@@ -1,0 +1,473 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Text;
+using System.Windows.Forms;
+using System.Net;
+using System.Net.NetworkInformation;
+
+using HSR.Net.Sockets;
+
+namespace HSR.YAT.Gui.Controls
+{
+	[DesignerCategory("Windows Forms")]
+	[DefaultEvent("HostNameOrAddressChanged")]
+	public partial class SocketSelection : UserControl
+	{
+
+		//------------------------------------------------------------------------------------------
+		// Types
+		//------------------------------------------------------------------------------------------
+
+		private class HostItem
+		{
+			public readonly string HostNameOrAddress;
+			public readonly string Description;
+
+			public HostItem(string hostNameOrAddress)
+			{
+				HostNameOrAddress = hostNameOrAddress;
+				Description = "";
+			}
+
+			public HostItem(string hostNameOrAddress, string description)
+			{
+				HostNameOrAddress = hostNameOrAddress;
+				Description = description;
+			}
+
+			public override string ToString()
+			{
+				if ((Description == null) || (Description == ""))
+					return (HostNameOrAddress);
+
+				if (Description == _LocalHostNameOrAddressDefault)
+					return (Description);
+
+				return (HostNameOrAddress + " (" + Description + ")");
+			}
+		}
+
+		//------------------------------------------------------------------------------------------
+		// Constants
+		//------------------------------------------------------------------------------------------
+
+		private const HostType _HostTypeDefault = HostType.TcpAutoSocket;
+
+		private const string _RemoteHostNameOrAddressDefault = Domain.Settings.Socket.SocketSettings.DefaultRemoteHostName;
+		private const int _RemotePortDefault = Domain.Settings.Socket.SocketSettings.DefaultPort;
+
+		private const string _LocalHostNameOrAddressDefault = Domain.Settings.Socket.SocketSettings.DefaultLocalHostName;
+		private const int _LocalPortDefault = Domain.Settings.Socket.SocketSettings.DefaultPort;
+
+		//------------------------------------------------------------------------------------------
+		// Attributes
+		//------------------------------------------------------------------------------------------
+
+		private bool _isSettingControls = false;
+
+		private HostType _hostType = _HostTypeDefault;
+
+		private string _remoteHostNameOrAddress = _RemoteHostNameOrAddressDefault;
+		private IPAddress _resolvedRemoteIPAddress = IPAddress.Loopback;
+		private int _remotePort = _RemotePortDefault;
+
+		private string _localHostNameOrAddress = _LocalHostNameOrAddressDefault;
+		private IPAddress _resolvedLocalIPAddress = IPAddress.Any;
+		private int _localPort = _LocalPortDefault;
+
+		//------------------------------------------------------------------------------------------
+		// Events
+		//------------------------------------------------------------------------------------------
+
+		[Category("Property Changed")]
+		[Description("Event raised when the RemoteHostNameOrAddress property is changed.")]
+		public event EventHandler RemoteHostNameOrAddressChanged;
+
+		[Category("Property Changed")]
+		[Description("Event raised when the RemotePort property is changed.")]
+		public event EventHandler RemotePortChanged;
+
+		[Category("Property Changed")]
+		[Description("Event raised when the LocalHostNameOrAddress property is changed.")]
+		public event EventHandler LocalHostNameOrAddressChanged;
+
+		[Category("Property Changed")]
+		[Description("Event raised when the LocalPort property is changed.")]
+		public event EventHandler LocalPortChanged;
+
+		//------------------------------------------------------------------------------------------
+		// Constructor
+		//------------------------------------------------------------------------------------------
+
+		public SocketSelection()
+		{
+			InitializeComponent();
+
+			InitializeControls();
+			SetControls();
+		}
+
+		#region Properties
+		//------------------------------------------------------------------------------------------
+		// Properties
+		//------------------------------------------------------------------------------------------
+
+		[Browsable(false)]
+		[DefaultValue(_HostTypeDefault)]
+		public HostType HostType
+		{
+			set
+			{
+				if (_hostType != value)
+				{
+					_hostType = value;
+					SetControls();
+				}
+			}
+		}
+
+		[Category("Socket")]
+		[Description("The remote host name or address.")]
+		[DefaultValue(_RemoteHostNameOrAddressDefault)]
+		public string RemoteHostNameOrAddress
+		{
+			get { return (_remoteHostNameOrAddress); }
+			set
+			{
+				if (_remoteHostNameOrAddress != value)
+				{
+					_remoteHostNameOrAddress = value;
+					SetControls();
+					OnRemoteHostNameOrAddressChanged(new EventArgs());
+				}
+			}
+		}
+
+		[Browsable(false)]
+		public IPAddress ResolvedRemoteIPAddress
+		{
+			get { return (_resolvedRemoteIPAddress); }
+		}
+
+		[Category("Socket")]
+		[Description("The remote TCP or UDP port.")]
+		[DefaultValue(_RemotePortDefault)]
+		public int RemotePort
+		{
+			get { return (_remotePort); }
+			set
+			{
+				if (_remotePort != value)
+				{
+					_remotePort = value;
+					SetControls();
+					OnRemotePortChanged(new EventArgs());
+				}
+			}
+		}
+
+		[Category("Socket")]
+		[Description("The local host name or address.")]
+		[DefaultValue(_LocalHostNameOrAddressDefault)]
+		public string LocalHostNameOrAddress
+		{
+			get { return (_localHostNameOrAddress); }
+			set
+			{
+				if (_localHostNameOrAddress != value)
+				{
+					_localHostNameOrAddress = value;
+					SetControls();
+					OnLocalHostNameOrAddressChanged(new EventArgs());
+				}
+			}
+		}
+
+		[Browsable(false)]
+		public IPAddress ResolvedLocalIPAddress
+		{
+			get { return (_resolvedLocalIPAddress); }
+		}
+
+		[Category("Socket")]
+		[Description("The local TCP or UDP port.")]
+		[DefaultValue(_LocalPortDefault)]
+		public int LocalPort
+		{
+			get { return (_localPort); }
+			set
+			{
+				if (_localPort != value)
+				{
+					_localPort = value;
+					SetControls();
+					OnLocalPortChanged(new EventArgs());
+				}
+			}
+		}
+
+		#endregion
+
+		#region Controls Event Handlers
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers
+		//------------------------------------------------------------------------------------------
+
+		private void comboBox_RemoteHostNameOrAddress_Validating(object sender, CancelEventArgs e)
+		{
+			if (!_isSettingControls)
+			{
+				string nameOrAddress;
+				HostItem hi = comboBox_RemoteHostNameOrAddress.SelectedItem as HostItem;
+				if (hi != null)
+					nameOrAddress = hi.HostNameOrAddress;
+				else
+					nameOrAddress = comboBox_RemoteHostNameOrAddress.Text;
+
+				IPAddress ipAddress;
+				if (IPAddress.TryParse(nameOrAddress, out ipAddress))
+				{
+					_resolvedRemoteIPAddress = ipAddress;
+					RemoteHostNameOrAddress = nameOrAddress;
+				}
+				else
+				{
+					try
+					{
+						IPAddress[] ipAddresses;
+						ipAddresses = Dns.GetHostAddresses(nameOrAddress);
+						_resolvedRemoteIPAddress = ipAddresses[0];
+						RemoteHostNameOrAddress = nameOrAddress;
+					}
+					catch (Exception ex)
+					{
+						MessageBox.Show
+							(
+							this,
+							"Host address is invalid:" + Environment.NewLine + Environment.NewLine +
+							ex.Message,
+							"Invalid Input",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Error
+							);
+						e.Cancel = true;
+					}
+				}
+			}
+		}
+
+		private void textBox_RemotePort_Validating(object sender, CancelEventArgs e)
+		{
+			if (!_isSettingControls)
+			{
+				int port;
+				if (int.TryParse(textBox_RemotePort.Text, out port) &&
+					(port >= System.Net.IPEndPoint.MinPort) && (port <= System.Net.IPEndPoint.MaxPort))
+				{
+					RemotePort = port;
+				}
+				else
+				{
+					MessageBox.Show
+						(
+						this,
+						"Port is invalid, valid values are numbers from " +
+							System.Net.IPEndPoint.MinPort.ToString() + " to " +
+							System.Net.IPEndPoint.MaxPort.ToString() + ".",
+						"Invalid Input",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+						);
+					e.Cancel = true;
+				}
+			}
+		}
+
+		private void comboBox_LocalHostNameOrAddress_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+			{
+				HostItem hi = comboBox_LocalHostNameOrAddress.SelectedItem as HostItem;
+				IPAddress ipAddress = IPAddress.Parse(hi.HostNameOrAddress);
+				_resolvedLocalIPAddress = ipAddress;
+			}
+		}
+
+		private void textBox_LocalPort_Validating(object sender, CancelEventArgs e)
+		{
+			if (!_isSettingControls)
+			{
+				int port;
+				if (int.TryParse(textBox_LocalPort.Text, out port) &&
+					(port >= System.Net.IPEndPoint.MinPort) && (port <= System.Net.IPEndPoint.MaxPort))
+				{
+					LocalPort = port;
+				}
+				else
+				{
+					MessageBox.Show
+						(
+						this,
+						"Port is invalid, valid values are numbers from " +
+							System.Net.IPEndPoint.MinPort.ToString() + " to " +
+							System.Net.IPEndPoint.MaxPort.ToString() + ".",
+						"Invalid Input",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+						);
+					e.Cancel = true;
+				}
+			}
+		}
+
+		#endregion
+
+		#region Private Methods
+		//------------------------------------------------------------------------------------------
+		// Private Methods
+		//------------------------------------------------------------------------------------------
+
+		private void InitializeControls()
+		{
+			_isSettingControls = true;
+
+			// remote host
+			comboBox_RemoteHostNameOrAddress.Items.Clear();
+			comboBox_RemoteHostNameOrAddress.Items.Add(new HostItem(_RemoteHostNameOrAddressDefault));
+			comboBox_RemoteHostNameOrAddress.Items.Add(new HostItem("127.0.0.1", "IPv4 localhost"));
+			comboBox_RemoteHostNameOrAddress.Items.Add(new HostItem("::1", "IPv6 localhost"));
+
+			// local host/interface
+			comboBox_LocalHostNameOrAddress.Items.Clear();
+			comboBox_LocalHostNameOrAddress.Items.Add(new HostItem(IPAddress.Any.ToString(), _LocalHostNameOrAddressDefault));
+			comboBox_LocalHostNameOrAddress.Items.Add(new HostItem("127.0.0.1", "IPv4 loopback"));
+			comboBox_LocalHostNameOrAddress.Items.Add(new HostItem("::1", "IPv6 loopback"));
+
+			NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
+			foreach (IPAddress address in Dns.GetHostAddresses(""))
+			{
+				string description = "";
+				foreach (NetworkInterface nic in nics)
+				{
+					if (nic.OperationalStatus == OperationalStatus.Up)
+					{
+						foreach (UnicastIPAddressInformation ai in nic.GetIPProperties().UnicastAddresses)
+						{
+							if (address.Equals(ai.Address))
+							{
+								description = nic.Description;
+								break;
+							}
+						}
+
+						if (description != "")
+							break;
+					}
+				}
+				comboBox_LocalHostNameOrAddress.Items.Add(new HostItem(address.ToString(), description));
+			}
+
+			_isSettingControls = false;
+		}
+
+		private void SetControls()
+		{
+			_isSettingControls = true;
+
+			// remote host address
+			if ((_hostType == HostType.TcpClient) || (_hostType == HostType.TcpAutoSocket) || (_hostType == HostType.Udp))
+			{
+				comboBox_RemoteHostNameOrAddress.Enabled = true;
+				comboBox_RemoteHostNameOrAddress.Text = _remoteHostNameOrAddress;
+			}
+			else
+			{
+				comboBox_RemoteHostNameOrAddress.Enabled = false;
+				comboBox_RemoteHostNameOrAddress.Text = "";
+			}
+
+			// remote port label
+			if (_hostType == HostType.Udp)
+				label_RemotePort.Text = "Remote UDP port:";
+			else
+				label_RemotePort.Text = "Remote TCP port:";
+
+			// remote port
+			if ((_hostType == HostType.TcpClient) || (_hostType == HostType.TcpAutoSocket) || (_hostType == HostType.Udp))
+			{
+				textBox_RemotePort.Enabled = true;
+				textBox_RemotePort.Text = _remotePort.ToString();
+			}
+			else
+			{
+				textBox_RemotePort.Enabled = false;
+				textBox_RemotePort.Text = "";
+			}
+
+			// local host address
+			if (_hostType != HostType.Unknown)
+			{
+				comboBox_LocalHostNameOrAddress.Enabled = true;
+				comboBox_LocalHostNameOrAddress.Text = _localHostNameOrAddress;
+			}
+			else
+			{
+				comboBox_LocalHostNameOrAddress.Enabled = false;
+				comboBox_LocalHostNameOrAddress.SelectedIndex = -1;
+			}
+
+			// local port label
+			if (_hostType == HostType.Udp)
+				label_LocalPort.Text = "Local UDP port:";
+			else
+				label_LocalPort.Text = "Local TCP port:";
+
+			// local port
+			if ((_hostType == HostType.TcpServer) || (_hostType == HostType.TcpAutoSocket) || (_hostType == HostType.Udp))
+			{
+				textBox_LocalPort.Enabled = true;
+				textBox_LocalPort.Text = _localPort.ToString();
+			}
+			else
+			{
+				textBox_LocalPort.Enabled = false;
+				textBox_LocalPort.Text = "";
+			}
+
+			_isSettingControls = false;
+		}
+
+		#endregion
+
+		#region Event Invoking
+		//------------------------------------------------------------------------------------------
+		// Event Invoking
+		//------------------------------------------------------------------------------------------
+
+		protected virtual void OnRemoteHostNameOrAddressChanged(EventArgs e)
+		{
+			Utilities.Event.EventHelper.FireSync(RemoteHostNameOrAddressChanged, this, e);
+		}
+
+		protected virtual void OnRemotePortChanged(EventArgs e)
+		{
+			Utilities.Event.EventHelper.FireSync(RemotePortChanged, this, e);
+		}
+
+		protected virtual void OnLocalHostNameOrAddressChanged(EventArgs e)
+		{
+			Utilities.Event.EventHelper.FireSync(LocalHostNameOrAddressChanged, this, e);
+		}
+
+		protected virtual void OnLocalPortChanged(EventArgs e)
+		{
+			Utilities.Event.EventHelper.FireSync(LocalPortChanged, this, e);
+		}
+
+		#endregion
+
+	}
+}
