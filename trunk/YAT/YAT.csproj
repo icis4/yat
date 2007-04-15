@@ -1,0 +1,85 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E87405A5-8FB0-4CE0-9946-3A08205B5DE0}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HSR.YAT</RootNamespace>
+    <AssemblyName>YAT</AssemblyName>
+    <ApplicationIcon>Resources\YAT\Icon_YAT.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="YAT.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\YAT.Domain\YAT.Domain.csproj">
+      <Project>{1C44A8C0-7805-4172-8746-2DB750803FFF}</Project>
+      <Name>YAT.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Gui.Forms\YAT.Gui.Forms.csproj">
+      <Project>{A1060959-580E-4493-BA51-4A3A7CDE1E88}</Project>
+      <Name>YAT.Gui.Forms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Gui.Utilities\YAT.Gui.Utilities.csproj">
+      <Project>{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}</Project>
+      <Name>YAT.Gui.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\YAT\Icon_YAT.ico" />
+    <EmbeddedResource Include="Resources\YAT\Icon_YAT_TerminalSettings.ico" />
+    <EmbeddedResource Include="Resources\YAT\Icon_YAT_UserSettings.ico" />
+    <EmbeddedResource Include="Resources\YAT\Icon_YAT_WorkspaceSettings.ico" />
+    <Content Include="Resources\YAT\Image_YAT_64x64.png" />
+    <Content Include="Resources\YAT\Image_YAT_TerminalSettings_64x64.png" />
+    <Content Include="Resources\YAT\Image_YAT_UserSettings_64x64.png" />
+    <Content Include="Resources\YAT\Image_YAT_WorkspaceSettings_64x64.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

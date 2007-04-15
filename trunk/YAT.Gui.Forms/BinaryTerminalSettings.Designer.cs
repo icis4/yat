@@ -1,0 +1,203 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace HSR.YAT.Gui.Forms
+{
+	partial class BinaryTerminalSettings
+	{
+		/// <summary>
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
+
+		/// <summary>
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && (components != null))
+			{
+				components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
+
+		#region Windows Form Designer generated code
+
+		/// <summary>
+		/// Required method for Designer support - do not modify
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
+			HSR.YAT.Domain.Settings.BinaryDisplaySettings binaryDisplaySettings1 = new HSR.YAT.Domain.Settings.BinaryDisplaySettings();
+			HSR.YAT.Domain.Settings.BinaryDisplaySettings binaryDisplaySettings2 = new HSR.YAT.Domain.Settings.BinaryDisplaySettings();
+			this.button_OK = new System.Windows.Forms.Button();
+			this.button_Cancel = new System.Windows.Forms.Button();
+			this.button_Defaults = new System.Windows.Forms.Button();
+			this.groupBox_Display = new System.Windows.Forms.GroupBox();
+			this.groupBox_RxDisplay = new System.Windows.Forms.GroupBox();
+			this.binaryTerminalSettingsSet_Rx = new HSR.YAT.Gui.Controls.BinaryDisplaySettingsSet();
+			this.groupBox_TxDisplay = new System.Windows.Forms.GroupBox();
+			this.binaryTerminalSettingsSet_Tx = new HSR.YAT.Gui.Controls.BinaryDisplaySettingsSet();
+			this.checkBox_DirectionLineBreak = new System.Windows.Forms.CheckBox();
+			this.checkBox_SeparateTxRxDisplay = new System.Windows.Forms.CheckBox();
+			this.groupBox_Display.SuspendLayout();
+			this.groupBox_RxDisplay.SuspendLayout();
+			this.groupBox_TxDisplay.SuspendLayout();
+			this.SuspendLayout();
+			// 
+			// button_OK
+			// 
+			this.button_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.button_OK.Location = new System.Drawing.Point(319, 29);
+			this.button_OK.Name = "button_OK";
+			this.button_OK.Size = new System.Drawing.Size(75, 23);
+			this.button_OK.TabIndex = 1;
+			this.button_OK.Text = "OK";
+			this.button_OK.Click += new System.EventHandler(this.button_OK_Click);
+			// 
+			// button_Cancel
+			// 
+			this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.button_Cancel.Location = new System.Drawing.Point(319, 58);
+			this.button_Cancel.Name = "button_Cancel";
+			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
+			this.button_Cancel.TabIndex = 2;
+			this.button_Cancel.Text = "Cancel";
+			this.button_Cancel.Click += new System.EventHandler(this.button_Cancel_Click);
+			// 
+			// button_Defaults
+			// 
+			this.button_Defaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_Defaults.Location = new System.Drawing.Point(319, 120);
+			this.button_Defaults.Name = "button_Defaults";
+			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
+			this.button_Defaults.TabIndex = 3;
+			this.button_Defaults.Text = "&Defaults...";
+			this.button_Defaults.Click += new System.EventHandler(this.button_Defaults_Click);
+			// 
+			// groupBox_Display
+			// 
+			this.groupBox_Display.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Display.Controls.Add(this.groupBox_RxDisplay);
+			this.groupBox_Display.Controls.Add(this.groupBox_TxDisplay);
+			this.groupBox_Display.Controls.Add(this.checkBox_DirectionLineBreak);
+			this.groupBox_Display.Controls.Add(this.checkBox_SeparateTxRxDisplay);
+			this.groupBox_Display.Location = new System.Drawing.Point(12, 12);
+			this.groupBox_Display.Name = "groupBox_Display";
+			this.groupBox_Display.Size = new System.Drawing.Size(293, 280);
+			this.groupBox_Display.TabIndex = 0;
+			this.groupBox_Display.TabStop = false;
+			this.groupBox_Display.Text = "Display Settings";
+			// 
+			// groupBox_RxDisplay
+			// 
+			this.groupBox_RxDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox_RxDisplay.Controls.Add(this.binaryTerminalSettingsSet_Rx);
+			this.groupBox_RxDisplay.Location = new System.Drawing.Point(6, 178);
+			this.groupBox_RxDisplay.Name = "groupBox_RxDisplay";
+			this.groupBox_RxDisplay.Size = new System.Drawing.Size(281, 96);
+			this.groupBox_RxDisplay.TabIndex = 5;
+			this.groupBox_RxDisplay.TabStop = false;
+			this.groupBox_RxDisplay.Text = "&Rx";
+			// 
+			// binaryTerminalSettingsSet_Rx
+			// 
+			this.binaryTerminalSettingsSet_Rx.Location = new System.Drawing.Point(12, 19);
+			this.binaryTerminalSettingsSet_Rx.Name = "binaryTerminalSettingsSet_Rx";
+			this.binaryTerminalSettingsSet_Rx.Settings = binaryDisplaySettings1;
+			this.binaryTerminalSettingsSet_Rx.Size = new System.Drawing.Size(263, 68);
+			this.binaryTerminalSettingsSet_Rx.TabIndex = 4;
+			this.binaryTerminalSettingsSet_Rx.SettingsChanged += new System.EventHandler(this.binaryTerminalSettingsSet_Rx_SettingsChanged);
+			// 
+			// groupBox_TxDisplay
+			// 
+			this.groupBox_TxDisplay.Controls.Add(this.binaryTerminalSettingsSet_Tx);
+			this.groupBox_TxDisplay.Location = new System.Drawing.Point(6, 44);
+			this.groupBox_TxDisplay.Name = "groupBox_TxDisplay";
+			this.groupBox_TxDisplay.Size = new System.Drawing.Size(281, 96);
+			this.groupBox_TxDisplay.TabIndex = 4;
+			this.groupBox_TxDisplay.TabStop = false;
+			this.groupBox_TxDisplay.Text = "&Tx and Rx";
+			// 
+			// binaryTerminalSettingsSet_Tx
+			// 
+			this.binaryTerminalSettingsSet_Tx.Location = new System.Drawing.Point(9, 19);
+			this.binaryTerminalSettingsSet_Tx.Name = "binaryTerminalSettingsSet_Tx";
+			this.binaryTerminalSettingsSet_Tx.Settings = binaryDisplaySettings2;
+			this.binaryTerminalSettingsSet_Tx.Size = new System.Drawing.Size(263, 68);
+			this.binaryTerminalSettingsSet_Tx.TabIndex = 2;
+			this.binaryTerminalSettingsSet_Tx.SettingsChanged += new System.EventHandler(this.binaryTerminalSettingsSet_Tx_SettingsChanged);
+			// 
+			// checkBox_DirectionLineBreak
+			// 
+			this.checkBox_DirectionLineBreak.AutoSize = true;
+			this.checkBox_DirectionLineBreak.Checked = true;
+			this.checkBox_DirectionLineBreak.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox_DirectionLineBreak.Location = new System.Drawing.Point(18, 21);
+			this.checkBox_DirectionLineBreak.Name = "checkBox_DirectionLineBreak";
+			this.checkBox_DirectionLineBreak.Size = new System.Drawing.Size(194, 17);
+			this.checkBox_DirectionLineBreak.TabIndex = 0;
+			this.checkBox_DirectionLineBreak.Text = "Break lines when direction changes";
+			this.checkBox_DirectionLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_DirectionLineBreak_CheckedChanged);
+			// 
+			// checkBox_SeparateTxRxDisplay
+			// 
+			this.checkBox_SeparateTxRxDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.checkBox_SeparateTxRxDisplay.AutoSize = true;
+			this.checkBox_SeparateTxRxDisplay.Location = new System.Drawing.Point(18, 155);
+			this.checkBox_SeparateTxRxDisplay.Name = "checkBox_SeparateTxRxDisplay";
+			this.checkBox_SeparateTxRxDisplay.Size = new System.Drawing.Size(175, 17);
+			this.checkBox_SeparateTxRxDisplay.TabIndex = 2;
+			this.checkBox_SeparateTxRxDisplay.Text = "&Separate settings for Tx and Rx";
+			this.checkBox_SeparateTxRxDisplay.UseVisualStyleBackColor = true;
+			this.checkBox_SeparateTxRxDisplay.CheckedChanged += new System.EventHandler(this.checkBox_SeparateTxRxDisplay_CheckedChanged);
+			// 
+			// BinaryTerminalSettings
+			// 
+			this.AcceptButton = this.button_OK;
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.CancelButton = this.button_Cancel;
+			this.ClientSize = new System.Drawing.Size(406, 304);
+			this.Controls.Add(this.groupBox_Display);
+			this.Controls.Add(this.button_Defaults);
+			this.Controls.Add(this.button_Cancel);
+			this.Controls.Add(this.button_OK);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
+			this.Name = "BinaryTerminalSettings";
+			this.ShowInTaskbar = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			this.Text = "Binary Terminal Settings";
+			this.Paint += new System.Windows.Forms.PaintEventHandler(this.BinaryTerminalSettings_Paint);
+			this.groupBox_Display.ResumeLayout(false);
+			this.groupBox_Display.PerformLayout();
+			this.groupBox_RxDisplay.ResumeLayout(false);
+			this.groupBox_TxDisplay.ResumeLayout(false);
+			this.ResumeLayout(false);
+
+		}
+
+		#endregion
+
+		private System.Windows.Forms.GroupBox groupBox_Display;
+		private System.Windows.Forms.Button button_OK;
+		private System.Windows.Forms.Button button_Cancel;
+		private System.Windows.Forms.Button button_Defaults;
+		private System.Windows.Forms.CheckBox checkBox_SeparateTxRxDisplay;
+		private System.Windows.Forms.CheckBox checkBox_DirectionLineBreak;
+		private System.Windows.Forms.GroupBox groupBox_RxDisplay;
+		private HSR.YAT.Gui.Controls.BinaryDisplaySettingsSet binaryTerminalSettingsSet_Rx;
+		private System.Windows.Forms.GroupBox groupBox_TxDisplay;
+		private HSR.YAT.Gui.Controls.BinaryDisplaySettingsSet binaryTerminalSettingsSet_Tx;
+
+	}
+}
