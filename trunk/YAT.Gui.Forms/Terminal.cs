@@ -1447,6 +1447,8 @@ namespace HSR.YAT.Gui.Forms
 				sb.Append(s.PortId.ToString());
 				sb.Append(" (" + s.Communication.ToString() + ") is ");
 				sb.Append(isOpen ? "open" : "closed");
+
+				toolStripStatusLabel_TerminalStatus_Connection.Visible = false;
 			}
 			else
 			{
@@ -1518,6 +1520,7 @@ namespace HSR.YAT.Gui.Forms
 				Image on = Properties.Resources.Image_On_12x12;
 				Image off = Properties.Resources.Image_Off_12x12;
 
+				toolStripStatusLabel_TerminalStatus_Connection.Visible = true;
 				toolStripStatusLabel_TerminalStatus_Connection.Image = (isConnected ? on : off);
 			}
 
