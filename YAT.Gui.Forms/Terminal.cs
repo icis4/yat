@@ -1379,8 +1379,8 @@ namespace HSR.YAT.Gui.Forms
 								}
 								else
 								{
-									sb.Append("starting");
-									sb.Append(" on port ");
+									sb.Append(" - ");
+									sb.Append("Starting on port ");
 									sb.Append(s.RemotePort.ToString());
 								}
 							}
@@ -1492,8 +1492,7 @@ namespace HSR.YAT.Gui.Forms
 							}
 							else
 							{
-								sb.Append("starting");
-								sb.Append(" on port ");
+								sb.Append("starting on port ");
 								sb.Append(s.RemotePort.ToString());
 							}
 						}
@@ -1515,6 +1514,11 @@ namespace HSR.YAT.Gui.Forms
 						sb.Append(s.LocalPort.ToString());
 						break;
 				}
+
+				Image on = Properties.Resources.Image_On_12x12;
+				Image off = Properties.Resources.Image_Off_12x12;
+
+				toolStripStatusLabel_TerminalStatus_Connection.Image = (isConnected ? on : off);
 			}
 
 			toolStripStatusLabel_TerminalStatus_IOStatus.Text = sb.ToString();

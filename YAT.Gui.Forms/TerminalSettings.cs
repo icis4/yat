@@ -152,10 +152,16 @@ namespace HSR.YAT.Gui.Forms
 			}
 		}
 
-		private void socketSelection_LocalPortChanged(object sender, EventArgs e)
+		private void socketSelection_LocalTcpPortChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
-				_settings_Form.IO.Socket.LocalPort = socketSelection.LocalPort;
+				_settings_Form.IO.Socket.LocalTcpPort = socketSelection.LocalTcpPort;
+		}
+
+		private void socketSelection_LocalUdpPortChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+				_settings_Form.IO.Socket.LocalUdpPort = socketSelection.LocalUdpPort;
 		}
 
 		private void socketSettings_TcpClientAutoReconnectChanged(object sender, EventArgs e)
@@ -263,7 +269,8 @@ namespace HSR.YAT.Gui.Forms
 			socketSelection.RemoteHostNameOrAddress = _settings_Form.IO.Socket.RemoteHostNameOrAddress;
 			socketSelection.RemotePort = _settings_Form.IO.Socket.RemotePort;
 			socketSelection.LocalHostNameOrAddress = _settings_Form.IO.Socket.LocalHostNameOrAddress;
-			socketSelection.LocalPort = _settings_Form.IO.Socket.LocalPort;
+			socketSelection.LocalTcpPort = _settings_Form.IO.Socket.LocalTcpPort;
+			socketSelection.LocalUdpPort = _settings_Form.IO.Socket.LocalUdpPort;
 
 			socketSettings.Visible = !isSerialPort;
 			socketSettings.HostType = (Domain.XIOType)ioType;

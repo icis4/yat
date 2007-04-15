@@ -18,16 +18,21 @@ namespace HSR.YAT.Gui.Controls
 
 		// \fixme Replace this help text with a real help
 		public static readonly string NewTerminalHelpText =
+			"TCP/IP:" + Environment.NewLine +
+			Environment.NewLine +
+			"AutoSocket automatically determines whether to run as client or server. On start, it tries to connect" + Environment.NewLine +
+			"   to a remote server and run as client. If this fails, it tries to run as server. Retry cycles and random" + Environment.NewLine +
+			"   wait times always ensure proper operation." + Environment.NewLine +
+			Environment.NewLine +
+			Environment.NewLine +
 			"TCP/IP and UDP/IP:" + Environment.NewLine +
 			Environment.NewLine +
-			"The remote host is the remote computer to connect to or" + Environment.NewLine +
-			"   an other program running on this machine" + Environment.NewLine +
+			"The remote host is the remote computer to connect to or an other program running on this machine." + Environment.NewLine +
 			"Examples:" + Environment.NewLine +
 			"   '127.0.0.1' is the IP localhost" + Environment.NewLine +
 			"   '::1' is the IP version 6 localhost" + Environment.NewLine +
 			Environment.NewLine +
-			"The local interface is the network interface that on this" + Environment.NewLine +
-			"   machine that is used for this connection" + Environment.NewLine +
+			"The local interface is the network interface that on this machine that is used for this connection." + Environment.NewLine +
 			"Examples:" + Environment.NewLine +
 			"   '127.0.0.1' is the IP loopback interface" + Environment.NewLine +
 			"   '::1' is the IP version 6 loopback interface";

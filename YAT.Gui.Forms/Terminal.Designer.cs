@@ -43,7 +43,6 @@ namespace HSR.YAT.Gui.Forms
 			this.toolStripMenuItem_RadixContextMenu_Oct = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_RadixContextMenu_Dec = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_RadixContextMenu_Hex = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_Monitor_Radix = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_MonitorContextMenu_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimestamp = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_ShowLength = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,6 +65,7 @@ namespace HSR.YAT.Gui.Forms
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_MonitorContextMenu_7 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_Print = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Monitor_Radix = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Send = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem_SendContextMenu_Command = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_File = new System.Windows.Forms.ToolStripMenuItem();
@@ -173,6 +173,7 @@ namespace HSR.YAT.Gui.Forms
 			this.predefined = new HSR.YAT.Gui.Controls.PredefinedCommands();
 			this.timer_RtsLuminescence = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.toolStripStatusLabel_TerminalStatus_Connection = new System.Windows.Forms.ToolStripStatusLabel();
 			this.contextMenuStrip_Monitor.SuspendLayout();
 			this.contextMenuStrip_Radix.SuspendLayout();
 			this.contextMenuStrip_Send.SuspendLayout();
@@ -256,7 +257,7 @@ namespace HSR.YAT.Gui.Forms
             this.toolStripMenuItem_RadixContextMenu_Dec,
             this.toolStripMenuItem_RadixContextMenu_Hex});
 			this.contextMenuStrip_Radix.Name = "contextMenuStrip_Radix";
-			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_MonitorContextMenu_Radix;
+			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_TerminalMenu_Monitor_Radix;
 			this.contextMenuStrip_Radix.Size = new System.Drawing.Size(146, 142);
 			this.contextMenuStrip_Radix.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Radix_Opening);
 			// 
@@ -308,13 +309,6 @@ namespace HSR.YAT.Gui.Forms
 			this.toolStripMenuItem_RadixContextMenu_Hex.Size = new System.Drawing.Size(145, 22);
 			this.toolStripMenuItem_RadixContextMenu_Hex.Text = "Hexadecimal";
 			this.toolStripMenuItem_RadixContextMenu_Hex.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Hex_Click);
-			// 
-			// toolStripMenuItem_TerminalMenu_Monitor_Radix
-			// 
-			this.toolStripMenuItem_TerminalMenu_Monitor_Radix.DropDown = this.contextMenuStrip_Radix;
-			this.toolStripMenuItem_TerminalMenu_Monitor_Radix.Name = "toolStripMenuItem_TerminalMenu_Monitor_Radix";
-			this.toolStripMenuItem_TerminalMenu_Monitor_Radix.Size = new System.Drawing.Size(225, 22);
-			this.toolStripMenuItem_TerminalMenu_Monitor_Radix.Text = "&Radix";
 			// 
 			// toolStripSeparator_MonitorContextMenu_1
 			// 
@@ -466,6 +460,13 @@ namespace HSR.YAT.Gui.Forms
 			this.toolStripMenuItem_MonitorContextMenu_Print.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Print.Text = "Print...";
 			this.toolStripMenuItem_MonitorContextMenu_Print.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Print_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_Monitor_Radix
+			// 
+			this.toolStripMenuItem_TerminalMenu_Monitor_Radix.DropDown = this.contextMenuStrip_Radix;
+			this.toolStripMenuItem_TerminalMenu_Monitor_Radix.Name = "toolStripMenuItem_TerminalMenu_Monitor_Radix";
+			this.toolStripMenuItem_TerminalMenu_Monitor_Radix.Size = new System.Drawing.Size(225, 22);
+			this.toolStripMenuItem_TerminalMenu_Monitor_Radix.Text = "&Radix";
 			// 
 			// contextMenuStrip_Send
 			// 
@@ -1142,7 +1143,8 @@ namespace HSR.YAT.Gui.Forms
             this.toolStripStatusLabel_TerminalStatus_CTS,
             this.toolStripStatusLabel_TerminalStatus_DTR,
             this.toolStripStatusLabel_TerminalStatus_DSR,
-            this.toolStripStatusLabel_TerminalStatus_DCD});
+            this.toolStripStatusLabel_TerminalStatus_DCD,
+            this.toolStripStatusLabel_TerminalStatus_Connection});
 			this.statusStrip_Terminal.Location = new System.Drawing.Point(0, 446);
 			this.statusStrip_Terminal.Name = "statusStrip_Terminal";
 			this.statusStrip_Terminal.ShowItemToolTips = true;
@@ -1153,7 +1155,7 @@ namespace HSR.YAT.Gui.Forms
 			// 
 			this.toolStripStatusLabel_TerminalStatus_Status.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripStatusLabel_TerminalStatus_Status.Name = "toolStripStatusLabel_TerminalStatus_Status";
-			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(410, 17);
+			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(269, 17);
 			this.toolStripStatusLabel_TerminalStatus_Status.Spring = true;
 			this.toolStripStatusLabel_TerminalStatus_Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -1264,7 +1266,7 @@ namespace HSR.YAT.Gui.Forms
 			this.splitContainer_Terminal.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainer_Terminal.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
 			this.splitContainer_Terminal.IsSplitterFixed = true;
-			this.splitContainer_Terminal.Location = new System.Drawing.Point(0, 24);
+			this.splitContainer_Terminal.Location = new System.Drawing.Point(0, 0);
 			this.splitContainer_Terminal.Name = "splitContainer_Terminal";
 			this.splitContainer_Terminal.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
@@ -1275,7 +1277,7 @@ namespace HSR.YAT.Gui.Forms
 			// splitContainer_Terminal.Panel2
 			// 
 			this.splitContainer_Terminal.Panel2.Controls.Add(this.splitContainer_Lower);
-			this.splitContainer_Terminal.Size = new System.Drawing.Size(712, 422);
+			this.splitContainer_Terminal.Size = new System.Drawing.Size(712, 446);
 			this.splitContainer_Terminal.SplitterDistance = 79;
 			this.splitContainer_Terminal.SplitterWidth = 1;
 			this.splitContainer_Terminal.TabIndex = 1;
@@ -1329,6 +1331,9 @@ namespace HSR.YAT.Gui.Forms
 			command3.Description = "";
 			command3.FilePath = "";
 			command3.IsFilePath = false;
+			command3.MultiLineCommand = new string[] {
+        ""};
+			command3.SingleLineCommand = "<1 lines...> []";
 			this.sendCommand.Command = command3;
 			this.sendCommand.ContextMenuStrip = this.contextMenuStrip_Send;
 			this.sendCommand.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1369,6 +1374,9 @@ namespace HSR.YAT.Gui.Forms
 			command1.Description = "";
 			command1.FilePath = "";
 			command1.IsFilePath = false;
+			command1.MultiLineCommand = new string[] {
+        ""};
+			command1.SingleLineCommand = "<1 lines...> []";
 			this.sendFile.Command = command1;
 			this.sendFile.ContextMenuStrip = this.contextMenuStrip_Send;
 			this.sendFile.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1394,7 +1402,7 @@ namespace HSR.YAT.Gui.Forms
 			// 
 			this.splitContainer_Lower.Panel2.Controls.Add(this.panel_Predefined);
 			this.splitContainer_Lower.Panel2MinSize = 96;
-			this.splitContainer_Lower.Size = new System.Drawing.Size(712, 342);
+			this.splitContainer_Lower.Size = new System.Drawing.Size(712, 366);
 			this.splitContainer_Lower.SplitterDistance = 536;
 			this.splitContainer_Lower.TabIndex = 0;
 			this.splitContainer_Lower.TabStop = false;
@@ -1407,7 +1415,7 @@ namespace HSR.YAT.Gui.Forms
 			this.panel_Monitor.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor.Name = "panel_Monitor";
 			this.panel_Monitor.Padding = new System.Windows.Forms.Padding(3);
-			this.panel_Monitor.Size = new System.Drawing.Size(536, 342);
+			this.panel_Monitor.Size = new System.Drawing.Size(536, 366);
 			this.panel_Monitor.TabIndex = 0;
 			// 
 			// groupBox_Monitor
@@ -1417,7 +1425,7 @@ namespace HSR.YAT.Gui.Forms
 			this.groupBox_Monitor.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox_Monitor.Location = new System.Drawing.Point(3, 3);
 			this.groupBox_Monitor.Name = "groupBox_Monitor";
-			this.groupBox_Monitor.Size = new System.Drawing.Size(530, 336);
+			this.groupBox_Monitor.Size = new System.Drawing.Size(530, 360);
 			this.groupBox_Monitor.TabIndex = 0;
 			this.groupBox_Monitor.TabStop = false;
 			this.groupBox_Monitor.Text = "Monitor";
@@ -1437,7 +1445,7 @@ namespace HSR.YAT.Gui.Forms
 			// 
 			this.splitContainer_MonitorLeft.Panel2.Controls.Add(this.splitContainer_MonitorRight);
 			this.splitContainer_MonitorLeft.Panel2MinSize = 100;
-			this.splitContainer_MonitorLeft.Size = new System.Drawing.Size(524, 317);
+			this.splitContainer_MonitorLeft.Size = new System.Drawing.Size(524, 341);
 			this.splitContainer_MonitorLeft.SplitterDistance = 172;
 			this.splitContainer_MonitorLeft.TabIndex = 0;
 			this.splitContainer_MonitorLeft.TabStop = false;
@@ -1450,7 +1458,7 @@ namespace HSR.YAT.Gui.Forms
 			this.panel_Monitor_Tx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Tx.Name = "panel_Monitor_Tx";
 			this.panel_Monitor_Tx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Tx.Size = new System.Drawing.Size(172, 317);
+			this.panel_Monitor_Tx.Size = new System.Drawing.Size(172, 341);
 			this.panel_Monitor_Tx.TabIndex = 1;
 			// 
 			// monitor_Tx
@@ -1460,7 +1468,7 @@ namespace HSR.YAT.Gui.Forms
 			this.monitor_Tx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Tx.Name = "monitor_Tx";
 			this.monitor_Tx.RepositoryType = HSR.YAT.Domain.RepositoryType.Tx;
-			this.monitor_Tx.Size = new System.Drawing.Size(166, 314);
+			this.monitor_Tx.Size = new System.Drawing.Size(166, 338);
 			this.monitor_Tx.TabIndex = 0;
 			this.monitor_Tx.CopyRequest += new System.EventHandler(this.monitor_Tx_CopyRequest);
 			this.monitor_Tx.PrintRequest += new System.EventHandler(this.monitor_Tx_PrintRequest);
@@ -1480,7 +1488,7 @@ namespace HSR.YAT.Gui.Forms
 			// 
 			this.splitContainer_MonitorRight.Panel2.Controls.Add(this.panel_Monitor_Rx);
 			this.splitContainer_MonitorRight.Panel2MinSize = 48;
-			this.splitContainer_MonitorRight.Size = new System.Drawing.Size(348, 317);
+			this.splitContainer_MonitorRight.Size = new System.Drawing.Size(348, 341);
 			this.splitContainer_MonitorRight.SplitterDistance = 174;
 			this.splitContainer_MonitorRight.TabIndex = 1;
 			this.splitContainer_MonitorRight.TabStop = false;
@@ -1493,7 +1501,7 @@ namespace HSR.YAT.Gui.Forms
 			this.panel_Monitor_Bidir.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Bidir.Name = "panel_Monitor_Bidir";
 			this.panel_Monitor_Bidir.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(174, 317);
+			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(174, 341);
 			this.panel_Monitor_Bidir.TabIndex = 1;
 			// 
 			// monitor_Bidir
@@ -1503,7 +1511,7 @@ namespace HSR.YAT.Gui.Forms
 			this.monitor_Bidir.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Bidir.Name = "monitor_Bidir";
 			this.monitor_Bidir.RepositoryType = HSR.YAT.Domain.RepositoryType.Bidir;
-			this.monitor_Bidir.Size = new System.Drawing.Size(168, 314);
+			this.monitor_Bidir.Size = new System.Drawing.Size(168, 338);
 			this.monitor_Bidir.TabIndex = 0;
 			this.monitor_Bidir.CopyRequest += new System.EventHandler(this.monitor_Bidir_CopyRequest);
 			this.monitor_Bidir.PrintRequest += new System.EventHandler(this.monitor_Bidir_PrintRequest);
@@ -1515,7 +1523,7 @@ namespace HSR.YAT.Gui.Forms
 			this.panel_Monitor_Rx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Rx.Name = "panel_Monitor_Rx";
 			this.panel_Monitor_Rx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Rx.Size = new System.Drawing.Size(170, 317);
+			this.panel_Monitor_Rx.Size = new System.Drawing.Size(170, 341);
 			this.panel_Monitor_Rx.TabIndex = 1;
 			// 
 			// monitor_Rx
@@ -1525,7 +1533,7 @@ namespace HSR.YAT.Gui.Forms
 			this.monitor_Rx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Rx.Name = "monitor_Rx";
 			this.monitor_Rx.RepositoryType = HSR.YAT.Domain.RepositoryType.Rx;
-			this.monitor_Rx.Size = new System.Drawing.Size(164, 314);
+			this.monitor_Rx.Size = new System.Drawing.Size(164, 338);
 			this.monitor_Rx.TabIndex = 0;
 			this.monitor_Rx.CopyRequest += new System.EventHandler(this.monitor_Rx_CopyRequest);
 			this.monitor_Rx.PrintRequest += new System.EventHandler(this.monitor_Rx_PrintRequest);
@@ -1537,7 +1545,7 @@ namespace HSR.YAT.Gui.Forms
 			this.panel_Predefined.Location = new System.Drawing.Point(0, 0);
 			this.panel_Predefined.Name = "panel_Predefined";
 			this.panel_Predefined.Padding = new System.Windows.Forms.Padding(3);
-			this.panel_Predefined.Size = new System.Drawing.Size(172, 342);
+			this.panel_Predefined.Size = new System.Drawing.Size(172, 366);
 			this.panel_Predefined.TabIndex = 0;
 			// 
 			// groupBox_Predefined
@@ -1548,7 +1556,7 @@ namespace HSR.YAT.Gui.Forms
 			this.groupBox_Predefined.Location = new System.Drawing.Point(3, 3);
 			this.groupBox_Predefined.Name = "groupBox_Predefined";
 			this.groupBox_Predefined.Padding = new System.Windows.Forms.Padding(3, 9, 3, 3);
-			this.groupBox_Predefined.Size = new System.Drawing.Size(166, 336);
+			this.groupBox_Predefined.Size = new System.Drawing.Size(166, 360);
 			this.groupBox_Predefined.TabIndex = 0;
 			this.groupBox_Predefined.TabStop = false;
 			this.groupBox_Predefined.Text = "&Predefined";
@@ -1559,7 +1567,7 @@ namespace HSR.YAT.Gui.Forms
 			this.predefined.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.predefined.Location = new System.Drawing.Point(3, 22);
 			this.predefined.Name = "predefined";
-			this.predefined.Size = new System.Drawing.Size(160, 311);
+			this.predefined.Size = new System.Drawing.Size(160, 335);
 			this.predefined.TabIndex = 0;
 			this.predefined.SelectedPageChanged += new System.EventHandler(this.predefined_SelectedPageChanged);
 			this.predefined.SendCommandRequest += new System.EventHandler<HSR.YAT.Gui.PredefinedCommandEventArgs>(this.predefined_SendCommandRequest);
@@ -1568,6 +1576,19 @@ namespace HSR.YAT.Gui.Forms
 			// timer_RtsLuminescence
 			// 
 			this.timer_RtsLuminescence.Tick += new System.EventHandler(this.timer_RtsLuminescence_Tick);
+			// 
+			// toolStripStatusLabel_TerminalStatus_Connection
+			// 
+			this.toolStripStatusLabel_TerminalStatus_Connection.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
+						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+			this.toolStripStatusLabel_TerminalStatus_Connection.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+			this.toolStripStatusLabel_TerminalStatus_Connection.Image = global::HSR.YAT.Gui.Forms.Properties.Resources.Image_On_12x12;
+			this.toolStripStatusLabel_TerminalStatus_Connection.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+			this.toolStripStatusLabel_TerminalStatus_Connection.Name = "toolStripStatusLabel_TerminalStatus_Connection";
+			this.toolStripStatusLabel_TerminalStatus_Connection.Size = new System.Drawing.Size(16, 17);
+			this.toolStripStatusLabel_TerminalStatus_Connection.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.toolStripStatusLabel_TerminalStatus_Connection.ToolTipText = "Connection State";
 			// 
 			// Terminal
 			// 
@@ -1765,5 +1786,6 @@ namespace HSR.YAT.Gui.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Command_10;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Command_11;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Command_12;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_Connection;
 	}
 }

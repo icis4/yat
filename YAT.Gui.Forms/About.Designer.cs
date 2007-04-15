@@ -170,9 +170,9 @@ namespace HSR.YAT.Gui.Forms
 			this.linkLabel_Home.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_Home.Location = new System.Drawing.Point(12, 297);
 			this.linkLabel_Home.Name = "linkLabel_Home";
-			this.linkLabel_Home.Size = new System.Drawing.Size(192, 13);
+			this.linkLabel_Home.Size = new System.Drawing.Size(322, 13);
 			this.linkLabel_Home.TabIndex = 10;
-			this.linkLabel_Home.Text = "Tell us if you like YAT or why you don\'t.";
+			this.linkLabel_Home.Text = "Visit YAT on SourceForge.net. Tell us if you like it or why you don\'t.";
 			this.linkLabel_Home.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
 			// linkLabel_Trademark

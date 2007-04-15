@@ -697,7 +697,8 @@ namespace HSR.YAT.Gui.Forms
 				switch (status)
 				{
 					case Status.ChildActivated: return (childText + " activated");
-					case Status.ChildActive:    return (childText + " active");
+					//case Status.ChildActive:  return (childText + " active");
+					case Status.ChildActive:    return (""); // display nothing to keep information lower
 					case Status.ChildChanged:   return (childText + " changed");
 					case Status.ChildSaved:     return (childText + " saved");
 				}

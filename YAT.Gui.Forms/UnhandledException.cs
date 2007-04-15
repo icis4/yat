@@ -16,6 +16,22 @@ namespace HSR.YAT.Gui.Forms
 		public UnhandledException(Exception exeption)
 		{
 			InitializeComponent();
+
+			string textBefore = "";
+			string textLink = "";
+			string textAfter = "";
+			int start = 0;
+
+			linkLabel_Explanation.Text = "";
+			textBefore = "An unhandled exception occured in YAT. Please report this exception to YAT > Tracker > Bugs on ";
+			textLink =   "SourceForge.net";
+			textAfter =                 " to give us valuable feedback to continuously improve YAT.";
+			linkLabel_Explanation.Text += textBefore;
+			start = linkLabel_Explanation.Text.Length;
+			linkLabel_Explanation.Text += textLink;
+			linkLabel_Explanation.Links.Add(start, textLink.Length, "http://sourceforge.net/projects/y-a-terminal/");
+			linkLabel_Explanation.Text += textAfter;
+
 			_exeption = exeption;
 		}
 
@@ -45,5 +61,21 @@ namespace HSR.YAT.Gui.Forms
 			text.WriteLine(_exeption.StackTrace);
 			Clipboard.SetDataObject(text.ToString(), true);
 		}
+
+		#region Controls Event Handlers
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers
+		//------------------------------------------------------------------------------------------
+
+		private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			string link = e.Link.LinkData as string;
+			if ((link != null) && (link.StartsWith("http://")))
+			{
+				Utilities.Net.Browser.BrowseUrl(link);
+			}
+		}
+
+		#endregion
 	}
 }

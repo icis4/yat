@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace HSR.YAT.Domain.IO
 {
@@ -31,6 +32,8 @@ namespace HSR.YAT.Domain.IO
 		//------------------------------------------------------------------------------------------
 
 		private const int _MaximalStartCycles = 3;
+		private const int _MinimalRestartWaitTimeInMs = 50;
+		private const int _MaximalRestartWaitTimeInMs = 300;
 
 		//------------------------------------------------------------------------------------------
 		// Attributes
@@ -48,6 +51,7 @@ namespace HSR.YAT.Domain.IO
 
 		private int _startCycleCounter = 0;
 		private object _startCycleCounterSyncObj = new object();
+		private Random _waitRandom = new Random();
 
 		private TcpClient _client;
 		private TcpServer _server;
@@ -474,7 +478,7 @@ namespace HSR.YAT.Domain.IO
 					else
 					{
 						DisposeSockets();                  // if client lost connection to server,
-						StartListening();                  //   restart AutoSocket
+						StartListening();                  //   change to server operation
 					}
 					break;
 				}
@@ -587,6 +591,7 @@ namespace HSR.YAT.Domain.IO
 					}
 					if (tryAgain)
 					{
+						Thread.Sleep(_waitRandom.Next(_MinimalRestartWaitTimeInMs, _MaximalRestartWaitTimeInMs));
 						StartConnecting();
 					}
 					else

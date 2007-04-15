@@ -597,7 +597,8 @@ namespace HSR.IO.Ports
 		/// </summary>
 		protected virtual void OnDataReceived(SerialDataReceivedEventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync<SerialDataReceivedEventArgs, SerialDataReceivedEventHandler>(DataReceived, this, e);
+			if (!IsDisposed && base.IsOpen)      // make sure to propagate event only if it port active
+				Utilities.Event.EventHelper.FireSync<SerialDataReceivedEventArgs, SerialDataReceivedEventHandler>(DataReceived, this, e);
 		}
 
 		/// <summary>
@@ -605,7 +606,8 @@ namespace HSR.IO.Ports
 		/// </summary>
 		protected virtual void OnErrorReceived(SerialErrorReceivedEventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync<SerialErrorReceivedEventArgs, SerialErrorReceivedEventHandler>(ErrorReceived, this, e);
+			if (!IsDisposed)                     // make sure to propagate event only if it port active
+				Utilities.Event.EventHelper.FireSync<SerialErrorReceivedEventArgs, SerialErrorReceivedEventHandler>(ErrorReceived, this, e);
 		}
 
 		/// <summary>
@@ -613,7 +615,8 @@ namespace HSR.IO.Ports
 		/// </summary>
 		protected virtual void OnPinChanged(SerialPinChangedEventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync<SerialPinChangedEventArgs, SerialPinChangedEventHandler>(PinChanged, this, e);
+			if (!IsDisposed && base.IsOpen)      // make sure to propagate event only if it port active
+				Utilities.Event.EventHelper.FireSync<SerialPinChangedEventArgs, SerialPinChangedEventHandler>(PinChanged, this, e);
 		}
 
 		#endregion

@@ -154,7 +154,8 @@ namespace HSR.YAT.Gui.Forms
 			this.socketSelection.LocalHostNameOrAddressChanged += new System.EventHandler(this.socketSelection_LocalHostNameOrAddressChanged);
 			this.socketSelection.RemotePortChanged += new System.EventHandler(this.socketSelection_RemotePortChanged);
 			this.socketSelection.RemoteHostNameOrAddressChanged += new System.EventHandler(this.socketSelection_RemoteHostNameOrAddressChanged);
-			this.socketSelection.LocalPortChanged += new System.EventHandler(this.socketSelection_LocalPortChanged);
+			this.socketSelection.LocalTcpPortChanged += new System.EventHandler(this.socketSelection_LocalTcpPortChanged);
+			this.socketSelection.LocalUdpPortChanged += new System.EventHandler(this.socketSelection_LocalUdpPortChanged);
 			// 
 			// serialPortSelection
 			// 

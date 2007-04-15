@@ -143,6 +143,26 @@ namespace HSR.YAT.Domain.IO
 			}
 		}
 
+		private bool IsConnectedOrConnecting
+		{
+			get
+			{
+				AssertNotDisposed();
+				switch (_state)
+				{
+					case SocketState.Connecting:
+					case SocketState.Connected:
+					{
+						return (true);
+					}
+					default:
+					{
+						return (false);
+					}
+				}
+			}
+		}
+
 		public bool IsConnected
 		{
 			get
@@ -329,7 +349,7 @@ namespace HSR.YAT.Domain.IO
 		public void OnConnected(HSR.Net.Sockets.ConnectionEventArgs e)
 		{
 			lock (_socketConnectionSyncObj)
-				_socketConnectionSyncObj = e.Connection;
+				_socketConnection = e.Connection;
 			
 			lock (_stateSyncObj)
 				_state = SocketState.Connected;
@@ -412,7 +432,6 @@ namespace HSR.YAT.Domain.IO
 			_reconnectTimer.AutoReset = false;
 			_reconnectTimer.Elapsed += new System.Timers.ElapsedEventHandler(_reconnectTimer_Elapsed);
 			_reconnectTimer.Start();
-			System.Diagnostics.Debug.WriteLine("Restart timer started");
 		}
 
 		private void StopAndDisposeReconnectTimer()
@@ -423,14 +442,11 @@ namespace HSR.YAT.Domain.IO
 				_reconnectTimer.Dispose();
 				_reconnectTimer = null;
 			}
-			System.Diagnostics.Debug.WriteLine("Restart timer disposed");
 		}
 
 		private void _reconnectTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			System.Diagnostics.Debug.WriteLine("Restart timer elapsed");
-			bool isConnected = (_state == SocketState.Connected);
-			if (!IsDisposed && !isConnected)
+			if (!IsDisposed && HasStarted && !IsConnectedOrConnecting)
 			{
 				try
 				{

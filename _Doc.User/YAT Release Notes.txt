@@ -46,13 +46,16 @@ Release 2.0.0 :: 2007-??-??
 - Serial COM port component "Charon.Communcations" removed
 - TCP/IP and UDP/IP support added
 - RS-485 support added
+- Baud rates above 115k added
 - Unicode encoding support added
 - Visual appearance modernized
-- Displaying performance improved
 - Support for multi-line commands added
-- Several minor send options added
+- Several send options added
 - Application settings shifted from registry to local user directory
+- Terminal settings (.yat) refined
+- Workspace settings (.yaw) introduced
 - About dialog: Link labels instead of normal labels
+- Displaying performance improved
 
 
 Version 1.0
@@ -103,9 +106,8 @@ Release 2.1.0 :: Not planned yet
   > e.g. File Transfer:
     OnDataReceived() and SendNextLine()
     => enables reception of multi-line commands
-- Workspace file (.yaw)
-  > Saves multiple terminals
-  > Saves size/position of the terminals
+- RS-232 AutoSense mode
+- Optional user settings (.yau)
 
 
 --------------------------------------------------------------------------------

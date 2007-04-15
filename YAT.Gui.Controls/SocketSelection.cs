@@ -60,7 +60,8 @@ namespace HSR.YAT.Gui.Controls
 		private const int _RemotePortDefault = Domain.Settings.Socket.SocketSettings.DefaultPort;
 
 		private const string _LocalHostNameOrAddressDefault = Domain.Settings.Socket.SocketSettings.DefaultLocalHostName;
-		private const int _LocalPortDefault = Domain.Settings.Socket.SocketSettings.DefaultPort;
+		private const int _LocalTcpPortDefault = Domain.Settings.Socket.SocketSettings.DefaultPort;
+		private const int _LocalUdpPortDefault = Domain.Settings.Socket.SocketSettings.DefaultPort + 1;
 
 		//------------------------------------------------------------------------------------------
 		// Attributes
@@ -76,7 +77,8 @@ namespace HSR.YAT.Gui.Controls
 
 		private string _localHostNameOrAddress = _LocalHostNameOrAddressDefault;
 		private IPAddress _resolvedLocalIPAddress = IPAddress.Any;
-		private int _localPort = _LocalPortDefault;
+		private int _localTcpPort = _LocalTcpPortDefault;
+		private int _localUdpPort = _LocalUdpPortDefault;
 
 		//------------------------------------------------------------------------------------------
 		// Events
@@ -95,8 +97,12 @@ namespace HSR.YAT.Gui.Controls
 		public event EventHandler LocalHostNameOrAddressChanged;
 
 		[Category("Property Changed")]
-		[Description("Event raised when the LocalPort property is changed.")]
-		public event EventHandler LocalPortChanged;
+		[Description("Event raised when the LocalTcpPort property is changed.")]
+		public event EventHandler LocalTcpPortChanged;
+
+		[Category("Property Changed")]
+		[Description("Event raised when the LocalUdpPort property is changed.")]
+		public event EventHandler LocalUdpPortChanged;
 
 		//------------------------------------------------------------------------------------------
 		// Constructor
@@ -193,18 +199,35 @@ namespace HSR.YAT.Gui.Controls
 		}
 
 		[Category("Socket")]
-		[Description("The local TCP or UDP port.")]
-		[DefaultValue(_LocalPortDefault)]
-		public int LocalPort
+		[Description("The local TCP port.")]
+		[DefaultValue(_LocalTcpPortDefault)]
+		public int LocalTcpPort
 		{
-			get { return (_localPort); }
+			get { return (_localTcpPort); }
 			set
 			{
-				if (_localPort != value)
+				if (_localTcpPort != value)
 				{
-					_localPort = value;
+					_localTcpPort = value;
 					SetControls();
-					OnLocalPortChanged(new EventArgs());
+					OnLocalTcpPortChanged(new EventArgs());
+				}
+			}
+		}
+
+		[Category("Socket")]
+		[Description("The local UDP port.")]
+		[DefaultValue(_LocalUdpPortDefault)]
+		public int LocalUdpPort
+		{
+			get { return (_localUdpPort); }
+			set
+			{
+				if (_localUdpPort != value)
+				{
+					_localUdpPort = value;
+					SetControls();
+					OnLocalUdpPortChanged(new EventArgs());
 				}
 			}
 		}
@@ -247,7 +270,7 @@ namespace HSR.YAT.Gui.Controls
 						MessageBox.Show
 							(
 							this,
-							"Host address is invalid:" + Environment.NewLine + Environment.NewLine +
+							"Remote host address is invalid:" + Environment.NewLine + Environment.NewLine +
 							ex.Message,
 							"Invalid Input",
 							MessageBoxButtons.OK,
@@ -268,13 +291,24 @@ namespace HSR.YAT.Gui.Controls
 					(port >= System.Net.IPEndPoint.MinPort) && (port <= System.Net.IPEndPoint.MaxPort))
 				{
 					RemotePort = port;
+
+					// also set local port to same number
+					if ((_hostType == HostType.TcpClient) || (_hostType == HostType.TcpAutoSocket) || (_hostType == HostType.Udp))
+					{
+						LocalTcpPort = port;
+
+						if (port < System.Net.IPEndPoint.MaxPort)
+							LocalUdpPort = port + 1;
+						else
+							LocalUdpPort = System.Net.IPEndPoint.MaxPort - 1;
+					}
 				}
 				else
 				{
 					MessageBox.Show
 						(
 						this,
-						"Port is invalid, valid values are numbers from " +
+						"Remote port is invalid, valid values are numbers from " +
 							System.Net.IPEndPoint.MinPort.ToString() + " to " +
 							System.Net.IPEndPoint.MaxPort.ToString() + ".",
 						"Invalid Input",
@@ -304,14 +338,21 @@ namespace HSR.YAT.Gui.Controls
 				if (int.TryParse(textBox_LocalPort.Text, out port) &&
 					(port >= System.Net.IPEndPoint.MinPort) && (port <= System.Net.IPEndPoint.MaxPort))
 				{
-					LocalPort = port;
+					LocalTcpPort = port;
+					LocalUdpPort = port;
+
+					// also set remote port to same number
+					if (_hostType == HostType.TcpServer)
+					{
+						RemotePort = port;
+					}
 				}
 				else
 				{
 					MessageBox.Show
 						(
 						this,
-						"Port is invalid, valid values are numbers from " +
+						"Local port is invalid, valid values are numbers from " +
 							System.Net.IPEndPoint.MinPort.ToString() + " to " +
 							System.Net.IPEndPoint.MaxPort.ToString() + ".",
 						"Invalid Input",
@@ -426,10 +467,15 @@ namespace HSR.YAT.Gui.Controls
 				label_LocalPort.Text = "Local TCP port:";
 
 			// local port
-			if ((_hostType == HostType.TcpServer) || (_hostType == HostType.TcpAutoSocket) || (_hostType == HostType.Udp))
+			if ((_hostType == HostType.TcpServer) || (_hostType == HostType.TcpAutoSocket))
 			{
 				textBox_LocalPort.Enabled = true;
-				textBox_LocalPort.Text = _localPort.ToString();
+				textBox_LocalPort.Text = _localTcpPort.ToString();
+			}
+			else if (_hostType == HostType.Udp)
+			{
+				textBox_LocalPort.Enabled = true;
+				textBox_LocalPort.Text = _localUdpPort.ToString();
 			}
 			else
 			{
@@ -462,9 +508,14 @@ namespace HSR.YAT.Gui.Controls
 			Utilities.Event.EventHelper.FireSync(LocalHostNameOrAddressChanged, this, e);
 		}
 
-		protected virtual void OnLocalPortChanged(EventArgs e)
+		protected virtual void OnLocalTcpPortChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(LocalPortChanged, this, e);
+			Utilities.Event.EventHelper.FireSync(LocalTcpPortChanged, this, e);
+		}
+
+		protected virtual void OnLocalUdpPortChanged(EventArgs e)
+		{
+			Utilities.Event.EventHelper.FireSync(LocalUdpPortChanged, this, e);
 		}
 
 		#endregion

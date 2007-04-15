@@ -230,50 +230,53 @@ namespace HSR.Net.Sockets
         /// <param name="ar"></param>
         internal void BeginConnectCallback(IAsyncResult ar)
         {
-			BaseSocketConnection connection = null;
-			SocketConnector connector = null;
-
-			try
+			if (!IsDisposed)
 			{
-				connector = (SocketConnector)ar.AsyncState;
-				connector.Socket.EndConnect(ar);
+				BaseSocketConnection connection = null;
+				SocketConnector connector = null;
 
-				if (!IsDisposed)
+				try
 				{
-					//----- Adjust buffer size!
-					connector.Socket.ReceiveBufferSize = Host.SocketBufferSize;
-					connector.Socket.SendBufferSize = Host.SocketBufferSize;
-
-					connection = new ClientSocketConnection(Host, this, connector.Socket, this.EncryptionType, this.CompressionType, Host.Header);
-
-					//----- Initialize!
-					Host.AddSocketConnection(connection);
-					InitializeConnection(connection);
-				}
-			}
-			catch (Exception exOuter)
-			{
-				HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
-				if (!IsDisposed)
-				{
-					if (connection != null)
+					connector = (SocketConnector)ar.AsyncState;
+					if (!connector.IsDisposed)
 					{
-						try
-						{
-							connection.BeginDisconnect(exOuter);
-						}
-						catch (Exception exInner)
-						{
-							HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
-							Host.FireOnException(new ExceptionEventArgs(exInner));
-						}
+						connector.Socket.EndConnect(ar);
+
+						//----- Adjust buffer size!
+						connector.Socket.ReceiveBufferSize = Host.SocketBufferSize;
+						connector.Socket.SendBufferSize = Host.SocketBufferSize;
+
+						connection = new ClientSocketConnection(Host, this, connector.Socket, this.EncryptionType, this.CompressionType, Host.Header);
+
+						//----- Initialize!
+						Host.AddSocketConnection(connection);
+						InitializeConnection(connection);
 					}
-					else
+				}
+				catch (Exception exOuter)
+				{
+					HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+					if (!IsDisposed)
 					{
-						Host.FireOnException(new ExceptionEventArgs(exOuter));
-						FReconnectAttempted++;
-						if (!IsDisposed)
-							Reconnect(false);
+						if (connection != null)
+						{
+							try
+							{
+								connection.BeginDisconnect(exOuter);
+							}
+							catch (Exception exInner)
+							{
+								HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+								Host.FireOnException(new ExceptionEventArgs(exInner));
+							}
+						}
+						else
+						{
+							Host.FireOnException(new ExceptionEventArgs(exOuter));
+							FReconnectAttempted++;
+							if (!IsDisposed)
+								Reconnect(false);
+						}
 					}
 				}
 			}

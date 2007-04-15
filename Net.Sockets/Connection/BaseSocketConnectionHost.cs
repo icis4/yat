@@ -976,34 +976,36 @@ namespace HSR.Net.Sockets
         /// </summary>
         private void BeginDisconnectCallback(IAsyncResult ar)
         {
-			BaseSocketConnection connection = null;
-			DisconnectedEventArgs e = null;
-
-			try
+			if (!IsDisposed)
 			{
-				e = (DisconnectedEventArgs)ar.AsyncState;
-				connection = (BaseSocketConnection)e.Connection;
+				BaseSocketConnection connection = null;
+				DisconnectedEventArgs e = null;
 
-				if (connection.Active)
+				try
 				{
-					connection.Socket.EndDisconnect(ar);
-					if (!IsDisposed)
-						FireOnDisconnected(e);
-				}
-			}
-			catch (Exception exOuter)
-			{
-				HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
-				if (!IsDisposed)
-				{
-					try
+					e = (DisconnectedEventArgs)ar.AsyncState;
+					connection = (BaseSocketConnection)e.Connection;
+
+					if (connection.Active)
 					{
+						connection.Socket.EndDisconnect(ar);
 						FireOnDisconnected(e);
 					}
-					catch (Exception exInner)
+				}
+				catch (Exception exOuter)
+				{
+					HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+					if (!IsDisposed)
 					{
-						HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
-						FireOnException(new ExceptionEventArgs(exInner));
+						try
+						{
+							FireOnDisconnected(e);
+						}
+						catch (Exception exInner)
+						{
+							HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+							FireOnException(new ExceptionEventArgs(exInner));
+						}
 					}
 				}
 			}

@@ -134,12 +134,22 @@ namespace HSR.YAT.Gui.Forms
 			}
 		}
 
-		private void socketSelection_LocalPortChanged(object sender, EventArgs e)
+		private void socketSelection_LocalTcpPortChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
 			{
-				int port = socketSelection.LocalPort;
-				_newTerminalSettings_Form.SocketLocalPort = port;
+				int port = socketSelection.LocalTcpPort;
+				_newTerminalSettings_Form.SocketLocalTcpPort = port;
+				SetControls();
+			}
+		}
+
+		private void socketSelection_LocalUdpPortChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+			{
+				int port = socketSelection.LocalUdpPort;
+				_newTerminalSettings_Form.SocketLocalUdpPort = port;
 				SetControls();
 			}
 		}
@@ -221,7 +231,8 @@ namespace HSR.YAT.Gui.Forms
 			socketSelection.RemoteHostNameOrAddress = _newTerminalSettings_Form.SocketRemoteHostNameOrAddress;
 			socketSelection.RemotePort = _newTerminalSettings_Form.SocketRemotePort;
 			socketSelection.LocalHostNameOrAddress = _newTerminalSettings_Form.SocketLocalHostNameOrAddress;
-			socketSelection.LocalPort = _newTerminalSettings_Form.SocketLocalPort;
+			socketSelection.LocalTcpPort = _newTerminalSettings_Form.SocketLocalTcpPort;
+			socketSelection.LocalUdpPort = _newTerminalSettings_Form.SocketLocalUdpPort;
 
 			checkBox_OpenTerminal.Checked = _newTerminalSettings_Form.OpenTerminal;
 
