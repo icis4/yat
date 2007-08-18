@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-using HSR.Utilities.Types;
+using MKY.Utilities.Types;
 
-namespace HSR.IO.Ports
+namespace MKY.IO.Ports
 {
 	#region Enum DataBits
 
@@ -74,6 +74,23 @@ namespace HSR.IO.Ports
 		public static XDataBits Parse(string bits)
 		{
 			return ((XDataBits)int.Parse(bits));
+		}
+
+		/// <summary></summary>
+		public static bool TryParse(string bits, out XDataBits result)
+		{
+			int intResult;
+
+			if (int.TryParse(bits, out intResult))
+			{
+				result = (XDataBits)intResult;
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
 		}
 
 		#endregion

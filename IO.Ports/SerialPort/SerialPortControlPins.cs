@@ -1,6 +1,6 @@
 using System;
 
-namespace HSR.IO.Ports
+namespace MKY.IO.Ports
 {
 	/// <summary>
 	/// Serial port control pins.

@@ -6,14 +6,14 @@ using System.Globalization;
 using System.Reflection;
 using System.IO.Ports;
 
-namespace HSR.IO.Ports
+namespace MKY.IO.Ports
 {
 	/// <summary>
 	/// Serial port settings.
 	/// </summary>
 	[Serializable]
 	[TypeConverter(typeof(SerialPortSettingsConverter))]
-	public class SerialPortSettings
+	public class SerialPortSettings : IEquatable<SerialPortSettings>
 	{
 		private BaudRate _baudRate;
 		private DataBits _dataBits;

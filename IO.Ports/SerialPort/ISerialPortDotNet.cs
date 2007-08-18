@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace HSR.IO.Ports
+namespace MKY.IO.Ports
 {
 	/// <summary>
 	/// ISerialPortDotNet is the interface of <see cref="System.IO.Ports.SerialPort"/>.
@@ -16,7 +16,7 @@ namespace HSR.IO.Ports
 		//------------------------------------------------------------------------------------------
 		// Must be mapped because System.IO.Ports.Serial___EventArgs do not
 		// provide any constructor and can therefore not be created from an
-		// adapter like HSR.IO.Ports.SerialPortCharon
+		// adapter like MKY.IO.Ports.SerialPortCharon
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>

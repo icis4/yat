@@ -7,14 +7,14 @@ using System.Reflection;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace HSR.IO.Ports
+namespace MKY.IO.Ports
 {
 	/// <summary>
 	/// SerialPortId
 	/// </summary>
 	[Serializable]
 	[TypeConverter(typeof(SerialPortIdConverter))]
-	public class SerialPortId : IComparable
+	public class SerialPortId : IEquatable<SerialPortId>, IComparable
 	{
 		//------------------------------------------------------------------------------------------
 		// Public constants
@@ -38,7 +38,7 @@ namespace HSR.IO.Ports
 		public const string DefaultInUseText = "(in use)";
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private int _number = DefaultPortNumber;
