@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HSR.YAT.Gui.Forms
+namespace MKY.YAT.Gui.Forms
 {
 	partial class TerminalSettings
 	{
@@ -37,12 +37,12 @@ namespace HSR.YAT.Gui.Forms
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
 			this.button_AdvancedSettings = new System.Windows.Forms.Button();
 			this.button_TextOrBinarySettings = new System.Windows.Forms.Button();
-			this.terminalSelection = new HSR.YAT.Gui.Controls.TerminalSelection();
+			this.terminalSelection = new MKY.YAT.Gui.Controls.TerminalSelection();
 			this.groupBox_PortSettings = new System.Windows.Forms.GroupBox();
-			this.socketSettings = new HSR.YAT.Gui.Controls.SocketSettings();
-			this.socketSelection = new HSR.YAT.Gui.Controls.SocketSelection();
-			this.serialPortSelection = new HSR.YAT.Gui.Controls.SerialPortSelection();
-			this.serialPortSettings = new HSR.YAT.Gui.Controls.SerialPortSettings();
+			this.socketSettings = new MKY.YAT.Gui.Controls.SocketSettings();
+			this.socketSelection = new MKY.YAT.Gui.Controls.SocketSelection();
+			this.serialPortSelection = new MKY.YAT.Gui.Controls.SerialPortSelection();
+			this.serialPortSettings = new MKY.YAT.Gui.Controls.SerialPortSettings();
 			this.menuItem_Port = new System.Windows.Forms.ContextMenu();
 			this.menuItem_Port_Search = new System.Windows.Forms.MenuItem();
 			this.button_Defaults = new System.Windows.Forms.Button();
@@ -163,7 +163,7 @@ namespace HSR.YAT.Gui.Forms
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.serialPortSelection.Location = new System.Drawing.Point(6, 19);
 			this.serialPortSelection.Name = "serialPortSelection";
-			this.serialPortSelection.PortId = new HSR.IO.Ports.SerialPortId(1);
+			this.serialPortSelection.PortId = new MKY.IO.Ports.SerialPortId(1);
 			this.serialPortSelection.Size = new System.Drawing.Size(260, 27);
 			this.serialPortSelection.TabIndex = 0;
 			this.serialPortSelection.PortIdChanged += new System.EventHandler(this.serialPortSelection_PortIdChanged);
@@ -248,13 +248,13 @@ namespace HSR.YAT.Gui.Forms
 		private System.Windows.Forms.GroupBox groupBox_Settings;
 		private System.Windows.Forms.ContextMenu menuItem_Port;
 		private System.Windows.Forms.MenuItem menuItem_Port_Search;
-		private HSR.YAT.Gui.Controls.TerminalSelection terminalSelection;
-		private HSR.YAT.Gui.Controls.SerialPortSettings serialPortSettings;
+		private MKY.YAT.Gui.Controls.TerminalSelection terminalSelection;
+		private MKY.YAT.Gui.Controls.SerialPortSettings serialPortSettings;
 		private System.Windows.Forms.Button button_AdvancedSettings;
 		private System.Windows.Forms.Button button_TextOrBinarySettings;
-		private HSR.YAT.Gui.Controls.SocketSelection socketSelection;
-		private HSR.YAT.Gui.Controls.SerialPortSelection serialPortSelection;
-		private HSR.YAT.Gui.Controls.SocketSettings socketSettings;
+		private MKY.YAT.Gui.Controls.SocketSelection socketSelection;
+		private MKY.YAT.Gui.Controls.SerialPortSelection serialPortSelection;
+		private MKY.YAT.Gui.Controls.SocketSettings socketSettings;
 		private System.Windows.Forms.Button button_Help;
 	}
 }

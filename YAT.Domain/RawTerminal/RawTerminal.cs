@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HSR.YAT.Domain
+namespace MKY.YAT.Domain
 {
 	/// <summary>
 	/// Defines a buffered serial interface. The buffers contain raw byte data,
@@ -11,7 +11,7 @@ namespace HSR.YAT.Domain
 	public class RawTerminal : IDisposable
 	{
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool _isDisposed = false;
@@ -28,18 +28,25 @@ namespace HSR.YAT.Domain
 		// Events
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public event EventHandler TerminalChanged;
+		/// <summary></summary>
 		public event EventHandler TerminalControlChanged;
+		/// <summary></summary>
 		public event EventHandler<TerminalErrorEventArgs> TerminalError;
 
+		/// <summary></summary>
 		public event EventHandler<RawElementEventArgs> RawElementSent;
+		/// <summary></summary>
 		public event EventHandler<RawElementEventArgs> RawElementReceived;
+		/// <summary></summary>
 		public event EventHandler<RepositoryEventArgs> RepositoryCleared;
 
 		//------------------------------------------------------------------------------------------
 		// Constructor
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public RawTerminal(Settings.IOSettings ioSettings, Settings.BufferSettings bufferSettings)
 		{
 			_txRepository    = new RawRepository(bufferSettings.TxBufferSize);
@@ -52,6 +59,7 @@ namespace HSR.YAT.Domain
 			AttachIO(Factory.IOFactory.CreateIO(ioSettings)); // settings are applied by factory
 		}
 
+		/// <summary></summary>
 		public RawTerminal(Settings.IOSettings ioSettings, Settings.BufferSettings bufferSettings, RawTerminal rhs)
 		{
 			_txRepository    = new RawRepository(rhs._txRepository);
@@ -116,6 +124,7 @@ namespace HSR.YAT.Domain
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public Settings.BufferSettings BufferSettings
 		{
 			get
@@ -131,6 +140,7 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		public Settings.IOSettings IOSettings
 		{
 			get
@@ -146,6 +156,7 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		public bool IsOpen
 		{
 			get
@@ -155,6 +166,7 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		public bool IsConnected
 		{
 			get
@@ -164,6 +176,7 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		public Domain.IO.IIOProvider UnderlyingIOProvider
 		{
 			get
@@ -173,6 +186,7 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		public object UnderlyingIOInstance
 		{
 			get
@@ -193,12 +207,14 @@ namespace HSR.YAT.Domain
 		// Open/Close
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public void Open()
 		{
 			AssertNotDisposed();
 			_io.Start();
 		}
 
+		/// <summary></summary>
 		public void Close()
 		{
 			AssertNotDisposed();
@@ -209,6 +225,7 @@ namespace HSR.YAT.Domain
 		// Send
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public void Send(byte[] data)
 		{
 			AssertNotDisposed();
@@ -225,6 +242,7 @@ namespace HSR.YAT.Domain
 		// Repository Access
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public List<RawElement> RepositoryToElements(RepositoryType repository)
 		{
 			AssertNotDisposed();
@@ -238,6 +256,7 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		public void ClearRepository(RepositoryType repository)
 		{
 			AssertNotDisposed();
@@ -256,6 +275,7 @@ namespace HSR.YAT.Domain
 		// ToString
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		new public string ToString()
 		{
 			AssertNotDisposed();
@@ -263,6 +283,7 @@ namespace HSR.YAT.Domain
 			return (ToString(""));
 		}
 
+		/// <summary></summary>
 		public string ToString(string indent)
 		{
 			AssertNotDisposed();
@@ -273,6 +294,7 @@ namespace HSR.YAT.Domain
 					indent + "- RxRepository: " + Environment.NewLine + _rxRepository.ToString(indent + "- "));
 		}
 
+		/// <summary></summary>
 		public string RepositoryToString(RepositoryType repository, string indent)
 		{
 			AssertNotDisposed();
@@ -430,31 +452,37 @@ namespace HSR.YAT.Domain
 		// Event Invoking
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		protected virtual void OnTerminalChanged(EventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync(TerminalChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnTerminalControlChanged(EventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync(TerminalControlChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnTerminalError(TerminalErrorEventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync<TerminalErrorEventArgs>(TerminalError, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnRawElementSent(RawElementEventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync<RawElementEventArgs>(RawElementSent, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnRawElementReceived(RawElementEventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync<RawElementEventArgs>(RawElementReceived, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnRepositoryCleared(RepositoryEventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync<RepositoryEventArgs>(RepositoryCleared, this, e);

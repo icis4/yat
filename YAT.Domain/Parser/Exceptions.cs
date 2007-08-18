@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HSR.YAT.Domain.Parser
+namespace MKY.YAT.Domain.Parser
 {
+	/// <summary></summary>
 	public class FormatException : System.FormatException
 	{
+		/// <summary></summary>
 		public FormatException(string message)
 			: base
 			(

@@ -7,9 +7,10 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
-using HSR.YAT.Settings.Application;
+using MKY.YAT.Settings;
+using MKY.YAT.Settings.Application;
 
-namespace HSR.YAT.Gui.Controls
+namespace MKY.YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("SendFileRequest")]
@@ -23,7 +24,7 @@ namespace HSR.YAT.Gui.Controls
 		private const bool _TerminalIsOpenDefault = false;
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private Command _command = new Command();
@@ -148,23 +149,23 @@ namespace HSR.YAT.Gui.Controls
 			{
 				case Domain.TerminalType.Binary:
 				{
-					ofd.Filter = ApplicationSettings.Extensions.BinaryFilesFilter;
-					ofd.DefaultExt = ApplicationSettings.Extensions.BinaryFilesDefault;
+					ofd.Filter = ExtensionSettings.BinaryFilesFilter;
+					ofd.DefaultExt = ExtensionSettings.BinaryFilesDefault;
 					break;
 				}
 				default: // includes Domain.TerminalType.Text:
 				{
-					ofd.Filter = ApplicationSettings.Extensions.TextFilesFilter;
-					ofd.DefaultExt = ApplicationSettings.Extensions.TextFilesDefault;
+					ofd.Filter = ExtensionSettings.TextFilesFilter;
+					ofd.DefaultExt = ExtensionSettings.TextFilesDefault;
 					break;
 				}
 			}
-			ofd.InitialDirectory = ApplicationSettings.LocalUser.Path.SendFilesPath;
+			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.SendFilesPath;
 			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName != string.Empty))
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUser.Path.SendFilesPath = Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.LocalUser.Paths.SendFilesPath = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
 				_command.IsFilePath = true;

@@ -7,7 +7,7 @@
     <ProjectGuid>{0762E929-7EB5-4BDA-9018-DBA94DA8BDE5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HSR.YAT.Gui.Controls</RootNamespace>
+    <RootNamespace>MKY.YAT.Gui.Controls</RootNamespace>
     <AssemblyName>YAT.Gui.Controls</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\YAT.snk</AssemblyOriginatorKeyFile>
@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -242,7 +244,7 @@
       <Project>{69A8CBB4-7D00-4A3D-9CF7-220DD02C2EB7}</Project>
       <Name>YAT.Settings.Application</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Settings.Document\YAT.Settings.Document.csproj">
+    <ProjectReference Include="..\YAT.Settings.Terminal\YAT.Settings.Terminal.csproj">
       <Project>{FE2D334F-B2D8-4A07-B63D-93BA775DBBCF}</Project>
       <Name>YAT.Settings.Document</Name>
     </ProjectReference>
@@ -252,9 +254,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Monitor\Image_Monitor_Bidir_48x24.png" />
-    <Content Include="Resources\Monitor\Image_Monitor_Rx_48x24.png" />
-    <Content Include="Resources\Monitor\Image_Monitor_Tx_48x24.png" />
+    <Content Include="Resources\Monitor\Image_Monitor_Bidir_28x28.png" />
+    <Content Include="Resources\Monitor\Image_Monitor_Rx_28x28.png" />
+    <Content Include="Resources\Monitor\Image_Monitor_Tx_28x28.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

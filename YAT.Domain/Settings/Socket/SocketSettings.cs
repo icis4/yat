@@ -3,21 +3,26 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace HSR.YAT.Domain.Settings.Socket
+namespace MKY.YAT.Domain.Settings.Socket
 {
-	public class SocketSettings : Utilities.Settings.Settings
+	/// <summary></summary>
+	[Serializable]
+	public class SocketSettings : Utilities.Settings.Settings, IEquatable<SocketSettings>
 	{
 
 		//------------------------------------------------------------------------------------------
 		// Constants
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public const string DefaultRemoteHostName = "localhost";
+		/// <summary></summary>
 		public const string DefaultLocalHostName = "<Any>";
+		/// <summary></summary>
 		public const int DefaultPort = 10000;
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private Net.Sockets.HostType _hostType;
@@ -37,12 +42,14 @@ namespace HSR.YAT.Domain.Settings.Socket
 		// Object Lifetime
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public SocketSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public SocketSettings(Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -50,6 +57,7 @@ namespace HSR.YAT.Domain.Settings.Socket
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public SocketSettings(SocketSettings rhs)
 			: base(rhs)
 		{
@@ -69,6 +77,7 @@ namespace HSR.YAT.Domain.Settings.Socket
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		protected override void SetMyDefaults()
 		{
 			HostType                = Net.Sockets.HostType.TcpAutoSocket;
@@ -90,6 +99,7 @@ namespace HSR.YAT.Domain.Settings.Socket
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("HostType")]
 		public Net.Sockets.HostType HostType
 		{
@@ -104,6 +114,7 @@ namespace HSR.YAT.Domain.Settings.Socket
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("RemoteHostNameOrAddress")]
 		public string RemoteHostNameOrAddress
 		{
@@ -118,6 +129,7 @@ namespace HSR.YAT.Domain.Settings.Socket
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public System.Net.IPAddress ResolvedRemoteIPAddress
 		{
@@ -125,6 +137,7 @@ namespace HSR.YAT.Domain.Settings.Socket
 			set { _resolvedRemoteIPAddress = value;  }
 		}
 
+		/// <summary></summary>
 		[XmlElement("RemotePort")]
 		public int RemotePort
 		{
@@ -139,6 +152,7 @@ namespace HSR.YAT.Domain.Settings.Socket
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("LocalHostNameOrAddress")]
 		public string LocalHostNameOrAddress
 		{
@@ -153,6 +167,7 @@ namespace HSR.YAT.Domain.Settings.Socket
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public System.Net.IPAddress ResolvedLocalIPAddress
 		{
@@ -160,6 +175,7 @@ namespace HSR.YAT.Domain.Settings.Socket
 			set { _resolvedLocalIPAddress = value; }
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public int LocalPort
 		{
@@ -196,6 +212,7 @@ namespace HSR.YAT.Domain.Settings.Socket
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("LocalTcpPort")]
 		public int LocalTcpPort
 		{
@@ -210,6 +227,7 @@ namespace HSR.YAT.Domain.Settings.Socket
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("LocalUdpPort")]
 		public int LocalUdpPort
 		{
@@ -224,6 +242,7 @@ namespace HSR.YAT.Domain.Settings.Socket
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("TcpClientAutoReconnect")]
 		public TcpClientAutoReconnect TcpClientAutoReconnect
 		{
@@ -247,7 +266,7 @@ namespace HSR.YAT.Domain.Settings.Socket
 
 		/// <summary>
 		/// Tries to resolve the IP address from <see cref="RemoteHostNameOrAddress"/> and
-		/// stores it in <see cref="ResolvedIPAddress"/>
+		/// stores it in <see cref="ResolvedRemoteIPAddress"/>
 		/// </summary>
 		/// <returns>
 		/// true if successfully resolved; false otherwise
@@ -309,11 +328,13 @@ namespace HSR.YAT.Domain.Settings.Socket
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());
 		}
 
+		/// <summary></summary>
 		public override string ToString()
 		{
 			return

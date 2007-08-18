@@ -6,12 +6,12 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-namespace HSR.YAT.Gui.Forms
+namespace MKY.YAT.Gui.Forms
 {
 	public partial class NewTerminal : System.Windows.Forms.Form
 	{
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool _isStartingUp = true;
@@ -20,7 +20,7 @@ namespace HSR.YAT.Gui.Forms
 		private Settings.NewTerminalSettings _newTerminalSettings;
 		private Settings.NewTerminalSettings _newTerminalSettings_Form;
 
-		private YAT.Settings.Document.DocumentSettings _documentSettings;
+		private YAT.Settings.Terminal.TerminalSettingsRoot _terminalSettings;
 
 		//------------------------------------------------------------------------------------------
 		// Constructor
@@ -44,9 +44,9 @@ namespace HSR.YAT.Gui.Forms
 			get { return (_newTerminalSettings); }
 		}
 
-		public YAT.Settings.Document.DocumentSettings DocumentSettingsResult
+		public YAT.Settings.Terminal.TerminalSettingsRoot TerminalSettingsResult
 		{
-			get { return (_documentSettings); }
+			get { return (_terminalSettings); }
 		}
 
 		#endregion
@@ -169,23 +169,35 @@ namespace HSR.YAT.Gui.Forms
 			_newTerminalSettings = _newTerminalSettings_Form;
 
 			// create document settings and fill it with new terminal settings
-			_documentSettings = new YAT.Settings.Document.DocumentSettings();
+			_terminalSettings = new YAT.Settings.Terminal.TerminalSettingsRoot();
 
-			_documentSettings.Terminal.TerminalType = _newTerminalSettings.TerminalType;
-			_documentSettings.Terminal.IO.IOType = _newTerminalSettings.IOType;
+			_terminalSettings.Terminal.TerminalType = _newTerminalSettings.TerminalType;
+			_terminalSettings.Terminal.IO.IOType = _newTerminalSettings.IOType;
 
-			_documentSettings.Terminal.IO.SerialPort.PortId = _newTerminalSettings.SerialPortId;
+			_terminalSettings.Terminal.IO.SerialPort.PortId = _newTerminalSettings.SerialPortId;
 
-			_documentSettings.Terminal.IO.Socket.RemoteHostNameOrAddress = _newTerminalSettings.SocketRemoteHostNameOrAddress;
-			_documentSettings.Terminal.IO.Socket.ResolvedRemoteIPAddress = socketSelection.ResolvedRemoteIPAddress;
-			_documentSettings.Terminal.IO.Socket.RemotePort = _newTerminalSettings.SocketRemotePort;
+			_terminalSettings.Terminal.IO.Socket.RemoteHostNameOrAddress = _newTerminalSettings.SocketRemoteHostNameOrAddress;
+			_terminalSettings.Terminal.IO.Socket.ResolvedRemoteIPAddress = socketSelection.ResolvedRemoteIPAddress;
+			_terminalSettings.Terminal.IO.Socket.RemotePort = _newTerminalSettings.SocketRemotePort;
 
-			_documentSettings.Terminal.IO.Socket.LocalHostNameOrAddress = _newTerminalSettings.SocketLocalHostNameOrAddress;
-			_documentSettings.Terminal.IO.Socket.ResolvedLocalIPAddress = socketSelection.ResolvedLocalIPAddress;
-			_documentSettings.Terminal.IO.Socket.LocalTcpPort = _newTerminalSettings.SocketLocalTcpPort;
-			_documentSettings.Terminal.IO.Socket.LocalUdpPort = _newTerminalSettings.SocketLocalUdpPort;
+			_terminalSettings.Terminal.IO.Socket.LocalHostNameOrAddress = _newTerminalSettings.SocketLocalHostNameOrAddress;
+			_terminalSettings.Terminal.IO.Socket.ResolvedLocalIPAddress = socketSelection.ResolvedLocalIPAddress;
+			_terminalSettings.Terminal.IO.Socket.LocalTcpPort = _newTerminalSettings.SocketLocalTcpPort;
+			_terminalSettings.Terminal.IO.Socket.LocalUdpPort = _newTerminalSettings.SocketLocalUdpPort;
 
-			_documentSettings.TerminalIsOpen = _newTerminalSettings.OpenTerminal;
+			_terminalSettings.TerminalIsOpen = _newTerminalSettings.OpenTerminal;
+
+			switch (_newTerminalSettings.TerminalType)
+			{
+				case Domain.TerminalType.Binary:
+					_terminalSettings.Display.Radix = Domain.Radix.Hex;
+					break;
+
+				case Domain.TerminalType.Text:
+				default:
+					_terminalSettings.Display.Radix = Domain.Radix.String;
+					break;
+			}
 		}
 
 		private void button_Cancel_Click(object sender, EventArgs e)
@@ -222,11 +234,13 @@ namespace HSR.YAT.Gui.Forms
 			Domain.IOType ioType = _newTerminalSettings_Form.IOType;
 			terminalSelection.IOType = ioType;
 
-			serialPortSelection.Enabled = (ioType == Domain.IOType.SerialPort);
-			serialPortSelection.ShowSerialPort = (ioType == Domain.IOType.SerialPort);
+			bool isSerialPort = (ioType == Domain.IOType.SerialPort);
+
+			serialPortSelection.Enabled = isSerialPort;
+			serialPortSelection.ShowSerialPort = isSerialPort;
 			serialPortSelection.PortId = _newTerminalSettings_Form.SerialPortId;
 
-			socketSelection.Enabled = (ioType != Domain.IOType.SerialPort);
+			socketSelection.Enabled = !isSerialPort;
 			socketSelection.HostType = (Domain.XIOType)ioType;
 			socketSelection.RemoteHostNameOrAddress = _newTerminalSettings_Form.SocketRemoteHostNameOrAddress;
 			socketSelection.RemotePort = _newTerminalSettings_Form.SocketRemotePort;

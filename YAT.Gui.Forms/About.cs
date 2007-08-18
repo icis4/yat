@@ -6,7 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-namespace HSR.YAT.Gui.Forms
+namespace MKY.YAT.Gui.Forms
 {
 	public partial class About : System.Windows.Forms.Form
 	{
@@ -22,14 +22,13 @@ namespace HSR.YAT.Gui.Forms
 
 			// form
 			text = "About " + Application.ProductName;
-			if (VersionInfo.HasProductNamePostFix)
-				text += VersionInfo.ProductNamePostFix;
-			Text = text + " - Yet Another Terminal";
+			text += VersionInfo.ProductNamePostFix;
+			text += " - Yet Another Terminal";
+			Text = text;
 
 			// title
 			text = Application.ProductName;
-			if (VersionInfo.HasProductNamePostFix)
-				text += VersionInfo.ProductNamePostFix;
+			text += VersionInfo.ProductNamePostFix;
 			text += " - Version " + Application.ProductVersion;
 			linkLabel_Title.Text = text;
 

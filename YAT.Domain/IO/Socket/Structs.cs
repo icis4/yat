@@ -7,16 +7,20 @@ using System.Xml.Serialization;
 // 'type' defines operator == or operator != but does not override Object.Equals(object o)
 #pragma warning disable 660
 
-namespace HSR.YAT.Domain
+namespace MKY.YAT.Domain
 {
+	/// <summary></summary>
 	public struct TcpClientAutoReconnect
 	{
+		/// <summary></summary>
 		[XmlElement("Enabled")]
 		public bool Enabled;
 
+		/// <summary></summary>
 		[XmlElement("Interval")]
 		public int Interval;                     // in ms
 
+		/// <summary></summary>
 		public TcpClientAutoReconnect(bool enabled, int interval)
 		{
 			Enabled = enabled;
@@ -33,6 +37,7 @@ namespace HSR.YAT.Domain
 			return (base.Equals(obj));
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

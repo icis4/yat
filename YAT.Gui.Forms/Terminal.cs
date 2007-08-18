@@ -7,17 +7,18 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
-using HSR.Utilities.Settings;
-using HSR.YAT.Settings.Application;
-using HSR.YAT.Settings.Document;
-using HSR.YAT.Gui.Settings;
+using MKY.Utilities.Settings;
+using MKY.YAT.Settings;
+using MKY.YAT.Settings.Application;
+using MKY.YAT.Settings.Terminal;
+using MKY.YAT.Gui.Settings;
 
-namespace HSR.YAT.Gui.Forms
+namespace MKY.YAT.Gui.Forms
 {
 	public partial class Terminal : Form
 	{
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		// startup/update
@@ -25,12 +26,13 @@ namespace HSR.YAT.Gui.Forms
 		private bool _isSettingControls = false;
 
 		// MDI
-		private string _id;
+		private Guid _guid = Guid.NewGuid();
+		private string _userId;
 		private Form _mdiParent;
 
 		// settings
-		private DocumentSettingsHandler<DocumentSettings> _settingsHandler;
-		private DocumentSettings _settings;
+		private DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> _settingsHandler;
+		private YAT.Settings.Terminal.TerminalSettingsRoot _settings;
 		private bool _handlingTerminalSettingsIsSuspended = false;
 
 		// terminal
@@ -60,7 +62,7 @@ namespace HSR.YAT.Gui.Forms
 		//------------------------------------------------------------------------------------------
 
 		// Important note to ensure proper z-order of this form:
-		// - With visual designer, proceed with the following order
+		// - Within visual designer, proceed in the following order
 		//     1. Place "menuStrip_Terminal" and dock it to top
 		//     2. Place "statusStrip_Terminal" and dock it to bottom
 		//     3. Place "splitContainer_Terminal" and dock it to fill
@@ -68,16 +70,16 @@ namespace HSR.YAT.Gui.Forms
 		public Terminal()
 		{
 			InitializeComponent();
-			Initialize(new DocumentSettingsHandler<DocumentSettings>());
+			Initialize(new DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot>());
 		}
 
-		public Terminal(DocumentSettingsHandler<DocumentSettings> settingsHandler)
+		public Terminal(DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> settingsHandler)
 		{
 			InitializeComponent();
 			Initialize(settingsHandler);
 		}
 
-		private void Initialize(DocumentSettingsHandler<DocumentSettings> settingsHandler)
+		private void Initialize(DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> settingsHandler)
 		{
 			FixContextMenus();
 
@@ -110,15 +112,31 @@ namespace HSR.YAT.Gui.Forms
 		// Properties
 		//******************************************************************************************
 
-		public string Id
+		public Guid Guid
 		{
-			get { return (_id); }
-			set { _id = value; }
+			get { return (_guid); }
 		}
 
-		public string IdFromFile
+		public string UserId
 		{
-			set { _id = Path.GetFileName(value); }
+			get { return (_userId); }
+			set { _userId = value; }
+		}
+
+		public string UserIdFromFile
+		{
+			set { _userId = Path.GetFileName(value); }
+		}
+
+		public string SettingsFilePath
+		{
+			get
+			{
+				if (_settingsHandler.SettingsFileExists)
+					return (_settingsHandler.SettingsFilePath);
+				else
+					return (string.Empty);
+			}
 		}
 
 		public bool IsOpen
@@ -175,6 +193,9 @@ namespace HSR.YAT.Gui.Forms
 
 				// immediately set terminal controls so the terminal "looks" nice from the very start
 				SetTerminalControls();
+
+				// select send command control to enable immediate user input
+				SelectSendCommandInput();
 
 				// then begin logging (in case opening of terminal needs to be logged)
 				if (_settings.LogIsOpen)
@@ -287,6 +308,11 @@ namespace HSR.YAT.Gui.Forms
 			CloseTerminal();
 		}
 
+		private void toolStripMenuItem_TerminalMenu_Terminal_Clear_Click(object sender, EventArgs e)
+		{
+			ClearAllMonitors();
+		}
+
 		private void toolStripMenuItem_TerminalMenu_Terminal_Settings_Click(object sender, EventArgs e)
 		{
 			ShowTerminalSettings();
@@ -313,59 +339,6 @@ namespace HSR.YAT.Gui.Forms
 		private void toolStripMenuItem_TerminalMenu_Send_File_Click(object sender, EventArgs e)
 		{
 			SendFile();
-		}
-
-		#endregion
-
-		#region Controls Event Handlers > Terminal Menu > Monitor
-		//------------------------------------------------------------------------------------------
-		// Controls Event Handlers > Terminal Menu > Monitor
-		//------------------------------------------------------------------------------------------
-
-		private void toolStripMenuItem_TerminalMenu_Monitor_DropDownOpening(object sender, EventArgs e)
-		{
-			toolStripMenuItem_TerminalMenu_Monitor_ShowTimestamp.Checked = _settings.Display.ShowTimestamp;
-			toolStripMenuItem_TerminalMenu_Monitor_ShowLength.Checked = _settings.Display.ShowLength;
-			toolStripComboBox_TerminalMenu_Monitor_Orientation.SelectedItem = _settings.Layout.MonitorOrientation;
-
-			toolStripMenuItem_TerminalMenu_Monitor_ShowCounters.Checked = _settings.Display.ShowCounters;
-			toolStripMenuItem_TerminalMenu_Monitor_ResetCounters.Enabled = _settings.Display.ShowCounters;
-		}
-
-		private void toolStripMenuItem_TerminalMenu_Monitor_ShowTimestamp_Click(object sender, EventArgs e)
-		{
-			_settings.Display.ShowTimestamp = !_settings.Display.ShowTimestamp;
-		}
-
-		private void toolStripMenuItem_TerminalMenu_Monitor_ShowLength_Click(object sender, EventArgs e)
-		{
-			_settings.Display.ShowLength = !_settings.Display.ShowLength;
-		}
-
-		private void toolStripComboBox_TerminalMenu_Monitor_Orientation_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (!_isSettingControls)
-				SetMonitorOrientation((Orientation)toolStripComboBox_TerminalMenu_Monitor_Orientation.SelectedItem);
-		}
-
-		private void toolStripMenuItem_TerminalMenu_Monitor_ClearAll_Click(object sender, EventArgs e)
-		{
-			ClearAllMonitors();
-		}
-
-		private void toolStripMenuItem_TerminalMenu_Monitor_ShowCounters_Click(object sender, EventArgs e)
-		{
-			_settings.Display.ShowCounters = !_settings.Display.ShowCounters;
-		}
-
-		private void toolStripMenuItem_TerminalMenu_Monitor_ResetCounters_Click(object sender, EventArgs e)
-		{
-			ClearCountStatus();
-		}
-
-		private void toolStripMenuItem_TerminalMenu_Monitor_Format_Click(object sender, EventArgs e)
-		{
-			ShowFormatSettings();
 		}
 
 		#endregion
@@ -411,103 +384,99 @@ namespace HSR.YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_View_DropDownOpening(object sender, EventArgs e)
 		{
-			toolStripMenuItem_TerminalMenu_View_SendCommand.Checked = _settings.Layout.SendCommandPanelIsVisible;
-			toolStripMenuItem_TerminalMenu_View_SendFile.Checked = _settings.Layout.SendFilePanelIsVisible;
-
-			toolStripMenuItem_TerminalMenu_View_Tx.Checked = _settings.Layout.TxMonitorPanelIsVisible;
-			toolStripMenuItem_TerminalMenu_View_Bidir.Checked = _settings.Layout.BidirMonitorPanelIsVisible;
-			toolStripMenuItem_TerminalMenu_View_Rx.Checked = _settings.Layout.RxMonitorPanelIsVisible;
+			// panels
+			toolStripMenuItem_TerminalMenu_View_Panels_Tx.Checked = _settings.Layout.TxMonitorPanelIsVisible;
+			toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Checked = _settings.Layout.BidirMonitorPanelIsVisible;
+			toolStripMenuItem_TerminalMenu_View_Panels_Rx.Checked = _settings.Layout.RxMonitorPanelIsVisible;
 
 			// disable monitor item if the other monitors are hidden
-			toolStripMenuItem_TerminalMenu_View_Tx.Enabled = (_settings.Layout.BidirMonitorPanelIsVisible || _settings.Layout.RxMonitorPanelIsVisible);
-			toolStripMenuItem_TerminalMenu_View_Bidir.Enabled = (_settings.Layout.TxMonitorPanelIsVisible || _settings.Layout.RxMonitorPanelIsVisible);
-			toolStripMenuItem_TerminalMenu_View_Rx.Enabled = (_settings.Layout.TxMonitorPanelIsVisible || _settings.Layout.BidirMonitorPanelIsVisible);
+			toolStripMenuItem_TerminalMenu_View_Panels_Tx.Enabled = (_settings.Layout.BidirMonitorPanelIsVisible || _settings.Layout.RxMonitorPanelIsVisible);
+			toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Enabled = (_settings.Layout.TxMonitorPanelIsVisible || _settings.Layout.RxMonitorPanelIsVisible);
+			toolStripMenuItem_TerminalMenu_View_Panels_Rx.Enabled = (_settings.Layout.TxMonitorPanelIsVisible || _settings.Layout.BidirMonitorPanelIsVisible);
 
-			toolStripMenuItem_TerminalMenu_View_Predefined.Checked = _settings.Layout.PredefinedPanelIsVisible;
+			toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem = _settings.Layout.MonitorOrientation;
+
+			toolStripMenuItem_TerminalMenu_View_Panels_SendCommand.Checked = _settings.Layout.SendCommandPanelIsVisible;
+			toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Checked = _settings.Layout.SendFilePanelIsVisible;
+
+			toolStripMenuItem_TerminalMenu_View_Panels_Predefined.Checked = _settings.Layout.PredefinedPanelIsVisible;
+
+			// counters
+			toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters.Checked = _settings.Display.ShowCounters;
+			toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters.Enabled = _settings.Display.ShowCounters;
+
+			// options
+			toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Checked = _settings.Display.ShowTimeStamp;
+			toolStripMenuItem_TerminalMenu_View_ShowLength.Checked = _settings.Display.ShowLength;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_SendCommand_Click(object sender, EventArgs e)
-		{
-			_settings.Layout.SendCommandPanelIsVisible = !_settings.Layout.SendCommandPanelIsVisible;
-		}
-
-		private void toolStripMenuItem_TerminalMenu_View_SendFile_Click(object sender, EventArgs e)
-		{
-			_settings.Layout.SendFilePanelIsVisible = !_settings.Layout.SendFilePanelIsVisible;
-		}
-
-		private void toolStripMenuItem_TerminalMenu_View_Tx_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_Panels_Tx_Click(object sender, EventArgs e)
 		{
 			_settings.Layout.TxMonitorPanelIsVisible = !_settings.Layout.TxMonitorPanelIsVisible;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_Bidir_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_Panels_Bidir_Click(object sender, EventArgs e)
 		{
 			_settings.Layout.BidirMonitorPanelIsVisible = !_settings.Layout.BidirMonitorPanelIsVisible;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_Rx_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_Panels_Rx_Click(object sender, EventArgs e)
 		{
 			_settings.Layout.RxMonitorPanelIsVisible = !_settings.Layout.RxMonitorPanelIsVisible;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_Predefined_Click(object sender, EventArgs e)
+		private void toolStripComboBox_TerminalMenu_View_Panels_Orientation_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+				SetMonitorOrientation((Orientation)toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem);
+		}
+
+		private void toolStripMenuItem_TerminalMenu_View_Panels_Predefined_Click(object sender, EventArgs e)
 		{
 			_settings.Layout.PredefinedPanelIsVisible = !_settings.Layout.PredefinedPanelIsVisible;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_Rearrange_Click(object sender, EventArgs e)
-		{
-			ViewRearrange();
-		}
-
-		#endregion
-
-		#endregion
-
-		#region Controls Event Handlers > Send Context Menu
-		//------------------------------------------------------------------------------------------
-		// Controls Event Handlers > Send Context Menu
-		//------------------------------------------------------------------------------------------
-
-		private void contextMenuStrip_Send_Opening(object sender, CancelEventArgs e)
-		{
-			toolStripMenuItem_SendContextMenu_Command.Enabled = _settings.SendCommand.Command.IsValidCommand;
-			toolStripMenuItem_SendContextMenu_File.Enabled = _settings.SendCommand.Command.IsValidFilePath;
-
-			toolStripMenuItem_SendContextMenu_View_SendCommand.Checked = _settings.Layout.SendCommandPanelIsVisible;
-			toolStripMenuItem_SendContextMenu_View_SendFile.Checked = _settings.Layout.SendFilePanelIsVisible;
-		}
-
-		private void toolStripMenuItem_SendContextMenu_Command_Click(object sender, EventArgs e)
-		{
-			SendCommand();
-		}
-
-		private void toolStripMenuItem_SendContextMenu_File_Click(object sender, EventArgs e)
-		{
-			SendFile();
-		}
-
-		private void toolStripMenuItem_SendContextMenu_View_SendCommand_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_Panels_SendCommand_Click(object sender, EventArgs e)
 		{
 			_settings.Layout.SendCommandPanelIsVisible = !_settings.Layout.SendCommandPanelIsVisible;
 		}
 
-		private void toolStripMenuItem_SendContextMenu_View_SendFile_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_Panels_SendFile_Click(object sender, EventArgs e)
 		{
 			_settings.Layout.SendFilePanelIsVisible = !_settings.Layout.SendFilePanelIsVisible;
 		}
 
-		private void toolStripMenuItem_SendContextMenu_Hide_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_Panels_Rearrange_Click(object sender, EventArgs e)
 		{
-			Control source = contextMenuStrip_Send.SourceControl;
-
-			if ((source == sendCommand) || (source == panel_SendCommand))
-				_settings.Layout.SendCommandPanelIsVisible = false;
-			if ((source == sendFile) || (source == panel_SendFile))
-				_settings.Layout.SendFilePanelIsVisible = false;
+			ViewRearrange();
 		}
+
+		private void toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters_Click(object sender, EventArgs e)
+		{
+			_settings.Display.ShowCounters = !_settings.Display.ShowCounters;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters_Click(object sender, EventArgs e)
+		{
+			ClearCountStatus();
+		}
+
+		private void toolStripMenuItem_TerminalMenu_View_ShowTimeStamp_Click(object sender, EventArgs e)
+		{
+			_settings.Display.ShowTimeStamp = !_settings.Display.ShowTimeStamp;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_View_ShowLength_Click(object sender, EventArgs e)
+		{
+			_settings.Display.ShowLength = !_settings.Display.ShowLength;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_View_Format_Click(object sender, EventArgs e)
+		{
+			ShowFormatSettings();
+		}
+
+		#endregion
 
 		#endregion
 
@@ -521,7 +490,7 @@ namespace HSR.YAT.Gui.Forms
 			Domain.RepositoryType monitorType = GetMonitorType(contextMenuStrip_Monitor.SourceControl);
 			bool isMonitor = (monitorType != Domain.RepositoryType.None);
 
-			toolStripMenuItem_MonitorContextMenu_ShowTimestamp.Checked = _settings.Display.ShowTimestamp;
+			toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Checked = _settings.Display.ShowTimeStamp;
 			toolStripMenuItem_MonitorContextMenu_ShowLength.Checked = _settings.Display.ShowLength;
 
 			toolStripMenuItem_MonitorContextMenu_Clear.Enabled = isMonitor;
@@ -529,14 +498,14 @@ namespace HSR.YAT.Gui.Forms
 			toolStripMenuItem_MonitorContextMenu_ShowCounters.Checked = _settings.Display.ShowCounters;
 			toolStripMenuItem_MonitorContextMenu_ResetCounters.Enabled = _settings.Display.ShowCounters;
 
-			toolStripMenuItem_MonitorContextMenu_View_Tx.Checked = _settings.Layout.TxMonitorPanelIsVisible;
-			toolStripMenuItem_MonitorContextMenu_View_Bidir.Checked = _settings.Layout.BidirMonitorPanelIsVisible;
-			toolStripMenuItem_MonitorContextMenu_View_Rx.Checked = _settings.Layout.RxMonitorPanelIsVisible;
+			toolStripMenuItem_MonitorContextMenu_Panels_Tx.Checked = _settings.Layout.TxMonitorPanelIsVisible;
+			toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Checked = _settings.Layout.BidirMonitorPanelIsVisible;
+			toolStripMenuItem_MonitorContextMenu_Panels_Rx.Checked = _settings.Layout.RxMonitorPanelIsVisible;
 
 			// disable "Monitor" item if the other monitors are hidden
-			toolStripMenuItem_MonitorContextMenu_View_Tx.Enabled    = (_settings.Layout.BidirMonitorPanelIsVisible || _settings.Layout.RxMonitorPanelIsVisible);
-			toolStripMenuItem_MonitorContextMenu_View_Bidir.Enabled = (_settings.Layout.TxMonitorPanelIsVisible || _settings.Layout.RxMonitorPanelIsVisible);
-			toolStripMenuItem_MonitorContextMenu_View_Rx.Enabled    = (_settings.Layout.TxMonitorPanelIsVisible || _settings.Layout.BidirMonitorPanelIsVisible);
+			toolStripMenuItem_MonitorContextMenu_Panels_Tx.Enabled = (_settings.Layout.BidirMonitorPanelIsVisible || _settings.Layout.RxMonitorPanelIsVisible);
+			toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Enabled = (_settings.Layout.TxMonitorPanelIsVisible || _settings.Layout.RxMonitorPanelIsVisible);
+			toolStripMenuItem_MonitorContextMenu_Panels_Rx.Enabled = (_settings.Layout.TxMonitorPanelIsVisible || _settings.Layout.BidirMonitorPanelIsVisible);
 
 			// hide "Hide" item if only this monitor is visible
 			bool hideIsAllowed = false;
@@ -554,9 +523,9 @@ namespace HSR.YAT.Gui.Forms
 			toolStripMenuItem_MonitorContextMenu_Print.Enabled = isMonitor;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowTimestamp_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_ShowTimeStamp_Click(object sender, EventArgs e)
 		{
-			_settings.Display.ShowTimestamp = !_settings.Display.ShowTimestamp;
+			_settings.Display.ShowTimeStamp = !_settings.Display.ShowTimeStamp;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowLength_Click(object sender, EventArgs e)
@@ -590,17 +559,17 @@ namespace HSR.YAT.Gui.Forms
 			ClearCountStatus();
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_View_Tx_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_Panels_Tx_Click(object sender, EventArgs e)
 		{
 			_settings.Layout.TxMonitorPanelIsVisible = !_settings.Layout.TxMonitorPanelIsVisible;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_View_Bidir_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_Panels_Bidir_Click(object sender, EventArgs e)
 		{
 			_settings.Layout.BidirMonitorPanelIsVisible = !_settings.Layout.BidirMonitorPanelIsVisible;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_View_Rx_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_Panels_Rx_Click(object sender, EventArgs e)
 		{
 			_settings.Layout.RxMonitorPanelIsVisible = !_settings.Layout.RxMonitorPanelIsVisible;
 		}
@@ -716,16 +685,56 @@ namespace HSR.YAT.Gui.Forms
 
 		#endregion
 
+		#region Controls Event Handlers > Send Context Menu
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Send Context Menu
+		//------------------------------------------------------------------------------------------
+
+		private void contextMenuStrip_Send_Opening(object sender, CancelEventArgs e)
+		{
+			toolStripMenuItem_SendContextMenu_Command.Enabled = _settings.SendCommand.Command.IsValidCommand;
+			toolStripMenuItem_SendContextMenu_File.Enabled = _settings.SendCommand.Command.IsValidFilePath;
+
+			toolStripMenuItem_SendContextMenu_Panels_SendCommand.Checked = _settings.Layout.SendCommandPanelIsVisible;
+			toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = _settings.Layout.SendFilePanelIsVisible;
+		}
+
+		private void toolStripMenuItem_SendContextMenu_Command_Click(object sender, EventArgs e)
+		{
+			SendCommand();
+		}
+
+		private void toolStripMenuItem_SendContextMenu_File_Click(object sender, EventArgs e)
+		{
+			SendFile();
+		}
+
+		private void toolStripMenuItem_SendContextMenu_View_SendCommand_Click(object sender, EventArgs e)
+		{
+			_settings.Layout.SendCommandPanelIsVisible = !_settings.Layout.SendCommandPanelIsVisible;
+		}
+
+		private void toolStripMenuItem_SendContextMenu_View_SendFile_Click(object sender, EventArgs e)
+		{
+			_settings.Layout.SendFilePanelIsVisible = !_settings.Layout.SendFilePanelIsVisible;
+		}
+
+		private void toolStripMenuItem_SendContextMenu_Hide_Click(object sender, EventArgs e)
+		{
+			Control source = contextMenuStrip_Send.SourceControl;
+
+			if (source == sendCommand)
+				_settings.Layout.SendCommandPanelIsVisible = false;
+			if (source == sendFile)
+				_settings.Layout.SendFilePanelIsVisible = false;
+		}
+
+		#endregion
+
 		#region Controls Event Handlers > Panel Layout
 		//------------------------------------------------------------------------------------------
 		// Controls Event Handlers > Panel Layout
 		//------------------------------------------------------------------------------------------
-
-		private void splitContainer_Upper_SplitterMoved(object sender, SplitterEventArgs e)
-		{
-			if (!_isStartingUp && !_isSettingControls)
-				_settings.Layout.UpperSplitterRatio = (float)splitContainer_Upper.SplitterDistance / splitContainer_Upper.Width;
-		}
 
 		private void splitContainer_MonitorLeft_SplitterMoved(object sender, SplitterEventArgs e)
 		{
@@ -755,37 +764,10 @@ namespace HSR.YAT.Gui.Forms
 			}
 		}
 
-		private void splitContainer_Lower_SplitterMoved(object sender, SplitterEventArgs e)
+		private void splitContainer_Predefined_SplitterMoved(object sender, SplitterEventArgs e)
 		{
 			if (!_isStartingUp && !_isSettingControls)
-				_settings.Layout.LowerSplitterRatio = (float)splitContainer_Lower.SplitterDistance / splitContainer_Lower.Width;
-		}
-
-		#endregion
-
-		#region Controls Event Handlers > Send
-		//------------------------------------------------------------------------------------------
-		// Controls Event Handlers > Send
-		//------------------------------------------------------------------------------------------
-
-		private void sendCommand_CommandChanged(object sender, EventArgs e)
-		{
-			_settings.Implicit.SendCommand.Command = sendCommand.Command;
-		}
-
-		private void sendCommand_SendCommandRequest(object sender, EventArgs e)
-		{
-			SendCommand();
-		}
-
-		private void sendFile_CommandChanged(object sender, EventArgs e)
-		{
-			_settings.Implicit.SendFile.Command = sendFile.Command;
-		}
-
-		private void sendFile_SendCommandRequest(object sender, EventArgs e)
-		{
-			SendFile();
+				_settings.Layout.PredefinedSplitterRatio = (float)splitContainer_Predefined.SplitterDistance / splitContainer_Predefined.Width;
 		}
 
 		#endregion
@@ -850,6 +832,33 @@ namespace HSR.YAT.Gui.Forms
 
 		#endregion
 
+		#region Controls Event Handlers > Send
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Send
+		//------------------------------------------------------------------------------------------
+
+		private void sendCommand_CommandChanged(object sender, EventArgs e)
+		{
+			_settings.Implicit.SendCommand.Command = sendCommand.Command;
+		}
+
+		private void sendCommand_SendCommandRequest(object sender, EventArgs e)
+		{
+			SendCommand();
+		}
+
+		private void sendFile_CommandChanged(object sender, EventArgs e)
+		{
+			_settings.Implicit.SendFile.Command = sendFile.Command;
+		}
+
+		private void sendFile_SendCommandRequest(object sender, EventArgs e)
+		{
+			SendFile();
+		}
+
+		#endregion
+
 		#region Controls Event Handlers > Status
 		//------------------------------------------------------------------------------------------
 		// Controls Event Handlers > Status
@@ -891,16 +900,16 @@ namespace HSR.YAT.Gui.Forms
 		{
 			SetFixedStatusText("Saving terminal as...");
 			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.Title = "Save " + Id + " As";
-			sfd.Filter = ApplicationSettings.Extensions.TerminalFilesFilter;
-			sfd.DefaultExt = ApplicationSettings.Extensions.TerminalFilesDefault;
-			sfd.InitialDirectory = ApplicationSettings.LocalUser.Path.SettingsFilesPath;
-			sfd.FileName = Id + "." + sfd.DefaultExt;
+			sfd.Title = "Save " + UserId + " As";
+			sfd.Filter = ExtensionSettings.TerminalFilesFilter;
+			sfd.DefaultExt = ExtensionSettings.TerminalFiles;
+			sfd.InitialDirectory = ApplicationSettings.LocalUser.Paths.TerminalFilesPath;
+			sfd.FileName = UserId + "." + sfd.DefaultExt;
 			if ((sfd.ShowDialog(this) == DialogResult.OK) && (sfd.FileName.Length > 0))
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUser.Path.SettingsFilesPath = System.IO.Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.LocalUser.Paths.TerminalFilesPath = System.IO.Path.GetDirectoryName(sfd.FileName);
 				_settingsHandler.SettingsFilePath = sfd.FileName;
 				DoSave();
 			}
@@ -908,6 +917,8 @@ namespace HSR.YAT.Gui.Forms
 			{
 				ResetStatusText();
 			}
+
+			SelectSendCommandInput();
 		}
 
 		private void DoSave()
@@ -916,7 +927,7 @@ namespace HSR.YAT.Gui.Forms
 			try
 			{
 				_settingsHandler.Save();
-				IdFromFile = _settingsHandler.SettingsFilePath;
+				UserIdFromFile = _settingsHandler.SettingsFilePath;
 				OnTerminalSaved(new TerminalSavedEventArgs(_settingsHandler.SettingsFilePath));
 				SetTimedStatusText("Terminal saved");
 			}
@@ -936,6 +947,8 @@ namespace HSR.YAT.Gui.Forms
 				SetTimedStatusText("Terminal not saved!");
 			}
 			SetTerminalCaption();
+
+			SelectSendCommandInput();
 		}
 
 		private void CloseFile()
@@ -1168,28 +1181,15 @@ namespace HSR.YAT.Gui.Forms
 			_isSettingControls = true;
 			SuspendLayout();
 
-			// splitContainer_Terminal and splitContainer_Upper
-			if (_settings.Layout.SendCommandPanelIsVisible || _settings.Layout.SendFilePanelIsVisible)
-			{
-				splitContainer_Terminal.Panel1Collapsed = false;
-				splitContainer_Upper.Panel1Collapsed = !_settings.Layout.SendCommandPanelIsVisible;
-				splitContainer_Upper.Panel2Collapsed = !_settings.Layout.SendFilePanelIsVisible;
-				splitContainer_Upper.SplitterDistance = (int)(_settings.Layout.UpperSplitterRatio * splitContainer_Upper.Width);
-			}
-			else
-			{
-				splitContainer_Terminal.Panel1Collapsed = true;
-			}
-
-			// splitContainer_Lower
+			// splitContainer_Predefined
 			if (_settings.Layout.PredefinedPanelIsVisible)
 			{
-				splitContainer_Lower.Panel2Collapsed = false;
-				splitContainer_Lower.SplitterDistance = (int)(_settings.Layout.LowerSplitterRatio * splitContainer_Lower.Width);
+				splitContainer_Predefined.Panel2Collapsed = false;
+				splitContainer_Predefined.SplitterDistance = (int)(_settings.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width);
 			}
 			else
 			{
-				splitContainer_Lower.Panel2Collapsed = true;
+				splitContainer_Predefined.Panel2Collapsed = true;
 			}
 
 			// splitContainer_MonitorLeft and splitContainer_MonitorRight
@@ -1238,6 +1238,18 @@ namespace HSR.YAT.Gui.Forms
 				splitContainer_MonitorRight.Panel1Collapsed = true;
 			}
 			splitContainer_MonitorRight.Panel2Collapsed = !rxIsVisible;
+
+			// splitContainer_Terminal and splitContainer_SendCommand
+			if (_settings.Layout.SendCommandPanelIsVisible || _settings.Layout.SendFilePanelIsVisible)
+			{
+				splitContainer_Terminal.Panel1Collapsed = false;
+				splitContainer_SendCommand.Panel1Collapsed = !_settings.Layout.SendCommandPanelIsVisible;
+				splitContainer_SendCommand.Panel2Collapsed = !_settings.Layout.SendFilePanelIsVisible;
+			}
+			else
+			{
+				splitContainer_Terminal.Panel1Collapsed = true;
+			}
 
 			ResumeLayout();
 			_isSettingControls = false;
@@ -1315,7 +1327,7 @@ namespace HSR.YAT.Gui.Forms
 				isConnected = _terminal.IsConnected;
 			}
 
-			StringBuilder sb = new StringBuilder(Id);
+			StringBuilder sb = new StringBuilder(UserId);
 
 			if ((_settings != null) && _settings.ExplicitHaveChanged)
 				sb.Append("*");
@@ -1545,8 +1557,8 @@ namespace HSR.YAT.Gui.Forms
 
 				if (isOpen)
 				{
-					HSR.IO.Ports.SerialPortControlPins pins;
-					pins = ((HSR.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance).ControlPins;
+					MKY.IO.Ports.SerialPortControlPins pins;
+					pins = ((MKY.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance).ControlPins;
 
 					bool rs485Handshake = (_settings.Terminal.IO.SerialPort.Communication.Handshake == Domain.IO.Handshake.RS485);
 
@@ -1599,8 +1611,8 @@ namespace HSR.YAT.Gui.Forms
 
 			if (_terminal.IsOpen)
 			{
-				HSR.IO.Ports.SerialPortControlPins pins;
-				pins = ((HSR.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance).ControlPins;
+				MKY.IO.Ports.SerialPortControlPins pins;
+				pins = ((MKY.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance).ControlPins;
 
 				toolStripStatusLabel_TerminalStatus_RTS.Image = (pins.Rts ? on : off);
 			}
@@ -1638,7 +1650,10 @@ namespace HSR.YAT.Gui.Forms
 			try
 			{
 				_terminal.Open();
-				if (saveStatus) _settings.TerminalIsOpen = _terminal.IsOpen;
+
+				if (saveStatus)
+					_settings.TerminalIsOpen = _terminal.IsOpen;
+
 				SetTimedStatusText("Terminal opened");
 				success = true;
 			}
@@ -1657,7 +1672,7 @@ namespace HSR.YAT.Gui.Forms
 					this,
 					"Unable to open terminal:" + Environment.NewLine + Environment.NewLine +
 					ex.Message + Environment.NewLine + Environment.NewLine +
-					ioText + " may be in use by another process.",
+					ioText + " could be in use by another process.",
 					"Terminal Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
@@ -1667,6 +1682,8 @@ namespace HSR.YAT.Gui.Forms
 				success = false;
 			}
 			Cursor = Cursors.Default;
+
+			SelectSendCommandInput();
 
 			return (success);
 		}
@@ -1779,6 +1796,8 @@ namespace HSR.YAT.Gui.Forms
 			{
 				ResetStatusText();
 			}
+
+			SelectSendCommandInput();
 		}
 
 		#endregion
@@ -1792,7 +1811,7 @@ namespace HSR.YAT.Gui.Forms
 		{
 			if (_settings.Terminal.IO.SerialPort.Communication.Handshake == Domain.IO.Handshake.Manual)
 			{
-				HSR.IO.Ports.ISerialPort port = (HSR.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance;
+				MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance;
 				port.ToggleRts();
 				_settings.Terminal.IO.SerialPort.RtsEnabled = port.RtsEnable;
 			}
@@ -1802,7 +1821,7 @@ namespace HSR.YAT.Gui.Forms
 		{
 			if (_settings.Terminal.IO.SerialPort.Communication.Handshake == Domain.IO.Handshake.Manual)
 			{
-				HSR.IO.Ports.ISerialPort port = (HSR.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance;
+				MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance;
 				port.ToggleDtr();
 				_settings.Terminal.IO.SerialPort.DtrEnabled = port.DtrEnable;
 			}
@@ -2076,6 +2095,12 @@ namespace HSR.YAT.Gui.Forms
 		// Send > Command
 		//------------------------------------------------------------------------------------------
 
+		private void SelectSendCommandInput()
+		{
+			sendCommand.Select();
+			sendCommand.SelectInput();
+		}
+
 		private void SendCommand()
 		{
 			SendCommand(_settings.SendCommand.Command);
@@ -2132,12 +2157,12 @@ namespace HSR.YAT.Gui.Forms
 				if (_terminal is Domain.TextTerminal)
 				{
 					string[] lines;
-					if (ApplicationSettings.Extensions.IsXml(System.IO.Path.GetExtension(filePath)))
+					if (ExtensionSettings.IsXmlFile(System.IO.Path.GetExtension(filePath)))
 					{
 						// xml
 						lines = XmlReader.LinesFromXmlFile(filePath);
 					}
-					else if (ApplicationSettings.Extensions.IsRtf(System.IO.Path.GetExtension(filePath)))
+					else if (ExtensionSettings.IsRtfFile(System.IO.Path.GetExtension(filePath)))
 					{
 						// rtf
 						lines = RtfReader.LinesFromRtfFile(filePath);
@@ -2358,10 +2383,10 @@ namespace HSR.YAT.Gui.Forms
 		{
 			_isSettingControls = true;
 
-			toolStripComboBox_TerminalMenu_Monitor_Orientation.Items.Clear();
-			toolStripComboBox_TerminalMenu_Monitor_Orientation.Items.Add(Orientation.Vertical);
-			toolStripComboBox_TerminalMenu_Monitor_Orientation.Items.Add(Orientation.Horizontal);
-			toolStripComboBox_TerminalMenu_Monitor_Orientation.SelectedIndex = 0;
+			toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.Clear();
+			toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.Add(Orientation.Vertical);
+			toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.Add(Orientation.Horizontal);
+			toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedIndex = 0;
 
 			toolStripComboBox_MonitorContextMenu_Orientation.Items.Clear();
 			toolStripComboBox_MonitorContextMenu_Orientation.Items.Add(Orientation.Vertical);
@@ -2451,13 +2476,13 @@ namespace HSR.YAT.Gui.Forms
 			SetFixedStatusText("Saving monitor as...");
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Title = "Save As";
-			sfd.Filter = ApplicationSettings.Extensions.TextFilesFilter;
-			sfd.DefaultExt = ApplicationSettings.Extensions.TextFilesDefault;
-			sfd.InitialDirectory = ApplicationSettings.LocalUser.Path.MonitorFilesPath;
+			sfd.Filter = ExtensionSettings.TextFilesFilter;
+			sfd.DefaultExt = ExtensionSettings.TextFilesDefault;
+			sfd.InitialDirectory = ApplicationSettings.LocalUser.Paths.MonitorFilesPath;
 			if (sfd.ShowDialog(this) == DialogResult.OK && sfd.FileName.Length > 0)
 			{
 				Refresh();
-				ApplicationSettings.LocalUser.Path.MonitorFilesPath = System.IO.Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.LocalUser.Paths.MonitorFilesPath = System.IO.Path.GetDirectoryName(sfd.FileName);
 				SaveMonitor(monitor, sfd.FileName);
 			}
 			else
@@ -2471,9 +2496,9 @@ namespace HSR.YAT.Gui.Forms
 			SetFixedStatusText("Saving monitor...");
 			try
 			{
-				if (ApplicationSettings.Extensions.IsXml(System.IO.Path.GetExtension(filePath)))
+				if (ExtensionSettings.IsXmlFile(System.IO.Path.GetExtension(filePath)))
 					XmlWriter.LinesToXmlFile(monitor.SelectedLines, filePath);
-				else if (ApplicationSettings.Extensions.IsRtf(System.IO.Path.GetExtension(filePath)))
+				else if (ExtensionSettings.IsRtfFile(System.IO.Path.GetExtension(filePath)))
 					RtfWriter.LinesToRtfFile(monitor.SelectedLines, filePath, _settings.Format, RichTextBoxStreamType.RichText);
 				else
 					RtfWriter.LinesToRtfFile(monitor.SelectedLines, filePath, _settings.Format, RichTextBoxStreamType.PlainText);
@@ -2577,6 +2602,8 @@ namespace HSR.YAT.Gui.Forms
 				_settings.Log = f.SettingsResult;
 				_log.Settings = _settings.Log;
 			}
+
+			SelectSendCommandInput();
 		}
 
 		private void BeginLog()

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace HSR.YAT.Gui.Settings
+namespace MKY.YAT.Gui.Settings
 {
-	public class NewTerminalSettings : Utilities.Settings.Settings
+	[Serializable]
+	public class NewTerminalSettings : Utilities.Settings.Settings, IEquatable<NewTerminalSettings>
 	{
 		private Domain.TerminalType _terminalType;
 		private Domain.IOType _ioType;
@@ -105,7 +106,7 @@ namespace HSR.YAT.Gui.Settings
 		}
 
 		[XmlElement("SerialPortId")]
-		public HSR.IO.Ports.SerialPortId SerialPortId
+		public MKY.IO.Ports.SerialPortId SerialPortId
 		{
 			get { return (_serialPortId); }
 			set

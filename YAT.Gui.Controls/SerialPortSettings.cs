@@ -6,7 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-namespace HSR.YAT.Gui.Controls
+namespace MKY.YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("BaudRateChanged")]
@@ -16,19 +16,19 @@ namespace HSR.YAT.Gui.Controls
 		// Constants
 		//------------------------------------------------------------------------------------------
 
-		private const IO.Ports.BaudRate        _BaudRateDefault  = IO.Ports.BaudRate.Baud009600;
+		private const int                      _BaudRateDefault  = (int)IO.Ports.BaudRate.Baud009600;
 		private const IO.Ports.DataBits        _DataBitsDefault  = IO.Ports.DataBits.Eight;
 		private const System.IO.Ports.Parity   _ParityDefault    = System.IO.Ports.Parity.None;
 		private const System.IO.Ports.StopBits _StopBitsDefault  = System.IO.Ports.StopBits.One;
 		private const Domain.IO.Handshake      _HandshakeDefault = Domain.IO.Handshake.None;
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool _isSettingControls = false;
 
-		private IO.Ports.BaudRate        _baudRate  = _BaudRateDefault;
+		private int                      _baudRate  = _BaudRateDefault;
 		private IO.Ports.DataBits        _dataBits  = _DataBitsDefault;
 		private System.IO.Ports.Parity   _parity    = _ParityDefault;
 		private System.IO.Ports.StopBits _stopBits  = _StopBitsDefault;
@@ -82,7 +82,7 @@ namespace HSR.YAT.Gui.Controls
 		[Category("Serial Port")]
 		[Description("The baud rate.")]
 		[DefaultValue(_BaudRateDefault)]
-		public IO.Ports.BaudRate BaudRate
+		public int BaudRate
 		{
 			get { return (_baudRate); }
 			set
@@ -177,6 +177,39 @@ namespace HSR.YAT.Gui.Controls
 				BaudRate = (IO.Ports.XBaudRate)comboBox_BaudRate.SelectedItem;
 		}
 
+		private void comboBox_BaudRate_Validating(object sender, CancelEventArgs e)
+		{
+			if (!_isSettingControls)
+			{
+				IO.Ports.XBaudRate baudRate = comboBox_BaudRate.SelectedItem as IO.Ports.XBaudRate;
+
+				if (baudRate != null)
+				{
+					BaudRate = baudRate;
+				}
+				else
+				{
+					int intBaudRate;
+					if (int.TryParse(comboBox_BaudRate.Text, out intBaudRate) && (intBaudRate > 0))
+					{
+						BaudRate = (IO.Ports.XBaudRate)intBaudRate;
+					}
+					else
+					{
+						MessageBox.Show
+							(
+							this,
+							"Baud rate must be a positive number!",
+							"Invalid Input",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Error
+							);
+						e.Cancel = true;
+					}
+				}
+			}
+		}
+
 		private void comboBox_DataBits_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
@@ -212,10 +245,15 @@ namespace HSR.YAT.Gui.Controls
 		{
 			_isSettingControls = true;
 
-			comboBox_BaudRate.SelectedItem = (IO.Ports.XBaudRate)_baudRate;
-			comboBox_DataBits.SelectedItem = (IO.Ports.XDataBits)_dataBits;
-			comboBox_Parity.SelectedItem = (IO.Ports.XParity)_parity;
-			comboBox_StopBits.SelectedItem = (IO.Ports.XStopBits)_stopBits;
+			IO.Ports.XBaudRate baudRate = (IO.Ports.XBaudRate)_baudRate;
+			if (baudRate != IO.Ports.BaudRate.UserDefined)
+				comboBox_BaudRate.SelectedItem = baudRate;
+			else
+				comboBox_BaudRate.Text = _baudRate.ToString();
+
+			comboBox_DataBits.SelectedItem  = (IO.Ports.XDataBits)_dataBits;
+			comboBox_Parity.SelectedItem    = (IO.Ports.XParity)_parity;
+			comboBox_StopBits.SelectedItem  = (IO.Ports.XStopBits)_stopBits;
 			comboBox_Handshake.SelectedItem = (Domain.IO.XHandshake)_handshake;
 
 			_isSettingControls = false;

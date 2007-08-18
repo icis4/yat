@@ -1,4 +1,4 @@
-namespace HSR.YAT.Gui.Controls
+namespace MKY.YAT.Gui.Controls
 {
 	partial class PredefinedCommandSettingsSet
 	{
@@ -29,7 +29,7 @@ namespace HSR.YAT.Gui.Controls
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.pathLabel_FilePath = new HSR.Windows.Forms.PathLabel();
+			this.pathLabel_FilePath = new MKY.Windows.Forms.PathLabel();
 			this.checkBox_IsFile = new System.Windows.Forms.CheckBox();
 			this.button_SetMultiLineCommand = new System.Windows.Forms.Button();
 			this.label_Shortcut = new System.Windows.Forms.Label();
@@ -137,7 +137,7 @@ namespace HSR.YAT.Gui.Controls
 
 		#endregion
 
-		private HSR.Windows.Forms.PathLabel pathLabel_FilePath;
+		private MKY.Windows.Forms.PathLabel pathLabel_FilePath;
 		private System.Windows.Forms.CheckBox checkBox_IsFile;
 		private System.Windows.Forms.Button button_SetMultiLineCommand;
 		private System.Windows.Forms.Label label_Shortcut;

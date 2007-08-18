@@ -1,4 +1,4 @@
-namespace HSR.YAT.Gui.Controls
+namespace MKY.YAT.Gui.Controls
 {
 	partial class SerialPortSettings
 	{
@@ -90,11 +90,11 @@ namespace HSR.YAT.Gui.Controls
 			// 
 			this.comboBox_BaudRate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.comboBox_BaudRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_BaudRate.Location = new System.Drawing.Point(101, 3);
 			this.comboBox_BaudRate.Name = "comboBox_BaudRate";
 			this.comboBox_BaudRate.Size = new System.Drawing.Size(156, 21);
 			this.comboBox_BaudRate.TabIndex = 1;
+			this.comboBox_BaudRate.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_BaudRate_Validating);
 			this.comboBox_BaudRate.SelectedIndexChanged += new System.EventHandler(this.comboBox_BaudRate_SelectedIndexChanged);
 			// 
 			// label_FlowControl

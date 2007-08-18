@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-using HSR.Utilities.Text;
+using MKY.Utilities.Text;
 
-namespace HSR.YAT.Domain.Settings
+namespace MKY.YAT.Domain.Settings
 {
-	public class TextTerminalSettings : Utilities.Settings.Settings
+	/// <summary></summary>
+	public class TextTerminalSettings : Utilities.Settings.Settings, IEquatable<TextTerminalSettings>
 	{
-		public static readonly string DefaultEol = (string)XEol.FromString(Environment.NewLine);
+		/// <summary></summary>
+		public static readonly string DefaultEol = (string)XEol.Parse(Environment.NewLine);
+		/// <summary></summary>
 		public static readonly int DefaultEncoding = (XEncoding)(System.Text.Encoding.Default);
 
 		private bool              _separateTxRxEol;
@@ -24,12 +27,14 @@ namespace HSR.YAT.Domain.Settings
 		private WaitForResponse   _waitForResponse;
 		private CharSubstitution  _charSubstitution;
 
+		/// <summary></summary>
 		public TextTerminalSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public TextTerminalSettings(Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -37,6 +42,7 @@ namespace HSR.YAT.Domain.Settings
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public TextTerminalSettings(TextTerminalSettings rhs)
 			: base(rhs)
 		{
@@ -54,6 +60,7 @@ namespace HSR.YAT.Domain.Settings
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		protected override void SetMyDefaults()
 		{
 			SeparateTxRxEol     = false;
@@ -74,6 +81,7 @@ namespace HSR.YAT.Domain.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("SeparateTxRxEol")]
 		public bool SeparateTxRxEol
 		{
@@ -88,6 +96,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("TxEol")]
 		public string TxEol
 		{
@@ -102,6 +111,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("RxEol")]
 		public string RxEol
 		{
@@ -122,6 +132,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Encoding")]
 		public int Encoding
 		{
@@ -136,6 +147,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("DirectionLineBreakEnabled")]
 		public bool DirectionLineBreakEnabled
 		{
@@ -150,6 +162,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("ShowEol")]
 		public bool ShowEol
 		{
@@ -164,6 +177,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("ReplaceControlChars")]
 		public bool ReplaceControlChars
 		{
@@ -178,6 +192,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("ControlCharRadix")]
 		public ControlCharRadix ControlCharRadix
 		{
@@ -192,6 +207,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("LineSendDelay")]
 		public TextLineSendDelay LineSendDelay
 		{
@@ -206,6 +222,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("WaitForResponse")]
 		public WaitForResponse WaitForResponse
 		{
@@ -220,6 +237,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("CharSubstitution")]
 		public CharSubstitution CharSubstitution
 		{
@@ -275,6 +293,7 @@ namespace HSR.YAT.Domain.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

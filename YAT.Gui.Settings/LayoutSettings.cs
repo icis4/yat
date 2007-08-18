@@ -4,14 +4,11 @@ using System.Text;
 using System.Xml.Serialization;
 using System.Windows.Forms;
 
-namespace HSR.YAT.Gui.Settings
+namespace MKY.YAT.Gui.Settings
 {
-	public class LayoutSettings : Utilities.Settings.Settings
+	[Serializable]
+	public class LayoutSettings : Utilities.Settings.Settings, IEquatable<LayoutSettings>
 	{
-		private bool _sendCommandPanelIsVisible;
-		private bool _sendFilePanelIsVisible;
-		private float _upperSplitterRatio;
-
 		private bool _txMonitorPanelIsVisible;
 		private bool _bidirMonitorPanelIsVisible;
 		private bool _rxMonitorPanelIsVisible;
@@ -20,7 +17,10 @@ namespace HSR.YAT.Gui.Settings
 		private Orientation _monitorOrientation;
 
 		private bool _predefinedPanelIsVisible;
-		private float _lowerSplitterRatio;
+		private float _predefinedSplitterRatio;
+
+		private bool _sendCommandPanelIsVisible;
+		private bool _sendFilePanelIsVisible;
 
 		public LayoutSettings()
 		{
@@ -38,10 +38,6 @@ namespace HSR.YAT.Gui.Settings
 		public LayoutSettings(LayoutSettings rhs)
 			: base(rhs)
 		{
-			SendCommandPanelIsVisible = rhs.SendCommandPanelIsVisible;
-			SendFilePanelIsVisible    = rhs.SendFilePanelIsVisible;
-			UpperSplitterRatio        = rhs.UpperSplitterRatio;
-
 			TxMonitorPanelIsVisible    = rhs.TxMonitorPanelIsVisible;
 			BidirMonitorPanelIsVisible = rhs.BidirMonitorPanelIsVisible;
 			RxMonitorPanelIsVisible    = rhs.RxMonitorPanelIsVisible;
@@ -50,17 +46,16 @@ namespace HSR.YAT.Gui.Settings
 			MonitorOrientation         = rhs.MonitorOrientation;
 
 			PredefinedPanelIsVisible = rhs.PredefinedPanelIsVisible;
-			LowerSplitterRatio       = rhs.LowerSplitterRatio;
+			PredefinedSplitterRatio  = rhs.PredefinedSplitterRatio;
+
+			SendCommandPanelIsVisible = rhs.SendCommandPanelIsVisible;
+			SendFilePanelIsVisible = rhs.SendFilePanelIsVisible;
 
 			ClearChanged();
 		}
 
 		protected override void SetMyDefaults()
 		{
-			SendCommandPanelIsVisible = true;
-			SendFilePanelIsVisible = true;
-			UpperSplitterRatio = (float)1 / 2;
-
 			TxMonitorPanelIsVisible = false;
 			BidirMonitorPanelIsVisible = true;
 			RxMonitorPanelIsVisible = false;
@@ -69,55 +64,16 @@ namespace HSR.YAT.Gui.Settings
 			MonitorOrientation = Orientation.Vertical;
 
 			PredefinedPanelIsVisible = true;
-			LowerSplitterRatio = (float)3 / 4;
+			PredefinedSplitterRatio = (float)3 / 4;
+
+			SendCommandPanelIsVisible = true;
+			SendFilePanelIsVisible = true;
 		}
 
 		#region Properties
 		//------------------------------------------------------------------------------------------
 		// Properties
 		//------------------------------------------------------------------------------------------
-
-		[XmlElement("SendCommandPanelIsVisible")]
-		public bool SendCommandPanelIsVisible
-		{
-			get { return (_sendCommandPanelIsVisible); }
-			set
-			{
-				if (_sendCommandPanelIsVisible != value)
-				{
-					_sendCommandPanelIsVisible = value;
-					SetChanged();
-				}
-			}
-		}
-
-		[XmlElement("SendFilePanelIsVisible")]
-		public bool SendFilePanelIsVisible
-		{
-			get { return (_sendFilePanelIsVisible); }
-			set
-			{
-				if (_sendFilePanelIsVisible != value)
-				{
-					_sendFilePanelIsVisible = value;
-					SetChanged();
-				}
-			}
-		}
-
-		[XmlElement("UpperSplitterRatio")]
-		public float UpperSplitterRatio
-		{
-			get { return (_upperSplitterRatio); }
-			set
-			{
-				if (_upperSplitterRatio != value)
-				{
-					_upperSplitterRatio = value;
-					SetChanged();
-				}
-			}
-		}
 
 		[XmlElement("TxMonitorPanelIsVisible")]
 		public bool TxMonitorPanelIsVisible
@@ -175,7 +131,7 @@ namespace HSR.YAT.Gui.Settings
 			}
 		}
 
-		[XmlElement("MonitorRigtSplitterRatio")]
+		[XmlElement("MonitorRightSplitterRatio")]
 		public float MonitorRightSplitterRatio
 		{
 			get { return (_monitorRightSplitterRatio); }
@@ -217,15 +173,43 @@ namespace HSR.YAT.Gui.Settings
 			}
 		}
 
-		[XmlElement("LowerSplitterRatio")]
-		public float LowerSplitterRatio
+		[XmlElement("PredefinedSplitterRatio")]
+		public float PredefinedSplitterRatio
 		{
-			get { return (_lowerSplitterRatio); }
+			get { return (_predefinedSplitterRatio); }
 			set
 			{
-				if (_lowerSplitterRatio != value)
+				if (_predefinedSplitterRatio != value)
 				{
-					_lowerSplitterRatio = value;
+					_predefinedSplitterRatio = value;
+					SetChanged();
+				}
+			}
+		}
+
+		[XmlElement("SendCommandPanelIsVisible")]
+		public bool SendCommandPanelIsVisible
+		{
+			get { return (_sendCommandPanelIsVisible); }
+			set
+			{
+				if (_sendCommandPanelIsVisible != value)
+				{
+					_sendCommandPanelIsVisible = value;
+					SetChanged();
+				}
+			}
+		}
+
+		[XmlElement("SendFilePanelIsVisible")]
+		public bool SendFilePanelIsVisible
+		{
+			get { return (_sendFilePanelIsVisible); }
+			set
+			{
+				if (_sendFilePanelIsVisible != value)
+				{
+					_sendFilePanelIsVisible = value;
 					SetChanged();
 				}
 			}
@@ -256,10 +240,6 @@ namespace HSR.YAT.Gui.Settings
 			{
 				return
 					(
-					_sendCommandPanelIsVisible.Equals(value._sendCommandPanelIsVisible) &&
-					_sendFilePanelIsVisible.Equals(value._sendFilePanelIsVisible) &&
-					_upperSplitterRatio.Equals(value._upperSplitterRatio) &&
-
 					_txMonitorPanelIsVisible.Equals(value._txMonitorPanelIsVisible) &&
 					_bidirMonitorPanelIsVisible.Equals(value._bidirMonitorPanelIsVisible) &&
 					_rxMonitorPanelIsVisible.Equals(value._rxMonitorPanelIsVisible) &&
@@ -268,7 +248,10 @@ namespace HSR.YAT.Gui.Settings
 					_monitorOrientation.Equals(value._monitorOrientation) &&
 
 					_predefinedPanelIsVisible.Equals(value._predefinedPanelIsVisible) &&
-					_lowerSplitterRatio.Equals(value._lowerSplitterRatio)
+					_predefinedSplitterRatio.Equals(value._predefinedSplitterRatio) &&
+
+					_sendCommandPanelIsVisible.Equals(value._sendCommandPanelIsVisible) &&
+					_sendFilePanelIsVisible.Equals(value._sendFilePanelIsVisible)
 					);
 			}
 			return (false);

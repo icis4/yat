@@ -7,17 +7,21 @@ using System.Xml.Serialization;
 // 'type' defines operator == or operator != but does not override Object.Equals(object o)
 #pragma warning disable 660
 
-namespace HSR.YAT.Domain
+namespace MKY.YAT.Domain
 {
+	/// <summary></summary>
 	public struct BinaryLengthLineBreak
 	{
+		/// <summary></summary>
 		[XmlElement("Enabled")]
 		public bool Enabled;
 
+		/// <summary></summary>
 		[XmlElement("LineLength")]
 		public int LineLength;                       // in chars/bytes
 
-	
+
+		/// <summary></summary>
 		public BinaryLengthLineBreak(bool enabled, int lineLength)
 		{
 			Enabled = enabled;
@@ -34,6 +38,7 @@ namespace HSR.YAT.Domain
 			return (base.Equals(obj));
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());
@@ -65,14 +70,18 @@ namespace HSR.YAT.Domain
 		#endregion
 	}
 
+	/// <summary></summary>
 	public struct BinarySequenceLineBreak
 	{
+		/// <summary></summary>
 		[XmlElement("Enabled")]
 		public bool Enabled;
 
+		/// <summary></summary>
 		[XmlElement("Sequence")]
 		public string Sequence;
 
+		/// <summary></summary>
 		public BinarySequenceLineBreak(bool enabled, string sequence)
 		{
 			Enabled = enabled;
@@ -89,6 +98,7 @@ namespace HSR.YAT.Domain
 			return (base.Equals(obj));
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());
@@ -120,14 +130,18 @@ namespace HSR.YAT.Domain
 		#endregion
 	}
 
+	/// <summary></summary>
 	public struct BinaryTimedLineBreak
 	{
+		/// <summary></summary>
 		[XmlElement("Enabled")]
 		public bool Enabled;
 
+		/// <summary></summary>
 		[XmlElement("Timeout")]
 		public int Timeout;                          // in ms
 
+		/// <summary></summary>
 		public BinaryTimedLineBreak(bool enabled, int timeout)
 		{
 			Enabled = enabled;
@@ -144,6 +158,7 @@ namespace HSR.YAT.Domain
 			return (base.Equals(obj));
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

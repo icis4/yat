@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace HSR.YAT.Domain.Settings
+namespace MKY.YAT.Domain.Settings
 {
-	public class TerminalSettings : Utilities.Settings.Settings
+	/// <summary></summary>
+	[Serializable]
+	public class TerminalSettings : Utilities.Settings.Settings, IEquatable<TerminalSettings>
 	{
 		private TerminalType _terminalType;
 
@@ -15,10 +17,11 @@ namespace HSR.YAT.Domain.Settings
 		private DisplaySettings _display;
 		private TransmitSettings _transmit;
 
-		// type dependet settings
+		// type dependent settings
 		private TextTerminalSettings _textTerminal;
 		private BinaryTerminalSettings _binaryTerminal;
 
+		/// <summary></summary>
 		public TerminalSettings()
 		{
 			SetMyDefaults();
@@ -26,6 +29,7 @@ namespace HSR.YAT.Domain.Settings
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public TerminalSettings(Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -34,6 +38,7 @@ namespace HSR.YAT.Domain.Settings
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public TerminalSettings(TerminalSettings rhs)
 			: base(rhs)
 		{
@@ -61,6 +66,7 @@ namespace HSR.YAT.Domain.Settings
 			BinaryTerminal = new BinaryTerminalSettings(SettingsType);
 		}
 
+		/// <summary></summary>
 		protected override void SetMyDefaults()
 		{
 			TerminalType = TerminalType.Text;
@@ -71,6 +77,7 @@ namespace HSR.YAT.Domain.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("TerminalType")]
 		public TerminalType TerminalType
 		{
@@ -85,6 +92,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("IO")]
 		public IOSettings IO
 		{
@@ -105,6 +113,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Buffer")]
 		public BufferSettings Buffer
 		{
@@ -125,6 +134,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Display")]
 		public DisplaySettings Display
 		{
@@ -145,6 +155,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Transmit")]
 		public TransmitSettings Transmit
 		{
@@ -165,6 +176,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("TextTerminal")]
 		public TextTerminalSettings TextTerminal
 		{
@@ -185,6 +197,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("BinaryTerminal")]
 		public BinaryTerminalSettings BinaryTerminal
 		{
@@ -237,6 +250,7 @@ namespace HSR.YAT.Domain.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

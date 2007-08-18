@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("YAT.Gui.Forms")]
 [assembly: AssemblyDescription("YAT GUI components")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("HSR")]
+[assembly: AssemblyCompany("YAT")]
 [assembly: AssemblyProduct("YAT")]
 [assembly: AssemblyCopyright("Copyright © 2003-2007 HSR Hochschule für Technik Rapperswil and Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 [assembly: AssemblyVersion("1.99.*")]
-[assembly: AssemblyFileVersion("1.99.12.0")]
-[assembly: AssemblyInformationalVersion("1.99.12")]
+[assembly: AssemblyFileVersion("1.99.13.0")]
+[assembly: AssemblyInformationalVersion("1.99.13")]

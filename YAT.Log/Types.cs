@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace HSR.YAT.Log
+namespace MKY.YAT.Log
 {
 	public enum LogFormat
 	{
@@ -18,7 +18,7 @@ namespace HSR.YAT.Log
 		Create, Append
 	}
 
-	public class FileNameSeparator
+	public class FileNameSeparator : IEquatable<FileNameSeparator>
 	{
 		public readonly string Separator;
 		public readonly string Description;

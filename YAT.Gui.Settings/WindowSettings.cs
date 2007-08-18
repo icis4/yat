@@ -5,9 +5,10 @@ using System.Xml.Serialization;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace HSR.YAT.Gui.Settings
+namespace MKY.YAT.Gui.Settings
 {
-	public class WindowSettings : Utilities.Settings.Settings
+	[Serializable]
+	public class WindowSettings : Utilities.Settings.Settings, IEquatable<WindowSettings>
 	{
 		private FormWindowState _state;
 		private Point _location;
@@ -38,9 +39,9 @@ namespace HSR.YAT.Gui.Settings
 
 		protected override void SetMyDefaults()
 		{
-			State = FormWindowState.Maximized;
+			State    = FormWindowState.Maximized;
 			Location = new Point(0, 0);
-			Size = new Size(720, 540);
+			Size     = new Size(720, 540);
 		}
 
 		#region Properties
@@ -115,12 +116,22 @@ namespace HSR.YAT.Gui.Settings
 			// ensure that object.operator!=() is called
 			if ((object)value != null)
 			{
-				return
-					(
-					_state.Equals(value._state) &&
-					_size.Equals(value._size)
-					);
-				// do not compare location
+				if (_state == FormWindowState.Normal)
+				{   // Normal
+					return
+						(
+						_state.Equals(value._state) &&
+						_location.Equals(value._location) &&
+						_size.Equals(value._size)
+						);
+				}
+				else
+				{   // Maximized or Minimized
+					return
+						(
+						_state.Equals(value._state)
+						);
+				}
 			}
 			return (false);
 		}

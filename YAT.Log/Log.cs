@@ -3,7 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace HSR.YAT.Log
+namespace MKY.YAT.Log
 {
 	public enum LogStreams
 	{

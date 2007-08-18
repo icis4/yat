@@ -5,10 +5,12 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using System.Threading;
 
-using HSR.IO.Ports;
+using MKY.IO.Ports;
+using MKY.YAT.Settings.Application;
 
-namespace HSR.YAT.Gui.Controls
+namespace MKY.YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("PortIdChanged")]
@@ -21,9 +23,10 @@ namespace HSR.YAT.Gui.Controls
 		private const bool _ShowSerialPortDefault = true;
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
+		private bool _isStartingUp = true;
 		private bool _isSettingControls = false;
 
 		private bool _showSerialPort = _ShowSerialPortDefault;
@@ -45,9 +48,6 @@ namespace HSR.YAT.Gui.Controls
 		public SerialPortSelection()
 		{
 			InitializeComponent();
-
-			SetSerialPortList();
-			SetControls();
 		}
 
 		#region Properties
@@ -88,6 +88,25 @@ namespace HSR.YAT.Gui.Controls
 
 		#endregion
 
+		#region Control Event Handlers
+		//------------------------------------------------------------------------------------------
+		// Control Event Handlers
+		//------------------------------------------------------------------------------------------
+
+		private void SerialPortSelection_Paint(object sender, PaintEventArgs e)
+		{
+			if (_isStartingUp)
+			{
+				_isStartingUp = false;
+
+				// initially set controls and validate its contents where needed
+				SetSerialPortList();
+				SetControls();
+			}
+		}
+
+		#endregion
+
 		#region Controls Event Handlers
 		//------------------------------------------------------------------------------------------
 		// Controls Event Handlers
@@ -111,6 +130,68 @@ namespace HSR.YAT.Gui.Controls
 		// Private Methods
 		//------------------------------------------------------------------------------------------
 
+		private class MarkPortsInUseThread
+		{
+			private SerialPortList _portList;
+			private bool _isScanning = true;
+			private string _status2 = "";
+			private bool _cancelScanning = false;
+
+			public MarkPortsInUseThread(SerialPortList portList)
+			{
+				_portList = portList;
+			}
+
+			public SerialPortList PortList
+			{
+				get { return (_portList); }
+			}
+
+			public bool IsScanning
+			{
+				get { return (_isScanning); }
+			}
+
+			public string Status2
+			{
+				get { return (_status2); }
+			}
+
+			public void MarkPortsInUse()
+			{
+				_portList.MarkPortsInUse(portList_MarkPortsInUseCallback);
+				_isScanning = false;
+
+				Windows.Forms.StatusBox.AcceptAndClose();
+			}
+
+			public void CancelScanning()
+			{
+				_cancelScanning = true;
+			}
+
+			private void portList_MarkPortsInUseCallback(object sender, SerialPortList.PortChangedAndCancelEventArgs e)
+			{
+				_status2 = "Scanning " + e.Port.ToString() + "...";
+				Windows.Forms.StatusBox.UpdateStatus2(_status2);
+				e.Cancel = _cancelScanning;
+			}
+		}
+
+		private MarkPortsInUseThread _markPortsInUseThread;
+
+		private void timer_ShowScanDialog_Tick(object sender, EventArgs e)
+		{
+			timer_ShowScanDialog.Stop();
+
+			bool setting = ApplicationSettings.LocalUser.General.DetectSerialPortsInUse;
+
+			if (Windows.Forms.StatusBox.Show(this, "Scanning ports...", "Serial Port Scan", _markPortsInUseThread.Status2, "&Detect ports that are in use", ref setting) != DialogResult.OK)
+				_markPortsInUseThread.CancelScanning();
+			
+			ApplicationSettings.LocalUser.General.DetectSerialPortsInUse = setting;
+		}
+
 		private void SetSerialPortList()
 		{
 			_isSettingControls = true;
@@ -119,7 +200,25 @@ namespace HSR.YAT.Gui.Controls
 
 			SerialPortList portList = new SerialPortList();
 			portList.FillWithAvailablePorts();
-			portList.MarkPortsInUse();
+
+			if (!DesignMode && ApplicationSettings.LocalUser.General.DetectSerialPortsInUse)
+			{
+				// install timer which shows a dialog if scanning takes more than 500ms
+				timer_ShowScanDialog.Start();
+
+				// start scanning on different thread
+				_markPortsInUseThread = new MarkPortsInUseThread(portList);
+				Thread t = new Thread(new ThreadStart(_markPortsInUseThread.MarkPortsInUse));
+				t.Start();
+
+				while (_markPortsInUseThread.IsScanning)
+					Application.DoEvents();
+
+				t.Join();
+
+				// cleanup
+				timer_ShowScanDialog.Stop();
+			}
 
 			comboBox_Port.Items.Clear();
 			comboBox_Port.Items.AddRange(portList.ToArray());

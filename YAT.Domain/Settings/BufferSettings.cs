@@ -3,21 +3,26 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace HSR.YAT.Domain.Settings
+namespace MKY.YAT.Domain.Settings
 {
-	public class BufferSettings : Utilities.Settings.Settings
+	/// <summary></summary>
+	[Serializable]
+	public class BufferSettings : Utilities.Settings.Settings, IEquatable<BufferSettings>
 	{
+		/// <summary></summary>
 		public const int BufferSizeDefault = 8192;
 
 		private int _txBufferSize;
 		private int _rxBufferSize;
 
+		/// <summary></summary>
 		public BufferSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public BufferSettings(Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -25,6 +30,7 @@ namespace HSR.YAT.Domain.Settings
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public BufferSettings(BufferSettings rhs)
 			: base(rhs)
 		{
@@ -33,6 +39,7 @@ namespace HSR.YAT.Domain.Settings
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		protected override void SetMyDefaults()
 		{
 			TxBufferSize = BufferSizeDefault;
@@ -44,6 +51,7 @@ namespace HSR.YAT.Domain.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("TxBufferSize")]
 		public int TxBufferSize
 		{
@@ -58,6 +66,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("RxBufferSize")]
 		public int RxBufferSize
 		{
@@ -72,6 +81,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public int BidirBufferSize
 		{
@@ -110,6 +120,7 @@ namespace HSR.YAT.Domain.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

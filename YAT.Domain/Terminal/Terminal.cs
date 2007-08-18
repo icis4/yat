@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-using HSR.Utilities;
+using MKY.Utilities;
 
-namespace HSR.YAT.Domain
+namespace MKY.YAT.Domain
 {
 	/// <summary>
 	/// Terminal with byte/string functionality and settings.
@@ -13,7 +13,7 @@ namespace HSR.YAT.Domain
 	public class Terminal : IDisposable
 	{
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool _isDisposed = false;
@@ -31,24 +31,36 @@ namespace HSR.YAT.Domain
 		//------------------------------------------------------------------------------------------
 		// Events
 		//------------------------------------------------------------------------------------------
-		
+
+		/// <summary></summary>
 		public event EventHandler TerminalChanged;
+		/// <summary></summary>
 		public event EventHandler TerminalControlChanged;
+		/// <summary></summary>
 		public event EventHandler<TerminalErrorEventArgs> TerminalError;
 
+		/// <summary></summary>
 		public event EventHandler<RawElementEventArgs> RawElementSent;
+		/// <summary></summary>
 		public event EventHandler<RawElementEventArgs> RawElementReceived;
+		/// <summary></summary>
 		public event EventHandler<DisplayElementsEventArgs> DisplayElementsSent;
+		/// <summary></summary>
 		public event EventHandler<DisplayElementsEventArgs> DisplayElementsReceived;
+		/// <summary></summary>
 		public event EventHandler<DisplayLinesEventArgs> DisplayLinesSent;
+		/// <summary></summary>
 		public event EventHandler<DisplayLinesEventArgs> DisplayLinesReceived;
+		/// <summary></summary>
 		public event EventHandler<RepositoryEventArgs> RepositoryCleared;
+		/// <summary></summary>
 		public event EventHandler<RepositoryEventArgs> RepositoryReloaded;
 
 		//------------------------------------------------------------------------------------------
 		// Constructors
 		//------------------------------------------------------------------------------------------
-		
+
+		/// <summary></summary>
 		public Terminal(Settings.TerminalSettings settings)
 		{
 			_txRepository    = new DisplayRepository(settings.Buffer.TxBufferSize);
@@ -61,6 +73,7 @@ namespace HSR.YAT.Domain
 			_eventsSuspendedForReload = false;
 		}
 
+		/// <summary></summary>
 		public Terminal(Settings.TerminalSettings settings, Terminal terminal)
 		{
 			_txRepository    = new DisplayRepository(terminal._txRepository);
@@ -129,6 +142,7 @@ namespace HSR.YAT.Domain
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public Settings.TerminalSettings TerminalSettings
 		{
 			get
@@ -144,6 +158,7 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		public bool IsOpen
 		{
 			get
@@ -153,6 +168,7 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		public bool IsConnected
 		{
 			get
@@ -162,6 +178,7 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		public Domain.IO.IIOProvider UnderlyingIOProvider
 		{
 			get
@@ -171,6 +188,7 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		public object UnderlyingIOInstance
 		{
 			get
@@ -180,26 +198,31 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		protected RawTerminal RawTerminal
 		{
 			get { return (_rawTerminal); }
 		}
 
+		/// <summary></summary>
 		protected DisplayRepository TxRepository
 		{
 			get { return (_txRepository); }
 		}
 
+		/// <summary></summary>
 		protected DisplayRepository BidirRepository
 		{
 			get { return (_bidirRepository); }
 		}
 
+		/// <summary></summary>
 		protected DisplayRepository RxRepository
 		{
 			get { return (_rxRepository); }
 		}
 
+		/// <summary></summary>
 		protected bool Reload
 		{
 			get { return (_eventsSuspendedForReload); }
@@ -216,13 +239,15 @@ namespace HSR.YAT.Domain
 		//------------------------------------------------------------------------------------------
 		// Methods > Open/Close
 		//------------------------------------------------------------------------------------------
-		
+
+		/// <summary></summary>
 		public virtual void Open()
 		{
 			AssertNotDisposed();
 			_rawTerminal.Open();
 		}
 
+		/// <summary></summary>
 		public virtual void Close()
 		{
 			AssertNotDisposed();
@@ -235,18 +260,20 @@ namespace HSR.YAT.Domain
 		//------------------------------------------------------------------------------------------
 		// Methods > Send
 		//------------------------------------------------------------------------------------------
-		
+
+		/// <summary></summary>
 		public virtual void Send(byte[] data)
 		{
 			AssertNotDisposed();
 			_rawTerminal.Send(data);
 		}
 
+		/// <summary></summary>
 		public virtual void Send(string s)
 		{
 			AssertNotDisposed();
 
-			Parser.Parser p = new Parser.Parser();
+			Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianess);
 			foreach (Parser.Result result in p.Parse(s, Parser.ParseMode.All))
 			{
 				if (result is Parser.ByteArrayResult)
@@ -260,6 +287,7 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		public virtual void SendLine(string line)
 		{
 			// simply send line as string
@@ -273,11 +301,13 @@ namespace HSR.YAT.Domain
 		// Methods > Element Processing
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		protected virtual DisplayElement ByteToElement(byte b, SerialDirection d)
 		{
 			return (ByteToElement(b, d, _terminalSettings.Display.Radix));
 		}
 
+		/// <summary></summary>
 		protected virtual DisplayElement ByteToElement(byte b, SerialDirection d, Radix r)
 		{
 			string data = "";
@@ -307,11 +337,13 @@ namespace HSR.YAT.Domain
 				return (new DisplayElement.RxData(new ElementOrigin(b, d), data));
 		}
 
+		/// <summary></summary>
 		protected virtual bool ElementsAreSeparate()
 		{
 			return (ElementsAreSeparate(_terminalSettings.Display.Radix));
 		}
 
+		/// <summary></summary>
 		protected virtual bool ElementsAreSeparate(Radix r)
 		{
 			switch (r)
@@ -326,22 +358,25 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		protected void SuspendEventsForReload()
 		{
 			_eventsSuspendedForReload = true;
 		}
 
+		/// <summary></summary>
 		protected void ResumeEventsAfterReload()
 		{
 			_eventsSuspendedForReload = false;
 		}
 
+		/// <summary></summary>
 		protected virtual void ProcessRawElement(RawElement re, List<DisplayElement> elements, List<List<DisplayElement>> lines)
 		{
 			List<DisplayElement> l = new List<DisplayElement>();
 
 			// line begin and time stamp
-			if (_terminalSettings.Display.ShowTimestamp)
+			if (_terminalSettings.Display.ShowTimeStamp)
 			{
 				l.Add(new DisplayElement.TimeStamp(re.TimeStamp));
 				l.Add(new DisplayElement.LeftMargin());
@@ -366,6 +401,7 @@ namespace HSR.YAT.Domain
 			lines.Add(l);
 		}
 
+		/// <summary></summary>
 		protected virtual void ProcessAndSignalRawElement(RawElement re)
 		{
 			List<DisplayElement> elements = new List<DisplayElement>();
@@ -390,12 +426,14 @@ namespace HSR.YAT.Domain
 		// Methods > Repository Access
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public virtual void ClearRepository(RepositoryType repository)
 		{
 			AssertNotDisposed();
 			_rawTerminal.ClearRepository(repository);
 		}
 
+		/// <summary></summary>
 		public virtual void ClearRepositories()
 		{
 			AssertNotDisposed();
@@ -405,6 +443,7 @@ namespace HSR.YAT.Domain
 			ClearRepository(RepositoryType.Rx);
 		}
 
+		/// <summary></summary>
 		public virtual void ReloadRepositories()
 		{
 			AssertNotDisposed();
@@ -429,6 +468,7 @@ namespace HSR.YAT.Domain
 			OnRepositoryReloaded(new RepositoryEventArgs(RepositoryType.Rx));
 		}
 
+		/// <summary></summary>
 		protected virtual void ClearMyRepository(RepositoryType repository)
 		{
 			switch (repository)
@@ -440,6 +480,7 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		public int GetRepositoryDataCount(RepositoryType repository)
 		{
 			AssertNotDisposed();
@@ -453,6 +494,7 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		public int GetRepositoryLineCount(RepositoryType repository)
 		{
 			AssertNotDisposed();
@@ -466,6 +508,7 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		public virtual List<DisplayElement> RepositoryToDisplayElements(RepositoryType repository)
 		{
 			AssertNotDisposed();
@@ -479,6 +522,7 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		public virtual List<List<DisplayElement>> RepositoryToDisplayLines(RepositoryType repository)
 		{
 			AssertNotDisposed();
@@ -492,6 +536,7 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		public virtual List<RawElement> RepositoryToRawElements(RepositoryType repository)
 		{
 			AssertNotDisposed();
@@ -505,6 +550,7 @@ namespace HSR.YAT.Domain
 		// Methods > ToString
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		new public virtual string ToString()
 		{
 			AssertNotDisposed();
@@ -512,6 +558,7 @@ namespace HSR.YAT.Domain
 			return (ToString(""));
 		}
 
+		/// <summary></summary>
 		public virtual string ToString(string indent)
 		{
 			AssertNotDisposed();
@@ -523,6 +570,7 @@ namespace HSR.YAT.Domain
 					indent + "- RxRepository: "    + Environment.NewLine  + _rxRepository.ToString(indent + "--"));
 		}
 
+		/// <summary></summary>
 		public string RepositoryToString(RepositoryType repository, string indent)
 		{
 			AssertNotDisposed();
@@ -595,7 +643,9 @@ namespace HSR.YAT.Domain
 		//------------------------------------------------------------------------------------------
 		// Settings Events
 		//------------------------------------------------------------------------------------------
-		protected virtual void _terminalSettings_Changed(object sender, HSR.Utilities.Settings.SettingsEventArgs e)
+		
+		/// <summary></summary>
+		protected virtual void _terminalSettings_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
 		{
 			if (e.Inner == null)
 			{
@@ -662,12 +712,14 @@ namespace HSR.YAT.Domain
 			OnTerminalError(e);
 		}
 
+		/// <summary></summary>
 		protected virtual void _rawTerminal_RawElementSent(object sender, RawElementEventArgs e)
 		{
 			OnRawElementSent(e);
 			ProcessAndSignalRawElement(e.Element);
 		}
 
+		/// <summary></summary>
 		protected virtual void _rawTerminal_RawElementReceived(object sender, RawElementEventArgs e)
 		{
 			OnRawElementReceived(e);
@@ -687,31 +739,37 @@ namespace HSR.YAT.Domain
 		// Event Invoking
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		protected virtual void OnTerminalChanged(EventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync(TerminalChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnTerminalControlChanged(EventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync(TerminalControlChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnTerminalError(TerminalErrorEventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync<TerminalErrorEventArgs>(TerminalError, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnRawElementSent(RawElementEventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync<RawElementEventArgs>(RawElementSent, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnRawElementReceived(RawElementEventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync<RawElementEventArgs>(RawElementReceived, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnDisplayElementsProcessed(SerialDirection direction, List<DisplayElement> elements)
 		{
 			if (direction == SerialDirection.Tx)
@@ -732,18 +790,21 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		protected virtual void OnDisplayElementsSent(DisplayElementsEventArgs e)
 		{
 			if (!_eventsSuspendedForReload)
 				Utilities.Event.EventHelper.FireSync<DisplayElementsEventArgs>(DisplayElementsSent, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnDisplayElementsReceived(DisplayElementsEventArgs e)
 		{
 			if (!_eventsSuspendedForReload)
 				Utilities.Event.EventHelper.FireSync<DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnDisplayLinesProcessed(SerialDirection direction, List<List<DisplayElement>> lines)
 		{
 			if (!_eventsSuspendedForReload)
@@ -755,24 +816,28 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		protected virtual void OnDisplayLinesSent(DisplayLinesEventArgs e)
 		{
 			if (!_eventsSuspendedForReload)
 				Utilities.Event.EventHelper.FireSync<DisplayLinesEventArgs>(DisplayLinesSent, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnDisplayLinesReceived(DisplayLinesEventArgs e)
 		{
 			if (!_eventsSuspendedForReload)
 				Utilities.Event.EventHelper.FireSync<DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnRepositoryCleared(RepositoryEventArgs e)
 		{
 			if (!_eventsSuspendedForReload)
 				Utilities.Event.EventHelper.FireSync<RepositoryEventArgs>(RepositoryCleared, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnRepositoryReloaded(RepositoryEventArgs e)
 		{
 			if (!_eventsSuspendedForReload)

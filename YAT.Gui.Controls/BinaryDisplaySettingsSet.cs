@@ -6,15 +6,15 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-using HSR.YAT.Domain.Settings;
+using MKY.YAT.Domain.Settings;
 
-namespace HSR.YAT.Gui.Controls
+namespace MKY.YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
 	public partial class BinaryDisplaySettingsSet : UserControl
 	{
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool _isSettingControls = false;

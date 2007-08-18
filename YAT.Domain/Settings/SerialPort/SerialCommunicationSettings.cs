@@ -3,22 +3,26 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace HSR.YAT.Domain.Settings.SerialPort
+namespace MKY.YAT.Domain.Settings.SerialPort
 {
-	public class SerialCommunicationSettings : Utilities.Settings.Settings
+	/// <summary></summary>
+	[Serializable]
+	public class SerialCommunicationSettings : Utilities.Settings.Settings, IEquatable<SerialCommunicationSettings>
 	{
-		private HSR.IO.Ports.BaudRate _baudRate;
-		private HSR.IO.Ports.DataBits _dataBits;
+		private int _baudRate;
+		private MKY.IO.Ports.DataBits _dataBits;
 		private System.IO.Ports.Parity _parity;
 		private System.IO.Ports.StopBits _stopBits;
 		private Domain.IO.Handshake _handshake;
 
+		/// <summary></summary>
 		public SerialCommunicationSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public SerialCommunicationSettings(Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -26,6 +30,7 @@ namespace HSR.YAT.Domain.Settings.SerialPort
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public SerialCommunicationSettings(SerialCommunicationSettings rhs)
 			: base(rhs)
 		{
@@ -37,10 +42,11 @@ namespace HSR.YAT.Domain.Settings.SerialPort
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		protected override void SetMyDefaults()
 		{
-			BaudRate   = HSR.IO.Ports.BaudRate.Baud009600;
-			DataBits   = HSR.IO.Ports.DataBits.Eight;
+			BaudRate   = (int)MKY.IO.Ports.BaudRate.Baud009600;
+			DataBits   = MKY.IO.Ports.DataBits.Eight;
 			Parity     = System.IO.Ports.Parity.None;
 			StopBits   = System.IO.Ports.StopBits.One;
 			Handshake  = Domain.IO.Handshake.None;
@@ -51,8 +57,9 @@ namespace HSR.YAT.Domain.Settings.SerialPort
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("BaudRate")]
-		public HSR.IO.Ports.BaudRate BaudRate
+		public int BaudRate
 		{
 			get { return (_baudRate); }
 			set
@@ -65,8 +72,9 @@ namespace HSR.YAT.Domain.Settings.SerialPort
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("DataBits")]
-		public HSR.IO.Ports.DataBits DataBits
+		public MKY.IO.Ports.DataBits DataBits
 		{
 			get { return (_dataBits); }
 			set
@@ -79,6 +87,7 @@ namespace HSR.YAT.Domain.Settings.SerialPort
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Parity")]
 		public System.IO.Ports.Parity Parity
 		{
@@ -93,6 +102,7 @@ namespace HSR.YAT.Domain.Settings.SerialPort
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("StopBits")]
 		public System.IO.Ports.StopBits StopBits
 		{
@@ -107,6 +117,7 @@ namespace HSR.YAT.Domain.Settings.SerialPort
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Handshake")]
 		public Domain.IO.Handshake Handshake
 		{
@@ -156,43 +167,47 @@ namespace HSR.YAT.Domain.Settings.SerialPort
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());
 		}
 
+		/// <summary></summary>
 		public override string ToString()
 		{
 			return
 			  (
-			  ((HSR.IO.Ports.XBaudRate)_baudRate).ToString() + ", " +
-			  ((HSR.IO.Ports.XDataBits)_dataBits).ToString() + ", " +
-			  ((HSR.IO.Ports.XParity)_parity).ToString() + ", " +
-			  ((HSR.IO.Ports.XStopBits)_stopBits).ToString() + ", " +
+			  _baudRate.ToString() + ", " +
+			  ((MKY.IO.Ports.XDataBits)_dataBits).ToString() + ", " +
+			  ((MKY.IO.Ports.XParity)_parity).ToString() + ", " +
+			  ((MKY.IO.Ports.XStopBits)_stopBits).ToString() + ", " +
 			  ((Domain.IO.XHandshake)_handshake).ToShortString()
 			  );
 		}
 
 		#endregion
 
+		/// <summary></summary>
 		public string ToShortString()
 		{
 			return
 			  (
-			  ((HSR.IO.Ports.XBaudRate)_baudRate).ToString() + ", " +
-			  ((HSR.IO.Ports.XDataBits)_dataBits).ToString() + ", " +
-			  ((HSR.IO.Ports.XParity)_parity).ToShortString()
+			  _baudRate.ToString() + ", " +
+			  ((MKY.IO.Ports.XDataBits)_dataBits).ToString() + ", " +
+			  ((MKY.IO.Ports.XParity)_parity).ToShortString()
 			  );
 		}
 
+		/// <summary></summary>
 		public string ToLongString()
 		{
 			return
 			  (
-			  ((HSR.IO.Ports.XBaudRate)_baudRate).ToString() + ", " +
-			  ((HSR.IO.Ports.XDataBits)_dataBits).ToString() + ", " +
-			  ((HSR.IO.Ports.XParity)_parity).ToString() + ", " +
-			  ((HSR.IO.Ports.XStopBits)_stopBits).ToString() + ", " +
+			  _baudRate.ToString() + ", " +
+			  ((MKY.IO.Ports.XDataBits)_dataBits).ToString() + ", " +
+			  ((MKY.IO.Ports.XParity)_parity).ToString() + ", " +
+			  ((MKY.IO.Ports.XStopBits)_stopBits).ToString() + ", " +
 			  ((Domain.IO.XHandshake)_handshake).ToString()
 			  );
 		}

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HSR.YAT.Gui.Forms
+namespace MKY.YAT.Gui.Forms
 {
 	partial class BinaryTerminalSettings
 	{
@@ -32,16 +32,16 @@ namespace HSR.YAT.Gui.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			HSR.YAT.Domain.Settings.BinaryDisplaySettings binaryDisplaySettings1 = new HSR.YAT.Domain.Settings.BinaryDisplaySettings();
-			HSR.YAT.Domain.Settings.BinaryDisplaySettings binaryDisplaySettings2 = new HSR.YAT.Domain.Settings.BinaryDisplaySettings();
+			MKY.YAT.Domain.Settings.BinaryDisplaySettings binaryDisplaySettings1 = new MKY.YAT.Domain.Settings.BinaryDisplaySettings();
+			MKY.YAT.Domain.Settings.BinaryDisplaySettings binaryDisplaySettings2 = new MKY.YAT.Domain.Settings.BinaryDisplaySettings();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_Defaults = new System.Windows.Forms.Button();
 			this.groupBox_Display = new System.Windows.Forms.GroupBox();
 			this.groupBox_RxDisplay = new System.Windows.Forms.GroupBox();
-			this.binaryTerminalSettingsSet_Rx = new HSR.YAT.Gui.Controls.BinaryDisplaySettingsSet();
+			this.binaryTerminalSettingsSet_Rx = new MKY.YAT.Gui.Controls.BinaryDisplaySettingsSet();
 			this.groupBox_TxDisplay = new System.Windows.Forms.GroupBox();
-			this.binaryTerminalSettingsSet_Tx = new HSR.YAT.Gui.Controls.BinaryDisplaySettingsSet();
+			this.binaryTerminalSettingsSet_Tx = new MKY.YAT.Gui.Controls.BinaryDisplaySettingsSet();
 			this.checkBox_DirectionLineBreak = new System.Windows.Forms.CheckBox();
 			this.checkBox_SeparateTxRxDisplay = new System.Windows.Forms.CheckBox();
 			this.groupBox_Display.SuspendLayout();
@@ -195,9 +195,9 @@ namespace HSR.YAT.Gui.Forms
 		private System.Windows.Forms.CheckBox checkBox_SeparateTxRxDisplay;
 		private System.Windows.Forms.CheckBox checkBox_DirectionLineBreak;
 		private System.Windows.Forms.GroupBox groupBox_RxDisplay;
-		private HSR.YAT.Gui.Controls.BinaryDisplaySettingsSet binaryTerminalSettingsSet_Rx;
+		private MKY.YAT.Gui.Controls.BinaryDisplaySettingsSet binaryTerminalSettingsSet_Rx;
 		private System.Windows.Forms.GroupBox groupBox_TxDisplay;
-		private HSR.YAT.Gui.Controls.BinaryDisplaySettingsSet binaryTerminalSettingsSet_Tx;
+		private MKY.YAT.Gui.Controls.BinaryDisplaySettingsSet binaryTerminalSettingsSet_Tx;
 
 	}
 }

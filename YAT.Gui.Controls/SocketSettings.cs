@@ -6,9 +6,9 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-using HSR.Net.Sockets;
+using MKY.Net.Sockets;
 
-namespace HSR.YAT.Gui.Controls
+namespace MKY.YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("TcpClientAutoReconnectChanged")]
@@ -20,10 +20,10 @@ namespace HSR.YAT.Gui.Controls
 
 		private const HostType _HostTypeDefault = HostType.TcpAutoSocket;
 
-		private static readonly Domain.TcpClientAutoReconnect _TcpClientAutoReconnectDefault = new HSR.YAT.Domain.TcpClientAutoReconnect(false, 500);
+		private static readonly Domain.TcpClientAutoReconnect _TcpClientAutoReconnectDefault = new MKY.YAT.Domain.TcpClientAutoReconnect(false, 500);
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool _isStartingUp = true;

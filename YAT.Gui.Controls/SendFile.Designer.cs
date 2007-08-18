@@ -1,4 +1,4 @@
-namespace HSR.YAT.Gui.Controls
+namespace MKY.YAT.Gui.Controls
 {
 	partial class SendFile
 	{
@@ -32,18 +32,16 @@ namespace HSR.YAT.Gui.Controls
 			this.button_SendFile = new System.Windows.Forms.Button();
 			this.button_SetFile = new System.Windows.Forms.Button();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.pathLabel_FilePath = new HSR.Windows.Forms.PathLabel();
+			this.pathLabel_FilePath = new MKY.Windows.Forms.PathLabel();
 			this.SuspendLayout();
 			// 
 			// button_SendFile
 			// 
-			this.button_SendFile.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.button_SendFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_SendFile.Enabled = false;
-			this.button_SendFile.Location = new System.Drawing.Point(3, 29);
+			this.button_SendFile.Location = new System.Drawing.Point(380, 3);
 			this.button_SendFile.Name = "button_SendFile";
-			this.button_SendFile.Size = new System.Drawing.Size(194, 22);
+			this.button_SendFile.Size = new System.Drawing.Size(157, 21);
 			this.button_SendFile.TabIndex = 2;
 			this.button_SendFile.Text = "Send File (F4)";
 			this.toolTip.SetToolTip(this.button_SendFile, "Send File");
@@ -52,7 +50,7 @@ namespace HSR.YAT.Gui.Controls
 			// button_SetFile
 			// 
 			this.button_SetFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_SetFile.Location = new System.Drawing.Point(172, 3);
+			this.button_SetFile.Location = new System.Drawing.Point(349, 3);
 			this.button_SetFile.Name = "button_SetFile";
 			this.button_SetFile.Size = new System.Drawing.Size(25, 21);
 			this.button_SetFile.TabIndex = 1;
@@ -67,7 +65,7 @@ namespace HSR.YAT.Gui.Controls
 			this.pathLabel_FilePath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.pathLabel_FilePath.Location = new System.Drawing.Point(3, 3);
 			this.pathLabel_FilePath.Name = "pathLabel_FilePath";
-			this.pathLabel_FilePath.Size = new System.Drawing.Size(163, 21);
+			this.pathLabel_FilePath.Size = new System.Drawing.Size(340, 21);
 			this.pathLabel_FilePath.TabIndex = 0;
 			this.pathLabel_FilePath.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolTip.SetToolTip(this.pathLabel_FilePath, "File Path, click or press <...> to choose file");
@@ -81,14 +79,14 @@ namespace HSR.YAT.Gui.Controls
 			this.Controls.Add(this.button_SendFile);
 			this.Controls.Add(this.pathLabel_FilePath);
 			this.Name = "SendFile";
-			this.Size = new System.Drawing.Size(200, 54);
+			this.Size = new System.Drawing.Size(540, 27);
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
-		private HSR.Windows.Forms.PathLabel pathLabel_FilePath;
+		private MKY.Windows.Forms.PathLabel pathLabel_FilePath;
 		private System.Windows.Forms.Button button_SendFile;
 		private System.Windows.Forms.Button button_SetFile;
 		private System.Windows.Forms.ToolTip toolTip;

@@ -2,10 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HSR.YAT.Domain
+namespace MKY.YAT.Domain
 {
+	/// <summary></summary>
 	public enum SerialDirection
 	{
-		Tx, Rx
+		/// <summary></summary>
+		Tx,
+		/// <summary></summary>
+		Rx
 	}
 }

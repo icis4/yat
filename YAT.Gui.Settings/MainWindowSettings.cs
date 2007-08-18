@@ -5,9 +5,10 @@ using System.Xml.Serialization;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace HSR.YAT.Gui.Settings
+namespace MKY.YAT.Gui.Settings
 {
-	public class MainWindowSettings : Utilities.Settings.Settings
+	[Serializable]
+	public class MainWindowSettings : Utilities.Settings.Settings, IEquatable<MainWindowSettings>
 	{
 		private FormWindowState _windowState;
 		private Point _location;

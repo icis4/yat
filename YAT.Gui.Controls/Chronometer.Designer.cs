@@ -1,4 +1,4 @@
-namespace HSR.YAT.Gui.Controls
+namespace MKY.YAT.Gui.Controls
 {
 	partial class Chronometer
 	{

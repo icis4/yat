@@ -1,4 +1,4 @@
-namespace HSR.YAT.Gui.Controls
+namespace MKY.YAT.Gui.Controls
 {
 	partial class PredefinedCommands
 	{
@@ -32,7 +32,7 @@ namespace HSR.YAT.Gui.Controls
 			this.label_Shortcut = new System.Windows.Forms.Label();
 			this.splitContainer_Lower = new System.Windows.Forms.SplitContainer();
 			this.panel_Commands = new System.Windows.Forms.Panel();
-			this.pageButtons = new HSR.YAT.Gui.Controls.PredefinedCommandPageButtons();
+			this.pageButtons = new MKY.YAT.Gui.Controls.PredefinedCommandPageButtons();
 			this.label_Page = new System.Windows.Forms.Label();
 			this.button_PageNext = new System.Windows.Forms.Button();
 			this.button_PagePrevious = new System.Windows.Forms.Button();
@@ -66,6 +66,7 @@ namespace HSR.YAT.Gui.Controls
 			this.splitContainer_Commands.Size = new System.Drawing.Size(144, 335);
 			this.splitContainer_Commands.SplitterDistance = 19;
 			this.splitContainer_Commands.TabIndex = 0;
+			this.splitContainer_Commands.TabStop = false;
 			// 
 			// label_Shortcut
 			// 
@@ -101,6 +102,7 @@ namespace HSR.YAT.Gui.Controls
 			this.splitContainer_Lower.SplitterDistance = 263;
 			this.splitContainer_Lower.SplitterWidth = 1;
 			this.splitContainer_Lower.TabIndex = 0;
+			this.splitContainer_Lower.TabStop = false;
 			// 
 			// panel_Commands
 			// 
@@ -119,8 +121,8 @@ namespace HSR.YAT.Gui.Controls
 			this.pageButtons.Name = "pageButtons";
 			this.pageButtons.Size = new System.Drawing.Size(138, 263);
 			this.pageButtons.TabIndex = 2;
-			this.pageButtons.SendCommandRequest += new System.EventHandler<HSR.YAT.Gui.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
-			this.pageButtons.DefineCommandRequest += new System.EventHandler<HSR.YAT.Gui.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
+			this.pageButtons.SendCommandRequest += new System.EventHandler<MKY.YAT.Gui.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
+			this.pageButtons.DefineCommandRequest += new System.EventHandler<MKY.YAT.Gui.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
 			// 
 			// label_Page
 			// 

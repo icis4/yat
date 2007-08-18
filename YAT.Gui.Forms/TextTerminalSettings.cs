@@ -6,14 +6,14 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-using HSR.Utilities.Text;
+using MKY.Utilities.Text;
 
-namespace HSR.YAT.Gui.Forms
+namespace MKY.YAT.Gui.Forms
 {
 	public partial class TextTerminalSettings : System.Windows.Forms.Form
 	{
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool _isStartingUp = true;
@@ -52,7 +52,7 @@ namespace HSR.YAT.Gui.Forms
 		// Form Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		private void TextTerminalSettings_Load(object sender, EventArgs e)
+		private void TextTerminalSettings_Paint(object sender, PaintEventArgs e)
 		{
 			if (_isStartingUp)
 			{
@@ -74,25 +74,40 @@ namespace HSR.YAT.Gui.Forms
 		{
 			if (!_isSettingControls)
 			{
-				_settings_Form.TxEol = comboBox_TxEol.Text;
+				Domain.XEol eol = comboBox_TxEol.SelectedItem as Domain.XEol;
+
+				if (eol != null)
+					_settings_Form.TxEol = eol.ToSequenceString();
+				else
+					_settings_Form.TxEol = comboBox_TxEol.Text;
+
 				SetControls();
 			}
 		}
 
 		private void comboBox_TxEol_Validating(object sender, CancelEventArgs e)
 		{
-			string eol = comboBox_TxEol.Text;
-			if (Validation.ValidateSequence(this, "EOL", eol))
+			Domain.XEol eol;
+			string eolString = comboBox_TxEol.Text;
+
+			if (Domain.XEol.TryParse(eolString, out eol))
 			{
-				if (!_isSettingControls)
-				{
-					_settings_Form.TxEol = eol;
-					SetControls();
-				}
+				_settings_Form.TxEol = eol.ToSequenceString();
 			}
 			else
 			{
-				e.Cancel = true;
+				if (Validation.ValidateSequence(this, "EOL", eolString))
+				{
+					if (!_isSettingControls)
+					{
+						_settings_Form.TxEol = eolString;
+						SetControls();
+					}
+				}
+				else
+				{
+					e.Cancel = true;
+				}
 			}
 		}
 
@@ -109,25 +124,40 @@ namespace HSR.YAT.Gui.Forms
 		{
 			if (!_isSettingControls)
 			{
-				_settings_Form.RxEol = comboBox_RxEol.Text;
+				Domain.XEol eol = comboBox_RxEol.SelectedItem as Domain.XEol;
+
+				if (eol != null)
+					_settings_Form.RxEol = eol.ToSequenceString();
+				else
+					_settings_Form.RxEol = comboBox_RxEol.Text;
+
 				SetControls();
 			}
 		}
 
 		private void comboBox_RxEol_Validating(object sender, CancelEventArgs e)
 		{
-			string eol = comboBox_RxEol.Text;
-			if (Validation.ValidateSequence(this, "EOL", eol))
+			Domain.XEol eol;
+			string eolString = comboBox_RxEol.Text;
+
+			if (Domain.XEol.TryParse(eolString, out eol))
 			{
-				if (!_isSettingControls)
-				{
-					_settings_Form.RxEol = eol;
-					SetControls();
-				}
+				_settings_Form.RxEol = eol.ToSequenceString();
 			}
 			else
 			{
-				e.Cancel = true;
+				if (Validation.ValidateSequence(this, "EOL", eolString))
+				{
+					if (!_isSettingControls)
+					{
+						_settings_Form.RxEol = eolString;
+						SetControls();
+					}
+				}
+				else
+				{
+					e.Cancel = true;
+				}
 			}
 		}
 
@@ -317,7 +347,7 @@ namespace HSR.YAT.Gui.Forms
 				this,
 				"Reset settings to default values?",
 				"Defaults?",
-				MessageBoxButtons.YesNoCancel,
+				MessageBoxButtons.YesNo,
 				MessageBoxIcon.Question,
 				MessageBoxDefaultButton.Button2
 				)
@@ -358,8 +388,17 @@ namespace HSR.YAT.Gui.Forms
 		{
 			_isSettingControls = true;
 
-			comboBox_TxEol.Text = _settings_Form.TxEol;
-			comboBox_RxEol.Text = _settings_Form.RxEol;
+			Domain.XEol eol;
+
+			if (Domain.XEol.TryParse(_settings_Form.TxEol, out eol))
+				comboBox_TxEol.SelectedItem = eol;
+			else
+				comboBox_TxEol.Text = _settings_Form.TxEol;
+
+			if (Domain.XEol.TryParse(_settings_Form.RxEol, out eol))
+				comboBox_RxEol.SelectedItem = eol;
+			else
+				comboBox_RxEol.Text = _settings_Form.RxEol;
 
 			bool separateEol = _settings_Form.SeparateTxRxEol;
 			checkBox_SeparateTxRxEol.Checked = separateEol;

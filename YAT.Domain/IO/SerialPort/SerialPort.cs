@@ -2,33 +2,40 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HSR.YAT.Domain.IO
+namespace MKY.YAT.Domain.IO
 {
+	/// <summary></summary>
 	public class SerialPort : IIOProvider, IDisposable
 	{
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool _isDisposed = false;
 
 		private Settings.SerialPort.SerialPortSettings _settings;
-		private HSR.IO.Ports.ISerialPort _port;
+		private MKY.IO.Ports.ISerialPort _port;
 
 		//------------------------------------------------------------------------------------------
 		// Events
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public event EventHandler IOChanged;
+		/// <summary></summary>
 		public event EventHandler IOControlChanged;
+		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
+		/// <summary></summary>
 		public event EventHandler DataReceived;
+		/// <summary></summary>
 		public event EventHandler DataSent;
 
 		//------------------------------------------------------------------------------------------
 		// Object Lifetime
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public SerialPort(Settings.SerialPort.SerialPortSettings settings)
 		{
 			_settings = settings;
@@ -66,11 +73,13 @@ namespace HSR.YAT.Domain.IO
 			Dispose(false);
 		}
 
+		/// <summary></summary>
 		protected bool IsDisposed
 		{
 			get { return (_isDisposed); }
 		}
 
+		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
 			if (_isDisposed)
@@ -84,6 +93,7 @@ namespace HSR.YAT.Domain.IO
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public bool HasStarted
 		{
 			get
@@ -97,6 +107,7 @@ namespace HSR.YAT.Domain.IO
 			}
 		}
 
+		/// <summary></summary>
 		public bool IsConnected
 		{
 			get
@@ -110,6 +121,7 @@ namespace HSR.YAT.Domain.IO
 			}
 		}
 
+		/// <summary></summary>
 		public int BytesAvailable
 		{
 			get
@@ -123,6 +135,7 @@ namespace HSR.YAT.Domain.IO
 			}
 		}
 
+		/// <summary></summary>
 		public object UnderlyingIOInstance
 		{
 			get
@@ -139,6 +152,7 @@ namespace HSR.YAT.Domain.IO
 		// Methods
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public void Start()
 		{
 			// AssertNotDisposed() is called by HasStarted
@@ -147,14 +161,13 @@ namespace HSR.YAT.Domain.IO
 			{
 				CreatePort();          // port must be created each time because _port.Close()
 				ApplySettings();       //   disposes the underlying IO instance
-				OpenPort();
 
 				// RTS
 				switch (_settings.Communication.Handshake)
 				{
 					case Handshake.None:
 					case Handshake.XOnXOff:
-						_port.RtsEnable = true;
+						_port.RtsEnable = false;
 						break;
 
 					case Handshake.Manual:
@@ -179,7 +192,7 @@ namespace HSR.YAT.Domain.IO
 					case Handshake.XOnXOff:
 					case Handshake.RequestToSendXOnXOff:
 					case Handshake.RS485:
-						_port.DtrEnable = true;
+						_port.DtrEnable = false;
 						break;
 
 					case Handshake.Manual:
@@ -187,11 +200,14 @@ namespace HSR.YAT.Domain.IO
 						break;
 				}
 
+				OpenPort();
+
 				OnIOChanged(new EventArgs());
 				OnIOControlChanged(new EventArgs());
 			}
 		}
 
+		/// <summary></summary>
 		public void Stop()
 		{
 			// AssertNotDisposed() is called by HasStarted
@@ -214,6 +230,7 @@ namespace HSR.YAT.Domain.IO
 			}
 		}
 
+		/// <summary></summary>
 		public int Receive(out byte[] buffer)
 		{
 			// AssertNotDisposed() is called by IsConnected
@@ -232,6 +249,7 @@ namespace HSR.YAT.Domain.IO
 			return (bytesReceived);
 		}
 
+		/// <summary></summary>
 		public void Send(byte[] buffer)
 		{
 			// AssertNotDisposed() is called by IsConnected
@@ -297,8 +315,8 @@ namespace HSR.YAT.Domain.IO
 				return;
 
 			Settings.SerialPort.SerialCommunicationSettings s = _settings.Communication;
-			_port.BaudRate = (HSR.IO.Ports.XBaudRate)s.BaudRate;
-			_port.DataBits = (HSR.IO.Ports.XDataBits)s.DataBits;
+			_port.BaudRate = (MKY.IO.Ports.XBaudRate)s.BaudRate;
+			_port.DataBits = (MKY.IO.Ports.XDataBits)s.DataBits;
 			_port.Parity = s.Parity;
 			_port.StopBits = s.StopBits;
 			_port.Handshake = (Domain.IO.XHandshake)s.Handshake;
@@ -316,10 +334,10 @@ namespace HSR.YAT.Domain.IO
 			if (_port != null)
 				DisposePort();
 			
-			_port = new HSR.IO.Ports.SerialPortDotNet();
-			_port.DataReceived += new HSR.IO.Ports.SerialDataReceivedEventHandler(_port_DataReceived);
-			_port.PinChanged += new HSR.IO.Ports.SerialPinChangedEventHandler(_port_PinChanged);
-			_port.ErrorReceived += new HSR.IO.Ports.SerialErrorReceivedEventHandler(_port_ErrorReceived);
+			_port = new MKY.IO.Ports.SerialPortDotNet();
+			_port.DataReceived += new MKY.IO.Ports.SerialDataReceivedEventHandler(_port_DataReceived);
+			_port.PinChanged += new MKY.IO.Ports.SerialPinChangedEventHandler(_port_PinChanged);
+			_port.ErrorReceived += new MKY.IO.Ports.SerialErrorReceivedEventHandler(_port_ErrorReceived);
 		}
 
 		private void OpenPort()
@@ -350,17 +368,17 @@ namespace HSR.YAT.Domain.IO
 		// Port Events
 		//------------------------------------------------------------------------------------------
 
-		private void _port_DataReceived(object sender, HSR.IO.Ports.SerialDataReceivedEventArgs e)
+		private void _port_DataReceived(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
 		{
 			OnDataReceived(new EventArgs());
 		}
 
-		private void _port_PinChanged(object sender, HSR.IO.Ports.SerialPinChangedEventArgs e)
+		private void _port_PinChanged(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
 			OnIOControlChanged(new EventArgs());
 		}
 
-		private void _port_ErrorReceived(object sender, HSR.IO.Ports.SerialErrorReceivedEventArgs e)
+		private void _port_ErrorReceived(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e)
 		{
 			bool fireEvent;
 			string message;
@@ -386,26 +404,31 @@ namespace HSR.YAT.Domain.IO
 		// Event Invoking
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync(IOChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync(IOControlChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnDataReceived(EventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync(DataReceived, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnDataSent(EventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync(DataSent, this, e);

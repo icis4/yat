@@ -3,29 +3,38 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace HSR.YAT.Domain.Settings
+namespace MKY.YAT.Domain.Settings
 {
-	public class DisplaySettings : Utilities.Settings.Settings
+	/// <summary></summary>
+	[Serializable]
+	public class DisplaySettings : Utilities.Settings.Settings, IEquatable<DisplaySettings>
 	{
+		/// <summary></summary>
 		public const Radix RadixDefault = Radix.String;
-		public const bool ShowTimestampDefault = false;
+		/// <summary></summary>
+		public const bool ShowTimeStampDefault = false;
+		/// <summary></summary>
 		public const bool ShowLengthDefault = false;
+		/// <summary></summary>
 		public const bool ShowCountersDefault = false;
+		/// <summary></summary>
 		public const int MaximalLineCountDefault = 100;
 
 		private Radix _radix;
-		private bool _showTimestamp;
+		private bool _showTimeStamp;
 		private bool _showLength;
 		private bool _showCounters;
 		private int _txMaximalLineCount;
 		private int _rxMaximalLineCount;
 
+		/// <summary></summary>
 		public DisplaySettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public DisplaySettings(Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -33,11 +42,12 @@ namespace HSR.YAT.Domain.Settings
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public DisplaySettings(DisplaySettings rhs)
 			: base(rhs)
 		{
 			Radix         = rhs.Radix;
-			ShowTimestamp = rhs.ShowTimestamp;
+			ShowTimeStamp = rhs.ShowTimeStamp;
 			ShowLength    = rhs.ShowLength;
 			ShowCounters  = rhs.ShowCounters;
 			TxMaximalLineCount = rhs.TxMaximalLineCount;
@@ -45,10 +55,11 @@ namespace HSR.YAT.Domain.Settings
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		protected override void SetMyDefaults()
 		{
 			Radix         = RadixDefault;
-			ShowTimestamp = ShowTimestampDefault;
+			ShowTimeStamp = ShowTimeStampDefault;
 			ShowLength    = ShowLengthDefault;
 			ShowCounters  = ShowCountersDefault;
 			TxMaximalLineCount = MaximalLineCountDefault;
@@ -60,6 +71,7 @@ namespace HSR.YAT.Domain.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("Radix")]
 		public Radix Radix
 		{
@@ -74,20 +86,22 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
-		[XmlElement("ShowTimestamp")]
-		public bool ShowTimestamp
+		/// <summary></summary>
+		[XmlElement("ShowTimeStamp")]
+		public bool ShowTimeStamp
 		{
-			get { return (_showTimestamp); }
+			get { return (_showTimeStamp); }
 			set
 			{
-				if (_showTimestamp != value)
+				if (_showTimeStamp != value)
 				{
-					_showTimestamp = value;
+					_showTimeStamp = value;
 					SetChanged();
 				}
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("ShowLength")]
 		public bool ShowLength
 		{
@@ -102,6 +116,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("ShowCounters")]
 		public bool ShowCounters
 		{
@@ -116,6 +131,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("TxMaximalLineCount")]
 		public int TxMaximalLineCount
 		{
@@ -130,6 +146,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("RxMaximalLineCount")]
 		public int RxMaximalLineCount
 		{
@@ -144,6 +161,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public int BidirMaximalLineCount
 		{
@@ -176,7 +194,7 @@ namespace HSR.YAT.Domain.Settings
 				return
 					(
 					_radix.Equals(value._radix) &&
-					_showTimestamp.Equals(value._showTimestamp) &&
+					_showTimeStamp.Equals(value._showTimeStamp) &&
 					_showLength.Equals(value._showLength) &&
 					_showCounters.Equals(value._showCounters) &&
 					_txMaximalLineCount.Equals(value._txMaximalLineCount) &&
@@ -186,6 +204,7 @@ namespace HSR.YAT.Domain.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

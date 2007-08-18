@@ -7,7 +7,7 @@
     <ProjectGuid>{A1060959-580E-4493-BA51-4A3A7CDE1E88}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HSR.YAT.Gui.Forms</RootNamespace>
+    <RootNamespace>MKY.YAT.Gui.Forms</RootNamespace>
     <AssemblyName>YAT.Gui.Forms</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\YAT.snk</AssemblyOriginatorKeyFile>
@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -87,6 +89,12 @@
     </Compile>
     <Compile Include="PredefinedCommandSettings.Designer.cs">
       <DependentUpon>PredefinedCommandSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Preferences.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Preferences.Designer.cs">
+      <DependentUpon>Preferences.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -160,6 +168,10 @@
     <EmbeddedResource Include="NewTerminal.resx">
       <DependentUpon>NewTerminal.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Preferences.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Preferences.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
@@ -239,9 +251,13 @@
       <Project>{69A8CBB4-7D00-4A3D-9CF7-220DD02C2EB7}</Project>
       <Name>YAT.Settings.Application</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Settings.Document\YAT.Settings.Document.csproj">
+    <ProjectReference Include="..\YAT.Settings.Terminal\YAT.Settings.Terminal.csproj">
       <Project>{FE2D334F-B2D8-4A07-B63D-93BA775DBBCF}</Project>
-      <Name>YAT.Settings.Document</Name>
+      <Name>YAT.Settings.Terminal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Settings.Workspace\YAT.Settings.Workspace.csproj">
+      <Project>{942BA759-57F9-4213-BDC8-E9A8325631B0}</Project>
+      <Name>YAT.Settings.Workspace</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Settings\YAT.Settings.csproj">
       <Project>{A3E80010-9146-47EF-87B0-138A60406A9E}</Project>

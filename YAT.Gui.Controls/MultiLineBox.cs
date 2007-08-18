@@ -7,12 +7,12 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
-namespace HSR.YAT.Gui.Controls
+namespace MKY.YAT.Gui.Controls
 {
 	public partial class MultiLineBox : Form
 	{
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool _isStartingUp = true;

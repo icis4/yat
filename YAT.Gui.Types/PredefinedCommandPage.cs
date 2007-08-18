@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace HSR.YAT.Gui
+namespace MKY.YAT.Gui
 {
 	[Serializable]
-	public class PredefinedCommandPage : IComparable
+	public class PredefinedCommandPage : IEquatable<PredefinedCommandPage>, IComparable
 	{
 		private string _pageName;
 		private List<Command> _commands;

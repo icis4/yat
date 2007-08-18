@@ -3,19 +3,24 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace HSR.YAT.Domain.Settings.SerialPort
+namespace MKY.YAT.Domain.Settings.SerialPort
 {
-	public class SerialPortSettings : Utilities.Settings.Settings
+	/// <summary></summary>
+	[Serializable]
+	public class SerialPortSettings : Utilities.Settings.Settings, IEquatable<SerialPortSettings>
 	{
+		/// <summary></summary>
 		public const string ParityErrorReplacementDefault = "\\h(00)";
-		public const byte   ParityErrorReplacementDefaultAsByte = 0x00;
+		/// <summary></summary>
+		public const byte ParityErrorReplacementDefaultAsByte = 0x00;
 
-		private HSR.IO.Ports.SerialPortId _portId;
+		private MKY.IO.Ports.SerialPortId _portId;
 		private SerialCommunicationSettings _communication;
 		private string _parityErrorReplacement;
 		private bool _rtsEnabled;
 		private bool _dtrEnabled;
 
+		/// <summary></summary>
 		public SerialPortSettings()
 		{
 			SetMyDefaults();
@@ -23,6 +28,7 @@ namespace HSR.YAT.Domain.Settings.SerialPort
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public SerialPortSettings(Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -31,6 +37,7 @@ namespace HSR.YAT.Domain.Settings.SerialPort
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public SerialPortSettings(SerialPortSettings rhs)
 			: base(rhs)
 		{
@@ -47,12 +54,13 @@ namespace HSR.YAT.Domain.Settings.SerialPort
 			Communication = new SerialCommunicationSettings(SettingsType);
 		}
 
+		/// <summary></summary>
 		protected override void SetMyDefaults()
 		{
-			PortId = HSR.IO.Ports.SerialPortId.DefaultPort;
+			PortId = MKY.IO.Ports.SerialPortId.DefaultPort;
 			ParityErrorReplacement = ParityErrorReplacementDefault;
-			RtsEnabled = true;
-			DtrEnabled = true;
+			RtsEnabled = false;
+			DtrEnabled = false;
 		}
 
 		#region Properties
@@ -60,8 +68,9 @@ namespace HSR.YAT.Domain.Settings.SerialPort
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("PortId")]
-		public HSR.IO.Ports.SerialPortId PortId
+		public MKY.IO.Ports.SerialPortId PortId
 		{
 			get { return (_portId); }
 			set
@@ -74,6 +83,7 @@ namespace HSR.YAT.Domain.Settings.SerialPort
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Communication")]
 		public SerialCommunicationSettings Communication
 		{
@@ -94,6 +104,7 @@ namespace HSR.YAT.Domain.Settings.SerialPort
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("ParityErrorReplacement")]
 		public string ParityErrorReplacement
 		{
@@ -108,6 +119,7 @@ namespace HSR.YAT.Domain.Settings.SerialPort
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("RtsEnabled")]
 		public bool RtsEnabled
 		{
@@ -122,6 +134,7 @@ namespace HSR.YAT.Domain.Settings.SerialPort
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("DtrEnabled")]
 		public bool DtrEnabled
 		{
@@ -171,6 +184,7 @@ namespace HSR.YAT.Domain.Settings.SerialPort
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

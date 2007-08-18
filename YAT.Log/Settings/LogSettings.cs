@@ -4,11 +4,13 @@ using System.Text;
 using System.Xml.Serialization;
 using System.IO;
 
-using HSR.YAT.Settings.Application;
+using MKY.YAT.Settings;
+using MKY.YAT.Settings.Application;
 
-namespace HSR.YAT.Log.Settings
+namespace MKY.YAT.Log.Settings
 {
-	public class LogSettings : Utilities.Settings.Settings
+	[Serializable]
+	public class LogSettings : Utilities.Settings.Settings, IEquatable<LogSettings>
 	{
 		// root
 		private string _rootPath;
@@ -85,18 +87,18 @@ namespace HSR.YAT.Log.Settings
 
 		protected override void SetMyDefaults()
 		{
-			RootPath = ApplicationSettings.LocalUser.Path.LogFilesPath;
+			RootPath = ApplicationSettings.LocalUser.Paths.LogFilesPath;
 			RootFileName = "YAT-Log";
 
 			RawLogTx = false;
 			RawLogBidir = false;
 			RawLogRx = false;
-			RawExtension = ApplicationSettings.Extensions.BinaryFilesDefault;
+			RawExtension = ExtensionSettings.BinaryFilesDefault;
 
 			NeatLogTx = false;
 			NeatLogBidir = true;
 			NeatLogRx = false;
-			NeatExtension = ApplicationSettings.Extensions.LogFilesDefault;
+			NeatExtension = ExtensionSettings.LogFilesDefault;
 
 			WriteMode = LogFileWriteMode.Create;
 

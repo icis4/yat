@@ -5,10 +5,10 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using System.IO;
 
-using HSR.Windows.Forms;
-using HSR.YAT.Settings.Application;
+using MKY.Windows.Forms;
+using MKY.YAT.Settings.Application;
 
-namespace HSR.YAT.Gui.Forms
+namespace MKY.YAT.Gui.Forms
 {
 	public partial class PredefinedCommandSettings : System.Windows.Forms.Form
 	{
@@ -31,7 +31,7 @@ namespace HSR.YAT.Gui.Forms
 		}
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private StartupControl _startupControl = new StartupControl(true, 1, 1);

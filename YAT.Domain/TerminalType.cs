@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using HSR.Utilities.Types;
+using MKY.Utilities.Types;
 
-namespace HSR.YAT.Domain
+namespace MKY.YAT.Domain
 {
 	#region Enum TerminalType
 
@@ -77,16 +77,32 @@ namespace HSR.YAT.Domain
 		/// <summary></summary>
 		public static XTerminalType Parse(string type)
 		{
+			XTerminalType result;
+
+			if (TryParse(type, out result))
+				return (result);
+			else
+				throw (new ArgumentOutOfRangeException(type));
+		}
+
+		/// <summary></summary>
+		public static bool TryParse(string type, out XTerminalType result)
+		{
 			if (string.Compare(type, Text_string, true) == 0)
 			{
-				return (new XTerminalType(TerminalType.Text));
+				result = new XTerminalType(TerminalType.Text);
+				return (true);
 			}
 			else if (string.Compare(type, Binary_string, true) == 0)
 			{
-				return (new XTerminalType(TerminalType.Binary));
+				result = new XTerminalType(TerminalType.Binary);
+				return (true);
 			}
-
-			throw (new ArgumentOutOfRangeException(type));
+			else
+			{
+				result = null;
+				return (false);
+			}
 		}
 
 		#endregion

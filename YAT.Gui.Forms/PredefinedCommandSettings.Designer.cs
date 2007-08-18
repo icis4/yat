@@ -1,4 +1,4 @@
-namespace HSR.YAT.Gui.Forms
+namespace MKY.YAT.Gui.Forms
 {
 	public partial class PredefinedCommandSettings
 	{
@@ -28,34 +28,34 @@ namespace HSR.YAT.Gui.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			HSR.YAT.Gui.Command command1 = new HSR.YAT.Gui.Command();
-			HSR.YAT.Gui.Command command2 = new HSR.YAT.Gui.Command();
-			HSR.YAT.Gui.Command command3 = new HSR.YAT.Gui.Command();
-			HSR.YAT.Gui.Command command4 = new HSR.YAT.Gui.Command();
-			HSR.YAT.Gui.Command command5 = new HSR.YAT.Gui.Command();
-			HSR.YAT.Gui.Command command6 = new HSR.YAT.Gui.Command();
-			HSR.YAT.Gui.Command command7 = new HSR.YAT.Gui.Command();
-			HSR.YAT.Gui.Command command8 = new HSR.YAT.Gui.Command();
-			HSR.YAT.Gui.Command command9 = new HSR.YAT.Gui.Command();
-			HSR.YAT.Gui.Command command10 = new HSR.YAT.Gui.Command();
-			HSR.YAT.Gui.Command command11 = new HSR.YAT.Gui.Command();
-			HSR.YAT.Gui.Command command12 = new HSR.YAT.Gui.Command();
+			MKY.YAT.Gui.Command command1 = new MKY.YAT.Gui.Command();
+			MKY.YAT.Gui.Command command2 = new MKY.YAT.Gui.Command();
+			MKY.YAT.Gui.Command command3 = new MKY.YAT.Gui.Command();
+			MKY.YAT.Gui.Command command4 = new MKY.YAT.Gui.Command();
+			MKY.YAT.Gui.Command command5 = new MKY.YAT.Gui.Command();
+			MKY.YAT.Gui.Command command6 = new MKY.YAT.Gui.Command();
+			MKY.YAT.Gui.Command command7 = new MKY.YAT.Gui.Command();
+			MKY.YAT.Gui.Command command8 = new MKY.YAT.Gui.Command();
+			MKY.YAT.Gui.Command command9 = new MKY.YAT.Gui.Command();
+			MKY.YAT.Gui.Command command10 = new MKY.YAT.Gui.Command();
+			MKY.YAT.Gui.Command command11 = new MKY.YAT.Gui.Command();
+			MKY.YAT.Gui.Command command12 = new MKY.YAT.Gui.Command();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_ClearPage = new System.Windows.Forms.Button();
 			this.groupBox_Page = new System.Windows.Forms.GroupBox();
-			this.predefinedCommandSettingsSet_12 = new HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet();
-			this.predefinedCommandSettingsSet_11 = new HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet();
-			this.predefinedCommandSettingsSet_10 = new HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet();
-			this.predefinedCommandSettingsSet_9 = new HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet();
-			this.predefinedCommandSettingsSet_8 = new HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet();
-			this.predefinedCommandSettingsSet_7 = new HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet();
-			this.predefinedCommandSettingsSet_6 = new HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet();
-			this.predefinedCommandSettingsSet_5 = new HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet();
-			this.predefinedCommandSettingsSet_4 = new HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet();
-			this.predefinedCommandSettingsSet_3 = new HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet();
-			this.predefinedCommandSettingsSet_1 = new HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet();
-			this.predefinedCommandSettingsSet_2 = new HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet();
+			this.predefinedCommandSettingsSet_12 = new MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet();
+			this.predefinedCommandSettingsSet_11 = new MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet();
+			this.predefinedCommandSettingsSet_10 = new MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet();
+			this.predefinedCommandSettingsSet_9 = new MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet();
+			this.predefinedCommandSettingsSet_8 = new MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet();
+			this.predefinedCommandSettingsSet_7 = new MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet();
+			this.predefinedCommandSettingsSet_6 = new MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet();
+			this.predefinedCommandSettingsSet_5 = new MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet();
+			this.predefinedCommandSettingsSet_4 = new MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet();
+			this.predefinedCommandSettingsSet_3 = new MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet();
+			this.predefinedCommandSettingsSet_1 = new MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet();
+			this.predefinedCommandSettingsSet_2 = new MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet();
 			this.label_File = new System.Windows.Forms.Label();
 			this.label_predefinedCommandSettingsSet_12 = new System.Windows.Forms.Label();
 			this.label_predefinedCommandSettingsSet_11 = new System.Windows.Forms.Label();
@@ -178,7 +178,7 @@ namespace HSR.YAT.Gui.Forms
 			this.predefinedCommandSettingsSet_12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			command1.CommandLines = new string[] {
         ""};
-			command1.DefaultRadix = HSR.YAT.Domain.Radix.String;
+			command1.DefaultRadix = MKY.YAT.Domain.Radix.String;
 			command1.Description = "";
 			command1.FilePath = "";
 			command1.IsFilePath = false;
@@ -199,7 +199,7 @@ namespace HSR.YAT.Gui.Forms
 			this.predefinedCommandSettingsSet_11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			command2.CommandLines = new string[] {
         ""};
-			command2.DefaultRadix = HSR.YAT.Domain.Radix.String;
+			command2.DefaultRadix = MKY.YAT.Domain.Radix.String;
 			command2.Description = "";
 			command2.FilePath = "";
 			command2.IsFilePath = false;
@@ -220,7 +220,7 @@ namespace HSR.YAT.Gui.Forms
 			this.predefinedCommandSettingsSet_10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			command3.CommandLines = new string[] {
         ""};
-			command3.DefaultRadix = HSR.YAT.Domain.Radix.String;
+			command3.DefaultRadix = MKY.YAT.Domain.Radix.String;
 			command3.Description = "";
 			command3.FilePath = "";
 			command3.IsFilePath = false;
@@ -241,7 +241,7 @@ namespace HSR.YAT.Gui.Forms
 			this.predefinedCommandSettingsSet_9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			command4.CommandLines = new string[] {
         ""};
-			command4.DefaultRadix = HSR.YAT.Domain.Radix.String;
+			command4.DefaultRadix = MKY.YAT.Domain.Radix.String;
 			command4.Description = "";
 			command4.FilePath = "";
 			command4.IsFilePath = false;
@@ -262,7 +262,7 @@ namespace HSR.YAT.Gui.Forms
 			this.predefinedCommandSettingsSet_8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			command5.CommandLines = new string[] {
         ""};
-			command5.DefaultRadix = HSR.YAT.Domain.Radix.String;
+			command5.DefaultRadix = MKY.YAT.Domain.Radix.String;
 			command5.Description = "";
 			command5.FilePath = "";
 			command5.IsFilePath = false;
@@ -283,7 +283,7 @@ namespace HSR.YAT.Gui.Forms
 			this.predefinedCommandSettingsSet_7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			command6.CommandLines = new string[] {
         ""};
-			command6.DefaultRadix = HSR.YAT.Domain.Radix.String;
+			command6.DefaultRadix = MKY.YAT.Domain.Radix.String;
 			command6.Description = "";
 			command6.FilePath = "";
 			command6.IsFilePath = false;
@@ -304,7 +304,7 @@ namespace HSR.YAT.Gui.Forms
 			this.predefinedCommandSettingsSet_6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			command7.CommandLines = new string[] {
         ""};
-			command7.DefaultRadix = HSR.YAT.Domain.Radix.String;
+			command7.DefaultRadix = MKY.YAT.Domain.Radix.String;
 			command7.Description = "";
 			command7.FilePath = "";
 			command7.IsFilePath = false;
@@ -325,7 +325,7 @@ namespace HSR.YAT.Gui.Forms
 			this.predefinedCommandSettingsSet_5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			command8.CommandLines = new string[] {
         ""};
-			command8.DefaultRadix = HSR.YAT.Domain.Radix.String;
+			command8.DefaultRadix = MKY.YAT.Domain.Radix.String;
 			command8.Description = "";
 			command8.FilePath = "";
 			command8.IsFilePath = false;
@@ -346,7 +346,7 @@ namespace HSR.YAT.Gui.Forms
 			this.predefinedCommandSettingsSet_4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			command9.CommandLines = new string[] {
         ""};
-			command9.DefaultRadix = HSR.YAT.Domain.Radix.String;
+			command9.DefaultRadix = MKY.YAT.Domain.Radix.String;
 			command9.Description = "";
 			command9.FilePath = "";
 			command9.IsFilePath = false;
@@ -367,7 +367,7 @@ namespace HSR.YAT.Gui.Forms
 			this.predefinedCommandSettingsSet_3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			command10.CommandLines = new string[] {
         ""};
-			command10.DefaultRadix = HSR.YAT.Domain.Radix.String;
+			command10.DefaultRadix = MKY.YAT.Domain.Radix.String;
 			command10.Description = "";
 			command10.FilePath = "";
 			command10.IsFilePath = false;
@@ -388,7 +388,7 @@ namespace HSR.YAT.Gui.Forms
 			this.predefinedCommandSettingsSet_1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			command11.CommandLines = new string[] {
         ""};
-			command11.DefaultRadix = HSR.YAT.Domain.Radix.String;
+			command11.DefaultRadix = MKY.YAT.Domain.Radix.String;
 			command11.Description = "";
 			command11.FilePath = "";
 			command11.IsFilePath = false;
@@ -408,7 +408,7 @@ namespace HSR.YAT.Gui.Forms
 			this.predefinedCommandSettingsSet_2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			command12.CommandLines = new string[] {
         ""};
-			command12.DefaultRadix = HSR.YAT.Domain.Radix.String;
+			command12.DefaultRadix = MKY.YAT.Domain.Radix.String;
 			command12.Description = "";
 			command12.FilePath = "";
 			command12.IsFilePath = false;
@@ -808,14 +808,14 @@ namespace HSR.YAT.Gui.Forms
 		private System.Windows.Forms.Button button_Help;
 		private System.Windows.Forms.GroupBox groupBox_Predefined;
 		private System.Windows.Forms.Button button_DeletePages;
-		private HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_8;
-		private HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_7;
-		private HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_6;
-		private HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_5;
-		private HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_4;
-		private HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_3;
-		private HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_1;
-		private HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_2;
+		private MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_8;
+		private MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_7;
+		private MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_6;
+		private MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_5;
+		private MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_4;
+		private MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_3;
+		private MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_1;
+		private MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_2;
 		private System.Windows.Forms.GroupBox groupBox_Pages;
 		private System.Windows.Forms.ListBox listBox_Pages;
 		private System.Windows.Forms.Button button_NamePage;
@@ -824,10 +824,10 @@ namespace HSR.YAT.Gui.Forms
 		private System.Windows.Forms.Button button_DeletePage;
 		private System.Windows.Forms.Button button_AddPage;
 		private System.Windows.Forms.Button button_InsertPage;
-		private HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_12;
-		private HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_11;
-		private HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_10;
-		private HSR.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_9;
+		private MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_12;
+		private MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_11;
+		private MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_10;
+		private MKY.YAT.Gui.Controls.PredefinedCommandSettingsSet predefinedCommandSettingsSet_9;
 		private System.Windows.Forms.Label label_predefinedCommandSettingsSet_9;
 		private System.Windows.Forms.Label label_predefinedCommandSettingsSet_12;
 		private System.Windows.Forms.Label label_predefinedCommandSettingsSet_11;

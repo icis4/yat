@@ -1,4 +1,4 @@
-namespace HSR.YAT.Gui.Forms
+namespace MKY.YAT.Gui.Forms
 {
 	partial class WelcomeScreen
 	{
@@ -30,7 +30,7 @@ namespace HSR.YAT.Gui.Forms
 		{
 			this.components = new System.ComponentModel.Container();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
-			this.timer_Startup = new System.Windows.Forms.Timer(this.components);
+			this.timer_Opacity = new System.Windows.Forms.Timer(this.components);
 			this.label_Name = new System.Windows.Forms.Label();
 			this.label_Version = new System.Windows.Forms.Label();
 			this.label_Status = new System.Windows.Forms.Label();
@@ -39,7 +39,7 @@ namespace HSR.YAT.Gui.Forms
 			// 
 			// pictureBox1
 			// 
-			this.pictureBox1.Image = global::HSR.YAT.Gui.Forms.Properties.Resources.Image_YAT_64x64;
+			this.pictureBox1.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_YAT_64x64;
 			this.pictureBox1.Location = new System.Drawing.Point(12, 12);
 			this.pictureBox1.Name = "pictureBox1";
 			this.pictureBox1.Size = new System.Drawing.Size(64, 64);
@@ -47,11 +47,11 @@ namespace HSR.YAT.Gui.Forms
 			this.pictureBox1.TabIndex = 0;
 			this.pictureBox1.TabStop = false;
 			// 
-			// timer_Startup
+			// timer_Opacity
 			// 
-			this.timer_Startup.Enabled = true;
-			this.timer_Startup.Interval = 25;
-			this.timer_Startup.Tick += new System.EventHandler(this.timer_Startup_Tick);
+			this.timer_Opacity.Enabled = true;
+			this.timer_Opacity.Interval = 40;
+			this.timer_Opacity.Tick += new System.EventHandler(this.timer_Opacity_Tick);
 			// 
 			// label_Name
 			// 
@@ -105,10 +105,11 @@ namespace HSR.YAT.Gui.Forms
 			this.Controls.Add(this.pictureBox1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Name = "WelcomeScreen";
-			this.Opacity = 0;
+			this.Opacity = 0.25;
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "WelcomeScreen";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WelcomeScreen_FormClosing);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -118,9 +119,9 @@ namespace HSR.YAT.Gui.Forms
 		#endregion
 
 		private System.Windows.Forms.PictureBox pictureBox1;
-		private System.Windows.Forms.Timer timer_Startup;
 		private System.Windows.Forms.Label label_Name;
 		private System.Windows.Forms.Label label_Version;
 		private System.Windows.Forms.Label label_Status;
+		private System.Windows.Forms.Timer timer_Opacity;
 	}
 }

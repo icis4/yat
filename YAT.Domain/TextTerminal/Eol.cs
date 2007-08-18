@@ -2,21 +2,28 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using HSR.Utilities.Types;
+using MKY.Utilities.Types;
 
-namespace HSR.YAT.Domain
+namespace MKY.YAT.Domain
 {
 	#region Enum Eol
 
 	/// <summary></summary>
 	public enum Eol
 	{
+		/// <summary></summary>
 		None,
+		/// <summary></summary>
 		Cr,
+		/// <summary></summary>
 		Lf,
+		/// <summary></summary>
 		CrLf,
+		/// <summary></summary>
 		LfCr,
+		/// <summary></summary>
 		Tab,
+		/// <summary></summary>
 		Nul,
 	}
 
@@ -34,11 +41,22 @@ namespace HSR.YAT.Domain
 		private const string None_stringSequence = "";
 
 		private const string Cr_string = "<CR>";
+		private const string Cr_stringNative = "\r";
+
 		private const string Lf_string = "<LF>";
+		private const string Lf_stringNative = "\n";
+
 		private const string CrLf_string = "<CR><LF>";
+		private const string CrLf_stringNative = "\r\n";
+		
 		private const string LfCr_string = "<LF><CR>";
+		private const string LfCr_stringNative = "\n\r";
+		
 		private const string Tab_string = "<TAB>";
+		private const string Tab_stringNative = "\t";
+		
 		private const string Nul_string = "<NUL>";
+		private const string Nul_stringNative = "\0";
 
 		#endregion
 
@@ -72,6 +90,7 @@ namespace HSR.YAT.Domain
 			throw (new NotImplementedException(UnderlyingEnum.ToString()));
 		}
 
+		/// <summary></summary>
 		public string ToSequenceString()
 		{
 			switch ((Eol)UnderlyingEnum)
@@ -112,80 +131,64 @@ namespace HSR.YAT.Domain
 		/// <summary></summary>
 		public static XEol Parse(string eol)
 		{
-			if      ((string.Compare(eol, None_string, true) == 0) ||
-			         (string.Compare(eol, None_stringSequence, true) == 0))
-			{
-				return (new XEol(Eol.None));
-			}
-			else if (string.Compare(eol, Cr_string, true) == 0)
-			{
-				return (new XEol(Eol.Cr));
-			}
-			else if (string.Compare(eol, Lf_string, true) == 0)
-			{
-				return (new XEol(Eol.Lf));
-			}
-			else if (string.Compare(eol, CrLf_string, true) == 0)
-			{
-				return (new XEol(Eol.CrLf));
-			}
-			else if (string.Compare(eol, LfCr_string, true) == 0)
-			{
-				return (new XEol(Eol.LfCr));
-			}
-			else if (string.Compare(eol, Tab_string, true) == 0)
-			{
-				return (new XEol(Eol.Tab));
-			}
-			else if (string.Compare(eol, Nul_string, true) == 0)
-			{
-				return (new XEol(Eol.Nul));
-			}
+			XEol result;
 
-			throw (new ArgumentOutOfRangeException(eol));
+			if (TryParse(eol, out result))
+				return (result);
+			else
+				throw (new ArgumentOutOfRangeException(eol));
 		}
 
-		#endregion
-
-		#region FromString
-
 		/// <summary></summary>
-		public static XEol FromString(string eol)
+		public static bool TryParse(string eol, out XEol result)
 		{
-			if (eol == null)
+			if      ((string.Compare(eol, None_string, true) == 0) ||
+					 (string.Compare(eol, None_stringSequence, true) == 0))
 			{
-				return (new XEol(Eol.None));
+				result = new XEol(Eol.None);
+				return (true);
 			}
-			else if (string.Compare(eol, "", true) == 0)
+			else if ((string.Compare(eol, Cr_string, true) == 0) ||
+					 (string.Compare(eol, Cr_stringNative, true) == 0))
 			{
-				return (new XEol(Eol.None));
+				result = new XEol(Eol.Cr);
+				return (true);
 			}
-			else if (string.Compare(eol, "\r", true) == 0)
+			else if ((string.Compare(eol, Lf_string, true) == 0) ||
+					 (string.Compare(eol, Lf_stringNative, true) == 0))
 			{
-				return (new XEol(Eol.Cr));
+				result = new XEol(Eol.Lf);
+				return (true);
 			}
-			else if (string.Compare(eol, "\n", true) == 0)
+			else if ((string.Compare(eol, CrLf_string, true) == 0) ||
+					 (string.Compare(eol, CrLf_stringNative, true) == 0))
 			{
-				return (new XEol(Eol.Lf));
+				result = new XEol(Eol.CrLf);
+				return (true);
 			}
-			else if (string.Compare(eol, "\r\n", true) == 0)
+			else if ((string.Compare(eol, LfCr_string, true) == 0) ||
+					 (string.Compare(eol, LfCr_stringNative, true) == 0))
 			{
-				return (new XEol(Eol.CrLf));
+				result = new XEol(Eol.LfCr);
+				return (true);
 			}
-			else if (string.Compare(eol, "\n\r", true) == 0)
+			else if ((string.Compare(eol, Tab_string, true) == 0) ||
+					 (string.Compare(eol, Tab_stringNative, true) == 0))
 			{
-				return (new XEol(Eol.LfCr));
+				result = new XEol(Eol.Tab);
+				return (true);
 			}
-			else if (string.Compare(eol, "\t", true) == 0)
+			else if ((string.Compare(eol, Nul_string, true) == 0) ||
+				     (string.Compare(eol, Nul_stringNative, true) == 0))
 			{
-				return (new XEol(Eol.Tab));
+				result = new XEol(Eol.Nul);
+				return (true);
 			}
-			else if (string.Compare(eol, "\0", true) == 0)
+			else
 			{
-				return (new XEol(Eol.Nul));
+				result = null;
+				return (false);
 			}
-
-			throw (new ArgumentOutOfRangeException(eol));
 		}
 
 		#endregion
