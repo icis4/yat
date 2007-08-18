@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Net.Sockets")]
 [assembly: AssemblyDescription("Net.Sockets extension")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("HSR")]
+[assembly: AssemblyCompany("YAT")]
 [assembly: AssemblyProduct("Net.Sockets")]
 [assembly: AssemblyCopyright("Copyright © 2003-2007 Hochschule für Technik Rapperswil. All rights reserved.")]
 [assembly: AssemblyTrademark("")]

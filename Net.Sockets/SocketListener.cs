@@ -41,7 +41,7 @@ using System.Net.Sockets;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 
-namespace HSR.Net.Sockets
+namespace MKY.Net.Sockets
 {
 
     /// <summary>
@@ -140,7 +140,7 @@ namespace HSR.Net.Sockets
 			}
 			catch (Exception exOuter)
 			{
-				HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+				MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
 				Stop();
 				Host.FireOnException(new ExceptionEventArgs(exOuter));
 			}
@@ -184,7 +184,7 @@ namespace HSR.Net.Sockets
 			}
 			catch (Exception exOuter)
 			{
-				HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+				MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
 				if (!IsDisposed)
 				{
 					if (connection != null)
@@ -195,7 +195,7 @@ namespace HSR.Net.Sockets
 						}
 						catch (Exception exInner)
 						{
-							HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+							MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
 							Host.FireOnException(new ExceptionEventArgs(exInner));
 						}
 					}

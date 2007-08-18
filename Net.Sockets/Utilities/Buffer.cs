@@ -37,7 +37,7 @@
 
 using System;
 
-namespace HSR.Net.Sockets.Utilities
+namespace MKY.Net.Sockets.Utilities
 {
     
     /// <summary>

@@ -41,7 +41,7 @@ using System.Text;
 using System.Threading;
 using System.Net.Sockets;
 
-namespace HSR.Net.Sockets.Utilities
+namespace MKY.Net.Sockets.Utilities
 {
 
     /// <summary>
@@ -90,7 +90,7 @@ namespace HSR.Net.Sockets.Utilities
     {
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool FIsDisposed = false;
@@ -297,7 +297,7 @@ namespace HSR.Net.Sockets.Utilities
                     }
                     catch (Exception exOuter)
                     {
-						HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+						MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
 						if (item.EventArgs is DisconnectedEventArgs)
                         {
                             //----- Disconnecting!
@@ -311,7 +311,7 @@ namespace HSR.Net.Sockets.Utilities
                             }
                             catch (Exception exInner)
                             {
-								HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+								MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
 								FHost.FireOnException(new ExceptionEventArgs(exInner));
                             }
                         }

@@ -49,7 +49,7 @@ using System.IO;
 
 using System.Diagnostics;
 
-namespace HSR.Net.Sockets
+namespace MKY.Net.Sockets
 {
 
     /// <summary>
@@ -59,7 +59,7 @@ namespace HSR.Net.Sockets
     {
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool FIsDisposed = false;
@@ -277,7 +277,7 @@ namespace HSR.Net.Sockets
                     }
                     catch (Exception ex)
 					{
-						HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, ex);
+						MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, ex);
 					}
                 }
 
@@ -308,7 +308,7 @@ namespace HSR.Net.Sockets
 					}
 					catch (Exception ex)
 					{
-						HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, ex);
+						MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, ex);
 					}
 				}
 
@@ -537,14 +537,14 @@ namespace HSR.Net.Sockets
 			}
 			catch (Exception exOuter)
 			{
-				HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+				MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
 				try
 				{
 					connection.BeginDisconnect(exOuter);
 				}
 				catch (Exception exInner)
 				{
-					HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+					MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
 					FireOnException(new ExceptionEventArgs(exInner));
 				}
 			}
@@ -630,14 +630,14 @@ namespace HSR.Net.Sockets
 			}
 			catch (Exception exOuter)
 			{
-				HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+				MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
 				try
 				{
 					connection.BeginDisconnect(exOuter);
 				}
 				catch (Exception exInner)
 				{
-					HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+					MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
 					FireOnException(new ExceptionEventArgs(exInner));
 				}
 			}
@@ -686,14 +686,14 @@ namespace HSR.Net.Sockets
 			}
 			catch (Exception exOuter)
 			{
-				HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+				MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
 				try
 				{
 					connection.BeginDisconnect(exOuter);
 				}
 				catch (Exception exInner)
 				{
-					HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+					MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
 					FireOnException(new ExceptionEventArgs(exInner));
 				}
 			}
@@ -918,14 +918,14 @@ namespace HSR.Net.Sockets
 				}
 				catch (Exception exOuter)
 				{
-					HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+					MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
 					try
 					{
 						connection.BeginDisconnect(exOuter);
 					}
 					catch (Exception exInner)
 					{
-						HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+						MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
 						FireOnException(new ExceptionEventArgs(exInner));
 					}
 				}
@@ -954,14 +954,14 @@ namespace HSR.Net.Sockets
 			}
 			catch (Exception exOuter)
 			{
-				HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+				MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
 				try
 				{
 					FireOnDisconnected(e);
 				}
 				catch (Exception exInner)
 				{
-					HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+					MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
 					FireOnException(new ExceptionEventArgs(exInner));
 				}
 			}
@@ -994,7 +994,7 @@ namespace HSR.Net.Sockets
 				}
 				catch (Exception exOuter)
 				{
-					HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+					MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
 					if (!IsDisposed)
 					{
 						try
@@ -1003,7 +1003,7 @@ namespace HSR.Net.Sockets
 						}
 						catch (Exception exInner)
 						{
-							HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+							MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
 							FireOnException(new ExceptionEventArgs(exInner));
 						}
 					}
@@ -1128,7 +1128,7 @@ namespace HSR.Net.Sockets
                         }
                         catch (Exception ex)
                         {
-							HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, ex);
+							MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, ex);
 						}
                     }
 
