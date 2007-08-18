@@ -49,13 +49,15 @@ Release 2.0.0 :: 2007-??-??
 - Baud rates above 115k added
 - Unicode encoding support added
 - Visual appearance modernized
+- Terminal window layout improved
 - Support for multi-line commands added
 - Several send options added
-- Application settings shifted from registry to local user directory
+- Application settings moved from registry to local user directory
 - Terminal settings (.yat) refined
 - Workspace settings (.yaw) introduced
-- About dialog: Link labels instead of normal labels
+- Menu structure improved
 - Displaying performance improved
+- About dialog: Link labels instead of normal labels
 
 
 Version 1.0
@@ -107,6 +109,7 @@ Release 2.1.0 :: Not planned yet
     OnDataReceived() and SendNextLine()
     => enables reception of multi-line commands
 - RS-232 AutoSense mode
+- Optional command settings (.yac)
 - Optional user settings (.yau)
 
 
