@@ -2,47 +2,69 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HSR.YAT.Settings
+namespace MKY.YAT.Settings
 {
 	/// <summary>
 	/// Defines extension filters for open/save dialogs.
 	/// </summary>
-	public class ExtensionSettings
+	public static class ExtensionSettings
 	{
-		public string AllFilesFilter
+		public static string AllFilesFilter
 		{
-			get
-			{
-				return ("All Files (*.*)|*.*");
-			}
+			get { return ("All Files (*.*)|*.*"); }
 		}
 
-		public string TerminalFilesFilter
+		public static string TerminalFilesFilter
 		{
-			get
-			{
-				return ("Terminal Files (*.yat)|*.yat|" +
-						"All Files (*.*)|*.*");
-			}
+			get { return ("Terminal Files (*.yat)|*.yat"); }
 		}
 
-		public string TerminalFilesDefault
+		public static string TerminalFiles
 		{
 			get { return (".yat"); }
 		}
 
-		public string TextFilesFilter
+		public static bool IsTerminalFile(string extension)
+		{
+			if (extension == TerminalFiles)
+				return (true);
+			else
+				return (false);
+		}
+
+		public static string WorkspaceFilesFilter
+		{
+			get { return ("Workspace Files (*.yaw)|*.yaw"); }
+		}
+
+		public static string WorkspaceFiles
+		{
+			get { return (".yaw"); }
+		}
+
+		public static bool IsWorkspaceFile(string extension)
+		{
+			if (extension == WorkspaceFiles)
+				return (true);
+			else
+				return (false);
+		}
+
+		public static string TextFilesFilter
 		{
 			get
 			{
-				return ("Text Files (*.txt;*.text;*.log)|*.txt;*.text;*.log|" +
-						"Rich Text Files (*.rtf)|*.rtf|" +
-						"XML Files (*.xml)|*.xml|" +
+				return ("Text Files (*.txt;*.text;*.log)|*.txt;*.text;*.log" +
+						"|" +
+						"Rich Text Files (*.rtf)|*.rtf" +
+						"|" +
+						"XML Files (*.xml)|*.xml" +
+						"|" +
 						"All Files (*.*)|*.*");
 			}
 		}
 
-		public string[] TextFilesWithDot
+		public static string[] TextFilesWithDot
 		{
 			get
 			{
@@ -56,22 +78,22 @@ namespace HSR.YAT.Settings
 			}
 		}
 
-		public string TextFilesDefault
+		public static string TextFilesDefault
 		{
 			get { return (".txt"); }
 		}
 
-		public string LogFilesDefault
+		public static string LogFilesDefault
 		{
 			get { return (".log"); }
 		}
 
-		public string MonitorFilesDefault
+		public static string MonitorFilesDefault
 		{
 			get { return (".rtf"); }
 		}
 
-		public bool IsText(string extension)
+		public static bool IsTextFile(string extension)
 		{
 			switch (extension)
 			{
@@ -85,7 +107,7 @@ namespace HSR.YAT.Settings
 			}
 		}
 
-		public bool IsRtf(string extension)
+		public static bool IsRtfFile(string extension)
 		{
 			switch (extension)
 			{
@@ -97,7 +119,7 @@ namespace HSR.YAT.Settings
 			}
 		}
 
-		public bool IsXml(string extension)
+		public static bool IsXmlFile(string extension)
 		{
 			switch (extension)
 			{
@@ -109,16 +131,17 @@ namespace HSR.YAT.Settings
 			}
 		}
 
-		public string BinaryFilesFilter
+		public static string BinaryFilesFilter
 		{
 			get
 			{
-				return ("Binary Files (*.dat;*.bin;*.binary)|*.dat;*.bin;*.binary|" +
+				return ("Binary Files (*.dat;*.bin;*.binary)|*.dat;*.bin;*.binary" +
+						"|" +
 						"All Files (*.*)|*.*");
 			}
 		}
 
-		public string[] BinaryFilesWithDot
+		public static string[] BinaryFilesWithDot
 		{
 			get
 			{
@@ -130,7 +153,7 @@ namespace HSR.YAT.Settings
 			}
 		}
 
-		public string BinaryFilesDefault
+		public static string BinaryFilesDefault
 		{
 			get { return (".dat"); }
 		}
