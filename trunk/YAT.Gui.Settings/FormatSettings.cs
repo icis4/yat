@@ -4,9 +4,10 @@ using System.Text;
 using System.Xml.Serialization;
 using System.Drawing;
 
-namespace HSR.YAT.Gui.Settings
+namespace MKY.YAT.Gui.Settings
 {
-	public class FormatSettings : Utilities.Settings.Settings
+	[Serializable]
+	public class FormatSettings : Utilities.Settings.Settings, IEquatable<FormatSettings>
 	{
 		private FontSettings _font;
 		private TextFormat _txDataFormat;

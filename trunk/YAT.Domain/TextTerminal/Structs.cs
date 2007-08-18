@@ -7,19 +7,24 @@ using System.Xml.Serialization;
 // 'type' defines operator == or operator != but does not override Object.Equals(object o)
 #pragma warning disable 660
 
-namespace HSR.YAT.Domain
+namespace MKY.YAT.Domain
 {
+	/// <summary></summary>
 	public struct TextLineSendDelay
 	{
+		/// <summary></summary>
 		[XmlElement("Enabled")]
 		public bool Enabled;
 
+		/// <summary></summary>
 		[XmlElement("Delay")]
 		public int Delay;                            // in ms
 
+		/// <summary></summary>
 		[XmlElement("LineInterval")]
 		public int LineInterval;
 
+		/// <summary></summary>
 		public TextLineSendDelay(bool enabled, int delay, int lineInterval)
 		{
 			Enabled = enabled;
@@ -37,6 +42,7 @@ namespace HSR.YAT.Domain
 			return (base.Equals(obj));
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());
@@ -68,14 +74,18 @@ namespace HSR.YAT.Domain
 		#endregion
 	}
 
+	/// <summary></summary>
 	public struct WaitForResponse
 	{
+		/// <summary></summary>
 		[XmlElement("Enabled")]
 		public bool Enabled;
 
+		/// <summary></summary>
 		[XmlElement("Timeout")]
 		public int Timeout;                            // in ms
 
+		/// <summary></summary>
 		public WaitForResponse(bool enabled, int timeout)
 		{
 			Enabled = enabled;
@@ -92,6 +102,7 @@ namespace HSR.YAT.Domain
 			return (base.Equals(obj));
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

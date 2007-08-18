@@ -8,9 +8,9 @@ using System.Windows.Forms;
 using System.Net;
 using System.Net.NetworkInformation;
 
-using HSR.Net.Sockets;
+using MKY.Net.Sockets;
 
-namespace HSR.YAT.Gui.Controls
+namespace MKY.YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("HostNameOrAddressChanged")]
@@ -64,7 +64,7 @@ namespace HSR.YAT.Gui.Controls
 		private const int _LocalUdpPortDefault = Domain.Settings.Socket.SocketSettings.DefaultPort + 1;
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool _isSettingControls = false;

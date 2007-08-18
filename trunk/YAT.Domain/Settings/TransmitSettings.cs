@@ -3,20 +3,25 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace HSR.YAT.Domain.Settings
+namespace MKY.YAT.Domain.Settings
 {
-	public class TransmitSettings : Utilities.Settings.Settings
+	/// <summary></summary>
+	[Serializable]
+	public class TransmitSettings : Utilities.Settings.Settings, IEquatable<TransmitSettings>
 	{
+		/// <summary></summary>
 		public const bool LocalEchoEnabledDefault = true;
 
-		bool _localEchoEnabled;
+		private bool _localEchoEnabled;
 
+		/// <summary></summary>
 		public TransmitSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public TransmitSettings(Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -24,6 +29,7 @@ namespace HSR.YAT.Domain.Settings
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public TransmitSettings(TransmitSettings rhs)
 			: base(rhs)
 		{
@@ -31,6 +37,7 @@ namespace HSR.YAT.Domain.Settings
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		protected override void SetMyDefaults()
 		{
 			LocalEchoEnabled = LocalEchoEnabledDefault;
@@ -41,6 +48,7 @@ namespace HSR.YAT.Domain.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("LocalEchoEnabled")]
 		public bool LocalEchoEnabled
 		{
@@ -86,6 +94,7 @@ namespace HSR.YAT.Domain.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using HSR.Utilities.Types;
+using MKY.Utilities.Types;
 
-namespace HSR.YAT.Domain
+namespace MKY.YAT.Domain
 {
 	#region Enum CharSubstitution
 
@@ -82,20 +82,37 @@ namespace HSR.YAT.Domain
 		/// <summary></summary>
 		public static XCharSubstitution Parse(string substitution)
 		{
+			XCharSubstitution result;
+
+			if (TryParse(substitution, out result))
+				return (result);
+			else
+				throw (new ArgumentOutOfRangeException(substitution));
+		}
+
+		/// <summary></summary>
+		public static bool TryParse(string substitution, out XCharSubstitution result)
+		{
 			if      (string.Compare(substitution, None_string, true) == 0)
 			{
-				return (new XCharSubstitution(CharSubstitution.None));
+				result = new XCharSubstitution(CharSubstitution.None);
+				return (true);
 			}
 			else if (string.Compare(substitution, ToUpper_string, true) == 0)
 			{
-				return (new XCharSubstitution(CharSubstitution.ToUpper));
+				result = new XCharSubstitution(CharSubstitution.ToUpper);
+				return (true);
 			}
 			else if (string.Compare(substitution, ToLower_string, true) == 0)
 			{
-				return (new XCharSubstitution(CharSubstitution.ToLower));
+				result = new XCharSubstitution(CharSubstitution.ToLower);
+				return (true);
 			}
-
-			throw (new ArgumentOutOfRangeException(substitution));
+			else
+			{
+				result = null;
+				return (false);
+			}
 		}
 
 		#endregion

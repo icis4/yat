@@ -2,24 +2,32 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using HSR.Utilities.Types;
+using MKY.Utilities.Types;
 
-namespace HSR.YAT.Domain
+namespace MKY.YAT.Domain
 {
 	#region Enum Radix
 
+	/// <summary></summary>
 	public enum Radix
 	{
+		/// <summary></summary>
 		Bin,
+		/// <summary></summary>
 		Oct,
+		/// <summary></summary>
 		Dec,
+		/// <summary></summary>
 		Hex,
+		/// <summary></summary>
 		Char,
+		/// <summary></summary>
 		String,
 	}
 
 	#endregion
 
+	/// <summary></summary>
 	[Serializable]
 	public class XRadix : XEnum
 	{
@@ -129,44 +137,64 @@ namespace HSR.YAT.Domain
 		/// <summary></summary>
 		public static XRadix Parse(string radix)
 		{
+			XRadix result;
+
+			if (TryParse(radix, out result))
+				return (result);
+			else
+				throw (new ArgumentOutOfRangeException(radix));
+		}
+
+		/// <summary></summary>
+		public static bool TryParse(string radix, out XRadix result)
+		{
 			if      ((string.Compare(radix, Bin_stringShort, true) == 0) ||
 			         (string.Compare(radix, Bin_stringMiddle, true) == 0) ||
 			         (string.Compare(radix, Bin_string, true) == 0))
 			{
-				return (new XRadix(Radix.Bin));
+				result = new XRadix(Radix.Bin);
+				return (false);
 			}
 			else if ((string.Compare(radix, Oct_stringShort, true) == 0) ||
 			         (string.Compare(radix, Oct_stringMiddle, true) == 0) ||
 			         (string.Compare(radix, Oct_string, true) == 0))
 			{
-				return (new XRadix(Radix.Oct));
+				result = new XRadix(Radix.Oct);
+				return (false);
 			}
 			else if ((string.Compare(radix, Dec_stringShort, true) == 0) ||
 			         (string.Compare(radix, Dec_stringMiddle, true) == 0) ||
 			         (string.Compare(radix, Dec_string, true) == 0))
 			{
-				return (new XRadix(Radix.Dec));
+				result = new XRadix(Radix.Dec);
+				return (false);
 			}
 			else if ((string.Compare(radix, Hex_stringShort, true) == 0) ||
 			         (string.Compare(radix, Hex_stringMiddle, true) == 0) ||
 			         (string.Compare(radix, Hex_string, true) == 0))
 			{
-				return (new XRadix(Radix.Hex));
+				result = new XRadix(Radix.Hex);
+				return (false);
 			}
 			else if ((string.Compare(radix, Char_stringShort, true) == 0) ||
 			         (string.Compare(radix, Char_stringMiddle, true) == 0) ||
 			         (string.Compare(radix, Char_string, true) == 0))
 			{
-				return (new XRadix(Radix.Char));
+				result = new XRadix(Radix.Char);
+				return (false);
 			}
 			else if ((string.Compare(radix, String_stringShort, true) == 0) ||
 			         (string.Compare(radix, String_stringMiddle, true) == 0) ||
 			         (string.Compare(radix, String_string, true) == 0))
 			{
-				return (new XRadix(Radix.String));
+				result = new XRadix(Radix.String);
+				return (false);
 			}
-
-			throw (new ArgumentOutOfRangeException(radix));
+			else
+			{
+				result = null;
+				return (false);
+			}
 		}
 
 		#endregion

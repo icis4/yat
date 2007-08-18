@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
-namespace HSR.YAT.Gui
+namespace MKY.YAT.Gui
 {
 	public static class Validation
 	{

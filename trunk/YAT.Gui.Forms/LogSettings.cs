@@ -7,15 +7,16 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
-using HSR.YAT.Settings.Application;
-using HSR.YAT.Settings.Document;
+using MKY.YAT.Settings;
+using MKY.YAT.Settings.Application;
+using MKY.YAT.Settings.Terminal;
 
-namespace HSR.YAT.Gui.Forms
+namespace MKY.YAT.Gui.Forms
 {
 	public partial class LogSettings : System.Windows.Forms.Form
 	{
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool _isStartingUp = true;
@@ -333,7 +334,7 @@ namespace HSR.YAT.Gui.Forms
 				this,
 				"Reset settings to default values?",
 				"Defaults?",
-				MessageBoxButtons.YesNoCancel,
+				MessageBoxButtons.YesNo,
 				MessageBoxIcon.Question,
 				MessageBoxDefaultButton.Button2
 				)
@@ -356,11 +357,11 @@ namespace HSR.YAT.Gui.Forms
 			_isSettingControls = true;
 
 			comboBox_Neat_Extension.Items.Clear();
-			foreach (string s in ApplicationSettings.Extensions.TextFilesWithDot)
+			foreach (string s in ExtensionSettings.TextFilesWithDot)
 				comboBox_Neat_Extension.Items.Add(s);
 
 			comboBox_Raw_Extension.Items.Clear();
-			foreach (string s in ApplicationSettings.Extensions.BinaryFilesWithDot)
+			foreach (string s in ExtensionSettings.BinaryFilesWithDot)
 				comboBox_Raw_Extension.Items.Add(s);
 
 			comboBox_Options_NameSeparator.Items.Clear();
@@ -422,11 +423,11 @@ namespace HSR.YAT.Gui.Forms
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Title = "Set Root";
-			ofd.Filter = ApplicationSettings.Extensions.AllFilesFilter;
+			ofd.Filter = ExtensionSettings.AllFilesFilter;
 			if (Directory.Exists(_settings_Form.RootPath))
 				ofd.InitialDirectory = _settings_Form.RootPath;
 			else
-				ofd.InitialDirectory = ApplicationSettings.LocalUser.Path.LogFilesPath;
+				ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.LogFilesPath;
 			ofd.FileName = _settings_Form.RootFileName;
 			ofd.CheckPathExists = false;
 			ofd.CheckFileExists = false;
@@ -434,7 +435,7 @@ namespace HSR.YAT.Gui.Forms
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUser.Path.LogFilesPath = Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.LocalUser.Paths.LogFilesPath = Path.GetDirectoryName(ofd.FileName);
 				_settings_Form.RootPath = Path.GetDirectoryName(ofd.FileName);
 				_settings_Form.RootFileName = Path.GetFileNameWithoutExtension(ofd.FileName);
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace HSR.YAT.Domain
+namespace MKY.YAT.Domain
 {
 	/// <summary>
 	/// DisplayRepository is a pseudo fixed-sized Queue holding DisplayElements.
@@ -17,6 +17,7 @@ namespace HSR.YAT.Domain
 		private Queue<DisplayElement> _queue;
 		private DisplayElement _lastQueued;
 
+		/// <summary></summary>
 		public DisplayRepository(int lineCapacity)
 		{
 			_lineCapacity = lineCapacity;
@@ -24,6 +25,7 @@ namespace HSR.YAT.Domain
 			ResetInternalState();
 		}
 
+		/// <summary></summary>
 		public DisplayRepository(DisplayRepository rhs)
 		{
 			_lineCapacity = rhs._lineCapacity;
@@ -32,6 +34,7 @@ namespace HSR.YAT.Domain
 			_queue = new Queue<DisplayElement>(rhs._queue);
 		}
 
+		/// <summary></summary>
 		public DisplayRepository(int lineCapacity, DisplayRepository rhs)
 		{
 			_lineCapacity = lineCapacity;
@@ -47,6 +50,7 @@ namespace HSR.YAT.Domain
 			_lastQueued = new DisplayElement.LineBreak();
 		}
 
+		/// <summary></summary>
 		public int LineCapacity
 		{
 			get { return (_lineCapacity); }
@@ -71,22 +75,26 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		public int DataCount
 		{
 			get { return (_dataCount); }
 		}
 
+		/// <summary></summary>
 		public int LineCount
 		{
 			get { return (_lineCount); }
 		}
 
+		/// <summary></summary>
 		public void Enqueue(List<DisplayElement> elements)
 		{
 			foreach (DisplayElement de in elements)
 				Enqueue(de);
 		}
 
+		/// <summary></summary>
 		public void Enqueue(DisplayElement de)
 		{
 			if (de.IsDataElement)
@@ -110,17 +118,20 @@ namespace HSR.YAT.Domain
 			_lastQueued = de;
 		}
 
+		/// <summary></summary>
 		public void Clear()
 		{
 			_queue.Clear();
 			ResetInternalState();
 		}
 
+		/// <summary></summary>
 		public List<DisplayElement> ToElements()
 		{
 			return (new List<DisplayElement>(_queue));
 		}
 
+		/// <summary></summary>
 		public List<List<DisplayElement>> ToLines()
 		{
 			List<List<DisplayElement>> lines = new List<List<DisplayElement>>();
@@ -142,11 +153,13 @@ namespace HSR.YAT.Domain
 			return (lines);
 		}
 
+		/// <summary></summary>
 		new public string ToString()
 		{
 			return (ToString(""));
 		}
 
+		/// <summary></summary>
 		public string ToString(string indent)
 		{
 			return (indent + "- DataCapacity: " + _lineCapacity.ToString("D") + Environment.NewLine +
@@ -155,11 +168,13 @@ namespace HSR.YAT.Domain
 					indent + "- Queue: " + Environment.NewLine + QueueToString(indent + "--"));
 		}
 
+		/// <summary></summary>
 		public string QueueToString()
 		{
 			return (QueueToString(""));
 		}
 
+		/// <summary></summary>
 		public string QueueToString(string indent)
 		{
 			StringWriter to = new StringWriter();

@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using HSR.Utilities.Types;
+using MKY.Utilities.Types;
 
-namespace HSR.YAT.Domain.Parser
+namespace MKY.YAT.Domain.Parser
 {
 	#region Enum Keyword
 
@@ -84,21 +84,36 @@ namespace HSR.YAT.Domain.Parser
 		/// <summary></summary>
 		public static XKeyword Parse(string keyword)
 		{
+			XKeyword result;
+
+			if (TryParse(keyword, out result))
+				return (result);
+			else
+				throw (new ArgumentOutOfRangeException(keyword));
+		}
+
+		/// <summary></summary>
+		public static bool TryParse(string keyword, out XKeyword result)
+		{
 			if      (string.Compare(keyword, Delay_string, true) == 0)
 			{
-				return (new XKeyword(Keyword.Delay));
+				result = new XKeyword(Keyword.Delay);
+				return (true);
 			}
 			else if (string.Compare(keyword, Eol_string, true) == 0)
 			{
-				return (new XKeyword(Keyword.Eol));
+				result = new XKeyword(Keyword.Eol);
+				return (true);
 			}
 			else if (string.Compare(keyword, NoEol_string, true) == 0)
 			{
-				return (new XKeyword(Keyword.NoEol));
+				result = new XKeyword(Keyword.NoEol);
+				return (true);
 			}
 			else
 			{
-				return (new XKeyword(Keyword.None));
+				result = null;
+				return (false);
 			}
 		}
 

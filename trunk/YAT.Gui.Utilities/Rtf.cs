@@ -5,7 +5,7 @@ using System.Drawing.Printing;
 using System.Collections.Generic;
 using System.IO;
 
-namespace HSR.YAT.Gui
+namespace MKY.YAT.Gui
 {
 	public static class RtfReader
 	{

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace HSR.YAT.Domain
+namespace MKY.YAT.Domain
 {
 	/// <summary>
 	/// Defines an element received from or sent to a serial interface. In
@@ -16,6 +16,7 @@ namespace HSR.YAT.Domain
 		private SerialDirection _direction;
 		private DateTime _timestamp;
 
+		/// <summary></summary>
 		public RawElement(byte[] data, SerialDirection direction)
 		{
 			_data = data;
@@ -23,26 +24,31 @@ namespace HSR.YAT.Domain
 			_timestamp = DateTime.Now;
 		}
 
+		/// <summary></summary>
 		public byte[] Data
 		{
 			get { return (_data); }
 		}
 
+		/// <summary></summary>
 		public SerialDirection Direction
 		{
 			get { return (_direction); }
 		}
 
+		/// <summary></summary>
 		public DateTime TimeStamp
 		{
 			get { return (_timestamp); }
 		}
 
+		/// <summary></summary>
 		new public string ToString()
 		{
 			return (ToString(""));
 		}
 
+		/// <summary></summary>
 		public string ToString(string indent)
 		{
 			string dataString = "";

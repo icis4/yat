@@ -3,14 +3,24 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace HSR.YAT.Domain.Settings
+namespace MKY.YAT.Domain.Settings
 {
-	public class IOSettings : Utilities.Settings.Settings
+	/// <summary></summary>
+	[Serializable]
+	public class IOSettings : Utilities.Settings.Settings, IEquatable<IOSettings>
 	{
-		private Domain.IOType _ioType;
+		/// <summary></summary>
+		public const IOType IOTypeDefault = IOType.SerialPort;
+
+		/// <summary></summary>
+		public const Endianess EndianessDefault = Endianess.BigEndian;
+
+		private IOType _ioType;
 		private SerialPort.SerialPortSettings _serialPort;
 		private Socket.SocketSettings _socket;
+		private Endianess _endianess;
 
+		/// <summary></summary>
 		public IOSettings()
 		{
 			SetMyDefaults();
@@ -18,6 +28,7 @@ namespace HSR.YAT.Domain.Settings
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public IOSettings(Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -26,12 +37,14 @@ namespace HSR.YAT.Domain.Settings
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public IOSettings(IOSettings rhs)
 			: base(rhs)
 		{
 			IOType = rhs.IOType;
 			SerialPort = new SerialPort.SerialPortSettings(rhs.SerialPort);
 			Socket = new Socket.SocketSettings(rhs.Socket);
+			Endianess = rhs.Endianess;
 			ClearChanged();
 		}
 
@@ -41,9 +54,11 @@ namespace HSR.YAT.Domain.Settings
 			Socket = new Socket.SocketSettings(SettingsType);
 		}
 
+		/// <summary></summary>
 		protected override void SetMyDefaults()
 		{
-			IOType = IOType.SerialPort;
+			IOType = IOTypeDefault;
+			Endianess = EndianessDefault;
 		}
 
 		#region Properties
@@ -51,6 +66,7 @@ namespace HSR.YAT.Domain.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("IOType")]
 		public IOType IOType
 		{
@@ -65,6 +81,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("SerialPort")]
 		public SerialPort.SerialPortSettings SerialPort
 		{
@@ -85,6 +102,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Socket")]
 		public Socket.SocketSettings Socket
 		{
@@ -101,6 +119,21 @@ namespace HSR.YAT.Domain.Settings
 					Socket.SocketSettings old = _socket;
 					_socket = value;
 					ReplaceNode(old, _socket);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("Endianess")]
+		public Endianess Endianess
+		{
+			get { return (_endianess); }
+			set
+			{
+				if (_endianess != value)
+				{
+					_endianess = value;
+					SetChanged();
 				}
 			}
 		}
@@ -131,12 +164,14 @@ namespace HSR.YAT.Domain.Settings
 				return 
 					(
 					_ioType.Equals(value._ioType) &&
+					_endianess.Equals(value._endianess) &&
 					base.Equals((Utilities.Settings.Settings)value) // compares all settings nodes
 					);
 			}
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

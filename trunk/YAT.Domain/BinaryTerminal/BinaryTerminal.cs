@@ -4,9 +4,9 @@ using System.Text;
 using System.IO;
 using System.Threading;
 
-using HSR.Utilities.Settings;
+using MKY.Utilities.Settings;
 
-namespace HSR.YAT.Domain
+namespace MKY.YAT.Domain
 {
 	/// <summary>
 	/// Binary protocol terminal.
@@ -22,30 +22,36 @@ namespace HSR.YAT.Domain
 		// Line Break Timer
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public class LineBreakTimer
 		{
 			private int _timeout;
 			private Timer _timer;
 
+			/// <summary></summary>
 			public event EventHandler Timeout;
 
+			/// <summary></summary>
 			public LineBreakTimer(int timeout)
 			{
 				_timeout = timeout;
 			}
 
+			/// <summary></summary>
 			public void Start()
 			{
 				TimerCallback timerDelegate = new TimerCallback(_timer_Timeout);
 				_timer = new Timer(timerDelegate, null, _timeout, System.Threading.Timeout.Infinite);
 			}
 
+			/// <summary></summary>
 			public void Restart()
 			{
 				Stop();
 				Start();
 			}
 
+			/// <summary></summary>
 			public void Stop()
 			{
 				_timer = null; ;
@@ -56,6 +62,7 @@ namespace HSR.YAT.Domain
 				OnTimeout(new EventArgs());
 			}
 
+			/// <summary></summary>
 			protected virtual void OnTimeout(EventArgs e)
 			{
 				Utilities.Event.EventHelper.FireSync(Timeout, this, e);
@@ -120,7 +127,7 @@ namespace HSR.YAT.Domain
 		#endregion
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private LineState _txLineState;
@@ -132,6 +139,7 @@ namespace HSR.YAT.Domain
 		// Constructor
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public BinaryTerminal(Settings.TerminalSettings settings)
 			: base(settings)
 		{
@@ -139,6 +147,7 @@ namespace HSR.YAT.Domain
 			Initialize();
 		}
 
+		/// <summary></summary>
 		public BinaryTerminal(Settings.TerminalSettings settings, Terminal terminal)
 			: base(settings, terminal)
 		{
@@ -173,6 +182,7 @@ namespace HSR.YAT.Domain
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public Settings.BinaryTerminalSettings BinaryTerminalSettings
 		{
 			get
@@ -217,7 +227,7 @@ namespace HSR.YAT.Domain
 
 		private void ExecuteLineBegin(Settings.BinaryDisplaySettings displaySettings, LineState lineState, DateTime timeStamp, List<DisplayElement> elements)
 		{
-			if (TerminalSettings.Display.ShowTimestamp)
+			if (TerminalSettings.Display.ShowTimeStamp)
 			{
 				List<DisplayElement> l = new List<DisplayElement>();
 
@@ -318,6 +328,7 @@ namespace HSR.YAT.Domain
 			elements.AddRange(l);
 		}
 
+		/// <summary></summary>
 		protected override void ProcessRawElement(RawElement re, List<DisplayElement> elements, List<List<DisplayElement>> lines)
 		{
 			Settings.BinaryDisplaySettings displaySettings;
@@ -414,6 +425,7 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		protected override void ProcessAndSignalRawElement(RawElement re)
 		{
 			// check whether direction has changed
@@ -430,6 +442,7 @@ namespace HSR.YAT.Domain
 		// Methods > Repository Access
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public override void ReloadRepositories()
 		{
 			AssertNotDisposed();
@@ -445,6 +458,7 @@ namespace HSR.YAT.Domain
 		// Methods > ToString
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public override string ToString()
 		{
 			AssertNotDisposed();
@@ -452,6 +466,7 @@ namespace HSR.YAT.Domain
 			return (ToString(""));
 		}
 
+		/// <summary></summary>
 		public override string ToString(string indent)
 		{
 			AssertNotDisposed();
@@ -509,11 +524,13 @@ namespace HSR.YAT.Domain
 		// Timer Events
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		protected virtual void _txTimer_Timeout(object sender, EventArgs e)
 		{
 			ProcessAndSignalTimedLineBreak(SerialDirection.Tx);
 		}
 
+		/// <summary></summary>
 		protected virtual void _rxTimer_Timeout(object sender, EventArgs e)
 		{
 			ProcessAndSignalTimedLineBreak(SerialDirection.Rx);

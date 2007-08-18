@@ -6,12 +6,12 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-namespace HSR.YAT.Gui.Forms
+namespace MKY.YAT.Gui.Forms
 {
 	public partial class TerminalSettings : System.Windows.Forms.Form
 	{
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool _isStartingUp = true;
@@ -202,7 +202,7 @@ namespace HSR.YAT.Gui.Forms
 				"Reset all settings to default values?" + Environment.NewLine +
 				text + " settings will also be reset!",
 				"Defaults?",
-				MessageBoxButtons.YesNoCancel,
+				MessageBoxButtons.YesNo,
 				MessageBoxIcon.Question,
 				MessageBoxDefaultButton.Button2
 				)
@@ -318,14 +318,14 @@ namespace HSR.YAT.Gui.Forms
 				Refresh();
 
 				_settings_Form.Display.Radix = f.SettingsResult.Display.Radix;
-				_settings_Form.Display.ShowTimestamp = f.SettingsResult.Display.ShowTimestamp;
+				_settings_Form.Display.ShowTimeStamp = f.SettingsResult.Display.ShowTimeStamp;
 				_settings_Form.Display.ShowLength = f.SettingsResult.Display.ShowLength;
 				_settings_Form.Display.ShowCounters = f.SettingsResult.Display.ShowCounters;
-				_settings_Form.Display.Radix = f.SettingsResult.Display.Radix;
-				_settings_Form.Display.Radix = f.SettingsResult.Display.Radix;
+
 				_settings_Form.Display.TxMaximalLineCount = f.SettingsResult.Display.TxMaximalLineCount;
 				_settings_Form.Display.RxMaximalLineCount = f.SettingsResult.Display.RxMaximalLineCount;
 
+				_settings_Form.IO.Endianess = f.SettingsResult.IO.Endianess;
 				_settings_Form.Transmit.LocalEchoEnabled = f.SettingsResult.Transmit.LocalEchoEnabled;
 
 				_settings_Form.IO.SerialPort.ParityErrorReplacement = f.SettingsResult.IO.SerialPort.ParityErrorReplacement;

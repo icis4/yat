@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HSR.YAT.Gui.Forms
+namespace MKY.YAT.Gui.Forms
 {
 	partial class LogSettings
 	{
@@ -36,7 +36,7 @@ namespace HSR.YAT.Gui.Forms
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
-			this.pathLabel_Root = new HSR.Windows.Forms.PathLabel();
+			this.pathLabel_Root = new MKY.Windows.Forms.PathLabel();
 			this.groupBox_Options_Subdirectories = new System.Windows.Forms.GroupBox();
 			this.checkBox_Options_SubdirectoriesFormat = new System.Windows.Forms.CheckBox();
 			this.checkBox_Options_SubdirectoriesChannel = new System.Windows.Forms.CheckBox();
@@ -54,18 +54,18 @@ namespace HSR.YAT.Gui.Forms
 			this.label_Root = new System.Windows.Forms.Label();
 			this.button_Root = new System.Windows.Forms.Button();
 			this.groupBox_Raw = new System.Windows.Forms.GroupBox();
-			this.pathLabel_Raw_Rx = new HSR.Windows.Forms.PathLabel();
-			this.pathLabel_Raw_Bidir = new HSR.Windows.Forms.PathLabel();
-			this.pathLabel_Raw_Tx = new HSR.Windows.Forms.PathLabel();
+			this.pathLabel_Raw_Rx = new MKY.Windows.Forms.PathLabel();
+			this.pathLabel_Raw_Bidir = new MKY.Windows.Forms.PathLabel();
+			this.pathLabel_Raw_Tx = new MKY.Windows.Forms.PathLabel();
 			this.checkBox_Raw_Bidir = new System.Windows.Forms.CheckBox();
 			this.label_Raw_Extension = new System.Windows.Forms.Label();
 			this.comboBox_Raw_Extension = new System.Windows.Forms.ComboBox();
 			this.checkBox_Raw_Rx = new System.Windows.Forms.CheckBox();
 			this.checkBox_Raw_Tx = new System.Windows.Forms.CheckBox();
 			this.groupBox_Neat = new System.Windows.Forms.GroupBox();
-			this.pathLabel_Neat_Rx = new HSR.Windows.Forms.PathLabel();
-			this.pathLabel_Neat_Bidir = new HSR.Windows.Forms.PathLabel();
-			this.pathLabel_Neat_Tx = new HSR.Windows.Forms.PathLabel();
+			this.pathLabel_Neat_Rx = new MKY.Windows.Forms.PathLabel();
+			this.pathLabel_Neat_Bidir = new MKY.Windows.Forms.PathLabel();
+			this.pathLabel_Neat_Tx = new MKY.Windows.Forms.PathLabel();
 			this.label_Neat_Extension = new System.Windows.Forms.Label();
 			this.comboBox_Neat_Extension = new System.Windows.Forms.ComboBox();
 			this.checkBox_Neat_Rx = new System.Windows.Forms.CheckBox();
@@ -568,13 +568,13 @@ namespace HSR.YAT.Gui.Forms
 		private System.Windows.Forms.Button button_OK;
 		private System.Windows.Forms.CheckBox checkBox_Options_SubdirectoriesFormat;
 		private System.Windows.Forms.CheckBox checkBox_Options_NameFormat;
-		private HSR.Windows.Forms.PathLabel pathLabel_Root;
-		private HSR.Windows.Forms.PathLabel pathLabel_Raw_Rx;
-		private HSR.Windows.Forms.PathLabel pathLabel_Raw_Bidir;
-		private HSR.Windows.Forms.PathLabel pathLabel_Raw_Tx;
-		private HSR.Windows.Forms.PathLabel pathLabel_Neat_Rx;
-		private HSR.Windows.Forms.PathLabel pathLabel_Neat_Bidir;
-		private HSR.Windows.Forms.PathLabel pathLabel_Neat_Tx;
+		private MKY.Windows.Forms.PathLabel pathLabel_Root;
+		private MKY.Windows.Forms.PathLabel pathLabel_Raw_Rx;
+		private MKY.Windows.Forms.PathLabel pathLabel_Raw_Bidir;
+		private MKY.Windows.Forms.PathLabel pathLabel_Raw_Tx;
+		private MKY.Windows.Forms.PathLabel pathLabel_Neat_Rx;
+		private MKY.Windows.Forms.PathLabel pathLabel_Neat_Bidir;
+		private MKY.Windows.Forms.PathLabel pathLabel_Neat_Tx;
 		private System.Windows.Forms.Button button_Defaults;
 	}
 }

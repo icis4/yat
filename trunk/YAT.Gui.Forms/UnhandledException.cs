@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
-namespace HSR.YAT.Gui.Forms
+namespace MKY.YAT.Gui.Forms
 {
 	public partial class UnhandledException : System.Windows.Forms.Form
 	{

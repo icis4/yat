@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-using HSR.Utilities.Text;
+using MKY.Utilities.Text;
 
-namespace HSR.YAT.Domain
+namespace MKY.YAT.Domain
 {
 	/// <summary>
 	/// Text protocol terminal.
@@ -17,6 +17,7 @@ namespace HSR.YAT.Domain
 		// Help
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public static readonly string KeywordHelp =
 			"For text terminals, the following additional keywords are supported :" + Environment.NewLine +
 			Environment.NewLine +
@@ -90,7 +91,7 @@ namespace HSR.YAT.Domain
 		#endregion
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private LineState _txLineState;
@@ -102,6 +103,7 @@ namespace HSR.YAT.Domain
 		// Constructor
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public TextTerminal(Settings.TerminalSettings settings)
 			: base(settings)
 		{
@@ -109,6 +111,7 @@ namespace HSR.YAT.Domain
 			Initialize();
 		}
 
+		/// <summary></summary>
 		public TextTerminal(Settings.TerminalSettings settings, Terminal terminal)
 			: base(settings, terminal)
 		{
@@ -138,6 +141,7 @@ namespace HSR.YAT.Domain
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public Settings.TextTerminalSettings TextTerminalSettings
 		{
 			get
@@ -165,12 +169,14 @@ namespace HSR.YAT.Domain
 		// Methods > Send
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public override void Send(string s)
 		{
 			AssertNotDisposed();
 			Send(s, null);
 		}
 
+		/// <summary></summary>
 		public override void SendLine(string line)
 		{
 			AssertNotDisposed();
@@ -179,7 +185,7 @@ namespace HSR.YAT.Domain
 
 		private void Send(string s, string eol)
 		{
-			Parser.SubstitutionParser p = new Parser.SubstitutionParser((XEncoding)TextTerminalSettings.Encoding);
+			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianess, (XEncoding)TextTerminalSettings.Encoding);
 
 			// prepare eol
 			MemoryStream eolWriter = new MemoryStream();;
@@ -238,7 +244,7 @@ namespace HSR.YAT.Domain
 		{
 			_rxDecodingStream = new List<byte>();
 
-			Parser.SubstitutionParser p = new Parser.SubstitutionParser((XEncoding)TextTerminalSettings.Encoding);
+			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianess, (XEncoding)TextTerminalSettings.Encoding);
 			byte[] txEol;
 			if (!p.TryParse(TextTerminalSettings.TxEol, TextTerminalSettings.CharSubstitution, out txEol))
 			{
@@ -257,6 +263,7 @@ namespace HSR.YAT.Domain
 			_bidirLineState = new BidirLineState(true, SerialDirection.Tx);
 		}
 
+		/// <summary></summary>
 		protected override DisplayElement ByteToElement(byte b, SerialDirection d, Radix r)
 		{
 			switch (r)
@@ -344,7 +351,7 @@ namespace HSR.YAT.Domain
 
 		private void ExecuteLineBegin(LineState lineState, DateTime timeStamp, List<DisplayElement> elements)
 		{
-			if (TerminalSettings.Display.ShowTimestamp)
+			if (TerminalSettings.Display.ShowTimeStamp)
 			{
 				List<DisplayElement> l = new List<DisplayElement>();
 
@@ -460,6 +467,7 @@ namespace HSR.YAT.Domain
 				lineState.LinePosition = LinePosition.End;
 		}
 
+		/// <summary></summary>
 		protected override void ProcessRawElement(RawElement re, List<DisplayElement> elements, List<List<DisplayElement>> lines)
 		{
 			LineState lineState;
@@ -515,6 +523,7 @@ namespace HSR.YAT.Domain
 			_bidirLineState.Direction = direction;
 		}
 
+		/// <summary></summary>
 		protected override void ProcessAndSignalRawElement(RawElement re)
 		{
 			// check whether direction has changed
@@ -531,6 +540,7 @@ namespace HSR.YAT.Domain
 		// Methods > Repository Access
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public override void ReloadRepositories()
 		{
 			AssertNotDisposed();
@@ -546,6 +556,7 @@ namespace HSR.YAT.Domain
 		// Methods > ToString
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public override string ToString()
 		{
 			AssertNotDisposed();
@@ -553,6 +564,7 @@ namespace HSR.YAT.Domain
 			return (ToString(""));
 		}
 
+		/// <summary></summary>
 		public override string ToString(string indent)
 		{
 			AssertNotDisposed();

@@ -4,7 +4,7 @@
   <Comment CommentText="Parser parses a formatted string to a byte array with the given encoding. The string can contain nested formats to any depth. Example:&#xD;&#xA;&quot;Hello\h(00 \c(A) 00)&lt;CR&gt;&lt;LF&gt;&quot;&#xD;&#xA;Parser is implemented using the state pattern.">
     <Position X="0.5" Y="0.817" Height="1.018" Width="3.425" />
   </Comment>
-  <Class Name="HSR.YAT.Domain.IO.SerialPort" Collapsed="true">
+  <Class Name="MKY.YAT.Domain.IO.SerialPort" Collapsed="true">
     <Position X="23.75" Y="2" Width="1.5" />
     <TypeIdentifier>
       <FileName>IO\SerialPort\SerialPort.cs</FileName>
@@ -12,7 +12,7 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="HSR.YAT.Domain.IO.Socket.TcpAutoSocket" Collapsed="true">
+  <Class Name="MKY.YAT.Domain.IO.Socket.TcpAutoSocket" Collapsed="true">
     <Position X="23.75" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <FileName>IO\Socket\TcpAutoSocket.cs</FileName>
@@ -20,7 +20,7 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="HSR.YAT.Domain.IO.TcpClient" Collapsed="true">
+  <Class Name="MKY.YAT.Domain.IO.TcpClient" Collapsed="true">
     <Position X="23.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <FileName>IO\Socket\TcpClient.cs</FileName>
@@ -28,7 +28,7 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="HSR.YAT.Domain.IO.Socket.TcpServer" Collapsed="true">
+  <Class Name="MKY.YAT.Domain.IO.Socket.TcpServer" Collapsed="true">
     <Position X="23.75" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>IO\Socket\TcpServer.cs</FileName>
@@ -36,7 +36,7 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="HSR.YAT.Domain.IO.Socket.UdpSocket" Collapsed="true">
+  <Class Name="MKY.YAT.Domain.IO.Socket.UdpSocket" Collapsed="true">
     <Position X="23.75" Y="7" Width="1.5" />
     <TypeIdentifier>
       <FileName>IO\Socket\UdpSocket.cs</FileName>
@@ -44,21 +44,21 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="HSR.YAT.Domain.Factory.IOFactory">
+  <Class Name="MKY.YAT.Domain.Factory.IOFactory">
     <Position X="18.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>Factory\IOFactory.cs</FileName>
       <HashCode>AAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
-  <Class Name="HSR.YAT.Domain.Factory.TerminalFactory">
+  <Class Name="MKY.YAT.Domain.Factory.TerminalFactory">
     <Position X="7" Y="0.5" Width="1.75" />
     <TypeIdentifier>
       <FileName>Factory\TerminalFactory.cs</FileName>
       <HashCode>AAAAAAAAAAAAAAAAAEAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
-  <Class Name="HSR.YAT.Domain.Terminal">
+  <Class Name="MKY.YAT.Domain.Terminal">
     <Position X="6.25" Y="2.25" Width="3.25" />
     <TypeIdentifier>
       <FileName>Terminal\Terminal.cs</FileName>
@@ -92,7 +92,7 @@
     </Compartments>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="HSR.YAT.Domain.DisplayElement">
+  <Class Name="MKY.YAT.Domain.DisplayElement">
     <Position X="9.5" Y="14.75" Width="1.75" />
     <TypeIdentifier>
       <FileName>Terminal\DisplayElement.cs</FileName>
@@ -103,64 +103,64 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
     <NestedTypes>
-      <Class Name="HSR.YAT.Domain.DisplayElement.Space" Collapsed="true">
+      <Class Name="MKY.YAT.Domain.DisplayElement.Space" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="HSR.YAT.Domain.DisplayElement.LeftMargin" Collapsed="true">
+      <Class Name="MKY.YAT.Domain.DisplayElement.LeftMargin" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="HSR.YAT.Domain.DisplayElement.LineLength" Collapsed="true">
+      <Class Name="MKY.YAT.Domain.DisplayElement.LineLength" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="HSR.YAT.Domain.DisplayElement.RxControl" Collapsed="true">
+      <Class Name="MKY.YAT.Domain.DisplayElement.RxControl" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="HSR.YAT.Domain.DisplayElement.TxControl" Collapsed="true">
+      <Class Name="MKY.YAT.Domain.DisplayElement.TxControl" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="HSR.YAT.Domain.DisplayElement.RightMargin" Collapsed="true">
+      <Class Name="MKY.YAT.Domain.DisplayElement.RightMargin" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="HSR.YAT.Domain.DisplayElement.LineBreak" Collapsed="true">
+      <Class Name="MKY.YAT.Domain.DisplayElement.LineBreak" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="HSR.YAT.Domain.DisplayElement.TimeStamp" Collapsed="true">
+      <Class Name="MKY.YAT.Domain.DisplayElement.TimeStamp" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="HSR.YAT.Domain.DisplayElement.Error" Collapsed="true">
+      <Class Name="MKY.YAT.Domain.DisplayElement.Error" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="HSR.YAT.Domain.DisplayElement.RxData" Collapsed="true">
+      <Class Name="MKY.YAT.Domain.DisplayElement.RxData" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="HSR.YAT.Domain.DisplayElement.TxData" Collapsed="true">
+      <Class Name="MKY.YAT.Domain.DisplayElement.TxData" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\DisplayElement.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
     </NestedTypes>
   </Class>
-  <Class Name="HSR.YAT.Domain.RawElement">
+  <Class Name="MKY.YAT.Domain.RawElement">
     <Position X="20.5" Y="14.75" Width="1.5" />
     <TypeIdentifier>
       <FileName>RawTerminal\RawElement.cs</FileName>
@@ -171,7 +171,7 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
   </Class>
-  <Class Name="HSR.YAT.Domain.RawRepository">
+  <Class Name="MKY.YAT.Domain.RawRepository">
     <Position X="17.75" Y="14.75" Width="2.5" />
     <TypeIdentifier>
       <FileName>RawTerminal\RawRepository.cs</FileName>
@@ -181,7 +181,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
   </Class>
-  <Class Name="HSR.YAT.Domain.RawTerminal">
+  <Class Name="MKY.YAT.Domain.RawTerminal">
     <Position X="17.75" Y="2" Width="2.5" />
     <TypeIdentifier>
       <FileName>RawTerminal\RawTerminal.cs</FileName>
@@ -216,7 +216,7 @@
     </Compartments>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="HSR.YAT.Domain.BinaryTerminal">
+  <Class Name="MKY.YAT.Domain.BinaryTerminal">
     <Position X="10" Y="10.5" Width="3" />
     <TypeIdentifier>
       <FileName>BinaryTerminal\BinaryTerminal.cs</FileName>
@@ -232,29 +232,29 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <NestedTypes>
-      <Class Name="HSR.YAT.Domain.BinaryTerminal.LineBreakTimer" Collapsed="true">
+      <Class Name="MKY.YAT.Domain.BinaryTerminal.LineBreakTimer" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>BinaryTerminal\BinaryTerminal.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Enum Name="HSR.YAT.Domain.BinaryTerminal.LinePosition" Collapsed="true">
+      <Enum Name="MKY.YAT.Domain.BinaryTerminal.LinePosition" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>BinaryTerminal\BinaryTerminal.cs</NewMemberFileName>
         </TypeIdentifier>
       </Enum>
-      <Struct Name="HSR.YAT.Domain.BinaryTerminal.LineState" Collapsed="true">
+      <Struct Name="MKY.YAT.Domain.BinaryTerminal.LineState" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>BinaryTerminal\BinaryTerminal.cs</NewMemberFileName>
         </TypeIdentifier>
       </Struct>
-      <Class Name="HSR.YAT.Domain.BinaryTerminal.BidirLineState" Collapsed="true">
+      <Class Name="MKY.YAT.Domain.BinaryTerminal.BidirLineState" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>BinaryTerminal\BinaryTerminal.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
     </NestedTypes>
   </Class>
-  <Class Name="HSR.YAT.Domain.SubstitutionParser">
+  <Class Name="MKY.YAT.Domain.SubstitutionParser">
     <Position X="0.5" Y="7.5" Width="2.75" />
     <TypeIdentifier>
       <FileName>TextTerminal\SubstitutionParser.cs</FileName>
@@ -264,7 +264,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
   </Class>
-  <Class Name="HSR.YAT.Domain.Parser">
+  <Class Name="MKY.YAT.Domain.Parser">
     <Position X="0.75" Y="2.25" Width="2.25" />
     <TypeIdentifier>
       <FileName>Terminal\Parser.cs</FileName>
@@ -274,44 +274,44 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <NestedTypes>
-      <Class Name="HSR.YAT.Domain.Parser.ParserState" Collapsed="true">
+      <Class Name="MKY.YAT.Domain.Parser.ParserState" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\Parser.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="HSR.YAT.Domain.Parser.DefaultState" Collapsed="true">
+      <Class Name="MKY.YAT.Domain.Parser.DefaultState" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\Parser.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="HSR.YAT.Domain.Parser.EscapeState" Collapsed="true">
+      <Class Name="MKY.YAT.Domain.Parser.EscapeState" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\Parser.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="HSR.YAT.Domain.Parser.BaseState" Collapsed="true">
+      <Class Name="MKY.YAT.Domain.Parser.BaseState" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\Parser.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="HSR.YAT.Domain.Parser.AsciiMnemonicState" Collapsed="true">
+      <Class Name="MKY.YAT.Domain.Parser.AsciiMnemonicState" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\Parser.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="HSR.YAT.Domain.Parser.NestedState" Collapsed="true">
+      <Class Name="MKY.YAT.Domain.Parser.NestedState" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\Parser.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="HSR.YAT.Domain.Parser.FormatException" Collapsed="true">
+      <Class Name="MKY.YAT.Domain.Parser.FormatException" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Terminal\Parser.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
     </NestedTypes>
   </Class>
-  <Class Name="HSR.YAT.Domain.TextTerminal">
+  <Class Name="MKY.YAT.Domain.TextTerminal">
     <Position X="10" Y="6.75" Width="2.75" />
     <TypeIdentifier>
       <FileName>TextTerminal\TextTerminal.cs</FileName>
@@ -321,19 +321,19 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <NestedTypes>
-      <Enum Name="HSR.YAT.Domain.TextTerminal.LinePosition" Collapsed="true">
+      <Enum Name="MKY.YAT.Domain.TextTerminal.LinePosition" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>TextTerminal\TextTerminal.cs</NewMemberFileName>
         </TypeIdentifier>
       </Enum>
-      <Struct Name="HSR.YAT.Domain.TextTerminal.LineState" Collapsed="true">
+      <Struct Name="MKY.YAT.Domain.TextTerminal.LineState" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>TextTerminal\TextTerminal.cs</NewMemberFileName>
         </TypeIdentifier>
       </Struct>
     </NestedTypes>
   </Class>
-  <Class Name="HSR.YAT.Domain.DisplayRepository">
+  <Class Name="MKY.YAT.Domain.DisplayRepository">
     <Position X="6.5" Y="14.75" Width="2.75" />
     <TypeIdentifier>
       <FileName>Terminal\DisplayRepository.cs</FileName>
@@ -343,21 +343,21 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
   </Class>
-  <Interface Name="HSR.YAT.Domain.IO.IIOProvider">
+  <Interface Name="MKY.YAT.Domain.IO.IIOProvider">
     <Position X="21" Y="2" Width="2" />
     <TypeIdentifier>
       <FileName>IO\IIOProvider.cs</FileName>
       <HashCode>AAAAAAACACBAAABAGEAAAAAAAAAIAAAwIAAAEAAQEAA=</HashCode>
     </TypeIdentifier>
   </Interface>
-  <Enum Name="HSR.YAT.Domain.Eol">
+  <Enum Name="MKY.YAT.Domain.Eol">
     <Position X="13.25" Y="6.75" Width="1.5" />
     <TypeIdentifier>
       <FileName>TextTerminal\Eol.cs</FileName>
       <HashCode>IAAAAAABAAAgAAAAAAAAAAAASAAAAAACAAAAAAEAAAA=</HashCode>
     </TypeIdentifier>
   </Enum>
-  <Enum Name="HSR.YAT.Domain.TerminalEncoding">
+  <Enum Name="MKY.YAT.Domain.TerminalEncoding">
     <Position X="1" Y="10.5" Width="1.75" />
     <TypeIdentifier>
       <FileName>TextTerminal\Encoding.cs</FileName>

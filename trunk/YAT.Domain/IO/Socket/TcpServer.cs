@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
-namespace HSR.YAT.Domain.IO
+namespace MKY.YAT.Domain.IO
 {
-	public class TcpServer : IIOProvider, IDisposable, HSR.Net.Sockets.ISocketService
+	/// <summary></summary>
+	public class TcpServer : IIOProvider, IDisposable, MKY.Net.Sockets.ISocketService
 	{
 		//------------------------------------------------------------------------------------------
 		// Types
@@ -20,10 +21,11 @@ namespace HSR.YAT.Domain.IO
 			Error,
 		}
 
+		/// <summary></summary>
 		public delegate void AsyncStopSocketCaller();
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool _isDisposed = false;
@@ -36,23 +38,29 @@ namespace HSR.YAT.Domain.IO
 
 		private Queue<byte> _receiveBuffer = new Queue<byte>();
 
-		private HSR.Net.Sockets.SocketServer _socket;
-		private List<HSR.Net.Sockets.ISocketConnection> _socketConnections = new List<HSR.Net.Sockets.ISocketConnection>();
+		private MKY.Net.Sockets.SocketServer _socket;
+		private List<MKY.Net.Sockets.ISocketConnection> _socketConnections = new List<MKY.Net.Sockets.ISocketConnection>();
 
 		//------------------------------------------------------------------------------------------
 		// Events
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public event EventHandler IOChanged;
+		/// <summary></summary>
 		public event EventHandler IOControlChanged;
+		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
+		/// <summary></summary>
 		public event EventHandler DataReceived;
+		/// <summary></summary>
 		public event EventHandler DataSent;
 
 		//------------------------------------------------------------------------------------------
 		// Object Lifetime
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public TcpServer(System.Net.IPAddress localIPAddress, int localPort)
 		{
 			_localIPAddress = localIPAddress;
@@ -90,11 +98,13 @@ namespace HSR.YAT.Domain.IO
 			Dispose(false);
 		}
 
+		/// <summary></summary>
 		protected bool IsDisposed
 		{
 			get { return (_isDisposed); }
 		}
 
+		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
 			if (_isDisposed)
@@ -108,6 +118,7 @@ namespace HSR.YAT.Domain.IO
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public bool HasStarted
 		{
 			get
@@ -128,6 +139,7 @@ namespace HSR.YAT.Domain.IO
 			}
 		}
 
+		/// <summary></summary>
 		public bool IsConnected
 		{
 			get
@@ -147,6 +159,7 @@ namespace HSR.YAT.Domain.IO
 			}
 		}
 
+		/// <summary></summary>
 		public int ConnectedClientCount
 		{
 			get
@@ -156,6 +169,7 @@ namespace HSR.YAT.Domain.IO
 			}
 		}
 
+		/// <summary></summary>
 		public int BytesAvailable
 		{
 			get
@@ -165,6 +179,7 @@ namespace HSR.YAT.Domain.IO
 			}
 		}
 
+		/// <summary></summary>
 		public object UnderlyingIOInstance
 		{
 			get
@@ -181,6 +196,7 @@ namespace HSR.YAT.Domain.IO
 		// Methods
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public void Start()
 		{
 			AssertNotDisposed();
@@ -189,6 +205,7 @@ namespace HSR.YAT.Domain.IO
 				StartSocket();
 		}
 
+		/// <summary></summary>
 		public void Stop()
 		{
 			AssertNotDisposed();
@@ -197,6 +214,7 @@ namespace HSR.YAT.Domain.IO
 				StopSocket();
 		}
 
+		/// <summary></summary>
 		public int Receive(out byte[] buffer)
 		{
 			AssertNotDisposed();
@@ -218,13 +236,14 @@ namespace HSR.YAT.Domain.IO
 			return (buffer.Length);
 		}
 
+		/// <summary></summary>
 		public void Send(byte[] buffer)
 		{
 			AssertNotDisposed();
 
 			if (HasStarted)
 			{
-				foreach (HSR.Net.Sockets.ISocketConnection connection in _socketConnections)
+				foreach (MKY.Net.Sockets.ISocketConnection connection in _socketConnections)
 					connection.BeginSend(buffer);
 			}
 		}
@@ -255,8 +274,8 @@ namespace HSR.YAT.Domain.IO
 
 		private void StartSocket()
 		{
-			_socket = new HSR.Net.Sockets.SocketServer((HSR.Net.Sockets.ISocketService)this, null, 2048, 8192, 0, 0, Timeout.Infinite, Timeout.Infinite);
-			_socket.OnException += new EventHandler<HSR.Net.Sockets.ExceptionEventArgs>(_socket_OnException);
+			_socket = new MKY.Net.Sockets.SocketServer((MKY.Net.Sockets.ISocketService)this, null, 2048, 8192, 0, 0, Timeout.Infinite, Timeout.Infinite);
+			_socket.OnException += new EventHandler<MKY.Net.Sockets.ExceptionEventArgs>(_socket_OnException);
 			_socket.AddListener(new System.Net.IPEndPoint(System.Net.IPAddress.Any, _localPort));
 			_socket.Start();
 
@@ -290,7 +309,7 @@ namespace HSR.YAT.Domain.IO
 		// Socket Events
 		//------------------------------------------------------------------------------------------
 
-		private void _socket_OnException(object sender, HSR.Net.Sockets.ExceptionEventArgs e)
+		private void _socket_OnException(object sender, MKY.Net.Sockets.ExceptionEventArgs e)
 		{
 			lock (_stateSyncObj)
 				_state = SocketState.Error;
@@ -306,7 +325,8 @@ namespace HSR.YAT.Domain.IO
 		// ISocketService Members
 		//------------------------------------------------------------------------------------------
 
-		public void OnConnected(HSR.Net.Sockets.ConnectionEventArgs e)
+		/// <summary></summary>
+		public void OnConnected(MKY.Net.Sockets.ConnectionEventArgs e)
 		{
 			lock (_socketConnections)
 				_socketConnections.Add(e.Connection);
@@ -320,7 +340,8 @@ namespace HSR.YAT.Domain.IO
 			e.Connection.BeginReceive();
 		}
 
-		public void OnReceived(HSR.Net.Sockets.MessageEventArgs e)
+		/// <summary></summary>
+		public void OnReceived(MKY.Net.Sockets.MessageEventArgs e)
 		{
 			lock (_receiveBuffer)
 			{
@@ -333,12 +354,14 @@ namespace HSR.YAT.Domain.IO
 			e.Connection.BeginReceive();
 		}
 
-		public void OnSent(HSR.Net.Sockets.MessageEventArgs e)
+		/// <summary></summary>
+		public void OnSent(MKY.Net.Sockets.MessageEventArgs e)
 		{
 			// nothing to do
 		}
 
-		public void OnDisconnected(HSR.Net.Sockets.DisconnectedEventArgs e)
+		/// <summary></summary>
+		public void OnDisconnected(MKY.Net.Sockets.DisconnectedEventArgs e)
 		{
 			if (e.Exception == null)
 			{
@@ -377,26 +400,31 @@ namespace HSR.YAT.Domain.IO
 		// Event Invoking
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync(IOChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync(IOControlChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnDataReceived(EventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync(DataReceived, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnDataSent(EventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync(DataSent, this, e);

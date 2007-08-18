@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Font Name="Tahoma" Size="8.25" />
-  <Class Name="HSR.YAT.Domain.Settings.TerminalSettings">
+  <Class Name="MKY.YAT.Domain.Settings.TerminalSettings">
     <Position X="0.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>Settings\TerminalSettings.cs</FileName>
@@ -19,7 +19,7 @@
       <Compartment Name="Methods" Collapsed="true" />
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
-    <AssociationLine Name="_io" Type="HSR.YAT.Domain.Settings.IOSettings" FixedFromPoint="true" FixedToPoint="true">
+    <AssociationLine Name="_io" Type="MKY.YAT.Domain.Settings.IOSettings" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="1.25" Y="3.201" />
         <Point X="1.25" Y="3.625" />
@@ -27,7 +27,7 @@
         <Point X="3.25" Y="4" />
       </Path>
     </AssociationLine>
-    <AssociationLine Name="_buffer" Type="HSR.YAT.Domain.Settings.BufferSettings" FixedFromPoint="true" FixedToPoint="true">
+    <AssociationLine Name="_buffer" Type="MKY.YAT.Domain.Settings.BufferSettings" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="1.25" Y="3.201" />
         <Point X="1.25" Y="3.625" />
@@ -35,7 +35,7 @@
         <Point X="5.25" Y="4" />
       </Path>
     </AssociationLine>
-    <AssociationLine Name="_display" Type="HSR.YAT.Domain.Settings.DisplaySettings" FixedFromPoint="true" FixedToPoint="true">
+    <AssociationLine Name="_display" Type="MKY.YAT.Domain.Settings.DisplaySettings" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="1.25" Y="3.201" />
         <Point X="1.25" Y="3.625" />
@@ -43,7 +43,7 @@
         <Point X="7.25" Y="4" />
       </Path>
     </AssociationLine>
-    <AssociationLine Name="_send" Type="HSR.YAT.Domain.Settings.SendSettings" FixedFromPoint="true" FixedToPoint="true">
+    <AssociationLine Name="_send" Type="MKY.YAT.Domain.Settings.SendSettings" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="1.25" Y="3.201" />
         <Point X="1.25" Y="3.625" />
@@ -51,7 +51,7 @@
         <Point X="9.25" Y="4" />
       </Path>
     </AssociationLine>
-    <AssociationLine Name="_textTerminal" Type="HSR.YAT.Domain.Settings.TextTerminalSettings" FixedFromPoint="true" FixedToPoint="true">
+    <AssociationLine Name="_textTerminal" Type="MKY.YAT.Domain.Settings.TextTerminalSettings" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="1.25" Y="3.201" />
         <Point X="1.25" Y="3.625" />
@@ -59,7 +59,7 @@
         <Point X="11.667" Y="4" />
       </Path>
     </AssociationLine>
-    <AssociationLine Name="_binaryTerminal" Type="HSR.YAT.Domain.Settings.BinaryTerminalSettings" FixedFromPoint="true" FixedToPoint="true">
+    <AssociationLine Name="_binaryTerminal" Type="MKY.YAT.Domain.Settings.BinaryTerminalSettings" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="1.25" Y="3.201" />
         <Point X="1.25" Y="3.625" />
@@ -68,7 +68,7 @@
       </Path>
     </AssociationLine>
   </Class>
-  <Class Name="HSR.YAT.Domain.Settings.IOSettings">
+  <Class Name="MKY.YAT.Domain.Settings.IOSettings">
     <Position X="2.5" Y="4" Width="1.5" />
     <TypeIdentifier>
       <FileName>Settings\IOSettings.cs</FileName>
@@ -83,7 +83,7 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
   </Class>
-  <Class Name="HSR.YAT.Domain.Settings.BufferSettings">
+  <Class Name="MKY.YAT.Domain.Settings.BufferSettings">
     <Position X="4.5" Y="4" Width="1.5" />
     <TypeIdentifier>
       <FileName>Settings\BufferSettings.cs</FileName>
@@ -94,7 +94,7 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
   </Class>
-  <Class Name="HSR.YAT.Domain.Settings.DisplaySettings">
+  <Class Name="MKY.YAT.Domain.Settings.DisplaySettings">
     <Position X="6.5" Y="4" Width="1.5" />
     <TypeIdentifier>
       <FileName>Settings\DisplaySettings.cs</FileName>
@@ -105,7 +105,7 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
   </Class>
-  <Class Name="HSR.YAT.Domain.Settings.SendSettings">
+  <Class Name="MKY.YAT.Domain.Settings.SendSettings">
     <Position X="8.5" Y="4" Width="1.5" />
     <TypeIdentifier>
       <FileName>Settings\SendSettings.cs</FileName>
@@ -116,7 +116,7 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
   </Class>
-  <Class Name="HSR.YAT.Domain.Settings.SerialPort.SerialPortSettings">
+  <Class Name="MKY.YAT.Domain.Settings.SerialPort.SerialPortSettings">
     <Position X="1.5" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>Settings\SerialPort\SerialPortSettings.cs</FileName>
@@ -130,7 +130,7 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
   </Class>
-  <Class Name="HSR.YAT.Domain.Settings.Socket.SocketSettings">
+  <Class Name="MKY.YAT.Domain.Settings.Socket.SocketSettings">
     <Position X="3.25" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <FileName>Settings\Socket\SocketSettings.cs</FileName>
@@ -141,7 +141,7 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
   </Class>
-  <Class Name="HSR.YAT.Domain.Settings.SerialPort.SerialCommunicationSettings">
+  <Class Name="MKY.YAT.Domain.Settings.SerialPort.SerialCommunicationSettings">
     <Position X="1.5" Y="9.25" Width="1.5" />
     <TypeIdentifier>
       <FileName>Settings\SerialPort\SerialCommunicationSettings.cs</FileName>
@@ -152,7 +152,7 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
   </Class>
-  <Class Name="HSR.YAT.Domain.Settings.BinaryTerminalSettings">
+  <Class Name="MKY.YAT.Domain.Settings.BinaryTerminalSettings">
     <Position X="12.75" Y="4" Width="2" />
     <TypeIdentifier>
       <FileName>BinaryTerminal\Settings\BinaryTerminalSettings.cs</FileName>
@@ -167,7 +167,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
   </Class>
-  <Class Name="HSR.YAT.Domain.Settings.TextTerminalSettings">
+  <Class Name="MKY.YAT.Domain.Settings.TextTerminalSettings">
     <Position X="10.5" Y="4" Width="1.75" />
     <TypeIdentifier>
       <FileName>TextTerminal\Settings\TextTerminalSettings.cs</FileName>
@@ -178,7 +178,7 @@
       <Compartment Name="Methods" Collapsed="true" />
     </Compartments>
   </Class>
-  <Class Name="HSR.YAT.Domain.Settings.BinaryDisplaySettings">
+  <Class Name="MKY.YAT.Domain.Settings.BinaryDisplaySettings">
     <Position X="12.75" Y="6.75" Width="2" />
     <TypeIdentifier>
       <FileName>BinaryTerminal\Settings\BinaryDisplaySettings.cs</FileName>

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace HSR.YAT.Gui.Settings
+namespace MKY.YAT.Gui.Settings
 {
-	public class SendFileSettings : Utilities.Settings.Settings
+	[Serializable]
+	public class SendFileSettings : Utilities.Settings.Settings, IEquatable<SendFileSettings>
 	{
 		private Command _command;
 

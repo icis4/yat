@@ -6,7 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-namespace HSR.YAT.Gui.Controls
+namespace MKY.YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("SendCommandRequest")]
@@ -19,7 +19,7 @@ namespace HSR.YAT.Gui.Controls
 		private const bool _TerminalIsOpenDefault = false;
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private List<Button> _buttons_commands;

@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-using HSR.Utilities.Recent;
+using MKY.Utilities.Recent;
 
-namespace HSR.YAT.Gui.Settings
+namespace MKY.YAT.Gui.Settings
 {
-	public class SendCommandSettings : Utilities.Settings.Settings
+	[Serializable]
+	public class SendCommandSettings : Utilities.Settings.Settings, IEquatable<SendCommandSettings>
 	{
-		public const int MaximumRecentCommands = 8;
+		public const int MaximumRecentCommands = 24;
 
 		private Command _command;
 		private RecentItemCollection<Command> _recentsCommands;

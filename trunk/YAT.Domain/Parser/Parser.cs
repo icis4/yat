@@ -4,7 +4,7 @@ using System.Text;
 using System.IO;
 using System.Globalization;
 
-namespace HSR.YAT.Domain.Parser
+namespace MKY.YAT.Domain.Parser
 {
 	/// <summary>
 	/// Parser.
@@ -16,6 +16,7 @@ namespace HSR.YAT.Domain.Parser
 		// Help
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public static readonly string FormatHelp =
 			"The following formats are supported (type without quotation marks):" + Environment.NewLine +
 			Environment.NewLine +
@@ -37,6 +38,7 @@ namespace HSR.YAT.Domain.Parser
 			"Type \\< to send an opening angle bracket" + Environment.NewLine +
 			"Type \\) to send a closing parenthesis";
 
+		/// <summary></summary>
 		public static readonly string KeywordHelp =
 			"In addition, the following keyword is supported:" + Environment.NewLine +
 			Environment.NewLine +
@@ -50,10 +52,13 @@ namespace HSR.YAT.Domain.Parser
 		// States
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		protected abstract class ParserState
 		{
+			/// <summary></summary>
 			public abstract bool TryParse(Parser parser, int parseChar, ref FormatException formatException);
 
+			/// <summary></summary>
 			protected void ChangeState(Parser parser, ParserState state)
 			{
 				parser.State = state;
@@ -67,11 +72,13 @@ namespace HSR.YAT.Domain.Parser
 		{
 			private StringWriter _contiguous;
 
+			/// <summary></summary>
 			public DefaultState()
 			{
 				_contiguous = new StringWriter();
 			}
 
+			/// <summary></summary>
 			public override bool TryParse(Parser parser, int parseChar, ref FormatException formatException)
 			{
 				if ((parseChar < 0) ||                   // end of parse string
@@ -143,6 +150,7 @@ namespace HSR.YAT.Domain.Parser
 		/// </summary>
 		protected class EscapeState : ParserState
 		{
+			/// <summary></summary>
 			public override bool TryParse(Parser parser, int parseChar, ref FormatException formatException)
 			{
 				switch (parseChar)
@@ -260,8 +268,10 @@ namespace HSR.YAT.Domain.Parser
 			}
 		}
 
+		/// <summary></summary>
 		protected class OpeningState : ParserState
 		{
+			/// <summary></summary>
 			public override bool TryParse(Parser parser, int parseChar, ref FormatException formatException)
 			{
 				if (parseChar == '(')
@@ -277,15 +287,18 @@ namespace HSR.YAT.Domain.Parser
 			}
 		}
 
+		/// <summary></summary>
 		protected class AsciiMnemonicState : ParserState
 		{
 			private StringWriter _mnemonic;
 
+			/// <summary></summary>
 			public AsciiMnemonicState()
 			{
 				_mnemonic = new StringWriter();
 			}
 
+			/// <summary></summary>
 			public override bool TryParse(Parser parser, int parseChar, ref FormatException formatException)
 			{
 				if ((parseChar < 0) || (parseChar == '>'))
@@ -313,9 +326,11 @@ namespace HSR.YAT.Domain.Parser
 			/// <summary>
 			/// Parses "parseString" for ascii mnemonics.
 			/// </summary>
+			/// <param name="parser"></param>
 			/// <param name="parseString">String to be parsed</param>
+			/// <param name="result"></param>
+			/// <param name="formatException">Returned if invalid string format.</param>
 			/// <returns>Bytearray containing the values encoded in Encoding.Default.</returns>
-			/// <exception cref="FormatException">Thrown if invalid string format.</exception>
 			public static bool TryParseAsciiMnemonic(Parser parser, string parseString, out byte[] result, ref FormatException formatException)
 			{
 				MemoryStream bytes = new MemoryStream();
@@ -343,8 +358,10 @@ namespace HSR.YAT.Domain.Parser
 			}
 		}
 
+		/// <summary></summary>
 		protected class NestedState : ParserState
 		{
+			/// <summary></summary>
 			public override bool TryParse(Parser parser, int parseChar, ref FormatException formatException)
 			{
 				if (!parser.NestedParser.State.TryParse(parser.NestedParser, parseChar, ref formatException))
@@ -359,11 +376,12 @@ namespace HSR.YAT.Domain.Parser
 
 		#endregion
 
-		#region Attributes
+		#region Fields
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
+		private Endianess _endianess = Endianess.BigEndian;
 		private Encoding _encoding = Encoding.Default;
 		private Radix _defaultRadix = Radix.String;
 		private ParseMode _parseMode = ParseMode.All;
@@ -386,26 +404,52 @@ namespace HSR.YAT.Domain.Parser
 		// Object Lifetime
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public Parser()
 		{
 		}
 
+		/// <summary></summary>
+		public Parser(Endianess endianess)
+		{
+			_endianess = endianess;
+		}
+
+		/// <summary></summary>
 		public Parser(Encoding encoding)
 		{
 			_encoding = encoding;
 		}
 
+		/// <summary></summary>
+		public Parser(Endianess endianess, Encoding encoding)
+		{
+			_endianess = endianess;
+			_encoding = encoding;
+		}
+
+		/// <summary></summary>
 		public Parser(Radix defaultRadix)
 		{
 			_defaultRadix = defaultRadix;
 		}
 
+		/// <summary></summary>
 		public Parser(Encoding encoding, Radix defaultRadix)
 		{
 			_encoding = encoding;
 			_defaultRadix = defaultRadix;
 		}
 
+		/// <summary></summary>
+		public Parser(Endianess endianess, Encoding encoding, Radix defaultRadix)
+		{
+			_endianess = endianess;
+			_encoding = encoding;
+			_defaultRadix = defaultRadix;
+		}
+
+		/// <summary></summary>
 		protected Parser(ParserState parserState, Parser parent)
 		{
 			InitializeNestedParse(parserState, parent);
@@ -418,6 +462,7 @@ namespace HSR.YAT.Domain.Parser
 		// Factory
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		protected virtual Parser GetParser(ParserState parserState, Parser parent)
 		{
 			Parser child = new Parser(parserState, parent);
@@ -452,12 +497,20 @@ namespace HSR.YAT.Domain.Parser
 			set { _state = value; }
 		}
 
+		/// <summary></summary>
+		public Endianess Endianess
+		{
+			get { return (_endianess); }
+		}
+
+		/// <summary></summary>
 		public Encoding Encoding
 		{
 			get { return (_encoding); }
 		}
 
-		// Radix: public get, private set
+		/// <summary></summary>
+		/// <remarks>Radix: public get, private set</remarks>
 		public Radix Radix
 		{
 			get { return (_defaultRadix); }
@@ -468,6 +521,7 @@ namespace HSR.YAT.Domain.Parser
 			_defaultRadix = defaultRadix;
 		}
 
+		/// <summary></summary>
 		public bool IsTopLevel
 		{
 			get { return (_parentParser == null); }
@@ -503,12 +557,14 @@ namespace HSR.YAT.Domain.Parser
 		// Public Methods
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public byte[] Parse(string s)
 		{
 			string parsed;
 			return (Parse(s, out parsed));
 		}
 
+		/// <summary></summary>
 		public byte[] Parse(string s, out string parsed)
 		{
 			Result[] resultResult = Parse(s, ParseMode.AllByteArrayResults, out parsed);
@@ -524,12 +580,14 @@ namespace HSR.YAT.Domain.Parser
 			return (byteResult.ToArray());
 		}
 
+		/// <summary></summary>
 		public Result[] Parse(string s, ParseMode mode)
 		{
 			string parsed;
 			return (Parse(s, mode, out parsed));
 		}
 
+		/// <summary></summary>
 		public Result[] Parse(string s, ParseMode mode, out string parsed)
 		{
 			Result[] result;
@@ -539,12 +597,14 @@ namespace HSR.YAT.Domain.Parser
 			return (result);
 		}
 
+		/// <summary></summary>
 		public bool TryParse(string s, out byte[] result)
 		{
 			string parsed;
 			return (TryParse(s, out result, out parsed));
 		}
 
+		/// <summary></summary>
 		public bool TryParse(string s, out byte[] result, out string parsed)
 		{
 			Result[] resultResult;
@@ -564,41 +624,48 @@ namespace HSR.YAT.Domain.Parser
 			return (tryResult);
 		}
 
+		/// <summary></summary>
 		public bool TryParse(string s)
 		{
 			return (TryParse(s, ParseMode.All));
 		}
 
+		/// <summary></summary>
 		public bool TryParse(string s, ParseMode mode)
 		{
 			string parsed;
 			return (TryParse(s, mode, out parsed));
 		}
 
+		/// <summary></summary>
 		public bool TryParse(string s, ParseMode mode, out Result[] result)
 		{
 			string parsed;
 			return (TryParse(s, mode, out result, out parsed));
 		}
 
+		/// <summary></summary>
 		public bool TryParse(string s, ParseMode mode, out string parsed)
 		{
 			Result[] result;
 			return (TryParse(s, mode, out result, out parsed));
 		}
 
+		/// <summary></summary>
 		public bool TryParse(string s, ParseMode mode, out string parsed, ref FormatException formatException)
 		{
 			Result[] result;
 			return (TryParse(s, mode, out result, out parsed, ref formatException));
 		}
 
+		/// <summary></summary>
 		public bool TryParse(string s, ParseMode mode, out Result[] result, out string parsed)
 		{
 			FormatException formatException = new FormatException("");
 			return (TryParse(s, mode, out result, out parsed, ref formatException));
 		}
 
+		/// <summary></summary>
 		public bool TryParse(string s, ParseMode mode, out Result[] result, out string parsed, ref FormatException formatException)
 		{
 			InitializeTopLevelParse(s, mode);
@@ -630,6 +697,7 @@ namespace HSR.YAT.Domain.Parser
 		// Protected Methods
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		protected void EndByteArray()
 		{
 			if (_byteArrayWriter.Length > 0)
@@ -639,6 +707,7 @@ namespace HSR.YAT.Domain.Parser
 			}
 		}
 
+		/// <summary></summary>
 		protected virtual bool TryParseContiguousRadixToken(string token, Radix parseRadix, out byte[] result, ref FormatException formatException)
 		{
 			// String
@@ -666,20 +735,28 @@ namespace HSR.YAT.Domain.Parser
 			}
 
 			// Bin/Oct/Dec/Hex
-			int utf32;
+			bool negative = false;
+			string tokenValue = token;
+			if (token.Substring(0, 1) == "-")
+			{
+				negative = true;
+				tokenValue = token.Substring(1);
+			}
+
+			ulong value;
 			bool success;
 			switch (parseRadix)
 			{
-				case Radix.Bin: success = Utilities.Types.XInt.TryParseBinary(token, out utf32); break;
-				case Radix.Oct: success = Utilities.Types.XInt.TryParseOctal(token, out utf32); break;
-				case Radix.Dec: success = int.TryParse(token, out utf32); break;
-				case Radix.Hex: success = int.TryParse(token, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out utf32); break;
+				case Radix.Bin: success = Utilities.Types.XInt.TryParseBinary(tokenValue, false, out value); break;
+				case Radix.Oct: success = Utilities.Types.XInt.TryParseOctal(tokenValue, false, out value); break;
+				case Radix.Dec: success = ulong.TryParse(tokenValue, out value); break;
+				case Radix.Hex: success = ulong.TryParse(tokenValue, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out value); break;
 				default: throw (new NotImplementedException("Unknown radix \"" + parseRadix + "\""));
 			}
 			if (success)
 			{
-				string utf16 = char.ConvertFromUtf32(utf32);
-				result = _encoding.GetBytes(utf16);
+				bool useBigEndian = (_endianess == Endianess.BigEndian);
+				result = Utilities.Types.XInt.ConvertToByteArray(value, negative, useBigEndian);
 				return (true);
 			}
 
@@ -687,13 +764,13 @@ namespace HSR.YAT.Domain.Parser
 			string readable = "";
 			switch (parseRadix)
 			{
-				case Radix.Bin: readable = "binary value"; break;
-				case Radix.Oct: readable = "octal value"; break;
-				case Radix.Dec: readable = "decimal value"; break;
+				case Radix.Bin: readable = "binary value";      break;
+				case Radix.Oct: readable = "octal value";       break;
+				case Radix.Dec: readable = "decimal value";     break;
 				case Radix.Hex: readable = "hexadecimal value"; break;
 				default: throw (new NotImplementedException("Unknown radix \"" + parseRadix + "\""));
 			}
-			formatException = new FormatException("Substring \"" + token + "\" contains no valid UTF-32 " + readable);
+			formatException = new FormatException("Substring \"" + token + "\" contains no valid " + readable);
 			result = new byte[] { };
 			return (false);
 		}
@@ -742,8 +819,9 @@ namespace HSR.YAT.Domain.Parser
 		/// </summary>
 		/// <param name="parseString">String to be parsed.</param>
 		/// <param name="parseRadix">Numeric radix.</param>
+		/// <param name="result"></param>
+		/// <param name="formatException">Returned if invalid string format.</param>
 		/// <returns>Bytearray containing the values encoded in Encoding.Default.</returns>
-		/// <exception cref="FormatException">Thrown if invalid string format.</exception>
 		/// <exception cref="OverflowException">Thrown if a value cannot be converted into bytes.</exception>
 		private bool TryParseContiguousRadix(string parseString, Radix parseRadix, out byte[] result, ref FormatException formatException)
 		{
@@ -789,8 +867,9 @@ namespace HSR.YAT.Domain.Parser
 		/// Parses "parseString" for keywords.
 		/// </summary>
 		/// <param name="parseString">String to be parsed</param>
+		/// <param name="result"></param>
+		/// <param name="formatException">Returned if invalid string format.</param>
 		/// <returns>Bytearray containing the values encoded in Encoding.Default.</returns>
-		/// <exception cref="FormatException">Thrown if invalid string format.</exception>
 		private bool TryParseContiguousKeywords(string parseString, out Result[] result, ref FormatException formatException)
 		{
 			List<Result> resultList = new List<Result>();

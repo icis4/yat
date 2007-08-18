@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-using HSR.Utilities.Recent;
+using MKY.Utilities.Recent;
 
-namespace HSR.YAT.Gui.Settings
+namespace MKY.YAT.Gui.Settings
 {
 	[Serializable]
-	public class RecentFileSettings : Utilities.Settings.Settings
+	public class RecentFileSettings : Utilities.Settings.Settings, IEquatable<RecentFileSettings>
 	{
 		public const int MaximumFilePaths = 8;
 

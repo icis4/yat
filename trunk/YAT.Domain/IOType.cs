@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using HSR.Utilities.Types;
+using MKY.Utilities.Types;
 
-namespace HSR.YAT.Domain
+namespace MKY.YAT.Domain
 {
 	#region Enum IOType
 
@@ -95,29 +95,46 @@ namespace HSR.YAT.Domain
 		/// <summary></summary>
 		public static XIOType Parse(string type)
 		{
+			XIOType result;
+
+			if (TryParse(type, out result))
+				return (result);
+			else
+				throw (new ArgumentOutOfRangeException(type));
+		}
+
+		/// <summary></summary>
+		public static bool TryParse(string type, out XIOType result)
+		{
 			if      (string.Compare(type, SerialPort_string, true) == 0)
 			{
-				return (new XIOType(IOType.SerialPort));
+				result = new XIOType(IOType.SerialPort);
+				return (true);
 			}
 			else if (string.Compare(type, TcpClient_string, true) == 0)
 			{
-				return (new XIOType(IOType.TcpClient));
+				result = new XIOType(IOType.TcpClient);
+				return (true);
 			}
 			else if (string.Compare(type, TcpServer_string, true) == 0)
 			{
-				return (new XIOType(IOType.TcpServer));
+				result = new XIOType(IOType.TcpServer);
+				return (true);
 			}
 			else if (string.Compare(type, TcpAutoSocket_string, true) == 0)
 			{
-				return (new XIOType(IOType.TcpAutoSocket));
+				result = new XIOType(IOType.TcpAutoSocket);
+				return (true);
 			}
 			else if (string.Compare(type, Udp_string, true) == 0)
 			{
-				return (new XIOType(IOType.Udp));
+				result = new XIOType(IOType.Udp);
+				return (true);
 			}
 			else
 			{
-				return (new XIOType(IOType.Unknown));
+				result = null;
+				return (false);
 			}
 		}
 

@@ -2,26 +2,34 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using HSR.Utilities.Types;
+using MKY.Utilities.Types;
 
-namespace HSR.YAT.Domain.IO
+namespace MKY.YAT.Domain.IO
 {
 	#region Enum Handshake
 
+	/// <summary></summary>
 	public enum Handshake
 	{
-		None                 = System.IO.Ports.Handshake.None,
-		RequestToSend        = System.IO.Ports.Handshake.RequestToSend,
-		XOnXOff              = System.IO.Ports.Handshake.XOnXOff,
+		/// <summary></summary>
+		None = System.IO.Ports.Handshake.None,
+		/// <summary></summary>
+		RequestToSend = System.IO.Ports.Handshake.RequestToSend,
+		/// <summary></summary>
+		XOnXOff = System.IO.Ports.Handshake.XOnXOff,
+		/// <summary></summary>
 		RequestToSendXOnXOff = System.IO.Ports.Handshake.RequestToSendXOnXOff,
+		/// <summary></summary>
 		Manual,
+		/// <summary></summary>
 		RS485,
 	}
 
 	#endregion
 
+	/// <summary></summary>
 	[Serializable]
-	public class XHandshake : HSR.IO.Ports.XHandshake
+	public class XHandshake : MKY.IO.Ports.XHandshake
 	{
 		#region String Definitions
 
@@ -38,6 +46,7 @@ namespace HSR.YAT.Domain.IO
 		{
 		}
 
+		/// <summary></summary>
 		protected XHandshake(Handshake handshake)
 			: base((System.IO.Ports.Handshake)handshake)
 		{
@@ -45,6 +54,7 @@ namespace HSR.YAT.Domain.IO
 
 		#region ToString
 
+		/// <summary></summary>
 		public override string ToString()
 		{
 			switch ((Handshake)UnderlyingEnum)
@@ -55,6 +65,7 @@ namespace HSR.YAT.Domain.IO
 			}
 		}
 
+		/// <summary></summary>
 		public new string ToShortString()
 		{
 			switch ((Handshake)UnderlyingEnum)
@@ -101,7 +112,7 @@ namespace HSR.YAT.Domain.IO
 			}
 			else
 			{
-				return ((XHandshake)HSR.IO.Ports.XHandshake.Parse(handshake));
+				return ((XHandshake)MKY.IO.Ports.XHandshake.Parse(handshake));
 			}
 		}
 

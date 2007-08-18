@@ -6,7 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-namespace HSR.YAT.Gui.Controls
+namespace MKY.YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("TerminalTypeChanged")]
@@ -18,30 +18,41 @@ namespace HSR.YAT.Gui.Controls
 
 		// \fixme Replace this help text with a real help
 		public static readonly string NewTerminalHelpText =
-			"TCP/IP:" + Environment.NewLine +
+			"Text vs. Binary:" + Environment.NewLine +
 			Environment.NewLine +
-			"AutoSocket automatically determines whether to run as client or server. On start, it tries to connect" + Environment.NewLine +
-			"   to a remote server and run as client. If this fails, it tries to run as server. Retry cycles and random" + Environment.NewLine +
-			"   wait times always ensure proper operation." + Environment.NewLine +
+			"Use a text terminal for text based protocols:" + Environment.NewLine +
+			"   - Characters 0x00..0x1F are treated as control characters" + Environment.NewLine +
+			"   - Line break is done using end of line sequence (EOL), e.g. <CR><LF>" + Environment.NewLine +
+			Environment.NewLine +
+			"Use a binary terminal for binary protocols:" + Environment.NewLine +
+			"   - Characters 0x00..0x1F are treated as normal data" + Environment.NewLine +
+			"   - Line break is done based on various binary settings" + Environment.NewLine +
+			Environment.NewLine +
+			Environment.NewLine +
+			"TCP/IP AutoSocket:" + Environment.NewLine +
+			Environment.NewLine +
+			"TCP/IP AutoSocket automatically determines whether to run as client or server. On start, it tries to" + Environment.NewLine +
+			"   connect to a remote server and run as client. If this fails, it tries to run as server. Retry cycles and" + Environment.NewLine +
+			"   random wait times always ensure proper operation." + Environment.NewLine +
 			Environment.NewLine +
 			Environment.NewLine +
 			"TCP/IP and UDP/IP:" + Environment.NewLine +
 			Environment.NewLine +
 			"The remote host is the remote computer to connect to or an other program running on this machine." + Environment.NewLine +
 			"Examples:" + Environment.NewLine +
-			"   '127.0.0.1' is the IP localhost" + Environment.NewLine +
-			"   '::1' is the IP version 6 localhost" + Environment.NewLine +
+			"   '127.0.0.1' is the IP v4 localhost" + Environment.NewLine +
+			"   '::1' is the IP v6 localhost" + Environment.NewLine +
 			Environment.NewLine +
 			"The local interface is the network interface that on this machine that is used for this connection." + Environment.NewLine +
 			"Examples:" + Environment.NewLine +
-			"   '127.0.0.1' is the IP loopback interface" + Environment.NewLine +
-			"   '::1' is the IP version 6 loopback interface";
+			"   '127.0.0.1' is the IP v4 loopback interface" + Environment.NewLine +
+			"   '::1' is the IP v6 loopback interface";
 
 		private const Domain.TerminalType _TerminalTypeDefault = Domain.TerminalType.Text;
 		private const Domain.IOType       _IOTypeDefault       = Domain.IOType.SerialPort;
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool _isSettingControls = false;

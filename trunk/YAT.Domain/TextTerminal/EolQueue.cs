@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace HSR.YAT.Domain
+namespace MKY.YAT.Domain
 {
+	/// <summary></summary>
 	public class EolQueue
 	{
 		private byte[] _eol;
 		private Queue<byte> _queue;
 
+		/// <summary></summary>
 		public EolQueue(byte[] eol)
 		{
 			_eol = eol;
 			_queue = new Queue<byte>(_eol.Length);
 		}
 
+		/// <summary></summary>
 		public byte[] Eol
 		{
 			get
@@ -24,17 +27,29 @@ namespace HSR.YAT.Domain
 			}
 		}
 
+		/// <summary></summary>
 		public void Enqueue(byte b)
 		{
-			while (_queue.Count >= _eol.Length)
+			if (_eol.Length > 0)
 			{
-				_queue.Dequeue();
+				while (_queue.Count >= _eol.Length)
+				{
+					_queue.Dequeue();
+				}
+				_queue.Enqueue(b);
 			}
-			_queue.Enqueue(b);
+			else if (_queue.Count > 0)
+			{
+				_queue.Clear();
+			}
 		}
 
+		/// <summary></summary>
 		public bool EolMatch()
 		{
+			if (_eol.Length <= 0)
+				return (false);
+
 			byte[] queue = ToByteArray();
 
 			if (queue.Length != _eol.Length)
@@ -59,6 +74,7 @@ namespace HSR.YAT.Domain
 			return (to.ToArray());
 		}
 
+		/// <summary></summary>
 		public void Reset()
 		{
 			_queue.Clear();

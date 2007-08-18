@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace HSR.YAT.Gui
+namespace MKY.YAT.Gui
 {
 	/// <summary>
 	/// Stores information about a single line, multi line or file command.
@@ -12,7 +12,7 @@ namespace HSR.YAT.Gui
 	/// This class intentionally combines all three command types in a single class to allow
 	/// co-existence of a line and a file command.
 	/// </remarks>
-	public class Command : IComparable
+	public class Command : IEquatable<Command>, IComparable
 	{
 		//------------------------------------------------------------------------------------------
 		// Constants
@@ -24,7 +24,7 @@ namespace HSR.YAT.Gui
 		public const string UndefinedFilePathText = "<Set a file...>";
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private string _description;

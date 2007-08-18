@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace HSR.YAT.Gui.Settings
+namespace MKY.YAT.Gui.Settings
 {
 	[Serializable]
-	public class PredefinedCommandSettings : Utilities.Settings.Settings
+	public class PredefinedCommandSettings : Utilities.Settings.Settings, IEquatable<PredefinedCommandSettings>
 	{
 		public const int MaximumCommandsPerPage = 12;
 

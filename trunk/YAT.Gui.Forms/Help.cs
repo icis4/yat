@@ -6,7 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-namespace HSR.YAT.Gui.Forms
+namespace MKY.YAT.Gui.Forms
 {
 	public partial class Help : System.Windows.Forms.Form
 	{
@@ -16,8 +16,7 @@ namespace HSR.YAT.Gui.Forms
 
 			// form title
 			string text = Application.ProductName;
-			if (VersionInfo.HasProductNamePostFix)
-				text += VersionInfo.ProductNamePostFix;
+			text += VersionInfo.ProductNamePostFix;
 			text += " Help";
 			Text = text;
 

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
-namespace HSR.YAT.Domain.IO
+namespace MKY.YAT.Domain.IO
 {
+	/// <summary></summary>
 	public class TcpAutoSocket : IIOProvider, IDisposable
 	{
 		//------------------------------------------------------------------------------------------
@@ -36,7 +37,7 @@ namespace HSR.YAT.Domain.IO
 		private const int _MaximalRestartWaitTimeInMs = 300;
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool _isDisposed = false;
@@ -60,16 +61,22 @@ namespace HSR.YAT.Domain.IO
 		// Events
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public event EventHandler IOChanged;
+		/// <summary></summary>
 		public event EventHandler IOControlChanged;
+		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
+		/// <summary></summary>
 		public event EventHandler DataReceived;
+		/// <summary></summary>
 		public event EventHandler DataSent;
 
 		//------------------------------------------------------------------------------------------
 		// Object Lifetime
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public TcpAutoSocket(System.Net.IPAddress remoteIPAddress, int remotePort, System.Net.IPAddress localIPAddress, int localPort)
 		{
 			_remoteIPAddress = remoteIPAddress;
@@ -109,11 +116,13 @@ namespace HSR.YAT.Domain.IO
 			Dispose(false);
 		}
 
+		/// <summary></summary>
 		protected bool IsDisposed
 		{
 			get { return (_isDisposed); }
 		}
 
+		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
 			if (_isDisposed)
@@ -127,6 +136,7 @@ namespace HSR.YAT.Domain.IO
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public bool HasStarted
 		{
 			get
@@ -154,6 +164,7 @@ namespace HSR.YAT.Domain.IO
 			}
 		}
 
+		/// <summary></summary>
 		public bool IsConnected
 		{
 			get
@@ -174,6 +185,7 @@ namespace HSR.YAT.Domain.IO
 			}
 		}
 
+		/// <summary></summary>
 		public bool IsClient
 		{
 			get
@@ -193,6 +205,7 @@ namespace HSR.YAT.Domain.IO
 			}
 		}
 
+		/// <summary></summary>
 		public bool IsServer
 		{
 			get
@@ -213,6 +226,7 @@ namespace HSR.YAT.Domain.IO
 			}
 		}
 
+		/// <summary></summary>
 		public int BytesAvailable
 		{
 			get
@@ -228,6 +242,7 @@ namespace HSR.YAT.Domain.IO
 			}
 		}
 
+		/// <summary></summary>
 		public object UnderlyingIOInstance
 		{
 			get
@@ -250,6 +265,7 @@ namespace HSR.YAT.Domain.IO
 		// Methods
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public void Start()
 		{
 			AssertNotDisposed();
@@ -264,12 +280,14 @@ namespace HSR.YAT.Domain.IO
 			}
 		}
 
+		/// <summary></summary>
 		public void Stop()
 		{
 			AssertNotDisposed();
 			StopAutoSocket();
 		}
 
+		/// <summary></summary>
 		public int Receive(out byte[] buffer)
 		{
 			AssertNotDisposed();
@@ -285,6 +303,7 @@ namespace HSR.YAT.Domain.IO
 			}
 		}
 
+		/// <summary></summary>
 		public void Send(byte[] buffer)
 		{
 			AssertNotDisposed();
@@ -633,26 +652,31 @@ namespace HSR.YAT.Domain.IO
 		// Event Invoking
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync(IOChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync(IOControlChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnDataReceived(EventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync(DataReceived, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnDataSent(EventArgs e)
 		{
 			Utilities.Event.EventHelper.FireSync(DataSent, this, e);

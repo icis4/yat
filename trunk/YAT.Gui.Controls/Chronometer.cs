@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace HSR.YAT.Gui.Controls
+namespace MKY.YAT.Gui.Controls
 {
 	public partial class Chronometer : Component
 	{
@@ -20,7 +20,7 @@ namespace HSR.YAT.Gui.Controls
 		}
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private State _state = State.Reset;

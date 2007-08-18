@@ -6,12 +6,12 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-namespace HSR.YAT.Gui.Forms
+namespace MKY.YAT.Gui.Forms
 {
 	public partial class BinaryTerminalSettings : System.Windows.Forms.Form
 	{
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool _isStartingUp = true;
@@ -134,13 +134,13 @@ namespace HSR.YAT.Gui.Forms
 				this,
 				"Reset settings to default values?",
 				"Defaults?",
-				MessageBoxButtons.YesNoCancel,
+				MessageBoxButtons.YesNo,
 				MessageBoxIcon.Question,
 				MessageBoxDefaultButton.Button2
 				)
 				== DialogResult.Yes)
 			{
-				_settings.SetDefaults();
+				_settings_Form.SetDefaults();
 				SetControls();
 			}
 		}

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace HSR.YAT.Domain.Settings
+namespace MKY.YAT.Domain.Settings
 {
-	public class BinaryTerminalSettings : Utilities.Settings.Settings
+	/// <summary></summary>
+	public class BinaryTerminalSettings : Utilities.Settings.Settings, IEquatable<BinaryTerminalSettings>
 	{
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool _directionLineBreakEnabled;
@@ -21,6 +22,7 @@ namespace HSR.YAT.Domain.Settings
 		// Constructor
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public BinaryTerminalSettings()
 		{
 			SetMyDefaults();
@@ -28,6 +30,7 @@ namespace HSR.YAT.Domain.Settings
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public BinaryTerminalSettings(Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -36,6 +39,7 @@ namespace HSR.YAT.Domain.Settings
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public BinaryTerminalSettings(BinaryTerminalSettings rhs)
 			: base(rhs)
 		{
@@ -53,6 +57,7 @@ namespace HSR.YAT.Domain.Settings
 			RxDisplay = new BinaryDisplaySettings(SettingsType);
 		}
 
+		/// <summary></summary>
 		protected override void SetMyDefaults()
 		{
 			SeparateTxRxDisplay = false;
@@ -63,6 +68,7 @@ namespace HSR.YAT.Domain.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("DirectionLineBreakEnabled")]
 		public bool DirectionLineBreakEnabled
 		{
@@ -77,6 +83,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("SeparateTxRxDisplay")]
 		public bool SeparateTxRxDisplay
 		{
@@ -91,6 +98,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("TxDisplay")]
 		public BinaryDisplaySettings TxDisplay
 		{
@@ -111,6 +119,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("RxDisplay")]
 		public BinaryDisplaySettings RxDisplay
 		{
@@ -170,6 +179,7 @@ namespace HSR.YAT.Domain.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

@@ -1,4 +1,4 @@
-namespace HSR.YAT.Gui.Forms
+namespace MKY.YAT.Gui.Forms
 {
 	partial class AdvancedTerminalSettings
 	{
@@ -32,6 +32,9 @@ namespace HSR.YAT.Gui.Forms
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
+			this.groupBox_CommunicationSettings = new System.Windows.Forms.GroupBox();
+			this.comboBox_Endianess = new System.Windows.Forms.ComboBox();
+			this.label_Endianess = new System.Windows.Forms.Label();
 			this.groupBox_ReceiveSettings = new System.Windows.Forms.GroupBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label_ParityReplacementExample = new System.Windows.Forms.Label();
@@ -39,7 +42,7 @@ namespace HSR.YAT.Gui.Forms
 			this.groupBox_TransmitSettings = new System.Windows.Forms.GroupBox();
 			this.checkBox_LocalEcho = new System.Windows.Forms.CheckBox();
 			this.groupBox_DisplaySettings = new System.Windows.Forms.GroupBox();
-			this.checkBox_ShowTimestamp = new System.Windows.Forms.CheckBox();
+			this.checkBox_ShowTimeStamp = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowCounters = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowLength = new System.Windows.Forms.CheckBox();
 			this.comboBox_Radix = new System.Windows.Forms.ComboBox();
@@ -48,6 +51,7 @@ namespace HSR.YAT.Gui.Forms
 			this.textBox_MaximalLineCount = new System.Windows.Forms.TextBox();
 			this.label_MaximalLineCount = new System.Windows.Forms.Label();
 			this.groupBox_Settings.SuspendLayout();
+			this.groupBox_CommunicationSettings.SuspendLayout();
 			this.groupBox_ReceiveSettings.SuspendLayout();
 			this.groupBox_TransmitSettings.SuspendLayout();
 			this.groupBox_DisplaySettings.SuspendLayout();
@@ -56,7 +60,7 @@ namespace HSR.YAT.Gui.Forms
 			// button_Defaults
 			// 
 			this.button_Defaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Defaults.Location = new System.Drawing.Point(227, 136);
+			this.button_Defaults.Location = new System.Drawing.Point(323, 136);
 			this.button_Defaults.Name = "button_Defaults";
 			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
 			this.button_Defaults.TabIndex = 3;
@@ -67,7 +71,7 @@ namespace HSR.YAT.Gui.Forms
 			// 
 			this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button_Cancel.Location = new System.Drawing.Point(227, 72);
+			this.button_Cancel.Location = new System.Drawing.Point(323, 72);
 			this.button_Cancel.Name = "button_Cancel";
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 2;
@@ -78,7 +82,7 @@ namespace HSR.YAT.Gui.Forms
 			// 
 			this.button_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_OK.Location = new System.Drawing.Point(227, 43);
+			this.button_OK.Location = new System.Drawing.Point(323, 43);
 			this.button_OK.Name = "button_OK";
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 1;
@@ -90,14 +94,48 @@ namespace HSR.YAT.Gui.Forms
 			this.groupBox_Settings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Settings.Controls.Add(this.groupBox_CommunicationSettings);
 			this.groupBox_Settings.Controls.Add(this.groupBox_ReceiveSettings);
 			this.groupBox_Settings.Controls.Add(this.groupBox_TransmitSettings);
 			this.groupBox_Settings.Controls.Add(this.groupBox_DisplaySettings);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
-			this.groupBox_Settings.Size = new System.Drawing.Size(203, 287);
+			this.groupBox_Settings.Size = new System.Drawing.Size(299, 341);
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
+			// 
+			// groupBox_CommunicationSettings
+			// 
+			this.groupBox_CommunicationSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_CommunicationSettings.Controls.Add(this.comboBox_Endianess);
+			this.groupBox_CommunicationSettings.Controls.Add(this.label_Endianess);
+			this.groupBox_CommunicationSettings.Location = new System.Drawing.Point(6, 161);
+			this.groupBox_CommunicationSettings.Name = "groupBox_CommunicationSettings";
+			this.groupBox_CommunicationSettings.Size = new System.Drawing.Size(286, 48);
+			this.groupBox_CommunicationSettings.TabIndex = 1;
+			this.groupBox_CommunicationSettings.TabStop = false;
+			this.groupBox_CommunicationSettings.Text = "Communication Settings";
+			// 
+			// comboBox_Endianess
+			// 
+			this.comboBox_Endianess.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBox_Endianess.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_Endianess.Location = new System.Drawing.Point(70, 18);
+			this.comboBox_Endianess.Name = "comboBox_Endianess";
+			this.comboBox_Endianess.Size = new System.Drawing.Size(205, 21);
+			this.comboBox_Endianess.TabIndex = 3;
+			this.comboBox_Endianess.SelectedIndexChanged += new System.EventHandler(this.comboBox_Endianess_SelectedIndexChanged);
+			// 
+			// label_Endianess
+			// 
+			this.label_Endianess.AutoSize = true;
+			this.label_Endianess.Location = new System.Drawing.Point(9, 21);
+			this.label_Endianess.Name = "label_Endianess";
+			this.label_Endianess.Size = new System.Drawing.Size(59, 13);
+			this.label_Endianess.TabIndex = 2;
+			this.label_Endianess.Text = "&Endianess:";
 			// 
 			// groupBox_ReceiveSettings
 			// 
@@ -106,10 +144,10 @@ namespace HSR.YAT.Gui.Forms
 			this.groupBox_ReceiveSettings.Controls.Add(this.label1);
 			this.groupBox_ReceiveSettings.Controls.Add(this.label_ParityReplacementExample);
 			this.groupBox_ReceiveSettings.Controls.Add(this.textBox_ParityReplacement);
-			this.groupBox_ReceiveSettings.Location = new System.Drawing.Point(6, 215);
+			this.groupBox_ReceiveSettings.Location = new System.Drawing.Point(6, 269);
 			this.groupBox_ReceiveSettings.Name = "groupBox_ReceiveSettings";
-			this.groupBox_ReceiveSettings.Size = new System.Drawing.Size(190, 65);
-			this.groupBox_ReceiveSettings.TabIndex = 2;
+			this.groupBox_ReceiveSettings.Size = new System.Drawing.Size(286, 65);
+			this.groupBox_ReceiveSettings.TabIndex = 3;
 			this.groupBox_ReceiveSettings.TabStop = false;
 			this.groupBox_ReceiveSettings.Text = "Receive Settings";
 			// 
@@ -120,7 +158,7 @@ namespace HSR.YAT.Gui.Forms
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(118, 13);
 			this.label1.TabIndex = 0;
-			this.label1.Text = "&Replace parity errors by";
+			this.label1.Text = "Replace &parity errors by";
 			// 
 			// label_ParityReplacementExample
 			// 
@@ -144,10 +182,10 @@ namespace HSR.YAT.Gui.Forms
 			this.groupBox_TransmitSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_TransmitSettings.Controls.Add(this.checkBox_LocalEcho);
-			this.groupBox_TransmitSettings.Location = new System.Drawing.Point(6, 161);
+			this.groupBox_TransmitSettings.Location = new System.Drawing.Point(6, 215);
 			this.groupBox_TransmitSettings.Name = "groupBox_TransmitSettings";
-			this.groupBox_TransmitSettings.Size = new System.Drawing.Size(190, 48);
-			this.groupBox_TransmitSettings.TabIndex = 1;
+			this.groupBox_TransmitSettings.Size = new System.Drawing.Size(286, 48);
+			this.groupBox_TransmitSettings.TabIndex = 2;
 			this.groupBox_TransmitSettings.TabStop = false;
 			this.groupBox_TransmitSettings.Text = "Transmit Settings";
 			// 
@@ -158,7 +196,7 @@ namespace HSR.YAT.Gui.Forms
 			this.checkBox_LocalEcho.Name = "checkBox_LocalEcho";
 			this.checkBox_LocalEcho.Size = new System.Drawing.Size(133, 17);
 			this.checkBox_LocalEcho.TabIndex = 0;
-			this.checkBox_LocalEcho.Text = "Local &echo on transmit";
+			this.checkBox_LocalEcho.Text = "L&ocal echo on transmit";
 			this.checkBox_LocalEcho.UseVisualStyleBackColor = true;
 			this.checkBox_LocalEcho.CheckedChanged += new System.EventHandler(this.checkBox_LocalEcho_CheckedChanged);
 			// 
@@ -167,7 +205,7 @@ namespace HSR.YAT.Gui.Forms
 			this.groupBox_DisplaySettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_DisplaySettings.Controls.Add(this.checkBox_ShowTimestamp);
+			this.groupBox_DisplaySettings.Controls.Add(this.checkBox_ShowTimeStamp);
 			this.groupBox_DisplaySettings.Controls.Add(this.checkBox_ShowCounters);
 			this.groupBox_DisplaySettings.Controls.Add(this.checkBox_ShowLength);
 			this.groupBox_DisplaySettings.Controls.Add(this.comboBox_Radix);
@@ -177,20 +215,20 @@ namespace HSR.YAT.Gui.Forms
 			this.groupBox_DisplaySettings.Controls.Add(this.label_MaximalLineCount);
 			this.groupBox_DisplaySettings.Location = new System.Drawing.Point(6, 13);
 			this.groupBox_DisplaySettings.Name = "groupBox_DisplaySettings";
-			this.groupBox_DisplaySettings.Size = new System.Drawing.Size(190, 142);
-			this.groupBox_DisplaySettings.TabIndex = 0;
+			this.groupBox_DisplaySettings.Size = new System.Drawing.Size(286, 142);
+			this.groupBox_DisplaySettings.TabIndex = 2;
 			this.groupBox_DisplaySettings.TabStop = false;
 			this.groupBox_DisplaySettings.Text = "Display Settings";
 			// 
-			// checkBox_ShowTimestamp
+			// checkBox_ShowTimeStamp
 			// 
-			this.checkBox_ShowTimestamp.AutoSize = true;
-			this.checkBox_ShowTimestamp.Location = new System.Drawing.Point(12, 45);
-			this.checkBox_ShowTimestamp.Name = "checkBox_ShowTimestamp";
-			this.checkBox_ShowTimestamp.Size = new System.Drawing.Size(103, 17);
-			this.checkBox_ShowTimestamp.TabIndex = 2;
-			this.checkBox_ShowTimestamp.Text = "Show timestamp";
-			this.checkBox_ShowTimestamp.CheckedChanged += new System.EventHandler(this.checkBox_ShowTimestamp_CheckedChanged);
+			this.checkBox_ShowTimeStamp.AutoSize = true;
+			this.checkBox_ShowTimeStamp.Location = new System.Drawing.Point(12, 45);
+			this.checkBox_ShowTimeStamp.Name = "checkBox_ShowTimeStamp";
+			this.checkBox_ShowTimeStamp.Size = new System.Drawing.Size(103, 17);
+			this.checkBox_ShowTimeStamp.TabIndex = 2;
+			this.checkBox_ShowTimeStamp.Text = "Show &timestamp";
+			this.checkBox_ShowTimeStamp.CheckedChanged += new System.EventHandler(this.checkBox_ShowTimeStamp_CheckedChanged);
 			// 
 			// checkBox_ShowCounters
 			// 
@@ -199,7 +237,7 @@ namespace HSR.YAT.Gui.Forms
 			this.checkBox_ShowCounters.Name = "checkBox_ShowCounters";
 			this.checkBox_ShowCounters.Size = new System.Drawing.Size(97, 17);
 			this.checkBox_ShowCounters.TabIndex = 4;
-			this.checkBox_ShowCounters.Text = "Show counters";
+			this.checkBox_ShowCounters.Text = "Show &counters";
 			this.checkBox_ShowCounters.CheckedChanged += new System.EventHandler(this.checkBox_ShowCounters_CheckedChanged);
 			// 
 			// checkBox_ShowLength
@@ -209,15 +247,17 @@ namespace HSR.YAT.Gui.Forms
 			this.checkBox_ShowLength.Name = "checkBox_ShowLength";
 			this.checkBox_ShowLength.Size = new System.Drawing.Size(85, 17);
 			this.checkBox_ShowLength.TabIndex = 3;
-			this.checkBox_ShowLength.Text = "Show length";
+			this.checkBox_ShowLength.Text = "Show &length";
 			this.checkBox_ShowLength.CheckedChanged += new System.EventHandler(this.checkBox_ShowLength_CheckedChanged);
 			// 
 			// comboBox_Radix
 			// 
+			this.comboBox_Radix.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_Radix.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox_Radix.Location = new System.Drawing.Point(52, 18);
+			this.comboBox_Radix.Location = new System.Drawing.Point(70, 18);
 			this.comboBox_Radix.Name = "comboBox_Radix";
-			this.comboBox_Radix.Size = new System.Drawing.Size(127, 21);
+			this.comboBox_Radix.Size = new System.Drawing.Size(205, 21);
 			this.comboBox_Radix.TabIndex = 1;
 			this.comboBox_Radix.SelectedIndexChanged += new System.EventHandler(this.comboBox_Radix_SelectedIndexChanged);
 			// 
@@ -228,7 +268,7 @@ namespace HSR.YAT.Gui.Forms
 			this.label_Radix.Name = "label_Radix";
 			this.label_Radix.Size = new System.Drawing.Size(37, 13);
 			this.label_Radix.TabIndex = 0;
-			this.label_Radix.Text = "Radix:";
+			this.label_Radix.Text = "&Radix:";
 			// 
 			// label_MaximalLineCountUnit
 			// 
@@ -269,7 +309,7 @@ namespace HSR.YAT.Gui.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(311, 311);
+			this.ClientSize = new System.Drawing.Size(407, 365);
 			this.Controls.Add(this.groupBox_Settings);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.button_Cancel);
@@ -283,6 +323,8 @@ namespace HSR.YAT.Gui.Forms
 			this.Text = "Advanced Terminal Settings";
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.ExtendendTerminalSettings_Paint);
 			this.groupBox_Settings.ResumeLayout(false);
+			this.groupBox_CommunicationSettings.ResumeLayout(false);
+			this.groupBox_CommunicationSettings.PerformLayout();
 			this.groupBox_ReceiveSettings.ResumeLayout(false);
 			this.groupBox_ReceiveSettings.PerformLayout();
 			this.groupBox_TransmitSettings.ResumeLayout(false);
@@ -309,10 +351,13 @@ namespace HSR.YAT.Gui.Forms
 		private System.Windows.Forms.CheckBox checkBox_LocalEcho;
 		private System.Windows.Forms.Label label_ParityReplacementExample;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.CheckBox checkBox_ShowTimestamp;
+		private System.Windows.Forms.CheckBox checkBox_ShowTimeStamp;
 		private System.Windows.Forms.CheckBox checkBox_ShowCounters;
 		private System.Windows.Forms.CheckBox checkBox_ShowLength;
 		private System.Windows.Forms.ComboBox comboBox_Radix;
 		private System.Windows.Forms.Label label_Radix;
+		private System.Windows.Forms.GroupBox groupBox_CommunicationSettings;
+		private System.Windows.Forms.ComboBox comboBox_Endianess;
+		private System.Windows.Forms.Label label_Endianess;
 	}
 }

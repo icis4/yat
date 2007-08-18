@@ -6,21 +6,23 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-using HSR.YAT.Settings.Application;
+using MKY.YAT.Settings.Application;
 
-namespace HSR.YAT.Gui.Forms
+namespace MKY.YAT.Gui.Forms
 {
 	public partial class WelcomeScreen : Form
 	{
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		// settings
+		private System.Timers.Timer _applicationSettingsTimer = new System.Timers.Timer();
 		private bool _applicationSettingsLoaded = false;
+		private bool _applicationSettingsReady = false;
 
 		//------------------------------------------------------------------------------------------
-		// Constructor
+		// Object Lifetime
 		//------------------------------------------------------------------------------------------
 
 		public WelcomeScreen()
@@ -28,11 +30,15 @@ namespace HSR.YAT.Gui.Forms
 			InitializeComponent();
 
 			label_Name.Text = Application.ProductName;
-			if (VersionInfo.HasProductNamePostFix)
-				label_Name.Text += VersionInfo.ProductNamePostFix;
+			label_Name.Text += VersionInfo.ProductNamePostFix;
 
 			label_Version.Text = "Version " + Application.ProductVersion;
-			label_Status.Text = "Loading settings...";
+			label_Status.Text  = "Loading settings...";
+
+			_applicationSettingsTimer.Interval = 100;
+			_applicationSettingsTimer.AutoReset = false;
+			_applicationSettingsTimer.Elapsed += new System.Timers.ElapsedEventHandler(_applicationSettingsTimer_Elapsed);
+			_applicationSettingsTimer.Start();
 		}
 
 		#region Properties
@@ -52,27 +58,46 @@ namespace HSR.YAT.Gui.Forms
 		// Controls Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		private void timer_Startup_Tick(object sender, EventArgs e)
+		private void WelcomeScreen_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			if (Opacity < 1.00)
+			timer_Opacity.Dispose();
+			_applicationSettingsTimer.Dispose();
+		}
+
+		private void timer_Opacity_Tick(object sender, EventArgs e)
+		{
+			// - close welcome screen immediately if application settings successfully loaded
+			// - close welcome screen after opacity transition if application settings
+			//   could not be loaded successfully
+			if (!_applicationSettingsLoaded && (Opacity < 1.00))
 			{
-				Opacity += 0.05;
+				// opacity starts at 0.25 (25%)
+				// 25% opacity increase per second in 1% steps
+				// => 40ms ticks
+				Opacity += 0.01;
 				Refresh();
 			}
-			else
+			else if (_applicationSettingsReady)
 			{
-				timer_Startup.Stop();
-
-				try
-				{
-					_applicationSettingsLoaded = ApplicationSettings.Load();
-				}
-				catch
-				{
-				}
+				timer_Opacity.Stop();
 
 				DialogResult = DialogResult.OK;
 				Close();
+			}
+		}
+
+		private void _applicationSettingsTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		{
+			try
+			{
+				_applicationSettingsLoaded = ApplicationSettings.Load();
+			}
+			catch
+			{
+			}
+			finally
+			{
+				_applicationSettingsReady = true;
 			}
 		}
 

@@ -6,7 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-namespace HSR.YAT.Gui.Controls
+namespace MKY.YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
 	public partial class Monitor : UserControl
@@ -22,7 +22,7 @@ namespace HSR.YAT.Gui.Controls
 		private const int _CountStatusDefault = 0;
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private Domain.RepositoryType _repositoryType = _RepositoryTypeDefault;
@@ -322,7 +322,7 @@ namespace HSR.YAT.Gui.Controls
 			{
 				ListBox lb = listBox_Monitor;
 
-				List<List<Domain.DisplayElement>> selectedLines = new List<List<HSR.YAT.Domain.DisplayElement>>();
+				List<List<Domain.DisplayElement>> selectedLines = new List<List<MKY.YAT.Domain.DisplayElement>>();
 				if (lb.SelectedItems.Count > 0)
 				{
 					foreach (int i in lb.SelectedIndices)
@@ -368,7 +368,7 @@ namespace HSR.YAT.Gui.Controls
 
 		private void Monitor_Resize(object sender, EventArgs e)
 		{
-			label_CountStatus.Left = (Width / 2) + 24;
+			label_CountStatus.Left = (Width / 2) + 14;
 		}
 
 		#endregion
@@ -444,9 +444,9 @@ namespace HSR.YAT.Gui.Controls
 				Image image = null;
 				switch (_repositoryType)
 				{
-					case Domain.RepositoryType.Tx:    image = Properties.Resources.Image_Monitor_Tx_48x24; break;
-					case Domain.RepositoryType.Bidir: image = Properties.Resources.Image_Monitor_Bidir_48x24; break;
-					case Domain.RepositoryType.Rx:    image = Properties.Resources.Image_Monitor_Rx_48x24; break;
+					case Domain.RepositoryType.Tx:    image = Properties.Resources.Image_Monitor_Tx_28x28; break;
+					case Domain.RepositoryType.Bidir: image = Properties.Resources.Image_Monitor_Bidir_28x28; break;
+					case Domain.RepositoryType.Rx:    image = Properties.Resources.Image_Monitor_Rx_28x28; break;
 				}
 				pictureBox_Monitor.Image = image;
 
@@ -478,30 +478,26 @@ namespace HSR.YAT.Gui.Controls
 				case Domain.RepositoryType.Tx:
 				{
 					sb.Append(_txByteCountStatus.ToString());
-					sb.Append(" bytes / ");
+					sb.Append(" / ");
 					sb.Append(_txLineCountStatus.ToString());
-					sb.Append(" lines");
 					break;
 				}
 				case Domain.RepositoryType.Bidir:
 				{
 					sb.Append(_txByteCountStatus.ToString());
-					sb.Append(" bytes / ");
+					sb.Append(" / ");
 					sb.Append(_txLineCountStatus.ToString());
-					sb.Append(" lines");
 					sb.Append(Environment.NewLine);
 					sb.Append(_rxByteCountStatus.ToString());
-					sb.Append(" bytes / ");
+					sb.Append(" / ");
 					sb.Append(_rxLineCountStatus.ToString());
-					sb.Append(" lines");
 					break;
 				}
 				case Domain.RepositoryType.Rx:
 				{
 					sb.Append(_rxByteCountStatus.ToString());
-					sb.Append(" bytes / ");
+					sb.Append(" / ");
 					sb.Append(_rxLineCountStatus.ToString());
-					sb.Append(" lines");
 					break;
 				}
 			}

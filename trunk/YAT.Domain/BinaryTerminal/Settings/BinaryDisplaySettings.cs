@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace HSR.YAT.Domain.Settings
+namespace MKY.YAT.Domain.Settings
 {
-	public class BinaryDisplaySettings : Utilities.Settings.Settings
+	/// <summary></summary>
+	public class BinaryDisplaySettings : Utilities.Settings.Settings, IEquatable<BinaryDisplaySettings>
 	{
 		private BinaryLengthLineBreak _lengthLineBreak;
 		private BinarySequenceLineBreak _sequenceLineBreak;
 		private BinaryTimedLineBreak _timedLineBreak;
 
+		/// <summary></summary>
 		public BinaryDisplaySettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public BinaryDisplaySettings(Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -24,6 +27,7 @@ namespace HSR.YAT.Domain.Settings
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public BinaryDisplaySettings(BinaryDisplaySettings rhs)
 			: base(rhs)
 		{
@@ -33,6 +37,7 @@ namespace HSR.YAT.Domain.Settings
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		protected override void SetMyDefaults()
 		{
 			LengthLineBreak   = new BinaryLengthLineBreak(false, 16);
@@ -45,6 +50,7 @@ namespace HSR.YAT.Domain.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("LengthLineBreak")]
 		public BinaryLengthLineBreak LengthLineBreak
 		{
@@ -59,6 +65,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("SequenceLineBreak")]
 		public BinarySequenceLineBreak SequenceLineBreak
 		{
@@ -73,6 +80,7 @@ namespace HSR.YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("TimedLineBreak")]
 		public BinaryTimedLineBreak TimedLineBreak
 		{
@@ -120,6 +128,7 @@ namespace HSR.YAT.Domain.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

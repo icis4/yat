@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HSR.YAT.Gui.Forms
+namespace MKY.YAT.Gui.Forms
 {
 	partial class TextTerminalSettings
 	{
@@ -42,7 +42,10 @@ namespace HSR.YAT.Gui.Forms
 			this.radioButton_SubstituteNone = new System.Windows.Forms.RadioButton();
 			this.checkBox_WaitForResponse = new System.Windows.Forms.CheckBox();
 			this.textBox_DelayInterval = new System.Windows.Forms.TextBox();
+			this.label_WaitForResponse = new System.Windows.Forms.Label();
+			this.label_WaitForResponseUnit = new System.Windows.Forms.Label();
 			this.label_DelayUnit = new System.Windows.Forms.Label();
+			this.textBox_WaitForResponse = new System.Windows.Forms.TextBox();
 			this.textBox_Delay = new System.Windows.Forms.TextBox();
 			this.label_DelayIntervalUnit = new System.Windows.Forms.Label();
 			this.checkBox_Delay = new System.Windows.Forms.CheckBox();
@@ -60,9 +63,6 @@ namespace HSR.YAT.Gui.Forms
 			this.checkBox_ShowEol = new System.Windows.Forms.CheckBox();
 			this.checkBox_ReplaceControlCharacters = new System.Windows.Forms.CheckBox();
 			this.button_Defaults = new System.Windows.Forms.Button();
-			this.label_WaitForResponse = new System.Windows.Forms.Label();
-			this.textBox_WaitForResponse = new System.Windows.Forms.TextBox();
-			this.label_WaitForResponseUnit = new System.Windows.Forms.Label();
 			this.groupBox_Settings.SuspendLayout();
 			this.groupBox_SendSettings.SuspendLayout();
 			this.groupBox_Substitute.SuspendLayout();
@@ -197,6 +197,26 @@ namespace HSR.YAT.Gui.Forms
 			this.textBox_DelayInterval.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_DelayInterval_Validating);
 			this.textBox_DelayInterval.TextChanged += new System.EventHandler(this.textBox_DelayInterval_TextChanged);
 			// 
+			// label_WaitForResponse
+			// 
+			this.label_WaitForResponse.AutoSize = true;
+			this.label_WaitForResponse.Location = new System.Drawing.Point(27, 65);
+			this.label_WaitForResponse.Name = "label_WaitForResponse";
+			this.label_WaitForResponse.Size = new System.Drawing.Size(84, 13);
+			this.label_WaitForResponse.TabIndex = 6;
+			this.label_WaitForResponse.Text = "with a timeout of";
+			this.label_WaitForResponse.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label_WaitForResponseUnit
+			// 
+			this.label_WaitForResponseUnit.AutoSize = true;
+			this.label_WaitForResponseUnit.Location = new System.Drawing.Point(164, 65);
+			this.label_WaitForResponseUnit.Name = "label_WaitForResponseUnit";
+			this.label_WaitForResponseUnit.Size = new System.Drawing.Size(20, 13);
+			this.label_WaitForResponseUnit.TabIndex = 8;
+			this.label_WaitForResponseUnit.Text = "ms";
+			this.label_WaitForResponseUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// label_DelayUnit
 			// 
 			this.label_DelayUnit.AutoSize = true;
@@ -206,6 +226,15 @@ namespace HSR.YAT.Gui.Forms
 			this.label_DelayUnit.TabIndex = 2;
 			this.label_DelayUnit.Text = "ms each";
 			this.label_DelayUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// textBox_WaitForResponse
+			// 
+			this.textBox_WaitForResponse.Location = new System.Drawing.Point(113, 62);
+			this.textBox_WaitForResponse.Name = "textBox_WaitForResponse";
+			this.textBox_WaitForResponse.Size = new System.Drawing.Size(51, 20);
+			this.textBox_WaitForResponse.TabIndex = 7;
+			this.textBox_WaitForResponse.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textBox_WaitForResponse.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_WaitForResponse_Validating);
 			// 
 			// textBox_Delay
 			// 
@@ -380,35 +409,6 @@ namespace HSR.YAT.Gui.Forms
 			this.button_Defaults.Text = "&Defaults...";
 			this.button_Defaults.Click += new System.EventHandler(this.button_Defaults_Click);
 			// 
-			// label_WaitForResponse
-			// 
-			this.label_WaitForResponse.AutoSize = true;
-			this.label_WaitForResponse.Location = new System.Drawing.Point(27, 65);
-			this.label_WaitForResponse.Name = "label_WaitForResponse";
-			this.label_WaitForResponse.Size = new System.Drawing.Size(84, 13);
-			this.label_WaitForResponse.TabIndex = 6;
-			this.label_WaitForResponse.Text = "with a timeout of";
-			this.label_WaitForResponse.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// textBox_WaitForResponse
-			// 
-			this.textBox_WaitForResponse.Location = new System.Drawing.Point(113, 62);
-			this.textBox_WaitForResponse.Name = "textBox_WaitForResponse";
-			this.textBox_WaitForResponse.Size = new System.Drawing.Size(51, 20);
-			this.textBox_WaitForResponse.TabIndex = 7;
-			this.textBox_WaitForResponse.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.textBox_WaitForResponse.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_WaitForResponse_Validating);
-			// 
-			// label_WaitForResponseUnit
-			// 
-			this.label_WaitForResponseUnit.AutoSize = true;
-			this.label_WaitForResponseUnit.Location = new System.Drawing.Point(164, 65);
-			this.label_WaitForResponseUnit.Name = "label_WaitForResponseUnit";
-			this.label_WaitForResponseUnit.Size = new System.Drawing.Size(20, 13);
-			this.label_WaitForResponseUnit.TabIndex = 8;
-			this.label_WaitForResponseUnit.Text = "ms";
-			this.label_WaitForResponseUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
 			// TextTerminalSettings
 			// 
 			this.AcceptButton = this.button_OK;
@@ -426,7 +426,7 @@ namespace HSR.YAT.Gui.Forms
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Text Terminal Settings";
-			this.Load += new System.EventHandler(this.TextTerminalSettings_Load);
+			this.Paint += new System.Windows.Forms.PaintEventHandler(this.TextTerminalSettings_Paint);
 			this.groupBox_Settings.ResumeLayout(false);
 			this.groupBox_Settings.PerformLayout();
 			this.groupBox_SendSettings.ResumeLayout(false);

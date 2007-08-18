@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HSR.YAT.Gui.Forms
+namespace MKY.YAT.Gui.Forms
 {
 	partial class UnhandledException
 	{
@@ -173,7 +173,7 @@ namespace HSR.YAT.Gui.Forms
 			// button_CopyToClipboard
 			// 
 			this.button_CopyToClipboard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.button_CopyToClipboard.Image = global::HSR.YAT.Gui.Forms.Properties.Resources.Image_CopyToClipboard_16x16;
+			this.button_CopyToClipboard.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_CopyToClipboard_16x16;
 			this.button_CopyToClipboard.Location = new System.Drawing.Point(12, 417);
 			this.button_CopyToClipboard.Name = "button_CopyToClipboard";
 			this.button_CopyToClipboard.Size = new System.Drawing.Size(176, 23);

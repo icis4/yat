@@ -3,23 +3,32 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace HSR.YAT.Domain
+namespace MKY.YAT.Domain
 {
 	#region Enum ControlCharRadix
 
+	/// <summary></summary>
 	public enum ControlCharRadix
 	{
+		/// <summary></summary>
 		Bin = Radix.Bin,
+		/// <summary></summary>
 		Oct = Radix.Oct,
+		/// <summary></summary>
 		Dec = Radix.Dec,
+		/// <summary></summary>
 		Hex = Radix.Hex,
+		/// <summary></summary>
 		Chr = Radix.Char,
+		/// <summary></summary>
 		Str = Radix.String,
+		/// <summary></summary>
 		AsciiMnemonic,
 	}
 
 	#endregion
 
+	/// <summary></summary>
 	[Serializable]
 	public class XControlCharRadix : XRadix
 	{
