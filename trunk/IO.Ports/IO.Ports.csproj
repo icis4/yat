@@ -7,8 +7,8 @@
     <ProjectGuid>{D8940035-D30A-48A3-AC28-E8A4B8910CB9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HSR.IO.Ports</RootNamespace>
-    <AssemblyName>HSR.IO.Ports</AssemblyName>
+    <RootNamespace>MKY.IO.Ports</RootNamespace>
+    <AssemblyName>IO.Ports</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\IO.Ports.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -21,6 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\HSR.IO.Ports.XML</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,6 +31,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\HSR.IO.Ports.XML</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

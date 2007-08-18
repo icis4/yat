@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 
-using HSR.Utilities.Types;
+using MKY.Utilities.Types;
 
-namespace HSR.IO.Ports
+namespace MKY.IO.Ports
 {
 	/// <summary>
 	/// Extended enum XStopBits.
@@ -71,6 +71,23 @@ namespace HSR.IO.Ports
 		public static XStopBits Parse(string bits)
 		{
 			return ((XStopBits)(double.Parse(bits)));
+		}
+
+		/// <summary></summary>
+		public static bool TryParse(string bits, out XStopBits result)
+		{
+			double doubleResult;
+
+			if (double.TryParse(bits, out doubleResult))
+			{
+				result = (XStopBits)doubleResult;
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
 		}
 
 		#endregion

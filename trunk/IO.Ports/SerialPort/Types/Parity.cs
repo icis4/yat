@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 
-using HSR.Utilities.Types;
+using MKY.Utilities.Types;
 
-namespace HSR.IO.Ports
+namespace MKY.IO.Ports
 {
 	/// <summary>
 	/// Extended enum XParity.
@@ -92,33 +92,52 @@ namespace HSR.IO.Ports
 		/// <summary></summary>
 		public static XParity Parse(string parity)
 		{
+			XParity result;
+
+			if (TryParse(parity, out result))
+				return (result);
+			else
+				throw (new ArgumentOutOfRangeException(parity));
+		}
+
+		/// <summary></summary>
+		public static bool TryParse(string parity, out XParity result)
+		{
 			if      ((string.Compare(parity, Even_string, true) == 0) ||
 			         (string.Compare(parity, Even_stringShort, true) == 0))
 			{
-				return (new XParity(Parity.Even));
+				result = new XParity(Parity.Even);
+				return (true);
 			}
 			else if ((string.Compare(parity, Odd_string, true) == 0) ||
 			         (string.Compare(parity, Odd_stringShort, true) == 0))
 			{
-				return (new XParity(Parity.Odd));
+				result = new XParity(Parity.Odd);
+				return (true);
 			}
 			else if ((string.Compare(parity, None_string, true) == 0) ||
 			         (string.Compare(parity, None_stringShort, true) == 0))
 			{
-				return (new XParity(Parity.None));
+				result = new XParity(Parity.None);
+				return (true);
 			}
 			else if ((string.Compare(parity, Mark_string, true) == 0) ||
 			         (string.Compare(parity, Mark_stringShort, true) == 0))
 			{
-				return (new XParity(Parity.Mark));
+				result = new XParity(Parity.Mark);
+				return (true);
 			}
 			else if ((string.Compare(parity, Space_string, true) == 0) ||
 			         (string.Compare(parity, Space_stringShort, true) == 0))
 			{
-				return (new XParity(Parity.Space));
+				result = new XParity(Parity.Space);
+				return (true);
 			}
-
-			throw (new ArgumentOutOfRangeException(parity));
+			else
+			{
+				result = null;
+				return (false);
+			}
 		}
 
 		#endregion

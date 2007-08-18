@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel;
 
-namespace HSR.IO.Ports
+namespace MKY.IO.Ports
 {
 	partial class SerialPortDotNet
 	{

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace HSR.IO.Ports
+namespace MKY.IO.Ports
 {
 	/// <summary>
 	/// List containing serial port IDs.
@@ -9,6 +9,22 @@ namespace HSR.IO.Ports
 	[Serializable]
 	public class SerialPortList : List<SerialPortId>
 	{
+		/// <summary></summary>
+		public class PortChangedAndCancelEventArgs : EventArgs
+		{
+			/// <summary></summary>
+			public readonly SerialPortId Port;
+
+			/// <summary></summary>
+			public bool Cancel = false;
+
+			/// <summary></summary>
+			public PortChangedAndCancelEventArgs(SerialPortId port)
+			{
+				Port = port;
+			}
+		}
+
 		/// <summary></summary>
 		public SerialPortList()
 			: base(SerialPortId.StandardLastPort - SerialPortId.StandardFirstPort + 1)
@@ -58,8 +74,34 @@ namespace HSR.IO.Ports
 		/// </remarks>
 		public void MarkPortsInUse()
 		{
+			MarkPortsInUse(null);
+		}
+
+		/// <summary>
+		/// Checks all ports whether they are currently in use and marks them.
+		/// </summary>
+		/// <remarks>
+		/// In .NET 2.0, no class provides a method to retrieve whether a port is currently
+		/// in use or not. Therefore, this method actively tries to open every port. This
+		/// takes some time.
+		/// </remarks>
+		/// <param name="portChangedCallback">
+		/// Callback delegate, can be used to get an event each time a new port is being
+		/// tried to be opened. Set the <see cref="PortChangedAndCancelEventArgs.Cancel"/>
+		/// property the true to cancel port scanning.
+		/// </param>
+		public void MarkPortsInUse(EventHandler<PortChangedAndCancelEventArgs> portChangedCallback)
+		{
 			foreach (SerialPortId portId in this)
 			{
+				if (portChangedCallback != null)
+				{
+					PortChangedAndCancelEventArgs args = new PortChangedAndCancelEventArgs(portId);
+					portChangedCallback.Invoke(this, args);
+					if (args.Cancel)
+						break;
+				}
+
 				System.IO.Ports.SerialPort p = new System.IO.Ports.SerialPort(portId);
 				try
 				{

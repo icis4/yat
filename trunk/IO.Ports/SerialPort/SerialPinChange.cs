@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HSR.IO.Ports
+namespace MKY.IO.Ports
 {
 	/// <summary>
-	/// Specifies the type of change that occurred on the HSR.IO.Ports.SerialPort object.
+	/// Specifies the type of change that occurred on the MKY.IO.Ports.SerialPort object.
 	/// </summary>
 	/// <remarks>
 	/// This enum adds RTS and DTR pin changes to <see cref="System.IO.Ports.SerialPinChange"/>.

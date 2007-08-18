@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HSR.IO.Ports
+namespace MKY.IO.Ports
 {
 	/// <summary></summary>
 	[Serializable]
@@ -49,7 +49,7 @@ namespace HSR.IO.Ports
 	public class SerialPinChangedEventArgs : EventArgs
 	{
 		/// <summary></summary>
-		public readonly HSR.IO.Ports.SerialPinChange EventType = HSR.IO.Ports.SerialPinChange.Unknown;
+		public readonly MKY.IO.Ports.SerialPinChange EventType = MKY.IO.Ports.SerialPinChange.Unknown;
 
 		/// <summary></summary>
 		public SerialPinChangedEventArgs()
@@ -58,7 +58,7 @@ namespace HSR.IO.Ports
 		}
 
 		/// <summary></summary>
-		public SerialPinChangedEventArgs(HSR.IO.Ports.SerialPinChange eventType)
+		public SerialPinChangedEventArgs(MKY.IO.Ports.SerialPinChange eventType)
 		{
 			EventType = eventType;
 		}

@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel;
 
-namespace HSR.IO.Ports
+namespace MKY.IO.Ports
 {
 	/// <summary>
 	/// ISerialPort is based on the .NET standart serial port interface and adds some useful

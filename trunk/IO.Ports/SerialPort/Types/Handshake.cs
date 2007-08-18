@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 
-using HSR.Utilities.Types;
+using MKY.Utilities.Types;
 
-namespace HSR.IO.Ports
+namespace MKY.IO.Ports
 {
 	/// <summary>
 	/// Extended enum XHandshake.
@@ -87,28 +87,46 @@ namespace HSR.IO.Ports
 		/// <summary></summary>
 		public static XHandshake Parse(string handshake)
 		{
+			XHandshake result;
+
+			if (TryParse(handshake, out result))
+				return (result);
+			else
+				throw (new ArgumentOutOfRangeException(handshake));
+		}
+
+		/// <summary></summary>
+		public static bool TryParse(string handshake, out XHandshake result)
+		{
 			if      ((string.Compare(handshake, None_string, true) == 0) ||
 			         (string.Compare(handshake, None_stringShort, true) == 0))
 			{
-				return (new XHandshake(Handshake.None));
+				result = new XHandshake(Handshake.None);
+				return (true);
 			}
 			else if ((string.Compare(handshake, RtsCts_string, true) == 0) ||
 			         (string.Compare(handshake, RtsCts_stringShort, true) == 0))
 			{
-				return (new XHandshake(Handshake.RequestToSend));
+				result = new XHandshake(Handshake.RequestToSend);
+				return (true);
 			}
 			else if ((string.Compare(handshake, XOnXOff_string, true) == 0) ||
 			         (string.Compare(handshake, XOnXOff_stringShort, true) == 0))
 			{
-				return (new XHandshake(Handshake.XOnXOff));
+				result = new XHandshake(Handshake.XOnXOff);
+				return (true);
 			}
 			else if ((string.Compare(handshake, RtsCtsXOnXOff_string, true) == 0) ||
 		             (string.Compare(handshake, RtsCtsXOnXOff_stringShort, true) == 0))
 			{
-				return (new XHandshake(Handshake.RequestToSendXOnXOff));
+				result = new XHandshake(Handshake.RequestToSendXOnXOff);
+				return (true);
 			}
-
-			throw (new ArgumentOutOfRangeException(handshake));
+			else
+			{
+				result = null;
+				return (false);
+			}
 		}
 
 		#endregion
