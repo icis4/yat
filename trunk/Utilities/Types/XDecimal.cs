@@ -5,14 +5,14 @@ using System.Text;
 namespace MKY.Utilities.Types
 {
 	/// <summary>
-	/// Double utility methods.
+	/// Decimal utility methods.
 	/// </summary>
-	public static class XDouble
+	public static class XDecimal
 	{
 		/// <summary>
 		/// Limits "value" to the boundaries specified.
 		/// </summary>
-		public static double LimitToBounds(double value, double lower, double upper)
+		public static decimal LimitToBounds(decimal value, decimal lower, decimal upper)
 		{
 			if (value < lower)
 				return (lower);

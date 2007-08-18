@@ -4,7 +4,7 @@ using System.Text;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace HSR.Utilities.Settings
+namespace MKY.Utilities.Settings
 {
 	/// <summary></summary>
 	public class DocumentSettingsHandler<TDocumentSettings>

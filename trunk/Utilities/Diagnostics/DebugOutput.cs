@@ -4,7 +4,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 
-namespace HSR.Utilities.Diagnostics
+namespace MKY.Utilities.Diagnostics
 {
 	/// <summary></summary>
 	static public class DebugOutput

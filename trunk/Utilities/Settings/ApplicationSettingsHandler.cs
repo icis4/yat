@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Windows.Forms;
 
-namespace HSR.Utilities.Settings
+namespace MKY.Utilities.Settings
 {
 	/// <summary></summary>
 	public class ApplicationSettingsHandler<TCommonSettings, TLocalUserSettings, TRoamingUserSettings>

@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Utilities")]
 [assembly: AssemblyDescription("C# Utilities")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("HSR")]
+[assembly: AssemblyCompany("YAT")]
 [assembly: AssemblyProduct("Utilities")]
 [assembly: AssemblyCopyright("Copyright © 2003-2007 HSR Hochschule für Technik Rapperswil and Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]

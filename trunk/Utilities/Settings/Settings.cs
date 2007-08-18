@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace HSR.Utilities.Settings
+namespace MKY.Utilities.Settings
 {
 	/// <summary></summary>
 	public enum SettingsType
@@ -20,7 +20,7 @@ namespace HSR.Utilities.Settings
 	}
 
 	/// <summary></summary>
-	public abstract class Settings
+	public abstract class Settings : IEquatable<Settings>
 	{
 		private SettingsType _settingsType = SettingsType.Explicit;
 
@@ -177,7 +177,7 @@ namespace HSR.Utilities.Settings
 			// ensure that object.operator!=() is called
 			if ((object)value != null)
 			{
-				for (int i = 0; i < _nodes.Count; i++)
+				for (int i = 0; (i < _nodes.Count) && (i < value._nodes.Count); i++)
 				{
 					// ensure that overridden object.Equals() is called
 					if (!_nodes[i].Equals((object)value._nodes[i]))

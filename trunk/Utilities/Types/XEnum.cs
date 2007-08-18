@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 
-namespace HSR.Utilities.Types
+namespace MKY.Utilities.Types
 {
 	/// <summary>
 	/// Extended enumeration type which offers more features that a normal enum.
@@ -59,6 +59,22 @@ namespace HSR.Utilities.Types
 	///         return ((XMode)int.Parse(mode));
 	///     }
 	///   
+	///     public static bool TryParse(string mode, out XMode result)
+	///     {
+	///         int intResult;
+	///         
+	///         if (int.TryParse(mode, out intResult))
+	///         {
+	///             result = (XMode)intResult;
+	///             return (true);
+	///         }
+	///         else
+	///         {
+	///             result = null;
+	///             return (false);
+	///         }
+	///     }
+	///   
 	///     public static implicit operator Mode(XMode mode)
 	///     {
 	///         return ((Mode)mode.UnderlyingEnum);
@@ -109,7 +125,7 @@ namespace HSR.Utilities.Types
 	/// 
 	/// </example>
 	[Serializable]
-	public abstract class XEnum : IComparable, ICloneable
+	public abstract class XEnum : IEquatable<XEnum>, IComparable, ICloneable
 	{
 		/// <summary>
 		/// Underlying enum.

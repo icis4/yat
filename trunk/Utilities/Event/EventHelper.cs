@@ -6,7 +6,7 @@ using System.Runtime.Remoting.Messaging;
 using System.Diagnostics;
 using System.IO;
 
-namespace HSR.Utilities.Event
+namespace MKY.Utilities.Event
 {
 	/// <summary>
 	/// Events helper methods to defensivly publish events.

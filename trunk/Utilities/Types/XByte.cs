@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HSR.Utilities.Types
+namespace MKY.Utilities.Types
 {
 	/// <summary>
 	/// Byte utility methods.
