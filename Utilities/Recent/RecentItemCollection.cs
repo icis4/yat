@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HSR.Utilities.Recent
+namespace MKY.Utilities.Recent
 {
 	/// <summary>
 	/// Collection for recent items like recent files, provides methods to handle the recent items.

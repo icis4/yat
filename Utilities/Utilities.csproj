@@ -7,8 +7,8 @@
     <ProjectGuid>{F489B948-95CF-49FE-B9AA-A51654F5688B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HSR.Utilities</RootNamespace>
-    <AssemblyName>HSR.Utilities</AssemblyName>
+    <RootNamespace>MKY.Utilities</RootNamespace>
+    <AssemblyName>Utilities</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\Utilities.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -21,6 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\HSR.Utilities.XML</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,6 +31,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\HSR.Utilities.XML</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -42,7 +44,9 @@
     <Compile Include="Diagnostics\DebugOutput.cs" />
     <Compile Include="Drawing\XDrawing.cs" />
     <Compile Include="Recent\RecentItem.cs" />
-    <Compile Include="Recent\RecentItemCollection.cs" />
+    <Compile Include="Recent\RecentItemCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Settings\ApplicationSettingsHandler.cs" />
     <Compile Include="Settings\DocumentSettingsHandler.cs" />
     <Compile Include="Event\EventHelper.cs" />
@@ -56,6 +60,7 @@
     <Compile Include="Text\XEncoding.cs" />
     <Compile Include="Types\XAscii.cs" />
     <Compile Include="Types\XByte.cs" />
+    <Compile Include="Types\XDecimal.cs" />
     <Compile Include="Types\XDouble.cs" />
     <Compile Include="Types\XEnum.cs" />
     <Compile Include="Types\XInt.cs" />

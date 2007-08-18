@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using HSR.Utilities.Types;
+using MKY.Utilities.Types;
 
-namespace HSR.Utilities.Text
+namespace MKY.Utilities.Text
 {
 	#region Enum SupportedEncoding
 
@@ -688,26 +688,49 @@ namespace HSR.Utilities.Text
 		/// <summary></summary>
 		public static XEncoding Parse(string encoding)
 		{
-			foreach (XEncodingInfo info in _infos)
-			{
-				if (string.Compare(encoding, info.BetterDisplayName, true) == 0)
-					return (new XEncoding(info.SupportedEncoding));
-			}
-			foreach (EncodingInfo info in Encoding.GetEncodings())
-			{
-				if (string.Compare(encoding, info.Name, true) == 0)
-					return (new XEncoding((SupportedEncoding)info.CodePage));
+			XEncoding result;
 
-				if (string.Compare(encoding, info.DisplayName, true) == 0)
-					return (new XEncoding((SupportedEncoding)info.CodePage));
-			}
-			throw (new ArgumentOutOfRangeException(encoding));
+			if (TryParse(encoding, out result))
+				return (result);
+			else
+				throw (new ArgumentOutOfRangeException(encoding));
 		}
 
 		/// <summary></summary>
 		public static XEncoding Parse(Encoding encoding)
 		{
 			return (Parse(encoding.CodePage));
+		}
+
+		/// <summary></summary>
+		public static bool TryParse(string encoding, out XEncoding result)
+		{
+			foreach (XEncodingInfo info in _infos)
+			{
+				if (string.Compare(encoding, info.BetterDisplayName, true) == 0)
+				{
+					result = new XEncoding(info.SupportedEncoding);
+					return (true);
+				}
+			}
+
+			foreach (EncodingInfo info in Encoding.GetEncodings())
+			{
+				if (string.Compare(encoding, info.Name, true) == 0)
+				{
+					result = new XEncoding((SupportedEncoding)info.CodePage);
+					return (true);
+				}
+
+				if (string.Compare(encoding, info.DisplayName, true) == 0)
+				{
+					result = new XEncoding((SupportedEncoding)info.CodePage);
+					return (true);
+				}
+			}
+
+			result = null;
+			return (false);
 		}
 
 		#endregion

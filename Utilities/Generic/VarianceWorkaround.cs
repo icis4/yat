@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HSR.Utilities.Generic
+namespace MKY.Utilities.Generic
 {
 	/// <summary>
 	/// Variance workaround, allows casts of generics (e.g. List of device to List of object)

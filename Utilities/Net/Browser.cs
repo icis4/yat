@@ -1,6 +1,6 @@
 using System;
 
-namespace HSR.Utilities.Net
+namespace MKY.Utilities.Net
 {
 	/// <summary>
 	/// Browser utility methods.

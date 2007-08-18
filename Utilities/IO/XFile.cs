@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace HSR.Utilities.IO
+namespace MKY.Utilities.IO
 {
 	/// <summary>
 	/// File utility methods.

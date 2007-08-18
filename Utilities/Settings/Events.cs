@@ -1,6 +1,6 @@
 using System;
 
-namespace HSR.Utilities.Settings
+namespace MKY.Utilities.Settings
 {
 	/// <summary></summary>
 	public class SettingsEventArgs : EventArgs

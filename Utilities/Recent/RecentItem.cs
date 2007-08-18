@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace HSR.Utilities.Recent
+namespace MKY.Utilities.Recent
 {
 	/// <summary>
 	/// Item for collections like recent files, encapsulates an item with a time stamp.
 	/// </summary>
 	[Serializable]
-	public class RecentItem<T> : IComparable
+	public class RecentItem<T> : IEquatable<RecentItem<T>>, IComparable
 	{
 		private T _item;
 		private DateTime _timeStamp;
