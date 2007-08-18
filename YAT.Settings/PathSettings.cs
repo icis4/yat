@@ -3,20 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace HSR.YAT.Settings
+namespace MKY.YAT.Settings
 {
-	public class PathSettings : Utilities.Settings.Settings
+	[Serializable]
+	public class PathSettings : Utilities.Settings.Settings, IEquatable<PathSettings>
 	{
-		[XmlElement("SettingsFilesPath")]
-		private string _settingsFilesPath;
-
-		[XmlElement("SendFilesPath")]
+		private string _terminalFilesPath;
+		private string _workspaceFilesPath;
 		private string _sendFilesPath;
-
-		[XmlElement("LogFilesPath")]
 		private string _logFilesPath;
-
-		[XmlElement("MonitorFilesPath")]
 		private string _monitorFilesPath;
 
 		public PathSettings()
@@ -35,19 +30,21 @@ namespace HSR.YAT.Settings
 		public PathSettings(PathSettings rhs)
 			: base(rhs)
 		{
-			SettingsFilesPath = rhs.SettingsFilesPath;
-			SendFilesPath     = rhs.SendFilesPath;
-			LogFilesPath      = rhs.LogFilesPath;
-			MonitorFilesPath  = rhs.MonitorFilesPath;
+			TerminalFilesPath  = rhs.TerminalFilesPath;
+			WorkspaceFilesPath = rhs.WorkspaceFilesPath;
+			SendFilesPath      = rhs.SendFilesPath;
+			LogFilesPath       = rhs.LogFilesPath;
+			MonitorFilesPath   = rhs.MonitorFilesPath;
 			ClearChanged();
 		}
 
 		protected override void SetMyDefaults()
 		{
-			SettingsFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-			SendFilesPath     = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-			LogFilesPath      = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-			MonitorFilesPath  = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+			TerminalFilesPath  = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+			WorkspaceFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+			SendFilesPath      = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+			LogFilesPath       = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+			MonitorFilesPath   = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
 		}
 
 		#region Properties
@@ -55,19 +52,35 @@ namespace HSR.YAT.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
-		public string SettingsFilesPath
+		[XmlElement("TerminalFilesPath")]
+		public string TerminalFilesPath
 		{
-			get { return (_settingsFilesPath); }
+			get { return (_terminalFilesPath); }
 			set
 			{
-				if (_settingsFilesPath != value)
+				if (_terminalFilesPath != value)
 				{
-					_settingsFilesPath = value;
+					_terminalFilesPath = value;
 					SetChanged();
 				}
 			}
 		}
 
+		[XmlElement("WorkspaceFilesPath")]
+		public string WorkspaceFilesPath
+		{
+			get { return (_workspaceFilesPath); }
+			set
+			{
+				if (_workspaceFilesPath != value)
+				{
+					_workspaceFilesPath = value;
+					SetChanged();
+				}
+			}
+		}
+
+		[XmlElement("SendFilesPath")]
 		public string SendFilesPath
 		{
 			get { return (_sendFilesPath); }
@@ -81,6 +94,7 @@ namespace HSR.YAT.Settings
 			}
 		}
 
+		[XmlElement("LogFilesPath")]
 		public string LogFilesPath
 		{
 			get { return (_logFilesPath); }
@@ -94,6 +108,7 @@ namespace HSR.YAT.Settings
 			}
 		}
 
+		[XmlElement("MonitorFilesPath")]
 		public string MonitorFilesPath
 		{
 			get { return (_monitorFilesPath); }
@@ -132,7 +147,8 @@ namespace HSR.YAT.Settings
 			{
 				return
 					(
-					_settingsFilesPath.Equals(value._settingsFilesPath) &&
+					_terminalFilesPath.Equals(value._terminalFilesPath) &&
+					_workspaceFilesPath.Equals(value._workspaceFilesPath) &&
 					_sendFilesPath.Equals(value._sendFilesPath) &&
 					_logFilesPath.Equals(value._logFilesPath) &&
 					_monitorFilesPath.Equals(value._monitorFilesPath)

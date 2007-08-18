@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using HSR.Utilities.Settings;
+using MKY.Utilities.Settings;
 
-namespace HSR.YAT.Settings.Application
+namespace MKY.YAT.Settings.Application
 {
 	public static class ApplicationSettings
 	{
@@ -12,8 +12,8 @@ namespace HSR.YAT.Settings.Application
 		// LocalUserSettings
 		//------------------------------------------------------------------------------------------
 
-		private static ApplicationSettingsHandler<object, LocalUserSettings, object> _settings =
-			new ApplicationSettingsHandler<object, LocalUserSettings, object>(false, true, false);
+		private static ApplicationSettingsHandler<object, LocalUserSettingsRoot, object> _settings =
+			new ApplicationSettingsHandler<object, LocalUserSettingsRoot, object>(false, true, false);
 
 		public static bool Load()
 		{
@@ -25,20 +25,9 @@ namespace HSR.YAT.Settings.Application
 			_settings.Save();
 		}
 
-		public static LocalUserSettings LocalUser
+		public static LocalUserSettingsRoot LocalUser
 		{
 			get { return (_settings.LocalUserSettings); }
-		}
-
-		//------------------------------------------------------------------------------------------
-		// ExtensionSettings
-		//------------------------------------------------------------------------------------------
-
-		private static ExtensionSettings _extensions = new ExtensionSettings();
-
-		public static ExtensionSettings Extensions
-		{
-			get { return (_extensions); }
 		}
 	}
 }
