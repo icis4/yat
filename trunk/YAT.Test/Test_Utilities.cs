@@ -1,8 +1,8 @@
 using System;
 
-using HSR.Utilities.Types;
+using MKY.Utilities.Types;
 
-namespace HSR.YAT.Test
+namespace MKY.YAT.Test
 {
 	public class Test_Utilities
 	{

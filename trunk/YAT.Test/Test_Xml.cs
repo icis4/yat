@@ -4,13 +4,13 @@ using System.Text;
 using System.IO;
 using System.Xml.Serialization;
 
-using HSR.Utilities.Recent;
-using HSR.YAT.Settings.Document;
-using HSR.YAT.Domain.Settings;
-using HSR.YAT.Gui;
-using HSR.YAT.Gui.Settings;
+using MKY.Utilities.Recent;
+using MKY.YAT.Settings.Document;
+using MKY.YAT.Domain.Settings;
+using MKY.YAT.Gui;
+using MKY.YAT.Gui.Settings;
 
-namespace HSR.YAT.Test
+namespace MKY.YAT.Test
 {
 	public class Test_Xml
 	{

@@ -1,10 +1,10 @@
 using System;
 
-using HSR.YAT.Settings;
-using HSR.YAT.Domain;
-using HSR.YAT.Domain.Settings;
+using MKY.YAT.Settings;
+using MKY.YAT.Domain;
+using MKY.YAT.Domain.Settings;
 
-namespace HSR.YAT.Test
+namespace MKY.YAT.Test
 {
 	public class Test_RawTerminal
 	{
