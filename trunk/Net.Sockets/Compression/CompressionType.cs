@@ -38,9 +38,9 @@
 using System;
 using System.Collections.Generic;
 
-using HSR.Utilities.Types;
+using MKY.Utilities.Types;
 
-namespace HSR.Net.Sockets.Compression
+namespace MKY.Net.Sockets.Compression
 {
 	#region Enum CompressionType
 
@@ -113,16 +113,32 @@ namespace HSR.Net.Sockets.Compression
 		/// <summary></summary>
 		public static XCompressionType Parse(string type)
 		{
+			XCompressionType result;
+
+			if (TryParse(type, out result))
+				return (result);
+			else
+				throw (new ArgumentOutOfRangeException(type));
+		}
+
+		/// <summary></summary>
+		public static bool TryParse(string type, out XCompressionType result)
+		{
 			if      (string.Compare(type, None_string, true) == 0)
 			{
-				return (new XCompressionType(CompressionType.None));
+				result = new XCompressionType(CompressionType.None);
+				return (true);
 			}
 			else if (string.Compare(type, GZip_string, true) == 0)
 			{
-				return (new XCompressionType(CompressionType.GZip));
+				result = new XCompressionType(CompressionType.GZip);
+				return (true);
 			}
-
-			throw (new ArgumentOutOfRangeException(type));
+			else
+			{
+				result = null;
+				return (false);
+			}
 		}
 
 		#endregion

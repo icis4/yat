@@ -41,7 +41,7 @@ using System.Text;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 
-namespace HSR.Net.Sockets.Cryptography
+namespace MKY.Net.Sockets.Cryptography
 {
 	/// <summary>
 	/// Base class for ICryptoServive. Use it overriding the virtual methods.

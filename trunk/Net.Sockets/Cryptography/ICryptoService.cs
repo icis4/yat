@@ -41,7 +41,7 @@ using System.Threading;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 
-namespace HSR.Net.Sockets.Cryptography
+namespace MKY.Net.Sockets.Cryptography
 {
     /// <summary>
     /// Crypto service methods.

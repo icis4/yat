@@ -40,7 +40,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 
-namespace HSR.Net.Sockets
+namespace MKY.Net.Sockets
 {
 	#region ISocketConnection
 

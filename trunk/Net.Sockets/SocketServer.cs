@@ -39,7 +39,7 @@ using System;
 using System.Threading;
 using System.Net;
 
-namespace HSR.Net.Sockets
+namespace MKY.Net.Sockets
 {
 
     /// <summary>

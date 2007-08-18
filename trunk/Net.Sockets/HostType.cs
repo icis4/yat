@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-using HSR.Utilities.Types;
+using MKY.Utilities.Types;
 
-namespace HSR.Net.Sockets
+namespace MKY.Net.Sockets
 {
 	#region Enum HostType
 
@@ -89,25 +89,41 @@ namespace HSR.Net.Sockets
 		/// <summary></summary>
 		public static XHostType Parse(string type)
 		{
+			XHostType result;
+
+			if (TryParse(type, out result))
+				return (result);
+			else
+				throw (new ArgumentOutOfRangeException(type));
+		}
+
+		/// <summary></summary>
+		public static bool TryParse(string type, out XHostType result)
+		{
 			if      (string.Compare(type, TcpClient_string, true) == 0)
 			{
-				return (new XHostType(HostType.TcpClient));
+				result = new XHostType(HostType.TcpClient);
+				return (true);
 			}
 			else if (string.Compare(type, TcpServer_string, true) == 0)
 			{
-				return (new XHostType(HostType.TcpServer));
+				result = new XHostType(HostType.TcpServer);
+				return (true);
 			}
 			else if (string.Compare(type, TcpAutoSocket_string, true) == 0)
 			{
-				return (new XHostType(HostType.TcpAutoSocket));
+				result = new XHostType(HostType.TcpAutoSocket);
+				return (true);
 			}
 			else if (string.Compare(type, Udp_string, true) == 0)
 			{
-				return (new XHostType(HostType.Udp));
+				result = new XHostType(HostType.Udp);
+				return (true);
 			}
 			else
 			{
-				return (new XHostType(HostType.Unknown));
+				result = null;
+				return (false);
 			}
 		}
 

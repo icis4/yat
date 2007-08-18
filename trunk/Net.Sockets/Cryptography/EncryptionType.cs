@@ -38,9 +38,9 @@
 using System;
 using System.Collections.Generic;
 
-using HSR.Utilities.Types;
+using MKY.Utilities.Types;
 
-namespace HSR.Net.Sockets.Cryptography
+namespace MKY.Net.Sockets.Cryptography
 {
 	#region Enum EncryptionType
 
@@ -72,7 +72,7 @@ namespace HSR.Net.Sockets.Cryptography
 		private const string None_string      = "None";
 		private const string Base64_string    = "Base 64";
 		private const string TripleDES_string = "Triple DES";
-		private const string Rijndael_string  = "Rijndael";
+		private const string Rijndael_string  = "AES (Rijndael)";
 		private const string SSL_string       = "SSL";
 
 		#endregion
@@ -128,28 +128,47 @@ namespace HSR.Net.Sockets.Cryptography
 		/// <summary></summary>
 		public static XEncryptionType Parse(string type)
 		{
+			XEncryptionType result;
+
+			if (TryParse(type, out result))
+				return (result);
+			else
+				throw (new ArgumentOutOfRangeException(type));
+		}
+
+		/// <summary></summary>
+		public static bool TryParse(string type, out XEncryptionType result)
+		{
 			if      (string.Compare(type, None_string, true) == 0)
 			{
-				return (new XEncryptionType(EncryptionType.None));
+				result = new XEncryptionType(EncryptionType.None);
+				return (true);
 			}
 			else if (string.Compare(type, Base64_string, true) == 0)
 			{
-				return (new XEncryptionType(EncryptionType.Base64));
+				result = new XEncryptionType(EncryptionType.Base64);
+				return (true);
 			}
 			else if (string.Compare(type, TripleDES_string, true) == 0)
 			{
-				return (new XEncryptionType(EncryptionType.TripleDES));
+				result = new XEncryptionType(EncryptionType.TripleDES);
+				return (true);
 			}
 			else if (string.Compare(type, Rijndael_string, true) == 0)
 			{
-				return (new XEncryptionType(EncryptionType.Rijndael));
+				result = new XEncryptionType(EncryptionType.Rijndael);
+				return (true);
 			}
 			else if (string.Compare(type, SSL_string, true) == 0)
 			{
-				return (new XEncryptionType(EncryptionType.SSL));
+				result = new XEncryptionType(EncryptionType.SSL);
+				return (true);
 			}
-
-			throw (new ArgumentOutOfRangeException(type));
+			else
+			{
+				result = null;
+				return (false);
+			}
 		}
 
 		#endregion

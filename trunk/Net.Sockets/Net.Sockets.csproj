@@ -7,8 +7,8 @@
     <ProjectGuid>{307EFF74-9C31-4943-87A9-E7686551C4D1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HSR.Net.Sockets</RootNamespace>
-    <AssemblyName>HSR.Net.Sockets</AssemblyName>
+    <RootNamespace>MKY.Net.Sockets</RootNamespace>
+    <AssemblyName>Net.Sockets</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\Net.Sockets.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -20,7 +20,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\HSR.Net.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\Net.xml</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,7 +30,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\HSR.Net.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Net.xml</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

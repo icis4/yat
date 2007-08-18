@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HSR.Net.Sockets
+namespace MKY.Net.Sockets
 {
 	/// <summary>
 	/// Max reconnect attempts reached.

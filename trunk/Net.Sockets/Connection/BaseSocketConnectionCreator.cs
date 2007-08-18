@@ -47,7 +47,7 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
-namespace HSR.Net.Sockets
+namespace MKY.Net.Sockets
 {
 	/// <summary></summary>
 	public struct AuthMessage
@@ -72,7 +72,7 @@ namespace HSR.Net.Sockets
     {
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		#region Fields
@@ -339,7 +339,7 @@ namespace HSR.Net.Sockets
 			}
 			catch (Exception exOuter)
 			{
-				HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+				MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
 				if (!IsDisposed)
 				{
 					try
@@ -348,7 +348,7 @@ namespace HSR.Net.Sockets
 					}
 					catch (Exception exInner)
 					{
-						HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+						MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
 						FHost.FireOnException(new ExceptionEventArgs(exInner));
 					}
 				}
@@ -389,7 +389,7 @@ namespace HSR.Net.Sockets
 							}
 							catch (FormatException ex)
 							{
-								HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, ex);
+								MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, ex);
 								//----- Base64 transformation error!
 							}
 
@@ -459,7 +459,7 @@ namespace HSR.Net.Sockets
 			}
 			catch (Exception exOuter)
 			{
-				HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+				MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
 				if (!IsDisposed)
 				{
 					try
@@ -468,7 +468,7 @@ namespace HSR.Net.Sockets
 					}
 					catch (Exception exInner)
 					{
-						HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+						MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
 						FHost.FireOnException(new ExceptionEventArgs(exInner));
 					}
 				}
@@ -514,14 +514,14 @@ namespace HSR.Net.Sockets
 			}
 			catch (Exception exOuter)
 			{
-				HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+				MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
 				try
 				{
 					connection.BeginDisconnect(exOuter);
 				}
 				catch (Exception exInner)
 				{
-					HSR.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+					MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
 					FHost.FireOnException(new ExceptionEventArgs(exInner));
 				}
 			}

@@ -41,7 +41,7 @@ using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Diagnostics;
 
-namespace HSR.Net.Sockets.Cryptography
+namespace MKY.Net.Sockets.Cryptography
 {
 
     /// <summary>

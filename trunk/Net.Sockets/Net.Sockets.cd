@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Font Name="Tahoma" Size="8.25" />
-  <Class Name="HSR.Net.Sockets.ServerSocketConnection">
+  <Class Name="MKY.Net.Sockets.ServerSocketConnection">
     <Position X="6.5" Y="7.25" Width="2" />
     <TypeIdentifier>
       <FileName>Connection\ServerSocketConnection.cs</FileName>
@@ -9,7 +9,7 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="HSR.Net.Sockets.BaseSocketConnection">
+  <Class Name="MKY.Net.Sockets.BaseSocketConnection">
     <Position X="5.25" Y="0.5" Width="2.25" />
     <TypeIdentifier>
       <FileName>Connection\BaseSocketConnection.cs</FileName>
@@ -20,7 +20,7 @@
     </Compartments>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="HSR.Net.Sockets.BaseSocketConnectionCreator">
+  <Class Name="MKY.Net.Sockets.BaseSocketConnectionCreator">
     <Position X="9.75" Y="0.5" Width="2.25" />
     <TypeIdentifier>
       <FileName>Connection\BaseSocketConnectionCreator.cs</FileName>
@@ -31,7 +31,7 @@
     </Compartments>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="HSR.Net.Sockets.BaseSocketConnectionHost">
+  <Class Name="MKY.Net.Sockets.BaseSocketConnectionHost">
     <Position X="13.5" Y="0.5" Width="2" />
     <TypeIdentifier>
       <FileName>Connection\BaseSocketConnectionHost.cs</FileName>
@@ -42,7 +42,7 @@
     </Compartments>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="HSR.Net.Sockets.ClientSocketConnection">
+  <Class Name="MKY.Net.Sockets.ClientSocketConnection">
     <Position X="4.25" Y="7.25" Width="2" />
     <TypeIdentifier>
       <FileName>Connection\ClientSocketConnection.cs</FileName>
@@ -53,7 +53,7 @@
     </Compartments>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="HSR.Net.Sockets.SocketClient">
+  <Class Name="MKY.Net.Sockets.SocketClient">
     <Position X="16" Y="3.5" Width="2.25" />
     <TypeIdentifier>
       <FileName>SocketClient.cs</FileName>
@@ -63,7 +63,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
   </Class>
-  <Class Name="HSR.Net.Sockets.SocketListener">
+  <Class Name="MKY.Net.Sockets.SocketListener">
     <Position X="11" Y="5" Width="2" />
     <TypeIdentifier>
       <FileName>SocketListener.cs</FileName>
@@ -73,7 +73,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
   </Class>
-  <Class Name="HSR.Net.Sockets.SocketServer">
+  <Class Name="MKY.Net.Sockets.SocketServer">
     <Position X="16" Y="6.5" Width="2.25" />
     <TypeIdentifier>
       <FileName>SocketServer.cs</FileName>
@@ -83,7 +83,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
   </Class>
-  <Class Name="HSR.Net.Sockets.SocketConnector">
+  <Class Name="MKY.Net.Sockets.SocketConnector">
     <Position X="8.75" Y="5" Width="2" />
     <TypeIdentifier>
       <FileName>SocketConnector.cs</FileName>
@@ -93,28 +93,28 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
   </Class>
-  <Interface Name="HSR.Net.Sockets.ISocketConnection">
+  <Interface Name="MKY.Net.Sockets.ISocketConnection">
     <Position X="1.75" Y="0.5" Width="1.75" />
     <TypeIdentifier>
       <FileName>Connection\ISocketConnection.cs</FileName>
       <HashCode>BABAAAAAAAAAAAgwAAIAIAAQIAAAAAQAAAEAAAAAIQg=</HashCode>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="HSR.Net.Sockets.IClientSocketConnection">
+  <Interface Name="MKY.Net.Sockets.IClientSocketConnection">
     <Position X="0.5" Y="4.5" Width="2" />
     <TypeIdentifier>
       <FileName>Connection\ISocketConnection.cs</FileName>
       <HashCode>AAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="HSR.Net.Sockets.IServerSocketConnection">
+  <Interface Name="MKY.Net.Sockets.IServerSocketConnection">
     <Position X="2.75" Y="4.5" Width="2" />
     <TypeIdentifier>
       <FileName>Connection\ISocketConnection.cs</FileName>
       <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAgAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="HSR.Net.Sockets.ISocketService" Collapsed="true">
+  <Interface Name="MKY.Net.Sockets.ISocketService" Collapsed="true">
     <Position X="16.25" Y="0.5" Width="1.75" />
     <TypeIdentifier>
       <FileName>Service\ISocketService.cs</FileName>

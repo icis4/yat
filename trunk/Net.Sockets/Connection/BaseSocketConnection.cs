@@ -42,7 +42,7 @@ using System.Security.Cryptography;
 using System.IO;
 using System.Collections.Generic;
 
-namespace HSR.Net.Sockets
+namespace MKY.Net.Sockets
 {
 
     /// <summary>
@@ -52,7 +52,7 @@ namespace HSR.Net.Sockets
     {
 
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool FIsDisposed = false;
