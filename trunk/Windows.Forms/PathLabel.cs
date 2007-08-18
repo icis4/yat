@@ -6,9 +6,9 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-using HSR.Utilities.Drawing;
+using MKY.Utilities.Drawing;
 
-namespace HSR.Windows.Forms
+namespace MKY.Windows.Forms
 {
 	/// <summary>
 	/// Provides a label that displays path strings with ellipsis.

@@ -7,8 +7,8 @@
     <ProjectGuid>{CB2E6173-CB9F-4FB4-8948-30D04D4BAE50}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HSR.Windows.Forms</RootNamespace>
-    <AssemblyName>HSR.Windows.Forms</AssemblyName>
+    <RootNamespace>MKY.Windows.Forms</RootNamespace>
+    <AssemblyName>Windows.Forms</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\Windows.Forms.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -21,6 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\HSR.Windows.Forms.XML</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -45,6 +47,12 @@
       <DependentUpon>PathLabel.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StatusBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatusBox.Designer.cs">
+      <DependentUpon>StatusBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="TextInputBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -60,6 +68,10 @@
     <EmbeddedResource Include="PathLabel.resx">
       <SubType>Designer</SubType>
       <DependentUpon>PathLabel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatusBox.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>StatusBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TextInputBox.resx">
       <DependentUpon>TextInputBox.cs</DependentUpon>
