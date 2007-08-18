@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace HSR.Windows.Forms
+namespace MKY.Windows.Forms
 {
 	/// <summary>
 	/// Provides a simple text input box similar to <see cref="MessageBox"/>.
@@ -15,7 +15,7 @@ namespace HSR.Windows.Forms
 	public partial class TextInputBox : Form
 	{
 		//------------------------------------------------------------------------------------------
-		// Attributes
+		// Fields
 		//------------------------------------------------------------------------------------------
 
 		private bool _isStartingUp = true;

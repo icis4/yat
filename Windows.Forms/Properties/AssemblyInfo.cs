@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Windows.Forms")]
 [assembly: AssemblyDescription("Windows.Forms extension")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("HSR")]
+[assembly: AssemblyCompany("YAT")]
 [assembly: AssemblyProduct("Windows.Forms")]
 [assembly: AssemblyCopyright("Copyright © 2006 HSR Hochschule für Technik Rapperswil and Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]

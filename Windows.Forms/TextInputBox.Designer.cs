@@ -1,4 +1,4 @@
-namespace HSR.Windows.Forms
+namespace MKY.Windows.Forms
 {
 	partial class TextInputBox
 	{
@@ -47,7 +47,7 @@ namespace HSR.Windows.Forms
 			// 
 			this.button_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_OK.Location = new System.Drawing.Point(25, 94);
+			this.button_OK.Location = new System.Drawing.Point(25, 80);
 			this.button_OK.Name = "button_OK";
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 2;
@@ -59,7 +59,7 @@ namespace HSR.Windows.Forms
 			// 
 			this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button_Cancel.Location = new System.Drawing.Point(106, 94);
+			this.button_Cancel.Location = new System.Drawing.Point(106, 80);
 			this.button_Cancel.Name = "button_Cancel";
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 3;
@@ -75,7 +75,7 @@ namespace HSR.Windows.Forms
 			this.textBox_InputText.Name = "textBox_InputText";
 			this.textBox_InputText.Size = new System.Drawing.Size(156, 20);
 			this.textBox_InputText.TabIndex = 1;
-			this.textBox_InputText.Text = "<Initial Text>";
+			this.textBox_InputText.Text = "<InitialText>";
 			this.textBox_InputText.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_InputText_Validating);
 			// 
 			// TextInputBox
@@ -85,7 +85,7 @@ namespace HSR.Windows.Forms
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(205, 139);
+			this.ClientSize = new System.Drawing.Size(205, 119);
 			this.Controls.Add(this.textBox_InputText);
 			this.Controls.Add(this.button_Cancel);
 			this.Controls.Add(this.button_OK);
@@ -93,7 +93,7 @@ namespace HSR.Windows.Forms
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(211, 175);
+			this.MinimumSize = new System.Drawing.Size(211, 144);
 			this.Name = "TextInputBox";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
