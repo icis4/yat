@@ -3,7 +3,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
 
-namespace HSR.YAT.Test
+namespace MKY.YAT.Test
 {
 	public class Test_Settings
 	{
@@ -16,12 +16,12 @@ namespace HSR.YAT.Test
 
 		private static void Test_Serialization(string filePath)
 		{
-			Settings.Document.DocumentSettings settings = new Settings.Document.DocumentSettings();
+			Settings.Document.TerminalSettings settings = new Settings.Document.TerminalSettings();
 			//Gui.Settings.FormatSettings settings = new Gui.Settings.FormatSettings();
 
 			XmlTextWriter writer = new XmlTextWriter(filePath, null);
 			writer.Formatting = Formatting.Indented;
-			XmlSerializer serializer = new XmlSerializer(typeof(Settings.Document.DocumentSettings));
+			XmlSerializer serializer = new XmlSerializer(typeof(Settings.Document.TerminalSettings));
 			//XmlSerializer serializer = new XmlSerializer(typeof(Gui.Settings.FormatSettings));
 			serializer.Serialize(writer, settings);
 			writer.Close();

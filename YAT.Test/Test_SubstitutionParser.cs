@@ -1,8 +1,8 @@
 using System;
 
-using HSR.YAT.Domain;
+using MKY.YAT.Domain;
 
-namespace HSR.YAT.Test
+namespace MKY.YAT.Test
 {
 	public class Test_SubstitutionParser
 	{
