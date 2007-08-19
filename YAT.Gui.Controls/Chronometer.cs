@@ -137,9 +137,9 @@ namespace MKY.YAT.Gui.Controls
 
 		#endregion
 
-		#region Control Event Handlers
+		#region Controls Event Handlers
 		//------------------------------------------------------------------------------------------
-		// Control Event Handlers
+		// Controls Event Handlers
 		//------------------------------------------------------------------------------------------
 
 		private void timer_Chronometer_Tick(object sender, EventArgs e)

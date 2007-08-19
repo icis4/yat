@@ -69,7 +69,7 @@ namespace MKY.YAT.Gui.Forms
 			this.linkLabel_HHD.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_HHD.Location = new System.Drawing.Point(12, 160);
 			this.linkLabel_HHD.Name = "linkLabel_HHD";
-			this.linkLabel_HHD.Size = new System.Drawing.Size(541, 26);
+			this.linkLabel_HHD.Size = new System.Drawing.Size(538, 26);
 			this.linkLabel_HHD.TabIndex = 7;
 			this.linkLabel_HHD.Text = resources.GetString("linkLabel_HHD.Text");
 			this.linkLabel_HHD.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);

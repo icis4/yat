@@ -66,11 +66,7 @@ namespace MKY.YAT.Gui.Controls
 		{
 			InitializeComponent();
 
-			comboBox_BaudRate.Items.AddRange(IO.Ports.XBaudRate.GetItems());
-			comboBox_DataBits.Items.AddRange(IO.Ports.XDataBits.GetItems());
-			comboBox_Parity.Items.AddRange(IO.Ports.XParity.GetItems());
-			comboBox_StopBits.Items.AddRange(IO.Ports.XStopBits.GetItems());
-			comboBox_Handshake.Items.AddRange(Domain.IO.XHandshake.GetItems());
+			InitializeControls();
 			SetControls();
 		}
 
@@ -240,6 +236,19 @@ namespace MKY.YAT.Gui.Controls
 		//------------------------------------------------------------------------------------------
 		// Private Methods
 		//------------------------------------------------------------------------------------------
+
+		private void InitializeControls()
+		{
+			_isSettingControls = true;
+
+			comboBox_BaudRate.Items.AddRange(IO.Ports.XBaudRate.GetItems());
+			comboBox_DataBits.Items.AddRange(IO.Ports.XDataBits.GetItems());
+			comboBox_Parity.Items.AddRange(IO.Ports.XParity.GetItems());
+			comboBox_StopBits.Items.AddRange(IO.Ports.XStopBits.GetItems());
+			comboBox_Handshake.Items.AddRange(Domain.IO.XHandshake.GetItems());
+
+			_isSettingControls = false;
+		}
 
 		private void SetControls()
 		{

@@ -225,7 +225,9 @@ namespace MKY.YAT.Gui.Controls
 
 			if (comboBox_Port.Items.Count > 0)
 			{
-				if (old != null)
+				if (_portId != null)
+					comboBox_Port.SelectedItem = _portId;
+				else if (old != null)
 					comboBox_Port.SelectedItem = old;
 				else
 					comboBox_Port.SelectedIndex = 0;

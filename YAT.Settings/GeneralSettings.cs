@@ -10,9 +10,12 @@ namespace MKY.YAT.Settings
 	[Serializable]
 	public class GeneralSettings : Utilities.Settings.Settings, IEquatable<GeneralSettings>
 	{
+		/// <summary></summary>
+		public static readonly string CurrentWorkspaceFilePathDefault = Application.LocalUserAppDataPath + Path.DirectorySeparatorChar + "DefaultWorkspace" + ExtensionSettings.WorkspaceFiles;
+
 		private bool _autoOpenWorkspace;
 		private bool _autoSaveWorkspace;
-		private string _currentWorkspaceFile;
+		private string _currentWorkspaceFilePath;
 		private bool _detectSerialPortsInUse;
 
 		public GeneralSettings()
@@ -31,20 +34,20 @@ namespace MKY.YAT.Settings
 		public GeneralSettings(GeneralSettings rhs)
 			: base(rhs)
 		{
-			AutoOpenWorkspace      = rhs.AutoOpenWorkspace;
-			AutoSaveWorkspace      = rhs.AutoSaveWorkspace;
-			CurrentWorkspaceFile   = rhs.CurrentWorkspaceFile;
-			DetectSerialPortsInUse = rhs.DetectSerialPortsInUse;
+			AutoOpenWorkspace        = rhs.AutoOpenWorkspace;
+			AutoSaveWorkspace        = rhs.AutoSaveWorkspace;
+			CurrentWorkspaceFilePath = rhs.CurrentWorkspaceFilePath;
+			DetectSerialPortsInUse   = rhs.DetectSerialPortsInUse;
 
 			ClearChanged();
 		}
 
 		protected override void SetMyDefaults()
 		{
-			AutoOpenWorkspace      = true;
-			AutoSaveWorkspace      = true;
-			CurrentWorkspaceFile   = Application.LocalUserAppDataPath + Path.DirectorySeparatorChar + "DefaultWorkspace" + ExtensionSettings.WorkspaceFiles;
-			DetectSerialPortsInUse = true;
+			AutoOpenWorkspace        = true;
+			AutoSaveWorkspace        = true;
+			CurrentWorkspaceFilePath = CurrentWorkspaceFilePathDefault;
+			DetectSerialPortsInUse   = true;
 		}
 
 		#region Properties
@@ -80,15 +83,15 @@ namespace MKY.YAT.Settings
 			}
 		}
 
-		[XmlElement("CurrentWorkspaceFile")]
-		public string CurrentWorkspaceFile
+		[XmlElement("CurrentWorkspaceFilePath")]
+		public string CurrentWorkspaceFilePath
 		{
-			get { return (_currentWorkspaceFile); }
+			get { return (_currentWorkspaceFilePath); }
 			set
 			{
-				if (_currentWorkspaceFile != value)
+				if (_currentWorkspaceFilePath != value)
 				{
-					_currentWorkspaceFile = value;
+					_currentWorkspaceFilePath = value;
 					SetChanged();
 				}
 			}
@@ -135,7 +138,7 @@ namespace MKY.YAT.Settings
 					(
 					_autoOpenWorkspace.Equals(value._autoOpenWorkspace) &&
 					_autoSaveWorkspace.Equals(value._autoSaveWorkspace) &&
-					_currentWorkspaceFile.Equals(value._currentWorkspaceFile) &&
+					_currentWorkspaceFilePath.Equals(value._currentWorkspaceFilePath) &&
 					_detectSerialPortsInUse.Equals(value._detectSerialPortsInUse)
 					);
 			}

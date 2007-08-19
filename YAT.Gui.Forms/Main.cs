@@ -52,7 +52,7 @@ namespace MKY.YAT.Gui.Forms
 		//------------------------------------------------------------------------------------------
 
 		// Important note to ensure proper z-order of this form:
-		// - With visual designer, proceed with the following order
+		// - With visual designer, proceed in the following order
 		//     1. Add control ToolStripPanel to the toolbox
 		//     2. Place three panels onto the form
 		//     3. Place the toolstrip into "toolStripPanel_Top"
@@ -61,7 +61,7 @@ namespace MKY.YAT.Gui.Forms
 		//     5. Dock "toolStripPanel_Top"
 		//     6. Dock "statusStrip_Main" to bottom
 		//     7. Dock "menuStrip_Main" to top
-		// - In source code, proceed according to the MenuStrip Class example in the MSDN
+		// - (In source code, proceed according to the MenuStrip class example in the MSDN)
 
 		public Main(string[] args, bool applicationSettingsLoaded)
 		{
@@ -74,7 +74,9 @@ namespace MKY.YAT.Gui.Forms
 		private void Initialize(bool applicationSettingsLoaded)
 		{
 			InitializeRecents();
+
 			_workspaceSettingsHandler = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
+			_workspaceSettingsHandler.SettingsFilePath = ApplicationSettings.LocalUser.General.CurrentWorkspaceFilePath;
 			_workspaceSettings = _workspaceSettingsHandler.Settings;
 
 			// form title
@@ -105,10 +107,18 @@ namespace MKY.YAT.Gui.Forms
 				_isStartingUp = false;
 
 				bool success = false;
+
 				if ((_commandLineArgs != null) && (_commandLineArgs.Length >= 1))
 				{
 					success = OpenFromFile(_commandLineArgs[0]);
 				}
+
+				if (!success && ApplicationSettings.LocalUser.General.AutoOpenWorkspace)
+				{
+					if (File.Exists(ApplicationSettings.LocalUser.General.CurrentWorkspaceFilePath))
+						success = OpenWorkspaceFromFile(ApplicationSettings.LocalUser.General.CurrentWorkspaceFilePath);
+				}
+
 				if (!success)
 				{
 					ShowNewTerminalDialog();
@@ -608,7 +618,7 @@ namespace MKY.YAT.Gui.Forms
 				Refresh();
 
 				ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
-				OpenTerminalFromFile(ofd.FileName);
+				OpenWorkspaceFromFile(ofd.FileName);
 			}
 			else
 			{
@@ -623,11 +633,15 @@ namespace MKY.YAT.Gui.Forms
 			if (MdiChildren.Length > 0)
 				return (false);
 
+			SetFixedStatusText("Opening workspace...");
 			try
 			{
 				_workspaceSettingsHandler.SettingsFilePath = filePath;
 				_workspaceSettingsHandler.Load();
-				SetRecent(filePath);
+				_workspaceSettings = _workspaceSettingsHandler.Settings;
+
+				if (filePath != GeneralSettings.CurrentWorkspaceFilePathDefault)
+					SetRecent(filePath);
 
 				SetTimedStatusText("Workspace opened");
 			}
@@ -650,11 +664,48 @@ namespace MKY.YAT.Gui.Forms
 				return (false);
 			}
 
+			int terminalCount = _workspaceSettings.Workspace.TerminalSettingsItems.Count;
+			if (terminalCount == 1)
+				SetFixedStatusText("Opening workspace terminal...");
+			else if (terminalCount > 1)
+				SetFixedStatusText("Opening workspace terminals...");
+
 			foreach (TerminalSettingsItem item in _workspaceSettings.Workspace.TerminalSettingsItems)
 			{
-				if (!OpenTerminalFromFile(item.FilePath))
-					return (false);
+				try
+				{
+					OpenTerminalFromFile(item.FilePath, true);
+				}
+				catch (System.Xml.XmlException ex)
+				{
+					SetFixedStatusText("Error opening terminal!");
+
+					DialogResult result = MessageBox.Show
+						(
+						this,
+						"Unable to open file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
+						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
+						"File error message: " + ex.InnerException.Message + Environment.NewLine + Environment.NewLine +
+						"Continue loading workspace?",
+						"File Error",
+						MessageBoxButtons.YesNo,
+						MessageBoxIcon.Exclamation
+						);
+
+					SetTimedStatusText("Terminal not opened!");
+
+					if (result == DialogResult.No)
+						break;
+				}
 			}
+
+			if (terminalCount == 1)
+				SetTimedStatusText("Workspace terminal opened");
+			else if (terminalCount > 1)
+				SetTimedStatusText("Workspace terminals opened");
+			else
+				SetTimedStatusText("Workspace contains no terminal to open");
+
 			return (true);
 		}
 
@@ -813,6 +864,12 @@ namespace MKY.YAT.Gui.Forms
 
 		private bool OpenTerminalFromFile(string filePath)
 		{
+			return (OpenTerminalFromFile(filePath, false));
+		}
+
+		private bool OpenTerminalFromFile(string filePath, bool suppressErrorHandling)
+		{
+			SetFixedStatusText("Opening terminal...");
 			try
 			{
 				DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> sh = new DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot>();
@@ -833,21 +890,28 @@ namespace MKY.YAT.Gui.Forms
 			}
 			catch (System.Xml.XmlException ex)
 			{
-				SetFixedStatusText("Error opening terminal!");
+				if (!suppressErrorHandling)
+				{
+					SetFixedStatusText("Error opening terminal!");
 
-				MessageBox.Show
-					(
-					this,
-					"Unable to open file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
-					"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
-					"File error message: " + ex.InnerException.Message,
-					"File Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Stop
-					);
+					MessageBox.Show
+						(
+						this,
+						"Unable to open file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
+						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
+						"File error message: " + ex.InnerException.Message,
+						"File Error",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Stop
+						);
 
-				SetTimedStatusText("No terminal opened!");
-				return (false);
+					SetTimedStatusText("Terminal not opened!");
+					return (false);
+				}
+				else
+				{
+					throw (ex);
+				}
 			}
 		}
 
@@ -900,6 +964,7 @@ namespace MKY.YAT.Gui.Forms
 
 		private void mdi_child_TerminalSaved(object sender, TerminalSavedEventArgs e)
 		{
+			AddToWorkspace((Terminal)sender);
 			SetRecent(e.FilePath);
 			SetTimedStatus(Status.ChildSaved);
 			SetToolControls();

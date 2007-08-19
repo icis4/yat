@@ -43,6 +43,7 @@ namespace MKY.YAT.Gui.Forms
 			this.toolStripMenuItem_RadixContextMenu_Oct = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_RadixContextMenu_Dec = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_RadixContextMenu_Hex = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_View_Radix = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_MonitorContextMenu_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_ShowLength = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,7 +66,6 @@ namespace MKY.YAT.Gui.Forms
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_MonitorContextMenu_7 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_Print = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_View_Radix = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Send = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem_SendContextMenu_Command = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_File = new System.Windows.Forms.ToolStripMenuItem();
@@ -265,7 +265,7 @@ namespace MKY.YAT.Gui.Forms
             this.toolStripMenuItem_RadixContextMenu_Dec,
             this.toolStripMenuItem_RadixContextMenu_Hex});
 			this.contextMenuStrip_Radix.Name = "contextMenuStrip_Radix";
-			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_TerminalMenu_View_Radix;
+			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_MonitorContextMenu_Radix;
 			this.contextMenuStrip_Radix.Size = new System.Drawing.Size(146, 142);
 			this.contextMenuStrip_Radix.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Radix_Opening);
 			// 
@@ -317,6 +317,13 @@ namespace MKY.YAT.Gui.Forms
 			this.toolStripMenuItem_RadixContextMenu_Hex.Size = new System.Drawing.Size(145, 22);
 			this.toolStripMenuItem_RadixContextMenu_Hex.Text = "&Hexadecimal";
 			this.toolStripMenuItem_RadixContextMenu_Hex.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Hex_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_View_Radix
+			// 
+			this.toolStripMenuItem_TerminalMenu_View_Radix.DropDown = this.contextMenuStrip_Radix;
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Name = "toolStripMenuItem_TerminalMenu_View_Radix";
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(169, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Text = "&Radix";
 			// 
 			// toolStripSeparator_MonitorContextMenu_1
 			// 
@@ -469,13 +476,6 @@ namespace MKY.YAT.Gui.Forms
 			this.toolStripMenuItem_MonitorContextMenu_Print.Text = "Print...";
 			this.toolStripMenuItem_MonitorContextMenu_Print.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Print_Click);
 			// 
-			// toolStripMenuItem_TerminalMenu_View_Radix
-			// 
-			this.toolStripMenuItem_TerminalMenu_View_Radix.DropDown = this.contextMenuStrip_Radix;
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Name = "toolStripMenuItem_TerminalMenu_View_Radix";
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(169, 22);
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Text = "&Radix";
-			// 
 			// contextMenuStrip_Send
 			// 
 			this.contextMenuStrip_Send.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -561,8 +561,7 @@ namespace MKY.YAT.Gui.Forms
             this.toolStripSeparator_PredefinedContextMenu_3,
             this.toolStripMenuItem_PredefinedContextMenu_Hide});
 			this.contextMenuStrip_Predefined.Name = "contextMenuStrip_PredefinedCommands";
-			this.contextMenuStrip_Predefined.OwnerItem = this.toolStripMenuItem_TerminalMenu_Send_Predefined;
-			this.contextMenuStrip_Predefined.Size = new System.Drawing.Size(225, 352);
+			this.contextMenuStrip_Predefined.Size = new System.Drawing.Size(225, 374);
 			this.contextMenuStrip_Predefined.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Predefined_Opening);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_Command_1
@@ -1368,7 +1367,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			this.splitContainer_Terminal.Panel2.Controls.Add(this.panel_SendCommand);
 			this.splitContainer_Terminal.Size = new System.Drawing.Size(712, 491);
-			this.splitContainer_Terminal.SplitterDistance = 396;
+			this.splitContainer_Terminal.SplitterDistance = 399;
 			this.splitContainer_Terminal.SplitterWidth = 1;
 			this.splitContainer_Terminal.TabIndex = 1;
 			this.splitContainer_Terminal.TabStop = false;
@@ -1388,7 +1387,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			this.splitContainer_Predefined.Panel2.Controls.Add(this.panel_Predefined);
 			this.splitContainer_Predefined.Panel2MinSize = 96;
-			this.splitContainer_Predefined.Size = new System.Drawing.Size(712, 396);
+			this.splitContainer_Predefined.Size = new System.Drawing.Size(712, 399);
 			this.splitContainer_Predefined.SplitterDistance = 536;
 			this.splitContainer_Predefined.TabIndex = 0;
 			this.splitContainer_Predefined.TabStop = false;
@@ -1400,7 +1399,7 @@ namespace MKY.YAT.Gui.Forms
 			this.panel_Monitor.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor.Name = "panel_Monitor";
 			this.panel_Monitor.Padding = new System.Windows.Forms.Padding(3, 3, 1, 0);
-			this.panel_Monitor.Size = new System.Drawing.Size(536, 396);
+			this.panel_Monitor.Size = new System.Drawing.Size(536, 399);
 			this.panel_Monitor.TabIndex = 0;
 			// 
 			// groupBox_Monitor
@@ -1411,7 +1410,7 @@ namespace MKY.YAT.Gui.Forms
 			this.groupBox_Monitor.Location = new System.Drawing.Point(3, 3);
 			this.groupBox_Monitor.Name = "groupBox_Monitor";
 			this.groupBox_Monitor.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.groupBox_Monitor.Size = new System.Drawing.Size(532, 393);
+			this.groupBox_Monitor.Size = new System.Drawing.Size(532, 396);
 			this.groupBox_Monitor.TabIndex = 0;
 			this.groupBox_Monitor.TabStop = false;
 			this.groupBox_Monitor.Text = "Monitor";
@@ -1431,7 +1430,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			this.splitContainer_MonitorLeft.Panel2.Controls.Add(this.splitContainer_MonitorRight);
 			this.splitContainer_MonitorLeft.Panel2MinSize = 100;
-			this.splitContainer_MonitorLeft.Size = new System.Drawing.Size(526, 377);
+			this.splitContainer_MonitorLeft.Size = new System.Drawing.Size(526, 380);
 			this.splitContainer_MonitorLeft.SplitterDistance = 172;
 			this.splitContainer_MonitorLeft.TabIndex = 0;
 			this.splitContainer_MonitorLeft.TabStop = false;
@@ -1444,7 +1443,7 @@ namespace MKY.YAT.Gui.Forms
 			this.panel_Monitor_Tx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Tx.Name = "panel_Monitor_Tx";
 			this.panel_Monitor_Tx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Tx.Size = new System.Drawing.Size(172, 377);
+			this.panel_Monitor_Tx.Size = new System.Drawing.Size(172, 380);
 			this.panel_Monitor_Tx.TabIndex = 0;
 			// 
 			// monitor_Tx
@@ -1454,7 +1453,7 @@ namespace MKY.YAT.Gui.Forms
 			this.monitor_Tx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Tx.Name = "monitor_Tx";
 			this.monitor_Tx.RepositoryType = MKY.YAT.Domain.RepositoryType.Tx;
-			this.monitor_Tx.Size = new System.Drawing.Size(166, 374);
+			this.monitor_Tx.Size = new System.Drawing.Size(166, 377);
 			this.monitor_Tx.TabIndex = 0;
 			this.monitor_Tx.CopyRequest += new System.EventHandler(this.monitor_Tx_CopyRequest);
 			this.monitor_Tx.PrintRequest += new System.EventHandler(this.monitor_Tx_PrintRequest);
@@ -1474,7 +1473,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			this.splitContainer_MonitorRight.Panel2.Controls.Add(this.panel_Monitor_Rx);
 			this.splitContainer_MonitorRight.Panel2MinSize = 48;
-			this.splitContainer_MonitorRight.Size = new System.Drawing.Size(350, 377);
+			this.splitContainer_MonitorRight.Size = new System.Drawing.Size(350, 380);
 			this.splitContainer_MonitorRight.SplitterDistance = 175;
 			this.splitContainer_MonitorRight.TabIndex = 1;
 			this.splitContainer_MonitorRight.TabStop = false;
@@ -1487,7 +1486,7 @@ namespace MKY.YAT.Gui.Forms
 			this.panel_Monitor_Bidir.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Bidir.Name = "panel_Monitor_Bidir";
 			this.panel_Monitor_Bidir.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(175, 377);
+			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(175, 380);
 			this.panel_Monitor_Bidir.TabIndex = 0;
 			// 
 			// monitor_Bidir
@@ -1497,7 +1496,7 @@ namespace MKY.YAT.Gui.Forms
 			this.monitor_Bidir.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Bidir.Name = "monitor_Bidir";
 			this.monitor_Bidir.RepositoryType = MKY.YAT.Domain.RepositoryType.Bidir;
-			this.monitor_Bidir.Size = new System.Drawing.Size(169, 374);
+			this.monitor_Bidir.Size = new System.Drawing.Size(169, 377);
 			this.monitor_Bidir.TabIndex = 0;
 			this.monitor_Bidir.CopyRequest += new System.EventHandler(this.monitor_Bidir_CopyRequest);
 			this.monitor_Bidir.PrintRequest += new System.EventHandler(this.monitor_Bidir_PrintRequest);
@@ -1509,7 +1508,7 @@ namespace MKY.YAT.Gui.Forms
 			this.panel_Monitor_Rx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Rx.Name = "panel_Monitor_Rx";
 			this.panel_Monitor_Rx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Rx.Size = new System.Drawing.Size(171, 377);
+			this.panel_Monitor_Rx.Size = new System.Drawing.Size(171, 380);
 			this.panel_Monitor_Rx.TabIndex = 0;
 			// 
 			// monitor_Rx
@@ -1519,7 +1518,7 @@ namespace MKY.YAT.Gui.Forms
 			this.monitor_Rx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Rx.Name = "monitor_Rx";
 			this.monitor_Rx.RepositoryType = MKY.YAT.Domain.RepositoryType.Rx;
-			this.monitor_Rx.Size = new System.Drawing.Size(165, 374);
+			this.monitor_Rx.Size = new System.Drawing.Size(165, 377);
 			this.monitor_Rx.TabIndex = 0;
 			this.monitor_Rx.CopyRequest += new System.EventHandler(this.monitor_Rx_CopyRequest);
 			this.monitor_Rx.PrintRequest += new System.EventHandler(this.monitor_Rx_PrintRequest);
@@ -1531,7 +1530,7 @@ namespace MKY.YAT.Gui.Forms
 			this.panel_Predefined.Location = new System.Drawing.Point(0, 0);
 			this.panel_Predefined.Name = "panel_Predefined";
 			this.panel_Predefined.Padding = new System.Windows.Forms.Padding(1, 3, 3, 0);
-			this.panel_Predefined.Size = new System.Drawing.Size(172, 396);
+			this.panel_Predefined.Size = new System.Drawing.Size(172, 399);
 			this.panel_Predefined.TabIndex = 0;
 			// 
 			// groupBox_Predefined
@@ -1542,7 +1541,7 @@ namespace MKY.YAT.Gui.Forms
 			this.groupBox_Predefined.Location = new System.Drawing.Point(1, 3);
 			this.groupBox_Predefined.Name = "groupBox_Predefined";
 			this.groupBox_Predefined.Padding = new System.Windows.Forms.Padding(3, 9, 3, 3);
-			this.groupBox_Predefined.Size = new System.Drawing.Size(168, 393);
+			this.groupBox_Predefined.Size = new System.Drawing.Size(168, 396);
 			this.groupBox_Predefined.TabIndex = 0;
 			this.groupBox_Predefined.TabStop = false;
 			this.groupBox_Predefined.Text = "&Predefined Commands";
@@ -1553,7 +1552,7 @@ namespace MKY.YAT.Gui.Forms
 			this.predefined.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.predefined.Location = new System.Drawing.Point(3, 22);
 			this.predefined.Name = "predefined";
-			this.predefined.Size = new System.Drawing.Size(162, 368);
+			this.predefined.Size = new System.Drawing.Size(162, 371);
 			this.predefined.TabIndex = 0;
 			this.predefined.SelectedPageChanged += new System.EventHandler(this.predefined_SelectedPageChanged);
 			this.predefined.SendCommandRequest += new System.EventHandler<MKY.YAT.Gui.PredefinedCommandEventArgs>(this.predefined_SendCommandRequest);
@@ -1566,7 +1565,7 @@ namespace MKY.YAT.Gui.Forms
 			this.panel_SendCommand.Location = new System.Drawing.Point(0, 0);
 			this.panel_SendCommand.Name = "panel_SendCommand";
 			this.panel_SendCommand.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_SendCommand.Size = new System.Drawing.Size(712, 94);
+			this.panel_SendCommand.Size = new System.Drawing.Size(712, 91);
 			this.panel_SendCommand.TabIndex = 0;
 			// 
 			// splitContainer_SendCommand
@@ -1585,7 +1584,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			this.splitContainer_SendCommand.Panel2.Controls.Add(this.groupBox_SendFile);
 			this.splitContainer_SendCommand.Panel2MinSize = 45;
-			this.splitContainer_SendCommand.Size = new System.Drawing.Size(706, 91);
+			this.splitContainer_SendCommand.Size = new System.Drawing.Size(706, 88);
 			this.splitContainer_SendCommand.SplitterDistance = 45;
 			this.splitContainer_SendCommand.SplitterWidth = 1;
 			this.splitContainer_SendCommand.TabIndex = 1;
@@ -1632,7 +1631,7 @@ namespace MKY.YAT.Gui.Forms
 			this.groupBox_SendFile.Location = new System.Drawing.Point(0, 0);
 			this.groupBox_SendFile.Name = "groupBox_SendFile";
 			this.groupBox_SendFile.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.groupBox_SendFile.Size = new System.Drawing.Size(706, 45);
+			this.groupBox_SendFile.Size = new System.Drawing.Size(706, 48);
 			this.groupBox_SendFile.TabIndex = 0;
 			this.groupBox_SendFile.TabStop = false;
 			this.groupBox_SendFile.Text = "&File";
@@ -1652,7 +1651,7 @@ namespace MKY.YAT.Gui.Forms
 			this.sendFile.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.sendFile.Location = new System.Drawing.Point(3, 13);
 			this.sendFile.Name = "sendFile";
-			this.sendFile.Size = new System.Drawing.Size(700, 29);
+			this.sendFile.Size = new System.Drawing.Size(700, 32);
 			this.sendFile.TabIndex = 0;
 			this.sendFile.SendCommandRequest += new System.EventHandler(this.sendFile_SendCommandRequest);
 			this.sendFile.CommandChanged += new System.EventHandler(this.sendFile_CommandChanged);
