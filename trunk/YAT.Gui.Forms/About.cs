@@ -69,7 +69,7 @@ namespace MKY.YAT.Gui.Forms
 
 			// HHD
 			linkLabel_HHD.Text = "";
-			textBefore = "YAT is a terminal (a connection end point). If you're looking for a tool to monitor serial data between an application" + Environment.NewLine +
+			textBefore = "YAT is a terminal (a connection endpoint). If you're looking for a tool to monitor serial data between an application" + Environment.NewLine +
 						 "and a device, or between two devices, check out ";
 			textLink =                                                   "HHD Serial Monitor";
 			textAfter =                                                                    ". It's worth the bucks.";

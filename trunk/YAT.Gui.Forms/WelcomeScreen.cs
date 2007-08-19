@@ -6,7 +6,9 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Utilities.Settings;
 using MKY.YAT.Settings.Application;
+using MKY.YAT.Settings.Workspace;
 
 namespace MKY.YAT.Gui.Forms
 {
@@ -17,7 +19,8 @@ namespace MKY.YAT.Gui.Forms
 		//------------------------------------------------------------------------------------------
 
 		// settings
-		private System.Timers.Timer _applicationSettingsTimer = new System.Timers.Timer();
+		private System.Timers.Timer _settingsTimer = new System.Timers.Timer();
+
 		private bool _applicationSettingsLoaded = false;
 		private bool _applicationSettingsReady = false;
 
@@ -35,10 +38,10 @@ namespace MKY.YAT.Gui.Forms
 			label_Version.Text = "Version " + Application.ProductVersion;
 			label_Status.Text  = "Loading settings...";
 
-			_applicationSettingsTimer.Interval = 100;
-			_applicationSettingsTimer.AutoReset = false;
-			_applicationSettingsTimer.Elapsed += new System.Timers.ElapsedEventHandler(_applicationSettingsTimer_Elapsed);
-			_applicationSettingsTimer.Start();
+			_settingsTimer.Interval = 100;
+			_settingsTimer.AutoReset = false;
+			_settingsTimer.Elapsed += new System.Timers.ElapsedEventHandler(_applicationSettingsTimer_Elapsed);
+			_settingsTimer.Start();
 		}
 
 		#region Properties
@@ -61,7 +64,7 @@ namespace MKY.YAT.Gui.Forms
 		private void WelcomeScreen_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			timer_Opacity.Dispose();
-			_applicationSettingsTimer.Dispose();
+			_settingsTimer.Dispose();
 		}
 
 		private void timer_Opacity_Tick(object sender, EventArgs e)

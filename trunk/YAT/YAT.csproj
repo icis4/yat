@@ -55,17 +55,9 @@
     <Compile Include="YAT.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\YAT.Domain\YAT.Domain.csproj">
-      <Project>{1C44A8C0-7805-4172-8746-2DB750803FFF}</Project>
-      <Name>YAT.Domain</Name>
-    </ProjectReference>
     <ProjectReference Include="..\YAT.Gui.Forms\YAT.Gui.Forms.csproj">
       <Project>{A1060959-580E-4493-BA51-4A3A7CDE1E88}</Project>
       <Name>YAT.Gui.Forms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\YAT.Gui.Utilities\YAT.Gui.Utilities.csproj">
-      <Project>{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}</Project>
-      <Name>YAT.Gui.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

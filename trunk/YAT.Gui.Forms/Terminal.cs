@@ -1011,6 +1011,8 @@ namespace MKY.YAT.Gui.Forms
 				_isSettingControls = true;
 				predefined.Pages = _settings.PredefinedCommand.Pages;
 				_isSettingControls = false;
+
+				SetPredefinedMenuItems();        // ensure that shortcuts are activated
 			}
 			else if (ReferenceEquals(e.Inner.Source, _settings.Format))
 			{

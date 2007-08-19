@@ -5,6 +5,10 @@ using System.Text;
 namespace MKY.YAT.Domain.IO
 {
 	/// <summary></summary>
+	/// <remarks>
+	/// <see cref="System.IO.Ports.SerialPort"/> is not thread-safe. Therefore, access to
+	/// _port is done using lock.
+	/// </remarks>
 	public class SerialPort : IIOProvider, IDisposable
 	{
 		//------------------------------------------------------------------------------------------
@@ -333,10 +337,10 @@ namespace MKY.YAT.Domain.IO
 		{
 			if (_port != null)
 				DisposePort();
-			
+
 			_port = new MKY.IO.Ports.SerialPortDotNet();
-			_port.DataReceived += new MKY.IO.Ports.SerialDataReceivedEventHandler(_port_DataReceived);
-			_port.PinChanged += new MKY.IO.Ports.SerialPinChangedEventHandler(_port_PinChanged);
+			_port.DataReceived  += new MKY.IO.Ports.SerialDataReceivedEventHandler(_port_DataReceived);
+			_port.PinChanged    += new MKY.IO.Ports.SerialPinChangedEventHandler(_port_PinChanged);
 			_port.ErrorReceived += new MKY.IO.Ports.SerialErrorReceivedEventHandler(_port_ErrorReceived);
 		}
 

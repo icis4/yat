@@ -106,6 +106,7 @@ namespace MKY.YAT.Gui.Forms
 			this.serialPortSelection.PortId = new MKY.IO.Ports.SerialPortId(1);
 			this.serialPortSelection.Size = new System.Drawing.Size(260, 27);
 			this.serialPortSelection.TabIndex = 0;
+			this.serialPortSelection.PortIdChanged += new System.EventHandler(this.serialPortSelection_PortIdChanged);
 			// 
 			// socketSelection
 			// 
@@ -115,6 +116,11 @@ namespace MKY.YAT.Gui.Forms
 			this.socketSelection.Name = "socketSelection";
 			this.socketSelection.Size = new System.Drawing.Size(260, 108);
 			this.socketSelection.TabIndex = 1;
+			this.socketSelection.LocalUdpPortChanged += new System.EventHandler(this.socketSelection_LocalUdpPortChanged);
+			this.socketSelection.LocalHostNameOrAddressChanged += new System.EventHandler(this.socketSelection_LocalHostNameOrAddressChanged);
+			this.socketSelection.RemotePortChanged += new System.EventHandler(this.socketSelection_RemotePortChanged);
+			this.socketSelection.RemoteHostNameOrAddressChanged += new System.EventHandler(this.socketSelection_RemoteHostNameOrAddressChanged);
+			this.socketSelection.LocalTcpPortChanged += new System.EventHandler(this.socketSelection_LocalTcpPortChanged);
 			// 
 			// terminalSelection
 			// 

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="linkLabel_HHD.Text" xml:space="preserve">
-    <value>YAT is a terminal (a connection end point). If you're looking for a tool to monitor serial data between an application
+    <value>YAT is a terminal (a connection endpoint). If you're looking for a tool to monitor serial data between an application
 and a device, or between two devices, check out HHD Serial Monitor. It's worth the bucks.</value>
   </data>
   <data name="label_Separator1.Text" xml:space="preserve">
