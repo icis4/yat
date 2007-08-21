@@ -383,7 +383,8 @@ namespace MKY.YAT.Domain.IO
 			}
 			catch
 			{
-				_client.Dispose();
+				if (_client != null)
+					_client.Dispose();
 				_client = null;
 
 				lock (_stateSyncObj)
