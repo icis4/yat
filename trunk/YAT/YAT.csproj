@@ -12,6 +12,7 @@
     <ApplicationIcon>
     </ApplicationIcon>
     <Win32Resource>D:\Sandboxes\YAT\_Trunk\YAT\Resources\YAT.res</Win32Resource>
+    <StartupObject>MKY.YAT.YAT</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
