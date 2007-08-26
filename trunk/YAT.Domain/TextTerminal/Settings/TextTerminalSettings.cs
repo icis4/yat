@@ -43,24 +43,29 @@ namespace MKY.YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
 		public TextTerminalSettings(TextTerminalSettings rhs)
 			: base(rhs)
 		{
-			SeparateTxRxEol     = rhs.SeparateTxRxEol;
-			TxEol               = rhs.TxEol;
-			RxEol               = rhs.RxEol;
-			Encoding            = rhs.Encoding;
-			DirectionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
-			ShowEol             = rhs.ShowEol;
-			ReplaceControlChars = rhs.ReplaceControlChars;
-			ControlCharRadix    = rhs.ControlCharRadix;
-			LineSendDelay       = rhs.LineSendDelay;
-			WaitForResponse     = rhs.WaitForResponse;
-			CharSubstitution    = rhs.CharSubstitution;
+			_separateTxRxEol     = rhs.SeparateTxRxEol;
+			_txEol               = rhs.TxEol;
+			_rxEol               = rhs.RxEol;
+			_encoding            = rhs.Encoding;
+			_directionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
+			_showEol             = rhs.ShowEol;
+			_replaceControlChars = rhs.ReplaceControlChars;
+			_controlCharRadix    = rhs.ControlCharRadix;
+			_lineSendDelay       = rhs.LineSendDelay;
+			_waitForResponse     = rhs.WaitForResponse;
+			_charSubstitution    = rhs.CharSubstitution;
 			ClearChanged();
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
 			SeparateTxRxEol     = false;

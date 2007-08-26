@@ -31,18 +31,23 @@ namespace MKY.YAT.Domain.Settings.SerialPort
 		}
 
 		/// <summary></summary>
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
 		public SerialCommunicationSettings(SerialCommunicationSettings rhs)
 			: base(rhs)
 		{
-			BaudRate   = rhs.BaudRate;
-			DataBits   = rhs.DataBits;
-			Parity     = rhs.Parity;
-			StopBits   = rhs.StopBits;
-			Handshake  = rhs.Handshake;
+			_baudRate   = rhs.BaudRate;
+			_dataBits   = rhs.DataBits;
+			_parity     = rhs.Parity;
+			_stopBits   = rhs.StopBits;
+			_handshake  = rhs.Handshake;
 			ClearChanged();
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
 			BaudRate   = (int)MKY.IO.Ports.BaudRate.Baud009600;

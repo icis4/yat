@@ -32,6 +32,9 @@ namespace MKY.YAT.Gui.Settings
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
 		public FormatSettings(FormatSettings rhs)
 			: base(rhs)
 		{
@@ -47,6 +50,9 @@ namespace MKY.YAT.Gui.Settings
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
 			FontSettings      = new FontSettings("Courier New", 8.25f, FontStyle.Regular);

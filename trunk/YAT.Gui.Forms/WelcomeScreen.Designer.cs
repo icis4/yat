@@ -98,7 +98,7 @@ namespace MKY.YAT.Gui.Forms
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
 			this.BackColor = System.Drawing.SystemColors.ControlDark;
-			this.ClientSize = new System.Drawing.Size(280, 119);
+			this.ClientSize = new System.Drawing.Size(280, 120);
 			this.Controls.Add(this.label_Status);
 			this.Controls.Add(this.label_Version);
 			this.Controls.Add(this.label_Name);

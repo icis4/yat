@@ -20,6 +20,7 @@ namespace MKY.YAT.Gui.Forms
 			text += " Help";
 			Text = text;
 
+			// help texts
 			textBox_ParserFormat.Text = Domain.Parser.Parser.FormatHelp;
 			textBox_ParserFormat.SelectionStart = 0;
 			textBox_ParserFormat.SelectionLength = 0;

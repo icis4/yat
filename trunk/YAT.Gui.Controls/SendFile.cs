@@ -166,7 +166,7 @@ namespace MKY.YAT.Gui.Controls
 				Refresh();
 
 				ApplicationSettings.LocalUser.Paths.SendFilesPath = Path.GetDirectoryName(ofd.FileName);
-				ApplicationSettings.Save();
+				ApplicationSettings.SaveLocalUser();
 
 				_command.IsFilePath = true;
 				_command.FilePath = ofd.FileName;

@@ -30,14 +30,19 @@ namespace MKY.YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
 		public TransmitSettings(TransmitSettings rhs)
 			: base(rhs)
 		{
-			LocalEchoEnabled = rhs.LocalEchoEnabled;
+			_localEchoEnabled = rhs.LocalEchoEnabled;
 			ClearChanged();
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
 			LocalEchoEnabled = LocalEchoEnabledDefault;

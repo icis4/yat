@@ -11,7 +11,11 @@ namespace MKY.YAT.Settings
 	public class GeneralSettings : Utilities.Settings.Settings, IEquatable<GeneralSettings>
 	{
 		/// <summary></summary>
-		public static readonly string CurrentWorkspaceFilePathDefault = Application.LocalUserAppDataPath + Path.DirectorySeparatorChar + "DefaultWorkspace" + ExtensionSettings.WorkspaceFiles;
+		public static readonly string AutoSaveRoot = Application.LocalUserAppDataPath;
+		/// <summary></summary>
+		public const string AutoSaveTerminalFileNamePrefix = "Terminal-";
+		/// <summary></summary>
+		public const string AutoSaveWorkspaceFileNamePrefix = "Workspace-";
 
 		private bool _autoOpenWorkspace;
 		private bool _autoSaveWorkspace;
@@ -31,22 +35,28 @@ namespace MKY.YAT.Settings
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
 		public GeneralSettings(GeneralSettings rhs)
 			: base(rhs)
 		{
-			AutoOpenWorkspace        = rhs.AutoOpenWorkspace;
-			AutoSaveWorkspace        = rhs.AutoSaveWorkspace;
-			CurrentWorkspaceFilePath = rhs.CurrentWorkspaceFilePath;
-			DetectSerialPortsInUse   = rhs.DetectSerialPortsInUse;
+			_autoOpenWorkspace        = rhs.AutoOpenWorkspace;
+			_autoSaveWorkspace        = rhs.AutoSaveWorkspace;
+			_currentWorkspaceFilePath = rhs.CurrentWorkspaceFilePath;
+			_detectSerialPortsInUse   = rhs.DetectSerialPortsInUse;
 
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
 			AutoOpenWorkspace        = true;
 			AutoSaveWorkspace        = true;
-			CurrentWorkspaceFilePath = CurrentWorkspaceFilePathDefault;
+			CurrentWorkspaceFilePath = string.Empty;
 			DetectSerialPortsInUse   = true;
 		}
 

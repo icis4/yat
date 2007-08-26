@@ -37,24 +37,29 @@ namespace MKY.YAT.Domain.Settings.SerialPort
 			ClearChanged();
 		}
 
-		/// <summary></summary>
-		public SerialPortSettings(SerialPortSettings rhs)
-			: base(rhs)
-		{
-			PortId = rhs.PortId;
-			Communication = new SerialCommunicationSettings(rhs.Communication);
-			ParityErrorReplacement = rhs.ParityErrorReplacement;
-			RtsEnabled = rhs.RtsEnabled;
-			DtrEnabled = rhs.DtrEnabled;
-			ClearChanged();
-		}
-
 		private void InitializeNodes()
 		{
 			Communication = new SerialCommunicationSettings(SettingsType);
 		}
 
 		/// <summary></summary>
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
+		public SerialPortSettings(SerialPortSettings rhs)
+			: base(rhs)
+		{
+			_portId = rhs.PortId;
+			Communication = new SerialCommunicationSettings(rhs.Communication);
+			_parityErrorReplacement = rhs.ParityErrorReplacement;
+			_rtsEnabled = rhs.RtsEnabled;
+			_dtrEnabled = rhs.DtrEnabled;
+			ClearChanged();
+		}
+
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
 			PortId = MKY.IO.Ports.SerialPortId.DefaultPort;

@@ -27,17 +27,23 @@ namespace MKY.YAT.Settings
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
 		public PathSettings(PathSettings rhs)
 			: base(rhs)
 		{
-			TerminalFilesPath  = rhs.TerminalFilesPath;
-			WorkspaceFilesPath = rhs.WorkspaceFilesPath;
-			SendFilesPath      = rhs.SendFilesPath;
-			LogFilesPath       = rhs.LogFilesPath;
-			MonitorFilesPath   = rhs.MonitorFilesPath;
+			_terminalFilesPath  = rhs.TerminalFilesPath;
+			_workspaceFilesPath = rhs.WorkspaceFilesPath;
+			_sendFilesPath      = rhs.SendFilesPath;
+			_logFilesPath       = rhs.LogFilesPath;
+			_monitorFilesPath   = rhs.MonitorFilesPath;
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
 			TerminalFilesPath  = Environment.GetFolderPath(Environment.SpecialFolder.Personal);

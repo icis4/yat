@@ -20,9 +20,14 @@ namespace MKY.YAT.Settings.Application
 			return (_settings.Load());
 		}
 
-		public static void Save()
+		/// <summary>
+		/// Saves local user settings. To improved performance, settings are only saved
+		/// if they have changed.
+		/// </summary>
+		public static void SaveLocalUser()
 		{
-			_settings.Save();
+			if (_settings.LocalUserSettings.HaveChanged)
+				_settings.SaveLocalUser();
 		}
 
 		public static LocalUserSettingsRoot LocalUser

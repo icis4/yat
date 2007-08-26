@@ -436,6 +436,8 @@ namespace MKY.YAT.Gui.Forms
 				Refresh();
 
 				ApplicationSettings.LocalUser.Paths.LogFilesPath = Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.SaveLocalUser();
+
 				_settings_Form.RootPath = Path.GetDirectoryName(ofd.FileName);
 				_settings_Form.RootFileName = Path.GetFileNameWithoutExtension(ofd.FileName);
 

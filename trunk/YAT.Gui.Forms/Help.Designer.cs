@@ -63,7 +63,6 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			this.textBox_ParserKeyword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.textBox_ParserKeyword.BackColor = System.Drawing.SystemColors.Control;
 			this.textBox_ParserKeyword.Location = new System.Drawing.Point(9, 312);
 			this.textBox_ParserKeyword.Multiline = true;
 			this.textBox_ParserKeyword.Name = "textBox_ParserKeyword";
@@ -77,7 +76,6 @@ namespace MKY.YAT.Gui.Forms
 			this.textBox_TextTerminalKeyword.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.textBox_TextTerminalKeyword.BackColor = System.Drawing.SystemColors.Control;
 			this.textBox_TextTerminalKeyword.Location = new System.Drawing.Point(9, 378);
 			this.textBox_TextTerminalKeyword.Multiline = true;
 			this.textBox_TextTerminalKeyword.Name = "textBox_TextTerminalKeyword";
@@ -90,7 +88,6 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			this.textBox_ParserFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.textBox_ParserFormat.BackColor = System.Drawing.SystemColors.Control;
 			this.textBox_ParserFormat.Location = new System.Drawing.Point(9, 51);
 			this.textBox_ParserFormat.Multiline = true;
 			this.textBox_ParserFormat.Name = "textBox_ParserFormat";
@@ -134,7 +131,9 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			// Help
 			// 
+			this.AcceptButton = this.button_Close;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.CancelButton = this.button_Close;
 			this.ClientSize = new System.Drawing.Size(500, 567);
 			this.Controls.Add(this.label_Explanations);
 			this.Controls.Add(this.button_Close);

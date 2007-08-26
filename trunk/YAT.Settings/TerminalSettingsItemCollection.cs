@@ -41,7 +41,7 @@ namespace MKY.YAT.Settings
 
 			for (int i = 0; i < clone.Count; i++)
 			{
-				if (this[i].Guid == tsi.Guid)
+				if (this[i].Guid.Equals(tsi.Guid))
 				{
 					this[i] = tsi;
 					return;

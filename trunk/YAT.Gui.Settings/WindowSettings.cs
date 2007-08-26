@@ -27,21 +27,27 @@ namespace MKY.YAT.Gui.Settings
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
 		public WindowSettings(WindowSettings rhs)
 			: base(rhs)
 		{
 
-			State    = rhs.State;
-			Location = rhs.Location;
-			Size     = rhs.Size;
+			_state    = rhs.State;
+			_location = rhs.Location;
+			_size     = rhs.Size;
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
 			State    = FormWindowState.Maximized;
 			Location = new Point(0, 0);
-			Size     = new Size(720, 540);
+			Size     = new Size(800, 600);
 		}
 
 		#region Properties

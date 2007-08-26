@@ -2,14 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
+using System.IO;
 
 namespace MKY.YAT.Settings
 {
 	[Serializable]
 	public class TerminalSettingsItem : Utilities.Settings.Settings, IEquatable<TerminalSettingsItem>
 	{
-		private Guid _guid;
 		private string _filePath;
+		private Guid _guid;
 		private Gui.Settings.WindowSettings _window;
 
 		public TerminalSettingsItem()
@@ -22,38 +23,33 @@ namespace MKY.YAT.Settings
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
 		public TerminalSettingsItem(TerminalSettingsItem rhs)
 			: base(rhs)
 		{
+			_filePath = rhs.FilePath;
+			_guid = rhs.Guid;
+
 			Window = new Gui.Settings.WindowSettings(rhs.Window);
 
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			_guid = Guid.Empty;
-			_filePath = "";
+			FilePath = "";
+			Guid = Guid.Empty;
 		}
 
 		#region Properties
 		//------------------------------------------------------------------------------------------
 		// Properties
 		//------------------------------------------------------------------------------------------
-
-		[XmlIgnore]
-		public Guid Guid
-		{
-			get { return (_guid); }
-			set
-			{
-				if (_guid != value)
-				{
-					_guid = value;
-					SetChanged();
-				}
-			}
-		}
 
 		[XmlElement("FilePath")]
 		public string FilePath
@@ -64,6 +60,35 @@ namespace MKY.YAT.Settings
 				if (_filePath != value)
 				{
 					_filePath = value;
+					SetChanged();
+				}
+				
+				// set GUID from file path if needed
+				if ((_guid == Guid.Empty) && File.Exists(_filePath))
+				{
+					string fileName = Path.GetFileNameWithoutExtension(_filePath);
+					string guidString = fileName.Substring(GeneralSettings.AutoSaveTerminalFileNamePrefix.Length);
+					try
+					{
+						_guid = new Guid(guidString);
+					}
+					catch (Exception)
+					{
+						_guid = Guid.Empty;
+					}
+				}
+			}
+		}
+
+		[XmlIgnore]
+		public Guid Guid
+		{
+			get { return (_guid); }
+			set
+			{
+				if (_guid != value)
+				{
+					_guid = value;
 					SetChanged();
 				}
 			}
@@ -114,6 +139,8 @@ namespace MKY.YAT.Settings
 			{
 				return
 					(
+					_filePath.Equals(value._filePath) &&
+					_guid.Equals(value._guid) &&
 					base.Equals((Utilities.Settings.Settings)value) // compares all settings nodes
 					);
 			}

@@ -8,7 +8,7 @@ namespace MKY.YAT.Settings
 	[Serializable]
 	public class WorkspaceSettings : Utilities.Settings.Settings, IEquatable<WorkspaceSettings>
 	{
-		private TerminalSettingsItemCollection _terminalSettingsItems;
+		private TerminalSettingsItemCollection _terminalSettings;
 
 		public WorkspaceSettings()
 			: base(Utilities.Settings.SettingsType.Explicit)
@@ -24,17 +24,22 @@ namespace MKY.YAT.Settings
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
 		public WorkspaceSettings(WorkspaceSettings rhs)
 			: base(rhs)
 		{
-			_terminalSettingsItems = new TerminalSettingsItemCollection(rhs.TerminalSettingsItems);
+			TerminalSettings = new TerminalSettingsItemCollection(rhs.TerminalSettings);
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			_terminalSettingsItems = new TerminalSettingsItemCollection();
-			SetChanged();
+			TerminalSettings = new TerminalSettingsItemCollection();
 		}
 
 		#region Properties
@@ -42,15 +47,15 @@ namespace MKY.YAT.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
-		[XmlElement("TerminalSettingsItems")]
-		public TerminalSettingsItemCollection TerminalSettingsItems
+		[XmlElement("TerminalSettings")]
+		public TerminalSettingsItemCollection TerminalSettings
 		{
-			get { return (_terminalSettingsItems); }
+			get { return (_terminalSettings); }
 			set
 			{
-				if (_terminalSettingsItems != value)
+				if (_terminalSettings != value)
 				{
-					_terminalSettingsItems = value;
+					_terminalSettings = value;
 					SetChanged();
 				}
 			}
@@ -81,7 +86,7 @@ namespace MKY.YAT.Settings
 			{
 				return
 					(
-					_terminalSettingsItems.Equals(value._terminalSettingsItems)
+					_terminalSettings.Equals(value._terminalSettings)
 					);
 			}
 			return (false);

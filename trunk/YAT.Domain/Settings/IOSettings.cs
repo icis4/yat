@@ -37,17 +37,6 @@ namespace MKY.YAT.Domain.Settings
 			ClearChanged();
 		}
 
-		/// <summary></summary>
-		public IOSettings(IOSettings rhs)
-			: base(rhs)
-		{
-			IOType = rhs.IOType;
-			SerialPort = new SerialPort.SerialPortSettings(rhs.SerialPort);
-			Socket = new Socket.SocketSettings(rhs.Socket);
-			Endianess = rhs.Endianess;
-			ClearChanged();
-		}
-
 		private void InitializeNodes()
 		{
 			SerialPort = new SerialPort.SerialPortSettings(SettingsType);
@@ -55,6 +44,22 @@ namespace MKY.YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
+		public IOSettings(IOSettings rhs)
+			: base(rhs)
+		{
+			_ioType = rhs.IOType;
+			SerialPort = new SerialPort.SerialPortSettings(rhs.SerialPort);
+			Socket = new Socket.SocketSettings(rhs.Socket);
+			_endianess = rhs.Endianess;
+			ClearChanged();
+		}
+
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
 			IOType = IOTypeDefault;

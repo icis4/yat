@@ -28,16 +28,22 @@ namespace MKY.YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
 		public BinaryDisplaySettings(BinaryDisplaySettings rhs)
 			: base(rhs)
 		{
-			LengthLineBreak   = rhs.LengthLineBreak;
-			SequenceLineBreak = rhs.SequenceLineBreak;
-			TimedLineBreak    = rhs.TimedLineBreak;
+			_lengthLineBreak   = rhs.LengthLineBreak;
+			_sequenceLineBreak = rhs.SequenceLineBreak;
+			_timedLineBreak    = rhs.TimedLineBreak;
 			ClearChanged();
 		}
 
 		/// <summary></summary>
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
 			LengthLineBreak   = new BinaryLengthLineBreak(false, 16);

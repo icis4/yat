@@ -58,6 +58,7 @@
     <Compile Include="Settings\Events.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Text\XEncoding.cs" />
+    <Compile Include="Types\XArray.cs" />
     <Compile Include="Types\XAscii.cs" />
     <Compile Include="Types\XByte.cs" />
     <Compile Include="Types\XDecimal.cs" />

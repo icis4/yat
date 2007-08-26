@@ -190,6 +190,7 @@ namespace MKY.YAT.Gui.Controls
 				_markPortsInUseThread.CancelScanning();
 			
 			ApplicationSettings.LocalUser.General.DetectSerialPortsInUse = setting;
+			ApplicationSettings.SaveLocalUser();
 		}
 
 		private void SetSerialPortList()

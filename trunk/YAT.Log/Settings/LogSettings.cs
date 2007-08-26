@@ -55,36 +55,42 @@ namespace MKY.YAT.Log.Settings
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
 		public LogSettings(LogSettings rhs)
 			: base(rhs)
 		{
-			RootPath     = rhs.RootPath;
-			RootFileName = rhs.RootFileName;
+			_rootPath     = rhs.RootPath;
+			_rootFileName = rhs.RootFileName;
 
-			RawLogTx     = rhs.RawLogTx;
-			RawLogBidir  = rhs.RawLogBidir;
-			RawLogRx     = rhs.RawLogRx;
-			RawExtension = rhs.RawExtension;
+			_rawLogTx     = rhs.RawLogTx;
+			_rawLogBidir  = rhs.RawLogBidir;
+			_rawLogRx     = rhs.RawLogRx;
+			_rawExtension = rhs.RawExtension;
 
-			NeatLogTx     = rhs.NeatLogTx;
-			NeatLogBidir  = rhs.NeatLogBidir;
-			NeatLogRx     = rhs.NeatLogRx;
-			NeatExtension = rhs.NeatExtension;
+			_neatLogTx     = rhs.NeatLogTx;
+			_neatLogBidir  = rhs.NeatLogBidir;
+			_neatLogRx     = rhs.NeatLogRx;
+			_neatExtension = rhs.NeatExtension;
 
-			WriteMode = rhs.WriteMode;
+			_writeMode = rhs.WriteMode;
 
-			SubdirectoriesFormat  = rhs.SubdirectoriesFormat;
-			SubdirectoriesChannel = rhs.SubdirectoriesChannel;
+			_subdirectoriesFormat  = rhs.SubdirectoriesFormat;
+			_subdirectoriesChannel = rhs.SubdirectoriesChannel;
 
-			NameFormat    = rhs.NameFormat;
-			NameChannel   = rhs.NameChannel;
-			NameDate      = rhs.NameDate;
-			NameTime      = rhs.NameTime;
-			NameSeparator = rhs.NameSeparator;
+			_nameFormat    = rhs.NameFormat;
+			_nameChannel   = rhs.NameChannel;
+			_nameDate      = rhs.NameDate;
+			_nameTime      = rhs.NameTime;
+			_nameSeparator = rhs.NameSeparator;
 
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
 			RootPath = ApplicationSettings.LocalUser.Paths.LogFilesPath;

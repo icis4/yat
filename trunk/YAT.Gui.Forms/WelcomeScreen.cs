@@ -32,11 +32,25 @@ namespace MKY.YAT.Gui.Forms
 		{
 			InitializeComponent();
 
+			const int margin = 8;
+			int width = Width;
+			int width2 = 0;
+
 			label_Name.Text = Application.ProductName;
 			label_Name.Text += VersionInfo.ProductNamePostFix;
+			width2 = label_Name.Left + label_Name.Width + margin;
+			if (width < width2)
+				width = width2;
 
 			label_Version.Text = "Version " + Application.ProductVersion;
+			width2 = label_Version.Left + label_Version.Width + margin;
+			if (width < width2)
+				width = width2;
+
 			label_Status.Text  = "Loading settings...";
+
+			if (Width < width)
+				Width = width;
 
 			_settingsTimer.Interval = 100;
 			_settingsTimer.AutoReset = false;

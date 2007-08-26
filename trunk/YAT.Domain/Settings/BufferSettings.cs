@@ -31,15 +31,20 @@ namespace MKY.YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
 		public BufferSettings(BufferSettings rhs)
 			: base(rhs)
 		{
-			TxBufferSize = rhs.TxBufferSize;
-			RxBufferSize = rhs.RxBufferSize;
+			_txBufferSize = rhs.TxBufferSize;
+			_rxBufferSize = rhs.RxBufferSize;
 			ClearChanged();
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
 			TxBufferSize = BufferSizeDefault;
