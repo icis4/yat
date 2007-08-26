@@ -58,26 +58,31 @@ namespace MKY.YAT.Domain.Settings.Socket
 		}
 
 		/// <summary></summary>
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
 		public SocketSettings(SocketSettings rhs)
 			: base(rhs)
 		{
-			HostType                = rhs.HostType;
+			_hostType                = rhs.HostType;
 
-			RemoteHostNameOrAddress = rhs.RemoteHostNameOrAddress;
-			ResolvedRemoteIPAddress = rhs.ResolvedRemoteIPAddress;
-			RemotePort              = rhs.RemotePort;
+			_remoteHostNameOrAddress = rhs.RemoteHostNameOrAddress;
+			_resolvedRemoteIPAddress = rhs.ResolvedRemoteIPAddress;
+			_remotePort              = rhs.RemotePort;
 
-			LocalHostNameOrAddress  = rhs.LocalHostNameOrAddress;
-			ResolvedLocalIPAddress  = rhs.ResolvedLocalIPAddress;
-			LocalTcpPort            = rhs.LocalTcpPort;
-			LocalUdpPort            = rhs.LocalUdpPort;
+			_localHostNameOrAddress  = rhs.LocalHostNameOrAddress;
+			_resolvedLocalIPAddress  = rhs.ResolvedLocalIPAddress;
+			_localTcpPort            = rhs.LocalTcpPort;
+			_localUdpPort            = rhs.LocalUdpPort;
 
-			TcpClientAutoReconnect  = rhs.TcpClientAutoReconnect;
+			_tcpClientAutoReconnect  = rhs.TcpClientAutoReconnect;
 
 			ClearChanged();
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
 			HostType                = Net.Sockets.HostType.TcpAutoSocket;

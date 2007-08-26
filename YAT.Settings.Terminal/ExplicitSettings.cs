@@ -26,6 +26,9 @@ namespace MKY.YAT.Settings.Terminal
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
 		public ExplicitSettings(ExplicitSettings rhs)
 			: base(rhs)
 		{
@@ -37,6 +40,9 @@ namespace MKY.YAT.Settings.Terminal
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
 			// nothing to do

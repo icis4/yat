@@ -364,8 +364,7 @@ namespace MKY.Utilities.Settings
 			// try to save common settings
 			try
 			{
-				if (HasCommonSettings)
-					SaveToFile(typeof(TCommonSettings), _commonSettingsFilePath, _commonSettings);
+				SaveCommon();
 			}
 			catch (Exception ex)
 			{
@@ -376,8 +375,7 @@ namespace MKY.Utilities.Settings
 			// try to save local user settings
 			try
 			{
-				if (HasLocalUserSettings)
-					SaveToFile(typeof(TLocalUserSettings), _localUserSettingsFilePath, _localUserSettings);
+				SaveLocalUser();
 			}
 			catch (Exception ex)
 			{
@@ -385,11 +383,10 @@ namespace MKY.Utilities.Settings
 					result = ex;
 			}
 
-			// try to save user settings
+			// try to save roaming user settings
 			try
 			{
-				if (HasRoamingUserSettings)
-					SaveToFile(typeof(TRoamingUserSettings), _roamingUserSettingsFilePath, _roamingUserSettings);
+				SaveRoamingUser();
 			}
 			catch (Exception ex)
 			{
@@ -400,6 +397,42 @@ namespace MKY.Utilities.Settings
 			// throw exeption if either operation failed
 			if (result != null)
 				throw (result);
+		}
+
+		/// <summary>
+		/// Tries to save settings to <see cref="CommonSettingsFilePath"/>.
+		/// </summary>
+		/// <exception cref="Exception">
+		/// Thrown if settings could not be saved.
+		/// </exception>
+		public void SaveCommon()
+		{
+			if (HasCommonSettings)
+				SaveToFile(typeof(TCommonSettings), _commonSettingsFilePath, _commonSettings);
+		}
+
+		/// <summary>
+		/// Tries to save settings to <see cref="LocalUserSettingsFilePath"/>.
+		/// </summary>
+		/// <exception cref="Exception">
+		/// Thrown if settings could not be saved.
+		/// </exception>
+		public void SaveLocalUser()
+		{
+			if (HasLocalUserSettings)
+				SaveToFile(typeof(TLocalUserSettings), _localUserSettingsFilePath, _localUserSettings);
+		}
+
+		/// <summary>
+		/// Tries to save settings to <see cref="RoamingUserSettingsFilePath"/>.
+		/// </summary>
+		/// <exception cref="Exception">
+		/// Thrown if settings could not be saved.
+		/// </exception>
+		public void SaveRoamingUser()
+		{
+			if (HasRoamingUserSettings)
+				SaveToFile(typeof(TRoamingUserSettings), _roamingUserSettingsFilePath, _roamingUserSettings);
 		}
 
 		private void SaveToFile(Type type, string file, object settings)

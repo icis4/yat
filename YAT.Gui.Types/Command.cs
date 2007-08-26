@@ -344,7 +344,7 @@ namespace MKY.YAT.Gui
 				return
 					(
 					_description.Equals (value._description) &&
-					_commandLines.Equals(value._commandLines) &&
+					Utilities.Types.XArray.ValueEquals(_commandLines, value._commandLines) &&
 					_defaultRadix.Equals(value._defaultRadix) &&
 					_isFilePath.Equals  (value._isFilePath) &&
 					_filePath.Equals    (value._filePath)

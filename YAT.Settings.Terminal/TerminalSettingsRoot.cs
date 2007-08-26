@@ -10,6 +10,7 @@ namespace MKY.YAT.Settings.Terminal
 	public class TerminalSettingsRoot : Utilities.Settings.Settings, IEquatable<TerminalSettingsRoot>
 	{
 		private string _productVersion = System.Windows.Forms.Application.ProductVersion;
+		private bool _autoSaved;
 		private ExplicitSettings _explicit;
 		private ImplicitSettings _implicit;
 
@@ -37,7 +38,7 @@ namespace MKY.YAT.Settings.Terminal
 		[XmlElement("FileType")]
 		public string FileType
 		{
-			get { return ("YAT Terminal Settings"); }
+			get { return ("YAT terminal settings"); }
 			set { } // do nothing
 		}
 
@@ -48,6 +49,13 @@ namespace MKY.YAT.Settings.Terminal
 			set { } // do nothing
 		}
 
+		[XmlElement("ProductVersion")]
+		public string ProductVersion
+		{
+			get { return (_productVersion); }
+			set { } // do nothing
+		}
+
 		[XmlElement("Saved")]
 		public SaveInfo Saved
 		{
@@ -55,16 +63,16 @@ namespace MKY.YAT.Settings.Terminal
 			set { } // do nothing
 		}
 
-		[XmlElement("ProductVersion")]
-		public string ProductVersion
+		[XmlElement("AutoSaved")]
+		public bool AutoSaved
 		{
-			get { return (_productVersion); }
+			get { return (_autoSaved); }
 			set
 			{
-				if (_productVersion != value)
+				if (_autoSaved != value)
 				{
-					_productVersion = value;
-					SetChanged();
+					_autoSaved = value;
+					// do not set changed;
 				}
 			}
 		}
@@ -305,6 +313,7 @@ namespace MKY.YAT.Settings.Terminal
 					_productVersion.Equals(value._productVersion) &&
 					base.Equals((Utilities.Settings.Settings)value) // compares all settings nodes
 					);
+				// do not compare AutoSaved
 			}
 			return (false);
 		}

@@ -26,17 +26,22 @@ namespace MKY.YAT.Gui.Settings
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
 		public PredefinedCommandSettings(PredefinedCommandSettings rhs)
 			: base(rhs)
 		{
-			_pages = new List<PredefinedCommandPage>(rhs.Pages);
+			Pages = new List<PredefinedCommandPage>(rhs.Pages);
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			_pages = new List<PredefinedCommandPage>();
-			SetChanged();
+			Pages = new List<PredefinedCommandPage>();
 		}
 
 		#region Properties

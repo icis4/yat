@@ -35,25 +35,31 @@ namespace MKY.YAT.Gui.Settings
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
 		public LayoutSettings(LayoutSettings rhs)
 			: base(rhs)
 		{
-			TxMonitorPanelIsVisible    = rhs.TxMonitorPanelIsVisible;
-			BidirMonitorPanelIsVisible = rhs.BidirMonitorPanelIsVisible;
-			RxMonitorPanelIsVisible    = rhs.RxMonitorPanelIsVisible;
-			MonitorLeftSplitterRatio   = rhs.MonitorLeftSplitterRatio;
-			MonitorRightSplitterRatio  = rhs.MonitorRightSplitterRatio;
-			MonitorOrientation         = rhs.MonitorOrientation;
+			_txMonitorPanelIsVisible    = rhs.TxMonitorPanelIsVisible;
+			_bidirMonitorPanelIsVisible = rhs.BidirMonitorPanelIsVisible;
+			_rxMonitorPanelIsVisible    = rhs.RxMonitorPanelIsVisible;
+			_monitorLeftSplitterRatio   = rhs.MonitorLeftSplitterRatio;
+			_monitorRightSplitterRatio  = rhs.MonitorRightSplitterRatio;
+			_monitorOrientation         = rhs.MonitorOrientation;
 
-			PredefinedPanelIsVisible = rhs.PredefinedPanelIsVisible;
-			PredefinedSplitterRatio  = rhs.PredefinedSplitterRatio;
+			_predefinedPanelIsVisible = rhs.PredefinedPanelIsVisible;
+			_predefinedSplitterRatio  = rhs.PredefinedSplitterRatio;
 
-			SendCommandPanelIsVisible = rhs.SendCommandPanelIsVisible;
-			SendFilePanelIsVisible = rhs.SendFilePanelIsVisible;
+			_sendCommandPanelIsVisible = rhs.SendCommandPanelIsVisible;
+			_sendFilePanelIsVisible = rhs.SendFilePanelIsVisible;
 
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
 			TxMonitorPanelIsVisible = false;

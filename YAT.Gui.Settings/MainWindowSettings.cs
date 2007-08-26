@@ -10,6 +10,7 @@ namespace MKY.YAT.Gui.Settings
 	[Serializable]
 	public class MainWindowSettings : Utilities.Settings.Settings, IEquatable<MainWindowSettings>
 	{
+		private FormStartPosition _startPosition;
 		private FormWindowState _windowState;
 		private Point _location;
 		private Size _size;
@@ -27,26 +28,49 @@ namespace MKY.YAT.Gui.Settings
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
 		public MainWindowSettings(MainWindowSettings rhs)
 			: base(rhs)
 		{
-			WindowState = rhs.WindowState;
-			Location    = rhs.Location;
-			Size        = rhs.Size;
+			_startPosition = rhs.StartPosition;
+			_windowState   = rhs.WindowState;
+			_location      = rhs.Location;
+			_size          = rhs.Size;
+
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			StartPosition = FormStartPosition.WindowsDefaultLocation;
 			WindowState = FormWindowState.Normal;
 			Location = new Point(0, 0);
-			Size = new Size(720, 540);
+			Size = new Size(800, 600);
 		}
 
 		#region Properties
 		//------------------------------------------------------------------------------------------
 		// Properties
 		//------------------------------------------------------------------------------------------
+
+		[XmlElement("StartPosition")]
+		public FormStartPosition StartPosition
+		{
+			get { return (_startPosition); }
+			set
+			{
+				if (_startPosition != value)
+				{
+					_startPosition = value;
+					SetChanged();
+				}
+			}
+		}
 
 		[XmlElement("WindowState")]
 		public FormWindowState WindowState
@@ -115,6 +139,7 @@ namespace MKY.YAT.Gui.Settings
 			{
 				return
 					(
+					_startPosition.Equals(value._startPosition) &&
 					_windowState.Equals(value._windowState) &&
 					_location.Equals(value._location) &&
 					_size.Equals(value._size)

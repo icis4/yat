@@ -8,10 +8,18 @@ namespace MKY.YAT.Gui
 	public class TerminalSavedEventArgs : EventArgs
 	{
 		public readonly string FilePath;
+		public readonly bool AutoSave;
 
 		public TerminalSavedEventArgs(string filePath)
 		{
 			FilePath = filePath;
+			AutoSave = false;
+		}
+
+		public TerminalSavedEventArgs(string filePath, bool autoSave)
+		{
+			FilePath = filePath;
+			AutoSave = autoSave;
 		}
 	}
 

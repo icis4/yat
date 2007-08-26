@@ -1,11 +1,11 @@
-
+﻿
 ********************************************************************************
                                  YAT Release Notes
  ------------------------------------------------------------------------------
     RS-232/422/485 TCP/UDP terminal to operate and debug serial connections
  ------------------------------------------------------------------------------
-          Copyright � 2003-2004 HSR Hochschule fuer Technik Rapperswil.
-                        Copyright � 2003-2007 Matthias Klaey.
+           Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
+                         Copyright © 2003-2007 Matthias Kläy.
                                 All rights reserved.
 ********************************************************************************
 
@@ -47,17 +47,18 @@ Release 2.0.0 :: 2007-??-??
 - TCP/IP and UDP/IP support added
 - RS-485 support added
 - Baud rates above 115k added
-- Unicode encoding support added
+- Support for non-standard baud rates added
+- Text: Unicode encoding support added
+- Little-endian/big-endian support for \h \d \o \b added
 - Visual appearance modernized
-- Terminal window layout improved
+- Displaying performance improved
 - Support for multi-line commands added
 - Several send options added
-- Application settings moved from registry to local user directory
+- Application settings shifted from registry to local user directory
 - Terminal settings (.yat) refined
 - Workspace settings (.yaw) introduced
-- Menu structure improved
-- Displaying performance improved
 - About dialog: Link labels instead of normal labels
+- Release notes moved to menu
 
 
 Version 1.0
@@ -109,7 +110,6 @@ Release 2.1.0 :: Not planned yet
     OnDataReceived() and SendNextLine()
     => enables reception of multi-line commands
 - RS-232 AutoSense mode
-- Optional command settings (.yac)
 - Optional user settings (.yau)
 
 
@@ -117,8 +117,8 @@ Release 2.1.0 :: Not planned yet
 4. Legal
 --------------------------------------------------------------------------------
 
-Copyright � 2003-2004 HSR Hochschule fuer Technik Rapperswil.
-Copyright � 2003-2007 Matthias Klaey.
+Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
+Copyright © 2003-2007 Matthias Kläy.
 All rights reserved.
 
 YAT is licensed under the CC-GNU GPL.

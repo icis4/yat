@@ -12,6 +12,7 @@ namespace MKY.YAT.Settings.Workspace
 	public class WorkspaceSettingsRoot : Utilities.Settings.Settings, IEquatable<WorkspaceSettingsRoot>
 	{
 		private string _productVersion = System.Windows.Forms.Application.ProductVersion;
+		private bool _autoSaved;
 		private WorkspaceSettings _workspace;
 
 		public WorkspaceSettingsRoot()
@@ -36,7 +37,7 @@ namespace MKY.YAT.Settings.Workspace
 		[XmlElement("FileType")]
 		public string FileType
 		{
-			get { return ("YAT Workspace Settings"); }
+			get { return ("YAT workspace settings"); }
 			set { } // do nothing
 		}
 
@@ -58,12 +59,19 @@ namespace MKY.YAT.Settings.Workspace
 		public string ProductVersion
 		{
 			get { return (_productVersion); }
+			set { } // do nothing
+		}
+
+		[XmlElement("AutoSaved")]
+		public bool AutoSaved
+		{
+			get { return (_autoSaved); }
 			set
 			{
-				if (_productVersion != value)
+				if (_autoSaved != value)
 				{
-					_productVersion = value;
-					SetChanged();
+					_autoSaved = value;
+					// do not set changed;
 				}
 			}
 		}
@@ -86,6 +94,20 @@ namespace MKY.YAT.Settings.Workspace
 					ReplaceNode(old, _workspace);
 				}
 			}
+		}
+
+		#endregion
+
+		#region Property Shortcuts
+		//------------------------------------------------------------------------------------------
+		// Property Shortcuts
+		//------------------------------------------------------------------------------------------
+
+		[XmlIgnore]
+		public TerminalSettingsItemCollection TerminalSettings
+		{
+			get { return (_workspace.TerminalSettings); }
+			set { _workspace.TerminalSettings = value; }
 		}
 
 		#endregion
@@ -116,6 +138,7 @@ namespace MKY.YAT.Settings.Workspace
 					_productVersion.Equals(value._productVersion) &&
 					base.Equals((Utilities.Settings.Settings)value) // compares all settings nodes
 					);
+				// do not compare AutoSaved
 			}
 			return (false);
 		}

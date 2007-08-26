@@ -33,15 +33,17 @@ namespace MKY.YAT.Gui.Forms
 
 		// MDI
 		private const string _TerminalText = "Terminal";
-		private long _terminalIdCounter = 0;
+		private int _terminalIdCounter = 0;
 		private const int _PathLength = 80;
 
 		// recent files
 		private List<ToolStripMenuItem> _menuItems_recents;
 
 		// workspace settings
+		private Guid _guid = Guid.NewGuid();
 		private DocumentSettingsHandler<WorkspaceSettingsRoot> _workspaceSettingsHandler;
-		private YAT.Settings.Workspace.WorkspaceSettingsRoot _workspaceSettings;
+		private WorkspaceSettingsRoot _workspaceSettingsRoot;
+		private bool _handlingWorkspaceSettingsIsSuspended = false;
 
 		// status
 		private const string _DefaultStatusText = "Ready";
@@ -77,7 +79,8 @@ namespace MKY.YAT.Gui.Forms
 
 			_workspaceSettingsHandler = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
 			_workspaceSettingsHandler.SettingsFilePath = ApplicationSettings.LocalUser.General.CurrentWorkspaceFilePath;
-			_workspaceSettings = _workspaceSettingsHandler.Settings;
+			_workspaceSettingsRoot = _workspaceSettingsHandler.Settings;
+			AttachWorkspaceSettingsHandlers();
 
 			// form title
 			string text = Application.ProductName;
@@ -91,6 +94,18 @@ namespace MKY.YAT.Gui.Forms
 			}
 			SetToolControls();
 		}
+
+		#region Properties
+		//******************************************************************************************
+		// Properties
+		//******************************************************************************************
+
+		public Guid Guid
+		{
+			get { return (_guid); }
+		}
+
+		#endregion
 
 		#region Form Event Handlers
 		//******************************************************************************************
@@ -129,7 +144,7 @@ namespace MKY.YAT.Gui.Forms
 		private void Main_LocationChanged(object sender, EventArgs e)
 		{
 			if (!_isStartingUp)
-				SaveWindowSettings();
+				SaveWindowSettings(true);
 		}
 
 		private void Main_SizeChanged(object sender, EventArgs e)
@@ -144,12 +159,43 @@ namespace MKY.YAT.Gui.Forms
 			SetToolControls();
 		}
 
-		private void Main_Closing(object sender, CancelEventArgs e)
+		private void Main_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			if (!e.Cancel)
-				SetFixedStatusText("Closing terminals...");
+			if (ApplicationSettings.LocalUser.General.AutoSaveWorkspace)
+			{
+				SaveWorkspaceFile(true);
+			}
 			else
+			{
+				if (_workspaceSettingsRoot.HaveChanged)
+				{
+					DialogResult dr = MessageBox.Show
+						(
+						this,
+						"Save workspace?",
+						Text,
+						MessageBoxButtons.YesNoCancel,
+						MessageBoxIcon.Question
+						);
+
+					switch (dr)
+					{
+						case DialogResult.Yes: SaveWorkspaceFile(); break;
+						case DialogResult.No:                       break;
+						default: e.Cancel = true;                   return;
+					}
+				}
+			}
+
+			if (!e.Cancel)
+			{
+				SetFixedStatusText("Exiting YAT...");
+				SuspendHandlingWorkspaceSettings();
+			}
+			else
+			{
 				ResetStatusText();
+			}
 		}
 
 		#endregion
@@ -198,17 +244,17 @@ namespace MKY.YAT.Gui.Forms
 
 		private void toolStripMenuItem_MainMenu_File_OpenWorkspace_Click(object sender, EventArgs e)
 		{
-			ShowOpenWorkspaceDialog();
+			ShowOpenWorkspaceFileDialog();
 		}
 
 		private void toolStripMenuItem_MainMenu_File_SaveWorkspace_Click(object sender, EventArgs e)
 		{
-			SaveWorkspace();
+			SaveWorkspaceFile();
 		}
 
 		private void toolStripMenuItem_MainMenu_File_SaveWorkspaceAs_Click(object sender, EventArgs e)
 		{
-			ShowSaveWorkspaceAsDialog();
+			ShowSaveWorkspaceFileAsDialog();
 		}
 
 		private void toolStripMenuItem_MainMenu_File_SaveAll_Click(object sender, EventArgs e)
@@ -277,6 +323,12 @@ namespace MKY.YAT.Gui.Forms
 		private void toolStripMenuItem_MainMenu_Help_Contents_Click(object sender, EventArgs e)
 		{
 			Gui.Forms.Help f = new Gui.Forms.Help();
+			f.Show(this);
+		}
+
+		private void toolStripMenuItem_MainMenu_Help_ReleaseNotes_Click(object sender, EventArgs e)
+		{
+			Gui.Forms.ReleaseNotes f = new Gui.Forms.ReleaseNotes();
 			f.Show(this);
 		}
 
@@ -358,7 +410,7 @@ namespace MKY.YAT.Gui.Forms
 
 		private void toolStripMenuItem_MainContextMenu_File_OpenWorkspace_Click(object sender, EventArgs e)
 		{
-			ShowOpenWorkspaceDialog();
+			ShowOpenWorkspaceFileDialog();
 		}
 
 		private void toolStripMenuItem_MainContextMenu_File_Exit_Click(object sender, EventArgs e)
@@ -430,6 +482,42 @@ namespace MKY.YAT.Gui.Forms
 
 		#endregion
 
+		#region Workspace Settings
+		//******************************************************************************************
+		// Workspace Settings
+		//******************************************************************************************
+
+		private void AttachWorkspaceSettingsHandlers()
+		{
+			_workspaceSettingsRoot.ClearChanged();
+			_workspaceSettingsRoot.Changed += new EventHandler<SettingsEventArgs>(_workspaceSettings_Changed);
+		}
+
+		//------------------------------------------------------------------------------------------
+		// Workspace Settings Events
+		//------------------------------------------------------------------------------------------
+
+		private void _workspaceSettings_Changed(object sender, SettingsEventArgs e)
+		{
+			if (_handlingWorkspaceSettingsIsSuspended)
+				return;
+
+			if (ApplicationSettings.LocalUser.General.AutoSaveWorkspace)
+				DoSaveWorkspaceFile(true);
+		}
+
+		private void SuspendHandlingWorkspaceSettings()
+		{
+			_handlingWorkspaceSettingsIsSuspended = true;
+		}
+
+		private void ResumeHandlingWorkspaceSettings()
+		{
+			_handlingWorkspaceSettingsIsSuspended = false;
+		}
+
+		#endregion
+
 		#region Menu
 		//******************************************************************************************
 		// Menu
@@ -452,9 +540,11 @@ namespace MKY.YAT.Gui.Forms
 		/// Update recent entry.
 		/// </summary>
 		/// <param name="recentFile">Recent file.</param>
-		public void SetRecent(string recentFile)
+		private void SetRecent(string recentFile)
 		{
 			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
+			ApplicationSettings.SaveLocalUser();
+
 			SetRecents();
 		}
 
@@ -499,12 +589,6 @@ namespace MKY.YAT.Gui.Forms
 			}
 		}
 
-		private void SaveRecents()
-		{
-			if (ApplicationSettings.LocalUser.RecentFiles.HaveChanged)
-				ApplicationSettings.Save();
-		}
-
 		#endregion
 
 		#region Tool
@@ -536,27 +620,41 @@ namespace MKY.YAT.Gui.Forms
 		private void ApplyWindowSettings()
 		{
 			SuspendLayout();
+
+			StartPosition = ApplicationSettings.LocalUser.MainWindow.StartPosition;
 			WindowState = ApplicationSettings.LocalUser.MainWindow.WindowState;
-			if (WindowState == FormWindowState.Normal)
-			{
+
+			if ((StartPosition == FormStartPosition.Manual) && (WindowState == FormWindowState.Normal))
 				Location = ApplicationSettings.LocalUser.MainWindow.Location;
-				Size     = ApplicationSettings.LocalUser.MainWindow.Size;
-			}
+
+			if (WindowState == FormWindowState.Normal)
+				Size = ApplicationSettings.LocalUser.MainWindow.Size;
+
 			ResumeLayout();
 		}
 
 		private void SaveWindowSettings()
 		{
+			SaveWindowSettings(false);
+		}
+
+		private void SaveWindowSettings(bool setStartPositionToManual)
+		{
+			if (setStartPositionToManual)
+			{
+				ApplicationSettings.LocalUser.MainWindow.StartPosition = FormStartPosition.Manual;
+				StartPosition = ApplicationSettings.LocalUser.MainWindow.StartPosition;
+			}
+
 			ApplicationSettings.LocalUser.MainWindow.WindowState = WindowState;
-			if (WindowState == FormWindowState.Normal)
-			{
+
+			if ((StartPosition == FormStartPosition.Manual) && (WindowState == FormWindowState.Normal))
 				ApplicationSettings.LocalUser.MainWindow.Location = Location;
-				ApplicationSettings.LocalUser.MainWindow.Size     = Size;
-			}
-			if (ApplicationSettings.LocalUser.MainWindow.HaveChanged)
-			{
-				ApplicationSettings.Save();
-			}
+
+			if (WindowState == FormWindowState.Normal)
+				ApplicationSettings.LocalUser.MainWindow.Size = Size;
+
+			ApplicationSettings.SaveLocalUser();
 		}
 
 		private bool OpenFromFile(string filePath)
@@ -595,7 +693,7 @@ namespace MKY.YAT.Gui.Forms
 		private void SaveAll()
 		{
 			SaveAllTerminals();
-			SaveWorkspace();
+			SaveWorkspaceFile();
 		}
 
 		#endregion
@@ -605,7 +703,7 @@ namespace MKY.YAT.Gui.Forms
 		// MDI Workspace
 		//******************************************************************************************
 
-		private void ShowOpenWorkspaceDialog()
+		private void ShowOpenWorkspaceFileDialog()
 		{
 			SetFixedStatusText("Opening workspace...");
 			OpenFileDialog ofd = new OpenFileDialog();
@@ -618,6 +716,8 @@ namespace MKY.YAT.Gui.Forms
 				Refresh();
 
 				ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.SaveLocalUser();
+
 				OpenWorkspaceFromFile(ofd.FileName);
 			}
 			else
@@ -638,9 +738,12 @@ namespace MKY.YAT.Gui.Forms
 			{
 				_workspaceSettingsHandler.SettingsFilePath = filePath;
 				_workspaceSettingsHandler.Load();
-				_workspaceSettings = _workspaceSettingsHandler.Settings;
+				_workspaceSettingsRoot = _workspaceSettingsHandler.Settings;
 
-				if (filePath != GeneralSettings.CurrentWorkspaceFilePathDefault)
+				ApplicationSettings.LocalUser.General.CurrentWorkspaceFilePath = filePath;
+				ApplicationSettings.SaveLocalUser();
+
+				if (!_workspaceSettingsRoot.AutoSaved)
 					SetRecent(filePath);
 
 				SetTimedStatusText("Workspace opened");
@@ -664,17 +767,18 @@ namespace MKY.YAT.Gui.Forms
 				return (false);
 			}
 
-			int terminalCount = _workspaceSettings.Workspace.TerminalSettingsItems.Count;
+			int terminalCount = _workspaceSettingsRoot.TerminalSettings.Count;
 			if (terminalCount == 1)
 				SetFixedStatusText("Opening workspace terminal...");
 			else if (terminalCount > 1)
 				SetFixedStatusText("Opening workspace terminals...");
 
-			foreach (TerminalSettingsItem item in _workspaceSettings.Workspace.TerminalSettingsItems)
+			TerminalSettingsItemCollection clone = new TerminalSettingsItemCollection(_workspaceSettingsRoot.TerminalSettings);
+			foreach (TerminalSettingsItem item in clone)
 			{
 				try
 				{
-					OpenTerminalFromFile(item.FilePath, true);
+					OpenTerminalFromFile(item.FilePath, item.Guid, item.Window, true);
 				}
 				catch (System.Xml.XmlException ex)
 				{
@@ -699,6 +803,9 @@ namespace MKY.YAT.Gui.Forms
 				}
 			}
 
+			// attach workspace settings after terminals have been opened
+			AttachWorkspaceSettingsHandlers();
+
 			if (terminalCount == 1)
 				SetTimedStatusText("Workspace terminal opened");
 			else if (terminalCount > 1)
@@ -709,41 +816,27 @@ namespace MKY.YAT.Gui.Forms
 			return (true);
 		}
 
-		private void SaveWorkspace()
+		private void SaveWorkspaceFile()
 		{
-			if (_workspaceSettingsHandler.SettingsFileExists)
-				DoSaveWorkspace();
+			SaveWorkspaceFile(false);
+		}
+
+		private void SaveWorkspaceFile(bool autoSave)
+		{
+			if (autoSave)
+			{
+				DoSaveWorkspaceFile(true);
+			}
 			else
-				ShowSaveWorkspaceAsDialog();
-		}
-
-		private void DoSaveWorkspace()
-		{
-			SetFixedStatusText("Saving workspace...");
-			try
 			{
-				_workspaceSettingsHandler.Save();
-				SetRecent(_workspaceSettingsHandler.SettingsFilePath);
-				SetTimedStatusText("Workspace saved");
-			}
-			catch (System.Xml.XmlException ex)
-			{
-				SetFixedStatusText("Error saving workspace!");
-				MessageBox.Show
-					(
-					this,
-					"Unable to save file" + Environment.NewLine + _workspaceSettingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
-					"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
-					"File error message: " + ex.InnerException.Message,
-					"File Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning
-					);
-				SetTimedStatusText("Terminal not saved!");
+				if (_workspaceSettingsHandler.SettingsFilePathIsValid && !_workspaceSettingsHandler.Settings.AutoSaved)
+					DoSaveWorkspaceFile(false);
+				else
+					ShowSaveWorkspaceFileAsDialog();
 			}
 		}
 
-		private void ShowSaveWorkspaceAsDialog()
+		private void ShowSaveWorkspaceFileAsDialog()
 		{
 			SetFixedStatusText("Saving workspace as...");
 			SaveFileDialog sfd = new SaveFileDialog();
@@ -757,12 +850,96 @@ namespace MKY.YAT.Gui.Forms
 				Refresh();
 
 				ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.SaveLocalUser();
+
+				string autoSaveFilePathToDelete = string.Empty;
+				if (_workspaceSettingsRoot.AutoSaved)
+					autoSaveFilePathToDelete = _workspaceSettingsHandler.SettingsFilePath;
+
 				_workspaceSettingsHandler.SettingsFilePath = sfd.FileName;
-				DoSaveWorkspace();
+				DoSaveWorkspaceFile(false, autoSaveFilePathToDelete);
 			}
 			else
 			{
 				ResetStatusText();
+			}
+		}
+
+		private void DoSaveWorkspaceFile(bool autoSave)
+		{
+			DoSaveWorkspaceFile(autoSave, "");
+		}
+
+		private void DoSaveWorkspaceFile(bool autoSave, string autoSaveFilePathToDelete)
+		{
+			if (!autoSave)
+				SetFixedStatusText("Saving workspace...");
+
+			try
+			{
+				_workspaceSettingsRoot.SuspendChangeEvent();
+
+				// save all contained terminals
+				foreach (Form f in MdiChildren)
+				{
+					((Gui.Forms.Terminal)f).RequestAutoSaveFile();
+				}
+
+				// update workspace
+				foreach (Form f in MdiChildren)
+				{
+					AddToOrReplaceInWorkspace((Gui.Forms.Terminal)f);
+				}
+
+				// save workspace
+				if (autoSave)
+				{
+					string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveWorkspaceFileNamePrefix + Guid.ToString() + ExtensionSettings.WorkspaceFiles;
+					if (!_workspaceSettingsHandler.SettingsFilePathIsValid)
+						_workspaceSettingsHandler.SettingsFilePath = autoSaveFilePath;
+				}
+				_workspaceSettingsHandler.Settings.AutoSaved = autoSave;
+				_workspaceSettingsHandler.Save();
+
+				_workspaceSettingsRoot.ClearChanged();
+				_workspaceSettingsRoot.ResumeChangeEvent();
+
+				ApplicationSettings.LocalUser.General.CurrentWorkspaceFilePath = _workspaceSettingsHandler.SettingsFilePath;
+				ApplicationSettings.SaveLocalUser();
+
+				if (!autoSave)
+				{
+					SetRecent(_workspaceSettingsHandler.SettingsFilePath);
+					SetTimedStatusText("Workspace saved");
+				}
+
+				// try to delete existing auto save file
+				try
+				{
+					if (File.Exists(autoSaveFilePathToDelete))
+						File.Delete(autoSaveFilePathToDelete);
+				}
+				catch (Exception)
+				{
+				}
+			}
+			catch (System.Xml.XmlException ex)
+			{
+				if (!autoSave)
+				{
+					SetFixedStatusText("Error saving workspace!");
+					MessageBox.Show
+						(
+						this,
+						"Unable to save file" + Environment.NewLine + _workspaceSettingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
+						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
+						"File error message: " + ex.InnerException.Message,
+						"File Error",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+						);
+					SetTimedStatusText("Workspace not saved!");
+				}
 			}
 		}
 
@@ -772,7 +949,9 @@ namespace MKY.YAT.Gui.Forms
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
+
 				ApplicationSettings.LocalUser.General = f.SettingsResult;
+				ApplicationSettings.SaveLocalUser();
 			}
 		}
 
@@ -781,7 +960,7 @@ namespace MKY.YAT.Gui.Forms
 			OpenFromFile(ApplicationSettings.LocalUser.RecentFiles.FilePaths[userIndex - 1].Item);
 		}
 
-		private void AddToWorkspace(Terminal terminal)
+		private void AddToOrReplaceInWorkspace(Terminal terminal)
 		{
 			WindowSettings ws = new WindowSettings();
 			ws.State = terminal.WindowState;
@@ -793,12 +972,14 @@ namespace MKY.YAT.Gui.Forms
 			tsi.FilePath = terminal.SettingsFilePath;
 			tsi.Window = ws;
 
-			_workspaceSettings.Workspace.TerminalSettingsItems.AddOrReplaceGuid(tsi);
+			_workspaceSettingsRoot.TerminalSettings.AddOrReplaceGuid(tsi);
+			_workspaceSettingsRoot.SetChanged();
 		}
 
 		private void RemoveFromWorkspace(Terminal terminal)
 		{
-			_workspaceSettings.Workspace.TerminalSettingsItems.RemoveGuid(terminal.Guid);
+			_workspaceSettingsRoot.TerminalSettings.RemoveGuid(terminal.Guid);
+			_workspaceSettingsRoot.SetChanged();
 		}
 
 		#endregion
@@ -807,6 +988,12 @@ namespace MKY.YAT.Gui.Forms
 		//******************************************************************************************
 		// MDI Children
 		//******************************************************************************************
+
+		private int GetNextTerminalId()
+		{
+			_terminalIdCounter++;
+			return (_terminalIdCounter);
+		}
 
 		private void ShowNewTerminalDialog()
 		{
@@ -817,21 +1004,21 @@ namespace MKY.YAT.Gui.Forms
 				Refresh();
 
 				ApplicationSettings.LocalUser.NewTerminal = f.NewTerminalSettingsResult;
-				if (ApplicationSettings.LocalUser.NewTerminal.HaveChanged)
-					ApplicationSettings.Save();
+				ApplicationSettings.SaveLocalUser();
 
 				SetFixedStatusText("Creating new terminal...");
 
 				DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> sh = new DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot>(f.TerminalSettingsResult);
 				Gui.Forms.Terminal terminal = new Gui.Forms.Terminal(sh);
-				_terminalIdCounter++;
-				terminal.UserId = _TerminalText + _terminalIdCounter;
+
+				terminal.UserName = _TerminalText + GetNextTerminalId();
 				terminal.MdiParent = this;
 				terminal.TerminalChanged += new EventHandler(mdi_child_TerminalChanged);
 				terminal.TerminalSaved += new EventHandler<TerminalSavedEventArgs>(mdi_child_TerminalSaved);
 				terminal.FormClosed += new FormClosedEventHandler(mdi_child_FormClosed);
 				terminal.Show();
-				AddToWorkspace(terminal);
+
+				AddToOrReplaceInWorkspace(terminal);
 
 				SetTimedStatusText("New terminal created");
 			}
@@ -854,6 +1041,8 @@ namespace MKY.YAT.Gui.Forms
 				Refresh();
 
 				ApplicationSettings.LocalUser.Paths.TerminalFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.SaveLocalUser();
+
 				OpenTerminalFromFile(ofd.FileName);
 			}
 			else
@@ -864,10 +1053,10 @@ namespace MKY.YAT.Gui.Forms
 
 		private bool OpenTerminalFromFile(string filePath)
 		{
-			return (OpenTerminalFromFile(filePath, false));
+			return (OpenTerminalFromFile(filePath, Guid.Empty, null, false));
 		}
 
-		private bool OpenTerminalFromFile(string filePath, bool suppressErrorHandling)
+		private bool OpenTerminalFromFile(string filePath, Guid guid, WindowSettings windowSettings, bool suppressErrorHandling)
 		{
 			SetFixedStatusText("Opening terminal...");
 			try
@@ -875,15 +1064,31 @@ namespace MKY.YAT.Gui.Forms
 				DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> sh = new DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot>();
 				sh.SettingsFilePath = filePath;
 				sh.Load();
+
+				// replace window settings with those saved in workspace
+				if (windowSettings != null)
+					sh.Settings.Window = windowSettings;
+
+				// create terminal
 				Gui.Forms.Terminal terminal = new Gui.Forms.Terminal(sh);
-				terminal.UserIdFromFile = filePath;
+
+				if (guid != Guid.Empty)
+					terminal.Guid = guid;
+
+				if (sh.Settings.AutoSaved)
+					terminal.UserName = _TerminalText + GetNextTerminalId();
+				else
+					terminal.UserNameFromFile = filePath;
+
 				terminal.MdiParent = this;
 				terminal.TerminalChanged += new EventHandler(mdi_child_TerminalChanged);
 				terminal.TerminalSaved += new EventHandler<TerminalSavedEventArgs>(mdi_child_TerminalSaved);
 				terminal.FormClosed += new FormClosedEventHandler(mdi_child_FormClosed);
 				terminal.Show();
-				AddToWorkspace(terminal);
-				SetRecent(filePath);
+
+				AddToOrReplaceInWorkspace(terminal);
+				if (!sh.Settings.AutoSaved)
+					SetRecent(filePath);
 
 				SetTimedStatusText("Terminal opened");
 				return (true);
@@ -964,9 +1169,12 @@ namespace MKY.YAT.Gui.Forms
 
 		private void mdi_child_TerminalSaved(object sender, TerminalSavedEventArgs e)
 		{
-			AddToWorkspace((Terminal)sender);
-			SetRecent(e.FilePath);
-			SetTimedStatus(Status.ChildSaved);
+			AddToOrReplaceInWorkspace((Terminal)sender);
+			if (!e.AutoSave)
+			{
+				SetRecent(e.FilePath);
+				SetTimedStatus(Status.ChildSaved);
+			}
 			SetToolControls();
 		}
 

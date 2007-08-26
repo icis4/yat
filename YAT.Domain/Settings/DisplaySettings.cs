@@ -43,19 +43,24 @@ namespace MKY.YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
 		public DisplaySettings(DisplaySettings rhs)
 			: base(rhs)
 		{
-			Radix         = rhs.Radix;
-			ShowTimeStamp = rhs.ShowTimeStamp;
-			ShowLength    = rhs.ShowLength;
-			ShowCounters  = rhs.ShowCounters;
-			TxMaximalLineCount = rhs.TxMaximalLineCount;
-			RxMaximalLineCount = rhs.RxMaximalLineCount;
+			_radix         = rhs.Radix;
+			_showTimeStamp = rhs.ShowTimeStamp;
+			_showLength    = rhs.ShowLength;
+			_showCounters  = rhs.ShowCounters;
+			_txMaximalLineCount = rhs.TxMaximalLineCount;
+			_rxMaximalLineCount = rhs.RxMaximalLineCount;
 			ClearChanged();
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
 			Radix         = RadixDefault;

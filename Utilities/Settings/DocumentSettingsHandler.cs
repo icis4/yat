@@ -41,7 +41,7 @@ namespace MKY.Utilities.Settings
 		}
 
 		/// <summary>
-		/// Returns whether the settings filePath exists.
+		/// Returns whether the settings file path exists.
 		/// </summary>
 		public bool SettingsFileExists
 		{
@@ -52,6 +52,23 @@ namespace MKY.Utilities.Settings
 				if (_settingsFilePath == string.Empty)
 					return (false);
 				return (System.IO.File.Exists(_settingsFilePath));
+			}
+		}
+
+		/// <summary>
+		/// Returns whether the settings file path is valid.
+		/// </summary>
+		public bool SettingsFilePathIsValid
+		{
+			get
+			{
+				if (_settingsFilePath == null)
+					return (false);
+				if (_settingsFilePath == string.Empty)
+					return (false);
+				if (System.IO.Path.GetFullPath(_settingsFilePath) == string.Empty)
+					return (false);
+				return (true);
 			}
 		}
 

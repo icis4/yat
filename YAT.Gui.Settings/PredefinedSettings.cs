@@ -23,13 +23,19 @@ namespace MKY.YAT.Gui.Settings
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
 		public PredefinedSettings(PredefinedSettings rhs)
 			: base(rhs)
 		{
-			SelectedPage = rhs.SelectedPage;
+			_selectedPage = rhs.SelectedPage;
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
 			SelectedPage = 1;

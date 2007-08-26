@@ -35,26 +35,32 @@ namespace MKY.YAT.Gui.Settings
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
 		public NewTerminalSettings(NewTerminalSettings rhs)
 			: base(rhs)
 		{
-			TerminalType = rhs.TerminalType;
-			IOType       = rhs.IOType;
+			_terminalType = rhs.TerminalType;
+			_ioType       = rhs.IOType;
 
-			SerialPortId = rhs.SerialPortId;
+			_serialPortId = rhs.SerialPortId;
 
-			SocketRemoteHostNameOrAddress = rhs.SocketRemoteHostNameOrAddress;
-			SocketRemotePort              = rhs.SocketRemotePort;
+			_socketRemoteHostNameOrAddress = rhs.SocketRemoteHostNameOrAddress;
+			_socketRemotePort              = rhs.SocketRemotePort;
 
-			SocketLocalHostNameOrAddress  = rhs.SocketLocalHostNameOrAddress;
-			SocketLocalTcpPort            = rhs.SocketLocalTcpPort;
-			SocketLocalUdpPort            = rhs.SocketLocalUdpPort;
+			_socketLocalHostNameOrAddress  = rhs.SocketLocalHostNameOrAddress;
+			_socketLocalTcpPort            = rhs.SocketLocalTcpPort;
+			_socketLocalUdpPort            = rhs.SocketLocalUdpPort;
 
-			OpenTerminal = rhs.OpenTerminal;
+			_openTerminal = rhs.OpenTerminal;
 
 			ClearChanged();
 		}
 
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
 			TerminalType = Domain.TerminalType.Text;

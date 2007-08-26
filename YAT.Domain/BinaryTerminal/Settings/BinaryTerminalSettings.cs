@@ -39,17 +39,6 @@ namespace MKY.YAT.Domain.Settings
 			ClearChanged();
 		}
 
-		/// <summary></summary>
-		public BinaryTerminalSettings(BinaryTerminalSettings rhs)
-			: base(rhs)
-		{
-			DirectionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
-			SeparateTxRxDisplay = rhs.SeparateTxRxDisplay;
-			TxDisplay = new BinaryDisplaySettings(rhs.TxDisplay);
-			RxDisplay = new BinaryDisplaySettings(rhs.RxDisplay);
-			ClearChanged();
-		}
-
 		private void InitializeNodes()
 		{
 			DirectionLineBreakEnabled = true;
@@ -58,8 +47,25 @@ namespace MKY.YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
+		public BinaryTerminalSettings(BinaryTerminalSettings rhs)
+			: base(rhs)
+		{
+			_directionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
+			_separateTxRxDisplay = rhs.SeparateTxRxDisplay;
+			TxDisplay = new BinaryDisplaySettings(rhs.TxDisplay);
+			RxDisplay = new BinaryDisplaySettings(rhs.RxDisplay);
+			ClearChanged();
+		}
+
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			DirectionLineBreakEnabled = true;
 			SeparateTxRxDisplay = false;
 		}
 

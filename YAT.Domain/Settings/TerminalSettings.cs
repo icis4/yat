@@ -38,23 +38,6 @@ namespace MKY.YAT.Domain.Settings
 			ClearChanged();
 		}
 
-		/// <summary></summary>
-		public TerminalSettings(TerminalSettings rhs)
-			: base(rhs)
-		{
-			TerminalType = rhs.TerminalType;
-
-			IO = new IOSettings(rhs.IO);
-			Buffer = new BufferSettings(rhs.Buffer);
-			Display = new DisplaySettings(rhs.Display);
-			Transmit = new TransmitSettings(rhs.Transmit);
-
-			TextTerminal = new TextTerminalSettings(rhs.TextTerminal);
-			BinaryTerminal = new BinaryTerminalSettings(rhs.BinaryTerminal);
-
-			ClearChanged();
-		}
-
 		private void InitializeNodes()
 		{
 			IO = new IOSettings(SettingsType);
@@ -67,6 +50,28 @@ namespace MKY.YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
+		public TerminalSettings(TerminalSettings rhs)
+			: base(rhs)
+		{
+			_terminalType = rhs.TerminalType;
+
+			IO = new IOSettings(rhs.IO);
+			Buffer = new BufferSettings(rhs.Buffer);
+			Display = new DisplaySettings(rhs.Display);
+			Transmit = new TransmitSettings(rhs.Transmit);
+
+			TextTerminal = new TextTerminalSettings(rhs.TextTerminal);
+			BinaryTerminal = new BinaryTerminalSettings(rhs.BinaryTerminal);
+
+			ClearChanged();
+		}
+
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
 		protected override void SetMyDefaults()
 		{
 			TerminalType = TerminalType.Text;
