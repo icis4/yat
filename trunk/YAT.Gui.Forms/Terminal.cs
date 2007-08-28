@@ -395,6 +395,8 @@ namespace MKY.YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_View_DropDownOpening(object sender, EventArgs e)
 		{
+			Domain.TerminalType terminalType = _terminalSettingsRoot.TerminalType;
+
 			// panels
 			toolStripMenuItem_TerminalMenu_View_Panels_Tx.Checked = _terminalSettingsRoot.Layout.TxMonitorPanelIsVisible;
 			toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Checked = _terminalSettingsRoot.Layout.BidirMonitorPanelIsVisible;
@@ -419,6 +421,10 @@ namespace MKY.YAT.Gui.Forms
 			// options
 			toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Checked = _terminalSettingsRoot.Display.ShowTimeStamp;
 			toolStripMenuItem_TerminalMenu_View_ShowLength.Checked = _terminalSettingsRoot.Display.ShowLength;
+			
+			bool enabled = (terminalType == Domain.TerminalType.Text);
+			toolStripMenuItem_TerminalMenu_View_ShowEol.Enabled = enabled;
+			toolStripMenuItem_TerminalMenu_View_ShowEol.Checked = enabled && _terminalSettingsRoot.TextTerminal.ShowEol;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Panels_Tx_Click(object sender, EventArgs e)
@@ -480,6 +486,11 @@ namespace MKY.YAT.Gui.Forms
 		private void toolStripMenuItem_TerminalMenu_View_ShowLength_Click(object sender, EventArgs e)
 		{
 			_terminalSettingsRoot.Display.ShowLength = !_terminalSettingsRoot.Display.ShowLength;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_View_ShowEol_Click(object sender, EventArgs e)
+		{
+			_terminalSettingsRoot.TextTerminal.ShowEol = !_terminalSettingsRoot.TextTerminal.ShowEol;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Format_Click(object sender, EventArgs e)
@@ -730,12 +741,12 @@ namespace MKY.YAT.Gui.Forms
 			SendFile();
 		}
 
-		private void toolStripMenuItem_SendContextMenu_View_SendCommand_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_SendContextMenu_Panels_SendCommand_Click(object sender, EventArgs e)
 		{
 			_terminalSettingsRoot.Layout.SendCommandPanelIsVisible = !_terminalSettingsRoot.Layout.SendCommandPanelIsVisible;
 		}
 
-		private void toolStripMenuItem_SendContextMenu_View_SendFile_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_SendContextMenu_Panels_SendFile_Click(object sender, EventArgs e)
 		{
 			_terminalSettingsRoot.Layout.SendFilePanelIsVisible = !_terminalSettingsRoot.Layout.SendFilePanelIsVisible;
 		}
@@ -1328,14 +1339,30 @@ namespace MKY.YAT.Gui.Forms
 			// splitContainer_Terminal and splitContainer_SendCommand
 			if (_terminalSettingsRoot.Layout.SendCommandPanelIsVisible || _terminalSettingsRoot.Layout.SendFilePanelIsVisible)
 			{
-				splitContainer_Terminal.Panel1Collapsed = false;
-				splitContainer_SendCommand.Panel1Collapsed = !_terminalSettingsRoot.Layout.SendCommandPanelIsVisible;
-				splitContainer_SendCommand.Panel2Collapsed = !_terminalSettingsRoot.Layout.SendFilePanelIsVisible;
+				splitContainer_Terminal.Panel2Collapsed = false;
+				panel_Monitor.Padding = new System.Windows.Forms.Padding(3, 3, 1, 0);
+				panel_Predefined.Padding = new System.Windows.Forms.Padding(1, 3, 3, 0);
 			}
 			else
 			{
-				splitContainer_Terminal.Panel1Collapsed = true;
+				splitContainer_Terminal.Panel2Collapsed = true;
+				panel_Monitor.Padding = new System.Windows.Forms.Padding(3, 3, 1, 3);
+				panel_Predefined.Padding = new System.Windows.Forms.Padding(1, 3, 3, 3);
 			}
+
+			if (_terminalSettingsRoot.Layout.SendCommandPanelIsVisible && _terminalSettingsRoot.Layout.SendFilePanelIsVisible)
+			{
+				splitContainer_Terminal.Panel2MinSize = 97;
+				splitContainer_Terminal.SplitterDistance = 393;
+			}
+			else if (_terminalSettingsRoot.Layout.SendCommandPanelIsVisible || _terminalSettingsRoot.Layout.SendFilePanelIsVisible)
+			{
+				splitContainer_Terminal.Panel2MinSize = 48;
+				splitContainer_Terminal.SplitterDistance = 442;
+			}
+
+			splitContainer_Send.Panel1Collapsed = !_terminalSettingsRoot.Layout.SendCommandPanelIsVisible;
+			splitContainer_Send.Panel2Collapsed = !_terminalSettingsRoot.Layout.SendFilePanelIsVisible;
 
 			ResumeLayout();
 			_isSettingControls = false;
