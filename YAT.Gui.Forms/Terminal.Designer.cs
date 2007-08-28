@@ -47,6 +47,7 @@ namespace MKY.YAT.Gui.Forms
 			this.toolStripSeparator_MonitorContextMenu_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_ShowLength = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MonitorContextMenu_ShowEol = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_MonitorContextMenu_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripComboBox_MonitorContextMenu_Orientation = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripSeparator_MonitorContextMenu_3 = new System.Windows.Forms.ToolStripSeparator();
@@ -110,13 +111,13 @@ namespace MKY.YAT.Gui.Forms
 			this.toolStripSeparator_TerminalMenu_Terminal_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings = new System.Windows.Forms.ToolStripMenuItem();
 			this.presetSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.e1NoneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.e1XonXoffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.n1NoneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.none1XOnXoffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.none1NoneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.none1XOnXOffToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-			this.none1RTSCTSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this._e1NoneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this._e1XonXoffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this._n1NoneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this._none1XOnXoffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this._none1NoneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this._none1XOnXOffToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this._none1RTSCTSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Command = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_File = new System.Windows.Forms.ToolStripMenuItem();
@@ -149,6 +150,7 @@ namespace MKY.YAT.Gui.Forms
 			this.toolStripSeparator_TerminalMenu_View_3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_ShowLength = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_View_ShowEol = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_TerminalMenu_View_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_Format = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip_Terminal = new System.Windows.Forms.StatusStrip();
@@ -175,15 +177,14 @@ namespace MKY.YAT.Gui.Forms
 			this.panel_Predefined = new System.Windows.Forms.Panel();
 			this.groupBox_Predefined = new System.Windows.Forms.GroupBox();
 			this.predefined = new MKY.YAT.Gui.Controls.PredefinedCommands();
-			this.panel_SendCommand = new System.Windows.Forms.Panel();
-			this.splitContainer_SendCommand = new System.Windows.Forms.SplitContainer();
+			this.panel_Send = new System.Windows.Forms.Panel();
+			this.splitContainer_Send = new System.Windows.Forms.SplitContainer();
 			this.groupBox_SendCommand = new System.Windows.Forms.GroupBox();
 			this.sendCommand = new MKY.YAT.Gui.Controls.SendCommand();
 			this.groupBox_SendFile = new System.Windows.Forms.GroupBox();
 			this.sendFile = new MKY.YAT.Gui.Controls.SendFile();
 			this.timer_RtsLuminescence = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.toolStripMenuItem_MonitorContextMenu_ShowEol = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Monitor.SuspendLayout();
 			this.contextMenuStrip_Radix.SuspendLayout();
 			this.contextMenuStrip_Send.SuspendLayout();
@@ -209,10 +210,10 @@ namespace MKY.YAT.Gui.Forms
 			this.panel_Monitor_Rx.SuspendLayout();
 			this.panel_Predefined.SuspendLayout();
 			this.groupBox_Predefined.SuspendLayout();
-			this.panel_SendCommand.SuspendLayout();
-			this.splitContainer_SendCommand.Panel1.SuspendLayout();
-			this.splitContainer_SendCommand.Panel2.SuspendLayout();
-			this.splitContainer_SendCommand.SuspendLayout();
+			this.panel_Send.SuspendLayout();
+			this.splitContainer_Send.Panel1.SuspendLayout();
+			this.splitContainer_Send.Panel2.SuspendLayout();
+			this.splitContainer_Send.SuspendLayout();
 			this.groupBox_SendCommand.SuspendLayout();
 			this.groupBox_SendFile.SuspendLayout();
 			this.SuspendLayout();
@@ -246,7 +247,7 @@ namespace MKY.YAT.Gui.Forms
             this.toolStripSeparator_MonitorContextMenu_7,
             this.toolStripMenuItem_MonitorContextMenu_Print});
 			this.contextMenuStrip_Monitor.Name = "contextMenuStrip_Monitor";
-			this.contextMenuStrip_Monitor.Size = new System.Drawing.Size(226, 379);
+			this.contextMenuStrip_Monitor.Size = new System.Drawing.Size(226, 357);
 			this.contextMenuStrip_Monitor.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Monitor_Opening);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Radix
@@ -324,7 +325,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Radix.DropDown = this.contextMenuStrip_Radix;
 			this.toolStripMenuItem_TerminalMenu_View_Radix.Name = "toolStripMenuItem_TerminalMenu_View_Radix";
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(169, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(219, 22);
 			this.toolStripMenuItem_TerminalMenu_View_Radix.Text = "&Radix";
 			// 
 			// toolStripSeparator_MonitorContextMenu_1
@@ -345,6 +346,13 @@ namespace MKY.YAT.Gui.Forms
 			this.toolStripMenuItem_MonitorContextMenu_ShowLength.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_ShowLength.Text = "Show Length";
 			this.toolStripMenuItem_MonitorContextMenu_ShowLength.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowLength_Click);
+			// 
+			// toolStripMenuItem_MonitorContextMenu_ShowEol
+			// 
+			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Name = "toolStripMenuItem_MonitorContextMenu_ShowEol";
+			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Size = new System.Drawing.Size(225, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Text = "Show End Of Line Sequence";
+			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowEol_Click);
 			// 
 			// toolStripSeparator_MonitorContextMenu_2
 			// 
@@ -487,7 +495,7 @@ namespace MKY.YAT.Gui.Forms
             this.toolStripMenuItem_SendContextMenu_Panels,
             this.toolStripMenuItem_SendContextMenu_Hide});
 			this.contextMenuStrip_Send.Name = "contextMenuStrip_Send";
-			this.contextMenuStrip_Send.Size = new System.Drawing.Size(160, 98);
+			this.contextMenuStrip_Send.Size = new System.Drawing.Size(160, 120);
 			this.contextMenuStrip_Send.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Send_Opening);
 			// 
 			// toolStripMenuItem_SendContextMenu_Command
@@ -525,6 +533,7 @@ namespace MKY.YAT.Gui.Forms
 			this.toolStripMenuItem_SendContextMenu_Panels_SendCommand.Name = "toolStripMenuItem_SendContextMenu_Panels_SendCommand";
 			this.toolStripMenuItem_SendContextMenu_Panels_SendCommand.Size = new System.Drawing.Size(188, 22);
 			this.toolStripMenuItem_SendContextMenu_Panels_SendCommand.Text = "Send Command Panel";
+			this.toolStripMenuItem_SendContextMenu_Panels_SendCommand.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_Panels_SendCommand_Click);
 			// 
 			// toolStripMenuItem_SendContextMenu_Panels_SendFile
 			// 
@@ -533,6 +542,7 @@ namespace MKY.YAT.Gui.Forms
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Name = "toolStripMenuItem_SendContextMenu_Panels_SendFile";
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Size = new System.Drawing.Size(188, 22);
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Text = "Send File Panel";
+			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_Panels_SendFile_Click);
 			// 
 			// toolStripMenuItem_SendContextMenu_Hide
 			// 
@@ -880,59 +890,59 @@ namespace MKY.YAT.Gui.Forms
 			// presetSettingsToolStripMenuItem
 			// 
 			this.presetSettingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.e1NoneToolStripMenuItem,
-            this.e1XonXoffToolStripMenuItem,
-            this.n1NoneToolStripMenuItem,
-            this.none1XOnXoffToolStripMenuItem,
-            this.none1NoneToolStripMenuItem,
-            this.none1XOnXOffToolStripMenuItem1,
-            this.none1RTSCTSToolStripMenuItem});
+            this._e1NoneToolStripMenuItem,
+            this._e1XonXoffToolStripMenuItem,
+            this._n1NoneToolStripMenuItem,
+            this._none1XOnXoffToolStripMenuItem,
+            this._none1NoneToolStripMenuItem,
+            this._none1XOnXOffToolStripMenuItem1,
+            this._none1RTSCTSToolStripMenuItem});
 			this.presetSettingsToolStripMenuItem.Name = "presetSettingsToolStripMenuItem";
 			this.presetSettingsToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
 			this.presetSettingsToolStripMenuItem.Text = "&Presets";
 			this.presetSettingsToolStripMenuItem.Visible = false;
 			// 
-			// e1NoneToolStripMenuItem
+			// _e1NoneToolStripMenuItem
 			// 
-			this.e1NoneToolStripMenuItem.Name = "e1NoneToolStripMenuItem";
-			this.e1NoneToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-			this.e1NoneToolStripMenuItem.Text = "&1: 2400, 7, Even, 1, None";
+			this._e1NoneToolStripMenuItem.Name = "_e1NoneToolStripMenuItem";
+			this._e1NoneToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+			this._e1NoneToolStripMenuItem.Text = "&1: 2400, 7, Even, 1, None";
 			// 
-			// e1XonXoffToolStripMenuItem
+			// _e1XonXoffToolStripMenuItem
 			// 
-			this.e1XonXoffToolStripMenuItem.Name = "e1XonXoffToolStripMenuItem";
-			this.e1XonXoffToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-			this.e1XonXoffToolStripMenuItem.Text = "&2: 2400, 7, Even, 1, XOn/XOff";
+			this._e1XonXoffToolStripMenuItem.Name = "_e1XonXoffToolStripMenuItem";
+			this._e1XonXoffToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+			this._e1XonXoffToolStripMenuItem.Text = "&2: 2400, 7, Even, 1, XOn/XOff";
 			// 
-			// n1NoneToolStripMenuItem
+			// _n1NoneToolStripMenuItem
 			// 
-			this.n1NoneToolStripMenuItem.Name = "n1NoneToolStripMenuItem";
-			this.n1NoneToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-			this.n1NoneToolStripMenuItem.Text = "&3: 9600, 8, None, 1, None";
+			this._n1NoneToolStripMenuItem.Name = "_n1NoneToolStripMenuItem";
+			this._n1NoneToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+			this._n1NoneToolStripMenuItem.Text = "&3: 9600, 8, None, 1, None";
 			// 
-			// none1XOnXoffToolStripMenuItem
+			// _none1XOnXoffToolStripMenuItem
 			// 
-			this.none1XOnXoffToolStripMenuItem.Name = "none1XOnXoffToolStripMenuItem";
-			this.none1XOnXoffToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-			this.none1XOnXoffToolStripMenuItem.Text = "&4: 9600, 8, None, 1, XOn/XOff";
+			this._none1XOnXoffToolStripMenuItem.Name = "_none1XOnXoffToolStripMenuItem";
+			this._none1XOnXoffToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+			this._none1XOnXoffToolStripMenuItem.Text = "&4: 9600, 8, None, 1, XOn/XOff";
 			// 
-			// none1NoneToolStripMenuItem
+			// _none1NoneToolStripMenuItem
 			// 
-			this.none1NoneToolStripMenuItem.Name = "none1NoneToolStripMenuItem";
-			this.none1NoneToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-			this.none1NoneToolStripMenuItem.Text = "&5: 19200, 8, None, 1, None";
+			this._none1NoneToolStripMenuItem.Name = "_none1NoneToolStripMenuItem";
+			this._none1NoneToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+			this._none1NoneToolStripMenuItem.Text = "&5: 19200, 8, None, 1, None";
 			// 
-			// none1XOnXOffToolStripMenuItem1
+			// _none1XOnXOffToolStripMenuItem1
 			// 
-			this.none1XOnXOffToolStripMenuItem1.Name = "none1XOnXOffToolStripMenuItem1";
-			this.none1XOnXOffToolStripMenuItem1.Size = new System.Drawing.Size(241, 22);
-			this.none1XOnXOffToolStripMenuItem1.Text = "&6: 19200, 8, None, 1, XOn/XOff";
+			this._none1XOnXOffToolStripMenuItem1.Name = "_none1XOnXOffToolStripMenuItem1";
+			this._none1XOnXOffToolStripMenuItem1.Size = new System.Drawing.Size(241, 22);
+			this._none1XOnXOffToolStripMenuItem1.Text = "&6: 19200, 8, None, 1, XOn/XOff";
 			// 
-			// none1RTSCTSToolStripMenuItem
+			// _none1RTSCTSToolStripMenuItem
 			// 
-			this.none1RTSCTSToolStripMenuItem.Name = "none1RTSCTSToolStripMenuItem";
-			this.none1RTSCTSToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-			this.none1RTSCTSToolStripMenuItem.Text = "&9: 115200, 8, None, 1, RTS/CTS";
+			this._none1RTSCTSToolStripMenuItem.Name = "_none1RTSCTSToolStripMenuItem";
+			this._none1RTSCTSToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+			this._none1RTSCTSToolStripMenuItem.Text = "&9: 115200, 8, None, 1, RTS/CTS";
 			// 
 			// toolStripMenuItem_TerminalMenu_Send
 			// 
@@ -1040,6 +1050,7 @@ namespace MKY.YAT.Gui.Forms
             this.toolStripSeparator_TerminalMenu_View_3,
             this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp,
             this.toolStripMenuItem_TerminalMenu_View_ShowLength,
+            this.toolStripMenuItem_TerminalMenu_View_ShowEol,
             this.toolStripSeparator_TerminalMenu_View_4,
             this.toolStripMenuItem_TerminalMenu_View_Format});
 			this.toolStripMenuItem_TerminalMenu_View.MergeAction = System.Windows.Forms.MergeAction.Insert;
@@ -1064,7 +1075,7 @@ namespace MKY.YAT.Gui.Forms
             this.toolStripSeparator_TerminalMenu_View_Panels_3,
             this.toolStripMenuItem_TerminalMenu_View_Panels_RearrangeAll});
 			this.toolStripMenuItem_TerminalMenu_View_Panels.Name = "toolStripMenuItem_TerminalMenu_View_Panels";
-			this.toolStripMenuItem_TerminalMenu_View_Panels.Size = new System.Drawing.Size(169, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Panels.Size = new System.Drawing.Size(219, 22);
 			this.toolStripMenuItem_TerminalMenu_View_Panels.Text = "&Panels";
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Panels_Tx
@@ -1152,7 +1163,7 @@ namespace MKY.YAT.Gui.Forms
 			// toolStripSeparator_TerminalMenu_View_1
 			// 
 			this.toolStripSeparator_TerminalMenu_View_1.Name = "toolStripSeparator_TerminalMenu_View_1";
-			this.toolStripSeparator_TerminalMenu_View_1.Size = new System.Drawing.Size(166, 6);
+			this.toolStripSeparator_TerminalMenu_View_1.Size = new System.Drawing.Size(216, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Counters
 			// 
@@ -1160,7 +1171,7 @@ namespace MKY.YAT.Gui.Forms
             this.toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters,
             this.toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters});
 			this.toolStripMenuItem_TerminalMenu_View_Counters.Name = "toolStripMenuItem_TerminalMenu_View_Counters";
-			this.toolStripMenuItem_TerminalMenu_View_Counters.Size = new System.Drawing.Size(169, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Counters.Size = new System.Drawing.Size(219, 22);
 			this.toolStripMenuItem_TerminalMenu_View_Counters.Text = "&Counters";
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters
@@ -1180,36 +1191,43 @@ namespace MKY.YAT.Gui.Forms
 			// toolStripSeparator_TerminalMenu_View_2
 			// 
 			this.toolStripSeparator_TerminalMenu_View_2.Name = "toolStripSeparator_TerminalMenu_View_2";
-			this.toolStripSeparator_TerminalMenu_View_2.Size = new System.Drawing.Size(166, 6);
+			this.toolStripSeparator_TerminalMenu_View_2.Size = new System.Drawing.Size(216, 6);
 			// 
 			// toolStripSeparator_TerminalMenu_View_3
 			// 
 			this.toolStripSeparator_TerminalMenu_View_3.Name = "toolStripSeparator_TerminalMenu_View_3";
-			this.toolStripSeparator_TerminalMenu_View_3.Size = new System.Drawing.Size(166, 6);
+			this.toolStripSeparator_TerminalMenu_View_3.Size = new System.Drawing.Size(216, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ShowTimeStamp
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Name = "toolStripMenuItem_TerminalMenu_View_ShowTimeStamp";
-			this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Size = new System.Drawing.Size(169, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Size = new System.Drawing.Size(219, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Text = "Show &Time Stamp";
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ShowLength
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_ShowLength.Name = "toolStripMenuItem_TerminalMenu_View_ShowLength";
-			this.toolStripMenuItem_TerminalMenu_View_ShowLength.Size = new System.Drawing.Size(169, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ShowLength.Size = new System.Drawing.Size(219, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ShowLength.Text = "Show &Length";
-			this.toolStripMenuItem_TerminalMenu_View_ShowLength.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowLength_Click);
+			this.toolStripMenuItem_TerminalMenu_View_ShowLength.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowLength_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_View_ShowEol
+			// 
+			this.toolStripMenuItem_TerminalMenu_View_ShowEol.Name = "toolStripMenuItem_TerminalMenu_View_ShowEol";
+			this.toolStripMenuItem_TerminalMenu_View_ShowEol.Size = new System.Drawing.Size(219, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ShowEol.Text = "Show &End Of Line Sequence";
+			this.toolStripMenuItem_TerminalMenu_View_ShowEol.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowEol_Click);
 			// 
 			// toolStripSeparator_TerminalMenu_View_4
 			// 
 			this.toolStripSeparator_TerminalMenu_View_4.Name = "toolStripSeparator_TerminalMenu_View_4";
-			this.toolStripSeparator_TerminalMenu_View_4.Size = new System.Drawing.Size(166, 6);
+			this.toolStripSeparator_TerminalMenu_View_4.Size = new System.Drawing.Size(216, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Format
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Format.Name = "toolStripMenuItem_TerminalMenu_View_Format";
-			this.toolStripMenuItem_TerminalMenu_View_Format.Size = new System.Drawing.Size(169, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Format.Size = new System.Drawing.Size(219, 22);
 			this.toolStripMenuItem_TerminalMenu_View_Format.Text = "&Format...";
 			this.toolStripMenuItem_TerminalMenu_View_Format.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_Format_Click);
 			// 
@@ -1368,9 +1386,10 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			// splitContainer_Terminal.Panel2
 			// 
-			this.splitContainer_Terminal.Panel2.Controls.Add(this.panel_SendCommand);
+			this.splitContainer_Terminal.Panel2.Controls.Add(this.panel_Send);
+			this.splitContainer_Terminal.Panel2MinSize = 97;
 			this.splitContainer_Terminal.Size = new System.Drawing.Size(712, 491);
-			this.splitContainer_Terminal.SplitterDistance = 405;
+			this.splitContainer_Terminal.SplitterDistance = 393;
 			this.splitContainer_Terminal.SplitterWidth = 1;
 			this.splitContainer_Terminal.TabIndex = 1;
 			this.splitContainer_Terminal.TabStop = false;
@@ -1390,7 +1409,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			this.splitContainer_Predefined.Panel2.Controls.Add(this.panel_Predefined);
 			this.splitContainer_Predefined.Panel2MinSize = 96;
-			this.splitContainer_Predefined.Size = new System.Drawing.Size(712, 405);
+			this.splitContainer_Predefined.Size = new System.Drawing.Size(712, 393);
 			this.splitContainer_Predefined.SplitterDistance = 536;
 			this.splitContainer_Predefined.TabIndex = 0;
 			this.splitContainer_Predefined.TabStop = false;
@@ -1402,7 +1421,7 @@ namespace MKY.YAT.Gui.Forms
 			this.panel_Monitor.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor.Name = "panel_Monitor";
 			this.panel_Monitor.Padding = new System.Windows.Forms.Padding(3, 3, 1, 0);
-			this.panel_Monitor.Size = new System.Drawing.Size(536, 405);
+			this.panel_Monitor.Size = new System.Drawing.Size(536, 393);
 			this.panel_Monitor.TabIndex = 0;
 			// 
 			// groupBox_Monitor
@@ -1413,7 +1432,7 @@ namespace MKY.YAT.Gui.Forms
 			this.groupBox_Monitor.Location = new System.Drawing.Point(3, 3);
 			this.groupBox_Monitor.Name = "groupBox_Monitor";
 			this.groupBox_Monitor.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.groupBox_Monitor.Size = new System.Drawing.Size(532, 402);
+			this.groupBox_Monitor.Size = new System.Drawing.Size(532, 390);
 			this.groupBox_Monitor.TabIndex = 0;
 			this.groupBox_Monitor.TabStop = false;
 			this.groupBox_Monitor.Text = "Monitor";
@@ -1433,7 +1452,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			this.splitContainer_MonitorLeft.Panel2.Controls.Add(this.splitContainer_MonitorRight);
 			this.splitContainer_MonitorLeft.Panel2MinSize = 100;
-			this.splitContainer_MonitorLeft.Size = new System.Drawing.Size(526, 386);
+			this.splitContainer_MonitorLeft.Size = new System.Drawing.Size(526, 374);
 			this.splitContainer_MonitorLeft.SplitterDistance = 172;
 			this.splitContainer_MonitorLeft.TabIndex = 0;
 			this.splitContainer_MonitorLeft.TabStop = false;
@@ -1446,7 +1465,7 @@ namespace MKY.YAT.Gui.Forms
 			this.panel_Monitor_Tx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Tx.Name = "panel_Monitor_Tx";
 			this.panel_Monitor_Tx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Tx.Size = new System.Drawing.Size(172, 386);
+			this.panel_Monitor_Tx.Size = new System.Drawing.Size(172, 374);
 			this.panel_Monitor_Tx.TabIndex = 0;
 			// 
 			// monitor_Tx
@@ -1456,7 +1475,7 @@ namespace MKY.YAT.Gui.Forms
 			this.monitor_Tx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Tx.Name = "monitor_Tx";
 			this.monitor_Tx.RepositoryType = MKY.YAT.Domain.RepositoryType.Tx;
-			this.monitor_Tx.Size = new System.Drawing.Size(166, 383);
+			this.monitor_Tx.Size = new System.Drawing.Size(166, 371);
 			this.monitor_Tx.TabIndex = 0;
 			this.monitor_Tx.CopyRequest += new System.EventHandler(this.monitor_Tx_CopyRequest);
 			this.monitor_Tx.PrintRequest += new System.EventHandler(this.monitor_Tx_PrintRequest);
@@ -1476,7 +1495,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			this.splitContainer_MonitorRight.Panel2.Controls.Add(this.panel_Monitor_Rx);
 			this.splitContainer_MonitorRight.Panel2MinSize = 48;
-			this.splitContainer_MonitorRight.Size = new System.Drawing.Size(350, 386);
+			this.splitContainer_MonitorRight.Size = new System.Drawing.Size(350, 374);
 			this.splitContainer_MonitorRight.SplitterDistance = 175;
 			this.splitContainer_MonitorRight.TabIndex = 1;
 			this.splitContainer_MonitorRight.TabStop = false;
@@ -1489,7 +1508,7 @@ namespace MKY.YAT.Gui.Forms
 			this.panel_Monitor_Bidir.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Bidir.Name = "panel_Monitor_Bidir";
 			this.panel_Monitor_Bidir.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(175, 386);
+			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(175, 374);
 			this.panel_Monitor_Bidir.TabIndex = 0;
 			// 
 			// monitor_Bidir
@@ -1499,7 +1518,7 @@ namespace MKY.YAT.Gui.Forms
 			this.monitor_Bidir.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Bidir.Name = "monitor_Bidir";
 			this.monitor_Bidir.RepositoryType = MKY.YAT.Domain.RepositoryType.Bidir;
-			this.monitor_Bidir.Size = new System.Drawing.Size(169, 383);
+			this.monitor_Bidir.Size = new System.Drawing.Size(169, 371);
 			this.monitor_Bidir.TabIndex = 0;
 			this.monitor_Bidir.CopyRequest += new System.EventHandler(this.monitor_Bidir_CopyRequest);
 			this.monitor_Bidir.PrintRequest += new System.EventHandler(this.monitor_Bidir_PrintRequest);
@@ -1511,7 +1530,7 @@ namespace MKY.YAT.Gui.Forms
 			this.panel_Monitor_Rx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Rx.Name = "panel_Monitor_Rx";
 			this.panel_Monitor_Rx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Rx.Size = new System.Drawing.Size(171, 386);
+			this.panel_Monitor_Rx.Size = new System.Drawing.Size(171, 374);
 			this.panel_Monitor_Rx.TabIndex = 0;
 			// 
 			// monitor_Rx
@@ -1521,7 +1540,7 @@ namespace MKY.YAT.Gui.Forms
 			this.monitor_Rx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Rx.Name = "monitor_Rx";
 			this.monitor_Rx.RepositoryType = MKY.YAT.Domain.RepositoryType.Rx;
-			this.monitor_Rx.Size = new System.Drawing.Size(165, 383);
+			this.monitor_Rx.Size = new System.Drawing.Size(165, 371);
 			this.monitor_Rx.TabIndex = 0;
 			this.monitor_Rx.CopyRequest += new System.EventHandler(this.monitor_Rx_CopyRequest);
 			this.monitor_Rx.PrintRequest += new System.EventHandler(this.monitor_Rx_PrintRequest);
@@ -1533,7 +1552,7 @@ namespace MKY.YAT.Gui.Forms
 			this.panel_Predefined.Location = new System.Drawing.Point(0, 0);
 			this.panel_Predefined.Name = "panel_Predefined";
 			this.panel_Predefined.Padding = new System.Windows.Forms.Padding(1, 3, 3, 0);
-			this.panel_Predefined.Size = new System.Drawing.Size(172, 405);
+			this.panel_Predefined.Size = new System.Drawing.Size(172, 393);
 			this.panel_Predefined.TabIndex = 0;
 			// 
 			// groupBox_Predefined
@@ -1544,7 +1563,7 @@ namespace MKY.YAT.Gui.Forms
 			this.groupBox_Predefined.Location = new System.Drawing.Point(1, 3);
 			this.groupBox_Predefined.Name = "groupBox_Predefined";
 			this.groupBox_Predefined.Padding = new System.Windows.Forms.Padding(3, 9, 3, 3);
-			this.groupBox_Predefined.Size = new System.Drawing.Size(168, 402);
+			this.groupBox_Predefined.Size = new System.Drawing.Size(168, 390);
 			this.groupBox_Predefined.TabIndex = 0;
 			this.groupBox_Predefined.TabStop = false;
 			this.groupBox_Predefined.Text = "&Predefined Commands";
@@ -1555,59 +1574,60 @@ namespace MKY.YAT.Gui.Forms
 			this.predefined.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.predefined.Location = new System.Drawing.Point(3, 22);
 			this.predefined.Name = "predefined";
-			this.predefined.Size = new System.Drawing.Size(162, 377);
+			this.predefined.Size = new System.Drawing.Size(162, 365);
 			this.predefined.TabIndex = 0;
 			this.predefined.SelectedPageChanged += new System.EventHandler(this.predefined_SelectedPageChanged);
 			this.predefined.SendCommandRequest += new System.EventHandler<MKY.YAT.Gui.PredefinedCommandEventArgs>(this.predefined_SendCommandRequest);
 			this.predefined.DefineCommandRequest += new System.EventHandler<MKY.YAT.Gui.PredefinedCommandEventArgs>(this.predefined_DefineCommandRequest);
 			// 
-			// panel_SendCommand
+			// panel_Send
 			// 
-			this.panel_SendCommand.Controls.Add(this.splitContainer_SendCommand);
-			this.panel_SendCommand.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel_SendCommand.Location = new System.Drawing.Point(0, 0);
-			this.panel_SendCommand.Name = "panel_SendCommand";
-			this.panel_SendCommand.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_SendCommand.Size = new System.Drawing.Size(712, 85);
-			this.panel_SendCommand.TabIndex = 0;
+			this.panel_Send.ContextMenuStrip = this.contextMenuStrip_Send;
+			this.panel_Send.Controls.Add(this.splitContainer_Send);
+			this.panel_Send.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel_Send.Location = new System.Drawing.Point(0, 0);
+			this.panel_Send.Name = "panel_Send";
+			this.panel_Send.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
+			this.panel_Send.Size = new System.Drawing.Size(712, 97);
+			this.panel_Send.TabIndex = 1;
 			// 
-			// splitContainer_SendCommand
+			// splitContainer_Send
 			// 
-			this.splitContainer_SendCommand.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer_SendCommand.Location = new System.Drawing.Point(3, 0);
-			this.splitContainer_SendCommand.Name = "splitContainer_SendCommand";
-			this.splitContainer_SendCommand.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			this.splitContainer_Send.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.splitContainer_Send.IsSplitterFixed = true;
+			this.splitContainer_Send.Location = new System.Drawing.Point(3, 0);
+			this.splitContainer_Send.Name = "splitContainer_Send";
+			this.splitContainer_Send.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
-			// splitContainer_SendCommand.Panel1
+			// splitContainer_Send.Panel1
 			// 
-			this.splitContainer_SendCommand.Panel1.Controls.Add(this.groupBox_SendCommand);
-			this.splitContainer_SendCommand.Panel1MinSize = 45;
+			this.splitContainer_Send.Panel1.Controls.Add(this.groupBox_SendCommand);
+			this.splitContainer_Send.Panel1MinSize = 46;
 			// 
-			// splitContainer_SendCommand.Panel2
+			// splitContainer_Send.Panel2
 			// 
-			this.splitContainer_SendCommand.Panel2.Controls.Add(this.groupBox_SendFile);
-			this.splitContainer_SendCommand.Panel2MinSize = 45;
-			this.splitContainer_SendCommand.Size = new System.Drawing.Size(706, 82);
-			this.splitContainer_SendCommand.SplitterDistance = 45;
-			this.splitContainer_SendCommand.SplitterWidth = 1;
-			this.splitContainer_SendCommand.TabIndex = 1;
-			this.splitContainer_SendCommand.TabStop = false;
+			this.splitContainer_Send.Panel2.Controls.Add(this.groupBox_SendFile);
+			this.splitContainer_Send.Panel2MinSize = 46;
+			this.splitContainer_Send.Size = new System.Drawing.Size(706, 94);
+			this.splitContainer_Send.SplitterDistance = 46;
+			this.splitContainer_Send.SplitterWidth = 1;
+			this.splitContainer_Send.TabIndex = 0;
 			// 
 			// groupBox_SendCommand
 			// 
-			this.groupBox_SendCommand.ContextMenuStrip = this.contextMenuStrip_Send;
 			this.groupBox_SendCommand.Controls.Add(this.sendCommand);
 			this.groupBox_SendCommand.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox_SendCommand.Location = new System.Drawing.Point(0, 0);
 			this.groupBox_SendCommand.Name = "groupBox_SendCommand";
-			this.groupBox_SendCommand.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.groupBox_SendCommand.Size = new System.Drawing.Size(706, 45);
-			this.groupBox_SendCommand.TabIndex = 0;
+			this.groupBox_SendCommand.Size = new System.Drawing.Size(706, 46);
+			this.groupBox_SendCommand.TabIndex = 1;
 			this.groupBox_SendCommand.TabStop = false;
-			this.groupBox_SendCommand.Text = "&Command";
+			this.groupBox_SendCommand.Text = "Send &Command";
 			// 
 			// sendCommand
 			// 
+			this.sendCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			command1.CommandLines = new string[] {
         "<1 lines...> []"};
 			command1.DefaultRadix = MKY.YAT.Domain.Radix.String;
@@ -1618,29 +1638,28 @@ namespace MKY.YAT.Gui.Forms
         "<1 lines...> []"};
 			command1.SingleLineCommand = "<1 lines...> []";
 			this.sendCommand.Command = command1;
-			this.sendCommand.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.sendCommand.Location = new System.Drawing.Point(3, 13);
+			this.sendCommand.Location = new System.Drawing.Point(3, 12);
 			this.sendCommand.Name = "sendCommand";
-			this.sendCommand.Size = new System.Drawing.Size(700, 29);
+			this.sendCommand.Size = new System.Drawing.Size(700, 27);
 			this.sendCommand.TabIndex = 0;
 			this.sendCommand.SendCommandRequest += new System.EventHandler(this.sendCommand_SendCommandRequest);
 			this.sendCommand.CommandChanged += new System.EventHandler(this.sendCommand_CommandChanged);
 			// 
 			// groupBox_SendFile
 			// 
-			this.groupBox_SendFile.ContextMenuStrip = this.contextMenuStrip_Send;
 			this.groupBox_SendFile.Controls.Add(this.sendFile);
 			this.groupBox_SendFile.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox_SendFile.Location = new System.Drawing.Point(0, 0);
 			this.groupBox_SendFile.Name = "groupBox_SendFile";
-			this.groupBox_SendFile.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.groupBox_SendFile.Size = new System.Drawing.Size(706, 48);
-			this.groupBox_SendFile.TabIndex = 0;
+			this.groupBox_SendFile.Size = new System.Drawing.Size(706, 47);
+			this.groupBox_SendFile.TabIndex = 1;
 			this.groupBox_SendFile.TabStop = false;
-			this.groupBox_SendFile.Text = "&File";
+			this.groupBox_SendFile.Text = "Send &File";
 			// 
 			// sendFile
 			// 
+			this.sendFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			command2.CommandLines = new string[] {
         "<1 lines...> []"};
 			command2.DefaultRadix = MKY.YAT.Domain.Radix.String;
@@ -1651,10 +1670,9 @@ namespace MKY.YAT.Gui.Forms
         "<1 lines...> []"};
 			command2.SingleLineCommand = "<1 lines...> []";
 			this.sendFile.Command = command2;
-			this.sendFile.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.sendFile.Location = new System.Drawing.Point(3, 13);
+			this.sendFile.Location = new System.Drawing.Point(3, 12);
 			this.sendFile.Name = "sendFile";
-			this.sendFile.Size = new System.Drawing.Size(700, 32);
+			this.sendFile.Size = new System.Drawing.Size(700, 27);
 			this.sendFile.TabIndex = 0;
 			this.sendFile.SendCommandRequest += new System.EventHandler(this.sendFile_SendCommandRequest);
 			this.sendFile.CommandChanged += new System.EventHandler(this.sendFile_CommandChanged);
@@ -1662,13 +1680,6 @@ namespace MKY.YAT.Gui.Forms
 			// timer_RtsLuminescence
 			// 
 			this.timer_RtsLuminescence.Tick += new System.EventHandler(this.timer_RtsLuminescence_Tick);
-			// 
-			// toolStripMenuItem_MonitorContextMenu_ShowEol
-			// 
-			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Name = "toolStripMenuItem_MonitorContextMenu_ShowEol";
-			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Size = new System.Drawing.Size(225, 22);
-			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Text = "Show End Of Line Sequence";
-			this.toolStripMenuItem_MonitorContextMenu_ShowEol.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowEol_Click);
 			// 
 			// Terminal
 			// 
@@ -1711,10 +1722,10 @@ namespace MKY.YAT.Gui.Forms
 			this.panel_Monitor_Rx.ResumeLayout(false);
 			this.panel_Predefined.ResumeLayout(false);
 			this.groupBox_Predefined.ResumeLayout(false);
-			this.panel_SendCommand.ResumeLayout(false);
-			this.splitContainer_SendCommand.Panel1.ResumeLayout(false);
-			this.splitContainer_SendCommand.Panel2.ResumeLayout(false);
-			this.splitContainer_SendCommand.ResumeLayout(false);
+			this.panel_Send.ResumeLayout(false);
+			this.splitContainer_Send.Panel1.ResumeLayout(false);
+			this.splitContainer_Send.Panel2.ResumeLayout(false);
+			this.splitContainer_Send.ResumeLayout(false);
 			this.groupBox_SendCommand.ResumeLayout(false);
 			this.groupBox_SendFile.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -1835,12 +1846,6 @@ namespace MKY.YAT.Gui.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Command_11;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Command_12;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_Connection;
-		private System.Windows.Forms.Panel panel_SendCommand;
-		private System.Windows.Forms.SplitContainer splitContainer_SendCommand;
-		private System.Windows.Forms.GroupBox groupBox_SendCommand;
-		private System.Windows.Forms.GroupBox groupBox_SendFile;
-		private MKY.YAT.Gui.Controls.SendCommand sendCommand;
-		private MKY.YAT.Gui.Controls.SendFile sendFile;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_TerminalMenu_File_1;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_Panels;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_Panels_Tx;
@@ -1868,13 +1873,155 @@ namespace MKY.YAT.Gui.Forms
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_TerminalMenu_View_4;
 		private System.Windows.Forms.ToolStripComboBox toolStripComboBox_TerminalMenu_View_Panels_Orientation;
 		private System.Windows.Forms.ToolStripMenuItem presetSettingsToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem n1NoneToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem e1NoneToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem e1XonXoffToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem none1XOnXoffToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem none1NoneToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem none1XOnXOffToolStripMenuItem1;
-		private System.Windows.Forms.ToolStripMenuItem none1RTSCTSToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem _n1NoneToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem _e1NoneToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem _e1XonXoffToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem _none1XOnXoffToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem _none1NoneToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem _none1XOnXOffToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem _none1RTSCTSToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowEol;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowEol;
+		private System.Windows.Forms.Panel panel_Send;
+		private System.Windows.Forms.SplitContainer splitContainer_Send;
+		private System.Windows.Forms.GroupBox groupBox_SendCommand;
+		private System.Windows.Forms.GroupBox groupBox_SendFile;
+		private MKY.YAT.Gui.Controls.SendCommand sendCommand;
+		private MKY.YAT.Gui.Controls.SendFile sendFile;
 	}
+
+	#region Copied Designer Code For Backup
+	//------------------------------------------------------------------------------------------
+	// Under some circumstances, the send panel gets messed up
+	// - Could be, that this happens when sendCommand and sendFile are docked to Fill
+	// - Could have some other reason
+	// Therefore, following a backup of the designer code
+	//------------------------------------------------------------------------------------------
+
+	/*
+
+			// 
+			// splitContainer_Terminal
+			// 
+			this.splitContainer_Terminal.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.splitContainer_Terminal.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+			this.splitContainer_Terminal.IsSplitterFixed = true;
+			this.splitContainer_Terminal.Location = new System.Drawing.Point(0, 0);
+			this.splitContainer_Terminal.Name = "splitContainer_Terminal";
+			this.splitContainer_Terminal.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			// 
+			// splitContainer_Terminal.Panel1
+			// 
+			this.splitContainer_Terminal.Panel1.Controls.Add(this.splitContainer_Predefined);
+			// 
+			// splitContainer_Terminal.Panel2
+			// 
+			this.splitContainer_Terminal.Panel2.Controls.Add(this.panel_Send);
+			this.splitContainer_Terminal.Panel2MinSize = 97;
+			this.splitContainer_Terminal.Size = new System.Drawing.Size(712, 491);
+			this.splitContainer_Terminal.SplitterDistance = 393;
+			this.splitContainer_Terminal.SplitterWidth = 1;
+			this.splitContainer_Terminal.TabIndex = 1;
+			this.splitContainer_Terminal.TabStop = false;
+			// 
+			// panel_Send
+			// 
+			this.panel_Send.Controls.Add(this.splitContainer_Send);
+			this.panel_Send.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel_Send.Location = new System.Drawing.Point(0, 0);
+			this.panel_Send.Name = "panel_Send";
+			this.panel_Send.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
+			this.panel_Send.Size = new System.Drawing.Size(712, 96);
+			this.panel_Send.TabIndex = 1;
+			// 
+			// splitContainer_Send
+			// 
+			this.splitContainer_Send.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.splitContainer_Send.IsSplitterFixed = true;
+			this.splitContainer_Send.Location = new System.Drawing.Point(3, 0);
+			this.splitContainer_Send.Name = "splitContainer_Send";
+			this.splitContainer_Send.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			// 
+			// splitContainer_Send.Panel1
+			// 
+			this.splitContainer_Send.Panel1.Controls.Add(this.groupBox_SendCommand);
+			this.splitContainer_Send.Panel1MinSize = 46;
+			// 
+			// splitContainer_Send.Panel2
+			// 
+			this.splitContainer_Send.Panel2.Controls.Add(this.groupBox_SendFile);
+			this.splitContainer_Send.Panel2MinSize = 46;
+			this.splitContainer_Send.Size = new System.Drawing.Size(706, 93);
+			this.splitContainer_Send.SplitterDistance = 46;
+			this.splitContainer_Send.SplitterWidth = 1;
+			this.splitContainer_Send.TabIndex = 0;
+			// 
+			// groupBox_SendCommand
+			// 
+			this.groupBox_SendCommand.Controls.Add(this.sendCommand);
+			this.groupBox_SendCommand.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.groupBox_SendCommand.Location = new System.Drawing.Point(0, 0);
+			this.groupBox_SendCommand.Name = "groupBox_SendCommand";
+			this.groupBox_SendCommand.Size = new System.Drawing.Size(706, 46);
+			this.groupBox_SendCommand.TabIndex = 1;
+			this.groupBox_SendCommand.TabStop = false;
+			this.groupBox_SendCommand.Text = "Send &Command";
+			// 
+			// sendCommand
+			// 
+			this.sendCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			command1.CommandLines = new string[] {
+        "<1 lines...> []"};
+			command1.DefaultRadix = MKY.YAT.Domain.Radix.String;
+			command1.Description = "<1 lines...> []";
+			command1.FilePath = "";
+			command1.IsFilePath = false;
+			command1.MultiLineCommand = new string[] {
+        "<1 lines...> []"};
+			command1.SingleLineCommand = "<1 lines...> []";
+			this.sendCommand.Command = command1;
+			this.sendCommand.Location = new System.Drawing.Point(3, 12);
+			this.sendCommand.Name = "sendCommand";
+			this.sendCommand.Size = new System.Drawing.Size(700, 27);
+			this.sendCommand.TabIndex = 0;
+			this.sendCommand.SendCommandRequest += new System.EventHandler(this.sendCommand_SendCommandRequest);
+			this.sendCommand.CommandChanged += new System.EventHandler(this.sendCommand_CommandChanged);
+			// 
+			// groupBox_SendFile
+			// 
+			this.groupBox_SendFile.Controls.Add(this.sendFile);
+			this.groupBox_SendFile.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.groupBox_SendFile.Location = new System.Drawing.Point(0, 0);
+			this.groupBox_SendFile.Name = "groupBox_SendFile";
+			this.groupBox_SendFile.Size = new System.Drawing.Size(706, 46);
+			this.groupBox_SendFile.TabIndex = 1;
+			this.groupBox_SendFile.TabStop = false;
+			this.groupBox_SendFile.Text = "Send &File";
+			// 
+			// sendFile
+			// 
+			this.sendFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			command2.CommandLines = new string[] {
+        "<1 lines...> []"};
+			command2.DefaultRadix = MKY.YAT.Domain.Radix.String;
+			command2.Description = "<1 lines...> []";
+			command2.FilePath = "";
+			command2.IsFilePath = false;
+			command2.MultiLineCommand = new string[] {
+        "<1 lines...> []"};
+			command2.SingleLineCommand = "<1 lines...> []";
+			this.sendFile.Command = command2;
+			this.sendFile.Location = new System.Drawing.Point(3, 12);
+			this.sendFile.Name = "sendFile";
+			this.sendFile.Size = new System.Drawing.Size(700, 27);
+			this.sendFile.TabIndex = 0;
+			this.sendFile.SendCommandRequest += new System.EventHandler(this.sendFile_SendCommandRequest);
+			this.sendFile.CommandChanged += new System.EventHandler(this.sendFile_CommandChanged);
+
+			*/
+
+	#endregion
+
 }
