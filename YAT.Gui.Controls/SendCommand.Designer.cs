@@ -39,9 +39,9 @@ namespace MKY.YAT.Gui.Controls
 			// 
 			this.button_SendCommand.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_SendCommand.Enabled = false;
-			this.button_SendCommand.Location = new System.Drawing.Point(380, 3);
+			this.button_SendCommand.Location = new System.Drawing.Point(391, 3);
 			this.button_SendCommand.Name = "button_SendCommand";
-			this.button_SendCommand.Size = new System.Drawing.Size(157, 21);
+			this.button_SendCommand.Size = new System.Drawing.Size(146, 21);
 			this.button_SendCommand.TabIndex = 2;
 			this.button_SendCommand.Text = "Send Command (F3)";
 			this.toolTip.SetToolTip(this.button_SendCommand, "Send Command");
@@ -53,7 +53,7 @@ namespace MKY.YAT.Gui.Controls
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_Command.Location = new System.Drawing.Point(3, 3);
 			this.comboBox_Command.Name = "comboBox_Command";
-			this.comboBox_Command.Size = new System.Drawing.Size(340, 21);
+			this.comboBox_Command.Size = new System.Drawing.Size(351, 21);
 			this.comboBox_Command.TabIndex = 0;
 			this.toolTip.SetToolTip(this.comboBox_Command, "Enter Command, click arrow for recent commands, press <...> to enter multi line c" +
 					"ommand");
@@ -67,7 +67,7 @@ namespace MKY.YAT.Gui.Controls
 			// button_MultiLineCommand
 			// 
 			this.button_MultiLineCommand.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_MultiLineCommand.Location = new System.Drawing.Point(349, 3);
+			this.button_MultiLineCommand.Location = new System.Drawing.Point(360, 3);
 			this.button_MultiLineCommand.Name = "button_MultiLineCommand";
 			this.button_MultiLineCommand.Size = new System.Drawing.Size(25, 21);
 			this.button_MultiLineCommand.TabIndex = 1;

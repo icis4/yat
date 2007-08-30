@@ -367,44 +367,41 @@ namespace MKY.YAT.Domain
 		private void ExecuteLineEnd(SerialDirection d, LineState lineState, List<DisplayElement> elements, List<List<DisplayElement>> lines)
 		{
 			// process EOL
+			int eolLength = lineState.Eol.Eol.Length;
 			List<DisplayElement> line = new List<DisplayElement>();
-			if (TextTerminalSettings.ShowEol)
+
+			if (TextTerminalSettings.ShowEol || (eolLength <= 0))
 			{
 				line.AddRange(lineState.LineElements);
 			}
-			else            // skip EOL if desired
+			else // remove EOL if desired
 			{
-				byte[] eol = lineState.Eol.Eol;
-				if (eol.Length > 0)
+				int eolElementCount = 0;
+				int eolAndWhiteElementCount = 0;
+				DisplayElement[] des = lineState.LineElements.ToArray();
+
+				// traverse elements reverse and count EOL data and white space elements to be removed
+				for (int i = (des.Length - 1); i > 0; i--)
 				{
-					DisplayElement[] des = lineState.LineElements.ToArray();
-					for (int i = 0; i < des.Length; i++)
+					if (des[i].IsDataElement)
 					{
-						int eolMatch = 0;
-						for (int j = 0; (j < (eol.Length)) && (j < (des.Length - i)); j++)
-						{
-							DisplayElement de = des[i + j];
-							if ((de.Origin != null) &&
-								(de.Origin.Data == eol[j]) &&
-								(de.Origin.Direction == d))
-								eolMatch++;
-							else
-								break;
-						}
+						// detect last non-EOL data element
+						if (eolElementCount >= eolLength)
+							break;
 
-						if (eolMatch == eol.Length)  // skip EOL elements
-							i += (eol.Length - 1);
-						else
-							line.Add(des[i]);
+						// loop through all EOL data elements
+						eolElementCount++;
 					}
+					eolAndWhiteElementCount++;
+				}
 
-					// also remove EOL from elements
-					elements.RemoveRange(elements.Count - eol.Length, eol.Length);
-				}
-				else
-				{
-					line.AddRange(lineState.LineElements);
-				}
+				// now traverse elements forward and add elements to line
+				for (int i = 0; i < (des.Length - eolAndWhiteElementCount); i++)
+					line.Add(des[i]);
+
+				// finally remove EOL data and white space elements from elements
+				if (elements.Count >= eolAndWhiteElementCount)
+					elements.RemoveRange(elements.Count - eolAndWhiteElementCount, eolAndWhiteElementCount);
 			}
 
 			// process line length

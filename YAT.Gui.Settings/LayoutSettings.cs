@@ -12,9 +12,9 @@ namespace MKY.YAT.Gui.Settings
 		private bool _txMonitorPanelIsVisible;
 		private bool _bidirMonitorPanelIsVisible;
 		private bool _rxMonitorPanelIsVisible;
-		private float _monitorLeftSplitterRatio;
-		private float _monitorRightSplitterRatio;
 		private Orientation _monitorOrientation;
+		private float _txMonitorSplitterRatio;
+		private float _rxMonitorSplitterRatio;
 
 		private bool _predefinedPanelIsVisible;
 		private float _predefinedSplitterRatio;
@@ -44,9 +44,9 @@ namespace MKY.YAT.Gui.Settings
 			_txMonitorPanelIsVisible    = rhs.TxMonitorPanelIsVisible;
 			_bidirMonitorPanelIsVisible = rhs.BidirMonitorPanelIsVisible;
 			_rxMonitorPanelIsVisible    = rhs.RxMonitorPanelIsVisible;
-			_monitorLeftSplitterRatio   = rhs.MonitorLeftSplitterRatio;
-			_monitorRightSplitterRatio  = rhs.MonitorRightSplitterRatio;
 			_monitorOrientation         = rhs.MonitorOrientation;
+			_txMonitorSplitterRatio     = rhs.TxMonitorSplitterRatio;
+			_rxMonitorSplitterRatio     = rhs.RxMonitorSplitterRatio;
 
 			_predefinedPanelIsVisible = rhs.PredefinedPanelIsVisible;
 			_predefinedSplitterRatio  = rhs.PredefinedSplitterRatio;
@@ -65,9 +65,9 @@ namespace MKY.YAT.Gui.Settings
 			TxMonitorPanelIsVisible = false;
 			BidirMonitorPanelIsVisible = true;
 			RxMonitorPanelIsVisible = false;
-			MonitorLeftSplitterRatio = (float)1 / 3;
-			MonitorRightSplitterRatio = (float)1 / 2;
 			MonitorOrientation = Orientation.Vertical;
+			TxMonitorSplitterRatio = (float)1 / 3;
+			RxMonitorSplitterRatio = (float)1 / 2;
 
 			PredefinedPanelIsVisible = true;
 			PredefinedSplitterRatio = (float)3 / 4;
@@ -123,34 +123,6 @@ namespace MKY.YAT.Gui.Settings
 			}
 		}
 
-		[XmlElement("MonitorLeftSplitterRatio")]
-		public float MonitorLeftSplitterRatio
-		{
-			get { return (_monitorLeftSplitterRatio); }
-			set
-			{
-				if (_monitorLeftSplitterRatio != value)
-				{
-					_monitorLeftSplitterRatio = value;
-					SetChanged();
-				}
-			}
-		}
-
-		[XmlElement("MonitorRightSplitterRatio")]
-		public float MonitorRightSplitterRatio
-		{
-			get { return (_monitorRightSplitterRatio); }
-			set
-			{
-				if (_monitorRightSplitterRatio != value)
-				{
-					_monitorRightSplitterRatio = value;
-					SetChanged();
-				}
-			}
-		}
-
 		[XmlElement("MonitorOrientation")]
 		public Orientation MonitorOrientation
 		{
@@ -160,6 +132,34 @@ namespace MKY.YAT.Gui.Settings
 				if (_monitorOrientation != value)
 				{
 					_monitorOrientation = value;
+					SetChanged();
+				}
+			}
+		}
+
+		[XmlElement("TxMonitorSplitterRatio")]
+		public float TxMonitorSplitterRatio
+		{
+			get { return (_txMonitorSplitterRatio); }
+			set
+			{
+				if (_txMonitorSplitterRatio != value)
+				{
+					_txMonitorSplitterRatio = value;
+					SetChanged();
+				}
+			}
+		}
+
+		[XmlElement("RxMonitorSplitterRatio")]
+		public float RxMonitorSplitterRatio
+		{
+			get { return (_rxMonitorSplitterRatio); }
+			set
+			{
+				if (_rxMonitorSplitterRatio != value)
+				{
+					_rxMonitorSplitterRatio = value;
 					SetChanged();
 				}
 			}
@@ -249,9 +249,9 @@ namespace MKY.YAT.Gui.Settings
 					_txMonitorPanelIsVisible.Equals(value._txMonitorPanelIsVisible) &&
 					_bidirMonitorPanelIsVisible.Equals(value._bidirMonitorPanelIsVisible) &&
 					_rxMonitorPanelIsVisible.Equals(value._rxMonitorPanelIsVisible) &&
-					_monitorLeftSplitterRatio.Equals(value._monitorLeftSplitterRatio) &&
-					_monitorRightSplitterRatio.Equals(value._monitorRightSplitterRatio) &&
 					_monitorOrientation.Equals(value._monitorOrientation) &&
+					_txMonitorSplitterRatio.Equals(value._txMonitorSplitterRatio) &&
+					_rxMonitorSplitterRatio.Equals(value._rxMonitorSplitterRatio) &&
 
 					_predefinedPanelIsVisible.Equals(value._predefinedPanelIsVisible) &&
 					_predefinedSplitterRatio.Equals(value._predefinedSplitterRatio) &&

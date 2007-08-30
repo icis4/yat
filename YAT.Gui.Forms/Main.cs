@@ -182,7 +182,7 @@ namespace MKY.YAT.Gui.Forms
 					{
 						case DialogResult.Yes: SaveWorkspaceFile(); break;
 						case DialogResult.No:                       break;
-						default: e.Cancel = true;                   return;
+						default:               e.Cancel = true;     return;
 					}
 				}
 			}

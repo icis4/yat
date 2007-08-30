@@ -166,10 +166,10 @@ namespace MKY.YAT.Gui.Forms
 			this.splitContainer_Predefined = new System.Windows.Forms.SplitContainer();
 			this.panel_Monitor = new System.Windows.Forms.Panel();
 			this.groupBox_Monitor = new System.Windows.Forms.GroupBox();
-			this.splitContainer_MonitorLeft = new System.Windows.Forms.SplitContainer();
+			this.splitContainer_TxMonitor = new System.Windows.Forms.SplitContainer();
 			this.panel_Monitor_Tx = new System.Windows.Forms.Panel();
 			this.monitor_Tx = new MKY.YAT.Gui.Controls.Monitor();
-			this.splitContainer_MonitorRight = new System.Windows.Forms.SplitContainer();
+			this.splitContainer_RxMonitor = new System.Windows.Forms.SplitContainer();
 			this.panel_Monitor_Bidir = new System.Windows.Forms.Panel();
 			this.monitor_Bidir = new MKY.YAT.Gui.Controls.Monitor();
 			this.panel_Monitor_Rx = new System.Windows.Forms.Panel();
@@ -199,13 +199,13 @@ namespace MKY.YAT.Gui.Forms
 			this.splitContainer_Predefined.SuspendLayout();
 			this.panel_Monitor.SuspendLayout();
 			this.groupBox_Monitor.SuspendLayout();
-			this.splitContainer_MonitorLeft.Panel1.SuspendLayout();
-			this.splitContainer_MonitorLeft.Panel2.SuspendLayout();
-			this.splitContainer_MonitorLeft.SuspendLayout();
+			this.splitContainer_TxMonitor.Panel1.SuspendLayout();
+			this.splitContainer_TxMonitor.Panel2.SuspendLayout();
+			this.splitContainer_TxMonitor.SuspendLayout();
 			this.panel_Monitor_Tx.SuspendLayout();
-			this.splitContainer_MonitorRight.Panel1.SuspendLayout();
-			this.splitContainer_MonitorRight.Panel2.SuspendLayout();
-			this.splitContainer_MonitorRight.SuspendLayout();
+			this.splitContainer_RxMonitor.Panel1.SuspendLayout();
+			this.splitContainer_RxMonitor.Panel2.SuspendLayout();
+			this.splitContainer_RxMonitor.SuspendLayout();
 			this.panel_Monitor_Bidir.SuspendLayout();
 			this.panel_Monitor_Rx.SuspendLayout();
 			this.panel_Predefined.SuspendLayout();
@@ -1427,7 +1427,7 @@ namespace MKY.YAT.Gui.Forms
 			// groupBox_Monitor
 			// 
 			this.groupBox_Monitor.ContextMenuStrip = this.contextMenuStrip_Monitor;
-			this.groupBox_Monitor.Controls.Add(this.splitContainer_MonitorLeft);
+			this.groupBox_Monitor.Controls.Add(this.splitContainer_TxMonitor);
 			this.groupBox_Monitor.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox_Monitor.Location = new System.Drawing.Point(3, 3);
 			this.groupBox_Monitor.Name = "groupBox_Monitor";
@@ -1437,26 +1437,26 @@ namespace MKY.YAT.Gui.Forms
 			this.groupBox_Monitor.TabStop = false;
 			this.groupBox_Monitor.Text = "Monitor";
 			// 
-			// splitContainer_MonitorLeft
+			// splitContainer_TxMonitor
 			// 
-			this.splitContainer_MonitorLeft.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer_MonitorLeft.Location = new System.Drawing.Point(3, 13);
-			this.splitContainer_MonitorLeft.Name = "splitContainer_MonitorLeft";
+			this.splitContainer_TxMonitor.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.splitContainer_TxMonitor.Location = new System.Drawing.Point(3, 13);
+			this.splitContainer_TxMonitor.Name = "splitContainer_TxMonitor";
 			// 
-			// splitContainer_MonitorLeft.Panel1
+			// splitContainer_TxMonitor.Panel1
 			// 
-			this.splitContainer_MonitorLeft.Panel1.Controls.Add(this.panel_Monitor_Tx);
-			this.splitContainer_MonitorLeft.Panel1MinSize = 48;
+			this.splitContainer_TxMonitor.Panel1.Controls.Add(this.panel_Monitor_Tx);
+			this.splitContainer_TxMonitor.Panel1MinSize = 48;
 			// 
-			// splitContainer_MonitorLeft.Panel2
+			// splitContainer_TxMonitor.Panel2
 			// 
-			this.splitContainer_MonitorLeft.Panel2.Controls.Add(this.splitContainer_MonitorRight);
-			this.splitContainer_MonitorLeft.Panel2MinSize = 100;
-			this.splitContainer_MonitorLeft.Size = new System.Drawing.Size(526, 374);
-			this.splitContainer_MonitorLeft.SplitterDistance = 172;
-			this.splitContainer_MonitorLeft.TabIndex = 0;
-			this.splitContainer_MonitorLeft.TabStop = false;
-			this.splitContainer_MonitorLeft.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer_MonitorLeft_SplitterMoved);
+			this.splitContainer_TxMonitor.Panel2.Controls.Add(this.splitContainer_RxMonitor);
+			this.splitContainer_TxMonitor.Panel2MinSize = 100;
+			this.splitContainer_TxMonitor.Size = new System.Drawing.Size(526, 374);
+			this.splitContainer_TxMonitor.SplitterDistance = 172;
+			this.splitContainer_TxMonitor.TabIndex = 0;
+			this.splitContainer_TxMonitor.TabStop = false;
+			this.splitContainer_TxMonitor.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer_TxMonitor_SplitterMoved);
 			// 
 			// panel_Monitor_Tx
 			// 
@@ -1480,26 +1480,26 @@ namespace MKY.YAT.Gui.Forms
 			this.monitor_Tx.CopyRequest += new System.EventHandler(this.monitor_Tx_CopyRequest);
 			this.monitor_Tx.PrintRequest += new System.EventHandler(this.monitor_Tx_PrintRequest);
 			// 
-			// splitContainer_MonitorRight
+			// splitContainer_RxMonitor
 			// 
-			this.splitContainer_MonitorRight.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer_MonitorRight.Location = new System.Drawing.Point(0, 0);
-			this.splitContainer_MonitorRight.Name = "splitContainer_MonitorRight";
+			this.splitContainer_RxMonitor.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.splitContainer_RxMonitor.Location = new System.Drawing.Point(0, 0);
+			this.splitContainer_RxMonitor.Name = "splitContainer_RxMonitor";
 			// 
-			// splitContainer_MonitorRight.Panel1
+			// splitContainer_RxMonitor.Panel1
 			// 
-			this.splitContainer_MonitorRight.Panel1.Controls.Add(this.panel_Monitor_Bidir);
-			this.splitContainer_MonitorRight.Panel1MinSize = 48;
+			this.splitContainer_RxMonitor.Panel1.Controls.Add(this.panel_Monitor_Bidir);
+			this.splitContainer_RxMonitor.Panel1MinSize = 48;
 			// 
-			// splitContainer_MonitorRight.Panel2
+			// splitContainer_RxMonitor.Panel2
 			// 
-			this.splitContainer_MonitorRight.Panel2.Controls.Add(this.panel_Monitor_Rx);
-			this.splitContainer_MonitorRight.Panel2MinSize = 48;
-			this.splitContainer_MonitorRight.Size = new System.Drawing.Size(350, 374);
-			this.splitContainer_MonitorRight.SplitterDistance = 175;
-			this.splitContainer_MonitorRight.TabIndex = 1;
-			this.splitContainer_MonitorRight.TabStop = false;
-			this.splitContainer_MonitorRight.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer_MonitorRight_SplitterMoved);
+			this.splitContainer_RxMonitor.Panel2.Controls.Add(this.panel_Monitor_Rx);
+			this.splitContainer_RxMonitor.Panel2MinSize = 48;
+			this.splitContainer_RxMonitor.Size = new System.Drawing.Size(350, 374);
+			this.splitContainer_RxMonitor.SplitterDistance = 175;
+			this.splitContainer_RxMonitor.TabIndex = 1;
+			this.splitContainer_RxMonitor.TabStop = false;
+			this.splitContainer_RxMonitor.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer_RxMonitor_SplitterMoved);
 			// 
 			// panel_Monitor_Bidir
 			// 
@@ -1711,13 +1711,13 @@ namespace MKY.YAT.Gui.Forms
 			this.splitContainer_Predefined.ResumeLayout(false);
 			this.panel_Monitor.ResumeLayout(false);
 			this.groupBox_Monitor.ResumeLayout(false);
-			this.splitContainer_MonitorLeft.Panel1.ResumeLayout(false);
-			this.splitContainer_MonitorLeft.Panel2.ResumeLayout(false);
-			this.splitContainer_MonitorLeft.ResumeLayout(false);
+			this.splitContainer_TxMonitor.Panel1.ResumeLayout(false);
+			this.splitContainer_TxMonitor.Panel2.ResumeLayout(false);
+			this.splitContainer_TxMonitor.ResumeLayout(false);
 			this.panel_Monitor_Tx.ResumeLayout(false);
-			this.splitContainer_MonitorRight.Panel1.ResumeLayout(false);
-			this.splitContainer_MonitorRight.Panel2.ResumeLayout(false);
-			this.splitContainer_MonitorRight.ResumeLayout(false);
+			this.splitContainer_RxMonitor.Panel1.ResumeLayout(false);
+			this.splitContainer_RxMonitor.Panel2.ResumeLayout(false);
+			this.splitContainer_RxMonitor.ResumeLayout(false);
 			this.panel_Monitor_Bidir.ResumeLayout(false);
 			this.panel_Monitor_Rx.ResumeLayout(false);
 			this.panel_Predefined.ResumeLayout(false);
@@ -1812,13 +1812,13 @@ namespace MKY.YAT.Gui.Forms
 		private System.Windows.Forms.SplitContainer splitContainer_Predefined;
 		private System.Windows.Forms.Panel panel_Monitor;
 		private System.Windows.Forms.GroupBox groupBox_Monitor;
-		private System.Windows.Forms.SplitContainer splitContainer_MonitorLeft;
+		private System.Windows.Forms.SplitContainer splitContainer_TxMonitor;
 		private System.Windows.Forms.Panel panel_Predefined;
 		private System.Windows.Forms.GroupBox groupBox_Predefined;
 		private MKY.YAT.Gui.Controls.PredefinedCommands predefined;
 		private System.Windows.Forms.Panel panel_Monitor_Tx;
 		private MKY.YAT.Gui.Controls.Monitor monitor_Tx;
-		private System.Windows.Forms.SplitContainer splitContainer_MonitorRight;
+		private System.Windows.Forms.SplitContainer splitContainer_RxMonitor;
 		private System.Windows.Forms.Panel panel_Monitor_Bidir;
 		private MKY.YAT.Gui.Controls.Monitor monitor_Bidir;
 		private System.Windows.Forms.Panel panel_Monitor_Rx;

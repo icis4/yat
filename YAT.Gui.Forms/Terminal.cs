@@ -164,7 +164,10 @@ namespace MKY.YAT.Gui.Forms
 
 		public void RequestAutoSaveFile()
 		{
-			SaveTerminalFile(true);
+			// only perform auto save if no file yet or on previously auto saved files
+			if (!_terminalSettingsHandler.SettingsFileExists ||
+				(_terminalSettingsHandler.SettingsFileExists && _terminalSettingsRoot.AutoSaved))
+				SaveTerminalFile(true);
 		}
 
 		public void RequestCloseFile()
@@ -247,7 +250,7 @@ namespace MKY.YAT.Gui.Forms
 				{
 					case DialogResult.Yes: SaveTerminalFile(); break;
 					case DialogResult.No:                      break;
-					default: e.Cancel = true;                  return;
+					default:               e.Cancel = true;    return;
 				}
 			}
 
@@ -768,31 +771,31 @@ namespace MKY.YAT.Gui.Forms
 		// Controls Event Handlers > Panel Layout
 		//------------------------------------------------------------------------------------------
 
-		private void splitContainer_MonitorLeft_SplitterMoved(object sender, SplitterEventArgs e)
+		private void splitContainer_TxMonitor_SplitterMoved(object sender, SplitterEventArgs e)
 		{
 			if (!_isStartingUp && !_isSettingControls)
 			{
 				int widthOrHeight = 0;
 				if (_terminalSettingsRoot.Layout.MonitorOrientation == Orientation.Vertical)
-					widthOrHeight = splitContainer_MonitorLeft.Width;
+					widthOrHeight = splitContainer_TxMonitor.Width;
 				else
-					widthOrHeight = splitContainer_MonitorLeft.Height;
+					widthOrHeight = splitContainer_TxMonitor.Height;
 
-				_terminalSettingsRoot.Layout.MonitorLeftSplitterRatio = (float)splitContainer_MonitorLeft.SplitterDistance / widthOrHeight;
+				_terminalSettingsRoot.Layout.TxMonitorSplitterRatio = (float)splitContainer_TxMonitor.SplitterDistance / widthOrHeight;
 			}
 		}
 
-		private void splitContainer_MonitorRight_SplitterMoved(object sender, SplitterEventArgs e)
+		private void splitContainer_RxMonitor_SplitterMoved(object sender, SplitterEventArgs e)
 		{
 			if (!_isStartingUp && !_isSettingControls)
 			{
 				int widthOrHeight = 0;
 				if (_terminalSettingsRoot.Layout.MonitorOrientation == Orientation.Vertical)
-					widthOrHeight = splitContainer_MonitorRight.Width;
+					widthOrHeight = splitContainer_RxMonitor.Width;
 				else
-					widthOrHeight = splitContainer_MonitorRight.Height;
+					widthOrHeight = splitContainer_RxMonitor.Height;
 
-				_terminalSettingsRoot.Layout.MonitorRightSplitterRatio = (float)splitContainer_MonitorRight.SplitterDistance / widthOrHeight;
+				_terminalSettingsRoot.Layout.RxMonitorSplitterRatio = (float)splitContainer_RxMonitor.SplitterDistance / widthOrHeight;
 			}
 		}
 
@@ -1289,7 +1292,7 @@ namespace MKY.YAT.Gui.Forms
 				splitContainer_Predefined.Panel2Collapsed = true;
 			}
 
-			// splitContainer_MonitorLeft and splitContainer_MonitorRight
+			// splitContainer_TxMonitor and splitContainer_RxMonitor
 			// one of the panels MUST be visible, if none is visible, then bidir si shown anyway
 			bool txIsVisible = _terminalSettingsRoot.Layout.TxMonitorPanelIsVisible;
 			bool bidirIsVisible = _terminalSettingsRoot.Layout.BidirMonitorPanelIsVisible || (!_terminalSettingsRoot.Layout.TxMonitorPanelIsVisible && !_terminalSettingsRoot.Layout.RxMonitorPanelIsVisible);
@@ -1297,44 +1300,44 @@ namespace MKY.YAT.Gui.Forms
 
 			// orientation
 			Orientation orientation = _terminalSettingsRoot.Layout.MonitorOrientation;
-			splitContainer_MonitorLeft.Orientation = orientation;
-			splitContainer_MonitorRight.Orientation = orientation;
+			splitContainer_TxMonitor.Orientation = orientation;
+			splitContainer_RxMonitor.Orientation = orientation;
 
 			if (txIsVisible)
 			{
-				splitContainer_MonitorLeft.Panel1Collapsed = false;
+				splitContainer_TxMonitor.Panel1Collapsed = false;
 
 				int widthOrHeight = 0;
 				if (orientation == Orientation.Vertical)
-					widthOrHeight = splitContainer_MonitorLeft.Width;
+					widthOrHeight = splitContainer_TxMonitor.Width;
 				else
-					widthOrHeight = splitContainer_MonitorLeft.Height;
+					widthOrHeight = splitContainer_TxMonitor.Height;
 
-				splitContainer_MonitorLeft.SplitterDistance = (int)(_terminalSettingsRoot.Layout.MonitorLeftSplitterRatio * widthOrHeight);
+				splitContainer_TxMonitor.SplitterDistance = (int)(_terminalSettingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight);
 			}
 			else
 			{
-				splitContainer_MonitorLeft.Panel1Collapsed = true;
+				splitContainer_TxMonitor.Panel1Collapsed = true;
 			}
-			splitContainer_MonitorLeft.Panel2Collapsed = !(bidirIsVisible || rxIsVisible);
+			splitContainer_TxMonitor.Panel2Collapsed = !(bidirIsVisible || rxIsVisible);
 
 			if (bidirIsVisible)
 			{
-				splitContainer_MonitorRight.Panel1Collapsed = false;
+				splitContainer_RxMonitor.Panel1Collapsed = false;
 
 				int widthOrHeight = 0;
 				if (orientation == Orientation.Vertical)
-					widthOrHeight = splitContainer_MonitorRight.Width;
+					widthOrHeight = splitContainer_RxMonitor.Width;
 				else
-					widthOrHeight = splitContainer_MonitorRight.Height;
+					widthOrHeight = splitContainer_RxMonitor.Height;
 
-				splitContainer_MonitorRight.SplitterDistance = (int)(_terminalSettingsRoot.Layout.MonitorRightSplitterRatio * widthOrHeight);
+				splitContainer_RxMonitor.SplitterDistance = (int)(_terminalSettingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight);
 			}
 			else
 			{
-				splitContainer_MonitorRight.Panel1Collapsed = true;
+				splitContainer_RxMonitor.Panel1Collapsed = true;
 			}
-			splitContainer_MonitorRight.Panel2Collapsed = !rxIsVisible;
+			splitContainer_RxMonitor.Panel2Collapsed = !rxIsVisible;
 
 			// splitContainer_Terminal and splitContainer_SendCommand
 			if (_terminalSettingsRoot.Layout.SendCommandPanelIsVisible || _terminalSettingsRoot.Layout.SendFilePanelIsVisible)
@@ -2522,8 +2525,8 @@ namespace MKY.YAT.Gui.Forms
 			_terminalSettingsRoot.Layout.MonitorOrientation = orientation;
 
 			SuspendLayout();
-			splitContainer_MonitorLeft.Orientation = orientation;
-			splitContainer_MonitorRight.Orientation = orientation;
+			splitContainer_TxMonitor.Orientation = orientation;
+			splitContainer_RxMonitor.Orientation = orientation;
 			ResumeLayout();
 		}
 
