@@ -10,7 +10,7 @@ namespace MKY.YAT.Settings.Terminal
 	public class TerminalSettingsRoot : Utilities.Settings.Settings, IEquatable<TerminalSettingsRoot>
 	{
 		private string _productVersion = System.Windows.Forms.Application.ProductVersion;
-		private bool _autoSaved;
+		private bool _autoSaved = false;
 		private ExplicitSettings _explicit;
 		private ImplicitSettings _implicit;
 

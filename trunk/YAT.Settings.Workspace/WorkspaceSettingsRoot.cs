@@ -12,7 +12,7 @@ namespace MKY.YAT.Settings.Workspace
 	public class WorkspaceSettingsRoot : Utilities.Settings.Settings, IEquatable<WorkspaceSettingsRoot>
 	{
 		private string _productVersion = System.Windows.Forms.Application.ProductVersion;
-		private bool _autoSaved;
+		private bool _autoSaved = false;
 		private WorkspaceSettings _workspace;
 
 		public WorkspaceSettingsRoot()
