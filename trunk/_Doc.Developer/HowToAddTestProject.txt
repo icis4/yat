@@ -1,0 +1,21 @@
+1. Solution > Add > New Project...
+
+2. Visual C# > Windows > Class Library
+   Name: "<Testee>.Test"
+
+3. Remove "Class1"
+
+4. Project > Properties
+   Modify default namespace if needed
+
+5. Open "AssemblyInfo"
+   Edit "AssemblyDescription"
+   Edit "AssemblyCompany"
+   Edit "AssemblyProduct"
+   Edit "AssemblyCopyright"
+   Edit "AssemblyVersion" to "major.minor.*"
+   Add "CLSCompliant"
+
+6. Add reference to "nunit.framework"
+
+7. Add test classes and tests according to the NUnit documentation
