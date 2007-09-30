@@ -86,6 +86,15 @@ namespace MKY.YAT.Gui.Forms
 			}
 		}
 
+		private void checkBox_UseRelativePaths_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+			{
+				_settings_Form.UseRelativePaths = checkBox_UseRelativePaths.Checked;
+				SetControls();
+			}
+		}
+
 		private void checkBox_DetectSerialPortsInUse_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
@@ -145,6 +154,8 @@ namespace MKY.YAT.Gui.Forms
 
 			checkBox_AutoOpenWorkspace.Checked = _settings_Form.AutoOpenWorkspace;
 			checkBox_AutoSaveWorkspace.Checked = _settings_Form.AutoSaveWorkspace;
+			checkBox_UseRelativePaths.Checked  = _settings_Form.UseRelativePaths;
+
 			checkBox_DetectSerialPortsInUse.Checked = _settings_Form.DetectSerialPortsInUse;
 
 			_isSettingControls = false;

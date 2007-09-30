@@ -117,7 +117,7 @@ namespace MKY.YAT.Domain.Parser
 
 			private bool TryWriteContiguous(Parser parser, ref FormatException formatException)
 			{
-				if (_contiguous.ToString() != string.Empty)
+				if (_contiguous.ToString() != "")
 				{
 					if (!parser.IsKeywordParser)
 					{
@@ -337,7 +337,7 @@ namespace MKY.YAT.Domain.Parser
 				string[] tokens = parseString.Split(' ');
 				foreach (string t in tokens)
 				{
-					if (t == string.Empty) continue;
+					if (t == "") continue;
 
 					byte code;
 					if (Utilities.Types.Ascii.TryParse(t, out code))
@@ -844,7 +844,7 @@ namespace MKY.YAT.Domain.Parser
 				string[] tokens = parseString.Split(' ');
 				foreach (string token in tokens)
 				{
-					if (token != string.Empty)
+					if (token != "")
 					{
 						byte[] b;
 						if (TryParseContiguousRadixToken(token, parseRadix, out b, ref formatException))
@@ -876,7 +876,7 @@ namespace MKY.YAT.Domain.Parser
 			string[] tokens = parseString.Split(' ');
 			foreach (string t in tokens)
 			{
-				if (t == string.Empty) continue;
+				if (t == "") continue;
 
 				try
 				{

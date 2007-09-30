@@ -711,7 +711,7 @@ namespace MKY.YAT.Gui.Forms
 			ofd.Filter = ExtensionSettings.WorkspaceFilesFilter;
 			ofd.DefaultExt = ExtensionSettings.WorkspaceFiles;
 			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath;
-			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName != string.Empty))
+			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName != ""))
 			{
 				Refresh();
 
@@ -852,7 +852,7 @@ namespace MKY.YAT.Gui.Forms
 				ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(sfd.FileName);
 				ApplicationSettings.SaveLocalUser();
 
-				string autoSaveFilePathToDelete = string.Empty;
+				string autoSaveFilePathToDelete = "";
 				if (_workspaceSettingsRoot.AutoSaved)
 					autoSaveFilePathToDelete = _workspaceSettingsHandler.SettingsFilePath;
 
@@ -879,6 +879,15 @@ namespace MKY.YAT.Gui.Forms
 			{
 				_workspaceSettingsRoot.SuspendChangeEvent();
 
+				// set workspace file path before terminals are saved in order
+				// to correctly retrieve relative paths
+				if (autoSave)
+				{
+					string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveWorkspaceFileNamePrefix + Guid.ToString() + ExtensionSettings.WorkspaceFiles;
+					if (!_workspaceSettingsHandler.SettingsFilePathIsValid)
+						_workspaceSettingsHandler.SettingsFilePath = autoSaveFilePath;
+				}
+
 				// save all contained terminals
 				foreach (Form f in MdiChildren)
 				{
@@ -892,12 +901,6 @@ namespace MKY.YAT.Gui.Forms
 				}
 
 				// save workspace
-				if (autoSave)
-				{
-					string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveWorkspaceFileNamePrefix + Guid.ToString() + ExtensionSettings.WorkspaceFiles;
-					if (!_workspaceSettingsHandler.SettingsFilePathIsValid)
-						_workspaceSettingsHandler.SettingsFilePath = autoSaveFilePath;
-				}
 				_workspaceSettingsHandler.Settings.AutoSaved = autoSave;
 				_workspaceSettingsHandler.Save();
 
@@ -969,7 +972,14 @@ namespace MKY.YAT.Gui.Forms
 
 			TerminalSettingsItem tsi = new TerminalSettingsItem();
 			tsi.Guid = terminal.Guid;
-			tsi.FilePath = terminal.SettingsFilePath;
+			string filePath = terminal.SettingsFilePath;
+			if (ApplicationSettings.LocalUser.General.UseRelativePaths)
+			{
+				Utilities.IO.XPathCompareResult pcr = Utilities.IO.XPath.CompareFilePaths(_workspaceSettingsHandler.SettingsFilePath, terminal.SettingsFilePath);
+				if (pcr.AreRelative)
+					filePath = pcr.RelativePath;
+			}
+			tsi.FilePath = filePath;
 			tsi.Window = ws;
 
 			_workspaceSettingsRoot.TerminalSettings.AddOrReplaceGuid(tsi);
@@ -1036,7 +1046,7 @@ namespace MKY.YAT.Gui.Forms
 			ofd.Filter = ExtensionSettings.TerminalFilesFilter;
 			ofd.DefaultExt = ExtensionSettings.TerminalFiles;
 			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.TerminalFilesPath;
-			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName != string.Empty))
+			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName != ""))
 			{
 				Refresh();
 
@@ -1058,11 +1068,16 @@ namespace MKY.YAT.Gui.Forms
 
 		private bool OpenTerminalFromFile(string filePath, Guid guid, WindowSettings windowSettings, bool suppressErrorHandling)
 		{
+			string absoluteFilePath = filePath;
+
 			SetFixedStatusText("Opening terminal...");
 			try
 			{
 				DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> sh = new DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot>();
-				sh.SettingsFilePath = filePath;
+
+				// combine absolute workspace path with terminal path if that one is relative
+				absoluteFilePath = Utilities.IO.XPath.CombineFilePaths(_workspaceSettingsHandler.SettingsFilePath, filePath);
+				sh.SettingsFilePath = absoluteFilePath;
 				sh.Load();
 
 				// replace window settings with those saved in workspace
@@ -1078,7 +1093,7 @@ namespace MKY.YAT.Gui.Forms
 				if (sh.Settings.AutoSaved)
 					terminal.UserName = _TerminalText + GetNextTerminalId();
 				else
-					terminal.UserNameFromFile = filePath;
+					terminal.UserNameFromFile = absoluteFilePath;
 
 				terminal.MdiParent = this;
 				terminal.TerminalChanged += new EventHandler(mdi_child_TerminalChanged);
@@ -1102,7 +1117,7 @@ namespace MKY.YAT.Gui.Forms
 					MessageBox.Show
 						(
 						this,
-						"Unable to open file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
+						"Unable to open file" + Environment.NewLine + absoluteFilePath + Environment.NewLine + Environment.NewLine +
 						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
 						"File error message: " + ex.InnerException.Message,
 						"File Error",

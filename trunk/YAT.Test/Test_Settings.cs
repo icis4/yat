@@ -16,12 +16,12 @@ namespace MKY.YAT.Test
 
 		private static void Test_Serialization(string filePath)
 		{
-			Settings.Document.TerminalSettings settings = new Settings.Document.TerminalSettings();
+			Settings.Terminal.TerminalSettingsRoot settings = new Settings.Terminal.TerminalSettingsRoot();
 			//Gui.Settings.FormatSettings settings = new Gui.Settings.FormatSettings();
 
 			XmlTextWriter writer = new XmlTextWriter(filePath, null);
 			writer.Formatting = Formatting.Indented;
-			XmlSerializer serializer = new XmlSerializer(typeof(Settings.Document.TerminalSettings));
+			XmlSerializer serializer = new XmlSerializer(typeof(Settings.Terminal.TerminalSettingsRoot));
 			//XmlSerializer serializer = new XmlSerializer(typeof(Gui.Settings.FormatSettings));
 			serializer.Serialize(writer, settings);
 			writer.Close();

@@ -133,7 +133,7 @@ namespace MKY.YAT.Gui.Controls
 		{
 			if (!_isSettingControls)
 			{
-				if (textBox_Description.Text != string.Empty)
+				if (textBox_Description.Text != "")
 					SetDescription(textBox_Description.Text);
 			}
 		}
@@ -249,14 +249,14 @@ namespace MKY.YAT.Gui.Controls
 
 				// file path
 				pathLabel_FilePath.Visible = false;
-				pathLabel_FilePath.Text = string.Empty;
+				pathLabel_FilePath.Text = "";
 				checkBox_IsFile.Checked = false;
 			}
 			else if (_command.IsFilePath)
 			{
 				// command
 				textBox_Command.Visible = false;
-				textBox_Command.Text = string.Empty;
+				textBox_Command.Text = "";
 
 				// buttons
                 button_SetMultiLineCommand.Visible = false;
@@ -287,7 +287,7 @@ namespace MKY.YAT.Gui.Controls
 
 				// file path
 				pathLabel_FilePath.Visible = false;
-				pathLabel_FilePath.Text = string.Empty;
+				pathLabel_FilePath.Text = "";
 				checkBox_IsFile.Checked = false;
 			}
 

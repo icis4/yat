@@ -161,7 +161,7 @@ namespace MKY.YAT.Gui.Controls
 				}
 			}
 			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.SendFilesPath;
-			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName != string.Empty))
+			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName != ""))
 			{
 				Refresh();
 

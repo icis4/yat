@@ -4,7 +4,7 @@ using System.IO;
 namespace MKY.Utilities.IO
 {
 	/// <summary>
-	/// File utility methods.
+	/// Utility methods for <see cref="System.IO.File"/>.
 	/// </summary>
 	public static class XFile
 	{

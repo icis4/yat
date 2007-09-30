@@ -49,7 +49,7 @@ namespace MKY.Utilities.Settings
 			{
 				if (_settingsFilePath == null)
 					return (false);
-				if (_settingsFilePath == string.Empty)
+				if (_settingsFilePath == "")
 					return (false);
 				return (System.IO.File.Exists(_settingsFilePath));
 			}
@@ -64,9 +64,9 @@ namespace MKY.Utilities.Settings
 			{
 				if (_settingsFilePath == null)
 					return (false);
-				if (_settingsFilePath == string.Empty)
+				if (_settingsFilePath == "")
 					return (false);
-				if (System.IO.Path.GetFullPath(_settingsFilePath) == string.Empty)
+				if (System.IO.Path.GetFullPath(_settingsFilePath) == "")
 					return (false);
 				return (true);
 			}

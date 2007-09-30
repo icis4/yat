@@ -7,8 +7,8 @@ namespace MKY.YAT.Gui
 	public static class VersionInfo
 	{
 		//public const string ProductNamePostFix = "";
-		//public const string ProductNamePostFix = " Beta 2";
+		public const string ProductNamePostFix = " Beta 2";
 		//public const string ProductNamePostFix = " Beta 2 Candidate 1";
-		public const string ProductNamePostFix = " Beta 2 Preliminary";
+		//public const string ProductNamePostFix = " Beta 2 Preliminary";
 	}
 }
