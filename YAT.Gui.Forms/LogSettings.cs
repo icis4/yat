@@ -375,7 +375,7 @@ namespace MKY.YAT.Gui.Forms
 		{
 			_isSettingControls = true;
 
-			if (_settings_Form.RootPath != string.Empty)
+			if (_settings_Form.RootPath != "")
 				pathLabel_Root.Text = _settings_Form.RootPath + Path.DirectorySeparatorChar + _settings_Form.RootFileName;
 			else
 				pathLabel_Root.Text = "<Set a root file...>";
@@ -431,7 +431,7 @@ namespace MKY.YAT.Gui.Forms
 			ofd.FileName = _settings_Form.RootFileName;
 			ofd.CheckPathExists = false;
 			ofd.CheckFileExists = false;
-			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName != string.Empty))
+			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName != ""))
 			{
 				Refresh();
 

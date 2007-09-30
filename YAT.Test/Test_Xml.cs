@@ -5,7 +5,7 @@ using System.IO;
 using System.Xml.Serialization;
 
 using MKY.Utilities.Recent;
-using MKY.YAT.Settings.Document;
+using MKY.YAT.Settings.Terminal;
 using MKY.YAT.Domain.Settings;
 using MKY.YAT.Gui;
 using MKY.YAT.Gui.Settings;

@@ -25,7 +25,7 @@ namespace MKY.YAT.Gui.Forms
 			Text = text;
 
 			// open and fill release notes
-			textBox_ReleaseNotes.Text = string.Empty;
+			textBox_ReleaseNotes.Text = "";
 			if (File.Exists(ReleaseNotesFilePath))
 			{
 				using (StreamReader sr = new StreamReader(ReleaseNotesFilePath, Encoding.UTF8, true))
@@ -34,7 +34,7 @@ namespace MKY.YAT.Gui.Forms
 						textBox_ReleaseNotes.Text = sr.ReadToEnd();
 				}
 			}
-			if (textBox_ReleaseNotes.Text == string.Empty)
+			if (textBox_ReleaseNotes.Text == "")
 			{
 				textBox_ReleaseNotes.Text = "Couldn't read release notes from" + Environment.NewLine + ReleaseNotesFilePath;
 			}

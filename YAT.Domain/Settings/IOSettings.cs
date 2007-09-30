@@ -187,7 +187,7 @@ namespace MKY.YAT.Domain.Settings
 		#region Comparison Operators
 
 		/// <summary>
-		/// Determines whether the two specified objects have reference and value equality.
+		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
 		public static bool operator ==(IOSettings lhs, IOSettings rhs)
 		{

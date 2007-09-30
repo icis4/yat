@@ -48,7 +48,7 @@ namespace MKY.Windows.Forms
 			label_Status1.Text = status1;
 			label_Status2.Text = status2;
 
-			if (settingText != string.Empty)
+			if (settingText != "")
 			{
 				checkBox_Setting.Visible = true;
 				checkBox_Setting.Text = settingText;

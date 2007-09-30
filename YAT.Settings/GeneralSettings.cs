@@ -19,6 +19,7 @@ namespace MKY.YAT.Settings
 
 		private bool _autoOpenWorkspace;
 		private bool _autoSaveWorkspace;
+		private bool _useRelativePaths;
 		private string _currentWorkspaceFilePath;
 		private bool _detectSerialPortsInUse;
 
@@ -43,6 +44,7 @@ namespace MKY.YAT.Settings
 		{
 			_autoOpenWorkspace        = rhs.AutoOpenWorkspace;
 			_autoSaveWorkspace        = rhs.AutoSaveWorkspace;
+			_useRelativePaths         = rhs.UseRelativePaths;
 			_currentWorkspaceFilePath = rhs.CurrentWorkspaceFilePath;
 			_detectSerialPortsInUse   = rhs.DetectSerialPortsInUse;
 
@@ -56,7 +58,8 @@ namespace MKY.YAT.Settings
 		{
 			AutoOpenWorkspace        = true;
 			AutoSaveWorkspace        = true;
-			CurrentWorkspaceFilePath = string.Empty;
+			UseRelativePaths         = true;
+			CurrentWorkspaceFilePath = "";
 			DetectSerialPortsInUse   = true;
 		}
 
@@ -88,6 +91,20 @@ namespace MKY.YAT.Settings
 				if (_autoSaveWorkspace != value)
 				{
 					_autoSaveWorkspace = value;
+					SetChanged();
+				}
+			}
+		}
+
+		[XmlElement("UseRelativePaths")]
+		public bool UseRelativePaths
+		{
+			get { return (_useRelativePaths); }
+			set
+			{
+				if (_useRelativePaths != value)
+				{
+					_useRelativePaths = value;
 					SetChanged();
 				}
 			}
@@ -146,10 +163,11 @@ namespace MKY.YAT.Settings
 			{
 				return
 					(
-					_autoOpenWorkspace.Equals(value._autoOpenWorkspace) &&
-					_autoSaveWorkspace.Equals(value._autoSaveWorkspace) &&
+					_autoOpenWorkspace.       Equals(value._autoOpenWorkspace) &&
+					_autoSaveWorkspace.       Equals(value._autoSaveWorkspace) &&
+					_useRelativePaths.        Equals(value._useRelativePaths) &&
 					_currentWorkspaceFilePath.Equals(value._currentWorkspaceFilePath) &&
-					_detectSerialPortsInUse.Equals(value._detectSerialPortsInUse)
+					_detectSerialPortsInUse.  Equals(value._detectSerialPortsInUse)
 					);
 			}
 			return (false);
@@ -165,7 +183,7 @@ namespace MKY.YAT.Settings
 		#region Comparison Operators
 
 		/// <summary>
-		/// Determines whether the two specified objects have reference and value equality.
+		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
 		public static bool operator ==(GeneralSettings lhs, GeneralSettings rhs)
 		{

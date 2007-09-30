@@ -5,7 +5,7 @@ using System.Windows.Forms;
 namespace MKY.YAT
 {
 	/// <summary>
-	/// Application class YAT.
+	/// Application main class of YAT.
 	/// </summary>
 	public class YAT
 	{

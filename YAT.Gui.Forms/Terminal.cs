@@ -141,8 +141,13 @@ namespace MKY.YAT.Gui.Forms
 				if (_terminalSettingsHandler.SettingsFileExists)
 					return (_terminalSettingsHandler.SettingsFilePath);
 				else
-					return (string.Empty);
+					return ("");
 			}
+		}
+
+		public bool AutoSaved
+		{
+			get { return (_terminalSettingsRoot.AutoSaved); }
 		}
 
 		public bool IsOpen
@@ -235,7 +240,11 @@ namespace MKY.YAT.Gui.Forms
 
 		private void Terminal_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			if (_terminalSettingsRoot.ExplicitHaveChanged)
+			if (_terminalSettingsRoot.HaveChanged && _terminalSettingsRoot.AutoSaved)
+			{
+				SaveTerminalFile(true);
+			}
+			else if (_terminalSettingsRoot.ExplicitHaveChanged)
 			{
 				DialogResult dr = MessageBox.Show
 					(
@@ -1140,7 +1149,7 @@ namespace MKY.YAT.Gui.Forms
 				ApplicationSettings.LocalUser.Paths.TerminalFilesPath = Path.GetDirectoryName(sfd.FileName);
 				ApplicationSettings.SaveLocalUser();
 
-				string autoSaveFilePathToDelete = string.Empty;
+				string autoSaveFilePathToDelete = "";
 				if (_terminalSettingsRoot.AutoSaved)
 					autoSaveFilePathToDelete = _terminalSettingsHandler.SettingsFilePath;
 
