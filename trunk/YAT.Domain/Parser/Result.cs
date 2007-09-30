@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MKY.YAT.Domain.Parser
+namespace YAT.Domain.Parser
 {
 	/// <summary></summary>
 	public abstract class Result

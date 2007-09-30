@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MKY.YAT.Gui.Forms
+namespace YAT.Gui.Forms
 {
 	partial class FormatSettings
 	{
@@ -35,14 +35,14 @@ namespace MKY.YAT.Gui.Forms
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
-			this.monitor_Error = new MKY.YAT.Gui.Controls.Monitor();
-			this.monitor_WhiteSpace = new MKY.YAT.Gui.Controls.Monitor();
-			this.monitor_Length = new MKY.YAT.Gui.Controls.Monitor();
-			this.monitor_TimeStamp = new MKY.YAT.Gui.Controls.Monitor();
-			this.monitor_RxControl = new MKY.YAT.Gui.Controls.Monitor();
-			this.monitor_RxData = new MKY.YAT.Gui.Controls.Monitor();
-			this.monitor_TxControl = new MKY.YAT.Gui.Controls.Monitor();
-			this.monitor_TxData = new MKY.YAT.Gui.Controls.Monitor();
+			this.monitor_Error = new YAT.Gui.Controls.Monitor();
+			this.monitor_WhiteSpace = new YAT.Gui.Controls.Monitor();
+			this.monitor_Length = new YAT.Gui.Controls.Monitor();
+			this.monitor_TimeStamp = new YAT.Gui.Controls.Monitor();
+			this.monitor_RxControl = new YAT.Gui.Controls.Monitor();
+			this.monitor_RxData = new YAT.Gui.Controls.Monitor();
+			this.monitor_TxControl = new YAT.Gui.Controls.Monitor();
+			this.monitor_TxData = new YAT.Gui.Controls.Monitor();
 			this.label_Format_Error = new System.Windows.Forms.Label();
 			this.label_Format_WhiteSpace = new System.Windows.Forms.Label();
 			this.label_Format_Length = new System.Windows.Forms.Label();
@@ -51,18 +51,18 @@ namespace MKY.YAT.Gui.Forms
 			this.label_Format_RxData = new System.Windows.Forms.Label();
 			this.label_Format_TxControl = new System.Windows.Forms.Label();
 			this.label_Format_TxData = new System.Windows.Forms.Label();
-			this.textFormat_Error = new MKY.YAT.Gui.Controls.TextFormat();
-			this.textFormat_WhiteSpace = new MKY.YAT.Gui.Controls.TextFormat();
-			this.textFormat_Length = new MKY.YAT.Gui.Controls.TextFormat();
-			this.textFormat_TimeStamp = new MKY.YAT.Gui.Controls.TextFormat();
-			this.textFormat_RxControl = new MKY.YAT.Gui.Controls.TextFormat();
-			this.textFormat_RxData = new MKY.YAT.Gui.Controls.TextFormat();
-			this.textFormat_TxControl = new MKY.YAT.Gui.Controls.TextFormat();
-			this.textFormat_TxData = new MKY.YAT.Gui.Controls.TextFormat();
+			this.textFormat_Error = new YAT.Gui.Controls.TextFormat();
+			this.textFormat_WhiteSpace = new YAT.Gui.Controls.TextFormat();
+			this.textFormat_Length = new YAT.Gui.Controls.TextFormat();
+			this.textFormat_TimeStamp = new YAT.Gui.Controls.TextFormat();
+			this.textFormat_RxControl = new YAT.Gui.Controls.TextFormat();
+			this.textFormat_RxData = new YAT.Gui.Controls.TextFormat();
+			this.textFormat_TxControl = new YAT.Gui.Controls.TextFormat();
+			this.textFormat_TxData = new YAT.Gui.Controls.TextFormat();
 			this.button_Font = new System.Windows.Forms.Button();
 			this.button_Defaults = new System.Windows.Forms.Button();
 			this.label_Example = new System.Windows.Forms.Label();
-			this.monitor_Example = new MKY.YAT.Gui.Controls.Monitor();
+			this.monitor_Example = new YAT.Gui.Controls.Monitor();
 			this.groupBox_Settings.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -454,14 +454,14 @@ namespace MKY.YAT.Gui.Forms
 		#endregion
 
 		private System.Windows.Forms.GroupBox groupBox_Settings;
-		private MKY.YAT.Gui.Controls.TextFormat textFormat_Error;
-		private MKY.YAT.Gui.Controls.TextFormat textFormat_WhiteSpace;
-		private MKY.YAT.Gui.Controls.TextFormat textFormat_Length;
-		private MKY.YAT.Gui.Controls.TextFormat textFormat_TimeStamp;
-		private MKY.YAT.Gui.Controls.TextFormat textFormat_RxControl;
-		private MKY.YAT.Gui.Controls.TextFormat textFormat_RxData;
-		private MKY.YAT.Gui.Controls.TextFormat textFormat_TxControl;
-		private MKY.YAT.Gui.Controls.TextFormat textFormat_TxData;
+		private YAT.Gui.Controls.TextFormat textFormat_Error;
+		private YAT.Gui.Controls.TextFormat textFormat_WhiteSpace;
+		private YAT.Gui.Controls.TextFormat textFormat_Length;
+		private YAT.Gui.Controls.TextFormat textFormat_TimeStamp;
+		private YAT.Gui.Controls.TextFormat textFormat_RxControl;
+		private YAT.Gui.Controls.TextFormat textFormat_RxData;
+		private YAT.Gui.Controls.TextFormat textFormat_TxControl;
+		private YAT.Gui.Controls.TextFormat textFormat_TxData;
 		private System.Windows.Forms.Label label_Example;
 		private System.Windows.Forms.Button button_Font;
 		private System.Windows.Forms.Button button_Defaults;
@@ -475,14 +475,14 @@ namespace MKY.YAT.Gui.Forms
 		private System.Windows.Forms.Label label_Format_RxControl;
 		private System.Windows.Forms.Label label_Format_RxData;
 		private System.Windows.Forms.Label label_Format_TxControl;
-		private MKY.YAT.Gui.Controls.Monitor monitor_Example;
-		private MKY.YAT.Gui.Controls.Monitor monitor_Error;
-		private MKY.YAT.Gui.Controls.Monitor monitor_WhiteSpace;
-		private MKY.YAT.Gui.Controls.Monitor monitor_Length;
-		private MKY.YAT.Gui.Controls.Monitor monitor_TimeStamp;
-		private MKY.YAT.Gui.Controls.Monitor monitor_RxControl;
-		private MKY.YAT.Gui.Controls.Monitor monitor_RxData;
-		private MKY.YAT.Gui.Controls.Monitor monitor_TxControl;
-		private MKY.YAT.Gui.Controls.Monitor monitor_TxData;
+		private YAT.Gui.Controls.Monitor monitor_Example;
+		private YAT.Gui.Controls.Monitor monitor_Error;
+		private YAT.Gui.Controls.Monitor monitor_WhiteSpace;
+		private YAT.Gui.Controls.Monitor monitor_Length;
+		private YAT.Gui.Controls.Monitor monitor_TimeStamp;
+		private YAT.Gui.Controls.Monitor monitor_RxControl;
+		private YAT.Gui.Controls.Monitor monitor_RxData;
+		private YAT.Gui.Controls.Monitor monitor_TxControl;
+		private YAT.Gui.Controls.Monitor monitor_TxData;
 	}
 }

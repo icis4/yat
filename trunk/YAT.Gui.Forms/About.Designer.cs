@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MKY.YAT.Gui.Forms
+namespace YAT.Gui.Forms
 {
 	partial class About
 	{
@@ -88,7 +88,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			// pictureBox_Product
 			// 
-			this.pictureBox_Product.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_YAT_48x48;
+			this.pictureBox_Product.Image = global::YAT.Gui.Forms.Properties.Resources.Image_YAT_48x48;
 			this.pictureBox_Product.Location = new System.Drawing.Point(12, 12);
 			this.pictureBox_Product.Name = "pictureBox_Product";
 			this.pictureBox_Product.Size = new System.Drawing.Size(48, 48);
@@ -210,7 +210,7 @@ namespace MKY.YAT.Gui.Forms
 			// pictureBox_License
 			// 
 			this.pictureBox_License.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.pictureBox_License.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_CC_GPL_88x62;
+			this.pictureBox_License.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CC_GPL_88x62;
 			this.pictureBox_License.Location = new System.Drawing.Point(448, 211);
 			this.pictureBox_License.Name = "pictureBox_License";
 			this.pictureBox_License.Size = new System.Drawing.Size(88, 62);

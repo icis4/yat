@@ -4,10 +4,10 @@ using System.Text;
 using System.Xml.Serialization;
 using System.IO;
 
-using MKY.YAT.Settings;
-using MKY.YAT.Settings.Application;
+using YAT.Settings;
+using YAT.Settings.Application;
 
-namespace MKY.YAT.Log.Settings
+namespace YAT.Log.Settings
 {
 	[Serializable]
 	public class LogSettings : Utilities.Settings.Settings, IEquatable<LogSettings>

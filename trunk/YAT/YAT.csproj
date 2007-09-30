@@ -7,12 +7,12 @@
     <ProjectGuid>{E87405A5-8FB0-4CE0-9946-3A08205B5DE0}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MKY.YAT</RootNamespace>
+    <RootNamespace>YAT</RootNamespace>
     <AssemblyName>YAT</AssemblyName>
     <ApplicationIcon>
     </ApplicationIcon>
     <Win32Resource>Resources\YAT.res</Win32Resource>
-    <StartupObject>MKY.YAT.YAT</StartupObject>
+    <StartupObject>YAT.YAT</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

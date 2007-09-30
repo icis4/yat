@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace MKY.YAT.Gui.Controls
+namespace YAT.Gui.Controls
 {
 	public partial class Chronometer : Component
 	{

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace MKY.YAT.Domain.Parser
+namespace YAT.Domain.Parser
 {
 	/// <summary>
 	/// Extends Parser with character substitution.

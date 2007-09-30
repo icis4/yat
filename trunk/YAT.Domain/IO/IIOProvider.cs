@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MKY.YAT.Domain.IO
+namespace YAT.Domain.IO
 {
 	/// <summary>
 	/// Generic IO provider that is used for serial port and socket communication.

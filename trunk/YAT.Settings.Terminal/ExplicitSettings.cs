@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace MKY.YAT.Settings.Terminal
+namespace YAT.Settings.Terminal
 {
 	[Serializable]
 	public class ExplicitSettings : Utilities.Settings.Settings, IEquatable<ExplicitSettings>

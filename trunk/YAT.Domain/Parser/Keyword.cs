@@ -4,7 +4,7 @@ using System.Text;
 
 using MKY.Utilities.Types;
 
-namespace MKY.YAT.Domain.Parser
+namespace YAT.Domain.Parser
 {
 	#region Enum Keyword
 

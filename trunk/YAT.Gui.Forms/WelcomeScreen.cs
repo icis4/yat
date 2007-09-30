@@ -7,10 +7,10 @@ using System.Text;
 using System.Windows.Forms;
 
 using MKY.Utilities.Settings;
-using MKY.YAT.Settings.Application;
-using MKY.YAT.Settings.Workspace;
+using YAT.Settings.Application;
+using YAT.Settings.Workspace;
 
-namespace MKY.YAT.Gui.Forms
+namespace YAT.Gui.Forms
 {
 	public partial class WelcomeScreen : Form
 	{

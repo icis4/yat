@@ -8,12 +8,12 @@ using System.Windows.Forms;
 using System.IO;
 
 using MKY.Utilities.Settings;
-using MKY.YAT.Settings;
-using MKY.YAT.Settings.Application;
-using MKY.YAT.Settings.Terminal;
-using MKY.YAT.Gui.Settings;
+using YAT.Settings;
+using YAT.Settings.Application;
+using YAT.Settings.Terminal;
+using YAT.Gui.Settings;
 
-namespace MKY.YAT.Gui.Forms
+namespace YAT.Gui.Forms
 {
 	public partial class Terminal : Form
 	{

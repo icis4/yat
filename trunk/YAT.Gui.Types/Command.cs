@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace MKY.YAT.Gui
+namespace YAT.Gui
 {
 	/// <summary>
 	/// Stores information about a single line, multi line or file command.

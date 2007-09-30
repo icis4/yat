@@ -7,7 +7,7 @@
     <ProjectGuid>{A1060959-580E-4493-BA51-4A3A7CDE1E88}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MKY.YAT.Gui.Forms</RootNamespace>
+    <RootNamespace>YAT.Gui.Forms</RootNamespace>
     <AssemblyName>YAT.Gui.Forms</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\YAT.snk</AssemblyOriginatorKeyFile>

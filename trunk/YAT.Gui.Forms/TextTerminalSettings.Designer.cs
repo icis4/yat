@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MKY.YAT.Gui.Forms
+namespace YAT.Gui.Forms
 {
 	partial class TextTerminalSettings
 	{

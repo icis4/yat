@@ -1,10 +1,10 @@
 using System;
 
-using MKY.YAT.Settings;
-using MKY.YAT.Domain;
-using MKY.YAT.Domain.Settings;
+using YAT.Settings;
+using YAT.Domain;
+using YAT.Domain.Settings;
 
-namespace MKY.YAT.Test
+namespace YAT.Test
 {
 	public class Test_RawTerminal
 	{

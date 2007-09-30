@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MKY.YAT.Test
+namespace YAT.Test
 {
 	public class Test_Parser
 	{

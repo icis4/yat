@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MKY.YAT.Settings
+namespace YAT.Settings
 {
 	/// <summary>
 	/// Defines extension filters for open/save dialogs.

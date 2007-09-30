@@ -6,9 +6,9 @@ using System.Windows.Forms;
 using System.IO;
 
 using MKY.Windows.Forms;
-using MKY.YAT.Settings.Application;
+using YAT.Settings.Application;
 
-namespace MKY.YAT.Gui.Forms
+namespace YAT.Gui.Forms
 {
 	public partial class PredefinedCommandSettings : System.Windows.Forms.Form
 	{

@@ -6,7 +6,7 @@ using System.Threading;
 
 using MKY.Utilities.Settings;
 
-namespace MKY.YAT.Domain
+namespace YAT.Domain
 {
 	/// <summary>
 	/// Binary protocol terminal.

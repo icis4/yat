@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 using MKY.Utilities.Text;
 
-namespace MKY.YAT.Gui.Forms
+namespace YAT.Gui.Forms
 {
 	public partial class TextTerminalSettings : System.Windows.Forms.Form
 	{

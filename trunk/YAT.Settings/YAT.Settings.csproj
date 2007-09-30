@@ -7,7 +7,7 @@
     <ProjectGuid>{A3E80010-9146-47EF-87B0-138A60406A9E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MKY.YAT.Settings</RootNamespace>
+    <RootNamespace>YAT.Settings</RootNamespace>
     <AssemblyName>YAT.Settings</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\YAT.snk</AssemblyOriginatorKeyFile>

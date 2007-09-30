@@ -7,11 +7,11 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
-using MKY.YAT.Settings;
-using MKY.YAT.Settings.Application;
-using MKY.YAT.Settings.Terminal;
+using YAT.Settings;
+using YAT.Settings.Application;
+using YAT.Settings.Terminal;
 
-namespace MKY.YAT.Gui.Forms
+namespace YAT.Gui.Forms
 {
 	public partial class LogSettings : System.Windows.Forms.Form
 	{

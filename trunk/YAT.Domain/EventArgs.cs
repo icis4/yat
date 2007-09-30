@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MKY.YAT.Domain
+namespace YAT.Domain
 {
 	/// <summary></summary>
 	public class TerminalErrorEventArgs : EventArgs

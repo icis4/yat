@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Utilities")]
-[assembly: AssemblyDescription("C# Utilities")]
+[assembly: AssemblyDescription("C# Utilities Test")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("YAT")]
+[assembly: AssemblyCompany("MKY")]
 [assembly: AssemblyProduct("Utilities")]
 [assembly: AssemblyCopyright("Copyright © 2003-2007 HSR Hochschule für Technik Rapperswil and Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
-namespace MKY.YAT.Domain.IO
+namespace YAT.Domain.IO
 {
 	/// <summary></summary>
 	public class UdpSocket : IIOProvider, IDisposable, MKY.Net.Sockets.ISocketService

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace MKY.YAT.Domain
+namespace YAT.Domain
 {
 	/// <summary>
 	/// DisplayRepository is a pseudo fixed-sized Queue holding DisplayElements.

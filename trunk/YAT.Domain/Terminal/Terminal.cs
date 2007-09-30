@@ -5,7 +5,7 @@ using System.IO;
 
 using MKY.Utilities;
 
-namespace MKY.YAT.Domain
+namespace YAT.Domain
 {
 	/// <summary>
 	/// Terminal with byte/string functionality and settings.

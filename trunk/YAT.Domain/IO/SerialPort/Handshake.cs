@@ -4,7 +4,7 @@ using System.Text;
 
 using MKY.Utilities.Types;
 
-namespace MKY.YAT.Domain.IO
+namespace YAT.Domain.IO
 {
 	#region Enum Handshake
 

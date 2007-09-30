@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using System.IO;
+using System.Collections.Generic;
 
 namespace MKY.Utilities.IO
 {
@@ -171,7 +172,11 @@ namespace MKY.Utilities.IO
 
 			string fileName = Path.GetFileName(filePath);
 			string absolutePath = DoCombineDirectoryPaths(directoryPath, Path.GetDirectoryName(filePath));
-			return (absolutePath + Path.DirectorySeparatorChar + fileName);
+
+			if (absolutePath != Path.GetPathRoot(absolutePath))
+				return (absolutePath + Path.DirectorySeparatorChar + fileName);
+			else
+				return (absolutePath + fileName);
 		}
 
 		/// <summary>
@@ -211,7 +216,11 @@ namespace MKY.Utilities.IO
 
 			string fileName2 = Path.GetFileName(filePath2);
 			string absolutePath = DoCombineDirectoryPaths(Path.GetDirectoryName(filePath1), Path.GetDirectoryName(filePath2));
-			return (absolutePath + Path.DirectorySeparatorChar + fileName2);
+
+			if (absolutePath != Path.GetPathRoot(absolutePath))
+				return (absolutePath + Path.DirectorySeparatorChar + fileName2);
+			else
+				return (absolutePath + fileName2);
 		}
 
 		#endregion
@@ -243,39 +252,50 @@ namespace MKY.Utilities.IO
 				if (dirInfoA.Root.FullName != dirInfoB.Root.FullName)
 					return (new XPathCompareResult(false));
 
-				// count number of equal characters in both paths
-				int i = 0;
-				for (i = 0; i < Utilities.Types.XInt.Min(dirPathA.Length, dirPathB.Length); i++)
+				// get common directory, make sure only directory part is used
+				List<string> dirInfosA = new List<string>();
+				List<string> dirInfosB = new List<string>();
+
+				DirectoryInfo tempDirInfoA = dirInfoA;
+				DirectoryInfo tempDirInfoB = dirInfoB;
+
+				while (tempDirInfoA != null)
 				{
-					if (string.Compare(dirPathA, i, dirPathB, i, 1, true) != 0)
-						break;
+					dirInfosA.Add(tempDirInfoA.FullName);
+					tempDirInfoA = tempDirInfoA.Parent;
 				}
+				while (tempDirInfoB != null)
+				{
+					dirInfosB.Add(tempDirInfoB.FullName);
+					tempDirInfoB = tempDirInfoB.Parent;
+				}
+
+				// reverse lists
+				dirInfosA.Reverse();
+				dirInfosB.Reverse();
 
 				// get common directory, make sure only directory part is used
-				DirectoryInfo commonDI;
-				string temp = Path.GetDirectoryName(dirPathA.Substring(0, i));
-				if (temp != null)
-					commonDI = new DirectoryInfo(temp);
-				else                   // common path only consists of root, simply use that
-					commonDI = new DirectoryInfo(dirPathA);
-
-				string commonPath = commonDI.FullName;
-
-				// get number of common directories
-				int commonDirectoryCount = 0;
-				DirectoryInfo di = commonDI;
-				while (di != null)
+				int i = 0;
+				while ((dirInfosA.Count > i) && (dirInfosB.Count > i) &&
+					   (dirInfosA[i] == dirInfosB[i]))
 				{
-					di = di.Parent;
-					if (di != null)
-						commonDirectoryCount++;
+					i++;
 				}
+
+				int commonDirectoryCount = i;
+
+				string commonPath = "";
+				if (commonDirectoryCount > 0)
+					commonPath = dirInfosA[commonDirectoryCount - 1];
+
+				DirectoryInfo commonDI = new DirectoryInfo(commonPath);
 
 				// check whether both paths are equal
 				if (dirPathA == dirPathB)
 					return (new XPathCompareResult(commonPath, commonDirectoryCount, 0, 0, "."));
 
 				// check whether one of the two is the others subdirectory
+				DirectoryInfo di = commonDI;
 				StringBuilder relativePath = new StringBuilder();
 				if (commonPath == dirPathA)
 				{
@@ -284,11 +304,16 @@ namespace MKY.Utilities.IO
 					while ((di != null) && (di.FullName != commonPath))
 					{
 						nearRelativeDirectoryCount++;
-						// actually, stepping in is
+						                                   // actually, stepping in is
 						if (relativePath.Length > 0)       //   done by stepping out
+						{
 							relativePath.Insert(0, Path.DirectorySeparatorChar);
-
-						relativePath.Insert(1, di.Name);
+							relativePath.Insert(0, di.Name);
+						}
+						else
+						{
+							relativePath.Append(di.Name);
+						}
 
 						di = di.Parent;
 					}
@@ -335,11 +360,21 @@ namespace MKY.Utilities.IO
 				while ((di != null) && (di.FullName != commonPath)) // step into path B
 				{
 					farRelativeDirectoryCount++;
-					// actually, stepping in is
-					if (relativePath.Length > 0)       //   done by stepping out
+					                                           // actually, stepping in is
+					if (relativePath.Length > commonPartIndex) //   done by stepping out
+					{
 						relativePath.Insert(commonPartIndex, Path.DirectorySeparatorChar);
-
-					relativePath.Insert(commonPartIndex + 1, di.Name);
+						relativePath.Insert(commonPartIndex + 1, di.Name);
+					}
+					else if (relativePath.Length > 0)
+					{
+						relativePath.Append(Path.DirectorySeparatorChar);
+						relativePath.Append(di.Name);
+					}
+					else
+					{
+						relativePath.Append(di.Name);
+					}
 
 					di = di.Parent;
 				}
@@ -360,30 +395,82 @@ namespace MKY.Utilities.IO
 		public static string DoCombineDirectoryPaths(string pathA, string pathB)
 		{
 			DirectoryInfo pathInfoA = null;
-			DirectoryInfo pathInfoB = null;
 
 			string dirPathA = "";
-			string dirPathB = "";
 			DirectoryInfo dirInfoA = null;
-			DirectoryInfo dirInfoB = null;
 
 			DoPrepareDirectoryPath(pathA, out pathInfoA, out dirPathA, out dirInfoA);
-			DoPrepareDirectoryPath(pathB, out pathInfoB, out dirPathB, out dirInfoB);
 
-			if ((pathInfoA != null) && (dirPathB.Length > 0))
+			if ((pathInfoA != null) && (pathB.Length > 0))
 			{
-				// check whether relative path points to current directory
-				if ((dirPathB ==                               ".") ||
-					(dirPathB == Path.DirectorySeparatorChar + ".") ||
-					(dirPathB ==                               "." + Path.DirectorySeparatorChar) ||
-					(dirPathB == Path.DirectorySeparatorChar + "." + Path.DirectorySeparatorChar) ||
-					(dirPathB.Substring(0, 2) == "." + Path.DirectorySeparatorChar) ||
-					(dirPathB.Substring(0, 3) == Path.DirectorySeparatorChar + "." + Path.DirectorySeparatorChar))
+				DirectoryInfo pathInfoResult = null;
+
+				string dirPathResult = "";
+				DirectoryInfo dirInfoResult = null;
+
+				// trim leading "\"
+				string s = pathB.TrimStart(Path.DirectorySeparatorChar);
+
+				// check whether relative path points to any parent directory
+				if ((s.Length >= 2) && (s.Substring(0, 2) == ".."))
 				{
-					return (dirPathA);
+					DirectoryInfo pathInfoParent = pathInfoA;
+
+					do
+					{
+						// detect invalidly long relative paths
+						if ((s.Length >= 3) && (s.Substring(0, 3) == "..."))
+							break;
+
+						s = s.Remove(0, 2);
+						pathInfoParent = pathInfoParent.Parent;
+
+						// ".." or "..\"
+						if ((s == "") ||
+							(s == Path.DirectorySeparatorChar.ToString()))
+						{
+							return (pathInfoParent.FullName);
+						}
+
+						// "..\<.. or Path>"
+						if ((s.Length >= 1) && (s.Substring(0, 1) == Path.DirectorySeparatorChar.ToString()))
+							s = s.Remove(0, 1);
+						else
+							break;
+					}
+					while ((s.Length >= 2) && (s.Substring(0, 2) == ".."));
+
+					if (pathInfoParent != null)
+						DoPrepareDirectoryPath(Path.Combine(pathInfoParent.FullName, s), out pathInfoResult, out dirPathResult, out dirInfoResult);
+				}
+
+				// check whether relative path points to current directory
+				else if ((s.Length >= 1) && (s.Substring(0, 1) == "."))
+				{
+					s = s.Remove(0, 1);
+
+					// "." or ".\"
+					if ((s == "") ||
+						(s == Path.DirectorySeparatorChar.ToString()))
+					{
+						return (dirPathA);
+					}
+
+					// ".\<Path>"
+					if (s.Substring(0, 1) == Path.DirectorySeparatorChar.ToString())
+					{
+						DoPrepareDirectoryPath(dirPathA + s.Substring(1), out pathInfoResult, out dirPathResult, out dirInfoResult);
+					}
 				}
 
 				// use System.IO.Path.Combine() for the easy cases
+				else
+				{
+					DoPrepareDirectoryPath(Path.Combine(dirPathA, pathB), out pathInfoResult, out dirPathResult, out dirInfoResult);
+				}
+
+				if (pathInfoResult != null)
+					return (dirPathResult);
 			}
 
 			// in case the second path was invalid, return the the first if possible
@@ -421,9 +508,18 @@ namespace MKY.Utilities.IO
 				// make sure parent directory and directory name is properly returned
 				// also make sure root is detected
 				if (temp.Parent != null)
-					dirPath = temp.Parent.FullName + Path.DirectorySeparatorChar + temp.Name;
+				{
+					// check whether parent actually is root
+					// ensure "\\" isn't appended twice ("Root" already contains "\\")
+					if (temp.Parent.FullName != temp.Root.FullName)
+						dirPath = temp.Parent.FullName + Path.DirectorySeparatorChar + temp.Name;
+					else
+						dirPath = temp.Root.FullName + temp.Name;
+				}
 				else
+				{
 					dirPath = temp.Root.FullName;
+				}
 
 				dirInfo = new DirectoryInfo(dirPath);
 			}

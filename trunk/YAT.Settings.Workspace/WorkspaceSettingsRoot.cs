@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-using MKY.YAT.Settings;
+using YAT.Settings;
 
-namespace MKY.YAT.Settings.Workspace
+namespace YAT.Settings.Workspace
 {
 	[Serializable]
 	[XmlRoot("Settings")]

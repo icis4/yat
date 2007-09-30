@@ -1,4 +1,4 @@
-namespace MKY.YAT.Gui.Forms
+namespace YAT.Gui.Forms
 {
 	partial class Terminal
 	{
@@ -30,8 +30,8 @@ namespace MKY.YAT.Gui.Forms
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Terminal));
-			MKY.YAT.Gui.Command command1 = new MKY.YAT.Gui.Command();
-			MKY.YAT.Gui.Command command2 = new MKY.YAT.Gui.Command();
+			YAT.Gui.Command command1 = new YAT.Gui.Command();
+			YAT.Gui.Command command2 = new YAT.Gui.Command();
 			this.timer_Status = new System.Windows.Forms.Timer(this.components);
 			this.contextMenuStrip_Monitor = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem_MonitorContextMenu_Radix = new System.Windows.Forms.ToolStripMenuItem();
@@ -168,21 +168,21 @@ namespace MKY.YAT.Gui.Forms
 			this.groupBox_Monitor = new System.Windows.Forms.GroupBox();
 			this.splitContainer_TxMonitor = new System.Windows.Forms.SplitContainer();
 			this.panel_Monitor_Tx = new System.Windows.Forms.Panel();
-			this.monitor_Tx = new MKY.YAT.Gui.Controls.Monitor();
+			this.monitor_Tx = new YAT.Gui.Controls.Monitor();
 			this.splitContainer_RxMonitor = new System.Windows.Forms.SplitContainer();
 			this.panel_Monitor_Bidir = new System.Windows.Forms.Panel();
-			this.monitor_Bidir = new MKY.YAT.Gui.Controls.Monitor();
+			this.monitor_Bidir = new YAT.Gui.Controls.Monitor();
 			this.panel_Monitor_Rx = new System.Windows.Forms.Panel();
-			this.monitor_Rx = new MKY.YAT.Gui.Controls.Monitor();
+			this.monitor_Rx = new YAT.Gui.Controls.Monitor();
 			this.panel_Predefined = new System.Windows.Forms.Panel();
 			this.groupBox_Predefined = new System.Windows.Forms.GroupBox();
-			this.predefined = new MKY.YAT.Gui.Controls.PredefinedCommands();
+			this.predefined = new YAT.Gui.Controls.PredefinedCommands();
 			this.panel_Send = new System.Windows.Forms.Panel();
 			this.splitContainer_Send = new System.Windows.Forms.SplitContainer();
 			this.groupBox_SendCommand = new System.Windows.Forms.GroupBox();
-			this.sendCommand = new MKY.YAT.Gui.Controls.SendCommand();
+			this.sendCommand = new YAT.Gui.Controls.SendCommand();
 			this.groupBox_SendFile = new System.Windows.Forms.GroupBox();
-			this.sendFile = new MKY.YAT.Gui.Controls.SendFile();
+			this.sendFile = new YAT.Gui.Controls.SendFile();
 			this.timer_RtsLuminescence = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.contextMenuStrip_Monitor.SuspendLayout();
@@ -459,7 +459,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_MonitorContextMenu_SaveToFile
 			// 
-			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_CopyToFolder_24x24;
+			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CopyToFolder_24x24;
 			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Name = "toolStripMenuItem_MonitorContextMenu_SaveToFile";
 			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Text = "Save to File...";
@@ -467,7 +467,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_MonitorContextMenu_CopyToClipboard
 			// 
-			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_CopyToClipboard_24x24;
+			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CopyToClipboard_24x24;
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Name = "toolStripMenuItem_MonitorContextMenu_CopyToClipboard";
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Text = "Copy to Clipboard";
@@ -480,7 +480,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Print
 			// 
-			this.toolStripMenuItem_MonitorContextMenu_Print.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_Print_24x24;
+			this.toolStripMenuItem_MonitorContextMenu_Print.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Print_24x24;
 			this.toolStripMenuItem_MonitorContextMenu_Print.Name = "toolStripMenuItem_MonitorContextMenu_Print";
 			this.toolStripMenuItem_MonitorContextMenu_Print.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Print.Text = "Print...";
@@ -797,7 +797,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_File_Save
 			// 
-			this.toolStripMenuItem_TerminalMenu_File_Save.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_SaveDocument_24x24;
+			this.toolStripMenuItem_TerminalMenu_File_Save.Image = global::YAT.Gui.Forms.Properties.Resources.Image_SaveDocument_24x24;
 			this.toolStripMenuItem_TerminalMenu_File_Save.MergeAction = System.Windows.Forms.MergeAction.Insert;
 			this.toolStripMenuItem_TerminalMenu_File_Save.MergeIndex = 6;
 			this.toolStripMenuItem_TerminalMenu_File_Save.Name = "toolStripMenuItem_TerminalMenu_File_Save";
@@ -841,7 +841,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Open
 			// 
-			this.toolStripMenuItem_TerminalMenu_Terminal_Open.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_ArrowRight_24x24;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Open.Image = global::YAT.Gui.Forms.Properties.Resources.Image_ArrowRight_24x24;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Open.Name = "toolStripMenuItem_TerminalMenu_Terminal_Open";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Open.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
 						| System.Windows.Forms.Keys.O)));
@@ -851,7 +851,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Close
 			// 
-			this.toolStripMenuItem_TerminalMenu_Terminal_Close.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_Stop_24x24;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Close.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Stop_24x24;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Close.Name = "toolStripMenuItem_TerminalMenu_Terminal_Close";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Close.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
 						| System.Windows.Forms.Keys.C)));
@@ -879,7 +879,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Settings
 			// 
-			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_Properties_24x24;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Properties_24x24;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Name = "toolStripMenuItem_TerminalMenu_Terminal_Settings";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
 						| System.Windows.Forms.Keys.S)));
@@ -1364,7 +1364,7 @@ namespace MKY.YAT.Gui.Forms
 						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
 						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_Connection.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-			this.toolStripStatusLabel_TerminalStatus_Connection.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_On_12x12;
+			this.toolStripStatusLabel_TerminalStatus_Connection.Image = global::YAT.Gui.Forms.Properties.Resources.Image_On_12x12;
 			this.toolStripStatusLabel_TerminalStatus_Connection.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_Connection.Name = "toolStripStatusLabel_TerminalStatus_Connection";
 			this.toolStripStatusLabel_TerminalStatus_Connection.Size = new System.Drawing.Size(16, 17);
@@ -1474,7 +1474,7 @@ namespace MKY.YAT.Gui.Forms
 			this.monitor_Tx.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.monitor_Tx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Tx.Name = "monitor_Tx";
-			this.monitor_Tx.RepositoryType = MKY.YAT.Domain.RepositoryType.Tx;
+			this.monitor_Tx.RepositoryType = YAT.Domain.RepositoryType.Tx;
 			this.monitor_Tx.Size = new System.Drawing.Size(166, 371);
 			this.monitor_Tx.TabIndex = 0;
 			this.monitor_Tx.CopyRequest += new System.EventHandler(this.monitor_Tx_CopyRequest);
@@ -1517,7 +1517,7 @@ namespace MKY.YAT.Gui.Forms
 			this.monitor_Bidir.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.monitor_Bidir.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Bidir.Name = "monitor_Bidir";
-			this.monitor_Bidir.RepositoryType = MKY.YAT.Domain.RepositoryType.Bidir;
+			this.monitor_Bidir.RepositoryType = YAT.Domain.RepositoryType.Bidir;
 			this.monitor_Bidir.Size = new System.Drawing.Size(169, 371);
 			this.monitor_Bidir.TabIndex = 0;
 			this.monitor_Bidir.CopyRequest += new System.EventHandler(this.monitor_Bidir_CopyRequest);
@@ -1539,7 +1539,7 @@ namespace MKY.YAT.Gui.Forms
 			this.monitor_Rx.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.monitor_Rx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Rx.Name = "monitor_Rx";
-			this.monitor_Rx.RepositoryType = MKY.YAT.Domain.RepositoryType.Rx;
+			this.monitor_Rx.RepositoryType = YAT.Domain.RepositoryType.Rx;
 			this.monitor_Rx.Size = new System.Drawing.Size(165, 371);
 			this.monitor_Rx.TabIndex = 0;
 			this.monitor_Rx.CopyRequest += new System.EventHandler(this.monitor_Rx_CopyRequest);
@@ -1577,8 +1577,8 @@ namespace MKY.YAT.Gui.Forms
 			this.predefined.Size = new System.Drawing.Size(162, 365);
 			this.predefined.TabIndex = 0;
 			this.predefined.SelectedPageChanged += new System.EventHandler(this.predefined_SelectedPageChanged);
-			this.predefined.SendCommandRequest += new System.EventHandler<MKY.YAT.Gui.PredefinedCommandEventArgs>(this.predefined_SendCommandRequest);
-			this.predefined.DefineCommandRequest += new System.EventHandler<MKY.YAT.Gui.PredefinedCommandEventArgs>(this.predefined_DefineCommandRequest);
+			this.predefined.SendCommandRequest += new System.EventHandler<YAT.Gui.PredefinedCommandEventArgs>(this.predefined_SendCommandRequest);
+			this.predefined.DefineCommandRequest += new System.EventHandler<YAT.Gui.PredefinedCommandEventArgs>(this.predefined_DefineCommandRequest);
 			// 
 			// panel_Send
 			// 
@@ -1630,7 +1630,7 @@ namespace MKY.YAT.Gui.Forms
 						| System.Windows.Forms.AnchorStyles.Right)));
 			command1.CommandLines = new string[] {
         "<1 lines...> []"};
-			command1.DefaultRadix = MKY.YAT.Domain.Radix.String;
+			command1.DefaultRadix = YAT.Domain.Radix.String;
 			command1.Description = "<1 lines...> []";
 			command1.FilePath = "";
 			command1.IsFilePath = false;
@@ -1662,7 +1662,7 @@ namespace MKY.YAT.Gui.Forms
 						| System.Windows.Forms.AnchorStyles.Right)));
 			command2.CommandLines = new string[] {
         "<1 lines...> []"};
-			command2.DefaultRadix = MKY.YAT.Domain.Radix.String;
+			command2.DefaultRadix = YAT.Domain.Radix.String;
 			command2.Description = "<1 lines...> []";
 			command2.FilePath = "";
 			command2.IsFilePath = false;
@@ -1815,14 +1815,14 @@ namespace MKY.YAT.Gui.Forms
 		private System.Windows.Forms.SplitContainer splitContainer_TxMonitor;
 		private System.Windows.Forms.Panel panel_Predefined;
 		private System.Windows.Forms.GroupBox groupBox_Predefined;
-		private MKY.YAT.Gui.Controls.PredefinedCommands predefined;
+		private YAT.Gui.Controls.PredefinedCommands predefined;
 		private System.Windows.Forms.Panel panel_Monitor_Tx;
-		private MKY.YAT.Gui.Controls.Monitor monitor_Tx;
+		private YAT.Gui.Controls.Monitor monitor_Tx;
 		private System.Windows.Forms.SplitContainer splitContainer_RxMonitor;
 		private System.Windows.Forms.Panel panel_Monitor_Bidir;
-		private MKY.YAT.Gui.Controls.Monitor monitor_Bidir;
+		private YAT.Gui.Controls.Monitor monitor_Bidir;
 		private System.Windows.Forms.Panel panel_Monitor_Rx;
-		private MKY.YAT.Gui.Controls.Monitor monitor_Rx;
+		private YAT.Gui.Controls.Monitor monitor_Rx;
 		private System.Windows.Forms.Timer timer_RtsLuminescence;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SendContextMenu_Command;
@@ -1886,8 +1886,8 @@ namespace MKY.YAT.Gui.Forms
 		private System.Windows.Forms.SplitContainer splitContainer_Send;
 		private System.Windows.Forms.GroupBox groupBox_SendCommand;
 		private System.Windows.Forms.GroupBox groupBox_SendFile;
-		private MKY.YAT.Gui.Controls.SendCommand sendCommand;
-		private MKY.YAT.Gui.Controls.SendFile sendFile;
+		private YAT.Gui.Controls.SendCommand sendCommand;
+		private YAT.Gui.Controls.SendFile sendFile;
 	}
 
 	#region Copied Designer Code For Backup
@@ -1973,7 +1973,7 @@ namespace MKY.YAT.Gui.Forms
 						| System.Windows.Forms.AnchorStyles.Right)));
 			command1.CommandLines = new string[] {
         "<1 lines...> []"};
-			command1.DefaultRadix = MKY.YAT.Domain.Radix.String;
+			command1.DefaultRadix = YAT.Domain.Radix.String;
 			command1.Description = "<1 lines...> []";
 			command1.FilePath = "";
 			command1.IsFilePath = false;
@@ -2005,7 +2005,7 @@ namespace MKY.YAT.Gui.Forms
 						| System.Windows.Forms.AnchorStyles.Right)));
 			command2.CommandLines = new string[] {
         "<1 lines...> []"};
-			command2.DefaultRadix = MKY.YAT.Domain.Radix.String;
+			command2.DefaultRadix = YAT.Domain.Radix.String;
 			command2.Description = "<1 lines...> []";
 			command2.FilePath = "";
 			command2.IsFilePath = false;

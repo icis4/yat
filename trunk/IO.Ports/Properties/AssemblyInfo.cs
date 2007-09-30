@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("IO.Ports")]
 [assembly: AssemblyDescription("System.IO.Ports extension")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("YAT")]
+[assembly: AssemblyCompany("MKY")]
 [assembly: AssemblyProduct("IO.Ports")]
 [assembly: AssemblyCopyright("Copyright © 2003-2007 HSR Hochschule für Technik Rapperswil and Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]

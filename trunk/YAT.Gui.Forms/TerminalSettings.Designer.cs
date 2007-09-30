@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MKY.YAT.Gui.Forms
+namespace YAT.Gui.Forms
 {
 	partial class TerminalSettings
 	{
@@ -37,12 +37,12 @@ namespace MKY.YAT.Gui.Forms
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
 			this.button_AdvancedSettings = new System.Windows.Forms.Button();
 			this.button_TextOrBinarySettings = new System.Windows.Forms.Button();
-			this.terminalSelection = new MKY.YAT.Gui.Controls.TerminalSelection();
+			this.terminalSelection = new YAT.Gui.Controls.TerminalSelection();
 			this.groupBox_PortSettings = new System.Windows.Forms.GroupBox();
-			this.socketSettings = new MKY.YAT.Gui.Controls.SocketSettings();
-			this.socketSelection = new MKY.YAT.Gui.Controls.SocketSelection();
-			this.serialPortSelection = new MKY.YAT.Gui.Controls.SerialPortSelection();
-			this.serialPortSettings = new MKY.YAT.Gui.Controls.SerialPortSettings();
+			this.socketSettings = new YAT.Gui.Controls.SocketSettings();
+			this.socketSelection = new YAT.Gui.Controls.SocketSelection();
+			this.serialPortSelection = new YAT.Gui.Controls.SerialPortSelection();
+			this.serialPortSettings = new YAT.Gui.Controls.SerialPortSettings();
 			this.menuItem_Port = new System.Windows.Forms.ContextMenu();
 			this.menuItem_Port_Search = new System.Windows.Forms.MenuItem();
 			this.button_Defaults = new System.Windows.Forms.Button();
@@ -248,13 +248,13 @@ namespace MKY.YAT.Gui.Forms
 		private System.Windows.Forms.GroupBox groupBox_Settings;
 		private System.Windows.Forms.ContextMenu menuItem_Port;
 		private System.Windows.Forms.MenuItem menuItem_Port_Search;
-		private MKY.YAT.Gui.Controls.TerminalSelection terminalSelection;
-		private MKY.YAT.Gui.Controls.SerialPortSettings serialPortSettings;
+		private YAT.Gui.Controls.TerminalSelection terminalSelection;
+		private YAT.Gui.Controls.SerialPortSettings serialPortSettings;
 		private System.Windows.Forms.Button button_AdvancedSettings;
 		private System.Windows.Forms.Button button_TextOrBinarySettings;
-		private MKY.YAT.Gui.Controls.SocketSelection socketSelection;
-		private MKY.YAT.Gui.Controls.SerialPortSelection serialPortSelection;
-		private MKY.YAT.Gui.Controls.SocketSettings socketSettings;
+		private YAT.Gui.Controls.SocketSelection socketSelection;
+		private YAT.Gui.Controls.SerialPortSelection serialPortSelection;
+		private YAT.Gui.Controls.SocketSettings socketSettings;
 		private System.Windows.Forms.Button button_Help;
 	}
 }

@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 using MKY.Utilities.Recent;
 
-namespace MKY.YAT.Gui.Settings
+namespace YAT.Gui.Settings
 {
 	[Serializable]
 	public class RecentFileSettings : Utilities.Settings.Settings, IEquatable<RecentFileSettings>

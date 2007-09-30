@@ -8,13 +8,13 @@ using System.Windows.Forms;
 using System.IO;
 
 using MKY.Utilities.Settings;
-using MKY.YAT.Settings;
-using MKY.YAT.Settings.Application;
-using MKY.YAT.Settings.Terminal;
-using MKY.YAT.Settings.Workspace;
-using MKY.YAT.Gui.Settings;
+using YAT.Settings;
+using YAT.Settings.Application;
+using YAT.Settings.Terminal;
+using YAT.Settings.Workspace;
+using YAT.Gui.Settings;
 
-namespace MKY.YAT.Gui.Forms
+namespace YAT.Gui.Forms
 {
 	/// <summary>
 	/// Main form, provides setup dialogs and hosts terminal forms (MDI forms)

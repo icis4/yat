@@ -1,4 +1,4 @@
-namespace MKY.YAT.Gui.Forms
+namespace YAT.Gui.Forms
 {
 	partial class Main
 	{
@@ -95,7 +95,7 @@ namespace MKY.YAT.Gui.Forms
 			this.toolStripPanel_Left = new System.Windows.Forms.ToolStripPanel();
 			this.timer_Chrono = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.chronometer_Main = new MKY.YAT.Gui.Controls.Chronometer(this.components);
+			this.chronometer_Main = new YAT.Gui.Controls.Chronometer(this.components);
 			this.contextMenuStrip_Main.SuspendLayout();
 			this.contextMenuStrip_FileRecent.SuspendLayout();
 			this.menuStrip_Main.SuspendLayout();
@@ -313,7 +313,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_MainMenu_File_New
 			// 
-			this.toolStripMenuItem_MainMenu_File_New.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_NewDocument_24x24;
+			this.toolStripMenuItem_MainMenu_File_New.Image = global::YAT.Gui.Forms.Properties.Resources.Image_NewDocument_24x24;
 			this.toolStripMenuItem_MainMenu_File_New.MergeIndex = 0;
 			this.toolStripMenuItem_MainMenu_File_New.Name = "toolStripMenuItem_MainMenu_File_New";
 			this.toolStripMenuItem_MainMenu_File_New.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
@@ -323,7 +323,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_MainMenu_File_Open
 			// 
-			this.toolStripMenuItem_MainMenu_File_Open.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_OpenDocument_24x24;
+			this.toolStripMenuItem_MainMenu_File_Open.Image = global::YAT.Gui.Forms.Properties.Resources.Image_OpenDocument_24x24;
 			this.toolStripMenuItem_MainMenu_File_Open.MergeIndex = 1;
 			this.toolStripMenuItem_MainMenu_File_Open.Name = "toolStripMenuItem_MainMenu_File_Open";
 			this.toolStripMenuItem_MainMenu_File_Open.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
@@ -573,7 +573,7 @@ namespace MKY.YAT.Gui.Forms
 			// toolStripButton_MainTool_File_New
 			// 
 			this.toolStripButton_MainTool_File_New.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_File_New.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_NewDocument_24x24;
+			this.toolStripButton_MainTool_File_New.Image = global::YAT.Gui.Forms.Properties.Resources.Image_NewDocument_24x24;
 			this.toolStripButton_MainTool_File_New.Name = "toolStripButton_MainTool_File_New";
 			this.toolStripButton_MainTool_File_New.Size = new System.Drawing.Size(28, 28);
 			this.toolStripButton_MainTool_File_New.Text = "New File";
@@ -584,7 +584,7 @@ namespace MKY.YAT.Gui.Forms
 			// toolStripButton_MainTool_File_Open
 			// 
 			this.toolStripButton_MainTool_File_Open.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_File_Open.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_OpenDocument_24x24;
+			this.toolStripButton_MainTool_File_Open.Image = global::YAT.Gui.Forms.Properties.Resources.Image_OpenDocument_24x24;
 			this.toolStripButton_MainTool_File_Open.Name = "toolStripButton_MainTool_File_Open";
 			this.toolStripButton_MainTool_File_Open.Size = new System.Drawing.Size(28, 28);
 			this.toolStripButton_MainTool_File_Open.Text = "Open File";
@@ -595,7 +595,7 @@ namespace MKY.YAT.Gui.Forms
 			// toolStripButton_MainTool_File_Save
 			// 
 			this.toolStripButton_MainTool_File_Save.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_File_Save.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_SaveDocument_24x24;
+			this.toolStripButton_MainTool_File_Save.Image = global::YAT.Gui.Forms.Properties.Resources.Image_SaveDocument_24x24;
 			this.toolStripButton_MainTool_File_Save.Name = "toolStripButton_MainTool_File_Save";
 			this.toolStripButton_MainTool_File_Save.Size = new System.Drawing.Size(28, 28);
 			this.toolStripButton_MainTool_File_Save.Text = "Save File";
@@ -611,7 +611,7 @@ namespace MKY.YAT.Gui.Forms
 			// toolStripButton_MainTool_Terminal_Open
 			// 
 			this.toolStripButton_MainTool_Terminal_Open.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_Open.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_ArrowRight_24x24;
+			this.toolStripButton_MainTool_Terminal_Open.Image = global::YAT.Gui.Forms.Properties.Resources.Image_ArrowRight_24x24;
 			this.toolStripButton_MainTool_Terminal_Open.Name = "toolStripButton_MainTool_Terminal_Open";
 			this.toolStripButton_MainTool_Terminal_Open.Size = new System.Drawing.Size(28, 28);
 			this.toolStripButton_MainTool_Terminal_Open.Text = "Open Terminal";
@@ -622,7 +622,7 @@ namespace MKY.YAT.Gui.Forms
 			// toolStripButton_MainTool_Terminal_Close
 			// 
 			this.toolStripButton_MainTool_Terminal_Close.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_Close.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_Stop_24x24;
+			this.toolStripButton_MainTool_Terminal_Close.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Stop_24x24;
 			this.toolStripButton_MainTool_Terminal_Close.Name = "toolStripButton_MainTool_Terminal_Close";
 			this.toolStripButton_MainTool_Terminal_Close.Size = new System.Drawing.Size(28, 28);
 			this.toolStripButton_MainTool_Terminal_Close.Text = "Close Terminal";
@@ -638,7 +638,7 @@ namespace MKY.YAT.Gui.Forms
 			// toolStripButton_MainTool_Terminal_Settings
 			// 
 			this.toolStripButton_MainTool_Terminal_Settings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_Settings.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_Properties_24x24;
+			this.toolStripButton_MainTool_Terminal_Settings.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Properties_24x24;
 			this.toolStripButton_MainTool_Terminal_Settings.Name = "toolStripButton_MainTool_Terminal_Settings";
 			this.toolStripButton_MainTool_Terminal_Settings.Size = new System.Drawing.Size(28, 28);
 			this.toolStripButton_MainTool_Terminal_Settings.Text = "Terminal Settings";
@@ -770,7 +770,7 @@ namespace MKY.YAT.Gui.Forms
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_MainStatus_Status;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_MainStatus_Chrono;
 		private System.Windows.Forms.Timer timer_Chrono;
-		private MKY.YAT.Gui.Controls.Chronometer chronometer_Main;
+		private YAT.Gui.Controls.Chronometer chronometer_Main;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_File_OpenWorkspace;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_File_SaveWorkspace;

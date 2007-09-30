@@ -4,7 +4,7 @@ using System.Text;
 using System.IO;
 using System.Globalization;
 
-namespace MKY.YAT.Domain.Parser
+namespace YAT.Domain.Parser
 {
 	/// <summary>
 	/// Parser.

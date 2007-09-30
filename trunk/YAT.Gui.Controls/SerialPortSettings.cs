@@ -6,7 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-namespace MKY.YAT.Gui.Controls
+namespace YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("BaudRateChanged")]

@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Windows.Forms;
 
-namespace MKY.YAT.Settings
+namespace YAT.Settings
 {
 	[Serializable]
 	public class GeneralSettings : Utilities.Settings.Settings, IEquatable<GeneralSettings>
