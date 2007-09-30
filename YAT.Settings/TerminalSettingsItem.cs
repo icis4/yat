@@ -4,7 +4,7 @@ using System.Text;
 using System.Xml.Serialization;
 using System.IO;
 
-namespace MKY.YAT.Settings
+namespace YAT.Settings
 {
 	[Serializable]
 	public class TerminalSettingsItem : Utilities.Settings.Settings, IEquatable<TerminalSettingsItem>

@@ -4,7 +4,7 @@ using System.Text;
 
 using MKY.Utilities.Types;
 
-namespace MKY.YAT.Domain
+namespace YAT.Domain
 {
 	#region Enum TerminalType
 

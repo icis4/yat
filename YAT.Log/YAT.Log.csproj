@@ -7,7 +7,7 @@
     <ProjectGuid>{7B0B343D-F992-4A1E-8E07-CB8EC651A5E6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MKY.YAT.Log</RootNamespace>
+    <RootNamespace>YAT.Log</RootNamespace>
     <AssemblyName>YAT.Log</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\YAT.snk</AssemblyOriginatorKeyFile>

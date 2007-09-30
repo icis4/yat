@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MKY.YAT.Log
+namespace YAT.Log
 {
 	public enum LogFormat
 	{

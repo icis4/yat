@@ -3,7 +3,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
 
-namespace MKY.YAT.Test
+namespace YAT.Test
 {
 	public class Test_Settings
 	{

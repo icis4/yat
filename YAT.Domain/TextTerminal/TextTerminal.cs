@@ -5,7 +5,7 @@ using System.IO;
 
 using MKY.Utilities.Text;
 
-namespace MKY.YAT.Domain
+namespace YAT.Domain
 {
 	/// <summary>
 	/// Text protocol terminal.

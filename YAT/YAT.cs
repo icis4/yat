@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace MKY.YAT
+namespace YAT
 {
 	/// <summary>
 	/// Application main class of YAT.

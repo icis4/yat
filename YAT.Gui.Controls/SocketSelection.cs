@@ -10,7 +10,7 @@ using System.Net.NetworkInformation;
 
 using MKY.Net.Sockets;
 
-namespace MKY.YAT.Gui.Controls
+namespace YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("HostNameOrAddressChanged")]

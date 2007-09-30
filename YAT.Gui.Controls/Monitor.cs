@@ -6,7 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-namespace MKY.YAT.Gui.Controls
+namespace YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
 	public partial class Monitor : UserControl
@@ -322,7 +322,7 @@ namespace MKY.YAT.Gui.Controls
 			{
 				ListBox lb = listBox_Monitor;
 
-				List<List<Domain.DisplayElement>> selectedLines = new List<List<MKY.YAT.Domain.DisplayElement>>();
+				List<List<Domain.DisplayElement>> selectedLines = new List<List<YAT.Domain.DisplayElement>>();
 				if (lb.SelectedItems.Count > 0)
 				{
 					foreach (int i in lb.SelectedIndices)

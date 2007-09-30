@@ -4,7 +4,7 @@ using System.Text;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace MKY.YAT.Gui
+namespace YAT.Gui
 {
 	public static class XmlReader
 	{

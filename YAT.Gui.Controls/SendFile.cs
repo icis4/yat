@@ -7,10 +7,10 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
-using MKY.YAT.Settings;
-using MKY.YAT.Settings.Application;
+using YAT.Settings;
+using YAT.Settings.Application;
 
-namespace MKY.YAT.Gui.Controls
+namespace YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("SendFileRequest")]

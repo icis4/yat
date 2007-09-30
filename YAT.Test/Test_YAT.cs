@@ -7,7 +7,7 @@
 
 using System;
 
-namespace MKY.YAT.Test
+namespace YAT.Test
 {
 	/// <summary>
 	/// Test main class of YAT.

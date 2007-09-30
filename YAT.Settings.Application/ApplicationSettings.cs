@@ -4,7 +4,7 @@ using System.Text;
 
 using MKY.Utilities.Settings;
 
-namespace MKY.YAT.Settings.Application
+namespace YAT.Settings.Application
 {
 	public static class ApplicationSettings
 	{

@@ -1,4 +1,4 @@
-namespace MKY.YAT.Gui.Forms
+namespace YAT.Gui.Forms
 {
 	partial class WelcomeScreen
 	{
@@ -39,7 +39,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			// pictureBox1
 			// 
-			this.pictureBox1.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_YAT_64x64;
+			this.pictureBox1.Image = global::YAT.Gui.Forms.Properties.Resources.Image_YAT_64x64;
 			this.pictureBox1.Location = new System.Drawing.Point(12, 12);
 			this.pictureBox1.Name = "pictureBox1";
 			this.pictureBox1.Size = new System.Drawing.Size(64, 64);

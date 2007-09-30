@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace MKY.YAT.Gui.Settings
+namespace YAT.Gui.Settings
 {
 	[Serializable]
 	public class PredefinedSettings : Utilities.Settings.Settings, IEquatable<PredefinedSettings>

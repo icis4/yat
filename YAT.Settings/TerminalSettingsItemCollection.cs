@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MKY.YAT.Settings
+namespace YAT.Settings
 {
 	/// <summary>
 	/// Collection for terminal settings items, provides methods to handle the items.

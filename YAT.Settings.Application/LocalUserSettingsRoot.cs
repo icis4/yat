@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace MKY.YAT.Settings.Application
+namespace YAT.Settings.Application
 {
 	[Serializable]
 	[XmlRoot("LocalUserSettings")]

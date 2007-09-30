@@ -5,12 +5,12 @@ using System.IO;
 using System.Xml.Serialization;
 
 using MKY.Utilities.Recent;
-using MKY.YAT.Settings.Terminal;
-using MKY.YAT.Domain.Settings;
-using MKY.YAT.Gui;
-using MKY.YAT.Gui.Settings;
+using YAT.Settings.Terminal;
+using YAT.Domain.Settings;
+using YAT.Gui;
+using YAT.Gui.Settings;
 
-namespace MKY.YAT.Test
+namespace YAT.Test
 {
 	public class Test_Xml
 	{

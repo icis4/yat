@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MKY.YAT.Gui.Forms
+namespace YAT.Gui.Forms
 {
 	partial class NewTerminal
 	{
@@ -36,9 +36,9 @@ namespace MKY.YAT.Gui.Forms
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_NewTerminal = new System.Windows.Forms.GroupBox();
 			this.groupBox_PortSettings = new System.Windows.Forms.GroupBox();
-			this.serialPortSelection = new MKY.YAT.Gui.Controls.SerialPortSelection();
-			this.socketSelection = new MKY.YAT.Gui.Controls.SocketSelection();
-			this.terminalSelection = new MKY.YAT.Gui.Controls.TerminalSelection();
+			this.serialPortSelection = new YAT.Gui.Controls.SerialPortSelection();
+			this.socketSelection = new YAT.Gui.Controls.SocketSelection();
+			this.terminalSelection = new YAT.Gui.Controls.TerminalSelection();
 			this.checkBox_OpenTerminal = new System.Windows.Forms.CheckBox();
 			this.pictureBox_New = new System.Windows.Forms.PictureBox();
 			this.button_Help = new System.Windows.Forms.Button();
@@ -148,7 +148,7 @@ namespace MKY.YAT.Gui.Forms
 			// 
 			// pictureBox_New
 			// 
-			this.pictureBox_New.Image = global::MKY.YAT.Gui.Forms.Properties.Resources.Image_NewDocument_24x24;
+			this.pictureBox_New.Image = global::YAT.Gui.Forms.Properties.Resources.Image_NewDocument_24x24;
 			this.pictureBox_New.Location = new System.Drawing.Point(12, 18);
 			this.pictureBox_New.Name = "pictureBox_New";
 			this.pictureBox_New.Size = new System.Drawing.Size(48, 48);
@@ -202,11 +202,11 @@ namespace MKY.YAT.Gui.Forms
 		private System.Windows.Forms.Button button_OK;
 		private System.Windows.Forms.Button button_Cancel;
 		private System.Windows.Forms.GroupBox groupBox_NewTerminal;
-		private MKY.YAT.Gui.Controls.TerminalSelection terminalSelection;
+		private YAT.Gui.Controls.TerminalSelection terminalSelection;
 		private System.Windows.Forms.CheckBox checkBox_OpenTerminal;
         private System.Windows.Forms.Button button_Help;
 		private System.Windows.Forms.GroupBox groupBox_PortSettings;
-		private MKY.YAT.Gui.Controls.SocketSelection socketSelection;
-		private MKY.YAT.Gui.Controls.SerialPortSelection serialPortSelection;
+		private YAT.Gui.Controls.SocketSelection socketSelection;
+		private YAT.Gui.Controls.SerialPortSelection serialPortSelection;
 	}
 }

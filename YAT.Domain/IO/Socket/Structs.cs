@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 // 'type' defines operator == or operator != but does not override Object.Equals(object o)
 #pragma warning disable 660
 
-namespace MKY.YAT.Domain
+namespace YAT.Domain
 {
 	/// <summary></summary>
 	public struct TcpClientAutoReconnect

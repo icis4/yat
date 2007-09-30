@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 using MKY.Net.Sockets;
 
-namespace MKY.YAT.Gui.Controls
+namespace YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("TcpClientAutoReconnectChanged")]
@@ -20,7 +20,7 @@ namespace MKY.YAT.Gui.Controls
 
 		private const HostType _HostTypeDefault = HostType.TcpAutoSocket;
 
-		private static readonly Domain.TcpClientAutoReconnect _TcpClientAutoReconnectDefault = new MKY.YAT.Domain.TcpClientAutoReconnect(false, 500);
+		private static readonly Domain.TcpClientAutoReconnect _TcpClientAutoReconnectDefault = new YAT.Domain.TcpClientAutoReconnect(false, 500);
 
 		//------------------------------------------------------------------------------------------
 		// Fields

@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 using MKY.Utilities.Recent;
 
-namespace MKY.YAT.Gui.Controls
+namespace YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("SendCommandRequest")]

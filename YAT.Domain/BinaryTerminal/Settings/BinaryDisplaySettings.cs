@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace MKY.YAT.Domain.Settings
+namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	public class BinaryDisplaySettings : Utilities.Settings.Settings, IEquatable<BinaryDisplaySettings>

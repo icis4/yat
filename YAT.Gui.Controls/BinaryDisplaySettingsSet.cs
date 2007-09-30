@@ -6,9 +6,9 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-using MKY.YAT.Domain.Settings;
+using YAT.Domain.Settings;
 
-namespace MKY.YAT.Gui.Controls
+namespace YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
 	public partial class BinaryDisplaySettingsSet : UserControl

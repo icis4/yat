@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 using MKY.Utilities.Text;
 
-namespace MKY.YAT.Domain.Settings
+namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	public class TextTerminalSettings : Utilities.Settings.Settings, IEquatable<TextTerminalSettings>

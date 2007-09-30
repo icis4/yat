@@ -1,4 +1,4 @@
-namespace MKY.YAT.Gui.Controls
+namespace YAT.Gui.Controls
 {
 	partial class PredefinedCommands
 	{
@@ -32,7 +32,7 @@ namespace MKY.YAT.Gui.Controls
 			this.label_Shortcut = new System.Windows.Forms.Label();
 			this.splitContainer_Lower = new System.Windows.Forms.SplitContainer();
 			this.panel_Commands = new System.Windows.Forms.Panel();
-			this.pageButtons = new MKY.YAT.Gui.Controls.PredefinedCommandPageButtons();
+			this.pageButtons = new YAT.Gui.Controls.PredefinedCommandPageButtons();
 			this.label_Page = new System.Windows.Forms.Label();
 			this.button_PageNext = new System.Windows.Forms.Button();
 			this.button_PagePrevious = new System.Windows.Forms.Button();
@@ -121,8 +121,8 @@ namespace MKY.YAT.Gui.Controls
 			this.pageButtons.Name = "pageButtons";
 			this.pageButtons.Size = new System.Drawing.Size(138, 263);
 			this.pageButtons.TabIndex = 2;
-			this.pageButtons.SendCommandRequest += new System.EventHandler<MKY.YAT.Gui.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
-			this.pageButtons.DefineCommandRequest += new System.EventHandler<MKY.YAT.Gui.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
+			this.pageButtons.SendCommandRequest += new System.EventHandler<YAT.Gui.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
+			this.pageButtons.DefineCommandRequest += new System.EventHandler<YAT.Gui.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
 			// 
 			// label_Page
 			// 
