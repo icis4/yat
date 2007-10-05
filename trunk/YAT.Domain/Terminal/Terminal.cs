@@ -4,6 +4,8 @@ using System.Text;
 using System.IO;
 
 using MKY.Utilities;
+using MKY.Utilities.Event;
+using MKY.Utilities.Types;
 
 namespace YAT.Domain
 {
@@ -314,8 +316,8 @@ namespace YAT.Domain
 
 			switch (r)
 			{
-				case Radix.Bin:    data += Utilities.Types.XByte.ConvertToBinaryString(b) + "b"; break;
-				case Radix.Oct:    data += Utilities.Types.XByte.ConvertToOctalString(b) + "o"; break;
+				case Radix.Bin:    data += XByte.ConvertToBinaryString(b) + "b"; break;
+				case Radix.Oct:    data += XByte.ConvertToOctalString(b) + "o"; break;
 				case Radix.Dec:    data += b.ToString("D3") + "d"; break;
 				case Radix.Hex:    data += b.ToString("X2") + "h"; break;
 				case Radix.Char:
@@ -602,12 +604,12 @@ namespace YAT.Domain
 				DetachTerminalSettings();
 
 			_terminalSettings = terminalSettings;
-			_terminalSettings.Changed += new EventHandler<Utilities.Settings.SettingsEventArgs>(_terminalSettings_Changed);
+			_terminalSettings.Changed += new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(_terminalSettings_Changed);
 		}
 
 		private void DetachTerminalSettings()
 		{
-			_terminalSettings.Changed -= new EventHandler<Utilities.Settings.SettingsEventArgs>(_terminalSettings_Changed);
+			_terminalSettings.Changed -= new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(_terminalSettings_Changed);
 			_terminalSettings = null;
 		}
 
@@ -742,31 +744,31 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnTerminalChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(TerminalChanged, this, e);
+			EventHelper.FireSync(TerminalChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnTerminalControlChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(TerminalControlChanged, this, e);
+			EventHelper.FireSync(TerminalControlChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnTerminalError(TerminalErrorEventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync<TerminalErrorEventArgs>(TerminalError, this, e);
+			EventHelper.FireSync<TerminalErrorEventArgs>(TerminalError, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRawElementSent(RawElementEventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync<RawElementEventArgs>(RawElementSent, this, e);
+			EventHelper.FireSync<RawElementEventArgs>(RawElementSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRawElementReceived(RawElementEventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync<RawElementEventArgs>(RawElementReceived, this, e);
+			EventHelper.FireSync<RawElementEventArgs>(RawElementReceived, this, e);
 		}
 
 		/// <summary></summary>
@@ -794,14 +796,14 @@ namespace YAT.Domain
 		protected virtual void OnDisplayElementsSent(DisplayElementsEventArgs e)
 		{
 			if (!_eventsSuspendedForReload)
-				Utilities.Event.EventHelper.FireSync<DisplayElementsEventArgs>(DisplayElementsSent, this, e);
+				EventHelper.FireSync<DisplayElementsEventArgs>(DisplayElementsSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsReceived(DisplayElementsEventArgs e)
 		{
 			if (!_eventsSuspendedForReload)
-				Utilities.Event.EventHelper.FireSync<DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
+				EventHelper.FireSync<DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
 		}
 
 		/// <summary></summary>
@@ -820,28 +822,28 @@ namespace YAT.Domain
 		protected virtual void OnDisplayLinesSent(DisplayLinesEventArgs e)
 		{
 			if (!_eventsSuspendedForReload)
-				Utilities.Event.EventHelper.FireSync<DisplayLinesEventArgs>(DisplayLinesSent, this, e);
+				EventHelper.FireSync<DisplayLinesEventArgs>(DisplayLinesSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesReceived(DisplayLinesEventArgs e)
 		{
 			if (!_eventsSuspendedForReload)
-				Utilities.Event.EventHelper.FireSync<DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
+				EventHelper.FireSync<DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryCleared(RepositoryEventArgs e)
 		{
 			if (!_eventsSuspendedForReload)
-				Utilities.Event.EventHelper.FireSync<RepositoryEventArgs>(RepositoryCleared, this, e);
+				EventHelper.FireSync<RepositoryEventArgs>(RepositoryCleared, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryReloaded(RepositoryEventArgs e)
 		{
 			if (!_eventsSuspendedForReload)
-				Utilities.Event.EventHelper.FireSync<RepositoryEventArgs>(RepositoryReloaded, this, e);
+				EventHelper.FireSync<RepositoryEventArgs>(RepositoryReloaded, this, e);
 		}
 
 		#endregion

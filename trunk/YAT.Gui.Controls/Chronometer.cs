@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using MKY.Utilities.Event;
+
 namespace YAT.Gui.Controls
 {
 	public partial class Chronometer : Component
@@ -156,7 +158,7 @@ namespace YAT.Gui.Controls
 
 		protected virtual void OnTick(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(Tick, this, e);
+			EventHelper.FireSync(Tick, this, e);
 		}
 
 		#endregion

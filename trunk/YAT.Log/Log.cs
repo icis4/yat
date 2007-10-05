@@ -3,6 +3,8 @@ using System.IO;
 using System.Collections.Generic;
 using System.Threading;
 
+using MKY.Utilities.IO;
+
 namespace YAT.Log
 {
 	public enum LogStreams
@@ -104,7 +106,7 @@ namespace YAT.Log
 
 				if (_writeMode == LogFileWriteMode.Create)
 				{
-					_file = Utilities.IO.XFile.MakeUniqueFileName(_file, _separator.Separator);
+					_file = XFile.MakeUniqueFileName(_file, _separator.Separator);
 					_fileStream = File.Open(_file, FileMode.Create, FileAccess.Write, FileShare.Read);
 				}
 				else if (_writeMode == LogFileWriteMode.Append)

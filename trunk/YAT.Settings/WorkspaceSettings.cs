@@ -6,18 +6,18 @@ using System.Xml.Serialization;
 namespace YAT.Settings
 {
 	[Serializable]
-	public class WorkspaceSettings : Utilities.Settings.Settings, IEquatable<WorkspaceSettings>
+	public class WorkspaceSettings : MKY.Utilities.Settings.Settings, IEquatable<WorkspaceSettings>
 	{
 		private TerminalSettingsItemCollection _terminalSettings;
 
 		public WorkspaceSettings()
-			: base(Utilities.Settings.SettingsType.Explicit)
+			: base(MKY.Utilities.Settings.SettingsType.Explicit)
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
-		public WorkspaceSettings(Utilities.Settings.SettingsType settingsType)
+		public WorkspaceSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();

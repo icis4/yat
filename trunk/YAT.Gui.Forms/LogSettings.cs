@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
+using MKY.Utilities.Types;
+
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
@@ -458,7 +460,7 @@ namespace YAT.Gui.Forms
 			invalid.Write(Path.AltDirectorySeparatorChar);
 			invalid.Write(Path.PathSeparator);
 
-			if (Utilities.Types.XString.Contains(filenameChars, invalid.ToString().ToCharArray()))
+			if (XString.Contains(filenameChars, invalid.ToString().ToCharArray()))
 			{
 				StringWriter invalidPrintable = new StringWriter();
 				foreach (char c in invalid.ToString().ToCharArray())

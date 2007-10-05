@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
+using MKY.Utilities.Event;
+
 using YAT.Settings;
 using YAT.Settings.Application;
 
@@ -231,12 +233,12 @@ namespace YAT.Gui.Controls
 
 		protected virtual void OnCommandChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(CommandChanged, this, e);
+			EventHelper.FireSync(CommandChanged, this, e);
 		}
 
 		protected virtual void OnSendCommandRequest(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(SendCommandRequest, this, e);
+			EventHelper.FireSync(SendCommandRequest, this, e);
 		}
 
 		#endregion

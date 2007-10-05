@@ -7,7 +7,7 @@ namespace YAT.Settings.Application
 {
 	[Serializable]
 	[XmlRoot("LocalUserSettings")]
-	public class LocalUserSettingsRoot : Utilities.Settings.Settings, IEquatable<LocalUserSettingsRoot>
+	public class LocalUserSettingsRoot : MKY.Utilities.Settings.Settings, IEquatable<LocalUserSettingsRoot>
 	{
 		private string _productVersion = System.Windows.Forms.Application.ProductVersion;
 		private Settings.GeneralSettings _general;
@@ -17,7 +17,7 @@ namespace YAT.Settings.Application
 		private Gui.Settings.RecentFileSettings _recentFiles;
 
 		public LocalUserSettingsRoot()
-			: base(Utilities.Settings.SettingsType.Explicit)
+			: base(MKY.Utilities.Settings.SettingsType.Explicit)
 		{
 			General     = new Settings.GeneralSettings();
 			Paths       = new Settings.PathSettings();
@@ -199,7 +199,7 @@ namespace YAT.Settings.Application
 				return
 					(
 					_productVersion.Equals(value._productVersion) &&
-					base.Equals((Utilities.Settings.Settings)value) // compares all settings nodes
+					base.Equals((MKY.Utilities.Settings.Settings)value) // compares all settings nodes
 					);
 			}
 			return (false);

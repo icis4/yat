@@ -7,7 +7,10 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
+using MKY.Utilities.Event;
+using MKY.Utilities.Recent;
 using MKY.Utilities.Settings;
+
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
@@ -2234,7 +2237,7 @@ namespace YAT.Gui.Forms
 			SendCommand(_terminalSettingsRoot.SendCommand.Command);
 			_terminalSettingsRoot.SendCommand.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
 				(
-				new Utilities.Recent.RecentItem<Command>(new Command(_terminalSettingsRoot.SendCommand.Command))
+				new RecentItem<Command>(new Command(_terminalSettingsRoot.SendCommand.Command))
 				);
 		}
 
@@ -2819,12 +2822,12 @@ namespace YAT.Gui.Forms
 
 		protected virtual void OnTerminalChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(TerminalChanged, this, e);
+			EventHelper.FireSync(TerminalChanged, this, e);
 		}
 
 		protected virtual void OnTerminalSaved(TerminalSavedEventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync<TerminalSavedEventArgs>(TerminalSaved, this, e);
+			EventHelper.FireSync<TerminalSavedEventArgs>(TerminalSaved, this, e);
 		}
 
 		#endregion

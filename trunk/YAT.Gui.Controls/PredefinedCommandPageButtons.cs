@@ -6,6 +6,8 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Utilities.Event;
+
 namespace YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
@@ -176,12 +178,12 @@ namespace YAT.Gui.Controls
 
 		protected virtual void OnSendCommandRequest(PredefinedCommandEventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync<PredefinedCommandEventArgs>(SendCommandRequest, this, e);
+			EventHelper.FireSync<PredefinedCommandEventArgs>(SendCommandRequest, this, e);
 		}
 
 		protected virtual void OnDefineCommandRequest(PredefinedCommandEventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync<PredefinedCommandEventArgs>(DefineCommandRequest, this, e);
+			EventHelper.FireSync<PredefinedCommandEventArgs>(DefineCommandRequest, this, e);
 		}
 
 		#endregion

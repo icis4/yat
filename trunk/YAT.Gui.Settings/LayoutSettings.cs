@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace YAT.Gui.Settings
 {
 	[Serializable]
-	public class LayoutSettings : Utilities.Settings.Settings, IEquatable<LayoutSettings>
+	public class LayoutSettings : MKY.Utilities.Settings.Settings, IEquatable<LayoutSettings>
 	{
 		private bool _txMonitorPanelIsVisible;
 		private bool _bidirMonitorPanelIsVisible;
@@ -28,7 +28,7 @@ namespace YAT.Gui.Settings
 			ClearChanged();
 		}
 
-		public LayoutSettings(Utilities.Settings.SettingsType settingsType)
+		public LayoutSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();

@@ -98,7 +98,7 @@ namespace YAT.Gui.Forms
 		{
 			if (!_isSettingControls)
 			{
-				IO.Ports.SerialPortId serialPortId = serialPortSelection.PortId;
+				MKY.IO.Ports.SerialPortId serialPortId = serialPortSelection.PortId;
 				_newTerminalSettings_Form.SerialPortId = serialPortId;
 				SetControls();
 			}

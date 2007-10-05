@@ -6,6 +6,8 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Utilities.Event;
+
 namespace YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
@@ -170,12 +172,12 @@ namespace YAT.Gui.Controls
 
 		protected virtual void OnTerminalTypeChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(TerminalTypeChanged, this, e);
+			EventHelper.FireSync(TerminalTypeChanged, this, e);
 		}
 
 		protected virtual void OnIOTypeChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(IOTypeChanged, this, e);
+			EventHelper.FireSync(IOTypeChanged, this, e);
 		}
 
 		#endregion

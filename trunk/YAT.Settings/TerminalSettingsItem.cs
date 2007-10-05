@@ -7,14 +7,14 @@ using System.IO;
 namespace YAT.Settings
 {
 	[Serializable]
-	public class TerminalSettingsItem : Utilities.Settings.Settings, IEquatable<TerminalSettingsItem>
+	public class TerminalSettingsItem : MKY.Utilities.Settings.Settings, IEquatable<TerminalSettingsItem>
 	{
 		private string _filePath;
 		private Guid _guid;
 		private Gui.Settings.WindowSettings _window;
 
 		public TerminalSettingsItem()
-			: base(Utilities.Settings.SettingsType.Implicit)
+			: base(MKY.Utilities.Settings.SettingsType.Implicit)
 		{
 			SetMyDefaults();
 
@@ -141,7 +141,7 @@ namespace YAT.Settings
 					(
 					_filePath.Equals(value._filePath) &&
 					_guid.Equals(value._guid) &&
-					base.Equals((Utilities.Settings.Settings)value) // compares all settings nodes
+					base.Equals((MKY.Utilities.Settings.Settings)value) // compares all settings nodes
 					);
 			}
 			return (false);

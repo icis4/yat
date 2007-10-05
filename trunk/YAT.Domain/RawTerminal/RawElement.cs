@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
+using MKY.Utilities.Types;
+
 namespace YAT.Domain
 {
 	/// <summary>
@@ -61,7 +63,7 @@ namespace YAT.Domain
 			}
 			return (indent + "- Data: " + dataString + Environment.NewLine +
 					indent + "- Direction: " + _direction.ToString() + Environment.NewLine +
-					indent + "- TimeStamp: " + _timestamp.ToLongTimeString() + "." + Utilities.Types.XString.Left(_timestamp.Millisecond.ToString("D3"), 2) + Environment.NewLine );
+					indent + "- TimeStamp: " + _timestamp.ToLongTimeString() + "." + XString.Left(_timestamp.Millisecond.ToString("D3"), 2) + Environment.NewLine );
 		}
 	}
 }

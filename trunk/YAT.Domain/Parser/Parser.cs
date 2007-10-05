@@ -4,6 +4,8 @@ using System.Text;
 using System.IO;
 using System.Globalization;
 
+using MKY.Utilities.Types;
+
 namespace YAT.Domain.Parser
 {
 	/// <summary>
@@ -340,7 +342,7 @@ namespace YAT.Domain.Parser
 					if (t == "") continue;
 
 					byte code;
-					if (Utilities.Types.Ascii.TryParse(t, out code))
+					if (Ascii.TryParse(t, out code))
 					{
 						char c = Convert.ToChar(code);
 						byte[] b = parser.Encoding.GetBytes(new char[] { c });
@@ -677,7 +679,7 @@ namespace YAT.Domain.Parser
 					EndByteArray();
 
 					// return part of string that could be parsed
-					parsed = Utilities.Types.XString.Left(s, s.Length - _reader.ReadToEnd().Length - 1);
+					parsed = XString.Left(s, s.Length - _reader.ReadToEnd().Length - 1);
 					result = _resultList.ToArray();
 					return (false);
 				}
@@ -747,8 +749,8 @@ namespace YAT.Domain.Parser
 			bool success;
 			switch (parseRadix)
 			{
-				case Radix.Bin: success = Utilities.Types.XInt.TryParseBinary(tokenValue, false, out value); break;
-				case Radix.Oct: success = Utilities.Types.XInt.TryParseOctal(tokenValue, false, out value); break;
+				case Radix.Bin: success = XInt.TryParseBinary(tokenValue, false, out value); break;
+				case Radix.Oct: success = XInt.TryParseOctal(tokenValue, false, out value); break;
 				case Radix.Dec: success = ulong.TryParse(tokenValue, out value); break;
 				case Radix.Hex: success = ulong.TryParse(tokenValue, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out value); break;
 				default: throw (new NotImplementedException("Unknown radix \"" + parseRadix + "\""));
@@ -756,7 +758,7 @@ namespace YAT.Domain.Parser
 			if (success)
 			{
 				bool useBigEndian = (_endianess == Endianess.BigEndian);
-				result = Utilities.Types.XInt.ConvertToByteArray(value, negative, useBigEndian);
+				result = XInt.ConvertToByteArray(value, negative, useBigEndian);
 				return (true);
 			}
 

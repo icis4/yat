@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 namespace YAT.Settings
 {
 	[Serializable]
-	public class PathSettings : Utilities.Settings.Settings, IEquatable<PathSettings>
+	public class PathSettings : MKY.Utilities.Settings.Settings, IEquatable<PathSettings>
 	{
 		private string _terminalFilesPath;
 		private string _workspaceFilesPath;
@@ -20,7 +20,7 @@ namespace YAT.Settings
 			ClearChanged();
 		}
 
-		public PathSettings(Utilities.Settings.SettingsType settingsType)
+		public PathSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();

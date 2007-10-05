@@ -8,7 +8,7 @@ using MKY.Utilities.Recent;
 namespace YAT.Gui.Settings
 {
 	[Serializable]
-	public class SendCommandSettings : Utilities.Settings.Settings, IEquatable<SendCommandSettings>
+	public class SendCommandSettings : MKY.Utilities.Settings.Settings, IEquatable<SendCommandSettings>
 	{
 		public const int MaximumRecentCommands = 24;
 
@@ -21,7 +21,7 @@ namespace YAT.Gui.Settings
 			ClearChanged();
 		}
 
-		public SendCommandSettings(Utilities.Settings.SettingsType settingsType)
+		public SendCommandSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();

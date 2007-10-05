@@ -7,7 +7,7 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class IOSettings : Utilities.Settings.Settings, IEquatable<IOSettings>
+	public class IOSettings : MKY.Utilities.Settings.Settings, IEquatable<IOSettings>
 	{
 		/// <summary></summary>
 		public const IOType IOTypeDefault = IOType.SerialPort;
@@ -29,7 +29,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		public IOSettings(Utilities.Settings.SettingsType settingsType)
+		public IOSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -170,7 +170,7 @@ namespace YAT.Domain.Settings
 					(
 					_ioType.Equals(value._ioType) &&
 					_endianess.Equals(value._endianess) &&
-					base.Equals((Utilities.Settings.Settings)value) // compares all settings nodes
+					base.Equals((MKY.Utilities.Settings.Settings)value) // compares all settings nodes
 					);
 			}
 			return (false);

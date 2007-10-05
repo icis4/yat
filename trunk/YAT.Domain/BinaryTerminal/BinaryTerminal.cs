@@ -4,6 +4,7 @@ using System.Text;
 using System.IO;
 using System.Threading;
 
+using MKY.Utilities.Event;
 using MKY.Utilities.Settings;
 
 namespace YAT.Domain
@@ -65,7 +66,7 @@ namespace YAT.Domain
 			/// <summary></summary>
 			protected virtual void OnTimeout(EventArgs e)
 			{
-				Utilities.Event.EventHelper.FireSync(Timeout, this, e);
+				EventHelper.FireSync(Timeout, this, e);
 			}
 		}
 
@@ -492,12 +493,12 @@ namespace YAT.Domain
 				DetachBinaryTerminalSettings();
 
 			TerminalSettings.BinaryTerminal = binaryTerminalSettings;
-			BinaryTerminalSettings.Changed += new EventHandler<Utilities.Settings.SettingsEventArgs>(BinaryTerminalSettings_Changed);
+			BinaryTerminalSettings.Changed += new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(BinaryTerminalSettings_Changed);
 		}
 
 		private void DetachBinaryTerminalSettings()
 		{
-			BinaryTerminalSettings.Changed -= new EventHandler<Utilities.Settings.SettingsEventArgs>(BinaryTerminalSettings_Changed);
+			BinaryTerminalSettings.Changed -= new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(BinaryTerminalSettings_Changed);
 		}
 
 		private void ApplyBinaryTerminalSettings()
@@ -512,7 +513,7 @@ namespace YAT.Domain
 		// Settings Events
 		//------------------------------------------------------------------------------------------
 
-		private void BinaryTerminalSettings_Changed(object sender, Utilities.Settings.SettingsEventArgs e)
+		private void BinaryTerminalSettings_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
 		{
 			ApplyBinaryTerminalSettings();
 		}

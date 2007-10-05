@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 namespace YAT.Gui.Settings
 {
 	[Serializable]
-	public class PredefinedSettings : Utilities.Settings.Settings, IEquatable<PredefinedSettings>
+	public class PredefinedSettings : MKY.Utilities.Settings.Settings, IEquatable<PredefinedSettings>
 	{
 		private int _selectedPage;
 
@@ -16,7 +16,7 @@ namespace YAT.Gui.Settings
 			ClearChanged();
 		}
 
-		public PredefinedSettings(Utilities.Settings.SettingsType settingsType)
+		public PredefinedSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();

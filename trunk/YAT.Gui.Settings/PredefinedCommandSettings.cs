@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 namespace YAT.Gui.Settings
 {
 	[Serializable]
-	public class PredefinedCommandSettings : Utilities.Settings.Settings, IEquatable<PredefinedCommandSettings>
+	public class PredefinedCommandSettings : MKY.Utilities.Settings.Settings, IEquatable<PredefinedCommandSettings>
 	{
 		public const int MaximumCommandsPerPage = 12;
 
@@ -19,7 +19,7 @@ namespace YAT.Gui.Settings
 			ClearChanged();
 		}
 
-		public PredefinedCommandSettings(Utilities.Settings.SettingsType settingsType)
+		public PredefinedCommandSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();

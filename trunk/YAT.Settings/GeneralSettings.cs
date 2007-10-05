@@ -8,7 +8,7 @@ using System.Windows.Forms;
 namespace YAT.Settings
 {
 	[Serializable]
-	public class GeneralSettings : Utilities.Settings.Settings, IEquatable<GeneralSettings>
+	public class GeneralSettings : MKY.Utilities.Settings.Settings, IEquatable<GeneralSettings>
 	{
 		/// <summary></summary>
 		public static readonly string AutoSaveRoot = Application.LocalUserAppDataPath;
@@ -29,7 +29,7 @@ namespace YAT.Settings
 			ClearChanged();
 		}
 
-		public GeneralSettings(Utilities.Settings.SettingsType settingsType)
+		public GeneralSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();

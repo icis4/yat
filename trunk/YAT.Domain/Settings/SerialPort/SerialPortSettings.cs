@@ -7,7 +7,7 @@ namespace YAT.Domain.Settings.SerialPort
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SerialPortSettings : Utilities.Settings.Settings, IEquatable<SerialPortSettings>
+	public class SerialPortSettings : MKY.Utilities.Settings.Settings, IEquatable<SerialPortSettings>
 	{
 		/// <summary></summary>
 		public const string ParityErrorReplacementDefault = "\\h(00)";
@@ -29,7 +29,7 @@ namespace YAT.Domain.Settings.SerialPort
 		}
 
 		/// <summary></summary>
-		public SerialPortSettings(Utilities.Settings.SettingsType settingsType)
+		public SerialPortSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();

@@ -232,9 +232,9 @@
       <Project>{4D2B091A-400B-436C-8C52-5DDABE9EBBAA}</Project>
       <Name>YAT.Gui.Settings</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Gui.Types\YAT.Gui.Types.csproj">
+    <ProjectReference Include="..\YAT.Gui.Types\YAT.Gui.csproj">
       <Project>{259B16E1-C709-4843-B9A8-EA1FF55EA1E3}</Project>
-      <Name>YAT.Gui.Types</Name>
+      <Name>YAT.Gui</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Gui.Utilities\YAT.Gui.Utilities.csproj">
       <Project>{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}</Project>
@@ -246,7 +246,7 @@
     </ProjectReference>
     <ProjectReference Include="..\YAT.Settings.Terminal\YAT.Settings.Terminal.csproj">
       <Project>{FE2D334F-B2D8-4A07-B63D-93BA775DBBCF}</Project>
-      <Name>YAT.Settings.Document</Name>
+      <Name>YAT.Settings.Terminal</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Settings\YAT.Settings.csproj">
       <Project>{A3E80010-9146-47EF-87B0-138A60406A9E}</Project>

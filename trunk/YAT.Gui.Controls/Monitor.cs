@@ -6,6 +6,8 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Utilities.Event;
+
 namespace YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
@@ -524,12 +526,12 @@ namespace YAT.Gui.Controls
 
 		protected virtual void OnCopyRequest(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(CopyRequest, this, e);
+			EventHelper.FireSync(CopyRequest, this, e);
 		}
 
 		protected virtual void OnPrintRequest(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(PrintRequest, this, e);
+			EventHelper.FireSync(PrintRequest, this, e);
 		}
 
 		#endregion

@@ -7,7 +7,7 @@ using System.Drawing;
 namespace YAT.Gui.Settings
 {
 	[Serializable]
-	public class FormatSettings : Utilities.Settings.Settings, IEquatable<FormatSettings>
+	public class FormatSettings : MKY.Utilities.Settings.Settings, IEquatable<FormatSettings>
 	{
 		private FontSettings _font;
 		private TextFormat _txDataFormat;
@@ -25,7 +25,7 @@ namespace YAT.Gui.Settings
 			ClearChanged();
 		}
 
-		public FormatSettings(Utilities.Settings.SettingsType settingsType)
+		public FormatSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();

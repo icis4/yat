@@ -8,7 +8,7 @@ using MKY.Utilities.Recent;
 namespace YAT.Gui.Settings
 {
 	[Serializable]
-	public class RecentFileSettings : Utilities.Settings.Settings, IEquatable<RecentFileSettings>
+	public class RecentFileSettings : MKY.Utilities.Settings.Settings, IEquatable<RecentFileSettings>
 	{
 		public const int MaximumFilePaths = 8;
 
@@ -21,7 +21,7 @@ namespace YAT.Gui.Settings
 			ClearChanged();
 		}
 
-		public RecentFileSettings(Utilities.Settings.SettingsType settingsType)
+		public RecentFileSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();

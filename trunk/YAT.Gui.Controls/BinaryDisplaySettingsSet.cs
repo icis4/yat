@@ -6,6 +6,8 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Utilities.Event;
+
 using YAT.Domain.Settings;
 
 namespace YAT.Gui.Controls
@@ -221,7 +223,7 @@ namespace YAT.Gui.Controls
 
 		protected virtual void OnSettingsChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(SettingsChanged, this, e);
+			EventHelper.FireSync(SettingsChanged, this, e);
 		}
 
 		#endregion
