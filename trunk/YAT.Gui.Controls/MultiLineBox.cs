@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
+using YAT.Gui.Types;
+
 namespace YAT.Gui.Controls
 {
 	public partial class MultiLineBox : Form

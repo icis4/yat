@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using MKY.Utilities.Types;
 using MKY.Utilities.Event;
 
+using YAT.Gui.Types;
+
 namespace YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]

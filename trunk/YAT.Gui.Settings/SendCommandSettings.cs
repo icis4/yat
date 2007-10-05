@@ -5,6 +5,8 @@ using System.Xml.Serialization;
 
 using MKY.Utilities.Recent;
 
+using YAT.Gui.Types;
+
 namespace YAT.Gui.Settings
 {
 	[Serializable]

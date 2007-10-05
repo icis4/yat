@@ -9,6 +9,7 @@ using System.IO;
 
 using MKY.Utilities.Event;
 
+using YAT.Gui.Types;
 using YAT.Settings;
 using YAT.Settings.Application;
 

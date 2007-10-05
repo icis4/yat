@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 using YAT.Domain;
 
-namespace YAT.Domain.Test
+namespace YAT.Domain.Test.Parser
 {
 	[TestFixture]
 	public class ParserTest

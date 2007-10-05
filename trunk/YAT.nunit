@@ -1,0 +1,47 @@
+﻿<NUnitProject>
+  <Settings activeconfig="Debug" />
+  <Config name="Debug" binpathtype="Auto">
+    <assembly path="Utilities\bin\Debug\Utilities.dll" />
+    <assembly path="YAT.Domain\bin\Debug\YAT.Domain.dll" />
+    <assembly path="IO.Ports\bin\Debug\IO.Ports.dll" />
+    <assembly path="Net.Sockets\bin\Debug\Net.Sockets.dll" />
+    <assembly path="YAT.Gui.Utilities\bin\Debug\YAT.Gui.Utilities.dll" />
+    <assembly path="YAT\bin\Debug\YAT.exe" />
+    <assembly path="Windows.Forms\bin\Debug\Windows.Forms.dll" />
+    <assembly path="YAT.Gui.Controls\bin\Debug\YAT.Gui.Controls.dll" />
+    <assembly path="YAT.Gui.Settings\bin\Debug\YAT.Gui.Settings.dll" />
+    <assembly path="YAT.Log\bin\Debug\YAT.Log.dll" />
+    <assembly path="YAT.Gui.Forms\bin\Debug\YAT.Gui.Forms.dll" />
+    <assembly path="YAT.Settings\bin\Debug\YAT.Settings.dll" />
+    <assembly path="YAT.Settings.Application\bin\Debug\YAT.Settings.Application.dll" />
+    <assembly path="YAT.Settings.Terminal\bin\Debug\YAT.Settings.Document.dll" />
+    <assembly path="YAT.Test\bin\Debug\YAT.Test.dll" />
+    <assembly path="YAT.Gui.Types\bin\Debug\YAT.Gui.Types.dll" />
+    <assembly path="YAT.Settings.Workspace\bin\Debug\YAT.Settings.Workspace.dll" />
+    <assembly path="Utilities.Test\bin\Debug\Utilities.Test.dll" />
+    <assembly path="YAT.Domain.Test\bin\Debug\YAT.Domain.Test.dll" />
+    <assembly path="YAT.Settings.Test\bin\Debug\YAT.Settings.Test.dll" />
+  </Config>
+  <Config name="Release" binpathtype="Auto">
+    <assembly path="Utilities\bin\Release\Utilities.dll" />
+    <assembly path="YAT.Domain\bin\Release\YAT.Domain.dll" />
+    <assembly path="IO.Ports\bin\Release\IO.Ports.dll" />
+    <assembly path="Net.Sockets\bin\Release\Net.Sockets.dll" />
+    <assembly path="YAT.Gui.Utilities\bin\Release\YAT.Gui.Utilities.dll" />
+    <assembly path="YAT\bin\Release\YAT.exe" />
+    <assembly path="Windows.Forms\bin\Release\Windows.Forms.dll" />
+    <assembly path="YAT.Gui.Controls\bin\Release\YAT.Gui.Controls.dll" />
+    <assembly path="YAT.Gui.Settings\bin\Release\YAT.Gui.Settings.dll" />
+    <assembly path="YAT.Log\bin\Release\YAT.Log.dll" />
+    <assembly path="YAT.Gui.Forms\bin\Release\YAT.Gui.Forms.dll" />
+    <assembly path="YAT.Settings\bin\Release\YAT.Settings.dll" />
+    <assembly path="YAT.Settings.Application\bin\Release\YAT.Settings.Application.dll" />
+    <assembly path="YAT.Settings.Terminal\bin\Release\YAT.Settings.Document.dll" />
+    <assembly path="YAT.Test\bin\Release\YAT.Test.dll" />
+    <assembly path="YAT.Gui.Types\bin\Release\YAT.Gui.Types.dll" />
+    <assembly path="YAT.Settings.Workspace\bin\Release\YAT.Settings.Workspace.dll" />
+    <assembly path="Utilities.Test\bin\Release\Utilities.Test.dll" />
+    <assembly path="YAT.Domain.Test\bin\Release\YAT.Domain.Test.dll" />
+    <assembly path="YAT.Settings.Test\bin\Release\YAT.Settings.Test.dll" />
+  </Config>
+</NUnitProject>

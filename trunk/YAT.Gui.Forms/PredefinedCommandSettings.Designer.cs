@@ -28,18 +28,18 @@ namespace YAT.Gui.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			YAT.Gui.Command command1 = new YAT.Gui.Command();
-			YAT.Gui.Command command2 = new YAT.Gui.Command();
-			YAT.Gui.Command command3 = new YAT.Gui.Command();
-			YAT.Gui.Command command4 = new YAT.Gui.Command();
-			YAT.Gui.Command command5 = new YAT.Gui.Command();
-			YAT.Gui.Command command6 = new YAT.Gui.Command();
-			YAT.Gui.Command command7 = new YAT.Gui.Command();
-			YAT.Gui.Command command8 = new YAT.Gui.Command();
-			YAT.Gui.Command command9 = new YAT.Gui.Command();
-			YAT.Gui.Command command10 = new YAT.Gui.Command();
-			YAT.Gui.Command command11 = new YAT.Gui.Command();
-			YAT.Gui.Command command12 = new YAT.Gui.Command();
+			YAT.Gui.Types.Command command1 = new YAT.Gui.Types.Command();
+			YAT.Gui.Types.Command command2 = new YAT.Gui.Types.Command();
+			YAT.Gui.Types.Command command3 = new YAT.Gui.Types.Command();
+			YAT.Gui.Types.Command command4 = new YAT.Gui.Types.Command();
+			YAT.Gui.Types.Command command5 = new YAT.Gui.Types.Command();
+			YAT.Gui.Types.Command command6 = new YAT.Gui.Types.Command();
+			YAT.Gui.Types.Command command7 = new YAT.Gui.Types.Command();
+			YAT.Gui.Types.Command command8 = new YAT.Gui.Types.Command();
+			YAT.Gui.Types.Command command9 = new YAT.Gui.Types.Command();
+			YAT.Gui.Types.Command command10 = new YAT.Gui.Types.Command();
+			YAT.Gui.Types.Command command11 = new YAT.Gui.Types.Command();
+			YAT.Gui.Types.Command command12 = new YAT.Gui.Types.Command();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_ClearPage = new System.Windows.Forms.Button();
