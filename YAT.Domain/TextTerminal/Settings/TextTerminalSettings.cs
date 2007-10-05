@@ -8,7 +8,7 @@ using MKY.Utilities.Text;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	public class TextTerminalSettings : Utilities.Settings.Settings, IEquatable<TextTerminalSettings>
+	public class TextTerminalSettings : MKY.Utilities.Settings.Settings, IEquatable<TextTerminalSettings>
 	{
 		/// <summary></summary>
 		public static readonly string DefaultEol = (string)XEol.Parse(Environment.NewLine);
@@ -35,7 +35,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		public TextTerminalSettings(Utilities.Settings.SettingsType settingsType)
+		public TextTerminalSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();

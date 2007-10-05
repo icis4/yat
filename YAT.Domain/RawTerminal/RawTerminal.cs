@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using MKY.Utilities.Event;
+
 namespace YAT.Domain
 {
 	/// <summary>
@@ -324,12 +326,12 @@ namespace YAT.Domain
 				DetachBufferSettings();
 
 			_bufferSettings = bufferSettings;
-			_bufferSettings.Changed += new EventHandler<Utilities.Settings.SettingsEventArgs>(_bufferSettings_Changed);
+			_bufferSettings.Changed += new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(_bufferSettings_Changed);
 		}
 
 		private void DetachBufferSettings()
 		{
-			_bufferSettings.Changed -= new EventHandler<Utilities.Settings.SettingsEventArgs>(_bufferSettings_Changed);
+			_bufferSettings.Changed -= new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(_bufferSettings_Changed);
 			_bufferSettings = null;
 		}
 
@@ -349,12 +351,12 @@ namespace YAT.Domain
 				DetachIOSettings();
 
 			_ioSettings = ioSettings;
-			_ioSettings.Changed += new EventHandler<Utilities.Settings.SettingsEventArgs>(_ioSettings_Changed);
+			_ioSettings.Changed += new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(_ioSettings_Changed);
 		}
 
 		private void DetachIOSettings()
 		{
-			_ioSettings.Changed -= new EventHandler<Utilities.Settings.SettingsEventArgs>(_ioSettings_Changed);
+			_ioSettings.Changed -= new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(_ioSettings_Changed);
 			_ioSettings = null;
 		}
 
@@ -370,12 +372,12 @@ namespace YAT.Domain
 		// Settings Events
 		//------------------------------------------------------------------------------------------
 
-		private void _bufferSettings_Changed(object sender, Utilities.Settings.SettingsEventArgs e)
+		private void _bufferSettings_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
 		{
 			ApplyBufferSettings();
 		}
 
-		private void _ioSettings_Changed(object sender, Utilities.Settings.SettingsEventArgs e)
+		private void _ioSettings_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
 		{
 			ApplyIOSettings();
 		}
@@ -455,37 +457,37 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnTerminalChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(TerminalChanged, this, e);
+			EventHelper.FireSync(TerminalChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnTerminalControlChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(TerminalControlChanged, this, e);
+			EventHelper.FireSync(TerminalControlChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnTerminalError(TerminalErrorEventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync<TerminalErrorEventArgs>(TerminalError, this, e);
+			EventHelper.FireSync<TerminalErrorEventArgs>(TerminalError, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRawElementSent(RawElementEventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync<RawElementEventArgs>(RawElementSent, this, e);
+			EventHelper.FireSync<RawElementEventArgs>(RawElementSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRawElementReceived(RawElementEventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync<RawElementEventArgs>(RawElementReceived, this, e);
+			EventHelper.FireSync<RawElementEventArgs>(RawElementReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryCleared(RepositoryEventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync<RepositoryEventArgs>(RepositoryCleared, this, e);
+			EventHelper.FireSync<RepositoryEventArgs>(RepositoryCleared, this, e);
 		}
 
 		#endregion

@@ -7,7 +7,10 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 
+using MKY.Utilities.Event;
+using MKY.Windows.Forms;
 using MKY.IO.Ports;
+
 using YAT.Settings.Application;
 
 namespace YAT.Gui.Controls
@@ -162,7 +165,7 @@ namespace YAT.Gui.Controls
 				_portList.MarkPortsInUse(portList_MarkPortsInUseCallback);
 				_isScanning = false;
 
-				Windows.Forms.StatusBox.AcceptAndClose();
+				StatusBox.AcceptAndClose();
 			}
 
 			public void CancelScanning()
@@ -173,7 +176,7 @@ namespace YAT.Gui.Controls
 			private void portList_MarkPortsInUseCallback(object sender, SerialPortList.PortChangedAndCancelEventArgs e)
 			{
 				_status2 = "Scanning " + e.Port.ToString() + "...";
-				Windows.Forms.StatusBox.UpdateStatus2(_status2);
+				StatusBox.UpdateStatus2(_status2);
 				e.Cancel = _cancelScanning;
 			}
 		}
@@ -186,7 +189,7 @@ namespace YAT.Gui.Controls
 
 			bool setting = ApplicationSettings.LocalUser.General.DetectSerialPortsInUse;
 
-			if (Windows.Forms.StatusBox.Show(this, "Scanning ports...", "Serial Port Scan", _markPortsInUseThread.Status2, "&Detect ports that are in use", ref setting) != DialogResult.OK)
+			if (StatusBox.Show(this, "Scanning ports...", "Serial Port Scan", _markPortsInUseThread.Status2, "&Detect ports that are in use", ref setting) != DialogResult.OK)
 				_markPortsInUseThread.CancelScanning();
 			
 			ApplicationSettings.LocalUser.General.DetectSerialPortsInUse = setting;
@@ -278,7 +281,7 @@ namespace YAT.Gui.Controls
 
 		protected virtual void OnPortIdChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(PortIdChanged, this, e);
+			EventHelper.FireSync(PortIdChanged, this, e);
 		}
 
 		#endregion

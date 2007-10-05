@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
+using MKY;
+
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class TerminalSettings : Utilities.Settings.Settings, IEquatable<TerminalSettings>
+	public class TerminalSettings : MKY.Utilities.Settings.Settings, IEquatable<TerminalSettings>
 	{
 		private TerminalType _terminalType;
 
@@ -30,7 +32,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		public TerminalSettings(Utilities.Settings.SettingsType settingsType)
+		public TerminalSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -249,7 +251,7 @@ namespace YAT.Domain.Settings
 				return
 					(
 					_terminalType.Equals(value._terminalType) &&
-					base.Equals((Utilities.Settings.Settings)value) // compares all settings nodes
+					base.Equals((MKY.Utilities.Settings.Settings)value) // compares all settings nodes
 					);
 			}
 			return (false);

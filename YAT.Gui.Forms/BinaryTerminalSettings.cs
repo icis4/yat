@@ -30,7 +30,7 @@ namespace YAT.Gui.Forms
 
 			_settings = settings;
 			_settings_Form = new Domain.Settings.BinaryTerminalSettings(settings);
-			_settings_Form.Changed += new EventHandler<Utilities.Settings.SettingsEventArgs>(_settings_Form_Changed);
+			_settings_Form.Changed += new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(_settings_Form_Changed);
 		}
 
 		#region Properties
@@ -50,7 +50,7 @@ namespace YAT.Gui.Forms
 		// Settings Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		private void _settings_Form_Changed(object sender, Utilities.Settings.SettingsEventArgs e)
+		private void _settings_Form_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
 		{
 			SetControls();
 		}
@@ -118,7 +118,7 @@ namespace YAT.Gui.Forms
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{
-			_settings_Form.Changed -= new EventHandler<Utilities.Settings.SettingsEventArgs>(_settings_Form_Changed);
+			_settings_Form.Changed -= new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(_settings_Form_Changed);
 			_settings = _settings_Form;
 		}
 

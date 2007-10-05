@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	public class BinaryTerminalSettings : Utilities.Settings.Settings, IEquatable<BinaryTerminalSettings>
+	public class BinaryTerminalSettings : MKY.Utilities.Settings.Settings, IEquatable<BinaryTerminalSettings>
 	{
 		//------------------------------------------------------------------------------------------
 		// Fields
@@ -31,7 +31,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		public BinaryTerminalSettings(Utilities.Settings.SettingsType settingsType)
+		public BinaryTerminalSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -179,7 +179,7 @@ namespace YAT.Domain.Settings
 					(
 					_directionLineBreakEnabled.Equals(value._directionLineBreakEnabled) &&
 					_separateTxRxDisplay.Equals(value._separateTxRxDisplay) &&
-					base.Equals((Utilities.Settings.Settings)value) // compares all settings nodes
+					base.Equals((MKY.Utilities.Settings.Settings)value) // compares all settings nodes
 					);
 			}
 			return (false);

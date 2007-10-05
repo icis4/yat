@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Net;
 using System.Net.NetworkInformation;
 
+using MKY.Utilities.Event;
 using MKY.Net.Sockets;
 
 namespace YAT.Gui.Controls
@@ -495,27 +496,27 @@ namespace YAT.Gui.Controls
 
 		protected virtual void OnRemoteHostNameOrAddressChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(RemoteHostNameOrAddressChanged, this, e);
+			EventHelper.FireSync(RemoteHostNameOrAddressChanged, this, e);
 		}
 
 		protected virtual void OnRemotePortChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(RemotePortChanged, this, e);
+			EventHelper.FireSync(RemotePortChanged, this, e);
 		}
 
 		protected virtual void OnLocalHostNameOrAddressChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(LocalHostNameOrAddressChanged, this, e);
+			EventHelper.FireSync(LocalHostNameOrAddressChanged, this, e);
 		}
 
 		protected virtual void OnLocalTcpPortChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(LocalTcpPortChanged, this, e);
+			EventHelper.FireSync(LocalTcpPortChanged, this, e);
 		}
 
 		protected virtual void OnLocalUdpPortChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(LocalUdpPortChanged, this, e);
+			EventHelper.FireSync(LocalUdpPortChanged, this, e);
 		}
 
 		#endregion

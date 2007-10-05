@@ -7,7 +7,7 @@ namespace YAT.Settings.Terminal
 {
 	[Serializable]
 	[XmlRoot("Settings")]
-	public class TerminalSettingsRoot : Utilities.Settings.Settings, IEquatable<TerminalSettingsRoot>
+	public class TerminalSettingsRoot : MKY.Utilities.Settings.Settings, IEquatable<TerminalSettingsRoot>
 	{
 		private string _productVersion = System.Windows.Forms.Application.ProductVersion;
 		private bool _autoSaved = false;
@@ -15,7 +15,7 @@ namespace YAT.Settings.Terminal
 		private ImplicitSettings _implicit;
 
 		public TerminalSettingsRoot()
-			: base(Utilities.Settings.SettingsType.Explicit)
+			: base(MKY.Utilities.Settings.SettingsType.Explicit)
 		{
 			Explicit = new ExplicitSettings();
 			Implicit = new ImplicitSettings();
@@ -167,7 +167,7 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlIgnore]
-		public IO.Ports.SerialPortId SerialPortId
+		public MKY.IO.Ports.SerialPortId SerialPortId
 		{
 			get { return (_explicit.Terminal.IO.SerialPort.PortId); }
 			set { _explicit.Terminal.IO.SerialPort.PortId = value; }
@@ -311,7 +311,7 @@ namespace YAT.Settings.Terminal
 				return
 					(
 					_productVersion.Equals(value._productVersion) &&
-					base.Equals((Utilities.Settings.Settings)value) // compares all settings nodes
+					base.Equals((MKY.Utilities.Settings.Settings)value) // compares all settings nodes
 					);
 				// do not compare AutoSaved
 			}

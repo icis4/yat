@@ -10,7 +10,7 @@ using YAT.Settings.Application;
 namespace YAT.Log.Settings
 {
 	[Serializable]
-	public class LogSettings : Utilities.Settings.Settings, IEquatable<LogSettings>
+	public class LogSettings : MKY.Utilities.Settings.Settings, IEquatable<LogSettings>
 	{
 		// root
 		private string _rootPath;
@@ -48,7 +48,7 @@ namespace YAT.Log.Settings
 			ClearChanged();
 		}
 
-		public LogSettings(Utilities.Settings.SettingsType settingsType)
+		public LogSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();

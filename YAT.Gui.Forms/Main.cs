@@ -7,7 +7,9 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
+using MKY.Utilities.IO;
 using MKY.Utilities.Settings;
+
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
@@ -574,7 +576,7 @@ namespace YAT.Gui.Forms
 			for (int i = 0; i < ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count; i++)
 			{
 				string prefix = string.Format("{0}: ", i + 1);
-				string file = Utilities.IO.XPath.LimitPath(ApplicationSettings.LocalUser.RecentFiles.FilePaths[i].Item, 60);
+				string file = XPath.LimitPath(ApplicationSettings.LocalUser.RecentFiles.FilePaths[i].Item, 60);
 				if (ApplicationSettings.LocalUser.RecentFiles.FilePaths[i] != null)
 				{
 					_menuItems_recents[i].Text = "&" + prefix + file;
@@ -975,7 +977,7 @@ namespace YAT.Gui.Forms
 			string filePath = terminal.SettingsFilePath;
 			if (ApplicationSettings.LocalUser.General.UseRelativePaths)
 			{
-				Utilities.IO.XPathCompareResult pcr = Utilities.IO.XPath.CompareFilePaths(_workspaceSettingsHandler.SettingsFilePath, terminal.SettingsFilePath);
+				XPathCompareResult pcr = XPath.CompareFilePaths(_workspaceSettingsHandler.SettingsFilePath, terminal.SettingsFilePath);
 				if (pcr.AreRelative)
 					filePath = pcr.RelativePath;
 			}
@@ -1076,7 +1078,7 @@ namespace YAT.Gui.Forms
 				DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> sh = new DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot>();
 
 				// combine absolute workspace path with terminal path if that one is relative
-				absoluteFilePath = Utilities.IO.XPath.CombineFilePaths(_workspaceSettingsHandler.SettingsFilePath, filePath);
+				absoluteFilePath = XPath.CombineFilePaths(_workspaceSettingsHandler.SettingsFilePath, filePath);
 				sh.SettingsFilePath = absoluteFilePath;
 				sh.Load();
 

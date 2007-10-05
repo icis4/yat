@@ -4,6 +4,7 @@ using System.Text;
 using System.IO;
 
 using MKY.Utilities.Text;
+using MKY.Utilities.Types;
 
 namespace YAT.Domain
 {
@@ -279,7 +280,7 @@ namespace YAT.Domain
 						string data = "";
 
 						if (b < 0x20)
-							data = "<" + Utilities.Types.Ascii.ConvertToMnemonic(b) + ">";
+							data = "<" + Ascii.ConvertToMnemonic(b) + ">";
 						if (b == 0x7F)
 							data = "<DEL>";
 
@@ -321,7 +322,7 @@ namespace YAT.Domain
 								string data = "";
 
 								if (code < 0x20)
-									data = "<" + Utilities.Types.Ascii.ConvertToMnemonic((byte)code) + ">";
+									data = "<" + Ascii.ConvertToMnemonic((byte)code) + ">";
 								if (code == 0x7F)
 									data = "<DEL>";
 
@@ -587,12 +588,12 @@ namespace YAT.Domain
 				DetachTextTerminalSettings();
 
 			TerminalSettings.TextTerminal = textTerminalSettings;
-			TerminalSettings.TextTerminal.Changed += new EventHandler<Utilities.Settings.SettingsEventArgs>(TextTerminalSettings_Changed);
+			TerminalSettings.TextTerminal.Changed += new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(TextTerminalSettings_Changed);
 		}
 
 		private void DetachTextTerminalSettings()
 		{
-			TerminalSettings.TextTerminal.Changed -= new EventHandler<Utilities.Settings.SettingsEventArgs>(TextTerminalSettings_Changed);
+			TerminalSettings.TextTerminal.Changed -= new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(TextTerminalSettings_Changed);
 		}
 
 		private void ApplyTextTerminalSettings()
@@ -607,7 +608,7 @@ namespace YAT.Domain
 		// Settings Events
 		//------------------------------------------------------------------------------------------
 
-		private void TextTerminalSettings_Changed(object sender, Utilities.Settings.SettingsEventArgs e)
+		private void TextTerminalSettings_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
 		{
 			ApplyTextTerminalSettings();
 		}

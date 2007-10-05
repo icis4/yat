@@ -6,6 +6,8 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Utilities.Event;
+
 namespace YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
@@ -244,7 +246,7 @@ namespace YAT.Gui.Controls
 
 		protected virtual void OnFormatChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(FormatChanged, this, e);
+			EventHelper.FireSync(FormatChanged, this, e);
 		}
 
 		#endregion

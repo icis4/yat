@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	public class BinaryDisplaySettings : Utilities.Settings.Settings, IEquatable<BinaryDisplaySettings>
+	public class BinaryDisplaySettings : MKY.Utilities.Settings.Settings, IEquatable<BinaryDisplaySettings>
 	{
 		private BinaryLengthLineBreak _lengthLineBreak;
 		private BinarySequenceLineBreak _sequenceLineBreak;
@@ -20,7 +20,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		public BinaryDisplaySettings(Utilities.Settings.SettingsType settingsType)
+		public BinaryDisplaySettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();

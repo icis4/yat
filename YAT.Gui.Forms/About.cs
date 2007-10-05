@@ -153,7 +153,7 @@ namespace YAT.Gui.Forms
 			string link = e.Link.LinkData as string;
 			if ((link != null) && (link.StartsWith("http://")))
 			{
-				Utilities.Net.Browser.BrowseUrl(link);
+				MKY.Utilities.Net.Browser.BrowseUrl(link);
 			}
 		}
 

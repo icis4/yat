@@ -6,6 +6,9 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Utilities.Types;
+using MKY.Utilities.Event;
+
 namespace YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
@@ -84,7 +87,7 @@ namespace YAT.Gui.Controls
 			get { return (_selectedPage); }
 			set
 			{
-				int selectedPageNew = Utilities.Types.XInt.LimitToBounds(value, 0, _pages.Count);
+				int selectedPageNew = XInt.LimitToBounds(value, 0, _pages.Count);
 				if (_selectedPage != selectedPageNew)
 				{
 					_selectedPage = selectedPageNew;
@@ -224,17 +227,17 @@ namespace YAT.Gui.Controls
 
 		protected virtual void OnSelectedPageChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(SelectedPageChanged, this, e);
+			EventHelper.FireSync(SelectedPageChanged, this, e);
 		}
 
 		protected virtual void OnSendCommandRequest(PredefinedCommandEventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync<PredefinedCommandEventArgs>(SendCommandRequest, this, e);
+			EventHelper.FireSync<PredefinedCommandEventArgs>(SendCommandRequest, this, e);
 		}
 
 		protected virtual void OnDefineCommandRequest(PredefinedCommandEventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync<PredefinedCommandEventArgs>(DefineCommandRequest, this, e);
+			EventHelper.FireSync<PredefinedCommandEventArgs>(DefineCommandRequest, this, e);
 		}
 
 		#endregion

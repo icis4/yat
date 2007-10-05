@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 
+using MKY.Utilities.Event;
+
 namespace MKY.Utilities.Settings
 {
 	/// <summary></summary>
@@ -227,7 +229,7 @@ namespace MKY.Utilities.Settings
 		protected virtual void OnChanged(SettingsEventArgs e)
 		{
 			if (!_changeEventIsSuspended)
-				Utilities.Event.EventHelper.FireSync<SettingsEventArgs>(Changed, this, e);
+				EventHelper.FireSync<SettingsEventArgs>(Changed, this, e);
 		}
 
 		#endregion

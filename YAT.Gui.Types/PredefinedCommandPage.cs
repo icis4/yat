@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace YAT.Gui
+namespace YAT.Gui.Types
 {
 	[Serializable]
 	public class PredefinedCommandPage : IEquatable<PredefinedCommandPage>, IComparable

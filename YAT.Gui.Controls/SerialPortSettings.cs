@@ -6,6 +6,8 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Utilities.Event;
+
 namespace YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
@@ -16,8 +18,8 @@ namespace YAT.Gui.Controls
 		// Constants
 		//------------------------------------------------------------------------------------------
 
-		private const int                      _BaudRateDefault  = (int)IO.Ports.BaudRate.Baud009600;
-		private const IO.Ports.DataBits        _DataBitsDefault  = IO.Ports.DataBits.Eight;
+		private const int                      _BaudRateDefault  = (int)MKY.IO.Ports.BaudRate.Baud009600;
+		private const MKY.IO.Ports.DataBits    _DataBitsDefault  = MKY.IO.Ports.DataBits.Eight;
 		private const System.IO.Ports.Parity   _ParityDefault    = System.IO.Ports.Parity.None;
 		private const System.IO.Ports.StopBits _StopBitsDefault  = System.IO.Ports.StopBits.One;
 		private const Domain.IO.Handshake      _HandshakeDefault = Domain.IO.Handshake.None;
@@ -29,7 +31,7 @@ namespace YAT.Gui.Controls
 		private bool _isSettingControls = false;
 
 		private int                      _baudRate  = _BaudRateDefault;
-		private IO.Ports.DataBits        _dataBits  = _DataBitsDefault;
+		private MKY.IO.Ports.DataBits    _dataBits  = _DataBitsDefault;
 		private System.IO.Ports.Parity   _parity    = _ParityDefault;
 		private System.IO.Ports.StopBits _stopBits  = _StopBitsDefault;
 		private Domain.IO.Handshake      _handshake = _HandshakeDefault;
@@ -95,7 +97,7 @@ namespace YAT.Gui.Controls
 		[Category("Serial Port")]
 		[Description("The number of data bits.")]
 		[DefaultValue(_DataBitsDefault)]
-		public IO.Ports.DataBits DataBits
+		public MKY.IO.Ports.DataBits DataBits
 		{
 			get { return (_dataBits); }
 			set
@@ -170,14 +172,14 @@ namespace YAT.Gui.Controls
 		private void comboBox_BaudRate_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
-				BaudRate = (IO.Ports.XBaudRate)comboBox_BaudRate.SelectedItem;
+				BaudRate = (MKY.IO.Ports.XBaudRate)comboBox_BaudRate.SelectedItem;
 		}
 
 		private void comboBox_BaudRate_Validating(object sender, CancelEventArgs e)
 		{
 			if (!_isSettingControls)
 			{
-				IO.Ports.XBaudRate baudRate = comboBox_BaudRate.SelectedItem as IO.Ports.XBaudRate;
+				MKY.IO.Ports.XBaudRate baudRate = comboBox_BaudRate.SelectedItem as MKY.IO.Ports.XBaudRate;
 
 				if (baudRate != null)
 				{
@@ -188,7 +190,7 @@ namespace YAT.Gui.Controls
 					int intBaudRate;
 					if (int.TryParse(comboBox_BaudRate.Text, out intBaudRate) && (intBaudRate > 0))
 					{
-						BaudRate = (IO.Ports.XBaudRate)intBaudRate;
+						BaudRate = (MKY.IO.Ports.XBaudRate)intBaudRate;
 					}
 					else
 					{
@@ -209,19 +211,19 @@ namespace YAT.Gui.Controls
 		private void comboBox_DataBits_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
-				DataBits = (IO.Ports.XDataBits)comboBox_DataBits.SelectedItem;
+				DataBits = (MKY.IO.Ports.XDataBits)comboBox_DataBits.SelectedItem;
 		}
 
 		private void comboBox_Parity_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
-				Parity = (IO.Ports.XParity)comboBox_Parity.SelectedItem;
+				Parity = (MKY.IO.Ports.XParity)comboBox_Parity.SelectedItem;
 		}
 
 		private void comboBox_StopBits_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
-				StopBits = (IO.Ports.XStopBits)comboBox_StopBits.SelectedItem;
+				StopBits = (MKY.IO.Ports.XStopBits)comboBox_StopBits.SelectedItem;
 		}
 
 		private void comboBox_Handshake_SelectedIndexChanged(object sender, EventArgs e)
@@ -241,10 +243,10 @@ namespace YAT.Gui.Controls
 		{
 			_isSettingControls = true;
 
-			comboBox_BaudRate.Items.AddRange(IO.Ports.XBaudRate.GetItems());
-			comboBox_DataBits.Items.AddRange(IO.Ports.XDataBits.GetItems());
-			comboBox_Parity.Items.AddRange(IO.Ports.XParity.GetItems());
-			comboBox_StopBits.Items.AddRange(IO.Ports.XStopBits.GetItems());
+			comboBox_BaudRate.Items.AddRange(MKY.IO.Ports.XBaudRate.GetItems());
+			comboBox_DataBits.Items.AddRange(MKY.IO.Ports.XDataBits.GetItems());
+			comboBox_Parity.Items.AddRange(MKY.IO.Ports.XParity.GetItems());
+			comboBox_StopBits.Items.AddRange(MKY.IO.Ports.XStopBits.GetItems());
 			comboBox_Handshake.Items.AddRange(Domain.IO.XHandshake.GetItems());
 
 			_isSettingControls = false;
@@ -254,15 +256,15 @@ namespace YAT.Gui.Controls
 		{
 			_isSettingControls = true;
 
-			IO.Ports.XBaudRate baudRate = (IO.Ports.XBaudRate)_baudRate;
-			if (baudRate != IO.Ports.BaudRate.UserDefined)
+			MKY.IO.Ports.XBaudRate baudRate = (MKY.IO.Ports.XBaudRate)_baudRate;
+			if (baudRate != MKY.IO.Ports.BaudRate.UserDefined)
 				comboBox_BaudRate.SelectedItem = baudRate;
 			else
 				comboBox_BaudRate.Text = _baudRate.ToString();
 
-			comboBox_DataBits.SelectedItem  = (IO.Ports.XDataBits)_dataBits;
-			comboBox_Parity.SelectedItem    = (IO.Ports.XParity)_parity;
-			comboBox_StopBits.SelectedItem  = (IO.Ports.XStopBits)_stopBits;
+			comboBox_DataBits.SelectedItem  = (MKY.IO.Ports.XDataBits)_dataBits;
+			comboBox_Parity.SelectedItem    = (MKY.IO.Ports.XParity)_parity;
+			comboBox_StopBits.SelectedItem  = (MKY.IO.Ports.XStopBits)_stopBits;
 			comboBox_Handshake.SelectedItem = (Domain.IO.XHandshake)_handshake;
 
 			_isSettingControls = false;
@@ -277,27 +279,27 @@ namespace YAT.Gui.Controls
 
 		protected virtual void OnBaudRateChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(BaudRateChanged, this, e);
+			EventHelper.FireSync(BaudRateChanged, this, e);
 		}
 
 		protected virtual void OnDataBitsChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(DataBitsChanged, this, e);
+			EventHelper.FireSync(DataBitsChanged, this, e);
 		}
 
 		protected virtual void OnParityChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(ParityChanged, this, e);
+			EventHelper.FireSync(ParityChanged, this, e);
 		}
 
 		protected virtual void OnStopBitsChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(StopBitsChanged, this, e);
+			EventHelper.FireSync(StopBitsChanged, this, e);
 		}
 
 		protected virtual void OnHandshakeChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(HandshakeChanged, this, e);
+			EventHelper.FireSync(HandshakeChanged, this, e);
 		}
 
 		#endregion

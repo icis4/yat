@@ -7,7 +7,7 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class BufferSettings : Utilities.Settings.Settings, IEquatable<BufferSettings>
+	public class BufferSettings : MKY.Utilities.Settings.Settings, IEquatable<BufferSettings>
 	{
 		/// <summary></summary>
 		public const int BufferSizeDefault = 8192;
@@ -23,7 +23,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		public BufferSettings(Utilities.Settings.SettingsType settingsType)
+		public BufferSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();

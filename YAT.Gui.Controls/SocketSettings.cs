@@ -6,6 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Utilities.Event;
 using MKY.Net.Sockets;
 
 namespace YAT.Gui.Controls
@@ -182,7 +183,7 @@ namespace YAT.Gui.Controls
 
 		protected virtual void OnTcpClientAutoReconnectChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(TcpClientAutoReconnectChanged, this, e);
+			EventHelper.FireSync(TcpClientAutoReconnectChanged, this, e);
 		}
 
 		#endregion

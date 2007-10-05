@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
+using MKY.Utilities.Event;
+
 namespace YAT.Domain.IO
 {
 	/// <summary></summary>
@@ -656,31 +658,31 @@ namespace YAT.Domain.IO
 		/// <summary></summary>
 		protected virtual void OnIOChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(IOChanged, this, e);
+			EventHelper.FireSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(IOControlChanged, this, e);
+			EventHelper.FireSync(IOControlChanged, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
+			EventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDataReceived(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(DataReceived, this, e);
+			EventHelper.FireSync(DataReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDataSent(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(DataSent, this, e);
+			EventHelper.FireSync(DataSent, this, e);
 		}
 
 		#endregion

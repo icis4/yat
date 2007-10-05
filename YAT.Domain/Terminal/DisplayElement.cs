@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
+using MKY.Utilities.Types;
+
 namespace YAT.Domain
 {
 	/// <summary></summary>
@@ -100,13 +102,13 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public TimeStamp(DateTime timeStamp)
-				: base("(" + timeStamp.ToLongTimeString() + "." + Utilities.Types.XString.Left((timeStamp.Millisecond/10).ToString("D2"), 2) + ")", false)
+				: base("(" + timeStamp.ToLongTimeString() + "." + XString.Left((timeStamp.Millisecond/10).ToString("D2"), 2) + ")", false)
 			{
 			}
 
 			/// <summary></summary>
 			public TimeStamp()
-				: base("(" + DateTime.Now.ToLongTimeString() + "." + Utilities.Types.XString.Left((DateTime.Now.Millisecond/10).ToString("D2"), 2) + ")", false)
+				: base("(" + DateTime.Now.ToLongTimeString() + "." + XString.Left((DateTime.Now.Millisecond/10).ToString("D2"), 2) + ")", false)
 			{
 			}
 		}

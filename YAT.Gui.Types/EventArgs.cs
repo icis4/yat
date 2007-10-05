@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace YAT.Gui
+namespace YAT.Gui.Types
 {
 	/// <summary></summary>
 	public class TerminalSavedEventArgs : EventArgs

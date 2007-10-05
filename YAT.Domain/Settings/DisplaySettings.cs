@@ -7,7 +7,7 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class DisplaySettings : Utilities.Settings.Settings, IEquatable<DisplaySettings>
+	public class DisplaySettings : MKY.Utilities.Settings.Settings, IEquatable<DisplaySettings>
 	{
 		/// <summary></summary>
 		public const Radix RadixDefault = Radix.String;
@@ -35,7 +35,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		public DisplaySettings(Utilities.Settings.SettingsType settingsType)
+		public DisplaySettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();

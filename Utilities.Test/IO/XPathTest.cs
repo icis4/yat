@@ -16,37 +16,37 @@ namespace MKY.Utilities.Test.IO
 		//------------------------------------------------------------------------------------------
 
 		private string[,] _testPaths =
-			{
-				// very-near relation
-				{	@"C:\MyDir",						@"C:\MyDir",						@".",							@".",							},
-				{	@"C:\MyDir",						@"C:\MyDir\MyFile2.abc",			@".\MyFile2.abc",				@".",							},
-				{	@"C:\MyDir\MyFile1.abc",			@"C:\MyDir",						@".",							@".\MyFile1.abc",				},
-				{	@"C:\MyDir\MyFile1.abc",			@"C:\MyDir\MyFile2.abc",			@".\MyFile2.abc",				@".\MyFile1.abc",				},
+		{
+			// very-near relation
+			{	@"C:\MyDir",						@"C:\MyDir",						@".",							@".",							},
+			{	@"C:\MyDir",						@"C:\MyDir\MyFile2.abc",			@".\MyFile2.abc",				@".",							},
+			{	@"C:\MyDir\MyFile1.abc",			@"C:\MyDir",						@".",							@".\MyFile1.abc",				},
+			{	@"C:\MyDir\MyFile1.abc",			@"C:\MyDir\MyFile2.abc",			@".\MyFile2.abc",				@".\MyFile1.abc",				},
 
-				// near relation
-				{	@"C:\MyDir",						@"C:\MyDir\MySubDir",				@"MySubDir",					@"..",							},
-				{	@"C:\MyDir",						@"C:\MyDir\MySubDir\MyFile2.abc",	@"MySubDir\MyFile2.abc",		@"..",							},
-				{	@"C:\MyDir\MyFile1.abc",			@"C:\MyDir\MySubDir",				@"MySubDir",					@"..\MyFile1.abc",				},
-				{	@"C:\MyDir\MyFile1.abc",			@"C:\MyDir\MySubDir\MyFile2.abc",	@"MySubDir\MyFile2.abc",		@"..\MyFile1.abc",				},
+			// near relation
+			{	@"C:\MyDir",						@"C:\MyDir\MySubDir",				@"MySubDir",					@"..",							},
+			{	@"C:\MyDir",						@"C:\MyDir\MySubDir\MyFile2.abc",	@"MySubDir\MyFile2.abc",		@"..",							},
+			{	@"C:\MyDir\MyFile1.abc",			@"C:\MyDir\MySubDir",				@"MySubDir",					@"..\MyFile1.abc",				},
+			{	@"C:\MyDir\MyFile1.abc",			@"C:\MyDir\MySubDir\MyFile2.abc",	@"MySubDir\MyFile2.abc",		@"..\MyFile1.abc",				},
 
-				// far relation
-				{	@"C:\MyDir\MySubDir1",				@"C:\MyDir\MySubDir2",				@"..\MySubDir2",				@"..\MySubDir1",					},
-				{	@"C:\MyDir\MySubDir1",				@"C:\MyDir\MySubDir2\MyFile2.abc",	@"..\MySubDir2\MyFile2.abc",	@"..\MySubDir1",					},
-				{	@"C:\MyDir\MySubDir1\MyFile1.abc",	@"C:\MyDir\MySubDir2",				@"..\MySubDir2",				@"..\MySubDir1\MyFile1.abc",		},
-				{	@"C:\MyDir\MySubDir1\MyFile1.abc",	@"C:\MyDir\MySubDir2\MyFile2.abc",	@"..\MySubDir2\MyFile2.abc",	@"..\MySubDir1\MyFile1.abc",		},
+			// far relation
+			{	@"C:\MyDir\MySubDir1",				@"C:\MyDir\MySubDir2",				@"..\MySubDir2",				@"..\MySubDir1",					},
+			{	@"C:\MyDir\MySubDir1",				@"C:\MyDir\MySubDir2\MyFile2.abc",	@"..\MySubDir2\MyFile2.abc",	@"..\MySubDir1",					},
+			{	@"C:\MyDir\MySubDir1\MyFile1.abc",	@"C:\MyDir\MySubDir2",				@"..\MySubDir2",				@"..\MySubDir1\MyFile1.abc",		},
+			{	@"C:\MyDir\MySubDir1\MyFile1.abc",	@"C:\MyDir\MySubDir2\MyFile2.abc",	@"..\MySubDir2\MyFile2.abc",	@"..\MySubDir1\MyFile1.abc",		},
 
-				// root relation
-				{	@"C:\",								@"C:\MyDir\MySubDir",				@"MyDir\MySubDir",				@"..\..",						},
-				{	@"C:\",								@"C:\MyDir\MySubDir\MyFile2.abc",	@"MyDir\MySubDir\MyFile2.abc",	@"..\..",						},
-				{	@"C:\MyFile1.abc",					@"C:\MyDir\MySubDir",				@"MyDir\MySubDir",				@"..\..\MyFile1.abc",			},
-				{	@"C:\MyFile1.abc",					@"C:\MyDir\MySubDir\MyFile2.abc",	@"MyDir\MySubDir\MyFile2.abc",	@"..\..\MyFile1.abc",			},
+			// root relation
+			{	@"C:\",								@"C:\MyDir\MySubDir",				@"MyDir\MySubDir",				@"..\..",						},
+			{	@"C:\",								@"C:\MyDir\MySubDir\MyFile2.abc",	@"MyDir\MySubDir\MyFile2.abc",	@"..\..",						},
+			{	@"C:\MyFile1.abc",					@"C:\MyDir\MySubDir",				@"MyDir\MySubDir",				@"..\..\MyFile1.abc",			},
+			{	@"C:\MyFile1.abc",					@"C:\MyDir\MySubDir\MyFile2.abc",	@"MyDir\MySubDir\MyFile2.abc",	@"..\..\MyFile1.abc",			},
 
-				// root far relation
-				{	@"C:\MyDir1",						@"C:\MyDir2",						@"..\MyDir2",					@"..\MyDir1",					},
-				{	@"C:\MyDir1",						@"C:\MyDir2\MyFile2.abc",			@"..\MyDir2\MyFile2.abc",		@"..\MyDir1",					},
-				{	@"C:\MyDir1\MyFile1.abc",			@"C:\MyDir2",						@"..\MyDir2",					@"..\MyDir1\MyFile1.abc",		},
-				{	@"C:\MyDir1\MyFile1.abc",			@"C:\MyDir2\MyFile2.abc",			@"..\MyDir2\MyFile2.abc",		@"..\MyDir1\MyFile1.abc",		},
-			};
+			// root far relation
+			{	@"C:\MyDir1",						@"C:\MyDir2",						@"..\MyDir2",					@"..\MyDir1",					},
+			{	@"C:\MyDir1",						@"C:\MyDir2\MyFile2.abc",			@"..\MyDir2\MyFile2.abc",		@"..\MyDir1",					},
+			{	@"C:\MyDir1\MyFile1.abc",			@"C:\MyDir2",						@"..\MyDir2",					@"..\MyDir1\MyFile1.abc",		},
+			{	@"C:\MyDir1\MyFile1.abc",			@"C:\MyDir2\MyFile2.abc",			@"..\MyDir2\MyFile2.abc",		@"..\MyDir1\MyFile1.abc",		},
+		};
 
 		#region Test Compare()
 		//------------------------------------------------------------------------------------------

@@ -5,7 +5,9 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using System.IO;
 
+using MKY.Utilities.Types;
 using MKY.Windows.Forms;
+
 using YAT.Settings.Application;
 
 namespace YAT.Gui.Forms
@@ -116,7 +118,7 @@ namespace YAT.Gui.Forms
 				int pageCount = _settings_Form.Pages.Count;
 				if (pageCount > 0)
 				{
-					_selectedPage = Utilities.Types.XInt.LimitToBounds(_startupControl.RequestedPage, 1, pageCount);
+					_selectedPage = XInt.LimitToBounds(_startupControl.RequestedPage, 1, pageCount);
 				}
 				else
 				{
@@ -127,7 +129,7 @@ namespace YAT.Gui.Forms
 				// initially set controls and validate its contents where needed
 				SetControls();
 
-				int selectedCommand = Utilities.Types.XInt.LimitToBounds(_startupControl.RequestedCommand, 1, Settings.PredefinedCommandSettings.MaximumCommandsPerPage);
+				int selectedCommand = XInt.LimitToBounds(_startupControl.RequestedCommand, 1, Settings.PredefinedCommandSettings.MaximumCommandsPerPage);
 				_predefinedCommandSettingsSetLabels[selectedCommand - 1].Select();
 			}
 		}
@@ -416,7 +418,7 @@ namespace YAT.Gui.Forms
 				 == DialogResult.Yes)
 			{
 				_settings_Form.Pages.RemoveAt(SelectedPageIndex);
-				_selectedPage = Utilities.Types.XInt.LimitToBounds(_selectedPage, 1, _settings_Form.Pages.Count);
+				_selectedPage = XInt.LimitToBounds(_selectedPage, 1, _settings_Form.Pages.Count);
 				SetControls();
 			}
 		}

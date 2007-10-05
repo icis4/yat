@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 namespace YAT.Gui.Settings
 {
 	[Serializable]
-	public class SendFileSettings : Utilities.Settings.Settings, IEquatable<SendFileSettings>
+	public class SendFileSettings : MKY.Utilities.Settings.Settings, IEquatable<SendFileSettings>
 	{
 		private Command _command;
 
@@ -16,7 +16,7 @@ namespace YAT.Gui.Settings
 			ClearChanged();
 		}
 
-		public SendFileSettings(Utilities.Settings.SettingsType settingsType)
+		public SendFileSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();

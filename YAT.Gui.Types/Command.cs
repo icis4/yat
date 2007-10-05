@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace YAT.Gui
+using MKY.Utilities.Types;
+
+namespace YAT.Gui.Types
 {
 	/// <summary>
 	/// Stores information about a single line, multi line or file command.
@@ -344,7 +346,7 @@ namespace YAT.Gui
 				return
 					(
 					_description.Equals (value._description) &&
-					Utilities.Types.XArray.ValueEquals(_commandLines, value._commandLines) &&
+					XArray.ValueEquals(_commandLines, value._commandLines) &&
 					_defaultRadix.Equals(value._defaultRadix) &&
 					_isFilePath.Equals  (value._isFilePath) &&
 					_filePath.Equals    (value._filePath)

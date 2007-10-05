@@ -7,7 +7,7 @@ namespace YAT.Domain.Settings.Socket
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SocketSettings : Utilities.Settings.Settings, IEquatable<SocketSettings>
+	public class SocketSettings : MKY.Utilities.Settings.Settings, IEquatable<SocketSettings>
 	{
 
 		//------------------------------------------------------------------------------------------
@@ -25,7 +25,7 @@ namespace YAT.Domain.Settings.Socket
 		// Fields
 		//------------------------------------------------------------------------------------------
 
-		private Net.Sockets.HostType _hostType;
+		private MKY.Net.Sockets.HostType _hostType;
 
 		private string _remoteHostNameOrAddress;
 		private System.Net.IPAddress _resolvedRemoteIPAddress;
@@ -50,7 +50,7 @@ namespace YAT.Domain.Settings.Socket
 		}
 
 		/// <summary></summary>
-		public SocketSettings(Utilities.Settings.SettingsType settingsType)
+		public SocketSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -85,7 +85,7 @@ namespace YAT.Domain.Settings.Socket
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			HostType                = Net.Sockets.HostType.TcpAutoSocket;
+			HostType                = MKY.Net.Sockets.HostType.TcpAutoSocket;
 
 			RemoteHostNameOrAddress = DefaultRemoteHostName;
 			ResolvedRemoteIPAddress = System.Net.IPAddress.Loopback;
@@ -106,7 +106,7 @@ namespace YAT.Domain.Settings.Socket
 
 		/// <summary></summary>
 		[XmlElement("HostType")]
-		public Net.Sockets.HostType HostType
+		public MKY.Net.Sockets.HostType HostType
 		{
 			get { return (_hostType); }
 			set
@@ -188,12 +188,12 @@ namespace YAT.Domain.Settings.Socket
 			{
 				switch (_hostType)
 				{
-					case Net.Sockets.HostType.TcpClient:
-					case Net.Sockets.HostType.TcpServer:
-					case Net.Sockets.HostType.TcpAutoSocket:
+					case MKY.Net.Sockets.HostType.TcpClient:
+					case MKY.Net.Sockets.HostType.TcpServer:
+					case MKY.Net.Sockets.HostType.TcpAutoSocket:
 						return (LocalTcpPort);
 
-					case Net.Sockets.HostType.Udp:
+					case MKY.Net.Sockets.HostType.Udp:
 						return (LocalUdpPort);
 
 					default:
@@ -204,13 +204,13 @@ namespace YAT.Domain.Settings.Socket
 			{
 				switch (_hostType)
 				{
-					case Net.Sockets.HostType.TcpClient:
-					case Net.Sockets.HostType.TcpServer:
-					case Net.Sockets.HostType.TcpAutoSocket:
+					case MKY.Net.Sockets.HostType.TcpClient:
+					case MKY.Net.Sockets.HostType.TcpServer:
+					case MKY.Net.Sockets.HostType.TcpAutoSocket:
 						LocalTcpPort = value;
 						break;
 
-					case Net.Sockets.HostType.Udp:
+					case MKY.Net.Sockets.HostType.Udp:
 						LocalUdpPort = value;
 						break;
 				}
@@ -344,7 +344,7 @@ namespace YAT.Domain.Settings.Socket
 		{
 			return
 			  (
-			  ((Net.Sockets.XHostType)_hostType).ToString() + ", " +
+			  ((MKY.Net.Sockets.XHostType)_hostType).ToString() + ", " +
 			  _remoteHostNameOrAddress + ", " +
 			  _remotePort.ToString() + ", " +
 			  _localHostNameOrAddress + ", " +

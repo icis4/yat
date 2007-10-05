@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 namespace YAT.Settings.Terminal
 {
 	[Serializable]
-	public class ImplicitSettings : Utilities.Settings.Settings, IEquatable<ImplicitSettings>
+	public class ImplicitSettings : MKY.Utilities.Settings.Settings, IEquatable<ImplicitSettings>
 	{
 		private bool _terminalIsOpen;
 		private bool _logIsOpen;
@@ -17,7 +17,7 @@ namespace YAT.Settings.Terminal
 		private Gui.Settings.LayoutSettings _layout;
 
 		public ImplicitSettings()
-			: base(Utilities.Settings.SettingsType.Implicit)
+			: base(MKY.Utilities.Settings.SettingsType.Implicit)
 		{
 			SetMyDefaults();
 
@@ -217,7 +217,7 @@ namespace YAT.Settings.Terminal
 					(
 					_terminalIsOpen.Equals(value._terminalIsOpen) &&
 					_logIsOpen.Equals(value._logIsOpen) &&
-					base.Equals((Utilities.Settings.Settings)value) // compares all settings nodes
+					base.Equals((MKY.Utilities.Settings.Settings)value) // compares all settings nodes
 					);
 			}
 			return (false);

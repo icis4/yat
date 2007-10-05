@@ -7,7 +7,7 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class TransmitSettings : Utilities.Settings.Settings, IEquatable<TransmitSettings>
+	public class TransmitSettings : MKY.Utilities.Settings.Settings, IEquatable<TransmitSettings>
 	{
 		/// <summary></summary>
 		public const bool LocalEchoEnabledDefault = true;
@@ -22,7 +22,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		public TransmitSettings(Utilities.Settings.SettingsType settingsType)
+		public TransmitSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();

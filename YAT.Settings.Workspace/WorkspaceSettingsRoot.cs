@@ -9,14 +9,14 @@ namespace YAT.Settings.Workspace
 {
 	[Serializable]
 	[XmlRoot("Settings")]
-	public class WorkspaceSettingsRoot : Utilities.Settings.Settings, IEquatable<WorkspaceSettingsRoot>
+	public class WorkspaceSettingsRoot : MKY.Utilities.Settings.Settings, IEquatable<WorkspaceSettingsRoot>
 	{
 		private string _productVersion = System.Windows.Forms.Application.ProductVersion;
 		private bool _autoSaved = false;
 		private WorkspaceSettings _workspace;
 
 		public WorkspaceSettingsRoot()
-			: base(Utilities.Settings.SettingsType.Explicit)
+			: base(MKY.Utilities.Settings.SettingsType.Explicit)
 		{
 			Workspace = new WorkspaceSettings();
 			ClearChanged();
@@ -136,7 +136,7 @@ namespace YAT.Settings.Workspace
 				return
 					(
 					_productVersion.Equals(value._productVersion) &&
-					base.Equals((Utilities.Settings.Settings)value) // compares all settings nodes
+					base.Equals((MKY.Utilities.Settings.Settings)value) // compares all settings nodes
 					);
 				// do not compare AutoSaved
 			}

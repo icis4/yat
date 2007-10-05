@@ -7,7 +7,7 @@ namespace YAT.Domain.Settings.SerialPort
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SerialCommunicationSettings : Utilities.Settings.Settings, IEquatable<SerialCommunicationSettings>
+	public class SerialCommunicationSettings : MKY.Utilities.Settings.Settings, IEquatable<SerialCommunicationSettings>
 	{
 		private int _baudRate;
 		private MKY.IO.Ports.DataBits _dataBits;
@@ -23,7 +23,7 @@ namespace YAT.Domain.Settings.SerialPort
 		}
 
 		/// <summary></summary>
-		public SerialCommunicationSettings(Utilities.Settings.SettingsType settingsType)
+		public SerialCommunicationSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();

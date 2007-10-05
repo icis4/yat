@@ -8,7 +8,7 @@ using System.Drawing;
 namespace YAT.Gui.Settings
 {
 	[Serializable]
-	public class WindowSettings : Utilities.Settings.Settings, IEquatable<WindowSettings>
+	public class WindowSettings : MKY.Utilities.Settings.Settings, IEquatable<WindowSettings>
 	{
 		private FormWindowState _state;
 		private Point _location;
@@ -20,7 +20,7 @@ namespace YAT.Gui.Settings
 			ClearChanged();
 		}
 
-		public WindowSettings(Utilities.Settings.SettingsType settingsType)
+		public WindowSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();

@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 namespace YAT.Settings.Terminal
 {
 	[Serializable]
-	public class ExplicitSettings : Utilities.Settings.Settings, IEquatable<ExplicitSettings>
+	public class ExplicitSettings : MKY.Utilities.Settings.Settings, IEquatable<ExplicitSettings>
 	{
 		private Domain.Settings.TerminalSettings _terminal;
 		private Gui.Settings.PredefinedCommandSettings _predefinedCommand;
@@ -14,7 +14,7 @@ namespace YAT.Settings.Terminal
 		private Log.Settings.LogSettings _log;
 
 		public ExplicitSettings()
-			: base(Utilities.Settings.SettingsType.Explicit)
+			: base(MKY.Utilities.Settings.SettingsType.Explicit)
 		{
 			SetMyDefaults();
 
@@ -155,7 +155,7 @@ namespace YAT.Settings.Terminal
 		{
 			// ensure that object.operator!=() is called
 			if ((object)value != null)
-				return (base.Equals((Utilities.Settings.Settings)value)); // compares all settings nodes
+				return (base.Equals((MKY.Utilities.Settings.Settings)value)); // compares all settings nodes
 
 			return (false);
 		}

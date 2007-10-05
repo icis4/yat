@@ -6,12 +6,12 @@ using System.Xml.Serialization;
 namespace YAT.Gui.Settings
 {
 	[Serializable]
-	public class NewTerminalSettings : Utilities.Settings.Settings, IEquatable<NewTerminalSettings>
+	public class NewTerminalSettings : MKY.Utilities.Settings.Settings, IEquatable<NewTerminalSettings>
 	{
 		private Domain.TerminalType _terminalType;
 		private Domain.IOType _ioType;
 
-		private IO.Ports.SerialPortId _serialPortId;
+		private MKY.IO.Ports.SerialPortId _serialPortId;
 
 		private string _socketRemoteHostNameOrAddress;
 		private int _socketRemotePort;
@@ -28,7 +28,7 @@ namespace YAT.Gui.Settings
 			ClearChanged();
 		}
 
-		public NewTerminalSettings(Utilities.Settings.SettingsType settingsType)
+		public NewTerminalSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -66,7 +66,7 @@ namespace YAT.Gui.Settings
 			TerminalType = Domain.TerminalType.Text;
 			IOType       = Domain.IOType.SerialPort;
 
-			SerialPortId = IO.Ports.SerialPortId.DefaultPort;
+			SerialPortId = MKY.IO.Ports.SerialPortId.DefaultPort;
 
 			SocketRemoteHostNameOrAddress = Domain.Settings.Socket.SocketSettings.DefaultRemoteHostName;
 			SocketRemotePort              = Domain.Settings.Socket.SocketSettings.DefaultPort;
