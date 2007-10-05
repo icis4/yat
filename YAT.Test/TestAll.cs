@@ -21,10 +21,11 @@ namespace YAT.Test
 				suite.Add(new MKY.Utilities.Test.Types.XByteTest());
 
 				// YAT.Domain.Test
-				//suite.Add(new AssertionTest());
+				suite.Add(new YAT.Domain.Test.Parser.ParserTest());
+				suite.Add(new YAT.Domain.Test.TextTerminal.SubstitutionParserTest());
 
 				// YAT.Settings.Test
-				//suite.Add(new AssertionTest());
+				suite.Add(new YAT.Settings.Test.SettingsTest());
 
 				return (suite);
 			}

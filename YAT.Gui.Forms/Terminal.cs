@@ -11,10 +11,11 @@ using MKY.Utilities.Event;
 using MKY.Utilities.Recent;
 using MKY.Utilities.Settings;
 
+using YAT.Gui.Types;
+using YAT.Gui.Settings;
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
-using YAT.Gui.Settings;
 
 namespace YAT.Gui.Forms
 {

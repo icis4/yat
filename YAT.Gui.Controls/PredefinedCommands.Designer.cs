@@ -121,8 +121,8 @@ namespace YAT.Gui.Controls
 			this.pageButtons.Name = "pageButtons";
 			this.pageButtons.Size = new System.Drawing.Size(138, 263);
 			this.pageButtons.TabIndex = 2;
-			this.pageButtons.SendCommandRequest += new System.EventHandler<YAT.Gui.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
-			this.pageButtons.DefineCommandRequest += new System.EventHandler<YAT.Gui.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
+			this.pageButtons.SendCommandRequest += new System.EventHandler<YAT.Gui.Types.PredefinedCommandEventArgs>(this.pageButtons_SendCommandRequest);
+			this.pageButtons.DefineCommandRequest += new System.EventHandler<YAT.Gui.Types.PredefinedCommandEventArgs>(this.pageButtons_DefineCommandRequest);
 			// 
 			// label_Page
 			// 

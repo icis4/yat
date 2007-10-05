@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using MKY.Utilities.Event;
 using MKY.Utilities.Recent;
 
+using YAT.Gui.Types;
+
 namespace YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
@@ -305,7 +307,7 @@ namespace YAT.Gui.Controls
 			_isSettingControls = false;
 		}
 
-        private void SetCommand(Command command)
+		private void SetCommand(Command command)
         {
             _command = command;
 

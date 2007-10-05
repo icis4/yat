@@ -9,6 +9,7 @@ using System.IO;
 
 using MKY.Utilities.Event;
 
+using YAT.Gui.Types;
 using YAT.Settings;
 using YAT.Settings.Application;
 
@@ -135,7 +136,7 @@ namespace YAT.Gui.Controls
 			if (_command.IsFilePath)
 				pathLabel_FilePath.Text = _command.FilePath;
 			else
-				pathLabel_FilePath.Text = Gui.Command.UndefinedFilePathText;
+				pathLabel_FilePath.Text = Command.UndefinedFilePathText;
 
 			if (_command.IsValidFilePath)
 				button_SendFile.Enabled = _terminalIsOpen;

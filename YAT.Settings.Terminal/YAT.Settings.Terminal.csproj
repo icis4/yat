@@ -68,9 +68,9 @@
       <Project>{4D2B091A-400B-436C-8C52-5DDABE9EBBAA}</Project>
       <Name>YAT.Gui.Settings</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Gui.Types\YAT.Gui.csproj">
+    <ProjectReference Include="..\YAT.Gui.Types\YAT.Gui.Types.csproj">
       <Project>{259B16E1-C709-4843-B9A8-EA1FF55EA1E3}</Project>
-      <Name>YAT.Gui</Name>
+      <Name>YAT.Gui.Types</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Log\YAT.Log.csproj">
       <Project>{7B0B343D-F992-4A1E-8E07-CB8EC651A5E6}</Project>

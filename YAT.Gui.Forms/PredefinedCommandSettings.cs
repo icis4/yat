@@ -8,6 +8,7 @@ using System.IO;
 using MKY.Utilities.Types;
 using MKY.Windows.Forms;
 
+using YAT.Gui.Types;
 using YAT.Settings.Application;
 
 namespace YAT.Gui.Forms

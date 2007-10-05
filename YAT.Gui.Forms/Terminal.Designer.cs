@@ -30,8 +30,8 @@ namespace YAT.Gui.Forms
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Terminal));
-			YAT.Gui.Command command1 = new YAT.Gui.Command();
-			YAT.Gui.Command command2 = new YAT.Gui.Command();
+			YAT.Gui.Types.Command command1 = new YAT.Gui.Types.Command();
+			YAT.Gui.Types.Command command2 = new YAT.Gui.Types.Command();
 			this.timer_Status = new System.Windows.Forms.Timer(this.components);
 			this.contextMenuStrip_Monitor = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem_MonitorContextMenu_Radix = new System.Windows.Forms.ToolStripMenuItem();
@@ -1577,8 +1577,8 @@ namespace YAT.Gui.Forms
 			this.predefined.Size = new System.Drawing.Size(162, 365);
 			this.predefined.TabIndex = 0;
 			this.predefined.SelectedPageChanged += new System.EventHandler(this.predefined_SelectedPageChanged);
-			this.predefined.SendCommandRequest += new System.EventHandler<YAT.Gui.PredefinedCommandEventArgs>(this.predefined_SendCommandRequest);
-			this.predefined.DefineCommandRequest += new System.EventHandler<YAT.Gui.PredefinedCommandEventArgs>(this.predefined_DefineCommandRequest);
+			this.predefined.SendCommandRequest += new System.EventHandler<YAT.Gui.Types.PredefinedCommandEventArgs>(this.predefined_SendCommandRequest);
+			this.predefined.DefineCommandRequest += new System.EventHandler<YAT.Gui.Types.PredefinedCommandEventArgs>(this.predefined_DefineCommandRequest);
 			// 
 			// panel_Send
 			// 
