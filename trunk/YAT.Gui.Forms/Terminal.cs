@@ -649,43 +649,6 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region Controls Event Handlers > Predefined Context Menu
-		//------------------------------------------------------------------------------------------
-		// Controls Event Handlers > Predefined Context Menu
-		//------------------------------------------------------------------------------------------
-
-		private void contextMenuStrip_Predefined_Opening(object sender, CancelEventArgs e)
-		{
-			SetPredefinedMenuItems();
-		}
-
-		private void toolStripMenuItem_PredefinedContextMenu_Command_Click(object sender, EventArgs e)
-		{
-			RequestPredefined(predefined.SelectedPage, int.Parse((string)(((ToolStripMenuItem)sender).Tag)));
-		}
-
-		private void toolStripMenuItem_PredefinedContextMenu_Page_Next_Click(object sender, EventArgs e)
-		{
-			predefined.NextPage();
-		}
-
-		private void toolStripMenuItem_PredefinedContextMenu_Page_Previous_Click(object sender, EventArgs e)
-		{
-			predefined.PreviousPage();
-		}
-
-		private void toolStripMenuItem_PredefinedContextMenu_Define_Click(object sender, EventArgs e)
-		{
-			ShowPredefinedCommandSettings(1, 1);
-		}
-
-		private void toolStripMenuItem_PredefinedContextMenu_Hide_Click(object sender, EventArgs e)
-		{
-			_terminalSettingsRoot.Layout.PredefinedPanelIsVisible = false;
-		}
-
-		#endregion
-
 		#region Controls Event Handlers > Radix Context Menu
 		//------------------------------------------------------------------------------------------
 		// Controls Event Handlers > Radix Context Menu
@@ -729,52 +692,6 @@ namespace YAT.Gui.Forms
 		private void toolStripMenuItem_RadixContextMenu_Hex_Click(object sender, EventArgs e)
 		{
 			SetMonitorRadix(Domain.Radix.Hex);
-		}
-
-		#endregion
-
-		#region Controls Event Handlers > Send Context Menu
-		//------------------------------------------------------------------------------------------
-		// Controls Event Handlers > Send Context Menu
-		//------------------------------------------------------------------------------------------
-
-		private void contextMenuStrip_Send_Opening(object sender, CancelEventArgs e)
-		{
-			toolStripMenuItem_SendContextMenu_Command.Enabled = _terminalSettingsRoot.SendCommand.Command.IsValidCommand;
-			toolStripMenuItem_SendContextMenu_File.Enabled = _terminalSettingsRoot.SendCommand.Command.IsValidFilePath;
-
-			toolStripMenuItem_SendContextMenu_Panels_SendCommand.Checked = _terminalSettingsRoot.Layout.SendCommandPanelIsVisible;
-			toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = _terminalSettingsRoot.Layout.SendFilePanelIsVisible;
-		}
-
-		private void toolStripMenuItem_SendContextMenu_Command_Click(object sender, EventArgs e)
-		{
-			SendCommand();
-		}
-
-		private void toolStripMenuItem_SendContextMenu_File_Click(object sender, EventArgs e)
-		{
-			SendFile();
-		}
-
-		private void toolStripMenuItem_SendContextMenu_Panels_SendCommand_Click(object sender, EventArgs e)
-		{
-			_terminalSettingsRoot.Layout.SendCommandPanelIsVisible = !_terminalSettingsRoot.Layout.SendCommandPanelIsVisible;
-		}
-
-		private void toolStripMenuItem_SendContextMenu_Panels_SendFile_Click(object sender, EventArgs e)
-		{
-			_terminalSettingsRoot.Layout.SendFilePanelIsVisible = !_terminalSettingsRoot.Layout.SendFilePanelIsVisible;
-		}
-
-		private void toolStripMenuItem_SendContextMenu_Hide_Click(object sender, EventArgs e)
-		{
-			Control source = contextMenuStrip_Send.SourceControl;
-
-			if (source == sendCommand)
-				_terminalSettingsRoot.Layout.SendCommandPanelIsVisible = false;
-			if (source == sendFile)
-				_terminalSettingsRoot.Layout.SendFilePanelIsVisible = false;
 		}
 
 		#endregion
@@ -885,22 +802,22 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Send
 		//------------------------------------------------------------------------------------------
 
-		private void sendCommand_CommandChanged(object sender, EventArgs e)
+		private void send_CommandChanged(object sender, EventArgs e)
 		{
-			_terminalSettingsRoot.Implicit.SendCommand.Command = sendCommand.Command;
+			_terminalSettingsRoot.Implicit.SendCommand.Command = send.Command;
 		}
 
-		private void sendCommand_SendCommandRequest(object sender, EventArgs e)
+		private void send_SendCommandRequest(object sender, EventArgs e)
 		{
 			SendCommand();
 		}
 
-		private void sendFile_CommandChanged(object sender, EventArgs e)
+		private void send_FileCommandChanged(object sender, EventArgs e)
 		{
-			_terminalSettingsRoot.Implicit.SendFile.Command = sendFile.Command;
+			_terminalSettingsRoot.Implicit.SendFile.Command = send.FileCommand;
 		}
 
-		private void sendFile_SendCommandRequest(object sender, EventArgs e)
+		private void send_SendFileCommandRequest(object sender, EventArgs e)
 		{
 			SendFile();
 		}
@@ -1011,7 +928,7 @@ namespace YAT.Gui.Forms
 			{
 				// SendCommandSettings changed
 				_isSettingControls = true;
-				sendCommand.Command = _terminalSettingsRoot.SendCommand.Command;
+				send.Command = _terminalSettingsRoot.SendCommand.Command;
 				sendCommand.RecentCommands = _terminalSettingsRoot.SendCommand.RecentCommands;
 				_isSettingControls = false;
 			}
@@ -1607,9 +1524,28 @@ namespace YAT.Gui.Forms
 					case Domain.IOType.TcpServer:
 						sb.Append("TCP server is ");
 						if (isOpen)
-							sb.Append(isConnected ? "connected" : "listening");
+						{
+							if (isConnected)
+							{
+								Domain.IO.TcpServer server = (Domain.IO.TcpServer)_terminal.UnderlyingIOProvider;
+								int count = server.ConnectedClientCount;
+
+								sb.Append("connected to ");
+								sb.Append(count.ToString());
+								if (count == 1)
+									sb.Append(" client");
+								else
+									sb.Append(" clients");
+							}
+							else
+							{
+								sb.Append("listening");
+							}
+						}
 						else
+						{
 							sb.Append("closed");
+						}
 						sb.Append(" on local port ");
 						sb.Append(s.LocalPort.ToString());
 						break;
@@ -2229,8 +2165,7 @@ namespace YAT.Gui.Forms
 
 		private void SelectSendCommandInput()
 		{
-			sendCommand.Select();
-			sendCommand.SelectInput();
+			send.SelectSendCommandInput();
 		}
 
 		private void SendCommand()

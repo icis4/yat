@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net.Sockets", "Net.Sockets\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Doc.Project", "_Doc.Project", "{0A8DD27A-6023-46EA-A96C-CBBBE174BA4E}"
 	ProjectSection(SolutionItems) = preProject
-		_Doc.Project\YAT.mmp = _Doc.Project\YAT.mmp
+		_Doc.Project\YAT.mmap = _Doc.Project\YAT.mmap
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Doc.User", "_Doc.User", "{BFE7EB1A-C031-410C-A06B-0DE446418B4A}"
@@ -92,6 +92,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Requirement", "1 - Requ
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Architecture", "2 - Architecture", "{909008BA-FFE7-4164-A1F3-119CF5051E52}"
+	ProjectSection(SolutionItems) = preProject
+		_Doc.Project\2 - Architecture\YAT Package Overview.pdf = _Doc.Project\2 - Architecture\YAT Package Overview.pdf
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Design", "3 - Design", "{5EEC2E06-6D29-41CD-B1B9-8E0F2E32E5D1}"
 	ProjectSection(SolutionItems) = preProject
@@ -125,6 +128,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Domain.Test", "YAT.Domain.Test\YAT.Domain.Test.csproj", "{7CA209C1-B1A8-43E0-BBFB-79EDA186CE62}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Settings.Test", "YAT.Settings.Test\YAT.Settings.Test.csproj", "{306722B1-7554-46FD-A8BE-99185753CD51}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Doc.Developer", "_Doc.Developer", "{E3E1764C-1358-495F-839F-721D4D307DF8}"
+	ProjectSection(SolutionItems) = preProject
+		_Doc.Developer\HowToAddTestProject.txt = _Doc.Developer\HowToAddTestProject.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -306,5 +314,8 @@ Global
 		{E1F028BD-94FB-41A5-AF94-FB257FE162EE} = {0A8DD27A-6023-46EA-A96C-CBBBE174BA4E}
 		{DCA59CFE-1A8D-44DD-B755-9ED543E91DEB} = {16B67EA9-E379-4134-B89E-B87379638D9C}
 		{D0EF5621-C98B-4B79-95E7-71C4F0B53A9B} = {16B67EA9-E379-4134-B89E-B87379638D9C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		ObjectiFSystem = D:\Sandboxes\YAT\_Model\YAT
 	EndGlobalSection
 EndGlobal

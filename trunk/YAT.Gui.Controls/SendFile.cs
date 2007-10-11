@@ -16,7 +16,7 @@ using YAT.Settings.Application;
 namespace YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
-	[DefaultEvent("SendFileRequest")]
+	[DefaultEvent("SendFileCommandRequest")]
 	public partial class SendFile : UserControl
 	{
 		//------------------------------------------------------------------------------------------
@@ -30,7 +30,7 @@ namespace YAT.Gui.Controls
 		// Fields
 		//------------------------------------------------------------------------------------------
 
-		private Command _command = new Command();
+		private Command _fileCommand = new Command();
 		private Domain.TerminalType _terminalType = _TerminalTypeDefault;
 		private bool _terminalIsOpen = _TerminalIsOpenDefault;
 
@@ -39,12 +39,12 @@ namespace YAT.Gui.Controls
 		//------------------------------------------------------------------------------------------
 
 		[Category("Property Changed")]
-		[Description("Event raised when the Command property is changed.")]
-		public event EventHandler CommandChanged;
+		[Description("Event raised when the FileCommand property is changed.")]
+		public event EventHandler FileCommandChanged;
 
 		[Category("Action")]
-		[Description("Event raised when sending the command is requested.")]
-		public event EventHandler SendCommandRequest;
+		[Description("Event raised when sending the file is requested.")]
+		public event EventHandler SendFileCommandRequest;
 
 		//------------------------------------------------------------------------------------------
 		// Constructor
@@ -65,17 +65,17 @@ namespace YAT.Gui.Controls
 		/// Command always returns a Command object, it never returns null.
 		/// </summary>
 		[Browsable(false)]
-		public Command Command
+		public Command FileCommand
 		{
-			get { return (_command); }
+			get { return (_fileCommand); }
 			set
 			{
 				if (value != null)
-					_command = value;
+					_fileCommand = value;
 				else
-					_command = new Command();
+					_fileCommand = new Command();
 
-				OnCommandChanged(new EventArgs());
+				OnFileCommandChanged(new EventArgs());
 				SetControls();
 			}
 		}
@@ -133,12 +133,12 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			if (_command.IsFilePath)
-				pathLabel_FilePath.Text = _command.FilePath;
+			if (_fileCommand.IsFilePath)
+				pathLabel_FilePath.Text = _fileCommand.FilePath;
 			else
 				pathLabel_FilePath.Text = Command.UndefinedFilePathText;
 
-			if (_command.IsValidFilePath)
+			if (_fileCommand.IsValidFilePath)
 				button_SendFile.Enabled = _terminalIsOpen;
 			else
 				button_SendFile.Enabled = false;
@@ -171,13 +171,13 @@ namespace YAT.Gui.Controls
 				ApplicationSettings.LocalUser.Paths.SendFilesPath = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.SaveLocalUser();
 
-				_command.IsFilePath = true;
-				_command.FilePath = ofd.FileName;
+				_fileCommand.IsFilePath = true;
+				_fileCommand.FilePath = ofd.FileName;
 
 				SetControls();
 				button_SendFile.Select();
 
-				OnCommandChanged(new EventArgs());
+				OnFileCommandChanged(new EventArgs());
 
 				return (true);
 			}
@@ -186,7 +186,7 @@ namespace YAT.Gui.Controls
 
 		private void RequestSendCommand()
 		{
-			if (!_command.IsValidFilePath)
+			if (!_fileCommand.IsValidFilePath)
 			{
 				if (MessageBox.Show
 					(
@@ -208,9 +208,9 @@ namespace YAT.Gui.Controls
 				}
 			}
 
-			if (_command.IsValidFilePath)
+			if (_fileCommand.IsValidFilePath)
 			{
-				OnSendCommandRequest(new EventArgs());
+				OnSendFileCommandRequest(new EventArgs());
 			}
 			else
 			{
@@ -232,14 +232,14 @@ namespace YAT.Gui.Controls
 		// Event Invoking
 		//------------------------------------------------------------------------------------------
 
-		protected virtual void OnCommandChanged(EventArgs e)
+		protected virtual void OnFileCommandChanged(EventArgs e)
 		{
-			EventHelper.FireSync(CommandChanged, this, e);
+			EventHelper.FireSync(FileCommandChanged, this, e);
 		}
 
-		protected virtual void OnSendCommandRequest(EventArgs e)
+		protected virtual void OnSendFileCommandRequest(EventArgs e)
 		{
-			EventHelper.FireSync(SendCommandRequest, this, e);
+			EventHelper.FireSync(SendFileCommandRequest, this, e);
 		}
 
 		#endregion

@@ -51,6 +51,12 @@
     <Compile Include="Chronometer.Designer.cs">
       <DependentUpon>Chronometer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Send.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Send.Designer.cs">
+      <DependentUpon>Send.cs</DependentUpon>
+    </Compile>
     <Compile Include="SocketSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -148,6 +154,10 @@
     <EmbeddedResource Include="Chronometer.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Chronometer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Send.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Send.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SocketSettings.resx">
       <DependentUpon>SocketSettings.cs</DependentUpon>

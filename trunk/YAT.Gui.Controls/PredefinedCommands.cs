@@ -134,6 +134,11 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//------------------------------------------------------------------------------------------
 
+		#region Controls Event Handlers > Commands
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Commands
+		//------------------------------------------------------------------------------------------
+
 		private void pageButtons_SendCommandRequest(object sender, PredefinedCommandEventArgs e)
 		{
 			RequestSendCommand(e.Command);
@@ -159,6 +164,45 @@ namespace YAT.Gui.Controls
 			if (!_isSettingControls)
 				SelectedPage = comboBox_Pages.SelectedIndex + 1;
 		}
+
+		#endregion
+
+		#region Controls Event Handlers > Context Menu
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Context Menu
+		//------------------------------------------------------------------------------------------
+
+		private void contextMenuStrip_Predefined_Opening(object sender, CancelEventArgs e)
+		{
+			SetPredefinedMenuItems();
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_Command_Click(object sender, EventArgs e)
+		{
+			RequestPredefined(predefined.SelectedPage, int.Parse((string)(((ToolStripMenuItem)sender).Tag)));
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_Page_Next_Click(object sender, EventArgs e)
+		{
+			predefined.NextPage();
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_Page_Previous_Click(object sender, EventArgs e)
+		{
+			predefined.PreviousPage();
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_Define_Click(object sender, EventArgs e)
+		{
+			ShowPredefinedCommandSettings(1, 1);
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_Hide_Click(object sender, EventArgs e)
+		{
+			_terminalSettingsRoot.Layout.PredefinedPanelIsVisible = false;
+		}
+
+		#endregion
 
 		#endregion
 

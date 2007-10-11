@@ -526,12 +526,16 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		/// <remarks>ToDo: Why isn't this function CLS compliant?</remarks>
+		[CLSCompliant(false)]
 		protected virtual void _txTimer_Timeout(object sender, EventArgs e)
 		{
 			ProcessAndSignalTimedLineBreak(SerialDirection.Tx);
 		}
 
 		/// <summary></summary>
+		/// <remarks>ToDo: Why isn't this function CLS compliant?</remarks>
+		[CLSCompliant(false)]
 		protected virtual void _rxTimer_Timeout(object sender, EventArgs e)
 		{
 			ProcessAndSignalTimedLineBreak(SerialDirection.Rx);
