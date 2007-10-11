@@ -12,6 +12,11 @@ namespace YAT.Domain
 	/// <summary>
 	/// Terminal with byte/string functionality and settings.
 	/// </summary>
+	/// <remarks>
+	/// Terminal and its specializations <see cref="TextTerminal"/> and <see cref="BinaryTerminal"/>
+	/// implement the method pattern. Terminal provides general processing and formatting functions,
+	/// its specializations add additional functionality.
+	/// </remarks>
 	public class Terminal : IDisposable
 	{
 		//------------------------------------------------------------------------------------------
@@ -647,6 +652,8 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 		
 		/// <summary></summary>
+		/// <remarks>ToDo: Why isn't this function CLS compliant?</remarks>
+		[CLSCompliant(false)]
 		protected virtual void _terminalSettings_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
 		{
 			if (e.Inner == null)
@@ -715,6 +722,8 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		/// <remarks>ToDo: Why isn't this function CLS compliant?</remarks>
+		[CLSCompliant(false)]
 		protected virtual void _rawTerminal_RawElementSent(object sender, RawElementEventArgs e)
 		{
 			OnRawElementSent(e);
@@ -722,6 +731,8 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		/// <remarks>ToDo: Why isn't this function CLS compliant?</remarks>
+		[CLSCompliant(false)]
 		protected virtual void _rawTerminal_RawElementReceived(object sender, RawElementEventArgs e)
 		{
 			OnRawElementReceived(e);

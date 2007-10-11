@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\YAT.res" />
+    <None Include="YAT.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
