@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using MKY.Utilities.Event;
+using MKY.Utilities.Recent;
 
 using YAT.Gui.Types;
 
@@ -22,6 +23,7 @@ namespace YAT.Gui.Controls
 
 		private const Domain.TerminalType _TerminalTypeDefault = Domain.TerminalType.Text;
 		private const bool _TerminalIsOpenDefault = false;
+		private const float _SplitterRatioDefault = (float)0.75;
 
 		//------------------------------------------------------------------------------------------
 		// Fields
@@ -29,6 +31,7 @@ namespace YAT.Gui.Controls
 
 		private Domain.TerminalType _terminalType = _TerminalTypeDefault;
 		private bool _terminalIsOpen = _TerminalIsOpenDefault;
+        private float _splitterRatio = _SplitterRatioDefault;
 
 		//------------------------------------------------------------------------------------------
 		// Events
@@ -78,7 +81,23 @@ namespace YAT.Gui.Controls
 		// Properties
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>
+        /// <summary>
+        /// Command always returns a Command object, it never returns null.
+        /// </summary>
+        [Browsable(false)]
+        public Command Command
+        {
+            get { return (sendCommand.Command); }
+            set { sendCommand.Command = value;  }
+        }
+
+        [Browsable(false)]
+        public RecentItemCollection<Command> RecentCommands
+        {
+            set { sendCommand.RecentCommands = value;  }
+        }
+
+        /// <summary>
 		/// Command always returns a Command object, it never returns null.
 		/// </summary>
 		[Browsable(false)]
@@ -99,18 +118,43 @@ namespace YAT.Gui.Controls
 			}
 		}
 
-		[Browsable(false)]
-		[DefaultValue(_TerminalIsOpenDefault)]
-		public bool TerminalIsOpen
-		{
-			set
-			{
-				_terminalIsOpen = value;
-				SetControls();
-			}
-		}
+        [Browsable(false)]
+        [DefaultValue(_TerminalIsOpenDefault)]
+        public bool TerminalIsOpen
+        {
+            set
+            {
+                _terminalIsOpen = value;
+                SetControls();
+            }
+        }
 
-		#endregion
+        [DefaultValue(true)]
+        public bool CommandPanelIsVisible
+        {
+            get { return (!splitContainer_Send.Panel1Collapsed); }
+            set { splitContainer_Send.Panel1Collapsed = !value;  }
+        }
+
+        [DefaultValue(true)]
+        public bool FilePanelIsVisible
+        {
+            get { return (!splitContainer_Send.Panel2Collapsed); }
+            set { splitContainer_Send.Panel2Collapsed = !value;  }
+        }
+
+        [DefaultValue(_SplitterRatioDefault)]
+        public float SplitterRatio
+        {
+            get { return (_splitterRatio); }
+            set
+            {
+                _splitterRatio = value;
+                SetControls();
+            }
+        }
+
+        #endregion
 
 		#region Controls Event Handlers
 		//******************************************************************************************
@@ -151,52 +195,6 @@ namespace YAT.Gui.Controls
 
 		#endregion
 
-		#region Controls Event Handlers > Send Context Menu
-		//------------------------------------------------------------------------------------------
-		// Controls Event Handlers > Send Context Menu
-		//------------------------------------------------------------------------------------------
-
-		private void contextMenuStrip_Send_Opening(object sender, CancelEventArgs e)
-		{
-			toolStripMenuItem_SendContextMenu_SendCommand.Enabled = _terminalSettingsRoot.SendCommand.Command.IsValidCommand;
-			toolStripMenuItem_SendContextMenu_SendFile.Enabled = _terminalSettingsRoot.SendCommand.Command.IsValidFilePath;
-
-			toolStripMenuItem_SendContextMenu_Panels_SendCommand.Checked = _terminalSettingsRoot.Layout.SendCommandPanelIsVisible;
-			toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = _terminalSettingsRoot.Layout.SendFilePanelIsVisible;
-		}
-
-		private void toolStripMenuItem_SendContextMenu_SendCommand_Click(object sender, EventArgs e)
-		{
-			SendCommand();
-		}
-
-		private void toolStripMenuItem_SendContextMenu_SendFile_Click(object sender, EventArgs e)
-		{
-			SendFile();
-		}
-
-		private void toolStripMenuItem_SendContextMenu_Panels_SendCommand_Click(object sender, EventArgs e)
-		{
-			_terminalSettingsRoot.Layout.SendCommandPanelIsVisible = !_terminalSettingsRoot.Layout.SendCommandPanelIsVisible;
-		}
-
-		private void toolStripMenuItem_SendContextMenu_Panels_SendFile_Click(object sender, EventArgs e)
-		{
-			_terminalSettingsRoot.Layout.SendFilePanelIsVisible = !_terminalSettingsRoot.Layout.SendFilePanelIsVisible;
-		}
-
-		private void toolStripMenuItem_SendContextMenu_Hide_Click(object sender, EventArgs e)
-		{
-			Control source = contextMenuStrip_Send.SourceControl;
-
-			if (source == sendCommand)
-				_terminalSettingsRoot.Layout.SendCommandPanelIsVisible = false;
-			if (source == sendFile)
-				_terminalSettingsRoot.Layout.SendFilePanelIsVisible = false;
-		}
-
-		#endregion
-
 		#endregion
 
 		#region Private Methods
@@ -207,9 +205,11 @@ namespace YAT.Gui.Controls
 		private void SetControls()
 		{
 			sendCommand.TerminalIsOpen = _terminalIsOpen;
+            sendCommand.SplitterRatio = _splitterRatio;
 
 			sendFile.TerminalType = _terminalType;
 			sendFile.TerminalIsOpen = _terminalIsOpen;
+            sendFile.SplitterRatio = _splitterRatio;
 		}
 
 		#endregion

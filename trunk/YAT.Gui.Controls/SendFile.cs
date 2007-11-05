@@ -25,6 +25,7 @@ namespace YAT.Gui.Controls
 
 		private const Domain.TerminalType _TerminalTypeDefault = Domain.TerminalType.Text;
 		private const bool _TerminalIsOpenDefault = false;
+        private const float _SplitterRatioDefault = (float)0.75;
 
 		//------------------------------------------------------------------------------------------
 		// Fields
@@ -33,6 +34,7 @@ namespace YAT.Gui.Controls
 		private Command _fileCommand = new Command();
 		private Domain.TerminalType _terminalType = _TerminalTypeDefault;
 		private bool _terminalIsOpen = _TerminalIsOpenDefault;
+        private float _splitterRatio = _SplitterRatioDefault;
 
 		//------------------------------------------------------------------------------------------
 		// Events
@@ -102,7 +104,18 @@ namespace YAT.Gui.Controls
 			}
 		}
 
-		#endregion
+        [DefaultValue(_SplitterRatioDefault)]
+        public float SplitterRatio
+        {
+            get { return (_splitterRatio); }
+            set
+            {
+                _splitterRatio = value;
+                SetControls();
+            }
+        }
+
+        #endregion
 
 		#region Controls Event Handlers
 		//------------------------------------------------------------------------------------------
@@ -133,6 +146,8 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
+            splitContainer.SplitterDistance = (int)(_splitterRatio * splitContainer.Width);
+
 			if (_fileCommand.IsFilePath)
 				pathLabel_FilePath.Text = _fileCommand.FilePath;
 			else
@@ -142,7 +157,7 @@ namespace YAT.Gui.Controls
 				button_SendFile.Enabled = _terminalIsOpen;
 			else
 				button_SendFile.Enabled = false;
-		}
+        }
 
 		private bool ShowOpenFileDialog()
 		{
