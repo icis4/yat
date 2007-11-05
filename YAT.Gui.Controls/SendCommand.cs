@@ -34,6 +34,7 @@ namespace YAT.Gui.Controls
 		//------------------------------------------------------------------------------------------
 
 		private const bool _TerminalIsOpenDefault = false;
+        private const float _SplitterRatioDefault = (float)0.75;
 
 		//------------------------------------------------------------------------------------------
 		// Fields
@@ -45,6 +46,7 @@ namespace YAT.Gui.Controls
 		private Command _command = new Command();
 		private RecentItemCollection<Command> _recents;
 		private bool _terminalIsOpen = _TerminalIsOpenDefault;
+        private float _splitterRatio = _SplitterRatioDefault;
 
 		private TextEditState _commandEditState = TextEditState.Inactive;
 
@@ -115,7 +117,18 @@ namespace YAT.Gui.Controls
 			}
 		}
 
-		#endregion
+        [DefaultValue(_SplitterRatioDefault)]
+        public float SplitterRatio
+        {
+            get { return (_splitterRatio); }
+            set
+            {
+                _splitterRatio = value;
+                SetControls();
+            }
+        }
+
+        #endregion
 
 		#region Methods
 		//******************************************************************************************
@@ -284,7 +297,9 @@ namespace YAT.Gui.Controls
 		{
 			_isSettingControls = true;
 
-			if (_commandEditState == TextEditState.Inactive)
+            splitContainer.SplitterDistance = (int)(_splitterRatio * splitContainer.Width);
+
+            if (_commandEditState == TextEditState.Inactive)
 			{
 				if (_command.IsCommand)
                     comboBox_Command.Text = _command.SingleLineCommand;

@@ -38,27 +38,6 @@ namespace YAT.Gui.Controls
 			this.button_PageNext = new System.Windows.Forms.Button();
 			this.button_PagePrevious = new System.Windows.Forms.Button();
 			this.comboBox_Pages = new System.Windows.Forms.ComboBox();
-			this.contextMenuStrip_Predefined = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.toolStripMenuItem_PredefinedContextMenu_Command_1 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_PredefinedContextMenu_Command_2 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_PredefinedContextMenu_Command_3 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_PredefinedContextMenu_Command_4 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_PredefinedContextMenu_Command_5 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_PredefinedContextMenu_Command_6 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_PredefinedContextMenu_Command_7 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_PredefinedContextMenu_Command_8 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_PredefinedContextMenu_Command_9 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_PredefinedContextMenu_Command_10 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_PredefinedContextMenu_Command_11 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_PredefinedContextMenu_Command_12 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator_PredefinedContextMenu_1 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_PredefinedContextMenu_Page = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_PredefinedContextMenu_Page_Next = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator_PredefinedContextMenu_2 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_PredefinedContextMenu_Define = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator_PredefinedContextMenu_3 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_PredefinedContextMenu_Hide = new System.Windows.Forms.ToolStripMenuItem();
 			this.splitContainer_Commands.Panel1.SuspendLayout();
 			this.splitContainer_Commands.Panel2.SuspendLayout();
 			this.splitContainer_Commands.SuspendLayout();
@@ -66,7 +45,6 @@ namespace YAT.Gui.Controls
 			this.splitContainer_Lower.Panel2.SuspendLayout();
 			this.splitContainer_Lower.SuspendLayout();
 			this.panel_Commands.SuspendLayout();
-			this.contextMenuStrip_Predefined.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// splitContainer_Commands
@@ -191,209 +169,10 @@ namespace YAT.Gui.Controls
 			this.comboBox_Pages.TabIndex = 3;
 			this.comboBox_Pages.SelectedIndexChanged += new System.EventHandler(this.comboBox_Pages_SelectedIndexChanged);
 			// 
-			// contextMenuStrip_Predefined
-			// 
-			this.contextMenuStrip_Predefined.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem_PredefinedContextMenu_Command_1,
-            this.toolStripMenuItem_PredefinedContextMenu_Command_2,
-            this.toolStripMenuItem_PredefinedContextMenu_Command_3,
-            this.toolStripMenuItem_PredefinedContextMenu_Command_4,
-            this.toolStripMenuItem_PredefinedContextMenu_Command_5,
-            this.toolStripMenuItem_PredefinedContextMenu_Command_6,
-            this.toolStripMenuItem_PredefinedContextMenu_Command_7,
-            this.toolStripMenuItem_PredefinedContextMenu_Command_8,
-            this.toolStripMenuItem_PredefinedContextMenu_Command_9,
-            this.toolStripMenuItem_PredefinedContextMenu_Command_10,
-            this.toolStripMenuItem_PredefinedContextMenu_Command_11,
-            this.toolStripMenuItem_PredefinedContextMenu_Command_12,
-            this.toolStripSeparator_PredefinedContextMenu_1,
-            this.toolStripMenuItem_PredefinedContextMenu_Page,
-            this.toolStripSeparator_PredefinedContextMenu_2,
-            this.toolStripMenuItem_PredefinedContextMenu_Define,
-            this.toolStripSeparator_PredefinedContextMenu_3,
-            this.toolStripMenuItem_PredefinedContextMenu_Hide});
-			this.contextMenuStrip_Predefined.Name = "contextMenuStrip_PredefinedCommands";
-			this.contextMenuStrip_Predefined.Size = new System.Drawing.Size(225, 374);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Command_1
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Command_1.Enabled = false;
-			this.toolStripMenuItem_PredefinedContextMenu_Command_1.Name = "toolStripMenuItem_PredefinedContextMenu_Command_1";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F1)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_1.Size = new System.Drawing.Size(224, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Command_1.Tag = "1";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_1.Text = "&1: <Undefined>";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_1.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Command_2
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Command_2.Enabled = false;
-			this.toolStripMenuItem_PredefinedContextMenu_Command_2.Name = "toolStripMenuItem_PredefinedContextMenu_Command_2";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_2.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F2)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_2.Size = new System.Drawing.Size(224, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Command_2.Tag = "2";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_2.Text = "&2: <Undefined>";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_2.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Command_3
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Command_3.Enabled = false;
-			this.toolStripMenuItem_PredefinedContextMenu_Command_3.Name = "toolStripMenuItem_PredefinedContextMenu_Command_3";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_3.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F3)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_3.Size = new System.Drawing.Size(224, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Command_3.Tag = "3";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_3.Text = "&3: <Undefined>";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_3.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Command_4
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Command_4.Enabled = false;
-			this.toolStripMenuItem_PredefinedContextMenu_Command_4.Name = "toolStripMenuItem_PredefinedContextMenu_Command_4";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_4.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F4)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_4.Size = new System.Drawing.Size(224, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Command_4.Tag = "4";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_4.Text = "&4: <Undefined>";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_4.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Command_5
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Command_5.Enabled = false;
-			this.toolStripMenuItem_PredefinedContextMenu_Command_5.Name = "toolStripMenuItem_PredefinedContextMenu_Command_5";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_5.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F5)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_5.Size = new System.Drawing.Size(224, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Command_5.Tag = "5";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_5.Text = "&5: <Undefined>";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_5.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Command_6
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Command_6.Enabled = false;
-			this.toolStripMenuItem_PredefinedContextMenu_Command_6.Name = "toolStripMenuItem_PredefinedContextMenu_Command_6";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_6.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F6)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_6.Size = new System.Drawing.Size(224, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Command_6.Tag = "6";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_6.Text = "&6: <Undefined>";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_6.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Command_7
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Command_7.Enabled = false;
-			this.toolStripMenuItem_PredefinedContextMenu_Command_7.Name = "toolStripMenuItem_PredefinedContextMenu_Command_7";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_7.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F7)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_7.Size = new System.Drawing.Size(224, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Command_7.Tag = "7";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_7.Text = "&7: <Undefined>";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_7.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Command_8
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Command_8.Enabled = false;
-			this.toolStripMenuItem_PredefinedContextMenu_Command_8.Name = "toolStripMenuItem_PredefinedContextMenu_Command_8";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_8.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F8)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_8.Size = new System.Drawing.Size(224, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Command_8.Tag = "8";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_8.Text = "&8: <Undefined>";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_8.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Command_9
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Command_9.Enabled = false;
-			this.toolStripMenuItem_PredefinedContextMenu_Command_9.Name = "toolStripMenuItem_PredefinedContextMenu_Command_9";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_9.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F9)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_9.Size = new System.Drawing.Size(224, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Command_9.Tag = "9";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_9.Text = "&9: <Undefined>";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_9.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Command_10
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Command_10.Enabled = false;
-			this.toolStripMenuItem_PredefinedContextMenu_Command_10.Name = "toolStripMenuItem_PredefinedContextMenu_Command_10";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_10.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F10)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_10.Size = new System.Drawing.Size(224, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Command_10.Tag = "10";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_10.Text = "1&0: <Undefined>";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_10.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Command_11
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Command_11.Enabled = false;
-			this.toolStripMenuItem_PredefinedContextMenu_Command_11.Name = "toolStripMenuItem_PredefinedContextMenu_Command_11";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_11.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F11)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_11.Size = new System.Drawing.Size(224, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Command_11.Tag = "11";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_11.Text = "11: <Undefined>";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_11.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Command_12
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Command_12.Enabled = false;
-			this.toolStripMenuItem_PredefinedContextMenu_Command_12.Name = "toolStripMenuItem_PredefinedContextMenu_Command_12";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_12.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F12)));
-			this.toolStripMenuItem_PredefinedContextMenu_Command_12.Size = new System.Drawing.Size(224, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Command_12.Tag = "12";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_12.Text = "12: <Undefined>";
-			this.toolStripMenuItem_PredefinedContextMenu_Command_12.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Command_Click);
-			// 
-			// toolStripSeparator_PredefinedContextMenu_1
-			// 
-			this.toolStripSeparator_PredefinedContextMenu_1.Name = "toolStripSeparator_PredefinedContextMenu_1";
-			this.toolStripSeparator_PredefinedContextMenu_1.Size = new System.Drawing.Size(221, 6);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Page
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Page.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem_PredefinedContextMenu_Page_Next,
-            this.toolStripMenuItem_PredefinedContextMenu_Page_Previous});
-			this.toolStripMenuItem_PredefinedContextMenu_Page.Name = "toolStripMenuItem_PredefinedContextMenu_Page";
-			this.toolStripMenuItem_PredefinedContextMenu_Page.Size = new System.Drawing.Size(224, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Page.Text = "&Page";
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Page_Next
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.Name = "toolStripMenuItem_PredefinedContextMenu_Page_Next";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Right)));
-			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.Size = new System.Drawing.Size(177, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.Text = "&Next";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_Next.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Page_Next_Click);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Page_Previous
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.Name = "toolStripMenuItem_PredefinedContextMenu_Page_Previous";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Left)));
-			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.Size = new System.Drawing.Size(177, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.Text = "&Previous";
-			this.toolStripMenuItem_PredefinedContextMenu_Page_Previous.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Page_Previous_Click);
-			// 
-			// toolStripSeparator_PredefinedContextMenu_2
-			// 
-			this.toolStripSeparator_PredefinedContextMenu_2.Name = "toolStripSeparator_PredefinedContextMenu_2";
-			this.toolStripSeparator_PredefinedContextMenu_2.Size = new System.Drawing.Size(221, 6);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Define
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Define.Name = "toolStripMenuItem_PredefinedContextMenu_Define";
-			this.toolStripMenuItem_PredefinedContextMenu_Define.Size = new System.Drawing.Size(224, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Define.Text = "Define...";
-			this.toolStripMenuItem_PredefinedContextMenu_Define.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Define_Click);
-			// 
-			// toolStripSeparator_PredefinedContextMenu_3
-			// 
-			this.toolStripSeparator_PredefinedContextMenu_3.Name = "toolStripSeparator_PredefinedContextMenu_3";
-			this.toolStripSeparator_PredefinedContextMenu_3.Size = new System.Drawing.Size(221, 6);
-			// 
-			// toolStripMenuItem_PredefinedContextMenu_Hide
-			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Hide.Name = "toolStripMenuItem_PredefinedContextMenu_Hide";
-			this.toolStripMenuItem_PredefinedContextMenu_Hide.Size = new System.Drawing.Size(224, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Hide.Text = "Hide";
-			this.toolStripMenuItem_PredefinedContextMenu_Hide.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Hide_Click);
-			// 
 			// PredefinedCommands
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ContextMenuStrip = this.contextMenuStrip_Predefined;
 			this.Controls.Add(this.splitContainer_Commands);
 			this.Name = "PredefinedCommands";
 			this.Size = new System.Drawing.Size(144, 335);
@@ -404,7 +183,6 @@ namespace YAT.Gui.Controls
 			this.splitContainer_Lower.Panel2.ResumeLayout(false);
 			this.splitContainer_Lower.ResumeLayout(false);
 			this.panel_Commands.ResumeLayout(false);
-			this.contextMenuStrip_Predefined.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -420,26 +198,5 @@ namespace YAT.Gui.Controls
 		private System.Windows.Forms.Label label_Page;
 		private System.Windows.Forms.Panel panel_Commands;
 		private PredefinedCommandPageButtons pageButtons;
-		private System.Windows.Forms.ContextMenuStrip contextMenuStrip_Predefined;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Command_1;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Command_2;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Command_3;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Command_4;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Command_5;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Command_6;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Command_7;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Command_8;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Command_9;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Command_10;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Command_11;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Command_12;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_PredefinedContextMenu_1;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Page;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Page_Next;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Page_Previous;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_PredefinedContextMenu_2;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Define;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_PredefinedContextMenu_3;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Hide;
 	}
 }

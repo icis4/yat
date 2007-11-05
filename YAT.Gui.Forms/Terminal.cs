@@ -47,6 +47,9 @@ namespace YAT.Gui.Forms
 		// terminal
 		private Domain.Terminal _terminal;
 
+        // preset
+        private List<ToolStripMenuItem> _menuItems_preset;
+
 		// predefined
 		private List<ToolStripMenuItem> _menuItems_predefined;
 
@@ -92,6 +95,7 @@ namespace YAT.Gui.Forms
 		{
 			FixContextMenus();
 
+            InitializePresetMenuItems();
 			InitializePredefinedMenuItems();
 			InitializeMonitorMenuItems();
 			InitializeIOControlStatusLabels();
@@ -345,7 +349,7 @@ namespace YAT.Gui.Forms
 			ShowTerminalSettings();
 		}
 
-		#endregion
+        #endregion
 
 		#region Controls Event Handlers > Terminal Menu > Send
 		//------------------------------------------------------------------------------------------
@@ -518,8 +522,25 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region Controls Event Handlers > Monitor Context Menu
-		//------------------------------------------------------------------------------------------
+        #region Controls Event Handlers > Preset Context Menu
+        //------------------------------------------------------------------------------------------
+        // Controls Event Handlers > Preset Context Menu
+        //------------------------------------------------------------------------------------------
+
+        private void contextMenuStrip_Preset_Opening(object sender, CancelEventArgs e)
+        {
+            SetPresetMenuItems();
+        }
+
+        private void toolStripMenuItem_PresetContextMenu_Preset_Click(object sender, EventArgs e)
+        {
+            RequestPreset(int.Parse((string)(((ToolStripMenuItem)sender).Tag)));
+        }
+
+        #endregion
+
+        #region Controls Event Handlers > Monitor Context Menu
+        //------------------------------------------------------------------------------------------
 		// Controls Event Handlers > Monitor Context Menu
 		//------------------------------------------------------------------------------------------
 
@@ -696,7 +717,80 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region Controls Event Handlers > Panel Layout
+        #region Controls Event Handlers > Predefined Context Menu
+        //------------------------------------------------------------------------------------------
+        // Controls Event Handlers > Predefined Context Menu
+        //------------------------------------------------------------------------------------------
+
+        private void contextMenuStrip_Predefined_Opening(object sender, CancelEventArgs e)
+        {
+            SetPredefinedMenuItems();
+        }
+
+        private void toolStripMenuItem_PredefinedContextMenu_Command_Click(object sender, EventArgs e)
+        {
+            RequestPredefined(predefined.SelectedPage, int.Parse((string)(((ToolStripMenuItem)sender).Tag)));
+        }
+
+        private void toolStripMenuItem_PredefinedContextMenu_Page_Next_Click(object sender, EventArgs e)
+        {
+            predefined.NextPage();
+        }
+
+        private void toolStripMenuItem_PredefinedContextMenu_Page_Previous_Click(object sender, EventArgs e)
+        {
+            predefined.PreviousPage();
+        }
+
+        private void toolStripMenuItem_PredefinedContextMenu_Define_Click(object sender, EventArgs e)
+        {
+            ShowPredefinedCommandSettings(1, 1);
+        }
+
+        private void toolStripMenuItem_PredefinedContextMenu_Hide_Click(object sender, EventArgs e)
+        {
+            _terminalSettingsRoot.Layout.PredefinedPanelIsVisible = false;
+        }
+
+        #endregion
+
+        #region Controls Event Handlers > Send Context Menu
+        //------------------------------------------------------------------------------------------
+        // Controls Event Handlers > Send Context Menu
+        //------------------------------------------------------------------------------------------
+
+        private void contextMenuStrip_Send_Opening(object sender, CancelEventArgs e)
+        {
+            toolStripMenuItem_SendContextMenu_SendCommand.Enabled = _terminalSettingsRoot.SendCommand.Command.IsValidCommand;
+            toolStripMenuItem_SendContextMenu_SendFile.Enabled = _terminalSettingsRoot.SendCommand.Command.IsValidFilePath;
+
+            toolStripMenuItem_SendContextMenu_Panels_SendCommand.Checked = _terminalSettingsRoot.Layout.SendCommandPanelIsVisible;
+            toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = _terminalSettingsRoot.Layout.SendFilePanelIsVisible;
+        }
+
+        private void toolStripMenuItem_SendContextMenu_SendCommand_Click(object sender, EventArgs e)
+        {
+            SendCommand();
+        }
+
+        private void toolStripMenuItem_SendContextMenu_SendFile_Click(object sender, EventArgs e)
+        {
+            SendFile();
+        }
+
+        private void toolStripMenuItem_SendContextMenu_Panels_SendCommand_Click(object sender, EventArgs e)
+        {
+            _terminalSettingsRoot.Layout.SendCommandPanelIsVisible = !_terminalSettingsRoot.Layout.SendCommandPanelIsVisible;
+        }
+
+        private void toolStripMenuItem_SendContextMenu_Panels_SendFile_Click(object sender, EventArgs e)
+        {
+            _terminalSettingsRoot.Layout.SendFilePanelIsVisible = !_terminalSettingsRoot.Layout.SendFilePanelIsVisible;
+        }
+
+        #endregion
+
+        #region Controls Event Handlers > Panel Layout
 		//------------------------------------------------------------------------------------------
 		// Controls Event Handlers > Panel Layout
 		//------------------------------------------------------------------------------------------
@@ -929,14 +1023,14 @@ namespace YAT.Gui.Forms
 				// SendCommandSettings changed
 				_isSettingControls = true;
 				send.Command = _terminalSettingsRoot.SendCommand.Command;
-				sendCommand.RecentCommands = _terminalSettingsRoot.SendCommand.RecentCommands;
+				send.RecentCommands = _terminalSettingsRoot.SendCommand.RecentCommands;
 				_isSettingControls = false;
 			}
 			else if (ReferenceEquals(e.Inner.Source, _terminalSettingsRoot.SendFile))
 			{
 				// SendFileSettings changed
 				_isSettingControls = true;
-				sendFile.Command = _terminalSettingsRoot.SendFile.Command;
+                send.FileCommand = _terminalSettingsRoot.SendFile.Command;
 				_isSettingControls = false;
 			}
 			else if (ReferenceEquals(e.Inner.Source, _terminalSettingsRoot.Predefined))
@@ -1223,7 +1317,7 @@ namespace YAT.Gui.Forms
 			}
 
 			// splitContainer_TxMonitor and splitContainer_RxMonitor
-			// one of the panels MUST be visible, if none is visible, then bidir si shown anyway
+			// one of the panels MUST be visible, if none is visible, then bidir is shown anyway
 			bool txIsVisible = _terminalSettingsRoot.Layout.TxMonitorPanelIsVisible;
 			bool bidirIsVisible = _terminalSettingsRoot.Layout.BidirMonitorPanelIsVisible || (!_terminalSettingsRoot.Layout.TxMonitorPanelIsVisible && !_terminalSettingsRoot.Layout.RxMonitorPanelIsVisible);
 			bool rxIsVisible = _terminalSettingsRoot.Layout.RxMonitorPanelIsVisible;
@@ -1294,8 +1388,9 @@ namespace YAT.Gui.Forms
 				splitContainer_Terminal.SplitterDistance = 442;
 			}
 
-			splitContainer_Send.Panel1Collapsed = !_terminalSettingsRoot.Layout.SendCommandPanelIsVisible;
-			splitContainer_Send.Panel2Collapsed = !_terminalSettingsRoot.Layout.SendFilePanelIsVisible;
+            send.CommandPanelIsVisible = _terminalSettingsRoot.Layout.SendCommandPanelIsVisible;
+            send.FilePanelIsVisible = _terminalSettingsRoot.Layout.SendFilePanelIsVisible;
+            send.SplitterRatio = _terminalSettingsRoot.Layout.PredefinedSplitterRatio;
 
 			ResumeLayout();
 			_isSettingControls = false;
@@ -1484,8 +1579,7 @@ namespace YAT.Gui.Forms
 			SetIOControlControls();
 
 			// send panel
-			sendCommand.TerminalIsOpen = isOpen;
-			sendFile.TerminalIsOpen = isOpen;
+			send.TerminalIsOpen = isOpen;
 
 			// predefined panel
 			predefined.TerminalIsOpen = isOpen;
@@ -2153,255 +2247,110 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region Send
+		#region Preset
 		//******************************************************************************************
-		// Send
-		//******************************************************************************************
-
-		#region Send > Command
-		//------------------------------------------------------------------------------------------
-		// Send > Command
-		//------------------------------------------------------------------------------------------
-
-		private void SelectSendCommandInput()
-		{
-			send.SelectSendCommandInput();
-		}
-
-		private void SendCommand()
-		{
-			SendCommand(_terminalSettingsRoot.SendCommand.Command);
-			_terminalSettingsRoot.SendCommand.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
-				(
-				new RecentItem<Command>(new Command(_terminalSettingsRoot.SendCommand.Command))
-				);
-		}
-
-		private void SendCommand(Command command)
-		{
-			if (command.IsValidCommand)
-			{
-				if (command.IsSingleLineCommand)
-				{
-					if (SendCommandSettings.IsEasterEggCommand(command.SingleLineCommand))
-						SendLine(SendCommandSettings.EasterEggCommandText);
-					else
-						SendLine(command.SingleLineCommand);
-				}
-				else
-				{
-					foreach (string line in command.MultiLineCommand)
-						SendLine(line);
-				}
-			}
-			else
-			{
-				SendLine("");
-			}
-		}
-
-		#endregion
-
-		#region Send > File
-		//------------------------------------------------------------------------------------------
-		// Send > File
-		//------------------------------------------------------------------------------------------
-
-		private void SendFile()
-		{
-			SendFile(_terminalSettingsRoot.SendFile.Command);
-		}
-
-		private void SendFile(Command command)
-		{
-			if (!command.IsValidFilePath)
-				return;
-
-			string filePath = command.FilePath;
-
-			try
-			{
-				if (_terminal is Domain.TextTerminal)
-				{
-					string[] lines;
-					if (ExtensionSettings.IsXmlFile(System.IO.Path.GetExtension(filePath)))
-					{
-						// xml
-						lines = XmlReader.LinesFromXmlFile(filePath);
-					}
-					else if (ExtensionSettings.IsRtfFile(System.IO.Path.GetExtension(filePath)))
-					{
-						// rtf
-						lines = RtfReader.LinesFromRtfFile(filePath);
-					}
-					else
-					{
-						// text
-						using (StreamReader sr = new StreamReader(filePath))
-						{
-							string s;
-							List<string> l = new List<string>();
-							while ((s = sr.ReadLine()) != null)
-							{
-								l.Add(s);
-							}
-							sr.Close();                   // close file before sending
-							lines = l.ToArray();
-						}
-					}
-
-					foreach (string line in lines)
-					{
-						SendLine(line);
-					}
-				}
-				else
-				{
-					using (FileStream fs = File.OpenRead(filePath))
-					{
-						byte[] a = new byte[(int)fs.Length];
-						fs.Read(a, 0, (int)fs.Length);
-						fs.Close();                   // close file before sending
-						Send(a);
-					}
-				}
-			}
-			catch (Exception e)
-			{
-				MessageBox.Show
-					(
-					this,
-					"Error while accessing file" + Environment.NewLine +
-					filePath + Environment.NewLine + Environment.NewLine +
-					e.Message,
-					"File Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-					);
-			}
-		}
-
-		#endregion
-
-		#endregion
-
-		#region Predefined
-		//******************************************************************************************
-		// Predefined
+		// Preset
 		//******************************************************************************************
 
-		private void InitializePredefinedMenuItems()
+		private void InitializePresetMenuItems()
 		{
-			_menuItems_predefined = new List<ToolStripMenuItem>(Settings.PredefinedCommandSettings.MaximumCommandsPerPage);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_1);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_2);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_3);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_4);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_5);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_6);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_7);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_8);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_9);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_10);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_11);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_12);
+			_menuItems_preset = new List<ToolStripMenuItem>();
+			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_1);
+			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_2);
+			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_3);
+			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_4);
+			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_5);
+			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_6);
 		}
 
-		private void SetPredefinedMenuItems()
+		private void SetPresetMenuItems()
 		{
-			// pages
-			List<PredefinedCommandPage> pages = _terminalSettingsRoot.PredefinedCommand.Pages;
+			bool isSerialPort = (_terminalSettingsRoot.IOType == Domain.IOType.SerialPort);
 
-			if ((pages != null) && (pages.Count > 0))
-			{
-				toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled = (predefined.SelectedPage > pages.Count);
-				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled = (predefined.SelectedPage < pages.Count);
-			}
-			else
-			{
-				toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled = false;
-				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled = false;
-			}
-
-			// commands
-			List<Command> commands = null;
-			if ((pages != null) && (pages.Count > 0))
-				commands = _terminalSettingsRoot.PredefinedCommand.Pages[predefined.SelectedPage - 1].Commands;
-
-			int commandCount = 0;
-			if (commands != null)
-				commandCount = commands.Count;
-
-			for (int i = 0; i < commandCount; i++)
-			{
-				bool isDefined = ((commands[i] != null) && !commands[i].IsEmpty);
-				bool isValid = (isDefined && _terminal.IsOpen && commands[i].IsValid);
-
-				if (isDefined)
-				{
-					_menuItems_predefined[i].Text = commands[i].Description;
-					_menuItems_predefined[i].Enabled = isValid;
-				}
-				else
-				{
-					_menuItems_predefined[i].Text = Command.UndefinedCommandText;
-					_menuItems_predefined[i].Enabled = true;
-				}
-			}
-			for (int i = commandCount; i < Settings.PredefinedCommandSettings.MaximumCommandsPerPage; i++)
-			{
-				_menuItems_predefined[i].Text = Command.UndefinedCommandText;
-				_menuItems_predefined[i].Enabled = true;
-			}
+			foreach (ToolStripMenuItem item in _menuItems_preset)
+				item.Enabled = isSerialPort;
 		}
 
-		private void RequestPredefined(int page, int command)
+		/// <summary>
+		/// Set requested preset. Currently, presets are fixed to those listed below.
+		/// For future versions, presets could be defined and managed similay to predefined
+		/// commands.
+		/// </summary>
+		private void RequestPreset(int preset)
 		{
-			List<PredefinedCommandPage> pages = _terminalSettingsRoot.PredefinedCommand.Pages;
-			if (page <= pages.Count)
+			string presetString = "";
+			switch (preset)
 			{
-				bool isDefined = false;
-				if (page > 0)
-				{
-					List<Command> commands = _terminalSettingsRoot.PredefinedCommand.Pages[page - 1].Commands;
-					isDefined =
-						(
-						(commands != null) &&
-						(commands.Count >= command) &&
-						(commands[command - 1] != null) &&
-						(!commands[command - 1].IsEmpty)
-						);
-				}
-                if (isDefined)
-				{
-					SendPredefined(page, command);
-					return;
-				}
+				case 1:	presetString =  "2400, 7, Even, 1, None";     break;
+				case 2:	presetString =  "2400, 7, Even, 1, XOn/XOff"; break;
+				case 3:	presetString =  "9600, 8, None, 1, None";     break;
+				case 4:	presetString =  "9600, 8, None, 1, XOn/XOff"; break;
+				case 5:	presetString = "19200, 8, None, 1, None";     break;
+				case 6:	presetString = "19200, 8, None, 1, XOn/XOff"; break;
 			}
 
-			// if command is not defined, show settings dialog
-			ShowPredefinedCommandSettings(page, command);
-		}
-
-		private void SendPredefined(int page, int command)
-		{
-			Command c = _terminalSettingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
-
-			if (c.IsCommand)
-				SendCommand(c);
-			else if (c.IsFilePath)
-				SendFile(c);
-		}
-
-		private void ShowPredefinedCommandSettings(int page, int command)
-		{
-			PredefinedCommandSettings f = new PredefinedCommandSettings(_terminalSettingsRoot.PredefinedCommand, page, command);
-			if (f.ShowDialog(this) == DialogResult.OK)
+			Domain.Settings.SerialPort.SerialCommunicationSettings settings = _terminalSettingsRoot.Terminal.IO.SerialPort.Communication;
+			settings.SuspendChangeEvent();
+			switch (preset)
 			{
-				Refresh();
-				_terminalSettingsRoot.PredefinedCommand = f.SettingsResult;
-				_terminalSettingsRoot.Predefined.SelectedPage = f.SelectedPage;
+				case 1: // "2400, 7, Even, 1, None"
+				{
+					settings.BaudRate  = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud002400;
+					settings.DataBits  = MKY.IO.Ports.DataBits.Seven;
+					settings.Parity    = System.IO.Ports.Parity.Even;
+					settings.StopBits  = System.IO.Ports.StopBits.One;
+					settings.Handshake = Domain.IO.Handshake.None;
+					break;
+				}
+				case 2: // "2400, 7, Even, 1, XOn/XOff"
+				{
+					settings.BaudRate  = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud002400;
+					settings.DataBits  = MKY.IO.Ports.DataBits.Seven;
+					settings.Parity    = System.IO.Ports.Parity.Even;
+					settings.StopBits  = System.IO.Ports.StopBits.One;
+					settings.Handshake = Domain.IO.Handshake.XOnXOff;
+					break;
+				}
+				case 3: // "9600, 8, None, 1, None"
+				{
+					settings.BaudRate  = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud009600;
+					settings.DataBits  = MKY.IO.Ports.DataBits.Eight;
+					settings.Parity    = System.IO.Ports.Parity.None;
+					settings.StopBits  = System.IO.Ports.StopBits.One;
+					settings.Handshake = Domain.IO.Handshake.None;
+					break;
+				}
+				case 4: // "9600, 8, None, 1, XOn/XOff"
+				{
+					settings.BaudRate  = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud009600;
+					settings.DataBits  = MKY.IO.Ports.DataBits.Eight;
+					settings.Parity    = System.IO.Ports.Parity.None;
+					settings.StopBits  = System.IO.Ports.StopBits.One;
+					settings.Handshake = Domain.IO.Handshake.XOnXOff;
+					break;
+				}
+				case 5: // "19200, 8, None, 1, None"
+				{
+					settings.BaudRate  = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud019200;
+					settings.DataBits  = MKY.IO.Ports.DataBits.Eight;
+					settings.Parity    = System.IO.Ports.Parity.None;
+					settings.StopBits  = System.IO.Ports.StopBits.One;
+					settings.Handshake = Domain.IO.Handshake.None;
+					break;
+				}
+				case 6: // "19200, 8, None, 1, XOn/XOff"
+				{
+					settings.BaudRate  = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud019200;
+					settings.DataBits  = MKY.IO.Ports.DataBits.Eight;
+					settings.Parity    = System.IO.Ports.Parity.None;
+					settings.StopBits  = System.IO.Ports.StopBits.One;
+					settings.Handshake = Domain.IO.Handshake.XOnXOff;
+					break;
+				}
 			}
+			settings.ResumeChangeEvent(true);
+
+			SetTimedStatusText("Terminal settings set to " + presetString + ".");
 		}
 
 		#endregion
@@ -2641,6 +2590,259 @@ namespace YAT.Gui.Forms
 					);
 
 				SetTimedStatusText("Monitor not printed!");
+			}
+		}
+
+		#endregion
+
+		#endregion
+
+		#region Predefined
+		//******************************************************************************************
+		// Predefined
+		//******************************************************************************************
+
+		private void InitializePredefinedMenuItems()
+		{
+			_menuItems_predefined = new List<ToolStripMenuItem>(Settings.PredefinedCommandSettings.MaximumCommandsPerPage);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_1);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_2);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_3);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_4);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_5);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_6);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_7);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_8);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_9);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_10);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_11);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_12);
+		}
+
+		private void SetPredefinedMenuItems()
+		{
+			// pages
+			List<PredefinedCommandPage> pages = _terminalSettingsRoot.PredefinedCommand.Pages;
+
+			if ((pages != null) && (pages.Count > 0))
+			{
+				toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled = (predefined.SelectedPage > pages.Count);
+				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled = (predefined.SelectedPage < pages.Count);
+			}
+			else
+			{
+				toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled = false;
+				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled = false;
+			}
+
+			// commands
+			List<Command> commands = null;
+			if ((pages != null) && (pages.Count > 0))
+				commands = _terminalSettingsRoot.PredefinedCommand.Pages[predefined.SelectedPage - 1].Commands;
+
+			int commandCount = 0;
+			if (commands != null)
+				commandCount = commands.Count;
+
+			for (int i = 0; i < commandCount; i++)
+			{
+				bool isDefined = ((commands[i] != null) && !commands[i].IsEmpty);
+				bool isValid = (isDefined && _terminal.IsOpen && commands[i].IsValid);
+
+				if (isDefined)
+				{
+					_menuItems_predefined[i].Text = commands[i].Description;
+					_menuItems_predefined[i].Enabled = isValid;
+				}
+				else
+				{
+					_menuItems_predefined[i].Text = Command.UndefinedCommandText;
+					_menuItems_predefined[i].Enabled = true;
+				}
+			}
+			for (int i = commandCount; i < Settings.PredefinedCommandSettings.MaximumCommandsPerPage; i++)
+			{
+				_menuItems_predefined[i].Text = Command.UndefinedCommandText;
+				_menuItems_predefined[i].Enabled = true;
+			}
+		}
+
+		private void RequestPredefined(int page, int command)
+		{
+			List<PredefinedCommandPage> pages = _terminalSettingsRoot.PredefinedCommand.Pages;
+			if (page <= pages.Count)
+			{
+				bool isDefined = false;
+				if (page > 0)
+				{
+					List<Command> commands = _terminalSettingsRoot.PredefinedCommand.Pages[page - 1].Commands;
+					isDefined =
+						(
+						(commands != null) &&
+						(commands.Count >= command) &&
+						(commands[command - 1] != null) &&
+						(!commands[command - 1].IsEmpty)
+						);
+				}
+                if (isDefined)
+				{
+					SendPredefined(page, command);
+					return;
+				}
+			}
+
+			// if command is not defined, show settings dialog
+			ShowPredefinedCommandSettings(page, command);
+		}
+
+		private void SendPredefined(int page, int command)
+		{
+			Command c = _terminalSettingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
+
+			if (c.IsCommand)
+				SendCommand(c);
+			else if (c.IsFilePath)
+				SendFile(c);
+		}
+
+		private void ShowPredefinedCommandSettings(int page, int command)
+		{
+			PredefinedCommandSettings f = new PredefinedCommandSettings(_terminalSettingsRoot.PredefinedCommand, page, command);
+			if (f.ShowDialog(this) == DialogResult.OK)
+			{
+				Refresh();
+				_terminalSettingsRoot.PredefinedCommand = f.SettingsResult;
+				_terminalSettingsRoot.Predefined.SelectedPage = f.SelectedPage;
+			}
+		}
+
+		#endregion
+
+		#region Send
+		//******************************************************************************************
+		// Send
+		//******************************************************************************************
+
+		#region Send > Command
+		//------------------------------------------------------------------------------------------
+		// Send > Command
+		//------------------------------------------------------------------------------------------
+
+		private void SelectSendCommandInput()
+		{
+			send.SelectSendCommandInput();
+		}
+
+		private void SendCommand()
+		{
+			SendCommand(_terminalSettingsRoot.SendCommand.Command);
+			_terminalSettingsRoot.SendCommand.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
+				(
+				new RecentItem<Command>(new Command(_terminalSettingsRoot.SendCommand.Command))
+				);
+		}
+
+		private void SendCommand(Command command)
+		{
+			if (command.IsValidCommand)
+			{
+				if (command.IsSingleLineCommand)
+				{
+					if (SendCommandSettings.IsEasterEggCommand(command.SingleLineCommand))
+						SendLine(SendCommandSettings.EasterEggCommandText);
+					else
+						SendLine(command.SingleLineCommand);
+				}
+				else
+				{
+					foreach (string line in command.MultiLineCommand)
+						SendLine(line);
+				}
+			}
+			else
+			{
+				SendLine("");
+			}
+		}
+
+		#endregion
+
+		#region Send > File
+		//------------------------------------------------------------------------------------------
+		// Send > File
+		//------------------------------------------------------------------------------------------
+
+		private void SendFile()
+		{
+			SendFile(_terminalSettingsRoot.SendFile.Command);
+		}
+
+		private void SendFile(Command command)
+		{
+			if (!command.IsValidFilePath)
+				return;
+
+			string filePath = command.FilePath;
+
+			try
+			{
+				if (_terminal is Domain.TextTerminal)
+				{
+					string[] lines;
+					if (ExtensionSettings.IsXmlFile(System.IO.Path.GetExtension(filePath)))
+					{
+						// xml
+						lines = XmlReader.LinesFromXmlFile(filePath);
+					}
+					else if (ExtensionSettings.IsRtfFile(System.IO.Path.GetExtension(filePath)))
+					{
+						// rtf
+						lines = RtfReader.LinesFromRtfFile(filePath);
+					}
+					else
+					{
+						// text
+						using (StreamReader sr = new StreamReader(filePath))
+						{
+							string s;
+							List<string> l = new List<string>();
+							while ((s = sr.ReadLine()) != null)
+							{
+								l.Add(s);
+							}
+							sr.Close();                   // close file before sending
+							lines = l.ToArray();
+						}
+					}
+
+					foreach (string line in lines)
+					{
+						SendLine(line);
+					}
+				}
+				else
+				{
+					using (FileStream fs = File.OpenRead(filePath))
+					{
+						byte[] a = new byte[(int)fs.Length];
+						fs.Read(a, 0, (int)fs.Length);
+						fs.Close();                   // close file before sending
+						Send(a);
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				MessageBox.Show
+					(
+					this,
+					"Error while accessing file" + Environment.NewLine +
+					filePath + Environment.NewLine + Environment.NewLine +
+					e.Message,
+					"File Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+					);
 			}
 		}
 
