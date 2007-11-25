@@ -166,7 +166,7 @@ namespace YAT.Gui.Forms
 		{
 			if (ApplicationSettings.LocalUser.General.AutoSaveWorkspace)
 			{
-				SaveWorkspaceFile(true);
+				SaveWorkspace(true);
 			}
 			else
 			{
@@ -183,7 +183,7 @@ namespace YAT.Gui.Forms
 
 					switch (dr)
 					{
-						case DialogResult.Yes: SaveWorkspaceFile(); break;
+						case DialogResult.Yes: SaveWorkspace(); break;
 						case DialogResult.No:                       break;
 						default:               e.Cancel = true;     return;
 					}
@@ -237,7 +237,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_MainMenu_File_Open_Click(object sender, EventArgs e)
 		{
-			ShowOpenTerminalDialog();
+			ShowOpenTerminalFromFileDialog();
 		}
 
 		private void toolStripMenuItem_MainMenu_File_CloseAll_Click(object sender, EventArgs e)
@@ -247,17 +247,17 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_MainMenu_File_OpenWorkspace_Click(object sender, EventArgs e)
 		{
-			ShowOpenWorkspaceFileDialog();
+			ShowOpenWorkspaceFromFileDialog();
 		}
 
 		private void toolStripMenuItem_MainMenu_File_SaveWorkspace_Click(object sender, EventArgs e)
 		{
-			SaveWorkspaceFile();
+			SaveWorkspace();
 		}
 
 		private void toolStripMenuItem_MainMenu_File_SaveWorkspaceAs_Click(object sender, EventArgs e)
 		{
-			ShowSaveWorkspaceFileAsDialog();
+			ShowSaveWorkspaceAsFileDialog();
 		}
 
 		private void toolStripMenuItem_MainMenu_File_SaveAll_Click(object sender, EventArgs e)
@@ -357,7 +357,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripButton_MainTool_File_Open_Click(object sender, EventArgs e)
 		{
-			ShowOpenTerminalDialog();
+			ShowOpenTerminalFromFileDialog();
 		}
 
 		private void toolStripButton_MainTool_File_Save_Click(object sender, EventArgs e)
@@ -408,12 +408,12 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_MainContextMenu_File_Open_Click(object sender, EventArgs e)
 		{
-			ShowOpenTerminalDialog();
+			ShowOpenTerminalFromFileDialog();
 		}
 
 		private void toolStripMenuItem_MainContextMenu_File_OpenWorkspace_Click(object sender, EventArgs e)
 		{
-			ShowOpenWorkspaceFileDialog();
+			ShowOpenWorkspaceFromFileDialog();
 		}
 
 		private void toolStripMenuItem_MainContextMenu_File_Exit_Click(object sender, EventArgs e)
@@ -506,7 +506,7 @@ namespace YAT.Gui.Forms
 				return;
 
 			if (ApplicationSettings.LocalUser.General.AutoSaveWorkspace)
-				DoSaveWorkspaceFile(true);
+				SaveWorkspaceToFile(true);
 		}
 
 		private void SuspendHandlingWorkspaceSettings()
@@ -660,6 +660,12 @@ namespace YAT.Gui.Forms
 			ApplicationSettings.SaveLocalUser();
 		}
 
+		/// <summary>
+		/// Opens YAT and opens the workspace or terminal file given. This method can directly
+		/// be called from the main providing the command line arguments.
+		/// </summary>
+		/// <param name="filePath">Workspace or terminal file</param>
+		/// <returns>true if successfully opened the workspace or terminal</returns>
 		private bool OpenFromFile(string filePath)
 		{
 			string fileName = Path.GetFileName(filePath);
@@ -693,10 +699,13 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		/// <summary>
+		/// Saves all terminal files and the workspace.
+		/// </summary>
 		private void SaveAll()
 		{
 			SaveAllTerminals();
-			SaveWorkspaceFile();
+			SaveWorkspace();
 		}
 
 		#endregion
@@ -706,7 +715,7 @@ namespace YAT.Gui.Forms
 		// MDI Workspace
 		//******************************************************************************************
 
-		private void ShowOpenWorkspaceFileDialog()
+		private void ShowOpenWorkspaceFromFileDialog()
 		{
 			SetFixedStatusText("Opening workspace...");
 			OpenFileDialog ofd = new OpenFileDialog();
@@ -819,27 +828,27 @@ namespace YAT.Gui.Forms
 			return (true);
 		}
 
-		private void SaveWorkspaceFile()
+		private void SaveWorkspace()
 		{
-			SaveWorkspaceFile(false);
+			SaveWorkspace(false);
 		}
 
-		private void SaveWorkspaceFile(bool autoSave)
+		private void SaveWorkspace(bool autoSave)
 		{
 			if (autoSave)
 			{
-				DoSaveWorkspaceFile(true);
+				SaveWorkspaceToFile(true);
 			}
 			else
 			{
 				if (_workspaceSettingsHandler.SettingsFilePathIsValid && !_workspaceSettingsHandler.Settings.AutoSaved)
-					DoSaveWorkspaceFile(false);
+					SaveWorkspaceToFile(false);
 				else
-					ShowSaveWorkspaceFileAsDialog();
+					ShowSaveWorkspaceAsFileDialog();
 			}
 		}
 
-		private void ShowSaveWorkspaceFileAsDialog()
+		private void ShowSaveWorkspaceAsFileDialog()
 		{
 			SetFixedStatusText("Saving workspace as...");
 			SaveFileDialog sfd = new SaveFileDialog();
@@ -860,7 +869,7 @@ namespace YAT.Gui.Forms
 					autoSaveFilePathToDelete = _workspaceSettingsHandler.SettingsFilePath;
 
 				_workspaceSettingsHandler.SettingsFilePath = sfd.FileName;
-				DoSaveWorkspaceFile(false, autoSaveFilePathToDelete);
+				SaveWorkspaceToFile(false, autoSaveFilePathToDelete);
 			}
 			else
 			{
@@ -868,12 +877,12 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void DoSaveWorkspaceFile(bool autoSave)
+		private void SaveWorkspaceToFile(bool autoSave)
 		{
-			DoSaveWorkspaceFile(autoSave, "");
+			SaveWorkspaceToFile(autoSave, "");
 		}
 
-		private void DoSaveWorkspaceFile(bool autoSave, string autoSaveFilePathToDelete)
+		private void SaveWorkspaceToFile(bool autoSave, string autoSaveFilePathToDelete)
 		{
 			if (!autoSave)
 				SetFixedStatusText("Saving workspace...");
@@ -1041,7 +1050,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void ShowOpenTerminalDialog()
+		private void ShowOpenTerminalFromFileDialog()
 		{
 			SetFixedStatusText("Opening terminal...");
 			OpenFileDialog ofd = new OpenFileDialog();
