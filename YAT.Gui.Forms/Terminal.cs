@@ -172,7 +172,7 @@ namespace YAT.Gui.Forms
 
 		public void RequestSaveFile()
 		{
-			SaveTerminalFile();
+			SaveTerminal();
 		}
 
 		public void RequestAutoSaveFile()
@@ -180,7 +180,7 @@ namespace YAT.Gui.Forms
 			// only perform auto save if no file yet or on previously auto saved files
 			if (!_terminalSettingsHandler.SettingsFileExists ||
 				(_terminalSettingsHandler.SettingsFileExists && _terminalSettingsRoot.AutoSaved))
-				SaveTerminalFile(true);
+				SaveTerminal(true);
 		}
 
 		public void RequestCloseFile()
@@ -250,7 +250,7 @@ namespace YAT.Gui.Forms
 		{
 			if (_terminalSettingsRoot.HaveChanged && _terminalSettingsRoot.AutoSaved)
 			{
-				SaveTerminalFile(true);
+				SaveTerminal(true);
 			}
 			else if (_terminalSettingsRoot.ExplicitHaveChanged)
 			{
@@ -265,7 +265,7 @@ namespace YAT.Gui.Forms
 
 				switch (dr)
 				{
-					case DialogResult.Yes: SaveTerminalFile(); break;
+					case DialogResult.Yes: SaveTerminal(); break;
 					case DialogResult.No:                      break;
 					default:               e.Cancel = true;    return;
 				}
@@ -302,12 +302,12 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_File_Save_Click(object sender, EventArgs e)
 		{
-			SaveTerminalFile();
+			SaveTerminal();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_File_SaveAs_Click(object sender, EventArgs e)
 		{
-			ShowSaveTerminalFileAsDialog();
+			ShowSaveTerminalAsFileDialog();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_File_Close_Click(object sender, EventArgs e)
@@ -1128,27 +1128,27 @@ namespace YAT.Gui.Forms
 		// File
 		//******************************************************************************************
 
-		private void SaveTerminalFile()
+		private void SaveTerminal()
 		{
-			SaveTerminalFile(false);
+			SaveTerminal(false);
 		}
 
-		private void SaveTerminalFile(bool autoSave)
+		private void SaveTerminal(bool autoSave)
 		{
 			if (autoSave)
 			{
-				DoSaveTerminalFile(true);
+				SaveTerminalToFile(true);
 			}
 			else
 			{
 				if (_terminalSettingsHandler.SettingsFilePathIsValid && !_terminalSettingsHandler.Settings.AutoSaved)
-					DoSaveTerminalFile(false);
+					SaveTerminalToFile(false);
 				else
-					ShowSaveTerminalFileAsDialog();
+					ShowSaveTerminalAsFileDialog();
 			}
 		}
 
-		private void ShowSaveTerminalFileAsDialog()
+		private void ShowSaveTerminalAsFileDialog()
 		{
 			SetFixedStatusText("Saving terminal as...");
 			SaveFileDialog sfd = new SaveFileDialog();
@@ -1169,7 +1169,7 @@ namespace YAT.Gui.Forms
 					autoSaveFilePathToDelete = _terminalSettingsHandler.SettingsFilePath;
 
 				_terminalSettingsHandler.SettingsFilePath = sfd.FileName;
-				DoSaveTerminalFile(false, autoSaveFilePathToDelete);
+				SaveTerminalToFile(false, autoSaveFilePathToDelete);
 			}
 			else
 			{
@@ -1179,12 +1179,12 @@ namespace YAT.Gui.Forms
 			SelectSendCommandInput();
 		}
 
-		private void DoSaveTerminalFile(bool autoSave)
+		private void SaveTerminalToFile(bool autoSave)
 		{
-			DoSaveTerminalFile(autoSave, "");
+			SaveTerminalToFile(autoSave, "");
 		}
 
-		private void DoSaveTerminalFile(bool autoSave, string autoSaveFilePathToDelete)
+		private void SaveTerminalToFile(bool autoSave, string autoSaveFilePathToDelete)
 		{
 			if (!autoSave)
 				SetFixedStatusText("Saving terminal...");
