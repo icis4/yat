@@ -11,6 +11,11 @@ namespace YAT.Domain.Test.Parser
 	[TestFixture]
 	public class ParserTest
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
 		private static readonly string[] _TestStrings =
 		{
 			// mixed
@@ -32,6 +37,18 @@ namespace YAT.Domain.Test.Parser
 			"\\c(H)\\c(e)llo \\c(()round\\c()) brackets",
 			"Empty \\c()",
 		};
+
+		#endregion
+
+		#region Tests
+		//==========================================================================================
+		// Test
+		//==========================================================================================
+
+		#region Tests > Parser
+		//------------------------------------------------------------------------------------------
+		// Tests > Parser
+		//------------------------------------------------------------------------------------------
 
 		[Test]
 		public void TestParser()
@@ -72,5 +89,9 @@ namespace YAT.Domain.Test.Parser
 				Assert.Fail(ex.Message);
 			}
 		}
+
+		#endregion
+
+		#endregion
 	}
 }

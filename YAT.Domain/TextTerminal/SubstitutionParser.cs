@@ -10,7 +10,19 @@ namespace YAT.Domain.Parser
 	/// </summary>
 	public class SubstitutionParser : Parser
 	{
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
 		private CharSubstitution _substitution;
+
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
 
 		/// <summary></summary>
 		public SubstitutionParser()
@@ -61,9 +73,12 @@ namespace YAT.Domain.Parser
 			_substitution = ((SubstitutionParser)parser)._substitution;
 		}
 
-		//------------------------------------------------------------------------------------------
+		#endregion
+
+		#region Factory
+		//==========================================================================================
 		// Factory
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary></summary>
 		protected override Parser GetParser(ParserState parserState, Parser parser)
@@ -72,9 +87,12 @@ namespace YAT.Domain.Parser
 			return (p);
 		}
 
-		//------------------------------------------------------------------------------------------
+		#endregion
+
+		#region Methods
+		//==========================================================================================
 		// Methods
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary></summary>
 		public byte[] Parse(string s, CharSubstitution substitution)
@@ -133,5 +151,7 @@ namespace YAT.Domain.Parser
 				default: return (token);
 			}
 		}
+
+		#endregion
 	}
 }

@@ -51,7 +51,6 @@
     <Compile Include="SendCommandSettings.cs" />
     <Compile Include="SendFileSettings.cs" />
     <Compile Include="TextFormat.cs" />
-    <Compile Include="WindowSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\YAT.snk" />
@@ -76,6 +75,10 @@
     <ProjectReference Include="..\YAT.Gui.Types\YAT.Gui.Types.csproj">
       <Project>{259B16E1-C709-4843-B9A8-EA1FF55EA1E3}</Project>
       <Name>YAT.Gui.Types</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Model.Types\YAT.Model.Types.csproj">
+      <Project>{651BA67D-9B00-4245-9C99-481F20273A62}</Project>
+      <Name>YAT.Model.Types</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

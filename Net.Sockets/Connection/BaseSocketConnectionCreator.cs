@@ -70,11 +70,6 @@ namespace MKY.Net.Sockets
     /// </summary>
     public abstract class BaseSocketConnectionCreator : IDisposable
     {
-
-		//------------------------------------------------------------------------------------------
-		// Fields
-		//------------------------------------------------------------------------------------------
-
 		#region Fields
 
 		private bool FIsDisposed = false;

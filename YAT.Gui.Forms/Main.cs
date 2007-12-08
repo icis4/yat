@@ -24,37 +24,27 @@ namespace YAT.Gui.Forms
 	/// </summary>
 	public partial class Main : Form
 	{
-		//------------------------------------------------------------------------------------------
+		#region Fields
+		//==========================================================================================
 		// Fields
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		// startup
 		private bool _isStartingUp = true;
 
-		// args
-		private string[] _commandLineArgs;
-
-		// MDI
-		private const string _TerminalText = "Terminal";
-		private int _terminalIdCounter = 0;
-		private const int _PathLength = 80;
-
 		// recent files
 		private List<ToolStripMenuItem> _menuItems_recents;
-
-		// workspace settings
-		private Guid _guid = Guid.NewGuid();
-		private DocumentSettingsHandler<WorkspaceSettingsRoot> _workspaceSettingsHandler;
-		private WorkspaceSettingsRoot _workspaceSettingsRoot;
-		private bool _handlingWorkspaceSettingsIsSuspended = false;
 
 		// status
 		private const string _DefaultStatusText = "Ready";
 		private const int _TimedStatusInterval = 2000;
 
-		//------------------------------------------------------------------------------------------
-		// Constructor
-		//------------------------------------------------------------------------------------------
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
 
 		// Important note to ensure proper z-order of this form:
 		// - With visual designer, proceed in the following order
@@ -68,52 +58,31 @@ namespace YAT.Gui.Forms
 		//     7. Dock "menuStrip_Main" to top
 		// - (In source code, proceed according to the MenuStrip class example in the MSDN)
 
-		public Main(string[] args, bool applicationSettingsLoaded)
+		public Main()
 		{
-			_commandLineArgs = args;
-
 			InitializeComponent();
-			Initialize(applicationSettingsLoaded);
+			Initialize();
 		}
 
-		private void Initialize(bool applicationSettingsLoaded)
+		private void Initialize()
 		{
 			InitializeRecents();
-
-			_workspaceSettingsHandler = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
-			_workspaceSettingsHandler.SettingsFilePath = ApplicationSettings.LocalUser.General.CurrentWorkspaceFilePath;
-			_workspaceSettingsRoot = _workspaceSettingsHandler.Settings;
-			AttachWorkspaceSettingsHandlers();
 
 			// form title
 			string text = Application.ProductName;
 			text += VersionInfo.ProductNamePostFix;
 			Text = text;
 
-			if (applicationSettingsLoaded)
-			{
-				StartPosition = FormStartPosition.Manual;
-				ApplyWindowSettings();
-			}
+			ApplyWindowSettingsAccordingToStartup();
 			SetToolControls();
-		}
-
-		#region Properties
-		//******************************************************************************************
-		// Properties
-		//******************************************************************************************
-
-		public Guid Guid
-		{
-			get { return (_guid); }
 		}
 
 		#endregion
 
 		#region Form Event Handlers
-		//******************************************************************************************
+		//==========================================================================================
 		// Form Event Handlers
-		//******************************************************************************************
+		//==========================================================================================
 
 		/// <summary>
 		/// Rest is done here as soon as form is visible.
@@ -204,9 +173,9 @@ namespace YAT.Gui.Forms
 		#endregion
 
 		#region Controls Event Handlers
-		//******************************************************************************************
+		//==========================================================================================
 		// Controls Event Handlers
-		//******************************************************************************************
+		//==========================================================================================
 
 		#region Controls Event Handlers > Main Menu
 		//------------------------------------------------------------------------------------------
@@ -485,46 +454,60 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region Workspace Settings
-		//******************************************************************************************
-		// Workspace Settings
-		//******************************************************************************************
+		#region Window
+		//==========================================================================================
+		// Window
+		//==========================================================================================
 
-		private void AttachWorkspaceSettingsHandlers()
+		private void ApplyWindowSettingsAccordingToStartup()
 		{
-			_workspaceSettingsRoot.ClearChanged();
-			_workspaceSettingsRoot.Changed += new EventHandler<SettingsEventArgs>(_workspaceSettings_Changed);
+			if (ApplicationSettingsHandler.LocalUserSettingsSuccessfullyLoaded)
+			{
+				SuspendLayout();
+
+				StartPosition = ApplicationSettings.LocalUser.MainWindow.StartPosition;
+				WindowState = ApplicationSettings.LocalUser.MainWindow.WindowState;
+
+				if ((StartPosition == FormStartPosition.Manual) && (WindowState == FormWindowState.Normal))
+					Location = ApplicationSettings.LocalUser.MainWindow.Location;
+
+				if (WindowState == FormWindowState.Normal)
+					Size = ApplicationSettings.LocalUser.MainWindow.Size;
+
+				ResumeLayout();
+			}
 		}
 
-		//------------------------------------------------------------------------------------------
-		// Workspace Settings Events
-		//------------------------------------------------------------------------------------------
-
-		private void _workspaceSettings_Changed(object sender, SettingsEventArgs e)
+		private void SaveWindowSettings()
 		{
-			if (_handlingWorkspaceSettingsIsSuspended)
-				return;
-
-			if (ApplicationSettings.LocalUser.General.AutoSaveWorkspace)
-				SaveWorkspaceToFile(true);
+			SaveWindowSettings(false);
 		}
 
-		private void SuspendHandlingWorkspaceSettings()
+		private void SaveWindowSettings(bool setStartPositionToManual)
 		{
-			_handlingWorkspaceSettingsIsSuspended = true;
-		}
+			if (setStartPositionToManual)
+			{
+				ApplicationSettings.LocalUser.MainWindow.StartPosition = FormStartPosition.Manual;
+				StartPosition = ApplicationSettings.LocalUser.MainWindow.StartPosition;
+			}
 
-		private void ResumeHandlingWorkspaceSettings()
-		{
-			_handlingWorkspaceSettingsIsSuspended = false;
+			ApplicationSettings.LocalUser.MainWindow.WindowState = WindowState;
+
+			if ((StartPosition == FormStartPosition.Manual) && (WindowState == FormWindowState.Normal))
+				ApplicationSettings.LocalUser.MainWindow.Location = Location;
+
+			if (WindowState == FormWindowState.Normal)
+				ApplicationSettings.LocalUser.MainWindow.Size = Size;
+
+			ApplicationSettings.SaveLocalUser();
 		}
 
 		#endregion
 
 		#region Menu
-		//******************************************************************************************
+		//==========================================================================================
 		// Menu
-		//******************************************************************************************
+		//==========================================================================================
 
 		private void InitializeRecents()
 		{
@@ -595,9 +578,9 @@ namespace YAT.Gui.Forms
 		#endregion
 
 		#region Tool
-		//******************************************************************************************
+		//==========================================================================================
 		// Tool
-		//******************************************************************************************
+		//==========================================================================================
 
 		private void SetToolControls()
 		{
@@ -615,348 +598,10 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region MDI Parent
-		//******************************************************************************************
-		// MDI Parent
-		//******************************************************************************************
-
-		private void ApplyWindowSettings()
-		{
-			SuspendLayout();
-
-			StartPosition = ApplicationSettings.LocalUser.MainWindow.StartPosition;
-			WindowState = ApplicationSettings.LocalUser.MainWindow.WindowState;
-
-			if ((StartPosition == FormStartPosition.Manual) && (WindowState == FormWindowState.Normal))
-				Location = ApplicationSettings.LocalUser.MainWindow.Location;
-
-			if (WindowState == FormWindowState.Normal)
-				Size = ApplicationSettings.LocalUser.MainWindow.Size;
-
-			ResumeLayout();
-		}
-
-		private void SaveWindowSettings()
-		{
-			SaveWindowSettings(false);
-		}
-
-		private void SaveWindowSettings(bool setStartPositionToManual)
-		{
-			if (setStartPositionToManual)
-			{
-				ApplicationSettings.LocalUser.MainWindow.StartPosition = FormStartPosition.Manual;
-				StartPosition = ApplicationSettings.LocalUser.MainWindow.StartPosition;
-			}
-
-			ApplicationSettings.LocalUser.MainWindow.WindowState = WindowState;
-
-			if ((StartPosition == FormStartPosition.Manual) && (WindowState == FormWindowState.Normal))
-				ApplicationSettings.LocalUser.MainWindow.Location = Location;
-
-			if (WindowState == FormWindowState.Normal)
-				ApplicationSettings.LocalUser.MainWindow.Size = Size;
-
-			ApplicationSettings.SaveLocalUser();
-		}
-
-		/// <summary>
-		/// Opens YAT and opens the workspace or terminal file given. This method can directly
-		/// be called from the main providing the command line arguments.
-		/// </summary>
-		/// <param name="filePath">Workspace or terminal file</param>
-		/// <returns>true if successfully opened the workspace or terminal</returns>
-		private bool OpenFromFile(string filePath)
-		{
-			string fileName = Path.GetFileName(filePath);
-			string extension = Path.GetExtension(filePath);
-			if      (ExtensionSettings.IsWorkspaceFile(extension))
-			{
-				SetFixedStatusText("Opening workspace " + fileName + "...");
-				return (OpenWorkspaceFromFile(filePath));
-			}
-			else if (ExtensionSettings.IsTerminalFile(extension))
-			{
-				SetFixedStatusText("Opening terminal " + fileName + "...");
-				return (OpenTerminalFromFile(filePath));
-			}
-			else
-			{
-				SetFixedStatusText("Unknown file type!");
-
-				MessageBox.Show
-					(
-					this,
-					"File" + Environment.NewLine + filePath + Environment.NewLine +
-					"has unknown type!",
-					"File Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Stop
-					);
-
-				SetTimedStatusText("No file opened!");
-				return (false);
-			}
-		}
-
-		/// <summary>
-		/// Saves all terminal files and the workspace.
-		/// </summary>
-		private void SaveAll()
-		{
-			SaveAllTerminals();
-			SaveWorkspace();
-		}
-
-		#endregion
-
-		#region MDI Workspace
-		//******************************************************************************************
-		// MDI Workspace
-		//******************************************************************************************
-
-		private void ShowOpenWorkspaceFromFileDialog()
-		{
-			SetFixedStatusText("Opening workspace...");
-			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Title = "Open";
-			ofd.Filter = ExtensionSettings.WorkspaceFilesFilter;
-			ofd.DefaultExt = ExtensionSettings.WorkspaceFiles;
-			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath;
-			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName != ""))
-			{
-				Refresh();
-
-				ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
-				ApplicationSettings.SaveLocalUser();
-
-				OpenWorkspaceFromFile(ofd.FileName);
-			}
-			else
-			{
-				ResetStatusText();
-			}
-		}
-
-		private bool OpenWorkspaceFromFile(string filePath)
-		{
-			// close all terminal 
-			CloseAllTerminals();
-			if (MdiChildren.Length > 0)
-				return (false);
-
-			SetFixedStatusText("Opening workspace...");
-			try
-			{
-				_workspaceSettingsHandler.SettingsFilePath = filePath;
-				_workspaceSettingsHandler.Load();
-				_workspaceSettingsRoot = _workspaceSettingsHandler.Settings;
-
-				ApplicationSettings.LocalUser.General.CurrentWorkspaceFilePath = filePath;
-				ApplicationSettings.SaveLocalUser();
-
-				if (!_workspaceSettingsRoot.AutoSaved)
-					SetRecent(filePath);
-
-				SetTimedStatusText("Workspace opened");
-			}
-			catch (System.Xml.XmlException ex)
-			{
-				SetFixedStatusText("Error opening workspace!");
-
-				MessageBox.Show
-					(
-					this,
-					"Unable to open file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
-					"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
-					"File error message: " + ex.InnerException.Message,
-					"File Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Stop
-					);
-
-				SetTimedStatusText("No workspace opened!");
-				return (false);
-			}
-
-			int terminalCount = _workspaceSettingsRoot.TerminalSettings.Count;
-			if (terminalCount == 1)
-				SetFixedStatusText("Opening workspace terminal...");
-			else if (terminalCount > 1)
-				SetFixedStatusText("Opening workspace terminals...");
-
-			TerminalSettingsItemCollection clone = new TerminalSettingsItemCollection(_workspaceSettingsRoot.TerminalSettings);
-			foreach (TerminalSettingsItem item in clone)
-			{
-				try
-				{
-					OpenTerminalFromFile(item.FilePath, item.Guid, item.Window, true);
-				}
-				catch (System.Xml.XmlException ex)
-				{
-					SetFixedStatusText("Error opening terminal!");
-
-					DialogResult result = MessageBox.Show
-						(
-						this,
-						"Unable to open file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
-						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
-						"File error message: " + ex.InnerException.Message + Environment.NewLine + Environment.NewLine +
-						"Continue loading workspace?",
-						"File Error",
-						MessageBoxButtons.YesNo,
-						MessageBoxIcon.Exclamation
-						);
-
-					SetTimedStatusText("Terminal not opened!");
-
-					if (result == DialogResult.No)
-						break;
-				}
-			}
-
-			// attach workspace settings after terminals have been opened
-			AttachWorkspaceSettingsHandlers();
-
-			if (terminalCount == 1)
-				SetTimedStatusText("Workspace terminal opened");
-			else if (terminalCount > 1)
-				SetTimedStatusText("Workspace terminals opened");
-			else
-				SetTimedStatusText("Workspace contains no terminal to open");
-
-			return (true);
-		}
-
-		private void SaveWorkspace()
-		{
-			SaveWorkspace(false);
-		}
-
-		private void SaveWorkspace(bool autoSave)
-		{
-			if (autoSave)
-			{
-				SaveWorkspaceToFile(true);
-			}
-			else
-			{
-				if (_workspaceSettingsHandler.SettingsFilePathIsValid && !_workspaceSettingsHandler.Settings.AutoSaved)
-					SaveWorkspaceToFile(false);
-				else
-					ShowSaveWorkspaceAsFileDialog();
-			}
-		}
-
-		private void ShowSaveWorkspaceAsFileDialog()
-		{
-			SetFixedStatusText("Saving workspace as...");
-			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.Title = "Save Workspace As";
-			sfd.Filter = ExtensionSettings.WorkspaceFilesFilter;
-			sfd.DefaultExt = ExtensionSettings.WorkspaceFiles;
-			sfd.InitialDirectory = ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath;
-			sfd.FileName = Environment.UserName + "." + sfd.DefaultExt;
-			if ((sfd.ShowDialog(this) == DialogResult.OK) && (sfd.FileName.Length > 0))
-			{
-				Refresh();
-
-				ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(sfd.FileName);
-				ApplicationSettings.SaveLocalUser();
-
-				string autoSaveFilePathToDelete = "";
-				if (_workspaceSettingsRoot.AutoSaved)
-					autoSaveFilePathToDelete = _workspaceSettingsHandler.SettingsFilePath;
-
-				_workspaceSettingsHandler.SettingsFilePath = sfd.FileName;
-				SaveWorkspaceToFile(false, autoSaveFilePathToDelete);
-			}
-			else
-			{
-				ResetStatusText();
-			}
-		}
-
-		private void SaveWorkspaceToFile(bool autoSave)
-		{
-			SaveWorkspaceToFile(autoSave, "");
-		}
-
-		private void SaveWorkspaceToFile(bool autoSave, string autoSaveFilePathToDelete)
-		{
-			if (!autoSave)
-				SetFixedStatusText("Saving workspace...");
-
-			try
-			{
-				_workspaceSettingsRoot.SuspendChangeEvent();
-
-				// set workspace file path before terminals are saved in order
-				// to correctly retrieve relative paths
-				if (autoSave)
-				{
-					string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveWorkspaceFileNamePrefix + Guid.ToString() + ExtensionSettings.WorkspaceFiles;
-					if (!_workspaceSettingsHandler.SettingsFilePathIsValid)
-						_workspaceSettingsHandler.SettingsFilePath = autoSaveFilePath;
-				}
-
-				// save all contained terminals
-				foreach (Form f in MdiChildren)
-				{
-					((Gui.Forms.Terminal)f).RequestAutoSaveFile();
-				}
-
-				// update workspace
-				foreach (Form f in MdiChildren)
-				{
-					AddToOrReplaceInWorkspace((Gui.Forms.Terminal)f);
-				}
-
-				// save workspace
-				_workspaceSettingsHandler.Settings.AutoSaved = autoSave;
-				_workspaceSettingsHandler.Save();
-
-				_workspaceSettingsRoot.ClearChanged();
-				_workspaceSettingsRoot.ResumeChangeEvent();
-
-				ApplicationSettings.LocalUser.General.CurrentWorkspaceFilePath = _workspaceSettingsHandler.SettingsFilePath;
-				ApplicationSettings.SaveLocalUser();
-
-				if (!autoSave)
-				{
-					SetRecent(_workspaceSettingsHandler.SettingsFilePath);
-					SetTimedStatusText("Workspace saved");
-				}
-
-				// try to delete existing auto save file
-				try
-				{
-					if (File.Exists(autoSaveFilePathToDelete))
-						File.Delete(autoSaveFilePathToDelete);
-				}
-				catch (Exception)
-				{
-				}
-			}
-			catch (System.Xml.XmlException ex)
-			{
-				if (!autoSave)
-				{
-					SetFixedStatusText("Error saving workspace!");
-					MessageBox.Show
-						(
-						this,
-						"Unable to save file" + Environment.NewLine + _workspaceSettingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
-						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
-						"File error message: " + ex.InnerException.Message,
-						"File Error",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning
-						);
-					SetTimedStatusText("Workspace not saved!");
-				}
-			}
-		}
+		#region Preferences
+		//==========================================================================================
+		// Preferences
+		//==========================================================================================
 
 		private void ShowPreferences()
 		{
@@ -970,254 +615,12 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void OpenRecent(int userIndex)
-		{
-			OpenFromFile(ApplicationSettings.LocalUser.RecentFiles.FilePaths[userIndex - 1].Item);
-		}
-
-		private void AddToOrReplaceInWorkspace(Terminal terminal)
-		{
-			WindowSettings ws = new WindowSettings();
-			ws.State = terminal.WindowState;
-			ws.Location = terminal.Location;
-			ws.Size = terminal.Size;
-
-			TerminalSettingsItem tsi = new TerminalSettingsItem();
-			tsi.Guid = terminal.Guid;
-			string filePath = terminal.SettingsFilePath;
-			if (ApplicationSettings.LocalUser.General.UseRelativePaths)
-			{
-				XPathCompareResult pcr = XPath.CompareFilePaths(_workspaceSettingsHandler.SettingsFilePath, terminal.SettingsFilePath);
-				if (pcr.AreRelative)
-					filePath = pcr.RelativePath;
-			}
-			tsi.FilePath = filePath;
-			tsi.Window = ws;
-
-			_workspaceSettingsRoot.TerminalSettings.AddOrReplaceGuid(tsi);
-			_workspaceSettingsRoot.SetChanged();
-		}
-
-		private void RemoveFromWorkspace(Terminal terminal)
-		{
-			_workspaceSettingsRoot.TerminalSettings.RemoveGuid(terminal.Guid);
-			_workspaceSettingsRoot.SetChanged();
-		}
-
-		#endregion
-
-		#region MDI Children
-		//******************************************************************************************
-		// MDI Children
-		//******************************************************************************************
-
-		private int GetNextTerminalId()
-		{
-			_terminalIdCounter++;
-			return (_terminalIdCounter);
-		}
-
-		private void ShowNewTerminalDialog()
-		{
-			SetFixedStatusText("New terminal...");
-			Gui.Forms.NewTerminal f = new Gui.Forms.NewTerminal(ApplicationSettings.LocalUser.NewTerminal);
-			if (f.ShowDialog(this) == DialogResult.OK)
-			{
-				Refresh();
-
-				ApplicationSettings.LocalUser.NewTerminal = f.NewTerminalSettingsResult;
-				ApplicationSettings.SaveLocalUser();
-
-				SetFixedStatusText("Creating new terminal...");
-
-				DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> sh = new DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot>(f.TerminalSettingsResult);
-				Gui.Forms.Terminal terminal = new Gui.Forms.Terminal(sh);
-
-				terminal.UserName = _TerminalText + GetNextTerminalId();
-				terminal.MdiParent = this;
-				terminal.TerminalChanged += new EventHandler(mdi_child_TerminalChanged);
-				terminal.TerminalSaved += new EventHandler<TerminalSavedEventArgs>(mdi_child_TerminalSaved);
-				terminal.FormClosed += new FormClosedEventHandler(mdi_child_FormClosed);
-				terminal.Show();
-
-				AddToOrReplaceInWorkspace(terminal);
-
-				SetTimedStatusText("New terminal created");
-			}
-			else
-			{
-				ResetStatusText();
-			}
-		}
-
-		private void ShowOpenTerminalFromFileDialog()
-		{
-			SetFixedStatusText("Opening terminal...");
-			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Title = "Open";
-			ofd.Filter = ExtensionSettings.TerminalFilesFilter;
-			ofd.DefaultExt = ExtensionSettings.TerminalFiles;
-			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.TerminalFilesPath;
-			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName != ""))
-			{
-				Refresh();
-
-				ApplicationSettings.LocalUser.Paths.TerminalFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
-				ApplicationSettings.SaveLocalUser();
-
-				OpenTerminalFromFile(ofd.FileName);
-			}
-			else
-			{
-				ResetStatusText();
-			}
-		}
-
-		private bool OpenTerminalFromFile(string filePath)
-		{
-			return (OpenTerminalFromFile(filePath, Guid.Empty, null, false));
-		}
-
-		private bool OpenTerminalFromFile(string filePath, Guid guid, WindowSettings windowSettings, bool suppressErrorHandling)
-		{
-			string absoluteFilePath = filePath;
-
-			SetFixedStatusText("Opening terminal...");
-			try
-			{
-				DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> sh = new DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot>();
-
-				// combine absolute workspace path with terminal path if that one is relative
-				absoluteFilePath = XPath.CombineFilePaths(_workspaceSettingsHandler.SettingsFilePath, filePath);
-				sh.SettingsFilePath = absoluteFilePath;
-				sh.Load();
-
-				// replace window settings with those saved in workspace
-				if (windowSettings != null)
-					sh.Settings.Window = windowSettings;
-
-				// create terminal
-				Gui.Forms.Terminal terminal = new Gui.Forms.Terminal(sh);
-
-				if (guid != Guid.Empty)
-					terminal.Guid = guid;
-
-				if (sh.Settings.AutoSaved)
-					terminal.UserName = _TerminalText + GetNextTerminalId();
-				else
-					terminal.UserNameFromFile = absoluteFilePath;
-
-				terminal.MdiParent = this;
-				terminal.TerminalChanged += new EventHandler(mdi_child_TerminalChanged);
-				terminal.TerminalSaved += new EventHandler<TerminalSavedEventArgs>(mdi_child_TerminalSaved);
-				terminal.FormClosed += new FormClosedEventHandler(mdi_child_FormClosed);
-				terminal.Show();
-
-				AddToOrReplaceInWorkspace(terminal);
-				if (!sh.Settings.AutoSaved)
-					SetRecent(filePath);
-
-				SetTimedStatusText("Terminal opened");
-				return (true);
-			}
-			catch (System.Xml.XmlException ex)
-			{
-				if (!suppressErrorHandling)
-				{
-					SetFixedStatusText("Error opening terminal!");
-
-					MessageBox.Show
-						(
-						this,
-						"Unable to open file" + Environment.NewLine + absoluteFilePath + Environment.NewLine + Environment.NewLine +
-						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
-						"File error message: " + ex.InnerException.Message,
-						"File Error",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Stop
-						);
-
-					SetTimedStatusText("Terminal not opened!");
-					return (false);
-				}
-				else
-				{
-					throw (ex);
-				}
-			}
-		}
-
-		private void CloseTerminal()
-		{
-			((Gui.Forms.Terminal)ActiveMdiChild).RequestCloseFile();
-		}
-
-		private void CloseAllTerminals()
-		{
-			foreach (Form f in MdiChildren)
-				((Gui.Forms.Terminal)f).RequestCloseFile();
-		}
-
-		private void SaveTerminal()
-		{
-			((Gui.Forms.Terminal)ActiveMdiChild).RequestSaveFile();
-		}
-
-		private void SaveAllTerminals()
-		{
-			foreach (Form f in MdiChildren)
-				((Gui.Forms.Terminal)f).RequestSaveFile();
-		}
-
-		private void OpenTerminalIO()
-		{
-			((Gui.Forms.Terminal)ActiveMdiChild).RequestOpenTerminal();
-		}
-
-		private void CloseTerminalIO()
-		{
-			((Gui.Forms.Terminal)ActiveMdiChild).RequestCloseTerminal();
-		}
-
-		private void EditTerminalSettings()
-		{
-			((Gui.Forms.Terminal)ActiveMdiChild).RequestEditTerminalSettings();
-		}
-
-		//------------------------------------------------------------------------------------------
-		// MDI Children > Events
-		//------------------------------------------------------------------------------------------
-
-		private void mdi_child_TerminalChanged(object sender, EventArgs e)
-		{
-			SetTimedStatus(Status.ChildChanged);
-			SetToolControls();
-		}
-
-		private void mdi_child_TerminalSaved(object sender, TerminalSavedEventArgs e)
-		{
-			AddToOrReplaceInWorkspace((Terminal)sender);
-			if (!e.AutoSave)
-			{
-				SetRecent(e.FilePath);
-				SetTimedStatus(Status.ChildSaved);
-			}
-			SetToolControls();
-		}
-
-		private void mdi_child_FormClosed(object sender, FormClosedEventArgs e)
-		{
-			RemoveFromWorkspace((Terminal)sender);
-			SetTimedStatus(Status.ChildClosed);
-			SetToolControls();
-		}
-
 		#endregion
 
 		#region Status
-		//******************************************************************************************
+		//==========================================================================================
 		// Status
-		//******************************************************************************************
+		//==========================================================================================
 
 		private enum Status
 		{
@@ -1288,9 +691,9 @@ namespace YAT.Gui.Forms
 		#endregion
 
 		#region Chrono
-		//******************************************************************************************
+		//==========================================================================================
 		// Chrono
-		//******************************************************************************************
+		//==========================================================================================
 
 		private void chronometer_Main_Tick(object sender, EventArgs e)
 		{

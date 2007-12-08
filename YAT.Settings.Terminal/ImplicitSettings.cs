@@ -13,7 +13,7 @@ namespace YAT.Settings.Terminal
 		private Gui.Settings.SendCommandSettings _sendCommand;
 		private Gui.Settings.SendFileSettings _sendFile;
 		private Gui.Settings.PredefinedSettings _predefined;
-		private Gui.Settings.WindowSettings _window;
+		private Settings.WindowSettings _window;
 		private Gui.Settings.LayoutSettings _layout;
 
 		public ImplicitSettings()
@@ -24,7 +24,7 @@ namespace YAT.Settings.Terminal
 			SendCommand = new Gui.Settings.SendCommandSettings(SettingsType);
 			SendFile    = new Gui.Settings.SendFileSettings(SettingsType);
 			Predefined  = new Gui.Settings.PredefinedSettings(SettingsType);
-			Window      = new Gui.Settings.WindowSettings(SettingsType);
+			Window      = new Settings.WindowSettings(SettingsType);
 			Layout      = new Gui.Settings.LayoutSettings(SettingsType);
 
 			ClearChanged();
@@ -42,7 +42,7 @@ namespace YAT.Settings.Terminal
 			SendCommand = new Gui.Settings.SendCommandSettings(rhs.SendCommand);
 			SendFile    = new Gui.Settings.SendFileSettings(rhs.SendFile);
 			Predefined  = new Gui.Settings.PredefinedSettings(rhs.Predefined);
-			Window      = new Gui.Settings.WindowSettings(rhs.Window);
+			Window      = new Settings.WindowSettings(rhs.Window);
 			Layout      = new Gui.Settings.LayoutSettings(rhs.Layout);
 
 			ClearChanged();
@@ -151,7 +151,7 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlElement("Window")]
-		public Gui.Settings.WindowSettings Window
+		public Settings.WindowSettings Window
 		{
 			get { return (_window); }
 			set
@@ -163,7 +163,7 @@ namespace YAT.Settings.Terminal
 				}
 				else if (_window != value)
 				{
-					Gui.Settings.WindowSettings old = _window;
+					Settings.WindowSettings old = _window;
 					_window = value;
 					ReplaceNode(old, _window);
 				}

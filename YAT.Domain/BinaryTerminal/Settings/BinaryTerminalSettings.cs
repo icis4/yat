@@ -8,9 +8,10 @@ namespace YAT.Domain.Settings
 	/// <summary></summary>
 	public class BinaryTerminalSettings : MKY.Utilities.Settings.Settings, IEquatable<BinaryTerminalSettings>
 	{
-		//------------------------------------------------------------------------------------------
+		#region Fields
+		//==========================================================================================
 		// Fields
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		private bool _directionLineBreakEnabled;
 
@@ -18,9 +19,12 @@ namespace YAT.Domain.Settings
 		private BinaryDisplaySettings _txDisplay;
 		private BinaryDisplaySettings _rxDisplay;
 
-		//------------------------------------------------------------------------------------------
-		// Constructor
-		//------------------------------------------------------------------------------------------
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
 
 		/// <summary></summary>
 		public BinaryTerminalSettings()
@@ -69,10 +73,12 @@ namespace YAT.Domain.Settings
 			SeparateTxRxDisplay = false;
 		}
 
+		#endregion
+
 		#region Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary></summary>
 		[XmlElement("DirectionLineBreakEnabled")]
@@ -155,6 +161,9 @@ namespace YAT.Domain.Settings
 		#endregion
 
 		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -194,6 +203,9 @@ namespace YAT.Domain.Settings
 		#endregion
 
 		#region Comparison Operators
+		//==========================================================================================
+		// Comparison Operators
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.

@@ -250,6 +250,10 @@
       <Project>{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}</Project>
       <Name>YAT.Gui.Utilities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\YAT.Model.Types\YAT.Model.Types.csproj">
+      <Project>{651BA67D-9B00-4245-9C99-481F20273A62}</Project>
+      <Name>YAT.Model.Types</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YAT.Settings.Application\YAT.Settings.Application.csproj">
       <Project>{69A8CBB4-7D00-4A3D-9CF7-220DD02C2EB7}</Project>
       <Name>YAT.Settings.Application</Name>

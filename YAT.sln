@@ -1,46 +1,70 @@
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "Utilities\Utilities.csproj", "{F489B948-95CF-49FE-B9AA-A51654F5688B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Domain", "YAT.Domain\YAT.Domain.csproj", "{1C44A8C0-7805-4172-8746-2DB750803FFF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO.Ports", "IO.Ports\IO.Ports.csproj", "{D8940035-D30A-48A3-AC28-E8A4B8910CB9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net.Sockets", "Net.Sockets\Net.Sockets.csproj", "{307EFF74-9C31-4943-87A9-E7686551C4D1}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Doc.Project", "_Doc.Project", "{0A8DD27A-6023-46EA-A96C-CBBBE174BA4E}"
-	ProjectSection(SolutionItems) = preProject
-		_Doc.Project\YAT.mmap = _Doc.Project\YAT.mmap
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Doc.User", "_Doc.User", "{BFE7EB1A-C031-410C-A06B-0DE446418B4A}"
-	ProjectSection(SolutionItems) = preProject
-		_Doc.User\YAT Release Notes.txt = _Doc.User\YAT Release Notes.txt
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Gui.Utilities", "YAT.Gui.Utilities\YAT.Gui.Utilities.csproj", "{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT", "YAT\YAT.csproj", "{E87405A5-8FB0-4CE0-9946-3A08205B5DE0}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows.Forms", "Windows.Forms\Windows.Forms.csproj", "{CB2E6173-CB9F-4FB4-8948-30D04D4BAE50}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Gui.Controls", "YAT.Gui.Controls\YAT.Gui.Controls.csproj", "{0762E929-7EB5-4BDA-9018-DBA94DA8BDE5}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Gui.Settings", "YAT.Gui.Settings\YAT.Gui.Settings.csproj", "{4D2B091A-400B-436C-8C52-5DDABE9EBBAA}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Log", "YAT.Log\YAT.Log.csproj", "{7B0B343D-F992-4A1E-8E07-CB8EC651A5E6}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Gui.Forms", "YAT.Gui.Forms\YAT.Gui.Forms.csproj", "{A1060959-580E-4493-BA51-4A3A7CDE1E88}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Settings", "YAT.Settings\YAT.Settings.csproj", "{A3E80010-9146-47EF-87B0-138A60406A9E}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Settings.Application", "YAT.Settings.Application\YAT.Settings.Application.csproj", "{69A8CBB4-7D00-4A3D-9CF7-220DD02C2EB7}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Settings.Terminal", "YAT.Settings.Terminal\YAT.Settings.Terminal.csproj", "{FE2D334F-B2D8-4A07-B63D-93BA775DBBCF}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Test", "YAT.Test\YAT.Test.csproj", "{1E91D8B1-CFE6-4914-BDCF-AA204773CECA}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Graphics", "_Graphics", "{16B67EA9-E379-4134-B89E-B87379638D9C}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 	ProjectSection(SolutionItems) = preProject
 		_Graphics\ReadMe.txt = _Graphics\ReadMe.txt
 		_Graphics\YAT.res = _Graphics\YAT.res
@@ -50,6 +74,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Graphics", "_Graphics", "{
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuvola", "Nuvola", "{DCA59CFE-1A8D-44DD-B755-9ED543E91DEB}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 	ProjectSection(SolutionItems) = preProject
 		_Graphics\Nuvola\kmultiple_48x48.png = _Graphics\Nuvola\kmultiple_48x48.png
 		_Graphics\Nuvola\mycomputer_64x64.png = _Graphics\Nuvola\mycomputer_64x64.png
@@ -58,6 +86,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuvola", "Nuvola", "{DCA59C
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "YAT", "YAT", "{D0EF5621-C98B-4B79-95E7-71C4F0B53A9B}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 	ProjectSection(SolutionItems) = preProject
 		_Graphics\YAT\Icon_YAT.ico = _Graphics\YAT\Icon_YAT.ico
 		_Graphics\YAT\Icon_YAT_TerminalSettings.ico = _Graphics\YAT\Icon_YAT_TerminalSettings.ico
@@ -81,57 +113,120 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "YAT", "YAT", "{D0EF5621-C98
 		_Graphics\YAT\Image_YAT_WorkspaceSettings_64x64.png = _Graphics\YAT\Image_YAT_WorkspaceSettings_64x64.png
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Requirement", "1 - Requirement", "{6878F061-737D-4B90-A1A2-5C8E21072639}"
-	ProjectSection(SolutionItems) = preProject
-		_Doc.Project\1 - Requirement\Mac Terminal - 1.pdf = _Doc.Project\1 - Requirement\Mac Terminal - 1.pdf
-		_Doc.Project\1 - Requirement\Mac Terminal - 2.pdf = _Doc.Project\1 - Requirement\Mac Terminal - 2.pdf
-		_Doc.Project\1 - Requirement\XTerm232 - 1.0 - Anforderungen - Allgemein.pdf = _Doc.Project\1 - Requirement\XTerm232 - 1.0 - Anforderungen - Allgemein.pdf
-		_Doc.Project\1 - Requirement\XTerm232 - 1.0 - Anforderungen - Text vs. Binary.pdf = _Doc.Project\1 - Requirement\XTerm232 - 1.0 - Anforderungen - Text vs. Binary.pdf
-		_Doc.Project\1 - Requirement\XTerm232 - 2.0 - Mögliche Erweiterungen.pdf = _Doc.Project\1 - Requirement\XTerm232 - 2.0 - Mögliche Erweiterungen.pdf
-		_Doc.Project\1 - Requirement\XTerm232 - 2.0 - Offene Punkte.pdf = _Doc.Project\1 - Requirement\XTerm232 - 2.0 - Offene Punkte.pdf
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Architecture", "2 - Architecture", "{909008BA-FFE7-4164-A1F3-119CF5051E52}"
-	ProjectSection(SolutionItems) = preProject
-		_Doc.Project\2 - Architecture\YAT Package Overview.pdf = _Doc.Project\2 - Architecture\YAT Package Overview.pdf
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Design", "3 - Design", "{5EEC2E06-6D29-41CD-B1B9-8E0F2E32E5D1}"
-	ProjectSection(SolutionItems) = preProject
-		_Doc.Project\3 - Design\XTerm232 - 1.0 - Data Flow.vsd = _Doc.Project\3 - Design\XTerm232 - 1.0 - Data Flow.vsd
-		_Doc.Project\3 - Design\XTerm232 - 1.0 - Design.vsd = _Doc.Project\3 - Design\XTerm232 - 1.0 - Design.vsd
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Implementation", "4 - Implementation", "{10198224-68E5-42C9-95CA-949641D4F9CD}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 - Test", "5 - Test", "{A1FA66A3-D8B2-4861-9401-F2B60C696A2F}"
-	ProjectSection(SolutionItems) = preProject
-		_Doc.Project\5 - Test\YAT - Test.xls = _Doc.Project\5 - Test\YAT - Test.xls
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6 - Release", "6 - Release", "{58EC1FB3-07BF-48E3-91CB-056709B17926}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Gui.Types", "YAT.Gui.Types\YAT.Gui.Types.csproj", "{259B16E1-C709-4843-B9A8-EA1FF55EA1E3}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "YAT.Setup", "YAT.Setup\YAT.Setup.vdproj", "{F46DFE27-1F74-4558-AD39-E7EA74822483}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "7 - Feedback", "7 - Feedback", "{E1F028BD-94FB-41A5-AF94-FB257FE162EE}"
-	ProjectSection(SolutionItems) = preProject
-		_Doc.Project\7 - Feedback\YAT - 2.0 Alpha 1 - Feedback.pdf = _Doc.Project\7 - Feedback\YAT - 2.0 Alpha 1 - Feedback.pdf
-		_Doc.Project\7 - Feedback\YAT - 2.0 Alpha 2 - Feedback.pdf = _Doc.Project\7 - Feedback\YAT - 2.0 Alpha 2 - Feedback.pdf
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Settings.Workspace", "YAT.Settings.Workspace\YAT.Settings.Workspace.csproj", "{942BA759-57F9-4213-BDC8-E9A8325631B0}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities.Test", "Utilities.Test\Utilities.Test.csproj", "{644F7C29-CCE6-4827-9EF2-8B7D34194101}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Domain.Test", "YAT.Domain.Test\YAT.Domain.Test.csproj", "{7CA209C1-B1A8-43E0-BBFB-79EDA186CE62}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Settings.Test", "YAT.Settings.Test\YAT.Settings.Test.csproj", "{306722B1-7554-46FD-A8BE-99185753CD51}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Doc.Developer", "_Doc.Developer", "{E3E1764C-1358-495F-839F-721D4D307DF8}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 	ProjectSection(SolutionItems) = preProject
 		_Doc.Developer\HowToAddTestProject.txt = _Doc.Developer\HowToAddTestProject.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Model", "YAT.Model\YAT.Model.csproj", "{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Controller", "YAT.Controller\YAT.Controller.csproj", "{D639409C-0B93-494B-9A01-4FE79686FAD6}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Domain", "YAT.Domain\YAT.Domain.csproj", "{1C44A8C0-7805-4172-8746-2DB750803FFF}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Gui.Utilities", "YAT.Gui.Utilities\YAT.Gui.Utilities.csproj", "{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO.Ports", "IO.Ports\IO.Ports.csproj", "{D8940035-D30A-48A3-AC28-E8A4B8910CB9}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "Utilities\Utilities.csproj", "{F489B948-95CF-49FE-B9AA-A51654F5688B}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net.Sockets", "Net.Sockets\Net.Sockets.csproj", "{307EFF74-9C31-4943-87A9-E7686551C4D1}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Model.Types", "YAT.Model.Types\YAT.Model.Types.csproj", "{651BA67D-9B00-4245-9C99-481F20273A62}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Doc.User", "_Doc.User", "{ABECE297-BF82-4016-93F9-DF7204BA05F5}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		_Doc.User\YAT Release Notes.txt = _Doc.User\YAT Release Notes.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Scripts", "_Scripts", "{08FEFDFE-B7C8-4D17-9C8F-3B3108242FB4}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		_Scripts\CleanAll-Options.bat = _Scripts\CleanAll-Options.bat
+		_Scripts\CleanAll-Setup.bat = _Scripts\CleanAll-Setup.bat
+		_Scripts\CleanAll-SVN.bat = _Scripts\CleanAll-SVN.bat
+		_Scripts\CleanAll-Temp.bat = _Scripts\CleanAll-Temp.bat
+		_Scripts\CleanAll.bat = _Scripts\CleanAll.bat
+		_Scripts\CleanDir.bat = _Scripts\CleanDir.bat
 	EndProjectSection
 EndProject
 Global
@@ -142,46 +237,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F489B948-95CF-49FE-B9AA-A51654F5688B}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
-		{F489B948-95CF-49FE-B9AA-A51654F5688B}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
-		{F489B948-95CF-49FE-B9AA-A51654F5688B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F489B948-95CF-49FE-B9AA-A51654F5688B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F489B948-95CF-49FE-B9AA-A51654F5688B}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
-		{F489B948-95CF-49FE-B9AA-A51654F5688B}.Release Test|Any CPU.Build.0 = Release|Any CPU
-		{F489B948-95CF-49FE-B9AA-A51654F5688B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F489B948-95CF-49FE-B9AA-A51654F5688B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1C44A8C0-7805-4172-8746-2DB750803FFF}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C44A8C0-7805-4172-8746-2DB750803FFF}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
-		{1C44A8C0-7805-4172-8746-2DB750803FFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C44A8C0-7805-4172-8746-2DB750803FFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C44A8C0-7805-4172-8746-2DB750803FFF}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
-		{1C44A8C0-7805-4172-8746-2DB750803FFF}.Release Test|Any CPU.Build.0 = Release|Any CPU
-		{1C44A8C0-7805-4172-8746-2DB750803FFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C44A8C0-7805-4172-8746-2DB750803FFF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D8940035-D30A-48A3-AC28-E8A4B8910CB9}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
-		{D8940035-D30A-48A3-AC28-E8A4B8910CB9}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
-		{D8940035-D30A-48A3-AC28-E8A4B8910CB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D8940035-D30A-48A3-AC28-E8A4B8910CB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D8940035-D30A-48A3-AC28-E8A4B8910CB9}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
-		{D8940035-D30A-48A3-AC28-E8A4B8910CB9}.Release Test|Any CPU.Build.0 = Release|Any CPU
-		{D8940035-D30A-48A3-AC28-E8A4B8910CB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D8940035-D30A-48A3-AC28-E8A4B8910CB9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{307EFF74-9C31-4943-87A9-E7686551C4D1}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
-		{307EFF74-9C31-4943-87A9-E7686551C4D1}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
-		{307EFF74-9C31-4943-87A9-E7686551C4D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{307EFF74-9C31-4943-87A9-E7686551C4D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{307EFF74-9C31-4943-87A9-E7686551C4D1}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
-		{307EFF74-9C31-4943-87A9-E7686551C4D1}.Release Test|Any CPU.Build.0 = Release|Any CPU
-		{307EFF74-9C31-4943-87A9-E7686551C4D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{307EFF74-9C31-4943-87A9-E7686551C4D1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
-		{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
-		{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
-		{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}.Release Test|Any CPU.Build.0 = Release|Any CPU
-		{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E87405A5-8FB0-4CE0-9946-3A08205B5DE0}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{E87405A5-8FB0-4CE0-9946-3A08205B5DE0}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
 		{E87405A5-8FB0-4CE0-9946-3A08205B5DE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -300,18 +355,75 @@ Global
 		{306722B1-7554-46FD-A8BE-99185753CD51}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
 		{306722B1-7554-46FD-A8BE-99185753CD51}.Release Test|Any CPU.Build.0 = Release|Any CPU
 		{306722B1-7554-46FD-A8BE-99185753CD51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
+		{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
+		{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}.Release Test|Any CPU.Build.0 = Release|Any CPU
+		{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D639409C-0B93-494B-9A01-4FE79686FAD6}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{D639409C-0B93-494B-9A01-4FE79686FAD6}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
+		{D639409C-0B93-494B-9A01-4FE79686FAD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D639409C-0B93-494B-9A01-4FE79686FAD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D639409C-0B93-494B-9A01-4FE79686FAD6}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
+		{D639409C-0B93-494B-9A01-4FE79686FAD6}.Release Test|Any CPU.Build.0 = Release|Any CPU
+		{D639409C-0B93-494B-9A01-4FE79686FAD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D639409C-0B93-494B-9A01-4FE79686FAD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C44A8C0-7805-4172-8746-2DB750803FFF}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C44A8C0-7805-4172-8746-2DB750803FFF}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
+		{1C44A8C0-7805-4172-8746-2DB750803FFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C44A8C0-7805-4172-8746-2DB750803FFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C44A8C0-7805-4172-8746-2DB750803FFF}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
+		{1C44A8C0-7805-4172-8746-2DB750803FFF}.Release Test|Any CPU.Build.0 = Release|Any CPU
+		{1C44A8C0-7805-4172-8746-2DB750803FFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C44A8C0-7805-4172-8746-2DB750803FFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
+		{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
+		{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}.Release Test|Any CPU.Build.0 = Release|Any CPU
+		{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8940035-D30A-48A3-AC28-E8A4B8910CB9}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8940035-D30A-48A3-AC28-E8A4B8910CB9}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
+		{D8940035-D30A-48A3-AC28-E8A4B8910CB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8940035-D30A-48A3-AC28-E8A4B8910CB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8940035-D30A-48A3-AC28-E8A4B8910CB9}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
+		{D8940035-D30A-48A3-AC28-E8A4B8910CB9}.Release Test|Any CPU.Build.0 = Release|Any CPU
+		{D8940035-D30A-48A3-AC28-E8A4B8910CB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8940035-D30A-48A3-AC28-E8A4B8910CB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F489B948-95CF-49FE-B9AA-A51654F5688B}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{F489B948-95CF-49FE-B9AA-A51654F5688B}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
+		{F489B948-95CF-49FE-B9AA-A51654F5688B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F489B948-95CF-49FE-B9AA-A51654F5688B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F489B948-95CF-49FE-B9AA-A51654F5688B}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
+		{F489B948-95CF-49FE-B9AA-A51654F5688B}.Release Test|Any CPU.Build.0 = Release|Any CPU
+		{F489B948-95CF-49FE-B9AA-A51654F5688B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F489B948-95CF-49FE-B9AA-A51654F5688B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{307EFF74-9C31-4943-87A9-E7686551C4D1}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{307EFF74-9C31-4943-87A9-E7686551C4D1}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
+		{307EFF74-9C31-4943-87A9-E7686551C4D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{307EFF74-9C31-4943-87A9-E7686551C4D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{307EFF74-9C31-4943-87A9-E7686551C4D1}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
+		{307EFF74-9C31-4943-87A9-E7686551C4D1}.Release Test|Any CPU.Build.0 = Release|Any CPU
+		{307EFF74-9C31-4943-87A9-E7686551C4D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{307EFF74-9C31-4943-87A9-E7686551C4D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{651BA67D-9B00-4245-9C99-481F20273A62}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{651BA67D-9B00-4245-9C99-481F20273A62}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
+		{651BA67D-9B00-4245-9C99-481F20273A62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{651BA67D-9B00-4245-9C99-481F20273A62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{651BA67D-9B00-4245-9C99-481F20273A62}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
+		{651BA67D-9B00-4245-9C99-481F20273A62}.Release Test|Any CPU.Build.0 = Release|Any CPU
+		{651BA67D-9B00-4245-9C99-481F20273A62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{651BA67D-9B00-4245-9C99-481F20273A62}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{6878F061-737D-4B90-A1A2-5C8E21072639} = {0A8DD27A-6023-46EA-A96C-CBBBE174BA4E}
-		{909008BA-FFE7-4164-A1F3-119CF5051E52} = {0A8DD27A-6023-46EA-A96C-CBBBE174BA4E}
-		{5EEC2E06-6D29-41CD-B1B9-8E0F2E32E5D1} = {0A8DD27A-6023-46EA-A96C-CBBBE174BA4E}
-		{10198224-68E5-42C9-95CA-949641D4F9CD} = {0A8DD27A-6023-46EA-A96C-CBBBE174BA4E}
-		{A1FA66A3-D8B2-4861-9401-F2B60C696A2F} = {0A8DD27A-6023-46EA-A96C-CBBBE174BA4E}
-		{58EC1FB3-07BF-48E3-91CB-056709B17926} = {0A8DD27A-6023-46EA-A96C-CBBBE174BA4E}
-		{E1F028BD-94FB-41A5-AF94-FB257FE162EE} = {0A8DD27A-6023-46EA-A96C-CBBBE174BA4E}
 		{DCA59CFE-1A8D-44DD-B755-9ED543E91DEB} = {16B67EA9-E379-4134-B89E-B87379638D9C}
 		{D0EF5621-C98B-4B79-95E7-71C4F0B53A9B} = {16B67EA9-E379-4134-B89E-B87379638D9C}
 	EndGlobalSection

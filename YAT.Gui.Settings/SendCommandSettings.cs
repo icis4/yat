@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 using MKY.Utilities.Recent;
 
-using YAT.Gui.Types;
+using YAT.Model.Types;
 
 namespace YAT.Gui.Settings
 {

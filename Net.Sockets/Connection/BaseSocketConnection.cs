@@ -50,11 +50,6 @@ namespace MKY.Net.Sockets
     /// </summary>
     public abstract class BaseSocketConnection : IDisposable, ISocketConnection
     {
-
-		//------------------------------------------------------------------------------------------
-		// Fields
-		//------------------------------------------------------------------------------------------
-
 		private bool FIsDisposed = false;
 
         #region Fields

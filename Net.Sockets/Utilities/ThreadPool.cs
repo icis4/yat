@@ -88,11 +88,6 @@ namespace MKY.Net.Sockets.Utilities
     /// </summary>
     public class HostThreadPool : IDisposable
     {
-
-		//------------------------------------------------------------------------------------------
-		// Fields
-		//------------------------------------------------------------------------------------------
-
 		private bool FIsDisposed = false;
 
 		#region Fields

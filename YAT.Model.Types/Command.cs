@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 using MKY.Utilities.Types;
 
-namespace YAT.Gui.Types
+namespace YAT.Model.Types
 {
 	/// <summary>
 	/// Stores information about a single line, multi line or file command.
@@ -16,18 +16,22 @@ namespace YAT.Gui.Types
 	/// </remarks>
 	public class Command : IEquatable<Command>, IComparable
 	{
-		//------------------------------------------------------------------------------------------
+		#region Constants
+		//==========================================================================================
 		// Constants
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		public const string EmptyCommandText = "<Enter a command...>";
 		public const string UndefinedCommandText = "<Define...>";
 		public const string MultiLineCommandText = "<Multi line...>";
 		public const string UndefinedFilePathText = "<Set a file...>";
 
-		//------------------------------------------------------------------------------------------
+		#endregion
+
+		#region Fields
+		//==========================================================================================
 		// Fields
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		private string _description;
 		private string[] _commandLines;
@@ -35,9 +39,12 @@ namespace YAT.Gui.Types
 		private bool _isFilePath;
 		private string _filePath;
 
-		//------------------------------------------------------------------------------------------
-		// Constructors
-		//------------------------------------------------------------------------------------------
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
 
 		public Command()
 		{
@@ -99,10 +106,12 @@ namespace YAT.Gui.Types
 			}
 		}
 
+		#endregion
+
 		#region Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		[XmlElement("Description")]
 		public string Description
@@ -174,9 +183,9 @@ namespace YAT.Gui.Types
 		#endregion
 
 		#region Convenience Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Convenience Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		[XmlIgnore]
 		public bool IsCommand
@@ -318,6 +327,9 @@ namespace YAT.Gui.Types
 		#endregion
 
 		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		public override string ToString()
 		{
@@ -363,6 +375,9 @@ namespace YAT.Gui.Types
 		#endregion
 
 		#region IComparable Members
+		//==========================================================================================
+		// IComparable Members
+		//==========================================================================================
 
 		public int CompareTo(object obj)
 		{
@@ -377,6 +392,9 @@ namespace YAT.Gui.Types
 		#endregion
 
 		#region Comparison Methods
+		//==========================================================================================
+		// Comparision Methods
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static int Compare(object objA, object objB)
@@ -393,6 +411,9 @@ namespace YAT.Gui.Types
 		#endregion
 
 		#region Comparison Operators
+		//==========================================================================================
+		// Comparison Operators
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.

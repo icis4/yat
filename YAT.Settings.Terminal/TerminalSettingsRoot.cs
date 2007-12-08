@@ -251,7 +251,7 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlIgnore]
-		public Gui.Settings.WindowSettings Window
+		public Settings.WindowSettings Window
 		{
 			get { return (_implicit.Window); }
 			set { _implicit.Window = value; }

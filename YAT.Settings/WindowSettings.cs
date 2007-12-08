@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace YAT.Gui.Settings
+namespace YAT.Settings
 {
 	[Serializable]
 	public class WindowSettings : MKY.Utilities.Settings.Settings, IEquatable<WindowSettings>

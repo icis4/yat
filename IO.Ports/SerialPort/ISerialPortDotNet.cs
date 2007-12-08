@@ -11,13 +11,13 @@ namespace MKY.IO.Ports
 	/// </summary>
 	public interface ISerialPortDotNet : IComponent
 	{
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Mapped SerialPort Events
 		//------------------------------------------------------------------------------------------
-		// Must be mapped because System.IO.Ports.Serial___EventArgs do not
-		// provide any constructor and can therefore not be created from an
+		// Must be mapped because System.IO.Ports.Serial<EventType>EventArgs do
+		// not provide any constructor and can therefore not be created from an
 		// adapter like MKY.IO.Ports.SerialPortCharon
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary>
 		/// Represents the method that will handle the data received event
@@ -40,9 +40,10 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		event SerialPinChangedEventHandler PinChanged;
 
-		//------------------------------------------------------------------------------------------
+
+		//==========================================================================================
 		// 1:1 code compatible interface
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary>
 		/// Gets or sets the port for communications, including but not limited to

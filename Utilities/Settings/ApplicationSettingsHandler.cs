@@ -33,6 +33,12 @@ namespace MKY.Utilities.Settings
 		private TLocalUserSettings _localUserSettings = default(TLocalUserSettings);
 		private TRoamingUserSettings _roamingUserSettings = default(TRoamingUserSettings);
 
+		private bool _commonSettingsSuccessfullyLoaded = false;
+		private bool _localUserSettingsSuccessfullyLoaded = false;
+		private bool _roamingUserSettingsSuccessfullyLoaded = false;
+
+		private bool _allSettingsSuccessfullyLoaded = false;
+
 		/// <summary>
 		/// Handles common and user settings. Common settings are stored in
 		/// <see cref="Application.CommonAppDataPath"/>, local user settings in
@@ -161,8 +167,7 @@ namespace MKY.Utilities.Settings
 		}
 
 		/// <summary>
-		/// Handler to common settings, if has common settings,
-		/// "null" otherwise.
+		/// Handler to common settings, if has common settings, "null" otherwise.
 		/// </summary>
 		public TCommonSettings CommonSettings
 		{
@@ -170,8 +175,7 @@ namespace MKY.Utilities.Settings
 		}
 
 		/// <summary>
-		/// Handler to local user settings, if has local user settings,
-		/// "null" otherwise.
+		/// Handler to local user settings, if has local user settings, "null" otherwise.
 		/// </summary>
 		public TLocalUserSettings LocalUserSettings
 		{
@@ -179,12 +183,47 @@ namespace MKY.Utilities.Settings
 		}
 
 		/// <summary>
-		/// Handler to user settings, if has user settings,
-		/// "null" otherwise.
+		/// Handler to roaming user settings, if has roaming user settings, "null" otherwise.
 		/// </summary>
 		public TRoamingUserSettings RoamingUserSettings
 		{
 			get { return (_roamingUserSettings); }
+		}
+
+		/// <summary>
+		/// Returns whether common settings have successfully been loaded, "false" if
+		/// they was no valid settings file and they were set to their defaults.
+		/// </summary>
+		public bool CommonSettingsSuccessfullyLoaded
+		{
+			get { return (_commonSettingsSuccessfullyLoaded); }
+		}
+
+		/// <summary>
+		/// Returns whether local user settings have successfully been loaded, "false" if
+		/// they was no valid settings file and they were set to their defaults.
+		/// </summary>
+		public bool LocalUserSettingsSuccessfullyLoaded
+		{
+			get { return (_localUserSettingsSuccessfullyLoaded); }
+		}
+
+		/// <summary>
+		/// Returns whether roaming user settings have successfully been loaded, "false" if
+		/// they was no valid settings file and they were set to their defaults.
+		/// </summary>
+		public bool RoamingUserSettingsSuccessfullyLoaded
+		{
+			get { return (_roamingUserSettingsSuccessfullyLoaded); }
+		}
+
+		/// <summary>
+		/// Returns whether all settings have successfully been loaded, "false" if
+		/// they were no valid settings files and they were set to their defaults.
+		/// </summary>
+		public bool AllSettingsSuccessfullyLoaded
+		{
+			get { return (_allSettingsSuccessfullyLoaded); }
 		}
 
 		/// <summary>
@@ -246,16 +285,18 @@ namespace MKY.Utilities.Settings
 		/// </exception>
 		public bool Load()
 		{
-			bool loadSuccess = true;
 			object settings = null;
+
+			_allSettingsSuccessfullyLoaded = true;
 
 			if (HasCommonSettings)
 			{
 				settings = LoadFromFile(typeof(TCommonSettings), _commonSettingsFilePath);
-				if (settings == null)
+				_commonSettingsSuccessfullyLoaded = (settings != null);
+				if (!_commonSettingsSuccessfullyLoaded)
 				{
 					settings = CommonSettingsDefault;
-					loadSuccess = false;
+					_allSettingsSuccessfullyLoaded = false;
 				}
 				_commonSettings = (TCommonSettings)settings;
 			}
@@ -263,10 +304,11 @@ namespace MKY.Utilities.Settings
 			if (HasLocalUserSettings)
 			{
 				settings = LoadFromFile(typeof(TLocalUserSettings), _localUserSettingsFilePath);
-				if (settings == null)
+				_localUserSettingsSuccessfullyLoaded = (settings != null);
+				if (!_localUserSettingsSuccessfullyLoaded)
 				{
 					settings = LocalUserSettingsDefault;
-					loadSuccess = false;
+					_allSettingsSuccessfullyLoaded = false;
 				}
 				_localUserSettings = (TLocalUserSettings)settings;
 			}
@@ -274,10 +316,11 @@ namespace MKY.Utilities.Settings
 			if (HasRoamingUserSettings)
 			{
 				settings = LoadFromFile(typeof(TRoamingUserSettings), _roamingUserSettingsFilePath);
-				if (settings == null)
+				_roamingUserSettingsSuccessfullyLoaded = (settings != null);
+				if (!_roamingUserSettingsSuccessfullyLoaded)
 				{
 					settings = RoamingUserSettingsDefault;
-					loadSuccess = false;
+					_allSettingsSuccessfullyLoaded = false;
 				}
 				_roamingUserSettings = (TRoamingUserSettings)settings;
 			}
@@ -290,7 +333,7 @@ namespace MKY.Utilities.Settings
 			catch { }
 
 			// return load status
-			return (loadSuccess);
+			return (_allSettingsSuccessfullyLoaded);
 		}
 
 		private object LoadFromFile(Type type, string file)
