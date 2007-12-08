@@ -16,9 +16,10 @@ namespace MKY.IO.Ports
 	[TypeConverter(typeof(SerialPortIdConverter))]
 	public class SerialPortId : IEquatable<SerialPortId>, IComparable
 	{
-		//------------------------------------------------------------------------------------------
-		// Public constants
-		//------------------------------------------------------------------------------------------
+		#region Public Constants
+		//==========================================================================================
+		// Public Constants
+		//==========================================================================================
 
 		/// <summary></summary>
 		public const string StandardPortPrefix = "COM";
@@ -37,18 +38,24 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public const string DefaultInUseText = "(in use)";
 
-		//------------------------------------------------------------------------------------------
+		#endregion
+
+		#region Fields
+		//==========================================================================================
 		// Fields
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		private int _number = DefaultPortNumber;
 
 		private bool _isInUse = false;
 		private string _inUseText = null;
 
-		//------------------------------------------------------------------------------------------
-		// Constructors
-		//------------------------------------------------------------------------------------------
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
 
 		/// <summary></summary>
 		public SerialPortId()
@@ -78,9 +85,12 @@ namespace MKY.IO.Ports
 				throw (new ArgumentOutOfRangeException("SerialPortId.Number", _number, "ASSERT(Number <= StandardLastPort)"));
 		}
 
-		//------------------------------------------------------------------------------------------
+		#endregion
+
+		#region Properties
+		//==========================================================================================
 		// Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary>
 		/// Port number (e.g. 1).
@@ -142,6 +152,8 @@ namespace MKY.IO.Ports
 					_inUseText = value;
 			}
 		}
+
+		#endregion
 
 		#region Object Members
 
@@ -255,6 +267,9 @@ namespace MKY.IO.Ports
 		#endregion
 
 		#region Comparison Operators
+		//==========================================================================================
+		// Comparison Operators
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
@@ -305,6 +320,9 @@ namespace MKY.IO.Ports
 		#endregion
 
 		#region Conversion Operators
+		//==========================================================================================
+		// Conversion Operators
+		//==========================================================================================
 
 		/// <summary></summary>
 		public static implicit operator int(SerialPortId port)
@@ -332,6 +350,11 @@ namespace MKY.IO.Ports
 
 		#endregion
 	}
+
+	#region Type Converter
+	//==========================================================================================
+	// Type Converter
+	//==========================================================================================
 
 	/// <summary></summary>
 	public class SerialPortIdConverter : TypeConverter
@@ -428,4 +451,6 @@ namespace MKY.IO.Ports
 			return (base.IsValid(context, value));
 		}
 	}
+
+	#endregion
 }
