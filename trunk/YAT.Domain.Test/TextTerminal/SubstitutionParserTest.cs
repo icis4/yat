@@ -11,6 +11,11 @@ namespace YAT.Domain.Test.TextTerminal
 	[TestFixture]
 	public class SubstitutionParserTest
 	{
+		#region Tests
+		//==========================================================================================
+		// Test
+		//==========================================================================================
+
 		#region Test SubstitutionParser
 		//------------------------------------------------------------------------------------------
 		// Test SubstitutionParser
@@ -46,6 +51,8 @@ namespace YAT.Domain.Test.TextTerminal
 				Assert.Fail(ex.Message);
 			}
 		}
+
+		#endregion
 
 		#endregion
 	}

@@ -18,17 +18,19 @@ namespace YAT.Settings.Test
 	[TestFixture]
 	public class SettingsTest
 	{
-		//------------------------------------------------------------------------------------------
+		#region Constants
+		//==========================================================================================
 		// Constants
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		private const string _TempPath = "c:\\";
 		private const string _TempPrefix = "YAT-Test-";
 		private const string _TempExtension = ".txt";
 
-		//------------------------------------------------------------------------------------------
+		#region Tests
+		//==========================================================================================
 		// Tear Down
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		[TearDown]
 		public void TearDown()
@@ -37,9 +39,14 @@ namespace YAT.Settings.Test
 			File.Delete(filePath);
 		}
 
-		#region Test ArraySerialization()
+		#region Tests
+		//==========================================================================================
+		// Tests
+		//==========================================================================================
+
+		#region Tests > ArraySerialization()
 		//------------------------------------------------------------------------------------------
-		// Test ArraySerialization()
+		// Tests > ArraySerialization()
 		//------------------------------------------------------------------------------------------
 
 		[Test]
@@ -66,9 +73,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Test ListSerialization()
+		#region Tests > ListSerialization()
 		//------------------------------------------------------------------------------------------
-		// Test ListSerialization()
+		// Tests > ListSerialization()
 		//------------------------------------------------------------------------------------------
 
 		[Test]
@@ -107,9 +114,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Test EmptyCommandSerialization()
+		#region Tests > EmptyCommandSerialization()
 		//------------------------------------------------------------------------------------------
-		// Test EmptyCommandSerialization()
+		// Tests > EmptyCommandSerialization()
 		//------------------------------------------------------------------------------------------
 
 		[Test]
@@ -128,9 +135,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Test RecentSerialization()
+		#region Tests > RecentSerialization()
 		//------------------------------------------------------------------------------------------
-		// Test RecentSerialization()
+		// Tests > RecentSerialization()
 		//------------------------------------------------------------------------------------------
 
 		[Test]
@@ -154,9 +161,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Test PredefinedSerialization()
+		#region Tests > PredefinedSerialization()
 		//------------------------------------------------------------------------------------------
-		// Test PredefinedSerialization()
+		// Tests > PredefinedSerialization()
 		//------------------------------------------------------------------------------------------
 
 		[Test]
@@ -182,9 +189,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Test ExplicitSerialization()
+		#region Tests > ExplicitSerialization()
 		//------------------------------------------------------------------------------------------
-		// Test ExplicitSerialization()
+		// Tests > ExplicitSerialization()
 		//------------------------------------------------------------------------------------------
 
 		[Test]
@@ -199,9 +206,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Test ImplicitSerialization()
+		#region Tests > ImplicitSerialization()
 		//------------------------------------------------------------------------------------------
-		// Test ImplicitSerialization()
+		// Tests > ImplicitSerialization()
 		//------------------------------------------------------------------------------------------
 
 		[Test]
@@ -216,10 +223,12 @@ namespace YAT.Settings.Test
 
 		#endregion
 
+		#endregion
+
 		#region Private Methods
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Private Methods
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		private static string MakeTempFilePath(string test)
 		{

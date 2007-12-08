@@ -15,6 +15,16 @@ namespace MKY.IO.Ports
 	[TypeConverter(typeof(SerialPortSettingsConverter))]
 	public class SerialPortSettings : IEquatable<SerialPortSettings>
 	{
+		/// <summary></summary>
+		public const byte XOnByte  = 0x11;
+		/// <summary></summary>
+		public const byte XOffByte = 0x13;
+
+		/// <summary></summary>
+		public const string XOnDescription = "XOn = 11h (DC1)";
+		/// <summary></summary>
+		public const string XOffDescription = "XOff = 13h (DC3)";
+
 		private BaudRate _baudRate;
 		private DataBits _dataBits;
 		private Parity _parity;

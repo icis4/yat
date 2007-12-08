@@ -30,8 +30,8 @@ namespace YAT.Gui.Forms
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Terminal));
-			YAT.Gui.Types.Command command1 = new YAT.Gui.Types.Command();
-			YAT.Gui.Types.Command command2 = new YAT.Gui.Types.Command();
+			YAT.Model.Types.Command command1 = new YAT.Model.Types.Command();
+			YAT.Model.Types.Command command2 = new YAT.Model.Types.Command();
 			this.timer_Status = new System.Windows.Forms.Timer(this.components);
 			this.contextMenuStrip_Monitor = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem_MonitorContextMenu_Radix = new System.Windows.Forms.ToolStripMenuItem();

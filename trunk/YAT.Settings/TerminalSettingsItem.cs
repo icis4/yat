@@ -11,14 +11,14 @@ namespace YAT.Settings
 	{
 		private string _filePath;
 		private Guid _guid;
-		private Gui.Settings.WindowSettings _window;
+		private WindowSettings _window;
 
 		public TerminalSettingsItem()
 			: base(MKY.Utilities.Settings.SettingsType.Implicit)
 		{
 			SetMyDefaults();
 
-			Window = new Gui.Settings.WindowSettings(SettingsType);
+			Window = new WindowSettings(SettingsType);
 
 			ClearChanged();
 		}
@@ -32,7 +32,7 @@ namespace YAT.Settings
 			_filePath = rhs.FilePath;
 			_guid = rhs.Guid;
 
-			Window = new Gui.Settings.WindowSettings(rhs.Window);
+			Window = new WindowSettings(rhs.Window);
 
 			ClearChanged();
 		}
@@ -95,7 +95,7 @@ namespace YAT.Settings
 		}
 
 		[XmlElement("Window")]
-		public Gui.Settings.WindowSettings Window
+		public WindowSettings Window
 		{
 			get { return (_window); }
 			set
@@ -107,7 +107,7 @@ namespace YAT.Settings
 				}
 				else if (_window != value)
 				{
-					Gui.Settings.WindowSettings old = _window;
+					WindowSettings old = _window;
 					_window = value;
 					ReplaceNode(old, _window);
 				}

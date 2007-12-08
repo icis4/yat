@@ -28,8 +28,8 @@ namespace YAT.Gui.Controls
 		/// </summary>
 		private void InitializeComponent()
 		{
-            YAT.Gui.Types.Command command1 = new YAT.Gui.Types.Command();
-            YAT.Gui.Types.Command command2 = new YAT.Gui.Types.Command();
+            YAT.Model.Types.Command command1 = new YAT.Model.Types.Command();
+            YAT.Model.Types.Command command2 = new YAT.Model.Types.Command();
             this.splitContainer_Send = new System.Windows.Forms.SplitContainer();
             this.groupBox_SendCommand = new System.Windows.Forms.GroupBox();
             this.sendCommand = new YAT.Gui.Controls.SendCommand();

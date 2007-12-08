@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Windows.Forms;
 
 namespace YAT
@@ -7,13 +8,23 @@ namespace YAT
 	/// <summary>
 	/// Application main class of YAT.
 	/// </summary>
+	/// <remarks>
+	/// This class is separated into its own .exe project for those who want to use YAT
+	/// components within their own application context.
+	/// </remarks>
 	public class YAT
 	{
-		public YAT(string[] args)
+		/// <summary>
+		/// Displays welcome screen and starts YAT.
+		/// </summary>
+		/// <remarks>
+		/// If built as release, unhandled exceptions are caught here and shown to the user
+		/// in an exception dialog. The user can then choose to send in the exception as
+		/// feedback. In case of debug, unhandled exceptions are intentionally not handled
+		/// here but by the development environment instead.
+		/// </remarks>
+		public Controller.MainResult Run(string[] commandLineArgs)
 		{
-			Gui.Forms.WelcomeScreen welcomeScreen;
-			Gui.Forms.Main app;
-
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
@@ -22,12 +33,9 @@ namespace YAT
 			{
 			#endif
 
-			welcomeScreen = new Gui.Forms.WelcomeScreen();
-
+			Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
 			if (welcomeScreen.ShowDialog() != DialogResult.OK)
-				return;
-
-			app = new Gui.Forms.Main(args, welcomeScreen.ApplicationSettingsLoaded);
+				return (Controller.MainResult.ApplicationSettingsError);
 
 			#if (!DEBUG)
 			}
@@ -43,7 +51,7 @@ namespace YAT
 					Gui.Forms.UnhandledException f = new Gui.Forms.UnhandledException(ex);
 					f.ShowDialog();
 				}
-				return;
+				return (Controller.MainResult.UnhandledException);
 			}
 			#endif
 
@@ -52,7 +60,8 @@ namespace YAT
 			{
 			#endif
 
-			Application.Run(app);
+			Controller.Main main = new Controller.Main(commandLineArgs);
+			main.Run();
 
 			#if (!DEBUG)
 			}
@@ -68,18 +77,22 @@ namespace YAT
 					Gui.Forms.UnhandledException f = new Gui.Forms.UnhandledException(ex);
 					f.ShowDialog();
 				}
-				return;
+				return (Controller.MainResult.UnhandledException);
 			}
 			#endif
+
+			return (Controller.MainResult.OK);
 		}
 
 		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		static void Main(string[] args)
+		static int Main(string[] commandLineArgs)
 		{
-			new YAT(args);
+			YAT yat = new YAT();
+			Controller.MainResult result = yat.Run(commandLineArgs);
+			return ((int)result);
 		}
 	}
 }

@@ -9,6 +9,11 @@ namespace YAT.Test
 {
 	public class TestAll
 	{
+		#region Suite
+		//==========================================================================================
+		// Suite
+		//==========================================================================================
+
 		[Suite]
 		public static TestSuite Suite
 		{
@@ -30,5 +35,7 @@ namespace YAT.Test
 				return (suite);
 			}
 		}
+
+		#endregion
 	}
 }

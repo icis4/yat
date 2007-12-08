@@ -9,10 +9,10 @@ namespace YAT.Domain.Settings.Socket
 	[Serializable]
 	public class SocketSettings : MKY.Utilities.Settings.Settings, IEquatable<SocketSettings>
 	{
-
-		//------------------------------------------------------------------------------------------
+		#region Constants
+		//==========================================================================================
 		// Constants
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary></summary>
 		public const string DefaultRemoteHostName = "localhost";
@@ -21,9 +21,12 @@ namespace YAT.Domain.Settings.Socket
 		/// <summary></summary>
 		public const int DefaultPort = 10000;
 
-		//------------------------------------------------------------------------------------------
+		#endregion
+
+		#region Fields
+		//==========================================================================================
 		// Fields
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		private MKY.Net.Sockets.HostType _hostType;
 
@@ -38,9 +41,12 @@ namespace YAT.Domain.Settings.Socket
 
 		private TcpClientAutoReconnect _tcpClientAutoReconnect;
 
-		//------------------------------------------------------------------------------------------
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
 		// Object Lifetime
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary></summary>
 		public SocketSettings()
@@ -99,10 +105,12 @@ namespace YAT.Domain.Settings.Socket
 			TcpClientAutoReconnect  = new TcpClientAutoReconnect(false, 500);
 		}
 
+		#endregion
+
 		#region Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary></summary>
 		[XmlElement("HostType")]
@@ -265,9 +273,9 @@ namespace YAT.Domain.Settings.Socket
 		#endregion
 
 		#region Methods
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Methods
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary>
 		/// Tries to resolve the IP address from <see cref="RemoteHostNameOrAddress"/> and
@@ -299,6 +307,9 @@ namespace YAT.Domain.Settings.Socket
 		#endregion
 
 		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
@@ -357,6 +368,9 @@ namespace YAT.Domain.Settings.Socket
 		#endregion
 
 		#region Comparison Operators
+		//==========================================================================================
+		// Comparison Operators
+		//==========================================================================================
 
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
