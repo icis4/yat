@@ -2,26 +2,28 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
-using System.Windows.Forms;
-using System.Drawing;
 
-namespace YAT.Gui.Settings
+using MKY.Utilities.Recent;
+
+using YAT.Model.Types;
+
+namespace YAT.Model.Settings
 {
 	[Serializable]
-	public class MainWindowSettings : MKY.Utilities.Settings.Settings, IEquatable<MainWindowSettings>
+	public class SendCommandSettings : MKY.Utilities.Settings.Settings, IEquatable<SendCommandSettings>
 	{
-		private FormStartPosition _startPosition;
-		private FormWindowState _windowState;
-		private Point _location;
-		private Size _size;
+		public const int MaximumRecentCommands = 24;
 
-		public MainWindowSettings()
+		private Command _command;
+		private RecentItemCollection<Command> _recentsCommands;
+
+		public SendCommandSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
-		public MainWindowSettings(MKY.Utilities.Settings.SettingsType settingsType)
+		public SendCommandSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -31,14 +33,11 @@ namespace YAT.Gui.Settings
 		/// <remarks>
 		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
 		/// </remarks>
-		public MainWindowSettings(MainWindowSettings rhs)
+		public SendCommandSettings(SendCommandSettings rhs)
 			: base(rhs)
 		{
-			_startPosition = rhs.StartPosition;
-			_windowState   = rhs.WindowState;
-			_location      = rhs.Location;
-			_size          = rhs.Size;
-
+			Command = new Command(rhs.Command);
+			RecentCommands = new RecentItemCollection<Command>(rhs.RecentCommands);
 			ClearChanged();
 		}
 
@@ -47,10 +46,8 @@ namespace YAT.Gui.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			StartPosition = FormStartPosition.WindowsDefaultLocation;
-			WindowState = FormWindowState.Normal;
-			Location = new Point(0, 0);
-			Size = new Size(800, 600);
+			Command = new Command();
+			RecentCommands = new RecentItemCollection<Command>(MaximumRecentCommands);
 		}
 
 		#region Properties
@@ -58,57 +55,29 @@ namespace YAT.Gui.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
-		[XmlElement("StartPosition")]
-		public FormStartPosition StartPosition
+		[XmlElement("Command")]
+		public Command Command
 		{
-			get { return (_startPosition); }
+			get { return (_command); }
 			set
 			{
-				if (_startPosition != value)
+				if (_command != value)
 				{
-					_startPosition = value;
+					_command = value;
 					SetChanged();
 				}
 			}
 		}
 
-		[XmlElement("WindowState")]
-		public FormWindowState WindowState
+		[XmlElement("RecentCommands")]
+		public RecentItemCollection<Command> RecentCommands
 		{
-			get { return (_windowState); }
+			get { return (_recentsCommands); }
 			set
 			{
-				if (_windowState != value)
+				if (_recentsCommands != value)
 				{
-					_windowState = value;
-					SetChanged();
-				}
-			}
-		}
-
-		[XmlElement("Location")]
-		public Point Location
-		{
-			get { return (_location); }
-			set
-			{
-				if (_location != value)
-				{
-					_location = value;
-					SetChanged();
-				}
-			}
-		}
-
-		[XmlElement("Size")]
-		public Size Size
-		{
-			get { return (_size); }
-			set
-			{
-				if (_size != value)
-				{
-					_size = value;
+					_recentsCommands = value;
 					SetChanged();
 				}
 			}
@@ -123,8 +92,8 @@ namespace YAT.Gui.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is MainWindowSettings)
-				return (Equals((MainWindowSettings)obj));
+			if (obj is SendCommandSettings)
+				return (Equals((SendCommandSettings)obj));
 
 			return (false);
 		}
@@ -132,17 +101,15 @@ namespace YAT.Gui.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(MainWindowSettings value)
+		public bool Equals(SendCommandSettings value)
 		{
 			// ensure that object.operator!=() is called
 			if ((object)value != null)
 			{
 				return
 					(
-					_startPosition.Equals(value._startPosition) &&
-					_windowState.Equals(value._windowState) &&
-					_location.Equals(value._location) &&
-					_size.Equals(value._size)
+					_command.Equals(value._command) &&
+					_recentsCommands.Equals(value._recentsCommands)
 					);
 			}
 			return (false);
@@ -160,7 +127,7 @@ namespace YAT.Gui.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(MainWindowSettings lhs, MainWindowSettings rhs)
+		public static bool operator ==(SendCommandSettings lhs, SendCommandSettings rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))
 				return (true);
@@ -174,9 +141,31 @@ namespace YAT.Gui.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(MainWindowSettings lhs, MainWindowSettings rhs)
+		public static bool operator !=(SendCommandSettings lhs, SendCommandSettings rhs)
 		{
 			return (!(lhs == rhs));
+		}
+
+		#endregion
+
+		#region Comparision
+		//------------------------------------------------------------------------------------------
+		// Comparision ;-)
+		//------------------------------------------------------------------------------------------
+
+		private const string _EasterEggCommand = "\\easteregg";
+
+		public static bool IsEasterEggCommand(string command)
+		{
+			return (string.Compare(command, _EasterEggCommand, true) == 0);
+		}
+
+		public static string EasterEggCommandText
+		{
+			get
+			{
+				return (":-)");
+			}
 		}
 
 		#endregion

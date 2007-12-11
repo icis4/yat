@@ -617,6 +617,122 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
+		private void ShowOpenWorkspaceFromFileDialog()
+		{
+			OnFixedStatusTextRequest("Opening workspace...");
+			OpenFileDialog ofd = new OpenFileDialog();
+			ofd.Title = "Open";
+			ofd.Filter = ExtensionSettings.WorkspaceFilesFilter;
+			ofd.DefaultExt = ExtensionSettings.WorkspaceFiles;
+			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath;
+			if ((ofd.ShowDialog(_window) == DialogResult.OK) && (ofd.FileName != ""))
+			{
+				Refresh();
+
+				ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.SaveLocalUser();
+
+				OpenWorkspaceFromFile(ofd.FileName);
+			}
+			else
+			{
+				ResetStatusText();
+			}
+		}
+
+		private void ShowNewTerminalDialog()
+		{
+			SetFixedStatusText("New terminal...");
+			Gui.Forms.NewTerminal f = new Gui.Forms.NewTerminal(ApplicationSettings.LocalUser.NewTerminal);
+			if (f.ShowDialog(this) == DialogResult.OK)
+			{
+				Refresh();
+
+				ApplicationSettings.LocalUser.NewTerminal = f.NewTerminalSettingsResult;
+				ApplicationSettings.SaveLocalUser();
+
+				SetFixedStatusText("Creating new terminal...");
+
+				DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> sh = new DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot>(f.TerminalSettingsResult);
+				Gui.Forms.Terminal terminal = new Gui.Forms.Terminal(sh);
+
+				terminal.UserName = _TerminalText + GetNextTerminalId();
+				terminal.MdiParent = this;
+				terminal.TerminalChanged += new EventHandler(mdi_child_TerminalChanged);
+				terminal.TerminalSaved += new EventHandler<TerminalSavedEventArgs>(mdi_child_TerminalSaved);
+				terminal.FormClosed += new FormClosedEventHandler(mdi_child_FormClosed);
+				terminal.Show();
+
+				AddToOrReplaceInWorkspace(terminal);
+
+				SetTimedStatusText("New terminal created");
+			}
+			else
+			{
+				ResetStatusText();
+			}
+		}
+
+		private void ShowOpenTerminalFromFileDialog()
+		{
+			SetFixedStatusText("Opening terminal...");
+			OpenFileDialog ofd = new OpenFileDialog();
+			ofd.Title = "Open";
+			ofd.Filter = ExtensionSettings.TerminalFilesFilter;
+			ofd.DefaultExt = ExtensionSettings.TerminalFiles;
+			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.TerminalFilesPath;
+			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName != ""))
+			{
+				Refresh();
+
+				ApplicationSettings.LocalUser.Paths.TerminalFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
+				ApplicationSettings.SaveLocalUser();
+
+				OpenTerminalFromFile(ofd.FileName);
+			}
+			else
+			{
+				ResetStatusText();
+			}
+		}
+
+		private void CloseTerminal()
+		{
+			((Gui.Forms.Terminal)ActiveMdiChild).RequestCloseFile();
+		}
+
+		private void CloseAllTerminals()
+		{
+			foreach (Form f in MdiChildren)
+				((Gui.Forms.Terminal)f).RequestCloseFile();
+		}
+
+		private void SaveTerminal()
+		{
+			((Gui.Forms.Terminal)ActiveMdiChild).RequestSaveFile();
+		}
+
+		private void SaveAllTerminals()
+		{
+			foreach (Form f in MdiChildren)
+				((Gui.Forms.Terminal)f).RequestSaveFile();
+		}
+
+		private void OpenTerminalIO()
+		{
+			((Gui.Forms.Terminal)ActiveMdiChild).RequestOpenTerminal();
+		}
+
+		private void CloseTerminalIO()
+		{
+			((Gui.Forms.Terminal)ActiveMdiChild).RequestCloseTerminal();
+		}
+
+		private void EditTerminalSettings()
+		{
+			((Gui.Forms.Terminal)ActiveMdiChild).RequestEditTerminalSettings();
+		}
+
 		#region Status
 		//==========================================================================================
 		// Status

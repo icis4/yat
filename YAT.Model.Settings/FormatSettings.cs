@@ -4,7 +4,7 @@ using System.Text;
 using System.Xml.Serialization;
 using System.Drawing;
 
-namespace YAT.Gui.Settings
+namespace YAT.Model.Settings
 {
 	[Serializable]
 	public class FormatSettings : MKY.Utilities.Settings.Settings, IEquatable<FormatSettings>

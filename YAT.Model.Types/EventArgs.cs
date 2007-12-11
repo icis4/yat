@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace YAT.Gui.Types
+namespace YAT.Model.Types
 {
 	/// <summary></summary>
 	public class PredefinedCommandEventArgs : EventArgs

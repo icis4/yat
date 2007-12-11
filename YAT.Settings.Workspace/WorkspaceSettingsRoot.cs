@@ -4,6 +4,7 @@ using System.Text;
 using System.Xml.Serialization;
 
 using YAT.Settings;
+using YAT.Model.Settings;
 
 namespace YAT.Settings.Workspace
 {

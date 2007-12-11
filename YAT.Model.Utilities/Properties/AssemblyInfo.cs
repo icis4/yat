@@ -6,8 +6,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("YAT.Gui.Settings")]
-[assembly: AssemblyDescription("YAT GUI components")]
+[assembly: AssemblyTitle("YAT.Model.Utilities")]
+[assembly: AssemblyDescription("YAT model utilities")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("YAT")]
 [assembly: AssemblyProduct("YAT")]
@@ -21,7 +21,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("56940284-2be0-4209-91cb-63b68f3349eb")]
+[assembly: Guid("6ddef24c-b339-4d55-ac54-44f3512f13fe")]
 
 // Version information for an assembly consists of the following four values:
 //

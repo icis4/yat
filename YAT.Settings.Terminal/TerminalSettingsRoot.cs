@@ -230,49 +230,49 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlIgnore]
-		public Gui.Settings.SendCommandSettings SendCommand
+		public Model.Settings.SendCommandSettings SendCommand
 		{
 			get { return (_implicit.SendCommand); }
 			set { _implicit.SendCommand = value; }
 		}
 
 		[XmlIgnore]
-		public Gui.Settings.SendFileSettings SendFile
+		public Model.Settings.SendFileSettings SendFile
 		{
 			get { return (_implicit.SendFile); }
 			set { _implicit.SendFile = value; }
 		}
 
 		[XmlIgnore]
-		public Gui.Settings.PredefinedSettings Predefined
+		public Model.Settings.PredefinedSettings Predefined
 		{
 			get { return (_implicit.Predefined); }
 			set { _implicit.Predefined = value; }
 		}
 
 		[XmlIgnore]
-		public Settings.WindowSettings Window
+		public Model.Settings.WindowSettings Window
 		{
 			get { return (_implicit.Window); }
 			set { _implicit.Window = value; }
 		}
 
 		[XmlIgnore]
-		public Gui.Settings.LayoutSettings Layout
+		public Model.Settings.LayoutSettings Layout
 		{
 			get { return (_implicit.Layout); }
 			set { _implicit.Layout = value; }
 		}
 
 		[XmlIgnore]
-		public Gui.Settings.PredefinedCommandSettings PredefinedCommand
+		public Model.Settings.PredefinedCommandSettings PredefinedCommand
 		{
 			get { return (_explicit.PredefinedCommand); }
 			set { _explicit.PredefinedCommand = value; }
 		}
 
 		[XmlIgnore]
-		public Gui.Settings.FormatSettings Format
+		public Model.Settings.FormatSettings Format
 		{
 			get { return (_explicit.Format); }
 			set { _explicit.Format = value; }
