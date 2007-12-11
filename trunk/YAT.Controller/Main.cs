@@ -40,7 +40,6 @@ namespace YAT.Controller
 		//==========================================================================================
 
 		// command line args
-		private string[] _modelCommandLineArgs;
 		private bool _commandLineHelpIsRequested = false;
 
 		#endregion
@@ -52,8 +51,7 @@ namespace YAT.Controller
 
 		public Main(string[] commandLineArgs)
 		{
-			_commandLineArgs = commandLineArgs;
-			PrepareCommandLineArgs(commandLineArgs);
+			ParseCommandLineArgs(commandLineArgs);
 
 			InitializeComponent();
 			Initialize();
@@ -78,12 +76,16 @@ namespace YAT.Controller
 			}
 
 			// create model and view and run application
-			Model.Main model = new Model.Main(_modelCommandLineArgs);
-			Gui.Forms.Main view = new Gui.Forms.Main(view);
-
-			// This call starts the Win32 message loop on the current thread and the main form
-			// \attention This call does not return until the application exits
-			Application.Run(view);
+			using (Model.Main model = new Model.Main())
+			{
+				using (Gui.Forms.Main view = new Gui.Forms.Main(model))
+				{
+					// start the Win32 message loop on the current thread and the main form
+					// \attention This call does not return until the application exits
+					Application.Run(view);
+				}
+			}
+			// dispose model and view to ensure immediate release of resources
 
 			return (MainResult.OK);
 		}
@@ -95,7 +97,7 @@ namespace YAT.Controller
 		// Command Line Args
 		//==========================================================================================
 
-		private void PrepareCommandLineArgs(string[] commandLineArgs)
+		private void ParseCommandLineArgs(string[] commandLineArgs)
 		{
 			foreach (string arg in commandLineArgs)
 			{
