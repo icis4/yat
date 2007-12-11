@@ -241,14 +241,6 @@
       <Project>{0762E929-7EB5-4BDA-9018-DBA94DA8BDE5}</Project>
       <Name>YAT.Gui.Controls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Gui.Settings\YAT.Gui.Settings.csproj">
-      <Project>{4D2B091A-400B-436C-8C52-5DDABE9EBBAA}</Project>
-      <Name>YAT.Gui.Settings</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\YAT.Gui.Types\YAT.Gui.Types.csproj">
-      <Project>{259B16E1-C709-4843-B9A8-EA1FF55EA1E3}</Project>
-      <Name>YAT.Gui.Types</Name>
-    </ProjectReference>
     <ProjectReference Include="..\YAT.Gui.Utilities\YAT.Gui.Utilities.csproj">
       <Project>{F0C24AC7-9A75-4898-AA3C-11711FD5C19C}</Project>
       <Name>YAT.Gui.Utilities</Name>

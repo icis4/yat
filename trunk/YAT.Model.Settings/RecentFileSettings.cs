@@ -5,25 +5,23 @@ using System.Xml.Serialization;
 
 using MKY.Utilities.Recent;
 
-using YAT.Model.Types;
-
-namespace YAT.Gui.Settings
+namespace YAT.Model.Settings
 {
 	[Serializable]
-	public class SendCommandSettings : MKY.Utilities.Settings.Settings, IEquatable<SendCommandSettings>
+	public class RecentFileSettings : MKY.Utilities.Settings.Settings, IEquatable<RecentFileSettings>
 	{
-		public const int MaximumRecentCommands = 24;
+		public const int MaximumFilePaths = 8;
 
-		private Command _command;
-		private RecentItemCollection<Command> _recentsCommands;
+		private RecentItemCollection<string> _filePaths;
 
-		public SendCommandSettings()
+		public RecentFileSettings()
+			: base()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
-		public SendCommandSettings(MKY.Utilities.Settings.SettingsType settingsType)
+		public RecentFileSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -33,11 +31,10 @@ namespace YAT.Gui.Settings
 		/// <remarks>
 		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
 		/// </remarks>
-		public SendCommandSettings(SendCommandSettings rhs)
+		public RecentFileSettings(RecentFileSettings rhs)
 			: base(rhs)
 		{
-			Command = new Command(rhs.Command);
-			RecentCommands = new RecentItemCollection<Command>(rhs.RecentCommands);
+			FilePaths = new RecentItemCollection<string>(rhs.FilePaths);
 			ClearChanged();
 		}
 
@@ -46,8 +43,7 @@ namespace YAT.Gui.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			Command = new Command();
-			RecentCommands = new RecentItemCollection<Command>(MaximumRecentCommands);
+			FilePaths = new RecentItemCollection<string>(MaximumFilePaths);
 		}
 
 		#region Properties
@@ -55,32 +51,29 @@ namespace YAT.Gui.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
-		[XmlElement("Command")]
-		public Command Command
+		[XmlElement("FilePaths")]
+		public RecentItemCollection<string> FilePaths
 		{
-			get { return (_command); }
+			get { return (_filePaths); }
 			set
 			{
-				if (_command != value)
+				if (_filePaths != value)
 				{
-					_command = value;
+					_filePaths = value;
 					SetChanged();
 				}
 			}
 		}
 
-		[XmlElement("RecentCommands")]
-		public RecentItemCollection<Command> RecentCommands
+		/// <remarks>
+		/// This property allows standard XML serialization which is not provided for
+		/// generic collection <see cref="RecentItemCollection"/>.
+		/// </remarks>
+		[XmlElement("FilePathsMaximumCapacity")]
+		public int FilePathsMaximumCapacity
 		{
-			get { return (_recentsCommands); }
-			set
-			{
-				if (_recentsCommands != value)
-				{
-					_recentsCommands = value;
-					SetChanged();
-				}
-			}
+			get { return (_filePaths.MaximumCapacity); }
+			set { _filePaths.MaximumCapacity = value; }
 		}
 
 		#endregion
@@ -92,8 +85,8 @@ namespace YAT.Gui.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is SendCommandSettings)
-				return (Equals((SendCommandSettings)obj));
+			if (obj is RecentFileSettings)
+				return (Equals((RecentFileSettings)obj));
 
 			return (false);
 		}
@@ -101,15 +94,14 @@ namespace YAT.Gui.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(SendCommandSettings value)
+		public bool Equals(RecentFileSettings value)
 		{
 			// ensure that object.operator!=() is called
 			if ((object)value != null)
 			{
 				return
 					(
-					_command.Equals(value._command) &&
-					_recentsCommands.Equals(value._recentsCommands)
+					_filePaths.Equals(value._filePaths)
 					);
 			}
 			return (false);
@@ -127,7 +119,7 @@ namespace YAT.Gui.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(SendCommandSettings lhs, SendCommandSettings rhs)
+		public static bool operator ==(RecentFileSettings lhs, RecentFileSettings rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))
 				return (true);
@@ -141,31 +133,9 @@ namespace YAT.Gui.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(SendCommandSettings lhs, SendCommandSettings rhs)
+		public static bool operator !=(RecentFileSettings lhs, RecentFileSettings rhs)
 		{
 			return (!(lhs == rhs));
-		}
-
-		#endregion
-
-		#region Comparision
-		//------------------------------------------------------------------------------------------
-		// Comparision ;-)
-		//------------------------------------------------------------------------------------------
-
-		private const string _EasterEggCommand = "\\easteregg";
-
-		public static bool IsEasterEggCommand(string command)
-		{
-			return (string.Compare(command, _EasterEggCommand, true) == 0);
-		}
-
-		public static string EasterEggCommandText
-		{
-			get
-			{
-				return (":-)");
-			}
 		}
 
 		#endregion

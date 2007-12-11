@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace YAT.Settings
+using YAT.Model.Types;
+
+namespace YAT.Model.Settings
 {
 	[Serializable]
-	public class WorkspaceSettings : MKY.Utilities.Settings.Settings, IEquatable<WorkspaceSettings>
+	public class SendFileSettings : MKY.Utilities.Settings.Settings, IEquatable<SendFileSettings>
 	{
-		private TerminalSettingsItemCollection _terminalSettings;
+		private Command _command;
 
-		public WorkspaceSettings()
-			: base(MKY.Utilities.Settings.SettingsType.Explicit)
+		public SendFileSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
-		public WorkspaceSettings(MKY.Utilities.Settings.SettingsType settingsType)
+		public SendFileSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -27,10 +28,10 @@ namespace YAT.Settings
 		/// <remarks>
 		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
 		/// </remarks>
-		public WorkspaceSettings(WorkspaceSettings rhs)
+		public SendFileSettings(SendFileSettings rhs)
 			: base(rhs)
 		{
-			TerminalSettings = new TerminalSettingsItemCollection(rhs.TerminalSettings);
+			Command = new Command(rhs.Command);
 			ClearChanged();
 		}
 
@@ -39,7 +40,7 @@ namespace YAT.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			TerminalSettings = new TerminalSettingsItemCollection();
+			Command = new Command();
 		}
 
 		#region Properties
@@ -47,15 +48,15 @@ namespace YAT.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
-		[XmlElement("TerminalSettings")]
-		public TerminalSettingsItemCollection TerminalSettings
+		[XmlElement("Command")]
+		public Command Command
 		{
-			get { return (_terminalSettings); }
+			get { return (_command); }
 			set
 			{
-				if (_terminalSettings != value)
+				if (_command != value)
 				{
-					_terminalSettings = value;
+					_command = value;
 					SetChanged();
 				}
 			}
@@ -70,8 +71,8 @@ namespace YAT.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is WorkspaceSettings)
-				return (Equals((WorkspaceSettings)obj));
+			if (obj is SendFileSettings)
+				return (Equals((SendFileSettings)obj));
 
 			return (false);
 		}
@@ -79,16 +80,12 @@ namespace YAT.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(WorkspaceSettings value)
+		public bool Equals(SendFileSettings value)
 		{
 			// ensure that object.operator!=() is called
 			if ((object)value != null)
-			{
-				return
-					(
-					_terminalSettings.Equals(value._terminalSettings)
-					);
-			}
+				return (_command.Equals(value._command));
+
 			return (false);
 		}
 
@@ -104,7 +101,7 @@ namespace YAT.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(WorkspaceSettings lhs, WorkspaceSettings rhs)
+		public static bool operator ==(SendFileSettings lhs, SendFileSettings rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))
 				return (true);
@@ -118,7 +115,7 @@ namespace YAT.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(WorkspaceSettings lhs, WorkspaceSettings rhs)
+		public static bool operator !=(SendFileSettings lhs, SendFileSettings rhs)
 		{
 			return (!(lhs == rhs));
 		}

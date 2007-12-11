@@ -64,17 +64,13 @@
       <Project>{1C44A8C0-7805-4172-8746-2DB750803FFF}</Project>
       <Name>YAT.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAT.Gui.Settings\YAT.Gui.Settings.csproj">
-      <Project>{4D2B091A-400B-436C-8C52-5DDABE9EBBAA}</Project>
-      <Name>YAT.Gui.Settings</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\YAT.Gui.Types\YAT.Gui.Types.csproj">
-      <Project>{259B16E1-C709-4843-B9A8-EA1FF55EA1E3}</Project>
-      <Name>YAT.Gui.Types</Name>
-    </ProjectReference>
     <ProjectReference Include="..\YAT.Log\YAT.Log.csproj">
       <Project>{7B0B343D-F992-4A1E-8E07-CB8EC651A5E6}</Project>
       <Name>YAT.Log</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Model.Settings\YAT.Model.Settings.csproj">
+      <Project>{E9FF1D5E-84E0-4ADB-94EC-662903931295}</Project>
+      <Name>YAT.Model.Settings</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Settings.Application\YAT.Settings.Application.csproj">
       <Project>{69A8CBB4-7D00-4A3D-9CF7-220DD02C2EB7}</Project>

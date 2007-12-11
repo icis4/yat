@@ -4,6 +4,7 @@ using System.Text;
 
 using MKY.Utilities.Settings;
 
+using YAT.Settings;
 using YAT.Settings.Workspace;
 
 namespace YAT.Model
@@ -39,6 +40,13 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
+		public Workspace()
+		{
+			_workspaceSettingsHandler = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
+			_workspaceSettingsHandler.SettingsFilePath = ApplicationSettings.LocalUser.General.CurrentWorkspaceFilePath;
+			_workspaceSettingsRoot = _workspaceSettingsHandler.Settings;
+			AttachWorkspaceSettingsHandlers();
+		}
 
 		#region Disposal
 		//------------------------------------------------------------------------------------------
@@ -284,97 +292,75 @@ namespace YAT.Model
 			return (_terminalIdCounter);
 		}
 
-		private void ShowNewTerminalDialog()
+		private bool OpenTerminalFromFile(string filePath)
 		{
-			SetFixedStatusText("New terminal...");
-			Gui.Forms.NewTerminal f = new Gui.Forms.NewTerminal(ApplicationSettings.LocalUser.NewTerminal);
-			if (f.ShowDialog(this) == DialogResult.OK)
+			return (OpenTerminalFromFile(filePath, Guid.Empty, null, false));
+		}
+
+		private bool OpenTerminalFromFile(string filePath, Guid guid, Settings.WindowSettings windowSettings, bool suppressErrorHandling)
+		{
+			string absoluteFilePath = filePath;
+
+			OnFixedStatusTextRequest("Opening terminal...");
+			try
 			{
-				Refresh();
+				DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> sh = new DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot>();
 
-				ApplicationSettings.LocalUser.NewTerminal = f.NewTerminalSettingsResult;
-				ApplicationSettings.SaveLocalUser();
+				// combine absolute workspace path with terminal path if that one is relative
+				absoluteFilePath = XPath.CombineFilePaths(_workspaceSettingsHandler.SettingsFilePath, filePath);
+				sh.SettingsFilePath = absoluteFilePath;
+				sh.Load();
 
-				SetFixedStatusText("Creating new terminal...");
+				// replace window settings with those saved in workspace
+				if (windowSettings != null)
+					sh.Settings.Window = windowSettings;
 
-				DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> sh = new DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot>(f.TerminalSettingsResult);
-				Gui.Forms.Terminal terminal = new Gui.Forms.Terminal(sh);
+				// create terminal
+				Terminal terminal = new Terminal(sh);
 
-				terminal.UserName = _TerminalText + GetNextTerminalId();
-				terminal.MdiParent = this;
-				terminal.TerminalChanged += new EventHandler(mdi_child_TerminalChanged);
-				terminal.TerminalSaved += new EventHandler<TerminalSavedEventArgs>(mdi_child_TerminalSaved);
-				terminal.FormClosed += new FormClosedEventHandler(mdi_child_FormClosed);
-				terminal.Show();
+				if (guid != Guid.Empty)
+					terminal.Guid = guid;
+
+				if (sh.Settings.AutoSaved)
+					terminal.UserName = _TerminalText + GetNextTerminalId();
+				else
+					terminal.UserNameFromFile = absoluteFilePath;
+
+				terminal.TerminalChanged += new EventHandler(terminal_TerminalChanged);
+				terminal.TerminalSaved += new EventHandler<TerminalSavedEventArgs>(terminal_TerminalSaved);
+				terminal.TerminalClosed += new FormClosedEventHandler(terminal_TerminalClosed);
 
 				AddToOrReplaceInWorkspace(terminal);
+				if (!sh.Settings.AutoSaved)
+					SetRecent(filePath);
 
-				SetTimedStatusText("New terminal created");
+				OnTimedStatusTextRequest("Terminal opened");
+				return (true);
 			}
-			else
+			catch (System.Xml.XmlException ex)
 			{
-				ResetStatusText();
+				if (!suppressErrorHandling)
+				{
+					OnFixedStatusTextRequest("Error opening terminal!");
+
+					OnMessageInputRequest
+						(
+						"Unable to open file" + Environment.NewLine + absoluteFilePath + Environment.NewLine + Environment.NewLine +
+						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
+						"File error message: " + ex.InnerException.Message,
+						"File Error",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Stop
+						);
+
+					OnTimedStatusTextRequest("Terminal not opened!");
+					return (false);
+				}
+				else
+				{
+					throw (ex);
+				}
 			}
-		}
-
-		private void ShowOpenTerminalFromFileDialog()
-		{
-			SetFixedStatusText("Opening terminal...");
-			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Title = "Open";
-			ofd.Filter = ExtensionSettings.TerminalFilesFilter;
-			ofd.DefaultExt = ExtensionSettings.TerminalFiles;
-			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.TerminalFilesPath;
-			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName != ""))
-			{
-				Refresh();
-
-				ApplicationSettings.LocalUser.Paths.TerminalFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
-				ApplicationSettings.SaveLocalUser();
-
-				OpenTerminalFromFile(ofd.FileName);
-			}
-			else
-			{
-				ResetStatusText();
-			}
-		}
-
-		private void CloseTerminal()
-		{
-			((Gui.Forms.Terminal)ActiveMdiChild).RequestCloseFile();
-		}
-
-		private void CloseAllTerminals()
-		{
-			foreach (Form f in MdiChildren)
-				((Gui.Forms.Terminal)f).RequestCloseFile();
-		}
-
-		private void SaveTerminal()
-		{
-			((Gui.Forms.Terminal)ActiveMdiChild).RequestSaveFile();
-		}
-
-		private void SaveAllTerminals()
-		{
-			foreach (Form f in MdiChildren)
-				((Gui.Forms.Terminal)f).RequestSaveFile();
-		}
-
-		private void OpenTerminalIO()
-		{
-			((Gui.Forms.Terminal)ActiveMdiChild).RequestOpenTerminal();
-		}
-
-		private void CloseTerminalIO()
-		{
-			((Gui.Forms.Terminal)ActiveMdiChild).RequestCloseTerminal();
-		}
-
-		private void EditTerminalSettings()
-		{
-			((Gui.Forms.Terminal)ActiveMdiChild).RequestEditTerminalSettings();
 		}
 
 		private void AddToOrReplaceInWorkspace(Terminal terminal)
@@ -410,13 +396,13 @@ namespace YAT.Model
 		// MDI Children > Events
 		//------------------------------------------------------------------------------------------
 
-		private void mdi_child_TerminalChanged(object sender, EventArgs e)
+		private void terminal_TerminalChanged(object sender, EventArgs e)
 		{
 			SetTimedStatus(Status.ChildChanged);
 			SetToolControls();
 		}
 
-		private void mdi_child_TerminalSaved(object sender, TerminalSavedEventArgs e)
+		private void terminal_TerminalSaved(object sender, TerminalSavedEventArgs e)
 		{
 			AddToOrReplaceInWorkspace((Terminal)sender);
 			if (!e.AutoSave)
@@ -427,7 +413,7 @@ namespace YAT.Model
 			SetToolControls();
 		}
 
-		private void mdi_child_FormClosed(object sender, FormClosedEventArgs e)
+		private void terminal_TerminalClosed(object sender, EventArgs e)
 		{
 			RemoveFromWorkspace((Terminal)sender);
 			SetTimedStatus(Status.ChildClosed);

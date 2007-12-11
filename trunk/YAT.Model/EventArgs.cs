@@ -45,14 +45,6 @@ namespace YAT.Model
 	}
 
 	/// <summary></summary>
-	public class DialogEventArgs : EventArgs
-	{
-		public DialogEventArgs()
-		{
-		}
-	}
-
-	/// <summary></summary>
 	public class TerminalSavedEventArgs : EventArgs
 	{
 		public readonly string FilePath;

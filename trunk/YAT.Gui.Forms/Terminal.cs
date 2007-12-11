@@ -878,6 +878,187 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
+		#region Settings
+		//==========================================================================================
+		// Settings
+		//==========================================================================================
+
+		private void AttachSettingsHandlers()
+		{
+			_terminalSettingsRoot.ClearChanged();
+			_terminalSettingsRoot.Changed += new EventHandler<SettingsEventArgs>(_settings_Changed);
+		}
+
+		//------------------------------------------------------------------------------------------
+		// Settings Events
+		//------------------------------------------------------------------------------------------
+
+		private void _settings_Changed(object sender, SettingsEventArgs e)
+		{
+			SetTerminalCaption();
+			if (e.Inner == null)
+			{
+				// SettingsRoot changed
+				// nothing to do, no need to care about ProductVersion
+			}
+			else if (ReferenceEquals(e.Inner.Source, _terminalSettingsRoot.Explicit))
+			{
+				// ExplicitSettings changed
+				HandleExplicitSettings(e.Inner);
+			}
+			else if (ReferenceEquals(e.Inner.Source, _terminalSettingsRoot.Implicit))
+			{
+				// ImplicitSettings changed
+				HandleImplicitSettings(e.Inner);
+			}
+		}
+
+		private void HandleExplicitSettings(SettingsEventArgs e)
+		{
+			if (e.Inner == null)
+			{
+				// ExplicitSettings changed
+				// nothing to do
+			}
+			else if (ReferenceEquals(e.Inner.Source, _terminalSettingsRoot.Terminal))
+			{
+				// TerminalSettings changed
+				HandleTerminalSettings(e.Inner);
+			}
+			else if (ReferenceEquals(e.Inner.Source, _terminalSettingsRoot.PredefinedCommand))
+			{
+				// PredefinedCommandSettings changed
+				_isSettingControls = true;
+				predefined.Pages = _terminalSettingsRoot.PredefinedCommand.Pages;
+				_isSettingControls = false;
+
+				SetPredefinedMenuItems();        // ensure that shortcuts are activated
+			}
+			else if (ReferenceEquals(e.Inner.Source, _terminalSettingsRoot.Format))
+			{
+				// FormatSettings changed
+				ReformatMonitors();
+			}
+			else if (ReferenceEquals(e.Inner.Source, _terminalSettingsRoot.Log))
+			{
+				// LogSettings changed
+				SetLogControls();
+			}
+		}
+
+		private void HandleImplicitSettings(SettingsEventArgs e)
+		{
+			if (e.Inner == null)
+			{
+				// ImplicitSettings changed
+				SetTerminalControls();
+				SetLogControls();
+			}
+			else if (ReferenceEquals(e.Inner.Source, _terminalSettingsRoot.SendCommand))
+			{
+				// SendCommandSettings changed
+				_isSettingControls = true;
+				send.Command = _terminalSettingsRoot.SendCommand.Command;
+				send.RecentCommands = _terminalSettingsRoot.SendCommand.RecentCommands;
+				_isSettingControls = false;
+			}
+			else if (ReferenceEquals(e.Inner.Source, _terminalSettingsRoot.SendFile))
+			{
+				// SendFileSettings changed
+				_isSettingControls = true;
+				send.FileCommand = _terminalSettingsRoot.SendFile.Command;
+				_isSettingControls = false;
+			}
+			else if (ReferenceEquals(e.Inner.Source, _terminalSettingsRoot.Predefined))
+			{
+				// PredefinedSettings changed
+				_isSettingControls = true;
+				predefined.SelectedPage = _terminalSettingsRoot.Predefined.SelectedPage;
+				_isSettingControls = false;
+			}
+			else if (ReferenceEquals(e.Inner.Source, _terminalSettingsRoot.Window))
+			{
+				// WindowSettings changed
+				// nothing to do, windows settings are only saved
+			}
+			else if (ReferenceEquals(e.Inner.Source, _terminalSettingsRoot.Layout))
+			{
+				// LayoutSettings changed
+				LayoutTerminal();
+			}
+		}
+
+		private void HandleTerminalSettings(SettingsEventArgs e)
+		{
+			if (_handlingTerminalSettingsIsSuspended)
+				return;
+
+			if (e.Inner == null)
+			{
+				// TerminalSettings changed
+				SetIOStatus();
+				SetIOControlControls();
+			}
+			else if (ReferenceEquals(e.Inner.Source, _terminalSettingsRoot.IO))
+			{
+				// IOSettings changed
+				SetIOStatus();
+				SetIOControlControls();
+			}
+			else if (ReferenceEquals(e.Inner.Source, _terminalSettingsRoot.Buffer))
+			{
+				// BufferSettings changed
+				ReloadMonitors();
+			}
+			else if (ReferenceEquals(e.Inner.Source, _terminalSettingsRoot.Display))
+			{
+				// DisplaySettings changed
+				ReloadMonitors();
+
+				monitor_Tx.ShowCountStatus = _terminalSettingsRoot.Display.ShowCounters;
+				monitor_Bidir.ShowCountStatus = _terminalSettingsRoot.Display.ShowCounters;
+				monitor_Rx.ShowCountStatus = _terminalSettingsRoot.Display.ShowCounters;
+			}
+			else if (ReferenceEquals(e.Inner.Source, _terminalSettingsRoot.Transmit))
+			{
+				// TransmitSettings changed
+				ReloadMonitors();
+			}
+			else if (ReferenceEquals(e.Inner.Source, _terminalSettingsRoot.TextTerminal))
+			{
+				// TextTerminalSettings changed
+				if (_terminalSettingsRoot.TerminalType == Domain.TerminalType.Text)
+					ReloadMonitors();
+			}
+			else if (ReferenceEquals(e.Inner.Source, _terminalSettingsRoot.BinaryTerminal))
+			{
+				// BinaryTerminalSettings changed
+				if (_terminalSettingsRoot.TerminalType == Domain.TerminalType.Binary)
+					ReloadMonitors();
+			}
+		}
+
+		private void SuspendHandlingTerminalSettings()
+		{
+			_handlingTerminalSettingsIsSuspended = true;
+		}
+
+		private void ResumeHandlingTerminalSettings()
+		{
+			_handlingTerminalSettingsIsSuspended = false;
+
+			SetIOStatus();
+			SetIOControlControls();
+
+			ReloadMonitors();
+
+			monitor_Tx.ShowCountStatus = _terminalSettingsRoot.Display.ShowCounters;
+			monitor_Bidir.ShowCountStatus = _terminalSettingsRoot.Display.ShowCounters;
+			monitor_Rx.ShowCountStatus = _terminalSettingsRoot.Display.ShowCounters;
+		}
+
+		#endregion
+
 		#region View
 		//==========================================================================================
 		// View
@@ -1495,6 +1676,139 @@ namespace YAT.Gui.Forms
 				_terminalSettingsRoot.PredefinedCommand = f.SettingsResult;
 				_terminalSettingsRoot.Predefined.SelectedPage = f.SelectedPage;
 			}
+		}
+
+		#endregion
+
+		private void ShowSaveTerminalAsFileDialog()
+		{
+			SetFixedStatusText("Saving terminal as...");
+			SaveFileDialog sfd = new SaveFileDialog();
+			sfd.Title = "Save " + UserName + " As";
+			sfd.Filter = ExtensionSettings.TerminalFilesFilter;
+			sfd.DefaultExt = ExtensionSettings.TerminalFiles;
+			sfd.InitialDirectory = ApplicationSettings.LocalUser.Paths.TerminalFilesPath;
+			sfd.FileName = UserName + "." + sfd.DefaultExt;
+			if ((sfd.ShowDialog(this) == DialogResult.OK) && (sfd.FileName.Length > 0))
+			{
+				Refresh();
+
+				ApplicationSettings.LocalUser.Paths.TerminalFilesPath = Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.SaveLocalUser();
+
+				string autoSaveFilePathToDelete = "";
+				if (_terminalSettingsRoot.AutoSaved)
+					autoSaveFilePathToDelete = _terminalSettingsHandler.SettingsFilePath;
+
+				_terminalSettingsHandler.SettingsFilePath = sfd.FileName;
+				SaveTerminalToFile(false, autoSaveFilePathToDelete);
+			}
+			else
+			{
+				ResetStatusText();
+			}
+
+			SelectSendCommandInput();
+		}
+
+		#region Terminal > Settings
+		//------------------------------------------------------------------------------------------
+		// Terminal > Settings
+		//------------------------------------------------------------------------------------------
+
+		private void ShowTerminalSettings()
+		{
+			SetFixedStatusText("Terminal Settings...");
+
+			Gui.Forms.TerminalSettings f = new Gui.Forms.TerminalSettings(_terminalSettingsRoot.Terminal);
+			if (f.ShowDialog(this) == DialogResult.OK)
+			{
+				Refresh();
+
+				Domain.Settings.TerminalSettings s = f.SettingsResult;
+				if (s.HaveChanged)
+				{
+					// settings have changed, recreate terminal with new settings
+					if (_terminal.IsOpen)
+					{
+						// terminal is open, re-open it with the new settings
+						if (CloseTerminal(false))
+						{
+							SuspendHandlingTerminalSettings();
+
+							DetachTerminalHandlers();      // detach to suspend events
+							_terminalSettingsRoot.Terminal = s;
+							_terminal = Domain.Factory.TerminalFactory.RecreateTerminal(_terminalSettingsRoot.Terminal, _terminal);
+							AttachTerminalHandlers();      // attach and resume events
+							_terminal.ReloadRepositories();
+
+							ResumeHandlingTerminalSettings();
+
+							OpenTerminal(false);
+							SetTimedStatusText("Terminal settings applied.");
+						}
+						else
+						{
+							SetTimedStatusText("Terminal settings not applied!");
+						}
+					}
+					else
+					{
+						// terminal is closed, simply set the new settings
+						SuspendHandlingTerminalSettings();
+
+						DetachTerminalHandlers();          // detach to suspend events
+						_terminalSettingsRoot.Terminal = s;
+						_terminal = Domain.Factory.TerminalFactory.RecreateTerminal(_terminalSettingsRoot.Terminal, _terminal);
+						AttachTerminalHandlers();          // attach an resume events
+						_terminal.ReloadRepositories();
+
+						ResumeHandlingTerminalSettings();
+
+						SetTimedStatusText("Terminal settings applied.");
+					}
+				}
+				else
+				{
+					SetTimedStatusText("Terminal settings not changed.");
+				}
+			}
+			else
+			{
+				ResetStatusText();
+			}
+
+			SelectSendCommandInput();
+		}
+
+		#endregion
+
+		#region Log
+		//==========================================================================================
+		// Log
+		//==========================================================================================
+
+		private void SetLogControls()
+		{
+			bool logSelected = _terminalSettingsRoot.Log.AnyRawOrNeat;
+			bool logOpen = _terminalSettingsRoot.LogIsOpen;
+
+			toolStripMenuItem_TerminalMenu_Log_Begin.Enabled = logSelected && !logOpen;
+			toolStripMenuItem_TerminalMenu_Log_End.Enabled = logSelected && logOpen;
+			toolStripMenuItem_TerminalMenu_Log_Clear.Enabled = logSelected && logOpen;
+		}
+
+		private void ShowLogSettings()
+		{
+			Gui.Forms.LogSettings f = new Gui.Forms.LogSettings(_terminalSettingsRoot.Log);
+			if (f.ShowDialog(this) == DialogResult.OK)
+			{
+				Refresh();
+				_terminalSettingsRoot.Log = f.SettingsResult;
+				_log.Settings = _terminalSettingsRoot.Log;
+			}
+
+			SelectSendCommandInput();
 		}
 
 		#endregion

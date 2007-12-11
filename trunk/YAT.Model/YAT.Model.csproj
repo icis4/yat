@@ -58,9 +58,17 @@
       <Project>{7B0B343D-F992-4A1E-8E07-CB8EC651A5E6}</Project>
       <Name>YAT.Log</Name>
     </ProjectReference>
+    <ProjectReference Include="..\YAT.Model.Settings\YAT.Model.Settings.csproj">
+      <Project>{E9FF1D5E-84E0-4ADB-94EC-662903931295}</Project>
+      <Name>YAT.Model.Settings</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YAT.Model.Types\YAT.Model.Types.csproj">
       <Project>{651BA67D-9B00-4245-9C99-481F20273A62}</Project>
       <Name>YAT.Model.Types</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Model.Utilities\YAT.Model.Utilities.csproj">
+      <Project>{7A7D2DB5-90CC-4BF0-9C80-FA7B8F6AAC74}</Project>
+      <Name>YAT.Model.Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Settings.Application\YAT.Settings.Application.csproj">
       <Project>{69A8CBB4-7D00-4A3D-9CF7-220DD02C2EB7}</Project>

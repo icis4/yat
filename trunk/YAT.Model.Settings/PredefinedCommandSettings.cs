@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-using YAT.Gui.Types;
+using YAT.Model.Types;
 
-namespace YAT.Gui.Settings
+namespace YAT.Model.Settings
 {
 	[Serializable]
 	public class PredefinedCommandSettings : MKY.Utilities.Settings.Settings, IEquatable<PredefinedCommandSettings>

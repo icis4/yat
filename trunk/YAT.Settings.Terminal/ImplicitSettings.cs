@@ -10,22 +10,22 @@ namespace YAT.Settings.Terminal
 	{
 		private bool _terminalIsOpen;
 		private bool _logIsOpen;
-		private Gui.Settings.SendCommandSettings _sendCommand;
-		private Gui.Settings.SendFileSettings _sendFile;
-		private Gui.Settings.PredefinedSettings _predefined;
-		private Settings.WindowSettings _window;
-		private Gui.Settings.LayoutSettings _layout;
+		private Model.Settings.SendCommandSettings _sendCommand;
+		private Model.Settings.SendFileSettings _sendFile;
+		private Model.Settings.PredefinedSettings _predefined;
+		private Model.Settings.WindowSettings _window;
+		private Model.Settings.LayoutSettings _layout;
 
 		public ImplicitSettings()
 			: base(MKY.Utilities.Settings.SettingsType.Implicit)
 		{
 			SetMyDefaults();
 
-			SendCommand = new Gui.Settings.SendCommandSettings(SettingsType);
-			SendFile    = new Gui.Settings.SendFileSettings(SettingsType);
-			Predefined  = new Gui.Settings.PredefinedSettings(SettingsType);
-			Window      = new Settings.WindowSettings(SettingsType);
-			Layout      = new Gui.Settings.LayoutSettings(SettingsType);
+			SendCommand = new Model.Settings.SendCommandSettings(SettingsType);
+			SendFile    = new Model.Settings.SendFileSettings(SettingsType);
+			Predefined  = new Model.Settings.PredefinedSettings(SettingsType);
+			Window      = new Model.Settings.WindowSettings(SettingsType);
+			Layout      = new Model.Settings.LayoutSettings(SettingsType);
 
 			ClearChanged();
 		}
@@ -39,11 +39,11 @@ namespace YAT.Settings.Terminal
 			_terminalIsOpen = rhs.TerminalIsOpen;
 			_logIsOpen = rhs.LogIsOpen;
 
-			SendCommand = new Gui.Settings.SendCommandSettings(rhs.SendCommand);
-			SendFile    = new Gui.Settings.SendFileSettings(rhs.SendFile);
-			Predefined  = new Gui.Settings.PredefinedSettings(rhs.Predefined);
-			Window      = new Settings.WindowSettings(rhs.Window);
-			Layout      = new Gui.Settings.LayoutSettings(rhs.Layout);
+			SendCommand = new Model.Settings.SendCommandSettings(rhs.SendCommand);
+			SendFile    = new Model.Settings.SendFileSettings(rhs.SendFile);
+			Predefined  = new Model.Settings.PredefinedSettings(rhs.Predefined);
+			Window      = new Model.Settings.WindowSettings(rhs.Window);
+			Layout      = new Model.Settings.LayoutSettings(rhs.Layout);
 
 			ClearChanged();
 		}
@@ -91,7 +91,7 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlElement("SendCommand")]
-		public Gui.Settings.SendCommandSettings SendCommand
+		public Model.Settings.SendCommandSettings SendCommand
 		{
 			get { return (_sendCommand); }
 			set
@@ -103,7 +103,7 @@ namespace YAT.Settings.Terminal
 				}
 				else if (_sendCommand != value)
 				{
-					Gui.Settings.SendCommandSettings old = _sendCommand;
+					Model.Settings.SendCommandSettings old = _sendCommand;
 					_sendCommand = value;
 					ReplaceNode(old, _sendCommand);
 				}
@@ -111,7 +111,7 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlElement("SendFile")]
-		public Gui.Settings.SendFileSettings SendFile
+		public Model.Settings.SendFileSettings SendFile
 		{
 			get { return (_sendFile); }
 			set
@@ -123,7 +123,7 @@ namespace YAT.Settings.Terminal
 				}
 				else if (_sendFile != value)
 				{
-					Gui.Settings.SendFileSettings old = _sendFile;
+					Model.Settings.SendFileSettings old = _sendFile;
 					_sendFile = value;
 					ReplaceNode(old, _sendFile);
 				}
@@ -131,7 +131,7 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlElement("Predefined")]
-		public Gui.Settings.PredefinedSettings Predefined
+		public Model.Settings.PredefinedSettings Predefined
 		{
 			get { return (_predefined); }
 			set
@@ -143,7 +143,7 @@ namespace YAT.Settings.Terminal
 				}
 				else if (_predefined != value)
 				{
-					Gui.Settings.PredefinedSettings old = _predefined;
+					Model.Settings.PredefinedSettings old = _predefined;
 					_predefined = value;
 					ReplaceNode(old, _predefined);
 				}
@@ -151,7 +151,7 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlElement("Window")]
-		public Settings.WindowSettings Window
+		public Model.Settings.WindowSettings Window
 		{
 			get { return (_window); }
 			set
@@ -163,7 +163,7 @@ namespace YAT.Settings.Terminal
 				}
 				else if (_window != value)
 				{
-					Settings.WindowSettings old = _window;
+					Model.Settings.WindowSettings old = _window;
 					_window = value;
 					ReplaceNode(old, _window);
 				}
@@ -171,7 +171,7 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlElement("Layout")]
-		public Gui.Settings.LayoutSettings Layout
+		public Model.Settings.LayoutSettings Layout
 		{
 			get { return (_layout); }
 			set
@@ -183,7 +183,7 @@ namespace YAT.Settings.Terminal
 				}
 				else if (_layout != value)
 				{
-					Gui.Settings.LayoutSettings old = _layout;
+					Model.Settings.LayoutSettings old = _layout;
 					_layout = value;
 					ReplaceNode(old, _layout);
 				}

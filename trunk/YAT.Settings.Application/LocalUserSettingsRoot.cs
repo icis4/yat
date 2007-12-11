@@ -12,18 +12,18 @@ namespace YAT.Settings.Application
 		private string _productVersion = System.Windows.Forms.Application.ProductVersion;
 		private Settings.GeneralSettings _general;
 		private Settings.PathSettings _paths;
-		private Gui.Settings.MainWindowSettings _mainWindow;
-		private Gui.Settings.NewTerminalSettings _newTerminal;
-		private Gui.Settings.RecentFileSettings _recentFiles;
+		private Model.Settings.MainWindowSettings _mainWindow;
+		private Model.Settings.NewTerminalSettings _newTerminal;
+		private Model.Settings.RecentFileSettings _recentFiles;
 
 		public LocalUserSettingsRoot()
 			: base(MKY.Utilities.Settings.SettingsType.Explicit)
 		{
 			General     = new Settings.GeneralSettings();
 			Paths       = new Settings.PathSettings();
-			MainWindow  = new Gui.Settings.MainWindowSettings();
-			NewTerminal = new Gui.Settings.NewTerminalSettings();
-			RecentFiles = new Gui.Settings.RecentFileSettings();
+			MainWindow  = new Model.Settings.MainWindowSettings();
+			NewTerminal = new Model.Settings.NewTerminalSettings();
+			RecentFiles = new Model.Settings.RecentFileSettings();
 
 			ClearChanged();
 		}
@@ -33,9 +33,9 @@ namespace YAT.Settings.Application
 		{
 			General     = new Settings.GeneralSettings(rhs.General);
 			Paths       = new Settings.PathSettings(rhs.Paths);
-			MainWindow  = new Gui.Settings.MainWindowSettings(rhs.MainWindow);
-			NewTerminal = new Gui.Settings.NewTerminalSettings(rhs.NewTerminal);
-			RecentFiles = new Gui.Settings.RecentFileSettings(rhs.RecentFiles);
+			MainWindow  = new Model.Settings.MainWindowSettings(rhs.MainWindow);
+			NewTerminal = new Model.Settings.NewTerminalSettings(rhs.NewTerminal);
+			RecentFiles = new Model.Settings.RecentFileSettings(rhs.RecentFiles);
 
 			ClearChanged();
 		}
@@ -114,7 +114,7 @@ namespace YAT.Settings.Application
 		}
 
 		[XmlElement("MainWindow")]
-		public Gui.Settings.MainWindowSettings MainWindow
+		public Model.Settings.MainWindowSettings MainWindow
 		{
 			get { return (_mainWindow); }
 			set
@@ -126,7 +126,7 @@ namespace YAT.Settings.Application
 				}
 				else if (_mainWindow != value)
 				{
-					Gui.Settings.MainWindowSettings old = _mainWindow;
+					Model.Settings.MainWindowSettings old = _mainWindow;
 					_mainWindow = value;
 					ReplaceNode(old, _mainWindow);
 				}
@@ -134,7 +134,7 @@ namespace YAT.Settings.Application
 		}
 
 		[XmlElement("NewTerminal")]
-		public Gui.Settings.NewTerminalSettings NewTerminal
+		public Model.Settings.NewTerminalSettings NewTerminal
 		{
 			get { return (_newTerminal); }
 			set
@@ -146,7 +146,7 @@ namespace YAT.Settings.Application
 				}
 				else if (_newTerminal != value)
 				{
-					Gui.Settings.NewTerminalSettings old = _newTerminal;
+					Model.Settings.NewTerminalSettings old = _newTerminal;
 					_newTerminal = value;
 					ReplaceNode(old, _newTerminal);
 				}
@@ -154,7 +154,7 @@ namespace YAT.Settings.Application
 		}
 
 		[XmlElement("RecentFiles")]
-		public Gui.Settings.RecentFileSettings RecentFiles
+		public Model.Settings.RecentFileSettings RecentFiles
 		{
 			get { return (_recentFiles); }
 			set
@@ -166,7 +166,7 @@ namespace YAT.Settings.Application
 				}
 				else if (_recentFiles != value)
 				{
-					Gui.Settings.RecentFileSettings old = _recentFiles;
+					Model.Settings.RecentFileSettings old = _recentFiles;
 					_recentFiles = value;
 					ReplaceNode(old, _recentFiles);
 				}

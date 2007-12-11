@@ -9,8 +9,8 @@ namespace YAT.Settings.Terminal
 	public class ExplicitSettings : MKY.Utilities.Settings.Settings, IEquatable<ExplicitSettings>
 	{
 		private Domain.Settings.TerminalSettings _terminal;
-		private Gui.Settings.PredefinedCommandSettings _predefinedCommand;
-		private Gui.Settings.FormatSettings _format;
+		private Model.Settings.PredefinedCommandSettings _predefinedCommand;
+		private Model.Settings.FormatSettings _format;
 		private Log.Settings.LogSettings _log;
 
 		public ExplicitSettings()
@@ -19,8 +19,8 @@ namespace YAT.Settings.Terminal
 			SetMyDefaults();
 
 			Terminal = new Domain.Settings.TerminalSettings(SettingsType);
-			PredefinedCommand = new Gui.Settings.PredefinedCommandSettings(SettingsType);
-			Format = new Gui.Settings.FormatSettings(SettingsType);
+			PredefinedCommand = new Model.Settings.PredefinedCommandSettings(SettingsType);
+			Format = new Model.Settings.FormatSettings(SettingsType);
 			Log = new Log.Settings.LogSettings(SettingsType);
 
 			ClearChanged();
@@ -33,8 +33,8 @@ namespace YAT.Settings.Terminal
 			: base(rhs)
 		{
 			Terminal = new Domain.Settings.TerminalSettings(rhs.Terminal);
-			PredefinedCommand = new Gui.Settings.PredefinedCommandSettings(rhs.PredefinedCommand);
-			Format = new Gui.Settings.FormatSettings(rhs.Format);
+			PredefinedCommand = new Model.Settings.PredefinedCommandSettings(rhs.PredefinedCommand);
+			Format = new Model.Settings.FormatSettings(rhs.Format);
 			Log = new Log.Settings.LogSettings(rhs.Log);
 
 			ClearChanged();
@@ -74,7 +74,7 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlElement("PredefinedCommand")]
-		public Gui.Settings.PredefinedCommandSettings PredefinedCommand
+		public Model.Settings.PredefinedCommandSettings PredefinedCommand
 		{
 			get { return (_predefinedCommand); }
 			set
@@ -86,7 +86,7 @@ namespace YAT.Settings.Terminal
 				}
 				else if (_predefinedCommand != value)
 				{
-					Gui.Settings.PredefinedCommandSettings old = _predefinedCommand;
+					Model.Settings.PredefinedCommandSettings old = _predefinedCommand;
 					_predefinedCommand = value;
 					ReplaceNode(old, _predefinedCommand);
 				}
@@ -94,7 +94,7 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlElement("Format")]
-		public Gui.Settings.FormatSettings Format
+		public Model.Settings.FormatSettings Format
 		{
 			get { return (_format); }
 			set
@@ -106,7 +106,7 @@ namespace YAT.Settings.Terminal
 				}
 				else if (_format != value)
 				{
-					Gui.Settings.FormatSettings old = _format;
+					Model.Settings.FormatSettings old = _format;
 					_format = value;
 					ReplaceNode(old, _format);
 				}

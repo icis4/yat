@@ -4,7 +4,7 @@ using System.Text;
 using System.Xml.Serialization;
 using System.IO;
 
-namespace YAT.Settings
+namespace YAT.Model.Settings
 {
 	[Serializable]
 	public class TerminalSettingsItem : MKY.Utilities.Settings.Settings, IEquatable<TerminalSettingsItem>
@@ -67,7 +67,7 @@ namespace YAT.Settings
 				if ((_guid == Guid.Empty) && File.Exists(_filePath))
 				{
 					string fileName = Path.GetFileNameWithoutExtension(_filePath);
-					string guidString = fileName.Substring(GeneralSettings.AutoSaveTerminalFileNamePrefix.Length);
+					string guidString = fileName.Substring(YAT.Settings.GeneralSettings.AutoSaveTerminalFileNamePrefix.Length);
 					try
 					{
 						_guid = new Guid(guidString);

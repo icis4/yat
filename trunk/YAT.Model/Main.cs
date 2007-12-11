@@ -8,6 +8,7 @@ using MKY.Utilities.Event;
 using MKY.Utilities.IO;
 
 using YAT.Settings;
+using YAT.Settings.Application;
 
 namespace YAT.Model
 {
@@ -40,9 +41,6 @@ namespace YAT.Model
 		/// <summary></summary>
 		public event EventHandler<MessageInputEventArgs> MessageInputRequest;
 
-		/// <summary></summary>
-		public event EventHandler<DialogEventArgs> DialogRequest;
-
 		#endregion
 
 		#region Object Lifetime
@@ -53,10 +51,6 @@ namespace YAT.Model
 		/// <summary></summary>
 		public Main()
 		{
-			_workspaceSettingsHandler = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
-			_workspaceSettingsHandler.SettingsFilePath = ApplicationSettings.LocalUser.General.CurrentWorkspaceFilePath;
-			_workspaceSettingsRoot = _workspaceSettingsHandler.Settings;
-			AttachWorkspaceSettingsHandlers();
 		}
 
 		#region Disposal
@@ -119,9 +113,9 @@ namespace YAT.Model
 		// Methods
 		//==========================================================================================
 
-		private void OpenRecent(int userIndex)
+		public bool OpenRecent(int userIndex)
 		{
-			OpenFromFile(ApplicationSettings.LocalUser.RecentFiles.FilePaths[userIndex - 1].Item);
+			return (OpenFromFile(ApplicationSettings.LocalUser.RecentFiles.FilePaths[userIndex - 1].Item));
 		}
 
 		/// <summary>
@@ -148,9 +142,8 @@ namespace YAT.Model
 			{
 				OnFixedStatusTextRequest("Unknown file type!");
 
-				MessageBox.Show
+				OnMessageInputRequest
 					(
-					_window,
 					"File" + Environment.NewLine + filePath + Environment.NewLine +
 					"has unknown type!",
 					"File Error",
@@ -160,29 +153,6 @@ namespace YAT.Model
 
 				OnTimedStatusTextRequest("No file opened!");
 				return (false);
-			}
-		}
-
-		private void ShowOpenWorkspaceFromFileDialog()
-		{
-			OnFixedStatusTextRequest("Opening workspace...");
-			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Title = "Open";
-			ofd.Filter = ExtensionSettings.WorkspaceFilesFilter;
-			ofd.DefaultExt = ExtensionSettings.WorkspaceFiles;
-			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath;
-			if ((ofd.ShowDialog(_window) == DialogResult.OK) && (ofd.FileName != ""))
-			{
-				OnRefreshRequest(new EventArgs());
-
-				ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
-				ApplicationSettings.SaveLocalUser();
-
-				OpenWorkspaceFromFile(ofd.FileName);
-			}
-			else
-			{
-				ResetStatusText();
 			}
 		}
 
@@ -212,9 +182,8 @@ namespace YAT.Model
 			{
 				OnFixedStatusTextRequest("Error opening workspace!");
 
-				MessageBox.Show
+				OnMessageInputRequest
 					(
-					_window,
 					"Unable to open file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
 					"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
 					"File error message: " + ex.InnerException.Message,
@@ -244,9 +213,8 @@ namespace YAT.Model
 				{
 					OnFixedStatusTextRequest("Error opening terminal!");
 
-					DialogResult result = MessageBox.Show
+					DialogResult result = OnMessageInputRequest
 						(
-						_window,
 						"Unable to open file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
 						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
 						"File error message: " + ex.InnerException.Message + Environment.NewLine + Environment.NewLine +
@@ -274,80 +242,6 @@ namespace YAT.Model
 				OnTimedStatusTextRequest("Workspace contains no terminal to open");
 
 			return (true);
-		}
-
-		private bool OpenTerminalFromFile(string filePath)
-		{
-			return (OpenTerminalFromFile(filePath, Guid.Empty, null, false));
-		}
-
-		private bool OpenTerminalFromFile(string filePath, Guid guid, WindowSettings windowSettings, bool suppressErrorHandling)
-		{
-			string absoluteFilePath = filePath;
-
-			OnFixedStatusTextRequest("Opening terminal...");
-			try
-			{
-				DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> sh = new DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot>();
-
-				// combine absolute workspace path with terminal path if that one is relative
-				absoluteFilePath = XPath.CombineFilePaths(_workspaceSettingsHandler.SettingsFilePath, filePath);
-				sh.SettingsFilePath = absoluteFilePath;
-				sh.Load();
-
-				// replace window settings with those saved in workspace
-				if (windowSettings != null)
-					sh.Settings.Window = windowSettings;
-
-				// create terminal
-				Gui.Forms.Terminal terminal = new Gui.Forms.Terminal(sh);
-
-				if (guid != Guid.Empty)
-					terminal.Guid = guid;
-
-				if (sh.Settings.AutoSaved)
-					terminal.UserName = _TerminalText + GetNextTerminalId();
-				else
-					terminal.UserNameFromFile = absoluteFilePath;
-
-				terminal.MdiParent = this;
-				terminal.TerminalChanged += new EventHandler(mdi_child_TerminalChanged);
-				terminal.TerminalSaved += new EventHandler<TerminalSavedEventArgs>(mdi_child_TerminalSaved);
-				terminal.FormClosed += new FormClosedEventHandler(mdi_child_FormClosed);
-				terminal.Show();
-
-				AddToOrReplaceInWorkspace(terminal);
-				if (!sh.Settings.AutoSaved)
-					SetRecent(filePath);
-
-				OnTimedStatusTextRequest("Terminal opened");
-				return (true);
-			}
-			catch (System.Xml.XmlException ex)
-			{
-				if (!suppressErrorHandling)
-				{
-					OnFixedStatusTextRequest("Error opening terminal!");
-
-					MessageBox.Show
-						(
-						_window,
-						"Unable to open file" + Environment.NewLine + absoluteFilePath + Environment.NewLine + Environment.NewLine +
-						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
-						"File error message: " + ex.InnerException.Message,
-						"File Error",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Stop
-						);
-
-					OnTimedStatusTextRequest("Terminal not opened!");
-					return (false);
-				}
-				else
-				{
-					throw (ex);
-				}
-			}
 		}
 
 		/// <summary>
@@ -402,12 +296,6 @@ namespace YAT.Model
 		protected virtual void OnMessageInputRequest(MessageInputEventArgs e)
 		{
 			EventHelper.FireSync(MessageInputRequest, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnDialogRequest(DialogEventArgs e)
-		{
-			EventHelper.FireSync(DialogRequest, this, e);
 		}
 
 		#endregion
