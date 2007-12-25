@@ -8,7 +8,6 @@ using System.IO;
 using MKY.Utilities.Types;
 using MKY.Windows.Forms;
 
-using YAT.Gui.Types;
 using YAT.Settings.Application;
 
 namespace YAT.Gui.Forms
@@ -44,8 +43,8 @@ namespace YAT.Gui.Forms
 		private StartupControl _startupControl = new StartupControl(true, 1, 1);
 		private bool _isSettingControls = false;
 
-		private Settings.PredefinedCommandSettings _settings;
-		private Settings.PredefinedCommandSettings _settings_Form;
+		private Model.Settings.PredefinedCommandSettings _settings;
+		private Model.Settings.PredefinedCommandSettings _settings_Form;
 		private int _selectedPage = 1;
 
 		private List<Label> _predefinedCommandSettingsSetLabels;
@@ -58,12 +57,12 @@ namespace YAT.Gui.Forms
 		// Object Lifetime
 		//==========================================================================================
 
-		public PredefinedCommandSettings(Settings.PredefinedCommandSettings settings, int requestedPage, int requestedCommand)
+		public PredefinedCommandSettings(Model.Settings.PredefinedCommandSettings settings, int requestedPage, int requestedCommand)
 		{
 			InitializeComponent();
 
 			_settings = settings;
-			_settings_Form = new Settings.PredefinedCommandSettings(settings);
+			_settings_Form = new Model.Settings.PredefinedCommandSettings(settings);
 			_startupControl.RequestedPage = requestedPage;
 			_startupControl.RequestedCommand = requestedCommand;
 			InitializeControls();
@@ -76,7 +75,7 @@ namespace YAT.Gui.Forms
 		// Properties
 		//==========================================================================================
 
-		public Settings.PredefinedCommandSettings SettingsResult
+		public Model.Settings.PredefinedCommandSettings SettingsResult
 		{
 			get { return (_settings); }
 		}

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using MKY.Utilities.Types;
 using MKY.Utilities.Event;
 
-using YAT.Gui.Types;
+using YAT.Model.Types;
 
 namespace YAT.Gui.Controls
 {

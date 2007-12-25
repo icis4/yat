@@ -229,6 +229,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Model.Settings", "YAT.M
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Model.Test", "YAT.Model.Test\YAT.Model.Test.csproj", "{AD1EB9BA-AD7F-406A-810C-FE0A0ED1E819}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Utilities", "YAT.Utilities\YAT.Utilities.csproj", "{5E374FF3-3CE6-4FD2-B41C-679329FF05A5}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Test|Any CPU = Debug Test|Any CPU
@@ -419,6 +431,20 @@ Global
 		{E9FF1D5E-84E0-4ADB-94EC-662903931295}.Release Test|Any CPU.Build.0 = Release|Any CPU
 		{E9FF1D5E-84E0-4ADB-94EC-662903931295}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9FF1D5E-84E0-4ADB-94EC-662903931295}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD1EB9BA-AD7F-406A-810C-FE0A0ED1E819}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD1EB9BA-AD7F-406A-810C-FE0A0ED1E819}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
+		{AD1EB9BA-AD7F-406A-810C-FE0A0ED1E819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD1EB9BA-AD7F-406A-810C-FE0A0ED1E819}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
+		{AD1EB9BA-AD7F-406A-810C-FE0A0ED1E819}.Release Test|Any CPU.Build.0 = Release|Any CPU
+		{AD1EB9BA-AD7F-406A-810C-FE0A0ED1E819}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E374FF3-3CE6-4FD2-B41C-679329FF05A5}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E374FF3-3CE6-4FD2-B41C-679329FF05A5}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
+		{5E374FF3-3CE6-4FD2-B41C-679329FF05A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E374FF3-3CE6-4FD2-B41C-679329FF05A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E374FF3-3CE6-4FD2-B41C-679329FF05A5}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
+		{5E374FF3-3CE6-4FD2-B41C-679329FF05A5}.Release Test|Any CPU.Build.0 = Release|Any CPU
+		{5E374FF3-3CE6-4FD2-B41C-679329FF05A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E374FF3-3CE6-4FD2-B41C-679329FF05A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

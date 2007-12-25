@@ -11,8 +11,6 @@ using MKY.Utilities.Event;
 using MKY.Utilities.Recent;
 using MKY.Utilities.Settings;
 
-using YAT.Gui.Types;
-using YAT.Gui.Settings;
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
@@ -61,16 +59,16 @@ namespace YAT.Gui.Forms
 		public Terminal()
 		{
 			InitializeComponent();
-			Initialize(new DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot>());
+			Initialize(new DocumentSettingsHandler<Settings.Terminal.TerminalSettingsRoot>());
 		}
 
-		public Terminal(DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> settingsHandler)
+		public Terminal(DocumentSettingsHandler<Settings.Terminal.TerminalSettingsRoot> settingsHandler)
 		{
 			InitializeComponent();
 			Initialize(settingsHandler);
 		}
 
-		private void Initialize(DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> settingsHandler)
+		private void Initialize(DocumentSettingsHandler<Settings.Terminal.TerminalSettingsRoot> settingsHandler)
 		{
 			FixContextMenus();
 
@@ -815,12 +813,12 @@ namespace YAT.Gui.Forms
 				_terminalSettingsRoot.Implicit.Predefined.SelectedPage = predefined.SelectedPage;
 		}
 
-		private void predefined_SendCommandRequest(object sender, PredefinedCommandEventArgs e)
+		private void predefined_SendCommandRequest(object sender, Model.Types.PredefinedCommandEventArgs e)
 		{
 			SendPredefined(e.Page, e.Command);
 		}
 
-		private void predefined_DefineCommandRequest(object sender, PredefinedCommandEventArgs e)
+		private void predefined_DefineCommandRequest(object sender, Model.Types.PredefinedCommandEventArgs e)
 		{
 			ShowPredefinedCommandSettings(e.Page, e.Command);
 		}
@@ -1779,6 +1777,546 @@ namespace YAT.Gui.Forms
 			}
 
 			SelectSendCommandInput();
+		}
+
+		#endregion
+
+		#region Terminal > View
+		//------------------------------------------------------------------------------------------
+		// Terminal > View
+		//------------------------------------------------------------------------------------------
+
+		private void InitializeIOControlStatusLabels()
+		{
+			_statusLabels_ioControl = new List<ToolStripStatusLabel>();
+			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_RTS);
+			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_CTS);
+			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DTR);
+			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DSR);
+			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DCD);
+		}
+
+		private void SetTerminalCaption()
+		{
+			bool isOpen = false;
+			bool isConnected = false;
+
+			if (_terminal != null)
+			{
+				isOpen = _terminal.IsOpen;
+				isConnected = _terminal.IsConnected;
+			}
+
+			StringBuilder sb = new StringBuilder(UserName);
+
+			if ((_terminalSettingsRoot != null) && _terminalSettingsRoot.ExplicitHaveChanged)
+				sb.Append("*");
+
+			if (_terminalSettingsRoot != null)
+			{
+				if (_terminalSettingsRoot.IOType == Domain.IOType.SerialPort)
+				{
+					Domain.Settings.SerialPort.SerialPortSettings s = _terminalSettingsRoot.IO.SerialPort;
+					sb.Append(" - ");
+					sb.Append(s.PortId.ToString());
+					sb.Append(" - ");
+					sb.Append(isOpen ? "Open" : "Closed");
+				}
+				else
+				{
+					Domain.Settings.Socket.SocketSettings s = _terminalSettingsRoot.IO.Socket;
+					switch (_terminalSettingsRoot.IOType)
+					{
+						case Domain.IOType.TcpClient:
+							sb.Append(" - ");
+							sb.Append(s.ResolvedRemoteIPAddress.ToString());
+							sb.Append(":");
+							sb.Append(s.RemotePort.ToString());
+							sb.Append(" - ");
+							sb.Append(isConnected ? "Connected" : "Disconnected");
+							break;
+
+						case Domain.IOType.TcpServer:
+							sb.Append(" - ");
+							sb.Append("Server:");
+							sb.Append(s.LocalPort.ToString());
+							sb.Append(" - ");
+							if (isOpen)
+								sb.Append(isConnected ? "Connected" : "Listening");
+							else
+								sb.Append("Closed");
+							break;
+
+						case Domain.IOType.TcpAutoSocket:
+							bool isClient = ((Domain.IO.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsClient;
+							bool isServer = ((Domain.IO.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsServer;
+							if (isOpen)
+							{
+								if (isClient)
+								{
+									sb.Append(" - ");
+									sb.Append(s.ResolvedRemoteIPAddress.ToString());
+									sb.Append(":");
+									sb.Append(s.RemotePort.ToString());
+									sb.Append(" - ");
+									sb.Append(isConnected ? "Connected" : "Disconnected");
+								}
+								else if (isServer)
+								{
+									sb.Append(" - ");
+									sb.Append("Server:");
+									sb.Append(s.LocalPort.ToString());
+									sb.Append(" - ");
+									sb.Append(isConnected ? "Connected" : "Listening");
+								}
+								else
+								{
+									sb.Append(" - ");
+									sb.Append("Starting on port ");
+									sb.Append(s.RemotePort.ToString());
+								}
+							}
+							else
+							{
+								sb.Append(" - ");
+								sb.Append("AutoSocket:");
+								sb.Append(s.RemotePort.ToString());
+								sb.Append(" - ");
+								sb.Append("Disconnected");
+							}
+							break;
+
+						case Domain.IOType.Udp:
+							sb.Append(" - ");
+							sb.Append(s.ResolvedRemoteIPAddress.ToString());
+							sb.Append(":");
+							sb.Append(s.RemotePort.ToString());
+							sb.Append(" - ");
+							sb.Append("Receive:");
+							sb.Append(s.LocalPort.ToString());
+							sb.Append(" - ");
+							sb.Append(isOpen ? "Open" : "Closed");
+							break;
+					}
+				}
+			}
+
+			Text = sb.ToString();
+		}
+
+		private void SetTerminalControls()
+		{
+			bool isOpen = _terminal.IsOpen;
+
+			// main menu
+			toolStripMenuItem_TerminalMenu_Terminal_Open.Enabled = !isOpen;
+			toolStripMenuItem_TerminalMenu_Terminal_Close.Enabled = isOpen;
+
+			// terminal panel
+			SetTerminalCaption();
+			SetIOStatus();
+			SetIOControlControls();
+
+			// send panel
+			send.TerminalIsOpen = isOpen;
+
+			// predefined panel
+			predefined.TerminalIsOpen = isOpen;
+		}
+
+		private void SetIOStatus()
+		{
+			bool isOpen = _terminal.IsOpen;
+			bool isConnected = _terminal.IsConnected;
+
+			StringBuilder sb = new StringBuilder();
+
+			if (_terminalSettingsRoot.IOType == Domain.IOType.SerialPort)
+			{
+				Domain.Settings.SerialPort.SerialPortSettings s = _terminalSettingsRoot.IO.SerialPort;
+				sb.Append("Serial port ");
+				sb.Append(s.PortId.ToString());
+				sb.Append(" (" + s.Communication.ToString() + ") is ");
+				sb.Append(isOpen ? "open" : "closed");
+
+				toolStripStatusLabel_TerminalStatus_Connection.Visible = false;
+			}
+			else
+			{
+				Domain.Settings.Socket.SocketSettings s = _terminalSettingsRoot.IO.Socket;
+				switch (_terminalSettingsRoot.IOType)
+				{
+					case Domain.IOType.TcpClient:
+						sb.Append("TCP client is ");
+						sb.Append(isConnected ? "connected to " : "disconnected from ");
+						sb.Append(s.ResolvedRemoteIPAddress.ToString());
+						sb.Append(" on remote port ");
+						sb.Append(s.RemotePort.ToString());
+						break;
+
+					case Domain.IOType.TcpServer:
+						sb.Append("TCP server is ");
+						if (isOpen)
+						{
+							if (isConnected)
+							{
+								Domain.IO.TcpServer server = (Domain.IO.TcpServer)_terminal.UnderlyingIOProvider;
+								int count = server.ConnectedClientCount;
+
+								sb.Append("connected to ");
+								sb.Append(count.ToString());
+								if (count == 1)
+									sb.Append(" client");
+								else
+									sb.Append(" clients");
+							}
+							else
+							{
+								sb.Append("listening");
+							}
+						}
+						else
+						{
+							sb.Append("closed");
+						}
+						sb.Append(" on local port ");
+						sb.Append(s.LocalPort.ToString());
+						break;
+
+					case Domain.IOType.TcpAutoSocket:
+						bool isClient = ((Domain.IO.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsClient;
+						bool isServer = ((Domain.IO.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsServer;
+						sb.Append("TCP auto socket is ");
+						if (isOpen)
+						{
+							if (isClient)
+							{
+								sb.Append("connected to ");
+								sb.Append(s.ResolvedRemoteIPAddress.ToString());
+								sb.Append(" on remote port ");
+								sb.Append(s.RemotePort.ToString());
+							}
+							else if (isServer)
+							{
+								sb.Append(isConnected ? "connected" : "listening");
+								sb.Append(" on local port ");
+								sb.Append(s.LocalPort.ToString());
+							}
+							else
+							{
+								sb.Append("starting on port ");
+								sb.Append(s.RemotePort.ToString());
+							}
+						}
+						else
+						{
+							sb.Append("closed on port ");
+							sb.Append(s.RemotePort.ToString());
+						}
+						break;
+
+					case Domain.IOType.Udp:
+						sb.Append("UDP socket is ");
+						sb.Append(isOpen ? "open" : "closed");
+						sb.Append(" for sending to ");
+						sb.Append(s.ResolvedRemoteIPAddress.ToString());
+						sb.Append(" on remote port ");
+						sb.Append(s.RemotePort.ToString());
+						sb.Append(" and receiving on local port ");
+						sb.Append(s.LocalPort.ToString());
+						break;
+				}
+
+				Image on = Properties.Resources.Image_On_12x12;
+				Image off = Properties.Resources.Image_Off_12x12;
+
+				toolStripStatusLabel_TerminalStatus_Connection.Visible = true;
+				toolStripStatusLabel_TerminalStatus_Connection.Image = (isConnected ? on : off);
+			}
+
+			toolStripStatusLabel_TerminalStatus_IOStatus.Text = sb.ToString();
+		}
+
+		private void SetIOControlControls()
+		{
+			bool isOpen = _terminal.IsOpen;
+			bool isSerialPort = (_terminalSettingsRoot.IOType == Domain.IOType.SerialPort);
+
+			foreach (ToolStripStatusLabel sl in _statusLabels_ioControl)
+				sl.Visible = isSerialPort;
+
+			if (isSerialPort)
+			{
+				foreach (ToolStripStatusLabel sl in _statusLabels_ioControl)
+					sl.Enabled = isOpen;
+
+				Image on = Properties.Resources.Image_On_12x12;
+				Image off = Properties.Resources.Image_Off_12x12;
+
+				if (isOpen)
+				{
+					MKY.IO.Ports.SerialPortControlPins pins;
+					pins = ((MKY.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance).ControlPins;
+
+					bool rs485Handshake = (_terminalSettingsRoot.Terminal.IO.SerialPort.Communication.Handshake == Domain.IO.Handshake.RS485);
+
+					if (rs485Handshake)
+					{
+						if (pins.Rts)
+							TriggerRtsLuminescence();
+					}
+					else
+					{
+						toolStripStatusLabel_TerminalStatus_RTS.Image = (pins.Rts ? on : off);
+					}
+
+					toolStripStatusLabel_TerminalStatus_CTS.Image = (pins.Cts ? on : off);
+					toolStripStatusLabel_TerminalStatus_DTR.Image = (pins.Dtr ? on : off);
+					toolStripStatusLabel_TerminalStatus_DSR.Image = (pins.Dsr ? on : off);
+					toolStripStatusLabel_TerminalStatus_DCD.Image = (pins.Cd ? on : off);
+
+					bool manualHandshake = (_terminalSettingsRoot.Terminal.IO.SerialPort.Communication.Handshake == Domain.IO.Handshake.Manual);
+
+					toolStripStatusLabel_TerminalStatus_RTS.ForeColor = (manualHandshake ? SystemColors.ControlText : SystemColors.GrayText);
+					toolStripStatusLabel_TerminalStatus_CTS.ForeColor = SystemColors.GrayText;
+					toolStripStatusLabel_TerminalStatus_DTR.ForeColor = (manualHandshake ? SystemColors.ControlText : SystemColors.GrayText);
+					toolStripStatusLabel_TerminalStatus_DSR.ForeColor = SystemColors.GrayText;
+					toolStripStatusLabel_TerminalStatus_DCD.ForeColor = SystemColors.GrayText;
+				}
+				else
+				{
+					foreach (ToolStripStatusLabel sl in _statusLabels_ioControl)
+						sl.Image = off;
+
+					foreach (ToolStripStatusLabel sl in _statusLabels_ioControl)
+						sl.ForeColor = SystemColors.ControlText;
+				}
+			}
+		}
+
+		private void TriggerRtsLuminescence()
+		{
+			timer_RtsLuminescence.Enabled = false;
+			toolStripStatusLabel_TerminalStatus_RTS.Image = Properties.Resources.Image_On_12x12;
+			timer_RtsLuminescence.Interval = _RtsLuminescenceInterval;
+			timer_RtsLuminescence.Enabled = true;
+		}
+
+		private void ResetRts()
+		{
+			Image on = Properties.Resources.Image_On_12x12;
+			Image off = Properties.Resources.Image_Off_12x12;
+
+			if (_terminal.IsOpen)
+			{
+				MKY.IO.Ports.SerialPortControlPins pins;
+				pins = ((MKY.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance).ControlPins;
+
+				toolStripStatusLabel_TerminalStatus_RTS.Image = (pins.Rts ? on : off);
+			}
+			else
+			{
+				toolStripStatusLabel_TerminalStatus_RTS.Image = off;
+			}
+		}
+
+		private void timer_RtsLuminescence_Tick(object sender, EventArgs e)
+		{
+			timer_RtsLuminescence.Enabled = false;
+			ResetRts();
+		}
+
+		#endregion
+
+		/*ON TERMINAL CHANGED
+			SetTerminalCaption();
+
+		ON TERMINAL SAVED
+			SelectSendCommandInput();
+
+		ON TERMINAL OPENED
+			SelectSendCommandInput();
+
+		OPEN TERMINAL
+		CLOSE TERMINAL
+			Cursor = Cursors.WaitCursor;
+			Cursor = Cursors.Default;*/
+
+		#region Terminal > Event Handlers
+		//------------------------------------------------------------------------------------------
+		// Terminal > Event Handlers
+		//------------------------------------------------------------------------------------------
+
+		private void _terminal_TerminalChanged(object sender, EventArgs e)
+		{
+			SetTerminalControls();
+			OnTerminalChanged(new EventArgs());
+		}
+
+		private void _terminal_TerminalControlChanged(object sender, EventArgs e)
+		{
+			SetIOControlControls();
+		}
+
+		private void _terminal_TerminalError(object sender, Domain.ErrorEventArgs e)
+		{
+			SetTerminalControls();
+			OnTerminalChanged(new EventArgs());
+
+			MessageBox.Show
+				(
+				this,
+				"Terminal error:" + Environment.NewLine + Environment.NewLine + e.Message,
+				"Terminal Error",
+				MessageBoxButtons.OK,
+				MessageBoxIcon.Error
+				);
+		}
+
+		private void _terminal_RawElementSent(object sender, Domain.RawElementEventArgs e)
+		{
+			// counter
+			int byteCount = e.Element.Data.Length;
+			monitor_Tx.TxByteCountStatus += byteCount;
+			monitor_Bidir.TxByteCountStatus += byteCount;
+
+			// log
+			if (_log.IsOpen)
+			{
+				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawTx);
+				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawBidir);
+			}
+		}
+
+		private void _terminal_RawElementReceived(object sender, Domain.RawElementEventArgs e)
+		{
+			// counter
+			int byteCount = e.Element.Data.Length;
+			monitor_Bidir.RxByteCountStatus += byteCount;
+			monitor_Rx.RxByteCountStatus += byteCount;
+
+			// log
+			if (_log.IsOpen)
+			{
+				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawBidir);
+				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawRx);
+			}
+		}
+
+		private void _terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
+		{
+			// display
+			monitor_Tx.AddElements(e.Elements);
+			monitor_Bidir.AddElements(e.Elements);
+
+			// log
+			foreach (Domain.DisplayElement de in e.Elements)
+			{
+				if (_log.IsOpen)
+				{
+					if (de.IsEol)
+					{
+						_log.WriteEol(Log.LogStreams.NeatTx);
+						_log.WriteEol(Log.LogStreams.NeatBidir);
+					}
+					else
+					{
+						_log.WriteString(de.Text, Log.LogStreams.NeatTx);
+						_log.WriteString(de.Text, Log.LogStreams.NeatBidir);
+					}
+				}
+			}
+		}
+
+		private void _terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
+		{
+			// display
+			monitor_Bidir.AddElements(e.Elements);
+			monitor_Rx.AddElements(e.Elements);
+
+			// log
+			foreach (Domain.DisplayElement de in e.Elements)
+			{
+				if (_log.IsOpen)
+				{
+					if (de.IsEol)
+					{
+						_log.WriteEol(Log.LogStreams.NeatBidir);
+						_log.WriteEol(Log.LogStreams.NeatRx);
+					}
+					else
+					{
+						_log.WriteString(de.Text, Log.LogStreams.NeatBidir);
+						_log.WriteString(de.Text, Log.LogStreams.NeatRx);
+					}
+				}
+			}
+		}
+
+		private void _terminal_DisplayLinesSent(object sender, Domain.DisplayLinesEventArgs e)
+		{
+			if (e.Lines.Count > 0)
+			{
+				monitor_Tx.ReplaceLastLine(e.Lines[0]);
+				monitor_Bidir.ReplaceLastLine(e.Lines[0]);
+			}
+			for (int i = 1; i < e.Lines.Count; i++)
+			{
+				monitor_Tx.AddLine(e.Lines[i]);
+				monitor_Bidir.AddLine(e.Lines[i]);
+			}
+
+			monitor_Tx.TxLineCountStatus += e.Lines.Count;
+			monitor_Bidir.TxLineCountStatus += e.Lines.Count;
+		}
+
+		private void _terminal_DisplayLinesReceived(object sender, Domain.DisplayLinesEventArgs e)
+		{
+			if (e.Lines.Count > 0)
+			{
+				monitor_Bidir.ReplaceLastLine(e.Lines[0]);
+				monitor_Rx.ReplaceLastLine(e.Lines[0]);
+			}
+			for (int i = 1; i < e.Lines.Count; i++)
+			{
+				monitor_Bidir.AddLine(e.Lines[i]);
+				monitor_Rx.AddLine(e.Lines[i]);
+			}
+
+			monitor_Bidir.RxLineCountStatus += e.Lines.Count;
+			monitor_Rx.RxLineCountStatus += e.Lines.Count;
+		}
+
+		private void _terminal_RepositoryCleared(object sender, Domain.RepositoryEventArgs e)
+		{
+			switch (e.Repository)
+			{
+				case Domain.RepositoryType.Tx: monitor_Tx.Clear(); break;
+				case Domain.RepositoryType.Bidir: monitor_Bidir.Clear(); break;
+				case Domain.RepositoryType.Rx: monitor_Rx.Clear(); break;
+			}
+		}
+
+		private void _terminal_RepositoryReloaded(object sender, Domain.RepositoryEventArgs e)
+		{
+			switch (e.Repository)
+			{
+				case Domain.RepositoryType.Tx: monitor_Tx.AddLines(_terminal.RepositoryToDisplayLines(Domain.RepositoryType.Tx)); break;
+				case Domain.RepositoryType.Bidir: monitor_Bidir.AddLines(_terminal.RepositoryToDisplayLines(Domain.RepositoryType.Bidir)); break;
+				case Domain.RepositoryType.Rx: monitor_Rx.AddLines(_terminal.RepositoryToDisplayLines(Domain.RepositoryType.Rx)); break;
+			}
+		}
+
+		#endregion
+
+		#region Send > Command
+		//------------------------------------------------------------------------------------------
+		// Send > Command
+		//------------------------------------------------------------------------------------------
+
+		private void SelectSendCommandInput()
+		{
+			send.SelectSendCommandInput();
 		}
 
 		#endregion

@@ -8,8 +8,13 @@ using System.Windows.Forms;
 
 using MKY.Utilities.Event;
 
+using YAT.Gui.Utilities;
+
 namespace YAT.Gui.Controls
 {
+	/// <summary>
+	/// This monitor implements a list box based terminal monitor in a speed optimized way
+	/// </summary>
 	[DesignerCategory("Windows Forms")]
 	public partial class Monitor : UserControl
 	{
@@ -22,7 +27,6 @@ namespace YAT.Gui.Controls
 		private const int _MaximalLineCountDefault = 100;
 
 		private const bool _ShowCountStatusDefault = false;
-		private const int _CountStatusDefault = 0;
 
 		#endregion
 
@@ -33,15 +37,15 @@ namespace YAT.Gui.Controls
 
 		private Domain.RepositoryType _repositoryType = _RepositoryTypeDefault;
 		private int _maximalLineCount = _MaximalLineCountDefault;
-		private Settings.FormatSettings _formatSettings = new Settings.FormatSettings();
+		private Model.Settings.FormatSettings _formatSettings = new Model.Settings.FormatSettings();
 		private List<List<Domain.DisplayElement>> _lines = new List<List<Domain.DisplayElement>>();
 
 		// count status
 		private bool _showCountStatus = _ShowCountStatusDefault;
-		private int _txByteCountStatus = _CountStatusDefault;
-		private int _rxByteCountStatus = _CountStatusDefault;
-		private int _txLineCountStatus = _CountStatusDefault;
-		private int _rxLineCountStatus = _CountStatusDefault;
+		private int _txByteCountStatus = 0;
+		private int _rxByteCountStatus = 0;
+		private int _txLineCountStatus = 0;
+		private int _rxLineCountStatus = 0;
 
 		#endregion
 
@@ -110,7 +114,7 @@ namespace YAT.Gui.Controls
 		}
 
 		[Browsable(false)]
-		public Settings.FormatSettings FormatSettings
+		public Model.Settings.FormatSettings FormatSettings
 		{
 			set
 			{
@@ -139,8 +143,8 @@ namespace YAT.Gui.Controls
 		}
 
 		[Category("Monitor")]
-		[Description("The TX byte count status.")]
-		[DefaultValue(_CountStatusDefault)]
+		[Description("The Tx byte count status.")]
+		[DefaultValue(0)]
 		public int TxByteCountStatus
 		{
 			get { return (_txByteCountStatus); }
@@ -155,8 +159,8 @@ namespace YAT.Gui.Controls
 		}
 
 		[Category("Monitor")]
-		[Description("The TX line count status.")]
-		[DefaultValue(_CountStatusDefault)]
+		[Description("The Tx line count status.")]
+		[DefaultValue(0)]
 		public int TxLineCountStatus
 		{
 			get { return (_txLineCountStatus); }
@@ -172,7 +176,7 @@ namespace YAT.Gui.Controls
 
 		[Category("Monitor")]
 		[Description("The Rx byte count status.")]
-		[DefaultValue(_CountStatusDefault)]
+		[DefaultValue(0)]
 		public int RxByteCountStatus
 		{
 			get { return (_rxByteCountStatus); }
@@ -188,7 +192,7 @@ namespace YAT.Gui.Controls
 
 		[Category("Monitor")]
 		[Description("The Rx line count status.")]
-		[DefaultValue(_CountStatusDefault)]
+		[DefaultValue(0)]
 		public int RxLineCountStatus
 		{
 			get { return (_rxLineCountStatus); }
@@ -327,6 +331,7 @@ namespace YAT.Gui.Controls
 			_txLineCountStatus = 0;
 			_rxByteCountStatus = 0;
 			_rxLineCountStatus = 0;
+
 			SetCountStatusControls();
 		}
 

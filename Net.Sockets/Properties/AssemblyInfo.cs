@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MKY")]
 [assembly: AssemblyProduct("Net.Sockets")]
-[assembly: AssemblyCopyright("Copyright © 2003-2007 Hochschule für Technik Rapperswil. All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2003-2008 Hochschule für Technik Rapperswil. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

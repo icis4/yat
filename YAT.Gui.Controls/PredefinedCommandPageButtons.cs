@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using MKY.Utilities.Event;
 
 using YAT.Model.Types;
-using YAT.Gui.Types;
+using YAT.Model.Settings;
 
 namespace YAT.Gui.Controls
 {
@@ -114,7 +114,7 @@ namespace YAT.Gui.Controls
 
 		private void InitializeButtons()
 		{
-			_buttons_commands = new List<Button>(Settings.PredefinedCommandSettings.MaximumCommandsPerPage);
+			_buttons_commands = new List<Button>(PredefinedCommandSettings.MaximumCommandsPerPage);
 			_buttons_commands.Add(button_Command_1);
 			_buttons_commands.Add(button_Command_2);
 			_buttons_commands.Add(button_Command_3);
@@ -151,7 +151,7 @@ namespace YAT.Gui.Controls
 					_buttons_commands[i].Enabled = true;
 				}
 			}
-			for (int i = commandCount; i < Settings.PredefinedCommandSettings.MaximumCommandsPerPage; i++)
+			for (int i = commandCount; i < PredefinedCommandSettings.MaximumCommandsPerPage; i++)
 			{
 				_buttons_commands[i].Text = Command.UndefinedCommandText;
 				_buttons_commands[i].Enabled = true;

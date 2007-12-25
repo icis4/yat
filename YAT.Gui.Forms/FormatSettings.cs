@@ -18,8 +18,8 @@ namespace YAT.Gui.Forms
 		private bool _isStartingUp = true;
 		private bool _isSettingControls = false;
 
-		private Settings.FormatSettings _settings;
-		private Settings.FormatSettings _settings_Form;
+		private Model.Settings.FormatSettings _settings;
+		private Model.Settings.FormatSettings _settings_Form;
 
 		private Controls.Monitor[] _monitors;
 		private Controls.TextFormat[] _textFormats;
@@ -34,12 +34,12 @@ namespace YAT.Gui.Forms
 		// Object Lifetime
 		//==========================================================================================
 
-		public FormatSettings(Settings.FormatSettings settings)
+		public FormatSettings(Model.Settings.FormatSettings settings)
 		{
 			InitializeComponent();
 
 			_settings = settings;
-			_settings_Form = new Settings.FormatSettings(settings);
+			_settings_Form = new Model.Settings.FormatSettings(settings);
 			InitializeExamples();
 			InitializeControls();
 		}
@@ -51,7 +51,7 @@ namespace YAT.Gui.Forms
 		// Properties
 		//==========================================================================================
 
-		public Settings.FormatSettings SettingsResult
+		public Model.Settings.FormatSettings SettingsResult
 		{
 			get { return (_settings); }
 		}
@@ -190,7 +190,7 @@ namespace YAT.Gui.Forms
 			monitor_Example.AddElements(_exampleComplete);
 		}
 
-		private Settings.TextFormat TextFormatFromIndex(int index)
+		private Model.Settings.TextFormat TextFormatFromIndex(int index)
 		{
 			switch (index)
 			{

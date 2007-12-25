@@ -43,6 +43,8 @@
   <ItemGroup>
     <Compile Include="Diagnostics\DebugOutput.cs" />
     <Compile Include="Drawing\XDrawing.cs" />
+    <Compile Include="Guid\GuidList.cs" />
+    <Compile Include="Guid\IGuidProvider.cs" />
     <Compile Include="Recent\RecentItem.cs" />
     <Compile Include="Recent\RecentItemCollection.cs">
       <SubType>Code</SubType>

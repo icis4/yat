@@ -35,11 +35,11 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public event EventHandler TerminalChanged;
+		public event EventHandler Changed;
 		/// <summary></summary>
-		public event EventHandler TerminalControlChanged;
+		public event EventHandler ControlChanged;
 		/// <summary></summary>
-		public event EventHandler<TerminalErrorEventArgs> TerminalError;
+		public event EventHandler<ErrorEventArgs> Error;
 
 		/// <summary></summary>
 		public event EventHandler<RawElementEventArgs> RawElementSent;
@@ -431,17 +431,17 @@ namespace YAT.Domain
 
 		private void _io_IOChanged(object sender, EventArgs e)
 		{
-			OnTerminalChanged(new EventArgs());
+			OnChanged(new EventArgs());
 		}
 
 		private void _io_IOControlChanged(object sender, EventArgs e)
 		{
-			OnTerminalControlChanged(new EventArgs());
+			OnControlChanged(new EventArgs());
 		}
 
 		private void _io_IOError(object sender, IO.IOErrorEventArgs e)
 		{
-			OnTerminalError(new TerminalErrorEventArgs(e.Message));
+			OnError(new ErrorEventArgs(e.Message));
 		}
 
 		private void _io_DataReceived(object sender, EventArgs e)
@@ -464,21 +464,21 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnTerminalChanged(EventArgs e)
+		protected virtual void OnChanged(EventArgs e)
 		{
-			EventHelper.FireSync(TerminalChanged, this, e);
+			EventHelper.FireSync(Changed, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnTerminalControlChanged(EventArgs e)
+		protected virtual void OnControlChanged(EventArgs e)
 		{
-			EventHelper.FireSync(TerminalControlChanged, this, e);
+			EventHelper.FireSync(ControlChanged, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnTerminalError(TerminalErrorEventArgs e)
+		protected virtual void OnError(ErrorEventArgs e)
 		{
-			EventHelper.FireSync<TerminalErrorEventArgs>(TerminalError, this, e);
+			EventHelper.FireSync<ErrorEventArgs>(Error, this, e);
 		}
 
 		/// <summary></summary>

@@ -18,8 +18,8 @@ namespace YAT.Gui.Forms
 		private bool _isStartingUp = true;
 		private bool _isSettingControls = false;
 
-		private YAT.Settings.GeneralSettings _settings;
-		private YAT.Settings.GeneralSettings _settings_Form;
+		private Settings.GeneralSettings _settings;
+		private Settings.GeneralSettings _settings_Form;
 
 		#endregion
 
@@ -28,12 +28,12 @@ namespace YAT.Gui.Forms
 		// Object Lifetime
 		//==========================================================================================
 
-		public Preferences(YAT.Settings.GeneralSettings settings)
+		public Preferences(Settings.GeneralSettings settings)
 		{
 			InitializeComponent();
 
 			_settings = settings;
-			_settings_Form = new YAT.Settings.GeneralSettings(settings);
+			_settings_Form = new Settings.GeneralSettings(settings);
 			InitializeControls();
 		}
 
@@ -44,7 +44,7 @@ namespace YAT.Gui.Forms
 		// Properties
 		//==========================================================================================
 
-		public YAT.Settings.GeneralSettings SettingsResult
+		public Settings.GeneralSettings SettingsResult
 		{
 			get { return (_settings); }
 		}

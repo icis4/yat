@@ -49,7 +49,6 @@
     <Compile Include="SendCommandSettings.cs" />
     <Compile Include="SendFileSettings.cs" />
     <Compile Include="TerminalSettingsItem.cs" />
-    <Compile Include="TerminalSettingsItemCollection.cs" />
     <Compile Include="TextFormat.cs" />
     <Compile Include="WindowSettings.cs" />
     <Compile Include="WorkspaceSettings.cs" />

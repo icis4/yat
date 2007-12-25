@@ -37,7 +37,7 @@ namespace YAT.Gui.Forms
 			textBefore = "Copyright © 2003-2004 ";
 			textLink =                         "HSR Hochschule für Technik Rapperswil";
 			textAfter =                                                             "." + Environment.NewLine +
-			             "Copyright © 2003-2007 Matthias Kläy.";
+			             "Copyright © 2003-2008 Matthias Kläy.";
 			linkLabel_Copyright.Text += textBefore;
 			start = linkLabel_Copyright.Text.Length;
 			linkLabel_Copyright.Text += textLink;

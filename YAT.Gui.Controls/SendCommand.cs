@@ -9,8 +9,9 @@ using System.Windows.Forms;
 using MKY.Utilities.Event;
 using MKY.Utilities.Recent;
 
-using YAT.Gui.Types;
+using YAT.Gui.Utilities;
 using YAT.Model.Types;
+using YAT.Model.Settings;
 
 namespace YAT.Gui.Controls
 {
@@ -250,7 +251,7 @@ namespace YAT.Gui.Controls
                 if ((_commandEditState == TextEditState.HasFocusButIsNotValidated) ||
                     (_commandEditState == TextEditState.IsLeavingButIsNotValidated))
                 {
-                    if (Settings.SendCommandSettings.IsEasterEggCommand(comboBox_Command.Text))
+                    if (SendCommandSettings.IsEasterEggCommand(comboBox_Command.Text))
 				    {
 					    if (_commandEditState == TextEditState.IsLeavingButIsNotValidated)
 						    _commandEditState = TextEditState.Inactive;

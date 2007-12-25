@@ -6,30 +6,30 @@ namespace MKY.Utilities.IO
 	/// <summary>
 	/// Thread-safe log file.
 	/// </summary>
-	public class Logfile
+	public class LogFile
 	{
-		private string _path;
+		private string _filePath;
 		private StreamWriter _writer;
 
 		/// <summary>
 		/// Starts Logfile.
 		/// </summary>
-		/// <param name="path">Path of log file.</param>
+		/// <param name="filePath">Path of log file.</param>
 		/// <param name="append">true to append to file, false to replace file.</param>
-		public Logfile(string path, bool append)
+		public LogFile(string filePath, bool append)
 		{
-			_path = path;
-			_writer = new System.IO.StreamWriter(path, append);
+			_filePath = filePath;
+			_writer = new System.IO.StreamWriter(_filePath, append);
 		}
 
 		/// <summary>
 		/// Returns complete path of log file.
 		/// </summary>
-		public String Path
+		public String FilePath
 		{
 			get
 			{
-				return (_path);
+				return (_filePath);
 			}
 		}
 

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 using MKY.Utilities.Event;
 
+using YAT.Gui.Utilities;
 using YAT.Domain.Settings;
 
 namespace YAT.Gui.Controls

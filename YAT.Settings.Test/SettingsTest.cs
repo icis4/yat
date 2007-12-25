@@ -27,7 +27,9 @@ namespace YAT.Settings.Test
 		private const string _TempPrefix = "YAT-Test-";
 		private const string _TempExtension = ".txt";
 
-		#region Tests
+		#endregion
+
+		#region Tear Down
 		//==========================================================================================
 		// Tear Down
 		//==========================================================================================
@@ -38,6 +40,8 @@ namespace YAT.Settings.Test
 			string filePath = MakeTempFilePath("*");
 			File.Delete(filePath);
 		}
+
+		#endregion
 
 		#region Tests
 		//==========================================================================================
