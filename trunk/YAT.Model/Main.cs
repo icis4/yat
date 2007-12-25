@@ -5,10 +5,14 @@ using System.IO;
 using System.Windows.Forms;
 
 using MKY.Utilities.Event;
+using MKY.Utilities.Recent;
+using MKY.Utilities.Settings;
 using MKY.Utilities.IO;
 
 using YAT.Settings;
 using YAT.Settings.Application;
+using YAT.Settings.Workspace;
+using YAT.Utilities;
 
 namespace YAT.Model
 {
@@ -18,12 +22,25 @@ namespace YAT.Model
 	/// </summary>
 	public class Main : IDisposable
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private readonly string _Title = Application.ProductName + VersionInfo.ProductNamePostFix;
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
 		//==========================================================================================
 
 		private bool _isDisposed = false;
+
+		private string _requestedFilePath = "";
+
+		private Workspace _workspace;
 
 		#endregion
 
@@ -51,6 +68,18 @@ namespace YAT.Model
 		/// <summary></summary>
 		public Main()
 		{
+			Initialize("");
+		}
+
+		/// <summary></summary>
+		public Main(string requestedFilePath)
+		{
+			Initialize(requestedFilePath);
+		}
+
+		private void Initialize(string requestedFilePath)
+		{
+			_requestedFilePath = requestedFilePath;
 		}
 
 		#region Disposal
@@ -72,7 +101,8 @@ namespace YAT.Model
 			{
 				if (disposing)
 				{
-					// nothing yet
+					if (_workspace != null)
+						_workspace.Dispose();
 				}
 				_isDisposed = true;
 			}
@@ -101,22 +131,76 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Properties
+		#region General Properties
 		//==========================================================================================
-		// Properties
+		// General Properties
 		//==========================================================================================
+
+		public string Title
+		{
+			get { return (_Title); }
+		}
 
 		#endregion
 
-		#region Methods
+		#region Recents
 		//==========================================================================================
-		// Methods
+		// Recents
+		//==========================================================================================
+
+		/// <summary>
+		/// If a file was requested by command line argument, this method tries to open the
+		/// requested file.
+		/// Else, this method tries to open the most recent workspace of the current user.
+		/// </summary>
+		/// <returns>Returns true if either operation succeeded, false otherwise</returns>
+		public bool Start()
+		{
+			bool success = false;
+
+			if ((_requestedFilePath != null) && (_requestedFilePath != ""))
+			{
+				success = OpenFromFile(_requestedFilePath);
+			}
+
+			if (!success && ApplicationSettings.LocalUser.General.AutoOpenWorkspace)
+			{
+				string filePath = ApplicationSettings.LocalUser.General.WorkspaceFilePath;
+				if (File.Exists(filePath))
+					success = OpenWorkspaceFromFile(filePath);
+			}
+
+			return (success);
+		}
+
+		#endregion
+
+		#region Recents
+		//==========================================================================================
+		// Recents
 		//==========================================================================================
 
 		public bool OpenRecent(int userIndex)
 		{
 			return (OpenFromFile(ApplicationSettings.LocalUser.RecentFiles.FilePaths[userIndex - 1].Item));
 		}
+
+		/// <summary>
+		/// Update recent entry.
+		/// </summary>
+		/// <param name="recentFile">Recent file.</param>
+		private void SetRecent(string recentFile)
+		{
+			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
+			ApplicationSettings.SaveLocalUser();
+		}
+
+		#endregion
+
+		#region Workspace
+		//==========================================================================================
+		// Workspace
+		//==========================================================================================
 
 		/// <summary>
 		/// Opens YAT and opens the workspace or terminal file given. This method can directly
@@ -136,7 +220,7 @@ namespace YAT.Model
 			else if (ExtensionSettings.IsTerminalFile(extension))
 			{
 				OnFixedStatusTextRequest("Opening terminal " + fileName + "...");
-				return (OpenTerminalFromFile(filePath));
+				return (_workspace.OpenTerminalFromFile(filePath));
 			}
 			else
 			{
@@ -158,22 +242,24 @@ namespace YAT.Model
 
 		private bool OpenWorkspaceFromFile(string filePath)
 		{
-			// close all terminal 
-			CloseAllTerminals();
-			if (MdiChildren.Length > 0)
+			// close workspace, only one workspace can exist within application
+			if (!_workspace.Close())
 				return (false);
 
 			OnFixedStatusTextRequest("Opening workspace...");
 			try
 			{
-				_workspaceSettingsHandler.SettingsFilePath = filePath;
-				_workspaceSettingsHandler.Load();
-				_workspaceSettingsRoot = _workspaceSettingsHandler.Settings;
+				DocumentSettingsHandler<WorkspaceSettingsRoot> sh = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
+				sh.SettingsFilePath = filePath;
+				sh.Load();
 
-				ApplicationSettings.LocalUser.General.CurrentWorkspaceFilePath = filePath;
+				ApplicationSettings.LocalUser.General.WorkspaceFilePath = filePath;
 				ApplicationSettings.SaveLocalUser();
 
-				if (!_workspaceSettingsRoot.AutoSaved)
+				// create workspace
+				_workspace = new Workspace(sh);
+
+				if (!sh.Settings.AutoSaved)
 					SetRecent(filePath);
 
 				OnTimedStatusTextRequest("Workspace opened");
@@ -196,43 +282,11 @@ namespace YAT.Model
 				return (false);
 			}
 
-			int terminalCount = _workspaceSettingsRoot.TerminalSettings.Count;
-			if (terminalCount == 1)
-				OnFixedStatusTextRequest("Opening workspace terminal...");
-			else if (terminalCount > 1)
-				OnFixedStatusTextRequest("Opening workspace terminals...");
+			// open workspace terminals
+			int terminalCount = _workspace.OpenTerminals();
 
-			TerminalSettingsItemCollection clone = new TerminalSettingsItemCollection(_workspaceSettingsRoot.TerminalSettings);
-			foreach (TerminalSettingsItem item in clone)
-			{
-				try
-				{
-					OpenTerminalFromFile(item.FilePath, item.Guid, item.Window, true);
-				}
-				catch (System.Xml.XmlException ex)
-				{
-					OnFixedStatusTextRequest("Error opening terminal!");
-
-					DialogResult result = OnMessageInputRequest
-						(
-						"Unable to open file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
-						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
-						"File error message: " + ex.InnerException.Message + Environment.NewLine + Environment.NewLine +
-						"Continue loading workspace?",
-						"File Error",
-						MessageBoxButtons.YesNo,
-						MessageBoxIcon.Exclamation
-						);
-
-					OnTimedStatusTextRequest("Terminal not opened!");
-
-					if (result == DialogResult.No)
-						break;
-				}
-			}
-
-			// attach workspace settings after terminals have been opened
-			AttachWorkspaceSettingsHandlers();
+			// attach workspace event handlers after terminals have been opened
+			AttachWorkspaceEventHandlers();
 
 			if (terminalCount == 1)
 				OnTimedStatusTextRequest("Workspace terminal opened");
@@ -244,13 +298,25 @@ namespace YAT.Model
 			return (true);
 		}
 
-		/// <summary>
-		/// Saves all terminal files and the workspace.
-		/// </summary>
-		private void SaveAll()
+		#endregion
+
+		#region Workspace Events
+		//==========================================================================================
+		// Workspace Events
+		//==========================================================================================
+
+		private void AttachWorkspaceEventHandlers()
 		{
-			SaveAllTerminals();
-			SaveWorkspace();
+			// \fixme _workspace.Changed += new EventHandler<SettingsEventArgs>(_workspaceSettings_Changed);
+		}
+
+		//------------------------------------------------------------------------------------------
+		// Workspace Events > Handlers
+		//------------------------------------------------------------------------------------------
+
+		private void _workspace_Changed(object sender, EventArgs e)
+		{
+			// \fixme not implemented yet
 		}
 
 		#endregion

@@ -18,10 +18,10 @@ namespace YAT.Gui.Forms
 		private bool _isStartingUp = true;
 		private bool _isSettingControls = false;
 
-		private Settings.NewTerminalSettings _newTerminalSettings;
-		private Settings.NewTerminalSettings _newTerminalSettings_Form;
+		private Model.Settings.NewTerminalSettings _newTerminalSettings;
+		private Model.Settings.NewTerminalSettings _newTerminalSettings_Form;
 
-		private YAT.Settings.Terminal.TerminalSettingsRoot _terminalSettings;
+		private Settings.Terminal.TerminalSettingsRoot _terminalSettings;
 
 		#endregion
 
@@ -30,12 +30,12 @@ namespace YAT.Gui.Forms
 		// Object Lifetime
 		//==========================================================================================
 
-		public NewTerminal(Settings.NewTerminalSettings newTerminalSettings)
+		public NewTerminal(Model.Settings.NewTerminalSettings newTerminalSettings)
 		{
 			InitializeComponent();
 
 			_newTerminalSettings = newTerminalSettings;
-			_newTerminalSettings_Form = new Settings.NewTerminalSettings(newTerminalSettings);
+			_newTerminalSettings_Form = new Model.Settings.NewTerminalSettings(newTerminalSettings);
 		}
 
 		#endregion
@@ -45,12 +45,12 @@ namespace YAT.Gui.Forms
 		// Properties
 		//==========================================================================================
 
-		public Settings.NewTerminalSettings NewTerminalSettingsResult
+		public Model.Settings.NewTerminalSettings NewTerminalSettingsResult
 		{
 			get { return (_newTerminalSettings); }
 		}
 
-		public YAT.Settings.Terminal.TerminalSettingsRoot TerminalSettingsResult
+		public Settings.Terminal.TerminalSettingsRoot TerminalSettingsResult
 		{
 			get { return (_terminalSettings); }
 		}
@@ -175,7 +175,7 @@ namespace YAT.Gui.Forms
 			_newTerminalSettings = _newTerminalSettings_Form;
 
 			// create document settings and fill it with new terminal settings
-			_terminalSettings = new YAT.Settings.Terminal.TerminalSettingsRoot();
+			_terminalSettings = new Settings.Terminal.TerminalSettingsRoot();
 
 			_terminalSettings.Terminal.TerminalType = _newTerminalSettings.TerminalType;
 			_terminalSettings.Terminal.IO.IOType = _newTerminalSettings.IOType;

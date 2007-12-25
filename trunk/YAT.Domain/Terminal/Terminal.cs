@@ -44,11 +44,11 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public event EventHandler TerminalChanged;
+		public event EventHandler Changed;
 		/// <summary></summary>
-		public event EventHandler TerminalControlChanged;
+		public event EventHandler ControlChanged;
 		/// <summary></summary>
-		public event EventHandler<TerminalErrorEventArgs> TerminalError;
+		public event EventHandler<ErrorEventArgs> Error;
 
 		/// <summary></summary>
 		public event EventHandler<RawElementEventArgs> RawElementSent;
@@ -700,12 +700,12 @@ namespace YAT.Domain
 		private void AttachRawTerminal(RawTerminal rawTerminal)
 		{
 			_rawTerminal = rawTerminal;
-			_rawTerminal.TerminalChanged        += new EventHandler(_rawTerminal_TerminalChanged);
-			_rawTerminal.TerminalControlChanged += new EventHandler(_rawTerminal_TerminalControlChanged);
+			_rawTerminal.Changed        += new EventHandler(_rawTerminal_Changed);
+			_rawTerminal.ControlChanged += new EventHandler(_rawTerminal_ControlChanged);
 			_rawTerminal.RawElementSent         += new EventHandler<RawElementEventArgs>(_rawTerminal_RawElementSent);
 			_rawTerminal.RawElementReceived     += new EventHandler<RawElementEventArgs>(_rawTerminal_RawElementReceived);
 			_rawTerminal.RepositoryCleared      += new EventHandler<RepositoryEventArgs>(_rawTerminal_RepositoryCleared);
-			_rawTerminal.TerminalError          += new EventHandler<TerminalErrorEventArgs>(_rawTerminal_TerminalError);
+			_rawTerminal.Error          += new EventHandler<ErrorEventArgs>(_rawTerminal_Error);
 		}
 
 		#endregion
@@ -715,19 +715,19 @@ namespace YAT.Domain
 		// Raw Terminal Events
 		//==========================================================================================
 
-		private void _rawTerminal_TerminalChanged(object sender, EventArgs e)
+		private void _rawTerminal_Changed(object sender, EventArgs e)
 		{
-			OnTerminalChanged(e);
+			OnChanged(e);
 		}
 
-		private void _rawTerminal_TerminalControlChanged(object sender, EventArgs e)
+		private void _rawTerminal_ControlChanged(object sender, EventArgs e)
 		{
-			OnTerminalControlChanged(e);
+			OnControlChanged(e);
 		}
 
-		private void _rawTerminal_TerminalError(object sender, TerminalErrorEventArgs e)
+		private void _rawTerminal_Error(object sender, ErrorEventArgs e)
 		{
-			OnTerminalError(e);
+			OnError(e);
 		}
 
 		/// <summary></summary>
@@ -762,21 +762,21 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnTerminalChanged(EventArgs e)
+		protected virtual void OnChanged(EventArgs e)
 		{
-			EventHelper.FireSync(TerminalChanged, this, e);
+			EventHelper.FireSync(Changed, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnTerminalControlChanged(EventArgs e)
+		protected virtual void OnControlChanged(EventArgs e)
 		{
-			EventHelper.FireSync(TerminalControlChanged, this, e);
+			EventHelper.FireSync(ControlChanged, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnTerminalError(TerminalErrorEventArgs e)
+		protected virtual void OnError(ErrorEventArgs e)
 		{
-			EventHelper.FireSync<TerminalErrorEventArgs>(TerminalError, this, e);
+			EventHelper.FireSync<ErrorEventArgs>(Error, this, e);
 		}
 
 		/// <summary></summary>

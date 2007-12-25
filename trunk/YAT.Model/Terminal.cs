@@ -4,15 +4,23 @@ using System.Text;
 using System.IO;
 using System.Windows.Forms;
 
+using MKY.Utilities.Guid;
 using MKY.Utilities.Event;
+using MKY.Utilities.Recent;
 using MKY.Utilities.Settings;
 
-using YAT.Model.Types;
+using YAT.Domain;
+
 using YAT.Settings;
+using YAT.Settings.Terminal;
+
+using YAT.Model.Types;
+using YAT.Model.Settings;
+using YAT.Model.Utilities;
 
 namespace YAT.Model
 {
-	public class Terminal : IDisposable
+	public class Terminal : IDisposable, IGuidProvider
 	{
 		#region Constants
 		//==========================================================================================
@@ -39,19 +47,24 @@ namespace YAT.Model
 
 		private bool _isDisposed = false;
 
-		private Guid _guid = Guid.NewGuid();
+		private Guid _guid;
 		private string _userName;
 
 		// settings
-		private DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> _terminalSettingsHandler;
-		private YAT.Settings.Terminal.TerminalSettingsRoot _terminalSettingsRoot;
-		private bool _handlingTerminalSettingsIsSuspended = false;
+		private DocumentSettingsHandler<TerminalSettingsRoot> _settingsHandler;
+		private YAT.Settings.Terminal.TerminalSettingsRoot _settingsRoot;
 
 		// terminal
 		private Domain.Terminal _terminal;
 
 		// logs
 		private Log.Logs _log;
+
+		// count status
+		private int _txByteCount = 0;
+		private int _rxByteCount = 0;
+		private int _txLineCount = 0;
+		private int _rxLineCount = 0;
 
 		#endregion
 
@@ -60,9 +73,27 @@ namespace YAT.Model
 		// Events
 		//==========================================================================================
 
-		public event EventHandler TerminalChanged;
-		public event EventHandler<TerminalSavedEventArgs> TerminalSaved;
-		public event EventHandler TerminalClosed;
+		public event EventHandler<SavedEventArgs> Saved;
+		public event EventHandler Closed;
+
+		public event EventHandler Changed;
+		public event EventHandler ControlChanged;
+		public event EventHandler<Domain.ErrorEventArgs> Error;
+
+		/// <summary></summary>
+		public event EventHandler<DisplayElementsEventArgs> DisplayElementsSent;
+		/// <summary></summary>
+		public event EventHandler<DisplayElementsEventArgs> DisplayElementsReceived;
+		/// <summary></summary>
+		public event EventHandler<DisplayLinesEventArgs> DisplayLinesSent;
+		/// <summary></summary>
+		public event EventHandler<DisplayLinesEventArgs> DisplayLinesReceived;
+		/// <summary></summary>
+		public event EventHandler<RepositoryEventArgs> RepositoryCleared;
+		/// <summary></summary>
+		public event EventHandler<RepositoryEventArgs> RepositoryReloaded;
+
+		public event EventHandler CountChanged;
 
 		/// <summary></summary>
 		public event EventHandler<StatusTextEventArgs> FixedStatusTextRequest;
@@ -73,7 +104,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public event EventHandler<MessageInputEventArgs> MessageInputRequest;
 
-		public event EventHandler SaveTerminalAsFileDialogRequest;
+		public event EventHandler SaveAsFileDialogRequest;
 
 		#endregion
 
@@ -82,7 +113,42 @@ namespace YAT.Model
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <summary></summary>
+		public Terminal()
+		{
+			Initialize(new DocumentSettingsHandler<TerminalSettingsRoot>(), Guid.NewGuid());
+		}
+
+		public Terminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
+		{
+			Initialize(settingsHandler, Guid.NewGuid());
+		}
+
+		public Terminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid)
+		{
+			Initialize(settingsHandler, guid);
+		}
+
+		private void Initialize(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid)
+		{
+			if (guid != Guid.Empty)
+				_guid = guid;
+			else
+				_guid = Guid.NewGuid();
+
+			_settingsHandler = settingsHandler;
+			_settingsRoot = _settingsHandler.Settings;
+			AttachSettingsHandlers();
+
+			if (!_settingsHandler.SettingsFilePathIsValid || _settingsRoot.AutoSaved)
+				_userName = _TerminalText + _terminalIdCounter.ToString();
+			else
+				UserNameFromFile = _settingsHandler.SettingsFilePath;
+
+			_terminal = Domain.Factory.TerminalFactory.CreateTerminal(_settingsRoot.Terminal);
+			AttachTerminalHandlers();
+
+			_log = new Log.Logs(_settingsRoot.Log);
+		}
 
 		#region Disposal
 		//------------------------------------------------------------------------------------------
@@ -103,7 +169,10 @@ namespace YAT.Model
 			{
 				if (disposing)
 				{
-					// nothing yet
+					if (_log != null)
+						_log.Dispose();
+					if (_terminal != null)
+						_terminal.Dispose();
 				}
 				_isDisposed = true;
 			}
@@ -132,42 +201,24 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Properties
+		#region General Properties
 		//==========================================================================================
-		// Properties
+		// General Properties
 		//==========================================================================================
 
 		public Guid Guid
 		{
 			get { return (_guid); }
-			set { _guid = value; }
 		}
 
 		public string UserName
 		{
 			get { return (_userName); }
-			set { _userName = value; }
 		}
 
-		public string UserNameFromFile
+		private string UserNameFromFile
 		{
 			set { _userName = Path.GetFileName(value); }
-		}
-
-		public string SettingsFilePath
-		{
-			get
-			{
-				if (_terminalSettingsHandler.SettingsFileExists)
-					return (_terminalSettingsHandler.SettingsFilePath);
-				else
-					return ("");
-			}
-		}
-
-		public bool AutoSaved
-		{
-			get { return (_terminalSettingsRoot.AutoSaved); }
 		}
 
 		public bool IsOpen
@@ -177,37 +228,45 @@ namespace YAT.Model
 
 		#endregion
 
-		#region File
+		#region Save
 		//==========================================================================================
-		// File
+		// Save
 		//==========================================================================================
 
-		private void SaveTerminal()
+		public void AutoSave()
 		{
-			SaveTerminal(false);
+			// only perform auto save if no file yet or on previously auto saved files
+			if (!_settingsHandler.SettingsFileExists ||
+				(_settingsHandler.SettingsFileExists && _settingsRoot.AutoSaved))
+				Save(true);
 		}
 
-		private void SaveTerminal(bool autoSave)
+		private void Save()
+		{
+			Save(false);
+		}
+
+		private void Save(bool autoSave)
 		{
 			if (autoSave)
 			{
-				SaveTerminalToFile(true);
+				SaveToFile(true);
 			}
 			else
 			{
-				if (_terminalSettingsHandler.SettingsFilePathIsValid && !_terminalSettingsHandler.Settings.AutoSaved)
-					SaveTerminalToFile(false);
+				if (_settingsHandler.SettingsFilePathIsValid && !_settingsHandler.Settings.AutoSaved)
+					SaveToFile(false);
 				else
-					OnSaveTerminalAsFileDialogRequest();
+					OnSaveAsFileDialogRequest(new EventArgs());
 			}
 		}
 
-		private void SaveTerminalToFile(bool autoSave)
+		private void SaveToFile(bool autoSave)
 		{
-			SaveTerminalToFile(autoSave, "");
+			SaveToFile(autoSave, "");
 		}
 
-		private void SaveTerminalToFile(bool autoSave, string autoSaveFilePathToDelete)
+		private void SaveToFile(bool autoSave, string autoSaveFilePathToDelete)
 		{
 			if (!autoSave)
 				OnFixedStatusTextRequest("Saving terminal...");
@@ -217,16 +276,17 @@ namespace YAT.Model
 				if (autoSave)
 				{
 					string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveTerminalFileNamePrefix + Guid.ToString() + ExtensionSettings.TerminalFiles;
-					if (!_terminalSettingsHandler.SettingsFilePathIsValid)
-						_terminalSettingsHandler.SettingsFilePath = autoSaveFilePath;
+					if (!_settingsHandler.SettingsFilePathIsValid)
+						_settingsHandler.SettingsFilePath = autoSaveFilePath;
 				}
-				_terminalSettingsHandler.Settings.AutoSaved = autoSave;
-				_terminalSettingsHandler.Save();
+				_settingsHandler.Settings.AutoSaved = autoSave;
+				_settingsHandler.Save();
 
 				if (!autoSave)
-					UserNameFromFile = _terminalSettingsHandler.SettingsFilePath;
+					UserNameFromFile = _settingsHandler.SettingsFilePath;
 
-				OnTerminalSaved(new TerminalSavedEventArgs(_terminalSettingsHandler.SettingsFilePath, autoSave));
+				OnSaved(new SavedEventArgs(_settingsHandler.SettingsFilePath, autoSave));
+				OnChanged(new EventArgs());
 
 				if (!autoSave)
 					OnTimedStatusTextRequest("Terminal saved");
@@ -248,7 +308,7 @@ namespace YAT.Model
 					OnFixedStatusTextRequest("Error saving terminal!");
 					OnMessageInputRequest
 						(
-						"Unable to save file" + Environment.NewLine + _terminalSettingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
+						"Unable to save file" + Environment.NewLine + _settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
 						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
 						"File error message: " + ex.InnerException.Message,
 						"File Error",
@@ -258,9 +318,44 @@ namespace YAT.Model
 					OnTimedStatusTextRequest("Terminal not saved!");
 				}
 			}
-			SetTerminalCaption();
+		}
 
-			SelectSendCommandInput();
+		#endregion
+
+		#region Settings
+		//==========================================================================================
+		// Settings
+		//==========================================================================================
+
+		public string SettingsFilePath
+		{
+			get
+			{
+				if (_settingsHandler.SettingsFileExists)
+					return (_settingsHandler.SettingsFilePath);
+				else
+					return ("");
+			}
+		}
+
+		public WindowSettings WindowSettings
+		{
+			get { return (_settingsRoot.Window); }
+		}
+
+		private void AttachSettingsHandlers()
+		{
+			_settingsRoot.ClearChanged();
+			_settingsRoot.Changed += new EventHandler<SettingsEventArgs>(_settings_Changed);
+		}
+
+		//------------------------------------------------------------------------------------------
+		// Settings Events
+		//------------------------------------------------------------------------------------------
+
+		private void _settings_Changed(object sender, SettingsEventArgs e)
+		{
+			// nothing to do yet
 		}
 
 		#endregion
@@ -277,9 +372,9 @@ namespace YAT.Model
 
 		private void AttachTerminalHandlers()
 		{
-			_terminal.TerminalChanged += new EventHandler(_terminal_TerminalChanged);
-			_terminal.TerminalControlChanged += new EventHandler(_terminal_TerminalControlChanged);
-			_terminal.TerminalError += new EventHandler<Domain.TerminalErrorEventArgs>(_terminal_TerminalError);
+			_terminal.Changed += new EventHandler(_terminal_Changed);
+			_terminal.ControlChanged += new EventHandler(_terminal_ControlChanged);
+			_terminal.Error += new EventHandler<Domain.ErrorEventArgs>(_terminal_Error);
 
 			_terminal.RawElementSent += new EventHandler<Domain.RawElementEventArgs>(_terminal_RawElementSent);
 			_terminal.RawElementReceived += new EventHandler<Domain.RawElementEventArgs>(_terminal_RawElementReceived);
@@ -293,9 +388,9 @@ namespace YAT.Model
 
 		private void DetachTerminalHandlers()
 		{
-			_terminal.TerminalChanged -= new EventHandler(_terminal_TerminalChanged);
-			_terminal.TerminalControlChanged -= new EventHandler(_terminal_TerminalControlChanged);
-			_terminal.TerminalError -= new EventHandler<Domain.TerminalErrorEventArgs>(_terminal_TerminalError);
+			_terminal.Changed -= new EventHandler(_terminal_Changed);
+			_terminal.ControlChanged -= new EventHandler(_terminal_ControlChanged);
+			_terminal.Error -= new EventHandler<Domain.ErrorEventArgs>(_terminal_Error);
 
 			_terminal.RawElementSent -= new EventHandler<Domain.RawElementEventArgs>(_terminal_RawElementSent);
 			_terminal.RawElementReceived -= new EventHandler<Domain.RawElementEventArgs>(_terminal_RawElementReceived);
@@ -305,353 +400,6 @@ namespace YAT.Model
 			_terminal.DisplayLinesReceived -= new EventHandler<Domain.DisplayLinesEventArgs>(_terminal_DisplayLinesReceived);
 			_terminal.RepositoryCleared -= new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryCleared);
 			_terminal.RepositoryReloaded -= new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryReloaded);
-		}
-
-		#endregion
-
-		#region Terminal > View
-		//------------------------------------------------------------------------------------------
-		// Terminal > View
-		//------------------------------------------------------------------------------------------
-
-		private void InitializeIOControlStatusLabels()
-		{
-			_statusLabels_ioControl = new List<ToolStripStatusLabel>();
-			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_RTS);
-			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_CTS);
-			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DTR);
-			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DSR);
-			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DCD);
-		}
-
-		private void SetTerminalCaption()
-		{
-			bool isOpen = false;
-			bool isConnected = false;
-
-			if (_terminal != null)
-			{
-				isOpen = _terminal.IsOpen;
-				isConnected = _terminal.IsConnected;
-			}
-
-			StringBuilder sb = new StringBuilder(UserName);
-
-			if ((_terminalSettingsRoot != null) && _terminalSettingsRoot.ExplicitHaveChanged)
-				sb.Append("*");
-
-			if (_terminalSettingsRoot != null)
-			{
-				if (_terminalSettingsRoot.IOType == Domain.IOType.SerialPort)
-				{
-					Domain.Settings.SerialPort.SerialPortSettings s = _terminalSettingsRoot.IO.SerialPort;
-					sb.Append(" - ");
-					sb.Append(s.PortId.ToString());
-					sb.Append(" - ");
-					sb.Append(isOpen ? "Open" : "Closed");
-				}
-				else
-				{
-					Domain.Settings.Socket.SocketSettings s = _terminalSettingsRoot.IO.Socket;
-					switch (_terminalSettingsRoot.IOType)
-					{
-						case Domain.IOType.TcpClient:
-							sb.Append(" - ");
-							sb.Append(s.ResolvedRemoteIPAddress.ToString());
-							sb.Append(":");
-							sb.Append(s.RemotePort.ToString());
-							sb.Append(" - ");
-							sb.Append(isConnected ? "Connected" : "Disconnected");
-							break;
-
-						case Domain.IOType.TcpServer:
-							sb.Append(" - ");
-							sb.Append("Server:");
-							sb.Append(s.LocalPort.ToString());
-							sb.Append(" - ");
-							if (isOpen)
-								sb.Append(isConnected ? "Connected" : "Listening");
-							else
-								sb.Append("Closed");
-							break;
-
-						case Domain.IOType.TcpAutoSocket:
-							bool isClient = ((Domain.IO.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsClient;
-							bool isServer = ((Domain.IO.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsServer;
-							if (isOpen)
-							{
-								if (isClient)
-								{
-									sb.Append(" - ");
-									sb.Append(s.ResolvedRemoteIPAddress.ToString());
-									sb.Append(":");
-									sb.Append(s.RemotePort.ToString());
-									sb.Append(" - ");
-									sb.Append(isConnected ? "Connected" : "Disconnected");
-								}
-								else if (isServer)
-								{
-									sb.Append(" - ");
-									sb.Append("Server:");
-									sb.Append(s.LocalPort.ToString());
-									sb.Append(" - ");
-									sb.Append(isConnected ? "Connected" : "Listening");
-								}
-								else
-								{
-									sb.Append(" - ");
-									sb.Append("Starting on port ");
-									sb.Append(s.RemotePort.ToString());
-								}
-							}
-							else
-							{
-								sb.Append(" - ");
-								sb.Append("AutoSocket:");
-								sb.Append(s.RemotePort.ToString());
-								sb.Append(" - ");
-								sb.Append("Disconnected");
-							}
-							break;
-
-						case Domain.IOType.Udp:
-							sb.Append(" - ");
-							sb.Append(s.ResolvedRemoteIPAddress.ToString());
-							sb.Append(":");
-							sb.Append(s.RemotePort.ToString());
-							sb.Append(" - ");
-							sb.Append("Receive:");
-							sb.Append(s.LocalPort.ToString());
-							sb.Append(" - ");
-							sb.Append(isOpen ? "Open" : "Closed");
-							break;
-					}
-				}
-			}
-
-			Text = sb.ToString();
-		}
-
-		private void SetTerminalControls()
-		{
-			bool isOpen = _terminal.IsOpen;
-
-			// main menu
-			toolStripMenuItem_TerminalMenu_Terminal_Open.Enabled = !isOpen;
-			toolStripMenuItem_TerminalMenu_Terminal_Close.Enabled = isOpen;
-
-			// terminal panel
-			SetTerminalCaption();
-			SetIOStatus();
-			SetIOControlControls();
-
-			// send panel
-			send.TerminalIsOpen = isOpen;
-
-			// predefined panel
-			predefined.TerminalIsOpen = isOpen;
-		}
-
-		private void SetIOStatus()
-		{
-			bool isOpen = _terminal.IsOpen;
-			bool isConnected = _terminal.IsConnected;
-
-			StringBuilder sb = new StringBuilder();
-
-			if (_terminalSettingsRoot.IOType == Domain.IOType.SerialPort)
-			{
-				Domain.Settings.SerialPort.SerialPortSettings s = _terminalSettingsRoot.IO.SerialPort;
-				sb.Append("Serial port ");
-				sb.Append(s.PortId.ToString());
-				sb.Append(" (" + s.Communication.ToString() + ") is ");
-				sb.Append(isOpen ? "open" : "closed");
-
-				toolStripStatusLabel_TerminalStatus_Connection.Visible = false;
-			}
-			else
-			{
-				Domain.Settings.Socket.SocketSettings s = _terminalSettingsRoot.IO.Socket;
-				switch (_terminalSettingsRoot.IOType)
-				{
-					case Domain.IOType.TcpClient:
-						sb.Append("TCP client is ");
-						sb.Append(isConnected ? "connected to " : "disconnected from ");
-						sb.Append(s.ResolvedRemoteIPAddress.ToString());
-						sb.Append(" on remote port ");
-						sb.Append(s.RemotePort.ToString());
-						break;
-
-					case Domain.IOType.TcpServer:
-						sb.Append("TCP server is ");
-						if (isOpen)
-						{
-							if (isConnected)
-							{
-								Domain.IO.TcpServer server = (Domain.IO.TcpServer)_terminal.UnderlyingIOProvider;
-								int count = server.ConnectedClientCount;
-
-								sb.Append("connected to ");
-								sb.Append(count.ToString());
-								if (count == 1)
-									sb.Append(" client");
-								else
-									sb.Append(" clients");
-							}
-							else
-							{
-								sb.Append("listening");
-							}
-						}
-						else
-						{
-							sb.Append("closed");
-						}
-						sb.Append(" on local port ");
-						sb.Append(s.LocalPort.ToString());
-						break;
-
-					case Domain.IOType.TcpAutoSocket:
-						bool isClient = ((Domain.IO.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsClient;
-						bool isServer = ((Domain.IO.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsServer;
-						sb.Append("TCP auto socket is ");
-						if (isOpen)
-						{
-							if (isClient)
-							{
-								sb.Append("connected to ");
-								sb.Append(s.ResolvedRemoteIPAddress.ToString());
-								sb.Append(" on remote port ");
-								sb.Append(s.RemotePort.ToString());
-							}
-							else if (isServer)
-							{
-								sb.Append(isConnected ? "connected" : "listening");
-								sb.Append(" on local port ");
-								sb.Append(s.LocalPort.ToString());
-							}
-							else
-							{
-								sb.Append("starting on port ");
-								sb.Append(s.RemotePort.ToString());
-							}
-						}
-						else
-						{
-							sb.Append("closed on port ");
-							sb.Append(s.RemotePort.ToString());
-						}
-						break;
-
-					case Domain.IOType.Udp:
-						sb.Append("UDP socket is ");
-						sb.Append(isOpen ? "open" : "closed");
-						sb.Append(" for sending to ");
-						sb.Append(s.ResolvedRemoteIPAddress.ToString());
-						sb.Append(" on remote port ");
-						sb.Append(s.RemotePort.ToString());
-						sb.Append(" and receiving on local port ");
-						sb.Append(s.LocalPort.ToString());
-						break;
-				}
-
-				Image on = Properties.Resources.Image_On_12x12;
-				Image off = Properties.Resources.Image_Off_12x12;
-
-				toolStripStatusLabel_TerminalStatus_Connection.Visible = true;
-				toolStripStatusLabel_TerminalStatus_Connection.Image = (isConnected ? on : off);
-			}
-
-			toolStripStatusLabel_TerminalStatus_IOStatus.Text = sb.ToString();
-		}
-
-		private void SetIOControlControls()
-		{
-			bool isOpen = _terminal.IsOpen;
-			bool isSerialPort = (_terminalSettingsRoot.IOType == Domain.IOType.SerialPort);
-
-			foreach (ToolStripStatusLabel sl in _statusLabels_ioControl)
-				sl.Visible = isSerialPort;
-
-			if (isSerialPort)
-			{
-				foreach (ToolStripStatusLabel sl in _statusLabels_ioControl)
-					sl.Enabled = isOpen;
-
-				Image on = Properties.Resources.Image_On_12x12;
-				Image off = Properties.Resources.Image_Off_12x12;
-
-				if (isOpen)
-				{
-					MKY.IO.Ports.SerialPortControlPins pins;
-					pins = ((MKY.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance).ControlPins;
-
-					bool rs485Handshake = (_terminalSettingsRoot.Terminal.IO.SerialPort.Communication.Handshake == Domain.IO.Handshake.RS485);
-
-					if (rs485Handshake)
-					{
-						if (pins.Rts)
-							TriggerRtsLuminescence();
-					}
-					else
-					{
-						toolStripStatusLabel_TerminalStatus_RTS.Image = (pins.Rts ? on : off);
-					}
-
-					toolStripStatusLabel_TerminalStatus_CTS.Image = (pins.Cts ? on : off);
-					toolStripStatusLabel_TerminalStatus_DTR.Image = (pins.Dtr ? on : off);
-					toolStripStatusLabel_TerminalStatus_DSR.Image = (pins.Dsr ? on : off);
-					toolStripStatusLabel_TerminalStatus_DCD.Image = (pins.Cd ? on : off);
-
-					bool manualHandshake = (_terminalSettingsRoot.Terminal.IO.SerialPort.Communication.Handshake == Domain.IO.Handshake.Manual);
-
-					toolStripStatusLabel_TerminalStatus_RTS.ForeColor = (manualHandshake ? SystemColors.ControlText : SystemColors.GrayText);
-					toolStripStatusLabel_TerminalStatus_CTS.ForeColor = SystemColors.GrayText;
-					toolStripStatusLabel_TerminalStatus_DTR.ForeColor = (manualHandshake ? SystemColors.ControlText : SystemColors.GrayText);
-					toolStripStatusLabel_TerminalStatus_DSR.ForeColor = SystemColors.GrayText;
-					toolStripStatusLabel_TerminalStatus_DCD.ForeColor = SystemColors.GrayText;
-				}
-				else
-				{
-					foreach (ToolStripStatusLabel sl in _statusLabels_ioControl)
-						sl.Image = off;
-
-					foreach (ToolStripStatusLabel sl in _statusLabels_ioControl)
-						sl.ForeColor = SystemColors.ControlText;
-				}
-			}
-		}
-
-		private void TriggerRtsLuminescence()
-		{
-			timer_RtsLuminescence.Enabled = false;
-			toolStripStatusLabel_TerminalStatus_RTS.Image = Properties.Resources.Image_On_12x12;
-			timer_RtsLuminescence.Interval = _RtsLuminescenceInterval;
-			timer_RtsLuminescence.Enabled = true;
-		}
-
-		private void ResetRts()
-		{
-			Image on = Properties.Resources.Image_On_12x12;
-			Image off = Properties.Resources.Image_Off_12x12;
-
-			if (_terminal.IsOpen)
-			{
-				MKY.IO.Ports.SerialPortControlPins pins;
-				pins = ((MKY.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance).ControlPins;
-
-				toolStripStatusLabel_TerminalStatus_RTS.Image = (pins.Rts ? on : off);
-			}
-			else
-			{
-				toolStripStatusLabel_TerminalStatus_RTS.Image = off;
-			}
-		}
-
-		private void timer_RtsLuminescence_Tick(object sender, EventArgs e)
-		{
-			timer_RtsLuminescence.Enabled = false;
-			ResetRts();
 		}
 
 		#endregion
@@ -670,15 +418,13 @@ namespace YAT.Model
 		{
 			bool success = false;
 
-			Cursor = Cursors.WaitCursor;
 			OnFixedStatusTextRequest("Opening terminal...");
-			Refresh();
 			try
 			{
 				_terminal.Open();
 
 				if (saveStatus)
-					_terminalSettingsRoot.TerminalIsOpen = _terminal.IsOpen;
+					_settingsRoot.TerminalIsOpen = _terminal.IsOpen;
 
 				OnTimedStatusTextRequest("Terminal opened");
 				success = true;
@@ -688,7 +434,7 @@ namespace YAT.Model
 				OnFixedStatusTextRequest("Error opening terminal!");
 
 				string ioText;
-				if (_terminalSettingsRoot.IOType == Domain.IOType.SerialPort)
+				if (_settingsRoot.IOType == Domain.IOType.SerialPort)
 					ioText = "Port";
 				else
 					ioText = "Socket";
@@ -704,11 +450,7 @@ namespace YAT.Model
 					);
 
 				OnTimedStatusTextRequest("Terminal not opened!");
-				success = false;
 			}
-			Cursor = Cursors.Default;
-
-			SelectSendCommandInput();
 
 			return (success);
 		}
@@ -722,15 +464,13 @@ namespace YAT.Model
 		{
 			bool success = false;
 
-			Cursor = Cursors.WaitCursor;
 			OnFixedStatusTextRequest("Closing terminal...");
-			Refresh();
 			try
 			{
 				_terminal.Close();
 
 				if (saveStatus)
-					_terminalSettingsRoot.TerminalIsOpen = _terminal.IsOpen;
+					_settingsRoot.TerminalIsOpen = _terminal.IsOpen;
 
 				OnTimedStatusTextRequest("Terminal closed");
 				success = true;
@@ -748,9 +488,7 @@ namespace YAT.Model
 					);
 
 				OnTimedStatusTextRequest("Terminal not closed!");
-				success = false;
 			}
-			Cursor = Cursors.Default;
 
 			return (success);
 		}
@@ -764,21 +502,21 @@ namespace YAT.Model
 
 		private void RequestToggleRts()
 		{
-			if (_terminalSettingsRoot.Terminal.IO.SerialPort.Communication.Handshake == Domain.IO.Handshake.Manual)
+			if (_settingsRoot.Terminal.IO.SerialPort.Communication.Handshake == Domain.IO.Handshake.Manual)
 			{
 				MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance;
 				port.ToggleRts();
-				_terminalSettingsRoot.Terminal.IO.SerialPort.RtsEnabled = port.RtsEnable;
+				_settingsRoot.Terminal.IO.SerialPort.RtsEnabled = port.RtsEnable;
 			}
 		}
 
 		private void RequestToggleDtr()
 		{
-			if (_terminalSettingsRoot.Terminal.IO.SerialPort.Communication.Handshake == Domain.IO.Handshake.Manual)
+			if (_settingsRoot.Terminal.IO.SerialPort.Communication.Handshake == Domain.IO.Handshake.Manual)
 			{
 				MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance;
 				port.ToggleDtr();
-				_terminalSettingsRoot.Terminal.IO.SerialPort.DtrEnabled = port.DtrEnable;
+				_settingsRoot.Terminal.IO.SerialPort.DtrEnabled = port.DtrEnable;
 			}
 		}
 
@@ -803,7 +541,7 @@ namespace YAT.Model
 
 				string text = "Unable to write to ";
 				string title;
-				switch (_terminalSettingsRoot.IOType)
+				switch (_settingsRoot.IOType)
 				{
 					case Domain.IOType.SerialPort: text += "port"; title = "Serial Port"; break;
 					default: text += "socket"; title = "Socket"; break;
@@ -836,7 +574,7 @@ namespace YAT.Model
 
 				string text = "Unable to write to ";
 				string title;
-				switch (_terminalSettingsRoot.IOType)
+				switch (_settingsRoot.IOType)
 				{
 					case Domain.IOType.SerialPort: text += "port"; title = "Serial Port"; break;
 					default: text += "socket"; title = "Socket"; break;
@@ -855,7 +593,7 @@ namespace YAT.Model
 			}
 			catch (Domain.Parser.FormatException ex)
 			{
-				ResetStatusText();
+				OnFixedStatusTextRequest("Error sending \"" + s + "\"!");
 				OnMessageInputRequest
 					(
 					"Bad data format:" + Environment.NewLine + Environment.NewLine + ex.Message,
@@ -863,6 +601,7 @@ namespace YAT.Model
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
 					);
+				OnTimedStatusTextRequest("Data not sent!");
 			}
 		}
 
@@ -873,38 +612,27 @@ namespace YAT.Model
 		// Terminal > Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		private void _terminal_TerminalChanged(object sender, EventArgs e)
+		private void _terminal_Changed(object sender, EventArgs e)
 		{
-			SetTerminalControls();
-			OnTerminalChanged(new EventArgs());
+			OnChanged(e);
 		}
 
-		private void _terminal_TerminalControlChanged(object sender, EventArgs e)
+		private void _terminal_ControlChanged(object sender, EventArgs e)
 		{
-			SetIOControlControls();
+			OnControlChanged(e);
 		}
 
-		private void _terminal_TerminalError(object sender, Domain.TerminalErrorEventArgs e)
+		private void _terminal_Error(object sender, Domain.ErrorEventArgs e)
 		{
-			SetTerminalControls();
-			OnTerminalChanged(new EventArgs());
-
-			MessageBox.Show
-				(
-				this,
-				"Terminal error:" + Environment.NewLine + Environment.NewLine + e.Message,
-				"Terminal Error",
-				MessageBoxButtons.OK,
-				MessageBoxIcon.Error
-				);
+			OnChanged(new EventArgs());
+			OnError(e);
 		}
 
 		private void _terminal_RawElementSent(object sender, Domain.RawElementEventArgs e)
 		{
-			// counter
-			int byteCount = e.Element.Data.Length;
-			monitor_Tx.TxByteCountStatus += byteCount;
-			monitor_Bidir.TxByteCountStatus += byteCount;
+			// count
+			_txByteCount += e.Element.Data.Length;
+			OnCountChanged(new EventArgs());
 
 			// log
 			if (_log.IsOpen)
@@ -916,10 +644,9 @@ namespace YAT.Model
 
 		private void _terminal_RawElementReceived(object sender, Domain.RawElementEventArgs e)
 		{
-			// counter
-			int byteCount = e.Element.Data.Length;
-			monitor_Bidir.RxByteCountStatus += byteCount;
-			monitor_Rx.RxByteCountStatus += byteCount;
+			// count
+			_rxByteCount += e.Element.Data.Length;
+			OnCountChanged(new EventArgs());
 
 			// log
 			if (_log.IsOpen)
@@ -932,8 +659,7 @@ namespace YAT.Model
 		private void _terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			// display
-			monitor_Tx.AddElements(e.Elements);
-			monitor_Bidir.AddElements(e.Elements);
+			OnDisplayElementsSent(e);
 
 			// log
 			foreach (Domain.DisplayElement de in e.Elements)
@@ -957,8 +683,7 @@ namespace YAT.Model
 		private void _terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			// display
-			monitor_Bidir.AddElements(e.Elements);
-			monitor_Rx.AddElements(e.Elements);
+			OnDisplayElementsReceived(e);
 
 			// log
 			foreach (Domain.DisplayElement de in e.Elements)
@@ -981,56 +706,32 @@ namespace YAT.Model
 
 		private void _terminal_DisplayLinesSent(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (e.Lines.Count > 0)
-			{
-				monitor_Tx.ReplaceLastLine(e.Lines[0]);
-				monitor_Bidir.ReplaceLastLine(e.Lines[0]);
-			}
-			for (int i = 1; i < e.Lines.Count; i++)
-			{
-				monitor_Tx.AddLine(e.Lines[i]);
-				monitor_Bidir.AddLine(e.Lines[i]);
-			}
+			// count
+			_txLineCount += e.Lines.Count;
+			OnCountChanged(new EventArgs());
 
-			monitor_Tx.TxLineCountStatus += e.Lines.Count;
-			monitor_Bidir.TxLineCountStatus += e.Lines.Count;
+			// display
+			OnDisplayLinesSent(e);
 		}
 
 		private void _terminal_DisplayLinesReceived(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (e.Lines.Count > 0)
-			{
-				monitor_Bidir.ReplaceLastLine(e.Lines[0]);
-				monitor_Rx.ReplaceLastLine(e.Lines[0]);
-			}
-			for (int i = 1; i < e.Lines.Count; i++)
-			{
-				monitor_Bidir.AddLine(e.Lines[i]);
-				monitor_Rx.AddLine(e.Lines[i]);
-			}
+			// count
+			_rxLineCount += e.Lines.Count;
+			OnCountChanged(new EventArgs());
 
-			monitor_Bidir.RxLineCountStatus += e.Lines.Count;
-			monitor_Rx.RxLineCountStatus += e.Lines.Count;
+			// display
+			OnDisplayLinesReceived(e);
 		}
 
 		private void _terminal_RepositoryCleared(object sender, Domain.RepositoryEventArgs e)
 		{
-			switch (e.Repository)
-			{
-				case Domain.RepositoryType.Tx: monitor_Tx.Clear(); break;
-				case Domain.RepositoryType.Bidir: monitor_Bidir.Clear(); break;
-				case Domain.RepositoryType.Rx: monitor_Rx.Clear(); break;
-			}
+			OnRepositoryCleared(e);
 		}
 
 		private void _terminal_RepositoryReloaded(object sender, Domain.RepositoryEventArgs e)
 		{
-			switch (e.Repository)
-			{
-				case Domain.RepositoryType.Tx: monitor_Tx.AddLines(_terminal.RepositoryToDisplayLines(Domain.RepositoryType.Tx)); break;
-				case Domain.RepositoryType.Bidir: monitor_Bidir.AddLines(_terminal.RepositoryToDisplayLines(Domain.RepositoryType.Bidir)); break;
-				case Domain.RepositoryType.Rx: monitor_Rx.AddLines(_terminal.RepositoryToDisplayLines(Domain.RepositoryType.Rx)); break;
-			}
+			OnRepositoryReloaded(e);
 		}
 
 		#endregion
@@ -1047,17 +748,12 @@ namespace YAT.Model
 		// Send > Command
 		//------------------------------------------------------------------------------------------
 
-		private void SelectSendCommandInput()
-		{
-			send.SelectSendCommandInput();
-		}
-
 		private void SendCommand()
 		{
-			SendCommand(_terminalSettingsRoot.SendCommand.Command);
-			_terminalSettingsRoot.SendCommand.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
+			SendCommand(_settingsRoot.SendCommand.Command);
+			_settingsRoot.SendCommand.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
 				(
-				new RecentItem<Command>(new Command(_terminalSettingsRoot.SendCommand.Command))
+				new RecentItem<Command>(new Command(_settingsRoot.SendCommand.Command))
 				);
 		}
 
@@ -1093,7 +789,7 @@ namespace YAT.Model
 
 		private void SendFile()
 		{
-			SendFile(_terminalSettingsRoot.SendFile.Command);
+			SendFile(_settingsRoot.SendFile.Command);
 		}
 
 		private void SendFile(Command command)
@@ -1178,9 +874,9 @@ namespace YAT.Model
 			try
 			{
 				// reapply settings NOW, makes sure date/time in filenames is refreshed
-				_log.Settings = _terminalSettingsRoot.Log;
+				_log.Settings = _settingsRoot.Log;
 				_log.Begin();
-				_terminalSettingsRoot.LogIsOpen = true;
+				_settingsRoot.LogIsOpen = true;
 			}
 			catch (System.IO.IOException ex)
 			{
@@ -1228,7 +924,7 @@ namespace YAT.Model
 				_log.End();
 
 				if (saveStatus)
-					_terminalSettingsRoot.LogIsOpen = false;
+					_settingsRoot.LogIsOpen = false;
 			}
 			catch (System.IO.IOException ex)
 			{
@@ -1245,24 +941,112 @@ namespace YAT.Model
 
 		#endregion
 
+		#region Count Status
+		//==========================================================================================
+		// Count Status
+		//==========================================================================================
+
+		public int TxByteCount
+		{
+			get { return (_txByteCount); }
+		}
+
+		public int TxLineCount
+		{
+			get { return (_txLineCount); }
+		}
+
+		public int RxByteCount
+		{
+			get { return (_rxByteCount); }
+		}
+
+		public int RxLineCount
+		{
+			get { return (_rxLineCount); }
+		}
+
+		public void ResetCount()
+		{
+			_txByteCount = 0;
+			_txLineCount = 0;
+			_rxByteCount = 0;
+			_rxLineCount = 0;
+
+			OnCountChanged(new EventArgs());
+		}
+
+		#endregion
+
 		#region Event Invoking
 		//==========================================================================================
 		// Event Invoking
 		//==========================================================================================
 
-		protected virtual void OnTerminalChanged(EventArgs e)
+		protected virtual void OnSaved(SavedEventArgs e)
 		{
-			EventHelper.FireSync(TerminalChanged, this, e);
+			EventHelper.FireSync<SavedEventArgs>(Saved, this, e);
 		}
 
-		protected virtual void OnTerminalSaved(TerminalSavedEventArgs e)
+		protected virtual void OnClosed(EventArgs e)
 		{
-			EventHelper.FireSync<TerminalSavedEventArgs>(TerminalSaved, this, e);
+			EventHelper.FireSync(Closed, this, e);
 		}
 
-		protected virtual void OnTerminalClosed(EventArgs e)
+		protected virtual void OnChanged(EventArgs e)
 		{
-			EventHelper.FireSync(TerminalClosed, this, e);
+			EventHelper.FireSync(Changed, this, e);
+		}
+
+		protected virtual void OnControlChanged(EventArgs e)
+		{
+			EventHelper.FireSync(ControlChanged, this, e);
+		}
+
+		protected virtual void OnError(Domain.ErrorEventArgs e)
+		{
+			EventHelper.FireSync(Error, this, e);
+		}
+
+		protected virtual void OnCountChanged(EventArgs e)
+		{
+			EventHelper.FireSync(CountChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnDisplayElementsSent(DisplayElementsEventArgs e)
+		{
+			EventHelper.FireSync<DisplayElementsEventArgs>(DisplayElementsSent, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnDisplayElementsReceived(DisplayElementsEventArgs e)
+		{
+			EventHelper.FireSync<DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnDisplayLinesSent(DisplayLinesEventArgs e)
+		{
+			EventHelper.FireSync<DisplayLinesEventArgs>(DisplayLinesSent, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnDisplayLinesReceived(DisplayLinesEventArgs e)
+		{
+			EventHelper.FireSync<DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnRepositoryCleared(RepositoryEventArgs e)
+		{
+			EventHelper.FireSync<RepositoryEventArgs>(RepositoryCleared, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnRepositoryReloaded(RepositoryEventArgs e)
+		{
+			EventHelper.FireSync<RepositoryEventArgs>(RepositoryReloaded, this, e);
 		}
 
 		/// <summary></summary>
@@ -1304,9 +1088,9 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void OnSaveTerminalAsFileDialogRequest(EventArgs e)
+		protected virtual void OnSaveAsFileDialogRequest(EventArgs e)
 		{
-			EventHelper.FireSync(SaveTerminalAsFileDialogRequest, this, e);
+			EventHelper.FireSync(SaveAsFileDialogRequest, this, e);
 		}
 
 		#endregion

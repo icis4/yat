@@ -10,8 +10,8 @@ namespace YAT.Controller
 	public enum MainResult
 	{
 		OK = 0,
-		ApplicationSettingsError = -1,
-		CommandLineArgsError = -2,
+		CommandLineArgsError = -1,
+		ApplicationSettingsError = -2,
 		UnhandledException = -3,
 	}
 }

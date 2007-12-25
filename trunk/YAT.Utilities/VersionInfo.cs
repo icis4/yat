@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace YAT.Model.Utilities
+namespace YAT.Utilities
 {
 	public static class VersionInfo
 	{

@@ -20,7 +20,7 @@ namespace YAT.Settings
 		private bool _autoOpenWorkspace;
 		private bool _autoSaveWorkspace;
 		private bool _useRelativePaths;
-		private string _currentWorkspaceFilePath;
+		private string _workspaceFilePath;
 		private bool _detectSerialPortsInUse;
 
 		public GeneralSettings()
@@ -42,11 +42,11 @@ namespace YAT.Settings
 		public GeneralSettings(GeneralSettings rhs)
 			: base(rhs)
 		{
-			_autoOpenWorkspace        = rhs.AutoOpenWorkspace;
-			_autoSaveWorkspace        = rhs.AutoSaveWorkspace;
-			_useRelativePaths         = rhs.UseRelativePaths;
-			_currentWorkspaceFilePath = rhs.CurrentWorkspaceFilePath;
-			_detectSerialPortsInUse   = rhs.DetectSerialPortsInUse;
+			_autoOpenWorkspace      = rhs.AutoOpenWorkspace;
+			_autoSaveWorkspace      = rhs.AutoSaveWorkspace;
+			_useRelativePaths       = rhs.UseRelativePaths;
+			_workspaceFilePath      = rhs.WorkspaceFilePath;
+			_detectSerialPortsInUse = rhs.DetectSerialPortsInUse;
 
 			ClearChanged();
 		}
@@ -56,11 +56,11 @@ namespace YAT.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			AutoOpenWorkspace        = true;
-			AutoSaveWorkspace        = true;
-			UseRelativePaths         = true;
-			CurrentWorkspaceFilePath = "";
-			DetectSerialPortsInUse   = true;
+			AutoOpenWorkspace      = true;
+			AutoSaveWorkspace      = true;
+			UseRelativePaths       = true;
+			WorkspaceFilePath      = "";
+			DetectSerialPortsInUse = true;
 		}
 
 		#region Properties
@@ -110,15 +110,15 @@ namespace YAT.Settings
 			}
 		}
 
-		[XmlElement("CurrentWorkspaceFilePath")]
-		public string CurrentWorkspaceFilePath
+		[XmlElement("WorkspaceFilePath")]
+		public string WorkspaceFilePath
 		{
-			get { return (_currentWorkspaceFilePath); }
+			get { return (_workspaceFilePath); }
 			set
 			{
-				if (_currentWorkspaceFilePath != value)
+				if (_workspaceFilePath != value)
 				{
-					_currentWorkspaceFilePath = value;
+					_workspaceFilePath = value;
 					SetChanged();
 				}
 			}
@@ -163,11 +163,11 @@ namespace YAT.Settings
 			{
 				return
 					(
-					_autoOpenWorkspace.       Equals(value._autoOpenWorkspace) &&
-					_autoSaveWorkspace.       Equals(value._autoSaveWorkspace) &&
-					_useRelativePaths.        Equals(value._useRelativePaths) &&
-					_currentWorkspaceFilePath.Equals(value._currentWorkspaceFilePath) &&
-					_detectSerialPortsInUse.  Equals(value._detectSerialPortsInUse)
+					_autoOpenWorkspace.     Equals(value._autoOpenWorkspace) &&
+					_autoSaveWorkspace.     Equals(value._autoSaveWorkspace) &&
+					_useRelativePaths.      Equals(value._useRelativePaths) &&
+					_workspaceFilePath.     Equals(value._workspaceFilePath) &&
+					_detectSerialPortsInUse.Equals(value._detectSerialPortsInUse)
 					);
 			}
 			return (false);

@@ -5,7 +5,7 @@ using System.Drawing.Printing;
 using System.Collections.Generic;
 using System.IO;
 
-namespace YAT.Gui
+namespace YAT.Gui.Utilities
 {
 	public static class Draw
 	{
@@ -20,7 +20,7 @@ namespace YAT.Gui
 		private static SolidBrush _whiteSpacesBrush = new SolidBrush(Color.Black);
 		private static SolidBrush _errorBrush       = new SolidBrush(Color.Black);
 
-		public static SizeF MeasureItem(List<Domain.DisplayElement> line, Gui.Settings.FormatSettings settings,
+		public static SizeF MeasureItem(List<Domain.DisplayElement> line, Model.Settings.FormatSettings settings,
 										Graphics graphics)
 		{
 			SizeF size = new SizeF(0, 0);
@@ -33,7 +33,7 @@ namespace YAT.Gui
 			return (new SizeF(width, size.Height));
 		}
 
-		public static SizeF MeasureItem(Domain.DisplayElement element, Gui.Settings.FormatSettings settings,
+		public static SizeF MeasureItem(Domain.DisplayElement element, Model.Settings.FormatSettings settings,
 										Graphics graphics)
 		{
 			string fontName = settings.Font.Name;
@@ -48,7 +48,7 @@ namespace YAT.Gui
 			return (graphics.MeasureString(element.Text, font));
 		}
 
-		public static SizeF DrawItem(List<Domain.DisplayElement> line, Gui.Settings.FormatSettings settings,
+		public static SizeF DrawItem(List<Domain.DisplayElement> line, Model.Settings.FormatSettings settings,
 									 Graphics graphics, RectangleF bounds, DrawItemState state)
 		{
 			SizeF size = new SizeF(0, 0);
@@ -65,7 +65,7 @@ namespace YAT.Gui
 			return (new SizeF(x - bounds.X, bounds.Height));
 		}
 
-		public static SizeF DrawItem(Domain.DisplayElement element, Gui.Settings.FormatSettings settings,
+		public static SizeF DrawItem(Domain.DisplayElement element, Model.Settings.FormatSettings settings,
 									 Graphics graphics, RectangleF bounds, DrawItemState state)
 		{
 			string fontName = settings.Font.Name;
@@ -107,7 +107,7 @@ namespace YAT.Gui
 		}
 
 		private static SolidBrush SetStyleAndColorAndBrush
-		                         (Domain.DisplayElement element, Gui.Settings.FormatSettings settings,
+								 (Domain.DisplayElement element, Model.Settings.FormatSettings settings,
 		                          out FontStyle fontStyle, out Color fontColor)
 		{
 			SolidBrush brush;

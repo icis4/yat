@@ -2,10 +2,11 @@
 ********************************************************************************
                                  YAT Release Notes
  ------------------------------------------------------------------------------
+                             YAT - Yet Another Terminal
     RS-232/422/485 TCP/UDP terminal to operate and debug serial connections
  ------------------------------------------------------------------------------
            Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-                         Copyright © 2003-2007 Matthias Kläy.
+                         Copyright © 2003-2008 Matthias Kläy.
                                 All rights reserved.
 ********************************************************************************
 
@@ -43,12 +44,14 @@ Release 2.0.0 :: 2007-??-??
 ---------------------------
 - Upgrade to .NET 2.0
 - Architectural refactoring
+  > Split into Main/Workspace/Terminal
+  > Split into Model/View/Controller
 - Serial COM port component "Charon.Communcations" removed
 - TCP/IP and UDP/IP support added
 - RS-485 support added
 - Baud rates above 115k added
 - Support for non-standard baud rates added
-- Text: Unicode encoding support added
+- Text: Unicode and other encoding support added
 - Little-endian/big-endian support for \h \d \o \b added
 - Visual appearance modernized
 - Displaying performance improved
@@ -118,7 +121,7 @@ Release 2.1.0 :: Not planned yet
 --------------------------------------------------------------------------------
 
 Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-Copyright © 2003-2007 Matthias Kläy.
+Copyright © 2003-2008 Matthias Kläy.
 All rights reserved.
 
 YAT is licensed under the CC-GNU GPL.

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
+using MKY.Utilities.Guid;
+
 using YAT.Settings;
 using YAT.Model.Settings;
 
@@ -105,7 +107,7 @@ namespace YAT.Settings.Workspace
 		//------------------------------------------------------------------------------------------
 
 		[XmlIgnore]
-		public TerminalSettingsItemCollection TerminalSettings
+		public GuidList<TerminalSettingsItem> TerminalSettings
 		{
 			get { return (_workspace.TerminalSettings); }
 			set { _workspace.TerminalSettings = value; }

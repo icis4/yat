@@ -5,13 +5,13 @@ using System.Text;
 namespace YAT.Domain
 {
 	/// <summary></summary>
-	public class TerminalErrorEventArgs : EventArgs
+	public class ErrorEventArgs : EventArgs
 	{
 		/// <summary></summary>
 		public readonly string Message;
 
 		/// <summary></summary>
-		public TerminalErrorEventArgs(string message)
+		public ErrorEventArgs(string message)
 		{
 			Message = message;
 		}

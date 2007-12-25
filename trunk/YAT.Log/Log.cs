@@ -18,11 +18,37 @@ namespace YAT.Log
 		NeatRx = 5
 	}
 
-	public class Logs
+	public class Logs : IDisposable
 	{
-		protected abstract class Log
+		#region Types
+		//==========================================================================================
+		// Types
+		//==========================================================================================
+
+		#region Types > Log Base
+		//==========================================================================================
+		// Types > Log Base
+		//==========================================================================================
+
+		protected abstract class Log : IDisposable
 		{
-			private bool _enabled;
+			#region Constants
+			//==========================================================================================
+			// Constants
+			//==========================================================================================
+
+			private const int _FlushTimeout = 250;
+
+			#endregion
+
+			#region Fields
+			//==========================================================================================
+			// Fields
+			//==========================================================================================
+
+			private bool _isDisposed = false;
+
+			private bool _enabled = false;
 			private string _file;
 			private LogFileWriteMode _writeMode;
 			private FileNameSeparator _separator;
@@ -30,8 +56,14 @@ namespace YAT.Log
 			private FileStream _fileStream;
 			private bool _open = false;
 
-			private const int _FLUSH_TIMEOUT = 250;
 			private Timer _flushTimer;
+
+			#endregion
+
+			#region Object Lifetime
+			//==========================================================================================
+			// Object Lifetime
+			//==========================================================================================
 
 			public Log(bool enabled, string file, LogFileWriteMode writeMode)
 			{
@@ -51,10 +83,58 @@ namespace YAT.Log
 				_separator = separator;
 			}
 
+			#region Disposal
+			//------------------------------------------------------------------------------------------
+			// Disposal
+			//------------------------------------------------------------------------------------------
+
+			/// <summary></summary>
+			public void Dispose()
+			{
+				Dispose(true);
+				GC.SuppressFinalize(this);
+			}
+
+			/// <summary></summary>
+			protected virtual void Dispose(bool disposing)
+			{
+				if (!_isDisposed)
+				{
+					if (disposing)
+					{
+						Close();
+					}
+					_isDisposed = true;
+				}
+			}
+
+			/// <summary></summary>
 			~Log()
 			{
-				Close();
+				Dispose(false);
 			}
+
+			/// <summary></summary>
+			protected bool IsDisposed
+			{
+				get { return (_isDisposed); }
+			}
+
+			/// <summary></summary>
+			protected void AssertNotDisposed()
+			{
+				if (_isDisposed)
+					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+			}
+
+			#endregion
+
+			#endregion
+
+			#region Properties
+			//==========================================================================================
+			// Properties
+			//==========================================================================================
 
 			protected bool IsEnabled
 			{
@@ -65,6 +145,13 @@ namespace YAT.Log
 			{
 				get { return (_open); }
 			}
+
+			#endregion
+
+			#region Methods
+			//==========================================================================================
+			// Methods
+			//==========================================================================================
 
 			public void SetSettings(bool enabled, string file, LogFileWriteMode writeMode)
 			{
@@ -159,7 +246,7 @@ namespace YAT.Log
 			protected void StartFlushTimer()
 			{
 				TimerCallback timerDelegate = new TimerCallback(_flushTimer_Timeout);
-				_flushTimer = new Timer(timerDelegate, null, _FLUSH_TIMEOUT, System.Threading.Timeout.Infinite);
+				_flushTimer = new Timer(timerDelegate, null, _FlushTimeout, System.Threading.Timeout.Infinite);
 			}
 
 			protected void RestartFlushTimer()
@@ -177,7 +264,16 @@ namespace YAT.Log
 			{
 				Flush();
 			}
+
+			#endregion
 		}
+
+		#endregion
+
+		#region Types > Binary Log
+		//==========================================================================================
+		// Types > Binary Log
+		//==========================================================================================
 
 		protected class BinaryLog : Log
 		{
@@ -227,6 +323,13 @@ namespace YAT.Log
 			}
 		}
 
+		#endregion
+
+		#region Types > Text Log
+		//==========================================================================================
+		// Types > Text Log
+		//==========================================================================================
+
 		protected class TextLog : Log
 		{
 			private StreamWriter _writer;
@@ -275,6 +378,17 @@ namespace YAT.Log
 			}
 		}
 
+		#endregion
+
+		#endregion
+
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
+		private bool _isDisposed = false;
+
 		private Settings.LogSettings _settings;
 
 		private List<Log> _logs;
@@ -288,6 +402,13 @@ namespace YAT.Log
 		private TextLog _neatTxLog;
 		private TextLog _neatBidirLog;
 		private TextLog _neatRxLog;
+
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
 
 		public Logs(Settings.LogSettings settings)
 		{
@@ -308,6 +429,59 @@ namespace YAT.Log
 			_logs.AddRange(_rawLogs);
 			_logs.AddRange(_neatLogs);
 		}
+
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary></summary>
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!_isDisposed)
+			{
+				if (disposing)
+				{
+					End();
+				}
+				_isDisposed = true;
+			}
+		}
+
+		/// <summary></summary>
+		~Logs()
+		{
+			Dispose(false);
+		}
+
+		/// <summary></summary>
+		protected bool IsDisposed
+		{
+			get { return (_isDisposed); }
+		}
+
+		/// <summary></summary>
+		protected void AssertNotDisposed()
+		{
+			if (_isDisposed)
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+		}
+
+		#endregion
+
+		#endregion
+
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
 
 		public Settings.LogSettings Settings
 		{
@@ -336,6 +510,13 @@ namespace YAT.Log
 				return (isOpen);
 			}
 		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
 
 		public void Begin()
 		{
@@ -385,5 +566,7 @@ namespace YAT.Log
 		{
 			return (_logs[stream.GetHashCode()]);
 		}
+
+		#endregion
 	}
 }

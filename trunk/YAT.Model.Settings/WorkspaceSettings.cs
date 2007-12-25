@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
+using MKY.Utilities.Guid;
+
 namespace YAT.Model.Settings
 {
 	[Serializable]
 	public class WorkspaceSettings : MKY.Utilities.Settings.Settings, IEquatable<WorkspaceSettings>
 	{
-		private TerminalSettingsItemCollection _terminalSettings;
+		private GuidList<TerminalSettingsItem> _terminalSettings;
 
 		public WorkspaceSettings()
 			: base(MKY.Utilities.Settings.SettingsType.Explicit)
@@ -30,7 +32,7 @@ namespace YAT.Model.Settings
 		public WorkspaceSettings(WorkspaceSettings rhs)
 			: base(rhs)
 		{
-			TerminalSettings = new TerminalSettingsItemCollection(rhs.TerminalSettings);
+			TerminalSettings = new GuidList<TerminalSettingsItem>(rhs.TerminalSettings);
 			ClearChanged();
 		}
 
@@ -39,7 +41,7 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			TerminalSettings = new TerminalSettingsItemCollection();
+			TerminalSettings = new GuidList<TerminalSettingsItem>();
 		}
 
 		#region Properties
@@ -48,7 +50,7 @@ namespace YAT.Model.Settings
 		//------------------------------------------------------------------------------------------
 
 		[XmlElement("TerminalSettings")]
-		public TerminalSettingsItemCollection TerminalSettings
+		public GuidList<TerminalSettingsItem> TerminalSettings
 		{
 			get { return (_terminalSettings); }
 			set

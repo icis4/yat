@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
+using YAT.Utilities;
+
 namespace YAT.Gui.Forms
 {
 	public partial class ReleaseNotes : Form

@@ -45,18 +45,18 @@ namespace YAT.Model
 	}
 
 	/// <summary></summary>
-	public class TerminalSavedEventArgs : EventArgs
+	public class SavedEventArgs : EventArgs
 	{
 		public readonly string FilePath;
 		public readonly bool AutoSave;
 
-		public TerminalSavedEventArgs(string filePath)
+		public SavedEventArgs(string filePath)
 		{
 			FilePath = filePath;
 			AutoSave = false;
 		}
 
-		public TerminalSavedEventArgs(string filePath, bool autoSave)
+		public SavedEventArgs(string filePath, bool autoSave)
 		{
 			FilePath = filePath;
 			AutoSave = autoSave;

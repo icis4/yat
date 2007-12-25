@@ -7,15 +7,10 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
-using MKY.Utilities.IO;
-using MKY.Utilities.Settings;
-
-using YAT.Gui.Types;
-using YAT.Gui.Settings;
-using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
+using YAT.Utilities;
 
 namespace YAT.Gui.Forms
 {
@@ -34,6 +29,9 @@ namespace YAT.Gui.Forms
 
 		// recent files
 		private List<ToolStripMenuItem> _menuItems_recents;
+
+		// model
+		private Model.Main _main;
 
 		// status
 		private const string _DefaultStatusText = "Ready";
@@ -61,17 +59,21 @@ namespace YAT.Gui.Forms
 		public Main()
 		{
 			InitializeComponent();
-			Initialize();
+			Initialize(new Model.Main());
 		}
 
-		private void Initialize()
+		public Main(Model.Main main)
+		{
+			InitializeComponent();
+			Initialize(main);
+		}
+
+		private void Initialize(Model.Main main)
 		{
 			InitializeRecents();
 
-			// form title
-			string text = Application.ProductName;
-			text += VersionInfo.ProductNamePostFix;
-			Text = text;
+			_main = main;
+			Text = _main.Title;
 
 			ApplyWindowSettingsAccordingToStartup();
 			SetToolControls();
@@ -93,23 +95,9 @@ namespace YAT.Gui.Forms
 			{
 				_isStartingUp = false;
 
-				bool success = false;
-
-				if ((_commandLineArgs != null) && (_commandLineArgs.Length >= 1))
-				{
-					success = OpenFromFile(_commandLineArgs[0]);
-				}
-
-				if (!success && ApplicationSettings.LocalUser.General.AutoOpenWorkspace)
-				{
-					if (File.Exists(ApplicationSettings.LocalUser.General.CurrentWorkspaceFilePath))
-						success = OpenWorkspaceFromFile(ApplicationSettings.LocalUser.General.CurrentWorkspaceFilePath);
-				}
-
-				if (!success)
-				{
+				// start YAT according to main settings, if this fails, display new terminal dialog
+				if (!_main.Start())
 					ShowNewTerminalDialog();
-				}
 			}
 		}
 
@@ -523,18 +511,6 @@ namespace YAT.Gui.Forms
 		}
 
 		/// <summary>
-		/// Update recent entry.
-		/// </summary>
-		/// <param name="recentFile">Recent file.</param>
-		private void SetRecent(string recentFile)
-		{
-			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
-			ApplicationSettings.SaveLocalUser();
-
-			SetRecents();
-		}
-
-		/// <summary>
 		/// Updates the main menu File > Recent > Recents...
 		/// </summary>
 		private void SetRecents()
@@ -653,7 +629,7 @@ namespace YAT.Gui.Forms
 
 				SetFixedStatusText("Creating new terminal...");
 
-				DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot> sh = new DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot>(f.TerminalSettingsResult);
+				DocumentSettingsHandler<Settings.Terminal.TerminalSettingsRoot> sh = new DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot>(f.TerminalSettingsResult);
 				Gui.Forms.Terminal terminal = new Gui.Forms.Terminal(sh);
 
 				terminal.UserName = _TerminalText + GetNextTerminalId();

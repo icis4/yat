@@ -4,10 +4,12 @@ using System.Text;
 using System.Xml.Serialization;
 using System.IO;
 
+using MKY.Utilities.Guid;
+
 namespace YAT.Model.Settings
 {
 	[Serializable]
-	public class TerminalSettingsItem : MKY.Utilities.Settings.Settings, IEquatable<TerminalSettingsItem>
+	public class TerminalSettingsItem : MKY.Utilities.Settings.Settings, IEquatable<TerminalSettingsItem>, IGuidProvider
 	{
 		private string _filePath;
 		private Guid _guid;

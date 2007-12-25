@@ -10,9 +10,9 @@ using System.IO;
 using MKY.Utilities.Event;
 
 using YAT.Model.Types;
-using YAT.Gui.Types;
 using YAT.Settings;
 using YAT.Settings.Application;
+using YAT.Gui.Utilities;
 
 namespace YAT.Gui.Controls
 {
@@ -53,7 +53,7 @@ namespace YAT.Gui.Controls
 		private bool _isStartingUp = true;
 		private bool _isSettingControls = false;
 
-		private Command _command = new Command();
+		private Model.Types.Command _command = new Model.Types.Command();
 		private Domain.TerminalType _terminalType = _TerminalTypeDefault;
 
 		private TextEditState _commandEditState = TextEditState.Inactive;
@@ -92,7 +92,7 @@ namespace YAT.Gui.Controls
 		/// Command always returns a Command object, it never returns null.
 		/// </summary>
 		[Browsable(false)]
-		public Command Command
+		public Model.Types.Command Command
 		{
 			get { return (_command); }
 			set
@@ -100,7 +100,7 @@ namespace YAT.Gui.Controls
 				if (value != null)
 					_command = value;
 				else
-					_command = new Command();
+					_command = new Model.Types.Command();
 
 				OnCommandChanged(new EventArgs());
 				SetControls();
@@ -184,7 +184,7 @@ namespace YAT.Gui.Controls
 		{
 			if (!_isSettingControls)
 			{
-				if (Settings.SendCommandSettings.IsEasterEggCommand(textBox_Command.Text))
+				if (Model.Settings.SendCommandSettings.IsEasterEggCommand(textBox_Command.Text))
 				{
 					if (_commandEditState == TextEditState.IsLeaving)
 						_commandEditState = TextEditState.Inactive;
