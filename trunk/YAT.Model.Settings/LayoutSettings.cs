@@ -6,6 +6,7 @@ using System.Windows.Forms;
 
 namespace YAT.Model.Settings
 {
+	/// <summary></summary>
 	[Serializable]
 	public class LayoutSettings : MKY.Utilities.Settings.Settings, IEquatable<LayoutSettings>
 	{
@@ -22,12 +23,14 @@ namespace YAT.Model.Settings
 		private bool _sendCommandPanelIsVisible;
 		private bool _sendFilePanelIsVisible;
 
+		/// <summary></summary>
 		public LayoutSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public LayoutSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -81,6 +84,7 @@ namespace YAT.Model.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("TxMonitorPanelIsVisible")]
 		public bool TxMonitorPanelIsVisible
 		{
@@ -95,6 +99,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("BidirMonitorPanelIsVisible")]
 		public bool BidirMonitorPanelIsVisible
 		{
@@ -109,6 +114,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("RxMonitorPanelIsVisible")]
 		public bool RxMonitorPanelIsVisible
 		{
@@ -123,6 +129,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("MonitorOrientation")]
 		public Orientation MonitorOrientation
 		{
@@ -137,6 +144,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("TxMonitorSplitterRatio")]
 		public float TxMonitorSplitterRatio
 		{
@@ -151,6 +159,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("RxMonitorSplitterRatio")]
 		public float RxMonitorSplitterRatio
 		{
@@ -165,6 +174,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("PredefinedPanelIsVisible")]
 		public bool PredefinedPanelIsVisible
 		{
@@ -179,6 +189,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("PredefinedSplitterRatio")]
 		public float PredefinedSplitterRatio
 		{
@@ -193,6 +204,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("SendCommandPanelIsVisible")]
 		public bool SendCommandPanelIsVisible
 		{
@@ -207,6 +219,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("SendFilePanelIsVisible")]
 		public bool SendFilePanelIsVisible
 		{
@@ -263,6 +276,7 @@ namespace YAT.Model.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

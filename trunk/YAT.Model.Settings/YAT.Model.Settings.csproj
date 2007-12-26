@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\YAT.Model.Settings.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\YAT.Model.Settings.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -37,7 +39,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FontSettings.cs" />
     <Compile Include="FormatSettings.cs" />
     <Compile Include="LayoutSettings.cs" />
     <Compile Include="MainWindowSettings.cs" />
@@ -49,7 +50,6 @@
     <Compile Include="SendCommandSettings.cs" />
     <Compile Include="SendFileSettings.cs" />
     <Compile Include="TerminalSettingsItem.cs" />
-    <Compile Include="TextFormat.cs" />
     <Compile Include="WindowSettings.cs" />
     <Compile Include="WorkspaceSettings.cs" />
   </ItemGroup>

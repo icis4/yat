@@ -7,11 +7,13 @@ using MKY.Utilities.Guid;
 
 namespace YAT.Model.Settings
 {
+	/// <summary></summary>
 	[Serializable]
 	public class WorkspaceSettings : MKY.Utilities.Settings.Settings, IEquatable<WorkspaceSettings>
 	{
 		private GuidList<TerminalSettingsItem> _terminalSettings;
 
+		/// <summary></summary>
 		public WorkspaceSettings()
 			: base(MKY.Utilities.Settings.SettingsType.Explicit)
 		{
@@ -19,6 +21,7 @@ namespace YAT.Model.Settings
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public WorkspaceSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -49,6 +52,7 @@ namespace YAT.Model.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("TerminalSettings")]
 		public GuidList<TerminalSettingsItem> TerminalSettings
 		{
@@ -94,6 +98,7 @@ namespace YAT.Model.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

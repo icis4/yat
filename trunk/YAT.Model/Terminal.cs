@@ -9,9 +9,8 @@ using MKY.Utilities.Event;
 using MKY.Utilities.Recent;
 using MKY.Utilities.Settings;
 
-using YAT.Domain;
-
 using YAT.Settings;
+using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 
 using YAT.Model.Types;
@@ -20,6 +19,7 @@ using YAT.Model.Utilities;
 
 namespace YAT.Model
 {
+	/// <summary></summary>
 	public class Terminal : IDisposable, IGuidProvider
 	{
 		#region Constants
@@ -52,7 +52,7 @@ namespace YAT.Model
 
 		// settings
 		private DocumentSettingsHandler<TerminalSettingsRoot> _settingsHandler;
-		private YAT.Settings.Terminal.TerminalSettingsRoot _settingsRoot;
+		private TerminalSettingsRoot _settingsRoot;
 
 		// terminal
 		private Domain.Terminal _terminal;
@@ -73,38 +73,42 @@ namespace YAT.Model
 		// Events
 		//==========================================================================================
 
-		public event EventHandler<SavedEventArgs> Saved;
-		public event EventHandler Closed;
+		/// <summary></summary>
+		public event EventHandler IOChanged;
+		/// <summary></summary>
+		public event EventHandler IOControlChanged;
+		/// <summary></summary>
+		public event EventHandler IOCountChanged;
+		/// <summary></summary>
+		public event EventHandler<Domain.ErrorEventArgs> IOError;
 
-		public event EventHandler Changed;
-		public event EventHandler ControlChanged;
-		public event EventHandler<Domain.ErrorEventArgs> Error;
-
 		/// <summary></summary>
-		public event EventHandler<DisplayElementsEventArgs> DisplayElementsSent;
+		public event EventHandler<Domain.DisplayElementsEventArgs> DisplayElementsSent;
 		/// <summary></summary>
-		public event EventHandler<DisplayElementsEventArgs> DisplayElementsReceived;
+		public event EventHandler<Domain.DisplayElementsEventArgs> DisplayElementsReceived;
 		/// <summary></summary>
-		public event EventHandler<DisplayLinesEventArgs> DisplayLinesSent;
+		public event EventHandler<Domain.DisplayLinesEventArgs> DisplayLinesSent;
 		/// <summary></summary>
-		public event EventHandler<DisplayLinesEventArgs> DisplayLinesReceived;
+		public event EventHandler<Domain.DisplayLinesEventArgs> DisplayLinesReceived;
 		/// <summary></summary>
-		public event EventHandler<RepositoryEventArgs> RepositoryCleared;
+		public event EventHandler<Domain.RepositoryEventArgs> RepositoryCleared;
 		/// <summary></summary>
-		public event EventHandler<RepositoryEventArgs> RepositoryReloaded;
-
-		public event EventHandler CountChanged;
+		public event EventHandler<Domain.RepositoryEventArgs> RepositoryReloaded;
 
 		/// <summary></summary>
 		public event EventHandler<StatusTextEventArgs> FixedStatusTextRequest;
-
 		/// <summary></summary>
 		public event EventHandler<StatusTextEventArgs> TimedStatusTextRequest;
-
 		/// <summary></summary>
 		public event EventHandler<MessageInputEventArgs> MessageInputRequest;
 
+		/// <summary></summary>
 		public event EventHandler SaveAsFileDialogRequest;
+
+		/// <summary></summary>
+		public event EventHandler<SavedEventArgs> Saved;
+		/// <summary></summary>
+		public event EventHandler Closed;
 
 		#endregion
 
@@ -113,16 +117,19 @@ namespace YAT.Model
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Terminal()
 		{
 			Initialize(new DocumentSettingsHandler<TerminalSettingsRoot>(), Guid.NewGuid());
 		}
 
+		/// <summary></summary>
 		public Terminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
 			Initialize(settingsHandler, Guid.NewGuid());
 		}
 
+		/// <summary></summary>
 		public Terminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid)
 		{
 			Initialize(settingsHandler, guid);
@@ -135,18 +142,23 @@ namespace YAT.Model
 			else
 				_guid = Guid.NewGuid();
 
+			// link and attach to settings
 			_settingsHandler = settingsHandler;
 			_settingsRoot = _settingsHandler.Settings;
-			AttachSettingsHandlers();
+			_settingsRoot.ClearChanged();
+			AttachSettingsEventHandlers();
 
+			// set user name
 			if (!_settingsHandler.SettingsFilePathIsValid || _settingsRoot.AutoSaved)
 				_userName = _TerminalText + _terminalIdCounter.ToString();
 			else
 				UserNameFromFile = _settingsHandler.SettingsFilePath;
 
+			// create underlying terminal
 			_terminal = Domain.Factory.TerminalFactory.CreateTerminal(_settingsRoot.Terminal);
-			AttachTerminalHandlers();
+			AttachTerminalEventHandlers();
 
+			// create log
 			_log = new Log.Logs(_settingsRoot.Log);
 		}
 
@@ -206,14 +218,24 @@ namespace YAT.Model
 		// General Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Guid Guid
 		{
-			get { return (_guid); }
+			get
+			{
+				AssertNotDisposed();
+				return (_guid);
+			}
 		}
 
+		/// <summary></summary>
 		public string UserName
 		{
-			get { return (_userName); }
+			get
+			{
+				AssertNotDisposed();
+				return (_userName);
+			}
 		}
 
 		private string UserNameFromFile
@@ -221,9 +243,62 @@ namespace YAT.Model
 			set { _userName = Path.GetFileName(value); }
 		}
 
+		/// <summary></summary>
 		public bool IsOpen
 		{
-			get { return (_terminal.IsOpen); }
+			get
+			{
+				AssertNotDisposed();
+				return (_terminal.IsOpen);
+			}
+		}
+
+		/// <summary></summary>
+		public bool LogIsOpen
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_log.IsOpen);
+			}
+		}
+
+		#endregion
+
+		#region General Methods
+		//==========================================================================================
+		// General Methods
+		//==========================================================================================
+
+		/// <summary>
+		/// Starts terminal, i.e. starts log and open I/O.
+		/// </summary>
+		public void Start()
+		{
+			// begin logging (in case opening of terminal needs to be logged)
+			if (_settingsRoot.LogIsOpen)
+				BeginLog();
+
+			// then open terminal
+			if (_settingsRoot.TerminalIsOpen)
+				OpenIO();
+		}
+
+		#endregion
+
+		#region Recents
+		//==========================================================================================
+		// Recents
+		//==========================================================================================
+
+		/// <summary>
+		/// Update recent entry.
+		/// </summary>
+		/// <param name="recentFile">Recent file.</param>
+		private void SetRecent(string recentFile)
+		{
+			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
+			ApplicationSettings.SaveLocalUser();
 		}
 
 		#endregion
@@ -233,41 +308,63 @@ namespace YAT.Model
 		// Save
 		//==========================================================================================
 
-		public void AutoSave()
+		/// <summary>
+		/// Only performs auto save if no file yet or on previously auto saved files
+		/// </summary>
+		private bool TryAutoSave()
 		{
-			// only perform auto save if no file yet or on previously auto saved files
+			AssertNotDisposed();
+
+			bool success = false;
 			if (!_settingsHandler.SettingsFileExists ||
 				(_settingsHandler.SettingsFileExists && _settingsRoot.AutoSaved))
-				Save(true);
+			{
+				success = Save(true);
+			}
+			return (success);
 		}
 
-		private void Save()
+		/// <summary>
+		/// Saves terminal to file, prompts for file if it doesn't exist yet
+		/// </summary>
+		public bool Save()
 		{
-			Save(false);
+			AssertNotDisposed();
+
+			return (Save(false));
 		}
 
-		private void Save(bool autoSave)
+		/// <summary>
+		/// Saves terminal to file, prompts for file if it doesn't exist yet
+		/// </summary>
+		public bool Save(bool autoSave)
 		{
+			AssertNotDisposed();
+
+			bool success = false;
 			if (autoSave)
 			{
-				SaveToFile(true);
+				success = SaveToFile(true);
 			}
 			else
 			{
 				if (_settingsHandler.SettingsFilePathIsValid && !_settingsHandler.Settings.AutoSaved)
-					SaveToFile(false);
+					success = SaveToFile(false);
 				else
-					OnSaveAsFileDialogRequest(new EventArgs());
+					success = (OnSaveAsFileDialogRequest() == DialogResult.OK);
 			}
+			return (success);
 		}
 
-		private void SaveToFile(bool autoSave)
+		private bool SaveToFile(bool autoSave)
 		{
-			SaveToFile(autoSave, "");
+			return (SaveToFile(autoSave, ""));
 		}
 
-		private void SaveToFile(bool autoSave, string autoSaveFilePathToDelete)
+		private bool SaveToFile(bool autoSave, string autoSaveFilePathToDelete)
 		{
+			bool success = false;
+
 			if (!autoSave)
 				OnFixedStatusTextRequest("Saving terminal...");
 
@@ -285,11 +382,14 @@ namespace YAT.Model
 				if (!autoSave)
 					UserNameFromFile = _settingsHandler.SettingsFilePath;
 
+				success = true;
 				OnSaved(new SavedEventArgs(_settingsHandler.SettingsFilePath, autoSave));
-				OnChanged(new EventArgs());
 
 				if (!autoSave)
+				{
+					SetRecent(_settingsHandler.SettingsFilePath);
 					OnTimedStatusTextRequest("Terminal saved");
+				}
 
 				// try to delete existing auto save file
 				try
@@ -318,6 +418,58 @@ namespace YAT.Model
 					OnTimedStatusTextRequest("Terminal not saved!");
 				}
 			}
+			return (success);
+		}
+
+		#endregion
+
+		#region Close
+		//==========================================================================================
+		// Close
+		//==========================================================================================
+
+		/// <summary></summary>
+		public bool Close()
+		{
+			bool success = false;
+
+			// first, save terminal
+			if (_settingsRoot.HaveChanged)
+			{
+				// try to auto save it
+				if (_settingsRoot.AutoSaved)
+					success = TryAutoSave();
+
+				// or save it manually
+				if (!success && _settingsRoot.ExplicitHaveChanged)
+				{
+					DialogResult dr = OnMessageInputRequest
+						(
+						"Save terminal?",
+						UserName,
+						MessageBoxButtons.YesNoCancel,
+						MessageBoxIcon.Question
+						);
+
+					switch (dr)
+					{
+						case DialogResult.Yes:    success = Save(); break;
+						case DialogResult.No:     success = true;   break;
+						case DialogResult.Cancel:
+						default:                  return (false);
+					}
+				}
+			}
+
+			// next, close underlying terminal
+			if (_terminal.IsOpen)
+				success = CloseIO(false);
+
+			// last, close log
+			if (_log.IsOpen)
+				EndLog();
+
+			return (success);
 		}
 
 		#endregion
@@ -327,10 +479,47 @@ namespace YAT.Model
 		// Settings
 		//==========================================================================================
 
+		#region Settings > Lifetime
+		//------------------------------------------------------------------------------------------
+		// Settings > Lifetime
+		//------------------------------------------------------------------------------------------
+
+		private void AttachSettingsEventHandlers()
+		{
+			_settingsRoot.Changed += new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
+		}
+
+		private void DetachSettingsEventHandlers()
+		{
+			_settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
+		}
+
+		#endregion
+
+		#region Settings > Event Handlers
+		//------------------------------------------------------------------------------------------
+		// Settings > Event Handlers
+		//------------------------------------------------------------------------------------------
+
+		private void _settingsRoot_Changed(object sender, SettingsEventArgs e)
+		{
+			// nothing to do yet
+		}
+
+		#endregion
+
+		#region Settings > Properties
+		//------------------------------------------------------------------------------------------
+		// Settings > Properties
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
 		public string SettingsFilePath
 		{
 			get
 			{
+				AssertNotDisposed();
+
 				if (_settingsHandler.SettingsFileExists)
 					return (_settingsHandler.SettingsFilePath);
 				else
@@ -338,25 +527,27 @@ namespace YAT.Model
 			}
 		}
 
+		/// <summary></summary>
+		public TerminalSettingsRoot SettingsRoot
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_settingsRoot);
+			}
+		}
+
+		/// <summary></summary>
 		public WindowSettings WindowSettings
 		{
-			get { return (_settingsRoot.Window); }
+			get
+			{
+				AssertNotDisposed();
+				return (_settingsRoot.Window);
+			}
 		}
 
-		private void AttachSettingsHandlers()
-		{
-			_settingsRoot.ClearChanged();
-			_settingsRoot.Changed += new EventHandler<SettingsEventArgs>(_settings_Changed);
-		}
-
-		//------------------------------------------------------------------------------------------
-		// Settings Events
-		//------------------------------------------------------------------------------------------
-
-		private void _settings_Changed(object sender, SettingsEventArgs e)
-		{
-			// nothing to do yet
-		}
+		#endregion
 
 		#endregion
 
@@ -370,36 +561,164 @@ namespace YAT.Model
 		// Terminal > Lifetime
 		//------------------------------------------------------------------------------------------
 
-		private void AttachTerminalHandlers()
+		private void AttachTerminalEventHandlers()
 		{
-			_terminal.Changed += new EventHandler(_terminal_Changed);
+			_terminal.Changed        += new EventHandler(_terminal_Changed);
 			_terminal.ControlChanged += new EventHandler(_terminal_ControlChanged);
-			_terminal.Error += new EventHandler<Domain.ErrorEventArgs>(_terminal_Error);
+			_terminal.Error          += new EventHandler<Domain.ErrorEventArgs>(_terminal_Error);
 
-			_terminal.RawElementSent += new EventHandler<Domain.RawElementEventArgs>(_terminal_RawElementSent);
-			_terminal.RawElementReceived += new EventHandler<Domain.RawElementEventArgs>(_terminal_RawElementReceived);
-			_terminal.DisplayElementsSent += new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsSent);
+			_terminal.RawElementSent          += new EventHandler<Domain.RawElementEventArgs>(_terminal_RawElementSent);
+			_terminal.RawElementReceived      += new EventHandler<Domain.RawElementEventArgs>(_terminal_RawElementReceived);
+			_terminal.DisplayElementsSent     += new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsSent);
 			_terminal.DisplayElementsReceived += new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsReceived);
-			_terminal.DisplayLinesSent += new EventHandler<Domain.DisplayLinesEventArgs>(_terminal_DisplayLinesSent);
-			_terminal.DisplayLinesReceived += new EventHandler<Domain.DisplayLinesEventArgs>(_terminal_DisplayLinesReceived);
-			_terminal.RepositoryCleared += new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryCleared);
-			_terminal.RepositoryReloaded += new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryReloaded);
+			_terminal.DisplayLinesSent        += new EventHandler<Domain.DisplayLinesEventArgs>(_terminal_DisplayLinesSent);
+			_terminal.DisplayLinesReceived    += new EventHandler<Domain.DisplayLinesEventArgs>(_terminal_DisplayLinesReceived);
+			_terminal.RepositoryCleared       += new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryCleared);
+			_terminal.RepositoryReloaded      += new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryReloaded);
 		}
 
-		private void DetachTerminalHandlers()
+		private void DetachTerminalEventHandlers()
 		{
-			_terminal.Changed -= new EventHandler(_terminal_Changed);
+			_terminal.Changed        -= new EventHandler(_terminal_Changed);
 			_terminal.ControlChanged -= new EventHandler(_terminal_ControlChanged);
-			_terminal.Error -= new EventHandler<Domain.ErrorEventArgs>(_terminal_Error);
+			_terminal.Error          -= new EventHandler<Domain.ErrorEventArgs>(_terminal_Error);
 
-			_terminal.RawElementSent -= new EventHandler<Domain.RawElementEventArgs>(_terminal_RawElementSent);
-			_terminal.RawElementReceived -= new EventHandler<Domain.RawElementEventArgs>(_terminal_RawElementReceived);
-			_terminal.DisplayElementsSent -= new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsSent);
+			_terminal.RawElementSent          -= new EventHandler<Domain.RawElementEventArgs>(_terminal_RawElementSent);
+			_terminal.RawElementReceived      -= new EventHandler<Domain.RawElementEventArgs>(_terminal_RawElementReceived);
+			_terminal.DisplayElementsSent     -= new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsSent);
 			_terminal.DisplayElementsReceived -= new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsReceived);
-			_terminal.DisplayLinesSent -= new EventHandler<Domain.DisplayLinesEventArgs>(_terminal_DisplayLinesSent);
-			_terminal.DisplayLinesReceived -= new EventHandler<Domain.DisplayLinesEventArgs>(_terminal_DisplayLinesReceived);
-			_terminal.RepositoryCleared -= new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryCleared);
-			_terminal.RepositoryReloaded -= new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryReloaded);
+			_terminal.DisplayLinesSent        -= new EventHandler<Domain.DisplayLinesEventArgs>(_terminal_DisplayLinesSent);
+			_terminal.DisplayLinesReceived    -= new EventHandler<Domain.DisplayLinesEventArgs>(_terminal_DisplayLinesReceived);
+			_terminal.RepositoryCleared       -= new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryCleared);
+			_terminal.RepositoryReloaded      -= new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryReloaded);
+		}
+
+		#endregion
+
+		#region Terminal > Event Handlers
+		//------------------------------------------------------------------------------------------
+		// Terminal > Event Handlers
+		//------------------------------------------------------------------------------------------
+
+		private void _terminal_Changed(object sender, EventArgs e)
+		{
+			OnIOChanged(e);
+		}
+
+		private void _terminal_ControlChanged(object sender, EventArgs e)
+		{
+			OnIOControlChanged(e);
+		}
+
+		private void _terminal_Error(object sender, Domain.ErrorEventArgs e)
+		{
+			OnIOError(e);
+		}
+
+		private void _terminal_RawElementSent(object sender, Domain.RawElementEventArgs e)
+		{
+			// count
+			_txByteCount += e.Element.Data.Length;
+			OnIOCountChanged(new EventArgs());
+
+			// log
+			if (_log.IsOpen)
+			{
+				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawTx);
+				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawBidir);
+			}
+		}
+
+		private void _terminal_RawElementReceived(object sender, Domain.RawElementEventArgs e)
+		{
+			// count
+			_rxByteCount += e.Element.Data.Length;
+			OnIOCountChanged(new EventArgs());
+
+			// log
+			if (_log.IsOpen)
+			{
+				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawBidir);
+				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawRx);
+			}
+		}
+
+		private void _terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
+		{
+			// display
+			OnDisplayElementsSent(e);
+
+			// log
+			foreach (Domain.DisplayElement de in e.Elements)
+			{
+				if (_log.IsOpen)
+				{
+					if (de.IsEol)
+					{
+						_log.WriteEol(Log.LogStreams.NeatTx);
+						_log.WriteEol(Log.LogStreams.NeatBidir);
+					}
+					else
+					{
+						_log.WriteString(de.Text, Log.LogStreams.NeatTx);
+						_log.WriteString(de.Text, Log.LogStreams.NeatBidir);
+					}
+				}
+			}
+		}
+
+		private void _terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
+		{
+			// display
+			OnDisplayElementsReceived(e);
+
+			// log
+			foreach (Domain.DisplayElement de in e.Elements)
+			{
+				if (_log.IsOpen)
+				{
+					if (de.IsEol)
+					{
+						_log.WriteEol(Log.LogStreams.NeatBidir);
+						_log.WriteEol(Log.LogStreams.NeatRx);
+					}
+					else
+					{
+						_log.WriteString(de.Text, Log.LogStreams.NeatBidir);
+						_log.WriteString(de.Text, Log.LogStreams.NeatRx);
+					}
+				}
+			}
+		}
+
+		private void _terminal_DisplayLinesSent(object sender, Domain.DisplayLinesEventArgs e)
+		{
+			// count
+			_txLineCount += e.Lines.Count;
+			OnIOCountChanged(new EventArgs());
+
+			// display
+			OnDisplayLinesSent(e);
+		}
+
+		private void _terminal_DisplayLinesReceived(object sender, Domain.DisplayLinesEventArgs e)
+		{
+			// count
+			_rxLineCount += e.Lines.Count;
+			OnIOCountChanged(new EventArgs());
+
+			// display
+			OnDisplayLinesReceived(e);
+		}
+
+		private void _terminal_RepositoryCleared(object sender, Domain.RepositoryEventArgs e)
+		{
+			OnRepositoryCleared(e);
+		}
+
+		private void _terminal_RepositoryReloaded(object sender, Domain.RepositoryEventArgs e)
+		{
+			OnRepositoryReloaded(e);
 		}
 
 		#endregion
@@ -409,12 +728,20 @@ namespace YAT.Model
 		// Terminal > Open/Close
 		//------------------------------------------------------------------------------------------
 
-		private bool OpenTerminal()
+		/// <summary>
+		/// Opens the terminal's I/O instance
+		/// </summary>
+		/// <returns>true if successful, false otherwise</returns>
+		public bool OpenIO()
 		{
-			return (OpenTerminal(true));
+			return (OpenIO(true));
 		}
 
-		private bool OpenTerminal(bool saveStatus)
+		/// <summary>
+		/// Opens the terminal's I/O instance
+		/// </summary>
+		/// <returns>true if successful, false otherwise</returns>
+		private bool OpenIO(bool saveStatus)
 		{
 			bool success = false;
 
@@ -455,12 +782,20 @@ namespace YAT.Model
 			return (success);
 		}
 
-		private bool CloseTerminal()
+		/// <summary>
+		/// Closes the terminal's I/O instance
+		/// </summary>
+		/// <returns>true if successful, false otherwise</returns>
+		public bool CloseIO()
 		{
-			return (CloseTerminal(true));
+			return (CloseIO(true));
 		}
 
-		private bool CloseTerminal(bool saveStatus)
+		/// <summary>
+		/// Closes the terminal's I/O instance
+		/// </summary>
+		/// <returns>true if successful, false otherwise</returns>
+		private bool CloseIO(bool saveStatus)
 		{
 			bool success = false;
 
@@ -500,7 +835,10 @@ namespace YAT.Model
 		// Terminal > IO Control
 		//------------------------------------------------------------------------------------------
 
-		private void RequestToggleRts()
+		/// <summary>
+		/// Toggles RTS line if current handshake settings allow this
+		/// </summary>
+		public void RequestToggleRts()
 		{
 			if (_settingsRoot.Terminal.IO.SerialPort.Communication.Handshake == Domain.IO.Handshake.Manual)
 			{
@@ -510,7 +848,10 @@ namespace YAT.Model
 			}
 		}
 
-		private void RequestToggleDtr()
+		/// <summary>
+		/// Toggles DTR line if current handshake settings allow this
+		/// </summary>
+		public void RequestToggleDtr()
 		{
 			if (_settingsRoot.Terminal.IO.SerialPort.Communication.Handshake == Domain.IO.Handshake.Manual)
 			{
@@ -607,131 +948,45 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Event Handlers
+		#region Terminal > Repositories
 		//------------------------------------------------------------------------------------------
-		// Terminal > Event Handlers
+		// Terminal > Repositories
 		//------------------------------------------------------------------------------------------
 
-		private void _terminal_Changed(object sender, EventArgs e)
+		/// <summary>
+		/// Forces complete reload of repositories
+		/// </summary>
+		public void ReloadRepositories()
 		{
-			OnChanged(e);
+			AssertNotDisposed();
+			_terminal.ReloadRepositories();
 		}
 
-		private void _terminal_ControlChanged(object sender, EventArgs e)
+		/// <summary>
+		/// Returns contents of desired repository
+		/// </summary>
+		public List<Domain.DisplayElement> RepositoryToDisplayElements(Domain.RepositoryType repositoryType)
 		{
-			OnControlChanged(e);
+			AssertNotDisposed();
+			return (_terminal.RepositoryToDisplayElements(repositoryType));
 		}
 
-		private void _terminal_Error(object sender, Domain.ErrorEventArgs e)
+		/// <summary>
+		/// Clears given repository
+		/// </summary>
+		public void ClearRepository(Domain.RepositoryType repositoryType)
 		{
-			OnChanged(new EventArgs());
-			OnError(e);
+			AssertNotDisposed();
+			_terminal.ClearRepository(repositoryType);
 		}
 
-		private void _terminal_RawElementSent(object sender, Domain.RawElementEventArgs e)
+		/// <summary>
+		/// Clears all repositories
+		/// </summary>
+		public void ClearRepositories()
 		{
-			// count
-			_txByteCount += e.Element.Data.Length;
-			OnCountChanged(new EventArgs());
-
-			// log
-			if (_log.IsOpen)
-			{
-				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawTx);
-				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawBidir);
-			}
-		}
-
-		private void _terminal_RawElementReceived(object sender, Domain.RawElementEventArgs e)
-		{
-			// count
-			_rxByteCount += e.Element.Data.Length;
-			OnCountChanged(new EventArgs());
-
-			// log
-			if (_log.IsOpen)
-			{
-				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawBidir);
-				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawRx);
-			}
-		}
-
-		private void _terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
-		{
-			// display
-			OnDisplayElementsSent(e);
-
-			// log
-			foreach (Domain.DisplayElement de in e.Elements)
-			{
-				if (_log.IsOpen)
-				{
-					if (de.IsEol)
-					{
-						_log.WriteEol(Log.LogStreams.NeatTx);
-						_log.WriteEol(Log.LogStreams.NeatBidir);
-					}
-					else
-					{
-						_log.WriteString(de.Text, Log.LogStreams.NeatTx);
-						_log.WriteString(de.Text, Log.LogStreams.NeatBidir);
-					}
-				}
-			}
-		}
-
-		private void _terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
-		{
-			// display
-			OnDisplayElementsReceived(e);
-
-			// log
-			foreach (Domain.DisplayElement de in e.Elements)
-			{
-				if (_log.IsOpen)
-				{
-					if (de.IsEol)
-					{
-						_log.WriteEol(Log.LogStreams.NeatBidir);
-						_log.WriteEol(Log.LogStreams.NeatRx);
-					}
-					else
-					{
-						_log.WriteString(de.Text, Log.LogStreams.NeatBidir);
-						_log.WriteString(de.Text, Log.LogStreams.NeatRx);
-					}
-				}
-			}
-		}
-
-		private void _terminal_DisplayLinesSent(object sender, Domain.DisplayLinesEventArgs e)
-		{
-			// count
-			_txLineCount += e.Lines.Count;
-			OnCountChanged(new EventArgs());
-
-			// display
-			OnDisplayLinesSent(e);
-		}
-
-		private void _terminal_DisplayLinesReceived(object sender, Domain.DisplayLinesEventArgs e)
-		{
-			// count
-			_rxLineCount += e.Lines.Count;
-			OnCountChanged(new EventArgs());
-
-			// display
-			OnDisplayLinesReceived(e);
-		}
-
-		private void _terminal_RepositoryCleared(object sender, Domain.RepositoryEventArgs e)
-		{
-			OnRepositoryCleared(e);
-		}
-
-		private void _terminal_RepositoryReloaded(object sender, Domain.RepositoryEventArgs e)
-		{
-			OnRepositoryReloaded(e);
+			AssertNotDisposed();
+			_terminal.ClearRepositories();
 		}
 
 		#endregion
@@ -748,7 +1003,10 @@ namespace YAT.Model
 		// Send > Command
 		//------------------------------------------------------------------------------------------
 
-		private void SendCommand()
+		/// <summary>
+		/// Sends command given by terminal settings
+		/// </summary>
+		public void SendCommand()
 		{
 			SendCommand(_settingsRoot.SendCommand.Command);
 			_settingsRoot.SendCommand.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
@@ -757,7 +1015,11 @@ namespace YAT.Model
 				);
 		}
 
-		private void SendCommand(Command command)
+		/// <summary>
+		/// Sends given command
+		/// </summary>
+		/// <param name="command">Command to be sent</param>
+		public void SendCommand(Command command)
 		{
 			if (command.IsValidCommand)
 			{
@@ -787,12 +1049,19 @@ namespace YAT.Model
 		// Send > File
 		//------------------------------------------------------------------------------------------
 
-		private void SendFile()
+		/// <summary>
+		/// Sends file given by terminal settings
+		/// </summary>
+		public void SendFile()
 		{
 			SendFile(_settingsRoot.SendFile.Command);
 		}
 
-		private void SendFile(Command command)
+		/// <summary>
+		/// Sends given file
+		/// </summary>
+		/// <param name="command">File to be sent</param>
+		public void SendFile(Command command)
 		{
 			if (!command.IsValidFilePath)
 				return;
@@ -869,6 +1138,7 @@ namespace YAT.Model
 		// Log
 		//==========================================================================================
 
+		/// <summary></summary>
 		public void BeginLog()
 		{
 			try
@@ -892,6 +1162,7 @@ namespace YAT.Model
 			}
 		}
 
+		/// <summary></summary>
 		public void ClearLog()
 		{
 			try
@@ -912,11 +1183,13 @@ namespace YAT.Model
 			}
 		}
 
+		/// <summary></summary>
 		public void EndLog()
 		{
 			EndLog(true);
 		}
 
+		/// <summary></summary>
 		public void EndLog(bool saveStatus)
 		{
 			try
@@ -946,26 +1219,31 @@ namespace YAT.Model
 		// Count Status
 		//==========================================================================================
 
+		/// <summary></summary>
 		public int TxByteCount
 		{
 			get { return (_txByteCount); }
 		}
 
+		/// <summary></summary>
 		public int TxLineCount
 		{
 			get { return (_txLineCount); }
 		}
 
+		/// <summary></summary>
 		public int RxByteCount
 		{
 			get { return (_rxByteCount); }
 		}
 
+		/// <summary></summary>
 		public int RxLineCount
 		{
 			get { return (_rxLineCount); }
 		}
 
+		/// <summary></summary>
 		public void ResetCount()
 		{
 			_txByteCount = 0;
@@ -973,7 +1251,7 @@ namespace YAT.Model
 			_rxByteCount = 0;
 			_rxLineCount = 0;
 
-			OnCountChanged(new EventArgs());
+			OnIOCountChanged(new EventArgs());
 		}
 
 		#endregion
@@ -983,114 +1261,104 @@ namespace YAT.Model
 		// Event Invoking
 		//==========================================================================================
 
-		protected virtual void OnSaved(SavedEventArgs e)
+		/// <summary></summary>
+		protected virtual void OnIOChanged(EventArgs e)
 		{
-			EventHelper.FireSync<SavedEventArgs>(Saved, this, e);
-		}
-
-		protected virtual void OnClosed(EventArgs e)
-		{
-			EventHelper.FireSync(Closed, this, e);
-		}
-
-		protected virtual void OnChanged(EventArgs e)
-		{
-			EventHelper.FireSync(Changed, this, e);
-		}
-
-		protected virtual void OnControlChanged(EventArgs e)
-		{
-			EventHelper.FireSync(ControlChanged, this, e);
-		}
-
-		protected virtual void OnError(Domain.ErrorEventArgs e)
-		{
-			EventHelper.FireSync(Error, this, e);
-		}
-
-		protected virtual void OnCountChanged(EventArgs e)
-		{
-			EventHelper.FireSync(CountChanged, this, e);
+			EventHelper.FireSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayElementsSent(DisplayElementsEventArgs e)
+		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-			EventHelper.FireSync<DisplayElementsEventArgs>(DisplayElementsSent, this, e);
+			EventHelper.FireSync(IOControlChanged, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayElementsReceived(DisplayElementsEventArgs e)
+		protected virtual void OnIOCountChanged(EventArgs e)
 		{
-			EventHelper.FireSync<DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
+			EventHelper.FireSync(IOCountChanged, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayLinesSent(DisplayLinesEventArgs e)
+		protected virtual void OnIOError(Domain.ErrorEventArgs e)
 		{
-			EventHelper.FireSync<DisplayLinesEventArgs>(DisplayLinesSent, this, e);
+			EventHelper.FireSync(IOError, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayLinesReceived(DisplayLinesEventArgs e)
+		protected virtual void OnDisplayElementsSent(Domain.DisplayElementsEventArgs e)
 		{
-			EventHelper.FireSync<DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
+			EventHelper.FireSync<Domain.DisplayElementsEventArgs>(DisplayElementsSent, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRepositoryCleared(RepositoryEventArgs e)
+		protected virtual void OnDisplayElementsReceived(Domain.DisplayElementsEventArgs e)
 		{
-			EventHelper.FireSync<RepositoryEventArgs>(RepositoryCleared, this, e);
+			EventHelper.FireSync<Domain.DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnRepositoryReloaded(RepositoryEventArgs e)
+		protected virtual void OnDisplayLinesSent(Domain.DisplayLinesEventArgs e)
 		{
-			EventHelper.FireSync<RepositoryEventArgs>(RepositoryReloaded, this, e);
+			EventHelper.FireSync<Domain.DisplayLinesEventArgs>(DisplayLinesSent, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnDisplayLinesReceived(Domain.DisplayLinesEventArgs e)
+		{
+			EventHelper.FireSync<Domain.DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnRepositoryCleared(Domain.RepositoryEventArgs e)
+		{
+			EventHelper.FireSync<Domain.RepositoryEventArgs>(RepositoryCleared, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnRepositoryReloaded(Domain.RepositoryEventArgs e)
+		{
+			EventHelper.FireSync<Domain.RepositoryEventArgs>(RepositoryReloaded, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnFixedStatusTextRequest(string text)
 		{
-			OnFixedStatusTextRequest(new StatusTextEventArgs(text));
-		}
-
-		/// <summary></summary>
-		protected virtual void OnFixedStatusTextRequest(StatusTextEventArgs e)
-		{
-			EventHelper.FireSync(FixedStatusTextRequest, this, e);
+			EventHelper.FireSync(FixedStatusTextRequest, this, new StatusTextEventArgs(text));
 		}
 
 		/// <summary></summary>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
-			OnTimedStatusTextRequest(new StatusTextEventArgs(text));
-		}
-
-		/// <summary></summary>
-		protected virtual void OnTimedStatusTextRequest(StatusTextEventArgs e)
-		{
-			EventHelper.FireSync(TimedStatusTextRequest, this, e);
+			EventHelper.FireSync(TimedStatusTextRequest, this, new StatusTextEventArgs(text));
 		}
 
 		/// <summary></summary>
 		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		{
 			MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
-			OnMessageInputRequest(e);
+			EventHelper.FireSync(MessageInputRequest, this, e);
 			return (e.Result);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnMessageInputRequest(MessageInputEventArgs e)
+		protected virtual DialogResult OnSaveAsFileDialogRequest()
 		{
-			EventHelper.FireSync(MessageInputRequest, this, e);
+			DialogEventArgs e = new DialogEventArgs();
+			EventHelper.FireSync(SaveAsFileDialogRequest, this, e);
+			return (e.Result);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnSaveAsFileDialogRequest(EventArgs e)
+		protected virtual void OnSaved(SavedEventArgs e)
 		{
-			EventHelper.FireSync(SaveAsFileDialogRequest, this, e);
+			EventHelper.FireSync<SavedEventArgs>(Saved, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnClosed(EventArgs e)
+		{
+			EventHelper.FireSync(Closed, this, e);
 		}
 
 		#endregion

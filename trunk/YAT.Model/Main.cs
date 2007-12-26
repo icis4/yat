@@ -11,6 +11,7 @@ using MKY.Utilities.IO;
 
 using YAT.Settings;
 using YAT.Settings.Application;
+using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
 using YAT.Utilities;
 
@@ -22,15 +23,6 @@ namespace YAT.Model
 	/// </summary>
 	public class Main : IDisposable
 	{
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private readonly string _Title = Application.ProductName + VersionInfo.ProductNamePostFix;
-
-		#endregion
-
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -50,13 +42,19 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public event EventHandler<StatusTextEventArgs> FixedStatusTextRequest;
+		public event EventHandler<WorkspaceEventArgs> WorkspaceOpened;
+		/// <summary></summary>
+		public event EventHandler WorkspaceClosed;
 
+		/// <summary></summary>
+		public event EventHandler<StatusTextEventArgs> FixedStatusTextRequest;
 		/// <summary></summary>
 		public event EventHandler<StatusTextEventArgs> TimedStatusTextRequest;
-
 		/// <summary></summary>
 		public event EventHandler<MessageInputEventArgs> MessageInputRequest;
+
+		/// <summary></summary>
+		public event EventHandler Closed;
 
 		#endregion
 
@@ -136,16 +134,25 @@ namespace YAT.Model
 		// General Properties
 		//==========================================================================================
 
-		public string Title
+		/// <summary></summary>
+		public string UserName
 		{
-			get { return (_Title); }
+			get
+			{
+				AssertNotDisposed();
+
+				if (_workspace != null)
+					return (_workspace.UserName);
+				else
+					return (ApplicationInfo.ProductName);
+			}
 		}
 
 		#endregion
 
-		#region Recents
+		#region General Methods
 		//==========================================================================================
-		// Recents
+		// General Methods
 		//==========================================================================================
 
 		/// <summary>
@@ -156,6 +163,8 @@ namespace YAT.Model
 		/// <returns>Returns true if either operation succeeded, false otherwise</returns>
 		public bool Start()
 		{
+			AssertNotDisposed();
+
 			bool success = false;
 
 			if ((_requestedFilePath != null) && (_requestedFilePath != ""))
@@ -180,8 +189,10 @@ namespace YAT.Model
 		// Recents
 		//==========================================================================================
 
+		/// <summary></summary>
 		public bool OpenRecent(int userIndex)
 		{
+			AssertNotDisposed();
 			return (OpenFromFile(ApplicationSettings.LocalUser.RecentFiles.FilePaths[userIndex - 1].Item));
 		}
 
@@ -197,10 +208,83 @@ namespace YAT.Model
 
 		#endregion
 
+		#region Close
+		//==========================================================================================
+		// Close
+		//==========================================================================================
+
+		/// <summary></summary>
+		public bool Close()
+		{
+			bool success = _workspace.Close();
+
+			if (success)
+				OnFixedStatusTextRequest("Exiting " + Application.ProductName + "...");
+			else
+				OnTimedStatusTextRequest("Exit cancelled");
+
+			if (success)
+				OnClosed(new EventArgs());
+
+			return (success);
+		}
+
+		#endregion
+
 		#region Workspace
 		//==========================================================================================
 		// Workspace
 		//==========================================================================================
+
+		#region Workspace > Lifetime
+		//------------------------------------------------------------------------------------------
+		// Workspace > Lifetime
+		//------------------------------------------------------------------------------------------
+
+		private void AttachWorkspaceEventHandlers()
+		{
+			_workspace.TerminalRemoved += new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalRemoved);
+			_workspace.TerminalAdded   += new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalAdded);
+
+			_workspace.Closed += new EventHandler(_workspace_Closed);
+		}
+
+		private void DetachWorkspaceEventHandlers()
+		{
+			_workspace.TerminalRemoved -= new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalRemoved);
+			_workspace.TerminalAdded   -= new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalAdded);
+
+			_workspace.Closed -= new EventHandler(_workspace_Closed);
+		}
+
+		#endregion
+
+		#region Workspace > Event Handlers
+		//------------------------------------------------------------------------------------------
+		// Workspace > Event Handlers
+		//------------------------------------------------------------------------------------------
+
+		private void _workspace_TerminalRemoved(object sender, Model.TerminalEventArgs e)
+		{
+			throw new Exception("The method or operation is not implemented.");
+		}
+
+		private void _workspace_TerminalAdded(object sender, Model.TerminalEventArgs e)
+		{
+			throw new Exception("The method or operation is not implemented.");
+		}
+
+		private void _workspace_Closed(object sender, EventArgs e)
+		{
+			OnWorkspaceClosed(e);
+		}
+
+		#endregion
+
+		#region Workspace > Methods
+		//------------------------------------------------------------------------------------------
+		// Workspace > Methods
+		//------------------------------------------------------------------------------------------
 
 		/// <summary>
 		/// Opens YAT and opens the workspace or terminal file given. This method can directly
@@ -210,6 +294,8 @@ namespace YAT.Model
 		/// <returns>true if successfully opened the workspace or terminal</returns>
 		public bool OpenFromFile(string filePath)
 		{
+			AssertNotDisposed();
+
 			string fileName = Path.GetFileName(filePath);
 			string extension = Path.GetExtension(filePath);
 			if (ExtensionSettings.IsWorkspaceFile(extension))
@@ -240,8 +326,11 @@ namespace YAT.Model
 			}
 		}
 
-		private bool OpenWorkspaceFromFile(string filePath)
+		/// <summary></summary>
+		public bool OpenWorkspaceFromFile(string filePath)
 		{
+			AssertNotDisposed();
+
 			// close workspace, only one workspace can exist within application
 			if (!_workspace.Close())
 				return (false);
@@ -285,9 +374,6 @@ namespace YAT.Model
 			// open workspace terminals
 			int terminalCount = _workspace.OpenTerminals();
 
-			// attach workspace event handlers after terminals have been opened
-			AttachWorkspaceEventHandlers();
-
 			if (terminalCount == 1)
 				OnTimedStatusTextRequest("Workspace terminal opened");
 			else if (terminalCount > 1)
@@ -295,29 +381,16 @@ namespace YAT.Model
 			else
 				OnTimedStatusTextRequest("Workspace contains no terminal to open");
 
+			// attach workspace event handlers after terminals have been opened
+			AttachWorkspaceEventHandlers();
+
+			// fire workspace event
+			OnWorkspaceOpened(new WorkspaceEventArgs(_workspace));
+
 			return (true);
 		}
 
 		#endregion
-
-		#region Workspace Events
-		//==========================================================================================
-		// Workspace Events
-		//==========================================================================================
-
-		private void AttachWorkspaceEventHandlers()
-		{
-			// \fixme _workspace.Changed += new EventHandler<SettingsEventArgs>(_workspaceSettings_Changed);
-		}
-
-		//------------------------------------------------------------------------------------------
-		// Workspace Events > Handlers
-		//------------------------------------------------------------------------------------------
-
-		private void _workspace_Changed(object sender, EventArgs e)
-		{
-			// \fixme not implemented yet
-		}
 
 		#endregion
 
@@ -327,41 +400,41 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnFixedStatusTextRequest(string text)
+		protected virtual void OnWorkspaceOpened(WorkspaceEventArgs e)
 		{
-			OnFixedStatusTextRequest(new StatusTextEventArgs(text));
+			EventHelper.FireSync<WorkspaceEventArgs>(WorkspaceOpened, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnFixedStatusTextRequest(StatusTextEventArgs e)
+		protected virtual void OnWorkspaceClosed(EventArgs e)
 		{
-			EventHelper.FireSync(FixedStatusTextRequest, this, e);
+			EventHelper.FireSync(WorkspaceClosed, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnFixedStatusTextRequest(string text)
+		{
+			EventHelper.FireSync(FixedStatusTextRequest, this, new StatusTextEventArgs(text));
 		}
 
 		/// <summary></summary>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
-			OnTimedStatusTextRequest(new StatusTextEventArgs(text));
-		}
-
-		/// <summary></summary>
-		protected virtual void OnTimedStatusTextRequest(StatusTextEventArgs e)
-		{
-			EventHelper.FireSync(TimedStatusTextRequest, this, e);
+			EventHelper.FireSync(TimedStatusTextRequest, this, new StatusTextEventArgs(text));
 		}
 
 		/// <summary></summary>
 		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		{
 			MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
-			OnMessageInputRequest(e);
+			EventHelper.FireSync(MessageInputRequest, this, e);
 			return (e.Result);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnMessageInputRequest(MessageInputEventArgs e)
+		protected virtual void OnClosed(EventArgs e)
 		{
-			EventHelper.FireSync(MessageInputRequest, this, e);
+			EventHelper.FireSync(Closed, this, e);
 		}
 
 		#endregion

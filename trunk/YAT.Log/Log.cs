@@ -7,17 +7,25 @@ using MKY.Utilities.IO;
 
 namespace YAT.Log
 {
+	/// <summary></summary>
 	public enum LogStreams
 	{
+		/// <summary></summary>
 		RawTx = 0,
+		/// <summary></summary>
 		RawBidir = 1,
+		/// <summary></summary>
 		RawRx = 2,
 
+		/// <summary></summary>
 		NeatTx = 3,
+		/// <summary></summary>
 		NeatBidir = 4,
+		/// <summary></summary>
 		NeatRx = 5
 	}
 
+	/// <summary></summary>
 	public class Logs : IDisposable
 	{
 		#region Types
@@ -30,6 +38,7 @@ namespace YAT.Log
 		// Types > Log Base
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected abstract class Log : IDisposable
 		{
 			#region Constants
@@ -65,11 +74,13 @@ namespace YAT.Log
 			// Object Lifetime
 			//==========================================================================================
 
+			/// <summary></summary>
 			public Log(bool enabled, string file, LogFileWriteMode writeMode)
 			{
 				Initialize(enabled, file, writeMode, new FileNameSeparator(""));
 			}
 
+			/// <summary></summary>
 			public Log(bool enabled, string file, LogFileWriteMode writeMode, FileNameSeparator separator)
 			{
 				Initialize(enabled, file, writeMode, separator);
@@ -136,11 +147,13 @@ namespace YAT.Log
 			// Properties
 			//==========================================================================================
 
+			/// <summary></summary>
 			protected bool IsEnabled
 			{
 				get { return (_enabled); }
 			}
 
+			/// <summary></summary>
 			public bool IsOpen
 			{
 				get { return (_open); }
@@ -153,11 +166,13 @@ namespace YAT.Log
 			// Methods
 			//==========================================================================================
 
+			/// <summary></summary>
 			public void SetSettings(bool enabled, string file, LogFileWriteMode writeMode)
 			{
 				SetSettings(enabled, file, writeMode, new FileNameSeparator(""));
 			}
 
+			/// <summary></summary>
 			public void SetSettings(bool enabled, string file, LogFileWriteMode writeMode, FileNameSeparator separator)
 			{
 				if (_open && (enabled != _enabled))
@@ -183,6 +198,7 @@ namespace YAT.Log
 					Initialize(enabled, file, writeMode, separator);
 			}
 
+			/// <summary></summary>
 			public void Open()
 			{
 				if (!_enabled)
@@ -210,6 +226,7 @@ namespace YAT.Log
 				_open = true;
 			}
 
+			/// <summary></summary>
 			public void Flush()
 			{
 				if (_enabled && _open)
@@ -218,6 +235,7 @@ namespace YAT.Log
 				}
 			}
 
+			/// <summary></summary>
 			public void Truncate()
 			{
 				if (_enabled && _open)
@@ -229,6 +247,7 @@ namespace YAT.Log
 				}
 			}
 
+			/// <summary></summary>
 			public void Close()
 			{
 				if (_enabled && _open)
@@ -239,27 +258,34 @@ namespace YAT.Log
 				_open = false;
 			}
 
+			/// <summary></summary>
 			protected abstract void OpenWriter(FileStream stream);
+			/// <summary></summary>
 			protected abstract void FlushWriter();
+			/// <summary></summary>
 			protected abstract void CloseWriter();
 
+			/// <summary></summary>
 			protected void StartFlushTimer()
 			{
 				TimerCallback timerDelegate = new TimerCallback(_flushTimer_Timeout);
 				_flushTimer = new Timer(timerDelegate, null, _FlushTimeout, System.Threading.Timeout.Infinite);
 			}
 
+			/// <summary></summary>
 			protected void RestartFlushTimer()
 			{
 				StopFlushTimer();
 				StartFlushTimer();
 			}
 
+			/// <summary></summary>
 			protected void StopFlushTimer()
 			{
 				_flushTimer = null; ;
 			}
 
+			/// <summary></summary>
 			private void _flushTimer_Timeout(object obj)
 			{
 				Flush();
@@ -275,35 +301,42 @@ namespace YAT.Log
 		// Types > Binary Log
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected class BinaryLog : Log
 		{
 			private BinaryWriter _writer;
 
+			/// <summary></summary>
 			public BinaryLog(bool enabled, string file, LogFileWriteMode writeMode)
 				: base(enabled, file, writeMode)
 			{
 			}
 
+			/// <summary></summary>
 			public BinaryLog(bool enabled, string file, LogFileWriteMode writeMode, FileNameSeparator separator)
 				: base(enabled, file, writeMode, separator)
 			{
 			}
 
+			/// <summary></summary>
 			protected override void OpenWriter(FileStream stream)
 			{
 				_writer = new BinaryWriter(stream);
 			}
 
+			/// <summary></summary>
 			protected override void FlushWriter()
 			{
 				_writer.Flush();
 			}
 
+			/// <summary></summary>
 			protected override void CloseWriter()
 			{
 				_writer.Close();
 			}
 
+			/// <summary></summary>
 			public void WriteByte(byte value)
 			{
 				if (IsEnabled && IsOpen)
@@ -313,6 +346,7 @@ namespace YAT.Log
 				}
 			}
 
+			/// <summary></summary>
 			public void WriteBytes(byte[] array)
 			{
 				if (IsEnabled && IsOpen)
@@ -330,35 +364,42 @@ namespace YAT.Log
 		// Types > Text Log
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected class TextLog : Log
 		{
 			private StreamWriter _writer;
 
+			/// <summary></summary>
 			public TextLog(bool enabled, string file, LogFileWriteMode writeMode)
 				: base(enabled, file, writeMode)
 			{
 			}
 
+			/// <summary></summary>
 			public TextLog(bool enabled, string file, LogFileWriteMode writeMode, FileNameSeparator separator)
 				: base(enabled, file, writeMode, separator)
 			{
 			}
 
+			/// <summary></summary>
 			protected override void OpenWriter(FileStream stream)
 			{
 				_writer = new StreamWriter(stream);
 			}
 
+			/// <summary></summary>
 			protected override void FlushWriter()
 			{
 				_writer.Flush();
 			}
 
+			/// <summary></summary>
 			protected override void CloseWriter()
 			{
 				_writer.Close();
 			}
 
+			/// <summary></summary>
 			public void WriteString(string value)
 			{
 				if (IsEnabled && IsOpen)
@@ -368,6 +409,7 @@ namespace YAT.Log
 				}
 			}
 
+			/// <summary></summary>
 			public void WriteEol()
 			{
 				if (IsEnabled && IsOpen)
@@ -410,6 +452,7 @@ namespace YAT.Log
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Logs(Settings.LogSettings settings)
 		{
 			_settings = settings;
@@ -483,6 +526,7 @@ namespace YAT.Log
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Settings.LogSettings Settings
 		{
 			get { return (_settings); }
@@ -500,6 +544,7 @@ namespace YAT.Log
 			}
 		}
 
+		/// <summary></summary>
 		public bool IsOpen
 		{
 			get
@@ -518,50 +563,59 @@ namespace YAT.Log
 		// Methods
 		//==========================================================================================
 
+		/// <summary></summary>
 		public void Begin()
 		{
 			foreach (Log l in _logs)
 				l.Open();
 		}
 
+		/// <summary></summary>
 		public void Clear()
 		{
 			foreach (Log l in _logs)
 				l.Truncate();
 		}
 
+		/// <summary></summary>
 		public void Flush()
 		{
 			foreach (Log l in _logs)
 				l.Flush();
 		}
 
+		/// <summary></summary>
 		public void End()
 		{
 			foreach (Log l in _logs)
 				l.Close();
 		}
 
+		/// <summary></summary>
 		public void WriteByte(byte value, LogStreams writeStream)
 		{
 			((BinaryLog)GetLog(writeStream)).WriteByte(value);
 		}
 
+		/// <summary></summary>
 		public void WriteBytes(byte[] array, LogStreams writeStream)
 		{
 			((BinaryLog)GetLog(writeStream)).WriteBytes(array);
 		}
 
+		/// <summary></summary>
 		public void WriteString(string value, LogStreams writeStream)
 		{
 			((TextLog)GetLog(writeStream)).WriteString(value);
 		}
 
+		/// <summary></summary>
 		public void WriteEol(LogStreams writeStream)
 		{
 			((TextLog)GetLog(writeStream)).WriteEol();
 		}
 
+		/// <summary></summary>
 		private Log GetLog(LogStreams stream)
 		{
 			return (_logs[stream.GetHashCode()]);

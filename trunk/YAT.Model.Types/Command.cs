@@ -21,9 +21,13 @@ namespace YAT.Model.Types
 		// Constants
 		//==========================================================================================
 
+		/// <summary></summary>
 		public const string EmptyCommandText = "<Enter a command...>";
+		/// <summary></summary>
 		public const string UndefinedCommandText = "<Define...>";
+		/// <summary></summary>
 		public const string MultiLineCommandText = "<Multi line...>";
+		/// <summary></summary>
 		public const string UndefinedFilePathText = "<Set a file...>";
 
 		#endregion
@@ -46,31 +50,37 @@ namespace YAT.Model.Types
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Command()
 		{
 			Initialize();
 		}
 
+		/// <summary></summary>
 		public Command(string description, string commandLine)
 		{
 			Initialize(description, false, new string[] { commandLine }, Domain.Radix.String, "");
 		}
 
+		/// <summary></summary>
 		public Command(string description, string[] commandLines)
 		{
 			Initialize(description, false, commandLines, Domain.Radix.String, "");
 		}
 
+		/// <summary></summary>
 		public Command(string description, string commandLine, Domain.Radix defaultRadix)
 		{
 			Initialize(description, false, new string[] { commandLine }, defaultRadix, "");
 		}
 
+		/// <summary></summary>
 		public Command(string description, string[] commandLines, Domain.Radix defaultRadix)
 		{
 			Initialize(description, false, commandLines, defaultRadix, "");
 		}
 
+		/// <summary></summary>
 		public Command(string description, bool isFilePath, string filePath)
 		{
 			Initialize(description, isFilePath, new string[] { "" }, Domain.Radix.String, filePath);
@@ -90,6 +100,7 @@ namespace YAT.Model.Types
 			_filePath = filePath;
 		}
 
+		/// <summary></summary>
 		public Command(Command rhs)
 		{
 			if (rhs != null)
@@ -113,6 +124,7 @@ namespace YAT.Model.Types
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		[XmlElement("Description")]
 		public string Description
 		{
@@ -133,6 +145,7 @@ namespace YAT.Model.Types
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("CommandLines")]
 		public string[] CommandLines
 		{
@@ -140,6 +153,7 @@ namespace YAT.Model.Types
 			set { _commandLines = value;  }
 		}
 
+		/// <summary></summary>
 		[XmlElement("DefaultRadix")]
 		public Domain.Radix DefaultRadix
 		{
@@ -147,6 +161,7 @@ namespace YAT.Model.Types
 			set { _defaultRadix = value; }
 		}
 
+		/// <summary></summary>
 		[XmlElement("IsFilePath")]
 		public bool IsFilePath
 		{
@@ -164,6 +179,7 @@ namespace YAT.Model.Types
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("FilePath")]
 		public string FilePath
 		{
@@ -187,6 +203,7 @@ namespace YAT.Model.Types
 		// Convenience Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public bool IsCommand
 		{
@@ -201,6 +218,7 @@ namespace YAT.Model.Types
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public bool IsSingleLineCommand
 		{
@@ -213,6 +231,7 @@ namespace YAT.Model.Types
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public bool IsMultiLineCommand
 		{
@@ -225,6 +244,7 @@ namespace YAT.Model.Types
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public bool IsValidCommand
 		{
@@ -243,6 +263,7 @@ namespace YAT.Model.Types
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public string SingleLineCommand
 		{
@@ -273,6 +294,7 @@ namespace YAT.Model.Types
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public string[] MultiLineCommand
 		{
@@ -291,6 +313,7 @@ namespace YAT.Model.Types
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public bool IsValidFilePath
 		{
@@ -303,6 +326,7 @@ namespace YAT.Model.Types
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public bool IsValid
 		{
@@ -315,6 +339,7 @@ namespace YAT.Model.Types
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public bool IsEmpty
 		{
@@ -331,6 +356,7 @@ namespace YAT.Model.Types
 		// Object Members
 		//==========================================================================================
 
+		/// <summary></summary>
 		public override string ToString()
 		{
 			return (Description);
@@ -367,6 +393,7 @@ namespace YAT.Model.Types
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());
@@ -379,6 +406,7 @@ namespace YAT.Model.Types
 		// IComparable Members
 		//==========================================================================================
 
+		/// <summary></summary>
 		public int CompareTo(object obj)
 		{
 			if (obj is Command)

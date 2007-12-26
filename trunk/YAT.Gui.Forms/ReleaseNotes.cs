@@ -21,8 +21,7 @@ namespace YAT.Gui.Forms
 			InitializeComponent();
 
 			// form title
-			string text = Application.ProductName;
-			text += VersionInfo.ProductNamePostFix;
+			string text = ApplicationInfo.ProductName;
 			text += " Release Notes";
 			Text = text;
 

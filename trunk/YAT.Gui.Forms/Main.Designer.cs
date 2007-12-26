@@ -54,13 +54,13 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_MainMenu_File_New = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_File_Open = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_MainMenu_File_1 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_MainMenu_File_CloseAll = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MainMenu_File_CloseAllTerminals = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_MainMenu_File_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainMenu_File_OpenWorkspace = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_File_SaveWorkspace = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_File_SaveWorkspaceAs = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_MainMenu_File_3 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_MainMenu_File_SaveAll = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MainMenu_File_SaveAllTerminals = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_MainMenu_File_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainMenu_File_Preferences = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_MainMenu_File_5 = new System.Windows.Forms.ToolStripSeparator();
@@ -292,13 +292,13 @@ namespace YAT.Gui.Forms
             this.toolStripMenuItem_MainMenu_File_New,
             this.toolStripMenuItem_MainMenu_File_Open,
             this.toolStripSeparator_MainMenu_File_1,
-            this.toolStripMenuItem_MainMenu_File_CloseAll,
+            this.toolStripMenuItem_MainMenu_File_CloseAllTerminals,
             this.toolStripSeparator_MainMenu_File_2,
             this.toolStripMenuItem_MainMenu_File_OpenWorkspace,
             this.toolStripMenuItem_MainMenu_File_SaveWorkspace,
             this.toolStripMenuItem_MainMenu_File_SaveWorkspaceAs,
             this.toolStripSeparator_MainMenu_File_3,
-            this.toolStripMenuItem_MainMenu_File_SaveAll,
+            this.toolStripMenuItem_MainMenu_File_SaveAllTerminals,
             this.toolStripSeparator_MainMenu_File_4,
             this.toolStripMenuItem_MainMenu_File_Preferences,
             this.toolStripSeparator_MainMenu_File_5,
@@ -337,14 +337,14 @@ namespace YAT.Gui.Forms
 			this.toolStripSeparator_MainMenu_File_1.Name = "toolStripSeparator_MainMenu_File_1";
 			this.toolStripSeparator_MainMenu_File_1.Size = new System.Drawing.Size(189, 6);
 			// 
-			// toolStripMenuItem_MainMenu_File_CloseAll
+			// toolStripMenuItem_MainMenu_File_CloseAllTerminals
 			// 
-			this.toolStripMenuItem_MainMenu_File_CloseAll.Enabled = false;
-			this.toolStripMenuItem_MainMenu_File_CloseAll.MergeIndex = 4;
-			this.toolStripMenuItem_MainMenu_File_CloseAll.Name = "toolStripMenuItem_MainMenu_File_CloseAll";
-			this.toolStripMenuItem_MainMenu_File_CloseAll.Size = new System.Drawing.Size(192, 22);
-			this.toolStripMenuItem_MainMenu_File_CloseAll.Text = "Clos&e All";
-			this.toolStripMenuItem_MainMenu_File_CloseAll.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_File_CloseAll_Click);
+			this.toolStripMenuItem_MainMenu_File_CloseAllTerminals.Enabled = false;
+			this.toolStripMenuItem_MainMenu_File_CloseAllTerminals.MergeIndex = 4;
+			this.toolStripMenuItem_MainMenu_File_CloseAllTerminals.Name = "toolStripMenuItem_MainMenu_File_CloseAllTerminals";
+			this.toolStripMenuItem_MainMenu_File_CloseAllTerminals.Size = new System.Drawing.Size(192, 22);
+			this.toolStripMenuItem_MainMenu_File_CloseAllTerminals.Text = "Clos&e All Terminals";
+			this.toolStripMenuItem_MainMenu_File_CloseAllTerminals.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_File_CloseAllTerminals_Click);
 			// 
 			// toolStripSeparator_MainMenu_File_2
 			// 
@@ -382,14 +382,14 @@ namespace YAT.Gui.Forms
 			this.toolStripSeparator_MainMenu_File_3.Name = "toolStripSeparator_MainMenu_File_3";
 			this.toolStripSeparator_MainMenu_File_3.Size = new System.Drawing.Size(189, 6);
 			// 
-			// toolStripMenuItem_MainMenu_File_SaveAll
+			// toolStripMenuItem_MainMenu_File_SaveAllTerminals
 			// 
-			this.toolStripMenuItem_MainMenu_File_SaveAll.Enabled = false;
-			this.toolStripMenuItem_MainMenu_File_SaveAll.MergeIndex = 14;
-			this.toolStripMenuItem_MainMenu_File_SaveAll.Name = "toolStripMenuItem_MainMenu_File_SaveAll";
-			this.toolStripMenuItem_MainMenu_File_SaveAll.Size = new System.Drawing.Size(192, 22);
-			this.toolStripMenuItem_MainMenu_File_SaveAll.Text = "Save A&ll";
-			this.toolStripMenuItem_MainMenu_File_SaveAll.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_File_SaveAll_Click);
+			this.toolStripMenuItem_MainMenu_File_SaveAllTerminals.Enabled = false;
+			this.toolStripMenuItem_MainMenu_File_SaveAllTerminals.MergeIndex = 14;
+			this.toolStripMenuItem_MainMenu_File_SaveAllTerminals.Name = "toolStripMenuItem_MainMenu_File_SaveAllTerminals";
+			this.toolStripMenuItem_MainMenu_File_SaveAllTerminals.Size = new System.Drawing.Size(192, 22);
+			this.toolStripMenuItem_MainMenu_File_SaveAllTerminals.Text = "Save A&ll Terminals";
+			this.toolStripMenuItem_MainMenu_File_SaveAllTerminals.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_File_SaveAllTerminals_Click);
 			// 
 			// toolStripSeparator_MainMenu_File_4
 			// 
@@ -728,9 +728,9 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_File_New;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_File_Open;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_MainMenu_File_1;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_File_CloseAll;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_File_CloseAllTerminals;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_MainMenu_File_2;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_File_SaveAll;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_File_SaveAllTerminals;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_MainMenu_File_3;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_File_Recent;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_MainMenu_File_4;

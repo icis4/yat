@@ -138,7 +138,7 @@ namespace YAT.Gui.Forms
 				// initially set controls and validate its contents where needed
 				SetControls();
 
-				int selectedCommand = XInt.LimitToBounds(_startupControl.RequestedCommand, 1, Settings.PredefinedCommandSettings.MaximumCommandsPerPage);
+				int selectedCommand = XInt.LimitToBounds(_startupControl.RequestedCommand, 1, Model.Settings.PredefinedCommandSettings.MaximumCommandsPerPage);
 				_predefinedCommandSettingsSetLabels[selectedCommand - 1].Select();
 			}
 		}
@@ -240,7 +240,7 @@ namespace YAT.Gui.Forms
 
 		private void InitializeControls()
 		{
-			_predefinedCommandSettingsSetLabels = new List<Label>(Settings.PredefinedCommandSettings.MaximumCommandsPerPage);
+			_predefinedCommandSettingsSetLabels = new List<Label>(Model.Settings.PredefinedCommandSettings.MaximumCommandsPerPage);
 			_predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_1);
 			_predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_2);
 			_predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_3);
@@ -254,7 +254,7 @@ namespace YAT.Gui.Forms
 			_predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_11);
 			_predefinedCommandSettingsSetLabels.Add(label_predefinedCommandSettingsSet_12);
 
-			_predefinedCommandSettingsSets = new List<Controls.PredefinedCommandSettingsSet>(Settings.PredefinedCommandSettings.MaximumCommandsPerPage);
+			_predefinedCommandSettingsSets = new List<Controls.PredefinedCommandSettingsSet>(Model.Settings.PredefinedCommandSettings.MaximumCommandsPerPage);
 			_predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_1);
 			_predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_2);
 			_predefinedCommandSettingsSets.Add(predefinedCommandSettingsSet_3);
@@ -288,7 +288,7 @@ namespace YAT.Gui.Forms
 				listBox_Pages.Enabled = true;
 				listBox_Pages.Items.Clear();
 
-				foreach (PredefinedCommandPage p in _settings_Form.Pages)
+				foreach (Model.Types.PredefinedCommandPage p in _settings_Form.Pages)
 					listBox_Pages.Items.Add(p.PageName);
 
 				if (pageIsSelected)
@@ -334,7 +334,7 @@ namespace YAT.Gui.Forms
 				for (int i = 0; i < commandCount; i++)
 					_predefinedCommandSettingsSets[i].Command = _settings_Form.Pages[SelectedPageIndex].Commands[i];
 
-				for (int i = commandCount; i < Settings.PredefinedCommandSettings.MaximumCommandsPerPage; i++)
+				for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaximumCommandsPerPage; i++)
 					_predefinedCommandSettingsSets[i].Command = null;
 
 				button_ClearPage.Enabled = (commandCount > 0);
@@ -386,7 +386,7 @@ namespace YAT.Gui.Forms
 				)
 				== DialogResult.OK)
 			{
-				PredefinedCommandPage pcp = new PredefinedCommandPage(Settings.PredefinedCommandSettings.MaximumCommandsPerPage, pageName);
+				Model.Types.PredefinedCommandPage pcp = new Model.Types.PredefinedCommandPage(Model.Settings.PredefinedCommandSettings.MaximumCommandsPerPage, pageName);
 				_settings_Form.Pages.Insert(SelectedPageIndex, pcp);
 				SetControls();
 			}
@@ -406,7 +406,7 @@ namespace YAT.Gui.Forms
 				)
 				== DialogResult.OK)
 			{
-				PredefinedCommandPage pcp = new PredefinedCommandPage(Settings.PredefinedCommandSettings.MaximumCommandsPerPage, pageName);
+				Model.Types.PredefinedCommandPage pcp = new Model.Types.PredefinedCommandPage(Model.Settings.PredefinedCommandSettings.MaximumCommandsPerPage, pageName);
 				_settings_Form.Pages.Add(pcp);
 				_selectedPage = _settings_Form.Pages.Count;
 				SetControls();
@@ -434,7 +434,7 @@ namespace YAT.Gui.Forms
 
 		private void MovePageUp()
 		{
-			PredefinedCommandPage pcp = _settings_Form.Pages[SelectedPageIndex];
+			Model.Types.PredefinedCommandPage pcp = _settings_Form.Pages[SelectedPageIndex];
 			_settings_Form.Pages.RemoveAt(SelectedPageIndex);
 			_selectedPage--;
 			_settings_Form.Pages.Insert(SelectedPageIndex, pcp);
@@ -443,7 +443,7 @@ namespace YAT.Gui.Forms
 
 		private void MovePageDown()
 		{
-			PredefinedCommandPage pcp = _settings_Form.Pages[SelectedPageIndex];
+			Model.Types.PredefinedCommandPage pcp = _settings_Form.Pages[SelectedPageIndex];
 			_settings_Form.Pages.RemoveAt(SelectedPageIndex);
 			_selectedPage++;
 			_settings_Form.Pages.Insert(SelectedPageIndex, pcp);
@@ -478,7 +478,7 @@ namespace YAT.Gui.Forms
 
 		private void GetCommand(int command)
 		{
-			List<Command> page = _settings_Form.Pages[SelectedPageIndex].Commands;
+			List<Model.Types.Command> page = _settings_Form.Pages[SelectedPageIndex].Commands;
 
 			if (page.Count >= command)
 			{
@@ -487,7 +487,7 @@ namespace YAT.Gui.Forms
 			else
 			{
 				while (page.Count < (command - 1))
-					page.Add(new Command());
+					page.Add(new Model.Types.Command());
 
 				page.Add(_predefinedCommandSettingsSets[command - 1].Command);
 			}

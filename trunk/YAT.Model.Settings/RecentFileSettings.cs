@@ -7,13 +7,16 @@ using MKY.Utilities.Recent;
 
 namespace YAT.Model.Settings
 {
+	/// <summary></summary>
 	[Serializable]
 	public class RecentFileSettings : MKY.Utilities.Settings.Settings, IEquatable<RecentFileSettings>
 	{
+		/// <summary></summary>
 		public const int MaximumFilePaths = 8;
 
 		private RecentItemCollection<string> _filePaths;
 
+		/// <summary></summary>
 		public RecentFileSettings()
 			: base()
 		{
@@ -21,6 +24,7 @@ namespace YAT.Model.Settings
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public RecentFileSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -51,6 +55,7 @@ namespace YAT.Model.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("FilePaths")]
 		public RecentItemCollection<string> FilePaths
 		{
@@ -107,6 +112,7 @@ namespace YAT.Model.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

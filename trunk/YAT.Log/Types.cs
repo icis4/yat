@@ -3,38 +3,58 @@ using System.Collections.Generic;
 
 namespace YAT.Log
 {
+	/// <summary></summary>
 	public enum LogFormat
 	{
-		Raw, Neat
+		/// <summary></summary>
+		Raw,
+		/// <summary></summary>
+		Neat
 	}
 
+	/// <summary></summary>
 	public enum LogStreamType
 	{
-		Tx, Bidir, Rx
+		/// <summary></summary>
+		Tx,
+		/// <summary></summary>
+		Bidir,
+		/// <summary></summary>
+		Rx
 	}
 
+	/// <summary></summary>
 	public enum LogFileWriteMode
 	{
-		Create, Append
+		/// <summary></summary>
+		Create,
+		/// <summary></summary>
+		Append
 	}
 
+	/// <summary></summary>
 	public class FileNameSeparator : IEquatable<FileNameSeparator>
 	{
+		/// <summary></summary>
 		public readonly string Separator;
+		/// <summary></summary>
 		public readonly string Description;
 
+		/// <summary></summary>
 		public FileNameSeparator()
 		{
 			Separator = FileNameSeparator.DefaultSeparator.Separator;
 			Description = FileNameSeparator.DefaultSeparator.Description;
 		}
 
+		/// <summary></summary>
 		public FileNameSeparator(string separator)
 		{
 			Separator = separator;
 			Description = separator;
 		}
 
+		/// <summary></summary>
 		public FileNameSeparator(string separator, string description)
 		{
 			Separator = separator;
@@ -71,30 +91,45 @@ namespace YAT.Log
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());
 		}
 
+		/// <summary></summary>
 		new public string ToString()
 		{
 			return (Separator);
 		}
 
+		/// <summary></summary>
 		public const string UnderscoreToString = "Underscore (_)";
+		/// <summary></summary>
 		public const string DashToString = "Dash (-)";
+		/// <summary></summary>
 		public const string DashWithSpacesToString = "Dash with spaces ( - )";
+		/// <summary></summary>
 		public const string BallToString = "Ball (°)";
+		/// <summary></summary>
 		public const string BallWithSpacesToString = "Ball with spaces ( ° )";
+		/// <summary></summary>
 		public const string NoneToString = "None";
 
+		/// <summary></summary>
 		public readonly static FileNameSeparator Underscore = new FileNameSeparator("_", UnderscoreToString);
+		/// <summary></summary>
 		public readonly static FileNameSeparator Dash = new FileNameSeparator("-", DashToString);
+		/// <summary></summary>
 		public readonly static FileNameSeparator DashWithSpaces = new FileNameSeparator(" - ", DashWithSpacesToString);
+		/// <summary></summary>
 		public readonly static FileNameSeparator Ball = new FileNameSeparator("°", BallToString);
+		/// <summary></summary>
 		public readonly static FileNameSeparator BallWithSpaces = new FileNameSeparator(" ° ", BallWithSpacesToString);
+		/// <summary></summary>
 		public readonly static FileNameSeparator None = new FileNameSeparator("", NoneToString);
 
+		/// <summary></summary>
 		public static FileNameSeparator[] Items
 		{
 			get
@@ -110,16 +145,19 @@ namespace YAT.Log
 			}
 		}
 
+		/// <summary></summary>
 		public static FileNameSeparator DefaultSeparator
 		{
 			get { return (Dash); }
 		}
 
+		/// <summary></summary>
 		public static implicit operator string(FileNameSeparator separator)
 		{
 			return (separator.Description);
 		}
 
+		/// <summary></summary>
 		public static explicit operator FileNameSeparator(string description)
 		{
 			switch (description)
@@ -138,6 +176,7 @@ namespace YAT.Log
 
 		#region Parse
 
+		/// <summary></summary>
 		public static FileNameSeparator Parse(string s)
 		{
 			switch (s)

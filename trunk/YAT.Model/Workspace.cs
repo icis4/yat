@@ -19,8 +19,11 @@ using YAT.Model.Types;
 using YAT.Model.Settings;
 using YAT.Model.Utilities;
 
+using YAT.Utilities;
+
 namespace YAT.Model
 {
+	/// <summary></summary>
 	public class Workspace : IDisposable, IGuidProvider
 	{
 		#region Fields
@@ -31,11 +34,15 @@ namespace YAT.Model
 		private bool _isDisposed = false;
 
 		private Guid _guid;
+
+		// settings
 		private DocumentSettingsHandler<WorkspaceSettingsRoot> _settingsHandler;
 		private WorkspaceSettingsRoot _settingsRoot;
 		private bool _handlingSettingsIsSuspended = false;
 
+		// terminal list
 		private List<Terminal> _terminals = new List<Terminal>();
+		private Terminal _activeTerminal = null;
 
 		#endregion
 
@@ -45,15 +52,24 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public event EventHandler<StatusTextEventArgs> FixedStatusTextRequest;
+		public event EventHandler<TerminalEventArgs> TerminalAdded;
+		/// <summary></summary>
+		public event EventHandler<TerminalEventArgs> TerminalRemoved;
 
 		/// <summary></summary>
+		public event EventHandler<StatusTextEventArgs> FixedStatusTextRequest;
+		/// <summary></summary>
 		public event EventHandler<StatusTextEventArgs> TimedStatusTextRequest;
-
 		/// <summary></summary>
 		public event EventHandler<MessageInputEventArgs> MessageInputRequest;
 
-		public event EventHandler SaveWorkspaceAsFileDialogRequest;
+		/// <summary></summary>
+		public event EventHandler SaveAsFileDialogRequest;
+
+		/// <summary></summary>
+		public event EventHandler<SavedEventArgs> Saved;
+		/// <summary></summary>
+		public event EventHandler Closed;
 
 		#endregion
 
@@ -62,6 +78,7 @@ namespace YAT.Model
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Workspace()
 		{
 			// create workspace settings from most recent workspace file
@@ -70,11 +87,13 @@ namespace YAT.Model
 			Initialize(sh, Guid.Empty);
 		}
 
+		/// <summary></summary>
 		public Workspace(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler)
 		{
 			Initialize(settingsHandler, Guid.Empty);
 		}
 
+		/// <summary></summary>
 		public Workspace(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, Guid guid)
 		{
 			Initialize(settingsHandler, guid);
@@ -87,9 +106,11 @@ namespace YAT.Model
 			else
 				_guid = Guid.NewGuid();
 
+			// link and attach to settings
 			_settingsHandler = settingsHandler;
 			_settingsRoot = _settingsHandler.Settings;
-			AttachWorkspaceSettingsHandlers();
+			_settingsRoot.ClearChanged();
+			AttachSettingsEventHandlers();
 		}
 
 		#region Disposal
@@ -140,14 +161,33 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Properties
+		#region General Properties
 		//==========================================================================================
-		// Properties
+		// General Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Guid Guid
 		{
-			get { return (_guid); }
+			get
+			{
+				AssertNotDisposed();
+				return (_guid);
+			}
+		}
+
+		/// <summary></summary>
+		public string UserName
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (_activeTerminal != null)
+					return (_activeTerminal.UserName);
+				else
+					return (ApplicationInfo.ProductName);
+			}
 		}
 
 		#endregion
@@ -169,36 +209,60 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Workspace Settings
+		#region Settings
 		//==========================================================================================
-		// Workspace Settings
+		// Settings
 		//==========================================================================================
 
-		private void AttachWorkspaceSettingsHandlers()
+		/// <summary></summary>
+		public bool SettingsHaveChanged
 		{
-			_settingsRoot.ClearChanged();
-			_settingsRoot.Changed += new EventHandler<SettingsEventArgs>(_workspaceSettings_Changed);
+			get
+			{
+				AssertNotDisposed();
+				return (_settingsRoot.HaveChanged);
+			}
+		}
+
+		/// <summary></summary>
+		public WorkspaceSettingsRoot SettingsRoot
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_settingsRoot);
+			}
+		}
+
+		private void AttachSettingsEventHandlers()
+		{
+			_settingsRoot.Changed += new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
+		}
+
+		private void DetachSettingsEventHandlers()
+		{
+			_settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
 		}
 
 		//------------------------------------------------------------------------------------------
-		// Workspace Settings > Event Handlers
+		// Settings > Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		private void _workspaceSettings_Changed(object sender, SettingsEventArgs e)
+		private void _settingsRoot_Changed(object sender, SettingsEventArgs e)
 		{
 			if (_handlingSettingsIsSuspended)
 				return;
 
 			if (ApplicationSettings.LocalUser.General.AutoSaveWorkspace)
-				SaveWorkspaceToFile(true);
+				SaveToFile(true);
 		}
 
-		private void SuspendHandlingWorkspaceSettings()
+		private void SuspendHandlingSettings()
 		{
 			_handlingSettingsIsSuspended = true;
 		}
 
-		private void ResumeHandlingWorkspaceSettings()
+		private void ResumeHandlingSettings()
 		{
 			_handlingSettingsIsSuspended = false;
 		}
@@ -210,33 +274,78 @@ namespace YAT.Model
 		// Save
 		//==========================================================================================
 
-		private void SaveWorkspace()
+		/// <summary>
+		/// Only performs auto save if no file yet or on previously auto saved files
+		/// </summary>
+		private bool TryAutoSave()
 		{
-			SaveWorkspace(false);
+			AssertNotDisposed();
+
+			bool success = false;
+			if (!_settingsHandler.SettingsFileExists ||
+				(_settingsHandler.SettingsFileExists && _settingsRoot.AutoSaved))
+			{
+				success = Save(true);
+			}
+			return (success);
 		}
 
-		private void SaveWorkspace(bool autoSave)
+		/// <summary>
+		/// Saves all terminals and workspace to file(s), prompts for file(s) if they doesn't exist yet
+		/// </summary>
+		public bool Save()
 		{
+			AssertNotDisposed();
+
+			return (Save(false));
+		}
+
+		/// <summary>
+		/// Saves all terminals and workspace to file(s), prompts for file(s) if they doesn't exist yet
+		/// </summary>
+		public bool Save(bool autoSave)
+		{
+			AssertNotDisposed();
+
+			bool success = false;
 			if (autoSave)
 			{
-				SaveWorkspaceToFile(true);
+				success = SaveToFile(true);
 			}
 			else
 			{
 				if (_settingsHandler.SettingsFilePathIsValid && !_settingsHandler.Settings.AutoSaved)
-					SaveWorkspaceToFile(false);
+					success = SaveToFile(false);
 				else
-					OnSaveWorkspaceAsFileDialogRequest(new EventArgs());
+					success = (OnSaveAsFileDialogRequest() == DialogResult.OK);
 			}
+			return (success);
 		}
 
-		private void SaveWorkspaceToFile(bool autoSave)
+		/// <summary>
+		/// Saves all terminals and workspace to given file
+		/// </summary>
+		public bool SaveAs(string filePath)
 		{
-			SaveWorkspaceToFile(autoSave, "");
+			AssertNotDisposed();
+
+			string autoSaveFilePathToDelete = "";
+			if (_settingsRoot.AutoSaved)
+				autoSaveFilePathToDelete = _settingsHandler.SettingsFilePath;
+
+			_settingsHandler.SettingsFilePath = filePath;
+			return (SaveToFile(false, autoSaveFilePathToDelete));
 		}
 
-		private void SaveWorkspaceToFile(bool autoSave, string autoSaveFilePathToDelete)
+		private bool SaveToFile(bool autoSave)
 		{
+			return (SaveToFile(autoSave, ""));
+		}
+
+		private bool SaveToFile(bool autoSave, string autoSaveFilePathToDelete)
+		{
+			bool success = false;
+
 			if (!autoSave)
 				OnFixedStatusTextRequest("Saving workspace...");
 
@@ -254,16 +363,7 @@ namespace YAT.Model
 				}
 
 				// save all contained terminals
-				foreach (Terminal t in _terminals)
-				{
-					t.AutoSave();
-				}
-
-				// update workspace
-				foreach (Terminal t in _terminals)
-				{
-					AddToOrReplaceInWorkspace(t);
-				}
+				SaveAllTerminals(false);
 
 				// save workspace
 				_settingsHandler.Settings.AutoSaved = autoSave;
@@ -274,6 +374,9 @@ namespace YAT.Model
 
 				ApplicationSettings.LocalUser.General.WorkspaceFilePath = _settingsHandler.SettingsFilePath;
 				ApplicationSettings.SaveLocalUser();
+
+				success = true;
+				OnSaved(new SavedEventArgs(_settingsHandler.SettingsFilePath, autoSave));
 
 				if (!autoSave)
 				{
@@ -308,15 +411,109 @@ namespace YAT.Model
 					OnTimedStatusTextRequest("Workspace not saved!");
 				}
 			}
+			return (success);
 		}
 
 		#endregion
 
-		#region Terminals
+		#region Close
 		//==========================================================================================
-		// Terminals
+		// Close
 		//==========================================================================================
 
+		/// <summary></summary>
+		public bool Close()
+		{
+			bool success = false;
+
+			// first, save all terminals
+			success = SaveAllTerminals();
+			if (!success)
+				return (false);
+
+			// next, save workspace
+			if (_settingsRoot.HaveChanged)
+			{
+				// try to auto save it
+				if (ApplicationSettings.LocalUser.General.AutoSaveWorkspace)
+					success = TryAutoSave();
+
+				// or save it manually
+				if (!success)
+				{
+					DialogResult dr = OnMessageInputRequest
+						(
+						"Save workspace?",
+						UserName,
+						MessageBoxButtons.YesNoCancel,
+						MessageBoxIcon.Question
+						);
+
+					switch (dr)
+					{
+						case DialogResult.Yes:    success = Save(); break;
+						case DialogResult.No:     success = true;   break;
+						case DialogResult.Cancel:
+						default:                  return (false);
+					}
+				}
+			}
+
+			// last, close all contained terminals
+			success = CloseAllTerminals();
+
+			return (success);
+		}
+
+		#endregion
+
+		#region Terminal
+		//==========================================================================================
+		// Terminal
+		//==========================================================================================
+
+		#region Terminal > Lifetime
+		//------------------------------------------------------------------------------------------
+		// Terminal > Lifetime
+		//------------------------------------------------------------------------------------------
+
+		private void AttachTerminalEventHandlers(Terminal terminal)
+		{
+			terminal.Saved  += new EventHandler<SavedEventArgs>(terminal_Saved);
+			terminal.Closed += new EventHandler(terminal_Closed);
+		}
+
+		#endregion
+
+		#region Terminal > Event Handlers
+		//------------------------------------------------------------------------------------------
+		// Terminal > Event Handlers
+		//------------------------------------------------------------------------------------------
+
+		private void terminal_Saved(object sender, SavedEventArgs e)
+		{
+			AddToOrReplaceInWorkspace((Terminal)sender);
+
+			if (!e.AutoSave)
+				SetRecent(e.FilePath);
+		}
+
+		private void terminal_Closed(object sender, EventArgs e)
+		{
+			RemoveFromWorkspace((Terminal)sender);
+		}
+
+		#endregion
+
+		#region Terminal > General Methods
+		//------------------------------------------------------------------------------------------
+		// Terminal > General Methods
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Opens terminals according to workspace settings and returns number of successfully
+		/// opened terminals
+		/// </summary>
 		public int OpenTerminals()
 		{
 			int terminalCount = _settingsRoot.TerminalSettings.Count;
@@ -357,6 +554,7 @@ namespace YAT.Model
 			return (terminalCount);
 		}
 
+		/// <summary></summary>
 		public bool OpenTerminalFromFile(string filePath)
 		{
 			return (OpenTerminalFromFile(filePath, Guid.Empty, null, false));
@@ -383,11 +581,9 @@ namespace YAT.Model
 				// create terminal
 				Terminal terminal = new Terminal(sh, guid);
 
-				terminal.Changed += new EventHandler(terminal_Changed);
-				terminal.Saved   += new EventHandler<SavedEventArgs>(terminal_Saved);
-				terminal.Closed  += new EventHandler(terminal_Closed);
-
+				AttachTerminalEventHandlers(terminal);
 				AddToOrReplaceInWorkspace(terminal);
+
 				if (!sh.Settings.AutoSaved)
 					SetRecent(filePath);
 
@@ -420,6 +616,21 @@ namespace YAT.Model
 			}
 		}
 
+		/// <summary></summary>
+		public bool CreateNewTerminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
+		{
+			OnFixedStatusTextRequest("Creating new terminal...");
+
+			// create terminal
+			Terminal terminal = new Terminal(settingsHandler);
+
+			AttachTerminalEventHandlers(terminal);
+			AddToOrReplaceInWorkspace(terminal);
+
+			OnTimedStatusTextRequest("New terminal created");
+			return (true);
+		}
+
 		private void AddToOrReplaceInWorkspace(Terminal terminal)
 		{
 			string filePath = terminal.SettingsFilePath;
@@ -441,42 +652,88 @@ namespace YAT.Model
 
 			_settingsRoot.TerminalSettings.AddOrReplaceGuid(tsi);
 			_settingsRoot.SetChanged();
+
+			// fire terminal added event
+			OnTerminalAdded(new TerminalEventArgs(terminal));
 		}
 
 		private void RemoveFromWorkspace(Terminal terminal)
 		{
 			_settingsRoot.TerminalSettings.RemoveGuid(terminal.Guid);
 			_settingsRoot.SetChanged();
+
+			// fire terminal added event
+			OnTerminalRemoved(new TerminalEventArgs(terminal));
 		}
 
-		public bool Close()
-		{
-			//foreach (Terminal t in _terminals)
-			//	t.Close();
-			return (false);
-		}
+		#endregion
 
+		#region Terminal > All Terminals Methods
 		//------------------------------------------------------------------------------------------
-		// Terminals > Events
+		// Terminal > All Terminals Methods
 		//------------------------------------------------------------------------------------------
 
-		private void terminal_Changed(object sender, EventArgs e)
+		/// <summary></summary>
+		public bool SaveAllTerminals()
 		{
-			// nothing to do
+			return (SaveAllTerminals(false));
 		}
 
-		private void terminal_Saved(object sender, SavedEventArgs e)
+		private bool SaveAllTerminals(bool autoSave)
 		{
-			AddToOrReplaceInWorkspace((Terminal)sender);
-
-			if (!e.AutoSave)
-				SetRecent(e.FilePath);
+			bool success = true;
+			foreach (Terminal t in _terminals)
+			{
+				if (!t.Save(autoSave))
+					success = false;
+			}
+			return (success);
 		}
 
-		private void terminal_Closed(object sender, EventArgs e)
+		/// <summary></summary>
+		public bool CloseAllTerminals()
 		{
-			RemoveFromWorkspace((Terminal)sender);
+			bool success = true;
+			foreach (Terminal t in _terminals)
+			{
+				if (!t.Close())
+					success = false;
+			}
+			return (success);
 		}
+
+		#endregion
+
+		#region Terminal > Active Terminal Methods
+		//------------------------------------------------------------------------------------------
+		// Terminal > Active Terminal Methods
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public bool SaveActiveTerminal()
+		{
+			return (_activeTerminal.Save());
+		}
+
+		/// <summary></summary>
+		public bool CloseActiveTerminal()
+		{
+			return (_activeTerminal.Close());
+		}
+
+		/// <summary></summary>
+		public bool OpenActiveTerminalIO()
+		{
+			return (_activeTerminal.OpenIO());
+		}
+
+		/// <summary></summary>
+		public bool CloseActiveTerminalIO()
+		{
+			return (_activeTerminal.CloseIO());
+		}
+
+		#endregion
 
 		#endregion
 
@@ -486,47 +743,55 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnFixedStatusTextRequest(string text)
+		protected virtual void OnTerminalAdded(TerminalEventArgs e)
 		{
-			OnFixedStatusTextRequest(new StatusTextEventArgs(text));
+			EventHelper.FireSync<TerminalEventArgs>(TerminalAdded, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnFixedStatusTextRequest(StatusTextEventArgs e)
+		protected virtual void OnTerminalRemoved(TerminalEventArgs e)
 		{
-			EventHelper.FireSync(FixedStatusTextRequest, this, e);
+			EventHelper.FireSync<TerminalEventArgs>(TerminalRemoved, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnFixedStatusTextRequest(string text)
+		{
+			EventHelper.FireSync(FixedStatusTextRequest, this, new StatusTextEventArgs(text));
 		}
 
 		/// <summary></summary>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
-			OnTimedStatusTextRequest(new StatusTextEventArgs(text));
-		}
-
-		/// <summary></summary>
-		protected virtual void OnTimedStatusTextRequest(StatusTextEventArgs e)
-		{
-			EventHelper.FireSync(TimedStatusTextRequest, this, e);
+			EventHelper.FireSync(TimedStatusTextRequest, this, new StatusTextEventArgs(text));
 		}
 
 		/// <summary></summary>
 		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		{
 			MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
-			OnMessageInputRequest(e);
+			EventHelper.FireSync(MessageInputRequest, this, e);
 			return (e.Result);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnMessageInputRequest(MessageInputEventArgs e)
+		protected virtual DialogResult OnSaveAsFileDialogRequest()
 		{
-			EventHelper.FireSync(MessageInputRequest, this, e);
+			DialogEventArgs e = new DialogEventArgs();
+			EventHelper.FireSync(SaveAsFileDialogRequest, this, e);
+			return (e.Result);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnSaveWorkspaceAsFileDialogRequest(EventArgs e)
+		protected virtual void OnSaved(SavedEventArgs e)
 		{
-			EventHelper.FireSync(SaveWorkspaceAsFileDialogRequest, this, e);
+			EventHelper.FireSync<SavedEventArgs>(Saved, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnClosed(EventArgs e)
+		{
+			EventHelper.FireSync(Closed, this, e);
 		}
 
 		#endregion

@@ -6,6 +6,7 @@ using System.Drawing;
 
 namespace YAT.Model.Settings
 {
+	/// <summary></summary>
 	[Serializable]
 	public class FontSettings : IEquatable<FontSettings>
 	{
@@ -14,6 +15,7 @@ namespace YAT.Model.Settings
 		private FontStyle _style;
 		private Font _font;
 
+		/// <summary></summary>
 		public FontSettings()
 		{
 			_name = "Courier New";
@@ -22,6 +24,7 @@ namespace YAT.Model.Settings
 			MakeFont();
 		}
 
+		/// <summary></summary>
 		public FontSettings(string name, float size, FontStyle style)
 		{
 			_name = name;
@@ -30,6 +33,7 @@ namespace YAT.Model.Settings
 			MakeFont();
 		}
 
+		/// <summary></summary>
 		public FontSettings(FontSettings rhs)
 		{
 			_name = rhs._name;
@@ -48,6 +52,7 @@ namespace YAT.Model.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("Name")]
 		public string Name
 		{
@@ -59,6 +64,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Size")]
 		public float Size
 		{
@@ -70,6 +76,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Style")]
 		public FontStyle Style
 		{
@@ -81,6 +88,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public Font Font
 		{
@@ -127,6 +135,7 @@ namespace YAT.Model.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

@@ -7,6 +7,7 @@ using System.Drawing;
 
 namespace YAT.Model.Settings
 {
+	/// <summary></summary>
 	[Serializable]
 	public class MainWindowSettings : MKY.Utilities.Settings.Settings, IEquatable<MainWindowSettings>
 	{
@@ -15,12 +16,14 @@ namespace YAT.Model.Settings
 		private Point _location;
 		private Size _size;
 
+		/// <summary></summary>
 		public MainWindowSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public MainWindowSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -58,6 +61,7 @@ namespace YAT.Model.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("StartPosition")]
 		public FormStartPosition StartPosition
 		{
@@ -72,6 +76,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("WindowState")]
 		public FormWindowState WindowState
 		{
@@ -86,6 +91,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Location")]
 		public Point Location
 		{
@@ -100,6 +106,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Size")]
 		public Size Size
 		{
@@ -148,6 +155,7 @@ namespace YAT.Model.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

@@ -5,6 +5,7 @@ using System.Xml.Serialization;
 
 namespace YAT.Model.Settings
 {
+	/// <summary></summary>
 	[Serializable]
 	public class NewTerminalSettings : MKY.Utilities.Settings.Settings, IEquatable<NewTerminalSettings>
 	{
@@ -22,12 +23,14 @@ namespace YAT.Model.Settings
 
 		private bool _openTerminal;
 
+		/// <summary></summary>
 		public NewTerminalSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public NewTerminalSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -83,6 +86,7 @@ namespace YAT.Model.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("TerminalType")]
 		public Domain.TerminalType TerminalType
 		{
@@ -97,6 +101,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("IOType")]
 		public Domain.IOType IOType
 		{
@@ -111,6 +116,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("SerialPortId")]
 		public MKY.IO.Ports.SerialPortId SerialPortId
 		{
@@ -125,6 +131,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("SocketRemoteHostNameOrAddress")]
 		public string SocketRemoteHostNameOrAddress
 		{
@@ -139,6 +146,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("SocketRemotePort")]
 		public int SocketRemotePort
 		{
@@ -153,6 +161,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("SocketLocalHostNameOrAddress")]
 		public string SocketLocalHostNameOrAddress
 		{
@@ -167,6 +176,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public int SocketLocalPort
 		{
@@ -203,6 +213,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("SocketLocalTcpPort")]
 		public int SocketLocalTcpPort
 		{
@@ -217,6 +228,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("SocketLocalUdpPort")]
 		public int SocketLocalUdpPort
 		{
@@ -231,6 +243,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("OpenTerminal")]
 		public bool OpenTerminal
 		{
@@ -285,6 +298,7 @@ namespace YAT.Model.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());
