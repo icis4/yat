@@ -4,8 +4,11 @@ using System.Text;
 using System.Xml.Serialization;
 using System.Drawing;
 
+using YAT.Model.Types;
+
 namespace YAT.Model.Settings
 {
+	/// <summary></summary>
 	[Serializable]
 	public class FormatSettings : MKY.Utilities.Settings.Settings, IEquatable<FormatSettings>
 	{
@@ -19,12 +22,14 @@ namespace YAT.Model.Settings
 		private TextFormat _whiteSpacesFormat;
 		private TextFormat _errorFormat;
 
+		/// <summary></summary>
 		public FormatSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public FormatSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -71,6 +76,7 @@ namespace YAT.Model.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("Font")]
 		public FontSettings FontSettings
 		{
@@ -85,6 +91,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public Font Font
 		{
@@ -99,6 +106,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("TxDataFormat")]
 		public TextFormat TxDataFormat
 		{
@@ -113,6 +121,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("TxControlFormat")]
 		public TextFormat TxControlFormat
 		{
@@ -127,6 +136,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("RxDataFormat")]
 		public TextFormat RxDataFormat
 		{
@@ -141,6 +151,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("RxControlFormat")]
 		public TextFormat RxControlFormat
 		{
@@ -155,6 +166,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("TimeStampFormat")]
 		public TextFormat TimeStampFormat
 		{
@@ -169,6 +181,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("LengthFormat")]
 		public TextFormat LengthFormat
 		{
@@ -183,6 +196,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("WhiteSpacesFormat")]
 		public TextFormat WhiteSpacesFormat
 		{
@@ -197,6 +211,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("ErrorFormat")]
 		public TextFormat ErrorFormat
 		{
@@ -250,6 +265,7 @@ namespace YAT.Model.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

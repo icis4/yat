@@ -9,9 +9,15 @@ using YAT.Settings.Application;
 
 namespace YAT.Log.Settings
 {
+	/// <summary></summary>
 	[Serializable]
 	public class LogSettings : MKY.Utilities.Settings.Settings, IEquatable<LogSettings>
 	{
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
 		// root
 		private string _rootPath;
 		private string _rootFileName;
@@ -42,12 +48,21 @@ namespace YAT.Log.Settings
 		private bool _nameTime;
 		private FileNameSeparator _nameSeparator;
 
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
+
+		/// <summary></summary>
 		public LogSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public LogSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -87,6 +102,13 @@ namespace YAT.Log.Settings
 
 			ClearChanged();
 		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
 
 		/// <remarks>
 		/// Set fields through properties to ensure correct setting of changed flag.
@@ -188,11 +210,14 @@ namespace YAT.Log.Settings
 			return (postFix.ToString());
 		}
 
+		#endregion
+
 		#region Properties
 		//------------------------------------------------------------------------------------------
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("RootPath")]
 		public string RootPath
 		{
@@ -207,6 +232,7 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("RootFileName")]
 		public string RootFileName
 		{
@@ -221,6 +247,7 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public string RootFilePath
 		{
@@ -228,6 +255,8 @@ namespace YAT.Log.Settings
 		}
 
 		//- Raw -------------------------------------------------------------------
+
+		/// <summary></summary>
 		[XmlElement("RawLogTx")]
 		public bool RawLogTx
 		{
@@ -242,6 +271,7 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public string RawTxRootRelativeFilePath
 		{
@@ -254,12 +284,14 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public string RawTxFilePath
 		{
 			get { return (_rootPath + Path.DirectorySeparatorChar + RawTxRootRelativeFilePath); }
 		}
 
+		/// <summary></summary>
 		[XmlElement("RawLogBidir")]
 		public bool RawLogBidir
 		{
@@ -274,6 +306,7 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public string RawBidirRootRelativeFilePath
 		{
@@ -286,12 +319,14 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public string RawBidirFilePath
 		{
 			get { return (_rootPath + Path.DirectorySeparatorChar + RawBidirRootRelativeFilePath); }
 		}
 
+		/// <summary></summary>
 		[XmlElement("RawLogRx")]
 		public bool RawLogRx
 		{
@@ -306,6 +341,7 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public string RawRxRootRelativeFilePath
 		{
@@ -318,12 +354,14 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public string RawRxFilePath
 		{
 			get { return (_rootPath + Path.DirectorySeparatorChar + RawRxRootRelativeFilePath); }
 		}
 
+		/// <summary></summary>
 		[XmlElement("RawExtension")]
 		public string RawExtension
 		{
@@ -339,6 +377,8 @@ namespace YAT.Log.Settings
 		}
 
 		//- Neat ------------------------------------------------------------------
+
+		/// <summary></summary>
 		[XmlElement("NeatLogTx")]
 		public bool NeatLogTx
 		{
@@ -353,6 +393,7 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public string NeatTxRootRelativeFilePath
 		{
@@ -365,12 +406,14 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public string NeatTxFilePath
 		{
 			get { return (_rootPath + Path.DirectorySeparatorChar + NeatTxRootRelativeFilePath); }
 		}
 
+		/// <summary></summary>
 		[XmlElement("NeatLogBidir")]
 		public bool NeatLogBidir
 		{
@@ -385,6 +428,7 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public string NeatBidirRootRelativeFilePath
 		{
@@ -397,12 +441,14 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public string NeatBidirFilePath
 		{
 			get { return (_rootPath + Path.DirectorySeparatorChar + NeatBidirRootRelativeFilePath); }
 		}
 
+		/// <summary></summary>
 		[XmlElement("NeatLogRx")]
 		public bool NeatLogRx
 		{
@@ -417,6 +463,7 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public string NeatRxRootRelativeFilePath
 		{
@@ -429,12 +476,14 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public string NeatRxFilePath
 		{
 			get { return (_rootPath + Path.DirectorySeparatorChar + NeatRxRootRelativeFilePath); }
 		}
 
+		/// <summary></summary>
 		[XmlElement("NeatExtension")]
 		public string NeatExtension
 		{
@@ -450,12 +499,15 @@ namespace YAT.Log.Settings
 		}
 
 		//- Combinations ----------------------------------------------------------
+
+		/// <summary></summary>
 		[XmlIgnore]
 		public bool AnyRaw
 		{
 			get { return (RawLogTx || RawLogRx); }
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public bool MultipleRaw
 		{
@@ -469,12 +521,14 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public bool AnyNeat
 		{
 			get { return (NeatLogTx || NeatLogBidir || NeatLogRx); }
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public bool MultipleNeat
 		{
@@ -488,12 +542,14 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public bool AnyRawOrNeat
 		{
 			get { return (AnyRaw || AnyNeat); }
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public bool BothRawAndNeat
 		{
@@ -503,6 +559,7 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public bool SameRawAndNeat
 		{
@@ -510,6 +567,8 @@ namespace YAT.Log.Settings
 		}
 
 		//- WriteMode -------------------------------------------------------------
+
+		/// <summary></summary>
 		[XmlElement("WriteMode")]
 		public LogFileWriteMode WriteMode
 		{
@@ -525,6 +584,8 @@ namespace YAT.Log.Settings
 		}
 
 		//- Subdirectories --------------------------------------------------------
+
+		/// <summary></summary>
 		[XmlElement("SubdirectoriesFormat")]
 		public bool SubdirectoriesFormat
 		{
@@ -539,6 +600,7 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("SubdirectoriesChannel")]
 		public bool SubdirectoriesChannel
 		{
@@ -554,6 +616,8 @@ namespace YAT.Log.Settings
 		}
 
 		//- Naming ----------------------------------------------------------------
+
+		/// <summary></summary>
 		[XmlElement("NameFormat")]
 		public bool NameFormat
 		{
@@ -568,6 +632,7 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("NameChannel")]
 		public bool NameChannel
 		{
@@ -582,6 +647,7 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("NameDate")]
 		public bool NameDate
 		{
@@ -596,6 +662,7 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("NameTime")]
 		public bool NameTime
 		{
@@ -610,6 +677,7 @@ namespace YAT.Log.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("NameSeparator")]
 		public FileNameSeparator NameSeparator
 		{
@@ -672,6 +740,7 @@ namespace YAT.Log.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

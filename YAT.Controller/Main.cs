@@ -26,7 +26,7 @@ namespace YAT.Controller
 
 		private readonly string[] _Title =
 		{
-			Application.ProductName + VersionInfo.ProductNamePostFix + " - Version " + Application.ProductVersion,
+			ApplicationInfo.ProductName + " - Version " + Application.ProductVersion,
 			"YAT - Yet Another Terminal",
 			"RS-232/422/485 TCP/UDP terminal to operate and debug serial connections",
 			"Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.",

@@ -9,20 +9,24 @@ using YAT.Model.Types;
 
 namespace YAT.Model.Settings
 {
+	/// <summary></summary>
 	[Serializable]
 	public class SendCommandSettings : MKY.Utilities.Settings.Settings, IEquatable<SendCommandSettings>
 	{
+		/// <summary></summary>
 		public const int MaximumRecentCommands = 24;
 
 		private Command _command;
 		private RecentItemCollection<Command> _recentsCommands;
 
+		/// <summary></summary>
 		public SendCommandSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public SendCommandSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -55,6 +59,7 @@ namespace YAT.Model.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("Command")]
 		public Command Command
 		{
@@ -69,6 +74,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("RecentCommands")]
 		public RecentItemCollection<Command> RecentCommands
 		{
@@ -115,6 +121,7 @@ namespace YAT.Model.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());
@@ -155,11 +162,13 @@ namespace YAT.Model.Settings
 
 		private const string _EasterEggCommand = "\\easteregg";
 
+		/// <summary></summary>
 		public static bool IsEasterEggCommand(string command)
 		{
 			return (string.Compare(command, _EasterEggCommand, true) == 0);
 		}
 
+		/// <summary></summary>
 		public static string EasterEggCommandText
 		{
 			get

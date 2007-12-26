@@ -7,13 +7,16 @@ using YAT.Model.Types;
 
 namespace YAT.Model.Settings
 {
+	/// <summary></summary>
 	[Serializable]
 	public class PredefinedCommandSettings : MKY.Utilities.Settings.Settings, IEquatable<PredefinedCommandSettings>
 	{
+		/// <summary></summary>
 		public const int MaximumCommandsPerPage = 12;
 
 		private List<PredefinedCommandPage> _pages;
 
+		/// <summary></summary>
 		public PredefinedCommandSettings()
 			: base()
 		{
@@ -21,6 +24,7 @@ namespace YAT.Model.Settings
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public PredefinedCommandSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -51,6 +55,7 @@ namespace YAT.Model.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("Pages")]
 		public List<PredefinedCommandPage> Pages
 		{
@@ -72,6 +77,7 @@ namespace YAT.Model.Settings
 		// Methods
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public void CreateDefaultPage()
 		{
 			_pages = new List<PredefinedCommandPage>();
@@ -106,6 +112,7 @@ namespace YAT.Model.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

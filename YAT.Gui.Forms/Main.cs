@@ -7,6 +7,10 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
+using MKY.Utilities.IO;
+using MKY.Utilities.Settings;
+
+using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
@@ -32,6 +36,7 @@ namespace YAT.Gui.Forms
 
 		// model
 		private Model.Main _main;
+		private Model.Workspace _workspace;
 
 		// status
 		private const string _DefaultStatusText = "Ready";
@@ -72,8 +77,11 @@ namespace YAT.Gui.Forms
 		{
 			InitializeRecents();
 
+			// link and attach to main model
 			_main = main;
-			Text = _main.Title;
+			AttachMainEventHandlers();
+
+			Text = _main.UserName;
 
 			ApplyWindowSettingsAccordingToStartup();
 			SetToolControls();
@@ -121,41 +129,7 @@ namespace YAT.Gui.Forms
 
 		private void Main_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			if (ApplicationSettings.LocalUser.General.AutoSaveWorkspace)
-			{
-				SaveWorkspace(true);
-			}
-			else
-			{
-				if (_workspaceSettingsRoot.HaveChanged)
-				{
-					DialogResult dr = MessageBox.Show
-						(
-						this,
-						"Save workspace?",
-						Text,
-						MessageBoxButtons.YesNoCancel,
-						MessageBoxIcon.Question
-						);
-
-					switch (dr)
-					{
-						case DialogResult.Yes: SaveWorkspace(); break;
-						case DialogResult.No:                       break;
-						default:               e.Cancel = true;     return;
-					}
-				}
-			}
-
-			if (!e.Cancel)
-			{
-				SetFixedStatusText("Exiting YAT...");
-				SuspendHandlingWorkspaceSettings();
-			}
-			else
-			{
-				ResetStatusText();
-			}
+			e.Cancel = (!_main.Close());
 		}
 
 		#endregion
@@ -177,14 +151,13 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_MainMenu_File_DropDownOpening(object sender, EventArgs e)
 		{
-			bool childReady = (ActiveMdiChild != null);
-			bool workspaceReady = _workspaceSettingsHandler.SettingsFileExists;
-			toolStripMenuItem_MainMenu_File_CloseAll.Enabled = childReady;
-			toolStripMenuItem_MainMenu_File_SaveAll.Enabled = (childReady && workspaceReady);
+			bool childIsReady = (ActiveMdiChild != null);
+			toolStripMenuItem_MainMenu_File_CloseAllTerminals.Enabled = childIsReady;
+			toolStripMenuItem_MainMenu_File_SaveAllTerminals.Enabled = childIsReady;
 			
 			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll();
-			bool recentsReady = (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count > 0);
-			toolStripMenuItem_MainMenu_File_Recent.Enabled = recentsReady;
+			bool recentsAreReady = (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count > 0);
+			toolStripMenuItem_MainMenu_File_Recent.Enabled = recentsAreReady;
 		}
 
 		private void toolStripMenuItem_MainMenu_File_New_Click(object sender, EventArgs e)
@@ -197,9 +170,9 @@ namespace YAT.Gui.Forms
 			ShowOpenTerminalFromFileDialog();
 		}
 
-		private void toolStripMenuItem_MainMenu_File_CloseAll_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MainMenu_File_CloseAllTerminals_Click(object sender, EventArgs e)
 		{
-			CloseAllTerminals();
+			_workspace.CloseAllTerminals();
 		}
 
 		private void toolStripMenuItem_MainMenu_File_OpenWorkspace_Click(object sender, EventArgs e)
@@ -209,7 +182,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_MainMenu_File_SaveWorkspace_Click(object sender, EventArgs e)
 		{
-			SaveWorkspace();
+			_workspace.Save();
 		}
 
 		private void toolStripMenuItem_MainMenu_File_SaveWorkspaceAs_Click(object sender, EventArgs e)
@@ -217,9 +190,9 @@ namespace YAT.Gui.Forms
 			ShowSaveWorkspaceAsFileDialog();
 		}
 
-		private void toolStripMenuItem_MainMenu_File_SaveAll_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MainMenu_File_SaveAllTerminals_Click(object sender, EventArgs e)
 		{
-			SaveAll();
+			_workspace.SaveAllTerminals();
 		}
 
 		private void toolStripMenuItem_MainMenu_File_Preferences_Click(object sender, EventArgs e)
@@ -319,22 +292,22 @@ namespace YAT.Gui.Forms
 
 		private void toolStripButton_MainTool_File_Save_Click(object sender, EventArgs e)
 		{
-			SaveTerminal();
+			((Terminal)ActiveMdiChild).RequestSaveFile();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Open_Click(object sender, EventArgs e)
 		{
-			OpenTerminalIO();
+			((Terminal)ActiveMdiChild).RequestOpenTerminal();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Close_Click(object sender, EventArgs e)
 		{
-			CloseTerminalIO();
+			((Terminal)ActiveMdiChild).RequestCloseTerminal();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Settings_Click(object sender, EventArgs e)
 		{
-			EditTerminalSettings();
+			((Terminal)ActiveMdiChild).RequestEditTerminalSettings();
 		}
 
 		#endregion
@@ -418,7 +391,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_FileRecentContextMenu_Click(object sender, EventArgs e)
 		{
-			OpenRecent(int.Parse((string)(((ToolStripMenuItem)sender).Tag)));
+			_main.OpenRecent(int.Parse((string)(((ToolStripMenuItem)sender).Tag)));
 		}
 
 		#endregion
@@ -449,7 +422,7 @@ namespace YAT.Gui.Forms
 
 		private void ApplyWindowSettingsAccordingToStartup()
 		{
-			if (ApplicationSettingsHandler.LocalUserSettingsSuccessfullyLoaded)
+			if (ApplicationSettings.LocalUserSettingsSuccessfullyLoaded)
 			{
 				SuspendLayout();
 
@@ -499,7 +472,7 @@ namespace YAT.Gui.Forms
 
 		private void InitializeRecents()
 		{
-			_menuItems_recents = new List<ToolStripMenuItem>(Settings.RecentFileSettings.MaximumFilePaths);
+			_menuItems_recents = new List<ToolStripMenuItem>(Model.Settings.RecentFileSettings.MaximumFilePaths);
 			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_1);
 			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_2);
 			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_3);
@@ -525,7 +498,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_MainMenu_File_Recent.Enabled = true;
 
 			// hide all
-			for (int i = 0; i < Settings.RecentFileSettings.MaximumFilePaths; i++)
+			for (int i = 0; i < Model.Settings.RecentFileSettings.MaximumFilePaths; i++)
 			{
 				string prefix = string.Format("{0}: ", i + 1);
 				_menuItems_recents[i].Text = "&" + prefix;
@@ -593,28 +566,230 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
+		#region Main
+		//==========================================================================================
+		// Main
+		//==========================================================================================
+
+		#region Main > Lifetime
+		//------------------------------------------------------------------------------------------
+		// Main > Lifetime
+		//------------------------------------------------------------------------------------------
+		
+		private void AttachMainEventHandlers()
+		{
+			_main.WorkspaceOpened += new EventHandler<Model.WorkspaceEventArgs>(_main_WorkspaceOpened);
+			_main.WorkspaceClosed += new EventHandler(_main_WorkspaceClosed);
+
+			_main.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_main_FixedStatusTextRequest);
+			_main.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_main_TimedStatusTextRequest);
+			_main.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(_main_MessageInputRequest);
+
+			_main.Closed += new EventHandler(_main_Closed);
+		}
+
+		private void DetachMainEventHandlers()
+		{
+			_main.WorkspaceOpened -= new EventHandler<Model.WorkspaceEventArgs>(_main_WorkspaceOpened);
+			_main.WorkspaceClosed -= new EventHandler(_main_WorkspaceClosed);
+
+			_main.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_main_FixedStatusTextRequest);
+			_main.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_main_TimedStatusTextRequest);
+			_main.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(_main_MessageInputRequest);
+
+			_main.Closed -= new EventHandler(_main_Closed);
+		}
+
+		#endregion
+
+		#region Main > Event Handlers
+		//------------------------------------------------------------------------------------------
+		// Main > Event Handlers
+		//------------------------------------------------------------------------------------------
+
+		private void _main_WorkspaceOpened(object sender, Model.WorkspaceEventArgs e)
+		{
+			_workspace = e.Workspace;
+			AttachWorkspaceEventHandlers();
+		}
+
+		private void _main_WorkspaceClosed(object sender, EventArgs e)
+		{
+			DetachWorkspaceEventHandlers();
+			_workspace = null;
+		}
+
+		private void _main_TimedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
+		{
+			SetTimedStatusText(e.Text);
+		}
+
+		private void _main_FixedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
+		{
+			SetFixedStatusText(e.Text);
+		}
+
+		private void _main_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
+		{
+			DialogResult dr;
+			dr = MessageBox.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
+			e.Result = dr;
+		}
+
+		private void _main_Closed(object sender, EventArgs e)
+		{
+			throw new Exception("The method or operation is not implemented.");
+		}
+
+		#endregion
+
+		#endregion
+
+		#region Workspace
+		//==========================================================================================
+		// Workspace
+		//==========================================================================================
+
+		#region Workspace > Methods
+		//------------------------------------------------------------------------------------------
+		// Workspace > Methods
+		//------------------------------------------------------------------------------------------
+
 		private void ShowOpenWorkspaceFromFileDialog()
 		{
-			OnFixedStatusTextRequest("Opening workspace...");
+			SetFixedStatusText("Opening workspace...");
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Title = "Open";
 			ofd.Filter = ExtensionSettings.WorkspaceFilesFilter;
 			ofd.DefaultExt = ExtensionSettings.WorkspaceFiles;
 			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath;
-			if ((ofd.ShowDialog(_window) == DialogResult.OK) && (ofd.FileName != ""))
+			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName != ""))
 			{
 				Refresh();
 
 				ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.SaveLocalUser();
 
-				OpenWorkspaceFromFile(ofd.FileName);
+				_main.OpenWorkspaceFromFile(ofd.FileName);
 			}
 			else
 			{
 				ResetStatusText();
 			}
 		}
+
+		private void ShowSaveWorkspaceAsFileDialog()
+		{
+			SetFixedStatusText("Saving workspace as...");
+			SaveFileDialog sfd = new SaveFileDialog();
+			sfd.Title = "Save Workspace As";
+			sfd.Filter = ExtensionSettings.WorkspaceFilesFilter;
+			sfd.DefaultExt = ExtensionSettings.WorkspaceFiles;
+			sfd.InitialDirectory = ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath;
+			sfd.FileName = Environment.UserName + "." + sfd.DefaultExt;
+			if ((sfd.ShowDialog(this) == DialogResult.OK) && (sfd.FileName.Length > 0))
+			{
+				Refresh();
+
+				ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(sfd.FileName);
+				ApplicationSettings.SaveLocalUser();
+
+				_workspace.SaveAs(sfd.FileName);
+			}
+			else
+			{
+				ResetStatusText();
+			}
+		}
+
+		#endregion
+
+		#region Workspace > Lifetime
+		//------------------------------------------------------------------------------------------
+		// Workspace > Lifetime
+		//------------------------------------------------------------------------------------------
+
+		private void AttachWorkspaceEventHandlers()
+		{
+			_workspace.TerminalRemoved += new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalRemoved);
+			_workspace.TerminalAdded   += new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalAdded);
+
+			_workspace.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_workspace_TimedStatusTextRequest);
+			_workspace.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_workspace_FixedStatusTextRequest);
+			_workspace.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(_workspace_MessageInputRequest);
+
+			_workspace.Closed += new EventHandler(_workspace_Closed);
+		}
+
+		private void DetachWorkspaceEventHandlers()
+		{
+			_workspace.TerminalRemoved -= new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalRemoved);
+			_workspace.TerminalAdded   -= new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalAdded);
+
+			_workspace.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_workspace_TimedStatusTextRequest);
+			_workspace.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_workspace_FixedStatusTextRequest);
+			_workspace.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(_workspace_MessageInputRequest);
+
+			_workspace.Closed -= new EventHandler(_workspace_Closed);
+		}
+
+		#endregion
+
+		#region Workspace > Event Handlers
+		//------------------------------------------------------------------------------------------
+		// Workspace > Event Handlers
+		//------------------------------------------------------------------------------------------
+
+		private void _workspace_TerminalRemoved(object sender, Model.TerminalEventArgs e)
+		{
+			// nothing to do, terminal is removed upon MDI::FormClosed event
+		}
+
+		private void _workspace_TerminalAdded(object sender, Model.TerminalEventArgs e)
+		{
+			// create terminal form
+			Terminal mdiChild = new Terminal(e.Terminal);
+
+			// link MDI child this MDI parent
+			mdiChild.MdiParent = this;
+			mdiChild.TerminalChanged += new EventHandler(mdiChild_TerminalChanged);
+			mdiChild.TerminalSaved   += new EventHandler<Model.SavedEventArgs>(mdiChild_TerminalSaved);
+			mdiChild.FormClosed      += new FormClosedEventHandler(mdiChild_FormClosed);
+
+			// show form
+			mdiChild.Show();
+		}
+
+		private void _workspace_TimedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
+		{
+			SetTimedStatusText(e.Text);
+		}
+
+		private void _workspace_FixedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
+		{
+			SetFixedStatusText(e.Text);
+		}
+
+		private void _workspace_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
+		{
+			DialogResult dr;
+			dr = MessageBox.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
+			e.Result = dr;
+		}
+
+		private void _workspace_Closed(object sender, EventArgs e)
+		{
+			throw new Exception("The method or operation is not implemented.");
+		}
+
+		#endregion
+
+		#endregion
+
+		#region Terminal
+		//==========================================================================================
+		// Terminal
+		//==========================================================================================
 
 		private void ShowNewTerminalDialog()
 		{
@@ -627,21 +802,8 @@ namespace YAT.Gui.Forms
 				ApplicationSettings.LocalUser.NewTerminal = f.NewTerminalSettingsResult;
 				ApplicationSettings.SaveLocalUser();
 
-				SetFixedStatusText("Creating new terminal...");
-
-				DocumentSettingsHandler<Settings.Terminal.TerminalSettingsRoot> sh = new DocumentSettingsHandler<YAT.Settings.Terminal.TerminalSettingsRoot>(f.TerminalSettingsResult);
-				Gui.Forms.Terminal terminal = new Gui.Forms.Terminal(sh);
-
-				terminal.UserName = _TerminalText + GetNextTerminalId();
-				terminal.MdiParent = this;
-				terminal.TerminalChanged += new EventHandler(mdi_child_TerminalChanged);
-				terminal.TerminalSaved += new EventHandler<TerminalSavedEventArgs>(mdi_child_TerminalSaved);
-				terminal.FormClosed += new FormClosedEventHandler(mdi_child_FormClosed);
-				terminal.Show();
-
-				AddToOrReplaceInWorkspace(terminal);
-
-				SetTimedStatusText("New terminal created");
+				DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>(f.TerminalSettingsResult);
+				_workspace.CreateNewTerminal(sh);
 			}
 			else
 			{
@@ -664,7 +826,7 @@ namespace YAT.Gui.Forms
 				ApplicationSettings.LocalUser.Paths.TerminalFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.SaveLocalUser();
 
-				OpenTerminalFromFile(ofd.FileName);
+				_workspace.OpenTerminalFromFile(ofd.FileName);
 			}
 			else
 			{
@@ -672,42 +834,41 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void CloseTerminal()
+		#endregion
+
+		#region MDI Children
+		//==========================================================================================
+		// MDI Children
+		//==========================================================================================
+
+		#region MDI Children > Events
+		//------------------------------------------------------------------------------------------
+		// MDI Children > Events
+		//------------------------------------------------------------------------------------------
+
+		private void mdiChild_TerminalChanged(object sender, EventArgs e)
 		{
-			((Gui.Forms.Terminal)ActiveMdiChild).RequestCloseFile();
+			SetTimedStatus(Status.ChildChanged);
+			SetToolControls();
 		}
 
-		private void CloseAllTerminals()
+		private void mdiChild_TerminalSaved(object sender, Model.SavedEventArgs e)
 		{
-			foreach (Form f in MdiChildren)
-				((Gui.Forms.Terminal)f).RequestCloseFile();
+			if (!e.AutoSave)
+				SetTimedStatus(Status.ChildSaved);
+
+			SetToolControls();
 		}
 
-		private void SaveTerminal()
+		private void mdiChild_FormClosed(object sender, FormClosedEventArgs e)
 		{
-			((Gui.Forms.Terminal)ActiveMdiChild).RequestSaveFile();
+			SetTimedStatus(Status.ChildClosed);
+			SetToolControls();
 		}
 
-		private void SaveAllTerminals()
-		{
-			foreach (Form f in MdiChildren)
-				((Gui.Forms.Terminal)f).RequestSaveFile();
-		}
+		#endregion
 
-		private void OpenTerminalIO()
-		{
-			((Gui.Forms.Terminal)ActiveMdiChild).RequestOpenTerminal();
-		}
-
-		private void CloseTerminalIO()
-		{
-			((Gui.Forms.Terminal)ActiveMdiChild).RequestCloseTerminal();
-		}
-
-		private void EditTerminalSettings()
-		{
-			((Gui.Forms.Terminal)ActiveMdiChild).RequestEditTerminalSettings();
-		}
+		#endregion
 
 		#region Status
 		//==========================================================================================

@@ -1571,8 +1571,8 @@ namespace YAT.Gui.Forms
 			this.predefined.Size = new System.Drawing.Size(162, 341);
 			this.predefined.TabIndex = 0;
 			this.predefined.SelectedPageChanged += new System.EventHandler(this.predefined_SelectedPageChanged);
-			this.predefined.SendCommandRequest += new System.EventHandler<YAT.Gui.Types.PredefinedCommandEventArgs>(this.predefined_SendCommandRequest);
-			this.predefined.DefineCommandRequest += new System.EventHandler<YAT.Gui.Types.PredefinedCommandEventArgs>(this.predefined_DefineCommandRequest);
+			this.predefined.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.predefined_SendCommandRequest);
+			this.predefined.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.predefined_DefineCommandRequest);
 			// 
 			// panel_Send
 			// 

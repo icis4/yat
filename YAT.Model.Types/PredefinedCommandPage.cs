@@ -5,6 +5,7 @@ using System.Xml.Serialization;
 
 namespace YAT.Model.Types
 {
+	/// <summary></summary>
 	[Serializable]
 	public class PredefinedCommandPage : IEquatable<PredefinedCommandPage>, IComparable
 	{
@@ -48,6 +49,7 @@ namespace YAT.Model.Types
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("PageName")]
 		public string PageName
 		{
@@ -55,6 +57,7 @@ namespace YAT.Model.Types
 			set { _pageName = value; }
 		}
 
+		/// <summary></summary>
 		[XmlElement("Commands")]
 		public List<Command> Commands
 		{

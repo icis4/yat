@@ -4,20 +4,23 @@ using System.Text;
 using System.Xml.Serialization;
 using System.Drawing;
 
-namespace YAT.Model.Settings
+namespace YAT.Model.Types
 {
+	/// <summary></summary>
 	[Serializable]
 	public class TextFormat : IEquatable<TextFormat>
 	{
 		private Color _color;
 		private FontStyle _style;
 
+		/// <summary></summary>
 		public TextFormat()
 		{
 			_color = Color.Black;
 			_style = FontStyle.Regular;
 		}
 
+		/// <summary></summary>
 		public TextFormat(Color color, bool bold, bool italic, bool underline, bool strikeout)
 		{
 			_color = color;
@@ -29,6 +32,7 @@ namespace YAT.Model.Settings
 			Strikeout = strikeout;
 		}
 
+		/// <summary></summary>
 		public TextFormat(TextFormat rhs)
 		{
 			_color = rhs._color;
@@ -40,6 +44,7 @@ namespace YAT.Model.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public Color Color
 		{
@@ -47,6 +52,7 @@ namespace YAT.Model.Settings
 			set { _color = value; }
 		}
 
+		/// <summary></summary>
 		[XmlElement("Color")]
 		public int ColorAsArgb
 		{
@@ -54,6 +60,7 @@ namespace YAT.Model.Settings
 			set { _color = Color.FromArgb(value); }
 		}
 
+		/// <summary></summary>
 		[XmlElement("FontStyle")]
 		public FontStyle Style
 		{
@@ -61,6 +68,7 @@ namespace YAT.Model.Settings
 			set { _style = value; }
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public bool Bold
 		{
@@ -74,6 +82,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public bool Italic
 		{
@@ -87,6 +96,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public bool Underline
 		{
@@ -100,6 +110,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public bool Strikeout
 		{
@@ -145,6 +156,7 @@ namespace YAT.Model.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

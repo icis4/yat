@@ -7,17 +7,20 @@ using YAT.Model.Types;
 
 namespace YAT.Model.Settings
 {
+	/// <summary></summary>
 	[Serializable]
 	public class SendFileSettings : MKY.Utilities.Settings.Settings, IEquatable<SendFileSettings>
 	{
 		private Command _command;
 
+		/// <summary></summary>
 		public SendFileSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public SendFileSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -48,6 +51,7 @@ namespace YAT.Model.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("Command")]
 		public Command Command
 		{
@@ -89,6 +93,7 @@ namespace YAT.Model.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

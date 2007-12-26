@@ -6,6 +6,8 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
+using YAT.Utilities;
+
 namespace YAT.Gui.Forms
 {
 	public partial class About : System.Windows.Forms.Form
@@ -21,14 +23,13 @@ namespace YAT.Gui.Forms
 			int start = 0;
 
 			// form
-			text = "About " + Application.ProductName;
-			text += VersionInfo.ProductNamePostFix;
+			text = "About ";
+			text += ApplicationInfo.ProductName;
 			text += " - Yet Another Terminal";
 			Text = text;
 
 			// title
-			text = Application.ProductName;
-			text += VersionInfo.ProductNamePostFix;
+			text = ApplicationInfo.ProductName;
 			text += " - Version " + Application.ProductVersion;
 			linkLabel_Title.Text = text;
 

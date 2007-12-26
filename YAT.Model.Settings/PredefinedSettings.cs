@@ -5,17 +5,20 @@ using System.Xml.Serialization;
 
 namespace YAT.Model.Settings
 {
+	/// <summary></summary>
 	[Serializable]
 	public class PredefinedSettings : MKY.Utilities.Settings.Settings, IEquatable<PredefinedSettings>
 	{
 		private int _selectedPage;
 
+		/// <summary></summary>
 		public PredefinedSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public PredefinedSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -46,6 +49,7 @@ namespace YAT.Model.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("SelectedPage")]
 		public int SelectedPage
 		{
@@ -87,6 +91,7 @@ namespace YAT.Model.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

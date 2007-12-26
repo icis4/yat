@@ -6,6 +6,8 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
+using YAT.Gui.Utilities;
+
 namespace YAT.Gui.Forms
 {
 	public partial class AdvancedTerminalSettings : Form

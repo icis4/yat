@@ -8,6 +8,7 @@ using MKY.Utilities.Guid;
 
 namespace YAT.Model.Settings
 {
+	/// <summary></summary>
 	[Serializable]
 	public class TerminalSettingsItem : MKY.Utilities.Settings.Settings, IEquatable<TerminalSettingsItem>, IGuidProvider
 	{
@@ -15,6 +16,7 @@ namespace YAT.Model.Settings
 		private Guid _guid;
 		private WindowSettings _window;
 
+		/// <summary></summary>
 		public TerminalSettingsItem()
 			: base(MKY.Utilities.Settings.SettingsType.Implicit)
 		{
@@ -53,6 +55,7 @@ namespace YAT.Model.Settings
 		// Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[XmlElement("FilePath")]
 		public string FilePath
 		{
@@ -82,6 +85,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public Guid Guid
 		{
@@ -96,6 +100,7 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Window")]
 		public WindowSettings Window
 		{
@@ -149,6 +154,7 @@ namespace YAT.Model.Settings
 			return (false);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

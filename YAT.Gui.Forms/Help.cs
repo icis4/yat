@@ -6,6 +6,8 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
+using YAT.Utilities;
+
 namespace YAT.Gui.Forms
 {
 	public partial class Help : System.Windows.Forms.Form
@@ -16,7 +18,7 @@ namespace YAT.Gui.Forms
 
 			// form title
 			string text = Application.ProductName;
-			text += VersionInfo.ProductNamePostFix;
+			text += ApplicationInfo.ProductNamePostFix;
 			text += " Help";
 			Text = text;
 
