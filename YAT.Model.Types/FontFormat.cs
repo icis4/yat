@@ -4,11 +4,11 @@ using System.Text;
 using System.Xml.Serialization;
 using System.Drawing;
 
-namespace YAT.Model.Settings
+namespace YAT.Model.Types
 {
 	/// <summary></summary>
 	[Serializable]
-	public class FontSettings : IEquatable<FontSettings>
+	public class FontFormat : IEquatable<FontFormat>
 	{
 		private string _name;
 		private float _size;
@@ -16,7 +16,7 @@ namespace YAT.Model.Settings
 		private Font _font;
 
 		/// <summary></summary>
-		public FontSettings()
+		public FontFormat()
 		{
 			_name = "Courier New";
 			_size = 8.25f;
@@ -25,7 +25,7 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		public FontSettings(string name, float size, FontStyle style)
+		public FontFormat(string name, float size, FontStyle style)
 		{
 			_name = name;
 			_size = size;
@@ -34,7 +34,7 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		public FontSettings(FontSettings rhs)
+		public FontFormat(FontFormat rhs)
 		{
 			_name = rhs._name;
 			_size = rhs._size;
@@ -111,8 +111,8 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is FontSettings)
-				return (Equals((FontSettings)obj));
+			if (obj is FontFormat)
+				return (Equals((FontFormat)obj));
 
 			return (false);
 		}
@@ -120,7 +120,7 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(FontSettings value)
+		public bool Equals(FontFormat value)
 		{
 			// ensure that object.operator!=() is called
 			if ((object)value != null)
@@ -148,7 +148,7 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(FontSettings lhs, FontSettings rhs)
+		public static bool operator ==(FontFormat lhs, FontFormat rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))
 				return (true);
@@ -162,7 +162,7 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(FontSettings lhs, FontSettings rhs)
+		public static bool operator !=(FontFormat lhs, FontFormat rhs)
 		{
 			return (!(lhs == rhs));
 		}

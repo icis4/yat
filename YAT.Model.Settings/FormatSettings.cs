@@ -12,7 +12,7 @@ namespace YAT.Model.Settings
 	[Serializable]
 	public class FormatSettings : MKY.Utilities.Settings.Settings, IEquatable<FormatSettings>
 	{
-		private FontSettings _font;
+		private FontFormat _font;
 		private TextFormat _txDataFormat;
 		private TextFormat _txControlFormat;
 		private TextFormat _rxDataFormat;
@@ -43,7 +43,7 @@ namespace YAT.Model.Settings
 		public FormatSettings(FormatSettings rhs)
 			: base(rhs)
 		{
-			FontSettings      = new FontSettings(rhs.FontSettings);
+			FontFormat        = new FontFormat(rhs.FontFormat);
 			TxDataFormat      = new TextFormat(rhs.TxDataFormat);
 			TxControlFormat   = new TextFormat(rhs.TxControlFormat);
 			RxDataFormat      = new TextFormat(rhs.RxDataFormat);
@@ -60,7 +60,7 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			FontSettings      = new FontSettings("Courier New", 8.25f, FontStyle.Regular);
+			FontFormat        = new FontFormat("Courier New", 8.25f, FontStyle.Regular);
 			TxDataFormat      = new TextFormat(Color.Blue, true, false, false, false);
 			TxControlFormat   = new TextFormat(Color.Blue, false, false, false, false);
 			RxDataFormat      = new TextFormat(Color.Purple, true, false, false, false);
@@ -78,7 +78,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("Font")]
-		public FontSettings FontSettings
+		public FontFormat FontFormat
 		{
 			get { return (_font); }
 			set

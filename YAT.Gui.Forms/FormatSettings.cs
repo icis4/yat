@@ -190,7 +190,7 @@ namespace YAT.Gui.Forms
 			monitor_Example.AddElements(_exampleComplete);
 		}
 
-		private Model.Settings.TextFormat TextFormatFromIndex(int index)
+		private Model.Types.TextFormat TextFormatFromIndex(int index)
 		{
 			switch (index)
 			{

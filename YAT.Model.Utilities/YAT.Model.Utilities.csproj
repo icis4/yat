@@ -59,6 +59,10 @@
       <Project>{E9FF1D5E-84E0-4ADB-94EC-662903931295}</Project>
       <Name>YAT.Model.Settings</Name>
     </ProjectReference>
+    <ProjectReference Include="..\YAT.Model.Types\YAT.Model.Types.csproj">
+      <Project>{651BA67D-9B00-4245-9C99-481F20273A62}</Project>
+      <Name>YAT.Model.Types</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

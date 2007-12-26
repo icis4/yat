@@ -1833,9 +1833,9 @@ namespace YAT.Gui.Forms
 		{
 			switch (e.Repository)
 			{
-				case Domain.RepositoryType.Tx: monitor_Tx.Clear(); break;
+				case Domain.RepositoryType.Tx:    monitor_Tx.Clear(); break;
 				case Domain.RepositoryType.Bidir: monitor_Bidir.Clear(); break;
-				case Domain.RepositoryType.Rx: monitor_Rx.Clear(); break;
+				case Domain.RepositoryType.Rx:    monitor_Rx.Clear(); break;
 			}
 		}
 
@@ -1843,9 +1843,9 @@ namespace YAT.Gui.Forms
 		{
 			switch (e.Repository)
 			{
-				case Domain.RepositoryType.Tx: monitor_Tx.AddLines(_terminal.RepositoryToDisplayLines(Domain.RepositoryType.Tx)); break;
+				case Domain.RepositoryType.Tx:    monitor_Tx.AddLines(_terminal.RepositoryToDisplayLines(Domain.RepositoryType.Tx)); break;
 				case Domain.RepositoryType.Bidir: monitor_Bidir.AddLines(_terminal.RepositoryToDisplayLines(Domain.RepositoryType.Bidir)); break;
-				case Domain.RepositoryType.Rx: monitor_Rx.AddLines(_terminal.RepositoryToDisplayLines(Domain.RepositoryType.Rx)); break;
+				case Domain.RepositoryType.Rx:    monitor_Rx.AddLines(_terminal.RepositoryToDisplayLines(Domain.RepositoryType.Rx)); break;
 			}
 		}
 
@@ -1882,12 +1882,7 @@ namespace YAT.Gui.Forms
 				ApplicationSettings.LocalUser.Paths.TerminalFilesPath = Path.GetDirectoryName(sfd.FileName);
 				ApplicationSettings.SaveLocalUser();
 
-				string autoSaveFilePathToDelete = "";
-				if (_settingsRoot.AutoSaved)
-					autoSaveFilePathToDelete = _terminalSettingsHandler.SettingsFilePath;
-
-				_terminalSettingsHandler.SettingsFilePath = sfd.FileName;
-				SaveTerminalToFile(false, autoSaveFilePathToDelete);
+				_terminal.SaveAs(sfd.FileName);
 			}
 			else
 			{
@@ -1916,45 +1911,9 @@ namespace YAT.Gui.Forms
 				Domain.Settings.TerminalSettings s = f.SettingsResult;
 				if (s.HaveChanged)
 				{
-					// settings have changed, recreate terminal with new settings
-					if (_terminal.IsOpen)
-					{
-						// terminal is open, re-open it with the new settings
-						if (CloseTerminal(false))
-						{
-							SuspendHandlingTerminalSettings();
-
-							DetachTerminalHandlers();      // detach to suspend events
-							_settingsRoot.Terminal = s;
-							_terminal = Domain.Factory.TerminalFactory.RecreateTerminal(_settingsRoot.Terminal, _terminal);
-							AttachTerminalHandlers();      // attach and resume events
-							_terminal.ReloadRepositories();
-
-							ResumeHandlingTerminalSettings();
-
-							OpenTerminal(false);
-							SetTimedStatusText("Terminal settings applied.");
-						}
-						else
-						{
-							SetTimedStatusText("Terminal settings not applied!");
-						}
-					}
-					else
-					{
-						// terminal is closed, simply set the new settings
-						SuspendHandlingTerminalSettings();
-
-						DetachTerminalHandlers();          // detach to suspend events
-						_settingsRoot.Terminal = s;
-						_terminal = Domain.Factory.TerminalFactory.RecreateTerminal(_settingsRoot.Terminal, _terminal);
-						AttachTerminalHandlers();          // attach an resume events
-						_terminal.ReloadRepositories();
-
-						ResumeHandlingTerminalSettings();
-
-						SetTimedStatusText("Terminal settings applied.");
-					}
+					SuspendHandlingTerminalSettings();
+					_terminal.SetSettings(s);
+					ResumeHandlingTerminalSettings();
 				}
 				else
 				{
@@ -2367,8 +2326,7 @@ namespace YAT.Gui.Forms
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
-				_settingsRoot.Log = f.SettingsResult;
-				_log.Settings = _settingsRoot.Log;
+				_terminal.SetLogSettings(f.SettingsResult);
 			}
 
 			SelectSendCommandInput();
@@ -2383,12 +2341,12 @@ namespace YAT.Gui.Forms
 
 		protected virtual void OnTerminalChanged(EventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync(TerminalChanged, this, e);
+			EventHelper.FireSync(Changed, this, e);
 		}
 
-		protected virtual void OnTerminalSaved(TerminalSavedEventArgs e)
+		protected virtual void OnTerminalSaved(Model.SavedEventArgs e)
 		{
-			Utilities.Event.EventHelper.FireSync<TerminalSavedEventArgs>(TerminalSaved, this, e);
+			EventHelper.FireSync<Model.SavedEventArgs>(Saved, this, e);
 		}
 
 		#endregion

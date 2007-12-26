@@ -752,9 +752,9 @@ namespace YAT.Gui.Forms
 
 			// link MDI child this MDI parent
 			mdiChild.MdiParent = this;
-			mdiChild.TerminalChanged += new EventHandler(mdiChild_TerminalChanged);
-			mdiChild.TerminalSaved   += new EventHandler<Model.SavedEventArgs>(mdiChild_TerminalSaved);
-			mdiChild.FormClosed      += new FormClosedEventHandler(mdiChild_FormClosed);
+			mdiChild.Changed    += new EventHandler(mdiChild_Changed);
+			mdiChild.Saved      += new EventHandler<Model.SavedEventArgs>(mdiChild_Saved);
+			mdiChild.FormClosed += new FormClosedEventHandler(mdiChild_FormClosed);
 
 			// show form
 			mdiChild.Show();
@@ -846,13 +846,13 @@ namespace YAT.Gui.Forms
 		// MDI Children > Events
 		//------------------------------------------------------------------------------------------
 
-		private void mdiChild_TerminalChanged(object sender, EventArgs e)
+		private void mdiChild_Changed(object sender, EventArgs e)
 		{
 			SetTimedStatus(Status.ChildChanged);
 			SetToolControls();
 		}
 
-		private void mdiChild_TerminalSaved(object sender, Model.SavedEventArgs e)
+		private void mdiChild_Saved(object sender, Model.SavedEventArgs e)
 		{
 			if (!e.AutoSave)
 				SetTimedStatus(Status.ChildSaved);

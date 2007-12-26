@@ -254,12 +254,42 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		public bool IsConnected
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_terminal.IsConnected);
+			}
+		}
+
+		/// <summary></summary>
 		public bool LogIsOpen
 		{
 			get
 			{
 				AssertNotDisposed();
 				return (_log.IsOpen);
+			}
+		}
+
+		/// <summary></summary>
+		public Domain.IO.IIOProvider UnderlyingIOProvider
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_terminal.UnderlyingIOProvider);
+			}
+		}
+
+		/// <summary></summary>
+		public object UnderlyingIOInstance
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_terminal.UnderlyingIOInstance);
 			}
 		}
 
@@ -282,6 +312,54 @@ namespace YAT.Model
 			// then open terminal
 			if (_settingsRoot.TerminalIsOpen)
 				OpenIO();
+		}
+
+		/// <summary>
+		/// Sets terminal settings
+		/// </summary>
+		public void SetSettings(Domain.Settings.TerminalSettings settings)
+		{
+			// settings have changed, recreate terminal with new settings
+			if (_terminal.IsOpen)
+			{
+				// terminal is open, re-open it with the new settings
+				if (CloseIO(false))
+				{
+					DetachTerminalEventHandlers();    // detach to suspend events
+					_settingsRoot.Terminal = settings;
+					_terminal = Domain.Factory.TerminalFactory.RecreateTerminal(_settingsRoot.Terminal, _terminal);
+					AttachTerminalEventHandlers();    // attach and resume events
+					_terminal.ReloadRepositories();
+
+					OpenIO(false);
+
+					OnTimedStatusTextRequest("Terminal settings applied.");
+				}
+				else
+				{
+					OnTimedStatusTextRequest("Terminal settings not applied!");
+				}
+			}
+			else
+			{
+				// terminal is closed, simply set the new settings
+				DetachTerminalEventHandlers();        // detach to suspend events
+				_settingsRoot.Terminal = settings;
+				_terminal = Domain.Factory.TerminalFactory.RecreateTerminal(_settingsRoot.Terminal, _terminal);
+				AttachTerminalEventHandlers();        // attach an resume events
+				_terminal.ReloadRepositories();
+
+				OnTimedStatusTextRequest("Terminal settings applied.");
+			}
+		}
+
+		/// <summary>
+		/// Sets log settings
+		/// </summary>
+		public void SetLogSettings(Log.Settings.LogSettings settings)
+		{
+			_settingsRoot.Log = settings;
+			_log.Settings = _settingsRoot.Log;
 		}
 
 		#endregion
@@ -354,6 +432,21 @@ namespace YAT.Model
 					success = (OnSaveAsFileDialogRequest() == DialogResult.OK);
 			}
 			return (success);
+		}
+
+		/// <summary>
+		/// Saves terminal to given file
+		/// </summary>
+		public bool SaveAs(string filePath)
+		{
+			AssertNotDisposed();
+
+			string autoSaveFilePathToDelete = "";
+			if (_settingsRoot.AutoSaved)
+				autoSaveFilePathToDelete = _settingsHandler.SettingsFilePath;
+
+			_settingsHandler.SettingsFilePath = filePath;
+			return (SaveToFile(false, autoSaveFilePathToDelete));
 		}
 
 		private bool SaveToFile(bool autoSave)
@@ -969,6 +1062,15 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 			return (_terminal.RepositoryToDisplayElements(repositoryType));
+		}
+
+		/// <summary>
+		/// Returns contents of desired repository
+		/// </summary>
+		public List<List<Domain.DisplayElement>> RepositoryToDisplayLines(Domain.RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+			return (_terminal.RepositoryToDisplayLines(repositoryType));
 		}
 
 		/// <summary>
