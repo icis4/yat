@@ -6,8 +6,12 @@ using System.Xml.Serialization;
 
 namespace YAT.Model.Utilities
 {
+	/// <summary>
+	/// Static utility class providing XML reader functionality for YAT
+	/// </summary>
 	public static class XmlReader
 	{
+		/// <summary></summary>
 		public static string[] LinesFromXmlFile(string xmlFilePath)
 		{
 			object lines = null;
@@ -33,8 +37,12 @@ namespace YAT.Model.Utilities
 		}
 	}
 
+	/// <summary>
+	/// Static utility class providing XML writer functionality for YAT
+	/// </summary>
 	public class XmlWriter
 	{
+		/// <summary></summary>
 		public static void LinesToXmlFile(List<List<Domain.DisplayElement>> lines, string xmlFilePath)
 		{
 			using (FileStream fs = new FileStream(xmlFilePath, FileMode.Create))

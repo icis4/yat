@@ -7,8 +7,12 @@ using System.IO;
 
 namespace YAT.Model.Utilities
 {
+	/// <summary>
+	/// Static utility class providing RTF reader functionality for YAT
+	/// </summary>
 	public static class RtfReader
 	{
+		/// <summary></summary>
 		public static string[] LinesFromRtfFile(string rtfFilePath)
 		{
 			RichTextBox rtb = new RichTextBox();
@@ -20,14 +24,19 @@ namespace YAT.Model.Utilities
 		}
 	}
 
+	/// <summary>
+	/// Static utility class providing RTF writer functionality for YAT
+	/// </summary>
 	public static class RtfWriter
 	{
+		/// <summary></summary>
 		public static void LinesToRtfFile(List<List<Domain.DisplayElement>> lines, string rtfFilePath, Settings.FormatSettings formatSettings, RichTextBoxStreamType rtfType)
 		{
 			RichTextBox rtb = LinesToRichTextBox(lines, formatSettings);
 			rtb.SaveFile(rtfFilePath, rtfType);
 		}
 
+		/// <summary></summary>
 		public static void LinesToClipboard(List<List<Domain.DisplayElement>> lines, Settings.FormatSettings formatSettings)
 		{
 			RichTextBox rtb = LinesToRichTextBox(lines, formatSettings);
@@ -35,6 +44,7 @@ namespace YAT.Model.Utilities
 			rtb.Copy();
 		}
 
+		/// <summary></summary>
 		public static RichTextBox LinesToRichTextBox(List<List<Domain.DisplayElement>> lines, Settings.FormatSettings formatSettings)
 		{
 			RichTextBox rtb = new RichTextBox();
@@ -110,12 +120,16 @@ namespace YAT.Model.Utilities
 		}
 	}
 
+	/// <summary>
+	/// Static utility class providing RTF printer functionality for YAT
+	/// </summary>
 	public class RtfPrinter
 	{
 		private PrintDocument _pd;
 		private RichTextBox _rtb;
 		private StringReader _reader;
 
+		/// <summary></summary>
 		public RtfPrinter(PrinterSettings settings)
 		{
 			_pd = new PrintDocument();
@@ -123,6 +137,7 @@ namespace YAT.Model.Utilities
 			_pd.PrinterSettings = settings;
 		}
 
+		/// <summary></summary>
 		public void Print(RichTextBox rtb)
 		{
 			_rtb = rtb;
