@@ -11,6 +11,8 @@ namespace MKY.Utilities.Settings
 		where TDocumentSettings : Settings, new()
 	{
 		private string _settingsFilePath = "";
+		private string _accessedSettingsFilePath = "";
+
 		private TDocumentSettings _settings = default(TDocumentSettings);
 
 		/// <summary>
@@ -41,7 +43,24 @@ namespace MKY.Utilities.Settings
 		}
 
 		/// <summary>
-		/// Returns whether the settings file path exists.
+		/// Returns whether the settings file path is valid.
+		/// </summary>
+		public bool SettingsFilePathIsValid
+		{
+			get
+			{
+				if (_settingsFilePath == null)
+					return (false);
+				if (_settingsFilePath == "")
+					return (false);
+				if (System.IO.Path.GetFullPath(_settingsFilePath) == "")
+					return (false);
+				return (true);
+			}
+		}
+
+		/// <summary>
+		/// Returns whether the settings file exists.
 		/// </summary>
 		public bool SettingsFileExists
 		{
@@ -56,9 +75,9 @@ namespace MKY.Utilities.Settings
 		}
 
 		/// <summary>
-		/// Returns whether the settings file path is valid.
+		/// Returns whether the settings file is up to date.
 		/// </summary>
-		public bool SettingsFilePathIsValid
+		public bool SettingsFileIsUpToDate
 		{
 			get
 			{
@@ -66,9 +85,11 @@ namespace MKY.Utilities.Settings
 					return (false);
 				if (_settingsFilePath == "")
 					return (false);
-				if (System.IO.Path.GetFullPath(_settingsFilePath) == "")
+				if (!System.IO.File.Exists(_settingsFilePath))
 					return (false);
-				return (true);
+
+				// return whether current settings file path is still the same as the last access
+				return (_settingsFilePath == _accessedSettingsFilePath);
 			}
 		}
 
@@ -112,6 +133,10 @@ namespace MKY.Utilities.Settings
 				settings = SettingsDefault;
 				loadSuccess = false;
 			}
+			else
+			{
+				_accessedSettingsFilePath = _settingsFilePath;
+			}
 			_settings = (TDocumentSettings)settings;
 			_settings.ClearChanged();
 
@@ -121,20 +146,22 @@ namespace MKY.Utilities.Settings
 
 		private object LoadFromFile(Type type, string filePath)
 		{
-			XmlSerializer serializer = new XmlSerializer(type);
-
 			// try to open filePath
-			try
+			if (File.Exists(filePath)) // first check for file to minimize exceptions thrown
 			{
-				object settings = null;
-				using (FileStream fs = new FileStream(filePath, FileMode.Open))
+				try
 				{
-					settings = serializer.Deserialize(fs);
+					object settings = null;
+					using (StreamReader sr = new StreamReader(filePath))
+					{
+						XmlSerializer serializer = new XmlSerializer(type);
+						settings = serializer.Deserialize(sr);
+					}
+					return (settings);
 				}
-				return (settings);
-			}
-			catch
-			{
+				catch
+				{
+				}
 			}
 
 			// if nothing found, return null
@@ -154,6 +181,7 @@ namespace MKY.Utilities.Settings
 			try
 			{
 				SaveToFile(_settings.GetType(), _settingsFilePath, _settings);
+				_accessedSettingsFilePath = _settingsFilePath;
 				_settings.ClearChanged();
 			}
 			catch (Exception ex)
@@ -182,10 +210,10 @@ namespace MKY.Utilities.Settings
 
 			try
 			{
-				using (FileStream fs = new FileStream(filePath, FileMode.Create))
+				using (StreamWriter sw = new StreamWriter(filePath))
 				{
 					XmlSerializer serializer = new XmlSerializer(type);
-					serializer.Serialize(fs, settings);
+					serializer.Serialize(sw, settings);
 				}
 			}
 			catch (Exception ex)

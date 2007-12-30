@@ -28,7 +28,7 @@ namespace MKY.Utilities.Settings
 
 		private List<Settings> _nodes;
 		private bool _haveChanged = false;
-		private bool _changeEventIsSuspended = false;
+		private int _changeEventSuspendedCount = 0;
 
 		/// <summary></summary>
 		public event EventHandler<SettingsEventArgs> Changed;
@@ -118,49 +118,40 @@ namespace MKY.Utilities.Settings
 		/// <summary></summary>
 		public virtual void SetChanged()
 		{
-			bool wasSuspended = _changeEventIsSuspended;
-			if (!wasSuspended)
-				SuspendChangeEvent();
+			SuspendChangeEvent();
 
 			foreach (Settings node in _nodes)
 				node.SetChanged();
 
 			_haveChanged = true;
 
-			if (!wasSuspended)
-				ResumeChangeEvent();
+			ResumeChangeEvent();
 		}
 
 		/// <summary></summary>
 		public virtual void ClearChanged()
 		{
-			bool wasSuspended = _changeEventIsSuspended;
-			if (!wasSuspended)
-				SuspendChangeEvent();
+			SuspendChangeEvent();
 
 			foreach (Settings node in _nodes)
 				node.ClearChanged();
 
 			_haveChanged = false;
 
-			if (!wasSuspended)
-				ResumeChangeEvent();
+			ResumeChangeEvent();
 		}
 
 		/// <summary></summary>
 		public virtual void SetDefaults()
 		{
-			bool wasSuspended = _changeEventIsSuspended;
-			if (!wasSuspended)
-				SuspendChangeEvent();
+			SuspendChangeEvent();
 
 			foreach (Settings node in _nodes)
 				node.SetDefaults();
 
 			SetMyDefaults();
 
-			if (!wasSuspended)
-				ResumeChangeEvent();
+			ResumeChangeEvent();
 		}
 
 		/// <summary></summary>
@@ -228,7 +219,7 @@ namespace MKY.Utilities.Settings
 		/// <summary></summary>
 		protected virtual void OnChanged(SettingsEventArgs e)
 		{
-			if (!_changeEventIsSuspended)
+			if (_changeEventSuspendedCount == 0)
 				EventHelper.FireSync<SettingsEventArgs>(Changed, this, e);
 		}
 
@@ -247,7 +238,7 @@ namespace MKY.Utilities.Settings
 			foreach (Settings node in _nodes)
 				node.SuspendChangeEvent();
 
-			_changeEventIsSuspended = true;
+			_changeEventSuspendedCount++;
 		}
 
 		/// <summary>
@@ -264,7 +255,7 @@ namespace MKY.Utilities.Settings
 		/// <summary></summary>
 		public void ResumeChangeEvent(bool forcePendingChangeEvent)
 		{
-			_changeEventIsSuspended = false;
+			_changeEventSuspendedCount--;
 
 			foreach (Settings node in _nodes)
 				node.ResumeChangeEvent(forcePendingChangeEvent);

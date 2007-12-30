@@ -126,7 +126,7 @@ namespace YAT.Gui.Forms
 			this.label_Explanations.Name = "label_Explanations";
 			this.label_Explanations.Size = new System.Drawing.Size(476, 26);
 			this.label_Explanations.TabIndex = 0;
-			this.label_Explanations.Text = "Since this is non-commercial software, there simply hasn\'t been man power to add " +
+			this.label_Explanations.Text = "Since this is non-commercial software, there simply hasn\'t been resources to add " +
 				"a comprehensive help yet. Maybe one day...";
 			// 
 			// Help

@@ -42,27 +42,48 @@ namespace MKY.Utilities.Guid
 		//==========================================================================================
 
 		/// <summary>
-		/// Add or replaces the item that has the same <see cref="Guid"/> as item.
+		/// Add or replaces the item that has the same <see cref="System.Guid"/> as item.
 		/// </summary>
-		public void AddOrReplaceGuid(T item)
+		public void AddOrReplaceGuidItem(T item)
+		{
+			// replace or add if not contained yet
+			if (!ReplaceGuidItem(item))
+				Add(item);
+		}
+
+		/// <summary>
+		/// Replaces the item that has the same <see cref="System.Guid"/> as item.
+		/// </summary>
+		public bool ReplaceGuidItem(T item)
 		{
 			GuidList<T> clone = new GuidList<T>(this);
-
 			for (int i = 0; i < clone.Count; i++)
 			{
 				if (this[i].Guid.Equals(item.Guid))
 				{
 					this[i] = item;
-					return;
+					return (true);
 				}
 			}
-
-			// add if not contained yet
-			Add(item);
+			return (false);
 		}
 
 		/// <summary>
-		/// Removes all items that have the specified GUID.
+		/// Returns first item within the list that has the specified <see cref="System.Guid"/>,
+		/// null otherwise.
+		/// </summary>
+		public T GetGuidItem(System.Guid guid)
+		{
+			foreach (T item in this)
+			{
+				if (item.Guid == guid)
+					return (item);
+			}
+			return (default(T));
+		}
+
+		/// <summary>
+		/// Removes all items that have the specified <see cref="System.Guid"/>.
 		/// </summary>
 		public void RemoveGuid(System.Guid guid)
 		{

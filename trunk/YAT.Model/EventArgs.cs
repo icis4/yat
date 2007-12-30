@@ -37,20 +37,33 @@ namespace YAT.Model
 		/// <summary></summary>
 		public readonly string FilePath;
 		/// <summary></summary>
-		public readonly bool AutoSave;
+		public readonly bool IsAutoSave;
 
 		/// <summary></summary>
 		public SavedEventArgs(string filePath)
 		{
 			FilePath = filePath;
-			AutoSave = false;
+			IsAutoSave = false;
 		}
 
 		/// <summary></summary>
-		public SavedEventArgs(string filePath, bool autoSave)
+		public SavedEventArgs(string filePath, bool isAutoSave)
 		{
 			FilePath = filePath;
-			AutoSave = autoSave;
+			IsAutoSave = isAutoSave;
+		}
+	}
+
+	/// <summary></summary>
+	public class ClosedEventArgs : EventArgs
+	{
+		/// <summary></summary>
+		public readonly bool IsWorkspaceClose;
+
+		/// <summary></summary>
+		public ClosedEventArgs(bool isWorkspaceClose)
+		{
+			IsWorkspaceClose = isWorkspaceClose;
 		}
 	}
 

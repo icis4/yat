@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Windows.Forms;
+using System.Diagnostics;
 
+using MKY.Utilities.Guid;
 using MKY.Utilities.Event;
 using MKY.Utilities.Recent;
 using MKY.Utilities.Settings;
@@ -13,6 +15,7 @@ using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
+
 using YAT.Utilities;
 
 namespace YAT.Model
@@ -150,36 +153,131 @@ namespace YAT.Model
 
 		#endregion
 
-		#region General Methods
+		#region Start
 		//==========================================================================================
-		// General Methods
+		// Start
 		//==========================================================================================
 
 		/// <summary>
 		/// If a file was requested by command line argument, this method tries to open the
 		/// requested file.
 		/// Else, this method tries to open the most recent workspace of the current user.
+		/// If still unsuccessful, a new workspace is created.
 		/// </summary>
-		/// <returns>Returns true if either operation succeeded, false otherwise</returns>
+		/// <returns>Returns true if either operation succeeded, false otherwise.</returns>
 		public bool Start()
 		{
 			AssertNotDisposed();
 
+			bool otherInstanceIsAlreadyRunning = OtherInstanceIsAlreadyRunning();
 			bool success = false;
 
 			if ((_requestedFilePath != null) && (_requestedFilePath != ""))
 			{
 				success = OpenFromFile(_requestedFilePath);
+
+				// clean up all default workspaces/terminals since they're not needed anymore
+				if (success && !otherInstanceIsAlreadyRunning)
+					CleanupDefaultDirectory();
 			}
 
 			if (!success && ApplicationSettings.LocalUser.General.AutoOpenWorkspace)
 			{
-				string filePath = ApplicationSettings.LocalUser.General.WorkspaceFilePath;
-				if (File.Exists(filePath))
-					success = OpenWorkspaceFromFile(filePath);
+				// make sure no other instance of YAT that could use the default workspace
+				// is already running
+				if (!otherInstanceIsAlreadyRunning)
+				{
+					string filePath = ApplicationSettings.LocalUser.General.WorkspaceFilePath;
+					if (File.Exists(filePath))
+						success = OpenWorkspaceFromFile(filePath);
+
+					// clean up obsolete default workspaces/terminals since they're not needed anymore
+					if (success)
+						CleanupDefaultDirectory();
+				}
 			}
 
+			// looks like nothing was successful, completely clean up default directory...
+			if (!success && !otherInstanceIsAlreadyRunning)
+				CleanupDefaultDirectory();
+
+			// ...and create new empty workspace
+			if (!success)
+				success = CreateNewWorkspace();
+
 			return (success);
+		}
+
+		private bool OtherInstanceIsAlreadyRunning()
+		{
+			List<Process> processes = new List<Process>();
+
+			// get all processes named "YAT"
+			processes.AddRange(Process.GetProcessesByName(Application.ProductName));
+
+			// also get all debug processes named "YAT.vshost"
+			processes.AddRange(Process.GetProcessesByName(Application.ProductName + ".vshost"));
+
+			// remove current instance
+			Process currentProcess = Process.GetCurrentProcess();
+			foreach (Process p in processes)
+			{
+				// comparision must happen through process ID
+				if (p.Id == currentProcess.Id)
+				{
+					processes.Remove(p);
+					break;
+				}
+			}
+
+			return (processes.Count > 0);
+		}
+
+		private void CleanupDefaultDirectory()
+		{
+			// get all file paths in default directory
+			List<string> defaultDirectoryFilePaths = new List<string>();
+			try
+			{
+				DirectoryInfo defaultDirectory = Directory.GetParent(ApplicationSettings.LocalUserSettingsFilePath);
+				defaultDirectoryFilePaths.AddRange(Directory.GetFiles(defaultDirectory.FullName));
+			}
+			catch
+			{
+				// don't care about exceptions
+			}
+
+			// ensure to leave application settings untouched
+			defaultDirectoryFilePaths.Remove(ApplicationSettings.LocalUserSettingsFilePath);
+
+			// get all active file paths
+			List<string> activeFilePaths = new List<string>();
+			if (_workspace != null)
+			{
+				// add workspace settings file
+				if (_workspace.SettingsFileExists)
+					activeFilePaths.Add(_workspace.SettingsFilePath);
+
+				// add terminal settings files
+				activeFilePaths.AddRange(_workspace.TerminalSettingsFilePaths);
+			}
+
+			// ensure to leave all active settings untouched
+			foreach (string afp in activeFilePaths)
+				defaultDirectoryFilePaths.Remove(afp);
+
+			// delete all obsolete file paths in default directory
+			foreach (string ddfp in defaultDirectoryFilePaths)
+			{
+				try
+				{
+					File.Delete(ddfp);
+				}
+				catch
+				{
+					// don't care about exceptions
+				}
+			}
 		}
 
 		#endregion
@@ -243,17 +341,11 @@ namespace YAT.Model
 
 		private void AttachWorkspaceEventHandlers()
 		{
-			_workspace.TerminalRemoved += new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalRemoved);
-			_workspace.TerminalAdded   += new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalAdded);
-
 			_workspace.Closed += new EventHandler(_workspace_Closed);
 		}
 
 		private void DetachWorkspaceEventHandlers()
 		{
-			_workspace.TerminalRemoved -= new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalRemoved);
-			_workspace.TerminalAdded   -= new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalAdded);
-
 			_workspace.Closed -= new EventHandler(_workspace_Closed);
 		}
 
@@ -263,16 +355,6 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 		// Workspace > Event Handlers
 		//------------------------------------------------------------------------------------------
-
-		private void _workspace_TerminalRemoved(object sender, Model.TerminalEventArgs e)
-		{
-			throw new Exception("The method or operation is not implemented.");
-		}
-
-		private void _workspace_TerminalAdded(object sender, Model.TerminalEventArgs e)
-		{
-			throw new Exception("The method or operation is not implemented.");
-		}
 
 		private void _workspace_Closed(object sender, EventArgs e)
 		{
@@ -285,6 +367,20 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 		// Workspace > Methods
 		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public bool CreateNewWorkspace()
+		{
+			OnFixedStatusTextRequest("Creating new workspace...");
+
+			// create workspace
+			_workspace = new Workspace(new DocumentSettingsHandler<WorkspaceSettingsRoot>());
+			AttachWorkspaceEventHandlers();
+			OnWorkspaceOpened(new WorkspaceEventArgs(_workspace));
+
+			OnTimedStatusTextRequest("New workspace created");
+			return (true);
+		}
 
 		/// <summary>
 		/// Opens YAT and opens the workspace or terminal file given. This method can directly
@@ -311,7 +407,6 @@ namespace YAT.Model
 			else
 			{
 				OnFixedStatusTextRequest("Unknown file type!");
-
 				OnMessageInputRequest
 					(
 					"File" + Environment.NewLine + filePath + Environment.NewLine +
@@ -320,7 +415,6 @@ namespace YAT.Model
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Stop
 					);
-
 				OnTimedStatusTextRequest("No file opened!");
 				return (false);
 			}
@@ -331,9 +425,37 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
+			// -------------------------------------------------------------------------------------
+			// check whether workspace is already opened
+			// -------------------------------------------------------------------------------------
+
+			if (_workspace != null)
+			{
+				if (filePath == _workspace.SettingsFilePath)
+				{
+					OnFixedStatusTextRequest("Workspace is already open.");
+					OnMessageInputRequest
+						(
+						"Workspace is already open and will not be re-openend.",
+						"Workspace File Warning",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+						);
+					OnTimedStatusTextRequest("Workspace not re-opened.");
+					return (false);
+				}
+			}
+
 			// close workspace, only one workspace can exist within application
-			if (!_workspace.Close())
-				return (false);
+			if (_workspace != null)
+			{
+				if (!_workspace.Close())
+					return (false);
+			}
+
+			// -------------------------------------------------------------------------------------
+			// open the workspace itself
+			// -------------------------------------------------------------------------------------
 
 			OnFixedStatusTextRequest("Opening workspace...");
 			try
@@ -345,33 +467,39 @@ namespace YAT.Model
 				ApplicationSettings.LocalUser.General.WorkspaceFilePath = filePath;
 				ApplicationSettings.SaveLocalUser();
 
+				// try to retrieve GUID from file path (in case of auto saved workspace files)
+				Guid guid = XGuid.CreateGuidFromFilePath(filePath, GeneralSettings.AutoSaveWorkspaceFileNamePrefix);
+
 				// create workspace
-				_workspace = new Workspace(sh);
+				_workspace = new Workspace(sh, guid);
+				AttachWorkspaceEventHandlers();
 
 				if (!sh.Settings.AutoSaved)
 					SetRecent(filePath);
 
+				OnWorkspaceOpened(new WorkspaceEventArgs(_workspace));
 				OnTimedStatusTextRequest("Workspace opened");
 			}
 			catch (System.Xml.XmlException ex)
 			{
 				OnFixedStatusTextRequest("Error opening workspace!");
-
 				OnMessageInputRequest
 					(
 					"Unable to open file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
 					"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
 					"File error message: " + ex.InnerException.Message,
-					"File Error",
+					"Invalid Workspace File",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Stop
 					);
-
 				OnTimedStatusTextRequest("No workspace opened!");
 				return (false);
 			}
 
+			// -------------------------------------------------------------------------------------
 			// open workspace terminals
+			// -------------------------------------------------------------------------------------
+
 			int terminalCount = _workspace.OpenTerminals();
 
 			if (terminalCount == 1)
@@ -380,12 +508,6 @@ namespace YAT.Model
 				OnTimedStatusTextRequest("Workspace terminals opened");
 			else
 				OnTimedStatusTextRequest("Workspace contains no terminal to open");
-
-			// attach workspace event handlers after terminals have been opened
-			AttachWorkspaceEventHandlers();
-
-			// fire workspace event
-			OnWorkspaceOpened(new WorkspaceEventArgs(_workspace));
 
 			return (true);
 		}
@@ -414,20 +536,20 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void OnFixedStatusTextRequest(string text)
 		{
-			EventHelper.FireSync(FixedStatusTextRequest, this, new StatusTextEventArgs(text));
+			EventHelper.FireSync<StatusTextEventArgs>(FixedStatusTextRequest, this, new StatusTextEventArgs(text));
 		}
 
 		/// <summary></summary>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
-			EventHelper.FireSync(TimedStatusTextRequest, this, new StatusTextEventArgs(text));
+			EventHelper.FireSync<StatusTextEventArgs>(TimedStatusTextRequest, this, new StatusTextEventArgs(text));
 		}
 
 		/// <summary></summary>
 		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		{
 			MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
-			EventHelper.FireSync(MessageInputRequest, this, e);
+			EventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
 			return (e.Result);
 		}
 

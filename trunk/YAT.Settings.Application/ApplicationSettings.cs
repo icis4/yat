@@ -40,6 +40,11 @@ namespace YAT.Settings.Application
 			get { return (_settingsHandler.LocalUserSettingsSuccessfullyLoaded); }
 		}
 
+		public static string LocalUserSettingsFilePath
+		{
+			get { return (_settingsHandler.LocalUserSettingsFilePath); }
+		}
+
 		public static bool AllSettingsSuccessfullyLoaded
 		{
 			get { return (_settingsHandler.AllSettingsSuccessfullyLoaded); }

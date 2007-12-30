@@ -27,6 +27,8 @@ namespace YAT.Gui.Forms
 		// startup/update
 		private bool _isStartingUp = true;
 		private bool _isSettingControls = false;
+		private bool _isClosingFromForm = false;
+		private bool _isClosingFromModel = false;
 
 		// MDI
 		private Form _mdiParent;
@@ -117,10 +119,15 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region Properties
+		#region MDI Parent
 		//******************************************************************************************
-		// Properties
+		// MDI Parent
 		//******************************************************************************************
+
+		#region MDI Parent > Properties
+		//------------------------------------------------------------------------------------------
+		// MDI Parent > Properties
+		//------------------------------------------------------------------------------------------
 
 		public string UserName
 		{
@@ -132,12 +139,17 @@ namespace YAT.Gui.Forms
 			get { return (_terminal.IsOpen); }
 		}
 
+		public Model.Terminal UnderlyingTerminal
+		{
+			get { return (_terminal); }
+		}
+
 		#endregion
 
-		#region Methods
-		//==========================================================================================
-		// Methods
-		//==========================================================================================
+		#region MDI Parent > Methods
+		//------------------------------------------------------------------------------------------
+		// MDI Parent > Methods
+		//------------------------------------------------------------------------------------------
 
 		public bool RequestSaveFile()
 		{
@@ -163,6 +175,8 @@ namespace YAT.Gui.Forms
 		{
 			ShowTerminalSettings();
 		}
+
+		#endregion
 
 		#endregion
 
@@ -202,9 +216,24 @@ namespace YAT.Gui.Forms
 				SaveWindowSettings();
 		}
 
+		/// <remarks>
+		/// Attention:
+		/// In case of MDI parent/application closing, this FormClosing event is called before
+		/// the FormClosing event of the MDI parent. Therefore, this MDI child has to handle
+		/// such events differently, i.e. auto save the terminal but only in case of non-user
+		/// closing.
+		/// </remarks>
 		private void Terminal_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			e.Cancel = (!_terminal.Close());
+			// prevent multiple calls to Close()
+			if (!_isClosingFromModel)
+			{
+				_isClosingFromForm = true;
+				if (e.CloseReason == CloseReason.UserClosing)
+					e.Cancel = (!_terminal.Close());
+				else
+					e.Cancel = (!_terminal.Close(true));
+			}
 		}
 
 		#endregion
@@ -871,208 +900,6 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region Settings
-		//==========================================================================================
-		// Settings
-		//==========================================================================================
-
-		#region Settings > Lifetime
-		//------------------------------------------------------------------------------------------
-		// Settings > Lifetime
-		//------------------------------------------------------------------------------------------
-
-		private void AttachSettingsEventHandlers()
-		{
-			_settingsRoot.Changed += new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
-		}
-
-		private void DetachSettingsEventHandlers()
-		{
-			_settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
-		}
-
-		#endregion
-
-		#region Settings > Event Handlers
-		//------------------------------------------------------------------------------------------
-		// Settings > Event Handlers
-		//------------------------------------------------------------------------------------------
-
-		private void _settingsRoot_Changed(object sender, SettingsEventArgs e)
-		{
-			SetTerminalCaption();
-			if (e.Inner == null)
-			{
-				// SettingsRoot changed
-				// nothing to do, no need to care about ProductVersion
-			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Explicit))
-			{
-				// ExplicitSettings changed
-				HandleExplicitSettings(e.Inner);
-			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Implicit))
-			{
-				// ImplicitSettings changed
-				HandleImplicitSettings(e.Inner);
-			}
-		}
-
-		private void HandleExplicitSettings(SettingsEventArgs e)
-		{
-			if (e.Inner == null)
-			{
-				// ExplicitSettings changed
-				// nothing to do
-			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Terminal))
-			{
-				// TerminalSettings changed
-				HandleTerminalSettings(e.Inner);
-			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.PredefinedCommand))
-			{
-				// PredefinedCommandSettings changed
-				_isSettingControls = true;
-				predefined.Pages = _settingsRoot.PredefinedCommand.Pages;
-				_isSettingControls = false;
-
-				SetPredefinedMenuItems();        // ensure that shortcuts are activated
-			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Format))
-			{
-				// FormatSettings changed
-				ReformatMonitors();
-			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Log))
-			{
-				// LogSettings changed
-				SetLogControls();
-			}
-		}
-
-		private void HandleImplicitSettings(SettingsEventArgs e)
-		{
-			if (e.Inner == null)
-			{
-				// ImplicitSettings changed
-				SetTerminalControls();
-				SetLogControls();
-			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.SendCommand))
-			{
-				// SendCommandSettings changed
-				_isSettingControls = true;
-				send.Command = _settingsRoot.SendCommand.Command;
-				send.RecentCommands = _settingsRoot.SendCommand.RecentCommands;
-				_isSettingControls = false;
-			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.SendFile))
-			{
-				// SendFileSettings changed
-				_isSettingControls = true;
-				send.FileCommand = _settingsRoot.SendFile.Command;
-				_isSettingControls = false;
-			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Predefined))
-			{
-				// PredefinedSettings changed
-				_isSettingControls = true;
-				predefined.SelectedPage = _settingsRoot.Predefined.SelectedPage;
-				_isSettingControls = false;
-			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Window))
-			{
-				// WindowSettings changed
-				// nothing to do, windows settings are only saved
-			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Layout))
-			{
-				// LayoutSettings changed
-				LayoutTerminal();
-			}
-		}
-
-		private void HandleTerminalSettings(SettingsEventArgs e)
-		{
-			if (_handlingTerminalSettingsIsSuspended)
-				return;
-
-			if (e.Inner == null)
-			{
-				// TerminalSettings changed
-				SetIOStatus();
-				SetIOControlControls();
-			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.IO))
-			{
-				// IOSettings changed
-				SetIOStatus();
-				SetIOControlControls();
-			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Buffer))
-			{
-				// BufferSettings changed
-				ReloadMonitors();
-			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Display))
-			{
-				// DisplaySettings changed
-				ReloadMonitors();
-
-				monitor_Tx.ShowCountStatus = _settingsRoot.Display.ShowCounters;
-				monitor_Bidir.ShowCountStatus = _settingsRoot.Display.ShowCounters;
-				monitor_Rx.ShowCountStatus = _settingsRoot.Display.ShowCounters;
-			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Transmit))
-			{
-				// TransmitSettings changed
-				ReloadMonitors();
-			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.TextTerminal))
-			{
-				// TextTerminalSettings changed
-				if (_settingsRoot.TerminalType == Domain.TerminalType.Text)
-					ReloadMonitors();
-			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.BinaryTerminal))
-			{
-				// BinaryTerminalSettings changed
-				if (_settingsRoot.TerminalType == Domain.TerminalType.Binary)
-					ReloadMonitors();
-			}
-		}
-
-		#endregion
-
-		#region Settings > Suspend
-		//------------------------------------------------------------------------------------------
-		// Settings > Suspend
-		//------------------------------------------------------------------------------------------
-
-		private void SuspendHandlingTerminalSettings()
-		{
-			_handlingTerminalSettingsIsSuspended = true;
-		}
-
-		private void ResumeHandlingTerminalSettings()
-		{
-			_handlingTerminalSettingsIsSuspended = false;
-
-			SetIOStatus();
-			SetIOControlControls();
-
-			ReloadMonitors();
-
-			monitor_Tx.ShowCountStatus = _settingsRoot.Display.ShowCounters;
-			monitor_Bidir.ShowCountStatus = _settingsRoot.Display.ShowCounters;
-			monitor_Rx.ShowCountStatus = _settingsRoot.Display.ShowCounters;
-		}
-
-		#endregion
-
-		#endregion
-
 		#region View
 		//==========================================================================================
 		// View
@@ -1331,14 +1158,14 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region Monitor
+		#region Monitor Panels
 		//==========================================================================================
-		// Monitor
+		// Monitor Panels
 		//==========================================================================================
 
-		#region Monitor > Access
+		#region Monitor Panels > Access
 		//------------------------------------------------------------------------------------------
-		// Monitor > Access
+		// Monitor Panels > Access
 		//------------------------------------------------------------------------------------------
 
 		private Domain.RepositoryType GetMonitorType(Control source)
@@ -1366,9 +1193,9 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region Monitor > View
+		#region Monitor Panels > View
 		//------------------------------------------------------------------------------------------
-		// Monitor > View
+		// Monitor Panels > View
 		//------------------------------------------------------------------------------------------
 
 		private void InitializeMonitorMenuItems()
@@ -1448,9 +1275,9 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region Monitor > Methods
+		#region Monitor Panels > Methods
 		//------------------------------------------------------------------------------------------
-		// Monitor > Methods
+		// Monitor Panels > Methods
 		//------------------------------------------------------------------------------------------
 
 		private void ShowFormatSettings()
@@ -1573,9 +1400,9 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region Predefined
+		#region Predefined Panel
 		//==========================================================================================
-		// Predefined
+		// Predefined Panel
 		//==========================================================================================
 
 		private void InitializePredefinedMenuItems()
@@ -1694,6 +1521,220 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
+		#region Send Panel
+		//==========================================================================================
+		// Send Panel
+		//==========================================================================================
+
+		private void SelectSendCommandInput()
+		{
+			send.SelectSendCommandInput();
+		}
+
+		#endregion
+
+		#region Settings
+		//==========================================================================================
+		// Settings
+		//==========================================================================================
+
+		#region Settings > Lifetime
+		//------------------------------------------------------------------------------------------
+		// Settings > Lifetime
+		//------------------------------------------------------------------------------------------
+
+		private void AttachSettingsEventHandlers()
+		{
+			_settingsRoot.Changed += new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
+		}
+
+		private void DetachSettingsEventHandlers()
+		{
+			_settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
+		}
+
+		#endregion
+
+		#region Settings > Event Handlers
+		//------------------------------------------------------------------------------------------
+		// Settings > Event Handlers
+		//------------------------------------------------------------------------------------------
+
+		private void _settingsRoot_Changed(object sender, SettingsEventArgs e)
+		{
+			SetTerminalCaption();
+			if (e.Inner == null)
+			{
+				// SettingsRoot changed
+				// nothing to do, no need to care about ProductVersion
+			}
+			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Explicit))
+			{
+				// ExplicitSettings changed
+				HandleExplicitSettings(e.Inner);
+			}
+			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Implicit))
+			{
+				// ImplicitSettings changed
+				HandleImplicitSettings(e.Inner);
+			}
+		}
+
+		private void HandleExplicitSettings(SettingsEventArgs e)
+		{
+			if (e.Inner == null)
+			{
+				// ExplicitSettings changed
+				// nothing to do
+			}
+			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Terminal))
+			{
+				// TerminalSettings changed
+				HandleTerminalSettings(e.Inner);
+			}
+			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.PredefinedCommand))
+			{
+				// PredefinedCommandSettings changed
+				_isSettingControls = true;
+				predefined.Pages = _settingsRoot.PredefinedCommand.Pages;
+				_isSettingControls = false;
+
+				SetPredefinedMenuItems();        // ensure that shortcuts are activated
+			}
+			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Format))
+			{
+				// FormatSettings changed
+				ReformatMonitors();
+			}
+			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Log))
+			{
+				// LogSettings changed
+				SetLogControls();
+			}
+		}
+
+		private void HandleImplicitSettings(SettingsEventArgs e)
+		{
+			if (e.Inner == null)
+			{
+				// ImplicitSettings changed
+				SetTerminalControls();
+				SetLogControls();
+			}
+			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.SendCommand))
+			{
+				// SendCommandSettings changed
+				_isSettingControls = true;
+				send.Command = _settingsRoot.SendCommand.Command;
+				send.RecentCommands = _settingsRoot.SendCommand.RecentCommands;
+				_isSettingControls = false;
+			}
+			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.SendFile))
+			{
+				// SendFileSettings changed
+				_isSettingControls = true;
+				send.FileCommand = _settingsRoot.SendFile.Command;
+				_isSettingControls = false;
+			}
+			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Predefined))
+			{
+				// PredefinedSettings changed
+				_isSettingControls = true;
+				predefined.SelectedPage = _settingsRoot.Predefined.SelectedPage;
+				_isSettingControls = false;
+			}
+			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Window))
+			{
+				// WindowSettings changed
+				// nothing to do, windows settings are only saved
+			}
+			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Layout))
+			{
+				// LayoutSettings changed
+				LayoutTerminal();
+			}
+		}
+
+		private void HandleTerminalSettings(SettingsEventArgs e)
+		{
+			if (_handlingTerminalSettingsIsSuspended)
+				return;
+
+			if (e.Inner == null)
+			{
+				// TerminalSettings changed
+				SetIOStatus();
+				SetIOControlControls();
+			}
+			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.IO))
+			{
+				// IOSettings changed
+				SetIOStatus();
+				SetIOControlControls();
+			}
+			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Buffer))
+			{
+				// BufferSettings changed
+				ReloadMonitors();
+			}
+			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Display))
+			{
+				// DisplaySettings changed
+				ReloadMonitors();
+
+				monitor_Tx.ShowCountStatus = _settingsRoot.Display.ShowCounters;
+				monitor_Bidir.ShowCountStatus = _settingsRoot.Display.ShowCounters;
+				monitor_Rx.ShowCountStatus = _settingsRoot.Display.ShowCounters;
+			}
+			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Transmit))
+			{
+				// TransmitSettings changed
+				ReloadMonitors();
+			}
+			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.TextTerminal))
+			{
+				// TextTerminalSettings changed
+				if (_settingsRoot.TerminalType == Domain.TerminalType.Text)
+					ReloadMonitors();
+			}
+			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.BinaryTerminal))
+			{
+				// BinaryTerminalSettings changed
+				if (_settingsRoot.TerminalType == Domain.TerminalType.Binary)
+					ReloadMonitors();
+			}
+		}
+
+		#endregion
+
+		#region Settings > Suspend
+		//------------------------------------------------------------------------------------------
+		// Settings > Suspend
+		//------------------------------------------------------------------------------------------
+
+		private void SuspendHandlingTerminalSettings()
+		{
+			_handlingTerminalSettingsIsSuspended = true;
+		}
+
+		private void ResumeHandlingTerminalSettings()
+		{
+			_handlingTerminalSettingsIsSuspended = false;
+
+			SetIOStatus();
+			SetIOControlControls();
+
+			ReloadMonitors();
+
+			monitor_Tx.ShowCountStatus = _settingsRoot.Display.ShowCounters;
+			monitor_Bidir.ShowCountStatus = _settingsRoot.Display.ShowCounters;
+			monitor_Rx.ShowCountStatus = _settingsRoot.Display.ShowCounters;
+		}
+
+		#endregion
+
+		#endregion
+
 		#region Terminal
 		//==========================================================================================
 		// Terminal
@@ -1719,8 +1760,14 @@ namespace YAT.Gui.Forms
 			_terminal.RepositoryCleared  += new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryCleared);
 			_terminal.RepositoryReloaded += new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryReloaded);
 
+			_terminal.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_terminal_TimedStatusTextRequest);
+			_terminal.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_terminal_FixedStatusTextRequest);
+			_terminal.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(_terminal_MessageInputRequest);
+
+			_terminal.SaveAsFileDialogRequest += new EventHandler<Model.DialogEventArgs>(_terminal_SaveAsFileDialogRequest);
+
 			_terminal.Saved  += new EventHandler<Model.SavedEventArgs>(_terminal_Saved);
-			_terminal.Closed += new EventHandler(_terminal_Closed);
+			_terminal.Closed += new EventHandler<Model.ClosedEventArgs>(_terminal_Closed);
 		}
 
 		private void DetachTerminalEventHandlers()
@@ -1738,8 +1785,14 @@ namespace YAT.Gui.Forms
 			_terminal.RepositoryCleared  -= new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryCleared);
 			_terminal.RepositoryReloaded -= new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryReloaded);
 
+			_terminal.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_terminal_TimedStatusTextRequest);
+			_terminal.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_terminal_FixedStatusTextRequest);
+			_terminal.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(_terminal_MessageInputRequest);
+
+			_terminal.SaveAsFileDialogRequest -= new EventHandler<Model.DialogEventArgs>(_terminal_SaveAsFileDialogRequest);
+
 			_terminal.Saved  -= new EventHandler<Model.SavedEventArgs>(_terminal_Saved);
-			_terminal.Closed -= new EventHandler(_terminal_Closed);
+			_terminal.Closed -= new EventHandler<Model.ClosedEventArgs>(_terminal_Closed);
 		}
 
 		#endregion
@@ -1849,14 +1902,40 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		private void _terminal_TimedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
+		{
+			SetTimedStatusText(e.Text);
+		}
+
+		private void _terminal_FixedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
+		{
+			SetFixedStatusText(e.Text);
+		}
+
+		private void _terminal_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
+		{
+			e.Result = MessageBox.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
+		}
+
+		private void _terminal_SaveAsFileDialogRequest(object sender, Model.DialogEventArgs e)
+		{
+			e.Result = ShowSaveTerminalAsFileDialog();
+		}
+
 		private void _terminal_Saved(object sender, Model.SavedEventArgs e)
 		{
 			SetTerminalControls();
+			SelectSendCommandInput();
 		}
 
-		private void _terminal_Closed(object sender, EventArgs e)
+		private void _terminal_Closed(object sender, Model.ClosedEventArgs e)
 		{
-			Close();
+			// prevent multiple calls to Close()
+			if (!_isClosingFromForm)
+			{
+				_isClosingFromModel = true;
+				Close();
+			}
 		}
 
 		#endregion
@@ -1866,16 +1945,19 @@ namespace YAT.Gui.Forms
 		// Terminal > Methods
 		//------------------------------------------------------------------------------------------
 
-		private void ShowSaveTerminalAsFileDialog()
+		private DialogResult ShowSaveTerminalAsFileDialog()
 		{
 			SetFixedStatusText("Saving terminal as...");
+
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Title = "Save " + UserName + " As";
 			sfd.Filter = ExtensionSettings.TerminalFilesFilter;
 			sfd.DefaultExt = ExtensionSettings.TerminalFiles;
 			sfd.InitialDirectory = ApplicationSettings.LocalUser.Paths.TerminalFilesPath;
 			sfd.FileName = UserName + "." + sfd.DefaultExt;
-			if ((sfd.ShowDialog(this) == DialogResult.OK) && (sfd.FileName.Length > 0))
+
+			DialogResult dr = sfd.ShowDialog(this);
+			if ((dr == DialogResult.OK) && (sfd.FileName.Length > 0))
 			{
 				Refresh();
 
@@ -1888,8 +1970,8 @@ namespace YAT.Gui.Forms
 			{
 				ResetStatusText();
 			}
-
 			SelectSendCommandInput();
+			return (dr);
 		}
 
 		#endregion
@@ -2276,32 +2358,6 @@ namespace YAT.Gui.Forms
 		}
 
 		#endregion
-
-		/*ON TERMINAL CHANGED
-			SetTerminalCaption();
-
-		ON TERMINAL SAVED
-			SelectSendCommandInput();
-
-		ON TERMINAL OPENED
-			SelectSendCommandInput();
-
-		OPEN TERMINAL
-		CLOSE TERMINAL
-			Cursor = Cursors.WaitCursor;
-			Cursor = Cursors.Default;*/
-
-		#endregion
-
-		#region Send > Command
-		//------------------------------------------------------------------------------------------
-		// Send > Command
-		//------------------------------------------------------------------------------------------
-
-		private void SelectSendCommandInput()
-		{
-			send.SelectSendCommandInput();
-		}
 
 		#endregion
 

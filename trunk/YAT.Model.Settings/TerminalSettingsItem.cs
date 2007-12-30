@@ -68,20 +68,9 @@ namespace YAT.Model.Settings
 					SetChanged();
 				}
 				
-				// set GUID from file path if needed
-				if ((_guid == Guid.Empty) && File.Exists(_filePath))
-				{
-					string fileName = Path.GetFileNameWithoutExtension(_filePath);
-					string guidString = fileName.Substring(YAT.Settings.GeneralSettings.AutoSaveTerminalFileNamePrefix.Length);
-					try
-					{
-						_guid = new Guid(guidString);
-					}
-					catch (Exception)
-					{
-						_guid = Guid.Empty;
-					}
-				}
+				// create GUID from file path
+				if ((_guid == Guid.Empty) && (_filePath != ""))
+					_guid = XGuid.CreateGuidFromFilePath(_filePath, YAT.Settings.GeneralSettings.AutoSaveTerminalFileNamePrefix);
 			}
 		}
 

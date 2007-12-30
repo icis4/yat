@@ -42,12 +42,12 @@ namespace MKY.Utilities.Event
 				else
 				{
 				#if (DEBUG) // invoke event directly so exceptions can be debugged where they happen
-					EventHandler castedDelegate = (EventHandler)eventDelegate;
+					EventHandler castedSink = (EventHandler)sink;
 					object sender = args[0];
 					EventArgs eventArgs = (EventArgs)args[1];
 					try
 					{
-						castedDelegate(sender, eventArgs);
+						castedSink(sender, eventArgs);
 					}
 					catch (Exception ex)
 					{
@@ -85,12 +85,12 @@ namespace MKY.Utilities.Event
 				else
 				{
 				#if (DEBUG) // invoke event directly so exceptions can be debugged where they happen
-					EventHandler<TEventArgs> castedDelegate = (EventHandler<TEventArgs>)eventDelegate;
+					EventHandler<TEventArgs> castedSink = (EventHandler<TEventArgs>)sink;
 					object sender = args[0];
 					TEventArgs eventArgs = (TEventArgs)args[1];
 					try
 					{
-						castedDelegate(sender, eventArgs);
+						castedSink(sender, eventArgs);
 					}
 					catch (Exception ex)
 					{

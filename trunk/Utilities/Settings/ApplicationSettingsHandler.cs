@@ -14,12 +14,10 @@ namespace MKY.Utilities.Settings
 		where TLocalUserSettings : new()
 		where TRoamingUserSettings : new()
 	{
-		/// <summary></summary>
-		public const string FileNameWithoutExtension = "Settings";
-		/// <summary></summary>
-		public const string Extension = ".xml";
-		/// <summary></summary>
-		public const string FileName = FileNameWithoutExtension + Extension;
+		private const string _Extension = ".xml";
+		private const string _CommonFileName = "CommonSettings" + _Extension;
+		private const string _LocalUserFileName = "LocalUserSettings" + _Extension;
+		private const string _RoamingUserFileName = "RoamingUserSettings" + _Extension;
 
 		private bool _hasCommonSettings = false;
 		private bool _hasLocalUserSettings = false;
@@ -43,8 +41,7 @@ namespace MKY.Utilities.Settings
 		/// Handles common and user settings. Common settings are stored in
 		/// <see cref="Application.CommonAppDataPath"/>, local user settings in
 		/// <see cref="Application.LocalUserAppDataPath"/>, user settings in
-		/// <see cref="Application.UserAppDataPath"/> in a file named
-		/// <see cref="FileName"/>
+		/// <see cref="Application.UserAppDataPath"/>.
 		/// </summary>
 		public ApplicationSettingsHandler(bool hasCommonSettings, bool hasLocalUserSettings, bool hasRoamingUserSettings)
 		{
@@ -52,7 +49,7 @@ namespace MKY.Utilities.Settings
 			_hasLocalUserSettings = hasLocalUserSettings;
 			_hasRoamingUserSettings = hasRoamingUserSettings;
 
-			ResetFileNames();
+			ResetFilePaths();
 
 			if (_hasCommonSettings)
 				_commonSettings = CommonSettingsDefault;
@@ -91,20 +88,20 @@ namespace MKY.Utilities.Settings
 		/// <summary>
 		/// Resets filenames to system defaults.
 		/// </summary>
-		public void ResetFileNames()
+		public void ResetFilePaths()
 		{
 			if (_hasCommonSettings)
-				_commonSettingsFilePath = Application.CommonAppDataPath + Path.DirectorySeparatorChar + FileName;
+				_commonSettingsFilePath = Application.CommonAppDataPath + Path.DirectorySeparatorChar + _CommonFileName;
 			else
 				_commonSettingsFilePath = "";
 
 			if (_hasLocalUserSettings)
-				_localUserSettingsFilePath = Application.LocalUserAppDataPath + Path.DirectorySeparatorChar + FileName;
+				_localUserSettingsFilePath = Application.LocalUserAppDataPath + Path.DirectorySeparatorChar + _LocalUserFileName;
 			else
 				_localUserSettingsFilePath = "";
 
 			if (_hasRoamingUserSettings)
-				_roamingUserSettingsFilePath = Application.UserAppDataPath + Path.DirectorySeparatorChar + FileName;
+				_roamingUserSettingsFilePath = Application.UserAppDataPath + Path.DirectorySeparatorChar + _RoamingUserFileName;
 			else
 				_roamingUserSettingsFilePath = "";
 		}
@@ -336,25 +333,28 @@ namespace MKY.Utilities.Settings
 			return (_allSettingsSuccessfullyLoaded);
 		}
 
-		private object LoadFromFile(Type type, string file)
+		private object LoadFromFile(Type type, string filePath)
 		{
 			// try to open existing file of current version
-			try
+			if (File.Exists(filePath)) // first check for file to minimize exceptions thrown
 			{
-				object settings = null;
-				using (FileStream fs = new FileStream(file, FileMode.Open))
+				try
 				{
-					XmlSerializer serializer = new XmlSerializer(type);
-					settings = serializer.Deserialize(fs);
+					object settings = null;
+					using (StreamReader sr = new StreamReader(filePath))
+					{
+						XmlSerializer serializer = new XmlSerializer(type);
+						settings = serializer.Deserialize(sr);
+					}
+					return (settings);
 				}
-				return (settings);
-			}
-			catch
-			{
+				catch
+				{
+				}
 			}
 
 			// find all valid directories of older versions
-			string productSettingsPath = Path.GetDirectoryName(Path.GetDirectoryName(file));
+			string productSettingsPath = Path.GetDirectoryName(Path.GetDirectoryName(filePath));
 			string[] allDirectories = Directory.GetDirectories(productSettingsPath);
 			List<string> oldDirectories = new List<string>();
 			Version currentVersion = new Version(Application.ProductVersion);
@@ -370,17 +370,17 @@ namespace MKY.Utilities.Settings
 			}
 
 			// try to open an existing file of an older version, start with most recent
-			string fileName = Path.GetFileName(file);
+			string fileName = Path.GetFileName(filePath);
 			oldDirectories.Sort();
 			for (int i = oldDirectories.Count - 1; i >= 0; i--)
 			{
 				try
 				{
 					object settings = null;
-					using (FileStream fs = new FileStream((string)oldDirectories[i] + Path.DirectorySeparatorChar + fileName, FileMode.Open))
+					using (StreamReader sr = new StreamReader((string)oldDirectories[i] + Path.DirectorySeparatorChar + fileName))
 					{
 						XmlSerializer serializer = new XmlSerializer(type);
-						settings = serializer.Deserialize(fs);
+						settings = serializer.Deserialize(sr);
 					}
 					return (settings);
 				}
@@ -478,25 +478,25 @@ namespace MKY.Utilities.Settings
 				SaveToFile(typeof(TRoamingUserSettings), _roamingUserSettingsFilePath, _roamingUserSettings);
 		}
 
-		private void SaveToFile(Type type, string file, object settings)
+		private void SaveToFile(Type type, string filePath, object settings)
 		{
-			string backup = file + ".bak";
+			string backup = filePath + ".bak";
 
 			try
 			{
 				if (File.Exists(backup))
 					File.Delete(backup);
-				if (File.Exists(file))
-					File.Move(file, backup);
+				if (File.Exists(filePath))
+					File.Move(filePath, backup);
 			}
 			catch { }
 
 			try
 			{
-				XmlSerializer serializer = new XmlSerializer(type);
-				using (FileStream fs = new FileStream(file, FileMode.Create))
+				using (StreamWriter sw = new StreamWriter(filePath))
 				{
-					serializer.Serialize(fs, settings);
+					XmlSerializer serializer = new XmlSerializer(type);
+					serializer.Serialize(sw, settings);
 				}
 			}
 			catch (Exception ex)
@@ -504,7 +504,7 @@ namespace MKY.Utilities.Settings
 				try
 				{
 					if (File.Exists(backup))
-						File.Move(backup, file);
+						File.Move(backup, filePath);
 				}
 				catch { }
 

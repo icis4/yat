@@ -41,7 +41,7 @@ namespace YAT.Model
 		private bool _handlingSettingsIsSuspended = false;
 
 		// terminal list
-		private List<Terminal> _terminals = new List<Terminal>();
+		private GuidList<Terminal> _terminals = new GuidList<Terminal>();
 		private Terminal _activeTerminal = null;
 
 		#endregion
@@ -51,9 +51,9 @@ namespace YAT.Model
 		// Events
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>Fired when a new terminal was added to the workspace.</summary>
 		public event EventHandler<TerminalEventArgs> TerminalAdded;
-		/// <summary></summary>
+		/// <summary>Fired when a terminal was removed from the workspace.</summary>
 		public event EventHandler<TerminalEventArgs> TerminalRemoved;
 
 		/// <summary></summary>
@@ -64,7 +64,7 @@ namespace YAT.Model
 		public event EventHandler<MessageInputEventArgs> MessageInputRequest;
 
 		/// <summary></summary>
-		public event EventHandler SaveAsFileDialogRequest;
+		public event EventHandler<DialogEventArgs> SaveAsFileDialogRequest;
 
 		/// <summary></summary>
 		public event EventHandler<SavedEventArgs> Saved;
@@ -132,7 +132,8 @@ namespace YAT.Model
 			{
 				if (disposing)
 				{
-					// nothing yet
+					foreach (Terminal t in _terminals)
+						t.Dispose();
 				}
 				_isDisposed = true;
 			}
@@ -190,21 +191,36 @@ namespace YAT.Model
 			}
 		}
 
-		#endregion
+		/// <summary></summary>
+		public bool SettingsFileExists
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_settingsHandler.SettingsFileExists);
+			}
+		}
 
-		#region Recents
-		//==========================================================================================
-		// Recents
-		//==========================================================================================
+		/// <summary></summary>
+		public string SettingsFilePath
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_settingsHandler.SettingsFilePath);
+			}
+		}
 
 		/// <summary>
-		/// Update recent entry.
+		/// Returns number of terminals within workspace.
 		/// </summary>
-		/// <param name="recentFile">Recent file.</param>
-		private void SetRecent(string recentFile)
+		public int TerminalCount
 		{
-			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
-			ApplicationSettings.SaveLocalUser();
+			get
+			{
+				AssertNotDisposed();
+				return (_terminals.Count);
+			}
 		}
 
 		#endregion
@@ -213,6 +229,44 @@ namespace YAT.Model
 		//==========================================================================================
 		// Settings
 		//==========================================================================================
+
+		#region Settings > Lifetime
+		//------------------------------------------------------------------------------------------
+		// Settings > Lifetime
+		//------------------------------------------------------------------------------------------
+
+		private void AttachSettingsEventHandlers()
+		{
+			_settingsRoot.Changed += new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
+		}
+
+		private void DetachSettingsEventHandlers()
+		{
+			_settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
+		}
+
+		#endregion
+
+		#region Settings > Event Handlers
+		//------------------------------------------------------------------------------------------
+		// Settings > Event Handlers
+		//------------------------------------------------------------------------------------------
+
+		private void _settingsRoot_Changed(object sender, SettingsEventArgs e)
+		{
+			if (_handlingSettingsIsSuspended)
+				return;
+
+			if (ApplicationSettings.LocalUser.General.AutoSaveWorkspace)
+				TryAutoSaveIfFileAlreadyAutoSaved();
+		}
+
+		#endregion
+
+		#region Settings > Properties
+		//------------------------------------------------------------------------------------------
+		// Settings > Properties
+		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		public bool SettingsHaveChanged
@@ -234,28 +288,12 @@ namespace YAT.Model
 			}
 		}
 
-		private void AttachSettingsEventHandlers()
-		{
-			_settingsRoot.Changed += new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
-		}
+		#endregion
 
-		private void DetachSettingsEventHandlers()
-		{
-			_settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
-		}
-
+		#region Settings > Methods
 		//------------------------------------------------------------------------------------------
-		// Settings > Event Handlers
+		// Settings > Methods
 		//------------------------------------------------------------------------------------------
-
-		private void _settingsRoot_Changed(object sender, SettingsEventArgs e)
-		{
-			if (_handlingSettingsIsSuspended)
-				return;
-
-			if (ApplicationSettings.LocalUser.General.AutoSaveWorkspace)
-				SaveToFile(true);
-		}
 
 		private void SuspendHandlingSettings()
 		{
@@ -269,23 +307,40 @@ namespace YAT.Model
 
 		#endregion
 
+		#endregion
+
 		#region Save
 		//==========================================================================================
 		// Save
 		//==========================================================================================
 
 		/// <summary>
-		/// Only performs auto save if no file yet or on previously auto saved files
+		/// Performs auto save if no file yet or on previously auto saved files.
 		/// </summary>
 		private bool TryAutoSave()
 		{
-			AssertNotDisposed();
-
 			bool success = false;
 			if (!_settingsHandler.SettingsFileExists ||
 				(_settingsHandler.SettingsFileExists && _settingsRoot.AutoSaved))
 			{
-				success = Save(true);
+				success = SaveToFile(true);
+			}
+			return (success);
+		}
+
+		/// <summary>
+		/// Performs auto save on previously auto saved files.
+		/// </summary>
+		/// <remarks>
+		/// This method is intentionally named this long to stress the difference to
+		/// <see cref="TryAutoSave()"/> above.
+		/// </remarks>
+		private bool TryAutoSaveIfFileAlreadyAutoSaved()
+		{
+			bool success = false;
+			if (_settingsHandler.SettingsFileExists && _settingsRoot.AutoSaved)
+			{
+				success = SaveToFile(true);
 			}
 			return (success);
 		}
@@ -297,27 +352,17 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			return (Save(false));
-		}
-
-		/// <summary>
-		/// Saves all terminals and workspace to file(s), prompts for file(s) if they doesn't exist yet
-		/// </summary>
-		public bool Save(bool autoSave)
-		{
-			AssertNotDisposed();
-
 			bool success = false;
-			if (autoSave)
+			if (_settingsHandler.SettingsFilePathIsValid)
 			{
-				success = SaveToFile(true);
+				if (_settingsHandler.Settings.AutoSaved)
+					success = SaveToFile(true);
+				else
+					success = SaveToFile(false);
 			}
 			else
 			{
-				if (_settingsHandler.SettingsFilePathIsValid && !_settingsHandler.Settings.AutoSaved)
-					success = SaveToFile(false);
-				else
-					success = (OnSaveAsFileDialogRequest() == DialogResult.OK);
+				success = (OnSaveAsFileDialogRequest() == DialogResult.OK);
 			}
 			return (success);
 		}
@@ -337,54 +382,72 @@ namespace YAT.Model
 			return (SaveToFile(false, autoSaveFilePathToDelete));
 		}
 
-		private bool SaveToFile(bool autoSave)
+		private bool SaveToFile(bool doAutoSave)
 		{
-			return (SaveToFile(autoSave, ""));
+			return (SaveToFile(doAutoSave, ""));
 		}
 
-		private bool SaveToFile(bool autoSave, string autoSaveFilePathToDelete)
+		private bool SaveToFile(bool doAutoSave, string autoSaveFilePathToDelete)
 		{
+			// -------------------------------------------------------------------------------------
+			// skip save if file is up to date and there were no changes
+			// -------------------------------------------------------------------------------------
+
+			if (_settingsHandler.SettingsFileIsUpToDate && (!_settingsRoot.HaveChanged))
+			{
+				// event must be fired anyway to ensure that dependent objects are updated
+				OnSaved(new SavedEventArgs(_settingsHandler.SettingsFilePath, doAutoSave));
+				return (true);
+			}
+
+			// -------------------------------------------------------------------------------------
+			// first, save all contained terminals
+			// -------------------------------------------------------------------------------------
+
 			bool success = false;
 
-			if (!autoSave)
+			if (!doAutoSave)
 				OnFixedStatusTextRequest("Saving workspace...");
+
+			// in case of auto save, assign workspace settings file path before saving terminals
+			// this ensures that relative paths are correctly retrieved by SaveAllTerminals()
+			if (doAutoSave && (!_settingsHandler.SettingsFilePathIsValid))
+			{
+				string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveWorkspaceFileNamePrefix + Guid.ToString() + ExtensionSettings.WorkspaceFiles;
+				_settingsHandler.SettingsFilePath = autoSaveFilePath;
+			}
+
+			if (!SaveAllTerminals())
+			{
+				OnTimedStatusTextRequest("Workspace not saved!");
+				return (false);
+			}
 
 			try
 			{
-				_settingsRoot.SuspendChangeEvent();
-
-				// set workspace file path before terminals are saved in order
-				// to correctly retrieve relative paths
-				if (autoSave)
-				{
-					string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveWorkspaceFileNamePrefix + Guid.ToString() + ExtensionSettings.WorkspaceFiles;
-					if (!_settingsHandler.SettingsFilePathIsValid)
-						_settingsHandler.SettingsFilePath = autoSaveFilePath;
-				}
-
-				// save all contained terminals
-				SaveAllTerminals(false);
-
+				// ---------------------------------------------------------------------------------
 				// save workspace
-				_settingsHandler.Settings.AutoSaved = autoSave;
-				_settingsHandler.Save();
+				// ---------------------------------------------------------------------------------
 
-				_settingsRoot.ClearChanged();
-				_settingsRoot.ResumeChangeEvent();
+				_settingsHandler.Settings.AutoSaved = doAutoSave;
+				_settingsHandler.Save();
 
 				ApplicationSettings.LocalUser.General.WorkspaceFilePath = _settingsHandler.SettingsFilePath;
 				ApplicationSettings.SaveLocalUser();
 
 				success = true;
-				OnSaved(new SavedEventArgs(_settingsHandler.SettingsFilePath, autoSave));
+				OnSaved(new SavedEventArgs(_settingsHandler.SettingsFilePath, doAutoSave));
 
-				if (!autoSave)
+				if (!doAutoSave)
 				{
 					SetRecent(_settingsHandler.SettingsFilePath);
 					OnTimedStatusTextRequest("Workspace saved");
 				}
 
+				// ---------------------------------------------------------------------------------
 				// try to delete existing auto save file
+				// ---------------------------------------------------------------------------------
+
 				try
 				{
 					if (File.Exists(autoSaveFilePathToDelete))
@@ -396,7 +459,7 @@ namespace YAT.Model
 			}
 			catch (System.Xml.XmlException ex)
 			{
-				if (!autoSave)
+				if (!doAutoSave)
 				{
 					OnFixedStatusTextRequest("Error saving workspace!");
 					OnMessageInputRequest
@@ -426,132 +489,215 @@ namespace YAT.Model
 		{
 			bool success = false;
 
-			// first, save all terminals
-			success = SaveAllTerminals();
-			if (!success)
-				return (false);
+			OnFixedStatusTextRequest("Closing workspace...");
 
-			// next, save workspace
-			if (_settingsRoot.HaveChanged)
+			// first, close all contained terminals but signal them auto close
+			if (!CloseAllTerminals(true))
 			{
-				// try to auto save it
-				if (ApplicationSettings.LocalUser.General.AutoSaveWorkspace)
-					success = TryAutoSave();
-
-				// or save it manually
-				if (!success)
-				{
-					DialogResult dr = OnMessageInputRequest
-						(
-						"Save workspace?",
-						UserName,
-						MessageBoxButtons.YesNoCancel,
-						MessageBoxIcon.Question
-						);
-
-					switch (dr)
-					{
-						case DialogResult.Yes:    success = Save(); break;
-						case DialogResult.No:     success = true;   break;
-						case DialogResult.Cancel:
-						default:                  return (false);
-					}
-				}
+				OnTimedStatusTextRequest("Workspace not closed");
+				return (false);
 			}
 
-			// last, close all contained terminals
-			success = CloseAllTerminals();
+			if (ApplicationSettings.LocalUser.General.AutoSaveWorkspace)
+			{
+				// try to auto save if never saved yet or changed
+				if (!_settingsHandler.SettingsFileExists || _settingsRoot.HaveChanged)
+					success = TryAutoSave();
+			}
 
+			// or save it manually if necessary
+			if (!success && _settingsRoot.ExplicitHaveChanged)
+			{
+				DialogResult dr = OnMessageInputRequest
+					(
+					"Save workspace?",
+					UserName,
+					MessageBoxButtons.YesNoCancel,
+					MessageBoxIcon.Question
+					);
+
+				switch (dr)
+				{
+					case DialogResult.Yes:    success = Save(); break;
+					case DialogResult.No:     success = true;   break;
+
+					case DialogResult.Cancel:
+					default:
+						OnTimedStatusTextRequest("Workspace not closed");
+						return (false);
+				}
+			}
+			else
+			{
+				// consider it successful if there was nothing to save
+				success = true;
+			}
+
+			if (success)
+			{
+				OnClosed(new EventArgs());
+				OnTimedStatusTextRequest("Workspace successfully closed");
+			}
+			else
+			{
+				OnTimedStatusTextRequest("Workspace not closed");
+			}
 			return (success);
 		}
 
 		#endregion
 
-		#region Terminal
+		#region Recents
 		//==========================================================================================
-		// Terminal
+		// Recents
 		//==========================================================================================
 
-		#region Terminal > Lifetime
+		/// <summary>
+		/// Update recent entry.
+		/// </summary>
+		/// <param name="recentFile">Recent file.</param>
+		private void SetRecent(string recentFile)
+		{
+			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
+			ApplicationSettings.SaveLocalUser();
+		}
+
+		#endregion
+
+		#region Terminals
+		//==========================================================================================
+		// Terminals
+		//==========================================================================================
+
+		#region Terminals > Lifetime
 		//------------------------------------------------------------------------------------------
-		// Terminal > Lifetime
+		// Terminals > Lifetime
 		//------------------------------------------------------------------------------------------
 
 		private void AttachTerminalEventHandlers(Terminal terminal)
 		{
 			terminal.Saved  += new EventHandler<SavedEventArgs>(terminal_Saved);
-			terminal.Closed += new EventHandler(terminal_Closed);
+			terminal.Closed += new EventHandler<ClosedEventArgs>(terminal_Closed);
+		}
+
+		private void DetachTerminalEventHandlers(Terminal terminal)
+		{
+			terminal.Saved  -= new EventHandler<SavedEventArgs>(terminal_Saved);
+			terminal.Closed -= new EventHandler<ClosedEventArgs>(terminal_Closed);
 		}
 
 		#endregion
 
-		#region Terminal > Event Handlers
+		#region Terminals > Event Handlers
 		//------------------------------------------------------------------------------------------
-		// Terminal > Event Handlers
+		// Terminals > Event Handlers
 		//------------------------------------------------------------------------------------------
 
 		private void terminal_Saved(object sender, SavedEventArgs e)
 		{
-			AddToOrReplaceInWorkspace((Terminal)sender);
+			ReplaceInWorkspace((Terminal)sender);
 
-			if (!e.AutoSave)
+			if (!e.IsAutoSave)
 				SetRecent(e.FilePath);
 		}
 
-		private void terminal_Closed(object sender, EventArgs e)
+		/// <remarks>
+		/// See remarks of <see cref="Terminal.Close(bool)"/> for details on why this event handler
+		/// needs to treat the Closed event differently in case of e.WorkspaceClose.
+		/// </remarks>
+		private void terminal_Closed(object sender, ClosedEventArgs e)
 		{
-			RemoveFromWorkspace((Terminal)sender);
+			if (!e.IsWorkspaceClose)
+				RemoveFromWorkspace((Terminal)sender);
 		}
 
 		#endregion
 
-		#region Terminal > General Methods
+		#region Terminals > General Properties
 		//------------------------------------------------------------------------------------------
-		// Terminal > General Methods
+		// Terminals > General Properties
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
+		/// Returns settings file paths of the all the terminals in the workspace
+		/// </summary>
+		public List<string> TerminalSettingsFilePaths
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				List<string> filePaths = new List<string>();
+				foreach (Terminal t in _terminals)
+				{
+					if (t.SettingsFileExists)
+						filePaths.Add(t.SettingsFilePath);
+				}
+				return (filePaths);
+			}
+		}
+
+		#endregion
+
+		#region Terminals > General Methods
+		//------------------------------------------------------------------------------------------
+		// Terminals > General Methods
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public bool CreateNewTerminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
+		{
+			OnFixedStatusTextRequest("Creating new terminal...");
+
+			// create terminal
+			Terminal terminal = new Terminal(settingsHandler);
+			AddToWorkspace(terminal);
+
+			OnTimedStatusTextRequest("New terminal created");
+			return (true);
+		}
+
+		/// <summary>
 		/// Opens terminals according to workspace settings and returns number of successfully
-		/// opened terminals
+		/// opened terminals.
 		/// </summary>
 		public int OpenTerminals()
 		{
-			int terminalCount = _settingsRoot.TerminalSettings.Count;
-			if (terminalCount == 1)
+			int requestedTerminalCount = _settingsRoot.TerminalSettings.Count;
+			if (requestedTerminalCount == 1)
 				OnFixedStatusTextRequest("Opening workspace terminal...");
-			else if (terminalCount > 1)
+			else if (requestedTerminalCount > 1)
 				OnFixedStatusTextRequest("Opening workspace terminals...");
 
+			int openedTerminalCount = 0;
 			GuidList<TerminalSettingsItem> clone = new GuidList<TerminalSettingsItem>(_settingsRoot.TerminalSettings);
 			foreach (TerminalSettingsItem item in clone)
 			{
 				try
 				{
-					OpenTerminalFromFile(item.FilePath, item.Guid, item.Window, true);
+					if (OpenTerminalFromFile(item.FilePath, item.Guid, item.Window, true))
+						openedTerminalCount++;
 				}
 				catch (System.Xml.XmlException ex)
 				{
 					OnFixedStatusTextRequest("Error opening terminal!");
-
 					DialogResult result = OnMessageInputRequest
 						(
 						"Unable to open terminal" + Environment.NewLine + item.FilePath + Environment.NewLine + Environment.NewLine +
 						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
 						"File error message: " + ex.InnerException.Message + Environment.NewLine + Environment.NewLine +
 						"Continue loading workspace?",
-						"File Error",
+						"Terminal File Error",
 						MessageBoxButtons.YesNo,
 						MessageBoxIcon.Exclamation
 						);
-
 					OnTimedStatusTextRequest("Terminal not opened!");
 
 					if (result == DialogResult.No)
 						break;
 				}
 			}
-
-			return (terminalCount);
+			return (openedTerminalCount);
 		}
 
 		/// <summary></summary>
@@ -567,10 +713,29 @@ namespace YAT.Model
 			OnFixedStatusTextRequest("Opening terminal...");
 			try
 			{
-				DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
-
 				// combine absolute workspace path with terminal path if that one is relative
 				absoluteFilePath = XPath.CombineFilePaths(_settingsHandler.SettingsFilePath, filePath);
+
+				// check whether terminal is already contained in workspace
+				foreach (Terminal t in _terminals)
+				{
+					if (absoluteFilePath == t.SettingsFilePath)
+					{
+						OnFixedStatusTextRequest("Terminal is already open.");
+						OnMessageInputRequest
+							(
+							"Terminal is already open and will not be re-openend.",
+							"Terminal File Warning",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Warning
+							);
+						OnTimedStatusTextRequest("Terminal not re-opened.");
+						return (false);
+					}
+				}
+
+				// load settings
+				DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
 				sh.SettingsFilePath = absoluteFilePath;
 				sh.Load();
 
@@ -580,9 +745,7 @@ namespace YAT.Model
 
 				// create terminal
 				Terminal terminal = new Terminal(sh, guid);
-
-				AttachTerminalEventHandlers(terminal);
-				AddToOrReplaceInWorkspace(terminal);
+				AddToWorkspace(terminal);
 
 				if (!sh.Settings.AutoSaved)
 					SetRecent(filePath);
@@ -595,17 +758,15 @@ namespace YAT.Model
 				if (!suppressErrorHandling)
 				{
 					OnFixedStatusTextRequest("Error opening terminal!");
-
 					OnMessageInputRequest
 						(
 						"Unable to open file" + Environment.NewLine + absoluteFilePath + Environment.NewLine + Environment.NewLine +
 						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
 						"File error message: " + ex.InnerException.Message,
-						"File Error",
+						"Invalid Terminal File",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Stop
 						);
-
 					OnTimedStatusTextRequest("Terminal not opened!");
 					return (false);
 				}
@@ -616,23 +777,10 @@ namespace YAT.Model
 			}
 		}
 
-		/// <summary></summary>
-		public bool CreateNewTerminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
+		private TerminalSettingsItem CreateTerminalSettingsItem(Terminal terminal)
 		{
-			OnFixedStatusTextRequest("Creating new terminal...");
+			TerminalSettingsItem tsi = new TerminalSettingsItem();
 
-			// create terminal
-			Terminal terminal = new Terminal(settingsHandler);
-
-			AttachTerminalEventHandlers(terminal);
-			AddToOrReplaceInWorkspace(terminal);
-
-			OnTimedStatusTextRequest("New terminal created");
-			return (true);
-		}
-
-		private void AddToOrReplaceInWorkspace(Terminal terminal)
-		{
 			string filePath = terminal.SettingsFilePath;
 			if (ApplicationSettings.LocalUser.General.UseRelativePaths)
 			{
@@ -641,24 +789,52 @@ namespace YAT.Model
 					filePath = pcr.RelativePath;
 			}
 
-			// clone window settings
-			WindowSettings ws = new WindowSettings(terminal.WindowSettings);
-
-			// create settings item
-			TerminalSettingsItem tsi = new TerminalSettingsItem();
 			tsi.Guid = terminal.Guid;
 			tsi.FilePath = filePath;
-			tsi.Window = ws;
+			tsi.Window = new WindowSettings(terminal.WindowSettings); // clone window settings
 
-			_settingsRoot.TerminalSettings.AddOrReplaceGuid(tsi);
+			return (tsi);
+		}
+
+		private void AddToWorkspace(Terminal terminal)
+		{
+			AttachTerminalEventHandlers(terminal);
+
+			// add terminal to terminal list
+			_terminals.Add(terminal);
+
+			// add terminal settings for new terminals
+			// replace terminal settings if workspace settings have been loaded from file prior
+			_settingsRoot.TerminalSettings.AddOrReplaceGuidItem(CreateTerminalSettingsItem(terminal));
 			_settingsRoot.SetChanged();
 
 			// fire terminal added event
 			OnTerminalAdded(new TerminalEventArgs(terminal));
 		}
 
+		private void ReplaceInWorkspace(Terminal terminal)
+		{
+			// replace terminal in terminal list
+			_terminals.ReplaceGuidItem(terminal);
+
+			// replace terminal in workspace settings if the settings have indeed changed
+			TerminalSettingsItem tsiNew = CreateTerminalSettingsItem(terminal);
+			TerminalSettingsItem tsiOld = _settingsRoot.TerminalSettings.GetGuidItem(terminal.Guid);
+			if ((tsiOld == null) || (tsiNew != tsiOld))
+			{
+				_settingsRoot.TerminalSettings.ReplaceGuidItem(tsiNew);
+				_settingsRoot.SetChanged();
+			}
+		}
+
 		private void RemoveFromWorkspace(Terminal terminal)
 		{
+			DetachTerminalEventHandlers(terminal);
+
+			// remove terminal from terminal list
+			_terminals.RemoveGuid(terminal.Guid);
+
+			// remove terminal from workspace settings
 			_settingsRoot.TerminalSettings.RemoveGuid(terminal.Guid);
 			_settingsRoot.SetChanged();
 
@@ -668,23 +844,21 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > All Terminals Methods
+		#region Terminals > All Terminals Methods
 		//------------------------------------------------------------------------------------------
-		// Terminal > All Terminals Methods
+		// Terminals > All Terminals Methods
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		public bool SaveAllTerminals()
 		{
-			return (SaveAllTerminals(false));
-		}
-
-		private bool SaveAllTerminals(bool autoSave)
-		{
 			bool success = true;
-			foreach (Terminal t in _terminals)
+
+			// calling Close() on a terminal will modify the list, therefore clone it first
+			List<Terminal> clone = new List<Terminal>(_terminals);
+			foreach (Terminal t in clone)
 			{
-				if (!t.Save(autoSave))
+				if (!t.Save())
 					success = false;
 			}
 			return (success);
@@ -693,10 +867,21 @@ namespace YAT.Model
 		/// <summary></summary>
 		public bool CloseAllTerminals()
 		{
+			return (CloseAllTerminals(false));
+		}
+
+		/// <remarks>
+		/// See remarks of <see cref="Terminal.Close(bool)"/> for details on 'WorkspaceClose'.
+		/// </remarks>
+		private bool CloseAllTerminals(bool isWorkspaceClose)
+		{
 			bool success = true;
-			foreach (Terminal t in _terminals)
+
+			// calling Close() on a terminal will modify the list, therefore clone it first
+			List<Terminal> clone = new List<Terminal>(_terminals);
+			foreach (Terminal t in clone)
 			{
-				if (!t.Close())
+				if (!t.Close(isWorkspaceClose))
 					success = false;
 			}
 			return (success);
@@ -704,10 +889,16 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Active Terminal Methods
+		#region Terminals > Active Terminal Methods
 		//------------------------------------------------------------------------------------------
-		// Terminal > Active Terminal Methods
+		// Terminals > Active Terminal Methods
 		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public void ActivateTerminal(Terminal terminal)
+		{
+			_activeTerminal = terminal;
+		}
 
 		/// <summary></summary>
 		public bool SaveActiveTerminal()
@@ -757,20 +948,20 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void OnFixedStatusTextRequest(string text)
 		{
-			EventHelper.FireSync(FixedStatusTextRequest, this, new StatusTextEventArgs(text));
+			EventHelper.FireSync<StatusTextEventArgs>(FixedStatusTextRequest, this, new StatusTextEventArgs(text));
 		}
 
 		/// <summary></summary>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
-			EventHelper.FireSync(TimedStatusTextRequest, this, new StatusTextEventArgs(text));
+			EventHelper.FireSync<StatusTextEventArgs>(TimedStatusTextRequest, this, new StatusTextEventArgs(text));
 		}
 
 		/// <summary></summary>
 		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		{
 			MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
-			EventHelper.FireSync(MessageInputRequest, this, e);
+			EventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
 			return (e.Result);
 		}
 
@@ -778,7 +969,7 @@ namespace YAT.Model
 		protected virtual DialogResult OnSaveAsFileDialogRequest()
 		{
 			DialogEventArgs e = new DialogEventArgs();
-			EventHelper.FireSync(SaveAsFileDialogRequest, this, e);
+			EventHelper.FireSync<DialogEventArgs>(SaveAsFileDialogRequest, this, e);
 			return (e.Result);
 		}
 

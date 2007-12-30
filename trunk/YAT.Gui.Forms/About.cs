@@ -130,7 +130,7 @@ namespace YAT.Gui.Forms
 			linkLabel_Home.Text += textAfter;
 
 			// author
-			linkLabel_Author.Text = "2007, Matthias Kläy";
+			linkLabel_Author.Text = "2008, Matthias Kläy";
 
 			// license
 			linkLabel_License.Text = "";
