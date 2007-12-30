@@ -36,6 +36,10 @@ namespace YAT.Model
 		// Static Fields
 		//==========================================================================================
 
+		/// <summary>
+		/// Static counter to number terminals. Counter is incremented before first use, first
+		/// terminal therefore is "Terminal1".
+		/// </summary>
 		private static int _terminalIdCounter = 0;
 
 		#endregion
@@ -90,6 +94,7 @@ namespace YAT.Model
 		public event EventHandler<Domain.DisplayLinesEventArgs> DisplayLinesSent;
 		/// <summary></summary>
 		public event EventHandler<Domain.DisplayLinesEventArgs> DisplayLinesReceived;
+
 		/// <summary></summary>
 		public event EventHandler<Domain.RepositoryEventArgs> RepositoryCleared;
 		/// <summary></summary>
@@ -103,12 +108,12 @@ namespace YAT.Model
 		public event EventHandler<MessageInputEventArgs> MessageInputRequest;
 
 		/// <summary></summary>
-		public event EventHandler SaveAsFileDialogRequest;
+		public event EventHandler<DialogEventArgs> SaveAsFileDialogRequest;
 
 		/// <summary></summary>
 		public event EventHandler<SavedEventArgs> Saved;
 		/// <summary></summary>
-		public event EventHandler Closed;
+		public event EventHandler<ClosedEventArgs> Closed;
 
 		#endregion
 
@@ -149,6 +154,7 @@ namespace YAT.Model
 			AttachSettingsEventHandlers();
 
 			// set user name
+			_terminalIdCounter++;
 			if (!_settingsHandler.SettingsFilePathIsValid || _settingsRoot.AutoSaved)
 				_userName = _TerminalText + _terminalIdCounter.ToString();
 			else
@@ -364,209 +370,6 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Recents
-		//==========================================================================================
-		// Recents
-		//==========================================================================================
-
-		/// <summary>
-		/// Update recent entry.
-		/// </summary>
-		/// <param name="recentFile">Recent file.</param>
-		private void SetRecent(string recentFile)
-		{
-			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
-			ApplicationSettings.SaveLocalUser();
-		}
-
-		#endregion
-
-		#region Save
-		//==========================================================================================
-		// Save
-		//==========================================================================================
-
-		/// <summary>
-		/// Only performs auto save if no file yet or on previously auto saved files
-		/// </summary>
-		private bool TryAutoSave()
-		{
-			AssertNotDisposed();
-
-			bool success = false;
-			if (!_settingsHandler.SettingsFileExists ||
-				(_settingsHandler.SettingsFileExists && _settingsRoot.AutoSaved))
-			{
-				success = Save(true);
-			}
-			return (success);
-		}
-
-		/// <summary>
-		/// Saves terminal to file, prompts for file if it doesn't exist yet
-		/// </summary>
-		public bool Save()
-		{
-			AssertNotDisposed();
-
-			return (Save(false));
-		}
-
-		/// <summary>
-		/// Saves terminal to file, prompts for file if it doesn't exist yet
-		/// </summary>
-		public bool Save(bool autoSave)
-		{
-			AssertNotDisposed();
-
-			bool success = false;
-			if (autoSave)
-			{
-				success = SaveToFile(true);
-			}
-			else
-			{
-				if (_settingsHandler.SettingsFilePathIsValid && !_settingsHandler.Settings.AutoSaved)
-					success = SaveToFile(false);
-				else
-					success = (OnSaveAsFileDialogRequest() == DialogResult.OK);
-			}
-			return (success);
-		}
-
-		/// <summary>
-		/// Saves terminal to given file
-		/// </summary>
-		public bool SaveAs(string filePath)
-		{
-			AssertNotDisposed();
-
-			string autoSaveFilePathToDelete = "";
-			if (_settingsRoot.AutoSaved)
-				autoSaveFilePathToDelete = _settingsHandler.SettingsFilePath;
-
-			_settingsHandler.SettingsFilePath = filePath;
-			return (SaveToFile(false, autoSaveFilePathToDelete));
-		}
-
-		private bool SaveToFile(bool autoSave)
-		{
-			return (SaveToFile(autoSave, ""));
-		}
-
-		private bool SaveToFile(bool autoSave, string autoSaveFilePathToDelete)
-		{
-			bool success = false;
-
-			if (!autoSave)
-				OnFixedStatusTextRequest("Saving terminal...");
-
-			try
-			{
-				if (autoSave)
-				{
-					string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveTerminalFileNamePrefix + Guid.ToString() + ExtensionSettings.TerminalFiles;
-					if (!_settingsHandler.SettingsFilePathIsValid)
-						_settingsHandler.SettingsFilePath = autoSaveFilePath;
-				}
-				_settingsHandler.Settings.AutoSaved = autoSave;
-				_settingsHandler.Save();
-
-				if (!autoSave)
-					UserNameFromFile = _settingsHandler.SettingsFilePath;
-
-				success = true;
-				OnSaved(new SavedEventArgs(_settingsHandler.SettingsFilePath, autoSave));
-
-				if (!autoSave)
-				{
-					SetRecent(_settingsHandler.SettingsFilePath);
-					OnTimedStatusTextRequest("Terminal saved");
-				}
-
-				// try to delete existing auto save file
-				try
-				{
-					if (File.Exists(autoSaveFilePathToDelete))
-						File.Delete(autoSaveFilePathToDelete);
-				}
-				catch (Exception)
-				{
-				}
-			}
-			catch (System.Xml.XmlException ex)
-			{
-				if (!autoSave)
-				{
-					OnFixedStatusTextRequest("Error saving terminal!");
-					OnMessageInputRequest
-						(
-						"Unable to save file" + Environment.NewLine + _settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
-						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
-						"File error message: " + ex.InnerException.Message,
-						"File Error",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning
-						);
-					OnTimedStatusTextRequest("Terminal not saved!");
-				}
-			}
-			return (success);
-		}
-
-		#endregion
-
-		#region Close
-		//==========================================================================================
-		// Close
-		//==========================================================================================
-
-		/// <summary></summary>
-		public bool Close()
-		{
-			bool success = false;
-
-			// first, save terminal
-			if (_settingsRoot.HaveChanged)
-			{
-				// try to auto save it
-				if (_settingsRoot.AutoSaved)
-					success = TryAutoSave();
-
-				// or save it manually
-				if (!success && _settingsRoot.ExplicitHaveChanged)
-				{
-					DialogResult dr = OnMessageInputRequest
-						(
-						"Save terminal?",
-						UserName,
-						MessageBoxButtons.YesNoCancel,
-						MessageBoxIcon.Question
-						);
-
-					switch (dr)
-					{
-						case DialogResult.Yes:    success = Save(); break;
-						case DialogResult.No:     success = true;   break;
-						case DialogResult.Cancel:
-						default:                  return (false);
-					}
-				}
-			}
-
-			// next, close underlying terminal
-			if (_terminal.IsOpen)
-				success = CloseIO(false);
-
-			// last, close log
-			if (_log.IsOpen)
-				EndLog();
-
-			return (success);
-		}
-
-		#endregion
-
 		#region Settings
 		//==========================================================================================
 		// Settings
@@ -607,16 +410,22 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		public bool SettingsFileExists
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_settingsHandler.SettingsFileExists);
+			}
+		}
+
+		/// <summary></summary>
 		public string SettingsFilePath
 		{
 			get
 			{
 				AssertNotDisposed();
-
-				if (_settingsHandler.SettingsFileExists)
-					return (_settingsHandler.SettingsFilePath);
-				else
-					return ("");
+				return (_settingsHandler.SettingsFilePath);
 			}
 		}
 
@@ -641,6 +450,249 @@ namespace YAT.Model
 		}
 
 		#endregion
+
+		#endregion
+
+		#region Save
+		//==========================================================================================
+		// Save
+		//==========================================================================================
+
+		/// <summary>
+		/// Performs auto save if no file yet or on previously auto saved files.
+		/// </summary>
+		private bool TryAutoSave()
+		{
+			bool success = false;
+			if (!_settingsHandler.SettingsFileExists ||
+				(_settingsHandler.SettingsFileExists && _settingsRoot.AutoSaved))
+			{
+				success = SaveToFile(true);
+			}
+			return (success);
+		}
+
+		/// <summary>
+		/// Saves terminal to file, prompts for file if it doesn't exist yet
+		/// </summary>
+		public bool Save()
+		{
+			AssertNotDisposed();
+
+			bool success = false;
+			if (_settingsHandler.SettingsFilePathIsValid)
+			{
+				if (_settingsHandler.Settings.AutoSaved)
+					success = SaveToFile(true);
+				else
+					success = SaveToFile(false);
+			}
+			else
+			{
+				success = (OnSaveAsFileDialogRequest() == DialogResult.OK);
+			}
+			return (success);
+		}
+
+		/// <summary>
+		/// Saves terminal to given file
+		/// </summary>
+		public bool SaveAs(string filePath)
+		{
+			AssertNotDisposed();
+
+			string autoSaveFilePathToDelete = "";
+			if (_settingsRoot.AutoSaved)
+				autoSaveFilePathToDelete = _settingsHandler.SettingsFilePath;
+
+			_settingsHandler.SettingsFilePath = filePath;
+			return (SaveToFile(false, autoSaveFilePathToDelete));
+		}
+
+		private bool SaveToFile(bool doAutoSave)
+		{
+			return (SaveToFile(doAutoSave, ""));
+		}
+
+		private bool SaveToFile(bool doAutoSave, string autoSaveFilePathToDelete)
+		{
+			// -------------------------------------------------------------------------------------
+			// skip save if file is up to date and there were no changes
+			// -------------------------------------------------------------------------------------
+
+			if (_settingsHandler.SettingsFileIsUpToDate && (!_settingsRoot.HaveChanged))
+			{
+				// event must be fired anyway to ensure that dependent objects are updated
+				OnSaved(new SavedEventArgs(_settingsHandler.SettingsFilePath, doAutoSave));
+				return (true);
+			}
+
+			// -------------------------------------------------------------------------------------
+			// save terminal
+			// -------------------------------------------------------------------------------------
+
+			bool success = false;
+
+			if (!doAutoSave)
+				OnFixedStatusTextRequest("Saving terminal...");
+
+			if (doAutoSave && (!_settingsHandler.SettingsFilePathIsValid))
+			{
+				string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveTerminalFileNamePrefix + Guid.ToString() + ExtensionSettings.TerminalFiles;
+				_settingsHandler.SettingsFilePath = autoSaveFilePath;
+			}
+
+			try
+			{
+				_settingsHandler.Settings.AutoSaved = doAutoSave;
+				_settingsHandler.Save();
+
+				if (!doAutoSave)
+					UserNameFromFile = _settingsHandler.SettingsFilePath;
+
+				success = true;
+				OnSaved(new SavedEventArgs(_settingsHandler.SettingsFilePath, doAutoSave));
+
+				if (!doAutoSave)
+				{
+					SetRecent(_settingsHandler.SettingsFilePath);
+					OnTimedStatusTextRequest("Terminal saved");
+				}
+
+				// ---------------------------------------------------------------------------------
+				// try to delete existing auto save file
+				// ---------------------------------------------------------------------------------
+
+				try
+				{
+					if (File.Exists(autoSaveFilePathToDelete))
+						File.Delete(autoSaveFilePathToDelete);
+				}
+				catch (Exception)
+				{
+				}
+			}
+			catch (System.Xml.XmlException ex)
+			{
+				if (!doAutoSave)
+				{
+					OnFixedStatusTextRequest("Error saving terminal!");
+					OnMessageInputRequest
+						(
+						"Unable to save file" + Environment.NewLine + _settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
+						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
+						"File error message: " + ex.InnerException.Message,
+						"File Error",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+						);
+					OnTimedStatusTextRequest("Terminal not saved!");
+				}
+			}
+			return (success);
+		}
+
+		#endregion
+
+		#region Close
+		//==========================================================================================
+		// Close
+		//==========================================================================================
+
+		/// <summary>Closes the terminal and prompts if the settings have changed.</summary>
+		public bool Close()
+		{
+			return (Close(false));
+		}
+
+		/// <summary>
+		/// Closes the terminal and tries to auto save if desired.
+		/// </summary>
+		/// <remarks>
+		/// Attention:
+		/// This method is needed for MDI applications. In case of MDI parent/application closing,
+		/// Close() of the terminal is called before Close() of the workspace. Without taking care
+		/// of this, the workspace would be saved after the terminal has already been close, i.e.
+		/// removed from the workspace. Therefore, the terminal has to signal such cases to the
+		/// workspace.
+		/// </remarks>
+		public bool Close(bool isWorkspaceClose)
+		{
+			bool success = false;
+
+			OnFixedStatusTextRequest("Closing terminal...");
+
+			// try to auto save if never saved yet or changed
+			if (isWorkspaceClose)
+			{
+				if (!_settingsHandler.SettingsFileExists || _settingsRoot.HaveChanged)
+					success = TryAutoSave();
+			}
+
+			// or save it manually if necessary
+			if (!success && _settingsRoot.ExplicitHaveChanged)
+			{
+				DialogResult dr = OnMessageInputRequest
+					(
+					"Save terminal?",
+					UserName,
+					MessageBoxButtons.YesNoCancel,
+					MessageBoxIcon.Question
+					);
+
+				switch (dr)
+				{
+					case DialogResult.Yes:    success = Save(); break;
+					case DialogResult.No:     success = true;   break;
+
+					case DialogResult.Cancel:
+					default:
+						OnTimedStatusTextRequest("Terminal not closed");
+						return (false);
+				}
+			}
+			else
+			{
+				// consider it successful if there was nothing to save
+				success = true;
+			}
+
+			// next, close underlying terminal
+			if (_terminal.IsOpen)
+				success = CloseIO(false);
+
+			// last, close log
+			if (_log.IsOpen)
+				EndLog();
+
+			if (success)
+			{
+				OnClosed(new ClosedEventArgs(isWorkspaceClose));
+				OnTimedStatusTextRequest("Terminal successfully closed");
+			}
+			else
+			{
+				OnTimedStatusTextRequest("Terminal not closed");
+			}
+			return (success);
+		}
+
+		#endregion
+
+		#region Recents
+		//==========================================================================================
+		// Recents
+		//==========================================================================================
+
+		/// <summary>
+		/// Update recent entry.
+		/// </summary>
+		/// <param name="recentFile">Recent file.</param>
+		private void SetRecent(string recentFile)
+		{
+			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
+			ApplicationSettings.SaveLocalUser();
+		}
 
 		#endregion
 
@@ -1041,68 +1093,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Repositories
+		#region Terminal > Send Command
 		//------------------------------------------------------------------------------------------
-		// Terminal > Repositories
-		//------------------------------------------------------------------------------------------
-
-		/// <summary>
-		/// Forces complete reload of repositories
-		/// </summary>
-		public void ReloadRepositories()
-		{
-			AssertNotDisposed();
-			_terminal.ReloadRepositories();
-		}
-
-		/// <summary>
-		/// Returns contents of desired repository
-		/// </summary>
-		public List<Domain.DisplayElement> RepositoryToDisplayElements(Domain.RepositoryType repositoryType)
-		{
-			AssertNotDisposed();
-			return (_terminal.RepositoryToDisplayElements(repositoryType));
-		}
-
-		/// <summary>
-		/// Returns contents of desired repository
-		/// </summary>
-		public List<List<Domain.DisplayElement>> RepositoryToDisplayLines(Domain.RepositoryType repositoryType)
-		{
-			AssertNotDisposed();
-			return (_terminal.RepositoryToDisplayLines(repositoryType));
-		}
-
-		/// <summary>
-		/// Clears given repository
-		/// </summary>
-		public void ClearRepository(Domain.RepositoryType repositoryType)
-		{
-			AssertNotDisposed();
-			_terminal.ClearRepository(repositoryType);
-		}
-
-		/// <summary>
-		/// Clears all repositories
-		/// </summary>
-		public void ClearRepositories()
-		{
-			AssertNotDisposed();
-			_terminal.ClearRepositories();
-		}
-
-		#endregion
-
-		#endregion
-
-		#region Send
-		//==========================================================================================
-		// Send
-		//==========================================================================================
-
-		#region Send > Command
-		//------------------------------------------------------------------------------------------
-		// Send > Command
+		// Terminal > Send Command
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -1146,9 +1139,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Send > File
+		#region Terminal > Send File
 		//------------------------------------------------------------------------------------------
-		// Send > File
+		// Terminal > Send File
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -1229,6 +1222,100 @@ namespace YAT.Model
 					MessageBoxIcon.Error
 					);
 			}
+		}
+
+		#endregion
+
+		#region Terminal > Repositories
+		//------------------------------------------------------------------------------------------
+		// Terminal > Repositories
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Forces complete reload of repositories
+		/// </summary>
+		public void ReloadRepositories()
+		{
+			AssertNotDisposed();
+			_terminal.ReloadRepositories();
+		}
+
+		/// <summary>
+		/// Returns contents of desired repository
+		/// </summary>
+		public List<Domain.DisplayElement> RepositoryToDisplayElements(Domain.RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+			return (_terminal.RepositoryToDisplayElements(repositoryType));
+		}
+
+		/// <summary>
+		/// Returns contents of desired repository
+		/// </summary>
+		public List<List<Domain.DisplayElement>> RepositoryToDisplayLines(Domain.RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+			return (_terminal.RepositoryToDisplayLines(repositoryType));
+		}
+
+		/// <summary>
+		/// Clears given repository
+		/// </summary>
+		public void ClearRepository(Domain.RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+			_terminal.ClearRepository(repositoryType);
+		}
+
+		/// <summary>
+		/// Clears all repositories
+		/// </summary>
+		public void ClearRepositories()
+		{
+			AssertNotDisposed();
+			_terminal.ClearRepositories();
+		}
+
+		#endregion
+
+		#region Terminal > Count Status
+		//------------------------------------------------------------------------------------------
+		// Terminal > Count Status
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public int TxByteCount
+		{
+			get { return (_txByteCount); }
+		}
+
+		/// <summary></summary>
+		public int TxLineCount
+		{
+			get { return (_txLineCount); }
+		}
+
+		/// <summary></summary>
+		public int RxByteCount
+		{
+			get { return (_rxByteCount); }
+		}
+
+		/// <summary></summary>
+		public int RxLineCount
+		{
+			get { return (_rxLineCount); }
+		}
+
+		/// <summary></summary>
+		public void ResetCount()
+		{
+			_txByteCount = 0;
+			_txLineCount = 0;
+			_rxByteCount = 0;
+			_rxLineCount = 0;
+
+			OnIOCountChanged(new EventArgs());
 		}
 
 		#endregion
@@ -1316,48 +1403,6 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Count Status
-		//==========================================================================================
-		// Count Status
-		//==========================================================================================
-
-		/// <summary></summary>
-		public int TxByteCount
-		{
-			get { return (_txByteCount); }
-		}
-
-		/// <summary></summary>
-		public int TxLineCount
-		{
-			get { return (_txLineCount); }
-		}
-
-		/// <summary></summary>
-		public int RxByteCount
-		{
-			get { return (_rxByteCount); }
-		}
-
-		/// <summary></summary>
-		public int RxLineCount
-		{
-			get { return (_rxLineCount); }
-		}
-
-		/// <summary></summary>
-		public void ResetCount()
-		{
-			_txByteCount = 0;
-			_txLineCount = 0;
-			_rxByteCount = 0;
-			_rxLineCount = 0;
-
-			OnIOCountChanged(new EventArgs());
-		}
-
-		#endregion
-
 		#region Event Invoking
 		//==========================================================================================
 		// Event Invoking
@@ -1384,7 +1429,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void OnIOError(Domain.ErrorEventArgs e)
 		{
-			EventHelper.FireSync(IOError, this, e);
+			EventHelper.FireSync<Domain.ErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>
@@ -1426,20 +1471,20 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void OnFixedStatusTextRequest(string text)
 		{
-			EventHelper.FireSync(FixedStatusTextRequest, this, new StatusTextEventArgs(text));
+			EventHelper.FireSync<StatusTextEventArgs>(FixedStatusTextRequest, this, new StatusTextEventArgs(text));
 		}
 
 		/// <summary></summary>
 		protected virtual void OnTimedStatusTextRequest(string text)
 		{
-			EventHelper.FireSync(TimedStatusTextRequest, this, new StatusTextEventArgs(text));
+			EventHelper.FireSync<StatusTextEventArgs>(TimedStatusTextRequest, this, new StatusTextEventArgs(text));
 		}
 
 		/// <summary></summary>
 		protected virtual DialogResult OnMessageInputRequest(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		{
 			MessageInputEventArgs e = new MessageInputEventArgs(text, caption, buttons, icon);
-			EventHelper.FireSync(MessageInputRequest, this, e);
+			EventHelper.FireSync<MessageInputEventArgs>(MessageInputRequest, this, e);
 			return (e.Result);
 		}
 
@@ -1447,7 +1492,7 @@ namespace YAT.Model
 		protected virtual DialogResult OnSaveAsFileDialogRequest()
 		{
 			DialogEventArgs e = new DialogEventArgs();
-			EventHelper.FireSync(SaveAsFileDialogRequest, this, e);
+			EventHelper.FireSync<DialogEventArgs>(SaveAsFileDialogRequest, this, e);
 			return (e.Result);
 		}
 
@@ -1458,9 +1503,9 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void OnClosed(EventArgs e)
+		protected virtual void OnClosed(ClosedEventArgs e)
 		{
-			EventHelper.FireSync(Closed, this, e);
+			EventHelper.FireSync<ClosedEventArgs>(Closed, this, e);
 		}
 
 		#endregion

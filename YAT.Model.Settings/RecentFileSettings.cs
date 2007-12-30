@@ -72,7 +72,7 @@ namespace YAT.Model.Settings
 
 		/// <remarks>
 		/// This property allows standard XML serialization which is not provided for
-		/// generic collection <see cref="RecentItemCollection"/>.
+		/// generic collection <see cref="T:RecentItemCollection`1"/>.
 		/// </remarks>
 		[XmlElement("FilePathsMaximumCapacity")]
 		public int FilePathsMaximumCapacity

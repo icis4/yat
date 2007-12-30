@@ -45,6 +45,7 @@
     <Compile Include="Drawing\XDrawing.cs" />
     <Compile Include="Guid\GuidList.cs" />
     <Compile Include="Guid\IGuidProvider.cs" />
+    <Compile Include="Guid\XGuid.cs" />
     <Compile Include="Recent\RecentItem.cs" />
     <Compile Include="Recent\RecentItemCollection.cs">
       <SubType>Code</SubType>

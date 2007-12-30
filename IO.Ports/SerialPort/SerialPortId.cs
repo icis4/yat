@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 namespace MKY.IO.Ports
 {
 	/// <summary>
-	/// SerialPortId
+	/// SerialPortId.
 	/// </summary>
 	[Serializable]
 	[TypeConverter(typeof(SerialPortIdConverter))]

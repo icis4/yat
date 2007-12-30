@@ -14,6 +14,7 @@ using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
+
 using YAT.Utilities;
 
 namespace YAT.Gui.Forms
@@ -30,6 +31,8 @@ namespace YAT.Gui.Forms
 
 		// startup
 		private bool _isStartingUp = true;
+		private bool _isClosingFromForm = false;
+		private bool _isClosingFromModel = false;
 
 		// recent files
 		private List<ToolStripMenuItem> _menuItems_recents;
@@ -103,8 +106,22 @@ namespace YAT.Gui.Forms
 			{
 				_isStartingUp = false;
 
-				// start YAT according to main settings, if this fails, display new terminal dialog
+				// start YAT according to main settings
 				if (!_main.Start())
+				{
+					MessageBox.Show
+						(
+						this,
+						"YAT could not be started!",
+						"Serious Application Error",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Stop
+						);
+					Close();
+				}
+
+				// if workspace is empty, display new terminal dialog
+				if (_workspace.TerminalCount == 0)
 					ShowNewTerminalDialog();
 			}
 		}
@@ -123,13 +140,22 @@ namespace YAT.Gui.Forms
 
 		private void Main_MdiChildActivate(object sender, EventArgs e)
 		{
-			SetTimedStatus(Status.ChildActivated);
+			if (ActiveMdiChild != null)
+			{
+				_workspace.ActivateTerminal(((Terminal)ActiveMdiChild).UnderlyingTerminal);
+				SetTimedStatus(Status.ChildActivated);
+			}
 			SetToolControls();
 		}
 
 		private void Main_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			e.Cancel = (!_main.Close());
+			// prevent multiple calls to Close()
+			if (!_isClosingFromModel)
+			{
+				_isClosingFromForm = true;
+				e.Cancel = (!_main.Close());
+			}
 		}
 
 		#endregion
@@ -615,8 +641,7 @@ namespace YAT.Gui.Forms
 
 		private void _main_WorkspaceClosed(object sender, EventArgs e)
 		{
-			DetachWorkspaceEventHandlers();
-			_workspace = null;
+			// do nothing, the Workspace::Closed event is handled at _workspace_Closed()
 		}
 
 		private void _main_TimedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
@@ -638,7 +663,12 @@ namespace YAT.Gui.Forms
 
 		private void _main_Closed(object sender, EventArgs e)
 		{
-			throw new Exception("The method or operation is not implemented.");
+			// prevent multiple calls to Close()
+			if (!_isClosingFromForm)
+			{
+				_isClosingFromModel = true;
+				Close();
+			}
 		}
 
 		#endregion
@@ -678,16 +708,19 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void ShowSaveWorkspaceAsFileDialog()
+		private DialogResult ShowSaveWorkspaceAsFileDialog()
 		{
 			SetFixedStatusText("Saving workspace as...");
+
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Title = "Save Workspace As";
 			sfd.Filter = ExtensionSettings.WorkspaceFilesFilter;
 			sfd.DefaultExt = ExtensionSettings.WorkspaceFiles;
 			sfd.InitialDirectory = ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath;
 			sfd.FileName = Environment.UserName + "." + sfd.DefaultExt;
-			if ((sfd.ShowDialog(this) == DialogResult.OK) && (sfd.FileName.Length > 0))
+
+			DialogResult dr = sfd.ShowDialog(this);
+			if ((dr == DialogResult.OK) && (sfd.FileName.Length > 0))
 			{
 				Refresh();
 
@@ -700,6 +733,7 @@ namespace YAT.Gui.Forms
 			{
 				ResetStatusText();
 			}
+			return (dr);
 		}
 
 		#endregion
@@ -711,24 +745,28 @@ namespace YAT.Gui.Forms
 
 		private void AttachWorkspaceEventHandlers()
 		{
-			_workspace.TerminalRemoved += new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalRemoved);
 			_workspace.TerminalAdded   += new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalAdded);
+			_workspace.TerminalRemoved += new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalRemoved);
 
 			_workspace.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_workspace_TimedStatusTextRequest);
 			_workspace.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_workspace_FixedStatusTextRequest);
 			_workspace.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(_workspace_MessageInputRequest);
 
+			_workspace.SaveAsFileDialogRequest += new EventHandler<Model.DialogEventArgs>(_workspace_SaveAsFileDialogRequest);
+			
 			_workspace.Closed += new EventHandler(_workspace_Closed);
 		}
 
 		private void DetachWorkspaceEventHandlers()
 		{
-			_workspace.TerminalRemoved -= new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalRemoved);
 			_workspace.TerminalAdded   -= new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalAdded);
+			_workspace.TerminalRemoved -= new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalRemoved);
 
 			_workspace.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_workspace_TimedStatusTextRequest);
 			_workspace.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_workspace_FixedStatusTextRequest);
 			_workspace.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(_workspace_MessageInputRequest);
+
+			_workspace.SaveAsFileDialogRequest -= new EventHandler<Model.DialogEventArgs>(_workspace_SaveAsFileDialogRequest);
 
 			_workspace.Closed -= new EventHandler(_workspace_Closed);
 		}
@@ -740,11 +778,6 @@ namespace YAT.Gui.Forms
 		// Workspace > Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		private void _workspace_TerminalRemoved(object sender, Model.TerminalEventArgs e)
-		{
-			// nothing to do, terminal is removed upon MDI::FormClosed event
-		}
-
 		private void _workspace_TerminalAdded(object sender, Model.TerminalEventArgs e)
 		{
 			// create terminal form
@@ -752,12 +785,18 @@ namespace YAT.Gui.Forms
 
 			// link MDI child this MDI parent
 			mdiChild.MdiParent = this;
+
 			mdiChild.Changed    += new EventHandler(mdiChild_Changed);
 			mdiChild.Saved      += new EventHandler<Model.SavedEventArgs>(mdiChild_Saved);
 			mdiChild.FormClosed += new FormClosedEventHandler(mdiChild_FormClosed);
 
 			// show form
 			mdiChild.Show();
+		}
+
+		private void _workspace_TerminalRemoved(object sender, Model.TerminalEventArgs e)
+		{
+			// nothing to do, terminal is removed by mdiChild_FormClosed event handler
 		}
 
 		private void _workspace_TimedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
@@ -772,14 +811,18 @@ namespace YAT.Gui.Forms
 
 		private void _workspace_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
-			DialogResult dr;
-			dr = MessageBox.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
-			e.Result = dr;
+			e.Result = MessageBox.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
+		}
+
+		private void _workspace_SaveAsFileDialogRequest(object sender, Model.DialogEventArgs e)
+		{
+			e.Result = ShowSaveWorkspaceAsFileDialog();
 		}
 
 		private void _workspace_Closed(object sender, EventArgs e)
 		{
-			throw new Exception("The method or operation is not implemented.");
+			DetachWorkspaceEventHandlers();
+			_workspace = null;
 		}
 
 		#endregion
@@ -854,7 +897,7 @@ namespace YAT.Gui.Forms
 
 		private void mdiChild_Saved(object sender, Model.SavedEventArgs e)
 		{
-			if (!e.AutoSave)
+			if (!e.IsAutoSave)
 				SetTimedStatus(Status.ChildSaved);
 
 			SetToolControls();

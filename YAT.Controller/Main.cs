@@ -110,7 +110,7 @@ namespace YAT.Controller
 
 		public Main(string[] commandLineArgs)
 		{
-			_commandLineError = ParseCommandLineArgs(commandLineArgs);
+			_commandLineError = (!ParseCommandLineArgs(commandLineArgs));
 		}
 
 		#endregion
@@ -181,6 +181,10 @@ namespace YAT.Controller
 			Console.WriteLine();
 
 			foreach (string line in _FileOptions)
+				Console.WriteLine(line);
+			Console.WriteLine();
+
+			foreach (string line in _AdvancedOptions)
 				Console.WriteLine(line);
 			Console.WriteLine();
 
