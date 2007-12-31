@@ -178,9 +178,9 @@ namespace YAT.Gui.Forms
 		private void toolStripMenuItem_MainMenu_File_DropDownOpening(object sender, EventArgs e)
 		{
 			bool childIsReady = (ActiveMdiChild != null);
-			toolStripMenuItem_MainMenu_File_CloseAllTerminals.Enabled = childIsReady;
-			toolStripMenuItem_MainMenu_File_SaveAllTerminals.Enabled = childIsReady;
-			
+			toolStripMenuItem_MainMenu_File_CloseAll.Enabled = childIsReady;
+			toolStripMenuItem_MainMenu_File_SaveAll.Enabled = childIsReady;
+
 			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll();
 			bool recentsAreReady = (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count > 0);
 			toolStripMenuItem_MainMenu_File_Recent.Enabled = recentsAreReady;
@@ -196,30 +196,56 @@ namespace YAT.Gui.Forms
 			ShowOpenTerminalFromFileDialog();
 		}
 
-		private void toolStripMenuItem_MainMenu_File_CloseAllTerminals_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MainMenu_File_CloseAll_Click(object sender, EventArgs e)
 		{
 			_workspace.CloseAllTerminals();
 		}
 
-		private void toolStripMenuItem_MainMenu_File_OpenWorkspace_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MainMenu_File_SaveAll_Click(object sender, EventArgs e)
+		{
+			_workspace.SaveAllTerminals();
+		}
+
+		#region Controls Event Handlers > Main Menu > File > Workspace
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Main Menu > File > Workspace
+		//------------------------------------------------------------------------------------------
+
+		private void toolStripMenuItem_MainMenu_File_Workspace_DropDownOpening(object sender, EventArgs e)
+		{
+			bool workspaceIsReady = (_workspace != null);
+			toolStripMenuItem_MainMenu_File_Workspace_New.Enabled = !workspaceIsReady;
+			toolStripMenuItem_MainMenu_File_Workspace_Close.Enabled = workspaceIsReady;
+			toolStripMenuItem_MainMenu_File_Workspace_Save.Enabled = workspaceIsReady;
+			toolStripMenuItem_MainMenu_File_Workspace_SaveAs.Enabled = workspaceIsReady;
+		}
+
+		private void toolStripMenuItem_MainMenu_File_Workspace_New_Click(object sender, EventArgs e)
+		{
+			_main.CreateNewWorkspace();
+		}
+
+		private void toolStripMenuItem_MainMenu_File_Workspace_Open_Click(object sender, EventArgs e)
 		{
 			ShowOpenWorkspaceFromFileDialog();
 		}
 
-		private void toolStripMenuItem_MainMenu_File_SaveWorkspace_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MainMenu_File_Workspace_Close_Click(object sender, EventArgs e)
+		{
+			_workspace.Close();
+		}
+
+		private void toolStripMenuItem_MainMenu_File_Workspace_Save_Click(object sender, EventArgs e)
 		{
 			_workspace.Save();
 		}
 
-		private void toolStripMenuItem_MainMenu_File_SaveWorkspaceAs_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MainMenu_File_Workspace_SaveAs_Click(object sender, EventArgs e)
 		{
 			ShowSaveWorkspaceAsFileDialog();
 		}
 
-		private void toolStripMenuItem_MainMenu_File_SaveAllTerminals_Click(object sender, EventArgs e)
-		{
-			_workspace.SaveAllTerminals();
-		}
+		#endregion
 
 		private void toolStripMenuItem_MainMenu_File_Preferences_Click(object sender, EventArgs e)
 		{
@@ -754,7 +780,7 @@ namespace YAT.Gui.Forms
 
 			_workspace.SaveAsFileDialogRequest += new EventHandler<Model.DialogEventArgs>(_workspace_SaveAsFileDialogRequest);
 			
-			_workspace.Closed += new EventHandler(_workspace_Closed);
+			_workspace.Closed += new EventHandler<Model.ClosedEventArgs>(_workspace_Closed);
 		}
 
 		private void DetachWorkspaceEventHandlers()
@@ -768,7 +794,7 @@ namespace YAT.Gui.Forms
 
 			_workspace.SaveAsFileDialogRequest -= new EventHandler<Model.DialogEventArgs>(_workspace_SaveAsFileDialogRequest);
 
-			_workspace.Closed -= new EventHandler(_workspace_Closed);
+			_workspace.Closed -= new EventHandler<Model.ClosedEventArgs>(_workspace_Closed);
 		}
 
 		#endregion
@@ -819,7 +845,7 @@ namespace YAT.Gui.Forms
 			e.Result = ShowSaveWorkspaceAsFileDialog();
 		}
 
-		private void _workspace_Closed(object sender, EventArgs e)
+		private void _workspace_Closed(object sender, Model.ClosedEventArgs e)
 		{
 			DetachWorkspaceEventHandlers();
 			_workspace = null;

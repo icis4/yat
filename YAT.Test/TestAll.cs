@@ -29,6 +29,9 @@ namespace YAT.Test
 				suite.Add(new YAT.Domain.Test.Parser.ParserTest());
 				suite.Add(new YAT.Domain.Test.TextTerminal.SubstitutionParserTest());
 
+				// YAT.Model.Test
+				suite.Add(new YAT.Model.Test.ModelTest());
+
 				// YAT.Settings.Test
 				suite.Add(new YAT.Settings.Test.SettingsTest());
 

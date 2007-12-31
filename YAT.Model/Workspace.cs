@@ -69,7 +69,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public event EventHandler<SavedEventArgs> Saved;
 		/// <summary></summary>
-		public event EventHandler Closed;
+		public event EventHandler<ClosedEventArgs> Closed;
 
 		#endregion
 
@@ -350,20 +350,34 @@ namespace YAT.Model
 		/// </summary>
 		public bool Save()
 		{
+			return (Save(true));
+		}
+
+		/// <summary>
+		/// Saves all terminals and workspace to file(s), prompts for file(s) if they doesn't exist yet
+		/// </summary>
+		public bool Save(bool autoSaveIsAllowed)
+		{
 			AssertNotDisposed();
 
 			bool success = false;
 			if (_settingsHandler.SettingsFilePathIsValid)
 			{
 				if (_settingsHandler.Settings.AutoSaved)
-					success = SaveToFile(true);
+				{
+					if (autoSaveIsAllowed)
+						success = SaveToFile(true);
+				}
 				else
+				{
 					success = SaveToFile(false);
+				}
 			}
-			else
-			{
+
+			// if not successful yet, request new file path
+			if (!success)
 				success = (OnSaveAsFileDialogRequest() == DialogResult.OK);
-			}
+
 			return (success);
 		}
 
@@ -417,7 +431,7 @@ namespace YAT.Model
 				_settingsHandler.SettingsFilePath = autoSaveFilePath;
 			}
 
-			if (!SaveAllTerminals())
+			if (!SaveAllTerminals(doAutoSave))
 			{
 				OnTimedStatusTextRequest("Workspace not saved!");
 				return (false);
@@ -484,14 +498,29 @@ namespace YAT.Model
 		// Close
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>Closes the workspace and prompts if the settings have changed.</summary>
 		public bool Close()
+		{
+			return (Close(false));
+		}
+
+		/// <summary>
+		/// Closes the workspace and tries to auto save if desired.
+		/// </summary>
+		/// <remarks>
+		/// Attention:
+		/// This method is needed for MDI applications. In case of MDI parent/application closing,
+		/// Close() of the workspace is called. Without taking care of this, the workspace would
+		/// be removed as the active workspace from the local user settings. Therefore, the
+		/// workspace has to signal such cases to the main.
+		/// </remarks>
+		public bool Close(bool isMainClose)
 		{
 			bool success = false;
 
 			OnFixedStatusTextRequest("Closing workspace...");
 
-			// first, close all contained terminals but signal them auto close
+			// first, close all contained terminals but signal them workspace close
 			if (!CloseAllTerminals(true))
 			{
 				OnTimedStatusTextRequest("Workspace not closed");
@@ -535,8 +564,9 @@ namespace YAT.Model
 
 			if (success)
 			{
-				OnClosed(new EventArgs());
+				// status text request must be before closed event, closed event may close the view
 				OnTimedStatusTextRequest("Workspace successfully closed");
+				OnClosed(new ClosedEventArgs(isMainClose));
 			}
 			else
 			{
@@ -603,11 +633,11 @@ namespace YAT.Model
 
 		/// <remarks>
 		/// See remarks of <see cref="Terminal.Close(bool)"/> for details on why this event handler
-		/// needs to treat the Closed event differently in case of e.WorkspaceClose.
+		/// needs to treat the Closed event differently in case of a parent (i.e. workspace) close.
 		/// </remarks>
 		private void terminal_Closed(object sender, ClosedEventArgs e)
 		{
-			if (!e.IsWorkspaceClose)
+			if (!e.IsParentClose)
 				RemoveFromWorkspace((Terminal)sender);
 		}
 
@@ -852,13 +882,19 @@ namespace YAT.Model
 		/// <summary></summary>
 		public bool SaveAllTerminals()
 		{
+			return (SaveAllTerminals(true));
+		}
+
+		/// <summary></summary>
+		public bool SaveAllTerminals(bool autoSaveIsAllowed)
+		{
 			bool success = true;
 
 			// calling Close() on a terminal will modify the list, therefore clone it first
 			List<Terminal> clone = new List<Terminal>(_terminals);
 			foreach (Terminal t in clone)
 			{
-				if (!t.Save())
+				if (!t.Save(autoSaveIsAllowed))
 					success = false;
 			}
 			return (success);
@@ -980,9 +1016,9 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void OnClosed(EventArgs e)
+		protected virtual void OnClosed(ClosedEventArgs e)
 		{
-			EventHelper.FireSync(Closed, this, e);
+			EventHelper.FireSync<ClosedEventArgs>(Closed, this, e);
 		}
 
 		#endregion

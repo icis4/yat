@@ -58,12 +58,18 @@ namespace YAT.Model
 	public class ClosedEventArgs : EventArgs
 	{
 		/// <summary></summary>
-		public readonly bool IsWorkspaceClose;
+		public readonly bool IsParentClose;
 
 		/// <summary></summary>
-		public ClosedEventArgs(bool isWorkspaceClose)
+		public ClosedEventArgs()
 		{
-			IsWorkspaceClose = isWorkspaceClose;
+			IsParentClose = false;
+		}
+
+		/// <summary></summary>
+		public ClosedEventArgs(bool isParentClose)
+		{
+			IsParentClose = isParentClose;
 		}
 	}
 

@@ -37,9 +37,9 @@ namespace MKY.Utilities.Guid
 
 			// do some basic checks to minimize probablity of exception below
 			bool tryCreate = true;
-			if (tryCreate && (string.Compare(fileName.Substring(0, prefix.Length), prefix) != 0))
-				tryCreate = false;
 			if (tryCreate && (fileName.Length < (prefix.Length + 32))) // GUID string contains at least 32 chars
+				tryCreate = false;
+			if (tryCreate && (string.Compare(fileName.Substring(0, prefix.Length), prefix) != 0))
 				tryCreate = false;
 
 			if (tryCreate)
