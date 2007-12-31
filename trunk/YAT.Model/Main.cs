@@ -314,7 +314,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public bool Close()
 		{
-			bool success = _workspace.Close();
+			bool success = _workspace.Close(true);
 
 			if (success)
 				OnFixedStatusTextRequest("Exiting " + Application.ProductName + "...");
@@ -341,12 +341,14 @@ namespace YAT.Model
 
 		private void AttachWorkspaceEventHandlers()
 		{
-			_workspace.Closed += new EventHandler(_workspace_Closed);
+			_workspace.Saved  += new EventHandler<SavedEventArgs>(_workspace_Saved);
+			_workspace.Closed += new EventHandler<ClosedEventArgs>(_workspace_Closed);
 		}
 
 		private void DetachWorkspaceEventHandlers()
 		{
-			_workspace.Closed -= new EventHandler(_workspace_Closed);
+			_workspace.Saved  -= new EventHandler<SavedEventArgs>(_workspace_Saved);
+			_workspace.Closed -= new EventHandler<ClosedEventArgs>(_workspace_Closed);
 		}
 
 		#endregion
@@ -356,8 +358,24 @@ namespace YAT.Model
 		// Workspace > Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		private void _workspace_Closed(object sender, EventArgs e)
+		private void _workspace_Saved(object sender, SavedEventArgs e)
 		{
+			ApplicationSettings.LocalUser.General.WorkspaceFilePath = e.FilePath;
+			ApplicationSettings.SaveLocalUser();
+		}
+
+		/// <remarks>
+		/// See remarks of <see cref="Workspace.Close(bool)"/> for details on why this event handler
+		/// needs to treat the Closed event differently in case of a parent (i.e. main) close.
+		/// </remarks>
+		private void _workspace_Closed(object sender, ClosedEventArgs e)
+		{
+			if (!e.IsParentClose)
+			{
+				ApplicationSettings.LocalUser.General.WorkspaceFilePath = "";
+				ApplicationSettings.SaveLocalUser();
+			}
+
 			OnWorkspaceClosed(e);
 		}
 
@@ -371,6 +389,13 @@ namespace YAT.Model
 		/// <summary></summary>
 		public bool CreateNewWorkspace()
 		{
+			// close workspace, only one workspace can exist within application
+			if (_workspace != null)
+			{
+				if (!_workspace.Close())
+					return (false);
+			}
+
 			OnFixedStatusTextRequest("Creating new workspace...");
 
 			// create workspace

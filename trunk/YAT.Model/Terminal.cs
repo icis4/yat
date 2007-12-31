@@ -477,20 +477,34 @@ namespace YAT.Model
 		/// </summary>
 		public bool Save()
 		{
+			return (Save(true));
+		}
+
+		/// <summary>
+		/// Saves terminal to file, prompts for file if it doesn't exist yet
+		/// </summary>
+		public bool Save(bool autoSaveIsAllowed)
+		{
 			AssertNotDisposed();
 
 			bool success = false;
 			if (_settingsHandler.SettingsFilePathIsValid)
 			{
 				if (_settingsHandler.Settings.AutoSaved)
-					success = SaveToFile(true);
+				{
+					if (autoSaveIsAllowed)
+						success = SaveToFile(true);
+				}
 				else
+				{
 					success = SaveToFile(false);
+				}
 			}
-			else
-			{
+
+			// if not successful yet, request new file path
+			if (!success)
 				success = (OnSaveAsFileDialogRequest() == DialogResult.OK);
-			}
+
 			return (success);
 		}
 
@@ -667,8 +681,9 @@ namespace YAT.Model
 
 			if (success)
 			{
-				OnClosed(new ClosedEventArgs(isWorkspaceClose));
+				// status text request must be before closed event, closed event may close the view
 				OnTimedStatusTextRequest("Terminal successfully closed");
+				OnClosed(new ClosedEventArgs(isWorkspaceClose));
 			}
 			else
 			{
