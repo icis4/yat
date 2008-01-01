@@ -1,0 +1,84 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.IO;
+
+namespace MKY.Utilities.Diagnostics
+{
+	/// <summary>
+	/// Provides methods to write to <see cref="System.Diagnostics.Debug"/> and
+	/// <see cref="System.Diagnostics.Trace"/> through appropriate wrappers.
+	/// </summary>
+	public static class DiagnosticsWriterOutput
+	{
+		/// <summary>
+		/// Writes source, type, message and stack of the given exception and its inner exceptions
+		/// to to given writer.
+		/// </summary>
+		/// <remarks>
+		/// There are also two predefined variants for the static objects
+		/// <see cref="System.Diagnostics.Debug"/> and 
+		/// <see cref="System.Diagnostics.Trace"/> available in
+		/// <see cref="MKY.Utilities.Diagnostics.XDebug"/> and
+		/// <see cref="MKY.Utilities.Diagnostics.XTrace"/>.
+		/// </remarks>
+		public static void WriteException(IDiagnosticsWriter writer, object obj, Exception ex)
+		{
+			writer.Write("Exception in ");
+			writer.WriteLine(obj.GetType().FullName);
+
+			writer.Indent();
+			{
+				Exception exception = ex;
+				int exceptionLevel = 0;
+				string line;
+				StringReader sr;
+
+				while (exception != null)
+				{
+					if (exceptionLevel == 0)
+						writer.WriteLine("Exception:");
+					else
+						writer.WriteLine("Inner exception level " + exceptionLevel.ToString() + ":");
+
+					writer.Indent();
+					{
+						writer.Write("Type: ");
+						writer.WriteLine(ex.GetType().ToString());
+						writer.WriteLine("Message:");
+						writer.Indent();
+						{
+							sr = new StringReader(ex.Message);
+							do
+							{
+								line = sr.ReadLine();
+								if (line != null)
+									writer.WriteLine(line);
+							}
+							while (line != null);
+						}
+						writer.Unindent();
+						writer.Write("Source: ");
+						writer.WriteLine(ex.Source);
+						writer.WriteLine("Stack:");
+						sr = new StringReader(ex.StackTrace);
+						do
+						{
+							line = sr.ReadLine();
+							if (line != null)
+								writer.WriteLine(line);
+						}
+						while (line != null);
+					}
+					writer.Unindent();
+
+					exception = exception.InnerException;
+					exceptionLevel++;
+				}
+			}
+			writer.Unindent();
+
+		} // WriteException()
+
+	} // DiagnosticsWriterOutput
+}
