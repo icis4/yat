@@ -3,8 +3,8 @@
   <FileType>YAT Terminal Settings</FileType>
   <Warning>Modifying this file may cause undefined behaviour!</Warning>
   <Saved>
-    <TimeStamp>2007-08-30T11:57:18.2478035+02:00</TimeStamp>
-    <UserName>klaey-1</UserName>
+    <TimeStamp>2008-01-01T19:25:48.6876864+01:00</TimeStamp>
+    <UserName>Matthias</UserName>
   </Saved>
   <ProductVersion>1.99.12</ProductVersion>
   <Explicit>
@@ -108,77 +108,7 @@
         </RxDisplay>
       </BinaryTerminal>
     </Terminal>
-    <PredefinedCommand>
-      <Pages>
-        <PageName>Page 1</PageName>
-        <Commands>
-          <Description>A</Description>
-          <CommandLines>A</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <Description>B</Description>
-          <CommandLines>B</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <Description>C</Description>
-          <CommandLines>C</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <Description>D</Description>
-          <CommandLines>D</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <Description>E</Description>
-          <CommandLines>E</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <Description>F</Description>
-          <CommandLines>F</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-      </Pages>
-      <Pages>
-        <PageName>Page 2</PageName>
-        <Commands>
-          <Description>X</Description>
-          <CommandLines>X</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <Description>Y</Description>
-          <CommandLines>Y</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <Description>Z</Description>
-          <CommandLines>Z</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-      </Pages>
-    </PredefinedCommand>
+    <PredefinedCommand />
     <Format>
       <Font>
         <Name>Courier New</Name>
@@ -219,7 +149,7 @@
       </ErrorFormat>
     </Format>
     <Log>
-      <RootPath>\\ch02sf00\klaey-1$</RootPath>
+      <RootPath>C:\Dokumente und Einstellungen\Matthias\Eigene Dateien</RootPath>
       <RootFileName>YAT-Log</RootFileName>
       <RawLogTx>false</RawLogTx>
       <RawLogBidir>false</RawLogBidir>
@@ -240,12 +170,12 @@
     </Log>
   </Explicit>
   <Implicit>
-    <TerminalIsOpen>false</TerminalIsOpen>
+    <TerminalIsOpen>true</TerminalIsOpen>
     <LogIsOpen>false</LogIsOpen>
     <SendCommand>
       <Command>
-        <Description>Hallo, hier ist YAT Beta 1</Description>
-        <CommandLines>Hallo, hier ist YAT Beta 1</CommandLines>
+        <Description />
+        <CommandLines />
         <DefaultRadix>String</DefaultRadix>
         <IsFilePath>false</IsFilePath>
         <FilePath />
