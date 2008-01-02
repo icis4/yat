@@ -144,6 +144,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Doc.Developer", "_Doc.Deve
 	EndProjectSection
 	ProjectSection(SolutionItems) = preProject
 		_Doc.Developer\HowToAddTestProject.txt = _Doc.Developer\HowToAddTestProject.txt
+		_Doc.Developer\HowToRunAndDebugNUnitTests.txt = _Doc.Developer\HowToRunAndDebugNUnitTests.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Model", "YAT.Model\YAT.Model.csproj", "{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}"

@@ -6,18 +6,36 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Windows.Forms;
 
+using MKY.Utilities.Diagnostics;
+using MKY.Utilities.Xml;
+
 namespace MKY.Utilities.Settings
 {
-	/// <summary></summary>
+	/// <summary>
+	/// Generic class to handle standard application settings. It covers common, local user
+	/// as well as roaming user settings.
+	/// </summary>
 	public class ApplicationSettingsHandler<TCommonSettings, TLocalUserSettings, TRoamingUserSettings>
 		where TCommonSettings : new()
 		where TLocalUserSettings : new()
 		where TRoamingUserSettings : new()
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
 		private const string _Extension = ".xml";
 		private const string _CommonFileName = "CommonSettings" + _Extension;
 		private const string _LocalUserFileName = "LocalUserSettings" + _Extension;
 		private const string _RoamingUserFileName = "RoamingUserSettings" + _Extension;
+
+		#endregion
+
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
 
 		private bool _hasCommonSettings = false;
 		private bool _hasLocalUserSettings = false;
@@ -36,6 +54,13 @@ namespace MKY.Utilities.Settings
 		private bool _roamingUserSettingsSuccessfullyLoaded = false;
 
 		private bool _allSettingsSuccessfullyLoaded = false;
+
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
 
 		/// <summary>
 		/// Handles common and user settings. Common settings are stored in
@@ -61,6 +86,13 @@ namespace MKY.Utilities.Settings
 				_roamingUserSettings = RoamingUserSettingsDefault;
 		}
 
+		#endregion
+
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
 		/// <summary>
 		/// Returns whether this handler has common settings.
 		/// </summary>
@@ -83,27 +115,6 @@ namespace MKY.Utilities.Settings
 		public bool HasRoamingUserSettings
 		{
 			get { return (_hasRoamingUserSettings); }
-		}
-
-		/// <summary>
-		/// Resets filenames to system defaults.
-		/// </summary>
-		public void ResetFilePaths()
-		{
-			if (_hasCommonSettings)
-				_commonSettingsFilePath = Application.CommonAppDataPath + Path.DirectorySeparatorChar + _CommonFileName;
-			else
-				_commonSettingsFilePath = "";
-
-			if (_hasLocalUserSettings)
-				_localUserSettingsFilePath = Application.LocalUserAppDataPath + Path.DirectorySeparatorChar + _LocalUserFileName;
-			else
-				_localUserSettingsFilePath = "";
-
-			if (_hasRoamingUserSettings)
-				_roamingUserSettingsFilePath = Application.UserAppDataPath + Path.DirectorySeparatorChar + _RoamingUserFileName;
-			else
-				_roamingUserSettingsFilePath = "";
 		}
 
 		/// <summary>
@@ -268,6 +279,34 @@ namespace MKY.Utilities.Settings
 			}
 		}
 
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary>
+		/// Resets filenames to system defaults.
+		/// </summary>
+		public void ResetFilePaths()
+		{
+			if (_hasCommonSettings)
+				_commonSettingsFilePath = Application.CommonAppDataPath + Path.DirectorySeparatorChar + _CommonFileName;
+			else
+				_commonSettingsFilePath = "";
+
+			if (_hasLocalUserSettings)
+				_localUserSettingsFilePath = Application.LocalUserAppDataPath + Path.DirectorySeparatorChar + _LocalUserFileName;
+			else
+				_localUserSettingsFilePath = "";
+
+			if (_hasRoamingUserSettings)
+				_roamingUserSettingsFilePath = Application.UserAppDataPath + Path.DirectorySeparatorChar + _RoamingUserFileName;
+			else
+				_roamingUserSettingsFilePath = "";
+		}
+
 		/// <summary>
 		/// Loads settings from <see cref="CommonSettingsFilePath"/>,
 		/// <see cref="LocalUserSettingsFilePath"/> and <see cref="RoamingUserSettingsFilePath"/>
@@ -327,7 +366,9 @@ namespace MKY.Utilities.Settings
 			{
 				Save();
 			}
-			catch { }
+			catch
+			{
+			}
 
 			// return load status
 			return (_allSettingsSuccessfullyLoaded);
@@ -338,12 +379,28 @@ namespace MKY.Utilities.Settings
 			// try to open existing file of current version
 			if (File.Exists(filePath)) // first check for file to minimize exceptions thrown
 			{
+				// try to open existing file with default deserialization
 				try
 				{
 					object settings = null;
 					using (StreamReader sr = new StreamReader(filePath))
 					{
 						XmlSerializer serializer = new XmlSerializer(type);
+						settings = serializer.Deserialize(sr);
+					}
+					return (settings);
+				}
+				catch
+				{
+				}
+
+				// try to open existing file with tolerant deserialization
+				try
+				{
+					object settings = null;
+					using (StreamReader sr = new StreamReader(filePath))
+					{
+						TolerantXmlSerializer serializer = new TolerantXmlSerializer(type);
 						settings = serializer.Deserialize(sr);
 					}
 					return (settings);
@@ -366,7 +423,9 @@ namespace MKY.Utilities.Settings
 					if (version < currentVersion)
 						oldDirectories.Add(directory);
 				}
-				catch { }
+				catch
+				{
+				}
 			}
 
 			// try to open an existing file of an older version, start with most recent
@@ -374,12 +433,28 @@ namespace MKY.Utilities.Settings
 			oldDirectories.Sort();
 			for (int i = oldDirectories.Count - 1; i >= 0; i--)
 			{
+				// try to open existing file with default deserialization
 				try
 				{
 					object settings = null;
 					using (StreamReader sr = new StreamReader((string)oldDirectories[i] + Path.DirectorySeparatorChar + fileName))
 					{
 						XmlSerializer serializer = new XmlSerializer(type);
+						settings = serializer.Deserialize(sr);
+					}
+					return (settings);
+				}
+				catch
+				{
+				}
+
+				// try to open existing file with tolerant deserialization
+				try
+				{
+					object settings = null;
+					using (StreamReader sr = new StreamReader(filePath))
+					{
+						TolerantXmlSerializer serializer = new TolerantXmlSerializer(type);
 						settings = serializer.Deserialize(sr);
 					}
 					return (settings);
@@ -520,5 +595,7 @@ namespace MKY.Utilities.Settings
 				catch { }
 			}
 		}
+
+		#endregion
 	}
 }

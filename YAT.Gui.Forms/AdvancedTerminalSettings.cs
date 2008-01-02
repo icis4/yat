@@ -231,6 +231,8 @@ namespace YAT.Gui.Forms
 
 		private void SetControls()
 		{
+			_isSettingControls = true;
+
 			comboBox_Radix.SelectedItem = (Domain.XRadix)_settings_Form.Display.Radix;
 			checkBox_ShowTimeStamp.Checked = _settings_Form.Display.ShowTimeStamp;
 			checkBox_ShowLength.Checked = _settings_Form.Display.ShowLength;
@@ -243,6 +245,8 @@ namespace YAT.Gui.Forms
 
 			groupBox_ReceiveSettings.Enabled = (_settings_Form.IO.IOType == Domain.IOType.SerialPort);
 			textBox_ParityReplacement.Text = _settings_Form.IO.SerialPort.ParityErrorReplacement;
+
+			_isSettingControls = false;
 		}
 
 		private void SetDefaults()

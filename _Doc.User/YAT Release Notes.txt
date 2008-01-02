@@ -52,6 +52,7 @@ Release 2.0.0 :: 2007-??-??
 - Baud rates above 115k added
 - Support for non-standard baud rates added
 - Text: Unicode and other encoding support added
+- Binary: Binary sequence line break added
 - Little-endian/big-endian support for \h \d \o \b added
 - Visual appearance modernized
 - Displaying performance improved

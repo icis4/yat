@@ -214,7 +214,7 @@ namespace MKY.Net.Sockets
 			}
             catch (Exception exOuter)
             {
-				MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+				MKY.Utilities.Diagnostics.XDebug.WriteException(this, exOuter);
 				Stop();
                 Host.FireOnException(new ExceptionEventArgs(exOuter));
             }
@@ -255,7 +255,7 @@ namespace MKY.Net.Sockets
 				}
 				catch (Exception exOuter)
 				{
-					MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+					MKY.Utilities.Diagnostics.XDebug.WriteException(this, exOuter);
 					if (!IsDisposed)
 					{
 						if (connection != null)
@@ -266,7 +266,7 @@ namespace MKY.Net.Sockets
 							}
 							catch (Exception exInner)
 							{
-								MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+								MKY.Utilities.Diagnostics.XDebug.WriteException(this, exInner);
 								Host.FireOnException(new ExceptionEventArgs(exInner));
 							}
 						}

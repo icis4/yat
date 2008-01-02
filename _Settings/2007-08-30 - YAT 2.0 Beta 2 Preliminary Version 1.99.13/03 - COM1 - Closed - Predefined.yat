@@ -112,62 +112,62 @@
     </Terminal>
     <PredefinedCommand>
       <Pages>
-        <PageName>Second Page</PageName>
+        <PageName>First Page</PageName>
         <Commands>
-          <Description>A2</Description>
-          <CommandLines>A2</CommandLines>
+          <Description>1A</Description>
+          <CommandLines>1A</CommandLines>
           <DefaultRadix>String</DefaultRadix>
           <IsFilePath>false</IsFilePath>
           <FilePath />
         </Commands>
         <Commands>
-          <Description>B2</Description>
-          <CommandLines>B2</CommandLines>
+          <Description>1B</Description>
+          <CommandLines>1B</CommandLines>
           <DefaultRadix>String</DefaultRadix>
           <IsFilePath>false</IsFilePath>
           <FilePath />
         </Commands>
         <Commands>
-          <Description>C2</Description>
-          <CommandLines>C2</CommandLines>
+          <Description>1C</Description>
+          <CommandLines>1C</CommandLines>
           <DefaultRadix>String</DefaultRadix>
           <IsFilePath>false</IsFilePath>
           <FilePath />
         </Commands>
         <Commands>
-          <Description>D2</Description>
-          <CommandLines>D2</CommandLines>
+          <Description>1D</Description>
+          <CommandLines>1D</CommandLines>
           <DefaultRadix>String</DefaultRadix>
           <IsFilePath>false</IsFilePath>
           <FilePath />
         </Commands>
       </Pages>
       <Pages>
-        <PageName>First Page</PageName>
+        <PageName>Second Page</PageName>
         <Commands>
-          <Description>A</Description>
-          <CommandLines>A</CommandLines>
+          <Description>2A</Description>
+          <CommandLines>2A</CommandLines>
           <DefaultRadix>String</DefaultRadix>
           <IsFilePath>false</IsFilePath>
           <FilePath />
         </Commands>
         <Commands>
-          <Description>B</Description>
-          <CommandLines>B</CommandLines>
+          <Description>2B</Description>
+          <CommandLines>2B</CommandLines>
           <DefaultRadix>String</DefaultRadix>
           <IsFilePath>false</IsFilePath>
           <FilePath />
         </Commands>
         <Commands>
-          <Description>C</Description>
-          <CommandLines>C</CommandLines>
+          <Description>2C</Description>
+          <CommandLines>2C</CommandLines>
           <DefaultRadix>String</DefaultRadix>
           <IsFilePath>false</IsFilePath>
           <FilePath />
         </Commands>
         <Commands>
-          <Description>D</Description>
-          <CommandLines>D</CommandLines>
+          <Description>2D</Description>
+          <CommandLines>2D</CommandLines>
           <DefaultRadix>String</DefaultRadix>
           <IsFilePath>false</IsFilePath>
           <FilePath />

@@ -89,13 +89,15 @@ namespace YAT.Domain
 		{
 			public LinePosition LinePosition;
 			public List<DisplayElement> LineElements;
+			public EolQueue SequenceBreak;
 			public DateTime TimeStamp;
 			public LineBreakTimer LineBreakTimer;
 
-			public LineState(DateTime timeStamp, LineBreakTimer lineBreakTimer)
+			public LineState(EolQueue sequenceBreak, DateTime timeStamp, LineBreakTimer lineBreakTimer)
 			{
 				LinePosition = BinaryTerminal.LinePosition.Begin;
 				LineElements = new List<DisplayElement>();
+				SequenceBreak = sequenceBreak;
 				TimeStamp = timeStamp;
 				LineBreakTimer = lineBreakTimer;
 			}
@@ -104,6 +106,7 @@ namespace YAT.Domain
 			{
 				LinePosition = BinaryTerminal.LinePosition.Begin;
 				LineElements.Clear();
+				SequenceBreak.Reset();
 				TimeStamp = DateTime.Now;
 			}
 		}
@@ -222,15 +225,27 @@ namespace YAT.Domain
 
 		private void InitializeStates()
 		{
+			Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianess);
 			LineBreakTimer t;
+
+			// tx
+			byte[] txSequenceBreak;
+			if (!p.TryParse(BinaryTerminalSettings.TxDisplay.SequenceLineBreak.Sequence, out txSequenceBreak))
+				txSequenceBreak = null;
 
 			t = new LineBreakTimer(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
 			t.Timeout += new EventHandler(_txTimer_Timeout);
-			_txLineState = new LineState(DateTime.Now, t);
+
+			_txLineState = new LineState(new EolQueue(txSequenceBreak), DateTime.Now, t);
+
+			// rx
+			byte[] rxSequenceBreak;
+			if (!p.TryParse(BinaryTerminalSettings.RxDisplay.SequenceLineBreak.Sequence, out rxSequenceBreak))
+				rxSequenceBreak = null;
 
 			t = new LineBreakTimer(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
 			t.Timeout += new EventHandler(_rxTimer_Timeout);
-			_rxLineState = new LineState(DateTime.Now, t);
+			_rxLineState = new LineState(new EolQueue(rxSequenceBreak), DateTime.Now, t);
 
 			_bidirLineState = new BidirLineState(true, SerialDirection.Tx);
 		}
@@ -336,6 +351,11 @@ namespace YAT.Domain
 			// return data
 			lineState.LineElements.AddRange(l);
 			elements.AddRange(l);
+
+			// evaluate binary sequence break
+			lineState.SequenceBreak.Enqueue(b);
+			if (lineState.SequenceBreak.EolMatch())
+				lineState.LinePosition = LinePosition.End;
 		}
 
 		/// <summary></summary>

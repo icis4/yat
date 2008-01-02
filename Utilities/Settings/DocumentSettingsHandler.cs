@@ -4,16 +4,33 @@ using System.Text;
 using System.IO;
 using System.Xml.Serialization;
 
+using MKY.Utilities.Diagnostics;
+using MKY.Utilities.Xml;
+
 namespace MKY.Utilities.Settings
 {
-	/// <summary></summary>
+	/// <summary>
+	/// Generic class to handle any kind of document settings, e.g. MDI application settings.
+	/// </summary>
 	public class DocumentSettingsHandler<TDocumentSettings>
 		where TDocumentSettings : Settings, new()
 	{
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
 		private string _settingsFilePath = "";
 		private string _accessedSettingsFilePath = "";
 
 		private TDocumentSettings _settings = default(TDocumentSettings);
+
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
 
 		/// <summary>
 		/// Handles document settings. Settings are stored in filePath
@@ -32,6 +49,13 @@ namespace MKY.Utilities.Settings
 		{
 			_settings = settings;
 		}
+
+		#endregion
+
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
 
 		/// <summary>
 		/// Complete path to document settings filePath.
@@ -111,6 +135,13 @@ namespace MKY.Utilities.Settings
 			get { return (new TDocumentSettings()); }
 		}
 
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
 		/// <summary>
 		/// Loads settings from <see cref="SettingsFilePath"/>
 		/// or creates default settings if file path not found or not readable.
@@ -146,9 +177,9 @@ namespace MKY.Utilities.Settings
 
 		private object LoadFromFile(Type type, string filePath)
 		{
-			// try to open filePath
 			if (File.Exists(filePath)) // first check for file to minimize exceptions thrown
 			{
+				// try to open existing file with default deserialization
 				try
 				{
 					object settings = null;
@@ -162,9 +193,25 @@ namespace MKY.Utilities.Settings
 				catch
 				{
 				}
+
+				// try to open existing file with tolerant deserialization
+				try
+				{
+					object settings = null;
+					using (StreamReader sr = new StreamReader(filePath))
+					{
+						TolerantXmlSerializer serializer = new TolerantXmlSerializer(type);
+						settings = serializer.Deserialize(sr);
+					}
+					return (settings);
+				}
+				catch (Exception ex)
+				{
+					XDebug.WriteException(this, ex);
+				}
 			}
 
-			// if nothing found, return null
+			// if not successful, return null
 			return (null);
 		}
 
@@ -237,5 +284,7 @@ namespace MKY.Utilities.Settings
 				catch { }
 			}
 		}
+
+		#endregion
 	}
 }
