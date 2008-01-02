@@ -41,7 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Diagnostics\DebugOutput.cs" />
+    <Compile Include="Diagnostics\AnyWriter.cs" />
+    <Compile Include="Diagnostics\AnyWriterWrapper.cs" />
+    <Compile Include="Diagnostics\ConsoleWrapper.cs" />
+    <Compile Include="Diagnostics\DebugWrapper.cs" />
+    <Compile Include="Diagnostics\DiagnosticsWriterOutput.cs" />
+    <Compile Include="Diagnostics\IDiagnosticsWriter.cs" />
+    <Compile Include="Diagnostics\TraceWrapper.cs" />
+    <Compile Include="Diagnostics\XConsole.cs" />
+    <Compile Include="Diagnostics\XDebug.cs" />
+    <Compile Include="Diagnostics\XTrace.cs" />
     <Compile Include="Drawing\XDrawing.cs" />
     <Compile Include="Guid\GuidList.cs" />
     <Compile Include="Guid\IGuidProvider.cs" />
@@ -70,6 +79,7 @@
     <Compile Include="Types\XInt.cs" />
     <Compile Include="Types\XString.cs" />
     <Compile Include="Net\Browser.cs" />
+    <Compile Include="Xml\TolerantXmlSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\Utilities.snk" />

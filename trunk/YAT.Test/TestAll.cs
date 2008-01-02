@@ -23,6 +23,7 @@ namespace YAT.Test
 
 				// Utilities.Test
 				suite.Add(new MKY.Utilities.Test.IO.XPathTest());
+				suite.Add(new MKY.Utilities.Test.Settings.DocumentSettingsHandlerTest());
 				suite.Add(new MKY.Utilities.Test.Types.XByteTest());
 
 				// YAT.Domain.Test

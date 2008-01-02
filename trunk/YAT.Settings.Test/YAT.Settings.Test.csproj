@@ -46,6 +46,14 @@
       <Project>{1C44A8C0-7805-4172-8746-2DB750803FFF}</Project>
       <Name>YAT.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\YAT.Model.Settings\YAT.Model.Settings.csproj">
+      <Project>{E9FF1D5E-84E0-4ADB-94EC-662903931295}</Project>
+      <Name>YAT.Model.Settings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Model.Types\YAT.Model.Types.csproj">
+      <Project>{651BA67D-9B00-4245-9C99-481F20273A62}</Project>
+      <Name>YAT.Model.Types</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YAT.Settings.Terminal\YAT.Settings.Terminal.csproj">
       <Project>{FE2D334F-B2D8-4A07-B63D-93BA775DBBCF}</Project>
       <Name>YAT.Settings.Terminal</Name>

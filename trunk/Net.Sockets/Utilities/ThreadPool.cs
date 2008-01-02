@@ -292,7 +292,7 @@ namespace MKY.Net.Sockets.Utilities
                     }
                     catch (Exception exOuter)
                     {
-						MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+						MKY.Utilities.Diagnostics.XDebug.WriteException(this, exOuter);
 						if (item.EventArgs is DisconnectedEventArgs)
                         {
                             //----- Disconnecting!
@@ -306,7 +306,7 @@ namespace MKY.Net.Sockets.Utilities
                             }
                             catch (Exception exInner)
                             {
-								MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+								MKY.Utilities.Diagnostics.XDebug.WriteException(this, exInner);
 								FHost.FireOnException(new ExceptionEventArgs(exInner));
                             }
                         }

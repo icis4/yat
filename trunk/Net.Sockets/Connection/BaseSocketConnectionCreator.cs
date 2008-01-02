@@ -334,7 +334,7 @@ namespace MKY.Net.Sockets
 			}
 			catch (Exception exOuter)
 			{
-				MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+				MKY.Utilities.Diagnostics.XDebug.WriteException(this, exOuter);
 				if (!IsDisposed)
 				{
 					try
@@ -343,7 +343,7 @@ namespace MKY.Net.Sockets
 					}
 					catch (Exception exInner)
 					{
-						MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+						MKY.Utilities.Diagnostics.XDebug.WriteException(this, exInner);
 						FHost.FireOnException(new ExceptionEventArgs(exInner));
 					}
 				}
@@ -384,7 +384,7 @@ namespace MKY.Net.Sockets
 							}
 							catch (FormatException ex)
 							{
-								MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, ex);
+								MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
 								//----- Base64 transformation error!
 							}
 
@@ -454,7 +454,7 @@ namespace MKY.Net.Sockets
 			}
 			catch (Exception exOuter)
 			{
-				MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+				MKY.Utilities.Diagnostics.XDebug.WriteException(this, exOuter);
 				if (!IsDisposed)
 				{
 					try
@@ -463,7 +463,7 @@ namespace MKY.Net.Sockets
 					}
 					catch (Exception exInner)
 					{
-						MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+						MKY.Utilities.Diagnostics.XDebug.WriteException(this, exInner);
 						FHost.FireOnException(new ExceptionEventArgs(exInner));
 					}
 				}
@@ -509,14 +509,14 @@ namespace MKY.Net.Sockets
 			}
 			catch (Exception exOuter)
 			{
-				MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+				MKY.Utilities.Diagnostics.XDebug.WriteException(this, exOuter);
 				try
 				{
 					connection.BeginDisconnect(exOuter);
 				}
 				catch (Exception exInner)
 				{
-					MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+					MKY.Utilities.Diagnostics.XDebug.WriteException(this, exInner);
 					FHost.FireOnException(new ExceptionEventArgs(exInner));
 				}
 			}

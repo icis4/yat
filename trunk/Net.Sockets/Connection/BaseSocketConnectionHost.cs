@@ -272,7 +272,7 @@ namespace MKY.Net.Sockets
                     }
                     catch (Exception ex)
 					{
-						MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, ex);
+						MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
 					}
                 }
 
@@ -303,7 +303,7 @@ namespace MKY.Net.Sockets
 					}
 					catch (Exception ex)
 					{
-						MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, ex);
+						MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
 					}
 				}
 
@@ -532,14 +532,14 @@ namespace MKY.Net.Sockets
 			}
 			catch (Exception exOuter)
 			{
-				MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+				MKY.Utilities.Diagnostics.XDebug.WriteException(this, exOuter);
 				try
 				{
 					connection.BeginDisconnect(exOuter);
 				}
 				catch (Exception exInner)
 				{
-					MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+					MKY.Utilities.Diagnostics.XDebug.WriteException(this, exInner);
 					FireOnException(new ExceptionEventArgs(exInner));
 				}
 			}
@@ -625,14 +625,14 @@ namespace MKY.Net.Sockets
 			}
 			catch (Exception exOuter)
 			{
-				MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+				MKY.Utilities.Diagnostics.XDebug.WriteException(this, exOuter);
 				try
 				{
 					connection.BeginDisconnect(exOuter);
 				}
 				catch (Exception exInner)
 				{
-					MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+					MKY.Utilities.Diagnostics.XDebug.WriteException(this, exInner);
 					FireOnException(new ExceptionEventArgs(exInner));
 				}
 			}
@@ -681,14 +681,14 @@ namespace MKY.Net.Sockets
 			}
 			catch (Exception exOuter)
 			{
-				MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+				MKY.Utilities.Diagnostics.XDebug.WriteException(this, exOuter);
 				try
 				{
 					connection.BeginDisconnect(exOuter);
 				}
 				catch (Exception exInner)
 				{
-					MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+					MKY.Utilities.Diagnostics.XDebug.WriteException(this, exInner);
 					FireOnException(new ExceptionEventArgs(exInner));
 				}
 			}
@@ -913,14 +913,14 @@ namespace MKY.Net.Sockets
 				}
 				catch (Exception exOuter)
 				{
-					MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+					MKY.Utilities.Diagnostics.XDebug.WriteException(this, exOuter);
 					try
 					{
 						connection.BeginDisconnect(exOuter);
 					}
 					catch (Exception exInner)
 					{
-						MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+						MKY.Utilities.Diagnostics.XDebug.WriteException(this, exInner);
 						FireOnException(new ExceptionEventArgs(exInner));
 					}
 				}
@@ -949,14 +949,14 @@ namespace MKY.Net.Sockets
 			}
 			catch (Exception exOuter)
 			{
-				MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+				MKY.Utilities.Diagnostics.XDebug.WriteException(this, exOuter);
 				try
 				{
 					FireOnDisconnected(e);
 				}
 				catch (Exception exInner)
 				{
-					MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+					MKY.Utilities.Diagnostics.XDebug.WriteException(this, exInner);
 					FireOnException(new ExceptionEventArgs(exInner));
 				}
 			}
@@ -989,7 +989,7 @@ namespace MKY.Net.Sockets
 				}
 				catch (Exception exOuter)
 				{
-					MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exOuter);
+					MKY.Utilities.Diagnostics.XDebug.WriteException(this, exOuter);
 					if (!IsDisposed)
 					{
 						try
@@ -998,7 +998,7 @@ namespace MKY.Net.Sockets
 						}
 						catch (Exception exInner)
 						{
-							MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, exInner);
+							MKY.Utilities.Diagnostics.XDebug.WriteException(this, exInner);
 							FireOnException(new ExceptionEventArgs(exInner));
 						}
 					}
@@ -1123,7 +1123,7 @@ namespace MKY.Net.Sockets
                         }
                         catch (Exception ex)
                         {
-							MKY.Utilities.Diagnostics.DebugOutput.WriteException(this, ex);
+							MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
 						}
                     }
 

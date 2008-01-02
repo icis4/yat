@@ -6,11 +6,12 @@ using System.Xml.Serialization;
 
 using NUnit.Framework;
 
+using MKY.Utilities.Diagnostics;
 using MKY.Utilities.Recent;
 
 using YAT.Domain.Settings;
-using YAT.Gui.Settings;
-using YAT.Gui.Types;
+using YAT.Model.Settings;
+using YAT.Model.Types;
 using YAT.Settings.Terminal;
 
 namespace YAT.Settings.Test
@@ -25,7 +26,7 @@ namespace YAT.Settings.Test
 
 		private const string _TempPath = "c:\\";
 		private const string _TempPrefix = "YAT-Test-";
-		private const string _TempExtension = ".txt";
+		private const string _TempExtension = ".xml";
 
 		#endregion
 
@@ -37,8 +38,8 @@ namespace YAT.Settings.Test
 		[TearDown]
 		public void TearDown()
 		{
-			string filePath = MakeTempFilePath("*");
-			File.Delete(filePath);
+			foreach (string filePath in Directory.GetFiles(MakeTempPath(), MakeTempFileName("*")))
+				File.Delete(filePath);
 		}
 
 		#endregion
@@ -48,9 +49,14 @@ namespace YAT.Settings.Test
 		// Tests
 		//==========================================================================================
 
-		#region Tests > ArraySerialization()
+		#region Tests > Serialization
 		//------------------------------------------------------------------------------------------
-		// Tests > ArraySerialization()
+		// Tests > Serialization
+		//------------------------------------------------------------------------------------------
+
+		#region Tests > Serialization > Array
+		//------------------------------------------------------------------------------------------
+		// Tests > Serialization > Array
 		//------------------------------------------------------------------------------------------
 
 		[Test]
@@ -77,9 +83,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Tests > ListSerialization()
+		#region Tests > Serialization > List
 		//------------------------------------------------------------------------------------------
-		// Tests > ListSerialization()
+		// Tests > Serialization > List
 		//------------------------------------------------------------------------------------------
 
 		[Test]
@@ -118,9 +124,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Tests > EmptyCommandSerialization()
+		#region Tests > Serialization > EmptyCommand
 		//------------------------------------------------------------------------------------------
-		// Tests > EmptyCommandSerialization()
+		// Tests > Serialization > EmptyCommand
 		//------------------------------------------------------------------------------------------
 
 		[Test]
@@ -139,9 +145,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Tests > RecentSerialization()
+		#region Tests > Serialization > Recent
 		//------------------------------------------------------------------------------------------
-		// Tests > RecentSerialization()
+		// Tests > Serialization > Recent
 		//------------------------------------------------------------------------------------------
 
 		[Test]
@@ -165,9 +171,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Tests > PredefinedSerialization()
+		#region Tests > Serialization > Predefined
 		//------------------------------------------------------------------------------------------
-		// Tests > PredefinedSerialization()
+		// Tests > Serialization > Predefined
 		//------------------------------------------------------------------------------------------
 
 		[Test]
@@ -193,9 +199,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Tests > ExplicitSerialization()
+		#region Tests > Serialization > Explicit
 		//------------------------------------------------------------------------------------------
-		// Tests > ExplicitSerialization()
+		// Tests > Serialization > Explicit
 		//------------------------------------------------------------------------------------------
 
 		[Test]
@@ -210,9 +216,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Tests > ImplicitSerialization()
+		#region Tests > Serialization > Implicit
 		//------------------------------------------------------------------------------------------
-		// Tests > ImplicitSerialization()
+		// Tests > Serialization > Implicit
 		//------------------------------------------------------------------------------------------
 
 		[Test]
@@ -229,49 +235,62 @@ namespace YAT.Settings.Test
 
 		#endregion
 
+		#endregion
+
 		#region Private Methods
 		//==========================================================================================
 		// Private Methods
 		//==========================================================================================
 
-		private static string MakeTempFilePath(string test)
+		private static string MakeTempPath()
 		{
-			return (_TempPath + _TempPrefix + test + _TempExtension);
+			return (_TempPath);
+		}
+
+		private static string MakeTempFileName(string name)
+		{
+			return (_TempPrefix + name + _TempExtension);
+		}
+
+		private static string MakeTempFilePath(string name)
+		{
+			return (MakeTempPath() + MakeTempFileName(name));
 		}
 
 		private static void TestSerialization(Type type, object obj, string filePath)
 		{
-			FileStream fs = null;
-			XmlSerializer serializer = new XmlSerializer(type);
-
 			// save
 			try
 			{
-				fs = new FileStream(filePath, FileMode.Create);
-				serializer.Serialize(fs, obj);
-				fs.Close();
+				using (StreamWriter sw = new StreamWriter(filePath))
+				{
+					XmlSerializer serializer = new XmlSerializer(type);
+					serializer.Serialize(sw, obj);
+				}
 			}
 			catch (Exception ex)
 			{
-				if (fs != null)
-					fs.Close();
+				XConsole.WriteException(typeof(SettingsTest), ex);
 
-				Assert.Fail("XML save error: " + ex.Message);
+				// Attention: The following call throws an exception, code below it won't be executed
+				Assert.Fail("XML serialize error: " + ex.Message);
 			}
 
 			// load
 			try
 			{
-				fs = new FileStream(filePath, FileMode.Open);
-				obj = serializer.Deserialize(fs);
-				fs.Close();
+				using (StreamReader sr = new StreamReader(filePath))
+				{
+					XmlSerializer serializer = new XmlSerializer(type);
+					obj = serializer.Deserialize(sr);
+				}
 			}
 			catch (Exception ex)
 			{
-				if (fs != null)
-					fs.Close();
+				XConsole.WriteException(typeof(SettingsTest), ex);
 
-				Assert.Fail("XML load error: " + ex.Message);
+				// Attention: The following call throws an exception, code below it won't be executed
+				Assert.Fail("XML deserialize error: " + ex.Message);
 			}
 		}
 

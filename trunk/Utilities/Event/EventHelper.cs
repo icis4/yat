@@ -229,12 +229,14 @@ namespace MKY.Utilities.Event
 
 		private static void WriteExceptionToDebugOutput(Exception ex, Delegate sink)
 		{
-			Diagnostics.DebugOutput.WriteException(typeof(EventHelper), ex);
+			Diagnostics.XDebug.WriteException(typeof(EventHelper), ex);
 			Debug.Indent();
-			Debug.Write("Event: ");
-			Debug.Write(sink.Method.Name);
-			Debug.Write(" in ");
-			Debug.WriteLine(sink.Target.GetType().ToString());
+			{
+				Debug.Write("Event: ");
+				Debug.Write(sink.Method.Name);
+				Debug.Write(" in ");
+				Debug.WriteLine(sink.Target.GetType().ToString());
+			}
 			Debug.Unindent();
 		}
 
