@@ -178,7 +178,7 @@ namespace YAT.Model
 
 				// clean up all default workspaces/terminals since they're not needed anymore
 				if (success && !otherInstanceIsAlreadyRunning)
-					CleanupDefaultDirectory();
+					CleanupLocalUserDirectory();
 			}
 
 			if (!success && ApplicationSettings.LocalUser.General.AutoOpenWorkspace)
@@ -193,13 +193,13 @@ namespace YAT.Model
 
 					// clean up obsolete default workspaces/terminals since they're not needed anymore
 					if (success)
-						CleanupDefaultDirectory();
+						CleanupLocalUserDirectory();
 				}
 			}
 
 			// looks like nothing was successful, completely clean up default directory...
 			if (!success && !otherInstanceIsAlreadyRunning)
-				CleanupDefaultDirectory();
+				CleanupLocalUserDirectory();
 
 			// ...and create new empty workspace
 			if (!success)
@@ -233,14 +233,14 @@ namespace YAT.Model
 			return (processes.Count > 0);
 		}
 
-		private void CleanupDefaultDirectory()
+		private void CleanupLocalUserDirectory()
 		{
 			// get all file paths in default directory
-			List<string> defaultDirectoryFilePaths = new List<string>();
+			List<string> localUserDirectoryFilePaths = new List<string>();
 			try
 			{
-				DirectoryInfo defaultDirectory = Directory.GetParent(ApplicationSettings.LocalUserSettingsFilePath);
-				defaultDirectoryFilePaths.AddRange(Directory.GetFiles(defaultDirectory.FullName));
+				DirectoryInfo localUserDirectory = Directory.GetParent(ApplicationSettings.LocalUserSettingsFilePath);
+				localUserDirectoryFilePaths.AddRange(Directory.GetFiles(localUserDirectory.FullName));
 			}
 			catch
 			{
@@ -248,7 +248,7 @@ namespace YAT.Model
 			}
 
 			// ensure to leave application settings untouched
-			defaultDirectoryFilePaths.Remove(ApplicationSettings.LocalUserSettingsFilePath);
+			localUserDirectoryFilePaths.Remove(ApplicationSettings.LocalUserSettingsFilePath);
 
 			// get all active file paths
 			List<string> activeFilePaths = new List<string>();
@@ -264,10 +264,10 @@ namespace YAT.Model
 
 			// ensure to leave all active settings untouched
 			foreach (string afp in activeFilePaths)
-				defaultDirectoryFilePaths.Remove(afp);
+				localUserDirectoryFilePaths.Remove(afp);
 
 			// delete all obsolete file paths in default directory
-			foreach (string ddfp in defaultDirectoryFilePaths)
+			foreach (string ddfp in localUserDirectoryFilePaths)
 			{
 				try
 				{
