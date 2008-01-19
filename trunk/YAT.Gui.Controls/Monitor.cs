@@ -287,8 +287,12 @@ namespace YAT.Gui.Controls
 			}                                    // if last line is empty, replace line before
 			else if (_lines[_lines.Count - 1].Count == 0)
 			{
-				_lines[_lines.Count - 2] = line;
-				lb.Items[lb.Items.Count - 2] = line;
+				// check that a "line before" actually exists
+				if (_lines.Count >= 2)
+					_lines[_lines.Count - 2] = line;
+
+				if (lb.Items.Count >= 2)
+					lb.Items[lb.Items.Count - 2] = line;
 			}
 			else                                 // if last line isn't finish yet, add to it
 			{

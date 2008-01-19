@@ -979,17 +979,21 @@ namespace YAT.Gui.Forms
 			splitContainer_TxMonitor.Orientation = orientation;
 			splitContainer_RxMonitor.Orientation = orientation;
 
+			// Tx split contains Tx and BiDir&Rx
 			if (txIsVisible)
 			{
 				splitContainer_TxMonitor.Panel1Collapsed = false;
 
-				int widthOrHeight = 0;
-				if (orientation == Orientation.Vertical)
-					widthOrHeight = splitContainer_TxMonitor.Width;
-				else
-					widthOrHeight = splitContainer_TxMonitor.Height;
+				if (bidirIsVisible || rxIsVisible)
+				{
+					int widthOrHeight = 0;
+					if (orientation == Orientation.Vertical)
+						widthOrHeight = splitContainer_TxMonitor.Width;
+					else
+						widthOrHeight = splitContainer_TxMonitor.Height;
 
-				splitContainer_TxMonitor.SplitterDistance = (int)(_settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight);
+					splitContainer_TxMonitor.SplitterDistance = (int)(_settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight);
+				}
 			}
 			else
 			{
@@ -997,17 +1001,21 @@ namespace YAT.Gui.Forms
 			}
 			splitContainer_TxMonitor.Panel2Collapsed = !(bidirIsVisible || rxIsVisible);
 
+			// Rx split contains BiDir and Rx
 			if (bidirIsVisible)
 			{
 				splitContainer_RxMonitor.Panel1Collapsed = false;
 
-				int widthOrHeight = 0;
-				if (orientation == Orientation.Vertical)
-					widthOrHeight = splitContainer_RxMonitor.Width;
-				else
-					widthOrHeight = splitContainer_RxMonitor.Height;
+				if (rxIsVisible)
+				{
+					int widthOrHeight = 0;
+					if (orientation == Orientation.Vertical)
+						widthOrHeight = splitContainer_RxMonitor.Width;
+					else
+						widthOrHeight = splitContainer_RxMonitor.Height;
 
-				splitContainer_RxMonitor.SplitterDistance = (int)(_settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight);
+					splitContainer_RxMonitor.SplitterDistance = (int)(_settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight);
+				}
 			}
 			else
 			{
@@ -1029,15 +1037,18 @@ namespace YAT.Gui.Forms
 				panel_Predefined.Padding = new System.Windows.Forms.Padding(1, 3, 3, 3);
 			}
 
+			// set send panel size depending on one or two sub-panels
 			if (_settingsRoot.Layout.SendCommandPanelIsVisible && _settingsRoot.Layout.SendFilePanelIsVisible)
 			{
-				splitContainer_Terminal.Panel2MinSize = 97;
-				splitContainer_Terminal.SplitterDistance = 393;
+				int height = 97;
+				splitContainer_Terminal.Panel2MinSize = height;
+				splitContainer_Terminal.SplitterDistance = splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth;
 			}
 			else if (_settingsRoot.Layout.SendCommandPanelIsVisible || _settingsRoot.Layout.SendFilePanelIsVisible)
 			{
-				splitContainer_Terminal.Panel2MinSize = 48;
-				splitContainer_Terminal.SplitterDistance = 442;
+				int height = 48;
+				splitContainer_Terminal.Panel2MinSize = height;
+				splitContainer_Terminal.SplitterDistance = splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth;
 			}
 
             send.CommandPanelIsVisible = _settingsRoot.Layout.SendCommandPanelIsVisible;

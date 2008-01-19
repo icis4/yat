@@ -3,7 +3,7 @@
 	--------------------------------
 	> Select "Menu > Tools > External Tools > Add"
 		> Title       = "NUnit"
-		> Command     = "<InstallPath>\NUnit\bin\nunit.exe"
+		> Command     = "<NUnitInstallPath>\bin\nunit.exe"
 		> Arguments   = "$(SolutionFileName)"
 		> Initial Dir = "$(SolutionDir)"
 	> Confirm "OK"

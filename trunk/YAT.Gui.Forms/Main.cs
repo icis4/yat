@@ -266,11 +266,21 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_MainMenu_Window_DropDownOpening(object sender, EventArgs e)
 		{
-			bool childReady = (ActiveMdiChild != null);
-			toolStripMenuItem_MainMenu_Window_Cascade.Enabled = childReady;
-			toolStripMenuItem_MainMenu_Window_TileHorizontal.Enabled = childReady;
-			toolStripMenuItem_MainMenu_Window_TileVertical.Enabled = childReady;
-			toolStripMenuItem_MainMenu_Window_ArrangeIcons.Enabled = childReady;
+			bool childIsReady = (ActiveMdiChild != null);
+			toolStripMenuItem_MainMenu_Window_Cascade.Enabled = childIsReady;
+			toolStripMenuItem_MainMenu_Window_TileHorizontal.Enabled = childIsReady;
+			toolStripMenuItem_MainMenu_Window_TileVertical.Enabled = childIsReady;
+			toolStripMenuItem_MainMenu_Window_ArrangeIcons.Enabled = childIsReady;
+
+			#if false
+			// \fixme
+			// I don't know how to fix bug item #1808494 "MDI window list invisible if no MDI children".
+			// The following code doesn't fix it. Could it even be a .NET bug?
+			if (childIsReady)
+				menuStrip_Main.MdiWindowListItem = toolStripMenuItem_MainMenu_Window;
+			else
+				menuStrip_Main.MdiWindowListItem = null;
+			#endif
 		}
 
 		private void toolStripMenuItem_MainMenu_Window_Cascade_Click(object sender, EventArgs e)
@@ -585,16 +595,16 @@ namespace YAT.Gui.Forms
 
 		private void SetToolControls()
 		{
-			bool childReady = (ActiveMdiChild != null);
+			bool childIsReady = (ActiveMdiChild != null);
 
 			bool terminalOpen = false;
-			if (childReady)
+			if (childIsReady)
 				terminalOpen = ((Gui.Forms.Terminal)ActiveMdiChild).IsOpen;
 
-			toolStripButton_MainTool_File_Save.Enabled = childReady;
-			toolStripButton_MainTool_Terminal_Open.Enabled = childReady && !terminalOpen;
-			toolStripButton_MainTool_Terminal_Close.Enabled = childReady && terminalOpen;
-			toolStripButton_MainTool_Terminal_Settings.Enabled = childReady;
+			toolStripButton_MainTool_File_Save.Enabled = childIsReady;
+			toolStripButton_MainTool_Terminal_Open.Enabled = childIsReady && !terminalOpen;
+			toolStripButton_MainTool_Terminal_Close.Enabled = childIsReady && terminalOpen;
+			toolStripButton_MainTool_Terminal_Settings.Enabled = childIsReady;
 		}
 
 		#endregion
