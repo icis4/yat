@@ -388,7 +388,7 @@ namespace YAT.Domain
 				DisplayElement[] des = lineState.LineElements.ToArray();
 
 				// traverse elements reverse and count EOL data and white space elements to be removed
-				for (int i = (des.Length - 1); i > 0; i--)
+				for (int i = (des.Length - 1); i >= 0; i--)
 				{
 					if (des[i].IsDataElement)
 					{

@@ -188,17 +188,16 @@ namespace MKY.Utilities.Types
 			if (bytesNeeded > 8)
 				bytesNeeded = 8;
 
-			int i = 0;
-			ulong l = 0;
-			byte b = 0;
 			byte[] result = new byte[bytesNeeded];
 
 			// for negative values, fill leading bytes with 0xFF
 			if (expandNegative)
 			{
-				for (i = bytesNeeded; i > bytesSignificant; i--)
+				for (int i = bytesNeeded; i > bytesSignificant; i--)
 					result[i - 1] = 0xFF;
 			}
+
+			ulong l = 0;
 
 			// convert most significant byte
 			if (bytesSignificant < 8)
@@ -206,7 +205,7 @@ namespace MKY.Utilities.Types
 			else
 				l = value;
 
-			b = (byte)(l >> ((bytesSignificant - 1) * 8));
+			byte b = (byte)(l >> ((bytesSignificant - 1) * 8));
 
 			// for negative values, expand most significant byte
 			if (expandNegative)
@@ -225,7 +224,7 @@ namespace MKY.Utilities.Types
 			result[bytesSignificant - 1] = b;
 
 			// convert and write remaining bytes
-			for (i = (bytesSignificant - 1); i > 0; i--)
+			for (int i = (bytesSignificant - 1); i > 0; i--)
 			{
 				l = value % (ulong)Math.Pow(2, i * 8);
 				b = (byte)(l >> ((i - 1) * 8));
@@ -235,6 +234,7 @@ namespace MKY.Utilities.Types
 			// swap endianess if needed
 			if (useBigEndian)
 			{
+				int i = 0;
 				int j = 0;
 				for (i = 0, j = (result.Length - 1); i < (int)(result.Length / 2); i++, j--)
 				{

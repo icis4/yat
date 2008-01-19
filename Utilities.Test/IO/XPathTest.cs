@@ -10,13 +10,13 @@ namespace MKY.Utilities.Test.IO
 {
 	[TestFixture]
 	public class XPathTest
-	{
-		#region Fields
-		//==========================================================================================
-		// Fields
+    {
+        #region Constants
+        //==========================================================================================
+        // Constants
 		//==========================================================================================
 
-		private string[,] _testPaths =
+        private readonly string[,] _TestPaths =
 		{
 			// very-near relation
 			{	@"C:\MyDir",						@"C:\MyDir",						@".",							@".",							},
@@ -70,12 +70,12 @@ namespace MKY.Utilities.Test.IO
 
 			XPathCompareResult pcResult;
 
-			for (int i = 0; i < _testPaths.GetLength(0); i += 4)
+			for (int i = 0; i < _TestPaths.GetLength(0); i += 4)
 			{
 				// A compared to B results in A relative
-				path1 = _testPaths[i, 0];
-				path2 = _testPaths[i, 1];
-				expected = _testPaths[i, 2];
+				path1 = _TestPaths[i, 0];
+				path2 = _TestPaths[i, 1];
+				expected = _TestPaths[i, 2];
 				pcResult.RelativePath = "";
 
 				/*if (path1 == "C:\\" &&
@@ -106,9 +106,9 @@ namespace MKY.Utilities.Test.IO
 				}
 
 				// B compared to A results in B relative
-				path1 = _testPaths[i, 1];
-				path2 = _testPaths[i, 0];
-				expected = _testPaths[i, 3];
+				path1 = _TestPaths[i, 1];
+				path2 = _TestPaths[i, 0];
+				expected = _TestPaths[i, 3];
 				pcResult.RelativePath = "";
 
 				/*if (path1 == "C:\\MyDir\\MySubDir" &&
@@ -156,12 +156,12 @@ namespace MKY.Utilities.Test.IO
 
 			string result = "";
 
-			for (int i = 0; i < _testPaths.GetLength(0); i++)
+			for (int i = 0; i < _TestPaths.GetLength(0); i++)
 			{
 				// A combined with A relative results in B
-				path1 = _testPaths[i, 0];
-				path2 = _testPaths[i, 2];
-				expected = _testPaths[i, 1];
+				path1 = _TestPaths[i, 0];
+				path2 = _TestPaths[i, 2];
+				expected = _TestPaths[i, 1];
 				result = "";
 
 				/*if (path1 == "C:\\MyDir" &&
@@ -192,9 +192,9 @@ namespace MKY.Utilities.Test.IO
 				}
 
 				// B combined with B relative results in A
-				path1 = _testPaths[i, 1];
-				path2 = _testPaths[i, 3];
-				expected = _testPaths[i, 0];
+				path1 = _TestPaths[i, 1];
+				path2 = _TestPaths[i, 3];
+				expected = _TestPaths[i, 0];
 				result = "";
 
 				/*if (path1 == "C:\\MyDir\\MySubDir" &&

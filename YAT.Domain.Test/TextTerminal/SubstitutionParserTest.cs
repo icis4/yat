@@ -11,6 +11,39 @@ namespace YAT.Domain.Test.TextTerminal
 	[TestFixture]
 	public class SubstitutionParserTest
 	{
+		#region Types
+		//==========================================================================================
+		// Types
+		//==========================================================================================
+
+		private struct TestSet
+		{
+			public CharSubstitution Substitution;
+			public string InputString;
+			public byte[] OutputBytes;
+
+			public TestSet(CharSubstitution substitution, string inputString, byte[] outputBytes)
+			{
+				Substitution = substitution;
+				InputString = inputString;
+				OutputBytes = outputBytes;
+			}
+		};
+
+		#endregion
+
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
+		private TestSet[] _testSets =
+		{
+			new TestSet(CharSubstitution.ToUpper, "\\c(A)\\c(b)CdEfGhIiKlMnOpQrStUvWxYz<Cr><Lf>",	new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x49, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x0D, 0x0A } ) ,
+		};
+
+		#endregion
+
 		#region Tests
 		//==========================================================================================
 		// Test
@@ -24,32 +57,49 @@ namespace YAT.Domain.Test.TextTerminal
 		[Test]
 		public void TestSubstitutionParser()
 		{
-			Domain.Parser.SubstitutionParser p = new Domain.Parser.SubstitutionParser();
-			byte[] a;
+			Exception exceptionToNUnit = null;
 
-			try
+			foreach (TestSet ts in _testSets)
 			{
-				a = p.Parse("\\c(A)\\c(b)CdEfGhIiKlMnOpQrStUvWxYz<Cr><Lf>", CharSubstitution.ToUpper);
+				Domain.Parser.SubstitutionParser parser;
+				byte[] outputBytes = new byte[] { };
 
-				Console.WriteLine("String:");
-				Console.Write("  ");
-				foreach (byte b in a)
+				try
 				{
-					Console.Write((char)b);
+					parser = new Domain.Parser.SubstitutionParser();
+					outputBytes = parser.Parse(ts.InputString, ts.Substitution);
+					Assert.AreEqual(outputBytes, ts.OutputBytes);
 				}
-				Console.Write("\n");
-				Console.WriteLine("Bytes:");
-				Console.Write("  ");
-				foreach (byte b in a)
+				catch (Exception ex)
 				{
-					Console.Write(b.ToString() + " ");
+					// catch assertion exceptions to ensure that all test sets are run in any case
+					//   but keep first exception to signal NUnit that test has failed
+					if (exceptionToNUnit == null)
+						exceptionToNUnit = ex;
+
+					Console.WriteLine("Invalid parser output bytes:");
+					Console.WriteLine();
+					Console.WriteLine("Input string =");
+					Console.WriteLine("\"" + ts.InputString + "\"");
+					Console.WriteLine();
+					Console.WriteLine("Expected output bytes =");
+					foreach (byte b in ts.OutputBytes)
+					{
+						Console.Write("0x" + b.ToString("X2") + ", ");
+					}
+					Console.WriteLine();
+					Console.WriteLine("Actual output bytes =");
+					foreach (byte b in outputBytes)
+					{
+						Console.Write("0x" + b.ToString("X2") + ", ");
+					}
+					Console.WriteLine();
 				}
-				Console.Write("\n");
 			}
-			catch (Domain.Parser.FormatException ex)
-			{
-				Assert.Fail(ex.Message);
-			}
+
+			// re-throw first exception to signal NUnit that test has failed
+			if (exceptionToNUnit != null)
+				throw (exceptionToNUnit);
 		}
 
 		#endregion
