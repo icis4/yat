@@ -101,7 +101,7 @@ namespace YAT.Gui.Controls
 			get { return (_selectedPage); }
 			set
 			{
-				int selectedPageNew = XInt.LimitToBounds(value, 0, _pages.Count);
+				int selectedPageNew = XInt32.LimitToBounds(value, 0, _pages.Count);
 				if (_selectedPage != selectedPageNew)
 				{
 					_selectedPage = selectedPageNew;

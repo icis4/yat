@@ -5,7 +5,7 @@ using System.Text;
 namespace MKY.Utilities.Types
 {
 	/// <summary>
-	/// Byte utility methods.
+	/// Byte/byte utility methods.
 	/// </summary>
 	public class XByte
 	{
@@ -14,7 +14,7 @@ namespace MKY.Utilities.Types
 		/// </summary>
 		public static string ConvertToBinaryString(byte value)
 		{
-			return (XInt.ConvertToNumericBaseString(2, value, byte.MaxValue));
+			return (XUInt64.ConvertToNumericBaseString(2, value, byte.MaxValue));
 		}
 
 		/// <summary>
@@ -22,7 +22,7 @@ namespace MKY.Utilities.Types
 		/// </summary>
 		public static string ConvertToOctalString(byte value)
 		{
-			return (XInt.ConvertToNumericBaseString(8, value, byte.MaxValue));
+			return (XUInt64.ConvertToNumericBaseString(8, value, byte.MaxValue));
 		}
 	}
 }

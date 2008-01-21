@@ -119,13 +119,14 @@ namespace YAT.Domain.Parser
 
 			private bool TryWriteContiguous(Parser parser, ref FormatException formatException)
 			{
-				if (_contiguous.ToString() != "")
+				string contiguousString = _contiguous.ToString();
+				if (contiguousString != "")
 				{
 					if (!parser.IsKeywordParser)
 					{
 						byte[] a;
 
-						if (!parser.TryParseContiguousRadix(_contiguous.ToString(), parser.Radix, out a, ref formatException))
+						if (!parser.TryParseContiguousRadix(contiguousString, parser.Radix, out a, ref formatException))
 							return (false);
 
 						foreach (byte b in a)
@@ -137,7 +138,7 @@ namespace YAT.Domain.Parser
 					{
 						Result[] a;
 
-						if (!parser.TryParseContiguousKeywords(_contiguous.ToString(), out a, ref formatException))
+						if (!parser.TryParseContiguousKeywords(contiguousString, out a, ref formatException))
 							return (false);
 
 						parser.ResultList.AddRange(a);
@@ -749,16 +750,16 @@ namespace YAT.Domain.Parser
 			bool success;
 			switch (parseRadix)
 			{
-				case Radix.Bin: success = XInt.TryParseBinary(tokenValue, false, out value); break;
-				case Radix.Oct: success = XInt.TryParseOctal(tokenValue, false, out value); break;
-				case Radix.Dec: success = ulong.TryParse(tokenValue, out value); break;
-				case Radix.Hex: success = ulong.TryParse(tokenValue, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out value); break;
+				case Radix.Bin: success = XUInt64.TryParseBinary(tokenValue, out value); break;
+				case Radix.Oct: success = XUInt64.TryParseOctal (tokenValue, out value); break;
+				case Radix.Dec: success = ulong.TryParse        (tokenValue, out value); break;
+				case Radix.Hex: success = ulong.TryParse        (tokenValue, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out value); break;
 				default: throw (new NotImplementedException("Unknown radix \"" + parseRadix + "\""));
 			}
 			if (success)
 			{
 				bool useBigEndian = (_endianess == Endianess.BigEndian);
-				result = XInt.ConvertToByteArray(value, negative, useBigEndian);
+				result = XUInt64.ConvertToByteArray(value, negative, useBigEndian);
 				return (true);
 			}
 

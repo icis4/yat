@@ -6,64 +6,44 @@ using System.IO;
 namespace MKY.Utilities.Types
 {
 	/// <summary>
-	/// Int utility methods.
+	/// UInt64/ulong utility methods.
 	/// </summary>
-	/// <remarks>
-	/// Possible extensions:
-	/// - ParseInside: get integer values inside strings (e.g. "COM5 (Device123B)" returns {5;123})
-	/// </remarks>
-	public static class XInt
+	public class XUInt64
 	{
 		/// <summary>
-		/// Returns the lesser of the two values.
-		/// </summary>
-		public static int Min(int value1, int value2)
-		{
-			if (value1 <= value2)
-				return (value1);
-			else
-				return (value2);
-		}
-
-		/// <summary>
-		/// Returns the larger of the two values.
-		/// </summary>
-		public static int Max(int value1, int value2)
-		{
-			if (value1 >= value2)
-				return (value1);
-			else
-				return (value2);
-		}
-
-		/// <summary>
-		/// Limits "value" to the boundaries specified.
-		/// </summary>
-		public static int LimitToBounds(int value, int lower, int upper)
-		{
-			if (value < lower)
-				return (lower);
-			if (value > upper)
-				return (upper);
-			return (value);
-		}
-
-		/// <summary>
-		/// Converts value into binary string (e.g. "00010100").
+		/// Converts value into binary string (e.g. "0000000000000000000000000000000000000000000000000000000000010100").
 		/// </summary>
 		[CLSCompliant(false)]
 		public static string ConvertToBinaryString(ulong value)
 		{
-			return (ConvertToNumericBaseString(2, value, ulong.MaxValue));
+			return (ConvertToBinaryString(value, ulong.MaxValue));
 		}
 
 		/// <summary>
-		/// Converts value into octal string (e.g. "024").
+		/// Converts value into binary string (e.g. "0000000000000000000000000000000000000000000000000000000000010100").
+		/// </summary>
+		[CLSCompliant(false)]
+		public static string ConvertToBinaryString(ulong value, ulong max)
+		{
+			return (ConvertToNumericBaseString(2, value, max));
+		}
+
+		/// <summary>
+		/// Converts value into octal string (e.g. "000000000000000000024").
 		/// </summary>
 		[CLSCompliant(false)]
 		public static string ConvertToOctalString(ulong value)
 		{
-			return (ConvertToNumericBaseString(8, value, ulong.MaxValue));
+			return (ConvertToOctalString(value, ulong.MaxValue));
+		}
+
+		/// <summary>
+		/// Converts value into octal string (e.g. "000000000000000000024").
+		/// </summary>
+		[CLSCompliant(false)]
+		public static string ConvertToOctalString(ulong value, ulong max)
+		{
+			return (ConvertToNumericBaseString(8, value, max));
 		}
 
 		/// <summary>
@@ -77,8 +57,9 @@ namespace MKY.Utilities.Types
 		{
 			StringWriter to = new StringWriter();
 
-			ulong remainder = value;
-			for (int power = (int)Math.Log(max, numericBase); power >= 0; power--)
+			ulong remainder = value;   // cast to double to prevent overflow on ulong.MaxValue
+			double exactPower = Math.Log((double)max + 1, numericBase);
+			for (int power = (int)Math.Ceiling(exactPower) - 1; power >= 0; power--)
 			{
 				ulong divider = (ulong)Math.Pow(numericBase, power);
 				ulong data = remainder / divider;
@@ -155,9 +136,9 @@ namespace MKY.Utilities.Types
 			else
 			{
 				if (value > 0)
-				{
-					double base2Log = Math.Log(value, 2);
-					double bitsSignificant = base2Log + 1;
+				{                            // cast to double to prevent overflow on ulong.MaxValue
+					double base2Log = Math.Log((double)value + 1, 2);
+					double bitsSignificant = Math.Ceiling(base2Log);
 					bytesSignificant = (int)Math.Ceiling(bitsSignificant / 8);
 				}
 			}
@@ -171,17 +152,15 @@ namespace MKY.Utilities.Types
 				bytesSignificant = 8;
 
 			int bytesNeeded = bytesSignificant;
-			if (expandNegative)
+			if (boundary > 0)
 			{
-				if (boundary > 0)
-				{
-					bytesNeeded = boundary;
-				}
-				else
-				{
-					if      (bytesNeeded > 4) bytesNeeded = 8;
-					else if (bytesNeeded > 2) bytesNeeded = 4;
-				}
+				bytesNeeded = boundary;
+			}
+			else
+			{
+				// auto-adjust boundary
+				if      (bytesNeeded > 4) bytesNeeded = 8;
+				else if (bytesNeeded > 2) bytesNeeded = 4;
 			}
 
 			// limit range to UInt64
@@ -210,7 +189,7 @@ namespace MKY.Utilities.Types
 			// for negative values, expand most significant byte
 			if (expandNegative)
 			{
-				if      (b < 0x01) b |= 0xFF;
+				if (b < 0x01) b |= 0xFF;
 				else if (b < 0x02) b |= 0xFE;
 				else if (b < 0x04) b |= 0xFC;
 				else if (b < 0x08) b |= 0xF8;
@@ -252,7 +231,6 @@ namespace MKY.Utilities.Types
 		/// other characters than '0' or '1'.
 		/// </summary>
 		/// <param name="parseString">String to be parsed.</param>
-		/// <param name="isBigEndian">String is in big endian instead of little endian.</param>
 		/// <param name="result">
 		/// When this method returns, contains the 64-bit unsigned value value equivalent
 		/// to the number contained in parseString, if the conversion succeeded, or zero if the
@@ -262,9 +240,9 @@ namespace MKY.Utilities.Types
 		/// </param>
 		/// <returns>The corresponding integer value.</returns>
 		[CLSCompliant(false)]
-		public static bool TryParseBinary(string parseString, bool isBigEndian, out ulong result)
+		public static bool TryParseBinary(string parseString, out ulong result)
 		{
-			return (TryParseNumericBase(2, parseString, isBigEndian, out result));
+			return (TryParseNumericBase(2, parseString, out result));
 		}
 
 		/// <summary>
@@ -272,7 +250,6 @@ namespace MKY.Utilities.Types
 		/// characters than '0' to '7'.
 		/// </summary>
 		/// <param name="parseString">String to be parsed.</param>
-		/// <param name="isBigEndian">String is in big endian instead of little endian.</param>
 		/// <param name="result">
 		/// When this method returns, contains the 64-bit unsigned value equivalent
 		/// to the number contained in parseString, if the conversion succeeded, or zero if the
@@ -282,9 +259,9 @@ namespace MKY.Utilities.Types
 		/// </param>
 		/// <returns>The corresponding integer value.</returns>
 		[CLSCompliant(false)]
-		public static bool TryParseOctal(string parseString, bool isBigEndian, out ulong result)
+		public static bool TryParseOctal(string parseString, out ulong result)
 		{
-			return (TryParseNumericBase(8, parseString, isBigEndian, out result));
+			return (TryParseNumericBase(8, parseString, out result));
 		}
 
 		/// <summary>
@@ -293,7 +270,6 @@ namespace MKY.Utilities.Types
 		/// </summary>
 		/// <param name="numericBase">Numeric base (0 to 9)</param>
 		/// <param name="parseString">String to be parsed.</param>
-		/// <param name="isBigEndian">String is in big endian instead of little endian.</param>
 		/// <param name="result">
 		/// When this method returns, contains the 64-bit unsigned value equivalent
 		/// to the number contained in parseString, if the conversion succeeded, or zero if the
@@ -303,24 +279,9 @@ namespace MKY.Utilities.Types
 		/// </param>
 		/// <returns>The corresponding integer value.</returns>
 		[CLSCompliant(false)]
-		public static bool TryParseNumericBase(int numericBase, string parseString, bool isBigEndian, out ulong result)
+		public static bool TryParseNumericBase(int numericBase, string parseString, out ulong result)
 		{
 			char[] from = parseString.ToCharArray();
-
-			// swap endianess if needed
-			if (isBigEndian)
-			{
-				int i = 0;
-				int j = 0;
-				char c = '\0';
-				for (i = 0, j = (from.Length - 1); i < (int)(from.Length / 2); i++, j--)
-				{
-					c = from[i];
-					from[i] = from[j];
-					from[j] = c;
-				}
-			}
-
 			result = 0;
 			for (int power = 0; power < from.Length; power++)
 			{
@@ -328,7 +289,7 @@ namespace MKY.Utilities.Types
 				int multiplier;
 				if (int.TryParse(from[i].ToString(), out multiplier) && (multiplier < numericBase))
 				{
-					result += (ulong)(multiplier * (int)Math.Pow(numericBase, power));
+					result += (ulong)multiplier * (ulong)Math.Pow(numericBase, power);
 				}
 				else
 				{
