@@ -17,7 +17,7 @@ using YAT.Settings.Terminal;
 namespace YAT.Settings.Test
 {
 	[TestFixture]
-	public class SettingsTest
+	public class XmlTest
 	{
 		#region Constants
 		//==========================================================================================
@@ -270,7 +270,7 @@ namespace YAT.Settings.Test
 			}
 			catch (Exception ex)
 			{
-				XConsole.WriteException(typeof(SettingsTest), ex);
+				XConsole.WriteException(typeof(XmlTest), ex);
 
 				// Attention: The following call throws an exception, code below it won't be executed
 				Assert.Fail("XML serialize error: " + ex.Message);
@@ -287,7 +287,7 @@ namespace YAT.Settings.Test
 			}
 			catch (Exception ex)
 			{
-				XConsole.WriteException(typeof(SettingsTest), ex);
+				XConsole.WriteException(typeof(XmlTest), ex);
 
 				// Attention: The following call throws an exception, code below it won't be executed
 				Assert.Fail("XML deserialize error: " + ex.Message);

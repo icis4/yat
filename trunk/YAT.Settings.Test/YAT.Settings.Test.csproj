@@ -31,13 +31,23 @@
     <Reference Include="nunit.framework, Version=2.4.6.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OldSettingsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SettingsTest.cs" />
+    <Compile Include="XmlTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IO.Ports\IO.Ports.csproj">
+      <Project>{D8940035-D30A-48A3-AC28-E8A4B8910CB9}</Project>
+      <Name>IO.Ports</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Net.Sockets\Net.Sockets.csproj">
+      <Project>{307EFF74-9C31-4943-87A9-E7686551C4D1}</Project>
+      <Name>Net.Sockets</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utilities\Utilities.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>Utilities</Name>
@@ -54,9 +64,25 @@
       <Project>{651BA67D-9B00-4245-9C99-481F20273A62}</Project>
       <Name>YAT.Model.Types</Name>
     </ProjectReference>
+    <ProjectReference Include="..\YAT.Model\YAT.Model.csproj">
+      <Project>{93A4CA8C-A158-4994-AB07-9577BDAE6F9B}</Project>
+      <Name>YAT.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Settings.Application\YAT.Settings.Application.csproj">
+      <Project>{69A8CBB4-7D00-4A3D-9CF7-220DD02C2EB7}</Project>
+      <Name>YAT.Settings.Application</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YAT.Settings.Terminal\YAT.Settings.Terminal.csproj">
       <Project>{FE2D334F-B2D8-4A07-B63D-93BA775DBBCF}</Project>
       <Name>YAT.Settings.Terminal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Settings.Workspace\YAT.Settings.Workspace.csproj">
+      <Project>{942BA759-57F9-4213-BDC8-E9A8325631B0}</Project>
+      <Name>YAT.Settings.Workspace</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Settings\YAT.Settings.csproj">
+      <Project>{A3E80010-9146-47EF-87B0-138A60406A9E}</Project>
+      <Name>YAT.Settings</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

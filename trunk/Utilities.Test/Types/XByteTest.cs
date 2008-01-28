@@ -18,12 +18,12 @@ namespace MKY.Utilities.Test.Types
 
 		private struct TestSet
 		{
-			public byte Data;
+			public readonly byte Data;
 
-			public string BinString;
-			public string OctString;
-			public string DecString;
-			public string HexString;
+			public readonly string BinString;
+			public readonly string OctString;
+			public readonly string DecString;
+			public readonly string HexString;
 
 			public TestSet(byte data, string binString, string octString, string decString, string hexString)
 			{

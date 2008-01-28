@@ -20,11 +20,11 @@ namespace YAT.Domain.Test.Parser
 
         private struct TestSet
         {
-            public Endianess Endianess;
-            public Encoding Encoding;
-            public Radix DefaultRadix;
-            public string InputString;
-            public byte[] OutputBytes;
+            public readonly Endianess Endianess;
+			public readonly Encoding Encoding;
+			public readonly Radix DefaultRadix;
+			public readonly string InputString;
+			public readonly byte[] OutputBytes;
 
             public TestSet(string inputString, byte[] outputBytes)
             {

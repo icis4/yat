@@ -19,22 +19,22 @@ namespace MKY.Utilities.Test.Types
 
 		private struct TestSet
 		{
-			public ulong Data;
+			public readonly ulong Data;
 
-			public int Boundary;
-			public ulong Max;
-			public bool ExpandNegative;
-			public bool UseBigEndian;
+			public readonly int Boundary;
+			public readonly ulong Max;
+			public readonly bool ExpandNegative;
+			public readonly bool UseBigEndian;
 
-			public string BinString;
-			public string OctString;
-			public string DecString;
-			public string HexString;
+			public readonly string BinString;
+			public readonly string OctString;
+			public readonly string DecString;
+			public readonly string HexString;
 
-			public string DecFormat;
-			public string HexFormat;
+			public readonly string DecFormat;
+			public readonly string HexFormat;
 
-			public byte[] ByteArray;
+			public readonly byte[] ByteArray;
 
 			public TestSet(ulong data, int boundary, ulong max, bool expandNegative, bool useBigEndian, string binString, string octString, string decString, string hexString, byte[] byteArray)
 			{
