@@ -488,6 +488,8 @@ namespace YAT.Model
 			AssertNotDisposed();
 
 			bool success = false;
+
+			// save terminal if file path is valid
 			if (_settingsHandler.SettingsFilePathIsValid)
 			{
 				if (_settingsHandler.Settings.AutoSaved)
@@ -499,6 +501,11 @@ namespace YAT.Model
 				{
 					success = SaveToFile(false);
 				}
+			}
+			else // auto save creates default file path
+			{
+				if (autoSaveIsAllowed)
+					success = SaveToFile(true);
 			}
 
 			// if not successful yet, request new file path
@@ -636,14 +643,19 @@ namespace YAT.Model
 
 			OnFixedStatusTextRequest("Closing terminal...");
 
-			// try to auto save if never saved yet or changed
+			// try to auto save or delete if never saved yet or changed...
 			if (isWorkspaceClose)
 			{
 				if (!_settingsHandler.SettingsFileExists || _settingsRoot.HaveChanged)
 					success = TryAutoSave();
 			}
+			else
+			{
+				if (_settingsHandler.SettingsFileExists && _settingsRoot.AutoSaved)
+					success = _settingsHandler.Delete();
+			}
 
-			// or save it manually if necessary
+			// ...or save it manually if necessary
 			if (!success && _settingsRoot.ExplicitHaveChanged)
 			{
 				DialogResult dr = OnMessageInputRequest
@@ -667,8 +679,7 @@ namespace YAT.Model
 			}
 			else
 			{
-				// consider it successful if there was nothing to save
-				success = true;
+				success = true; // consider it successful if there was nothing to save
 			}
 
 			// next, close underlying terminal

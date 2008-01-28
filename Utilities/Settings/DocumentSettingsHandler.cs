@@ -147,7 +147,7 @@ namespace MKY.Utilities.Settings
 		/// or creates default settings if file path not found or not readable.
 		/// </summary>
 		/// <returns>
-		/// Returns false if either settings could not be loaded from
+		/// Returns false if settings could not be loaded from
 		/// <see cref="SettingsFilePath"/> and have been set to defaults.
 		/// </returns>
 		/// <exception cref="Exception">
@@ -282,6 +282,25 @@ namespace MKY.Utilities.Settings
 						File.Delete(backup);
 				}
 				catch { }
+			}
+		}
+
+		/// <summary>
+		/// Tries to delete file <see cref="SettingsFilePath"/>.
+		/// </summary>
+		/// <returns>
+		/// Returns true if file successfully saved.
+		/// </returns>
+		public bool Delete()
+		{
+			try
+			{
+				File.Delete(_settingsFilePath);
+				return (true);
+			}
+			catch
+			{
+				return (false);
 			}
 		}
 

@@ -25,6 +25,8 @@ namespace YAT.Test
 				suite.Add(new MKY.Utilities.Test.IO.XPathTest());
 				suite.Add(new MKY.Utilities.Test.Settings.DocumentSettingsHandlerTest());
 				suite.Add(new MKY.Utilities.Test.Types.XByteTest());
+				suite.Add(new MKY.Utilities.Test.Types.XInt32Test());
+				suite.Add(new MKY.Utilities.Test.Types.XUInt64Test());
 
 				// YAT.Domain.Test
 				suite.Add(new YAT.Domain.Test.Parser.ParserTest());
@@ -34,7 +36,8 @@ namespace YAT.Test
 				suite.Add(new YAT.Model.Test.ModelTest());
 
 				// YAT.Settings.Test
-				suite.Add(new YAT.Settings.Test.SettingsTest());
+				suite.Add(new YAT.Settings.Test.FileVersionsTest());
+				suite.Add(new YAT.Settings.Test.XmlTest());
 
 				return (suite);
 			}

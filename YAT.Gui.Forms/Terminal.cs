@@ -1693,9 +1693,9 @@ namespace YAT.Gui.Forms
 				// DisplaySettings changed
 				ReloadMonitors();
 
-				monitor_Tx.ShowCountStatus = _settingsRoot.Display.ShowCounters;
+				monitor_Tx.ShowCountStatus    = _settingsRoot.Display.ShowCounters;
 				monitor_Bidir.ShowCountStatus = _settingsRoot.Display.ShowCounters;
-				monitor_Rx.ShowCountStatus = _settingsRoot.Display.ShowCounters;
+				monitor_Rx.ShowCountStatus    = _settingsRoot.Display.ShowCounters;
 			}
 			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Transmit))
 			{

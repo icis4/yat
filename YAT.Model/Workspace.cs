@@ -38,7 +38,6 @@ namespace YAT.Model
 		// settings
 		private DocumentSettingsHandler<WorkspaceSettingsRoot> _settingsHandler;
 		private WorkspaceSettingsRoot _settingsRoot;
-		private bool _handlingSettingsIsSuspended = false;
 
 		// terminal list
 		private GuidList<Terminal> _terminals = new GuidList<Terminal>();
@@ -252,13 +251,21 @@ namespace YAT.Model
 		// Settings > Event Handlers
 		//------------------------------------------------------------------------------------------
 
+		private bool _settingsRoot_Changed_handlingSettingsIsSuspended = false;
+
 		private void _settingsRoot_Changed(object sender, SettingsEventArgs e)
 		{
-			if (_handlingSettingsIsSuspended)
+
+			if (_settingsRoot_Changed_handlingSettingsIsSuspended)
 				return;
 
 			if (ApplicationSettings.LocalUser.General.AutoSaveWorkspace)
+			{
+				// prevent recursive calls
+				_settingsRoot_Changed_handlingSettingsIsSuspended = true;
 				TryAutoSaveIfFileAlreadyAutoSaved();
+				_settingsRoot_Changed_handlingSettingsIsSuspended = false;
+			}
 		}
 
 		#endregion
@@ -286,23 +293,6 @@ namespace YAT.Model
 				AssertNotDisposed();
 				return (_settingsRoot);
 			}
-		}
-
-		#endregion
-
-		#region Settings > Methods
-		//------------------------------------------------------------------------------------------
-		// Settings > Methods
-		//------------------------------------------------------------------------------------------
-
-		private void SuspendHandlingSettings()
-		{
-			_handlingSettingsIsSuspended = true;
-		}
-
-		private void ResumeHandlingSettings()
-		{
-			_handlingSettingsIsSuspended = false;
 		}
 
 		#endregion
@@ -361,6 +351,8 @@ namespace YAT.Model
 			AssertNotDisposed();
 
 			bool success = false;
+
+			// save workspace if file path is valid
 			if (_settingsHandler.SettingsFilePathIsValid)
 			{
 				if (_settingsHandler.Settings.AutoSaved)
@@ -372,6 +364,11 @@ namespace YAT.Model
 				{
 					success = SaveToFile(false);
 				}
+			}
+			else // auto save creates default file path
+			{
+				if (autoSaveIsAllowed)
+					success = SaveToFile(true);
 			}
 
 			// if not successful yet, request new file path
@@ -527,14 +524,29 @@ namespace YAT.Model
 				return (false);
 			}
 
-			if (ApplicationSettings.LocalUser.General.AutoSaveWorkspace)
+			// try to auto save or delete if never saved yet or changed...
+			if (isMainClose)
 			{
-				// try to auto save if never saved yet or changed
-				if (!_settingsHandler.SettingsFileExists || _settingsRoot.HaveChanged)
-					success = TryAutoSave();
+				if (ApplicationSettings.LocalUser.General.AutoSaveWorkspace)
+				{
+					if (!_settingsHandler.SettingsFileExists || _settingsRoot.HaveChanged)
+						success = TryAutoSave();
+				}
+			}
+			else
+			{
+				if (_settingsHandler.SettingsFileExists && _settingsRoot.AutoSaved)
+				{
+					success = _settingsHandler.Delete();
+				}
+				else if (ApplicationSettings.LocalUser.General.AutoSaveWorkspace)
+				{
+					if (!_settingsHandler.SettingsFileExists || _settingsRoot.HaveChanged)
+						success = TryAutoSave();
+				}
 			}
 
-			// or save it manually if necessary
+			// ...or save it manually if necessary
 			if (!success && _settingsRoot.ExplicitHaveChanged)
 			{
 				DialogResult dr = OnMessageInputRequest
@@ -558,8 +570,7 @@ namespace YAT.Model
 			}
 			else
 			{
-				// consider it successful if there was nothing to save
-				success = true;
+				success = true; // consider it successful if there was nothing to save
 			}
 
 			if (success)
