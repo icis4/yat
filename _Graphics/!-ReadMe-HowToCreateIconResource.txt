@@ -14,7 +14,7 @@ How to create "YAT.res"
 
 5.	Use "Resource Hacker" to add the icons to <YAT.res>
 	- <http://angusj.com/resourcehacker/>
-	- Resources must be name "1", "2",...
+	- Resources must be named "1", "2",...
 
 
 ---
