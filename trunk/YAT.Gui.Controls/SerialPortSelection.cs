@@ -79,6 +79,7 @@ namespace YAT.Gui.Controls
 				if (_showSerialPort != value)
 				{
 					_showSerialPort = value;
+					SetSerialPortList(); // refresh serial port list if allowed and needed
 					SetControls();
 				}
 			}
@@ -217,7 +218,8 @@ namespace YAT.Gui.Controls
 			SerialPortList portList = new SerialPortList();
 			portList.FillWithAvailablePorts();
 
-			if (!DesignMode && ApplicationSettings.LocalUser.General.DetectSerialPortsInUse)
+			if (!DesignMode && ApplicationSettings.LocalUser.General.DetectSerialPortsInUse &&
+				Enabled && _showSerialPort)
 			{
 				// install timer which shows a dialog if scanning takes more than 500ms
 				timer_ShowScanDialog.Start();
@@ -241,14 +243,15 @@ namespace YAT.Gui.Controls
 
 			if (comboBox_Port.Items.Count > 0)
 			{
-				if (_portId != null)
+				if      ((_portId != null) && (portList.Contains(_portId)))
 					comboBox_Port.SelectedItem = _portId;
-				else if (old != null)
+				else if ((old     != null) && (portList.Contains(old)))
 					comboBox_Port.SelectedItem = old;
 				else
 					comboBox_Port.SelectedIndex = 0;
 
-				_portId = (SerialPortId)comboBox_Port.SelectedItem;
+				// set property instead of member to ensure that changed event is fired
+				PortId = (SerialPortId)comboBox_Port.SelectedItem;
 			}
 			else
 			{

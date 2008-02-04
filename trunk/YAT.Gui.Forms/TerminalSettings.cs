@@ -260,6 +260,20 @@ namespace YAT.Gui.Forms
 
 			bool isSerialPort = (ioType == Domain.IOType.SerialPort);
 
+			// set socket control before serial port control since that might need to refresh the
+			// serial port list first (which takes time, which looks ulgy)
+			socketSelection.Visible                 = !isSerialPort;
+			socketSelection.HostType                = (Domain.XIOType)ioType;
+			socketSelection.RemoteHostNameOrAddress = _settings_Form.IO.Socket.RemoteHostNameOrAddress;
+			socketSelection.RemotePort              = _settings_Form.IO.Socket.RemotePort;
+			socketSelection.LocalHostNameOrAddress  = _settings_Form.IO.Socket.LocalHostNameOrAddress;
+			socketSelection.LocalTcpPort            = _settings_Form.IO.Socket.LocalTcpPort;
+			socketSelection.LocalUdpPort            = _settings_Form.IO.Socket.LocalUdpPort;
+
+			socketSettings.Visible                = !isSerialPort;
+			socketSettings.HostType               = (Domain.XIOType)ioType;
+			socketSettings.TcpClientAutoReconnect = _settings_Form.IO.Socket.TcpClientAutoReconnect;
+
 			serialPortSelection.Visible  = isSerialPort;
 			serialPortSelection.PortId   = _settings_Form.IO.SerialPort.PortId;
 
@@ -269,18 +283,6 @@ namespace YAT.Gui.Forms
 			serialPortSettings.Parity    = _settings_Form.IO.SerialPort.Communication.Parity;
 			serialPortSettings.StopBits  = _settings_Form.IO.SerialPort.Communication.StopBits;
 			serialPortSettings.Handshake = _settings_Form.IO.SerialPort.Communication.Handshake;
-
-			socketSelection.Visible = !isSerialPort;
-			socketSelection.HostType = (Domain.XIOType)ioType;
-			socketSelection.RemoteHostNameOrAddress = _settings_Form.IO.Socket.RemoteHostNameOrAddress;
-			socketSelection.RemotePort = _settings_Form.IO.Socket.RemotePort;
-			socketSelection.LocalHostNameOrAddress = _settings_Form.IO.Socket.LocalHostNameOrAddress;
-			socketSelection.LocalTcpPort = _settings_Form.IO.Socket.LocalTcpPort;
-			socketSelection.LocalUdpPort = _settings_Form.IO.Socket.LocalUdpPort;
-
-			socketSettings.Visible = !isSerialPort;
-			socketSettings.HostType = (Domain.XIOType)ioType;
-			socketSettings.TcpClientAutoReconnect = _settings_Form.IO.Socket.TcpClientAutoReconnect;
 
 			_isSettingControls = false;
 		}

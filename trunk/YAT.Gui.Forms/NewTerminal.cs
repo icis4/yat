@@ -242,17 +242,19 @@ namespace YAT.Gui.Forms
 
 			bool isSerialPort = (ioType == Domain.IOType.SerialPort);
 
-			serialPortSelection.Enabled = isSerialPort;
-			serialPortSelection.ShowSerialPort = isSerialPort;
-			serialPortSelection.PortId = _newTerminalSettings_Form.SerialPortId;
-
-			socketSelection.Enabled = !isSerialPort;
-			socketSelection.HostType = (Domain.XIOType)ioType;
+			// set socket control before serial port control since that might need to refresh the
+			// serial port list first (which takes time, which looks ulgy)
+			socketSelection.Enabled                 = !isSerialPort;
+			socketSelection.HostType                = (Domain.XIOType)ioType;
 			socketSelection.RemoteHostNameOrAddress = _newTerminalSettings_Form.SocketRemoteHostNameOrAddress;
-			socketSelection.RemotePort = _newTerminalSettings_Form.SocketRemotePort;
-			socketSelection.LocalHostNameOrAddress = _newTerminalSettings_Form.SocketLocalHostNameOrAddress;
-			socketSelection.LocalTcpPort = _newTerminalSettings_Form.SocketLocalTcpPort;
-			socketSelection.LocalUdpPort = _newTerminalSettings_Form.SocketLocalUdpPort;
+			socketSelection.RemotePort              = _newTerminalSettings_Form.SocketRemotePort;
+			socketSelection.LocalHostNameOrAddress  = _newTerminalSettings_Form.SocketLocalHostNameOrAddress;
+			socketSelection.LocalTcpPort            = _newTerminalSettings_Form.SocketLocalTcpPort;
+			socketSelection.LocalUdpPort            = _newTerminalSettings_Form.SocketLocalUdpPort;
+
+			serialPortSelection.Enabled        = isSerialPort;
+			serialPortSelection.ShowSerialPort = isSerialPort;
+			serialPortSelection.PortId         = _newTerminalSettings_Form.SerialPortId;
 
 			checkBox_OpenTerminal.Checked = _newTerminalSettings_Form.OpenTerminal;
 
