@@ -54,59 +54,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Test", "YAT.Test\YAT.Te
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Graphics", "_Graphics", "{16B67EA9-E379-4134-B89E-B87379638D9C}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-	ProjectSection(SolutionItems) = preProject
-		_Graphics\ReadMe.txt = _Graphics\ReadMe.txt
-		_Graphics\YAT.res = _Graphics\YAT.res
-		_Graphics\YAT_TerminalSettings_64x64.xcf = _Graphics\YAT_TerminalSettings_64x64.xcf
-		_Graphics\YAT_UserSettings_64x64.xcf = _Graphics\YAT_UserSettings_64x64.xcf
-		_Graphics\YAT_WorkspaceSettings_64x64.xcf = _Graphics\YAT_WorkspaceSettings_64x64.xcf
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuvola", "Nuvola", "{DCA59CFE-1A8D-44DD-B755-9ED543E91DEB}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-	ProjectSection(SolutionItems) = preProject
-		_Graphics\Nuvola\kmultiple_48x48.png = _Graphics\Nuvola\kmultiple_48x48.png
-		_Graphics\Nuvola\mycomputer_64x64.png = _Graphics\Nuvola\mycomputer_64x64.png
-		_Graphics\Nuvola\template_source_48x48.png = _Graphics\Nuvola\template_source_48x48.png
-		_Graphics\Nuvola\vcard_48x48.png = _Graphics\Nuvola\vcard_48x48.png
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "YAT", "YAT", "{D0EF5621-C98B-4B79-95E7-71C4F0B53A9B}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-	ProjectSection(SolutionItems) = preProject
-		_Graphics\YAT\Icon_YAT.ico = _Graphics\YAT\Icon_YAT.ico
-		_Graphics\YAT\Icon_YAT_TerminalSettings.ico = _Graphics\YAT\Icon_YAT_TerminalSettings.ico
-		_Graphics\YAT\Icon_YAT_UserSettings.ico = _Graphics\YAT\Icon_YAT_UserSettings.ico
-		_Graphics\YAT\Icon_YAT_WorkspaceSettings.ico = _Graphics\YAT\Icon_YAT_WorkspaceSettings.ico
-		_Graphics\YAT\Image_YAT_16x16.png = _Graphics\YAT\Image_YAT_16x16.png
-		_Graphics\YAT\Image_YAT_32x32.png = _Graphics\YAT\Image_YAT_32x32.png
-		_Graphics\YAT\Image_YAT_48x48.png = _Graphics\YAT\Image_YAT_48x48.png
-		_Graphics\YAT\Image_YAT_64x64.png = _Graphics\YAT\Image_YAT_64x64.png
-		_Graphics\YAT\Image_YAT_TerminalSettings_16x16.png = _Graphics\YAT\Image_YAT_TerminalSettings_16x16.png
-		_Graphics\YAT\Image_YAT_TerminalSettings_32x32.png = _Graphics\YAT\Image_YAT_TerminalSettings_32x32.png
-		_Graphics\YAT\Image_YAT_TerminalSettings_48x48.png = _Graphics\YAT\Image_YAT_TerminalSettings_48x48.png
-		_Graphics\YAT\Image_YAT_TerminalSettings_64x64.png = _Graphics\YAT\Image_YAT_TerminalSettings_64x64.png
-		_Graphics\YAT\Image_YAT_UserSettings_16x16.png = _Graphics\YAT\Image_YAT_UserSettings_16x16.png
-		_Graphics\YAT\Image_YAT_UserSettings_32x32.png = _Graphics\YAT\Image_YAT_UserSettings_32x32.png
-		_Graphics\YAT\Image_YAT_UserSettings_48x48.png = _Graphics\YAT\Image_YAT_UserSettings_48x48.png
-		_Graphics\YAT\Image_YAT_UserSettings_64x64.png = _Graphics\YAT\Image_YAT_UserSettings_64x64.png
-		_Graphics\YAT\Image_YAT_WorkspaceSettings_16x16.png = _Graphics\YAT\Image_YAT_WorkspaceSettings_16x16.png
-		_Graphics\YAT\Image_YAT_WorkspaceSettings_32x32.png = _Graphics\YAT\Image_YAT_WorkspaceSettings_32x32.png
-		_Graphics\YAT\Image_YAT_WorkspaceSettings_48x48.png = _Graphics\YAT\Image_YAT_WorkspaceSettings_48x48.png
-		_Graphics\YAT\Image_YAT_WorkspaceSettings_64x64.png = _Graphics\YAT\Image_YAT_WorkspaceSettings_64x64.png
-	EndProjectSection
-EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "YAT.Setup", "YAT.Setup\YAT.Setup.vdproj", "{F46DFE27-1F74-4558-AD39-E7EA74822483}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -449,10 +396,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{DCA59CFE-1A8D-44DD-B755-9ED543E91DEB} = {16B67EA9-E379-4134-B89E-B87379638D9C}
-		{D0EF5621-C98B-4B79-95E7-71C4F0B53A9B} = {16B67EA9-E379-4134-B89E-B87379638D9C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		ObjectiFSystem = D:\Sandboxes\YAT\_Model\YAT
