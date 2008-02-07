@@ -28,7 +28,7 @@ namespace YAT.Controller
 		{
 			ApplicationInfo.ProductName + " - Version " + Application.ProductVersion,
 			"YAT - Yet Another Terminal",
-			"RS-232/422/485 TCP/UDP terminal to operate and debug serial connections",
+			"RS-232/422/423/485 TCP/UDP terminal to operate and debug serial connections",
 			"Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.",
 			"Copyright © 2003-2008 Matthias Kläy.",
 		};
