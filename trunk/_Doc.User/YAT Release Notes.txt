@@ -62,7 +62,9 @@ Release 2.0.0 :: 2008-??-??
 - Application settings shifted from registry to local user directory
 - Terminal settings (.yat) refined
 - Workspace settings (.yaw) introduced
+- Automatic saving and loading of complete workspace added
 - About dialog: Link labels instead of normal labels
+- Automatic testing using NUnit added
 - Release notes moved to menu
 
 
