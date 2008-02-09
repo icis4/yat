@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Windows.Forms")]
-[assembly: AssemblyDescription("Windows.Forms extension")]
+[assembly: AssemblyTitle("YAT.Controller.Test")]
+[assembly: AssemblyDescription("YAT controller components test")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("MKY")]
-[assembly: AssemblyProduct("Windows.Forms")]
-[assembly: AssemblyCopyright("Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil. Copyright © 2003-2008 Matthias Kläy. All rights reserved.")]
+[assembly: AssemblyCompany("YAT")]
+[assembly: AssemblyProduct("YAT")]
+[assembly: AssemblyCopyright("Copyright © 2007-2008 Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -21,7 +21,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("9914015d-751a-4513-a863-1a998cfda2ec")]
+[assembly: Guid("53a93a64-d05e-4b50-9f9a-249713c0e3b7")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -32,8 +32,8 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.99.*")]
+[assembly: AssemblyFileVersion("1.99.15.0")]
 
 // CLS compliance
 [assembly: CLSCompliant(true)]
