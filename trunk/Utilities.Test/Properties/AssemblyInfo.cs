@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MKY")]
 [assembly: AssemblyProduct("Utilities.Test")]
-[assembly: AssemblyCopyright("Copyright © 2007 Matthias Kläy. All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2007-2008 Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
