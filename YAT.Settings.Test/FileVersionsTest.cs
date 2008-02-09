@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.IO;
 using System.Windows.Forms;
 
 using NUnit.Framework;
@@ -17,75 +16,6 @@ namespace YAT.Settings.Test
 	[TestFixture]
 	public class FileVersionsTest
 	{
-		#region Types
-		//==========================================================================================
-		// Types
-		//==========================================================================================
-
-		#region Types > Settings Enums
-		//------------------------------------------------------------------------------------------
-		// Types > Settings Enums
-		//------------------------------------------------------------------------------------------
-
-		private enum Terminal_V1_99_12
-		{
-			_01_COM1_Open_Default,
-			_02_COM2_Open_Binary_115200,
-			_03_COM1_Closed_Predefined,
-		}
-
-		private enum Workspace_V1_99_12
-		{
-		}
-
-		private enum Terminal_V1_99_13
-		{
-			_01_COM1_Open_Default,
-			_02_COM2_Open_Binary_115200,
-			_03_COM1_Closed_Predefined,
-		}
-
-		private enum Workspace_V1_99_13
-		{
-			_04_Matthias,
-		}
-
-		#endregion
-
-		private struct SettingsFilePaths<T, W>
-		{
-			private readonly string _Path;
-
-			public readonly Dictionary<T, string> TerminalFilePaths;
-			public readonly Dictionary<W, string> WorkspaceFilePaths;
-
-			public SettingsFilePaths(string directory)
-			{
-				// traverse path from "<Root>\YAT\bin\[Debug|Release]\YAT.exe" to "<Root>"
-				DirectoryInfo di = new DirectoryInfo(Environment.CurrentDirectory);
-				for (int i = 0; i < 3; i++)
-					di = di.Parent;
-
-				// set path to "<Root>\_Settings\<directory>\"
-				_Path = di.FullName + Path.DirectorySeparatorChar + "_Settings" + Path.DirectorySeparatorChar + directory + Path.DirectorySeparatorChar;
-
-				TerminalFilePaths = new Dictionary<T, string>();
-				WorkspaceFilePaths = new Dictionary<W, string>();
-			}
-
-			public void AddTerminalFileName(T fileKey, string fileName)
-			{
-				TerminalFilePaths.Add(fileKey, _Path + fileName);
-			}
-
-			public void AddWorkspaceFileName(W fileKey, string fileName)
-			{
-				WorkspaceFilePaths.Add(fileKey, _Path + fileName);
-			}
-		}
-
-		#endregion
-
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -93,9 +23,6 @@ namespace YAT.Settings.Test
 
 		private bool _autoSaveWorkspaceToRestore;
 		private MKY.IO.Ports.SerialPortList _serialPorts;
-
-		private SettingsFilePaths<Terminal_V1_99_12, Workspace_V1_99_12> _settingsFilePaths_V1_99_12;
-		private SettingsFilePaths<Terminal_V1_99_13, Workspace_V1_99_13> _settingsFilePaths_V1_99_13;
 
 		#endregion
 
@@ -109,22 +36,6 @@ namespace YAT.Settings.Test
 			// serial ports
 			_serialPorts = new MKY.IO.Ports.SerialPortList();
 			_serialPorts.FillWithAvailablePorts();
-
-			// V1.99.12
-			_settingsFilePaths_V1_99_12 = new SettingsFilePaths<Terminal_V1_99_12, Workspace_V1_99_12>("2007-04-15 - YAT 2.0 Beta 1 Version 1.99.12");
-
-			_settingsFilePaths_V1_99_12.AddTerminalFileName(Terminal_V1_99_12._01_COM1_Open_Default,       "01 - COM1 - Open - Default.yat"        );
-			_settingsFilePaths_V1_99_12.AddTerminalFileName(Terminal_V1_99_12._02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
-			_settingsFilePaths_V1_99_12.AddTerminalFileName(Terminal_V1_99_12._03_COM1_Closed_Predefined,  "03 - COM1 - Closed - Predefined.yat"   );
-
-			// V1.99.13
-			_settingsFilePaths_V1_99_13 = new SettingsFilePaths<Terminal_V1_99_13, Workspace_V1_99_13>("2007-08-30 - YAT 2.0 Beta 2 Preliminary Version 1.99.13");
-
-			_settingsFilePaths_V1_99_13.AddTerminalFileName(Terminal_V1_99_13._01_COM1_Open_Default,       "01 - COM1 - Open - Default.yat"        );
-			_settingsFilePaths_V1_99_13.AddTerminalFileName(Terminal_V1_99_13._02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
-			_settingsFilePaths_V1_99_13.AddTerminalFileName(Terminal_V1_99_13._03_COM1_Closed_Predefined,  "03 - COM1 - Closed - Predefined.yat"   );
-
-			_settingsFilePaths_V1_99_13.AddWorkspaceFileName(Workspace_V1_99_13._04_Matthias, "04 - Matthias.yaw");
 		}
 
 		#endregion
@@ -174,7 +85,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				_settingsFilePaths_V1_99_12.TerminalFilePaths[Terminal_V1_99_12._01_COM1_Open_Default]
+				SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
 				);
 
 			// create terminal from settings and check whether settings are correctly set
@@ -192,7 +103,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				_settingsFilePaths_V1_99_12.TerminalFilePaths[Terminal_V1_99_12._02_COM2_Open_Binary_115200]
+				SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
 				);
 
 			// create terminal from settings and check whether settings are correctly set
@@ -209,7 +120,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				_settingsFilePaths_V1_99_12.TerminalFilePaths[Terminal_V1_99_12._03_COM1_Closed_Predefined]
+				SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
 				);
 
 			// create terminal from settings and check whether settings are correctly set
@@ -234,7 +145,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				_settingsFilePaths_V1_99_13.TerminalFilePaths[Terminal_V1_99_13._01_COM1_Open_Default]
+				SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
 				);
 
 			// create terminal from settings and check whether settings are correctly set
@@ -252,7 +163,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				_settingsFilePaths_V1_99_13.TerminalFilePaths[Terminal_V1_99_13._02_COM2_Open_Binary_115200]
+				SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
 				);
 
 			// create terminal from settings and check whether settings are correctly set
@@ -269,7 +180,7 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				_settingsFilePaths_V1_99_13.TerminalFilePaths[Terminal_V1_99_13._03_COM1_Closed_Predefined]
+				SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
 				);
 
 			// create terminal from settings and check whether settings are correctly set
@@ -292,7 +203,90 @@ namespace YAT.Settings.Test
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
 				(
-				_settingsFilePaths_V1_99_13.WorkspaceFilePaths[Workspace_V1_99_13._04_Matthias]
+				SettingsFilesProvider.FilePaths_V1_99_13.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
+				);
+
+			// create workspace from settings and check whether settings are correctly set
+			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
+			{
+				workspace.OpenTerminals();
+				VerifySettingsCase04(workspace);
+			}
+		}
+
+		#endregion
+
+		#region Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.15 > Terminal
+		//------------------------------------------------------------------------------------------
+		// Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.15 > Terminal
+		//------------------------------------------------------------------------------------------
+
+		// 01_COM1_Open_Default
+		[Test]
+		[Category("Support for COM1 required")]
+		public void Test_V1_99_15_TerminalSettingsCase01()
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_15.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
+				);
+
+			// create terminal from settings and check whether settings are correctly set
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				terminal.Start();
+				VerifySettingsCase01(terminal);
+			}
+		}
+
+		// 02_COM2_Open_Binary_115200
+		[Test]
+		[Category("Support for COM2 required")]
+		public void Test_V1_99_15_TerminalSettingsCase02()
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_15.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
+				);
+
+			// create terminal from settings and check whether settings are correctly set
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				terminal.Start();
+				VerifySettingsCase02(terminal);
+			}
+		}
+
+		// 03_COM1_Closed_Predefined
+		[Test]
+		public void Test_V1_99_15_TerminalSettingsCase03()
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_15.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
+				);
+
+			// create terminal from settings and check whether settings are correctly set
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				terminal.Start();
+				VerifySettingsCase03(terminal);
+			}
+		}
+
+		#endregion
+
+		#region Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.15 > Workspace
+		//------------------------------------------------------------------------------------------
+		// Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.15 > Workspace
+		//------------------------------------------------------------------------------------------
+
+		[Test]
+		public void Test_V1_99_15_WorkspaceSettingsCase04()
+		{
+			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_15.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
 				);
 
 			// create workspace from settings and check whether settings are correctly set
