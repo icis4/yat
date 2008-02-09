@@ -20,7 +20,9 @@
 
 6. Add reference to "nunit.framework"
 
-7. Add test classes
+7. Add reference to testee projects
+
+8. Add test classes
    Name: "<Testee>Test"
 
-8. Add tests according to the NUnit documentation
+9. Add tests according to the NUnit documentation
