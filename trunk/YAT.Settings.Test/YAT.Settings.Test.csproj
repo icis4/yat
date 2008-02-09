@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="FileVersionsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingsFilesProvider.cs" />
     <Compile Include="XmlTest.cs" />
   </ItemGroup>
   <ItemGroup>
