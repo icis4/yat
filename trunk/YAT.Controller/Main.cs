@@ -24,7 +24,7 @@ namespace YAT.Controller
 		// Constants
 		//==========================================================================================
 
-		private readonly string[] _Title =
+		private static readonly string[] _Title =
 		{
 			ApplicationInfo.ProductName + " - Version " + Application.ProductVersion,
 			"YAT - Yet Another Terminal",
@@ -33,7 +33,7 @@ namespace YAT.Controller
 			"Copyright © 2003-2008 Matthias Kläy.",
 		};
 
-		private readonly string[] _FileOptions =
+		private static readonly string[] _FileOptions =
 		{
 			"Usage:    ",
 			"  YAT[.exe] [<WorkspaceSettings>.yaw|<TerminalSettings>.yat]",
@@ -45,7 +45,7 @@ namespace YAT.Controller
 			"          Start YAT and open given terminal settings",
 		};
 
-		private readonly string[] _AdvancedOptions =
+		private static readonly string[] _AdvancedOptions =
 		{
 			"Advanced usage:    ",
 			"  YAT[.exe] [/r]",
@@ -57,13 +57,13 @@ namespace YAT.Controller
 			"  YAT /r  Start YAT and open most recent file",
 		};
 
-		private readonly string[] _RecentArg =
+		private static readonly string[] _RecentArg =
 		{
 			"/r",
 			"-r",
 		};
 
-		private readonly string[] _Help =
+		private static readonly string[] _Help =
 		{
 			"  /?      ",
 			"  -?      ",
@@ -71,7 +71,7 @@ namespace YAT.Controller
 			"  --help  Display this help text",
 		};
 
-		private readonly string[] _HelpArg =
+		private static readonly string[] _HelpArg =
 		{
 			"/?",
 			"-?",
@@ -79,7 +79,7 @@ namespace YAT.Controller
 			"--help",
 		};
 
-		private readonly string[] _Return =
+		private static readonly string[] _Return =
 		{
 			"Return codes:",
 			"   0      Successful exit",
@@ -110,7 +110,34 @@ namespace YAT.Controller
 
 		public Main(string[] commandLineArgs)
 		{
-			_commandLineError = (!ParseCommandLineArgs(commandLineArgs));
+			// only parse 'real' command line args, i.e. skip first arg which is the .exe file path
+			string[] realArgs = new string[commandLineArgs.Length - 1];
+			for (int i = 1; i < commandLineArgs.Length; i++)
+				realArgs[i - 1] = commandLineArgs[i];
+
+			_commandLineError = (!ParseCommandLineArgs(realArgs));
+		}
+
+		#endregion
+
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		public bool CommandLineError
+		{
+			get { return (_commandLineError); }
+		}
+
+		public bool CommandLineHelpIsRequested
+		{
+			get { return (_commandLineHelpIsRequested); }
+		}
+
+		public string RequestedFilePath
+		{
+			get { return (_requestedFilePath); }
 		}
 
 		#endregion
