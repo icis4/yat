@@ -110,12 +110,9 @@ namespace YAT.Controller
 
 		public Main(string[] commandLineArgs)
 		{
-			// only parse 'real' command line args, i.e. skip first arg which is the .exe file path
-			string[] realArgs = new string[commandLineArgs.Length - 1];
-			for (int i = 1; i < commandLineArgs.Length; i++)
-				realArgs[i - 1] = commandLineArgs[i];
-
-			_commandLineError = (!ParseCommandLineArgs(realArgs));
+			// parse command line args if there are
+			if (commandLineArgs.Length > 0)
+				_commandLineError = (!ParseCommandLineArgs(commandLineArgs));
 		}
 
 		#endregion
@@ -190,8 +187,8 @@ namespace YAT.Controller
 			int argsParsed = 0;
 			int argsParsedTotal = 0;
 
-			if ((argsParsed = ParseArgsForHelp  (commandLineArgs)) < 0) return (false); else argsParsedTotal += argsParsed;
-			if ((argsParsed = ParseArgsForFile  (commandLineArgs)) < 0) return (false); else argsParsedTotal += argsParsed;
+			if ((argsParsed = ParseArgsForHelp(commandLineArgs)) < 0)   return (false); else argsParsedTotal += argsParsed;
+			if ((argsParsed = ParseArgsForFile(commandLineArgs)) < 0)   return (false); else argsParsedTotal += argsParsed;
 			if ((argsParsed = ParseArgsForRecent(commandLineArgs)) < 0) return (false); else argsParsedTotal += argsParsed;
 
 			if (argsParsedTotal != commandLineArgs.Length)

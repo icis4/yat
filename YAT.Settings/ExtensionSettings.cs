@@ -157,5 +157,18 @@ namespace YAT.Settings
 		{
 			get { return (".dat"); }
 		}
+
+		public static string ExecutableFiles
+		{
+			get { return (".exe"); }
+		}
+
+		public static bool IsExecutableFile(string extension)
+		{
+			if (extension == ExecutableFiles)
+				return (true);
+			else
+				return (false);
+		}
 	}
 }

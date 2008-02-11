@@ -15,6 +15,26 @@ namespace YAT.Controller.Test
 		// Tests
 		//==========================================================================================
 
+		#region Tests > EmptyCommandLine
+		//------------------------------------------------------------------------------------------
+		// Tests > EmptyCommandLine
+		//------------------------------------------------------------------------------------------
+
+		[Test]
+		public void TestEmptyCommandLine()
+		{
+			string[] args =
+				{
+				};
+
+			Controller.Main main = new Main(args);
+
+			Assert.IsFalse(main.CommandLineError);
+			Assert.IsFalse(main.CommandLineHelpIsRequested);
+		}
+
+		#endregion
+
 		#region Tests > TerminalCommandLineArg
 		//------------------------------------------------------------------------------------------
 		// Tests > TerminalCommandLineArg
@@ -25,7 +45,6 @@ namespace YAT.Controller.Test
 		{
 			string[] args =
 				{
-					Application.ExecutablePath,
 					Settings.Test.SettingsFilesProvider.FilePaths_Current.TerminalFilePaths[Settings.Test.TerminalSettingsTestCases.T_03_COM1_Closed_Predefined],
 				};
 
@@ -33,7 +52,7 @@ namespace YAT.Controller.Test
 
 			Assert.IsFalse(main.CommandLineError);
 			Assert.IsFalse(main.CommandLineHelpIsRequested);
-			StringAssert.AreEqualIgnoringCase(args[1], main.RequestedFilePath, "Invalid requested terminal settings file path");
+			StringAssert.AreEqualIgnoringCase(args[0], main.RequestedFilePath, "Invalid requested terminal settings file path");
 		}
 
 		#endregion
@@ -48,7 +67,6 @@ namespace YAT.Controller.Test
 		{
 			string[] args =
 				{
-					Application.ExecutablePath,
 					Settings.Test.SettingsFilesProvider.FilePaths_Current.WorkspaceFilePaths[Settings.Test.WorkspaceSettingsTestCases.W_04_Matthias],
 				};
 
@@ -56,7 +74,7 @@ namespace YAT.Controller.Test
 
 			Assert.IsFalse(main.CommandLineError);
 			Assert.IsFalse(main.CommandLineHelpIsRequested);
-			StringAssert.AreEqualIgnoringCase(args[1], main.RequestedFilePath, "Invalid requested workspace settings file path");
+			StringAssert.AreEqualIgnoringCase(args[0], main.RequestedFilePath, "Invalid requested workspace settings file path");
 		}
 
 		#endregion
