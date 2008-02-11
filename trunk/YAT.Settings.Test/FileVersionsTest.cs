@@ -216,19 +216,19 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.15 > Terminal
+		#region Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.17 > Terminal
 		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.15 > Terminal
+		// Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.17 > Terminal
 		//------------------------------------------------------------------------------------------
 
 		// 01_COM1_Open_Default
 		[Test]
 		[Category("Support for COM1 required")]
-		public void Test_V1_99_15_TerminalSettingsCase01()
+		public void Test_V1_99_17_TerminalSettingsCase01()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_15.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
+				SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
 				);
 
 			// create terminal from settings and check whether settings are correctly set
@@ -242,11 +242,11 @@ namespace YAT.Settings.Test
 		// 02_COM2_Open_Binary_115200
 		[Test]
 		[Category("Support for COM2 required")]
-		public void Test_V1_99_15_TerminalSettingsCase02()
+		public void Test_V1_99_17_TerminalSettingsCase02()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_15.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
+				SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
 				);
 
 			// create terminal from settings and check whether settings are correctly set
@@ -259,11 +259,11 @@ namespace YAT.Settings.Test
 
 		// 03_COM1_Closed_Predefined
 		[Test]
-		public void Test_V1_99_15_TerminalSettingsCase03()
+		public void Test_V1_99_17_TerminalSettingsCase03()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_15.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
+				SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
 				);
 
 			// create terminal from settings and check whether settings are correctly set
@@ -276,17 +276,17 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.15 > Workspace
+		#region Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.17 > Workspace
 		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.15 > Workspace
+		// Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.17 > Workspace
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void Test_V1_99_15_WorkspaceSettingsCase04()
+		public void Test_V1_99_17_WorkspaceSettingsCase04()
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
 				(
-				SettingsFilesProvider.FilePaths_V1_99_15.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
+				SettingsFilesProvider.FilePaths_V1_99_17.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
 				);
 
 			// create workspace from settings and check whether settings are correctly set

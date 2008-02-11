@@ -426,6 +426,9 @@ namespace YAT.Model
 			}
 			else if (ExtensionSettings.IsTerminalFile(extension))
 			{
+				if (!CreateNewWorkspace())
+					return (false);
+
 				OnFixedStatusTextRequest("Opening terminal " + fileName + "...");
 				return (_workspace.OpenTerminalFromFile(filePath));
 			}
