@@ -1,0 +1,44 @@
+
+1.	Upload distribution to SourceForge
+	----------------------------------
+	> Open FileZilla
+	> Use anonymous FTP to connect to "upload.sourceforge.net"
+	> Browse to "incoming" directory
+	> Upload .zip's to "incoming"
+
+
+2.	Add release
+	-----------
+	> Select package
+	> Set release name (e.g. "YAT 2.0 Beta 2 Candidate 1 Version 1.99.15")
+	> "Create"
+
+
+3.	Add release notes
+	-----------------
+	> Paste notes in
+	> Paste changes in
+	> Tick "preserve format"
+	> "Submit"
+
+
+4.	Add files to release
+	--------------------
+	> Tick desired files
+	> "Add"
+
+
+5.	Edit files
+	----------
+	> Set processor platform
+	> Set file type
+
+
+6.	Send monitoring email notice
+	----------------------------
+
+
+7.	Check release and release notes
+	-------------------------------
+	> Download release and verify contents
+	> Browse release notes

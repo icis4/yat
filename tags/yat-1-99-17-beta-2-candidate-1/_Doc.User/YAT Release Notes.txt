@@ -1,0 +1,137 @@
+﻿
+********************************************************************************
+                                 YAT Release Notes
+ ------------------------------------------------------------------------------
+                             YAT - Yet Another Terminal
+   RS-232/422/423/485 TCP/UDP terminal to operate and debug serial connections
+ ------------------------------------------------------------------------------
+           Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
+                         Copyright © 2003-2008 Matthias Kläy.
+                                All rights reserved.
+********************************************************************************
+
+
+Contents
+========
+
+1. Install
+2. History
+3. Roadmap
+4. Legal
+
+
+--------------------------------------------------------------------------------
+1. Install
+--------------------------------------------------------------------------------
+
+Simply run "Setup.exe". A wizard will guide you through the rest of the
+installation process.
+
+YAT uses the Microsoft .NET Framework. Setup checks, if .NET is already
+installed on your system. If not, it asks whether to download and install .NET.
+You can also download .NET under "http://www.microsoft.com/net/"
+(.NET Framework Redistributable) and install it manually.
+
+
+--------------------------------------------------------------------------------
+2. History
+--------------------------------------------------------------------------------
+
+Version 2.0
+===========
+
+Release 2.0.0 :: 2008-??-??
+---------------------------
+- Renamed to YAT
+- Upgrade to .NET 2.0
+- Architectural refactoring
+  > Split into Main/Workspace/Terminal
+  > Split into Model/View/Controller
+- Serial COM port component "Charon.Communcations" removed
+- TCP/IP and UDP/IP support added
+- RS-485 support added
+- Baud rates above 115k added
+- Support for non-standard baud rates added
+- Text: Unicode and other encoding support added
+- Binary: Binary sequence line break added
+- Little-endian/big-endian support for \h \d \o \b added
+- Visual appearance modernized
+- Displaying performance improved
+- Support for multi-line commands added
+- Several send options added
+- Application settings shifted from registry to local user directory
+- Terminal settings (.yat) refined
+- Workspace settings (.yaw) introduced
+- Automatic saving and loading of complete workspace added
+- About dialog: Link labels instead of normal labels
+- Automatic testing using NUnit added
+- Release notes moved to menu
+
+
+Version 1.0
+===========
+
+Release 1.0.2 :: 2003-10-31
+---------------------------
+- NewTerminal.Connect registry entry can be empty
+
+Release 1.0.1 :: 2003-10-30
+---------------------------
+- Log Root: CheckPathExists = false / CheckFileExists = false
+- Readme: More precise information on .NET download
+- BufferSettings -> DisplaySettings
+- Click on PortStatus opens connection settings
+- PortStatus update
+- ConnectionSettings recreation
+- Owner drawn ListBoxes
+- Auto ListBox scroll
+- Log file creation/clear bugs fixed
+- FontSettings
+- Connect CheckBox on NewTerminal
+- WindowLayoutUpdateControl
+
+Release 1.0.0 :: 2003-10-14
+---------------------------
+- Initial release
+- Bin/Oct/Dec/Hex/Char/String
+- COM 1..256
+- 75...115000 Baud
+- Predefined Commands/Direct Commands
+- Text/Binary
+- Log Raw/Neat
+- Send files
+- RichTextBoxes
+
+
+--------------------------------------------------------------------------------
+3. Roadmap
+--------------------------------------------------------------------------------
+
+Future releases
+===============
+
+Release 2.1.0 :: Not planned yet
+--------------------------------
+- Plug-In/Scripting Interface
+  > e.g. File Transfer:
+    OnDataReceived() and SendNextLine()
+    => enables reception of multi-line commands
+- RS-232 AutoSense mode
+- Optional user settings (.yau)
+
+
+--------------------------------------------------------------------------------
+4. Legal
+--------------------------------------------------------------------------------
+
+Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
+Copyright © 2003-2008 Matthias Kläy.
+All rights reserved.
+
+YAT is licensed under the CC-GNU GPL.
+For details see http://creativecommons.org/licenses/GPL/2.0/
+
+
+********************************************************************************
+                             End of YAT Release Notes
+********************************************************************************
