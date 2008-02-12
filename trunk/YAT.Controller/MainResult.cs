@@ -12,6 +12,8 @@ namespace YAT.Controller
 		OK = 0,
 		CommandLineArgsError = -1,
 		ApplicationSettingsError = -2,
-		UnhandledException = -3,
+		ApplicationStartError = -3,
+		ApplicationExitError = -4,
+		UnhandledException = -5,
 	}
 }

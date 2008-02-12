@@ -1,0 +1,72 @@
+
+Note:	The whole release process takes about 4 hours
+
+
+1.	Set application versions
+	------------------------
+	> Set product name post fix in
+	  "YAT.Utilities.ApplicationInfo.ProductNamePostFix"
+	> Set product versions in all assembly infos
+
+
+2.	Set installation version
+	------------------------
+	> Set product name in "YAT.Setup"
+	> Set product version in "YAT.Setup"
+
+
+3.	Update and add settings archive
+	-------------------------------
+	> Add new settings set to "_Settings"
+	> Add new settings to "YAT.Settings.Test.SettingsFilesProvider"
+
+
+4.	Run automated tests
+	-------------------
+	> Use NUnit
+
+
+5.	Run manual tests
+	----------------
+	> According to manual test cases
+
+
+6.	Build YAT
+	---------
+	> Use "Build > Batch Build" in VS2005
+	  > Select "Release" configuration
+	  > "Build"
+
+
+7.	Pack YAT
+	--------
+	> Add a new directory to the offline archive "\YAT\Releases and Checkpoints"
+	> Update "\Distribution\Release" and "\Distribution\Release With Redistributable"
+	> Update the two according .zip files
+
+
+8.	Write release notes
+	-------------------
+
+
+9.	Upload YAT
+	----------
+	> According to "HowToUploadDistributionToSourcForge.txt"
+
+
+10.	Send e-mail to the YAT mailing list
+	-----------------------------------
+	> "y-a-terminal-users@lists.sourceforge.net"
+
+
+11.	Commit and tag YAT
+	------------------
+	> Commit any modifications to the subversion repository
+	> Tag/checkpoint the project
+
+
+12.	Archive YAT
+	-----------
+	> Copy the working copy to "\YAT\Releases and Checkpoints\Working Copy"
+	> Clean the copy using "\_Scripts\CleanAll.bat"
+	> Pack the copy into a properly named zip file
