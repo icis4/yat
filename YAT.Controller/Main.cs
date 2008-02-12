@@ -17,7 +17,7 @@ namespace YAT.Controller
 	/// This class is separated into its own .exe project for those who want to use YAT
 	/// components within their own context.
 	/// </remarks>
-	public class Main
+	public class Main : IDisposable
 	{
 		#region Constants
 		//==========================================================================================
@@ -85,7 +85,9 @@ namespace YAT.Controller
 			"   0      Successful exit",
 			"  -1      Command line argument error",
 			"  -2      Application settings error",
-			"  -3      Unhandled exception",
+			"  -3      Application start error",
+			"  -4      Application exit error",
+			"  -5      Unhandled exception",
 		};
 
 		#endregion
@@ -94,6 +96,8 @@ namespace YAT.Controller
 		//==========================================================================================
 		// Fields
 		//==========================================================================================
+
+		private bool _isDisposed = false;
 
 		// command line
 		private bool _commandLineError = false;
@@ -114,6 +118,51 @@ namespace YAT.Controller
 			if (commandLineArgs.Length > 0)
 				_commandLineError = (!ParseCommandLineArgs(commandLineArgs));
 		}
+
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary></summary>
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!_isDisposed)
+			{
+				if (disposing)
+				{
+				}
+				_isDisposed = true;
+			}
+		}
+
+		/// <summary></summary>
+		~Main()
+		{
+			Dispose(false);
+		}
+
+		/// <summary></summary>
+		protected bool IsDisposed
+		{
+			get { return (_isDisposed); }
+		}
+
+		/// <summary></summary>
+		protected void AssertNotDisposed()
+		{
+			if (_isDisposed)
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+		}
+
+		#endregion
 
 		#endregion
 
@@ -146,6 +195,11 @@ namespace YAT.Controller
 
 		public MainResult Run()
 		{
+			return (Run(true));
+		}
+
+		public MainResult Run(bool runWithView)
+		{
 			// show command line help in case of error
 			if (_commandLineError)
 			{
@@ -161,18 +215,37 @@ namespace YAT.Controller
 			}
 
 			// create model and view and run application
+			MainResult mainResult;
 			using (Model.Main model = new Model.Main(_requestedFilePath))
 			{
-				using (Gui.Forms.Main view = new Gui.Forms.Main(model))
+				if (runWithView)
 				{
-					// start the Win32 message loop on the current thread and the main form
-					// \attention This call does not return until the application exits
-					Application.Run(view);
+					using (Gui.Forms.Main view = new Gui.Forms.Main(model))
+					{
+						// start the Win32 message loop on the current thread and the main form
+						// \attention This call does not return until the application exits
+						Application.Run(view);
+					}
+					mainResult = MainResult.OK;
+				}
+				else // non-view application for automated test usage
+				{
+					if (model.Start())
+					{
+						if (model.Exit())
+							mainResult = MainResult.OK;
+						else
+							mainResult = MainResult.ApplicationExitError;
+					}
+					else
+					{
+						mainResult = MainResult.ApplicationStartError;
+					}
 				}
 			}
 			// dispose model and view to ensure immediate release of resources
 
-			return (MainResult.OK);
+			return (mainResult);
 		}
 
 		#endregion
@@ -194,7 +267,7 @@ namespace YAT.Controller
 			if (argsParsedTotal != commandLineArgs.Length)
 				return (false);
 
-			return (true);
+			return (CheckParsedArgsForConsistency());
 		}
 
 		// write help text onto console
@@ -284,6 +357,13 @@ namespace YAT.Controller
 				}
 			}
 			return (argsParsed);
+		}
+
+		// check whether parsed command line args are consistent
+		bool CheckParsedArgsForConsistency()
+		{
+			// nothing to check yet, always return true
+			return (true);
 		}
 
 		#endregion

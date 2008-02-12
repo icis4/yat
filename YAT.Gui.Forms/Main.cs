@@ -154,7 +154,7 @@ namespace YAT.Gui.Forms
 			if (!_isClosingFromModel)
 			{
 				_isClosingFromForm = true;
-				e.Cancel = (!_main.Close());
+				e.Cancel = (!_main.Exit());
 			}
 		}
 
@@ -647,7 +647,7 @@ namespace YAT.Gui.Forms
 			_main.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_main_TimedStatusTextRequest);
 			_main.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(_main_MessageInputRequest);
 
-			_main.Closed += new EventHandler(_main_Closed);
+			_main.Exited += new EventHandler(_main_Exited);
 		}
 
 		private void DetachMainEventHandlers()
@@ -659,7 +659,7 @@ namespace YAT.Gui.Forms
 			_main.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_main_TimedStatusTextRequest);
 			_main.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(_main_MessageInputRequest);
 
-			_main.Closed -= new EventHandler(_main_Closed);
+			_main.Exited -= new EventHandler(_main_Exited);
 		}
 
 		#endregion
@@ -697,7 +697,7 @@ namespace YAT.Gui.Forms
 			e.Result = dr;
 		}
 
-		private void _main_Closed(object sender, EventArgs e)
+		private void _main_Exited(object sender, EventArgs e)
 		{
 			// prevent multiple calls to Close()
 			if (!_isClosingFromForm)

@@ -83,14 +83,14 @@ namespace YAT.Settings.Test
 
 		static SettingsFilesProvider()
 		{
-			// 1.99.12
+			// V1.99.12
 			_settingsFilePaths_V1_99_12 = new SettingsFilePaths("2007-04-15 - YAT 2.0 Beta 1 Version 1.99.12");
 
 			_settingsFilePaths_V1_99_12.AddTerminalFileName(TerminalSettingsTestCases.T_01_COM1_Open_Default,       "01 - COM1 - Open - Default.yat");
 			_settingsFilePaths_V1_99_12.AddTerminalFileName(TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
 			_settingsFilePaths_V1_99_12.AddTerminalFileName(TerminalSettingsTestCases.T_03_COM1_Closed_Predefined,  "03 - COM1 - Closed - Predefined.yat");
 
-			// 1.99.13
+			// V1.99.13
 			_settingsFilePaths_V1_99_13 = new SettingsFilePaths("2007-08-30 - YAT 2.0 Beta 2 Preliminary Version 1.99.13");
 
 			_settingsFilePaths_V1_99_13.AddTerminalFileName(TerminalSettingsTestCases.T_01_COM1_Open_Default,       "01 - COM1 - Open - Default.yat");
@@ -99,7 +99,7 @@ namespace YAT.Settings.Test
 
 			_settingsFilePaths_V1_99_13.AddWorkspaceFileName(WorkspaceSettingsTestCases.W_04_Matthias, "04 - Matthias.yaw");
 
-			// 1.99.17
+			// V1.99.17
 			_settingsFilePaths_V1_99_17 = new SettingsFilePaths("2008-02-11 - YAT 2.0 Beta 2 Candidate 1 Version 1.99.17");
 
 			_settingsFilePaths_V1_99_17.AddTerminalFileName(TerminalSettingsTestCases.T_01_COM1_Open_Default,       "01 - COM1 - Open - Default.yat");

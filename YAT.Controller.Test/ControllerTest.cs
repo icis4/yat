@@ -5,11 +5,50 @@ using System.Windows.Forms;
 
 using NUnit.Framework;
 
+using YAT.Settings.Application;
+
 namespace YAT.Controller.Test
 {
 	[TestFixture]
 	public class ControllerTest
 	{
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
+		private bool _autoSaveWorkspaceToRestore;
+
+		#endregion
+
+		#region Set Up Fixture
+		//==========================================================================================
+		// Set Up Fixture
+		//==========================================================================================
+
+		[TestFixtureSetUp]
+		public void TestFixtureSetUp()
+		{
+			// prevent auto-save of workspace settings
+			_autoSaveWorkspaceToRestore = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
+			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = false;
+		}
+
+		#endregion
+
+		#region Tear Down Fixture
+		//==========================================================================================
+		// Tear Down Fixture
+		//==========================================================================================
+
+		[TestFixtureTearDown]
+		public void TestFixtureTearDown()
+		{
+			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = _autoSaveWorkspaceToRestore;
+		}
+
+		#endregion
+
 		#region Tests
 		//==========================================================================================
 		// Tests
@@ -23,14 +62,11 @@ namespace YAT.Controller.Test
 		[Test]
 		public void TestEmptyCommandLine()
 		{
-			string[] args =
-				{
-				};
-
-			Controller.Main main = new Main(args);
-
-			Assert.IsFalse(main.CommandLineError);
-			Assert.IsFalse(main.CommandLineHelpIsRequested);
+			using (Controller.Main main = new Main(EmptyArgs))
+			{
+				Assert.IsFalse(main.CommandLineError);
+				Assert.IsFalse(main.CommandLineHelpIsRequested);
+			}
 		}
 
 		#endregion
@@ -43,16 +79,12 @@ namespace YAT.Controller.Test
 		[Test]
 		public void TestTerminalCommandLineArg()
 		{
-			string[] args =
-				{
-					Settings.Test.SettingsFilesProvider.FilePaths_Current.TerminalFilePaths[Settings.Test.TerminalSettingsTestCases.T_03_COM1_Closed_Predefined],
-				};
-
-			Controller.Main main = new Main(args);
-
-			Assert.IsFalse(main.CommandLineError);
-			Assert.IsFalse(main.CommandLineHelpIsRequested);
-			StringAssert.AreEqualIgnoringCase(args[0], main.RequestedFilePath, "Invalid requested terminal settings file path");
+			using (Controller.Main main = new Main(TeriminalArgs))
+			{
+				Assert.IsFalse(main.CommandLineError);
+				Assert.IsFalse(main.CommandLineHelpIsRequested);
+				StringAssert.AreEqualIgnoringCase(TeriminalArgs[0], main.RequestedFilePath, "Invalid requested terminal settings file path");
+			}
 		}
 
 		#endregion
@@ -65,19 +97,181 @@ namespace YAT.Controller.Test
 		[Test]
 		public void TestWorkspaceCommandLineArg()
 		{
-			string[] args =
-				{
-					Settings.Test.SettingsFilesProvider.FilePaths_Current.WorkspaceFilePaths[Settings.Test.WorkspaceSettingsTestCases.W_04_Matthias],
-				};
-
-			Controller.Main main = new Main(args);
-
-			Assert.IsFalse(main.CommandLineError);
-			Assert.IsFalse(main.CommandLineHelpIsRequested);
-			StringAssert.AreEqualIgnoringCase(args[0], main.RequestedFilePath, "Invalid requested workspace settings file path");
+			using (Controller.Main main = new Main(WorkspaceArgs))
+			{
+				Assert.IsFalse(main.CommandLineError);
+				Assert.IsFalse(main.CommandLineHelpIsRequested);
+				StringAssert.AreEqualIgnoringCase(WorkspaceArgs[0], main.RequestedFilePath, "Invalid requested workspace settings file path");
+			}
 		}
 
 		#endregion
+
+		#region Tests > EmptyCommandLineRun
+		//------------------------------------------------------------------------------------------
+		// Tests > EmptyCommandLineRun
+		//------------------------------------------------------------------------------------------
+
+		[Test]
+		public void TestEmptyCommandLineRun()
+		{
+			using (Controller.Main main = new Main(EmptyArgs))
+			{
+				RunAndVerifyApplicationWithoutView(main);
+			}
+		}
+
+		#endregion
+
+		#region Tests > TerminalCommandLineArgRun
+		//------------------------------------------------------------------------------------------
+		// Tests > TerminalCommandLineArgRun
+		//------------------------------------------------------------------------------------------
+
+		[Test]
+		public void TestTerminalCommandLineArgRun()
+		{
+			using (Controller.Main main = new Main(TeriminalArgs))
+			{
+				RunAndVerifyApplicationWithoutView(main);
+			}
+		}
+
+		#endregion
+
+		#region Tests > WorkspaceCommandLineArgRun
+		//------------------------------------------------------------------------------------------
+		// Tests > WorkspaceCommandLineArgRun
+		//------------------------------------------------------------------------------------------
+
+		[Test]
+		public void TestWorkspaceCommandLineArgRun()
+		{
+			using (Controller.Main main = new Main(WorkspaceArgs))
+			{
+				RunAndVerifyApplicationWithoutView(main);
+			}
+		}
+
+		#endregion
+
+		#region Tests > EmptyCommandLineRunInteractive
+		//------------------------------------------------------------------------------------------
+		// Tests > EmptyCommandLineRunInteractive
+		//------------------------------------------------------------------------------------------
+
+		[Test]
+		[Category("Interactive")]
+		public void TestEmptyCommandLineRunInteractive()
+		{
+			using (Controller.Main main = new Main(EmptyArgs))
+			{
+				RunAndVerifyApplication(main);
+			}
+		}
+
+		#endregion
+
+		#region Tests > TerminalCommandLineArgRunInteractive
+		//------------------------------------------------------------------------------------------
+		// Tests > TerminalCommandLineArgRunInteractive
+		//------------------------------------------------------------------------------------------
+
+		[Test]
+		[Category("Interactive")]
+		public void TestTerminalCommandLineArgRunInteractive()
+		{
+			using (Controller.Main main = new Main(TeriminalArgs))
+			{
+				RunAndVerifyApplication(main);
+			}
+		}
+
+		#endregion
+
+		#region Tests > WorkspaceCommandLineArgRunInteractive
+		//------------------------------------------------------------------------------------------
+		// Tests > WorkspaceCommandLineArgRunInteractive
+		//------------------------------------------------------------------------------------------
+
+		[Test]
+		[Category("Interactive")]
+		public void TestWorkspaceCommandLineArgRunInteractive()
+		{
+			using (Controller.Main main = new Main(WorkspaceArgs))
+			{
+				RunAndVerifyApplication(main);
+			}
+		}
+
+		#endregion
+
+		#endregion
+
+		#region Private Properties
+		//==========================================================================================
+		// Private Properties
+		//==========================================================================================
+
+		private string[] EmptyArgs
+		{
+			get
+			{
+				return
+				(
+					new string[]
+					{
+					}
+				);
+			}
+		}
+
+		private string[] TeriminalArgs
+		{
+			get
+			{
+				return
+				(
+					new string[]
+					{
+						Settings.Test.SettingsFilesProvider.FilePaths_Current.TerminalFilePaths[Settings.Test.TerminalSettingsTestCases.T_03_COM1_Closed_Predefined],
+					}
+				);
+			}
+		}
+
+		private string[] WorkspaceArgs
+		{
+			get
+			{
+				return
+				(
+					new string[]
+					{
+						Settings.Test.SettingsFilesProvider.FilePaths_Current.WorkspaceFilePaths[Settings.Test.WorkspaceSettingsTestCases.W_04_Matthias],
+					}
+				);
+			}
+		}
+
+		#endregion
+
+		#region Private Methods
+		//==========================================================================================
+		// Private Methods
+		//==========================================================================================
+
+		private void RunAndVerifyApplication(Controller.Main main)
+		{
+			MainResult mainResult = main.Run();
+			Assert.AreEqual(MainResult.OK, mainResult);
+		}
+
+		private void RunAndVerifyApplicationWithoutView(Controller.Main main)
+		{
+			MainResult mainResult = main.Run(false);
+			Assert.AreEqual(MainResult.OK, mainResult);
+		}
 
 		#endregion
 	}

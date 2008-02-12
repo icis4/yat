@@ -57,7 +57,7 @@ namespace YAT.Model
 		public event EventHandler<MessageInputEventArgs> MessageInputRequest;
 
 		/// <summary></summary>
-		public event EventHandler Closed;
+		public event EventHandler Exited;
 
 		#endregion
 
@@ -312,7 +312,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public bool Close()
+		public bool Exit()
 		{
 			bool success = _workspace.Close(true);
 
@@ -322,7 +322,7 @@ namespace YAT.Model
 				OnTimedStatusTextRequest("Exit cancelled");
 
 			if (success)
-				OnClosed(new EventArgs());
+				OnExited(new EventArgs());
 
 			return (success);
 		}
@@ -582,9 +582,9 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void OnClosed(EventArgs e)
+		protected virtual void OnExited(EventArgs e)
 		{
-			EventHelper.FireSync(Closed, this, e);
+			EventHelper.FireSync(Exited, this, e);
 		}
 
 		#endregion
