@@ -60,7 +60,7 @@ namespace YAT.Gui.Forms
 			// button_Defaults
 			// 
 			this.button_Defaults.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Defaults.Location = new System.Drawing.Point(323, 136);
+			this.button_Defaults.Location = new System.Drawing.Point(300, 136);
 			this.button_Defaults.Name = "button_Defaults";
 			this.button_Defaults.Size = new System.Drawing.Size(75, 23);
 			this.button_Defaults.TabIndex = 3;
@@ -71,7 +71,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button_Cancel.Location = new System.Drawing.Point(323, 72);
+			this.button_Cancel.Location = new System.Drawing.Point(300, 72);
 			this.button_Cancel.Name = "button_Cancel";
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 2;
@@ -82,7 +82,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.button_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_OK.Location = new System.Drawing.Point(323, 43);
+			this.button_OK.Location = new System.Drawing.Point(300, 43);
 			this.button_OK.Name = "button_OK";
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 1;
@@ -100,7 +100,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.Controls.Add(this.groupBox_DisplaySettings);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
-			this.groupBox_Settings.Size = new System.Drawing.Size(299, 341);
+			this.groupBox_Settings.Size = new System.Drawing.Size(276, 341);
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
 			// 
@@ -112,7 +112,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_CommunicationSettings.Controls.Add(this.label_Endianess);
 			this.groupBox_CommunicationSettings.Location = new System.Drawing.Point(6, 161);
 			this.groupBox_CommunicationSettings.Name = "groupBox_CommunicationSettings";
-			this.groupBox_CommunicationSettings.Size = new System.Drawing.Size(286, 48);
+			this.groupBox_CommunicationSettings.Size = new System.Drawing.Size(263, 48);
 			this.groupBox_CommunicationSettings.TabIndex = 1;
 			this.groupBox_CommunicationSettings.TabStop = false;
 			this.groupBox_CommunicationSettings.Text = "Communication Settings";
@@ -124,7 +124,7 @@ namespace YAT.Gui.Forms
 			this.comboBox_Endianess.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_Endianess.Location = new System.Drawing.Point(70, 18);
 			this.comboBox_Endianess.Name = "comboBox_Endianess";
-			this.comboBox_Endianess.Size = new System.Drawing.Size(205, 21);
+			this.comboBox_Endianess.Size = new System.Drawing.Size(182, 21);
 			this.comboBox_Endianess.TabIndex = 3;
 			this.comboBox_Endianess.SelectedIndexChanged += new System.EventHandler(this.comboBox_Endianess_SelectedIndexChanged);
 			// 
@@ -146,7 +146,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_ReceiveSettings.Controls.Add(this.textBox_ParityReplacement);
 			this.groupBox_ReceiveSettings.Location = new System.Drawing.Point(6, 269);
 			this.groupBox_ReceiveSettings.Name = "groupBox_ReceiveSettings";
-			this.groupBox_ReceiveSettings.Size = new System.Drawing.Size(286, 65);
+			this.groupBox_ReceiveSettings.Size = new System.Drawing.Size(263, 65);
 			this.groupBox_ReceiveSettings.TabIndex = 3;
 			this.groupBox_ReceiveSettings.TabStop = false;
 			this.groupBox_ReceiveSettings.Text = "Receive Settings";
@@ -184,7 +184,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_TransmitSettings.Controls.Add(this.checkBox_LocalEcho);
 			this.groupBox_TransmitSettings.Location = new System.Drawing.Point(6, 215);
 			this.groupBox_TransmitSettings.Name = "groupBox_TransmitSettings";
-			this.groupBox_TransmitSettings.Size = new System.Drawing.Size(286, 48);
+			this.groupBox_TransmitSettings.Size = new System.Drawing.Size(263, 48);
 			this.groupBox_TransmitSettings.TabIndex = 2;
 			this.groupBox_TransmitSettings.TabStop = false;
 			this.groupBox_TransmitSettings.Text = "Transmit Settings";
@@ -215,7 +215,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_DisplaySettings.Controls.Add(this.label_MaximalLineCount);
 			this.groupBox_DisplaySettings.Location = new System.Drawing.Point(6, 13);
 			this.groupBox_DisplaySettings.Name = "groupBox_DisplaySettings";
-			this.groupBox_DisplaySettings.Size = new System.Drawing.Size(286, 142);
+			this.groupBox_DisplaySettings.Size = new System.Drawing.Size(263, 142);
 			this.groupBox_DisplaySettings.TabIndex = 2;
 			this.groupBox_DisplaySettings.TabStop = false;
 			this.groupBox_DisplaySettings.Text = "Display Settings";
@@ -257,7 +257,7 @@ namespace YAT.Gui.Forms
 			this.comboBox_Radix.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_Radix.Location = new System.Drawing.Point(70, 18);
 			this.comboBox_Radix.Name = "comboBox_Radix";
-			this.comboBox_Radix.Size = new System.Drawing.Size(205, 21);
+			this.comboBox_Radix.Size = new System.Drawing.Size(182, 21);
 			this.comboBox_Radix.TabIndex = 1;
 			this.comboBox_Radix.SelectedIndexChanged += new System.EventHandler(this.comboBox_Radix_SelectedIndexChanged);
 			// 
@@ -309,7 +309,7 @@ namespace YAT.Gui.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(407, 365);
+			this.ClientSize = new System.Drawing.Size(384, 365);
 			this.Controls.Add(this.groupBox_Settings);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.button_Cancel);

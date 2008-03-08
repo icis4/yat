@@ -1113,7 +1113,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits  = MKY.IO.Ports.DataBits.Seven;
 					settings.Parity    = System.IO.Ports.Parity.Even;
 					settings.StopBits  = System.IO.Ports.StopBits.One;
-					settings.Handshake = Domain.IO.Handshake.None;
+					settings.FlowControl = Domain.IO.FlowControl.None;
 					break;
 				}
 				case 2: // "2400, 7, Even, 1, XOn/XOff"
@@ -1122,7 +1122,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits  = MKY.IO.Ports.DataBits.Seven;
 					settings.Parity    = System.IO.Ports.Parity.Even;
 					settings.StopBits  = System.IO.Ports.StopBits.One;
-					settings.Handshake = Domain.IO.Handshake.XOnXOff;
+					settings.FlowControl = Domain.IO.FlowControl.XOnXOff;
 					break;
 				}
 				case 3: // "9600, 8, None, 1, None"
@@ -1131,7 +1131,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits  = MKY.IO.Ports.DataBits.Eight;
 					settings.Parity    = System.IO.Ports.Parity.None;
 					settings.StopBits  = System.IO.Ports.StopBits.One;
-					settings.Handshake = Domain.IO.Handshake.None;
+					settings.FlowControl = Domain.IO.FlowControl.None;
 					break;
 				}
 				case 4: // "9600, 8, None, 1, XOn/XOff"
@@ -1140,7 +1140,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits  = MKY.IO.Ports.DataBits.Eight;
 					settings.Parity    = System.IO.Ports.Parity.None;
 					settings.StopBits  = System.IO.Ports.StopBits.One;
-					settings.Handshake = Domain.IO.Handshake.XOnXOff;
+					settings.FlowControl = Domain.IO.FlowControl.XOnXOff;
 					break;
 				}
 				case 5: // "19200, 8, None, 1, None"
@@ -1149,7 +1149,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits  = MKY.IO.Ports.DataBits.Eight;
 					settings.Parity    = System.IO.Ports.Parity.None;
 					settings.StopBits  = System.IO.Ports.StopBits.One;
-					settings.Handshake = Domain.IO.Handshake.None;
+					settings.FlowControl = Domain.IO.FlowControl.None;
 					break;
 				}
 				case 6: // "19200, 8, None, 1, XOn/XOff"
@@ -1158,7 +1158,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits  = MKY.IO.Ports.DataBits.Eight;
 					settings.Parity    = System.IO.Ports.Parity.None;
 					settings.StopBits  = System.IO.Ports.StopBits.One;
-					settings.Handshake = Domain.IO.Handshake.XOnXOff;
+					settings.FlowControl = Domain.IO.FlowControl.XOnXOff;
 					break;
 				}
 			}
@@ -1279,9 +1279,7 @@ namespace YAT.Gui.Forms
 
 		private void ClearCountStatus()
 		{
-			monitor_Tx.ResetCountStatus();
-			monitor_Bidir.ResetCountStatus();
-			monitor_Rx.ResetCountStatus();
+			_terminal.ResetCount();
 		}
 
 		#endregion
@@ -1829,11 +1827,18 @@ namespace YAT.Gui.Forms
 			int txByteCount = _terminal.TxByteCount;
 			int rxByteCount = _terminal.RxByteCount;
 
+			int txLineCount = _terminal.TxLineCount;
+			int rxLineCount = _terminal.RxLineCount;
+
 			monitor_Tx.TxByteCountStatus    = txByteCount;
+			monitor_Tx.TxLineCountStatus    = txLineCount;
 			monitor_Bidir.TxByteCountStatus = txByteCount;
+			monitor_Bidir.TxLineCountStatus = txLineCount;
 
 			monitor_Bidir.RxByteCountStatus = rxByteCount;
+			monitor_Bidir.RxLineCountStatus = rxLineCount;
 			monitor_Rx.RxByteCountStatus    = rxByteCount;
+			monitor_Rx.RxLineCountStatus    = rxLineCount;
 		}
 
 		private void _terminal_IOError(object sender, Domain.ErrorEventArgs e)
@@ -2300,9 +2305,9 @@ namespace YAT.Gui.Forms
 					MKY.IO.Ports.SerialPortControlPins pins;
 					pins = ((MKY.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance).ControlPins;
 
-					bool rs485Handshake = (_settingsRoot.Terminal.IO.SerialPort.Communication.Handshake == Domain.IO.Handshake.RS485);
+					bool rs485FlowControl = (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == Domain.IO.FlowControl.RS485);
 
-					if (rs485Handshake)
+					if (rs485FlowControl)
 					{
 						if (pins.Rts)
 							TriggerRtsLuminescence();
@@ -2317,11 +2322,11 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_DSR.Image = (pins.Dsr ? on : off);
 					toolStripStatusLabel_TerminalStatus_DCD.Image = (pins.Cd ? on : off);
 
-					bool manualHandshake = (_settingsRoot.Terminal.IO.SerialPort.Communication.Handshake == Domain.IO.Handshake.Manual);
+					bool manualFlowControl = (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == Domain.IO.FlowControl.Manual);
 
-					toolStripStatusLabel_TerminalStatus_RTS.ForeColor = (manualHandshake ? SystemColors.ControlText : SystemColors.GrayText);
+					toolStripStatusLabel_TerminalStatus_RTS.ForeColor = (manualFlowControl ? SystemColors.ControlText : SystemColors.GrayText);
 					toolStripStatusLabel_TerminalStatus_CTS.ForeColor = SystemColors.GrayText;
-					toolStripStatusLabel_TerminalStatus_DTR.ForeColor = (manualHandshake ? SystemColors.ControlText : SystemColors.GrayText);
+					toolStripStatusLabel_TerminalStatus_DTR.ForeColor = (manualFlowControl ? SystemColors.ControlText : SystemColors.GrayText);
 					toolStripStatusLabel_TerminalStatus_DSR.ForeColor = SystemColors.GrayText;
 					toolStripStatusLabel_TerminalStatus_DCD.ForeColor = SystemColors.GrayText;
 				}

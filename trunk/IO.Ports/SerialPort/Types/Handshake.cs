@@ -9,6 +9,10 @@ namespace MKY.IO.Ports
 	/// <summary>
 	/// Extended enum XHandshake.
 	/// </summary>
+	/// <remarks>
+	/// I think flow control would the better identifier, no clue why .NET uses the
+	/// term handshake.
+	/// </remarks>
 	[Serializable]
 	public class XHandshake : XEnum
 	{

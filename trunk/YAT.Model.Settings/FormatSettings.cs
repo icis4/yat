@@ -60,7 +60,7 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			FontFormat        = new FontFormat("Courier New", 8.25f, FontStyle.Regular);
+			FontFormat        = new FontFormat(Types.FontFormat.NameDefault, Types.FontFormat.SizeDefault, Types.FontFormat.StyleDefault);
 			TxDataFormat      = new TextFormat(Color.Blue, true, false, false, false);
 			TxControlFormat   = new TextFormat(Color.Blue, false, false, false, false);
 			RxDataFormat      = new TextFormat(Color.Purple, true, false, false, false);

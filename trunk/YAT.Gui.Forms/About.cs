@@ -117,6 +117,14 @@ namespace YAT.Gui.Forms
 			start = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
 			linkLabel_Environment.Links.Add(start, textLink.Length, "http://www.glyfx.com/");
+			linkLabel_Environment.Text += Environment.NewLine;
+
+			textBefore = "   > Terminal font ";
+			textLink = "DejaVu";
+			linkLabel_Environment.Text += textBefore;
+			start = linkLabel_Environment.Text.Length;
+			linkLabel_Environment.Text += textLink;
+			linkLabel_Environment.Links.Add(start, textLink.Length, "http://dejavu.sourceforge.net/");
 
 			// home
 			linkLabel_Home.Text = "";

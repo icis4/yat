@@ -128,10 +128,10 @@ namespace YAT.Gui.Forms
 				_settings_Form.IO.SerialPort.Communication.StopBits = serialPortSettings.StopBits;
 		}
 
-		private void serialPortSettings_HandshakeChanged(object sender, EventArgs e)
+		private void serialPortSettings_FlowControlChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
-				_settings_Form.IO.SerialPort.Communication.Handshake = serialPortSettings.Handshake;
+				_settings_Form.IO.SerialPort.Communication.FlowControl = serialPortSettings.FlowControl;
 		}
 
 		private void socketSelection_RemoteHostNameOrAddressChanged(object sender, EventArgs e)
@@ -282,7 +282,7 @@ namespace YAT.Gui.Forms
 			serialPortSettings.DataBits  = _settings_Form.IO.SerialPort.Communication.DataBits;
 			serialPortSettings.Parity    = _settings_Form.IO.SerialPort.Communication.Parity;
 			serialPortSettings.StopBits  = _settings_Form.IO.SerialPort.Communication.StopBits;
-			serialPortSettings.Handshake = _settings_Form.IO.SerialPort.Communication.Handshake;
+			serialPortSettings.FlowControl = _settings_Form.IO.SerialPort.Communication.FlowControl;
 
 			_isSettingControls = false;
 		}

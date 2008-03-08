@@ -129,6 +129,12 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		public Terminal(TerminalSettingsRoot settings)
+		{
+			Initialize(new DocumentSettingsHandler<TerminalSettingsRoot>(settings), Guid.NewGuid());
+		}
+
+		/// <summary></summary>
 		public Terminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
 			Initialize(settingsHandler, Guid.NewGuid());
@@ -1007,11 +1013,11 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Toggles RTS line if current handshake settings allow this
+		/// Toggles RTS line if current flow control settings allow this
 		/// </summary>
 		public void RequestToggleRts()
 		{
-			if (_settingsRoot.Terminal.IO.SerialPort.Communication.Handshake == Domain.IO.Handshake.Manual)
+			if (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == Domain.IO.FlowControl.Manual)
 			{
 				MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance;
 				port.ToggleRts();
@@ -1020,11 +1026,11 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Toggles DTR line if current handshake settings allow this
+		/// Toggles DTR line if current flow control settings allow this
 		/// </summary>
 		public void RequestToggleDtr()
 		{
-			if (_settingsRoot.Terminal.IO.SerialPort.Communication.Handshake == Domain.IO.Handshake.Manual)
+			if (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == Domain.IO.FlowControl.Manual)
 			{
 				MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance;
 				port.ToggleDtr();

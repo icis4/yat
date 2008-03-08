@@ -57,7 +57,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.button_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Close.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_Close.Location = new System.Drawing.Point(527, 310);
+			this.button_Close.Location = new System.Drawing.Point(527, 327);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
 			this.button_Close.TabIndex = 13;
@@ -166,9 +166,10 @@ namespace YAT.Gui.Forms
 			// 
 			// linkLabel_Home
 			// 
+			this.linkLabel_Home.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.linkLabel_Home.AutoSize = true;
 			this.linkLabel_Home.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_Home.Location = new System.Drawing.Point(12, 297);
+			this.linkLabel_Home.Location = new System.Drawing.Point(12, 314);
 			this.linkLabel_Home.Name = "linkLabel_Home";
 			this.linkLabel_Home.Size = new System.Drawing.Size(322, 13);
 			this.linkLabel_Home.TabIndex = 10;
@@ -191,16 +192,17 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Environment.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_Environment.Location = new System.Drawing.Point(12, 211);
 			this.linkLabel_Environment.Name = "linkLabel_Environment";
-			this.linkLabel_Environment.Size = new System.Drawing.Size(352, 78);
+			this.linkLabel_Environment.Size = new System.Drawing.Size(352, 91);
 			this.linkLabel_Environment.TabIndex = 9;
 			this.linkLabel_Environment.Text = resources.GetString("linkLabel_Environment.Text");
 			this.linkLabel_Environment.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
 			// linkLabel_Author
 			// 
+			this.linkLabel_Author.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.linkLabel_Author.AutoSize = true;
 			this.linkLabel_Author.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_Author.Location = new System.Drawing.Point(12, 320);
+			this.linkLabel_Author.Location = new System.Drawing.Point(12, 337);
 			this.linkLabel_Author.Name = "linkLabel_Author";
 			this.linkLabel_Author.Size = new System.Drawing.Size(65, 13);
 			this.linkLabel_Author.TabIndex = 11;
@@ -235,7 +237,7 @@ namespace YAT.Gui.Forms
 			this.AcceptButton = this.button_Close;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.button_Close;
-			this.ClientSize = new System.Drawing.Size(614, 345);
+			this.ClientSize = new System.Drawing.Size(614, 362);
 			this.Controls.Add(this.pictureBox_License);
 			this.Controls.Add(this.linkLabel_Trademark);
 			this.Controls.Add(this.linkLabel_Environment);

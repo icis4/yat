@@ -19,11 +19,11 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const int                      _BaudRateDefault  = (int)MKY.IO.Ports.BaudRate.Baud009600;
-		private const MKY.IO.Ports.DataBits    _DataBitsDefault  = MKY.IO.Ports.DataBits.Eight;
-		private const System.IO.Ports.Parity   _ParityDefault    = System.IO.Ports.Parity.None;
-		private const System.IO.Ports.StopBits _StopBitsDefault  = System.IO.Ports.StopBits.One;
-		private const Domain.IO.Handshake      _HandshakeDefault = Domain.IO.Handshake.None;
+		private const int                      _BaudRateDefault    = (int)MKY.IO.Ports.BaudRate.Baud009600;
+		private const MKY.IO.Ports.DataBits    _DataBitsDefault    = MKY.IO.Ports.DataBits.Eight;
+		private const System.IO.Ports.Parity   _ParityDefault      = System.IO.Ports.Parity.None;
+		private const System.IO.Ports.StopBits _StopBitsDefault    = System.IO.Ports.StopBits.One;
+		private const Domain.IO.FlowControl    _FlowControlDefault = Domain.IO.FlowControl.None;
 
 		#endregion
 
@@ -34,11 +34,11 @@ namespace YAT.Gui.Controls
 
 		private bool _isSettingControls = false;
 
-		private int                      _baudRate  = _BaudRateDefault;
-		private MKY.IO.Ports.DataBits    _dataBits  = _DataBitsDefault;
-		private System.IO.Ports.Parity   _parity    = _ParityDefault;
-		private System.IO.Ports.StopBits _stopBits  = _StopBitsDefault;
-		private Domain.IO.Handshake      _handshake = _HandshakeDefault;
+		private int                      _baudRate    = _BaudRateDefault;
+		private MKY.IO.Ports.DataBits    _dataBits    = _DataBitsDefault;
+		private System.IO.Ports.Parity   _parity      = _ParityDefault;
+		private System.IO.Ports.StopBits _stopBits    = _StopBitsDefault;
+		private Domain.IO.FlowControl    _flowControl = _FlowControlDefault;
 
 		#endregion
 
@@ -64,8 +64,8 @@ namespace YAT.Gui.Controls
 		public event EventHandler StopBitsChanged;
 
 		[Category("Property Changed")]
-		[Description("Event raised when the Handshake property is changed.")]
-		public event EventHandler HandshakeChanged;
+		[Description("Event raised when the FlowControl property is changed.")]
+		public event EventHandler FlowControlChanged;
 
 		#endregion
 
@@ -158,18 +158,18 @@ namespace YAT.Gui.Controls
 		}
 
 		[Category("Serial Port")]
-		[Description("The handshake type.")]
-		[DefaultValue(_HandshakeDefault)]
-		public Domain.IO.Handshake Handshake
+		[Description("The flow control type.")]
+		[DefaultValue(_FlowControlDefault)]
+		public Domain.IO.FlowControl FlowControl
 		{
-			get { return (_handshake); }
+			get { return (_flowControl); }
 			set
 			{
-				if (_handshake != value)
+				if (_flowControl != value)
 				{
-					_handshake = value;
+					_flowControl = value;
 					SetControls();
-					OnHandshakeChanged(new EventArgs());
+					OnFlowControlChanged(new EventArgs());
 				}
 			}
 		}
@@ -238,10 +238,10 @@ namespace YAT.Gui.Controls
 				StopBits = (MKY.IO.Ports.XStopBits)comboBox_StopBits.SelectedItem;
 		}
 
-		private void comboBox_Handshake_SelectedIndexChanged(object sender, EventArgs e)
+		private void comboBox_FlowControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
-				Handshake = (Domain.IO.XHandshake)comboBox_Handshake.SelectedItem;
+				FlowControl = (Domain.IO.XFlowControl)comboBox_FlowControl.SelectedItem;
 		}
 
 		#endregion
@@ -259,7 +259,7 @@ namespace YAT.Gui.Controls
 			comboBox_DataBits.Items.AddRange(MKY.IO.Ports.XDataBits.GetItems());
 			comboBox_Parity.Items.AddRange(MKY.IO.Ports.XParity.GetItems());
 			comboBox_StopBits.Items.AddRange(MKY.IO.Ports.XStopBits.GetItems());
-			comboBox_Handshake.Items.AddRange(Domain.IO.XHandshake.GetItems());
+			comboBox_FlowControl.Items.AddRange(Domain.IO.XFlowControl.GetItems());
 
 			_isSettingControls = false;
 		}
@@ -277,7 +277,7 @@ namespace YAT.Gui.Controls
 			comboBox_DataBits.SelectedItem  = (MKY.IO.Ports.XDataBits)_dataBits;
 			comboBox_Parity.SelectedItem    = (MKY.IO.Ports.XParity)_parity;
 			comboBox_StopBits.SelectedItem  = (MKY.IO.Ports.XStopBits)_stopBits;
-			comboBox_Handshake.SelectedItem = (Domain.IO.XHandshake)_handshake;
+			comboBox_FlowControl.SelectedItem = (Domain.IO.XFlowControl)_flowControl;
 
 			_isSettingControls = false;
 		}
@@ -309,9 +309,9 @@ namespace YAT.Gui.Controls
 			EventHelper.FireSync(StopBitsChanged, this, e);
 		}
 
-		protected virtual void OnHandshakeChanged(EventArgs e)
+		protected virtual void OnFlowControlChanged(EventArgs e)
 		{
-			EventHelper.FireSync(HandshakeChanged, this, e);
+			EventHelper.FireSync(FlowControlChanged, this, e);
 		}
 
 		#endregion

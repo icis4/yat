@@ -6,10 +6,14 @@ using MKY.Utilities.Types;
 
 namespace YAT.Domain.IO
 {
-	#region Enum Handshake
+	#region Enum FlowControl
 
 	/// <summary></summary>
-	public enum Handshake
+	/// <remarks>
+	/// I think flow control is the better identifier, no clue why .NET uses the
+	/// term flowControl.
+	/// </remarks>
+	public enum FlowControl
 	{
 		/// <summary></summary>
 		None = System.IO.Ports.Handshake.None,
@@ -29,7 +33,7 @@ namespace YAT.Domain.IO
 
 	/// <summary></summary>
 	[Serializable]
-	public class XHandshake : MKY.IO.Ports.XHandshake
+	public class XFlowControl : MKY.IO.Ports.XHandshake
 	{
 		#region String Definitions
 
@@ -40,15 +44,15 @@ namespace YAT.Domain.IO
 
 		#endregion
 
-		/// <summary>Default is <see cref="Handshake.None"/></summary>
-		public XHandshake()
-			: base((System.IO.Ports.Handshake)Handshake.None)
+		/// <summary>Default is <see cref="FlowControl.None"/></summary>
+		public XFlowControl()
+			: base((System.IO.Ports.Handshake)FlowControl.None)
 		{
 		}
 
 		/// <summary></summary>
-		protected XHandshake(Handshake handshake)
-			: base((System.IO.Ports.Handshake)handshake)
+		protected XFlowControl(FlowControl flowControl)
+			: base((System.IO.Ports.Handshake)flowControl)
 		{
 		}
 
@@ -57,22 +61,22 @@ namespace YAT.Domain.IO
 		/// <summary></summary>
 		public override string ToString()
 		{
-			switch ((Handshake)UnderlyingEnum)
+			switch ((FlowControl)UnderlyingEnum)
 			{
-				case Handshake.Manual: return (Manual_string);
-				case Handshake.RS485:  return (RS485_string);
-				default:               return (base.ToString());
+				case FlowControl.Manual: return (Manual_string);
+				case FlowControl.RS485:  return (RS485_string);
+				default:                 return (base.ToString());
 			}
 		}
 
 		/// <summary></summary>
 		public new string ToShortString()
 		{
-			switch ((Handshake)UnderlyingEnum)
+			switch ((FlowControl)UnderlyingEnum)
 			{
-				case Handshake.Manual: return (Manual_stringShort);
-				case Handshake.RS485:  return (RS485_stringShort);
-				default:               return (base.ToShortString());
+				case FlowControl.Manual: return (Manual_stringShort);
+				case FlowControl.RS485:  return (RS485_stringShort);
+				default:                 return (base.ToShortString());
 			}
 		}
 
@@ -81,15 +85,15 @@ namespace YAT.Domain.IO
 		#region GetItems
 
 		/// <summary></summary>
-		public new static XHandshake[] GetItems()
+		public new static XFlowControl[] GetItems()
 		{
-			List<XHandshake> a = new List<XHandshake>();
-			a.Add(new XHandshake(Handshake.None));
-			a.Add(new XHandshake(Handshake.RequestToSend));
-			a.Add(new XHandshake(Handshake.XOnXOff));
-			a.Add(new XHandshake(Handshake.RequestToSendXOnXOff));
-			a.Add(new XHandshake(Handshake.Manual));
-			a.Add(new XHandshake(Handshake.RS485));
+			List<XFlowControl> a = new List<XFlowControl>();
+			a.Add(new XFlowControl(FlowControl.None));
+			a.Add(new XFlowControl(FlowControl.RequestToSend));
+			a.Add(new XFlowControl(FlowControl.XOnXOff));
+			a.Add(new XFlowControl(FlowControl.RequestToSendXOnXOff));
+			a.Add(new XFlowControl(FlowControl.Manual));
+			a.Add(new XFlowControl(FlowControl.RS485));
 			return (a.ToArray());
 		}
 
@@ -98,21 +102,21 @@ namespace YAT.Domain.IO
 		#region Parse
 
 		/// <summary></summary>
-		public new static XHandshake Parse(string handshake)
+		public new static XFlowControl Parse(string flowControl)
 		{
-			if      ((string.Compare(handshake, Manual_string, true) == 0) ||
-					 (string.Compare(handshake, Manual_stringShort, true) == 0))
+			if      ((string.Compare(flowControl, Manual_string, true) == 0) ||
+					 (string.Compare(flowControl, Manual_stringShort, true) == 0))
 			{
-				return (new XHandshake(Handshake.Manual));
+				return (new XFlowControl(FlowControl.Manual));
 			}
-			else if ((string.Compare(handshake, RS485_string, true) == 0) ||
-					 (string.Compare(handshake, RS485_stringShort, true) == 0))
+			else if ((string.Compare(flowControl, RS485_string, true) == 0) ||
+					 (string.Compare(flowControl, RS485_stringShort, true) == 0))
 			{
-				return (new XHandshake(Handshake.RS485));
+				return (new XFlowControl(FlowControl.RS485));
 			}
 			else
 			{
-				return ((XHandshake)MKY.IO.Ports.XHandshake.Parse(handshake));
+				return ((XFlowControl)MKY.IO.Ports.XHandshake.Parse(flowControl));
 			}
 		}
 
@@ -121,63 +125,63 @@ namespace YAT.Domain.IO
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator Handshake(XHandshake handshake)
+		public static implicit operator FlowControl(XFlowControl flowControl)
 		{
-			return ((Handshake)handshake.UnderlyingEnum);
+			return ((FlowControl)flowControl.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XHandshake(Handshake handshake)
+		public static implicit operator XFlowControl(FlowControl flowControl)
 		{
-			return (new XHandshake(handshake));
+			return (new XFlowControl(flowControl));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(XHandshake handshake)
+		public static implicit operator int(XFlowControl flowControl)
 		{
-			return (handshake.GetHashCode());
+			return (flowControl.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XHandshake(int handshake)
+		public static implicit operator XFlowControl(int flowControl)
 		{
-			return (new XHandshake((Handshake)handshake));
+			return (new XFlowControl((FlowControl)flowControl));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(XHandshake handshake)
+		public static implicit operator string(XFlowControl flowControl)
 		{
-			return (handshake.ToString());
+			return (flowControl.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XHandshake(string handshake)
+		public static implicit operator XFlowControl(string flowControl)
 		{
-			return (Parse(handshake));
+			return (Parse(flowControl));
 		}
 
 		/// <summary></summary>
-		public static implicit operator System.IO.Ports.Handshake(XHandshake handshake)
+		public static implicit operator System.IO.Ports.Handshake(XFlowControl flowControl)
 		{
-			switch ((Handshake)handshake.UnderlyingEnum)
+			switch ((FlowControl)flowControl.UnderlyingEnum)
 			{
-				case Handshake.None:
-				case Handshake.RequestToSend:
-				case Handshake.XOnXOff:
-				case Handshake.RequestToSendXOnXOff:
-					return ((System.IO.Ports.Handshake)(Handshake)handshake);
+				case FlowControl.None:
+				case FlowControl.RequestToSend:
+				case FlowControl.XOnXOff:
+				case FlowControl.RequestToSendXOnXOff:
+					return ((System.IO.Ports.Handshake)(FlowControl)flowControl);
 
-				case Handshake.RS485:
-				case Handshake.Manual:
+				case FlowControl.RS485:
+				case FlowControl.Manual:
 				default:
 					return (System.IO.Ports.Handshake.None);
 			}
 		}
 
 		/// <summary></summary>
-		public static implicit operator XHandshake(System.IO.Ports.Handshake handshake)
+		public static implicit operator XFlowControl(System.IO.Ports.Handshake flowControl)
 		{
-			return (new XHandshake((Handshake)handshake));
+			return (new XFlowControl((FlowControl)flowControl));
 		}
 
 		#endregion

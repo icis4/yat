@@ -477,10 +477,15 @@ namespace MKY.IO.Ports
 				OnOpening(new EventArgs());
 				base.Open();
 
-				// \fixme i.e. checkme, is XOn already sent by DotNET?
-				// This needs some efforts to be done, cannot be done right now
-				byte[] xOn = { SerialPortSettings.XOnByte };
-				base.Write(xOn, 0, 1);
+				// send XOn if software flow control enabled
+				if ((Handshake == System.IO.Ports.Handshake.XOnXOff) ||
+					(Handshake == System.IO.Ports.Handshake.RequestToSendXOnXOff))
+				{
+					// \fixme i.e. checkme, is XOn already sent by DotNET?
+					// This needs some efforts to be done, cannot be done right now
+					byte[] xOn = { SerialPortSettings.XOnByte };
+					base.Write(xOn, 0, 1);
+				}
 
 				OnOpened(new EventArgs());
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.RtsChanged));

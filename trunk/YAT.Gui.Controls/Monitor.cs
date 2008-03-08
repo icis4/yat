@@ -215,6 +215,9 @@ namespace YAT.Gui.Controls
 
 		public void AddElement(Domain.DisplayElement element)
 		{
+			if (_repositoryType == Domain.RepositoryType.Rx)
+				System.Diagnostics.Debug.WriteLine("(AddElement)");
+
 			List<Domain.DisplayElement> elements = new List<Domain.DisplayElement>();
 			elements.Add(element);
 			AddElements(elements);
@@ -225,8 +228,35 @@ namespace YAT.Gui.Controls
 			ListBox lb = listBox_Monitor;
 			lb.BeginUpdate();
 
+			if (_repositoryType == Domain.RepositoryType.Rx)
+				System.Diagnostics.Debug.WriteLine("(AddElements)");
+
 			foreach (Domain.DisplayElement de in elements)
 			{
+				// if first line, add a new empty line
+				if (_lines.Count == 0)
+				{
+					List<Domain.DisplayElement> line = new List<Domain.DisplayElement>();
+					_lines.Add(line);
+					lb.Items.Add(line);
+				}
+
+				// add element to the current line
+				List<Domain.DisplayElement> partialLine = _lines[_lines.Count - 1];
+				partialLine.Add(de);
+				_lines[_lines.Count - 1] = partialLine;
+				lb.Items[lb.Items.Count - 1] = partialLine;
+
+				if (_repositoryType == Domain.RepositoryType.Rx)
+					System.Diagnostics.Debug.WriteLine
+						(
+						"AddElements:" + Environment.NewLine +
+						"- ls.Count: " + _lines.Count.ToString() + Environment.NewLine +
+						"- lb.Count: " + lb.Items.Count.ToString() + Environment.NewLine +
+						de.ToString()
+						);
+
+				// process EOL
 				if (de.IsEol)
 				{
 					// remove lines if maximum exceeded
@@ -235,26 +265,11 @@ namespace YAT.Gui.Controls
 						_lines.RemoveAt(0);
 						lb.Items.RemoveAt(0);
 					}
+
+					// add new empty line
 					List<Domain.DisplayElement> line = new List<Domain.DisplayElement>();
 					_lines.Add(line);
 					lb.Items.Add(line);
-				}
-				else
-				{
-					if (_lines.Count == 0)       // if first line, add a new line
-					{
-						List<Domain.DisplayElement> line = new List<Domain.DisplayElement>();
-						line.Add(de);
-						_lines.Add(line);
-						lb.Items.Add(line);
-					}
-					else                         // else add elements to the current line
-					{
-						List<Domain.DisplayElement> partialLine = _lines[_lines.Count - 1];
-						partialLine.Add(de);
-						_lines[_lines.Count - 1] = partialLine;
-						lb.Items[lb.Items.Count - 1] = partialLine;
-					}
 				}
 			}
 
@@ -267,17 +282,26 @@ namespace YAT.Gui.Controls
 
 		public void AddLine(List<Domain.DisplayElement> line)
 		{
+			if (_repositoryType == Domain.RepositoryType.Rx)
+				System.Diagnostics.Debug.WriteLine("(AddLine)");
+
 			AddElements(line);
 		}
 
 		public void AddLines(List<List<Domain.DisplayElement>> lines)
 		{
+			if (_repositoryType == Domain.RepositoryType.Rx)
+				System.Diagnostics.Debug.WriteLine("(AddLines)");
+
 			foreach (List<Domain.DisplayElement> line in lines)
 				AddLine(line);
 		}
 
 		public void ReplaceLastLine(List<Domain.DisplayElement> line)
 		{
+			if (_repositoryType == Domain.RepositoryType.Rx)
+				System.Diagnostics.Debug.WriteLine("(ReplaceLastLine)");
+
 			ListBox lb = listBox_Monitor;
 			lb.BeginUpdate();
 
@@ -313,7 +337,7 @@ namespace YAT.Gui.Controls
 
 		public void Reload()
 		{
-			ClearListBox();
+			Clear();
 			AddLines(_lines);
 		}
 
@@ -401,41 +425,44 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
+		// measures item height only, not needed for OwnerDrawnFixed
 		#if (false)
 
-		// measures item height only, not needed for OwnerDrawnFixed
 		private void listBox_Monitor_MeasureItem(object sender, MeasureItemEventArgs e)
 		{
-			ListBox lb = listBox_Monitor;
+			if (e.Index >= 0)
+			{
+				ListBox lb = listBox_Monitor;
 
-			SizeF size = Draw.MeasureItem((List<Domain.DisplayElement>)(lb.Items[e.Index]), _formatSettings, e.Graphics);
+				SizeF size = Draw.MeasureItem((List<Domain.DisplayElement>)(lb.Items[e.Index]), _formatSettings, e.Graphics);
 
-			int width  = (int)Math.Ceiling(size.Width);
-			int height = (int)Math.Ceiling(size.Height);
+				int width  = (int)Math.Ceiling(size.Width);
+				int height = (int)Math.Ceiling(size.Height);
 
-			e.ItemWidth  = width;
-			e.ItemHeight = height;
+				e.ItemWidth  = width;
+				e.ItemHeight = height;
 
-			if (width > lb.HorizontalExtent)
-				lb.HorizontalExtent = width;
+				if (width > lb.HorizontalExtent)
+					lb.HorizontalExtent = width;
 
-			if (height != lb.ItemHeight)
-				lb.ItemHeight = height;
+				if (height != lb.ItemHeight)
+					lb.ItemHeight = height;
+			}
 		}
 
 		#endif
 
 		private void listBox_Monitor_DrawItem(object sender, DrawItemEventArgs e)
 		{
-			ListBox lb = listBox_Monitor;
-
-			if ((e.Index >= 0) && (lb.DisplayRectangle.IntersectsWith(lb.GetItemRectangle(e.Index))))
+			if (e.Index >= 0)
 			{
+				ListBox lb = listBox_Monitor;
+
 				e.DrawBackground();
 				SizeF size = Draw.DrawItem((List<Domain.DisplayElement>)(lb.Items[e.Index]), _formatSettings, e.Graphics, e.Bounds, e.State);
 				e.DrawFocusRectangle();
 
-				int width  = (int)Math.Ceiling(size.Width);
+				int width = (int)Math.Ceiling(size.Width);
 				int height = (int)Math.Ceiling(size.Height);
 
 				if (width > lb.HorizontalExtent)
@@ -449,7 +476,6 @@ namespace YAT.Gui.Controls
 		private void listBox_Monitor_Leave(object sender, EventArgs e)
 		{
 			ListBox lb = listBox_Monitor;
-
 			lb.ClearSelected();
 		}
 

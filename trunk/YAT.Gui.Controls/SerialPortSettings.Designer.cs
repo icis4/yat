@@ -29,7 +29,7 @@ namespace YAT.Gui.Controls
 		private void InitializeComponent()
 		{
 			this.comboBox_StopBits = new System.Windows.Forms.ComboBox();
-			this.comboBox_Handshake = new System.Windows.Forms.ComboBox();
+			this.comboBox_FlowControl = new System.Windows.Forms.ComboBox();
 			this.comboBox_Parity = new System.Windows.Forms.ComboBox();
 			this.comboBox_DataBits = new System.Windows.Forms.ComboBox();
 			this.comboBox_BaudRate = new System.Windows.Forms.ComboBox();
@@ -38,8 +38,8 @@ namespace YAT.Gui.Controls
 			this.label_Parity = new System.Windows.Forms.Label();
 			this.label_DataBits = new System.Windows.Forms.Label();
 			this.label_BaudRate = new System.Windows.Forms.Label();
-			this.label_HandshakeRemarks_1 = new System.Windows.Forms.Label();
-			this.label_HandshakeRemarks_2 = new System.Windows.Forms.Label();
+			this.label_FlowControlRemarks_1 = new System.Windows.Forms.Label();
+			this.label_FlowControlRemarks_2 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// comboBox_StopBits
@@ -53,16 +53,16 @@ namespace YAT.Gui.Controls
 			this.comboBox_StopBits.TabIndex = 7;
 			this.comboBox_StopBits.SelectedIndexChanged += new System.EventHandler(this.comboBox_StopBits_SelectedIndexChanged);
 			// 
-			// comboBox_Handshake
+			// comboBox_FlowControl
 			// 
-			this.comboBox_Handshake.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			this.comboBox_FlowControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.comboBox_Handshake.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox_Handshake.Location = new System.Drawing.Point(3, 130);
-			this.comboBox_Handshake.Name = "comboBox_Handshake";
-			this.comboBox_Handshake.Size = new System.Drawing.Size(254, 21);
-			this.comboBox_Handshake.TabIndex = 9;
-			this.comboBox_Handshake.SelectedIndexChanged += new System.EventHandler(this.comboBox_Handshake_SelectedIndexChanged);
+			this.comboBox_FlowControl.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_FlowControl.Location = new System.Drawing.Point(3, 130);
+			this.comboBox_FlowControl.Name = "comboBox_FlowControl";
+			this.comboBox_FlowControl.Size = new System.Drawing.Size(254, 21);
+			this.comboBox_FlowControl.TabIndex = 9;
+			this.comboBox_FlowControl.SelectedIndexChanged += new System.EventHandler(this.comboBox_FlowControl_SelectedIndexChanged);
 			// 
 			// comboBox_Parity
 			// 
@@ -102,9 +102,9 @@ namespace YAT.Gui.Controls
 			this.label_FlowControl.AutoSize = true;
 			this.label_FlowControl.Location = new System.Drawing.Point(3, 114);
 			this.label_FlowControl.Name = "label_FlowControl";
-			this.label_FlowControl.Size = new System.Drawing.Size(65, 13);
+			this.label_FlowControl.Size = new System.Drawing.Size(67, 13);
 			this.label_FlowControl.TabIndex = 8;
-			this.label_FlowControl.Text = "Handshake:";
+			this.label_FlowControl.Text = "Flow control:";
 			// 
 			// label_StopBits
 			// 
@@ -142,32 +142,32 @@ namespace YAT.Gui.Controls
 			this.label_BaudRate.TabIndex = 0;
 			this.label_BaudRate.Text = "Bits per second:";
 			// 
-			// label_HandshakeRemarks_1
+			// label_FlowControlRemarks_1
 			// 
-			this.label_HandshakeRemarks_1.AutoSize = true;
-			this.label_HandshakeRemarks_1.Location = new System.Drawing.Point(3, 154);
-			this.label_HandshakeRemarks_1.Name = "label_HandshakeRemarks_1";
-			this.label_HandshakeRemarks_1.Size = new System.Drawing.Size(46, 26);
-			this.label_HandshakeRemarks_1.TabIndex = 10;
-			this.label_HandshakeRemarks_1.Text = "Manual:\r\nRS-485:";
+			this.label_FlowControlRemarks_1.AutoSize = true;
+			this.label_FlowControlRemarks_1.Location = new System.Drawing.Point(3, 154);
+			this.label_FlowControlRemarks_1.Name = "label_FlowControlRemarks_1";
+			this.label_FlowControlRemarks_1.Size = new System.Drawing.Size(46, 26);
+			this.label_FlowControlRemarks_1.TabIndex = 10;
+			this.label_FlowControlRemarks_1.Text = "Manual:\r\nRS-485:";
 			// 
-			// label_HandshakeRemarks_2
+			// label_FlowControlRemarks_2
 			// 
-			this.label_HandshakeRemarks_2.AutoSize = true;
-			this.label_HandshakeRemarks_2.Location = new System.Drawing.Point(55, 154);
-			this.label_HandshakeRemarks_2.Name = "label_HandshakeRemarks_2";
-			this.label_HandshakeRemarks_2.Size = new System.Drawing.Size(160, 26);
-			this.label_HandshakeRemarks_2.TabIndex = 11;
-			this.label_HandshakeRemarks_2.Text = "RTS / DTR can be set manually\r\nRTS is set high while sending\r\n";
+			this.label_FlowControlRemarks_2.AutoSize = true;
+			this.label_FlowControlRemarks_2.Location = new System.Drawing.Point(55, 154);
+			this.label_FlowControlRemarks_2.Name = "label_FlowControlRemarks_2";
+			this.label_FlowControlRemarks_2.Size = new System.Drawing.Size(160, 26);
+			this.label_FlowControlRemarks_2.TabIndex = 11;
+			this.label_FlowControlRemarks_2.Text = "RTS / DTR can be set manually\r\nRTS is set high while sending\r\n";
 			// 
 			// SerialPortSettings
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.label_HandshakeRemarks_2);
-			this.Controls.Add(this.label_HandshakeRemarks_1);
+			this.Controls.Add(this.label_FlowControlRemarks_2);
+			this.Controls.Add(this.label_FlowControlRemarks_1);
 			this.Controls.Add(this.comboBox_StopBits);
-			this.Controls.Add(this.comboBox_Handshake);
+			this.Controls.Add(this.comboBox_FlowControl);
 			this.Controls.Add(this.comboBox_Parity);
 			this.Controls.Add(this.comboBox_DataBits);
 			this.Controls.Add(this.comboBox_BaudRate);
@@ -186,7 +186,7 @@ namespace YAT.Gui.Controls
 		#endregion
 
 		private System.Windows.Forms.ComboBox comboBox_StopBits;
-		private System.Windows.Forms.ComboBox comboBox_Handshake;
+		private System.Windows.Forms.ComboBox comboBox_FlowControl;
 		private System.Windows.Forms.ComboBox comboBox_Parity;
 		private System.Windows.Forms.ComboBox comboBox_DataBits;
 		private System.Windows.Forms.ComboBox comboBox_BaudRate;
@@ -195,7 +195,7 @@ namespace YAT.Gui.Controls
 		private System.Windows.Forms.Label label_Parity;
 		private System.Windows.Forms.Label label_DataBits;
 		private System.Windows.Forms.Label label_BaudRate;
-		private System.Windows.Forms.Label label_HandshakeRemarks_1;
-		private System.Windows.Forms.Label label_HandshakeRemarks_2;
+		private System.Windows.Forms.Label label_FlowControlRemarks_1;
+		private System.Windows.Forms.Label label_FlowControlRemarks_2;
 	}
 }

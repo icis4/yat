@@ -178,39 +178,39 @@ namespace YAT.Domain.IO
 				ApplySettings();       //   disposes the underlying IO instance
 
 				// RTS
-				switch (_settings.Communication.Handshake)
+				switch (_settings.Communication.FlowControl)
 				{
-					case Handshake.None:
-					case Handshake.XOnXOff:
+					case FlowControl.None:
+					case FlowControl.XOnXOff:
 						_port.RtsEnable = false;
 						break;
 
-					case Handshake.Manual:
+					case FlowControl.Manual:
 						_port.RtsEnable = _settings.RtsEnabled;
 						break;
 
-					case Handshake.RS485:
+					case FlowControl.RS485:
 						_port.RtsEnable = false;
 						break;
 
-					case Handshake.RequestToSend:
-					case Handshake.RequestToSendXOnXOff:
+					case FlowControl.RequestToSend:
+					case FlowControl.RequestToSendXOnXOff:
 						// do nothing, RTS is used for hand shake
 						break;
 				}
 
 				// DTR
-				switch (_settings.Communication.Handshake)
+				switch (_settings.Communication.FlowControl)
 				{
-					case Handshake.None:
-					case Handshake.RequestToSend:
-					case Handshake.XOnXOff:
-					case Handshake.RequestToSendXOnXOff:
-					case Handshake.RS485:
+					case FlowControl.None:
+					case FlowControl.RequestToSend:
+					case FlowControl.XOnXOff:
+					case FlowControl.RequestToSendXOnXOff:
+					case FlowControl.RS485:
 						_port.DtrEnable = false;
 						break;
 
-					case Handshake.Manual:
+					case FlowControl.Manual:
 						_port.DtrEnable = _settings.DtrEnabled;
 						break;
 				}
@@ -271,12 +271,12 @@ namespace YAT.Domain.IO
 
 			if (IsConnected)
 			{
-				if (_settings.Communication.Handshake == Handshake.RS485)
+				if (_settings.Communication.FlowControl == FlowControl.RS485)
 					_port.RtsEnable = true;
 
 				_port.Write(buffer, 0, buffer.Length);
 
-				if (_settings.Communication.Handshake == Handshake.RS485)
+				if (_settings.Communication.FlowControl == FlowControl.RS485)
 					_port.RtsEnable = false;
 
 				OnDataSent(new EventArgs());
@@ -311,14 +311,14 @@ namespace YAT.Domain.IO
 				_port.ParityReplace = Settings.SerialPort.SerialPortSettings.ParityErrorReplacementDefaultAsByte;
 
 			// RTS and DTR
-			switch (_settings.Communication.Handshake)
+			switch (_settings.Communication.FlowControl)
 			{
-				case Handshake.Manual:
+				case FlowControl.Manual:
 					_port.RtsEnable = _settings.RtsEnabled;
 					_port.DtrEnable = _settings.DtrEnabled;
 					break;
 
-				case Handshake.RS485:
+				case FlowControl.RS485:
 					_port.RtsEnable = false;
 					break;
 			}
@@ -334,7 +334,7 @@ namespace YAT.Domain.IO
 			_port.DataBits = (MKY.IO.Ports.XDataBits)s.DataBits;
 			_port.Parity = s.Parity;
 			_port.StopBits = s.StopBits;
-			_port.Handshake = (Domain.IO.XHandshake)s.Handshake;
+			_port.Handshake = (Domain.IO.XFlowControl)s.FlowControl;
 		}
 
 		#endregion

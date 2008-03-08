@@ -55,7 +55,7 @@ namespace YAT.Gui.Controls
 			// 
 			this.listBox_Monitor.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listBox_Monitor.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-			this.listBox_Monitor.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.listBox_Monitor.Font = new System.Drawing.Font("DejaVu Sans Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.listBox_Monitor.HorizontalScrollbar = true;
 			this.listBox_Monitor.IntegralHeight = false;
 			this.listBox_Monitor.Location = new System.Drawing.Point(0, 33);
