@@ -27,9 +27,9 @@ namespace YAT.Domain
 	{
 		#region String Definitions
 
-		private const string BigEndian_string = "Big-Endian (Network Order, Motorola)";
+		private const string BigEndian_string    = "Big-Endian (Network, Motorola)";
 		private const string LittleEndian_string = "Little-Endian (Intel)";
-		private const string Unknown_string = "Unknown";
+		private const string Unknown_string      = "Unknown";
 
 		#endregion
 

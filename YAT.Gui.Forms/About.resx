@@ -140,6 +140,7 @@ HSR and Mettler-Toledo. YAT was initially developed as XTerm232 due to the lack 
    &gt; IO.Ports serial port extension by Matthias Kläy
    &gt; Modified Net.Sockets socket extension ALAZ by Andre Luis Azevedo
    &gt; YAT icons from Nuvola by David Vignoni edited in GIMP
-   &gt; Toolbar icons from free common set by glyfx</value>
+   &gt; Toolbar icons from free common set by glyfx
+   &gt; Terminal font DejaVu</value>
   </data>
 </root>

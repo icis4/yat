@@ -19,7 +19,6 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const FontStyle _FormatFontStyleDefault = FontStyle.Regular;
 		private const bool _BoldDefault = false;
 		private const bool _ItalicDefault = false;
 		private const bool _UnderlineDefault = false;
@@ -34,7 +33,7 @@ namespace YAT.Gui.Controls
 
 		private bool _isSettingControls = false;
 
-		private Font _font = new Font("Courier New", 10, _FormatFontStyleDefault);
+		private Font _font = new Font(Model.Types.FontFormat.NameDefault, Model.Types.FontFormat.SizeDefault, Model.Types.FontFormat.StyleDefault);
 		private Color _color = Color.Black;
 
 		#endregion
@@ -93,7 +92,7 @@ namespace YAT.Gui.Controls
 
 		[Category("Format")]
 		[Description("The font style.")]
-		[DefaultValue(_FormatFontStyleDefault)]
+		[DefaultValue(Model.Types.FontFormat.StyleDefault)]
 		public FontStyle FormatFontStyle
 		{
 			get { return (_font.Style); }

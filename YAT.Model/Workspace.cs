@@ -87,6 +87,12 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		public Workspace(WorkspaceSettingsRoot settings)
+		{
+			Initialize(new DocumentSettingsHandler<WorkspaceSettingsRoot>(settings), Guid.Empty);
+		}
+
+		/// <summary></summary>
 		public Workspace(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler)
 		{
 			Initialize(settingsHandler, Guid.Empty);

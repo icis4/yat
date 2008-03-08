@@ -64,6 +64,8 @@ Release 2.0.0 :: 2008-??-??
 - Workspace settings (.yaw) introduced
 - Automatic saving and loading of complete workspace added
 - About dialog: Link labels instead of normal labels
+- Nuvola based icons
+- DejaVu Sans Mono as default font
 - Automatic testing using NUnit added
 - Release notes moved to menu
 

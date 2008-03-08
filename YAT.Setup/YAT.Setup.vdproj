@@ -39,6 +39,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_00D87CCAC305445B90B0C5E721054E1C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_01209FE1988D980673D4798DC684A44C"
         "OwnerKey" = "8:_7478B2D9D73D3BB700BF930B31A45FF9"
         "MsmSig" = "8:_UNDEFINED"
@@ -117,6 +123,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_0F84775FE5614180B01B1B342BCE14FF"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_1C32C3E5C55F0676FF2E23C23FC1950F"
         "OwnerKey" = "8:_01209FE1988D980673D4798DC684A44C"
         "MsmSig" = "8:_UNDEFINED"
@@ -171,6 +183,48 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_1FF82390D1D8464C867A4E50E4706B2F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_23036CE2213742AEA264759BEAFA617B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_267AF4B4DF0D4AF9A0CB444F6E117C47"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_294E03A83B8245EB861775A47DBD0D90"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_29BFA7D067D646B98C30082FAA56E9AF"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3A5906ECF1EC4CAAABB8307211311B3A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3B43A7B3260B43CDA8ACC7888299B92F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_3DA6B8F1AD8913333BA417DDC15E1E01"
         "OwnerKey" = "8:_0A17A7CD35CDBFF6698F07AC58795F1C"
         "MsmSig" = "8:_UNDEFINED"
@@ -190,6 +244,24 @@
         "Entry"
         {
         "MsmKey" = "8:_55C278F87B484B7EA653F02DFD637F36"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5799679D694D4D768D2A6574F281FC54"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_67E9E076EC0740B284A0F6A9F35AEF78"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6A1BBB9CB64E4BB1A40CC4FB63CC0AE1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -231,6 +303,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_6E57D1FE09E64AD9986C668FE56860BD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_7478B2D9D73D3BB700BF930B31A45FF9"
         "OwnerKey" = "8:_AA9AA9AA1DCB904F98E0C471D8016909"
         "MsmSig" = "8:_UNDEFINED"
@@ -245,6 +323,18 @@
         {
         "MsmKey" = "8:_7478B2D9D73D3BB700BF930B31A45FF9"
         "OwnerKey" = "8:_0A17A7CD35CDBFF6698F07AC58795F1C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_77A6B25342F74B178FB0A01BA5F7C7E8"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7B2975051FC94006B8FCEE6936E63F28"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -309,6 +399,36 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_94642EDA2A364D6B8DA8BD2176F47346"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_97964BA121B74854ACB2E3FC12C1B5A7"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9B49533709B94DDDABF70FA71797AEBD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A0FE27E22EA249048AD98B5A64837FA6"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A236F5EC9E0F40C38C86CFCF36C16029"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_A4EB9814AD453BC46CCBB5706AF2141C"
         "OwnerKey" = "8:_6AF334C6680B6B1C4550A1F49B57DA86"
         "MsmSig" = "8:_UNDEFINED"
@@ -365,6 +485,24 @@
         {
         "MsmKey" = "8:_AA9AA9AA1DCB904F98E0C471D8016909"
         "OwnerKey" = "8:_55C278F87B484B7EA653F02DFD637F36"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AB17C125156A4916AA2154800473DD57"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B08347304D57482698EB70179CE068A5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B4DD0B64E7FB4CBEAA4C0BB2127D2417"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -507,6 +645,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C899D9093A7348759AC6A11A8A7F8C7A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_CA505EE8327A3D3453E40CFBFF3074D3"
         "OwnerKey" = "8:_7478B2D9D73D3BB700BF930B31A45FF9"
         "MsmSig" = "8:_UNDEFINED"
@@ -603,6 +747,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_D0010F5FD77A49FFBE10EF98652A9E4C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_D28A96B86A648B8F378915D27E49EB1F"
         "OwnerKey" = "8:_0A17A7CD35CDBFF6698F07AC58795F1C"
         "MsmSig" = "8:_UNDEFINED"
@@ -611,6 +761,30 @@
         {
         "MsmKey" = "8:_D28A96B86A648B8F378915D27E49EB1F"
         "OwnerKey" = "8:_55C278F87B484B7EA653F02DFD637F36"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E51D5246AFBC4F3CBFA74197D4A0E5D3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_ECA1D12DCC8D40529A48915DB2B18CE4"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F3E2A13B7EAA4E81B69DFDCFE537AB24"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F503240C20AC401C9DC757D75F7138E0"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -869,7 +1043,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Utilities, Version=1.99.2963.16556, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Utilities, Version=1.99.2964.41335, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_00CF1406DD754BAC17F7DE387FCBABAC"
@@ -896,11 +1070,31 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_00D87CCAC305445B90B0C5E721054E1C"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\status.txt"
+            "TargetName" = "8:status.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_27A80D4B07014EA98AFADDEF9C9ADDA3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_01209FE1988D980673D4798DC684A44C"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Model.Settings, Version=1.99.2963.16554, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Model.Settings, Version=1.99.2979.41681, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_01209FE1988D980673D4798DC684A44C"
@@ -951,7 +1145,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Gui.Forms, Version=1.99.2963.16983, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Gui.Forms, Version=1.99.2979.41858, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_0A17A7CD35CDBFF6698F07AC58795F1C"
@@ -978,11 +1172,31 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0F84775FE5614180B01B1B342BCE14FF"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSansMono.ttf"
+            "TargetName" = "8:DejaVuSansMono.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_1C32C3E5C55F0676FF2E23C23FC1950F"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Model.Types, Version=1.99.2963.16554, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Model.Types, Version=1.99.2979.41672, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_1C32C3E5C55F0676FF2E23C23FC1950F"
@@ -1013,7 +1227,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Settings.Workspace, Version=1.99.2963.16557, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Settings.Workspace, Version=1.99.2979.41683, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_1CA236C58260C684D6775C7A81386274"
@@ -1038,6 +1252,146 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1FF82390D1D8464C867A4E50E4706B2F"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSerif.ttf"
+            "TargetName" = "8:DejaVuSerif.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_23036CE2213742AEA264759BEAFA617B"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSerifCondensed-BoldItalic.ttf"
+            "TargetName" = "8:DejaVuSerifCondensed-BoldItalic.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_267AF4B4DF0D4AF9A0CB444F6E117C47"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\README"
+            "TargetName" = "8:README"
+            "Tag" = "8:"
+            "Folder" = "8:_27A80D4B07014EA98AFADDEF9C9ADDA3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_294E03A83B8245EB861775A47DBD0D90"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSansCondensed-BoldOblique.ttf"
+            "TargetName" = "8:DejaVuSansCondensed-BoldOblique.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_29BFA7D067D646B98C30082FAA56E9AF"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\NEWS"
+            "TargetName" = "8:NEWS"
+            "Tag" = "8:"
+            "Folder" = "8:_27A80D4B07014EA98AFADDEF9C9ADDA3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3A5906ECF1EC4CAAABB8307211311B3A"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSansMono-BoldOblique.ttf"
+            "TargetName" = "8:DejaVuSansMono-BoldOblique.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3B43A7B3260B43CDA8ACC7888299B92F"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSans-ExtraLight.ttf"
+            "TargetName" = "8:DejaVuSans-ExtraLight.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_3DA6B8F1AD8913333BA417DDC15E1E01"
@@ -1071,11 +1425,71 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5799679D694D4D768D2A6574F281FC54"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSerifCondensed.ttf"
+            "TargetName" = "8:DejaVuSerifCondensed.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_67E9E076EC0740B284A0F6A9F35AEF78"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSansCondensed-Oblique.ttf"
+            "TargetName" = "8:DejaVuSansCondensed-Oblique.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6A1BBB9CB64E4BB1A40CC4FB63CC0AE1"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\unicover.txt"
+            "TargetName" = "8:unicover.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_27A80D4B07014EA98AFADDEF9C9ADDA3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6AF334C6680B6B1C4550A1F49B57DA86"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Settings.Application, Version=1.99.2963.16555, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Settings.Application, Version=1.99.2979.41681, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_6AF334C6680B6B1C4550A1F49B57DA86"
@@ -1102,11 +1516,31 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6E57D1FE09E64AD9986C668FE56860BD"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSerifCondensed-Italic.ttf"
+            "TargetName" = "8:DejaVuSerifCondensed-Italic.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7478B2D9D73D3BB700BF930B31A45FF9"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Model, Version=1.99.2963.16980, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Model, Version=1.99.2979.41683, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_7478B2D9D73D3BB700BF930B31A45FF9"
@@ -1133,11 +1567,51 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_77A6B25342F74B178FB0A01BA5F7C7E8"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSans-Oblique.ttf"
+            "TargetName" = "8:DejaVuSans-Oblique.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7B2975051FC94006B8FCEE6936E63F28"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSans-Bold.ttf"
+            "TargetName" = "8:DejaVuSans-Bold.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7EB1407FFF9DFA411F8BCB338F43EAAD"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Model.Utilities, Version=1.99.2963.16556, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Model.Utilities, Version=1.99.2979.41682, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_7EB1407FFF9DFA411F8BCB338F43EAAD"
@@ -1168,7 +1642,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Settings.Document, Version=1.99.2963.16555, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Settings.Document, Version=1.99.2979.41682, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_873F97494C51085C2FB5C1E929663094"
@@ -1226,11 +1700,111 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_94642EDA2A364D6B8DA8BD2176F47346"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\BUGS"
+            "TargetName" = "8:BUGS"
+            "Tag" = "8:"
+            "Folder" = "8:_27A80D4B07014EA98AFADDEF9C9ADDA3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_97964BA121B74854ACB2E3FC12C1B5A7"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSansCondensed-Bold.ttf"
+            "TargetName" = "8:DejaVuSansCondensed-Bold.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9B49533709B94DDDABF70FA71797AEBD"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSans.ttf"
+            "TargetName" = "8:DejaVuSans.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A0FE27E22EA249048AD98B5A64837FA6"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSansMono-Bold.ttf"
+            "TargetName" = "8:DejaVuSansMono-Bold.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A236F5EC9E0F40C38C86CFCF36C16029"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSans-BoldOblique.ttf"
+            "TargetName" = "8:DejaVuSans-BoldOblique.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A4EB9814AD453BC46CCBB5706AF2141C"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Settings, Version=1.99.2963.16554, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Settings, Version=1.99.2964.41332, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_A4EB9814AD453BC46CCBB5706AF2141C"
@@ -1261,7 +1835,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Controller, Version=1.99.2963.16984, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Controller, Version=1.99.2979.41859, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_AA9AA9AA1DCB904F98E0C471D8016909"
@@ -1288,11 +1862,71 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AB17C125156A4916AA2154800473DD57"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\LICENSE"
+            "TargetName" = "8:LICENSE"
+            "Tag" = "8:"
+            "Folder" = "8:_27A80D4B07014EA98AFADDEF9C9ADDA3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B08347304D57482698EB70179CE068A5"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSansMono-Oblique.ttf"
+            "TargetName" = "8:DejaVuSansMono-Oblique.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B4DD0B64E7FB4CBEAA4C0BB2127D2417"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSerif-BoldItalic.ttf"
+            "TargetName" = "8:DejaVuSerif-BoldItalic.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B81CC4DEC2B470B97CDAA5A412A87A58"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Log, Version=1.99.2963.16555, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Log, Version=1.99.2979.41682, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_B81CC4DEC2B470B97CDAA5A412A87A58"
@@ -1323,7 +1957,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Gui.Utilities, Version=1.99.2963.16556, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Gui.Utilities, Version=1.99.2979.41682, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_B951CA3C5FD269A08779BF5EECA8D524"
@@ -1381,11 +2015,31 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C899D9093A7348759AC6A11A8A7F8C7A"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\langcover.txt"
+            "TargetName" = "8:langcover.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_27A80D4B07014EA98AFADDEF9C9ADDA3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CA505EE8327A3D3453E40CFBFF3074D3"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Domain, Version=1.99.2963.16553, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Domain, Version=1.99.2979.41629, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_CA505EE8327A3D3453E40CFBFF3074D3"
@@ -1416,7 +2070,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:IO.Ports, Version=1.0.2963.15255, Culture=neutral, PublicKeyToken=b49b7dd2098222f0, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:IO.Ports, Version=1.0.2979.41628, Culture=neutral, PublicKeyToken=b49b7dd2098222f0, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_CDB138759B2CD73F3AD50BBCB598DFBD"
@@ -1443,11 +2097,31 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D0010F5FD77A49FFBE10EF98652A9E4C"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\AUTHORS"
+            "TargetName" = "8:AUTHORS"
+            "Tag" = "8:"
+            "Folder" = "8:_27A80D4B07014EA98AFADDEF9C9ADDA3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D28A96B86A648B8F378915D27E49EB1F"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:YAT.Gui.Controls, Version=1.99.2963.16557, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:YAT.Gui.Controls, Version=1.99.2979.41683, Culture=neutral, PublicKeyToken=0355d5f4a621ce23, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_D28A96B86A648B8F378915D27E49EB1F"
@@ -1472,6 +2146,86 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E51D5246AFBC4F3CBFA74197D4A0E5D3"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSansCondensed.ttf"
+            "TargetName" = "8:DejaVuSansCondensed.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ECA1D12DCC8D40529A48915DB2B18CE4"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSerif-Italic.ttf"
+            "TargetName" = "8:DejaVuSerif-Italic.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F3E2A13B7EAA4E81B69DFDCFE537AB24"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSerifCondensed-Bold.ttf"
+            "TargetName" = "8:DejaVuSerifCondensed-Bold.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F503240C20AC401C9DC757D75F7138E0"
+            {
+            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSerif-Bold.ttf"
+            "TargetName" = "8:DejaVuSerif-Bold.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
         }
@@ -1557,6 +2311,28 @@
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Property" = "8:TARGETDIR"
+                "Folders"
+                {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_27A80D4B07014EA98AFADDEF9C9ADDA3"
+                    {
+                    "Name" = "8:DejaVu Info"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_D966256AC1514FD094342792109C9B0D"
+                        "Folders"
+                        {
+                        }
+                    }
+                }
+            }
+            "{1525181F-901A-416C-8A58-119130FE478E}:_75FE2B390D88474498B774F5E17E3CE2"
+            {
+            "Name" = "8:#1911"
+            "AlwaysCreate" = "11:FALSE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:FontsFolder"
                 "Folders"
                 {
                 }

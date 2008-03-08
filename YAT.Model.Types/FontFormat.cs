@@ -10,6 +10,20 @@ namespace YAT.Model.Types
 	[Serializable]
 	public class FontFormat : IEquatable<FontFormat>
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		/// <summary></summary>
+		public const string NameDefault = "DejaVu Sans Mono";
+		/// <summary></summary>
+		public const float SizeDefault = 8.25f;
+		/// <summary></summary>
+		public const FontStyle StyleDefault = FontStyle.Regular;
+
+		#endregion
+
 		private string _name;
 		private float _size;
 		private FontStyle _style;
@@ -18,9 +32,9 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public FontFormat()
 		{
-			_name = "Courier New";
-			_size = 8.25f;
-			_style = FontStyle.Regular;
+			_name = NameDefault;
+			_size = SizeDefault;
+			_style = StyleDefault;
 			MakeFont();
 		}
 

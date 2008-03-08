@@ -178,7 +178,7 @@ namespace YAT.Gui.Forms
 			this.serialPortSettings.TabIndex = 1;
 			this.serialPortSettings.ParityChanged += new System.EventHandler(this.serialPortSettings_ParityChanged);
 			this.serialPortSettings.DataBitsChanged += new System.EventHandler(this.serialPortSettings_DataBitsChanged);
-			this.serialPortSettings.HandshakeChanged += new System.EventHandler(this.serialPortSettings_HandshakeChanged);
+			this.serialPortSettings.FlowControlChanged += new System.EventHandler(this.serialPortSettings_FlowControlChanged);
 			this.serialPortSettings.StopBitsChanged += new System.EventHandler(this.serialPortSettings_StopBitsChanged);
 			this.serialPortSettings.BaudRateChanged += new System.EventHandler(this.serialPortSettings_BaudRateChanged);
 			// 

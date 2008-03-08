@@ -13,7 +13,7 @@ namespace YAT.Domain.Settings.SerialPort
 		private MKY.IO.Ports.DataBits _dataBits;
 		private System.IO.Ports.Parity _parity;
 		private System.IO.Ports.StopBits _stopBits;
-		private Domain.IO.Handshake _handshake;
+		private Domain.IO.FlowControl _flowControl;
 
 		/// <summary></summary>
 		public SerialCommunicationSettings()
@@ -37,11 +37,11 @@ namespace YAT.Domain.Settings.SerialPort
 		public SerialCommunicationSettings(SerialCommunicationSettings rhs)
 			: base(rhs)
 		{
-			_baudRate   = rhs.BaudRate;
-			_dataBits   = rhs.DataBits;
-			_parity     = rhs.Parity;
-			_stopBits   = rhs.StopBits;
-			_handshake  = rhs.Handshake;
+			_baudRate    = rhs.BaudRate;
+			_dataBits    = rhs.DataBits;
+			_parity      = rhs.Parity;
+			_stopBits    = rhs.StopBits;
+			_flowControl = rhs.FlowControl;
 			ClearChanged();
 		}
 
@@ -50,11 +50,11 @@ namespace YAT.Domain.Settings.SerialPort
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			BaudRate   = (int)MKY.IO.Ports.BaudRate.Baud009600;
-			DataBits   = MKY.IO.Ports.DataBits.Eight;
-			Parity     = System.IO.Ports.Parity.None;
-			StopBits   = System.IO.Ports.StopBits.One;
-			Handshake  = Domain.IO.Handshake.None;
+			BaudRate    = (int)MKY.IO.Ports.BaudRate.Baud009600;
+			DataBits    = MKY.IO.Ports.DataBits.Eight;
+			Parity      = System.IO.Ports.Parity.None;
+			StopBits    = System.IO.Ports.StopBits.One;
+			FlowControl = Domain.IO.FlowControl.None;
 		}
 
 		#region Properties
@@ -123,15 +123,15 @@ namespace YAT.Domain.Settings.SerialPort
 		}
 
 		/// <summary></summary>
-		[XmlElement("Handshake")]
-		public Domain.IO.Handshake Handshake
+		[XmlElement("FlowControl")]
+		public Domain.IO.FlowControl FlowControl
 		{
-			get { return (_handshake); }
+			get { return (_flowControl); }
 			set
 			{
-				if (_handshake != value)
+				if (_flowControl != value)
 				{
-					_handshake = value;
+					_flowControl = value;
 					SetChanged();
 				}
 			}
@@ -166,7 +166,7 @@ namespace YAT.Domain.Settings.SerialPort
 					_dataBits.Equals(value._dataBits) &&
 					_parity.Equals(value._parity) &&
 					_stopBits.Equals(value._stopBits) &&
-					_handshake.Equals(value._handshake)
+					_flowControl.Equals(value._flowControl)
 					);
 			}
 			return (false);
@@ -187,7 +187,7 @@ namespace YAT.Domain.Settings.SerialPort
 			  ((MKY.IO.Ports.XDataBits)_dataBits).ToString() + ", " +
 			  ((MKY.IO.Ports.XParity)_parity).ToString() + ", " +
 			  ((MKY.IO.Ports.XStopBits)_stopBits).ToString() + ", " +
-			  ((Domain.IO.XHandshake)_handshake).ToShortString()
+			  ((Domain.IO.XFlowControl)_flowControl).ToShortString()
 			  );
 		}
 
@@ -213,7 +213,7 @@ namespace YAT.Domain.Settings.SerialPort
 			  ((MKY.IO.Ports.XDataBits)_dataBits).ToString() + ", " +
 			  ((MKY.IO.Ports.XParity)_parity).ToString() + ", " +
 			  ((MKY.IO.Ports.XStopBits)_stopBits).ToString() + ", " +
-			  ((Domain.IO.XHandshake)_handshake).ToString()
+			  ((Domain.IO.XFlowControl)_flowControl).ToString()
 			  );
 		}
 

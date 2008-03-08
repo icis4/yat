@@ -58,11 +58,11 @@ namespace YAT.Gui.Forms
 			this.label_Name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Name.AutoSize = true;
-			this.label_Name.Font = new System.Drawing.Font("Courier New", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_Name.Font = new System.Drawing.Font("DejaVu Sans Mono", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Name.Location = new System.Drawing.Point(91, 12);
 			this.label_Name.Margin = new System.Windows.Forms.Padding(12, 0, 3, 0);
 			this.label_Name.Name = "label_Name";
-			this.label_Name.Size = new System.Drawing.Size(72, 36);
+			this.label_Name.Size = new System.Drawing.Size(74, 38);
 			this.label_Name.TabIndex = 1;
 			this.label_Name.Text = "YAT";
 			// 
@@ -71,11 +71,11 @@ namespace YAT.Gui.Forms
 			this.label_Version.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Version.AutoSize = true;
-			this.label_Version.Font = new System.Drawing.Font("Courier New", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_Version.Font = new System.Drawing.Font("DejaVu Sans Mono", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Version.Location = new System.Drawing.Point(93, 53);
 			this.label_Version.Margin = new System.Windows.Forms.Padding(12, 0, 3, 0);
 			this.label_Version.Name = "label_Version";
-			this.label_Version.Size = new System.Drawing.Size(179, 23);
+			this.label_Version.Size = new System.Drawing.Size(179, 24);
 			this.label_Version.TabIndex = 1;
 			this.label_Version.Text = "Version 2.0.0";
 			// 
@@ -84,11 +84,11 @@ namespace YAT.Gui.Forms
 			this.label_Status.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Status.AutoSize = true;
-			this.label_Status.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_Status.Font = new System.Drawing.Font("DejaVu Sans Mono", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Status.Location = new System.Drawing.Point(9, 91);
 			this.label_Status.Margin = new System.Windows.Forms.Padding(12, 0, 3, 0);
 			this.label_Status.Name = "label_Status";
-			this.label_Status.Size = new System.Drawing.Size(140, 14);
+			this.label_Status.Size = new System.Drawing.Size(140, 13);
 			this.label_Status.TabIndex = 1;
 			this.label_Status.Text = "Loading settings...";
 			// 
