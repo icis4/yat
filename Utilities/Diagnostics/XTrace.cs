@@ -27,5 +27,20 @@ namespace MKY.Utilities.Diagnostics
 		{
 			DiagnosticsWriterOutput.WriteException(_traceWrapper, obj, ex);
 		}
+
+		/// <summary>
+		/// Writes message and stack to <see cref="System.Diagnostics.Trace"/>.
+		/// </summary>
+		/// <remarks>
+		/// There also is a <see cref="System.Diagnostics.Debug"/> variant of this method available
+		/// in <see cref="MKY.Utilities.Diagnostics.XDebug"/>.
+		/// Unfortunately, the Debug and Trace objects do not provide access to their underlying
+		/// output writers. Therefore, the two implementations use writer wrappers.
+		/// </remarks>
+		[Conditional("TRACE")]
+		public static void WriteStack(object obj, string message)
+		{
+			DiagnosticsWriterOutput.WriteStack(_traceWrapper, obj, message);
+		}
 	}
 }

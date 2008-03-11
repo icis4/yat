@@ -545,6 +545,11 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_MonitorContextMenu_Print.Enabled = isMonitor;
 		}
 
+		private void toolStripMenuItem_MonitorContextMenu_Format_Click(object sender, EventArgs e)
+		{
+			ShowFormatSettings();
+		}
+
 		private void toolStripMenuItem_MonitorContextMenu_ShowTimeStamp_Click(object sender, EventArgs e)
 		{
 			_settingsRoot.Display.ShowTimeStamp = !_settingsRoot.Display.ShowTimeStamp;
@@ -1858,43 +1863,37 @@ namespace YAT.Gui.Forms
 
 		private void _terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			// display
+			// display elements immediately
 			monitor_Tx.AddElements(e.Elements);
 			monitor_Bidir.AddElements(e.Elements);
 		}
 
 		private void _terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			// display
+			// display elements immediately
 			monitor_Bidir.AddElements(e.Elements);
 			monitor_Rx.AddElements(e.Elements);
 		}
 
 		private void _terminal_DisplayLinesSent(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (e.Lines.Count > 0)
+			// replace lines when they are complete
+			for (int i = 0; i < e.Lines.Count; i++)
 			{
-				monitor_Tx.ReplaceLastLine(e.Lines[0]);
-				monitor_Bidir.ReplaceLastLine(e.Lines[0]);
-			}
-			for (int i = 1; i < e.Lines.Count; i++)
-			{
-				monitor_Tx.AddLine(e.Lines[i]);
-				monitor_Bidir.AddLine(e.Lines[i]);
+				int offset = e.Lines.Count - i; // e.g. offset = 1 replaces last line
+				monitor_Tx.ReplaceLine(offset, e.Lines[i]);
+				monitor_Bidir.ReplaceLine(offset, e.Lines[i]);
 			}
 		}
 
 		private void _terminal_DisplayLinesReceived(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			if (e.Lines.Count > 0)
+			// replace lines when they are complete
+			for (int i = 0; i < e.Lines.Count; i++)
 			{
-				monitor_Bidir.ReplaceLastLine(e.Lines[0]);
-				monitor_Rx.ReplaceLastLine(e.Lines[0]);
-			}
-			for (int i = 1; i < e.Lines.Count; i++)
-			{
-				monitor_Bidir.AddLine(e.Lines[i]);
-				monitor_Rx.AddLine(e.Lines[i]);
+				int offset = e.Lines.Count - i; // e.g. offset = 1 replaces last line
+				monitor_Bidir.ReplaceLine(offset, e.Lines[i]);
+				monitor_Rx.ReplaceLine(offset, e.Lines[i]);
 			}
 		}
 
@@ -1902,9 +1901,9 @@ namespace YAT.Gui.Forms
 		{
 			switch (e.Repository)
 			{
-				case Domain.RepositoryType.Tx:    monitor_Tx.Clear(); break;
+				case Domain.RepositoryType.Tx:    monitor_Tx.Clear();    break;
 				case Domain.RepositoryType.Bidir: monitor_Bidir.Clear(); break;
-				case Domain.RepositoryType.Rx:    monitor_Rx.Clear(); break;
+				case Domain.RepositoryType.Rx:    monitor_Rx.Clear();    break;
 			}
 		}
 
@@ -1912,9 +1911,9 @@ namespace YAT.Gui.Forms
 		{
 			switch (e.Repository)
 			{
-				case Domain.RepositoryType.Tx:    monitor_Tx.AddLines(_terminal.RepositoryToDisplayLines(Domain.RepositoryType.Tx)); break;
+				case Domain.RepositoryType.Tx:    monitor_Tx.AddLines   (_terminal.RepositoryToDisplayLines(Domain.RepositoryType.Tx));    break;
 				case Domain.RepositoryType.Bidir: monitor_Bidir.AddLines(_terminal.RepositoryToDisplayLines(Domain.RepositoryType.Bidir)); break;
-				case Domain.RepositoryType.Rx:    monitor_Rx.AddLines(_terminal.RepositoryToDisplayLines(Domain.RepositoryType.Rx)); break;
+				case Domain.RepositoryType.Rx:    monitor_Rx.AddLines   (_terminal.RepositoryToDisplayLines(Domain.RepositoryType.Rx));    break;
 			}
 		}
 
