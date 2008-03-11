@@ -23,6 +23,7 @@ namespace YAT.Gui.Forms
 
 		private Controls.Monitor[] _monitors;
 		private Controls.TextFormat[] _textFormats;
+		private Model.Types.TextFormat[] _formatSettings;
 
 		private List<Domain.DisplayElement> _examples;
 		private List<Domain.DisplayElement> _exampleComplete;
@@ -172,32 +173,22 @@ namespace YAT.Gui.Forms
 					textFormat_TimeStamp, textFormat_Length, textFormat_WhiteSpace, textFormat_Error,
 				};
 
+			_formatSettings = new Model.Types.TextFormat[]
+				{
+					_settings_Form.TxDataFormat, _settings_Form.TxControlFormat, _settings_Form.RxDataFormat, _settings_Form.RxControlFormat,
+					_settings_Form.TimeStampFormat, _settings_Form.LengthFormat, _settings_Form.WhiteSpacesFormat, _settings_Form.ErrorFormat,
+				};
+
 			for (int i = 0; i < _monitors.Length; i++)
 				_monitors[i].AddElement(_examples [i]);
 
 			monitor_Example.AddElements(_exampleComplete);
 		}
 
-		private Model.Types.TextFormat TextFormatFromIndex(int index)
-		{
-			switch (index)
-			{
-				case 0: return (_settings_Form.TxDataFormat);
-				case 1: return (_settings_Form.TxControlFormat);
-				case 2: return (_settings_Form.RxDataFormat);
-				case 3: return (_settings_Form.RxControlFormat);
-				case 4: return (_settings_Form.TimeStampFormat);
-				case 5: return (_settings_Form.LengthFormat);
-				case 6: return (_settings_Form.WhiteSpacesFormat);
-				case 7: return (_settings_Form.ErrorFormat);
-				default: throw (new ArgumentOutOfRangeException("index", index, "Control index out of range (0-7)"));
-			}
-		}
-
 		private void GetFormat(int index)
 		{
-			TextFormatFromIndex(index).Style = _textFormats[index].FormatFontStyle;
-			TextFormatFromIndex(index).Color = _textFormats[index].FormatColor;
+			_formatSettings[index].Style = _textFormats[index].FormatFontStyle;
+			_formatSettings[index].Color = _textFormats[index].FormatColor;
 		}
 
 		private void SetControls()
@@ -205,16 +196,18 @@ namespace YAT.Gui.Forms
 			_isSettingControls = true;
 
 			for (int i = 0; i < _monitors.Length; i++)
-				_monitors[i].FormatSettings = _settings_Form;
+			{                          // clone settings before assigning them to control
+				_monitors[i].FormatSettings = new Model.Settings.FormatSettings(_settings_Form);
+			}
 
 			for (int i = 0; i < _textFormats.Length; i++)
 			{
 				_textFormats[i].FormatFont = _settings_Form.Font;
-				_textFormats[i].FormatFontStyle = TextFormatFromIndex(i).Style;
-				_textFormats[i].FormatColor = TextFormatFromIndex(i).Color;
+				_textFormats[i].FormatFontStyle = _formatSettings[i].Style;
+				_textFormats[i].FormatColor = _formatSettings[i].Color;
 			}
-
-			monitor_Example.FormatSettings = _settings_Form;
+			                           // clone settings before assigning them to control
+			monitor_Example.FormatSettings = new Model.Settings.FormatSettings(_settings_Form);
 
 			_isSettingControls = false;
 		}

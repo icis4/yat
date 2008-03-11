@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using MKY.Utilities.Event;
+using MKY.Utilities.Diagnostics;
 
 using YAT.Gui.Utilities;
 
@@ -215,9 +216,6 @@ namespace YAT.Gui.Controls
 
 		public void AddElement(Domain.DisplayElement element)
 		{
-			if (_repositoryType == Domain.RepositoryType.Rx)
-				System.Diagnostics.Debug.WriteLine("(AddElement)");
-
 			List<Domain.DisplayElement> elements = new List<Domain.DisplayElement>();
 			elements.Add(element);
 			AddElements(elements);
@@ -227,9 +225,6 @@ namespace YAT.Gui.Controls
 		{
 			ListBox lb = listBox_Monitor;
 			lb.BeginUpdate();
-
-			if (_repositoryType == Domain.RepositoryType.Rx)
-				System.Diagnostics.Debug.WriteLine("(AddElements)");
 
 			foreach (Domain.DisplayElement de in elements)
 			{
@@ -246,15 +241,6 @@ namespace YAT.Gui.Controls
 				partialLine.Add(de);
 				_lines[_lines.Count - 1] = partialLine;
 				lb.Items[lb.Items.Count - 1] = partialLine;
-
-				if (_repositoryType == Domain.RepositoryType.Rx)
-					System.Diagnostics.Debug.WriteLine
-						(
-						"AddElements:" + Environment.NewLine +
-						"- ls.Count: " + _lines.Count.ToString() + Environment.NewLine +
-						"- lb.Count: " + lb.Items.Count.ToString() + Environment.NewLine +
-						de.ToString()
-						);
 
 				// process EOL
 				if (de.IsEol)
@@ -282,51 +268,31 @@ namespace YAT.Gui.Controls
 
 		public void AddLine(List<Domain.DisplayElement> line)
 		{
-			if (_repositoryType == Domain.RepositoryType.Rx)
-				System.Diagnostics.Debug.WriteLine("(AddLine)");
-
 			AddElements(line);
 		}
 
 		public void AddLines(List<List<Domain.DisplayElement>> lines)
 		{
-			if (_repositoryType == Domain.RepositoryType.Rx)
-				System.Diagnostics.Debug.WriteLine("(AddLines)");
-
 			foreach (List<Domain.DisplayElement> line in lines)
 				AddLine(line);
 		}
 
-		public void ReplaceLastLine(List<Domain.DisplayElement> line)
+		public void ReplaceLine(int offset, List<Domain.DisplayElement> line)
 		{
-			if (_repositoryType == Domain.RepositoryType.Rx)
-				System.Diagnostics.Debug.WriteLine("(ReplaceLastLine)");
+			int lastIndex = _lines.Count - 1;
+			int indexToReplace = lastIndex - offset;
 
-			ListBox lb = listBox_Monitor;
-			lb.BeginUpdate();
-
-			if (_lines.Count == 0)               // if first line, simply add it
+			if (indexToReplace >= 0)
 			{
-				AddLine(line);
-			}                                    // if last line is empty, replace line before
-			else if (_lines[_lines.Count - 1].Count == 0)
-			{
-				// check that a "line before" actually exists
-				if (_lines.Count >= 2)
-					_lines[_lines.Count - 2] = line;
+				_lines[indexToReplace] = line;
 
-				if (lb.Items.Count >= 2)
-					lb.Items[lb.Items.Count - 2] = line;
+				ListBox lb = listBox_Monitor;
+				lb.Items[indexToReplace] = line;
 			}
-			else                                 // if last line isn't finish yet, add to it
+			else
 			{
-				List<Domain.DisplayElement> partialLine = _lines[_lines.Count - 1];
-				partialLine.AddRange(line);
-				_lines[_lines.Count - 1] = partialLine;
-				lb.Items[lb.Items.Count - 1] = partialLine;
+				XTrace.WriteStack(this, "Invalid attempt to replace a line of the monitor");
 			}
-
-			lb.EndUpdate();
 		}
 
 		public void Clear()
@@ -517,6 +483,7 @@ namespace YAT.Gui.Controls
 		private void SetFormatDependentControls()
 		{
 			listBox_Monitor.ItemHeight = _formatSettings.Font.Height;
+			listBox_Monitor.Refresh();
 		}
 
 		private void SetCountStatusControls()

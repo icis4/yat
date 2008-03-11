@@ -55,7 +55,7 @@
     <Compile Include="IO\SerialPort\SerialPort.cs" />
     <Compile Include="IO\Socket\TcpAutoSocket.cs" />
     <Compile Include="IO\Socket\TcpClient.cs" />
-    <Compile Include="IO\SerialPort\Handshake.cs" />
+    <Compile Include="IO\SerialPort\FlowControl.cs" />
     <Compile Include="IOType.cs" />
     <Compile Include="Factory\IOFactory.cs" />
     <Compile Include="IO\Socket\TcpServer.cs" />

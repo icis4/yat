@@ -19,5 +19,13 @@ namespace MKY.Utilities.Diagnostics
 		{
 			DiagnosticsWriterOutput.WriteException(_consoleWrapper, obj, ex);
 		}
+
+		/// <summary>
+		/// Writes message and stack to <see cref="System.Console"/>.
+		/// </summary>
+		public static void WriteStack(object obj, string message)
+		{
+			DiagnosticsWriterOutput.WriteStack(_consoleWrapper, obj, message);
+		}
 	}
 }
