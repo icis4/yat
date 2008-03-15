@@ -10,11 +10,6 @@ namespace YAT.Domain.Settings
 	public class TransmitSettings : MKY.Utilities.Settings.Settings, IEquatable<TransmitSettings>
 	{
 		/// <summary></summary>
-		public const bool LocalEchoEnabledDefault = true;
-
-		private bool _localEchoEnabled;
-
-		/// <summary></summary>
 		public TransmitSettings()
 		{
 			SetMyDefaults();
@@ -36,7 +31,6 @@ namespace YAT.Domain.Settings
 		public TransmitSettings(TransmitSettings rhs)
 			: base(rhs)
 		{
-			_localEchoEnabled = rhs.LocalEchoEnabled;
 			ClearChanged();
 		}
 
@@ -45,28 +39,15 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			LocalEchoEnabled = LocalEchoEnabledDefault;
+			// nothing to do
 		}
 
 		#region Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
-		/// <summary></summary>
-		[XmlElement("LocalEchoEnabled")]
-		public bool LocalEchoEnabled
-		{
-			get { return (_localEchoEnabled); }
-			set
-			{
-				if (_localEchoEnabled != value)
-				{
-					_localEchoEnabled = value;
-					SetChanged();
-				}
-			}
-		}
+		// no properties yet
 
 		#endregion
 
@@ -93,7 +74,7 @@ namespace YAT.Domain.Settings
 			{
 				return
 					(
-					_localEchoEnabled.Equals(value._localEchoEnabled)
+					true
 					);
 			}
 			return (false);
