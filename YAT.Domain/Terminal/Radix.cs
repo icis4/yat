@@ -142,7 +142,7 @@ namespace YAT.Domain
 			if (TryParse(radix, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException(radix));
+				throw (new ArgumentOutOfRangeException("radix", radix, "Invalid radix"));
 		}
 
 		/// <summary></summary>

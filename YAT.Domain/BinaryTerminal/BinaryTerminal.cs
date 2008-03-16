@@ -331,7 +331,7 @@ namespace YAT.Domain
 			List<DisplayElement> l = new List<DisplayElement>();
 
 			// add space if necessary
-			if (ElementsAreSeparate())
+			if (ElementsAreSeparate(direction))
 			{
 				int lineLength = 0;
 				foreach (DisplayElement de in lineState.LineElements)
@@ -411,7 +411,7 @@ namespace YAT.Domain
 			else
 				lineState = _txLineState;
 
-			if (BinaryTerminalSettings.DirectionLineBreakEnabled)
+			if (TerminalSettings.Display.DirectionLineBreakEnabled)
 			{
 				if (_bidirLineState.IsFirstLine)
 				{

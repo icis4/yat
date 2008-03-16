@@ -13,8 +13,6 @@ namespace YAT.Domain.Settings
 		// Fields
 		//==========================================================================================
 
-		private bool _directionLineBreakEnabled;
-
 		private bool _separateTxRxDisplay;
 		private BinaryDisplaySettings _txDisplay;
 		private BinaryDisplaySettings _rxDisplay;
@@ -45,7 +43,6 @@ namespace YAT.Domain.Settings
 
 		private void InitializeNodes()
 		{
-			DirectionLineBreakEnabled = true;
 			TxDisplay = new BinaryDisplaySettings(SettingsType);
 			RxDisplay = new BinaryDisplaySettings(SettingsType);
 		}
@@ -57,7 +54,6 @@ namespace YAT.Domain.Settings
 		public BinaryTerminalSettings(BinaryTerminalSettings rhs)
 			: base(rhs)
 		{
-			_directionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
 			_separateTxRxDisplay = rhs.SeparateTxRxDisplay;
 			TxDisplay = new BinaryDisplaySettings(rhs.TxDisplay);
 			RxDisplay = new BinaryDisplaySettings(rhs.RxDisplay);
@@ -69,7 +65,6 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			DirectionLineBreakEnabled = true;
 			SeparateTxRxDisplay = false;
 		}
 
@@ -79,21 +74,6 @@ namespace YAT.Domain.Settings
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
-
-		/// <summary></summary>
-		[XmlElement("DirectionLineBreakEnabled")]
-		public bool DirectionLineBreakEnabled
-		{
-			get { return (_directionLineBreakEnabled); }
-			set
-			{
-				if (_directionLineBreakEnabled != value)
-				{
-					_directionLineBreakEnabled = value;
-					SetChanged();
-				}
-			}
-		}
 
 		/// <summary></summary>
 		[XmlElement("SeparateTxRxDisplay")]
@@ -186,7 +166,6 @@ namespace YAT.Domain.Settings
 			{
 				return
 					(
-					_directionLineBreakEnabled.Equals(value._directionLineBreakEnabled) &&
 					_separateTxRxDisplay.Equals(value._separateTxRxDisplay) &&
 					base.Equals((MKY.Utilities.Settings.Settings)value) // compares all settings nodes
 					);

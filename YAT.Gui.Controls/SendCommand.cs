@@ -29,6 +29,7 @@ namespace YAT.Gui.Controls
 			Inactive,
 			HasFocusButIsNotValidated,
 			HasFocusAndIsValidated,
+			HasFocusAndIsValidatedAndSendRequested,
 			IsLeavingButIsNotValidated,
 		}
 
@@ -316,12 +317,19 @@ namespace YAT.Gui.Controls
 
             splitContainer.SplitterDistance = (int)(_splitterRatio * splitContainer.Width);
 
-            if (_commandEditState == TextEditState.Inactive)
+			if (_commandEditState == TextEditState.Inactive)
 			{
 				if (_command.IsCommand)
                     comboBox_Command.Text = _command.SingleLineCommand;
 				else
 					comboBox_Command.Text = Command.EmptyCommandText;
+			}
+			else if (_commandEditState == TextEditState.HasFocusAndIsValidatedAndSendRequested)
+			{   // needed when command is modified (e.g. cleared) after send
+				if (_command.IsCommand)
+					comboBox_Command.Text = _command.SingleLineCommand;
+				else
+					comboBox_Command.Text = "";
 			}
 			button_SendCommand.Enabled = _terminalIsOpen;
 
@@ -388,9 +396,15 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <remarks>
+		/// Temporarily changing the edit state is needed when command is modified
+		/// (e.g. cleared) after send.
+		/// </remarks>
 		private void RequestSendCommand()
 		{
+			_commandEditState = TextEditState.HasFocusAndIsValidatedAndSendRequested;
 			OnSendCommandRequest(new EventArgs());
+			_commandEditState = TextEditState.HasFocusAndIsValidated;
 		}
 
 		#endregion

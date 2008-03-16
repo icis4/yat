@@ -327,6 +327,24 @@ namespace YAT.Gui.Forms
 			f.Show(this);
 		}
 
+		private void toolStripMenuItem_MainMenu_Help_RequestSupport_Click(object sender, EventArgs e)
+		{
+			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerInstructions.Tracker.Support);
+			f.Show(this);
+		}
+
+		private void toolStripMenuItem_MainMenu_Help_RequestFeature_Click(object sender, EventArgs e)
+		{
+			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerInstructions.Tracker.Feature);
+			f.Show(this);
+		}
+
+		private void toolStripMenuItem_MainMenu_Help_SubmitBug_Click(object sender, EventArgs e)
+		{
+			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerInstructions.Tracker.Bug);
+			f.Show(this);
+		}
+
 		private void toolStripMenuItem_MainMenu_Help_About_Click(object sender, EventArgs e)
 		{
 			Gui.Forms.About f = new Gui.Forms.About();

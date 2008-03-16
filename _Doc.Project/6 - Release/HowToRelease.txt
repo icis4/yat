@@ -59,13 +59,17 @@ Note:	The whole release process takes about 4 hours
 	> "y-a-terminal-users@lists.sourceforge.net"
 
 
-11.	Commit and tag YAT
+11.	Close feature requests and bugs that are covered by release
+	-----------------------------------------------------------
+
+
+12.	Commit and tag YAT
 	------------------
 	> Commit any modifications to the subversion repository
 	> Tag/checkpoint the project
 
 
-12.	Archive YAT
+13.	Archive YAT
 	-----------
 	> Copy the working copy to "\YAT\Releases and Checkpoints\Working Copy"
 	> Clean the copy using "\_Scripts\CleanAll.bat"

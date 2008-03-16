@@ -78,6 +78,21 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers
 		//==========================================================================================
 
+		private void comboBox_Encoding_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+				_settings_Form.Encoding = (XEncoding)comboBox_Encoding.SelectedItem;
+		}
+
+		private void checkBox_SeparateTxRxEol_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+			{
+				_settings_Form.SeparateTxRxEol = checkBox_SeparateTxRxEol.Checked;
+				SetControls();
+			}
+		}
+
 		private void comboBox_TxEol_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
@@ -116,15 +131,6 @@ namespace YAT.Gui.Forms
 				{
 					e.Cancel = true;
 				}
-			}
-		}
-
-		private void checkBox_SeparateTxRxEol_CheckedChanged(object sender, EventArgs e)
-		{
-			if (!_isSettingControls)
-			{
-				_settings_Form.SeparateTxRxEol = checkBox_SeparateTxRxEol.Checked;
-				SetControls();
 			}
 		}
 
@@ -169,21 +175,6 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void comboBox_Encoding_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (!_isSettingControls)
-				_settings_Form.Encoding = (XEncoding)comboBox_Encoding.SelectedItem;
-		}
-
-		private void checkBox_DirectionLineBreak_CheckedChanged(object sender, EventArgs e)
-		{
-			if (!_isSettingControls)
-			{
-				_settings_Form.DirectionLineBreakEnabled = checkBox_DirectionLineBreak.Checked;
-				SetControls();
-			}
-		}
-
 		private void checkBox_ShowEol_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
@@ -191,21 +182,6 @@ namespace YAT.Gui.Forms
 				_settings_Form.ShowEol = checkBox_ShowEol.Checked;
 				SetControls();
 			}
-		}
-
-		private void checkBox_ReplaceControlCharacters_CheckedChanged(object sender, EventArgs e)
-		{
-			if (!_isSettingControls)
-			{
-				_settings_Form.ReplaceControlChars = checkBox_ReplaceControlCharacters.Checked;
-				SetControls();
-			}
-		}
-
-		private void comboBox_ControlCharacterRadix_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (!_isSettingControls)
-				_settings_Form.ControlCharRadix = (Domain.XControlCharRadix)comboBox_ControlCharacterRadix.SelectedItem;
 		}
 
 		private void checkBox_Delay_CheckedChanged(object sender, EventArgs e)
@@ -374,9 +350,6 @@ namespace YAT.Gui.Forms
 			comboBox_Encoding.Items.Clear();
 			comboBox_Encoding.Items.AddRange(XEncoding.GetItems());
 
-			comboBox_ControlCharacterRadix.Items.Clear();
-			comboBox_ControlCharacterRadix.Items.AddRange(Domain.XControlCharRadix.GetItems());
-
 			_isSettingControls = false;
 		}
 
@@ -384,34 +357,33 @@ namespace YAT.Gui.Forms
 		{
 			_isSettingControls = true;
 
-			Domain.XEol eol;
+			// encoding
+			comboBox_Encoding.SelectedItem = (XEncoding)_settings_Form.Encoding;
 
+			// EOL
+			bool separateEol = _settings_Form.SeparateTxRxEol;
+			if (!separateEol)
+				label_TxEol.Text = "E&OL sequence:";
+			else
+				label_TxEol.Text = "&Tx EOL sequence:";
+			checkBox_SeparateTxRxEol.Checked = separateEol;
+			label_RxEol.Enabled = separateEol;
+			comboBox_RxEol.Enabled = separateEol;
+
+			Domain.XEol eol;
 			if (Domain.XEol.TryParse(_settings_Form.TxEol, out eol))
 				comboBox_TxEol.SelectedItem = eol;
 			else
 				comboBox_TxEol.Text = _settings_Form.TxEol;
-
 			if (Domain.XEol.TryParse(_settings_Form.RxEol, out eol))
 				comboBox_RxEol.SelectedItem = eol;
 			else
 				comboBox_RxEol.Text = _settings_Form.RxEol;
 
-			bool separateEol = _settings_Form.SeparateTxRxEol;
-			checkBox_SeparateTxRxEol.Checked = separateEol;
-			label_RxEol.Enabled = separateEol;
-			comboBox_RxEol.Enabled = separateEol;
-
-			comboBox_Encoding.SelectedItem = (XEncoding)_settings_Form.Encoding;
-
-			checkBox_DirectionLineBreak.Checked = _settings_Form.DirectionLineBreakEnabled;
-
+			// display
 			checkBox_ShowEol.Checked = _settings_Form.ShowEol;
 
-			bool replaceEnabled = _settings_Form.ReplaceControlChars;
-			checkBox_ReplaceControlCharacters.Checked = replaceEnabled;
-			comboBox_ControlCharacterRadix.Enabled = replaceEnabled;
-			comboBox_ControlCharacterRadix.SelectedItem = (Domain.XControlCharRadix)_settings_Form.ControlCharRadix;
-
+			// transmit
 			bool delayEnabled = _settings_Form.LineSendDelay.Enabled;
 			checkBox_Delay.Checked = delayEnabled;
 			textBox_Delay.Enabled = delayEnabled;

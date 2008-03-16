@@ -213,7 +213,7 @@ namespace YAT.Model.Types
 					(
 					!IsFilePath &&
 					(_commandLines.Length >= 1) &&
-					!string.IsNullOrEmpty(_commandLines[0])
+					(_commandLines[0] != null)
 					);
 			}
 		}

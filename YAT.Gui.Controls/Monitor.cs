@@ -7,7 +7,6 @@ using System.Text;
 using System.Windows.Forms;
 
 using MKY.Utilities.Event;
-using MKY.Utilities.Diagnostics;
 
 using YAT.Gui.Utilities;
 
@@ -291,7 +290,7 @@ namespace YAT.Gui.Controls
 			}
 			else
 			{
-				XTrace.WriteStack(this, "Invalid attempt to replace a line of the monitor");
+				throw (new InvalidOperationException("Invalid attempt to replace a line of the monitor"));
 			}
 		}
 
@@ -483,6 +482,11 @@ namespace YAT.Gui.Controls
 		private void SetFormatDependentControls()
 		{
 			listBox_Monitor.ItemHeight = _formatSettings.Font.Height;
+			listBox_Monitor.Refresh();
+		}
+
+		private void SetCharReplaceDependentControls()
+		{
 			listBox_Monitor.Refresh();
 		}
 

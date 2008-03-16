@@ -97,7 +97,7 @@ namespace MKY.IO.Ports
 			if (TryParse(parity, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException(parity));
+				throw (new ArgumentOutOfRangeException("parity", parity, "Invalid parity"));
 		}
 
 		/// <summary></summary>

@@ -11,6 +11,7 @@ namespace YAT.Settings.Terminal
 		private Domain.Settings.TerminalSettings _terminal;
 		private Model.Settings.PredefinedCommandSettings _predefinedCommand;
 		private Model.Settings.FormatSettings _format;
+		private Domain.Settings.CharReplaceSettings _charReplace;
 		private Log.Settings.LogSettings _log;
 
 		public ExplicitSettings()
@@ -49,9 +50,9 @@ namespace YAT.Settings.Terminal
 		}
 
 		#region Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		[XmlElement("Terminal")]
 		public Domain.Settings.TerminalSettings Terminal
@@ -109,6 +110,26 @@ namespace YAT.Settings.Terminal
 					Model.Settings.FormatSettings old = _format;
 					_format = value;
 					ReplaceNode(old, _format);
+				}
+			}
+		}
+
+		[XmlElement("CharReplace")]
+		public Domain.Settings.CharReplaceSettings CharReplace
+		{
+			get { return (_charReplace); }
+			set
+			{
+				if (_charReplace == null)
+				{
+					_charReplace = value;
+					AttachNode(_charReplace);
+				}
+				else if (_charReplace != value)
+				{
+					Domain.Settings.CharReplaceSettings old = _charReplace;
+					_charReplace = value;
+					ReplaceNode(old, _charReplace);
 				}
 			}
 		}

@@ -17,7 +17,8 @@ namespace YAT.Domain.Settings
 		private IOSettings _io;
 		private BufferSettings _buffer;
 		private DisplaySettings _display;
-		private TransmitSettings _transmit;
+		private CharReplaceSettings _charReplace;
+		private SendSettings _send;
 
 		// type dependent settings
 		private TextTerminalSettings _textTerminal;
@@ -45,7 +46,8 @@ namespace YAT.Domain.Settings
 			IO = new IOSettings(SettingsType);
 			Buffer = new BufferSettings(SettingsType);
 			Display = new DisplaySettings(SettingsType);
-			Transmit = new TransmitSettings(SettingsType);
+			CharReplace = new CharReplaceSettings(SettingsType);
+			Send = new SendSettings(SettingsType);
 
 			TextTerminal = new TextTerminalSettings(SettingsType);
 			BinaryTerminal = new BinaryTerminalSettings(SettingsType);
@@ -63,7 +65,8 @@ namespace YAT.Domain.Settings
 			IO = new IOSettings(rhs.IO);
 			Buffer = new BufferSettings(rhs.Buffer);
 			Display = new DisplaySettings(rhs.Display);
-			Transmit = new TransmitSettings(rhs.Transmit);
+			CharReplace = new CharReplaceSettings(rhs.CharReplace);
+			Send = new SendSettings(rhs.Send);
 
 			TextTerminal = new TextTerminalSettings(rhs.TextTerminal);
 			BinaryTerminal = new BinaryTerminalSettings(rhs.BinaryTerminal);
@@ -80,9 +83,9 @@ namespace YAT.Domain.Settings
 		}
 
 		#region Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary></summary>
 		[XmlElement("TerminalType")]
@@ -163,22 +166,43 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("Transmit")]
-		public TransmitSettings Transmit
+		[XmlElement("CharReplace")]
+		public CharReplaceSettings CharReplace
 		{
-			get { return (_transmit); }
+			get { return (_charReplace); }
 			set
 			{
-				if (_transmit == null)
+				if (_charReplace == null)
 				{
-					_transmit = value;
-					AttachNode(_transmit);
+					_charReplace = value;
+					AttachNode(_charReplace);
 				}
-				else if (_transmit != value)
+				else if (_charReplace != value)
 				{
-					TransmitSettings old = _transmit;
-					_transmit = value;
-					ReplaceNode(old, _transmit);
+					CharReplaceSettings old = _charReplace;
+					_charReplace = value;
+					ReplaceNode(old, _charReplace);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("Send")]
+		public SendSettings Send
+		{
+			get { return (_send); }
+			set
+			{
+				if (_send == null)
+				{
+					_send = value;
+					AttachNode(_send);
+				}
+				else if (_send != value)
+				{
+					SendSettings old = _send;
+					_send = value;
+					ReplaceNode(old, _send);
 				}
 			}
 		}

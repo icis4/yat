@@ -318,6 +318,10 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		/// <remarks>
+		/// The following list must handle the same properties as
+		/// <see cref="Gui.Forms.AdvancedTerminalSettings.SetDefaults()"/> defaults.
+		/// </remarks>
 		private void ShowAdvancedSettings()
 		{
 			Gui.Forms.AdvancedTerminalSettings f = new Gui.Forms.AdvancedTerminalSettings(_settings_Form);
@@ -325,17 +329,27 @@ namespace YAT.Gui.Forms
 			{
 				Refresh();
 
-				_settings_Form.Display.Radix = f.SettingsResult.Display.Radix;
+				_settings_Form.Display.SeparateTxRxRadix = f.SettingsResult.Display.SeparateTxRxRadix;
+				_settings_Form.Display.TxRadix = f.SettingsResult.Display.TxRadix;
+				_settings_Form.Display.RxRadix = f.SettingsResult.Display.RxRadix;
+
 				_settings_Form.Display.ShowTimeStamp = f.SettingsResult.Display.ShowTimeStamp;
 				_settings_Form.Display.ShowLength = f.SettingsResult.Display.ShowLength;
 				_settings_Form.Display.ShowCounters = f.SettingsResult.Display.ShowCounters;
 
+				_settings_Form.Display.DirectionLineBreakEnabled = f.SettingsResult.Display.DirectionLineBreakEnabled;
 				_settings_Form.Display.TxMaximalLineCount = f.SettingsResult.Display.TxMaximalLineCount;
 				_settings_Form.Display.RxMaximalLineCount = f.SettingsResult.Display.RxMaximalLineCount;
 
-				_settings_Form.IO.Endianess = f.SettingsResult.IO.Endianess;
-				_settings_Form.Transmit.LocalEchoEnabled = f.SettingsResult.Transmit.LocalEchoEnabled;
+				_settings_Form.CharReplace.ReplaceControlChars = f.SettingsResult.CharReplace.ReplaceControlChars;
+				_settings_Form.CharReplace.ControlCharRadix = f.SettingsResult.CharReplace.ControlCharRadix;
+				_settings_Form.CharReplace.ReplaceSpace = f.SettingsResult.CharReplace.ReplaceSpace;
 
+				_settings_Form.IO.Endianess = f.SettingsResult.IO.Endianess;
+
+				_settings_Form.Send.KeepCommand = f.SettingsResult.Send.KeepCommand;
+
+				_settings_Form.IO.SerialPort.ReplaceParityErrors = f.SettingsResult.IO.SerialPort.ReplaceParityErrors;
 				_settings_Form.IO.SerialPort.ParityErrorReplacement = f.SettingsResult.IO.SerialPort.ParityErrorReplacement;
 			}
 		}

@@ -132,7 +132,6 @@ namespace YAT.Gui.Forms
 			// Help
 			// 
 			this.AcceptButton = this.button_Close;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.button_Close;
 			this.ClientSize = new System.Drawing.Size(500, 567);
 			this.Controls.Add(this.label_Explanations);

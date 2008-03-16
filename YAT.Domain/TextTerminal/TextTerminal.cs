@@ -281,24 +281,7 @@ namespace YAT.Domain
 				case Radix.Dec:
 				case Radix.Hex:
 				{
-					if (((b < 0x20) || (b == 0x7F)) && (TextTerminalSettings.ControlCharRadix == ControlCharRadix.AsciiMnemonic))
-					{
-						string data = "";
-
-						if (b < 0x20)
-							data = "<" + Ascii.ConvertToMnemonic(b) + ">";
-						if (b == 0x7F)
-							data = "<DEL>";
-
-						if (d == SerialDirection.Tx)
-							return (new DisplayElement.TxControl(new ElementOrigin(b, d), data));
-						else
-							return (new DisplayElement.RxControl(new ElementOrigin(b, d), data));
-					}
-					else
-					{
-						return (base.ByteToElement(b, d, r));
-					}
+					return (base.ByteToElement(b, d, r));
 				}
 				// Char/String
 				case Radix.Char:
@@ -321,21 +304,14 @@ namespace YAT.Domain
 						char[] chars = new char[1];
 						if (e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true) == 1)
 						{
-							// treat ASCII control charaters separately
 							int code = (int)chars[0];
-							if (((code < 0x20) || (code == 0x7F)) && (TextTerminalSettings.ControlCharRadix == ControlCharRadix.AsciiMnemonic))
+							if ((code < 0x20) || (code == 0x7F)) // control chars
 							{
-								string data = "";
-
-								if (code < 0x20)
-									data = "<" + Ascii.ConvertToMnemonic((byte)code) + ">";
-								if (code == 0x7F)
-									data = "<DEL>";
-
-								if (d == SerialDirection.Tx)
-									return (new DisplayElement.TxControl(new ElementOrigin(b, d), data));
-								else
-									return (new DisplayElement.RxControl(new ElementOrigin(b, d), data));
+								return (base.ByteToElement(b, d, r));
+							}
+							else if (b == 0x20) // space
+							{
+								return (base.ByteToElement(b, d, r));
 							}
 							else
 							{
@@ -442,7 +418,7 @@ namespace YAT.Domain
 			List<DisplayElement> l = new List<DisplayElement>();
 
 			// add space if necessary
-			if (ElementsAreSeparate())
+			if (ElementsAreSeparate(direction))
 			{
 				int lineLength = 0;
 				foreach (DisplayElement le in lineState.LineElements)
@@ -503,7 +479,7 @@ namespace YAT.Domain
 			else
 				lineState = _txLineState;
 
-			if (TextTerminalSettings.DirectionLineBreakEnabled)
+			if (TerminalSettings.Display.DirectionLineBreakEnabled)
 			{
 				if (_bidirLineState.IsFirstLine)
 				{

@@ -10,12 +10,15 @@ namespace YAT.Domain.Settings.SerialPort
 	public class SerialPortSettings : MKY.Utilities.Settings.Settings, IEquatable<SerialPortSettings>
 	{
 		/// <summary></summary>
+		public const bool ReplaceParityErrorsDefault = false;
+		/// <summary></summary>
 		public const string ParityErrorReplacementDefault = "\\h(00)";
 		/// <summary></summary>
 		public const byte ParityErrorReplacementDefaultAsByte = 0x00;
 
 		private MKY.IO.Ports.SerialPortId _portId;
 		private SerialCommunicationSettings _communication;
+		private bool _replaceParityErrors;
 		private string _parityErrorReplacement;
 		private bool _rtsEnabled;
 		private bool _dtrEnabled;
@@ -51,6 +54,7 @@ namespace YAT.Domain.Settings.SerialPort
 		{
 			_portId = rhs.PortId;
 			Communication = new SerialCommunicationSettings(rhs.Communication);
+			_replaceParityErrors = rhs._replaceParityErrors;
 			_parityErrorReplacement = rhs.ParityErrorReplacement;
 			_rtsEnabled = rhs.RtsEnabled;
 			_dtrEnabled = rhs.DtrEnabled;
@@ -63,15 +67,16 @@ namespace YAT.Domain.Settings.SerialPort
 		protected override void SetMyDefaults()
 		{
 			PortId = MKY.IO.Ports.SerialPortId.DefaultPort;
+			ReplaceParityErrors = ReplaceParityErrorsDefault;
 			ParityErrorReplacement = ParityErrorReplacementDefault;
 			RtsEnabled = false;
 			DtrEnabled = false;
 		}
 
 		#region Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary></summary>
 		[XmlElement("PortId")]
@@ -105,6 +110,21 @@ namespace YAT.Domain.Settings.SerialPort
 					SerialCommunicationSettings old = _communication;
 					_communication = value;
 					ReplaceNode(old, _communication);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("ReplaceParityErrors")]
+		public bool ReplaceParityErrors
+		{
+			get { return (_replaceParityErrors); }
+			set
+			{
+				if (_replaceParityErrors != value)
+				{
+					_replaceParityErrors = value;
+					SetChanged();
 				}
 			}
 		}
@@ -181,6 +201,7 @@ namespace YAT.Domain.Settings.SerialPort
 					(
 					_portId.Equals(value._portId) &&
 					_communication.Equals(value._communication) &&
+					_replaceParityErrors.Equals(value._replaceParityErrors) &&
 					_parityErrorReplacement.Equals(value._parityErrorReplacement) &&
 					_rtsEnabled.Equals(value._rtsEnabled) &&
 					_dtrEnabled.Equals(value._dtrEnabled)

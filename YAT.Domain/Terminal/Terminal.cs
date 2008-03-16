@@ -320,43 +320,116 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual DisplayElement ByteToElement(byte b, SerialDirection d)
 		{
-			return (ByteToElement(b, d, _terminalSettings.Display.Radix));
+			if (d == SerialDirection.Tx)
+				return (ByteToElement(b, d, _terminalSettings.Display.TxRadix));
+			else
+				return (ByteToElement(b, d, _terminalSettings.Display.RxRadix));
 		}
 
 		/// <summary></summary>
 		protected virtual DisplayElement ByteToElement(byte b, SerialDirection d, Radix r)
 		{
+			bool replaceToAscii = ((TerminalSettings.CharReplace.ReplaceControlChars) &&
+								   (TerminalSettings.CharReplace.ControlCharRadix == ControlCharRadix.AsciiMnemonic));
+			bool error = false;
 			string data = "";
 
 			switch (r)
 			{
-				case Radix.Bin:    data += XByte.ConvertToBinaryString(b) + "b"; break;
-				case Radix.Oct:    data += XByte.ConvertToOctalString(b) + "o"; break;
-				case Radix.Dec:    data += b.ToString("D3") + "d"; break;
-				case Radix.Hex:    data += b.ToString("X2") + "h"; break;
+				case Radix.Bin:
+				case Radix.Oct:
+				case Radix.Dec:
+				case Radix.Hex:
+				{
+					if ((b < 0x20) || (b == 0x7F)) // control chars
+					{
+						if (replaceToAscii)
+							data = ByteToAsciiString(b);
+						else
+							data = ByteToNumericRadixString(b, r);
+					}
+					else
+					{
+						data = ByteToNumericRadixString(b, r);
+					}
+					break;
+				}
 				case Radix.Char:
 				case Radix.String:
 				{
-					if ((b < 0x20) || (b == 0x7F))
-						data += "<" + b.ToString("X2") + "h>";
+					if ((b < 0x20) || (b == 0x7F)) // control chars
+					{
+						if (replaceToAscii)
+						{
+							data = ByteToAsciiString(b);
+						}
+						else
+						{
+							error = true; // signal error
+							if (d == SerialDirection.Tx)
+								data = "Sent";
+							else
+								data = "Received";
+							data += " ASCII control char";
+							data += " <" + b.ToString("X2") + "h>";
+							data += " cannot be displayed in current settings";
+						}
+					}
+					else if (b == 0x20) // space
+					{
+						if (TerminalSettings.CharReplace.ReplaceSpace)
+							data = "␣";
+						else
+							data = " ";
+					}
 					else
-						data += ((char)b).ToString();
-
+					{
+						data = ((char)b).ToString();
+					}
 					break;
 				}
-				default: throw (new NotImplementedException("Unknown Radix"));
+				default: throw (new NotImplementedException("Invalid radix"));
 			}
 
-			if (d == SerialDirection.Tx)
-				return (new DisplayElement.TxData(new ElementOrigin(b, d), data));
+			if (!error)
+			{
+				if (d == SerialDirection.Tx)
+					return (new DisplayElement.TxData(new ElementOrigin(b, d), data));
+				else
+					return (new DisplayElement.RxData(new ElementOrigin(b, d), data));
+			}
 			else
-				return (new DisplayElement.RxData(new ElementOrigin(b, d), data));
+			{
+				return (new DisplayElement.Error(data));
+			}
 		}
 
 		/// <summary></summary>
-		protected virtual bool ElementsAreSeparate()
+		protected virtual string ByteToAsciiString(byte b)
 		{
-			return (ElementsAreSeparate(_terminalSettings.Display.Radix));
+			return ("<" + Ascii.ConvertToMnemonic(b) + ">");
+		}
+
+		/// <summary></summary>
+		protected virtual string ByteToNumericRadixString(byte b, Radix r)
+		{
+			switch (r)
+			{
+				case Radix.Bin: return (XByte.ConvertToBinaryString(b) + "b");
+				case Radix.Oct: return (XByte.ConvertToOctalString(b) + "o");
+				case Radix.Dec: return (b.ToString("D3") + "d");
+				case Radix.Hex: return (b.ToString("X2") + "h");
+				default: throw (new NotImplementedException("Invalid radix"));
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual bool ElementsAreSeparate(SerialDirection d)
+		{
+			if (d == SerialDirection.Tx)
+				return (ElementsAreSeparate(_terminalSettings.Display.TxRadix));
+			else
+				return (ElementsAreSeparate(_terminalSettings.Display.RxRadix));
 		}
 
 		/// <summary></summary>
