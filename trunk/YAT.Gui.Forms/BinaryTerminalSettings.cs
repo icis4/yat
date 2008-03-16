@@ -86,15 +86,6 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers
 		//==========================================================================================
 
-		private void checkBox_DirectionLineBreak_CheckedChanged(object sender, EventArgs e)
-		{
-			if (!_isSettingControls)
-			{
-				_settings_Form.DirectionLineBreakEnabled = checkBox_DirectionLineBreak.Checked;
-				SetControls();
-			}
-		}
-
 		private void binaryTerminalSettingsSet_Tx_SettingsChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
@@ -149,8 +140,6 @@ namespace YAT.Gui.Forms
 		private void SetControls()
 		{
 			_isSettingControls = true;
-
-			checkBox_DirectionLineBreak.Checked = _settings_Form.DirectionLineBreakEnabled;
 
 			if (_settings_Form.SeparateTxRxDisplay)
 				groupBox_TxDisplay.Text = "&Tx and Rx";

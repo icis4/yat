@@ -31,9 +31,9 @@ namespace YAT.Settings.Terminal
 		}
 
 		#region Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		[XmlElement("FileType")]
 		public string FileType
@@ -209,10 +209,17 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlIgnore]
-		public Domain.Settings.TransmitSettings Transmit
+		public Domain.Settings.CharReplaceSettings CharReplace
 		{
-			get { return (_explicit.Terminal.Transmit); }
-			set { _explicit.Terminal.Transmit = value; }
+			get { return (_explicit.Terminal.CharReplace); }
+			set { _explicit.Terminal.CharReplace = value; }
+		}
+
+		[XmlIgnore]
+		public Domain.Settings.SendSettings Send
+		{
+			get { return (_explicit.Terminal.Send); }
+			set { _explicit.Terminal.Send = value; }
 		}
 
 		[XmlIgnore]

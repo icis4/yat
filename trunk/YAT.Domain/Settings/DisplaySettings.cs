@@ -10,6 +10,8 @@ namespace YAT.Domain.Settings
 	public class DisplaySettings : MKY.Utilities.Settings.Settings, IEquatable<DisplaySettings>
 	{
 		/// <summary></summary>
+		public const bool SeparateTxRxRadixDefault = false;
+		/// <summary></summary>
 		public const Radix RadixDefault = Radix.String;
 		/// <summary></summary>
 		public const bool ShowTimeStampDefault = false;
@@ -19,11 +21,16 @@ namespace YAT.Domain.Settings
 		public const bool ShowCountersDefault = false;
 		/// <summary></summary>
 		public const int MaximalLineCountDefault = 100;
+		/// <summary></summary>
+		public const bool DirectionLineBreakEnabledDefault = true;
 
-		private Radix _radix;
+		private bool _separateTxRxRadix;
+		private Radix _txRadix;
+		private Radix _rxRadix;
 		private bool _showTimeStamp;
 		private bool _showLength;
 		private bool _showCounters;
+		private bool _directionLineBreakEnabled;
 		private int _txMaximalLineCount;
 		private int _rxMaximalLineCount;
 
@@ -49,12 +56,16 @@ namespace YAT.Domain.Settings
 		public DisplaySettings(DisplaySettings rhs)
 			: base(rhs)
 		{
-			_radix         = rhs.Radix;
-			_showTimeStamp = rhs.ShowTimeStamp;
-			_showLength    = rhs.ShowLength;
-			_showCounters  = rhs.ShowCounters;
+			_separateTxRxRadix  = rhs.SeparateTxRxRadix;
+			_txRadix            = rhs.TxRadix;
+			_rxRadix            = rhs.RxRadix;
+			_showTimeStamp      = rhs.ShowTimeStamp;
+			_showLength         = rhs.ShowLength;
+			_showCounters       = rhs.ShowCounters;
+			_directionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
 			_txMaximalLineCount = rhs.TxMaximalLineCount;
 			_rxMaximalLineCount = rhs.RxMaximalLineCount;
+
 			ClearChanged();
 		}
 
@@ -63,29 +74,68 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			Radix         = RadixDefault;
-			ShowTimeStamp = ShowTimeStampDefault;
-			ShowLength    = ShowLengthDefault;
-			ShowCounters  = ShowCountersDefault;
+			SeparateTxRxRadix  = SeparateTxRxRadixDefault;
+			TxRadix            = RadixDefault;
+			RxRadix            = RadixDefault;
+			ShowTimeStamp      = ShowTimeStampDefault;
+			ShowLength         = ShowLengthDefault;
+			ShowCounters       = ShowCountersDefault;
 			TxMaximalLineCount = MaximalLineCountDefault;
 			RxMaximalLineCount = MaximalLineCountDefault;
+			DirectionLineBreakEnabled = DirectionLineBreakEnabledDefault;
 		}
 
 		#region Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Properties
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlElement("Radix")]
-		public Radix Radix
+		[XmlElement("SeparateTxRxRadix")]
+		public bool SeparateTxRxRadix
 		{
-			get { return (_radix); }
+			get { return (_separateTxRxRadix); }
 			set
 			{
-				if (_radix != value)
+				if (_separateTxRxRadix != value)
 				{
-					_radix = value;
+					_separateTxRxRadix = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("TxRadix")]
+		public Radix TxRadix
+		{
+			get { return (_txRadix); }
+			set
+			{
+				if (_txRadix != value)
+				{
+					_txRadix = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("RxRadix")]
+		public Radix RxRadix
+		{
+			get
+			{
+				if (_separateTxRxRadix)
+					return (_rxRadix);
+				else
+					return (_txRadix);
+			}
+			set
+			{
+				if (_rxRadix != value)
+				{
+					_rxRadix = value;
 					SetChanged();
 				}
 			}
@@ -173,6 +223,21 @@ namespace YAT.Domain.Settings
 			get { return (TxMaximalLineCount + RxMaximalLineCount); }
 		}
 
+		/// <summary></summary>
+		[XmlElement("DirectionLineBreakEnabled")]
+		public bool DirectionLineBreakEnabled
+		{
+			get { return (_directionLineBreakEnabled); }
+			set
+			{
+				if (_directionLineBreakEnabled != value)
+				{
+					_directionLineBreakEnabled = value;
+					SetChanged();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members
@@ -198,12 +263,15 @@ namespace YAT.Domain.Settings
 			{
 				return
 					(
-					_radix.Equals(value._radix) &&
-					_showTimeStamp.Equals(value._showTimeStamp) &&
-					_showLength.Equals(value._showLength) &&
-					_showCounters.Equals(value._showCounters) &&
-					_txMaximalLineCount.Equals(value._txMaximalLineCount) &&
-					_rxMaximalLineCount.Equals(value._rxMaximalLineCount)
+					_separateTxRxRadix.Equals  (value._separateTxRxRadix) &&
+					_txRadix.Equals            (value._txRadix) &&
+					_rxRadix.Equals            (value._rxRadix) &&
+					_showTimeStamp.Equals      (value._showTimeStamp) &&
+					_showLength.Equals         (value._showLength) &&
+					_showCounters.Equals       (value._showCounters) &&
+					_txMaximalLineCount.Equals (value._txMaximalLineCount) &&
+					_rxMaximalLineCount.Equals (value._rxMaximalLineCount) &&
+					_directionLineBreakEnabled.Equals(value._directionLineBreakEnabled)
 					);
 			}
 			return (false);

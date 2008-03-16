@@ -96,7 +96,7 @@ namespace MKY.IO.Ports
 			if (TryParse(handshake, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException(handshake));
+				throw (new ArgumentOutOfRangeException("handshake", handshake, "Invalid handshake"));
 		}
 
 		/// <summary></summary>

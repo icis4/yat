@@ -20,35 +20,34 @@ namespace YAT.Gui.Utilities
 		private static SolidBrush _whiteSpacesBrush = new SolidBrush(Color.Black);
 		private static SolidBrush _errorBrush       = new SolidBrush(Color.Black);
 
-		public static SizeF MeasureItem(List<Domain.DisplayElement> line, Model.Settings.FormatSettings settings,
+		public static SizeF MeasureItem(List<Domain.DisplayElement> line, Model.Settings.FormatSettings formatSettings,
 										Graphics graphics)
 		{
 			SizeF size = new SizeF(0, 0);
 			float width = 0.0f;
 			foreach (Domain.DisplayElement de in line)
 			{
-				size = MeasureItem(de, settings, graphics);
+				size = MeasureItem(de, formatSettings, graphics);
 				width += (float)size.Width;
 			}
 			return (new SizeF(width, size.Height));
 		}
 
-		public static SizeF MeasureItem(Domain.DisplayElement element, Model.Settings.FormatSettings settings,
+		public static SizeF MeasureItem(Domain.DisplayElement element, Model.Settings.FormatSettings formatSettings,
 										Graphics graphics)
 		{
-			string fontName = settings.Font.Name;
-			float fontSize = settings.Font.Size;
+			string fontName = formatSettings.Font.Name;
+			float fontSize = formatSettings.Font.Size;
 			FontStyle fontStyle;
 			Color fontColor;
-			Font font;
+			SetStyleAndColorAndBrush(element, formatSettings, out fontStyle, out fontColor);
 
-			SetStyleAndColorAndBrush(element, settings, out fontStyle, out fontColor);
-			font = SetFont(fontName, fontSize, fontStyle);
+			Font font = SetFont(fontName, fontSize, fontStyle);
 
 			return (graphics.MeasureString(element.Text, font));
 		}
 
-		public static SizeF DrawItem(List<Domain.DisplayElement> line, Model.Settings.FormatSettings settings,
+		public static SizeF DrawItem(List<Domain.DisplayElement> line, Model.Settings.FormatSettings formatSettings,
 									 Graphics graphics, RectangleF bounds, DrawItemState state)
 		{
 			SizeF size = new SizeF(0, 0);
@@ -56,7 +55,7 @@ namespace YAT.Gui.Utilities
 			float width = bounds.Width;
 			foreach (Domain.DisplayElement de in line)
 			{
-				size = DrawItem(de, settings, graphics,
+				size = DrawItem(de, formatSettings, graphics,
 								new RectangleF(x, bounds.Y, width, bounds.Height),
 								state);
 				x += size.Width;
@@ -65,18 +64,16 @@ namespace YAT.Gui.Utilities
 			return (new SizeF(x - bounds.X, bounds.Height));
 		}
 
-		public static SizeF DrawItem(Domain.DisplayElement element, Model.Settings.FormatSettings settings,
+		public static SizeF DrawItem(Domain.DisplayElement element, Model.Settings.FormatSettings formatSettings,
 									 Graphics graphics, RectangleF bounds, DrawItemState state)
 		{
-			string fontName = settings.Font.Name;
-			float fontSize = settings.Font.Size;
 			FontStyle fontStyle;
 			Color fontColor;
-			Font font;
-			Brush brush;
+			Brush brush = SetStyleAndColorAndBrush(element, formatSettings, out fontStyle, out fontColor);
 
-			brush = SetStyleAndColorAndBrush(element, settings, out fontStyle, out fontColor);
-			font = SetFont(settings.Font.Name, settings.Font.Size, fontStyle);
+			string fontName = formatSettings.Font.Name;
+			float fontSize = formatSettings.Font.Size;
+			Font font = SetFont(fontName, fontSize, fontStyle);
 
 			// select the highlight brush if the item is selected
 			if ((state & DrawItemState.Selected) == DrawItemState.Selected)
@@ -183,6 +180,16 @@ namespace YAT.Gui.Utilities
 				brush = new SolidBrush(color);
 			}
 			return (brush);
+		}
+
+		private static string FinalizeText(Domain.DisplayElement element, Domain.Settings.CharReplaceSettings settings)
+		{
+			if (element is Domain.DisplayElement.Space)
+			{
+				if (settings.ReplaceSpace)
+					return (Domain.Settings.CharReplaceSettings.ReplaceSpaceString);
+			}
+			return (element.Text);
 		}
 	}
 }

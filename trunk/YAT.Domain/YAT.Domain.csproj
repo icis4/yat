@@ -60,6 +60,7 @@
     <Compile Include="Factory\IOFactory.cs" />
     <Compile Include="IO\Socket\TcpServer.cs" />
     <Compile Include="IO\Socket\UdpSocket.cs" />
+    <Compile Include="Settings\CharReplaceSettings.cs" />
     <Compile Include="TextTerminal\Structs.cs" />
     <Compile Include="Terminal\Radix.cs" />
     <Compile Include="Terminal\DisplayElement.cs" />
@@ -79,7 +80,7 @@
     <Compile Include="Settings\TerminalSettings.cs" />
     <Compile Include="Settings\DisplaySettings.cs" />
     <Compile Include="Settings\SerialPort\SerialCommunicationSettings.cs" />
-    <Compile Include="Settings\TransmitSettings.cs" />
+    <Compile Include="Settings\SendSettings.cs" />
     <Compile Include="TextTerminal\CharSubstitution.cs" />
     <Compile Include="TextTerminal\Settings\TextTerminalSettings.cs" />
     <Compile Include="TextTerminal\SubstitutionParser.cs" />

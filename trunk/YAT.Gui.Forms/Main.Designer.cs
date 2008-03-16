@@ -82,6 +82,10 @@ namespace YAT.Gui.Forms
 			this.toolStripSeparator_MainMenu_Help_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_MainMenu_Help_2 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_MainMenu_Help_RequestSupport = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MainMenu_Help_RequestFeature = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MainMenu_Help_SubmitBug = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator_MainMenu_Help_3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainMenu_Help_About = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip_Main = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel_MainStatus_Status = new System.Windows.Forms.ToolStripStatusLabel();
@@ -516,6 +520,10 @@ namespace YAT.Gui.Forms
             this.toolStripSeparator_MainMenu_Help_1,
             this.toolStripMenuItem_MainMenu_Help_ReleaseNotes,
             this.toolStripSeparator_MainMenu_Help_2,
+            this.toolStripMenuItem_MainMenu_Help_RequestSupport,
+            this.toolStripMenuItem_MainMenu_Help_RequestFeature,
+            this.toolStripMenuItem_MainMenu_Help_SubmitBug,
+            this.toolStripSeparator_MainMenu_Help_3,
             this.toolStripMenuItem_MainMenu_Help_About});
 			this.toolStripMenuItem_MainMenu_Help.MergeIndex = 6;
 			this.toolStripMenuItem_MainMenu_Help.Name = "toolStripMenuItem_MainMenu_Help";
@@ -527,31 +535,57 @@ namespace YAT.Gui.Forms
 			// 
 			this.toolStripMenuItem_MainMenu_Help_Contents.Name = "toolStripMenuItem_MainMenu_Help_Contents";
 			this.toolStripMenuItem_MainMenu_Help_Contents.ShortcutKeys = System.Windows.Forms.Keys.F1;
-			this.toolStripMenuItem_MainMenu_Help_Contents.Size = new System.Drawing.Size(154, 22);
+			this.toolStripMenuItem_MainMenu_Help_Contents.Size = new System.Drawing.Size(166, 22);
 			this.toolStripMenuItem_MainMenu_Help_Contents.Text = "&Contents";
 			this.toolStripMenuItem_MainMenu_Help_Contents.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_Contents_Click);
 			// 
 			// toolStripSeparator_MainMenu_Help_1
 			// 
 			this.toolStripSeparator_MainMenu_Help_1.Name = "toolStripSeparator_MainMenu_Help_1";
-			this.toolStripSeparator_MainMenu_Help_1.Size = new System.Drawing.Size(151, 6);
+			this.toolStripSeparator_MainMenu_Help_1.Size = new System.Drawing.Size(163, 6);
 			// 
 			// toolStripMenuItem_MainMenu_Help_ReleaseNotes
 			// 
 			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes.Name = "toolStripMenuItem_MainMenu_Help_ReleaseNotes";
-			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes.Size = new System.Drawing.Size(154, 22);
+			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes.Size = new System.Drawing.Size(166, 22);
 			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes.Text = "&Release Notes";
 			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_ReleaseNotes_Click);
 			// 
 			// toolStripSeparator_MainMenu_Help_2
 			// 
 			this.toolStripSeparator_MainMenu_Help_2.Name = "toolStripSeparator_MainMenu_Help_2";
-			this.toolStripSeparator_MainMenu_Help_2.Size = new System.Drawing.Size(151, 6);
+			this.toolStripSeparator_MainMenu_Help_2.Size = new System.Drawing.Size(163, 6);
+			// 
+			// toolStripMenuItem_MainMenu_Help_RequestSupport
+			// 
+			this.toolStripMenuItem_MainMenu_Help_RequestSupport.Name = "toolStripMenuItem_MainMenu_Help_RequestSupport";
+			this.toolStripMenuItem_MainMenu_Help_RequestSupport.Size = new System.Drawing.Size(166, 22);
+			this.toolStripMenuItem_MainMenu_Help_RequestSupport.Text = "Request Support";
+			this.toolStripMenuItem_MainMenu_Help_RequestSupport.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_RequestSupport_Click);
+			// 
+			// toolStripMenuItem_MainMenu_Help_RequestFeature
+			// 
+			this.toolStripMenuItem_MainMenu_Help_RequestFeature.Name = "toolStripMenuItem_MainMenu_Help_RequestFeature";
+			this.toolStripMenuItem_MainMenu_Help_RequestFeature.Size = new System.Drawing.Size(166, 22);
+			this.toolStripMenuItem_MainMenu_Help_RequestFeature.Text = "Request Feature";
+			this.toolStripMenuItem_MainMenu_Help_RequestFeature.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_RequestFeature_Click);
+			// 
+			// toolStripMenuItem_MainMenu_Help_SubmitBug
+			// 
+			this.toolStripMenuItem_MainMenu_Help_SubmitBug.Name = "toolStripMenuItem_MainMenu_Help_SubmitBug";
+			this.toolStripMenuItem_MainMenu_Help_SubmitBug.Size = new System.Drawing.Size(166, 22);
+			this.toolStripMenuItem_MainMenu_Help_SubmitBug.Text = "Submit Bug";
+			this.toolStripMenuItem_MainMenu_Help_SubmitBug.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_SubmitBug_Click);
+			// 
+			// toolStripSeparator_MainMenu_Help_3
+			// 
+			this.toolStripSeparator_MainMenu_Help_3.Name = "toolStripSeparator_MainMenu_Help_3";
+			this.toolStripSeparator_MainMenu_Help_3.Size = new System.Drawing.Size(163, 6);
 			// 
 			// toolStripMenuItem_MainMenu_Help_About
 			// 
 			this.toolStripMenuItem_MainMenu_Help_About.Name = "toolStripMenuItem_MainMenu_Help_About";
-			this.toolStripMenuItem_MainMenu_Help_About.Size = new System.Drawing.Size(154, 22);
+			this.toolStripMenuItem_MainMenu_Help_About.Size = new System.Drawing.Size(166, 22);
 			this.toolStripMenuItem_MainMenu_Help_About.Text = "&About...";
 			this.toolStripMenuItem_MainMenu_Help_About.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_About_Click);
 			// 
@@ -821,5 +855,9 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_MainMenu_File_Workspace_2;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_File_Workspace_Save;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_File_Workspace_SaveAs;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_RequestFeature;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_SubmitBug;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_MainMenu_Help_3;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainMenu_Help_RequestSupport;
 	}
 }

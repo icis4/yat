@@ -640,12 +640,47 @@ namespace YAT.Gui.Forms
 
 		private void contextMenuStrip_Radix_Opening(object sender, CancelEventArgs e)
 		{
-			toolStripMenuItem_RadixContextMenu_String.Checked = (_settingsRoot.Display.Radix == Domain.Radix.String);
-			toolStripMenuItem_RadixContextMenu_Char.Checked = (_settingsRoot.Display.Radix == Domain.Radix.Char);
-			toolStripMenuItem_RadixContextMenu_Bin.Checked = (_settingsRoot.Display.Radix == Domain.Radix.Bin);
-			toolStripMenuItem_RadixContextMenu_Oct.Checked = (_settingsRoot.Display.Radix == Domain.Radix.Oct);
-			toolStripMenuItem_RadixContextMenu_Dec.Checked = (_settingsRoot.Display.Radix == Domain.Radix.Dec);
-			toolStripMenuItem_RadixContextMenu_Hex.Checked = (_settingsRoot.Display.Radix == Domain.Radix.Hex);
+			bool separateTxRx = _settingsRoot.Display.SeparateTxRxRadix;
+
+			toolStripMenuItem_RadixContextMenu_String.Visible = !separateTxRx;
+			toolStripMenuItem_RadixContextMenu_Char.Visible   = !separateTxRx;
+			toolStripMenuItem_RadixContextMenu_Bin.Visible    = !separateTxRx;
+			toolStripMenuItem_RadixContextMenu_Oct.Visible    = !separateTxRx;
+			toolStripMenuItem_RadixContextMenu_Dec.Visible    = !separateTxRx;
+			toolStripMenuItem_RadixContextMenu_Hex.Visible    = !separateTxRx;
+
+			toolStripSeparator_RadixContextMenu_1.Visible = !separateTxRx;
+			toolStripSeparator_RadixContextMenu_2.Visible = !separateTxRx;
+			toolStripSeparator_RadixContextMenu_3.Visible = separateTxRx;
+
+			toolStripMenuItem_RadixContextMenu_TxRadix.Visible = separateTxRx;
+			toolStripMenuItem_RadixContextMenu_RxRadix.Visible = separateTxRx;
+
+			if (!separateTxRx)
+			{
+				toolStripMenuItem_RadixContextMenu_String.Checked = (_settingsRoot.Display.TxRadix == Domain.Radix.String);
+				toolStripMenuItem_RadixContextMenu_Char.Checked   = (_settingsRoot.Display.TxRadix == Domain.Radix.Char);
+				toolStripMenuItem_RadixContextMenu_Bin.Checked    = (_settingsRoot.Display.TxRadix == Domain.Radix.Bin);
+				toolStripMenuItem_RadixContextMenu_Oct.Checked    = (_settingsRoot.Display.TxRadix == Domain.Radix.Oct);
+				toolStripMenuItem_RadixContextMenu_Dec.Checked    = (_settingsRoot.Display.TxRadix == Domain.Radix.Dec);
+				toolStripMenuItem_RadixContextMenu_Hex.Checked    = (_settingsRoot.Display.TxRadix == Domain.Radix.Hex);
+			}
+			else
+			{
+				toolStripMenuItem_RadixContextMenu_Tx_String.Checked = (_settingsRoot.Display.TxRadix == Domain.Radix.String);
+				toolStripMenuItem_RadixContextMenu_Tx_Char.Checked   = (_settingsRoot.Display.TxRadix == Domain.Radix.Char);
+				toolStripMenuItem_RadixContextMenu_Tx_Bin.Checked    = (_settingsRoot.Display.TxRadix == Domain.Radix.Bin);
+				toolStripMenuItem_RadixContextMenu_Tx_Oct.Checked    = (_settingsRoot.Display.TxRadix == Domain.Radix.Oct);
+				toolStripMenuItem_RadixContextMenu_Tx_Dec.Checked    = (_settingsRoot.Display.TxRadix == Domain.Radix.Dec);
+				toolStripMenuItem_RadixContextMenu_Tx_Hex.Checked    = (_settingsRoot.Display.TxRadix == Domain.Radix.Hex);
+
+				toolStripMenuItem_RadixContextMenu_Rx_String.Checked = (_settingsRoot.Display.RxRadix == Domain.Radix.String);
+				toolStripMenuItem_RadixContextMenu_Rx_Char.Checked   = (_settingsRoot.Display.RxRadix == Domain.Radix.Char);
+				toolStripMenuItem_RadixContextMenu_Rx_Bin.Checked    = (_settingsRoot.Display.RxRadix == Domain.Radix.Bin);
+				toolStripMenuItem_RadixContextMenu_Rx_Oct.Checked    = (_settingsRoot.Display.RxRadix == Domain.Radix.Oct);
+				toolStripMenuItem_RadixContextMenu_Rx_Dec.Checked    = (_settingsRoot.Display.RxRadix == Domain.Radix.Dec);
+				toolStripMenuItem_RadixContextMenu_Rx_Hex.Checked    = (_settingsRoot.Display.RxRadix == Domain.Radix.Hex);
+			}
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_String_Click(object sender, EventArgs e)
@@ -676,6 +711,71 @@ namespace YAT.Gui.Forms
 		private void toolStripMenuItem_RadixContextMenu_Hex_Click(object sender, EventArgs e)
 		{
 			SetMonitorRadix(Domain.Radix.Hex);
+		}
+
+		private void toolStripMenuItem_RadixContextMenu_SeparateTxRx_Click(object sender, EventArgs e)
+		{
+			_settingsRoot.Display.SeparateTxRxRadix = !_settingsRoot.Display.SeparateTxRxRadix;
+		}
+
+		private void toolStripMenuItem_RadixContextMenu_Tx_String_Click(object sender, EventArgs e)
+		{
+			SetMonitorRadix(Domain.SerialDirection.Tx, Domain.Radix.String);
+		}
+
+		private void toolStripMenuItem_RadixContextMenu_Tx_Char_Click(object sender, EventArgs e)
+		{
+			SetMonitorRadix(Domain.SerialDirection.Tx, Domain.Radix.Char);
+		}
+
+		private void toolStripMenuItem_RadixContextMenu_Tx_Bin_Click(object sender, EventArgs e)
+		{
+			SetMonitorRadix(Domain.SerialDirection.Tx, Domain.Radix.Bin);
+		}
+
+		private void toolStripMenuItem_RadixContextMenu_Tx_Oct_Click(object sender, EventArgs e)
+		{
+			SetMonitorRadix(Domain.SerialDirection.Tx, Domain.Radix.Oct);
+		}
+
+		private void toolStripMenuItem_RadixContextMenu_Tx_Dec_Click(object sender, EventArgs e)
+		{
+			SetMonitorRadix(Domain.SerialDirection.Tx, Domain.Radix.Dec);
+		}
+
+		private void toolStripMenuItem_RadixContextMenu_Tx_Hex_Click(object sender, EventArgs e)
+		{
+			SetMonitorRadix(Domain.SerialDirection.Tx, Domain.Radix.Hex);
+		}
+
+		private void toolStripMenuItem_RadixContextMenu_Rx_String_Click(object sender, EventArgs e)
+		{
+			SetMonitorRadix(Domain.SerialDirection.Rx, Domain.Radix.String);
+		}
+
+		private void toolStripMenuItem_RadixContextMenu_Rx_Char_Click(object sender, EventArgs e)
+		{
+			SetMonitorRadix(Domain.SerialDirection.Rx, Domain.Radix.Char);
+		}
+
+		private void toolStripMenuItem_RadixContextMenu_Rx_Bin_Click(object sender, EventArgs e)
+		{
+			SetMonitorRadix(Domain.SerialDirection.Rx, Domain.Radix.Bin);
+		}
+
+		private void toolStripMenuItem_RadixContextMenu_Rx_Oct_Click(object sender, EventArgs e)
+		{
+			SetMonitorRadix(Domain.SerialDirection.Rx, Domain.Radix.Oct);
+		}
+
+		private void toolStripMenuItem_RadixContextMenu_Rx_Dec_Click(object sender, EventArgs e)
+		{
+			SetMonitorRadix(Domain.SerialDirection.Rx, Domain.Radix.Dec);
+		}
+
+		private void toolStripMenuItem_RadixContextMenu_Rx_Hex_Click(object sender, EventArgs e)
+		{
+			SetMonitorRadix(Domain.SerialDirection.Rx, Domain.Radix.Hex);
 		}
 
 		#endregion
@@ -724,6 +824,8 @@ namespace YAT.Gui.Forms
 
         private void contextMenuStrip_Send_Opening(object sender, CancelEventArgs e)
         {
+			toolStripMenuItem_SendContextMenu_KeepCommand.Checked = _settingsRoot.Send.KeepCommand;
+
             toolStripMenuItem_SendContextMenu_SendCommand.Enabled = _settingsRoot.SendCommand.Command.IsValidCommand;
             toolStripMenuItem_SendContextMenu_SendFile.Enabled = _settingsRoot.SendCommand.Command.IsValidFilePath;
 
@@ -731,7 +833,12 @@ namespace YAT.Gui.Forms
             toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = _settingsRoot.Layout.SendFilePanelIsVisible;
         }
 
-        private void toolStripMenuItem_SendContextMenu_SendCommand_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_SendContextMenu_KeepCommand_Click(object sender, EventArgs e)
+		{
+			_settingsRoot.Send.KeepCommand = !_settingsRoot.Send.KeepCommand;
+		}
+
+		private void toolStripMenuItem_SendContextMenu_SendCommand_Click(object sender, EventArgs e)
         {
             _terminal.SendCommand();
         }
@@ -1233,7 +1340,15 @@ namespace YAT.Gui.Forms
 
 		private void SetMonitorRadix(Domain.Radix radix)
 		{
-			_settingsRoot.Display.Radix = radix;
+			SetMonitorRadix(Domain.SerialDirection.Tx, radix);
+		}
+
+		private void SetMonitorRadix(Domain.SerialDirection direction, Domain.Radix radix)
+		{
+			if (direction == Domain.SerialDirection.Tx)
+				_settingsRoot.Display.TxRadix = radix;
+			else
+				_settingsRoot.Display.RxRadix = radix;
 		}
 
 		private void SetMonitorOrientation(Orientation orientation)
@@ -1296,11 +1411,12 @@ namespace YAT.Gui.Forms
 
 		private void ShowFormatSettings()
 		{
-			Gui.Forms.FormatSettings f = new Gui.Forms.FormatSettings(_settingsRoot.Format);
+			Gui.Forms.FormatSettings f = new Gui.Forms.FormatSettings(_settingsRoot.Format, _settingsRoot.CharReplace);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
-				_settingsRoot.Format = f.SettingsResult;
+				_settingsRoot.Format = f.FormatSettingsResult;
+				_settingsRoot.CharReplace = f.CharReplaceSettingsResult;
 			}
 		}
 
@@ -1700,10 +1816,10 @@ namespace YAT.Gui.Forms
 				monitor_Bidir.ShowCountStatus = _settingsRoot.Display.ShowCounters;
 				monitor_Rx.ShowCountStatus    = _settingsRoot.Display.ShowCounters;
 			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Transmit))
+			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Send))
 			{
-				// TransmitSettings changed
-				ReloadMonitors();
+				// SendSettings changed
+				// nothing to do
 			}
 			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.TextTerminal))
 			{

@@ -16,7 +16,7 @@ namespace MKY.Utilities.Types
 		/// <summary>
 		/// Converts an ascii code into according mnemonic.
 		/// </summary>
-		/// <exception cref="ArgumentOutOfRangeException">Thrown if code out of range 0x00 to 0x1F</exception>
+		/// <exception cref="ArgumentOutOfRangeException">Thrown if code out of range 0x00 to 0x1F, 0x7F</exception>
 		public static string ConvertToMnemonic(byte code)
 		{
 			switch (code)
@@ -53,7 +53,8 @@ namespace MKY.Utilities.Types
 				case 0x1D: return ("GS");
 				case 0x1E: return ("RS");
 				case 0x1F: return ("US");
-				default: throw (new ArgumentOutOfRangeException("Code hex(" + code.ToString("X2") + ") is no ascii control code"));
+				case 0x7F: return ("DEL");
+				default: throw (new ArgumentOutOfRangeException("code", code, "Code hex(" + code.ToString("X2") + ") is no ascii control code"));
 			}
 		}
 
@@ -109,6 +110,7 @@ namespace MKY.Utilities.Types
 				case "GS":  result = 0x1D; return (true);
 				case "RS":  result = 0x1E; return (true);
 				case "US":  result = 0x1F; return (true);
+				case "DEL": result = 0x7F; return (true);
 				default:    result = 0x00; return (false);
 			}
 		}

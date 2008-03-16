@@ -1140,6 +1140,10 @@ namespace YAT.Model
 				(
 				new RecentItem<Command>(new Command(_settingsRoot.SendCommand.Command))
 				);
+
+			// clear command if desired
+			if (!_settingsRoot.Send.KeepCommand)
+				_settingsRoot.SendCommand.Command = new Command(); // set command to ""
 		}
 
 		/// <summary>

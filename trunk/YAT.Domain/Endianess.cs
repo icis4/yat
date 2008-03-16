@@ -83,7 +83,7 @@ namespace YAT.Domain
 			if (TryParse(endianess, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException(endianess));
+				throw (new ArgumentOutOfRangeException("endianess", endianess, "Invalid endianess"));
 		}
 
 		/// <summary></summary>

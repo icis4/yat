@@ -82,7 +82,7 @@ namespace YAT.Domain
 			if (TryParse(type, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException(type));
+				throw (new ArgumentOutOfRangeException("type", type, "Invalid type"));
 		}
 
 		/// <summary></summary>

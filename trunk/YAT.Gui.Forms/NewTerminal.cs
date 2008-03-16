@@ -196,12 +196,14 @@ namespace YAT.Gui.Forms
 			switch (_newTerminalSettings.TerminalType)
 			{
 				case Domain.TerminalType.Binary:
-					_terminalSettings.Display.Radix = Domain.Radix.Hex;
+					_terminalSettings.Display.TxRadix = Domain.Radix.Hex;
+					_terminalSettings.Display.RxRadix = Domain.Radix.Hex;
 					break;
 
 				case Domain.TerminalType.Text:
 				default:
-					_terminalSettings.Display.Radix = Domain.Radix.String;
+					_terminalSettings.Display.TxRadix = Domain.Radix.String;
+					_terminalSettings.Display.RxRadix = Domain.Radix.String;
 					break;
 			}
 		}

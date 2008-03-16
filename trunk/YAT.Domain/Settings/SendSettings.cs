@@ -7,17 +7,22 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class TransmitSettings : MKY.Utilities.Settings.Settings, IEquatable<TransmitSettings>
+	public class SendSettings : MKY.Utilities.Settings.Settings, IEquatable<SendSettings>
 	{
 		/// <summary></summary>
-		public TransmitSettings()
+		public const bool KeepCommandDefault = true;
+
+		private bool _keepCommand;
+
+		/// <summary></summary>
+		public SendSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
 		/// <summary></summary>
-		public TransmitSettings(MKY.Utilities.Settings.SettingsType settingsType)
+		public SendSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -28,9 +33,10 @@ namespace YAT.Domain.Settings
 		/// <remarks>
 		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
 		/// </remarks>
-		public TransmitSettings(TransmitSettings rhs)
+		public SendSettings(SendSettings rhs)
 			: base(rhs)
 		{
+			_keepCommand = rhs._keepCommand;
 			ClearChanged();
 		}
 
@@ -39,7 +45,7 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			// nothing to do
+			KeepCommand = KeepCommandDefault;
 		}
 
 		#region Properties
@@ -47,7 +53,20 @@ namespace YAT.Domain.Settings
 		// Properties
 		//==========================================================================================
 
-		// no properties yet
+		/// <summary></summary>
+		[XmlElement("KeepCommand")]
+		public bool KeepCommand
+		{
+			get { return (_keepCommand); }
+			set
+			{
+				if (_keepCommand != value)
+				{
+					_keepCommand = value;
+					SetChanged();
+				}
+			}
+		}
 
 		#endregion
 
@@ -58,8 +77,8 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is TransmitSettings)
-				return (Equals((TransmitSettings)obj));
+			if (obj is SendSettings)
+				return (Equals((SendSettings)obj));
 
 			return (false);
 		}
@@ -67,14 +86,14 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(TransmitSettings value)
+		public bool Equals(SendSettings value)
 		{
 			// ensure that object.operator!=() is called
 			if ((object)value != null)
 			{
 				return
 					(
-					true
+					_keepCommand.Equals(value._keepCommand)
 					);
 			}
 			return (false);
@@ -93,7 +112,7 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(TransmitSettings lhs, TransmitSettings rhs)
+		public static bool operator ==(SendSettings lhs, SendSettings rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))
 				return (true);
@@ -107,7 +126,7 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(TransmitSettings lhs, TransmitSettings rhs)
+		public static bool operator !=(SendSettings lhs, SendSettings rhs)
 		{
 			return (!(lhs == rhs));
 		}
