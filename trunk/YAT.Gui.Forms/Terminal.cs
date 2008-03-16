@@ -653,6 +653,8 @@ namespace YAT.Gui.Forms
 			toolStripSeparator_RadixContextMenu_2.Visible = !separateTxRx;
 			toolStripSeparator_RadixContextMenu_3.Visible = separateTxRx;
 
+			toolStripMenuItem_RadixContextMenu_SeparateTxRx.Checked = separateTxRx;
+
 			toolStripMenuItem_RadixContextMenu_TxRadix.Visible = separateTxRx;
 			toolStripMenuItem_RadixContextMenu_RxRadix.Visible = separateTxRx;
 
@@ -1967,14 +1969,31 @@ namespace YAT.Gui.Forms
 			SetTerminalControls();
 			OnTerminalChanged(new EventArgs());
 
-			MessageBox.Show
-				(
-				this,
-				"Terminal error:" + Environment.NewLine + Environment.NewLine + e.Message,
-				"Terminal Error",
-				MessageBoxButtons.OK,
-				MessageBoxIcon.Error
-				);
+			Domain.SerialPortErrorEventArgs serialPortErrorEventArgs = (e as Domain.SerialPortErrorEventArgs);
+			if (serialPortErrorEventArgs == null)
+			{
+				SetFixedStatusText("Terminal Error");
+				MessageBox.Show
+					(
+					this,
+					"Terminal error:" + Environment.NewLine + Environment.NewLine + e.Message,
+					"Terminal Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
+					);
+			}
+			else
+			{
+				SetTimedStatusText("Terminal Warning");
+				MessageBox.Show
+					(
+					this,
+					"Terminal warning:" + Environment.NewLine + Environment.NewLine + e.Message,
+					"Terminal Warning",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning
+					);
+			}
 		}
 
 		private void _terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)

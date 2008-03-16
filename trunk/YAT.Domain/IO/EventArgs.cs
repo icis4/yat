@@ -16,4 +16,18 @@ namespace YAT.Domain.IO
 			Message = message;
 		}
 	}
+
+	/// <summary></summary>
+	public class SerialPortIOErrorEventArgs : IOErrorEventArgs
+	{
+		/// <summary></summary>
+		public readonly System.IO.Ports.SerialError SerialPortError;
+
+		/// <summary></summary>
+		public SerialPortIOErrorEventArgs(string message, System.IO.Ports.SerialError serialPortError)
+			: base(message)
+		{
+			SerialPortError = serialPortError;
+		}
+	}
 }

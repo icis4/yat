@@ -357,8 +357,8 @@ namespace YAT.Gui.Controls
 
         private void SetSingleLineCommand(string commandLine)
         {
-            _command.IsFilePath = false;
-            _command.SingleLineCommand = commandLine;
+			// create new command to ensure that not only command but also description is updated
+			_command = new Command(commandLine);
 
             SetControls();
             OnCommandChanged(new EventArgs());

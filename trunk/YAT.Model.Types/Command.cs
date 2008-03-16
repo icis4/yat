@@ -57,6 +57,12 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
+		public Command(string commandLine)
+		{
+			Initialize(commandLine, false, new string[] { commandLine }, Domain.Radix.String, "");
+		}
+
+		/// <summary></summary>
 		public Command(string description, string commandLine)
 		{
 			Initialize(description, false, new string[] { commandLine }, Domain.Radix.String, "");

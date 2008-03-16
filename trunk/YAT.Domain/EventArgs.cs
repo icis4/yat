@@ -18,6 +18,20 @@ namespace YAT.Domain
 	}
 
 	/// <summary></summary>
+	public class SerialPortErrorEventArgs : ErrorEventArgs
+	{
+		/// <summary></summary>
+		public readonly System.IO.Ports.SerialError SerialPortError;
+
+		/// <summary></summary>
+		public SerialPortErrorEventArgs(string message, System.IO.Ports.SerialError serialPortError)
+			: base(message)
+		{
+			SerialPortError = serialPortError;
+		}
+	}
+
+	/// <summary></summary>
 	public class RawElementEventArgs : EventArgs
 	{
 		/// <summary></summary>

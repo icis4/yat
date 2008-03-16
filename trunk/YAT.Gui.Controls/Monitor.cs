@@ -399,7 +399,7 @@ namespace YAT.Gui.Controls
 			{
 				ListBox lb = listBox_Monitor;
 
-				SizeF size = Draw.MeasureItem((List<Domain.DisplayElement>)(lb.Items[e.Index]), _formatSettings, e.Graphics);
+				SizeF size = Draw.MeasureItem((List<Domain.DisplayElement>)(lb.Items[e.Index]), _formatSettings, e.Graphics, e.Bounds);
 
 				int width  = (int)Math.Ceiling(size.Width);
 				int height = (int)Math.Ceiling(size.Height);

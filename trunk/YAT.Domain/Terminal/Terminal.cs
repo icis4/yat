@@ -773,12 +773,12 @@ namespace YAT.Domain
 		private void AttachRawTerminal(RawTerminal rawTerminal)
 		{
 			_rawTerminal = rawTerminal;
-			_rawTerminal.Changed        += new EventHandler(_rawTerminal_Changed);
-			_rawTerminal.ControlChanged += new EventHandler(_rawTerminal_ControlChanged);
-			_rawTerminal.RawElementSent         += new EventHandler<RawElementEventArgs>(_rawTerminal_RawElementSent);
-			_rawTerminal.RawElementReceived     += new EventHandler<RawElementEventArgs>(_rawTerminal_RawElementReceived);
-			_rawTerminal.RepositoryCleared      += new EventHandler<RepositoryEventArgs>(_rawTerminal_RepositoryCleared);
-			_rawTerminal.Error          += new EventHandler<ErrorEventArgs>(_rawTerminal_Error);
+			_rawTerminal.Changed            += new EventHandler(_rawTerminal_Changed);
+			_rawTerminal.ControlChanged     += new EventHandler(_rawTerminal_ControlChanged);
+			_rawTerminal.RawElementSent     += new EventHandler<RawElementEventArgs>(_rawTerminal_RawElementSent);
+			_rawTerminal.RawElementReceived += new EventHandler<RawElementEventArgs>(_rawTerminal_RawElementReceived);
+			_rawTerminal.RepositoryCleared  += new EventHandler<RepositoryEventArgs>(_rawTerminal_RepositoryCleared);
+			_rawTerminal.Error              += new EventHandler<ErrorEventArgs>(_rawTerminal_Error);
 		}
 
 		#endregion
