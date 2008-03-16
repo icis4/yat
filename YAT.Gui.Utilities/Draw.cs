@@ -19,22 +19,34 @@ namespace YAT.Gui.Utilities
 		private static SolidBrush _lineLengthBrush  = new SolidBrush(Color.Black);
 		private static SolidBrush _whiteSpacesBrush = new SolidBrush(Color.Black);
 		private static SolidBrush _errorBrush       = new SolidBrush(Color.Black);
+		private static StringFormat _stringFormat   = new StringFormat();
+
+		static Draw()
+		{
+			// use GenericTypographic format to be able to measure characters indiviually,
+			// i.e. without a small margin before and after the character
+			_stringFormat = StringFormat.GenericTypographic;
+
+			// additionally enable trailing spaces to be able to correctly measure
+			// single spaces
+			_stringFormat.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
+		}
 
 		public static SizeF MeasureItem(List<Domain.DisplayElement> line, Model.Settings.FormatSettings formatSettings,
-										Graphics graphics)
+										Graphics graphics, RectangleF bounds)
 		{
 			SizeF size = new SizeF(0, 0);
 			float width = 0.0f;
 			foreach (Domain.DisplayElement de in line)
 			{
-				size = MeasureItem(de, formatSettings, graphics);
+				size = MeasureItem(de, formatSettings, graphics, bounds);
 				width += (float)size.Width;
 			}
 			return (new SizeF(width, size.Height));
 		}
 
 		public static SizeF MeasureItem(Domain.DisplayElement element, Model.Settings.FormatSettings formatSettings,
-										Graphics graphics)
+										Graphics graphics, RectangleF bounds)
 		{
 			string fontName = formatSettings.Font.Name;
 			float fontSize = formatSettings.Font.Size;
@@ -44,7 +56,7 @@ namespace YAT.Gui.Utilities
 
 			Font font = SetFont(fontName, fontSize, fontStyle);
 
-			return (graphics.MeasureString(element.Text, font));
+			return (graphics.MeasureString(element.Text, font, bounds.Size, _stringFormat));
 		}
 
 		public static SizeF DrawItem(List<Domain.DisplayElement> line, Model.Settings.FormatSettings formatSettings,
@@ -80,10 +92,15 @@ namespace YAT.Gui.Utilities
 				brush = SystemBrushes.HighlightText;
 
 			// perform the painting
-			graphics.DrawString(element.Text, font, brush, bounds);
+			graphics.DrawString(element.Text, font, brush, bounds, _stringFormat);
 
 			// measure consumed rectangle
-			return (graphics.MeasureString(element.Text, font));
+			/*Region[] charRegions = new Region[element.Text.Length];
+			charRegions = graphics.MeasureCharacterRanges(element.Text, font, bounds.Size, _stringFormat);
+			float width = 0.0f;
+			foreach (Region charRegion in charRegions)
+				width += charRegion.W*/
+			return (graphics.MeasureString(element.Text, font, bounds.Size, _stringFormat));
 		}
 
 		private static Font SetFont(string fontName, float fontSize, FontStyle fontStyle)

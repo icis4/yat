@@ -441,7 +441,11 @@ namespace YAT.Domain
 
 		private void _io_IOError(object sender, IO.IOErrorEventArgs e)
 		{
-			OnError(new ErrorEventArgs(e.Message));
+			IO.SerialPortIOErrorEventArgs serialPortErrorEventArgs = (e as IO.SerialPortIOErrorEventArgs);
+			if (serialPortErrorEventArgs == null)
+				OnError(new ErrorEventArgs(e.Message));
+			else
+				OnError(new SerialPortErrorEventArgs(serialPortErrorEventArgs.Message, serialPortErrorEventArgs.SerialPortError));
 		}
 
 		private void _io_DataReceived(object sender, EventArgs e)

@@ -395,21 +395,17 @@ namespace YAT.Domain.IO
 
 		private void _port_ErrorReceived(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e)
 		{
-			bool fireEvent;
 			string message;
 			switch (e.EventType)
 			{
-				case System.IO.Ports.SerialError.Frame:    fireEvent = false; message = "Serial communication framing error!";            break;
-				case System.IO.Ports.SerialError.Overrun:  fireEvent = true;  message = "Serial communication character buffer overrun!"; break;
-				case System.IO.Ports.SerialError.RXOver:   fireEvent = true;  message = "Serial communication input buffer overflow!";    break;
-				case System.IO.Ports.SerialError.RXParity: fireEvent = true;  message = "Serial communication parity error!";             break;
-				case System.IO.Ports.SerialError.TXFull:   fireEvent = true;  message = "Serial communication output buffer full!";       break;
-				default:                                   fireEvent = true;  message = "Serial communication error!";                    break;
+				case System.IO.Ports.SerialError.Frame:    message = "Serial communication framing error!";            break;
+				case System.IO.Ports.SerialError.Overrun:  message = "Serial communication character buffer overrun!"; break;
+				case System.IO.Ports.SerialError.RXOver:   message = "Serial communication input buffer overflow!";    break;
+				case System.IO.Ports.SerialError.RXParity: message = "Serial communication parity error!";             break;
+				case System.IO.Ports.SerialError.TXFull:   message = "Serial communication output buffer full!";       break;
+				default:                                   message = "Unknown serial communication error!";            break;
 			}
-
-			// then post error
-			if (fireEvent)
-				OnIOError(new IOErrorEventArgs(message));
+			OnIOError(new SerialPortIOErrorEventArgs(message, e.EventType));
 		}
 
 		#endregion
