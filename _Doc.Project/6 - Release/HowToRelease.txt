@@ -84,7 +84,9 @@ Note:	The whole release process takes about 4 hours
 15.	Commit and tag YAT
 	------------------
 	> Commit any modifications to the subversion repository
-	> Tag/checkpoint the project
+	> Tag/checkpoint the project, e.g.
+	  > "/tags/yat-1-99-18-beta-2-candidate-2"
+	  > "YAT 2.0 Beta 2 Candidate 2 Version 1.99.18"
 
 
 16.	Archive YAT
