@@ -1,0 +1,27 @@
+
+1.	Setup NUnit within Visual Studio
+	--------------------------------
+	> Select "Menu > Tools > External Tools > Add"
+		> Title       = "NUnit"
+		> Command     = "<NUnitInstallPath>\bin\nunit.exe"
+		> Arguments   = "$(SolutionFileName)"
+		> Initial Dir = "$(SolutionDir)"
+	> Confirm "OK"
+
+
+2.	Start NUnit from within Visual Studio
+	-------------------------------------
+	> Run "Menu > Tools > External Tools > NUnit"
+
+
+3.	Run NUnit test
+	--------------
+	> Select a test and click "Run" or double-click on a test
+
+
+4.	Debug NUnit test from within Visual Studio
+	------------------------------------------
+	> Select "Menu > Debug > Attach to Process..."
+		> Select process "NUnit"
+	> Confirm "OK"
+	> Set breakpoints in tests or tested code as ususal
