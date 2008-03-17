@@ -744,6 +744,11 @@ namespace YAT.Model
 						break;
 				}
 			}
+
+			// on success, clear changed flag since all terminals got openend
+			if (openedTerminalCount == requestedTerminalCount)
+				_settingsRoot.ClearChanged();
+
 			return (openedTerminalCount);
 		}
 

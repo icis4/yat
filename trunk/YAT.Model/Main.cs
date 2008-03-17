@@ -407,6 +407,15 @@ namespace YAT.Model
 			return (true);
 		}
 
+		/// <summary></summary>
+		public bool CreateNewWorkspaceAndTerminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
+		{
+			if (!CreateNewWorkspace())
+				return (false);
+
+			return (_workspace.CreateNewTerminal(settingsHandler));
+		}
+
 		/// <summary>
 		/// Opens YAT and opens the workspace or terminal file given. This method can directly
 		/// be called from the main providing the command line arguments.

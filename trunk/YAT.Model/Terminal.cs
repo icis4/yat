@@ -252,7 +252,10 @@ namespace YAT.Model
 
 		private string UserNameFromFile
 		{
-			set { _userName = Path.GetFileName(value); }
+			set
+			{
+				_userName = Path.GetFileNameWithoutExtension(value);
+			}
 		}
 
 		/// <summary></summary>
@@ -1268,7 +1271,7 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Forces complete reload of repositories
+		/// Forces complete reload of repositories.
 		/// </summary>
 		public void ReloadRepositories()
 		{
@@ -1277,7 +1280,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Returns contents of desired repository
+		/// Returns contents of desired repository.
 		/// </summary>
 		public List<Domain.DisplayElement> RepositoryToDisplayElements(Domain.RepositoryType repositoryType)
 		{
@@ -1286,7 +1289,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Returns contents of desired repository
+		/// Returns contents of desired repository.
 		/// </summary>
 		public List<List<Domain.DisplayElement>> RepositoryToDisplayLines(Domain.RepositoryType repositoryType)
 		{
@@ -1295,7 +1298,19 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Clears given repository
+		/// Returns contents of desired repository as string.
+		/// </summary>
+		/// <remarks>
+		/// Can be used for debugging purposes.
+		/// </remarks>
+		public string RepositoryToString(Domain.RepositoryType repositoryType)
+		{
+			AssertNotDisposed();
+			return (_terminal.RepositoryToString(repositoryType));
+		}
+
+		/// <summary>
+		/// Clears given repository.
 		/// </summary>
 		public void ClearRepository(Domain.RepositoryType repositoryType)
 		{
@@ -1304,7 +1319,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Clears all repositories
+		/// Clears all repositories.
 		/// </summary>
 		public void ClearRepositories()
 		{

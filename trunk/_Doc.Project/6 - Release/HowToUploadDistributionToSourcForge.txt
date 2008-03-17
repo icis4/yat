@@ -9,8 +9,9 @@
 
 2.	Add release
 	-----------
-	> Select package
-	> Set release name (e.g. "YAT 2.0 Beta 2 Candidate 1 Version 1.99.15")
+	> Open "Admin > File Releases"
+	> Select "Add Release" for desired package
+	> Set release name (e.g. "YAT 2.0 Beta 2 Candidate 1 Version 1.99.17")
 	> "Create"
 
 
@@ -34,11 +35,11 @@
 	> Set file type
 
 
-6.	Send monitoring email notice
-	----------------------------
-
-
-7.	Check release and release notes
+6.	Check release and release notes
 	-------------------------------
 	> Download release and verify contents
 	> Browse release notes
+
+
+7.	Send monitoring email notice
+	----------------------------

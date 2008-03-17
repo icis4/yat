@@ -299,6 +299,89 @@ namespace YAT.Settings.Test
 
 		#endregion
 
+		#region Tests > YAT 2.0 Beta 2 Candidate 2 Version 1.99.18 > Terminal
+		//------------------------------------------------------------------------------------------
+		// Tests > YAT 2.0 Beta 2 Candidate 2 Version 1.99.18 > Terminal
+		//------------------------------------------------------------------------------------------
+
+		// 01_COM1_Open_Default
+		[Test]
+		[Category("Support for COM1 required")]
+		public void Test_V1_99_18_TerminalSettingsCase01()
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
+				);
+
+			// create terminal from settings and check whether settings are correctly set
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				terminal.Start();
+				VerifySettingsCase01(terminal);
+			}
+		}
+
+		// 02_COM2_Open_Binary_115200
+		[Test]
+		[Category("Support for COM2 required")]
+		public void Test_V1_99_18_TerminalSettingsCase02()
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
+				);
+
+			// create terminal from settings and check whether settings are correctly set
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				terminal.Start();
+				VerifySettingsCase02(terminal);
+			}
+		}
+
+		// 03_COM1_Closed_Predefined
+		[Test]
+		public void Test_V1_99_18_TerminalSettingsCase03()
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
+				);
+
+			// create terminal from settings and check whether settings are correctly set
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				terminal.Start();
+				VerifySettingsCase03(terminal);
+			}
+		}
+
+		#endregion
+
+		#region Tests > YAT 2.0 Beta 2 Candidate 2 Version 1.99.18 > Workspace
+		//------------------------------------------------------------------------------------------
+		// Tests > YAT 2.0 Beta 2 Candidate 2 Version 1.99.18 > Workspace
+		//------------------------------------------------------------------------------------------
+
+		[Test]
+		public void Test_V1_99_18_WorkspaceSettingsCase04()
+		{
+			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_18.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
+				);
+
+			// create workspace from settings and check whether settings are correctly set
+			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
+			{
+				workspace.OpenTerminals();
+				VerifySettingsCase04(workspace);
+			}
+		}
+
+		#endregion
+
 		#endregion
 
 		#region Set Up Settings
