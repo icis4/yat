@@ -32,6 +32,11 @@ namespace YAT.Domain
 	/// <summary>
 	/// Extended enum XEol.
 	/// </summary>
+	/// <remarks>
+	/// LF:   Unix, Linux, Mac OS from version X, AmigaOS, BSD
+	/// CRLF: Windows, DOS, OS/2, CP/M
+	/// CR:   Mac OS up to version 9, Apple II
+	/// </remarks>
 	[Serializable]
 	public class XEol : XEnum
 	{

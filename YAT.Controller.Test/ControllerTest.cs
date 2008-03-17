@@ -133,7 +133,8 @@ namespace YAT.Controller.Test
 		{
 			using (Controller.Main main = new Main(TeriminalArgs))
 			{
-				RunAndVerifyApplicationWithoutView(main);
+				// expect application exit error because new workspace is created but not saved
+				RunAndVerifyApplicationWithoutView(main, MainResult.ApplicationExitError);
 			}
 		}
 
@@ -263,14 +264,24 @@ namespace YAT.Controller.Test
 
 		private void RunAndVerifyApplication(Controller.Main main)
 		{
+			RunAndVerifyApplication(main, MainResult.OK);
+		}
+
+		private void RunAndVerifyApplication(Controller.Main main, MainResult expectedMainResult)
+		{
 			MainResult mainResult = main.Run();
-			Assert.AreEqual(MainResult.OK, mainResult);
+			Assert.AreEqual(expectedMainResult, mainResult);
 		}
 
 		private void RunAndVerifyApplicationWithoutView(Controller.Main main)
 		{
+			RunAndVerifyApplicationWithoutView(main, MainResult.OK);
+		}
+
+		private void RunAndVerifyApplicationWithoutView(Controller.Main main, MainResult expectedMainResult)
+		{
 			MainResult mainResult = main.Run(false);
-			Assert.AreEqual(MainResult.OK, mainResult);
+			Assert.AreEqual(expectedMainResult, mainResult);
 		}
 
 		#endregion

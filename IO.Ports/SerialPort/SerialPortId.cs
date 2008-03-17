@@ -81,8 +81,9 @@ namespace MKY.IO.Ports
 		{
 			if (!(_number >= StandardFirstPort))
 				throw (new ArgumentOutOfRangeException("SerialPortId.Number", _number, "ASSERT(Number >= StandardFirstPort)"));
-			if (!(_number <= StandardLastPort))
-				throw (new ArgumentOutOfRangeException("SerialPortId.Number", _number, "ASSERT(Number <= StandardLastPort)"));
+			// allow ports above 256, don't know how to retrieve true last port of the current machine
+			//! if (!(_number <= StandardLastPort))
+			//! 	throw (new ArgumentOutOfRangeException("SerialPortId.Number", _number, "ASSERT(Number <= StandardLastPort)"));
 		}
 
 		#endregion

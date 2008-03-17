@@ -900,7 +900,12 @@ namespace YAT.Gui.Forms
 				ApplicationSettings.SaveLocalUser();
 
 				DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>(f.TerminalSettingsResult);
-				_workspace.CreateNewTerminal(sh);
+
+				// check whether workspace is ready, otherwise empty workspace needs to be creaeted first
+				if (_workspace != null)
+					_workspace.CreateNewTerminal(sh);
+				else
+					_main.CreateNewWorkspaceAndTerminal(sh);
 			}
 			else
 			{
@@ -923,7 +928,11 @@ namespace YAT.Gui.Forms
 				ApplicationSettings.LocalUser.Paths.TerminalFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.SaveLocalUser();
 
-				_workspace.OpenTerminalFromFile(ofd.FileName);
+				// check whether workspace is ready, otherwise empty workspace needs to be creaeted first
+				if (_workspace != null)
+					_workspace.OpenTerminalFromFile(ofd.FileName);
+				else
+					_main.OpenFromFile(ofd.FileName);
 			}
 			else
 			{

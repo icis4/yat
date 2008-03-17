@@ -1367,7 +1367,9 @@ namespace YAT.Gui.Forms
 		{
 			SetFixedStatusText("Reloading...");
 			Cursor = Cursors.WaitCursor;
+
 			_terminal.ReloadRepositories();
+
 			Cursor = Cursors.Default;
 			SetTimedStatusText("Reloading done");
 		}
@@ -1380,10 +1382,6 @@ namespace YAT.Gui.Forms
 			monitor_Tx.FormatSettings    = _settingsRoot.Format;
 			monitor_Bidir.FormatSettings = _settingsRoot.Format;
 			monitor_Rx.FormatSettings    = _settingsRoot.Format;
-
-			monitor_Tx.Reload   (_terminal.RepositoryToDisplayElements(Domain.RepositoryType.Tx));
-			monitor_Bidir.Reload(_terminal.RepositoryToDisplayElements(Domain.RepositoryType.Bidir));
-			monitor_Rx.Reload   (_terminal.RepositoryToDisplayElements(Domain.RepositoryType.Rx));
 
 			Cursor = Cursors.Default;
 			SetTimedStatusText("Reformatting done");

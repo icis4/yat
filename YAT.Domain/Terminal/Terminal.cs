@@ -626,6 +626,20 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		public virtual string RepositoryToString(RepositoryType repository)
+		{
+			AssertNotDisposed();
+
+			switch (repository)
+			{
+				case RepositoryType.Tx:    return (_txRepository.ToString());
+				case RepositoryType.Bidir: return (_bidirRepository.ToString());
+				case RepositoryType.Rx:    return (_rxRepository.ToString());
+				default: throw (new NotImplementedException("Unknown RepositoryType"));
+			}
+		}
+
+		/// <summary></summary>
 		public virtual List<RawElement> RepositoryToRawElements(RepositoryType repository)
 		{
 			AssertNotDisposed();

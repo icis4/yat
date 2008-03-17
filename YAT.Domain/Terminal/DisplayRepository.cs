@@ -64,6 +64,14 @@ namespace YAT.Domain
 				{
 					while (_lineCount > value)
 					{
+						// ensure that queue isn't empty
+						if (_queue.Count <= 0)
+						{
+							_dataCount = 0;
+							_lineCount = 0;
+							break;
+						}
+
 						DisplayElement d = (DisplayElement)_queue.Dequeue();
 						if (d.IsDataElement)
 							_dataCount--;
@@ -101,6 +109,14 @@ namespace YAT.Domain
 			{
 				while (_dataCount >= _lineCapacity)
 				{
+					// ensure that queue isn't empty
+					if (_queue.Count <= 0)
+					{
+						_dataCount = 0;
+						_lineCount = 0;
+						break;
+					}
+
 					DisplayElement temp = (DisplayElement)_queue.Dequeue();
 					if (temp.IsDataElement)
 						_dataCount--;

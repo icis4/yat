@@ -397,21 +397,24 @@ namespace YAT.Gui.Controls
 		{
 			if (e.Index >= 0)
 			{
-				ListBox lb = listBox_Monitor;
+				unchecked
+				{
+					ListBox lb = listBox_Monitor;
 
-				SizeF size = Draw.MeasureItem((List<Domain.DisplayElement>)(lb.Items[e.Index]), _formatSettings, e.Graphics, e.Bounds);
+					SizeF size = Draw.MeasureItem((List<Domain.DisplayElement>)(lb.Items[e.Index]), _formatSettings, e.Graphics, e.Bounds);
 
-				int width  = (int)Math.Ceiling(size.Width);
-				int height = (int)Math.Ceiling(size.Height);
+					int width  = (int)Math.Ceiling(size.Width);
+					int height = (int)Math.Ceiling(size.Height);
 
-				e.ItemWidth  = width;
-				e.ItemHeight = height;
+					e.ItemWidth  = width;
+					e.ItemHeight = height;
 
-				if (width > lb.HorizontalExtent)
-					lb.HorizontalExtent = width;
+					if (width > lb.HorizontalExtent)
+						lb.HorizontalExtent = width;
 
-				if (height != lb.ItemHeight)
-					lb.ItemHeight = height;
+					if (height != lb.ItemHeight)
+						lb.ItemHeight = height;
+				}
 			}
 		}
 
@@ -421,20 +424,23 @@ namespace YAT.Gui.Controls
 		{
 			if (e.Index >= 0)
 			{
-				ListBox lb = listBox_Monitor;
+				unchecked
+				{
+					ListBox lb = listBox_Monitor;
 
-				e.DrawBackground();
-				SizeF size = Draw.DrawItem((List<Domain.DisplayElement>)(lb.Items[e.Index]), _formatSettings, e.Graphics, e.Bounds, e.State);
-				e.DrawFocusRectangle();
+					e.DrawBackground();
+					SizeF size = Draw.DrawItem((List<Domain.DisplayElement>)(lb.Items[e.Index]), _formatSettings, e.Graphics, e.Bounds, e.State);
+					e.DrawFocusRectangle();
 
-				int width = (int)Math.Ceiling(size.Width);
-				int height = (int)Math.Ceiling(size.Height);
+					int width = (int)Math.Ceiling(size.Width);
+					int height = (int)Math.Ceiling(size.Height);
 
-				if (width > lb.HorizontalExtent)
-					lb.HorizontalExtent = width;
+					if (width > lb.HorizontalExtent)
+						lb.HorizontalExtent = width;
 
-				if (height != lb.ItemHeight)
-					lb.ItemHeight = height;
+					if (height != lb.ItemHeight)
+						lb.ItemHeight = height;
+				}
 			}
 		}
 

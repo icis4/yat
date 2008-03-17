@@ -95,11 +95,6 @@ namespace YAT.Gui.Utilities
 			graphics.DrawString(element.Text, font, brush, bounds, _stringFormat);
 
 			// measure consumed rectangle
-			/*Region[] charRegions = new Region[element.Text.Length];
-			charRegions = graphics.MeasureCharacterRanges(element.Text, font, bounds.Size, _stringFormat);
-			float width = 0.0f;
-			foreach (Region charRegion in charRegions)
-				width += charRegion.W*/
 			return (graphics.MeasureString(element.Text, font, bounds.Size, _stringFormat));
 		}
 

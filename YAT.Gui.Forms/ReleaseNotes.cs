@@ -13,8 +13,10 @@ namespace YAT.Gui.Forms
 {
 	public partial class ReleaseNotes : Form
 	{
-		//public readonly string ReleaseNotesFilePath = "C:\\Programme\\YAT\\YAT Release Notes.txt";
-		public readonly string ReleaseNotesFilePath = Application.StartupPath + Path.DirectorySeparatorChar + "YAT Release Notes.txt";
+		public const string ReleaseNotesFileName = "YAT Release Notes.txt";
+
+		//public readonly string ReleaseNotesFilePath = "C:\\Programme\\YAT\\" + ReleaseNotesFileName;
+		public readonly string ReleaseNotesFilePath = Application.StartupPath + Path.DirectorySeparatorChar + ReleaseNotesFileName;
 
 		public ReleaseNotes()
 		{
