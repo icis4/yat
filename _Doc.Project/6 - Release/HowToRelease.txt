@@ -2,11 +2,14 @@
 Note:	The whole release process takes about 4 hours
 
 
-1.	Set application versions
-	------------------------
+1.	Set versions if not already done
+	--------------------------------
 	> Set product name post fix in
 	  "YAT.Utilities.ApplicationInfo.ProductNamePostFix"
 	> Set product versions in all assembly infos
+	  > Attention: Do not edit versions in
+	    "YAT.Settings.Test.SettingsFilesProvider" and
+	    "YAT.Settings.Test.FileVersionsTest"
 
 
 2.	Set installation version
@@ -94,3 +97,7 @@ Note:	The whole release process takes about 4 hours
 	> Copy the working copy to "\YAT\Releases and Checkpoints\Working Copy"
 	> Clean the copy using "\_Scripts\CleanAll.bat"
 	> Pack the copy into a properly named zip file
+
+
+17.	Immediately increment product name and versions
+	-----------------------------------------------
