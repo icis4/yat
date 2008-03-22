@@ -104,7 +104,7 @@ namespace YAT.Gui.Forms
 			this.toolStripPanel_Left = new System.Windows.Forms.ToolStripPanel();
 			this.timer_Chrono = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.chronometer_Main = new YAT.Gui.Controls.Chronometer(this.components);
+			this.chronometer_Main = new MKY.Windows.Forms.Chronometer(this.components);
 			this.contextMenuStrip_Main.SuspendLayout();
 			this.contextMenuStrip_FileRecent.SuspendLayout();
 			this.menuStrip_Main.SuspendLayout();
@@ -745,7 +745,7 @@ namespace YAT.Gui.Forms
 			// 
 			// chronometer_Main
 			// 
-			this.chronometer_Main.Tick += new System.EventHandler(this.chronometer_Main_Tick);
+			this.chronometer_Main.TimeSpanChanged += new System.EventHandler(this.chronometer_Main_TimeSpanChanged);
 			// 
 			// Main
 			// 
@@ -839,7 +839,7 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_MainStatus_Status;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_MainStatus_Chrono;
 		private System.Windows.Forms.Timer timer_Chrono;
-		private YAT.Gui.Controls.Chronometer chronometer_Main;
+		private MKY.Windows.Forms.Chronometer chronometer_Main;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_MainMenu_File_5;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MainContextMenu_File_OpenWorkspace;

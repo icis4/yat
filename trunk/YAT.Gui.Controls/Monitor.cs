@@ -12,20 +12,49 @@ using YAT.Gui.Utilities;
 
 namespace YAT.Gui.Controls
 {
+	public enum MonitorActivityState
+	{
+		Inactive,
+		Active,
+		Pending,
+	}
+
 	/// <summary>
 	/// This monitor implements a list box based terminal monitor in a speed optimized way
 	/// </summary>
 	[DesignerCategory("Windows Forms")]
 	public partial class Monitor : UserControl
 	{
+		#region Types
+		//==========================================================================================
+		// Types
+		//==========================================================================================
+
+		public enum OpacityState
+		{
+			Inactive,
+			Incrementing,
+			Decrementing,
+		}
+
+		#endregion
+
 		#region Constants
 		//==========================================================================================
 		// Constants
 		//==========================================================================================
 
 		private const Domain.RepositoryType _RepositoryTypeDefault = Domain.RepositoryType.None;
+		private const MonitorActivityState  _ActivityStateDefault  = MonitorActivityState.Inactive;
+
+		private const double _MinimumImageOpacity   =  0.00; //   0%
+		private const double _MaximumImageOpacity   =  1.00; // 100%
+		private const double _ImageOpacityIncrement = +0.10; // +10%
+		private const double _ImageOpacityDecrement = -0.10; // -10%
+
 		private const int _MaximalLineCountDefault = 100;
 
+		private const bool _ShowTimeStatusDefault  = false;
 		private const bool _ShowCountStatusDefault = false;
 
 		#endregion
@@ -35,17 +64,32 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
+		// state
 		private Domain.RepositoryType _repositoryType = _RepositoryTypeDefault;
+		private MonitorActivityState _activityState = _ActivityStateDefault;
+		private MonitorActivityState _activityStateOld = _ActivityStateDefault;
+
+		// image
+		private Image _imageInactive = null;
+		private Image _imageActive = null;
+		private OpacityState _imageOpacityState = OpacityState.Inactive;
+		private double _imageOpacity = _MinimumImageOpacity;
+
+		// lines
 		private int _maximalLineCount = _MaximalLineCountDefault;
 		private Model.Settings.FormatSettings _formatSettings = new Model.Settings.FormatSettings();
 		private List<List<Domain.DisplayElement>> _lines = new List<List<Domain.DisplayElement>>();
 
+		// time status
+		private bool _showTimeStatus = _ShowTimeStatusDefault;
+		private TimeSpan _connectTime;
+
 		// count status
 		private bool _showCountStatus = _ShowCountStatusDefault;
-		private int _txByteCountStatus = 0;
-		private int _rxByteCountStatus = 0;
-		private int _txLineCountStatus = 0;
-		private int _rxLineCountStatus = 0;
+		private int _txByteCountStatus;
+		private int _rxByteCountStatus;
+		private int _txLineCountStatus;
+		private int _rxLineCountStatus;
 
 		#endregion
 
@@ -99,6 +143,22 @@ namespace YAT.Gui.Controls
 		}
 
 		[Category("Monitor")]
+		[Description("The activity state.")]
+		[DefaultValue(_ActivityStateDefault)]
+		public MonitorActivityState ActivityState
+		{
+			get { return (_activityState); }
+			set
+			{
+				if (_activityState != value)
+				{
+					_activityState = value;
+					SetControls();
+				}
+			}
+		}
+
+		[Category("Monitor")]
 		[Description("The maxmimal number of lines to display.")]
 		[DefaultValue(_MaximalLineCountDefault)]
 		public int MaximalLineCount
@@ -122,6 +182,38 @@ namespace YAT.Gui.Controls
 				{
 					_formatSettings = value;
 					SetFormatDependentControls();
+				}
+			}
+		}
+
+		[Category("Monitor")]
+		[Description("Show the time status.")]
+		[DefaultValue(_ShowTimeStatusDefault)]
+		public bool ShowTimeStatus
+		{
+			get { return (_showTimeStatus); }
+			set
+			{
+				if (_showTimeStatus != value)
+				{
+					_showTimeStatus = value;
+					SetTimeStatusControls();
+				}
+			}
+		}
+
+		[Category("Monitor")]
+		[Description("The connect time status.")]
+		[DefaultValue(0)]
+		public TimeSpan ConnectTime
+		{
+			get { return (_connectTime); }
+			set
+			{
+				if (_connectTime != value)
+				{
+					_connectTime = value;
+					SetTimeStatusControls();
 				}
 			}
 		}
@@ -318,6 +410,13 @@ namespace YAT.Gui.Controls
 			AddLines(lines);
 		}
 
+		public void ResetTimeStatus()
+		{
+			_connectTime = TimeSpan.Zero;
+
+			SetTimeStatusControls();
+		}
+
 		public void ResetCountStatus()
 		{
 			_txByteCountStatus = 0;
@@ -380,7 +479,9 @@ namespace YAT.Gui.Controls
 
 		private void Monitor_Resize(object sender, EventArgs e)
 		{
-			label_CountStatus.Left = (Width / 2) + 14;
+			int middle = Width / 2;
+			label_TimeStatus.Width = middle - 14;
+			label_CountStatus.Left = middle + 14;
 		}
 
 		#endregion
@@ -389,6 +490,39 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 		// Controls Event Handlers
 		//==========================================================================================
+
+		private void timer_Opacity_Tick(object sender, EventArgs e)
+		{
+			if (_imageOpacityState != OpacityState.Inactive)
+			{
+				if (_imageOpacityState == OpacityState.Incrementing)
+				{
+					_imageOpacity += _ImageOpacityIncrement;
+					if (_imageOpacity > _MaximumImageOpacity)
+					{
+						_imageOpacity = _MaximumImageOpacity;
+						_imageOpacityState = OpacityState.Decrementing;
+					}
+				}
+				else
+				{
+					_imageOpacity += _ImageOpacityDecrement;
+					if (_imageOpacity < _MinimumImageOpacity)
+					{
+						_imageOpacity = _MinimumImageOpacity;
+						_imageOpacityState = OpacityState.Incrementing;
+					}
+				}
+
+				// \fixme Don't know how to alter image opacity yet
+				//pictureBox_Monitor.Image.Opacity = _imageOpacity
+
+				if (_imageOpacity >= ((_MaximumImageOpacity - _MinimumImageOpacity) / 2))
+					pictureBox_Monitor.Image = _imageActive;
+				else
+					pictureBox_Monitor.Image = null;
+			}
+		}
 
 		// measures item height only, not needed for OwnerDrawnFixed
 		#if (false)
@@ -461,16 +595,44 @@ namespace YAT.Gui.Controls
 		{
 			if (_repositoryType != Domain.RepositoryType.None)
 			{
-				Image image = null;
 				switch (_repositoryType)
 				{
-					case Domain.RepositoryType.Tx:    image = Properties.Resources.Image_Monitor_Tx_28x28; break;
-					case Domain.RepositoryType.Bidir: image = Properties.Resources.Image_Monitor_Bidir_28x28; break;
-					case Domain.RepositoryType.Rx:    image = Properties.Resources.Image_Monitor_Rx_28x28; break;
+					case Domain.RepositoryType.Tx:    _imageInactive = Properties.Resources.Image_Monitor_Tx_28x28;    _imageActive = Properties.Resources.Image_Monitor_Tx_28x28_Green;    break;
+					case Domain.RepositoryType.Bidir: _imageInactive = Properties.Resources.Image_Monitor_Bidir_28x28; _imageActive = Properties.Resources.Image_Monitor_Bidir_28x28_Green; break;
+					case Domain.RepositoryType.Rx:    _imageInactive = Properties.Resources.Image_Monitor_Rx_28x28;    _imageActive = Properties.Resources.Image_Monitor_Rx_28x28_Green;    break;
 				}
-				pictureBox_Monitor.Image = image;
+				pictureBox_Monitor.BackgroundImage = _imageInactive;
 
+				// image blending
+				switch (_activityState)
+				{
+					case MonitorActivityState.Active:   _imageOpacityState = OpacityState.Inactive; pictureBox_Monitor.Image = _imageActive; break;
+					case MonitorActivityState.Inactive: _imageOpacityState = OpacityState.Inactive; pictureBox_Monitor.Image = null;         break;
+					case MonitorActivityState.Pending:
+					{
+						if (_imageOpacityState == OpacityState.Inactive)
+						{
+							if (_activityStateOld == MonitorActivityState.Active)
+							{
+								pictureBox_Monitor.Image = _imageActive;
+								_imageOpacity = _MaximumImageOpacity;
+								_imageOpacityState = OpacityState.Decrementing;
+							}
+							if (_activityStateOld == MonitorActivityState.Inactive)
+							{
+								pictureBox_Monitor.Image = _imageActive;
+								_imageOpacity = _MinimumImageOpacity;
+								_imageOpacityState = OpacityState.Incrementing;
+							}
+						}
+						break;
+					}
+				}
+				_activityStateOld = _activityState;
+
+				timer_Opacity.Enabled = (_imageOpacityState != OpacityState.Inactive);
 				panel_Picture.Visible = true;
+
 				listBox_Monitor.BringToFront();
 				listBox_Monitor.Top = panel_Picture.Height;
 			}
@@ -481,9 +643,9 @@ namespace YAT.Gui.Controls
 			}
 
 			SetFormatDependentControls();
+			SetTimeStatusControls();
 			SetCountStatusControls();
 		}
-
 
 		private void SetFormatDependentControls()
 		{
@@ -494,6 +656,29 @@ namespace YAT.Gui.Controls
 		private void SetCharReplaceDependentControls()
 		{
 			listBox_Monitor.Refresh();
+		}
+
+		private void SetTimeStatusControls()
+		{
+			StringBuilder sb = new StringBuilder();
+			TimeSpan ts = _connectTime;
+
+			sb.Insert(0, ts.Seconds.ToString("D2"));
+			sb.Insert(0, ":");
+			sb.Insert(0, ts.Minutes.ToString());
+			if (ts.Hours > 0)
+			{
+				sb.Insert(0, ":");
+				sb.Insert(0, ts.Hours.ToString());
+
+				if (ts.Days > 0)
+				{
+					sb.Insert(0, "days ");
+					sb.Insert(0, ts.Days.ToString());
+				}
+			}
+			label_TimeStatus.Text = sb.ToString();
+			label_TimeStatus.Visible = _showTimeStatus;
 		}
 
 		private void SetCountStatusControls()

@@ -34,7 +34,7 @@ namespace YAT.Domain.Parser
 			"Characters are case insensitive (e.g. \\H = \\h / 4f = 4F / <lf> = <LF>)" + Environment.NewLine +
 			"Brakets can hold contiguous data (e.g. \\d(79 75)) separated by spaces, except for strings" + Environment.NewLine +
 			"Control characters can be nested (e.g. \\d(79 \\h(4B) 79))" + Environment.NewLine +
-			"Three letter radix identifiers are also allowed (e.g. \\hex instead of \\h" + Environment.NewLine +
+			"Three letter radix identifiers are also allowed (e.g. \\hex instead of \\h)" + Environment.NewLine +
 			Environment.NewLine +
 			"Type \\\\ to send a backspace" + Environment.NewLine +
 			"Type \\< to send an opening angle bracket" + Environment.NewLine +

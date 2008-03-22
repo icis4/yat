@@ -18,6 +18,8 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const bool ShowLengthDefault = false;
 		/// <summary></summary>
+		public const bool ShowConnectTimeDefault = false;
+		/// <summary></summary>
 		public const bool ShowCountersDefault = false;
 		/// <summary></summary>
 		public const int MaximalLineCountDefault = 100;
@@ -29,6 +31,7 @@ namespace YAT.Domain.Settings
 		private Radix _rxRadix;
 		private bool _showTimeStamp;
 		private bool _showLength;
+		private bool _showConnectTime;
 		private bool _showCounters;
 		private bool _directionLineBreakEnabled;
 		private int _txMaximalLineCount;
@@ -61,6 +64,7 @@ namespace YAT.Domain.Settings
 			_rxRadix            = rhs.RxRadix;
 			_showTimeStamp      = rhs.ShowTimeStamp;
 			_showLength         = rhs.ShowLength;
+			_showConnectTime    = rhs.ShowConnectTime;
 			_showCounters       = rhs.ShowCounters;
 			_directionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
 			_txMaximalLineCount = rhs.TxMaximalLineCount;
@@ -79,6 +83,7 @@ namespace YAT.Domain.Settings
 			RxRadix            = RadixDefault;
 			ShowTimeStamp      = ShowTimeStampDefault;
 			ShowLength         = ShowLengthDefault;
+			ShowConnectTime    = ShowConnectTimeDefault;
 			ShowCounters       = ShowCountersDefault;
 			TxMaximalLineCount = MaximalLineCountDefault;
 			RxMaximalLineCount = MaximalLineCountDefault;
@@ -166,6 +171,21 @@ namespace YAT.Domain.Settings
 				if (_showLength != value)
 				{
 					_showLength = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("ShowConnectTime")]
+		public bool ShowConnectTime
+		{
+			get { return (_showConnectTime); }
+			set
+			{
+				if (_showConnectTime != value)
+				{
+					_showConnectTime = value;
 					SetChanged();
 				}
 			}
@@ -268,6 +288,7 @@ namespace YAT.Domain.Settings
 					_rxRadix.Equals            (value._rxRadix) &&
 					_showTimeStamp.Equals      (value._showTimeStamp) &&
 					_showLength.Equals         (value._showLength) &&
+					_showConnectTime.Equals    (value._showConnectTime) &&
 					_showCounters.Equals       (value._showCounters) &&
 					_txMaximalLineCount.Equals (value._txMaximalLineCount) &&
 					_rxMaximalLineCount.Equals (value._rxMaximalLineCount) &&

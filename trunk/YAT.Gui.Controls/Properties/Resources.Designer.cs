@@ -67,6 +67,13 @@ namespace YAT.Gui.Controls.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Image_Monitor_Bidir_28x28_Green {
+            get {
+                object obj = ResourceManager.GetObject("Image_Monitor_Bidir_28x28_Green", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Image_Monitor_Rx_28x28 {
             get {
                 object obj = ResourceManager.GetObject("Image_Monitor_Rx_28x28", resourceCulture);
@@ -74,9 +81,23 @@ namespace YAT.Gui.Controls.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Image_Monitor_Rx_28x28_Green {
+            get {
+                object obj = ResourceManager.GetObject("Image_Monitor_Rx_28x28_Green", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Image_Monitor_Tx_28x28 {
             get {
                 object obj = ResourceManager.GetObject("Image_Monitor_Tx_28x28", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Image_Monitor_Tx_28x28_Green {
+            get {
+                object obj = ResourceManager.GetObject("Image_Monitor_Tx_28x28_Green", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

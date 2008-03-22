@@ -40,8 +40,12 @@ namespace YAT.Gui.Forms
 			this.label_ParityReplacementExample = new System.Windows.Forms.Label();
 			this.textBox_ParityReplacement = new System.Windows.Forms.TextBox();
 			this.groupBox_SendCommandSettings = new System.Windows.Forms.GroupBox();
+			this.checkBox_CopyPredefined = new System.Windows.Forms.CheckBox();
 			this.checkBox_KeepCommand = new System.Windows.Forms.CheckBox();
 			this.groupBox_DisplaySettings = new System.Windows.Forms.GroupBox();
+			this.groupBox_Display_Space = new System.Windows.Forms.GroupBox();
+			this.label_SpaceReplacementChar = new System.Windows.Forms.Label();
+			this.checkBox_ReplaceSpace = new System.Windows.Forms.CheckBox();
 			this.groupBox_Display_ControlChars = new System.Windows.Forms.GroupBox();
 			this.comboBox_ControlCharacterRadix = new System.Windows.Forms.ComboBox();
 			this.label_ControlCharacterRadix = new System.Windows.Forms.Label();
@@ -51,6 +55,7 @@ namespace YAT.Gui.Forms
 			this.label_RxRadix = new System.Windows.Forms.Label();
 			this.checkBox_SeparateTxRxRadix = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowTimeStamp = new System.Windows.Forms.CheckBox();
+			this.checkBox_ShowConnectTime = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowCounters = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowLength = new System.Windows.Forms.CheckBox();
 			this.comboBox_TxRadix = new System.Windows.Forms.ComboBox();
@@ -58,16 +63,13 @@ namespace YAT.Gui.Forms
 			this.label_MaximalLineCountUnit = new System.Windows.Forms.Label();
 			this.textBox_MaximalLineCount = new System.Windows.Forms.TextBox();
 			this.label_MaximalLineCount = new System.Windows.Forms.Label();
-			this.groupBox_Display_Space = new System.Windows.Forms.GroupBox();
-			this.label_SpaceReplacementChar = new System.Windows.Forms.Label();
-			this.checkBox_ReplaceSpace = new System.Windows.Forms.CheckBox();
 			this.groupBox_Settings.SuspendLayout();
 			this.groupBox_CommunicationSettings.SuspendLayout();
 			this.groupBox_ReceiveSettings.SuspendLayout();
 			this.groupBox_SendCommandSettings.SuspendLayout();
 			this.groupBox_DisplaySettings.SuspendLayout();
-			this.groupBox_Display_ControlChars.SuspendLayout();
 			this.groupBox_Display_Space.SuspendLayout();
+			this.groupBox_Display_ControlChars.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// button_Defaults
@@ -113,17 +115,17 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.Controls.Add(this.groupBox_DisplaySettings);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
-			this.groupBox_Settings.Size = new System.Drawing.Size(276, 538);
+			this.groupBox_Settings.Size = new System.Drawing.Size(276, 584);
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
 			// 
 			// groupBox_CommunicationSettings
 			// 
-			this.groupBox_CommunicationSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+			this.groupBox_CommunicationSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_CommunicationSettings.Controls.Add(this.comboBox_Endianess);
 			this.groupBox_CommunicationSettings.Controls.Add(this.label_Endianess);
-			this.groupBox_CommunicationSettings.Location = new System.Drawing.Point(6, 360);
+			this.groupBox_CommunicationSettings.Location = new System.Drawing.Point(6, 383);
 			this.groupBox_CommunicationSettings.Name = "groupBox_CommunicationSettings";
 			this.groupBox_CommunicationSettings.Size = new System.Drawing.Size(263, 48);
 			this.groupBox_CommunicationSettings.TabIndex = 1;
@@ -157,7 +159,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_ReceiveSettings.Controls.Add(this.checkBox_ReplaceParityError);
 			this.groupBox_ReceiveSettings.Controls.Add(this.label_ParityReplacementExample);
 			this.groupBox_ReceiveSettings.Controls.Add(this.textBox_ParityReplacement);
-			this.groupBox_ReceiveSettings.Location = new System.Drawing.Point(6, 468);
+			this.groupBox_ReceiveSettings.Location = new System.Drawing.Point(6, 514);
 			this.groupBox_ReceiveSettings.Name = "groupBox_ReceiveSettings";
 			this.groupBox_ReceiveSettings.Size = new System.Drawing.Size(263, 63);
 			this.groupBox_ReceiveSettings.TabIndex = 3;
@@ -194,15 +196,28 @@ namespace YAT.Gui.Forms
 			// 
 			// groupBox_SendCommandSettings
 			// 
-			this.groupBox_SendCommandSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+			this.groupBox_SendCommandSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_SendCommandSettings.Controls.Add(this.checkBox_CopyPredefined);
 			this.groupBox_SendCommandSettings.Controls.Add(this.checkBox_KeepCommand);
-			this.groupBox_SendCommandSettings.Location = new System.Drawing.Point(6, 414);
+			this.groupBox_SendCommandSettings.Location = new System.Drawing.Point(6, 437);
 			this.groupBox_SendCommandSettings.Name = "groupBox_SendCommandSettings";
-			this.groupBox_SendCommandSettings.Size = new System.Drawing.Size(263, 48);
+			this.groupBox_SendCommandSettings.Size = new System.Drawing.Size(263, 71);
 			this.groupBox_SendCommandSettings.TabIndex = 2;
 			this.groupBox_SendCommandSettings.TabStop = false;
 			this.groupBox_SendCommandSettings.Text = "Send Command Settings";
+			// 
+			// checkBox_CopyPredefined
+			// 
+			this.checkBox_CopyPredefined.AutoSize = true;
+			this.checkBox_CopyPredefined.Location = new System.Drawing.Point(12, 44);
+			this.checkBox_CopyPredefined.Name = "checkBox_CopyPredefined";
+			this.checkBox_CopyPredefined.Size = new System.Drawing.Size(240, 17);
+			this.checkBox_CopyPredefined.TabIndex = 1;
+			this.checkBox_CopyPredefined.Text = "Copy &predefined to send command after send";
+			this.checkBox_CopyPredefined.UseVisualStyleBackColor = true;
+			this.checkBox_CopyPredefined.CheckedChanged += new System.EventHandler(this.checkBox_CopyPredefined_CheckedChanged);
 			// 
 			// checkBox_KeepCommand
 			// 
@@ -217,8 +232,7 @@ namespace YAT.Gui.Forms
 			// 
 			// groupBox_DisplaySettings
 			// 
-			this.groupBox_DisplaySettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
+			this.groupBox_DisplaySettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_DisplaySettings.Controls.Add(this.groupBox_Display_Space);
 			this.groupBox_DisplaySettings.Controls.Add(this.groupBox_Display_ControlChars);
@@ -227,6 +241,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_DisplaySettings.Controls.Add(this.label_RxRadix);
 			this.groupBox_DisplaySettings.Controls.Add(this.checkBox_SeparateTxRxRadix);
 			this.groupBox_DisplaySettings.Controls.Add(this.checkBox_ShowTimeStamp);
+			this.groupBox_DisplaySettings.Controls.Add(this.checkBox_ShowConnectTime);
 			this.groupBox_DisplaySettings.Controls.Add(this.checkBox_ShowCounters);
 			this.groupBox_DisplaySettings.Controls.Add(this.checkBox_ShowLength);
 			this.groupBox_DisplaySettings.Controls.Add(this.comboBox_TxRadix);
@@ -236,22 +251,57 @@ namespace YAT.Gui.Forms
 			this.groupBox_DisplaySettings.Controls.Add(this.label_MaximalLineCount);
 			this.groupBox_DisplaySettings.Location = new System.Drawing.Point(6, 13);
 			this.groupBox_DisplaySettings.Name = "groupBox_DisplaySettings";
-			this.groupBox_DisplaySettings.Size = new System.Drawing.Size(263, 341);
+			this.groupBox_DisplaySettings.Size = new System.Drawing.Size(263, 364);
 			this.groupBox_DisplaySettings.TabIndex = 0;
 			this.groupBox_DisplaySettings.TabStop = false;
 			this.groupBox_DisplaySettings.Text = "Display Settings";
 			// 
+			// groupBox_Display_Space
+			// 
+			this.groupBox_Display_Space.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Display_Space.Controls.Add(this.label_SpaceReplacementChar);
+			this.groupBox_Display_Space.Controls.Add(this.checkBox_ReplaceSpace);
+			this.groupBox_Display_Space.Location = new System.Drawing.Point(6, 312);
+			this.groupBox_Display_Space.Name = "groupBox_Display_Space";
+			this.groupBox_Display_Space.Size = new System.Drawing.Size(250, 46);
+			this.groupBox_Display_Space.TabIndex = 14;
+			this.groupBox_Display_Space.TabStop = false;
+			this.groupBox_Display_Space.Text = "Space";
+			// 
+			// label_SpaceReplacementChar
+			// 
+			this.label_SpaceReplacementChar.AutoSize = true;
+			this.label_SpaceReplacementChar.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.label_SpaceReplacementChar.Font = new System.Drawing.Font("DejaVu Sans Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label_SpaceReplacementChar.Location = new System.Drawing.Point(220, 21);
+			this.label_SpaceReplacementChar.Name = "label_SpaceReplacementChar";
+			this.label_SpaceReplacementChar.Size = new System.Drawing.Size(16, 15);
+			this.label_SpaceReplacementChar.TabIndex = 1;
+			this.label_SpaceReplacementChar.Text = "␣";
+			// 
+			// checkBox_ReplaceSpace
+			// 
+			this.checkBox_ReplaceSpace.AutoSize = true;
+			this.checkBox_ReplaceSpace.Location = new System.Drawing.Point(6, 19);
+			this.checkBox_ReplaceSpace.Name = "checkBox_ReplaceSpace";
+			this.checkBox_ReplaceSpace.Size = new System.Drawing.Size(216, 17);
+			this.checkBox_ReplaceSpace.TabIndex = 0;
+			this.checkBox_ReplaceSpace.Text = "Re&place by open box character U+2423";
+			this.checkBox_ReplaceSpace.UseVisualStyleBackColor = true;
+			this.checkBox_ReplaceSpace.CheckedChanged += new System.EventHandler(this.checkBox_ReplaceSpace_CheckedChanged);
+			// 
 			// groupBox_Display_ControlChars
 			// 
-			this.groupBox_Display_ControlChars.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			this.groupBox_Display_ControlChars.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Display_ControlChars.Controls.Add(this.comboBox_ControlCharacterRadix);
 			this.groupBox_Display_ControlChars.Controls.Add(this.label_ControlCharacterRadix);
 			this.groupBox_Display_ControlChars.Controls.Add(this.checkBox_ReplaceControlCharacters);
-			this.groupBox_Display_ControlChars.Location = new System.Drawing.Point(6, 214);
+			this.groupBox_Display_ControlChars.Location = new System.Drawing.Point(6, 237);
 			this.groupBox_Display_ControlChars.Name = "groupBox_Display_ControlChars";
 			this.groupBox_Display_ControlChars.Size = new System.Drawing.Size(251, 69);
-			this.groupBox_Display_ControlChars.TabIndex = 12;
+			this.groupBox_Display_ControlChars.TabIndex = 13;
 			this.groupBox_Display_ControlChars.TabStop = false;
 			this.groupBox_Display_ControlChars.Text = "Control Characters \\h(00) - \\h(1F), \\h(7F)";
 			// 
@@ -285,11 +335,12 @@ namespace YAT.Gui.Forms
 			// 
 			// checkBox_DirectionLineBreak
 			// 
+			this.checkBox_DirectionLineBreak.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBox_DirectionLineBreak.AutoSize = true;
-			this.checkBox_DirectionLineBreak.Location = new System.Drawing.Point(12, 164);
+			this.checkBox_DirectionLineBreak.Location = new System.Drawing.Point(12, 187);
 			this.checkBox_DirectionLineBreak.Name = "checkBox_DirectionLineBreak";
 			this.checkBox_DirectionLineBreak.Size = new System.Drawing.Size(194, 17);
-			this.checkBox_DirectionLineBreak.TabIndex = 8;
+			this.checkBox_DirectionLineBreak.TabIndex = 9;
 			this.checkBox_DirectionLineBreak.Text = "&Break lines when direction changes";
 			this.checkBox_DirectionLineBreak.CheckedChanged += new System.EventHandler(this.checkBox_DirectionLineBreak_CheckedChanged);
 			// 
@@ -334,13 +385,25 @@ namespace YAT.Gui.Forms
 			this.checkBox_ShowTimeStamp.Text = "Show &timestamp";
 			this.checkBox_ShowTimeStamp.CheckedChanged += new System.EventHandler(this.checkBox_ShowTimeStamp_CheckedChanged);
 			// 
+			// checkBox_ShowConnectTime
+			// 
+			this.checkBox_ShowConnectTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.checkBox_ShowConnectTime.AutoSize = true;
+			this.checkBox_ShowConnectTime.Location = new System.Drawing.Point(12, 141);
+			this.checkBox_ShowConnectTime.Name = "checkBox_ShowConnectTime";
+			this.checkBox_ShowConnectTime.Size = new System.Drawing.Size(117, 17);
+			this.checkBox_ShowConnectTime.TabIndex = 7;
+			this.checkBox_ShowConnectTime.Text = "Show connect t&ime";
+			this.checkBox_ShowConnectTime.CheckedChanged += new System.EventHandler(this.checkBox_ShowConnectTime_CheckedChanged);
+			// 
 			// checkBox_ShowCounters
 			// 
+			this.checkBox_ShowCounters.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.checkBox_ShowCounters.AutoSize = true;
-			this.checkBox_ShowCounters.Location = new System.Drawing.Point(12, 141);
+			this.checkBox_ShowCounters.Location = new System.Drawing.Point(12, 164);
 			this.checkBox_ShowCounters.Name = "checkBox_ShowCounters";
 			this.checkBox_ShowCounters.Size = new System.Drawing.Size(97, 17);
-			this.checkBox_ShowCounters.TabIndex = 7;
+			this.checkBox_ShowCounters.TabIndex = 8;
 			this.checkBox_ShowCounters.Text = "Show &counters";
 			this.checkBox_ShowCounters.CheckedChanged += new System.EventHandler(this.checkBox_ShowCounters_CheckedChanged);
 			// 
@@ -376,69 +439,36 @@ namespace YAT.Gui.Forms
 			// 
 			// label_MaximalLineCountUnit
 			// 
+			this.label_MaximalLineCountUnit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_MaximalLineCountUnit.AutoSize = true;
-			this.label_MaximalLineCountUnit.Location = new System.Drawing.Point(145, 190);
+			this.label_MaximalLineCountUnit.Location = new System.Drawing.Point(145, 213);
 			this.label_MaximalLineCountUnit.Name = "label_MaximalLineCountUnit";
 			this.label_MaximalLineCountUnit.Size = new System.Drawing.Size(28, 13);
-			this.label_MaximalLineCountUnit.TabIndex = 11;
+			this.label_MaximalLineCountUnit.TabIndex = 12;
 			this.label_MaximalLineCountUnit.Text = "lines";
 			this.label_MaximalLineCountUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// textBox_MaximalLineCount
 			// 
-			this.textBox_MaximalLineCount.Location = new System.Drawing.Point(92, 187);
+			this.textBox_MaximalLineCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.textBox_MaximalLineCount.Location = new System.Drawing.Point(92, 210);
 			this.textBox_MaximalLineCount.Name = "textBox_MaximalLineCount";
 			this.textBox_MaximalLineCount.Size = new System.Drawing.Size(50, 20);
-			this.textBox_MaximalLineCount.TabIndex = 10;
+			this.textBox_MaximalLineCount.TabIndex = 11;
 			this.textBox_MaximalLineCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textBox_MaximalLineCount.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_MaximalLineCount_Validating);
 			this.textBox_MaximalLineCount.TextChanged += new System.EventHandler(this.textBox_MaximalLineCount_TextChanged);
 			// 
 			// label_MaximalLineCount
 			// 
+			this.label_MaximalLineCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_MaximalLineCount.AutoSize = true;
-			this.label_MaximalLineCount.Location = new System.Drawing.Point(9, 190);
+			this.label_MaximalLineCount.Location = new System.Drawing.Point(9, 213);
 			this.label_MaximalLineCount.Name = "label_MaximalLineCount";
 			this.label_MaximalLineCount.Size = new System.Drawing.Size(81, 13);
-			this.label_MaximalLineCount.TabIndex = 9;
+			this.label_MaximalLineCount.TabIndex = 10;
 			this.label_MaximalLineCount.Text = "Display &maximal";
 			this.label_MaximalLineCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// groupBox_Display_Space
-			// 
-			this.groupBox_Display_Space.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Display_Space.Controls.Add(this.label_SpaceReplacementChar);
-			this.groupBox_Display_Space.Controls.Add(this.checkBox_ReplaceSpace);
-			this.groupBox_Display_Space.Location = new System.Drawing.Point(6, 289);
-			this.groupBox_Display_Space.Name = "groupBox_Display_Space";
-			this.groupBox_Display_Space.Size = new System.Drawing.Size(250, 46);
-			this.groupBox_Display_Space.TabIndex = 13;
-			this.groupBox_Display_Space.TabStop = false;
-			this.groupBox_Display_Space.Text = "Space";
-			// 
-			// label_SpaceReplacementChar
-			// 
-			this.label_SpaceReplacementChar.AutoSize = true;
-			this.label_SpaceReplacementChar.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.label_SpaceReplacementChar.Font = new System.Drawing.Font("DejaVu Sans Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label_SpaceReplacementChar.Location = new System.Drawing.Point(220, 21);
-			this.label_SpaceReplacementChar.Name = "label_SpaceReplacementChar";
-			this.label_SpaceReplacementChar.Size = new System.Drawing.Size(16, 15);
-			this.label_SpaceReplacementChar.TabIndex = 1;
-			this.label_SpaceReplacementChar.Text = "␣";
-			// 
-			// checkBox_ReplaceSpace
-			// 
-			this.checkBox_ReplaceSpace.AutoSize = true;
-			this.checkBox_ReplaceSpace.Location = new System.Drawing.Point(6, 19);
-			this.checkBox_ReplaceSpace.Name = "checkBox_ReplaceSpace";
-			this.checkBox_ReplaceSpace.Size = new System.Drawing.Size(216, 17);
-			this.checkBox_ReplaceSpace.TabIndex = 0;
-			this.checkBox_ReplaceSpace.Text = "Re&place by open box character U+2423";
-			this.checkBox_ReplaceSpace.UseVisualStyleBackColor = true;
-			this.checkBox_ReplaceSpace.CheckedChanged += new System.EventHandler(this.checkBox_ReplaceSpace_CheckedChanged);
 			// 
 			// AdvancedTerminalSettings
 			// 
@@ -446,7 +476,7 @@ namespace YAT.Gui.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(384, 562);
+			this.ClientSize = new System.Drawing.Size(384, 608);
 			this.Controls.Add(this.groupBox_Settings);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.button_Cancel);
@@ -468,10 +498,10 @@ namespace YAT.Gui.Forms
 			this.groupBox_SendCommandSettings.PerformLayout();
 			this.groupBox_DisplaySettings.ResumeLayout(false);
 			this.groupBox_DisplaySettings.PerformLayout();
-			this.groupBox_Display_ControlChars.ResumeLayout(false);
-			this.groupBox_Display_ControlChars.PerformLayout();
 			this.groupBox_Display_Space.ResumeLayout(false);
 			this.groupBox_Display_Space.PerformLayout();
+			this.groupBox_Display_ControlChars.ResumeLayout(false);
+			this.groupBox_Display_ControlChars.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -511,5 +541,7 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.GroupBox groupBox_Display_Space;
 		private System.Windows.Forms.Label label_SpaceReplacementChar;
 		private System.Windows.Forms.CheckBox checkBox_ReplaceSpace;
+		private System.Windows.Forms.CheckBox checkBox_ShowConnectTime;
+		private System.Windows.Forms.CheckBox checkBox_CopyPredefined;
 	}
 }

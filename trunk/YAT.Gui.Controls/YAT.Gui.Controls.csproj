@@ -45,12 +45,6 @@
     <Compile Include="BinaryDisplaySettingsSet.Designer.cs">
       <DependentUpon>BinaryDisplaySettingsSet.cs</DependentUpon>
     </Compile>
-    <Compile Include="Chronometer.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Chronometer.Designer.cs">
-      <DependentUpon>Chronometer.cs</DependentUpon>
-    </Compile>
     <Compile Include="Send.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -150,10 +144,6 @@
     <EmbeddedResource Include="BinaryDisplaySettingsSet.resx">
       <SubType>Designer</SubType>
       <DependentUpon>BinaryDisplaySettingsSet.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Chronometer.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Chronometer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Send.resx">
       <SubType>Designer</SubType>
@@ -265,8 +255,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Monitor\Image_Monitor_Bidir_28x28.png" />
+    <None Include="Resources\Monitor\Image_Monitor_Bidir_28x28_Green.png" />
     <Content Include="Resources\Monitor\Image_Monitor_Rx_28x28.png" />
+    <None Include="Resources\Monitor\Image_Monitor_Rx_28x28_Green.png" />
     <Content Include="Resources\Monitor\Image_Monitor_Tx_28x28.png" />
+    <None Include="Resources\Monitor\Image_Monitor_Tx_28x28_Green.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

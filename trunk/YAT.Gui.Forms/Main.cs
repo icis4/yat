@@ -488,7 +488,20 @@ namespace YAT.Gui.Forms
 
 		private void toolStripStatusLabel_MainStatus_Chrono_DoubleClick(object sender, EventArgs e)
 		{
+			chronometer_Main.Stop();
 			chronometer_Main.Reset();
+		}
+
+		#endregion
+
+		#region Controls Event Handlers > Chrono
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Chrono
+		//------------------------------------------------------------------------------------------
+
+		private void chronometer_Main_TimeSpanChanged(object sender, EventArgs e)
+		{
+			toolStripStatusLabel_MainStatus_Chrono.Text = chronometer_Main.ToString();
 		}
 
 		#endregion
@@ -1045,18 +1058,6 @@ namespace YAT.Gui.Forms
 		{
 			timer_Status.Enabled = false;
 			ResetStatusText();
-		}
-
-		#endregion
-
-		#region Chrono
-		//==========================================================================================
-		// Chrono
-		//==========================================================================================
-
-		private void chronometer_Main_Tick(object sender, EventArgs e)
-		{
-			toolStripStatusLabel_MainStatus_Chrono.Text = chronometer_Main.ToString();
 		}
 
 		#endregion

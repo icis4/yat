@@ -396,15 +396,20 @@ namespace YAT.Gui.Controls
 			}
 		}
 
-		/// <remarks>
-		/// Temporarily changing the edit state is needed when command is modified
-		/// (e.g. cleared) after send.
-		/// </remarks>
 		private void RequestSendCommand()
 		{
-			_commandEditState = TextEditState.HasFocusAndIsValidatedAndSendRequested;
-			OnSendCommandRequest(new EventArgs());
-			_commandEditState = TextEditState.HasFocusAndIsValidated;
+			if (_commandEditState == TextEditState.Inactive)
+			{
+				OnSendCommandRequest(new EventArgs());
+			}
+			else
+			{
+				// temporarily changing the edit state is needed when command is modified
+				// (e.g. cleared) after send
+				_commandEditState = TextEditState.HasFocusAndIsValidatedAndSendRequested;
+				OnSendCommandRequest(new EventArgs());
+				_commandEditState = TextEditState.HasFocusAndIsValidated;
+			}
 		}
 
 		#endregion

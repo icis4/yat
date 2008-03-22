@@ -30,8 +30,8 @@ namespace YAT.Gui.Forms
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Terminal));
-			YAT.Model.Types.Command command1 = new YAT.Model.Types.Command();
-			YAT.Model.Types.Command command2 = new YAT.Model.Types.Command();
+			YAT.Model.Types.Command command3 = new YAT.Model.Types.Command();
+			YAT.Model.Types.Command command4 = new YAT.Model.Types.Command();
 			this.timer_Status = new System.Windows.Forms.Timer(this.components);
 			this.contextMenuStrip_Monitor = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem_MonitorContextMenu_Radix = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,7 +62,6 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_RadixContextMenu_Rx_Oct = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_RadixContextMenu_Rx_Dec = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_View_Radix = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Format = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_MonitorContextMenu_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp = new System.Windows.Forms.ToolStripMenuItem();
@@ -74,19 +73,23 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_MonitorContextMenu_Clear = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_ClearAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_MonitorContextMenu_4 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MonitorContextMenu_RestartConnectTime = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator_MonitorContextMenu_5 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_ShowCounters = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_ResetCounters = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator_MonitorContextMenu_5 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripSeparator_MonitorContextMenu_6 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_Panels = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Tx = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Bidir = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Panels_Rx = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Hide = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator_MonitorContextMenu_6 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripSeparator_MonitorContextMenu_7 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_SaveToFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator_MonitorContextMenu_7 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripSeparator_MonitorContextMenu_8 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_Print = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_View_Radix = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Predefined = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem_PredefinedContextMenu_Command_1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_Command_2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -110,14 +113,15 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_PredefinedContextMenu_Hide = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Predefined = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Send = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.toolStripMenuItem_SendContextMenu_KeepCommand = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator_SendContextMenu_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_SendContextMenu_SendCommand = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_SendFile = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator_SendContextMenu_2 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripSeparator_SendContextMenu_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_SendContextMenu_Panels = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_Panels_SendCommand = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator_SendContextMenu_2 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_SendContextMenu_KeepCommand = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_SendContextMenu_CopyPredefined = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip_Terminal = new System.Windows.Forms.MenuStrip();
 			this.toolStripMenuItem_TerminalMenu_File = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_File_Close = new System.Windows.Forms.ToolStripMenuItem();
@@ -142,6 +146,9 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_Command = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_File = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_TerminalMenu_Send_1 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripSeparator_TerminalMenu_Send_2 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_TerminalMenu_Send_KeepCommand = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log_Begin = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log_End = new System.Windows.Forms.ToolStripMenuItem();
@@ -163,15 +170,18 @@ namespace YAT.Gui.Forms
 			this.toolStripSeparator_TerminalMenu_View_Panels_3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_Panels_RearrangeAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_TerminalMenu_View_1 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator_TerminalMenu_View_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_Counters = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator_TerminalMenu_View_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripSeparator_TerminalMenu_View_3 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripSeparator_TerminalMenu_View_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_ShowLength = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_ShowEol = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator_TerminalMenu_View_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_Format = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip_Terminal = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel_TerminalStatus_Status = new System.Windows.Forms.ToolStripStatusLabel();
@@ -249,18 +259,21 @@ namespace YAT.Gui.Forms
             this.toolStripMenuItem_MonitorContextMenu_Clear,
             this.toolStripMenuItem_MonitorContextMenu_ClearAll,
             this.toolStripSeparator_MonitorContextMenu_4,
+            this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime,
+            this.toolStripMenuItem_MonitorContextMenu_RestartConnectTime,
+            this.toolStripSeparator_MonitorContextMenu_5,
             this.toolStripMenuItem_MonitorContextMenu_ShowCounters,
             this.toolStripMenuItem_MonitorContextMenu_ResetCounters,
-            this.toolStripSeparator_MonitorContextMenu_5,
+            this.toolStripSeparator_MonitorContextMenu_6,
             this.toolStripMenuItem_MonitorContextMenu_Panels,
             this.toolStripMenuItem_MonitorContextMenu_Hide,
-            this.toolStripSeparator_MonitorContextMenu_6,
+            this.toolStripSeparator_MonitorContextMenu_7,
             this.toolStripMenuItem_MonitorContextMenu_SaveToFile,
             this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard,
-            this.toolStripSeparator_MonitorContextMenu_7,
+            this.toolStripSeparator_MonitorContextMenu_8,
             this.toolStripMenuItem_MonitorContextMenu_Print});
 			this.contextMenuStrip_Monitor.Name = "contextMenuStrip_Monitor";
-			this.contextMenuStrip_Monitor.Size = new System.Drawing.Size(226, 379);
+			this.contextMenuStrip_Monitor.Size = new System.Drawing.Size(226, 429);
 			this.contextMenuStrip_Monitor.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Monitor_Opening);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Radix
@@ -286,7 +299,7 @@ namespace YAT.Gui.Forms
             this.toolStripMenuItem_RadixContextMenu_TxRadix,
             this.toolStripMenuItem_RadixContextMenu_RxRadix});
 			this.contextMenuStrip_Radix.Name = "contextMenuStrip_Radix";
-			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_MonitorContextMenu_Radix;
+			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_TerminalMenu_View_Radix;
 			this.contextMenuStrip_Radix.Size = new System.Drawing.Size(182, 220);
 			this.contextMenuStrip_Radix.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Radix_Opening);
 			// 
@@ -482,13 +495,6 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex.Text = "&Hexadecimal";
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Rx_Hex_Click);
 			// 
-			// toolStripMenuItem_TerminalMenu_View_Radix
-			// 
-			this.toolStripMenuItem_TerminalMenu_View_Radix.DropDown = this.contextMenuStrip_Radix;
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Name = "toolStripMenuItem_TerminalMenu_View_Radix";
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(219, 22);
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Text = "R&adix";
-			// 
 			// toolStripMenuItem_MonitorContextMenu_Format
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Format.Name = "toolStripMenuItem_MonitorContextMenu_Format";
@@ -561,6 +567,25 @@ namespace YAT.Gui.Forms
 			this.toolStripSeparator_MonitorContextMenu_4.Name = "toolStripSeparator_MonitorContextMenu_4";
 			this.toolStripSeparator_MonitorContextMenu_4.Size = new System.Drawing.Size(222, 6);
 			// 
+			// toolStripMenuItem_MonitorContextMenu_ShowConnectTime
+			// 
+			this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Name = "toolStripMenuItem_MonitorContextMenu_ShowConnectTime";
+			this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Size = new System.Drawing.Size(225, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Text = "Show Connect Time";
+			this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime_Click);
+			// 
+			// toolStripMenuItem_MonitorContextMenu_RestartConnectTime
+			// 
+			this.toolStripMenuItem_MonitorContextMenu_RestartConnectTime.Name = "toolStripMenuItem_MonitorContextMenu_RestartConnectTime";
+			this.toolStripMenuItem_MonitorContextMenu_RestartConnectTime.Size = new System.Drawing.Size(225, 22);
+			this.toolStripMenuItem_MonitorContextMenu_RestartConnectTime.Text = "Restart Connect Time";
+			this.toolStripMenuItem_MonitorContextMenu_RestartConnectTime.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_RestartConnectTime_Click);
+			// 
+			// toolStripSeparator_MonitorContextMenu_5
+			// 
+			this.toolStripSeparator_MonitorContextMenu_5.Name = "toolStripSeparator_MonitorContextMenu_5";
+			this.toolStripSeparator_MonitorContextMenu_5.Size = new System.Drawing.Size(222, 6);
+			// 
 			// toolStripMenuItem_MonitorContextMenu_ShowCounters
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_ShowCounters.Name = "toolStripMenuItem_MonitorContextMenu_ShowCounters";
@@ -575,10 +600,10 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_MonitorContextMenu_ResetCounters.Text = "Reset Counters";
 			this.toolStripMenuItem_MonitorContextMenu_ResetCounters.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ResetCounters_Click);
 			// 
-			// toolStripSeparator_MonitorContextMenu_5
+			// toolStripSeparator_MonitorContextMenu_6
 			// 
-			this.toolStripSeparator_MonitorContextMenu_5.Name = "toolStripSeparator_MonitorContextMenu_5";
-			this.toolStripSeparator_MonitorContextMenu_5.Size = new System.Drawing.Size(222, 6);
+			this.toolStripSeparator_MonitorContextMenu_6.Name = "toolStripSeparator_MonitorContextMenu_6";
+			this.toolStripSeparator_MonitorContextMenu_6.Size = new System.Drawing.Size(222, 6);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Panels
 			// 
@@ -620,10 +645,10 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_MonitorContextMenu_Hide.Text = "Hide";
 			this.toolStripMenuItem_MonitorContextMenu_Hide.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Hide_Click);
 			// 
-			// toolStripSeparator_MonitorContextMenu_6
+			// toolStripSeparator_MonitorContextMenu_7
 			// 
-			this.toolStripSeparator_MonitorContextMenu_6.Name = "toolStripSeparator_MonitorContextMenu_6";
-			this.toolStripSeparator_MonitorContextMenu_6.Size = new System.Drawing.Size(222, 6);
+			this.toolStripSeparator_MonitorContextMenu_7.Name = "toolStripSeparator_MonitorContextMenu_7";
+			this.toolStripSeparator_MonitorContextMenu_7.Size = new System.Drawing.Size(222, 6);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_SaveToFile
 			// 
@@ -641,10 +666,10 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Text = "Copy to Clipboard";
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard_Click);
 			// 
-			// toolStripSeparator_MonitorContextMenu_7
+			// toolStripSeparator_MonitorContextMenu_8
 			// 
-			this.toolStripSeparator_MonitorContextMenu_7.Name = "toolStripSeparator_MonitorContextMenu_7";
-			this.toolStripSeparator_MonitorContextMenu_7.Size = new System.Drawing.Size(222, 6);
+			this.toolStripSeparator_MonitorContextMenu_8.Name = "toolStripSeparator_MonitorContextMenu_8";
+			this.toolStripSeparator_MonitorContextMenu_8.Size = new System.Drawing.Size(222, 6);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Print
 			// 
@@ -653,6 +678,13 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_MonitorContextMenu_Print.Size = new System.Drawing.Size(225, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Print.Text = "Print...";
 			this.toolStripMenuItem_MonitorContextMenu_Print.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Print_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_View_Radix
+			// 
+			this.toolStripMenuItem_TerminalMenu_View_Radix.DropDown = this.contextMenuStrip_Radix;
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Name = "toolStripMenuItem_TerminalMenu_View_Radix";
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(219, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Text = "R&adix";
 			// 
 			// contextMenuStrip_Predefined
 			// 
@@ -676,7 +708,6 @@ namespace YAT.Gui.Forms
             this.toolStripSeparator_PredefinedContextMenu_3,
             this.toolStripMenuItem_PredefinedContextMenu_Hide});
 			this.contextMenuStrip_Predefined.Name = "contextMenuStrip_PredefinedCommands";
-			this.contextMenuStrip_Predefined.OwnerItem = this.toolStripMenuItem_TerminalMenu_Send_Predefined;
 			this.contextMenuStrip_Predefined.Size = new System.Drawing.Size(225, 352);
 			this.contextMenuStrip_Predefined.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Predefined_Opening);
 			// 
@@ -858,52 +889,43 @@ namespace YAT.Gui.Forms
 			// 
 			this.toolStripMenuItem_TerminalMenu_Send_Predefined.DropDown = this.contextMenuStrip_Predefined;
 			this.toolStripMenuItem_TerminalMenu_Send_Predefined.Name = "toolStripMenuItem_TerminalMenu_Send_Predefined";
-			this.toolStripMenuItem_TerminalMenu_Send_Predefined.Size = new System.Drawing.Size(187, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_Predefined.Size = new System.Drawing.Size(325, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_Predefined.Text = "&Predefined Command";
 			// 
 			// contextMenuStrip_Send
 			// 
 			this.contextMenuStrip_Send.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem_SendContextMenu_KeepCommand,
-            this.toolStripSeparator_SendContextMenu_1,
             this.toolStripMenuItem_SendContextMenu_SendCommand,
             this.toolStripMenuItem_SendContextMenu_SendFile,
+            this.toolStripSeparator_SendContextMenu_1,
+            this.toolStripMenuItem_SendContextMenu_Panels,
             this.toolStripSeparator_SendContextMenu_2,
-            this.toolStripMenuItem_SendContextMenu_Panels});
+            this.toolStripMenuItem_SendContextMenu_KeepCommand,
+            this.toolStripMenuItem_SendContextMenu_CopyPredefined});
 			this.contextMenuStrip_Send.Name = "contextMenuStrip_Send";
-			this.contextMenuStrip_Send.Size = new System.Drawing.Size(215, 126);
+			this.contextMenuStrip_Send.Size = new System.Drawing.Size(326, 126);
 			this.contextMenuStrip_Send.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Send_Opening);
-			// 
-			// toolStripMenuItem_SendContextMenu_KeepCommand
-			// 
-			this.toolStripMenuItem_SendContextMenu_KeepCommand.Name = "toolStripMenuItem_SendContextMenu_KeepCommand";
-			this.toolStripMenuItem_SendContextMenu_KeepCommand.Size = new System.Drawing.Size(214, 22);
-			this.toolStripMenuItem_SendContextMenu_KeepCommand.Text = "Keep Command After Send";
-			this.toolStripMenuItem_SendContextMenu_KeepCommand.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_KeepCommand_Click);
-			// 
-			// toolStripSeparator_SendContextMenu_1
-			// 
-			this.toolStripSeparator_SendContextMenu_1.Name = "toolStripSeparator_SendContextMenu_1";
-			this.toolStripSeparator_SendContextMenu_1.Size = new System.Drawing.Size(211, 6);
 			// 
 			// toolStripMenuItem_SendContextMenu_SendCommand
 			// 
 			this.toolStripMenuItem_SendContextMenu_SendCommand.Name = "toolStripMenuItem_SendContextMenu_SendCommand";
-			this.toolStripMenuItem_SendContextMenu_SendCommand.Size = new System.Drawing.Size(214, 22);
+			this.toolStripMenuItem_SendContextMenu_SendCommand.ShortcutKeys = System.Windows.Forms.Keys.F3;
+			this.toolStripMenuItem_SendContextMenu_SendCommand.Size = new System.Drawing.Size(325, 22);
 			this.toolStripMenuItem_SendContextMenu_SendCommand.Text = "Send Command";
 			this.toolStripMenuItem_SendContextMenu_SendCommand.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_SendCommand_Click);
 			// 
 			// toolStripMenuItem_SendContextMenu_SendFile
 			// 
 			this.toolStripMenuItem_SendContextMenu_SendFile.Name = "toolStripMenuItem_SendContextMenu_SendFile";
-			this.toolStripMenuItem_SendContextMenu_SendFile.Size = new System.Drawing.Size(214, 22);
+			this.toolStripMenuItem_SendContextMenu_SendFile.ShortcutKeys = System.Windows.Forms.Keys.F4;
+			this.toolStripMenuItem_SendContextMenu_SendFile.Size = new System.Drawing.Size(325, 22);
 			this.toolStripMenuItem_SendContextMenu_SendFile.Text = "Send File";
 			this.toolStripMenuItem_SendContextMenu_SendFile.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_SendFile_Click);
 			// 
-			// toolStripSeparator_SendContextMenu_2
+			// toolStripSeparator_SendContextMenu_1
 			// 
-			this.toolStripSeparator_SendContextMenu_2.Name = "toolStripSeparator_SendContextMenu_2";
-			this.toolStripSeparator_SendContextMenu_2.Size = new System.Drawing.Size(211, 6);
+			this.toolStripSeparator_SendContextMenu_1.Name = "toolStripSeparator_SendContextMenu_1";
+			this.toolStripSeparator_SendContextMenu_1.Size = new System.Drawing.Size(322, 6);
 			// 
 			// toolStripMenuItem_SendContextMenu_Panels
 			// 
@@ -911,7 +933,7 @@ namespace YAT.Gui.Forms
             this.toolStripMenuItem_SendContextMenu_Panels_SendCommand,
             this.toolStripMenuItem_SendContextMenu_Panels_SendFile});
 			this.toolStripMenuItem_SendContextMenu_Panels.Name = "toolStripMenuItem_SendContextMenu_Panels";
-			this.toolStripMenuItem_SendContextMenu_Panels.Size = new System.Drawing.Size(214, 22);
+			this.toolStripMenuItem_SendContextMenu_Panels.Size = new System.Drawing.Size(325, 22);
 			this.toolStripMenuItem_SendContextMenu_Panels.Text = "Panels";
 			// 
 			// toolStripMenuItem_SendContextMenu_Panels_SendCommand
@@ -931,6 +953,29 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Size = new System.Drawing.Size(188, 22);
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Text = "Send File Panel";
 			this.toolStripMenuItem_SendContextMenu_Panels_SendFile.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_Panels_SendFile_Click);
+			// 
+			// toolStripSeparator_SendContextMenu_2
+			// 
+			this.toolStripSeparator_SendContextMenu_2.Name = "toolStripSeparator_SendContextMenu_2";
+			this.toolStripSeparator_SendContextMenu_2.Size = new System.Drawing.Size(322, 6);
+			// 
+			// toolStripMenuItem_SendContextMenu_KeepCommand
+			// 
+			this.toolStripMenuItem_SendContextMenu_KeepCommand.Name = "toolStripMenuItem_SendContextMenu_KeepCommand";
+			this.toolStripMenuItem_SendContextMenu_KeepCommand.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+						| System.Windows.Forms.Keys.K)));
+			this.toolStripMenuItem_SendContextMenu_KeepCommand.Size = new System.Drawing.Size(325, 22);
+			this.toolStripMenuItem_SendContextMenu_KeepCommand.Text = "Keep Command After Send";
+			this.toolStripMenuItem_SendContextMenu_KeepCommand.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_KeepCommand_Click);
+			// 
+			// toolStripMenuItem_SendContextMenu_CopyPredefined
+			// 
+			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Name = "toolStripMenuItem_SendContextMenu_CopyPredefined";
+			this.toolStripMenuItem_SendContextMenu_CopyPredefined.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+						| System.Windows.Forms.Keys.P)));
+			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Size = new System.Drawing.Size(325, 22);
+			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Text = "Copy Predefined To Send Command";
+			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_CopyPredefined_Click);
 			// 
 			// menuStrip_Terminal
 			// 
@@ -1128,7 +1173,10 @@ namespace YAT.Gui.Forms
             this.toolStripMenuItem_TerminalMenu_Send_Command,
             this.toolStripMenuItem_TerminalMenu_Send_File,
             this.toolStripSeparator_TerminalMenu_Send_1,
-            this.toolStripMenuItem_TerminalMenu_Send_Predefined});
+            this.toolStripMenuItem_TerminalMenu_Send_Predefined,
+            this.toolStripSeparator_TerminalMenu_Send_2,
+            this.toolStripMenuItem_TerminalMenu_Send_KeepCommand,
+            this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined});
 			this.toolStripMenuItem_TerminalMenu_Send.MergeAction = System.Windows.Forms.MergeAction.Insert;
 			this.toolStripMenuItem_TerminalMenu_Send.MergeIndex = 2;
 			this.toolStripMenuItem_TerminalMenu_Send.Name = "toolStripMenuItem_TerminalMenu_Send";
@@ -1140,7 +1188,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.toolStripMenuItem_TerminalMenu_Send_Command.Name = "toolStripMenuItem_TerminalMenu_Send_Command";
 			this.toolStripMenuItem_TerminalMenu_Send_Command.ShortcutKeys = System.Windows.Forms.Keys.F3;
-			this.toolStripMenuItem_TerminalMenu_Send_Command.Size = new System.Drawing.Size(187, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_Command.Size = new System.Drawing.Size(325, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_Command.Text = "&Command";
 			this.toolStripMenuItem_TerminalMenu_Send_Command.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_Command_Click);
 			// 
@@ -1148,14 +1196,37 @@ namespace YAT.Gui.Forms
 			// 
 			this.toolStripMenuItem_TerminalMenu_Send_File.Name = "toolStripMenuItem_TerminalMenu_Send_File";
 			this.toolStripMenuItem_TerminalMenu_Send_File.ShortcutKeys = System.Windows.Forms.Keys.F4;
-			this.toolStripMenuItem_TerminalMenu_Send_File.Size = new System.Drawing.Size(187, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_File.Size = new System.Drawing.Size(325, 22);
 			this.toolStripMenuItem_TerminalMenu_Send_File.Text = "&File";
 			this.toolStripMenuItem_TerminalMenu_Send_File.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_File_Click);
 			// 
 			// toolStripSeparator_TerminalMenu_Send_1
 			// 
 			this.toolStripSeparator_TerminalMenu_Send_1.Name = "toolStripSeparator_TerminalMenu_Send_1";
-			this.toolStripSeparator_TerminalMenu_Send_1.Size = new System.Drawing.Size(184, 6);
+			this.toolStripSeparator_TerminalMenu_Send_1.Size = new System.Drawing.Size(322, 6);
+			// 
+			// toolStripSeparator_TerminalMenu_Send_2
+			// 
+			this.toolStripSeparator_TerminalMenu_Send_2.Name = "toolStripSeparator_TerminalMenu_Send_2";
+			this.toolStripSeparator_TerminalMenu_Send_2.Size = new System.Drawing.Size(322, 6);
+			// 
+			// toolStripMenuItem_TerminalMenu_Send_KeepCommand
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_KeepCommand.Name = "toolStripMenuItem_TerminalMenu_Send_KeepCommand";
+			this.toolStripMenuItem_TerminalMenu_Send_KeepCommand.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+						| System.Windows.Forms.Keys.K)));
+			this.toolStripMenuItem_TerminalMenu_Send_KeepCommand.Size = new System.Drawing.Size(325, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_KeepCommand.Text = "&Keep Command After Send";
+			this.toolStripMenuItem_TerminalMenu_Send_KeepCommand.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_KeepCommand_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_Send_CopyPredefined
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Name = "toolStripMenuItem_TerminalMenu_Send_CopyPredefined";
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+						| System.Windows.Forms.Keys.P)));
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Size = new System.Drawing.Size(325, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Text = "Copy &Predefined To Send Command";
+			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Log
 			// 
@@ -1222,6 +1293,7 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_TerminalMenu_View.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem_TerminalMenu_View_Panels,
             this.toolStripSeparator_TerminalMenu_View_1,
+            this.toolStripMenuItem_TerminalMenu_View_ConnectTime,
             this.toolStripMenuItem_TerminalMenu_View_Counters,
             this.toolStripSeparator_TerminalMenu_View_2,
             this.toolStripMenuItem_TerminalMenu_View_Radix,
@@ -1343,6 +1415,34 @@ namespace YAT.Gui.Forms
 			this.toolStripSeparator_TerminalMenu_View_1.Name = "toolStripSeparator_TerminalMenu_View_1";
 			this.toolStripSeparator_TerminalMenu_View_1.Size = new System.Drawing.Size(216, 6);
 			// 
+			// toolStripMenuItem_TerminalMenu_View_ConnectTime
+			// 
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime,
+            this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime});
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime.Name = "toolStripMenuItem_TerminalMenu_View_ConnectTime";
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime.Size = new System.Drawing.Size(219, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime.Text = "Connect T&ime";
+			// 
+			// toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime
+			// 
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Name = "toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime";
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Size = new System.Drawing.Size(181, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Text = "&Show Connect Time";
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime
+			// 
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime.Name = "toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime";
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime.Size = new System.Drawing.Size(181, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime.Text = "&Restart Connect Time";
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime_Click);
+			// 
+			// toolStripSeparator_TerminalMenu_View_2
+			// 
+			this.toolStripSeparator_TerminalMenu_View_2.Name = "toolStripSeparator_TerminalMenu_View_2";
+			this.toolStripSeparator_TerminalMenu_View_2.Size = new System.Drawing.Size(216, 6);
+			// 
 			// toolStripMenuItem_TerminalMenu_View_Counters
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_Counters.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1366,15 +1466,15 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters.Text = "&Reset Counters";
 			this.toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters_Click);
 			// 
-			// toolStripSeparator_TerminalMenu_View_2
-			// 
-			this.toolStripSeparator_TerminalMenu_View_2.Name = "toolStripSeparator_TerminalMenu_View_2";
-			this.toolStripSeparator_TerminalMenu_View_2.Size = new System.Drawing.Size(216, 6);
-			// 
 			// toolStripSeparator_TerminalMenu_View_3
 			// 
 			this.toolStripSeparator_TerminalMenu_View_3.Name = "toolStripSeparator_TerminalMenu_View_3";
 			this.toolStripSeparator_TerminalMenu_View_3.Size = new System.Drawing.Size(216, 6);
+			// 
+			// toolStripSeparator_TerminalMenu_View_4
+			// 
+			this.toolStripSeparator_TerminalMenu_View_4.Name = "toolStripSeparator_TerminalMenu_View_4";
+			this.toolStripSeparator_TerminalMenu_View_4.Size = new System.Drawing.Size(216, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ShowTimeStamp
 			// 
@@ -1396,11 +1496,6 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_TerminalMenu_View_ShowEol.Size = new System.Drawing.Size(219, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ShowEol.Text = "Show &End Of Line Sequence";
 			this.toolStripMenuItem_TerminalMenu_View_ShowEol.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowEol_Click);
-			// 
-			// toolStripSeparator_TerminalMenu_View_4
-			// 
-			this.toolStripSeparator_TerminalMenu_View_4.Name = "toolStripSeparator_TerminalMenu_View_4";
-			this.toolStripSeparator_TerminalMenu_View_4.Size = new System.Drawing.Size(216, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Format
 			// 
@@ -1649,6 +1744,7 @@ namespace YAT.Gui.Forms
 			// 
 			// monitor_Tx
 			// 
+			this.monitor_Tx.ConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Tx.ContextMenuStrip = this.contextMenuStrip_Monitor;
 			this.monitor_Tx.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.monitor_Tx.Location = new System.Drawing.Point(3, 0);
@@ -1692,6 +1788,7 @@ namespace YAT.Gui.Forms
 			// 
 			// monitor_Bidir
 			// 
+			this.monitor_Bidir.ConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Bidir.ContextMenuStrip = this.contextMenuStrip_Monitor;
 			this.monitor_Bidir.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.monitor_Bidir.Location = new System.Drawing.Point(3, 0);
@@ -1714,6 +1811,7 @@ namespace YAT.Gui.Forms
 			// 
 			// monitor_Rx
 			// 
+			this.monitor_Rx.ConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Rx.ContextMenuStrip = this.contextMenuStrip_Monitor;
 			this.monitor_Rx.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.monitor_Rx.Location = new System.Drawing.Point(3, 0);
@@ -1770,28 +1868,28 @@ namespace YAT.Gui.Forms
 			// 
 			// send
 			// 
-			command1.CommandLines = new string[] {
+			command3.CommandLines = new string[] {
         "<1 lines...> []"};
-			command1.DefaultRadix = YAT.Domain.Radix.String;
-			command1.Description = "<1 lines...> []";
-			command1.FilePath = "";
-			command1.IsFilePath = false;
-			command1.MultiLineCommand = new string[] {
+			command3.DefaultRadix = YAT.Domain.Radix.String;
+			command3.Description = "<1 lines...> []";
+			command3.FilePath = "";
+			command3.IsFilePath = false;
+			command3.MultiLineCommand = new string[] {
         "<1 lines...> []"};
-			command1.SingleLineCommand = "<1 lines...> []";
-			this.send.Command = command1;
+			command3.SingleLineCommand = "<1 lines...> []";
+			this.send.Command = command3;
 			this.send.ContextMenuStrip = this.contextMenuStrip_Send;
 			this.send.Dock = System.Windows.Forms.DockStyle.Fill;
-			command2.CommandLines = new string[] {
+			command4.CommandLines = new string[] {
         "<1 lines...> []"};
-			command2.DefaultRadix = YAT.Domain.Radix.String;
-			command2.Description = "<1 lines...> []";
-			command2.FilePath = "";
-			command2.IsFilePath = false;
-			command2.MultiLineCommand = new string[] {
+			command4.DefaultRadix = YAT.Domain.Radix.String;
+			command4.Description = "<1 lines...> []";
+			command4.FilePath = "";
+			command4.IsFilePath = false;
+			command4.MultiLineCommand = new string[] {
         "<1 lines...> []"};
-			command2.SingleLineCommand = "<1 lines...> []";
-			this.send.FileCommand = command2;
+			command4.SingleLineCommand = "<1 lines...> []";
+			this.send.FileCommand = command4;
 			this.send.Location = new System.Drawing.Point(3, 0);
 			this.send.Name = "send";
 			this.send.Size = new System.Drawing.Size(706, 94);
@@ -2024,6 +2122,16 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_RadixContextMenu_Rx_Hex;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SendContextMenu_KeepCommand;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_SendContextMenu_2;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_TerminalMenu_Send_2;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_KeepCommand;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_CopyPredefined;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SendContextMenu_CopyPredefined;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowConnectTime;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_RestartConnectTime;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_MonitorContextMenu_8;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ConnectTime;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime;
 	}
 
 	#region Copied Designer Code For Backup

@@ -11,8 +11,11 @@ namespace YAT.Domain.Settings
 	{
 		/// <summary></summary>
 		public const bool KeepCommandDefault = true;
+		/// <summary></summary>
+		public const bool CopyPredefinedDefault = false;
 
 		private bool _keepCommand;
+		private bool _copyPredefined;
 
 		/// <summary></summary>
 		public SendSettings()
@@ -37,6 +40,7 @@ namespace YAT.Domain.Settings
 			: base(rhs)
 		{
 			_keepCommand = rhs._keepCommand;
+			_copyPredefined = rhs._copyPredefined;
 			ClearChanged();
 		}
 
@@ -46,6 +50,7 @@ namespace YAT.Domain.Settings
 		protected override void SetMyDefaults()
 		{
 			KeepCommand = KeepCommandDefault;
+			CopyPredefined = CopyPredefinedDefault;
 		}
 
 		#region Properties
@@ -63,6 +68,21 @@ namespace YAT.Domain.Settings
 				if (_keepCommand != value)
 				{
 					_keepCommand = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("CopyPredefined")]
+		public bool CopyPredefined
+		{
+			get { return (_copyPredefined); }
+			set
+			{
+				if (_copyPredefined != value)
+				{
+					_copyPredefined = value;
 					SetChanged();
 				}
 			}
@@ -93,7 +113,8 @@ namespace YAT.Domain.Settings
 			{
 				return
 					(
-					_keepCommand.Equals(value._keepCommand)
+					_keepCommand.Equals(value._keepCommand) &&
+					_copyPredefined.Equals(value._copyPredefined)
 					);
 			}
 			return (false);

@@ -8,6 +8,7 @@ using MKY.Utilities.Guid;
 using MKY.Utilities.Event;
 using MKY.Utilities.Recent;
 using MKY.Utilities.Settings;
+using MKY.Utilities.Time;
 
 using YAT.Settings;
 using YAT.Settings.Application;
@@ -64,6 +65,9 @@ namespace YAT.Model
 		// logs
 		private Log.Logs _log;
 
+		// time status
+		private Chronometer _ioConnectChrono;
+
 		// count status
 		private int _txByteCount = 0;
 		private int _rxByteCount = 0;
@@ -81,6 +85,8 @@ namespace YAT.Model
 		public event EventHandler IOChanged;
 		/// <summary></summary>
 		public event EventHandler IOControlChanged;
+		/// <summary></summary>
+		public event EventHandler IOConnectTimeChanged;
 		/// <summary></summary>
 		public event EventHandler IOCountChanged;
 		/// <summary></summary>
@@ -172,6 +178,11 @@ namespace YAT.Model
 
 			// create log
 			_log = new Log.Logs(_settingsRoot.Log);
+
+			// create chrono
+			_ioConnectChrono = new Chronometer();
+			_ioConnectChrono.Interval = 1000;
+			_ioConnectChrono.TimeSpanChanged += new EventHandler(_ioConnectChrono_TimeSpanChanged);
 		}
 
 		#region Disposal
@@ -193,6 +204,8 @@ namespace YAT.Model
 			{
 				if (disposing)
 				{
+					if (_ioConnectChrono != null)
+						_ioConnectChrono.Dispose();
 					if (_log != null)
 						_log.Dispose();
 					if (_terminal != null)
@@ -780,9 +793,18 @@ namespace YAT.Model
 		// Terminal > Event Handlers
 		//------------------------------------------------------------------------------------------
 
+		private bool _terminal_Changed_isConnected = false;
+
 		private void _terminal_Changed(object sender, EventArgs e)
 		{
 			OnIOChanged(e);
+
+			if      (_terminal.IsConnected && !_terminal_Changed_isConnected)
+				_ioConnectChrono.Start();
+			else if (!_terminal.IsConnected && _terminal_Changed_isConnected)
+				_ioConnectChrono.Stop();
+
+			_terminal_Changed_isConnected = _terminal.IsConnected;
 		}
 
 		private void _terminal_ControlChanged(object sender, EventArgs e)
@@ -1134,7 +1156,7 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Sends command given by terminal settings
+		/// Sends command given by terminal settings.
 		/// </summary>
 		public void SendCommand()
 		{
@@ -1150,9 +1172,9 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Sends given command
+		/// Sends given command.
 		/// </summary>
-		/// <param name="command">Command to be sent</param>
+		/// <param name="command">Command to be sent.</param>
 		public void SendCommand(Command command)
 		{
 			if (command.IsValidCommand)
@@ -1265,6 +1287,36 @@ namespace YAT.Model
 
 		#endregion
 
+		#region Terminal > Send Predefined
+		//------------------------------------------------------------------------------------------
+		// Terminal > Send Predefined
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Send requested predefined command.
+		/// </summary>
+		public void SendPredefined(int page, int command)
+		{
+			Model.Types.Command c = _settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
+
+			if (c.IsCommand)
+			{
+				SendCommand(c);
+
+				if (_settingsRoot.Send.CopyPredefined)
+					_settingsRoot.SendCommand.Command = new Command(c); // copy command if desired
+			}
+			else if (c.IsFilePath)
+			{
+				SendFile(c);
+
+				if (_settingsRoot.Send.CopyPredefined)
+					_settingsRoot.SendFile.Command = new Command(c); // copy command if desired
+			}
+		}
+
+		#endregion
+
 		#region Terminal > Repositories
 		//------------------------------------------------------------------------------------------
 		// Terminal > Repositories
@@ -1329,6 +1381,30 @@ namespace YAT.Model
 
 		#endregion
 
+		#region Terminal > Time Status
+		//------------------------------------------------------------------------------------------
+		// Terminal > Time Status
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public TimeSpan IOConnectTime
+		{
+			get { return (_ioConnectChrono.TimeSpan); }
+		}
+
+		/// <summary></summary>
+		public void RestartIOConnectTime()
+		{
+			_ioConnectChrono.Restart();
+		}
+
+		private void _ioConnectChrono_TimeSpanChanged(object sender, EventArgs e)
+		{
+			OnIOConnectTimeChanged(new EventArgs());
+		}
+
+		#endregion
+
 		#region Terminal > Count Status
 		//------------------------------------------------------------------------------------------
 		// Terminal > Count Status
@@ -1359,7 +1435,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public void ResetCount()
+		public void ResetIOCount()
 		{
 			_txByteCount = 0;
 			_txLineCount = 0;
@@ -1469,6 +1545,12 @@ namespace YAT.Model
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			EventHelper.FireSync(IOControlChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnIOConnectTimeChanged(EventArgs e)
+		{
+			EventHelper.FireSync(IOConnectTimeChanged, this, e);
 		}
 
 		/// <summary></summary>
