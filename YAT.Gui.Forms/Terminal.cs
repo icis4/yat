@@ -318,6 +318,9 @@ namespace YAT.Gui.Forms
 		{
 			toolStripMenuItem_TerminalMenu_Send_Command.Enabled = _settingsRoot.SendCommand.Command.IsValidCommand;
 			toolStripMenuItem_TerminalMenu_Send_File.Enabled = _settingsRoot.SendCommand.Command.IsValidFilePath;
+
+			toolStripMenuItem_TerminalMenu_Send_KeepCommand.Checked = _settingsRoot.Send.KeepCommand;
+			toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked = _settingsRoot.Send.CopyPredefined;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_Command_Click(object sender, EventArgs e)
@@ -328,6 +331,16 @@ namespace YAT.Gui.Forms
 		private void toolStripMenuItem_TerminalMenu_Send_File_Click(object sender, EventArgs e)
 		{
 			_terminal.SendFile();
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Send_KeepCommand_Click(object sender, EventArgs e)
+		{
+			_settingsRoot.Send.KeepCommand = !_settingsRoot.Send.KeepCommand;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Send_CopyPredefined_Click(object sender, EventArgs e)
+		{
+			_settingsRoot.Send.CopyPredefined = !_settingsRoot.Send.CopyPredefined;
 		}
 
 		#endregion
@@ -376,33 +389,39 @@ namespace YAT.Gui.Forms
 			Domain.TerminalType terminalType = _settingsRoot.TerminalType;
 
 			// panels
-			toolStripMenuItem_TerminalMenu_View_Panels_Tx.Checked = _settingsRoot.Layout.TxMonitorPanelIsVisible;
+			toolStripMenuItem_TerminalMenu_View_Panels_Tx.Checked    = _settingsRoot.Layout.TxMonitorPanelIsVisible;
 			toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Checked = _settingsRoot.Layout.BidirMonitorPanelIsVisible;
-			toolStripMenuItem_TerminalMenu_View_Panels_Rx.Checked = _settingsRoot.Layout.RxMonitorPanelIsVisible;
+			toolStripMenuItem_TerminalMenu_View_Panels_Rx.Checked    = _settingsRoot.Layout.RxMonitorPanelIsVisible;
 
 			// disable monitor item if the other monitors are hidden
-			toolStripMenuItem_TerminalMenu_View_Panels_Tx.Enabled = (_settingsRoot.Layout.BidirMonitorPanelIsVisible || _settingsRoot.Layout.RxMonitorPanelIsVisible);
+			toolStripMenuItem_TerminalMenu_View_Panels_Tx.Enabled    = (_settingsRoot.Layout.BidirMonitorPanelIsVisible || _settingsRoot.Layout.RxMonitorPanelIsVisible);
 			toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Enabled = (_settingsRoot.Layout.TxMonitorPanelIsVisible || _settingsRoot.Layout.RxMonitorPanelIsVisible);
-			toolStripMenuItem_TerminalMenu_View_Panels_Rx.Enabled = (_settingsRoot.Layout.TxMonitorPanelIsVisible || _settingsRoot.Layout.BidirMonitorPanelIsVisible);
+			toolStripMenuItem_TerminalMenu_View_Panels_Rx.Enabled    = (_settingsRoot.Layout.TxMonitorPanelIsVisible || _settingsRoot.Layout.BidirMonitorPanelIsVisible);
 
 			toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem = _settingsRoot.Layout.MonitorOrientation;
 
 			toolStripMenuItem_TerminalMenu_View_Panels_SendCommand.Checked = _settingsRoot.Layout.SendCommandPanelIsVisible;
-			toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Checked = _settingsRoot.Layout.SendFilePanelIsVisible;
+			toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Checked    = _settingsRoot.Layout.SendFilePanelIsVisible;
 
 			toolStripMenuItem_TerminalMenu_View_Panels_Predefined.Checked = _settingsRoot.Layout.PredefinedPanelIsVisible;
 
+			// connect time
+			bool showConnectTime = _settingsRoot.Display.ShowConnectTime;
+			toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Checked    = showConnectTime;
+			toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime.Enabled = showConnectTime;
+
 			// counters
-			toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters.Checked = _settingsRoot.Display.ShowCounters;
-			toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters.Enabled = _settingsRoot.Display.ShowCounters;
+			bool showCounters = _settingsRoot.Display.ShowCounters;
+			toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters.Checked  = showCounters;
+			toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters.Enabled = showCounters;
 
 			// options
 			toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Checked = _settingsRoot.Display.ShowTimeStamp;
 			toolStripMenuItem_TerminalMenu_View_ShowLength.Checked = _settingsRoot.Display.ShowLength;
 			
-			bool enabled = (terminalType == Domain.TerminalType.Text);
-			toolStripMenuItem_TerminalMenu_View_ShowEol.Enabled = enabled;
-			toolStripMenuItem_TerminalMenu_View_ShowEol.Checked = enabled && _settingsRoot.TextTerminal.ShowEol;
+			bool isText = (terminalType == Domain.TerminalType.Text);
+			toolStripMenuItem_TerminalMenu_View_ShowEol.Enabled = isText;
+			toolStripMenuItem_TerminalMenu_View_ShowEol.Checked = isText && _settingsRoot.TextTerminal.ShowEol;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Panels_Tx_Click(object sender, EventArgs e)
@@ -446,6 +465,16 @@ namespace YAT.Gui.Forms
 			ViewRearrange();
 		}
 
+		private void toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime_Click(object sender, EventArgs e)
+		{
+			_settingsRoot.Display.ShowConnectTime = !_settingsRoot.Display.ShowConnectTime;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime_Click(object sender, EventArgs e)
+		{
+			_terminal.RestartIOConnectTime();
+		}
+
 		private void toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters_Click(object sender, EventArgs e)
 		{
 			_settingsRoot.Display.ShowCounters = !_settingsRoot.Display.ShowCounters;
@@ -453,7 +482,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters_Click(object sender, EventArgs e)
 		{
-			ClearCountStatus();
+			_terminal.ResetIOCount();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowTimeStamp_Click(object sender, EventArgs e)
@@ -509,25 +538,30 @@ namespace YAT.Gui.Forms
 			bool isMonitor = (monitorType != Domain.RepositoryType.None);
 
 			toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Checked = _settingsRoot.Display.ShowTimeStamp;
-			toolStripMenuItem_MonitorContextMenu_ShowLength.Checked = _settingsRoot.Display.ShowLength;
+			toolStripMenuItem_MonitorContextMenu_ShowLength.Checked    = _settingsRoot.Display.ShowLength;
 
-			bool enabled = (terminalType == Domain.TerminalType.Text);
-			toolStripMenuItem_MonitorContextMenu_ShowEol.Enabled = enabled;
-			toolStripMenuItem_MonitorContextMenu_ShowEol.Checked = enabled && _settingsRoot.TextTerminal.ShowEol;
+			bool isText = (terminalType == Domain.TerminalType.Text);
+			toolStripMenuItem_MonitorContextMenu_ShowEol.Enabled = isText;
+			toolStripMenuItem_MonitorContextMenu_ShowEol.Checked = isText && _settingsRoot.TextTerminal.ShowEol;
 
 			toolStripMenuItem_MonitorContextMenu_Clear.Enabled = isMonitor;
 
-			toolStripMenuItem_MonitorContextMenu_ShowCounters.Checked = _settingsRoot.Display.ShowCounters;
-			toolStripMenuItem_MonitorContextMenu_ResetCounters.Enabled = _settingsRoot.Display.ShowCounters;
+			bool showConnectTime = _settingsRoot.Display.ShowConnectTime;
+			toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Checked    = showConnectTime;
+			toolStripMenuItem_MonitorContextMenu_RestartConnectTime.Enabled = showConnectTime;
 
-			toolStripMenuItem_MonitorContextMenu_Panels_Tx.Checked = _settingsRoot.Layout.TxMonitorPanelIsVisible;
+			bool showCounters = _settingsRoot.Display.ShowCounters;
+			toolStripMenuItem_MonitorContextMenu_ShowCounters.Checked  = showCounters;
+			toolStripMenuItem_MonitorContextMenu_ResetCounters.Enabled = showCounters;
+
+			toolStripMenuItem_MonitorContextMenu_Panels_Tx.Checked    = _settingsRoot.Layout.TxMonitorPanelIsVisible;
 			toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Checked = _settingsRoot.Layout.BidirMonitorPanelIsVisible;
-			toolStripMenuItem_MonitorContextMenu_Panels_Rx.Checked = _settingsRoot.Layout.RxMonitorPanelIsVisible;
+			toolStripMenuItem_MonitorContextMenu_Panels_Rx.Checked    = _settingsRoot.Layout.RxMonitorPanelIsVisible;
 
 			// disable "Monitor" item if the other monitors are hidden
-			toolStripMenuItem_MonitorContextMenu_Panels_Tx.Enabled = (_settingsRoot.Layout.BidirMonitorPanelIsVisible || _settingsRoot.Layout.RxMonitorPanelIsVisible);
+			toolStripMenuItem_MonitorContextMenu_Panels_Tx.Enabled    = (_settingsRoot.Layout.BidirMonitorPanelIsVisible || _settingsRoot.Layout.RxMonitorPanelIsVisible);
 			toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Enabled = (_settingsRoot.Layout.TxMonitorPanelIsVisible || _settingsRoot.Layout.RxMonitorPanelIsVisible);
-			toolStripMenuItem_MonitorContextMenu_Panels_Rx.Enabled = (_settingsRoot.Layout.TxMonitorPanelIsVisible || _settingsRoot.Layout.BidirMonitorPanelIsVisible);
+			toolStripMenuItem_MonitorContextMenu_Panels_Rx.Enabled    = (_settingsRoot.Layout.TxMonitorPanelIsVisible || _settingsRoot.Layout.BidirMonitorPanelIsVisible);
 
 			// hide "Hide" item if only this monitor is visible
 			bool hideIsAllowed = false;
@@ -581,6 +615,16 @@ namespace YAT.Gui.Forms
 			ClearAllMonitors();
 		}
 
+		private void toolStripMenuItem_MonitorContextMenu_ShowConnectTime_Click(object sender, EventArgs e)
+		{
+			_settingsRoot.Display.ShowConnectTime = !_settingsRoot.Display.ShowConnectTime;
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_RestartConnectTime_Click(object sender, EventArgs e)
+		{
+			_terminal.RestartIOConnectTime();
+		}
+
 		private void toolStripMenuItem_MonitorContextMenu_ShowCounters_Click(object sender, EventArgs e)
 		{
 			_settingsRoot.Display.ShowCounters = !_settingsRoot.Display.ShowCounters;
@@ -588,7 +632,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_MonitorContextMenu_ResetCounters_Click(object sender, EventArgs e)
 		{
-			ClearCountStatus();
+			_terminal.ResetIOCount();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Panels_Tx_Click(object sender, EventArgs e)
@@ -826,18 +870,14 @@ namespace YAT.Gui.Forms
 
         private void contextMenuStrip_Send_Opening(object sender, CancelEventArgs e)
         {
-			toolStripMenuItem_SendContextMenu_KeepCommand.Checked = _settingsRoot.Send.KeepCommand;
-
-            toolStripMenuItem_SendContextMenu_SendCommand.Enabled = _settingsRoot.SendCommand.Command.IsValidCommand;
+			toolStripMenuItem_SendContextMenu_SendCommand.Enabled = _settingsRoot.SendCommand.Command.IsValidCommand;
             toolStripMenuItem_SendContextMenu_SendFile.Enabled = _settingsRoot.SendCommand.Command.IsValidFilePath;
 
             toolStripMenuItem_SendContextMenu_Panels_SendCommand.Checked = _settingsRoot.Layout.SendCommandPanelIsVisible;
             toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = _settingsRoot.Layout.SendFilePanelIsVisible;
-        }
 
-		private void toolStripMenuItem_SendContextMenu_KeepCommand_Click(object sender, EventArgs e)
-		{
-			_settingsRoot.Send.KeepCommand = !_settingsRoot.Send.KeepCommand;
+			toolStripMenuItem_SendContextMenu_KeepCommand.Checked = _settingsRoot.Send.KeepCommand;
+			toolStripMenuItem_SendContextMenu_CopyPredefined.Checked = _settingsRoot.Send.CopyPredefined;
 		}
 
 		private void toolStripMenuItem_SendContextMenu_SendCommand_Click(object sender, EventArgs e)
@@ -860,7 +900,17 @@ namespace YAT.Gui.Forms
             _settingsRoot.Layout.SendFilePanelIsVisible = !_settingsRoot.Layout.SendFilePanelIsVisible;
         }
 
-        #endregion
+		private void toolStripMenuItem_SendContextMenu_KeepCommand_Click(object sender, EventArgs e)
+		{
+			_settingsRoot.Send.KeepCommand = !_settingsRoot.Send.KeepCommand;
+		}
+
+		private void toolStripMenuItem_SendContextMenu_CopyPredefined_Click(object sender, EventArgs e)
+		{
+			_settingsRoot.Send.CopyPredefined = !_settingsRoot.Send.CopyPredefined;
+		}
+
+		#endregion
 
         #region Controls Event Handlers > Panel Layout
 		//------------------------------------------------------------------------------------------
@@ -953,7 +1003,7 @@ namespace YAT.Gui.Forms
 
 		private void predefined_SendCommandRequest(object sender, Model.Types.PredefinedCommandEventArgs e)
 		{
-			SendPredefined(e.Page, e.Command);
+			_terminal.SendPredefined(e.Page, e.Command);
 		}
 
 		private void predefined_DefineCommandRequest(object sender, Model.Types.PredefinedCommandEventArgs e)
@@ -1363,6 +1413,39 @@ namespace YAT.Gui.Forms
 			ResumeLayout();
 		}
 
+		private void SetMonitorIOStatus()
+		{
+			Gui.Controls.MonitorActivityState activityState = Gui.Controls.MonitorActivityState.Inactive;
+			if (_terminal != null)
+			{
+				if (_terminal.IsOpen)
+				{
+					if (_terminal.IsConnected)
+						activityState = Gui.Controls.MonitorActivityState.Active;
+					else
+						activityState = Gui.Controls.MonitorActivityState.Pending;
+				}
+			}
+			monitor_Tx.ActivityState = activityState;
+			monitor_Bidir.ActivityState = activityState;
+			monitor_Rx.ActivityState = activityState;
+		}
+
+		private void SetMonitorContents()
+		{
+			ReloadMonitors();
+
+			bool showConnectTime = _settingsRoot.Display.ShowConnectTime;
+			monitor_Tx.ShowTimeStatus    = showConnectTime;
+			monitor_Bidir.ShowTimeStatus = showConnectTime;
+			monitor_Rx.ShowTimeStatus    = showConnectTime;
+
+			bool showCounters = _settingsRoot.Display.ShowCounters;
+			monitor_Tx.ShowCountStatus    = showCounters;
+			monitor_Bidir.ShowCountStatus = showCounters;
+			monitor_Rx.ShowCountStatus    = showCounters;
+		}
+
 		private void ReloadMonitors()
 		{
 			SetFixedStatusText("Reloading...");
@@ -1395,11 +1478,6 @@ namespace YAT.Gui.Forms
 		private void ClearAllMonitors()
 		{
 			_terminal.ClearRepositories();
-		}
-
-		private void ClearCountStatus()
-		{
-			_terminal.ResetCount();
 		}
 
 		#endregion
@@ -1619,23 +1697,13 @@ namespace YAT.Gui.Forms
 				}
                 if (isDefined)
 				{
-					SendPredefined(page, command);
+					_terminal.SendPredefined(page, command);
 					return;
 				}
 			}
 
 			// if command is not defined, show settings dialog
 			ShowPredefinedCommandSettings(page, command);
-		}
-
-		private void SendPredefined(int page, int command)
-		{
-			Model.Types.Command c = _settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
-
-			if (c.IsCommand)
-				_terminal.SendCommand(c);
-			else if (c.IsFilePath)
-				_terminal.SendFile(c);
 		}
 
 		private void ShowPredefinedCommandSettings(int page, int command)
@@ -1795,6 +1863,7 @@ namespace YAT.Gui.Forms
 				// TerminalSettings changed
 				SetIOStatus();
 				SetIOControlControls();
+				SetMonitorIOStatus();
 			}
 			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.IO))
 			{
@@ -1810,11 +1879,7 @@ namespace YAT.Gui.Forms
 			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Display))
 			{
 				// DisplaySettings changed
-				ReloadMonitors();
-
-				monitor_Tx.ShowCountStatus    = _settingsRoot.Display.ShowCounters;
-				monitor_Bidir.ShowCountStatus = _settingsRoot.Display.ShowCounters;
-				monitor_Rx.ShowCountStatus    = _settingsRoot.Display.ShowCounters;
+				SetMonitorContents();
 			}
 			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Send))
 			{
@@ -1853,12 +1918,8 @@ namespace YAT.Gui.Forms
 
 			SetIOStatus();
 			SetIOControlControls();
-
-			ReloadMonitors();
-
-			monitor_Tx.ShowCountStatus = _settingsRoot.Display.ShowCounters;
-			monitor_Bidir.ShowCountStatus = _settingsRoot.Display.ShowCounters;
-			monitor_Rx.ShowCountStatus = _settingsRoot.Display.ShowCounters;
+			SetMonitorIOStatus();
+			SetMonitorContents();
 		}
 
 		#endregion
@@ -1877,10 +1938,11 @@ namespace YAT.Gui.Forms
 
 		private void AttachTerminalEventHandlers()
 		{
-			_terminal.IOChanged        += new EventHandler(_terminal_IOChanged);
-			_terminal.IOControlChanged += new EventHandler(_terminal_IOControlChanged);
-			_terminal.IOCountChanged   += new EventHandler(_terminal_IOCountChanged);
-			_terminal.IOError          += new EventHandler<Domain.ErrorEventArgs>(_terminal_IOError);
+			_terminal.IOChanged            += new EventHandler(_terminal_IOChanged);
+			_terminal.IOControlChanged     += new EventHandler(_terminal_IOControlChanged);
+			_terminal.IOConnectTimeChanged += new EventHandler(_terminal_IOConnectTimeChanged);
+			_terminal.IOCountChanged       += new EventHandler(_terminal_IOCountChanged);
+			_terminal.IOError              += new EventHandler<Domain.ErrorEventArgs>(_terminal_IOError);
 
 			_terminal.DisplayElementsSent     += new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsSent);
 			_terminal.DisplayElementsReceived += new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsReceived);
@@ -1902,10 +1964,11 @@ namespace YAT.Gui.Forms
 
 		private void DetachTerminalEventHandlers()
 		{
-			_terminal.IOChanged        -= new EventHandler(_terminal_IOChanged);
-			_terminal.IOControlChanged -= new EventHandler(_terminal_IOControlChanged);
-			_terminal.IOCountChanged   -= new EventHandler(_terminal_IOCountChanged);
-			_terminal.IOError          -= new EventHandler<Domain.ErrorEventArgs>(_terminal_IOError);
+			_terminal.IOChanged            -= new EventHandler(_terminal_IOChanged);
+			_terminal.IOControlChanged     -= new EventHandler(_terminal_IOControlChanged);
+			_terminal.IOConnectTimeChanged -= new EventHandler(_terminal_IOConnectTimeChanged);
+			_terminal.IOCountChanged       -= new EventHandler(_terminal_IOCountChanged);
+			_terminal.IOError              -= new EventHandler<Domain.ErrorEventArgs>(_terminal_IOError);
 
 			_terminal.DisplayElementsSent     -= new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsSent);
 			_terminal.DisplayElementsReceived -= new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsReceived);
@@ -1941,6 +2004,14 @@ namespace YAT.Gui.Forms
 		private void _terminal_IOControlChanged(object sender, EventArgs e)
 		{
 			SetIOControlControls();
+		}
+
+		private void _terminal_IOConnectTimeChanged(object sender, EventArgs e)
+		{
+			TimeSpan ts = _terminal.IOConnectTime;
+			monitor_Tx.ConnectTime    = ts;
+			monitor_Bidir.ConnectTime = ts;
+			monitor_Rx.ConnectTime    = ts;
 		}
 
 		private void _terminal_IOCountChanged(object sender, EventArgs e)
@@ -2295,6 +2366,7 @@ namespace YAT.Gui.Forms
 			SetTerminalCaption();
 			SetIOStatus();
 			SetIOControlControls();
+			SetMonitorIOStatus();
 
 			// send panel
 			send.TerminalIsOpen = isOpen;

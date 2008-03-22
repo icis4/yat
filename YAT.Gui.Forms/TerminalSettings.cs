@@ -335,6 +335,7 @@ namespace YAT.Gui.Forms
 
 				_settings_Form.Display.ShowTimeStamp = f.SettingsResult.Display.ShowTimeStamp;
 				_settings_Form.Display.ShowLength = f.SettingsResult.Display.ShowLength;
+				_settings_Form.Display.ShowConnectTime = f.SettingsResult.Display.ShowConnectTime;
 				_settings_Form.Display.ShowCounters = f.SettingsResult.Display.ShowCounters;
 
 				_settings_Form.Display.DirectionLineBreakEnabled = f.SettingsResult.Display.DirectionLineBreakEnabled;
@@ -348,6 +349,7 @@ namespace YAT.Gui.Forms
 				_settings_Form.IO.Endianess = f.SettingsResult.IO.Endianess;
 
 				_settings_Form.Send.KeepCommand = f.SettingsResult.Send.KeepCommand;
+				_settings_Form.Send.CopyPredefined = f.SettingsResult.Send.CopyPredefined;
 
 				_settings_Form.IO.SerialPort.ReplaceParityErrors = f.SettingsResult.IO.SerialPort.ReplaceParityErrors;
 				_settings_Form.IO.SerialPort.ParityErrorReplacement = f.SettingsResult.IO.SerialPort.ParityErrorReplacement;

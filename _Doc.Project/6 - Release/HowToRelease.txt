@@ -5,11 +5,13 @@ Note:	The whole release process takes about 4 hours
 1.	Set versions if not already done
 	--------------------------------
 	> Set product name post fix in
-	  "YAT.Utilities.ApplicationInfo.ProductNamePostFix"
+	  "YAT.Utilities.ApplicationInfo.ProductNamePostFix" and
 	> Set product versions in all assembly infos
-	  > Attention: Do not edit versions in
-	    "YAT.Settings.Test.SettingsFilesProvider" and
-	    "YAT.Settings.Test.FileVersionsTest"
+	  > Attention: Ensure to replace version number including leading quote
+	               to keep SettingsFilesProvider and FileVersionsTest untouched
+	               e.g. replace "1.99.18 by "1.99.19
+	> Set product name in "YAT.Setup"
+	> Set product versions in "YAT.Setup"
 
 
 2.	Set installation version

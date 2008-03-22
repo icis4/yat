@@ -6,30 +6,16 @@ using System.Text;
 
 using MKY.Utilities.Event;
 
-namespace YAT.Gui.Controls
+namespace MKY.Windows.Forms
 {
+	/// <summary></summary>
 	public partial class Chronometer : Component
 	{
-		#region Types
-		//==========================================================================================
-		// Types
-		//==========================================================================================
-
-		private enum State
-		{
-			Reset,
-			Running,
-			Stopped,
-		}
-
-		#endregion
-
 		#region Fields
 		//==========================================================================================
 		// Fields
 		//==========================================================================================
 
-		private State _state = State.Reset;
 		private TimeSpan _accumulatedTimeSpan = TimeSpan.Zero;
 		private DateTime _startTimeStamp = DateTime.Now;
 
@@ -40,9 +26,10 @@ namespace YAT.Gui.Controls
 		// Events
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Action")]
-		[Description("Event raised the tick interval elapsed.")]
-		public event EventHandler Tick;
+		[Description("Event raised the tick interval elapsed or the time span was reset.")]
+		public event EventHandler TimeSpanChanged;
 
 		#endregion
 
@@ -51,15 +38,16 @@ namespace YAT.Gui.Controls
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Chronometer()
 		{
 			InitializeComponent();
 		}
 
+		/// <summary></summary>
 		public Chronometer(IContainer container)
 		{
 			container.Add(this);
-
 			InitializeComponent();
 		}
 
@@ -70,6 +58,7 @@ namespace YAT.Gui.Controls
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		[DefaultValue(100)]
 		public int Interval
 		{
@@ -77,19 +66,15 @@ namespace YAT.Gui.Controls
 			set { timer_Chronometer.Interval = value;  }
 		}
 
+		/// <summary></summary>
 		public TimeSpan TimeSpan
 		{
 			get
 			{
-				switch (_state)
-				{
-					case State.Reset:
-					case State.Stopped:
-						return (_accumulatedTimeSpan);
-
-					default:
-						return (_accumulatedTimeSpan + (DateTime.Now - _startTimeStamp));
-				}
+				if (!timer_Chronometer.Enabled)
+					return (_accumulatedTimeSpan);
+				else
+					return (_accumulatedTimeSpan + (DateTime.Now - _startTimeStamp));
 			}
 		}
 
@@ -100,30 +85,54 @@ namespace YAT.Gui.Controls
 		// Methods
 		//==========================================================================================
 
-		public void StartStop()
+		/// <summary></summary>
+		public void Start()
 		{
-			switch (_state)
+			if (!timer_Chronometer.Enabled)
 			{
-				case State.Reset:
-				case State.Stopped:
-					_startTimeStamp = DateTime.Now;
-					_state = State.Running;
-					break;
-
-				default:
-					_accumulatedTimeSpan += DateTime.Now - _startTimeStamp;
-					_state = State.Stopped;
-					break;
+				timer_Chronometer.Start();
+				_startTimeStamp = DateTime.Now;
+				OnTimeSpanChanged(new EventArgs());
 			}
 		}
 
-		public void Reset()
+		/// <summary></summary>
+		public void Stop()
 		{
-			_accumulatedTimeSpan = TimeSpan.Zero;
-			_startTimeStamp = DateTime.Now;
-			_state = State.Reset;
+			if (timer_Chronometer.Enabled)
+			{
+				timer_Chronometer.Stop();
+				_accumulatedTimeSpan += (DateTime.Now - _startTimeStamp);
+				OnTimeSpanChanged(new EventArgs());
+			}
 		}
 
+		/// <summary></summary>
+		public void StartStop()
+		{
+			if (!timer_Chronometer.Enabled)
+				Start();
+			else
+				Stop();
+		}
+
+		/// <summary></summary>
+		public void Reset()
+		{
+			_startTimeStamp = DateTime.Now;
+			_accumulatedTimeSpan = TimeSpan.Zero;
+			OnTimeSpanChanged(new EventArgs());
+		}
+
+		/// <summary></summary>
+		public void Restart()
+		{
+			Stop();
+			Reset();
+			Start();
+		}
+
+		/// <summary></summary>
 		public override string ToString()
 		{
 			StringBuilder sb = new StringBuilder();
@@ -158,7 +167,7 @@ namespace YAT.Gui.Controls
 
 		private void timer_Chronometer_Tick(object sender, EventArgs e)
 		{
-			OnTick(new EventArgs());
+			OnTimeSpanChanged(new EventArgs());
 		}
 
 		#endregion
@@ -168,9 +177,10 @@ namespace YAT.Gui.Controls
 		// Event Invoking
 		//==========================================================================================
 
-		protected virtual void OnTick(EventArgs e)
+		/// <summary></summary>
+		protected virtual void OnTimeSpanChanged(EventArgs e)
 		{
-			EventHelper.FireSync(Tick, this, e);
+			EventHelper.FireSync(TimeSpanChanged, this, e);
 		}
 
 		#endregion

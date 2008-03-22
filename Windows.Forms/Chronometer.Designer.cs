@@ -1,4 +1,4 @@
-namespace YAT.Gui.Controls
+namespace MKY.Windows.Forms
 {
 	partial class Chronometer
 	{
@@ -33,7 +33,6 @@ namespace YAT.Gui.Controls
 			// 
 			// timer_Chronometer
 			// 
-			this.timer_Chronometer.Enabled = true;
 			this.timer_Chronometer.Tick += new System.EventHandler(this.timer_Chronometer_Tick);
 
 		}

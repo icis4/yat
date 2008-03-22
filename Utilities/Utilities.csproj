@@ -70,6 +70,8 @@
     <Compile Include="Settings\Events.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Text\XEncoding.cs" />
+    <Compile Include="Time\Chronometer.cs">
+    </Compile>
     <Compile Include="Types\XArray.cs" />
     <Compile Include="Types\XAscii.cs" />
     <Compile Include="Types\XByte.cs" />

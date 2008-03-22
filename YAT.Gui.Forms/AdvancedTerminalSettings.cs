@@ -109,6 +109,12 @@ namespace YAT.Gui.Forms
 				_settings_Form.Display.ShowLength = checkBox_ShowLength.Checked;
 		}
 
+		private void checkBox_ShowConnectTime_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+				_settings_Form.Display.ShowConnectTime = checkBox_ShowConnectTime.Checked;
+		}
+
 		private void checkBox_ShowCounters_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
@@ -191,6 +197,15 @@ namespace YAT.Gui.Forms
 			if (!_isSettingControls)
 			{
 				_settings_Form.Send.KeepCommand = checkBox_KeepCommand.Checked;
+				SetControls();
+			}
+		}
+
+		private void checkBox_CopyPredefined_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+			{
+				_settings_Form.Send.CopyPredefined = checkBox_CopyPredefined.Checked;
 				SetControls();
 			}
 		}
@@ -306,6 +321,7 @@ namespace YAT.Gui.Forms
 			// display
 			checkBox_ShowTimeStamp.Checked = _settings_Form.Display.ShowTimeStamp;
 			checkBox_ShowLength.Checked = _settings_Form.Display.ShowLength;
+			checkBox_ShowConnectTime.Checked = _settings.Display.ShowConnectTime;
 			checkBox_ShowCounters.Checked = _settings_Form.Display.ShowCounters;
 
 			checkBox_DirectionLineBreak.Checked = _settings_Form.Display.DirectionLineBreakEnabled;
@@ -322,6 +338,7 @@ namespace YAT.Gui.Forms
 
 			// send
 			checkBox_KeepCommand.Checked = _settings_Form.Send.KeepCommand;
+			checkBox_CopyPredefined.Checked = _settings_Form.Send.CopyPredefined;
 
 			// receive
 			groupBox_ReceiveSettings.Enabled = (_settings_Form.IO.IOType == Domain.IOType.SerialPort);
@@ -345,6 +362,7 @@ namespace YAT.Gui.Forms
 
 			_settings_Form.Display.ShowTimeStamp = Domain.Settings.DisplaySettings.ShowTimeStampDefault;
 			_settings_Form.Display.ShowLength = Domain.Settings.DisplaySettings.ShowLengthDefault;
+			_settings_Form.Display.ShowConnectTime = Domain.Settings.DisplaySettings.ShowConnectTimeDefault;
 			_settings_Form.Display.ShowCounters = Domain.Settings.DisplaySettings.ShowCountersDefault;
 
 			_settings_Form.Display.DirectionLineBreakEnabled = Domain.Settings.DisplaySettings.DirectionLineBreakEnabledDefault;
@@ -358,6 +376,7 @@ namespace YAT.Gui.Forms
 			_settings_Form.IO.Endianess = Domain.Settings.IOSettings.EndianessDefault;
 
 			_settings_Form.Send.KeepCommand = Domain.Settings.SendSettings.KeepCommandDefault;
+			_settings_Form.Send.CopyPredefined = Domain.Settings.SendSettings.CopyPredefinedDefault;
 
 			_settings_Form.IO.SerialPort.ReplaceParityErrors = Domain.Settings.SerialPort.SerialPortSettings.ReplaceParityErrorsDefault;
 			_settings_Form.IO.SerialPort.ParityErrorReplacement = Domain.Settings.SerialPort.SerialPortSettings.ParityErrorReplacementDefault;

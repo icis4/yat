@@ -9,7 +9,7 @@ namespace YAT.Utilities
 	{
 		//public const string ProductNamePostFix = "";
 		//public const string ProductNamePostFix = " Beta 2";
-		public const string ProductNamePostFix = " Beta 2 Candidate 2";
+		public const string ProductNamePostFix = " Beta 2 Candidate 3";
 		//public const string ProductNamePostFix = " Beta 2 Preliminary";
 
 		public static readonly string ProductName = Application.ProductName + ProductNamePostFix;
