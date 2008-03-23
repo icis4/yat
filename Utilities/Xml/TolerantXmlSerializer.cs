@@ -117,7 +117,7 @@ namespace MKY.Utilities.Xml
 			#region Disabled Debug Output
 			//--------------------------------------------------------------------------------------
 			#if false
-			using (StreamWriter sw = new StreamWriter("c:\\" + GetType().ToString() + ".CopyDocumentTolerantly-InputSchema.xsd"))
+			using (StreamWriter sw = new StreamWriter(@"c:\" + GetType().ToString() + ".CopyDocumentTolerantly-InputSchema.xsd"))
 			{
 				inputSchema.Write(sw);
 			}
@@ -137,7 +137,7 @@ namespace MKY.Utilities.Xml
 			#region Disabled Debug Output
 			//--------------------------------------------------------------------------------------
 			#if false
-			using (StreamWriter sw = new StreamWriter("c:\\" + GetType().ToString() + ".CopyDocumentTolerantly-OutputSchema.xsd"))
+			using (StreamWriter sw = new StreamWriter(@"c:\" + GetType().ToString() + ".CopyDocumentTolerantly-OutputSchema.xsd"))
 			{
 				outputSchema.Write(sw);
 			}

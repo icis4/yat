@@ -35,9 +35,9 @@ namespace YAT.Gui.Utilities
 				if (parsedText.Length > 0)
 				{
 					sb.Append(Environment.NewLine);
-					sb.Append("Only \"");
-					sb.Append(        parsedText);
-					sb.Append(                "\" is valid");
+					sb.Append(@"Only """);
+					sb.Append(         parsedText);
+					sb.Append(                 @""" is valid");
 				}
 				if (formatException.Message.Length > 0)
 				{

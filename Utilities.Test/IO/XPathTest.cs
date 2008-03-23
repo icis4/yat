@@ -78,8 +78,8 @@ namespace MKY.Utilities.Test.IO
 				expected = _TestPaths[i, 2];
 				pcResult.RelativePath = "";
 
-				/*if (path1 == "C:\\" &&
-					path2 == "C:\\MyDir\\MySubDir")
+				/*if (path1 == @"C:\" &&
+					path2 == @"C:\MyDir\MySubDir")
 				{
 					System.Diagnostics.Debugger.Break();
 				}*/
@@ -111,8 +111,8 @@ namespace MKY.Utilities.Test.IO
 				expected = _TestPaths[i, 3];
 				pcResult.RelativePath = "";
 
-				/*if (path1 == "C:\\MyDir\\MySubDir" &&
-					path2 == "C:\\MyDir")
+				/*if (path1 == @"C:\MyDir\MySubDir" &&
+					path2 == @"C:\MyDir")
 				{
 					System.Diagnostics.Debugger.Break();
 				}*/
@@ -164,8 +164,8 @@ namespace MKY.Utilities.Test.IO
 				expected = _TestPaths[i, 1];
 				result = "";
 
-				/*if (path1 == "C:\\MyDir" &&
-					path2 == ".")
+				/*if (path1 == @"C:\MyDir" &&
+					path2 == @".")
 				{
 					System.Diagnostics.Debugger.Break();
 				}*/
@@ -197,8 +197,8 @@ namespace MKY.Utilities.Test.IO
 				expected = _TestPaths[i, 0];
 				result = "";
 
-				/*if (path1 == "C:\\MyDir\\MySubDir" &&
-					path2 == "..\\..\\MyFile1.abc")
+				/*if (path1 == @"C:\MyDir\MySubDir" &&
+					path2 == @"..\..\MyFile1.abc")
 				{
 					System.Diagnostics.Debugger.Break();
 				}*/

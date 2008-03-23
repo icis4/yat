@@ -52,7 +52,7 @@ namespace YAT.Gui.Forms
 			linkLabel_Description.Text = "";
 			textBefore = "YAT is a by-product of the ";
 			textLink =                              "Swiss federal KTI/CTI";
-			textAfter =                                                  " project 6542.1 FHS-ET \"BBP - Balance Based Pipetting\" between" + Environment.NewLine;
+			textAfter =                                                 @" project 6542.1 FHS-ET ""BBP - Balance Based Pipetting"" between" + Environment.NewLine;
 			linkLabel_Description.Text += textBefore;
 			start = linkLabel_Description.Text.Length;
 			linkLabel_Description.Text += textLink;

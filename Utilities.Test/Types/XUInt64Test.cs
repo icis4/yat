@@ -173,7 +173,7 @@ namespace MKY.Utilities.Test.Types
 						Console.WriteLine("Invalid parser output bytes:");
 						Console.WriteLine();
 						Console.WriteLine("Input data =");
-						Console.WriteLine("\"" + ts.Data.ToString() + "\"");
+						Console.WriteLine(@"""" + ts.Data.ToString() + @"""");
 						Console.WriteLine();
 						Console.WriteLine("Expected bytes =");
 						foreach (byte b in ts.ByteArray)

@@ -20,32 +20,32 @@ namespace YAT.Domain.Parser
 
 		/// <summary></summary>
 		public static readonly string FormatHelp =
-			"The following formats are supported (type without quotation marks):" + Environment.NewLine +
+			@"The following formats are supported (type without quotation marks):" + Environment.NewLine +
 			Environment.NewLine +
-			"Default \"OK\"" + Environment.NewLine +
-			"Binary \"\\b(01001111)\\b(01001011)\"" + Environment.NewLine +
-			"Octal \"\\o(117)\\o(113)\"" + Environment.NewLine +
-			"Decimal \"\\d(79)\\d(75)\"" + Environment.NewLine +
-			"Hexadecimal \"\\h(4F)\\h(4B)\"" + Environment.NewLine +
-			"Character \"\\c(O)\\c(K)\"" + Environment.NewLine +
-			"String \"\\s(OK)\"" + Environment.NewLine +
-			"ASCII controls (0x00 to 0x1F) \"<CR><LF>\"" + Environment.NewLine +
+			@"Default ""OK""" + Environment.NewLine +
+			@"Binary ""\b(01001111 01001011)""" + Environment.NewLine +
+			@"Octal ""\o(117 113)""" + Environment.NewLine +
+			@"Decimal ""\d(79 75)""" + Environment.NewLine +
+			@"Hexadecimal ""\h(4F 4B)""" + Environment.NewLine +
+			@"Character ""\c(O K)""" + Environment.NewLine +
+			@"String ""\s(OK)""" + Environment.NewLine +
+			@"ASCII controls (0x00 to 0x1F) ""<CR><LF>""" + Environment.NewLine +
 			Environment.NewLine +
-			"Characters are case insensitive (e.g. \\H = \\h / 4f = 4F / <lf> = <LF>)" + Environment.NewLine +
-			"Brakets can hold contiguous data (e.g. \\d(79 75)) separated by spaces, except for strings" + Environment.NewLine +
-			"Control characters can be nested (e.g. \\d(79 \\h(4B) 79))" + Environment.NewLine +
-			"Three letter radix identifiers are also allowed (e.g. \\hex instead of \\h)" + Environment.NewLine +
+			@"Format specifiers are case insensitive, e.g. ""\H"" = ""\h"", ""4f"" = ""4F"", ""<lf>"" = ""<LF>""" + Environment.NewLine +
+			@"Formats can also be applied on each value, e.g. ""\d(79)\d(75)""" + Environment.NewLine +
+			@"Formats can be nested, e.g. ""\d(79 \h(4B) 79)""" + Environment.NewLine +
+			@"Three letter radix identifiers are also allowed, e.g. ""\hex"" instead of ""\h""" + Environment.NewLine +
 			Environment.NewLine +
-			"Type \\\\ to send a backspace" + Environment.NewLine +
-			"Type \\< to send an opening angle bracket" + Environment.NewLine +
-			"Type \\) to send a closing parenthesis";
+			@"Type \\ to send a backspace" + Environment.NewLine +
+			@"Type \< to send an opening angle bracket" + Environment.NewLine +
+			@"Type \) to send a closing parenthesis";
 
 		/// <summary></summary>
 		public static readonly string KeywordHelp =
-			"In addition, the following keyword is supported:" + Environment.NewLine +
+			@"In addition, the following keyword is supported:" + Environment.NewLine +
 			Environment.NewLine +
-			"Delay \"Send something\\!(" + (XKeyword)Keyword.Delay + "(10s))Send delayed by 10 seconds\"" + Environment.NewLine +
-			"Delay \"Send something\\!(" + (XKeyword)Keyword.Delay + "(500ms))Send delayed by 500 milliseconds\"";
+			@"Delay ""Send something\!(" + (XKeyword)Keyword.Delay + @"(10s))Send delayed by 10 seconds""" + Environment.NewLine +
+			@"Delay ""Send something\!(" + (XKeyword)Keyword.Delay + @"(500ms))Send delayed by 500 milliseconds""";
 
 		#endregion
 
@@ -221,6 +221,7 @@ namespace YAT.Domain.Parser
 					{
 						byte[] b = parser.Encoding.GetBytes(new char[] { '\\' });
 						parser.ByteArrayWriter.Write(b, 0, b.Length);
+						parser.EndByteArray();
 						parser.HasFinished = true;
 						ChangeState(parser, null);
 						return (true);
@@ -229,6 +230,7 @@ namespace YAT.Domain.Parser
 					{
 						byte[] b = parser.Encoding.GetBytes(new char[] { '<' });
 						parser.ByteArrayWriter.Write(b, 0, b.Length);
+						parser.EndByteArray();
 						parser.HasFinished = true;
 						ChangeState(parser, null);
 						return (true);
@@ -237,6 +239,7 @@ namespace YAT.Domain.Parser
 					{
 						byte[] b = parser.Encoding.GetBytes(new char[] { '>' });
 						parser.ByteArrayWriter.Write(b, 0, b.Length);
+						parser.EndByteArray();
 						parser.HasFinished = true;
 						ChangeState(parser, null);
 						return (true);
@@ -245,6 +248,7 @@ namespace YAT.Domain.Parser
 					{
 						byte[] b = parser.Encoding.GetBytes(new char[] { '(' });
 						parser.ByteArrayWriter.Write(b, 0, b.Length);
+						parser.EndByteArray();
 						parser.HasFinished = true;
 						ChangeState(parser, null);
 						return (true);
@@ -253,6 +257,7 @@ namespace YAT.Domain.Parser
 					{
 						byte[] b = parser.Encoding.GetBytes(new char[] { ')' });
 						parser.ByteArrayWriter.Write(b, 0, b.Length);
+						parser.EndByteArray();
 						parser.HasFinished = true;
 						ChangeState(parser, null);
 						return (true);
@@ -261,9 +266,9 @@ namespace YAT.Domain.Parser
 					{
 						formatException = new FormatException
 							(
-							"Character '" + (char)parseChar + "'" +
-							"[\\d(" + parseChar + ")] is " +
-							"not a valid character"
+							@"Character '" + (char)parseChar + "'" +
+							@"[\d(" + parseChar + ")] is " +
+							@"not a valid character"
 							);
 						return (false);
 					}
@@ -284,7 +289,7 @@ namespace YAT.Domain.Parser
 				}
 				else
 				{
-					formatException = new FormatException("Missing opening parenthesis \"(\"");
+					formatException = new FormatException(@"Missing opening parenthesis ""(""");
 					return (false);
 				}
 			}
@@ -352,7 +357,7 @@ namespace YAT.Domain.Parser
 					else
 					{
 						result = new byte[] { };
-						formatException = new FormatException("\"" + t + "\" is no ascii mnemonic");
+						formatException = new FormatException(@"""" + t + @""" is no ascii mnemonic");
 						return (false);
 					}
 				}
@@ -731,7 +736,7 @@ namespace YAT.Domain.Parser
 				}
 				else
 				{
-					formatException = new FormatException("Substring \"" + token + "\" does not contain a valid single character");
+					formatException = new FormatException(@"Substring """ + token + @""" does not contain a valid single character");
 					result = new byte[] { };
 					return (false);
 				}
@@ -754,7 +759,7 @@ namespace YAT.Domain.Parser
 				case Radix.Oct: success = XUInt64.TryParseOctal (tokenValue, out value); break;
 				case Radix.Dec: success = ulong.TryParse        (tokenValue, out value); break;
 				case Radix.Hex: success = ulong.TryParse        (tokenValue, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out value); break;
-				default: throw (new NotImplementedException("Unknown radix \"" + parseRadix + "\""));
+				default: throw (new NotImplementedException(@"Unknown radix """ + parseRadix + @""""));
 			}
 			if (success)
 			{
@@ -771,9 +776,9 @@ namespace YAT.Domain.Parser
 				case Radix.Oct: readable = "octal value";       break;
 				case Radix.Dec: readable = "decimal value";     break;
 				case Radix.Hex: readable = "hexadecimal value"; break;
-				default: throw (new NotImplementedException("Unknown radix \"" + parseRadix + "\""));
+				default: throw (new NotImplementedException(@"Unknown radix """ + parseRadix + @""""));
 			}
-			formatException = new FormatException("Substring \"" + token + "\" contains no valid " + readable);
+			formatException = new FormatException(@"Substring """ + token + @""" contains no valid " + readable);
 			result = new byte[] { };
 			return (false);
 		}
@@ -888,7 +893,7 @@ namespace YAT.Domain.Parser
 				catch
 				{
 					result = new Result[] { };
-					formatException = new FormatException("\"" + t + "\" is no keyword");
+					formatException = new FormatException(@"""" + t + @""" is no keyword");
 					return (false);
 				}
 			}

@@ -12,7 +12,7 @@ namespace YAT.Domain.Settings.SerialPort
 		/// <summary></summary>
 		public const bool ReplaceParityErrorsDefault = false;
 		/// <summary></summary>
-		public const string ParityErrorReplacementDefault = "\\h(00)";
+		public const string ParityErrorReplacementDefault = @"\h(00)";
 		/// <summary></summary>
 		public const byte ParityErrorReplacementDefaultAsByte = 0x00;
 
