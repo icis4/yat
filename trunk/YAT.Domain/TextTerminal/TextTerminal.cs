@@ -20,12 +20,12 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		public static readonly string KeywordHelp =
-			"For text terminals, the following additional keywords are supported :" + Environment.NewLine +
+			@"For text terminals, the following additional keywords are supported :" + Environment.NewLine +
 			Environment.NewLine +
-			"Send EOL sequence \"OK\\!(" + (Parser.XKeyword)Parser.Keyword.Eol + ")\"" + Environment.NewLine +
-			"Do not send EOL \"OK\\!(" + (Parser.XKeyword)Parser.Keyword.NoEol + ")\"" + Environment.NewLine +
-			"\"\\!(" + (Parser.XKeyword)Parser.Keyword.NoEol + ")\" is useful if your text protocol does have an EOL sequence" + Environment.NewLine +
-			"  except for a few special commands (e.g. synchronization commands).";
+			@"Send EOL sequence ""OK\!(" + (Parser.XKeyword)Parser.Keyword.Eol + @")""" + Environment.NewLine +
+			@"Do not send EOL ""OK\!(" + (Parser.XKeyword)Parser.Keyword.NoEol + @")""" + Environment.NewLine +
+			@"""\!(" + (Parser.XKeyword)Parser.Keyword.NoEol + @")"" is useful if your text protocol does have an EOL sequence" + Environment.NewLine +
+			@"  except for a few special commands (e.g. synchronization commands).";
 
 		#endregion
 

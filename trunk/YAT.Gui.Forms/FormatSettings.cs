@@ -247,9 +247,14 @@ namespace YAT.Gui.Forms
 				}
 				catch (Exception)
 				{
-					result = MessageBox.Show(this,
-					  "Font \"" + fd.Font.Name + "\" does not support regular style. Choose a different font.",
-					  "Bad font", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+					result = MessageBox.Show
+						(
+						this,
+						@"Font """ + fd.Font.Name + @""" does not support regular style. Choose a different font.",
+						@"Bad font",
+						MessageBoxButtons.OKCancel,
+						MessageBoxIcon.Exclamation
+						);
 					continue;
 				}
 
@@ -262,9 +267,14 @@ namespace YAT.Gui.Forms
 				}
 				catch (Exception)
 				{
-					result = MessageBox.Show(this,
-					  "Font \"" + fd.Font.Name + "\" can not be applied to rich text boxes. Choose a different font.",
-					  "Bad font", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+					result = MessageBox.Show
+						(
+						this,
+						@"Font """ + fd.Font.Name + @""" can not be applied to rich text boxes. Choose a different font.",
+						@"Bad font",
+						MessageBoxButtons.OKCancel,
+						MessageBoxIcon.Exclamation
+						);
 					continue;
 				}
 			}

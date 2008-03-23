@@ -47,7 +47,7 @@ namespace YAT.Domain.Settings
 		protected override void SetMyDefaults()
 		{
 			LengthLineBreak   = new BinaryLengthLineBreak(false, 16);
-			SequenceLineBreak = new BinarySequenceLineBreak(false, "\\h(00)");
+			SequenceLineBreak = new BinarySequenceLineBreak(false, @"\h(00)");
 			TimedLineBreak    = new BinaryTimedLineBreak(false, 500);
 		}
 

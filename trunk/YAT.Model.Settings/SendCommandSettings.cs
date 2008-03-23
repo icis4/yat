@@ -160,7 +160,7 @@ namespace YAT.Model.Settings
 		// Comparision ;-)
 		//------------------------------------------------------------------------------------------
 
-		private const string _EasterEggCommand = "\\easteregg";
+		private const string _EasterEggCommand = @"\easteregg";
 
 		/// <summary></summary>
 		public static bool IsEasterEggCommand(string command)

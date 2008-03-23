@@ -133,7 +133,7 @@ namespace MKY.IO.Ports
 		/// Gets or sets the port for communications, including but not limited to all available COM ports.
 		/// </summary>
 		[Category("Port")]
-		[Description("Port name (e.g. \"COM1\").")]
+		[Description(@"Port name, e.g. ""COM1"".")]
 		[DefaultValue(SerialPortId.DefaultPortName)]
 		public new string PortName
 		{
@@ -309,7 +309,7 @@ namespace MKY.IO.Ports
 		/// Communications port settings.
 		/// </summary>
 		[Category("Port")]
-		[Description("Port settings. Default settings are \"" + _PortSettingsDefault + "\".")]
+		[Description(@"Port settings. Default settings are """ + _PortSettingsDefault + @""".")]
 		[DefaultValue(_PortSettingsDefault)]
 		[TypeConverter(typeof(IO.Ports.SerialPortSettingsConverter))]
 		public virtual SerialPortSettings PortSettings

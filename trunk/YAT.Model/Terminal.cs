@@ -1109,15 +1109,15 @@ namespace YAT.Model
 
 		private void SendLine(string s)
 		{
-			OnFixedStatusTextRequest("Sending \"" + s + "\"...");
+			OnFixedStatusTextRequest(@"Sending """ + s + @"""...");
 			try
 			{
 				_terminal.SendLine(s);
-				OnTimedStatusTextRequest("\"" + s + "\" sent");
+				OnTimedStatusTextRequest(@"""" + s + @""" sent");
 			}
 			catch (System.IO.IOException ex)
 			{
-				OnFixedStatusTextRequest("Error sending \"" + s + "\"!");
+				OnFixedStatusTextRequest(@"Error sending """ + s + @"""!");
 
 				string text = "Unable to write to ";
 				string title;
@@ -1140,7 +1140,7 @@ namespace YAT.Model
 			}
 			catch (Domain.Parser.FormatException ex)
 			{
-				OnFixedStatusTextRequest("Error sending \"" + s + "\"!");
+				OnFixedStatusTextRequest(@"Error sending """ + s + @"""!");
 				OnMessageInputRequest
 					(
 					"Bad data format:" + Environment.NewLine + Environment.NewLine + ex.Message,

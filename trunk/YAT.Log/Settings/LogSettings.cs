@@ -146,7 +146,7 @@ namespace YAT.Log.Settings
 			{
 				case LogFormat.Raw:  return ("Raw");
 				case LogFormat.Neat: return ("Neat");
-				default: throw (new ArgumentException("LogFormat \"" + type + "\" unknown"));
+				default: throw (new ArgumentException(@"LogFormat """ + type + @""" unknown"));
 			}
 		}
 
@@ -157,7 +157,7 @@ namespace YAT.Log.Settings
 				case LogStreamType.Tx:    return ("Tx");
 				case LogStreamType.Bidir: return ("BiDir");
 				case LogStreamType.Rx:    return ("Rx");
-				default: throw (new ArgumentException("LogChannel \"" + type + "\" unknown"));
+				default: throw (new ArgumentException(@"LogChannel """ + type + @""" unknown"));
 			}
 		}
 

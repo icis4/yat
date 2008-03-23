@@ -74,12 +74,12 @@ namespace YAT.Gui.Forms
 			linkLabel_Link.Links.Add(start, textLink.Length, textLink);
 
 			// instructions
-			text = "1. Click on \"Submit New\"" + Environment.NewLine +
-				   "2. Select a \"Category\"" + Environment.NewLine +
-				   "3. Select a \"Group\", i.e. the YAT version you are using" + Environment.NewLine +
-				   "4. Fill in \"Summary\"" + Environment.NewLine +
-				   "5. Fill in \"Detailed Description\"" + Environment.NewLine +
-				   "6. Click on \"SUBMIT\"";
+			text = @"1. Click on ""Submit New""" + Environment.NewLine +
+				   @"2. Select a ""Category""" + Environment.NewLine +
+				   @"3. Select a ""Group"", i.e. the YAT version you are using" + Environment.NewLine +
+				   @"4. Fill in ""Summary""" + Environment.NewLine +
+				   @"5. Fill in ""Detailed Description""" + Environment.NewLine +
+				   @"6. Click on ""SUBMIT""";
 			linkLabel_Instructions.Text = text;
 		}
 

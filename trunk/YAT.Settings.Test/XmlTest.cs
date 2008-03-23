@@ -24,7 +24,7 @@ namespace YAT.Settings.Test
 		// Constants
 		//==========================================================================================
 
-		private const string _TempPath = "c:\\";
+		private const string _TempPath = @"c:\";
 		private const string _TempPrefix = "YAT-Test-";
 		private const string _TempExtension = ".xml";
 
