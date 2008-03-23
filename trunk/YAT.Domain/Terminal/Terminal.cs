@@ -24,7 +24,7 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private bool _isDisposed = false;
+		private bool _isDisposed;
 
 		private Settings.TerminalSettings _terminalSettings;
 
@@ -747,10 +747,7 @@ namespace YAT.Domain
 		// Settings Events
 		//==========================================================================================
 		
-		/// <summary></summary>
-		/// <remarks>ToDo: Why isn't this function CLS compliant?</remarks>
-		[CLSCompliant(false)]
-		protected virtual void _terminalSettings_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
+		private void _terminalSettings_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
 		{
 			if (e.Inner == null)
 			{
@@ -817,19 +814,13 @@ namespace YAT.Domain
 			OnError(e);
 		}
 
-		/// <summary></summary>
-		/// <remarks>ToDo: Why isn't this function CLS compliant?</remarks>
-		[CLSCompliant(false)]
-		protected virtual void _rawTerminal_RawElementSent(object sender, RawElementEventArgs e)
+		private void _rawTerminal_RawElementSent(object sender, RawElementEventArgs e)
 		{
 			OnRawElementSent(e);
 			ProcessAndSignalRawElement(e.Element);
 		}
 
-		/// <summary></summary>
-		/// <remarks>ToDo: Why isn't this function CLS compliant?</remarks>
-		[CLSCompliant(false)]
-		protected virtual void _rawTerminal_RawElementReceived(object sender, RawElementEventArgs e)
+		private void _rawTerminal_RawElementReceived(object sender, RawElementEventArgs e)
 		{
 			OnRawElementReceived(e);
 			ProcessAndSignalRawElement(e.Element);

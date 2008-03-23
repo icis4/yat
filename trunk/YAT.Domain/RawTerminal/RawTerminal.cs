@@ -17,7 +17,7 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private bool _isDisposed = false;
+		private bool _isDisposed;
 
 		private Settings.BufferSettings _bufferSettings;
 		private RawRepository _txRepository;

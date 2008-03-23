@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MKY.Utilities</RootNamespace>
-    <AssemblyName>Utilities</AssemblyName>
+    <AssemblyName>MKY.Utilities</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\Utilities.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>

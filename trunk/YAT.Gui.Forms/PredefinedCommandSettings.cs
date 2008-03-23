@@ -174,6 +174,11 @@ namespace YAT.Gui.Forms
 			AddPage();
 		}
 
+		private void button_CopyPage_Click(object sender, EventArgs e)
+		{
+			CopyPage();
+		}
+
 		private void button_DeletePage_Click(object sender, EventArgs e)
 		{
 			DeletePage();
@@ -304,6 +309,7 @@ namespace YAT.Gui.Forms
 			button_NamePage.Enabled = pageIsSelected;
 			button_InsertPage.Enabled = pageIsSelected;
 			button_AddPage.Enabled = true;
+			button_CopyPage.Enabled = pageIsSelected;
 			button_DeletePage.Enabled = pageIsSelected;
 			button_MovePageUp.Enabled = pageIsSelected && (_selectedPage > 1);
 			button_MovePageDown.Enabled = pageIsSelected && (_selectedPage < pageCount);
@@ -379,7 +385,7 @@ namespace YAT.Gui.Forms
 			if (TextInputBox.Show
 				(
 				this,
-				"Enter page name:",
+				"Enter name of inserted page:",
 				"Page Name",
 				"Page " + pageNumber.ToString(),
 				out pageName
@@ -399,7 +405,7 @@ namespace YAT.Gui.Forms
 			if (TextInputBox.Show
 				(
 				this,
-				"Enter page name:",
+				"Enter name of added page:",
 				"Page Name",
 				"Page " + pageNumber.ToString(),
 				out pageName
@@ -409,6 +415,26 @@ namespace YAT.Gui.Forms
 				Model.Types.PredefinedCommandPage pcp = new Model.Types.PredefinedCommandPage(Model.Settings.PredefinedCommandSettings.MaximumCommandsPerPage, pageName);
 				_settings_Form.Pages.Add(pcp);
 				_selectedPage = _settings_Form.Pages.Count;
+				SetControls();
+			}
+		}
+
+		private void CopyPage()
+		{
+			string pageName;
+			if (TextInputBox.Show
+				(
+				this,
+				"Enter name of copy:",
+				"Page Name",
+				_settings_Form.Pages[SelectedPageIndex].PageName + " (copy)",
+				out pageName
+				)
+				== DialogResult.OK)
+			{
+				Model.Types.PredefinedCommandPage pcp = new Model.Types.PredefinedCommandPage(_settings_Form.Pages[SelectedPageIndex]);
+				pcp.PageName = pageName;
+				_settings_Form.Pages.Insert(SelectedPageIndex + 1, pcp);
 				SetControls();
 			}
 		}

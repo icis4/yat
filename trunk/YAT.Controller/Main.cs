@@ -97,7 +97,7 @@ namespace YAT.Controller
 		// Fields
 		//==========================================================================================
 
-		private bool _isDisposed = false;
+		private bool _isDisposed;
 
 		// command line
 		private bool _commandLineError = false;

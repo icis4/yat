@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MKY.Net.Sockets</RootNamespace>
-    <AssemblyName>Net.Sockets</AssemblyName>
+    <AssemblyName>MKY.Net.Sockets</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\Net.Sockets.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>

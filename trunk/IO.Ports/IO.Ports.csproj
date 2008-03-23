@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MKY.IO.Ports</RootNamespace>
-    <AssemblyName>IO.Ports</AssemblyName>
+    <AssemblyName>MKY.IO.Ports</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\IO.Ports.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>

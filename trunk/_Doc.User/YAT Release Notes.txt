@@ -47,7 +47,8 @@ Release 2.0.0 :: 2008-??-??
 - Architectural refactoring
   > Split into Main/Workspace/Terminal
   > Split into Model/View/Controller
-- Serial COM port component "Charon.Communcations" removed
+- Use of serial port component of .NET 2.0
+  > Serial port component "Charon.Communcations" removed
 - TCP/IP and UDP/IP support added
 - RS-485 support added
 - Baud rates above 115k added
@@ -57,8 +58,12 @@ Release 2.0.0 :: 2008-??-??
 - Little-endian/big-endian support for \h \d \o \b added
 - Visual appearance modernized
 - Displaying performance improved
+- Terminal status improved
+- Time/connected/counter status added to monitors
 - Support for multi-line commands added
-- Several send options added
+- Support to copy commands added
+- Option to keep/auto-clear send command added
+- Several additional send options added
 - Application settings shifted from registry to local user directory
 - Terminal settings (.yat) refined
 - Workspace settings (.yaw) introduced

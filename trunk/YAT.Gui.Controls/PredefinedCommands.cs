@@ -79,6 +79,7 @@ namespace YAT.Gui.Controls
 		[Browsable(false)]
 		public List<PredefinedCommandPage> Pages
 		{
+			get { return (_pages); }
 			set
 			{
 				_pages = value;
@@ -137,6 +138,15 @@ namespace YAT.Gui.Controls
 		public void PreviousPage()
 		{
 			SelectedPage--;
+		}
+
+		/// <summary>
+		/// Returns command that is assigned to the button at the specified location.
+		/// Returns <see cref="null"/> if no button or if command is undefined or not valid.
+		/// </summary>
+		public Command GetCommandFromScreenPoint(Point p)
+		{
+			return (pageButtons.GetCommandFromScreenPoint(p));
 		}
 
 		#endregion

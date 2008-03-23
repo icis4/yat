@@ -95,6 +95,42 @@ namespace YAT.Gui.Controls
 
 		#endregion
 
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary>
+		/// Returns command that is assigned to the button at the specified location.
+		/// Returns <see cref="null"/> if no button or if command is undefined or not valid.
+		/// </summary>
+		public Command GetCommandFromScreenPoint(Point p)
+		{
+			Point client = PointToClient(p);
+
+			// ensure that location is within control
+			if ((client.X < 0) || (client.X > Width))
+				return (null);
+			if ((client.Y < 0) || (client.Y > Height))
+				return (null);
+
+			int ySum = 0;
+			for (int i = 0; i < _buttons_commands.Count; i++)
+			{
+				ySum += _buttons_commands[i].Height;
+				if (client.Y <= ySum)
+				{
+					if ((_commands != null) && (!_commands[i].IsEmpty))
+						return (_commands[i]);
+					else
+						return (null);
+				}
+			}
+			return (null);
+		}
+
+		#endregion
+
 		#region Controls Event Handlers
 		//==========================================================================================
 		// Controls Event Handlers

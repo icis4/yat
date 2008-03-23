@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
@@ -27,14 +28,16 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
-		public PredefinedCommandPage(IEnumerable<Command> collection)
+		public PredefinedCommandPage(PredefinedCommandPage rhs)
 		{
-			if (collection is PredefinedCommandPage)
+			_pageName = rhs._pageName;
+
+			// clone all commands
+			_commands = new List<Command>();
+			foreach (Command c in rhs._commands)
 			{
-				PredefinedCommandPage casted = (PredefinedCommandPage)collection;
-				_pageName = casted._pageName;
+				_commands.Add(new Command(c));
 			}
-			_commands = new List<Command>(collection);
 		}
 
 		/// <summary></summary>
