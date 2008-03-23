@@ -10,7 +10,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
-		private bool _isDisposed = false;
+		private bool _isDisposed;
 
 		/// <summary> 
 		/// Clean up any resources being used.

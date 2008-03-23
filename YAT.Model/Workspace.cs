@@ -31,7 +31,7 @@ namespace YAT.Model
 		// Fields
 		//==========================================================================================
 
-		private bool _isDisposed = false;
+		private bool _isDisposed;
 
 		private Guid _guid;
 

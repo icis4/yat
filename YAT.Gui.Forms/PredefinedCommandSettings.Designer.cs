@@ -28,18 +28,18 @@ namespace YAT.Gui.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			YAT.Model.Types.Command command1 = new YAT.Model.Types.Command();
-			YAT.Model.Types.Command command2 = new YAT.Model.Types.Command();
-			YAT.Model.Types.Command command3 = new YAT.Model.Types.Command();
-			YAT.Model.Types.Command command4 = new YAT.Model.Types.Command();
-			YAT.Model.Types.Command command5 = new YAT.Model.Types.Command();
-			YAT.Model.Types.Command command6 = new YAT.Model.Types.Command();
-			YAT.Model.Types.Command command7 = new YAT.Model.Types.Command();
-			YAT.Model.Types.Command command8 = new YAT.Model.Types.Command();
-			YAT.Model.Types.Command command9 = new YAT.Model.Types.Command();
-			YAT.Model.Types.Command command10 = new YAT.Model.Types.Command();
-			YAT.Model.Types.Command command11 = new YAT.Model.Types.Command();
-			YAT.Model.Types.Command command12 = new YAT.Model.Types.Command();
+			YAT.Model.Types.Command command13 = new YAT.Model.Types.Command();
+			YAT.Model.Types.Command command14 = new YAT.Model.Types.Command();
+			YAT.Model.Types.Command command15 = new YAT.Model.Types.Command();
+			YAT.Model.Types.Command command16 = new YAT.Model.Types.Command();
+			YAT.Model.Types.Command command17 = new YAT.Model.Types.Command();
+			YAT.Model.Types.Command command18 = new YAT.Model.Types.Command();
+			YAT.Model.Types.Command command19 = new YAT.Model.Types.Command();
+			YAT.Model.Types.Command command20 = new YAT.Model.Types.Command();
+			YAT.Model.Types.Command command21 = new YAT.Model.Types.Command();
+			YAT.Model.Types.Command command22 = new YAT.Model.Types.Command();
+			YAT.Model.Types.Command command23 = new YAT.Model.Types.Command();
+			YAT.Model.Types.Command command24 = new YAT.Model.Types.Command();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_ClearPage = new System.Windows.Forms.Button();
@@ -89,6 +89,7 @@ namespace YAT.Gui.Forms
 			this.button_InsertPage = new System.Windows.Forms.Button();
 			this.button_AddPage = new System.Windows.Forms.Button();
 			this.button_NamePage = new System.Windows.Forms.Button();
+			this.button_CopyPage = new System.Windows.Forms.Button();
 			this.groupBox_Page.SuspendLayout();
 			this.groupBox_Predefined.SuspendLayout();
 			this.groupBox_Pages.SuspendLayout();
@@ -176,16 +177,16 @@ namespace YAT.Gui.Forms
 			// predefinedCommandSettingsSet_12
 			// 
 			this.predefinedCommandSettingsSet_12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			command1.CommandLines = new string[] {
+			command13.CommandLines = new string[] {
         ""};
-			command1.DefaultRadix = YAT.Domain.Radix.String;
-			command1.Description = "";
-			command1.FilePath = "";
-			command1.IsFilePath = false;
-			command1.MultiLineCommand = new string[] {
+			command13.DefaultRadix = YAT.Domain.Radix.String;
+			command13.Description = "";
+			command13.FilePath = "";
+			command13.IsFilePath = false;
+			command13.MultiLineCommand = new string[] {
         ""};
-			command1.SingleLineCommand = "";
-			this.predefinedCommandSettingsSet_12.Command = command1;
+			command13.SingleLineCommand = "";
+			this.predefinedCommandSettingsSet_12.Command = command13;
 			this.predefinedCommandSettingsSet_12.Location = new System.Drawing.Point(30, 318);
 			this.predefinedCommandSettingsSet_12.Name = "predefinedCommandSettingsSet_12";
 			this.predefinedCommandSettingsSet_12.ShortcutString = "Shift+F12";
@@ -197,16 +198,16 @@ namespace YAT.Gui.Forms
 			// predefinedCommandSettingsSet_11
 			// 
 			this.predefinedCommandSettingsSet_11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			command2.CommandLines = new string[] {
+			command14.CommandLines = new string[] {
         ""};
-			command2.DefaultRadix = YAT.Domain.Radix.String;
-			command2.Description = "";
-			command2.FilePath = "";
-			command2.IsFilePath = false;
-			command2.MultiLineCommand = new string[] {
+			command14.DefaultRadix = YAT.Domain.Radix.String;
+			command14.Description = "";
+			command14.FilePath = "";
+			command14.IsFilePath = false;
+			command14.MultiLineCommand = new string[] {
         ""};
-			command2.SingleLineCommand = "";
-			this.predefinedCommandSettingsSet_11.Command = command2;
+			command14.SingleLineCommand = "";
+			this.predefinedCommandSettingsSet_11.Command = command14;
 			this.predefinedCommandSettingsSet_11.Location = new System.Drawing.Point(30, 292);
 			this.predefinedCommandSettingsSet_11.Name = "predefinedCommandSettingsSet_11";
 			this.predefinedCommandSettingsSet_11.ShortcutString = "Shift+F11";
@@ -218,16 +219,16 @@ namespace YAT.Gui.Forms
 			// predefinedCommandSettingsSet_10
 			// 
 			this.predefinedCommandSettingsSet_10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			command3.CommandLines = new string[] {
+			command15.CommandLines = new string[] {
         ""};
-			command3.DefaultRadix = YAT.Domain.Radix.String;
-			command3.Description = "";
-			command3.FilePath = "";
-			command3.IsFilePath = false;
-			command3.MultiLineCommand = new string[] {
+			command15.DefaultRadix = YAT.Domain.Radix.String;
+			command15.Description = "";
+			command15.FilePath = "";
+			command15.IsFilePath = false;
+			command15.MultiLineCommand = new string[] {
         ""};
-			command3.SingleLineCommand = "";
-			this.predefinedCommandSettingsSet_10.Command = command3;
+			command15.SingleLineCommand = "";
+			this.predefinedCommandSettingsSet_10.Command = command15;
 			this.predefinedCommandSettingsSet_10.Location = new System.Drawing.Point(30, 266);
 			this.predefinedCommandSettingsSet_10.Name = "predefinedCommandSettingsSet_10";
 			this.predefinedCommandSettingsSet_10.ShortcutString = "Shift+F10";
@@ -239,16 +240,16 @@ namespace YAT.Gui.Forms
 			// predefinedCommandSettingsSet_9
 			// 
 			this.predefinedCommandSettingsSet_9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			command4.CommandLines = new string[] {
+			command16.CommandLines = new string[] {
         ""};
-			command4.DefaultRadix = YAT.Domain.Radix.String;
-			command4.Description = "";
-			command4.FilePath = "";
-			command4.IsFilePath = false;
-			command4.MultiLineCommand = new string[] {
+			command16.DefaultRadix = YAT.Domain.Radix.String;
+			command16.Description = "";
+			command16.FilePath = "";
+			command16.IsFilePath = false;
+			command16.MultiLineCommand = new string[] {
         ""};
-			command4.SingleLineCommand = "";
-			this.predefinedCommandSettingsSet_9.Command = command4;
+			command16.SingleLineCommand = "";
+			this.predefinedCommandSettingsSet_9.Command = command16;
 			this.predefinedCommandSettingsSet_9.Location = new System.Drawing.Point(30, 240);
 			this.predefinedCommandSettingsSet_9.Name = "predefinedCommandSettingsSet_9";
 			this.predefinedCommandSettingsSet_9.ShortcutString = "Shift+F9";
@@ -260,16 +261,16 @@ namespace YAT.Gui.Forms
 			// predefinedCommandSettingsSet_8
 			// 
 			this.predefinedCommandSettingsSet_8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			command5.CommandLines = new string[] {
+			command17.CommandLines = new string[] {
         ""};
-			command5.DefaultRadix = YAT.Domain.Radix.String;
-			command5.Description = "";
-			command5.FilePath = "";
-			command5.IsFilePath = false;
-			command5.MultiLineCommand = new string[] {
+			command17.DefaultRadix = YAT.Domain.Radix.String;
+			command17.Description = "";
+			command17.FilePath = "";
+			command17.IsFilePath = false;
+			command17.MultiLineCommand = new string[] {
         ""};
-			command5.SingleLineCommand = "";
-			this.predefinedCommandSettingsSet_8.Command = command5;
+			command17.SingleLineCommand = "";
+			this.predefinedCommandSettingsSet_8.Command = command17;
 			this.predefinedCommandSettingsSet_8.Location = new System.Drawing.Point(30, 214);
 			this.predefinedCommandSettingsSet_8.Name = "predefinedCommandSettingsSet_8";
 			this.predefinedCommandSettingsSet_8.ShortcutString = "Shift+F8";
@@ -281,16 +282,16 @@ namespace YAT.Gui.Forms
 			// predefinedCommandSettingsSet_7
 			// 
 			this.predefinedCommandSettingsSet_7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			command6.CommandLines = new string[] {
+			command18.CommandLines = new string[] {
         ""};
-			command6.DefaultRadix = YAT.Domain.Radix.String;
-			command6.Description = "";
-			command6.FilePath = "";
-			command6.IsFilePath = false;
-			command6.MultiLineCommand = new string[] {
+			command18.DefaultRadix = YAT.Domain.Radix.String;
+			command18.Description = "";
+			command18.FilePath = "";
+			command18.IsFilePath = false;
+			command18.MultiLineCommand = new string[] {
         ""};
-			command6.SingleLineCommand = "";
-			this.predefinedCommandSettingsSet_7.Command = command6;
+			command18.SingleLineCommand = "";
+			this.predefinedCommandSettingsSet_7.Command = command18;
 			this.predefinedCommandSettingsSet_7.Location = new System.Drawing.Point(30, 188);
 			this.predefinedCommandSettingsSet_7.Name = "predefinedCommandSettingsSet_7";
 			this.predefinedCommandSettingsSet_7.ShortcutString = "Shift+F7";
@@ -302,16 +303,16 @@ namespace YAT.Gui.Forms
 			// predefinedCommandSettingsSet_6
 			// 
 			this.predefinedCommandSettingsSet_6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			command7.CommandLines = new string[] {
+			command19.CommandLines = new string[] {
         ""};
-			command7.DefaultRadix = YAT.Domain.Radix.String;
-			command7.Description = "";
-			command7.FilePath = "";
-			command7.IsFilePath = false;
-			command7.MultiLineCommand = new string[] {
+			command19.DefaultRadix = YAT.Domain.Radix.String;
+			command19.Description = "";
+			command19.FilePath = "";
+			command19.IsFilePath = false;
+			command19.MultiLineCommand = new string[] {
         ""};
-			command7.SingleLineCommand = "";
-			this.predefinedCommandSettingsSet_6.Command = command7;
+			command19.SingleLineCommand = "";
+			this.predefinedCommandSettingsSet_6.Command = command19;
 			this.predefinedCommandSettingsSet_6.Location = new System.Drawing.Point(30, 162);
 			this.predefinedCommandSettingsSet_6.Name = "predefinedCommandSettingsSet_6";
 			this.predefinedCommandSettingsSet_6.ShortcutString = "Shift+F6";
@@ -323,16 +324,16 @@ namespace YAT.Gui.Forms
 			// predefinedCommandSettingsSet_5
 			// 
 			this.predefinedCommandSettingsSet_5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			command8.CommandLines = new string[] {
+			command20.CommandLines = new string[] {
         ""};
-			command8.DefaultRadix = YAT.Domain.Radix.String;
-			command8.Description = "";
-			command8.FilePath = "";
-			command8.IsFilePath = false;
-			command8.MultiLineCommand = new string[] {
+			command20.DefaultRadix = YAT.Domain.Radix.String;
+			command20.Description = "";
+			command20.FilePath = "";
+			command20.IsFilePath = false;
+			command20.MultiLineCommand = new string[] {
         ""};
-			command8.SingleLineCommand = "";
-			this.predefinedCommandSettingsSet_5.Command = command8;
+			command20.SingleLineCommand = "";
+			this.predefinedCommandSettingsSet_5.Command = command20;
 			this.predefinedCommandSettingsSet_5.Location = new System.Drawing.Point(30, 136);
 			this.predefinedCommandSettingsSet_5.Name = "predefinedCommandSettingsSet_5";
 			this.predefinedCommandSettingsSet_5.ShortcutString = "Shift+F5";
@@ -344,16 +345,16 @@ namespace YAT.Gui.Forms
 			// predefinedCommandSettingsSet_4
 			// 
 			this.predefinedCommandSettingsSet_4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			command9.CommandLines = new string[] {
+			command21.CommandLines = new string[] {
         ""};
-			command9.DefaultRadix = YAT.Domain.Radix.String;
-			command9.Description = "";
-			command9.FilePath = "";
-			command9.IsFilePath = false;
-			command9.MultiLineCommand = new string[] {
+			command21.DefaultRadix = YAT.Domain.Radix.String;
+			command21.Description = "";
+			command21.FilePath = "";
+			command21.IsFilePath = false;
+			command21.MultiLineCommand = new string[] {
         ""};
-			command9.SingleLineCommand = "";
-			this.predefinedCommandSettingsSet_4.Command = command9;
+			command21.SingleLineCommand = "";
+			this.predefinedCommandSettingsSet_4.Command = command21;
 			this.predefinedCommandSettingsSet_4.Location = new System.Drawing.Point(30, 110);
 			this.predefinedCommandSettingsSet_4.Name = "predefinedCommandSettingsSet_4";
 			this.predefinedCommandSettingsSet_4.ShortcutString = "Shift+F4";
@@ -365,16 +366,16 @@ namespace YAT.Gui.Forms
 			// predefinedCommandSettingsSet_3
 			// 
 			this.predefinedCommandSettingsSet_3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			command10.CommandLines = new string[] {
+			command22.CommandLines = new string[] {
         ""};
-			command10.DefaultRadix = YAT.Domain.Radix.String;
-			command10.Description = "";
-			command10.FilePath = "";
-			command10.IsFilePath = false;
-			command10.MultiLineCommand = new string[] {
+			command22.DefaultRadix = YAT.Domain.Radix.String;
+			command22.Description = "";
+			command22.FilePath = "";
+			command22.IsFilePath = false;
+			command22.MultiLineCommand = new string[] {
         ""};
-			command10.SingleLineCommand = "";
-			this.predefinedCommandSettingsSet_3.Command = command10;
+			command22.SingleLineCommand = "";
+			this.predefinedCommandSettingsSet_3.Command = command22;
 			this.predefinedCommandSettingsSet_3.Location = new System.Drawing.Point(30, 84);
 			this.predefinedCommandSettingsSet_3.Name = "predefinedCommandSettingsSet_3";
 			this.predefinedCommandSettingsSet_3.ShortcutString = "Shift+F3";
@@ -386,16 +387,16 @@ namespace YAT.Gui.Forms
 			// predefinedCommandSettingsSet_1
 			// 
 			this.predefinedCommandSettingsSet_1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			command11.CommandLines = new string[] {
+			command23.CommandLines = new string[] {
         ""};
-			command11.DefaultRadix = YAT.Domain.Radix.String;
-			command11.Description = "";
-			command11.FilePath = "";
-			command11.IsFilePath = false;
-			command11.MultiLineCommand = new string[] {
+			command23.DefaultRadix = YAT.Domain.Radix.String;
+			command23.Description = "";
+			command23.FilePath = "";
+			command23.IsFilePath = false;
+			command23.MultiLineCommand = new string[] {
         ""};
-			command11.SingleLineCommand = "";
-			this.predefinedCommandSettingsSet_1.Command = command11;
+			command23.SingleLineCommand = "";
+			this.predefinedCommandSettingsSet_1.Command = command23;
 			this.predefinedCommandSettingsSet_1.Location = new System.Drawing.Point(30, 32);
 			this.predefinedCommandSettingsSet_1.Name = "predefinedCommandSettingsSet_1";
 			this.predefinedCommandSettingsSet_1.Size = new System.Drawing.Size(554, 20);
@@ -406,16 +407,16 @@ namespace YAT.Gui.Forms
 			// predefinedCommandSettingsSet_2
 			// 
 			this.predefinedCommandSettingsSet_2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			command12.CommandLines = new string[] {
+			command24.CommandLines = new string[] {
         ""};
-			command12.DefaultRadix = YAT.Domain.Radix.String;
-			command12.Description = "";
-			command12.FilePath = "";
-			command12.IsFilePath = false;
-			command12.MultiLineCommand = new string[] {
+			command24.DefaultRadix = YAT.Domain.Radix.String;
+			command24.Description = "";
+			command24.FilePath = "";
+			command24.IsFilePath = false;
+			command24.MultiLineCommand = new string[] {
         ""};
-			command12.SingleLineCommand = "";
-			this.predefinedCommandSettingsSet_2.Command = command12;
+			command24.SingleLineCommand = "";
+			this.predefinedCommandSettingsSet_2.Command = command24;
 			this.predefinedCommandSettingsSet_2.Location = new System.Drawing.Point(30, 58);
 			this.predefinedCommandSettingsSet_2.Name = "predefinedCommandSettingsSet_2";
 			this.predefinedCommandSettingsSet_2.ShortcutString = "Shift+F2";
@@ -663,6 +664,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.groupBox_Pages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox_Pages.Controls.Add(this.button_CopyPage);
 			this.groupBox_Pages.Controls.Add(this.listBox_Pages);
 			this.groupBox_Pages.Controls.Add(this.button_DeletePages);
 			this.groupBox_Pages.Controls.Add(this.button_MovePageUp);
@@ -696,7 +698,7 @@ namespace YAT.Gui.Forms
 			this.button_DeletePages.Location = new System.Drawing.Point(12, 369);
 			this.button_DeletePages.Name = "button_DeletePages";
 			this.button_DeletePages.Size = new System.Drawing.Size(120, 23);
-			this.button_DeletePages.TabIndex = 7;
+			this.button_DeletePages.TabIndex = 8;
 			this.button_DeletePages.Text = "Delete A&ll Pages...";
 			this.button_DeletePages.Click += new System.EventHandler(this.button_DeletePages_Click);
 			// 
@@ -706,7 +708,7 @@ namespace YAT.Gui.Forms
 			this.button_MovePageUp.Location = new System.Drawing.Point(138, 284);
 			this.button_MovePageUp.Name = "button_MovePageUp";
 			this.button_MovePageUp.Size = new System.Drawing.Size(75, 23);
-			this.button_MovePageUp.TabIndex = 5;
+			this.button_MovePageUp.TabIndex = 6;
 			this.button_MovePageUp.Text = "&Up";
 			this.button_MovePageUp.Click += new System.EventHandler(this.button_MovePageUp_Click);
 			// 
@@ -716,16 +718,16 @@ namespace YAT.Gui.Forms
 			this.button_MovePageDown.Location = new System.Drawing.Point(138, 313);
 			this.button_MovePageDown.Name = "button_MovePageDown";
 			this.button_MovePageDown.Size = new System.Drawing.Size(75, 23);
-			this.button_MovePageDown.TabIndex = 6;
+			this.button_MovePageDown.TabIndex = 7;
 			this.button_MovePageDown.Text = "&Down";
 			this.button_MovePageDown.Click += new System.EventHandler(this.button_MovePageDown_Click);
 			// 
 			// button_DeletePage
 			// 
-			this.button_DeletePage.Location = new System.Drawing.Point(138, 119);
+			this.button_DeletePage.Location = new System.Drawing.Point(138, 148);
 			this.button_DeletePage.Name = "button_DeletePage";
 			this.button_DeletePage.Size = new System.Drawing.Size(75, 23);
-			this.button_DeletePage.TabIndex = 4;
+			this.button_DeletePage.TabIndex = 5;
 			this.button_DeletePage.Text = "D&elete...";
 			this.button_DeletePage.Click += new System.EventHandler(this.button_DeletePage_Click);
 			// 
@@ -755,6 +757,15 @@ namespace YAT.Gui.Forms
 			this.button_NamePage.TabIndex = 1;
 			this.button_NamePage.Text = "&Name...";
 			this.button_NamePage.Click += new System.EventHandler(this.button_NamePage_Click);
+			// 
+			// button_CopyPage
+			// 
+			this.button_CopyPage.Location = new System.Drawing.Point(138, 119);
+			this.button_CopyPage.Name = "button_CopyPage";
+			this.button_CopyPage.Size = new System.Drawing.Size(75, 23);
+			this.button_CopyPage.TabIndex = 4;
+			this.button_CopyPage.Text = "&Copy...";
+			this.button_CopyPage.Click += new System.EventHandler(this.button_CopyPage_Click);
 			// 
 			// PredefinedCommandSettings
 			// 
@@ -832,5 +843,6 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.Label label_predefinedCommandSettingsSet_12;
 		private System.Windows.Forms.Label label_predefinedCommandSettingsSet_11;
 		private System.Windows.Forms.Label label_predefinedCommandSettingsSet_10;
+		private System.Windows.Forms.Button button_CopyPage;
 	}
 }

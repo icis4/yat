@@ -41,7 +41,7 @@ namespace YAT.Domain.IO
 		// Fields
 		//==========================================================================================
 
-		private bool _isDisposed = false;
+		private bool _isDisposed;
 
 		private System.Net.IPAddress _localIPAddress;
 		private int _localPort;

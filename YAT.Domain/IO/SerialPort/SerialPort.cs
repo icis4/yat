@@ -18,7 +18,7 @@ namespace YAT.Domain.IO
 		// Fields
 		//==========================================================================================
 
-		private bool _isDisposed = false;
+		private bool _isDisposed;
 
 		private Settings.SerialPort.SerialPortSettings _settings;
 		private MKY.IO.Ports.ISerialPort _port;

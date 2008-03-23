@@ -55,7 +55,7 @@ namespace YAT.Log
 			// Fields
 			//==========================================================================================
 
-			private bool _isDisposed = false;
+			private bool _isDisposed;
 
 			private bool _enabled = false;
 			private string _file;
@@ -429,7 +429,7 @@ namespace YAT.Log
 		// Fields
 		//==========================================================================================
 
-		private bool _isDisposed = false;
+		private bool _isDisposed;
 
 		private Settings.LogSettings _settings;
 

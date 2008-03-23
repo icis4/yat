@@ -514,8 +514,10 @@ namespace YAT.Gui.Controls
 					}
 				}
 
+				#if false
 				// \fixme Don't know how to alter image opacity yet
-				//pictureBox_Monitor.Image.Opacity = _imageOpacity
+				pictureBox_Monitor.Image.Opacity = _imageOpacity
+				#endif
 
 				if (_imageOpacity >= ((_MaximumImageOpacity - _MinimumImageOpacity) / 2))
 					pictureBox_Monitor.Image = _imageActive;

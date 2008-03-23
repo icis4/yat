@@ -50,7 +50,7 @@ namespace YAT.Model
 		// Fields
 		//==========================================================================================
 
-		private bool _isDisposed = false;
+		private bool _isDisposed;
 
 		private Guid _guid;
 		private string _userName;
@@ -69,10 +69,10 @@ namespace YAT.Model
 		private Chronometer _ioConnectChrono;
 
 		// count status
-		private int _txByteCount = 0;
-		private int _rxByteCount = 0;
-		private int _txLineCount = 0;
-		private int _rxLineCount = 0;
+		private int _txByteCount;
+		private int _rxByteCount;
+		private int _txLineCount;
+		private int _rxLineCount;
 
 		#endregion
 
@@ -793,7 +793,11 @@ namespace YAT.Model
 		// Terminal > Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		private bool _terminal_Changed_isConnected = false;
+		/// <summary>
+		/// Local field to maintain connection state in order to be able to detect
+		/// a change of the connection state.
+		/// </summary>
+		private bool _terminal_Changed_isConnected;
 
 		private void _terminal_Changed(object sender, EventArgs e)
 		{
@@ -1299,14 +1303,14 @@ namespace YAT.Model
 		{
 			Model.Types.Command c = _settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
 
-			if (c.IsCommand)
+			if (c.IsValidCommand)
 			{
 				SendCommand(c);
 
 				if (_settingsRoot.Send.CopyPredefined)
 					_settingsRoot.SendCommand.Command = new Command(c); // copy command if desired
 			}
-			else if (c.IsFilePath)
+			else if (c.IsValidFilePath)
 			{
 				SendFile(c);
 

@@ -30,8 +30,8 @@ namespace YAT.Gui.Forms
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Terminal));
-			YAT.Model.Types.Command command3 = new YAT.Model.Types.Command();
-			YAT.Model.Types.Command command4 = new YAT.Model.Types.Command();
+			YAT.Model.Types.Command command1 = new YAT.Model.Types.Command();
+			YAT.Model.Types.Command command2 = new YAT.Model.Types.Command();
 			this.timer_Status = new System.Windows.Forms.Timer(this.components);
 			this.contextMenuStrip_Monitor = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem_MonitorContextMenu_Radix = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,6 +62,7 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_RadixContextMenu_Rx_Oct = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_RadixContextMenu_Rx_Dec = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_View_Radix = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Format = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_MonitorContextMenu_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,7 +90,6 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_MonitorContextMenu_8 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_Print = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_View_Radix = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Predefined = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem_PredefinedContextMenu_Command_1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_Command_2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -110,6 +110,8 @@ namespace YAT.Gui.Forms
 			this.toolStripSeparator_PredefinedContextMenu_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_PredefinedContextMenu_Define = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_PredefinedContextMenu_3 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_PredefinedContextMenu_Copy = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator_PredefinedContextMenu_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_PredefinedContextMenu_Hide = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Predefined = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Send = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -173,15 +175,15 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator_TerminalMenu_View_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_Counters = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator_TerminalMenu_View_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripSeparator_TerminalMenu_View_3 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripSeparator_TerminalMenu_View_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_ShowTimeStamp = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_ShowLength = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_ShowEol = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator_TerminalMenu_View_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_Format = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip_Terminal = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel_TerminalStatus_Status = new System.Windows.Forms.ToolStripStatusLabel();
@@ -299,7 +301,7 @@ namespace YAT.Gui.Forms
             this.toolStripMenuItem_RadixContextMenu_TxRadix,
             this.toolStripMenuItem_RadixContextMenu_RxRadix});
 			this.contextMenuStrip_Radix.Name = "contextMenuStrip_Radix";
-			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_TerminalMenu_View_Radix;
+			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_MonitorContextMenu_Radix;
 			this.contextMenuStrip_Radix.Size = new System.Drawing.Size(182, 220);
 			this.contextMenuStrip_Radix.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Radix_Opening);
 			// 
@@ -495,6 +497,13 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex.Text = "&Hexadecimal";
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Rx_Hex_Click);
 			// 
+			// toolStripMenuItem_TerminalMenu_View_Radix
+			// 
+			this.toolStripMenuItem_TerminalMenu_View_Radix.DropDown = this.contextMenuStrip_Radix;
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Name = "toolStripMenuItem_TerminalMenu_View_Radix";
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(219, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Text = "R&adix";
+			// 
 			// toolStripMenuItem_MonitorContextMenu_Format
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Format.Name = "toolStripMenuItem_MonitorContextMenu_Format";
@@ -679,13 +688,6 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_MonitorContextMenu_Print.Text = "Print...";
 			this.toolStripMenuItem_MonitorContextMenu_Print.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Print_Click);
 			// 
-			// toolStripMenuItem_TerminalMenu_View_Radix
-			// 
-			this.toolStripMenuItem_TerminalMenu_View_Radix.DropDown = this.contextMenuStrip_Radix;
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Name = "toolStripMenuItem_TerminalMenu_View_Radix";
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(219, 22);
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Text = "R&adix";
-			// 
 			// contextMenuStrip_Predefined
 			// 
 			this.contextMenuStrip_Predefined.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -706,9 +708,11 @@ namespace YAT.Gui.Forms
             this.toolStripSeparator_PredefinedContextMenu_2,
             this.toolStripMenuItem_PredefinedContextMenu_Define,
             this.toolStripSeparator_PredefinedContextMenu_3,
+            this.toolStripMenuItem_PredefinedContextMenu_Copy,
+            this.toolStripSeparator_PredefinedContextMenu_4,
             this.toolStripMenuItem_PredefinedContextMenu_Hide});
 			this.contextMenuStrip_Predefined.Name = "contextMenuStrip_PredefinedCommands";
-			this.contextMenuStrip_Predefined.Size = new System.Drawing.Size(225, 352);
+			this.contextMenuStrip_Predefined.Size = new System.Drawing.Size(225, 374);
 			this.contextMenuStrip_Predefined.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Predefined_Opening);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_Command_1
@@ -877,6 +881,18 @@ namespace YAT.Gui.Forms
 			// 
 			this.toolStripSeparator_PredefinedContextMenu_3.Name = "toolStripSeparator_PredefinedContextMenu_3";
 			this.toolStripSeparator_PredefinedContextMenu_3.Size = new System.Drawing.Size(221, 6);
+			// 
+			// toolStripMenuItem_PredefinedContextMenu_Copy
+			// 
+			this.toolStripMenuItem_PredefinedContextMenu_Copy.Name = "toolStripMenuItem_PredefinedContextMenu_Copy";
+			this.toolStripMenuItem_PredefinedContextMenu_Copy.Size = new System.Drawing.Size(224, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_Copy.Text = "Copy to Send Command";
+			this.toolStripMenuItem_PredefinedContextMenu_Copy.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Copy_Click);
+			// 
+			// toolStripSeparator_PredefinedContextMenu_4
+			// 
+			this.toolStripSeparator_PredefinedContextMenu_4.Name = "toolStripSeparator_PredefinedContextMenu_4";
+			this.toolStripSeparator_PredefinedContextMenu_4.Size = new System.Drawing.Size(221, 6);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_Hide
 			// 
@@ -1427,21 +1443,16 @@ namespace YAT.Gui.Forms
 			// toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Name = "toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime";
-			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Size = new System.Drawing.Size(181, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Size = new System.Drawing.Size(189, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Text = "&Show Connect Time";
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime
 			// 
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime.Name = "toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime";
-			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime.Size = new System.Drawing.Size(181, 22);
+			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime.Size = new System.Drawing.Size(189, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime.Text = "&Restart Connect Time";
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime_Click);
-			// 
-			// toolStripSeparator_TerminalMenu_View_2
-			// 
-			this.toolStripSeparator_TerminalMenu_View_2.Name = "toolStripSeparator_TerminalMenu_View_2";
-			this.toolStripSeparator_TerminalMenu_View_2.Size = new System.Drawing.Size(216, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Counters
 			// 
@@ -1466,15 +1477,15 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters.Text = "&Reset Counters";
 			this.toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters_Click);
 			// 
+			// toolStripSeparator_TerminalMenu_View_2
+			// 
+			this.toolStripSeparator_TerminalMenu_View_2.Name = "toolStripSeparator_TerminalMenu_View_2";
+			this.toolStripSeparator_TerminalMenu_View_2.Size = new System.Drawing.Size(216, 6);
+			// 
 			// toolStripSeparator_TerminalMenu_View_3
 			// 
 			this.toolStripSeparator_TerminalMenu_View_3.Name = "toolStripSeparator_TerminalMenu_View_3";
 			this.toolStripSeparator_TerminalMenu_View_3.Size = new System.Drawing.Size(216, 6);
-			// 
-			// toolStripSeparator_TerminalMenu_View_4
-			// 
-			this.toolStripSeparator_TerminalMenu_View_4.Name = "toolStripSeparator_TerminalMenu_View_4";
-			this.toolStripSeparator_TerminalMenu_View_4.Size = new System.Drawing.Size(216, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_ShowTimeStamp
 			// 
@@ -1496,6 +1507,11 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_TerminalMenu_View_ShowEol.Size = new System.Drawing.Size(219, 22);
 			this.toolStripMenuItem_TerminalMenu_View_ShowEol.Text = "Show &End Of Line Sequence";
 			this.toolStripMenuItem_TerminalMenu_View_ShowEol.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ShowEol_Click);
+			// 
+			// toolStripSeparator_TerminalMenu_View_4
+			// 
+			this.toolStripSeparator_TerminalMenu_View_4.Name = "toolStripSeparator_TerminalMenu_View_4";
+			this.toolStripSeparator_TerminalMenu_View_4.Size = new System.Drawing.Size(216, 6);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Format
 			// 
@@ -1868,28 +1884,28 @@ namespace YAT.Gui.Forms
 			// 
 			// send
 			// 
-			command3.CommandLines = new string[] {
+			command1.CommandLines = new string[] {
         "<1 lines...> []"};
-			command3.DefaultRadix = YAT.Domain.Radix.String;
-			command3.Description = "<1 lines...> []";
-			command3.FilePath = "";
-			command3.IsFilePath = false;
-			command3.MultiLineCommand = new string[] {
+			command1.DefaultRadix = YAT.Domain.Radix.String;
+			command1.Description = "<1 lines...> []";
+			command1.FilePath = "";
+			command1.IsFilePath = false;
+			command1.MultiLineCommand = new string[] {
         "<1 lines...> []"};
-			command3.SingleLineCommand = "<1 lines...> []";
-			this.send.Command = command3;
+			command1.SingleLineCommand = "<1 lines...> []";
+			this.send.Command = command1;
 			this.send.ContextMenuStrip = this.contextMenuStrip_Send;
 			this.send.Dock = System.Windows.Forms.DockStyle.Fill;
-			command4.CommandLines = new string[] {
+			command2.CommandLines = new string[] {
         "<1 lines...> []"};
-			command4.DefaultRadix = YAT.Domain.Radix.String;
-			command4.Description = "<1 lines...> []";
-			command4.FilePath = "";
-			command4.IsFilePath = false;
-			command4.MultiLineCommand = new string[] {
+			command2.DefaultRadix = YAT.Domain.Radix.String;
+			command2.Description = "<1 lines...> []";
+			command2.FilePath = "";
+			command2.IsFilePath = false;
+			command2.MultiLineCommand = new string[] {
         "<1 lines...> []"};
-			command4.SingleLineCommand = "<1 lines...> []";
-			this.send.FileCommand = command4;
+			command2.SingleLineCommand = "<1 lines...> []";
+			this.send.FileCommand = command2;
 			this.send.Location = new System.Drawing.Point(3, 0);
 			this.send.Name = "send";
 			this.send.Size = new System.Drawing.Size(706, 94);
@@ -2053,8 +2069,10 @@ namespace YAT.Gui.Forms
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Page_Previous;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator_PredefinedContextMenu_2;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Define;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator_PredefinedContextMenu_3;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Hide;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_PredefinedContextMenu_3;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Copy;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_PredefinedContextMenu_4;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Hide;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip_Send;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SendContextMenu_SendCommand;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SendContextMenu_SendFile;

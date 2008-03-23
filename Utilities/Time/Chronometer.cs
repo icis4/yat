@@ -16,7 +16,7 @@ namespace MKY.Utilities.Time
 		// Fields
 		//==========================================================================================
 
-		private bool _isDisposed = false;
+		private bool _isDisposed;
 
 		private System.Timers.Timer _timer;
 
