@@ -1299,6 +1299,8 @@ namespace YAT.Model
 		/// <summary>
 		/// Send requested predefined command.
 		/// </summary>
+		/// <param name="page">Page 1..max</param>
+		/// <param name="command">Command 1..max</param>
 		public void SendPredefined(int page, int command)
 		{
 			Model.Types.Command c = _settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];

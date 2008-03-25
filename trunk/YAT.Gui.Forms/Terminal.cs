@@ -834,22 +834,51 @@ namespace YAT.Gui.Forms
 		/// <summary>
 		/// Temporary reference to command to be copied.
 		/// </summary>
-		private Model.Types.Command contextMenuStrip_Predefined_CopyCommand = null;
+		private int contextMenuStrip_Predefined_SelectedCommand = 0;
+		private Model.Types.Command contextMenuStrip_Predefined_CopyToSendCommand = null;
 
         private void contextMenuStrip_Predefined_Opening(object sender, CancelEventArgs e)
         {
 			if (contextMenuStrip_Predefined.SourceControl == groupBox_Predefined)
 			{
-				contextMenuStrip_Predefined_CopyCommand = predefined.GetCommandFromScreenPoint(new Point(contextMenuStrip_Predefined.Left, contextMenuStrip_Predefined.Top));
+				int id = predefined.GetCommandIdFromScreenPoint(new Point(contextMenuStrip_Predefined.Left, contextMenuStrip_Predefined.Top));
+				Model.Types.Command c = predefined.GetCommandFromId(id);
+
+				contextMenuStrip_Predefined_SelectedCommand = id;
+				contextMenuStrip_Predefined_CopyToSendCommand = c;
 
 				toolStripSeparator_PredefinedContextMenu_3.Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_Copy.Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_Copy.Enabled = (contextMenuStrip_Predefined_CopyCommand != null);
+
+				ToolStripMenuItem mi = toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand;
+				mi.Visible = true;
+				if (c != null)
+				{
+					mi.Enabled = (c.IsCommand || c.IsFilePath);
+					if (c.IsCommand)
+						mi.Text = "Copy to Send Command";
+					else if (c.IsFilePath)
+						mi.Text = "Copy to Send File";
+					else
+						mi.Text = "Copy";
+				}
+				else
+				{
+					mi.Enabled = false;
+					mi.Text = "Copy";
+				}
+
+				toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand.Visible = true;
+				toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand.Enabled = ((id != 0) && (_settingsRoot.SendCommand.Command.IsCommand));
+				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Visible = true;
+				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Enabled = ((id != 0) && (_settingsRoot.SendFile.Command.IsFilePath));
 			}
 			else
 			{
 				toolStripSeparator_PredefinedContextMenu_3.Visible = false;
-				toolStripMenuItem_PredefinedContextMenu_Copy.Visible = false;
+
+				toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand.Visible = false;
+				toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand.Visible = false;
+				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Visible = false;
 			}
 
             SetPredefinedMenuItems();
@@ -872,21 +901,35 @@ namespace YAT.Gui.Forms
 
         private void toolStripMenuItem_PredefinedContextMenu_Define_Click(object sender, EventArgs e)
         {
-            ShowPredefinedCommandSettings(1, 1);
-        }
+			if (contextMenuStrip_Predefined_SelectedCommand != 0)
+				ShowPredefinedCommandSettings(predefined.SelectedPage, contextMenuStrip_Predefined_SelectedCommand);
+			else
+				ShowPredefinedCommandSettings(predefined.SelectedPage, 1);
+		}
 
-		private void toolStripMenuItem_PredefinedContextMenu_Copy_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand_Click(object sender, EventArgs e)
 		{
-			if (contextMenuStrip_Predefined_CopyCommand != null)
+			Model.Types.Command c = contextMenuStrip_Predefined_CopyToSendCommand;
+			if (c != null)
 			{
-				if (contextMenuStrip_Predefined_CopyCommand.IsCommand)
-					_settingsRoot.SendCommand.Command = contextMenuStrip_Predefined_CopyCommand;
-				else if (contextMenuStrip_Predefined_CopyCommand.IsFilePath)
-					_settingsRoot.SendFile.Command = contextMenuStrip_Predefined_CopyCommand;
+				if (c.IsCommand)
+					_settingsRoot.SendCommand.Command = c;
+				else if (c.IsFilePath)
+					_settingsRoot.SendFile.Command = c;
 			}
 		}
 
-        private void toolStripMenuItem_PredefinedContextMenu_Hide_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand_Click(object sender, EventArgs e)
+		{
+			_settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommand - 1, _settingsRoot.SendCommand.Command);
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile_Click(object sender, EventArgs e)
+		{
+			_settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommand - 1, _settingsRoot.SendFile.Command);
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_Hide_Click(object sender, EventArgs e)
         {
             _settingsRoot.Layout.PredefinedPanelIsVisible = false;
         }
@@ -1708,6 +1751,8 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		/// <param name="page">Page 1..max</param>
+		/// <param name="command">Command 1..max</param>
 		private void RequestPredefined(int page, int command)
 		{
 			List<Model.Types.PredefinedCommandPage> pages = _settingsRoot.PredefinedCommand.Pages;
@@ -1736,6 +1781,8 @@ namespace YAT.Gui.Forms
 			ShowPredefinedCommandSettings(page, command);
 		}
 
+		/// <param name="page">Page 1..max</param>
+		/// <param name="command">Command 1..max</param>
 		private void ShowPredefinedCommandSettings(int page, int command)
 		{
 			PredefinedCommandSettings f = new PredefinedCommandSettings(_settingsRoot.PredefinedCommand, page, command);

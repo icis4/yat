@@ -85,6 +85,23 @@ namespace YAT.Model.Settings
 			SetChanged();
 		}
 
+		/// <summary></summary>
+		/// <param name="selectedPage">Index 0..max-1.</param>
+		/// <param name="selectedCommand">Index 0..max-1.</param>
+		/// <param name="command">Command to be set.</param>
+		public void SetCommand(int selectedPage, int selectedCommand, Command command)
+		{
+			if ((selectedPage >= 0) && (selectedPage < _pages.Count))
+			{
+				PredefinedCommandPage page = _pages[selectedPage];
+				if ((selectedCommand >= 0) && (selectedCommand < MaximumCommandsPerPage))
+				{
+					page.SetCommand(selectedCommand, command);
+					SetChanged();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members

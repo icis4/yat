@@ -442,7 +442,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.toolStripMenuItem_MainMenu_File_Preferences.Name = "toolStripMenuItem_MainMenu_File_Preferences";
 			this.toolStripMenuItem_MainMenu_File_Preferences.Size = new System.Drawing.Size(163, 22);
-			this.toolStripMenuItem_MainMenu_File_Preferences.Text = "Pr&eferences...";
+			this.toolStripMenuItem_MainMenu_File_Preferences.Text = "P&references...";
 			this.toolStripMenuItem_MainMenu_File_Preferences.Click += new System.EventHandler(this.toolStripMenuItem_MainMenu_File_Preferences_Click);
 			// 
 			// toolStripSeparator_MainMenu_File_5
