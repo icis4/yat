@@ -101,32 +101,58 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary>
-		/// Returns command that is assigned to the button at the specified location.
-		/// Returns <see cref="null"/> if no button or if command is undefined or not valid.
+		/// Returns command at the specified id.
+		/// Returns <see cref="null"/> if command is undefined or not valid.
 		/// </summary>
-		public Command GetCommandFromScreenPoint(Point p)
+		public Command GetCommandFromId(int id)
+		{
+			int i = (id - 1); // command ID = 1..max
+
+			if (_commands != null)
+			{
+				if ((i >= 0) && (i < _commands.Count))
+				{
+					if (_commands[i] != null)
+					{
+						if (!_commands[i].IsEmpty)
+							return (_commands[i]);
+					}
+				}
+			}
+			return (null);
+		}
+
+		/// <summary>
+		/// Returns command ID (1..max) that is assigned to the button at the specified location.
+		/// Returns 0 if no button.
+		/// </summary>
+		public int GetCommandIdFromScreenPoint(Point p)
 		{
 			Point client = PointToClient(p);
 
 			// ensure that location is within control
 			if ((client.X < 0) || (client.X > Width))
-				return (null);
+				return (0);
 			if ((client.Y < 0) || (client.Y > Height))
-				return (null);
+				return (0);
 
 			int ySum = 0;
 			for (int i = 0; i < _buttons_commands.Count; i++)
 			{
 				ySum += _buttons_commands[i].Height;
 				if (client.Y <= ySum)
-				{
-					if ((_commands != null) && (!_commands[i].IsEmpty))
-						return (_commands[i]);
-					else
-						return (null);
-				}
+					return (i + 1); // commmand ID = 1..max
 			}
-			return (null);
+			return (0);
+		}
+
+		/// <summary>
+		/// Returns command that is assigned to the button at the specified location.
+		/// Returns <see cref="null"/> if no button or if command is undefined or not valid.
+		/// </summary>
+		public Command GetCommandFromScreenPoint(Point p)
+		{
+			return (GetCommandFromId(GetCommandIdFromScreenPoint(p)));
 		}
 
 		#endregion

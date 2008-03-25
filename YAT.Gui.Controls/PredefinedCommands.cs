@@ -141,6 +141,24 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary>
+		/// Returns command at the specified id.
+		/// Returns <see cref="null"/> if command is undefined or not valid.
+		/// </summary>
+		public Command GetCommandFromId(int id)
+		{
+			return (pageButtons.GetCommandFromId(id));
+		}
+
+		/// <summary>
+		/// Returns command ID (1..max) that is assigned to the button at the specified location.
+		/// Returns 0 if no button.
+		/// </summary>
+		public int GetCommandIdFromScreenPoint(Point p)
+		{
+			return (pageButtons.GetCommandIdFromScreenPoint(p));
+		}
+
+		/// <summary>
 		/// Returns command that is assigned to the button at the specified location.
 		/// Returns <see cref="null"/> if no button or if command is undefined or not valid.
 		/// </summary>

@@ -110,7 +110,9 @@ namespace YAT.Gui.Forms
 			this.toolStripSeparator_PredefinedContextMenu_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_PredefinedContextMenu_Define = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_PredefinedContextMenu_3 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_PredefinedContextMenu_Copy = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_PredefinedContextMenu_4 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_PredefinedContextMenu_Hide = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_Predefined = new System.Windows.Forms.ToolStripMenuItem();
@@ -708,7 +710,9 @@ namespace YAT.Gui.Forms
             this.toolStripSeparator_PredefinedContextMenu_2,
             this.toolStripMenuItem_PredefinedContextMenu_Define,
             this.toolStripSeparator_PredefinedContextMenu_3,
-            this.toolStripMenuItem_PredefinedContextMenu_Copy,
+            this.toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand,
+            this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand,
+            this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile,
             this.toolStripSeparator_PredefinedContextMenu_4,
             this.toolStripMenuItem_PredefinedContextMenu_Hide});
 			this.contextMenuStrip_Predefined.Name = "contextMenuStrip_PredefinedCommands";
@@ -882,12 +886,26 @@ namespace YAT.Gui.Forms
 			this.toolStripSeparator_PredefinedContextMenu_3.Name = "toolStripSeparator_PredefinedContextMenu_3";
 			this.toolStripSeparator_PredefinedContextMenu_3.Size = new System.Drawing.Size(221, 6);
 			// 
-			// toolStripMenuItem_PredefinedContextMenu_Copy
+			// toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand
 			// 
-			this.toolStripMenuItem_PredefinedContextMenu_Copy.Name = "toolStripMenuItem_PredefinedContextMenu_Copy";
-			this.toolStripMenuItem_PredefinedContextMenu_Copy.Size = new System.Drawing.Size(224, 22);
-			this.toolStripMenuItem_PredefinedContextMenu_Copy.Text = "Copy to Send Command";
-			this.toolStripMenuItem_PredefinedContextMenu_Copy.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_Copy_Click);
+			this.toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand.Name = "toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand";
+			this.toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand.Size = new System.Drawing.Size(224, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand.Text = "Copy to Send Command";
+			this.toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand_Click);
+			// 
+			// toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand
+			// 
+			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand.Name = "toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand";
+			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand.Size = new System.Drawing.Size(224, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand.Text = "Copy from Send Command";
+			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand_Click);
+			// 
+			// toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile
+			// 
+			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Name = "toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile";
+			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Size = new System.Drawing.Size(224, 22);
+			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Text = "Copy from Send File";
+			this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Click += new System.EventHandler(this.toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile_Click);
 			// 
 			// toolStripSeparator_PredefinedContextMenu_4
 			// 
@@ -2070,7 +2088,9 @@ namespace YAT.Gui.Forms
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator_PredefinedContextMenu_2;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Define;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_PredefinedContextMenu_3;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Copy;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_PredefinedContextMenu_4;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Hide;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip_Send;

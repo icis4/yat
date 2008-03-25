@@ -22,7 +22,9 @@ namespace YAT.Gui.Forms
 		private struct StartupControl
 		{
 			public bool Startup;
+			/// <param name="RequestedPage">Page 1..<see cref="Model.Settings.PredefinedCommandSettings.MaximumCommandsPerPage"/>.</param>
 			public int RequestedPage;
+			/// <param name="RequestedCommand">Command 1..<see cref="Model.Settings.PredefinedCommandSettings.MaximumCommandsPerPage"/>.</param>
 			public int RequestedCommand;
 
 			public StartupControl(bool startup, int requestedPage, int requestedCommand)
@@ -57,6 +59,8 @@ namespace YAT.Gui.Forms
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <param name="requestedPage">Page 1..<see cref="Model.Settings.PredefinedCommandSettings.MaximumCommandsPerPage"/></param>
+		/// <param name="requestedCommand">Command 1..<see cref="Model.Settings.PredefinedCommandSettings.MaximumCommandsPerPage"/></param>
 		public PredefinedCommandSettings(Model.Settings.PredefinedCommandSettings settings, int requestedPage, int requestedCommand)
 		{
 			InitializeComponent();
@@ -202,7 +206,7 @@ namespace YAT.Gui.Forms
 		private void predefinedCommandSettingsSet_CommandChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
-				GetCommand(int.Parse((string)(((Controls.PredefinedCommandSettingsSet)sender).Tag)));
+				GetCommandFromSettingsSet(int.Parse((string)(((Controls.PredefinedCommandSettingsSet)sender).Tag)));
 		}
 
 		private void button_ClearPage_Click(object sender, EventArgs e)
@@ -502,21 +506,12 @@ namespace YAT.Gui.Forms
 		// Private Methods > Selected Page
 		//------------------------------------------------------------------------------------------
 
-		private void GetCommand(int command)
+		/// <summary></summary>
+		/// <param name="command">Command 1..<see cref="Model.Settings.PredefinedCommandSettings.MaximumCommandsPerPage"/>.</param>
+		private void GetCommandFromSettingsSet(int command)
 		{
-			List<Model.Types.Command> page = _settings_Form.Pages[SelectedPageIndex].Commands;
-
-			if (page.Count >= command)
-			{
-				page[command - 1] = _predefinedCommandSettingsSets[command - 1].Command;
-			}
-			else
-			{
-				while (page.Count < (command - 1))
-					page.Add(new Model.Types.Command());
-
-				page.Add(_predefinedCommandSettingsSets[command - 1].Command);
-			}
+			Model.Types.PredefinedCommandPage page = _settings_Form.Pages[SelectedPageIndex];
+			page.SetCommand(command - 1, _predefinedCommandSettingsSets[command - 1].Command);
 		}
 
 		private void ClearPage()

@@ -70,6 +70,34 @@ namespace YAT.Model.Types
 
 		#endregion
 
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary></summary>
+		/// <param name="selectedCommand">Index 0..max-1.</param>
+		/// <param name="command">Command to be set.</param>
+		public void SetCommand(int selectedCommand, Command command)
+		{
+			if (selectedCommand >= 0)
+			{
+				if (selectedCommand < _commands.Count)
+				{
+					_commands[selectedCommand] = new Command(command);
+				}
+				else
+				{
+					while (_commands.Count < (selectedCommand))
+						_commands.Add(new Command());
+
+					_commands.Add(new Command(command));
+				}
+			}
+		}
+
+		#endregion
+
 		#region Object Members
 		//------------------------------------------------------------------------------------------
 		// Object Members
