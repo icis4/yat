@@ -61,7 +61,7 @@ Release 2.0.0 :: 2008-??-??
 - Terminal status improved
 - Time/connected/counter status added to monitors
 - Support for multi-line commands added
-- Support to copy commands added
+- Support to copy predefined to/from send command/file added
 - Option to keep/auto-clear send command added
 - Several additional send options added
 - Application settings shifted from registry to local user directory

@@ -65,6 +65,24 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
+		/// Queries WMI (Windows Management Instrumentation) trying to retrieve to description
+		/// that is associated with the serial port.
+		/// </summary>
+		/// <remarks>
+		/// Query is never done automatically because it takes quite some time.
+		/// </remarks>
+		public void GetDescriptionsFromSystem()
+		{
+			Dictionary<int, string> descriptions = SerialPortSearcher.GetDescriptionsFromSystem();
+
+			foreach (SerialPortId portId in this)
+			{
+				if (descriptions.ContainsKey(portId.Number))
+					portId.Description = descriptions[portId.Number];
+			}
+		}
+
+		/// <summary>
 		/// Checks all ports whether they are currently in use and marks them.
 		/// </summary>
 		/// <remarks>

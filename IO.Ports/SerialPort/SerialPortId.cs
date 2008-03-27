@@ -1,5 +1,7 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
@@ -27,16 +29,27 @@ namespace MKY.IO.Ports
 		public const int StandardFirstPort = 1;
 		/// <summary></summary>
 		public const int StandardLastPort = 256;
+		/// <summary></summary>
+		public const int MaximumLastPort = 65536; // \fixme don't know how to retrieve true last port of the current machine
 
 		/// <summary></summary>
 		public const int DefaultPortNumber = 1;
 		/// <summary></summary>
 		public const string DefaultPortName = "COM1";
 		/// <summary></summary>
-		public readonly static SerialPortId DefaultPort = new SerialPortId(DefaultPortNumber);
+		public static readonly SerialPortId DefaultPort = new SerialPortId(DefaultPortNumber);
 
 		/// <summary></summary>
 		public const string DefaultInUseText = "(in use)";
+
+		/// <summary></summary>
+		public static readonly Regex PortNumberRegex;
+		/// <summary></summary>
+		public static readonly Regex PortNameRegex;
+		/// <summary></summary>
+		public static readonly Regex PortNameWithParenthesesRegex;
+		/// <summary></summary>
+		public static readonly Regex PortNameOnlyRegex;
 
 		#endregion
 
@@ -47,8 +60,27 @@ namespace MKY.IO.Ports
 
 		private int _number = DefaultPortNumber;
 
+		private string _description = null;
+		private bool _hasDescriptonFromSystem = false;
+
 		private bool _isInUse = false;
 		private string _inUseText = null;
+
+		#endregion
+
+		#region Static Object Lifetime
+		//==========================================================================================
+		// Static Object Lifetime
+		//==========================================================================================
+
+		/// <summary></summary>
+		static SerialPortId()
+		{
+			PortNumberRegex              = new Regex(@"(?<port>\d+)", RegexOptions.Compiled);
+			PortNameRegex                = new Regex(StandardPortPrefix + @"(?<port>\d+)",           RegexOptions.IgnoreCase | RegexOptions.Compiled);
+			PortNameWithParenthesesRegex = new Regex(@"\(" + StandardPortPrefix + @"(?<port>\d+)\)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+			PortNameOnlyRegex            = new Regex(@"^" + StandardPortPrefix + @"(?<port>\d+)$",   RegexOptions.IgnoreCase | RegexOptions.Compiled);
+		}
 
 		#endregion
 
@@ -81,9 +113,8 @@ namespace MKY.IO.Ports
 		{
 			if (!(_number >= StandardFirstPort))
 				throw (new ArgumentOutOfRangeException("SerialPortId.Number", _number, "ASSERT(Number >= StandardFirstPort)"));
-			// allow ports above 256, don't know how to retrieve true last port of the current machine
-			//! if (!(_number <= StandardLastPort))
-			//! 	throw (new ArgumentOutOfRangeException("SerialPortId.Number", _number, "ASSERT(Number <= StandardLastPort)"));
+			if (!(_number <= MaximumLastPort))
+				throw (new ArgumentOutOfRangeException("SerialPortId.Number", _number, "ASSERT(Number <= MaximumLastPort)"));
 		}
 
 		#endregion
@@ -108,7 +139,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Port name (e.g. COM1).
+		/// Port name (e.g. "COM1").
 		/// </summary>
 		[XmlElement("Name")]
 		public string Name
@@ -119,6 +150,32 @@ namespace MKY.IO.Ports
 				_number = Parse(value);
 				CheckPort();
 			}
+		}
+
+		/// <summary>
+		/// Port description (e.g. "Serial On USB Port").
+		/// </summary>
+		[XmlIgnore]
+		public string Description
+		{
+			get { return (_description); }
+			set
+			{
+				if (value == "")
+					_description = null;
+				else
+					_description = value;
+			}
+		}
+
+		/// <summary>
+		/// Indicates whether port has retrieved description from system.
+		/// </summary>
+		[XmlIgnore]
+		public bool HasDescriptionFromSystem
+		{
+			get { return (_hasDescriptonFromSystem); }
+			set { _hasDescriptonFromSystem = value; }
 		}
 
 		/// <summary>
@@ -151,6 +208,31 @@ namespace MKY.IO.Ports
 					_inUseText = null;
 				else
 					_inUseText = value;
+			}
+		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary>
+		/// Queries WMI (Windows Management Instrumentation) trying to retrieve to description
+		/// that is associated with the serial port.
+		/// </summary>
+		/// <remarks>
+		/// Query is never done automatically because it takes quite some time.
+		/// </remarks>
+		public void GetDescriptionFromSystem()
+		{
+			Dictionary<int, string> descriptions = SerialPortSearcher.GetDescriptionsFromSystem();
+
+			if (descriptions.ContainsKey(_number))
+			{
+				Description = descriptions[_number];
+				_hasDescriptonFromSystem = true;
 			}
 		}
 
@@ -190,10 +272,30 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public override string ToString()
 		{
-			if (IsInUse)
-				return (Name + " " + InUseText);
-			else
-				return (Name);
+			return (ToString(true, true));
+		}
+
+		/// <summary></summary>
+		public string ToString(bool appendDescription, bool appendInUseText)
+		{
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append(Name);             // "COM10"
+
+			if (appendDescription && (_description != null))
+			{
+				sb.Append(" [");
+				sb.Append(_description); // "COM10 [Serial On USB Port]"
+				sb.Append("]");
+			}
+
+			if (appendInUseText && _isInUse)
+			{
+				sb.Append(" ");
+				sb.Append(_inUseText);   // "COM10 [Serial On USB Port] (in use)"
+			}
+
+			return (sb.ToString());
 		}
 
 		/// <summary>
@@ -201,36 +303,70 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public static SerialPortId Parse(string s)
 		{
-			// e.g. "COM1" / "COM1 Bluetooth" / "Bluetooth COM1"
-			if (s.StartsWith(StandardPortPrefix))
-				s.Remove(0, StandardPortPrefix.Length);
+			SerialPortId result;
+			if (TryParse(s, out result))
+				return (result);
+			else
+				throw (new FormatException(s + " does not specify a valid serial port ID"));
+		}
 
-			// e.g. "1" / "1 Bluetooth" / "Bluetooth COM1"
-			try
+		/// <summary>
+		/// Tries to parse s for the first integer number and returns the corresponding port.
+		/// </summary>
+		public static bool TryParse(string s, out SerialPortId result)
+		{
+			Match m;
+
+			// e.g. "COM2"
+			m = PortNameOnlyRegex.Match(s);
+			if (m.Success)
 			{
-				int portNumber = int.Parse(s);
-				return (new SerialPortId(portNumber));
-			}
-			catch
-			{
+				int portNumber;
+				if (int.TryParse(m.Groups[1].Value, out portNumber))
+				{
+					if ((portNumber >= StandardFirstPort) &&
+						(portNumber <= MaximumLastPort))
+					{
+						result = new SerialPortId(portNumber);
+						return (true);
+					}
+				}
 			}
 
-			// e.g. "1 Bluetooth" / "Bluetooth COM1"
-			bool gathering = false;
-			StringWriter writer = new StringWriter();
-			foreach (char c in s.ToCharArray())
+			// e.g. "Bluetooth Communications Port (COM2)"
+			m = PortNameWithParenthesesRegex.Match(s);
+			if (m.Success)
 			{
-				if (char.IsDigit(c))
+				int portNumber;
+				if (int.TryParse(m.Groups[1].Value, out portNumber))
 				{
-					gathering = true;
-					writer.Write(c);
-				}
-				else if (gathering)
-				{
-					break;
+					if ((portNumber >= StandardFirstPort) &&
+						(portNumber <= MaximumLastPort))
+					{
+						result = new SerialPortId(portNumber);
+						return (true);
+					}
 				}
 			}
-			return (new SerialPortId(int.Parse(writer.ToString())));
+
+			// e.g. "Modem on COM2"
+			m = PortNameRegex.Match(s);
+			if (m.Success)
+			{
+				int portNumber;
+				if (int.TryParse(m.Groups[1].Value, out portNumber))
+				{
+					if ((portNumber >= StandardFirstPort) &&
+						(portNumber <= MaximumLastPort))
+					{
+						result = new SerialPortId(portNumber);
+						return (true);
+					}
+				}
+			}
+
+			result = null;
+			return (false);
 		}
 
 		#endregion

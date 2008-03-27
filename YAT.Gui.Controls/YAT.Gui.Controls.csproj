@@ -259,6 +259,9 @@
     <Content Include="Resources\Monitor\Image_Monitor_Rx_28x28.png" />
     <None Include="Resources\Monitor\Image_Monitor_Rx_28x28_Green.png" />
     <Content Include="Resources\Monitor\Image_Monitor_Tx_28x28.png" />
+    <Content Include="Resources\SerialPortSelection\Image_Refresh_16x16.png" />
+    <Content Include="Resources\SerialPortSelection\Image_Refresh_16x16_Disabled.png" />
+    <Content Include="Resources\SerialPortSelection\Image_Refresh_16x16_Hot.png" />
     <None Include="Resources\Monitor\Image_Monitor_Tx_28x28_Green.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

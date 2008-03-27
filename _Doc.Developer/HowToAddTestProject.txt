@@ -7,6 +7,7 @@
 3. Remove "Class1"
 
 4. Project > Properties
+   Modify assembly name if needed
    Modify default namespace if needed
 
 5. Open "AssemblyInfo"
