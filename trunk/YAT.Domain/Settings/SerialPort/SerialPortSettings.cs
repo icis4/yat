@@ -88,6 +88,10 @@ namespace YAT.Domain.Settings.SerialPort
 				if (_portId != value)
 				{
 					_portId = value;
+
+					if (!_portId.HasDescriptionFromSystem)
+						_portId.GetDescriptionFromSystem();
+
 					SetChanged();
 				}
 			}

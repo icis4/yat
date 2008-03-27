@@ -51,7 +51,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button_Cancel.Location = new System.Drawing.Point(373, 60);
+			this.button_Cancel.Location = new System.Drawing.Point(398, 60);
 			this.button_Cancel.Name = "button_Cancel";
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 2;
@@ -62,7 +62,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.button_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_OK.Location = new System.Drawing.Point(373, 33);
+			this.button_OK.Location = new System.Drawing.Point(398, 33);
 			this.button_OK.Name = "button_OK";
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 1;
@@ -79,7 +79,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_NewTerminal.Controls.Add(this.checkBox_OpenTerminal);
 			this.groupBox_NewTerminal.Location = new System.Drawing.Point(73, 12);
 			this.groupBox_NewTerminal.Name = "groupBox_NewTerminal";
-			this.groupBox_NewTerminal.Size = new System.Drawing.Size(287, 279);
+			this.groupBox_NewTerminal.Size = new System.Drawing.Size(312, 298);
 			this.groupBox_NewTerminal.TabIndex = 0;
 			this.groupBox_NewTerminal.TabStop = false;
 			// 
@@ -92,7 +92,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_PortSettings.Controls.Add(this.socketSelection);
 			this.groupBox_PortSettings.Location = new System.Drawing.Point(6, 79);
 			this.groupBox_PortSettings.Name = "groupBox_PortSettings";
-			this.groupBox_PortSettings.Size = new System.Drawing.Size(275, 163);
+			this.groupBox_PortSettings.Size = new System.Drawing.Size(300, 182);
 			this.groupBox_PortSettings.TabIndex = 1;
 			this.groupBox_PortSettings.TabStop = false;
 			this.groupBox_PortSettings.Text = "Port &Settings";
@@ -104,7 +104,7 @@ namespace YAT.Gui.Forms
 			this.serialPortSelection.Location = new System.Drawing.Point(6, 19);
 			this.serialPortSelection.Name = "serialPortSelection";
 			this.serialPortSelection.PortId = new MKY.IO.Ports.SerialPortId(1);
-			this.serialPortSelection.Size = new System.Drawing.Size(260, 27);
+			this.serialPortSelection.Size = new System.Drawing.Size(285, 46);
 			this.serialPortSelection.TabIndex = 0;
 			this.serialPortSelection.PortIdChanged += new System.EventHandler(this.serialPortSelection_PortIdChanged);
 			// 
@@ -112,7 +112,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.socketSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.socketSelection.Location = new System.Drawing.Point(6, 46);
+			this.socketSelection.Location = new System.Drawing.Point(6, 65);
 			this.socketSelection.Name = "socketSelection";
 			this.socketSelection.Size = new System.Drawing.Size(260, 108);
 			this.socketSelection.TabIndex = 1;
@@ -139,7 +139,7 @@ namespace YAT.Gui.Forms
 			this.checkBox_OpenTerminal.AutoSize = true;
 			this.checkBox_OpenTerminal.Checked = true;
 			this.checkBox_OpenTerminal.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox_OpenTerminal.Location = new System.Drawing.Point(113, 252);
+			this.checkBox_OpenTerminal.Location = new System.Drawing.Point(113, 271);
 			this.checkBox_OpenTerminal.Name = "checkBox_OpenTerminal";
 			this.checkBox_OpenTerminal.Size = new System.Drawing.Size(91, 17);
 			this.checkBox_OpenTerminal.TabIndex = 2;
@@ -159,7 +159,7 @@ namespace YAT.Gui.Forms
 			// button_Help
 			// 
 			this.button_Help.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Help.Location = new System.Drawing.Point(373, 112);
+			this.button_Help.Location = new System.Drawing.Point(398, 112);
 			this.button_Help.Name = "button_Help";
 			this.button_Help.Size = new System.Drawing.Size(75, 23);
 			this.button_Help.TabIndex = 3;
@@ -172,16 +172,16 @@ namespace YAT.Gui.Forms
 			this.AcceptButton = this.button_OK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(460, 310);
+			this.ClientSize = new System.Drawing.Size(485, 329);
 			this.Controls.Add(this.button_Help);
 			this.Controls.Add(this.groupBox_NewTerminal);
 			this.Controls.Add(this.pictureBox_New);
 			this.Controls.Add(this.button_Cancel);
 			this.Controls.Add(this.button_OK);
 			this.MaximizeBox = false;
-			this.MaximumSize = new System.Drawing.Size(1024, 337);
+			this.MaximumSize = new System.Drawing.Size(1024, 356);
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(456, 337);
+			this.MinimumSize = new System.Drawing.Size(493, 356);
 			this.Name = "NewTerminal";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;

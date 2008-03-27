@@ -91,6 +91,9 @@ namespace YAT.Model.Settings
 		/// <param name="command">Command to be set.</param>
 		public void SetCommand(int selectedPage, int selectedCommand, Command command)
 		{
+			if ((selectedPage == 0) && (_pages.Count == 0))
+				CreateDefaultPage();
+
 			if ((selectedPage >= 0) && (selectedPage < _pages.Count))
 			{
 				PredefinedCommandPage page = _pages[selectedPage];

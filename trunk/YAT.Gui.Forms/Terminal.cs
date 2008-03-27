@@ -2345,7 +2345,7 @@ namespace YAT.Gui.Forms
 				{
 					Domain.Settings.SerialPort.SerialPortSettings s = _settingsRoot.IO.SerialPort;
 					sb.Append(" - ");
-					sb.Append(s.PortId.ToString());
+					sb.Append(s.PortId.ToString(true, false));
 					sb.Append(" - ");
 					sb.Append(isOpen ? "Open" : "Closed");
 				}
@@ -2463,7 +2463,7 @@ namespace YAT.Gui.Forms
 			{
 				Domain.Settings.SerialPort.SerialPortSettings s = _settingsRoot.IO.SerialPort;
 				sb.Append("Serial port ");
-				sb.Append(s.PortId.ToString());
+				sb.Append(s.PortId.ToString(true, false));
 				sb.Append(" (" + s.Communication.ToString() + ") is ");
 				sb.Append(isOpen ? "open" : "closed");
 

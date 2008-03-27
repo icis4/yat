@@ -82,6 +82,7 @@ namespace MKY.Windows.Forms
 			this.AcceptButton = this.button_Cancel;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoSize = true;
 			this.CancelButton = this.button_Cancel;
 			this.ClientSize = new System.Drawing.Size(205, 97);
 			this.Controls.Add(this.button_Cancel);

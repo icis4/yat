@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Utilities")]
+[assembly: AssemblyTitle("MKY.Utilities")]
 [assembly: AssemblyDescription("C# Utilities")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MKY")]
-[assembly: AssemblyProduct("Utilities")]
+[assembly: AssemblyProduct("MKY.Utilities")]
 [assembly: AssemblyCopyright("Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil. Copyright © 2003-2008 Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

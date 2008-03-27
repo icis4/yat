@@ -297,6 +297,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Edit\Image_Delete_16x16.png" />
+    <Content Include="Resources\Edit\Image_Delete_16x16_Disabled.png" />
+    <Content Include="Resources\Edit\Image_Delete_16x16_Hot.png" />
     <Content Include="Resources\Status\Image_Off_12x12.png" />
     <Content Include="Resources\Status\Image_On_12x12.png" />
     <Content Include="Resources\Tool\Image_ArrowRight_24x24.png" />

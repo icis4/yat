@@ -217,6 +217,7 @@ namespace YAT.Gui.Controls
 
 			SerialPortList portList = new SerialPortList();
 			portList.FillWithAvailablePorts();
+			portList.GetDescriptionsFromSystem();
 
 			if (!DesignMode && ApplicationSettings.LocalUser.General.DetectSerialPortsInUse &&
 				Enabled && _showSerialPort)

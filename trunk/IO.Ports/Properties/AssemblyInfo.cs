@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("IO.Ports")]
+[assembly: AssemblyTitle("MKY.IO.Ports")]
 [assembly: AssemblyDescription("System.IO.Ports extension")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MKY")]
-[assembly: AssemblyProduct("IO.Ports")]
+[assembly: AssemblyProduct("MKY.IO.Ports")]
 [assembly: AssemblyCopyright("Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil. Copyright © 2003-2008 Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -173,15 +173,28 @@ namespace YAT.Gui.Controls
 		{
 			_isSettingControls = true;
 
-			bool enabled;
-			if (_hostType == HostType.TcpClient)
-				enabled = _tcpClientAutoReconnect.Enabled;
-			else
-				enabled = false;
+			bool isTcpClient = (_hostType == HostType.TcpClient);
 
-			checkBox_TcpClientAutoReconnect.Checked = enabled;
-			textBox_TcpClientAutoReconnectInterval.Enabled = enabled;
-			textBox_TcpClientAutoReconnectInterval.Text = _tcpClientAutoReconnect.Interval.ToString();
+			bool autoReconnectEnabled;
+			if (isTcpClient)
+				autoReconnectEnabled = _tcpClientAutoReconnect.Enabled;
+			else
+				autoReconnectEnabled = false;
+
+			checkBox_TcpClientAutoReconnect.Enabled = isTcpClient;
+			checkBox_TcpClientAutoReconnect.Checked = autoReconnectEnabled;
+
+			string autoReconnectIntervalText;
+			if (isTcpClient)
+				autoReconnectIntervalText = _tcpClientAutoReconnect.Interval.ToString();
+			else
+				autoReconnectIntervalText = "";
+
+			textBox_TcpClientAutoReconnectInterval.Enabled = autoReconnectEnabled;
+			textBox_TcpClientAutoReconnectInterval.Text = autoReconnectIntervalText;
+
+			label_TcpClientAutoReconnectInterval.Enabled = isTcpClient;
+			label_TcpClientAutoReconnectIntervalUnit.Enabled = isTcpClient;
 
 			_isSettingControls = false;
 		}
