@@ -141,7 +141,7 @@ namespace YAT.Domain
 			if (TryParse(eol, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException("eol", eol, "Invalid EOL"));
+				throw (new ArgumentOutOfRangeException("eol", eol, "Invalid EOL."));
 		}
 
 		/// <summary></summary>

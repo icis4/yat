@@ -118,7 +118,7 @@ namespace MKY.Net.Sockets.Compression
 			if (TryParse(type, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException("type", type, "Invalid type"));
+				throw (new ArgumentOutOfRangeException("type", type, "Invalid type."));
 		}
 
 		/// <summary></summary>

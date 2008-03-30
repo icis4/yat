@@ -652,12 +652,12 @@ namespace YAT.Gui.Controls
 		private void SetFormatDependentControls()
 		{
 			listBox_Monitor.ItemHeight = _formatSettings.Font.Height;
-			listBox_Monitor.Refresh();
+			listBox_Monitor.Invalidate();
 		}
 
 		private void SetCharReplaceDependentControls()
 		{
-			listBox_Monitor.Refresh();
+			listBox_Monitor.Invalidate();
 		}
 
 		private void SetTimeStatusControls()

@@ -40,6 +40,11 @@ namespace MKY.IO.Ports
 		public static readonly SerialPortId DefaultPort = new SerialPortId(DefaultPortNumber);
 
 		/// <summary></summary>
+		public const string DefaultDescriptionSeparator = "-";
+
+		/// <summary></summary>
+		public const string DefaultInUseSeparator = "-";
+		/// <summary></summary>
 		public const string DefaultInUseText = "(in use)";
 
 		/// <summary></summary>
@@ -61,10 +66,12 @@ namespace MKY.IO.Ports
 		private int _number = DefaultPortNumber;
 
 		private string _description = null;
+		private string _descriptionSeparator = null;
 		private bool _hasDescriptonFromSystem = false;
 
 		private bool _isInUse = false;
 		private string _inUseText = null;
+		private string _inUseSeparator = null;
 
 		#endregion
 
@@ -112,9 +119,9 @@ namespace MKY.IO.Ports
 		private void CheckPort()
 		{
 			if (!(_number >= StandardFirstPort))
-				throw (new ArgumentOutOfRangeException("SerialPortId.Number", _number, "ASSERT(Number >= StandardFirstPort)"));
+				throw (new ArgumentOutOfRangeException("SerialPortId.Number", _number, "ASSERT(Number >= StandardFirstPort)."));
 			if (!(_number <= MaximumLastPort))
-				throw (new ArgumentOutOfRangeException("SerialPortId.Number", _number, "ASSERT(Number <= MaximumLastPort)"));
+				throw (new ArgumentOutOfRangeException("SerialPortId.Number", _number, "ASSERT(Number <= MaximumLastPort)."));
 		}
 
 		#endregion
@@ -169,6 +176,29 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
+		/// The separator which is shown when port is currently in use, e.g. "COM1 - Serial On USB Port".
+		/// </summary>
+		[XmlIgnore]
+		[DefaultValue(DefaultDescriptionSeparator)]
+		public string DescriptionSeparator
+		{
+			get
+			{
+				if (_descriptionSeparator == null)
+					return (DefaultDescriptionSeparator);
+				else
+					return (_descriptionSeparator);
+			}
+			set
+			{
+				if (value == "")
+					_descriptionSeparator = null;
+				else
+					_descriptionSeparator = value;
+			}
+		}
+
+		/// <summary>
 		/// Indicates whether port has retrieved description from system.
 		/// </summary>
 		[XmlIgnore]
@@ -189,7 +219,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// The text which is shown when port is currently in use, e.g. "COM1 (in use)".
+		/// The text which is shown when port is currently in use, e.g. "COM1 - (in use)".
 		/// </summary>
 		[XmlIgnore]
 		[DefaultValue(DefaultInUseText)]
@@ -208,6 +238,29 @@ namespace MKY.IO.Ports
 					_inUseText = null;
 				else
 					_inUseText = value;
+			}
+		}
+
+		/// <summary>
+		/// The separator which is shown when port is currently in use, e.g. "COM1 - (in use)".
+		/// </summary>
+		[XmlIgnore]
+		[DefaultValue(DefaultInUseSeparator)]
+		public string InUseSeparator
+		{
+			get
+			{
+				if (_inUseSeparator == null)
+					return (DefaultInUseSeparator);
+				else
+					return (_inUseSeparator);
+			}
+			set
+			{
+				if (value == "")
+					_inUseSeparator = null;
+				else
+					_inUseSeparator = value;
 			}
 		}
 
@@ -280,19 +333,22 @@ namespace MKY.IO.Ports
 		{
 			StringBuilder sb = new StringBuilder();
 
-			sb.Append(Name);             // "COM10"
+			sb.Append(Name);                     // "COM10"
 
-			if (appendDescription && (_description != null))
-			{
-				sb.Append(" [");
-				sb.Append(_description); // "COM10 [Serial On USB Port]"
-				sb.Append("]");
-			}
-
-			if (appendInUseText && _isInUse)
+			if (appendDescription && (Description != null))
 			{
 				sb.Append(" ");
-				sb.Append(_inUseText);   // "COM10 [Serial On USB Port] (in use)"
+				sb.Append(DescriptionSeparator); // "COM10 -"
+				sb.Append(" ");
+				sb.Append(Description);          // "COM10 - Serial On USB Port"
+			}
+
+			if (appendInUseText && IsInUse)
+			{
+				sb.Append(" ");
+				sb.Append(InUseSeparator);       // "COM10 - Serial On USB Port -"
+				sb.Append(" ");
+				sb.Append(InUseText);            // "COM10 - Serial On USB Port - (in use)"
 			}
 
 			return (sb.ToString());

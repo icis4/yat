@@ -87,7 +87,7 @@ namespace YAT.Domain
 			if (TryParse(substitution, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException("substitution", substitution, "Invalid substitution"));
+				throw (new ArgumentOutOfRangeException("substitution", substitution, "Invalid substitution."));
 		}
 
 		/// <summary></summary>
