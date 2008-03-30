@@ -11,13 +11,13 @@ namespace YAT.Model.Types
 	public class TextFormat : IEquatable<TextFormat>
 	{
 		private Color _color;
-		private FontStyle _style;
+		private FontStyle _fontStyle;
 
 		/// <summary></summary>
 		public TextFormat()
 		{
 			_color = Color.Black;
-			_style = FontStyle.Regular;
+			_fontStyle = FontStyle.Regular;
 		}
 
 		/// <summary></summary>
@@ -25,7 +25,7 @@ namespace YAT.Model.Types
 		{
 			_color = color;
 
-			_style = FontStyle.Regular;
+			_fontStyle = FontStyle.Regular;
 			Bold = bold;
 			Italic = italic;
 			Underline = underline;
@@ -36,7 +36,7 @@ namespace YAT.Model.Types
 		public TextFormat(TextFormat rhs)
 		{
 			_color = rhs._color;
-			_style = rhs._style;
+			_fontStyle = rhs._fontStyle;
 		}
 
 		#region Properties
@@ -62,23 +62,23 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlElement("FontStyle")]
-		public FontStyle Style
+		public FontStyle FontStyle
 		{
-			get { return (_style); }
-			set { _style = value; }
+			get { return (_fontStyle); }
+			set { _fontStyle = value; }
 		}
 
 		/// <summary></summary>
 		[XmlIgnore]
 		public bool Bold
 		{
-			get { return ((_style & FontStyle.Bold) == FontStyle.Bold); }
+			get { return ((_fontStyle & FontStyle.Bold) == FontStyle.Bold); }
 			set
 			{
 				if (value)
-					_style |= FontStyle.Bold;
+					_fontStyle |= FontStyle.Bold;
 				else
-					_style &= ~FontStyle.Bold;
+					_fontStyle &= ~FontStyle.Bold;
 			}
 		}
 
@@ -86,13 +86,13 @@ namespace YAT.Model.Types
 		[XmlIgnore]
 		public bool Italic
 		{
-			get { return ((_style & FontStyle.Italic) == FontStyle.Italic); }
+			get { return ((_fontStyle & FontStyle.Italic) == FontStyle.Italic); }
 			set
 			{
 				if (value)
-					_style |= FontStyle.Italic;
+					_fontStyle |= FontStyle.Italic;
 				else
-					_style &= ~FontStyle.Italic;
+					_fontStyle &= ~FontStyle.Italic;
 			}
 		}
 
@@ -100,13 +100,13 @@ namespace YAT.Model.Types
 		[XmlIgnore]
 		public bool Underline
 		{
-			get { return ((_style & FontStyle.Underline) == FontStyle.Underline); }
+			get { return ((_fontStyle & FontStyle.Underline) == FontStyle.Underline); }
 			set
 			{
 				if (value)
-					_style |= FontStyle.Underline;
+					_fontStyle |= FontStyle.Underline;
 				else
-					_style &= ~FontStyle.Underline;
+					_fontStyle &= ~FontStyle.Underline;
 			}
 		}
 
@@ -114,13 +114,13 @@ namespace YAT.Model.Types
 		[XmlIgnore]
 		public bool Strikeout
 		{
-			get { return ((_style & FontStyle.Strikeout) == FontStyle.Strikeout); }
+			get { return ((_fontStyle & FontStyle.Strikeout) == FontStyle.Strikeout); }
 			set
 			{
 				if (value)
-					_style |= FontStyle.Strikeout;
+					_fontStyle |= FontStyle.Strikeout;
 				else
-					_style &= ~FontStyle.Strikeout;
+					_fontStyle &= ~FontStyle.Strikeout;
 			}
 		}
 
@@ -149,7 +149,7 @@ namespace YAT.Model.Types
 			{
 				return
 					(
-					_style.Equals(value._style) &&
+					_fontStyle.Equals(value._fontStyle) &&
 					_color.Equals(value._color)
 					);
 			}

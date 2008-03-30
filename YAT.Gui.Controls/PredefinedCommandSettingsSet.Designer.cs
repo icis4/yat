@@ -37,6 +37,7 @@ namespace YAT.Gui.Controls
 			this.textBox_Command = new System.Windows.Forms.TextBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.button_SetFile = new System.Windows.Forms.Button();
+			this.button_Delete = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// pathLabel_FilePath
@@ -95,6 +96,8 @@ namespace YAT.Gui.Controls
 			// 
 			// textBox_Command
 			// 
+			this.textBox_Command.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.textBox_Command.Location = new System.Drawing.Point(126, 0);
 			this.textBox_Command.Name = "textBox_Command";
 			this.textBox_Command.Size = new System.Drawing.Size(313, 20);
@@ -116,10 +119,23 @@ namespace YAT.Gui.Controls
 			this.toolTip.SetToolTip(this.button_SetFile, "Choose File");
 			this.button_SetFile.Click += new System.EventHandler(this.button_SetFile_Click);
 			// 
+			// button_Delete
+			// 
+			this.button_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_Delete.Image = global::YAT.Gui.Controls.Properties.Resources.Image_Delete_16x16;
+			this.button_Delete.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.button_Delete.Location = new System.Drawing.Point(557, 0);
+			this.button_Delete.Name = "button_Delete";
+			this.button_Delete.Size = new System.Drawing.Size(24, 20);
+			this.button_Delete.TabIndex = 7;
+			this.toolTip.SetToolTip(this.button_Delete, "Refresh serial port list");
+			this.button_Delete.Click += new System.EventHandler(this.button_Delete_Click);
+			// 
 			// PredefinedCommandSettingsSet
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.button_Delete);
 			this.Controls.Add(this.textBox_Command);
 			this.Controls.Add(this.pathLabel_FilePath);
 			this.Controls.Add(this.checkBox_IsFile);
@@ -128,7 +144,7 @@ namespace YAT.Gui.Controls
 			this.Controls.Add(this.label_Shortcut);
 			this.Controls.Add(this.textBox_Description);
 			this.Name = "PredefinedCommandSettingsSet";
-			this.Size = new System.Drawing.Size(554, 20);
+			this.Size = new System.Drawing.Size(584, 20);
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.PredefinedCommandSettingsSet_Paint);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -145,5 +161,6 @@ namespace YAT.Gui.Controls
 		private System.Windows.Forms.TextBox textBox_Command;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.Button button_SetFile;
+		private System.Windows.Forms.Button button_Delete;
 	}
 }

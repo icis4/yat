@@ -21,12 +21,8 @@ namespace YAT.Gui.Forms
 		private Model.Settings.FormatSettings _formatSettings;
 		private Model.Settings.FormatSettings _formatSettings_Form;
 
-		private Domain.Settings.CharReplaceSettings _charReplaceSettings;
-		private Domain.Settings.CharReplaceSettings _charReplaceSettings_Form;
-
 		private Controls.Monitor[] _monitors;
 		private Controls.TextFormat[] _textFormats;
-		private Model.Types.TextFormat[] _textFormatSettings;
 
 		private List<Domain.DisplayElement> _examples;
 		private List<Domain.DisplayElement> _exampleComplete;
@@ -38,15 +34,12 @@ namespace YAT.Gui.Forms
 		// Object Lifetime
 		//==========================================================================================
 
-		public FormatSettings(Model.Settings.FormatSettings formatSettings, Domain.Settings.CharReplaceSettings charReplaceSettings)
+		public FormatSettings(Model.Settings.FormatSettings formatSettings)
 		{
 			InitializeComponent();
 
 			_formatSettings = formatSettings;
 			_formatSettings_Form = new Model.Settings.FormatSettings(formatSettings);
-
-			_charReplaceSettings = charReplaceSettings;
-			_charReplaceSettings_Form = new Domain.Settings.CharReplaceSettings(charReplaceSettings);
 
 			InitializeExamples();
 			InitializeControls();
@@ -62,11 +55,6 @@ namespace YAT.Gui.Forms
 		public Model.Settings.FormatSettings FormatSettingsResult
 		{
 			get { return (_formatSettings); }
-		}
-
-		public Domain.Settings.CharReplaceSettings CharReplaceSettingsResult
-		{
-			get { return (_charReplaceSettings); }
 		}
 
 		#endregion
@@ -98,7 +86,7 @@ namespace YAT.Gui.Forms
 		{
 			if (!_isSettingControls)
 			{
-				GetFormat(int.Parse((string)(((Controls.TextFormat)sender).Tag)));
+				GetFormatFromControl(int.Parse((string)(((Controls.TextFormat)sender).Tag)));
 				SetControls();
 			}
 		}
@@ -111,7 +99,6 @@ namespace YAT.Gui.Forms
 		private void button_OK_Click(object sender, EventArgs e)
 		{
 			_formatSettings = _formatSettings_Form;
-			_charReplaceSettings = _charReplaceSettings_Form;
 		}
 
 		private void button_Cancel_Click(object sender, EventArgs e)
@@ -122,8 +109,6 @@ namespace YAT.Gui.Forms
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
 			_formatSettings_Form.SetDefaults();
-			_charReplaceSettings_Form.SetDefaults();
-
 			SetControls();
 		}
 
@@ -148,7 +133,29 @@ namespace YAT.Gui.Forms
 
 			Domain.DisplayRepository exampleComplete = new Domain.DisplayRepository(24);
 
-			exampleComplete.Enqueue(_examples[4]);
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStamp(DateTime.Now));
+			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
+			exampleComplete.Enqueue(new Domain.DisplayElement.TxData(null, "12h"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.Space());
+			exampleComplete.Enqueue(new Domain.DisplayElement.TxControl(null, "<CR>"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.RightMargin());
+			exampleComplete.Enqueue(new Domain.DisplayElement.LineLength(2));
+			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
+
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStamp(DateTime.Now));
+			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
+			exampleComplete.Enqueue(new Domain.DisplayElement.RxData(null, "34h"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.Space());
+			exampleComplete.Enqueue(new Domain.DisplayElement.RxControl(null, "<LF>"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.RightMargin());
+			exampleComplete.Enqueue(new Domain.DisplayElement.LineLength(2));
+			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
+
+			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStamp(DateTime.Now));
+			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
+			exampleComplete.Enqueue(new Domain.DisplayElement.Error("Message"));
+
+			/*exampleComplete.Enqueue(_examples[4]);
 			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
 			exampleComplete.Enqueue(_examples[0]);
 			exampleComplete.Enqueue(new Domain.DisplayElement.Space());
@@ -168,7 +175,7 @@ namespace YAT.Gui.Forms
 
 			exampleComplete.Enqueue(_examples[4]);
 			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
-			exampleComplete.Enqueue(_examples[6]);
+			exampleComplete.Enqueue(_examples[6]);*/
 
 			_exampleComplete = exampleComplete.ToElements();
 		}
@@ -187,22 +194,32 @@ namespace YAT.Gui.Forms
 					textFormat_TimeStamp, textFormat_Length, textFormat_Error,
 				};
 
-			_textFormatSettings = new Model.Types.TextFormat[]
-				{
-					_formatSettings_Form.TxDataFormat, _formatSettings_Form.TxControlFormat, _formatSettings_Form.RxDataFormat, _formatSettings_Form.RxControlFormat,
-					_formatSettings_Form.TimeStampFormat, _formatSettings_Form.LengthFormat, _formatSettings_Form.ErrorFormat,
-				};
-
 			for (int i = 0; i < _monitors.Length; i++)
-				_monitors[i].AddElement(_examples [i]);
+				_monitors[i].AddElement(_examples[i]);
 
 			monitor_Example.AddElements(_exampleComplete);
 		}
 
-		private void GetFormat(int index)
+		private Model.Types.TextFormat GetFormatFromIndex(int index)
 		{
-			_textFormatSettings[index].Style = _textFormats[index].FormatFontStyle;
-			_textFormatSettings[index].Color = _textFormats[index].FormatColor;
+			switch (index)
+			{
+				case 0: return (_formatSettings_Form.TxDataFormat);
+				case 1: return (_formatSettings_Form.TxControlFormat);
+				case 2: return (_formatSettings_Form.RxDataFormat);
+				case 3: return (_formatSettings_Form.RxControlFormat);
+				case 4: return (_formatSettings_Form.TimeStampFormat);
+				case 5: return (_formatSettings_Form.LengthFormat);
+				case 6: return (_formatSettings_Form.ErrorFormat);
+				default: throw (new ArgumentOutOfRangeException("index", index, "There is no format at this index."));
+			}
+		}
+
+		private void GetFormatFromControl(int index)
+		{
+			Model.Types.TextFormat tf = GetFormatFromIndex(index);
+			tf.FontStyle = _textFormats[index].FormatFontStyle;
+			tf.Color     = _textFormats[index].FormatColor;
 		}
 
 		private void SetControls()
@@ -216,9 +233,11 @@ namespace YAT.Gui.Forms
 
 			for (int i = 0; i < _textFormats.Length; i++)
 			{
-				_textFormats[i].FormatFont = _formatSettings_Form.Font;
-				_textFormats[i].FormatFontStyle = _textFormatSettings[i].Style;
-				_textFormats[i].FormatColor = _textFormatSettings[i].Color;
+				_textFormats[i].FormatFontWithoutStyle = _formatSettings_Form.Font;
+
+				Model.Types.TextFormat tf = GetFormatFromIndex(i);
+				_textFormats[i].FormatFontStyle = tf.FontStyle;
+				_textFormats[i].FormatColor     = tf.Color;
 			}
 			                           // clone settings before assigning them to control
 			monitor_Example.FormatSettings = new Model.Settings.FormatSettings(_formatSettings_Form);
@@ -257,26 +276,6 @@ namespace YAT.Gui.Forms
 						);
 					continue;
 				}
-
-				try
-				{
-					RichTextBox rtb = new RichTextBox();
-					rtb.SelectionFont = f;
-					rtb.AppendText("Test");
-					break;
-				}
-				catch (Exception)
-				{
-					result = MessageBox.Show
-						(
-						this,
-						@"Font """ + fd.Font.Name + @""" can not be applied to rich text boxes. Choose a different font.",
-						@"Bad font",
-						MessageBoxButtons.OKCancel,
-						MessageBoxIcon.Exclamation
-						);
-					continue;
-				}
 			}
 			while (result == DialogResult.OK);
 
@@ -285,10 +284,6 @@ namespace YAT.Gui.Forms
 				if ((f.Name != _formatSettings_Form.Font.Name) || (f.Size != _formatSettings_Form.Font.Size))
 				{
 					_formatSettings_Form.Font = f;
-					foreach (Controls.TextFormat tf in _textFormats)
-					{
-						tf.FormatFontWithoutStyle = _formatSettings_Form.Font;
-					}
 					SetControls();
 				}
 			}

@@ -693,7 +693,7 @@ namespace MKY.Utilities.Text
 			if (TryParse(encoding, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException("encoding", encoding, "Invalid encoding"));
+				throw (new ArgumentOutOfRangeException("encoding", encoding, "Invalid encoding."));
 		}
 
 		/// <summary></summary>

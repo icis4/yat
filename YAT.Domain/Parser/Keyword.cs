@@ -89,7 +89,7 @@ namespace YAT.Domain.Parser
 			if (TryParse(keyword, out result))
 				return (result);
 			else
-				throw (new ArgumentOutOfRangeException("keyword", keyword, "Invalid keyword"));
+				throw (new ArgumentOutOfRangeException("keyword", keyword, "Invalid keyword."));
 		}
 
 		/// <summary></summary>

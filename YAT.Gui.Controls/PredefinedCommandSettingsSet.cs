@@ -240,6 +240,13 @@ namespace YAT.Gui.Controls
 			ShowOpenFileDialog();
 		}
 
+		private void button_Delete_Click(object sender, EventArgs e)
+		{
+			_command.Clear();
+			SetControls();
+			OnCommandChanged(new EventArgs());
+		}
+
 		#endregion
 
 		#region Private Methods

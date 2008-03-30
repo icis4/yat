@@ -1562,12 +1562,11 @@ namespace YAT.Gui.Forms
 
 		private void ShowFormatSettings()
 		{
-			Gui.Forms.FormatSettings f = new Gui.Forms.FormatSettings(_settingsRoot.Format, _settingsRoot.CharReplace);
+			Gui.Forms.FormatSettings f = new Gui.Forms.FormatSettings(_settingsRoot.Format);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
 				_settingsRoot.Format = f.FormatSettingsResult;
-				_settingsRoot.CharReplace = f.CharReplaceSettingsResult;
 			}
 		}
 

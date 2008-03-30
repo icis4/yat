@@ -71,32 +71,32 @@ namespace YAT.Model.Utilities
 
 			if (element is Domain.DisplayElement.TxData)
 			{
-				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.TxDataFormat.Style);
+				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.TxDataFormat.FontStyle);
 				rtb.SelectionColor = formatSettings.TxDataFormat.Color;
 			}
 			else if (element is Domain.DisplayElement.TxControl)
 			{
-				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.TxControlFormat.Style);
+				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.TxControlFormat.FontStyle);
 				rtb.SelectionColor = formatSettings.TxControlFormat.Color;
 			}
 			else if (element is Domain.DisplayElement.RxData)
 			{
-				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.RxDataFormat.Style);
+				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.RxDataFormat.FontStyle);
 				rtb.SelectionColor = formatSettings.RxDataFormat.Color;
 			}
 			else if (element is Domain.DisplayElement.RxControl)
 			{
-				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.RxControlFormat.Style);
+				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.RxControlFormat.FontStyle);
 				rtb.SelectionColor = formatSettings.RxControlFormat.Color;
 			}
 			else if (element is Domain.DisplayElement.TimeStamp)
 			{
-				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.TimeStampFormat.Style);
+				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.TimeStampFormat.FontStyle);
 				rtb.SelectionColor = formatSettings.TimeStampFormat.Color;
 			}
 			else if (element is Domain.DisplayElement.LineLength)
 			{
-				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.LengthFormat.Style);
+				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.LengthFormat.FontStyle);
 				rtb.SelectionColor = formatSettings.LengthFormat.Color;
 			}
 			else if ((element is Domain.DisplayElement.LeftMargin) ||
@@ -104,12 +104,12 @@ namespace YAT.Model.Utilities
 					 (element is Domain.DisplayElement.RightMargin) ||
 					 (element is Domain.DisplayElement.LineBreak))
 			{
-				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.WhiteSpacesFormat.Style);
+				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.WhiteSpacesFormat.FontStyle);
 				rtb.SelectionColor = formatSettings.WhiteSpacesFormat.Color;
 			}
 			else if (element is Domain.DisplayElement.Error)
 			{
-				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.ErrorFormat.Style);
+				rtb.SelectionFont = new Font(fontName, fontSize, formatSettings.ErrorFormat.FontStyle);
 				rtb.SelectionColor = formatSettings.ErrorFormat.Color;
 			}
 			else

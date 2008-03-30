@@ -60,6 +60,27 @@ namespace YAT.Gui.Controls.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Image_Delete_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Image_Delete_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Image_Delete_16x16_Disabled {
+            get {
+                object obj = ResourceManager.GetObject("Image_Delete_16x16_Disabled", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Image_Delete_16x16_Hot {
+            get {
+                object obj = ResourceManager.GetObject("Image_Delete_16x16_Hot", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Image_Monitor_Bidir_28x28 {
             get {
                 object obj = ResourceManager.GetObject("Image_Monitor_Bidir_28x28", resourceCulture);

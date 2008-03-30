@@ -122,54 +122,54 @@ namespace YAT.Gui.Utilities
 			SolidBrush brush;
 			if (element is Domain.DisplayElement.TxData)
 			{
-				fontStyle = settings.TxDataFormat.Style;
+				fontStyle = settings.TxDataFormat.FontStyle;
 				fontColor = settings.TxDataFormat.Color;
-				brush = SetBrush(_txDataBrush, fontColor);
+				brush = SetBrush(ref _txDataBrush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.TxControl)
 			{
-				fontStyle = settings.TxControlFormat.Style;
+				fontStyle = settings.TxControlFormat.FontStyle;
 				fontColor = settings.TxControlFormat.Color;
-				brush = SetBrush(_txControlBrush, fontColor);
+				brush = SetBrush(ref _txControlBrush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.RxData)
 			{
-				fontStyle = settings.RxDataFormat.Style;
+				fontStyle = settings.RxDataFormat.FontStyle;
 				fontColor = settings.RxDataFormat.Color;
-				brush = SetBrush(_rxDataBrush, fontColor);
+				brush = SetBrush(ref _rxDataBrush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.RxControl)
 			{
-				fontStyle = settings.RxControlFormat.Style;
+				fontStyle = settings.RxControlFormat.FontStyle;
 				fontColor = settings.RxControlFormat.Color;
-				brush = SetBrush(_rxControlBrush, fontColor);
+				brush = SetBrush(ref _rxControlBrush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.TimeStamp)
 			{
-				fontStyle = settings.TimeStampFormat.Style;
+				fontStyle = settings.TimeStampFormat.FontStyle;
 				fontColor = settings.TimeStampFormat.Color;
-				brush = SetBrush(_timestampBrush, fontColor);
+				brush = SetBrush(ref _timestampBrush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.LineLength)
 			{
-				fontStyle = settings.LengthFormat.Style;
+				fontStyle = settings.LengthFormat.FontStyle;
 				fontColor = settings.LengthFormat.Color;
-				brush = SetBrush(_lineLengthBrush, fontColor);
+				brush = SetBrush(ref _lineLengthBrush, fontColor);
 			}
 			else if ((element is Domain.DisplayElement.LeftMargin) ||
 					 (element is Domain.DisplayElement.Space) ||
 					 (element is Domain.DisplayElement.RightMargin) ||
 					 (element is Domain.DisplayElement.LineBreak))
 			{
-				fontStyle = settings.WhiteSpacesFormat.Style;
+				fontStyle = settings.WhiteSpacesFormat.FontStyle;
 				fontColor = settings.WhiteSpacesFormat.Color;
-				brush = SetBrush(_whiteSpacesBrush, fontColor);
+				brush = SetBrush(ref _whiteSpacesBrush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.Error)
 			{
-				fontStyle = settings.ErrorFormat.Style;
+				fontStyle = settings.ErrorFormat.FontStyle;
 				fontColor = settings.ErrorFormat.Color;
-				brush = SetBrush(_errorBrush, fontColor);
+				brush = SetBrush(ref _errorBrush, fontColor);
 			}
 			else
 			{
@@ -178,30 +178,20 @@ namespace YAT.Gui.Utilities
 			return (brush);
 		}
 
-		private static SolidBrush SetBrush(SolidBrush brush, Color color)
+		private static SolidBrush SetBrush(ref SolidBrush brush, Color color)
 		{
 			// create the brush using the font color
 			if (brush == null)
 			{
 				brush = new SolidBrush(color);
 			}
-			else if (brush.Color != color)
+			else if (brush.Color.ToArgb() != color.ToArgb())
 			{
-				// the font color has changed, so dispose of the cached brush and create a new one
+				// the font color has changed, dispose of the cached brush and create a new one
 				brush.Dispose();
 				brush = new SolidBrush(color);
 			}
 			return (brush);
-		}
-
-		private static string FinalizeText(Domain.DisplayElement element, Domain.Settings.CharReplaceSettings settings)
-		{
-			if (element is Domain.DisplayElement.Space)
-			{
-				if (settings.ReplaceSpace)
-					return (Domain.Settings.CharReplaceSettings.ReplaceSpaceString);
-			}
-			return (element.Text);
 		}
 	}
 }
