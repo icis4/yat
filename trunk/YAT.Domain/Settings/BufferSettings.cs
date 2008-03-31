@@ -10,7 +10,7 @@ namespace YAT.Domain.Settings
 	public class BufferSettings : MKY.Utilities.Settings.Settings, IEquatable<BufferSettings>
 	{
 		/// <summary></summary>
-		public const int BufferSizeDefault = 8192;
+		public const int BufferSizeDefault = 65536;
 
 		private int _txBufferSize;
 		private int _rxBufferSize;

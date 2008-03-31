@@ -22,7 +22,7 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const bool ShowCountersDefault = false;
 		/// <summary></summary>
-		public const int MaximalLineCountDefault = 100;
+		public const int MaximalLineCountDefault = 1000;
 		/// <summary></summary>
 		public const bool DirectionLineBreakEnabledDefault = true;
 

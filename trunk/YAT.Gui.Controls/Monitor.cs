@@ -52,7 +52,7 @@ namespace YAT.Gui.Controls
 		private const double _ImageOpacityIncrement = +0.10; // +10%
 		private const double _ImageOpacityDecrement = -0.10; // -10%
 
-		private const int _MaximalLineCountDefault = 100;
+		private const int _MaximalLineCountDefault = Domain.Settings.DisplaySettings.MaximalLineCountDefault;
 
 		private const bool _ShowTimeStatusDefault  = false;
 		private const bool _ShowCountStatusDefault = false;

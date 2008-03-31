@@ -345,7 +345,7 @@ namespace YAT.Gui.Forms
 					_predefinedCommandSettingsSets[i].Command = _settings_Form.Pages[SelectedPageIndex].Commands[i];
 
 				for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaximumCommandsPerPage; i++)
-					_predefinedCommandSettingsSets[i].Command = null;
+					_predefinedCommandSettingsSets[i].Command = new Model.Types.Command();
 
 				button_ClearPage.Enabled = (commandCount > 0);
 			}

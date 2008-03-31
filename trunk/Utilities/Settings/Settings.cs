@@ -22,7 +22,11 @@ namespace MKY.Utilities.Settings
 	}
 
 	/// <summary></summary>
-	public abstract class Settings : IEquatable<Settings>
+	/// <remarks>
+	/// IEquatable is not implemented because this abstract class cannot check
+	/// for value equality.
+	/// </remarks>
+	public abstract class Settings
 	{
 		private SettingsType _settingsType = SettingsType.Explicit;
 
@@ -165,30 +169,36 @@ namespace MKY.Utilities.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
+		/// <remarks>
+		/// IEquatable and "public bool Equals(Settings value)"  is not implemented
+		/// because this abstract class cannot check for value equality.
+		/// </remarks>
 		public override bool Equals(object obj)
 		{
 			if (obj is Settings)
-				return (Equals((Settings)obj));
-
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(Settings value)
-		{
-			// ensure that object.operator!=() is called
-			if ((object)value != null)
 			{
-				for (int i = 0; (i < _nodes.Count) && (i < value._nodes.Count); i++)
+				Settings value = (Settings)obj;
+
+				// ensure that object.operator!=() is called
+				if ((object)value != null)
 				{
-					// ensure that overridden object.Equals() is called
-					if (!_nodes[i].Equals((object)value._nodes[i]))
-						return (false);
+					if (this.GetType() == value.GetType())
+					{
+						// compare all nodes, settings values have already been compared by inheriting class
+						if (_nodes.Count == value._nodes.Count)
+						{
+							for (int i = 0; i < _nodes.Count; i++)
+							{
+								if (!_nodes[i].Equals(value._nodes[i]))
+									return (false);
+							}
+							return (true);
+						}
+					}
 				}
-				return (true);
+				return (false);
 			}
+
 			return (false);
 		}
 

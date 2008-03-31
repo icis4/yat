@@ -298,29 +298,33 @@ namespace YAT.Domain
 					// if decoding array can be decoded into something useful, decode it
 					if (charCount > 0)
 					{
-						_rxDecodingStream.Clear();
-
 						// char count must be 1, otherwise something went wrong
 						char[] chars = new char[1];
 						if (e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true) == 1)
 						{
+							// ensure that 'unknown' characters 0xFFFD are not decoded yet
 							int code = (int)chars[0];
-							if ((code < 0x20) || (code == 0x7F)) // control chars
+							if (code != 0xFFFD)
 							{
-								return (base.ByteToElement(b, d, r));
-							}
-							else if (b == 0x20) // space
-							{
-								return (base.ByteToElement(b, d, r));
-							}
-							else
-							{
-								StringBuilder sb = new StringBuilder();
-								sb.Append(chars, 0, charCount);
-								if (d == SerialDirection.Tx)
-									return (new DisplayElement.TxData(new ElementOrigin(b, d), sb.ToString()));
+								_rxDecodingStream.Clear();
+
+								if ((code < 0x20) || (code == 0x7F)) // control chars
+								{
+									return (base.ByteToElement(b, d, r));
+								}
+								else if (b == 0x20) // space
+								{
+									return (base.ByteToElement(b, d, r));
+								}
 								else
-									return (new DisplayElement.RxData(new ElementOrigin(b, d), sb.ToString()));
+								{
+									StringBuilder sb = new StringBuilder();
+									sb.Append(chars, 0, charCount);
+									if (d == SerialDirection.Tx)
+										return (new DisplayElement.TxData(new ElementOrigin(b, d), sb.ToString()));
+									else
+										return (new DisplayElement.RxData(new ElementOrigin(b, d), sb.ToString()));
+								}
 							}
 						}
 					}

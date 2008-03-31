@@ -332,6 +332,7 @@ namespace YAT.Gui.Forms
 			checkBox_ReplaceControlCharacters.Checked = replaceControlChars;
 			comboBox_ControlCharacterRadix.Enabled = replaceControlChars;
 			comboBox_ControlCharacterRadix.SelectedItem = (Domain.XControlCharRadix)_settings_Form.CharReplace.ControlCharRadix;
+			checkBox_ReplaceSpace.Checked = _settings_Form.CharReplace.ReplaceSpace;
 
 			// communication
 			comboBox_Endianess.SelectedItem = (Domain.XEndianess)_settings_Form.IO.Endianess;
