@@ -322,7 +322,7 @@ namespace YAT.Gui.Controls
 				if (_command.IsCommand)
                     comboBox_Command.Text = _command.SingleLineCommand;
 				else
-					comboBox_Command.Text = Command.EmptyCommandText;
+					comboBox_Command.Text = Command.EnterCommandText;
 			}
 			else if (_commandEditState == TextEditState.HasFocusAndIsValidatedAndSendRequested)
 			{   // needed when command is modified (e.g. cleared) after send

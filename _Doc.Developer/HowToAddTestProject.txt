@@ -9,6 +9,7 @@
 4. Project > Properties
    Modify assembly name if needed
    Modify default namespace if needed
+   Tick Build > Advanced > Check for under/overflow
 
 5. Open "AssemblyInfo"
    Add "using System;"

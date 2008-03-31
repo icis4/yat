@@ -277,6 +277,9 @@ namespace YAT.Gui.Controls
 				pathLabel_FilePath.Visible = false;
 				pathLabel_FilePath.Text = "";
 				checkBox_IsFile.Checked = false;
+
+				// delete
+				button_Delete.Enabled = true;
 			}
 			else if (_command.IsFilePath)
 			{
@@ -297,13 +300,16 @@ namespace YAT.Gui.Controls
 				else
 					pathLabel_FilePath.Text = Command.UndefinedFilePathText;
 				checkBox_IsFile.Checked = true;
+
+				// delete
+				button_Delete.Enabled = true;
 			}
 			else
 			{
 				// command
 				textBox_Command.Visible = true;
 				if (_commandEditState == TextEditState.Inactive)
-					textBox_Command.Text = Command.EmptyCommandText;
+					textBox_Command.Text = Command.EnterCommandText;
 
 				// buttons
                 button_SetMultiLineCommand.Visible = true;
@@ -315,6 +321,9 @@ namespace YAT.Gui.Controls
 				pathLabel_FilePath.Visible = false;
 				pathLabel_FilePath.Text = "";
 				checkBox_IsFile.Checked = false;
+
+				// delete
+				button_Delete.Enabled = false;
 			}
 
 			_isSettingControls = false;

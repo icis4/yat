@@ -346,9 +346,9 @@ namespace YAT.Domain
 
 		private void ApplyBufferSettings()
 		{
-			_txRepository.Capacity = _bufferSettings.TxBufferSize;
+			_txRepository.Capacity    = _bufferSettings.TxBufferSize;
 			_bidirRepository.Capacity = _bufferSettings.BidirBufferSize;
-			_rxRepository.Capacity = _bufferSettings.RxBufferSize;
+			_rxRepository.Capacity    = _bufferSettings.RxBufferSize;
 		}
 
 		private void AttachIOSettings(Settings.IOSettings ioSettings)

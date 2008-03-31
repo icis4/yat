@@ -114,7 +114,7 @@ namespace YAT.Gui.Controls
 				{
 					if (_commands[i] != null)
 					{
-						if (!_commands[i].IsEmpty)
+						if (_commands[i].IsDefined)
 							return (_commands[i]);
 					}
 				}
@@ -199,7 +199,7 @@ namespace YAT.Gui.Controls
 
 			for (int i = 0; i < commandCount; i++)
 			{
-				bool isDefined = ((_commands[i] != null) && !_commands[i].IsEmpty);
+				bool isDefined = ((_commands[i] != null) && _commands[i].IsDefined);
 				bool isValid = (isDefined && _terminalIsOpen && _commands[i].IsValid);
 
 				if (isDefined)
@@ -209,13 +209,13 @@ namespace YAT.Gui.Controls
 				}
 				else
 				{
-					_buttons_commands[i].Text = Command.UndefinedCommandText;
+					_buttons_commands[i].Text = Command.DefineCommandText;
 					_buttons_commands[i].Enabled = true;
 				}
 			}
 			for (int i = commandCount; i < PredefinedCommandSettings.MaximumCommandsPerPage; i++)
 			{
-				_buttons_commands[i].Text = Command.UndefinedCommandText;
+				_buttons_commands[i].Text = Command.DefineCommandText;
 				_buttons_commands[i].Enabled = true;
 			}
 		}
@@ -227,7 +227,7 @@ namespace YAT.Gui.Controls
 				(_commands != null) &&
 				(_commands.Count >= command) &&
 				(_commands[command - 1] != null) &&
-				(!_commands[command - 1].IsEmpty)
+				(_commands[command - 1].IsDefined)
 				);
 
 			if (isDefined)

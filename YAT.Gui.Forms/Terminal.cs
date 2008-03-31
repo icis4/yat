@@ -1506,8 +1506,6 @@ namespace YAT.Gui.Forms
 
 		private void SetMonitorContents()
 		{
-			ReloadMonitors();
-
 			bool showConnectTime = _settingsRoot.Display.ShowConnectTime;
 			monitor_Tx.ShowTimeStatus    = showConnectTime;
 			monitor_Bidir.ShowTimeStatus = showConnectTime;
@@ -1517,6 +1515,13 @@ namespace YAT.Gui.Forms
 			monitor_Tx.ShowCountStatus    = showCounters;
 			monitor_Bidir.ShowCountStatus = showCounters;
 			monitor_Rx.ShowCountStatus    = showCounters;
+
+			monitor_Tx.MaximalLineCount    = _settingsRoot.Display.TxMaximalLineCount;
+			monitor_Bidir.MaximalLineCount = _settingsRoot.Display.BidirMaximalLineCount;
+			monitor_Rx.MaximalLineCount    = _settingsRoot.Display.RxMaximalLineCount;
+
+			// reload from repositories
+			ReloadMonitors();
 		}
 
 		private void ReloadMonitors()
@@ -1729,7 +1734,7 @@ namespace YAT.Gui.Forms
 
 			for (int i = 0; i < commandCount; i++)
 			{
-				bool isDefined = ((commands[i] != null) && !commands[i].IsEmpty);
+				bool isDefined = ((commands[i] != null) && commands[i].IsDefined);
 				bool isValid = (isDefined && _terminal.IsOpen && commands[i].IsValid);
 
 				if (isDefined)
@@ -1739,13 +1744,13 @@ namespace YAT.Gui.Forms
 				}
 				else
 				{
-					_menuItems_predefined[i].Text = Model.Types.Command.UndefinedCommandText;
+					_menuItems_predefined[i].Text = Model.Types.Command.DefineCommandText;
 					_menuItems_predefined[i].Enabled = true;
 				}
 			}
 			for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaximumCommandsPerPage; i++)
 			{
-				_menuItems_predefined[i].Text = Model.Types.Command.UndefinedCommandText;
+				_menuItems_predefined[i].Text = Model.Types.Command.DefineCommandText;
 				_menuItems_predefined[i].Enabled = true;
 			}
 		}
@@ -1766,7 +1771,7 @@ namespace YAT.Gui.Forms
 						(commands != null) &&
 						(commands.Count >= command) &&
 						(commands[command - 1] != null) &&
-						(!commands[command - 1].IsEmpty)
+						(commands[command - 1].IsDefined)
 						);
 				}
                 if (isDefined)
