@@ -11,7 +11,7 @@ Note:	The whole release process takes about 4 hours
 	               to keep SettingsFilesProvider and FileVersionsTest untouched
 	               e.g. replace "1.99.18 by "1.99.19
 	> Set product name in "YAT.Setup"
-	> Set product versions in "YAT.Setup"
+	> Set product version in "YAT.Setup"
 
 
 2.	Set installation version if not already done
@@ -79,6 +79,7 @@ Note:	The whole release process takes about 4 hours
 13.	Send e-mail to the YAT mailing list
 	-----------------------------------
 	> "y-a-terminal-users@lists.sourceforge.net"
+	> Save e-mail in offline archive "\Distribution"
 
 
 14.	Close feature requests and bugs that are covered by release
@@ -102,3 +103,4 @@ Note:	The whole release process takes about 4 hours
 
 17.	Immediately increment product name and versions
 	-----------------------------------------------
+	> Commit modifications to the subversion repository
