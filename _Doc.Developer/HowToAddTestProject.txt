@@ -9,6 +9,7 @@
 4. Project > Properties
    Modify assembly name if needed
    Modify default namespace if needed
+   Select all configurations
    Tick Build > Advanced > Check for under/overflow
 
 5. Open "AssemblyInfo"
