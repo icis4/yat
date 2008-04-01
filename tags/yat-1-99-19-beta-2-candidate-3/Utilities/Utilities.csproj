@@ -1,0 +1,98 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F489B948-95CF-49FE-B9AA-A51654F5688B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MKY.Utilities</RootNamespace>
+    <AssemblyName>MKY.Utilities</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Properties\Utilities.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\MKY.Utilities.xml</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\MKY.Utilities.xml</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Diagnostics\AnyWriter.cs" />
+    <Compile Include="Diagnostics\AnyWriterWrapper.cs" />
+    <Compile Include="Diagnostics\ConsoleWrapper.cs" />
+    <Compile Include="Diagnostics\DebugWrapper.cs" />
+    <Compile Include="Diagnostics\DiagnosticsWriterOutput.cs" />
+    <Compile Include="Diagnostics\IDiagnosticsWriter.cs" />
+    <Compile Include="Diagnostics\TraceWrapper.cs" />
+    <Compile Include="Diagnostics\XConsole.cs" />
+    <Compile Include="Diagnostics\XDebug.cs" />
+    <Compile Include="Diagnostics\XTrace.cs" />
+    <Compile Include="Drawing\XDrawing.cs" />
+    <Compile Include="Guid\GuidList.cs" />
+    <Compile Include="Guid\IGuidProvider.cs" />
+    <Compile Include="Guid\XGuid.cs" />
+    <Compile Include="Recent\RecentItem.cs" />
+    <Compile Include="Recent\RecentItemCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Settings\ApplicationSettingsHandler.cs" />
+    <Compile Include="Settings\DocumentSettingsHandler.cs" />
+    <Compile Include="Event\EventHelper.cs" />
+    <Compile Include="Generic\VarianceWorkaround.cs" />
+    <Compile Include="IO\LogFile.cs" />
+    <Compile Include="IO\XFile.cs" />
+    <Compile Include="IO\XPath.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\Events.cs" />
+    <Compile Include="Settings\Settings.cs" />
+    <Compile Include="Text\XEncoding.cs" />
+    <Compile Include="Time\Chronometer.cs">
+    </Compile>
+    <Compile Include="Types\XArray.cs" />
+    <Compile Include="Types\XAscii.cs" />
+    <Compile Include="Types\XByte.cs" />
+    <Compile Include="Types\XDecimal.cs" />
+    <Compile Include="Types\XDouble.cs" />
+    <Compile Include="Types\XEnum.cs" />
+    <Compile Include="Types\XInt32.cs" />
+    <Compile Include="Types\XString.cs" />
+    <Compile Include="Net\Browser.cs" />
+    <Compile Include="Types\XUInt64.cs" />
+    <Compile Include="Xml\TolerantXmlSerializer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\Utilities.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

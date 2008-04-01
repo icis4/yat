@@ -1,0 +1,104 @@
+
+Note:	The whole release process takes about 4 hours
+
+
+1.	Set versions if not already done
+	--------------------------------
+	> Set product name post fix in
+	  "YAT.Utilities.ApplicationInfo.ProductNamePostFix" and
+	> Set product versions in all assembly infos
+	  > Attention: Ensure to replace version number including leading quote
+	               to keep SettingsFilesProvider and FileVersionsTest untouched
+	               e.g. replace "1.99.18 by "1.99.19
+	> Set product name in "YAT.Setup"
+	> Set product versions in "YAT.Setup"
+
+
+2.	Set installation version if not already done
+	--------------------------------------------
+	> Set product name in "YAT.Setup"
+	> Set product version in "YAT.Setup"
+
+
+3.	Update and add settings archive
+	-------------------------------
+	> Add new settings set to "_Settings"
+	> Run YAT and save settings
+	> Diff and verify the new settings
+	> Add new settings to "YAT.Settings.Test.SettingsFilesProvider"
+	> Add new settings to "YAT.Settings.Test.FileVersionsTest"
+
+
+4.	Run automated tests
+	-------------------
+	> Use NUnit
+
+
+5.	Run manual tests
+	----------------
+	> According to manual test cases
+
+
+6.	Build YAT
+	---------
+	> Use "Build > Batch Build" in Visual Studio
+	  > Select "Release" configuration
+	  > "Build"
+
+
+7.	Close Visual Studio
+	-------------------
+	> Needed to ensure that YAT doesn't detect already running "YAT.vshost.exe" on startup
+
+
+8.	Install YAT
+	-----------
+
+
+9.	Run manual after-installation tests
+	-----------------------------------
+	> According to manual after-installation test cases
+
+
+10.	Pack YAT
+	--------
+	> Add a new directory to the offline archive "\YAT\Releases and Checkpoints"
+	> Update "\Distribution\Release" and "\Distribution\Release With Redistributable"
+	> Update the two according .zip files
+
+
+11.	Write release notes
+	-------------------
+
+
+12.	Upload YAT
+	----------
+	> According to "HowToUploadDistributionToSourcForge.txt"
+
+
+13.	Send e-mail to the YAT mailing list
+	-----------------------------------
+	> "y-a-terminal-users@lists.sourceforge.net"
+
+
+14.	Close feature requests and bugs that are covered by release
+	-----------------------------------------------------------
+
+
+15.	Commit and tag YAT
+	------------------
+	> Commit any modifications to the subversion repository
+	> Tag/checkpoint the project, e.g.
+	  > "/tags/yat-1-99-18-beta-2-candidate-2"
+	  > "YAT 2.0 Beta 2 Candidate 2 Version 1.99.18"
+
+
+16.	Archive YAT
+	-----------
+	> Copy the working copy to "\YAT\Releases and Checkpoints\Working Copy"
+	> Clean the copy using "\_Scripts\CleanAll.bat"
+	> Pack the copy into a properly named zip file
+
+
+17.	Immediately increment product name and versions
+	-----------------------------------------------
