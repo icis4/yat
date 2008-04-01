@@ -29,14 +29,16 @@
 	> "Add"
 
 
-5.	Edit files
-	----------
+5.	Edit each file
+	--------------
 	> Set processor platform
 	> Set file type
+	> "Update/Refresh"
 
 
 6.	Check release and release notes
 	-------------------------------
+	> Clear browser cache
 	> Download release and verify contents
 	> Browse release notes
 

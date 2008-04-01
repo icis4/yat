@@ -51,7 +51,6 @@ namespace YAT.Model.Utilities
 			foreach (List<Domain.DisplayElement> line in lines)
 			{
 				RtfWriter.AppendDisplayElements(rtb, line, formatSettings);
-				RtfWriter.AppendDisplayElement(rtb, new Domain.DisplayElement.LineBreak(), formatSettings);
 			}
 			return (rtb);
 		}
@@ -116,7 +115,12 @@ namespace YAT.Model.Utilities
 			{
 				throw (new NotImplementedException("Unknown DisplayElement"));
 			}
-			rtb.AppendText(element.Text);
+
+			// handle line break according to current system
+			if (element is Domain.DisplayElement.LineBreak)
+				rtb.AppendText(Environment.NewLine);
+			else
+				rtb.AppendText(element.Text);
 		}
 	}
 
