@@ -14,8 +14,8 @@ Note:	The whole release process takes about 4 hours
 	> Set product versions in "YAT.Setup"
 
 
-2.	Set installation version
-	------------------------
+2.	Set installation version if not already done
+	--------------------------------------------
 	> Set product name in "YAT.Setup"
 	> Set product version in "YAT.Setup"
 
@@ -23,8 +23,7 @@ Note:	The whole release process takes about 4 hours
 3.	Update and add settings archive
 	-------------------------------
 	> Add new settings set to "_Settings"
-	> Copy last settings set into the new settins
-	> Run YAT with the old settings and save them with the new version
+	> Run YAT and save settings
 	> Diff and verify the new settings
 	> Add new settings to "YAT.Settings.Test.SettingsFilesProvider"
 	> Add new settings to "YAT.Settings.Test.FileVersionsTest"

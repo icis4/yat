@@ -296,13 +296,13 @@ namespace YAT.Domain
 					int charCount = e.GetCharCount(decodingArray);
 
 					// if decoding array can be decoded into something useful, decode it
-					if (charCount > 0)
+					if (charCount == 1)
 					{
 						// char count must be 1, otherwise something went wrong
-						char[] chars = new char[1];
+						char[] chars = new char[charCount];
 						if (e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true) == 1)
 						{
-							// ensure that 'unknown' characters 0xFFFD are not decoded yet
+							// ensure that 'unknown' character 0xFFFD is not decoded yet
 							int code = (int)chars[0];
 							if (code != 0xFFFD)
 							{
@@ -326,7 +326,16 @@ namespace YAT.Domain
 										return (new DisplayElement.RxData(new ElementOrigin(b, d), sb.ToString()));
 								}
 							}
+							else
+							{
+								// 'unknown' character 0xFFFD, do not reset stream
+							}
 						}
+					}
+					else
+					{
+						// nothing useful to decode into, reset stream
+						_rxDecodingStream.Clear();
 					}
 
 					// nothing to decode (yet)

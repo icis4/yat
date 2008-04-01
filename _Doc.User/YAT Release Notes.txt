@@ -49,6 +49,7 @@ Release 2.0.0 :: 2008-??-??
   > Split into Model/View/Controller
 - Use of serial port component of .NET 2.0
   > Serial port component "Charon.Communcations" removed
+- Serial COM ports are now labelled, e.g. "COM2 - Serial On USB Port"
 - TCP/IP and UDP/IP support added
 - RS-485 support added
 - Baud rates above 115k added
