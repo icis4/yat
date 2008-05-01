@@ -1036,7 +1036,6 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_TerminalMenu_File.Name = "toolStripMenuItem_TerminalMenu_File";
 			this.toolStripMenuItem_TerminalMenu_File.Size = new System.Drawing.Size(35, 20);
 			this.toolStripMenuItem_TerminalMenu_File.Text = "&File";
-			this.toolStripMenuItem_TerminalMenu_File.DropDownOpening += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_File_DropDownOpening);
 			// 
 			// toolStripMenuItem_TerminalMenu_File_Close
 			// 

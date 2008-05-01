@@ -45,7 +45,7 @@ namespace YAT.Gui.Forms
 			this.button_Close.Location = new System.Drawing.Point(282, 270);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
-			this.button_Close.TabIndex = 1;
+			this.button_Close.TabIndex = 0;
 			this.button_Close.Text = "Close";
 			this.button_Close.Click += new System.EventHandler(this.button_Close_Click);
 			// 
@@ -59,7 +59,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_Instructions.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Instructions.Name = "groupBox_Instructions";
 			this.groupBox_Instructions.Size = new System.Drawing.Size(345, 246);
-			this.groupBox_Instructions.TabIndex = 0;
+			this.groupBox_Instructions.TabIndex = 1;
 			this.groupBox_Instructions.TabStop = false;
 			// 
 			// linkLabel_Link
@@ -80,7 +80,7 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Instructions.Location = new System.Drawing.Point(6, 148);
 			this.linkLabel_Instructions.Name = "linkLabel_Instructions";
 			this.linkLabel_Instructions.Size = new System.Drawing.Size(265, 78);
-			this.linkLabel_Instructions.TabIndex = 2;
+			this.linkLabel_Instructions.TabIndex = 3;
 			this.linkLabel_Instructions.Text = "1. Click on \"Submit New\"\r\n2. Select a \"Category\"\r\n3. Select a \"Group\", i.e. the Y" +
 				"AT version you are using\r\n4. Fill in \"Summary\"\r\n5. Fill in \"Detailed Description" +
 				"\"\r\n6. Click on \"SUBMIT\"";
