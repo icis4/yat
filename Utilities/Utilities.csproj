@@ -82,7 +82,7 @@
     <Compile Include="Types\XString.cs" />
     <Compile Include="Net\Browser.cs" />
     <Compile Include="Types\XUInt64.cs" />
-    <Compile Include="Windows\XForm.cs" />
+    <Compile Include="Windows.Forms\XForm.cs" />
     <Compile Include="Xml\TolerantXmlSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
