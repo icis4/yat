@@ -9,6 +9,7 @@ using System.IO;
 
 using MKY.Utilities.IO;
 using MKY.Utilities.Settings;
+using MKY.Utilities.Windows.Forms;
 
 using YAT.Settings;
 using YAT.Settings.Application;
@@ -31,11 +32,9 @@ namespace YAT.Gui.Forms
 
 		// startup
 		private bool _isStartingUp = true;
+		// not needed yet: private bool _isSettingControls = false;
 		private bool _isClosingFromForm = false;
 		private bool _isClosingFromModel = false;
-
-		// recent files
-		private List<ToolStripMenuItem> _menuItems_recents;
 
 		// model
 		private Model.Main _main;
@@ -78,7 +77,7 @@ namespace YAT.Gui.Forms
 
 		private void Initialize(Model.Main main)
 		{
-			InitializeRecents();
+			InitializeControls();
 
 			// link and attach to main model
 			_main = main;
@@ -87,7 +86,8 @@ namespace YAT.Gui.Forms
 			Text = _main.UserName;
 
 			ApplyWindowSettingsAccordingToStartup();
-			SetToolControls();
+
+			SetControls();
 		}
 
 		#endregion
@@ -145,7 +145,7 @@ namespace YAT.Gui.Forms
 				_workspace.ActivateTerminal(((Terminal)ActiveMdiChild).UnderlyingTerminal);
 				SetTimedStatus(Status.ChildActivated);
 			}
-			SetToolControls();
+			SetChildControls();
 		}
 
 		private void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -175,15 +175,41 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Main Menu > File
 		//------------------------------------------------------------------------------------------
 
-		private void toolStripMenuItem_MainMenu_File_DropDownOpening(object sender, EventArgs e)
+		/// <remarks>
+		/// Must be called each time MDI child status changes.
+		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void toolStripMenuItem_MainMenu_File_SetChildMenuItems()
 		{
+			// not needed yet: _isSettingControls = true;
+
 			bool childIsReady = (ActiveMdiChild != null);
 			toolStripMenuItem_MainMenu_File_CloseAll.Enabled = childIsReady;
 			toolStripMenuItem_MainMenu_File_SaveAll.Enabled = childIsReady;
 
+			// not needed yet: _isSettingControls = false;
+		}
+
+		/// <remarks>
+		/// Must be called each time recent status changes.
+		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void toolStripMenuItem_MainMenu_File_SetRecentMenuItems()
+		{
 			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll();
+
+			// not needed yet: _isSettingControls = true;
+
 			bool recentsAreReady = (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count > 0);
 			toolStripMenuItem_MainMenu_File_Recent.Enabled = recentsAreReady;
+
+			// not needed yet: _isSettingControls = false;
+		}
+
+		private void toolStripMenuItem_MainMenu_File_DropDownOpening(object sender, EventArgs e)
+		{
+			toolStripMenuItem_MainMenu_File_SetChildMenuItems();
+			toolStripMenuItem_MainMenu_File_SetRecentMenuItems();
 		}
 
 		private void toolStripMenuItem_MainMenu_File_New_Click(object sender, EventArgs e)
@@ -211,13 +237,26 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Main Menu > File > Workspace
 		//------------------------------------------------------------------------------------------
 
-		private void toolStripMenuItem_MainMenu_File_Workspace_DropDownOpening(object sender, EventArgs e)
+		/// <remarks>
+		/// Must be called each time workspace status changes.
+		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void toolStripMenuItem_MainMenu_File_Workspace_SetMenuItems()
 		{
+			// not needed yet: _isSettingControls = true;
+
 			bool workspaceIsReady = (_workspace != null);
 			toolStripMenuItem_MainMenu_File_Workspace_New.Enabled = !workspaceIsReady;
 			toolStripMenuItem_MainMenu_File_Workspace_Close.Enabled = workspaceIsReady;
 			toolStripMenuItem_MainMenu_File_Workspace_Save.Enabled = workspaceIsReady;
 			toolStripMenuItem_MainMenu_File_Workspace_SaveAs.Enabled = workspaceIsReady;
+
+			// not needed yet: _isSettingControls = false;
+		}
+
+		private void toolStripMenuItem_MainMenu_File_Workspace_DropDownOpening(object sender, EventArgs e)
+		{
+			toolStripMenuItem_MainMenu_File_Workspace_SetMenuItems();
 		}
 
 		private void toolStripMenuItem_MainMenu_File_Workspace_New_Click(object sender, EventArgs e)
@@ -264,13 +303,21 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Main Menu > Window
 		//------------------------------------------------------------------------------------------
 
-		private void toolStripMenuItem_MainMenu_Window_DropDownOpening(object sender, EventArgs e)
+		/// <remarks>
+		/// Must be called each time MDI child status changes.
+		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void toolStripMenuItem_MainMenu_Window_SetChildMenuItems()
 		{
+			// not needed yet: _isSettingControls = true;
+
 			bool childIsReady = (ActiveMdiChild != null);
 			toolStripMenuItem_MainMenu_Window_Cascade.Enabled = childIsReady;
 			toolStripMenuItem_MainMenu_Window_TileHorizontal.Enabled = childIsReady;
 			toolStripMenuItem_MainMenu_Window_TileVertical.Enabled = childIsReady;
 			toolStripMenuItem_MainMenu_Window_ArrangeIcons.Enabled = childIsReady;
+
+			// not needed yet: _isSettingControls = false;
 
 			#if false
 			// \fixme
@@ -281,6 +328,11 @@ namespace YAT.Gui.Forms
 			else
 				menuStrip_Main.MdiWindowListItem = null;
 			#endif
+		}
+
+		private void toolStripMenuItem_MainMenu_Window_DropDownOpening(object sender, EventArgs e)
+		{
+			toolStripMenuItem_MainMenu_Window_SetChildMenuItems();
 		}
 
 		private void toolStripMenuItem_MainMenu_Window_Cascade_Click(object sender, EventArgs e)
@@ -310,38 +362,43 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Main Menu > Help
 		//------------------------------------------------------------------------------------------
 
-		private void toolStripMenuItem_MainMenu_Help_DropDownOpening(object sender, EventArgs e)
-		{
-			// nothing to do
-		}
-
 		private void toolStripMenuItem_MainMenu_Help_Contents_Click(object sender, EventArgs e)
 		{
 			Gui.Forms.Help f = new Gui.Forms.Help();
+			f.StartPosition = FormStartPosition.Manual;
+			f.Location = XForm.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
 		}
 
 		private void toolStripMenuItem_MainMenu_Help_ReleaseNotes_Click(object sender, EventArgs e)
 		{
 			Gui.Forms.ReleaseNotes f = new Gui.Forms.ReleaseNotes();
+			f.StartPosition = FormStartPosition.Manual;
+			f.Location = XForm.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
 		}
 
 		private void toolStripMenuItem_MainMenu_Help_RequestSupport_Click(object sender, EventArgs e)
 		{
 			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerInstructions.Tracker.Support);
+			f.StartPosition = FormStartPosition.Manual;
+			f.Location = XForm.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
 		}
 
 		private void toolStripMenuItem_MainMenu_Help_RequestFeature_Click(object sender, EventArgs e)
 		{
 			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerInstructions.Tracker.Feature);
+			f.StartPosition = FormStartPosition.Manual;
+			f.Location = XForm.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
 		}
 
 		private void toolStripMenuItem_MainMenu_Help_SubmitBug_Click(object sender, EventArgs e)
 		{
 			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerInstructions.Tracker.Bug);
+			f.StartPosition = FormStartPosition.Manual;
+			f.Location = XForm.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
 		}
 
@@ -359,6 +416,24 @@ namespace YAT.Gui.Forms
 		//------------------------------------------------------------------------------------------
 		// Controls Event Handlers > Toolbar
 		//------------------------------------------------------------------------------------------
+
+		private void toolStripButton_MainTool_SetControls()
+		{
+			// not needed yet: _isSettingControls = true;
+
+			bool childIsReady = (ActiveMdiChild != null);
+
+			bool terminalOpen = false;
+			if (childIsReady)
+				terminalOpen = ((Gui.Forms.Terminal)ActiveMdiChild).IsOpen;
+
+			toolStripButton_MainTool_File_Save.Enabled = childIsReady;
+			toolStripButton_MainTool_Terminal_Open.Enabled = childIsReady && !terminalOpen;
+			toolStripButton_MainTool_Terminal_Close.Enabled = childIsReady && terminalOpen;
+			toolStripButton_MainTool_Terminal_Settings.Enabled = childIsReady;
+
+			// not needed yet: _isSettingControls = false;
+		}
 
 		private void toolStripButton_MainTool_File_New_Click(object sender, EventArgs e)
 		{
@@ -397,6 +472,22 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Main Context Menu
 		//------------------------------------------------------------------------------------------
 
+		/// <remarks>
+		/// Must be called each time recent status changes.
+		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void contextMenuStrip_Main_SetRecentMenuItems()
+		{
+			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll();
+
+			// not needed yet: _isSettingControls = true;
+
+			bool recentsAreReady = (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count > 0);
+			toolStripMenuItem_MainContextMenu_File_Recent.Enabled = recentsAreReady;
+
+			// not needed yet: _isSettingControls = false;
+		}
+
 		private void contextMenuStrip_Main_Opening(object sender, CancelEventArgs e)
 		{
 			// prevent context menu being displayed within the child window
@@ -406,9 +497,7 @@ namespace YAT.Gui.Forms
 				return;
 			}
 
-			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll();
-			bool recentsReady = (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count > 0);
-			toolStripMenuItem_MainContextMenu_File_Recent.Enabled = recentsReady;
+			contextMenuStrip_Main_SetRecentMenuItems();
 		}
 
 		private void toolStripMenuItem_MainContextMenu_File_New_Click(object sender, EventArgs e)
@@ -438,6 +527,58 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > File Recent Context Menu
 		//------------------------------------------------------------------------------------------
 
+		private List<ToolStripMenuItem> _menuItems_recents;
+
+		private void contextMenuStrip_FileRecent_InitializeControls()
+		{
+			_menuItems_recents = new List<ToolStripMenuItem>(Model.Settings.RecentFileSettings.MaximumFilePaths);
+			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_1);
+			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_2);
+			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_3);
+			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_4);
+			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_5);
+			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_6);
+			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_7);
+			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_8);
+		}
+
+		/// <remarks>
+		/// Must be called each time recent status changes.
+		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void contextMenuStrip_FileRecent_SetRecentMenuItems()
+		{
+			// not needed yet: _isSettingControls = true;
+
+			// hide all
+			for (int i = 0; i < Model.Settings.RecentFileSettings.MaximumFilePaths; i++)
+			{
+				string prefix = string.Format("{0}: ", i + 1);
+				_menuItems_recents[i].Text = "&" + prefix;
+				_menuItems_recents[i].Visible = false;
+			}
+
+			// show valid
+			for (int i = 0; i < ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count; i++)
+			{
+				string prefix = string.Format("{0}: ", i + 1);
+				string file = XPath.LimitPath(ApplicationSettings.LocalUser.RecentFiles.FilePaths[i].Item, 60);
+				if (ApplicationSettings.LocalUser.RecentFiles.FilePaths[i] != null)
+				{
+					_menuItems_recents[i].Text = "&" + prefix + file;
+					_menuItems_recents[i].Enabled = true;
+				}
+				else
+				{
+					_menuItems_recents[i].Text = "&" + prefix;
+					_menuItems_recents[i].Enabled = false;
+				}
+				_menuItems_recents[i].Visible = true;
+			}
+
+			// not needed yet: _isSettingControls = false;
+		}
+
 		/// <summary>
 		/// Makes sure that context menus are at the right position upon first drop down. This is
 		/// a fix, it should be that way by default. However, due to some resaons, they somtimes
@@ -466,7 +607,7 @@ namespace YAT.Gui.Forms
 			// no need to validate again, is already done on opening of parent menu
 			// ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll();
 
-			SetRecents();
+			contextMenuStrip_FileRecent_SetRecentMenuItems();
 		}
 
 		private void toolStripMenuItem_FileRecentContextMenu_Click(object sender, EventArgs e)
@@ -558,88 +699,6 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region Menu
-		//==========================================================================================
-		// Menu
-		//==========================================================================================
-
-		private void InitializeRecents()
-		{
-			_menuItems_recents = new List<ToolStripMenuItem>(Model.Settings.RecentFileSettings.MaximumFilePaths);
-			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_1);
-			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_2);
-			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_3);
-			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_4);
-			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_5);
-			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_6);
-			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_7);
-			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_8);
-		}
-
-		/// <summary>
-		/// Updates the main menu File > Recent > Recents...
-		/// </summary>
-		private void SetRecents()
-		{
-			if (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count == 0)
-			{
-				toolStripMenuItem_MainMenu_File_Recent.Enabled = false;
-				toolStripMenuItem_MainMenu_File_Recent.Enabled = false;
-				return;
-			}
-			toolStripMenuItem_MainMenu_File_Recent.Enabled = true;
-			toolStripMenuItem_MainMenu_File_Recent.Enabled = true;
-
-			// hide all
-			for (int i = 0; i < Model.Settings.RecentFileSettings.MaximumFilePaths; i++)
-			{
-				string prefix = string.Format("{0}: ", i + 1);
-				_menuItems_recents[i].Text = "&" + prefix;
-				_menuItems_recents[i].Visible = false;
-			}
-
-			// show valid
-			for (int i = 0; i < ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count; i++)
-			{
-				string prefix = string.Format("{0}: ", i + 1);
-				string file = XPath.LimitPath(ApplicationSettings.LocalUser.RecentFiles.FilePaths[i].Item, 60);
-				if (ApplicationSettings.LocalUser.RecentFiles.FilePaths[i] != null)
-				{
-					_menuItems_recents[i].Text = "&" + prefix + file;
-					_menuItems_recents[i].Enabled = true;
-				}
-				else
-				{
-					_menuItems_recents[i].Text = "&" + prefix;
-					_menuItems_recents[i].Enabled = false;
-				}
-				_menuItems_recents[i].Visible = true;
-			}
-		}
-
-		#endregion
-
-		#region Tool
-		//==========================================================================================
-		// Tool
-		//==========================================================================================
-
-		private void SetToolControls()
-		{
-			bool childIsReady = (ActiveMdiChild != null);
-
-			bool terminalOpen = false;
-			if (childIsReady)
-				terminalOpen = ((Gui.Forms.Terminal)ActiveMdiChild).IsOpen;
-
-			toolStripButton_MainTool_File_Save.Enabled = childIsReady;
-			toolStripButton_MainTool_Terminal_Open.Enabled = childIsReady && !terminalOpen;
-			toolStripButton_MainTool_Terminal_Close.Enabled = childIsReady && terminalOpen;
-			toolStripButton_MainTool_Terminal_Settings.Enabled = childIsReady;
-		}
-
-		#endregion
-
 		#region Preferences
 		//==========================================================================================
 		// Preferences
@@ -704,11 +763,16 @@ namespace YAT.Gui.Forms
 		{
 			_workspace = e.Workspace;
 			AttachWorkspaceEventHandlers();
+
+			SetWorkspaceControls();
 		}
 
+		/// <remarks>
+		/// Workspace::Closed event is handled at _workspace_Closed().
+		/// </remarks>
 		private void _main_WorkspaceClosed(object sender, EventArgs e)
 		{
-			// do nothing, the Workspace::Closed event is handled at _workspace_Closed()
+			SetWorkspaceControls();
 		}
 
 		private void _main_TimedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
@@ -859,11 +923,16 @@ namespace YAT.Gui.Forms
 
 			// show form
 			mdiChild.Show();
+
+			SetChildControls();
 		}
 
+		/// <remarks>
+		/// Terminal is removed by mdiChild_FormClose event handler.
+		/// </remarks>
 		private void _workspace_TerminalRemoved(object sender, Model.TerminalEventArgs e)
 		{
-			// nothing to do, terminal is removed by mdiChild_FormClosed event handler
+			SetChildControls();
 		}
 
 		private void _workspace_TimedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
@@ -890,6 +959,8 @@ namespace YAT.Gui.Forms
 		{
 			DetachWorkspaceEventHandlers();
 			_workspace = null;
+
+			SetChildControls();
 		}
 
 		#endregion
@@ -955,6 +1026,51 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
+		#region MDI Parent
+		//==========================================================================================
+		// MDI Parent
+		//==========================================================================================
+
+		private void InitializeControls()
+		{
+			InitializeRecentControls();
+		}
+
+		private void InitializeRecentControls()
+		{
+			contextMenuStrip_FileRecent_InitializeControls();
+		}
+
+		private void SetControls()
+		{
+			SetChildControls();
+			SetRecentControls();
+			SetWorkspaceControls();
+		}
+
+		private void SetChildControls()
+		{
+			toolStripButton_MainTool_SetControls();
+
+			toolStripMenuItem_MainMenu_File_SetChildMenuItems();
+			toolStripMenuItem_MainMenu_Window_SetChildMenuItems();
+		}
+
+		private void SetRecentControls()
+		{
+			toolStripMenuItem_MainMenu_File_SetRecentMenuItems();
+
+			contextMenuStrip_Main_SetRecentMenuItems();
+			contextMenuStrip_FileRecent_SetRecentMenuItems();
+		}
+
+		private void SetWorkspaceControls()
+		{
+			toolStripMenuItem_MainMenu_File_Workspace_SetMenuItems();
+		}
+
+		#endregion
+
 		#region MDI Children
 		//==========================================================================================
 		// MDI Children
@@ -968,7 +1084,7 @@ namespace YAT.Gui.Forms
 		private void mdiChild_Changed(object sender, EventArgs e)
 		{
 			SetTimedStatus(Status.ChildChanged);
-			SetToolControls();
+			SetChildControls();
 		}
 
 		private void mdiChild_Saved(object sender, Model.SavedEventArgs e)
@@ -976,13 +1092,13 @@ namespace YAT.Gui.Forms
 			if (!e.IsAutoSave)
 				SetTimedStatus(Status.ChildSaved);
 
-			SetToolControls();
+			SetChildControls();
 		}
 
 		private void mdiChild_FormClosed(object sender, FormClosedEventArgs e)
 		{
 			SetTimedStatus(Status.ChildClosed);
-			SetToolControls();
+			SetChildControls();
 		}
 
 		#endregion

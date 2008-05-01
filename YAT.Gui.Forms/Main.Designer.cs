@@ -529,7 +529,6 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_MainMenu_Help.Name = "toolStripMenuItem_MainMenu_Help";
 			this.toolStripMenuItem_MainMenu_Help.Size = new System.Drawing.Size(40, 20);
 			this.toolStripMenuItem_MainMenu_Help.Text = "&Help";
-			this.toolStripMenuItem_MainMenu_Help.DropDownOpening += new System.EventHandler(this.toolStripMenuItem_MainMenu_Help_DropDownOpening);
 			// 
 			// toolStripMenuItem_MainMenu_Help_Contents
 			// 

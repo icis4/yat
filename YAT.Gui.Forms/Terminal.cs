@@ -33,12 +33,6 @@ namespace YAT.Gui.Forms
 		// MDI
 		private Form _mdiParent;
 
-        // preset
-        private List<ToolStripMenuItem> _menuItems_preset;
-
-		// predefined
-		private List<ToolStripMenuItem> _menuItems_predefined;
-
 		// terminal
 		private Model.Terminal _terminal;
 
@@ -50,7 +44,6 @@ namespace YAT.Gui.Forms
 		private const string _DefaultStatusText = "";
 		private const int _TimedStatusInterval = 2000;
 		private const int _RtsLuminescenceInterval = 150;
-		private List<ToolStripStatusLabel> _statusLabels_ioControl;
 
 		#endregion
 
@@ -93,10 +86,7 @@ namespace YAT.Gui.Forms
 		{
 			FixContextMenus();
 
-            InitializePresetMenuItems();
-			InitializePredefinedMenuItems();
-			InitializeMonitorMenuItems();
-			InitializeIOControlStatusLabels();
+			InitializeControls();
 
 			// link and attach to terminal model
 			_terminal = terminal;
@@ -253,11 +243,6 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Terminal Menu > File
 		//------------------------------------------------------------------------------------------
 
-		private void toolStripMenuItem_TerminalMenu_File_DropDownOpening(object sender, EventArgs e)
-		{
-			// nothing to do
-		}
-
 		private void toolStripMenuItem_TerminalMenu_File_Save_Click(object sender, EventArgs e)
 		{
 			_terminal.Save();
@@ -280,11 +265,24 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Terminal Menu > Terminal
 		//------------------------------------------------------------------------------------------
 
-		private void toolStripMenuItem_TerminalMenu_Terminal_DropDownOpening(object sender, EventArgs e)
+		/// <remarks>
+		/// Must be called each time terminal status changes.
+		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems()
 		{
+			_isSettingControls = true;
+
 			bool terminalIsOpen = _terminal.IsOpen;
 			toolStripMenuItem_TerminalMenu_Terminal_Open.Enabled = !terminalIsOpen;
 			toolStripMenuItem_TerminalMenu_Terminal_Close.Enabled = terminalIsOpen;
+
+			_isSettingControls = false;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Terminal_DropDownOpening(object sender, EventArgs e)
+		{
+			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Open_Click(object sender, EventArgs e)
@@ -314,13 +312,26 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Terminal Menu > Send
 		//------------------------------------------------------------------------------------------
 
-		private void toolStripMenuItem_TerminalMenu_Send_DropDownOpening(object sender, EventArgs e)
+		/// <remarks>
+		/// Must be called each time send status changes.
+		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
 		{
+			_isSettingControls = true;
+
 			toolStripMenuItem_TerminalMenu_Send_Command.Enabled = _settingsRoot.SendCommand.Command.IsValidCommand;
 			toolStripMenuItem_TerminalMenu_Send_File.Enabled = _settingsRoot.SendCommand.Command.IsValidFilePath;
 
 			toolStripMenuItem_TerminalMenu_Send_KeepCommand.Checked = _settingsRoot.Send.KeepCommand;
 			toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked = _settingsRoot.Send.CopyPredefined;
+
+			_isSettingControls = false;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Send_DropDownOpening(object sender, EventArgs e)
+		{
+			toolStripMenuItem_TerminalMenu_Send_SetMenuItems();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_Command_Click(object sender, EventArgs e)
@@ -350,11 +361,27 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Terminal Menu > Log
 		//------------------------------------------------------------------------------------------
 
+		/// <remarks>
+		/// Must be called each time terminal status changes.
+		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void toolStripMenuItem_TerminalMenu_Log_SetMenuItems()
+		{
+			_isSettingControls = true;
+
+			bool logIsSelected = _settingsRoot.Log.AnyRawOrNeat;
+			bool logIsOpen = _settingsRoot.LogIsOpen;
+
+			toolStripMenuItem_TerminalMenu_Log_Begin.Enabled = logIsSelected && !logIsOpen;
+			toolStripMenuItem_TerminalMenu_Log_End.Enabled = logIsSelected && logIsOpen;
+			toolStripMenuItem_TerminalMenu_Log_Clear.Enabled = logIsSelected && logIsOpen;
+
+			_isSettingControls = false;
+		}
+
 		private void toolStripMenuItem_TerminalMenu_Log_DropDownOpening(object sender, EventArgs e)
 		{
-			bool logIsOpen = _terminal.LogIsOpen;
-			toolStripMenuItem_TerminalMenu_Log_Begin.Enabled = !logIsOpen;
-			toolStripMenuItem_TerminalMenu_Log_End.Enabled = logIsOpen;
+			toolStripMenuItem_TerminalMenu_Log_SetMenuItems();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Log_Begin_Click(object sender, EventArgs e)
@@ -384,8 +411,25 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Terminal Menu > View
 		//------------------------------------------------------------------------------------------
 
-		private void toolStripMenuItem_TerminalMenu_View_DropDownOpening(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_Initialize()
 		{
+			_isSettingControls = true;
+
+			toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.Clear();
+			toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.Add(Orientation.Vertical);
+			toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.Add(Orientation.Horizontal);
+			toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedIndex = 0;
+
+			_isSettingControls = false;
+		}
+
+		/// <remarks>
+		/// Must be called each time terminal status changes.
+		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void toolStripMenuItem_TerminalMenu_View_SetMenuItems()
+		{
+			_isSettingControls = true;
 			Domain.TerminalType terminalType = _settingsRoot.TerminalType;
 
 			// panels
@@ -422,6 +466,13 @@ namespace YAT.Gui.Forms
 			bool isText = (terminalType == Domain.TerminalType.Text);
 			toolStripMenuItem_TerminalMenu_View_ShowEol.Enabled = isText;
 			toolStripMenuItem_TerminalMenu_View_ShowEol.Checked = isText && _settingsRoot.TextTerminal.ShowEol;
+
+			_isSettingControls = false;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_View_DropDownOpening(object sender, EventArgs e)
+		{
+			toolStripMenuItem_TerminalMenu_View_SetMenuItems();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Panels_Tx_Click(object sender, EventArgs e)
@@ -514,12 +565,41 @@ namespace YAT.Gui.Forms
         // Controls Event Handlers > Preset Context Menu
         //------------------------------------------------------------------------------------------
 
+        private List<ToolStripMenuItem> _menuItems_preset;
+
+		private void contextMenuStrip_Preset_Initialize()
+		{
+			_menuItems_preset = new List<ToolStripMenuItem>();
+			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_1);
+			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_2);
+			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_3);
+			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_4);
+			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_5);
+			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_6);
+		}
+
+		/// <remarks>
+		/// Must be called each time preset status changes.
+		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void contextMenuStrip_Preset_SetMenuItems()
+		{
+			_isSettingControls = true;
+
+			bool isSerialPort = (_settingsRoot.IOType == Domain.IOType.SerialPort);
+
+			foreach (ToolStripMenuItem item in _menuItems_preset)
+				item.Enabled = isSerialPort;
+
+			_isSettingControls = false;
+		}
+
         private void contextMenuStrip_Preset_Opening(object sender, CancelEventArgs e)
         {
-            SetPresetMenuItems();
+            contextMenuStrip_Preset_SetMenuItems();
         }
 
-        private void toolStripMenuItem_PresetContextMenu_Preset_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_PresetContextMenu_Preset_Click(object sender, EventArgs e)
         {
             RequestPreset(int.Parse((string)(((ToolStripMenuItem)sender).Tag)));
         }
@@ -531,8 +611,31 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Monitor Context Menu
 		//------------------------------------------------------------------------------------------
 
+		private void contextMenuStrip_Monitor_Initialize()
+		{
+			_isSettingControls = true;
+
+			toolStripComboBox_MonitorContextMenu_Orientation.Items.Clear();
+			toolStripComboBox_MonitorContextMenu_Orientation.Items.Add(Orientation.Vertical);
+			toolStripComboBox_MonitorContextMenu_Orientation.Items.Add(Orientation.Horizontal);
+			toolStripComboBox_MonitorContextMenu_Orientation.SelectedIndex = 0;
+
+			_isSettingControls = false;
+		}
+
 		private void contextMenuStrip_Monitor_Opening(object sender, CancelEventArgs e)
 		{
+			contextMenuStrip_Monitor_SetMenuItems();
+		}
+
+		/// <remarks>
+		/// Must be called each time monitor status changes.
+		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void contextMenuStrip_Monitor_SetMenuItems()
+		{
+			_isSettingControls = true;
+
 			Domain.TerminalType terminalType = _settingsRoot.TerminalType;
 			Domain.RepositoryType monitorType = GetMonitorType(contextMenuStrip_Monitor.SourceControl);
 			bool isMonitor = (monitorType != Domain.RepositoryType.None);
@@ -577,6 +680,8 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_MonitorContextMenu_SaveToFile.Enabled = isMonitor;
 			toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Enabled = isMonitor;
 			toolStripMenuItem_MonitorContextMenu_Print.Enabled = isMonitor;
+
+			_isSettingControls = false;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Format_Click(object sender, EventArgs e)
@@ -682,8 +787,14 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Radix Context Menu
 		//------------------------------------------------------------------------------------------
 
-		private void contextMenuStrip_Radix_Opening(object sender, CancelEventArgs e)
+		/// <remarks>
+		/// Must be called each time send status changes.
+		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void contextMenuStrip_Radix_SetMenuItems()
 		{
+			_isSettingControls = true;
+
 			bool separateTxRx = _settingsRoot.Display.SeparateTxRxRadix;
 
 			toolStripMenuItem_RadixContextMenu_String.Visible = !separateTxRx;
@@ -727,6 +838,13 @@ namespace YAT.Gui.Forms
 				toolStripMenuItem_RadixContextMenu_Rx_Dec.Checked    = (_settingsRoot.Display.RxRadix == Domain.Radix.Dec);
 				toolStripMenuItem_RadixContextMenu_Rx_Hex.Checked    = (_settingsRoot.Display.RxRadix == Domain.Radix.Hex);
 			}
+
+			_isSettingControls = false;
+		}
+
+		private void contextMenuStrip_Radix_Opening(object sender, CancelEventArgs e)
+		{
+			contextMenuStrip_Radix_SetMenuItems();
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_String_Click(object sender, EventArgs e)
@@ -831,6 +949,81 @@ namespace YAT.Gui.Forms
         // Controls Event Handlers > Predefined Context Menu
         //------------------------------------------------------------------------------------------
 
+		private List<ToolStripMenuItem> _menuItems_predefined;
+
+		private void contextMenuStrip_Predefined_Initialize()
+		{
+			_menuItems_predefined = new List<ToolStripMenuItem>(Model.Settings.PredefinedCommandSettings.MaximumCommandsPerPage);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_1);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_2);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_3);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_4);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_5);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_6);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_7);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_8);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_9);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_10);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_11);
+			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_12);
+		}
+
+		/// <remarks>
+		/// Must be called each time send status changes.
+		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void contextMenuStrip_Predefined_SetMenuItems()
+		{
+			_isSettingControls = true;
+
+			// pages
+			List<Model.Types.PredefinedCommandPage> pages = _settingsRoot.PredefinedCommand.Pages;
+
+			if ((pages != null) && (pages.Count > 0))
+			{
+				toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled = (predefined.SelectedPage > pages.Count);
+				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled = (predefined.SelectedPage < pages.Count);
+			}
+			else
+			{
+				toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled = false;
+				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled = false;
+			}
+
+			// commands
+			List<Model.Types.Command> commands = null;
+			if ((pages != null) && (pages.Count > 0))
+				commands = _settingsRoot.PredefinedCommand.Pages[predefined.SelectedPage - 1].Commands;
+
+			int commandCount = 0;
+			if (commands != null)
+				commandCount = commands.Count;
+
+			for (int i = 0; i < commandCount; i++)
+			{
+				bool isDefined = ((commands[i] != null) && commands[i].IsDefined);
+				bool isValid = (isDefined && _terminal.IsOpen && commands[i].IsValid);
+
+				if (isDefined)
+				{
+					_menuItems_predefined[i].Text = commands[i].Description;
+					_menuItems_predefined[i].Enabled = isValid;
+				}
+				else
+				{
+					_menuItems_predefined[i].Text = Model.Types.Command.DefineCommandText;
+					_menuItems_predefined[i].Enabled = true;
+				}
+			}
+			for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaximumCommandsPerPage; i++)
+			{
+				_menuItems_predefined[i].Text = Model.Types.Command.DefineCommandText;
+				_menuItems_predefined[i].Enabled = true;
+			}
+
+			_isSettingControls = false;
+		}
+
 		/// <summary>
 		/// Temporary reference to command to be copied.
 		/// </summary>
@@ -881,8 +1074,8 @@ namespace YAT.Gui.Forms
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Visible = false;
 			}
 
-            SetPredefinedMenuItems();
-        }
+			contextMenuStrip_Predefined_SetMenuItems();
+		}
 
         private void toolStripMenuItem_PredefinedContextMenu_Command_Click(object sender, EventArgs e)
         {
@@ -941,8 +1134,14 @@ namespace YAT.Gui.Forms
         // Controls Event Handlers > Send Context Menu
         //------------------------------------------------------------------------------------------
 
-        private void contextMenuStrip_Send_Opening(object sender, CancelEventArgs e)
-        {
+		/// <remarks>
+		/// Must be called each time send status changes.
+		/// Reason: Shortcuts associated to menu items are only active when items are visible and enabled.
+		/// </remarks>
+		private void contextMenuStrip_Send_SetMenuItems()
+		{
+			_isSettingControls = true;
+
 			toolStripMenuItem_SendContextMenu_SendCommand.Enabled = _settingsRoot.SendCommand.Command.IsValidCommand;
             toolStripMenuItem_SendContextMenu_SendFile.Enabled = _settingsRoot.SendCommand.Command.IsValidFilePath;
 
@@ -951,6 +1150,13 @@ namespace YAT.Gui.Forms
 
 			toolStripMenuItem_SendContextMenu_KeepCommand.Checked = _settingsRoot.Send.KeepCommand;
 			toolStripMenuItem_SendContextMenu_CopyPredefined.Checked = _settingsRoot.Send.CopyPredefined;
+
+			_isSettingControls = false;
+		}
+
+		private void contextMenuStrip_Send_Opening(object sender, CancelEventArgs e)
+		{
+			contextMenuStrip_Send_SetMenuItems();
 		}
 
 		private void toolStripMenuItem_SendContextMenu_SendCommand_Click(object sender, EventArgs e)
@@ -1118,6 +1324,18 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Status
 		//------------------------------------------------------------------------------------------
 
+		private List<ToolStripStatusLabel> _statusLabels_ioControl;
+
+		private void toolStripStatusLabel_TerminalStatus_Initialize()
+		{
+			_statusLabels_ioControl = new List<ToolStripStatusLabel>();
+			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_RTS);
+			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_CTS);
+			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DTR);
+			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DSR);
+			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DCD);
+		}
+
 		private void toolStripStatusLabel_TerminalStatus_IOStatus_Click(object sender, EventArgs e)
 		{
 			ShowTerminalSettings();
@@ -1158,6 +1376,15 @@ namespace YAT.Gui.Forms
 			contextMenuStrip_Monitor.OwnerItem = null;
 			contextMenuStrip_Predefined.OwnerItem = null;
 			ResumeLayout();
+		}
+
+		private void InitializeControls()
+		{
+			contextMenuStrip_Preset_Initialize();
+            contextMenuStrip_Predefined_Initialize();
+			contextMenuStrip_Monitor_Initialize();
+
+			toolStripStatusLabel_TerminalStatus_Initialize();
 		}
 
 		private void ApplyWindowSettings()
@@ -1296,31 +1523,44 @@ namespace YAT.Gui.Forms
 			_isSettingControls = false;
 		}
 
+		private void SetDisplayControls()
+		{
+			toolStripMenuItem_TerminalMenu_View_SetMenuItems();
+			contextMenuStrip_Radix_SetMenuItems();
+		}
+
+		private void SetLayoutControls()
+		{
+			toolStripMenuItem_TerminalMenu_View_SetMenuItems();
+			contextMenuStrip_Monitor_SetMenuItems();
+		}
+
+		private void SetPredefinedControls()
+		{
+			contextMenuStrip_Predefined_SetMenuItems(); // ensure that shortcuts are activated
+
+			predefined.TerminalIsOpen = _terminal.IsOpen;
+		}
+
+		private void SetPresetControls()
+		{
+			contextMenuStrip_Preset_SetMenuItems();
+		}
+
+		private void SetSendControls()
+		{
+			toolStripMenuItem_TerminalMenu_Send_SetMenuItems();
+			contextMenuStrip_Send_SetMenuItems();
+
+			send.TerminalIsOpen = _terminal.IsOpen;
+		}
+
 		#endregion
 
 		#region Preset
 		//==========================================================================================
 		// Preset
 		//==========================================================================================
-
-		private void InitializePresetMenuItems()
-		{
-			_menuItems_preset = new List<ToolStripMenuItem>();
-			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_1);
-			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_2);
-			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_3);
-			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_4);
-			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_5);
-			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_6);
-		}
-
-		private void SetPresetMenuItems()
-		{
-			bool isSerialPort = (_settingsRoot.IOType == Domain.IOType.SerialPort);
-
-			foreach (ToolStripMenuItem item in _menuItems_preset)
-				item.Enabled = isSerialPort;
-		}
 
 		/// <summary>
 		/// Set requested preset. Currently, presets are fixed to those listed below.
@@ -1445,23 +1685,6 @@ namespace YAT.Gui.Forms
 		//------------------------------------------------------------------------------------------
 		// Monitor Panels > View
 		//------------------------------------------------------------------------------------------
-
-		private void InitializeMonitorMenuItems()
-		{
-			_isSettingControls = true;
-
-			toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.Clear();
-			toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.Add(Orientation.Vertical);
-			toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.Add(Orientation.Horizontal);
-			toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedIndex = 0;
-
-			toolStripComboBox_MonitorContextMenu_Orientation.Items.Clear();
-			toolStripComboBox_MonitorContextMenu_Orientation.Items.Add(Orientation.Vertical);
-			toolStripComboBox_MonitorContextMenu_Orientation.Items.Add(Orientation.Horizontal);
-			toolStripComboBox_MonitorContextMenu_Orientation.SelectedIndex = 0;
-
-			_isSettingControls = false;
-		}
 
 		private void SetMonitorRadix(Domain.Radix radix)
 		{
@@ -1690,71 +1913,6 @@ namespace YAT.Gui.Forms
 		// Predefined Panel
 		//==========================================================================================
 
-		private void InitializePredefinedMenuItems()
-		{
-			_menuItems_predefined = new List<ToolStripMenuItem>(Model.Settings.PredefinedCommandSettings.MaximumCommandsPerPage);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_1);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_2);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_3);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_4);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_5);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_6);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_7);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_8);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_9);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_10);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_11);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_12);
-		}
-
-		private void SetPredefinedMenuItems()
-		{
-			// pages
-			List<Model.Types.PredefinedCommandPage> pages = _settingsRoot.PredefinedCommand.Pages;
-
-			if ((pages != null) && (pages.Count > 0))
-			{
-				toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled = (predefined.SelectedPage > pages.Count);
-				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled = (predefined.SelectedPage < pages.Count);
-			}
-			else
-			{
-				toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled = false;
-				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled = false;
-			}
-
-			// commands
-			List<Model.Types.Command> commands = null;
-			if ((pages != null) && (pages.Count > 0))
-				commands = _settingsRoot.PredefinedCommand.Pages[predefined.SelectedPage - 1].Commands;
-
-			int commandCount = 0;
-			if (commands != null)
-				commandCount = commands.Count;
-
-			for (int i = 0; i < commandCount; i++)
-			{
-				bool isDefined = ((commands[i] != null) && commands[i].IsDefined);
-				bool isValid = (isDefined && _terminal.IsOpen && commands[i].IsValid);
-
-				if (isDefined)
-				{
-					_menuItems_predefined[i].Text = commands[i].Description;
-					_menuItems_predefined[i].Enabled = isValid;
-				}
-				else
-				{
-					_menuItems_predefined[i].Text = Model.Types.Command.DefineCommandText;
-					_menuItems_predefined[i].Enabled = true;
-				}
-			}
-			for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaximumCommandsPerPage; i++)
-			{
-				_menuItems_predefined[i].Text = Model.Types.Command.DefineCommandText;
-				_menuItems_predefined[i].Enabled = true;
-			}
-		}
-
 		/// <param name="page">Page 1..max</param>
 		/// <param name="command">Command 1..max</param>
 		private void RequestPredefined(int page, int command)
@@ -1878,7 +2036,7 @@ namespace YAT.Gui.Forms
 				predefined.Pages = _settingsRoot.PredefinedCommand.Pages;
 				_isSettingControls = false;
 
-				SetPredefinedMenuItems();        // ensure that shortcuts are activated
+				SetPredefinedControls();
 			}
 			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Format))
 			{
@@ -1907,6 +2065,8 @@ namespace YAT.Gui.Forms
 				send.Command = _settingsRoot.SendCommand.Command;
 				send.RecentCommands = _settingsRoot.SendCommand.RecentCommands;
 				_isSettingControls = false;
+
+				SetSendControls();
 			}
 			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.SendFile))
 			{
@@ -1914,6 +2074,8 @@ namespace YAT.Gui.Forms
 				_isSettingControls = true;
 				send.FileCommand = _settingsRoot.SendFile.Command;
 				_isSettingControls = false;
+
+				SetSendControls();
 			}
 			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Predefined))
 			{
@@ -1931,6 +2093,7 @@ namespace YAT.Gui.Forms
 			{
 				// LayoutSettings changed
 				LayoutTerminal();
+				SetLayoutControls();
 			}
 		}
 
@@ -1961,6 +2124,7 @@ namespace YAT.Gui.Forms
 			{
 				// DisplaySettings changed
 				SetMonitorContents();
+				SetDisplayControls();
 			}
 			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Send))
 			{
@@ -2317,16 +2481,6 @@ namespace YAT.Gui.Forms
 		// Terminal > View
 		//------------------------------------------------------------------------------------------
 
-		private void InitializeIOControlStatusLabels()
-		{
-			_statusLabels_ioControl = new List<ToolStripStatusLabel>();
-			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_RTS);
-			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_CTS);
-			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DTR);
-			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DSR);
-			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DCD);
-		}
-
 		private void SetTerminalCaption()
 		{
 			bool isOpen = false;
@@ -2437,11 +2591,8 @@ namespace YAT.Gui.Forms
 
 		private void SetTerminalControls()
 		{
-			bool isOpen = _terminal.IsOpen;
-
-			// main menu
-			toolStripMenuItem_TerminalMenu_Terminal_Open.Enabled = !isOpen;
-			toolStripMenuItem_TerminalMenu_Terminal_Close.Enabled = isOpen;
+			// terminal menu
+			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
 
 			// terminal panel
 			SetTerminalCaption();
@@ -2449,11 +2600,14 @@ namespace YAT.Gui.Forms
 			SetIOControlControls();
 			SetMonitorIOStatus();
 
-			// send panel
-			send.TerminalIsOpen = isOpen;
+			// send
+			SetSendControls();
 
-			// predefined panel
-			predefined.TerminalIsOpen = isOpen;
+			// predefined
+			SetPredefinedControls();
+
+			// preset
+			SetPresetControls();
 		}
 
 		private void SetIOStatus()
@@ -2669,12 +2823,7 @@ namespace YAT.Gui.Forms
 
 		private void SetLogControls()
 		{
-			bool logSelected = _settingsRoot.Log.AnyRawOrNeat;
-			bool logOpen = _settingsRoot.LogIsOpen;
-
-			toolStripMenuItem_TerminalMenu_Log_Begin.Enabled = logSelected && !logOpen;
-			toolStripMenuItem_TerminalMenu_Log_End.Enabled = logSelected && logOpen;
-			toolStripMenuItem_TerminalMenu_Log_Clear.Enabled = logSelected && logOpen;
+			toolStripMenuItem_TerminalMenu_Log_SetMenuItems();
 		}
 
 		private void ShowLogSettings()

@@ -60,7 +60,7 @@ namespace YAT.Gui.Forms
 			this.button_Close.Location = new System.Drawing.Point(527, 327);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
-			this.button_Close.TabIndex = 13;
+			this.button_Close.TabIndex = 0;
 			this.button_Close.Text = "Close";
 			// 
 			// linkLabel_HHD
@@ -70,7 +70,7 @@ namespace YAT.Gui.Forms
 			this.linkLabel_HHD.Location = new System.Drawing.Point(12, 160);
 			this.linkLabel_HHD.Name = "linkLabel_HHD";
 			this.linkLabel_HHD.Size = new System.Drawing.Size(538, 26);
-			this.linkLabel_HHD.TabIndex = 7;
+			this.linkLabel_HHD.TabIndex = 8;
 			this.linkLabel_HHD.Text = resources.GetString("linkLabel_HHD.Text");
 			this.linkLabel_HHD.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
@@ -82,7 +82,7 @@ namespace YAT.Gui.Forms
 			this.label_Separator1.Location = new System.Drawing.Point(9, 61);
 			this.label_Separator1.Name = "label_Separator1";
 			this.label_Separator1.Size = new System.Drawing.Size(596, 25);
-			this.label_Separator1.TabIndex = 3;
+			this.label_Separator1.TabIndex = 4;
 			this.label_Separator1.Text = resources.GetString("label_Separator1.Text");
 			this.label_Separator1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
@@ -104,7 +104,7 @@ namespace YAT.Gui.Forms
 			this.label_Separator2.Location = new System.Drawing.Point(9, 135);
 			this.label_Separator2.Name = "label_Separator2";
 			this.label_Separator2.Size = new System.Drawing.Size(596, 25);
-			this.label_Separator2.TabIndex = 6;
+			this.label_Separator2.TabIndex = 7;
 			this.label_Separator2.Text = resources.GetString("label_Separator2.Text");
 			this.label_Separator2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
@@ -115,7 +115,7 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Description.Location = new System.Drawing.Point(12, 86);
 			this.linkLabel_Description.Name = "linkLabel_Description";
 			this.linkLabel_Description.Size = new System.Drawing.Size(552, 26);
-			this.linkLabel_Description.TabIndex = 4;
+			this.linkLabel_Description.TabIndex = 5;
 			this.linkLabel_Description.Text = resources.GetString("linkLabel_Description.Text");
 			this.linkLabel_Description.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
@@ -127,7 +127,7 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Copyright.Location = new System.Drawing.Point(67, 22);
 			this.linkLabel_Copyright.Name = "linkLabel_Copyright";
 			this.linkLabel_Copyright.Size = new System.Drawing.Size(535, 26);
-			this.linkLabel_Copyright.TabIndex = 1;
+			this.linkLabel_Copyright.TabIndex = 2;
 			this.linkLabel_Copyright.Text = "<COPYRIGHT>";
 			this.linkLabel_Copyright.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
@@ -139,7 +139,7 @@ namespace YAT.Gui.Forms
 			this.label_Separator3.Location = new System.Drawing.Point(9, 186);
 			this.label_Separator3.Name = "label_Separator3";
 			this.label_Separator3.Size = new System.Drawing.Size(596, 25);
-			this.label_Separator3.TabIndex = 8;
+			this.label_Separator3.TabIndex = 9;
 			this.label_Separator3.Text = resources.GetString("label_Separator3.Text");
 			this.label_Separator3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
@@ -150,7 +150,7 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Platform.Location = new System.Drawing.Point(12, 122);
 			this.linkLabel_Platform.Name = "linkLabel_Platform";
 			this.linkLabel_Platform.Size = new System.Drawing.Size(204, 13);
-			this.linkLabel_Platform.TabIndex = 5;
+			this.linkLabel_Platform.TabIndex = 6;
 			this.linkLabel_Platform.Text = "For .NET 2.0 on Windows 2000 and later.";
 			this.linkLabel_Platform.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
@@ -160,7 +160,7 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Title.Location = new System.Drawing.Point(67, 9);
 			this.linkLabel_Title.Name = "linkLabel_Title";
 			this.linkLabel_Title.Size = new System.Drawing.Size(395, 13);
-			this.linkLabel_Title.TabIndex = 0;
+			this.linkLabel_Title.TabIndex = 1;
 			this.linkLabel_Title.Text = "<NAME> <VERSION>";
 			this.linkLabel_Title.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
@@ -172,7 +172,7 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Home.Location = new System.Drawing.Point(12, 314);
 			this.linkLabel_Home.Name = "linkLabel_Home";
 			this.linkLabel_Home.Size = new System.Drawing.Size(322, 13);
-			this.linkLabel_Home.TabIndex = 10;
+			this.linkLabel_Home.TabIndex = 11;
 			this.linkLabel_Home.Text = "Visit YAT on SourceForge.net. Tell us if you like it or why you don\'t.";
 			this.linkLabel_Home.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
@@ -182,7 +182,7 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Trademark.Location = new System.Drawing.Point(67, 48);
 			this.linkLabel_Trademark.Name = "linkLabel_Trademark";
 			this.linkLabel_Trademark.Size = new System.Drawing.Size(395, 13);
-			this.linkLabel_Trademark.TabIndex = 2;
+			this.linkLabel_Trademark.TabIndex = 3;
 			this.linkLabel_Trademark.Text = "<TRADEMARK>";
 			this.linkLabel_Trademark.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
@@ -193,7 +193,7 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Environment.Location = new System.Drawing.Point(12, 211);
 			this.linkLabel_Environment.Name = "linkLabel_Environment";
 			this.linkLabel_Environment.Size = new System.Drawing.Size(352, 91);
-			this.linkLabel_Environment.TabIndex = 9;
+			this.linkLabel_Environment.TabIndex = 10;
 			this.linkLabel_Environment.Text = resources.GetString("linkLabel_Environment.Text");
 			this.linkLabel_Environment.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
@@ -205,7 +205,7 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Author.Location = new System.Drawing.Point(12, 337);
 			this.linkLabel_Author.Name = "linkLabel_Author";
 			this.linkLabel_Author.Size = new System.Drawing.Size(65, 13);
-			this.linkLabel_Author.TabIndex = 11;
+			this.linkLabel_Author.TabIndex = 12;
 			this.linkLabel_Author.Text = "<AUTHOR>";
 			this.linkLabel_Author.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
@@ -228,7 +228,7 @@ namespace YAT.Gui.Forms
 			this.linkLabel_License.Location = new System.Drawing.Point(392, 274);
 			this.linkLabel_License.Name = "linkLabel_License";
 			this.linkLabel_License.Size = new System.Drawing.Size(199, 13);
-			this.linkLabel_License.TabIndex = 12;
+			this.linkLabel_License.TabIndex = 13;
 			this.linkLabel_License.Text = "YAT is licensed under the CC-GNU GPL.";
 			this.linkLabel_License.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 

@@ -249,37 +249,46 @@ namespace YAT.Gui.Forms
 		{
 			FontDialog fd;
 			Font f = _formatSettings_Form.Font;
-			DialogResult result;
+			bool fontOK = false;
+			bool cancel = false;
 			do
 			{
 				fd = new FontDialog();
 				fd.Font = _formatSettings_Form.Font;
 				fd.ShowEffects = false;
-				if ((result = fd.ShowDialog(this)) != DialogResult.OK)
-					continue;
-
-				Refresh();
-
-				try
+				if (fd.ShowDialog(this) != DialogResult.OK)
 				{
-					f = new Font(fd.Font.Name, fd.Font.Size, FontStyle.Regular);
+					cancel = true;
 				}
-				catch (Exception)
+				else
 				{
-					result = MessageBox.Show
-						(
-						this,
-						@"Font """ + fd.Font.Name + @""" does not support regular style. Choose a different font.",
-						@"Bad font",
-						MessageBoxButtons.OKCancel,
-						MessageBoxIcon.Exclamation
-						);
-					continue;
+					// check chosen font
+
+					Refresh();
+
+					try
+					{
+						f = new Font(fd.Font.Name, fd.Font.Size, FontStyle.Regular);
+						fontOK = true;
+					}
+					catch (Exception)
+					{
+						cancel =
+							MessageBox.Show
+							(
+								this,
+								@"Font """ + fd.Font.Name + @""" does not support regular style. Choose a different font.",
+								@"Font not supported",
+								MessageBoxButtons.OKCancel,
+								MessageBoxIcon.Exclamation
+							)
+							!= DialogResult.OK;
+					}
 				}
 			}
-			while (result == DialogResult.OK);
+			while (!fontOK && !cancel);
 
-			if (result == DialogResult.OK)
+			if (fontOK)
 			{
 				if ((f.Name != _formatSettings_Form.Font.Name) || (f.Size != _formatSettings_Form.Font.Size))
 				{
