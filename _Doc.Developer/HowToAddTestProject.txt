@@ -2,7 +2,7 @@
 1. Solution > Add > New Project...
 
 2. Visual C# > Windows > Class Library
-   Name: "<Testee>.Test"
+   Name "<Testee>.Test"
 
 3. Remove "Class1"
 
@@ -26,6 +26,6 @@
 7. Add reference to testee projects
 
 8. Add test classes
-   Name: "<Testee>Test"
+   Name "<Testee>Test"
 
 9. Add tests according to the NUnit documentation
