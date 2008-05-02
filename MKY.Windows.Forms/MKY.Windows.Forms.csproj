@@ -10,7 +10,7 @@
     <RootNamespace>MKY.Windows.Forms</RootNamespace>
     <AssemblyName>MKY.Windows.Forms</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Properties\Windows.Forms.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Properties\MKY.Windows.Forms.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -69,7 +69,7 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\Windows.Forms.snk" />
+    <None Include="Properties\MKY.Windows.Forms.snk" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Chronometer.resx">
@@ -90,9 +90,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Utilities\Utilities.csproj">
+    <ProjectReference Include="..\MKY.Utilities\MKY.Utilities.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
-      <Name>Utilities</Name>
+      <Name>MKY.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

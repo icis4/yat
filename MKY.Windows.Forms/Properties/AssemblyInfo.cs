@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MKY.Windows.Forms")]
-[assembly: AssemblyDescription("Windows.Forms extension")]
+[assembly: AssemblyDescription("System.Windows.Forms extension")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MKY")]
 [assembly: AssemblyProduct("MKY.Windows.Forms")]

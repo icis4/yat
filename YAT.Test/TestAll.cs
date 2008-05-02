@@ -21,7 +21,7 @@ namespace YAT.Test
 			{
 				TestSuite suite = new TestSuite("TestAll");
 
-				// Utilities.Test
+				// MKY.Utilities.Test
 				suite.Add(new MKY.Utilities.Test.IO.XPathTest());
 				suite.Add(new MKY.Utilities.Test.Settings.DocumentSettingsHandlerTest());
 				suite.Add(new MKY.Utilities.Test.Types.XByteTest());

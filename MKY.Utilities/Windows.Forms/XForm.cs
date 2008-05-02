@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace MKY.Utilities.Windows.Forms
 {
 	/// <summary>
-	/// Windows.Forms utility methods.
+	/// System.Windows.Forms utility methods.
 	/// </summary>
 	public static class XForm
 	{

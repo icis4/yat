@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT", "YAT\YAT.csproj", "{E
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows.Forms", "Windows.Forms\Windows.Forms.csproj", "{CB2E6173-CB9F-4FB4-8948-30D04D4BAE50}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Windows.Forms", "MKY.Windows.Forms\MKY.Windows.Forms.csproj", "{CB2E6173-CB9F-4FB4-8948-30D04D4BAE50}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
@@ -66,7 +66,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Settings.Workspace", "Y
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities.Test", "Utilities.Test\Utilities.Test.csproj", "{644F7C29-CCE6-4827-9EF2-8B7D34194101}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Utilities.Test", "MKY.Utilities.Test\MKY.Utilities.Test.csproj", "{644F7C29-CCE6-4827-9EF2-8B7D34194101}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
@@ -118,19 +118,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Gui.Utilities", "YAT.Gu
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO.Ports", "IO.Ports\IO.Ports.csproj", "{D8940035-D30A-48A3-AC28-E8A4B8910CB9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Ports", "MKY.IO.Ports\MKY.IO.Ports.csproj", "{D8940035-D30A-48A3-AC28-E8A4B8910CB9}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "Utilities\Utilities.csproj", "{F489B948-95CF-49FE-B9AA-A51654F5688B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Utilities", "MKY.Utilities\MKY.Utilities.csproj", "{F489B948-95CF-49FE-B9AA-A51654F5688B}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net.Sockets", "Net.Sockets\Net.Sockets.csproj", "{307EFF74-9C31-4943-87A9-E7686551C4D1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Net.Sockets", "MKY.Net.Sockets\MKY.Net.Sockets.csproj", "{307EFF74-9C31-4943-87A9-E7686551C4D1}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
@@ -195,7 +195,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Controller.Test", "YAT.
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO.Ports.Test", "IO.Ports.Test\IO.Ports.Test.csproj", "{82461541-B351-4913-9747-EAFEE2322768}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Ports.Test", "MKY.IO.Ports.Test\MKY.IO.Ports.Test.csproj", "{82461541-B351-4913-9747-EAFEE2322768}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"

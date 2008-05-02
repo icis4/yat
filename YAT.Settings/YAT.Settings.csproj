@@ -48,9 +48,9 @@
     <Compile Include="Structs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Utilities\Utilities.csproj">
+    <ProjectReference Include="..\MKY.Utilities\MKY.Utilities.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
-      <Name>Utilities</Name>
+      <Name>MKY.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

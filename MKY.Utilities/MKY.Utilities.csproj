@@ -10,7 +10,7 @@
     <RootNamespace>MKY.Utilities</RootNamespace>
     <AssemblyName>MKY.Utilities</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Properties\Utilities.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Properties\MKY.Utilities.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -86,7 +86,7 @@
     <Compile Include="Xml\TolerantXmlSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\Utilities.snk" />
+    <None Include="Properties\MKY.Utilities.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

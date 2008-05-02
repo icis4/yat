@@ -43,17 +43,17 @@
     <Compile Include="XmlTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IO.Ports\IO.Ports.csproj">
+    <ProjectReference Include="..\MKY.IO.Ports\MKY.IO.Ports.csproj">
       <Project>{D8940035-D30A-48A3-AC28-E8A4B8910CB9}</Project>
-      <Name>IO.Ports</Name>
+      <Name>MKY.IO.Ports</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Net.Sockets\Net.Sockets.csproj">
+    <ProjectReference Include="..\MKY.Net.Sockets\MKY.Net.Sockets.csproj">
       <Project>{307EFF74-9C31-4943-87A9-E7686551C4D1}</Project>
-      <Name>Net.Sockets</Name>
+      <Name>MKY.Net.Sockets</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Utilities\Utilities.csproj">
+    <ProjectReference Include="..\MKY.Utilities\MKY.Utilities.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
-      <Name>Utilities</Name>
+      <Name>MKY.Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Domain\YAT.Domain.csproj">
       <Project>{1C44A8C0-7805-4172-8746-2DB750803FFF}</Project>
