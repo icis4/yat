@@ -10,7 +10,7 @@
     <RootNamespace>MKY.Net.Sockets</RootNamespace>
     <AssemblyName>MKY.Net.Sockets</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Properties\Net.Sockets.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Properties\MKY.Net.Sockets.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -66,13 +66,13 @@
     <Compile Include="Utilities\ThreadPool.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\Net.Sockets.snk" />
-    <None Include="Net.Sockets.cd" />
+    <None Include="Properties\MKY.Net.Sockets.snk" />
+    <None Include="MKY.Net.Sockets.cd" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Utilities\Utilities.csproj">
+    <ProjectReference Include="..\MKY.Utilities\MKY.Utilities.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
-      <Name>Utilities</Name>
+      <Name>MKY.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
