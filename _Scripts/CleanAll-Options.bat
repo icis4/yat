@@ -2,12 +2,16 @@
 
 PUSHD ..
 
-ECHO Cleaning user options...
+ECHO Cleaning solution user options...
 DEL /F /Q /A:H "*.suo"
 ECHO ...successfully cleaned
 
-ECHO Cleaning additional options...
+ECHO Cleaning additional solution settings...
 DEL /F /Q /A:H "*.xml"
+ECHO ...successfully cleaned
+
+ECHO Cleaning all project user options...
+FOR /R %%I IN (.) DO CALL "_Scripts\CleanFiles.bat" "%%I" "*.csproj.user"
 ECHO ...successfully cleaned
 
 POPD
