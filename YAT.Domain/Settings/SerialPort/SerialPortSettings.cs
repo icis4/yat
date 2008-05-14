@@ -18,13 +18,13 @@ namespace YAT.Domain.Settings.SerialPort
 		/// <summary></summary>
 		public const byte ParityErrorReplacementDefaultAsByte = 0x00;
 
-		private MKY.IO.Ports.SerialPortId _portId;
+		private MKY.IO.Ports.SerialPortId   _portId;
 		private SerialCommunicationSettings _communication;
 		private AutoRetry _autoReopen;
-		private bool _replaceParityErrors;
+		private bool   _replaceParityErrors;
 		private string _parityErrorReplacement;
-		private bool _rtsEnabled;
-		private bool _dtrEnabled;
+		private bool   _rtsEnabled;
+		private bool   _dtrEnabled;
 
 		/// <summary></summary>
 		public SerialPortSettings()
@@ -57,8 +57,8 @@ namespace YAT.Domain.Settings.SerialPort
 		{
 			_portId = rhs.PortId;
 			Communication = new SerialCommunicationSettings(rhs.Communication);
-			_autoReopen = rhs._autoReopen;
-			_replaceParityErrors = rhs._replaceParityErrors;
+			_autoReopen             = rhs._autoReopen;
+			_replaceParityErrors    = rhs._replaceParityErrors;
 			_parityErrorReplacement = rhs.ParityErrorReplacement;
 			_rtsEnabled = rhs.RtsEnabled;
 			_dtrEnabled = rhs.DtrEnabled;
@@ -71,11 +71,11 @@ namespace YAT.Domain.Settings.SerialPort
 		protected override void SetMyDefaults()
 		{
 			PortId = MKY.IO.Ports.SerialPortId.DefaultPort;
-			AutoReopen = AutoReopenDefault;
-			ReplaceParityErrors = ReplaceParityErrorsDefault;
+			AutoReopen             = AutoReopenDefault;
+			ReplaceParityErrors    = ReplaceParityErrorsDefault;
 			ParityErrorReplacement = ParityErrorReplacementDefault;
-			RtsEnabled = false;
-			DtrEnabled = false;
+			RtsEnabled = true;
+			DtrEnabled = true;
 		}
 
 		#region Properties

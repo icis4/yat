@@ -305,6 +305,15 @@ namespace MKY.IO.Ports
 			}
 		}
 
+		private bool HandshakeIsNotUsingRequestToSend
+		{
+			get
+			{
+				return ((base.Handshake != System.IO.Ports.Handshake.RequestToSend) &&
+						(base.Handshake != System.IO.Ports.Handshake.RequestToSendXOnXOff));
+			}
+		}
+
 		/// <summary>
 		/// Communications port settings.
 		/// </summary>
@@ -356,15 +365,23 @@ namespace MKY.IO.Ports
 			get
 			{
 				AssertNotDisposed();
-				return (base.RtsEnable);
+
+				if (HandshakeIsNotUsingRequestToSend)
+					return (base.RtsEnable);
+				else
+					return (false);
 			}
 			set
 			{
 				AssertNotDisposed();
-				if (base.RtsEnable != value)
+
+				if (HandshakeIsNotUsingRequestToSend)
 				{
-					base.RtsEnable = value;
-					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.RtsChanged));
+					if (base.RtsEnable != value)
+					{
+						base.RtsEnable = value;
+						OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.RtsChanged));
+					}
 				}
 			}
 		}
@@ -375,8 +392,12 @@ namespace MKY.IO.Ports
 		public virtual void ToggleRts()
 		{
 			AssertNotDisposed();
-			this.RtsEnable = !this.RtsEnable;
-			OnPinChanged(new SerialPinChangedEventArgs());
+
+			if (HandshakeIsNotUsingRequestToSend)
+			{
+				this.RtsEnable = !this.RtsEnable;
+				OnPinChanged(new SerialPinChangedEventArgs());
+			}
 		}
 
 		/// <summary>
@@ -424,7 +445,12 @@ namespace MKY.IO.Ports
 				AssertNotDisposed();
 
 				SerialPortControlPins pins = new SerialPortControlPins();
-				pins.Rts = base.RtsEnable;
+
+				if (HandshakeIsNotUsingRequestToSend)
+					pins.Rts = base.RtsEnable;
+				else
+					pins.Rts = false;
+
 				pins.Cts = base.CtsHolding;
 				pins.Dtr = base.DtrEnable;
 				pins.Dsr = base.DsrHolding;
