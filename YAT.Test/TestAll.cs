@@ -33,7 +33,7 @@ namespace YAT.Test
 				suite.Add(new YAT.Domain.Test.TextTerminal.SubstitutionParserTest());
 
 				// YAT.Model.Test
-				suite.Add(new YAT.Model.Test.ModelTest());
+				suite.Add(new YAT.Model.Test.TransmissionTest());
 
 				// YAT.Settings.Test
 				suite.Add(new YAT.Settings.Test.FileVersionsTest());

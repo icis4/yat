@@ -134,6 +134,12 @@ namespace YAT.Gui.Forms
 				_settings_Form.IO.SerialPort.Communication.FlowControl = serialPortSettings.FlowControl;
 		}
 
+		private void serialPortSettings_AutoReopenChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+				_settings_Form.IO.SerialPort.AutoReopen = serialPortSettings.AutoReopen;
+		}
+
 		private void socketSelection_RemoteHostNameOrAddressChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
@@ -274,15 +280,16 @@ namespace YAT.Gui.Forms
 			socketSettings.HostType               = (Domain.XIOType)ioType;
 			socketSettings.TcpClientAutoReconnect = _settings_Form.IO.Socket.TcpClientAutoReconnect;
 
-			serialPortSelection.Visible  = isSerialPort;
-			serialPortSelection.PortId   = _settings_Form.IO.SerialPort.PortId;
+			serialPortSelection.Visible = isSerialPort;
+			serialPortSelection.PortId  = _settings_Form.IO.SerialPort.PortId;
 
-			serialPortSettings.Visible   = isSerialPort;
-			serialPortSettings.BaudRate  = _settings_Form.IO.SerialPort.Communication.BaudRate;
-			serialPortSettings.DataBits  = _settings_Form.IO.SerialPort.Communication.DataBits;
-			serialPortSettings.Parity    = _settings_Form.IO.SerialPort.Communication.Parity;
-			serialPortSettings.StopBits  = _settings_Form.IO.SerialPort.Communication.StopBits;
+			serialPortSettings.Visible     = isSerialPort;
+			serialPortSettings.BaudRate    = _settings_Form.IO.SerialPort.Communication.BaudRate;
+			serialPortSettings.DataBits    = _settings_Form.IO.SerialPort.Communication.DataBits;
+			serialPortSettings.Parity      = _settings_Form.IO.SerialPort.Communication.Parity;
+			serialPortSettings.StopBits    = _settings_Form.IO.SerialPort.Communication.StopBits;
 			serialPortSettings.FlowControl = _settings_Form.IO.SerialPort.Communication.FlowControl;
+			serialPortSettings.AutoReopen  = _settings_Form.IO.SerialPort.AutoReopen;
 
 			_isSettingControls = false;
 		}

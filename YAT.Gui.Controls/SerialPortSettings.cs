@@ -39,6 +39,7 @@ namespace YAT.Gui.Controls
 		private System.IO.Ports.Parity   _parity      = _ParityDefault;
 		private System.IO.Ports.StopBits _stopBits    = _StopBitsDefault;
 		private Domain.IO.FlowControl    _flowControl = _FlowControlDefault;
+		private Domain.AutoRetry         _autoReopen  = Domain.Settings.SerialPort.SerialPortSettings.AutoReopenDefault;
 
 		#endregion
 
@@ -66,6 +67,10 @@ namespace YAT.Gui.Controls
 		[Category("Property Changed")]
 		[Description("Event raised when the FlowControl property is changed.")]
 		public event EventHandler FlowControlChanged;
+
+		[Category("Property Changed")]
+		[Description("Event raised when the AutoReopen property is changed.")]
+		public event EventHandler AutoReopenChanged;
 
 		#endregion
 
@@ -174,6 +179,23 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		[Category("Serial Port")]
+		[Description("Auto reopen optione.")]
+		[Browsable(false)]
+		public Domain.AutoRetry AutoReopen
+		{
+			get { return (_autoReopen); }
+			set
+			{
+				if (_autoReopen != value)
+				{
+					_autoReopen = value;
+					SetControls();
+					OnAutoReopenChanged(new EventArgs());
+				}
+			}
+		}
+
 		#endregion
 
 		#region Controls Event Handlers
@@ -244,6 +266,42 @@ namespace YAT.Gui.Controls
 				FlowControl = (Domain.IO.XFlowControl)comboBox_FlowControl.SelectedItem;
 		}
 
+		private void checkBox_AutoReopen_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+			{
+				Domain.AutoRetry ar = _autoReopen;
+				ar.Enabled = checkBox_AutoReopen.Checked;
+				AutoReopen = ar;
+			}
+		}
+
+		private void textBox_AutoReopenInterval_Validating(object sender, CancelEventArgs e)
+		{
+			if (!_isSettingControls)
+			{
+				int interval;
+				if (int.TryParse(textBox_AutoReopenInterval.Text, out interval) && (interval >= 100))
+				{
+					Domain.AutoRetry ar = _autoReopen;
+					ar.Interval = interval;
+					AutoReopen = ar;
+				}
+				else
+				{
+					MessageBox.Show
+						(
+						this,
+						"Reconnect interval must be at least 100 ms!",
+						"Invalid Input",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+						);
+					e.Cancel = true;
+				}
+			}
+		}
+
 		#endregion
 
 		#region Private Methods
@@ -274,10 +332,13 @@ namespace YAT.Gui.Controls
 			else
 				comboBox_BaudRate.Text = _baudRate.ToString();
 
-			comboBox_DataBits.SelectedItem  = (MKY.IO.Ports.XDataBits)_dataBits;
-			comboBox_Parity.SelectedItem    = (MKY.IO.Ports.XParity)_parity;
-			comboBox_StopBits.SelectedItem  = (MKY.IO.Ports.XStopBits)_stopBits;
+			comboBox_DataBits.SelectedItem    = (MKY.IO.Ports.XDataBits)_dataBits;
+			comboBox_Parity.SelectedItem      = (MKY.IO.Ports.XParity)_parity;
+			comboBox_StopBits.SelectedItem    = (MKY.IO.Ports.XStopBits)_stopBits;
 			comboBox_FlowControl.SelectedItem = (Domain.IO.XFlowControl)_flowControl;
+
+			checkBox_AutoReopen.Checked     = _autoReopen.Enabled;
+			textBox_AutoReopenInterval.Text = _autoReopen.Interval.ToString();
 
 			_isSettingControls = false;
 		}
@@ -312,6 +373,11 @@ namespace YAT.Gui.Controls
 		protected virtual void OnFlowControlChanged(EventArgs e)
 		{
 			EventHelper.FireSync(FlowControlChanged, this, e);
+		}
+
+		protected virtual void OnAutoReopenChanged(EventArgs e)
+		{
+			EventHelper.FireSync(AutoReopenChanged, this, e);
 		}
 
 		#endregion

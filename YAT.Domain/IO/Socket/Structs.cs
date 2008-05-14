@@ -3,25 +3,21 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-// disable warning CS0660
-// 'type' defines operator == or operator != but does not override Object.Equals(object o)
-#pragma warning disable 660
-
 namespace YAT.Domain
 {
 	/// <summary></summary>
-	public struct TcpClientAutoReconnect
+	public struct AutoRetry
 	{
 		/// <summary></summary>
 		[XmlElement("Enabled")]
 		public bool Enabled;
 
-		/// <summary></summary>
+		/// <summary>Interval of reconnect in ms</summary>
 		[XmlElement("Interval")]
-		public int Interval;                     // in ms
+		public int Interval;
 
 		/// <summary></summary>
-		public TcpClientAutoReconnect(bool enabled, int interval)
+		public AutoRetry(bool enabled, int interval)
 		{
 			Enabled = enabled;
 			Interval = interval;
@@ -50,7 +46,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(TcpClientAutoReconnect lhs, TcpClientAutoReconnect rhs)
+		public static bool operator ==(AutoRetry lhs, AutoRetry rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))
 				return (true);
@@ -61,7 +57,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(TcpClientAutoReconnect lhs, TcpClientAutoReconnect rhs)
+		public static bool operator !=(AutoRetry lhs, AutoRetry rhs)
 		{
 			return (!(lhs == rhs));
 		}

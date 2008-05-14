@@ -68,6 +68,9 @@ namespace YAT.Gui.Forms
 			linkLabel_Description.Links.Add(start, textLink.Length, "http://www.mt.com/");
 			linkLabel_Description.Text += textAfter;
 
+			// platform
+			linkLabel_Platform.Text = "For .NET 2.0 on Windows 2000 and later. Currently running on .NET runtime " + System.Runtime.InteropServices.RuntimeEnvironment.GetSystemVersion() + ".";
+
 			// HHD
 			linkLabel_HHD.Text = "";
 			textBefore = "YAT is a terminal (a connection endpoint). If you're looking for a tool to monitor serial data between an application" + Environment.NewLine +

@@ -36,7 +36,7 @@ namespace YAT.Domain.IO
 		private System.Net.IPAddress _remoteIPAddress;
 		private int _remotePort;
 		private System.Net.IPAddress _localIPAddress;
-		private TcpClientAutoReconnect _autoReconnect;
+		private AutoRetry _autoReconnect;
 
 		private SocketState _state = SocketState.Disconnected;
 		private object _stateSyncObj = new object();
@@ -80,11 +80,11 @@ namespace YAT.Domain.IO
 			_remoteIPAddress = remoteIPAddress;
 			_remotePort = remotePort;
 			_localIPAddress = localIPAddress;
-			_autoReconnect = new TcpClientAutoReconnect();
+			_autoReconnect = new AutoRetry();
 		}
 
 		/// <summary></summary>
-		public TcpClient(System.Net.IPAddress remoteIPAddress, int remotePort, System.Net.IPAddress localIPAddress, TcpClientAutoReconnect autoReconnect)
+		public TcpClient(System.Net.IPAddress remoteIPAddress, int remotePort, System.Net.IPAddress localIPAddress, AutoRetry autoReconnect)
 		{
 			_remoteIPAddress = remoteIPAddress;
 			_remotePort = remotePort;

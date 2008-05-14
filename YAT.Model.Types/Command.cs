@@ -60,13 +60,19 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public Command(string commandLine)
 		{
-			Initialize(true, commandLine, false, new string[] { commandLine }, Domain.Radix.String, "");
+			Initialize(true, "", false, new string[] { commandLine }, Domain.Radix.String, "");
 		}
 
 		/// <summary></summary>
 		public Command(string description, string commandLine)
 		{
 			Initialize(true, description, false, new string[] { commandLine }, Domain.Radix.String, "");
+		}
+
+		/// <summary></summary>
+		public Command(string[] commandLines)
+		{
+			Initialize(true, "", false, commandLines, Domain.Radix.String, "");
 		}
 
 		/// <summary></summary>
@@ -141,7 +147,13 @@ namespace YAT.Model.Types
 			set { _isDefined = value;  }
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Gets and sets description.
+		/// </summary>
+		/// <remarks>
+		/// Description cannot be cleared to "" with setting this property because of XML
+		/// deserialization issues. Instead, use <see cref="ClearDescription()"/>.
+		/// </remarks>
 		[XmlElement("Description")]
 		public string Description
 		{
@@ -427,6 +439,12 @@ namespace YAT.Model.Types
 		public void Clear()
 		{
 			Initialize();
+		}
+
+		/// <summary></summary>
+		public void ClearDescription()
+		{
+			_description = "";
 		}
 
 		#endregion

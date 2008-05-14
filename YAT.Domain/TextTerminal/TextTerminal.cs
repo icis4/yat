@@ -534,12 +534,21 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		/// <remarks>Ensure that line states are completely reset.</remarks>
 		public override void ReloadRepositories()
 		{
 			AssertNotDisposed();
 			
 			Initialize();
 			base.ReloadRepositories();
+		}
+
+		/// <summary></summary>
+		/// <remarks>Ensure that line states are completely reset.</remarks>
+		protected override void ClearMyRepository(RepositoryType repository)
+		{
+			Initialize();
+			base.ClearMyRepository(repository);
 		}
 
 		#endregion

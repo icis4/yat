@@ -13,6 +13,21 @@ namespace YAT.Domain.IO
 	/// </remarks>
 	public class SerialPort : IIOProvider, IDisposable
 	{
+		#region Types
+		//==========================================================================================
+		// Types
+		//==========================================================================================
+
+		private enum PortState
+		{
+			Closed,
+			Openend,
+			WaitingForReopen,
+			Error,
+		}
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -20,8 +35,13 @@ namespace YAT.Domain.IO
 
 		private bool _isDisposed;
 
+		private PortState _state = PortState.Closed;
+		private object _stateSyncObj = new object();
+
 		private Settings.SerialPort.SerialPortSettings _settings;
 		private MKY.IO.Ports.ISerialPort _port;
+
+		private System.Timers.Timer _reopenTimer;
 
 		#endregion
 
@@ -74,6 +94,7 @@ namespace YAT.Domain.IO
 			{
 				if (disposing)
 				{
+					StopAndDisposeReopenTimer();
 					DisposePort();
 				}
 				_isDisposed = true;
@@ -114,11 +135,18 @@ namespace YAT.Domain.IO
 			get
 			{
 				AssertNotDisposed();
-
-				if (_port != null)
-					return (_port.IsOpen);
-				else
-					return (false);
+				switch (_state)
+				{
+					case PortState.Openend:
+					case PortState.WaitingForReopen:
+					{
+						return (true);
+					}
+					default:
+					{
+						return (false);
+					}
+				}
 			}
 		}
 
@@ -217,6 +245,9 @@ namespace YAT.Domain.IO
 
 				OpenPort();
 
+				lock (_stateSyncObj)
+					_state = PortState.Openend;
+
 				OnIOChanged(new EventArgs());
 				OnIOControlChanged(new EventArgs());
 			}
@@ -239,6 +270,9 @@ namespace YAT.Domain.IO
 
 				ClosePort();
 				DisposePort();
+
+				lock (_stateSyncObj)
+					_state = PortState.Closed;
 
 				OnIOChanged(new EventArgs());
 				OnIOControlChanged(new EventArgs());
@@ -398,14 +432,58 @@ namespace YAT.Domain.IO
 			string message;
 			switch (e.EventType)
 			{
-				case System.IO.Ports.SerialError.Frame:    message = "Serial communication framing error!";            break;
-				case System.IO.Ports.SerialError.Overrun:  message = "Serial communication character buffer overrun!"; break;
-				case System.IO.Ports.SerialError.RXOver:   message = "Serial communication input buffer overflow!";    break;
-				case System.IO.Ports.SerialError.RXParity: message = "Serial communication parity error!";             break;
-				case System.IO.Ports.SerialError.TXFull:   message = "Serial communication output buffer full!";       break;
-				default:                                   message = "Unknown serial communication error!";            break;
+				case System.IO.Ports.SerialError.Frame:    message = "Serial port framing error!";            break;
+				case System.IO.Ports.SerialError.Overrun:  message = "Serial port character buffer overrun!"; break;
+				case System.IO.Ports.SerialError.RXOver:   message = "Serial port input buffer overflow!";    break;
+				case System.IO.Ports.SerialError.RXParity: message = "Serial port parity error!";             break;
+				case System.IO.Ports.SerialError.TXFull:   message = "Serial port output buffer full!";       break;
+				default:                                   message = "Unknown serial port error!";            break;
 			}
 			OnIOError(new SerialPortIOErrorEventArgs(message, e.EventType));
+		}
+
+		#endregion
+
+		#region Reopen Timer
+		//==========================================================================================
+		// Reopen Timer
+		//==========================================================================================
+
+		private void StartReopenTimer()
+		{
+			_reopenTimer = new System.Timers.Timer(_settings.AutoReopen.Interval);
+			_reopenTimer.AutoReset = false;
+			_reopenTimer.Elapsed += new System.Timers.ElapsedEventHandler(_reopenTimer_Elapsed);
+			_reopenTimer.Start();
+		}
+
+		private void StopAndDisposeReopenTimer()
+		{
+			if (_reopenTimer != null)
+			{
+				_reopenTimer.Stop();
+				_reopenTimer.Dispose();
+				_reopenTimer = null;
+			}
+		}
+
+		private void _reopenTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		{
+			if (!IsDisposed && HasStarted && !IsConnected)
+			{
+				try
+				{
+					Start();
+				}
+				catch
+				{
+					StartReopenTimer();
+				}
+			}
+			else
+			{
+				StopAndDisposeReopenTimer();
+			}
 		}
 
 		#endregion
