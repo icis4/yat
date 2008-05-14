@@ -20,6 +20,8 @@ namespace YAT.Domain.Settings.Socket
 		public const string DefaultLocalHostName = "<Any>";
 		/// <summary></summary>
 		public const int DefaultPort = 10000;
+		/// <summary></summary>
+		public static readonly Domain.AutoRetry TcpClientAutoReconnectDefault = new YAT.Domain.AutoRetry(false, 500);
 
 		#endregion
 
@@ -39,7 +41,7 @@ namespace YAT.Domain.Settings.Socket
 		private int _localTcpPort;
 		private int _localUdpPort;
 
-		private TcpClientAutoReconnect _tcpClientAutoReconnect;
+		private AutoRetry _tcpClientAutoReconnect;
 
 		#endregion
 
@@ -102,7 +104,7 @@ namespace YAT.Domain.Settings.Socket
 			LocalTcpPort            = DefaultPort;
 			LocalUdpPort            = DefaultPort + 1;
 
-			TcpClientAutoReconnect  = new TcpClientAutoReconnect(false, 500);
+			TcpClientAutoReconnect  = new AutoRetry(false, 500);
 		}
 
 		#endregion
@@ -257,7 +259,7 @@ namespace YAT.Domain.Settings.Socket
 
 		/// <summary></summary>
 		[XmlElement("TcpClientAutoReconnect")]
-		public TcpClientAutoReconnect TcpClientAutoReconnect
+		public AutoRetry TcpClientAutoReconnect
 		{
 			get { return (_tcpClientAutoReconnect); }
 			set

@@ -149,9 +149,10 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Platform.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_Platform.Location = new System.Drawing.Point(12, 122);
 			this.linkLabel_Platform.Name = "linkLabel_Platform";
-			this.linkLabel_Platform.Size = new System.Drawing.Size(204, 13);
+			this.linkLabel_Platform.Size = new System.Drawing.Size(432, 13);
 			this.linkLabel_Platform.TabIndex = 6;
-			this.linkLabel_Platform.Text = "For .NET 2.0 on Windows 2000 and later.";
+			this.linkLabel_Platform.Text = "For .NET 2.0 on Windows 2000 and later. Currently running on .NET runtime <VERSIO" +
+				"N>.";
 			this.linkLabel_Platform.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
 			// linkLabel_Title
@@ -192,7 +193,7 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Environment.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_Environment.Location = new System.Drawing.Point(12, 211);
 			this.linkLabel_Environment.Name = "linkLabel_Environment";
-			this.linkLabel_Environment.Size = new System.Drawing.Size(352, 91);
+			this.linkLabel_Environment.Size = new System.Drawing.Size(389, 91);
 			this.linkLabel_Environment.TabIndex = 10;
 			this.linkLabel_Environment.Text = resources.GetString("linkLabel_Environment.Text");
 			this.linkLabel_Environment.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
@@ -238,11 +239,11 @@ namespace YAT.Gui.Forms
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.button_Close;
 			this.ClientSize = new System.Drawing.Size(614, 362);
+			this.Controls.Add(this.linkLabel_License);
 			this.Controls.Add(this.pictureBox_License);
 			this.Controls.Add(this.linkLabel_Trademark);
 			this.Controls.Add(this.linkLabel_Environment);
 			this.Controls.Add(this.linkLabel_Author);
-			this.Controls.Add(this.linkLabel_License);
 			this.Controls.Add(this.linkLabel_Home);
 			this.Controls.Add(this.linkLabel_Title);
 			this.Controls.Add(this.linkLabel_Platform);

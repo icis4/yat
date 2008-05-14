@@ -151,10 +151,7 @@ namespace YAT.Gui.Controls
 		private void textBox_Description_Validating(object sender, CancelEventArgs e)
 		{
 			if (!_isSettingControls)
-			{
-				if (textBox_Description.Text != "")
-					SetDescription(textBox_Description.Text);
-			}
+				SetDescription(textBox_Description.Text);
 		}
 
 		private void textBox_Command_Enter(object sender, EventArgs e)
@@ -331,7 +328,10 @@ namespace YAT.Gui.Controls
 
 		private void SetDescription(string description)
 		{
-			_command.Description = description;
+			if (description != "")
+				_command.Description = description;
+			else
+				_command.ClearDescription();
 
 			SetControls();
 			OnCommandChanged(new EventArgs());

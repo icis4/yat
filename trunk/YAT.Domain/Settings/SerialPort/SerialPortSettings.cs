@@ -10,6 +10,8 @@ namespace YAT.Domain.Settings.SerialPort
 	public class SerialPortSettings : MKY.Utilities.Settings.Settings, IEquatable<SerialPortSettings>
 	{
 		/// <summary></summary>
+		public static readonly AutoRetry AutoReopenDefault = new AutoRetry(false, 2000);
+		/// <summary></summary>
 		public const bool ReplaceParityErrorsDefault = false;
 		/// <summary></summary>
 		public const string ParityErrorReplacementDefault = @"\h(00)";
@@ -18,6 +20,7 @@ namespace YAT.Domain.Settings.SerialPort
 
 		private MKY.IO.Ports.SerialPortId _portId;
 		private SerialCommunicationSettings _communication;
+		private AutoRetry _autoReopen;
 		private bool _replaceParityErrors;
 		private string _parityErrorReplacement;
 		private bool _rtsEnabled;
@@ -54,6 +57,7 @@ namespace YAT.Domain.Settings.SerialPort
 		{
 			_portId = rhs.PortId;
 			Communication = new SerialCommunicationSettings(rhs.Communication);
+			_autoReopen = rhs._autoReopen;
 			_replaceParityErrors = rhs._replaceParityErrors;
 			_parityErrorReplacement = rhs.ParityErrorReplacement;
 			_rtsEnabled = rhs.RtsEnabled;
@@ -67,6 +71,7 @@ namespace YAT.Domain.Settings.SerialPort
 		protected override void SetMyDefaults()
 		{
 			PortId = MKY.IO.Ports.SerialPortId.DefaultPort;
+			AutoReopen = AutoReopenDefault;
 			ReplaceParityErrors = ReplaceParityErrorsDefault;
 			ParityErrorReplacement = ParityErrorReplacementDefault;
 			RtsEnabled = false;
@@ -114,6 +119,21 @@ namespace YAT.Domain.Settings.SerialPort
 					SerialCommunicationSettings old = _communication;
 					_communication = value;
 					ReplaceNode(old, _communication);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("AutoReopen")]
+		public AutoRetry AutoReopen
+		{
+			get { return (_autoReopen); }
+			set
+			{
+				if (_autoReopen != value)
+				{
+					_autoReopen = value;
+					SetChanged();
 				}
 			}
 		}
@@ -205,6 +225,7 @@ namespace YAT.Domain.Settings.SerialPort
 					(
 					_portId.Equals(value._portId) &&
 					_communication.Equals(value._communication) &&
+					_autoReopen.Equals(value._autoReopen) &&
 					_replaceParityErrors.Equals(value._replaceParityErrors) &&
 					_parityErrorReplacement.Equals(value._parityErrorReplacement) &&
 					_rtsEnabled.Equals(value._rtsEnabled) &&

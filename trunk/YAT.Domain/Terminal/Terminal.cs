@@ -811,7 +811,24 @@ namespace YAT.Domain
 
 		private void _rawTerminal_Error(object sender, ErrorEventArgs e)
 		{
-			OnError(e);
+			SerialPortErrorEventArgs serialPortErrorEventArgs = (e as SerialPortErrorEventArgs);
+			if (serialPortErrorEventArgs == null)
+			{
+				OnError(e);
+			}
+			else
+			{
+				// handle serial port errors whenever possible
+				switch (serialPortErrorEventArgs.SerialPortError)
+				{
+					case System.IO.Ports.SerialError.Frame:    OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("Framing error"));   break;
+					case System.IO.Ports.SerialError.Overrun:  OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("Buffer overrun"));  break;
+					case System.IO.Ports.SerialError.RXOver:   OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("Buffer overflow")); break;
+					case System.IO.Ports.SerialError.RXParity: OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("Parity error"));    break;
+					case System.IO.Ports.SerialError.TXFull:   OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Error("Buffer full"));     break;
+					default:                                   OnError(e); break;
+				}
+			}
 		}
 
 		private void _rawTerminal_RawElementSent(object sender, RawElementEventArgs e)
@@ -867,6 +884,14 @@ namespace YAT.Domain
 		protected virtual void OnRawElementReceived(RawElementEventArgs e)
 		{
 			EventHelper.FireSync<RawElementEventArgs>(RawElementReceived, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnDisplayElementProcessed(SerialDirection direction, DisplayElement element)
+		{
+			List<DisplayElement> elements = new List<DisplayElement>();
+			elements.Add(element);
+			OnDisplayElementsProcessed(direction, elements);
 		}
 
 		/// <summary></summary>

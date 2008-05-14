@@ -40,6 +40,9 @@ namespace YAT.Gui.Controls
 			this.label_BaudRate = new System.Windows.Forms.Label();
 			this.label_FlowControlRemarks_1 = new System.Windows.Forms.Label();
 			this.label_FlowControlRemarks_2 = new System.Windows.Forms.Label();
+			this.label_AutoReopenIntervalUnit = new System.Windows.Forms.Label();
+			this.textBox_AutoReopenInterval = new System.Windows.Forms.TextBox();
+			this.checkBox_AutoReopen = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// comboBox_StopBits
@@ -160,10 +163,44 @@ namespace YAT.Gui.Controls
 			this.label_FlowControlRemarks_2.TabIndex = 11;
 			this.label_FlowControlRemarks_2.Text = "RTS / DTR can be set manually\r\nRTS is set high while sending\r\n";
 			// 
+			// label_AutoReopenIntervalUnit
+			// 
+			this.label_AutoReopenIntervalUnit.AutoSize = true;
+			this.label_AutoReopenIntervalUnit.Location = new System.Drawing.Point(151, 212);
+			this.label_AutoReopenIntervalUnit.Name = "label_AutoReopenIntervalUnit";
+			this.label_AutoReopenIntervalUnit.Size = new System.Drawing.Size(20, 13);
+			this.label_AutoReopenIntervalUnit.TabIndex = 15;
+			this.label_AutoReopenIntervalUnit.Text = "ms";
+			this.label_AutoReopenIntervalUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// textBox_AutoReopenInterval
+			// 
+			this.textBox_AutoReopenInterval.Enabled = false;
+			this.textBox_AutoReopenInterval.Location = new System.Drawing.Point(101, 209);
+			this.textBox_AutoReopenInterval.Name = "textBox_AutoReopenInterval";
+			this.textBox_AutoReopenInterval.Size = new System.Drawing.Size(48, 20);
+			this.textBox_AutoReopenInterval.TabIndex = 14;
+			this.textBox_AutoReopenInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textBox_AutoReopenInterval.Validating += new System.ComponentModel.CancelEventHandler(textBox_AutoReopenInterval_Validating);
+			// 
+			// checkBox_AutoReopen
+			// 
+			this.checkBox_AutoReopen.AutoSize = true;
+			this.checkBox_AutoReopen.Location = new System.Drawing.Point(3, 192);
+			this.checkBox_AutoReopen.Name = "checkBox_AutoReopen";
+			this.checkBox_AutoReopen.Size = new System.Drawing.Size(235, 17);
+			this.checkBox_AutoReopen.TabIndex = 12;
+			this.checkBox_AutoReopen.Text = "When port is closed, try to reopen port every";
+			this.checkBox_AutoReopen.UseVisualStyleBackColor = true;
+			this.checkBox_AutoReopen.CheckedChanged += new System.EventHandler(this.checkBox_AutoReopen_CheckedChanged);
+			// 
 			// SerialPortSettings
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.label_AutoReopenIntervalUnit);
+			this.Controls.Add(this.textBox_AutoReopenInterval);
+			this.Controls.Add(this.checkBox_AutoReopen);
 			this.Controls.Add(this.label_FlowControlRemarks_2);
 			this.Controls.Add(this.label_FlowControlRemarks_1);
 			this.Controls.Add(this.comboBox_StopBits);
@@ -177,7 +214,7 @@ namespace YAT.Gui.Controls
 			this.Controls.Add(this.label_DataBits);
 			this.Controls.Add(this.label_BaudRate);
 			this.Name = "SerialPortSettings";
-			this.Size = new System.Drawing.Size(260, 186);
+			this.Size = new System.Drawing.Size(260, 232);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -197,5 +234,8 @@ namespace YAT.Gui.Controls
 		private System.Windows.Forms.Label label_BaudRate;
 		private System.Windows.Forms.Label label_FlowControlRemarks_1;
 		private System.Windows.Forms.Label label_FlowControlRemarks_2;
+		private System.Windows.Forms.Label label_AutoReopenIntervalUnit;
+		private System.Windows.Forms.TextBox textBox_AutoReopenInterval;
+		private System.Windows.Forms.CheckBox checkBox_AutoReopen;
 	}
 }

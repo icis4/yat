@@ -9,7 +9,7 @@ using YAT.Settings.Terminal;
 namespace YAT.Model.Test
 {
 	[TestFixture]
-	public class TerminalClearTest
+	public class ClearTest
 	{
 		#region Tests
 		//==========================================================================================

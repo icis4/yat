@@ -9,7 +9,7 @@ using YAT.Settings.Terminal;
 namespace YAT.Model.Test
 {
 	[TestFixture]
-	public class ModelTest
+	public class TransmissionTest
 	{
 		#region Constants
 		//==========================================================================================
@@ -47,7 +47,7 @@ namespace YAT.Model.Test
 		// Object Lifetime
 		//==========================================================================================
 
-		public ModelTest()
+		public TransmissionTest()
 		{
 			_SingleLineCommand  = new Utilities.TestSet(new Model.Types.Command(_TestCommandLines[0]));
 			_DoubleLineCommand  = new Utilities.TestSet(new Model.Types.Command(new string[] { _TestCommandLines[0], _TestCommandLines[1] } ));
