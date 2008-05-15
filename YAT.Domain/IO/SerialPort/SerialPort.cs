@@ -95,7 +95,7 @@ namespace YAT.Domain.IO
 				if (disposing)
 				{
 					StopAndDisposeReopenTimer();
-					DisposePort();
+					CloseAndDisposePortAsync();
 				}
 				_isDisposed = true;
 			}
@@ -273,8 +273,7 @@ namespace YAT.Domain.IO
                 lock (_stateSyncObj)
                     _state = PortState.Closed;
 
-                ClosePort();
-				DisposePort();
+				CloseAndDisposePortAsync();
 
 				OnIOChanged(new EventArgs());
 				OnIOControlChanged(new EventArgs());
@@ -410,6 +409,25 @@ namespace YAT.Domain.IO
 				_port.Dispose();
 				_port = null;
 			}
+		}
+
+		private delegate void AsyncInvokeDelegate();
+
+		/// <summary></summary>
+		/// <remarks>
+		/// Asynchronously invoke close/dispose to prevent potential dead-locks if
+		/// close/dispose was called from a ISynchronizeInvoke target (i.e. a form).
+		/// </remarks>
+		private void CloseAndDisposePortAsync()
+		{
+			AsyncInvokeDelegate asyncInvoker = new AsyncInvokeDelegate(CloseAndDisposePort);
+			asyncInvoker.BeginInvoke(null, null);
+		}
+
+		private void CloseAndDisposePort()
+		{
+			ClosePort();
+			DisposePort();
 		}
 
 		#endregion
