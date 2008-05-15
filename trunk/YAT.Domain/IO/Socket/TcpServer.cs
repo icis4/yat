@@ -308,11 +308,11 @@ namespace YAT.Domain.IO
 
 		private void StopSocket()
 		{
-			_socket.Stop();
-			DisposeSocket();
-
 			lock (_stateSyncObj)
 				_state = SocketState.Stopping;
+
+			_socket.Stop();
+			DisposeSocket();
 
 			OnIOChanged(new EventArgs());
 		}

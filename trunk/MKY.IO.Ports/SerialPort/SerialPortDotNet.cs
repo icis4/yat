@@ -369,7 +369,7 @@ namespace MKY.IO.Ports
 				if (HandshakeIsNotUsingRequestToSend)
 					return (base.RtsEnable);
 				else
-					return (false);
+					return (true);
 			}
 			set
 			{
@@ -449,7 +449,7 @@ namespace MKY.IO.Ports
 				if (HandshakeIsNotUsingRequestToSend)
 					pins.Rts = base.RtsEnable;
 				else
-					pins.Rts = false;
+					pins.Rts = true;
 
 				pins.Cts = base.CtsHolding;
 				pins.Dtr = base.DtrEnable;
@@ -503,12 +503,11 @@ namespace MKY.IO.Ports
 				OnOpening(new EventArgs());
 				base.Open();
 
-				// send XOn if software flow control enabled
+				// immediately send XOn if software flow control enabled to ensure that
+                //   device gets put into XOn if it was XOff before
 				if ((Handshake == System.IO.Ports.Handshake.XOnXOff) ||
 					(Handshake == System.IO.Ports.Handshake.RequestToSendXOnXOff))
 				{
-					// \fixme i.e. checkme, is XOn already sent by DotNET?
-					// This needs some efforts to be done, cannot be done right now
 					byte[] xOn = { SerialPortSettings.XOnByte };
 					base.Write(xOn, 0, 1);
 				}

@@ -821,11 +821,11 @@ namespace YAT.Domain
 				// handle serial port errors whenever possible
 				switch (serialPortErrorEventArgs.SerialPortError)
 				{
-					case System.IO.Ports.SerialError.Frame:    OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("Framing error"));   break;
-					case System.IO.Ports.SerialError.Overrun:  OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("Buffer overrun"));  break;
-					case System.IO.Ports.SerialError.RXOver:   OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("Buffer overflow")); break;
-					case System.IO.Ports.SerialError.RXParity: OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("Parity error"));    break;
-					case System.IO.Ports.SerialError.TXFull:   OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Error("Buffer full"));     break;
+					case System.IO.Ports.SerialError.Frame:    OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("<FRAMING ERROR>"));   break;
+					case System.IO.Ports.SerialError.Overrun:  OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("<BUFFER OVERRUN>"));  break;
+					case System.IO.Ports.SerialError.RXOver:   OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("<BUFFER OVERFLOW>")); break;
+					case System.IO.Ports.SerialError.RXParity: OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("<PARITY ERROR>"));    break;
+					case System.IO.Ports.SerialError.TXFull:   OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Error("<BUFFER FULL>"));     break;
 					default:                                   OnError(e); break;
 				}
 			}
