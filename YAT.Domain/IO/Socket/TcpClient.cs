@@ -17,6 +17,7 @@ namespace YAT.Domain.IO
 
 		private enum SocketState
 		{
+			Disconnecting,
 			Disconnected,
 			Connecting,
 			Connected,
@@ -326,12 +327,12 @@ namespace YAT.Domain.IO
 
 		private void StopSocket()
 		{
+			lock (_stateSyncObj)
+				_state = SocketState.Disconnecting;
+
 			_socket.Stop();
 			DisposeSocket();
-			
-			lock (_stateSyncObj)
-				_state = SocketState.Disconnected;
-			
+
 			OnIOChanged(new EventArgs());
 		}
 

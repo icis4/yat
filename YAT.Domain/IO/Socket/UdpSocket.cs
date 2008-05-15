@@ -294,11 +294,11 @@ namespace YAT.Domain.IO
 
 		private void StopSocket()
 		{
-			_socket.Stop();
-			DisposeSocket();
-
 			lock (_stateSyncObj)
 				_state = SocketState.Closing;
+
+			_socket.Stop();
+			DisposeSocket();
 
 			OnIOChanged(new EventArgs());
 		}

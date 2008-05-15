@@ -268,11 +268,13 @@ namespace YAT.Domain.IO
 
 				#endif
 
-				ClosePort();
-				DisposePort();
+                // set state to closed before starting to close
+                // ensures that no more port events are forwarded
+                lock (_stateSyncObj)
+                    _state = PortState.Closed;
 
-				lock (_stateSyncObj)
-					_state = PortState.Closed;
+                ClosePort();
+				DisposePort();
 
 				OnIOChanged(new EventArgs());
 				OnIOControlChanged(new EventArgs());
@@ -419,27 +421,32 @@ namespace YAT.Domain.IO
 
 		private void _port_DataReceived(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
 		{
-			OnDataReceived(new EventArgs());
+			if (_state == PortState.Openend) // ensure not to forward any events during closing anymore
+				OnDataReceived(new EventArgs());
 		}
 
 		private void _port_PinChanged(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
-			OnIOControlChanged(new EventArgs());
+			if (_state == PortState.Openend) // ensure not to forward any events during closing anymore
+				OnIOControlChanged(new EventArgs());
 		}
 
 		private void _port_ErrorReceived(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e)
 		{
-			string message;
-			switch (e.EventType)
+			if (_state == PortState.Openend) // ensure not to forward any events during closing anymore
 			{
-				case System.IO.Ports.SerialError.Frame:    message = "Serial port framing error!";            break;
-				case System.IO.Ports.SerialError.Overrun:  message = "Serial port character buffer overrun!"; break;
-				case System.IO.Ports.SerialError.RXOver:   message = "Serial port input buffer overflow!";    break;
-				case System.IO.Ports.SerialError.RXParity: message = "Serial port parity error!";             break;
-				case System.IO.Ports.SerialError.TXFull:   message = "Serial port output buffer full!";       break;
-				default:                                   message = "Unknown serial port error!";            break;
+				string message;
+				switch (e.EventType)
+				{
+					case System.IO.Ports.SerialError.Frame:    message = "Serial port framing error!";            break;
+					case System.IO.Ports.SerialError.Overrun:  message = "Serial port character buffer overrun!"; break;
+					case System.IO.Ports.SerialError.RXOver:   message = "Serial port input buffer overflow!";    break;
+					case System.IO.Ports.SerialError.RXParity: message = "Serial port parity error!";             break;
+					case System.IO.Ports.SerialError.TXFull:   message = "Serial port output buffer full!";       break;
+					default:                                   message = "Unknown serial port error!";            break;
+				}
+				OnIOError(new SerialPortIOErrorEventArgs(message, e.EventType));
 			}
-			OnIOError(new SerialPortIOErrorEventArgs(message, e.EventType));
 		}
 
 		#endregion
