@@ -54,7 +54,7 @@ namespace MKY.Utilities.Event
 						WriteExceptionToDebugOutput(ex, sink);
 					}
 				#else // NON-DEBUG: invoke event the safe way
-					InvokeOnSameThread(sink, args);
+					InvokeOnCurrentThread(sink, args);
 				#endif
 				}
 			}
@@ -97,7 +97,7 @@ namespace MKY.Utilities.Event
 						WriteExceptionToDebugOutput(ex, sink);
 					}
 				#else // NON-DEBUG: invoke event the safe way
-					InvokeOnSameThread(sink, args);
+					InvokeOnCurrentThread(sink, args);
 				#endif
 				}
 			}
@@ -124,7 +124,7 @@ namespace MKY.Utilities.Event
 				if ((sinkTarget != null) && (sinkTarget.InvokeRequired))
 					InvokeSynchronized(sinkTarget, sink, args);
 				else
-					InvokeOnSameThread(sink, args);
+					InvokeOnCurrentThread(sink, args);
 			}
 		}
 
@@ -160,7 +160,7 @@ namespace MKY.Utilities.Event
 				}
 				else
 				{
-					AsyncInvokeDelegate asyncInvoker = new AsyncInvokeDelegate(InvokeOnSameThread); ;
+					AsyncInvokeDelegate asyncInvoker = new AsyncInvokeDelegate(InvokeOnCurrentThread);
 					asyncInvoker.BeginInvoke(sink, args, null, null);
 				}
 			}
@@ -194,13 +194,13 @@ namespace MKY.Utilities.Event
 
 		#endregion
 
-		#region Safe Invoke On Same Thread
+		#region Safe Invoke On Current Thread
 		//------------------------------------------------------------------------------------------
-		// Safe Invoke On Same Thread
+		// Safe Invoke On Current Thread
 		//------------------------------------------------------------------------------------------
 
 		[OneWay]
-		private static void InvokeOnSameThread(Delegate sink, object[] args)
+		private static void InvokeOnCurrentThread(Delegate sink, object[] args)
 		{
 			try
 			{
