@@ -48,7 +48,7 @@ namespace MKY.IO.Serial.SerialPort
 		private PortState _state = PortState.Reset;
 		private object _stateSyncObj = new object();
 
-		private Settings.SerialPort.SerialPortSettings _settings;
+		private SerialPortSettings _settings;
 		private MKY.IO.Ports.ISerialPort _port;
 
 		/// <summary>
@@ -83,7 +83,7 @@ namespace MKY.IO.Serial.SerialPort
 		//==========================================================================================
 
 		/// <summary></summary>
-		public SerialPort(Settings.SerialPort.SerialPortSettings settings)
+		public SerialPort(SerialPortSettings settings)
 		{
 			_settings = settings;
 			ApplySettings();
