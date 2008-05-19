@@ -337,7 +337,9 @@ namespace YAT.Gui.Controls
 			comboBox_StopBits.SelectedItem    = (MKY.IO.Ports.XStopBits)_stopBits;
 			comboBox_FlowControl.SelectedItem = (Domain.IO.XFlowControl)_flowControl;
 
-			checkBox_AutoReopen.Checked     = _autoReopen.Enabled;
+			bool autoOpenEnabled = _autoReopen.Enabled;
+			checkBox_AutoReopen.Checked = autoOpenEnabled;
+			textBox_AutoReopenInterval.Enabled = autoOpenEnabled;
 			textBox_AutoReopenInterval.Text = _autoReopen.Interval.ToString();
 
 			_isSettingControls = false;

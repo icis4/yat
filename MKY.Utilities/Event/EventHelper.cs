@@ -1,3 +1,7 @@
+// Choose whether exceptions should be handled or execution immediately stopped
+//#define HANDLE_EXCEPTIONS
+#define BREAK_EXCEPTIONS
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,7 +26,7 @@ namespace MKY.Utilities.Event
 		/// Fires event with supplied arguments synchronously. Event is
 		/// fired safely, exceptions are caught. If an event sink implements
 		/// <see cref="System.ComponentModel.ISynchronizeInvoke"/>,
-		/// the event is invoked on that thread. Otherwise the event is
+		/// the event is invoked on that thread. Otherwise, the event is
 		/// invoked on the current thread.
 		/// </summary>
 		public static void FireSync(Delegate eventDelegate, params object[] args)
@@ -41,7 +45,7 @@ namespace MKY.Utilities.Event
 				}
 				else
 				{
-				#if (DEBUG) // invoke event directly so exceptions can be debugged where they happen
+				#if (DEBUG && HANDLE_EXCEPTIONS) // invoke event directly so exceptions can be debugged where they happen
 					EventHandler castedSink = (EventHandler)sink;
 					object sender = args[0];
 					EventArgs eventArgs = (EventArgs)args[1];
@@ -53,6 +57,11 @@ namespace MKY.Utilities.Event
 					{
 						WriteExceptionToDebugOutput(ex, sink);
 					}
+				#elif (DEBUG && BREAK_EXCEPTIONS) // invoke event directly so exceptions can be debugged where they happen
+					EventHandler castedSink = (EventHandler)sink;
+					object sender = args[0];
+					EventArgs eventArgs = (EventArgs)args[1];
+					castedSink(sender, eventArgs);
 				#else // NON-DEBUG: invoke event the safe way
 					InvokeOnCurrentThread(sink, args);
 				#endif
@@ -64,7 +73,7 @@ namespace MKY.Utilities.Event
 		/// Fires event with supplied arguments synchronously. Event is
 		/// fired safely, exceptions are caught. If an event sink implements
 		/// <see cref="System.ComponentModel.ISynchronizeInvoke"/>,
-		/// the event is invoked on that thread. Otherwise the event is
+		/// the event is invoked on that thread. Otherwise, the event is
 		/// invoked on the current thread.
 		/// </summary>
 		public static void FireSync<TEventArgs>(Delegate eventDelegate, params object[] args)
@@ -84,7 +93,7 @@ namespace MKY.Utilities.Event
 				}
 				else
 				{
-				#if (DEBUG) // invoke event directly so exceptions can be debugged where they happen
+				#if (DEBUG && HANDLE_EXCEPTIONS) // invoke event directly so exceptions can be debugged where they happen
 					EventHandler<TEventArgs> castedSink = (EventHandler<TEventArgs>)sink;
 					object sender = args[0];
 					TEventArgs eventArgs = (TEventArgs)args[1];
@@ -96,6 +105,11 @@ namespace MKY.Utilities.Event
 					{
 						WriteExceptionToDebugOutput(ex, sink);
 					}
+				#elif (DEBUG && BREAK_EXCEPTIONS) // invoke event directly so exceptions can be debugged where they happen
+					EventHandler<TEventArgs> castedSink = (EventHandler<TEventArgs>)sink;
+					object sender = args[0];
+					TEventArgs eventArgs = (TEventArgs)args[1];
+					castedSink(sender, eventArgs);
 				#else // NON-DEBUG: invoke event the safe way
 					InvokeOnCurrentThread(sink, args);
 				#endif
@@ -107,7 +121,7 @@ namespace MKY.Utilities.Event
 		/// Fires event with supplied arguments synchronously. Event is
 		/// fired safely, exceptions are caught. If an event sink implements
 		/// <see cref="System.ComponentModel.ISynchronizeInvoke"/>,
-		/// the event is invoked on that thread. Otherwise the event is
+		/// the event is invoked on that thread. Otherwise, the event is
 		/// invoked on the current thread.
 		/// </summary>
 		public static void FireSync<TEventArgs, TEventHandler>(Delegate eventDelegate, params object[] args)
@@ -141,7 +155,7 @@ namespace MKY.Utilities.Event
 		/// Fires event with supplied arguments synchronously. Event is
 		/// fired safely, exceptions are caught. If an event sink implements
 		/// <see cref="System.ComponentModel.ISynchronizeInvoke"/>,
-		/// the event is invoked on that thread. Otherwise the event is
+		/// the event is invoked on that thread. Otherwise, the event is
 		/// invoked on a thread from the thread pool.
 		/// </summary>
 		public static void FireAsync(Delegate eventDelegate, params object[] args)
