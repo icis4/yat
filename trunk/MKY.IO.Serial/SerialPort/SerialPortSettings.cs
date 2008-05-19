@@ -14,17 +14,15 @@ namespace MKY.IO.Serial.SerialPort
 		/// <summary></summary>
 		public const bool ReplaceParityErrorsDefault = false;
 		/// <summary></summary>
-		public const string ParityErrorReplacementDefault = @"\h(00)";
-		/// <summary></summary>
-		public const byte ParityErrorReplacementDefaultAsByte = 0x00;
+		public const byte ParityErrorReplacementDefault = 0x00;
 
 		private MKY.IO.Ports.SerialPortId   _portId;
 		private SerialCommunicationSettings _communication;
 		private AutoRetry _autoReopen;
-		private bool   _replaceParityErrors;
-		private string _parityErrorReplacement;
-		private bool   _rtsEnabled;
-		private bool   _dtrEnabled;
+		private bool _replaceParityErrors;
+		private byte _parityErrorReplacement;
+		private bool _rtsEnabled;
+		private bool _dtrEnabled;
 
 		/// <summary></summary>
 		public SerialPortSettings()
@@ -59,7 +57,7 @@ namespace MKY.IO.Serial.SerialPort
 			Communication = new SerialCommunicationSettings(rhs.Communication);
 			_autoReopen             = rhs._autoReopen;
 			_replaceParityErrors    = rhs._replaceParityErrors;
-			_parityErrorReplacement = rhs.ParityErrorReplacement;
+			_parityErrorReplacement = rhs._parityErrorReplacement;
 			_rtsEnabled = rhs.RtsEnabled;
 			_dtrEnabled = rhs.DtrEnabled;
 			ClearChanged();
@@ -155,7 +153,7 @@ namespace MKY.IO.Serial.SerialPort
 
 		/// <summary></summary>
 		[XmlElement("ParityErrorReplacement")]
-		public string ParityErrorReplacement
+		public byte ParityErrorReplacement
 		{
 			get { return (_parityErrorReplacement); }
 			set

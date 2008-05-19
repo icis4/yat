@@ -54,7 +54,7 @@ namespace MKY.IO.Serial.SerialPort
 			DataBits    = MKY.IO.Ports.DataBits.Eight;
 			Parity      = System.IO.Ports.Parity.None;
 			StopBits    = System.IO.Ports.StopBits.One;
-			FlowControl = Domain.IO.FlowControl.None;
+			FlowControl = FlowControl.None;
 		}
 
 		#region Properties
@@ -187,7 +187,7 @@ namespace MKY.IO.Serial.SerialPort
 			  ((MKY.IO.Ports.XDataBits)_dataBits).ToString() + ", " +
 			  ((MKY.IO.Ports.XParity)_parity).ToString() + ", " +
 			  ((MKY.IO.Ports.XStopBits)_stopBits).ToString() + ", " +
-			  ((Domain.IO.XFlowControl)_flowControl).ToShortString()
+			  ((XFlowControl)_flowControl).ToShortString()
 			  );
 		}
 
@@ -213,7 +213,7 @@ namespace MKY.IO.Serial.SerialPort
 			  ((MKY.IO.Ports.XDataBits)_dataBits).ToString() + ", " +
 			  ((MKY.IO.Ports.XParity)_parity).ToString() + ", " +
 			  ((MKY.IO.Ports.XStopBits)_stopBits).ToString() + ", " +
-			  ((Domain.IO.XFlowControl)_flowControl).ToString()
+			  ((XFlowControl)_flowControl).ToString()
 			  );
 		}
 

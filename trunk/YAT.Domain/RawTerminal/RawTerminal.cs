@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using MKY.Utilities.Event;
+using MKY.IO.Serial;
 
 namespace YAT.Domain
 {
@@ -25,7 +26,7 @@ namespace YAT.Domain
 		private RawRepository _rxRepository;
 
 		private Settings.IOSettings _ioSettings;
-		private IO.IIOProvider _io;
+		private IIOProvider _io;
 
 		#endregion
 
@@ -65,7 +66,7 @@ namespace YAT.Domain
 			AttachBufferSettings(bufferSettings);
 
 			AttachIOSettings(ioSettings);
-			AttachIO(Factory.IOFactory.CreateIO(ioSettings)); // settings are applied by factory
+			AttachIO(IOFactory.CreateIO(ioSettings)); // settings are applied by factory
 		}
 
 		/// <summary></summary>
@@ -78,7 +79,7 @@ namespace YAT.Domain
 			AttachBufferSettings(bufferSettings);
 
 			AttachIOSettings(ioSettings);
-			AttachIO(Factory.IOFactory.CreateIO(ioSettings)); // settings are applied by factory
+			AttachIO(IOFactory.CreateIO(ioSettings)); // settings are applied by factory
 		}
 
 		#region Disposal
@@ -188,7 +189,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public Domain.IO.IIOProvider UnderlyingIOProvider
+		public IIOProvider UnderlyingIOProvider
 		{
 			get
 			{
@@ -398,9 +399,9 @@ namespace YAT.Domain
 		// IO
 		//==========================================================================================
 
-		private void AttachIO(IO.IIOProvider io)
+		private void AttachIO(IIOProvider io)
 		{
-			if (IO.IIOProvider.ReferenceEquals(_io, io))
+			if (IIOProvider.ReferenceEquals(_io, io))
 				return;
 
 			if (_io != null)
@@ -439,9 +440,9 @@ namespace YAT.Domain
 			OnControlChanged(new EventArgs());
 		}
 
-		private void _io_IOError(object sender, IO.IOErrorEventArgs e)
+		private void _io_IOError(object sender, IOErrorEventArgs e)
 		{
-			IO.SerialPortIOErrorEventArgs serialPortErrorEventArgs = (e as IO.SerialPortIOErrorEventArgs);
+			IO.SerialPortIOErrorEventArgs serialPortErrorEventArgs = (e as SerialPortIOErrorEventArgs);
 			if (serialPortErrorEventArgs == null)
 				OnError(new ErrorEventArgs(e.Message));
 			else

@@ -51,12 +51,12 @@
     <Compile Include="SerialDirection.cs" />
     <Compile Include="Settings\CharReplaceSettings.cs" />
     <Compile Include="Settings\IOSettings.cs" />
+    <Compile Include="TerminalFactory.cs" />
     <Compile Include="TextTerminal\Structs.cs" />
     <Compile Include="Terminal\Radix.cs" />
     <Compile Include="Terminal\DisplayElement.cs" />
     <Compile Include="Terminal\DisplayRepository.cs" />
     <Compile Include="TerminalType.cs" />
-    <Compile Include="Factory\TerminalFactory.cs" />
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RawTerminal\RawTerminal.cs" />
@@ -87,6 +87,10 @@
     <ProjectReference Include="..\MKY.IO.Ports\MKY.IO.Ports.csproj">
       <Project>{D8940035-D30A-48A3-AC28-E8A4B8910CB9}</Project>
       <Name>MKY.IO.Ports</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MKY.IO.Serial\MKY.IO.Serial.csproj">
+      <Project>{E3A19532-D12A-4A90-B7F3-637A0A8FA6BD}</Project>
+      <Name>MKY.IO.Serial</Name>
     </ProjectReference>
     <ProjectReference Include="..\MKY.Net.Sockets\MKY.Net.Sockets.csproj">
       <Project>{307EFF74-9C31-4943-87A9-E7686551C4D1}</Project>

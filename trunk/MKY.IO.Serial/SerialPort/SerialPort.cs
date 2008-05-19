@@ -291,12 +291,7 @@ namespace MKY.IO.Serial.SerialPort
 			ApplyCommunicationSettings();
 
 			// parity replace
-			Parser.Parser p = new Parser.Parser(Encoding.Default);
-			byte[] bytes;
-			if (p.TryParse(_settings.ParityErrorReplacement, out bytes) && (bytes.Length >= 1))
-				_port.ParityReplace = bytes[0];
-			else
-				_port.ParityReplace = Settings.SerialPort.SerialPortSettings.ParityErrorReplacementDefaultAsByte;
+			_port.ParityReplace = _settings.ParityErrorReplacement;
 
 			// RTS and DTR
 			switch (_settings.Communication.FlowControl)
@@ -324,12 +319,12 @@ namespace MKY.IO.Serial.SerialPort
 			if (_port == null)
 				return;
 
-			Settings.SerialPort.SerialCommunicationSettings s = _settings.Communication;
+			SerialCommunicationSettings s = _settings.Communication;
 			_port.BaudRate = (MKY.IO.Ports.XBaudRate)s.BaudRate;
 			_port.DataBits = (MKY.IO.Ports.XDataBits)s.DataBits;
 			_port.Parity = s.Parity;
 			_port.StopBits = s.StopBits;
-			_port.Handshake = (Domain.IO.XFlowControl)s.FlowControl;
+			_port.Handshake = (XFlowControl)s.FlowControl;
 		}
 
 		#endregion

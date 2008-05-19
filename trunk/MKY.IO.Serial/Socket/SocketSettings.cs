@@ -21,7 +21,7 @@ namespace MKY.IO.Serial.Socket
 		/// <summary></summary>
 		public const int DefaultPort = 10000;
 		/// <summary></summary>
-		public static readonly AutoRetry TcpClientAutoReconnectDefault = new YAT.Domain.AutoRetry(false, 500);
+		public static readonly AutoRetry TcpClientAutoReconnectDefault = new AutoRetry(false, 500);
 
 		#endregion
 
