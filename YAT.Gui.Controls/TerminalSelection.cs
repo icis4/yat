@@ -51,8 +51,8 @@ namespace YAT.Gui.Controls
 			"   '127.0.0.1' is the IP v4 loopback interface" + Environment.NewLine +
 			"   '::1' is the IP v6 loopback interface";
 
-		private const Domain.TerminalType _TerminalTypeDefault = Domain.TerminalType.Text;
-		private const Domain.IOType       _IOTypeDefault       = Domain.IOType.SerialPort;
+		private const Domain.TerminalType  _TerminalTypeDefault = Domain.TerminalType.Text;
+		private const MKY.IO.Serial.IOType _IOTypeDefault       = MKY.IO.Serial.IOType.SerialPort;
 
 		#endregion
 
@@ -64,7 +64,7 @@ namespace YAT.Gui.Controls
 		private bool _isSettingControls = false;
 
 		private Domain.TerminalType _terminalType = _TerminalTypeDefault;
-		private Domain.IOType       _ioType       = _IOTypeDefault;
+		private MKY.IO.Serial.IOType _ioType      = _IOTypeDefault;
 
 		#endregion
 
@@ -93,7 +93,7 @@ namespace YAT.Gui.Controls
 			InitializeComponent();
 
 			comboBox_TerminalType.Items.AddRange(Domain.XTerminalType.GetItems());
-			comboBox_IOType.Items.AddRange(Domain.XIOType.GetItems());
+			comboBox_IOType.Items.AddRange(MKY.IO.Serial.XIOType.GetItems());
 
 			SetControls();
 		}
@@ -125,7 +125,7 @@ namespace YAT.Gui.Controls
 		[Category("Terminal")]
 		[Description("The port type.")]
 		[DefaultValue(_IOTypeDefault)]
-		public Domain.IOType IOType
+		public MKY.IO.Serial.IOType IOType
 		{
 			get { return (_ioType); }
 			set
@@ -155,7 +155,7 @@ namespace YAT.Gui.Controls
 		private void comboBox_IOType_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
-				IOType = (Domain.XIOType)comboBox_IOType.SelectedItem;
+				IOType = (MKY.IO.Serial.XIOType)comboBox_IOType.SelectedItem;
 		}
 
 		#endregion
@@ -170,7 +170,7 @@ namespace YAT.Gui.Controls
 			_isSettingControls = true;
 
 			comboBox_TerminalType.SelectedItem = (Domain.XTerminalType)_terminalType;
-			comboBox_IOType.SelectedItem = (Domain.XIOType)_ioType;
+			comboBox_IOType.SelectedItem = (MKY.IO.Serial.XIOType)_ioType;
 
 			_isSettingControls = false;
 		}

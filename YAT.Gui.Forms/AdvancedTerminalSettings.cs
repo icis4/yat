@@ -231,7 +231,8 @@ namespace YAT.Gui.Forms
 				{
 					if (!_isSettingControls)
 					{
-						_settings_Form.IO.SerialPort.ParityErrorReplacement = replacement;
+						_settings_Form.IO.SerialPort.ParityErrorReplacement = bytes[0];
+						_settings_Form.IO.SerialParityErrorReplacement = replacement;
 						SetControls();
 					}
 				}
@@ -245,7 +246,7 @@ namespace YAT.Gui.Forms
 
 					message += Environment.NewLine;
 					message += "Enter a replacement that resolves to 1 byte, e.g. " +
-						Domain.Settings.SerialPort.SerialPortSettings.ParityErrorReplacementDefault;
+						Domain.Settings.IOSettings.SerialParityErrorReplacementDefault;
 
 					MessageBox.Show
 						(
@@ -342,11 +343,11 @@ namespace YAT.Gui.Forms
 			checkBox_CopyPredefined.Checked = _settings_Form.Send.CopyPredefined;
 
 			// receive
-			groupBox_ReceiveSettings.Enabled = (_settings_Form.IO.IOType == Domain.IOType.SerialPort);
+			groupBox_ReceiveSettings.Enabled = (_settings_Form.IO.IOType == MKY.IO.Serial.IOType.SerialPort);
 			bool replaceParityErrors = _settings_Form.IO.SerialPort.ReplaceParityErrors;
 			checkBox_ReplaceParityError.Checked = replaceParityErrors;
 			textBox_ParityReplacement.Enabled = replaceParityErrors;
-			textBox_ParityReplacement.Text = _settings_Form.IO.SerialPort.ParityErrorReplacement;
+			textBox_ParityReplacement.Text = _settings_Form.IO.SerialParityErrorReplacement;
 
 			_isSettingControls = false;
 		}
@@ -379,8 +380,9 @@ namespace YAT.Gui.Forms
 			_settings_Form.Send.KeepCommand = Domain.Settings.SendSettings.KeepCommandDefault;
 			_settings_Form.Send.CopyPredefined = Domain.Settings.SendSettings.CopyPredefinedDefault;
 
-			_settings_Form.IO.SerialPort.ReplaceParityErrors = Domain.Settings.SerialPort.SerialPortSettings.ReplaceParityErrorsDefault;
-			_settings_Form.IO.SerialPort.ParityErrorReplacement = Domain.Settings.SerialPort.SerialPortSettings.ParityErrorReplacementDefault;
+			_settings_Form.IO.SerialPort.ReplaceParityErrors = MKY.IO.Serial.SerialPortSettings.ReplaceParityErrorsDefault;
+			_settings_Form.IO.SerialPort.ParityErrorReplacement = MKY.IO.Serial.SerialPortSettings.ParityErrorReplacementDefault;
+			_settings_Form.IO.SerialParityErrorReplacement = Domain.Settings.IOSettings.SerialParityErrorReplacementDefault;
 		}
 
 		#endregion

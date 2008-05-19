@@ -173,7 +173,7 @@ namespace YAT.Model
 				UserNameFromFile = _settingsHandler.SettingsFilePath;
 
 			// create underlying terminal
-			_terminal = Domain.Factory.TerminalFactory.CreateTerminal(_settingsRoot.Terminal);
+			_terminal = Domain.TerminalFactory.CreateTerminal(_settingsRoot.Terminal);
 			AttachTerminalEventHandlers();
 
 			// create log
@@ -302,7 +302,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public Domain.IO.IIOProvider UnderlyingIOProvider
+		public MKY.IO.Serial.IIOProvider UnderlyingIOProvider
 		{
 			get
 			{
@@ -355,7 +355,7 @@ namespace YAT.Model
 				{
 					DetachTerminalEventHandlers();    // detach to suspend events
 					_settingsRoot.Terminal = settings;
-					_terminal = Domain.Factory.TerminalFactory.RecreateTerminal(_settingsRoot.Terminal, _terminal);
+					_terminal = Domain.TerminalFactory.RecreateTerminal(_settingsRoot.Terminal, _terminal);
 					AttachTerminalEventHandlers();    // attach and resume events
 					_terminal.ReloadRepositories();
 
@@ -373,7 +373,7 @@ namespace YAT.Model
 				// terminal is closed, simply set the new settings
 				DetachTerminalEventHandlers();        // detach to suspend events
 				_settingsRoot.Terminal = settings;
-				_terminal = Domain.Factory.TerminalFactory.RecreateTerminal(_settingsRoot.Terminal, _terminal);
+				_terminal = Domain.TerminalFactory.RecreateTerminal(_settingsRoot.Terminal, _terminal);
 				AttachTerminalEventHandlers();        // attach an resume events
 				_terminal.ReloadRepositories();
 
@@ -967,7 +967,7 @@ namespace YAT.Model
 				OnFixedStatusTextRequest("Error opening terminal!");
 
 				string ioText;
-				if (_settingsRoot.IOType == Domain.IOType.SerialPort)
+				if (_settingsRoot.IOType == MKY.IO.Serial.IOType.SerialPort)
 					ioText = "Port";
 				else
 					ioText = "Socket";
@@ -1046,7 +1046,7 @@ namespace YAT.Model
 		/// </summary>
 		public void RequestToggleRts()
 		{
-			if (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == Domain.IO.FlowControl.Manual)
+			if (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.FlowControl.Manual)
 			{
 				MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance;
 				port.ToggleRts();
@@ -1059,7 +1059,7 @@ namespace YAT.Model
 		/// </summary>
 		public void RequestToggleDtr()
 		{
-			if (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == Domain.IO.FlowControl.Manual)
+			if (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.FlowControl.Manual)
 			{
 				MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance;
 				port.ToggleDtr();
@@ -1090,7 +1090,7 @@ namespace YAT.Model
 				string title;
 				switch (_settingsRoot.IOType)
 				{
-					case Domain.IOType.SerialPort: text += "port"; title = "Serial Port"; break;
+					case MKY.IO.Serial.IOType.SerialPort: text += "port"; title = "Serial Port"; break;
 					default: text += "socket"; title = "Socket"; break;
 				}
 				text += ":";
@@ -1123,7 +1123,7 @@ namespace YAT.Model
 				string title;
 				switch (_settingsRoot.IOType)
 				{
-					case Domain.IOType.SerialPort: text += "port"; title = "Serial Port"; break;
+					case MKY.IO.Serial.IOType.SerialPort: text += "port"; title = "Serial Port"; break;
 					default: text += "socket"; title = "Socket"; break;
 				}
 				text += ":";

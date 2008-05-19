@@ -231,6 +231,10 @@
       <Project>{D8940035-D30A-48A3-AC28-E8A4B8910CB9}</Project>
       <Name>MKY.IO.Ports</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MKY.IO.Serial\MKY.IO.Serial.csproj">
+      <Project>{E3A19532-D12A-4A90-B7F3-637A0A8FA6BD}</Project>
+      <Name>MKY.IO.Serial</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MKY.Net.Sockets\MKY.Net.Sockets.csproj">
       <Project>{307EFF74-9C31-4943-87A9-E7686551C4D1}</Project>
       <Name>MKY.Net.Sockets</Name>

@@ -6,6 +6,8 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.IO.Serial;
+
 namespace YAT.Gui.Forms
 {
 	public partial class TerminalSettings : System.Windows.Forms.Form
@@ -86,9 +88,9 @@ namespace YAT.Gui.Forms
 		{
 			if (!_isSettingControls)
 			{
-				Domain.IOType ioType = terminalSelection.IOType;
+				IOType ioType = terminalSelection.IOType;
 				_settings_Form.IO.IOType = ioType;
-				_settings_Form.IO.Socket.HostType = (Domain.XIOType)ioType;
+				_settings_Form.IO.Socket.HostType = (XIOType)ioType;
 				SetControls();
 			}
 		}
@@ -251,7 +253,7 @@ namespace YAT.Gui.Forms
 
 			terminalSelection.TerminalType = _settings_Form.TerminalType;
 
-			Domain.IOType ioType = _settings_Form.IO.IOType;
+			IOType ioType = _settings_Form.IO.IOType;
 			terminalSelection.IOType = ioType;
 
 			string text = "&";
@@ -264,12 +266,12 @@ namespace YAT.Gui.Forms
 			text += " Settings...";
 			button_TextOrBinarySettings.Text = text;
 
-			bool isSerialPort = (ioType == Domain.IOType.SerialPort);
+			bool isSerialPort = (ioType == IOType.SerialPort);
 
 			// set socket control before serial port control since that might need to refresh the
 			// serial port list first (which takes time, which looks ulgy)
 			socketSelection.Visible                 = !isSerialPort;
-			socketSelection.HostType                = (Domain.XIOType)ioType;
+			socketSelection.HostType                = (XIOType)ioType;
 			socketSelection.RemoteHostNameOrAddress = _settings_Form.IO.Socket.RemoteHostNameOrAddress;
 			socketSelection.RemotePort              = _settings_Form.IO.Socket.RemotePort;
 			socketSelection.LocalHostNameOrAddress  = _settings_Form.IO.Socket.LocalHostNameOrAddress;
@@ -277,7 +279,7 @@ namespace YAT.Gui.Forms
 			socketSelection.LocalUdpPort            = _settings_Form.IO.Socket.LocalUdpPort;
 
 			socketSettings.Visible                = !isSerialPort;
-			socketSettings.HostType               = (Domain.XIOType)ioType;
+			socketSettings.HostType               = (XIOType)ioType;
 			socketSettings.TcpClientAutoReconnect = _settings_Form.IO.Socket.TcpClientAutoReconnect;
 
 			serialPortSelection.Visible = isSerialPort;
@@ -360,6 +362,7 @@ namespace YAT.Gui.Forms
 
 				_settings_Form.IO.SerialPort.ReplaceParityErrors = f.SettingsResult.IO.SerialPort.ReplaceParityErrors;
 				_settings_Form.IO.SerialPort.ParityErrorReplacement = f.SettingsResult.IO.SerialPort.ParityErrorReplacement;
+				_settings_Form.IO.SerialParityErrorReplacement = f.SettingsResult.IO.SerialParityErrorReplacement;
 			}
 		}
 

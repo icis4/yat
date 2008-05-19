@@ -5,7 +5,7 @@ using System.Threading;
 
 using MKY.Utilities.Event;
 
-namespace MKY.IO.Serial.Socket
+namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	public class TcpAutoSocket : IIOProvider, IDisposable

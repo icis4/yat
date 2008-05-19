@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace MKY.IO.Serial.SerialPort
+namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	[Serializable]

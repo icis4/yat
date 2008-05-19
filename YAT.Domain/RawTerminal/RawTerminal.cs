@@ -5,6 +5,8 @@ using System.Text;
 using MKY.Utilities.Event;
 using MKY.IO.Serial;
 
+using YAT.Domain;
+
 namespace YAT.Domain
 {
 	/// <summary>
@@ -410,7 +412,7 @@ namespace YAT.Domain
 			_io = io;
 			_io.IOChanged        += new EventHandler(_io_IOChanged);
 			_io.IOControlChanged += new EventHandler(_io_IOControlChanged);
-			_io.IOError          += new EventHandler<IO.IOErrorEventArgs>(_io_IOError);
+			_io.IOError          += new EventHandler<IOErrorEventArgs>(_io_IOError);
 			_io.DataReceived     += new EventHandler(_io_DataReceived);
 		}
 
@@ -418,7 +420,7 @@ namespace YAT.Domain
 		{
 			_io.IOChanged        -= new EventHandler(_io_IOChanged);
 			_io.IOControlChanged -= new EventHandler(_io_IOControlChanged);
-			_io.IOError          -= new EventHandler<IO.IOErrorEventArgs>(_io_IOError);
+			_io.IOError          -= new EventHandler<IOErrorEventArgs>(_io_IOError);
 			_io.DataReceived     -= new EventHandler(_io_DataReceived);
 			_io = null;
 		}
@@ -442,7 +444,7 @@ namespace YAT.Domain
 
 		private void _io_IOError(object sender, IOErrorEventArgs e)
 		{
-			IO.SerialPortIOErrorEventArgs serialPortErrorEventArgs = (e as SerialPortIOErrorEventArgs);
+			SerialPortIOErrorEventArgs serialPortErrorEventArgs = (e as SerialPortIOErrorEventArgs);
 			if (serialPortErrorEventArgs == null)
 				OnError(new ErrorEventArgs(e.Message));
 			else

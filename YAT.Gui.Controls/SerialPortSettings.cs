@@ -23,7 +23,7 @@ namespace YAT.Gui.Controls
 		private const MKY.IO.Ports.DataBits    _DataBitsDefault    = MKY.IO.Ports.DataBits.Eight;
 		private const System.IO.Ports.Parity   _ParityDefault      = System.IO.Ports.Parity.None;
 		private const System.IO.Ports.StopBits _StopBitsDefault    = System.IO.Ports.StopBits.One;
-		private const Domain.IO.FlowControl    _FlowControlDefault = Domain.IO.FlowControl.None;
+		private const MKY.IO.Serial.FlowControl _FlowControlDefault = MKY.IO.Serial.FlowControl.None;
 
 		#endregion
 
@@ -38,8 +38,8 @@ namespace YAT.Gui.Controls
 		private MKY.IO.Ports.DataBits    _dataBits    = _DataBitsDefault;
 		private System.IO.Ports.Parity   _parity      = _ParityDefault;
 		private System.IO.Ports.StopBits _stopBits    = _StopBitsDefault;
-		private Domain.IO.FlowControl    _flowControl = _FlowControlDefault;
-		private Domain.AutoRetry         _autoReopen  = Domain.Settings.SerialPort.SerialPortSettings.AutoReopenDefault;
+		private MKY.IO.Serial.FlowControl _flowControl = _FlowControlDefault;
+		private MKY.IO.Serial.AutoRetry _autoReopen = MKY.IO.Serial.SerialPortSettings.AutoReopenDefault;
 
 		#endregion
 
@@ -165,7 +165,7 @@ namespace YAT.Gui.Controls
 		[Category("Serial Port")]
 		[Description("The flow control type.")]
 		[DefaultValue(_FlowControlDefault)]
-		public Domain.IO.FlowControl FlowControl
+		public MKY.IO.Serial.FlowControl FlowControl
 		{
 			get { return (_flowControl); }
 			set
@@ -182,7 +182,7 @@ namespace YAT.Gui.Controls
 		[Category("Serial Port")]
 		[Description("Auto reopen optione.")]
 		[Browsable(false)]
-		public Domain.AutoRetry AutoReopen
+		public MKY.IO.Serial.AutoRetry AutoReopen
 		{
 			get { return (_autoReopen); }
 			set
@@ -263,14 +263,14 @@ namespace YAT.Gui.Controls
 		private void comboBox_FlowControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
-				FlowControl = (Domain.IO.XFlowControl)comboBox_FlowControl.SelectedItem;
+				FlowControl = (MKY.IO.Serial.XFlowControl)comboBox_FlowControl.SelectedItem;
 		}
 
 		private void checkBox_AutoReopen_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
 			{
-				Domain.AutoRetry ar = _autoReopen;
+				MKY.IO.Serial.AutoRetry ar = _autoReopen;
 				ar.Enabled = checkBox_AutoReopen.Checked;
 				AutoReopen = ar;
 			}
@@ -283,7 +283,7 @@ namespace YAT.Gui.Controls
 				int interval;
 				if (int.TryParse(textBox_AutoReopenInterval.Text, out interval) && (interval >= 100))
 				{
-					Domain.AutoRetry ar = _autoReopen;
+					MKY.IO.Serial.AutoRetry ar = _autoReopen;
 					ar.Interval = interval;
 					AutoReopen = ar;
 				}
@@ -317,7 +317,7 @@ namespace YAT.Gui.Controls
 			comboBox_DataBits.Items.AddRange(MKY.IO.Ports.XDataBits.GetItems());
 			comboBox_Parity.Items.AddRange(MKY.IO.Ports.XParity.GetItems());
 			comboBox_StopBits.Items.AddRange(MKY.IO.Ports.XStopBits.GetItems());
-			comboBox_FlowControl.Items.AddRange(Domain.IO.XFlowControl.GetItems());
+			comboBox_FlowControl.Items.AddRange(MKY.IO.Serial.XFlowControl.GetItems());
 
 			_isSettingControls = false;
 		}
@@ -335,7 +335,7 @@ namespace YAT.Gui.Controls
 			comboBox_DataBits.SelectedItem    = (MKY.IO.Ports.XDataBits)_dataBits;
 			comboBox_Parity.SelectedItem      = (MKY.IO.Ports.XParity)_parity;
 			comboBox_StopBits.SelectedItem    = (MKY.IO.Ports.XStopBits)_stopBits;
-			comboBox_FlowControl.SelectedItem = (Domain.IO.XFlowControl)_flowControl;
+			comboBox_FlowControl.SelectedItem = (MKY.IO.Serial.XFlowControl)_flowControl;
 
 			bool autoOpenEnabled = _autoReopen.Enabled;
 			checkBox_AutoReopen.Checked = autoOpenEnabled;
