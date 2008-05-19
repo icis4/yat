@@ -49,11 +49,11 @@
     <Compile Include="SerialPort\SerialPort.cs" />
     <Compile Include="SerialPort\SerialPortSettings.cs" />
     <Compile Include="Socket\SocketSettings.cs" />
-    <Compile Include="Socket\Structs.cs" />
     <Compile Include="Socket\TcpAutoSocket.cs" />
     <Compile Include="Socket\TcpClient.cs" />
     <Compile Include="Socket\TcpServer.cs" />
     <Compile Include="Socket\UdpSocket.cs" />
+    <Compile Include="Structs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\MKY.IO.Serial.snk" />

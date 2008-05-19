@@ -13,7 +13,7 @@ namespace MKY.IO.Serial.SerialPort
 		private MKY.IO.Ports.DataBits _dataBits;
 		private System.IO.Ports.Parity _parity;
 		private System.IO.Ports.StopBits _stopBits;
-		private Domain.IO.FlowControl _flowControl;
+		private FlowControl _flowControl;
 
 		/// <summary></summary>
 		public SerialCommunicationSettings()
@@ -124,7 +124,7 @@ namespace MKY.IO.Serial.SerialPort
 
 		/// <summary></summary>
 		[XmlElement("FlowControl")]
-		public Domain.IO.FlowControl FlowControl
+		public FlowControl FlowControl
 		{
 			get { return (_flowControl); }
 			set
