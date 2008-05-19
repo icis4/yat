@@ -86,9 +86,9 @@ namespace YAT.Gui.Forms
 		{
 			if (!_isSettingControls)
 			{
-				IOType ioType = terminalSelection.IOType;
+				Domain.IOType ioType = terminalSelection.IOType;
 				_settings_Form.IO.IOType = ioType;
-				_settings_Form.IO.Socket.HostType = (XIOType)ioType;
+				_settings_Form.IO.Socket.HostType = (Domain.XIOType)ioType;
 				SetControls();
 			}
 		}
@@ -251,7 +251,7 @@ namespace YAT.Gui.Forms
 
 			terminalSelection.TerminalType = _settings_Form.TerminalType;
 
-			IOType ioType = _settings_Form.IO.IOType;
+			Domain.IOType ioType = _settings_Form.IO.IOType;
 			terminalSelection.IOType = ioType;
 
 			string text = "&";
@@ -264,12 +264,12 @@ namespace YAT.Gui.Forms
 			text += " Settings...";
 			button_TextOrBinarySettings.Text = text;
 
-			bool isSerialPort = (ioType == IOType.SerialPort);
+			bool isSerialPort = (ioType == Domain.IOType.SerialPort);
 
 			// set socket control before serial port control since that might need to refresh the
 			// serial port list first (which takes time, which looks ulgy)
 			socketSelection.Visible                 = !isSerialPort;
-			socketSelection.HostType                = (XIOType)ioType;
+			socketSelection.HostType                = (Domain.XIOType)ioType;
 			socketSelection.RemoteHostNameOrAddress = _settings_Form.IO.Socket.RemoteHostNameOrAddress;
 			socketSelection.RemotePort              = _settings_Form.IO.Socket.RemotePort;
 			socketSelection.LocalHostNameOrAddress  = _settings_Form.IO.Socket.LocalHostNameOrAddress;
@@ -277,7 +277,7 @@ namespace YAT.Gui.Forms
 			socketSelection.LocalUdpPort            = _settings_Form.IO.Socket.LocalUdpPort;
 
 			socketSettings.Visible                = !isSerialPort;
-			socketSettings.HostType               = (XIOType)ioType;
+			socketSettings.HostType               = (Domain.XIOType)ioType;
 			socketSettings.TcpClientAutoReconnect = _settings_Form.IO.Socket.TcpClientAutoReconnect;
 
 			serialPortSelection.Visible = isSerialPort;

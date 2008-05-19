@@ -93,7 +93,7 @@ namespace YAT.Gui.Controls
 			InitializeComponent();
 
 			comboBox_TerminalType.Items.AddRange(Domain.XTerminalType.GetItems());
-			comboBox_IOType.Items.AddRange(MKY.IO.Serial.XIOType.GetItems());
+			comboBox_IOType.Items.AddRange(Domain.XIOType.GetItems());
 
 			SetControls();
 		}
@@ -155,7 +155,7 @@ namespace YAT.Gui.Controls
 		private void comboBox_IOType_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
-				IOType = (MKY.IO.Serial.XIOType)comboBox_IOType.SelectedItem;
+				IOType = (Domain.XIOType)comboBox_IOType.SelectedItem;
 		}
 
 		#endregion
@@ -170,7 +170,7 @@ namespace YAT.Gui.Controls
 			_isSettingControls = true;
 
 			comboBox_TerminalType.SelectedItem = (Domain.XTerminalType)_terminalType;
-			comboBox_IOType.SelectedItem = (MKY.IO.Serial.XIOType)_ioType;
+			comboBox_IOType.SelectedItem = (Domain.XIOType)_ioType;
 
 			_isSettingControls = false;
 		}

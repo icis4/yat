@@ -17,9 +17,9 @@ namespace YAT.Domain.Settings
 		public const Endianess EndianessDefault = Endianess.BigEndian;
 
 		private Domain.IOType _ioType;
-		private SerialPortSettings _serialPort;
+		private MKY.IO.Serial.SerialPortSettings _serialPort;
 		private string _serialParityErrorReplacement;
-		private SocketSettings _socket;
+		private MKY.IO.Serial.SocketSettings _socket;
 		private Endianess _endianess;
 
 		/// <summary></summary>
@@ -41,8 +41,8 @@ namespace YAT.Domain.Settings
 
 		private void InitializeNodes()
 		{
-			SerialPort = new SerialPortSettings(SettingsType);
-			Socket = new SocketSettings(SettingsType);
+			SerialPort = new MKY.IO.Serial.SerialPortSettings(SettingsType);
+			Socket = new MKY.IO.Serial.SocketSettings(SettingsType);
 		}
 
 		/// <summary></summary>
@@ -53,9 +53,9 @@ namespace YAT.Domain.Settings
 			: base(rhs)
 		{
 			_ioType = rhs.IOType;
-			SerialPort = new SerialPortSettings(rhs.SerialPort);
+			SerialPort = new MKY.IO.Serial.SerialPortSettings(rhs.SerialPort);
 			_serialParityErrorReplacement = rhs.SerialParityErrorReplacement;
-			Socket = new SocketSettings(rhs.Socket);
+			Socket = new MKY.IO.Serial.SocketSettings(rhs.Socket);
 			_endianess = rhs.Endianess;
 			ClearChanged();
 		}
@@ -92,7 +92,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("SerialPort")]
-		public SerialPortSettings SerialPort
+		public MKY.IO.Serial.SerialPortSettings SerialPort
 		{
 			get { return (_serialPort); }
 			set
@@ -104,7 +104,7 @@ namespace YAT.Domain.Settings
 				}
 				else if (_serialPort != value)
 				{
-					SerialPortSettings old = _serialPort;
+					MKY.IO.Serial.SerialPortSettings old = _serialPort;
 					_serialPort = value;
 					ReplaceNode(old, _serialPort);
 				}
@@ -128,7 +128,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("Socket")]
-		public SocketSettings Socket
+		public MKY.IO.Serial.SocketSettings Socket
 		{
 			get { return (_socket); }
 			set
@@ -140,7 +140,7 @@ namespace YAT.Domain.Settings
 				}
 				else if (_socket != value)
 				{
-					SocketSettings old = _socket;
+					MKY.IO.Serial.SocketSettings old = _socket;
 					_socket = value;
 					ReplaceNode(old, _socket);
 				}

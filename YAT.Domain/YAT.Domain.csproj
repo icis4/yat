@@ -45,6 +45,7 @@
     <Compile Include="BinaryTerminal\Structs.cs" />
     <Compile Include="Endianess.cs" />
     <Compile Include="IOFactory.cs" />
+    <Compile Include="IOType.cs" />
     <Compile Include="Parser\Exceptions.cs" />
     <Compile Include="Parser\Keyword.cs" />
     <Compile Include="Parser\ParseMode.cs" />

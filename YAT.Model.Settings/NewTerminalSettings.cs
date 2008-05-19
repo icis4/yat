@@ -10,7 +10,7 @@ namespace YAT.Model.Settings
 	public class NewTerminalSettings : MKY.Utilities.Settings.Settings, IEquatable<NewTerminalSettings>
 	{
 		private Domain.TerminalType _terminalType;
-		private IOType _ioType;
+		private Domain.IOType _ioType;
 
 		private MKY.IO.Ports.SerialPortId _serialPortId;
 
@@ -67,16 +67,16 @@ namespace YAT.Model.Settings
 		protected override void SetMyDefaults()
 		{
 			TerminalType = Domain.TerminalType.Text;
-			IOType       = IOType.SerialPort;
+			IOType       = Domain.IOType.SerialPort;
 
 			SerialPortId = MKY.IO.Ports.SerialPortId.DefaultPort;
 
-			SocketRemoteHostNameOrAddress = SocketSettings.DefaultRemoteHostName;
-			SocketRemotePort              = SocketSettings.DefaultPort;
+			SocketRemoteHostNameOrAddress = MKY.IO.Serial.SocketSettings.DefaultRemoteHostName;
+			SocketRemotePort              = MKY.IO.Serial.SocketSettings.DefaultPort;
 
-			SocketLocalHostNameOrAddress  = SocketSettings.DefaultLocalHostName;
-			SocketLocalTcpPort            = SocketSettings.DefaultPort;
-			SocketLocalUdpPort            = SocketSettings.DefaultPort + 1;
+			SocketLocalHostNameOrAddress  = MKY.IO.Serial.SocketSettings.DefaultLocalHostName;
+			SocketLocalTcpPort            = MKY.IO.Serial.SocketSettings.DefaultPort;
+			SocketLocalUdpPort            = MKY.IO.Serial.SocketSettings.DefaultPort + 1;
 
 			OpenTerminal = true;
 		}
@@ -103,7 +103,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("IOType")]
-		public IOType IOType
+		public Domain.IOType IOType
 		{
 			get { return (_ioType); }
 			set
@@ -184,12 +184,12 @@ namespace YAT.Model.Settings
 			{
 				switch (_ioType)
 				{
-					case IOType.TcpClient:
-					case IOType.TcpServer:
-					case IOType.TcpAutoSocket:
+					case Domain.IOType.TcpClient:
+					case Domain.IOType.TcpServer:
+					case Domain.IOType.TcpAutoSocket:
 						return (SocketLocalTcpPort);
 
-					case IOType.Udp:
+					case Domain.IOType.Udp:
 						return (SocketLocalUdpPort);
 
 					default:
@@ -200,13 +200,13 @@ namespace YAT.Model.Settings
 			{
 				switch (_ioType)
 				{
-					case IOType.TcpClient:
-					case IOType.TcpServer:
-					case IOType.TcpAutoSocket:
+					case Domain.IOType.TcpClient:
+					case Domain.IOType.TcpServer:
+					case Domain.IOType.TcpAutoSocket:
 						SocketLocalTcpPort = value;
 						break;
 
-					case IOType.Udp:
+					case Domain.IOType.Udp:
 						SocketLocalUdpPort = value;
 						break;
 				}

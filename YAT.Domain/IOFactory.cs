@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using MKY.IO.Serial;
+
 namespace YAT.Domain
 {
 	internal static class IOFactory
 	{
-		public static MKY.IO.Serial.IIOProvider CreateIO(Settings.IOSettings settings)
+		public static IIOProvider CreateIO(Settings.IOSettings settings)
 		{
 			switch (settings.IOType)
 			{
