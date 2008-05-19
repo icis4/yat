@@ -195,7 +195,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public Domain.IO.IIOProvider UnderlyingIOProvider
+		public MKY.IO.Serial.IIOProvider UnderlyingIOProvider
 		{
 			get
 			{

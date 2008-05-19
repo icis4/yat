@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace MKY.IO.Serial
+using MKY.IO.Serial;
+using MKY.IO.Serial.SerialPort;
+using MKY.IO.Serial.Socket;
+
+namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
@@ -16,8 +20,8 @@ namespace MKY.IO.Serial
 		public const Endianess EndianessDefault = Endianess.BigEndian;
 
 		private IOType _ioType;
-		private SerialPort.SerialPortSettings _serialPort;
-		private Socket.SocketSettings _socket;
+		private SerialPortSettings _serialPort;
+		private SocketSettings _socket;
 		private Endianess _endianess;
 
 		/// <summary></summary>
@@ -39,8 +43,8 @@ namespace MKY.IO.Serial
 
 		private void InitializeNodes()
 		{
-			SerialPort = new SerialPort.SerialPortSettings(SettingsType);
-			Socket = new Socket.SocketSettings(SettingsType);
+			SerialPort = new SerialPortSettings(SettingsType);
+			Socket = new SocketSettings(SettingsType);
 		}
 
 		/// <summary></summary>
@@ -51,8 +55,8 @@ namespace MKY.IO.Serial
 			: base(rhs)
 		{
 			_ioType = rhs.IOType;
-			SerialPort = new SerialPort.SerialPortSettings(rhs.SerialPort);
-			Socket = new Socket.SocketSettings(rhs.Socket);
+			SerialPort = new SerialPortSettings(rhs.SerialPort);
+			Socket = new SocketSettings(rhs.Socket);
 			_endianess = rhs.Endianess;
 			ClearChanged();
 		}
@@ -88,7 +92,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("SerialPort")]
-		public SerialPort.SerialPortSettings SerialPort
+		public SerialPortSettings SerialPort
 		{
 			get { return (_serialPort); }
 			set
@@ -100,7 +104,7 @@ namespace MKY.IO.Serial
 				}
 				else if (_serialPort != value)
 				{
-					SerialPort.SerialPortSettings old = _serialPort;
+					SerialPortSettings old = _serialPort;
 					_serialPort = value;
 					ReplaceNode(old, _serialPort);
 				}
@@ -109,7 +113,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("Socket")]
-		public Socket.SocketSettings Socket
+		public SocketSettings Socket
 		{
 			get { return (_socket); }
 			set
@@ -121,7 +125,7 @@ namespace MKY.IO.Serial
 				}
 				else if (_socket != value)
 				{
-					Socket.SocketSettings old = _socket;
+					SocketSettings old = _socket;
 					_socket = value;
 					ReplaceNode(old, _socket);
 				}
