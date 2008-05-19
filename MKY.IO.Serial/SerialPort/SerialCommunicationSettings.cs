@@ -13,7 +13,7 @@ namespace MKY.IO.Serial
 		private MKY.IO.Ports.DataBits _dataBits;
 		private System.IO.Ports.Parity _parity;
 		private System.IO.Ports.StopBits _stopBits;
-		private FlowControl _flowControl;
+		private SerialFlowControl _flowControl;
 
 		/// <summary></summary>
 		public SerialCommunicationSettings()
@@ -54,7 +54,7 @@ namespace MKY.IO.Serial
 			DataBits    = MKY.IO.Ports.DataBits.Eight;
 			Parity      = System.IO.Ports.Parity.None;
 			StopBits    = System.IO.Ports.StopBits.One;
-			FlowControl = FlowControl.None;
+			FlowControl = SerialFlowControl.None;
 		}
 
 		#region Properties
@@ -124,7 +124,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("FlowControl")]
-		public FlowControl FlowControl
+		public SerialFlowControl FlowControl
 		{
 			get { return (_flowControl); }
 			set
@@ -187,7 +187,7 @@ namespace MKY.IO.Serial
 			  ((MKY.IO.Ports.XDataBits)_dataBits).ToString() + ", " +
 			  ((MKY.IO.Ports.XParity)_parity).ToString() + ", " +
 			  ((MKY.IO.Ports.XStopBits)_stopBits).ToString() + ", " +
-			  ((XFlowControl)_flowControl).ToShortString()
+			  ((XSerialFlowControl)_flowControl).ToShortString()
 			  );
 		}
 
@@ -213,7 +213,7 @@ namespace MKY.IO.Serial
 			  ((MKY.IO.Ports.XDataBits)_dataBits).ToString() + ", " +
 			  ((MKY.IO.Ports.XParity)_parity).ToString() + ", " +
 			  ((MKY.IO.Ports.XStopBits)_stopBits).ToString() + ", " +
-			  ((XFlowControl)_flowControl).ToString()
+			  ((XSerialFlowControl)_flowControl).ToString()
 			  );
 		}
 

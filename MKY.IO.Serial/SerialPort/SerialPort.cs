@@ -259,12 +259,12 @@ namespace MKY.IO.Serial
 
 			if (IsConnected)
 			{
-				if (_settings.Communication.FlowControl == FlowControl.RS485)
+				if (_settings.Communication.FlowControl == SerialFlowControl.RS485)
 					_port.RtsEnable = true;
 
 				_port.Write(buffer, 0, buffer.Length);
 
-				if (_settings.Communication.FlowControl == FlowControl.RS485)
+				if (_settings.Communication.FlowControl == SerialFlowControl.RS485)
 					_port.RtsEnable = false;
 
 				OnDataSent(new EventArgs());
@@ -296,12 +296,12 @@ namespace MKY.IO.Serial
 			// RTS and DTR
 			switch (_settings.Communication.FlowControl)
 			{
-				case FlowControl.Manual:
+				case SerialFlowControl.Manual:
 					_port.RtsEnable = _settings.RtsEnabled;
 					_port.DtrEnable = _settings.DtrEnabled;
 					break;
 
-				case FlowControl.RS485:
+				case SerialFlowControl.RS485:
 					_port.RtsEnable = false;
 					break;
 			}
@@ -324,7 +324,7 @@ namespace MKY.IO.Serial
 			_port.DataBits = (MKY.IO.Ports.XDataBits)s.DataBits;
 			_port.Parity = s.Parity;
 			_port.StopBits = s.StopBits;
-			_port.Handshake = (XFlowControl)s.FlowControl;
+			_port.Handshake = (XSerialFlowControl)s.FlowControl;
 		}
 
 		#endregion
@@ -401,21 +401,21 @@ namespace MKY.IO.Serial
 			// RTS
 			switch (_settings.Communication.FlowControl)
 			{
-				case FlowControl.None:
-				case FlowControl.XOnXOff:
+				case SerialFlowControl.None:
+				case SerialFlowControl.XOnXOff:
 					_port.RtsEnable = false;
 					break;
 
-				case FlowControl.Manual:
+				case SerialFlowControl.Manual:
 					_port.RtsEnable = _settings.RtsEnabled;
 					break;
 
-				case FlowControl.RS485:
+				case SerialFlowControl.RS485:
 					_port.RtsEnable = false;
 					break;
 
-				case FlowControl.RequestToSend:
-				case FlowControl.RequestToSendXOnXOff:
+				case SerialFlowControl.RequestToSend:
+				case SerialFlowControl.RequestToSendXOnXOff:
 					// do nothing, RTS is used for hand shake
 					break;
 			}
@@ -423,15 +423,15 @@ namespace MKY.IO.Serial
 			// DTR
 			switch (_settings.Communication.FlowControl)
 			{
-				case FlowControl.None:
-				case FlowControl.RequestToSend:
-				case FlowControl.XOnXOff:
-				case FlowControl.RequestToSendXOnXOff:
-				case FlowControl.RS485:
+				case SerialFlowControl.None:
+				case SerialFlowControl.RequestToSend:
+				case SerialFlowControl.XOnXOff:
+				case SerialFlowControl.RequestToSendXOnXOff:
+				case SerialFlowControl.RS485:
 					_port.DtrEnable = false;
 					break;
 
-				case FlowControl.Manual:
+				case SerialFlowControl.Manual:
 					_port.DtrEnable = _settings.DtrEnabled;
 					break;
 			}

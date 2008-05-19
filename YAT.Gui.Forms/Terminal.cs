@@ -1590,7 +1590,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits    = MKY.IO.Ports.DataBits.Seven;
 					settings.Parity      = System.IO.Ports.Parity.Even;
 					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.FlowControl.None;
+					settings.FlowControl = MKY.IO.Serial.SerialFlowControl.None;
 					break;
 				}
 				case 2: // "2400, 7, Even, 1, XOn/XOff"
@@ -1599,7 +1599,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits    = MKY.IO.Ports.DataBits.Seven;
 					settings.Parity      = System.IO.Ports.Parity.Even;
 					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.FlowControl.XOnXOff;
+					settings.FlowControl = MKY.IO.Serial.SerialFlowControl.XOnXOff;
 					break;
 				}
 				case 3: // "9600, 8, None, 1, None"
@@ -1608,7 +1608,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
 					settings.Parity      = System.IO.Ports.Parity.None;
 					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.FlowControl.None;
+					settings.FlowControl = MKY.IO.Serial.SerialFlowControl.None;
 					break;
 				}
 				case 4: // "9600, 8, None, 1, XOn/XOff"
@@ -1617,7 +1617,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
 					settings.Parity      = System.IO.Ports.Parity.None;
 					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.FlowControl.XOnXOff;
+					settings.FlowControl = MKY.IO.Serial.SerialFlowControl.XOnXOff;
 					break;
 				}
 				case 5: // "19200, 8, None, 1, None"
@@ -1626,7 +1626,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
 					settings.Parity      = System.IO.Ports.Parity.None;
 					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.FlowControl.None;
+					settings.FlowControl = MKY.IO.Serial.SerialFlowControl.None;
 					break;
 				}
 				case 6: // "19200, 8, None, 1, XOn/XOff"
@@ -1635,7 +1635,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
 					settings.Parity      = System.IO.Ports.Parity.None;
 					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.FlowControl.XOnXOff;
+					settings.FlowControl = MKY.IO.Serial.SerialFlowControl.XOnXOff;
 					break;
 				}
 			}
@@ -2759,7 +2759,7 @@ namespace YAT.Gui.Forms
 							pins = port.ControlPins;
 					}
 
-					bool rs485FlowControl = (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.FlowControl.RS485);
+					bool rs485FlowControl = (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.RS485);
 
 					if (rs485FlowControl)
 					{
@@ -2776,7 +2776,7 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_DSR.Image = (pins.Dsr ? on : off);
 					toolStripStatusLabel_TerminalStatus_DCD.Image = (pins.Cd ? on : off);
 
-					bool manualFlowControl = (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.FlowControl.Manual);
+					bool manualFlowControl = (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual);
 
 					toolStripStatusLabel_TerminalStatus_RTS.ForeColor = (manualFlowControl ? SystemColors.ControlText : SystemColors.GrayText);
 					toolStripStatusLabel_TerminalStatus_CTS.ForeColor = SystemColors.GrayText;

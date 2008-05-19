@@ -1046,7 +1046,7 @@ namespace YAT.Model
 		/// </summary>
 		public void RequestToggleRts()
 		{
-			if (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.FlowControl.Manual)
+			if (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual)
 			{
 				MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance;
 				port.ToggleRts();
@@ -1059,7 +1059,7 @@ namespace YAT.Model
 		/// </summary>
 		public void RequestToggleDtr()
 		{
-			if (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.FlowControl.Manual)
+			if (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual)
 			{
 				MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance;
 				port.ToggleDtr();
