@@ -4,8 +4,6 @@ using System.Text;
 using System.Xml.Serialization;
 
 using MKY.IO.Serial;
-using MKY.IO.Serial.SerialPort;
-using MKY.IO.Serial.Socket;
 
 namespace YAT.Domain.Settings
 {
@@ -15,12 +13,14 @@ namespace YAT.Domain.Settings
 	{
 		/// <summary></summary>
 		public const IOType IOTypeDefault = IOType.SerialPort;
-
+		/// <summary></summary>
+		public const string SerialParityErrorReplacementDefault = @"\h(00)";
 		/// <summary></summary>
 		public const Endianess EndianessDefault = Endianess.BigEndian;
 
 		private IOType _ioType;
 		private SerialPortSettings _serialPort;
+		private string _serialParityErrorReplacement;
 		private SocketSettings _socket;
 		private Endianess _endianess;
 
@@ -56,6 +56,7 @@ namespace YAT.Domain.Settings
 		{
 			_ioType = rhs.IOType;
 			SerialPort = new SerialPortSettings(rhs.SerialPort);
+			_serialParityErrorReplacement = rhs.SerialParityErrorReplacement;
 			Socket = new SocketSettings(rhs.Socket);
 			_endianess = rhs.Endianess;
 			ClearChanged();
@@ -67,6 +68,7 @@ namespace YAT.Domain.Settings
 		protected override void SetMyDefaults()
 		{
 			IOType = IOTypeDefault;
+			SerialParityErrorReplacement = SerialParityErrorReplacementDefault;
 			Endianess = EndianessDefault;
 		}
 
@@ -107,6 +109,21 @@ namespace YAT.Domain.Settings
 					SerialPortSettings old = _serialPort;
 					_serialPort = value;
 					ReplaceNode(old, _serialPort);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("SerialParityErrorReplacement")]
+		public string SerialParityErrorReplacement
+		{
+			get { return (_serialParityErrorReplacement); }
+			set
+			{
+				if (_serialParityErrorReplacement != value)
+				{
+					_serialParityErrorReplacement = value;
+					SetChanged();
 				}
 			}
 		}
@@ -173,6 +190,7 @@ namespace YAT.Domain.Settings
 				return 
 					(
 					_ioType.Equals(value._ioType) &&
+					_serialParityErrorReplacement.Equals(value._serialParityErrorReplacement) &&
 					_endianess.Equals(value._endianess) &&
 					base.Equals((MKY.Utilities.Settings.Settings)value) // compares all settings nodes
 					);

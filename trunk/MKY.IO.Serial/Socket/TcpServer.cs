@@ -5,7 +5,7 @@ using System.Threading;
 
 using MKY.Utilities.Event;
 
-namespace MKY.IO.Serial.Socket
+namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	public class TcpServer : IIOProvider, IDisposable, MKY.Net.Sockets.ISocketService

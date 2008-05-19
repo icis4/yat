@@ -4,7 +4,7 @@ using System.Text;
 
 using MKY.Utilities.Types;
 
-namespace MKY.IO.Serial.SerialPort
+namespace MKY.IO.Serial
 {
 	#region Enum FlowControl
 

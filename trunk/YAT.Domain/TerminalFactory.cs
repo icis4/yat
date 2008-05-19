@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace YAT.Domain.Factory
+namespace YAT.Domain
 {
 	/// <summary></summary>
 	public static class TerminalFactory

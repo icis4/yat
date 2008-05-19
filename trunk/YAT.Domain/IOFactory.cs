@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using YAT.Domain.IO;
+using MKY.IO.Serial;
 
-namespace YAT.Domain.Factory
+namespace YAT.Domain
 {
 	internal static class IOFactory
 	{

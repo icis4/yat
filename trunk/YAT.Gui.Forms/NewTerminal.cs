@@ -94,7 +94,7 @@ namespace YAT.Gui.Forms
 		{
 			if (!_isSettingControls)
 			{
-				Domain.IOType ioType = terminalSelection.IOType;
+				MKY.IO.Serial.IOType ioType = terminalSelection.IOType;
 				_newTerminalSettings_Form.IOType = ioType;
 				SetControls();
 			}
@@ -239,15 +239,15 @@ namespace YAT.Gui.Forms
 
 			terminalSelection.TerminalType = _newTerminalSettings_Form.TerminalType;
 
-			Domain.IOType ioType = _newTerminalSettings_Form.IOType;
+			MKY.IO.Serial.IOType ioType = _newTerminalSettings_Form.IOType;
 			terminalSelection.IOType = ioType;
 
-			bool isSerialPort = (ioType == Domain.IOType.SerialPort);
+			bool isSerialPort = (ioType == MKY.IO.Serial.IOType.SerialPort);
 
 			// set socket control before serial port control since that might need to refresh the
 			// serial port list first (which takes time, which looks ulgy)
 			socketSelection.Enabled                 = !isSerialPort;
-			socketSelection.HostType                = (Domain.XIOType)ioType;
+			socketSelection.HostType                = (MKY.IO.Serial.XIOType)ioType;
 			socketSelection.RemoteHostNameOrAddress = _newTerminalSettings_Form.SocketRemoteHostNameOrAddress;
 			socketSelection.RemotePort              = _newTerminalSettings_Form.SocketRemotePort;
 			socketSelection.LocalHostNameOrAddress  = _newTerminalSettings_Form.SocketLocalHostNameOrAddress;

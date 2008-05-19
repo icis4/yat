@@ -60,12 +60,12 @@ namespace YAT.Gui.Controls
 
 		private const HostType _HostTypeDefault = HostType.TcpAutoSocket;
 
-		private const string _RemoteHostNameOrAddressDefault = Domain.Settings.Socket.SocketSettings.DefaultRemoteHostName;
-		private const int _RemotePortDefault = Domain.Settings.Socket.SocketSettings.DefaultPort;
+		private const string _RemoteHostNameOrAddressDefault = MKY.IO.Serial.SocketSettings.DefaultRemoteHostName;
+		private const int _RemotePortDefault                 = MKY.IO.Serial.SocketSettings.DefaultPort;
 
-		private const string _LocalHostNameOrAddressDefault = Domain.Settings.Socket.SocketSettings.DefaultLocalHostName;
-		private const int _LocalTcpPortDefault = Domain.Settings.Socket.SocketSettings.DefaultPort;
-		private const int _LocalUdpPortDefault = Domain.Settings.Socket.SocketSettings.DefaultPort + 1;
+		private const string _LocalHostNameOrAddressDefault = MKY.IO.Serial.SocketSettings.DefaultLocalHostName;
+		private const int _LocalTcpPortDefault              = MKY.IO.Serial.SocketSettings.DefaultPort;
+		private const int _LocalUdpPortDefault              = MKY.IO.Serial.SocketSettings.DefaultPort + 1;
 
 		#endregion
 

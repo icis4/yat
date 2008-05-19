@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 using MKY.Utilities.Event;
 using MKY.Net.Sockets;
+using MKY.IO.Serial;
 
 namespace YAT.Gui.Controls
 {
@@ -34,7 +35,7 @@ namespace YAT.Gui.Controls
 
 		private HostType _hostType = _HostTypeDefault;
 
-		private Domain.AutoRetry _tcpClientAutoReconnect = Domain.Settings.Socket.SocketSettings.TcpClientAutoReconnectDefault;
+		private AutoRetry _tcpClientAutoReconnect = MKY.IO.Serial.SocketSettings.TcpClientAutoReconnectDefault;
 
 		#endregion
 
@@ -85,7 +86,7 @@ namespace YAT.Gui.Controls
 		[Category("Socket")]
 		[Description("Sets TCP client auto reconnect.")]
 		[Browsable(false)]
-		public Domain.AutoRetry TcpClientAutoReconnect
+		public AutoRetry TcpClientAutoReconnect
 		{
 			get { return (_tcpClientAutoReconnect); }
 			set
@@ -128,7 +129,7 @@ namespace YAT.Gui.Controls
 		{
 			if (!_isSettingControls)
 			{
-				Domain.AutoRetry ar = _tcpClientAutoReconnect;
+				MKY.IO.Serial.AutoRetry ar = _tcpClientAutoReconnect;
 				ar.Enabled = checkBox_TcpClientAutoReconnect.Checked;
 				TcpClientAutoReconnect = ar;
 			}
@@ -141,7 +142,7 @@ namespace YAT.Gui.Controls
 				int interval;
 				if (int.TryParse(textBox_TcpClientAutoReconnectInterval.Text, out interval) && (interval >= 100))
 				{
-					Domain.AutoRetry ar = _tcpClientAutoReconnect;
+					MKY.IO.Serial.AutoRetry ar = _tcpClientAutoReconnect;
 					ar.Interval = interval;
 					TcpClientAutoReconnect = ar;
 				}

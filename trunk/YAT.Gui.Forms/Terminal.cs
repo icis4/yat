@@ -586,7 +586,7 @@ namespace YAT.Gui.Forms
 		{
 			_isSettingControls = true;
 
-			bool isSerialPort = (_settingsRoot.IOType == Domain.IOType.SerialPort);
+			bool isSerialPort = (_settingsRoot.IOType == MKY.IO.Serial.IOType.SerialPort);
 
 			foreach (ToolStripMenuItem item in _menuItems_preset)
 				item.Enabled = isSerialPort;
@@ -1580,62 +1580,62 @@ namespace YAT.Gui.Forms
 				case 6:	presetString = "19200, 8, None, 1, XOn/XOff"; break;
 			}
 
-			Domain.Settings.SerialPort.SerialCommunicationSettings settings = _settingsRoot.Terminal.IO.SerialPort.Communication;
+			MKY.IO.Serial.SerialCommunicationSettings settings = _settingsRoot.Terminal.IO.SerialPort.Communication;
 			settings.SuspendChangeEvent();
 			switch (preset)
 			{
 				case 1: // "2400, 7, Even, 1, None"
 				{
-					settings.BaudRate  = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud002400;
-					settings.DataBits  = MKY.IO.Ports.DataBits.Seven;
-					settings.Parity    = System.IO.Ports.Parity.Even;
-					settings.StopBits  = System.IO.Ports.StopBits.One;
-					settings.FlowControl = Domain.IO.FlowControl.None;
+					settings.BaudRate    = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud002400;
+					settings.DataBits    = MKY.IO.Ports.DataBits.Seven;
+					settings.Parity      = System.IO.Ports.Parity.Even;
+					settings.StopBits    = System.IO.Ports.StopBits.One;
+					settings.FlowControl = MKY.IO.Serial.FlowControl.None;
 					break;
 				}
 				case 2: // "2400, 7, Even, 1, XOn/XOff"
 				{
-					settings.BaudRate  = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud002400;
-					settings.DataBits  = MKY.IO.Ports.DataBits.Seven;
-					settings.Parity    = System.IO.Ports.Parity.Even;
-					settings.StopBits  = System.IO.Ports.StopBits.One;
-					settings.FlowControl = Domain.IO.FlowControl.XOnXOff;
+					settings.BaudRate    = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud002400;
+					settings.DataBits    = MKY.IO.Ports.DataBits.Seven;
+					settings.Parity      = System.IO.Ports.Parity.Even;
+					settings.StopBits    = System.IO.Ports.StopBits.One;
+					settings.FlowControl = MKY.IO.Serial.FlowControl.XOnXOff;
 					break;
 				}
 				case 3: // "9600, 8, None, 1, None"
 				{
-					settings.BaudRate  = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud009600;
-					settings.DataBits  = MKY.IO.Ports.DataBits.Eight;
-					settings.Parity    = System.IO.Ports.Parity.None;
-					settings.StopBits  = System.IO.Ports.StopBits.One;
-					settings.FlowControl = Domain.IO.FlowControl.None;
+					settings.BaudRate    = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud009600;
+					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
+					settings.Parity      = System.IO.Ports.Parity.None;
+					settings.StopBits    = System.IO.Ports.StopBits.One;
+					settings.FlowControl = MKY.IO.Serial.FlowControl.None;
 					break;
 				}
 				case 4: // "9600, 8, None, 1, XOn/XOff"
 				{
-					settings.BaudRate  = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud009600;
-					settings.DataBits  = MKY.IO.Ports.DataBits.Eight;
-					settings.Parity    = System.IO.Ports.Parity.None;
-					settings.StopBits  = System.IO.Ports.StopBits.One;
-					settings.FlowControl = Domain.IO.FlowControl.XOnXOff;
+					settings.BaudRate    = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud009600;
+					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
+					settings.Parity      = System.IO.Ports.Parity.None;
+					settings.StopBits    = System.IO.Ports.StopBits.One;
+					settings.FlowControl = MKY.IO.Serial.FlowControl.XOnXOff;
 					break;
 				}
 				case 5: // "19200, 8, None, 1, None"
 				{
-					settings.BaudRate  = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud019200;
-					settings.DataBits  = MKY.IO.Ports.DataBits.Eight;
-					settings.Parity    = System.IO.Ports.Parity.None;
-					settings.StopBits  = System.IO.Ports.StopBits.One;
-					settings.FlowControl = Domain.IO.FlowControl.None;
+					settings.BaudRate    = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud019200;
+					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
+					settings.Parity      = System.IO.Ports.Parity.None;
+					settings.StopBits    = System.IO.Ports.StopBits.One;
+					settings.FlowControl = MKY.IO.Serial.FlowControl.None;
 					break;
 				}
 				case 6: // "19200, 8, None, 1, XOn/XOff"
 				{
-					settings.BaudRate  = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud019200;
-					settings.DataBits  = MKY.IO.Ports.DataBits.Eight;
-					settings.Parity    = System.IO.Ports.Parity.None;
-					settings.StopBits  = System.IO.Ports.StopBits.One;
-					settings.FlowControl = Domain.IO.FlowControl.XOnXOff;
+					settings.BaudRate    = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud019200;
+					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
+					settings.Parity      = System.IO.Ports.Parity.None;
+					settings.StopBits    = System.IO.Ports.StopBits.One;
+					settings.FlowControl = MKY.IO.Serial.FlowControl.XOnXOff;
 					break;
 				}
 			}
@@ -2499,9 +2499,9 @@ namespace YAT.Gui.Forms
 
 			if (_settingsRoot != null)
 			{
-				if (_settingsRoot.IOType == Domain.IOType.SerialPort)
+				if (_settingsRoot.IOType == MKY.IO.Serial.IOType.SerialPort)
 				{
-					Domain.Settings.SerialPort.SerialPortSettings s = _settingsRoot.IO.SerialPort;
+					MKY.IO.Serial.SerialPortSettings s = _settingsRoot.IO.SerialPort;
 					sb.Append(" - ");
 					sb.Append(s.PortId.ToString(true, false));
 					sb.Append(" - ");
@@ -2509,10 +2509,10 @@ namespace YAT.Gui.Forms
 				}
 				else
 				{
-					Domain.Settings.Socket.SocketSettings s = _settingsRoot.IO.Socket;
+					MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
 					switch (_settingsRoot.IOType)
 					{
-						case Domain.IOType.TcpClient:
+						case MKY.IO.Serial.IOType.TcpClient:
 							sb.Append(" - ");
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
 							sb.Append(":");
@@ -2521,7 +2521,7 @@ namespace YAT.Gui.Forms
 							sb.Append(isConnected ? "Connected" : "Disconnected");
 							break;
 
-						case Domain.IOType.TcpServer:
+						case MKY.IO.Serial.IOType.TcpServer:
 							sb.Append(" - ");
 							sb.Append("Server:");
 							sb.Append(s.LocalPort.ToString());
@@ -2532,9 +2532,9 @@ namespace YAT.Gui.Forms
 								sb.Append("Closed");
 							break;
 
-						case Domain.IOType.TcpAutoSocket:
-							bool isClient = ((Domain.IO.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsClient;
-							bool isServer = ((Domain.IO.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsServer;
+						case MKY.IO.Serial.IOType.TcpAutoSocket:
+							bool isClient = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsClient;
+							bool isServer = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsServer;
 							if (isOpen)
 							{
 								if (isClient)
@@ -2571,7 +2571,7 @@ namespace YAT.Gui.Forms
 							}
 							break;
 
-						case Domain.IOType.Udp:
+						case MKY.IO.Serial.IOType.Udp:
 							sb.Append(" - ");
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
 							sb.Append(":");
@@ -2620,10 +2620,10 @@ namespace YAT.Gui.Forms
 			Image on = Properties.Resources.Image_On_12x12;
 			Image off = Properties.Resources.Image_Off_12x12;
 
-			if (_settingsRoot.IOType == Domain.IOType.SerialPort)
+			if (_settingsRoot.IOType == MKY.IO.Serial.IOType.SerialPort)
 			{
 				// be aware that isOpen means I/O started and isConnected COM port open
-				Domain.Settings.SerialPort.SerialPortSettings s = _settingsRoot.IO.SerialPort;
+				MKY.IO.Serial.SerialPortSettings s = _settingsRoot.IO.SerialPort;
 				sb.Append("Serial port ");
 				sb.Append(s.PortId.ToString(true, false));
 				sb.Append(" (" + s.Communication.ToString() + ") is ");
@@ -2641,10 +2641,10 @@ namespace YAT.Gui.Forms
 			}
 			else
 			{
-				Domain.Settings.Socket.SocketSettings s = _settingsRoot.IO.Socket;
+				MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
 				switch (_settingsRoot.IOType)
 				{
-					case Domain.IOType.TcpClient:
+					case MKY.IO.Serial.IOType.TcpClient:
 						sb.Append("TCP client is ");
 						sb.Append(isConnected ? "connected to " : "disconnected from ");
 						sb.Append(s.ResolvedRemoteIPAddress.ToString());
@@ -2652,13 +2652,13 @@ namespace YAT.Gui.Forms
 						sb.Append(s.RemotePort.ToString());
 						break;
 
-					case Domain.IOType.TcpServer:
+					case MKY.IO.Serial.IOType.TcpServer:
 						sb.Append("TCP server is ");
 						if (isOpen)
 						{
 							if (isConnected)
 							{
-								Domain.IO.TcpServer server = (Domain.IO.TcpServer)_terminal.UnderlyingIOProvider;
+								MKY.IO.Serial.TcpServer server = (MKY.IO.Serial.TcpServer)_terminal.UnderlyingIOProvider;
 								int count = server.ConnectedClientCount;
 
 								sb.Append("connected to ");
@@ -2681,9 +2681,9 @@ namespace YAT.Gui.Forms
 						sb.Append(s.LocalPort.ToString());
 						break;
 
-					case Domain.IOType.TcpAutoSocket:
-						bool isClient = ((Domain.IO.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsClient;
-						bool isServer = ((Domain.IO.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsServer;
+					case MKY.IO.Serial.IOType.TcpAutoSocket:
+						bool isClient = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsClient;
+						bool isServer = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsServer;
 						sb.Append("TCP auto socket is ");
 						if (isOpen)
 						{
@@ -2713,7 +2713,7 @@ namespace YAT.Gui.Forms
 						}
 						break;
 
-					case Domain.IOType.Udp:
+					case MKY.IO.Serial.IOType.Udp:
 						sb.Append("UDP socket is ");
 						sb.Append(isOpen ? "open" : "closed");
 						sb.Append(" for sending to ");
@@ -2736,7 +2736,7 @@ namespace YAT.Gui.Forms
 		{
 			bool isOpen = _terminal.IsOpen;
 			bool isConnected = _terminal.IsConnected;
-			bool isSerialPort = (_settingsRoot.IOType == Domain.IOType.SerialPort);
+			bool isSerialPort = (_settingsRoot.IOType == MKY.IO.Serial.IOType.SerialPort);
 
 			foreach (ToolStripStatusLabel sl in _statusLabels_ioControl)
 				sl.Visible = isSerialPort;
@@ -2759,7 +2759,7 @@ namespace YAT.Gui.Forms
 							pins = port.ControlPins;
 					}
 
-					bool rs485FlowControl = (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == Domain.IO.FlowControl.RS485);
+					bool rs485FlowControl = (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.FlowControl.RS485);
 
 					if (rs485FlowControl)
 					{
@@ -2776,7 +2776,7 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_DSR.Image = (pins.Dsr ? on : off);
 					toolStripStatusLabel_TerminalStatus_DCD.Image = (pins.Cd ? on : off);
 
-					bool manualFlowControl = (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == Domain.IO.FlowControl.Manual);
+					bool manualFlowControl = (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.FlowControl.Manual);
 
 					toolStripStatusLabel_TerminalStatus_RTS.ForeColor = (manualFlowControl ? SystemColors.ControlText : SystemColors.GrayText);
 					toolStripStatusLabel_TerminalStatus_CTS.ForeColor = SystemColors.GrayText;
