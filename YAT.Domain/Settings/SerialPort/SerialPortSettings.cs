@@ -10,7 +10,7 @@ namespace YAT.Domain.Settings.SerialPort
 	public class SerialPortSettings : MKY.Utilities.Settings.Settings, IEquatable<SerialPortSettings>
 	{
 		/// <summary></summary>
-		public static readonly AutoRetry AutoReopenDefault = new AutoRetry(false, 2000);
+		public static readonly AutoRetry AutoReopenDefault = new AutoRetry(true, 2000);
 		/// <summary></summary>
 		public const bool ReplaceParityErrorsDefault = false;
 		/// <summary></summary>

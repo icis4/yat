@@ -20,11 +20,21 @@ namespace YAT.Domain.IO
 
 		private enum PortState
 		{
+			Reset,
 			Closed,
 			Openend,
 			WaitingForReopen,
 			Error,
 		}
+
+		#endregion
+
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private int _AliveInterval = 500;
 
 		#endregion
 
@@ -35,12 +45,16 @@ namespace YAT.Domain.IO
 
 		private bool _isDisposed;
 
-		private PortState _state = PortState.Closed;
+		private PortState _state = PortState.Reset;
 		private object _stateSyncObj = new object();
 
 		private Settings.SerialPort.SerialPortSettings _settings;
 		private MKY.IO.Ports.ISerialPort _port;
 
+		/// <summary>
+		/// Alive timer detects port break states, i.e. when a USB to serial converter is disconnected.
+		/// </summary>
+		private System.Timers.Timer _aliveTimer;
 		private System.Timers.Timer _reopenTimer;
 
 		#endregion
@@ -94,6 +108,7 @@ namespace YAT.Domain.IO
 			{
 				if (disposing)
 				{
+					StopAndDisposeAliveTimer();
 					StopAndDisposeReopenTimer();
 					CloseAndDisposePortAsync();
 				}
@@ -137,6 +152,7 @@ namespace YAT.Domain.IO
 				AssertNotDisposed();
 				switch (_state)
 				{
+					case PortState.Closed:
 					case PortState.Openend:
 					case PortState.WaitingForReopen:
 					{
@@ -201,82 +217,19 @@ namespace YAT.Domain.IO
 			// AssertNotDisposed() is called by HasStarted
 
 			if (!HasStarted)
-			{
-				CreatePort();          // port must be created each time because _port.Close()
-				ApplySettings();       //   disposes the underlying IO instance
-
-				// RTS
-				switch (_settings.Communication.FlowControl)
-				{
-					case FlowControl.None:
-					case FlowControl.XOnXOff:
-						_port.RtsEnable = false;
-						break;
-
-					case FlowControl.Manual:
-						_port.RtsEnable = _settings.RtsEnabled;
-						break;
-
-					case FlowControl.RS485:
-						_port.RtsEnable = false;
-						break;
-
-					case FlowControl.RequestToSend:
-					case FlowControl.RequestToSendXOnXOff:
-						// do nothing, RTS is used for hand shake
-						break;
-				}
-
-				// DTR
-				switch (_settings.Communication.FlowControl)
-				{
-					case FlowControl.None:
-					case FlowControl.RequestToSend:
-					case FlowControl.XOnXOff:
-					case FlowControl.RequestToSendXOnXOff:
-					case FlowControl.RS485:
-						_port.DtrEnable = false;
-						break;
-
-					case FlowControl.Manual:
-						_port.DtrEnable = _settings.DtrEnabled;
-						break;
-				}
-
-				OpenPort();
-
-				lock (_stateSyncObj)
-					_state = PortState.Openend;
-
-				OnIOChanged(new EventArgs());
-				OnIOControlChanged(new EventArgs());
-			}
+				CreateAndOpenPort();
 		}
 
 		/// <summary></summary>
 		public void Stop()
 		{
-			// AssertNotDisposed() is called by HasStarted
-
 			if (HasStarted)
 			{
-				#if false
+				lock (_stateSyncObj)
+					_state = PortState.Reset;
 
-				// RTS/DTR are reset upon ClosePort()
-				_port.RtsEnable = false;
-				_port.DtrEnable = false;
-
-				#endif
-
-                // set state to closed before starting to close
-                // ensures that no more port events are forwarded
-                lock (_stateSyncObj)
-                    _state = PortState.Closed;
-
-				CloseAndDisposePortAsync();
-
-				OnIOChanged(new EventArgs());
-				OnIOControlChanged(new EventArgs());
+				StopAndDisposeReopenTimer();
+				CloseAndDisposePort();
 			}
 		}
 
@@ -357,6 +310,13 @@ namespace YAT.Domain.IO
 					_port.RtsEnable = false;
 					break;
 			}
+
+			// auto reopen
+			if (_settings.AutoReopen.Enabled)
+			{
+				if (!IsDisposed && HasStarted && !IsConnected)
+					StartReopenTimer();
+			}
 		}
 
 		private void ApplyCommunicationSettings()
@@ -374,9 +334,9 @@ namespace YAT.Domain.IO
 
 		#endregion
 
-		#region Port
+		#region Simple Port Methods
 		//==========================================================================================
-		// Port
+		// Simple Port Methods
 		//==========================================================================================
 
 		private void CreatePort()
@@ -420,14 +380,113 @@ namespace YAT.Domain.IO
 		/// </remarks>
 		private void CloseAndDisposePortAsync()
 		{
-			AsyncInvokeDelegate asyncInvoker = new AsyncInvokeDelegate(CloseAndDisposePort);
+			AsyncInvokeDelegate asyncInvoker = new AsyncInvokeDelegate(DoCloseAndDisposePortAsync);
 			asyncInvoker.BeginInvoke(null, null);
 		}
 
-		private void CloseAndDisposePort()
+		private void DoCloseAndDisposePortAsync()
 		{
 			ClosePort();
 			DisposePort();
+		}
+
+		#endregion
+
+		#region Port Methods
+		//==========================================================================================
+		// Port Methods
+		//==========================================================================================
+
+		/// <summary></summary>
+		private void CreateAndOpenPort()
+		{
+			CreatePort();          // port must be created each time because _port.Close()
+			ApplySettings();       //   disposes the underlying IO instance
+
+			// RTS
+			switch (_settings.Communication.FlowControl)
+			{
+				case FlowControl.None:
+				case FlowControl.XOnXOff:
+					_port.RtsEnable = false;
+					break;
+
+				case FlowControl.Manual:
+					_port.RtsEnable = _settings.RtsEnabled;
+					break;
+
+				case FlowControl.RS485:
+					_port.RtsEnable = false;
+					break;
+
+				case FlowControl.RequestToSend:
+				case FlowControl.RequestToSendXOnXOff:
+					// do nothing, RTS is used for hand shake
+					break;
+			}
+
+			// DTR
+			switch (_settings.Communication.FlowControl)
+			{
+				case FlowControl.None:
+				case FlowControl.RequestToSend:
+				case FlowControl.XOnXOff:
+				case FlowControl.RequestToSendXOnXOff:
+				case FlowControl.RS485:
+					_port.DtrEnable = false;
+					break;
+
+				case FlowControl.Manual:
+					_port.DtrEnable = _settings.DtrEnabled;
+					break;
+			}
+
+			OpenPort();
+			StartAliveTimer();
+
+			lock (_stateSyncObj)
+				_state = PortState.Openend;
+
+			OnIOChanged(new EventArgs());
+			OnIOControlChanged(new EventArgs());
+		}
+
+		/// <summary></summary>
+		private void StopOrClosePort()
+		{
+			if (_settings.AutoReopen.Enabled)
+			{
+				lock (_stateSyncObj)
+					_state = PortState.Closed;
+
+				CloseAndDisposePort();
+				StartReopenTimer();
+			}
+			else
+			{
+				Stop();
+			}
+		}
+
+		/// <summary></summary>
+		/// <remarks>
+		/// State must be set by calling function.
+		/// </remarks>
+		private void CloseAndDisposePort()
+		{
+			#if false
+
+			// RTS/DTR are reset upon ClosePort()
+			_port.RtsEnable = false;
+			_port.DtrEnable = false;
+
+			#endif
+
+			StopAndDisposeAliveTimer();
+			CloseAndDisposePortAsync();
+
+			OnIOChanged(new EventArgs());
+			OnIOControlChanged(new EventArgs());
 		}
 
 		#endregion
@@ -445,8 +504,26 @@ namespace YAT.Domain.IO
 
 		private void _port_PinChanged(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
-			if (_state == PortState.Openend) // ensure not to forward any events during closing anymore
-				OnIOControlChanged(new EventArgs());
+			// if pin has changed, but access to port throws exception, port has been shut down,
+			//   e.g. USB to serial converter disconnected
+			System.Diagnostics.Trace.WriteLine("PinChanged");
+			try
+			{
+				System.Diagnostics.Trace.WriteLine("PinChanged::Trying");
+
+				// force access to port to check whether it's still alive
+				bool cts = _port.CtsHolding;
+
+				System.Diagnostics.Trace.WriteLine("PinChanged::OK");
+
+				if (_state == PortState.Openend) // ensure not to forward any events during closing anymore
+					OnIOControlChanged(new EventArgs());
+			}
+			catch
+			{
+				System.Diagnostics.Trace.WriteLine("PinChanged::Closing");
+				StopOrClosePort();
+			}
 		}
 
 		private void _port_ErrorReceived(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e)
@@ -469,6 +546,62 @@ namespace YAT.Domain.IO
 
 		#endregion
 
+		#region Alive Timer
+		//==========================================================================================
+		// Alive Timer
+		//==========================================================================================
+
+		private void StartAliveTimer()
+		{
+			if (_aliveTimer == null)
+			{
+				_aliveTimer = new System.Timers.Timer(_AliveInterval);
+				_aliveTimer.AutoReset = true;
+				_aliveTimer.Elapsed += new System.Timers.ElapsedEventHandler(_aliveTimer_Elapsed);
+				_aliveTimer.Start();
+			}
+		}
+
+		private void StopAndDisposeAliveTimer()
+		{
+			if (_aliveTimer != null)
+			{
+				_aliveTimer.Stop();
+				_aliveTimer.Dispose();
+				_aliveTimer = null;
+			}
+		}
+
+		private void _aliveTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		{
+			if (!IsDisposed && HasStarted)
+			{
+				try
+				{
+					// if port isn't open anymore, or access to port throws exception,
+					//   port has been shut down, e.g. USB to serial converter disconnected
+					if (_port.IsOpen)
+						System.Diagnostics.Trace.WriteLine("Alive and open");
+					else
+					{
+						System.Diagnostics.Trace.WriteLine("Alive and closed");
+						StopOrClosePort();
+					}
+				}
+				catch
+				{
+					System.Diagnostics.Trace.WriteLine("Non more alive");
+					StopOrClosePort();
+				}
+			}
+			else
+			{
+				StopAndDisposeAliveTimer();
+			}
+		}
+
+		#endregion
+
 		#region Reopen Timer
 		//==========================================================================================
 		// Reopen Timer
@@ -476,6 +609,9 @@ namespace YAT.Domain.IO
 
 		private void StartReopenTimer()
 		{
+			if (_reopenTimer != null)
+				StopAndDisposeReopenTimer();
+
 			_reopenTimer = new System.Timers.Timer(_settings.AutoReopen.Interval);
 			_reopenTimer.AutoReset = false;
 			_reopenTimer.Elapsed += new System.Timers.ElapsedEventHandler(_reopenTimer_Elapsed);

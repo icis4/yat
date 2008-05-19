@@ -465,6 +465,9 @@ namespace YAT.Domain.IO
 
 		private void StartReconnectTimer()
 		{
+			if (_reconnectTimer != null)
+				StopAndDisposeReconnectTimer();
+
 			_reconnectTimer = new System.Timers.Timer(_autoReconnect.Interval);
 			_reconnectTimer.AutoReset = false;
 			_reconnectTimer.Elapsed += new System.Timers.ElapsedEventHandler(_reconnectTimer_Elapsed);
