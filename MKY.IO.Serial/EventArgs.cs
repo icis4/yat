@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace YAT.Domain.IO
+namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	public class IOErrorEventArgs : EventArgs

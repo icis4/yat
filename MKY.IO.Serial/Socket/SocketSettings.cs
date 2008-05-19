@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace YAT.Domain.Settings.Socket
+namespace MKY.IO.Serial.Socket
 {
 	/// <summary></summary>
 	[Serializable]

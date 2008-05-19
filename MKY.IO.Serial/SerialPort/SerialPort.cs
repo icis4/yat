@@ -4,7 +4,7 @@ using System.Text;
 
 using MKY.Utilities.Event;
 
-namespace YAT.Domain.IO
+namespace MKY.IO.Serial.SerialPort
 {
 	/// <summary></summary>
 	/// <remarks>
