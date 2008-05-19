@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-using MKY.IO.Serial;
-
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>

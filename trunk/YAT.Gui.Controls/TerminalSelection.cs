@@ -51,8 +51,8 @@ namespace YAT.Gui.Controls
 			"   '127.0.0.1' is the IP v4 loopback interface" + Environment.NewLine +
 			"   '::1' is the IP v6 loopback interface";
 
-		private const Domain.TerminalType  _TerminalTypeDefault = Domain.TerminalType.Text;
-		private const MKY.IO.Serial.IOType _IOTypeDefault       = MKY.IO.Serial.IOType.SerialPort;
+		private const Domain.TerminalType _TerminalTypeDefault = Domain.TerminalType.Text;
+		private const Domain.IOType       _IOTypeDefault       = Domain.IOType.SerialPort;
 
 		#endregion
 
@@ -64,7 +64,7 @@ namespace YAT.Gui.Controls
 		private bool _isSettingControls = false;
 
 		private Domain.TerminalType _terminalType = _TerminalTypeDefault;
-		private MKY.IO.Serial.IOType _ioType      = _IOTypeDefault;
+		private Domain.IOType       _ioType       = _IOTypeDefault;
 
 		#endregion
 
@@ -125,7 +125,7 @@ namespace YAT.Gui.Controls
 		[Category("Terminal")]
 		[Description("The port type.")]
 		[DefaultValue(_IOTypeDefault)]
-		public MKY.IO.Serial.IOType IOType
+		public Domain.IOType IOType
 		{
 			get { return (_ioType); }
 			set

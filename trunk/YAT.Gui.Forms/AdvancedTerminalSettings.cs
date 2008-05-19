@@ -343,7 +343,7 @@ namespace YAT.Gui.Forms
 			checkBox_CopyPredefined.Checked = _settings_Form.Send.CopyPredefined;
 
 			// receive
-			groupBox_ReceiveSettings.Enabled = (_settings_Form.IO.IOType == MKY.IO.Serial.IOType.SerialPort);
+			groupBox_ReceiveSettings.Enabled = (_settings_Form.IO.IOType == Domain.IOType.SerialPort);
 			bool replaceParityErrors = _settings_Form.IO.SerialPort.ReplaceParityErrors;
 			checkBox_ReplaceParityError.Checked = replaceParityErrors;
 			textBox_ParityReplacement.Enabled = replaceParityErrors;

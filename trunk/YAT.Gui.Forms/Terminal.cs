@@ -586,7 +586,7 @@ namespace YAT.Gui.Forms
 		{
 			_isSettingControls = true;
 
-			bool isSerialPort = (_settingsRoot.IOType == MKY.IO.Serial.IOType.SerialPort);
+			bool isSerialPort = (_settingsRoot.IOType == Domain.IOType.SerialPort);
 
 			foreach (ToolStripMenuItem item in _menuItems_preset)
 				item.Enabled = isSerialPort;
@@ -2499,7 +2499,7 @@ namespace YAT.Gui.Forms
 
 			if (_settingsRoot != null)
 			{
-				if (_settingsRoot.IOType == MKY.IO.Serial.IOType.SerialPort)
+				if (_settingsRoot.IOType == Domain.IOType.SerialPort)
 				{
 					MKY.IO.Serial.SerialPortSettings s = _settingsRoot.IO.SerialPort;
 					sb.Append(" - ");
@@ -2512,7 +2512,7 @@ namespace YAT.Gui.Forms
 					MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
 					switch (_settingsRoot.IOType)
 					{
-						case MKY.IO.Serial.IOType.TcpClient:
+						case Domain.IOType.TcpClient:
 							sb.Append(" - ");
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
 							sb.Append(":");
@@ -2521,7 +2521,7 @@ namespace YAT.Gui.Forms
 							sb.Append(isConnected ? "Connected" : "Disconnected");
 							break;
 
-						case MKY.IO.Serial.IOType.TcpServer:
+						case Domain.IOType.TcpServer:
 							sb.Append(" - ");
 							sb.Append("Server:");
 							sb.Append(s.LocalPort.ToString());
@@ -2532,7 +2532,7 @@ namespace YAT.Gui.Forms
 								sb.Append("Closed");
 							break;
 
-						case MKY.IO.Serial.IOType.TcpAutoSocket:
+						case Domain.IOType.TcpAutoSocket:
 							bool isClient = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsClient;
 							bool isServer = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsServer;
 							if (isOpen)
@@ -2571,7 +2571,7 @@ namespace YAT.Gui.Forms
 							}
 							break;
 
-						case MKY.IO.Serial.IOType.Udp:
+						case Domain.IOType.Udp:
 							sb.Append(" - ");
 							sb.Append(s.ResolvedRemoteIPAddress.ToString());
 							sb.Append(":");
@@ -2620,7 +2620,7 @@ namespace YAT.Gui.Forms
 			Image on = Properties.Resources.Image_On_12x12;
 			Image off = Properties.Resources.Image_Off_12x12;
 
-			if (_settingsRoot.IOType == MKY.IO.Serial.IOType.SerialPort)
+			if (_settingsRoot.IOType == Domain.IOType.SerialPort)
 			{
 				// be aware that isOpen means I/O started and isConnected COM port open
 				MKY.IO.Serial.SerialPortSettings s = _settingsRoot.IO.SerialPort;
@@ -2644,7 +2644,7 @@ namespace YAT.Gui.Forms
 				MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
 				switch (_settingsRoot.IOType)
 				{
-					case MKY.IO.Serial.IOType.TcpClient:
+					case Domain.IOType.TcpClient:
 						sb.Append("TCP client is ");
 						sb.Append(isConnected ? "connected to " : "disconnected from ");
 						sb.Append(s.ResolvedRemoteIPAddress.ToString());
@@ -2652,7 +2652,7 @@ namespace YAT.Gui.Forms
 						sb.Append(s.RemotePort.ToString());
 						break;
 
-					case MKY.IO.Serial.IOType.TcpServer:
+					case Domain.IOType.TcpServer:
 						sb.Append("TCP server is ");
 						if (isOpen)
 						{
@@ -2681,7 +2681,7 @@ namespace YAT.Gui.Forms
 						sb.Append(s.LocalPort.ToString());
 						break;
 
-					case MKY.IO.Serial.IOType.TcpAutoSocket:
+					case Domain.IOType.TcpAutoSocket:
 						bool isClient = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsClient;
 						bool isServer = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsServer;
 						sb.Append("TCP auto socket is ");
@@ -2713,7 +2713,7 @@ namespace YAT.Gui.Forms
 						}
 						break;
 
-					case MKY.IO.Serial.IOType.Udp:
+					case Domain.IOType.Udp:
 						sb.Append("UDP socket is ");
 						sb.Append(isOpen ? "open" : "closed");
 						sb.Append(" for sending to ");
@@ -2736,7 +2736,7 @@ namespace YAT.Gui.Forms
 		{
 			bool isOpen = _terminal.IsOpen;
 			bool isConnected = _terminal.IsConnected;
-			bool isSerialPort = (_settingsRoot.IOType == MKY.IO.Serial.IOType.SerialPort);
+			bool isSerialPort = (_settingsRoot.IOType == Domain.IOType.SerialPort);
 
 			foreach (ToolStripStatusLabel sl in _statusLabels_ioControl)
 				sl.Visible = isSerialPort;

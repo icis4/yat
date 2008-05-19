@@ -967,7 +967,7 @@ namespace YAT.Model
 				OnFixedStatusTextRequest("Error opening terminal!");
 
 				string ioText;
-				if (_settingsRoot.IOType == MKY.IO.Serial.IOType.SerialPort)
+				if (_settingsRoot.IOType == Domain.IOType.SerialPort)
 					ioText = "Port";
 				else
 					ioText = "Socket";
@@ -1090,7 +1090,7 @@ namespace YAT.Model
 				string title;
 				switch (_settingsRoot.IOType)
 				{
-					case MKY.IO.Serial.IOType.SerialPort: text += "port"; title = "Serial Port"; break;
+					case Domain.IOType.SerialPort: text += "port"; title = "Serial Port"; break;
 					default: text += "socket"; title = "Socket"; break;
 				}
 				text += ":";
@@ -1123,7 +1123,7 @@ namespace YAT.Model
 				string title;
 				switch (_settingsRoot.IOType)
 				{
-					case MKY.IO.Serial.IOType.SerialPort: text += "port"; title = "Serial Port"; break;
+					case Domain.IOType.SerialPort: text += "port"; title = "Serial Port"; break;
 					default: text += "socket"; title = "Socket"; break;
 				}
 				text += ":";

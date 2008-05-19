@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-using MKY.IO.Serial;
-
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
@@ -12,13 +10,13 @@ namespace YAT.Domain.Settings
 	public class IOSettings : MKY.Utilities.Settings.Settings, IEquatable<IOSettings>
 	{
 		/// <summary></summary>
-		public const IOType IOTypeDefault = IOType.SerialPort;
+		public const Domain.IOType IOTypeDefault = Domain.IOType.SerialPort;
 		/// <summary></summary>
 		public const string SerialParityErrorReplacementDefault = @"\h(00)";
 		/// <summary></summary>
 		public const Endianess EndianessDefault = Endianess.BigEndian;
 
-		private IOType _ioType;
+		private Domain.IOType _ioType;
 		private SerialPortSettings _serialPort;
 		private string _serialParityErrorReplacement;
 		private SocketSettings _socket;
@@ -79,7 +77,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("IOType")]
-		public IOType IOType
+		public Domain.IOType IOType
 		{
 			get { return (_ioType); }
 			set

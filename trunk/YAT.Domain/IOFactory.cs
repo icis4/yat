@@ -2,22 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using MKY.IO.Serial;
-
 namespace YAT.Domain
 {
 	internal static class IOFactory
 	{
-		public static IIOProvider CreateIO(Settings.IOSettings settings)
+		public static MKY.IO.Serial.IIOProvider CreateIO(Settings.IOSettings settings)
 		{
 			switch (settings.IOType)
 			{
-				case IOType.SerialPort:
+				case Domain.IOType.SerialPort:
 				{
 					return (new SerialPort(settings.SerialPort));
 				}
 
-				case IOType.TcpClient:
+				case Domain.IOType.TcpClient:
 				{
 					return (new TcpClient
 						(
@@ -28,7 +26,7 @@ namespace YAT.Domain
 						));
 				}
 
-				case IOType.TcpServer:
+				case Domain.IOType.TcpServer:
 				{
 					return (new TcpServer
 						(
@@ -37,7 +35,7 @@ namespace YAT.Domain
 						));
 				}
 
-				case IOType.TcpAutoSocket:
+				case Domain.IOType.TcpAutoSocket:
 				{
 					return (new TcpAutoSocket
 						(
@@ -48,7 +46,7 @@ namespace YAT.Domain
 						));
 				}
 
-				case IOType.Udp:
+				case Domain.IOType.Udp:
 				{
 					return (new UdpSocket
 						(

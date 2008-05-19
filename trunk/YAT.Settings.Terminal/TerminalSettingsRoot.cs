@@ -160,7 +160,7 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlIgnore]
-		public MKY.IO.Serial.IOType IOType
+		public Domain.IOType IOType
 		{
 			get { return (_explicit.Terminal.IO.IOType); }
 			set { _explicit.Terminal.IO.IOType = value; }
