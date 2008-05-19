@@ -5,7 +5,7 @@ using System.Text;
 using MKY.Utilities.Types;
 using MKY.Net.Sockets;
 
-namespace YAT.Domain
+namespace MKY.IO.Serial
 {
 	#region Enum IOType
 

@@ -5,7 +5,7 @@ using System.Threading;
 
 using MKY.Utilities.Event;
 
-namespace YAT.Domain.IO
+namespace MKY.IO.Serial.Socket
 {
 	/// <summary></summary>
 	public class UdpSocket : IIOProvider, IDisposable, MKY.Net.Sockets.ISocketService

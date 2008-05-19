@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace YAT.Domain.Settings.SerialPort
+namespace MKY.IO.Serial.SerialPort
 {
 	/// <summary></summary>
 	[Serializable]
