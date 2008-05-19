@@ -6,8 +6,6 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-using MKY.IO.Serial;
-
 namespace YAT.Gui.Forms
 {
 	public partial class TerminalSettings : System.Windows.Forms.Form
