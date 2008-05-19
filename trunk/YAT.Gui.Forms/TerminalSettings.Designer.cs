@@ -84,14 +84,14 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.Controls.Add(this.groupBox_PortSettings);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
-			this.groupBox_Settings.Size = new System.Drawing.Size(453, 341);
+			this.groupBox_Settings.Size = new System.Drawing.Size(453, 388);
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
 			// 
 			// button_AdvancedSettings
 			// 
 			this.button_AdvancedSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_AdvancedSettings.Location = new System.Drawing.Point(323, 304);
+			this.button_AdvancedSettings.Location = new System.Drawing.Point(323, 351);
 			this.button_AdvancedSettings.Name = "button_AdvancedSettings";
 			this.button_AdvancedSettings.Size = new System.Drawing.Size(114, 23);
 			this.button_AdvancedSettings.TabIndex = 4;
@@ -130,7 +130,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_PortSettings.Controls.Add(this.socketSelection);
 			this.groupBox_PortSettings.Location = new System.Drawing.Point(6, 79);
 			this.groupBox_PortSettings.Name = "groupBox_PortSettings";
-			this.groupBox_PortSettings.Size = new System.Drawing.Size(300, 256);
+			this.groupBox_PortSettings.Size = new System.Drawing.Size(300, 303);
 			this.groupBox_PortSettings.TabIndex = 1;
 			this.groupBox_PortSettings.TabStop = false;
 			this.groupBox_PortSettings.Text = "Port &Settings";
@@ -156,18 +156,18 @@ namespace YAT.Gui.Forms
 			// 
 			// serialPortSettings
 			// 
-			this.serialPortSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+			this.serialPortSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.serialPortSettings.Location = new System.Drawing.Point(6, 64);
 			this.serialPortSettings.Name = "serialPortSettings";
-			this.serialPortSettings.Size = new System.Drawing.Size(260, 186);
+			this.serialPortSettings.Size = new System.Drawing.Size(260, 232);
 			this.serialPortSettings.TabIndex = 1;
 			this.serialPortSettings.ParityChanged += new System.EventHandler(this.serialPortSettings_ParityChanged);
-			this.serialPortSettings.DataBitsChanged += new System.EventHandler(this.serialPortSettings_DataBitsChanged);
-			this.serialPortSettings.StopBitsChanged += new System.EventHandler(this.serialPortSettings_StopBitsChanged);
-			this.serialPortSettings.FlowControlChanged += new System.EventHandler(this.serialPortSettings_FlowControlChanged);
 			this.serialPortSettings.BaudRateChanged += new System.EventHandler(this.serialPortSettings_BaudRateChanged);
 			this.serialPortSettings.AutoReopenChanged += new System.EventHandler(this.serialPortSettings_AutoReopenChanged);
+			this.serialPortSettings.FlowControlChanged += new System.EventHandler(this.serialPortSettings_FlowControlChanged);
+			this.serialPortSettings.StopBitsChanged += new System.EventHandler(this.serialPortSettings_StopBitsChanged);
+			this.serialPortSettings.DataBitsChanged += new System.EventHandler(this.serialPortSettings_DataBitsChanged);
 			// 
 			// socketSelection
 			// 
@@ -219,16 +219,16 @@ namespace YAT.Gui.Forms
 			this.AcceptButton = this.button_OK;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(567, 372);
+			this.ClientSize = new System.Drawing.Size(567, 412);
 			this.Controls.Add(this.button_Help);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.groupBox_Settings);
 			this.Controls.Add(this.button_Cancel);
 			this.Controls.Add(this.button_OK);
 			this.MaximizeBox = false;
-			this.MaximumSize = new System.Drawing.Size(1024, 399);
+			this.MaximumSize = new System.Drawing.Size(1024, 439);
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(575, 399);
+			this.MinimumSize = new System.Drawing.Size(575, 439);
 			this.Name = "TerminalSettings";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;

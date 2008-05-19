@@ -62,7 +62,6 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_RadixContextMenu_Rx_Oct = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_RadixContextMenu_Rx_Dec = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_View_Radix = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Format = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_MonitorContextMenu_1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_ShowTimeStamp = new System.Windows.Forms.ToolStripMenuItem();
@@ -90,6 +89,7 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_MonitorContextMenu_8 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_Print = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_View_Radix = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Predefined = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem_PredefinedContextMenu_Command_1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_Command_2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -195,7 +195,7 @@ namespace YAT.Gui.Forms
 			this.toolStripStatusLabel_TerminalStatus_DTR = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel_TerminalStatus_DSR = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel_TerminalStatus_DCD = new System.Windows.Forms.ToolStripStatusLabel();
-			this.toolStripStatusLabel_TerminalStatus_Connection = new System.Windows.Forms.ToolStripStatusLabel();
+			this.toolStripStatusLabel_TerminalStatus_ConnectionState = new System.Windows.Forms.ToolStripStatusLabel();
 			this.splitContainer_Terminal = new System.Windows.Forms.SplitContainer();
 			this.splitContainer_Predefined = new System.Windows.Forms.SplitContainer();
 			this.panel_Monitor = new System.Windows.Forms.Panel();
@@ -303,7 +303,7 @@ namespace YAT.Gui.Forms
             this.toolStripMenuItem_RadixContextMenu_TxRadix,
             this.toolStripMenuItem_RadixContextMenu_RxRadix});
 			this.contextMenuStrip_Radix.Name = "contextMenuStrip_Radix";
-			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_MonitorContextMenu_Radix;
+			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_TerminalMenu_View_Radix;
 			this.contextMenuStrip_Radix.Size = new System.Drawing.Size(182, 220);
 			this.contextMenuStrip_Radix.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Radix_Opening);
 			// 
@@ -499,13 +499,6 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex.Text = "&Hexadecimal";
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Rx_Hex_Click);
 			// 
-			// toolStripMenuItem_TerminalMenu_View_Radix
-			// 
-			this.toolStripMenuItem_TerminalMenu_View_Radix.DropDown = this.contextMenuStrip_Radix;
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Name = "toolStripMenuItem_TerminalMenu_View_Radix";
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(219, 22);
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Text = "R&adix";
-			// 
 			// toolStripMenuItem_MonitorContextMenu_Format
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Format.Name = "toolStripMenuItem_MonitorContextMenu_Format";
@@ -690,6 +683,13 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_MonitorContextMenu_Print.Text = "Print...";
 			this.toolStripMenuItem_MonitorContextMenu_Print.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Print_Click);
 			// 
+			// toolStripMenuItem_TerminalMenu_View_Radix
+			// 
+			this.toolStripMenuItem_TerminalMenu_View_Radix.DropDown = this.contextMenuStrip_Radix;
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Name = "toolStripMenuItem_TerminalMenu_View_Radix";
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(219, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Text = "R&adix";
+			// 
 			// contextMenuStrip_Predefined
 			// 
 			this.contextMenuStrip_Predefined.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -716,7 +716,8 @@ namespace YAT.Gui.Forms
             this.toolStripSeparator_PredefinedContextMenu_4,
             this.toolStripMenuItem_PredefinedContextMenu_Hide});
 			this.contextMenuStrip_Predefined.Name = "contextMenuStrip_PredefinedCommands";
-			this.contextMenuStrip_Predefined.Size = new System.Drawing.Size(225, 374);
+			this.contextMenuStrip_Predefined.OwnerItem = this.toolStripMenuItem_TerminalMenu_Send_Predefined;
+			this.contextMenuStrip_Predefined.Size = new System.Drawing.Size(225, 424);
 			this.contextMenuStrip_Predefined.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Predefined_Opening);
 			// 
 			// toolStripMenuItem_PredefinedContextMenu_Command_1
@@ -1547,7 +1548,7 @@ namespace YAT.Gui.Forms
             this.toolStripStatusLabel_TerminalStatus_DTR,
             this.toolStripStatusLabel_TerminalStatus_DSR,
             this.toolStripStatusLabel_TerminalStatus_DCD,
-            this.toolStripStatusLabel_TerminalStatus_Connection});
+            this.toolStripStatusLabel_TerminalStatus_ConnectionState});
 			this.statusStrip_Terminal.Location = new System.Drawing.Point(0, 491);
 			this.statusStrip_Terminal.Name = "statusStrip_Terminal";
 			this.statusStrip_Terminal.ShowItemToolTips = true;
@@ -1558,7 +1559,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.toolStripStatusLabel_TerminalStatus_Status.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripStatusLabel_TerminalStatus_Status.Name = "toolStripStatusLabel_TerminalStatus_Status";
-			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(394, 17);
+			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(363, 17);
 			this.toolStripStatusLabel_TerminalStatus_Status.Spring = true;
 			this.toolStripStatusLabel_TerminalStatus_Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -1574,12 +1575,10 @@ namespace YAT.Gui.Forms
 			// 
 			// toolStripStatusLabel_TerminalStatus_RTS
 			// 
-			this.toolStripStatusLabel_TerminalStatus_RTS.BackColor = System.Drawing.SystemColors.Control;
 			this.toolStripStatusLabel_TerminalStatus_RTS.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
 						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
 						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_RTS.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-			this.toolStripStatusLabel_TerminalStatus_RTS.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.toolStripStatusLabel_TerminalStatus_RTS.Image = ((System.Drawing.Image)(resources.GetObject("toolStripStatusLabel_TerminalStatus_RTS.Image")));
 			this.toolStripStatusLabel_TerminalStatus_RTS.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_RTS.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
@@ -1593,7 +1592,6 @@ namespace YAT.Gui.Forms
 			// 
 			// toolStripStatusLabel_TerminalStatus_CTS
 			// 
-			this.toolStripStatusLabel_TerminalStatus_CTS.BackColor = System.Drawing.SystemColors.Control;
 			this.toolStripStatusLabel_TerminalStatus_CTS.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
 						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
 						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
@@ -1611,12 +1609,10 @@ namespace YAT.Gui.Forms
 			// 
 			// toolStripStatusLabel_TerminalStatus_DTR
 			// 
-			this.toolStripStatusLabel_TerminalStatus_DTR.BackColor = System.Drawing.SystemColors.Control;
 			this.toolStripStatusLabel_TerminalStatus_DTR.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
 						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
 						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_DTR.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-			this.toolStripStatusLabel_TerminalStatus_DTR.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.toolStripStatusLabel_TerminalStatus_DTR.Image = ((System.Drawing.Image)(resources.GetObject("toolStripStatusLabel_TerminalStatus_DTR.Image")));
 			this.toolStripStatusLabel_TerminalStatus_DTR.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_DTR.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
@@ -1630,7 +1626,6 @@ namespace YAT.Gui.Forms
 			// 
 			// toolStripStatusLabel_TerminalStatus_DSR
 			// 
-			this.toolStripStatusLabel_TerminalStatus_DSR.BackColor = System.Drawing.SystemColors.Control;
 			this.toolStripStatusLabel_TerminalStatus_DSR.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
 						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
 						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
@@ -1648,7 +1643,6 @@ namespace YAT.Gui.Forms
 			// 
 			// toolStripStatusLabel_TerminalStatus_DCD
 			// 
-			this.toolStripStatusLabel_TerminalStatus_DCD.BackColor = System.Drawing.SystemColors.Control;
 			this.toolStripStatusLabel_TerminalStatus_DCD.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
 						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
 						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
@@ -1664,18 +1658,18 @@ namespace YAT.Gui.Forms
 			this.toolStripStatusLabel_TerminalStatus_DCD.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
 			this.toolStripStatusLabel_TerminalStatus_DCD.ToolTipText = "Data Carrier Detect (In)";
 			// 
-			// toolStripStatusLabel_TerminalStatus_Connection
+			// toolStripStatusLabel_TerminalStatus_ConnectionState
 			// 
-			this.toolStripStatusLabel_TerminalStatus_Connection.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
+			this.toolStripStatusLabel_TerminalStatus_ConnectionState.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
 						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
 						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-			this.toolStripStatusLabel_TerminalStatus_Connection.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-			this.toolStripStatusLabel_TerminalStatus_Connection.Image = global::YAT.Gui.Forms.Properties.Resources.Image_On_12x12;
-			this.toolStripStatusLabel_TerminalStatus_Connection.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-			this.toolStripStatusLabel_TerminalStatus_Connection.Name = "toolStripStatusLabel_TerminalStatus_Connection";
-			this.toolStripStatusLabel_TerminalStatus_Connection.Size = new System.Drawing.Size(16, 17);
-			this.toolStripStatusLabel_TerminalStatus_Connection.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.toolStripStatusLabel_TerminalStatus_Connection.ToolTipText = "Connection State";
+			this.toolStripStatusLabel_TerminalStatus_ConnectionState.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+			this.toolStripStatusLabel_TerminalStatus_ConnectionState.Image = global::YAT.Gui.Forms.Properties.Resources.Image_On_12x12;
+			this.toolStripStatusLabel_TerminalStatus_ConnectionState.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+			this.toolStripStatusLabel_TerminalStatus_ConnectionState.Name = "toolStripStatusLabel_TerminalStatus_ConnectionState";
+			this.toolStripStatusLabel_TerminalStatus_ConnectionState.Size = new System.Drawing.Size(16, 17);
+			this.toolStripStatusLabel_TerminalStatus_ConnectionState.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.toolStripStatusLabel_TerminalStatus_ConnectionState.ToolTipText = "Connection State";
 			// 
 			// splitContainer_Terminal
 			// 
@@ -1883,11 +1877,12 @@ namespace YAT.Gui.Forms
 			this.predefined.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.predefined.Location = new System.Drawing.Point(3, 22);
 			this.predefined.Name = "predefined";
+			this.predefined.Pages = null;
 			this.predefined.Size = new System.Drawing.Size(162, 365);
 			this.predefined.TabIndex = 0;
 			this.predefined.SelectedPageChanged += new System.EventHandler(this.predefined_SelectedPageChanged);
-			this.predefined.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.predefined_SendCommandRequest);
 			this.predefined.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.predefined_DefineCommandRequest);
+			this.predefined.SendCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.predefined_SendCommandRequest);
 			// 
 			// panel_Send
 			// 
@@ -1906,6 +1901,7 @@ namespace YAT.Gui.Forms
 			command1.DefaultRadix = YAT.Domain.Radix.String;
 			command1.Description = "<1 lines...> []";
 			command1.FilePath = "";
+			command1.IsDefined = true;
 			command1.IsFilePath = false;
 			command1.MultiLineCommand = new string[] {
         "<1 lines...> []"};
@@ -1918,6 +1914,7 @@ namespace YAT.Gui.Forms
 			command2.DefaultRadix = YAT.Domain.Radix.String;
 			command2.Description = "<1 lines...> []";
 			command2.FilePath = "";
+			command2.IsDefined = true;
 			command2.IsFilePath = false;
 			command2.MultiLineCommand = new string[] {
         "<1 lines...> []"};
@@ -2099,7 +2096,7 @@ namespace YAT.Gui.Forms
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SendContextMenu_Panels;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SendContextMenu_Panels_SendCommand;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SendContextMenu_Panels_SendFile;
-		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_Connection;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_ConnectionState;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_Panels;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_Panels_Tx;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_Panels_Bidir;

@@ -84,7 +84,7 @@ namespace YAT.Gui.Controls
 			{
 				_pages = value;
 
-				if (_pages.Count == 0) // even if no pages, select page 1 anyway
+				if ((_pages == null) || (_pages.Count == 0)) // even if no pages, select page 1 anyway
 					SelectedPage = 1;
 				else if (_selectedPage > _pages.Count)
 					SelectedPage = _pages.Count;
@@ -102,7 +102,7 @@ namespace YAT.Gui.Controls
 			set
 			{
 				int selectedPageNew;
-				if (_pages.Count > 0)
+				if ((_pages != null) && (_pages.Count > 0))
 					selectedPageNew = XInt32.LimitToBounds(value, _SelectedPageDefault, _pages.Count);
 				else
 					selectedPageNew = _SelectedPageDefault;
