@@ -21,7 +21,7 @@ namespace YAT.Model.Settings
 		private int _socketLocalTcpPort;
 		private int _socketLocalUdpPort;
 
-		private bool _openTerminal;
+		private bool _startTerminal;
 
 		/// <summary></summary>
 		public NewTerminalSettings()
@@ -56,7 +56,7 @@ namespace YAT.Model.Settings
 			_socketLocalTcpPort            = rhs.SocketLocalTcpPort;
 			_socketLocalUdpPort            = rhs.SocketLocalUdpPort;
 
-			_openTerminal = rhs.OpenTerminal;
+			_startTerminal = rhs.StartTerminal;
 
 			ClearChanged();
 		}
@@ -78,7 +78,7 @@ namespace YAT.Model.Settings
 			SocketLocalTcpPort            = MKY.IO.Serial.SocketSettings.DefaultPort;
 			SocketLocalUdpPort            = MKY.IO.Serial.SocketSettings.DefaultPort + 1;
 
-			OpenTerminal = true;
+			StartTerminal = true;
 		}
 
 		#region Properties
@@ -244,15 +244,15 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("OpenTerminal")]
-		public bool OpenTerminal
+		[XmlElement("StartTerminal")]
+		public bool StartTerminal
 		{
-			get { return (_openTerminal); }
+			get { return (_startTerminal); }
 			set
 			{
-				if (_openTerminal != value)
+				if (_startTerminal != value)
 				{
-					_openTerminal = value;
+					_startTerminal = value;
 					SetChanged();
 				}
 			}
@@ -283,16 +283,15 @@ namespace YAT.Model.Settings
 			{
 				return
 					(
-					_terminalType.Equals    (value._terminalType) &&
-					_ioType.Equals          (value._ioType) &&
-					_serialPortId.Equals    (value._serialPortId) &&
+					_terminalType.Equals      (value._terminalType) &&
+					_ioType.Equals            (value._ioType) &&
+					_serialPortId.Equals      (value._serialPortId) &&
 					_socketRemoteHostNameOrAddress.Equals(value._socketRemoteHostNameOrAddress) &&
-					_socketRemotePort.Equals(value._socketRemotePort) &&
+					_socketRemotePort.Equals  (value._socketRemotePort) &&
 					_socketLocalHostNameOrAddress.Equals(value._socketLocalHostNameOrAddress) &&
 					_socketLocalTcpPort.Equals(value._socketLocalTcpPort) &&
 					_socketLocalUdpPort.Equals(value._socketLocalUdpPort) &&
-
-					_openTerminal.Equals    (value._openTerminal)
+					_startTerminal.Equals     (value._startTerminal)
 					);
 			}
 			return (false);

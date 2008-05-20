@@ -154,7 +154,7 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		public bool HasStarted
+		public bool IsStarted
 		{
 			get
 			{
@@ -179,6 +179,12 @@ namespace MKY.IO.Serial
 					}
 				}
 			}
+		}
+
+		/// <summary></summary>
+		public bool IsOpen
+		{
+			get { return (IsConnected); }
 		}
 
 		/// <summary></summary>
@@ -573,7 +579,7 @@ namespace MKY.IO.Serial
 			{
 				case SocketState.StartingListing:
 				{
-					if (_server.HasStarted)                // if IO changed during startup,
+					if (_server.IsStarted)                // if IO changed during startup,
 					{                                      //   check for start and change state
 						lock (_stateSyncObj)
 							_state = SocketState.Listing;

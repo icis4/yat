@@ -125,17 +125,17 @@ namespace YAT.Settings.Terminal
 		//------------------------------------------------------------------------------------------
 
 		[XmlIgnore]
-		public bool TerminalIsOpen
+		public bool TerminalIsStarted
 		{
-			get { return (_implicit.TerminalIsOpen); }
-			set { _implicit.TerminalIsOpen = value; }
+			get { return (_implicit.TerminalIsStarted); }
+			set { _implicit.TerminalIsStarted = value; }
 		}
 
 		[XmlIgnore]
-		public bool LogIsOpen
+		public bool LogIsStarted
 		{
-			get { return (_implicit.LogIsOpen); }
-			set { _implicit.LogIsOpen = value; }
+			get { return (_implicit.LogIsStarted); }
+			set { _implicit.LogIsStarted = value; }
 		}
 
 		[XmlIgnore]

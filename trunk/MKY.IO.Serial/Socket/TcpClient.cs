@@ -148,7 +148,7 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		public bool HasStarted
+		public bool IsStarted
 		{
 			get
 			{
@@ -167,6 +167,12 @@ namespace MKY.IO.Serial
 					}
 				}
 			}
+		}
+
+		/// <summary></summary>
+		public bool IsOpen
+		{
+			get { return (IsConnected); }
 		}
 
 		private bool IsConnectedOrConnecting
@@ -241,7 +247,7 @@ namespace MKY.IO.Serial
 		{
 			AssertNotDisposed();
 
-			if (!HasStarted)
+			if (!IsStarted)
 				StartSocket();
 		}
 
@@ -250,7 +256,7 @@ namespace MKY.IO.Serial
 		{
 			AssertNotDisposed();
 
-			if (HasStarted)
+			if (IsStarted)
 				StopSocket();
 		}
 
@@ -281,7 +287,7 @@ namespace MKY.IO.Serial
 		{
 			AssertNotDisposed();
 
-			if (HasStarted)
+			if (IsStarted)
 			{
 				if (_socketConnection != null)
 					_socketConnection.BeginSend(buffer);
@@ -486,7 +492,7 @@ namespace MKY.IO.Serial
 
 		private void _reconnectTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			if (!IsDisposed && HasStarted && !IsConnectedOrConnecting)
+			if (!IsDisposed && IsStarted && !IsConnectedOrConnecting)
 			{
 				try
 				{

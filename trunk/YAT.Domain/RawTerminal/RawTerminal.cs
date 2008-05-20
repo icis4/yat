@@ -171,12 +171,12 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public bool IsOpen
+		public bool IsStarted
 		{
 			get
 			{
 				AssertNotDisposed();
-				return (_io.HasStarted);
+				return (_io.IsStarted);
 			}
 		}
 
@@ -187,6 +187,16 @@ namespace YAT.Domain
 			{
 				AssertNotDisposed();
 				return (_io.IsConnected);
+			}
+		}
+
+		/// <summary></summary>
+		public bool IsOpen
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_io.IsOpen);
 			}
 		}
 
@@ -218,18 +228,18 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		//------------------------------------------------------------------------------------------
-		// Open/Close
+		// Start/Stop
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public void Open()
+		public void Start()
 		{
 			AssertNotDisposed();
 			_io.Start();
 		}
 
 		/// <summary></summary>
-		public void Close()
+		public void Stop()
 		{
 			AssertNotDisposed();
 			_io.Stop();

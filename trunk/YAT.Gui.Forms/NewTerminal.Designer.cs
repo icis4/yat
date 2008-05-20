@@ -39,7 +39,7 @@ namespace YAT.Gui.Forms
 			this.serialPortSelection = new YAT.Gui.Controls.SerialPortSelection();
 			this.socketSelection = new YAT.Gui.Controls.SocketSelection();
 			this.terminalSelection = new YAT.Gui.Controls.TerminalSelection();
-			this.checkBox_OpenTerminal = new System.Windows.Forms.CheckBox();
+			this.checkBox_StartTerminal = new System.Windows.Forms.CheckBox();
 			this.pictureBox_New = new System.Windows.Forms.PictureBox();
 			this.button_Help = new System.Windows.Forms.Button();
 			this.groupBox_NewTerminal.SuspendLayout();
@@ -76,7 +76,7 @@ namespace YAT.Gui.Forms
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_NewTerminal.Controls.Add(this.groupBox_PortSettings);
 			this.groupBox_NewTerminal.Controls.Add(this.terminalSelection);
-			this.groupBox_NewTerminal.Controls.Add(this.checkBox_OpenTerminal);
+			this.groupBox_NewTerminal.Controls.Add(this.checkBox_StartTerminal);
 			this.groupBox_NewTerminal.Location = new System.Drawing.Point(73, 12);
 			this.groupBox_NewTerminal.Name = "groupBox_NewTerminal";
 			this.groupBox_NewTerminal.Size = new System.Drawing.Size(312, 298);
@@ -133,18 +133,18 @@ namespace YAT.Gui.Forms
 			this.terminalSelection.IOTypeChanged += new System.EventHandler(this.terminalSelection_IOTypeChanged);
 			this.terminalSelection.TerminalTypeChanged += new System.EventHandler(this.terminalSelection_TerminalTypeChanged);
 			// 
-			// checkBox_OpenTerminal
+			// checkBox_StartTerminal
 			// 
-			this.checkBox_OpenTerminal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.checkBox_OpenTerminal.AutoSize = true;
-			this.checkBox_OpenTerminal.Checked = true;
-			this.checkBox_OpenTerminal.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox_OpenTerminal.Location = new System.Drawing.Point(113, 271);
-			this.checkBox_OpenTerminal.Name = "checkBox_OpenTerminal";
-			this.checkBox_OpenTerminal.Size = new System.Drawing.Size(91, 17);
-			this.checkBox_OpenTerminal.TabIndex = 2;
-			this.checkBox_OpenTerminal.Text = "&Open terminal";
-			this.checkBox_OpenTerminal.CheckedChanged += new System.EventHandler(this.checkBox_OpenTerminal_CheckedChanged);
+			this.checkBox_StartTerminal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.checkBox_StartTerminal.AutoSize = true;
+			this.checkBox_StartTerminal.Checked = true;
+			this.checkBox_StartTerminal.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox_StartTerminal.Location = new System.Drawing.Point(113, 271);
+			this.checkBox_StartTerminal.Name = "checkBox_StartTerminal";
+			this.checkBox_StartTerminal.Size = new System.Drawing.Size(91, 17);
+			this.checkBox_StartTerminal.TabIndex = 2;
+			this.checkBox_StartTerminal.Text = "St&art terminal";
+			this.checkBox_StartTerminal.CheckedChanged += new System.EventHandler(this.checkBox_StartTerminal_CheckedChanged);
 			// 
 			// pictureBox_New
 			// 
@@ -203,7 +203,7 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.Button button_Cancel;
 		private System.Windows.Forms.GroupBox groupBox_NewTerminal;
 		private YAT.Gui.Controls.TerminalSelection terminalSelection;
-		private System.Windows.Forms.CheckBox checkBox_OpenTerminal;
+		private System.Windows.Forms.CheckBox checkBox_StartTerminal;
         private System.Windows.Forms.Button button_Help;
 		private System.Windows.Forms.GroupBox groupBox_PortSettings;
 		private YAT.Gui.Controls.SocketSelection socketSelection;

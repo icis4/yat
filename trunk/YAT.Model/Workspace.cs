@@ -973,13 +973,13 @@ namespace YAT.Model
 		/// <summary></summary>
 		public bool OpenActiveTerminalIO()
 		{
-			return (_activeTerminal.OpenIO());
+			return (_activeTerminal.StartIO());
 		}
 
 		/// <summary></summary>
 		public bool CloseActiveTerminalIO()
 		{
-			return (_activeTerminal.CloseIO());
+			return (_activeTerminal.StopIO());
 		}
 
 		#endregion

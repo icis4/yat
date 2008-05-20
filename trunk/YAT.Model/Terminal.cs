@@ -272,6 +272,16 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		public bool IsStarted
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_terminal.IsStarted);
+			}
+		}
+
+		/// <summary></summary>
 		public bool IsOpen
 		{
 			get
@@ -292,12 +302,12 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public bool LogIsOpen
+		public bool LogIsStarted
 		{
 			get
 			{
 				AssertNotDisposed();
-				return (_log.IsOpen);
+				return (_log.IsStarted);
 			}
 		}
 
@@ -334,12 +344,12 @@ namespace YAT.Model
 		public void Start()
 		{
 			// begin logging (in case opening of terminal needs to be logged)
-			if (_settingsRoot.LogIsOpen)
+			if (_settingsRoot.LogIsStarted)
 				BeginLog();
 
 			// then open terminal
-			if (_settingsRoot.TerminalIsOpen)
-				OpenIO();
+			if (_settingsRoot.TerminalIsStarted)
+				StartIO();
 		}
 
 		/// <summary>
@@ -348,10 +358,10 @@ namespace YAT.Model
 		public void SetSettings(Domain.Settings.TerminalSettings settings)
 		{
 			// settings have changed, recreate terminal with new settings
-			if (_terminal.IsOpen)
+			if (_terminal.IsStarted)
 			{
 				// terminal is open, re-open it with the new settings
-				if (CloseIO(false))
+				if (StopIO(false))
 				{
 					DetachTerminalEventHandlers();    // detach to suspend events
 					_settingsRoot.Terminal = settings;
@@ -359,7 +369,7 @@ namespace YAT.Model
 					AttachTerminalEventHandlers();    // attach and resume events
 					_terminal.ReloadRepositories();
 
-					OpenIO(false);
+					StartIO(false);
 
 					OnTimedStatusTextRequest("Terminal settings applied.");
 				}
@@ -705,11 +715,11 @@ namespace YAT.Model
 			}
 
 			// next, close underlying terminal
-			if (_terminal.IsOpen)
-				success = CloseIO(false);
+			if (_terminal.IsStarted)
+				success = StopIO(false);
 
 			// last, close log
-			if (_log.IsOpen)
+			if (_log.IsStarted)
 				EndLog();
 
 			if (success)
@@ -828,7 +838,7 @@ namespace YAT.Model
 			OnIOCountChanged(new EventArgs());
 
 			// log
-			if (_log.IsOpen)
+			if (_log.IsStarted)
 			{
 				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawTx);
 				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawBidir);
@@ -842,7 +852,7 @@ namespace YAT.Model
 			OnIOCountChanged(new EventArgs());
 
 			// log
-			if (_log.IsOpen)
+			if (_log.IsStarted)
 			{
 				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawBidir);
 				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawRx);
@@ -857,7 +867,7 @@ namespace YAT.Model
 			// log
 			foreach (Domain.DisplayElement de in e.Elements)
 			{
-				if (_log.IsOpen)
+				if (_log.IsStarted)
 				{
 					if (de.IsEol)
 					{
@@ -881,7 +891,7 @@ namespace YAT.Model
 			// log
 			foreach (Domain.DisplayElement de in e.Elements)
 			{
-				if (_log.IsOpen)
+				if (_log.IsStarted)
 				{
 					if (de.IsEol)
 					{
@@ -938,33 +948,33 @@ namespace YAT.Model
 		/// Opens the terminal's I/O instance
 		/// </summary>
 		/// <returns>true if successful, false otherwise</returns>
-		public bool OpenIO()
+		public bool StartIO()
 		{
-			return (OpenIO(true));
+			return (StartIO(true));
 		}
 
 		/// <summary>
 		/// Opens the terminal's I/O instance
 		/// </summary>
 		/// <returns>true if successful, false otherwise</returns>
-		private bool OpenIO(bool saveStatus)
+		private bool StartIO(bool saveStatus)
 		{
 			bool success = false;
 
-			OnFixedStatusTextRequest("Opening terminal...");
+			OnFixedStatusTextRequest("Starting terminal...");
 			try
 			{
-				_terminal.Open();
+				_terminal.Start();
 
 				if (saveStatus)
-					_settingsRoot.TerminalIsOpen = _terminal.IsOpen;
+					_settingsRoot.TerminalIsStarted = _terminal.IsStarted;
 
-				OnTimedStatusTextRequest("Terminal opened");
+				OnTimedStatusTextRequest("Terminal started");
 				success = true;
 			}
 			catch (Exception ex)
 			{
-				OnFixedStatusTextRequest("Error opening terminal!");
+				OnFixedStatusTextRequest("Error starting terminal!");
 
 				string ioText;
 				if (_settingsRoot.IOType == Domain.IOType.SerialPort)
@@ -974,7 +984,7 @@ namespace YAT.Model
 
 				OnMessageInputRequest
 					(
-					"Unable to open terminal:" + Environment.NewLine + Environment.NewLine +
+					"Unable to start terminal:" + Environment.NewLine + Environment.NewLine +
 					ex.Message + Environment.NewLine + Environment.NewLine +
 					ioText + " could be in use by another process.",
 					"Terminal Error",
@@ -982,7 +992,7 @@ namespace YAT.Model
 					MessageBoxIcon.Error
 					);
 
-				OnTimedStatusTextRequest("Terminal not opened!");
+				OnTimedStatusTextRequest("Terminal not started!");
 			}
 
 			return (success);
@@ -992,43 +1002,43 @@ namespace YAT.Model
 		/// Closes the terminal's I/O instance
 		/// </summary>
 		/// <returns>true if successful, false otherwise</returns>
-		public bool CloseIO()
+		public bool StopIO()
 		{
-			return (CloseIO(true));
+			return (StopIO(true));
 		}
 
 		/// <summary>
 		/// Closes the terminal's I/O instance
 		/// </summary>
 		/// <returns>true if successful, false otherwise</returns>
-		private bool CloseIO(bool saveStatus)
+		private bool StopIO(bool saveStatus)
 		{
 			bool success = false;
 
-			OnFixedStatusTextRequest("Closing terminal...");
+			OnFixedStatusTextRequest("Stopping terminal...");
 			try
 			{
-				_terminal.Close();
+				_terminal.Stop();
 
 				if (saveStatus)
-					_settingsRoot.TerminalIsOpen = _terminal.IsOpen;
+					_settingsRoot.TerminalIsStarted = _terminal.IsStarted;
 
-				OnTimedStatusTextRequest("Terminal closed");
+				OnTimedStatusTextRequest("Terminal stopped");
 				success = true;
 			}
 			catch (Exception ex)
 			{
-				OnTimedStatusTextRequest("Error closing terminal!");
+				OnTimedStatusTextRequest("Error stopping terminal!");
 
 				OnMessageInputRequest
 					(
-					"Unable to close terminal:" + Environment.NewLine + Environment.NewLine + ex.Message,
+					"Unable to stop terminal:" + Environment.NewLine + Environment.NewLine + ex.Message,
 					"Terminal Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
 					);
 
-				OnTimedStatusTextRequest("Terminal not closed!");
+				OnTimedStatusTextRequest("Terminal not stopped!");
 			}
 
 			return (success);
@@ -1468,7 +1478,7 @@ namespace YAT.Model
 				// reapply settings NOW, makes sure date/time in filenames is refreshed
 				_log.Settings = _settingsRoot.Log;
 				_log.Begin();
-				_settingsRoot.LogIsOpen = true;
+				_settingsRoot.LogIsStarted = true;
 			}
 			catch (System.IO.IOException ex)
 			{
@@ -1519,7 +1529,7 @@ namespace YAT.Model
 				_log.End();
 
 				if (saveStatus)
-					_settingsRoot.LogIsOpen = false;
+					_settingsRoot.LogIsStarted = false;
 			}
 			catch (System.IO.IOException ex)
 			{

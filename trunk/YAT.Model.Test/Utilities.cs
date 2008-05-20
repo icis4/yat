@@ -63,7 +63,7 @@ namespace YAT.Model.Test
 			// create settings
 			TerminalSettingsRoot settings = new TerminalSettingsRoot();
 			settings.Terminal.IO.IOType = Domain.IOType.TcpAutoSocket;
-			settings.TerminalIsOpen = true;
+			settings.TerminalIsStarted = true;
 			return (settings);
 		}
 

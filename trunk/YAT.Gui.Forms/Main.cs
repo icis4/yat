@@ -423,13 +423,13 @@ namespace YAT.Gui.Forms
 
 			bool childIsReady = (ActiveMdiChild != null);
 
-			bool terminalOpen = false;
+			bool terminalIsStarted = false;
 			if (childIsReady)
-				terminalOpen = ((Gui.Forms.Terminal)ActiveMdiChild).IsOpen;
+				terminalIsStarted = ((Gui.Forms.Terminal)ActiveMdiChild).IsStarted;
 
 			toolStripButton_MainTool_File_Save.Enabled = childIsReady;
-			toolStripButton_MainTool_Terminal_Open.Enabled = childIsReady && !terminalOpen;
-			toolStripButton_MainTool_Terminal_Close.Enabled = childIsReady && terminalOpen;
+			toolStripButton_MainTool_Terminal_Start.Enabled = childIsReady && !terminalIsStarted;
+			toolStripButton_MainTool_Terminal_Stop.Enabled = childIsReady && terminalIsStarted;
 			toolStripButton_MainTool_Terminal_Settings.Enabled = childIsReady;
 
 			// not needed yet: _isSettingControls = false;
@@ -450,14 +450,14 @@ namespace YAT.Gui.Forms
 			((Terminal)ActiveMdiChild).RequestSaveFile();
 		}
 
-		private void toolStripButton_MainTool_Terminal_Open_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Terminal_Start_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestOpenTerminal();
+			((Terminal)ActiveMdiChild).RequestStartTerminal();
 		}
 
-		private void toolStripButton_MainTool_Terminal_Close_Click(object sender, EventArgs e)
+		private void toolStripButton_MainTool_Terminal_Stop_Click(object sender, EventArgs e)
 		{
-			((Terminal)ActiveMdiChild).RequestCloseTerminal();
+			((Terminal)ActiveMdiChild).RequestStopTerminal();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Settings_Click(object sender, EventArgs e)

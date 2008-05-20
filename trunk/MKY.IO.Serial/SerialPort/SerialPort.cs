@@ -110,7 +110,7 @@ namespace MKY.IO.Serial
 				{
 					StopAndDisposeAliveTimer();
 					StopAndDisposeReopenTimer();
-					CloseAndDisposePortAsync();
+					BeginInvokeCloseAndDisposePort();
 				}
 				_isDisposed = true;
 			}
@@ -145,7 +145,7 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		public bool HasStarted
+		public bool IsStarted
 		{
 			get
 			{
@@ -166,6 +166,32 @@ namespace MKY.IO.Serial
 			}
 		}
 
+		private bool AutoReopenEnabledAndAllowed
+		{
+			get
+			{
+				return
+					(
+						!IsDisposed && IsStarted && !IsOpen &&
+						_settings.AutoReopen.Enabled
+					);
+			}
+		}
+
+		/// <summary></summary>
+		public bool IsOpen
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (_port != null)
+					return (_port.IsOpen);
+				else
+					return (false);
+			}
+		}
+
 		/// <summary></summary>
 		public bool IsConnected
 		{
@@ -174,7 +200,7 @@ namespace MKY.IO.Serial
 				AssertNotDisposed();
 
 				if (_port != null)
-					return (_port.IsOpen);
+					return (_port.IsOpen && !_port.BreakState);
 				else
 					return (false);
 			}
@@ -214,32 +240,28 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public void Start()
 		{
-			// AssertNotDisposed() is called by HasStarted
+			// AssertNotDisposed() is called by IsStarted
 
-			if (!HasStarted)
+			if (!IsStarted)
 				CreateAndOpenPort();
 		}
 
 		/// <summary></summary>
 		public void Stop()
 		{
-			if (HasStarted)
-			{
-				lock (_stateSyncObj)
-					_state = PortState.Reset;
+			// AssertNotDisposed() is called by IsStarted
 
-				StopAndDisposeReopenTimer();
-				CloseAndDisposePort();
-			}
+			if (IsStarted)
+				ResetPort();
 		}
 
 		/// <summary></summary>
 		public int Receive(out byte[] buffer)
 		{
-			// AssertNotDisposed() is called by IsConnected
+			// AssertNotDisposed() is called by IsOpen
 
 			int bytesReceived = 0;
-			if (IsConnected)
+			if (IsOpen)
 			{
 				int bytesToRead = _port.BytesToRead;
 				buffer = new byte[bytesToRead];
@@ -255,9 +277,9 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public void Send(byte[] buffer)
 		{
-			// AssertNotDisposed() is called by IsConnected
+			// AssertNotDisposed() is called by IsOpen
 
-			if (IsConnected)
+			if (IsOpen)
 			{
 				if (_settings.Communication.FlowControl == SerialFlowControl.RS485)
 					_port.RtsEnable = true;
@@ -305,13 +327,6 @@ namespace MKY.IO.Serial
 					_port.RtsEnable = false;
 					break;
 			}
-
-			// auto reopen
-			if (_settings.AutoReopen.Enabled)
-			{
-				if (!IsDisposed && HasStarted && !IsConnected)
-					StartReopenTimer();
-			}
 		}
 
 		private void ApplyCommunicationSettings()
@@ -337,7 +352,7 @@ namespace MKY.IO.Serial
 		private void CreatePort()
 		{
 			if (_port != null)
-				DisposePort();
+				CloseAndDisposePort();
 
 			_port = new MKY.IO.Ports.SerialPortDotNet();
 			_port.DataReceived  += new MKY.IO.Ports.SerialDataReceivedEventHandler(_port_DataReceived);
@@ -351,21 +366,31 @@ namespace MKY.IO.Serial
 				_port.Open();
 		}
 
-		private void ClosePort()
-		{
-			if (_port.IsOpen)
-				_port.Close();
-		}
-
-		private void DisposePort()
+		private void CloseAndDisposePort()
 		{
 			if (_port != null)
 			{
-				_port.Dispose();
-				_port = null;
+				try
+				{
+					if (_port.IsOpen)
+						_port.Close();
+
+					_port.Dispose();
+					_port = null;
+				}
+				catch { }
 			}
 		}
 
+		#endregion
+
+		#region Async Port Methods
+		//==========================================================================================
+		// Async Port Methods
+		//==========================================================================================
+
+		private MKY.IO.Ports.ISerialPort _portAsync = null;
+		private object _portAsyncSyncObj = new object();
 		private delegate void AsyncInvokeDelegate();
 
 		/// <summary></summary>
@@ -373,16 +398,37 @@ namespace MKY.IO.Serial
 		/// Asynchronously invoke close/dispose to prevent potential dead-locks if
 		/// close/dispose was called from a ISynchronizeInvoke target (i.e. a form).
 		/// </remarks>
-		private void CloseAndDisposePortAsync()
+		private void BeginInvokeCloseAndDisposePort()
 		{
+			// Copy reference and immediately set _port to null to prevent any
+			//   further access to it.
+			lock (_portAsyncSyncObj)
+			{
+				_portAsync = _port;
+			}
+			_port = null;
+
 			AsyncInvokeDelegate asyncInvoker = new AsyncInvokeDelegate(DoCloseAndDisposePortAsync);
 			asyncInvoker.BeginInvoke(null, null);
 		}
 
 		private void DoCloseAndDisposePortAsync()
 		{
-			ClosePort();
-			DisposePort();
+			lock (_portAsyncSyncObj)
+			{
+				try
+				{
+					if (_portAsync != null)
+					{
+						if (_portAsync.IsOpen)
+							_portAsync.Close();
+
+						_portAsync.Dispose();
+						_portAsync = null;
+					}
+				}
+				catch { }
+			}
 		}
 
 		#endregion
@@ -451,10 +497,16 @@ namespace MKY.IO.Serial
 		{
 			if (_settings.AutoReopen.Enabled)
 			{
+				StopAndDisposeAliveTimer();
+
 				lock (_stateSyncObj)
 					_state = PortState.Closed;
 
 				CloseAndDisposePort();
+
+				OnIOChanged(new EventArgs());
+				OnIOControlChanged(new EventArgs());
+
 				StartReopenTimer();
 			}
 			else
@@ -464,21 +516,14 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		/// <remarks>
-		/// State must be set by calling function.
-		/// </remarks>
-		private void CloseAndDisposePort()
+		private void ResetPort()
 		{
-			#if false
-
-			// RTS/DTR are reset upon ClosePort()
-			_port.RtsEnable = false;
-			_port.DtrEnable = false;
-
-			#endif
+			lock (_stateSyncObj)
+				_state = PortState.Reset;
 
 			StopAndDisposeAliveTimer();
-			CloseAndDisposePortAsync();
+			StopAndDisposeReopenTimer();
+			BeginInvokeCloseAndDisposePort();
 
 			OnIOChanged(new EventArgs());
 			OnIOControlChanged(new EventArgs());
@@ -501,22 +546,16 @@ namespace MKY.IO.Serial
 		{
 			// if pin has changed, but access to port throws exception, port has been shut down,
 			//   e.g. USB to serial converter disconnected
-			System.Diagnostics.Trace.WriteLine("PinChanged");
 			try
 			{
-				System.Diagnostics.Trace.WriteLine("PinChanged::Trying");
-
 				// force access to port to check whether it's still alive
 				bool cts = _port.CtsHolding;
-
-				System.Diagnostics.Trace.WriteLine("PinChanged::OK");
 
 				if (_state == PortState.Openend) // ensure not to forward any events during closing anymore
 					OnIOControlChanged(new EventArgs());
 			}
 			catch
 			{
-				System.Diagnostics.Trace.WriteLine("PinChanged::Closing");
 				StopOrClosePort();
 			}
 		}
@@ -567,25 +606,37 @@ namespace MKY.IO.Serial
 			}
 		}
 
+		#if false
+		// \fixme break state detection doesn't work
+		private bool _aliveTimer_BreakState = false;
+		#endif
+
 		private void _aliveTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			if (!IsDisposed && HasStarted)
+			if (!IsDisposed && IsStarted)
 			{
 				try
 				{
 					// if port isn't open anymore, or access to port throws exception,
 					//   port has been shut down, e.g. USB to serial converter disconnected
-					if (_port.IsOpen)
-						System.Diagnostics.Trace.WriteLine("Alive and open");
-					else
+					if (!_port.IsOpen)
 					{
-						System.Diagnostics.Trace.WriteLine("Alive and closed");
 						StopOrClosePort();
 					}
+					#if false
+					// \fixme break state detection doesn't work
+					else
+					{
+						// detect break state changes
+						if (_aliveTimer_BreakState != _port.BreakState)
+							OnIOChanged(new EventArgs());
+
+						_aliveTimer_BreakState = _port.BreakState;
+					}
+					#endif
 				}
 				catch
 				{
-					System.Diagnostics.Trace.WriteLine("Non more alive");
 					StopOrClosePort();
 				}
 			}
@@ -625,14 +676,20 @@ namespace MKY.IO.Serial
 
 		private void _reopenTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			if (!IsDisposed && HasStarted && !IsConnected)
+			if (AutoReopenEnabledAndAllowed)
 			{
 				try
 				{
-					Start();
+					// try to re-open port
+					CreateAndOpenPort();
 				}
 				catch
 				{
+					// re-open failed, cleanup and restart
+					lock (_stateSyncObj)
+						_state = PortState.Closed;
+
+					CloseAndDisposePort();
 					StartReopenTimer();
 				}
 			}
