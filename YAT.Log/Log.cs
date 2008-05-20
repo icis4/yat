@@ -57,13 +57,13 @@ namespace YAT.Log
 
 			private bool _isDisposed;
 
-			private bool _enabled = false;
+			private bool _isEnabled = false;
 			private string _file;
 			private LogFileWriteMode _writeMode;
 			private FileNameSeparator _separator;
 
 			private FileStream _fileStream;
-			private bool _open = false;
+			private bool _isStarted = false;
 
 			private Timer _flushTimer;
 
@@ -88,7 +88,7 @@ namespace YAT.Log
 
 			private void Initialize(bool enabled, string file, LogFileWriteMode writeMode, FileNameSeparator separator)
 			{
-				_enabled = enabled;
+				_isEnabled = enabled;
 				_file = file;
 				_writeMode = writeMode;
 				_separator = separator;
@@ -150,13 +150,13 @@ namespace YAT.Log
 			/// <summary></summary>
 			protected bool IsEnabled
 			{
-				get { return (_enabled); }
+				get { return (_isEnabled); }
 			}
 
 			/// <summary></summary>
-			public bool IsOpen
+			public bool IsStarted
 			{
-				get { return (_open); }
+				get { return (_isStarted); }
 			}
 
 			#endregion
@@ -175,7 +175,7 @@ namespace YAT.Log
 			/// <summary></summary>
 			public void SetSettings(bool enabled, string file, LogFileWriteMode writeMode, FileNameSeparator separator)
 			{
-				if (_open && (enabled != _enabled))
+				if (_isStarted && (enabled != _isEnabled))
 				{
 					if (enabled)
 					{
@@ -188,7 +188,7 @@ namespace YAT.Log
 						Initialize(enabled, file, writeMode, separator);
 					}
 				}
-				else if (_open && (file != _file))
+				else if (_isStarted && (file != _file))
 				{
 					Close();
 					Initialize(enabled, file, writeMode, separator);
@@ -201,7 +201,7 @@ namespace YAT.Log
 			/// <summary></summary>
 			public void Open()
 			{
-				if (!_enabled)
+				if (!_isEnabled)
 					return;
 
 				if (!Directory.Exists(Path.GetDirectoryName(_file)))
@@ -223,13 +223,13 @@ namespace YAT.Log
 					throw (new ArgumentException("Write mode not supported"));
 
 				OpenWriter(_fileStream);
-				_open = true;
+				_isStarted = true;
 			}
 
 			/// <summary></summary>
 			public void Flush()
 			{
-				if (_enabled && _open)
+				if (_isEnabled && _isStarted)
 				{
 					FlushWriter();
 				}
@@ -238,7 +238,7 @@ namespace YAT.Log
 			/// <summary></summary>
 			public void Truncate()
 			{
-				if (_enabled && _open)
+				if (_isEnabled && _isStarted)
 				{
 					CloseWriter();
 					_fileStream.Close();
@@ -250,12 +250,12 @@ namespace YAT.Log
 			/// <summary></summary>
 			public void Close()
 			{
-				if (_enabled && _open)
+				if (_isEnabled && _isStarted)
 				{
 					CloseWriter();
 					_fileStream.Close();
 				}
-				_open = false;
+				_isStarted = false;
 			}
 
 			/// <summary></summary>
@@ -339,7 +339,7 @@ namespace YAT.Log
 			/// <summary></summary>
 			public void WriteByte(byte value)
 			{
-				if (IsEnabled && IsOpen)
+				if (IsEnabled && IsStarted)
 				{
 					_writer.Write(value);
 					RestartFlushTimer();
@@ -349,7 +349,7 @@ namespace YAT.Log
 			/// <summary></summary>
 			public void WriteBytes(byte[] array)
 			{
-				if (IsEnabled && IsOpen)
+				if (IsEnabled && IsStarted)
 				{
 					_writer.Write(array);
 					RestartFlushTimer();
@@ -402,7 +402,7 @@ namespace YAT.Log
 			/// <summary></summary>
 			public void WriteString(string value)
 			{
-				if (IsEnabled && IsOpen)
+				if (IsEnabled && IsStarted)
 				{
 					_writer.Write(value);
 					RestartFlushTimer();
@@ -412,7 +412,7 @@ namespace YAT.Log
 			/// <summary></summary>
 			public void WriteEol()
 			{
-				if (IsEnabled && IsOpen)
+				if (IsEnabled && IsStarted)
 				{
 					_writer.WriteLine();
 					RestartFlushTimer();
@@ -545,14 +545,14 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		public bool IsOpen
+		public bool IsStarted
 		{
 			get
 			{
-				bool isOpen = false;
+				bool isStarted = false;
 				foreach (Log l in _logs)
-					isOpen = isOpen || l.IsOpen;
-				return (isOpen);
+					isStarted = isStarted || l.IsStarted;
+				return (isStarted);
 			}
 		}
 

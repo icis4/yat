@@ -8,8 +8,9 @@ namespace YAT.Settings.Terminal
 	[Serializable]
 	public class ImplicitSettings : MKY.Utilities.Settings.Settings, IEquatable<ImplicitSettings>
 	{
-		private bool _terminalIsOpen;
-		private bool _logIsOpen;
+		private bool _terminalIsStarted;
+		private bool _logIsStarted;
+
 		private Model.Settings.SendCommandSettings _sendCommand;
 		private Model.Settings.SendFileSettings _sendFile;
 		private Model.Settings.PredefinedSettings _predefined;
@@ -36,8 +37,8 @@ namespace YAT.Settings.Terminal
 		public ImplicitSettings(ImplicitSettings rhs)
 			: base(rhs)
 		{
-			_terminalIsOpen = rhs.TerminalIsOpen;
-			_logIsOpen = rhs.LogIsOpen;
+			_terminalIsStarted = rhs.TerminalIsStarted;
+			_logIsStarted      = rhs.LogIsStarted;
 
 			SendCommand = new Model.Settings.SendCommandSettings(rhs.SendCommand);
 			SendFile    = new Model.Settings.SendFileSettings(rhs.SendFile);
@@ -53,8 +54,8 @@ namespace YAT.Settings.Terminal
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			TerminalIsOpen = true;
-			LogIsOpen = false;
+			TerminalIsStarted = true;
+			LogIsStarted = false;
 		}
 
 		#region Properties
@@ -62,29 +63,29 @@ namespace YAT.Settings.Terminal
 		// Properties
 		//==========================================================================================
 
-		[XmlElement("TerminalIsOpen")]
-		public bool TerminalIsOpen
+		[XmlElement("TerminalIsStarted")]
+		public bool TerminalIsStarted
 		{
-			get { return (_terminalIsOpen); }
+			get { return (_terminalIsStarted); }
 			set
 			{
-				if (_terminalIsOpen != value)
+				if (_terminalIsStarted != value)
 				{
-					_terminalIsOpen = value;
+					_terminalIsStarted = value;
 					SetChanged();
 				}
 			}
 		}
 
-		[XmlElement("LogIsOpen")]
-		public bool LogIsOpen
+		[XmlElement("LogIsStarted")]
+		public bool LogIsStarted
 		{
-			get { return (_logIsOpen); }
+			get { return (_logIsStarted); }
 			set
 			{
-				if (_logIsOpen != value)
+				if (_logIsStarted != value)
 				{
-					_logIsOpen = value;
+					_logIsStarted = value;
 					SetChanged();
 				}
 			}
@@ -215,8 +216,8 @@ namespace YAT.Settings.Terminal
 			{
 				return
 					(
-					_terminalIsOpen.Equals(value._terminalIsOpen) &&
-					_logIsOpen.Equals(value._logIsOpen) &&
+					_terminalIsStarted.Equals(value._terminalIsStarted) &&
+					_logIsStarted.Equals(value._logIsStarted) &&
 					base.Equals((MKY.Utilities.Settings.Settings)value) // compares all settings nodes
 					);
 			}

@@ -175,12 +175,12 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public bool IsOpen
+		public bool IsStarted
 		{
 			get
 			{
 				AssertNotDisposed();
-				return (_rawTerminal.IsOpen);
+				return (_rawTerminal.IsStarted);
 			}
 		}
 
@@ -191,6 +191,16 @@ namespace YAT.Domain
 			{
 				AssertNotDisposed();
 				return (_rawTerminal.IsConnected);
+			}
+		}
+
+		/// <summary></summary>
+		public bool IsOpen
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_rawTerminal.IsOpen);
 			}
 		}
 
@@ -251,23 +261,23 @@ namespace YAT.Domain
 		// Methods
 		//==========================================================================================
 
-		#region Methods > Open/Close
+		#region Methods > Start/Stop
 		//------------------------------------------------------------------------------------------
-		// Methods > Open/Close
+		// Methods > Start/Stop
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public virtual void Open()
+		public virtual void Start()
 		{
 			AssertNotDisposed();
-			_rawTerminal.Open();
+			_rawTerminal.Start();
 		}
 
 		/// <summary></summary>
-		public virtual void Close()
+		public virtual void Stop()
 		{
 			AssertNotDisposed();
-			_rawTerminal.Close();
+			_rawTerminal.Stop();
 		}
 
 		#endregion

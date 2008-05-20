@@ -124,9 +124,9 @@ namespace YAT.Gui.Forms
 			get { return (_terminal.UserName); }
 		}
 
-		public bool IsOpen
+		public bool IsStarted
 		{
-			get { return (_terminal.IsOpen); }
+			get { return (_terminal.IsStarted); }
 		}
 
 		public Model.Terminal UnderlyingTerminal
@@ -151,14 +151,14 @@ namespace YAT.Gui.Forms
 			return (_terminal.Close());
 		}
 
-		public bool RequestOpenTerminal()
+		public bool RequestStartTerminal()
 		{
-			return (_terminal.OpenIO());
+			return (_terminal.StartIO());
 		}
 
-		public bool RequestCloseTerminal()
+		public bool RequestStopTerminal()
 		{
-			return (_terminal.CloseIO());
+			return (_terminal.StopIO());
 		}
 
 		public void RequestEditTerminalSettings()
@@ -273,9 +273,9 @@ namespace YAT.Gui.Forms
 		{
 			_isSettingControls = true;
 
-			bool terminalIsOpen = _terminal.IsOpen;
-			toolStripMenuItem_TerminalMenu_Terminal_Open.Enabled = !terminalIsOpen;
-			toolStripMenuItem_TerminalMenu_Terminal_Close.Enabled = terminalIsOpen;
+			bool terminalIsStarted = _terminal.IsStarted;
+			toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = !terminalIsStarted;
+			toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled = terminalIsStarted;
 
 			_isSettingControls = false;
 		}
@@ -285,14 +285,14 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
 		}
 
-		private void toolStripMenuItem_TerminalMenu_Terminal_Open_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_Terminal_Start_Click(object sender, EventArgs e)
 		{
-			_terminal.OpenIO();
+			_terminal.StartIO();
 		}
 
-		private void toolStripMenuItem_TerminalMenu_Terminal_Close_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_Terminal_Stop_Click(object sender, EventArgs e)
 		{
-			_terminal.CloseIO();
+			_terminal.StopIO();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Clear_Click(object sender, EventArgs e)
@@ -370,11 +370,11 @@ namespace YAT.Gui.Forms
 			_isSettingControls = true;
 
 			bool logIsSelected = _settingsRoot.Log.AnyRawOrNeat;
-			bool logIsOpen = _settingsRoot.LogIsOpen;
+			bool logIsStarted  = _settingsRoot.LogIsStarted;
 
-			toolStripMenuItem_TerminalMenu_Log_Begin.Enabled = logIsSelected && !logIsOpen;
-			toolStripMenuItem_TerminalMenu_Log_End.Enabled = logIsSelected && logIsOpen;
-			toolStripMenuItem_TerminalMenu_Log_Clear.Enabled = logIsSelected && logIsOpen;
+			toolStripMenuItem_TerminalMenu_Log_Begin.Enabled = logIsSelected && !logIsStarted;
+			toolStripMenuItem_TerminalMenu_Log_End.Enabled = logIsSelected && logIsStarted;
+			toolStripMenuItem_TerminalMenu_Log_Clear.Enabled = logIsSelected && logIsStarted;
 
 			_isSettingControls = false;
 		}
@@ -1714,7 +1714,7 @@ namespace YAT.Gui.Forms
 			Gui.Controls.MonitorActivityState activityState = Gui.Controls.MonitorActivityState.Inactive;
 			if (_terminal != null)
 			{
-				if (_terminal.IsOpen)
+				if (_terminal.IsStarted)
 				{
 					if (_terminal.IsConnected)
 						activityState = Gui.Controls.MonitorActivityState.Active;
@@ -2483,11 +2483,13 @@ namespace YAT.Gui.Forms
 
 		private void SetTerminalCaption()
 		{
+			bool isStarted = false;
 			bool isOpen = false;
 			bool isConnected = false;
 
 			if (_terminal != null)
 			{
+				isStarted = _terminal.IsStarted;
 				isOpen = _terminal.IsOpen;
 				isConnected = _terminal.IsConnected;
 			}
@@ -2526,7 +2528,7 @@ namespace YAT.Gui.Forms
 							sb.Append("Server:");
 							sb.Append(s.LocalPort.ToString());
 							sb.Append(" - ");
-							if (isOpen)
+							if (isStarted)
 								sb.Append(isConnected ? "Connected" : "Listening");
 							else
 								sb.Append("Closed");
@@ -2535,7 +2537,7 @@ namespace YAT.Gui.Forms
 						case Domain.IOType.TcpAutoSocket:
 							bool isClient = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsClient;
 							bool isServer = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsServer;
-							if (isOpen)
+							if (isStarted)
 							{
 								if (isClient)
 								{
@@ -2612,32 +2614,23 @@ namespace YAT.Gui.Forms
 
 		private void SetIOStatus()
 		{
+			bool isStarted = _terminal.IsStarted;
 			bool isOpen = _terminal.IsOpen;
 			bool isConnected = _terminal.IsConnected;
+			bool isSerialPort = (_settingsRoot.IOType == Domain.IOType.SerialPort);
 
 			StringBuilder sb = new StringBuilder();
 
 			Image on = Properties.Resources.Image_On_12x12;
 			Image off = Properties.Resources.Image_Off_12x12;
 
-			if (_settingsRoot.IOType == Domain.IOType.SerialPort)
+			if (isSerialPort)
 			{
-				// be aware that isOpen means I/O started and isConnected COM port open
 				MKY.IO.Serial.SerialPortSettings s = _settingsRoot.IO.SerialPort;
 				sb.Append("Serial port ");
 				sb.Append(s.PortId.ToString(true, false));
 				sb.Append(" (" + s.Communication.ToString() + ") is ");
-				sb.Append(isConnected ? "open" : "closed");
-
-				bool breakState = true;
-				if (isConnected)
-				{
-					MKY.IO.Ports.ISerialPort port = _terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
-					if (port != null)
-						breakState = port.BreakState;
-				}
-				toolStripStatusLabel_TerminalStatus_ConnectionState.Visible = true;
-				toolStripStatusLabel_TerminalStatus_ConnectionState.Image = (!breakState ? on : off);
+				sb.Append(isOpen ? "open" : "closed");
 			}
 			else
 			{
@@ -2654,7 +2647,7 @@ namespace YAT.Gui.Forms
 
 					case Domain.IOType.TcpServer:
 						sb.Append("TCP server is ");
-						if (isOpen)
+						if (isStarted)
 						{
 							if (isConnected)
 							{
@@ -2685,7 +2678,7 @@ namespace YAT.Gui.Forms
 						bool isClient = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsClient;
 						bool isServer = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsServer;
 						sb.Append("TCP auto socket is ");
-						if (isOpen)
+						if (isStarted)
 						{
 							if (isClient)
 							{
@@ -2724,16 +2717,19 @@ namespace YAT.Gui.Forms
 						sb.Append(s.LocalPort.ToString());
 						break;
 				}
-
-				toolStripStatusLabel_TerminalStatus_ConnectionState.Visible = true;
-				toolStripStatusLabel_TerminalStatus_ConnectionState.Image = (isConnected ? on : off);
 			}
+
+			// \fixme break state detection doesn't work, otherwise, connection state could always be enabled
+			toolStripStatusLabel_TerminalStatus_ConnectionState.Visible = !isSerialPort;
+			toolStripStatusLabel_TerminalStatus_ConnectionState.Enabled = isOpen;
+			toolStripStatusLabel_TerminalStatus_ConnectionState.Image = (isConnected ? on : off);
 
 			toolStripStatusLabel_TerminalStatus_IOStatus.Text = sb.ToString();
 		}
 
 		private void SetIOControlControls()
 		{
+			bool isStarted = _terminal.IsStarted;
 			bool isOpen = _terminal.IsOpen;
 			bool isConnected = _terminal.IsConnected;
 			bool isSerialPort = (_settingsRoot.IOType == Domain.IOType.SerialPort);
@@ -2752,12 +2748,9 @@ namespace YAT.Gui.Forms
 				if (isOpen)
 				{
 					MKY.IO.Ports.SerialPortControlPins pins = new MKY.IO.Ports.SerialPortControlPins();
-					if (isConnected)
-					{
-						MKY.IO.Ports.ISerialPort port = _terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
-						if (port != null)
-							pins = port.ControlPins;
-					}
+					MKY.IO.Ports.ISerialPort port = _terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
+					if (port != null)
+						pins = port.ControlPins;
 
 					bool rs485FlowControl = (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.RS485);
 
@@ -2806,7 +2799,8 @@ namespace YAT.Gui.Forms
 		private void ResetRts()
 		{
 			bool isOpen = _terminal.IsOpen;
-			bool isConnected = _terminal.IsConnected;
+
+			toolStripStatusLabel_TerminalStatus_RTS.Enabled = isOpen;
 
 			Image on = Properties.Resources.Image_On_12x12;
 			Image off = Properties.Resources.Image_Off_12x12;
@@ -2814,12 +2808,9 @@ namespace YAT.Gui.Forms
 			if (isOpen)
 			{
 				MKY.IO.Ports.SerialPortControlPins pins = new MKY.IO.Ports.SerialPortControlPins();
-				if (isConnected)
-				{
-					MKY.IO.Ports.ISerialPort port = _terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
-					if (port != null)
-						pins = port.ControlPins;
-				}
+				MKY.IO.Ports.ISerialPort port = _terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
+				if (port != null)
+					pins = port.ControlPins;
 
 				toolStripStatusLabel_TerminalStatus_RTS.Image = (pins.Rts ? on : off);
 			}

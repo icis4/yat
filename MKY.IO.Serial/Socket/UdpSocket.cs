@@ -135,7 +135,7 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		public bool HasStarted
+		public bool IsStarted
 		{
 			get
 			{
@@ -156,7 +156,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public bool IsConnected
+		public bool IsOpen
 		{
 			get
 			{
@@ -173,6 +173,12 @@ namespace MKY.IO.Serial
 					}
 				}
 			}
+		}
+
+		/// <summary></summary>
+		public bool IsConnected
+		{
+			get { return (IsOpen);  }
 		}
 
 		/// <summary></summary>
@@ -207,7 +213,7 @@ namespace MKY.IO.Serial
 		{
 			AssertNotDisposed();
 
-			if (!HasStarted)
+			if (!IsStarted)
 				StartSocket();
 		}
 
@@ -216,7 +222,7 @@ namespace MKY.IO.Serial
 		{
 			AssertNotDisposed();
 
-			if (HasStarted)
+			if (IsStarted)
 				StopSocket();
 		}
 
@@ -247,7 +253,7 @@ namespace MKY.IO.Serial
 		{
 			AssertNotDisposed();
 
-			if (HasStarted)
+			if (IsStarted)
 			{
 				if (_socketConnection != null)
 					_socketConnection.BeginSend(buffer);

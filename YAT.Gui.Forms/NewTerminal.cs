@@ -160,12 +160,12 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void checkBox_OpenTerminal_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_StartTerminal_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
 			{
-				bool open = checkBox_OpenTerminal.Checked;
-				_newTerminalSettings_Form.OpenTerminal = open;
+				bool start = checkBox_StartTerminal.Checked;
+				_newTerminalSettings_Form.StartTerminal = start;
 			}
 		}
 
@@ -191,7 +191,7 @@ namespace YAT.Gui.Forms
 			_terminalSettings.Terminal.IO.Socket.LocalTcpPort = _newTerminalSettings.SocketLocalTcpPort;
 			_terminalSettings.Terminal.IO.Socket.LocalUdpPort = _newTerminalSettings.SocketLocalUdpPort;
 
-			_terminalSettings.TerminalIsOpen = _newTerminalSettings.OpenTerminal;
+			_terminalSettings.TerminalIsStarted = _newTerminalSettings.StartTerminal;
 
 			switch (_newTerminalSettings.TerminalType)
 			{
@@ -258,7 +258,7 @@ namespace YAT.Gui.Forms
 			serialPortSelection.ShowSerialPort = isSerialPort;
 			serialPortSelection.PortId         = _newTerminalSettings_Form.SerialPortId;
 
-			checkBox_OpenTerminal.Checked = _newTerminalSettings_Form.OpenTerminal;
+			checkBox_StartTerminal.Checked     = _newTerminalSettings_Form.StartTerminal;
 
 			_isSettingControls = false;
 		}
