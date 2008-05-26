@@ -5,6 +5,19 @@ using System.Text;
 namespace MKY.IO.Serial
 {
 	/// <summary></summary>
+	public class IORequestEventArgs : EventArgs
+	{
+		/// <summary></summary>
+		public readonly IORequest Request;
+
+		/// <summary></summary>
+		public IORequestEventArgs(IORequest request)
+		{
+			Request = request;
+		}
+	}
+
+	/// <summary></summary>
 	public class IOErrorEventArgs : EventArgs
 	{
 		/// <summary></summary>

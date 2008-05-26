@@ -5,20 +5,33 @@ using System.Text;
 namespace YAT.Domain
 {
 	/// <summary></summary>
-	public class ErrorEventArgs : EventArgs
+	public class IORequestEventArgs : EventArgs
+	{
+		/// <summary></summary>
+		public readonly IORequest Request;
+
+		/// <summary></summary>
+		public IORequestEventArgs(IORequest request)
+		{
+			Request = request;
+		}
+	}
+
+	/// <summary></summary>
+	public class IOErrorEventArgs : EventArgs
 	{
 		/// <summary></summary>
 		public readonly string Message;
 
 		/// <summary></summary>
-		public ErrorEventArgs(string message)
+		public IOErrorEventArgs(string message)
 		{
 			Message = message;
 		}
 	}
 
 	/// <summary></summary>
-	public class SerialPortErrorEventArgs : ErrorEventArgs
+	public class SerialPortErrorEventArgs : IOErrorEventArgs
 	{
 		/// <summary></summary>
 		public readonly System.IO.Ports.SerialError SerialPortError;

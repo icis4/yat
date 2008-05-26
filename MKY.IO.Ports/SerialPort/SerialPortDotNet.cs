@@ -1,3 +1,6 @@
+// Choose whether additional debug output should be written on open/close
+//#define WRITE_DEBUG
+
 using System;
 using System.ComponentModel;
 using System.Collections.Generic;
@@ -501,7 +504,23 @@ namespace MKY.IO.Ports
 			if (!base.IsOpen)
 			{
 				OnOpening(new EventArgs());
+
+			#if (DEBUG && WRITE_DEBUG)
+				try
+				{
+					DebugWrite("Trying base.Open()", true);
+					base.Open();
+					DebugWrite("base.Open() OK");
+				}
+				catch (Exception ex)
+				{
+					DebugWrite("base.Open() exception");
+					DebugWrite(ex.Message);
+					throw (ex);
+				}
+			#else
 				base.Open();
+			#endif
 
 				// immediately send XOn if software flow control enabled to ensure that
                 //   device gets put into XOn if it was XOff before
@@ -559,7 +578,22 @@ namespace MKY.IO.Ports
 			if (base.IsOpen)
 			{
 				OnClosing(new EventArgs());
+			#if (DEBUG && WRITE_DEBUG)
+				try
+				{
+					DebugWrite("Trying base.Close()", true);
+					base.Close();
+					DebugWrite("base.Close() OK");
+				}
+				catch (Exception ex)
+				{
+					DebugWrite("base.Close() exception");
+					DebugWrite(ex.Message);
+					throw (ex);
+				}
+			#else
 				base.Close();
+			#endif
 				OnClosed(new EventArgs());
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.RtsChanged));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.DtrChanged));
@@ -669,6 +703,33 @@ namespace MKY.IO.Ports
 			if (!IsDisposed && base.IsOpen)      // make sure to propagate event only if port active
 				EventHelper.FireSync<SerialPinChangedEventArgs, SerialPinChangedEventHandler>(PinChanged, this, e);
 		}
+
+		#endregion
+
+		#region Debug
+		//==========================================================================================
+		// Debug
+		//==========================================================================================
+
+	#if (DEBUG && WRITE_DEBUG)
+
+		private string DebugWrite_portName = "";
+		private void DebugWrite(string message)
+		{
+			DebugWrite(message, false);
+		}
+		private void DebugWrite(string message, bool writeStack)
+		{
+			if (DebugWrite_portName == "")
+				DebugWrite_portName = PortName;
+
+			System.Diagnostics.Debug.WriteLine(DebugWrite_portName + " " + Environment.TickCount.ToString() + " " + message);
+
+			if (writeStack)
+				MKY.Utilities.Diagnostics.XDebug.WriteStack(this, "");
+		}
+
+	#endif // DEBUG && WRITE_DEBUG
 
 		#endregion
 	}

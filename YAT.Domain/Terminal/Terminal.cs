@@ -44,11 +44,13 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public event EventHandler Changed;
+		public event EventHandler IOChanged;
 		/// <summary></summary>
-		public event EventHandler ControlChanged;
+		public event EventHandler IOControlChanged;
 		/// <summary></summary>
-		public event EventHandler<ErrorEventArgs> Error;
+		public event EventHandler<IORequestEventArgs> IORequest;
+		/// <summary></summary>
+		public event EventHandler<IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
 		public event EventHandler<RawElementEventArgs> RawElementSent;
@@ -794,12 +796,15 @@ namespace YAT.Domain
 		private void AttachRawTerminal(RawTerminal rawTerminal)
 		{
 			_rawTerminal = rawTerminal;
-			_rawTerminal.Changed            += new EventHandler(_rawTerminal_Changed);
-			_rawTerminal.ControlChanged     += new EventHandler(_rawTerminal_ControlChanged);
+
+			_rawTerminal.IOChanged          += new EventHandler(_rawTerminal_IOChanged);
+			_rawTerminal.IOControlChanged   += new EventHandler(_rawTerminal_IOControlChanged);
+			_rawTerminal.IORequest          += new EventHandler<IORequestEventArgs>(_rawTerminal_IORequest);
+			_rawTerminal.IOError            += new EventHandler<IOErrorEventArgs>(_rawTerminal_IOError);
+
 			_rawTerminal.RawElementSent     += new EventHandler<RawElementEventArgs>(_rawTerminal_RawElementSent);
 			_rawTerminal.RawElementReceived += new EventHandler<RawElementEventArgs>(_rawTerminal_RawElementReceived);
 			_rawTerminal.RepositoryCleared  += new EventHandler<RepositoryEventArgs>(_rawTerminal_RepositoryCleared);
-			_rawTerminal.Error              += new EventHandler<ErrorEventArgs>(_rawTerminal_Error);
 		}
 
 		#endregion
@@ -809,22 +814,27 @@ namespace YAT.Domain
 		// Raw Terminal Events
 		//==========================================================================================
 
-		private void _rawTerminal_Changed(object sender, EventArgs e)
+		private void _rawTerminal_IOChanged(object sender, EventArgs e)
 		{
-			OnChanged(e);
+			OnIOChanged(e);
 		}
 
-		private void _rawTerminal_ControlChanged(object sender, EventArgs e)
+		private void _rawTerminal_IOControlChanged(object sender, EventArgs e)
 		{
-			OnControlChanged(e);
+			OnIOControlChanged(e);
 		}
 
-		private void _rawTerminal_Error(object sender, ErrorEventArgs e)
+		private void _rawTerminal_IORequest(object sender, IORequestEventArgs e)
+		{
+			OnIORequest(e);
+		}
+
+		private void _rawTerminal_IOError(object sender, IOErrorEventArgs e)
 		{
 			SerialPortErrorEventArgs serialPortErrorEventArgs = (e as SerialPortErrorEventArgs);
 			if (serialPortErrorEventArgs == null)
 			{
-				OnError(e);
+				OnIOError(e);
 			}
 			else
 			{
@@ -836,7 +846,7 @@ namespace YAT.Domain
 					case System.IO.Ports.SerialError.RXOver:   OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("<BUFFER OVERFLOW>")); break;
 					case System.IO.Ports.SerialError.RXParity: OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("<PARITY ERROR>"));    break;
 					case System.IO.Ports.SerialError.TXFull:   OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Error("<BUFFER FULL>"));     break;
-					default:                                   OnError(e); break;
+					default:                                   OnIOError(e); break;
 				}
 			}
 		}
@@ -867,21 +877,27 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnChanged(EventArgs e)
+		protected virtual void OnIOChanged(EventArgs e)
 		{
-			EventHelper.FireSync(Changed, this, e);
+			EventHelper.FireSync(IOChanged, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnControlChanged(EventArgs e)
+		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-			EventHelper.FireSync(ControlChanged, this, e);
+			EventHelper.FireSync(IOControlChanged, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnError(ErrorEventArgs e)
+		protected virtual void OnIORequest(IORequestEventArgs e)
 		{
-			EventHelper.FireSync<ErrorEventArgs>(Error, this, e);
+			EventHelper.FireSync<IORequestEventArgs>(IORequest, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnIOError(IOErrorEventArgs e)
+		{
+			EventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>

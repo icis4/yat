@@ -2187,7 +2187,8 @@ namespace YAT.Gui.Forms
 			_terminal.IOControlChanged     += new EventHandler(_terminal_IOControlChanged);
 			_terminal.IOConnectTimeChanged += new EventHandler(_terminal_IOConnectTimeChanged);
 			_terminal.IOCountChanged       += new EventHandler(_terminal_IOCountChanged);
-			_terminal.IOError              += new EventHandler<Domain.ErrorEventArgs>(_terminal_IOError);
+			_terminal.IORequest            += new EventHandler<Domain.IORequestEventArgs>(_terminal_IORequest);
+			_terminal.IOError              += new EventHandler<Domain.IOErrorEventArgs>(_terminal_IOError);
 
 			_terminal.DisplayElementsSent     += new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsSent);
 			_terminal.DisplayElementsReceived += new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsReceived);
@@ -2213,7 +2214,8 @@ namespace YAT.Gui.Forms
 			_terminal.IOControlChanged     -= new EventHandler(_terminal_IOControlChanged);
 			_terminal.IOConnectTimeChanged -= new EventHandler(_terminal_IOConnectTimeChanged);
 			_terminal.IOCountChanged       -= new EventHandler(_terminal_IOCountChanged);
-			_terminal.IOError              -= new EventHandler<Domain.ErrorEventArgs>(_terminal_IOError);
+			_terminal.IORequest            -= new EventHandler<Domain.IORequestEventArgs>(_terminal_IORequest);
+			_terminal.IOError              -= new EventHandler<Domain.IOErrorEventArgs>(_terminal_IOError);
 
 			_terminal.DisplayElementsSent     -= new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsSent);
 			_terminal.DisplayElementsReceived -= new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsReceived);
@@ -2278,7 +2280,27 @@ namespace YAT.Gui.Forms
 			monitor_Rx.RxLineCountStatus    = rxLineCount;
 		}
 
-		private void _terminal_IOError(object sender, Domain.ErrorEventArgs e)
+		/// <remarks>
+		/// Event is used to invoke I/O start/stop operations on the main thread. This procedure
+		/// fixes the deadlock issue as described in <see cref="MKY.IO.Serial.SerialPort"/>.
+		/// </remarks>
+		private void _terminal_IORequest(object sender, Domain.IORequestEventArgs e)
+		{
+			switch (e.Request)
+			{
+				case Domain.IORequest.StartIO:
+					_terminal.StartIO();
+					System.Diagnostics.Debug.WriteLine("_terminal_IORequest::StartIO");
+					break;
+
+				case Domain.IORequest.StopIO:
+					_terminal.StopIO();
+					System.Diagnostics.Debug.WriteLine("_terminal_IORequest::StopIO");
+					break;
+			}
+		}
+
+		private void _terminal_IOError(object sender, Domain.IOErrorEventArgs e)
 		{
 			SetTerminalControls();
 			OnTerminalChanged(new EventArgs());

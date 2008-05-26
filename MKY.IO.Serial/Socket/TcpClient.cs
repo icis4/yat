@@ -62,6 +62,8 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public event EventHandler IOControlChanged;
 		/// <summary></summary>
+		public event EventHandler<IORequestEventArgs> IORequest;
+		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
 		/// <summary></summary>
 		public event EventHandler DataReceived;
@@ -526,6 +528,14 @@ namespace MKY.IO.Serial
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			EventHelper.FireSync(IOControlChanged, this, e);
+			throw (new NotSupportedException("Event not in use"));
+		}
+
+		/// <summary></summary>
+		protected virtual void OnIORequest(IORequestEventArgs e)
+		{
+			EventHelper.FireSync(IORequest, this, e);
+			throw (new NotSupportedException("Event not in use"));
 		}
 
 		/// <summary></summary>
