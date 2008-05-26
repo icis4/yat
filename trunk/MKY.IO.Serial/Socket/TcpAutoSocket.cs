@@ -78,6 +78,8 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public event EventHandler IOControlChanged;
 		/// <summary></summary>
+		public event EventHandler<IORequestEventArgs> IORequest;
+		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
 		/// <summary></summary>
 		public event EventHandler DataReceived;
@@ -395,7 +397,6 @@ namespace MKY.IO.Serial
 
 			_client = new TcpClient(_remoteIPAddress, _remotePort, _localIPAddress);
 			_client.IOChanged += new EventHandler(_client_IOChanged);
-			_client.IOControlChanged += new EventHandler(_client_IOControlChanged);
 			_client.IOError += new EventHandler<IOErrorEventArgs>(_client_IOError);
 			_client.DataReceived += new EventHandler(_client_DataReceived);
 			_client.DataSent += new EventHandler(_client_DataSent);
@@ -428,7 +429,6 @@ namespace MKY.IO.Serial
 
 			_server = new TcpServer(_localIPAddress, _localPort);
 			_server.IOChanged += new EventHandler(_server_IOChanged);
-			_server.IOControlChanged += new EventHandler(_server_IOControlChanged);
 			_server.IOError += new EventHandler<IOErrorEventArgs>(_server_IOError);
 			_server.DataReceived += new EventHandler(_server_DataReceived);
 			_server.DataSent += new EventHandler(_server_DataSent);
@@ -528,12 +528,6 @@ namespace MKY.IO.Serial
 			}
 		}
 
-		private void _client_IOControlChanged(object sender, EventArgs e)
-		{
-			if (IsClient)
-				OnIOControlChanged(e);
-		}
-
 		private void _client_IOError(object sender, IOErrorEventArgs e)
 		{
 			switch (_state)
@@ -613,12 +607,6 @@ namespace MKY.IO.Serial
 			}
 		}
 
-		private void _server_IOControlChanged(object sender, EventArgs e)
-		{
-			if (IsServer)
-				OnIOControlChanged(e);
-		}
-
 		private void _server_IOError(object sender, IOErrorEventArgs e)
 		{
 			switch (_state)
@@ -686,6 +674,14 @@ namespace MKY.IO.Serial
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			EventHelper.FireSync(IOControlChanged, this, e);
+			throw (new NotSupportedException("Event not in use"));
+		}
+
+		/// <summary></summary>
+		protected virtual void OnIORequest(IORequestEventArgs e)
+		{
+			EventHelper.FireSync(IORequest, this, e);
+			throw (new NotSupportedException("Event not in use"));
 		}
 
 		/// <summary></summary>

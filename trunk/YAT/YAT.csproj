@@ -15,6 +15,7 @@
     <StartupObject>YAT.YAT</StartupObject>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\YAT.snk</AssemblyOriginatorKeyFile>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
     <PublishUrl>http://localhost/YAT/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -26,7 +27,6 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>true</IsWebBootstrapper>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

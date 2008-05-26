@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.ComponentModel;
 
 using MKY.Utilities.Event;
 
@@ -8,8 +10,67 @@ namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	/// <remarks>
-	/// <see cref="System.IO.Ports.SerialPort"/> is not thread-safe. Therefore, access to
-	/// _port is done using lock.
+	/// There is a serious deadlock issue in <see cref="System.IO.Ports.SerialPort"/>.
+	/// Google for [UnauthorizedAccessException "Access to the port"] for more information,
+	/// work-arounds and solutions.
+	/// 
+	/// ============================================================================================
+	/// Source: http://msdn.microsoft.com/en-us/library/system.io.ports.serialport_methods.aspx
+	/// Author: Dan Randolph
+	/// 
+	/// There is a deadlock problem with the internal close operation of
+	/// <see cref="System.IO.Ports.SerialPort"/>. Use BeginInvoke instead of Invoke from the
+	/// serialPort_DataReceived event handler to start the method that reads from the
+	/// SerialPort buffer and it will solve the problem. I finally tracked down the problem
+	/// to the Close method by putting a start/stop button on the form. Then I was able to
+	/// lock up the application and found that Close was the culpret. I'm pretty sure that
+	/// components.Dispose() will end up calling the SerialPort Close method if it is open.
+	/// 
+	/// In my application, the user can change the baud rate and the port. In order to do
+	/// this, the SerialPort must be closed fist and this caused a random deadlock in my
+	/// application. Microsoft should document this better!
+	/// ============================================================================================
+	/// 
+	/// Use case 1: Open/close a single time from GUI
+	/// ---------------------------------------------
+	/// 1. Start YAT
+	/// 2. Open port
+	/// 3. Close port
+	/// 4. Exit YAT
+	/// 
+	/// Use case 2: Close/open multiple times from GUI
+	/// ----------------------------------------------
+	/// 1. Start YAT
+	/// 2. Open port
+	/// 3. Close port
+	/// 4. Open port
+	/// 5. Repeat close/open multiple times
+	/// 6. Exit YAT
+	/// 
+	/// Use case 3: Close/disconnect/reconnect/open multiple times
+	/// ----------------------------------------------------------
+	/// 1. Start YAT
+	/// 2. Open port
+	/// 3. Close port
+	/// 4. Disconnect USB-to-serial adapter
+	/// 5. Reconnect USB-to-serial adapter
+	/// 6. Open port
+	/// 7. Repeat close/disconnect/reconnect/open multiple times
+	/// 8. Exit YAT
+	/// 
+	/// Use case 4: Disconnect/reconnect multiple times
+	/// -----------------------------------------------
+	/// 1. Start YAT
+	/// 2. Open port
+	/// 3. Disconnect USB-to-serial adapter
+	/// 4. Reconnect USB-to-serial adapter
+	///    => System.UnauthorizedAccssException("Der Zugriff auf den Anschluss wurde verweigert.")
+	///       @ System.IO.Ports.InternalResources.WinIOError(Int32 errorCode, String str)
+	///       @ System.IO.Ports.SerialStream.Dispose(Boolean disposing)
+	///       @ System.IO.Ports.SerialStream.Finalize()
+	/// 5. Repeat disconnect/reconnect multiple times
+	/// 6. Exit YAT
+	/// 
 	/// </remarks>
 	public class SerialPort : IIOProvider, IDisposable
 	{
@@ -34,7 +95,8 @@ namespace MKY.IO.Serial
 		// Constants
 		//==========================================================================================
 
-		private int _AliveInterval = 500;
+		private const int _AliveInterval = 500;
+		private const int _MinimalReopenIdleTimeInMs = 2000;
 
 		#endregion
 
@@ -47,9 +109,20 @@ namespace MKY.IO.Serial
 
 		private PortState _state = PortState.Reset;
 		private object _stateSyncObj = new object();
+		
+		private DateTime _closeTimeStamp = DateTime.MinValue;
+		private object _closeTimeStampSyncObj = new object();
 
 		private SerialPortSettings _settings;
 		private MKY.IO.Ports.ISerialPort _port;
+		private object _portSyncObj = new object();
+
+		// async receiving
+		private Queue<byte> _receiveQueue = new Queue<byte>();
+
+		// async requests
+		// \fixme Auto-reopen doesn't work because of deadlock issue mentioned above.
+		//private bool _isInternalStopRequest = false;
 
 		/// <summary>
 		/// Alive timer detects port break states, i.e. when a USB to serial converter is disconnected.
@@ -68,6 +141,8 @@ namespace MKY.IO.Serial
 		public event EventHandler IOChanged;
 		/// <summary></summary>
 		public event EventHandler IOControlChanged;
+		/// <summary></summary>
+		public event EventHandler<IORequestEventArgs> IORequest;
 		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
 		/// <summary></summary>
@@ -110,7 +185,7 @@ namespace MKY.IO.Serial
 				{
 					StopAndDisposeAliveTimer();
 					StopAndDisposeReopenTimer();
-					BeginInvokeCloseAndDisposePort();
+					CloseAndDisposePort();
 				}
 				_isDisposed = true;
 			}
@@ -212,11 +287,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-
-				if (_port != null)
-					return (_port.BytesToRead);
-				else
-					return (0);
+				return (_receiveQueue.Count);
 			}
 		}
 
@@ -252,7 +323,13 @@ namespace MKY.IO.Serial
 			// AssertNotDisposed() is called by IsStarted
 
 			if (IsStarted)
-				ResetPort();
+			{
+				// \fixme Auto-reopen doesn't work because of deadlock issue mentioned above.
+				//if (_isInternalStopRequest && _settings.AutoReopen.Enabled)
+				//	ClosePortAndStartReopenTimer();
+				//else
+					ResetPort();
+			}
 		}
 
 		/// <summary></summary>
@@ -263,9 +340,13 @@ namespace MKY.IO.Serial
 			int bytesReceived = 0;
 			if (IsOpen)
 			{
-				int bytesToRead = _port.BytesToRead;
-				buffer = new byte[bytesToRead];
-				bytesReceived = _port.Read(buffer, 0, bytesToRead);
+				lock (_receiveQueue)
+				{
+					bytesReceived = _receiveQueue.Count;
+					buffer = new byte[bytesReceived];
+					for (int i = 0; i < bytesReceived; i++)
+						buffer[i] = _receiveQueue.Dequeue();
+				}
 			}
 			else
 			{
@@ -281,13 +362,16 @@ namespace MKY.IO.Serial
 
 			if (IsOpen)
 			{
-				if (_settings.Communication.FlowControl == SerialFlowControl.RS485)
-					_port.RtsEnable = true;
+				lock (_portSyncObj)
+				{
+					if (_settings.Communication.FlowControl == SerialFlowControl.RS485)
+						_port.RtsEnable = true;
 
-				_port.Write(buffer, 0, buffer.Length);
+					_port.Write(buffer, 0, buffer.Length);
 
-				if (_settings.Communication.FlowControl == SerialFlowControl.RS485)
-					_port.RtsEnable = false;
+					if (_settings.Communication.FlowControl == SerialFlowControl.RS485)
+						_port.RtsEnable = false;
+				}
 
 				OnDataSent(new EventArgs());
 			}
@@ -305,41 +389,36 @@ namespace MKY.IO.Serial
 			if (_port == null)
 				return;
 
-			// no need to set encoding, only bytes are handled, encoding is done by text terminal
-			//_port.Encoding = _ioSettings.Encoding;
-
-			_port.PortId = _settings.PortId;
-
-			ApplyCommunicationSettings();
-
-			// parity replace
-			_port.ParityReplace = _settings.ParityErrorReplacement;
-
-			// RTS and DTR
-			switch (_settings.Communication.FlowControl)
+			lock (_portSyncObj)
 			{
-				case SerialFlowControl.Manual:
-					_port.RtsEnable = _settings.RtsEnabled;
-					_port.DtrEnable = _settings.DtrEnabled;
-					break;
+				// no need to set encoding, only bytes are handled, encoding is done by text terminal
+				//_port.Encoding = _ioSettings.Encoding;
 
-				case SerialFlowControl.RS485:
-					_port.RtsEnable = false;
-					break;
+				_port.PortId = _settings.PortId;
+
+				SerialCommunicationSettings s = _settings.Communication;
+				_port.BaudRate = (MKY.IO.Ports.XBaudRate)s.BaudRate;
+				_port.DataBits = (MKY.IO.Ports.XDataBits)s.DataBits;
+				_port.Parity = s.Parity;
+				_port.StopBits = s.StopBits;
+				_port.Handshake = (XSerialFlowControl)s.FlowControl;
+
+				// parity replace
+				_port.ParityReplace = _settings.ParityErrorReplacement;
+
+				// RTS and DTR
+				switch (_settings.Communication.FlowControl)
+				{
+					case SerialFlowControl.Manual:
+						_port.RtsEnable = _settings.RtsEnabled;
+						_port.DtrEnable = _settings.DtrEnabled;
+						break;
+
+					case SerialFlowControl.RS485:
+						_port.RtsEnable = false;
+						break;
+				}
 			}
-		}
-
-		private void ApplyCommunicationSettings()
-		{
-			if (_port == null)
-				return;
-
-			SerialCommunicationSettings s = _settings.Communication;
-			_port.BaudRate = (MKY.IO.Ports.XBaudRate)s.BaudRate;
-			_port.DataBits = (MKY.IO.Ports.XDataBits)s.DataBits;
-			_port.Parity = s.Parity;
-			_port.StopBits = s.StopBits;
-			_port.Handshake = (XSerialFlowControl)s.FlowControl;
 		}
 
 		#endregion
@@ -352,18 +431,27 @@ namespace MKY.IO.Serial
 		private void CreatePort()
 		{
 			if (_port != null)
+			{
 				CloseAndDisposePort();
+				SetCloseTimeStamp();
+			}
 
-			_port = new MKY.IO.Ports.SerialPortDotNet();
-			_port.DataReceived  += new MKY.IO.Ports.SerialDataReceivedEventHandler(_port_DataReceived);
-			_port.PinChanged    += new MKY.IO.Ports.SerialPinChangedEventHandler(_port_PinChanged);
-			_port.ErrorReceived += new MKY.IO.Ports.SerialErrorReceivedEventHandler(_port_ErrorReceived);
+			lock (_portSyncObj)
+			{
+				_port = new MKY.IO.Ports.SerialPortDotNet();
+				_port.DataReceived += new MKY.IO.Ports.SerialDataReceivedEventHandler(_port_DataReceived);
+				_port.PinChanged += new MKY.IO.Ports.SerialPinChangedEventHandler(_port_PinChanged);
+				_port.ErrorReceived += new MKY.IO.Ports.SerialErrorReceivedEventHandler(_port_ErrorReceived);
+			}
 		}
 
 		private void OpenPort()
 		{
 			if (!_port.IsOpen)
-				_port.Open();
+			{
+				lock (_portSyncObj)
+					_port.Open();
+			}
 		}
 
 		private void CloseAndDisposePort()
@@ -372,59 +460,13 @@ namespace MKY.IO.Serial
 			{
 				try
 				{
-					if (_port.IsOpen)
-						_port.Close();
-
-					_port.Dispose();
-					_port = null;
-				}
-				catch { }
-			}
-		}
-
-		#endregion
-
-		#region Async Port Methods
-		//==========================================================================================
-		// Async Port Methods
-		//==========================================================================================
-
-		private MKY.IO.Ports.ISerialPort _portAsync = null;
-		private object _portAsyncSyncObj = new object();
-		private delegate void AsyncInvokeDelegate();
-
-		/// <summary></summary>
-		/// <remarks>
-		/// Asynchronously invoke close/dispose to prevent potential dead-locks if
-		/// close/dispose was called from a ISynchronizeInvoke target (i.e. a form).
-		/// </remarks>
-		private void BeginInvokeCloseAndDisposePort()
-		{
-			// Copy reference and immediately set _port to null to prevent any
-			//   further access to it.
-			lock (_portAsyncSyncObj)
-			{
-				_portAsync = _port;
-			}
-			_port = null;
-
-			AsyncInvokeDelegate asyncInvoker = new AsyncInvokeDelegate(DoCloseAndDisposePortAsync);
-			asyncInvoker.BeginInvoke(null, null);
-		}
-
-		private void DoCloseAndDisposePortAsync()
-		{
-			lock (_portAsyncSyncObj)
-			{
-				try
-				{
-					if (_portAsync != null)
+					lock (_portSyncObj)
 					{
-						if (_portAsync.IsOpen)
-							_portAsync.Close();
+						if (_port.IsOpen)
+							_port.Close();
 
-						_portAsync.Dispose();
-						_portAsync = null;
+						_port.Dispose();
+						_port = null;
 					}
 				}
 				catch { }
@@ -441,46 +483,59 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		private void CreateAndOpenPort()
 		{
+			// allow asynchronous close/dispose of port, needed because of issue described on top
+			double reopenIdleTimeInMs = 0;
+			lock (_closeTimeStampSyncObj)
+			{
+				TimeSpan ts = DateTime.Now - _closeTimeStamp;
+				reopenIdleTimeInMs = _MinimalReopenIdleTimeInMs - ts.TotalMilliseconds;
+			}
+			if (reopenIdleTimeInMs >= 1)
+				Thread.Sleep((int)reopenIdleTimeInMs);
+
 			CreatePort();          // port must be created each time because _port.Close()
 			ApplySettings();       //   disposes the underlying IO instance
 
-			// RTS
-			switch (_settings.Communication.FlowControl)
+			lock (_portSyncObj)
 			{
-				case SerialFlowControl.None:
-				case SerialFlowControl.XOnXOff:
-					_port.RtsEnable = false;
-					break;
+				// RTS
+				switch (_settings.Communication.FlowControl)
+				{
+					case SerialFlowControl.None:
+					case SerialFlowControl.XOnXOff:
+						_port.RtsEnable = false;
+						break;
 
-				case SerialFlowControl.Manual:
-					_port.RtsEnable = _settings.RtsEnabled;
-					break;
+					case SerialFlowControl.Manual:
+						_port.RtsEnable = _settings.RtsEnabled;
+						break;
 
-				case SerialFlowControl.RS485:
-					_port.RtsEnable = false;
-					break;
+					case SerialFlowControl.RS485:
+						_port.RtsEnable = false;
+						break;
 
-				case SerialFlowControl.RequestToSend:
-				case SerialFlowControl.RequestToSendXOnXOff:
-					// do nothing, RTS is used for hand shake
-					break;
-			}
+					case SerialFlowControl.RequestToSend:
+					case SerialFlowControl.RequestToSendXOnXOff:
+						// do nothing, RTS is used for hand shake
+						break;
+				}
 
-			// DTR
-			switch (_settings.Communication.FlowControl)
-			{
-				case SerialFlowControl.None:
-				case SerialFlowControl.RequestToSend:
-				case SerialFlowControl.XOnXOff:
-				case SerialFlowControl.RequestToSendXOnXOff:
-				case SerialFlowControl.RS485:
-					_port.DtrEnable = false;
-					break;
+				// DTR
+				switch (_settings.Communication.FlowControl)
+				{
+					case SerialFlowControl.None:
+					case SerialFlowControl.RequestToSend:
+					case SerialFlowControl.XOnXOff:
+					case SerialFlowControl.RequestToSendXOnXOff:
+					case SerialFlowControl.RS485:
+						_port.DtrEnable = false;
+						break;
 
-				case SerialFlowControl.Manual:
-					_port.DtrEnable = _settings.DtrEnabled;
-					break;
-			}
+					case SerialFlowControl.Manual:
+						_port.DtrEnable = _settings.DtrEnabled;
+						break;
+				}
+			} // lock (_portSyncObj)
 
 			OpenPort();
 			StartAliveTimer();
@@ -492,7 +547,8 @@ namespace MKY.IO.Serial
 			OnIOControlChanged(new EventArgs());
 		}
 
-		/// <summary></summary>
+		// \fixme Auto-reopen doesn't work because of deadlock issue mentioned above.
+		/*/// <summary></summary>
 		private void StopOrClosePort()
 		{
 			if (_settings.AutoReopen.Enabled)
@@ -503,6 +559,7 @@ namespace MKY.IO.Serial
 					_state = PortState.Closed;
 
 				CloseAndDisposePort();
+				SetCloseTimeStamp();
 
 				OnIOChanged(new EventArgs());
 				OnIOControlChanged(new EventArgs());
@@ -513,6 +570,23 @@ namespace MKY.IO.Serial
 			{
 				Stop();
 			}
+		}*/
+
+		/// <summary></summary>
+		private void ClosePortAndStartReopenTimer()
+		{
+			StopAndDisposeAliveTimer();
+
+			lock (_stateSyncObj)
+				_state = PortState.Closed;
+
+			CloseAndDisposePort();
+			SetCloseTimeStamp();
+
+			OnIOChanged(new EventArgs());
+			OnIOControlChanged(new EventArgs());
+
+			StartReopenTimer();
 		}
 
 		/// <summary></summary>
@@ -523,10 +597,19 @@ namespace MKY.IO.Serial
 
 			StopAndDisposeAliveTimer();
 			StopAndDisposeReopenTimer();
-			BeginInvokeCloseAndDisposePort();
+			CloseAndDisposePort();
+			SetCloseTimeStamp();
 
 			OnIOChanged(new EventArgs());
 			OnIOControlChanged(new EventArgs());
+		}
+
+		private void SetCloseTimeStamp()
+		{
+			lock (_closeTimeStampSyncObj)
+			{
+				_closeTimeStamp = DateTime.Now;
+			}
 		}
 
 		#endregion
@@ -536,13 +619,51 @@ namespace MKY.IO.Serial
 		// Port Events
 		//==========================================================================================
 
+		private delegate void _port_DataReceivedDelegate(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e);
+
 		private void _port_DataReceived(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
 		{
 			if (_state == PortState.Openend) // ensure not to forward any events during closing anymore
-				OnDataReceived(new EventArgs());
+			{
+				_port_DataReceivedDelegate asyncInvoker = new _port_DataReceivedDelegate(_port_DataReceivedAsync);
+				asyncInvoker.BeginInvoke(sender, e, null, null);
+			}
 		}
 
+		/// <summary>
+		/// Asynchronously handle the data received event to fix the deadlock issue as described
+		/// at the top of this file.
+		/// </summary>
+		private void _port_DataReceivedAsync(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
+		{
+			// immediately read data on this thread
+			byte[] buffer;
+			lock (_portSyncObj)
+			{
+				int bytesToRead = _port.BytesToRead;
+				buffer = new byte[bytesToRead];
+				_port.Read(buffer, 0, bytesToRead);
+			}
+			lock (_receiveQueue)
+			{
+				foreach (byte b in buffer)
+					_receiveQueue.Enqueue(b);
+			}
+			OnDataReceived(new EventArgs());
+		}
+
+		private delegate void _port_PinChangedDelegate(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e);
+
 		private void _port_PinChanged(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
+		{
+			if (_state == PortState.Openend) // ensure not to forward any events during closing anymore
+			{
+				_port_PinChangedDelegate asyncInvoker = new _port_PinChangedDelegate(_port_PinChangedAsync);
+				asyncInvoker.BeginInvoke(sender, e, null, null);
+			}
+		}
+
+		private void _port_PinChangedAsync(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
 			// if pin has changed, but access to port throws exception, port has been shut down,
 			//   e.g. USB to serial converter disconnected
@@ -556,26 +677,36 @@ namespace MKY.IO.Serial
 			}
 			catch
 			{
-				StopOrClosePort();
+				OnIORequest(new IORequestEventArgs(Serial.IORequest.Close));
+				// \fixme Auto-reopen doesn't work because of deadlock issue mentioned above.
+				//StopOrClosePort();
 			}
 		}
+
+		private delegate void _port_ErrorReceivedDelegate(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e);
 
 		private void _port_ErrorReceived(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e)
 		{
 			if (_state == PortState.Openend) // ensure not to forward any events during closing anymore
 			{
-				string message;
-				switch (e.EventType)
-				{
-					case System.IO.Ports.SerialError.Frame:    message = "Serial port framing error!";            break;
-					case System.IO.Ports.SerialError.Overrun:  message = "Serial port character buffer overrun!"; break;
-					case System.IO.Ports.SerialError.RXOver:   message = "Serial port input buffer overflow!";    break;
-					case System.IO.Ports.SerialError.RXParity: message = "Serial port parity error!";             break;
-					case System.IO.Ports.SerialError.TXFull:   message = "Serial port output buffer full!";       break;
-					default:                                   message = "Unknown serial port error!";            break;
-				}
-				OnIOError(new SerialPortIOErrorEventArgs(message, e.EventType));
+				_port_ErrorReceivedDelegate asyncInvoker = new _port_ErrorReceivedDelegate(_port_ErrorReceivedAsync);
+				asyncInvoker.BeginInvoke(sender, e, null, null);
 			}
+		}
+
+		private void _port_ErrorReceivedAsync(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e)
+		{
+			string message;
+			switch (e.EventType)
+			{
+				case System.IO.Ports.SerialError.Frame:    message = "Serial port framing error!";            break;
+				case System.IO.Ports.SerialError.Overrun:  message = "Serial port character buffer overrun!"; break;
+				case System.IO.Ports.SerialError.RXOver:   message = "Serial port input buffer overflow!";    break;
+				case System.IO.Ports.SerialError.RXParity: message = "Serial port parity error!";             break;
+				case System.IO.Ports.SerialError.TXFull:   message = "Serial port output buffer full!";       break;
+				default:                                   message = "Unknown serial port error!";            break;
+			}
+			OnIOError(new SerialPortIOErrorEventArgs(message, e.EventType));
 		}
 
 		#endregion
@@ -621,7 +752,9 @@ namespace MKY.IO.Serial
 					//   port has been shut down, e.g. USB to serial converter disconnected
 					if (!_port.IsOpen)
 					{
-						StopOrClosePort();
+						OnIORequest(new IORequestEventArgs(Serial.IORequest.Close));
+						// \fixme Auto-reopen doesn't work because of deadlock issue mentioned above.
+						//StopOrClosePort();
 					}
 					#if false
 					// \fixme break state detection doesn't work
@@ -637,7 +770,9 @@ namespace MKY.IO.Serial
 				}
 				catch
 				{
-					StopOrClosePort();
+					OnIORequest(new IORequestEventArgs(Serial.IORequest.Close));
+					// \fixme Auto-reopen doesn't work because of deadlock issue mentioned above.
+					//StopOrClosePort();
 				}
 			}
 			else
@@ -655,12 +790,12 @@ namespace MKY.IO.Serial
 
 		private void StartReopenTimer()
 		{
-			if (_reopenTimer != null)
-				StopAndDisposeReopenTimer();
-
-			_reopenTimer = new System.Timers.Timer(_settings.AutoReopen.Interval);
-			_reopenTimer.AutoReset = false;
-			_reopenTimer.Elapsed += new System.Timers.ElapsedEventHandler(_reopenTimer_Elapsed);
+			if (_reopenTimer == null)
+			{
+				_reopenTimer = new System.Timers.Timer(_settings.AutoReopen.Interval);
+				_reopenTimer.AutoReset = false;
+				_reopenTimer.Elapsed += new System.Timers.ElapsedEventHandler(_reopenTimer_Elapsed);
+			}
 			_reopenTimer.Start();
 		}
 
@@ -681,7 +816,9 @@ namespace MKY.IO.Serial
 				try
 				{
 					// try to re-open port
-					CreateAndOpenPort();
+					OnIORequest(new IORequestEventArgs(Serial.IORequest.Open));
+					// \fixme Auto-reopen doesn't work because of deadlock issue mentioned above.
+					//CreateAndOpenPort();
 				}
 				catch
 				{
@@ -716,6 +853,16 @@ namespace MKY.IO.Serial
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			EventHelper.FireSync(IOControlChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnIORequest(IORequestEventArgs e)
+		{
+			// \fixme Auto-reopen doesn't work because of deadlock issue mentioned above.
+			//if (e.Request == Serial.IORequest.Close)
+			//	_isInternalStopRequest = true;
+
+			EventHelper.FireSync<IORequestEventArgs>(IORequest, this, e);
 		}
 
 		/// <summary></summary>

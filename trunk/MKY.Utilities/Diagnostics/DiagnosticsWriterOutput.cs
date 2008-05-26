@@ -101,19 +101,23 @@ namespace MKY.Utilities.Diagnostics
 				string line;
 				StringReader sr;
 
-				writer.WriteLine("Message:");
-				writer.Indent();
+				if ((message != null) && (message != ""))
 				{
-					sr = new StringReader(message);
-					do
+					writer.WriteLine("Message:");
+					writer.Indent();
 					{
-						line = sr.ReadLine();
-						if (line != null)
-							writer.WriteLine(line);
+						sr = new StringReader(message);
+						do
+						{
+							line = sr.ReadLine();
+							if (line != null)
+								writer.WriteLine(line);
+						}
+						while (line != null);
 					}
-					while (line != null);
+					writer.Unindent();
 				}
-				writer.Unindent();
+
 				writer.WriteLine("Stack:"); // stack trace is already indented
 				StackTrace st = new StackTrace();
 				sr = new StringReader(st.ToString());

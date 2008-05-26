@@ -90,7 +90,9 @@ namespace YAT.Model
 		/// <summary></summary>
 		public event EventHandler IOCountChanged;
 		/// <summary></summary>
-		public event EventHandler<Domain.ErrorEventArgs> IOError;
+		public event EventHandler<Domain.IORequestEventArgs> IORequest;
+		/// <summary></summary>
+		public event EventHandler<Domain.IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
 		public event EventHandler<Domain.DisplayElementsEventArgs> DisplayElementsSent;
@@ -766,9 +768,10 @@ namespace YAT.Model
 
 		private void AttachTerminalEventHandlers()
 		{
-			_terminal.Changed        += new EventHandler(_terminal_Changed);
-			_terminal.ControlChanged += new EventHandler(_terminal_ControlChanged);
-			_terminal.Error          += new EventHandler<Domain.ErrorEventArgs>(_terminal_Error);
+			_terminal.IOChanged        += new EventHandler(_terminal_IOChanged);
+			_terminal.IOControlChanged += new EventHandler(_terminal_IOControlChanged);
+			_terminal.IORequest        += new EventHandler<Domain.IORequestEventArgs>(_terminal_IORequest);
+			_terminal.IOError          += new EventHandler<Domain.IOErrorEventArgs>(_terminal_IOError);
 
 			_terminal.RawElementSent          += new EventHandler<Domain.RawElementEventArgs>(_terminal_RawElementSent);
 			_terminal.RawElementReceived      += new EventHandler<Domain.RawElementEventArgs>(_terminal_RawElementReceived);
@@ -782,9 +785,10 @@ namespace YAT.Model
 
 		private void DetachTerminalEventHandlers()
 		{
-			_terminal.Changed        -= new EventHandler(_terminal_Changed);
-			_terminal.ControlChanged -= new EventHandler(_terminal_ControlChanged);
-			_terminal.Error          -= new EventHandler<Domain.ErrorEventArgs>(_terminal_Error);
+			_terminal.IOChanged        -= new EventHandler(_terminal_IOChanged);
+			_terminal.IOControlChanged -= new EventHandler(_terminal_IOControlChanged);
+			_terminal.IORequest        -= new EventHandler<Domain.IORequestEventArgs>(_terminal_IORequest);
+			_terminal.IOError          -= new EventHandler<Domain.IOErrorEventArgs>(_terminal_IOError);
 
 			_terminal.RawElementSent          -= new EventHandler<Domain.RawElementEventArgs>(_terminal_RawElementSent);
 			_terminal.RawElementReceived      -= new EventHandler<Domain.RawElementEventArgs>(_terminal_RawElementReceived);
@@ -807,26 +811,31 @@ namespace YAT.Model
 		/// Local field to maintain connection state in order to be able to detect
 		/// a change of the connection state.
 		/// </summary>
-		private bool _terminal_Changed_isConnected;
+		private bool _terminal_IOChanged_isConnected;
 
-		private void _terminal_Changed(object sender, EventArgs e)
+		private void _terminal_IOChanged(object sender, EventArgs e)
 		{
 			OnIOChanged(e);
 
-			if      (_terminal.IsConnected && !_terminal_Changed_isConnected)
+			if      (_terminal.IsConnected && !_terminal_IOChanged_isConnected)
 				_ioConnectChrono.Start();
-			else if (!_terminal.IsConnected && _terminal_Changed_isConnected)
+			else if (!_terminal.IsConnected && _terminal_IOChanged_isConnected)
 				_ioConnectChrono.Stop();
 
-			_terminal_Changed_isConnected = _terminal.IsConnected;
+			_terminal_IOChanged_isConnected = _terminal.IsConnected;
 		}
 
-		private void _terminal_ControlChanged(object sender, EventArgs e)
+		private void _terminal_IOControlChanged(object sender, EventArgs e)
 		{
 			OnIOControlChanged(e);
 		}
 
-		private void _terminal_Error(object sender, Domain.ErrorEventArgs e)
+		private void _terminal_IORequest(object sender, Domain.IORequestEventArgs e)
+		{
+			OnIORequest(e);
+		}
+
+		private void _terminal_IOError(object sender, Domain.IOErrorEventArgs e)
 		{
 			OnIOError(e);
 		}
@@ -939,13 +948,13 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Open/Close
+		#region Terminal > Start/Stop
 		//------------------------------------------------------------------------------------------
-		// Terminal > Open/Close
+		// Terminal > Start/Stop
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Opens the terminal's I/O instance
+		/// Starts the terminal's I/O instance
 		/// </summary>
 		/// <returns>true if successful, false otherwise</returns>
 		public bool StartIO()
@@ -954,7 +963,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Opens the terminal's I/O instance
+		/// Starts the terminal's I/O instance
 		/// </summary>
 		/// <returns>true if successful, false otherwise</returns>
 		private bool StartIO(bool saveStatus)
@@ -999,7 +1008,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Closes the terminal's I/O instance
+		/// Stops the terminal's I/O instance
 		/// </summary>
 		/// <returns>true if successful, false otherwise</returns>
 		public bool StopIO()
@@ -1008,7 +1017,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Closes the terminal's I/O instance
+		/// Stops the terminal's I/O instance
 		/// </summary>
 		/// <returns>true if successful, false otherwise</returns>
 		private bool StopIO(bool saveStatus)
@@ -1576,9 +1585,15 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void OnIOError(Domain.ErrorEventArgs e)
+		protected virtual void OnIORequest(Domain.IORequestEventArgs e)
 		{
-			EventHelper.FireSync<Domain.ErrorEventArgs>(IOError, this, e);
+			EventHelper.FireSync<Domain.IORequestEventArgs>(IORequest, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnIOError(Domain.IOErrorEventArgs e)
+		{
+			EventHelper.FireSync<Domain.IOErrorEventArgs>(IOError, this, e);
 		}
 
 		/// <summary></summary>
