@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
+using MKY.Utilities.Windows.Forms;
+
 namespace YAT.Gui.Forms
 {
 	public partial class UnhandledException : System.Windows.Forms.Form
@@ -43,6 +45,20 @@ namespace YAT.Gui.Forms
 			textBox_Stack.Text = _exeption.StackTrace;
 		}
 
+		#region Controls Event Handlers
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers
+		//------------------------------------------------------------------------------------------
+
+		private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			string link = e.Link.LinkData as string;
+			if ((link != null) && (link.StartsWith("http://")))
+			{
+				MKY.Utilities.Net.Browser.BrowseUrl(link);
+			}
+		}
+
 		private void button_CopyToClipboard_Click(object sender, EventArgs e)
 		{
 			StringWriter text = new StringWriter();
@@ -62,18 +78,12 @@ namespace YAT.Gui.Forms
 			Clipboard.SetDataObject(text.ToString(), true);
 		}
 
-		#region Controls Event Handlers
-		//------------------------------------------------------------------------------------------
-		// Controls Event Handlers
-		//------------------------------------------------------------------------------------------
-
-		private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		private void button_Instructions_Click(object sender, EventArgs e)
 		{
-			string link = e.Link.LinkData as string;
-			if ((link != null) && (link.StartsWith("http://")))
-			{
-				MKY.Utilities.Net.Browser.BrowseUrl(link);
-			}
+			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerInstructions.Tracker.Bug);
+			f.StartPosition = FormStartPosition.Manual;
+			f.Location = XForm.CalculateManualCenterParentLocation(this, f);
+			f.Show(this);
 		}
 
 		#endregion

@@ -1,6 +1,6 @@
 // Choose whether exceptions should be handled or execution immediately stopped
-//#define HANDLE_EXCEPTIONS
-#define BREAK_EXCEPTIONS
+#define HANDLE_EXCEPTIONS
+//#define BREAK_EXCEPTIONS
 
 using System;
 using System.Collections.Generic;
@@ -17,10 +17,51 @@ namespace MKY.Utilities.Event
 	/// </summary>
 	public static class EventHelper
 	{
+		#region Unhandled Exception Callback
+		//==========================================================================================
+		// Unhandled Exception Callback
+		//==========================================================================================
+
+		/// <summary>
+		/// Unhandled exception callback delegate.
+		/// </summary>
+		public delegate void UnhandledExceptionCallback(Exception ex);
+
+		private static UnhandledExceptionCallback _unhandledExceptionCallback = null;
+		private static ISynchronizeInvoke _unhandledExceptionCallbackTarget = null;
+
+		/// <summary>
+		/// Installs a callback that is called on unhandled exceptions.
+		/// </summary>
+		public static void InstallUnhandledExceptionCallback(UnhandledExceptionCallback callback)
+		{
+			InstallUnhandledExceptionCallback(callback, null);
+		}
+
+		/// <summary>
+		/// Installs a callback that is called on unhandled exceptions.
+		/// </summary>
+		public static void InstallUnhandledExceptionCallback(UnhandledExceptionCallback callback, ISynchronizeInvoke target)
+		{
+			_unhandledExceptionCallback = callback;
+			_unhandledExceptionCallbackTarget = target;
+		}
+
+		/// <summary>
+		/// Installs the callback that is called on unhandled exceptions.
+		/// </summary>
+		public static void UninstallUnhandledExceptionCallback()
+		{
+			_unhandledExceptionCallback = null;
+			_unhandledExceptionCallbackTarget = null;
+		}
+
+		#endregion
+
 		#region Sync Event Invoking
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Sync Event Invoking
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		/// <summary>
 		/// Fires event with supplied arguments synchronously. Event is
@@ -145,9 +186,9 @@ namespace MKY.Utilities.Event
 		#endregion
 
 		#region Async Event Invoking
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Async Event Invoking
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		private delegate void AsyncInvokeDelegate(Delegate eventDelegate, object[] args);
 
@@ -183,9 +224,9 @@ namespace MKY.Utilities.Event
 		#endregion
 
 		#region Safe Invoke Synchronized To ISynchronizeInvoke
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Safe Invoke Synchronized To ISynchronizeInvoke
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		[OneWay]
 		private static void InvokeSynchronized(ISynchronizeInvoke sinkTarget, Delegate sink, object[] args)
@@ -194,24 +235,32 @@ namespace MKY.Utilities.Event
 			{
 				sinkTarget.Invoke(sink, args);
 			}
-		#if (DEBUG) // output as much data as possible for debugging support
 			catch (Exception ex)
 			{
+			#if (DEBUG) // output as much data as possible for debugging support
 				WriteExceptionToDebugOutput(ex, sink);
+			#else // NON-DEBUG, forward or discard exception
+				if (_unhandledExceptionCallback != null)
+				{
+					try
+					{
+						if ((_unhandledExceptionCallbackTarget != null) && (_unhandledExceptionCallbackTarget.InvokeRequired))
+							_unhandledExceptionCallbackTarget.Invoke(_unhandledExceptionCallback, new object[] { ex });
+						else
+							_unhandledExceptionCallback.Invoke(ex, null, null);
+					}
+					catch { }
+				}
+			#endif
 			}
-		#else // NON-DEBUG, discard exception
-			catch
-			{
-			}
-		#endif
 		}
 
 		#endregion
 
 		#region Safe Invoke On Current Thread
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Safe Invoke On Current Thread
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 		[OneWay]
 		private static void InvokeOnCurrentThread(Delegate sink, object[] args)
@@ -220,24 +269,32 @@ namespace MKY.Utilities.Event
 			{
 				sink.DynamicInvoke(args);
 			}
-		#if (DEBUG) // output as much data as possible for debugging support
 			catch (Exception ex)
 			{
+			#if (DEBUG) // output as much data as possible for debugging support
 				WriteExceptionToDebugOutput(ex, sink);
+			#else // NON-DEBUG, forward or discard exception
+				if (_unhandledExceptionCallback != null)
+				{
+					try
+					{
+						if ((_unhandledExceptionCallbackTarget != null) && (_unhandledExceptionCallbackTarget.InvokeRequired))
+							_unhandledExceptionCallbackTarget.Invoke(_unhandledExceptionCallback, new object[] { ex });
+						else
+							_unhandledExceptionCallback.Invoke(ex, null, null);
+					}
+					catch { }
+				}
+			#endif
 			}
-		#else // NON-DEBUG, discard exception
-			catch
-			{
-			}
-		#endif
 		}
 
 		#endregion
 
 		#region Debug Output
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 		// Debug Output
-		//------------------------------------------------------------------------------------------
+		//==========================================================================================
 
 	#if (DEBUG)
 

@@ -44,6 +44,7 @@ namespace YAT.Gui.Forms
 			this.textBox_Stack = new System.Windows.Forms.TextBox();
 			this.button_CopyToClipboard = new System.Windows.Forms.Button();
 			this.linkLabel_Explanation = new System.Windows.Forms.LinkLabel();
+			this.button_Instructions = new System.Windows.Forms.Button();
 			this.groupBox_Exception.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -54,7 +55,7 @@ namespace YAT.Gui.Forms
 			this.button_Close.Location = new System.Drawing.Point(507, 417);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
-			this.button_Close.TabIndex = 3;
+			this.button_Close.TabIndex = 4;
 			this.button_Close.Text = "Close";
 			// 
 			// groupBox_Exception
@@ -194,12 +195,24 @@ namespace YAT.Gui.Forms
 				"ve YAT.";
 			this.linkLabel_Explanation.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
+			// button_Instructions
+			// 
+			this.button_Instructions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.button_Instructions.Location = new System.Drawing.Point(194, 417);
+			this.button_Instructions.Name = "button_Instructions";
+			this.button_Instructions.Size = new System.Drawing.Size(176, 23);
+			this.button_Instructions.TabIndex = 3;
+			this.button_Instructions.Text = "&Instructions on Bug Submission";
+			this.button_Instructions.UseVisualStyleBackColor = true;
+			this.button_Instructions.Click += new System.EventHandler(this.button_Instructions_Click);
+			// 
 			// UnhandledException
 			// 
 			this.AcceptButton = this.button_Close;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.button_Close;
 			this.ClientSize = new System.Drawing.Size(594, 452);
+			this.Controls.Add(this.button_Instructions);
 			this.Controls.Add(this.linkLabel_Explanation);
 			this.Controls.Add(this.button_CopyToClipboard);
 			this.Controls.Add(this.groupBox_Exception);
@@ -232,5 +245,6 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.TextBox textBox_Message;
 		private System.Windows.Forms.Button button_CopyToClipboard;
 		private System.Windows.Forms.LinkLabel linkLabel_Explanation;
+		private System.Windows.Forms.Button button_Instructions;
 	}
 }
