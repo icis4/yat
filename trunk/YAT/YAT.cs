@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Utilities.Event;
+
 namespace YAT
 {
 	/// <summary>
@@ -28,16 +30,20 @@ namespace YAT
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
-			#if (!DEBUG)
+		#if (!DEBUG)
+			EventHelper.InstallUnhandledExceptionCallback(UnhandledExceptionCallback);
+		#endif
+
+		#if (!DEBUG)
 			try
 			{
-			#endif
+		#endif
 
 			Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
 			if (welcomeScreen.ShowDialog() != DialogResult.OK)
 				return (Controller.MainResult.ApplicationSettingsError);
 
-			#if (!DEBUG)
+		#if (!DEBUG)
 			}
 			catch (Exception ex)
 			{
@@ -53,17 +59,17 @@ namespace YAT
 				}
 				return (Controller.MainResult.UnhandledException);
 			}
-			#endif
+		#endif
 
-			#if (!DEBUG)
+		#if (!DEBUG)
 			try
 			{
-			#endif
+		#endif
 
 			Controller.Main main = new Controller.Main(commandLineArgs);
 			main.Run();
 
-			#if (!DEBUG)
+		#if (!DEBUG)
 			}
 			catch (Exception ex)
 			{
@@ -79,10 +85,26 @@ namespace YAT
 				}
 				return (Controller.MainResult.UnhandledException);
 			}
-			#endif
+		#endif
 
 			return (Controller.MainResult.OK);
 		}
+
+	#if (!DEBUG)
+		private void UnhandledExceptionCallback(Exception ex)
+		{
+			if (MessageBox.Show("An unhandled exception occured in " + Application.ProductName + "." + Environment.NewLine +
+								"Show detailed information?",
+								Application.ProductName,
+								MessageBoxButtons.YesNoCancel,
+								MessageBoxIcon.Stop,
+								MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+			{
+				Gui.Forms.UnhandledException f = new Gui.Forms.UnhandledException(ex);
+				f.ShowDialog();
+			}
+		}
+	#endif
 
 		/// <summary>
 		/// The main entry point for the application.

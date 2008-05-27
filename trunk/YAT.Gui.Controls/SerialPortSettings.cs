@@ -338,8 +338,11 @@ namespace YAT.Gui.Controls
 			comboBox_FlowControl.SelectedItem = (MKY.IO.Serial.XSerialFlowControl)_flowControl;
 
 			// \fixme Auto-reopen doesn't work because of deadlock issue mentioned in SerialPort.
-			//bool autoOpenEnabled = _autoReopen.Enabled;
-			bool autoOpenEnabled = false;
+			checkBox_AutoReopen.Visible = false;
+			textBox_AutoReopenInterval.Visible = false;
+			label_AutoReopenIntervalUnit.Visible = false;
+
+			bool autoOpenEnabled = _autoReopen.Enabled;
 			checkBox_AutoReopen.Checked = autoOpenEnabled;
 			textBox_AutoReopenInterval.Enabled = autoOpenEnabled;
 			textBox_AutoReopenInterval.Text = _autoReopen.Interval.ToString();

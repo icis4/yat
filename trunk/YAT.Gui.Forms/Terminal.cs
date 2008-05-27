@@ -2290,12 +2290,10 @@ namespace YAT.Gui.Forms
 			{
 				case Domain.IORequest.StartIO:
 					_terminal.StartIO();
-					System.Diagnostics.Debug.WriteLine("_terminal_IORequest::StartIO");
 					break;
 
 				case Domain.IORequest.StopIO:
 					_terminal.StopIO();
-					System.Diagnostics.Debug.WriteLine("_terminal_IORequest::StopIO");
 					break;
 			}
 		}
