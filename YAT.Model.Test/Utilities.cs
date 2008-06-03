@@ -5,6 +5,7 @@ using System.Threading;
 
 using NUnit.Framework;
 
+using MKY.Utilities.Settings;
 using YAT.Settings.Terminal;
 
 namespace YAT.Model.Test
@@ -65,6 +66,11 @@ namespace YAT.Model.Test
 			settings.Terminal.IO.IOType = Domain.IOType.TcpAutoSocket;
 			settings.TerminalIsStarted = true;
 			return (settings);
+		}
+
+		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetTCPSettingsHandler()
+		{
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetTCPSettings()));
 		}
 
 		#endregion

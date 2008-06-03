@@ -49,15 +49,15 @@ namespace YAT.Model.Test
 
 		public TransmissionTest()
 		{
-			_SingleLineCommand  = new Utilities.TestSet(new Model.Types.Command(_TestCommandLines[0]));
-			_DoubleLineCommand  = new Utilities.TestSet(new Model.Types.Command(new string[] { _TestCommandLines[0], _TestCommandLines[1] } ));
-			_TripleLineCommand  = new Utilities.TestSet(new Model.Types.Command(new string[] { _TestCommandLines[0], _TestCommandLines[1], _TestCommandLines[2] }));
-			_MultiLineCommand   = new Utilities.TestSet(new Model.Types.Command(_TestCommandLines));
+			_SingleLineCommand  = new Utilities.TestSet(new Types.Command(_TestCommandLines[0]));
+			_DoubleLineCommand  = new Utilities.TestSet(new Types.Command(new string[] { _TestCommandLines[0], _TestCommandLines[1] } ));
+			_TripleLineCommand  = new Utilities.TestSet(new Types.Command(new string[] { _TestCommandLines[0], _TestCommandLines[1], _TestCommandLines[2] }));
+			_MultiLineCommand   = new Utilities.TestSet(new Types.Command(_TestCommandLines));
 
-			_MultiEOLCommand    = new Utilities.TestSet(new Model.Types.Command(@"A<CR><LF>B<CR><LF>C<CR><LF>D"), 4, new int[] { 2, 2, 2, 2 }); // EOL results in one more element
+			_MultiEOLCommand    = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B<CR><LF>C<CR><LF>D"), 4, new int[] { 2, 2, 2, 2 }); // EOL results in one more element
 
-			_SingleNoEOLCommand = new Utilities.TestSet(new Model.Types.Command(@"A\!(NoEOL)"), 0, new int[] { 1 });
-			_DoubleNoEOLCommand = new Utilities.TestSet(new Model.Types.Command(new string[] { @"A\!(NoEOL)", @"B\!(NoEOL)" }), 0, new int[] { 2 });
+			_SingleNoEOLCommand = new Utilities.TestSet(new Types.Command(@"A\!(NoEOL)"), 0, new int[] { 1 });
+			_DoubleNoEOLCommand = new Utilities.TestSet(new Types.Command(new string[] { @"A\!(NoEOL)", @"B\!(NoEOL)" }), 0, new int[] { 2 });
 		}
 
 		#endregion
@@ -189,9 +189,9 @@ namespace YAT.Model.Test
 		private void PerformCommandTransmission(TerminalSettingsRoot settingsA, TerminalSettingsRoot settingsB, Utilities.TestSet testSet, int transmissionCount)
 		{
 			// create terminals from settings and check whether B receives from A
-			using (Model.Terminal terminalA = new Model.Terminal(settingsA))
+			using (Terminal terminalA = new Terminal(settingsA))
 			{
-				using (Model.Terminal terminalB = new Model.Terminal(settingsB))
+				using (Terminal terminalB = new Terminal(settingsB))
 				{
 					// start and open terminals
 					terminalA.Start();
