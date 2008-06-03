@@ -11,8 +11,8 @@ namespace MKY.IO.Serial
 	/// <summary></summary>
 	/// <remarks>
 	/// There is a serious deadlock issue in <see cref="System.IO.Ports.SerialPort"/>.
-	/// Google for [UnauthorizedAccessException "Access to the port"] for more information,
-	/// work-arounds and solutions.
+	/// Google for [UnauthorizedAccessException "Access to the port"] for more information and
+	/// work-arounds suggestions.
 	/// 
 	/// ============================================================================================
 	/// Source: http://msdn.microsoft.com/en-us/library/system.io.ports.serialport_methods.aspx
@@ -64,13 +64,21 @@ namespace MKY.IO.Serial
 	/// 2. Open port
 	/// 3. Disconnect USB-to-serial adapter
 	/// 4. Reconnect USB-to-serial adapter
-	///    => System.UnauthorizedAccssException("Der Zugriff auf den Anschluss wurde verweigert.")
+	///    => System.UnauthorizedAccssException("Access is denied.")
 	///       @ System.IO.Ports.InternalResources.WinIOError(Int32 errorCode, String str)
 	///       @ System.IO.Ports.SerialStream.Dispose(Boolean disposing)
 	///       @ System.IO.Ports.SerialStream.Finalize()
 	/// 5. Repeat disconnect/reconnect multiple times
 	/// 6. Exit YAT
 	/// 
+	/// ============================================================================================
+	/// Work-arounds tried 2008-05
+	/// - Async close
+	/// - Async DataReceived event
+	/// - Immediate async read
+	/// - Dispatch of all open/close operations onto Windows.Forms main thread using OnRequest event
+	/// - try GC.Collect(Forced) => no exceptions on GC, exception gets fired afterwards
+	/// ============================================================================================
 	/// </remarks>
 	public class SerialPort : IIOProvider, IDisposable
 	{

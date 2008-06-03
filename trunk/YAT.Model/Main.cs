@@ -26,6 +26,19 @@ namespace YAT.Model
 	/// </summary>
 	public class Main : IDisposable
 	{
+		#region Static Fields
+		//==========================================================================================
+		// Static Fields
+		//==========================================================================================
+
+		/// <summary>
+		/// Keep track of how many instances of main are running, needed to check for multiple
+		/// instances in <see cref="Start()"/>.
+		/// </summary>
+		private static int _instancesRunning = 0;
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -151,6 +164,18 @@ namespace YAT.Model
 			}
 		}
 
+		/// <summary>
+		/// Returns workspace within main or <c>null</c> if no workspace is active.
+		/// </summary>
+		public Workspace Workspace
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_workspace);
+			}
+		}
+
 		#endregion
 
 		#region Start
@@ -176,9 +201,16 @@ namespace YAT.Model
 			{
 				success = OpenFromFile(_requestedFilePath);
 
-				// clean up all default workspaces/terminals since they're not needed anymore
-				if (success && !otherInstanceIsAlreadyRunning)
-					CleanupLocalUserDirectory();
+				if (success)
+				{
+					// reset workspace file path
+					ApplicationSettings.LocalUser.General.WorkspaceFilePath = "";
+					ApplicationSettings.SaveLocalUser();
+
+					// clean up all default workspaces/terminals since they're not needed anymore
+					if (!otherInstanceIsAlreadyRunning)
+						CleanupLocalUserDirectory();
+				}
 			}
 
 			if (!success && ApplicationSettings.LocalUser.General.AutoOpenWorkspace)
@@ -203,7 +235,17 @@ namespace YAT.Model
 
 			// ...and create new empty workspace
 			if (!success)
+			{
+				// reset workspace file path
+				ApplicationSettings.LocalUser.General.WorkspaceFilePath = "";
+				ApplicationSettings.SaveLocalUser();
+
 				success = CreateNewWorkspace();
+			}
+
+			// update number of running instances
+			if (success)
+				_instancesRunning++;
 
 			return (success);
 		}
@@ -212,7 +254,7 @@ namespace YAT.Model
 		{
 			List<Process> processes = new List<Process>();
 
-			// get all processes named "YAT"
+			// get all processes named "YAT" (also "NUnit" while testing)
 			processes.AddRange(Process.GetProcessesByName(Application.ProductName));
 
 			// also get all debug processes named "YAT.vshost"
@@ -230,7 +272,8 @@ namespace YAT.Model
 				}
 			}
 
-			return (processes.Count > 0);
+			// consider multiple processes as well as multiple instances within this process
+			return ((processes.Count > 0) || (_instancesRunning > 0));
 		}
 
 		private void CleanupLocalUserDirectory()
@@ -306,15 +349,23 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Close
+		#region Exit
 		//==========================================================================================
-		// Close
+		// Exit
 		//==========================================================================================
 
 		/// <summary></summary>
 		public bool Exit()
 		{
-			bool success = _workspace.Close(true);
+			bool success;
+
+			if (_workspace != null)
+				success = _workspace.Close(true);
+			else
+				success = true;
+
+			if (success)
+				_instancesRunning--;
 
 			if (success)
 				OnFixedStatusTextRequest("Exiting " + Application.ProductName + "...");
@@ -365,7 +416,7 @@ namespace YAT.Model
 		}
 
 		/// <remarks>
-		/// See remarks of <see cref="Workspace.Close(bool)"/> for details on why this event handler
+		/// See remarks of <see cref="YAT.Model.Workspace.Close(bool)"/> for details on why this event handler
 		/// needs to treat the Closed event differently in case of a parent (i.e. main) close.
 		/// </remarks>
 		private void _workspace_Closed(object sender, ClosedEventArgs e)
@@ -375,6 +426,9 @@ namespace YAT.Model
 				ApplicationSettings.LocalUser.General.WorkspaceFilePath = "";
 				ApplicationSettings.SaveLocalUser();
 			}
+
+			DetachWorkspaceEventHandlers();
+			_workspace = null;
 
 			OnWorkspaceClosed(e);
 		}
@@ -547,6 +601,17 @@ namespace YAT.Model
 				OnTimedStatusTextRequest("Workspace contains no terminal to open");
 
 			return (true);
+		}
+
+		/// <summary>
+		/// Closes the active workspace.
+		/// </summary>
+		public bool CloseWorkspace()
+		{
+			if (_workspace != null)
+				return (_workspace.Close());
+			else
+				return (false);
 		}
 
 		#endregion

@@ -25,9 +25,9 @@ namespace YAT.Model.Test
 		public void TestClearCompleteLine()
 		{
 			// create terminals from settings and check whether B receives from A
-			using (Model.Terminal terminalA = new Model.Terminal(Utilities.GetTCPSettings()))
+			using (Terminal terminalA = new Terminal(Utilities.GetTCPSettings()))
 			{
-				using (Model.Terminal terminalB = new Model.Terminal(Utilities.GetTCPSettings()))
+				using (Terminal terminalB = new Terminal(Utilities.GetTCPSettings()))
 				{
 					Utilities.TestSet testSet;
 
@@ -37,7 +37,7 @@ namespace YAT.Model.Test
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					// create test set to verify transmission
-					testSet = new Utilities.TestSet(new Model.Types.Command(@"A"), 1, new int[] { 2 }); // EOL results in one more element
+					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 2 }); // EOL results in one more element
 
 					// send test command
 					terminalA.SendCommand(testSet.Command);
@@ -49,7 +49,7 @@ namespace YAT.Model.Test
 										  testSet);
 
 					// create test set to verify clear
-					testSet = new Utilities.TestSet(new Model.Types.Command(@""), 0, new int[] { 0 }); // Empty terminals expected
+					testSet = new Utilities.TestSet(new Types.Command(@""), 0, new int[] { 0 }); // Empty terminals expected
 
 					// clear data
 					terminalA.ClearRepositories();
@@ -74,9 +74,9 @@ namespace YAT.Model.Test
 		public void TestClearIncompleteLine()
 		{
 			// create terminals from settings and check whether B receives from A
-			using (Model.Terminal terminalA = new Model.Terminal(Utilities.GetTCPSettings()))
+			using (Terminal terminalA = new Terminal(Utilities.GetTCPSettings()))
 			{
-				using (Model.Terminal terminalB = new Model.Terminal(Utilities.GetTCPSettings()))
+				using (Terminal terminalB = new Terminal(Utilities.GetTCPSettings()))
 				{
 					Utilities.TestSet testSet;
 					List<List<Domain.DisplayElement>> lines;
@@ -87,7 +87,7 @@ namespace YAT.Model.Test
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					// create test set to verify transmission
-					testSet = new Utilities.TestSet(new Model.Types.Command(@"A"), 1, new int[] { 2 }); // EOL results in one more element
+					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 2 }); // EOL results in one more element
 
 					// send test command
 					terminalA.SendCommand(testSet.Command);
@@ -99,7 +99,7 @@ namespace YAT.Model.Test
 										  testSet);
 
 					// send incomplete line command
-					terminalA.SendCommand(new Model.Types.Command(@"B\!(NoEOL)"));
+					terminalA.SendCommand(new Types.Command(@"B\!(NoEOL)"));
 					Utilities.WaitForTransmission(terminalA, terminalB);
 
 					// verify incomplete line
@@ -108,7 +108,7 @@ namespace YAT.Model.Test
 						Assert.Fail("Incomplete line not received");
 
 					// create test set to verify clear
-					testSet = new Utilities.TestSet(new Model.Types.Command(@""), 0, new int[] { 0 }); // Empty terminals expected
+					testSet = new Utilities.TestSet(new Types.Command(@""), 0, new int[] { 0 }); // Empty terminals expected
 
 					// clear data
 					terminalA.ClearRepositories();
