@@ -37,54 +37,199 @@ You can also download .NET under "http://www.microsoft.com/net/"
 2. History
 --------------------------------------------------------------------------------
 
-Version 2.0
-===========
+YAT 2.0
+=======
 
-Release 2.0.0 :: 2008-??-??
----------------------------
-- Renamed to YAT
-- Upgrade to .NET 2.0
-- Architectural refactoring
-  > Split into Main/Workspace/Terminal
-  > Split into Model/View/Controller
-- Use of serial port component of .NET 2.0
-  > Serial port component "Charon.Communcations" removed
+YAT 2.0 Beta 2 Candidate 4 Version 1.99.xx :: 2008-06-xx
+--------------------------------------------------------
+
+YAT 2.0 Beta 2 Candidate 3 Version 1.99.19 :: 2008-04-01
+--------------------------------------------------------
+
+New:
 - Serial COM ports are now labelled, e.g. "COM2 - Serial On USB Port"
-- TCP/IP and UDP/IP support added
-- RS-485 support added
-- Baud rates above 115k added
-- Support for non-standard baud rates added
-- Text: Unicode and other encoding support added
-- Binary: Binary sequence line break added
-- Little-endian/big-endian support for \h \d \o \b added
-- Visual appearance modernized
+- Monitors have two new features
+   > Connect time can be displayed
+   > Direction icon changes color depending on I/O state
+- Advanced setting "Copy predefined command" added
+   > By default, predefined commands are not copied to "Send Command" text box after send
+   > If "Copy predefined command" is enabled, command is copied after send
+- Copy options to/from predefined to send command/file added
+- Predefined commands can now be deleted/cleared
+
+Important changes:
+- Number of display lines can now be changed
+- Displaying bug for UTF-8 encoding fixed
+- Parser bug on "\\" fixed
+- Copy and save don't add extra line anymore
+- Format settings bug fixed
 - Displaying performance improved
-- Terminal status improved
-- Time/connected/counter status added to monitors
-- Support for multi-line commands added
-- Support to copy predefined to/from send command/file added
-- Option to keep/auto-clear send command added
-- Several additional send options added
-- Application settings shifted from registry to local user directory
-- Terminal settings (.yat) refined
-- Workspace settings (.yaw) introduced
-- Automatic saving and loading of complete workspace added
-- About dialog: Link labels instead of normal labels
-- Nuvola based icons
-- DejaVu Sans Mono as default font
+
+Limitations and known issues:
+- Thorough testing of RTS/CTS hardware flow control pending
+- Thorough testing of XOn/XOff software flow control pending
+- UTF-16/32 testing pending
+- More advanced text line send and receive options not yet implemented
+- Logging in XML not yet implemented, definition of schema pending
+
+
+YAT 2.0 Beta 2 Candidate 2 Version 1.99.18 :: 2008-03-17
+--------------------------------------------------------
+
+New:
+- "DejaVu Sans Mono" as default font
+   > "View > Format > Font" to select "DejaVu Sans Mono" on existing files
+- Advanced setting "Keep command" added
+   > By default, command is kept in "Send Command" text box after send
+   > If "Keep command" is disabled, command is cleared after send
+- Radix for Tx and Rx can now optionally be set separately
+- Optional space replacement by open box character U+2423
+- Menu entries to request support, features and submit bugs added
+- Automated NUnit loop-back test for model (Main/Workspace/Terminal) added
+
+Important changes:
+- Mix-up of lines when receiving multiple lines fixed
+- Duplications when sending multi-line commands fixed
+- Line/byte counters fixed
+- Measuring and calculation of spacing improved for monitors
+- XOn/XOff improved
+
+Limitations and known issues:
+- Thorough testing of XOn/XOff software flow control pending
+- More advanced text line send and receive options not yet implemented
+
+
+YAT 2.0 Beta 2 Candidate 1 Version 1.99.17 :: 2008-02-11
+--------------------------------------------------------
+
+New:
+- General settings in "File > Preferences"
 - Automatic testing using NUnit added
+
+Important changes:
+- Relation between workspace (.yaw) and terminals (.yat) massively improved
+   > Workspace references terminals using relative file paths
+   > By default, workspace and terminals are automatically managed
+   > When explicitly saved, workspace and terminals are treated in MDI manner
+- Settings saved in old terminal and workspace files can now always be retrieved correctly
+- Complete refactoring into proper MVC (model-view-controller) architecture
+- Terminal status improved
+- Little-endian/big-endian support for \h \d \o \b added
+
+Limitations and known issues:
+- Thorough testing of XOn/XOff software flow control pending
+- More advanced text line send and receive options not yet implemented
+
+
+YAT 2.0 Beta 2 Preliminary Version 1.99.13 :: 2007-08-30
+--------------------------------------------------------
+
+New:
+- Workspace can be stored as ".yaw" file
+- Support for non-standard baud rates added
+- Little-endian/big-endian support added
+- Binary: Binary sequence line break implemented
+
+Important changes:
+- Layout and menu structure improved
 - Release notes moved to menu
 
+Limitations and known issues:
+- ".yat" files of older versions cannot be handled yet
+- Workspace references terminal files with absolute paths
+- 2 parallel terminals sometime crash
 
-Version 1.0
-===========
 
-Release 1.0.2 :: 2003-10-31
----------------------------
+YAT 2.0 Beta 1 Version 1.99.12 :: 2007-04-15
+--------------------------------------------
+
+New:
+- TCP/IP (Client/Server/AutoSocket) and UDP/IP support added
+- Baud rates above 115k added
+- Serial COM ports that are in use are marked "(in use)"
+
+Important changes:
+- Text: EOL sequence is disabled by default
+
+Limitations and known issues:
+- Text: "Wait for response" is prepared but not yet implemented
+- Text: "Send line delay" is prepared but not yet implemented
+- Binary: "Binary sequence line break" is prepared but not yet implemented
+- Procedure command "\!(Delay(500ms))" is prepared but not yet implemented
+- Direct Mode (as in traditional terminals) not yet implemented, requires serious refactorings...
+- YAT Workspace (.yaw) not yet implemented
+
+
+YAT 2.0 Alpha 3 Version 1.99.8 :: 2007-02-25
+--------------------------------------------
+
+New:
+- Ctrl-C kopiert den selektierten Monitor-Inhalt in die Zwischenablage
+- Save and send from YAT XML files
+- Procedure commands "\!(NoEOL)" and "\!(EOL)" added
+- Chronometer added to status bar
+
+Important changes:
+- 12 instead of 8 predefined commands per page
+- Predefined command dialog bugs fixed
+- Text: "EOL = None" fixed
+ 
+Limitations and known issues:
+- So far, only serial ports are supported, TCP/IP and UDP/IP are yet to be implemented
+- Already open serial COM ports are not marked as such
+- Text: EOL sequence is always shown
+- Procedure command "\!(Delay(500ms))" is prepared but not yet implemented
+- Direct Mode (as in traditional terminals) not yet implemented, requires serious refactorings...
+
+
+YAT 2.0 Alpha 2 Version 1.99.3 :: 2007-02-07
+--------------------------------------------
+
+New:
+- Text: Unicode and other encoding support added (approx 150 encodings)
+- Byte/line counter added to monitors
+
+Limitations and known issues:
+- So far, only serial ports are supported, TCP/IP and UDP/IP are yet to be implemented
+- Already open serial COM ports are not marked as such
+- Text: EOL sequence is always shown
+
+
+YAT 2.0 Alpha 1 Version 1.99.0 :: 2007-01-23
+--------------------------------------------
+
+New:
+- Unlimited number of predefined commands
+- Support for multi-line commands added
+- RS-485 support added
+- Manual flowcontrol added
+
+Important changes:
+- Renamed to YAT
+- Upgrade to .NET 2.0
+- Use of serial port component of .NET 2.0
+   > Serial port component "Charon.Communcations" removed
+- Application settings shifted from registry to local user directory
+- Terminal settings (.yat) refined
+- Visual appearance modernized
+- Displaying performance improved
+- Nuvola based icons
+- About dialog: Link labels instead of normal labels
+
+Limitations and known issues:
+- So far, only serial ports are supported, TCP/IP and UDP/IP are yet to be implemented
+- Text: EOL sequence is always shown
+
+
+XTerm232 1.0
+============
+
+XTerm232 1.0.2 :: 2003-10-31
+----------------------------
 - NewTerminal.Connect registry entry can be empty
 
-Release 1.0.1 :: 2003-10-30
----------------------------
+XTerm232 1.0.1 :: 2003-10-30
+----------------------------
 - Log Root: CheckPathExists = false / CheckFileExists = false
 - Readme: More precise information on .NET download
 - BufferSettings -> DisplaySettings
@@ -98,8 +243,8 @@ Release 1.0.1 :: 2003-10-30
 - Connect CheckBox on NewTerminal
 - WindowLayoutUpdateControl
 
-Release 1.0.0 :: 2003-10-14
----------------------------
+XTerm232 1.0.0 :: 2003-10-14
+----------------------------
 - Initial release
 - Bin/Oct/Dec/Hex/Char/String
 - COM 1..256
@@ -118,12 +263,19 @@ Release 1.0.0 :: 2003-10-14
 Future releases
 ===============
 
-Release 2.1.0 :: Not planned yet
---------------------------------
+YAT 2.0 Beta 3 :: 2008-Q4
+-------------------------
+- Logging refactoring
+- Support for XML logging
+- Initial support for scripting
+   > Inputs/requirements are highly appreciated
+
+YAT 2.1.0 :: Not planned yet
+----------------------------
 - Plug-In/Scripting Interface
-  > e.g. File Transfer:
-    OnDataReceived() and SendNextLine()
-    => enables reception of multi-line commands
+   > e.g. File Transfer:
+     OnDataReceived() and SendNextLine()
+     => enables reception of multi-line commands
 - RS-232 AutoSense mode
 - Optional user settings (.yau)
 
