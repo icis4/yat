@@ -39,36 +39,38 @@ Note:	The whole release process takes about 4 hours
 	> According to manual test cases
 
 
-6.	Build YAT
+6.	Write release notes
+	-------------------
+	> Add them to offline archive "\Distribution"
+	> Add them cumulatively to "\_Doc.User\YAT Release Notes.txt"
+
+
+7.	Build YAT
 	---------
 	> Use "Build > Batch Build" in Visual Studio
 	  > Select "Release" configuration
 	  > "Build"
 
 
-7.	Close Visual Studio
+8.	Close Visual Studio
 	-------------------
 	> Needed to ensure that YAT doesn't detect already running "YAT.vshost.exe" on startup
 
 
-8.	Install YAT
+9.	Install YAT
 	-----------
 
 
-9.	Run manual after-installation tests
+10.	Run manual after-installation tests
 	-----------------------------------
 	> According to manual after-installation test cases
 
 
-10.	Pack YAT
+11.	Pack YAT
 	--------
 	> Add a new directory to the offline archive "\YAT\Releases and Checkpoints"
 	> Update "\Distribution\Release" and "\Distribution\Release With Redistributable"
 	> Update the two according .zip files
-
-
-11.	Write release notes
-	-------------------
 
 
 12.	Upload YAT

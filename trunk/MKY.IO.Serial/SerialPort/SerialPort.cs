@@ -104,7 +104,6 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		private const int _AliveInterval = 500;
-		private const int _MinimalReopenIdleTimeInMs = 2000;
 
 		#endregion
 
@@ -118,19 +117,9 @@ namespace MKY.IO.Serial
 		private PortState _state = PortState.Reset;
 		private object _stateSyncObj = new object();
 		
-		private DateTime _closeTimeStamp = DateTime.MinValue;
-		private object _closeTimeStampSyncObj = new object();
-
 		private SerialPortSettings _settings;
 		private MKY.IO.Ports.ISerialPort _port;
 		private object _portSyncObj = new object();
-
-		// async receiving
-		private Queue<byte> _receiveQueue = new Queue<byte>();
-
-		// async requests
-		// \fixme Auto-reopen doesn't work because of deadlock issue mentioned above.
-		//private bool _isInternalStopRequest = false;
 
 		/// <summary>
 		/// Alive timer detects port break states, i.e. when a USB to serial converter is disconnected.
@@ -295,7 +284,11 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_receiveQueue.Count);
+
+				if (_port != null)
+					return (_port.BytesToRead);
+				else
+					return (0);
 			}
 		}
 
@@ -348,13 +341,9 @@ namespace MKY.IO.Serial
 			int bytesReceived = 0;
 			if (IsOpen)
 			{
-				lock (_receiveQueue)
-				{
-					bytesReceived = _receiveQueue.Count;
-					buffer = new byte[bytesReceived];
-					for (int i = 0; i < bytesReceived; i++)
-						buffer[i] = _receiveQueue.Dequeue();
-				}
+				int bytesToRead = _port.BytesToRead;
+				buffer = new byte[bytesToRead];
+				bytesReceived = _port.Read(buffer, 0, bytesToRead);
 			}
 			else
 			{
@@ -439,10 +428,7 @@ namespace MKY.IO.Serial
 		private void CreatePort()
 		{
 			if (_port != null)
-			{
 				CloseAndDisposePort();
-				SetCloseTimeStamp();
-			}
 
 			lock (_portSyncObj)
 			{
@@ -491,16 +477,6 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		private void CreateAndOpenPort()
 		{
-			// allow asynchronous close/dispose of port, needed because of issue described on top
-			double reopenIdleTimeInMs = 0;
-			lock (_closeTimeStampSyncObj)
-			{
-				TimeSpan ts = DateTime.Now - _closeTimeStamp;
-				reopenIdleTimeInMs = _MinimalReopenIdleTimeInMs - ts.TotalMilliseconds;
-			}
-			if (reopenIdleTimeInMs >= 1)
-				Thread.Sleep((int)reopenIdleTimeInMs);
-
 			CreatePort();          // port must be created each time because _port.Close()
 			ApplySettings();       //   disposes the underlying IO instance
 
@@ -567,7 +543,6 @@ namespace MKY.IO.Serial
 					_state = PortState.Closed;
 
 				CloseAndDisposePort();
-				SetCloseTimeStamp();
 
 				OnIOChanged(new EventArgs());
 				OnIOControlChanged(new EventArgs());
@@ -589,7 +564,6 @@ namespace MKY.IO.Serial
 				_state = PortState.Closed;
 
 			CloseAndDisposePort();
-			SetCloseTimeStamp();
 
 			OnIOChanged(new EventArgs());
 			OnIOControlChanged(new EventArgs());
@@ -606,18 +580,9 @@ namespace MKY.IO.Serial
 			StopAndDisposeAliveTimer();
 			StopAndDisposeReopenTimer();
 			CloseAndDisposePort();
-			SetCloseTimeStamp();
 
 			OnIOChanged(new EventArgs());
 			OnIOControlChanged(new EventArgs());
-		}
-
-		private void SetCloseTimeStamp()
-		{
-			lock (_closeTimeStampSyncObj)
-			{
-				_closeTimeStamp = DateTime.Now;
-			}
 		}
 
 		#endregion
@@ -627,6 +592,10 @@ namespace MKY.IO.Serial
 		// Port Events
 		//==========================================================================================
 
+		/// <summary>
+		/// Asynchronously invoke incoming events to prevent potential dead-locks if close/dispose
+		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
+		/// </summary>
 		private delegate void _port_DataReceivedDelegate(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e);
 
 		private void _port_DataReceived(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
@@ -638,28 +607,15 @@ namespace MKY.IO.Serial
 			}
 		}
 
-		/// <summary>
-		/// Asynchronously handle the data received event to fix the deadlock issue as described
-		/// at the top of this file.
-		/// </summary>
 		private void _port_DataReceivedAsync(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
 		{
-			// immediately read data on this thread
-			byte[] buffer;
-			lock (_portSyncObj)
-			{
-				int bytesToRead = _port.BytesToRead;
-				buffer = new byte[bytesToRead];
-				_port.Read(buffer, 0, bytesToRead);
-			}
-			lock (_receiveQueue)
-			{
-				foreach (byte b in buffer)
-					_receiveQueue.Enqueue(b);
-			}
 			OnDataReceived(new EventArgs());
 		}
 
+		/// <summary>
+		/// Asynchronously invoke incoming events to prevent potential dead-locks if close/dispose
+		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
+		/// </summary>
 		private delegate void _port_PinChangedDelegate(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e);
 
 		private void _port_PinChanged(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
@@ -691,6 +647,10 @@ namespace MKY.IO.Serial
 			}
 		}
 
+		/// <summary>
+		/// Asynchronously invoke incoming events to prevent potential dead-locks if close/dispose
+		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
+		/// </summary>
 		private delegate void _port_ErrorReceivedDelegate(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e);
 
 		private void _port_ErrorReceived(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e)
