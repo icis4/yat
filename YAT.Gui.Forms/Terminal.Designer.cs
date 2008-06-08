@@ -1091,7 +1091,7 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
 						| System.Windows.Forms.Keys.A)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Size = new System.Drawing.Size(204, 22);
-			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Text = "St&art";
+			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Text = "&Open";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Start.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Start_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Stop
@@ -1101,7 +1101,7 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
 						| System.Windows.Forms.Keys.O)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Size = new System.Drawing.Size(204, 22);
-			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Text = "St&op";
+			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Text = "&Close";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Terminal_Stop_Click);
 			// 
 			// toolStripSeparator_TerminalMenu_Terminal_1

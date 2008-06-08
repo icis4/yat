@@ -7,8 +7,25 @@ namespace YAT.Settings.Terminal
 {
 	[Serializable]
 	[XmlRoot("Settings")]
-	public class TerminalSettingsRoot : MKY.Utilities.Settings.Settings, IEquatable<TerminalSettingsRoot>
+	public class TerminalSettingsRoot : MKY.Utilities.Settings.Settings, MKY.Utilities.Xml.IAlternateXmlElementProvider, IEquatable<TerminalSettingsRoot>
 	{
+		/// <summary>
+		/// Alternate XML elements for backward compatibility with old settings.
+		/// </summary>
+		/// <remarks>
+		/// \fixme Matthias Klaey 2008-06-07 (2 hours to the first Euro2008 game :-)
+		/// Instead of this approach, an [AlternateXmlElementAttribute] based approach should be tried
+		/// in a future version. Such approach would be benefitial in terms of modularity because the
+		/// XML path wouldn't need to be considered, i.e. name changes in the path could be handled.
+		/// That is not the case currently.
+		/// </remarks>
+		private static readonly MKY.Utilities.Xml.AlternateXmlElement[] _AlternateXmlElements =
+			{
+				new MKY.Utilities.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "SerialPort", "Communication" }, "FlowControl",       new string[] { "Handshake" } ),
+				new MKY.Utilities.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "TerminalIsStarted", new string[] { "TerminalIsOpen" } ),
+				new MKY.Utilities.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "LogIsStarted",      new string[] { "LogIsOpen" } ),
+			};
+
 		private string _productVersion = System.Windows.Forms.Application.ProductVersion;
 		private bool _autoSaved = false;
 		private ExplicitSettings _explicit;
@@ -35,10 +52,11 @@ namespace YAT.Settings.Terminal
 		// Properties
 		//==========================================================================================
 
+		/// <remarks>File type is a kind of title, therefore capital 'T' and 'S'.</remarks>
 		[XmlElement("FileType")]
 		public string FileType
 		{
-			get { return ("YAT terminal settings"); }
+			get { return ("YAT Terminal Settings"); }
 			set { } // do nothing
 		}
 
@@ -115,6 +133,12 @@ namespace YAT.Settings.Terminal
 					ReplaceNode(old, _implicit);
 				}
 			}
+		}
+
+		[XmlIgnore]
+		public MKY.Utilities.Xml.AlternateXmlElement[] AlternateXmlElements
+		{
+			get { return (_AlternateXmlElements); }
 		}
 
 		#endregion

@@ -143,7 +143,7 @@ namespace YAT.Gui.Forms
 			this.checkBox_StartTerminal.Name = "checkBox_StartTerminal";
 			this.checkBox_StartTerminal.Size = new System.Drawing.Size(91, 17);
 			this.checkBox_StartTerminal.TabIndex = 2;
-			this.checkBox_StartTerminal.Text = "St&art terminal";
+			this.checkBox_StartTerminal.Text = "&Open terminal";
 			this.checkBox_StartTerminal.CheckedChanged += new System.EventHandler(this.checkBox_StartTerminal_CheckedChanged);
 			// 
 			// pictureBox_New

@@ -25,6 +25,8 @@ namespace MKY.Utilities.Settings
 
 		private TDocumentSettings _settings = default(TDocumentSettings);
 
+		private AlternateXmlElement[] _alternateXmlElements = null;
+
 		#endregion
 
 		#region Object Lifetime
@@ -38,7 +40,7 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public DocumentSettingsHandler()
 		{
-			_settings = SettingsDefault;
+			Initialize(SettingsDefault);
 		}
 
 		/// <summary>
@@ -47,7 +49,16 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public DocumentSettingsHandler(TDocumentSettings settings)
 		{
+			Initialize(settings);
+		}
+
+		private void Initialize(TDocumentSettings settings)
+		{
 			_settings = settings;
+
+			IAlternateXmlElementProvider aep = settings	as IAlternateXmlElementProvider;
+			if (aep != null)
+				_alternateXmlElements = aep.AlternateXmlElements;
 		}
 
 		#endregion
@@ -118,8 +129,7 @@ namespace MKY.Utilities.Settings
 		}
 
 		/// <summary>
-		/// Handler to user settings, if has user settings,
-		/// "null" otherwise.
+		/// Handler to settings.
 		/// </summary>
 		public TDocumentSettings Settings
 		{
@@ -127,8 +137,7 @@ namespace MKY.Utilities.Settings
 		}
 
 		/// <summary>
-		/// Handler to common settings, if has common settings,
-		/// "null" otherwise.
+		/// Handler to settings default.
 		/// </summary>
 		public TDocumentSettings SettingsDefault
 		{
@@ -195,12 +204,28 @@ namespace MKY.Utilities.Settings
 				}
 
 				// try to open existing file with tolerant deserialization
-				try
+				/*try
 				{
 					object settings = null;
 					using (StreamReader sr = new StreamReader(filePath))
 					{
 						TolerantXmlSerializer serializer = new TolerantXmlSerializer(type);
+						settings = serializer.Deserialize(sr);
+					}
+					return (settings);
+				}
+				catch (Exception ex)
+				{
+					XDebug.WriteException(this, ex);
+				}*/
+
+				// try to open existing file with alternate-tolerant deserialization
+				try
+				{
+					object settings = null;
+					using (StreamReader sr = new StreamReader(filePath))
+					{
+						AlternateTolerantXmlSerializer serializer = new AlternateTolerantXmlSerializer(type, _alternateXmlElements);
 						settings = serializer.Deserialize(sr);
 					}
 					return (settings);

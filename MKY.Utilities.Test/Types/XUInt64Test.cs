@@ -64,7 +64,7 @@ namespace MKY.Utilities.Test.Types
 		// Fields
 		//==========================================================================================
 
-		private TestSet[][] _testSets =
+		private readonly TestSet[][] _testSets =
 		{
 			// automatic boundary
 			new TestSet[]
@@ -161,7 +161,7 @@ namespace MKY.Utilities.Test.Types
 					try
 					{
 						convertedByteArray = XUInt64.ConvertToByteArray(ts.Data, ts.Boundary, ts.ExpandNegative, ts.UseBigEndian);
-						Assert.AreEqual(convertedByteArray, ts.ByteArray);
+						Assert.AreEqual(ts.ByteArray, convertedByteArray);
 					}
 					catch (Exception ex)
 					{
