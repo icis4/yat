@@ -11,7 +11,8 @@ namespace MKY.Utilities.Types
 	public static class XArray
 	{
 		/// <summary>
-		/// Determines whether the two arrays have value equality.
+		/// Determines whether the two arrays have value equality, i.e. all array elements have
+		/// value equality.
 		/// </summary>
 		public static bool ValueEquals(Array objA, Array objB)
 		{
@@ -24,7 +25,7 @@ namespace MKY.Utilities.Types
 			IEnumerator objAEnumerator = objA.GetEnumerator();
 			IEnumerator objBEnumerator = objB.GetEnumerator();
 
-			// chech element by element
+			// check element by element
 			while (objAEnumerator.MoveNext() && (objAEnumerator.Current != null) &&
 				   objBEnumerator.MoveNext() && (objBEnumerator.Current != null))
 			{

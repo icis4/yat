@@ -682,9 +682,9 @@ namespace YAT.Gui.Forms
 			this.toolStripButton_MainTool_Terminal_Start.Image = global::YAT.Gui.Forms.Properties.Resources.Image_ArrowRight_24x24;
 			this.toolStripButton_MainTool_Terminal_Start.Name = "toolStripButton_MainTool_Terminal_Start";
 			this.toolStripButton_MainTool_Terminal_Start.Size = new System.Drawing.Size(28, 28);
-			this.toolStripButton_MainTool_Terminal_Start.Text = "Start Terminal";
+			this.toolStripButton_MainTool_Terminal_Start.Text = "Open Terminal";
 			this.toolStripButton_MainTool_Terminal_Start.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-			this.toolStripButton_MainTool_Terminal_Start.ToolTipText = "Start Terminal";
+			this.toolStripButton_MainTool_Terminal_Start.ToolTipText = "Open Terminal";
 			this.toolStripButton_MainTool_Terminal_Start.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Start_Click);
 			// 
 			// toolStripButton_MainTool_Terminal_Stop
@@ -693,9 +693,9 @@ namespace YAT.Gui.Forms
 			this.toolStripButton_MainTool_Terminal_Stop.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Stop_24x24;
 			this.toolStripButton_MainTool_Terminal_Stop.Name = "toolStripButton_MainTool_Terminal_Stop";
 			this.toolStripButton_MainTool_Terminal_Stop.Size = new System.Drawing.Size(28, 28);
-			this.toolStripButton_MainTool_Terminal_Stop.Text = "Stop Terminal";
+			this.toolStripButton_MainTool_Terminal_Stop.Text = "Close Terminal";
 			this.toolStripButton_MainTool_Terminal_Stop.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-			this.toolStripButton_MainTool_Terminal_Stop.ToolTipText = "Stop Terminal";
+			this.toolStripButton_MainTool_Terminal_Stop.ToolTipText = "Close Terminal";
 			this.toolStripButton_MainTool_Terminal_Stop.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Stop_Click);
 			// 
 			// toolStripSeparator_MainTool_2

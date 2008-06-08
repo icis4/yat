@@ -43,7 +43,7 @@ namespace MKY.Utilities.Test.Types
 		// Fields
 		//==========================================================================================
 
-		private TestSet[] _testSets =
+		private readonly TestSet[] _testSets =
 		{
 			new TestSet(	  0, "00000000", "000", "000", "00" ),
 			new TestSet(	  1, "00000001", "001", "001", "01" ),

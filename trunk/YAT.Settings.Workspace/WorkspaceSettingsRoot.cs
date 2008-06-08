@@ -37,10 +37,11 @@ namespace YAT.Settings.Workspace
 		// Properties
 		//==========================================================================================
 
+		/// <remarks>File type is a kind of title, therefore capital 'W' and 'S'.</remarks>
 		[XmlElement("FileType")]
 		public string FileType
 		{
-			get { return ("YAT workspace settings"); }
+			get { return ("YAT Workspace Settings"); }
 			set { } // do nothing
 		}
 

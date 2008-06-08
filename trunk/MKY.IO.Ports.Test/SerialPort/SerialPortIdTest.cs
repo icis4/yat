@@ -37,7 +37,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		// Fields
 		//==========================================================================================
 
-		private TestSet[] _testSets =
+		private readonly TestSet[] _testSets =
 		{
 			new TestSet(     1,     "COM1", new string[] { "Serial Communication Port (COM1)", "Serial Port COM1", "serial port com1", "Serial Port Com1" } ),
 			new TestSet(     2,     "COM2", new string[] { "Bluetooth Communication Port (COM2)", "COM2 - Bluetooth Communication Port" } ),

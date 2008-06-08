@@ -34,7 +34,7 @@ namespace MKY.Utilities.Xml
 		{
 			_type = type;
 
-			// create an empty object tree of that type to be able to serialize it afterwards
+			// create an empty object tree of the type to be able to serialize it afterwards
 			object obj = _type.GetConstructor(new System.Type[] { }).Invoke(new object[] { });
 
 			// serialize the empty object tree into a string
@@ -82,6 +82,35 @@ namespace MKY.Utilities.Xml
 
 			// create object tree from output document
 			return (CreateObjectTreeFromDocument(outputDocument));
+		}
+
+		#endregion
+
+		#region Protected Methods
+		//==========================================================================================
+		// Protected Methods
+		//==========================================================================================
+
+		/// <summary>
+		/// Tries to match a given input attribute to the given output attribute.
+		/// </summary>
+		/// <remarks>
+		/// <see cref="CopyTolerantly"/> on why input must be matched to output and not vice-versa.
+		/// </remarks>
+		virtual protected bool TryToMatchAttribute(XPathNavigator inputNavigator, ref XPathNavigator outputNavigator)
+		{
+			return (outputNavigator.MoveToAttribute(inputNavigator.LocalName, inputNavigator.NamespaceURI));
+		}
+
+		/// <summary>
+		/// Tries to match a given input child to the given output child.
+		/// </summary>
+		/// <remarks>
+		/// <see cref="CopyTolerantly"/> on why input must be matched to output and not vice-versa.
+		/// </remarks>
+		virtual protected bool TryToMatchChild(XPathNavigator inputNavigator, ref XPathNavigator outputNavigator)
+		{
+			return (outputNavigator.MoveToChild(inputNavigator.LocalName, inputNavigator.NamespaceURI));
 		}
 
 		#endregion
@@ -175,6 +204,11 @@ namespace MKY.Utilities.Xml
 		/// </summary>
 		/// <remarks>
 		/// This method assumes that both navigators are pointing to an XML node with the same name.
+		/// 
+		/// Important:
+		/// Input navigator must be used as the primary navigator to ensure that all elements of
+		/// the input are traversed, including those that are not available/filled on an empty
+		/// XML tree. This is i.e. the case for arrays which are empty by default.
 		/// </remarks>
 		private void CopyTolerantly(XPathNavigator inputNavigator, XPathNavigator outputNavigator)
 		{
@@ -200,9 +234,15 @@ namespace MKY.Utilities.Xml
 								{
 									do
 									{
+										// clone output navigator to keep current node level
+										XPathNavigator outputNavigatorClone = outputNavigator.Clone();
+
 										// in case of an attribute with the same name, try to copy
-										if (outputNavigator.MoveToAttribute(inputNavigator.LocalName, inputNavigator.NamespaceURI))
-											TryToCopyValue(inputNavigator.Clone(), outputNavigator.Clone());
+										if (TryToMatchAttribute(inputNavigator, ref outputNavigatorClone))
+										{
+											if (TryToCopyValue(inputNavigator, outputNavigatorClone))
+												break; // immediately break on successful copy
+										}
 									}
 									while (inputNavigator.MoveToNextAttribute());
 								}
@@ -222,10 +262,10 @@ namespace MKY.Utilities.Xml
 							{
 								if (inputNavigator.MoveToFirstChild())
 								{
-									// check whether this nodes ends here
+									// check whether this node ends here
 									if (inputNavigator.LocalName == "")
 									{
-										// in case the input also ends here, copy its value
+										// in case both nods end here, copy the value
 										if (outputNavigator.MoveToFirstChild())
 										{
 											if (outputNavigator.LocalName == "")
@@ -240,7 +280,7 @@ namespace MKY.Utilities.Xml
 											XPathNavigator outputNavigatorClone = outputNavigator.Clone();
 
 											// in case of a child with the same name, recurse
-											if (outputNavigatorClone.MoveToChild(inputNavigator.LocalName, inputNavigator.NamespaceURI))
+											if (TryToMatchChild(inputNavigator, ref outputNavigatorClone))
 												CopyTolerantly(inputNavigator.Clone(), outputNavigatorClone);
 										}
 										while (inputNavigator.MoveToNext());
@@ -251,7 +291,7 @@ namespace MKY.Utilities.Xml
 							// that output doesn't, then try to copy complete node
 							else
 							{
-								TryToCopyNode(inputNavigator.Clone(), outputNavigator.Clone());
+								TryToCopyNode(inputNavigator, outputNavigator);
 							}
 						}
 
@@ -277,7 +317,7 @@ namespace MKY.Utilities.Xml
 		/// <summary>
 		/// Tries to copy the value if both navigators are pointing to an element with the same type.
 		/// </summary>
-		private void TryToCopyValue(XPathNavigator inputNavigator, XPathNavigator outputNavigator)
+		private bool TryToCopyValue(XPathNavigator inputNavigator, XPathNavigator outputNavigator)
 		{
 			XmlSchemaType inputType = inputNavigator.SchemaInfo.SchemaType;
 			XmlSchemaType outputType = outputNavigator.SchemaInfo.SchemaType;
@@ -299,7 +339,11 @@ namespace MKY.Utilities.Xml
 
 			// copy value if type fits
 			if (inputType == outputType)
+			{
 				outputNavigator.SetValue(inputNavigator.Value);
+				return (true);
+			}
+			return (false);
 		}
 
 		/// <summary>
@@ -307,17 +351,19 @@ namespace MKY.Utilities.Xml
 		/// </summary>
 		/// <remarks>
 		/// </remarks>
-		private void TryToCopyNode(XPathNavigator inputNavigator, XPathNavigator outputNavigator)
+		private bool TryToCopyNode(XPathNavigator inputNavigator, XPathNavigator outputNavigator)
 		{
 			try
 			{
 				using (XmlReader reader = inputNavigator.ReadSubtree())
 				{
 					outputNavigator.ReplaceSelf(reader);
+					return (true);
 				}
 			}
 			catch
 			{
+				return (false);
 			}
 		}
 

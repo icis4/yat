@@ -70,7 +70,7 @@ namespace YAT.Domain.Test.Parser
 		// Fields
 		//==========================================================================================
 
-		private TestSet[][] _testSets =
+		private readonly TestSet[][] _testSets =
 		{
 			// mixed
 			new TestSet[]
@@ -161,7 +161,7 @@ namespace YAT.Domain.Test.Parser
 					{
 						parser = new Domain.Parser.Parser(ts.Encoding);
 						outputBytes = parser.Parse(ts.InputString);
-						Assert.AreEqual(outputBytes, ts.OutputBytes);
+						Assert.AreEqual(ts.OutputBytes, outputBytes);
 					}
 					catch (Exception ex)
 					{

@@ -98,7 +98,7 @@ namespace MKY.Utilities.Test.Settings
 		// Fields
 		//==========================================================================================
 
-		private TestSet[] _testSets =
+		private readonly TestSet[] _testSets =
 		{
 			new TestSet(_11, "TestObjectV1", typeof(TestClassV1), typeof(TestClassV1)),
 			new TestSet(_12, "TestObjectV1", typeof(TestClassV1), typeof(TestClassV2)),
