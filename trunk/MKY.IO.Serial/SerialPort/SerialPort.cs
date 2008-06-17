@@ -121,6 +121,9 @@ namespace MKY.IO.Serial
 		private MKY.IO.Ports.ISerialPort _port;
 		private object _portSyncObj = new object();
 
+		// async receiving
+		private Queue<byte> _receiveQueue = new Queue<byte>();
+		
 		/// <summary>
 		/// Alive timer detects port break states, i.e. when a USB to serial converter is disconnected.
 		/// </summary>
@@ -285,10 +288,12 @@ namespace MKY.IO.Serial
 			{
 				AssertNotDisposed();
 
-				if (_port != null)
-					return (_port.BytesToRead);
-				else
-					return (0);
+				int bytesAvailable = 0;
+				lock (_receiveQueue)
+				{
+					bytesAvailable = _receiveQueue.Count;
+				}
+				return (bytesAvailable); 
 			}
 		}
 
@@ -341,9 +346,13 @@ namespace MKY.IO.Serial
 			int bytesReceived = 0;
 			if (IsOpen)
 			{
-				int bytesToRead = _port.BytesToRead;
-				buffer = new byte[bytesToRead];
-				bytesReceived = _port.Read(buffer, 0, bytesToRead);
+				lock (_receiveQueue)
+				{
+					bytesReceived = _receiveQueue.Count;
+					buffer = new byte[bytesReceived];
+					for (int i = 0; i < bytesReceived; i++)
+						buffer[i] = _receiveQueue.Dequeue();
+				}
 			}
 			else
 			{
@@ -597,19 +606,52 @@ namespace MKY.IO.Serial
 		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
 		/// </summary>
 		private delegate void _port_DataReceivedDelegate(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e);
+		private object _port_DataReceivedSyncObj = new object();
 
 		private void _port_DataReceived(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
 		{
-			if (_state == PortState.Openend) // ensure not to forward any events during closing anymore
+			if (_state == PortState.Openend) // Ensure not to forward any events during closing anymore
 			{
-				_port_DataReceivedDelegate asyncInvoker = new _port_DataReceivedDelegate(_port_DataReceivedAsync);
-				asyncInvoker.BeginInvoke(sender, e, null, null);
+				// Immediately read data on this thread
+				int bytesToRead = _port.BytesToRead;
+				byte[] buffer = new byte[bytesToRead];
+				_port.Read(buffer, 0, bytesToRead);
+
+				lock (_receiveQueue)
+				{
+					foreach (byte b in buffer)
+						_receiveQueue.Enqueue(b);
+				}
+
+				// Ensure that only one data received event thread is active at the same time.
+				// Without this exclusivity, two receive threads could create a race condition.
+				if (Monitor.TryEnter(_port_DataReceivedSyncObj))
+				{
+					Monitor.Exit(_port_DataReceivedSyncObj);
+
+					_port_DataReceivedDelegate asyncInvoker = new _port_DataReceivedDelegate(_port_DataReceivedAsync);
+					asyncInvoker.BeginInvoke(sender, e, null, null);
+				}
 			}
 		}
 
 		private void _port_DataReceivedAsync(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
 		{
-			OnDataReceived(new EventArgs());
+			// Ensure that only one data received event thread is active at the same time.
+			// Without this exclusivity, two receive threads could create a race condition.
+			Monitor.Enter(_port_DataReceivedSyncObj);
+			try
+			{
+				// Fire events until there is no more data available. Must be done to ensure
+				// that events are fired even for data that was enqueued above while the sync
+				// obj was busy.
+				while (BytesAvailable > 0)
+					OnDataReceived(new EventArgs());
+			}
+			finally
+			{
+				Monitor.Exit(_port_DataReceivedSyncObj);
+			}
 		}
 
 		/// <summary>
