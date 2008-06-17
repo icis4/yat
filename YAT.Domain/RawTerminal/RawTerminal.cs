@@ -476,6 +476,8 @@ namespace YAT.Domain
 			if (_io.Receive(out data) > 0)
 			{
 				RawElement re = new RawElement(data, SerialDirection.Rx);
+				//\fixme
+				//System.Diagnostics.Debug.Write(_rxRepository.ToString());
 				_rxRepository.Enqueue(re);
 				_bidirRepository.Enqueue(re);
 				OnRawElementReceived(new RawElementEventArgs(re));

@@ -64,13 +64,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public byte[] ToByteArray()
 		{
-			MemoryStream to = new MemoryStream(_queue.Count);
-			foreach (object o in _queue.ToArray())
-			{
-				byte[] data = ((RawElement)o).Data;
-				int length = data.Length;
-				to.Write(data, 0, length);
-			}
+			List<byte> to = new List<byte>(_queue.Count);
+			foreach (RawElement re in _queue.ToArray())
+				to.AddRange(re.Data);
+
 			return (to.ToArray());
 		}
 
@@ -89,8 +86,21 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public string ToString(string indent)
 		{
-			return (indent + "- Capacity: " + _capacity.ToString("D") + Environment.NewLine +
-					indent + "- Queue: " + Environment.NewLine + QueueToString(indent + "--"));
+			return (QueueToString(indent));
+		}
+
+		/// <summary></summary>
+		public string ToDetailedString()
+		{
+			return (ToDetailedString(""));
+		}
+
+		/// <summary></summary>
+		public string ToDetailedString(string indent)
+		{
+			return (indent + "- Capacity: " + _capacity.ToString() + Environment.NewLine +
+					indent + "- Queue: " + Environment.NewLine +
+					QueueToDetailedString(indent + "--"));
 		}
 
 		/// <summary></summary>
@@ -103,11 +113,27 @@ namespace YAT.Domain
 		public string QueueToString(string indent)
 		{
 			StringWriter to = new StringWriter();
+			foreach (RawElement re in ToElements())
+				to.Write(re.ToString(indent));
+
+			return (to.ToString());
+		}
+
+		/// <summary></summary>
+		public string QueueToDetailedString()
+		{
+			return (QueueToDetailedString(""));
+		}
+
+		/// <summary></summary>
+		public string QueueToDetailedString(string indent)
+		{
+			StringWriter to = new StringWriter();
 			int i = 1;
 			foreach (RawElement re in ToElements())
 			{
 				to.Write(indent + "RawElement " + i++ + ":" + Environment.NewLine);
-				to.Write(re.ToString(indent + "--"));
+				to.Write(re.ToDetailedString(indent + "--"));
 			}
 			return (to.ToString());
 		}

@@ -53,17 +53,35 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public string ToString(string indent)
 		{
-			string dataString = "";
+			StringWriter to = new StringWriter();
+			foreach (byte b in _data)
+				to.Write(Convert.ToChar(b));
+
+			return (to.ToString());
+		}
+
+		/// <summary></summary>
+		public string ToDetailedString()
+		{
+			return (ToDetailedString(""));
+		}
+
+		/// <summary></summary>
+		public string ToDetailedString(string indent)
+		{
+			bool begin = true;
+			StringWriter data = new StringWriter();
 			foreach (byte b in _data)
 			{
-				if (dataString != "")
-					dataString += " ";
+				if (!begin)
+					data.Write(" ");
 
-				dataString += b.ToString("X2") + "h";
+				begin = false;
+				data.Write(b.ToString("X2") + "h");
 			}
-			return (indent + "- Data: " + dataString + Environment.NewLine +
+			return (indent + "- Data: " + data.ToString() + Environment.NewLine +
 					indent + "- Direction: " + _direction.ToString() + Environment.NewLine +
-					indent + "- TimeStamp: " + _timestamp.ToLongTimeString() + "." + XString.Left(_timestamp.Millisecond.ToString("D3"), 2) + Environment.NewLine );
+					indent + "- TimeStamp: " + _timestamp.ToLongTimeString() + "." + XString.Left(_timestamp.Millisecond.ToString("D3"), 2) + Environment.NewLine);
 		}
 	}
 }
