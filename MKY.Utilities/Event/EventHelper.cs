@@ -247,7 +247,7 @@ namespace MKY.Utilities.Event
 						if ((_unhandledExceptionCallbackTarget != null) && (_unhandledExceptionCallbackTarget.InvokeRequired))
 							_unhandledExceptionCallbackTarget.Invoke(_unhandledExceptionCallback, new object[] { ex });
 						else
-							_unhandledExceptionCallback.Invoke(ex, null, null);
+                            _unhandledExceptionCallback.Invoke(ex);
 					}
 					catch { }
 				}
@@ -281,7 +281,7 @@ namespace MKY.Utilities.Event
 						if ((_unhandledExceptionCallbackTarget != null) && (_unhandledExceptionCallbackTarget.InvokeRequired))
 							_unhandledExceptionCallbackTarget.Invoke(_unhandledExceptionCallback, new object[] { ex });
 						else
-							_unhandledExceptionCallback.Invoke(ex, null, null);
+                            _unhandledExceptionCallback.Invoke(ex);
 					}
 					catch { }
 				}
