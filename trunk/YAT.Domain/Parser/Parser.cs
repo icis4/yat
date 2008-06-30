@@ -20,7 +20,7 @@ namespace YAT.Domain.Parser
 
 		/// <summary></summary>
 		public static readonly string FormatHelp =
-			@"The following formats are supported (type without quotation marks):" + Environment.NewLine +
+			@"The following formats are supported (type without quotes):" + Environment.NewLine +
 			Environment.NewLine +
 			@"Default ""OK""" + Environment.NewLine +
 			@"Binary ""\b(01001111 01001011)""" + Environment.NewLine +

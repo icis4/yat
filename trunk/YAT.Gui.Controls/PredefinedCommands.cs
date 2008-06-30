@@ -230,7 +230,7 @@ namespace YAT.Gui.Controls
 				button_PageNext.Enabled = (_selectedPage < _pages.Count);
 
 				label_Page.Enabled = true;
-				label_Page.Text = "Page " + _selectedPage.ToString() + "/" + _pages.Count.ToString();
+				label_Page.Text = "Page " + _selectedPage + "/" + _pages.Count;
 
 				comboBox_Pages.Enabled = true;
 				comboBox_Pages.Items.Clear();

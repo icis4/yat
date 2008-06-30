@@ -354,7 +354,7 @@ namespace YAT.Domain
 
 			// evaluate binary sequence break
 			lineState.SequenceBreak.Enqueue(b);
-			if (lineState.SequenceBreak.EolMatch())
+			if (lineState.SequenceBreak.IsCompleteMatch)
 				lineState.LinePosition = LinePosition.End;
 		}
 

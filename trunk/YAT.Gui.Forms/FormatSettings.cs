@@ -25,7 +25,7 @@ namespace YAT.Gui.Forms
 		private Controls.TextFormat[] _textFormats;
 
 		private List<Domain.DisplayElement> _examples;
-		private List<Domain.DisplayElement> _exampleComplete;
+		private List<List<Domain.DisplayElement>> _exampleComplete;
 
 		#endregion
 
@@ -131,7 +131,7 @@ namespace YAT.Gui.Forms
 			_examples.Add(new Domain.DisplayElement.LineLength(2));
 			_examples.Add(new Domain.DisplayElement.Error("Message"));
 
-			Domain.DisplayRepository exampleComplete = new Domain.DisplayRepository(24);
+			Domain.DisplayRepository exampleComplete = new Domain.DisplayRepository(24, 32);
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStamp(DateTime.Now));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
@@ -177,7 +177,7 @@ namespace YAT.Gui.Forms
 			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
 			exampleComplete.Enqueue(_examples[6]);*/
 
-			_exampleComplete = exampleComplete.ToElements();
+			_exampleComplete = exampleComplete.ToLines();
 		}
 
 		private void InitializeControls()
@@ -197,7 +197,7 @@ namespace YAT.Gui.Forms
 			for (int i = 0; i < _monitors.Length; i++)
 				_monitors[i].AddElement(_examples[i]);
 
-			monitor_Example.AddElements(_exampleComplete);
+			monitor_Example.AddLines(_exampleComplete);
 		}
 
 		private Model.Types.TextFormat GetFormatFromIndex(int index)

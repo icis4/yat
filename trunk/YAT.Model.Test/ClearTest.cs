@@ -25,9 +25,9 @@ namespace YAT.Model.Test
 		public void TestClearCompleteLine()
 		{
 			// create terminals from settings and check whether B receives from A
-			using (Terminal terminalA = new Terminal(Utilities.GetTCPSettings()))
+			using (Terminal terminalA = new Terminal(Utilities.GetTextTCPSettings()))
 			{
-				using (Terminal terminalB = new Terminal(Utilities.GetTCPSettings()))
+				using (Terminal terminalB = new Terminal(Utilities.GetTextTCPSettings()))
 				{
 					Utilities.TestSet testSet;
 
@@ -74,9 +74,9 @@ namespace YAT.Model.Test
 		public void TestClearIncompleteLine()
 		{
 			// create terminals from settings and check whether B receives from A
-			using (Terminal terminalA = new Terminal(Utilities.GetTCPSettings()))
+			using (Terminal terminalA = new Terminal(Utilities.GetTextTCPSettings()))
 			{
-				using (Terminal terminalB = new Terminal(Utilities.GetTCPSettings()))
+				using (Terminal terminalB = new Terminal(Utilities.GetTextTCPSettings()))
 				{
 					Utilities.TestSet testSet;
 					List<List<Domain.DisplayElement>> lines;

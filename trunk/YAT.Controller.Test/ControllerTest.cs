@@ -79,11 +79,11 @@ namespace YAT.Controller.Test
 		[Test]
 		public void TestTerminalCommandLineArg()
 		{
-			using (Controller.Main main = new Main(TeriminalArgs))
+			using (Controller.Main main = new Main(TerminalArgs))
 			{
 				Assert.IsFalse(main.CommandLineError);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
-				StringAssert.AreEqualIgnoringCase(TeriminalArgs[0], main.RequestedFilePath, "Invalid requested terminal settings file path");
+				StringAssert.AreEqualIgnoringCase(TerminalArgs[0], main.RequestedFilePath, "Invalid requested terminal settings file path");
 			}
 		}
 
@@ -131,10 +131,9 @@ namespace YAT.Controller.Test
 		[Test]
 		public void TestTerminalCommandLineArgRun()
 		{
-			using (Controller.Main main = new Main(TeriminalArgs))
+			using (Controller.Main main = new Main(TerminalArgs))
 			{
-				// expect application exit error because new workspace is created but not saved
-				RunAndVerifyApplicationWithoutView(main, MainResult.ApplicationExitError);
+				RunAndVerifyApplicationWithoutView(main);
 			}
 		}
 
@@ -182,7 +181,7 @@ namespace YAT.Controller.Test
 		[Category("Interactive")]
 		public void TestTerminalCommandLineArgRunInteractive()
 		{
-			using (Controller.Main main = new Main(TeriminalArgs))
+			using (Controller.Main main = new Main(TerminalArgs))
 			{
 				RunAndVerifyApplication(main);
 			}
@@ -227,7 +226,7 @@ namespace YAT.Controller.Test
 			}
 		}
 
-		private string[] TeriminalArgs
+		private string[] TerminalArgs
 		{
 			get
 			{

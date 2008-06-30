@@ -321,9 +321,9 @@ namespace YAT.Gui.Forms
 			_isSettingControls = true;
 
 			toolStripMenuItem_TerminalMenu_Send_Command.Enabled = _settingsRoot.SendCommand.Command.IsValidCommand;
-			toolStripMenuItem_TerminalMenu_Send_File.Enabled = _settingsRoot.SendCommand.Command.IsValidFilePath;
+			toolStripMenuItem_TerminalMenu_Send_File.Enabled    = _settingsRoot.SendFile.Command.IsValidFilePath;
 
-			toolStripMenuItem_TerminalMenu_Send_KeepCommand.Checked = _settingsRoot.Send.KeepCommand;
+			toolStripMenuItem_TerminalMenu_Send_KeepCommand.Checked    = _settingsRoot.Send.KeepCommand;
 			toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked = _settingsRoot.Send.CopyPredefined;
 
 			_isSettingControls = false;
@@ -2649,7 +2649,7 @@ namespace YAT.Gui.Forms
 				MKY.IO.Serial.SerialPortSettings s = _settingsRoot.IO.SerialPort;
 				sb.Append("Serial port ");
 				sb.Append(s.PortId.ToString(true, false));
-				sb.Append(" (" + s.Communication.ToString() + ") is ");
+				sb.Append(" (" + s.Communication + ") is ");
 				sb.Append(isOpen ? "open" : "closed");
 			}
 			else

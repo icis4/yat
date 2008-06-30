@@ -98,7 +98,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public string ToDetailedString(string indent)
 		{
-			return (indent + "- Capacity: " + _capacity.ToString() + Environment.NewLine +
+			return (indent + "- Capacity: " + _capacity + Environment.NewLine +
 					indent + "- Queue: " + Environment.NewLine +
 					QueueToDetailedString(indent + "--"));
 		}

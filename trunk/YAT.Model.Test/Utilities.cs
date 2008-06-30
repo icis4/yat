@@ -6,6 +6,8 @@ using System.Threading;
 using NUnit.Framework;
 
 using MKY.Utilities.Settings;
+using MKY.Utilities.Types;
+
 using YAT.Settings.Terminal;
 
 namespace YAT.Model.Test
@@ -49,8 +51,10 @@ namespace YAT.Model.Test
 		//==========================================================================================
 		// Constants
 		//==========================================================================================
+
 		private const int _Interval = 100;
 		private const int _Timeout = 10000;
+		private const int _WaitEOL = 1000;
 
 		#endregion
 
@@ -59,18 +63,19 @@ namespace YAT.Model.Test
 		// Settings
 		//==========================================================================================
 
-		internal static TerminalSettingsRoot GetTCPSettings()
+		internal static TerminalSettingsRoot GetTextTCPSettings()
 		{
 			// create settings
 			TerminalSettingsRoot settings = new TerminalSettingsRoot();
+			settings.TerminalType = Domain.TerminalType.Text;
 			settings.Terminal.IO.IOType = Domain.IOType.TcpAutoSocket;
 			settings.TerminalIsStarted = true;
 			return (settings);
 		}
 
-		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetTCPSettingsHandler()
+		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetTextTCPSettingsHandler()
 		{
-			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetTCPSettings()));
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetTextTCPSettings()));
 		}
 
 		#endregion
@@ -103,9 +108,12 @@ namespace YAT.Model.Test
 				timeout += _Interval;
 
 				if (timeout >= _Timeout)
-					Assert.Fail("Transmission timeout");
+					Assert.Fail("Transmission timeout. Try to re-run test case.");
 			}
 			while (terminalB.RxByteCount != terminalA.TxByteCount);
+
+			// wait to allow EOL to be sent (EOL is sent a bit later than line contents)
+			Thread.Sleep(_WaitEOL);
 		}
 
 		#endregion
@@ -143,24 +151,47 @@ namespace YAT.Model.Test
 					}
 					else
 					{
+						string strA = XArray.ElementsToString(lineA.ToArray());
+						string strB = XArray.ElementsToString(lineB.ToArray());
+
+						Console.Write
+							(
+							"A:" + Environment.NewLine + strA + Environment.NewLine +
+							"B:" + Environment.NewLine + strB + Environment.NewLine
+							);
+
 						Assert.Fail
 							(
 							"Line length mismatch: " +
-							"Expected = " + expectedLineLength.ToString() + " elements, " +
-							"A = " + lineA.Count.ToString() + " elements, " +
-							"B = " + lineB.Count.ToString() + " elements."
+							"Expected = " + expectedLineLength + " elements, " +
+							"A = " + lineA.Count + @" elements, " +
+							"B = " + lineB.Count + @" elements. See ""Console.Out"" for details."
 							);
 					}
 				}
 			}
 			else
 			{
+				StringBuilder sbA = new StringBuilder();
+				StringBuilder sbB = new StringBuilder();
+
+				foreach (List<Domain.DisplayElement> lineA in linesA)
+					sbA.Append(XArray.ElementsToString(lineA.ToArray()));
+				foreach (List<Domain.DisplayElement> lineB in linesB)
+					sbB.Append(XArray.ElementsToString(lineB.ToArray()));
+
+				Console.Write
+					(
+					"A:" + Environment.NewLine + sbA + Environment.NewLine +
+					"B:" + Environment.NewLine + sbB + Environment.NewLine
+					);
+
 				Assert.Fail
 					(
 					"Line count mismatch: " +
-					"Expected = " + expectedLineCount.ToString() + " lines, " +
-					"A = " + linesA.Count.ToString() + " lines, " +
-					"B = " + linesB.Count.ToString() + " lines."
+					"Expected = " + expectedLineCount + " lines, " +
+					"A = " + linesA.Count + @" lines, " +
+					"B = " + linesB.Count + @" lines. See ""Console.Out"" for details."
 					);
 			}
 		}

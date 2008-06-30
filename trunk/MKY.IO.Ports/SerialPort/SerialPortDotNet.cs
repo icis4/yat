@@ -723,7 +723,7 @@ namespace MKY.IO.Ports
 			if (DebugWrite_portName == "")
 				DebugWrite_portName = PortName;
 
-			System.Diagnostics.Debug.WriteLine(DebugWrite_portName + " " + Environment.TickCount.ToString() + " " + message);
+			System.Diagnostics.Debug.WriteLine(DebugWrite_portName + " " + Environment.TickCount + " " + message);
 
 			if (writeStack)
 				MKY.Utilities.Diagnostics.XDebug.WriteStack(this, "");

@@ -391,7 +391,7 @@ namespace YAT.Gui.Forms
 				this,
 				"Enter name of inserted page:",
 				"Page Name",
-				"Page " + pageNumber.ToString(),
+				"Page " + pageNumber,
 				out pageName
 				)
 				== DialogResult.OK)
@@ -411,7 +411,7 @@ namespace YAT.Gui.Forms
 				this,
 				"Enter name of added page:",
 				"Page Name",
-				"Page " + pageNumber.ToString(),
+				"Page " + pageNumber,
 				out pageName
 				)
 				== DialogResult.OK)
