@@ -54,12 +54,14 @@ namespace YAT.Domain
 		{
 			public LinePosition LinePosition;
 			public List<DisplayElement> LineElements;
+			public List<DisplayElement> EolElements;
 			public EolQueue Eol;
 
 			public LineState(EolQueue eol)
 			{
 				LinePosition = TextTerminal.LinePosition.Begin;
 				LineElements = new List<DisplayElement>();
+				EolElements = new List<DisplayElement>();
 				Eol = eol;
 			}
 
@@ -67,6 +69,7 @@ namespace YAT.Domain
 			{
 				LinePosition = TextTerminal.LinePosition.Begin;
 				LineElements.Clear();
+				EolElements.Clear();
 				Eol.Reset();
 			}
 		}
@@ -366,11 +369,11 @@ namespace YAT.Domain
 			int eolLength = lineState.Eol.Eol.Length;
 			List<DisplayElement> line = new List<DisplayElement>();
 
-			if (TextTerminalSettings.ShowEol || (eolLength <= 0))
+			if (TextTerminalSettings.ShowEol || (eolLength <= 0) || (!lineState.Eol.IsCompleteMatch))
 			{
 				line.AddRange(lineState.LineElements);
 			}
-			else // remove EOL if desired
+			else // remove EOL
 			{
 				int eolElementCount = 0;
 				int eolAndWhiteElementCount = 0;
@@ -430,7 +433,7 @@ namespace YAT.Domain
 		{
 			List<DisplayElement> l = new List<DisplayElement>();
 
-			// add space if necessary
+			// Add space if necessary
 			if (ElementsAreSeparate(direction))
 			{
 				int lineLength = 0;
@@ -445,19 +448,42 @@ namespace YAT.Domain
 				}
 			}
 
-			// add data
+			// Process data
 			DisplayElement de = ByteToElement(b, direction);
-			if (de.IsDataElement)
-				l.Add(de);
 
-			// return data
+			// Evaluate EOL, i.e. check whether EOL is about to start or has already started
+			lineState.Eol.Enqueue(b);
+			if (lineState.Eol.IsCompleteMatch)
+			{
+				if (de.IsDataElement)
+					lineState.EolElements.Add(de);
+
+				l.AddRange(lineState.EolElements);
+				lineState.LinePosition = LinePosition.End;
+			}
+			else if (lineState.Eol.IsPartlyMatch)
+			{
+				// Keep EOL elements but delay them until EOL complete
+				if (de.IsDataElement)
+					lineState.EolElements.Add(de);
+			}
+			else
+			{
+				// Retrieve potential EOL elements on incomplete EOL
+				if (lineState.EolElements.Count > 0)
+				{
+					l.AddRange(lineState.EolElements);
+					lineState.EolElements.Clear();
+				}
+
+				// Add non-EOL data
+				if (de.IsDataElement)
+					l.Add(de);
+			}
+
+			// Return data
 			lineState.LineElements.AddRange(l);
 			elements.AddRange(l);
-
-			// evaluate EOL
-			lineState.Eol.Enqueue(b);
-			if (lineState.Eol.EolMatch())
-				lineState.LinePosition = LinePosition.End;
 		}
 
 		/// <summary></summary>

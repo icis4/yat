@@ -79,8 +79,8 @@ namespace YAT.Domain
 				begin = false;
 				data.Write(b.ToString("X2") + "h");
 			}
-			return (indent + "- Data: " + data.ToString() + Environment.NewLine +
-					indent + "- Direction: " + _direction.ToString() + Environment.NewLine +
+			return (indent + "- Data: " + data + Environment.NewLine +
+					indent + "- Direction: " + _direction + Environment.NewLine +
 					indent + "- TimeStamp: " + _timestamp.ToLongTimeString() + "." + XString.Left(_timestamp.Millisecond.ToString("D3"), 2) + Environment.NewLine);
 		}
 	}

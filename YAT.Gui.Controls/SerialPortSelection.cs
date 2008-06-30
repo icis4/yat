@@ -188,7 +188,7 @@ namespace YAT.Gui.Controls
 
 			private void portList_MarkPortsInUseCallback(object sender, SerialPortList.PortChangedAndCancelEventArgs e)
 			{
-				_status2 = "Scanning " + e.Port.ToString() + "...";
+				_status2 = "Scanning " + e.Port + "...";
 				StatusBox.UpdateStatus2(_status2);
 				e.Cancel = _cancelScanning;
 			}

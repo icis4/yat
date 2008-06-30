@@ -36,6 +36,9 @@ namespace YAT.Model.Test
 		private readonly Utilities.TestSet _MultiLineCommand;
 
 		private readonly Utilities.TestSet _MultiEOLCommand;
+		private readonly Utilities.TestSet _MixedEOLCommand;
+
+		private readonly Utilities.TestSet _EOLPartsCommand;
 
 		private readonly Utilities.TestSet _SingleNoEOLCommand;
 		private readonly Utilities.TestSet _DoubleNoEOLCommand;
@@ -54,10 +57,13 @@ namespace YAT.Model.Test
 			_TripleLineCommand  = new Utilities.TestSet(new Types.Command(new string[] { _TestCommandLines[0], _TestCommandLines[1], _TestCommandLines[2] }));
 			_MultiLineCommand   = new Utilities.TestSet(new Types.Command(_TestCommandLines));
 
-			_MultiEOLCommand    = new Utilities.TestSet(new Types.Command(@"A<CR><LF>B<CR><LF>C<CR><LF>D"), 4, new int[] { 2, 2, 2, 2 }); // EOL results in one more element
+			_MultiEOLCommand    = new Utilities.TestSet(new Types.Command(@"A\!(EOL)B<CR><LF>C<CR><LF>D"), 4, new int[] { 2, 2, 2, 2 }); // EOL results in one element since ShowEOL is switched off
+			_MixedEOLCommand    = new Utilities.TestSet(new Types.Command(@"A\!(EOL)BC<CR><LF>D"),         3, new int[] { 2, 3, 2    }); // EOL results in one element since ShowEOL is switched off
 
-			_SingleNoEOLCommand = new Utilities.TestSet(new Types.Command(@"A\!(NoEOL)"), 0, new int[] { 1 });
-			_DoubleNoEOLCommand = new Utilities.TestSet(new Types.Command(new string[] { @"A\!(NoEOL)", @"B\!(NoEOL)" }), 0, new int[] { 2 });
+			_EOLPartsCommand    = new Utilities.TestSet(new Types.Command(@"A<CR><CR><LF>B<CR><LF><LF>C<CR><LF>D<CR>E<LF>F"), 4, new int[] { 3, 2, 3, 6 });
+
+			_SingleNoEOLCommand = new Utilities.TestSet(new Types.Command(@"A\!(NoEOL)"), 1, new int[] { 1 });                                 // there is always 1 line
+			_DoubleNoEOLCommand = new Utilities.TestSet(new Types.Command(new string[] { @"A\!(NoEOL)", @"B\!(NoEOL)" }), 1, new int[] { 2 }); // there is always 1 line
 		}
 
 		#endregion
@@ -150,6 +156,32 @@ namespace YAT.Model.Test
 
 		#endregion
 
+		#region Tests > MixedEOLTransmissionTCP
+		//------------------------------------------------------------------------------------------
+		// Tests > MixedEOLTransmissionTCP
+		//------------------------------------------------------------------------------------------
+
+		[Test]
+		public void TestMixedEOLTransmissionTCP()
+		{
+			PerformCommandTransmissionTCP(_MixedEOLCommand);
+		}
+
+		#endregion
+
+		#region Tests > EOLPartsTransmissionTCP
+		//------------------------------------------------------------------------------------------
+		// Tests > EOLPartsTransmissionTCP
+		//------------------------------------------------------------------------------------------
+
+		[Test]
+		public void TestEOLPartsTransmissionTCP()
+		{
+			PerformCommandTransmissionTCP(_EOLPartsCommand);
+		}
+
+		#endregion
+
 		#region Tests > NoEOLTransmissionTCP
 		//------------------------------------------------------------------------------------------
 		// Tests > NoEOLTransmissionTCP
@@ -183,7 +215,7 @@ namespace YAT.Model.Test
 
 		private void PerformCommandTransmissionTCP(Utilities.TestSet testSet, int transmissionCount)
 		{
-			PerformCommandTransmission(Utilities.GetTCPSettings(), Utilities.GetTCPSettings(), testSet, transmissionCount);
+			PerformCommandTransmission(Utilities.GetTextTCPSettings(), Utilities.GetTextTCPSettings(), testSet, transmissionCount);
 		}
 
 		private void PerformCommandTransmission(TerminalSettingsRoot settingsA, TerminalSettingsRoot settingsB, Utilities.TestSet testSet, int transmissionCount)

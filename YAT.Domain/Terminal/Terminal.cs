@@ -79,9 +79,9 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public Terminal(Settings.TerminalSettings settings)
 		{
-			_txRepository    = new DisplayRepository(settings.Buffer.TxBufferSize);
-			_bidirRepository = new DisplayRepository(settings.Buffer.BidirBufferSize);
-			_rxRepository    = new DisplayRepository(settings.Buffer.RxBufferSize);
+			_txRepository    = new DisplayRepository(settings.Display.TxMaximalLineCount,    settings.Buffer.TxBufferSize);
+			_bidirRepository = new DisplayRepository(settings.Display.BidirMaximalLineCount, settings.Buffer.BidirBufferSize);
+			_rxRepository    = new DisplayRepository(settings.Display.RxMaximalLineCount,    settings.Buffer.RxBufferSize);
 
 			AttachTerminalSettings(settings);
 			AttachRawTerminal(new RawTerminal(_terminalSettings.IO, _terminalSettings.Buffer));
@@ -574,9 +574,9 @@ namespace YAT.Domain
 		{
 			switch (repository)
 			{
-				case RepositoryType.Tx:    _txRepository.Clear(); break;
+				case RepositoryType.Tx:    _txRepository.Clear();    break;
 				case RepositoryType.Bidir: _bidirRepository.Clear(); break;
-				case RepositoryType.Rx:    _rxRepository.Clear(); break;
+				case RepositoryType.Rx:    _rxRepository.Clear();    break;
 				default: throw (new NotImplementedException("Unknown RepositoryType"));
 			}
 		}
@@ -605,20 +605,6 @@ namespace YAT.Domain
 				case RepositoryType.Tx:    return (_txRepository.LineCount);
 				case RepositoryType.Bidir: return (_bidirRepository.LineCount);
 				case RepositoryType.Rx:    return (_rxRepository.LineCount);
-				default: throw (new NotImplementedException("Unknown RepositoryType"));
-			}
-		}
-
-		/// <summary></summary>
-		public virtual List<DisplayElement> RepositoryToDisplayElements(RepositoryType repository)
-		{
-			AssertNotDisposed();
-
-			switch (repository)
-			{
-				case RepositoryType.Tx:    return (_txRepository.ToElements());
-				case RepositoryType.Bidir: return (_bidirRepository.ToElements());
-				case RepositoryType.Rx:    return (_rxRepository.ToElements());
 				default: throw (new NotImplementedException("Unknown RepositoryType"));
 			}
 		}
@@ -678,7 +664,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 			
-			return (indent + "- Settings: " + _terminalSettings.ToString() + Environment.NewLine +
+			return (indent + "- Settings: " + _terminalSettings + Environment.NewLine +
 					indent + "- RawTerminal: "     + Environment.NewLine + _rawTerminal.ToString(indent + "--") +
 					indent + "- TxRepository: "    + Environment.NewLine + _txRepository.ToString(indent + "--") +
 					indent + "- BidirRepository: " + Environment.NewLine + _bidirRepository.ToString(indent + "--") +

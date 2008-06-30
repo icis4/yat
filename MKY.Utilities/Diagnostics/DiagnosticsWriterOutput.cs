@@ -40,7 +40,7 @@ namespace MKY.Utilities.Diagnostics
 					if (exceptionLevel == 0)
 						writer.WriteLine("Exception:");
 					else
-						writer.WriteLine("Inner exception level " + exceptionLevel.ToString() + ":");
+						writer.WriteLine("Inner exception level " + exceptionLevel + ":");
 
 					writer.Indent();
 					{

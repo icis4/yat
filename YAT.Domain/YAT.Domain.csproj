@@ -45,6 +45,8 @@
     <Compile Include="BinaryTerminal\Structs.cs" />
     <Compile Include="Endianess.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="Eol.cs" />
+    <Compile Include="EolQueue.cs" />
     <Compile Include="IOFactory.cs" />
     <Compile Include="IOType.cs" />
     <Compile Include="Parser\Exceptions.cs" />
@@ -76,8 +78,6 @@
     <Compile Include="Terminal\Terminal.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="Terminal\RepositoryType.cs" />
-    <Compile Include="TextTerminal\EolQueue.cs" />
-    <Compile Include="TextTerminal\Eol.cs" />
     <Compile Include="TextTerminal\TextTerminal.cs" />
     <Compile Include="TextTerminal\ControlCharRadix.cs" />
   </ItemGroup>

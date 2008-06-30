@@ -10,45 +10,56 @@ namespace YAT.Domain
 	/// </summary>
 	public class DisplayRepository
 	{
-		private int _lineCapacity;
-		private int _dataCount;
-		private int _lineCount;
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
 
-		private Queue<DisplayElement> _queue;
-		private DisplayElement _lastQueued;
+		private int _lineCapacity;
+		private int _perLineCapacity;
+
+		private int _dataCount;
+
+		private Queue<List<DisplayElement>> _lines;
+		private List<DisplayElement> _currentLine;
+
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
 
 		/// <summary></summary>
-		public DisplayRepository(int lineCapacity)
+		public DisplayRepository(int lineCapacity, int perLineCapacity)
 		{
-			_lineCapacity = lineCapacity;
-			_queue = new Queue<DisplayElement>(_lineCapacity);
-			ResetInternalState();
+			_lineCapacity    = lineCapacity;
+			_perLineCapacity = perLineCapacity;
+
+			_dataCount = 0;
+
+			_lines       = new Queue<List<DisplayElement>>(_lineCapacity);
+			_currentLine = new List<DisplayElement>(_perLineCapacity);
 		}
 
 		/// <summary></summary>
 		public DisplayRepository(DisplayRepository rhs)
 		{
-			_lineCapacity = rhs._lineCapacity;
+			_lineCapacity    = rhs._lineCapacity;
+			_perLineCapacity = rhs._perLineCapacity;
+
 			_dataCount = rhs._dataCount;
-			_lineCount = rhs._lineCount;
-			_queue = new Queue<DisplayElement>(rhs._queue);
+
+			_lines       = new Queue<List<DisplayElement>>(rhs._lines);
+			_currentLine = new List<DisplayElement>(rhs._currentLine);
 		}
 
-		/// <summary></summary>
-		public DisplayRepository(int lineCapacity, DisplayRepository rhs)
-		{
-			_lineCapacity = lineCapacity;
-			_queue = new Queue<DisplayElement>(_lineCapacity);
-			foreach (DisplayElement de in rhs._queue.ToArray())
-				Enqueue(de);
-		}
+		#endregion
 
-		private void ResetInternalState()
-		{
-			_dataCount = 0;
-			_lineCount = 0;
-			_lastQueued = new DisplayElement.LineBreak();
-		}
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
 
 		/// <summary></summary>
 		public int LineCapacity
@@ -56,44 +67,48 @@ namespace YAT.Domain
 			get { return (_lineCapacity); }
 			set
 			{
-				if (value > _lineCount)
+				if (value > _lines.Count)
 				{
 					_lineCapacity = value;
 				}
-				else if (value < _lineCount)
+				else if (value < _lines.Count)
 				{
-					while (_lineCount > value)
-					{
-						// ensure that queue isn't empty
-						if (_queue.Count <= 0)
-						{
-							_dataCount = 0;
-							_lineCount = 0;
-							break;
-						}
+					while (_lines.Count > value)
+						DequeueExcessLine();
 
-						DisplayElement d = (DisplayElement)_queue.Dequeue();
-						if (d.IsDataElement)
-							_dataCount--;
-						if (d.IsEol)
-							_lineCount--;
-					}
 					_lineCapacity = value;
 				}
 			}
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Returns number of data elements within repository.
+		/// </summary>
 		public int DataCount
 		{
 			get { return (_dataCount); }
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Returns number of lines within repository.
+		/// </summary>
 		public int LineCount
 		{
-			get { return (_lineCount); }
+			get
+			{
+				if (_currentLine.Count <= 0)
+					return (_lines.Count);
+				else
+					return (_lines.Count + 1); // Current line adds one line
+			}
 		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
 
 		/// <summary></summary>
 		public void Enqueue(List<DisplayElement> elements)
@@ -105,69 +120,71 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public void Enqueue(DisplayElement de)
 		{
-			if (de.IsDataElement)
+			// Add element to current line if there is space left
+			if (_currentLine.Count < _perLineCapacity)
 			{
-				while (_dataCount >= _lineCapacity)
-				{
-					// ensure that queue isn't empty
-					if (_queue.Count <= 0)
-					{
-						_dataCount = 0;
-						_lineCount = 0;
-						break;
-					}
-
-					DisplayElement temp = (DisplayElement)_queue.Dequeue();
-					if (temp.IsDataElement)
-						_dataCount--;
-					if (temp.IsEol)
-						_lineCount--;
-				}
+				_currentLine.Add(de);
+				if (de.IsDataElement)
+					_dataCount++;
 			}
-			_queue.Enqueue(de);
 
-			if (de.IsDataElement)
-				_dataCount++;
-			if ((_lastQueued != null) && _lastQueued.IsEol)
-				_lineCount++;
+			// Check whether a line break is needed
+			if (de.IsEol)
+			{
+				// Excess must be manually dequeued
+				if (_lines.Count >= _lineCapacity)
+					DequeueExcessLine();
 
-			_lastQueued = de;
+				// Enqueue new line and reset current line
+				_lines.Enqueue(new List<DisplayElement>(_currentLine));
+				_currentLine.Clear();
+			}
 		}
 
 		/// <summary></summary>
 		public void Clear()
 		{
-			_queue.Clear();
-			ResetInternalState();
-		}
+			_lines.Clear();
+			_currentLine.Clear();
 
-		/// <summary></summary>
-		public List<DisplayElement> ToElements()
-		{
-			return (new List<DisplayElement>(_queue));
+			_dataCount = 0;
 		}
 
 		/// <summary></summary>
 		public List<List<DisplayElement>> ToLines()
 		{
-			List<List<DisplayElement>> lines = new List<List<DisplayElement>>();
-			List<DisplayElement> line = new List<DisplayElement>();
-			foreach (DisplayElement de in ToElements())
-			{
-				line.Add(de);
-				if (de.IsEol)
-				{
-					lines.Add(new List<DisplayElement>(line));
-					line.Clear();
-				}
-			}
-			if (line.Count > 0)
-			{
-				lines.Add(new List<DisplayElement>(line)); // add last line
-				line.Clear();
-			}
+			List<List<DisplayElement>> lines = new List<List<DisplayElement>>(_lines.ToArray());
+
+			// Add current line if it contains elements
+			if (_currentLine.Count > 0)
+				lines.Add(new List<DisplayElement>(_currentLine));
+
 			return (lines);
 		}
+
+		#endregion
+
+		#region Private Methods
+		//==========================================================================================
+		// Private Methods
+		//==========================================================================================
+
+		private void DequeueExcessLine()
+		{
+			List<DisplayElement> line = _lines.Dequeue();
+			foreach (DisplayElement de in line)
+			{
+				if (de.IsDataElement)
+					_dataCount--;
+			}
+		}
+
+		#endregion
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary></summary>
 		new public string ToString()
@@ -175,32 +192,47 @@ namespace YAT.Domain
 			return (ToString(""));
 		}
 
+		#region Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+		// Object Members > Extensions
+		//------------------------------------------------------------------------------------------
+
 		/// <summary></summary>
 		public string ToString(string indent)
 		{
 			return (indent + "- DataCapacity: " + _lineCapacity.ToString("D") + Environment.NewLine +
 					indent + "- DataCount: " + _dataCount.ToString("D") + Environment.NewLine +
-					indent + "- LineCount: " + _lineCount.ToString("D") + Environment.NewLine +
-					indent + "- Queue: " + Environment.NewLine + QueueToString(indent + "--"));
+					indent + "- LineCount: " + _lines.Count.ToString("D") + Environment.NewLine +
+					indent + "- Lines: " + Environment.NewLine + LinesToString(indent + "--"));
 		}
 
 		/// <summary></summary>
-		public string QueueToString()
+		public string LinesToString()
 		{
-			return (QueueToString(""));
+			return (LinesToString(""));
 		}
 
 		/// <summary></summary>
-		public string QueueToString(string indent)
+		public string LinesToString(string indent)
 		{
 			StringWriter to = new StringWriter();
-			int i = 1;
-			foreach (DisplayElement de in ToElements())
+			int l = 0;
+			foreach (List<DisplayElement> line in ToLines())
 			{
-				to.Write(indent + "DisplayElement " + i++ + ":" + Environment.NewLine);
-				to.Write(de.ToString(indent + "--"));
+				l++;
+				int e = 0;
+				foreach (DisplayElement de in line)
+				{
+					e++;
+					to.Write(indent + "Line " + l + " DisplayElement " + e + ":" + Environment.NewLine);
+					to.Write(de.ToString(indent + "--"));
+				}
 			}
 			return (to.ToString());
 		}
+
+		#endregion
+
+		#endregion
 	}
 }

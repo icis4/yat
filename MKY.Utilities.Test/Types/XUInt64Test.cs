@@ -50,8 +50,8 @@ namespace MKY.Utilities.Test.Types
 				DecString = decString;
 				HexString = hexString;
 
-				DecFormat = "D" + DecString.Length.ToString();
-				HexFormat = "X" + HexString.Length.ToString();
+				DecFormat = "D" + DecString.Length;
+				HexFormat = "X" + HexString.Length;
 
 				ByteArray = byteArray;
 			}
@@ -173,7 +173,7 @@ namespace MKY.Utilities.Test.Types
 						Console.WriteLine("Invalid parser output bytes:");
 						Console.WriteLine();
 						Console.WriteLine("Input data =");
-						Console.WriteLine(@"""" + ts.Data.ToString() + @"""");
+						Console.WriteLine(@"""" + ts.Data + @"""");
 						Console.WriteLine();
 						Console.WriteLine("Expected bytes =");
 						foreach (byte b in ts.ByteArray)

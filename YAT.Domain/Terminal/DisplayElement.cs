@@ -123,13 +123,13 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public LineLength()
-				: base("(" + 0.ToString() + ")", false)
+				: base("(" + 0 + ")", false)
 			{
 			}
 
 			/// <summary></summary>
 			public LineLength(int length)
-				: base("(" + length.ToString() + ")", false)
+				: base("(" + length + ")", false)
 			{
 			}
 		}
@@ -277,8 +277,8 @@ namespace YAT.Domain
 		{
 			return (indent + "- Type: " + GetType().Name + Environment.NewLine +
 					indent + "- Text: " + _text + Environment.NewLine +
-					indent + "- IsDataElement: " + _isDataElement.ToString() + Environment.NewLine +
-					indent + "- IsEol: " + _isEol.ToString() + Environment.NewLine);
+					indent + "- IsDataElement: " + _isDataElement + Environment.NewLine +
+					indent + "- IsEol: " + _isEol + Environment.NewLine);
 		}
 	}
 

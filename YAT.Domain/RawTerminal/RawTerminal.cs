@@ -314,7 +314,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			return (indent + "- IOSettings: " + _ioSettings.ToString() + Environment.NewLine +
+			return (indent + "- IOSettings: " + _ioSettings + Environment.NewLine +
 					indent + "- TxRepository: " + Environment.NewLine + _txRepository.ToString(indent + "- ") +
 					indent + "- BidirRepository: " + Environment.NewLine + _bidirRepository.ToString(indent + "- ") +
 					indent + "- RxRepository: " + Environment.NewLine + _rxRepository.ToString(indent + "- "));
@@ -476,8 +476,6 @@ namespace YAT.Domain
 			if (_io.Receive(out data) > 0)
 			{
 				RawElement re = new RawElement(data, SerialDirection.Rx);
-				//\fixme
-				//System.Diagnostics.Debug.Write(_rxRepository.ToString());
 				_rxRepository.Enqueue(re);
 				_bidirRepository.Enqueue(re);
 				OnRawElementReceived(new RawElementEventArgs(re));
