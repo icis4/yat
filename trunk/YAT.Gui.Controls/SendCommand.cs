@@ -231,6 +231,9 @@ namespace YAT.Gui.Controls
 			_commandEditState = TextEditState.HasFocusButIsNotValidated;
 		}
 
+		/// <remarks>
+		/// Leave() is called before Validating() when focus gets lost, e.g. TAB is pressed.
+		/// </remarks>
 		private void comboBox_Command_Leave(object sender, EventArgs e)
 		{
             if (_commandEditState == TextEditState.HasFocusAndIsValidated)
@@ -245,6 +248,9 @@ namespace YAT.Gui.Controls
 				_commandEditState = TextEditState.HasFocusButIsNotValidated;
 		}
 
+		/// <remarks>
+		/// Validating() is called after Leave() when focus gets lost, e.g. TAB is pressed.
+		/// </remarks>
 		private void comboBox_Command_Validating(object sender, CancelEventArgs e)
 		{
 			if (!_isSettingControls)
