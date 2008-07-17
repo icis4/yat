@@ -103,10 +103,10 @@ namespace YAT.Gui.Controls
 			this.textBox_Command.Size = new System.Drawing.Size(313, 20);
 			this.textBox_Command.TabIndex = 1;
 			this.toolTip.SetToolTip(this.textBox_Command, "Enter Command, press <...> to enter multi line command");
-			this.textBox_Command.Enter += new System.EventHandler(this.textBox_Command_Enter);
-			this.textBox_Command.Leave += new System.EventHandler(this.textBox_Command_Leave);
-			this.textBox_Command.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_Command_Validating);
 			this.textBox_Command.TextChanged += new System.EventHandler(this.textBox_Command_TextChanged);
+			this.textBox_Command.Leave += new System.EventHandler(this.textBox_Command_Leave);
+			this.textBox_Command.Enter += new System.EventHandler(this.textBox_Command_Enter);
+			this.textBox_Command.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_Command_Validating);
 			// 
 			// button_SetFile
 			// 
@@ -146,6 +146,7 @@ namespace YAT.Gui.Controls
 			this.Name = "PredefinedCommandSettingsSet";
 			this.Size = new System.Drawing.Size(584, 20);
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.PredefinedCommandSettingsSet_Paint);
+			this.Enter += new System.EventHandler(this.PredefinedCommandSettingsSet_Enter);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

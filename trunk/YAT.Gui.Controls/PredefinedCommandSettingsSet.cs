@@ -16,6 +16,14 @@ using YAT.Gui.Utilities;
 
 namespace YAT.Gui.Controls
 {
+	/// <summary>
+	/// Provides command edit. Control keeps track of the edit state to properly
+	/// react on all possible edit states.
+	/// </summary>
+	/// <remarks>
+	/// On focus enter, edit state is always reset.
+	/// On focus leave, edit state is kept depending on how focus is leaving.
+	/// </remarks>
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("CommandChanged")]
 	public partial class PredefinedCommandSettingsSet : UserControl
@@ -25,11 +33,10 @@ namespace YAT.Gui.Controls
 		// Types
 		//==========================================================================================
 
-		private enum TextEditState
+		private enum FocusState
 		{
 			Inactive,
-			HasFocusButIsNotValidated,
-			HasFocusAndIsValidated,
+			HasFocus,
 			IsLeaving,
 		}
 
@@ -56,7 +63,8 @@ namespace YAT.Gui.Controls
 		private Model.Types.Command _command = new Model.Types.Command();
 		private Domain.TerminalType _terminalType = _TerminalTypeDefault;
 
-		private TextEditState _commandEditState = TextEditState.Inactive;
+		private FocusState _focusState = FocusState.Inactive;
+		private bool _isValidated = false;
 
 		#endregion
 
@@ -79,6 +87,7 @@ namespace YAT.Gui.Controls
 		public PredefinedCommandSettingsSet()
 		{
 			InitializeComponent();
+			SetControls();
 		}
 
 		#endregion
@@ -136,9 +145,18 @@ namespace YAT.Gui.Controls
 			{
 				_isStartingUp = false;
 
-				// initially set controls and validate its contents where needed
+				// Initially set controls and validate its contents where needed
 				SetControls();
+
+				// Move cursor to end
+				textBox_Command.SelectionStart = textBox_Command.Text.Length;
 			}
+		}
+
+		private void PredefinedCommandSettingsSet_Enter(object sender, EventArgs e)
+		{
+			_focusState = FocusState.Inactive;
+			_isValidated = false;
 		}
 
 		#endregion
@@ -156,51 +174,76 @@ namespace YAT.Gui.Controls
 
 		private void textBox_Command_Enter(object sender, EventArgs e)
 		{
-			// clear "<Enter a command...>" if needed
-			if (!_command.IsSingleLineCommand)
+			// Clear "<Enter a command...>" if needed
+			if ((_focusState == FocusState.Inactive) && !_command.IsSingleLineCommand)
 			{
 				_isSettingControls = true;
 				textBox_Command.Text = "";
 				_isSettingControls = false;
 			}
-			_commandEditState = TextEditState.HasFocusButIsNotValidated;
+
+			_focusState = FocusState.HasFocus;
+			_isValidated = false;
 		}
 
+		/// <remarks>
+		/// Event sequence when focus is leaving, e.g. TAB is pressed.
+		/// 1. ComboBox.Leave()
+		/// 2. ComboBox.Validating()
+		/// </remarks>
 		private void textBox_Command_Leave(object sender, System.EventArgs e)
 		{
-			_commandEditState = TextEditState.IsLeaving;
+			if (_isValidated)
+				_focusState = FocusState.Inactive;
+			else
+				_focusState = FocusState.IsLeaving;
 		}
 
 		private void textBox_Command_TextChanged(object sender, System.EventArgs e)
 		{
 			if (!_isSettingControls)
-				_commandEditState = TextEditState.HasFocusButIsNotValidated;
+				_isValidated = false;
 		}
 
+		/// <remarks>
+		/// Event sequence when focus is leaving, e.g. TAB is pressed.
+		/// 1. ComboBox.Leave()
+		/// 2. ComboBox.Validating()
+		/// </remarks>
 		private void textBox_Command_Validating(object sender, CancelEventArgs e)
 		{
 			if (!_isSettingControls)
 			{
 				if (Model.Settings.SendCommandSettings.IsEasterEggCommand(textBox_Command.Text))
 				{
-					if (_commandEditState == TextEditState.IsLeaving)
-						_commandEditState = TextEditState.Inactive;
+					_isValidated = true;
+
+					if (_focusState == FocusState.IsLeaving)
+						_focusState = FocusState.Inactive;
 					else
-						_commandEditState = TextEditState.HasFocusAndIsValidated;
+						_focusState = FocusState.HasFocus;
 
 					SetSingleLineCommand(textBox_Command.Text);
 					return;
 				}
-				if (Validation.ValidateSequence(this, "Command", textBox_Command.Text))
+
+				int invalidTextStart;
+				int invalidTextLength;
+				if (Validation.ValidateSequence(this, "Command", textBox_Command.Text, out invalidTextStart, out invalidTextLength))
 				{
-					if (_commandEditState == TextEditState.IsLeaving)
-						_commandEditState = TextEditState.Inactive;
+					_isValidated = true;
+
+					if (_focusState == FocusState.IsLeaving)
+						_focusState = FocusState.Inactive;
 					else
-						_commandEditState = TextEditState.HasFocusAndIsValidated;
+						_focusState = FocusState.HasFocus;
 
 					SetSingleLineCommand(textBox_Command.Text);
 					return;
 				}
+
+				_focusState = FocusState.HasFocus;
+				textBox_Command.Select(invalidTextStart, invalidTextLength);
 				e.Cancel = true;
 			}
 		}
@@ -262,13 +305,14 @@ namespace YAT.Gui.Controls
 			{
 				// command
 				textBox_Command.Visible = true;
-				textBox_Command.Text = _command.SingleLineCommand;
+				if (_focusState == FocusState.Inactive)
+					textBox_Command.Text = _command.SingleLineCommand;
 
 				// buttons
-                button_SetMultiLineCommand.Visible = true;
-                button_SetMultiLineCommand.Enabled = true;
-                button_SetFile.Visible = false;
-                button_SetFile.Enabled = false;
+				button_SetMultiLineCommand.Visible = true;
+				button_SetMultiLineCommand.Enabled = true;
+				button_SetFile.Visible = false;
+				button_SetFile.Enabled = false;
 
 				// file path
 				pathLabel_FilePath.Visible = false;
@@ -285,10 +329,10 @@ namespace YAT.Gui.Controls
 				textBox_Command.Text = "";
 
 				// buttons
-                button_SetMultiLineCommand.Visible = false;
-                button_SetMultiLineCommand.Enabled = false;
-                button_SetFile.Visible = true;
-                button_SetFile.Enabled = true;
+				button_SetMultiLineCommand.Visible = false;
+				button_SetMultiLineCommand.Enabled = false;
+				button_SetFile.Visible = true;
+				button_SetFile.Enabled = true;
 
 				// file path
 				pathLabel_FilePath.Visible = true;
@@ -305,14 +349,14 @@ namespace YAT.Gui.Controls
 			{
 				// command
 				textBox_Command.Visible = true;
-				if (_commandEditState == TextEditState.Inactive)
+				if (_focusState == FocusState.Inactive)
 					textBox_Command.Text = Command.EnterCommandText;
 
 				// buttons
-                button_SetMultiLineCommand.Visible = true;
-                button_SetMultiLineCommand.Enabled = true;
-                button_SetFile.Visible = false;
-                button_SetFile.Enabled = false;
+				button_SetMultiLineCommand.Visible = true;
+				button_SetMultiLineCommand.Enabled = true;
+				button_SetFile.Visible = false;
+				button_SetFile.Enabled = false;
 
 				// file path
 				pathLabel_FilePath.Visible = false;

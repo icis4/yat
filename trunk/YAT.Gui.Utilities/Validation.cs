@@ -12,6 +12,28 @@ namespace YAT.Gui.Utilities
 			return (ValidateSequence(owner, description, textToValidate, Domain.Parser.ParseMode.All));
 		}
 
+		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, out int invalidTextStart, out int invalidTextLength)
+		{
+			string parsedText;
+			if (ValidateSequence(owner, description, textToValidate, out parsedText))
+			{
+				invalidTextStart = -1;
+				invalidTextLength = 0;
+				return (true);
+			}
+			else
+			{
+				invalidTextStart = parsedText.Length;
+				invalidTextLength = textToValidate.Length - invalidTextStart;
+				return (false);
+			}
+		}
+
+		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, out string parsedText)
+		{
+			return (ValidateSequence(owner, description, textToValidate, Domain.Parser.ParseMode.All, out parsedText));
+		}
+
 		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, Domain.Parser.ParseMode parseMode)
 		{
 			string parsedText;

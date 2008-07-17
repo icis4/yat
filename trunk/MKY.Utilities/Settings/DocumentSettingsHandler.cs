@@ -188,7 +188,7 @@ namespace MKY.Utilities.Settings
 		{
 			if (File.Exists(filePath)) // first check for file to minimize exceptions thrown
 			{
-				// try to open existing file with default deserialization
+				// Try to open existing file with default deserialization
 				try
 				{
 					object settings = null;
@@ -203,23 +203,7 @@ namespace MKY.Utilities.Settings
 				{
 				}
 
-				// try to open existing file with tolerant deserialization
-				/*try
-				{
-					object settings = null;
-					using (StreamReader sr = new StreamReader(filePath))
-					{
-						TolerantXmlSerializer serializer = new TolerantXmlSerializer(type);
-						settings = serializer.Deserialize(sr);
-					}
-					return (settings);
-				}
-				catch (Exception ex)
-				{
-					XDebug.WriteException(this, ex);
-				}*/
-
-				// try to open existing file with alternate-tolerant deserialization
+				// Try to open existing file with tolerant & alternate-tolerant deserialization
 				try
 				{
 					object settings = null;
@@ -236,7 +220,7 @@ namespace MKY.Utilities.Settings
 				}
 			}
 
-			// if not successful, return null
+			// If not successful, return null
 			return (null);
 		}
 

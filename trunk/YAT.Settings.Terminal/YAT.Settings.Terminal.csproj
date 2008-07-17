@@ -7,8 +7,8 @@
     <ProjectGuid>{FE2D334F-B2D8-4A07-B63D-93BA775DBBCF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>YAT.Settings.Document</RootNamespace>
-    <AssemblyName>YAT.Settings.Document</AssemblyName>
+    <RootNamespace>YAT.Settings.Terminal</RootNamespace>
+    <AssemblyName>YAT.Settings.Terminal</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\YAT.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>

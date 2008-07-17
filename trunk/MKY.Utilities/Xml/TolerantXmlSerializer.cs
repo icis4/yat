@@ -1,3 +1,7 @@
+// Enable to write input and output documents and schemas to files
+//#define WRITE_DOCUMENTS_TO_FILES
+//#define WRITE_SCHEMAS_TO_FILES
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -34,19 +38,35 @@ namespace MKY.Utilities.Xml
 		{
 			_type = type;
 
-			// create an empty object tree of the type to be able to serialize it afterwards
+			// Create an empty object tree of the type to be able to serialize it afterwards
 			object obj = _type.GetConstructor(new System.Type[] { }).Invoke(new object[] { });
 
-			// serialize the empty object tree into a string
-			// unlike file serialization, this string serialization will be UTF-16 encoded
+			// Serialize the empty object tree into a string
+			// Unlike file serialization, this string serialization will be UTF-16 encoded
 			StringBuilder sb = new StringBuilder();
 			XmlWriter writer = XmlWriter.Create(sb);
 			XmlSerializer serializer = new XmlSerializer(type);
 			serializer.Serialize(writer, obj);
 
-			// load that string into an XML document that serves as base for new documents
+			// Load that string into an XML document that serves as base for new documents
 			_defaultDocument = new XmlDocument();
 			_defaultDocument.LoadXml(sb.ToString());
+
+			// Retrieve default schema
+			XmlReflectionImporter reflectionImporter = new XmlReflectionImporter();
+			XmlTypeMapping typeMapping = reflectionImporter.ImportTypeMapping(type);
+			XmlSchemas schemas = new XmlSchemas();
+			XmlSchemaExporter schemaExporter = new XmlSchemaExporter(schemas);
+			schemaExporter.ExportTypeMapping(typeMapping);
+
+			// Set and compile default schema
+			_defaultDocument.Schemas.Add(schemas[0]);
+			_defaultDocument.Schemas.Compile();
+			_defaultDocument.Validate(null);
+
+		#if WRITE_SCHEMAS_TO_FILES
+			WriteSchemasToFiles(_defaultDocument.Schemas, "DefaultSchema");
+		#endif
 		}
 
 		#endregion
@@ -70,17 +90,39 @@ namespace MKY.Utilities.Xml
 		/// </remarks>
 		public object Deserialize(TextReader reader)
 		{
-			// reads input stream
+			// Read input stream
 			XmlDocument inputDocument = CreateDocumentFromInput(reader);
 
-			// create output document from default
+		#if WRITE_DOCUMENTS_TO_FILES
+			WriteDocumentToFile(inputDocument, "InputDocument");
+		#endif
+
+			// Retrieve and activate schema within document
+			inputDocument.Schemas = InferSchemaFromXml(inputDocument.OuterXml);
+			inputDocument.Validate(null);
+
+		#if WRITE_SCHEMAS_TO_FILES
+			WriteSchemasToFiles(inputDocument.Schemas, "InputSchema");
+		#endif
+
+			// Create output document from default
 			XmlDocument outputDocument = new XmlDocument();
 			outputDocument.LoadXml(_defaultDocument.InnerXml);
+			outputDocument.Schemas = _defaultDocument.Schemas;
+			outputDocument.Validate(null);
 
-			// recursively traverse documents node-by-node and copy compatible nodes
+		#if WRITE_SCHEMAS_TO_FILES
+			WriteSchemasToFiles(outputDocument.Schemas, "OutputSchema");
+		#endif
+
+			// Recursively traverse documents node-by-node and copy compatible nodes
 			CopyDocumentTolerantly(inputDocument, outputDocument);
 
-			// create object tree from output document
+		#if WRITE_DOCUMENTS_TO_FILES
+			WriteDocumentToFile(outputDocument, "OutputDocument");
+		#endif
+
+			// Create object tree from output document
 			return (CreateObjectTreeFromDocument(outputDocument));
 		}
 
@@ -134,69 +176,37 @@ namespace MKY.Utilities.Xml
 		}
 
 		/// <summary>
+		/// Creates and returns object tree from document.
+		/// </summary>
+		private object CreateObjectTreeFromDocument(XmlDocument document)
+		{
+			// Save the resulting document into a string
+			// Unlike file serialization, this string serialization will be UTF-16 encoded
+			StringBuilder sb = new StringBuilder();
+			XmlWriter writer = XmlWriter.Create(sb);
+			document.Save(writer);
+
+			// Deserialize that string into an object tree
+			StringReader sr = new StringReader(sb.ToString());
+			XmlSerializer serializer = new XmlSerializer(_type);
+			return (serializer.Deserialize(sr));
+		}
+
+		/// <summary>
 		/// Recursively traverses documents node-by-node and copies compatible nodes.
 		/// </summary>
 		private void CopyDocumentTolerantly(XmlDocument inputDocument, XmlDocument outputDocument)
 		{
-			// retrieve and activate schema within document
-			XmlSchema inputSchema = InferSchemaFromXml(inputDocument.OuterXml);
-			inputDocument.Schemas.Add(inputSchema);
-			inputDocument.Validate(null);
-
-			#region Disabled Debug Output
-			//--------------------------------------------------------------------------------------
-			#if false
-			using (StreamWriter sw = new StreamWriter(@"c:\" + GetType() + ".CopyDocumentTolerantly-InputSchema.xsd"))
-			{
-				inputSchema.Write(sw);
-			}
-			#endif
-			//--------------------------------------------------------------------------------------
-			#endregion
-
-			// retrieve and reset navigator
+			// Retrieve and reset navigator
 			XPathNavigator inputNavigator = inputDocument.CreateNavigator();
 			inputNavigator.MoveToRoot();
 
-			// retrieve and activate schema within document
-			XmlSchema outputSchema = InferSchemaFromXml(outputDocument.OuterXml);
-			outputDocument.Schemas.Add(outputSchema);
-			outputDocument.Validate(null);
-
-			#region Disabled Debug Output
-			//--------------------------------------------------------------------------------------
-			#if false
-			using (StreamWriter sw = new StreamWriter(@"c:\" + GetType() + ".CopyDocumentTolerantly-OutputSchema.xsd"))
-			{
-				outputSchema.Write(sw);
-			}
-			#endif
-			//--------------------------------------------------------------------------------------
-			#endregion
-
-			// retrieve and reset navigator
+			// Retrieve and reset navigator
 			XPathNavigator outputNavigator = outputDocument.CreateNavigator();
 			outputNavigator.MoveToRoot();
 
-			// copy recursivly
+			// Copy recursivly
 			CopyTolerantly(inputNavigator, outputNavigator);
-		}
-
-		private XmlSchema InferSchemaFromXml(string xmlString)
-		{
-			XmlSchemaSet schemaSet = new XmlSchemaSet();
-			XmlSchemaInference inference = new XmlSchemaInference();
-			using (StringReader sr = new StringReader(xmlString))
-			{
-				XmlReader reader = XmlReader.Create(sr);
-				schemaSet = inference.InferSchema(reader);
-			}
-
-			// return first schema
-			foreach (XmlSchema s in schemaSet.Schemas())
-				return (s);
-
-			return (null);
 		}
 
 		/// <summary>
@@ -315,35 +325,28 @@ namespace MKY.Utilities.Xml
 		}
 
 		/// <summary>
-		/// Tries to copy the value if both navigators are pointing to an element with the same type.
+		/// Tries to copy the value if both navigators are pointing to an element with a compatible type.
 		/// </summary>
 		private bool TryToCopyValue(XPathNavigator inputNavigator, XPathNavigator outputNavigator)
 		{
-			XmlSchemaType inputType = inputNavigator.SchemaInfo.SchemaType;
-			XmlSchemaType outputType = outputNavigator.SchemaInfo.SchemaType;
+			// Navigate to parents to set typed value
+			XPathNavigator outputParentNavigator;
+			outputParentNavigator = outputNavigator.Clone();
+			outputParentNavigator.MoveToParent();
 
-			// if necessary, navigate to parent to retrieve type
-			// must always be done on both to ensure comparing apples with apples
-			if ((inputType == null) || (outputType == null))
+			XPathNavigator inputParentNavigator;
+			inputParentNavigator = inputNavigator.Clone();
+			inputParentNavigator.MoveToParent();
+
+			try
 			{
-				XPathNavigator parentNavigator;
-
-				parentNavigator = inputNavigator.Clone();
-				parentNavigator.MoveToParent();
-				inputType = parentNavigator.SchemaInfo.SchemaType;
-
-				parentNavigator = outputNavigator.Clone();
-				parentNavigator.MoveToParent();
-				outputType = parentNavigator.SchemaInfo.SchemaType;
-			}
-
-			// copy value if type fits
-			if (inputType == outputType)
-			{
-				outputNavigator.SetValue(inputNavigator.Value);
+				outputParentNavigator.SetTypedValue(inputParentNavigator.TypedValue);
 				return (true);
 			}
-			return (false);
+			catch
+			{
+				return (false);
+			}
 		}
 
 		/// <summary>
@@ -367,22 +370,52 @@ namespace MKY.Utilities.Xml
 			}
 		}
 
-		/// <summary>
-		/// Creates and returns object tree from document.
-		/// </summary>
-		private object CreateObjectTreeFromDocument(XmlDocument document)
+		private XmlSchemaSet InferSchemaFromXml(string xmlString)
 		{
-			// save the resulting document into a string
-			// unlike file serialization, this string serialization will be UTF-16 encoded
-			StringBuilder sb = new StringBuilder();
-			XmlWriter writer = XmlWriter.Create(sb);
-			document.Save(writer);
-
-			// deserialize that string into an object tree
-			StringReader sr = new StringReader(sb.ToString());
-			XmlSerializer serializer = new XmlSerializer(_type);
-			return (serializer.Deserialize(sr));
+			using (StringReader sr = new StringReader(xmlString))
+			{
+				XmlReader reader = XmlReader.Create(sr);
+				XmlSchemaInference inference = new XmlSchemaInference();
+				return (inference.InferSchema(reader));
+			}
 		}
+
+	#if WRITE_SCHEMAS_TO_FILES
+		private void WriteSchemasToFiles(XmlSchemaSet schemas, string label)
+		{
+			int i = 0;
+			foreach (XmlSchema schema in schemas.Schemas())
+			{
+				string filePath = @"C:\" + GetType() + "." + label + "-" + i + ".xsd";
+				using (StreamWriter sw = new StreamWriter(filePath))
+				{
+					schema.Write(sw);
+				}
+				Console.WriteLine
+				(
+					"For development purposes, schema written to" + Environment.NewLine +
+					@"""" + filePath + @""""
+				);
+				i++;
+			}
+		}
+	#endif
+
+	#if WRITE_DOCUMENTS_TO_FILES
+		private void WriteDocumentToFile(XmlDocument document, string label)
+		{
+			string filePath = @"C:\" + GetType() + "." + label + ".xml";
+			using (StreamWriter sw = new StreamWriter(filePath))
+			{
+				document.Save(sw);
+			}
+			Console.WriteLine
+			(
+				"For development purposes, document written to" + Environment.NewLine +
+				@"""" + filePath + @""""
+			);
+		}
+	#endif
 
 		#endregion
 	}

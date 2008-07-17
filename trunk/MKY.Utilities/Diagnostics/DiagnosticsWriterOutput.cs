@@ -45,11 +45,11 @@ namespace MKY.Utilities.Diagnostics
 					writer.Indent();
 					{
 						writer.Write("Type: ");
-						writer.WriteLine(ex.GetType().ToString());
+						writer.WriteLine(exception.GetType().ToString());
 						writer.WriteLine("Message:");
 						writer.Indent();
 						{
-							sr = new StringReader(ex.Message);
+							sr = new StringReader(exception.Message);
 							do
 							{
 								line = sr.ReadLine();
@@ -60,9 +60,9 @@ namespace MKY.Utilities.Diagnostics
 						}
 						writer.Unindent();
 						writer.Write("Source: ");
-						writer.WriteLine(ex.Source);
+						writer.WriteLine(exception.Source);
 						writer.WriteLine("Stack:"); // stack trace is already indented
-						sr = new StringReader(ex.StackTrace);
+						sr = new StringReader(exception.StackTrace);
 						do
 						{
 							line = sr.ReadLine();

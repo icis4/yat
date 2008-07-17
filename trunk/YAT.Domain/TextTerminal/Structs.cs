@@ -16,9 +16,9 @@ namespace YAT.Domain
 		[XmlElement("Enabled")]
 		public bool Enabled;
 
-		/// <summary></summary>
+		/// <summary>Delay in ms</summary>
 		[XmlElement("Delay")]
-		public int Delay;                            // in ms
+		public int Delay;
 
 		/// <summary></summary>
 		[XmlElement("LineInterval")]
@@ -81,9 +81,9 @@ namespace YAT.Domain
 		[XmlElement("Enabled")]
 		public bool Enabled;
 
-		/// <summary></summary>
+		/// <summary>Wait timeout in ms</summary>
 		[XmlElement("Timeout")]
-		public int Timeout;                            // in ms
+		public int Timeout;
 
 		/// <summary></summary>
 		public WaitForResponse(bool enabled, int timeout)
