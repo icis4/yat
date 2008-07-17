@@ -33,9 +33,9 @@ namespace YAT.Domain.Settings
 		private bool _showLength;
 		private bool _showConnectTime;
 		private bool _showCounters;
-		private bool _directionLineBreakEnabled;
 		private int _txMaximalLineCount;
 		private int _rxMaximalLineCount;
+		private bool _directionLineBreakEnabled;
 
 		/// <summary></summary>
 		public DisplaySettings()
@@ -66,9 +66,9 @@ namespace YAT.Domain.Settings
 			_showLength         = rhs.ShowLength;
 			_showConnectTime    = rhs.ShowConnectTime;
 			_showCounters       = rhs.ShowCounters;
-			_directionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
 			_txMaximalLineCount = rhs.TxMaximalLineCount;
 			_rxMaximalLineCount = rhs.RxMaximalLineCount;
+			_directionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
 
 			ClearChanged();
 		}

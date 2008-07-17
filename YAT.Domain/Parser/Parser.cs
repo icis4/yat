@@ -262,6 +262,13 @@ namespace YAT.Domain.Parser
 						ChangeState(parser, null);
 						return (true);
 					}
+					case -1:                               // end-of-stream
+					{
+						parser.EndByteArray();
+						parser.HasFinished = true;
+						ChangeState(parser, null);
+						return (true);
+					}
 					default:
 					{
 						formatException = new FormatException
@@ -684,7 +691,7 @@ namespace YAT.Domain.Parser
 				{
 					EndByteArray();
 
-					// return part of string that could be parsed
+					// Return part of string that could be parsed
 					parsed = XString.Left(s, s.Length - _reader.ReadToEnd().Length - 1);
 					result = _resultList.ToArray();
 					return (false);

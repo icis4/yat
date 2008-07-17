@@ -125,13 +125,20 @@ namespace YAT.Gui.Controls
 
 				// validate each line
 				bool isValid = true;
+				int textLength = 0;
 				foreach (string s in multiLineCommand)
 				{
-					if (!Validation.ValidateSequence(this, "Command", s))
+					int invalidTextStart;
+					int invalidTextLength;
+					if (!Validation.ValidateSequence(this, "Command", s, out invalidTextStart, out invalidTextLength))
 					{
+						invalidTextStart += textLength;
+						invalidTextLength = textBox_Command.Text.Length - invalidTextStart;
+						textBox_Command.Select(invalidTextStart, invalidTextLength);
 						isValid = false;
 						break;
 					}
+					textLength += s.Length + Environment.NewLine.Length;
 				}
 				if (isValid)
 				{

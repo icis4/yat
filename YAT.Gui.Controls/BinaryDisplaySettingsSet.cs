@@ -139,7 +139,9 @@ namespace YAT.Gui.Controls
 
 		private void textBox_SequenceLineBreakSequence_Validating(object sender, CancelEventArgs e)
 		{
-			if (Validation.ValidateSequence(this, "Sequence", textBox_SequenceLineBreakSequence.Text))
+			int invalidTextStart;
+			int invalidTextLength;
+			if (Validation.ValidateSequence(this, "Sequence", textBox_SequenceLineBreakSequence.Text, out invalidTextStart, out invalidTextLength))
 			{
 				Domain.BinarySequenceLineBreak slb = _settings.SequenceLineBreak;
 				slb.Sequence = textBox_SequenceLineBreakSequence.Text;
@@ -149,6 +151,7 @@ namespace YAT.Gui.Controls
 			}
 			else
 			{
+				textBox_SequenceLineBreakSequence.Select(invalidTextStart, invalidTextLength);
 				e.Cancel = true;
 			}
 		}

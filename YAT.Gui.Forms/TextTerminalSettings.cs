@@ -119,7 +119,9 @@ namespace YAT.Gui.Forms
 			}
 			else
 			{
-				if (Validation.ValidateSequence(this, "EOL", eolString))
+				int invalidTextStart;
+				int invalidTextLength;
+				if (Validation.ValidateSequence(this, "EOL", eolString, out invalidTextStart, out invalidTextLength))
 				{
 					if (!_isSettingControls)
 					{
@@ -129,6 +131,7 @@ namespace YAT.Gui.Forms
 				}
 				else
 				{
+					comboBox_TxEol.Select(invalidTextStart, invalidTextLength);
 					e.Cancel = true;
 				}
 			}
@@ -160,7 +163,9 @@ namespace YAT.Gui.Forms
 			}
 			else
 			{
-				if (Validation.ValidateSequence(this, "EOL", eolString))
+				int invalidTextStart;
+				int invalidTextLength;
+				if (Validation.ValidateSequence(this, "EOL", eolString, out invalidTextStart, out invalidTextLength))
 				{
 					if (!_isSettingControls)
 					{
@@ -170,6 +175,7 @@ namespace YAT.Gui.Forms
 				}
 				else
 				{
+					comboBox_RxEol.Select(invalidTextStart, invalidTextLength);
 					e.Cancel = true;
 				}
 			}

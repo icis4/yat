@@ -222,7 +222,9 @@ namespace YAT.Gui.Forms
 		private void textBox_ParityReplacement_Validating(object sender, CancelEventArgs e)
 		{
 			string replacement = textBox_ParityReplacement.Text;
-			if (Validation.ValidateSequence(this, "Replacement", replacement))
+			int invalidTextStart;
+			int invalidTextLength;
+			if (Validation.ValidateSequence(this, "Replacement", replacement, out invalidTextStart, out invalidTextLength))
 			{
 				Domain.Parser.Parser p = new Domain.Parser.Parser();
 				byte[] bytes = p.Parse(replacement);
@@ -258,10 +260,10 @@ namespace YAT.Gui.Forms
 						);
 					e.Cancel = true;
 				}
-
 			}
 			else
 			{
+				textBox_ParityReplacement.Select(invalidTextStart, invalidTextLength);
 				e.Cancel = true;
 			}
 		}

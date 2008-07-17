@@ -15,6 +15,14 @@ using YAT.Model.Settings;
 
 namespace YAT.Gui.Controls
 {
+	/// <summary>
+	/// Provides command edit and send. Control keeps track of the edit state to properly
+	/// react on all possible edit states.
+	/// </summary>
+	/// <remarks>
+	/// On focus enter, edit state is always reset.
+	/// On focus leave, edit state is kept depending on how focus is leaving.
+	/// </remarks>
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("SendCommandRequest")]
 	public partial class SendCommand : UserControl
@@ -24,13 +32,12 @@ namespace YAT.Gui.Controls
 		// Types
 		//==========================================================================================
 
-		private enum TextEditState
+		private enum FocusState
 		{
 			Inactive,
-			HasFocusButIsNotValidated,
-			HasFocusAndIsValidated,
-			HasFocusAndIsValidatedAndSendRequested,
-			IsLeavingButIsNotValidated,
+			HasFocus,
+			IsLeaving,
+			IsLeavingControl,
 		}
 
 		#endregion
@@ -58,7 +65,9 @@ namespace YAT.Gui.Controls
 		private bool _terminalIsOpen = _TerminalIsOpenDefault;
         private float _splitterRatio = _SplitterRatioDefault;
 
-		private TextEditState _commandEditState = TextEditState.Inactive;
+		private FocusState _focusState = FocusState.Inactive;
+		private bool _isValidated = false;
+		private bool _sendIsRequested = false;
 
 		#endregion
 
@@ -135,18 +144,18 @@ namespace YAT.Gui.Controls
 			}
 		}
 
-        [DefaultValue(_SplitterRatioDefault)]
-        public float SplitterRatio
-        {
-            get { return (_splitterRatio); }
-            set
-            {
-                _splitterRatio = value;
-                SetControls();
-            }
-        }
+		[DefaultValue(_SplitterRatioDefault)]
+		public float SplitterRatio
+		{
+			get { return (_splitterRatio); }
+			set
+			{
+				_splitterRatio = value;
+				SetControls();
+			}
+		}
 
-        #endregion
+		#endregion
 
 		#region Methods
 		//==========================================================================================
@@ -167,18 +176,18 @@ namespace YAT.Gui.Controls
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if ((_commandEditState != TextEditState.Inactive) && (keyData == Keys.Enter))
+			if ((_focusState != FocusState.Inactive) && (keyData == Keys.Enter))
 			{
 				if (button_SendCommand.Enabled)
 				{
-					if (_commandEditState == TextEditState.HasFocusButIsNotValidated)
+					if (_isValidated)
 					{
-						if (ValidateChildren())
-							RequestSendCommand();
+						RequestSendCommand();
 					}
 					else
 					{
-						RequestSendCommand();
+						if (ValidateChildren())
+							RequestSendCommand();
 					}
 				}
 				return (true);
@@ -199,12 +208,32 @@ namespace YAT.Gui.Controls
 			{
 				_isStartingUp = false;
 
-				// initially set controls and validate its contents where needed
+				// Initially set controls and validate its contents where needed
 				SetControls();
 
-				// move cursor to end
+				// Move cursor to end
 				comboBox_Command.SelectionStart = comboBox_Command.Text.Length;
 			}
+		}
+
+		private void SendCommand_Enter(object sender, EventArgs e)
+		{
+			_focusState = FocusState.Inactive;
+			_isValidated = false;
+		}
+
+		/// <remarks>
+		/// Event sequence when focus is leaving control, e.g. other MDI child activated.
+		/// 1. ComboBox.Leave()
+		/// 2. UserControl.Leave()
+		/// 3. ComboBox.Validating()
+		/// </remarks>
+		private void SendCommand_Leave(object sender, EventArgs e)
+		{
+			if (_isValidated)
+				_focusState = FocusState.Inactive;
+			else
+				_focusState = FocusState.IsLeavingControl;
 		}
 
 		#endregion
@@ -221,76 +250,101 @@ namespace YAT.Gui.Controls
 
 		private void comboBox_Command_Enter(object sender, EventArgs e)
 		{
-			// clear "<Enter a command...>" if needed
-			if (!_command.IsSingleLineCommand)
+			// Clear "<Enter a command...>" if needed
+			if ((_focusState == FocusState.Inactive) && !_command.IsSingleLineCommand)
 			{
 				_isSettingControls = true;
 				comboBox_Command.Text = "";
 				_isSettingControls = false;
 			}
-			_commandEditState = TextEditState.HasFocusButIsNotValidated;
+
+			_focusState = FocusState.HasFocus;
+			_isValidated = false;
 		}
 
 		/// <remarks>
-		/// Leave() is called before Validating() when focus gets lost, e.g. TAB is pressed.
+		/// Event sequence when focus is leaving, e.g. TAB is pressed.
+		/// 1. ComboBox.Leave()
+		/// 2. ComboBox.Validating()
+		/// 
+		/// Event sequence when focus is leaving control, e.g. other MDI child activated.
+		/// 1. ComboBox.Leave()
+		/// 2. UserControl.Leave()
+		/// 3. ComboBox.Validating()
 		/// </remarks>
 		private void comboBox_Command_Leave(object sender, EventArgs e)
 		{
-            if (_commandEditState == TextEditState.HasFocusAndIsValidated)
-                _commandEditState = TextEditState.Inactive;
-            else
-                _commandEditState = TextEditState.IsLeavingButIsNotValidated;
+			if (_isValidated)
+				_focusState = FocusState.Inactive;
+			else
+				_focusState = FocusState.IsLeaving;
 		}
 
 		private void comboBox_Command_TextChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
-				_commandEditState = TextEditState.HasFocusButIsNotValidated;
+				_isValidated = false;
 		}
 
 		/// <remarks>
-		/// Validating() is called after Leave() when focus gets lost, e.g. TAB is pressed.
+		/// Event sequence when focus is leaving, e.g. TAB is pressed.
+		/// 1. ComboBox.Leave()
+		/// 2. ComboBox.Validating()
+		/// 
+		/// Event sequence when focus is leaving control, e.g. other MDI child activated.
+		/// 1. ComboBox.Leave()
+		/// 2. UserControl.Leave()
+		/// 3. ComboBox.Validating()
 		/// </remarks>
 		private void comboBox_Command_Validating(object sender, CancelEventArgs e)
 		{
 			if (!_isSettingControls)
 			{
-                if ((_commandEditState == TextEditState.HasFocusButIsNotValidated) ||
-                    (_commandEditState == TextEditState.IsLeavingButIsNotValidated))
-                {
-                    if (SendCommandSettings.IsEasterEggCommand(comboBox_Command.Text))
-				    {
-					    if (_commandEditState == TextEditState.IsLeavingButIsNotValidated)
-						    _commandEditState = TextEditState.Inactive;
-					    else
-						    _commandEditState = TextEditState.HasFocusAndIsValidated;
+				if (!_isValidated && (_focusState != FocusState.IsLeavingControl))
+				{
+					if (SendCommandSettings.IsEasterEggCommand(comboBox_Command.Text))
+					{
+						_isValidated = true;
 
-					    SetSingleLineCommand(comboBox_Command.Text);
-					    return;
-				    }
-				    if (Validation.ValidateSequence(this, "Command", comboBox_Command.Text))
-				    {
-					    if (_commandEditState == TextEditState.IsLeavingButIsNotValidated)
-						    _commandEditState = TextEditState.Inactive;
-					    else
-						    _commandEditState = TextEditState.HasFocusAndIsValidated;
+						if (_focusState == FocusState.IsLeaving)
+							_focusState = FocusState.Inactive;
+						else
+							_focusState = FocusState.HasFocus;
 
-					    SetSingleLineCommand(comboBox_Command.Text);
-					    return;
-				    }
-				    e.Cancel = true;
+						CreateSingleLineCommand(comboBox_Command.Text);
+						return;
+					}
+
+					int invalidTextStart;
+					int invalidTextLength;
+					if (Validation.ValidateSequence(this, "Command", comboBox_Command.Text, out invalidTextStart, out invalidTextLength))
+					{
+						_isValidated = true;
+
+						if (_focusState == FocusState.IsLeaving)
+							_focusState = FocusState.Inactive;
+						else
+							_focusState = FocusState.HasFocus;
+
+						CreateSingleLineCommand(comboBox_Command.Text);
+						return;
+					}
+
+					_focusState = FocusState.HasFocus;
+					comboBox_Command.Select(invalidTextStart, invalidTextLength);
+					e.Cancel = true;
                 }
 			}
 		}
 
-        private void comboBox_Command_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!_isSettingControls)
-            {
-                _commandEditState = TextEditState.HasFocusAndIsValidated;
-                SetCommand((Command)((RecentItem<Command>)comboBox_Command.SelectedItem));
-            }
-       }
+		private void comboBox_Command_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+			{
+				_isValidated = true; // Commands in history have already been validated
+				SetCommand((Command)((RecentItem<Command>)comboBox_Command.SelectedItem));
+			}
+		}
         
         private void button_MultiLineCommand_Click(object sender, EventArgs e)
 		{
@@ -299,14 +353,14 @@ namespace YAT.Gui.Controls
 
 		private void button_SendCommand_Click(object sender, EventArgs e)
 		{
-			if (_commandEditState == TextEditState.HasFocusButIsNotValidated)
+			if (_isValidated)
 			{
-				if (ValidateChildren())
-					RequestSendCommand();
+				RequestSendCommand();
 			}
 			else
 			{
-				RequestSendCommand();
+				if (ValidateChildren())
+					RequestSendCommand();
 			}
 		}
 
@@ -321,16 +375,16 @@ namespace YAT.Gui.Controls
 		{
 			_isSettingControls = true;
 
-            splitContainer.SplitterDistance = (int)(_splitterRatio * splitContainer.Width);
+			splitContainer.SplitterDistance = (int)(_splitterRatio * splitContainer.Width);
 
-			if (_commandEditState == TextEditState.Inactive)
+			if (_focusState == FocusState.Inactive)
 			{
 				if (_command.IsCommand)
-                    comboBox_Command.Text = _command.SingleLineCommand;
+					comboBox_Command.Text = _command.SingleLineCommand;
 				else
 					comboBox_Command.Text = Command.EnterCommandText;
 			}
-			else if (_commandEditState == TextEditState.HasFocusAndIsValidatedAndSendRequested)
+			else if (_sendIsRequested)
 			{   // needed when command is modified (e.g. cleared) after send
 				if (_command.IsCommand)
 					comboBox_Command.Text = _command.SingleLineCommand;
@@ -354,21 +408,23 @@ namespace YAT.Gui.Controls
 		}
 
 		private void SetCommand(Command command)
-        {
-            _command = command;
+		{
+			_command = command;
 
-            SetControls();
-            OnCommandChanged(new EventArgs());
-        }
+			SetControls();
+			OnCommandChanged(new EventArgs());
+		}
 
-        private void SetSingleLineCommand(string commandLine)
-        {
-			// create new command to ensure that not only command but also description is updated
+		/// <remarks>
+		/// Always create new command to ensure that not only command but also description is updated.
+		/// </remarks>
+		private void CreateSingleLineCommand(string commandLine)
+		{
 			_command = new Command(commandLine);
 
-            SetControls();
-            OnCommandChanged(new EventArgs());
-        }
+			SetControls();
+			OnCommandChanged(new EventArgs());
+		}
 
         private void ShowMultiLineCommandBox(Control requestingControl)
 		{
@@ -404,17 +460,17 @@ namespace YAT.Gui.Controls
 
 		private void RequestSendCommand()
 		{
-			if (_commandEditState == TextEditState.Inactive)
+			if (_focusState == FocusState.Inactive)
 			{
 				OnSendCommandRequest(new EventArgs());
 			}
 			else
 			{
-				// temporarily changing the edit state is needed when command is modified
-				// (e.g. cleared) after send
-				_commandEditState = TextEditState.HasFocusAndIsValidatedAndSendRequested;
+				// notifying the send state is needed when command is automatically
+				//   modified (e.g. cleared) after send
+				_sendIsRequested = true;
 				OnSendCommandRequest(new EventArgs());
-				_commandEditState = TextEditState.HasFocusAndIsValidated;
+				_sendIsRequested = false;
 			}
 		}
 
