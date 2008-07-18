@@ -10,8 +10,6 @@ Note:	The whole release process takes about 4 hours
 	  > Attention: Ensure to replace version number including leading quote
 	               to keep SettingsFilesProvider and FileVersionsTest untouched
 	               e.g. replace "1.99.18 by "1.99.19
-	> Set product name in "YAT.Setup"
-	> Set product version in "YAT.Setup"
 
 
 2.	Set installation version if not already done
