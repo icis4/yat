@@ -8,8 +8,8 @@ namespace YAT.Utilities
 	public static class ApplicationInfo
 	{
 		//public const string ProductNamePostFix = "";
-		//public const string ProductNamePostFix = " Beta 2";
-		public const string ProductNamePostFix = " Beta 2 Candidate 4";
+		public const string ProductNamePostFix = " Beta 2";
+		//public const string ProductNamePostFix = " Beta 2 Candidate 4";
 		//public const string ProductNamePostFix = " Beta 2 Preliminary";
 
 		public static readonly string ProductName = Application.ProductName + ProductNamePostFix;

@@ -104,4 +104,4 @@ Note:	The whole release process takes about 4 hours
 
 17.	Immediately increment product name and versions
 	-----------------------------------------------
-	> Commit modifications to the subversion repository
+	> Commit modifications to the subversion repository according to 1.
