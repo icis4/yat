@@ -1,0 +1,57 @@
+
+1.	Upload distribution to SourceForge
+	----------------------------------
+	> Open FileZilla
+	> Use SFTP to connect to "frs.sourceforge.net"
+	  > SourceForge user and password
+	  > Port 22 for SFTP
+	> Browse to "incoming" directory
+	> Upload .zip's to "incoming"
+
+
+2.	Add release
+	-----------
+	> Open "Admin > File Releases"
+	> Select "Add Release" for desired package
+	> Set release name (e.g. "YAT 2.0 Beta 2 Candidate 1 Version 1.99.17")
+	> "Create"
+
+
+3.	Add release notes
+	-----------------
+	> Paste notes in
+	> Paste changes in
+	> Tick "preserve format"
+	> "Submit"
+
+
+4.	Add files to release
+	--------------------
+	> Tick desired files
+	> "Add"
+
+
+5.	Edit each file
+	--------------
+	> Set processor platform
+	> Set file type
+	> "Update/Refresh"
+
+
+6.	Check release and release notes
+	-------------------------------
+	> Clear browser cache
+	> Download release and verify contents of .zip
+	> Browse release notes
+
+
+7.	Hide obsolete release(s)
+	------------------------
+
+
+8.	Send monitoring email notice
+	----------------------------
+
+
+9.	Update news
+	-----------

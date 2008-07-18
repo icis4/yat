@@ -1,0 +1,84 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D8940035-D30A-48A3-AC28-E8A4B8910CB9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MKY.IO.Ports</RootNamespace>
+    <AssemblyName>MKY.IO.Ports</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Properties\MKY.IO.Ports.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\MKY.IO.Ports.xml</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\MKY.IO.Ports.xml</DocumentationFile>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="SerialPort\EventArgs.cs" />
+    <Compile Include="SerialPort\ISerialPort.cs" />
+    <Compile Include="SerialPort\ISerialPortDotNet.cs" />
+    <Compile Include="SerialPort\SerialPinChange.cs" />
+    <Compile Include="SerialPort\SerialPortControlPins.cs" />
+    <Compile Include="SerialPort\SerialPortDotNet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SerialPort\SerialPortDotNet.designer.cs">
+      <DependentUpon>SerialPortDotNet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SerialPort\SerialPortId.cs" />
+    <Compile Include="SerialPort\SerialPortList.cs" />
+    <Compile Include="SerialPort\SerialPortSearcher.cs" />
+    <Compile Include="SerialPort\SerialPortSettings.cs" />
+    <Compile Include="SerialPort\Types\BaudRate.cs" />
+    <Compile Include="SerialPort\Types\DataBits.cs" />
+    <Compile Include="SerialPort\Types\Handshake.cs" />
+    <Compile Include="SerialPort\Types\Parity.cs" />
+    <Compile Include="SerialPort\Types\StopBits.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MKY.Utilities\MKY.Utilities.csproj">
+      <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
+      <Name>MKY.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\MKY.IO.Ports.snk" />
+    <None Include="MKY.IO.Ports.cd" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
