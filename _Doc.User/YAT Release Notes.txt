@@ -40,8 +40,40 @@ You can also download .NET under "http://www.microsoft.com/net/"
 YAT 2.0
 =======
 
-YAT 2.0 Beta 2 Candidate 4 Version 1.99.xx :: 2008-06-xx
+YAT 2.0 Beta 2 Candidate 4 Version 1.99.20 :: 2008-07-18
 --------------------------------------------------------
+
+Important changes:
+- Treatment of serial port communication errors improved (feature request #1953199)
+   > On less critical errors, red error message is shown in monitor, no message box is shown anymore
+- XOn/XOff software flow control has thoroughly been tested, it correctly worked before
+- Support for COM ports above 256 has been tested with local virtual port loopbacks
+- File handling of workspace and terminal files improved
+   > Automated workspace/terminal use case tests added
+- Initialization and update of menu items improved
+- Text: EOL processing improved
+- Name of non-YAT assembly projects adapted to assembly name
+- Separate non-YAT assembly encapsulating serial port and socket providers
+
+Fixed bugs:
+- RTS/CTS hardware flow control is fixed and thoroughly tested (bugs #1919399 and #1944332)
+- Thread synchronization issue when closing while receiving fixed (bug #1931923)
+- Command validation fixed (bug #1983796) and improved
+- Font can be changed in format settings dialog (bug #1937065)
+- Shortcuts are immediately active, no need to open menu first anymore (bug #1944023)
+- Menu > Send > File now gets properly enabled (bug #1995796)
+- Clearing monitors also clears incomplete lines (bug #1942335)
+- Clearing predefined command description really clears it (bug #1945488)
+- ShowEOL = false doesn't strip chars anymore (bug #1931582)
+- Log now logs EOL according to settings (bug #1995797)
+- Help, release notes and tracker instructions forms are shown center of parent (bug #1938031)
+
+Limitations and known issues:
+- Auto-reopen not implementable due to .NET deadlock issue in SerialPort (feature request #1960299)
+- UTF-16/32 testing pending (bug #1931537)
+- More advanced text line send and receive options not yet implemented (feature requests #1808508 and #1808509)
+- Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
+
 
 YAT 2.0 Beta 2 Candidate 3 Version 1.99.19 :: 2008-04-01
 --------------------------------------------------------

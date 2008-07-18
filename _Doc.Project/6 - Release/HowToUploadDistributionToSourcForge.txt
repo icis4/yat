@@ -2,7 +2,9 @@
 1.	Upload distribution to SourceForge
 	----------------------------------
 	> Open FileZilla
-	> Use anonymous FTP to connect to "upload.sourceforge.net"
+	> Use SFTP to connect to "frs.sourceforge.net"
+	  > SourceForge user and password
+	  > Port 22 for SFTP
 	> Browse to "incoming" directory
 	> Upload .zip's to "incoming"
 
@@ -39,9 +41,17 @@
 6.	Check release and release notes
 	-------------------------------
 	> Clear browser cache
-	> Download release and verify contents
+	> Download release and verify contents of .zip
 	> Browse release notes
 
 
-7.	Send monitoring email notice
+7.	Hide obsolete release(s)
+	------------------------
+
+
+8.	Send monitoring email notice
 	----------------------------
+
+
+9.	Update news
+	-----------
