@@ -86,7 +86,7 @@ namespace YAT.Gui.Forms
 			// environment
 			linkLabel_Environment.Text = "";
 			textBefore = "YAT is developed with" + Environment.NewLine +
-			             "   > Microsoft Visual Studio 2005" + Environment.NewLine +
+			             "   > Microsoft Visual Studio 2008" + Environment.NewLine +
 						 "   > System.IO.Ports serial port extension by Matthias Kläy" + Environment.NewLine +
 						 "   > Modified System.Net.Sockets socket extension ";
 			textLink =                                              "ALAZ";
