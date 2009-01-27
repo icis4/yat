@@ -199,7 +199,7 @@ namespace MKY.Utilities.Time
 			sb.Insert(0, ts.Seconds.ToString("D2"));
 			sb.Insert(0, ":");
 			sb.Insert(0, ts.Minutes.ToString());
-			if (ts.Hours > 0)
+			if ((ts.Hours > 0) | (ts.Days > 0))
 			{
 				sb.Insert(0, ":");
 				sb.Insert(0, ts.Hours.ToString());
