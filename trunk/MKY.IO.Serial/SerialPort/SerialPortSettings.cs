@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
+using MKY.IO.Ports;
+
 namespace MKY.IO.Serial
 {
 	/// <summary></summary>
@@ -16,7 +18,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public const byte ParityErrorReplacementDefault = 0x00;
 
-		private MKY.IO.Ports.SerialPortId   _portId;
+		private SerialPortId _portId;
 		private SerialCommunicationSettings _communication;
 		private AutoRetry _autoReopen;
 		private bool _replaceParityErrors;
@@ -53,13 +55,14 @@ namespace MKY.IO.Serial
 		public SerialPortSettings(SerialPortSettings rhs)
 			: base(rhs)
 		{
-			_portId = rhs.PortId;
-			Communication = new SerialCommunicationSettings(rhs.Communication);
+			PortId                  = new SerialPortId(rhs.PortId.Number);
+			Communication           = new SerialCommunicationSettings(rhs.Communication);
 			_autoReopen             = rhs._autoReopen;
 			_replaceParityErrors    = rhs._replaceParityErrors;
 			_parityErrorReplacement = rhs._parityErrorReplacement;
-			_rtsEnabled = rhs.RtsEnabled;
-			_dtrEnabled = rhs.DtrEnabled;
+			_rtsEnabled             = rhs.RtsEnabled;
+			_dtrEnabled             = rhs.DtrEnabled;
+
 			ClearChanged();
 		}
 
@@ -68,12 +71,12 @@ namespace MKY.IO.Serial
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			PortId = MKY.IO.Ports.SerialPortId.DefaultPort;
+			PortId                 = SerialPortId.DefaultPort;
 			AutoReopen             = AutoReopenDefault;
 			ReplaceParityErrors    = ReplaceParityErrorsDefault;
 			ParityErrorReplacement = ParityErrorReplacementDefault;
-			RtsEnabled = true;
-			DtrEnabled = true;
+			RtsEnabled             = true;
+			DtrEnabled             = true;
 		}
 
 		#region Properties
@@ -83,7 +86,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("PortId")]
-		public MKY.IO.Ports.SerialPortId PortId
+		public SerialPortId PortId
 		{
 			get { return (_portId); }
 			set
@@ -221,13 +224,13 @@ namespace MKY.IO.Serial
 			{
 				return 
 					(
-					_portId.Equals(value._portId) &&
-					_communication.Equals(value._communication) &&
-					_autoReopen.Equals(value._autoReopen) &&
-					_replaceParityErrors.Equals(value._replaceParityErrors) &&
+					_portId.Equals                (value._portId) &&
+					_communication.Equals         (value._communication) &&
+					_autoReopen.Equals            (value._autoReopen) &&
+					_replaceParityErrors.Equals   (value._replaceParityErrors) &&
 					_parityErrorReplacement.Equals(value._parityErrorReplacement) &&
-					_rtsEnabled.Equals(value._rtsEnabled) &&
-					_dtrEnabled.Equals(value._dtrEnabled)
+					_rtsEnabled.Equals            (value._rtsEnabled) &&
+					_dtrEnabled.Equals            (value._dtrEnabled)
 					);
 			}
 			return (false);

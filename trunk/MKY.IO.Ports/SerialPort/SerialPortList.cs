@@ -27,7 +27,7 @@ namespace MKY.IO.Ports
 
 		/// <summary></summary>
 		public SerialPortList()
-			: base(SerialPortId.StandardLastPort - SerialPortId.StandardFirstPort + 1)
+			: base(SerialPortId.LastStandardPortNumber - SerialPortId.FirstPortNumber + 1)
 		{
 		}
 
@@ -38,13 +38,13 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Fills list with all ports from <see cref="SerialPortId.StandardFirstPort"/> to
-		/// <see cref="SerialPortId.StandardLastPort"/>.
+		/// Fills list with all ports from <see cref="SerialPortId.FirstPortNumber"/> to
+		/// <see cref="SerialPortId.LastStandardPortNumber"/>.
 		/// </summary>
 		public void FillWithStandardPorts()
 		{
 			Clear();
-			for (int i = SerialPortId.StandardFirstPort; i <= SerialPortId.StandardLastPort; i++)
+			for (int i = SerialPortId.FirstPortNumber; i <= SerialPortId.LastStandardPortNumber; i++)
 			{
 				base.Add(new SerialPortId(i));
 			}

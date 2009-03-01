@@ -87,7 +87,7 @@ namespace YAT.Gui.Controls
 
 		[Category("Serial Port")]
 		[Description("Serial port ID.")]
-		[DefaultValue(SerialPortId.DefaultPortNumber)]
+		[DefaultValue(SerialPortId.FirstPortNumber)]
 		public SerialPortId PortId
 		{
 			get { return (_portId); }

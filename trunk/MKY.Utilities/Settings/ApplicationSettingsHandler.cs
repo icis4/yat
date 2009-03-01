@@ -175,7 +175,7 @@ namespace MKY.Utilities.Settings
 		}
 
 		/// <summary>
-		/// Handler to common settings, if has common settings, "null" otherwise.
+		/// Handler to common settings, if has common settings, <c>null</c> otherwise.
 		/// </summary>
 		public TCommonSettings CommonSettings
 		{
@@ -183,7 +183,7 @@ namespace MKY.Utilities.Settings
 		}
 
 		/// <summary>
-		/// Handler to local user settings, if has local user settings, "null" otherwise.
+		/// Handler to local user settings, if has local user settings, <c>null</c> otherwise.
 		/// </summary>
 		public TLocalUserSettings LocalUserSettings
 		{
@@ -191,7 +191,7 @@ namespace MKY.Utilities.Settings
 		}
 
 		/// <summary>
-		/// Handler to roaming user settings, if has roaming user settings, "null" otherwise.
+		/// Handler to roaming user settings, if has roaming user settings, <c>null</c> otherwise.
 		/// </summary>
 		public TRoamingUserSettings RoamingUserSettings
 		{
@@ -199,7 +199,7 @@ namespace MKY.Utilities.Settings
 		}
 
 		/// <summary>
-		/// Returns whether common settings have successfully been loaded, "false" if
+		/// Returns whether common settings have successfully been loaded, <c>false</c> if
 		/// they was no valid settings file and they were set to their defaults.
 		/// </summary>
 		public bool CommonSettingsSuccessfullyLoaded
@@ -208,7 +208,7 @@ namespace MKY.Utilities.Settings
 		}
 
 		/// <summary>
-		/// Returns whether local user settings have successfully been loaded, "false" if
+		/// Returns whether local user settings have successfully been loaded, <c>false</c> if
 		/// they was no valid settings file and they were set to their defaults.
 		/// </summary>
 		public bool LocalUserSettingsSuccessfullyLoaded
@@ -217,7 +217,7 @@ namespace MKY.Utilities.Settings
 		}
 
 		/// <summary>
-		/// Returns whether roaming user settings have successfully been loaded, "false" if
+		/// Returns whether roaming user settings have successfully been loaded, <c>false</c> if
 		/// they was no valid settings file and they were set to their defaults.
 		/// </summary>
 		public bool RoamingUserSettingsSuccessfullyLoaded
@@ -226,7 +226,7 @@ namespace MKY.Utilities.Settings
 		}
 
 		/// <summary>
-		/// Returns whether all settings have successfully been loaded, "false" if
+		/// Returns whether all settings have successfully been loaded, <c>false</c> if
 		/// they were no valid settings files and they were set to their defaults.
 		/// </summary>
 		public bool AllSettingsSuccessfullyLoaded
@@ -236,7 +236,7 @@ namespace MKY.Utilities.Settings
 
 		/// <summary>
 		/// Handler to common settings, if has common settings,
-		/// "null" otherwise.
+		/// <c>null</c> otherwise.
 		/// </summary>
 		public TCommonSettings CommonSettingsDefault
 		{
@@ -251,7 +251,7 @@ namespace MKY.Utilities.Settings
 
 		/// <summary>
 		/// Handler to local user settings defaults, if has local user settings,
-		/// "null" otherwise.
+		/// <c>null</c> otherwise.
 		/// </summary>
 		public TLocalUserSettings LocalUserSettingsDefault
 		{
@@ -266,7 +266,7 @@ namespace MKY.Utilities.Settings
 
 		/// <summary>
 		/// Handler to user settings defaults, if has user settings,
-		/// "null" otherwise.
+		/// <c>null</c> otherwise.
 		/// </summary>
 		public TRoamingUserSettings RoamingUserSettingsDefault
 		{
@@ -464,7 +464,7 @@ namespace MKY.Utilities.Settings
 				}
 			}
 
-			// if nothing found, return null
+			// if nothing found, return <c>null</c>
 			return (null);
 		}
 

@@ -24,20 +24,22 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 
 		/// <summary></summary>
-		public const string StandardPortPrefix = "COM";
-		/// <summary></summary>
-		public const int StandardFirstPort = 1;
-		/// <summary></summary>
-		public const int StandardLastPort = 256;
-		/// <summary></summary>
-		public const int MaximumLastPort = 65536; // \fixme don't know how to retrieve true last port of the current machine
+		public const string PortNamePrefix = "COM";
 
 		/// <summary></summary>
-		public const int DefaultPortNumber = 1;
+		public const int FirstPortNumber = 1;
 		/// <summary></summary>
-		public const string DefaultPortName = "COM1";
+		public const int LastStandardPortNumber = 256;
 		/// <summary></summary>
-		public static readonly SerialPortId DefaultPort = new SerialPortId(DefaultPortNumber);
+		public const int MaximumPortNumber = 65536; // \fixme don't know how to retrieve true last port of the current machine
+
+		/// <summary>
+		/// First port name as string.
+		/// </summary>
+		/// <remarks>
+		/// Can be used as default string on attributes such as <see cref="System.ComponentModel.DefaultValueAttribute"/>.
+		/// </remarks>
+		public const string FirstPortName = "COM1";
 
 		/// <summary></summary>
 		public const string DefaultDescriptionSeparator = "-";
@@ -63,7 +65,7 @@ namespace MKY.IO.Ports
 		// Fields
 		//==========================================================================================
 
-		private int _number = DefaultPortNumber;
+		private int _number = FirstPortNumber;
 
 		private string _description = null;
 		private string _descriptionSeparator = null;
@@ -84,9 +86,34 @@ namespace MKY.IO.Ports
 		static SerialPortId()
 		{
 			PortNumberRegex              = new Regex(@"(?<port>\d+)", RegexOptions.Compiled);
-			PortNameRegex                = new Regex(StandardPortPrefix + @"(?<port>\d+)",           RegexOptions.IgnoreCase | RegexOptions.Compiled);
-			PortNameWithParenthesesRegex = new Regex(@"\(" + StandardPortPrefix + @"(?<port>\d+)\)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-			PortNameOnlyRegex            = new Regex(@"^" + StandardPortPrefix + @"(?<port>\d+)$",   RegexOptions.IgnoreCase | RegexOptions.Compiled);
+			PortNameRegex                = new Regex(PortNamePrefix + @"(?<port>\d+)",           RegexOptions.IgnoreCase | RegexOptions.Compiled);
+			PortNameWithParenthesesRegex = new Regex(@"\(" + PortNamePrefix + @"(?<port>\d+)\)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+			PortNameOnlyRegex            = new Regex(@"^" + PortNamePrefix + @"(?<port>\d+)$",   RegexOptions.IgnoreCase | RegexOptions.Compiled);
+		}
+
+		#endregion
+
+		#region Static Properties
+		//==========================================================================================
+		// Static Properties
+		//==========================================================================================
+
+		/// <summary>
+		/// Returns default port on system. Default is the first port available, usually "COM1".
+		/// Returns <c>null</c> if no ports are available.
+		/// </summary>
+		public static SerialPortId DefaultPort
+		{
+			get
+			{
+				SerialPortList l = new SerialPortList();
+				l.FillWithAvailablePorts();
+
+				if (l.Count > 0)
+					return (new SerialPortId(l[0].Number));
+				else
+					return (null);
+			}
 		}
 
 		#endregion
@@ -99,7 +126,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public SerialPortId()
 		{
-			_number = DefaultPortNumber;
+			_number = FirstPortNumber;
 		}
 
 		/// <summary></summary>
@@ -118,9 +145,9 @@ namespace MKY.IO.Ports
 
 		private void CheckPort()
 		{
-			if (!(_number >= StandardFirstPort))
+			if (!(_number >= FirstPortNumber))
 				throw (new ArgumentOutOfRangeException("SerialPortId.Number", _number, "ASSERT(Number >= StandardFirstPort)."));
-			if (!(_number <= MaximumLastPort))
+			if (!(_number <= MaximumPortNumber))
 				throw (new ArgumentOutOfRangeException("SerialPortId.Number", _number, "ASSERT(Number <= MaximumLastPort)."));
 		}
 
@@ -151,7 +178,7 @@ namespace MKY.IO.Ports
 		[XmlElement("Name")]
 		public string Name
 		{
-			get { return (StandardPortPrefix + _number.ToString()); }
+			get { return (PortNamePrefix + _number.ToString()); }
 			set
 			{
 				_number = Parse(value);
@@ -380,8 +407,8 @@ namespace MKY.IO.Ports
 				int portNumber;
 				if (int.TryParse(m.Groups[1].Value, out portNumber))
 				{
-					if ((portNumber >= StandardFirstPort) &&
-						(portNumber <= MaximumLastPort))
+					if ((portNumber >= FirstPortNumber) &&
+						(portNumber <= MaximumPortNumber))
 					{
 						result = new SerialPortId(portNumber);
 						return (true);
@@ -396,8 +423,8 @@ namespace MKY.IO.Ports
 				int portNumber;
 				if (int.TryParse(m.Groups[1].Value, out portNumber))
 				{
-					if ((portNumber >= StandardFirstPort) &&
-						(portNumber <= MaximumLastPort))
+					if ((portNumber >= FirstPortNumber) &&
+						(portNumber <= MaximumPortNumber))
 					{
 						result = new SerialPortId(portNumber);
 						return (true);
@@ -412,8 +439,8 @@ namespace MKY.IO.Ports
 				int portNumber;
 				if (int.TryParse(m.Groups[1].Value, out portNumber))
 				{
-					if ((portNumber >= StandardFirstPort) &&
-						(portNumber <= MaximumLastPort))
+					if ((portNumber >= FirstPortNumber) &&
+						(portNumber <= MaximumPortNumber))
 					{
 						result = new SerialPortId(portNumber);
 						return (true);

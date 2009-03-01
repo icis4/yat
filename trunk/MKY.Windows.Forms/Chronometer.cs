@@ -143,12 +143,12 @@ namespace MKY.Windows.Forms
 			sb.Insert(0, ts.Seconds.ToString("D2"));
 			sb.Insert(0, ":");
 			sb.Insert(0, ts.Minutes.ToString());
-			if ((ts.Hours > 0) | (ts.Days > 0))
+			if (ts.TotalHours >= 1)
 			{
 				sb.Insert(0, ":");
 				sb.Insert(0, ts.Hours.ToString());
 
-				if (ts.Days > 0)
+				if (ts.TotalDays >= 1)
 				{
 					sb.Insert(0, "days ");
 					sb.Insert(0, ts.Days.ToString());

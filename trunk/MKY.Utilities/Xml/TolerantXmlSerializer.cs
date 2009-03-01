@@ -257,7 +257,7 @@ namespace MKY.Utilities.Xml
 									while (inputNavigator.MoveToNextAttribute());
 								}
 							}
-							// in case of null values and sequences, input may contain attributes
+							// in case of <c>null</c> values and sequences, input may contain attributes
 							// that output doesn't, then try to copy complete node
 							else
 							{
@@ -297,7 +297,7 @@ namespace MKY.Utilities.Xml
 									}
 								}
 							}
-							// in case of null values and sequences, input may contain children
+							// in case of <c>null</c> values and sequences, input may contain children
 							// that output doesn't, then try to copy complete node
 							else
 							{

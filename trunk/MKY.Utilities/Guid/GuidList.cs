@@ -70,7 +70,7 @@ namespace MKY.Utilities.Guid
 
 		/// <summary>
 		/// Returns first item within the list that has the specified <see cref="System.Guid"/>,
-		/// null otherwise.
+		/// <c>null</c> otherwise.
 		/// </summary>
 		public T GetGuidItem(System.Guid guid)
 		{

@@ -146,7 +146,7 @@ namespace YAT.Gui.Controls
 
 		/// <summary>
 		/// Returns command at the specified id.
-		/// Returns <see cref="null"/> if command is undefined or not valid.
+		/// Returns <c>null</c> if command is undefined or not valid.
 		/// </summary>
 		public Command GetCommandFromId(int id)
 		{
@@ -164,7 +164,7 @@ namespace YAT.Gui.Controls
 
 		/// <summary>
 		/// Returns command that is assigned to the button at the specified location.
-		/// Returns <see cref="null"/> if no button or if command is undefined or not valid.
+		/// Returns <c>null</c> if no button or if command is undefined or not valid.
 		/// </summary>
 		public Command GetCommandFromScreenPoint(Point p)
 		{

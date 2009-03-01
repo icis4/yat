@@ -9,6 +9,10 @@ namespace MKY.Utilities.Windows.Forms
 	/// <summary>
 	/// System.Windows.Forms utility methods.
 	/// </summary>
+	/// <remarks>
+	/// This class is intentionally not placed into <c>MKY.Windows.Forms</c> since it's a
+	/// pure utility containing no visual contents.
+	/// </remarks>
 	public static class XForm
 	{
 		/// <summary>

@@ -105,7 +105,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary>
-		/// Command always returns a Command object, it never returns null.
+		/// Command always returns a Command object, it never returns <c>null</c>.
 		/// </summary>
 		[Browsable(false)]
 		public Command Command
