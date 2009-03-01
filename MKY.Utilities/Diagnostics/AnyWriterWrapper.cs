@@ -19,7 +19,7 @@ namespace MKY.Utilities.Diagnostics
 		private TextWriter _writer = null;
 
 		/// <summary>
-		/// Sets a writer to write to. Set <param name="writer"></param> to null after writing.
+		/// Sets a writer to write to. Set <param name="writer"></param> to <c>null</c> after writing.
 		/// </summary>
 		public void SetWriter(TextWriter writer)
 		{

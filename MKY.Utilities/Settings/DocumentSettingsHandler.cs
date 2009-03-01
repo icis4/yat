@@ -220,7 +220,7 @@ namespace MKY.Utilities.Settings
 				}
 			}
 
-			// If not successful, return null
+			// If not successful, return <c>null</c>
 			return (null);
 		}
 

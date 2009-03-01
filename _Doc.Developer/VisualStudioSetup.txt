@@ -1,0 +1,11 @@
+
+Options
+  > Text Editor
+    > C#
+      > General
+        > Diplay > Line numers = true
+      > Tabs
+        > Indenting = Smart [Default]
+        > Tab size = 4 [Default]
+        > Indent size = 4 [Default]
+        > Keep tabs

@@ -137,7 +137,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		[Category("Port")]
 		[Description(@"Port name, e.g. ""COM1"".")]
-		[DefaultValue(SerialPortId.DefaultPortName)]
+		[DefaultValue(SerialPortId.FirstPortName)]
 		public new string PortName
 		{
 			get
@@ -161,7 +161,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		[Category("Port")]
 		[Description("Port ID.")]
-		[DefaultValue(SerialPortId.DefaultPortNumber)]
+		[DefaultValue(SerialPortId.FirstPortNumber)]
 		[TypeConverter(typeof(IO.Ports.SerialPortIdConverter))]
 		public virtual SerialPortId PortId
 		{

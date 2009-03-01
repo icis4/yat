@@ -13,9 +13,9 @@ namespace MKY.IO.Ports
 	/// </summary>
 	public static class SerialPortSearcher
 	{
-		#region Methods
+		#region Static Methods
 		//==========================================================================================
-		// Methods
+		// Static Methods
 		//==========================================================================================
 
 		/// <summary>
