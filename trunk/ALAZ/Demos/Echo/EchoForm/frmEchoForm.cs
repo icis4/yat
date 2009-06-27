@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using System.Net;
 using System.Threading;
 
-using ALAZ.SystemEx.SocketsEx;
 using EchoSocketService;
 
 namespace EchoFormTemplate
@@ -31,9 +30,10 @@ namespace EchoFormTemplate
 
         public void Event(string eventMessage, bool ex)
         {
+
             if (lstMessages.InvokeRequired)
             {
-                lstMessages.BeginInvoke(new OnEventDelegate(delegate(string s) { Event(s); }), eventMessage);
+                lstMessages.Invoke(new OnEventDelegate(delegate(string s) { Event(s); }), eventMessage);
             }
             else
             {
@@ -48,7 +48,7 @@ namespace EchoFormTemplate
                     Interlocked.Decrement(ref FConnectionCount);
                 }
 
-                this.Text = "EchoFormServer / " + FConnectionCount.ToString() + " Connections";
+                this.Text = FConnectionCount.ToString() + " Connections";
 
                 string[] s = eventMessage.Split('\n');
 
@@ -56,6 +56,10 @@ namespace EchoFormTemplate
                 {
                     lstMessages.BeginUpdate();
                     lstMessages.Items.Insert(0, s[i]);
+
+                    if (lstMessages.Items.Count > 100)
+                        lstMessages.Items.RemoveAt(100);
+
                     lstMessages.EndUpdate();
                 }
 
@@ -73,6 +77,11 @@ namespace EchoFormTemplate
         {
             Event("Service Exception! - " + ex.Message, true);
             Event("------------------------------------------------", true);
+        }
+
+        private void lstMessages_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
 
     }
