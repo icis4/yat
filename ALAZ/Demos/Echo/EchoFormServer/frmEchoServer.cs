@@ -10,7 +10,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Security.Cryptography;
 
-using ALAZ.SystemEx.SocketsEx;
+using ALAZ.SystemEx.NetEx.SocketsEx;
 
 namespace EchoFormServer
 {
@@ -26,26 +26,22 @@ namespace EchoFormServer
 
         private void frmEchoServer_Load(object sender, EventArgs e)
         {
+            FEchoServer = new SocketServer( CallbackThreadType.ctWorkerThread, new EchoSocketService.EchoSocketService(FEvent), DelimiterType.dtMessageTailExcludeOnReceive, Encoding.GetEncoding(1252).GetBytes("ALAZ"), 1024 * 2, 1024 * 16);
+        }
 
-            //----- CspParameters used in CryptService.
-            CspParameters param = new CspParameters();
-            param.KeyContainerName = "ALAZ_ECHO_SERVICE";
-            RSACryptoServiceProvider serverKey = new RSACryptoServiceProvider(param);
+        private void AddListener()
+        {
 
-            FEchoServer = new SocketServer(new EchoSocketService.EchoSocketService(FEvent), new byte[] { 0xFF, 0xFE, 0xFD });
-            FEchoServer.AddListener(new IPEndPoint(IPAddress.Any, 8090), EncryptType.etNone, CompressionType.ctGZIP, null, 50, 10);
-            FEchoServer.AddListener(new IPEndPoint(IPAddress.Any, 8091), EncryptType.etBase64, CompressionType.ctNone, null, 50, 10);
-            FEchoServer.AddListener(new IPEndPoint(IPAddress.Any, 8092), EncryptType.etRijndael, CompressionType.ctGZIP, new EchoCryptService.EchoCryptService(), 50, 10);
-            FEchoServer.AddListener(new IPEndPoint(IPAddress.Any, 8093), EncryptType.etTripleDES, CompressionType.ctNone, new EchoCryptService.EchoCryptService(), 50, 10);
-            FEchoServer.AddListener(new IPEndPoint(IPAddress.Any, 8094), EncryptType.etSSL, CompressionType.ctGZIP, new EchoCryptService.EchoCryptService(), 50, 10);
-
-            FEchoServer.OnException += new OnExceptionDelegate(OnException);
+            FEchoServer.AddListener(String.Empty, new IPEndPoint(IPAddress.Any, 8092), EncryptType.etNone, CompressionType.ctNone, new EchoCryptService.EchoCryptService(), 50, 3);
 
         }
 
         private void cmdStart_Click(object sender, EventArgs e)
         {
+
+            AddListener();
             FEchoServer.Start();
+
             Event("Started!");
             Event("---------------------------------");
 
@@ -53,7 +49,9 @@ namespace EchoFormServer
 
         private void cmdStop_Click(object sender, EventArgs e)
         {
+            
             FEchoServer.Stop();
+
             Event("Stopped!");
             Event("---------------------------------");
 

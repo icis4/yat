@@ -1,14 +1,15 @@
 using System;
 using System.Net;
-using System.Net.Sockets;
 using System.Threading;
-
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography;
 using System.Text;
-using EchoSocketService;
+using System.Diagnostics;
 
-using ALAZ.SystemEx.SocketsEx;
+using EchoSocketService;
+using EchoCryptService;
+
+using ALAZ.SystemEx.NetEx.SocketsEx;
 
 namespace Main
 {
@@ -20,12 +21,12 @@ namespace Main
         static void Main(string[] args)
         {
 
-            Console.SetWindowSize(60, 25);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
             EncryptType et = EncryptType.etNone;
-            CompressionType ct = CompressionType.ctGZIP;
+            CompressionType ct = CompressionType.ctNone;
             int port = 8090;
-            int connections = 10;
+            int connections = 50;
 
             if (args.Length >= 1)
             {
@@ -42,17 +43,46 @@ namespace Main
                 ct = (CompressionType) Enum.Parse(typeof(CompressionType), args[2], true);
             }
 
+            //----- Socket Client!
             OnEventDelegate FEvent = new OnEventDelegate(Event);
 
-            SocketClient echoClient = new SocketClient(new EchoSocketService.EchoSocketService(FEvent), new byte[] { 0xFF, 0xFE, 0xFD });
-            echoClient.OnException += new OnExceptionDelegate(echoClient_OnException);
+            SocketClient echoClient = new SocketClient(CallbackThreadType.ctWorkerThread, new EchoSocketService.EchoSocketService(FEvent));
 
+            echoClient.Delimiter = new byte[] { 0xFF, 0x00, 0xFE, 0x01, 0xFD, 0x02 };
+            echoClient.DelimiterType = DelimiterType.dtMessageTailExcludeOnReceive;
+
+            echoClient.SocketBufferSize = 1024;
+            echoClient.MessageBufferSize = 2048;
+            
+            echoClient.IdleCheckInterval = 60000;
+            echoClient.IdleTimeOutValue = 120000;
+
+            //----- Socket Connectors!
+            SocketConnector connector = null;
+            
             for (int i = 0; i < connections; i++)
             {
-                echoClient.AddConnector(new IPEndPoint(IPAddress.Loopback, port), et, ct, new EchoCryptService.EchoCryptService());
+                
+                connector = echoClient.AddConnector("Connector " + i.ToString(), new IPEndPoint(IPAddress.Loopback, 8090));
+                
+                /*
+                connector.ProxyInfo = new ProxyInfo(
+                    ProxyType.ptHTTP, 
+                    new IPEndPoint(IPAddress.Loopback, 8080), 
+                    new NetworkCredential("test", "1234"));
+                */
+
+                connector.CryptoService = new EchoCryptService.EchoCryptService();
+                connector.CompressionType = ct;
+                connector.EncryptType = et;
+
+                connector.ReconnectAttempts = 10;
+                connector.ReconnectAttemptInterval = 5000;
+                
             }
 
             Console.Title = "EchoConsoleClient / " + connections.ToString() + " Connections / " + Enum.GetName(typeof(EncryptType), et) + " / " + Enum.GetName(typeof(CompressionType), ct);
+            
             echoClient.Start();
 
             Console.WriteLine("Started!");
@@ -60,40 +90,33 @@ namespace Main
 
             Console.ReadLine();
 
-            echoClient.Stop();
+            try
+            {
+                echoClient.Stop();
+                echoClient.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            echoClient = null;
 
             Console.WriteLine("Stopped!");
             Console.WriteLine("----------------------");
             Console.ReadLine();
 
-            echoClient.Dispose();
-
-        }
-
-        static void echoClient_OnException(Exception ex)
-        {
-
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Service Exception! - " + ex.Message);
-            Console.WriteLine("------------------------------------------------");
-            Console.ResetColor();
-
         }
 
         static void Event(string eventMessage)
         {
-            
-            if (eventMessage.Contains("Exception"))
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(eventMessage);
-                Console.ResetColor();
-            }
-            else
-            {
-                Console.WriteLine(eventMessage);
-            }
+            Console.WriteLine(eventMessage);
+        }
 
+        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Console.WriteLine(e.ExceptionObject.ToString());
+            Console.ReadLine();
         }
 
     }

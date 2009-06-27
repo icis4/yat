@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("EchoWindowsServiceServer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Virus")]
-[assembly: AssemblyProduct("EchoWindowsServiceServer")]
-[assembly: AssemblyCopyright("Copyright © Virus 2006")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("26d4912e-d9a1-4664-bd55-3568cc80261c")]
+[assembly: Guid("d62ce6ff-dfca-4bf7-82b9-aa6e6532b4db")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -37,20 +37,22 @@ namespace EchoFormTemplate
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lstMessages.FormattingEnabled = true;
-            this.lstMessages.Location = new System.Drawing.Point(12, 54);
+            this.lstMessages.ItemHeight = 16;
+            this.lstMessages.Location = new System.Drawing.Point(16, 64);
+            this.lstMessages.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.lstMessages.Name = "lstMessages";
-            this.lstMessages.Size = new System.Drawing.Size(524, 225);
+            this.lstMessages.Size = new System.Drawing.Size(697, 244);
             this.lstMessages.TabIndex = 1;
+            this.lstMessages.SelectedIndexChanged += new System.EventHandler(this.lstMessages_SelectedIndexChanged);
             // 
             // frmEchoForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(548, 291);
+            this.ClientSize = new System.Drawing.Size(731, 324);
             this.Controls.Add(this.lstMessages);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "frmEchoForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Echo Form";

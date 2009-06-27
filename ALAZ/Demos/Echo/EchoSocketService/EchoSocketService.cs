@@ -2,8 +2,11 @@ using System;
 using System.Threading;
 using System.Text;
 using System.Security.Cryptography;
+using System.Net.Sockets;
+using System.Diagnostics;
 
-using ALAZ.SystemEx.SocketsEx;
+using ALAZ.SystemEx.NetEx.SocketsEx;
+using ALAZ.SystemEx.ThreadingEx;
 
 namespace EchoSocketService
 {
@@ -23,7 +26,7 @@ namespace EchoSocketService
 
         #endregion
 
-        #region Constructors
+        #region Constructor
 
         public EchoSocketService()
         {
@@ -39,22 +42,47 @@ namespace EchoSocketService
 
         #region Methods
 
+        #region Event
+        
         private void Event(string eventMessage)
         {
 
             if (FOnEventDelegate != null)
             {
-                FOnEventDelegate.Invoke(eventMessage);
+                FOnEventDelegate(eventMessage);
             }
 
         }
+        
+        #endregion
 
+        #region SleepRandom
+        
+        public void SleepRandom(HostType hostType)
+        {
+            Random r = new Random(DateTime.Now.Millisecond);
+            
+            if (hostType == HostType.htServer)
+            {
+                ThreadEx.SleepEx( r.Next(1000, 2000) );
+            }
+            else
+            {
+                ThreadEx.SleepEx( r.Next(10000, 15000));
+            }
+            
+        }
+        
+        #endregion
+
+        #region GetMessage
+        
         public byte[] GetMessage(int handle)
         {
 
             Random r = new Random(handle + DateTime.Now.Millisecond);
-
-            byte[] message = new byte[r.Next(256, 2048)];
+            
+            byte[] message = new byte[r.Next(246, 1000)];
 
             for (int i = 0; i < message.Length; i++)
             {
@@ -64,7 +92,11 @@ namespace EchoSocketService
             return message;
 
         }
+        
+        #endregion
 
+        #region OnConnected
+        
         public override void OnConnected(ConnectionEventArgs e)
         {
 
@@ -72,13 +104,19 @@ namespace EchoSocketService
 
             s.Append("------------------------------------------------" + "\r\n");
             s.Append("Connected - " + e.Connection.ConnectionId + "\r\n");
-            s.Append(e.Connection.EncryptType.ToString() + "\r\n");
-            s.Append(e.Connection.CompressionType.ToString() + "\r\n");
+            s.Append(e.Connection.Host.HostType.ToString() + "\r\n");
+            s.Append(e.Connection.Creator.Name + "\r\n");
+            s.Append(e.Connection.Creator.EncryptType.ToString() + "\r\n");
+            s.Append(e.Connection.Creator.CompressionType.ToString() + "\r\n");
             s.Append("------------------------------------------------" + "\r\n");
 
             Event(s.ToString());
 
-            if (e.Connection.HostType == HostType.htServer)
+            s.Length = 0;
+
+            Thread.Sleep(123);
+
+            if (e.Connection.Host.HostType == HostType.htServer)
             {
                 e.Connection.BeginReceive();
             }
@@ -88,23 +126,40 @@ namespace EchoSocketService
                 e.Connection.BeginSend(b);
             }
 
+            
         }
+        
+        #endregion
 
+        #region OnSent
+        
         public override void OnSent(MessageEventArgs e)
         {
 
-            StringBuilder s = new StringBuilder();
-
-            s.Append("------------------------------------------------" + "\r\n");
-            s.Append("Sent - " + e.Connection.ConnectionId + "\r\n");
-            s.Append(Encoding.Default.GetString(e.Buffer) + "\r\n");
-            s.Append("------------------------------------------------" + "\r\n");
-
-            Event(s.ToString().Trim());
-
-            if (e.Connection.HostType == HostType.htServer)
+            if (!e.SentByServer)
             {
-                e.Connection.BeginReceive();
+                StringBuilder s = new StringBuilder();
+
+                s.Append("------------------------------------------------" + "\r\n");
+                s.Append("Sent - " + e.Connection.ConnectionId + "\r\n");
+                s.Append("Sent Bytes - " + e.Connection.WriteBytes.ToString() + "\r\n");
+                s.Append("------------------------------------------------" + "\r\n");
+
+                Event(s.ToString().Trim());
+
+                s.Length = 0;
+
+            }
+
+
+            if (e.Connection.Host.HostType == HostType.htServer)
+            {
+    
+                if (!e.SentByServer)
+                {
+                    e.Connection.BeginReceive();
+                }
+
             }
             else
             {
@@ -112,7 +167,11 @@ namespace EchoSocketService
             }
 
         }
+        
+        #endregion
 
+        #region OnReceived
+        
         public override void OnReceived(MessageEventArgs e)
         {
 
@@ -120,40 +179,43 @@ namespace EchoSocketService
 
             s.Append("------------------------------------------------" + "\r\n");
             s.Append("Received - " + e.Connection.ConnectionId + "\r\n");
-            s.Append(Encoding.Default.GetString(e.Buffer) + "\r\n");
+            s.Append("Received Bytes - " + e.Connection.ReadBytes.ToString() + "\r\n");
             s.Append("------------------------------------------------" + "\r\n");
 
             Event(s.ToString());
+            s.Length = 0;
 
-            Thread.Sleep(new Random(DateTime.Now.Millisecond).Next(500, 1000));
+            SleepRandom(e.Connection.Host.HostType);
 
-            if (e.Connection.HostType == HostType.htServer)
+            if (e.Connection.Host.HostType == HostType.htServer)
             {
-                byte[] b = e.Buffer;
-                e.Connection.BeginSend(b);
+                e.Connection.BeginSend(e.Buffer);
             }
             else
             {
-
                 byte[] b = GetMessage(e.Connection.SocketHandle.ToInt32());
                 e.Connection.BeginSend(b);
             }
 
         }
+        
+        #endregion
 
-        public override void OnDisconnected(DisconnectedEventArgs e)
+        #region OnDisconnected
+        
+        public override void OnDisconnected(ConnectionEventArgs e)
         {
 
             StringBuilder s = new StringBuilder();
 
             s.Append("------------------------------------------------" + "\r\n");
             s.Append("Disconnected - " + e.Connection.ConnectionId + "\r\n");
-            s.Append((e.Exception == null ? "" : "Exception - " + e.Exception.Message) + "\r\n");
             s.Append("------------------------------------------------" + "\r\n");
 
             Event(s.ToString());
+            s.Length = 0;
 
-            if (e.Connection.HostType == HostType.htServer)
+            if (e.Connection.Host.HostType == HostType.htServer)
             {
                 //------
             }
@@ -163,6 +225,51 @@ namespace EchoSocketService
             }
 
         }
+        
+        #endregion
+
+        #region OnException
+        
+        public override void OnException(ExceptionEventArgs e)
+        {
+
+            StringBuilder s = new StringBuilder();
+
+            s.Append("------------------------------------------------" + "\r\n");
+            s.Append("Exception - " + e.Exception.GetType().ToString() + "\r\n");
+            s.Append("Exception Message - " + e.Exception.Message + "\r\n");
+
+            if (e.Exception is ReconnectAttemptException)
+            {
+                s.Append("Attempted   - " + ((ReconnectAttemptException)e.Exception).Attempt.ToString() + "\r\n");
+                s.Append("Max Reached - " + ((ReconnectAttemptException)e.Exception).MaxReached.ToString() + "\r\n");
+                s.Append("------------------------------------------------" + "\r\n");
+                s.Append("Inner Error - " + ((SocketException)e.Exception.InnerException).ErrorCode.ToString() + "\r\n");
+                s.Append("------------------------------------------------" + "\r\n");
+                s.Append("Creator - " + ((ReconnectAttemptException)e.Exception).Creator.Name + "\r\n");
+                s.Append("Creator - " + ((ReconnectAttemptException)e.Exception).Creator.EncryptType.ToString() + "\r\n");
+                s.Append("Creator - " + ((ReconnectAttemptException)e.Exception).Creator.CompressionType.ToString() + "\r\n");
+
+            }
+
+            if (e.Exception is SocketException)
+            {
+                s.Append("Socket Error - " + ((SocketException)e.Exception).ErrorCode.ToString() + "\r\n");
+            }
+
+            s.Append("------------------------------------------------" + "\r\n");
+
+            Event(s.ToString());
+            s.Length = 0;
+
+            if (e.Connection != null)
+            {
+                e.Connection.BeginDisconnect();
+            }
+          
+        }
+        
+        #endregion
 
         #endregion
 

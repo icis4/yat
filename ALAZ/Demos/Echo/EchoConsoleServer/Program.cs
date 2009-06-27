@@ -1,12 +1,14 @@
 using System;
 using System.Net;
-using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Security.Cryptography;
 using System.Text;
+
 using EchoSocketService;
-using ALAZ.SystemEx.SocketsEx;
+using EchoCryptService;
+
+using ALAZ.SystemEx.NetEx.SocketsEx;
 
 namespace Main
 {
@@ -18,33 +20,77 @@ namespace Main
         static void Main(string[] args)
         {
 
-            //----- CspParameters used in CryptService.
-            CspParameters param = new CspParameters();
-            param.KeyContainerName = "ALAZ_ECHO_SERVICE";
-            RSACryptoServiceProvider serverKey = new RSACryptoServiceProvider(param);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
+            //----- Socket Server!
             OnEventDelegate FEvent = new OnEventDelegate(Event);
 
-            SocketServer echoServer = new SocketServer(new EchoSocketService.EchoSocketService(FEvent), new byte[] { 0xFF, 0xFE, 0xFD });
-            echoServer.OnException += new OnExceptionDelegate(echoServer_OnException);
+            SocketServer echoServer = new SocketServer(CallbackThreadType.ctWorkerThread, new EchoSocketService.EchoSocketService(FEvent));
 
-            echoServer.AddListener(new IPEndPoint(IPAddress.Any, 8090), EncryptType.etNone, CompressionType.ctGZIP, null, 50, 10);
-            echoServer.AddListener(new IPEndPoint(IPAddress.Any, 8091), EncryptType.etBase64, CompressionType.ctNone, null, 50, 10);
+            echoServer.Delimiter = new byte[] { 0xFF, 0x00, 0xFE, 0x01, 0xFD, 0x02 };
+            echoServer.DelimiterType = DelimiterType.dtMessageTailExcludeOnReceive;
+            
+            echoServer.SocketBufferSize = 1024;
+            echoServer.MessageBufferSize = 2048;
+            
+            echoServer.IdleCheckInterval = 60000;
+            echoServer.IdleTimeOutValue = 120000;
 
+            //----- Socket Listener!
+            SocketListener listener = echoServer.AddListener("Commom Port - 8090", new IPEndPoint(IPAddress.Any, 8090));
+
+            listener.AcceptThreads = 3;
+            listener.BackLog = 100;
+
+            listener.EncryptType = EncryptType.etNone;
+            listener.CompressionType = CompressionType.ctNone;
+            listener.CryptoService = new EchoCryptService.EchoCryptService();
+            
             echoServer.Start();
  
             Console.WriteLine("Started!");
             Console.WriteLine("----------------------");
 
-            Console.ReadLine();
+            int iot = 0;
+            int wt = 0;
 
-            echoServer.Stop();
+            ThreadPool.GetAvailableThreads(out wt, out iot);
+            Console.WriteLine("Threads Work - " + wt.ToString());
+            Console.WriteLine("Threads I/O  - " + iot.ToString());
+
+            string s;
+            
+            do
+            {
+
+                s = Console.ReadLine();
+
+                if (s.Equals("g"))
+                {
+
+                    ThreadPool.GetAvailableThreads(out wt, out iot);
+                    Console.WriteLine("Threads Work " + iot.ToString());
+                    Console.WriteLine("Threads I/O  " + wt.ToString());
+
+                }
+
+            } while (s.Equals("g"));
+
+            try
+            {
+                echoServer.Stop();
+                echoServer.Dispose();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            echoServer = null;
 
             Console.WriteLine("Stopped!");
             Console.WriteLine("----------------------");
             Console.ReadLine();
-
-            echoServer.Dispose();
 
         }
 
@@ -69,6 +115,12 @@ namespace Main
                 Console.WriteLine(eventMessage);
             }
 
+        }
+
+        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Console.WriteLine(e.ExceptionObject.ToString());
+            Console.ReadLine();
         }
 
     }
