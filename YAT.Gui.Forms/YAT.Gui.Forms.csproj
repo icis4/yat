@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A1060959-580E-4493-BA51-4A3A7CDE1E88}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -16,6 +16,7 @@
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,6 +39,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -240,10 +244,6 @@
       <Project>{E3A19532-D12A-4A90-B7F3-637A0A8FA6BD}</Project>
       <Name>MKY.IO.Serial</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MKY.Net.Sockets\MKY.Net.Sockets.csproj">
-      <Project>{307EFF74-9C31-4943-87A9-E7686551C4D1}</Project>
-      <Name>MKY.Net.Sockets</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MKY.Utilities\MKY.Utilities.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY.Utilities</Name>
@@ -309,6 +309,8 @@
     <Content Include="Resources\Edit\Image_Delete_16x16.png" />
     <Content Include="Resources\Edit\Image_Delete_16x16_Disabled.png" />
     <Content Include="Resources\Edit\Image_Delete_16x16_Hot.png" />
+    <None Include="Resources\GPL\Image_LGPLv3_88x31.png" />
+    <None Include="Resources\GPL\Image_LGPLv3_147x51.png" />
     <Content Include="Resources\Status\Image_Off_12x12.png" />
     <Content Include="Resources\Status\Image_On_12x12.png" />
     <Content Include="Resources\Tool\Image_ArrowRight_24x24.png" />
@@ -353,7 +355,6 @@
     <Content Include="Resources\Tool\Image_Views_24x24.png" />
     <Content Include="Resources\Tool\Image_Views_24x24_Disabled.png" />
     <Content Include="Resources\Tool\Image_Views_24x24_Hot.png" />
-    <Content Include="Resources\YAT\Image_CC_GPL_88x62.png" />
     <Content Include="Resources\YAT\Icon_YAT.ico" />
     <Content Include="Resources\YAT\Icon_YAT_TerminalSettings.ico" />
     <Content Include="Resources\YAT\Icon_YAT_UserSettings.ico" />

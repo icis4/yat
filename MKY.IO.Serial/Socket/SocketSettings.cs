@@ -1,3 +1,19 @@
+//==================================================================================================
+// URL       : $URL$
+// Author    : $Author$
+// Date      : $Date$
+// Revision  : $Rev$
+// ------------------------------------------------------------------------------------------------
+// See SVN change log for revision details.
+// ------------------------------------------------------------------------------------------------
+// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
+// Copyright © 2003-2009 Matthias Kläy.
+// All rights reserved.
+// ------------------------------------------------------------------------------------------------
+// This source code is licensed under the GNU LGPL.
+// See http://www.gnu.org/licenses/lgpl.html for license details.
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -30,7 +46,7 @@ namespace MKY.IO.Serial
 		// Fields
 		//==========================================================================================
 
-		private MKY.Net.Sockets.HostType _hostType;
+		private ALAZ.SystemEx.NetEx.SocketsEx.HostType _hostType;
 
 		private string _remoteHostNameOrAddress;
 		private System.Net.IPAddress _resolvedRemoteIPAddress;
@@ -93,7 +109,7 @@ namespace MKY.IO.Serial
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			HostType                = MKY.Net.Sockets.HostType.TcpAutoSocket;
+			HostType                = ALAZ.SystemEx.NetEx.SocketsEx.HostType.TcpAutoSocket;
 
 			RemoteHostNameOrAddress = DefaultRemoteHostName;
 			ResolvedRemoteIPAddress = System.Net.IPAddress.Loopback;
@@ -116,7 +132,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("HostType")]
-		public MKY.Net.Sockets.HostType HostType
+		public ALAZ.SystemEx.NetEx.SocketsEx.HostType HostType
 		{
 			get { return (_hostType); }
 			set
@@ -198,12 +214,12 @@ namespace MKY.IO.Serial
 			{
 				switch (_hostType)
 				{
-					case MKY.Net.Sockets.HostType.TcpClient:
-					case MKY.Net.Sockets.HostType.TcpServer:
-					case MKY.Net.Sockets.HostType.TcpAutoSocket:
+					case ALAZ.SystemEx.NetEx.SocketsEx.HostType.TcpClient:
+					case ALAZ.SystemEx.NetEx.SocketsEx.HostType.TcpServer:
+					case ALAZ.SystemEx.NetEx.SocketsEx.HostType.TcpAutoSocket:
 						return (LocalTcpPort);
 
-					case MKY.Net.Sockets.HostType.Udp:
+					case ALAZ.SystemEx.NetEx.SocketsEx.HostType.Udp:
 						return (LocalUdpPort);
 
 					default:
@@ -214,13 +230,13 @@ namespace MKY.IO.Serial
 			{
 				switch (_hostType)
 				{
-					case MKY.Net.Sockets.HostType.TcpClient:
-					case MKY.Net.Sockets.HostType.TcpServer:
-					case MKY.Net.Sockets.HostType.TcpAutoSocket:
+					case ALAZ.SystemEx.NetEx.SocketsEx.HostType.TcpClient:
+					case ALAZ.SystemEx.NetEx.SocketsEx.HostType.TcpServer:
+					case ALAZ.SystemEx.NetEx.SocketsEx.HostType.TcpAutoSocket:
 						LocalTcpPort = value;
 						break;
 
-					case MKY.Net.Sockets.HostType.Udp:
+					case ALAZ.SystemEx.NetEx.SocketsEx.HostType.Udp:
 						LocalUdpPort = value;
 						break;
 				}
@@ -357,7 +373,7 @@ namespace MKY.IO.Serial
 		{
 			return
 			  (
-			  ((MKY.Net.Sockets.XHostType)_hostType).ToString() + ", " +
+			  ((ALAZ.SystemEx.NetEx.SocketsEx.XHostType)_hostType).ToString() + ", " +
 			  _remoteHostNameOrAddress + ", " +
 			  _remotePort.ToString() + ", " +
 			  _localHostNameOrAddress + ", " +
@@ -399,3 +415,7 @@ namespace MKY.IO.Serial
 		#endregion
 	}
 }
+
+//==================================================================================================
+// End of $URL$
+//==================================================================================================

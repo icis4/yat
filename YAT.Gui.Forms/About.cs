@@ -1,3 +1,19 @@
+//==================================================================================================
+// URL       : $URL$
+// Author    : $Author$
+// Date      : $Date$
+// Revision  : $Rev$
+// ------------------------------------------------------------------------------------------------
+// See SVN change log for revision details.
+// ------------------------------------------------------------------------------------------------
+// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
+// Copyright © 2003-2009 Matthias Kläy.
+// All rights reserved.
+// ------------------------------------------------------------------------------------------------
+// YAT is licensed under the GNU LGPL.
+// See http://www.gnu.org/licenses/lgpl.html for license details.
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -38,7 +54,7 @@ namespace YAT.Gui.Forms
 			textBefore = "Copyright © 2003-2004 ";
 			textLink =                         "HSR Hochschule für Technik Rapperswil";
 			textAfter =                                                             "." + Environment.NewLine +
-			             "Copyright © 2003-2008 Matthias Kläy.";
+			             "Copyright © 2003-2009 Matthias Kläy.";
 			linkLabel_Copyright.Text += textBefore;
 			start = linkLabel_Copyright.Text.Length;
 			linkLabel_Copyright.Text += textLink;
@@ -69,7 +85,7 @@ namespace YAT.Gui.Forms
 			linkLabel_Description.Text += textAfter;
 
 			// platform
-			linkLabel_Platform.Text = "For .NET 2.0 on Windows 2000 and later. Currently running on .NET runtime " + System.Runtime.InteropServices.RuntimeEnvironment.GetSystemVersion() + ".";
+			linkLabel_Platform.Text = "For .NET 3.5 on Windows 2000 and later. Currently running on .NET runtime " + System.Runtime.InteropServices.RuntimeEnvironment.GetSystemVersion() + ".";
 
 			// HHD
 			linkLabel_HHD.Text = "";
@@ -86,11 +102,13 @@ namespace YAT.Gui.Forms
 			// environment
 			linkLabel_Environment.Text = "";
 			textBefore = "YAT is developed with" + Environment.NewLine +
-			             "   > Microsoft Visual Studio 2008" + Environment.NewLine +
+						 "   > Microsoft Visual Studio 2008" + Environment.NewLine +
+						 "   > AnkhSVN" + Environment.NewLine +
+						 "   > NUnit" + Environment.NewLine +
 						 "   > System.IO.Ports serial port extension by Matthias Kläy" + Environment.NewLine +
-						 "   > Modified System.Net.Sockets socket extension ";
-			textLink =                                              "ALAZ";
-			textAfter =                                                 " by Andre Luis Azevedo";
+						 "   > System.Net.Sockets socket extension ";
+			textLink =                                            "ALAZ";
+			textAfter =                                               " by Andre Luis Azevedo";
 			linkLabel_Environment.Text += textBefore;
 			start = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
@@ -141,17 +159,17 @@ namespace YAT.Gui.Forms
 			linkLabel_Home.Text += textAfter;
 
 			// author
-			linkLabel_Author.Text = "2008, Matthias Kläy";
+			linkLabel_Author.Text = "2009, Matthias Kläy";
 
 			// license
 			linkLabel_License.Text = "";
 			textBefore = "YAT is licensed under the ";
-			textLink =                             "CC-GNU GPL";
-			textAfter =                                      ".";
+			textLink =                             "GNU LGPL";
+			textAfter =                                    ".";
 			linkLabel_License.Text += textBefore;
 			start = linkLabel_License.Text.Length;
 			linkLabel_License.Text += textLink;
-			linkLabel_License.Links.Add(start, textLink.Length, "http://creativecommons.org/licenses/GPL/2.0/");
+			linkLabel_License.Links.Add(start, textLink.Length, "http://www.gnu.org/licenses/lgpl.html");
 			linkLabel_License.Text += textAfter;
 		}
 
@@ -172,3 +190,7 @@ namespace YAT.Gui.Forms
 		#endregion
 	}
 }
+
+//==================================================================================================
+// End of $URL$
+//==================================================================================================
