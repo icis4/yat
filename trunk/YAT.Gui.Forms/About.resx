@@ -136,9 +136,11 @@ HSR and Mettler-Toledo. YAT was initially developed as XTerm232 due to the lack 
   </data>
   <data name="linkLabel_Environment.Text" xml:space="preserve">
     <value>YAT is developed with
-   &gt; Microsoft Visual Studio 2005
+   &gt; Microsoft Visual Studio &lt;VERSION&gt;
+   &gt; AnkhSVN
+   &gt; NUnit
    &gt; System.IO.Ports serial port extension by Matthias Kläy
-   &gt; Modified System.Net.Sockets socket extension ALAZ by Andre Luis Azevedo
+   &gt; System.Net.Sockets socket extension ALAZ by Andre Luis Azevedo
    &gt; YAT icons from Nuvola by David Vignoni edited in GIMP
    &gt; Toolbar icons from free common set by glyfx
    &gt; Terminal font DejaVu</value>

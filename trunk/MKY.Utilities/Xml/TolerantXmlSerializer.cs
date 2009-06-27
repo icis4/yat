@@ -1,3 +1,19 @@
+//==================================================================================================
+// URL       : $URL$
+// Author    : $Author$
+// Date      : $Date$
+// Revision  : $Rev$
+// ------------------------------------------------------------------------------------------------
+// See SVN change log for revision details.
+// ------------------------------------------------------------------------------------------------
+// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
+// Copyright © 2003-2009 Matthias Kläy.
+// All rights reserved.
+// ------------------------------------------------------------------------------------------------
+// This source code is licensed under the GNU LGPL.
+// See http://www.gnu.org/licenses/lgpl.html for license details.
+//==================================================================================================
+
 // Enable to write input and output documents and schemas to files
 //#define WRITE_DOCUMENTS_TO_FILES
 //#define WRITE_SCHEMAS_TO_FILES
@@ -420,3 +436,7 @@ namespace MKY.Utilities.Xml
 		#endregion
 	}
 }
+
+//==================================================================================================
+// End of $URL$
+//==================================================================================================

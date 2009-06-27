@@ -1,4 +1,20 @@
-﻿using System;
+﻿//==================================================================================================
+// URL       : $URL$
+// Author    : $Author$
+// Date      : $Date$
+// Revision  : $Rev$
+// ------------------------------------------------------------------------------------------------
+// See SVN change log for revision details.
+// ------------------------------------------------------------------------------------------------
+// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
+// Copyright © 2003-2009 Matthias Kläy.
+// All rights reserved.
+// ------------------------------------------------------------------------------------------------
+// This source code is licensed under the GNU LGPL.
+// See http://www.gnu.org/licenses/lgpl.html for license details.
+//==================================================================================================
+
+using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -11,7 +27,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MKY")]
 [assembly: AssemblyProduct("MKY.Utilities")]
-[assembly: AssemblyCopyright("Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil. Copyright © 2003-2008 Matthias Kläy. All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil. Copyright © 2003-2009 Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -33,7 +49,12 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.1.0")]
+[assembly: AssemblyInformationalVersion("1.0.1")]
 
 // CLS compliance
 [assembly: CLSCompliant(true)]
+
+//==================================================================================================
+// End of $URL$
+//==================================================================================================

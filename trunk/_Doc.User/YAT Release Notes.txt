@@ -6,7 +6,7 @@
    RS-232/422/423/485 TCP/UDP terminal to operate and debug serial connections
  ------------------------------------------------------------------------------
            Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-                         Copyright © 2003-2008 Matthias Kläy.
+                         Copyright © 2003-2009 Matthias Kläy.
                                 All rights reserved.
 ********************************************************************************
 
@@ -39,6 +39,38 @@ You can also download .NET under "http://www.microsoft.com/net/"
 
 YAT 2.0
 =======
+
+YAT 2.0 Beta 2 Candidate 5 Version 1.99.2x :: 2009-08-xx
+--------------------------------------------------------
+
+Important changes:
+- Update to .NET 3.5 SP1 (feature request #2813235)
+- Update to ALAZ 2.0 (feature request #2813236)
+- Update to DejaVu 2.29 (feature request #2813292)
+- Update to NUnit 2.5 (feature request #2813296)
+
+- Header and footer added to all source files
+- SVN tags added to all source files (feature request #2813228)
+
+Fixed bugs:
+- RTS/CTS hardware flow control is fixed and thoroughly tested (bugs #1919399 and #1944332)
+- Thread synchronization issue when closing while receiving fixed (bug #1931923)
+- Command validation fixed (bug #1983796) and improved
+- Font can be changed in format settings dialog (bug #1937065)
+- Shortcuts are immediately active, no need to open menu first anymore (bug #1944023)
+- Menu > Send > File now gets properly enabled (bug #1995796)
+- Clearing monitors also clears incomplete lines (bug #1942335)
+- Clearing predefined command description really clears it (bug #1945488)
+- ShowEOL = false doesn't strip chars anymore (bug #1931582)
+- Log now logs EOL according to settings (bug #1995797)
+- Help, release notes and tracker instructions forms are shown center of parent (bug #1938031)
+
+Limitations and known issues:
+- Auto-reopen not implementable due to .NET deadlock issue in SerialPort (feature request #1960299)
+- UTF-16/32 testing pending (bug #1931537)
+- More advanced text line send and receive options not yet implemented (feature requests #1808508 and #1808509)
+- Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
+
 
 YAT 2.0 Beta 2 Candidate 4 Version 1.99.20 :: 2008-07-18
 --------------------------------------------------------
@@ -317,7 +349,7 @@ YAT 2.1.0 :: Not planned yet
 --------------------------------------------------------------------------------
 
 Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-Copyright © 2003-2008 Matthias Kläy.
+Copyright © 2003-2009 Matthias Kläy.
 All rights reserved.
 
 YAT is licensed under the CC-GNU GPL.

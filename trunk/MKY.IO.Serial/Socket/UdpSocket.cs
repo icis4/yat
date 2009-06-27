@@ -1,3 +1,19 @@
+//==================================================================================================
+// URL       : $URL$
+// Author    : $Author$
+// Date      : $Date$
+// Revision  : $Rev$
+// ------------------------------------------------------------------------------------------------
+// See SVN change log for revision details.
+// ------------------------------------------------------------------------------------------------
+// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
+// Copyright © 2003-2009 Matthias Kläy.
+// All rights reserved.
+// ------------------------------------------------------------------------------------------------
+// This source code is licensed under the GNU LGPL.
+// See http://www.gnu.org/licenses/lgpl.html for license details.
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +24,7 @@ using MKY.Utilities.Event;
 namespace MKY.IO.Serial
 {
 	/// <summary></summary>
-	public class UdpSocket : IIOProvider, IDisposable, MKY.Net.Sockets.ISocketService
+	public class UdpSocket : IIOProvider, IDisposable, ALAZ.SystemEx.NetEx.SocketsEx.ISocketService
 	{
 		#region Types
 		//==========================================================================================
@@ -43,8 +59,8 @@ namespace MKY.IO.Serial
 
 		private Queue<byte> _receiveBuffer = new Queue<byte>();
 
-		private MKY.Net.Sockets.SocketClient _socket;
-		private MKY.Net.Sockets.ISocketConnection _socketConnection;
+		private ALAZ.SystemEx.NetEx.SocketsEx.SocketClient _socket;
+		private ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection _socketConnection;
 		private object _socketConnectionSyncObj = new object();
 
 		#endregion
@@ -288,8 +304,8 @@ namespace MKY.IO.Serial
 
 		private void StartSocket()
 		{
-			_socket = new MKY.Net.Sockets.SocketClient(MKY.Net.Sockets.HostType.Udp, (MKY.Net.Sockets.ISocketService)this, null, 2048, 8192, 0, 0, Timeout.Infinite, Timeout.Infinite);
-			_socket.OnException += new EventHandler<MKY.Net.Sockets.ExceptionEventArgs>(_socket_OnException);
+			_socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketClient(ALAZ.SystemEx.NetEx.SocketsEx.HostType.Udp, (ALAZ.SystemEx.NetEx.SocketsEx.ISocketService)this, null, 2048, 8192, 0, 0, Timeout.Infinite, Timeout.Infinite);
+			_socket.OnException += new EventHandler<ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs>(_socket_OnException);
 			_socket.AddConnector(new System.Net.IPEndPoint(_remoteIPAddress, _remotePort),
 								 new System.Net.IPEndPoint(System.Net.IPAddress.Any, _localPort));
 			_socket.Start();
@@ -324,7 +340,7 @@ namespace MKY.IO.Serial
 		// Socket Events
 		//==========================================================================================
 
-		private void _socket_OnException(object sender, MKY.Net.Sockets.ExceptionEventArgs e)
+		private void _socket_OnException(object sender, ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs e)
 		{
 			DisposeSocket();
 
@@ -343,7 +359,7 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		public void OnConnected(MKY.Net.Sockets.ConnectionEventArgs e)
+		public void OnConnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
 			lock (_socketConnectionSyncObj)
 				_socketConnection = e.Connection;
@@ -358,7 +374,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public void OnReceived(MKY.Net.Sockets.MessageEventArgs e)
+		public void OnReceived(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
 			lock (_receiveBuffer)
 			{
@@ -372,13 +388,13 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public void OnSent(MKY.Net.Sockets.MessageEventArgs e)
+		public void OnSent(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
 			// nothing to do
 		}
 
 		/// <summary></summary>
-		public void OnDisconnected(MKY.Net.Sockets.DisconnectedEventArgs e)
+		public void OnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.DisconnectedEventArgs e)
 		{
 			if (e.Exception == null)
 			{
@@ -455,3 +471,7 @@ namespace MKY.IO.Serial
 		#endregion
 	}
 }
+
+//==================================================================================================
+// End of $URL$
+//==================================================================================================

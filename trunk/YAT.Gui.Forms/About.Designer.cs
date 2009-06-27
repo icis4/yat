@@ -57,7 +57,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.button_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Close.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_Close.Location = new System.Drawing.Point(527, 327);
+			this.button_Close.Location = new System.Drawing.Point(527, 353);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
 			this.button_Close.TabIndex = 0;
@@ -149,10 +149,10 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Platform.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_Platform.Location = new System.Drawing.Point(12, 122);
 			this.linkLabel_Platform.Name = "linkLabel_Platform";
-			this.linkLabel_Platform.Size = new System.Drawing.Size(432, 13);
+			this.linkLabel_Platform.Size = new System.Drawing.Size(477, 13);
 			this.linkLabel_Platform.TabIndex = 6;
-			this.linkLabel_Platform.Text = "For .NET 2.0 on Windows 2000 and later. Currently running on .NET runtime <VERSIO" +
-				"N>.";
+			this.linkLabel_Platform.Text = "For .NET <VERSION> on Windows 2000 and later. Currently running on .NET runtime <" +
+				"VERSION>.";
 			this.linkLabel_Platform.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
 			// linkLabel_Title
@@ -170,7 +170,7 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Home.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.linkLabel_Home.AutoSize = true;
 			this.linkLabel_Home.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_Home.Location = new System.Drawing.Point(12, 314);
+			this.linkLabel_Home.Location = new System.Drawing.Point(12, 340);
 			this.linkLabel_Home.Name = "linkLabel_Home";
 			this.linkLabel_Home.Size = new System.Drawing.Size(322, 13);
 			this.linkLabel_Home.TabIndex = 11;
@@ -193,7 +193,7 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Environment.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_Environment.Location = new System.Drawing.Point(12, 211);
 			this.linkLabel_Environment.Name = "linkLabel_Environment";
-			this.linkLabel_Environment.Size = new System.Drawing.Size(389, 91);
+			this.linkLabel_Environment.Size = new System.Drawing.Size(346, 117);
 			this.linkLabel_Environment.TabIndex = 10;
 			this.linkLabel_Environment.Text = resources.GetString("linkLabel_Environment.Text");
 			this.linkLabel_Environment.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
@@ -203,7 +203,7 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Author.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.linkLabel_Author.AutoSize = true;
 			this.linkLabel_Author.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_Author.Location = new System.Drawing.Point(12, 337);
+			this.linkLabel_Author.Location = new System.Drawing.Point(12, 363);
 			this.linkLabel_Author.Name = "linkLabel_Author";
 			this.linkLabel_Author.Size = new System.Drawing.Size(65, 13);
 			this.linkLabel_Author.TabIndex = 12;
@@ -228,9 +228,9 @@ namespace YAT.Gui.Forms
 			this.linkLabel_License.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_License.Location = new System.Drawing.Point(392, 274);
 			this.linkLabel_License.Name = "linkLabel_License";
-			this.linkLabel_License.Size = new System.Drawing.Size(199, 13);
+			this.linkLabel_License.Size = new System.Drawing.Size(188, 13);
 			this.linkLabel_License.TabIndex = 13;
-			this.linkLabel_License.Text = "YAT is licensed under the CC-GNU GPL.";
+			this.linkLabel_License.Text = "YAT is licensed under the GNU LGPL.";
 			this.linkLabel_License.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
 			// About
@@ -238,7 +238,7 @@ namespace YAT.Gui.Forms
 			this.AcceptButton = this.button_Close;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.button_Close;
-			this.ClientSize = new System.Drawing.Size(614, 362);
+			this.ClientSize = new System.Drawing.Size(614, 388);
 			this.Controls.Add(this.linkLabel_License);
 			this.Controls.Add(this.pictureBox_License);
 			this.Controls.Add(this.linkLabel_Trademark);
