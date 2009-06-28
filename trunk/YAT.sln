@@ -4,6 +4,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Doc.Developer", "_Doc.Deve
 	ProjectSection(SolutionItems) = preProject
 		_Doc.Developer\HowToAddTestProject.txt = _Doc.Developer\HowToAddTestProject.txt
 		_Doc.Developer\HowToRunAndDebugNUnitTests.txt = _Doc.Developer\HowToRunAndDebugNUnitTests.txt
+		_Doc.Developer\SVNSetup.txt = _Doc.Developer\SVNSetup.txt
 		_Doc.Developer\Template.cs = _Doc.Developer\Template.cs
 		_Doc.Developer\VisualStudioSetup.txt = _Doc.Developer\VisualStudioSetup.txt
 	EndProjectSection

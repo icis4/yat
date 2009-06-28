@@ -1,8 +1,8 @@
 //==================================================================================================
-// URL       : $URL$
-// Author    : $Author$
-// Date      : $Date$
-// Revision  : $Rev$
+// $URL$
+// $Author$
+// $Date$
+// $Revision$
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
@@ -370,7 +370,12 @@ namespace MKY.IO.Serial
 		// ISocketService Members
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// Fired when connected.
+		/// </summary>
+		/// <param name="e">
+		/// Information about the connection.
+		/// </param>
 		public void OnConnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
 			lock (_socketConnections)
@@ -385,7 +390,12 @@ namespace MKY.IO.Serial
 			e.Connection.BeginReceive();
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Fired when data arrives.
+		/// </summary>
+		/// <param name="e">
+		/// Information about the Message.
+		/// </param>
 		public void OnReceived(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
 			lock (_receiveBuffer)
@@ -399,43 +409,55 @@ namespace MKY.IO.Serial
 			e.Connection.BeginReceive();
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Fired when data is sent.
+		/// </summary>
+		/// <param name="e">
+		/// Information about the Message.
+		/// </param>
 		public void OnSent(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
 			// nothing to do
 		}
 
-		/// <summary></summary>
-		public void OnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.DisconnectedEventArgs e)
+		/// <summary>
+		/// Fired when disconnected.
+		/// </summary>
+		/// <param name="e">
+		/// Information about the connection.
+		/// </param>
+		public void OnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
-			if (e.Exception == null)
+			bool isConnected = false;
+			lock (_socketConnections)
 			{
-				// normal disconnect
-				bool isConnected = false;
-				lock (_socketConnections)
-				{
-					_socketConnections.Remove(e.Connection);
-					isConnected = (_socketConnections.Count > 0);
-				}
-				if (!isConnected)
-				{
-					lock (_stateSyncObj)
-						_state = SocketState.Listening;
-
-					OnIOChanged(new EventArgs());
-				}
+				_socketConnections.Remove(e.Connection);
+				isConnected = (_socketConnections.Count > 0);
 			}
-			else
+			if (!isConnected)
 			{
-				// exception disconnect
-				DisposeSocket();
-
 				lock (_stateSyncObj)
-					_state = SocketState.Error;
+					_state = SocketState.Listening;
 
 				OnIOChanged(new EventArgs());
-				OnIOError(new IOErrorEventArgs(e.Exception.Message));
 			}
+		}
+
+		/// <summary>
+		/// Fired when exception occurs.
+		/// </summary>
+		/// <param name="e">
+		/// Information about the exception and connection.
+		/// </param>
+		public void OnException(ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs e)
+		{
+			DisposeSocket();
+
+			lock (_stateSyncObj)
+				_state = SocketState.Error;
+
+			OnIOChanged(new EventArgs());
+			OnIOError(new IOErrorEventArgs(e.Exception.Message));
 		}
 
 		#endregion
@@ -488,5 +510,6 @@ namespace MKY.IO.Serial
 }
 
 //==================================================================================================
-// End of $URL$
+// End of
+// $URL$
 //==================================================================================================

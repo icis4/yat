@@ -1,8 +1,0 @@
-
-2006-06-19, von Michi Bolliger
-
-http://www.codeproject.com/cs/internet/AsyncSocketServerandClien.asp
-
-http://www.codeproject.com/cs/internet/socketsincs.asp
-
-http://www.codeproject.com/cs/internet/tcpserverall.asp
