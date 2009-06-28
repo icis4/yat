@@ -40,6 +40,7 @@
 using System;
 using System.Threading;
 using System.Net;
+using System.Net.Sockets;
 
 using ALAZ.SystemEx.ThreadingEx;
 
@@ -54,31 +55,31 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
         #region Constructor
 
-        public SocketServer(CallbackThreadType callbackThreadType, ISocketService socketService)
-            : base(HostType.htServer, callbackThreadType, socketService, DelimiterType.dtNone, null, 2048, 2048, 0, 0)
+        public SocketServer(ProtocolType protocolType, CallbackThreadType callbackThreadType, ISocketService socketService)
+			: base(HostType.htServer, protocolType, callbackThreadType, socketService, DelimiterType.dtNone, null, 2048, 2048, 0, 0)
         {
             //-----
         }
 
-        public SocketServer(CallbackThreadType callbackThreadType, ISocketService socketService, DelimiterType delimiterType, byte[] delimiter)
-            : base(HostType.htServer, callbackThreadType, socketService, delimiterType, delimiter, 2048, 2048, 0, 0)
+		public SocketServer(ProtocolType protocolType, CallbackThreadType callbackThreadType, ISocketService socketService, DelimiterType delimiterType, byte[] delimiter)
+			: base(HostType.htServer, protocolType, callbackThreadType, socketService, delimiterType, delimiter, 2048, 2048, 0, 0)
         {
             //-----
         }
 
-        public SocketServer(CallbackThreadType callbackThreadType, ISocketService socketService, DelimiterType delimiterType, byte[] delimiter, int socketBufferSize, int messageBufferSize)
-            : base(HostType.htServer, callbackThreadType, socketService, delimiterType, delimiter, socketBufferSize, messageBufferSize, 0, 0)
+		public SocketServer(ProtocolType protocolType, CallbackThreadType callbackThreadType, ISocketService socketService, DelimiterType delimiterType, byte[] delimiter, int socketBufferSize, int messageBufferSize)
+			: base(HostType.htServer, protocolType, callbackThreadType, socketService, delimiterType, delimiter, socketBufferSize, messageBufferSize, 0, 0)
         {
             //-----
         }
 
-        public SocketServer(CallbackThreadType callbackThreadType, ISocketService socketService, DelimiterType delimiterType, byte[] delimiter, int socketBufferSize, int messageBufferSize, int idleCheckInterval, int idleTimeOutValue)
-            : base(HostType.htServer, callbackThreadType, socketService, delimiterType, delimiter, socketBufferSize, messageBufferSize, idleCheckInterval, idleTimeOutValue)
+		public SocketServer(ProtocolType protocolType, CallbackThreadType callbackThreadType, ISocketService socketService, DelimiterType delimiterType, byte[] delimiter, int socketBufferSize, int messageBufferSize, int idleCheckInterval, int idleTimeOutValue)
+			: base(HostType.htServer, protocolType, callbackThreadType, socketService, delimiterType, delimiter, socketBufferSize, messageBufferSize, idleCheckInterval, idleTimeOutValue)
         {
             //-----
         }
 
-        #endregion
+		#endregion
 
         #region Methods
 

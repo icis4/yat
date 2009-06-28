@@ -22,6 +22,9 @@ using System.ComponentModel;
 
 using MKY.Utilities.Event;
 
+// The MKY.IO.Serial namespace combines serial port and socket infrastructure. This code is
+// intentionally placed into the MKY.IO.Serial namespace even though the file is located in
+// MKY.IO.Serial\SerialPort for better separation of the implementation files.
 namespace MKY.IO.Serial
 {
 	/// <summary></summary>

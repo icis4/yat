@@ -53,7 +53,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyInformationalVersion("1.0.1")]
 
 // CLS compliance
-[assembly: CLSCompliant(false)] // false because ALAZ isn't CLS compliant
+[assembly: CLSCompliant(true)]
 
 //==================================================================================================
 // End of

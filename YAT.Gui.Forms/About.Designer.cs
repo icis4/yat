@@ -57,7 +57,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.button_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Close.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_Close.Location = new System.Drawing.Point(527, 353);
+			this.button_Close.Location = new System.Drawing.Point(527, 351);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
 			this.button_Close.TabIndex = 0;
@@ -170,7 +170,7 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Home.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.linkLabel_Home.AutoSize = true;
 			this.linkLabel_Home.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_Home.Location = new System.Drawing.Point(12, 340);
+			this.linkLabel_Home.Location = new System.Drawing.Point(12, 338);
 			this.linkLabel_Home.Name = "linkLabel_Home";
 			this.linkLabel_Home.Size = new System.Drawing.Size(322, 13);
 			this.linkLabel_Home.TabIndex = 11;
@@ -203,7 +203,7 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Author.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.linkLabel_Author.AutoSize = true;
 			this.linkLabel_Author.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_Author.Location = new System.Drawing.Point(12, 363);
+			this.linkLabel_Author.Location = new System.Drawing.Point(12, 361);
 			this.linkLabel_Author.Name = "linkLabel_Author";
 			this.linkLabel_Author.Size = new System.Drawing.Size(65, 13);
 			this.linkLabel_Author.TabIndex = 12;
@@ -213,10 +213,10 @@ namespace YAT.Gui.Forms
 			// pictureBox_License
 			// 
 			this.pictureBox_License.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.pictureBox_License.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CC_GPL_88x62;
-			this.pictureBox_License.Location = new System.Drawing.Point(448, 211);
+			this.pictureBox_License.Image = global::YAT.Gui.Forms.Properties.Resources.Image_LGPLv3_88x31;
+			this.pictureBox_License.Location = new System.Drawing.Point(462, 227);
 			this.pictureBox_License.Name = "pictureBox_License";
-			this.pictureBox_License.Size = new System.Drawing.Size(88, 62);
+			this.pictureBox_License.Size = new System.Drawing.Size(88, 31);
 			this.pictureBox_License.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
 			this.pictureBox_License.TabIndex = 15;
 			this.pictureBox_License.TabStop = false;
@@ -226,7 +226,7 @@ namespace YAT.Gui.Forms
 			this.linkLabel_License.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.linkLabel_License.AutoSize = true;
 			this.linkLabel_License.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_License.Location = new System.Drawing.Point(392, 274);
+			this.linkLabel_License.Location = new System.Drawing.Point(414, 211);
 			this.linkLabel_License.Name = "linkLabel_License";
 			this.linkLabel_License.Size = new System.Drawing.Size(188, 13);
 			this.linkLabel_License.TabIndex = 13;
@@ -238,7 +238,7 @@ namespace YAT.Gui.Forms
 			this.AcceptButton = this.button_Close;
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.button_Close;
-			this.ClientSize = new System.Drawing.Size(614, 388);
+			this.ClientSize = new System.Drawing.Size(614, 386);
 			this.Controls.Add(this.linkLabel_License);
 			this.Controls.Add(this.pictureBox_License);
 			this.Controls.Add(this.linkLabel_Trademark);

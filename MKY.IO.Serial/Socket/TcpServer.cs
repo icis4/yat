@@ -21,6 +21,9 @@ using System.Threading;
 
 using MKY.Utilities.Event;
 
+// The MKY.IO.Serial namespace combines serial port and socket infrastructure. This code is
+// intentionally placed into the MKY.IO.Serial namespace even though the file is located in
+// MKY.IO.Serial\Socket for better separation of the implementation files.
 namespace MKY.IO.Serial
 {
 	/// <summary></summary>
@@ -319,9 +322,13 @@ namespace MKY.IO.Serial
 
 		private void StartSocket()
 		{
-			_socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketServer((ALAZ.SystemEx.NetEx.SocketsEx.ISocketService)this, null, 2048, 8192, 0, 0, Timeout.Infinite, Timeout.Infinite);
-			_socket.OnException += new EventHandler<ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs>(_socket_OnException);
-			_socket.AddListener(new System.Net.IPEndPoint(System.Net.IPAddress.Any, _localPort));
+			_socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketServer(System.Net.Sockets.ProtocolType.Tcp,
+																	 ALAZ.SystemEx.NetEx.SocketsEx.CallbackThreadType.ctWorkerThread,
+																	(ALAZ.SystemEx.NetEx.SocketsEx.ISocketService)this,
+																	 ALAZ.SystemEx.NetEx.SocketsEx.DelimiterType.dtNone, null,
+																	 SocketDefaults.SocketBufferSize, SocketDefaults.MessageBufferSize,
+																	 Timeout.Infinite, Timeout.Infinite);
+			_socket.AddListener("YAT TCP Server Listener", new System.Net.IPEndPoint(System.Net.IPAddress.Any, _localPort));
 			_socket.Start();
 
 			lock (_stateSyncObj)
@@ -345,22 +352,6 @@ namespace MKY.IO.Serial
 		{
 			Stop();
 			Start();
-		}
-
-		#endregion
-
-		#region Socket Events
-		//==========================================================================================
-		// Socket Events
-		//==========================================================================================
-
-		private void _socket_OnException(object sender, ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs e)
-		{
-			lock (_stateSyncObj)
-				_state = SocketState.Error;
-
-			OnIOChanged(new EventArgs());
-			OnIOError(new IOErrorEventArgs(e.Exception.Message));
 		}
 
 		#endregion

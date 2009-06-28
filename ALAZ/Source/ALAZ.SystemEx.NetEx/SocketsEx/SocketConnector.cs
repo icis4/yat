@@ -56,6 +56,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
         private Socket FSocket;
         private IPEndPoint FRemoteEndPoint;
+		private ProtocolType FProtocolType;
 
         private Timer FReconnectTimer;
         private int FReconnectAttempts;
@@ -89,12 +90,16 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
         /// <param name="localEndPoint">
         /// Local endpoint. if null, will be any address/port.
         /// </param>
-        public SocketConnector(BaseSocketConnectionHost host, string name, IPEndPoint remoteEndPoint, ProxyInfo proxyData, EncryptType encryptType, CompressionType compressionType, ICryptoService cryptoService, int reconnectAttempts, int reconnectAttemptInterval, IPEndPoint localEndPoint)
+		/// <param name="protocolType">
+		/// Protocol type, TCP or UDP.
+		/// </param>
+		public SocketConnector(BaseSocketConnectionHost host, string name, IPEndPoint remoteEndPoint, ProxyInfo proxyData, EncryptType encryptType, CompressionType compressionType, ICryptoService cryptoService, int reconnectAttempts, int reconnectAttemptInterval, IPEndPoint localEndPoint, ProtocolType protocolType)
             : base(host, name, localEndPoint, encryptType, compressionType, cryptoService)
         {
 
             FReconnectTimer = new Timer(new TimerCallback(ReconnectConnectionTimerCallBack));
             FRemoteEndPoint = remoteEndPoint;
+			FProtocolType = protocolType;
 
             FReconnectAttempts = reconnectAttempts;
             FReconnectAttemptInterval = reconnectAttemptInterval;
@@ -105,7 +110,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
         }
 
-        #endregion
+		#endregion
 
         #region Destructor
 
@@ -170,7 +175,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
             {
 
                 //----- Create Socket!
-                FSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                FSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, FProtocolType);
                 FSocket.Bind(InternalLocalEndPoint);
                 FSocket.ReceiveBufferSize = Host.SocketBufferSize;
                 FSocket.SendBufferSize = Host.SocketBufferSize;
