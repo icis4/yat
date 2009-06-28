@@ -1,8 +1,8 @@
 ﻿//==================================================================================================
-// URL       : $URL$
-// Author    : $Author$
-// Date      : $Date$
-// Revision  : $Rev$
+// $URL$
+// $Author$
+// $Date$
+// $Revision$
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
@@ -53,8 +53,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyInformationalVersion("1.0.1")]
 
 // CLS compliance
-[assembly: CLSCompliant(true)]
+[assembly: CLSCompliant(false)] // false because ALAZ isn't CLS compliant
 
 //==================================================================================================
-// End of $URL$
+// End of
+// $URL$
 //==================================================================================================
