@@ -40,6 +40,7 @@
 using System;
 using System.Threading;
 using System.Net;
+using System.Net.Sockets;
 
 namespace ALAZ.SystemEx.NetEx.SocketsEx
 {
@@ -52,31 +53,31 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
         #region Constructor
 
-        public SocketClient(CallbackThreadType callbackThreadType, ISocketService socketService)
-            : base(HostType.htClient, callbackThreadType, socketService, DelimiterType.dtNone, null, 2048, 2048, 0, 0)
+		public SocketClient(ProtocolType protocolType, CallbackThreadType callbackThreadType, ISocketService socketService)
+			: base(HostType.htClient, protocolType, callbackThreadType, socketService, DelimiterType.dtNone, null, 2048, 2048, 0, 0)
         {
             //-----
         }
 
-        public SocketClient(CallbackThreadType callbackThreadType, ISocketService socketService, DelimiterType delimiterType, byte[] delimiter)
-            : base(HostType.htClient, callbackThreadType, socketService, delimiterType, delimiter, 2048, 2048, 0, 0)
+		public SocketClient(ProtocolType protocolType, CallbackThreadType callbackThreadType, ISocketService socketService, DelimiterType delimiterType, byte[] delimiter)
+			: base(HostType.htClient, protocolType, callbackThreadType, socketService, delimiterType, delimiter, 2048, 2048, 0, 0)
         {
             //-----
         }
 
-        public SocketClient(CallbackThreadType callbackThreadType, ISocketService socketService, DelimiterType delimiterType, byte[] delimiter, int socketBufferSize, int messageBufferSize)
-            : base(HostType.htClient, callbackThreadType, socketService, delimiterType, delimiter, socketBufferSize, messageBufferSize, 0, 0)
+		public SocketClient(ProtocolType protocolType, CallbackThreadType callbackThreadType, ISocketService socketService, DelimiterType delimiterType, byte[] delimiter, int socketBufferSize, int messageBufferSize)
+			: base(HostType.htClient, protocolType, callbackThreadType, socketService, delimiterType, delimiter, socketBufferSize, messageBufferSize, 0, 0)
         {
             //-----
         }
 
-        public SocketClient(CallbackThreadType callbackThreadType, ISocketService socketService, DelimiterType delimiterType, byte[] delimiter, int socketBufferSize, int messageBufferSize, int idleCheckInterval, int idleTimeOutValue)
-            : base(HostType.htClient, callbackThreadType, socketService, delimiterType, delimiter, socketBufferSize, messageBufferSize, idleCheckInterval, idleTimeOutValue)
+		public SocketClient(ProtocolType protocolType, CallbackThreadType callbackThreadType, ISocketService socketService, DelimiterType delimiterType, byte[] delimiter, int socketBufferSize, int messageBufferSize, int idleCheckInterval, int idleTimeOutValue)
+			: base(HostType.htClient, protocolType, callbackThreadType, socketService, delimiterType, delimiter, socketBufferSize, messageBufferSize, idleCheckInterval, idleTimeOutValue)
         {
             //-----
         }
 
-        #endregion
+		#endregion
 
         #region Methods
 
@@ -161,7 +162,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
             if (!Disposed)
             {
             
-              result = new SocketConnector(this, name, remoteEndPoint, proxyData, encryptType, compressionType, cryptoService, reconnectAttempts, reconnectAttemptInterval, localEndPoint);
+              result = new SocketConnector(this, name, remoteEndPoint, proxyData, encryptType, compressionType, cryptoService, reconnectAttempts, reconnectAttemptInterval, localEndPoint, ProtocolType);
               AddCreator(result);
               
             }

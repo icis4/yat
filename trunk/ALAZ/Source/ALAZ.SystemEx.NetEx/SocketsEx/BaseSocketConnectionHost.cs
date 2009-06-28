@@ -71,6 +71,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
         private object FSyncActive;
         
         private HostType FHostType;
+		private ProtocolType FProtocolType;
         private long FConnectionId;
 
         private DelimiterType FDelimiterType;
@@ -107,10 +108,11 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
         #region Constructor
 
-        public BaseSocketConnectionHost(HostType hostType, CallbackThreadType callbackThreadtype, ISocketService socketService, DelimiterType delimiterType, byte[] delimiter, int socketBufferSize, int messageBufferSize, int idleCheckInterval, int idleTimeOutValue)
+		public BaseSocketConnectionHost(HostType hostType, ProtocolType protocolType, CallbackThreadType callbackThreadtype, ISocketService socketService, DelimiterType delimiterType, byte[] delimiter, int socketBufferSize, int messageBufferSize, int idleCheckInterval, int idleTimeOutValue)
         {
 
             FHostType = hostType;
+			FProtocolType = protocolType;
             FConnectionId = 1000;
 
             FSocketConnectionsSync = new ReaderWriterLockSlim();
@@ -2597,7 +2599,12 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
             get { return FHostType; }
         }
 
-        public bool Active
+		public ProtocolType ProtocolType
+		{
+			get { return FProtocolType; }
+		}
+
+		public bool Active
         {
 
             get

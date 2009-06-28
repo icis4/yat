@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using MKY.Utilities.Types;
-using ALAZ.SystemEx.NetEx.SocketsEx;
+using MKY.IO.Serial;
 
 namespace YAT.Domain
 {
@@ -196,27 +196,27 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public static implicit operator HostType(XIOType type)
+		public static implicit operator SocketHostType(XIOType type)
 		{
 			switch ((IOType)type)
 			{
-				case IOType.TcpClient:     return (HostType.TcpClient);
-				case IOType.TcpServer:     return (HostType.TcpServer);
-				case IOType.TcpAutoSocket: return (HostType.TcpAutoSocket);
-				case IOType.Udp:           return (HostType.Udp);
-				default:                   return (HostType.Unknown);
+				case IOType.TcpClient:     return (SocketHostType.TcpClient);
+				case IOType.TcpServer:     return (SocketHostType.TcpServer);
+				case IOType.TcpAutoSocket: return (SocketHostType.TcpAutoSocket);
+				case IOType.Udp:           return (SocketHostType.Udp);
+				default:                   return (SocketHostType.Unknown);
 			}
 		}
 
 		/// <summary></summary>
-		public static implicit operator XIOType(HostType type)
+		public static implicit operator XIOType(SocketHostType type)
 		{
 			switch (type)
 			{
-				case HostType.TcpClient:     return (IOType.TcpClient);
-				case HostType.TcpServer:     return (IOType.TcpServer);
-				case HostType.TcpAutoSocket: return (IOType.TcpAutoSocket);
-				case HostType.Udp:           return (IOType.Udp);
+				case SocketHostType.TcpClient:     return (IOType.TcpClient);
+				case SocketHostType.TcpServer:     return (IOType.TcpServer);
+				case SocketHostType.TcpAutoSocket: return (IOType.TcpAutoSocket);
+				case SocketHostType.Udp:           return (IOType.Udp);
 				default:                                 return (IOType.Unknown);
 			}
 		}

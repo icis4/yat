@@ -19,6 +19,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
+// The MKY.IO.Serial namespace combines serial port and socket infrastructure. This code is
+// intentionally placed into the MKY.IO.Serial namespace even though the file is located in
+// MKY.IO.Serial\Socket for better separation of the implementation files.
 namespace MKY.IO.Serial
 {
 	/// <summary></summary>
@@ -46,7 +49,7 @@ namespace MKY.IO.Serial
 		// Fields
 		//==========================================================================================
 
-		private ALAZ.SystemEx.NetEx.SocketsEx.HostType _hostType;
+		private SocketHostType _hostType;
 
 		private string _remoteHostNameOrAddress;
 		private System.Net.IPAddress _resolvedRemoteIPAddress;
@@ -109,7 +112,7 @@ namespace MKY.IO.Serial
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			HostType                = ALAZ.SystemEx.NetEx.SocketsEx.HostType.TcpAutoSocket;
+			HostType                = SocketHostType.TcpAutoSocket;
 
 			RemoteHostNameOrAddress = DefaultRemoteHostName;
 			ResolvedRemoteIPAddress = System.Net.IPAddress.Loopback;
@@ -132,7 +135,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("HostType")]
-		public ALAZ.SystemEx.NetEx.SocketsEx.HostType HostType
+		public SocketHostType HostType
 		{
 			get { return (_hostType); }
 			set
@@ -214,12 +217,12 @@ namespace MKY.IO.Serial
 			{
 				switch (_hostType)
 				{
-					case ALAZ.SystemEx.NetEx.SocketsEx.HostType.TcpClient:
-					case ALAZ.SystemEx.NetEx.SocketsEx.HostType.TcpServer:
-					case ALAZ.SystemEx.NetEx.SocketsEx.HostType.TcpAutoSocket:
+					case SocketHostType.TcpClient:
+					case SocketHostType.TcpServer:
+					case SocketHostType.TcpAutoSocket:
 						return (LocalTcpPort);
 
-					case ALAZ.SystemEx.NetEx.SocketsEx.HostType.Udp:
+					case SocketHostType.Udp:
 						return (LocalUdpPort);
 
 					default:
@@ -230,13 +233,13 @@ namespace MKY.IO.Serial
 			{
 				switch (_hostType)
 				{
-					case ALAZ.SystemEx.NetEx.SocketsEx.HostType.TcpClient:
-					case ALAZ.SystemEx.NetEx.SocketsEx.HostType.TcpServer:
-					case ALAZ.SystemEx.NetEx.SocketsEx.HostType.TcpAutoSocket:
+					case SocketHostType.TcpClient:
+					case SocketHostType.TcpServer:
+					case SocketHostType.TcpAutoSocket:
 						LocalTcpPort = value;
 						break;
 
-					case ALAZ.SystemEx.NetEx.SocketsEx.HostType.Udp:
+					case SocketHostType.Udp:
 						LocalUdpPort = value;
 						break;
 				}
@@ -373,7 +376,7 @@ namespace MKY.IO.Serial
 		{
 			return
 			  (
-			  ((ALAZ.SystemEx.NetEx.SocketsEx.XHostType)_hostType).ToString() + ", " +
+			  ((XSocketHostType)_hostType).ToString() + ", " +
 			  _remoteHostNameOrAddress + ", " +
 			  _remotePort.ToString() + ", " +
 			  _localHostNameOrAddress + ", " +

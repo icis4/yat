@@ -57,7 +57,9 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
         #region Fields
 
-        //----- EndPoints!
+		private ProtocolType FProtocolType;
+
+		//----- EndPoints!
         private IPEndPoint FLocalEndPoint;
         private IPEndPoint FRemoteEndPoint;
 
@@ -105,8 +107,10 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
         
         #region Constructor
 
-        public SocketClientSync(IPEndPoint host)
+		public SocketClientSync(ProtocolType protocolType, IPEndPoint host)
         {
+
+			FProtocolType = protocolType;
 
             FReceivedEvent = new AutoResetEvent(false);
             FExceptionEvent = new AutoResetEvent(false);
@@ -259,7 +263,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                     FExceptionEvent.Reset();
                     FDisconnectEvent.Reset();
 
-                    FSocketClient = new SocketClient(CallbackThreadType.ctWorkerThread, FSocketClientEvents, FDelimiterType, FDelimiter, FSocketBufferSize, FMessageBufferSize);
+                    FSocketClient = new SocketClient(FProtocolType, CallbackThreadType.ctWorkerThread, FSocketClientEvents, FDelimiterType, FDelimiter, FSocketBufferSize, FMessageBufferSize);
                     
                     SocketConnector connector = FSocketClient.AddConnector("SocketClientSync", FRemoteEndPoint);
                     

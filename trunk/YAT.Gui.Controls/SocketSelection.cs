@@ -25,7 +25,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 
 using MKY.Utilities.Event;
-using ALAZ.SystemEx.NetEx.SocketsEx;
+using MKY.IO.Serial;
 
 namespace YAT.Gui.Controls
 {
@@ -74,7 +74,7 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const HostType _HostTypeDefault = HostType.TcpAutoSocket;
+		private const SocketHostType _HostTypeDefault = SocketHostType.TcpAutoSocket;
 
 		private const string _RemoteHostNameOrAddressDefault = MKY.IO.Serial.SocketSettings.DefaultRemoteHostName;
 		private const int _RemotePortDefault                 = MKY.IO.Serial.SocketSettings.DefaultPort;
@@ -92,7 +92,7 @@ namespace YAT.Gui.Controls
 
 		private bool _isSettingControls = false;
 
-		private HostType _hostType = _HostTypeDefault;
+		private MKY.IO.Serial.SocketHostType _hostType = _HostTypeDefault;
 
 		private string _remoteHostNameOrAddress = _RemoteHostNameOrAddressDefault;
 		private IPAddress _resolvedRemoteIPAddress = IPAddress.Loopback;
@@ -154,7 +154,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DefaultValue(_HostTypeDefault)]
-		public HostType HostType
+		public MKY.IO.Serial.SocketHostType HostType
 		{
 			set
 			{
@@ -324,7 +324,7 @@ namespace YAT.Gui.Controls
 					RemotePort = port;
 
 					// also set local port to same number
-					if ((_hostType == HostType.TcpClient) || (_hostType == HostType.TcpAutoSocket) || (_hostType == HostType.Udp))
+					if ((_hostType == SocketHostType.TcpClient) || (_hostType == SocketHostType.TcpAutoSocket) || (_hostType == SocketHostType.Udp))
 					{
 						LocalTcpPort = port;
 
@@ -373,7 +373,7 @@ namespace YAT.Gui.Controls
 					LocalUdpPort = port;
 
 					// also set remote port to same number
-					if (_hostType == HostType.TcpServer)
+					if (_hostType == SocketHostType.TcpServer)
 					{
 						RemotePort = port;
 					}
@@ -450,7 +450,7 @@ namespace YAT.Gui.Controls
 			_isSettingControls = true;
 
 			// remote host address
-			if ((_hostType == HostType.TcpClient) || (_hostType == HostType.TcpAutoSocket) || (_hostType == HostType.Udp))
+			if ((_hostType == SocketHostType.TcpClient) || (_hostType == SocketHostType.TcpAutoSocket) || (_hostType == SocketHostType.Udp))
 			{
 				comboBox_RemoteHostNameOrAddress.Enabled = true;
 				comboBox_RemoteHostNameOrAddress.Text = _remoteHostNameOrAddress;
@@ -462,13 +462,13 @@ namespace YAT.Gui.Controls
 			}
 
 			// remote port label
-			if (_hostType == HostType.Udp)
+			if (_hostType == SocketHostType.Udp)
 				label_RemotePort.Text = "Remote UDP port:";
 			else
 				label_RemotePort.Text = "Remote TCP port:";
 
 			// remote port
-			if ((_hostType == HostType.TcpClient) || (_hostType == HostType.TcpAutoSocket) || (_hostType == HostType.Udp))
+			if ((_hostType == SocketHostType.TcpClient) || (_hostType == SocketHostType.TcpAutoSocket) || (_hostType == SocketHostType.Udp))
 			{
 				textBox_RemotePort.Enabled = true;
 				textBox_RemotePort.Text = _remotePort.ToString();
@@ -480,7 +480,7 @@ namespace YAT.Gui.Controls
 			}
 
 			// local host address
-			if (_hostType != HostType.Unknown)
+			if (_hostType != SocketHostType.Unknown)
 			{
 				comboBox_LocalHostNameOrAddress.Enabled = true;
 				comboBox_LocalHostNameOrAddress.Text = _localHostNameOrAddress;
@@ -492,18 +492,18 @@ namespace YAT.Gui.Controls
 			}
 
 			// local port label
-			if (_hostType == HostType.Udp)
+			if (_hostType == SocketHostType.Udp)
 				label_LocalPort.Text = "Local UDP port:";
 			else
 				label_LocalPort.Text = "Local TCP port:";
 
 			// local port
-			if ((_hostType == HostType.TcpServer) || (_hostType == HostType.TcpAutoSocket))
+			if ((_hostType == SocketHostType.TcpServer) || (_hostType == SocketHostType.TcpAutoSocket))
 			{
 				textBox_LocalPort.Enabled = true;
 				textBox_LocalPort.Text = _localTcpPort.ToString();
 			}
-			else if (_hostType == HostType.Udp)
+			else if (_hostType == SocketHostType.Udp)
 			{
 				textBox_LocalPort.Enabled = true;
 				textBox_LocalPort.Text = _localUdpPort.ToString();

@@ -21,6 +21,9 @@ using System.Threading;
 
 using MKY.Utilities.Event;
 
+// The MKY.IO.Serial namespace combines serial port and socket infrastructure. This code is
+// intentionally placed into the MKY.IO.Serial namespace even though the file is located in
+// MKY.IO.Serial\Socket for better separation of the implementation files.
 namespace MKY.IO.Serial
 {
 	/// <summary></summary>
@@ -338,9 +341,13 @@ namespace MKY.IO.Serial
 
 		private void StartSocket()
 		{
-			_socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketClient((ALAZ.SystemEx.NetEx.SocketsEx.ISocketService)this, null, 2048, 8192, 0, 0, Timeout.Infinite, Timeout.Infinite);
-			_socket.OnException += new EventHandler<ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs>(_socket_OnException);
-			_socket.AddConnector(new System.Net.IPEndPoint(_remoteIPAddress, _remotePort));
+			_socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketClient(System.Net.Sockets.ProtocolType.Tcp,
+																	 ALAZ.SystemEx.NetEx.SocketsEx.CallbackThreadType.ctWorkerThread,
+																	(ALAZ.SystemEx.NetEx.SocketsEx.ISocketService)this,
+																	 ALAZ.SystemEx.NetEx.SocketsEx.DelimiterType.dtNone, null,
+																	 SocketDefaults.SocketBufferSize, SocketDefaults.MessageBufferSize,
+																	 Timeout.Infinite, Timeout.Infinite);
+			_socket.AddConnector("YAT TCP Client Connector", new System.Net.IPEndPoint(_remoteIPAddress, _remotePort));
 			_socket.Start();
 			
 			lock (_stateSyncObj)
@@ -364,36 +371,6 @@ namespace MKY.IO.Serial
 		{
 			Stop();
 			Start();
-		}
-
-		#endregion
-
-		#region Socket Events
-		//==========================================================================================
-		// Socket Events
-		//==========================================================================================
-
-		private void _socket_OnException(object sender, ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs e)
-		{
-			if (_autoReconnect.Enabled)
-			{
-				lock (_stateSyncObj)
-					_state = SocketState.WaitingForReconnect;
-			
-				OnIOChanged(new EventArgs());
-
-				StartReconnectTimer();
-			}
-			else
-			{
-				DisposeSocket();
-
-				lock (_stateSyncObj)
-					_state = SocketState.Error;
-				
-				OnIOChanged(new EventArgs());
-				OnIOError(new IOErrorEventArgs(e.Exception.Message));
-			}
 		}
 
 		#endregion
@@ -490,16 +467,28 @@ namespace MKY.IO.Serial
 		/// </param>
 		public void OnException(ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs e)
 		{
-			DisposeSocket();
+			if (_autoReconnect.Enabled)
+			{
+				lock (_stateSyncObj)
+					_state = SocketState.WaitingForReconnect;
 
-			lock (_socketConnectionSyncObj)
-				_socketConnection = null;
+				OnIOChanged(new EventArgs());
 
-			lock (_stateSyncObj)
-				_state = SocketState.Error;
+				StartReconnectTimer();
+			}
+			else
+			{
+				DisposeSocket();
 
-			OnIOChanged(new EventArgs());
-			OnIOError(new IOErrorEventArgs(e.Exception.Message));
+				lock (_socketConnectionSyncObj)
+					_socketConnection = null;
+
+				lock (_stateSyncObj)
+					_state = SocketState.Error;
+
+				OnIOChanged(new EventArgs());
+				OnIOError(new IOErrorEventArgs(e.Exception.Message));
+			}
 		}
 
 		#endregion

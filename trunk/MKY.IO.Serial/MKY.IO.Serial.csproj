@@ -56,10 +56,12 @@
     <Compile Include="SerialPort\SerialCommunicationSettings.cs" />
     <Compile Include="SerialPort\SerialPort.cs" />
     <Compile Include="SerialPort\SerialPortSettings.cs" />
+    <Compile Include="Socket\SocketDefaults.cs" />
     <Compile Include="Socket\SocketSettings.cs" />
     <Compile Include="Socket\TcpAutoSocket.cs" />
     <Compile Include="Socket\TcpClient.cs" />
     <Compile Include="Socket\TcpServer.cs" />
+    <Compile Include="Socket\SocketHostType.cs" />
     <Compile Include="Socket\UdpSocket.cs" />
     <Compile Include="Structs.cs" />
   </ItemGroup>

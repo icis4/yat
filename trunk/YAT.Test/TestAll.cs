@@ -15,11 +15,10 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Text;
 
 using NUnit.Framework;
-using NUnit.Core;
 
 namespace YAT.Test
 {
@@ -31,11 +30,11 @@ namespace YAT.Test
 		//==========================================================================================
 
 		[Suite]
-		public static TestSuite Suite
+		public static IEnumerable Suite
 		{
 			get
 			{
-				TestSuite suite = new TestSuite("TestAll");
+				ArrayList suite = new ArrayList();
 
 				// MKY.Utilities.Test
 				suite.Add(new MKY.Utilities.Test.IO.XPathTest());

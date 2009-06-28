@@ -23,7 +23,6 @@ using System.Text;
 using System.Windows.Forms;
 
 using MKY.Utilities.Event;
-using ALAZ.SystemEx.NetEx.SocketsEx;
 using MKY.IO.Serial;
 
 namespace YAT.Gui.Controls
@@ -37,7 +36,7 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const HostType _HostTypeDefault = HostType.TcpAutoSocket;
+		private const SocketHostType _HostTypeDefault = SocketHostType.TcpAutoSocket;
 
 		#endregion
 
@@ -49,8 +48,7 @@ namespace YAT.Gui.Controls
 		private bool _isStartingUp = true;
 		private bool _isSettingControls = false;
 
-		private HostType _hostType = _HostTypeDefault;
-
+		private SocketHostType _hostType = _HostTypeDefault;
 		private AutoRetry _tcpClientAutoReconnect = MKY.IO.Serial.SocketSettings.TcpClientAutoReconnectDefault;
 
 		#endregion
@@ -87,7 +85,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DefaultValue(_HostTypeDefault)]
-		public HostType HostType
+		public SocketHostType HostType
 		{
 			set
 			{
@@ -188,7 +186,7 @@ namespace YAT.Gui.Controls
 		{
 			_isSettingControls = true;
 
-			bool isTcpClient = (_hostType == HostType.TcpClient);
+			bool isTcpClient = (_hostType == SocketHostType.TcpClient);
 
 			bool autoReconnectEnabled;
 			if (isTcpClient)
