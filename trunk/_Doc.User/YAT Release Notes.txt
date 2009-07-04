@@ -40,7 +40,7 @@ You can also download .NET under "http://www.microsoft.com/net/"
 YAT 2.0
 =======
 
-YAT 2.0 Beta 2 Candidate 5 Version 1.99.2x :: 2009-08-xx
+YAT 2.0 Beta 3 Candidate 1 Version 1.99.2x :: 2009-08-xx
 --------------------------------------------------------
 
 Important changes:
@@ -49,7 +49,7 @@ Important changes:
 - Update to DejaVu 2.29 (feature request #2813292)
 - Update to NUnit 2.5 (feature request #2813296)
 
-- Header and footer added to all source files
+- Header and footer added to all source files (feature request #2136643)
 - SVN tags added to all source files (feature request #2813228)
 
 Fixed bugs:
@@ -327,15 +327,15 @@ XTerm232 1.0.0 :: 2003-10-14
 Future releases
 ===============
 
-YAT 2.0 Beta 3 :: 2008-Q4
--------------------------
+YAT 2.1 Beta 1 :: Not planned yet
+---------------------------------
 - Logging refactoring
 - Support for XML logging
 - Initial support for scripting
    > Inputs/requirements are highly appreciated
 
-YAT 2.1.0 :: Not planned yet
-----------------------------
+YAT 2.1 :: Not planned yet
+--------------------------
 - Plug-In/Scripting Interface
    > e.g. File Transfer:
      OnDataReceived() and SendNextLine()
@@ -352,9 +352,8 @@ Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
 Copyright © 2003-2009 Matthias Kläy.
 All rights reserved.
 
-YAT is licensed under the CC-GNU GPL.
-For details see http://creativecommons.org/licenses/GPL/2.0/
-
+YAT is licensed under the GNU LGPL.
+See http://www.gnu.org/licenses/lgpl.html for license details.
 
 ********************************************************************************
                              End of YAT Release Notes

@@ -549,7 +549,7 @@ namespace YAT.Gui.Controls
 		{
 			if (e.Index >= 0)
 			{
-				unchecked
+				if (e.Index >= 0)
 				{
 					ListBox lb = listBox_Monitor;
 
@@ -572,11 +572,26 @@ namespace YAT.Gui.Controls
 
 		#endif
 
+		/// <remarks>
+		/// Whether we like it or not, <see cref="System.Windows.Forms.ListBox.OnDrawItem()"/> calls
+		/// this method pretty often. Actually it's called twice each time a new line is added. In
+		/// addition, another call is needed for the next still empty line. Thus:
+		/// 1st line received => 3 calls to DrawItem() at index 0 | 0 | 1
+		/// 2nd line received => 5                     at index 0 | 1 | 0 | 1 | 2
+		/// 3rd line received => 7                     at index 0 | 1 | 2 | 0 | 1 | 2 | 3
+		/// ...
+		/// Nth line received => 2*N + 1               at index 0 | 1 | 2...N | 0 | 1 | 2...N | N+1
+		/// 
+		/// Each call takes a 0..2ms. E.g. for 25 lines this results in something like:
+		/// 51 x 2ms = 100ms per update!
+		/// At least scrolling is handled properly, i.e. as soon as the listbox starts to scroll,
+		/// the number of calls doesn't increase anymore.
+		/// </remarks>
 		private void listBox_Monitor_DrawItem(object sender, DrawItemEventArgs e)
 		{
-			if (e.Index >= 0)
+			unchecked
 			{
-				unchecked
+				if (e.Index >= 0)
 				{
 					ListBox lb = listBox_Monitor;
 
@@ -584,13 +599,13 @@ namespace YAT.Gui.Controls
 					SizeF size = Draw.DrawItem((List<Domain.DisplayElement>)(lb.Items[e.Index]), _formatSettings, e.Graphics, e.Bounds, e.State);
 					e.DrawFocusRectangle();
 
-					int width = (int)Math.Ceiling(size.Width);
+					int width  = (int)Math.Ceiling(size.Width);
 					int height = (int)Math.Ceiling(size.Height);
 
-					if (width > lb.HorizontalExtent)
+					if ((width > 0) && (width > lb.HorizontalExtent))
 						lb.HorizontalExtent = width;
 
-					if (height != lb.ItemHeight)
+					if ((height > 0) && (height != lb.ItemHeight))
 						lb.ItemHeight = height;
 				}
 			}
@@ -600,6 +615,11 @@ namespace YAT.Gui.Controls
 		{
 			ListBox lb = listBox_Monitor;
 			lb.ClearSelected();
+		}
+
+		private void timer_Redraw_Tick(object sender, EventArgs e)
+		{
+			// do be done
 		}
 
 		#endregion

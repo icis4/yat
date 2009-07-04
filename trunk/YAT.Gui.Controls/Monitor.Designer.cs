@@ -37,6 +37,7 @@ namespace YAT.Gui.Controls
 			this.pictureBox_Monitor = new System.Windows.Forms.PictureBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.timer_Opacity = new System.Windows.Forms.Timer(this.components);
+			this.timer_Redraw = new System.Windows.Forms.Timer(this.components);
 			this.panel_Monitor.SuspendLayout();
 			this.panel_Picture.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_Monitor)).BeginInit();
@@ -65,8 +66,8 @@ namespace YAT.Gui.Controls
 			this.listBox_Monitor.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listBox_Monitor.Size = new System.Drawing.Size(300, 167);
 			this.listBox_Monitor.TabIndex = 1;
-			this.listBox_Monitor.Leave += new System.EventHandler(this.listBox_Monitor_Leave);
 			this.listBox_Monitor.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox_Monitor_DrawItem);
+			this.listBox_Monitor.Leave += new System.EventHandler(this.listBox_Monitor_Leave);
 			// 
 			// panel_Picture
 			// 
@@ -118,11 +119,18 @@ namespace YAT.Gui.Controls
 			// 
 			this.timer_Opacity.Tick += new System.EventHandler(this.timer_Opacity_Tick);
 			// 
+			// timer_Redraw
+			// 
+			this.timer_Redraw.Enabled = true;
+			this.timer_Redraw.Interval = 50;
+			this.timer_Redraw.Tick += new System.EventHandler(this.timer_Redraw_Tick);
+			// 
 			// Monitor
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.panel_Monitor);
+			this.DoubleBuffered = true;
 			this.Name = "Monitor";
 			this.Size = new System.Drawing.Size(300, 200);
 			this.Resize += new System.EventHandler(this.Monitor_Resize);
@@ -143,5 +151,6 @@ namespace YAT.Gui.Controls
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.Timer timer_Opacity;
 		private System.Windows.Forms.Label label_TimeStatus;
+		private System.Windows.Forms.Timer timer_Redraw;
 	}
 }
