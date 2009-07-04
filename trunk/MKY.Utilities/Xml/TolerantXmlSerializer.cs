@@ -14,9 +14,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-// Enable to write input and output documents and schemas to files
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+// Choose whether to write input and output documents and schemas to files:
+// - Uncomment to write files
+// - Comment out for normal operation
 //#define WRITE_DOCUMENTS_TO_FILES
 //#define WRITE_SCHEMAS_TO_FILES
+
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
 
 using System;
 using System.Collections.Generic;
@@ -26,6 +37,8 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using System.Xml.XPath;
+
+#endregion
 
 namespace MKY.Utilities.Xml
 {
@@ -80,7 +93,7 @@ namespace MKY.Utilities.Xml
 			_defaultDocument.Schemas.Compile();
 			_defaultDocument.Validate(null);
 
-		#if WRITE_SCHEMAS_TO_FILES
+		#if (WRITE_SCHEMAS_TO_FILES)
 			WriteSchemasToFiles(_defaultDocument.Schemas, "DefaultSchema");
 		#endif
 		}
@@ -109,7 +122,7 @@ namespace MKY.Utilities.Xml
 			// Read input stream
 			XmlDocument inputDocument = CreateDocumentFromInput(reader);
 
-		#if WRITE_DOCUMENTS_TO_FILES
+		#if (WRITE_DOCUMENTS_TO_FILES)
 			WriteDocumentToFile(inputDocument, "InputDocument");
 		#endif
 
@@ -117,7 +130,7 @@ namespace MKY.Utilities.Xml
 			inputDocument.Schemas = InferSchemaFromXml(inputDocument.OuterXml);
 			inputDocument.Validate(null);
 
-		#if WRITE_SCHEMAS_TO_FILES
+		#if (WRITE_SCHEMAS_TO_FILES)
 			WriteSchemasToFiles(inputDocument.Schemas, "InputSchema");
 		#endif
 
@@ -127,14 +140,14 @@ namespace MKY.Utilities.Xml
 			outputDocument.Schemas = _defaultDocument.Schemas;
 			outputDocument.Validate(null);
 
-		#if WRITE_SCHEMAS_TO_FILES
+		#if (WRITE_SCHEMAS_TO_FILES)
 			WriteSchemasToFiles(outputDocument.Schemas, "OutputSchema");
 		#endif
 
 			// Recursively traverse documents node-by-node and copy compatible nodes
 			CopyDocumentTolerantly(inputDocument, outputDocument);
 
-		#if WRITE_DOCUMENTS_TO_FILES
+		#if (WRITE_DOCUMENTS_TO_FILES)
 			WriteDocumentToFile(outputDocument, "OutputDocument");
 		#endif
 
@@ -396,7 +409,7 @@ namespace MKY.Utilities.Xml
 			}
 		}
 
-	#if WRITE_SCHEMAS_TO_FILES
+	#if (WRITE_SCHEMAS_TO_FILES)
 		private void WriteSchemasToFiles(XmlSchemaSet schemas, string label)
 		{
 			int i = 0;
@@ -417,7 +430,7 @@ namespace MKY.Utilities.Xml
 		}
 	#endif
 
-	#if WRITE_DOCUMENTS_TO_FILES
+	#if (WRITE_DOCUMENTS_TO_FILES)
 		private void WriteDocumentToFile(XmlDocument document, string label)
 		{
 			string filePath = @"C:\" + GetType() + "." + label + ".xml";

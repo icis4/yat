@@ -14,6 +14,25 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+// Choose whether list box scrolling should be delayed in order to improve the performance:
+// - Uncomment to enable switching
+// - Comment out to disable switching
+#define ENABLE_DELAYED_SCROLLING
+
+// Choose whether list box draw mode should be switched depending on performance:
+// - Uncomment to enable switching
+// - Comment out to disable switching
+#define ENABLE_DRAW_MODE_SWITCHING
+
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,14 +45,23 @@ using MKY.Utilities.Event;
 
 using YAT.Gui.Utilities;
 
+#endregion
+
 namespace YAT.Gui.Controls
 {
+	#region MonitorActivityState Enum
+	//==================================================================================================
+	// MonitorActivityState Enum
+	//==================================================================================================
+
 	public enum MonitorActivityState
 	{
 		Inactive,
 		Active,
 		Pending,
 	}
+
+	#endregion
 
 	/// <summary>
 	/// This monitor implements a list box based terminal monitor in a speed optimized way
@@ -69,6 +97,17 @@ namespace YAT.Gui.Controls
 		private const double _ImageOpacityDecrement = -0.10; // -10%
 
 		private const int _MaximalLineCountDefault = Domain.Settings.DisplaySettings.MaximalLineCountDefault;
+
+		/// <summary>
+		/// Interval of the performance optimization timer.
+		/// </summary>
+		private const int _PerformanceOptimizationInterval = 50;
+
+		/// <summary>
+		/// Decimates the optimization interval above. 2 x 50ms = 100ms is a trade-off between
+		/// speed and visibility. Smaller values reduce speed, larger are visible.
+		/// </summary>
+		private const int _ScrollIntervalDecimator = 2;
 
 		private const bool _ShowTimeStatusDefault  = false;
 		private const bool _ShowCountStatusDefault = false;
@@ -133,6 +172,11 @@ namespace YAT.Gui.Controls
 		{
 			InitializeComponent();
 			SetControls();
+
+		#if (ENABLE_DELAYED_SCROLLING || ENABLE_DRAW_MODE_SWITCHING)
+			timer_PerformanceOptimization.Interval = _PerformanceOptimizationInterval;
+			timer_PerformanceOptimization.Enabled = true;
+		#endif
 		}
 
 		#endregion
@@ -335,7 +379,7 @@ namespace YAT.Gui.Controls
 
 			foreach (Domain.DisplayElement de in elements)
 			{
-				// if first line, add a new empty line
+				// If first line, add a new empty line
 				if (_lines.Count == 0)
 				{
 					List<Domain.DisplayElement> line = new List<Domain.DisplayElement>();
@@ -343,32 +387,34 @@ namespace YAT.Gui.Controls
 					lb.Items.Add(line);
 				}
 
-				// add element to the current line
+				// Add element to the current line
 				List<Domain.DisplayElement> partialLine = _lines[_lines.Count - 1];
 				partialLine.Add(de);
 				_lines[_lines.Count - 1] = partialLine;
 				lb.Items[lb.Items.Count - 1] = partialLine;
 
-				// process EOL
+				// Process EOL
 				if (de.IsEol)
 				{
-					// remove lines if maximum exceeded
+					// Remove lines if maximum exceeded
 					while (lb.Items.Count >= (_maximalLineCount))
 					{
 						_lines.RemoveAt(0);
 						lb.Items.RemoveAt(0);
 					}
 
-					// add new empty line
+					// Add new empty line
 					List<Domain.DisplayElement> line = new List<Domain.DisplayElement>();
 					_lines.Add(line);
 					lb.Items.Add(line);
 				}
 			}
 
-			// scroll list
+		#if (!ENABLE_DELAYED_SCROLLING)
+			// Scroll list to bottom
 			if ((lb.SelectedItems.Count == 0) && (lb.Items.Count > 0))
 				lb.TopIndex = lb.Items.Count - 1;
+		#endif
 
 			lb.EndUpdate();
 		}
@@ -529,12 +575,10 @@ namespace YAT.Gui.Controls
 						_imageOpacityState = OpacityState.Incrementing;
 					}
 				}
-
-				#if false
+#if (FALSE)
 				// \fixme Don't know how to alter image opacity yet
 				pictureBox_Monitor.Image.Opacity = _imageOpacity
-				#endif
-
+#endif
 				if (_imageOpacity >= ((_MaximumImageOpacity - _MinimumImageOpacity) / 2))
 					pictureBox_Monitor.Image = _imageActive;
 				else
@@ -542,9 +586,10 @@ namespace YAT.Gui.Controls
 			}
 		}
 
-		// measures item height only, not needed for OwnerDrawnFixed
-		#if (false)
-
+#if (FALSE)
+		/// <remarks>
+		/// Measures item height only, not needed for OwnerDrawnFixed.
+		/// </remarks>
 		private void listBox_Monitor_MeasureItem(object sender, MeasureItemEventArgs e)
 		{
 			if (e.Index >= 0)
@@ -569,8 +614,7 @@ namespace YAT.Gui.Controls
 				}
 			}
 		}
-
-		#endif
+#endif
 
 		/// <remarks>
 		/// Whether we like it or not, <see cref="System.Windows.Forms.ListBox.OnDrawItem()"/> calls
@@ -617,9 +661,23 @@ namespace YAT.Gui.Controls
 			lb.ClearSelected();
 		}
 
-		private void timer_Redraw_Tick(object sender, EventArgs e)
+		private static int timer_PerformanceOptimization_Tick_ScrollIntervalDecimatorCounter = _ScrollIntervalDecimator;
+
+		private void timer_PerformanceOptimization_Tick(object sender, EventArgs e)
 		{
-			// do be done
+			ListBox lb = listBox_Monitor;
+
+		#if (ENABLE_DELAYED_SCROLLING)
+			timer_PerformanceOptimization_Tick_ScrollIntervalDecimatorCounter--;
+			if (timer_PerformanceOptimization_Tick_ScrollIntervalDecimatorCounter <= 0)
+			{
+				timer_PerformanceOptimization_Tick_ScrollIntervalDecimatorCounter = _ScrollIntervalDecimator;
+
+				// Scroll list to bottom
+				if ((lb.SelectedItems.Count == 0) && (lb.Items.Count > 0))
+					lb.TopIndex = lb.Items.Count - 1;
+			}
+		#endif
 		}
 
 		#endregion

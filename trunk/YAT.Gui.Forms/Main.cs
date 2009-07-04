@@ -335,7 +335,7 @@ namespace YAT.Gui.Forms
 
 			// not needed yet: _isSettingControls = false;
 
-			#if false
+#if (FALSE)
 			// \fixme
 			// I don't know how to fix bug item #1808494 "MDI window list invisible if no MDI children".
 			// The following code doesn't fix it. Could it even be a .NET bug?
@@ -343,7 +343,7 @@ namespace YAT.Gui.Forms
 				menuStrip_Main.MdiWindowListItem = toolStripMenuItem_MainMenu_Window;
 			else
 				menuStrip_Main.MdiWindowListItem = null;
-			#endif
+#endif
 		}
 
 		private void toolStripMenuItem_MainMenu_Window_DropDownOpening(object sender, EventArgs e)

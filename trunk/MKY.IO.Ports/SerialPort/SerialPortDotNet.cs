@@ -14,8 +14,19 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-// Choose whether additional debug output should be written on open/close
-//#define WRITE_DEBUG
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+// Choose whether additional debug output should be written on open/close:
+// - Uncomment to debug
+// - Comment out for normal operation
+//#define DEBUG_OPEN_CLOSE
+
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
 
 using System;
 using System.ComponentModel;
@@ -24,6 +35,8 @@ using System.Diagnostics;
 using System.Text;
 
 using MKY.Utilities.Event;
+
+#endregion
 
 namespace MKY.IO.Ports
 {
@@ -520,8 +533,7 @@ namespace MKY.IO.Ports
 			if (!base.IsOpen)
 			{
 				OnOpening(new EventArgs());
-
-			#if (DEBUG && WRITE_DEBUG)
+			#if (DEBUG && DEBUG_OPEN_CLOSE)
 				try
 				{
 					DebugWrite("Trying base.Open()", true);
@@ -594,7 +606,7 @@ namespace MKY.IO.Ports
 			if (base.IsOpen)
 			{
 				OnClosing(new EventArgs());
-			#if (DEBUG && WRITE_DEBUG)
+			#if (DEBUG && DEBUG_OPEN_CLOSE)
 				try
 				{
 					DebugWrite("Trying base.Close()", true);
@@ -727,13 +739,15 @@ namespace MKY.IO.Ports
 		// Debug
 		//==========================================================================================
 
-	#if (DEBUG && WRITE_DEBUG)
+#if (DEBUG && DEBUG_OPEN_CLOSE)
 
 		private string DebugWrite_portName = "";
+
 		private void DebugWrite(string message)
 		{
 			DebugWrite(message, false);
 		}
+
 		private void DebugWrite(string message, bool writeStack)
 		{
 			if (DebugWrite_portName == "")
@@ -745,7 +759,7 @@ namespace MKY.IO.Ports
 				MKY.Utilities.Diagnostics.XDebug.WriteStack(this, "");
 		}
 
-	#endif // DEBUG && WRITE_DEBUG
+#endif // DEBUG && DEBUG_OPEN_CLOSE
 
 		#endregion
 	}

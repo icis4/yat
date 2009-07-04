@@ -766,10 +766,10 @@ namespace MKY.IO.Serial
 			}
 		}
 
-		#if false
+#if (FALSE)
 		// \fixme break state detection doesn't work
 		private bool _aliveTimer_BreakState = false;
-		#endif
+#endif
 
 		private void _aliveTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
@@ -785,7 +785,7 @@ namespace MKY.IO.Serial
 						// \fixme Auto-reopen doesn't work because of deadlock issue mentioned above.
 						//StopOrClosePort();
 					}
-					#if false
+#if (FALSE)
 					// \fixme break state detection doesn't work
 					else
 					{
@@ -795,7 +795,7 @@ namespace MKY.IO.Serial
 
 						_aliveTimer_BreakState = _port.BreakState;
 					}
-					#endif
+#endif
 				}
 				catch
 				{
