@@ -1,0 +1,28 @@
+
+Preprocessor statements
+-----------------------
+
+Use
+#if (FALSE)
+to permanently disable blocks of code.
+FALSE is never defined in C#, #if (FALSE) clearly states that block isn't in use.
+
+Write
+#if (FALSE)
+<BLOCK>
+#endif
+at column 0 to keep code structure clear of disabled block.
+
+Use
+		#if (!DEBUG)
+			try
+			{
+		#endif
+to enable or disable blocks of code depending on configuration switches.
+Write preprocessor statements one level out of normal code structure to clearly show that these
+statements do not belong to the normal code. Still, don't use
+#if (!DEBUG)
+			try
+			{
+#endif
+because it adds agitation to the code structure.
