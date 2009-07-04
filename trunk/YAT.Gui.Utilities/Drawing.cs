@@ -23,28 +23,36 @@ using System.IO;
 
 namespace YAT.Gui.Utilities
 {
-	public static class Draw
+	public static class Drawing
 	{
-		// for efficiency, cache the font and brushes to use for drawing
-		private static Font _font;
-		private static SolidBrush _txDataBrush      = new SolidBrush(Color.Black);
-		private static SolidBrush _txControlBrush   = new SolidBrush(Color.Black);
-		private static SolidBrush _rxDataBrush      = new SolidBrush(Color.Black);
-		private static SolidBrush _rxControlBrush   = new SolidBrush(Color.Black);
-		private static SolidBrush _timestampBrush   = new SolidBrush(Color.Black);
-		private static SolidBrush _lineLengthBrush  = new SolidBrush(Color.Black);
-		private static SolidBrush _whiteSpacesBrush = new SolidBrush(Color.Black);
-		private static SolidBrush _errorBrush       = new SolidBrush(Color.Black);
-		private static StringFormat _stringFormat   = new StringFormat();
-
-		static Draw()
+		private struct DrawingElements
 		{
-			// use GenericTypographic format to be able to measure characters indiviually,
+			public Font Font;
+			public SolidBrush Brush;
+		}
+
+		/// <remarks>
+		/// For performance reasons, cache fonts and brushes used for drawing.
+		/// </remarks>
+		private static DrawingElements _txData      = new DrawingElements();
+		private static DrawingElements _txControl   = new DrawingElements();
+		private static DrawingElements _rxData      = new DrawingElements();
+		private static DrawingElements _rxControl   = new DrawingElements();
+		private static DrawingElements _timeStamp   = new DrawingElements();
+		private static DrawingElements _lineLength  = new DrawingElements();
+		private static DrawingElements _whiteSpaces = new DrawingElements();
+		private static DrawingElements _error       = new DrawingElements();
+
+		/// <summary>String format used for drawing.</summary>
+		private static StringFormat _stringFormat = new StringFormat();
+
+		static Drawing()
+		{
+			// Use GenericTypographic format to be able to measure characters indiviually,
 			// i.e. without a small margin before and after the character
 			_stringFormat = StringFormat.GenericTypographic;
 
-			// additionally enable trailing spaces to be able to correctly measure
-			// single spaces
+			// Additionally enable trailing spaces to be able to correctly measure single spaces
 			_stringFormat.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
 		}
 
@@ -64,13 +72,9 @@ namespace YAT.Gui.Utilities
 		public static SizeF MeasureItem(Domain.DisplayElement element, Model.Settings.FormatSettings formatSettings,
 										Graphics graphics, RectangleF bounds)
 		{
-			string fontName = formatSettings.Font.Name;
-			float fontSize = formatSettings.Font.Size;
-			FontStyle fontStyle;
-			Color fontColor;
-			SetStyleAndColorAndBrush(element, formatSettings, out fontStyle, out fontColor);
-
-			Font font = SetFont(fontName, fontSize, fontStyle);
+			Font font;
+			Brush brush;
+			SetDrawingItems(element, formatSettings, out font, out brush);
 
 			return (graphics.MeasureString(element.Text, font, bounds.Size, _stringFormat));
 		}
@@ -95,13 +99,9 @@ namespace YAT.Gui.Utilities
 		public static SizeF DrawItem(Domain.DisplayElement element, Model.Settings.FormatSettings formatSettings,
 									 Graphics graphics, RectangleF bounds, DrawItemState state)
 		{
-			FontStyle fontStyle;
-			Color fontColor;
-			Brush brush = SetStyleAndColorAndBrush(element, formatSettings, out fontStyle, out fontColor);
-
-			string fontName = formatSettings.Font.Name;
-			float fontSize = formatSettings.Font.Size;
-			Font font = SetFont(fontName, fontSize, fontStyle);
+			Font font;
+			Brush brush;
+			SetDrawingItems(element, formatSettings, out font, out brush);
 
 			// select the highlight brush if the item is selected
 			if ((state & DrawItemState.Selected) == DrawItemState.Selected)
@@ -114,63 +114,55 @@ namespace YAT.Gui.Utilities
 			return (graphics.MeasureString(element.Text, font, bounds.Size, _stringFormat));
 		}
 
-		private static Font SetFont(string fontName, float fontSize, FontStyle fontStyle)
+		private static void SetDrawingItems(Domain.DisplayElement element, Model.Settings.FormatSettings settings,
+		                                    out Font font, out Brush brush)
 		{
-			if (_font == null)
-			{
-				_font = new Font(fontName, fontSize, fontStyle);
-			}
-			else if ((_font.Name != fontName) ||
-					 (_font.Size != fontSize) ||
-					 (_font.Style != fontStyle))
-			{
-				// the font has changed, so dispose of the cached font and create a new one
-				_font.Dispose();
-				_font = new Font(fontName, fontSize, fontStyle);
-			}
-			return (_font);
-		}
+			string fontName = settings.Font.Name;
+			float fontSize  = settings.Font.Size;
+			FontStyle fontStyle;
+			Color fontColor;
 
-		private static SolidBrush SetStyleAndColorAndBrush
-								 (Domain.DisplayElement element, Model.Settings.FormatSettings settings,
-		                          out FontStyle fontStyle, out Color fontColor)
-		{
-			SolidBrush brush;
 			if (element is Domain.DisplayElement.TxData)
 			{
 				fontStyle = settings.TxDataFormat.FontStyle;
 				fontColor = settings.TxDataFormat.Color;
-				brush = SetBrush(ref _txDataBrush, fontColor);
+				font  = SetFont (ref _txData.Font, fontName, fontSize, fontStyle);
+				brush = SetBrush(ref _txData.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.TxControl)
 			{
 				fontStyle = settings.TxControlFormat.FontStyle;
 				fontColor = settings.TxControlFormat.Color;
-				brush = SetBrush(ref _txControlBrush, fontColor);
+				font  = SetFont (ref _txControl.Font, fontName, fontSize, fontStyle);
+				brush = SetBrush(ref _txControl.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.RxData)
 			{
 				fontStyle = settings.RxDataFormat.FontStyle;
 				fontColor = settings.RxDataFormat.Color;
-				brush = SetBrush(ref _rxDataBrush, fontColor);
+				font  = SetFont (ref _rxData.Font, fontName, fontSize, fontStyle);
+				brush = SetBrush(ref _rxData.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.RxControl)
 			{
 				fontStyle = settings.RxControlFormat.FontStyle;
 				fontColor = settings.RxControlFormat.Color;
-				brush = SetBrush(ref _rxControlBrush, fontColor);
+				font  = SetFont (ref _rxControl.Font, fontName, fontSize, fontStyle);
+				brush = SetBrush(ref _rxControl.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.TimeStamp)
 			{
 				fontStyle = settings.TimeStampFormat.FontStyle;
 				fontColor = settings.TimeStampFormat.Color;
-				brush = SetBrush(ref _timestampBrush, fontColor);
+				font  = SetFont (ref _timeStamp.Font, fontName, fontSize, fontStyle);
+				brush = SetBrush(ref _timeStamp.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.LineLength)
 			{
 				fontStyle = settings.LengthFormat.FontStyle;
 				fontColor = settings.LengthFormat.Color;
-				brush = SetBrush(ref _lineLengthBrush, fontColor);
+				font  = SetFont (ref _lineLength.Font, fontName, fontSize, fontStyle);
+				brush = SetBrush(ref _lineLength.Brush, fontColor);
 			}
 			else if ((element is Domain.DisplayElement.LeftMargin) ||
 					 (element is Domain.DisplayElement.Space) ||
@@ -179,35 +171,54 @@ namespace YAT.Gui.Utilities
 			{
 				fontStyle = settings.WhiteSpacesFormat.FontStyle;
 				fontColor = settings.WhiteSpacesFormat.Color;
-				brush = SetBrush(ref _whiteSpacesBrush, fontColor);
+				font  = SetFont (ref _whiteSpaces.Font, fontName, fontSize, fontStyle);
+				brush = SetBrush(ref _whiteSpaces.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.Error)
 			{
 				fontStyle = settings.ErrorFormat.FontStyle;
 				fontColor = settings.ErrorFormat.Color;
-				brush = SetBrush(ref _errorBrush, fontColor);
+				font  = SetFont (ref _error.Font, fontName, fontSize, fontStyle);
+				brush = SetBrush(ref _error.Brush, fontColor);
 			}
 			else
 			{
 				throw (new NotImplementedException("Unknown DisplayElement"));
 			}
-			return (brush);
 		}
 
-		private static SolidBrush SetBrush(ref SolidBrush brush, Color color)
+		private static Font SetFont(ref Font cachedFont, string fontName, float fontSize, FontStyle fontStyle)
 		{
-			// create the brush using the font color
-			if (brush == null)
+			// Create the font
+			if (cachedFont == null)
 			{
-				brush = new SolidBrush(color);
+				cachedFont = new Font(fontName, fontSize, fontStyle);
 			}
-			else if (brush.Color.ToArgb() != color.ToArgb())
+			else if ((cachedFont.Name  != fontName) ||
+					 (cachedFont.Size  != fontSize) ||
+					 (cachedFont.Style != fontStyle))
 			{
-				// the font color has changed, dispose of the cached brush and create a new one
-				brush.Dispose();
-				brush = new SolidBrush(color);
+				// The font has changed, dispose of the cached font and create a new one
+				cachedFont.Dispose();
+				cachedFont = new Font(fontName, fontSize, fontStyle);
 			}
-			return (brush);
+			return (cachedFont);
+		}
+
+		private static SolidBrush SetBrush(ref SolidBrush cachedBrush, Color color)
+		{
+			// Create the brush using the font color
+			if (cachedBrush == null)
+			{
+				cachedBrush = new SolidBrush(color);
+			}
+			else if (cachedBrush.Color.ToArgb() != color.ToArgb())
+			{
+				// The font color has changed, dispose of the cached brush and create a new one
+				cachedBrush.Dispose();
+				cachedBrush = new SolidBrush(color);
+			}
+			return (cachedBrush);
 		}
 	}
 }

@@ -582,7 +582,7 @@ namespace YAT.Gui.Controls
 		/// ...
 		/// Nth line received => 2*N + 1               at index 0 | 1 | 2...N | 0 | 1 | 2...N | N+1
 		/// 
-		/// Each call takes a 0..2ms. E.g. for 25 lines this results in something like:
+		/// Each call takes a 0..2ms. For 25 lines this results in something like:
 		/// 51 x 2ms = 100ms per update!
 		/// At least scrolling is handled properly, i.e. as soon as the listbox starts to scroll,
 		/// the number of calls doesn't increase anymore.
@@ -596,7 +596,7 @@ namespace YAT.Gui.Controls
 					ListBox lb = listBox_Monitor;
 
 					e.DrawBackground();
-					SizeF size = Draw.DrawItem((List<Domain.DisplayElement>)(lb.Items[e.Index]), _formatSettings, e.Graphics, e.Bounds, e.State);
+					SizeF size = Drawing.DrawItem((List<Domain.DisplayElement>)(lb.Items[e.Index]), _formatSettings, e.Graphics, e.Bounds, e.State);
 					e.DrawFocusRectangle();
 
 					int width  = (int)Math.Ceiling(size.Width);
