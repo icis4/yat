@@ -37,7 +37,7 @@ namespace YAT.Gui.Controls
 			this.pictureBox_Monitor = new System.Windows.Forms.PictureBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.timer_Opacity = new System.Windows.Forms.Timer(this.components);
-			this.timer_Redraw = new System.Windows.Forms.Timer(this.components);
+			this.timer_PerformanceOptimization = new System.Windows.Forms.Timer(this.components);
 			this.panel_Monitor.SuspendLayout();
 			this.panel_Picture.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_Monitor)).BeginInit();
@@ -119,11 +119,9 @@ namespace YAT.Gui.Controls
 			// 
 			this.timer_Opacity.Tick += new System.EventHandler(this.timer_Opacity_Tick);
 			// 
-			// timer_Redraw
+			// timer_PerformanceOptimization
 			// 
-			this.timer_Redraw.Enabled = true;
-			this.timer_Redraw.Interval = 50;
-			this.timer_Redraw.Tick += new System.EventHandler(this.timer_Redraw_Tick);
+			this.timer_PerformanceOptimization.Tick += new System.EventHandler(this.timer_PerformanceOptimization_Tick);
 			// 
 			// Monitor
 			// 
@@ -151,6 +149,6 @@ namespace YAT.Gui.Controls
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.Timer timer_Opacity;
 		private System.Windows.Forms.Label label_TimeStatus;
-		private System.Windows.Forms.Timer timer_Redraw;
+		private System.Windows.Forms.Timer timer_PerformanceOptimization;
 	}
 }

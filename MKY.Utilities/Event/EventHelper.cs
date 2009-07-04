@@ -14,9 +14,23 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-// Choose whether exceptions should be handled or execution immediately stopped
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+// Choose whether exceptions should be handled or execution immediately stopped:
+// - Uncomment to handle exceptions
+// - Comment out to break exceptions
 #define HANDLE_EXCEPTIONS
-//#define BREAK_EXCEPTIONS
+
+#if (!HANDLE_EXCEPTIONS) // Break exceptions is mutual exclusive against handle exceptions
+	#define BREAK_EXCEPTIONS
+#endif
+
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
 
 using System;
 using System.Collections.Generic;
@@ -25,6 +39,8 @@ using System.ComponentModel;
 using System.Runtime.Remoting.Messaging;
 using System.Diagnostics;
 using System.IO;
+
+#endregion
 
 namespace MKY.Utilities.Event
 {

@@ -45,20 +45,16 @@ namespace YAT
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-
 		#if (!DEBUG)
 			EventHelper.InstallUnhandledExceptionCallback(UnhandledExceptionCallback);
 		#endif
-
 		#if (!DEBUG)
 			try
 			{
 		#endif
-
-			Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
-			if (welcomeScreen.ShowDialog() != DialogResult.OK)
-				return (Controller.MainResult.ApplicationSettingsError);
-
+				Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
+				if (welcomeScreen.ShowDialog() != DialogResult.OK)
+					return (Controller.MainResult.ApplicationSettingsError);
 		#if (!DEBUG)
 			}
 			catch (Exception ex)
@@ -76,15 +72,12 @@ namespace YAT
 				return (Controller.MainResult.UnhandledException);
 			}
 		#endif
-
 		#if (!DEBUG)
 			try
 			{
 		#endif
-
-			Controller.Main main = new Controller.Main(commandLineArgs);
-			main.Run();
-
+				Controller.Main main = new Controller.Main(commandLineArgs);
+				main.Run();
 		#if (!DEBUG)
 			}
 			catch (Exception ex)
@@ -102,11 +95,10 @@ namespace YAT
 				return (Controller.MainResult.UnhandledException);
 			}
 		#endif
-
 			return (Controller.MainResult.OK);
 		}
 
-	#if (!DEBUG)
+		#if (!DEBUG)
 		private void UnhandledExceptionCallback(Exception ex)
 		{
 			if (MessageBox.Show("An unhandled exception occured in " + Application.ProductName + "." + Environment.NewLine +
@@ -120,7 +112,7 @@ namespace YAT
 				f.ShowDialog();
 			}
 		}
-	#endif
+		#endif
 
 		/// <summary>
 		/// The main entry point for the application.

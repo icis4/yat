@@ -118,24 +118,22 @@ namespace YAT.Settings.Test
 			filePath = MakeTempFilePath("ListEmpty");
 			List<string> le = new List<string>();
 			TestSerialization(typeof(List<string>), le, filePath);
-
-		#if false
+#if (FALSE)
 			// doesn't work
 			filePath = MakeTempFilePath("ListOfArrays");
 			List<string[]> la = new List<string[]>();
 			la.Add(new string[] { "A", "AA" });
 			la.Add(new string[] { "B", "BB" });
 			Test_Serialization(typeof(List<string>), la, filePath);
-		#endif
-
-		#if false
+#endif
+#if (FALSE)
 			// doesn't work
 			filePath = MakeTempFilePath("ListOfLists");
 			List<List<string>> ll = new List<List<string>>();
 			ll.Add(l);
 			ll.Add(l);
 			Test_Serialization(typeof(List<string>), ll, filePath);
-		#endif
+#endif
 		}
 
 		#endregion
