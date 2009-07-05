@@ -1,4 +1,4 @@
-//==================================================================================================
+ï»¿//==================================================================================================
 // $URL$
 // $Author$
 // $Date$
@@ -6,8 +6,8 @@
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2009 Matthias Kläy.
+// Copyright Â© 2003-2004 HSR Hochschule fÃ¼r Technik Rapperswil.
+// Copyright Â© 2003-2009 Matthias KlÃ¤y.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
@@ -16,7 +16,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -24,18 +26,22 @@ using System.Text;
 namespace YAT.Domain
 {
 	/// <summary>
-	/// DisplayRepository is a pseudo fixed-sized Queue holding DisplayElements.
+	/// Implements a display line containing a list of display elements.
 	/// </summary>
-	public class DisplayRepository : Queue<DisplayLine>
+	/// <remarks>
+	/// This calls inherits <see cref="T:List`"/>. However, it only overrides functions required
+	/// for the YAT monitor. It is only allowed to add to the list, removing items results in an
+	/// undefined behaviour.
+	/// </remarks>
+	[Serializable]
+	public class DisplayLine : List<DisplayElement>
 	{
 		#region Fields
 		//==========================================================================================
 		// Fields
 		//==========================================================================================
 
-		private int _capacity = 0;
-		private DisplayLine _currentLine;
-		private int _dataCount = 0;
+		private int _dataCount;
 
 		#endregion
 
@@ -45,21 +51,30 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public DisplayRepository(int capacity)
-			: base(capacity)
+		public DisplayLine()
 		{
-			_capacity = capacity;
-			_currentLine = new DisplayLine();
 			_dataCount = 0;
 		}
 
 		/// <summary></summary>
-		public DisplayRepository(DisplayRepository rhs)
+		public DisplayLine(int elementCapacity)
+			: base(elementCapacity)
+		{
+			_dataCount = 0;
+		}
+
+		/// <summary></summary>
+		public DisplayLine(DisplayLine rhs)
 			: base(rhs)
 		{
-			_capacity = rhs._capacity;
-			_currentLine = new DisplayLine(rhs._currentLine);
 			_dataCount = rhs._dataCount;
+		}
+
+		/// <summary></summary>
+		public DisplayLine(DisplayElement displayElement)
+		{
+			_dataCount = 0;
+			Add(displayElement);
 		}
 
 		#endregion
@@ -68,40 +83,6 @@ namespace YAT.Domain
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
-
-		/// <summary></summary>
-		public int Capacity
-		{
-			get { return (_capacity); }
-			set
-			{
-				if (value > Count)
-				{
-					_capacity = value;
-				}
-				else if (value < Count)
-				{
-					while (Count > value)
-						DequeueExcessLine();
-
-					_capacity = value;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Returns number of lines within repository.
-		/// </summary>
-		new public int Count
-		{
-			get
-			{
-				if (_currentLine.Count <= 0)
-					return (base.Count);
-				else
-					return (base.Count + 1); // Current line adds one line
-			}
-		}
 
 		/// <summary>
 		/// Returns number of data elements within repository.
@@ -119,74 +100,12 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public void Enqueue(DisplayElement item)
+		new public void Add(DisplayElement item)
 		{
-			// Add element to current line
-			_currentLine.Add(item);
+			base.Add(item);
+
 			if (item.IsDataElement)
 				_dataCount++;
-
-			// Check whether a line break is needed
-			if (item.IsEol)
-			{
-				// Excess must be manually dequeued
-				if (Count >= Capacity)
-					DequeueExcessLine();
-
-				// Enqueue new line and reset current line
-				base.Enqueue(new DisplayLine(_currentLine));
-				_currentLine.Clear();
-			}
-		}
-
-		/// <summary></summary>
-		public void Enqueue(IEnumerable<DisplayElement> collection)
-		{
-			foreach (DisplayElement de in collection)
-				Enqueue(de);
-		}
-
-		/// <summary></summary>
-		new public void Clear()
-		{
-			base.Clear();
-			_currentLine.Clear();
-			_dataCount = 0;
-		}
-
-		/// <summary></summary>
-		new public DisplayLine[] ToArray()
-		{
-			return (ToLines().ToArray());
-		}
-
-		/// <summary></summary>
-		public List<DisplayLine> ToLines()
-		{
-			List<DisplayLine> lines = new List<DisplayLine>(base.ToArray());
-
-			// Add current line if it contains elements
-			if (_currentLine.Count > 0)
-				lines.Add(new DisplayLine(_currentLine));
-
-			return (lines);
-		}
-
-		#endregion
-
-		#region Private Methods
-		//==========================================================================================
-		// Private Methods
-		//==========================================================================================
-
-		private void DequeueExcessLine()
-		{
-			DisplayLine dl = Dequeue();
-			foreach (DisplayElement de in dl)
-			{
-				if (de.IsDataElement)
-					_dataCount--;
-			}
 		}
 
 		#endregion
@@ -196,10 +115,16 @@ namespace YAT.Domain
 		// Object Members
 		//==========================================================================================
 
-		/// <summary></summary>
-		new public string ToString()
+		/// <summary>
+		/// Standard ToString method returning the element contents only.
+		/// </summary>
+		public override string ToString()
 		{
-			return (ToString(""));
+			StringBuilder sb = new StringBuilder();
+			foreach (DisplayElement de in this)
+				sb.Append(de.ToString());
+
+			return (sb.ToString());
 		}
 
 		#region Object Members > Extensions
@@ -207,31 +132,32 @@ namespace YAT.Domain
 		// Object Members > Extensions
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <summary>
+		/// Extended ToString method which can be used for trace/debug.
+		/// </summary>
 		public string ToString(string indent)
 		{
-			return (indent + "- LineCapacity: " + Capacity.ToString("D") + Environment.NewLine +
-					indent + "- LineCount: " + Count.ToString("D") + Environment.NewLine +
+			return (indent + "- ElementCount: " + Count.ToString("D") + Environment.NewLine +
 					indent + "- DataCount: " + _dataCount.ToString("D") + Environment.NewLine +
-					indent + "- Lines: " + Environment.NewLine + LinesToString(indent + "--"));
+					indent + "- Elements: " + Environment.NewLine + ElementsToString(indent + "--"));
 		}
 
 		/// <summary></summary>
-		public string LinesToString()
+		public string ElementsToString()
 		{
-			return (LinesToString(""));
+			return (ElementsToString(""));
 		}
 
 		/// <summary></summary>
-		public string LinesToString(string indent)
+		public string ElementsToString(string indent)
 		{
 			StringBuilder sb = new StringBuilder();
 			int i = 0;
-			foreach (DisplayLine dl in ToLines())
+			foreach (DisplayElement de in this)
 			{
 				i++;
-				sb.Append(indent + "DisplayLine " + i + ":" + Environment.NewLine);
-				sb.Append(dl.ToString(indent + "--"));
+				sb.Append(indent + "DisplayElement " + i + ":" + Environment.NewLine);
+				sb.Append(de.ToString(indent + "--"));
 			}
 			return (sb.ToString());
 		}

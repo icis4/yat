@@ -40,8 +40,8 @@ namespace YAT.Gui.Forms
 		private Controls.Monitor[] _monitors;
 		private Controls.TextFormat[] _textFormats;
 
-		private List<Domain.DisplayElement> _examples;
-		private List<List<Domain.DisplayElement>> _exampleComplete;
+		private List<Domain.DisplayLine> _exampleLines;
+		private List<Domain.DisplayLine> _exampleComplete;
 
 		#endregion
 
@@ -137,17 +137,17 @@ namespace YAT.Gui.Forms
 
 		private void InitializeExamples()
 		{
-			_examples = new List<Domain.DisplayElement>();
+			_exampleLines = new List<Domain.DisplayLine>();
 
-			_examples.Add(new Domain.DisplayElement.TxData(null, "12h"));
-			_examples.Add(new Domain.DisplayElement.TxControl(null, "<CR>"));
-			_examples.Add(new Domain.DisplayElement.RxData(null, "34h"));
-			_examples.Add(new Domain.DisplayElement.RxControl(null, "<LF>"));
-			_examples.Add(new Domain.DisplayElement.TimeStamp(DateTime.Now));
-			_examples.Add(new Domain.DisplayElement.LineLength(2));
-			_examples.Add(new Domain.DisplayElement.Error("Message"));
+			_exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxData(null, "12h")));
+			_exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxControl(null, "<CR>")));
+			_exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxData(null, "34h")));
+			_exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxControl(null, "<LF>")));
+			_exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeStamp(DateTime.Now)));
+			_exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.LineLength(2)));
+			_exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.Error("Message")));
 
-			Domain.DisplayRepository exampleComplete = new Domain.DisplayRepository(24, 32);
+			Domain.DisplayRepository exampleComplete = new Domain.DisplayRepository(24);
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStamp(DateTime.Now));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
@@ -211,7 +211,7 @@ namespace YAT.Gui.Forms
 				};
 
 			for (int i = 0; i < _monitors.Length; i++)
-				_monitors[i].AddElement(_examples[i]);
+				_monitors[i].AddLine(_exampleLines[i]);
 
 			monitor_Example.AddLines(_exampleComplete);
 		}

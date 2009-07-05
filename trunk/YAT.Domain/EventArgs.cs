@@ -18,6 +18,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+// The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
+// is intentionally placed into the YAT.Domain namespace even though the file is located in the
+// YAT.Domain\RawTerminal for better separation of the implementation files.
 namespace YAT.Domain
 {
 	/// <summary></summary>
@@ -90,10 +93,10 @@ namespace YAT.Domain
 	public class DisplayLinesEventArgs : EventArgs
 	{
 		/// <summary></summary>
-		public readonly List<List<DisplayElement>> Lines;
+		public readonly List<DisplayLine> Lines;
 
 		/// <summary></summary>
-		public DisplayLinesEventArgs(List<List<DisplayElement>> lines)
+		public DisplayLinesEventArgs(List<DisplayLine> lines)
 		{
 			Lines = lines;
 		}

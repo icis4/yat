@@ -23,6 +23,9 @@ using MKY.Utilities;
 using MKY.Utilities.Event;
 using MKY.Utilities.Types;
 
+// The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
+// is intentionally placed into the YAT.Domain namespace even though the file is located in the
+// YAT.Domain\RawTerminal for better separation of the implementation files.
 namespace YAT.Domain
 {
 	/// <summary>
@@ -95,9 +98,9 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public Terminal(Settings.TerminalSettings settings)
 		{
-			_txRepository    = new DisplayRepository(settings.Display.TxMaximalLineCount,    settings.Buffer.TxBufferSize);
-			_bidirRepository = new DisplayRepository(settings.Display.BidirMaximalLineCount, settings.Buffer.BidirBufferSize);
-			_rxRepository    = new DisplayRepository(settings.Display.RxMaximalLineCount,    settings.Buffer.RxBufferSize);
+			_txRepository    = new DisplayRepository(settings.Display.TxMaximalLineCount);
+			_bidirRepository = new DisplayRepository(settings.Display.BidirMaximalLineCount);
+			_rxRepository    = new DisplayRepository(settings.Display.RxMaximalLineCount);
 
 			AttachTerminalSettings(settings);
 			AttachRawTerminal(new RawTerminal(_terminalSettings.IO, _terminalSettings.Buffer));
@@ -112,9 +115,9 @@ namespace YAT.Domain
 			_bidirRepository = new DisplayRepository(terminal._bidirRepository);
 			_rxRepository    = new DisplayRepository(terminal._rxRepository);
 
-			_txRepository.LineCapacity    = settings.Display.TxMaximalLineCount;
-			_bidirRepository.LineCapacity = settings.Display.BidirMaximalLineCount;
-			_rxRepository.LineCapacity    = settings.Display.RxMaximalLineCount;
+			_txRepository.Capacity    = settings.Display.TxMaximalLineCount;
+			_bidirRepository.Capacity = settings.Display.BidirMaximalLineCount;
+			_rxRepository.Capacity    = settings.Display.RxMaximalLineCount;
 
 			AttachTerminalSettings(settings);
 			AttachRawTerminal(new RawTerminal(_terminalSettings.IO, _terminalSettings.Buffer, terminal._rawTerminal));
@@ -488,9 +491,9 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void ProcessRawElement(RawElement re, List<DisplayElement> elements, List<List<DisplayElement>> lines)
+		protected virtual void ProcessRawElement(RawElement re, List<DisplayElement> elements, List<DisplayLine> lines)
 		{
-			List<DisplayElement> l = new List<DisplayElement>();
+			DisplayLine l = new DisplayLine();
 
 			// line begin and time stamp
 			if (_terminalSettings.Display.ShowTimeStamp)
@@ -522,7 +525,7 @@ namespace YAT.Domain
 		protected virtual void ProcessAndSignalRawElement(RawElement re)
 		{
 			List<DisplayElement> elements = new List<DisplayElement>();
-			List<List<DisplayElement>> lines = new List<List<DisplayElement>>();
+			List<DisplayLine> lines = new List<DisplayLine>();
 
 			ProcessRawElement(re, elements, lines);
 
@@ -618,15 +621,15 @@ namespace YAT.Domain
 
 			switch (repository)
 			{
-				case RepositoryType.Tx:    return (_txRepository.LineCount);
-				case RepositoryType.Bidir: return (_bidirRepository.LineCount);
-				case RepositoryType.Rx:    return (_rxRepository.LineCount);
+				case RepositoryType.Tx:    return (_txRepository.Count);
+				case RepositoryType.Bidir: return (_bidirRepository.Count);
+				case RepositoryType.Rx:    return (_rxRepository.Count);
 				default: throw (new NotImplementedException("Unknown RepositoryType"));
 			}
 		}
 
 		/// <summary></summary>
-		public virtual List<List<DisplayElement>> RepositoryToDisplayLines(RepositoryType repository)
+		public virtual List<DisplayLine> RepositoryToDisplayLines(RepositoryType repository)
 		{
 			AssertNotDisposed();
 
@@ -749,9 +752,9 @@ namespace YAT.Domain
 		{
 			Settings.DisplaySettings s = _terminalSettings.Display;
 
-			_txRepository.LineCapacity    = s.TxMaximalLineCount;
-			_bidirRepository.LineCapacity = s.BidirMaximalLineCount;
-			_rxRepository.LineCapacity    = s.RxMaximalLineCount;
+			_txRepository.Capacity    = s.TxMaximalLineCount;
+			_bidirRepository.Capacity = s.BidirMaximalLineCount;
+			_rxRepository.Capacity    = s.RxMaximalLineCount;
 		}
 
 		#endregion
@@ -958,7 +961,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayLinesProcessed(SerialDirection direction, List<List<DisplayElement>> lines)
+		protected virtual void OnDisplayLinesProcessed(SerialDirection direction, List<DisplayLine> lines)
 		{
 			if (!_eventsSuspendedForReload)
 			{

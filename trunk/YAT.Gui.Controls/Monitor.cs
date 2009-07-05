@@ -18,15 +18,28 @@
 // Configuration
 //==================================================================================================
 
+// Choose whether performance meter should be in use:
+// - Uncomment to enable
+// - Comment out to disable
+#define ENABLE_PERFORMANCE_METER
+
+// Choose whether to write the current performance level and state to debug output:
+// - Uncomment to enable
+// - Comment out to disable
+// Attention:
+// Debug output will show output off all three monitors, thus, only each 3rd output belongs to a
+// particular monitor.
+//#define DEBUG_PERFORMANCE
+
 // Choose whether list box scrolling should be delayed in order to improve the performance:
-// - Uncomment to enable switching
-// - Comment out to disable switching
-#define ENABLE_DELAYED_SCROLLING
+// - Uncomment to enable
+// - Comment out to disable
+//#define ENABLE_DELAYED_SCROLLING
 
 // Choose whether list box draw mode should be switched depending on performance:
-// - Uncomment to enable switching
-// - Comment out to disable switching
-#define ENABLE_DRAW_MODE_SWITCHING
+// - Uncomment to enable
+// - Comment out to disable
+//#define ENABLE_DRAW_MODE_SWITCHING
 
 #region Using
 //==================================================================================================
@@ -64,7 +77,7 @@ namespace YAT.Gui.Controls
 	#endregion
 
 	/// <summary>
-	/// This monitor implements a list box based terminal monitor in a speed optimized way
+	/// This monitor implements a list box based terminal monitor in a speed optimized way.
 	/// </summary>
 	[DesignerCategory("Windows Forms")]
 	public partial class Monitor : UserControl
@@ -74,11 +87,82 @@ namespace YAT.Gui.Controls
 		// Types
 		//==========================================================================================
 
-		public enum OpacityState
+		private enum OpacityState
 		{
 			Inactive,
 			Incrementing,
 			Decrementing,
+		}
+
+		private enum PerformanceState
+		{
+			OK,
+			Critical,
+		}
+
+		private class PerformanceMeter
+		{
+			private double _criticalLevel = 0.0;
+			private int _cycleInterval = 0;
+			private int _cycles = 0;
+
+			private Queue<PerformanceState> _cycleQueue;
+			private int _currentCycleBusyTimeSpan = 0;
+			private PerformanceState _totalState = PerformanceState.OK;
+
+			public PerformanceMeter(double criticalLevel, int cycleInterval, int cycles)
+			{
+				_criticalLevel = criticalLevel;
+				_cycleInterval = cycleInterval;
+				_cycles = cycles;
+				_cycleQueue = new Queue<PerformanceState>(_cycles);
+			}
+
+			public PerformanceState State
+			{
+				get { return (_totalState); }
+			}
+
+			public void AddBusyTimeSpan(int timeSpan)
+			{
+				_currentCycleBusyTimeSpan += timeSpan;
+			}
+
+			public void EndCycle()
+			{
+				// Make space to be able to enqueue this cycle
+				while ((_cycleQueue.Count > 0) && (_cycleQueue.Count > (_cycles - 1)))
+					_cycleQueue.Dequeue();
+
+				// Evaluate this cycle and enqueue it
+				double level = (double)_currentCycleBusyTimeSpan / (double)_cycleInterval;
+				if (level < _criticalLevel)
+					_cycleQueue.Enqueue(PerformanceState.OK);
+				else
+					_cycleQueue.Enqueue(PerformanceState.Critical);
+
+				// Evaluate current performance state
+				int criticalCycles = 0;
+				foreach (PerformanceState cycleState in _cycleQueue.ToArray())
+				{
+					if (cycleState == PerformanceState.Critical)
+						criticalCycles++;
+				}
+				if (criticalCycles < (_cycles / 2))
+					_totalState = PerformanceState.OK;
+				else
+					_totalState = PerformanceState.Critical;
+
+				// Optionally output performance information to debug output
+			#if (DEBUG_PERFORMANCE)
+				System.Diagnostics.Debug.WriteLine("Cycle time = " + _currentCycleBusyTimeSpan +
+												   " / Cycle level = " + level.ToString("0%") +
+												   " / Total state = " + _totalState);
+			#endif
+
+				// Reset this cycle
+				_currentCycleBusyTimeSpan = 0;
+			}
 		}
 
 		#endregion
@@ -88,15 +172,29 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
+		// State
 		private const Domain.RepositoryType _RepositoryTypeDefault = Domain.RepositoryType.None;
 		private const MonitorActivityState  _ActivityStateDefault  = MonitorActivityState.Inactive;
 
+		// Image
 		private const double _MinimumImageOpacity   =  0.00; //   0%
 		private const double _MaximumImageOpacity   =  1.00; // 100%
 		private const double _ImageOpacityIncrement = +0.10; // +10%
 		private const double _ImageOpacityDecrement = -0.10; // -10%
 
+		// Lines
 		private const int _MaximalLineCountDefault = Domain.Settings.DisplaySettings.MaximalLineCountDefault;
+
+		// Time status
+		private const bool _ShowTimeStatusDefault = false;
+		private const bool _ShowCountStatusDefault = false;
+
+		// Performance
+
+		/// <summary>
+		/// Critical level of CPU usage.
+		/// </summary>
+		private const double _CriticalPerformanceLevel = 0.50; // 50%
 
 		/// <summary>
 		/// Interval of the performance optimization timer.
@@ -104,13 +202,15 @@ namespace YAT.Gui.Controls
 		private const int _PerformanceOptimizationInterval = 50;
 
 		/// <summary>
+		/// Number of performance measurement cycles (sliding performance state).
+		/// </summary>
+		private const int _PerformanceMeterCycles = 10;
+
+		/// <summary>
 		/// Decimates the optimization interval above. 2 x 50ms = 100ms is a trade-off between
 		/// speed and visibility. Smaller values reduce speed, larger are visible.
 		/// </summary>
 		private const int _ScrollIntervalDecimator = 2;
-
-		private const bool _ShowTimeStatusDefault  = false;
-		private const bool _ShowCountStatusDefault = false;
 
 		#endregion
 
@@ -119,32 +219,34 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		// state
+		// State
 		private Domain.RepositoryType _repositoryType = _RepositoryTypeDefault;
 		private MonitorActivityState _activityState = _ActivityStateDefault;
 		private MonitorActivityState _activityStateOld = _ActivityStateDefault;
 
-		// image
+		// Image
 		private Image _imageInactive = null;
 		private Image _imageActive = null;
 		private OpacityState _imageOpacityState = OpacityState.Inactive;
 		private double _imageOpacity = _MinimumImageOpacity;
 
-		// lines
+		// Lines
 		private int _maximalLineCount = _MaximalLineCountDefault;
 		private Model.Settings.FormatSettings _formatSettings = new Model.Settings.FormatSettings();
-		private List<List<Domain.DisplayElement>> _lines = new List<List<Domain.DisplayElement>>();
 
-		// time status
+		// Time status
 		private bool _showTimeStatus = _ShowTimeStatusDefault;
 		private TimeSpan _connectTime;
 
-		// count status
+		// Count status
 		private bool _showCountStatus = _ShowCountStatusDefault;
 		private int _txByteCountStatus;
 		private int _rxByteCountStatus;
 		private int _txLineCountStatus;
 		private int _rxLineCountStatus;
+
+		// Performance
+		private PerformanceMeter _performanceMeter;
 
 		#endregion
 
@@ -173,7 +275,13 @@ namespace YAT.Gui.Controls
 			InitializeComponent();
 			SetControls();
 
-		#if (ENABLE_DELAYED_SCROLLING || ENABLE_DRAW_MODE_SWITCHING)
+		#if (ENABLE_PERFORMANCE_METER)
+			_performanceMeter = new PerformanceMeter(_CriticalPerformanceLevel,
+													 _PerformanceOptimizationInterval,
+													 _PerformanceMeterCycles);
+		#endif
+
+		#if (ENABLE_PERFORMANCE_METER || ENABLE_DELAYED_SCROLLING || ENABLE_DRAW_MODE_SWITCHING)
 			timer_PerformanceOptimization.Interval = _PerformanceOptimizationInterval;
 			timer_PerformanceOptimization.Enabled = true;
 		#endif
@@ -367,9 +475,12 @@ namespace YAT.Gui.Controls
 
 		public void AddElement(Domain.DisplayElement element)
 		{
-			List<Domain.DisplayElement> elements = new List<Domain.DisplayElement>();
-			elements.Add(element);
-			AddElements(elements);
+			ListBox lb = listBox_Monitor;
+			lb.BeginUpdate();
+
+			AddElementToListBox(element);
+
+			lb.EndUpdate();
 		}
 
 		public void AddElements(List<Domain.DisplayElement> elements)
@@ -377,87 +488,68 @@ namespace YAT.Gui.Controls
 			ListBox lb = listBox_Monitor;
 			lb.BeginUpdate();
 
-			foreach (Domain.DisplayElement de in elements)
-			{
-				// If first line, add a new empty line
-				if (_lines.Count == 0)
-				{
-					List<Domain.DisplayElement> line = new List<Domain.DisplayElement>();
-					_lines.Add(line);
-					lb.Items.Add(line);
-				}
-
-				// Add element to the current line
-				List<Domain.DisplayElement> partialLine = _lines[_lines.Count - 1];
-				partialLine.Add(de);
-				_lines[_lines.Count - 1] = partialLine;
-				lb.Items[lb.Items.Count - 1] = partialLine;
-
-				// Process EOL
-				if (de.IsEol)
-				{
-					// Remove lines if maximum exceeded
-					while (lb.Items.Count >= (_maximalLineCount))
-					{
-						_lines.RemoveAt(0);
-						lb.Items.RemoveAt(0);
-					}
-
-					// Add new empty line
-					List<Domain.DisplayElement> line = new List<Domain.DisplayElement>();
-					_lines.Add(line);
-					lb.Items.Add(line);
-				}
-			}
-
-		#if (!ENABLE_DELAYED_SCROLLING)
-			// Scroll list to bottom
-			if ((lb.SelectedItems.Count == 0) && (lb.Items.Count > 0))
-				lb.TopIndex = lb.Items.Count - 1;
-		#endif
+			foreach (Domain.DisplayElement element in elements)
+				AddElementToListBox(element);
 
 			lb.EndUpdate();
 		}
 
-		public void AddLine(List<Domain.DisplayElement> line)
+		public void AddLine(Domain.DisplayLine line)
 		{
-			AddElements(line);
+			ListBox lb = listBox_Monitor;
+			lb.BeginUpdate();
+
+			foreach (Domain.DisplayElement element in line)
+				AddElementToListBox(element);
+
+			lb.EndUpdate();
 		}
 
-		public void AddLines(List<List<Domain.DisplayElement>> lines)
+		public void AddLines(List<Domain.DisplayLine> lines)
 		{
-			foreach (List<Domain.DisplayElement> line in lines)
-				AddLine(line);
+			ListBox lb = listBox_Monitor;
+			lb.BeginUpdate();
+
+			foreach (Domain.DisplayLine line in lines)
+				foreach (Domain.DisplayElement element in line)
+					AddElementToListBox(element);
+
+			lb.EndUpdate();
 		}
 
-		public void ReplaceLine(int offset, List<Domain.DisplayElement> line)
+		public void ReplaceLine(int offset, Domain.DisplayLine line)
 		{
-			int lastIndex = _lines.Count - 1;
+			ListBox lb = listBox_Monitor;
+
+			int lastIndex = lb.Items.Count - 1;
 			int indexToReplace = lastIndex - offset;
 
 			if (indexToReplace >= 0)
-			{
-				_lines[indexToReplace] = line;
-
-				ListBox lb = listBox_Monitor;
 				lb.Items[indexToReplace] = line;
-			}
 			else
-			{
 				throw (new InvalidOperationException("Invalid attempt to replace a line of the monitor"));
-			}
 		}
 
 		public void Clear()
 		{
-			_lines.Clear();
 			ClearListBox();
 		}
 
 		public void Reload()
 		{
+			ListBox lb = listBox_Monitor;
+
+			// Retrieve lines from list box
+			List<Domain.DisplayLine> lines = new List<YAT.Domain.DisplayLine>();
+			foreach (object item in lb.Items)
+			{
+				Domain.DisplayLine line = item as Domain.DisplayLine;
+				lines.Add(line);
+			}
+
+			// Clear everything and perform reload
 			Clear();
-			AddLines(_lines);
+			AddLines(lines);
 		}
 
 		public void Reload(List<Domain.DisplayElement> elements)
@@ -466,7 +558,7 @@ namespace YAT.Gui.Controls
 			AddElements(elements);
 		}
 
-		private void Reload(List<List<Domain.DisplayElement>> lines)
+		private void Reload(List<Domain.DisplayLine> lines)
 		{
 			Clear();
 			AddLines(lines);
@@ -489,22 +581,22 @@ namespace YAT.Gui.Controls
 			SetCountStatusControls();
 		}
 
-		public List<List<Domain.DisplayElement>> SelectedLines
+		public List<YAT.Domain.DisplayLine> SelectedLines
 		{
 			get
 			{
 				ListBox lb = listBox_Monitor;
 
-				List<List<Domain.DisplayElement>> selectedLines = new List<List<YAT.Domain.DisplayElement>>();
+				List<Domain.DisplayLine> selectedLines = new List<Domain.DisplayLine>();
 				if (lb.SelectedItems.Count > 0)
 				{
 					foreach (int i in lb.SelectedIndices)
-						selectedLines.Add(_lines[i]);
+						selectedLines.Add(lb.Items[i] as Domain.DisplayLine);
 				}
 				else
 				{
 					for (int i = 0; i < lb.Items.Count; i++)
-						selectedLines.Add(_lines[i]);
+						selectedLines.Add(lb.Items[i] as Domain.DisplayLine);
 				}
 				return (selectedLines);
 			}
@@ -639,8 +731,12 @@ namespace YAT.Gui.Controls
 				{
 					ListBox lb = listBox_Monitor;
 
+				#if (ENABLE_PERFORMANCE_METER)
+					DateTime dt = DateTime.Now;
+				#endif
+
 					e.DrawBackground();
-					SizeF size = Drawing.DrawItem((List<Domain.DisplayElement>)(lb.Items[e.Index]), _formatSettings, e.Graphics, e.Bounds, e.State);
+					SizeF size = Drawing.DrawItem(lb.Items[e.Index] as Domain.DisplayLine, _formatSettings, e.Graphics, e.Bounds, e.State);
 					e.DrawFocusRectangle();
 
 					int width  = (int)Math.Ceiling(size.Width);
@@ -651,6 +747,11 @@ namespace YAT.Gui.Controls
 
 					if ((height > 0) && (height != lb.ItemHeight))
 						lb.ItemHeight = height;
+
+				#if (ENABLE_PERFORMANCE_METER)
+					TimeSpan ts = DateTime.Now - dt;
+					_performanceMeter.AddBusyTimeSpan((int)ts.TotalMilliseconds);
+				#endif
 				}
 			}
 		}
@@ -666,6 +767,17 @@ namespace YAT.Gui.Controls
 		private void timer_PerformanceOptimization_Tick(object sender, EventArgs e)
 		{
 			ListBox lb = listBox_Monitor;
+
+		#if (ENABLE_PERFORMANCE_METER)
+			_performanceMeter.EndCycle();
+		#endif
+
+		#if (ENABLE_DRAW_MODE_SWITCHING)
+			if (_performanceMeter.State == PerformanceState.OK)
+				lb.DrawMode = DrawMode.OwnerDrawFixed;
+			else
+				lb.DrawMode = DrawMode.Normal;
+		#endif
 
 		#if (ENABLE_DELAYED_SCROLLING)
 			timer_PerformanceOptimization_Tick_ScrollIntervalDecimatorCounter--;
@@ -745,8 +857,13 @@ namespace YAT.Gui.Controls
 
 		private void SetFormatDependentControls()
 		{
+			listBox_Monitor.BeginUpdate();
+
+			listBox_Monitor.Font = _formatSettings.Font;
 			listBox_Monitor.ItemHeight = _formatSettings.Font.Height;
 			listBox_Monitor.Invalidate();
+
+			listBox_Monitor.EndUpdate();
 		}
 
 		private void SetCharReplaceDependentControls()
@@ -810,6 +927,50 @@ namespace YAT.Gui.Controls
 			}
 			label_CountStatus.Text = sb.ToString();
 			label_CountStatus.Visible = _showCountStatus;
+		}
+
+		/// <summary>
+		/// Adds an element to the list box.
+		/// </summary>
+		/// <remarks>
+		/// Neither calls <see cref="ListBox.BeginUpdate()"/> nor <see cref="ListBox.EndUpdate()"/>.
+		/// If performance requires it, the calling function must do so.
+		/// </remarks>
+		/// <param name="element"></param>
+		private void AddElementToListBox(Domain.DisplayElement element)
+		{
+			ListBox lb = listBox_Monitor;
+
+			// If first line, add a new empty line
+			if (lb.Items.Count == 0)
+			{
+				Domain.DisplayLine line = new Domain.DisplayLine();
+				lb.Items.Add(line);
+			}
+
+			// Add element to the current line
+			int i = lb.Items.Count - 1;
+			Domain.DisplayLine partialLine = lb.Items[i] as Domain.DisplayLine;
+			partialLine.Add(element);
+			lb.Items[i] = partialLine;
+
+			// Process EOL
+			if (element.IsEol)
+			{
+				// Remove lines if maximum exceeded
+				while (lb.Items.Count >= (_maximalLineCount))
+					lb.Items.RemoveAt(0);
+
+				// Add new empty line
+				Domain.DisplayLine line = new Domain.DisplayLine();
+				lb.Items.Add(line);
+			}
+
+		#if (!ENABLE_DELAYED_SCROLLING)
+			// Scroll list to bottom
+			if ((lb.SelectedItems.Count == 0) && (lb.Items.Count > 0))
+				lb.TopIndex = lb.Items.Count - 1;
+		#endif
 		}
 
 		private void ClearListBox()

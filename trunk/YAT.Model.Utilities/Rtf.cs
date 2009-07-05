@@ -46,14 +46,14 @@ namespace YAT.Model.Utilities
 	public static class RtfWriter
 	{
 		/// <summary></summary>
-		public static void LinesToRtfFile(List<List<Domain.DisplayElement>> lines, string rtfFilePath, Settings.FormatSettings formatSettings, RichTextBoxStreamType rtfType)
+		public static void LinesToRtfFile(List<Domain.DisplayLine> lines, string rtfFilePath, Settings.FormatSettings formatSettings, RichTextBoxStreamType rtfType)
 		{
 			RichTextBox rtb = LinesToRichTextBox(lines, formatSettings);
 			rtb.SaveFile(rtfFilePath, rtfType);
 		}
 
 		/// <summary></summary>
-		public static void LinesToClipboard(List<List<Domain.DisplayElement>> lines, Settings.FormatSettings formatSettings)
+		public static void LinesToClipboard(List<Domain.DisplayLine> lines, Settings.FormatSettings formatSettings)
 		{
 			RichTextBox rtb = LinesToRichTextBox(lines, formatSettings);
 			rtb.SelectAll();
@@ -61,22 +61,24 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		public static RichTextBox LinesToRichTextBox(List<List<Domain.DisplayElement>> lines, Settings.FormatSettings formatSettings)
+		public static RichTextBox LinesToRichTextBox(List<Domain.DisplayLine> lines, Settings.FormatSettings formatSettings)
 		{
 			RichTextBox rtb = new RichTextBox();
-			foreach (List<Domain.DisplayElement> line in lines)
-			{
-				RtfWriter.AppendDisplayElements(rtb, line, formatSettings);
-			}
+			foreach (Domain.DisplayLine line in lines)
+				AppendDisplayLine(rtb, line, formatSettings);
+
 			return (rtb);
+		}
+
+		private static void AppendDisplayLine(RichTextBox rtb, Domain.DisplayLine line, Settings.FormatSettings formatSettings)
+		{
+			AppendDisplayElements(rtb, line, formatSettings);
 		}
 
 		private static void AppendDisplayElements(RichTextBox rtb, List<Domain.DisplayElement> elements, Settings.FormatSettings formatSettings)
 		{
 			foreach (Domain.DisplayElement de in elements)
-			{
 				AppendDisplayElement(rtb, de, formatSettings);
-			}
 		}
 
 		private static void AppendDisplayElement(RichTextBox rtb, Domain.DisplayElement element, Settings.FormatSettings formatSettings)

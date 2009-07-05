@@ -95,7 +95,7 @@ namespace YAT.Model.Test
 				using (Terminal terminalB = new Terminal(Utilities.GetTextTCPSettings()))
 				{
 					Utilities.TestSet testSet;
-					List<List<Domain.DisplayElement>> lines;
+					List<Domain.DisplayLine> lines;
 
 					// start and open terminals
 					terminalA.Start();
