@@ -22,6 +22,9 @@ using System.Globalization;
 
 using MKY.Utilities.Types;
 
+// The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
+// is intentionally placed into the YAT.Domain namespace even though the file is located in the
+// YAT.Domain\RawTerminal for better separation of the implementation files.
 namespace YAT.Domain
 {
 	/// <summary></summary>
@@ -282,13 +285,17 @@ namespace YAT.Domain
 			set { _isEol = value; }
 		}
 
-		/// <summary></summary>
-		override public string ToString()
+		/// <summary>
+		/// Standard ToString method returning the element contents only.
+		/// </summary>
+		public override string ToString()
 		{
-			return (ToString(""));
+			return (_text);
 		}
 
-		/// <summary></summary>
+		/// <summary>
+		/// Extended ToString method which can be used for trace/debug.
+		/// </summary>
 		public string ToString(string indent)
 		{
 			return (indent + "- Type: " + GetType().Name + Environment.NewLine +

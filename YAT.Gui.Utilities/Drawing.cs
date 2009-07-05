@@ -56,7 +56,7 @@ namespace YAT.Gui.Utilities
 			_stringFormat.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
 		}
 
-		public static SizeF MeasureItem(List<Domain.DisplayElement> line, Model.Settings.FormatSettings formatSettings,
+		public static SizeF MeasureItem(Domain.DisplayLine line, Model.Settings.FormatSettings formatSettings,
 										Graphics graphics, RectangleF bounds)
 		{
 			SizeF size = new SizeF(0, 0);
@@ -79,7 +79,7 @@ namespace YAT.Gui.Utilities
 			return (graphics.MeasureString(element.Text, font, bounds.Size, _stringFormat));
 		}
 
-		public static SizeF DrawItem(List<Domain.DisplayElement> line, Model.Settings.FormatSettings formatSettings,
+		public static SizeF DrawItem(Domain.DisplayLine line, Model.Settings.FormatSettings formatSettings,
 									 Graphics graphics, RectangleF bounds, DrawItemState state)
 		{
 			SizeF size = new SizeF(0, 0);

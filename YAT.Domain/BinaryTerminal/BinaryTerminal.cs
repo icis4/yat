@@ -23,6 +23,9 @@ using System.Threading;
 using MKY.Utilities.Event;
 using MKY.Utilities.Settings;
 
+// The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
+// is intentionally placed into the YAT.Domain namespace even though the file is located in the
+// YAT.Domain\BinaryTerminal for better separation of the implementation files.
 namespace YAT.Domain
 {
 	/// <summary>
@@ -286,7 +289,7 @@ namespace YAT.Domain
 				lineState.LineBreakTimer.Start();
 		}
 
-		private void ExecuteLineEnd(LineState lineState, List<DisplayElement> elements, List<List<DisplayElement>> lines)
+		private void ExecuteLineEnd(LineState lineState, List<DisplayElement> elements, List<DisplayLine> lines)
 		{
 			List<DisplayElement> l = new List<DisplayElement>();
 
@@ -310,14 +313,16 @@ namespace YAT.Domain
 
 			// return line
 			lineState.LineElements.AddRange(l);
-			List<DisplayElement> line = new List<DisplayElement>();
+			DisplayLine line = new DisplayLine();
 			line.AddRange(lineState.LineElements);
 			lines.Add(line);
 
 			lineState.Reset();
 		}
 
-		private void ExecuteTimedLineBreakOnReload(Settings.BinaryDisplaySettings displaySettings, LineState lineState, DateTime timeStamp, List<DisplayElement> elements, List<List<DisplayElement>> lines)
+		private void ExecuteTimedLineBreakOnReload(Settings.BinaryDisplaySettings displaySettings,
+			                                       LineState lineState, DateTime timeStamp,
+			                                       List<DisplayElement> elements, List<DisplayLine> lines)
 		{
 			if (lineState.LineElements.Count > 0)
 			{
@@ -375,7 +380,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessRawElement(RawElement re, List<DisplayElement> elements, List<List<DisplayElement>> lines)
+		protected override void ProcessRawElement(RawElement re, List<DisplayElement> elements, List<DisplayLine> lines)
 		{
 			Settings.BinaryDisplaySettings displaySettings;
 			if (re.Direction == SerialDirection.Tx)
@@ -439,7 +444,7 @@ namespace YAT.Domain
 						(direction != _bidirLineState.Direction))
 					{
 						List<DisplayElement> elements = new List<DisplayElement>();
-						List<List<DisplayElement>> lines = new List<List<DisplayElement>>();
+						List<DisplayLine> lines = new List<DisplayLine>();
 
 						ExecuteLineEnd(lineState, elements, lines);
 
@@ -462,7 +467,7 @@ namespace YAT.Domain
 			if (lineState.LineElements.Count > 0)
 			{
 				List<DisplayElement> elements = new List<DisplayElement>();
-				List<List<DisplayElement>> lines = new List<List<DisplayElement>>();
+				List<DisplayLine> lines = new List<DisplayLine>();
 
 				ExecuteLineEnd(lineState, elements, lines);
 

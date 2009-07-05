@@ -1417,7 +1417,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Returns contents of desired repository.
 		/// </summary>
-		public List<List<Domain.DisplayElement>> RepositoryToDisplayLines(Domain.RepositoryType repositoryType)
+		public List<Domain.DisplayLine> RepositoryToDisplayLines(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 			return (_terminal.RepositoryToDisplayLines(repositoryType));

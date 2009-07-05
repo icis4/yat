@@ -33,13 +33,13 @@ namespace YAT.Model.Utilities
 			object lines = null;
 			using (FileStream fs = new FileStream(xmlFilePath, FileMode.Open))
 			{
-				XmlSerializer serializer = new XmlSerializer(typeof(List<List<Domain.DisplayElement>>));
+				XmlSerializer serializer = new XmlSerializer(typeof(List<Domain.DisplayLine>));
 				lines = serializer.Deserialize(fs);
 			}
 
 			StringBuilder sb;
 			List<string> linesString = new List<string>();
-			foreach (List<Domain.DisplayElement> line in (List<List<Domain.DisplayElement>>)lines)
+			foreach (Domain.DisplayLine line in (List<Domain.DisplayLine>)lines)
 			{
 				sb = new StringBuilder();
 				foreach (Domain.DisplayElement de in line)
@@ -59,11 +59,11 @@ namespace YAT.Model.Utilities
 	public class XmlWriter
 	{
 		/// <summary></summary>
-		public static void LinesToXmlFile(List<List<Domain.DisplayElement>> lines, string xmlFilePath)
+		public static void LinesToXmlFile(List<Domain.DisplayLine> lines, string xmlFilePath)
 		{
 			using (FileStream fs = new FileStream(xmlFilePath, FileMode.Create))
 			{
-				XmlSerializer serializer = new XmlSerializer(typeof(List<List<Domain.DisplayElement>>));
+				XmlSerializer serializer = new XmlSerializer(typeof(List<Domain.DisplayLine>));
 				serializer.Serialize(fs, lines);
 			}
 		}

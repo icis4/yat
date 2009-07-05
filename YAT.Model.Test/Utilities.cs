@@ -139,12 +139,12 @@ namespace YAT.Model.Test
 		// Verifications
 		//==========================================================================================
 
-		internal static void VerifyLines(List<List<Domain.DisplayElement>> linesA, List<List<Domain.DisplayElement>> linesB, TestSet testSet)
+		internal static void VerifyLines(List<Domain.DisplayLine> linesA, List<Domain.DisplayLine> linesB, TestSet testSet)
 		{
 			VerifyLines(linesA, linesB, testSet, 1);
 		}
 
-		internal static void VerifyLines(List<List<Domain.DisplayElement>> linesA, List<List<Domain.DisplayElement>> linesB, TestSet testSet, int cycle)
+		internal static void VerifyLines(List<Domain.DisplayLine> linesA, List<Domain.DisplayLine> linesB, TestSet testSet, int cycle)
 		{
 			int expectedLineCount = testSet.ExpectedLineCount * cycle;
 
@@ -153,8 +153,8 @@ namespace YAT.Model.Test
 			{
 				for (int i = 0; i < linesA.Count; i++)
 				{
-					List<Domain.DisplayElement> lineA = linesA[i];
-					List<Domain.DisplayElement> lineB = linesB[i];
+					Domain.DisplayLine lineA = linesA[i];
+					Domain.DisplayLine lineB = linesB[i];
 
 					int commandIndex = i % testSet.ExpectedLineCount;
 					int expectedLineLength = testSet.ExpectedLineLenghts[commandIndex];
@@ -191,9 +191,9 @@ namespace YAT.Model.Test
 				StringBuilder sbA = new StringBuilder();
 				StringBuilder sbB = new StringBuilder();
 
-				foreach (List<Domain.DisplayElement> lineA in linesA)
+				foreach (Domain.DisplayLine lineA in linesA)
 					sbA.Append(XArray.ElementsToString(lineA.ToArray()));
-				foreach (List<Domain.DisplayElement> lineB in linesB)
+				foreach (Domain.DisplayLine lineB in linesB)
 					sbB.Append(XArray.ElementsToString(lineB.ToArray()));
 
 				Console.Write

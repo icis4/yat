@@ -22,6 +22,9 @@ using System.IO;
 using MKY.Utilities.Text;
 using MKY.Utilities.Types;
 
+// The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
+// is intentionally placed into the YAT.Domain namespace even though the file is located in the
+// YAT.Domain\RawTerminal for better separation of the implementation files.
 namespace YAT.Domain
 {
 	/// <summary>
@@ -379,47 +382,47 @@ namespace YAT.Domain
 			lineState.LinePosition = LinePosition.Data;
 		}
 
-		private void ExecuteLineEnd(SerialDirection d, LineState lineState, List<DisplayElement> elements, List<List<DisplayElement>> lines)
+		private void ExecuteLineEnd(SerialDirection d, LineState lineState, List<DisplayElement> elements, List<DisplayLine> lines)
 		{
-			// process EOL
+			// Process EOL
 			int eolLength = lineState.Eol.Eol.Length;
-			List<DisplayElement> line = new List<DisplayElement>();
+			DisplayLine line = new DisplayLine();
 
 			if (TextTerminalSettings.ShowEol || (eolLength <= 0) || (!lineState.Eol.IsCompleteMatch))
 			{
 				line.AddRange(lineState.LineElements);
 			}
-			else // remove EOL
+			else // Remove EOL
 			{
 				int eolElementCount = 0;
 				int eolAndWhiteElementCount = 0;
 				DisplayElement[] des = lineState.LineElements.ToArray();
 
-				// traverse elements reverse and count EOL data and white space elements to be removed
+				// Traverse elements reverse and count EOL data and white space elements to be removed
 				for (int i = (des.Length - 1); i >= 0; i--)
 				{
 					if (des[i].IsDataElement)
 					{
-						// detect last non-EOL data element
+						// Detect last non-EOL data element
 						if (eolElementCount >= eolLength)
 							break;
 
-						// loop through all EOL data elements
+						// Loop through all EOL data elements
 						eolElementCount++;
 					}
 					eolAndWhiteElementCount++;
 				}
 
-				// now traverse elements forward and add elements to line
+				// Now traverse elements forward and add elements to line
 				for (int i = 0; i < (des.Length - eolAndWhiteElementCount); i++)
 					line.Add(des[i]);
 
-				// finally remove EOL data and white space elements from elements
+				// Finally remove EOL data and white space elements from elements
 				if (elements.Count >= eolAndWhiteElementCount)
 					elements.RemoveRange(elements.Count - eolAndWhiteElementCount, eolAndWhiteElementCount);
 			}
 
-			// process line length
+			// Process line length
 			List<DisplayElement> l = new List<DisplayElement>();
 			if (TerminalSettings.Display.ShowLength)
 			{
@@ -434,14 +437,14 @@ namespace YAT.Domain
 			}
 			l.Add(new DisplayElement.LineBreak());
 
-			// add line end to elements and return them
+			// Add line end to elements and return them
 			elements.AddRange(l);
 
-			// also add line end to line and return it
+			// Also add line end to line and return it
 			line.AddRange(l);
 			lines.Add(line);
 
-			// reset line state
+			// Reset line state
 			lineState.Reset();
 		}
 
@@ -503,7 +506,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessRawElement(RawElement re, List<DisplayElement> elements, List<List<DisplayElement>> lines)
+		protected override void ProcessRawElement(RawElement re, List<DisplayElement> elements, List<DisplayLine> lines)
 		{
 			LineState lineState;
 			if (re.Direction == SerialDirection.Tx)
@@ -546,7 +549,7 @@ namespace YAT.Domain
 						(direction != _bidirLineState.Direction))
 					{
 						List<DisplayElement> elements = new List<DisplayElement>();
-						List<List<DisplayElement>> lines = new List<List<DisplayElement>>();
+						List<DisplayLine> lines = new List<DisplayLine>();
 
 						ExecuteLineEnd(_bidirLineState.Direction, lineState, elements, lines);
 
