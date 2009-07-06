@@ -2366,8 +2366,8 @@ namespace YAT.Gui.Forms
 			for (int i = 0; i < e.Lines.Count; i++)
 			{
 				int offset = e.Lines.Count - i; // e.g. offset = 1 replaces last line
-				monitor_Tx.ReplaceLine(offset, e.Lines[i]);
-				monitor_Bidir.ReplaceLine(offset, e.Lines[i]);
+				//monitor_Tx.ReplaceLine(offset, e.Lines[i]);
+				//monitor_Bidir.ReplaceLine(offset, e.Lines[i]);
 			}
 		}
 
@@ -2377,8 +2377,8 @@ namespace YAT.Gui.Forms
 			for (int i = 0; i < e.Lines.Count; i++)
 			{
 				int offset = e.Lines.Count - i; // e.g. offset = 1 replaces last line
-				monitor_Bidir.ReplaceLine(offset, e.Lines[i]);
-				monitor_Rx.ReplaceLine(offset, e.Lines[i]);
+				//monitor_Bidir.ReplaceLine(offset, e.Lines[i]);
+				//monitor_Rx.ReplaceLine(offset, e.Lines[i]);
 			}
 		}
 
