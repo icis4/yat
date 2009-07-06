@@ -18,6 +18,11 @@
 // Configuration
 //==================================================================================================
 
+// Choose whether list box is owner draw fixed:
+// - Uncomment to enable
+// - Comment out to disable
+#define ENABLE_OWNER_DRAW_FIXED
+
 // Choose whether performance meter should be in use:
 // - Uncomment to enable
 // - Comment out to disable
@@ -34,7 +39,7 @@
 // Choose whether list box scrolling should be delayed in order to improve the performance:
 // - Uncomment to enable
 // - Comment out to disable
-//#define ENABLE_DELAYED_SCROLLING
+#define ENABLE_DELAYED_SCROLLING
 
 // Choose whether list box draw mode should be switched depending on performance:
 // - Uncomment to enable
@@ -273,6 +278,13 @@ namespace YAT.Gui.Controls
 		public Monitor()
 		{
 			InitializeComponent();
+
+		#if (ENABLE_OWNER_DRAW_FIXED)
+			listBox_Monitor.DrawMode = DrawMode.OwnerDrawFixed;
+		#else
+			listBox_Monitor.DrawMode = DrawMode.Normal;
+		#endif
+
 			SetControls();
 
 		#if (ENABLE_PERFORMANCE_METER)
@@ -480,6 +492,12 @@ namespace YAT.Gui.Controls
 
 			AddElementToListBox(element);
 
+		#if (!ENABLE_DELAYED_SCROLLING)
+			// Scroll list to bottom
+			if ((lb.SelectedItems.Count == 0) && (lb.Items.Count > 0))
+				lb.TopIndex = lb.Items.Count - 1;
+		#endif
+
 			lb.EndUpdate();
 		}
 
@@ -490,6 +508,12 @@ namespace YAT.Gui.Controls
 
 			foreach (Domain.DisplayElement element in elements)
 				AddElementToListBox(element);
+
+		#if (!ENABLE_DELAYED_SCROLLING)
+			// Scroll list to bottom
+			if ((lb.SelectedItems.Count == 0) && (lb.Items.Count > 0))
+				lb.TopIndex = lb.Items.Count - 1;
+		#endif
 
 			lb.EndUpdate();
 		}
@@ -502,7 +526,13 @@ namespace YAT.Gui.Controls
 			foreach (Domain.DisplayElement element in line)
 				AddElementToListBox(element);
 
-			lb.EndUpdate();
+		#if (!ENABLE_DELAYED_SCROLLING)
+			// Scroll list to bottom
+			if ((lb.SelectedItems.Count == 0) && (lb.Items.Count > 0))
+				lb.TopIndex = lb.Items.Count - 1;
+		#endif
+
+			lb.Refresh();
 		}
 
 		public void AddLines(List<Domain.DisplayLine> lines)
@@ -514,10 +544,16 @@ namespace YAT.Gui.Controls
 				foreach (Domain.DisplayElement element in line)
 					AddElementToListBox(element);
 
+		#if (!ENABLE_DELAYED_SCROLLING)
+			// Scroll list to bottom
+			if ((lb.SelectedItems.Count == 0) && (lb.Items.Count > 0))
+				lb.TopIndex = lb.Items.Count - 1;
+		#endif
+
 			lb.EndUpdate();
 		}
 
-		public void ReplaceLine(int offset, Domain.DisplayLine line)
+		/*public void ReplaceLine(int offset, Domain.DisplayLine line)
 		{
 			ListBox lb = listBox_Monitor;
 
@@ -525,10 +561,10 @@ namespace YAT.Gui.Controls
 			int indexToReplace = lastIndex - offset;
 
 			if (indexToReplace >= 0)
-				lb.Items[indexToReplace] = line;
+				lb.Items[indexToReplace] = new Domain.DisplayLine(line);
 			else
 				throw (new InvalidOperationException("Invalid attempt to replace a line of the monitor"));
-		}
+		}*/
 
 		public void Clear()
 		{
@@ -762,7 +798,9 @@ namespace YAT.Gui.Controls
 			lb.ClearSelected();
 		}
 
-		private static int timer_PerformanceOptimization_Tick_ScrollIntervalDecimatorCounter = _ScrollIntervalDecimator;
+	#if (ENABLE_DELAYED_SCROLLING)
+		private int timer_PerformanceOptimization_Tick_ScrollIntervalDecimatorCounter = _ScrollIntervalDecimator;
+	#endif
 
 		private void timer_PerformanceOptimization_Tick(object sender, EventArgs e)
 		{
@@ -943,16 +981,20 @@ namespace YAT.Gui.Controls
 
 			// If first line, add a new empty line
 			if (lb.Items.Count == 0)
-			{
-				Domain.DisplayLine line = new Domain.DisplayLine();
-				lb.Items.Add(line);
-			}
+				lb.Items.Add(new Domain.DisplayLine());
 
-			// Add element to the current line
+			// Get current line and add element
 			int i = lb.Items.Count - 1;
-			Domain.DisplayLine partialLine = lb.Items[i] as Domain.DisplayLine;
-			partialLine.Add(element);
-			lb.Items[i] = partialLine;
+			Domain.DisplayLine l = lb.Items[i] as Domain.DisplayLine;
+			l.Add(element);
+
+		#if (!ENABLE_OWNER_DRAW_FIXED)
+			// Remove and re-add the line.
+			// Attention 1: Simply overwriting the item corrups the item list.
+			// Attention 2: Line must first be added. Otherwise scroll to bottom gets corrupted.
+			lb.Items.Add(l);
+			lb.Items.RemoveAt(i);
+		#endif
 
 			// Process EOL
 			if (element.IsEol)
@@ -962,15 +1004,8 @@ namespace YAT.Gui.Controls
 					lb.Items.RemoveAt(0);
 
 				// Add new empty line
-				Domain.DisplayLine line = new Domain.DisplayLine();
-				lb.Items.Add(line);
+				lb.Items.Add(new Domain.DisplayLine());
 			}
-
-		#if (!ENABLE_DELAYED_SCROLLING)
-			// Scroll list to bottom
-			if ((lb.SelectedItems.Count == 0) && (lb.Items.Count > 0))
-				lb.TopIndex = lb.Items.Count - 1;
-		#endif
 		}
 
 		private void ClearListBox()
