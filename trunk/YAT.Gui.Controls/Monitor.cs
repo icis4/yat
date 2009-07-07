@@ -23,10 +23,15 @@
 // - Comment out to disable
 #define ENABLE_OWNER_DRAW_FIXED
 
+// Choose whether list box scrolling should be delayed in order to improve the performance:
+// - Uncomment to enable
+// - Comment out to disable
+#define ENABLE_DELAYED_SCROLLING
+
 // Choose whether performance meter should be in use:
 // - Uncomment to enable
 // - Comment out to disable
-#define ENABLE_PERFORMANCE_METER
+//#define ENABLE_PERFORMANCE_METER
 
 // Choose whether to write the current performance level and state to debug output:
 // - Uncomment to enable
@@ -36,15 +41,15 @@
 // particular monitor.
 //#define DEBUG_PERFORMANCE
 
-// Choose whether list box scrolling should be delayed in order to improve the performance:
-// - Uncomment to enable
-// - Comment out to disable
-#define ENABLE_DELAYED_SCROLLING
-
 // Choose whether list box draw mode should be switched depending on performance:
 // - Uncomment to enable
 // - Comment out to disable
 //#define ENABLE_DRAW_MODE_SWITCHING
+
+// Choose whether list box draw should skipped every 2nd (useless) drawto improve performance:
+// - Uncomment to skip
+// - Comment out for normal operation
+//#define SKIP_EVERY_2ND_DRAW
 
 #region Using
 //==================================================================================================
@@ -238,6 +243,9 @@ namespace YAT.Gui.Controls
 		// Lines
 		private int _maximalLineCount = _MaximalLineCountDefault;
 		private Model.Settings.FormatSettings _formatSettings = new Model.Settings.FormatSettings();
+	#if (SKIP_EVERY_2ND_DRAW)
+		private bool[] _skipFlag = new bool[_MaximalLineCountDefault];
+	#endif
 
 		// Time status
 		private bool _showTimeStatus = _ShowTimeStatusDefault;
@@ -251,7 +259,9 @@ namespace YAT.Gui.Controls
 		private int _rxLineCountStatus;
 
 		// Performance
+	#if (ENABLE_PERFORMANCE_METER)
 		private PerformanceMeter _performanceMeter;
+	#endif
 
 		#endregion
 
@@ -286,6 +296,12 @@ namespace YAT.Gui.Controls
 		#endif
 
 			SetControls();
+
+		#if (SKIP_EVERY_2ND_DRAW)
+			_skipFlag[0] = true;
+			for (int i = 1; i < _skipFlag.Length; i++)
+				_skipFlag[i] = false;
+		#endif
 
 		#if (ENABLE_PERFORMANCE_METER)
 			_performanceMeter = new PerformanceMeter(_CriticalPerformanceLevel,
@@ -347,6 +363,24 @@ namespace YAT.Gui.Controls
 			{
 				if (_maximalLineCount != value)
 				{
+				#if (SKIP_EVERY_2ND_DRAW)                          // Clone skip flag array
+					bool[] _skipFlagOld = (bool[])_skipFlag.Clone();
+
+					_skipFlag = new bool[_maximalLineCount];       // Create resized skip flag array
+					if (_skipFlag.Length <= _skipFlagOld.Length)
+					{
+						for (int i = 0; i < _skipFlag.Length; i++) // Reinit new skip flag array
+							_skipFlag[i] = _skipFlagOld[i];
+					}
+					else
+					{
+						for (int i = 0; i < _skipFlagOld.Length; i++)
+							_skipFlag[i] = _skipFlagOld[i];
+						for (int i = _skipFlagOld.Length; i < _skipFlag.Length; i++)
+							_skipFlag[i] = false;
+					}
+				#endif
+
 					_maximalLineCount = value;
 					Reload();
 				}
@@ -758,6 +792,12 @@ namespace YAT.Gui.Controls
 		/// 51 x 2ms = 100ms per update!
 		/// At least scrolling is handled properly, i.e. as soon as the listbox starts to scroll,
 		/// the number of calls doesn't increase anymore.
+		/// 
+		/// Example measurements for SIR @ 18 upd/s:
+		/// 1.99.20 => 30% CPU usage
+		/// 1.99.22 with owner drawn and delayed scrolling => 25% CPU usage
+		/// 1.99.22 with owner drawn without DrawItem() => 10% CPU usage
+		/// 1.99.22 with normal drawn => 20% CPU usage
 		/// </remarks>
 		private void listBox_Monitor_DrawItem(object sender, DrawItemEventArgs e)
 		{
@@ -765,6 +805,15 @@ namespace YAT.Gui.Controls
 			{
 				if (e.Index >= 0)
 				{
+				#if (SKIP_EVERY_2ND_DRAW)
+					if (_skipFlag[e.Index])
+					{
+						_skipFlag[e.Index] = false;
+						return;
+					}
+					_skipFlag[e.Index] = true;
+				#endif
+
 					ListBox lb = listBox_Monitor;
 
 				#if (ENABLE_PERFORMANCE_METER)
