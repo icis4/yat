@@ -113,14 +113,16 @@ namespace YAT.Gui.Controls
 		/// Command always returns a Command object, it never returns <c>null</c>.
         /// </summary>
         [Browsable(false)]
-        public Command Command
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public Command Command
         {
             get { return (sendCommand.Command); }
             set { sendCommand.Command = value;  }
         }
 
         [Browsable(false)]
-        public RecentItemCollection<Command> RecentCommands
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public RecentItemCollection<Command> RecentCommands
         {
             set { sendCommand.RecentCommands = value;  }
         }
@@ -129,6 +131,7 @@ namespace YAT.Gui.Controls
 		/// Command always returns a Command object, it never returns <c>null</c>.
 		/// </summary>
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Command FileCommand
 		{
 			get { return (sendFile.FileCommand); }
@@ -136,7 +139,7 @@ namespace YAT.Gui.Controls
 		}
 
 		[Browsable(false)]
-		[DefaultValue(_TerminalTypeDefault)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Domain.TerminalType TerminalType
 		{
 			set
@@ -147,8 +150,8 @@ namespace YAT.Gui.Controls
 		}
 
         [Browsable(false)]
-        [DefaultValue(_TerminalIsOpenDefault)]
-        public bool TerminalIsOpen
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public bool TerminalIsOpen
         {
             set
             {

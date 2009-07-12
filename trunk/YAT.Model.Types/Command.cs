@@ -499,7 +499,7 @@ namespace YAT.Model.Types
 					(
 					_isDefined.Equals   (value._isDefined) &&
 					_description.Equals (value._description) &&
-					XArray.ValueEquals(_commandLines, value._commandLines) &&
+					XArray.ValuesEqual  (_commandLines, value._commandLines) &&
 					_defaultRadix.Equals(value._defaultRadix) &&
 					_isFilePath.Equals  (value._isFilePath) &&
 					_filePath.Equals    (value._filePath)

@@ -187,13 +187,13 @@ namespace YAT.Gui.Controls
 		private const MonitorActivityState  _ActivityStateDefault  = MonitorActivityState.Inactive;
 
 		// Image
-		private const double _MinimumImageOpacity   =  0.00; //   0%
-		private const double _MaximumImageOpacity   =  1.00; // 100%
+		private const double _MinImageOpacity       =  0.00; //   0%
+		private const double _MaxImageOpacity       =  1.00; // 100%
 		private const double _ImageOpacityIncrement = +0.10; // +10%
 		private const double _ImageOpacityDecrement = -0.10; // -10%
 
 		// Lines
-		private const int _MaximalLineCountDefault = Domain.Settings.DisplaySettings.MaximalLineCountDefault;
+		private const int _MaxLineCountDefault = Domain.Settings.DisplaySettings.MaxLineCountDefault;
 
 		// Time status
 		private const bool _ShowTimeStatusDefault = false;
@@ -238,10 +238,10 @@ namespace YAT.Gui.Controls
 		private Image _imageInactive = null;
 		private Image _imageActive = null;
 		private OpacityState _imageOpacityState = OpacityState.Inactive;
-		private double _imageOpacity = _MinimumImageOpacity;
+		private double _imageOpacity = _MinImageOpacity;
 
 		// Lines
-		private int _maximalLineCount = _MaximalLineCountDefault;
+		private int _maximalLineCount = _MaxLineCountDefault;
 		private Model.Settings.FormatSettings _formatSettings = new Model.Settings.FormatSettings();
 	#if (SKIP_EVERY_2ND_DRAW)
 		private bool[] _skipFlag = new bool[_MaximalLineCountDefault];
@@ -356,7 +356,7 @@ namespace YAT.Gui.Controls
 
 		[Category("Monitor")]
 		[Description("The maxmimal number of lines to display.")]
-		[DefaultValue(_MaximalLineCountDefault)]
+		[DefaultValue(_MaxLineCountDefault)]
 		public int MaximalLineCount
 		{
 			set
@@ -388,6 +388,7 @@ namespace YAT.Gui.Controls
 		}
 
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Model.Settings.FormatSettings FormatSettings
 		{
 			set
@@ -722,18 +723,18 @@ namespace YAT.Gui.Controls
 				if (_imageOpacityState == OpacityState.Incrementing)
 				{
 					_imageOpacity += _ImageOpacityIncrement;
-					if (_imageOpacity > _MaximumImageOpacity)
+					if (_imageOpacity > _MaxImageOpacity)
 					{
-						_imageOpacity = _MaximumImageOpacity;
+						_imageOpacity = _MaxImageOpacity;
 						_imageOpacityState = OpacityState.Decrementing;
 					}
 				}
 				else
 				{
 					_imageOpacity += _ImageOpacityDecrement;
-					if (_imageOpacity < _MinimumImageOpacity)
+					if (_imageOpacity < _MinImageOpacity)
 					{
-						_imageOpacity = _MinimumImageOpacity;
+						_imageOpacity = _MinImageOpacity;
 						_imageOpacityState = OpacityState.Incrementing;
 					}
 				}
@@ -741,7 +742,7 @@ namespace YAT.Gui.Controls
 				// \fixme Don't know how to alter image opacity yet
 				pictureBox_Monitor.Image.Opacity = _imageOpacity
 #endif
-				if (_imageOpacity >= ((_MaximumImageOpacity - _MinimumImageOpacity) / 2))
+				if (_imageOpacity >= ((_MaxImageOpacity - _MinImageOpacity) / 2))
 					pictureBox_Monitor.Image = _imageActive;
 				else
 					pictureBox_Monitor.Image = null;
@@ -798,6 +799,8 @@ namespace YAT.Gui.Controls
 		/// 1.99.22 with owner drawn and delayed scrolling => 25% CPU usage
 		/// 1.99.22 with owner drawn without DrawItem() => 10% CPU usage
 		/// 1.99.22 with normal drawn => 20% CPU usage
+		/// 
+		/// Double-buffered = true (form and control) doesn't make much difference either...
 		/// </remarks>
 		private void listBox_Monitor_DrawItem(object sender, DrawItemEventArgs e)
 		{
@@ -910,13 +913,13 @@ namespace YAT.Gui.Controls
 							if (_activityStateOld == MonitorActivityState.Active)
 							{
 								pictureBox_Monitor.Image = _imageActive;
-								_imageOpacity = _MaximumImageOpacity;
+								_imageOpacity = _MaxImageOpacity;
 								_imageOpacityState = OpacityState.Decrementing;
 							}
 							if (_activityStateOld == MonitorActivityState.Inactive)
 							{
 								pictureBox_Monitor.Image = _imageActive;
-								_imageOpacity = _MinimumImageOpacity;
+								_imageOpacity = _MinImageOpacity;
 								_imageOpacityState = OpacityState.Incrementing;
 							}
 						}

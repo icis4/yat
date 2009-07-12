@@ -89,6 +89,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public List<Command> Commands
 		{
 			set
@@ -99,7 +100,7 @@ namespace YAT.Gui.Controls
 		}
 
 		[Browsable(false)]
-		[DefaultValue(_TerminalIsOpenDefault)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool TerminalIsOpen
 		{
 			set
@@ -192,7 +193,7 @@ namespace YAT.Gui.Controls
 
 		private void InitializeButtons()
 		{
-			_buttons_commands = new List<Button>(PredefinedCommandSettings.MaximumCommandsPerPage);
+			_buttons_commands = new List<Button>(PredefinedCommandSettings.MaxCommandsPerPage);
 			_buttons_commands.Add(button_Command_1);
 			_buttons_commands.Add(button_Command_2);
 			_buttons_commands.Add(button_Command_3);
@@ -229,7 +230,7 @@ namespace YAT.Gui.Controls
 					_buttons_commands[i].Enabled = true;
 				}
 			}
-			for (int i = commandCount; i < PredefinedCommandSettings.MaximumCommandsPerPage; i++)
+			for (int i = commandCount; i < PredefinedCommandSettings.MaxCommandsPerPage; i++)
 			{
 				_buttons_commands[i].Text = Command.DefineCommandText;
 				_buttons_commands[i].Enabled = true;

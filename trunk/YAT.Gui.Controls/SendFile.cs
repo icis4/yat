@@ -96,6 +96,7 @@ namespace YAT.Gui.Controls
 		/// Command always returns a Command object, it never returns <c>null</c>.
 		/// </summary>
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Command FileCommand
 		{
 			get { return (_fileCommand); }
@@ -112,7 +113,7 @@ namespace YAT.Gui.Controls
 		}
 
 		[Browsable(false)]
-		[DefaultValue(_TerminalTypeDefault)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Domain.TerminalType TerminalType
 		{
 			set
@@ -123,7 +124,7 @@ namespace YAT.Gui.Controls
 		}
 
 		[Browsable(false)]
-		[DefaultValue(_TerminalIsOpenDefault)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool TerminalIsOpen
 		{
 			set

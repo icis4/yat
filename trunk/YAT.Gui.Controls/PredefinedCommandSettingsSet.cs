@@ -117,6 +117,7 @@ namespace YAT.Gui.Controls
 		/// Command always returns a Command object, it never returns <c>null</c>.
 		/// </summary>
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Model.Types.Command Command
 		{
 			get { return (_command); }
@@ -133,7 +134,7 @@ namespace YAT.Gui.Controls
 		}
 
 		[Browsable(false)]
-		[DefaultValue(_TerminalTypeDefault)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Domain.TerminalType TerminalType
 		{
 			set { _terminalType = value; }

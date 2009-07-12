@@ -153,7 +153,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		[Browsable(false)]
-		[DefaultValue(_HostTypeDefault)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public MKY.IO.Serial.SocketHostType HostType
 		{
 			set
@@ -184,6 +184,7 @@ namespace YAT.Gui.Controls
 		}
 
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IPAddress ResolvedRemoteIPAddress
 		{
 			get { return (_resolvedRemoteIPAddress); }
@@ -224,6 +225,7 @@ namespace YAT.Gui.Controls
 		}
 
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IPAddress ResolvedLocalIPAddress
 		{
 			get { return (_resolvedLocalIPAddress); }

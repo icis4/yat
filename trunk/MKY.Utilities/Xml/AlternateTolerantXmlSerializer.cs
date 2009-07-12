@@ -159,7 +159,7 @@ namespace MKY.Utilities.Xml
 			foreach (AlternateXmlElement element in alternates)
 			{
 				// compare XML path
-				if (Types.XArray.ValueEquals(element.XmlPath, standardXmlPath))
+				if (Types.XArray.ValuesEqual(element.XmlPath, standardXmlPath))
 				{
 					// compare alternates to given local name
 					foreach (string alternateLocalName in element.AlternateLocalNames)

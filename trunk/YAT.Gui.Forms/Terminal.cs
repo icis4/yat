@@ -969,7 +969,7 @@ namespace YAT.Gui.Forms
 
 		private void contextMenuStrip_Predefined_Initialize()
 		{
-			_menuItems_predefined = new List<ToolStripMenuItem>(Model.Settings.PredefinedCommandSettings.MaximumCommandsPerPage);
+			_menuItems_predefined = new List<ToolStripMenuItem>(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage);
 			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_1);
 			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_2);
 			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_3);
@@ -1031,7 +1031,7 @@ namespace YAT.Gui.Forms
 					_menuItems_predefined[i].Enabled = true;
 				}
 			}
-			for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaximumCommandsPerPage; i++)
+			for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage; i++)
 			{
 				_menuItems_predefined[i].Text = Model.Types.Command.DefineCommandText;
 				_menuItems_predefined[i].Enabled = true;

@@ -28,7 +28,7 @@ namespace YAT.Model.Settings
 	public class RecentFileSettings : MKY.Utilities.Settings.Settings, IEquatable<RecentFileSettings>
 	{
 		/// <summary></summary>
-		public const int MaximumFilePaths = 8;
+		public const int MaxFilePaths = 8;
 
 		private RecentItemCollection<string> _filePaths;
 
@@ -63,7 +63,7 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			FilePaths = new RecentItemCollection<string>(MaximumFilePaths);
+			FilePaths = new RecentItemCollection<string>(MaxFilePaths);
 		}
 
 		#region Properties
@@ -90,11 +90,11 @@ namespace YAT.Model.Settings
 		/// This property allows standard XML serialization which is not provided for
 		/// generic collection <see cref="T:RecentItemCollection`1"/>.
 		/// </remarks>
-		[XmlElement("FilePathsMaximumCapacity")]
-		public int FilePathsMaximumCapacity
+		[XmlElement("FilePathsCapacity")]
+		public int FilePathsCapacity
 		{
-			get { return (_filePaths.MaximumCapacity); }
-			set { _filePaths.MaximumCapacity = value; }
+			get { return (_filePaths.Capacity); }
+			set { _filePaths.Capacity = value; }
 		}
 
 		#endregion

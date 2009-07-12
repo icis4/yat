@@ -84,7 +84,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		[Browsable(false)]
-		[DefaultValue(_HostTypeDefault)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public SocketHostType HostType
 		{
 			set
@@ -99,7 +99,6 @@ namespace YAT.Gui.Controls
 
 		[Category("Socket")]
 		[Description("Sets TCP client auto reconnect.")]
-		[Browsable(false)]
 		public AutoRetry TcpClientAutoReconnect
 		{
 			get { return (_tcpClientAutoReconnect); }

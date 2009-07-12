@@ -52,6 +52,7 @@ namespace MKY.IO.Ports
 		/// Returns whether object has already been disposed.
 		/// </summary>
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool IsDisposed
 		{
 			get { return (_isDisposed); }

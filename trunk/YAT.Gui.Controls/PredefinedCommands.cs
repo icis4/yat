@@ -93,6 +93,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public List<PredefinedCommandPage> Pages
 		{
 			get { return (_pages); }
@@ -133,7 +134,7 @@ namespace YAT.Gui.Controls
 		}
 
 		[Browsable(false)]
-		[DefaultValue(_TerminalIsOpenDefault)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool TerminalIsOpen
 		{
 			set

@@ -96,40 +96,6 @@ namespace MKY.Utilities.Test.Types
 
 		#endregion
 
-		#region Tests > Min()
-		//------------------------------------------------------------------------------------------
-		// Tests > Min()
-		//------------------------------------------------------------------------------------------
-
-		[Test]
-		public void TestMin()
-		{
-			foreach (TestSet ts in _testSets)
-			{
-				Assert.AreEqual(ts.Min, XInt32.Min(ts.Min, ts.Max));
-				Assert.AreEqual(ts.Min, XInt32.Min(ts.Max, ts.Min));
-			}
-		}
-
-		#endregion
-
-		#region Tests > Max()
-		//------------------------------------------------------------------------------------------
-		// Tests > Max()
-		//------------------------------------------------------------------------------------------
-
-		[Test]
-		public void TestMax()
-		{
-			foreach (TestSet ts in _testSets)
-			{
-				Assert.AreEqual(ts.Max, XInt32.Max(ts.Min, ts.Max));
-				Assert.AreEqual(ts.Max, XInt32.Max(ts.Max, ts.Min));
-			}
-		}
-
-		#endregion
-
 		#region Tests > LimitToBounds()
 		//------------------------------------------------------------------------------------------
 		// Tests > LimitToBounds()

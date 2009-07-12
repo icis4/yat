@@ -1,4 +1,4 @@
-//==================================================================================================
+ï»¿//==================================================================================================
 // $URL$
 // $Author$
 // $Date$
@@ -6,43 +6,35 @@
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2009 Matthias Kläy.
+// Copyright Â© 2003-2004 HSR Hochschule fÃ¼r Technik Rapperswil.
+// Copyright Â© 2003-2009 Matthias KlÃ¤y.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
-// This source code is licensed under the GNU LGPL.
+// YAT is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Windows.Forms;
 
-namespace MKY.Utilities.Types
+namespace MKY.Windows.Forms.Test
 {
-	/// <summary>
-	/// Int32/int utility methods.
-	/// </summary>
-	/// <remarks>
-	/// Possible extensions:
-	/// - ParseInside: get integer values inside strings (e.g. "COM5 (Device123B)" returns {5;123})
-	/// </remarks>
-	public class XInt32
+	static class TestMain
 	{
 		/// <summary>
-		/// Limits "value" to the boundaries specified.
+		/// The main entry point for the application.
 		/// </summary>
-		public static int LimitToBounds(int value, int lower, int upper)
+		[STAThread]
+		static void Main()
 		{
-			if (value < lower)
-				return (lower);
-			if (value > upper)
-				return (upper);
-			return (value);
+			Application.EnableVisualStyles();
+			Application.SetCompatibleTextRenderingDefault(false);
+			Application.Run(new FastListBoxTest());
 		}
 	}
 }
-
 
 //==================================================================================================
 // End of

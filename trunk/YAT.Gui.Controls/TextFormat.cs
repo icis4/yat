@@ -96,6 +96,7 @@ namespace YAT.Gui.Controls
 		}
 
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Font FormatFontWithoutStyle
 		{
 			set

@@ -25,8 +25,6 @@ namespace MKY.Utilities.Recent
 	/// </summary>
 	public class RecentItemCollection<T> : List<RecentItem<T>>
 	{
-		private int _maximumCapacity = 8;
-
 		/// <summary></summary>
 		public RecentItemCollection()
 			: base()
@@ -34,45 +32,16 @@ namespace MKY.Utilities.Recent
 		}
 
 		/// <summary></summary>
-		public RecentItemCollection(int maximumCapacity)
-			: base()
+		public RecentItemCollection(int capacity)
+			: base(capacity)
 		{
-			_maximumCapacity = maximumCapacity;
 		}
 
 		/// <summary></summary>
 		public RecentItemCollection(IEnumerable<RecentItem<T>> collection)
 			: base(collection)
 		{
-			if (collection is RecentItemCollection<T>)
-			{
-				RecentItemCollection<T> casted = (RecentItemCollection<T>)collection;
-				_maximumCapacity = casted._maximumCapacity;
-			}
 		}
-
-		/// <summary></summary>
-		public RecentItemCollection(int capacity, int maximumCapacity)
-			: base(capacity)
-		{
-			_maximumCapacity = maximumCapacity;
-		}
-
-		#region Properties
-		//==========================================================================================
-		// Properties
-		//==========================================================================================
-
-		/// <summary>
-		/// The maximum capacity of the collection.
-		/// </summary>
-		public int MaximumCapacity
-		{
-			get { return (_maximumCapacity); }
-			set { _maximumCapacity = value;  }
-		}
-
-		#endregion
 
 		#region Methods
 		//------------------------------------------------------------------------------------------
@@ -81,7 +50,7 @@ namespace MKY.Utilities.Recent
 
 		/// <summary>
 		/// Inserts the recent item at the beginning of the collection (least recent) and remove the
-		/// most recent item if the collection already contains <see cref="MaximumCapacity"/> items.
+		/// most recent item if the collection already contains <see cref="Capacity"/> items.
 		/// </summary>
 		public virtual void ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(RecentItem<T> item)
 		{
@@ -91,7 +60,7 @@ namespace MKY.Utilities.Recent
 			}
 			else
 			{
-				while (Count >= MaximumCapacity)
+				while (Count >= Capacity)
 					RemoveMostRecent();
 			}
 			Insert(0, item);
@@ -99,7 +68,7 @@ namespace MKY.Utilities.Recent
 
 		/// <summary>
 		/// Remove the most recent item if the collection already contains
-		/// <see cref="MaximumCapacity"/> items.
+		/// <see cref="Capacity"/> items.
 		/// </summary>
 		/// <returns>
 		/// true if an item is successfully removed; otherwise, false. This method also returns

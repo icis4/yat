@@ -33,7 +33,7 @@ namespace MKY.Utilities.Types
 		/// <returns>
 		/// True if arrays have value equality, otherwise false.
 		/// </returns>
-		public static bool ValueEquals(Array objA, Array objB)
+		public static bool ValuesEqual(Array objA, Array objB)
 		{
 			if (ReferenceEquals(objA, objB))
 				return (true);
