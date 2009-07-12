@@ -124,6 +124,7 @@ namespace YAT.Gui.Controls
 		/// Command always returns a Command object, it never returns <c>null</c>.
 		/// </summary>
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Command Command
 		{
 			get { return (_command); }
@@ -140,6 +141,7 @@ namespace YAT.Gui.Controls
 		}
 
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public RecentItemCollection<Command> RecentCommands
 		{
 			set
@@ -150,7 +152,7 @@ namespace YAT.Gui.Controls
 		}
 
 		[Browsable(false)]
-		[DefaultValue(_TerminalIsOpenDefault)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool TerminalIsOpen
 		{
 			set

@@ -547,7 +547,7 @@ namespace YAT.Gui.Forms
 
 		private void contextMenuStrip_FileRecent_InitializeControls()
 		{
-			_menuItems_recents = new List<ToolStripMenuItem>(Model.Settings.RecentFileSettings.MaximumFilePaths);
+			_menuItems_recents = new List<ToolStripMenuItem>(Model.Settings.RecentFileSettings.MaxFilePaths);
 			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_1);
 			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_2);
 			_menuItems_recents.Add(toolStripMenuItem_FileRecentContextMenu_3);
@@ -567,7 +567,7 @@ namespace YAT.Gui.Forms
 			// not needed yet: _isSettingControls = true;
 
 			// hide all
-			for (int i = 0; i < Model.Settings.RecentFileSettings.MaximumFilePaths; i++)
+			for (int i = 0; i < Model.Settings.RecentFileSettings.MaxFilePaths; i++)
 			{
 				string prefix = string.Format("{0}: ", i + 1);
 				_menuItems_recents[i].Text = "&" + prefix;

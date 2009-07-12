@@ -30,7 +30,7 @@ namespace YAT.Model.Settings
 	public class SendCommandSettings : MKY.Utilities.Settings.Settings, IEquatable<SendCommandSettings>
 	{
 		/// <summary></summary>
-		public const int MaximumRecentCommands = 24;
+		public const int MaxRecentCommands = 24;
 
 		private Command _command;
 		private RecentItemCollection<Command> _recentsCommands;
@@ -67,7 +67,7 @@ namespace YAT.Model.Settings
 		protected override void SetMyDefaults()
 		{
 			Command = new Command();
-			RecentCommands = new RecentItemCollection<Command>(MaximumRecentCommands);
+			RecentCommands = new RecentItemCollection<Command>(MaxRecentCommands);
 		}
 
 		#region Properties

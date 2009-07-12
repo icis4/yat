@@ -197,7 +197,6 @@ namespace YAT.Gui.Controls
 
 		[Category("Serial Port")]
 		[Description("Auto reopen optione.")]
-		[Browsable(false)]
 		public MKY.IO.Serial.AutoRetry AutoReopen
 		{
 			get { return (_autoReopen); }

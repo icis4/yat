@@ -87,7 +87,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		[Browsable(false)]
-		[DefaultValue(_ShowSerialPortDefault)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool ShowSerialPort
 		{
 			set

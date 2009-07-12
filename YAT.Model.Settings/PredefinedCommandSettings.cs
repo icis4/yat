@@ -28,7 +28,7 @@ namespace YAT.Model.Settings
 	public class PredefinedCommandSettings : MKY.Utilities.Settings.Settings, IEquatable<PredefinedCommandSettings>
 	{
 		/// <summary></summary>
-		public const int MaximumCommandsPerPage = 12;
+		public const int MaxCommandsPerPage = 12;
 
 		private List<PredefinedCommandPage> _pages;
 
@@ -113,7 +113,7 @@ namespace YAT.Model.Settings
 			if ((selectedPage >= 0) && (selectedPage < _pages.Count))
 			{
 				PredefinedCommandPage page = _pages[selectedPage];
-				if ((selectedCommand >= 0) && (selectedCommand < MaximumCommandsPerPage))
+				if ((selectedCommand >= 0) && (selectedCommand < MaxCommandsPerPage))
 				{
 					page.SetCommand(selectedCommand, command);
 					SetChanged();

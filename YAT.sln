@@ -85,6 +85,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALAZ.SystemEx", "ALAZ\Sourc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALAZ.SystemEx.NetEx", "ALAZ\Source\ALAZ.SystemEx.NetEx\ALAZ.SystemEx.NetEx.csproj", "{25162422-3B32-4FB3-8A99-6BCFBE30D9AE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Windows.Forms.Test", "MKY.Windows.Forms.Test\MKY.Windows.Forms.Test.csproj", "{4171BFD3-4E50-4752-977B-9B1F79C3EDFB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Test|Any CPU = Debug Test|Any CPU
@@ -290,11 +292,9 @@ Global
 		{82461541-B351-4913-9747-EAFEE2322768}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{82461541-B351-4913-9747-EAFEE2322768}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
 		{82461541-B351-4913-9747-EAFEE2322768}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{82461541-B351-4913-9747-EAFEE2322768}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82461541-B351-4913-9747-EAFEE2322768}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
 		{82461541-B351-4913-9747-EAFEE2322768}.Release Test|Any CPU.Build.0 = Release|Any CPU
 		{82461541-B351-4913-9747-EAFEE2322768}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{82461541-B351-4913-9747-EAFEE2322768}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E3A19532-D12A-4A90-B7F3-637A0A8FA6BD}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{E3A19532-D12A-4A90-B7F3-637A0A8FA6BD}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
 		{E3A19532-D12A-4A90-B7F3-637A0A8FA6BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -319,6 +319,12 @@ Global
 		{25162422-3B32-4FB3-8A99-6BCFBE30D9AE}.Release Test|Any CPU.Build.0 = Release|Any CPU
 		{25162422-3B32-4FB3-8A99-6BCFBE30D9AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25162422-3B32-4FB3-8A99-6BCFBE30D9AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4171BFD3-4E50-4752-977B-9B1F79C3EDFB}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{4171BFD3-4E50-4752-977B-9B1F79C3EDFB}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
+		{4171BFD3-4E50-4752-977B-9B1F79C3EDFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4171BFD3-4E50-4752-977B-9B1F79C3EDFB}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
+		{4171BFD3-4E50-4752-977B-9B1F79C3EDFB}.Release Test|Any CPU.Build.0 = Release|Any CPU
+		{4171BFD3-4E50-4752-977B-9B1F79C3EDFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

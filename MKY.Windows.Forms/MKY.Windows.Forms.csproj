@@ -56,6 +56,9 @@
     <Compile Include="Chronometer.Designer.cs">
       <DependentUpon>Chronometer.cs</DependentUpon>
     </Compile>
+    <Compile Include="FastListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="PathLabel.cs">
       <SubType>Component</SubType>
     </Compile>

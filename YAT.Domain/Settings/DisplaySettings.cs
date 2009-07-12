@@ -38,7 +38,7 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const bool ShowCountersDefault = false;
 		/// <summary></summary>
-		public const int MaximalLineCountDefault = 1000;
+		public const int MaxLineCountDefault = 1000;
 		/// <summary></summary>
 		public const bool DirectionLineBreakEnabledDefault = true;
 
@@ -101,8 +101,8 @@ namespace YAT.Domain.Settings
 			ShowLength         = ShowLengthDefault;
 			ShowConnectTime    = ShowConnectTimeDefault;
 			ShowCounters       = ShowCountersDefault;
-			TxMaximalLineCount = MaximalLineCountDefault;
-			RxMaximalLineCount = MaximalLineCountDefault;
+			TxMaximalLineCount = MaxLineCountDefault;
+			RxMaximalLineCount = MaxLineCountDefault;
 			DirectionLineBreakEnabled = DirectionLineBreakEnabledDefault;
 		}
 

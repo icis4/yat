@@ -47,7 +47,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public const int LastStandardPortNumber = 256;
 		/// <summary></summary>
-		public const int MaximumPortNumber = 65536; // \fixme don't know how to retrieve true last port of the current machine
+		public const int MaxPortNumber = 65536;
 
 		/// <summary>
 		/// First port name as string.
@@ -163,8 +163,8 @@ namespace MKY.IO.Ports
 		{
 			if (!(_number >= FirstPortNumber))
 				throw (new ArgumentOutOfRangeException("SerialPortId.Number", _number, "ASSERT(Number >= StandardFirstPort)."));
-			if (!(_number <= MaximumPortNumber))
-				throw (new ArgumentOutOfRangeException("SerialPortId.Number", _number, "ASSERT(Number <= MaximumLastPort)."));
+			if (!(_number <= MaxPortNumber))
+				throw (new ArgumentOutOfRangeException("SerialPortId.Number", _number, "ASSERT(Number <= MaxLastPort)."));
 		}
 
 		#endregion
@@ -424,7 +424,7 @@ namespace MKY.IO.Ports
 				if (int.TryParse(m.Groups[1].Value, out portNumber))
 				{
 					if ((portNumber >= FirstPortNumber) &&
-						(portNumber <= MaximumPortNumber))
+						(portNumber <= MaxPortNumber))
 					{
 						result = new SerialPortId(portNumber);
 						return (true);
@@ -440,7 +440,7 @@ namespace MKY.IO.Ports
 				if (int.TryParse(m.Groups[1].Value, out portNumber))
 				{
 					if ((portNumber >= FirstPortNumber) &&
-						(portNumber <= MaximumPortNumber))
+						(portNumber <= MaxPortNumber))
 					{
 						result = new SerialPortId(portNumber);
 						return (true);
@@ -456,7 +456,7 @@ namespace MKY.IO.Ports
 				if (int.TryParse(m.Groups[1].Value, out portNumber))
 				{
 					if ((portNumber >= FirstPortNumber) &&
-						(portNumber <= MaximumPortNumber))
+						(portNumber <= MaxPortNumber))
 					{
 						result = new SerialPortId(portNumber);
 						return (true);
