@@ -30,14 +30,13 @@ namespace YAT.Gui.Controls
 		{
 			this.components = new System.ComponentModel.Container();
 			this.panel_Monitor = new System.Windows.Forms.Panel();
-			this.listBox_Monitor = new System.Windows.Forms.ListBox();
+			this.fastListBox_Monitor = new MKY.Windows.Forms.FastListBox();
 			this.panel_Picture = new System.Windows.Forms.Panel();
 			this.label_TimeStatus = new System.Windows.Forms.Label();
 			this.label_CountStatus = new System.Windows.Forms.Label();
 			this.pictureBox_Monitor = new System.Windows.Forms.PictureBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.timer_Opacity = new System.Windows.Forms.Timer(this.components);
-			this.timer_PerformanceOptimization = new System.Windows.Forms.Timer(this.components);
 			this.panel_Monitor.SuspendLayout();
 			this.panel_Picture.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_Monitor)).BeginInit();
@@ -45,7 +44,7 @@ namespace YAT.Gui.Controls
 			// 
 			// panel_Monitor
 			// 
-			this.panel_Monitor.Controls.Add(this.listBox_Monitor);
+			this.panel_Monitor.Controls.Add(this.fastListBox_Monitor);
 			this.panel_Monitor.Controls.Add(this.panel_Picture);
 			this.panel_Monitor.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel_Monitor.Location = new System.Drawing.Point(0, 0);
@@ -54,19 +53,20 @@ namespace YAT.Gui.Controls
 			this.panel_Monitor.TabIndex = 0;
 			this.panel_Monitor.Tag = "";
 			// 
-			// listBox_Monitor
+			// fastListBox_Monitor
 			// 
-			this.listBox_Monitor.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.listBox_Monitor.Font = new System.Drawing.Font("DejaVu Sans Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.listBox_Monitor.HorizontalScrollbar = true;
-			this.listBox_Monitor.IntegralHeight = false;
-			this.listBox_Monitor.Location = new System.Drawing.Point(0, 33);
-			this.listBox_Monitor.Name = "listBox_Monitor";
-			this.listBox_Monitor.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listBox_Monitor.Size = new System.Drawing.Size(300, 167);
-			this.listBox_Monitor.TabIndex = 1;
-			this.listBox_Monitor.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox_Monitor_DrawItem);
-			this.listBox_Monitor.Leave += new System.EventHandler(this.listBox_Monitor_Leave);
+			this.fastListBox_Monitor.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.fastListBox_Monitor.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+			this.fastListBox_Monitor.Font = new System.Drawing.Font("DejaVu Sans Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.fastListBox_Monitor.HorizontalScrollbar = true;
+			this.fastListBox_Monitor.IntegralHeight = false;
+			this.fastListBox_Monitor.Location = new System.Drawing.Point(0, 33);
+			this.fastListBox_Monitor.Name = "fastListBox_Monitor";
+			this.fastListBox_Monitor.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.fastListBox_Monitor.Size = new System.Drawing.Size(300, 167);
+			this.fastListBox_Monitor.TabIndex = 1;
+			this.fastListBox_Monitor.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox_Monitor_DrawItem);
+			this.fastListBox_Monitor.Leave += new System.EventHandler(this.listBox_Monitor_Leave);
 			// 
 			// panel_Picture
 			// 
@@ -118,10 +118,6 @@ namespace YAT.Gui.Controls
 			// 
 			this.timer_Opacity.Tick += new System.EventHandler(this.timer_Opacity_Tick);
 			// 
-			// timer_PerformanceOptimization
-			// 
-			this.timer_PerformanceOptimization.Tick += new System.EventHandler(this.timer_PerformanceOptimization_Tick);
-			// 
 			// Monitor
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -141,13 +137,12 @@ namespace YAT.Gui.Controls
 		#endregion
 
 		private System.Windows.Forms.Panel panel_Monitor;
-		private System.Windows.Forms.ListBox listBox_Monitor;
+		private MKY.Windows.Forms.FastListBox fastListBox_Monitor;
 		private System.Windows.Forms.Panel panel_Picture;
 		private System.Windows.Forms.PictureBox pictureBox_Monitor;
 		private System.Windows.Forms.Label label_CountStatus;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.Timer timer_Opacity;
 		private System.Windows.Forms.Label label_TimeStatus;
-		private System.Windows.Forms.Timer timer_PerformanceOptimization;
 	}
 }
