@@ -51,18 +51,64 @@ namespace MKY.Windows.Forms.Test
 
 		private void button_Add_Click(object sender, EventArgs e)
 		{
-			fastListBox.Items.Add("TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
+			FastListBox flb = fastListBox;
+			flb.BeginUpdate();
+
+			flb.Items.Add("TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
+
+			// scroll list
+			if ((flb.SelectedItems.Count == 0) && (flb.Items.Count > 0))
+				flb.TopIndex = flb.Items.Count - 1;
+
+			flb.EndUpdate();
 		}
 
 		private void button_AddMany_Click(object sender, EventArgs e)
 		{
+			FastListBox flb = fastListBox;
+			flb.BeginUpdate();
+
 			for (int i = 0; i < 50; i++)
-				fastListBox.Items.Add("TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
+				flb.Items.Add("TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
+
+			// scroll list
+			if ((flb.SelectedItems.Count == 0) && (flb.Items.Count > 0))
+				flb.TopIndex = flb.Items.Count - 1;
+
+			flb.EndUpdate();
 		}
 
 		private void button_Remove_Click(object sender, EventArgs e)
 		{
-			fastListBox.Items.RemoveAt(0);
+			FastListBox flb = fastListBox;
+			flb.BeginUpdate();
+
+			if (flb.Items.Count > 0)
+				flb.Items.RemoveAt(0);
+
+			// scroll list
+			if ((flb.SelectedItems.Count == 0) && (flb.Items.Count > 0))
+				flb.TopIndex = flb.Items.Count - 1;
+
+			flb.EndUpdate();
+		}
+
+		private void button_RemoveMany_Click(object sender, EventArgs e)
+		{
+			FastListBox flb = fastListBox;
+			flb.BeginUpdate();
+
+			for (int i = 0; i < 50; i++)
+			{
+				if (flb.Items.Count > 0)
+					flb.Items.RemoveAt(0);
+			}
+
+			// scroll list
+			if ((flb.SelectedItems.Count == 0) && (flb.Items.Count > 0))
+				flb.TopIndex = flb.Items.Count - 1;
+
+			flb.EndUpdate();
 		}
 	}
 }

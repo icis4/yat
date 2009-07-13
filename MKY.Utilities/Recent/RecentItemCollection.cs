@@ -50,7 +50,7 @@ namespace MKY.Utilities.Recent
 
 		/// <summary>
 		/// Inserts the recent item at the beginning of the collection (least recent) and remove the
-		/// most recent item if the collection already contains <see cref="Capacity"/> items.
+		/// most recent item if the collection already contains <see cref="T:RecentItemCollection`1.Capacity"/> items.
 		/// </summary>
 		public virtual void ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(RecentItem<T> item)
 		{
@@ -67,8 +67,7 @@ namespace MKY.Utilities.Recent
 		}
 
 		/// <summary>
-		/// Remove the most recent item if the collection already contains
-		/// <see cref="Capacity"/> items.
+		/// Remove the most recent item if the collection already contains <see cref="T:RecentItemCollection`1.Capacity"/> items.
 		/// </summary>
 		/// <returns>
 		/// true if an item is successfully removed; otherwise, false. This method also returns
