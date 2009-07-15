@@ -114,12 +114,13 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.Controls.Add(this.button_Font);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
-			this.groupBox_Settings.Size = new System.Drawing.Size(550, 230);
+			this.groupBox_Settings.Size = new System.Drawing.Size(550, 234);
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
 			// 
 			// monitor_Error
 			// 
+			this.monitor_Error.ConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Error.Location = new System.Drawing.Point(88, 193);
 			this.monitor_Error.Name = "monitor_Error";
 			this.monitor_Error.Size = new System.Drawing.Size(127, 23);
@@ -128,6 +129,7 @@ namespace YAT.Gui.Forms
 			// 
 			// monitor_Length
 			// 
+			this.monitor_Length.ConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Length.Location = new System.Drawing.Point(88, 164);
 			this.monitor_Length.Name = "monitor_Length";
 			this.monitor_Length.Size = new System.Drawing.Size(127, 23);
@@ -136,6 +138,7 @@ namespace YAT.Gui.Forms
 			// 
 			// monitor_TimeStamp
 			// 
+			this.monitor_TimeStamp.ConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_TimeStamp.Location = new System.Drawing.Point(88, 135);
 			this.monitor_TimeStamp.Name = "monitor_TimeStamp";
 			this.monitor_TimeStamp.Size = new System.Drawing.Size(127, 23);
@@ -144,6 +147,7 @@ namespace YAT.Gui.Forms
 			// 
 			// monitor_RxControl
 			// 
+			this.monitor_RxControl.ConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_RxControl.Location = new System.Drawing.Point(88, 106);
 			this.monitor_RxControl.Name = "monitor_RxControl";
 			this.monitor_RxControl.Size = new System.Drawing.Size(127, 23);
@@ -152,6 +156,7 @@ namespace YAT.Gui.Forms
 			// 
 			// monitor_RxData
 			// 
+			this.monitor_RxData.ConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_RxData.Location = new System.Drawing.Point(88, 77);
 			this.monitor_RxData.Name = "monitor_RxData";
 			this.monitor_RxData.Size = new System.Drawing.Size(127, 23);
@@ -160,6 +165,7 @@ namespace YAT.Gui.Forms
 			// 
 			// monitor_TxControl
 			// 
+			this.monitor_TxControl.ConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_TxControl.Location = new System.Drawing.Point(88, 48);
 			this.monitor_TxControl.Name = "monitor_TxControl";
 			this.monitor_TxControl.Size = new System.Drawing.Size(127, 23);
@@ -168,6 +174,7 @@ namespace YAT.Gui.Forms
 			// 
 			// monitor_TxData
 			// 
+			this.monitor_TxData.ConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_TxData.Location = new System.Drawing.Point(88, 19);
 			this.monitor_TxData.Name = "monitor_TxData";
 			this.monitor_TxData.Size = new System.Drawing.Size(127, 23);
@@ -352,7 +359,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.label_Example.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_Example.AutoSize = true;
-			this.label_Example.Location = new System.Drawing.Point(24, 258);
+			this.label_Example.Location = new System.Drawing.Point(24, 262);
 			this.label_Example.Name = "label_Example";
 			this.label_Example.Size = new System.Drawing.Size(50, 13);
 			this.label_Example.TabIndex = 1;
@@ -363,7 +370,8 @@ namespace YAT.Gui.Forms
 			// 
 			this.monitor_Example.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.monitor_Example.Location = new System.Drawing.Point(100, 258);
+			this.monitor_Example.ConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_Example.Location = new System.Drawing.Point(100, 262);
 			this.monitor_Example.Name = "monitor_Example";
 			this.monitor_Example.Size = new System.Drawing.Size(358, 58);
 			this.monitor_Example.TabIndex = 2;
@@ -372,9 +380,10 @@ namespace YAT.Gui.Forms
 			// FormatSettings
 			// 
 			this.AcceptButton = this.button_OK;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(669, 331);
+			this.ClientSize = new System.Drawing.Size(669, 335);
 			this.Controls.Add(this.monitor_Example);
 			this.Controls.Add(this.label_Example);
 			this.Controls.Add(this.button_Defaults);

@@ -123,7 +123,6 @@ namespace YAT.Gui.Controls
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.panel_Monitor);
-			this.DoubleBuffered = true;
 			this.Name = "Monitor";
 			this.Size = new System.Drawing.Size(300, 200);
 			this.Resize += new System.EventHandler(this.Monitor_Resize);

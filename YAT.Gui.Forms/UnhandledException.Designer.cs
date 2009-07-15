@@ -209,7 +209,8 @@ namespace YAT.Gui.Forms
 			// UnhandledException
 			// 
 			this.AcceptButton = this.button_Close;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Close;
 			this.ClientSize = new System.Drawing.Size(594, 452);
 			this.Controls.Add(this.button_Instructions);

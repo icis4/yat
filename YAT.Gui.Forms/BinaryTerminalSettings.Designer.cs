@@ -32,8 +32,8 @@ namespace YAT.Gui.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			YAT.Domain.Settings.BinaryDisplaySettings binaryDisplaySettings3 = new YAT.Domain.Settings.BinaryDisplaySettings();
-			YAT.Domain.Settings.BinaryDisplaySettings binaryDisplaySettings4 = new YAT.Domain.Settings.BinaryDisplaySettings();
+			YAT.Domain.Settings.BinaryDisplaySettings binaryDisplaySettings1 = new YAT.Domain.Settings.BinaryDisplaySettings();
+			YAT.Domain.Settings.BinaryDisplaySettings binaryDisplaySettings2 = new YAT.Domain.Settings.BinaryDisplaySettings();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_Defaults = new System.Windows.Forms.Button();
@@ -110,7 +110,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.binaryTerminalSettingsSet_Rx.Location = new System.Drawing.Point(12, 19);
 			this.binaryTerminalSettingsSet_Rx.Name = "binaryTerminalSettingsSet_Rx";
-			this.binaryTerminalSettingsSet_Rx.Settings = binaryDisplaySettings3;
+			this.binaryTerminalSettingsSet_Rx.Settings = binaryDisplaySettings1;
 			this.binaryTerminalSettingsSet_Rx.Size = new System.Drawing.Size(263, 68);
 			this.binaryTerminalSettingsSet_Rx.TabIndex = 0;
 			this.binaryTerminalSettingsSet_Rx.SettingsChanged += new System.EventHandler(this.binaryTerminalSettingsSet_Rx_SettingsChanged);
@@ -131,7 +131,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.binaryTerminalSettingsSet_Tx.Location = new System.Drawing.Point(9, 19);
 			this.binaryTerminalSettingsSet_Tx.Name = "binaryTerminalSettingsSet_Tx";
-			this.binaryTerminalSettingsSet_Tx.Settings = binaryDisplaySettings4;
+			this.binaryTerminalSettingsSet_Tx.Settings = binaryDisplaySettings2;
 			this.binaryTerminalSettingsSet_Tx.Size = new System.Drawing.Size(263, 68);
 			this.binaryTerminalSettingsSet_Tx.TabIndex = 0;
 			this.binaryTerminalSettingsSet_Tx.SettingsChanged += new System.EventHandler(this.binaryTerminalSettingsSet_Tx_SettingsChanged);
@@ -151,7 +151,8 @@ namespace YAT.Gui.Forms
 			// BinaryTerminalSettings
 			// 
 			this.AcceptButton = this.button_OK;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
 			this.ClientSize = new System.Drawing.Size(406, 279);
 			this.Controls.Add(this.groupBox_Display);
