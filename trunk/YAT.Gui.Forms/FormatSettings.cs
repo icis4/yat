@@ -278,10 +278,9 @@ namespace YAT.Gui.Forms
 				}
 				else
 				{
-					// check chosen font
-
 					Refresh();
 
+					// check chosen font
 					try
 					{
 						f = new Font(fd.Font.Name, fd.Font.Size, FontStyle.Regular);

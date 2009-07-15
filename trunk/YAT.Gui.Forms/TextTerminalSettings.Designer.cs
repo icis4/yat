@@ -266,8 +266,8 @@ namespace YAT.Gui.Forms
 			this.textBox_DelayInterval.Size = new System.Drawing.Size(40, 20);
 			this.textBox_DelayInterval.TabIndex = 3;
 			this.textBox_DelayInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.textBox_DelayInterval.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_DelayInterval_Validating);
 			this.textBox_DelayInterval.TextChanged += new System.EventHandler(this.textBox_DelayInterval_TextChanged);
+			this.textBox_DelayInterval.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_DelayInterval_Validating);
 			// 
 			// label_WaitForResponse
 			// 
@@ -359,7 +359,8 @@ namespace YAT.Gui.Forms
 			// TextTerminalSettings
 			// 
 			this.AcceptButton = this.button_OK;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
 			this.ClientSize = new System.Drawing.Size(399, 403);
 			this.Controls.Add(this.button_Defaults);

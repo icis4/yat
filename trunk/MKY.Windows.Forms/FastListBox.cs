@@ -31,6 +31,15 @@ namespace MKY.Windows.Forms
 	[DesignerCategory("Windows Forms")]
 	public class FastListBox : ListBox
 	{
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
+		private bool _normal_UserPaint = false;
+
+		#endregion
+
 		#region Object Lifetime
 		//==========================================================================================
 		// Object Lifetime
@@ -41,7 +50,31 @@ namespace MKY.Windows.Forms
 		{
 			SetStyle(ControlStyles.AllPaintingInWmPaint, true);
 			SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-			SetStyle(ControlStyles.UserPaint, true);
+
+			StoreNormalPaintStyle();
+			SetUserPaintStyle();
+		}
+
+		#endregion
+
+		#region Overridden Properties
+		//==========================================================================================
+		// Overridden Properties
+		//==========================================================================================
+
+		/// <summary></summary>
+		public override DrawMode DrawMode
+		{
+			get { return base.DrawMode; }
+			set
+			{
+				if (value == DrawMode.Normal)
+					RestoreNormalPaintStyle();
+				else
+					SetUserPaintStyle();
+
+				base.DrawMode = value;
+			}
 		}
 
 		#endregion
@@ -51,13 +84,23 @@ namespace MKY.Windows.Forms
 		// Overridden Methods
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Is only called if draw mode is <see cref="System.Windows.Forms.DrawMode.OwnerDrawFixed"/> or
+		/// <see cref="System.Windows.Forms.DrawMode.OwnerDrawVariable"/>.
+		/// If draw mode is <see cref="System.Windows.Forms.DrawMode.Normal"/>,
+		/// only ListBox.OnDrawItem() is called.
+		/// </remarks>
 		protected override void OnPaintBackground(PaintEventArgs e)
 		{
 			base.OnPaintBackground(e);
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Is only called if draw mode is <see cref="System.Windows.Forms.DrawMode.OwnerDrawFixed"/> or
+		/// <see cref="System.Windows.Forms.DrawMode.OwnerDrawVariable"/>.
+		/// If draw mode is <see cref="System.Windows.Forms.DrawMode.Normal"/>,
+		/// only ListBox.OnDrawItem() is called.
+		/// </remarks>
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			int maxVisibleItems = (int)Math.Ceiling((float)Height / (float)ItemHeight);
@@ -66,32 +109,21 @@ namespace MKY.Windows.Forms
 
 			for (int i = TopIndex; i < bottomIndex; i++)
 			{
+				// Calculate bounding box taking the beginning of the item rectangle into account:
+				// e.g. scroll position somewhere in between...
+				//         ------XX------
+				// ...results in a complete rectangle (HorizontalExtent) of...
+				//    ------------------------
+				// ...and a text position of...
+				//    ABCDEFGHIJ
+				// ...thus the beginning of the text (x) is a negative value left of the visible rectangle...
+				//   (x)
 				int offset = i - TopIndex;
-				Rectangle dr = new Rectangle(e.ClipRectangle.X, offset * ItemHeight,
-											 e.ClipRectangle.Width, ItemHeight);
+				Rectangle ir = GetItemRectangle(i);
+				int x = DisplayRectangle.Width - ir.Width; // (x)
+				Rectangle bounds = new Rectangle(x, offset * ItemHeight, ir.Width, ItemHeight);
 
-				//System.Diagnostics.Debug.WriteLine(offset + " :: CR :: " + e.ClipRectangle);
-				//Rectangle ir = GetItemRectangle(i);
-				//System.Diagnostics.Debug.WriteLine(offset + " :: IR :: " + ir);
-
-				//Rectangle dr;
-				/*if (e.ClipRectangle.X == 0) // moving right
-				{
-					if (e.ClipRectangle.Width == Width)
-						dr = new Rectangle(e.ClipRectangle.Width - ir.Width, offset * ItemHeight, ir.Width, ItemHeight);
-					else
-						dr = new Rectangle(e.ClipRectangle.X, offset * ItemHeight, ir.Width, ItemHeight);
-				}
-				else                        // moving left
-				{
-					if (e.ClipRectangle.Width == Width)
-						dr = new Rectangle(e.ClipRectangle.Width - ir.Width, offset * ItemHeight, ir.Width, ItemHeight);
-					else
-						dr = new Rectangle(e.ClipRectangle.X, offset * ItemHeight, ir.Width, ItemHeight);
-				}*/
-				//dr = new Rectangle(e.ClipRectangle.Width - ir.Width, offset * ItemHeight, e.ClipRectangle.Width, ItemHeight);
-				//System.Diagnostics.Debug.WriteLine(offset + " :: DR :: " + dr);
-
+				// Set normal/selected state
 				DrawItemState state = DrawItemState.Default;
 				foreach (int index in SelectedIndices)
 				{
@@ -102,8 +134,50 @@ namespace MKY.Windows.Forms
 					}
 				}
 
-				base.OnDrawItem(new DrawItemEventArgs(e.Graphics, Font, dr, i, state));
+				// Request drawing of item
+				base.OnDrawItem(new DrawItemEventArgs(e.Graphics, Font, bounds, i, state));
 			}
+		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary>
+		/// Scroll list to bottom if no items are selected.
+		/// </summary>
+		public void ScrollToBottomIfNoItemsSelected()
+		{
+			if ((SelectedItems.Count == 0) && (Items.Count > 0))
+				TopIndex = Items.Count - 1;
+		}
+
+		#endregion
+
+		#region Protected Methods
+		//==========================================================================================
+		// Private Methods
+		//==========================================================================================
+
+		/// <summary></summary>
+		protected virtual void StoreNormalPaintStyle()
+		{
+			_normal_UserPaint = GetStyle(ControlStyles.UserPaint);
+		}
+
+		/// <summary></summary>
+		protected virtual void RestoreNormalPaintStyle()
+		{
+			SetStyle(ControlStyles.UserPaint, _normal_UserPaint);
+		}
+
+		/// <summary></summary>
+		protected virtual void SetUserPaintStyle()
+		{
+			SetStyle(ControlStyles.UserPaint, true);
 		}
 
 		#endregion

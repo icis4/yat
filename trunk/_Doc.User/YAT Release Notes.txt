@@ -44,11 +44,11 @@ YAT 2.0 Beta 3 Candidate 1 Version 1.99.2x :: 2009-08-xx
 --------------------------------------------------------
 
 Important changes:
+- Flickering eliminated by implementing a speed optimized list box (bug #2813227)
 - Update to .NET 3.5 SP1 (feature request #2813235)
 - Update to ALAZ 2.0 (feature request #2813236)
 - Update to DejaVu 2.29 (feature request #2813292)
-- Update to NUnit 2.5 (feature request #2813296)
-
+- Update to NUnit 2.5.1 (feature request #2813296)
 - Header and footer added to all source files (feature request #2136643)
 - SVN tags added to all source files (feature request #2813228)
 

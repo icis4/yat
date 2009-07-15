@@ -103,7 +103,7 @@ namespace YAT.Gui.Forms
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.serialPortSelection.Location = new System.Drawing.Point(6, 19);
 			this.serialPortSelection.Name = "serialPortSelection";
-			this.serialPortSelection.PortId = new MKY.IO.Ports.SerialPortId(1);
+			this.serialPortSelection.PortId = new MKY.IO.Ports.SerialPortId(3);
 			this.serialPortSelection.Size = new System.Drawing.Size(285, 46);
 			this.serialPortSelection.TabIndex = 0;
 			this.serialPortSelection.PortIdChanged += new System.EventHandler(this.serialPortSelection_PortIdChanged);
@@ -170,9 +170,10 @@ namespace YAT.Gui.Forms
 			// NewTerminal
 			// 
 			this.AcceptButton = this.button_OK;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(485, 329);
+			this.ClientSize = new System.Drawing.Size(485, 320);
 			this.Controls.Add(this.button_Help);
 			this.Controls.Add(this.groupBox_NewTerminal);
 			this.Controls.Add(this.pictureBox_New);

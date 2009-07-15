@@ -190,6 +190,7 @@ namespace YAT.Gui.Controls
 		[DefaultValue(_MaxLineCountDefault)]
 		public int MaximalLineCount
 		{
+			get { return (_maximalLineCount); }
 			set
 			{
 				if (_maximalLineCount != value)
@@ -340,10 +341,7 @@ namespace YAT.Gui.Controls
 
 			AddElementToListBox(element);
 
-			// Scroll list to bottom
-			if ((flb.SelectedItems.Count == 0) && (flb.Items.Count > 0))
-				flb.TopIndex = flb.Items.Count - 1;
-
+			flb.ScrollToBottomIfNoItemsSelected();
 			flb.EndUpdate();
 		}
 
@@ -355,10 +353,7 @@ namespace YAT.Gui.Controls
 			foreach (Domain.DisplayElement element in elements)
 				AddElementToListBox(element);
 
-			// Scroll list to bottom
-			if ((flb.SelectedItems.Count == 0) && (flb.Items.Count > 0))
-				flb.TopIndex = flb.Items.Count - 1;
-
+			flb.ScrollToBottomIfNoItemsSelected();
 			flb.EndUpdate();
 		}
 
@@ -370,10 +365,7 @@ namespace YAT.Gui.Controls
 			foreach (Domain.DisplayElement element in line)
 				AddElementToListBox(element);
 
-			// Scroll list to bottom
-			if ((flb.SelectedItems.Count == 0) && (flb.Items.Count > 0))
-				flb.TopIndex = flb.Items.Count - 1;
-
+			flb.ScrollToBottomIfNoItemsSelected();
 			flb.Refresh();
 		}
 
@@ -386,10 +378,7 @@ namespace YAT.Gui.Controls
 				foreach (Domain.DisplayElement element in line)
 					AddElementToListBox(element);
 
-			// Scroll list to bottom
-			if ((flb.SelectedItems.Count == 0) && (flb.Items.Count > 0))
-				flb.TopIndex = flb.Items.Count - 1;
-
+			flb.ScrollToBottomIfNoItemsSelected();
 			flb.EndUpdate();
 		}
 
@@ -585,6 +574,10 @@ namespace YAT.Gui.Controls
 #endif
 
 		/// <remarks>
+		///
+		/// ListBox
+		/// -------
+		///
 		/// Whether we like it or not, <see cref="System.Windows.Forms.ListBox.OnDrawItem()"/> calls
 		/// this method pretty often. Actually it's called twice each time a new line is added. In
 		/// addition, another call is needed for the next still empty line. Thus:
@@ -606,6 +599,16 @@ namespace YAT.Gui.Controls
 		/// 1.99.22 with normal drawn => 20% CPU usage
 		/// 
 		/// Double-buffered = true (form and control) doesn't make much difference either...
+		///
+		///
+		/// FastListBox
+		/// -----------
+		///
+		/// Fast and smooth :-)
+		///
+		/// CPU usage is about the same as above, however, FastListBox has no flickering at all
+		/// whereas the standard ListBox has.
+		///
 		/// </remarks>
 		private void listBox_Monitor_DrawItem(object sender, DrawItemEventArgs e)
 		{
@@ -702,13 +705,16 @@ namespace YAT.Gui.Controls
 
 		private void SetFormatDependentControls()
 		{
-			fastListBox_Monitor.BeginUpdate();
+			FastListBox flb = fastListBox_Monitor;
 
-			fastListBox_Monitor.Font = _formatSettings.Font;
-			fastListBox_Monitor.ItemHeight = _formatSettings.Font.Height;
-			fastListBox_Monitor.Invalidate();
+			flb.BeginUpdate();
 
-			fastListBox_Monitor.EndUpdate();
+			flb.Font = _formatSettings.Font;
+			flb.ItemHeight = _formatSettings.Font.Height;
+			flb.ScrollToBottomIfNoItemsSelected();
+			flb.Invalidate();
+
+			flb.EndUpdate();
 		}
 
 		private void SetCharReplaceDependentControls()

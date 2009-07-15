@@ -30,8 +30,6 @@ namespace YAT.Gui.Forms
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Terminal));
-			YAT.Model.Types.Command command1 = new YAT.Model.Types.Command();
-			YAT.Model.Types.Command command2 = new YAT.Model.Types.Command();
 			this.timer_Status = new System.Windows.Forms.Timer(this.components);
 			this.contextMenuStrip_Monitor = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem_MonitorContextMenu_Radix = new System.Windows.Forms.ToolStripMenuItem();
@@ -1877,7 +1875,6 @@ namespace YAT.Gui.Forms
 			this.predefined.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.predefined.Location = new System.Drawing.Point(3, 22);
 			this.predefined.Name = "predefined";
-			this.predefined.Pages = null;
 			this.predefined.Size = new System.Drawing.Size(162, 363);
 			this.predefined.TabIndex = 0;
 			this.predefined.SelectedPageChanged += new System.EventHandler(this.predefined_SelectedPageChanged);
@@ -1896,30 +1893,8 @@ namespace YAT.Gui.Forms
 			// 
 			// send
 			// 
-			command1.CommandLines = new string[] {
-        "<1 lines...> []"};
-			command1.DefaultRadix = YAT.Domain.Radix.String;
-			command1.Description = "<1 lines...> []";
-			command1.FilePath = "";
-			command1.IsDefined = true;
-			command1.IsFilePath = false;
-			command1.MultiLineCommand = new string[] {
-        "<1 lines...> []"};
-			command1.SingleLineCommand = "<1 lines...> []";
-			this.send.Command = command1;
 			this.send.ContextMenuStrip = this.contextMenuStrip_Send;
 			this.send.Dock = System.Windows.Forms.DockStyle.Fill;
-			command2.CommandLines = new string[] {
-        "<1 lines...> []"};
-			command2.DefaultRadix = YAT.Domain.Radix.String;
-			command2.Description = "<1 lines...> []";
-			command2.FilePath = "";
-			command2.IsDefined = true;
-			command2.IsFilePath = false;
-			command2.MultiLineCommand = new string[] {
-        "<1 lines...> []"};
-			command2.SingleLineCommand = "<1 lines...> []";
-			this.send.FileCommand = command2;
 			this.send.Location = new System.Drawing.Point(3, 0);
 			this.send.Name = "send";
 			this.send.Size = new System.Drawing.Size(706, 94);
@@ -1935,12 +1910,12 @@ namespace YAT.Gui.Forms
 			// 
 			// Terminal
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(712, 513);
 			this.Controls.Add(this.splitContainer_Terminal);
 			this.Controls.Add(this.menuStrip_Terminal);
 			this.Controls.Add(this.statusStrip_Terminal);
-			this.DoubleBuffered = true;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "Terminal";
 			this.Text = "Terminal";
