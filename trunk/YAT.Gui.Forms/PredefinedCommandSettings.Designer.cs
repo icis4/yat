@@ -58,7 +58,6 @@ namespace YAT.Gui.Forms
 			this.label_predefinedCommandSettingsSet_2 = new System.Windows.Forms.Label();
 			this.label_ExampleBinary_Description = new System.Windows.Forms.Label();
 			this.label_ExampleBinary_Data = new System.Windows.Forms.Label();
-			this.label_ExampleBinary = new System.Windows.Forms.Label();
 			this.label_predefinedCommandSettingsSet_1 = new System.Windows.Forms.Label();
 			this.label_Delete = new System.Windows.Forms.Label();
 			this.label_Shortcut = new System.Windows.Forms.Label();
@@ -66,7 +65,7 @@ namespace YAT.Gui.Forms
 			this.label_Description = new System.Windows.Forms.Label();
 			this.label_ExampleText_Description = new System.Windows.Forms.Label();
 			this.label_ExampleText_Data = new System.Windows.Forms.Label();
-			this.label_ExampleText = new System.Windows.Forms.Label();
+			this.label_Example = new System.Windows.Forms.Label();
 			this.button_Help = new System.Windows.Forms.Button();
 			this.groupBox_Predefined = new System.Windows.Forms.GroupBox();
 			this.groupBox_Pages = new System.Windows.Forms.GroupBox();
@@ -88,7 +87,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.button_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_OK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_OK.Location = new System.Drawing.Point(620, 478);
+			this.button_OK.Location = new System.Drawing.Point(617, 442);
 			this.button_OK.Name = "button_OK";
 			this.button_OK.Size = new System.Drawing.Size(75, 23);
 			this.button_OK.TabIndex = 1;
@@ -99,7 +98,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.button_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.button_Cancel.Location = new System.Drawing.Point(701, 478);
+			this.button_Cancel.Location = new System.Drawing.Point(698, 442);
 			this.button_Cancel.Name = "button_Cancel";
 			this.button_Cancel.Size = new System.Drawing.Size(75, 23);
 			this.button_Cancel.TabIndex = 2;
@@ -108,12 +107,11 @@ namespace YAT.Gui.Forms
 			// 
 			// button_ClearPage
 			// 
-			this.button_ClearPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.button_ClearPage.Location = new System.Drawing.Point(347, 369);
+			this.button_ClearPage.Location = new System.Drawing.Point(536, 354);
 			this.button_ClearPage.Name = "button_ClearPage";
-			this.button_ClearPage.Size = new System.Drawing.Size(120, 23);
-			this.button_ClearPage.TabIndex = 35;
-			this.button_ClearPage.Text = "&Clear All Commands...";
+			this.button_ClearPage.Size = new System.Drawing.Size(75, 23);
+			this.button_ClearPage.TabIndex = 34;
+			this.button_ClearPage.Text = "Dele&te All...";
 			this.button_ClearPage.Click += new System.EventHandler(this.button_ClearPage_Click);
 			// 
 			// groupBox_Page
@@ -148,7 +146,6 @@ namespace YAT.Gui.Forms
 			this.groupBox_Page.Controls.Add(this.label_predefinedCommandSettingsSet_2);
 			this.groupBox_Page.Controls.Add(this.label_ExampleBinary_Description);
 			this.groupBox_Page.Controls.Add(this.label_ExampleBinary_Data);
-			this.groupBox_Page.Controls.Add(this.label_ExampleBinary);
 			this.groupBox_Page.Controls.Add(this.label_predefinedCommandSettingsSet_1);
 			this.groupBox_Page.Controls.Add(this.label_Delete);
 			this.groupBox_Page.Controls.Add(this.label_Shortcut);
@@ -156,10 +153,10 @@ namespace YAT.Gui.Forms
 			this.groupBox_Page.Controls.Add(this.label_Description);
 			this.groupBox_Page.Controls.Add(this.label_ExampleText_Description);
 			this.groupBox_Page.Controls.Add(this.label_ExampleText_Data);
-			this.groupBox_Page.Controls.Add(this.label_ExampleText);
+			this.groupBox_Page.Controls.Add(this.label_Example);
 			this.groupBox_Page.Location = new System.Drawing.Point(231, 16);
 			this.groupBox_Page.Name = "groupBox_Page";
-			this.groupBox_Page.Size = new System.Drawing.Size(620, 428);
+			this.groupBox_Page.Size = new System.Drawing.Size(620, 392);
 			this.groupBox_Page.TabIndex = 1;
 			this.groupBox_Page.TabStop = false;
 			this.groupBox_Page.Text = "<Page>";
@@ -310,10 +307,10 @@ namespace YAT.Gui.Forms
 			// label_File
 			// 
 			this.label_File.AutoSize = true;
-			this.label_File.Location = new System.Drawing.Point(473, 16);
+			this.label_File.Location = new System.Drawing.Point(6, 16);
 			this.label_File.Name = "label_File";
 			this.label_File.Size = new System.Drawing.Size(48, 13);
-			this.label_File.TabIndex = 2;
+			this.label_File.TabIndex = 0;
 			this.label_File.Text = "Use File:";
 			this.label_File.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -418,9 +415,8 @@ namespace YAT.Gui.Forms
 			// 
 			// label_ExampleBinary_Description
 			// 
-			this.label_ExampleBinary_Description.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_ExampleBinary_Description.AutoSize = true;
-			this.label_ExampleBinary_Description.Location = new System.Drawing.Point(60, 402);
+			this.label_ExampleBinary_Description.Location = new System.Drawing.Point(402, 368);
 			this.label_ExampleBinary_Description.Name = "label_ExampleBinary_Description";
 			this.label_ExampleBinary_Description.Size = new System.Drawing.Size(72, 13);
 			this.label_ExampleBinary_Description.TabIndex = 33;
@@ -428,23 +424,12 @@ namespace YAT.Gui.Forms
 			// 
 			// label_ExampleBinary_Data
 			// 
-			this.label_ExampleBinary_Data.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_ExampleBinary_Data.AutoSize = true;
-			this.label_ExampleBinary_Data.Location = new System.Drawing.Point(186, 402);
+			this.label_ExampleBinary_Data.Location = new System.Drawing.Point(67, 368);
 			this.label_ExampleBinary_Data.Name = "label_ExampleBinary_Data";
 			this.label_ExampleBinary_Data.Size = new System.Drawing.Size(66, 13);
-			this.label_ExampleBinary_Data.TabIndex = 34;
+			this.label_ExampleBinary_Data.TabIndex = 32;
 			this.label_ExampleBinary_Data.Text = "\\h(52 53 54)";
-			// 
-			// label_ExampleBinary
-			// 
-			this.label_ExampleBinary.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label_ExampleBinary.AutoSize = true;
-			this.label_ExampleBinary.Location = new System.Drawing.Point(6, 386);
-			this.label_ExampleBinary.Name = "label_ExampleBinary";
-			this.label_ExampleBinary.Size = new System.Drawing.Size(82, 13);
-			this.label_ExampleBinary.TabIndex = 32;
-			this.label_ExampleBinary.Text = "Binary Example:";
 			// 
 			// label_predefinedCommandSettingsSet_1
 			// 
@@ -478,7 +463,7 @@ namespace YAT.Gui.Forms
 			// label_Data
 			// 
 			this.label_Data.AutoSize = true;
-			this.label_Data.Location = new System.Drawing.Point(153, 16);
+			this.label_Data.Location = new System.Drawing.Point(54, 16);
 			this.label_Data.Name = "label_Data";
 			this.label_Data.Size = new System.Drawing.Size(78, 13);
 			this.label_Data.TabIndex = 1;
@@ -488,47 +473,44 @@ namespace YAT.Gui.Forms
 			// label_Description
 			// 
 			this.label_Description.AutoSize = true;
-			this.label_Description.Location = new System.Drawing.Point(27, 16);
+			this.label_Description.Location = new System.Drawing.Point(402, 16);
 			this.label_Description.Name = "label_Description";
 			this.label_Description.Size = new System.Drawing.Size(63, 13);
-			this.label_Description.TabIndex = 0;
+			this.label_Description.TabIndex = 2;
 			this.label_Description.Text = "Description:";
 			this.label_Description.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label_ExampleText_Description
 			// 
-			this.label_ExampleText_Description.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_ExampleText_Description.AutoSize = true;
-			this.label_ExampleText_Description.Location = new System.Drawing.Point(30, 364);
+			this.label_ExampleText_Description.Location = new System.Drawing.Point(402, 350);
 			this.label_ExampleText_Description.Name = "label_ExampleText_Description";
 			this.label_ExampleText_Description.Size = new System.Drawing.Size(72, 13);
-			this.label_ExampleText_Description.TabIndex = 30;
+			this.label_ExampleText_Description.TabIndex = 31;
 			this.label_ExampleText_Description.Text = "Reset Device";
 			// 
 			// label_ExampleText_Data
 			// 
-			this.label_ExampleText_Data.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_ExampleText_Data.AutoSize = true;
-			this.label_ExampleText_Data.Location = new System.Drawing.Point(156, 364);
+			this.label_ExampleText_Data.Location = new System.Drawing.Point(67, 350);
 			this.label_ExampleText_Data.Name = "label_ExampleText_Data";
 			this.label_ExampleText_Data.Size = new System.Drawing.Size(29, 13);
-			this.label_ExampleText_Data.TabIndex = 31;
+			this.label_ExampleText_Data.TabIndex = 30;
 			this.label_ExampleText_Data.Text = "RST";
 			// 
-			// label_ExampleText
+			// label_Example
 			// 
-			this.label_ExampleText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label_ExampleText.AutoSize = true;
-			this.label_ExampleText.Location = new System.Drawing.Point(6, 348);
-			this.label_ExampleText.Name = "label_ExampleText";
-			this.label_ExampleText.Size = new System.Drawing.Size(74, 13);
-			this.label_ExampleText.TabIndex = 29;
-			this.label_ExampleText.Text = "Text Example:";
+			this.label_Example.AutoSize = true;
+			this.label_Example.Location = new System.Drawing.Point(6, 359);
+			this.label_Example.Name = "label_Example";
+			this.label_Example.Size = new System.Drawing.Size(55, 13);
+			this.label_Example.TabIndex = 29;
+			this.label_Example.Text = "Examples:";
 			// 
 			// button_Help
 			// 
 			this.button_Help.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_Help.Location = new System.Drawing.Point(782, 478);
+			this.button_Help.Location = new System.Drawing.Point(779, 442);
 			this.button_Help.Name = "button_Help";
 			this.button_Help.Size = new System.Drawing.Size(75, 23);
 			this.button_Help.TabIndex = 3;
@@ -544,7 +526,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_Predefined.Controls.Add(this.groupBox_Page);
 			this.groupBox_Predefined.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Predefined.Name = "groupBox_Predefined";
-			this.groupBox_Predefined.Size = new System.Drawing.Size(857, 451);
+			this.groupBox_Predefined.Size = new System.Drawing.Size(857, 415);
 			this.groupBox_Predefined.TabIndex = 0;
 			this.groupBox_Predefined.TabStop = false;
 			// 
@@ -563,7 +545,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_Pages.Controls.Add(this.button_NamePage);
 			this.groupBox_Pages.Location = new System.Drawing.Point(6, 16);
 			this.groupBox_Pages.Name = "groupBox_Pages";
-			this.groupBox_Pages.Size = new System.Drawing.Size(219, 428);
+			this.groupBox_Pages.Size = new System.Drawing.Size(219, 392);
 			this.groupBox_Pages.TabIndex = 0;
 			this.groupBox_Pages.TabStop = false;
 			this.groupBox_Pages.Text = "&Pages";
@@ -579,8 +561,6 @@ namespace YAT.Gui.Forms
 			// 
 			// listBox_Pages
 			// 
-			this.listBox_Pages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)));
 			this.listBox_Pages.FormattingEnabled = true;
 			this.listBox_Pages.HorizontalScrollbar = true;
 			this.listBox_Pages.Location = new System.Drawing.Point(12, 32);
@@ -591,17 +571,15 @@ namespace YAT.Gui.Forms
 			// 
 			// button_DeletePages
 			// 
-			this.button_DeletePages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.button_DeletePages.Location = new System.Drawing.Point(12, 369);
+			this.button_DeletePages.Location = new System.Drawing.Point(12, 354);
 			this.button_DeletePages.Name = "button_DeletePages";
 			this.button_DeletePages.Size = new System.Drawing.Size(120, 23);
 			this.button_DeletePages.TabIndex = 8;
-			this.button_DeletePages.Text = "Delete A&ll Pages...";
+			this.button_DeletePages.Text = "De&lete All Pages...";
 			this.button_DeletePages.Click += new System.EventHandler(this.button_DeletePages_Click);
 			// 
 			// button_MovePageUp
 			// 
-			this.button_MovePageUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.button_MovePageUp.Location = new System.Drawing.Point(138, 284);
 			this.button_MovePageUp.Name = "button_MovePageUp";
 			this.button_MovePageUp.Size = new System.Drawing.Size(75, 23);
@@ -611,7 +589,6 @@ namespace YAT.Gui.Forms
 			// 
 			// button_MovePageDown
 			// 
-			this.button_MovePageDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.button_MovePageDown.Location = new System.Drawing.Point(138, 313);
 			this.button_MovePageDown.Name = "button_MovePageDown";
 			this.button_MovePageDown.Size = new System.Drawing.Size(75, 23);
@@ -661,7 +638,7 @@ namespace YAT.Gui.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(881, 514);
+			this.ClientSize = new System.Drawing.Size(881, 478);
 			this.Controls.Add(this.groupBox_Predefined);
 			this.Controls.Add(this.button_Help);
 			this.Controls.Add(this.button_Cancel);
@@ -688,10 +665,9 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.Label label_Data;
 		private System.Windows.Forms.Label label_Shortcut;
 		private System.Windows.Forms.Label label_File;
-		private System.Windows.Forms.Label label_ExampleText;
+		private System.Windows.Forms.Label label_Example;
 		private System.Windows.Forms.Label label_ExampleText_Description;
 		private System.Windows.Forms.Label label_ExampleText_Data;
-		private System.Windows.Forms.Label label_ExampleBinary;
 		private System.Windows.Forms.Label label_ExampleBinary_Description;
 		private System.Windows.Forms.Label label_ExampleBinary_Data;
 		private System.Windows.Forms.Label label_predefinedCommandSettingsSet_1;

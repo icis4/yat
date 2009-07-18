@@ -60,9 +60,9 @@ namespace YAT.Gui.Forms
 			this.checkBox_ShowLength = new System.Windows.Forms.CheckBox();
 			this.comboBox_TxRadix = new System.Windows.Forms.ComboBox();
 			this.label_TxRadix = new System.Windows.Forms.Label();
-			this.label_MaximalLineCountUnit = new System.Windows.Forms.Label();
-			this.textBox_MaximalLineCount = new System.Windows.Forms.TextBox();
-			this.label_MaximalLineCount = new System.Windows.Forms.Label();
+			this.label_MaxLineCountUnit = new System.Windows.Forms.Label();
+			this.textBox_MaxLineCount = new System.Windows.Forms.TextBox();
+			this.label_MaxLineCount = new System.Windows.Forms.Label();
 			this.groupBox_Settings.SuspendLayout();
 			this.groupBox_CommunicationSettings.SuspendLayout();
 			this.groupBox_ReceiveSettings.SuspendLayout();
@@ -246,9 +246,9 @@ namespace YAT.Gui.Forms
 			this.groupBox_DisplaySettings.Controls.Add(this.checkBox_ShowLength);
 			this.groupBox_DisplaySettings.Controls.Add(this.comboBox_TxRadix);
 			this.groupBox_DisplaySettings.Controls.Add(this.label_TxRadix);
-			this.groupBox_DisplaySettings.Controls.Add(this.label_MaximalLineCountUnit);
-			this.groupBox_DisplaySettings.Controls.Add(this.textBox_MaximalLineCount);
-			this.groupBox_DisplaySettings.Controls.Add(this.label_MaximalLineCount);
+			this.groupBox_DisplaySettings.Controls.Add(this.label_MaxLineCountUnit);
+			this.groupBox_DisplaySettings.Controls.Add(this.textBox_MaxLineCount);
+			this.groupBox_DisplaySettings.Controls.Add(this.label_MaxLineCount);
 			this.groupBox_DisplaySettings.Location = new System.Drawing.Point(6, 13);
 			this.groupBox_DisplaySettings.Name = "groupBox_DisplaySettings";
 			this.groupBox_DisplaySettings.Size = new System.Drawing.Size(263, 319);
@@ -434,35 +434,35 @@ namespace YAT.Gui.Forms
 			this.label_TxRadix.TabIndex = 0;
 			this.label_TxRadix.Text = "R&adix:";
 			// 
-			// label_MaximalLineCountUnit
+			// label_MaxLineCountUnit
 			// 
-			this.label_MaximalLineCountUnit.AutoSize = true;
-			this.label_MaximalLineCountUnit.Location = new System.Drawing.Point(148, 167);
-			this.label_MaximalLineCountUnit.Name = "label_MaximalLineCountUnit";
-			this.label_MaximalLineCountUnit.Size = new System.Drawing.Size(28, 13);
-			this.label_MaximalLineCountUnit.TabIndex = 12;
-			this.label_MaximalLineCountUnit.Text = "lines";
-			this.label_MaximalLineCountUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label_MaxLineCountUnit.AutoSize = true;
+			this.label_MaxLineCountUnit.Location = new System.Drawing.Point(148, 167);
+			this.label_MaxLineCountUnit.Name = "label_MaxLineCountUnit";
+			this.label_MaxLineCountUnit.Size = new System.Drawing.Size(28, 13);
+			this.label_MaxLineCountUnit.TabIndex = 12;
+			this.label_MaxLineCountUnit.Text = "lines";
+			this.label_MaxLineCountUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// textBox_MaximalLineCount
+			// textBox_MaxLineCount
 			// 
-			this.textBox_MaximalLineCount.Location = new System.Drawing.Point(92, 164);
-			this.textBox_MaximalLineCount.Name = "textBox_MaximalLineCount";
-			this.textBox_MaximalLineCount.Size = new System.Drawing.Size(50, 20);
-			this.textBox_MaximalLineCount.TabIndex = 11;
-			this.textBox_MaximalLineCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.textBox_MaximalLineCount.TextChanged += new System.EventHandler(this.textBox_MaximalLineCount_TextChanged);
-			this.textBox_MaximalLineCount.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_MaximalLineCount_Validating);
+			this.textBox_MaxLineCount.Location = new System.Drawing.Point(92, 164);
+			this.textBox_MaxLineCount.Name = "textBox_MaxLineCount";
+			this.textBox_MaxLineCount.Size = new System.Drawing.Size(50, 20);
+			this.textBox_MaxLineCount.TabIndex = 11;
+			this.textBox_MaxLineCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.textBox_MaxLineCount.TextChanged += new System.EventHandler(this.textBox_MaxLineCount_TextChanged);
+			this.textBox_MaxLineCount.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_MaxLineCount_Validating);
 			// 
-			// label_MaximalLineCount
+			// label_MaxLineCount
 			// 
-			this.label_MaximalLineCount.AutoSize = true;
-			this.label_MaximalLineCount.Location = new System.Drawing.Point(9, 167);
-			this.label_MaximalLineCount.Name = "label_MaximalLineCount";
-			this.label_MaximalLineCount.Size = new System.Drawing.Size(81, 13);
-			this.label_MaximalLineCount.TabIndex = 10;
-			this.label_MaximalLineCount.Text = "Display &maximal";
-			this.label_MaximalLineCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label_MaxLineCount.AutoSize = true;
+			this.label_MaxLineCount.Location = new System.Drawing.Point(9, 167);
+			this.label_MaxLineCount.Name = "label_MaxLineCount";
+			this.label_MaxLineCount.Size = new System.Drawing.Size(81, 13);
+			this.label_MaxLineCount.TabIndex = 10;
+			this.label_MaxLineCount.Text = "Display &maximal";
+			this.label_MaxLineCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// AdvancedTerminalSettings
 			// 
@@ -510,9 +510,9 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.GroupBox groupBox_DisplaySettings;
 		private System.Windows.Forms.GroupBox groupBox_ReceiveSettings;
 		private System.Windows.Forms.TextBox textBox_ParityReplacement;
-		private System.Windows.Forms.Label label_MaximalLineCountUnit;
-		private System.Windows.Forms.TextBox textBox_MaximalLineCount;
-		private System.Windows.Forms.Label label_MaximalLineCount;
+		private System.Windows.Forms.Label label_MaxLineCountUnit;
+		private System.Windows.Forms.TextBox textBox_MaxLineCount;
+		private System.Windows.Forms.Label label_MaxLineCount;
 		private System.Windows.Forms.CheckBox checkBox_KeepCommand;
 		private System.Windows.Forms.Label label_ParityReplacementExample;
 		private System.Windows.Forms.CheckBox checkBox_ShowTimeStamp;

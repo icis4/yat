@@ -14,6 +14,21 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+//==================================================================================================
+// Configuration
+//==================================================================================================
+
+// Choose whether SerialPort should automatically detect and handle live disconnects/reconnects:
+// - Uncomment to enable
+// - Comment out to disable
+// \fixme Auto-reopen doesn't work because of deadlock issue mentioned below.
+//#define DETECT_BREAKS_AND_TRY_AUTO_REOPEN
+
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,6 +36,8 @@ using System.Threading;
 using System.ComponentModel;
 
 using MKY.Utilities.Event;
+
+#endregion
 
 // The MKY.IO.Serial namespace combines serial port and socket infrastructure. This code is
 // intentionally placed into the MKY.IO.Serial namespace even though the file is located in
@@ -148,6 +165,11 @@ namespace MKY.IO.Serial
 		/// </summary>
 		private System.Timers.Timer _aliveTimer;
 		private System.Timers.Timer _reopenTimer;
+
+	#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
+		private bool _isInternalStopRequest = false;
+	#endif
+		private ReaderWriterLockSlim _isInternalStopRequestLock = new ReaderWriterLockSlim();
 
 		#endregion
 
@@ -349,11 +371,18 @@ namespace MKY.IO.Serial
 
 			if (IsStarted)
 			{
-				// \fixme Auto-reopen doesn't work because of deadlock issue mentioned above.
-				//if (_isInternalStopRequest && _settings.AutoReopen.Enabled)
-				//	ClosePortAndStartReopenTimer();
-				//else
+			#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
+				_isInternalStopRequestLock.EnterReadLock();
+				bool isInternalStopRequest = _isInternalStopRequest;
+				_isInternalStopRequestLock.ExitReadLock();
+
+				if (isInternalStopRequest && _settings.AutoReopen.Enabled)
+					ClosePortAndStartReopenTimer();
+				else
 					ResetPort();
+			#else
+					ResetPort();
+			#endif
 			}
 		}
 
@@ -559,8 +588,8 @@ namespace MKY.IO.Serial
 			OnIOControlChanged(new EventArgs());
 		}
 
-		// \fixme Auto-reopen doesn't work because of deadlock issue mentioned above.
-		/*/// <summary></summary>
+	#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
+		/// <summary></summary>
 		private void StopOrClosePort()
 		{
 			if (_settings.AutoReopen.Enabled)
@@ -581,7 +610,8 @@ namespace MKY.IO.Serial
 			{
 				Stop();
 			}
-		}*/
+		}
+	#endif // DETECT_BREAKS_AND_TRY_AUTO_REOPEN
 
 		/// <summary></summary>
 		private void ClosePortAndStartReopenTimer()
@@ -703,8 +733,10 @@ namespace MKY.IO.Serial
 			catch
 			{
 				OnIORequest(new IORequestEventArgs(Serial.IORequest.Close));
-				// \fixme Auto-reopen doesn't work because of deadlock issue mentioned above.
-				//StopOrClosePort();
+
+			#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
+				StopOrClosePort();
+			#endif
 			}
 		}
 
@@ -782,8 +814,10 @@ namespace MKY.IO.Serial
 					if (!_port.IsOpen)
 					{
 						OnIORequest(new IORequestEventArgs(Serial.IORequest.Close));
-						// \fixme Auto-reopen doesn't work because of deadlock issue mentioned above.
-						//StopOrClosePort();
+
+					#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
+						StopOrClosePort();
+					#endif
 					}
 #if (FALSE)
 					// \fixme break state detection doesn't work
@@ -800,8 +834,10 @@ namespace MKY.IO.Serial
 				catch
 				{
 					OnIORequest(new IORequestEventArgs(Serial.IORequest.Close));
-					// \fixme Auto-reopen doesn't work because of deadlock issue mentioned above.
-					//StopOrClosePort();
+
+				#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
+					StopOrClosePort();
+				#endif
 				}
 			}
 			else
@@ -846,8 +882,10 @@ namespace MKY.IO.Serial
 				{
 					// try to re-open port
 					OnIORequest(new IORequestEventArgs(Serial.IORequest.Open));
-					// \fixme Auto-reopen doesn't work because of deadlock issue mentioned above.
-					//CreateAndOpenPort();
+
+				#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
+					CreateAndOpenPort();
+				#endif
 				}
 				catch
 				{
@@ -887,9 +925,14 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected virtual void OnIORequest(IORequestEventArgs e)
 		{
-			// \fixme Auto-reopen doesn't work because of deadlock issue mentioned above.
-			//if (e.Request == Serial.IORequest.Close)
-			//	_isInternalStopRequest = true;
+		#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
+			if (e.Request == Serial.IORequest.Close)
+			{
+				_isInternalStopRequestLock.EnterWriteLock();
+				_isInternalStopRequest = true;
+				_isInternalStopRequestLock.ExitWriteLock();
+			}
+		#endif
 
 			EventHelper.FireSync<IORequestEventArgs>(IORequest, this, e);
 		}

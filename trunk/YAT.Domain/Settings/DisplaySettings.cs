@@ -49,8 +49,8 @@ namespace YAT.Domain.Settings
 		private bool _showLength;
 		private bool _showConnectTime;
 		private bool _showCounters;
-		private int _txMaximalLineCount;
-		private int _rxMaximalLineCount;
+		private int _txMaxLineCount;
+		private int _rxMaxLineCount;
 		private bool _directionLineBreakEnabled;
 
 		/// <summary></summary>
@@ -82,8 +82,8 @@ namespace YAT.Domain.Settings
 			_showLength         = rhs.ShowLength;
 			_showConnectTime    = rhs.ShowConnectTime;
 			_showCounters       = rhs.ShowCounters;
-			_txMaximalLineCount = rhs.TxMaximalLineCount;
-			_rxMaximalLineCount = rhs.RxMaximalLineCount;
+			_txMaxLineCount = rhs.TxMaxLineCount;
+			_rxMaxLineCount = rhs.RxMaxLineCount;
 			_directionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
 
 			ClearChanged();
@@ -101,8 +101,8 @@ namespace YAT.Domain.Settings
 			ShowLength         = ShowLengthDefault;
 			ShowConnectTime    = ShowConnectTimeDefault;
 			ShowCounters       = ShowCountersDefault;
-			TxMaximalLineCount = MaxLineCountDefault;
-			RxMaximalLineCount = MaxLineCountDefault;
+			TxMaxLineCount = MaxLineCountDefault;
+			RxMaxLineCount = MaxLineCountDefault;
 			DirectionLineBreakEnabled = DirectionLineBreakEnabledDefault;
 		}
 
@@ -223,30 +223,36 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("TxMaximalLineCount")]
-		public int TxMaximalLineCount
+		[XmlElement("TxMaxLineCount")]
+		public int TxMaxLineCount
 		{
-			get { return (_txMaximalLineCount); }
+			get { return (_txMaxLineCount); }
 			set
 			{
-				if (_txMaximalLineCount != value)
+				if (_txMaxLineCount != value)
 				{
-					_txMaximalLineCount = value;
+					if (value < 1)
+						throw (new ArgumentOutOfRangeException("TxMaxLineCount", "Line count must at least be 1"));
+
+					_txMaxLineCount = value;
 					SetChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("RxMaximalLineCount")]
-		public int RxMaximalLineCount
+		[XmlElement("RxMaxLineCount")]
+		public int RxMaxLineCount
 		{
-			get { return (_rxMaximalLineCount); }
+			get { return (_rxMaxLineCount); }
 			set
 			{
-				if (_rxMaximalLineCount != value)
+				if (_rxMaxLineCount != value)
 				{
-					_rxMaximalLineCount = value;
+					if (value < 1)
+						throw (new ArgumentOutOfRangeException("RxMaxLineCount", "Line count must at least be 1"));
+
+					_rxMaxLineCount = value;
 					SetChanged();
 				}
 			}
@@ -254,9 +260,9 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public int BidirMaximalLineCount
+		public int BidirMaxLineCount
 		{
-			get { return (TxMaximalLineCount + RxMaximalLineCount); }
+			get { return (TxMaxLineCount + RxMaxLineCount); }
 		}
 
 		/// <summary></summary>
@@ -306,8 +312,8 @@ namespace YAT.Domain.Settings
 					_showLength.Equals         (value._showLength) &&
 					_showConnectTime.Equals    (value._showConnectTime) &&
 					_showCounters.Equals       (value._showCounters) &&
-					_txMaximalLineCount.Equals (value._txMaximalLineCount) &&
-					_rxMaximalLineCount.Equals (value._rxMaximalLineCount) &&
+					_txMaxLineCount.Equals (value._txMaxLineCount) &&
+					_rxMaxLineCount.Equals (value._rxMaxLineCount) &&
 					_directionLineBreakEnabled.Equals(value._directionLineBreakEnabled)
 					);
 			}

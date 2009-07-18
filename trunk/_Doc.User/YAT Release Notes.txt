@@ -43,6 +43,9 @@ YAT 2.0
 YAT 2.0 Beta 3 Candidate 1 Version 1.99.2x :: 2009-08-xx
 --------------------------------------------------------
 
+New:
+- Select all/none items in monitor (feature request #2455810)
+
 Important changes:
 - Flickering eliminated by implementing a speed optimized list box (bug #2813227)
 - Update to .NET 3.5 SP1 (feature request #2813235)

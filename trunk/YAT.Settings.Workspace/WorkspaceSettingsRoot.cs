@@ -123,6 +123,7 @@ namespace YAT.Settings.Workspace
 		// Property Shortcuts
 		//------------------------------------------------------------------------------------------
 
+		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public GuidList<TerminalSettingsItem> TerminalSettings
 		{

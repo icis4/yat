@@ -362,8 +362,8 @@ namespace YAT.Gui.Forms
 				_settings_Form.Display.ShowCounters = f.SettingsResult.Display.ShowCounters;
 
 				_settings_Form.Display.DirectionLineBreakEnabled = f.SettingsResult.Display.DirectionLineBreakEnabled;
-				_settings_Form.Display.TxMaximalLineCount = f.SettingsResult.Display.TxMaximalLineCount;
-				_settings_Form.Display.RxMaximalLineCount = f.SettingsResult.Display.RxMaximalLineCount;
+				_settings_Form.Display.TxMaxLineCount = f.SettingsResult.Display.TxMaxLineCount;
+				_settings_Form.Display.RxMaxLineCount = f.SettingsResult.Display.RxMaxLineCount;
 
 				_settings_Form.CharReplace.ReplaceControlChars = f.SettingsResult.CharReplace.ReplaceControlChars;
 				_settings_Form.CharReplace.ControlCharRadix = f.SettingsResult.CharReplace.ControlCharRadix;
