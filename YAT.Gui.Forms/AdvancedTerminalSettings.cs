@@ -146,24 +146,24 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void textBox_MaximalLineCount_TextChanged(object sender, EventArgs e)
+		private void textBox_MaxLineCount_TextChanged(object sender, EventArgs e)
 		{
 			int lines;
-			if (int.TryParse(textBox_MaximalLineCount.Text, out lines) && (Math.Abs(lines) == 1))
-				label_MaximalLineCountUnit.Text = "line";
+			if (int.TryParse(textBox_MaxLineCount.Text, out lines) && (Math.Abs(lines) == 1))
+				label_MaxLineCountUnit.Text = "line";
 			else
-				label_MaximalLineCountUnit.Text = "lines";
+				label_MaxLineCountUnit.Text = "lines";
 		}
 
-		private void textBox_MaximalLineCount_Validating(object sender, CancelEventArgs e)
+		private void textBox_MaxLineCount_Validating(object sender, CancelEventArgs e)
 		{
 			if (!_isSettingControls)
 			{
 				int lineCount;
-				if (int.TryParse(textBox_MaximalLineCount.Text, out lineCount) || (lineCount >= 1))
+				if (int.TryParse(textBox_MaxLineCount.Text, out lineCount) && (lineCount >= 1))
 				{
-					_settings_Form.Display.TxMaximalLineCount = lineCount;
-					_settings_Form.Display.RxMaximalLineCount = lineCount;
+					_settings_Form.Display.TxMaxLineCount = lineCount;
+					_settings_Form.Display.RxMaxLineCount = lineCount;
 					SetControls();
 				}
 				else
@@ -344,7 +344,7 @@ namespace YAT.Gui.Forms
 			checkBox_ShowCounters.Checked = _settings_Form.Display.ShowCounters;
 
 			checkBox_DirectionLineBreak.Checked = _settings_Form.Display.DirectionLineBreakEnabled;
-			textBox_MaximalLineCount.Text = _settings_Form.Display.TxMaximalLineCount.ToString();
+			textBox_MaxLineCount.Text = _settings_Form.Display.TxMaxLineCount.ToString();
 
 			// char replace
 			bool replaceControlChars = _settings_Form.CharReplace.ReplaceControlChars;
@@ -386,8 +386,8 @@ namespace YAT.Gui.Forms
 			_settings_Form.Display.ShowCounters = Domain.Settings.DisplaySettings.ShowCountersDefault;
 
 			_settings_Form.Display.DirectionLineBreakEnabled = Domain.Settings.DisplaySettings.DirectionLineBreakEnabledDefault;
-			_settings_Form.Display.TxMaximalLineCount = Domain.Settings.DisplaySettings.MaxLineCountDefault;
-			_settings_Form.Display.RxMaximalLineCount = Domain.Settings.DisplaySettings.MaxLineCountDefault;
+			_settings_Form.Display.TxMaxLineCount = Domain.Settings.DisplaySettings.MaxLineCountDefault;
+			_settings_Form.Display.RxMaxLineCount = Domain.Settings.DisplaySettings.MaxLineCountDefault;
 
 			_settings_Form.CharReplace.ReplaceControlChars = Domain.Settings.CharReplaceSettings.ReplaceControlCharsDefault;
 			_settings_Form.CharReplace.ControlCharRadix = Domain.Settings.CharReplaceSettings.ControlCharRadixDefault;

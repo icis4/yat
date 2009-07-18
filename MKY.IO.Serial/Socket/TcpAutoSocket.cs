@@ -57,9 +57,9 @@ namespace MKY.IO.Serial
 		// Constants
 		//==========================================================================================
 
-		private const int _MaximalStartCycles = 3;
-		private const int _MinimalRestartWaitTime = 50;
-		private const int _MaximalRestartWaitTime = 300;
+		private const int _MaxStartCycles = 3;
+		private const int _MinRestartWaitTime = 50;
+		private const int _MaxRestartWaitTime = 300;
 
 		#endregion
 
@@ -636,12 +636,12 @@ namespace MKY.IO.Serial
 					lock (_startCycleCounterSyncObj)
 					{
 						_startCycleCounter++;
-						if (_startCycleCounter < (_MaximalStartCycles - 1))
+						if (_startCycleCounter < (_MaxStartCycles - 1))
 							tryAgain = true;
 					}
 					if (tryAgain)
 					{
-						Thread.Sleep(_waitRandom.Next(_MinimalRestartWaitTime, _MaximalRestartWaitTime));
+						Thread.Sleep(_waitRandom.Next(_MinRestartWaitTime, _MaxRestartWaitTime));
 						StartConnecting();
 					}
 					else

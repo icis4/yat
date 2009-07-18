@@ -43,10 +43,7 @@ namespace MKY.Utilities.IO
 		/// </summary>
 		public String FilePath
 		{
-			get
-			{
-				return (_filePath);
-			}
+			get { return (_filePath); }
 		}
 
 		/// <summary>
@@ -54,13 +51,7 @@ namespace MKY.Utilities.IO
 		/// </summary>
 		public Stream UnderlyingStream
 		{
-			get
-			{
-				lock (_writer)
-				{
-					return (_writer.BaseStream);
-				}
-			}
+			get { return (_writer.BaseStream); }
 		}
 
 		/// <summary>

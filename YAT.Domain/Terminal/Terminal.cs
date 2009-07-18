@@ -98,9 +98,9 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public Terminal(Settings.TerminalSettings settings)
 		{
-			_txRepository    = new DisplayRepository(settings.Display.TxMaximalLineCount);
-			_bidirRepository = new DisplayRepository(settings.Display.BidirMaximalLineCount);
-			_rxRepository    = new DisplayRepository(settings.Display.RxMaximalLineCount);
+			_txRepository    = new DisplayRepository(settings.Display.TxMaxLineCount);
+			_bidirRepository = new DisplayRepository(settings.Display.BidirMaxLineCount);
+			_rxRepository    = new DisplayRepository(settings.Display.RxMaxLineCount);
 
 			AttachTerminalSettings(settings);
 			AttachRawTerminal(new RawTerminal(_terminalSettings.IO, _terminalSettings.Buffer));
@@ -115,9 +115,9 @@ namespace YAT.Domain
 			_bidirRepository = new DisplayRepository(terminal._bidirRepository);
 			_rxRepository    = new DisplayRepository(terminal._rxRepository);
 
-			_txRepository.Capacity    = settings.Display.TxMaximalLineCount;
-			_bidirRepository.Capacity = settings.Display.BidirMaximalLineCount;
-			_rxRepository.Capacity    = settings.Display.RxMaximalLineCount;
+			_txRepository.Capacity    = settings.Display.TxMaxLineCount;
+			_bidirRepository.Capacity = settings.Display.BidirMaxLineCount;
+			_rxRepository.Capacity    = settings.Display.RxMaxLineCount;
 
 			AttachTerminalSettings(settings);
 			AttachRawTerminal(new RawTerminal(_terminalSettings.IO, _terminalSettings.Buffer, terminal._rawTerminal));
@@ -752,9 +752,9 @@ namespace YAT.Domain
 		{
 			Settings.DisplaySettings s = _terminalSettings.Display;
 
-			_txRepository.Capacity    = s.TxMaximalLineCount;
-			_bidirRepository.Capacity = s.BidirMaximalLineCount;
-			_rxRepository.Capacity    = s.RxMaximalLineCount;
+			_txRepository.Capacity    = s.TxMaxLineCount;
+			_bidirRepository.Capacity = s.BidirMaxLineCount;
+			_rxRepository.Capacity    = s.RxMaxLineCount;
 		}
 
 		#endregion

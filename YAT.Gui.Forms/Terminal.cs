@@ -26,6 +26,7 @@ using System.IO;
 using MKY.Utilities.Event;
 using MKY.Utilities.Recent;
 using MKY.Utilities.Settings;
+using MKY.Utilities.Windows.Forms;
 
 using YAT.Settings;
 using YAT.Settings.Application;
@@ -40,7 +41,7 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		// startup/update
+		// Startup/update
 		private bool _isStartingUp = true;
 		private bool _isSettingControls = false;
 		private bool _isClosingFromForm = false;
@@ -49,14 +50,17 @@ namespace YAT.Gui.Forms
 		// MDI
 		private Form _mdiParent;
 
-		// terminal
+		// Terminal
 		private Model.Terminal _terminal;
 
-		// settings
+		// Monitors
+		private Domain.RepositoryType _monitorSelection = Domain.RepositoryType.None;
+
+		// Settings
 		private TerminalSettingsRoot _settingsRoot;
 		private bool _handlingTerminalSettingsIsSuspended = false;
 
-		// status
+		// Status
 		private const string _DefaultStatusText = "";
 		private const int _TimedStatusInterval = 2000;
 		private const int _RtsLuminescenceInterval = 150;
@@ -289,9 +293,18 @@ namespace YAT.Gui.Forms
 		{
 			_isSettingControls = true;
 
+			// Start/stop
 			bool terminalIsStarted = _terminal.IsStarted;
 			toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = !terminalIsStarted;
-			toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled = terminalIsStarted;
+			toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled  =  terminalIsStarted;
+
+			// Edit
+			bool monitorIsSelected = (_monitorSelection != Domain.RepositoryType.None);
+			toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Enabled       = monitorIsSelected;
+			toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Enabled      = monitorIsSelected;
+			toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Enabled      = monitorIsSelected;
+			toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = monitorIsSelected;
+			toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled           = monitorIsSelected;
 
 			_isSettingControls = false;
 		}
@@ -314,6 +327,33 @@ namespace YAT.Gui.Forms
 		private void toolStripMenuItem_TerminalMenu_Terminal_Clear_Click(object sender, EventArgs e)
 		{
 			ClearAllMonitors();
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Terminal_SelectAll_Click(object sender, EventArgs e)
+		{
+			Controls.Monitor monitor = GetMonitor(_monitorSelection);
+			monitor.SelectAll();
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Terminal_SelectNone_Click(object sender, EventArgs e)
+		{
+			Controls.Monitor monitor = GetMonitor(_monitorSelection);
+			monitor.SelectNone();
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Terminal_SaveToFile_Click(object sender, EventArgs e)
+		{
+			ShowSaveMonitorDialog(GetMonitor(contextMenuStrip_Monitor.SourceControl));
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard_Click(object sender, EventArgs e)
+		{
+			CopyMonitorToClipboard(GetMonitor(_monitorSelection));
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Terminal_Print_Click(object sender, EventArgs e)
+		{
+			ShowPrintMonitorDialog(GetMonitor(_monitorSelection));
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Settings_Click(object sender, EventArgs e)
@@ -431,10 +471,7 @@ namespace YAT.Gui.Forms
 		{
 			_isSettingControls = true;
 
-			toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.Clear();
-			toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.Add(Orientation.Vertical);
-			toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.Add(Orientation.Horizontal);
-			toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedIndex = 0;
+			toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.AddRange(XOrientation.GetItems());
 
 			_isSettingControls = false;
 		}
@@ -458,7 +495,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Enabled = (_settingsRoot.Layout.TxMonitorPanelIsVisible || _settingsRoot.Layout.RxMonitorPanelIsVisible);
 			toolStripMenuItem_TerminalMenu_View_Panels_Rx.Enabled    = (_settingsRoot.Layout.TxMonitorPanelIsVisible || _settingsRoot.Layout.BidirMonitorPanelIsVisible);
 
-			toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem = _settingsRoot.Layout.MonitorOrientation;
+			toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem = (XOrientation)_settingsRoot.Layout.MonitorOrientation;
 
 			toolStripMenuItem_TerminalMenu_View_Panels_SendCommand.Checked = _settingsRoot.Layout.SendCommandPanelIsVisible;
 			toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Checked    = _settingsRoot.Layout.SendFilePanelIsVisible;
@@ -509,7 +546,7 @@ namespace YAT.Gui.Forms
 		private void toolStripComboBox_TerminalMenu_View_Panels_Orientation_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
-				SetMonitorOrientation((Orientation)toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem);
+				SetMonitorOrientation((XOrientation)toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem);
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Panels_Predefined_Click(object sender, EventArgs e)
@@ -631,10 +668,7 @@ namespace YAT.Gui.Forms
 		{
 			_isSettingControls = true;
 
-			toolStripComboBox_MonitorContextMenu_Orientation.Items.Clear();
-			toolStripComboBox_MonitorContextMenu_Orientation.Items.Add(Orientation.Vertical);
-			toolStripComboBox_MonitorContextMenu_Orientation.Items.Add(Orientation.Horizontal);
-			toolStripComboBox_MonitorContextMenu_Orientation.SelectedIndex = 0;
+			toolStripComboBox_MonitorContextMenu_Panels_Orientation.Items.AddRange(XOrientation.GetItems());
 
 			_isSettingControls = false;
 		}
@@ -656,14 +690,34 @@ namespace YAT.Gui.Forms
 			Domain.RepositoryType monitorType = GetMonitorType(contextMenuStrip_Monitor.SourceControl);
 			bool isMonitor = (monitorType != Domain.RepositoryType.None);
 
+			toolStripMenuItem_MonitorContextMenu_Panels_Tx.Checked    = _settingsRoot.Layout.TxMonitorPanelIsVisible;
+			toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Checked = _settingsRoot.Layout.BidirMonitorPanelIsVisible;
+			toolStripMenuItem_MonitorContextMenu_Panels_Rx.Checked    = _settingsRoot.Layout.RxMonitorPanelIsVisible;
+
+			// Disable "Monitor" item if the other monitors are hidden
+			toolStripMenuItem_MonitorContextMenu_Panels_Tx.Enabled    = (_settingsRoot.Layout.BidirMonitorPanelIsVisible || _settingsRoot.Layout.RxMonitorPanelIsVisible);
+			toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Enabled = (_settingsRoot.Layout.TxMonitorPanelIsVisible    || _settingsRoot.Layout.RxMonitorPanelIsVisible);
+			toolStripMenuItem_MonitorContextMenu_Panels_Rx.Enabled    = (_settingsRoot.Layout.TxMonitorPanelIsVisible    || _settingsRoot.Layout.BidirMonitorPanelIsVisible);
+
+			toolStripComboBox_MonitorContextMenu_Panels_Orientation.SelectedItem = (XOrientation)_settingsRoot.Layout.MonitorOrientation;
+
+			// Hide "Hide" item if only this monitor is visible
+			bool hideIsAllowed = false;
+			switch (monitorType)
+			{
+				case Domain.RepositoryType.Tx:    hideIsAllowed = (_settingsRoot.Layout.BidirMonitorPanelIsVisible || _settingsRoot.Layout.RxMonitorPanelIsVisible);    break;
+				case Domain.RepositoryType.Bidir: hideIsAllowed = (_settingsRoot.Layout.TxMonitorPanelIsVisible    || _settingsRoot.Layout.RxMonitorPanelIsVisible);    break;
+				case Domain.RepositoryType.Rx:    hideIsAllowed = (_settingsRoot.Layout.TxMonitorPanelIsVisible    || _settingsRoot.Layout.BidirMonitorPanelIsVisible); break;
+			}
+			toolStripMenuItem_MonitorContextMenu_Hide.Visible = hideIsAllowed;
+			toolStripMenuItem_MonitorContextMenu_Hide.Enabled = isMonitor && hideIsAllowed;
+
 			toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Checked = _settingsRoot.Display.ShowTimeStamp;
 			toolStripMenuItem_MonitorContextMenu_ShowLength.Checked    = _settingsRoot.Display.ShowLength;
 
 			bool isText = (terminalType == Domain.TerminalType.Text);
 			toolStripMenuItem_MonitorContextMenu_ShowEol.Enabled = isText;
 			toolStripMenuItem_MonitorContextMenu_ShowEol.Checked = isText && _settingsRoot.TextTerminal.ShowEol;
-
-			toolStripMenuItem_MonitorContextMenu_Clear.Enabled = isMonitor;
 
 			bool showConnectTime = _settingsRoot.Display.ShowConnectTime;
 			toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Checked    = showConnectTime;
@@ -673,31 +727,47 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_MonitorContextMenu_ShowCounters.Checked  = showCounters;
 			toolStripMenuItem_MonitorContextMenu_ResetCounters.Enabled = showCounters;
 
-			toolStripMenuItem_MonitorContextMenu_Panels_Tx.Checked    = _settingsRoot.Layout.TxMonitorPanelIsVisible;
-			toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Checked = _settingsRoot.Layout.BidirMonitorPanelIsVisible;
-			toolStripMenuItem_MonitorContextMenu_Panels_Rx.Checked    = _settingsRoot.Layout.RxMonitorPanelIsVisible;
+			toolStripMenuItem_MonitorContextMenu_Clear.Enabled = isMonitor;
 
-			// disable "Monitor" item if the other monitors are hidden
-			toolStripMenuItem_MonitorContextMenu_Panels_Tx.Enabled    = (_settingsRoot.Layout.BidirMonitorPanelIsVisible || _settingsRoot.Layout.RxMonitorPanelIsVisible);
-			toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Enabled = (_settingsRoot.Layout.TxMonitorPanelIsVisible || _settingsRoot.Layout.RxMonitorPanelIsVisible);
-			toolStripMenuItem_MonitorContextMenu_Panels_Rx.Enabled    = (_settingsRoot.Layout.TxMonitorPanelIsVisible || _settingsRoot.Layout.BidirMonitorPanelIsVisible);
+			toolStripMenuItem_MonitorContextMenu_SelectAll.Enabled  = isMonitor;
+			toolStripMenuItem_MonitorContextMenu_SelectNone.Enabled = isMonitor;
 
-			// hide "Hide" item if only this monitor is visible
-			bool hideIsAllowed = false;
-			switch (monitorType)
-			{
-				case Domain.RepositoryType.Tx:    hideIsAllowed = (_settingsRoot.Layout.BidirMonitorPanelIsVisible || _settingsRoot.Layout.RxMonitorPanelIsVisible); break;
-				case Domain.RepositoryType.Bidir: hideIsAllowed = (_settingsRoot.Layout.TxMonitorPanelIsVisible || _settingsRoot.Layout.RxMonitorPanelIsVisible); break;
-				case Domain.RepositoryType.Rx:    hideIsAllowed = (_settingsRoot.Layout.TxMonitorPanelIsVisible || _settingsRoot.Layout.BidirMonitorPanelIsVisible); break;
-			}
-			toolStripMenuItem_MonitorContextMenu_Hide.Visible = hideIsAllowed;
-			toolStripMenuItem_MonitorContextMenu_Hide.Enabled = isMonitor && hideIsAllowed;
-
-			toolStripMenuItem_MonitorContextMenu_SaveToFile.Enabled = isMonitor;
+			toolStripMenuItem_MonitorContextMenu_SaveToFile.Enabled      = isMonitor;
 			toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Enabled = isMonitor;
-			toolStripMenuItem_MonitorContextMenu_Print.Enabled = isMonitor;
+			toolStripMenuItem_MonitorContextMenu_Print.Enabled           = isMonitor;
 
 			_isSettingControls = false;
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_Panels_Tx_Click(object sender, EventArgs e)
+		{
+			_settingsRoot.Layout.TxMonitorPanelIsVisible = !_settingsRoot.Layout.TxMonitorPanelIsVisible;
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_Panels_Bidir_Click(object sender, EventArgs e)
+		{
+			_settingsRoot.Layout.BidirMonitorPanelIsVisible = !_settingsRoot.Layout.BidirMonitorPanelIsVisible;
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_Panels_Rx_Click(object sender, EventArgs e)
+		{
+			_settingsRoot.Layout.RxMonitorPanelIsVisible = !_settingsRoot.Layout.RxMonitorPanelIsVisible;
+		}
+
+		private void toolStripComboBox_MonitorContextMenu_Panels_Orientation_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+				SetMonitorOrientation((XOrientation)toolStripComboBox_MonitorContextMenu_Panels_Orientation.SelectedItem);
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_Hide_Click(object sender, EventArgs e)
+		{
+			switch (GetMonitorType(contextMenuStrip_Monitor.SourceControl))
+			{
+				case Domain.RepositoryType.Tx:    _settingsRoot.Layout.TxMonitorPanelIsVisible    = false; break;
+				case Domain.RepositoryType.Bidir: _settingsRoot.Layout.BidirMonitorPanelIsVisible = false; break;
+				case Domain.RepositoryType.Rx:    _settingsRoot.Layout.RxMonitorPanelIsVisible    = false; break;
+			}
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Format_Click(object sender, EventArgs e)
@@ -720,22 +790,6 @@ namespace YAT.Gui.Forms
 			_settingsRoot.TextTerminal.ShowEol = !_settingsRoot.TextTerminal.ShowEol;
 		}
 
-		private void toolStripComboBox_MonitorContextMenu_Orientation_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (!_isSettingControls)
-				SetMonitorOrientation((Orientation)toolStripComboBox_MonitorContextMenu_Orientation.SelectedItem);
-		}
-
-		private void toolStripMenuItem_MonitorContextMenu_Clear_Click(object sender, EventArgs e)
-		{
-			ClearMonitor(GetMonitorType(contextMenuStrip_Monitor.SourceControl));
-		}
-
-		private void toolStripMenuItem_MonitorContextMenu_ClearAll_Click(object sender, EventArgs e)
-		{
-			ClearAllMonitors();
-		}
-
 		private void toolStripMenuItem_MonitorContextMenu_ShowConnectTime_Click(object sender, EventArgs e)
 		{
 			_settingsRoot.Display.ShowConnectTime = !_settingsRoot.Display.ShowConnectTime;
@@ -756,29 +810,19 @@ namespace YAT.Gui.Forms
 			_terminal.ResetIOCount();
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_Panels_Tx_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_Clear_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Layout.TxMonitorPanelIsVisible = !_settingsRoot.Layout.TxMonitorPanelIsVisible;
+			ClearMonitor(GetMonitorType(contextMenuStrip_Monitor.SourceControl));
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_Panels_Bidir_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_SelectAll_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Layout.BidirMonitorPanelIsVisible = !_settingsRoot.Layout.BidirMonitorPanelIsVisible;
+			GetMonitor(contextMenuStrip_Monitor.SourceControl).SelectAll();
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_Panels_Rx_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_SelectNone_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Layout.RxMonitorPanelIsVisible = !_settingsRoot.Layout.RxMonitorPanelIsVisible;
-		}
-
-		private void toolStripMenuItem_MonitorContextMenu_Hide_Click(object sender, EventArgs e)
-		{
-			switch (GetMonitorType(contextMenuStrip_Monitor.SourceControl))
-			{
-				case Domain.RepositoryType.Tx:    _settingsRoot.Layout.TxMonitorPanelIsVisible    = false; break;
-				case Domain.RepositoryType.Bidir: _settingsRoot.Layout.BidirMonitorPanelIsVisible = false; break;
-				case Domain.RepositoryType.Rx:    _settingsRoot.Layout.RxMonitorPanelIsVisible    = false; break;
-			}
+			GetMonitor(contextMenuStrip_Monitor.SourceControl).SelectNone();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_SaveToFile_Click(object sender, EventArgs e)
@@ -1253,6 +1297,12 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Monitor
 		//------------------------------------------------------------------------------------------
 
+		private void monitor_Tx_Enter(object sender, EventArgs e)
+		{
+			// Remember which monitor has been actived last
+			_monitorSelection = Domain.RepositoryType.Tx;
+		}
+
 		private void monitor_Tx_CopyRequest(object sender, System.EventArgs e)
 		{
 			CopyMonitorToClipboard(monitor_Tx);
@@ -1263,6 +1313,12 @@ namespace YAT.Gui.Forms
 			PrintMonitor(monitor_Tx);
 		}
 
+		private void monitor_Bidir_Enter(object sender, EventArgs e)
+		{
+			// Remember which monitor has been actived last
+			_monitorSelection = Domain.RepositoryType.Bidir;
+		}
+
 		private void monitor_Bidir_CopyRequest(object sender, System.EventArgs e)
 		{
 			CopyMonitorToClipboard(monitor_Bidir);
@@ -1271,6 +1327,12 @@ namespace YAT.Gui.Forms
 		private void monitor_Bidir_PrintRequest(object sender, System.EventArgs e)
 		{
 			PrintMonitor(monitor_Bidir);
+		}
+
+		private void monitor_Rx_Enter(object sender, EventArgs e)
+		{
+			// Remember which monitor has been actived last
+			_monitorSelection = Domain.RepositoryType.Rx;
 		}
 
 		private void monitor_Rx_CopyRequest(object sender, System.EventArgs e)
@@ -1396,6 +1458,8 @@ namespace YAT.Gui.Forms
 
 		private void InitializeControls()
 		{
+			toolStripMenuItem_TerminalMenu_View_Initialize();
+
 			contextMenuStrip_Preset_Initialize();
             contextMenuStrip_Predefined_Initialize();
 			contextMenuStrip_Monitor_Initialize();
@@ -1686,7 +1750,12 @@ namespace YAT.Gui.Forms
 
 		private Controls.Monitor GetMonitor(Control source)
 		{
-			switch (GetMonitorType(source))
+			return (GetMonitor(GetMonitorType(source)));
+		}
+
+		private Controls.Monitor GetMonitor(Domain.RepositoryType type)
+		{
+			switch (type)
 			{
 				case Domain.RepositoryType.Tx:    return (monitor_Tx);
 				case Domain.RepositoryType.Bidir: return (monitor_Bidir);
@@ -1755,9 +1824,9 @@ namespace YAT.Gui.Forms
 			monitor_Bidir.ShowCountStatus = showCounters;
 			monitor_Rx.ShowCountStatus    = showCounters;
 
-			monitor_Tx.MaximalLineCount    = _settingsRoot.Display.TxMaximalLineCount;
-			monitor_Bidir.MaximalLineCount = _settingsRoot.Display.BidirMaximalLineCount;
-			monitor_Rx.MaximalLineCount    = _settingsRoot.Display.RxMaximalLineCount;
+			monitor_Tx.MaxLineCount    = _settingsRoot.Display.TxMaxLineCount;
+			monitor_Bidir.MaxLineCount = _settingsRoot.Display.BidirMaxLineCount;
+			monitor_Rx.MaxLineCount    = _settingsRoot.Display.RxMaxLineCount;
 
 			// reload from repositories
 			ReloadMonitors();

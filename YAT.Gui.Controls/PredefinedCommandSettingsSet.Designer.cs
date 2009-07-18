@@ -45,7 +45,7 @@ namespace YAT.Gui.Controls
 			this.pathLabel_FilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.pathLabel_FilePath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pathLabel_FilePath.Location = new System.Drawing.Point(126, 0);
+			this.pathLabel_FilePath.Location = new System.Drawing.Point(21, 0);
 			this.pathLabel_FilePath.Name = "pathLabel_FilePath";
 			this.pathLabel_FilePath.Size = new System.Drawing.Size(313, 20);
 			this.pathLabel_FilePath.TabIndex = 2;
@@ -57,7 +57,7 @@ namespace YAT.Gui.Controls
 			// 
 			this.checkBox_IsFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.checkBox_IsFile.AutoSize = true;
-			this.checkBox_IsFile.Location = new System.Drawing.Point(476, 3);
+			this.checkBox_IsFile.Location = new System.Drawing.Point(3, 3);
 			this.checkBox_IsFile.Name = "checkBox_IsFile";
 			this.checkBox_IsFile.Size = new System.Drawing.Size(15, 14);
 			this.checkBox_IsFile.TabIndex = 5;
@@ -67,7 +67,7 @@ namespace YAT.Gui.Controls
 			// button_SetMultiLineCommand
 			// 
 			this.button_SetMultiLineCommand.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_SetMultiLineCommand.Location = new System.Drawing.Point(445, 0);
+			this.button_SetMultiLineCommand.Location = new System.Drawing.Point(340, 0);
 			this.button_SetMultiLineCommand.Name = "button_SetMultiLineCommand";
 			this.button_SetMultiLineCommand.Size = new System.Drawing.Size(25, 20);
 			this.button_SetMultiLineCommand.TabIndex = 3;
@@ -87,7 +87,7 @@ namespace YAT.Gui.Controls
 			// 
 			// textBox_Description
 			// 
-			this.textBox_Description.Location = new System.Drawing.Point(0, 0);
+			this.textBox_Description.Location = new System.Drawing.Point(371, 0);
 			this.textBox_Description.Name = "textBox_Description";
 			this.textBox_Description.Size = new System.Drawing.Size(120, 20);
 			this.textBox_Description.TabIndex = 0;
@@ -98,7 +98,7 @@ namespace YAT.Gui.Controls
 			// 
 			this.textBox_Command.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.textBox_Command.Location = new System.Drawing.Point(126, 0);
+			this.textBox_Command.Location = new System.Drawing.Point(21, 0);
 			this.textBox_Command.Name = "textBox_Command";
 			this.textBox_Command.Size = new System.Drawing.Size(313, 20);
 			this.textBox_Command.TabIndex = 1;
@@ -111,7 +111,7 @@ namespace YAT.Gui.Controls
 			// button_SetFile
 			// 
 			this.button_SetFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button_SetFile.Location = new System.Drawing.Point(445, 0);
+			this.button_SetFile.Location = new System.Drawing.Point(340, 0);
 			this.button_SetFile.Name = "button_SetFile";
 			this.button_SetFile.Size = new System.Drawing.Size(25, 20);
 			this.button_SetFile.TabIndex = 4;

@@ -104,7 +104,7 @@ namespace YAT.Gui.Controls
 		private double _imageOpacity = _MinImageOpacity;
 
 		// Lines
-		private int _maximalLineCount = _MaxLineCountDefault;
+		private int _maxLineCount = _MaxLineCountDefault;
 		private Model.Settings.FormatSettings _formatSettings = new Model.Settings.FormatSettings();
 
 		// Time status
@@ -188,14 +188,14 @@ namespace YAT.Gui.Controls
 		[Category("Monitor")]
 		[Description("The maxmimal number of lines to display.")]
 		[DefaultValue(_MaxLineCountDefault)]
-		public int MaximalLineCount
+		public int MaxLineCount
 		{
-			get { return (_maximalLineCount); }
+			get { return (_maxLineCount); }
 			set
 			{
-				if (_maximalLineCount != value)
+				if (_maxLineCount != value)
 				{
-					_maximalLineCount = value;
+					_maxLineCount = value;
 					Reload();
 				}
 			}
@@ -446,6 +446,32 @@ namespace YAT.Gui.Controls
 			SetCountStatusControls();
 		}
 
+		public void SelectAll()
+		{
+			FastListBox flb = fastListBox_Monitor;
+			flb.BeginUpdate();
+
+			for (int i = 0; i < flb.Items.Count; i++)
+				flb.SelectedIndex = i;
+
+			flb.EndUpdate();
+		}
+
+		public void SelectNone()
+		{
+			FastListBox flb = fastListBox_Monitor;
+			flb.BeginUpdate();
+
+			flb.ClearSelected();
+
+			flb.EndUpdate();
+		}
+
+		public int SelectedLineCount
+		{
+			get { return (fastListBox_Monitor.SelectedItems.Count); }
+		}
+
 		public List<YAT.Domain.DisplayLine> SelectedLines
 		{
 			get
@@ -476,12 +502,22 @@ namespace YAT.Gui.Controls
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if (keyData == (Keys.Control | Keys.C))
+			if      (keyData == (Keys.Control | Keys.A)) // Ctrl-A = Select All
+			{
+				SelectAll();
+				return (true);
+			}
+			else if (keyData == (Keys.Control | Keys.N)) // Ctrl-N = Select None
+			{
+				SelectNone();
+				return (true);
+			}
+			else if (keyData == (Keys.Control | Keys.C)) // Ctrl-C = Copy
 			{
 				OnCopyRequest(new EventArgs());
 				return (true);
 			}
-			else if (keyData == (Keys.Control | Keys.P))
+			else if (keyData == (Keys.Control | Keys.P)) // Ctrl-P = Print
 			{
 				OnPrintRequest(new EventArgs());
 				return (true);
@@ -805,7 +841,7 @@ namespace YAT.Gui.Controls
 			if (element.IsEol)
 			{
 				// Remove lines if maximum exceeded
-				while (flb.Items.Count >= (_maximalLineCount))
+				while (flb.Items.Count >= (_maxLineCount))
 					flb.Items.RemoveAt(0);
 
 				// Add new empty line
@@ -816,10 +852,11 @@ namespace YAT.Gui.Controls
 		private void ClearListBox()
 		{
 			FastListBox flb = fastListBox_Monitor;
-
 			flb.BeginUpdate();
+
 			flb.Items.Clear();
 			flb.HorizontalExtent = 0;
+
 			flb.EndUpdate();
 		}
 
