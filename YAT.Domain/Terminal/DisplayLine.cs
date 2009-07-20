@@ -26,15 +26,15 @@ using System.Xml.Serialization;
 namespace YAT.Domain
 {
 	/// <summary>
-	/// Implements a display line containing a list of display elements.
+	/// Implements a collection of display elements.
 	/// </summary>
 	/// <remarks>
 	/// This calls inherits <see cref="T:List`"/>. However, it only overrides functions required
-	/// for the YAT monitor. It is only allowed to add to the list, removing items results in an
+	/// for YAT use cases. It is only allowed to add to the list, removing items results in an
 	/// undefined behaviour.
 	/// </remarks>
 	[Serializable]
-	public class DisplayLine : List<DisplayElement>
+	public class DisplayElementCollection : List<DisplayElement>
 	{
 		#region Fields
 		//==========================================================================================
@@ -51,27 +51,27 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public DisplayLine()
+		public DisplayElementCollection()
 		{
 			_dataCount = 0;
 		}
 
 		/// <summary></summary>
-		public DisplayLine(int elementCapacity)
+		public DisplayElementCollection(int elementCapacity)
 			: base(elementCapacity)
 		{
 			_dataCount = 0;
 		}
 
 		/// <summary></summary>
-		public DisplayLine(DisplayLine rhs)
-			: base(rhs)
+		public DisplayElementCollection(DisplayElementCollection collection)
+			: base(collection)
 		{
-			_dataCount = rhs._dataCount;
+			_dataCount = collection._dataCount;
 		}
 
 		/// <summary></summary>
-		public DisplayLine(DisplayElement displayElement)
+		public DisplayElementCollection(DisplayElement displayElement)
 		{
 			_dataCount = 0;
 			Add(displayElement);
@@ -102,10 +102,42 @@ namespace YAT.Domain
 		/// <summary></summary>
 		new public void Add(DisplayElement item)
 		{
-			base.Add(item);
+			if (Count <= 0)
+			{
+				base.Add(item);
+			}
+			else
+			{
+				// For performance reasons, append this item to the last item in case it's the same
+				// kind of item
+				int lastIndex = Count - 1;
+				if (this[lastIndex].IsSameKindAs(item))
+					this[lastIndex].Append(item);
+				else
+					base.Add(item);
+			}
+			_dataCount += item.DataCount;
+		}
 
-			if (item.IsDataElement)
-				_dataCount++;
+		/// <summary></summary>
+		new public void AddRange(IEnumerable<DisplayElement> collection)
+		{
+			foreach (DisplayElement item in collection)
+				Add(item);
+		}
+
+		/// <summary>
+		/// Creates a shallow copy of the collection.
+		/// </summary>
+		/// <returns>A shallow copy of the collection.</returns>
+		public DisplayElementCollection Clone()
+		{
+			DisplayElementCollection c = new DisplayElementCollection();
+
+			foreach (DisplayElement de in this)
+				c.Add(new DisplayElement(de));
+
+			return (c);
 		}
 
 		#endregion
@@ -163,6 +195,90 @@ namespace YAT.Domain
 		}
 
 		#endregion
+
+		#endregion
+	}
+
+	/// <summary>
+	/// Implements a display line containing a list of display elements.
+	/// </summary>
+	/// <remarks>
+	/// This calls inherits <see cref="T:List`"/>. However, it only overrides functions required
+	/// for YAT use cases. It is only allowed to add to the list, removing items results in an
+	/// undefined behaviour.
+	/// </remarks>
+	[Serializable]
+	public class DisplayLine : DisplayElementCollection
+	{
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
+
+		/// <summary></summary>
+		public DisplayLine()
+		{
+		}
+
+		/// <summary></summary>
+		public DisplayLine(int elementCapacity)
+			: base(elementCapacity)
+		{
+		}
+
+		/// <summary></summary>
+		public DisplayLine(DisplayElementCollection collection)
+			: base(collection)
+		{
+		}
+
+		/// <summary></summary>
+		public DisplayLine(DisplayElement displayElement)
+			: base(displayElement)
+		{
+		}
+
+		#endregion
+	}
+
+	/// <summary>
+	/// Implements a part of a display line containing a list of display elements.
+	/// </summary>
+	/// <remarks>
+	/// This calls inherits <see cref="T:List`"/>. However, it only overrides functions required
+	/// for YAT use cases. It is only allowed to add to the list, removing items results in an
+	/// undefined behaviour.
+	/// </remarks>
+	[Serializable]
+	public class DisplayLinePart : DisplayLine
+	{
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
+
+		/// <summary></summary>
+		public DisplayLinePart()
+		{
+		}
+
+		/// <summary></summary>
+		public DisplayLinePart(int elementCapacity)
+			: base(elementCapacity)
+		{
+		}
+
+		/// <summary></summary>
+		public DisplayLinePart(DisplayElementCollection collection)
+			: base(collection)
+		{
+		}
+
+		/// <summary></summary>
+		public DisplayLinePart(DisplayElement displayElement)
+			: base(displayElement)
+		{
+		}
 
 		#endregion
 	}

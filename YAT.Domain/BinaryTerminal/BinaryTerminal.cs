@@ -107,7 +107,7 @@ namespace YAT.Domain
 		private class LineState
 		{
 			public LinePosition LinePosition;
-			public List<DisplayElement> LineElements;
+			public DisplayLine LineElements;
 			public EolQueue SequenceBreak;
 			public DateTime TimeStamp;
 			public LineBreakTimer LineBreakTimer;
@@ -115,7 +115,7 @@ namespace YAT.Domain
 			public LineState(EolQueue sequenceBreak, DateTime timeStamp, LineBreakTimer lineBreakTimer)
 			{
 				LinePosition = BinaryTerminal.LinePosition.Begin;
-				LineElements = new List<DisplayElement>();
+				LineElements = new DisplayLine();
 				SequenceBreak = sequenceBreak;
 				TimeStamp = timeStamp;
 				LineBreakTimer = lineBreakTimer;
@@ -269,29 +269,30 @@ namespace YAT.Domain
 			_bidirLineState = new BidirLineState(true, SerialDirection.Tx);
 		}
 
-		private void ExecuteLineBegin(Settings.BinaryDisplaySettings displaySettings, LineState lineState, DateTime timeStamp, List<DisplayElement> elements)
+		private void ExecuteLineBegin(Settings.BinaryDisplaySettings displaySettings, LineState lineState, DateTime ts, DisplayElementCollection elements)
 		{
 			if (TerminalSettings.Display.ShowTimeStamp)
 			{
-				List<DisplayElement> l = new List<DisplayElement>();
+				DisplayLinePart lp = new DisplayLinePart();
 
-				l.Add(new DisplayElement.TimeStamp(timeStamp));
-				l.Add(new DisplayElement.LeftMargin());
+				lp.Add(new DisplayElement.TimeStamp(ts));
+				lp.Add(new DisplayElement.LeftMargin());
 
-				lineState.LineElements.AddRange(l);
-				elements.AddRange(l);
+				// Attention: Clone elements because they are needed again below
+				lineState.LineElements.AddRange(lp.Clone());
+				elements.AddRange(lp);
 			}
 
 			lineState.LinePosition = LinePosition.Data;
-			lineState.TimeStamp = timeStamp;
+			lineState.TimeStamp = ts;
 
 			if (displaySettings.TimedLineBreak.Enabled)
 				lineState.LineBreakTimer.Start();
 		}
 
-		private void ExecuteLineEnd(LineState lineState, List<DisplayElement> elements, List<DisplayLine> lines)
+		private void ExecuteLineEnd(LineState lineState, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
-			List<DisplayElement> l = new List<DisplayElement>();
+			DisplayLinePart lp = new DisplayLinePart();
 
 			lineState.LineBreakTimer.Stop();
 
@@ -300,19 +301,21 @@ namespace YAT.Domain
 				int lineLength = 0;
 				foreach (DisplayElement de in lineState.LineElements)
 				{
-					if (de.IsDataElement)
+					if (de.IsData)
 						lineLength++;
 				}
-				l.Add(new DisplayElement.RightMargin());
-				l.Add(new DisplayElement.LineLength(lineLength));
+				lp.Add(new DisplayElement.RightMargin());
+				lp.Add(new DisplayElement.LineLength(lineLength));
 			}
-			l.Add(new DisplayElement.LineBreak());
+			lp.Add(new DisplayElement.LineBreak());
 
-			// return elements
-			elements.AddRange(l);
+			// Return elements
+			elements.AddRange(lp);
 
-			// return line
-			lineState.LineElements.AddRange(l);
+			// Return line
+			// Attention: Clone elements because they've also needed above
+			lineState.LineElements.AddRange(lp);
+
 			DisplayLine line = new DisplayLine();
 			line.AddRange(lineState.LineElements);
 			lines.Add(line);
@@ -321,16 +324,16 @@ namespace YAT.Domain
 		}
 
 		private void ExecuteTimedLineBreakOnReload(Settings.BinaryDisplaySettings displaySettings,
-			                                       LineState lineState, DateTime timeStamp,
-			                                       List<DisplayElement> elements, List<DisplayLine> lines)
+			                                       LineState lineState, DateTime ts,
+												   DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			if (lineState.LineElements.Count > 0)
 			{
-				TimeSpan span = timeStamp - lineState.TimeStamp;
+				TimeSpan span = ts - lineState.TimeStamp;
 				if (span.TotalMilliseconds >= displaySettings.TimedLineBreak.Timeout)
 					ExecuteLineEnd(lineState, elements, lines);
 			}
-			lineState.TimeStamp = timeStamp;
+			lineState.TimeStamp = ts;
 		}
 
 		private void ExecuteLengthLineBreak(Settings.BinaryDisplaySettings displaySettings, LineState lineState)
@@ -338,7 +341,7 @@ namespace YAT.Domain
 			int lineLength = 0;
 			foreach (DisplayElement de in lineState.LineElements)
 			{
-				if (de.IsDataElement)
+				if (de.IsData)
 					lineLength++;
 			}
 			if (lineLength >= displaySettings.LengthLineBreak.LineLength)
@@ -347,9 +350,9 @@ namespace YAT.Domain
 			}
 		}
 
-		private void ExecuteData(SerialDirection direction, LineState lineState, byte b, List<DisplayElement> elements)
+		private void ExecuteData(SerialDirection direction, LineState lineState, byte b, DisplayElementCollection elements)
 		{
-			List<DisplayElement> l = new List<DisplayElement>();
+			DisplayLinePart lp = new DisplayLinePart();
 
 			// add space if necessary
 			if (ElementsAreSeparate(direction))
@@ -357,21 +360,21 @@ namespace YAT.Domain
 				int lineLength = 0;
 				foreach (DisplayElement de in lineState.LineElements)
 				{
-					if (de.IsDataElement)
+					if (de.IsData)
 						lineLength++;
 				}
 				if (lineLength > 0)
 				{
-					l.Add(new DisplayElement.Space());
+					lp.Add(new DisplayElement.Space());
 				}
 			}
 
 			// add data
-			l.Add(ByteToElement(b, direction));
+			lp.Add(ByteToElement(b, direction));
 
 			// return data
-			lineState.LineElements.AddRange(l);
-			elements.AddRange(l);
+			lineState.LineElements.AddRange(lp);
+			elements.AddRange(lp);
 
 			// evaluate binary sequence break
 			lineState.SequenceBreak.Enqueue(b);
@@ -380,7 +383,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected override void ProcessRawElement(RawElement re, List<DisplayElement> elements, List<DisplayLine> lines)
+		protected override void ProcessRawElement(RawElement re, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			Settings.BinaryDisplaySettings displaySettings;
 			if (re.Direction == SerialDirection.Tx)
@@ -443,7 +446,7 @@ namespace YAT.Domain
 					if ((lineState.LineElements.Count > 0) &&
 						(direction != _bidirLineState.Direction))
 					{
-						List<DisplayElement> elements = new List<DisplayElement>();
+						DisplayElementCollection elements = new DisplayElementCollection();
 						List<DisplayLine> lines = new List<DisplayLine>();
 
 						ExecuteLineEnd(lineState, elements, lines);
@@ -466,7 +469,7 @@ namespace YAT.Domain
 
 			if (lineState.LineElements.Count > 0)
 			{
-				List<DisplayElement> elements = new List<DisplayElement>();
+				DisplayElementCollection elements = new DisplayElementCollection();
 				List<DisplayLine> lines = new List<DisplayLine>();
 
 				ExecuteLineEnd(lineState, elements, lines);

@@ -44,7 +44,7 @@ namespace YAT.Model.Utilities
 				sb = new StringBuilder();
 				foreach (Domain.DisplayElement de in line)
 				{
-					if (de.IsDataElement)
+					if (de.IsData)
 						sb.Append(de.Text);
 				}
 				linesString.Add(sb.ToString());

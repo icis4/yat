@@ -43,12 +43,17 @@ namespace YAT.Domain
 	[XmlInclude(typeof(DisplayElement.Error))]
 	public class DisplayElement
 	{
+		#region Types
+		//==========================================================================================
+		// Types
+		//==========================================================================================
+
 		/// <summary></summary>
 		public class NoData : DisplayElement
 		{
 			/// <summary></summary>
 			public NoData()
-				: base("", false)
+				: base()
 			{
 			}
 		}
@@ -63,8 +68,14 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public TxData(ElementOrigin origin, string data)
-				: base(origin, data, true)
+			public TxData(byte original, string data)
+				: base(SerialDirection.Tx, original, data)
+			{
+			}
+
+			/// <summary></summary>
+			public TxData(byte[] original, string data, int dataCount)
+				: base(SerialDirection.Tx, original, data, dataCount)
 			{
 			}
 		}
@@ -79,8 +90,14 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public TxControl(ElementOrigin origin, string control)
-				: base(origin, control, true)
+			public TxControl(byte original, string control)
+				: base(SerialDirection.Tx, original, control)
+			{
+			}
+
+			/// <summary></summary>
+			public TxControl(byte[] original, string control, int controlCount)
+				: base(SerialDirection.Tx, original, control, controlCount)
 			{
 			}
 		}
@@ -95,8 +112,14 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public RxData(ElementOrigin origin, string data)
-				: base(origin, data, true)
+			public RxData(byte original, string data)
+				: base(SerialDirection.Rx, original, data)
+			{
+			}
+
+			/// <summary></summary>
+			public RxData(byte[] original, string data, int dataCount)
+				: base(SerialDirection.Rx, original, data, dataCount)
 			{
 			}
 		}
@@ -111,8 +134,14 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public RxControl(ElementOrigin origin, string control)
-				: base(origin, control, true)
+			public RxControl(byte original, string control)
+				: base(SerialDirection.Rx, original, control)
+			{
+			}
+
+			/// <summary></summary>
+			public RxControl(byte[] original, string control, int controlCount)
+				: base(SerialDirection.Rx, original, control, controlCount)
 			{
 			}
 		}
@@ -121,18 +150,26 @@ namespace YAT.Domain
 		public class TimeStamp : DisplayElement
 		{
 			/// <summary></summary>
-			public TimeStamp(DateTime timeStamp)
-				: base("(" + timeStamp.ToString("HH:mm:ss.ff", DateTimeFormatInfo.InvariantInfo) + ")", false)
-//				: base("(" + timeStamp.ToString("yyyy-MM-dd HH:mm:ss.ffzzz", DateTimeFormatInfo.InvariantInfo) + ")", false)
-//				: base("(" + timeStamp.ToLongTimeString() + "." + XString.Left((timeStamp.Millisecond/10).ToString("D2"), 2) + ")", false)
+			public TimeStamp()
+				: base("(" + DateTime.Now.ToString("HH:mm:ss.ff", DateTimeFormatInfo.InvariantInfo) + ")")
+//				: base("(" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffzzz", DateTimeFormatInfo.InvariantInfo) + ")")
+//				: base("(" + DateTime.Now.ToLongTimeString() + "." + XString.Left((DateTime.Now.Millisecond/10).ToString("D2"), 2) + ")")
 			{
 			}
 
 			/// <summary></summary>
-			public TimeStamp()
-				: base("(" + DateTime.Now.ToString("HH:mm:ss.ff", DateTimeFormatInfo.InvariantInfo) + ")", false)
-//				: base("(" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffzzz", DateTimeFormatInfo.InvariantInfo) + ")", false)
-//				: base("(" + DateTime.Now.ToLongTimeString() + "." + XString.Left((DateTime.Now.Millisecond/10).ToString("D2"), 2) + ")", false)
+			public TimeStamp(DateTime timeStamp)
+				: base("(" + timeStamp.ToString("HH:mm:ss.ff", DateTimeFormatInfo.InvariantInfo) + ")")
+			//				: base("(" + timeStamp.ToString("yyyy-MM-dd HH:mm:ss.ffzzz", DateTimeFormatInfo.InvariantInfo) + ")")
+			//				: base("(" + timeStamp.ToLongTimeString() + "." + XString.Left((timeStamp.Millisecond/10).ToString("D2"), 2) + ")")
+			{
+			}
+
+			/// <summary></summary>
+			public TimeStamp(SerialDirection direction, DateTime timeStamp)
+				: base(direction, "(" + timeStamp.ToString("HH:mm:ss.ff", DateTimeFormatInfo.InvariantInfo) + ")")
+//				: base(direction, "(" + timeStamp.ToString("yyyy-MM-dd HH:mm:ss.ffzzz", DateTimeFormatInfo.InvariantInfo) + ")")
+//				: base(direction, "(" + timeStamp.ToLongTimeString() + "." + XString.Left((timeStamp.Millisecond/10).ToString("D2"), 2) + ")")
 			{
 			}
 		}
@@ -142,13 +179,19 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public LineLength()
-				: base("(" + 0 + ")", false)
+				: base("(" + 0 + ")")
 			{
 			}
 
 			/// <summary></summary>
 			public LineLength(int length)
-				: base("(" + length + ")", false)
+				: base("(" + length + ")")
+			{
+			}
+
+			/// <summary></summary>
+			public LineLength(SerialDirection direction, int length)
+				: base(direction, "(" + length + ")")
 			{
 			}
 		}
@@ -158,7 +201,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public LeftMargin()
-				: base(" ", false)
+				: base(" ")
 			{
 			}
 		}
@@ -168,7 +211,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public Space()
-				: base(" ", false)
+				: base(" ")
 			{
 			}
 		}
@@ -178,7 +221,7 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public RightMargin()
-				: base(" ", false)
+				: base(" ")
 			{
 			}
 		}
@@ -188,7 +231,13 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public LineBreak()
-				: base(Environment.NewLine, false, true)
+				: base(SerialDirection.None, new byte[] { }, "", 0, true)
+			{
+			}
+
+			/// <summary></summary>
+			public LineBreak(SerialDirection direction, byte[] original)
+				: base(direction, original, "", 0, true)
 			{
 			}
 		}
@@ -198,60 +247,132 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public Error()
-				: base("", false)
+				: base()
 			{
 			}
 
 			/// <summary></summary>
 			public Error(string message)
-				: base(message, false)
+				: base(message)
+			{
+			}
+
+			/// <summary></summary>
+			public Error(SerialDirection direction, string message)
+				: base(direction, message)
 			{
 			}
 		}
 
-		private ElementOrigin _origin;
+		#endregion
+
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
+		private SerialDirection _direction;
+		private List<byte> _origin;
 		private string _text;
-		private bool _isDataElement;
+		private int _dataCount;
+		private bool _isData;
 		private bool _isEol;
+
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
 
 		/// <summary></summary>
 		public DisplayElement()
 		{
-			Initialize(null, "", true, false);
+			Initialize(SerialDirection.None, null, "", 0, false, false);
 		}
 
 		/// <summary></summary>
-		public DisplayElement(string text, bool isDataElement)
+		public DisplayElement(string text)
 		{
-			Initialize(null, text, isDataElement, false);
+			Initialize(SerialDirection.None, null, text, 0, false, false);
 		}
 
 		/// <summary></summary>
-		public DisplayElement(ElementOrigin origin, string text, bool isDataElement)
+		public DisplayElement(SerialDirection direction, string text)
 		{
-			Initialize(origin, text, isDataElement, false);
+			Initialize(direction, null, text, 0, false, false);
 		}
 
 		/// <summary></summary>
-		public DisplayElement(string text, bool isDataElement, bool isEol)
+		public DisplayElement(SerialDirection direction, byte origin, string text)
 		{
-			Initialize(null, text, isDataElement, isEol);
+			List<byte> l = new List<byte>();
+			l.Add(origin);
+			Initialize(direction, l, text, 1, true, false);
 		}
 
-		private void Initialize(ElementOrigin origin, string text, bool isDataElement, bool isEol)
+		/// <summary></summary>
+		public DisplayElement(SerialDirection direction, byte[] origin, string text, int dataCount)
 		{
+			List<byte> l = new List<byte>();
+			l.AddRange(origin);
+			Initialize(direction, l, text, dataCount, true, false);
+		}
+
+		/// <summary></summary>
+		public DisplayElement(SerialDirection direction, byte[] origin, string text, int dataCount, bool isEol)
+		{
+			List<byte> l = new List<byte>();
+			l.AddRange(origin);
+			Initialize(direction, l, text, dataCount, true, isEol);
+		}
+
+		/// <summary></summary>
+		public DisplayElement(DisplayElement de)
+		{
+			List<byte> l = new List<byte>();
+			l.AddRange(de._origin);
+			Initialize(de._direction, l, de._text, de._dataCount, de._isData, de._isEol);
+		}
+
+		private void Initialize(SerialDirection direction, List<byte> origin, string text, int dataCount, bool isDataElement, bool isEol)
+		{
+			_direction = direction;
 			_origin = origin;
 			_text = text;
-			_isDataElement = isDataElement;
+			_dataCount = dataCount;
+			_isData = isDataElement;
 			_isEol = isEol;
+		}
+
+		#endregion
+
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		/// <summary></summary>
+		[XmlAttribute("Direction")]
+		public SerialDirection Direction
+		{
+			get { return (_direction); }
+			set { _direction = value; }
 		}
 
 		/// <summary></summary>
 		[XmlAttribute("Origin")]
-		public ElementOrigin Origin
+		public List<byte> Origin
 		{
 			get { return (_origin); }
 			set { _origin = value; }
+		}
+
+		/// <summary></summary>
+		[XmlIgnore()]
+		public int OriginCount
+		{
+			get { return (_origin.Count); }
 		}
 
 		/// <summary></summary>
@@ -263,18 +384,26 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		[XmlAttribute("IsDataElement")]
-		public bool IsDataElement
+		[XmlAttribute("DataCount")]
+		public int DataCount
 		{
-			get { return (_isDataElement); }
-			set { _isDataElement = value; }
+			get { return (_dataCount); }
+			set { _dataCount = value; }
+		}
+
+		/// <summary></summary>
+		[XmlAttribute("IsData")]
+		public bool IsData
+		{
+			get { return (_isData); }
+			set { _isData = value; }
 		}
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public bool IsNoDataElement
+		public bool IsNoData
 		{
-			get { return (!_isDataElement); }
+			get { return (!_isData); }
 		}
 
 		/// <summary></summary>
@@ -284,6 +413,60 @@ namespace YAT.Domain
 			get { return (_isEol); }
 			set { _isEol = value; }
 		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary>
+		/// Compares too display elements and returns true if both are of the same kind.
+		/// </summary>
+		public bool IsSameKindAs(DisplayElement de)
+		{
+			if (_direction != de._direction)
+				return (false);
+
+			if (_isData != de._isData)
+				return (false);
+
+			if (_isEol != de._isEol)
+				return (false);
+
+			return (true);
+		}
+
+		/// <summary>
+		/// Appends contents to this element.
+		/// </summary>
+		/// <remarks>
+		/// Useful to improve performance. Appending keeps number of display elements as low as
+		/// possible, thus iteration through display element gets faster.
+		/// </remarks>
+		public void Append(DisplayElement de)
+		{
+			if (_direction != de._direction)
+				throw (new InvalidOperationException("Cannot append because direction doesn't match"));
+
+			if (_isData != de._isData)
+				throw (new InvalidOperationException("Cannot append because data type doesn't match"));
+
+			if (_isEol != de._isEol)
+				throw (new InvalidOperationException("Cannot append because EOL doesn't match"));
+
+			_origin.AddRange(de._origin);
+			_text += de._text;
+			_dataCount += de._dataCount;
+		}
+
+		#endregion
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
 
 		/// <summary>
 		/// Standard ToString method returning the element contents only.
@@ -298,39 +481,16 @@ namespace YAT.Domain
 		/// </summary>
 		public string ToString(string indent)
 		{
-			return (indent + "- Type: " + GetType().Name + Environment.NewLine +
-					indent + "- Text: " + _text + Environment.NewLine +
-					indent + "- IsDataElement: " + _isDataElement + Environment.NewLine +
-					indent + "- IsEol: " + _isEol + Environment.NewLine);
-		}
-	}
-
-	/// <summary>
-	/// Stores data of the origin of the display element.
-	/// </summary>
-	public class ElementOrigin
-	{
-		private byte _data;
-		private SerialDirection _direction;
-
-		/// <summary></summary>
-		public ElementOrigin(byte data, SerialDirection direction)
-		{
-			_data = data;
-			_direction = direction;
+			return (indent + "- Type: "      + GetType().Name + Environment.NewLine +
+					indent + "- Direction: " + _direction     + Environment.NewLine +
+					indent + "- Origin: "    + _origin        + Environment.NewLine +
+					indent + "- Text: "      + _text          + Environment.NewLine +
+					indent + "- DataCount: " + _dataCount     + Environment.NewLine +
+					indent + "- IsData: "    + _isData        + Environment.NewLine +
+					indent + "- IsEol: "     + _isEol         + Environment.NewLine);
 		}
 
-		/// <summary></summary>
-		public byte Data
-		{
-			get { return (_data); }
-		}
-
-		/// <summary></summary>
-		public SerialDirection Direction
-		{
-			get { return (_direction); }
-		}
+		#endregion
 	}
 }
 

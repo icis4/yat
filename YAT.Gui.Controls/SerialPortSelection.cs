@@ -90,6 +90,7 @@ namespace YAT.Gui.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool ShowSerialPort
 		{
+			get { return (_showSerialPort); }
 			set
 			{
 				if (_showSerialPort != value)
@@ -227,62 +228,64 @@ namespace YAT.Gui.Controls
 
 		private void SetSerialPortList()
 		{
-			_isSettingControls = true;
-
-			SerialPortId old = (SerialPortId)comboBox_Port.SelectedItem;
-
-			SerialPortList portList = new SerialPortList();
-			portList.FillWithAvailablePorts();
-			portList.GetDescriptionsFromSystem();
-
-			if (!DesignMode && ApplicationSettings.LocalUser.General.DetectSerialPortsInUse &&
-				Enabled && _showSerialPort)
+			if (Enabled && ShowSerialPort)
 			{
-				// install timer which shows a dialog if scanning takes more than 500ms
-				timer_ShowScanDialog.Start();
+				_isSettingControls = true;
 
-				// start scanning on different thread
-				_markPortsInUseThread = new MarkPortsInUseThread(portList);
-				Thread t = new Thread(new ThreadStart(_markPortsInUseThread.MarkPortsInUse));
-				t.Start();
+				SerialPortId old = (SerialPortId)comboBox_Port.SelectedItem;
 
-				while (_markPortsInUseThread.IsScanning)
-					Application.DoEvents();
+				SerialPortList portList = new SerialPortList();
+				portList.FillWithAvailablePorts();
+				portList.GetDescriptionsFromSystem();
 
-				t.Join();
+				if (!DesignMode && ApplicationSettings.LocalUser.General.DetectSerialPortsInUse)
+				{
+					// install timer which shows a dialog if scanning takes more than 500ms
+					timer_ShowScanDialog.Start();
 
-				// cleanup
-				timer_ShowScanDialog.Stop();
-			}
+					// start scanning on different thread
+					_markPortsInUseThread = new MarkPortsInUseThread(portList);
+					Thread t = new Thread(new ThreadStart(_markPortsInUseThread.MarkPortsInUse));
+					t.Start();
 
-			comboBox_Port.Items.Clear();
-			comboBox_Port.Items.AddRange(portList.ToArray());
+					while (_markPortsInUseThread.IsScanning)
+						Application.DoEvents();
 
-			if (comboBox_Port.Items.Count > 0)
-			{
-				if      ((_portId != null) && (portList.Contains(_portId)))
-					comboBox_Port.SelectedItem = _portId;
-				else if ((old     != null) && (portList.Contains(old)))
-					comboBox_Port.SelectedItem = old;
+					t.Join();
+
+					// cleanup
+					timer_ShowScanDialog.Stop();
+				}
+
+				comboBox_Port.Items.Clear();
+				comboBox_Port.Items.AddRange(portList.ToArray());
+
+				if (comboBox_Port.Items.Count > 0)
+				{
+					if ((_portId != null) && (portList.Contains(_portId)))
+						comboBox_Port.SelectedItem = _portId;
+					else if ((old != null) && (portList.Contains(old)))
+						comboBox_Port.SelectedItem = old;
+					else
+						comboBox_Port.SelectedIndex = 0;
+
+					// set property instead of member to ensure that changed event is fired
+					PortId = (SerialPortId)comboBox_Port.SelectedItem;
+				}
 				else
-					comboBox_Port.SelectedIndex = 0;
+				{
+					MessageBox.Show
+						(
+						this,
+						"No serial COM ports available, check serial COM port system settings.",
+						"No COM Ports",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+						);
+				}
 
-				// set property instead of member to ensure that changed event is fired
-				PortId = (SerialPortId)comboBox_Port.SelectedItem;
+				_isSettingControls = false;
 			}
-			else
-			{
-				MessageBox.Show
-					(
-					this,
-					"No serial COM ports available, check serial COM port system settings.",
-					"No COM Ports",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning
-					);
-			}
-
-			_isSettingControls = false;
 		}
 
 		private void SetControls()

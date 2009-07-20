@@ -123,7 +123,7 @@ namespace YAT.Domain
 		{
 			// Add element to current line
 			_currentLine.Add(item);
-			if (item.IsDataElement)
+			if (item.IsData)
 				_dataCount++;
 
 			// Check whether a line break is needed
@@ -184,7 +184,7 @@ namespace YAT.Domain
 			DisplayLine dl = Dequeue();
 			foreach (DisplayElement de in dl)
 			{
-				if (de.IsDataElement)
+				if (de.IsData)
 					_dataCount--;
 			}
 		}

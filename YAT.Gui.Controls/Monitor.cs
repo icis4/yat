@@ -828,24 +828,41 @@ namespace YAT.Gui.Controls
 		{
 			FastListBox flb = fastListBox_Monitor;
 
-			// If first line, add a new empty line
-			if (flb.Items.Count == 0)
-				flb.Items.Add(new Domain.DisplayLine());
-
-			// Get current line and add element
-			int i = flb.Items.Count - 1;
-			Domain.DisplayLine l = flb.Items[i] as Domain.DisplayLine;
-			l.Add(element);
-
-			// Process EOL
-			if (element.IsEol)
+			// If first line, add element to a new line
+			if (flb.Items.Count <= 0)
 			{
-				// Remove lines if maximum exceeded
-				while (flb.Items.Count >= (_maxLineCount))
-					flb.Items.RemoveAt(0);
+				flb.Items.Add(new Domain.DisplayLine(element));
+			}
+			else
+			{
+				// Get current line
+				int lastLineIndex = flb.Items.Count - 1;
+				Domain.DisplayLine current = flb.Items[lastLineIndex] as Domain.DisplayLine;
 
-				// Add new empty line
-				flb.Items.Add(new Domain.DisplayLine());
+				// If first element, add element to line
+				if (current.Count <= 0)
+				{
+					current.Add(element);
+				}
+				else
+				{
+					// If current line has ended, add element to a new line
+					// Otherwise, simply add element to current line
+					int lastElementIndex = current.Count - 1;
+					if (current[lastElementIndex].IsEol)
+					{
+						// Remove lines if maximum exceeded
+						while (flb.Items.Count >= (_maxLineCount))
+							flb.Items.RemoveAt(0);
+
+						// Add element to a new line
+						flb.Items.Add(new Domain.DisplayLine(element));
+					}
+					else
+					{
+						current.Add(element);
+					}
+				}
 			}
 		}
 

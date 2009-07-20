@@ -2417,21 +2417,21 @@ namespace YAT.Gui.Forms
 
 		private void _terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			// display elements immediately
+			// Display elements immediately
 			monitor_Tx.AddElements(e.Elements);
 			monitor_Bidir.AddElements(e.Elements);
 		}
 
 		private void _terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			// display elements immediately
+			// Display elements immediately
 			monitor_Bidir.AddElements(e.Elements);
 			monitor_Rx.AddElements(e.Elements);
 		}
 
 		private void _terminal_DisplayLinesSent(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			// replace lines when they are complete
+			// Replace lines when they are complete
 			for (int i = 0; i < e.Lines.Count; i++)
 			{
 				int offset = e.Lines.Count - i; // e.g. offset = 1 replaces last line
@@ -2442,7 +2442,7 @@ namespace YAT.Gui.Forms
 
 		private void _terminal_DisplayLinesReceived(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			// replace lines when they are complete
+			// Replace lines when they are complete
 			for (int i = 0; i < e.Lines.Count; i++)
 			{
 				int offset = e.Lines.Count - i; // e.g. offset = 1 replaces last line
