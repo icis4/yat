@@ -27,9 +27,11 @@ namespace YAT.Domain
 	public enum SerialDirection
 	{
 		/// <summary></summary>
-		Tx,
+		None = 0,
 		/// <summary></summary>
-		Rx
+		Tx   = 1,
+		/// <summary></summary>
+		Rx   = 2,
 	}
 }
 

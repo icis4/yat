@@ -80,10 +80,10 @@ namespace YAT.Domain
 	public class DisplayElementsEventArgs : EventArgs
 	{
 		/// <summary></summary>
-		public readonly List<DisplayElement> Elements;
+		public readonly DisplayElementCollection Elements;
 
 		/// <summary></summary>
-		public DisplayElementsEventArgs(List<DisplayElement> elements)
+		public DisplayElementsEventArgs(DisplayElementCollection elements)
 		{
 			Elements = elements;
 		}

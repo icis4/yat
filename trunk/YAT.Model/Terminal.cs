@@ -866,8 +866,8 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Local field to maintain connection state in order to be able to detect
-		/// a change of the connection state.
+		/// Local field to maintain connection state in order to be able to detect a change of the
+		/// connection state.
 		/// </summary>
 		private bool _terminal_IOChanged_isConnected;
 
@@ -875,9 +875,9 @@ namespace YAT.Model
 		{
 			OnIOChanged(e);
 
-			if      (_terminal.IsConnected && !_terminal_IOChanged_isConnected)
+			if      ( _terminal.IsConnected && !_terminal_IOChanged_isConnected)
 				_ioConnectChrono.Start();
-			else if (!_terminal.IsConnected && _terminal_IOChanged_isConnected)
+			else if (!_terminal.IsConnected &&  _terminal_IOChanged_isConnected)
 				_ioConnectChrono.Stop();
 
 			_terminal_IOChanged_isConnected = _terminal.IsConnected;
@@ -900,11 +900,11 @@ namespace YAT.Model
 
 		private void _terminal_RawElementSent(object sender, Domain.RawElementEventArgs e)
 		{
-			// count
+			// Count
 			_txByteCount += e.Element.Data.Length;
 			OnIOCountChanged(new EventArgs());
 
-			// log
+			// Log
 			if (_log.IsStarted)
 			{
 				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawTx);
@@ -914,11 +914,11 @@ namespace YAT.Model
 
 		private void _terminal_RawElementReceived(object sender, Domain.RawElementEventArgs e)
 		{
-			// count
+			// Count
 			_rxByteCount += e.Element.Data.Length;
 			OnIOCountChanged(new EventArgs());
 
-			// log
+			// Log
 			if (_log.IsStarted)
 			{
 				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawBidir);
@@ -928,10 +928,10 @@ namespace YAT.Model
 
 		private void _terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			// display
+			// Display
 			OnDisplayElementsSent(e);
 
-			// log
+			// Log
 			foreach (Domain.DisplayElement de in e.Elements)
 			{
 				if (_log.IsStarted)
@@ -952,10 +952,10 @@ namespace YAT.Model
 
 		private void _terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			// display
+			// Display
 			OnDisplayElementsReceived(e);
 
-			// log
+			// Log
 			foreach (Domain.DisplayElement de in e.Elements)
 			{
 				if (_log.IsStarted)
@@ -976,21 +976,21 @@ namespace YAT.Model
 
 		private void _terminal_DisplayLinesSent(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			// count
+			// Count
 			_txLineCount += e.Lines.Count;
 			OnIOCountChanged(new EventArgs());
 
-			// display
+			// Display
 			OnDisplayLinesSent(e);
 		}
 
 		private void _terminal_DisplayLinesReceived(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			// count
+			// Count
 			_rxLineCount += e.Lines.Count;
 			OnIOCountChanged(new EventArgs());
 
-			// display
+			// Display
 			OnDisplayLinesReceived(e);
 		}
 

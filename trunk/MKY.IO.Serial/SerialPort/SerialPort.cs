@@ -676,10 +676,15 @@ namespace MKY.IO.Serial
 				// Without this exclusivity, two receive threads could create a race condition.
 				if (Monitor.TryEnter(_port_DataReceivedSyncObj))
 				{
-					Monitor.Exit(_port_DataReceivedSyncObj);
-
-					_port_DataReceivedDelegate asyncInvoker = new _port_DataReceivedDelegate(_port_DataReceivedAsync);
-					asyncInvoker.BeginInvoke(sender, e, null, null);
+					try
+					{
+						_port_DataReceivedDelegate asyncInvoker = new _port_DataReceivedDelegate(_port_DataReceivedAsync);
+						asyncInvoker.BeginInvoke(sender, e, null, null);
+					}
+					finally
+					{
+						Monitor.Exit(_port_DataReceivedSyncObj);
+					}
 				}
 			}
 		}

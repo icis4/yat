@@ -363,7 +363,7 @@ namespace YAT.Domain
 			bool replaceToAscii = ((TerminalSettings.CharReplace.ReplaceControlChars) &&
 								   (TerminalSettings.CharReplace.ControlCharRadix == ControlCharRadix.AsciiMnemonic));
 			bool error = false;
-			string data = "";
+			string text = "";
 
 			switch (r)
 			{
@@ -375,13 +375,13 @@ namespace YAT.Domain
 					if ((b < 0x20) || (b == 0x7F)) // control chars
 					{
 						if (replaceToAscii)
-							data = ByteToAsciiString(b);
+							text = ByteToAsciiString(b);
 						else
-							data = ByteToNumericRadixString(b, r);
+							text = ByteToNumericRadixString(b, r);
 					}
 					else
 					{
-						data = ByteToNumericRadixString(b, r);
+						text = ByteToNumericRadixString(b, r);
 					}
 					break;
 				}
@@ -392,30 +392,30 @@ namespace YAT.Domain
 					{
 						if (replaceToAscii)
 						{
-							data = ByteToAsciiString(b);
+							text = ByteToAsciiString(b);
 						}
 						else
 						{
 							error = true; // signal error
 							if (d == SerialDirection.Tx)
-								data = "Sent";
+								text = "Sent";
 							else
-								data = "Received";
-							data += " ASCII control char";
-							data += " <" + b.ToString("X2") + "h>";
-							data += " cannot be displayed in current settings";
+								text = "Received";
+							text += " ASCII control char";
+							text += " <" + b.ToString("X2") + "h>";
+							text += " cannot be displayed in current settings";
 						}
 					}
 					else if (b == 0x20) // space
 					{
 						if (TerminalSettings.CharReplace.ReplaceSpace)
-							data = "␣";
+							text = "␣";
 						else
-							data = " ";
+							text = " ";
 					}
 					else
 					{
-						data = ((char)b).ToString();
+						text = ((char)b).ToString();
 					}
 					break;
 				}
@@ -425,13 +425,13 @@ namespace YAT.Domain
 			if (!error)
 			{
 				if (d == SerialDirection.Tx)
-					return (new DisplayElement.TxData(new ElementOrigin(b, d), data));
+					return (new DisplayElement.TxData(b, text));
 				else
-					return (new DisplayElement.RxData(new ElementOrigin(b, d), data));
+					return (new DisplayElement.RxData(b, text));
 			}
 			else
 			{
-				return (new DisplayElement.Error(data));
+				return (new DisplayElement.Error(d, text));
 			}
 		}
 
@@ -491,40 +491,43 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected virtual void ProcessRawElement(RawElement re, List<DisplayElement> elements, List<DisplayLine> lines)
+		protected virtual void ProcessRawElement(RawElement re, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
-			DisplayLine l = new DisplayLine();
+			DisplayLine dl = new DisplayLine();
 
-			// line begin and time stamp
+			// Line begin and time stamp
 			if (_terminalSettings.Display.ShowTimeStamp)
 			{
-				l.Add(new DisplayElement.TimeStamp(re.TimeStamp));
-				l.Add(new DisplayElement.LeftMargin());
+				dl.Add(new DisplayElement.TimeStamp(re.Direction, re.TimeStamp));
+				dl.Add(new DisplayElement.LeftMargin());
 			}
 
-			// data
+			// Data
 			foreach (byte b in re.Data)
 			{
-				l.Add(ByteToElement(b, re.Direction));
+				dl.Add(ByteToElement(b, re.Direction));
 			}
 
-			// line length and end
+			// Line length and end
 			if (_terminalSettings.Display.ShowLength)
 			{
-				l.Add(new DisplayElement.RightMargin());
-				l.Add(new DisplayElement.LineLength(1));
+				dl.Add(new DisplayElement.RightMargin());
+				dl.Add(new DisplayElement.LineLength(re.Direction, 1));
 			}
-			l.Add(new DisplayElement.LineBreak());
+			dl.Add(new DisplayElement.LineBreak());
 
-			// return elements
-			elements.AddRange(l);
-			lines.Add(l);
+			// Return elements
+			// Attention: Clone elements because they are needed again below
+			elements.AddRange(dl.Clone());
+			lines.Add(dl);
 		}
 
 		/// <summary></summary>
 		protected virtual void ProcessAndSignalRawElement(RawElement re)
 		{
-			List<DisplayElement> elements = new List<DisplayElement>();
+			// Collection of elements processed, extends over one or multiple lines, depending on
+			// the number of bytes in raw element
+			DisplayElementCollection elements = new DisplayElementCollection();
 			List<DisplayLine> lines = new List<DisplayLine>();
 
 			ProcessRawElement(re, elements, lines);
@@ -920,13 +923,13 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayElementProcessed(SerialDirection direction, DisplayElement element)
 		{
-			List<DisplayElement> elements = new List<DisplayElement>();
+			DisplayElementCollection elements = new DisplayElementCollection();
 			elements.Add(element);
 			OnDisplayElementsProcessed(direction, elements);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisplayElementsProcessed(SerialDirection direction, List<DisplayElement> elements)
+		protected virtual void OnDisplayElementsProcessed(SerialDirection direction, DisplayElementCollection elements)
 		{
 			if (direction == SerialDirection.Tx)
 			{

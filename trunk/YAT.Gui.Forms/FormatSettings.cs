@@ -139,10 +139,10 @@ namespace YAT.Gui.Forms
 		{
 			_exampleLines = new List<Domain.DisplayLine>();
 
-			_exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxData(null, "12h")));
-			_exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxControl(null, "<CR>")));
-			_exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxData(null, "34h")));
-			_exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxControl(null, "<LF>")));
+			_exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxData(0x41, "41h")));
+			_exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TxControl(0x13, "<CR>")));
+			_exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxData(0x42, "42h")));
+			_exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.RxControl(0x10, "<LF>")));
 			_exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.TimeStamp(DateTime.Now)));
 			_exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.LineLength(2)));
 			_exampleLines.Add(new Domain.DisplayLine(new Domain.DisplayElement.Error("Message")));
@@ -151,18 +151,18 @@ namespace YAT.Gui.Forms
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStamp(DateTime.Now));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
-			exampleComplete.Enqueue(new Domain.DisplayElement.TxData(null, "12h"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TxData(0x41, "41h"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.Space());
-			exampleComplete.Enqueue(new Domain.DisplayElement.TxControl(null, "<CR>"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.TxControl(0x13, "<CR>"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.RightMargin());
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineLength(2));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
 
 			exampleComplete.Enqueue(new Domain.DisplayElement.TimeStamp(DateTime.Now));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LeftMargin());
-			exampleComplete.Enqueue(new Domain.DisplayElement.RxData(null, "34h"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.RxData(0x42, "42h"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.Space());
-			exampleComplete.Enqueue(new Domain.DisplayElement.RxControl(null, "<LF>"));
+			exampleComplete.Enqueue(new Domain.DisplayElement.RxControl(0x10, "<LF>"));
 			exampleComplete.Enqueue(new Domain.DisplayElement.RightMargin());
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineLength(2));
 			exampleComplete.Enqueue(new Domain.DisplayElement.LineBreak());
@@ -243,7 +243,7 @@ namespace YAT.Gui.Forms
 			_isSettingControls = true;
 
 			for (int i = 0; i < _monitors.Length; i++)
-			{                          // clone settings before assigning them to control
+			{                          // Clone settings before assigning them to control
 				_monitors[i].FormatSettings = new Model.Settings.FormatSettings(_formatSettings_Form);
 			}
 
@@ -255,7 +255,7 @@ namespace YAT.Gui.Forms
 				_textFormats[i].FormatFontStyle = tf.FontStyle;
 				_textFormats[i].FormatColor     = tf.Color;
 			}
-			                           // clone settings before assigning them to control
+			                           // Clone settings before assigning them to control
 			monitor_Example.FormatSettings = new Model.Settings.FormatSettings(_formatSettings_Form);
 
 			_isSettingControls = false;
