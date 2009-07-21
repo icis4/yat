@@ -849,7 +849,7 @@ namespace YAT.Gui.Controls
 					// If current line has ended, add element to a new line
 					// Otherwise, simply add element to current line
 					int lastElementIndex = current.Count - 1;
-					if (current[lastElementIndex].IsEol)
+					if (current[lastElementIndex] is Domain.DisplayElement.LineBreak)
 					{
 						// Remove lines if maximum exceeded
 						while (flb.Items.Count >= (_maxLineCount))

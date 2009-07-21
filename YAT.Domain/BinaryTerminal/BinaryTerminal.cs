@@ -290,7 +290,7 @@ namespace YAT.Domain
 				lineState.LineBreakTimer.Start();
 		}
 
-		private void ExecuteLineEnd(LineState lineState, DisplayElementCollection elements, List<DisplayLine> lines)
+		private void ExecuteLineEnd(LineState lineState, SerialDirection d, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			DisplayLinePart lp = new DisplayLinePart();
 
@@ -307,7 +307,7 @@ namespace YAT.Domain
 				lp.Add(new DisplayElement.RightMargin());
 				lp.Add(new DisplayElement.LineLength(lineLength));
 			}
-			lp.Add(new DisplayElement.LineBreak());
+			lp.Add(new DisplayElement.LineBreak(d));
 
 			// Return elements
 			elements.AddRange(lp);
@@ -324,14 +324,14 @@ namespace YAT.Domain
 		}
 
 		private void ExecuteTimedLineBreakOnReload(Settings.BinaryDisplaySettings displaySettings,
-			                                       LineState lineState, DateTime ts,
+			                                       LineState lineState, SerialDirection d, DateTime ts,
 												   DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			if (lineState.LineElements.Count > 0)
 			{
 				TimeSpan span = ts - lineState.TimeStamp;
 				if (span.TotalMilliseconds >= displaySettings.TimedLineBreak.Timeout)
-					ExecuteLineEnd(lineState, elements, lines);
+					ExecuteLineEnd(lineState, d, elements, lines);
 			}
 			lineState.TimeStamp = ts;
 		}
@@ -350,12 +350,12 @@ namespace YAT.Domain
 			}
 		}
 
-		private void ExecuteData(SerialDirection direction, LineState lineState, byte b, DisplayElementCollection elements)
+		private void ExecuteData(SerialDirection d, LineState lineState, byte b, DisplayElementCollection elements)
 		{
 			DisplayLinePart lp = new DisplayLinePart();
 
 			// add space if necessary
-			if (ElementsAreSeparate(direction))
+			if (ElementsAreSeparate(d))
 			{
 				int lineLength = 0;
 				foreach (DisplayElement de in lineState.LineElements)
@@ -370,7 +370,7 @@ namespace YAT.Domain
 			}
 
 			// add data
-			lp.Add(ByteToElement(b, direction));
+			lp.Add(ByteToElement(b, d));
 
 			// return data
 			lineState.LineElements.AddRange(lp);
@@ -401,7 +401,7 @@ namespace YAT.Domain
 			{
 				// in case of reload, timed line breaks are executed here
 				if (Reload && displaySettings.TimedLineBreak.Enabled)
-					ExecuteTimedLineBreakOnReload(displaySettings, lineState, re.TimeStamp, elements, lines);
+					ExecuteTimedLineBreakOnReload(displaySettings, lineState, re.Direction, re.TimeStamp, elements, lines);
 
 				// line begin
 				if (lineState.LinePosition == LinePosition.Begin)
@@ -423,14 +423,14 @@ namespace YAT.Domain
 
 				// line end and length
 				if (lineState.LinePosition == LinePosition.End)
-					ExecuteLineEnd(lineState, elements, lines);
+					ExecuteLineEnd(lineState, re.Direction, elements, lines);
 			}
 		}
 
-		private void ProcessAndSignalDirectionLineBreak(SerialDirection direction)
+		private void ProcessAndSignalDirectionLineBreak(SerialDirection d)
 		{
 			LineState lineState;
-			if (direction == SerialDirection.Tx)
+			if (d == SerialDirection.Tx)
 				lineState = _rxLineState;
 			else
 				lineState = _txLineState;
@@ -444,25 +444,25 @@ namespace YAT.Domain
 				else
 				{
 					if ((lineState.LineElements.Count > 0) &&
-						(direction != _bidirLineState.Direction))
+						(d != _bidirLineState.Direction))
 					{
 						DisplayElementCollection elements = new DisplayElementCollection();
 						List<DisplayLine> lines = new List<DisplayLine>();
 
-						ExecuteLineEnd(lineState, elements, lines);
+						ExecuteLineEnd(lineState, d, elements, lines);
 
 						OnDisplayElementsProcessed(_bidirLineState.Direction, elements);
 						OnDisplayLinesProcessed(_bidirLineState.Direction, lines);
 					}
 				}
 			}
-			_bidirLineState.Direction = direction;
+			_bidirLineState.Direction = d;
 		}
 
-		private void ProcessAndSignalTimedLineBreak(SerialDirection direction)
+		private void ProcessAndSignalTimedLineBreak(SerialDirection d)
 		{
 			LineState lineState;
-			if (direction == SerialDirection.Tx)
+			if (d == SerialDirection.Tx)
 				lineState = _txLineState;
 			else
 				lineState = _rxLineState;
@@ -472,10 +472,10 @@ namespace YAT.Domain
 				DisplayElementCollection elements = new DisplayElementCollection();
 				List<DisplayLine> lines = new List<DisplayLine>();
 
-				ExecuteLineEnd(lineState, elements, lines);
+				ExecuteLineEnd(lineState, d, elements, lines);
 
-				OnDisplayElementsProcessed(direction, elements);
-				OnDisplayLinesProcessed(direction, lines);
+				OnDisplayElementsProcessed(d, elements);
+				OnDisplayLinesProcessed(d, lines);
 			}
 		}
 

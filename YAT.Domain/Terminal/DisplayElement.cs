@@ -231,13 +231,13 @@ namespace YAT.Domain
 		{
 			/// <summary></summary>
 			public LineBreak()
-				: base(SerialDirection.None, new byte[] { }, "", 0, true)
+				: base()
 			{
 			}
 
 			/// <summary></summary>
-			public LineBreak(SerialDirection direction, byte[] original)
-				: base(direction, original, "", 0, true)
+			public LineBreak(SerialDirection direction)
+				: base(direction, "")
 			{
 			}
 		}
@@ -288,19 +288,19 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public DisplayElement()
 		{
-			Initialize(SerialDirection.None, null, "", 0, false, false);
+			Initialize(SerialDirection.None, new List<byte>(), "", 0, false, false);
 		}
 
 		/// <summary></summary>
 		public DisplayElement(string text)
 		{
-			Initialize(SerialDirection.None, null, text, 0, false, false);
+			Initialize(SerialDirection.None, new List<byte>(), text, 0, false, false);
 		}
 
 		/// <summary></summary>
 		public DisplayElement(SerialDirection direction, string text)
 		{
-			Initialize(direction, null, text, 0, false, false);
+			Initialize(direction, new List<byte>(), text, 0, false, false);
 		}
 
 		/// <summary></summary>
@@ -426,6 +426,9 @@ namespace YAT.Domain
 		/// </summary>
 		public bool IsSameKindAs(DisplayElement de)
 		{
+			if (this.GetType() != de.GetType())
+				return (false);
+
 			if (_direction != de._direction)
 				return (false);
 
@@ -447,11 +450,14 @@ namespace YAT.Domain
 		/// </remarks>
 		public void Append(DisplayElement de)
 		{
+			if (this.GetType() != de.GetType())
+				throw (new InvalidOperationException("Cannot append because type doesn't match"));
+
 			if (_direction != de._direction)
 				throw (new InvalidOperationException("Cannot append because direction doesn't match"));
 
 			if (_isData != de._isData)
-				throw (new InvalidOperationException("Cannot append because data type doesn't match"));
+				throw (new InvalidOperationException("Cannot append because kind doesn't match"));
 
 			if (_isEol != de._isEol)
 				throw (new InvalidOperationException("Cannot append because EOL doesn't match"));

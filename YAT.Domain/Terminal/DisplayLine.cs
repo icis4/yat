@@ -126,6 +126,19 @@ namespace YAT.Domain
 				Add(item);
 		}
 
+		/// <summary></summary>
+		public void RemoveAtEnd(int count)
+		{
+			int lastIndex = Count - 1;
+			for (int i = lastIndex; i > (lastIndex - count); i--)
+			{
+				if (this[i].IsData)
+					_dataCount--;
+
+				base.RemoveAt(i);
+			}
+		}
+
 		/// <summary>
 		/// Creates a shallow copy of the collection.
 		/// </summary>
