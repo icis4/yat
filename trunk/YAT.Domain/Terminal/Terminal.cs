@@ -424,10 +424,20 @@ namespace YAT.Domain
 
 			if (!error)
 			{
-				if (d == SerialDirection.Tx)
-					return (new DisplayElement.TxData(b, text));
+				if ((b < 0x20) || (b == 0x7F)) // control chars
+				{
+					if (d == SerialDirection.Tx)
+						return (new DisplayElement.TxControl(b, text));
+					else
+						return (new DisplayElement.RxControl(b, text));
+				}
 				else
-					return (new DisplayElement.RxData(b, text));
+				{
+					if (d == SerialDirection.Tx)
+						return (new DisplayElement.TxData(b, text));
+					else
+						return (new DisplayElement.RxData(b, text));
+				}
 			}
 			else
 			{
@@ -514,7 +524,7 @@ namespace YAT.Domain
 				dl.Add(new DisplayElement.RightMargin());
 				dl.Add(new DisplayElement.LineLength(re.Direction, 1));
 			}
-			dl.Add(new DisplayElement.LineBreak());
+			dl.Add(new DisplayElement.LineBreak(re.Direction));
 
 			// Return elements
 			// Attention: Clone elements because they are needed again below

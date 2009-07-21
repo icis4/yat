@@ -412,7 +412,13 @@ namespace YAT.Domain
 				if (de.IsData)
 					lineState.EolElements.Add(de);
 
-				lp.AddRange(lineState.EolElements);
+				// Retrieve EOL elements, marking them as EOL
+				foreach (DisplayElement item in lineState.EolElements)
+				{
+					item.IsEol = true;
+					lp.Add(item);
+				}
+				lineState.EolElements.Clear();
 				lineState.LinePosition = LinePosition.End;
 			}
 			else if (lineState.Eol.IsPartlyMatch)
@@ -441,7 +447,7 @@ namespace YAT.Domain
 			elements.AddRange(lp);
 		}
 
-		private void ExecuteLineEnd(LineState lineState, DisplayElementCollection elements, List<DisplayLine> lines)
+		private void ExecuteLineEnd(LineState lineState, SerialDirection d, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			// Process EOL
 			int eolLength = lineState.Eol.Eol.Length;
@@ -453,26 +459,26 @@ namespace YAT.Domain
 			}
 			else // Remove EOL
 			{
-				int eolAndWhiteElementCount = 0;
+				int eolAndWhiteCount = 0;
 				DisplayElement[] des = lineState.LineElements.ToArray();
 
-				// Traverse elements reverse and count EOL data and white space elements to be removed
+				// Traverse elements reverse and count EOL and white spaces to be removed
 				for (int i = (des.Length - 1); i >= 0; i--)
 				{
 					// Detect last non-EOL data element
 					if (des[i].IsData && !des[i].IsEol)
 						break;
 
-					eolAndWhiteElementCount++;
+					eolAndWhiteCount++;
 				}
 
-				// Remove EOL and white spaces from elements
-				if (elements.Count >= eolAndWhiteElementCount)
-					elements.RemoveAtEnd(elements.Count - eolAndWhiteElementCount, eolAndWhiteElementCount);
-
 				// Now traverse elements forward and add elements to line
-				for (int i = 0; i < (des.Length - eolAndWhiteElementCount); i++)
+				for (int i = 0; i < (des.Length - eolAndWhiteCount); i++)
 					line.Add(des[i]);
+
+				// Finally, remove EOL and white spaces from elements
+				if (elements.Count >= eolAndWhiteCount)
+					elements.RemoveAtEnd(eolAndWhiteCount);
 			}
 
 			// Process line length
@@ -488,7 +494,7 @@ namespace YAT.Domain
 				lp.Add(new DisplayElement.RightMargin());
 				lp.Add(new DisplayElement.LineLength(lineLength));
 			}
-			lp.Add(new DisplayElement.LineBreak());
+			lp.Add(new DisplayElement.LineBreak(d));
 
 			// Add line end to elements and return them
 			elements.AddRange(lp);
@@ -522,11 +528,11 @@ namespace YAT.Domain
 
 				// Line end and length
 				if (lineState.LinePosition == LinePosition.End)
-					ExecuteLineEnd(lineState, elements, lines);
+					ExecuteLineEnd(lineState, re.Direction, elements, lines);
 			}
 		}
 
-		private void ProcessAndSignalDirectionLineBreak(SerialDirection direction)
+		private void ProcessAndSignalDirectionLineBreak(SerialDirection d)
 		{
 			if (TerminalSettings.Display.DirectionLineBreakEnabled)
 			{
@@ -537,25 +543,25 @@ namespace YAT.Domain
 				else
 				{
 					LineState lineState; // Attention: Direction changed => Use opposite state
-					if (direction == SerialDirection.Tx)
+					if (d == SerialDirection.Tx)
 						lineState = _rxLineState;
 					else
 						lineState = _txLineState;
 
 					if ((lineState.LineElements.Count > 0) &&
-						(direction != _bidirLineState.Direction))
+						(d != _bidirLineState.Direction))
 					{
 						DisplayElementCollection elements = new DisplayElementCollection();
 						List<DisplayLine> lines = new List<DisplayLine>();
 
-						ExecuteLineEnd(lineState, elements, lines);
+						ExecuteLineEnd(lineState, d, elements, lines);
 
 						OnDisplayElementsProcessed(_bidirLineState.Direction, elements);
 						OnDisplayLinesProcessed(_bidirLineState.Direction, lines);
 					}
 				}
 			}
-			_bidirLineState.Direction = direction;
+			_bidirLineState.Direction = d;
 		}
 
 		/// <summary></summary>
