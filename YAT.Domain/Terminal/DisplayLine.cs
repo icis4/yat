@@ -65,9 +65,10 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		public DisplayElementCollection(DisplayElementCollection collection)
-			: base(collection)
 		{
-			_dataCount = collection._dataCount;
+			_dataCount = 0;
+			foreach (DisplayElement item in collection)
+				Add(item);
 		}
 
 		/// <summary></summary>
@@ -99,22 +100,23 @@ namespace YAT.Domain
 		// Methods
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Item must be cloned to prevent unexpected behaviour of the reference type.
+		/// </remarks>
 		new public void Add(DisplayElement item)
 		{
 			if (Count <= 0)
 			{
-				base.Add(item);
+				base.Add(item.Clone());
 			}
 			else
 			{
-				// For performance reasons, append this item to the last item in case it's the same
-				// kind of item
+				// For performance reasons, append the item to the last item if possible
 				int lastIndex = Count - 1;
 				if (this[lastIndex].IsSameKindAs(item))
-					this[lastIndex].Append(item);
+					this[lastIndex].Append(item.Clone());
 				else
-					base.Add(item);
+					base.Add(item.Clone());
 			}
 			_dataCount += item.DataCount;
 		}
@@ -127,16 +129,32 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		new public void RemoveAt(int index)
+		{
+			if (this[index].IsData)
+				_dataCount -= this[index].DataCount;
+
+			base.RemoveAt(index);
+		}
+
+		/// <summary></summary>
+		public void RemoveAtEnd()
+		{
+			RemoveAt(Count - 1);
+		}
+
+		/// <summary></summary>
 		public void RemoveAtEnd(int count)
 		{
-			int lastIndex = Count - 1;
-			for (int i = lastIndex; i > (lastIndex - count); i--)
-			{
-				if (this[i].IsData)
-					_dataCount--;
+			for (int i = 0; i < count; i++)
+				RemoveAtEnd();
+		}
 
-				base.RemoveAt(i);
-			}
+		/// <summary></summary>
+		new public void RemoveRange(int index, int count)
+		{
+			for (int i = 0; i < count; i++)
+				RemoveAt(index + i);
 		}
 
 		/// <summary>
@@ -148,7 +166,7 @@ namespace YAT.Domain
 			DisplayElementCollection c = new DisplayElementCollection();
 
 			foreach (DisplayElement de in this)
-				c.Add(new DisplayElement(de));
+				c.Add(de.Clone());
 
 			return (c);
 		}
@@ -249,6 +267,27 @@ namespace YAT.Domain
 		public DisplayLine(DisplayElement displayElement)
 			: base(displayElement)
 		{
+		}
+
+		#endregion
+
+		#region DisplayElementCollection Members
+		//==========================================================================================
+		// DisplayElementCollection Members
+		//==========================================================================================
+
+		/// <summary>
+		/// Creates a shallow copy of the collection.
+		/// </summary>
+		/// <returns>A shallow copy of the collection.</returns>
+		new public DisplayLine Clone()
+		{
+			DisplayLine dl = new DisplayLine();
+
+			foreach (DisplayElement de in this)
+				dl.Add(de.Clone());
+
+			return (dl);
 		}
 
 		#endregion
