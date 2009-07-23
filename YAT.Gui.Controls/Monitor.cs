@@ -382,19 +382,6 @@ namespace YAT.Gui.Controls
 			flb.EndUpdate();
 		}
 
-		/*public void ReplaceLine(int offset, Domain.DisplayLine line)
-		{
-			FastListBox flb = listBox_Monitor;
-
-			int lastIndex = flb.Items.Count - 1;
-			int indexToReplace = lastIndex - offset;
-
-			if (indexToReplace >= 0)
-				flb.Items[indexToReplace] = new Domain.DisplayLine(line);
-			else
-				throw (new InvalidOperationException("Invalid attempt to replace a line of the monitor"));
-		}*/
-
 		public void Clear()
 		{
 			ClearListBox();

@@ -2429,28 +2429,6 @@ namespace YAT.Gui.Forms
 			monitor_Rx.AddElements(e.Elements);
 		}
 
-		private void _terminal_DisplayLinesSent(object sender, Domain.DisplayLinesEventArgs e)
-		{
-			// Replace lines when they are complete
-			for (int i = 0; i < e.Lines.Count; i++)
-			{
-				int offset = e.Lines.Count - i; // e.g. offset = 1 replaces last line
-				//monitor_Tx.ReplaceLine(offset, e.Lines[i]);
-				//monitor_Bidir.ReplaceLine(offset, e.Lines[i]);
-			}
-		}
-
-		private void _terminal_DisplayLinesReceived(object sender, Domain.DisplayLinesEventArgs e)
-		{
-			// Replace lines when they are complete
-			for (int i = 0; i < e.Lines.Count; i++)
-			{
-				int offset = e.Lines.Count - i; // e.g. offset = 1 replaces last line
-				//monitor_Bidir.ReplaceLine(offset, e.Lines[i]);
-				//monitor_Rx.ReplaceLine(offset, e.Lines[i]);
-			}
-		}
-
 		private void _terminal_RepositoryCleared(object sender, Domain.RepositoryEventArgs e)
 		{
 			switch (e.Repository)
