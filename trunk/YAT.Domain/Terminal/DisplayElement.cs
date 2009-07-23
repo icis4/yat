@@ -35,7 +35,7 @@ namespace YAT.Domain
 	[XmlInclude(typeof(DisplayElement.RxData))]
 	[XmlInclude(typeof(DisplayElement.RxControl))]
 	[XmlInclude(typeof(DisplayElement.TimeStamp))]
-	[XmlInclude(typeof(DisplayElement.LineBreak))]
+	[XmlInclude(typeof(DisplayElement.LineLength))]
 	[XmlInclude(typeof(DisplayElement.LeftMargin))]
 	[XmlInclude(typeof(DisplayElement.Space))]
 	[XmlInclude(typeof(DisplayElement.RightMargin))]
@@ -172,6 +172,12 @@ namespace YAT.Domain
 //				: base(direction, "(" + timeStamp.ToLongTimeString() + "." + XString.Left((timeStamp.Millisecond/10).ToString("D2"), 2) + ")")
 			{
 			}
+
+			/// <summary></summary>
+			public TimeStamp(SerialDirection direction, string timeStamp)
+				: base(direction, timeStamp)
+			{
+			}
 		}
 
 		/// <summary></summary>
@@ -192,6 +198,12 @@ namespace YAT.Domain
 			/// <summary></summary>
 			public LineLength(SerialDirection direction, int length)
 				: base(direction, "(" + length + ")")
+			{
+			}
+
+			/// <summary></summary>
+			public LineLength(SerialDirection direction, string length)
+				: base(direction, length)
 			{
 			}
 		}
@@ -286,25 +298,25 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public DisplayElement()
+		private DisplayElement()
 		{
 			Initialize(SerialDirection.None, new List<byte>(), "", 0, false, false);
 		}
 
 		/// <summary></summary>
-		public DisplayElement(string text)
+		private DisplayElement(string text)
 		{
 			Initialize(SerialDirection.None, new List<byte>(), text, 0, false, false);
 		}
 
 		/// <summary></summary>
-		public DisplayElement(SerialDirection direction, string text)
+		private DisplayElement(SerialDirection direction, string text)
 		{
 			Initialize(direction, new List<byte>(), text, 0, false, false);
 		}
 
 		/// <summary></summary>
-		public DisplayElement(SerialDirection direction, byte origin, string text)
+		private DisplayElement(SerialDirection direction, byte origin, string text)
 		{
 			List<byte> l = new List<byte>();
 			l.Add(origin);
@@ -312,7 +324,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public DisplayElement(SerialDirection direction, byte[] origin, string text, int dataCount)
+		private DisplayElement(SerialDirection direction, byte[] origin, string text, int dataCount)
 		{
 			List<byte> l = new List<byte>();
 			l.AddRange(origin);
@@ -320,28 +332,20 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public DisplayElement(SerialDirection direction, byte[] origin, string text, int dataCount, bool isEol)
+		private DisplayElement(SerialDirection direction, byte[] origin, string text, int dataCount, bool isEol)
 		{
 			List<byte> l = new List<byte>();
 			l.AddRange(origin);
 			Initialize(direction, l, text, dataCount, true, isEol);
 		}
 
-		/// <summary></summary>
-		public DisplayElement(DisplayElement de)
-		{
-			List<byte> l = new List<byte>();
-			l.AddRange(de._origin);
-			Initialize(de._direction, l, de._text, de._dataCount, de._isData, de._isEol);
-		}
-
-		private void Initialize(SerialDirection direction, List<byte> origin, string text, int dataCount, bool isDataElement, bool isEol)
+		private void Initialize(SerialDirection direction, List<byte> origin, string text, int dataCount, bool isData, bool isEol)
 		{
 			_direction = direction;
 			_origin = origin;
 			_text = text;
 			_dataCount = dataCount;
-			_isData = isDataElement;
+			_isData = isData;
 			_isEol = isEol;
 		}
 
@@ -421,6 +425,40 @@ namespace YAT.Domain
 		// Methods
 		//==========================================================================================
 
+		/// <summary></summary>
+		public DisplayElement Clone()
+		{
+			// Ensure to use the proper constructor
+
+			// Attention: For performance reasons, reflection as shown below is not used
+			//ConstructorInfo ci = this.GetType().GetConstructor(Type.EmptyTypes);
+			//DisplayElement de = (DisplayElement)ci.Invoke(null);
+
+			DisplayElement de;
+
+			if      (this is TxData)      de = new TxData();
+			else if (this is TxControl)   de = new TxControl();
+			else if (this is RxData)      de = new RxData();
+			else if (this is RxControl)   de = new RxControl();
+			else if (this is TimeStamp)   de = new TimeStamp();
+			else if (this is LineLength)  de = new LineLength();
+			else if (this is LeftMargin)  de = new LeftMargin();
+			else if (this is Space)       de = new Space();
+			else if (this is RightMargin) de = new RightMargin();
+			else if (this is LineBreak)   de = new LineBreak();
+			else if (this is Error)       de = new Error();
+			else throw (new TypeLoadException("Unknown display element type"));
+
+			de._direction = _direction;
+			de._origin = _origin;
+			de._text = _text;
+			de._dataCount = _dataCount;
+			de._isData = _isData;
+			de._isEol = _isEol;
+
+			return (de);
+		}
+
 		/// <summary>
 		/// Compares too display elements and returns true if both are of the same kind.
 		/// </summary>
@@ -448,8 +486,16 @@ namespace YAT.Domain
 		/// Useful to improve performance. Appending keeps number of display elements as low as
 		/// possible, thus iteration through display element gets faster.
 		/// </remarks>
+		static int counter = 0;
 		public void Append(DisplayElement de)
 		{
+			//System.Diagnostics.Debug.WriteLine("This:" + Environment.NewLine + this.ToString(""));
+			//System.Diagnostics.Debug.WriteLine("Elem:" + Environment.NewLine + de.ToString(""));
+
+			//counter++;
+			//if (counter >= 19)
+				//System.Diagnostics.Debugger.Break();
+
 			if (this.GetType() != de.GetType())
 				throw (new InvalidOperationException("Cannot append because type doesn't match"));
 

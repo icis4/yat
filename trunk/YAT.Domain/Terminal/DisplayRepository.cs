@@ -134,7 +134,7 @@ namespace YAT.Domain
 					DequeueExcessLine();
 
 				// Enqueue new line and reset current line
-				base.Enqueue(new DisplayLine(_currentLine));
+				base.Enqueue(_currentLine.Clone());
 				_currentLine.Clear();
 			}
 		}
@@ -181,11 +181,14 @@ namespace YAT.Domain
 
 		private void DequeueExcessLine()
 		{
-			DisplayLine dl = Dequeue();
-			foreach (DisplayElement de in dl)
+			if (Count > 0)
 			{
-				if (de.IsData)
-					_dataCount--;
+				DisplayLine dl = Dequeue();
+				foreach (DisplayElement de in dl)
+				{
+					if (de.IsData)
+						_dataCount--;
+				}
 			}
 		}
 
