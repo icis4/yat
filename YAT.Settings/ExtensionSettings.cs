@@ -25,19 +25,17 @@ namespace YAT.Settings
 	/// </summary>
 	public static class ExtensionSettings
 	{
-		public static string AllFilesFilter
-		{
-			get { return ("All Files (*.*)|*.*"); }
-		}
+		private static string _terminalFileExtension  = ".yat";
+		private static string _workspaceFileExtension = ".yaw";
 
-		public static string TerminalFilesFilter
-		{
-			get { return ("Terminal Files (*.yat)|*.yat"); }
-		}
-
+		/// <summary>
+		/// Allows to alter the file extension used for terminal files,
+		/// e.g. ".ab1" instead of ".yat".
+		/// </summary>
 		public static string TerminalFiles
 		{
-			get { return (".yat"); }
+			get { return (_terminalFileExtension); }
+			set { _terminalFileExtension = value; }
 		}
 
 		public static bool IsTerminalFile(string extension)
@@ -48,14 +46,19 @@ namespace YAT.Settings
 				return (false);
 		}
 
-		public static string WorkspaceFilesFilter
+		public static string TerminalFilesFilter
 		{
-			get { return ("Workspace Files (*.yaw)|*.yaw"); }
+			get { return ("Terminal Files (*" + TerminalFiles + ")|*" + TerminalFiles); }
 		}
 
+		/// <summary>
+		/// Allows to alter the file extension used for workspace files,
+		/// e.g. ".ab2" instead of ".yaw".
+		/// </summary>
 		public static string WorkspaceFiles
 		{
-			get { return (".yaw"); }
+			get { return (_workspaceFileExtension); }
+			set { _workspaceFileExtension = value; }
 		}
 
 		public static bool IsWorkspaceFile(string extension)
@@ -64,6 +67,11 @@ namespace YAT.Settings
 				return (true);
 			else
 				return (false);
+		}
+
+		public static string WorkspaceFilesFilter
+		{
+			get { return ("Workspace Files (*" + WorkspaceFiles + ")|*" + WorkspaceFiles); }
 		}
 
 		public static string TextFilesFilter
@@ -185,6 +193,11 @@ namespace YAT.Settings
 				return (true);
 			else
 				return (false);
+		}
+
+		public static string AllFilesFilter
+		{
+			get { return ("All Files (*.*)|*.*"); }
 		}
 	}
 }

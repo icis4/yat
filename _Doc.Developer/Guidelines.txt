@@ -1,4 +1,11 @@
 
+Special tags
+------------
+
+\fixme
+\remind
+
+
 override and new
 ----------------
 
@@ -19,7 +26,7 @@ FALSE is never defined in C#, #if (FALSE) clearly states that block isn't in use
 
 Write
 #if (FALSE)
-<Block>
+			<Block>
 #endif
 at column 0 to keep code structure clear of disabled block.
 

@@ -53,6 +53,7 @@
     <Compile Include="EventArgs.cs" />
     <Compile Include="FontFormat.cs" />
     <Compile Include="PredefinedCommandPage.cs" />
+    <Compile Include="PredefinedCommandPageCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextFormat.cs" />
   </ItemGroup>

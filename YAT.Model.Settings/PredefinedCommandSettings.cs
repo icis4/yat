@@ -30,7 +30,7 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		public const int MaxCommandsPerPage = 12;
 
-		private List<PredefinedCommandPage> _pages;
+		private PredefinedCommandPageCollection _pages;
 
 		/// <summary></summary>
 		public PredefinedCommandSettings()
@@ -54,7 +54,7 @@ namespace YAT.Model.Settings
 		public PredefinedCommandSettings(PredefinedCommandSettings rhs)
 			: base(rhs)
 		{
-			Pages = new List<PredefinedCommandPage>(rhs.Pages);
+			Pages = new PredefinedCommandPageCollection(rhs.Pages);
 			ClearChanged();
 		}
 
@@ -63,7 +63,7 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			Pages = new List<PredefinedCommandPage>();
+			Pages = new PredefinedCommandPageCollection();
 		}
 
 		#region Properties
@@ -73,7 +73,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("Pages")]
-		public List<PredefinedCommandPage> Pages
+		public PredefinedCommandPageCollection Pages
 		{
 			get { return (_pages); }
 			set
@@ -96,7 +96,7 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		public void CreateDefaultPage()
 		{
-			_pages = new List<PredefinedCommandPage>();
+			_pages = new PredefinedCommandPageCollection();
 			_pages.Add(new PredefinedCommandPage("Page 1"));
 			SetChanged();
 		}

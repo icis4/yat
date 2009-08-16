@@ -1066,19 +1066,25 @@ namespace YAT.Gui.Forms
 
 				if (isDefined)
 				{
-					_menuItems_predefined[i].Text = commands[i].Description;
-					_menuItems_predefined[i].Enabled = isValid;
+					_menuItems_predefined[i].Text      = commands[i].Description;
+					_menuItems_predefined[i].ForeColor = SystemColors.ControlText;
+					_menuItems_predefined[i].Font      = SystemFonts.DefaultFont;
+					_menuItems_predefined[i].Enabled   = isValid;
 				}
 				else
 				{
-					_menuItems_predefined[i].Text = Model.Types.Command.DefineCommandText;
-					_menuItems_predefined[i].Enabled = true;
+					_menuItems_predefined[i].Text      = Model.Types.Command.DefineCommandText;
+					_menuItems_predefined[i].ForeColor = SystemColors.GrayText;
+					_menuItems_predefined[i].Font      = Utilities.Drawing.ItalicDefaultFont;
+					_menuItems_predefined[i].Enabled   = true;
 				}
 			}
 			for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage; i++)
 			{
-				_menuItems_predefined[i].Text = Model.Types.Command.DefineCommandText;
-				_menuItems_predefined[i].Enabled = true;
+				_menuItems_predefined[i].Text      = Model.Types.Command.DefineCommandText;
+				_menuItems_predefined[i].ForeColor = SystemColors.GrayText;
+				_menuItems_predefined[i].Font      = Utilities.Drawing.ItalicDefaultFont;
+				_menuItems_predefined[i].Enabled   = true;
 			}
 
 			_isSettingControls = false;
@@ -2277,8 +2283,6 @@ namespace YAT.Gui.Forms
 
 			_terminal.DisplayElementsSent     += new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsSent);
 			_terminal.DisplayElementsReceived += new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsReceived);
-			_terminal.DisplayLinesSent        += new EventHandler<Domain.DisplayLinesEventArgs>(_terminal_DisplayLinesSent);
-			_terminal.DisplayLinesReceived    += new EventHandler<Domain.DisplayLinesEventArgs>(_terminal_DisplayLinesReceived);
 
 			_terminal.RepositoryCleared  += new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryCleared);
 			_terminal.RepositoryReloaded += new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryReloaded);
@@ -2304,8 +2308,6 @@ namespace YAT.Gui.Forms
 
 			_terminal.DisplayElementsSent     -= new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsSent);
 			_terminal.DisplayElementsReceived -= new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsReceived);
-			_terminal.DisplayLinesSent        -= new EventHandler<Domain.DisplayLinesEventArgs>(_terminal_DisplayLinesSent);
-			_terminal.DisplayLinesReceived    -= new EventHandler<Domain.DisplayLinesEventArgs>(_terminal_DisplayLinesReceived);
 
 			_terminal.RepositoryCleared  -= new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryCleared);
 			_terminal.RepositoryReloaded -= new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryReloaded);

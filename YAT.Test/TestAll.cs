@@ -36,6 +36,9 @@ namespace YAT.Test
 			{
 				ArrayList suite = new ArrayList();
 
+				// MKY.IO.Ports.Test
+				suite.Add(new MKY.IO.Ports.Test.SerialPort.SerialPortIdTest());
+
 				// MKY.Utilities.Test
 				suite.Add(new MKY.Utilities.Test.IO.XPathTest());
 				suite.Add(new MKY.Utilities.Test.Settings.DocumentSettingsHandlerTest());
@@ -43,11 +46,17 @@ namespace YAT.Test
 				suite.Add(new MKY.Utilities.Test.Types.XInt32Test());
 				suite.Add(new MKY.Utilities.Test.Types.XUInt64Test());
 
+				// YAT.Controller.Test
+				suite.Add(new YAT.Controller.Test.ControllerTest());
+
 				// YAT.Domain.Test
 				suite.Add(new YAT.Domain.Test.Parser.ParserTest());
 				suite.Add(new YAT.Domain.Test.TextTerminal.SubstitutionParserTest());
 
 				// YAT.Model.Test
+				suite.Add(new YAT.Model.Test.ClearTest());
+				suite.Add(new YAT.Model.Test.FileHandlingTest());
+				suite.Add(new YAT.Model.Test.StressTest());
 				suite.Add(new YAT.Model.Test.TransmissionTest());
 
 				// YAT.Settings.Test

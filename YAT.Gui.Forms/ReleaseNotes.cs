@@ -34,18 +34,18 @@ namespace YAT.Gui.Forms
 		private const string _ReleaseNotesFileName = @"YAT Release Notes.txt";
 
 		private readonly string _ReleaseNotesFilePath = Application.StartupPath + Path.DirectorySeparatorChar + _ReleaseNotesFileName;
+
 		private readonly string _ReleaseNotesDevelopmentRelativeFilePath =
 			@".." + Path.DirectorySeparatorChar +
 			@".." + Path.DirectorySeparatorChar +
 			@".." + Path.DirectorySeparatorChar +
 			@"_Doc.User" + Path.DirectorySeparatorChar + _ReleaseNotesFileName;
-		//private readonly string _ReleaseNotesInstallationAbsoluteFilePath = @"C:\Programme\YAT\" + _ReleaseNotesFileName;
 
 		public ReleaseNotes()
 		{
 			InitializeComponent();
 
-			// get file path
+			// Get file path depending on development or installation
 			string _filePath;
 			switch (Path.GetFileName(Application.StartupPath))
 			{
@@ -59,12 +59,12 @@ namespace YAT.Gui.Forms
 					break;
 			}
 
-			// form title
+			// Set form title
 			string text = ApplicationInfo.ProductName;
 			text += " Release Notes";
 			Text = text;
 
-			// open and fill release notes
+			// Open and fill release notes
 			textBox_ReleaseNotes.Text = "";
 			if (File.Exists(_filePath))
 			{

@@ -179,9 +179,17 @@ namespace YAT.Gui.Controls
             splitContainer.SplitterDistance = (int)(_splitterRatio * splitContainer.Width);
 
 			if (_fileCommand.IsFilePath)
-				pathLabel_FilePath.Text = _fileCommand.FilePath;
+			{
+				pathLabel_FilePath.Text      = _fileCommand.FilePath;
+				pathLabel_FilePath.ForeColor = SystemColors.ControlText;
+				pathLabel_FilePath.Font      = SystemFonts.DefaultFont;
+			}
 			else
-				pathLabel_FilePath.Text = Command.UndefinedFilePathText;
+			{
+				pathLabel_FilePath.Text      = Command.UndefinedFilePathText;
+				pathLabel_FilePath.ForeColor = SystemColors.GrayText;
+				pathLabel_FilePath.Font      = Utilities.Drawing.ItalicDefaultFont;
+			}
 
 			if (_fileCommand.IsValidFilePath)
 				button_SendFile.Enabled = _terminalIsOpen;

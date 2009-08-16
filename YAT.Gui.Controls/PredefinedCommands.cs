@@ -49,7 +49,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		private bool _isSettingControls = false;
-		private List<PredefinedCommandPage> _pages;
+		private PredefinedCommandPageCollection _pages;
 		private int _selectedPage = _SelectedPageDefault;
 		private bool _terminalIsOpen = _TerminalIsOpenDefault;
 
@@ -94,7 +94,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public List<PredefinedCommandPage> Pages
+		public PredefinedCommandPageCollection Pages
 		{
 			get { return (_pages); }
 			set

@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.IO;
 
@@ -28,16 +29,6 @@ namespace YAT.Model.Test
 	[TestFixture]
 	public class FileHandlingTest
 	{
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private const string _TempPath = @"c:\";
-		private const string _TempPrefix = "YAT-Test-";
-
-		#endregion
-
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -842,17 +833,17 @@ namespace YAT.Model.Test
 
 		private static string MakeTempPath()
 		{
-			return (_TempPath);
+			return (System.Windows.Forms.Application.StartupPath);
 		}
 
 		private static string MakeTempFileName(string name, string extension)
 		{
-			return (_TempPrefix + name + extension);
+			return ("YAT-Test-" + name + extension);
 		}
 
 		private static string MakeTempFilePath(string name, string extension)
 		{
-			return (MakeTempPath() + MakeTempFileName(name, extension));
+			return (MakeTempPath() + Path.DirectorySeparatorChar + MakeTempFileName(name, extension));
 		}
 
 		#endregion

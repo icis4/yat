@@ -415,7 +415,7 @@ namespace MKY.Utilities.Xml
 			int i = 0;
 			foreach (XmlSchema schema in schemas.Schemas())
 			{
-				string filePath = @"C:\" + GetType() + "." + label + "-" + i + ".xsd";
+				string filePath = System.Windows.Forms.Application.StartupPath + Path.DirectorySeparatorChar + GetType() + "." + label + "-" + i + ".xsd";
 				using (StreamWriter sw = new StreamWriter(filePath))
 				{
 					schema.Write(sw);
@@ -433,7 +433,7 @@ namespace MKY.Utilities.Xml
 	#if (WRITE_DOCUMENTS_TO_FILES)
 		private void WriteDocumentToFile(XmlDocument document, string label)
 		{
-			string filePath = @"C:\" + GetType() + "." + label + ".xml";
+			string filePath = System.Windows.Forms.Application.StartupPath + Path.DirectorySeparatorChar + GetType() + "." + label + ".xml";
 			using (StreamWriter sw = new StreamWriter(filePath))
 			{
 				document.Save(sw);

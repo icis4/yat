@@ -38,18 +38,18 @@ namespace YAT.Gui.Forms
 			string textAfter = "";
 			int start = 0;
 
-			// form
+			// Form
 			text = "About ";
 			text += ApplicationInfo.ProductName;
 			text += " - Yet Another Terminal";
 			Text = text;
 
-			// title
+			// Title
 			text = ApplicationInfo.ProductName;
 			text += " - Version " + Application.ProductVersion;
 			linkLabel_Title.Text = text;
 
-			// copyright
+			// Copyright
 			linkLabel_Copyright.Text = "";
 			textBefore = "Copyright © 2003-2004 ";
 			textLink =                         "HSR Hochschule für Technik Rapperswil";
@@ -61,10 +61,10 @@ namespace YAT.Gui.Forms
 			linkLabel_Copyright.Links.Add(start, textLink.Length, "http://www.hsr.ch/");
 			linkLabel_Copyright.Text += textAfter;
 
-			// trademark
+			// Trademark
 			linkLabel_Trademark.Text = "All rights reserved.";
 
-			// description
+			// Description
 			linkLabel_Description.Text = "";
 			textBefore = "YAT is a by-product of the ";
 			textLink =                              "Swiss federal KTI/CTI";
@@ -84,7 +84,7 @@ namespace YAT.Gui.Forms
 			linkLabel_Description.Links.Add(start, textLink.Length, "http://www.mt.com/");
 			linkLabel_Description.Text += textAfter;
 
-			// platform
+			// Platform
 			linkLabel_Platform.Text = "For .NET 3.5 on Windows 2000 and later. Currently running on .NET runtime " + System.Runtime.InteropServices.RuntimeEnvironment.GetSystemVersion() + ".";
 
 			// HHD
@@ -99,7 +99,18 @@ namespace YAT.Gui.Forms
 			linkLabel_HHD.Links.Add(start, textLink.Length, "http://www.hhdsoftware.com/");
 			linkLabel_HHD.Text += textAfter;
 
-			// environment
+			// VSPE
+			linkLabel_VSPE.Text = "";
+			textBefore = "If you're also looking for a tool to create and manage additional virtual COM ports, check out"  + Environment.NewLine;
+			textLink =   "Eterlogic Virtual Serial Ports Emulator";
+			textAfter =                                          ".";
+			linkLabel_VSPE.Text += textBefore;
+			start = linkLabel_VSPE.Text.Length;
+			linkLabel_VSPE.Text += textLink;
+			linkLabel_VSPE.Links.Add(start, textLink.Length, "http://www.eterlogic.com/Products.VSPE.html");
+			linkLabel_VSPE.Text += textAfter;
+
+			// Environment
 			linkLabel_Environment.Text = "";
 			textBefore = "YAT is developed with" + Environment.NewLine +
 						 "   > Microsoft Visual Studio 2008" + Environment.NewLine +
@@ -147,7 +158,7 @@ namespace YAT.Gui.Forms
 			linkLabel_Environment.Text += textLink;
 			linkLabel_Environment.Links.Add(start, textLink.Length, "http://dejavu.sourceforge.net/");
 
-			// home
+			// Home
 			linkLabel_Home.Text = "";
 			textBefore = "Visit YAT on ";
 			textLink =                "SourceForge.net";
@@ -158,10 +169,10 @@ namespace YAT.Gui.Forms
 			linkLabel_Home.Links.Add(start, textLink.Length, "http://sourceforge.net/projects/y-a-terminal/");
 			linkLabel_Home.Text += textAfter;
 
-			// author
+			// Author
 			linkLabel_Author.Text = "2009, Matthias Kläy";
 
-			// license
+			// License
 			linkLabel_License.Text = "";
 			textBefore = "YAT is licensed under the ";
 			textLink =                             "GNU LGPL";

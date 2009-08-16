@@ -28,17 +28,26 @@ namespace YAT.Gui.Forms
 {
 	public partial class Help : System.Windows.Forms.Form
 	{
+		/// <summary>
+		/// \fixme
+		/// Add a true help to YAT.
+		/// 
+		/// \remind
+		/// Explain framing errors:
+		/// "A framing error occurs when the last bit is not a stop bit. This may occur due to a timing error. You will most commonly encounter a framing error when using a null modem linking two computers or a protocol analyzer when the speed at which the data is being sent is different to that of what you have the UART set to receive it at."
+		/// In YAT, these errors are shown in red.
+		/// </summary>
 		public Help()
 		{
 			InitializeComponent();
 
-			// form title
+			// Form title
 			string text = Application.ProductName;
 			text += ApplicationInfo.ProductNamePostFix;
 			text += " Help";
 			Text = text;
 
-			// help texts
+			// Help texts
 			textBox_ParserFormat.Text = Domain.Parser.Parser.FormatHelp;
 			textBox_ParserFormat.SelectionStart = 0;
 			textBox_ParserFormat.SelectionLength = 0;

@@ -24,9 +24,14 @@ namespace MKY.Utilities.Diagnostics
 	/// <summary>
 	/// Provides static methods to write diagnostics output to <see cref="System.Diagnostics.Debug"/>.
 	/// </summary>
+	/// <remarks>
+	/// Implementation gets optimized on non-debug by not creating the debug wrapper.
+	/// </remarks>
 	public static class XDebug
 	{
-		private static DebugWrapper _debugWrapper = new DebugWrapper();
+		#if (DEBUG)
+			private static DebugWrapper _debugWrapper = new DebugWrapper();
+		#endif
 
 		/// <summary>
 		/// Writes source, type, message and stack of the given exception and its inner exceptions
