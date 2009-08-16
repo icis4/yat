@@ -24,9 +24,14 @@ namespace MKY.Utilities.Diagnostics
 	/// <summary>
 	/// Provides static methods to write diagnostics output to <see cref="System.Diagnostics.Trace"/>.
 	/// </summary>
+	/// <remarks>
+	/// Implementation gets optimized on non-trace by not creating the trace wrapper.
+	/// </remarks>
 	public static class XTrace
 	{
-		private static TraceWrapper _traceWrapper = new TraceWrapper();
+		#if (TRACE)
+			private static TraceWrapper _traceWrapper = new TraceWrapper();
+		#endif
 
 		/// <summary>
 		/// Writes source, type, message and stack of the given exception and its inner exceptions
@@ -41,7 +46,9 @@ namespace MKY.Utilities.Diagnostics
 		[Conditional("TRACE")]
 		public static void WriteException(object obj, Exception ex)
 		{
+		#if (TRACE)
 			DiagnosticsWriterOutput.WriteException(_traceWrapper, obj, ex);
+		#endif
 		}
 
 		/// <summary>
@@ -56,7 +63,9 @@ namespace MKY.Utilities.Diagnostics
 		[Conditional("TRACE")]
 		public static void WriteStack(object obj, string message)
 		{
+		#if (TRACE)
 			DiagnosticsWriterOutput.WriteStack(_traceWrapper, obj, message);
+		#endif
 		}
 	}
 }

@@ -35,17 +35,6 @@ namespace YAT.Settings.Test
 	[TestFixture]
 	public class XmlTest
 	{
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private const string _TempPath = @"c:\";
-		private const string _TempPrefix = "YAT-Test-";
-		private const string _TempExtension = ".xml";
-
-		#endregion
-
 		#region Tear Down
 		//==========================================================================================
 		// Tear Down
@@ -201,13 +190,13 @@ namespace YAT.Settings.Test
 			pcp.Commands.Add(new Command("Hallo", "Wält"));
 			TestSerialization(typeof(PredefinedCommandPage), pcp, filePath);
 
-			List<PredefinedCommandPage> l = new List<PredefinedCommandPage>();
-			l.Add(pcp);
-			l.Add(pcp);
+			PredefinedCommandPageCollection c = new PredefinedCommandPageCollection();
+			c.Add(pcp);
+			c.Add(pcp);
 
 			filePath = MakeTempFilePath("PredefinedCommandSettings");
 			PredefinedCommandSettings pcs = new PredefinedCommandSettings();
-			pcs.Pages = l;
+			pcs.Pages = c;
 			TestSerialization(typeof(PredefinedCommandSettings), pcs, filePath);
 		}
 
@@ -258,22 +247,22 @@ namespace YAT.Settings.Test
 
 		private static string MakeTempPath()
 		{
-			return (_TempPath);
+			return (System.Windows.Forms.Application.StartupPath);
 		}
 
 		private static string MakeTempFileName(string name)
 		{
-			return (_TempPrefix + name + _TempExtension);
+			return ("YAT-Test-" + name + ".xml");
 		}
 
 		private static string MakeTempFilePath(string name)
 		{
-			return (MakeTempPath() + MakeTempFileName(name));
+			return (MakeTempPath() + Path.DirectorySeparatorChar + MakeTempFileName(name));
 		}
 
 		private static void TestSerialization(Type type, object obj, string filePath)
 		{
-			// save
+			// Save
 			try
 			{
 				using (StreamWriter sw = new StreamWriter(filePath))
@@ -290,7 +279,7 @@ namespace YAT.Settings.Test
 				Assert.Fail("XML serialize error: " + ex.Message);
 			}
 
-			// load
+			// Load
 			try
 			{
 				using (StreamReader sr = new StreamReader(filePath))

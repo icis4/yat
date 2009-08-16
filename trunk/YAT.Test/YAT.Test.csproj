@@ -49,9 +49,21 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MKY.IO.Ports.Test\MKY.IO.Ports.Test.csproj">
+      <Project>{82461541-B351-4913-9747-EAFEE2322768}</Project>
+      <Name>MKY.IO.Ports.Test</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MKY.Utilities.Test\MKY.Utilities.Test.csproj">
       <Project>{644F7C29-CCE6-4827-9EF2-8B7D34194101}</Project>
       <Name>MKY.Utilities.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MKY.Windows.Forms.Test\MKY.Windows.Forms.Test.csproj">
+      <Project>{4171BFD3-4E50-4752-977B-9B1F79C3EDFB}</Project>
+      <Name>MKY.Windows.Forms.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Controller.Test\YAT.Controller.Test.csproj">
+      <Project>{7585E865-B3AA-4D73-BAC0-D0C4B25D2CF0}</Project>
+      <Name>YAT.Controller.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Domain.Test\YAT.Domain.Test.csproj">
       <Project>{7CA209C1-B1A8-43E0-BBFB-79EDA186CE62}</Project>

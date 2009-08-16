@@ -486,16 +486,8 @@ namespace YAT.Domain
 		/// Useful to improve performance. Appending keeps number of display elements as low as
 		/// possible, thus iteration through display element gets faster.
 		/// </remarks>
-		static int counter = 0;
 		public void Append(DisplayElement de)
 		{
-			//System.Diagnostics.Debug.WriteLine("This:" + Environment.NewLine + this.ToString(""));
-			//System.Diagnostics.Debug.WriteLine("Elem:" + Environment.NewLine + de.ToString(""));
-
-			//counter++;
-			//if (counter >= 19)
-				//System.Diagnostics.Debugger.Break();
-
 			if (this.GetType() != de.GetType())
 				throw (new InvalidOperationException("Cannot append because type doesn't match"));
 

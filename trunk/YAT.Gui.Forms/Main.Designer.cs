@@ -46,9 +46,9 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_FileRecentContextMenu_6 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_FileRecentContextMenu_7 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_FileRecentContextMenu_8 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_MainMenu_File_Recent = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_MainContextMenu_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainContextMenu_File_Exit = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MainMenu_File_Recent = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip_Main = new System.Windows.Forms.MenuStrip();
 			this.toolStripMenuItem_MainMenu_File = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_File_New = new System.Windows.Forms.ToolStripMenuItem();
@@ -177,7 +177,7 @@ namespace YAT.Gui.Forms
             this.toolStripMenuItem_FileRecentContextMenu_7,
             this.toolStripMenuItem_FileRecentContextMenu_8});
 			this.contextMenuStrip_FileRecent.Name = "contextMenuStrip_FileRecent";
-			this.contextMenuStrip_FileRecent.OwnerItem = this.toolStripMenuItem_MainContextMenu_File_Recent;
+			this.contextMenuStrip_FileRecent.OwnerItem = this.toolStripMenuItem_MainMenu_File_Recent;
 			this.contextMenuStrip_FileRecent.Size = new System.Drawing.Size(87, 180);
 			this.contextMenuStrip_FileRecent.Paint += new System.Windows.Forms.PaintEventHandler(this.contextMenuStrip_FileRecent_Paint);
 			this.contextMenuStrip_FileRecent.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_FileRecent_Opening);
@@ -262,14 +262,6 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_FileRecentContextMenu_8.Visible = false;
 			this.toolStripMenuItem_FileRecentContextMenu_8.Click += new System.EventHandler(this.toolStripMenuItem_FileRecentContextMenu_Click);
 			// 
-			// toolStripMenuItem_MainMenu_File_Recent
-			// 
-			this.toolStripMenuItem_MainMenu_File_Recent.DropDown = this.contextMenuStrip_FileRecent;
-			this.toolStripMenuItem_MainMenu_File_Recent.Enabled = false;
-			this.toolStripMenuItem_MainMenu_File_Recent.Name = "toolStripMenuItem_MainMenu_File_Recent";
-			this.toolStripMenuItem_MainMenu_File_Recent.Size = new System.Drawing.Size(155, 22);
-			this.toolStripMenuItem_MainMenu_File_Recent.Text = "&Recent";
-			// 
 			// toolStripSeparator_MainContextMenu_2
 			// 
 			this.toolStripSeparator_MainContextMenu_2.Name = "toolStripSeparator_MainContextMenu_2";
@@ -281,6 +273,14 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Size = new System.Drawing.Size(173, 22);
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Text = "Exit";
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Click += new System.EventHandler(this.toolStripMenuItem_MainContextMenu_File_Exit_Click);
+			// 
+			// toolStripMenuItem_MainMenu_File_Recent
+			// 
+			this.toolStripMenuItem_MainMenu_File_Recent.DropDown = this.contextMenuStrip_FileRecent;
+			this.toolStripMenuItem_MainMenu_File_Recent.Enabled = false;
+			this.toolStripMenuItem_MainMenu_File_Recent.Name = "toolStripMenuItem_MainMenu_File_Recent";
+			this.toolStripMenuItem_MainMenu_File_Recent.Size = new System.Drawing.Size(155, 22);
+			this.toolStripMenuItem_MainMenu_File_Recent.Text = "&Recent";
 			// 
 			// menuStrip_Main
 			// 
@@ -635,7 +635,7 @@ namespace YAT.Gui.Forms
             this.toolStripButton_MainTool_Terminal_Settings});
 			this.toolStrip_Main.Location = new System.Drawing.Point(3, 0);
 			this.toolStrip_Main.Name = "toolStrip_Main";
-			this.toolStrip_Main.Size = new System.Drawing.Size(192, 31);
+			this.toolStrip_Main.Size = new System.Drawing.Size(223, 31);
 			this.toolStrip_Main.TabIndex = 0;
 			// 
 			// toolStripButton_MainTool_File_New
@@ -682,7 +682,7 @@ namespace YAT.Gui.Forms
 			this.toolStripButton_MainTool_Terminal_Start.Image = global::YAT.Gui.Forms.Properties.Resources.Image_ArrowRight_24x24;
 			this.toolStripButton_MainTool_Terminal_Start.Name = "toolStripButton_MainTool_Terminal_Start";
 			this.toolStripButton_MainTool_Terminal_Start.Size = new System.Drawing.Size(28, 28);
-			this.toolStripButton_MainTool_Terminal_Start.Text = "Open Terminal";
+			this.toolStripButton_MainTool_Terminal_Start.Text = "Open Port";
 			this.toolStripButton_MainTool_Terminal_Start.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.toolStripButton_MainTool_Terminal_Start.ToolTipText = "Open Terminal";
 			this.toolStripButton_MainTool_Terminal_Start.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Start_Click);
@@ -693,7 +693,7 @@ namespace YAT.Gui.Forms
 			this.toolStripButton_MainTool_Terminal_Stop.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Stop_24x24;
 			this.toolStripButton_MainTool_Terminal_Stop.Name = "toolStripButton_MainTool_Terminal_Stop";
 			this.toolStripButton_MainTool_Terminal_Stop.Size = new System.Drawing.Size(28, 28);
-			this.toolStripButton_MainTool_Terminal_Stop.Text = "Close Terminal";
+			this.toolStripButton_MainTool_Terminal_Stop.Text = "Close Port";
 			this.toolStripButton_MainTool_Terminal_Stop.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.toolStripButton_MainTool_Terminal_Stop.ToolTipText = "Close Terminal";
 			this.toolStripButton_MainTool_Terminal_Stop.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Stop_Click);

@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileHandlingTest.cs" />
+    <Compile Include="StressTest.cs" />
     <Compile Include="TransmissionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ClearTest.cs" />

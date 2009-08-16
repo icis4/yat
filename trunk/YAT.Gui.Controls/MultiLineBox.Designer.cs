@@ -46,9 +46,9 @@ namespace YAT.Gui.Controls
 			this.textBox_Command.ScrollBars = System.Windows.Forms.ScrollBars.Both;
 			this.textBox_Command.Size = new System.Drawing.Size(268, 152);
 			this.textBox_Command.TabIndex = 0;
+			this.textBox_Command.TextChanged += new System.EventHandler(this.textBox_Command_TextChanged);
 			this.textBox_Command.Leave += new System.EventHandler(this.textBox_Command_Leave);
 			this.textBox_Command.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_Command_Validating);
-			this.textBox_Command.TextChanged += new System.EventHandler(this.textBox_Command_TextChanged);
 			// 
 			// label_Remarks
 			// 
@@ -56,6 +56,7 @@ namespace YAT.Gui.Controls
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Remarks.BackColor = System.Drawing.SystemColors.Window;
+			this.label_Remarks.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Remarks.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.label_Remarks.Location = new System.Drawing.Point(32, 33);
 			this.label_Remarks.Name = "label_Remarks";

@@ -31,6 +31,8 @@ namespace YAT.Gui.Utilities
 			public SolidBrush Brush;
 		}
 
+		private static Font _italicDefaultFont = new Font(SystemFonts.DefaultFont, FontStyle.Italic);
+
 		/// <remarks>
 		/// For performance reasons, cache fonts and brushes used for drawing.
 		/// </remarks>
@@ -54,6 +56,21 @@ namespace YAT.Gui.Utilities
 
 			// Additionally enable trailing spaces to be able to correctly measure single spaces
 			_stringFormat.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
+		}
+
+		public static Font ItalicDefaultFont
+		{
+			get
+			{
+				// Recreate font if system font has changed
+				if ((_italicDefaultFont.Name != SystemFonts.DefaultFont.Name) ||
+					(_italicDefaultFont.Size != SystemFonts.DefaultFont.Size))
+				{
+					_italicDefaultFont = new Font(SystemFonts.DefaultFont, FontStyle.Italic);
+				}
+
+				return (_italicDefaultFont);
+			}
 		}
 
 		public static SizeF MeasureItem(Domain.DisplayLine line, Model.Settings.FormatSettings formatSettings,

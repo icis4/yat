@@ -35,10 +35,6 @@ namespace MKY.Utilities.Test.Settings
 		// Constants
 		//==========================================================================================
 
-		private const string _TempPath = @"c:\";
-		private const string _TempPrefix = "YAT-Test-";
-		private const string _TempExtension = ".xml";
-
 		private const int _11 = 11;
 		private const int _12 = 12;
 		private const int _13 = 13;
@@ -282,17 +278,17 @@ namespace MKY.Utilities.Test.Settings
 
 		private static string MakeTempPath()
 		{
-			return (_TempPath);
+			return (System.Windows.Forms.Application.StartupPath);
 		}
 
 		private static string MakeTempFileName(string name)
 		{
-			return (_TempPrefix + name + _TempExtension);
+			return ("YAT-Test-" + name + ".xml");
 		}
 
 		private static string MakeTempFilePath(string name)
 		{
-			return (MakeTempPath() + MakeTempFileName(name));
+			return (MakeTempPath() + Path.DirectorySeparatorChar + MakeTempFileName(name));
 		}
 
 		private static void SerializeTestObject(Type type, object obj, string filePath)

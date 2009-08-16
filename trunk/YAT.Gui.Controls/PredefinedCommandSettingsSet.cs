@@ -193,11 +193,7 @@ namespace YAT.Gui.Controls
 		{
 			// Clear "<Enter a command...>" if needed
 			if ((_focusState == FocusState.Inactive) && !_command.IsSingleLineCommand)
-			{
-				_isSettingControls = true;
-				textBox_Command.Text = "";
-				_isSettingControls = false;
-			}
+				ClearCommand();
 
 			_focusState = FocusState.HasFocus;
 			_isValidated = false;
@@ -323,7 +319,11 @@ namespace YAT.Gui.Controls
 				// command
 				textBox_Command.Visible = true;
 				if (_focusState == FocusState.Inactive)
-					textBox_Command.Text = _command.SingleLineCommand;
+				{
+					textBox_Command.Text      = _command.SingleLineCommand;
+					textBox_Command.ForeColor = SystemColors.ControlText;
+					textBox_Command.Font      = SystemFonts.DefaultFont;
+				}
 
 				// buttons
 				button_SetMultiLineCommand.Visible = true;
@@ -354,9 +354,18 @@ namespace YAT.Gui.Controls
 				// file path
 				pathLabel_FilePath.Visible = true;
 				if (_command.IsFilePath)
-					pathLabel_FilePath.Text = _command.FilePath;
+				{
+					pathLabel_FilePath.Text      = _command.FilePath;
+					pathLabel_FilePath.ForeColor = SystemColors.ControlText;
+					pathLabel_FilePath.Font      = SystemFonts.DefaultFont;
+				}
 				else
-					pathLabel_FilePath.Text = Command.UndefinedFilePathText;
+				{
+					pathLabel_FilePath.Text      = Command.UndefinedFilePathText;
+					pathLabel_FilePath.ForeColor = SystemColors.GrayText;
+					pathLabel_FilePath.Font      = Utilities.Drawing.ItalicDefaultFont;
+				}
+
 				checkBox_IsFile.Checked = true;
 
 				// delete
@@ -367,7 +376,11 @@ namespace YAT.Gui.Controls
 				// command
 				textBox_Command.Visible = true;
 				if (_focusState == FocusState.Inactive)
-					textBox_Command.Text = Command.EnterCommandText;
+				{
+					textBox_Command.Text      = Command.EnterCommandText;
+					textBox_Command.ForeColor = SystemColors.GrayText;
+					textBox_Command.Font      = Utilities.Drawing.ItalicDefaultFont;
+				}
 
 				// buttons
 				button_SetMultiLineCommand.Visible = true;
@@ -407,11 +420,22 @@ namespace YAT.Gui.Controls
 			OnCommandChanged(new EventArgs());
 		}
 
+		private void ClearCommand()
+		{
+			_isSettingControls = true;
+			textBox_Command.Text      = "";
+			textBox_Command.ForeColor = SystemColors.ControlText;
+			textBox_Command.Font      = SystemFonts.DefaultFont;
+			_isSettingControls = false;
+		}
+
 		private void ShowMultiLineCommandBox(Control requestingControl)
 		{
 			// indicate multi line command
 			_isSettingControls = true;
-			textBox_Command.Text = Command.MultiLineCommandText;
+			textBox_Command.Text      = Command.MultiLineCommandText;
+			textBox_Command.ForeColor = SystemColors.ControlText;
+			textBox_Command.Font      = SystemFonts.DefaultFont;
 			_isSettingControls = false;
 
 			// calculate startup location

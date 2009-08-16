@@ -398,16 +398,27 @@ namespace YAT.Gui.Controls
 			if (_focusState == FocusState.Inactive)
 			{
 				if (_command.IsCommand)
-					comboBox_Command.Text = _command.SingleLineCommand;
+				{
+					comboBox_Command.Text      = _command.SingleLineCommand;
+					comboBox_Command.ForeColor = SystemColors.ControlText;
+					comboBox_Command.Font      = SystemFonts.DefaultFont;
+				}
 				else
-					comboBox_Command.Text = Command.EnterCommandText;
+				{
+					comboBox_Command.Text      = Command.EnterCommandText;
+					comboBox_Command.ForeColor = SystemColors.GrayText;
+					comboBox_Command.Font      = Utilities.Drawing.ItalicDefaultFont;
+				}
 			}
 			else if (_sendIsRequested)
-			{   // needed when command is modified (e.g. cleared) after send
+			{   // Needed when command is modified (e.g. cleared) after send
 				if (_command.IsCommand)
-					comboBox_Command.Text = _command.SingleLineCommand;
+					comboBox_Command.Text  = _command.SingleLineCommand;
 				else
-					comboBox_Command.Text = "";
+					comboBox_Command.Text  = "";
+
+				comboBox_Command.ForeColor = SystemColors.ControlText;
+				comboBox_Command.Font      = SystemFonts.DefaultFont;
 			}
 			button_SendCommand.Enabled = _terminalIsOpen;
 
@@ -448,7 +459,9 @@ namespace YAT.Gui.Controls
 		{
 			// indicate multi line command
 			_isSettingControls = true;
-			comboBox_Command.Text = Command.MultiLineCommandText;
+			comboBox_Command.Text      = Command.MultiLineCommandText;
+			comboBox_Command.ForeColor = SystemColors.ControlText;
+			comboBox_Command.Font      = SystemFonts.DefaultFont;
 			_isSettingControls = false;
 
 			// calculate startup location

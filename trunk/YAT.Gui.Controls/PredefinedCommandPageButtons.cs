@@ -221,19 +221,25 @@ namespace YAT.Gui.Controls
 
 				if (isDefined)
 				{
-					_buttons_commands[i].Text = _commands[i].Description;
-					_buttons_commands[i].Enabled = isValid;
+					_buttons_commands[i].Text      = _commands[i].Description;
+					_buttons_commands[i].ForeColor = SystemColors.ControlText;
+					_buttons_commands[i].Font      = SystemFonts.DefaultFont;
+					_buttons_commands[i].Enabled   = isValid;
 				}
 				else
 				{
-					_buttons_commands[i].Text = Command.DefineCommandText;
-					_buttons_commands[i].Enabled = true;
+					_buttons_commands[i].Text      = Command.DefineCommandText;
+					_buttons_commands[i].ForeColor = SystemColors.GrayText;
+					_buttons_commands[i].Font      = Utilities.Drawing.ItalicDefaultFont;
+					_buttons_commands[i].Enabled   = true;
 				}
 			}
 			for (int i = commandCount; i < PredefinedCommandSettings.MaxCommandsPerPage; i++)
 			{
-				_buttons_commands[i].Text = Command.DefineCommandText;
-				_buttons_commands[i].Enabled = true;
+				_buttons_commands[i].Text      = Command.DefineCommandText;
+				_buttons_commands[i].ForeColor = SystemColors.GrayText;
+				_buttons_commands[i].Font      = Utilities.Drawing.ItalicDefaultFont;
+				_buttons_commands[i].Enabled   = true;
 			}
 		}
 

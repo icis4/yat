@@ -35,15 +35,15 @@ namespace MKY.Utilities.IO
 		{
 			string limitedPath;
 
-			if (path.Length <= length)                 // path string too long ?
+			if (path.Length <= length)                 // Path string too long ?
 				return (path);
-			                                           // local drive ?
+			                                           // Local path ?
 			if (path.IndexOf(Path.VolumeSeparatorChar) < 0)
 			{
 				limitedPath = Types.XString.Left(path, 3) + "..." +
 							  Types.XString.Right(path, Math.Max(length - 6, 0));
 			}
-			else                                       // network drive !
+			else                                       // Network path !
 			{
 				int separatorPosition = path.Substring(4).IndexOf(Path.DirectorySeparatorChar);
 				if ((separatorPosition >= 0) && (separatorPosition < length - 4))
@@ -189,10 +189,13 @@ namespace MKY.Utilities.IO
 			string fileName = Path.GetFileName(filePath);
 			string absolutePath = DoCombineDirectoryPaths(directoryPath, Path.GetDirectoryName(filePath));
 
-			if (absolutePath != Path.GetPathRoot(absolutePath))
+			//string root = Path.GetPathRoot(absolutePath);
+			string combined = Path.Combine(absolutePath, fileName);
+			return (combined);
+			/*if (absolutePath != Path.GetPathRoot(absolutePath))
 				return (absolutePath + Path.DirectorySeparatorChar + fileName);
 			else
-				return (absolutePath + fileName);
+				return (absolutePath + fileName);*/
 		}
 
 		/// <summary>
@@ -233,10 +236,13 @@ namespace MKY.Utilities.IO
 			string fileName2 = Path.GetFileName(filePath2);
 			string absolutePath = DoCombineDirectoryPaths(Path.GetDirectoryName(filePath1), Path.GetDirectoryName(filePath2));
 
-			if (absolutePath != Path.GetPathRoot(absolutePath))
+			string combined = Path.Combine(absolutePath, fileName2);
+			return (combined);
+
+			/*if (absolutePath != Path.GetPathRoot(absolutePath))
 				return (absolutePath + Path.DirectorySeparatorChar + fileName2);
 			else
-				return (absolutePath + fileName2);
+				return (absolutePath + fileName2);*/
 		}
 
 		#endregion
@@ -424,17 +430,17 @@ namespace MKY.Utilities.IO
 				string dirPathResult = "";
 				DirectoryInfo dirInfoResult = null;
 
-				// trim leading "\"
+				// Trim leading '\'
 				string s = pathB.TrimStart(Path.DirectorySeparatorChar);
 
-				// check whether relative path points to any parent directory
+				// Check whether relative path points to any parent directory
 				if ((s.Length >= 2) && (s.Substring(0, 2) == ".."))
 				{
 					DirectoryInfo pathInfoParent = pathInfoA;
 
 					do
 					{
-						// detect invalidly long relative paths
+						// Detect invalidly long relative paths
 						if ((s.Length >= 3) && (s.Substring(0, 3) == "..."))
 							break;
 
@@ -460,7 +466,7 @@ namespace MKY.Utilities.IO
 						DoPrepareDirectoryPath(Path.Combine(pathInfoParent.FullName, s), out pathInfoResult, out dirPathResult, out dirInfoResult);
 				}
 
-				// check whether relative path points to current directory
+				// Check whether relative path points to current directory
 				else if ((s.Length >= 1) && (s.Substring(0, 1) == "."))
 				{
 					s = s.Remove(0, 1);
@@ -475,21 +481,23 @@ namespace MKY.Utilities.IO
 					// ".\<Path>"
 					if (s.Substring(0, 1) == Path.DirectorySeparatorChar.ToString())
 					{
-						DoPrepareDirectoryPath(dirPathA + s.Substring(1), out pathInfoResult, out dirPathResult, out dirInfoResult);
+						string combined = dirPathA + s.Substring(1);
+						DoPrepareDirectoryPath(combined, out pathInfoResult, out dirPathResult, out dirInfoResult);
 					}
 				}
 
-				// use System.IO.Path.Combine() for the easy cases
+				// Use System.IO.Path.Combine() for the easy cases
 				else
 				{
-					DoPrepareDirectoryPath(Path.Combine(dirPathA, pathB), out pathInfoResult, out dirPathResult, out dirInfoResult);
+					string combined = Path.Combine(dirPathA, pathB);
+					DoPrepareDirectoryPath(combined, out pathInfoResult, out dirPathResult, out dirInfoResult);
 				}
 
 				if (pathInfoResult != null)
 					return (dirPathResult);
 			}
 
-			// in case the second path was invalid, return the the first if possible
+			// In case the second path was invalid, return the the first if possible
 			if (pathInfoA != null)
 				return (dirPathA);
 			else
@@ -511,31 +519,22 @@ namespace MKY.Utilities.IO
 				// DirectoryInfo throws if path contains invalid characters
 				pathInfo = new DirectoryInfo(path);
 			}
-			catch
+			catch (Exception ex)
 			{
+				MKY.Utilities.Diagnostics.XDebug.WriteException(typeof(XPath), ex);
 				pathInfo = null;
 			}
 
-			// get directory and file name
+			// Get directory and file name
 			if (pathInfo != null)
 			{
 				DirectoryInfo temp = new DirectoryInfo(path);
 
-				// make sure parent directory and directory name is properly returned
-				// also make sure root is detected
+				// Make sure parent directory and directory name is properly returned
 				if (temp.Parent != null)
-				{
-					// check whether parent actually is root
-					// ensure "\\" isn't appended twice ("Root" already contains "\\")
-					if (temp.Parent.FullName != temp.Root.FullName)
-						dirPath = temp.Parent.FullName + Path.DirectorySeparatorChar + temp.Name;
-					else
-						dirPath = temp.Root.FullName + temp.Name;
-				}
+					dirPath = Path.Combine(temp.Parent.FullName, temp.Name);
 				else
-				{
 					dirPath = temp.Root.FullName;
-				}
 
 				dirInfo = new DirectoryInfo(dirPath);
 			}
@@ -567,7 +566,7 @@ namespace MKY.Utilities.IO
 				pathInfo = null;
 			}
 
-			// get directory and file name
+			// Get directory and file name
 			if (pathInfo != null)
 			{
 				dirPath = Path.GetDirectoryName(path);

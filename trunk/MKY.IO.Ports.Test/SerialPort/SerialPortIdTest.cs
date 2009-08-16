@@ -57,7 +57,10 @@ namespace MKY.IO.Ports.Test.SerialPort
 		{
 			new TestSet(     1,     "COM1", new string[] { "Serial Communication Port (COM1)", "Serial Port COM1", "serial port com1", "Serial Port Com1" } ),
 			new TestSet(     2,     "COM2", new string[] { "Bluetooth Communication Port (COM2)", "COM2 - Bluetooth Communication Port" } ),
+			new TestSet(   255,   "COM255", new string[] { "Some Virtual Port (COM255)", "Virtual Port COM255" } ),
 			new TestSet(   256,   "COM256", new string[] { "Some Virtual Port (COM256)", "Virtual Port COM256" } ),
+			new TestSet(   257,   "COM257", new string[] { "Some Virtual Port (COM257)", "Virtual Port COM257" } ),
+			new TestSet( 65535, "COM65535", new string[] { "Super Advanced Port (COM65535)", "Advanced Port COM65535" } ),
 			new TestSet( 65536, "COM65536", new string[] { "Super Advanced Port (COM65536)", "Advanced Port COM65536" } ),
 		};
 

@@ -49,6 +49,7 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Author = new System.Windows.Forms.LinkLabel();
 			this.pictureBox_License = new System.Windows.Forms.PictureBox();
 			this.linkLabel_License = new System.Windows.Forms.LinkLabel();
+			this.linkLabel_VSPE = new System.Windows.Forms.LinkLabel();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_Product)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_License)).BeginInit();
 			this.SuspendLayout();
@@ -57,7 +58,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.button_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Close.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_Close.Location = new System.Drawing.Point(527, 351);
+			this.button_Close.Location = new System.Drawing.Point(531, 387);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
 			this.button_Close.TabIndex = 0;
@@ -81,7 +82,7 @@ namespace YAT.Gui.Forms
 			this.label_Separator1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Separator1.Location = new System.Drawing.Point(9, 61);
 			this.label_Separator1.Name = "label_Separator1";
-			this.label_Separator1.Size = new System.Drawing.Size(596, 25);
+			this.label_Separator1.Size = new System.Drawing.Size(600, 25);
 			this.label_Separator1.TabIndex = 4;
 			this.label_Separator1.Text = resources.GetString("label_Separator1.Text");
 			this.label_Separator1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -103,7 +104,7 @@ namespace YAT.Gui.Forms
 			this.label_Separator2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_Separator2.Location = new System.Drawing.Point(9, 135);
 			this.label_Separator2.Name = "label_Separator2";
-			this.label_Separator2.Size = new System.Drawing.Size(596, 25);
+			this.label_Separator2.Size = new System.Drawing.Size(600, 25);
 			this.label_Separator2.TabIndex = 7;
 			this.label_Separator2.Text = resources.GetString("label_Separator2.Text");
 			this.label_Separator2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -126,20 +127,20 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Copyright.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_Copyright.Location = new System.Drawing.Point(67, 22);
 			this.linkLabel_Copyright.Name = "linkLabel_Copyright";
-			this.linkLabel_Copyright.Size = new System.Drawing.Size(535, 26);
+			this.linkLabel_Copyright.Size = new System.Drawing.Size(539, 26);
 			this.linkLabel_Copyright.TabIndex = 2;
 			this.linkLabel_Copyright.Text = "<COPYRIGHT>";
 			this.linkLabel_Copyright.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
 			// label_Separator3
 			// 
-			this.label_Separator3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			this.label_Separator3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Separator3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label_Separator3.Location = new System.Drawing.Point(9, 186);
+			this.label_Separator3.Location = new System.Drawing.Point(9, 222);
 			this.label_Separator3.Name = "label_Separator3";
-			this.label_Separator3.Size = new System.Drawing.Size(596, 25);
-			this.label_Separator3.TabIndex = 9;
+			this.label_Separator3.Size = new System.Drawing.Size(600, 25);
+			this.label_Separator3.TabIndex = 10;
 			this.label_Separator3.Text = resources.GetString("label_Separator3.Text");
 			this.label_Separator3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
@@ -170,10 +171,10 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Home.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.linkLabel_Home.AutoSize = true;
 			this.linkLabel_Home.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_Home.Location = new System.Drawing.Point(12, 338);
+			this.linkLabel_Home.Location = new System.Drawing.Point(12, 374);
 			this.linkLabel_Home.Name = "linkLabel_Home";
 			this.linkLabel_Home.Size = new System.Drawing.Size(322, 13);
-			this.linkLabel_Home.TabIndex = 11;
+			this.linkLabel_Home.TabIndex = 12;
 			this.linkLabel_Home.Text = "Visit YAT on SourceForge.net. Tell us if you like it or why you don\'t.";
 			this.linkLabel_Home.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
@@ -189,12 +190,13 @@ namespace YAT.Gui.Forms
 			// 
 			// linkLabel_Environment
 			// 
+			this.linkLabel_Environment.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.linkLabel_Environment.AutoSize = true;
 			this.linkLabel_Environment.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_Environment.Location = new System.Drawing.Point(12, 211);
+			this.linkLabel_Environment.Location = new System.Drawing.Point(12, 247);
 			this.linkLabel_Environment.Name = "linkLabel_Environment";
 			this.linkLabel_Environment.Size = new System.Drawing.Size(346, 117);
-			this.linkLabel_Environment.TabIndex = 10;
+			this.linkLabel_Environment.TabIndex = 11;
 			this.linkLabel_Environment.Text = resources.GetString("linkLabel_Environment.Text");
 			this.linkLabel_Environment.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
@@ -203,18 +205,18 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Author.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.linkLabel_Author.AutoSize = true;
 			this.linkLabel_Author.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_Author.Location = new System.Drawing.Point(12, 361);
+			this.linkLabel_Author.Location = new System.Drawing.Point(12, 397);
 			this.linkLabel_Author.Name = "linkLabel_Author";
 			this.linkLabel_Author.Size = new System.Drawing.Size(65, 13);
-			this.linkLabel_Author.TabIndex = 12;
+			this.linkLabel_Author.TabIndex = 13;
 			this.linkLabel_Author.Text = "<AUTHOR>";
 			this.linkLabel_Author.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
 			// pictureBox_License
 			// 
-			this.pictureBox_License.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.pictureBox_License.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.pictureBox_License.Image = global::YAT.Gui.Forms.Properties.Resources.Image_LGPLv3_88x31;
-			this.pictureBox_License.Location = new System.Drawing.Point(462, 227);
+			this.pictureBox_License.Location = new System.Drawing.Point(442, 263);
 			this.pictureBox_License.Name = "pictureBox_License";
 			this.pictureBox_License.Size = new System.Drawing.Size(88, 31);
 			this.pictureBox_License.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -223,15 +225,27 @@ namespace YAT.Gui.Forms
 			// 
 			// linkLabel_License
 			// 
-			this.linkLabel_License.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.linkLabel_License.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.linkLabel_License.AutoSize = true;
 			this.linkLabel_License.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_License.Location = new System.Drawing.Point(414, 211);
+			this.linkLabel_License.Location = new System.Drawing.Point(394, 247);
 			this.linkLabel_License.Name = "linkLabel_License";
 			this.linkLabel_License.Size = new System.Drawing.Size(188, 13);
-			this.linkLabel_License.TabIndex = 13;
+			this.linkLabel_License.TabIndex = 14;
 			this.linkLabel_License.Text = "YAT is licensed under the GNU LGPL.";
 			this.linkLabel_License.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
+			// 
+			// linkLabel_VSPE
+			// 
+			this.linkLabel_VSPE.AutoSize = true;
+			this.linkLabel_VSPE.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
+			this.linkLabel_VSPE.Location = new System.Drawing.Point(12, 196);
+			this.linkLabel_VSPE.Name = "linkLabel_VSPE";
+			this.linkLabel_VSPE.Size = new System.Drawing.Size(440, 26);
+			this.linkLabel_VSPE.TabIndex = 9;
+			this.linkLabel_VSPE.Text = "If you\'re also looking for a tool to create and manage additional virtual COM por" +
+				"ts, check out\r\nEterlogic Virtual Serial Ports Emulator.";
+			this.linkLabel_VSPE.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
 			// About
 			// 
@@ -239,7 +253,7 @@ namespace YAT.Gui.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Close;
-			this.ClientSize = new System.Drawing.Size(614, 386);
+			this.ClientSize = new System.Drawing.Size(618, 422);
 			this.Controls.Add(this.linkLabel_License);
 			this.Controls.Add(this.pictureBox_License);
 			this.Controls.Add(this.linkLabel_Trademark);
@@ -252,6 +266,7 @@ namespace YAT.Gui.Forms
 			this.Controls.Add(this.label_Separator3);
 			this.Controls.Add(this.label_Separator2);
 			this.Controls.Add(this.label_Separator1);
+			this.Controls.Add(this.linkLabel_VSPE);
 			this.Controls.Add(this.linkLabel_HHD);
 			this.Controls.Add(this.linkLabel_Copyright);
 			this.Controls.Add(this.pictureBox_Product);
@@ -288,5 +303,6 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.LinkLabel linkLabel_Author;
 		private System.Windows.Forms.PictureBox pictureBox_License;
 		private System.Windows.Forms.LinkLabel linkLabel_License;
+		private System.Windows.Forms.LinkLabel linkLabel_VSPE;
 	}
 }

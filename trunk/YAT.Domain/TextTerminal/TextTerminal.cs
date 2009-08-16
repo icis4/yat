@@ -481,18 +481,24 @@ namespace YAT.Domain
 					elements.RemoveAtEnd(eolAndWhiteCount);
 			}
 
+#if (FALSE)
+			// \remind
+			// Break debugger on SIR responses that are mixed up (more than 16 chars without EOL)
+			// Used to debug an issue that is possibly related to #2455804
+			//
+			// 2009-08-16 / mky
+			// Ran more than 50'000 SIR responses without getting a break here.
+			//
+			if ((d == SerialDirection.Rx) && (line.DataCount > 16))
+				System.Diagnostics.Debugger.Break();
+#endif
+
 			// Process line length
 			DisplayLinePart lp = new DisplayLinePart();
 			if (TerminalSettings.Display.ShowLength)
 			{
-				int lineLength = 0;
-				foreach (DisplayElement de in line)
-				{
-					if (de.IsData)
-						lineLength++;
-				}
 				lp.Add(new DisplayElement.RightMargin());
-				lp.Add(new DisplayElement.LineLength(lineLength));
+				lp.Add(new DisplayElement.LineLength(line.DataCount));
 			}
 			lp.Add(new DisplayElement.LineBreak(d));
 
