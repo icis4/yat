@@ -341,12 +341,23 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                         ThreadEx.LoopSleep(ref loopSleep);
                     }
 
-                    if (connections.Length > 0)
-                    {
-                        FWaitConnectionsDisposing.WaitOne(Timeout.Infinite, false);
-                    }
+					// ----- \remind BEGIN -----
 
-                }
+					// 2007-03-22 / Matthias Klaey
+					// Why wait on thread here? Start() is non-blocking!
+					// If Stop() is called from a GUI thread and the GUI is attached to
+					//   the Disconnected event, a dead-lock happens:
+					//   - The GUI thread is blocked here
+					//   - FireOnDisconnected is blocked when trying to synchronize
+					//     Invoke() onto the GUI thread
+
+                    //if (connections.Length > 0)
+                    //{
+                    //    FWaitConnectionsDisposing.WaitOne(Timeout.Infinite, false);
+                    //}
+
+					// ----- \remind END -----
+				}
 
             }
 
@@ -1791,7 +1802,15 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
             {
 
                 connection.Active = false;
-                connection.Socket.Shutdown(SocketShutdown.Send);
+
+				// ----- \remind BEGIN -----
+
+				// 2009-08-22 / Matthias Klaey
+				// Commented-out because of ObjectDisposedException when stopping.
+
+				//connection.Socket.Shutdown(SocketShutdown.Send);
+
+				// ----- \remind END -----
 
                 lock (connection.WriteQueue)
                 {

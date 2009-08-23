@@ -31,16 +31,20 @@ namespace YAT.Settings.Application
 		private static ApplicationSettingsHandler<object, LocalUserSettingsRoot, object> _settingsHandler =
 			new ApplicationSettingsHandler<object, LocalUserSettingsRoot, object>(false, true, false);
 
+		/// <summary>
+		/// Loads settings. So far, there are only local user settings.
+		/// </summary>
+		/// <returns></returns>
 		public static bool Load()
 		{
-			return (_settingsHandler.Load());
+			return (_settingsHandler.LoadLocalUser());
 		}
 
 		/// <summary>
-		/// Saves local user settings. To improved performance, settings are only saved
-		/// if they have changed.
+		/// Saves settings. So far, there are only local user settings.
+		/// To improved performance, settings are only saved if they have changed.
 		/// </summary>
-		public static void SaveLocalUser()
+		public static void Save()
 		{
 			if (_settingsHandler.LocalUserSettings.HaveChanged)
 				_settingsHandler.SaveLocalUser();
@@ -61,9 +65,9 @@ namespace YAT.Settings.Application
 			get { return (_settingsHandler.LocalUserSettingsFilePath); }
 		}
 
-		public static bool AllSettingsSuccessfullyLoaded
+		public static bool SettingsSuccessfullyLoaded
 		{
-			get { return (_settingsHandler.AllSettingsSuccessfullyLoaded); }
+			get { return (_settingsHandler.LocalUserSettingsSuccessfullyLoaded); }
 		}
 	}
 }

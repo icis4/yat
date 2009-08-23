@@ -29,7 +29,7 @@ namespace YAT.Settings.Terminal
 		/// Alternate XML elements for backward compatibility with old settings.
 		/// </summary>
 		/// <remarks>
-		/// \fixme Matthias Klaey 2008-06-07 (2 hours to the first Euro2008 game :-)
+		/// \remind Matthias Klaey 2008-06-07 (2 hours to the first Euro2008 game :-)
 		/// Instead of this approach, an [AlternateXmlElementAttribute] based approach should be tried
 		/// in a future version. Such approach would be benefitial in terms of modularity because the
 		/// XML path wouldn't need to be considered, i.e. name changes in the path could be handled.
@@ -376,7 +376,7 @@ namespace YAT.Settings.Terminal
 		/// </summary>
 		public bool Equals(TerminalSettingsRoot value)
 		{
-			// ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called
 			if ((object)value != null)
 			{
 				return

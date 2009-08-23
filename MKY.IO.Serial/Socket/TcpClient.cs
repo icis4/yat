@@ -55,7 +55,6 @@ namespace MKY.IO.Serial
 
 		private System.Net.IPAddress _remoteIPAddress;
 		private int _remotePort;
-		private System.Net.IPAddress _localIPAddress;
 		private AutoRetry _autoReconnect;
 
 		private SocketState _state = SocketState.Disconnected;
@@ -97,20 +96,18 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		public TcpClient(System.Net.IPAddress remoteIPAddress, int remotePort, System.Net.IPAddress localIPAddress)
+		public TcpClient(System.Net.IPAddress remoteIPAddress, int remotePort)
 		{
 			_remoteIPAddress = remoteIPAddress;
 			_remotePort = remotePort;
-			_localIPAddress = localIPAddress;
 			_autoReconnect = new AutoRetry();
 		}
 
 		/// <summary></summary>
-		public TcpClient(System.Net.IPAddress remoteIPAddress, int remotePort, System.Net.IPAddress localIPAddress, AutoRetry autoReconnect)
+		public TcpClient(System.Net.IPAddress remoteIPAddress, int remotePort, AutoRetry autoReconnect)
 		{
 			_remoteIPAddress = remoteIPAddress;
 			_remotePort = remotePort;
-			_localIPAddress = localIPAddress;
 			_autoReconnect = autoReconnect;
 		}
 
@@ -317,6 +314,26 @@ namespace MKY.IO.Serial
 
 		#endregion
 
+		#region State Methods
+		//==========================================================================================
+		// State Methods
+		//==========================================================================================
+
+		private void SetStateAndNotify(SocketState state)
+		{
+#if (DEBUG)
+			SocketState oldState = _state;
+#endif
+			lock (_stateSyncObj)
+				_state = state;
+#if (DEBUG)
+			System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortEndPointString() + "): State has changed from " + oldState + " to " + _state);
+#endif
+			OnIOChanged(new EventArgs());
+		}
+
+		#endregion
+
 		#region Simple Socket Methods
 		//==========================================================================================
 		// Simple Socket Methods
@@ -349,22 +366,16 @@ namespace MKY.IO.Serial
 																	 Timeout.Infinite, Timeout.Infinite);
 			_socket.AddConnector("YAT TCP Client Connector", new System.Net.IPEndPoint(_remoteIPAddress, _remotePort));
 			_socket.Start();
-			
-			lock (_stateSyncObj)
-				_state = SocketState.Connecting;
-			
-			OnIOChanged(new EventArgs());
+
+			SetStateAndNotify(SocketState.Connecting);
 		}
 
 		private void StopSocket()
 		{
-			lock (_stateSyncObj)
-				_state = SocketState.Disconnecting;
-
 			_socket.Stop();
 			DisposeSocket();
 
-			OnIOChanged(new EventArgs());
+			SetStateAndNotify(SocketState.Disconnecting);
 		}
 
 		private void RestartSocket()
@@ -390,11 +401,8 @@ namespace MKY.IO.Serial
 		{
 			lock (_socketConnectionSyncObj)
 				_socketConnection = e.Connection;
-			
-			lock (_stateSyncObj)
-				_state = SocketState.Connected;
 
-			OnIOChanged(new EventArgs());
+			SetStateAndNotify(SocketState.Connected);
 
 			// immediately begin receiving data
 			e.Connection.BeginReceive();
@@ -443,19 +451,13 @@ namespace MKY.IO.Serial
 
 			if (_autoReconnect.Enabled)
 			{
-				lock (_stateSyncObj)
-					_state = SocketState.WaitingForReconnect;
-
-				OnIOChanged(new EventArgs());
+				SetStateAndNotify(SocketState.WaitingForReconnect);
 
 				StartReconnectTimer();
 			}
 			else
 			{
-				lock (_stateSyncObj)
-					_state = SocketState.Disconnected;
-
-				OnIOChanged(new EventArgs());
+				SetStateAndNotify(SocketState.Disconnected);
 			}
 		}
 
@@ -469,10 +471,7 @@ namespace MKY.IO.Serial
 		{
 			if (_autoReconnect.Enabled)
 			{
-				lock (_stateSyncObj)
-					_state = SocketState.WaitingForReconnect;
-
-				OnIOChanged(new EventArgs());
+				SetStateAndNotify(SocketState.WaitingForReconnect);
 
 				StartReconnectTimer();
 			}
@@ -483,10 +482,7 @@ namespace MKY.IO.Serial
 				lock (_socketConnectionSyncObj)
 					_socketConnection = null;
 
-				lock (_stateSyncObj)
-					_state = SocketState.Error;
-
-				OnIOChanged(new EventArgs());
+				SetStateAndNotify(SocketState.Error);
 				OnIOError(new IOErrorEventArgs(e.Exception.Message));
 			}
 		}
@@ -581,6 +577,19 @@ namespace MKY.IO.Serial
 		protected virtual void OnDataSent(EventArgs e)
 		{
 			EventHelper.FireSync(DataSent, this, e);
+		}
+
+		#endregion
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary></summary>
+		public string ToShortEndPointString()
+		{
+			return (_remoteIPAddress + ":" + _remotePort);
 		}
 
 		#endregion

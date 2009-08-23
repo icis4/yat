@@ -117,7 +117,7 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public bool Equals(RecentFileSettings value)
 		{
-			// ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called
 			if ((object)value != null)
 			{
 				return

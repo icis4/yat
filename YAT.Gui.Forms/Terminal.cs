@@ -1902,7 +1902,7 @@ namespace YAT.Gui.Forms
 				Refresh();
 
 				ApplicationSettings.LocalUser.Paths.MonitorFilesPath = System.IO.Path.GetDirectoryName(sfd.FileName);
-				ApplicationSettings.SaveLocalUser();
+				ApplicationSettings.Save();
 
 				SaveMonitor(monitor, sfd.FileName);
 			}
@@ -2511,7 +2511,7 @@ namespace YAT.Gui.Forms
 				Refresh();
 
 				ApplicationSettings.LocalUser.Paths.TerminalFilesPath = Path.GetDirectoryName(sfd.FileName);
-				ApplicationSettings.SaveLocalUser();
+				ApplicationSettings.Save();
 
 				_terminal.SaveAs(sfd.FileName);
 			}

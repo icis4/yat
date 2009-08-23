@@ -102,7 +102,7 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public bool Equals(SendFileSettings value)
 		{
-			// ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called
 			if ((object)value != null)
 				return (_command.Equals(value._command));
 

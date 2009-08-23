@@ -95,7 +95,7 @@ namespace YAT.Log
 		/// </summary>
 		public bool Equals(FileNameSeparator value)
 		{
-			// ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called
 			if ((object)value != null)
 			{
 				return

@@ -146,7 +146,7 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public bool Equals(TerminalSettingsItem value)
 		{
-			// ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called
 			if ((object)value != null)
 			{
 				return

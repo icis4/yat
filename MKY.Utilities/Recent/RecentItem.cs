@@ -131,7 +131,7 @@ namespace MKY.Utilities.Recent
 		/// </summary>
 		public bool Equals(RecentItem<T> value)
 		{
-			// ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called
 			if ((object)value != null)
 			{
 				return

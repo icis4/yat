@@ -100,7 +100,7 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public bool Equals(PredefinedSettings value)
 		{
-			// ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called
 			if ((object)value != null)
 				return (_selectedPage.Equals(value._selectedPage));
 

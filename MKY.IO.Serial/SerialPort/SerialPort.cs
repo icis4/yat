@@ -350,9 +350,9 @@ namespace MKY.IO.Serial
 
 		#endregion
 
-		#region Methods
+		#region Public Methods
 		//==========================================================================================
-		// Methods
+		// Public Methods
 		//==========================================================================================
 
 		/// <summary></summary>
@@ -433,9 +433,9 @@ namespace MKY.IO.Serial
 
 		#endregion
 
-		#region Settings
+		#region Settings Methods
 		//==========================================================================================
-		// Settings
+		// Settings Methods
 		//==========================================================================================
 
 		private void ApplySettings()
@@ -473,6 +473,27 @@ namespace MKY.IO.Serial
 						break;
 				}
 			}
+		}
+
+		#endregion
+
+		#region State Methods
+		//==========================================================================================
+		// State Methods
+		//==========================================================================================
+
+		private void SetStateAndNotify(PortState state)
+		{
+#if (DEBUG)
+			PortState oldState = _state;
+#endif
+			lock (_stateSyncObj)
+				_state = state;
+#if (DEBUG)
+			System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortPortString() + "): State has changed from " + oldState + " to " + _state);
+#endif
+			OnIOChanged(new EventArgs());
+			OnIOControlChanged(new EventArgs());
 		}
 
 		#endregion
@@ -580,12 +601,7 @@ namespace MKY.IO.Serial
 
 			OpenPort();
 			StartAliveTimer();
-
-			lock (_stateSyncObj)
-				_state = PortState.Openend;
-
-			OnIOChanged(new EventArgs());
-			OnIOControlChanged(new EventArgs());
+			SetStateAndNotify(PortState.Openend);
 		}
 
 	#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
@@ -595,13 +611,8 @@ namespace MKY.IO.Serial
 			if (_settings.AutoReopen.Enabled)
 			{
 				StopAndDisposeAliveTimer();
-
-				lock (_stateSyncObj)
-					_state = PortState.Closed;
-
 				CloseAndDisposePort();
-
-				OnIOChanged(new EventArgs());
+				SetStateAndNotify(PortState.Closed);
 				OnIOControlChanged(new EventArgs());
 
 				StartReopenTimer();
@@ -611,20 +622,15 @@ namespace MKY.IO.Serial
 				Stop();
 			}
 		}
-	#endif // DETECT_BREAKS_AND_TRY_AUTO_REOPEN
+#endif // DETECT_BREAKS_AND_TRY_AUTO_REOPEN
 
 		/// <summary></summary>
 		private void ClosePortAndStartReopenTimer()
 		{
 			StopAndDisposeAliveTimer();
-
-			lock (_stateSyncObj)
-				_state = PortState.Closed;
-
+			StopAndDisposeReopenTimer();
 			CloseAndDisposePort();
-
-			OnIOChanged(new EventArgs());
-			OnIOControlChanged(new EventArgs());
+			SetStateAndNotify(PortState.Closed);
 
 			StartReopenTimer();
 		}
@@ -632,15 +638,10 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		private void ResetPort()
 		{
-			lock (_stateSyncObj)
-				_state = PortState.Reset;
-
 			StopAndDisposeAliveTimer();
 			StopAndDisposeReopenTimer();
 			CloseAndDisposePort();
-
-			OnIOChanged(new EventArgs());
-			OnIOControlChanged(new EventArgs());
+			SetStateAndNotify(PortState.Reset);
 		}
 
 		#endregion
@@ -894,11 +895,8 @@ namespace MKY.IO.Serial
 				}
 				catch
 				{
-					// re-open failed, cleanup and restart
-					lock (_stateSyncObj)
-						_state = PortState.Closed;
-
 					CloseAndDisposePort();
+					SetStateAndNotify(PortState.Closed); // Re-open failed, cleanup and restart
 					StartReopenTimer();
 				}
 			}
@@ -958,6 +956,19 @@ namespace MKY.IO.Serial
 		protected virtual void OnDataSent(EventArgs e)
 		{
 			EventHelper.FireSync(DataSent, this, e);
+		}
+
+		#endregion
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary></summary>
+		public string ToShortPortString()
+		{
+			return (_port.PortId);
 		}
 
 		#endregion

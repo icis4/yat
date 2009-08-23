@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using System.IO;
@@ -36,7 +37,6 @@ namespace YAT.Settings
 		private bool _autoOpenWorkspace;
 		private bool _autoSaveWorkspace;
 		private bool _useRelativePaths;
-		private string _workspaceFilePath;
 		private bool _detectSerialPortsInUse;
 
 		public GeneralSettings()
@@ -61,7 +61,6 @@ namespace YAT.Settings
 			_autoOpenWorkspace      = rhs.AutoOpenWorkspace;
 			_autoSaveWorkspace      = rhs.AutoSaveWorkspace;
 			_useRelativePaths       = rhs.UseRelativePaths;
-			_workspaceFilePath      = rhs.WorkspaceFilePath;
 			_detectSerialPortsInUse = rhs.DetectSerialPortsInUse;
 
 			ClearChanged();
@@ -75,7 +74,6 @@ namespace YAT.Settings
 			AutoOpenWorkspace      = true;
 			AutoSaveWorkspace      = true;
 			UseRelativePaths       = true;
-			WorkspaceFilePath      = "";
 			DetectSerialPortsInUse = true;
 		}
 
@@ -126,20 +124,6 @@ namespace YAT.Settings
 			}
 		}
 
-		[XmlElement("WorkspaceFilePath")]
-		public string WorkspaceFilePath
-		{
-			get { return (_workspaceFilePath); }
-			set
-			{
-				if (_workspaceFilePath != value)
-				{
-					_workspaceFilePath = value;
-					SetChanged();
-				}
-			}
-		}
-
 		[XmlElement("DetectSerialPortsInUse")]
 		public bool DetectSerialPortsInUse
 		{
@@ -174,16 +158,15 @@ namespace YAT.Settings
 		/// </summary>
 		public bool Equals(GeneralSettings value)
 		{
-			// ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called
 			if ((object)value != null)
 			{
 				return
 					(
-					_autoOpenWorkspace.     Equals(value._autoOpenWorkspace) &&
-					_autoSaveWorkspace.     Equals(value._autoSaveWorkspace) &&
-					_useRelativePaths.      Equals(value._useRelativePaths) &&
-					_workspaceFilePath.     Equals(value._workspaceFilePath) &&
-					_detectSerialPortsInUse.Equals(value._detectSerialPortsInUse)
+					_autoOpenWorkspace.        Equals(value._autoOpenWorkspace) &&
+					_autoSaveWorkspace.        Equals(value._autoSaveWorkspace) &&
+					_useRelativePaths.         Equals(value._useRelativePaths) &&
+					_detectSerialPortsInUse.   Equals(value._detectSerialPortsInUse)
 					);
 			}
 			return (false);

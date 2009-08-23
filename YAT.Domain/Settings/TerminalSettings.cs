@@ -285,7 +285,7 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public bool Equals(TerminalSettings value)
 		{
-			// ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called
 			if ((object)value != null)
 			{
 				return

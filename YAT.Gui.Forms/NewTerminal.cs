@@ -260,8 +260,8 @@ namespace YAT.Gui.Forms
 
 			bool isSerialPort = (ioType == Domain.IOType.SerialPort);
 
-			// set socket control before serial port control since that might need to refresh the
-			// serial port list first (which takes time, which looks ulgy)
+			// Set socket control before serial port control since that might need to refresh the
+			//   serial port list first (which takes time, which looks ulgy)
 			socketSelection.Enabled                 = !isSerialPort;
 			socketSelection.HostType                = (Domain.XIOType)ioType;
 			socketSelection.RemoteHostNameOrAddress = _newTerminalSettings_Form.SocketRemoteHostNameOrAddress;

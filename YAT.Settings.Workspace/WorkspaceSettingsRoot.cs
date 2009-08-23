@@ -151,7 +151,7 @@ namespace YAT.Settings.Workspace
 		/// </summary>
 		public bool Equals(WorkspaceSettingsRoot value)
 		{
-			// ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called
 			if ((object)value != null)
 			{
 				return

@@ -492,7 +492,7 @@ namespace YAT.Model.Types
 		/// </summary>
 		public bool Equals(Command value)
 		{
-			// ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called
 			if ((object)value != null)
 			{
 				return

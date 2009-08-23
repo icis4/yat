@@ -60,6 +60,9 @@ namespace YAT.Gui.Controls
 				if ((Description == null) || (Description == ""))
 					return (HostNameOrAddress);
 
+				if (Description == _RemoteHostNameOrAddressDefault)
+					return (Description);
+
 				if (Description == _LocalHostNameOrAddressDefault)
 					return (Description);
 
@@ -276,9 +279,13 @@ namespace YAT.Gui.Controls
 		{
 			if (!_isSettingControls)
 			{
+				// \attention
+				// Do not assume that the selected item maches the actual text in the box
+				//   because SelectedItem is also set if text has changed in the meantime.
+
 				string nameOrAddress;
 				HostItem hi = comboBox_RemoteHostNameOrAddress.SelectedItem as HostItem;
-				if (hi != null)
+				if ((hi != null) && (hi.ToString() == comboBox_RemoteHostNameOrAddress.Text))
 					nameOrAddress = hi.HostNameOrAddress;
 				else
 					nameOrAddress = comboBox_RemoteHostNameOrAddress.Text;
@@ -325,7 +332,7 @@ namespace YAT.Gui.Controls
 				{
 					RemotePort = port;
 
-					// also set local port to same number
+					// Also set local port to same number
 					if ((_hostType == SocketHostType.TcpClient) || (_hostType == SocketHostType.TcpAutoSocket) || (_hostType == SocketHostType.Udp))
 					{
 						LocalTcpPort = port;
@@ -363,6 +370,11 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		private void button_RefreshPorts_Click(object sender, EventArgs e)
+		{
+			SetAdapterList();
+		}
+
 		private void textBox_LocalPort_Validating(object sender, CancelEventArgs e)
 		{
 			if (!_isSettingControls)
@@ -374,7 +386,7 @@ namespace YAT.Gui.Controls
 					LocalTcpPort = port;
 					LocalUdpPort = port;
 
-					// also set remote port to same number
+					// Also set remote port to same number
 					if (_hostType == SocketHostType.TcpServer)
 					{
 						RemotePort = port;
@@ -408,17 +420,19 @@ namespace YAT.Gui.Controls
 		{
 			_isSettingControls = true;
 
-			// remote host
+			// Remote host
 			comboBox_RemoteHostNameOrAddress.Items.Clear();
-			comboBox_RemoteHostNameOrAddress.Items.Add(new HostItem(_RemoteHostNameOrAddressDefault));
-			comboBox_RemoteHostNameOrAddress.Items.Add(new HostItem("127.0.0.1", "IPv4 localhost"));
-			comboBox_RemoteHostNameOrAddress.Items.Add(new HostItem("::1", "IPv6 localhost"));
+			comboBox_RemoteHostNameOrAddress.Items.Add(new HostItem(IPAddress.Loopback.ToString(),     _RemoteHostNameOrAddressDefault));
+			comboBox_RemoteHostNameOrAddress.Items.Add(new HostItem(IPAddress.Loopback.ToString(),     "IPv4 localhost"));
+			comboBox_RemoteHostNameOrAddress.Items.Add(new HostItem(IPAddress.IPv6Loopback.ToString(), "IPv6 localhost"));
 
-			// local host/interface
+			// Local host/interface
 			comboBox_LocalHostNameOrAddress.Items.Clear();
-			comboBox_LocalHostNameOrAddress.Items.Add(new HostItem(IPAddress.Any.ToString(), _LocalHostNameOrAddressDefault));
-			comboBox_LocalHostNameOrAddress.Items.Add(new HostItem("127.0.0.1", "IPv4 loopback"));
-			comboBox_LocalHostNameOrAddress.Items.Add(new HostItem("::1", "IPv6 loopback"));
+			comboBox_LocalHostNameOrAddress.Items.Add(new HostItem(IPAddress.Any.ToString(),          _LocalHostNameOrAddressDefault));
+			comboBox_LocalHostNameOrAddress.Items.Add(new HostItem(IPAddress.Any.ToString(),          "IPv4 any"));
+			comboBox_LocalHostNameOrAddress.Items.Add(new HostItem(IPAddress.Loopback.ToString(),     "IPv4 loopback"));
+			comboBox_LocalHostNameOrAddress.Items.Add(new HostItem(IPAddress.IPv6Any.ToString(),      "IPv6 any"));
+			comboBox_LocalHostNameOrAddress.Items.Add(new HostItem(IPAddress.IPv6Loopback.ToString(), "IPv6 loopback"));
 
 			NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
 			foreach (IPAddress address in Dns.GetHostAddresses(""))
@@ -451,7 +465,7 @@ namespace YAT.Gui.Controls
 		{
 			_isSettingControls = true;
 
-			// remote host address
+			// Remote host address
 			if ((_hostType == SocketHostType.TcpClient) || (_hostType == SocketHostType.TcpAutoSocket) || (_hostType == SocketHostType.Udp))
 			{
 				comboBox_RemoteHostNameOrAddress.Enabled = true;
@@ -463,13 +477,13 @@ namespace YAT.Gui.Controls
 				comboBox_RemoteHostNameOrAddress.Text = "";
 			}
 
-			// remote port label
+			// Remote port label
 			if (_hostType == SocketHostType.Udp)
 				label_RemotePort.Text = "Remote UDP port:";
 			else
 				label_RemotePort.Text = "Remote TCP port:";
 
-			// remote port
+			// Remote port
 			if ((_hostType == SocketHostType.TcpClient) || (_hostType == SocketHostType.TcpAutoSocket) || (_hostType == SocketHostType.Udp))
 			{
 				textBox_RemotePort.Enabled = true;
@@ -481,7 +495,7 @@ namespace YAT.Gui.Controls
 				textBox_RemotePort.Text = "";
 			}
 
-			// local host address
+			// Local host address
 			if (_hostType != SocketHostType.Unknown)
 			{
 				comboBox_LocalHostNameOrAddress.Enabled = true;
@@ -493,13 +507,13 @@ namespace YAT.Gui.Controls
 				comboBox_LocalHostNameOrAddress.SelectedIndex = -1;
 			}
 
-			// local port label
+			// Local port label
 			if (_hostType == SocketHostType.Udp)
 				label_LocalPort.Text = "Local UDP port:";
 			else
 				label_LocalPort.Text = "Local TCP port:";
 
-			// local port
+			// Local port
 			if ((_hostType == SocketHostType.TcpServer) || (_hostType == SocketHostType.TcpAutoSocket))
 			{
 				textBox_LocalPort.Enabled = true;

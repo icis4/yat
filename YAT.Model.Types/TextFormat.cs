@@ -160,7 +160,7 @@ namespace YAT.Model.Types
 		/// </summary>
 		public bool Equals(TextFormat value)
 		{
-			// ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called
 			if ((object)value != null)
 			{
 				return

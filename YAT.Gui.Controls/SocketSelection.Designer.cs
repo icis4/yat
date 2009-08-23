@@ -36,6 +36,7 @@ namespace YAT.Gui.Controls
 			this.label_LocalPort = new System.Windows.Forms.Label();
 			this.label_LocalHost = new System.Windows.Forms.Label();
 			this.comboBox_LocalHostNameOrAddress = new System.Windows.Forms.ComboBox();
+			this.button_RefreshPorts = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// label_RemoteHost
@@ -58,8 +59,6 @@ namespace YAT.Gui.Controls
 			// 
 			// textBox_RemotePort
 			// 
-			this.textBox_RemotePort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
 			this.textBox_RemotePort.Location = new System.Drawing.Point(101, 30);
 			this.textBox_RemotePort.Name = "textBox_RemotePort";
 			this.textBox_RemotePort.Size = new System.Drawing.Size(156, 20);
@@ -68,8 +67,6 @@ namespace YAT.Gui.Controls
 			// 
 			// comboBox_RemoteHostNameOrAddress
 			// 
-			this.comboBox_RemoteHostNameOrAddress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_RemoteHostNameOrAddress.Location = new System.Drawing.Point(101, 3);
 			this.comboBox_RemoteHostNameOrAddress.Name = "comboBox_RemoteHostNameOrAddress";
 			this.comboBox_RemoteHostNameOrAddress.Size = new System.Drawing.Size(156, 21);
@@ -78,8 +75,6 @@ namespace YAT.Gui.Controls
 			// 
 			// textBox_LocalPort
 			// 
-			this.textBox_LocalPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
 			this.textBox_LocalPort.Location = new System.Drawing.Point(101, 83);
 			this.textBox_LocalPort.Name = "textBox_LocalPort";
 			this.textBox_LocalPort.Size = new System.Drawing.Size(156, 20);
@@ -106,8 +101,6 @@ namespace YAT.Gui.Controls
 			// 
 			// comboBox_LocalHostNameOrAddress
 			// 
-			this.comboBox_LocalHostNameOrAddress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_LocalHostNameOrAddress.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_LocalHostNameOrAddress.Location = new System.Drawing.Point(101, 56);
 			this.comboBox_LocalHostNameOrAddress.Name = "comboBox_LocalHostNameOrAddress";
@@ -115,10 +108,22 @@ namespace YAT.Gui.Controls
 			this.comboBox_LocalHostNameOrAddress.TabIndex = 5;
 			this.comboBox_LocalHostNameOrAddress.SelectedIndexChanged += new System.EventHandler(this.comboBox_LocalHostNameOrAddress_SelectedIndexChanged);
 			// 
-			// SocketSettings
+			// button_RefreshPorts
+			// 
+			this.button_RefreshPorts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_RefreshPorts.Image = global::YAT.Gui.Controls.Properties.Resources.Image_Refresh_16x16;
+			this.button_RefreshPorts.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.button_RefreshPorts.Location = new System.Drawing.Point(258, 56);
+			this.button_RefreshPorts.Name = "button_RefreshPorts";
+			this.button_RefreshPorts.Size = new System.Drawing.Size(24, 21);
+			this.button_RefreshPorts.TabIndex = 8;
+			this.button_RefreshPorts.Click += new System.EventHandler(this.button_RefreshPorts_Click);
+			// 
+			// SocketSelection
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.button_RefreshPorts);
 			this.Controls.Add(this.textBox_LocalPort);
 			this.Controls.Add(this.textBox_RemotePort);
 			this.Controls.Add(this.comboBox_LocalHostNameOrAddress);
@@ -127,8 +132,8 @@ namespace YAT.Gui.Controls
 			this.Controls.Add(this.label_RemotePort);
 			this.Controls.Add(this.label_LocalHost);
 			this.Controls.Add(this.label_RemoteHost);
-			this.Name = "SocketSettings";
-			this.Size = new System.Drawing.Size(260, 106);
+			this.Name = "SocketSelection";
+			this.Size = new System.Drawing.Size(285, 106);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -144,5 +149,6 @@ namespace YAT.Gui.Controls
 		private System.Windows.Forms.Label label_LocalPort;
 		private System.Windows.Forms.Label label_LocalHost;
 		private System.Windows.Forms.ComboBox comboBox_LocalHostNameOrAddress;
+		private System.Windows.Forms.Button button_RefreshPorts;
 	}
 }

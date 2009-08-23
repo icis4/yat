@@ -54,7 +54,6 @@ namespace MKY.IO.Serial
 
 		private System.Net.IPAddress _remoteIPAddress;
 		private int _remotePort;
-		private System.Net.IPAddress _localIPAddress;
 		private int _localPort;
 
 		private SocketState _state = SocketState.Closed;
@@ -94,11 +93,10 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		public UdpSocket(System.Net.IPAddress remoteIPAddress, int remotePort, System.Net.IPAddress localIPAddress, int localPort)
+		public UdpSocket(System.Net.IPAddress remoteIPAddress, int remotePort, int localPort)
 		{
 			_remoteIPAddress = remoteIPAddress;
 			_remotePort = remotePort;
-			_localIPAddress = localIPAddress;
 			_localPort = localPort;
 		}
 
@@ -283,6 +281,26 @@ namespace MKY.IO.Serial
 
 		#endregion
 
+		#region State Methods
+		//==========================================================================================
+		// State Methods
+		//==========================================================================================
+
+		private void SetStateAndNotify(SocketState state)
+		{
+#if (DEBUG)
+			SocketState oldState = _state;
+#endif
+			lock (_stateSyncObj)
+				_state = state;
+#if (DEBUG)
+			System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortEndPointString() + "): State has changed from " + oldState + " to " + _state);
+#endif
+			OnIOChanged(new EventArgs());
+		}
+
+		#endregion
+
 		#region Simple Socket Methods
 		//==========================================================================================
 		// Simple Socket Methods
@@ -318,21 +336,15 @@ namespace MKY.IO.Serial
 								 new System.Net.IPEndPoint(System.Net.IPAddress.Any, _localPort));
 			_socket.Start();
 
-			lock (_stateSyncObj)
-				_state = SocketState.Opening;
-			
-			OnIOChanged(new EventArgs());
+			SetStateAndNotify(SocketState.Opening);
 		}
 
 		private void StopSocket()
 		{
-			lock (_stateSyncObj)
-				_state = SocketState.Closing;
-
 			_socket.Stop();
 			DisposeSocket();
 
-			OnIOChanged(new EventArgs());
+			SetStateAndNotify(SocketState.Closing);
 		}
 
 		private void RestartSocket()
@@ -359,10 +371,7 @@ namespace MKY.IO.Serial
 			lock (_socketConnectionSyncObj)
 				_socketConnection = e.Connection;
 
-			lock (_stateSyncObj)
-				_state = SocketState.Open;
-
-			OnIOChanged(new EventArgs());
+			SetStateAndNotify(SocketState.Open);
 
 			// immediately begin receiving data
 			e.Connection.BeginReceive();
@@ -410,10 +419,7 @@ namespace MKY.IO.Serial
 			lock (_socketConnectionSyncObj)
 				_socketConnection = null;
 
-			lock (_stateSyncObj)
-				_state = SocketState.Closed;
-
-			OnIOChanged(new EventArgs());
+			SetStateAndNotify(SocketState.Closed);
 		}
 
         /// <summary>
@@ -429,10 +435,7 @@ namespace MKY.IO.Serial
 			lock (_socketConnectionSyncObj)
 				_socketConnection = null;
 
-			lock (_stateSyncObj)
-				_state = SocketState.Error;
-
-			OnIOChanged(new EventArgs());
+			SetStateAndNotify(SocketState.Error);
 			OnIOError(new IOErrorEventArgs(e.Exception.Message));
 		}
 
@@ -479,6 +482,19 @@ namespace MKY.IO.Serial
 		protected virtual void OnDataSent(EventArgs e)
 		{
 			EventHelper.FireSync(DataSent, this, e);
+		}
+
+		#endregion
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary></summary>
+		public string ToShortEndPointString()
+		{
+			return ("Server:" + _localPort + " / " + _remoteIPAddress + ":" + _remotePort);
 		}
 
 		#endregion

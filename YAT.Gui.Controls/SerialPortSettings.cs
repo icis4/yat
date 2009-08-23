@@ -228,31 +228,26 @@ namespace YAT.Gui.Controls
 		{
 			if (!_isSettingControls)
 			{
-				MKY.IO.Ports.XBaudRate baudRate = comboBox_BaudRate.SelectedItem as MKY.IO.Ports.XBaudRate;
+				// \attention
+				// Do not assume that the selected item maches the actual text in the box
+				//   because SelectedItem is also set if text has changed in the meantime.
 
-				if (baudRate != null)
+				int intBaudRate;
+				if (int.TryParse(comboBox_BaudRate.Text, out intBaudRate) && (intBaudRate > 0))
 				{
-					BaudRate = baudRate;
+					BaudRate = (MKY.IO.Ports.XBaudRate)intBaudRate;
 				}
 				else
 				{
-					int intBaudRate;
-					if (int.TryParse(comboBox_BaudRate.Text, out intBaudRate) && (intBaudRate > 0))
-					{
-						BaudRate = (MKY.IO.Ports.XBaudRate)intBaudRate;
-					}
-					else
-					{
-						MessageBox.Show
-							(
-							this,
-							"Baud rate must be a positive number!",
-							"Invalid Input",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Error
-							);
-						e.Cancel = true;
-					}
+					MessageBox.Show
+						(
+						this,
+						"Baud rate must be a positive number!",
+						"Invalid Input",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+						);
+					e.Cancel = true;
 				}
 			}
 		}

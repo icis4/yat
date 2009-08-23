@@ -710,7 +710,7 @@ namespace YAT.Gui.Forms
 			if (WindowState == FormWindowState.Normal)
 				ApplicationSettings.LocalUser.MainWindow.Size = Size;
 
-			ApplicationSettings.SaveLocalUser();
+			ApplicationSettings.Save();
 		}
 
 		#endregion
@@ -728,7 +728,7 @@ namespace YAT.Gui.Forms
 				Refresh();
 
 				ApplicationSettings.LocalUser.General = f.SettingsResult;
-				ApplicationSettings.SaveLocalUser();
+				ApplicationSettings.Save();
 			}
 		}
 
@@ -845,7 +845,7 @@ namespace YAT.Gui.Forms
 				Refresh();
 
 				ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
-				ApplicationSettings.SaveLocalUser();
+				ApplicationSettings.Save();
 
 				_main.OpenWorkspaceFromFile(ofd.FileName);
 			}
@@ -872,7 +872,7 @@ namespace YAT.Gui.Forms
 				Refresh();
 
 				ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(sfd.FileName);
-				ApplicationSettings.SaveLocalUser();
+				ApplicationSettings.Save();
 
 				_workspace.SaveAs(sfd.FileName);
 			}
@@ -997,7 +997,7 @@ namespace YAT.Gui.Forms
 				Refresh();
 
 				ApplicationSettings.LocalUser.NewTerminal = f.NewTerminalSettingsResult;
-				ApplicationSettings.SaveLocalUser();
+				ApplicationSettings.Save();
 
 				DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>(f.TerminalSettingsResult);
 
@@ -1026,7 +1026,7 @@ namespace YAT.Gui.Forms
 				Refresh();
 
 				ApplicationSettings.LocalUser.Paths.TerminalFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
-				ApplicationSettings.SaveLocalUser();
+				ApplicationSettings.Save();
 
 				// check whether workspace is ready, otherwise empty workspace needs to be creaeted first
 				if (_workspace != null)

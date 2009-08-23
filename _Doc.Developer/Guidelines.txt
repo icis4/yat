@@ -4,6 +4,7 @@ Special tags
 
 \fixme
 \remind
+\attention
 
 
 override and new
