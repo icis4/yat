@@ -303,7 +303,7 @@ namespace MKY.Utilities.Settings
 		//==========================================================================================
 
 		/// <summary>
-		/// Resets filenames to system defaults.
+		/// Resets file names to system defaults.
 		/// </summary>
 		public void ResetFilePaths()
 		{
@@ -337,47 +337,18 @@ namespace MKY.Utilities.Settings
 		/// </exception>
 		public bool Load()
 		{
-			object settings = null;
-
 			_allSettingsSuccessfullyLoaded = true;
 
-			if (HasCommonSettings)
-			{
-				settings = LoadFromFile(typeof(TCommonSettings), _commonSettingsFilePath);
-				_commonSettingsSuccessfullyLoaded = (settings != null);
-				if (!_commonSettingsSuccessfullyLoaded)
-				{
-					settings = CommonSettingsDefault;
-					_allSettingsSuccessfullyLoaded = false;
-				}
-				_commonSettings = (TCommonSettings)settings;
-			}
+			if (!LoadCommon())
+				_allSettingsSuccessfullyLoaded = false;
 
-			if (HasLocalUserSettings)
-			{
-				settings = LoadFromFile(typeof(TLocalUserSettings), _localUserSettingsFilePath);
-				_localUserSettingsSuccessfullyLoaded = (settings != null);
-				if (!_localUserSettingsSuccessfullyLoaded)
-				{
-					settings = LocalUserSettingsDefault;
-					_allSettingsSuccessfullyLoaded = false;
-				}
-				_localUserSettings = (TLocalUserSettings)settings;
-			}
+			if (!LoadLocalUser())
+				_allSettingsSuccessfullyLoaded = false;
 
-			if (HasRoamingUserSettings)
-			{
-				settings = LoadFromFile(typeof(TRoamingUserSettings), _roamingUserSettingsFilePath);
-				_roamingUserSettingsSuccessfullyLoaded = (settings != null);
-				if (!_roamingUserSettingsSuccessfullyLoaded)
-				{
-					settings = RoamingUserSettingsDefault;
-					_allSettingsSuccessfullyLoaded = false;
-				}
-				_roamingUserSettings = (TRoamingUserSettings)settings;
-			}
+			if (!LoadRoamingUser())
+				_allSettingsSuccessfullyLoaded = false;
 
-			// immediately try to save settings to reflect current version
+			// Immediately try to save settings to reflect current version
 			try
 			{
 				Save();
@@ -386,16 +357,88 @@ namespace MKY.Utilities.Settings
 			{
 			}
 
-			// return load status
+			// Return load result
 			return (_allSettingsSuccessfullyLoaded);
+		}
+
+		/// <summary>
+		/// Tries to load settings from <see cref="CommonSettingsFilePath"/>.
+		/// </summary>
+		/// <returns>
+		/// Returns false if either settings could not be loaded from
+		/// its file path and have been set to defaults.
+		/// </returns>
+		public bool LoadCommon()
+		{
+			bool result = true;
+			if (HasCommonSettings)
+			{
+				object settings = LoadFromFile(typeof(TCommonSettings), _commonSettingsFilePath);
+				_commonSettingsSuccessfullyLoaded = (settings != null);
+				if (!_commonSettingsSuccessfullyLoaded)
+				{
+					settings = CommonSettingsDefault;
+					result = false;
+				}
+				_commonSettings = (TCommonSettings)settings;
+			}
+			return (result);
+		}
+
+		/// <summary>
+		/// Tries to load settings from <see cref="LocalUserSettingsFilePath"/>.
+		/// </summary>
+		/// <returns>
+		/// Returns false if either settings could not be loaded from
+		/// its file path and have been set to defaults.
+		/// </returns>
+		public bool LoadLocalUser()
+		{
+			bool result = true;
+			if (HasLocalUserSettings)
+			{
+				object settings = LoadFromFile(typeof(TLocalUserSettings), _localUserSettingsFilePath);
+				_localUserSettingsSuccessfullyLoaded = (settings != null);
+				if (!_localUserSettingsSuccessfullyLoaded)
+				{
+					settings = LocalUserSettingsDefault;
+					result = false;
+				}
+				_localUserSettings = (TLocalUserSettings)settings;
+			}
+			return (result);
+		}
+
+		/// <summary>
+		/// Tries to load settings from <see cref="RoamingUserSettingsFilePath"/>.
+		/// </summary>
+		/// <returns>
+		/// Returns false if either settings could not be loaded from
+		/// its file path and have been set to defaults.
+		/// </returns>
+		public bool LoadRoamingUser()
+		{
+			bool result = true;
+			if (HasRoamingUserSettings)
+			{
+				object settings = LoadFromFile(typeof(TRoamingUserSettings), _roamingUserSettingsFilePath);
+				_roamingUserSettingsSuccessfullyLoaded = (settings != null);
+				if (!_roamingUserSettingsSuccessfullyLoaded)
+				{
+					settings = RoamingUserSettingsDefault;
+					result = false;
+				}
+				_roamingUserSettings = (TRoamingUserSettings)settings;
+			}
+			return (result);
 		}
 
 		private object LoadFromFile(Type type, string filePath)
 		{
-			// try to open existing file of current version
+			// Try to open existing file of current version
 			if (File.Exists(filePath)) // first check for file to minimize exceptions thrown
 			{
-				// try to open existing file with default deserialization
+				// Try to open existing file with default deserialization
 				try
 				{
 					object settings = null;
@@ -410,7 +453,7 @@ namespace MKY.Utilities.Settings
 				{
 				}
 
-				// try to open existing file with tolerant deserialization
+				// Try to open existing file with tolerant deserialization
 				try
 				{
 					object settings = null;
@@ -426,7 +469,7 @@ namespace MKY.Utilities.Settings
 				}
 			}
 
-			// find all valid directories of older versions
+			// Find all valid directories of older versions
 			string productSettingsPath = Path.GetDirectoryName(Path.GetDirectoryName(filePath));
 			string[] allDirectories = Directory.GetDirectories(productSettingsPath);
 			List<string> oldDirectories = new List<string>();
@@ -444,12 +487,12 @@ namespace MKY.Utilities.Settings
 				}
 			}
 
-			// try to open an existing file of an older version, start with most recent
+			// Try to open an existing file of an older version, start with most recent
 			string fileName = Path.GetFileName(filePath);
 			oldDirectories.Sort();
 			for (int i = oldDirectories.Count - 1; i >= 0; i--)
 			{
-				// try to open existing file with default deserialization
+				// Try to open existing file with default deserialization
 				try
 				{
 					object settings = null;
@@ -464,7 +507,7 @@ namespace MKY.Utilities.Settings
 				{
 				}
 
-				// try to open existing file with tolerant deserialization
+				// Try to open existing file with tolerant deserialization
 				try
 				{
 					object settings = null;
@@ -480,7 +523,7 @@ namespace MKY.Utilities.Settings
 				}
 			}
 
-			// if nothing found, return <c>null</c>
+			// If nothing found, return <c>null</c>
 			return (null);
 		}
 
@@ -495,7 +538,7 @@ namespace MKY.Utilities.Settings
 		{
 			Exception result = null;
 
-			// try to save common settings
+			// Try to save common settings
 			try
 			{
 				SaveCommon();
@@ -506,7 +549,7 @@ namespace MKY.Utilities.Settings
 					result = ex;
 			}
 
-			// try to save local user settings
+			// Try to save local user settings
 			try
 			{
 				SaveLocalUser();
@@ -517,7 +560,7 @@ namespace MKY.Utilities.Settings
 					result = ex;
 			}
 
-			// try to save roaming user settings
+			// Try to save roaming user settings
 			try
 			{
 				SaveRoamingUser();
@@ -528,7 +571,7 @@ namespace MKY.Utilities.Settings
 					result = ex;
 			}
 
-			// throw exeption if either operation failed
+			// Throw exeption if either operation failed
 			if (result != null)
 				throw (result);
 		}

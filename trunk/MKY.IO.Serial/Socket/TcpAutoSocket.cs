@@ -41,9 +41,9 @@ namespace MKY.IO.Serial
 			Connecting,
 			Connected,
 			ConnectingFailed,
-			StartingListing,
-			Listing,
-			ListingFailed,
+			StartingListening,
+			Listening,
+			ListeningFailed,
 			Accepted,
 			Restarting,
 			Stopping,
@@ -186,9 +186,9 @@ namespace MKY.IO.Serial
 					case SocketState.Connecting:
 					case SocketState.ConnectingFailed:
 					case SocketState.Connected:
-					case SocketState.StartingListing:
-					case SocketState.Listing:
-					case SocketState.ListingFailed:
+					case SocketState.StartingListening:
+					case SocketState.Listening:
+					case SocketState.ListeningFailed:
 					case SocketState.Accepted:
 					case SocketState.Restarting:
 					{
@@ -257,7 +257,7 @@ namespace MKY.IO.Serial
 				AssertNotDisposed();
 				switch (_state)
 				{
-					case SocketState.Listing:
+					case SocketState.Listening:
 					case SocketState.Accepted:
 					{
 						return (true);
@@ -360,6 +360,26 @@ namespace MKY.IO.Serial
 
 		#endregion
 
+		#region State Methods
+		//==========================================================================================
+		// State Methods
+		//==========================================================================================
+
+		private void SetStateAndNotify(SocketState state)
+		{
+#if (DEBUG)
+			SocketState oldState = _state;
+#endif
+			lock (_stateSyncObj)
+				_state = state;
+#if (DEBUG)
+			System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortEndPointString() + "): State has changed from " + oldState + " to " + _state);
+#endif
+			OnIOChanged(new EventArgs());
+		}
+
+		#endregion
+
 		#region Simple Socket Methods
 		//==========================================================================================
 		// Simple Socket Methods
@@ -399,8 +419,7 @@ namespace MKY.IO.Serial
 			lock (_startCycleCounterSyncObj)
 				_startCycleCounter = 0;
 
-			_state = SocketState.Starting;
-			OnIOChanged(new EventArgs());
+			SetStateAndNotify(SocketState.Starting);
 
 			// immediately start connecting
 			StartConnecting();
@@ -409,12 +428,9 @@ namespace MKY.IO.Serial
 		// try to start as client
 		private void StartConnecting()
 		{
-			lock (_stateSyncObj)
-				_state = SocketState.Connecting;
+			SetStateAndNotify(SocketState.Connecting);
 
-			OnIOChanged(new EventArgs());
-
-			_client = new TcpClient(_remoteIPAddress, _remotePort, _localIPAddress);
+			_client = new TcpClient(_remoteIPAddress, _remotePort);
 			_client.IOChanged += new EventHandler(_client_IOChanged);
 			_client.IOError += new EventHandler<IOErrorEventArgs>(_client_IOError);
 			_client.DataReceived += new EventHandler(_client_DataReceived);
@@ -430,10 +446,7 @@ namespace MKY.IO.Serial
 					_client.Dispose();
 				_client = null;
 
-				lock (_stateSyncObj)
-					_state = SocketState.Error;
-
-				OnIOChanged(new EventArgs());
+				SetStateAndNotify(SocketState.Error);
 				OnIOError(new IOErrorEventArgs("AutoSocket client could not be created."));
 			}
 		}
@@ -441,10 +454,7 @@ namespace MKY.IO.Serial
 		// try to start as server
 		private void StartListening()
 		{
-			lock (_stateSyncObj)
-				_state = SocketState.StartingListing;
-
-			OnIOChanged(new EventArgs());
+			SetStateAndNotify(SocketState.StartingListening);
 
 			_server = new TcpServer(_localIPAddress, _localPort);
 			_server.IOChanged += new EventHandler(_server_IOChanged);
@@ -461,20 +471,14 @@ namespace MKY.IO.Serial
 				_server.Dispose();
 				_server = null;
 
-				lock (_stateSyncObj)
-					_state = SocketState.Error;
-
-				OnIOChanged(new EventArgs());
+				SetStateAndNotify(SocketState.Error);
 				OnIOError(new IOErrorEventArgs("AutoSocket server could not be created."));
 			}
 		}
 
 		private void RestartAutoSocket()
 		{
-			lock (_stateSyncObj)
-				_state = SocketState.Restarting;
-
-			OnIOChanged(new EventArgs());
+			SetStateAndNotify(SocketState.Restarting);
 
 			StopSockets();
 			DisposeSockets();
@@ -484,28 +488,19 @@ namespace MKY.IO.Serial
 
 		private void StopAutoSocket()
 		{
-			lock (_stateSyncObj)
-				_state = SocketState.Stopping;
-
-			OnIOChanged(new EventArgs());
+			SetStateAndNotify(SocketState.Stopping);
 
 			StopSockets();
 			DisposeSockets();
 
-			lock (_stateSyncObj)
-				_state = SocketState.Reset;
-
-			OnIOChanged(new EventArgs());
+			SetStateAndNotify(SocketState.Reset);
 		}
 
 		private void AutoSocketError(string message)
 		{
 			DisposeSockets();
 
-			lock (_stateSyncObj)
-				_state = SocketState.Error;
-
-			OnIOChanged(new EventArgs());
+			SetStateAndNotify(SocketState.Error);
 			OnIOError(new IOErrorEventArgs(message));
 		}
 
@@ -522,25 +517,22 @@ namespace MKY.IO.Serial
 			{
 				case SocketState.Connecting:
 				{
-					if (_client.IsConnected)               // if IO changed during startup,
-					{                                      //   check for connected and change state
-						lock (_stateSyncObj)
-							_state = SocketState.Connected;
-
-						OnIOChanged(e);
+					if (_client.IsConnected)          // If IO changed during startup,
+					{                                 //   check for connected and change state
+						SetStateAndNotify(SocketState.Connected);
 					}
 					break;
 				}
 				case SocketState.Connected:
 				{
-					if (_client.IsConnected)               // if IO changed during client operation
-					{                                      //   and client is connected to a server,
-						OnIOChanged(e);                    //   simply forward the event
+					if (_client.IsConnected)          // If IO changed during client operation
+					{                                 //   and client is connected to a server,
+						OnIOChanged(e);               //   simply forward the event
 					}
 					else
 					{
-						DisposeSockets();                  // if client lost connection to server,
-						StartListening();                  //   change to server operation
+						DisposeSockets();             // If client lost connection to server,
+						StartListening();             //   change to server operation
 					}
 					break;
 				}
@@ -554,14 +546,14 @@ namespace MKY.IO.Serial
 				case SocketState.Connecting:
 				case SocketState.ConnectingFailed:
 				{
-					DisposeSockets();                      // in case of error during startup,
-					StartListening();                      //   try to start as server
+					DisposeSockets();                 // In case of error during startup,
+					StartListening();                 //   try to start as server
 					break;
 				}
 				case SocketState.Connected:
 				{
-					DisposeSockets();                      // in case of error during client operation,
-					StartConnecting();                     //   restart AutoSocket
+					DisposeSockets();                 // In case of error during client operation,
+					StartConnecting();                //   restart AutoSocket
 					break;
 				}
 			}
@@ -590,38 +582,23 @@ namespace MKY.IO.Serial
 		{
 			switch (_state)
 			{
-				case SocketState.StartingListing:
+				case SocketState.StartingListening:
 				{
-					if (_server.IsStarted)                // if IO changed during startup,
-					{                                      //   check for start and change state
-						lock (_stateSyncObj)
-							_state = SocketState.Listing;
-
-						OnIOChanged(e);
-					}
+					if (_server.IsStarted)                        // If IO changed during startup,
+						SetStateAndNotify(SocketState.Listening); //   check for start and change state
 					break;
 				}
-				case SocketState.Listing:
+				case SocketState.Listening:
 				{
-					if (_server.ConnectedClientCount > 0)  // if IO changed during listening,
-					{                                      //   change state to accepted if
-						lock (_stateSyncObj)               //   clients are connected
-							_state = SocketState.Accepted;
-
-						OnIOChanged(e);
-					}
-					break;
+					if (_server.ConnectedClientCount > 0)         // If IO changed during listening,
+						SetStateAndNotify(SocketState.Accepted);  //   change state to accepted if
+					break;                                        //   clients are connected
 				}
 				case SocketState.Accepted:
 				{
-					if (_server.ConnectedClientCount <= 0) // if IO changed during accepted,
-					{                                      //   change state to listening if
-						lock (_stateSyncObj)               //   no clients are connected
-							_state = SocketState.Listing;
-
-						OnIOChanged(e);
-					}
-					break;
+					if (_server.ConnectedClientCount <= 0)        // If IO changed during accepted,
+						SetStateAndNotify(SocketState.Listening); //   change state to listening if
+					break;                                        //   no clients are connected
 				}
 			}
 		}
@@ -630,9 +607,9 @@ namespace MKY.IO.Serial
 		{
 			switch (_state)
 			{
-				case SocketState.StartingListing:          // in case of error during startup,
-				{                                          //   increment start cycles and
-					bool tryAgain = false;                 //   continue depending on count
+				case SocketState.StartingListening:   // In case of error during startup,
+				{                                     //   increment start cycles and
+					bool tryAgain = false;            //   continue depending on count
 					lock (_startCycleCounterSyncObj)
 					{
 						_startCycleCounter++;
@@ -654,11 +631,11 @@ namespace MKY.IO.Serial
 					}
 					break;
 				}
-				case SocketState.Listing:
+				case SocketState.Listening:
 				case SocketState.Accepted:
 				{
-					DisposeSockets();                      // in case of error during server operation,
-					StartConnecting();                     //   restart AutoSocket
+					DisposeSockets();                 // In case of error during server operation,
+					StartConnecting();                //   restart AutoSocket
 					break;
 				}
 			}
@@ -719,6 +696,19 @@ namespace MKY.IO.Serial
 		protected virtual void OnDataSent(EventArgs e)
 		{
 			EventHelper.FireSync(DataSent, this, e);
+		}
+
+		#endregion
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary></summary>
+		public string ToShortEndPointString()
+		{
+			return ("Server:" + _localPort + " / " + _remoteIPAddress + ":" + _remotePort);
 		}
 
 		#endregion

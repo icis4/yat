@@ -492,7 +492,7 @@ namespace YAT.Gui.Controls
 				Refresh();
 
 				ApplicationSettings.LocalUser.Paths.SendFilesPath = Path.GetDirectoryName(ofd.FileName);
-				ApplicationSettings.SaveLocalUser();
+				ApplicationSettings.Save();
 
 				_command.IsFilePath = true;
 				_command.FilePath = ofd.FileName;

@@ -352,7 +352,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public bool Equals(SerialPortId value)
 		{
-			// ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called
 			if ((object)value != null)
 				return (_number.Equals(value._number));
 

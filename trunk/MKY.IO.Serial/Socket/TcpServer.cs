@@ -298,6 +298,26 @@ namespace MKY.IO.Serial
 
 		#endregion
 
+		#region State Methods
+		//==========================================================================================
+		// State Methods
+		//==========================================================================================
+
+		private void SetStateAndNotify(SocketState state)
+		{
+#if (DEBUG)
+			SocketState oldState = _state;
+#endif
+			lock (_stateSyncObj)
+				_state = state;
+#if (DEBUG)
+			System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortEndPointString() + "): State has changed from " + oldState + " to " + _state);
+#endif
+			OnIOChanged(new EventArgs());
+		}
+
+		#endregion
+
 		#region Simple Socket Methods
 		//==========================================================================================
 		// Simple Socket Methods
@@ -331,21 +351,15 @@ namespace MKY.IO.Serial
 			_socket.AddListener("YAT TCP Server Listener", new System.Net.IPEndPoint(System.Net.IPAddress.Any, _localPort));
 			_socket.Start();
 
-			lock (_stateSyncObj)
-				_state = SocketState.Listening;
-
-			OnIOChanged(new EventArgs());
+			SetStateAndNotify(SocketState.Listening);
 		}
 
 		private void StopSocket()
 		{
-			lock (_stateSyncObj)
-				_state = SocketState.Stopping;
-
 			_socket.Stop();
 			DisposeSocket();
 
-			OnIOChanged(new EventArgs());
+			SetStateAndNotify(SocketState.Stopping);
 		}
 
 		private void RestartSocket()
@@ -372,10 +386,7 @@ namespace MKY.IO.Serial
 			lock (_socketConnections)
 				_socketConnections.Add(e.Connection);
 
-			lock (_stateSyncObj)
-				_state = SocketState.Accepted;
-
-			OnIOChanged(new EventArgs());
+			SetStateAndNotify(SocketState.Accepted);
 
 			// immediately begin receiving data
 			e.Connection.BeginReceive();
@@ -425,13 +436,9 @@ namespace MKY.IO.Serial
 				_socketConnections.Remove(e.Connection);
 				isConnected = (_socketConnections.Count > 0);
 			}
-			if (!isConnected)
-			{
-				lock (_stateSyncObj)
-					_state = SocketState.Listening;
 
-				OnIOChanged(new EventArgs());
-			}
+			if (!isConnected)
+				SetStateAndNotify(SocketState.Listening);
 		}
 
 		/// <summary>
@@ -444,10 +451,7 @@ namespace MKY.IO.Serial
 		{
 			DisposeSocket();
 
-			lock (_stateSyncObj)
-				_state = SocketState.Error;
-
-			OnIOChanged(new EventArgs());
+			SetStateAndNotify(SocketState.Error);
 			OnIOError(new IOErrorEventArgs(e.Exception.Message));
 		}
 
@@ -494,6 +498,19 @@ namespace MKY.IO.Serial
 		protected virtual void OnDataSent(EventArgs e)
 		{
 			EventHelper.FireSync(DataSent, this, e);
+		}
+
+		#endregion
+
+		#region Object Members
+		//==========================================================================================
+		// Object Members
+		//==========================================================================================
+
+		/// <summary></summary>
+		public string ToShortEndPointString()
+		{
+			return ("Server:" + _localPort);
 		}
 
 		#endregion

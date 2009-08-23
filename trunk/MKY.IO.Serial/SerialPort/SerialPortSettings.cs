@@ -238,7 +238,7 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public bool Equals(SerialPortSettings value)
 		{
-			// ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called
 			if ((object)value != null)
 			{
 				return 

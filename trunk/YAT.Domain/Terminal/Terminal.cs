@@ -337,7 +337,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual void SendLine(string line)
 		{
-			// simply send line as string
+			// Simply send line as string
 			Send(line);
 		}
 

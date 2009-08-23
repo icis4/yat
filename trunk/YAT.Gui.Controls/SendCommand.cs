@@ -272,7 +272,9 @@ namespace YAT.Gui.Controls
 			if ((_focusState == FocusState.Inactive) && !_command.IsSingleLineCommand)
 			{
 				_isSettingControls = true;
-				comboBox_Command.Text = "";
+				comboBox_Command.Text      = "";
+				comboBox_Command.ForeColor = SystemColors.ControlText;
+				comboBox_Command.Font      = SystemFonts.DefaultFont; 
 				_isSettingControls = false;
 			}
 

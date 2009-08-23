@@ -195,7 +195,7 @@ namespace MKY.Utilities.Settings
 			{
 				Settings value = (Settings)obj;
 
-				// ensure that object.operator!=() is called
+				// Ensure that object.operator!=() is called
 				if ((object)value != null)
 				{
 					if (this.GetType() == value.GetType())

@@ -28,6 +28,7 @@ namespace YAT.Settings.Application
 		private string _productVersion = System.Windows.Forms.Application.ProductVersion;
 		private Settings.GeneralSettings _general;
 		private Settings.PathSettings _paths;
+		private Settings.AutoWorkspaceSettings _autoAutoWorkspace;
 		private Model.Settings.MainWindowSettings _mainWindow;
 		private Model.Settings.NewTerminalSettings _newTerminal;
 		private Model.Settings.RecentFileSettings _recentFiles;
@@ -35,11 +36,12 @@ namespace YAT.Settings.Application
 		public LocalUserSettingsRoot()
 			: base(MKY.Utilities.Settings.SettingsType.Explicit)
 		{
-			General     = new Settings.GeneralSettings();
-			Paths       = new Settings.PathSettings();
-			MainWindow  = new Model.Settings.MainWindowSettings();
-			NewTerminal = new Model.Settings.NewTerminalSettings();
-			RecentFiles = new Model.Settings.RecentFileSettings();
+			General       = new Settings.GeneralSettings();
+			Paths         = new Settings.PathSettings();
+			AutoWorkspace = new Settings.AutoWorkspaceSettings();
+			MainWindow    = new Model.Settings.MainWindowSettings();
+			NewTerminal   = new Model.Settings.NewTerminalSettings();
+			RecentFiles   = new Model.Settings.RecentFileSettings();
 
 			ClearChanged();
 		}
@@ -47,11 +49,12 @@ namespace YAT.Settings.Application
 		public LocalUserSettingsRoot(LocalUserSettingsRoot rhs)
 			: base(rhs)
 		{
-			General     = new Settings.GeneralSettings(rhs.General);
-			Paths       = new Settings.PathSettings(rhs.Paths);
-			MainWindow  = new Model.Settings.MainWindowSettings(rhs.MainWindow);
-			NewTerminal = new Model.Settings.NewTerminalSettings(rhs.NewTerminal);
-			RecentFiles = new Model.Settings.RecentFileSettings(rhs.RecentFiles);
+			General       = new Settings.GeneralSettings(rhs.General);
+			Paths         = new Settings.PathSettings(rhs.Paths);
+			AutoWorkspace = new Settings.AutoWorkspaceSettings(rhs.AutoWorkspace);
+			MainWindow    = new Model.Settings.MainWindowSettings(rhs.MainWindow);
+			NewTerminal   = new Model.Settings.NewTerminalSettings(rhs.NewTerminal);
+			RecentFiles   = new Model.Settings.RecentFileSettings(rhs.RecentFiles);
 
 			ClearChanged();
 		}
@@ -125,6 +128,26 @@ namespace YAT.Settings.Application
 					Settings.PathSettings old = _paths;
 					_paths = value;
 					ReplaceNode(old, _paths);
+				}
+			}
+		}
+
+		[XmlElement("AutoWorkspace")]
+		public Settings.AutoWorkspaceSettings AutoWorkspace
+		{
+			get { return (_autoAutoWorkspace); }
+			set
+			{
+				if (_autoAutoWorkspace == null)
+				{
+					_autoAutoWorkspace = value;
+					AttachNode(_autoAutoWorkspace);
+				}
+				else if (_autoAutoWorkspace != value)
+				{
+					Settings.AutoWorkspaceSettings old = _autoAutoWorkspace;
+					_autoAutoWorkspace = value;
+					ReplaceNode(old, _autoAutoWorkspace);
 				}
 			}
 		}
@@ -209,7 +232,7 @@ namespace YAT.Settings.Application
 		/// </summary>
 		public bool Equals(LocalUserSettingsRoot value)
 		{
-			// ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called
 			if ((object)value != null)
 			{
 				return

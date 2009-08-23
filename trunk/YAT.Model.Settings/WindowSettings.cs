@@ -141,7 +141,7 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public bool Equals(WindowSettings value)
 		{
-			// ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called
 			if ((object)value != null)
 			{
 				if (_state == FormWindowState.Normal)

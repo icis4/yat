@@ -96,10 +96,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public Workspace()
 		{
-			// create workspace settings from most recent workspace file
-			DocumentSettingsHandler<WorkspaceSettingsRoot> sh = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
-			sh.SettingsFilePath = ApplicationSettings.LocalUser.General.WorkspaceFilePath;
-			Initialize(sh, Guid.Empty);
+			Initialize(new DocumentSettingsHandler<WorkspaceSettingsRoot>(), Guid.NewGuid());
 		}
 
 		/// <summary></summary>
@@ -447,18 +444,18 @@ namespace YAT.Model
 		private bool SaveToFile(bool doAutoSave, string autoSaveFilePathToDelete)
 		{
 			// -------------------------------------------------------------------------------------
-			// skip save if file is up to date and there were no changes
+			// Skip save if file is up to date and there were no changes
 			// -------------------------------------------------------------------------------------
 
 			if (_settingsHandler.SettingsFileIsUpToDate && (!_settingsRoot.HaveChanged))
 			{
-				// event must be fired anyway to ensure that dependent objects are updated
+				// Event must be fired anyway to ensure that dependent objects are updated
 				OnSaved(new SavedEventArgs(_settingsHandler.SettingsFilePath, doAutoSave));
 				return (true);
 			}
 
 			// -------------------------------------------------------------------------------------
-			// first, save all contained terminals
+			// First, save all contained terminals
 			// -------------------------------------------------------------------------------------
 
 			bool success = false;
@@ -466,8 +463,8 @@ namespace YAT.Model
 			if (!doAutoSave)
 				OnFixedStatusTextRequest("Saving workspace...");
 
-			// in case of auto save, assign workspace settings file path before saving terminals
-			// this ensures that relative paths are correctly retrieved by SaveAllTerminals()
+			// In case of auto save, assign workspace settings file path before saving terminals
+			// This ensures that relative paths are correctly retrieved by SaveAllTerminals()
 			if (doAutoSave && (!_settingsHandler.SettingsFilePathIsValid))
 			{
 				string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveWorkspaceFileNamePrefix + Guid.ToString() + ExtensionSettings.WorkspaceFiles;
@@ -483,14 +480,11 @@ namespace YAT.Model
 			try
 			{
 				// ---------------------------------------------------------------------------------
-				// save workspace
+				// Save workspace
 				// ---------------------------------------------------------------------------------
 
 				_settingsHandler.Settings.AutoSaved = doAutoSave;
 				_settingsHandler.Save();
-
-				ApplicationSettings.LocalUser.General.WorkspaceFilePath = _settingsHandler.SettingsFilePath;
-				ApplicationSettings.SaveLocalUser();
 
 				success = true;
 				OnSaved(new SavedEventArgs(_settingsHandler.SettingsFilePath, doAutoSave));
@@ -502,7 +496,7 @@ namespace YAT.Model
 				}
 
 				// ---------------------------------------------------------------------------------
-				// try to delete existing auto save file
+				// Try to delete existing auto save file
 				// ---------------------------------------------------------------------------------
 
 				try
@@ -551,11 +545,11 @@ namespace YAT.Model
 		/// Closes the workspace and tries to auto save if desired.
 		/// </summary>
 		/// <remarks>
-		/// Attention:
+		/// \attention
 		/// This method is needed for MDI applications. In case of MDI parent/application closing,
 		/// Close() of the workspace is called. Without taking care of this, the workspace would
 		/// be removed as the active workspace from the local user settings. Therefore, the
-		/// workspace has to signal such cases to the main.
+		/// workspace has to signal such cases to main.
 		/// 
 		/// Cases (similar to cases in Model.Terminal):
 		/// - Main close
@@ -673,7 +667,7 @@ namespace YAT.Model
 		private void SetRecent(string recentFile)
 		{
 			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
-			ApplicationSettings.SaveLocalUser();
+			ApplicationSettings.Save();
 		}
 
 		#endregion

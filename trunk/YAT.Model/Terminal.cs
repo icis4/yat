@@ -686,7 +686,7 @@ namespace YAT.Model
 		/// Closes the terminal and tries to auto save if desired.
 		/// </summary>
 		/// <remarks>
-		/// Attention:
+		/// \attention
 		/// This method is needed for MDI applications. In case of MDI parent/application closing,
 		/// Close() of the terminal is called before Close() of the workspace. Without taking care
 		/// of this, the workspace would be saved after the terminal has already been close, i.e.
@@ -809,7 +809,7 @@ namespace YAT.Model
 		private void SetRecent(string recentFile)
 		{
 			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary(recentFile);
-			ApplicationSettings.SaveLocalUser();
+			ApplicationSettings.Save();
 		}
 
 		#endregion
@@ -1247,7 +1247,7 @@ namespace YAT.Model
 				new RecentItem<Command>(new Command(_settingsRoot.SendCommand.Command))
 				);
 
-			// clear command if desired
+			// Clear command if desired
 			if (!_settingsRoot.Send.KeepCommand)
 				_settingsRoot.SendCommand.Command = new Command(); // set command to ""
 		}

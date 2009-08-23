@@ -34,7 +34,7 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		public const string DefaultRemoteHostName = "localhost";
+		public const string DefaultRemoteHostName = "<Localhost>";
 		/// <summary></summary>
 		public const string DefaultLocalHostName = "<Any>";
 		/// <summary></summary>
@@ -348,7 +348,7 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public bool Equals(SocketSettings value)
 		{
-			// ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called
 			if ((object)value != null)
 			{
 				return

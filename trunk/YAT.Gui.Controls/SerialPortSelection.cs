@@ -223,7 +223,7 @@ namespace YAT.Gui.Controls
 				_markPortsInUseThread.CancelScanning();
 			
 			ApplicationSettings.LocalUser.General.DetectSerialPortsInUse = setting;
-			ApplicationSettings.SaveLocalUser();
+			ApplicationSettings.Save();
 		}
 
 		private void SetSerialPortList()

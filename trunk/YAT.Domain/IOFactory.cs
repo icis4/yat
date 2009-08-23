@@ -42,7 +42,6 @@ namespace YAT.Domain
 						(
 						settings.Socket.ResolvedRemoteIPAddress,
 						settings.Socket.RemotePort,
-						settings.Socket.ResolvedLocalIPAddress,
 						settings.Socket.TcpClientAutoReconnect
 						));
 				}
@@ -73,7 +72,6 @@ namespace YAT.Domain
 						(
 						settings.Socket.ResolvedRemoteIPAddress,
 						settings.Socket.RemotePort,
-						settings.Socket.ResolvedLocalIPAddress,
 						settings.Socket.LocalUdpPort
 						));
 				}

@@ -1,4 +1,4 @@
-//==================================================================================================
+ï»¿//==================================================================================================
 // $URL$
 // $Author$
 // $Date$
@@ -6,8 +6,8 @@
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2009 Matthias Kläy.
+// Copyright Â© 2003-2004 HSR Hochschule fÃ¼r Technik Rapperswil.
+// Copyright Â© 2003-2009 Matthias KlÃ¤y.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
@@ -16,65 +16,50 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
-using System.Drawing;
 
-namespace YAT.Model.Types
+namespace YAT.Settings
 {
-	/// <summary></summary>
 	[Serializable]
-	public class FontFormat : IEquatable<FontFormat>
+	public class AutoWorkspaceSettings : MKY.Utilities.Settings.Settings, IEquatable<AutoWorkspaceSettings>
 	{
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
+		private string _filePath;
+		private Guid _filePathUser;
 
-		/// <summary></summary>
-		public const string NameDefault = "DejaVu Sans Mono";
-		/// <summary></summary>
-		public const float SizeDefault = 8.25f;
-		/// <summary></summary>
-		public const FontStyle StyleDefault = FontStyle.Regular;
-
-		#endregion
-
-		private string _name;
-		private float _size;
-		private FontStyle _style;
-		private Font _font;
-
-		/// <summary></summary>
-		public FontFormat()
+		public AutoWorkspaceSettings()
 		{
-			_name = NameDefault;
-			_size = SizeDefault;
-			_style = StyleDefault;
-			MakeFont();
+			SetMyDefaults();
+			ClearChanged();
 		}
 
-		/// <summary></summary>
-		public FontFormat(string name, float size, FontStyle style)
+		public AutoWorkspaceSettings(MKY.Utilities.Settings.SettingsType settingsType)
+			: base(settingsType)
 		{
-			_name = name;
-			_size = size;
-			_style = style;
-			MakeFont();
+			SetMyDefaults();
+			ClearChanged();
 		}
 
-		/// <summary></summary>
-		public FontFormat(FontFormat rhs)
+		/// <remarks>
+		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
+		/// </remarks>
+		public AutoWorkspaceSettings(AutoWorkspaceSettings rhs)
+			: base(rhs)
 		{
-			_name = rhs._name;
-			_size = rhs._size;
-			_style = rhs._style;
-			MakeFont();
+			_filePath     = rhs.FilePath;
+			_filePathUser = rhs.FilePathUser;
+
+			ClearChanged();
 		}
 
-		private void MakeFont()
+		/// <remarks>
+		/// Set fields through properties to ensure correct setting of changed flag.
+		/// </remarks>
+		protected override void SetMyDefaults()
 		{
-			_font = new Font(_name, _size, _style);
+			FilePath     = "";
+			FilePathUser = Guid.Empty;
 		}
 
 		#region Properties
@@ -82,54 +67,52 @@ namespace YAT.Model.Types
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
-		[XmlElement("Name")]
-		public string Name
+		[XmlElement("FilePath")]
+		public string FilePath
 		{
-			get { return (_name); }
+			get { return (_filePath); }
 			set
 			{
-				_name = value;
-				MakeFont();
+				if (_filePath != value)
+				{
+					_filePath = value;
+					SetChanged();
+				}
+			}
+		}
+
+		[XmlElement("FilePathUser")]
+		public Guid FilePathUser
+		{
+			get { return (_filePathUser); }
+			set
+			{
+				if (_filePathUser != value)
+				{
+					_filePathUser = value;
+					SetChanged();
+				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("Size")]
-		public float Size
+		public void SetFilePathAndUser(string filePath, Guid filePathUser)
 		{
-			get { return (_size); }
-			set
-			{
-				_size = value;
-				MakeFont();
-			}
+			FilePath = filePath;
+			FilePathUser = filePathUser;
 		}
 
 		/// <summary></summary>
-		[XmlElement("Style")]
-		public FontStyle Style
+		public void ResetFilePathAndUser()
 		{
-			get { return (_style); }
-			set
-			{
-				_style = value;
-				MakeFont();
-			}
+			FilePath = "";
+			FilePathUser = Guid.Empty;
 		}
 
 		/// <summary></summary>
-		[XmlIgnore]
-		public Font Font
+		public void ResetUserOnly()
 		{
-			get { return (_font); }
-			set
-			{
-				_name = value.Name;
-				_size = value.Size;
-				_style = value.Style;
-				MakeFont();
-			}
+			FilePathUser = Guid.Empty;
 		}
 
 		#endregion
@@ -141,8 +124,8 @@ namespace YAT.Model.Types
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is FontFormat)
-				return (Equals((FontFormat)obj));
+			if (obj is AutoWorkspaceSettings)
+				return (Equals((AutoWorkspaceSettings)obj));
 
 			return (false);
 		}
@@ -150,22 +133,20 @@ namespace YAT.Model.Types
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(FontFormat value)
+		public bool Equals(AutoWorkspaceSettings value)
 		{
 			// Ensure that object.operator!=() is called
 			if ((object)value != null)
 			{
 				return
 					(
-					_name.Equals(value._name) &&
-					_size.Equals(value._size) &&
-					_style.Equals(value._style)
+					_filePath.       Equals(value._filePath) &&
+					_filePathUser.Equals(value._filePathUser)
 					);
 			}
 			return (false);
 		}
 
-		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());
@@ -178,7 +159,7 @@ namespace YAT.Model.Types
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(FontFormat lhs, FontFormat rhs)
+		public static bool operator ==(AutoWorkspaceSettings lhs, AutoWorkspaceSettings rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))
 				return (true);
@@ -192,7 +173,7 @@ namespace YAT.Model.Types
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(FontFormat lhs, FontFormat rhs)
+		public static bool operator !=(AutoWorkspaceSettings lhs, AutoWorkspaceSettings rhs)
 		{
 			return (!(lhs == rhs));
 		}
