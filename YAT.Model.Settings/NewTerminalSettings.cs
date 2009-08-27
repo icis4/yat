@@ -19,6 +19,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
+using MKY.Utilities.Net;
+
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
@@ -30,10 +32,10 @@ namespace YAT.Model.Settings
 
 		private MKY.IO.Ports.SerialPortId _serialPortId;
 
-		private string _socketRemoteHostNameOrAddress;
+		private XIPHost _socketRemoteHost;
 		private int _socketRemotePort;
 
-		private string _socketLocalHostNameOrAddress;
+		private XNetworkInterface _socketLocalInterface;
 		private int _socketLocalTcpPort;
 		private int _socketLocalUdpPort;
 
@@ -60,19 +62,19 @@ namespace YAT.Model.Settings
 		public NewTerminalSettings(NewTerminalSettings rhs)
 			: base(rhs)
 		{
-			_terminalType = rhs.TerminalType;
-			_ioType       = rhs.IOType;
+			_terminalType         = rhs.TerminalType;
+			_ioType               = rhs.IOType;
 
-			_serialPortId = rhs.SerialPortId;
+			_serialPortId         = rhs.SerialPortId;
 
-			_socketRemoteHostNameOrAddress = rhs.SocketRemoteHostNameOrAddress;
-			_socketRemotePort              = rhs.SocketRemotePort;
+			_socketRemoteHost     = rhs.SocketRemoteHost;
+			_socketRemotePort     = rhs.SocketRemotePort;
 
-			_socketLocalHostNameOrAddress  = rhs.SocketLocalHostNameOrAddress;
-			_socketLocalTcpPort            = rhs.SocketLocalTcpPort;
-			_socketLocalUdpPort            = rhs.SocketLocalUdpPort;
+			_socketLocalInterface = rhs.SocketLocalInterface;
+			_socketLocalTcpPort   = rhs.SocketLocalTcpPort;
+			_socketLocalUdpPort   = rhs.SocketLocalUdpPort;
 
-			_startTerminal = rhs.StartTerminal;
+			_startTerminal        = rhs.StartTerminal;
 
 			ClearChanged();
 		}
@@ -82,17 +84,17 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			TerminalType = Domain.TerminalType.Text;
-			IOType       = Domain.IOType.SerialPort;
+			TerminalType         = Domain.TerminalType.Text;
+			IOType               = Domain.IOType.SerialPort;
 
-			SerialPortId = MKY.IO.Ports.SerialPortId.DefaultPort;
+			SerialPortId         = MKY.IO.Ports.SerialPortId.DefaultPort;
 
-			SocketRemoteHostNameOrAddress = MKY.IO.Serial.SocketSettings.DefaultRemoteHostName;
-			SocketRemotePort              = MKY.IO.Serial.SocketSettings.DefaultPort;
+			SocketRemoteHost     = MKY.IO.Serial.SocketSettings.DefaultRemoteHost;
+			SocketRemotePort     = MKY.IO.Serial.SocketSettings.DefaultPort;
 
-			SocketLocalHostNameOrAddress  = MKY.IO.Serial.SocketSettings.DefaultLocalHostName;
-			SocketLocalTcpPort            = MKY.IO.Serial.SocketSettings.DefaultPort;
-			SocketLocalUdpPort            = MKY.IO.Serial.SocketSettings.DefaultPort + 1;
+			SocketLocalInterface = MKY.IO.Serial.SocketSettings.DefaultLocalInterface;
+			SocketLocalTcpPort   = MKY.IO.Serial.SocketSettings.DefaultPort;
+			SocketLocalUdpPort   = MKY.IO.Serial.SocketSettings.DefaultPort + 1;
 
 			StartTerminal = true;
 		}
@@ -148,15 +150,15 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("SocketRemoteHostNameOrAddress")]
-		public string SocketRemoteHostNameOrAddress
+		[XmlElement("SocketRemoteHost")]
+		public string SocketRemoteHost
 		{
-			get { return (_socketRemoteHostNameOrAddress); }
+			get { return (_socketRemoteHost); }
 			set
 			{
-				if (_socketRemoteHostNameOrAddress != value)
+				if (_socketRemoteHost != value)
 				{
-					_socketRemoteHostNameOrAddress = value;
+					_socketRemoteHost = value;
 					SetChanged();
 				}
 			}
@@ -178,15 +180,15 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("SocketLocalHostNameOrAddress")]
-		public string SocketLocalHostNameOrAddress
+		[XmlElement("SocketLocalInterface")]
+		public string SocketLocalInterface
 		{
-			get { return (_socketLocalHostNameOrAddress); }
+			get { return (_socketLocalInterface); }
 			set
 			{
-				if (_socketLocalHostNameOrAddress != value)
+				if (_socketLocalInterface != value)
 				{
-					_socketLocalHostNameOrAddress = value;
+					_socketLocalInterface = value;
 					SetChanged();
 				}
 			}
@@ -302,9 +304,9 @@ namespace YAT.Model.Settings
 					_terminalType.Equals      (value._terminalType) &&
 					_ioType.Equals            (value._ioType) &&
 					_serialPortId.Equals      (value._serialPortId) &&
-					_socketRemoteHostNameOrAddress.Equals(value._socketRemoteHostNameOrAddress) &&
+					_socketRemoteHost.Equals(value._socketRemoteHost) &&
 					_socketRemotePort.Equals  (value._socketRemotePort) &&
-					_socketLocalHostNameOrAddress.Equals(value._socketLocalHostNameOrAddress) &&
+					_socketLocalInterface.Equals(value._socketLocalInterface) &&
 					_socketLocalTcpPort.Equals(value._socketLocalTcpPort) &&
 					_socketLocalUdpPort.Equals(value._socketLocalUdpPort) &&
 					_startTerminal.Equals     (value._startTerminal)

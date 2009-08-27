@@ -64,6 +64,9 @@
     <Compile Include="Guid\GuidList.cs" />
     <Compile Include="Guid\IGuidProvider.cs" />
     <Compile Include="Guid\XGuid.cs" />
+    <Compile Include="Net\IPHost.cs" />
+    <Compile Include="Net\NetworkInterfaceCollection.cs" />
+    <Compile Include="Net\NetworkInterface.cs" />
     <Compile Include="Recent\RecentItem.cs" />
     <Compile Include="Recent\RecentItemCollection.cs">
       <SubType>Code</SubType>

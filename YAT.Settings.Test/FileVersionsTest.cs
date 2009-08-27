@@ -38,7 +38,7 @@ namespace YAT.Settings.Test
 		//==========================================================================================
 
 		private bool _autoSaveWorkspaceToRestore;
-		private MKY.IO.Ports.SerialPortList _serialPorts;
+		private MKY.IO.Ports.SerialPortCollection _serialPorts;
 
 		#endregion
 
@@ -50,7 +50,7 @@ namespace YAT.Settings.Test
 		public FileVersionsTest()
 		{
 			// serial ports
-			_serialPorts = new MKY.IO.Ports.SerialPortList();
+			_serialPorts = new MKY.IO.Ports.SerialPortCollection();
 			_serialPorts.FillWithAvailablePorts();
 		}
 
