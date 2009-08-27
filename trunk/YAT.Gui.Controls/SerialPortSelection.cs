@@ -165,17 +165,17 @@ namespace YAT.Gui.Controls
 
 		private class MarkPortsInUseThread
 		{
-			private SerialPortList _portList;
+			private SerialPortCollection _portList;
 			private bool _isScanning = true;
 			private string _status2 = "";
 			private bool _cancelScanning = false;
 
-			public MarkPortsInUseThread(SerialPortList portList)
+			public MarkPortsInUseThread(SerialPortCollection portList)
 			{
 				_portList = portList;
 			}
 
-			public SerialPortList PortList
+			public SerialPortCollection PortList
 			{
 				get { return (_portList); }
 			}
@@ -203,7 +203,7 @@ namespace YAT.Gui.Controls
 				_cancelScanning = true;
 			}
 
-			private void portList_MarkPortsInUseCallback(object sender, SerialPortList.PortChangedAndCancelEventArgs e)
+			private void portList_MarkPortsInUseCallback(object sender, SerialPortCollection.PortChangedAndCancelEventArgs e)
 			{
 				_status2 = "Scanning " + e.Port + "...";
 				StatusBox.UpdateStatus2(_status2);
@@ -234,7 +234,7 @@ namespace YAT.Gui.Controls
 
 				SerialPortId old = (SerialPortId)comboBox_Port.SelectedItem;
 
-				SerialPortList portList = new SerialPortList();
+				SerialPortCollection portList = new SerialPortCollection();
 				portList.FillWithAvailablePorts();
 				portList.GetDescriptionsFromSystem();
 

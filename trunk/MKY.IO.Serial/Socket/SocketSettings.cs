@@ -18,6 +18,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
+using System.Net;
+
+using MKY.Utilities.Net;
 
 // The MKY.IO.Serial namespace combines serial port and socket infrastructure. This code is
 // intentionally placed into the MKY.IO.Serial namespace even though the file is located in
@@ -34,11 +37,23 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		public const string DefaultRemoteHostName = "<Localhost>";
+		public static readonly XIPHost DefaultRemoteHost = new XIPHost(CommonIPHost.Localhost);
 		/// <summary></summary>
-		public const string DefaultLocalHostName = "<Any>";
+		public static readonly IPAddress DefaultResolvedRemoteIPAddress = IPAddress.Loopback;
+		/// <summary></summary>
+		public static readonly XNetworkInterface DefaultLocalInterface = new XNetworkInterface(CommonNetworkInterface.Any);
+		/// <summary></summary>
+		public static readonly IPAddress DefaultResolvedLocalIPAddress = IPAddress.Any;
+
 		/// <summary></summary>
 		public const int DefaultPort = 10000;
+		/// <summary></summary>
+		public const int DefaultRemotePort = DefaultPort;
+		/// <summary></summary>
+		public const int DefaultLocalTcpPort = DefaultPort;
+		/// <summary></summary>
+		public const int DefaultLocalUdpPort = DefaultPort + 1;
+
 		/// <summary></summary>
 		public static readonly AutoRetry TcpClientAutoReconnectDefault = new AutoRetry(false, 500);
 
@@ -51,12 +66,12 @@ namespace MKY.IO.Serial
 
 		private SocketHostType _hostType;
 
-		private string _remoteHostNameOrAddress;
-		private System.Net.IPAddress _resolvedRemoteIPAddress;
+		private XIPHost _remoteHost;
+		private IPAddress _resolvedRemoteIPAddress;
 		private int _remotePort;
 
-		private string _localHostNameOrAddress;
-		private System.Net.IPAddress _resolvedLocalIPAddress;
+		private XNetworkInterface _localInterface;
+		private IPAddress _resolvedLocalIPAddress;
 		private int _localTcpPort;
 		private int _localUdpPort;
 
@@ -93,11 +108,11 @@ namespace MKY.IO.Serial
 		{
 			_hostType                = rhs.HostType;
 
-			_remoteHostNameOrAddress = rhs.RemoteHostNameOrAddress;
+			_remoteHost              = rhs.RemoteHost;
 			_resolvedRemoteIPAddress = rhs.ResolvedRemoteIPAddress;
 			_remotePort              = rhs.RemotePort;
 
-			_localHostNameOrAddress  = rhs.LocalHostNameOrAddress;
+			_localInterface          = rhs.LocalInterface;
 			_resolvedLocalIPAddress  = rhs.ResolvedLocalIPAddress;
 			_localTcpPort            = rhs.LocalTcpPort;
 			_localUdpPort            = rhs.LocalUdpPort;
@@ -114,12 +129,12 @@ namespace MKY.IO.Serial
 		{
 			HostType                = SocketHostType.TcpAutoSocket;
 
-			RemoteHostNameOrAddress = DefaultRemoteHostName;
-			ResolvedRemoteIPAddress = System.Net.IPAddress.Loopback;
+			RemoteHost              = DefaultRemoteHost;
+			ResolvedRemoteIPAddress = DefaultResolvedRemoteIPAddress;
 			RemotePort              = DefaultPort;
 
-			LocalHostNameOrAddress  = DefaultLocalHostName;
-			ResolvedLocalIPAddress  = System.Net.IPAddress.Any;
+			LocalInterface          = DefaultLocalInterface;
+			ResolvedLocalIPAddress  = DefaultResolvedLocalIPAddress;
 			LocalTcpPort            = DefaultPort;
 			LocalUdpPort            = DefaultPort + 1;
 
@@ -149,15 +164,15 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		[XmlElement("RemoteHostNameOrAddress")]
-		public string RemoteHostNameOrAddress
+		[XmlElement("RemoteHost")]
+		public XIPHost RemoteHost
 		{
-			get { return (_remoteHostNameOrAddress); }
+			get { return (_remoteHost); }
 			set
 			{
-				if (_remoteHostNameOrAddress != value)
+				if (_remoteHost != value)
 				{
-					_remoteHostNameOrAddress = value;
+					_remoteHost = value;
 					SetChanged();
 				}
 			}
@@ -165,7 +180,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public System.Net.IPAddress ResolvedRemoteIPAddress
+		public IPAddress ResolvedRemoteIPAddress
 		{
 			get { return (_resolvedRemoteIPAddress); }
 			set { _resolvedRemoteIPAddress = value;  }
@@ -187,15 +202,15 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		[XmlElement("LocalHostNameOrAddress")]
-		public string LocalHostNameOrAddress
+		[XmlElement("NetworkInterface")]
+		public XNetworkInterface LocalInterface
 		{
-			get { return (_localHostNameOrAddress); }
+			get { return (_localInterface); }
 			set
 			{
-				if (_localHostNameOrAddress != value)
+				if (_localInterface != value)
 				{
-					_localHostNameOrAddress = value;
+					_localInterface = value;
 					SetChanged();
 				}
 			}
@@ -203,7 +218,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public System.Net.IPAddress ResolvedLocalIPAddress
+		public IPAddress ResolvedLocalIPAddress
 		{
 			get { return (_resolvedLocalIPAddress); }
 			set { _resolvedLocalIPAddress = value; }
@@ -299,7 +314,7 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary>
-		/// Tries to resolve the IP address from <see cref="RemoteHostNameOrAddress"/> and
+		/// Tries to resolve the IP address from <see cref="RemoteHost"/> and
 		/// stores it in <see cref="ResolvedRemoteIPAddress"/>
 		/// </summary>
 		/// <returns>
@@ -309,12 +324,12 @@ namespace MKY.IO.Serial
 		{
 			try
 			{
-				System.Net.IPAddress[] ipAddresses;
+				IPAddress[] ipAddresses;
 
-				ipAddresses = System.Net.Dns.GetHostAddresses(_remoteHostNameOrAddress);
+				ipAddresses = System.Net.Dns.GetHostAddresses(_remoteHost);
 				_resolvedRemoteIPAddress = ipAddresses[0];
 
-				ipAddresses = System.Net.Dns.GetHostAddresses(_localHostNameOrAddress);
+				ipAddresses = System.Net.Dns.GetHostAddresses(_localInterface);
 				_resolvedLocalIPAddress = ipAddresses[0];
 
 				return (true);
@@ -354,9 +369,9 @@ namespace MKY.IO.Serial
 				return
 					(
 					_hostType.Equals(value._hostType) &&
-					_remoteHostNameOrAddress.Equals(value._remoteHostNameOrAddress) &&
+					_remoteHost.Equals(value._remoteHost) &&
 					_remotePort.Equals(value._remotePort) &&
-					_localHostNameOrAddress.Equals(value._localHostNameOrAddress) &&
+					_localInterface.Equals(value._localInterface) &&
 					_localTcpPort.Equals(value._localTcpPort) &&
 					_localUdpPort.Equals(value._localUdpPort) &&
 					_tcpClientAutoReconnect.Equals(value._tcpClientAutoReconnect)
@@ -377,9 +392,9 @@ namespace MKY.IO.Serial
 			return
 			  (
 			  ((XSocketHostType)_hostType).ToString() + ", " +
-			  _remoteHostNameOrAddress + ", " +
+			  _remoteHost + ", " +
 			  _remotePort.ToString() + ", " +
-			  _localHostNameOrAddress + ", " +
+			  _localInterface + ", " +
 			  _localTcpPort.ToString() + ", " +
 			  _localUdpPort.ToString() + ", " +
 			  _tcpClientAutoReconnect.ToString()

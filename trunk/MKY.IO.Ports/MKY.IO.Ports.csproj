@@ -62,7 +62,7 @@
       <DependentUpon>SerialPortDotNet.cs</DependentUpon>
     </Compile>
     <Compile Include="SerialPort\SerialPortId.cs" />
-    <Compile Include="SerialPort\SerialPortList.cs" />
+    <Compile Include="SerialPort\SerialPortCollection.cs" />
     <Compile Include="SerialPort\SerialPortSearcher.cs" />
     <Compile Include="SerialPort\SerialPortSettings.cs" />
     <Compile Include="SerialPort\Types\BaudRate.cs" />

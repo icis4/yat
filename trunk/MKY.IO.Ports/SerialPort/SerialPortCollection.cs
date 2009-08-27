@@ -23,7 +23,7 @@ namespace MKY.IO.Ports
 	/// List containing serial port IDs.
 	/// </summary>
 	[Serializable]
-	public class SerialPortList : List<SerialPortId>
+	public class SerialPortCollection : List<SerialPortId>
 	{
 		/// <summary></summary>
 		public class PortChangedAndCancelEventArgs : EventArgs
@@ -42,13 +42,13 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		public SerialPortList()
+		public SerialPortCollection()
 			: base(SerialPortId.LastStandardPortNumber - SerialPortId.FirstPortNumber + 1)
 		{
 		}
 
 		/// <summary></summary>
-		public SerialPortList(IEnumerable<SerialPortId> rhs)
+		public SerialPortCollection(IEnumerable<SerialPortId> rhs)
 			: base(rhs)
 		{
 		}

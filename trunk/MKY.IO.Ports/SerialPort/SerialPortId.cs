@@ -122,7 +122,7 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				SerialPortList l = new SerialPortList();
+				SerialPortCollection l = new SerialPortCollection();
 				l.FillWithAvailablePorts();
 
 				if (l.Count > 0)
@@ -595,12 +595,12 @@ namespace MKY.IO.Ports
 	/// <summary></summary>
 	public class SerialPortIdConverter : TypeConverter
 	{
-		private SerialPortList _portList;
+		private SerialPortCollection _portList;
 
 		/// <summary></summary>
 		public SerialPortIdConverter()
 		{
-			_portList = new SerialPortList();
+			_portList = new SerialPortCollection();
 			_portList.FillWithStandardPorts();
 		}
 

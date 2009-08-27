@@ -26,8 +26,7 @@ namespace MKY.IO.Ports
 	/// Extended enum XHandshake.
 	/// </summary>
 	/// <remarks>
-	/// I think flow control would the better identifier, no clue why .NET uses the
-	/// term handshake.
+	/// I think flow control would be the better identifier, no clue why .NET uses the term handshake.
 	/// </remarks>
 	[Serializable]
 	public class XHandshake : XEnum

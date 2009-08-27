@@ -25,6 +25,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 
 using MKY.Utilities.Event;
+using MKY.Utilities.Net;
 using MKY.IO.Serial;
 
 namespace YAT.Gui.Controls
@@ -33,58 +34,21 @@ namespace YAT.Gui.Controls
 	[DefaultEvent("HostNameOrAddressChanged")]
 	public partial class SocketSelection : UserControl
 	{
-		#region Types
-		//==========================================================================================
-		// Types
-		//==========================================================================================
-
-		private class HostItem
-		{
-			public readonly string HostNameOrAddress;
-			public readonly string Description;
-
-			public HostItem(string hostNameOrAddress)
-			{
-				HostNameOrAddress = hostNameOrAddress;
-				Description = "";
-			}
-
-			public HostItem(string hostNameOrAddress, string description)
-			{
-				HostNameOrAddress = hostNameOrAddress;
-				Description = description;
-			}
-
-			public override string ToString()
-			{
-				if ((Description == null) || (Description == ""))
-					return (HostNameOrAddress);
-
-				if (Description == _RemoteHostNameOrAddressDefault)
-					return (Description);
-
-				if (Description == _LocalHostNameOrAddressDefault)
-					return (Description);
-
-				return (HostNameOrAddress + " (" + Description + ")");
-			}
-		}
-
-		#endregion
-
 		#region Constants
 		//==========================================================================================
 		// Constants
 		//==========================================================================================
 
-		private const SocketHostType _HostTypeDefault = SocketHostType.TcpAutoSocket;
+		private const SocketHostType _DefaultHostType                     = SocketHostType.TcpAutoSocket;
 
-		private const string _RemoteHostNameOrAddressDefault = MKY.IO.Serial.SocketSettings.DefaultRemoteHostName;
-		private const int _RemotePortDefault                 = MKY.IO.Serial.SocketSettings.DefaultPort;
+		private static readonly XIPHost _DefaultRemoteHost                = MKY.IO.Serial.SocketSettings.DefaultRemoteHost;
+		private static readonly IPAddress _DefaultResolvedRemoteIPAddress = MKY.IO.Serial.SocketSettings.DefaultResolvedRemoteIPAddress;
+		private const int _DefaultRemotePort                              = MKY.IO.Serial.SocketSettings.DefaultRemotePort;
 
-		private const string _LocalHostNameOrAddressDefault = MKY.IO.Serial.SocketSettings.DefaultLocalHostName;
-		private const int _LocalTcpPortDefault              = MKY.IO.Serial.SocketSettings.DefaultPort;
-		private const int _LocalUdpPortDefault              = MKY.IO.Serial.SocketSettings.DefaultPort + 1;
+		private static readonly XNetworkInterface _DefaultLocalInterface  = MKY.IO.Serial.SocketSettings.DefaultLocalInterface;
+		private static readonly IPAddress _DefaultResolvedLocalIPAddress  = MKY.IO.Serial.SocketSettings.DefaultResolvedLocalIPAddress;
+		private const int _DefaultLocalTcpPort                            = MKY.IO.Serial.SocketSettings.DefaultLocalTcpPort;
+		private const int _DefaultLocalUdpPort                            = MKY.IO.Serial.SocketSettings.DefaultLocalUdpPort;
 
 		#endregion
 
@@ -95,16 +59,16 @@ namespace YAT.Gui.Controls
 
 		private bool _isSettingControls = false;
 
-		private MKY.IO.Serial.SocketHostType _hostType = _HostTypeDefault;
+		private SocketHostType _hostType = _DefaultHostType;
 
-		private string _remoteHostNameOrAddress = _RemoteHostNameOrAddressDefault;
-		private IPAddress _resolvedRemoteIPAddress = IPAddress.Loopback;
-		private int _remotePort = _RemotePortDefault;
+		private XIPHost _remoteHost                = _DefaultRemoteHost;
+		private IPAddress _resolvedRemoteIPAddress = _DefaultResolvedRemoteIPAddress;
+		private int _remotePort                    = _DefaultRemotePort;
 
-		private string _localHostNameOrAddress = _LocalHostNameOrAddressDefault;
-		private IPAddress _resolvedLocalIPAddress = IPAddress.Any;
-		private int _localTcpPort = _LocalTcpPortDefault;
-		private int _localUdpPort = _LocalUdpPortDefault;
+		private XNetworkInterface _localInterface  = _DefaultLocalInterface;
+		private IPAddress _resolvedLocalIPAddress  = _DefaultResolvedLocalIPAddress;
+		private int _localTcpPort                  = _DefaultLocalTcpPort;
+		private int _localUdpPort                  = _DefaultLocalUdpPort;
 
 		#endregion
 
@@ -114,16 +78,16 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		[Category("Property Changed")]
-		[Description("Event raised when the RemoteHostNameOrAddress property is changed.")]
-		public event EventHandler RemoteHostNameOrAddressChanged;
+		[Description("Event raised when the RemoteHost property is changed.")]
+		public event EventHandler RemoteHostChanged;
 
 		[Category("Property Changed")]
 		[Description("Event raised when the RemotePort property is changed.")]
 		public event EventHandler RemotePortChanged;
 
 		[Category("Property Changed")]
-		[Description("Event raised when the LocalHostNameOrAddress property is changed.")]
-		public event EventHandler LocalHostNameOrAddressChanged;
+		[Description("Event raised when the LocalInterface property is changed.")]
+		public event EventHandler LocalInterfaceChanged;
 
 		[Category("Property Changed")]
 		[Description("Event raised when the LocalTcpPort property is changed.")]
@@ -169,19 +133,18 @@ namespace YAT.Gui.Controls
 			}
 		}
 
-		[Category("Socket")]
-		[Description("The remote host name or address.")]
-		[DefaultValue(_RemoteHostNameOrAddressDefault)]
-		public string RemoteHostNameOrAddress
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public XIPHost RemoteHost
 		{
-			get { return (_remoteHostNameOrAddress); }
+			get { return (_remoteHost); }
 			set
 			{
-				if (_remoteHostNameOrAddress != value)
+				if (_remoteHost != value)
 				{
-					_remoteHostNameOrAddress = value;
+					_remoteHost = value;
 					SetControls();
-					OnRemoteHostNameOrAddressChanged(new EventArgs());
+					OnRemoteHostChanged(new EventArgs());
 				}
 			}
 		}
@@ -195,7 +158,7 @@ namespace YAT.Gui.Controls
 
 		[Category("Socket")]
 		[Description("The remote TCP or UDP port.")]
-		[DefaultValue(_RemotePortDefault)]
+		[DefaultValue(_DefaultRemotePort)]
 		public int RemotePort
 		{
 			get { return (_remotePort); }
@@ -210,19 +173,18 @@ namespace YAT.Gui.Controls
 			}
 		}
 
-		[Category("Socket")]
-		[Description("The local host name or address.")]
-		[DefaultValue(_LocalHostNameOrAddressDefault)]
-		public string LocalHostNameOrAddress
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public string LocalInterface
 		{
-			get { return (_localHostNameOrAddress); }
+			get { return (_localInterface); }
 			set
 			{
-				if (_localHostNameOrAddress != value)
+				if (_localInterface != value)
 				{
-					_localHostNameOrAddress = value;
+					_localInterface = value;
 					SetControls();
-					OnLocalHostNameOrAddressChanged(new EventArgs());
+					OnLocalInterfaceChanged(new EventArgs());
 				}
 			}
 		}
@@ -236,7 +198,7 @@ namespace YAT.Gui.Controls
 
 		[Category("Socket")]
 		[Description("The local TCP port.")]
-		[DefaultValue(_LocalTcpPortDefault)]
+		[DefaultValue(_DefaultLocalTcpPort)]
 		public int LocalTcpPort
 		{
 			get { return (_localTcpPort); }
@@ -253,7 +215,7 @@ namespace YAT.Gui.Controls
 
 		[Category("Socket")]
 		[Description("The local UDP port.")]
-		[DefaultValue(_LocalUdpPortDefault)]
+		[DefaultValue(_DefaultLocalUdpPort)]
 		public int LocalUdpPort
 		{
 			get { return (_localUdpPort); }
@@ -275,7 +237,7 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		private void comboBox_RemoteHostNameOrAddress_Validating(object sender, CancelEventArgs e)
+		private void comboBox_RemoteHost_Validating(object sender, CancelEventArgs e)
 		{
 			if (!_isSettingControls)
 			{
@@ -284,11 +246,11 @@ namespace YAT.Gui.Controls
 				//   because SelectedItem is also set if text has changed in the meantime.
 
 				string nameOrAddress;
-				HostItem hi = comboBox_RemoteHostNameOrAddress.SelectedItem as HostItem;
-				if ((hi != null) && (hi.ToString() == comboBox_RemoteHostNameOrAddress.Text))
+				HostItem hi = comboBox_RemoteHost.SelectedItem as HostItem;
+				if ((hi != null) && (hi.ToString() == comboBox_RemoteHost.Text))
 					nameOrAddress = hi.HostNameOrAddress;
 				else
-					nameOrAddress = comboBox_RemoteHostNameOrAddress.Text;
+					nameOrAddress = comboBox_RemoteHost.Text;
 
 				IPAddress ipAddress;
 				if (IPAddress.TryParse(nameOrAddress, out ipAddress))
@@ -310,7 +272,7 @@ namespace YAT.Gui.Controls
 						MessageBox.Show
 							(
 							this,
-							"Remote host address is invalid:" + Environment.NewLine + Environment.NewLine +
+							"Remote host name or address is invalid:" + Environment.NewLine + Environment.NewLine +
 							ex.Message,
 							"Invalid Input",
 							MessageBoxButtons.OK,
@@ -360,17 +322,17 @@ namespace YAT.Gui.Controls
 			}
 		}
 
-		private void comboBox_LocalHostNameOrAddress_SelectedIndexChanged(object sender, EventArgs e)
+		private void comboBox_LocalInterface_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
 			{
-				HostItem hi = comboBox_LocalHostNameOrAddress.SelectedItem as HostItem;
+				HostItem hi = comboBox_LocalInterface.SelectedItem as HostItem;
 				IPAddress ipAddress = IPAddress.Parse(hi.HostNameOrAddress);
 				_resolvedLocalIPAddress = ipAddress;
 			}
 		}
 
-		private void button_RefreshPorts_Click(object sender, EventArgs e)
+		private void button_RefreshLocalInterfaces_Click(object sender, EventArgs e)
 		{
 			SetAdapterList();
 		}
@@ -421,18 +383,18 @@ namespace YAT.Gui.Controls
 			_isSettingControls = true;
 
 			// Remote host
-			comboBox_RemoteHostNameOrAddress.Items.Clear();
-			comboBox_RemoteHostNameOrAddress.Items.Add(new HostItem(IPAddress.Loopback.ToString(),     _RemoteHostNameOrAddressDefault));
-			comboBox_RemoteHostNameOrAddress.Items.Add(new HostItem(IPAddress.Loopback.ToString(),     "IPv4 localhost"));
-			comboBox_RemoteHostNameOrAddress.Items.Add(new HostItem(IPAddress.IPv6Loopback.ToString(), "IPv6 localhost"));
+			comboBox_RemoteHost.Items.Clear();
+			comboBox_RemoteHost.Items.Add(new HostItem(IPAddress.Loopback.ToString(),     _DefaultRemoteHost));
+			comboBox_RemoteHost.Items.Add(new HostItem(IPAddress.Loopback.ToString(),     "IPv4 localhost"));
+			comboBox_RemoteHost.Items.Add(new HostItem(IPAddress.IPv6Loopback.ToString(), "IPv6 localhost"));
 
 			// Local host/interface
-			comboBox_LocalHostNameOrAddress.Items.Clear();
-			comboBox_LocalHostNameOrAddress.Items.Add(new HostItem(IPAddress.Any.ToString(),          _LocalHostNameOrAddressDefault));
-			comboBox_LocalHostNameOrAddress.Items.Add(new HostItem(IPAddress.Any.ToString(),          "IPv4 any"));
-			comboBox_LocalHostNameOrAddress.Items.Add(new HostItem(IPAddress.Loopback.ToString(),     "IPv4 loopback"));
-			comboBox_LocalHostNameOrAddress.Items.Add(new HostItem(IPAddress.IPv6Any.ToString(),      "IPv6 any"));
-			comboBox_LocalHostNameOrAddress.Items.Add(new HostItem(IPAddress.IPv6Loopback.ToString(), "IPv6 loopback"));
+			comboBox_LocalInterface.Items.Clear();
+			comboBox_LocalInterface.Items.Add(new HostItem(IPAddress.Any.ToString(),          _DefaultLocalInterface));
+			comboBox_LocalInterface.Items.Add(new HostItem(IPAddress.Any.ToString(),          "IPv4 any"));
+			comboBox_LocalInterface.Items.Add(new HostItem(IPAddress.Loopback.ToString(),     "IPv4 loopback"));
+			comboBox_LocalInterface.Items.Add(new HostItem(IPAddress.IPv6Any.ToString(),      "IPv6 any"));
+			comboBox_LocalInterface.Items.Add(new HostItem(IPAddress.IPv6Loopback.ToString(), "IPv6 loopback"));
 
 			NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
 			foreach (IPAddress address in Dns.GetHostAddresses(""))
@@ -455,7 +417,7 @@ namespace YAT.Gui.Controls
 							break;
 					}
 				}
-				comboBox_LocalHostNameOrAddress.Items.Add(new HostItem(address.ToString(), description));
+				comboBox_LocalInterface.Items.Add(new HostItem(address.ToString(), description));
 			}
 
 			_isSettingControls = false;
@@ -468,13 +430,13 @@ namespace YAT.Gui.Controls
 			// Remote host address
 			if ((_hostType == SocketHostType.TcpClient) || (_hostType == SocketHostType.TcpAutoSocket) || (_hostType == SocketHostType.Udp))
 			{
-				comboBox_RemoteHostNameOrAddress.Enabled = true;
-				comboBox_RemoteHostNameOrAddress.Text = _remoteHostNameOrAddress;
+				comboBox_RemoteHost.Enabled = true;
+				comboBox_RemoteHost.Text = _remoteHost;
 			}
 			else
 			{
-				comboBox_RemoteHostNameOrAddress.Enabled = false;
-				comboBox_RemoteHostNameOrAddress.Text = "";
+				comboBox_RemoteHost.Enabled = false;
+				comboBox_RemoteHost.Text = "";
 			}
 
 			// Remote port label
@@ -498,13 +460,13 @@ namespace YAT.Gui.Controls
 			// Local host address
 			if (_hostType != SocketHostType.Unknown)
 			{
-				comboBox_LocalHostNameOrAddress.Enabled = true;
-				comboBox_LocalHostNameOrAddress.Text = _localHostNameOrAddress;
+				comboBox_LocalInterface.Enabled = true;
+				comboBox_LocalInterface.Text = _localInterface;
 			}
 			else
 			{
-				comboBox_LocalHostNameOrAddress.Enabled = false;
-				comboBox_LocalHostNameOrAddress.SelectedIndex = -1;
+				comboBox_LocalInterface.Enabled = false;
+				comboBox_LocalInterface.SelectedIndex = -1;
 			}
 
 			// Local port label
@@ -540,9 +502,9 @@ namespace YAT.Gui.Controls
 		// Event Invoking
 		//==========================================================================================
 
-		protected virtual void OnRemoteHostNameOrAddressChanged(EventArgs e)
+		protected virtual void OnRemoteHostChanged(EventArgs e)
 		{
-			EventHelper.FireSync(RemoteHostNameOrAddressChanged, this, e);
+			EventHelper.FireSync(RemoteHostChanged, this, e);
 		}
 
 		protected virtual void OnRemotePortChanged(EventArgs e)
@@ -550,9 +512,9 @@ namespace YAT.Gui.Controls
 			EventHelper.FireSync(RemotePortChanged, this, e);
 		}
 
-		protected virtual void OnLocalHostNameOrAddressChanged(EventArgs e)
+		protected virtual void OnLocalInterfaceChanged(EventArgs e)
 		{
-			EventHelper.FireSync(LocalHostNameOrAddressChanged, this, e);
+			EventHelper.FireSync(LocalInterfaceChanged, this, e);
 		}
 
 		protected virtual void OnLocalTcpPortChanged(EventArgs e)
