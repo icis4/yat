@@ -156,11 +156,11 @@ namespace YAT.Gui.Forms
 				_settings_Form.IO.SerialPort.AutoReopen = serialPortSettings.AutoReopen;
 		}
 
-		private void socketSelection_RemoteHostNameOrAddressChanged(object sender, EventArgs e)
+		private void socketSelection_RemoteHostChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
 			{
-				_settings_Form.IO.Socket.RemoteHostNameOrAddress = socketSelection.RemoteHostNameOrAddress;
+				_settings_Form.IO.Socket.RemoteHost = socketSelection.RemoteHost;
 				_settings_Form.IO.Socket.ResolvedRemoteIPAddress = socketSelection.ResolvedRemoteIPAddress;
 			}
 		}
@@ -171,11 +171,11 @@ namespace YAT.Gui.Forms
 				_settings_Form.IO.Socket.RemotePort = socketSelection.RemotePort;
 		}
 
-		private void socketSelection_LocalHostNameOrAddressChanged(object sender, EventArgs e)
+		private void socketSelection_LocalInterfaceChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
 			{
-				_settings_Form.IO.Socket.LocalHostNameOrAddress = socketSelection.LocalHostNameOrAddress;
+				_settings_Form.IO.Socket.LocalInterface = socketSelection.LocalInterface;
 				_settings_Form.IO.Socket.ResolvedLocalIPAddress = socketSelection.ResolvedLocalIPAddress;
 			}
 		}
@@ -282,15 +282,15 @@ namespace YAT.Gui.Forms
 
 			bool isSerialPort = (ioType == Domain.IOType.SerialPort);
 
-			// set socket control before serial port control since that might need to refresh the
-			// serial port list first (which takes time, which looks ulgy)
-			socketSelection.Visible                 = !isSerialPort;
-			socketSelection.HostType                = (Domain.XIOType)ioType;
-			socketSelection.RemoteHostNameOrAddress = _settings_Form.IO.Socket.RemoteHostNameOrAddress;
-			socketSelection.RemotePort              = _settings_Form.IO.Socket.RemotePort;
-			socketSelection.LocalHostNameOrAddress  = _settings_Form.IO.Socket.LocalHostNameOrAddress;
-			socketSelection.LocalTcpPort            = _settings_Form.IO.Socket.LocalTcpPort;
-			socketSelection.LocalUdpPort            = _settings_Form.IO.Socket.LocalUdpPort;
+			// Set socket control before serial port control since that might need to refresh the
+			//   serial port list first (which takes time, which looks ulgy)
+			socketSelection.Visible        = !isSerialPort;
+			socketSelection.HostType       = (Domain.XIOType)ioType;
+			socketSelection.RemoteHost     = _settings_Form.IO.Socket.RemoteHost;
+			socketSelection.RemotePort     = _settings_Form.IO.Socket.RemotePort;
+			socketSelection.LocalInterface = _settings_Form.IO.Socket.LocalInterface;
+			socketSelection.LocalTcpPort   = _settings_Form.IO.Socket.LocalTcpPort;
+			socketSelection.LocalUdpPort   = _settings_Form.IO.Socket.LocalUdpPort;
 
 			socketSettings.Visible                = !isSerialPort;
 			socketSettings.HostType               = (Domain.XIOType)ioType;

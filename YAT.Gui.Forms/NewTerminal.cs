@@ -22,6 +22,8 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Utilities.Net;
+
 namespace YAT.Gui.Forms
 {
 	public partial class NewTerminal : System.Windows.Forms.Form
@@ -126,12 +128,12 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void socketSelection_RemoteHostNameOrAddressChanged(object sender, EventArgs e)
+		private void socketSelection_RemoteHostChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
 			{
-				string nameOrAddress = socketSelection.RemoteHostNameOrAddress;
-				_newTerminalSettings_Form.SocketRemoteHostNameOrAddress = nameOrAddress;
+				XIPHost host = socketSelection.RemoteHost;
+				_newTerminalSettings_Form.SocketRemoteHost = host;
 				SetControls();
 			}
 		}
@@ -146,12 +148,12 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void socketSelection_LocalHostNameOrAddressChanged(object sender, EventArgs e)
+		private void socketSelection_LocalInterfaceChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
 			{
-				string nameOrAddress = socketSelection.LocalHostNameOrAddress;
-				_newTerminalSettings_Form.SocketLocalHostNameOrAddress = nameOrAddress;
+				XNetworkInterface localInterface = socketSelection.LocalInterface;
+				_newTerminalSettings_Form.SocketLocalInterface = localInterface;
 				SetControls();
 			}
 		}
@@ -193,21 +195,21 @@ namespace YAT.Gui.Forms
 			// create document settings and fill it with new terminal settings
 			_terminalSettings = new Settings.Terminal.TerminalSettingsRoot();
 
-			_terminalSettings.Terminal.TerminalType = _newTerminalSettings.TerminalType;
-			_terminalSettings.Terminal.IO.IOType = _newTerminalSettings.IOType;
+			_terminalSettings.Terminal.TerminalType                      = _newTerminalSettings.TerminalType;
+			_terminalSettings.Terminal.IO.IOType                         = _newTerminalSettings.IOType;
 
-			_terminalSettings.Terminal.IO.SerialPort.PortId = _newTerminalSettings.SerialPortId;
+			_terminalSettings.Terminal.IO.SerialPort.PortId              = _newTerminalSettings.SerialPortId;
 
-			_terminalSettings.Terminal.IO.Socket.RemoteHostNameOrAddress = _newTerminalSettings.SocketRemoteHostNameOrAddress;
+			_terminalSettings.Terminal.IO.Socket.RemoteHost              = _newTerminalSettings.SocketRemoteHost;
 			_terminalSettings.Terminal.IO.Socket.ResolvedRemoteIPAddress = socketSelection.ResolvedRemoteIPAddress;
-			_terminalSettings.Terminal.IO.Socket.RemotePort = _newTerminalSettings.SocketRemotePort;
+			_terminalSettings.Terminal.IO.Socket.RemotePort              = _newTerminalSettings.SocketRemotePort;
 
-			_terminalSettings.Terminal.IO.Socket.LocalHostNameOrAddress = _newTerminalSettings.SocketLocalHostNameOrAddress;
-			_terminalSettings.Terminal.IO.Socket.ResolvedLocalIPAddress = socketSelection.ResolvedLocalIPAddress;
-			_terminalSettings.Terminal.IO.Socket.LocalTcpPort = _newTerminalSettings.SocketLocalTcpPort;
-			_terminalSettings.Terminal.IO.Socket.LocalUdpPort = _newTerminalSettings.SocketLocalUdpPort;
+			_terminalSettings.Terminal.IO.Socket.LocalInterface          = _newTerminalSettings.SocketLocalInterface;
+			_terminalSettings.Terminal.IO.Socket.ResolvedLocalIPAddress  = socketSelection.ResolvedLocalIPAddress;
+			_terminalSettings.Terminal.IO.Socket.LocalTcpPort            = _newTerminalSettings.SocketLocalTcpPort;
+			_terminalSettings.Terminal.IO.Socket.LocalUdpPort            = _newTerminalSettings.SocketLocalUdpPort;
 
-			_terminalSettings.TerminalIsStarted = _newTerminalSettings.StartTerminal;
+			_terminalSettings.TerminalIsStarted                          = _newTerminalSettings.StartTerminal;
 
 			switch (_newTerminalSettings.TerminalType)
 			{
@@ -262,13 +264,13 @@ namespace YAT.Gui.Forms
 
 			// Set socket control before serial port control since that might need to refresh the
 			//   serial port list first (which takes time, which looks ulgy)
-			socketSelection.Enabled                 = !isSerialPort;
-			socketSelection.HostType                = (Domain.XIOType)ioType;
-			socketSelection.RemoteHostNameOrAddress = _newTerminalSettings_Form.SocketRemoteHostNameOrAddress;
-			socketSelection.RemotePort              = _newTerminalSettings_Form.SocketRemotePort;
-			socketSelection.LocalHostNameOrAddress  = _newTerminalSettings_Form.SocketLocalHostNameOrAddress;
-			socketSelection.LocalTcpPort            = _newTerminalSettings_Form.SocketLocalTcpPort;
-			socketSelection.LocalUdpPort            = _newTerminalSettings_Form.SocketLocalUdpPort;
+			socketSelection.Enabled        = !isSerialPort;
+			socketSelection.HostType       = (Domain.XIOType)ioType;
+			socketSelection.RemoteHost     = _newTerminalSettings_Form.SocketRemoteHost;
+			socketSelection.RemotePort     = _newTerminalSettings_Form.SocketRemotePort;
+			socketSelection.LocalInterface = _newTerminalSettings_Form.SocketLocalInterface;
+			socketSelection.LocalTcpPort   = _newTerminalSettings_Form.SocketLocalTcpPort;
+			socketSelection.LocalUdpPort   = _newTerminalSettings_Form.SocketLocalUdpPort;
 
 			serialPortSelection.Enabled        = isSerialPort;
 			serialPortSelection.ShowSerialPort = isSerialPort;

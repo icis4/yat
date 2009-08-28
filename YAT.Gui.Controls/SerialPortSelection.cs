@@ -132,7 +132,7 @@ namespace YAT.Gui.Controls
 			{
 				_isStartingUp = false;
 
-				// initially set controls and validate its contents where needed
+				// Initially set controls and validate its contents where needed
 				SetSerialPortList();
 				SetControls();
 			}
@@ -232,19 +232,19 @@ namespace YAT.Gui.Controls
 			{
 				_isSettingControls = true;
 
-				SerialPortId old = (SerialPortId)comboBox_Port.SelectedItem;
+				SerialPortId old = comboBox_Port.SelectedItem as SerialPortId;
 
-				SerialPortCollection portList = new SerialPortCollection();
-				portList.FillWithAvailablePorts();
-				portList.GetDescriptionsFromSystem();
+				SerialPortCollection ports = new SerialPortCollection();
+				ports.FillWithAvailablePorts();
+				ports.GetDescriptionsFromSystem();
 
 				if (!DesignMode && ApplicationSettings.LocalUser.General.DetectSerialPortsInUse)
 				{
-					// install timer which shows a dialog if scanning takes more than 500ms
+					// Install timer which shows a dialog if scanning takes more than 500ms
 					timer_ShowScanDialog.Start();
 
-					// start scanning on different thread
-					_markPortsInUseThread = new MarkPortsInUseThread(portList);
+					// Start scanning on different thread
+					_markPortsInUseThread = new MarkPortsInUseThread(ports);
 					Thread t = new Thread(new ThreadStart(_markPortsInUseThread.MarkPortsInUse));
 					t.Start();
 
@@ -253,24 +253,24 @@ namespace YAT.Gui.Controls
 
 					t.Join();
 
-					// cleanup
+					// Cleanup
 					timer_ShowScanDialog.Stop();
 				}
 
 				comboBox_Port.Items.Clear();
-				comboBox_Port.Items.AddRange(portList.ToArray());
+				comboBox_Port.Items.AddRange(ports.ToArray());
 
 				if (comboBox_Port.Items.Count > 0)
 				{
-					if ((_portId != null) && (portList.Contains(_portId)))
+					if ((_portId != null) && (ports.Contains(_portId)))
 						comboBox_Port.SelectedItem = _portId;
-					else if ((old != null) && (portList.Contains(old)))
+					else if ((old != null) && (ports.Contains(old)))
 						comboBox_Port.SelectedItem = old;
 					else
 						comboBox_Port.SelectedIndex = 0;
 
 					// set property instead of member to ensure that changed event is fired
-					PortId = (SerialPortId)comboBox_Port.SelectedItem;
+					PortId = comboBox_Port.SelectedItem as SerialPortId;
 				}
 				else
 				{

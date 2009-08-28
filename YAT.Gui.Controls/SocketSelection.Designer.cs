@@ -134,6 +134,7 @@ namespace YAT.Gui.Controls
 			this.Controls.Add(this.label_RemoteHost);
 			this.Name = "SocketSelection";
 			this.Size = new System.Drawing.Size(285, 106);
+			this.Paint += new System.Windows.Forms.PaintEventHandler(this.SocketSelection_Paint);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
