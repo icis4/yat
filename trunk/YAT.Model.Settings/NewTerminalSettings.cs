@@ -151,7 +151,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("SocketRemoteHost")]
-		public string SocketRemoteHost
+		public XIPHost SocketRemoteHost
 		{
 			get { return (_socketRemoteHost); }
 			set
@@ -181,7 +181,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("SocketLocalInterface")]
-		public string SocketLocalInterface
+		public XNetworkInterface SocketLocalInterface
 		{
 			get { return (_socketLocalInterface); }
 			set

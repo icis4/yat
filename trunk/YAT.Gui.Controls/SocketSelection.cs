@@ -57,6 +57,7 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
+		private bool _isStartingUp = true;
 		private bool _isSettingControls = false;
 
 		private SocketHostType _hostType = _DefaultHostType;
@@ -107,9 +108,6 @@ namespace YAT.Gui.Controls
 		public SocketSelection()
 		{
 			InitializeComponent();
-
-			InitializeControls();
-			SetControls();
 		}
 
 		#endregion
@@ -232,6 +230,26 @@ namespace YAT.Gui.Controls
 
 		#endregion
 
+		#region Control Event Handlers
+		//==========================================================================================
+		// Control Event Handlers
+		//==========================================================================================
+
+		private void SocketSelection_Paint(object sender, PaintEventArgs e)
+		{
+			if (_isStartingUp)
+			{
+				_isStartingUp = false;
+
+				// Initially set controls and validate its contents where needed
+				InitializeControls();
+				SetLocalInterfaceList();
+				SetControls();
+			}
+		}
+
+		#endregion
+
 		#region Controls Event Handlers
 		//==========================================================================================
 		// Controls Event Handlers
@@ -245,40 +263,45 @@ namespace YAT.Gui.Controls
 				// Do not assume that the selected item maches the actual text in the box
 				//   because SelectedItem is also set if text has changed in the meantime.
 
-				string nameOrAddress;
-				HostItem hi = comboBox_RemoteHost.SelectedItem as HostItem;
-				if ((hi != null) && (hi.ToString() == comboBox_RemoteHost.Text))
-					nameOrAddress = hi.HostNameOrAddress;
-				else
-					nameOrAddress = comboBox_RemoteHost.Text;
-
-				IPAddress ipAddress;
-				if (IPAddress.TryParse(nameOrAddress, out ipAddress))
+				XIPHost host = comboBox_RemoteHost.SelectedItem as XIPHost;
+				if ((host != null) && (host.IPAddress != IPAddress.None) &&
+					(host.ToString() == comboBox_RemoteHost.Text))
 				{
-					_resolvedRemoteIPAddress = ipAddress;
-					RemoteHostNameOrAddress = nameOrAddress;
+					RemoteHost = host;
+					_resolvedRemoteIPAddress = host.IPAddress;
 				}
 				else
 				{
-					try
+					IPAddress ipAddress;
+					string nameOrAddress;
+					nameOrAddress = comboBox_RemoteHost.Text;
+
+					if (IPAddress.TryParse(nameOrAddress, out ipAddress))
 					{
-						IPAddress[] ipAddresses;
-						ipAddresses = Dns.GetHostAddresses(nameOrAddress);
-						_resolvedRemoteIPAddress = ipAddresses[0];
-						RemoteHostNameOrAddress = nameOrAddress;
+						_resolvedRemoteIPAddress = ipAddress;
 					}
-					catch (Exception ex)
+					else
 					{
-						MessageBox.Show
-							(
-							this,
-							"Remote host name or address is invalid:" + Environment.NewLine + Environment.NewLine +
-							ex.Message,
-							"Invalid Input",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Error
-							);
-						e.Cancel = true;
+						try
+						{
+							IPAddress[] ipAddresses;
+							ipAddresses = Dns.GetHostAddresses(nameOrAddress);
+							_resolvedRemoteIPAddress = ipAddresses[0];
+							RemoteHost = new XIPHost(_resolvedRemoteIPAddress);
+						}
+						catch (Exception ex)
+						{
+							MessageBox.Show
+								(
+								this,
+								"Remote host name or address is invalid:" + Environment.NewLine + Environment.NewLine +
+								ex.Message,
+								"Invalid Input",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Error
+								);
+							e.Cancel = true;
+						}
 					}
 				}
 			}
@@ -326,15 +349,14 @@ namespace YAT.Gui.Controls
 		{
 			if (!_isSettingControls)
 			{
-				HostItem hi = comboBox_LocalInterface.SelectedItem as HostItem;
-				IPAddress ipAddress = IPAddress.Parse(hi.HostNameOrAddress);
-				_resolvedLocalIPAddress = ipAddress;
+				_localInterface = comboBox_LocalInterface.SelectedItem as XNetworkInterface;
+				_resolvedLocalIPAddress = _localInterface.IPAddress;
 			}
 		}
 
 		private void button_RefreshLocalInterfaces_Click(object sender, EventArgs e)
 		{
-			SetAdapterList();
+			SetLocalInterfaceList();
 		}
 
 		private void textBox_LocalPort_Validating(object sender, CancelEventArgs e)
@@ -384,43 +406,51 @@ namespace YAT.Gui.Controls
 
 			// Remote host
 			comboBox_RemoteHost.Items.Clear();
-			comboBox_RemoteHost.Items.Add(new HostItem(IPAddress.Loopback.ToString(),     _DefaultRemoteHost));
-			comboBox_RemoteHost.Items.Add(new HostItem(IPAddress.Loopback.ToString(),     "IPv4 localhost"));
-			comboBox_RemoteHost.Items.Add(new HostItem(IPAddress.IPv6Loopback.ToString(), "IPv6 localhost"));
-
-			// Local host/interface
-			comboBox_LocalInterface.Items.Clear();
-			comboBox_LocalInterface.Items.Add(new HostItem(IPAddress.Any.ToString(),          _DefaultLocalInterface));
-			comboBox_LocalInterface.Items.Add(new HostItem(IPAddress.Any.ToString(),          "IPv4 any"));
-			comboBox_LocalInterface.Items.Add(new HostItem(IPAddress.Loopback.ToString(),     "IPv4 loopback"));
-			comboBox_LocalInterface.Items.Add(new HostItem(IPAddress.IPv6Any.ToString(),      "IPv6 any"));
-			comboBox_LocalInterface.Items.Add(new HostItem(IPAddress.IPv6Loopback.ToString(), "IPv6 loopback"));
-
-			NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
-			foreach (IPAddress address in Dns.GetHostAddresses(""))
-			{
-				string description = "";
-				foreach (NetworkInterface nic in nics)
-				{
-					if (nic.OperationalStatus == OperationalStatus.Up)
-					{
-						foreach (UnicastIPAddressInformation ai in nic.GetIPProperties().UnicastAddresses)
-						{
-							if (address.Equals(ai.Address))
-							{
-								description = nic.Description;
-								break;
-							}
-						}
-
-						if (description != "")
-							break;
-					}
-				}
-				comboBox_LocalInterface.Items.Add(new HostItem(address.ToString(), description));
-			}
+			comboBox_RemoteHost.Items.Add(XIPHost.GetItems());
 
 			_isSettingControls = false;
+		}
+
+		private void SetLocalInterfaceList()
+		{
+			if (Enabled)
+			{
+				_isSettingControls = true;
+
+				XNetworkInterface old = comboBox_LocalInterface.SelectedItem as XNetworkInterface;
+
+				NetworkInterfaceCollection localInterfaces = new NetworkInterfaceCollection();
+				localInterfaces.FillWithAvailableInterfaces();
+
+				comboBox_LocalInterface.Items.Clear();
+				comboBox_LocalInterface.Items.AddRange(localInterfaces.ToArray());
+
+				if (comboBox_LocalInterface.Items.Count > 0)
+				{
+					if ((_localInterface != null) && (localInterfaces.Contains(_localInterface)))
+						comboBox_LocalInterface.SelectedItem = _localInterface;
+					else if ((old != null) && (localInterfaces.Contains(old)))
+						comboBox_LocalInterface.SelectedItem = old;
+					else
+						comboBox_LocalInterface.SelectedIndex = 0;
+
+					// Set property instead of member to ensure that changed event is fired
+					LocalInterface = comboBox_LocalInterface.SelectedItem as XNetworkInterface;
+				}
+				else
+				{
+					MessageBox.Show
+						(
+						this,
+						"No local network interfaces available, check network system settings.",
+						"No interfaces",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+						);
+				}
+
+				_isSettingControls = false;
+			}
 		}
 
 		private void SetControls()

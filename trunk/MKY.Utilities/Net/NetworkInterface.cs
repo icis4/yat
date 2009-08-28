@@ -85,6 +85,28 @@ namespace MKY.Utilities.Net
 			_otherDescription = description;
 		}
 
+		#region Properties
+
+		/// <summary></summary>
+		public IPAddress IPAddress
+		{
+			get
+			{
+				switch ((CommonNetworkInterface)UnderlyingEnum)
+				{
+					case CommonNetworkInterface.Any:          return (IPAddress.Any);
+					case CommonNetworkInterface.IPv4Any:      return (IPAddress.Any);
+					case CommonNetworkInterface.IPv4Loopback: return (IPAddress.Loopback);
+					case CommonNetworkInterface.IPv6Any:      return (IPAddress.IPv6Any);
+					case CommonNetworkInterface.IPv6Loopback: return (IPAddress.IPv6Loopback);
+					case CommonNetworkInterface.Other:        return (_otherAddress);
+				}
+				throw (new NotImplementedException(UnderlyingEnum.ToString()));
+			}
+		}
+
+		#endregion
+
 		#region ToString
 
 		/// <summary></summary>
@@ -92,7 +114,7 @@ namespace MKY.Utilities.Net
 		{
 			switch ((CommonNetworkInterface)UnderlyingEnum)
 			{
-				case CommonNetworkInterface.Any:          return (Any_string);
+				case CommonNetworkInterface.Any:          return (Any_stringNice);
 				case CommonNetworkInterface.IPv4Any:      return (IPv4Any_string      + " (" + IPAddress.Any + ")");
 				case CommonNetworkInterface.IPv4Loopback: return (IPv4Loopback_string + " (" + IPAddress.Loopback + ")");
 				case CommonNetworkInterface.IPv6Any:      return (IPv6Any_string      + " (" + IPAddress.IPv6Any + ")");
@@ -116,16 +138,6 @@ namespace MKY.Utilities.Net
 				}
 			}
 			throw (new NotImplementedException(UnderlyingEnum.ToString()));
-		}
-
-		/// <summary></summary>
-		public string ToNiceString()
-		{
-			switch ((CommonNetworkInterface)UnderlyingEnum)
-			{
-				case CommonNetworkInterface.Any: return (Any_stringNice);
-				default:                         return (ToString());
-			}
 		}
 
 		#endregion

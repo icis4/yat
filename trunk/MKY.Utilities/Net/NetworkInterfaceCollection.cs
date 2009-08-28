@@ -40,7 +40,7 @@ namespace MKY.Utilities.Net
 		}
 
 		/// <summary>
-		/// Fills list with all ports from <see cref="System.IO.Ports.SerialPort.GetPortNames()"/>.
+		/// Fills list with all interfaces.
 		/// </summary>
 		public void FillWithAvailableInterfaces()
 		{
