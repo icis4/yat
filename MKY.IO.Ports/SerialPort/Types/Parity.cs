@@ -25,7 +25,6 @@ namespace MKY.IO.Ports
 	/// <summary>
 	/// Extended enum XParity.
 	/// </summary>
-	[Serializable]
 	public class XParity : XEnum
 	{
 		#region String Definitions

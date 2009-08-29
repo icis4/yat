@@ -11,7 +11,6 @@ namespace MKY.Utilities.Windows.Forms
 	/// <summary>
 	/// Extended enum XOrientation which extends <see cref="Orientation"/>.
 	/// </summary>
-	[Serializable]
 	public class XOrientation : XEnum
 	{
 		#region String Definitions

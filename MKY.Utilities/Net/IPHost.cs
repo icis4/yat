@@ -42,7 +42,6 @@ namespace MKY.Utilities.Net
 	/// <summary>
 	/// Extended enum XIPHost.
 	/// </summary>
-	[Serializable]
 	public class XIPHost : XEnum
 	{
 		#region String Definitions

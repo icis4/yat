@@ -43,7 +43,6 @@ namespace MKY.IO.Ports
 	/// <summary>
 	/// Extended enum XDataBits.
 	/// </summary>
-	[Serializable]
 	public class XDataBits : XEnum
 	{
 		/// <summary>Default is <see cref="DataBits.Eight"/></summary>

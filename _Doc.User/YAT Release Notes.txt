@@ -66,8 +66,10 @@ Fixed bugs:
 - Thread synchronization issue when closing while receiving fixed (bug #1931923)
 - Command validation fixed (bug #1983796) and improved
 - Multi-line command issues fixed (bugs #2213644, #2816862 and #2831453)
-- TCP remote IP address selection issue fixed (bug #2690191)
-- TCP disconnect issue fixed (bug #2684769)
+- TCP/IP remote IP address selection issue fixed (bug #2690191)
+- TCP/IP disconnect issue fixed (bug #2684769)
+- TCP/IP state issue fixed (bug #2694592)
+- TCP/IP AutoSocket reconnect issue fixed (bug #2767608)
 - Font can be changed in format settings dialog (bug #1937065)
 - Shortcuts are immediately active, no need to first open menu anymore (bug #1944023)
 - Menu > Send > File now gets properly enabled (bug #1995796)

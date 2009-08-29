@@ -46,7 +46,6 @@ namespace MKY.IO.Serial
 	/// <summary>
 	/// Extended enum XSocketHostType.
 	/// </summary>
-	[Serializable]
 	public class XSocketHostType : XEnum
 	{
 		#region String Definitions

@@ -77,7 +77,6 @@ namespace MKY.IO.Ports
 	/// <summary>
 	/// Extended enum XBaudRate.
 	/// </summary>
-	[Serializable]
 	public class XBaudRate : XEnum
 	{
 		private int _userDefinedBaudRate = 0;

@@ -362,7 +362,6 @@ namespace MKY.Utilities.Text
 	/// <summary>
 	/// Extended enum XEncoding.
 	/// </summary>
-	[Serializable]
 	public class XEncoding : XEnum
 	{
 		private struct XEncodingInfo

@@ -66,11 +66,11 @@ namespace MKY.IO.Serial
 
 		private SocketHostType _hostType;
 
-		private XIPHost _remoteHost;
+		private string _remoteHost;
 		private IPAddress _resolvedRemoteIPAddress;
 		private int _remotePort;
 
-		private XNetworkInterface _localInterface;
+		private string _localInterface;
 		private IPAddress _resolvedLocalIPAddress;
 		private int _localTcpPort;
 		private int _localUdpPort;
@@ -165,7 +165,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("RemoteHost")]
-		public XIPHost RemoteHost
+		public string RemoteHost
 		{
 			get { return (_remoteHost); }
 			set
@@ -203,7 +203,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("LocalInterface")]
-		public XNetworkInterface LocalInterface
+		public string LocalInterface
 		{
 			get { return (_localInterface); }
 			set

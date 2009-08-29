@@ -42,7 +42,6 @@ namespace YAT.Domain.Parser
 	/// <summary>
 	/// Extended enum XKeyword.
 	/// </summary>
-	[Serializable]
 	class XKeyword : XEnum
 	{
 		#region String Definitions

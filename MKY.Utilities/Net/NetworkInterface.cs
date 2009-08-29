@@ -48,7 +48,6 @@ namespace MKY.Utilities.Net
 	/// <summary>
 	/// Extended enum XNetworkInterface.
 	/// </summary>
-	[Serializable]
 	public class XNetworkInterface : XEnum
 	{
 		#region String Definitions

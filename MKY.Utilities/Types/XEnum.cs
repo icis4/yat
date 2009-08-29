@@ -22,21 +22,22 @@ using System.Reflection;
 namespace MKY.Utilities.Types
 {
 	/// <summary>
-	/// Extended enumeration type which offers more features that a normal enum.
-	/// XEnum uses an underlying enum to distinguish objects. Provide an enum,
-	/// derive from XEnum, define new name/value methods if necessary
-	/// and implement the conversion methods to get a fully functional XEnum.
+	/// Extended enumeration type which offers more features that a normal enum. <see cref="XEnum">
+	/// uses an underlying enum to distinguish objects. Provide an enum, derive from <see cref="XEnum">,
+	/// define new name/value methods if necessary and implement the conversion methods to get a
+	/// fully functional <see cref="XEnum">.
 	/// </summary>
 	/// <remarks>
-	/// Using a normal enum in client class has the big advantage, that code
-	/// designers and features like IntelliSense can use their built-in enum
-	/// support.
+	/// Using a normal enum in a client class has the big advantage that code designers and features
+	/// like IntelliSense can use their built-in enum support.
+	/// <see cref="XEnum"> based types are not serializable due to the fact that <see cref="Enum"/>
+	/// isn't serializable.
 	/// </remarks>
 	/// <example>
 	/// 
-	/// -----------------------------------------------------------------
+	/// -------------------------------------------------------------------------------------------
 	/// Creating a concrete XEnum including implicit conversion operators
-	/// -----------------------------------------------------------------
+	/// -------------------------------------------------------------------------------------------
 	/// 
 	/// public enum Mode
 	/// {
@@ -149,7 +150,7 @@ namespace MKY.Utilities.Types
 		protected readonly Enum UnderlyingEnum;
 
 		/// <summary>
-		/// XEnum needs an underlying enum to be constructed.
+		/// XEnum requires an underlying enum to be constructed.
 		/// </summary>
 		protected XEnum(Enum underlyingEnum)
 		{

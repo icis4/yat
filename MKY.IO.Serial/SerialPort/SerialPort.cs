@@ -490,7 +490,7 @@ namespace MKY.IO.Serial
 			lock (_stateSyncObj)
 				_state = state;
 #if (DEBUG)
-			System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortPortString() + "): State has changed from " + oldState + " to " + _state);
+			System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortPortString() + ")(" + _state + "): State has changed from " + oldState + " to " + _state);
 #endif
 			OnIOChanged(new EventArgs());
 			OnIOControlChanged(new EventArgs());

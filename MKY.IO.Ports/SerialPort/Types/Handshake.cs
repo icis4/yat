@@ -28,7 +28,6 @@ namespace MKY.IO.Ports
 	/// <remarks>
 	/// I think flow control would be the better identifier, no clue why .NET uses the term handshake.
 	/// </remarks>
-	[Serializable]
 	public class XHandshake : XEnum
 	{
 		#region String Definitions
