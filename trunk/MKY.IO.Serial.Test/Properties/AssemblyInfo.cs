@@ -22,11 +22,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MKY.IO.Ports.Test")]
-[assembly: AssemblyDescription("System.IO.Ports extension test")]
+[assembly: AssemblyTitle("MKY.IO.Serial.Test")]
+[assembly: AssemblyDescription("System.IO extension test")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MKY")]
-[assembly: AssemblyProduct("MKY.IO.Ports.Test")]
+[assembly: AssemblyProduct("MKY.IO.Serial.Test")]
 [assembly: AssemblyCopyright("Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil. Copyright © 2003-2009 Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -37,7 +37,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("a1634682-aa09-418f-8ff5-544241607e54")]
+[assembly: Guid("de62a24c-6df4-4ba2-aa70-9b46eaec10b9")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -46,7 +46,7 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-// You can specify all the values or you can default the Revision and Build Numbers 
+// You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.*")]

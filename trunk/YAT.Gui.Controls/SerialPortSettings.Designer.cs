@@ -105,18 +105,18 @@ namespace YAT.Gui.Controls
 			this.label_FlowControl.AutoSize = true;
 			this.label_FlowControl.Location = new System.Drawing.Point(3, 114);
 			this.label_FlowControl.Name = "label_FlowControl";
-			this.label_FlowControl.Size = new System.Drawing.Size(67, 13);
+			this.label_FlowControl.Size = new System.Drawing.Size(68, 13);
 			this.label_FlowControl.TabIndex = 8;
-			this.label_FlowControl.Text = "Flow control:";
+			this.label_FlowControl.Text = "Flow Control:";
 			// 
 			// label_StopBits
 			// 
 			this.label_StopBits.AutoSize = true;
 			this.label_StopBits.Location = new System.Drawing.Point(3, 87);
 			this.label_StopBits.Name = "label_StopBits";
-			this.label_StopBits.Size = new System.Drawing.Size(51, 13);
+			this.label_StopBits.Size = new System.Drawing.Size(52, 13);
 			this.label_StopBits.TabIndex = 6;
-			this.label_StopBits.Text = "Stop bits:";
+			this.label_StopBits.Text = "Stop Bits:";
 			// 
 			// label_Parity
 			// 
@@ -132,18 +132,18 @@ namespace YAT.Gui.Controls
 			this.label_DataBits.AutoSize = true;
 			this.label_DataBits.Location = new System.Drawing.Point(3, 33);
 			this.label_DataBits.Name = "label_DataBits";
-			this.label_DataBits.Size = new System.Drawing.Size(52, 13);
+			this.label_DataBits.Size = new System.Drawing.Size(53, 13);
 			this.label_DataBits.TabIndex = 2;
-			this.label_DataBits.Text = "Data bits:";
+			this.label_DataBits.Text = "Data Bits:";
 			// 
 			// label_BaudRate
 			// 
 			this.label_BaudRate.AutoSize = true;
 			this.label_BaudRate.Location = new System.Drawing.Point(3, 6);
 			this.label_BaudRate.Name = "label_BaudRate";
-			this.label_BaudRate.Size = new System.Drawing.Size(83, 13);
+			this.label_BaudRate.Size = new System.Drawing.Size(85, 13);
 			this.label_BaudRate.TabIndex = 0;
-			this.label_BaudRate.Text = "Bits per second:";
+			this.label_BaudRate.Text = "Bits per Second:";
 			// 
 			// label_FlowControlRemarks_1
 			// 
@@ -181,7 +181,7 @@ namespace YAT.Gui.Controls
 			this.textBox_AutoReopenInterval.Size = new System.Drawing.Size(48, 20);
 			this.textBox_AutoReopenInterval.TabIndex = 14;
 			this.textBox_AutoReopenInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.textBox_AutoReopenInterval.Validating += new System.ComponentModel.CancelEventHandler(textBox_AutoReopenInterval_Validating);
+			this.textBox_AutoReopenInterval.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_AutoReopenInterval_Validating);
 			// 
 			// checkBox_AutoReopen
 			// 

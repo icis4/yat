@@ -137,7 +137,7 @@ namespace YAT.Gui.Forms
 			// 
 			// socketSettings
 			// 
-			this.socketSettings.Location = new System.Drawing.Point(6, 129);
+			this.socketSettings.Location = new System.Drawing.Point(6, 146);
 			this.socketSettings.Name = "socketSettings";
 			this.socketSettings.Size = new System.Drawing.Size(260, 42);
 			this.socketSettings.TabIndex = 3;
@@ -175,12 +175,12 @@ namespace YAT.Gui.Forms
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.socketSelection.Location = new System.Drawing.Point(6, 19);
 			this.socketSelection.Name = "socketSelection";
-			this.socketSelection.Size = new System.Drawing.Size(260, 108);
+			this.socketSelection.Size = new System.Drawing.Size(285, 125);
 			this.socketSelection.TabIndex = 2;
-			this.socketSelection.LocalUdpPortChanged += new System.EventHandler(this.socketSelection_LocalUdpPortChanged);
 			this.socketSelection.LocalInterfaceChanged += new System.EventHandler(this.socketSelection_LocalInterfaceChanged);
-			this.socketSelection.RemotePortChanged += new System.EventHandler(this.socketSelection_RemotePortChanged);
+			this.socketSelection.LocalUdpPortChanged += new System.EventHandler(this.socketSelection_LocalUdpPortChanged);
 			this.socketSelection.RemoteHostChanged += new System.EventHandler(this.socketSelection_RemoteHostChanged);
+			this.socketSelection.RemotePortChanged += new System.EventHandler(this.socketSelection_RemotePortChanged);
 			this.socketSelection.LocalTcpPortChanged += new System.EventHandler(this.socketSelection_LocalTcpPortChanged);
 			// 
 			// menuItem_Port

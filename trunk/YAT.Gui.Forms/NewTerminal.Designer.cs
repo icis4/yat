@@ -79,7 +79,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_NewTerminal.Controls.Add(this.checkBox_StartTerminal);
 			this.groupBox_NewTerminal.Location = new System.Drawing.Point(73, 12);
 			this.groupBox_NewTerminal.Name = "groupBox_NewTerminal";
-			this.groupBox_NewTerminal.Size = new System.Drawing.Size(312, 298);
+			this.groupBox_NewTerminal.Size = new System.Drawing.Size(312, 315);
 			this.groupBox_NewTerminal.TabIndex = 0;
 			this.groupBox_NewTerminal.TabStop = false;
 			// 
@@ -92,7 +92,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_PortSettings.Controls.Add(this.socketSelection);
 			this.groupBox_PortSettings.Location = new System.Drawing.Point(6, 79);
 			this.groupBox_PortSettings.Name = "groupBox_PortSettings";
-			this.groupBox_PortSettings.Size = new System.Drawing.Size(300, 182);
+			this.groupBox_PortSettings.Size = new System.Drawing.Size(300, 199);
 			this.groupBox_PortSettings.TabIndex = 1;
 			this.groupBox_PortSettings.TabStop = false;
 			this.groupBox_PortSettings.Text = "Port &Settings";
@@ -110,16 +110,17 @@ namespace YAT.Gui.Forms
 			// 
 			// socketSelection
 			// 
-			this.socketSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+			this.socketSelection.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.socketSelection.Location = new System.Drawing.Point(6, 65);
 			this.socketSelection.Name = "socketSelection";
-			this.socketSelection.Size = new System.Drawing.Size(260, 108);
+			this.socketSelection.Size = new System.Drawing.Size(285, 125);
 			this.socketSelection.TabIndex = 1;
-			this.socketSelection.LocalUdpPortChanged += new System.EventHandler(this.socketSelection_LocalUdpPortChanged);
 			this.socketSelection.LocalInterfaceChanged += new System.EventHandler(this.socketSelection_LocalInterfaceChanged);
-			this.socketSelection.RemotePortChanged += new System.EventHandler(this.socketSelection_RemotePortChanged);
+			this.socketSelection.LocalUdpPortChanged += new System.EventHandler(this.socketSelection_LocalUdpPortChanged);
 			this.socketSelection.RemoteHostChanged += new System.EventHandler(this.socketSelection_RemoteHostChanged);
+			this.socketSelection.RemotePortChanged += new System.EventHandler(this.socketSelection_RemotePortChanged);
 			this.socketSelection.LocalTcpPortChanged += new System.EventHandler(this.socketSelection_LocalTcpPortChanged);
 			// 
 			// terminalSelection
@@ -139,7 +140,7 @@ namespace YAT.Gui.Forms
 			this.checkBox_StartTerminal.AutoSize = true;
 			this.checkBox_StartTerminal.Checked = true;
 			this.checkBox_StartTerminal.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox_StartTerminal.Location = new System.Drawing.Point(113, 271);
+			this.checkBox_StartTerminal.Location = new System.Drawing.Point(113, 288);
 			this.checkBox_StartTerminal.Name = "checkBox_StartTerminal";
 			this.checkBox_StartTerminal.Size = new System.Drawing.Size(91, 17);
 			this.checkBox_StartTerminal.TabIndex = 2;
@@ -173,16 +174,16 @@ namespace YAT.Gui.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(485, 320);
+			this.ClientSize = new System.Drawing.Size(485, 337);
 			this.Controls.Add(this.button_Help);
 			this.Controls.Add(this.groupBox_NewTerminal);
 			this.Controls.Add(this.pictureBox_New);
 			this.Controls.Add(this.button_Cancel);
 			this.Controls.Add(this.button_OK);
 			this.MaximizeBox = false;
-			this.MaximumSize = new System.Drawing.Size(1024, 356);
+			this.MaximumSize = new System.Drawing.Size(1024, 373);
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(493, 356);
+			this.MinimumSize = new System.Drawing.Size(493, 373);
 			this.Name = "NewTerminal";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;

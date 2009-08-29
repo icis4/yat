@@ -21,12 +21,12 @@ using System.Text;
 
 using NUnit.Framework;
 
-using MKY.IO.Ports;
+using MKY.IO.Serial;
 
-namespace MKY.IO.Ports.Test.SerialPort
+namespace MKY.IO.Serial.Test.Socket
 {
 	[TestFixture]
-	public class SerialPortSettingsTest
+	public class SocketSettingsTest
 	{
 		#region Tests
 		//==========================================================================================
@@ -42,8 +42,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		public void TestSerialization()
 		{
 			// \fixme
-			// Improve SerialPortSettings and XBaudRate such that they can handle user defined baud rates.
-			// Then, add a test case that verifies that user defined baud rates are properly handled.
+			// Add a test case that verifies that settings are properly handled.
 		}
 
 		#endregion

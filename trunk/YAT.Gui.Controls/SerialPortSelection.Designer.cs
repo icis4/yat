@@ -52,6 +52,7 @@ namespace YAT.Gui.Controls
 			// 
 			this.comboBox_Port.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
+			this.comboBox_Port.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_Port.ItemHeight = 13;
 			this.comboBox_Port.Location = new System.Drawing.Point(6, 22);
 			this.comboBox_Port.Name = "comboBox_Port";
