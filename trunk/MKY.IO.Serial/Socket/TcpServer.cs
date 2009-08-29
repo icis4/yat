@@ -251,6 +251,10 @@ namespace MKY.IO.Serial
 
 			if (!IsStarted)
 				StartSocket();
+#if (DEBUG)
+			else
+				System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortEndPointString() + "): Start() requested but state is " + _state);
+#endif
 		}
 
 		/// <summary></summary>
@@ -349,17 +353,17 @@ namespace MKY.IO.Serial
 																	 SocketDefaults.SocketBufferSize, SocketDefaults.MessageBufferSize,
 																	 Timeout.Infinite, Timeout.Infinite);
 			_socket.AddListener("YAT TCP Server Listener", new System.Net.IPEndPoint(System.Net.IPAddress.Any, _localPort));
-			_socket.Start();
+			_socket.Start(); // The ALAZ socket will be started asynchronously
 
 			SetStateAndNotify(SocketState.Listening);
 		}
 
 		private void StopSocket()
 		{
+			// \remind
+			// The ALAZ sockets by default stop synchronously. However, due to some other issues
+			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
 			_socket.Stop();
-			DisposeSocket();
-
-			SetStateAndNotify(SocketState.Stopping);
 		}
 
 		private void RestartSocket()
@@ -388,7 +392,7 @@ namespace MKY.IO.Serial
 
 			SetStateAndNotify(SocketState.Accepted);
 
-			// immediately begin receiving data
+			// Immediately begin receiving data
 			e.Connection.BeginReceive();
 		}
 
@@ -407,7 +411,7 @@ namespace MKY.IO.Serial
 			}
 			OnDataReceived(new EventArgs());
 
-			// continue receiving data
+			// Continue receiving data
 			e.Connection.BeginReceive();
 		}
 
@@ -419,7 +423,7 @@ namespace MKY.IO.Serial
 		/// </param>
 		public void OnSent(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
-			// nothing to do
+			// Nothing to do
 		}
 
 		/// <summary>

@@ -95,7 +95,7 @@ namespace YAT.Gui.Forms
 		{
 			InitializeControls();
 
-			// link and attach to main model
+			// Link and attach to main model
 			_main = main;
 			AttachMainEventHandlers();
 
@@ -337,7 +337,7 @@ namespace YAT.Gui.Forms
 
 #if (FALSE)
 			// \fixme
-			// I don't know how to fix bug item #1808494 "MDI window list invisible if no MDI children".
+			// I don't know how to fix bug #1808494 "MDI window list invisible if no MDI children".
 			// The following code doesn't fix it. Could it even be a .NET bug?
 			if (childIsReady)
 				menuStrip_Main.MdiWindowListItem = toolStripMenuItem_MainMenu_Window;

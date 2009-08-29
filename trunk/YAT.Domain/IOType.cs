@@ -50,7 +50,6 @@ namespace YAT.Domain
 	/// <summary>
 	/// Extended enum XIOType.
 	/// </summary>
-	[Serializable]
 	public class XIOType : XEnum
 	{
 		#region String Definitions

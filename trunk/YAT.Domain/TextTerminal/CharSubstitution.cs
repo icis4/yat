@@ -43,8 +43,7 @@ namespace YAT.Domain
 	/// <summary>
 	/// Extended enum XCharSubstitution.
 	/// </summary>
-	[Serializable]
-	class XCharSubstitution : XEnum
+	public class XCharSubstitution : XEnum
 	{
 		#region String Definitions
 

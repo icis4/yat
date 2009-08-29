@@ -47,7 +47,6 @@ namespace YAT.Domain
 	#endregion
 
 	/// <summary></summary>
-	[Serializable]
 	public class XRadix : XEnum
 	{
 		#region String Definitions

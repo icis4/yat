@@ -321,6 +321,13 @@ namespace MKY.IO.Serial
 					StartAutoSocket();
 					break;
 				}
+				default:
+				{
+#if (DEBUG)
+					System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortEndPointString() + "): Start() requested but state is " + _state);
+#endif
+					break;
+				}
 			}
 		}
 
@@ -387,9 +394,12 @@ namespace MKY.IO.Serial
 
 		private void StopSockets()
 		{
-			if (IsClient)
+			// \remind
+			// The ALAZ sockets by default stop synchronously. However, due to some other issues
+			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
+			if (_client != null)
 				_client.Stop();
-			else if (IsServer)
+			if (_server != null)
 				_server.Stop();
 		}
 
@@ -421,11 +431,11 @@ namespace MKY.IO.Serial
 
 			SetStateAndNotify(SocketState.Starting);
 
-			// immediately start connecting
+			// Immediately start connecting
 			StartConnecting();
 		}
 
-		// try to start as client
+		// Try to start as client
 		private void StartConnecting()
 		{
 			SetStateAndNotify(SocketState.Connecting);
@@ -438,7 +448,7 @@ namespace MKY.IO.Serial
 
 			try
 			{
-				_client.Start();
+				_client.Start(); // Client will be started asynchronously
 			}
 			catch
 			{
@@ -464,7 +474,7 @@ namespace MKY.IO.Serial
 
 			try
 			{
-				_server.Start();
+				_server.Start(); // Server will be started asynchronously
 			}
 			catch
 			{
@@ -481,7 +491,8 @@ namespace MKY.IO.Serial
 			SetStateAndNotify(SocketState.Restarting);
 
 			StopSockets();
-			DisposeSockets();
+			// \remind
+			//DisposeSockets();
 
 			StartAutoSocket();
 		}
@@ -491,7 +502,8 @@ namespace MKY.IO.Serial
 			SetStateAndNotify(SocketState.Stopping);
 
 			StopSockets();
-			DisposeSockets();
+			// \remind
+			//DisposeSockets();
 
 			SetStateAndNotify(SocketState.Reset);
 		}

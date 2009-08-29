@@ -41,7 +41,6 @@ namespace YAT.Domain
 	/// <summary>
 	/// Extended enum XTerminalType.
 	/// </summary>
-	[Serializable]
 	public class XTerminalType : XEnum
 	{
 		#region String Definitions

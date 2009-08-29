@@ -25,7 +25,6 @@ namespace MKY.IO.Ports
 	/// <summary>
 	/// Extended enum XStopBits.
 	/// </summary>
-	[Serializable]
 	public class XStopBits : XEnum
 	{
 		#region Double Definitions
