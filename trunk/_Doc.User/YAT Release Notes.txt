@@ -46,6 +46,8 @@ YAT 2.0 Beta 3 Candidate 1 Version 1.99.2x :: 2009-08-xx
 New:
 - Select all/none items in monitor (feature request #2455810)
 - Optionally hide radix, e.g. "80" instead of "80h" (feature request #2085990)
+- Tabs are treated as tabs and not converted to <TAB> anymore by default (feature request #2813232)
+- Additional toolbar buttons to clear/save/copy monitor contents added
 
 Important changes:
 - Flickering eliminated by implementing a speed optimized list box (bug #2813227)

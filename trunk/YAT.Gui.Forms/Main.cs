@@ -443,10 +443,14 @@ namespace YAT.Gui.Forms
 			if (childIsReady)
 				terminalIsStarted = ((Gui.Forms.Terminal)ActiveMdiChild).IsStarted;
 
-			toolStripButton_MainTool_File_Save.Enabled = childIsReady;
-			toolStripButton_MainTool_Terminal_Start.Enabled = childIsReady && !terminalIsStarted;
-			toolStripButton_MainTool_Terminal_Stop.Enabled = childIsReady && terminalIsStarted;
-			toolStripButton_MainTool_Terminal_Settings.Enabled = childIsReady;
+			toolStripButton_MainTool_File_Save.Enabled                = childIsReady;
+			toolStripButton_MainTool_Terminal_Start.Enabled           = childIsReady && !terminalIsStarted;
+			toolStripButton_MainTool_Terminal_Stop.Enabled            = childIsReady && terminalIsStarted;
+			toolStripButton_MainTool_Terminal_Clear.Enabled           = childIsReady;
+			toolStripButton_MainTool_Terminal_SaveToFile.Enabled      = childIsReady;
+			toolStripButton_MainTool_Terminal_CopyToClipboard.Enabled = childIsReady;
+			toolStripButton_MainTool_Terminal_Print.Enabled           = childIsReady;
+			toolStripButton_MainTool_Terminal_Settings.Enabled        = childIsReady;
 
 			// not needed yet: _isSettingControls = false;
 		}
@@ -474,6 +478,26 @@ namespace YAT.Gui.Forms
 		private void toolStripButton_MainTool_Terminal_Stop_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestStopTerminal();
+		}
+
+		private void toolStripButton_MainTool_Terminal_Clear_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestClear();
+		}
+
+		private void toolStripButton_MainTool_Terminal_SaveToFile_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestSaveToFile();
+		}
+
+		private void toolStripButton_MainTool_Terminal_CopyToClipboard_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestCopyToClipboard();
+		}
+
+		private void toolStripButton_MainTool_Terminal_Print_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestPrint();
 		}
 
 		private void toolStripButton_MainTool_Terminal_Settings_Click(object sender, EventArgs e)

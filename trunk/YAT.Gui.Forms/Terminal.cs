@@ -181,6 +181,26 @@ namespace YAT.Gui.Forms
 			return (_terminal.StopIO());
 		}
 
+		public void RequestClear()
+		{
+			_terminal.ClearRepositories();
+		}
+
+		public void RequestSaveToFile()
+		{
+			ShowSaveMonitorDialog(GetMonitor(_monitorSelection));
+		}
+
+		public void RequestCopyToClipboard()
+		{
+			CopyMonitorToClipboard(GetMonitor(_monitorSelection));
+		}
+
+		public void RequestPrint()
+		{
+			ShowPrintMonitorDialog(GetMonitor(_monitorSelection));
+		}
+
 		public void RequestEditTerminalSettings()
 		{
 			ShowTerminalSettings();
@@ -343,7 +363,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_SaveToFile_Click(object sender, EventArgs e)
 		{
-			ShowSaveMonitorDialog(GetMonitor(contextMenuStrip_Monitor.SourceControl));
+			ShowSaveMonitorDialog(GetMonitor(_monitorSelection));
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard_Click(object sender, EventArgs e)

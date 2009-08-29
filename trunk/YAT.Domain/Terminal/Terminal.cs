@@ -372,7 +372,7 @@ namespace YAT.Domain
 				case Radix.Dec:
 				case Radix.Hex:
 				{
-					if ((b < 0x20) || (b == 0x7F)) // control chars
+					if ((b < 0x20) || (b == 0x7F)) // Control chars
 					{
 						if (replaceToAscii)
 							text = ByteToAsciiString(b);
@@ -388,7 +388,7 @@ namespace YAT.Domain
 				case Radix.Char:
 				case Radix.String:
 				{
-					if ((b < 0x20) || (b == 0x7F)) // control chars
+					if ((b < 0x20) || (b == 0x7F)) // Control chars
 					{
 						if (replaceToAscii)
 						{
@@ -396,7 +396,7 @@ namespace YAT.Domain
 						}
 						else
 						{
-							error = true; // signal error
+							error = true; // Signal error
 							if (d == SerialDirection.Tx)
 								text = "Sent";
 							else
@@ -406,7 +406,7 @@ namespace YAT.Domain
 							text += " cannot be displayed in current settings";
 						}
 					}
-					else if (b == 0x20) // space
+					else if (b == 0x20) // Space
 					{
 						if (TerminalSettings.CharReplace.ReplaceSpace)
 							text = "␣";
@@ -424,7 +424,14 @@ namespace YAT.Domain
 
 			if (!error)
 			{
-				if ((b < 0x20) || (b == 0x7F)) // control chars
+				if ((b == 0x09) && !_terminalSettings.CharReplace.ReplaceTab) // Tab
+				{
+					if (d == SerialDirection.Tx)
+						return (new DisplayElement.TxData(b, text));
+					else
+						return (new DisplayElement.RxData(b, text));
+				}
+				else if ((b < 0x20) || (b == 0x7F)) // Control chars
 				{
 					if (d == SerialDirection.Tx)
 						return (new DisplayElement.TxControl(b, text));
@@ -448,7 +455,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual string ByteToAsciiString(byte b)
 		{
-			return ("<" + Ascii.ConvertToMnemonic(b) + ">");
+			if ((b == 0x09) && !_terminalSettings.CharReplace.ReplaceTab)
+				return ("\t");
+			else
+				return ("<" + Ascii.ConvertToMnemonic(b) + ">");
 		}
 
 		/// <summary></summary>
