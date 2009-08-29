@@ -684,7 +684,7 @@ namespace YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_MonitorContextMenu_SaveToFile
 			// 
-			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CopyToFolder_24x24;
+			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CopyToFolder_16x16;
 			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Name = "toolStripMenuItem_MonitorContextMenu_SaveToFile";
 			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Size = new System.Drawing.Size(221, 22);
 			this.toolStripMenuItem_MonitorContextMenu_SaveToFile.Text = "Save to File...";
@@ -692,7 +692,7 @@ namespace YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_MonitorContextMenu_CopyToClipboard
 			// 
-			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CopyToClipboard_24x24;
+			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CopyToClipboard_16x16;
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Name = "toolStripMenuItem_MonitorContextMenu_CopyToClipboard";
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Size = new System.Drawing.Size(221, 22);
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Text = "Copy to Clipboard";
@@ -700,7 +700,7 @@ namespace YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Print
 			// 
-			this.toolStripMenuItem_MonitorContextMenu_Print.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Print_24x24;
+			this.toolStripMenuItem_MonitorContextMenu_Print.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Print_16x16;
 			this.toolStripMenuItem_MonitorContextMenu_Print.Name = "toolStripMenuItem_MonitorContextMenu_Print";
 			this.toolStripMenuItem_MonitorContextMenu_Print.Size = new System.Drawing.Size(221, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Print.Text = "Print...";
@@ -1065,7 +1065,7 @@ namespace YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_File_Save
 			// 
-			this.toolStripMenuItem_TerminalMenu_File_Save.Image = global::YAT.Gui.Forms.Properties.Resources.Image_SaveDocument_24x24;
+			this.toolStripMenuItem_TerminalMenu_File_Save.Image = global::YAT.Gui.Forms.Properties.Resources.Image_SaveDocument_16x16;
 			this.toolStripMenuItem_TerminalMenu_File_Save.MergeAction = System.Windows.Forms.MergeAction.Insert;
 			this.toolStripMenuItem_TerminalMenu_File_Save.MergeIndex = 6;
 			this.toolStripMenuItem_TerminalMenu_File_Save.Name = "toolStripMenuItem_TerminalMenu_File_Save";
@@ -1119,7 +1119,7 @@ namespace YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Stop
 			// 
-			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Stop_24x24;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Stop_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.Name = "toolStripMenuItem_TerminalMenu_Terminal_Stop";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Stop.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
 						| System.Windows.Forms.Keys.C)));
@@ -1169,7 +1169,7 @@ namespace YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_SaveToFile
 			// 
-			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CopyToFolder_24x24;
+			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CopyToFolder_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Name = "toolStripMenuItem_TerminalMenu_Terminal_SaveToFile";
 			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Size = new System.Drawing.Size(213, 22);
@@ -1178,7 +1178,7 @@ namespace YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard
 			// 
-			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CopyToClipboard_24x24;
+			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CopyToClipboard_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Name = "toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard";
 			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Size = new System.Drawing.Size(213, 22);
@@ -1187,7 +1187,7 @@ namespace YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Print
 			// 
-			this.toolStripMenuItem_TerminalMenu_Terminal_Print.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Print_24x24;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Print.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Print_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Print.Name = "toolStripMenuItem_TerminalMenu_Terminal_Print";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Print.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
 			this.toolStripMenuItem_TerminalMenu_Terminal_Print.Size = new System.Drawing.Size(213, 22);
@@ -1201,7 +1201,7 @@ namespace YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_TerminalMenu_Terminal_Settings
 			// 
-			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Properties_24x24;
+			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Properties_16x16;
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.Name = "toolStripMenuItem_TerminalMenu_Terminal_Settings";
 			this.toolStripMenuItem_TerminalMenu_Terminal_Settings.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
 						| System.Windows.Forms.Keys.S)));

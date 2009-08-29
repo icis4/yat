@@ -149,7 +149,7 @@ namespace YAT.Gui.Forms
 			// 
 			// pictureBox_New
 			// 
-			this.pictureBox_New.Image = global::YAT.Gui.Forms.Properties.Resources.Image_NewDocument_24x24;
+			this.pictureBox_New.Image = global::YAT.Gui.Forms.Properties.Resources.Image_NewDocument_16x16;
 			this.pictureBox_New.Location = new System.Drawing.Point(12, 18);
 			this.pictureBox_New.Name = "pictureBox_New";
 			this.pictureBox_New.Size = new System.Drawing.Size(48, 48);

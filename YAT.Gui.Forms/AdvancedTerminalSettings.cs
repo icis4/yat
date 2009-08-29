@@ -202,6 +202,12 @@ namespace YAT.Gui.Forms
 				_settings_Form.CharReplace.ControlCharRadix = (Domain.XControlCharRadix)comboBox_ControlCharacterRadix.SelectedItem;
 		}
 
+		private void checkBox_ReplaceTab_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+				_settings_Form.CharReplace.ReplaceTab = checkBox_ReplaceTab.Checked;
+		}
+
 		private void checkBox_ReplaceSpace_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
@@ -359,6 +365,7 @@ namespace YAT.Gui.Forms
 			checkBox_ReplaceControlCharacters.Checked   = replaceControlChars;
 			comboBox_ControlCharacterRadix.Enabled      = replaceControlChars;
 			comboBox_ControlCharacterRadix.SelectedItem = (Domain.XControlCharRadix)_settings_Form.CharReplace.ControlCharRadix;
+			checkBox_ReplaceTab.Checked                 = _settings_Form.CharReplace.ReplaceTab;
 			checkBox_ReplaceSpace.Checked               = _settings_Form.CharReplace.ReplaceSpace;
 
 			// Communication
@@ -400,6 +407,7 @@ namespace YAT.Gui.Forms
 
 			_settings_Form.CharReplace.ReplaceControlChars = Domain.Settings.CharReplaceSettings.ReplaceControlCharsDefault;
 			_settings_Form.CharReplace.ControlCharRadix    = Domain.Settings.CharReplaceSettings.ControlCharRadixDefault;
+			_settings_Form.CharReplace.ReplaceTab          = Domain.Settings.CharReplaceSettings.ReplaceTabDefault;
 			_settings_Form.CharReplace.ReplaceSpace        = Domain.Settings.CharReplaceSettings.ReplaceSpaceDefault;
 
 			_settings_Form.IO.Endianess = Domain.Settings.IOSettings.EndianessDefault;

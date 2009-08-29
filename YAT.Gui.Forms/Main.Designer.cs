@@ -46,9 +46,9 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_FileRecentContextMenu_6 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_FileRecentContextMenu_7 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_FileRecentContextMenu_8 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_MainMenu_File_Recent = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_MainContextMenu_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainContextMenu_File_Exit = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MainMenu_File_Recent = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip_Main = new System.Windows.Forms.MenuStrip();
 			this.toolStripMenuItem_MainMenu_File = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_File_New = new System.Windows.Forms.ToolStripMenuItem();
@@ -98,6 +98,11 @@ namespace YAT.Gui.Forms
 			this.toolStripButton_MainTool_Terminal_Start = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_MainTool_Terminal_Stop = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator_MainTool_2 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripButton_MainTool_Terminal_Clear = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Terminal_SaveToFile = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Terminal_CopyToClipboard = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Terminal_Print = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator_MainTool_3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_MainTool_Terminal_Settings = new System.Windows.Forms.ToolStripButton();
 			this.toolStripPanel_Top = new System.Windows.Forms.ToolStripPanel();
 			this.toolStripPanel_Right = new System.Windows.Forms.ToolStripPanel();
@@ -105,11 +110,6 @@ namespace YAT.Gui.Forms
 			this.timer_Chrono = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.chronometer_Main = new MKY.Windows.Forms.Chronometer(this.components);
-			this.toolStripSeparator_MainTool_3 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripButton_MainTool_Terminal_Clear = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_MainTool_Terminal_SaveToFile = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_MainTool_Terminal_CopyToClipboard = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton_MainTool_Terminal_Print = new System.Windows.Forms.ToolStripButton();
 			this.contextMenuStrip_Main.SuspendLayout();
 			this.contextMenuStrip_FileRecent.SuspendLayout();
 			this.menuStrip_Main.SuspendLayout();
@@ -182,7 +182,7 @@ namespace YAT.Gui.Forms
             this.toolStripMenuItem_FileRecentContextMenu_7,
             this.toolStripMenuItem_FileRecentContextMenu_8});
 			this.contextMenuStrip_FileRecent.Name = "contextMenuStrip_FileRecent";
-			this.contextMenuStrip_FileRecent.OwnerItem = this.toolStripMenuItem_MainContextMenu_File_Recent;
+			this.contextMenuStrip_FileRecent.OwnerItem = this.toolStripMenuItem_MainMenu_File_Recent;
 			this.contextMenuStrip_FileRecent.Size = new System.Drawing.Size(87, 180);
 			this.contextMenuStrip_FileRecent.Paint += new System.Windows.Forms.PaintEventHandler(this.contextMenuStrip_FileRecent_Paint);
 			this.contextMenuStrip_FileRecent.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_FileRecent_Opening);
@@ -267,14 +267,6 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_FileRecentContextMenu_8.Visible = false;
 			this.toolStripMenuItem_FileRecentContextMenu_8.Click += new System.EventHandler(this.toolStripMenuItem_FileRecentContextMenu_Click);
 			// 
-			// toolStripMenuItem_MainMenu_File_Recent
-			// 
-			this.toolStripMenuItem_MainMenu_File_Recent.DropDown = this.contextMenuStrip_FileRecent;
-			this.toolStripMenuItem_MainMenu_File_Recent.Enabled = false;
-			this.toolStripMenuItem_MainMenu_File_Recent.Name = "toolStripMenuItem_MainMenu_File_Recent";
-			this.toolStripMenuItem_MainMenu_File_Recent.Size = new System.Drawing.Size(155, 22);
-			this.toolStripMenuItem_MainMenu_File_Recent.Text = "&Recent";
-			// 
 			// toolStripSeparator_MainContextMenu_2
 			// 
 			this.toolStripSeparator_MainContextMenu_2.Name = "toolStripSeparator_MainContextMenu_2";
@@ -286,6 +278,14 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Size = new System.Drawing.Size(173, 22);
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Text = "Exit";
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Click += new System.EventHandler(this.toolStripMenuItem_MainContextMenu_File_Exit_Click);
+			// 
+			// toolStripMenuItem_MainMenu_File_Recent
+			// 
+			this.toolStripMenuItem_MainMenu_File_Recent.DropDown = this.contextMenuStrip_FileRecent;
+			this.toolStripMenuItem_MainMenu_File_Recent.Enabled = false;
+			this.toolStripMenuItem_MainMenu_File_Recent.Name = "toolStripMenuItem_MainMenu_File_Recent";
+			this.toolStripMenuItem_MainMenu_File_Recent.Size = new System.Drawing.Size(155, 22);
+			this.toolStripMenuItem_MainMenu_File_Recent.Text = "&Recent";
 			// 
 			// menuStrip_Main
 			// 
@@ -324,7 +324,7 @@ namespace YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_MainMenu_File_New
 			// 
-			this.toolStripMenuItem_MainMenu_File_New.Image = global::YAT.Gui.Forms.Properties.Resources.Image_NewDocument_24x24;
+			this.toolStripMenuItem_MainMenu_File_New.Image = global::YAT.Gui.Forms.Properties.Resources.Image_NewDocument_16x16;
 			this.toolStripMenuItem_MainMenu_File_New.MergeIndex = 0;
 			this.toolStripMenuItem_MainMenu_File_New.Name = "toolStripMenuItem_MainMenu_File_New";
 			this.toolStripMenuItem_MainMenu_File_New.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
@@ -334,7 +334,7 @@ namespace YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_MainMenu_File_Open
 			// 
-			this.toolStripMenuItem_MainMenu_File_Open.Image = global::YAT.Gui.Forms.Properties.Resources.Image_OpenDocument_24x24;
+			this.toolStripMenuItem_MainMenu_File_Open.Image = global::YAT.Gui.Forms.Properties.Resources.Image_OpenDocument_16x16;
 			this.toolStripMenuItem_MainMenu_File_Open.MergeIndex = 1;
 			this.toolStripMenuItem_MainMenu_File_Open.Name = "toolStripMenuItem_MainMenu_File_Open";
 			this.toolStripMenuItem_MainMenu_File_Open.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
@@ -712,6 +712,54 @@ namespace YAT.Gui.Forms
 			this.toolStripSeparator_MainTool_2.Name = "toolStripSeparator_MainTool_2";
 			this.toolStripSeparator_MainTool_2.Size = new System.Drawing.Size(6, 25);
 			// 
+			// toolStripButton_MainTool_Terminal_Clear
+			// 
+			this.toolStripButton_MainTool_Terminal_Clear.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_Terminal_Clear.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Delete_16x16;
+			this.toolStripButton_MainTool_Terminal_Clear.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton_MainTool_Terminal_Clear.Name = "toolStripButton_MainTool_Terminal_Clear";
+			this.toolStripButton_MainTool_Terminal_Clear.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Terminal_Clear.Text = "Clear";
+			this.toolStripButton_MainTool_Terminal_Clear.ToolTipText = "Clear Terminal Monitors";
+			this.toolStripButton_MainTool_Terminal_Clear.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Clear_Click);
+			// 
+			// toolStripButton_MainTool_Terminal_SaveToFile
+			// 
+			this.toolStripButton_MainTool_Terminal_SaveToFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_Terminal_SaveToFile.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CopyToFolder_16x16;
+			this.toolStripButton_MainTool_Terminal_SaveToFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton_MainTool_Terminal_SaveToFile.Name = "toolStripButton_MainTool_Terminal_SaveToFile";
+			this.toolStripButton_MainTool_Terminal_SaveToFile.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Terminal_SaveToFile.Text = "Save...";
+			this.toolStripButton_MainTool_Terminal_SaveToFile.ToolTipText = "Save To File...";
+			this.toolStripButton_MainTool_Terminal_SaveToFile.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_SaveToFile_Click);
+			// 
+			// toolStripButton_MainTool_Terminal_CopyToClipboard
+			// 
+			this.toolStripButton_MainTool_Terminal_CopyToClipboard.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_Terminal_CopyToClipboard.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CopyToClipboard_16x16;
+			this.toolStripButton_MainTool_Terminal_CopyToClipboard.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton_MainTool_Terminal_CopyToClipboard.Name = "toolStripButton_MainTool_Terminal_CopyToClipboard";
+			this.toolStripButton_MainTool_Terminal_CopyToClipboard.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Terminal_CopyToClipboard.Text = "Copy";
+			this.toolStripButton_MainTool_Terminal_CopyToClipboard.ToolTipText = "Copy To Clipboard";
+			this.toolStripButton_MainTool_Terminal_CopyToClipboard.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_CopyToClipboard_Click);
+			// 
+			// toolStripButton_MainTool_Terminal_Print
+			// 
+			this.toolStripButton_MainTool_Terminal_Print.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton_MainTool_Terminal_Print.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Print_16x16;
+			this.toolStripButton_MainTool_Terminal_Print.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton_MainTool_Terminal_Print.Name = "toolStripButton_MainTool_Terminal_Print";
+			this.toolStripButton_MainTool_Terminal_Print.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Terminal_Print.Text = "Print...";
+			this.toolStripButton_MainTool_Terminal_Print.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Print_Click);
+			// 
+			// toolStripSeparator_MainTool_3
+			// 
+			this.toolStripSeparator_MainTool_3.Name = "toolStripSeparator_MainTool_3";
+			this.toolStripSeparator_MainTool_3.Size = new System.Drawing.Size(6, 25);
+			// 
 			// toolStripButton_MainTool_Terminal_Settings
 			// 
 			this.toolStripButton_MainTool_Terminal_Settings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -754,50 +802,6 @@ namespace YAT.Gui.Forms
 			// chronometer_Main
 			// 
 			this.chronometer_Main.TimeSpanChanged += new System.EventHandler(this.chronometer_Main_TimeSpanChanged);
-			// 
-			// toolStripSeparator_MainTool_3
-			// 
-			this.toolStripSeparator_MainTool_3.Name = "toolStripSeparator_MainTool_3";
-			this.toolStripSeparator_MainTool_3.Size = new System.Drawing.Size(6, 25);
-			// 
-			// toolStripButton_MainTool_Terminal_Clear
-			// 
-			this.toolStripButton_MainTool_Terminal_Clear.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_Clear.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Delete_16x16;
-			this.toolStripButton_MainTool_Terminal_Clear.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButton_MainTool_Terminal_Clear.Name = "toolStripButton_MainTool_Terminal_Clear";
-			this.toolStripButton_MainTool_Terminal_Clear.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Clear.Text = "Clear";
-			this.toolStripButton_MainTool_Terminal_Clear.ToolTipText = "Clear Terminal Monitors";
-			// 
-			// toolStripButton_MainTool_Terminal_SaveToFile
-			// 
-			this.toolStripButton_MainTool_Terminal_SaveToFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_SaveToFile.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CopyToFolder_16x16;
-			this.toolStripButton_MainTool_Terminal_SaveToFile.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButton_MainTool_Terminal_SaveToFile.Name = "toolStripButton_MainTool_Terminal_SaveToFile";
-			this.toolStripButton_MainTool_Terminal_SaveToFile.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_SaveToFile.Text = "Save...";
-			this.toolStripButton_MainTool_Terminal_SaveToFile.ToolTipText = "Save To File...";
-			// 
-			// toolStripButton_MainTool_Terminal_CopyToClipboard
-			// 
-			this.toolStripButton_MainTool_Terminal_CopyToClipboard.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_CopyToClipboard.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CopyToClipboard_16x16;
-			this.toolStripButton_MainTool_Terminal_CopyToClipboard.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButton_MainTool_Terminal_CopyToClipboard.Name = "toolStripButton_MainTool_Terminal_CopyToClipboard";
-			this.toolStripButton_MainTool_Terminal_CopyToClipboard.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_CopyToClipboard.Text = "Copy";
-			this.toolStripButton_MainTool_Terminal_CopyToClipboard.ToolTipText = "Copy To Clipboard";
-			// 
-			// toolStripButton_MainTool_Terminal_Print
-			// 
-			this.toolStripButton_MainTool_Terminal_Print.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton_MainTool_Terminal_Print.Image = global::YAT.Gui.Forms.Properties.Resources.Image_Print_16x16;
-			this.toolStripButton_MainTool_Terminal_Print.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButton_MainTool_Terminal_Print.Name = "toolStripButton_MainTool_Terminal_Print";
-			this.toolStripButton_MainTool_Terminal_Print.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton_MainTool_Terminal_Print.Text = "Print...";
 			// 
 			// Main
 			// 
