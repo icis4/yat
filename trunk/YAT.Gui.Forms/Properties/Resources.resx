@@ -130,77 +130,47 @@
   <data name="Icon_YAT_WorkspaceSettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\YAT\Icon_YAT_WorkspaceSettings.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Image_ArrowRight_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tool\Image_ArrowRight_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Image_ArrowRight_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_ArrowRight_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_ArrowRight_24x24_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_ArrowRight_24x24_Disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_ArrowRight_24x24_Hot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_ArrowRight_24x24_Hot.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Image_CopyToClipboard_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_CopyToClipboard_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Image_CopyToClipboard_16x16_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_CopyToClipboard_16x16_Disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_CopyToClipboard_16x16_Hot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_CopyToClipboard_16x16_Hot.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Image_CopyToClipboard_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_CopyToClipboard_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Image_CopyToClipboard_24x24_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_CopyToClipboard_24x24_Disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_CopyToClipboard_24x24_Hot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_CopyToClipboard_24x24_Hot.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Image_CopyToFolder_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tool\Image_CopyToFolder_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Image_CopyToFolder_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_CopyToFolder_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Image_CopyToFolder_24x24_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_CopyToFolder_24x24_Disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_CopyToFolder_24x24_Hot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_CopyToFolder_24x24_Hot.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Image_Delete_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Edit\Image_Delete_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\Tool\Image_Delete_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Image_Delete_16x16_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Edit\Image_Delete_16x16_Disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Image_Delete_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tool\Image_Delete_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Image_Delete_16x16_Hot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Edit\Image_Delete_16x16_Hot.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Image_FolderClosed_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tool\Image_FolderClosed_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Image_FolderClosed_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_FolderClosed_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Image_FolderClosed_24x24_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_FolderClosed_24x24_Disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_FolderClosed_24x24_Hot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_FolderClosed_24x24_Hot.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Image_FolderOpen_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tool\Image_FolderOpen_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Image_FolderOpen_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_FolderOpen_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Image_FolderOpen_24x24_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_FolderOpen_24x24_Disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_FolderOpen_24x24_Hot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_FolderOpen_24x24_Hot.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Image_FolderOptions_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tool\Image_FolderOptions_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Image_FolderOptions_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_FolderOptions_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_FolderOptions_24x24_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_FolderOptions_24x24_Disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_FolderOptions_24x24_Hot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_FolderOptions_24x24_Hot.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Image_LGPLv3_147x51" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\GPL\Image_LGPLv3_147x51.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -208,14 +178,11 @@
   <data name="Image_LGPLv3_88x31" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\GPL\Image_LGPLv3_88x31.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Image_NewDocument_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tool\Image_NewDocument_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Image_NewDocument_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_NewDocument_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_NewDocument_24x24_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_NewDocument_24x24_Disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_NewDocument_24x24_Hot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_NewDocument_24x24_Hot.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Image_Off_12x12" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Status\Image_Off_12x12.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -223,59 +190,41 @@
   <data name="Image_On_12x12" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Status\Image_On_12x12.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Image_OpenDocument_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tool\Image_OpenDocument_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Image_OpenDocument_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_OpenDocument_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Image_OpenDocument_24x24_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_OpenDocument_24x24_Disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_OpenDocument_24x24_Hot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_OpenDocument_24x24_Hot.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Image_Print_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tool\Image_Print_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Image_Print_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_Print_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Image_Print_24x24_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_Print_24x24_Disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_Print_24x24_Hot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_Print_24x24_Hot.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Image_Properties_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tool\Image_Properties_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Image_Properties_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_Properties_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Image_Properties_24x24_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_Properties_24x24_Disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_Properties_24x24_Hot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_Properties_24x24_Hot.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Image_SaveDocument_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tool\Image_SaveDocument_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Image_SaveDocument_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_SaveDocument_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Image_SaveDocument_24x24_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_SaveDocument_24x24_Disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_SaveDocument_24x24_Hot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_SaveDocument_24x24_Hot.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Image_Stop_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tool\Image_Stop_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Image_Stop_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_Stop_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Image_Stop_24x24_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_Stop_24x24_Disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_Stop_24x24_Hot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_Stop_24x24_Hot.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Image_Views_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tool\Image_Views_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Image_Views_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool\Image_Views_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_Views_24x24_Disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_Views_24x24_Disabled.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Image_Views_24x24_Hot" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Tool\Image_Views_24x24_Hot.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Image_YAT_16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\YAT\Image_YAT_16x16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

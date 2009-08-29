@@ -456,10 +456,34 @@ namespace YAT.Domain
 		{
 			switch (r)
 			{
-				case Radix.Bin: return (XByte.ConvertToBinaryString(b) + "b");
-				case Radix.Oct: return (XByte.ConvertToOctalString(b) + "o");
-				case Radix.Dec: return (b.ToString("D3") + "d");
-				case Radix.Hex: return (b.ToString("X2") + "h");
+				case Radix.Bin:
+				{
+					if (_terminalSettings.Display.ShowRadix)
+						return (XByte.ConvertToBinaryString(b) + "b");
+					else
+						return (XByte.ConvertToBinaryString(b));
+				}
+				case Radix.Oct:
+				{
+					if (_terminalSettings.Display.ShowRadix)
+						return (XByte.ConvertToOctalString(b) + "o");
+					else
+						return (XByte.ConvertToOctalString(b));
+				}
+				case Radix.Dec:
+				{
+					if (_terminalSettings.Display.ShowRadix)
+						return (b.ToString("D3") + "d");
+					else
+						return (b.ToString("D3"));
+				}
+				case Radix.Hex:
+				{
+					if (_terminalSettings.Display.ShowRadix)
+						return (b.ToString("X2") + "h");
+					else
+						return (b.ToString("X2"));
+				}
 				default: throw (new NotImplementedException("Invalid radix"));
 			}
 		}
