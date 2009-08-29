@@ -30,6 +30,8 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const Radix RadixDefault = Radix.String;
 		/// <summary></summary>
+		public const bool ShowRadixDefault = true;
+		/// <summary></summary>
 		public const bool ShowTimeStampDefault = false;
 		/// <summary></summary>
 		public const bool ShowLengthDefault = false;
@@ -45,6 +47,7 @@ namespace YAT.Domain.Settings
 		private bool _separateTxRxRadix;
 		private Radix _txRadix;
 		private Radix _rxRadix;
+		private bool _showRadix;
 		private bool _showTimeStamp;
 		private bool _showLength;
 		private bool _showConnectTime;
@@ -78,12 +81,13 @@ namespace YAT.Domain.Settings
 			_separateTxRxRadix  = rhs.SeparateTxRxRadix;
 			_txRadix            = rhs.TxRadix;
 			_rxRadix            = rhs.RxRadix;
+			_showRadix          = rhs.ShowRadix;
 			_showTimeStamp      = rhs.ShowTimeStamp;
 			_showLength         = rhs.ShowLength;
 			_showConnectTime    = rhs.ShowConnectTime;
 			_showCounters       = rhs.ShowCounters;
-			_txMaxLineCount = rhs.TxMaxLineCount;
-			_rxMaxLineCount = rhs.RxMaxLineCount;
+			_txMaxLineCount     = rhs.TxMaxLineCount;
+			_rxMaxLineCount     = rhs.RxMaxLineCount;
 			_directionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
 
 			ClearChanged();
@@ -97,12 +101,13 @@ namespace YAT.Domain.Settings
 			SeparateTxRxRadix  = SeparateTxRxRadixDefault;
 			TxRadix            = RadixDefault;
 			RxRadix            = RadixDefault;
+			ShowRadix          = ShowRadixDefault;
 			ShowTimeStamp      = ShowTimeStampDefault;
 			ShowLength         = ShowLengthDefault;
 			ShowConnectTime    = ShowConnectTimeDefault;
 			ShowCounters       = ShowCountersDefault;
-			TxMaxLineCount = MaxLineCountDefault;
-			RxMaxLineCount = MaxLineCountDefault;
+			TxMaxLineCount     = MaxLineCountDefault;
+			RxMaxLineCount     = MaxLineCountDefault;
 			DirectionLineBreakEnabled = DirectionLineBreakEnabledDefault;
 		}
 
@@ -157,6 +162,21 @@ namespace YAT.Domain.Settings
 				if (_rxRadix != value)
 				{
 					_rxRadix = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("ShowRadix")]
+		public bool ShowRadix
+		{
+			get { return (_showRadix); }
+			set
+			{
+				if (_showRadix != value)
+				{
+					_showRadix = value;
 					SetChanged();
 				}
 			}
@@ -308,6 +328,7 @@ namespace YAT.Domain.Settings
 					_separateTxRxRadix.Equals  (value._separateTxRxRadix) &&
 					_txRadix.Equals            (value._txRadix) &&
 					_rxRadix.Equals            (value._rxRadix) &&
+					_showRadix.Equals          (value._showRadix) &&
 					_showTimeStamp.Equals      (value._showTimeStamp) &&
 					_showLength.Equals         (value._showLength) &&
 					_showConnectTime.Equals    (value._showConnectTime) &&

@@ -88,23 +88,16 @@ namespace YAT.Gui.Forms.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Image_ArrowRight_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Image_ArrowRight_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Image_ArrowRight_24x24 {
             get {
                 object obj = ResourceManager.GetObject("Image_ArrowRight_24x24", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Image_ArrowRight_24x24_Disabled {
-            get {
-                object obj = ResourceManager.GetObject("Image_ArrowRight_24x24_Disabled", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Image_ArrowRight_24x24_Hot {
-            get {
-                object obj = ResourceManager.GetObject("Image_ArrowRight_24x24_Hot", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -116,20 +109,6 @@ namespace YAT.Gui.Forms.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Image_CopyToClipboard_16x16_Disabled {
-            get {
-                object obj = ResourceManager.GetObject("Image_CopyToClipboard_16x16_Disabled", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Image_CopyToClipboard_16x16_Hot {
-            get {
-                object obj = ResourceManager.GetObject("Image_CopyToClipboard_16x16_Hot", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap Image_CopyToClipboard_24x24 {
             get {
                 object obj = ResourceManager.GetObject("Image_CopyToClipboard_24x24", resourceCulture);
@@ -137,16 +116,9 @@ namespace YAT.Gui.Forms.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Image_CopyToClipboard_24x24_Disabled {
+        internal static System.Drawing.Bitmap Image_CopyToFolder_16x16 {
             get {
-                object obj = ResourceManager.GetObject("Image_CopyToClipboard_24x24_Disabled", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Image_CopyToClipboard_24x24_Hot {
-            get {
-                object obj = ResourceManager.GetObject("Image_CopyToClipboard_24x24_Hot", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_CopyToFolder_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -158,20 +130,6 @@ namespace YAT.Gui.Forms.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Image_CopyToFolder_24x24_Disabled {
-            get {
-                object obj = ResourceManager.GetObject("Image_CopyToFolder_24x24_Disabled", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Image_CopyToFolder_24x24_Hot {
-            get {
-                object obj = ResourceManager.GetObject("Image_CopyToFolder_24x24_Hot", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         internal static System.Drawing.Bitmap Image_Delete_16x16 {
             get {
                 object obj = ResourceManager.GetObject("Image_Delete_16x16", resourceCulture);
@@ -179,16 +137,16 @@ namespace YAT.Gui.Forms.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Image_Delete_16x16_Disabled {
+        internal static System.Drawing.Bitmap Image_Delete_24x24 {
             get {
-                object obj = ResourceManager.GetObject("Image_Delete_16x16_Disabled", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_Delete_24x24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap Image_Delete_16x16_Hot {
+        internal static System.Drawing.Bitmap Image_FolderClosed_16x16 {
             get {
-                object obj = ResourceManager.GetObject("Image_Delete_16x16_Hot", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_FolderClosed_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -200,16 +158,9 @@ namespace YAT.Gui.Forms.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Image_FolderClosed_24x24_Disabled {
+        internal static System.Drawing.Bitmap Image_FolderOpen_16x16 {
             get {
-                object obj = ResourceManager.GetObject("Image_FolderClosed_24x24_Disabled", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Image_FolderClosed_24x24_Hot {
-            get {
-                object obj = ResourceManager.GetObject("Image_FolderClosed_24x24_Hot", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_FolderOpen_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -221,16 +172,9 @@ namespace YAT.Gui.Forms.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Image_FolderOpen_24x24_Disabled {
+        internal static System.Drawing.Bitmap Image_FolderOptions_16x16 {
             get {
-                object obj = ResourceManager.GetObject("Image_FolderOpen_24x24_Disabled", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Image_FolderOpen_24x24_Hot {
-            get {
-                object obj = ResourceManager.GetObject("Image_FolderOpen_24x24_Hot", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_FolderOptions_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -238,20 +182,6 @@ namespace YAT.Gui.Forms.Properties {
         internal static System.Drawing.Bitmap Image_FolderOptions_24x24 {
             get {
                 object obj = ResourceManager.GetObject("Image_FolderOptions_24x24", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Image_FolderOptions_24x24_Disabled {
-            get {
-                object obj = ResourceManager.GetObject("Image_FolderOptions_24x24_Disabled", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Image_FolderOptions_24x24_Hot {
-            get {
-                object obj = ResourceManager.GetObject("Image_FolderOptions_24x24_Hot", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -270,23 +200,16 @@ namespace YAT.Gui.Forms.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Image_NewDocument_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Image_NewDocument_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Image_NewDocument_24x24 {
             get {
                 object obj = ResourceManager.GetObject("Image_NewDocument_24x24", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Image_NewDocument_24x24_Disabled {
-            get {
-                object obj = ResourceManager.GetObject("Image_NewDocument_24x24_Disabled", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Image_NewDocument_24x24_Hot {
-            get {
-                object obj = ResourceManager.GetObject("Image_NewDocument_24x24_Hot", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -305,6 +228,13 @@ namespace YAT.Gui.Forms.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Image_OpenDocument_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("Image_OpenDocument_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Image_OpenDocument_24x24 {
             get {
                 object obj = ResourceManager.GetObject("Image_OpenDocument_24x24", resourceCulture);
@@ -312,16 +242,9 @@ namespace YAT.Gui.Forms.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Image_OpenDocument_24x24_Disabled {
+        internal static System.Drawing.Bitmap Image_Print_16x16 {
             get {
-                object obj = ResourceManager.GetObject("Image_OpenDocument_24x24_Disabled", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Image_OpenDocument_24x24_Hot {
-            get {
-                object obj = ResourceManager.GetObject("Image_OpenDocument_24x24_Hot", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_Print_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -333,16 +256,9 @@ namespace YAT.Gui.Forms.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Image_Print_24x24_Disabled {
+        internal static System.Drawing.Bitmap Image_Properties_16x16 {
             get {
-                object obj = ResourceManager.GetObject("Image_Print_24x24_Disabled", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Image_Print_24x24_Hot {
-            get {
-                object obj = ResourceManager.GetObject("Image_Print_24x24_Hot", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_Properties_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -354,16 +270,9 @@ namespace YAT.Gui.Forms.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Image_Properties_24x24_Disabled {
+        internal static System.Drawing.Bitmap Image_SaveDocument_16x16 {
             get {
-                object obj = ResourceManager.GetObject("Image_Properties_24x24_Disabled", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Image_Properties_24x24_Hot {
-            get {
-                object obj = ResourceManager.GetObject("Image_Properties_24x24_Hot", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_SaveDocument_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -375,16 +284,9 @@ namespace YAT.Gui.Forms.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Image_SaveDocument_24x24_Disabled {
+        internal static System.Drawing.Bitmap Image_Stop_16x16 {
             get {
-                object obj = ResourceManager.GetObject("Image_SaveDocument_24x24_Disabled", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Image_SaveDocument_24x24_Hot {
-            get {
-                object obj = ResourceManager.GetObject("Image_SaveDocument_24x24_Hot", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_Stop_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -396,16 +298,9 @@ namespace YAT.Gui.Forms.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Image_Stop_24x24_Disabled {
+        internal static System.Drawing.Bitmap Image_Views_16x16 {
             get {
-                object obj = ResourceManager.GetObject("Image_Stop_24x24_Disabled", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Image_Stop_24x24_Hot {
-            get {
-                object obj = ResourceManager.GetObject("Image_Stop_24x24_Hot", resourceCulture);
+                object obj = ResourceManager.GetObject("Image_Views_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -413,20 +308,6 @@ namespace YAT.Gui.Forms.Properties {
         internal static System.Drawing.Bitmap Image_Views_24x24 {
             get {
                 object obj = ResourceManager.GetObject("Image_Views_24x24", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Image_Views_24x24_Disabled {
-            get {
-                object obj = ResourceManager.GetObject("Image_Views_24x24_Disabled", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap Image_Views_24x24_Hot {
-            get {
-                object obj = ResourceManager.GetObject("Image_Views_24x24_Hot", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

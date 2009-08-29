@@ -485,12 +485,12 @@ namespace YAT.Gui.Forms
 			_isSettingControls = true;
 			Domain.TerminalType terminalType = _settingsRoot.TerminalType;
 
-			// panels
+			// Panels
 			toolStripMenuItem_TerminalMenu_View_Panels_Tx.Checked    = _settingsRoot.Layout.TxMonitorPanelIsVisible;
 			toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Checked = _settingsRoot.Layout.BidirMonitorPanelIsVisible;
 			toolStripMenuItem_TerminalMenu_View_Panels_Rx.Checked    = _settingsRoot.Layout.RxMonitorPanelIsVisible;
 
-			// disable monitor item if the other monitors are hidden
+			// Disable monitor item if the other monitors are hidden
 			toolStripMenuItem_TerminalMenu_View_Panels_Tx.Enabled    = (_settingsRoot.Layout.BidirMonitorPanelIsVisible || _settingsRoot.Layout.RxMonitorPanelIsVisible);
 			toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Enabled = (_settingsRoot.Layout.TxMonitorPanelIsVisible || _settingsRoot.Layout.RxMonitorPanelIsVisible);
 			toolStripMenuItem_TerminalMenu_View_Panels_Rx.Enabled    = (_settingsRoot.Layout.TxMonitorPanelIsVisible || _settingsRoot.Layout.BidirMonitorPanelIsVisible);
@@ -502,19 +502,20 @@ namespace YAT.Gui.Forms
 
 			toolStripMenuItem_TerminalMenu_View_Panels_Predefined.Checked = _settingsRoot.Layout.PredefinedPanelIsVisible;
 
-			// connect time
+			// Connect time
 			bool showConnectTime = _settingsRoot.Display.ShowConnectTime;
 			toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Checked    = showConnectTime;
 			toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime.Enabled = showConnectTime;
 
-			// counters
+			// Counters
 			bool showCounters = _settingsRoot.Display.ShowCounters;
 			toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters.Checked  = showCounters;
 			toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters.Enabled = showCounters;
 
-			// options
+			// Options
+			toolStripMenuItem_TerminalMenu_View_ShowRadix.Checked     = _settingsRoot.Display.ShowRadix;
 			toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Checked = _settingsRoot.Display.ShowTimeStamp;
-			toolStripMenuItem_TerminalMenu_View_ShowLength.Checked = _settingsRoot.Display.ShowLength;
+			toolStripMenuItem_TerminalMenu_View_ShowLength.Checked    = _settingsRoot.Display.ShowLength;
 			
 			bool isText = (terminalType == Domain.TerminalType.Text);
 			toolStripMenuItem_TerminalMenu_View_ShowEol.Enabled = isText;
@@ -587,6 +588,11 @@ namespace YAT.Gui.Forms
 		private void toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters_Click(object sender, EventArgs e)
 		{
 			_terminal.ResetIOCount();
+		}
+
+		private void toolStripMenuItem_TerminalMenu_View_ShowRadix_Click(object sender, EventArgs e)
+		{
+			_settingsRoot.Display.ShowRadix = !_settingsRoot.Display.ShowRadix;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowTimeStamp_Click(object sender, EventArgs e)
@@ -712,6 +718,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_MonitorContextMenu_Hide.Visible = hideIsAllowed;
 			toolStripMenuItem_MonitorContextMenu_Hide.Enabled = isMonitor && hideIsAllowed;
 
+			toolStripMenuItem_MonitorContextMenu_ShowRadix.Checked     = _settingsRoot.Display.ShowRadix;
 			toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Checked = _settingsRoot.Display.ShowTimeStamp;
 			toolStripMenuItem_MonitorContextMenu_ShowLength.Checked    = _settingsRoot.Display.ShowLength;
 
@@ -773,6 +780,11 @@ namespace YAT.Gui.Forms
 		private void toolStripMenuItem_MonitorContextMenu_Format_Click(object sender, EventArgs e)
 		{
 			ShowFormatSettings();
+		}
+
+		private void toolStripMenuItem_MonitorContextMenu_ShowRadix_Click(object sender, EventArgs e)
+		{
+			_settingsRoot.Display.ShowRadix = !_settingsRoot.Display.ShowRadix;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowTimeStamp_Click(object sender, EventArgs e)
