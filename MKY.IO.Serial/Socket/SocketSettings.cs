@@ -202,7 +202,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		[XmlElement("NetworkInterface")]
+		[XmlElement("LocalInterface")]
 		public XNetworkInterface LocalInterface
 		{
 			get { return (_localInterface); }

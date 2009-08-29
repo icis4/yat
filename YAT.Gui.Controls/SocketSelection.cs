@@ -279,6 +279,7 @@ namespace YAT.Gui.Controls
 					if (IPAddress.TryParse(nameOrAddress, out ipAddress))
 					{
 						_resolvedRemoteIPAddress = ipAddress;
+						RemoteHost = new XIPHost(_resolvedRemoteIPAddress);
 					}
 					else
 					{
@@ -406,7 +407,7 @@ namespace YAT.Gui.Controls
 
 			// Remote host
 			comboBox_RemoteHost.Items.Clear();
-			comboBox_RemoteHost.Items.Add(XIPHost.GetItems());
+			comboBox_RemoteHost.Items.AddRange(XIPHost.GetItems());
 
 			_isSettingControls = false;
 		}

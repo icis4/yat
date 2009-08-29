@@ -90,6 +90,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALAZ.SystemEx.NetEx", "ALAZ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Windows.Forms.Test", "MKY.Windows.Forms.Test\MKY.Windows.Forms.Test.csproj", "{4171BFD3-4E50-4752-977B-9B1F79C3EDFB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Serial.Test", "MKY.IO.Serial.Test\MKY.IO.Serial.Test.csproj", "{CAEC3FFA-F303-4CCB-A42A-36F45AA00BD2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Test|Any CPU = Debug Test|Any CPU
@@ -328,6 +330,14 @@ Global
 		{4171BFD3-4E50-4752-977B-9B1F79C3EDFB}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
 		{4171BFD3-4E50-4752-977B-9B1F79C3EDFB}.Release Test|Any CPU.Build.0 = Release|Any CPU
 		{4171BFD3-4E50-4752-977B-9B1F79C3EDFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAEC3FFA-F303-4CCB-A42A-36F45AA00BD2}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAEC3FFA-F303-4CCB-A42A-36F45AA00BD2}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
+		{CAEC3FFA-F303-4CCB-A42A-36F45AA00BD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAEC3FFA-F303-4CCB-A42A-36F45AA00BD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAEC3FFA-F303-4CCB-A42A-36F45AA00BD2}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
+		{CAEC3FFA-F303-4CCB-A42A-36F45AA00BD2}.Release Test|Any CPU.Build.0 = Release|Any CPU
+		{CAEC3FFA-F303-4CCB-A42A-36F45AA00BD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAEC3FFA-F303-4CCB-A42A-36F45AA00BD2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

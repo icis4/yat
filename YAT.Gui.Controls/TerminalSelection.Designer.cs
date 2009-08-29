@@ -50,9 +50,9 @@ namespace YAT.Gui.Controls
 			this.label_TerminalType.AutoSize = true;
 			this.label_TerminalType.Location = new System.Drawing.Point(3, 6);
 			this.label_TerminalType.Name = "label_TerminalType";
-			this.label_TerminalType.Size = new System.Drawing.Size(73, 13);
+			this.label_TerminalType.Size = new System.Drawing.Size(77, 13);
 			this.label_TerminalType.TabIndex = 0;
-			this.label_TerminalType.Text = "&Terminal type:";
+			this.label_TerminalType.Text = "&Terminal Type:";
 			// 
 			// comboBox_IOType
 			// 
@@ -70,9 +70,9 @@ namespace YAT.Gui.Controls
 			this.label_IOType.AutoSize = true;
 			this.label_IOType.Location = new System.Drawing.Point(3, 33);
 			this.label_IOType.Name = "label_IOType";
-			this.label_IOType.Size = new System.Drawing.Size(52, 13);
+			this.label_IOType.Size = new System.Drawing.Size(56, 13);
 			this.label_IOType.TabIndex = 2;
-			this.label_IOType.Text = "&Port type:";
+			this.label_IOType.Text = "&Port Type:";
 			// 
 			// TerminalSelection
 			// 

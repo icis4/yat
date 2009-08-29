@@ -53,12 +53,14 @@ namespace YAT.Gui.Controls
 			this.label_RemotePort.AutoSize = true;
 			this.label_RemotePort.Location = new System.Drawing.Point(3, 33);
 			this.label_RemotePort.Name = "label_RemotePort";
-			this.label_RemotePort.Size = new System.Drawing.Size(92, 13);
+			this.label_RemotePort.Size = new System.Drawing.Size(93, 13);
 			this.label_RemotePort.TabIndex = 2;
-			this.label_RemotePort.Text = "Remote TCP port:";
+			this.label_RemotePort.Text = "Remote TCP Port:";
 			// 
 			// textBox_RemotePort
 			// 
+			this.textBox_RemotePort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.textBox_RemotePort.Location = new System.Drawing.Point(101, 30);
 			this.textBox_RemotePort.Name = "textBox_RemotePort";
 			this.textBox_RemotePort.Size = new System.Drawing.Size(156, 20);
@@ -67,6 +69,8 @@ namespace YAT.Gui.Controls
 			// 
 			// comboBox_RemoteHost
 			// 
+			this.comboBox_RemoteHost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_RemoteHost.Location = new System.Drawing.Point(101, 3);
 			this.comboBox_RemoteHost.Name = "comboBox_RemoteHost";
 			this.comboBox_RemoteHost.Size = new System.Drawing.Size(156, 21);
@@ -75,7 +79,9 @@ namespace YAT.Gui.Controls
 			// 
 			// textBox_LocalPort
 			// 
-			this.textBox_LocalPort.Location = new System.Drawing.Point(101, 83);
+			this.textBox_LocalPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.textBox_LocalPort.Location = new System.Drawing.Point(101, 102);
 			this.textBox_LocalPort.Name = "textBox_LocalPort";
 			this.textBox_LocalPort.Size = new System.Drawing.Size(156, 20);
 			this.textBox_LocalPort.TabIndex = 8;
@@ -83,12 +89,13 @@ namespace YAT.Gui.Controls
 			// 
 			// label_LocalPort
 			// 
+			this.label_LocalPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_LocalPort.AutoSize = true;
-			this.label_LocalPort.Location = new System.Drawing.Point(3, 86);
+			this.label_LocalPort.Location = new System.Drawing.Point(3, 105);
 			this.label_LocalPort.Name = "label_LocalPort";
-			this.label_LocalPort.Size = new System.Drawing.Size(81, 13);
+			this.label_LocalPort.Size = new System.Drawing.Size(82, 13);
 			this.label_LocalPort.TabIndex = 7;
-			this.label_LocalPort.Text = "Local TCP port:";
+			this.label_LocalPort.Text = "Local TCP Port:";
 			// 
 			// label_LocalInterface
 			// 
@@ -101,19 +108,21 @@ namespace YAT.Gui.Controls
 			// 
 			// comboBox_LocalInterface
 			// 
+			this.comboBox_LocalInterface.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBox_LocalInterface.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox_LocalInterface.Location = new System.Drawing.Point(101, 56);
+			this.comboBox_LocalInterface.Location = new System.Drawing.Point(6, 75);
 			this.comboBox_LocalInterface.Name = "comboBox_LocalInterface";
-			this.comboBox_LocalInterface.Size = new System.Drawing.Size(156, 21);
+			this.comboBox_LocalInterface.Size = new System.Drawing.Size(251, 21);
 			this.comboBox_LocalInterface.TabIndex = 5;
 			this.comboBox_LocalInterface.SelectedIndexChanged += new System.EventHandler(this.comboBox_LocalInterface_SelectedIndexChanged);
 			// 
 			// button_RefreshLocalInterfaces
 			// 
-			this.button_RefreshLocalInterfaces.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.button_RefreshLocalInterfaces.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_RefreshLocalInterfaces.Image = global::YAT.Gui.Controls.Properties.Resources.Image_Refresh_16x16;
 			this.button_RefreshLocalInterfaces.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.button_RefreshLocalInterfaces.Location = new System.Drawing.Point(258, 56);
+			this.button_RefreshLocalInterfaces.Location = new System.Drawing.Point(258, 75);
 			this.button_RefreshLocalInterfaces.Name = "button_RefreshLocalInterfaces";
 			this.button_RefreshLocalInterfaces.Size = new System.Drawing.Size(24, 21);
 			this.button_RefreshLocalInterfaces.TabIndex = 6;
@@ -133,7 +142,7 @@ namespace YAT.Gui.Controls
 			this.Controls.Add(this.label_LocalInterface);
 			this.Controls.Add(this.label_RemoteHost);
 			this.Name = "SocketSelection";
-			this.Size = new System.Drawing.Size(285, 106);
+			this.Size = new System.Drawing.Size(285, 125);
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.SocketSelection_Paint);
 			this.ResumeLayout(false);
 			this.PerformLayout();
