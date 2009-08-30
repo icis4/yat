@@ -56,7 +56,7 @@ namespace YAT.Model.Test
 			// allow modification of auto save setting
 			_autoOpenWorkspaceToRestore = ApplicationSettings.LocalUser.General.AutoOpenWorkspace;
 			_autoSaveWorkspaceToRestore = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
-			_workspaceFilePathToRestore = ApplicationSettings.LocalUser.General.WorkspaceFilePath;
+			_workspaceFilePathToRestore = ApplicationSettings.LocalUser.AutoWorkspace.FilePath;
 		}
 
 		#endregion
@@ -71,7 +71,7 @@ namespace YAT.Model.Test
 		{
 			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = _autoOpenWorkspaceToRestore;
 			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = _autoSaveWorkspaceToRestore;
-			ApplicationSettings.LocalUser.General.WorkspaceFilePath = _workspaceFilePathToRestore;
+			ApplicationSettings.LocalUser.AutoWorkspace.FilePath = _workspaceFilePathToRestore;
 		}
 
 		#endregion
@@ -188,7 +188,7 @@ namespace YAT.Model.Test
 
 			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = true;
 			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = true;
-			ApplicationSettings.LocalUser.General.WorkspaceFilePath = "";
+			ApplicationSettings.LocalUser.AutoWorkspace.FilePath = "";
 
 			#region Use case 1
 			// - Initial start
@@ -590,7 +590,7 @@ namespace YAT.Model.Test
 
 			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = true;
 			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = true;
-			ApplicationSettings.LocalUser.General.WorkspaceFilePath = "";
+			ApplicationSettings.LocalUser.AutoWorkspace.FilePath = "";
 
 			#region Preparation
 			// - Initial start
@@ -857,7 +857,7 @@ namespace YAT.Model.Test
 		{
 			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = false;
 			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = true;
-			ApplicationSettings.LocalUser.General.WorkspaceFilePath = "";
+			ApplicationSettings.LocalUser.AutoWorkspace.FilePath = "";
 
 			main = new Main();
 			main.Start();              // creates empty workspace
@@ -945,9 +945,9 @@ namespace YAT.Model.Test
 
 			// verify application settings
 			if (workspaceFileExpected)
-				StringAssert.AreEqualIgnoringCase(workspace.SettingsFilePath, ApplicationSettings.LocalUser.General.WorkspaceFilePath, "Workspace file path not set");
+				StringAssert.AreEqualIgnoringCase(workspace.SettingsFilePath, ApplicationSettings.LocalUser.AutoWorkspace.FilePath, "Workspace file path not set");
 			else
-				StringAssert.AreEqualIgnoringCase("", ApplicationSettings.LocalUser.General.WorkspaceFilePath, "Workspace file path not reset");
+				StringAssert.AreEqualIgnoringCase("", ApplicationSettings.LocalUser.AutoWorkspace.FilePath, "Workspace file path not reset");
 
 			// verify recent settings
 			if (workspaceFileExpected && (!workspaceFileAutoExpected))

@@ -63,19 +63,21 @@ Important changes:
 Fixed bugs:
 - Workspaces (.yaw) now properly work on network paths (bug #2234443)
 - RTS/CTS hardware flow control is fixed and thoroughly tested (bugs #1919399 and #1944332)
-- Thread synchronization issue when closing while receiving fixed (bug #1931923)
 - Command validation fixed (bug #1983796) and improved
 - Multi-line command issues fixed (bugs #2213644, #2816862 and #2831453)
+- Clearing predefined command description really clears it (bug #1945488)
 - TCP/IP remote IP address selection issue fixed (bug #2690191)
 - TCP/IP disconnect issue fixed (bug #2684769)
 - TCP/IP state issue fixed (bug #2694592)
 - TCP/IP AutoSocket reconnect issue fixed (bug #2767608)
+- Thread synchronization issue when closing while receiving fixed (bug #1931923)
+- Clearing monitors also clears incomplete lines (bug #1942335)
+- ShowEOL = false doesn't strip chars anymore (bug #1931582)
 - Font can be changed in format settings dialog (bug #1937065)
 - Shortcuts are immediately active, no need to first open menu anymore (bug #1944023)
 - Menu > Send > File now gets properly enabled (bug #1995796)
-- Clearing monitors also clears incomplete lines (bug #1942335)
-- Clearing predefined command description really clears it (bug #1945488)
-- ShowEOL = false doesn't strip chars anymore (bug #1931582)
+- Directly opened terminals don't automatically get saved anymore (bug #2821291)
+- Relative paths are no more added to recents
 - Log now logs EOL according to settings (bug #1995797)
 - Help, release notes and tracker instructions forms are shown at center of parent (bug #1938031)
 
