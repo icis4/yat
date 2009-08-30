@@ -46,17 +46,17 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		// startup
+		// Startup
 		private bool _isStartingUp = true;
-		// not needed yet: private bool _isSettingControls = false;
+		// Not needed yet: private bool _isSettingControls = false;
 		private bool _isClosingFromForm = false;
 		private bool _isClosingFromModel = false;
 
-		// model
+		// Model
 		private Model.Main _main;
 		private Model.Workspace _workspace;
 
-		// status
+		// Status
 		private const string _DefaultStatusText = "Ready";
 		private const int _TimedStatusInterval = 2000;
 
@@ -197,13 +197,13 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void toolStripMenuItem_MainMenu_File_SetChildMenuItems()
 		{
-			// not needed yet: _isSettingControls = true;
+			// Not needed yet: _isSettingControls = true;
 
 			bool childIsReady = (ActiveMdiChild != null);
 			toolStripMenuItem_MainMenu_File_CloseAll.Enabled = childIsReady;
 			toolStripMenuItem_MainMenu_File_SaveAll.Enabled = childIsReady;
 
-			// not needed yet: _isSettingControls = false;
+			// Not needed yet: _isSettingControls = false;
 		}
 
 		/// <remarks>
@@ -214,12 +214,12 @@ namespace YAT.Gui.Forms
 		{
 			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll();
 
-			// not needed yet: _isSettingControls = true;
+			// Not needed yet: _isSettingControls = true;
 
 			bool recentsAreReady = (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count > 0);
 			toolStripMenuItem_MainMenu_File_Recent.Enabled = recentsAreReady;
 
-			// not needed yet: _isSettingControls = false;
+			// Not needed yet: _isSettingControls = false;
 		}
 
 		private void toolStripMenuItem_MainMenu_File_DropDownOpening(object sender, EventArgs e)
@@ -259,7 +259,7 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void toolStripMenuItem_MainMenu_File_Workspace_SetMenuItems()
 		{
-			// not needed yet: _isSettingControls = true;
+			// Not needed yet: _isSettingControls = true;
 
 			bool workspaceIsReady = (_workspace != null);
 			toolStripMenuItem_MainMenu_File_Workspace_New.Enabled = !workspaceIsReady;
@@ -267,7 +267,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_MainMenu_File_Workspace_Save.Enabled = workspaceIsReady;
 			toolStripMenuItem_MainMenu_File_Workspace_SaveAs.Enabled = workspaceIsReady;
 
-			// not needed yet: _isSettingControls = false;
+			// Not needed yet: _isSettingControls = false;
 		}
 
 		private void toolStripMenuItem_MainMenu_File_Workspace_DropDownOpening(object sender, EventArgs e)
@@ -325,7 +325,7 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void toolStripMenuItem_MainMenu_Window_SetChildMenuItems()
 		{
-			// not needed yet: _isSettingControls = true;
+			// Not needed yet: _isSettingControls = true;
 
 			bool childIsReady = (ActiveMdiChild != null);
 			toolStripMenuItem_MainMenu_Window_Cascade.Enabled = childIsReady;
@@ -333,7 +333,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_MainMenu_Window_TileVertical.Enabled = childIsReady;
 			toolStripMenuItem_MainMenu_Window_ArrangeIcons.Enabled = childIsReady;
 
-			// not needed yet: _isSettingControls = false;
+			// Not needed yet: _isSettingControls = false;
 
 #if (FALSE)
 			// \fixme
@@ -435,7 +435,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripButton_MainTool_SetControls()
 		{
-			// not needed yet: _isSettingControls = true;
+			// Not needed yet: _isSettingControls = true;
 
 			bool childIsReady = (ActiveMdiChild != null);
 
@@ -452,7 +452,7 @@ namespace YAT.Gui.Forms
 			toolStripButton_MainTool_Terminal_Print.Enabled           = childIsReady;
 			toolStripButton_MainTool_Terminal_Settings.Enabled        = childIsReady;
 
-			// not needed yet: _isSettingControls = false;
+			// Not needed yet: _isSettingControls = false;
 		}
 
 		private void toolStripButton_MainTool_File_New_Click(object sender, EventArgs e)
@@ -520,12 +520,12 @@ namespace YAT.Gui.Forms
 		{
 			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll();
 
-			// not needed yet: _isSettingControls = true;
+			// Not needed yet: _isSettingControls = true;
 
 			bool recentsAreReady = (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count > 0);
 			toolStripMenuItem_MainContextMenu_File_Recent.Enabled = recentsAreReady;
 
-			// not needed yet: _isSettingControls = false;
+			// Not needed yet: _isSettingControls = false;
 		}
 
 		private void contextMenuStrip_Main_Opening(object sender, CancelEventArgs e)
@@ -588,7 +588,7 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void contextMenuStrip_FileRecent_SetRecentMenuItems()
 		{
-			// not needed yet: _isSettingControls = true;
+			// Not needed yet: _isSettingControls = true;
 
 			// hide all
 			for (int i = 0; i < Model.Settings.RecentFileSettings.MaxFilePaths; i++)
@@ -616,7 +616,7 @@ namespace YAT.Gui.Forms
 				_menuItems_recents[i].Visible = true;
 			}
 
-			// not needed yet: _isSettingControls = false;
+			// Not needed yet: _isSettingControls = false;
 		}
 
 		/// <summary>
@@ -1071,6 +1071,28 @@ namespace YAT.Gui.Forms
 		// MDI Parent
 		//==========================================================================================
 
+		#region MDI Parent > Properties
+		//------------------------------------------------------------------------------------------
+		// MDI Parent > Properties
+		//------------------------------------------------------------------------------------------
+
+		public Model.Main UnderlyingMain
+		{
+			get { return (_main); }
+		}
+
+		public Model.Workspace UnderlyingWorkspace
+		{
+			get { return (_workspace); }
+		}
+
+		#endregion
+
+		#region MDI Parent > Methods
+		//------------------------------------------------------------------------------------------
+		// MDI Parent > Methods
+		//------------------------------------------------------------------------------------------
+
 		private void InitializeControls()
 		{
 			InitializeRecentControls();
@@ -1108,6 +1130,8 @@ namespace YAT.Gui.Forms
 		{
 			toolStripMenuItem_MainMenu_File_Workspace_SetMenuItems();
 		}
+
+		#endregion
 
 		#endregion
 

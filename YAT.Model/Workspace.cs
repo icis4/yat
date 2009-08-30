@@ -365,7 +365,7 @@ namespace YAT.Model
 		/// Performs auto save on previously auto saved files.
 		/// </summary>
 		/// <remarks>
-		/// This method is intentionally named this long to stress the difference to
+		/// This method is intentionally named this long to emphasize the difference to
 		/// <see cref="TryAutoSave()"/> above.
 		/// </remarks>
 		private bool TryAutoSaveIfFileAlreadyAutoSaved()
@@ -570,49 +570,42 @@ namespace YAT.Model
 		public bool Close(bool isMainClose)
 		{
 			bool tryAutoSave = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
-			if (!isMainClose)
-			{
-				// try to auto save existing normal file if desired (w4a)
-				tryAutoSave = (tryAutoSave &&
-					           _settingsHandler.SettingsFileExists && !_settingsRoot.AutoSaved);
-			}
-
 			bool success = false;
 
 			OnFixedStatusTextRequest("Closing workspace...");
 
-			// first, close all contained terminals signaling them a workspace close
+			// First, close all contained terminals signaling them a workspace close
 			if (!CloseAllTerminals(true, tryAutoSave))
 			{
 				OnTimedStatusTextRequest("Workspace not closed");
 				return (false);
 			}
 
-			// try to auto save if desired
+			// Try to auto save if desired
 			if (tryAutoSave)
 				success = TryAutoSave();
 
-			// no success on auto save or auto save not desired
+			// No success on auto save or auto save not desired
 			if (!success)
 			{
-				// no file (m1, m3, w1, w3)
+				// No file (m1, m3, w1, w3)
 				if (!_settingsHandler.SettingsFileExists)
 				{
-					success = true; // consider it successful if there was no file to save
+					success = true; // Consider it successful if there was no file to save
 				}
-				// existing file
+				// Existing file
 				else
 				{
-					if (_settingsRoot.AutoSaved) // existing auto file (m2a/b, w2)
+					if (_settingsRoot.AutoSaved) // Existing auto file (m2a/b, w2)
 					{
 						_settingsHandler.Delete();
-						success = true; // don't care if auto file not successfully deleted
+						success = true; // Don't care if auto file not successfully deleted
 					}
 
-					// existing normal file (m4a/b, w4a/b) will be handled below
+					// Existing normal file (m4a/b, w4a/b) will be handled below
 				}
 
-				// normal (m4a/b, w4a/b)
+				// Normal (m4a/b, w4a/b)
 				if (!success && _settingsRoot.ExplicitHaveChanged)
 				{
 					DialogResult dr = OnMessageInputRequest
@@ -634,15 +627,15 @@ namespace YAT.Model
 							return (false);
 					}
 				}
-				else // else means settings have not changed
+				else // Else means settings have not changed
 				{
-					success = true; // consider it successful if there was nothing to save
+					success = true; // Consider it successful if there was nothing to save
 				}
-			} // end of if no success on auto save or auto save disabled
+			} // End of if no success on auto save or auto save disabled
 
 			if (success)
 			{
-				// status text request must be before closed event, closed event may close the view
+				// Status text request must be before closed event, closed event may close the view
 				OnTimedStatusTextRequest("Workspace successfully closed");
 				OnClosed(new ClosedEventArgs(isMainClose));
 			}
@@ -651,6 +644,20 @@ namespace YAT.Model
 				OnTimedStatusTextRequest("Workspace not closed");
 			}
 			return (success);
+		}
+
+		/// <summary>
+		/// Method to check wheter auto save is really desired. Needed because of the MDI issue
+		/// on close described in YAT.Gui.Forms.Main/Terminal.
+		/// </summary>
+		public bool TryAutoSaveIsDesired(bool tryAutoSave, Terminal terminal)
+		{
+			// Do not auto save if terminal file already exists but workspace doesn't.
+			// Applies to terminal use case w4a/b.
+			if (tryAutoSave && !SettingsFileExists && terminal.SettingsFileExists)
+				return (true);
+			else
+				return (false);
 		}
 
 		#endregion
@@ -757,7 +764,7 @@ namespace YAT.Model
 		{
 			OnFixedStatusTextRequest("Creating new terminal...");
 
-			// create terminal
+			// Create terminal
 			Terminal terminal = new Terminal(settingsHandler);
 			AddToWorkspace(terminal);
 
@@ -806,7 +813,7 @@ namespace YAT.Model
 				}
 			}
 
-			// on success, clear changed flag since all terminals got openend
+			// On success, clear changed flag since all terminals got openend
 			if (openedTerminalCount == requestedTerminalCount)
 				_settingsRoot.ClearChanged();
 
@@ -826,10 +833,10 @@ namespace YAT.Model
 			OnFixedStatusTextRequest("Opening terminal...");
 			try
 			{
-				// combine absolute workspace path with terminal path if that one is relative
+				// Combine absolute workspace path with terminal path if that one is relative
 				absoluteFilePath = XPath.CombineFilePaths(_settingsHandler.SettingsFilePath, filePath);
 
-				// check whether terminal is already contained in workspace
+				// Check whether terminal is already contained in workspace
 				foreach (Terminal t in _terminals)
 				{
 					if (absoluteFilePath == t.SettingsFilePath)
@@ -847,21 +854,21 @@ namespace YAT.Model
 					}
 				}
 
-				// load settings
+				// Load settings
 				DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
 				sh.SettingsFilePath = absoluteFilePath;
 				sh.Load();
 
-				// replace window settings with those saved in workspace
+				// Replace window settings with those saved in workspace
 				if (windowSettings != null)
 					sh.Settings.Window = windowSettings;
 
-				// create terminal
+				// Create terminal
 				Terminal terminal = new Terminal(sh, guid);
 				AddToWorkspace(terminal);
 
 				if (!sh.Settings.AutoSaved)
-					SetRecent(filePath);
+					SetRecent(absoluteFilePath);
 
 				OnTimedStatusTextRequest("Terminal opened");
 				return (true);
@@ -904,7 +911,7 @@ namespace YAT.Model
 
 			tsi.Guid = terminal.Guid;
 			tsi.FilePath = filePath;
-			tsi.Window = new WindowSettings(terminal.WindowSettings); // clone window settings
+			tsi.Window = new WindowSettings(terminal.WindowSettings); // Clone window settings
 
 			return (tsi);
 		}
@@ -913,26 +920,26 @@ namespace YAT.Model
 		{
 			AttachTerminalEventHandlers(terminal);
 
-			// add terminal to terminal list
+			// Add terminal to terminal list
 			_terminals.Add(terminal);
 			_activeTerminal = terminal;
 
-			// add terminal settings for new terminals
-			// replace terminal settings if workspace settings have been loaded from file prior
+			// Add terminal settings for new terminals
+			// Replace terminal settings if workspace settings have been loaded from file prior
 			_settingsRoot.TerminalSettings.AddOrReplaceGuidItem(CreateTerminalSettingsItem(terminal));
 			_settingsRoot.SetChanged();
 
-			// fire terminal added event
+			// Fire terminal added event
 			OnTerminalAdded(new TerminalEventArgs(terminal));
 		}
 
 		private void ReplaceInWorkspace(Terminal terminal)
 		{
-			// replace terminal in terminal list
+			// Replace terminal in terminal list
 			_terminals.ReplaceGuidItem(terminal);
 			_activeTerminal = terminal;
 
-			// replace terminal in workspace settings if the settings have indeed changed
+			// Replace terminal in workspace settings if the settings have indeed changed
 			TerminalSettingsItem tsiNew = CreateTerminalSettingsItem(terminal);
 			TerminalSettingsItem tsiOld = _settingsRoot.TerminalSettings.GetGuidItem(terminal.Guid);
 			if ((tsiOld == null) || (tsiNew != tsiOld))
@@ -946,15 +953,15 @@ namespace YAT.Model
 		{
 			DetachTerminalEventHandlers(terminal);
 
-			// remove terminal from terminal list
+			// Remove terminal from terminal list
 			_terminals.RemoveGuid(terminal.Guid);
 			_activeTerminal = null;
 
-			// remove terminal from workspace settings
+			// Remove terminal from workspace settings
 			_settingsRoot.TerminalSettings.RemoveGuid(terminal.Guid);
 			_settingsRoot.SetChanged();
 
-			// fire terminal added event
+			// Fire terminal added event
 			OnTerminalRemoved(new TerminalEventArgs(terminal));
 		}
 
@@ -976,7 +983,7 @@ namespace YAT.Model
 		{
 			bool success = true;
 
-			// calling Close() on a terminal will modify the list, therefore clone it first
+			// Calling Close() on a terminal will modify the list, therefore clone it first
 			List<Terminal> clone = new List<Terminal>(_terminals);
 			foreach (Terminal t in clone)
 			{
@@ -999,11 +1006,11 @@ namespace YAT.Model
 		{
 			bool success = true;
 
-			// calling Close() on a terminal will modify the list, therefore clone it first
+			// Calling Close() on a terminal will modify the list, therefore clone it first
 			List<Terminal> clone = new List<Terminal>(_terminals);
 			foreach (Terminal t in clone)
 			{
-				if (!t.Close(isWorkspaceClose, tryAutoSave))
+				if (!t.Close(isWorkspaceClose, TryAutoSaveIsDesired(tryAutoSave, t)))
 					success = false;
 			}
 			return (success);

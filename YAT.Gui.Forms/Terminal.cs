@@ -255,14 +255,21 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void Terminal_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			// prevent multiple calls to Close()
+			// Prevent multiple calls to Close()
 			if (!_isClosingFromModel)
 			{
 				_isClosingFromForm = true;
 				if (e.CloseReason == CloseReason.UserClosing)
+				{
 					e.Cancel = (!_terminal.Close());
+				}
 				else
-					e.Cancel = (!_terminal.Close(true));
+				{
+					bool tryAutoSave = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
+					Forms.Main m = _mdiParent as Forms.Main;
+					Model.Workspace w = m.UnderlyingWorkspace;
+					e.Cancel = (!_terminal.Close(true, w.TryAutoSaveIsDesired(tryAutoSave, _terminal)));
+				}
 			}
 		}
 

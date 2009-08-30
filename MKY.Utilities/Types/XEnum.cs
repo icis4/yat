@@ -22,15 +22,15 @@ using System.Reflection;
 namespace MKY.Utilities.Types
 {
 	/// <summary>
-	/// Extended enumeration type which offers more features that a normal enum. <see cref="XEnum">
-	/// uses an underlying enum to distinguish objects. Provide an enum, derive from <see cref="XEnum">,
+	/// Extended enumeration type which offers more features that a normal enum. <see cref="XEnum"/>
+	/// uses an underlying enum to distinguish objects. Provide an enum, derive from <see cref="XEnum"/>,
 	/// define new name/value methods if necessary and implement the conversion methods to get a
-	/// fully functional <see cref="XEnum">.
+	/// fully functional <see cref="XEnum"/>.
 	/// </summary>
 	/// <remarks>
 	/// Using a normal enum in a client class has the big advantage that code designers and features
 	/// like IntelliSense can use their built-in enum support.
-	/// <see cref="XEnum"> based types are not serializable due to the fact that <see cref="Enum"/>
+	/// <see cref="XEnum"/> based types are not serializable due to the fact that <see cref="Enum"/>
 	/// isn't serializable.
 	/// </remarks>
 	/// <example>

@@ -968,7 +968,10 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public string ToShortPortString()
 		{
-			return (_port.PortId);
+			if (_port != null)
+				return (_port.PortId);
+			else
+				return ("<Undefined>");
 		}
 
 		#endregion

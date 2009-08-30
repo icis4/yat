@@ -673,13 +673,7 @@ namespace YAT.Model
 		/// <summary>Closes the terminal and prompts if needed if settings have changed.</summary>
 		public bool Close()
 		{
-			return (Close(false));
-		}
-
-		/// <summary>Closes the terminal and prompts if needed if settings have changed.</summary>
-		public bool Close(bool isWorkspaceClose)
-		{
-			return (Close(isWorkspaceClose, isWorkspaceClose));
+			return (Close(false, false));
 		}
 
 		/// <summary>
@@ -711,42 +705,35 @@ namespace YAT.Model
 		/// </remarks>
 		public bool Close(bool isWorkspaceClose, bool tryAutoSave)
 		{
-			if (!isWorkspaceClose)
-			{
-				// try to auto save existing normal file if desired (w4a)
-				tryAutoSave = (tryAutoSave &&
-							   _settingsHandler.SettingsFileExists && !_settingsRoot.AutoSaved);
-			}
-
 			bool success = false;
 
 			OnFixedStatusTextRequest("Closing terminal...");
 
-			// try to auto save if desired
+			// Try to auto save if desired
 			if (tryAutoSave)
 				success = TryAutoSave();
 
-			// no success on auto save or auto save not desired
+			// No success on auto save or auto save not desired
 			if (!success)
 			{
-				// no file (w1, w3, t1, t3)
+				// No file (w1, w3, t1, t3)
 				if (!_settingsHandler.SettingsFileExists)
 				{
-					success = true; // consider it successful if there was no file to save
+					success = true; // Consider it successful if there was no file to save
 				}
-				// existing file
+				// Existing file
 				else
 				{
-					if (_settingsRoot.AutoSaved) // existing auto file (w2a/b, t2)
+					if (_settingsRoot.AutoSaved) // Existing auto file (w2a/b, t2)
 					{
 						_settingsHandler.Delete();
-						success = true; // don't care if auto file not successfully deleted
+						success = true; // Don't care if auto file not successfully deleted
 					}
 
-					// existing normal file (w4a/b, t4a/b) will be handled below
+					// Existing normal file (w4a/b, t4a/b) will be handled below
 				}
 
-				// normal (w4a/b, t4a/b)
+				// Normal (w4a/b, t4a/b)
 				if (!success && _settingsRoot.ExplicitHaveChanged)
 				{
 					DialogResult dr = OnMessageInputRequest
@@ -768,23 +755,23 @@ namespace YAT.Model
 							return (false);
 					}
 				}
-				else // else means settings have not changed
+				else // Else means settings have not changed
 				{
-					success = true; // consider it successful if there was nothing to save
+					success = true; // Consider it successful if there was nothing to save
 				}
-			} // end of if no success on auto save or auto save disabled
+			} // End of if no success on auto save or auto save disabled
 
-			// next, close underlying terminal
+			// Next, close underlying terminal
 			if (_terminal.IsStarted)
 				success = StopIO(false);
 
-			// last, close log
+			// Last, close log
 			if (_log.IsStarted)
 				EndLog();
 
 			if (success)
 			{
-				// status text request must be before closed event, closed event may close the view
+				// Status text request must be before closed event, closed event may close the view
 				OnTimedStatusTextRequest("Terminal successfully closed");
 				OnClosed(new ClosedEventArgs(isWorkspaceClose));
 			}
