@@ -44,9 +44,10 @@ YAT 2.0 Beta 3 Candidate 1 Version 1.99.2x :: 2009-08-xx
 --------------------------------------------------------
 
 New:
+- Support for serial ports which are named other than COM (feature request #2848228)
 - Select all/none items in monitor (feature request #2455810)
 - Optionally hide radix, e.g. "80" instead of "80h" (feature request #2085990)
-- Tabs are treated as tabs and not converted to <TAB> anymore by default (feature request #2813232)
+- Tabs are treated as tabs and not converted to <TAB> by default anymore (feature request #2813232)
 - Additional toolbar buttons to clear/save/copy monitor contents added
 
 Important changes:
@@ -69,7 +70,7 @@ Fixed bugs:
 - TCP/IP remote IP address selection issue fixed (bug #2690191)
 - TCP/IP disconnect issue fixed (bug #2684769)
 - TCP/IP state issue fixed (bug #2694592)
-- TCP/IP AutoSocket reconnect issue fixed (bug #2767608)
+- TCP/IP AutoSocket connect/disconnect/reconnect issues fixed (bug #2767608)
 - Thread synchronization issue when closing while receiving fixed (bug #1931923)
 - Clearing monitors also clears incomplete lines (bug #1942335)
 - ShowEOL = false doesn't strip chars anymore (bug #1931582)

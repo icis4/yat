@@ -268,7 +268,7 @@ namespace YAT.Gui.Forms
 					bool tryAutoSave = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
 					Forms.Main m = _mdiParent as Forms.Main;
 					Model.Workspace w = m.UnderlyingWorkspace;
-					e.Cancel = (!_terminal.Close(true, w.TryAutoSaveIsDesired(tryAutoSave, _terminal)));
+					e.Cancel = (!_terminal.Close(true, w.TryTerminalAutoSaveIsDesired(tryAutoSave, _terminal)));
 				}
 			}
 		}

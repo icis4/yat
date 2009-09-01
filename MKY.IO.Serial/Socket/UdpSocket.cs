@@ -50,6 +50,8 @@ namespace MKY.IO.Serial
 		// Fields
 		//==========================================================================================
 
+		private static int _instanceCounter = 0;
+		private int _instanceId = 0;
 		private bool _isDisposed;
 
 		private System.Net.IPAddress _remoteIPAddress;
@@ -95,6 +97,8 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public UdpSocket(System.Net.IPAddress remoteIPAddress, int remotePort, int localPort)
 		{
+			_instanceId = _instanceCounter++;
+
 			_remoteIPAddress = remoteIPAddress;
 			_remotePort = remotePort;
 			_localPort = localPort;
@@ -122,6 +126,9 @@ namespace MKY.IO.Serial
 					DisposeSocket();
 				}
 				_isDisposed = true;
+#if (DEBUG)
+				System.Diagnostics.Debug.WriteLine(GetType() + "     (" + _instanceId + ")(" + ToShortEndPointString() + "): Disposed");
+#endif
 			}
 		}
 
@@ -236,7 +243,7 @@ namespace MKY.IO.Serial
 				StartSocket();
 #if (DEBUG)
 			else
-				System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortEndPointString() + "): Start() requested but state is " + _state);
+				System.Diagnostics.Debug.WriteLine(GetType() + "     (" + _instanceId + ")(" + ToShortEndPointString() + "): Start() requested but state is " + _state);
 #endif
 		}
 
@@ -298,7 +305,7 @@ namespace MKY.IO.Serial
 			lock (_stateSyncObj)
 				_state = state;
 #if (DEBUG)
-			System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortEndPointString() + "): State has changed from " + oldState + " to " + _state);
+			System.Diagnostics.Debug.WriteLine(GetType() + "     (" + _instanceId + ")(" + ToShortEndPointString() + "): State has changed from " + oldState + " to " + _state);
 #endif
 			OnIOChanged(new EventArgs());
 		}
@@ -314,7 +321,8 @@ namespace MKY.IO.Serial
 		{
 			if (_socket != null)
 			{
-				_socket.Dispose();
+				_socket.Stop();
+				_socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose()
 				_socket = null;
 				_socketConnection = null;
 			}
@@ -329,6 +337,8 @@ namespace MKY.IO.Serial
 
 		private void StartSocket()
 		{
+			SetStateAndNotify(SocketState.Opening);
+
 			_socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketClient(System.Net.Sockets.ProtocolType.Udp,
 				                                                     ALAZ.SystemEx.NetEx.SocketsEx.CallbackThreadType.ctWorkerThread,
 																	(ALAZ.SystemEx.NetEx.SocketsEx.ISocketService)this,
@@ -339,8 +349,6 @@ namespace MKY.IO.Serial
 								 null, ALAZ.SystemEx.NetEx.SocketsEx.EncryptType.etNone, ALAZ.SystemEx.NetEx.SocketsEx.CompressionType.ctNone, null, 0, 0,
 								 new System.Net.IPEndPoint(System.Net.IPAddress.Any, _localPort));
 			_socket.Start(); // The ALAZ socket will be started asynchronously
-
-			SetStateAndNotify(SocketState.Opening);
 		}
 
 		private void StopSocket()

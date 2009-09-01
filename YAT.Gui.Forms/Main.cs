@@ -122,7 +122,7 @@ namespace YAT.Gui.Forms
 			{
 				_isStartingUp = false;
 
-				// start YAT according to main settings
+				// Start YAT according to main settings
 				if (!_main.Start())
 				{
 					MessageBox.Show
@@ -136,7 +136,7 @@ namespace YAT.Gui.Forms
 					Close();
 				}
 
-				// if workspace is empty, display new terminal dialog
+				// If workspace is empty, display new terminal dialog
 				if (_workspace.TerminalCount == 0)
 					ShowNewTerminalDialog();
 			}
@@ -951,7 +951,7 @@ namespace YAT.Gui.Forms
 
 		private void _workspace_TerminalAdded(object sender, Model.TerminalEventArgs e)
 		{
-			// create terminal form
+			// Create terminal form
 			Terminal mdiChild = new Terminal(e.Terminal);
 
 			// link MDI child this MDI parent

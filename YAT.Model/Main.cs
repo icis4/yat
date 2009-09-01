@@ -135,8 +135,15 @@ namespace YAT.Model
 			{
 				if (disposing)
 				{
+					// First, detach event handlers to ensure that no more events are received
+					DetachWorkspaceEventHandlers();
+
+					// Then, dispose of objects
 					if (_workspace != null)
+					{
 						_workspace.Dispose();
+						_workspace = null;
+					}
 				}
 				_isDisposed = true;
 			}
@@ -417,14 +424,20 @@ namespace YAT.Model
 
 		private void AttachWorkspaceEventHandlers()
 		{
-			_workspace.Saved  += new EventHandler<SavedEventArgs>(_workspace_Saved);
-			_workspace.Closed += new EventHandler<ClosedEventArgs>(_workspace_Closed);
+			if (_workspace != null)
+			{
+				_workspace.Saved  += new EventHandler<SavedEventArgs> (_workspace_Saved);
+				_workspace.Closed += new EventHandler<ClosedEventArgs>(_workspace_Closed);
+			}
 		}
 
 		private void DetachWorkspaceEventHandlers()
 		{
-			_workspace.Saved  -= new EventHandler<SavedEventArgs>(_workspace_Saved);
-			_workspace.Closed -= new EventHandler<ClosedEventArgs>(_workspace_Closed);
+			if (_workspace != null)
+			{
+				_workspace.Saved  -= new EventHandler<SavedEventArgs> (_workspace_Saved);
+				_workspace.Closed -= new EventHandler<ClosedEventArgs>(_workspace_Closed);
+			}
 		}
 
 		#endregion
@@ -478,7 +491,7 @@ namespace YAT.Model
 
 			OnFixedStatusTextRequest("Creating new workspace...");
 
-			// create workspace
+			// Create workspace
 			_workspace = new Workspace(new DocumentSettingsHandler<WorkspaceSettingsRoot>());
 			AttachWorkspaceEventHandlers();
 			OnWorkspaceOpened(new WorkspaceEventArgs(_workspace));
@@ -587,7 +600,7 @@ namespace YAT.Model
 				// try to retrieve GUID from file path (in case of auto saved workspace files)
 				Guid guid = XGuid.CreateGuidFromFilePath(filePath, GeneralSettings.AutoSaveWorkspaceFileNamePrefix);
 
-				// create workspace
+				// Create workspace
 				_workspace = new Workspace(sh, guid);
 				AttachWorkspaceEventHandlers();
 

@@ -247,7 +247,8 @@ namespace YAT.Settings.Test
 
 		private static string MakeTempPath()
 		{
-			return (System.Windows.Forms.Application.StartupPath);
+			//return (Path.GetTempPath() + Path.DirectorySeparatorChar + "YAT");
+			return ("D:");
 		}
 
 		private static string MakeTempFileName(string name)

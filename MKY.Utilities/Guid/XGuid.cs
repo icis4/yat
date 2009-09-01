@@ -71,7 +71,7 @@ namespace MKY.Utilities.Guid
 				}
 			}
 
-			// create new GUID
+			// Create new GUID
 			return (System.Guid.NewGuid());
 		}
 	}

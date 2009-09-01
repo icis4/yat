@@ -73,13 +73,13 @@ namespace YAT.Model.Test
 			_TripleLineCommand  = new Utilities.TestSet(new Types.Command(new string[] { _TestCommandLines[0], _TestCommandLines[1], _TestCommandLines[2] }));
 			_MultiLineCommand   = new Utilities.TestSet(new Types.Command(_TestCommandLines));
 
-			_MultiEOLCommand    = new Utilities.TestSet(new Types.Command(@"A\!(EOL)B<CR><LF>C<CR><LF>D"), 4, new int[] { 2, 2, 2, 2 }); // EOL results in one element since ShowEOL is switched off
-			_MixedEOLCommand    = new Utilities.TestSet(new Types.Command(@"A\!(EOL)BC<CR><LF>D"),         3, new int[] { 2, 3, 2    }); // EOL results in one element since ShowEOL is switched off
+			_MultiEOLCommand    = new Utilities.TestSet(new Types.Command(@"A\!(EOL)B<CR><LF>C<CR><LF>D"), 4, new int[] { 2, 2, 2, 2 }, new int[] { 1, 1, 1, 1 }); // EOL results in one element since ShowEOL is switched off
+			_MixedEOLCommand    = new Utilities.TestSet(new Types.Command(@"A\!(EOL)BC<CR><LF>D"),         3, new int[] { 2, 2, 2    }, new int[] { 1, 2, 1    }); // EOL results in one element since ShowEOL is switched off
 
-			_EOLPartsCommand    = new Utilities.TestSet(new Types.Command(@"A<CR><CR><LF>B<CR><LF><LF>C<CR><LF>D<CR>E<LF>F"), 4, new int[] { 3, 2, 3, 6 });
+			_EOLPartsCommand    = new Utilities.TestSet(new Types.Command(@"A<CR><CR><LF>B<CR><LF><LF>C<CR><LF>D<CR>E<LF>F"), 4, new int[] { 3, 2, 3, 6 }, new int[] { 2, 1, 2, 5 });
 
-			_SingleNoEOLCommand = new Utilities.TestSet(new Types.Command(@"A\!(NoEOL)"), 1, new int[] { 1 });                                 // there is always 1 line
-			_DoubleNoEOLCommand = new Utilities.TestSet(new Types.Command(new string[] { @"A\!(NoEOL)", @"B\!(NoEOL)" }), 1, new int[] { 2 }); // there is always 1 line
+			_SingleNoEOLCommand = new Utilities.TestSet(new Types.Command(@"A\!(NoEOL)"), 1, new int[] { 1 }, new int[] { 1 });                                 // There is always 1 line
+			_DoubleNoEOLCommand = new Utilities.TestSet(new Types.Command(new string[] { @"A\!(NoEOL)", @"B\!(NoEOL)" }), 1, new int[] { 1 }, new int[] { 2 }); // There is always 1 line
 		}
 
 		#endregion
@@ -236,23 +236,23 @@ namespace YAT.Model.Test
 
 		private void PerformCommandTransmission(TerminalSettingsRoot settingsA, TerminalSettingsRoot settingsB, Utilities.TestSet testSet, int transmissionCount)
 		{
-			// create terminals from settings and check whether B receives from A
+			// Create terminals from settings and check whether B receives from A
 			using (Terminal terminalA = new Terminal(settingsA))
 			{
 				using (Terminal terminalB = new Terminal(settingsB))
 				{
-					// start and open terminals
+					// Start and open terminals
 					terminalA.Start();
 					terminalB.Start();
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					for (int i = 0; i < transmissionCount; i++)
 					{
-						// send test command
+						// Send test command
 						terminalA.SendCommand(testSet.Command);
 						Utilities.WaitForTransmission(terminalA, terminalB);
 
-						// verify transmission
+						// Verify transmission
 						Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 							                  terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
 									          testSet, i + 1);

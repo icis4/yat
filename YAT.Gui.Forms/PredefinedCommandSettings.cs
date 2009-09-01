@@ -143,7 +143,7 @@ namespace YAT.Gui.Forms
 			{
 				_startupControl.Startup = false;
 
-				// create a page if no pages exist yet
+				// Create a page if no pages exist yet
 				int pageCount = _settings_Form.Pages.Count;
 				if (pageCount > 0)
 				{
@@ -155,7 +155,7 @@ namespace YAT.Gui.Forms
 					_selectedPage = 1;
 				}
 
-				// initially set controls and validate its contents where needed
+				// Initially set controls and validate its contents where needed
 				SetControls();
 
 				int selectedCommand = XInt32.LimitToBounds(_startupControl.RequestedCommand, 1, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage);

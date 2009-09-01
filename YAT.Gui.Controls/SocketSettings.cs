@@ -126,7 +126,7 @@ namespace YAT.Gui.Controls
 			{
 				_isStartingUp = false;
 
-				// initially set controls and validate its contents where needed
+				// Initially set controls and validate its contents where needed
 				SetControls();
 			}
 		}

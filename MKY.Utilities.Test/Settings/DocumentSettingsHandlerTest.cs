@@ -278,12 +278,13 @@ namespace MKY.Utilities.Test.Settings
 
 		private static string MakeTempPath()
 		{
-			return (System.Windows.Forms.Application.StartupPath);
+			//return (Path.GetTempPath() + Path.DirectorySeparatorChar + "MKY");
+			return ("D:");
 		}
 
 		private static string MakeTempFileName(string name)
 		{
-			return ("YAT-Test-" + name + ".xml");
+			return ("MKY-Test-" + name + ".xml");
 		}
 
 		private static string MakeTempFilePath(string name)

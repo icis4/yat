@@ -39,25 +39,29 @@ namespace YAT.Model.Test
 		{
 			public readonly Model.Types.Command Command;
 			public readonly int ExpectedLineCount;
-			public readonly int[] ExpectedLineLenghts;
+			public readonly int[] ExpectedElementCounts;
+			public readonly int[] ExpectedDataCounts;
 
 			public TestSet(Model.Types.Command command)
 			{
 				Command = command;
 				ExpectedLineCount = command.CommandLines.Length;
 
-				ExpectedLineLenghts = new int[ExpectedLineCount];
+				ExpectedElementCounts = new int[ExpectedLineCount];
+				ExpectedDataCounts = new int[ExpectedLineCount];
 				for (int i = 0; i < ExpectedLineCount; i++)
 				{
-					ExpectedLineLenghts[i] = command.CommandLines[i].Length + 1; // EOL results in one more element
+					ExpectedElementCounts[i] = 2; // 1 data element + 1 EOL element
+					ExpectedDataCounts[i]    = command.CommandLines[i].Length;
 				}
 			}
 
-			public TestSet(Model.Types.Command command, int expectedLineCount, int[] expectedLineLenghts)
+			public TestSet(Model.Types.Command command, int expectedLineCount, int[] expectedElementCounts, int[] expectedDataCounts)
 			{
 				Command = command;
 				ExpectedLineCount = expectedLineCount;
-				ExpectedLineLenghts = expectedLineLenghts;
+				ExpectedElementCounts = expectedElementCounts;
+				ExpectedDataCounts = expectedDataCounts;
 			}
 		}
 
@@ -81,7 +85,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetTextTCPSettings()
 		{
-			// create settings
+			// Create settings
 			TerminalSettingsRoot settings = new TerminalSettingsRoot();
 			settings.TerminalType = Domain.TerminalType.Text;
 			settings.Terminal.IO.IOType = Domain.IOType.TcpAutoSocket;
@@ -104,7 +108,7 @@ namespace YAT.Model.Test
 		internal static void WaitForConnection(Model.Terminal terminalA, Model.Terminal terminalB)
 		{
 			int timeout = 0;
-			do                         // initially wait to allow async send,
+			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while
 				Thread.Sleep(_Interval);
 				timeout += _Interval;
@@ -118,7 +122,7 @@ namespace YAT.Model.Test
 		internal static void WaitForTransmission(Model.Terminal terminalA, Model.Terminal terminalB)
 		{
 			int timeout = 0;
-			do                         // initially wait to allow async send,
+			do                         // Initially wait to allow async send,
 			{                          //   therefore, use do-while
 				Thread.Sleep(_Interval);
 				timeout += _Interval;
@@ -128,7 +132,7 @@ namespace YAT.Model.Test
 			}
 			while (terminalB.RxByteCount != terminalA.TxByteCount);
 
-			// wait to allow EOL to be sent (EOL is sent a bit later than line contents)
+			// Wait to allow EOL to be sent (EOL is sent a bit later than line contents)
 			Thread.Sleep(_WaitEOL);
 		}
 
@@ -157,10 +161,13 @@ namespace YAT.Model.Test
 					Domain.DisplayLine lineB = linesB[i];
 
 					int commandIndex = i % testSet.ExpectedLineCount;
-					int expectedLineLength = testSet.ExpectedLineLenghts[commandIndex];
+					int expectedElementCount = testSet.ExpectedElementCounts[commandIndex];
+					int expectedDataCount = testSet.ExpectedDataCounts[commandIndex];
 
 					if ((lineB.Count == lineA.Count) &&
-						(lineB.Count == expectedLineLength))
+						(lineB.Count == expectedElementCount) &&
+						(lineB.DataCount == lineA.DataCount) &&
+						(lineB.DataCount == expectedDataCount))
 					{
 						for (int j = 0; j < lineA.Count; j++)
 							Assert.AreEqual(lineA[j].Text, lineB[j].Text);
@@ -179,9 +186,12 @@ namespace YAT.Model.Test
 						Assert.Fail
 							(
 							"Line length mismatch: " +
-							"Expected = " + expectedLineLength + " elements, " +
+							"Expected = " + expectedElementCount + " elements, " +
 							"A = " + lineA.Count + @" elements, " +
-							"B = " + lineB.Count + @" elements. See ""Console.Out"" for details."
+							"B = " + lineB.Count + @" elements, " +
+							"Expected = " + expectedDataCount + " data, " +
+							"A = " + lineA.DataCount + @" data, " +
+							"B = " + lineB.DataCount + @" data. See ""Console.Out"" for details."
 							);
 					}
 				}

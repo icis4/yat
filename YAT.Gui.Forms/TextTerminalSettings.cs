@@ -82,7 +82,7 @@ namespace YAT.Gui.Forms
 			{
 				_isStartingUp = false;
 
-				// initially set controls and validate its contents where needed
+				// Initially set controls and validate its contents where needed
 				SetControls();
 			}
 		}
