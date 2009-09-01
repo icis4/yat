@@ -833,7 +833,8 @@ namespace YAT.Model.Test
 
 		private static string MakeTempPath()
 		{
-			return (System.Windows.Forms.Application.StartupPath);
+			//return (Path.GetTempPath() + Path.DirectorySeparatorChar + "YAT");
+			return ("D:");
 		}
 
 		private static string MakeTempFileName(string name, string extension)
@@ -860,7 +861,7 @@ namespace YAT.Model.Test
 			ApplicationSettings.LocalUser.AutoWorkspace.FilePath = "";
 
 			main = new Main();
-			main.Start();              // creates empty workspace
+			main.Start();              // Creates empty workspace
 			workspace = main.Workspace;
 			workspace.CreateNewTerminal(Utilities.GetTextTCPSettingsHandler());
 			terminal = workspace.ActiveTerminal;
@@ -910,7 +911,7 @@ namespace YAT.Model.Test
 		private void VerifyFiles(Workspace workspace, bool workspaceFileExpected, bool workspaceFileAutoExpected,
 			                     Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
 		{
-			// verify workspace file(s)
+			// Verify workspace file(s)
 			if (workspaceFileExpected)
 			{
 				Assert.IsTrue(File.Exists(workspace.SettingsFilePath), "Workspace file doesn't exist");
@@ -925,7 +926,7 @@ namespace YAT.Model.Test
 				Assert.IsFalse(File.Exists(workspace.SettingsFilePath), "Workspace file exists unexpectantly");
 			}
 
-			// verify terminal file
+			// Verify terminal file
 			for (int i = 0; i < terminal.Length; i++)
 			{
 				if (terminalFileExpected[i])
@@ -943,13 +944,13 @@ namespace YAT.Model.Test
 				}
 			}
 
-			// verify application settings
+			// Verify application settings
 			if (workspaceFileExpected)
 				StringAssert.AreEqualIgnoringCase(workspace.SettingsFilePath, ApplicationSettings.LocalUser.AutoWorkspace.FilePath, "Workspace file path not set");
 			else
 				StringAssert.AreEqualIgnoringCase("", ApplicationSettings.LocalUser.AutoWorkspace.FilePath, "Workspace file path not reset");
 
-			// verify recent settings
+			// Verify recent settings
 			if (workspaceFileExpected && (!workspaceFileAutoExpected))
 				Assert.IsTrue(ApplicationSettings.LocalUser.RecentFiles.FilePaths.Contains(workspace.SettingsFilePath), "Workspace file path doesn't exist in recents");
 			else

@@ -127,7 +127,7 @@ namespace YAT.Domain
 				_dataCount++;
 
 			// Check whether a line break is needed
-			if (item.IsEol)
+			if (item is Domain.DisplayElement.LineBreak)
 			{
 				// Excess must be manually dequeued
 				if (Count >= Capacity)

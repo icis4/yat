@@ -216,21 +216,21 @@ namespace YAT.Controller
 
 		public MainResult Run(bool runWithView)
 		{
-			// show command line help in case of error
+			// Show command line help in case of error
 			if (_commandLineError)
 			{
 				WriteHelp();
 				return (MainResult.CommandLineArgsError);
 			}
 
-			// show command line help if requested
+			// Show command line help if requested
 			if (_commandLineHelpIsRequested)
 			{
 				WriteHelp();
 				return (MainResult.OK);
 			}
 
-			// create model and view and run application
+			// Create model and view and run application
 			MainResult mainResult;
 			using (Model.Main model = new Model.Main(_requestedFilePath))
 			{
@@ -238,13 +238,13 @@ namespace YAT.Controller
 				{
 					using (Gui.Forms.Main view = new Gui.Forms.Main(model))
 					{
-						// start the Win32 message loop on the current thread and the main form
+						// Start the Win32 message loop on the current thread and the main form
 						// \attention This call does not return until the application exits
 						Application.Run(view);
 					}
 					mainResult = MainResult.OK;
 				}
-				else // non-view application for automated test usage
+				else // Non-view application for automated test usage
 				{
 					if (model.Start())
 					{
@@ -259,7 +259,7 @@ namespace YAT.Controller
 					}
 				}
 			}
-			// dispose model and view to ensure immediate release of resources
+			// Dispose of model and view to ensure immediate release of resources
 
 			return (mainResult);
 		}

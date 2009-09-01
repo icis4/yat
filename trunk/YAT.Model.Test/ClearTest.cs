@@ -40,38 +40,38 @@ namespace YAT.Model.Test
 		[Test]
 		public void TestClearCompleteLine()
 		{
-			// create terminals from settings and check whether B receives from A
+			// Create terminals from settings and check whether B receives from A
 			using (Terminal terminalA = new Terminal(Utilities.GetTextTCPSettings()))
 			{
 				using (Terminal terminalB = new Terminal(Utilities.GetTextTCPSettings()))
 				{
 					Utilities.TestSet testSet;
 
-					// start and open terminals
+					// Start and open terminals
 					terminalA.Start();
 					terminalB.Start();
 					Utilities.WaitForConnection(terminalA, terminalB);
 
-					// create test set to verify transmission
-					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 2 }); // EOL results in one more element
+					// Create test set to verify transmission
+					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 2 }, new int[] { 1 }); // EOL results in one more element
 
-					// send test command
+					// Send test command
 					terminalA.SendCommand(testSet.Command);
 					Utilities.WaitForTransmission(terminalA, terminalB);
 
-					// verify transmission
+					// Verify transmission
 					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 										  terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
 										  testSet);
 
-					// create test set to verify clear
-					testSet = new Utilities.TestSet(new Types.Command(@""), 0, new int[] { 0 }); // Empty terminals expected
+					// Create test set to verify clear
+					testSet = new Utilities.TestSet(new Types.Command(@""), 0, new int[] { 0 }, new int[] { 0 }); // Empty terminals expected
 
-					// clear data
+					// Clear data
 					terminalA.ClearRepositories();
 					terminalB.ClearRepositories();
 
-					// verify clear
+					// Verify clear
 					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 										  terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
 										  testSet);
@@ -89,7 +89,7 @@ namespace YAT.Model.Test
 		[Test]
 		public void TestClearIncompleteLine()
 		{
-			// create terminals from settings and check whether B receives from A
+			// Create terminals from settings and check whether B receives from A
 			using (Terminal terminalA = new Terminal(Utilities.GetTextTCPSettings()))
 			{
 				using (Terminal terminalB = new Terminal(Utilities.GetTextTCPSettings()))
@@ -97,40 +97,40 @@ namespace YAT.Model.Test
 					Utilities.TestSet testSet;
 					List<Domain.DisplayLine> lines;
 
-					// start and open terminals
+					// Start and open terminals
 					terminalA.Start();
 					terminalB.Start();
 					Utilities.WaitForConnection(terminalA, terminalB);
 
-					// create test set to verify transmission
-					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 2 }); // EOL results in one more element
+					// Create test set to verify transmission
+					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 2 }, new int[] { 1 }); // EOL results in one more element
 
-					// send test command
+					// Send test command
 					terminalA.SendCommand(testSet.Command);
 					Utilities.WaitForTransmission(terminalA, terminalB);
 
-					// verify transmission
+					// Verify transmission
 					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 										  terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
 										  testSet);
 
-					// send incomplete line command
+					// Send incomplete line command
 					terminalA.SendCommand(new Types.Command(@"B\!(NoEOL)"));
 					Utilities.WaitForTransmission(terminalA, terminalB);
 
-					// verify incomplete line
+					// Verify incomplete line
 					lines = terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx);
 					if (lines.Count != 2)
 						Assert.Fail("Incomplete line not received");
 
-					// create test set to verify clear
-					testSet = new Utilities.TestSet(new Types.Command(@""), 0, new int[] { 0 }); // Empty terminals expected
+					// Create test set to verify clear
+					testSet = new Utilities.TestSet(new Types.Command(@""), 0, new int[] { 0 }, new int[] { 0 }); // Empty terminals expected
 
 					// clear data
 					terminalA.ClearRepositories();
 					terminalB.ClearRepositories();
 
-					// verify clear
+					// Verify clear
 					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
 										  terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
 										  testSet);

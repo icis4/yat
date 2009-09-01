@@ -150,8 +150,24 @@ namespace YAT.Model
 			{
 				if (disposing)
 				{
-					foreach (Terminal t in _terminals)
-						t.Dispose();
+					if (_terminals != null)
+					{
+						// First, detach event handlers to ensure that no more events are received
+						foreach (Terminal t in _terminals)
+							DetachTerminalEventHandlers(t);
+					}
+
+					DetachSettingsEventHandlers();
+
+					if (_terminals != null)
+					{
+						// Then, dispose of objects
+						foreach (Terminal t in _terminals)
+							t.Dispose();
+
+						_terminals.Clear();
+						_terminals = null;
+					}
 				}
 				_isDisposed = true;
 			}
@@ -279,12 +295,14 @@ namespace YAT.Model
 
 		private void AttachSettingsEventHandlers()
 		{
-			_settingsRoot.Changed += new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
+			if (_settingsRoot != null)
+				_settingsRoot.Changed += new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
 		}
 
 		private void DetachSettingsEventHandlers()
 		{
-			_settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
+			if (_settingsRoot != null)
+				_settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
 		}
 
 		#endregion
@@ -395,7 +413,7 @@ namespace YAT.Model
 
 			bool success = false;
 
-			// save workspace if file path is valid
+			// Save workspace if file path is valid
 			if (_settingsHandler.SettingsFilePathIsValid)
 			{
 				if (_settingsHandler.Settings.AutoSaved)
@@ -408,13 +426,13 @@ namespace YAT.Model
 					success = SaveToFile(false);
 				}
 			}
-			else // auto save creates default file path
+			else // Auto save creates default file path
 			{
 				if (autoSaveIsAllowed)
 					success = SaveToFile(true);
 			}
 
-			// if not successful yet, request new file path
+			// If not successful yet, request new file path
 			if (!success)
 				success = (OnSaveAsFileDialogRequest() == DialogResult.OK);
 
@@ -570,7 +588,10 @@ namespace YAT.Model
 		public bool Close(bool isMainClose)
 		{
 			bool tryAutoSave = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
-			bool success = false;
+
+			// Don't try to auto save if there is no existing file (w1)
+			if (!isMainClose && !_settingsHandler.SettingsFileExists)
+				tryAutoSave = false;
 
 			OnFixedStatusTextRequest("Closing workspace...");
 
@@ -580,6 +601,8 @@ namespace YAT.Model
 				OnTimedStatusTextRequest("Workspace not closed");
 				return (false);
 			}
+
+			bool success = false;
 
 			// Try to auto save if desired
 			if (tryAutoSave)
@@ -650,14 +673,14 @@ namespace YAT.Model
 		/// Method to check wheter auto save is really desired. Needed because of the MDI issue
 		/// on close described in YAT.Gui.Forms.Main/Terminal.
 		/// </summary>
-		public bool TryAutoSaveIsDesired(bool tryAutoSave, Terminal terminal)
+		public bool TryTerminalAutoSaveIsDesired(bool tryAutoSave, Terminal terminal)
 		{
 			// Do not auto save if terminal file already exists but workspace doesn't.
 			// Applies to terminal use case w4a/b.
 			if (tryAutoSave && !SettingsFileExists && terminal.SettingsFileExists)
-				return (true);
-			else
 				return (false);
+
+			return (tryAutoSave);
 		}
 
 		#endregion
@@ -1010,7 +1033,7 @@ namespace YAT.Model
 			List<Terminal> clone = new List<Terminal>(_terminals);
 			foreach (Terminal t in clone)
 			{
-				if (!t.Close(isWorkspaceClose, TryAutoSaveIsDesired(tryAutoSave, t)))
+				if (!t.Close(isWorkspaceClose, TryTerminalAutoSaveIsDesired(tryAutoSave, t)))
 					success = false;
 			}
 			return (success);

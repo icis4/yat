@@ -104,7 +104,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
 				);
 
-			// create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -122,7 +122,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
 				);
 
-			// create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -139,7 +139,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
 				);
 
-			// create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -164,7 +164,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
 				);
 
-			// create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -182,7 +182,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
 				);
 
-			// create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -199,7 +199,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
 				);
 
-			// create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -222,7 +222,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_13.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
 				);
 
-			// create workspace from settings and check whether settings are correctly set
+			// Create workspace from settings and check whether settings are correctly set
 			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
 			{
 				workspace.OpenTerminals();
@@ -247,7 +247,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
 				);
 
-			// create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -265,7 +265,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
 				);
 
-			// create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -282,7 +282,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
 				);
 
-			// create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -305,7 +305,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_17.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
 				);
 
-			// create workspace from settings and check whether settings are correctly set
+			// Create workspace from settings and check whether settings are correctly set
 			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
 			{
 				workspace.OpenTerminals();
@@ -330,7 +330,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
 				);
 
-			// create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -348,7 +348,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
 				);
 
-			// create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -365,7 +365,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
 				);
 
-			// create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -388,7 +388,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_18.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
 				);
 
-			// create workspace from settings and check whether settings are correctly set
+			// Create workspace from settings and check whether settings are correctly set
 			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
 			{
 				workspace.OpenTerminals();
@@ -413,7 +413,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_19.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
 				);
 
-			// create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -431,7 +431,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_19.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
 				);
 
-			// create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -448,7 +448,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_19.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
 				);
 
-			// create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -471,7 +471,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_19.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
 				);
 
-			// create workspace from settings and check whether settings are correctly set
+			// Create workspace from settings and check whether settings are correctly set
 			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
 			{
 				workspace.OpenTerminals();
@@ -496,7 +496,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_20.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
 				);
 
-			// create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -514,7 +514,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_20.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
 				);
 
-			// create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -531,7 +531,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_20.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
 				);
 
-			// create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -554,7 +554,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_20.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
 				);
 
-			// create workspace from settings and check whether settings are correctly set
+			// Create workspace from settings and check whether settings are correctly set
 			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
 			{
 				workspace.OpenTerminals();

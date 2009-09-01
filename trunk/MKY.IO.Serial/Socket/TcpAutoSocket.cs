@@ -58,8 +58,12 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		private const int _MaxStartCycles = 3;
-		private const int _MinRestartWaitTime = 50;
-		private const int _MaxRestartWaitTime = 300;
+
+		private const int _MinConnectDelay = 50;
+		private const int _MaxConnectDelay = 300;
+
+		private const int _MinListenDelay = 50;
+		private const int _MaxListenDelay = 300;
 
 		#endregion
 
@@ -68,6 +72,10 @@ namespace MKY.IO.Serial
 		// Fields
 		//==========================================================================================
 
+		private static int _instanceCounter = 0;
+		private static Random _random = new Random();
+
+		private int _instanceId = 0;
 		private bool _isDisposed;
 
 		private System.Net.IPAddress _remoteIPAddress;
@@ -80,7 +88,6 @@ namespace MKY.IO.Serial
 
 		private int _startCycleCounter = 0;
 		private object _startCycleCounterSyncObj = new object();
-		private Random _waitRandom = new Random();
 
 		private TcpClient _client;
 		private TcpServer _server;
@@ -115,6 +122,8 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public TcpAutoSocket(System.Net.IPAddress remoteIPAddress, int remotePort, System.Net.IPAddress localIPAddress, int localPort)
 		{
+			_instanceId = _instanceCounter++;
+
 			_remoteIPAddress = remoteIPAddress;
 			_remotePort = remotePort;
 			_localIPAddress = localIPAddress;
@@ -143,6 +152,9 @@ namespace MKY.IO.Serial
 					DisposeSockets();
 				}
 				_isDisposed = true;
+#if (DEBUG)
+				System.Diagnostics.Debug.WriteLine(GetType() + " (" + _instanceId + ")(" + ToShortEndPointString() + "): Disposed");
+#endif
 			}
 		}
 
@@ -324,7 +336,7 @@ namespace MKY.IO.Serial
 				default:
 				{
 #if (DEBUG)
-					System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortEndPointString() + "): Start() requested but state is " + _state);
+					System.Diagnostics.Debug.WriteLine(GetType() + " (" + _instanceId + ")(" + ToShortEndPointString() + "): Start() requested but state is " + _state);
 #endif
 					break;
 				}
@@ -380,7 +392,7 @@ namespace MKY.IO.Serial
 			lock (_stateSyncObj)
 				_state = state;
 #if (DEBUG)
-			System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortEndPointString() + "): State has changed from " + oldState + " to " + _state);
+			System.Diagnostics.Debug.WriteLine(GetType() + " (" + _instanceId + ")(" + ToShortEndPointString() + "): State has changed from " + oldState + " to " + _state);
 #endif
 			OnIOChanged(new EventArgs());
 		}
@@ -405,16 +417,8 @@ namespace MKY.IO.Serial
 
 		private void DisposeSockets()
 		{
-			if (_client != null)
-			{
-				_client.Dispose();
-				_client = null;
-			}
-			if (_server != null)
-			{
-				_server.Dispose();
-				_server = null;
-			}
+			DestroyClient();
+			DestroyServer();
 		}
 
 		#endregion
@@ -427,51 +431,47 @@ namespace MKY.IO.Serial
 		private void StartAutoSocket()
 		{
 			lock (_startCycleCounterSyncObj)
-				_startCycleCounter = 0;
+				_startCycleCounter = 1;
 
 			SetStateAndNotify(SocketState.Starting);
-
-			// Immediately start connecting
 			StartConnecting();
 		}
 
 		// Try to start as client
 		private void StartConnecting()
 		{
+			int delay = _random.Next(_MinConnectDelay, _MaxConnectDelay);
+#if (FALSE)
+			System.Diagnostics.Debug.WriteLine(GetType() + " (" + _instanceId + ")(" + ToShortEndPointString() + "): Delaying connecting by " + delay);
+#endif
+			Thread.Sleep(delay);
+
 			SetStateAndNotify(SocketState.Connecting);
-
-			_client = new TcpClient(_remoteIPAddress, _remotePort);
-			_client.IOChanged += new EventHandler(_client_IOChanged);
-			_client.IOError += new EventHandler<IOErrorEventArgs>(_client_IOError);
-			_client.DataReceived += new EventHandler(_client_DataReceived);
-			_client.DataSent += new EventHandler(_client_DataSent);
-
+			CreateClient(_remoteIPAddress, _remotePort);
 			try
 			{
 				_client.Start(); // Client will be started asynchronously
 			}
 			catch
 			{
-				if (_client != null)
-					_client.Dispose();
+				_client.Dispose();
 				_client = null;
 
-				SetStateAndNotify(SocketState.Error);
-				OnIOError(new IOErrorEventArgs("AutoSocket client could not be created."));
+				StartListening();
 			}
 		}
 
 		// try to start as server
 		private void StartListening()
 		{
+			int delay = _random.Next(_MinListenDelay, _MaxListenDelay);
+#if (FALSE)
+			System.Diagnostics.Debug.WriteLine(GetType() + " (" + _instanceId + ")(" + ToShortEndPointString() + "): Delaying listening by " + delay);
+#endif
+			Thread.Sleep(delay);
+
 			SetStateAndNotify(SocketState.StartingListening);
-
-			_server = new TcpServer(_localIPAddress, _localPort);
-			_server.IOChanged += new EventHandler(_server_IOChanged);
-			_server.IOError += new EventHandler<IOErrorEventArgs>(_server_IOError);
-			_server.DataReceived += new EventHandler(_server_DataReceived);
-			_server.DataSent += new EventHandler(_server_DataSent);
-
+			CreateServer(_localIPAddress, _localPort);
 			try
 			{
 				_server.Start(); // Server will be started asynchronously
@@ -481,8 +481,33 @@ namespace MKY.IO.Serial
 				_server.Dispose();
 				_server = null;
 
-				SetStateAndNotify(SocketState.Error);
-				OnIOError(new IOErrorEventArgs("AutoSocket server could not be created."));
+				RequestTryAgain();
+			}
+		}
+
+		private void RequestTryAgain()
+		{
+			bool tryAgain = false;
+			lock (_startCycleCounterSyncObj)
+			{
+				_startCycleCounter++;
+				if (_startCycleCounter <= _MaxStartCycles)
+					tryAgain = true;
+			}
+			if (tryAgain)
+			{
+#if (DEBUG)
+				System.Diagnostics.Debug.WriteLine(GetType() + " (" + _instanceId + ")(" + ToShortEndPointString() + "): Trying connect cycle " + _startCycleCounter);
+#endif
+				StartConnecting();
+			}
+			else
+			{
+				AutoSocketError
+					(
+					"AutoSocket could neither be started as client nor server," + Environment.NewLine +
+					"TCP/IP address/port is not available."
+					);
 			}
 		}
 
@@ -490,6 +515,9 @@ namespace MKY.IO.Serial
 		{
 			SetStateAndNotify(SocketState.Restarting);
 
+			// \remind
+			// The ALAZ sockets by default stop synchronously. However, due to some other issues
+			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
 			StopSockets();
 			// \remind
 			//DisposeSockets();
@@ -501,6 +529,9 @@ namespace MKY.IO.Serial
 		{
 			SetStateAndNotify(SocketState.Stopping);
 
+			// \remind
+			// The ALAZ sockets by default stop synchronously. However, due to some other issues
+			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
 			StopSockets();
 			// \remind
 			//DisposeSockets();
@@ -518,10 +549,46 @@ namespace MKY.IO.Serial
 
 		#endregion
 
-		#region Client Events
+		#region Client
 		//==========================================================================================
-		// Client Events
+		// Client
 		//==========================================================================================
+
+		#region Client > Lifetime
+		//------------------------------------------------------------------------------------------
+		// Client > Lifetime
+		//------------------------------------------------------------------------------------------
+
+		private void CreateClient(System.Net.IPAddress remoteIPAddress, int remotePort)
+		{
+			_client = new TcpClient(_remoteIPAddress, _remotePort);
+
+			_client.IOChanged    += new EventHandler(_client_IOChanged);
+			_client.IOError      += new EventHandler<IOErrorEventArgs>(_client_IOError);
+			_client.DataReceived += new EventHandler(_client_DataReceived);
+			_client.DataSent     += new EventHandler(_client_DataSent);
+		}
+
+		private void DestroyClient()
+		{
+			if (_client != null)
+			{
+				_client.IOChanged    -= new EventHandler(_client_IOChanged);
+				_client.IOError      -= new EventHandler<IOErrorEventArgs>(_client_IOError);
+				_client.DataReceived -= new EventHandler(_client_DataReceived);
+				_client.DataSent     -= new EventHandler(_client_DataSent);
+
+				_client.Dispose();
+				_client = null;
+			}
+		}
+
+		#endregion
+
+		#region Client > Events
+		//------------------------------------------------------------------------------------------
+		// Client > Events
+		//------------------------------------------------------------------------------------------
 
 		private void _client_IOChanged(object sender, EventArgs e)
 		{
@@ -585,10 +652,48 @@ namespace MKY.IO.Serial
 
 		#endregion
 
-		#region Server Events
+		#endregion
+
+		#region Server
 		//==========================================================================================
-		// Server Events
+		// Server
 		//==========================================================================================
+
+		#region Server > Events
+		//------------------------------------------------------------------------------------------
+		// Server > Events
+		//------------------------------------------------------------------------------------------
+
+		private void CreateServer(System.Net.IPAddress localIPAddress, int localPort)
+		{
+			_server = new TcpServer(_localIPAddress, _localPort);
+
+			_server.IOChanged    += new EventHandler(_server_IOChanged);
+			_server.IOError      += new EventHandler<IOErrorEventArgs>(_server_IOError);
+			_server.DataReceived += new EventHandler(_server_DataReceived);
+			_server.DataSent     += new EventHandler(_server_DataSent);
+		}
+
+		private void DestroyServer()
+		{
+			if (_server != null)
+			{
+				_server.IOChanged    -= new EventHandler(_server_IOChanged);
+				_server.IOError      -= new EventHandler<IOErrorEventArgs>(_server_IOError);
+				_server.DataReceived -= new EventHandler(_server_DataReceived);
+				_server.DataSent     -= new EventHandler(_server_DataSent);
+
+				_server.Dispose();
+				_server = null;
+			}
+		}
+
+		#endregion
+
+		#region Server > Events
+		//------------------------------------------------------------------------------------------
+		// Server > Events
+		//------------------------------------------------------------------------------------------
 
 		private void _server_IOChanged(object sender, EventArgs e)
 		{
@@ -621,26 +726,7 @@ namespace MKY.IO.Serial
 			{
 				case SocketState.StartingListening:   // In case of error during startup,
 				{                                     //   increment start cycles and
-					bool tryAgain = false;            //   continue depending on count
-					lock (_startCycleCounterSyncObj)
-					{
-						_startCycleCounter++;
-						if (_startCycleCounter < (_MaxStartCycles - 1))
-							tryAgain = true;
-					}
-					if (tryAgain)
-					{
-						Thread.Sleep(_waitRandom.Next(_MinRestartWaitTime, _MaxRestartWaitTime));
-						StartConnecting();
-					}
-					else
-					{
-						AutoSocketError
-							(
-							"AutoSocket could neither be started as client nor server," + Environment.NewLine +
-							"TCP/IP address/port is not available."
-							);
-					}
+					RequestTryAgain();                //   continue depending on count
 					break;
 				}
 				case SocketState.Listening:
@@ -664,6 +750,8 @@ namespace MKY.IO.Serial
 			if (IsServer)
 				OnDataSent(e);
 		}
+
+		#endregion
 
 		#endregion
 

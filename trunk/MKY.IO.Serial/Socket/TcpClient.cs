@@ -51,6 +51,8 @@ namespace MKY.IO.Serial
 		// Fields
 		//==========================================================================================
 
+		private static int _instanceCounter = 0;
+		private int _instanceId = 0;
 		private bool _isDisposed;
 
 		private System.Net.IPAddress _remoteIPAddress;
@@ -98,14 +100,19 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public TcpClient(System.Net.IPAddress remoteIPAddress, int remotePort)
 		{
-			_remoteIPAddress = remoteIPAddress;
-			_remotePort = remotePort;
-			_autoReconnect = new AutoRetry();
+			Initialize(remoteIPAddress, remotePort, new AutoRetry());
 		}
 
 		/// <summary></summary>
 		public TcpClient(System.Net.IPAddress remoteIPAddress, int remotePort, AutoRetry autoReconnect)
 		{
+			Initialize(remoteIPAddress, remotePort, autoReconnect);
+		}
+
+		private void Initialize(System.Net.IPAddress remoteIPAddress, int remotePort, AutoRetry autoReconnect)
+		{
+			_instanceId = _instanceCounter++;
+
 			_remoteIPAddress = remoteIPAddress;
 			_remotePort = remotePort;
 			_autoReconnect = autoReconnect;
@@ -134,6 +141,9 @@ namespace MKY.IO.Serial
 					DisposeSocket();
 				}
 				_isDisposed = true;
+#if (DEBUG)
+				System.Diagnostics.Debug.WriteLine(GetType() + "     (" + _instanceId + ")(               " + ToShortEndPointString() + "): Disposed");
+#endif
 			}
 		}
 
@@ -269,7 +279,7 @@ namespace MKY.IO.Serial
 				StartSocket();
 #if (DEBUG)
 			else
-				System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortEndPointString() + "): Start() requested but state is " + _state);
+				System.Diagnostics.Debug.WriteLine(GetType() + "     (" + _instanceId + ")(               " + ToShortEndPointString() + "): Start() requested but state is " + _state);
 #endif
 		}
 
@@ -331,7 +341,7 @@ namespace MKY.IO.Serial
 			lock (_stateSyncObj)
 				_state = state;
 #if (DEBUG)
-			System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortEndPointString() + "): State has changed from " + oldState + " to " + _state);
+			System.Diagnostics.Debug.WriteLine(GetType() + "     (" + _instanceId + ")(               " + ToShortEndPointString() + "): State has changed from " + oldState + " to " + _state);
 #endif
 			OnIOChanged(new EventArgs());
 		}
@@ -347,7 +357,8 @@ namespace MKY.IO.Serial
 		{
 			if (_socket != null)
 			{
-				_socket.Dispose();
+				_socket.Stop();
+				_socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose()
 				_socket = null;
 				_socketConnection = null;
 			}
@@ -362,6 +373,8 @@ namespace MKY.IO.Serial
 
 		private void StartSocket()
 		{
+			SetStateAndNotify(SocketState.Connecting);
+
 			_socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketClient(System.Net.Sockets.ProtocolType.Tcp,
 																	 ALAZ.SystemEx.NetEx.SocketsEx.CallbackThreadType.ctWorkerThread,
 																	(ALAZ.SystemEx.NetEx.SocketsEx.ISocketService)this,
@@ -370,8 +383,6 @@ namespace MKY.IO.Serial
 																	 Timeout.Infinite, Timeout.Infinite);
 			_socket.AddConnector("YAT TCP Client Connector", new System.Net.IPEndPoint(_remoteIPAddress, _remotePort));
 			_socket.Start(); // The ALAZ socket will be started asynchronously
-
-			SetStateAndNotify(SocketState.Connecting);
 		}
 
 		private void StopSocket()
