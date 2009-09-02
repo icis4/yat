@@ -74,7 +74,7 @@ namespace MKY.IO.Serial
 		public SerialPortSettings(SerialPortSettings rhs)
 			: base(rhs)
 		{
-			PortId                  = new SerialPortId(rhs.PortId.Number);
+			PortId                  = new SerialPortId(rhs.PortId);
 			Communication           = new SerialCommunicationSettings(rhs.Communication);
 			_autoReopen             = rhs._autoReopen;
 			_replaceParityErrors    = rhs._replaceParityErrors;

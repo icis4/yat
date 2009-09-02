@@ -1476,12 +1476,17 @@ namespace YAT.Model
 		/// <summary></summary>
 		public TimeSpan IOConnectTime
 		{
-			get { return (_ioConnectChrono.TimeSpan); }
+			get
+			{
+				AssertNotDisposed();
+				return (_ioConnectChrono.TimeSpan);
+			}
 		}
 
 		/// <summary></summary>
 		public void RestartIOConnectTime()
 		{
+			AssertNotDisposed();
 			_ioConnectChrono.Restart();
 		}
 

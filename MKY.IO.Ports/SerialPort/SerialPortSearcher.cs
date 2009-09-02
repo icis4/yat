@@ -36,37 +36,38 @@ namespace MKY.IO.Ports
 
 		/// <summary>
 		/// Queries WMI (Windows Management Instrumentation) trying to retrieve to description
-		/// that is associated with the serial ports.
+		///   that is associated with the serial ports.
 		/// </summary>
 		/// <remarks>
 		/// Query is never done automatically because it takes quite some time.
 		/// </remarks>
-		public static Dictionary<int, string> GetDescriptionsFromSystem()
+		public static Dictionary<string, string> GetDescriptionsFromSystem()
 		{
-			Dictionary<int, string> descriptions = new Dictionary<int, string>();
+			Dictionary<string, string> descriptions = new Dictionary<string, string>();
 
 			try
 			{
-				// use a tool like "WMI Explorer" to browse through the WMI entries
+				// Use a tool like "WMI Explorer" to browse through the WMI entries
 
 				ManagementObjectSearcher searcher;
 
 				searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PnPEntity");
 				foreach (ManagementObject obj in searcher.Get())
 				{
-					// check all objects with given GUID
-					// results in all LPT and COM ports except modems
+					// Check all objects with given GUID
+					// Results in all LPT and COM ports except modems
 					if (obj["ClassGuid"].ToString() == "{4D36E978-E325-11CE-BFC1-08002BE10318}")
 					{
 						// "Caption" contains something like "Serial On USB Port (COM2)"
-						Match m = SerialPortId.PortNameWithParenthesesRegex.Match(obj["Caption"].ToString());
+						Match m = SerialPortId.StandardPortNameWithParenthesesRegex.Match(obj["Caption"].ToString());
 						if (m.Success)
 						{
 							int portNumber;
 							if (int.TryParse(m.Groups[1].Value, out portNumber))
 							{
-								if (!descriptions.ContainsKey(portNumber))
-									descriptions.Add(portNumber, obj["Description"].ToString());
+								string portName = SerialPortId.StandardPortNumberToString(portNumber);
+								if (!descriptions.ContainsKey(portName))
+									descriptions.Add(portName, obj["Description"].ToString());
 							}
 						}
 					}
@@ -76,14 +77,15 @@ namespace MKY.IO.Ports
 				foreach (ManagementObject obj in searcher.Get())
 				{
 					// "AttachedTo" contains something like "COM1"
-					Match m = SerialPortId.PortNameOnlyRegex.Match(obj["AttachedTo"].ToString());
+					Match m = SerialPortId.StandardPortNameOnlyRegex.Match(obj["AttachedTo"].ToString());
 					if (m.Success)
 					{
 						int portNumber;
 						if (int.TryParse(m.Groups[1].Value, out portNumber))
 						{
-							if (!descriptions.ContainsKey(portNumber))
-								descriptions.Add(portNumber, obj["Description"].ToString());
+							string portName = SerialPortId.StandardPortNumberToString(portNumber);
+							if (!descriptions.ContainsKey(portName))
+								descriptions.Add(portName, obj["Description"].ToString());
 						}
 					}
 				}

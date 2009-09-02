@@ -166,7 +166,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		[Category("Port")]
 		[Description(@"Port name, e.g. ""COM1"".")]
-		[DefaultValue(SerialPortId.FirstPortName)]
+		[DefaultValue(SerialPortId.FirstStandardPortName)]
 		public new string PortName
 		{
 			get
@@ -190,7 +190,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		[Category("Port")]
 		[Description("Port ID.")]
-		[DefaultValue(SerialPortId.FirstPortNumber)]
+		[DefaultValue(SerialPortId.FirstStandardPortNumber)]
 		[TypeConverter(typeof(IO.Ports.SerialPortIdConverter))]
 		public virtual SerialPortId PortId
 		{
@@ -550,7 +550,7 @@ namespace MKY.IO.Ports
 				base.Open();
 			#endif
 
-				// immediately send XOn if software flow control enabled to ensure that
+				// Immediately send XOn if software flow control enabled to ensure that
                 //   device gets put into XOn if it was XOff before
 				if ((Handshake == System.IO.Ports.Handshake.XOnXOff) ||
 					(Handshake == System.IO.Ports.Handshake.RequestToSendXOnXOff))
@@ -562,6 +562,10 @@ namespace MKY.IO.Ports
 				OnOpened(new EventArgs());
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.RtsChanged));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.DtrChanged));
+
+				// Immediately check whether there is already data pending
+				if (base.BytesToRead > 0)
+					OnDataReceived(new SerialDataReceivedEventArgs());
 			}
 		}
 

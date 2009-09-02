@@ -2015,6 +2015,7 @@ namespace YAT.Gui.Forms
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.Terminal_Paint);
 			this.SizeChanged += new System.EventHandler(this.Terminal_SizeChanged);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Terminal_FormClosing);
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Terminal_FormClosed);
 			this.LocationChanged += new System.EventHandler(this.Terminal_LocationChanged);
 			this.contextMenuStrip_Monitor.ResumeLayout(false);
 			this.contextMenuStrip_Radix.ResumeLayout(false);
@@ -2047,7 +2048,6 @@ namespace YAT.Gui.Forms
 			this.panel_Send.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
-
 		}
 
 		#endregion

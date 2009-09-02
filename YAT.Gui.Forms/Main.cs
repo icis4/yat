@@ -174,6 +174,15 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		private void Main_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			DetachWorkspaceEventHandlers();
+			_workspace = null;
+
+			DetachMainEventHandlers();
+			_main = null;
+		}
+
 		#endregion
 
 		#region Controls Event Handlers
@@ -770,26 +779,32 @@ namespace YAT.Gui.Forms
 		
 		private void AttachMainEventHandlers()
 		{
-			_main.WorkspaceOpened += new EventHandler<Model.WorkspaceEventArgs>(_main_WorkspaceOpened);
-			_main.WorkspaceClosed += new EventHandler(_main_WorkspaceClosed);
+			if (_main != null)
+			{
+				_main.WorkspaceOpened += new EventHandler<Model.WorkspaceEventArgs>(_main_WorkspaceOpened);
+				_main.WorkspaceClosed += new EventHandler(_main_WorkspaceClosed);
 
-			_main.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_main_FixedStatusTextRequest);
-			_main.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_main_TimedStatusTextRequest);
-			_main.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(_main_MessageInputRequest);
+				_main.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_main_FixedStatusTextRequest);
+				_main.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_main_TimedStatusTextRequest);
+				_main.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(_main_MessageInputRequest);
 
-			_main.Exited += new EventHandler(_main_Exited);
+				_main.Exited += new EventHandler(_main_Exited);
+			}
 		}
 
 		private void DetachMainEventHandlers()
 		{
-			_main.WorkspaceOpened -= new EventHandler<Model.WorkspaceEventArgs>(_main_WorkspaceOpened);
-			_main.WorkspaceClosed -= new EventHandler(_main_WorkspaceClosed);
+			if (_main != null)
+			{
+				_main.WorkspaceOpened -= new EventHandler<Model.WorkspaceEventArgs>(_main_WorkspaceOpened);
+				_main.WorkspaceClosed -= new EventHandler(_main_WorkspaceClosed);
 
-			_main.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_main_FixedStatusTextRequest);
-			_main.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_main_TimedStatusTextRequest);
-			_main.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(_main_MessageInputRequest);
+				_main.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_main_FixedStatusTextRequest);
+				_main.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_main_TimedStatusTextRequest);
+				_main.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(_main_MessageInputRequest);
 
-			_main.Exited -= new EventHandler(_main_Exited);
+				_main.Exited -= new EventHandler(_main_Exited);
+			}
 		}
 
 		#endregion
@@ -916,30 +931,36 @@ namespace YAT.Gui.Forms
 
 		private void AttachWorkspaceEventHandlers()
 		{
-			_workspace.TerminalAdded   += new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalAdded);
-			_workspace.TerminalRemoved += new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalRemoved);
+			if (_workspace != null)
+			{
+				_workspace.TerminalAdded   += new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalAdded);
+				_workspace.TerminalRemoved += new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalRemoved);
 
-			_workspace.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_workspace_TimedStatusTextRequest);
-			_workspace.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_workspace_FixedStatusTextRequest);
-			_workspace.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(_workspace_MessageInputRequest);
+				_workspace.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_workspace_TimedStatusTextRequest);
+				_workspace.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_workspace_FixedStatusTextRequest);
+				_workspace.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(_workspace_MessageInputRequest);
 
-			_workspace.SaveAsFileDialogRequest += new EventHandler<Model.DialogEventArgs>(_workspace_SaveAsFileDialogRequest);
-			
-			_workspace.Closed += new EventHandler<Model.ClosedEventArgs>(_workspace_Closed);
+				_workspace.SaveAsFileDialogRequest += new EventHandler<Model.DialogEventArgs>(_workspace_SaveAsFileDialogRequest);
+				
+				_workspace.Closed += new EventHandler<Model.ClosedEventArgs>(_workspace_Closed);
+			}
 		}
 
 		private void DetachWorkspaceEventHandlers()
 		{
-			_workspace.TerminalAdded   -= new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalAdded);
-			_workspace.TerminalRemoved -= new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalRemoved);
+			if (_workspace != null)
+			{
+				_workspace.TerminalAdded   -= new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalAdded);
+				_workspace.TerminalRemoved -= new EventHandler<Model.TerminalEventArgs>(_workspace_TerminalRemoved);
 
-			_workspace.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_workspace_TimedStatusTextRequest);
-			_workspace.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_workspace_FixedStatusTextRequest);
-			_workspace.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(_workspace_MessageInputRequest);
+				_workspace.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_workspace_TimedStatusTextRequest);
+				_workspace.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_workspace_FixedStatusTextRequest);
+				_workspace.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(_workspace_MessageInputRequest);
 
-			_workspace.SaveAsFileDialogRequest -= new EventHandler<Model.DialogEventArgs>(_workspace_SaveAsFileDialogRequest);
+				_workspace.SaveAsFileDialogRequest -= new EventHandler<Model.DialogEventArgs>(_workspace_SaveAsFileDialogRequest);
 
-			_workspace.Closed -= new EventHandler<Model.ClosedEventArgs>(_workspace_Closed);
+				_workspace.Closed -= new EventHandler<Model.ClosedEventArgs>(_workspace_Closed);
+			}
 		}
 
 		#endregion
@@ -954,14 +975,14 @@ namespace YAT.Gui.Forms
 			// Create terminal form
 			Terminal mdiChild = new Terminal(e.Terminal);
 
-			// link MDI child this MDI parent
+			// Link MDI child this MDI parent
 			mdiChild.MdiParent = this;
 
 			mdiChild.Changed    += new EventHandler(mdiChild_Changed);
 			mdiChild.Saved      += new EventHandler<Model.SavedEventArgs>(mdiChild_Saved);
 			mdiChild.FormClosed += new FormClosedEventHandler(mdiChild_FormClosed);
 
-			// show form
+			// Show form
 			mdiChild.Show();
 
 			SetChildControls();

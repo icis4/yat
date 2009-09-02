@@ -108,19 +108,19 @@ namespace YAT.Gui.Forms
 
 			InitializeControls();
 
-			// link and attach to terminal model
+			// Link and attach to terminal model
 			_terminal = terminal;
 			AttachTerminalEventHandlers();
 
-			// link and attach to terminal settings
+			// Link and attach to terminal settings
 			_settingsRoot = _terminal.SettingsRoot;
 			AttachSettingsEventHandlers();
 
 			ApplyWindowSettings();
 			LayoutTerminal();
 
-			// force settings changed event to set all controls
-			// for improved performance, manually suspend/resume handler for terminal settings
+			// Force settings changed event to set all controls
+			// For improved performance, manually suspend/resume handler for terminal settings
 			SuspendHandlingTerminalSettings();
 			_settingsRoot.ClearChanged();
 			_settingsRoot.ForceChangeEvent();
@@ -130,9 +130,9 @@ namespace YAT.Gui.Forms
 		#endregion
 
 		#region MDI Parent
-		//******************************************************************************************
+		//==========================================================================================
 		// MDI Parent
-		//******************************************************************************************
+		//==========================================================================================
 
 		#region MDI Parent > Properties
 		//------------------------------------------------------------------------------------------
@@ -141,12 +141,24 @@ namespace YAT.Gui.Forms
 
 		public string UserName
 		{
-			get { return (_terminal.UserName); }
+			get
+			{
+				if (_terminal != null)
+					return (_terminal.UserName);
+				else
+					return ("");
+			}
 		}
 
 		public bool IsStarted
 		{
-			get { return (_terminal.IsStarted); }
+			get
+			{
+				if (_terminal != null)
+					return (_terminal.IsStarted);
+				else
+					return (false);
+			}
 		}
 
 		public Model.Terminal UnderlyingTerminal
@@ -271,6 +283,15 @@ namespace YAT.Gui.Forms
 					e.Cancel = (!_terminal.Close(true, w.TryTerminalAutoSaveIsDesired(tryAutoSave, _terminal)));
 				}
 			}
+		}
+
+		private void Terminal_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			DetachTerminalEventHandlers();
+			_terminal = null;
+
+			DetachSettingsEventHandlers();
+			_settingsRoot = null;
 		}
 
 		#endregion
@@ -2112,12 +2133,14 @@ namespace YAT.Gui.Forms
 
 		private void AttachSettingsEventHandlers()
 		{
-			_settingsRoot.Changed += new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
+			if (_settingsRoot != null)
+				_settingsRoot.Changed += new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
 		}
 
 		private void DetachSettingsEventHandlers()
 		{
-			_settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
+			if (_settingsRoot != null)
+				_settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
 		}
 
 		#endregion
@@ -2313,52 +2336,58 @@ namespace YAT.Gui.Forms
 
 		private void AttachTerminalEventHandlers()
 		{
-			_terminal.IOChanged            += new EventHandler(_terminal_IOChanged);
-			_terminal.IOControlChanged     += new EventHandler(_terminal_IOControlChanged);
-			_terminal.IOConnectTimeChanged += new EventHandler(_terminal_IOConnectTimeChanged);
-			_terminal.IOCountChanged       += new EventHandler(_terminal_IOCountChanged);
-			_terminal.IORequest            += new EventHandler<Domain.IORequestEventArgs>(_terminal_IORequest);
-			_terminal.IOError              += new EventHandler<Domain.IOErrorEventArgs>(_terminal_IOError);
+			if (_terminal != null)
+			{
+				_terminal.IOChanged            += new EventHandler(_terminal_IOChanged);
+				_terminal.IOControlChanged     += new EventHandler(_terminal_IOControlChanged);
+				_terminal.IOConnectTimeChanged += new EventHandler(_terminal_IOConnectTimeChanged);
+				_terminal.IOCountChanged       += new EventHandler(_terminal_IOCountChanged);
+				_terminal.IORequest            += new EventHandler<Domain.IORequestEventArgs>(_terminal_IORequest);
+				_terminal.IOError              += new EventHandler<Domain.IOErrorEventArgs>(_terminal_IOError);
 
-			_terminal.DisplayElementsSent     += new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsSent);
-			_terminal.DisplayElementsReceived += new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsReceived);
+				_terminal.DisplayElementsSent     += new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsSent);
+				_terminal.DisplayElementsReceived += new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsReceived);
 
-			_terminal.RepositoryCleared  += new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryCleared);
-			_terminal.RepositoryReloaded += new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryReloaded);
+				_terminal.RepositoryCleared  += new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryCleared);
+				_terminal.RepositoryReloaded += new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryReloaded);
 
-			_terminal.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_terminal_TimedStatusTextRequest);
-			_terminal.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_terminal_FixedStatusTextRequest);
-			_terminal.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(_terminal_MessageInputRequest);
+				_terminal.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_terminal_TimedStatusTextRequest);
+				_terminal.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_terminal_FixedStatusTextRequest);
+				_terminal.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(_terminal_MessageInputRequest);
 
-			_terminal.SaveAsFileDialogRequest += new EventHandler<Model.DialogEventArgs>(_terminal_SaveAsFileDialogRequest);
+				_terminal.SaveAsFileDialogRequest += new EventHandler<Model.DialogEventArgs>(_terminal_SaveAsFileDialogRequest);
 
-			_terminal.Saved  += new EventHandler<Model.SavedEventArgs>(_terminal_Saved);
-			_terminal.Closed += new EventHandler<Model.ClosedEventArgs>(_terminal_Closed);
+				_terminal.Saved  += new EventHandler<Model.SavedEventArgs>(_terminal_Saved);
+				_terminal.Closed += new EventHandler<Model.ClosedEventArgs>(_terminal_Closed);
+			}
 		}
 
 		private void DetachTerminalEventHandlers()
 		{
-			_terminal.IOChanged            -= new EventHandler(_terminal_IOChanged);
-			_terminal.IOControlChanged     -= new EventHandler(_terminal_IOControlChanged);
-			_terminal.IOConnectTimeChanged -= new EventHandler(_terminal_IOConnectTimeChanged);
-			_terminal.IOCountChanged       -= new EventHandler(_terminal_IOCountChanged);
-			_terminal.IORequest            -= new EventHandler<Domain.IORequestEventArgs>(_terminal_IORequest);
-			_terminal.IOError              -= new EventHandler<Domain.IOErrorEventArgs>(_terminal_IOError);
+			if (_terminal != null)
+			{
+				_terminal.IOChanged            -= new EventHandler(_terminal_IOChanged);
+				_terminal.IOControlChanged     -= new EventHandler(_terminal_IOControlChanged);
+				_terminal.IOConnectTimeChanged -= new EventHandler(_terminal_IOConnectTimeChanged);
+				_terminal.IOCountChanged       -= new EventHandler(_terminal_IOCountChanged);
+				_terminal.IORequest            -= new EventHandler<Domain.IORequestEventArgs>(_terminal_IORequest);
+				_terminal.IOError              -= new EventHandler<Domain.IOErrorEventArgs>(_terminal_IOError);
 
-			_terminal.DisplayElementsSent     -= new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsSent);
-			_terminal.DisplayElementsReceived -= new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsReceived);
+				_terminal.DisplayElementsSent     -= new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsSent);
+				_terminal.DisplayElementsReceived -= new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsReceived);
 
-			_terminal.RepositoryCleared  -= new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryCleared);
-			_terminal.RepositoryReloaded -= new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryReloaded);
+				_terminal.RepositoryCleared  -= new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryCleared);
+				_terminal.RepositoryReloaded -= new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryReloaded);
 
-			_terminal.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_terminal_TimedStatusTextRequest);
-			_terminal.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_terminal_FixedStatusTextRequest);
-			_terminal.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(_terminal_MessageInputRequest);
+				_terminal.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_terminal_TimedStatusTextRequest);
+				_terminal.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_terminal_FixedStatusTextRequest);
+				_terminal.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(_terminal_MessageInputRequest);
 
-			_terminal.SaveAsFileDialogRequest -= new EventHandler<Model.DialogEventArgs>(_terminal_SaveAsFileDialogRequest);
+				_terminal.SaveAsFileDialogRequest -= new EventHandler<Model.DialogEventArgs>(_terminal_SaveAsFileDialogRequest);
 
-			_terminal.Saved  -= new EventHandler<Model.SavedEventArgs>(_terminal_Saved);
-			_terminal.Closed -= new EventHandler<Model.ClosedEventArgs>(_terminal_Closed);
+				_terminal.Saved  -= new EventHandler<Model.SavedEventArgs>(_terminal_Saved);
+				_terminal.Closed -= new EventHandler<Model.ClosedEventArgs>(_terminal_Closed);
+			}
 		}
 
 		#endregion
@@ -2381,10 +2410,15 @@ namespace YAT.Gui.Forms
 
 		private void _terminal_IOConnectTimeChanged(object sender, EventArgs e)
 		{
-			TimeSpan ts = _terminal.IOConnectTime;
-			monitor_Tx.ConnectTime    = ts;
-			monitor_Bidir.ConnectTime = ts;
-			monitor_Rx.ConnectTime    = ts;
+			// \remind MKY 2009-09-02
+			// Check added the get rid of those weird object disposed exceptions on workspace close
+			if (_terminal != null)
+			{
+				TimeSpan ts = _terminal.IOConnectTime;
+				monitor_Tx.ConnectTime    = ts;
+				monitor_Bidir.ConnectTime = ts;
+				monitor_Rx.ConnectTime    = ts;
+			}
 		}
 
 		private void _terminal_IOCountChanged(object sender, EventArgs e)
@@ -2518,7 +2552,7 @@ namespace YAT.Gui.Forms
 
 		private void _terminal_Closed(object sender, Model.ClosedEventArgs e)
 		{
-			// prevent multiple calls to Close()
+			// Prevent multiple calls to Close()
 			if (!_isClosingFromForm)
 			{
 				_isClosingFromModel = true;

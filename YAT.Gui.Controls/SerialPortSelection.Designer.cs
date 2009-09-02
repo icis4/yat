@@ -52,13 +52,12 @@ namespace YAT.Gui.Controls
 			// 
 			this.comboBox_Port.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.comboBox_Port.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_Port.ItemHeight = 13;
 			this.comboBox_Port.Location = new System.Drawing.Point(6, 22);
 			this.comboBox_Port.Name = "comboBox_Port";
 			this.comboBox_Port.Size = new System.Drawing.Size(251, 21);
 			this.comboBox_Port.TabIndex = 1;
-			this.comboBox_Port.SelectedIndexChanged += new System.EventHandler(this.comboBox_Port_SelectedIndexChanged);
+			this.comboBox_Port.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Port_Validating);
 			// 
 			// label_Port
 			// 
