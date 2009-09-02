@@ -40,11 +40,10 @@ You can also download .NET under "http://www.microsoft.com/net/"
 YAT 2.0
 =======
 
-YAT 2.0 Beta 3 Candidate 1 Version 1.99.2x :: 2009-08-xx
+YAT 2.0 Beta 3 Candidate 1 Version 1.99.22 :: 2009-09-02
 --------------------------------------------------------
 
 New:
-- Support for serial ports which are named other than COM (feature request #2848228)
 - Select all/none items in monitor (feature request #2455810)
 - Optionally hide radix, e.g. "80" instead of "80h" (feature request #2085990)
 - Tabs are treated as tabs and not converted to <TAB> by default anymore (feature request #2813232)
@@ -67,6 +66,7 @@ Fixed bugs:
 - Command validation fixed (bug #1983796) and improved
 - Multi-line command issues fixed (bugs #2213644, #2816862 and #2831453)
 - Clearing predefined command description really clears it (bug #1945488)
+- On open, serial ports immediately check whether there is already data pending (bug #2848229)
 - TCP/IP remote IP address selection issue fixed (bug #2690191)
 - TCP/IP disconnect issue fixed (bug #2684769)
 - TCP/IP state issue fixed (bug #2694592)
@@ -74,6 +74,7 @@ Fixed bugs:
 - Thread synchronization issue when closing while receiving fixed (bug #1931923)
 - Clearing monitors also clears incomplete lines (bug #1942335)
 - ShowEOL = false doesn't strip chars anymore (bug #1931582)
+- Log into .dat can now properly be started (bug #2455807)
 - Font can be changed in format settings dialog (bug #1937065)
 - Shortcuts are immediately active, no need to first open menu anymore (bug #1944023)
 - Menu > Send > File now gets properly enabled (bug #1995796)
@@ -84,6 +85,7 @@ Fixed bugs:
 
 Limitations and known issues:
 - Auto-reopen not yet implementable due to .NET deadlock issue in SerialPort (feature request #1960299)
+- Support for serial ports which are named other than COM isn't supported by .NET (feature request #2848228)
 - UTF-16/32 testing pending (bug #1931537)
 - More advanced text line send and receive options not yet implemented (feature requests #1808508 and #1808509)
 - Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)

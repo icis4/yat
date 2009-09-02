@@ -104,7 +104,7 @@ namespace YAT.Gui.Controls
 
 		[Category("Serial Port")]
 		[Description("Serial port ID.")]
-		[DefaultValue(SerialPortId.FirstPortNumber)]
+		[DefaultValue(SerialPortId.FirstStandardPortNumber)]
 		public SerialPortId PortId
 		{
 			get { return (_portId); }
@@ -145,10 +145,39 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		private void comboBox_Port_SelectedIndexChanged(object sender, EventArgs e)
+		private void comboBox_Port_Validating(object sender, CancelEventArgs e)
 		{
 			if (!_isSettingControls)
-				PortId = (SerialPortId)comboBox_Port.SelectedItem;
+			{
+				// \attention
+				// Do not assume that the selected item maches the actual text in the box
+				//   because SelectedItem is also set if text has changed in the meantime.
+
+				SerialPortId id = comboBox_Port.SelectedItem as SerialPortId;
+				if ((id != null) && (id.ToString() == comboBox_Port.Text))
+				{
+					PortId = id;
+				}
+				else
+				{
+					if (SerialPortId.TryParse(comboBox_Port.Text, out id))
+					{
+						PortId = id;
+					}
+					else
+					{
+						MessageBox.Show
+							(
+							this,
+							"Serial port name is invalid",
+							"Invalid Input",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Error
+							);
+						e.Cancel = true;
+					}
+				}
+			}
 		}
 
 		private void button_RefreshPorts_Click(object sender, EventArgs e)

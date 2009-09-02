@@ -520,7 +520,7 @@ namespace YAT.Log.Settings
 		[XmlIgnore]
 		public bool AnyRaw
 		{
-			get { return (RawLogTx || RawLogRx); }
+			get { return (RawLogTx || RawLogBidir || RawLogRx); }
 		}
 
 		/// <summary></summary>

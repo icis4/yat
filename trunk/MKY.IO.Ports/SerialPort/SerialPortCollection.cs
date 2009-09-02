@@ -43,7 +43,7 @@ namespace MKY.IO.Ports
 
 		/// <summary></summary>
 		public SerialPortCollection()
-			: base(SerialPortId.LastStandardPortNumber - SerialPortId.FirstPortNumber + 1)
+			: base(SerialPortId.LastStandardPortNumber - SerialPortId.FirstStandardPortNumber + 1)
 		{
 		}
 
@@ -54,13 +54,13 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Fills list with all ports from <see cref="SerialPortId.FirstPortNumber"/> to
+		/// Fills list with all ports from <see cref="SerialPortId.FirstStandardPortNumber"/> to
 		/// <see cref="SerialPortId.LastStandardPortNumber"/>.
 		/// </summary>
 		public void FillWithStandardPorts()
 		{
 			Clear();
-			for (int i = SerialPortId.FirstPortNumber; i <= SerialPortId.LastStandardPortNumber; i++)
+			for (int i = SerialPortId.FirstStandardPortNumber; i <= SerialPortId.LastStandardPortNumber; i++)
 			{
 				base.Add(new SerialPortId(i));
 			}
@@ -89,12 +89,12 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public void GetDescriptionsFromSystem()
 		{
-			Dictionary<int, string> descriptions = SerialPortSearcher.GetDescriptionsFromSystem();
+			Dictionary<string, string> descriptions = SerialPortSearcher.GetDescriptionsFromSystem();
 
 			foreach (SerialPortId portId in this)
 			{
-				if (descriptions.ContainsKey(portId.Number))
-					portId.Description = descriptions[portId.Number];
+				if (descriptions.ContainsKey(portId.Name))
+					portId.Description = descriptions[portId.Name];
 			}
 		}
 

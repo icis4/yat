@@ -107,7 +107,7 @@ namespace MKY.Utilities.Event
 			if (eventDelegate == null)
 				return;
 
-			// invoke event in a safe way
+			// Invoke event in a safe way
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{
@@ -118,7 +118,7 @@ namespace MKY.Utilities.Event
 				}
 				else
 				{
-				#if (DEBUG && HANDLE_EXCEPTIONS) // invoke event directly so exceptions can be debugged where they happen
+				#if (DEBUG && HANDLE_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen
 					EventHandler castedSink = (EventHandler)sink;
 					object sender = args[0];
 					EventArgs eventArgs = (EventArgs)args[1];
@@ -130,12 +130,12 @@ namespace MKY.Utilities.Event
 					{
 						WriteExceptionToDebugOutput(ex, sink);
 					}
-				#elif (DEBUG && BREAK_EXCEPTIONS) // invoke event directly so exceptions can be debugged where they happen
+				#elif (DEBUG && BREAK_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen
 					EventHandler castedSink = (EventHandler)sink;
 					object sender = args[0];
 					EventArgs eventArgs = (EventArgs)args[1];
 					castedSink(sender, eventArgs);
-				#else // NON-DEBUG: invoke event the safe way
+				#else // NON-DEBUG: Invoke event the safe way
 					InvokeOnCurrentThread(sink, args);
 				#endif
 				}
@@ -155,7 +155,7 @@ namespace MKY.Utilities.Event
 			if (eventDelegate == null)
 				return;
 
-			// invoke event in a safe way
+			// Invoke event in a safe way
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{
@@ -166,7 +166,7 @@ namespace MKY.Utilities.Event
 				}
 				else
 				{
-				#if (DEBUG && HANDLE_EXCEPTIONS) // invoke event directly so exceptions can be debugged where they happen
+				#if (DEBUG && HANDLE_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen
 					EventHandler<TEventArgs> castedSink = (EventHandler<TEventArgs>)sink;
 					object sender = args[0];
 					TEventArgs eventArgs = (TEventArgs)args[1];
@@ -178,12 +178,12 @@ namespace MKY.Utilities.Event
 					{
 						WriteExceptionToDebugOutput(ex, sink);
 					}
-				#elif (DEBUG && BREAK_EXCEPTIONS) // invoke event directly so exceptions can be debugged where they happen
+				#elif (DEBUG && BREAK_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen
 					EventHandler<TEventArgs> castedSink = (EventHandler<TEventArgs>)sink;
 					object sender = args[0];
 					TEventArgs eventArgs = (TEventArgs)args[1];
 					castedSink(sender, eventArgs);
-				#else // NON-DEBUG: invoke event the safe way
+				#else // NON-DEBUG: Invoke event the safe way
 					InvokeOnCurrentThread(sink, args);
 				#endif
 				}
@@ -203,7 +203,7 @@ namespace MKY.Utilities.Event
 			if (eventDelegate == null)
 				return;
 
-			// events of type "event MyEventHandler MyEvent" are always fired the non-debug way
+			// Events of type "event MyEventHandler MyEvent" are always fired the non-debug way
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{
@@ -269,9 +269,9 @@ namespace MKY.Utilities.Event
 			}
 			catch (Exception ex)
 			{
-			#if (DEBUG) // output as much data as possible for debugging support
+			#if (DEBUG) // Output as much data as possible for debugging support
 				WriteExceptionToDebugOutput(ex, sink);
-			#else // NON-DEBUG, forward or discard exception
+			#else // NON-DEBUG: Forward or discard exception
 				if (_unhandledExceptionCallback != null)
 				{
 					try

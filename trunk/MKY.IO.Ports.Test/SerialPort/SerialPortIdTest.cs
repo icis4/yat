@@ -35,15 +35,15 @@ namespace MKY.IO.Ports.Test.SerialPort
 
 		private struct TestSet
 		{
-			public readonly int PortNumber;
+			public readonly int StandardPortNumber;
 			public readonly string PortName;
 			public readonly string[] PortDescriptions;
 
-			public TestSet(int portNumber, string portName, string[] portDescriptions)
+			public TestSet(int standardPortNumber, string portName, string[] portDescriptions)
 			{
-				PortNumber = portNumber;
-				PortName = portName;
-				PortDescriptions = portDescriptions;
+				StandardPortNumber = standardPortNumber;
+				PortName           = portName;
+				PortDescriptions   = portDescriptions;
 			}
 		};
 
@@ -63,6 +63,9 @@ namespace MKY.IO.Ports.Test.SerialPort
 			new TestSet(   257,   "COM257", new string[] { "Some Virtual Port (COM257)", "Virtual Port COM257" } ),
 			new TestSet( 65535, "COM65535", new string[] { "Super Advanced Port (COM65535)", "Advanced Port COM65535" } ),
 			new TestSet( 65536, "COM65536", new string[] { "Super Advanced Port (COM65536)", "Advanced Port COM65536" } ),
+			new TestSet(     0,        "Y", new string[] { } ),
+			new TestSet(     0,       "1Y", new string[] { } ),
+			new TestSet(     0,        "1", new string[] { } ),
 		};
 
 		#endregion
@@ -84,18 +87,21 @@ namespace MKY.IO.Ports.Test.SerialPort
 
 			foreach (TestSet ts in _testSets)
 			{
-				port = new SerialPortId(ts.PortNumber);
-				Assert.AreEqual(ts.PortNumber, port.Number);
-				Assert.AreEqual(ts.PortName, port.Name);
+				if (ts.StandardPortNumber != 0)
+				{
+					port = new SerialPortId(ts.StandardPortNumber);
+					Assert.AreEqual(ts.StandardPortNumber, port.StandardPortNumber);
+					Assert.AreEqual(ts.PortName, port.Name);
+				}
 
 				port = new SerialPortId(ts.PortName);
-				Assert.AreEqual(ts.PortNumber, port.Number);
+				Assert.AreEqual(ts.StandardPortNumber, port.StandardPortNumber);
 				Assert.AreEqual(ts.PortName, port.Name);
 
 				foreach (string description in ts.PortDescriptions)
 				{
 					port = new SerialPortId(description);
-					Assert.AreEqual(ts.PortNumber, port.Number);
+					Assert.AreEqual(ts.StandardPortNumber, port.StandardPortNumber);
 					Assert.AreEqual(ts.PortName, port.Name);
 				}
 			}
