@@ -46,9 +46,9 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_FileRecentContextMenu_6 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_FileRecentContextMenu_7 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_FileRecentContextMenu_8 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_MainMenu_File_Recent = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator_MainContextMenu_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainContextMenu_File_Exit = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MainMenu_File_Recent = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip_Main = new System.Windows.Forms.MenuStrip();
 			this.toolStripMenuItem_MainMenu_File = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_File_New = new System.Windows.Forms.ToolStripMenuItem();
@@ -110,6 +110,13 @@ namespace YAT.Gui.Forms
 			this.timer_Chrono = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.chronometer_Main = new MKY.Windows.Forms.Chronometer(this.components);
+			this.toolStripButton_MainTool_Terminal_Radix_Bin = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator_MainTool_4 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripButton_MainTool_Terminal_Radix_Oct = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Terminal_Radix_Dec = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Terminal_Radix_Hex = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Terminal_Radix_Char = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton_MainTool_Terminal_Radix_String = new System.Windows.Forms.ToolStripButton();
 			this.contextMenuStrip_Main.SuspendLayout();
 			this.contextMenuStrip_FileRecent.SuspendLayout();
 			this.menuStrip_Main.SuspendLayout();
@@ -182,7 +189,7 @@ namespace YAT.Gui.Forms
             this.toolStripMenuItem_FileRecentContextMenu_7,
             this.toolStripMenuItem_FileRecentContextMenu_8});
 			this.contextMenuStrip_FileRecent.Name = "contextMenuStrip_FileRecent";
-			this.contextMenuStrip_FileRecent.OwnerItem = this.toolStripMenuItem_MainContextMenu_File_Recent;
+			this.contextMenuStrip_FileRecent.OwnerItem = this.toolStripMenuItem_MainMenu_File_Recent;
 			this.contextMenuStrip_FileRecent.Size = new System.Drawing.Size(87, 180);
 			this.contextMenuStrip_FileRecent.Paint += new System.Windows.Forms.PaintEventHandler(this.contextMenuStrip_FileRecent_Paint);
 			this.contextMenuStrip_FileRecent.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_FileRecent_Opening);
@@ -267,14 +274,6 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_FileRecentContextMenu_8.Visible = false;
 			this.toolStripMenuItem_FileRecentContextMenu_8.Click += new System.EventHandler(this.toolStripMenuItem_FileRecentContextMenu_Click);
 			// 
-			// toolStripMenuItem_MainMenu_File_Recent
-			// 
-			this.toolStripMenuItem_MainMenu_File_Recent.DropDown = this.contextMenuStrip_FileRecent;
-			this.toolStripMenuItem_MainMenu_File_Recent.Enabled = false;
-			this.toolStripMenuItem_MainMenu_File_Recent.Name = "toolStripMenuItem_MainMenu_File_Recent";
-			this.toolStripMenuItem_MainMenu_File_Recent.Size = new System.Drawing.Size(155, 22);
-			this.toolStripMenuItem_MainMenu_File_Recent.Text = "&Recent";
-			// 
 			// toolStripSeparator_MainContextMenu_2
 			// 
 			this.toolStripSeparator_MainContextMenu_2.Name = "toolStripSeparator_MainContextMenu_2";
@@ -286,6 +285,14 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Size = new System.Drawing.Size(173, 22);
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Text = "Exit";
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Click += new System.EventHandler(this.toolStripMenuItem_MainContextMenu_File_Exit_Click);
+			// 
+			// toolStripMenuItem_MainMenu_File_Recent
+			// 
+			this.toolStripMenuItem_MainMenu_File_Recent.DropDown = this.contextMenuStrip_FileRecent;
+			this.toolStripMenuItem_MainMenu_File_Recent.Enabled = false;
+			this.toolStripMenuItem_MainMenu_File_Recent.Name = "toolStripMenuItem_MainMenu_File_Recent";
+			this.toolStripMenuItem_MainMenu_File_Recent.Size = new System.Drawing.Size(155, 22);
+			this.toolStripMenuItem_MainMenu_File_Recent.Text = "&Recent";
 			// 
 			// menuStrip_Main
 			// 
@@ -636,15 +643,22 @@ namespace YAT.Gui.Forms
             this.toolStripButton_MainTool_Terminal_Start,
             this.toolStripButton_MainTool_Terminal_Stop,
             this.toolStripSeparator_MainTool_2,
+            this.toolStripButton_MainTool_Terminal_Radix_String,
+            this.toolStripButton_MainTool_Terminal_Radix_Char,
+            this.toolStripButton_MainTool_Terminal_Radix_Bin,
+            this.toolStripButton_MainTool_Terminal_Radix_Oct,
+            this.toolStripButton_MainTool_Terminal_Radix_Dec,
+            this.toolStripButton_MainTool_Terminal_Radix_Hex,
+            this.toolStripSeparator_MainTool_3,
             this.toolStripButton_MainTool_Terminal_Clear,
             this.toolStripButton_MainTool_Terminal_SaveToFile,
             this.toolStripButton_MainTool_Terminal_CopyToClipboard,
             this.toolStripButton_MainTool_Terminal_Print,
-            this.toolStripSeparator_MainTool_3,
+            this.toolStripSeparator_MainTool_4,
             this.toolStripButton_MainTool_Terminal_Settings});
 			this.toolStrip_Main.Location = new System.Drawing.Point(3, 0);
 			this.toolStrip_Main.Name = "toolStrip_Main";
-			this.toolStrip_Main.Size = new System.Drawing.Size(260, 25);
+			this.toolStrip_Main.Size = new System.Drawing.Size(444, 25);
 			this.toolStrip_Main.TabIndex = 0;
 			// 
 			// toolStripButton_MainTool_File_New
@@ -803,6 +817,83 @@ namespace YAT.Gui.Forms
 			// 
 			this.chronometer_Main.TimeSpanChanged += new System.EventHandler(this.chronometer_Main_TimeSpanChanged);
 			// 
+			// toolStripButton_MainTool_Terminal_Radix_Bin
+			// 
+			this.toolStripButton_MainTool_Terminal_Radix_Bin.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton_MainTool_Terminal_Radix_Bin.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_MainTool_Terminal_Radix_Bin.Image")));
+			this.toolStripButton_MainTool_Terminal_Radix_Bin.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton_MainTool_Terminal_Radix_Bin.Name = "toolStripButton_MainTool_Terminal_Radix_Bin";
+			this.toolStripButton_MainTool_Terminal_Radix_Bin.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Terminal_Radix_Bin.Text = "2";
+			this.toolStripButton_MainTool_Terminal_Radix_Bin.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.toolStripButton_MainTool_Terminal_Radix_Bin.ToolTipText = "Radix: Binary";
+			this.toolStripButton_MainTool_Terminal_Radix_Bin.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Radix_Bin_Click);
+			// 
+			// toolStripSeparator_MainTool_4
+			// 
+			this.toolStripSeparator_MainTool_4.Name = "toolStripSeparator_MainTool_4";
+			this.toolStripSeparator_MainTool_4.Size = new System.Drawing.Size(6, 25);
+			// 
+			// toolStripButton_MainTool_Terminal_Radix_Oct
+			// 
+			this.toolStripButton_MainTool_Terminal_Radix_Oct.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton_MainTool_Terminal_Radix_Oct.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_MainTool_Terminal_Radix_Oct.Image")));
+			this.toolStripButton_MainTool_Terminal_Radix_Oct.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton_MainTool_Terminal_Radix_Oct.Name = "toolStripButton_MainTool_Terminal_Radix_Oct";
+			this.toolStripButton_MainTool_Terminal_Radix_Oct.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Terminal_Radix_Oct.Text = "8";
+			this.toolStripButton_MainTool_Terminal_Radix_Oct.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.toolStripButton_MainTool_Terminal_Radix_Oct.ToolTipText = "Radix: Octal";
+			this.toolStripButton_MainTool_Terminal_Radix_Oct.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Radix_Oct_Click);
+			// 
+			// toolStripButton_MainTool_Terminal_Radix_Dec
+			// 
+			this.toolStripButton_MainTool_Terminal_Radix_Dec.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton_MainTool_Terminal_Radix_Dec.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_MainTool_Terminal_Radix_Dec.Image")));
+			this.toolStripButton_MainTool_Terminal_Radix_Dec.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton_MainTool_Terminal_Radix_Dec.Name = "toolStripButton_MainTool_Terminal_Radix_Dec";
+			this.toolStripButton_MainTool_Terminal_Radix_Dec.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Terminal_Radix_Dec.Text = "10";
+			this.toolStripButton_MainTool_Terminal_Radix_Dec.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.toolStripButton_MainTool_Terminal_Radix_Dec.ToolTipText = "Radix: Decimal";
+			this.toolStripButton_MainTool_Terminal_Radix_Dec.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Radix_Dec_Click);
+			// 
+			// toolStripButton_MainTool_Terminal_Radix_Hex
+			// 
+			this.toolStripButton_MainTool_Terminal_Radix_Hex.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton_MainTool_Terminal_Radix_Hex.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_MainTool_Terminal_Radix_Hex.Image")));
+			this.toolStripButton_MainTool_Terminal_Radix_Hex.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton_MainTool_Terminal_Radix_Hex.Name = "toolStripButton_MainTool_Terminal_Radix_Hex";
+			this.toolStripButton_MainTool_Terminal_Radix_Hex.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton_MainTool_Terminal_Radix_Hex.Text = "16";
+			this.toolStripButton_MainTool_Terminal_Radix_Hex.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.toolStripButton_MainTool_Terminal_Radix_Hex.ToolTipText = "Radix: Hexadecimal";
+			this.toolStripButton_MainTool_Terminal_Radix_Hex.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Radix_Hex_Click);
+			// 
+			// toolStripButton_MainTool_Terminal_Radix_Char
+			// 
+			this.toolStripButton_MainTool_Terminal_Radix_Char.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton_MainTool_Terminal_Radix_Char.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_MainTool_Terminal_Radix_Char.Image")));
+			this.toolStripButton_MainTool_Terminal_Radix_Char.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton_MainTool_Terminal_Radix_Char.Name = "toolStripButton_MainTool_Terminal_Radix_Char";
+			this.toolStripButton_MainTool_Terminal_Radix_Char.Size = new System.Drawing.Size(30, 22);
+			this.toolStripButton_MainTool_Terminal_Radix_Char.Text = "Chr";
+			this.toolStripButton_MainTool_Terminal_Radix_Char.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.toolStripButton_MainTool_Terminal_Radix_Char.ToolTipText = "Radix: Char";
+			this.toolStripButton_MainTool_Terminal_Radix_Char.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Radix_Char_Click);
+			// 
+			// toolStripButton_MainTool_Terminal_Radix_String
+			// 
+			this.toolStripButton_MainTool_Terminal_Radix_String.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton_MainTool_Terminal_Radix_String.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_MainTool_Terminal_Radix_String.Image")));
+			this.toolStripButton_MainTool_Terminal_Radix_String.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton_MainTool_Terminal_Radix_String.Name = "toolStripButton_MainTool_Terminal_Radix_String";
+			this.toolStripButton_MainTool_Terminal_Radix_String.Size = new System.Drawing.Size(25, 22);
+			this.toolStripButton_MainTool_Terminal_Radix_String.Text = "Str";
+			this.toolStripButton_MainTool_Terminal_Radix_String.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.toolStripButton_MainTool_Terminal_Radix_String.ToolTipText = "Radix: String";
+			this.toolStripButton_MainTool_Terminal_Radix_String.Click += new System.EventHandler(this.toolStripButton_MainTool_Terminal_Radix_String_Click);
+			// 
 			// Main
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -922,5 +1013,12 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_CopyToClipboard;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Print;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_MainTool_3;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_Bin;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_Oct;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_Dec;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_Hex;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator_MainTool_4;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_Char;
+		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_String;
 	}
 }

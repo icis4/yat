@@ -153,7 +153,7 @@ namespace YAT.Gui.Forms
 		{
 			_isSettingControls = true;
 
-			// nothing to do yet
+			// Nothing to do yet
 
 			_isSettingControls = false;
 		}

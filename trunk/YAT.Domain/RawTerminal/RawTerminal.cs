@@ -405,7 +405,7 @@ namespace YAT.Domain
 
 		private void ApplyIOSettings()
 		{
-			// nothing to do
+			// Nothing to do
 		}
 
 		#endregion
