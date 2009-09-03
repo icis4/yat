@@ -465,7 +465,7 @@ namespace YAT.Model
 
 		private void _settingsRoot_Changed(object sender, SettingsEventArgs e)
 		{
-			// nothing to do yet
+			// Nothing to do yet
 		}
 
 		#endregion

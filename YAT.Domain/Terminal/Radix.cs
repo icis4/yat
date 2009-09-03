@@ -31,6 +31,8 @@ namespace YAT.Domain
 	public enum Radix
 	{
 		/// <summary></summary>
+		None,
+		/// <summary></summary>
 		Bin,
 		/// <summary></summary>
 		Oct,

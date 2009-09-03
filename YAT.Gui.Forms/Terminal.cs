@@ -41,7 +41,7 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		// Startup/update
+		// Startup/update/closing
 		private bool _isStartingUp = true;
 		private bool _isSettingControls = false;
 		private bool _isClosingFromForm = false;
@@ -193,6 +193,11 @@ namespace YAT.Gui.Forms
 			return (_terminal.StopIO());
 		}
 
+		public void RequestRadix(Domain.Radix radix)
+		{
+			_settingsRoot.Display.TxRadix = radix;
+		}
+
 		public void RequestClear()
 		{
 			_terminal.ClearRepositories();
@@ -248,13 +253,13 @@ namespace YAT.Gui.Forms
 
 		private void Terminal_LocationChanged(object sender, EventArgs e)
 		{
-			if (!_isStartingUp)
+			if (!_isStartingUp && !_isClosingFromForm && !_isClosingFromModel)
 				SaveWindowSettings();
 		}
 
 		private void Terminal_SizeChanged(object sender, EventArgs e)
 		{
-			if (!_isStartingUp)
+			if (!_isStartingUp && !_isClosingFromForm && !_isClosingFromModel)
 				SaveWindowSettings();
 		}
 
@@ -271,6 +276,7 @@ namespace YAT.Gui.Forms
 			if (!_isClosingFromModel)
 			{
 				_isClosingFromForm = true;
+
 				if (e.CloseReason == CloseReason.UserClosing)
 				{
 					e.Cancel = (!_terminal.Close());
@@ -282,6 +288,9 @@ namespace YAT.Gui.Forms
 					Model.Workspace w = m.UnderlyingWorkspace;
 					e.Cancel = (!_terminal.Close(true, w.TryTerminalAutoSaveIsDesired(tryAutoSave, _terminal)));
 				}
+
+				if (e.Cancel)
+					_isClosingFromForm = false;
 			}
 		}
 
@@ -2156,7 +2165,7 @@ namespace YAT.Gui.Forms
 			if (e.Inner == null)
 			{
 				// SettingsRoot changed
-				// nothing to do, no need to care about ProductVersion
+				// Nothing to do, no need to care about ProductVersion
 			}
 			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Explicit))
 			{
@@ -2168,6 +2177,7 @@ namespace YAT.Gui.Forms
 				// ImplicitSettings changed
 				HandleImplicitSettings(e.Inner);
 			}
+			OnTerminalChanged(new EventArgs());
 		}
 
 		private void HandleExplicitSettings(SettingsEventArgs e)
@@ -2175,7 +2185,7 @@ namespace YAT.Gui.Forms
 			if (e.Inner == null)
 			{
 				// ExplicitSettings changed
-				// nothing to do
+				// Nothing to do
 			}
 			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Terminal))
 			{
@@ -2240,7 +2250,7 @@ namespace YAT.Gui.Forms
 			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Window))
 			{
 				// WindowSettings changed
-				// nothing to do, windows settings are only saved
+				// Nothing to do, windows settings are only saved
 			}
 			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Layout))
 			{

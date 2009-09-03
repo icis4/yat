@@ -452,9 +452,37 @@ namespace YAT.Gui.Forms
 			if (childIsReady)
 				terminalIsStarted = ((Gui.Forms.Terminal)ActiveMdiChild).IsStarted;
 
-			toolStripButton_MainTool_File_Save.Enabled                = childIsReady;
-			toolStripButton_MainTool_Terminal_Start.Enabled           = childIsReady && !terminalIsStarted;
-			toolStripButton_MainTool_Terminal_Stop.Enabled            = childIsReady && terminalIsStarted;
+			bool radixIsReady = false;
+			Domain.Radix radix = Domain.Radix.None;
+			if (childIsReady)
+			{
+				Model.Terminal terminal = ((Gui.Forms.Terminal)ActiveMdiChild).UnderlyingTerminal;
+				if (terminal != null)
+				{
+					radixIsReady = !(terminal.SettingsRoot.Display.SeparateTxRxRadix);
+					if (radixIsReady)
+						radix = terminal.SettingsRoot.Display.TxRadix;
+				}
+			}
+
+			toolStripButton_MainTool_File_Save.Enabled      = childIsReady;
+			toolStripButton_MainTool_Terminal_Start.Enabled = childIsReady && !terminalIsStarted;
+			toolStripButton_MainTool_Terminal_Stop.Enabled  = childIsReady && terminalIsStarted;
+
+			toolStripButton_MainTool_Terminal_Radix_String.Enabled = childIsReady && radixIsReady;
+			toolStripButton_MainTool_Terminal_Radix_Char.Enabled   = childIsReady && radixIsReady;
+			toolStripButton_MainTool_Terminal_Radix_Bin.Enabled    = childIsReady && radixIsReady;
+			toolStripButton_MainTool_Terminal_Radix_Oct.Enabled    = childIsReady && radixIsReady;
+			toolStripButton_MainTool_Terminal_Radix_Dec.Enabled    = childIsReady && radixIsReady;
+			toolStripButton_MainTool_Terminal_Radix_Hex.Enabled    = childIsReady && radixIsReady;
+
+			toolStripButton_MainTool_Terminal_Radix_String.Checked = (radix == Domain.Radix.String);
+			toolStripButton_MainTool_Terminal_Radix_Char.Checked   = (radix == Domain.Radix.Char);
+			toolStripButton_MainTool_Terminal_Radix_Bin.Checked    = (radix == Domain.Radix.Bin);
+			toolStripButton_MainTool_Terminal_Radix_Oct.Checked    = (radix == Domain.Radix.Oct);
+			toolStripButton_MainTool_Terminal_Radix_Dec.Checked    = (radix == Domain.Radix.Dec);
+			toolStripButton_MainTool_Terminal_Radix_Hex.Checked    = (radix == Domain.Radix.Hex);
+
 			toolStripButton_MainTool_Terminal_Clear.Enabled           = childIsReady;
 			toolStripButton_MainTool_Terminal_SaveToFile.Enabled      = childIsReady;
 			toolStripButton_MainTool_Terminal_CopyToClipboard.Enabled = childIsReady;
@@ -487,6 +515,36 @@ namespace YAT.Gui.Forms
 		private void toolStripButton_MainTool_Terminal_Stop_Click(object sender, EventArgs e)
 		{
 			((Terminal)ActiveMdiChild).RequestStopTerminal();
+		}
+
+		private void toolStripButton_MainTool_Terminal_Radix_String_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.String);
+		}
+
+		private void toolStripButton_MainTool_Terminal_Radix_Char_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Char);
+		}
+
+		private void toolStripButton_MainTool_Terminal_Radix_Bin_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Bin);
+		}
+
+		private void toolStripButton_MainTool_Terminal_Radix_Oct_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Oct);
+		}
+
+		private void toolStripButton_MainTool_Terminal_Radix_Dec_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Dec);
+		}
+
+		private void toolStripButton_MainTool_Terminal_Radix_Hex_Click(object sender, EventArgs e)
+		{
+			((Terminal)ActiveMdiChild).RequestRadix(Domain.Radix.Hex);
 		}
 
 		private void toolStripButton_MainTool_Terminal_Clear_Click(object sender, EventArgs e)

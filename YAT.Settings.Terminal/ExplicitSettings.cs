@@ -62,7 +62,7 @@ namespace YAT.Settings.Terminal
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			// nothing to do
+			// Nothing to do
 		}
 
 		#region Properties
