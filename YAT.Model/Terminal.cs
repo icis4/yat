@@ -102,7 +102,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public event EventHandler IOControlChanged;
 		/// <summary></summary>
-		public event EventHandler IOConnectTimeChanged;
+		public event EventHandler<TimeSpanEventArgs> IOConnectTimeChanged;
 		/// <summary></summary>
 		public event EventHandler IOCountChanged;
 		/// <summary></summary>
@@ -200,7 +200,7 @@ namespace YAT.Model
 			// Create chrono
 			_ioConnectChrono = new Chronometer();
 			_ioConnectChrono.Interval = 1000;
-			_ioConnectChrono.TimeSpanChanged += new EventHandler(_ioConnectChrono_TimeSpanChanged);
+			_ioConnectChrono.TimeSpanChanged += new EventHandler<TimeSpanEventArgs>(_ioConnectChrono_TimeSpanChanged);
 		}
 
 		#region Disposal
@@ -1490,9 +1490,9 @@ namespace YAT.Model
 			_ioConnectChrono.Restart();
 		}
 
-		private void _ioConnectChrono_TimeSpanChanged(object sender, EventArgs e)
+		private void _ioConnectChrono_TimeSpanChanged(object sender, TimeSpanEventArgs e)
 		{
-			OnIOConnectTimeChanged(new EventArgs());
+			OnIOConnectTimeChanged(e);
 		}
 
 		#endregion
@@ -1640,9 +1640,9 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		protected virtual void OnIOConnectTimeChanged(EventArgs e)
+		protected virtual void OnIOConnectTimeChanged(TimeSpanEventArgs e)
 		{
-			EventHelper.FireSync(IOConnectTimeChanged, this, e);
+			EventHelper.FireSync<TimeSpanEventArgs>(IOConnectTimeChanged, this, e);
 		}
 
 		/// <summary></summary>

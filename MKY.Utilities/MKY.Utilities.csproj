@@ -84,6 +84,7 @@
     <Compile Include="Text\XEncoding.cs" />
     <Compile Include="Time\Chronometer.cs">
     </Compile>
+    <Compile Include="Time\XTimeSpan.cs" />
     <Compile Include="Types\XArray.cs" />
     <Compile Include="Types\XAscii.cs" />
     <Compile Include="Types\XByte.cs" />

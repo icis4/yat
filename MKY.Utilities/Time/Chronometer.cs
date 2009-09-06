@@ -49,7 +49,7 @@ namespace MKY.Utilities.Time
 		/// <summary></summary>
 		[Category("Action")]
 		[Description("Event raised the tick interval elapsed or the time span was reset.")]
-		public event EventHandler TimeSpanChanged;
+		public event EventHandler<TimeSpanEventArgs> TimeSpanChanged;
 
 		#endregion
 
@@ -158,7 +158,7 @@ namespace MKY.Utilities.Time
 			{
 				_timer.Start();
 				_startTimeStamp = DateTime.Now;
-				OnTimeSpanChanged(new EventArgs());
+				OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
 			}
 		}
 
@@ -170,8 +170,9 @@ namespace MKY.Utilities.Time
 			if (_timer.Enabled)
 			{
 				_timer.Stop();
-				_accumulatedTimeSpan += DateTime.Now - _startTimeStamp;
-				OnTimeSpanChanged(new EventArgs());
+				_accumulatedTimeSpan += (DateTime.Now - _startTimeStamp);
+				System.Diagnostics.Debug.WriteLine("Chrono::Stop()");
+				OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
 			}
 		}
 
@@ -191,7 +192,7 @@ namespace MKY.Utilities.Time
 
 			_startTimeStamp = DateTime.Now;
 			_accumulatedTimeSpan = TimeSpan.Zero;
-			OnTimeSpanChanged(new EventArgs());
+			OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan.Zero));
 		}
 
 		/// <summary></summary>
@@ -208,26 +209,7 @@ namespace MKY.Utilities.Time
 		public override string ToString()
 		{
 			AssertNotDisposed();
-
-			StringBuilder sb = new StringBuilder();
-			TimeSpan ts = TimeSpan;
-
-			sb.Insert(0, ts.Seconds.ToString("D2"));
-			sb.Insert(0, ":");
-			sb.Insert(0, ts.Minutes.ToString());
-			if (ts.TotalHours >= 1)
-			{
-				sb.Insert(0, ":");
-				sb.Insert(0, ts.Hours.ToString());
-
-				if (ts.TotalDays >= 1)
-				{
-					sb.Insert(0, "days ");
-					sb.Insert(0, ts.Days.ToString());
-				}
-			}
-
-			return (sb.ToString());
+			return (XTimeSpan.FormatTimeSpan(TimeSpan, true));
 		}
 
 		#endregion
@@ -239,7 +221,7 @@ namespace MKY.Utilities.Time
 
 		private void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			OnTimeSpanChanged(new EventArgs());
+			OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
 		}
 
 		#endregion
@@ -250,9 +232,10 @@ namespace MKY.Utilities.Time
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnTimeSpanChanged(EventArgs e)
+		protected virtual void OnTimeSpanChanged(TimeSpanEventArgs e)
 		{
-			EventHelper.FireSync(TimeSpanChanged, this, e);
+			System.Diagnostics.Debug.WriteLine("Chrono::OnTimeSpanChanged()");
+			EventHelper.FireSync<TimeSpanEventArgs>(TimeSpanChanged, this, e);
 		}
 
 		#endregion

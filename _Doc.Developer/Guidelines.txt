@@ -1,20 +1,11 @@
 
-Special tags
-------------
+Comments
+--------
 
+Use special tags
 \fixme
 \remind
 \attention
-
-
-override and new
-----------------
-
-Write
-public override <Name>
-but
-new public <Name>
-to emphasize the intended hiding of a method.
 
 
 Preprocessor statements
@@ -44,3 +35,45 @@ statements do not belong to the normal code. Still, don't use
 			{
 #endif
 because it adds agitation to the code structure.
+
+
+Classes
+-------
+Use static classes instead of Singletons
+
+
+override and new
+----------------
+
+Write
+public override <Name>
+but
+new public <Name>
+to emphasize the intended hiding of a method.
+
+
+Inheritance
+-----------
+- Implement IEquatable
+- Implement ICloneable (Problem: return type is object)
+- Implement TryParse() and Parse()
+- Use and TryParse() instead of Parse()
+
+
+Variables
+---------
+- Do not re-initialize fields with default value of respective type
+- Always initialize local variables
+
+
+.NET classes
+------------
+- Console.Title/.ForegroundColor/.ResetColor
+- System.Media.SystemSounds
+- DefaultFontValue
+
+
+Known issues
+------------
+- Die ReadLine() Methode der .NET Komponente funktioniert nicht zuverlässig mit USB-RS232 Konvertern
+- "Excel sample [.NET Framework]"

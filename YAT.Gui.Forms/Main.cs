@@ -25,6 +25,7 @@ using System.IO;
 
 using MKY.Utilities.IO;
 using MKY.Utilities.Settings;
+using MKY.Utilities.Time;
 using MKY.Utilities.Windows.Forms;
 
 using YAT.Settings;
@@ -747,9 +748,9 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Chrono
 		//------------------------------------------------------------------------------------------
 
-		private void chronometer_Main_TimeSpanChanged(object sender, EventArgs e)
+		private void chronometer_Main_TimeSpanChanged(object sender, TimeSpanEventArgs e)
 		{
-			toolStripStatusLabel_MainStatus_Chrono.Text = chronometer_Main.ToString();
+			toolStripStatusLabel_MainStatus_Chrono.Text = XTimeSpan.FormatTimeSpan(e.TimeSpan, true);
 		}
 
 		#endregion

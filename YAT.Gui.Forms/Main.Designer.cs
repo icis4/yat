@@ -815,7 +815,7 @@ namespace YAT.Gui.Forms
 			// 
 			// chronometer_Main
 			// 
-			this.chronometer_Main.TimeSpanChanged += new System.EventHandler(this.chronometer_Main_TimeSpanChanged);
+			this.chronometer_Main.TimeSpanChanged += new System.EventHandler<MKY.Utilities.Time.TimeSpanEventArgs>(this.chronometer_Main_TimeSpanChanged);
 			// 
 			// toolStripButton_MainTool_Terminal_Radix_Bin
 			// 

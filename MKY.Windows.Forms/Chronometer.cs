@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.Text;
 
 using MKY.Utilities.Event;
+using MKY.Utilities.Time;
 
 namespace MKY.Windows.Forms
 {
@@ -45,7 +46,7 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		[Category("Action")]
 		[Description("Event raised the tick interval elapsed or the time span was reset.")]
-		public event EventHandler TimeSpanChanged;
+		public event EventHandler<TimeSpanEventArgs> TimeSpanChanged;
 
 		#endregion
 
@@ -108,7 +109,7 @@ namespace MKY.Windows.Forms
 			{
 				timer_Chronometer.Start();
 				_startTimeStamp = DateTime.Now;
-				OnTimeSpanChanged(new EventArgs());
+				OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
 			}
 		}
 
@@ -119,7 +120,7 @@ namespace MKY.Windows.Forms
 			{
 				timer_Chronometer.Stop();
 				_accumulatedTimeSpan += (DateTime.Now - _startTimeStamp);
-				OnTimeSpanChanged(new EventArgs());
+				OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
 			}
 		}
 
@@ -137,7 +138,7 @@ namespace MKY.Windows.Forms
 		{
 			_startTimeStamp = DateTime.Now;
 			_accumulatedTimeSpan = TimeSpan.Zero;
-			OnTimeSpanChanged(new EventArgs());
+			OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan.Zero));
 		}
 
 		/// <summary></summary>
@@ -151,27 +152,7 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder();
-			TimeSpan ts = TimeSpan;
-
-			sb.Insert(0, (ts.Milliseconds/10).ToString("D2"));
-			sb.Insert(0, ".");
-			sb.Insert(0, ts.Seconds.ToString("D2"));
-			sb.Insert(0, ":");
-			sb.Insert(0, ts.Minutes.ToString());
-			if (ts.TotalHours >= 1)
-			{
-				sb.Insert(0, ":");
-				sb.Insert(0, ts.Hours.ToString());
-
-				if (ts.TotalDays >= 1)
-				{
-					sb.Insert(0, "days ");
-					sb.Insert(0, ts.Days.ToString());
-				}
-			}
-
-			return (sb.ToString());
+			return (XTimeSpan.FormatTimeSpan(TimeSpan, true));
 		}
 
 		#endregion
@@ -183,7 +164,7 @@ namespace MKY.Windows.Forms
 
 		private void timer_Chronometer_Tick(object sender, EventArgs e)
 		{
-			OnTimeSpanChanged(new EventArgs());
+			OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
 		}
 
 		#endregion
@@ -194,9 +175,9 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnTimeSpanChanged(EventArgs e)
+		protected virtual void OnTimeSpanChanged(TimeSpanEventArgs e)
 		{
-			EventHelper.FireSync(TimeSpanChanged, this, e);
+			EventHelper.FireSync<TimeSpanEventArgs>(TimeSpanChanged, this, e);
 		}
 
 		#endregion
