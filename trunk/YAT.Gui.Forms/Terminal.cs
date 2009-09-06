@@ -2421,7 +2421,6 @@ namespace YAT.Gui.Forms
 
 		private void _terminal_IOConnectTimeChanged(object sender, TimeSpanEventArgs e)
 		{
-			System.Diagnostics.Debug.WriteLine("_terminal_IOConnectTimeChanged()");
 			monitor_Tx.ConnectTime    = e.TimeSpan;
 			monitor_Bidir.ConnectTime = e.TimeSpan;
 			monitor_Rx.ConnectTime    = e.TimeSpan;
