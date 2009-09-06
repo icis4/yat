@@ -171,7 +171,6 @@ namespace MKY.Utilities.Time
 			{
 				_timer.Stop();
 				_accumulatedTimeSpan += (DateTime.Now - _startTimeStamp);
-				System.Diagnostics.Debug.WriteLine("Chrono::Stop()");
 				OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
 			}
 		}
@@ -234,7 +233,6 @@ namespace MKY.Utilities.Time
 		/// <summary></summary>
 		protected virtual void OnTimeSpanChanged(TimeSpanEventArgs e)
 		{
-			System.Diagnostics.Debug.WriteLine("Chrono::OnTimeSpanChanged()");
 			EventHelper.FireSync<TimeSpanEventArgs>(TimeSpanChanged, this, e);
 		}
 
