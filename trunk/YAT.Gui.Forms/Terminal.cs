@@ -26,6 +26,7 @@ using System.IO;
 using MKY.Utilities.Event;
 using MKY.Utilities.Recent;
 using MKY.Utilities.Settings;
+using MKY.Utilities.Time;
 using MKY.Utilities.Windows.Forms;
 
 using YAT.Settings;
@@ -2350,7 +2351,7 @@ namespace YAT.Gui.Forms
 			{
 				_terminal.IOChanged            += new EventHandler(_terminal_IOChanged);
 				_terminal.IOControlChanged     += new EventHandler(_terminal_IOControlChanged);
-				_terminal.IOConnectTimeChanged += new EventHandler(_terminal_IOConnectTimeChanged);
+				_terminal.IOConnectTimeChanged += new EventHandler<TimeSpanEventArgs>(_terminal_IOConnectTimeChanged);
 				_terminal.IOCountChanged       += new EventHandler(_terminal_IOCountChanged);
 				_terminal.IORequest            += new EventHandler<Domain.IORequestEventArgs>(_terminal_IORequest);
 				_terminal.IOError              += new EventHandler<Domain.IOErrorEventArgs>(_terminal_IOError);
@@ -2378,7 +2379,7 @@ namespace YAT.Gui.Forms
 			{
 				_terminal.IOChanged            -= new EventHandler(_terminal_IOChanged);
 				_terminal.IOControlChanged     -= new EventHandler(_terminal_IOControlChanged);
-				_terminal.IOConnectTimeChanged -= new EventHandler(_terminal_IOConnectTimeChanged);
+				_terminal.IOConnectTimeChanged -= new EventHandler<TimeSpanEventArgs>(_terminal_IOConnectTimeChanged);
 				_terminal.IOCountChanged       -= new EventHandler(_terminal_IOCountChanged);
 				_terminal.IORequest            -= new EventHandler<Domain.IORequestEventArgs>(_terminal_IORequest);
 				_terminal.IOError              -= new EventHandler<Domain.IOErrorEventArgs>(_terminal_IOError);
@@ -2418,17 +2419,12 @@ namespace YAT.Gui.Forms
 			SetIOControlControls();
 		}
 
-		private void _terminal_IOConnectTimeChanged(object sender, EventArgs e)
+		private void _terminal_IOConnectTimeChanged(object sender, TimeSpanEventArgs e)
 		{
-			// \remind MKY 2009-09-02
-			// Check added the get rid of those weird object disposed exceptions on workspace close
-			if (_terminal != null)
-			{
-				TimeSpan ts = _terminal.IOConnectTime;
-				monitor_Tx.ConnectTime    = ts;
-				monitor_Bidir.ConnectTime = ts;
-				monitor_Rx.ConnectTime    = ts;
-			}
+			System.Diagnostics.Debug.WriteLine("_terminal_IOConnectTimeChanged()");
+			monitor_Tx.ConnectTime    = e.TimeSpan;
+			monitor_Bidir.ConnectTime = e.TimeSpan;
+			monitor_Rx.ConnectTime    = e.TimeSpan;
 		}
 
 		private void _terminal_IOCountChanged(object sender, EventArgs e)
@@ -2897,9 +2893,9 @@ namespace YAT.Gui.Forms
 
 		private void SetIOControlControls()
 		{
-			bool isStarted = _terminal.IsStarted;
-			bool isOpen = _terminal.IsOpen;
-			bool isConnected = _terminal.IsConnected;
+			bool isStarted    = _terminal.IsStarted;
+			bool isOpen       = _terminal.IsOpen;
+			bool isConnected  = _terminal.IsConnected;
 			bool isSerialPort = (_settingsRoot.IOType == Domain.IOType.SerialPort);
 
 			foreach (ToolStripStatusLabel sl in _statusLabels_ioControl)

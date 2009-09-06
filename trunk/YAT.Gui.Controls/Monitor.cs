@@ -23,6 +23,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using MKY.Utilities.Event;
+using MKY.Utilities.Time;
 using MKY.Windows.Forms;
 
 using YAT.Gui.Utilities;
@@ -747,24 +748,7 @@ namespace YAT.Gui.Controls
 
 		private void SetTimeStatusControls()
 		{
-			StringBuilder sb = new StringBuilder();
-			TimeSpan ts = _connectTime;
-
-			sb.Insert(0, ts.Seconds.ToString("D2"));
-			sb.Insert(0, ":");
-			sb.Insert(0, ts.Minutes.ToString());
-			if (ts.Hours > 0)
-			{
-				sb.Insert(0, ":");
-				sb.Insert(0, ts.Hours.ToString());
-
-				if (ts.Days > 0)
-				{
-					sb.Insert(0, "days ");
-					sb.Insert(0, ts.Days.ToString());
-				}
-			}
-			label_TimeStatus.Text = sb.ToString();
+			label_TimeStatus.Text = XTimeSpan.FormatTimeSpan(_connectTime);
 			label_TimeStatus.Visible = _showTimeStatus;
 		}
 
