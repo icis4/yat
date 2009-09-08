@@ -21,7 +21,7 @@ Note:	The whole release process takes about 4 hours
 3.	Update and add settings archive
 	-------------------------------
 	[ ] Add new settings set to "_Settings"
-		> Run YAT, open settings, modify settings, save ungraded settings to new directory
+		> Run YAT, open settings, modify settings, save upgraded settings to new directory
 	[ ] Run YAT and save settings
 	[ ] Diff and verify the new settings
 	[ ] Add new settings to "YAT.Settings.Test.SettingsFilesProvider"
@@ -40,9 +40,9 @@ Note:	The whole release process takes about 4 hours
 
 6.	Write release notes
 	-------------------
-	[ ] Add them to offline archive "\Distribution"
 	[ ] Add them cumulatively to "\_Doc.User\YAT Release Notes.txt"
-	[ ] Add the overall release notes to release package directory
+	[ ] Add the cumulative release notes to the release package directory
+	[ ] Prepare the current release notes in offline archive "\Distribution"
 
 
 7.	Build YAT
