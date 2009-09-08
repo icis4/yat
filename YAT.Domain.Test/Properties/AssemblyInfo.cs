@@ -50,7 +50,7 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.99.*")]
-[assembly: AssemblyFileVersion("1.99.22.0")]
+[assembly: AssemblyFileVersion("1.99.23.0")]
 
 // CLS compliance
 [assembly: CLSCompliant(true)]
