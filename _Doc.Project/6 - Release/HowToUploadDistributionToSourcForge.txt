@@ -1,57 +1,33 @@
 
-1.	Upload distribution to SourceForge
-	----------------------------------
-	[ ] Open FileZilla
-	[ ] Use SFTP to connect to "frs.sourceforge.net"
-		> SourceForge user and password
-		> Port 22 for SFTP
-	[ ] Browse to "incoming" directory
-	[ ] Upload .zip's to "incoming"
+1.	Prepare upload to SourceForge
+	-----------------------------
+	[ ] Open File Manager
+	[ ] Add release folder (e.g. "Version 1.99.17 - YAT 2.0 Beta 2 Candidate 1")
+	[ ] Select folder as active upload folder
+	
+	HowTo: 
+	<https://sourceforge.net/apps/trac/sourceforge/wiki/Release%20files%20for%20download>
 
 
 2.	Add release
 	-----------
-	[ ] Open "Admin > File Releases"
-	[ ] Select "Add Release" for desired package
-	[ ] Set release name (e.g. "YAT 2.0 Beta 2 Candidate 1 Version 1.99.17")
-	[ ] "Create"
+	[ ] Upload release notes
+	[ ] Tick release notes as such
+	[ ] Upload distribution .zip
+	[ ] Tick platform
+	[ ] Link release to release notes
 
 
-3.	Add release notes
-	-----------------
-	[ ] Paste notes in
-	[ ] Paste changes in
-	[ ] Tick "preserve format"
-	[ ] "Submit"
-
-
-4.	Add files to release
-	--------------------
-	[ ] Tick desired files
-	[ ] "Add"
-
-
-5.	Edit each file
-	--------------
-	[ ] Set processor platform
-	[ ] Set file type
-	[ ] "Update/Refresh"
-
-
-6.	Check release and release notes
+3.	Check release and release notes
 	-------------------------------
-	[ ] Clear browser cache
+	[ ] Reload YAT web page
 	[ ] Download release and verify contents of .zip
 	[ ] Browse release notes
 
 
-7.	Hide obsolete release(s)
-	------------------------
-
-
-8.	Send monitoring email notice
-	----------------------------
-
-
-9.	Update news
+4.	Submit news
 	-----------
+	e.g. "Candidate 1 for Beta 3 has been released. See the release notes for details on new features, important changes, fixed bugs and known limitations."
+	
+	HowTo:
+	<https://sourceforge.net/apps/trac/sourceforge/wiki/News>

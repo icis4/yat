@@ -40,7 +40,7 @@ You can also download .NET under "http://www.microsoft.com/net/"
 YAT 2.0
 =======
 
-YAT 2.0 Beta 3 Candidate 1 Version 1.99.22 :: 2009-09-02
+YAT 2.0 Beta 3 Candidate 1 Version 1.99.22 :: 2009-09-08
 --------------------------------------------------------
 
 New:
@@ -375,6 +375,7 @@ All rights reserved.
 
 YAT is licensed under the GNU LGPL.
 See http://www.gnu.org/licenses/lgpl.html for license details.
+
 
 ********************************************************************************
                              End of YAT Release Notes
