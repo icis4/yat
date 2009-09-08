@@ -1,0 +1,6 @@
+
+Tools
+  > Settings
+    > IDE Support
+      > Visual Studio
+        > Enable = true

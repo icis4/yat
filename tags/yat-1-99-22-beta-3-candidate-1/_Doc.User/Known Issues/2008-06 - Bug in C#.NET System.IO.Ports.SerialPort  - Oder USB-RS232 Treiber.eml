@@ -1,0 +1,169 @@
+X-Account-Key: account7
+X-UIDL: UID821-1162504358
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
+Return-path: <Matthias.Klaey@mt.com>
+Envelope-to: matthias@jorj.ch
+Delivery-date: Wed, 18 Jun 2008 11:52:38 +0200
+Received: from ns.mt.com ([212.249.201.68] helo=ch00se10.mt.com)
+	by server8.cyon.ch with esmtp (Exim 4.68)
+	(envelope-from <Matthias.Klaey@mt.com>)
+	id 1K8uL4-00011x-5v
+	for matthias@jorj.ch; Wed, 18 Jun 2008 11:52:38 +0200
+Received: from ch00se32.eu.mt.mtnet ([172.21.4.114]) by ch00se10.mt.com with Microsoft SMTPSVC(6.0.3790.3959);
+	 Wed, 18 Jun 2008 11:52:27 +0200
+X-MimeOLE: Produced By Microsoft Exchange V6.5
+Content-class: urn:content-classes:message
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+	boundary="----_=_NextPart_001_01C8D129.03C60E04"
+Subject: Bug in C#.NET System.IO.Ports.SerialPort ? Oder USB-RS232 Treiber ?
+Date: Wed, 18 Jun 2008 11:52:26 +0200
+Message-ID: <31E2AD257FA8874D8ACC22427ACB59D6E12932@ch00se32.eu.mt.mtnet>
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Thread-Topic: Bug in C#.NET System.IO.Ports.SerialPort ? Oder USB-RS232 Treiber ?
+Thread-Index: AcjRKQOeKxfUJ7AhR4W3QYJZDUsXhg==
+From: <Matthias.Klaey@mt.com>
+To: <matthias@jorj.ch>
+X-OriginalArrivalTime: 18 Jun 2008 09:52:27.0105 (UTC) FILETIME=[04004510:01C8D129]
+X-Spam-Status: No, score=-1.1
+X-Spam-Score: -10
+X-Spam-Bar: -
+X-Spam-Flag: NO
+
+This is a multi-part message in MIME format.
+
+------_=_NextPart_001_01C8D129.03C60E04
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+Hoi z=E4me
+
+Im Zusammenhang mit YAT bin ich auf ein Problem mit =
+System.IO.Ports.SerialPort mit gewissen USB-RS232 Adaptern gestossen. =
+Der Fehler tritt immer dann auf, wenn =FCber l=E4ngere Zeit Daten =
+empfangen werden. Beispielsweise beim Empfang von SIR. Dies k=F6nnte =
+f=FCr eure Applikationen beim Erfassen von l=E4ngeren Messreihen =
+ebenfalls zum Problem werden.
+
+Anf=E4nglich dachte ich, dass ich selber den Fehler innerhalb von YAT =
+verursache. Daher habe ich ein eigenst=E4ndiges, minimals Testprojekt =
+erstellt, welches lediglich empfangene Zeichen in ein File schreibt. =
+Dabei habe ich reproduzierbar fehlende Zeichen festgestellt. Hier die =
+genauen Resultate:
+
+Laptop @ Home mit MCT U232 USB-RS232 Adapter:
+TestContinuousReceivingOfSIR - 2008-06-15 - 1613 - ~20 missing chars out =
+of ~600'000 chars total
+TestContinuousReceivingOfSIR - 2008-06-15 - 1649 - ~10 missing chars out =
+of ~360'000 chars total
+TestContinuousReceivingOfSIR - 2008-06-15 - 1813 - ~10 missing chars out =
+of ~360'000 chars total
+TestContinuousReceivingOfSIR - 2008-06-16 - 1032 - ~130 missing chars =
+out of ~9'000'000 chars total
+TestContinuousReceivingOfSIR - 2008-06-16 - 2245 - ~6 missing chars out =
+of ~360'000 chars total
+
+Desktop Rechner @ Work mit PL-2303 USB-RS232 Adapter:
+TestContinuousReceivingOfSIR - 2008-06-18 - 1111 - 0 missing chars out =
+of ~360'000 chars total :-)
+
+Bei Gelegenheit werde ich die Messungen mit einer Alternative zu =
+System.IO.Ports.SerialPort wiederholen und herausfinden, ob der Fehler =
+in System.IO.Ports.SerialPort oder im USB-RS232 Adapter Treiber =
+geschieht.
+
+Gr=FCsse
+Matthias
+
+------_=_NextPart_001_01C8D129.03C60E04
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV=3D"Content-Type" CONTENT=3D"text/html; =
+charset=3Diso-8859-1">
+<META NAME=3D"Generator" CONTENT=3D"MS Exchange Server version =
+6.5.7652.24">
+<TITLE>Bug in C#.NET System.IO.Ports.SerialPort ? Oder USB-RS232 Treiber =
+?</TITLE>
+</HEAD>
+<BODY>
+<!-- Converted from text/rtf format -->
+
+<P><SPAN LANG=3D"de-ch"><FONT SIZE=3D2 FACE=3D"Arial">Hoi =
+z=E4me</FONT></SPAN>
+</P>
+
+<P><SPAN LANG=3D"de-ch"><FONT SIZE=3D2 FACE=3D"Arial">Im Zusammenhang =
+mit YAT bin ich auf ein Problem mit System.IO.Ports.SerialPort mit =
+gewissen USB-RS232 Adaptern gestossen. Der Fehler tritt immer dann auf, =
+wenn =FCber l=E4ngere Zeit Daten empfangen werden. Beispielsweise beim =
+Empfang von SIR. Dies k=F6nnte f=FCr eure Applikationen beim Erfassen =
+von l=E4ngeren Messreihen ebenfalls zum Problem =
+werden.</FONT></SPAN></P>
+
+<P><SPAN LANG=3D"de-ch"><FONT SIZE=3D2 FACE=3D"Arial">Anf=E4nglich =
+dachte ich, dass ich selber den Fehler innerhalb von YAT verursache. =
+Daher habe ich ein eigenst=E4ndiges, minimals Testprojekt erstellt, =
+welches lediglich empfangene Zeichen in ein File schreibt. Dabei habe =
+ich reproduzierbar fehlende Zeichen festgestellt. Hier die genauen =
+Resultate:</FONT></SPAN></P>
+
+<P><SPAN LANG=3D"de-ch"><B><FONT SIZE=3D2 FACE=3D"Arial">Laptop @ Home =
+mit MCT U232 USB-RS232 Adapter:</FONT></B></SPAN>
+
+<BR><SPAN LANG=3D"en-us"><FONT SIZE=3D2 FACE=3D"Courier =
+New">TestContinuousReceivingOfSIR - 2008-06-15 - 1613 - ~20 missing =
+chars out of ~600'000 chars total</FONT></SPAN>
+
+<BR><SPAN LANG=3D"en-us"><FONT SIZE=3D2 FACE=3D"Courier =
+New">TestContinuousReceivingOfSIR - 2008-06-15 - 1649 - ~10 missing =
+chars out of ~360'000 chars total</FONT></SPAN>
+
+<BR><SPAN LANG=3D"en-us"><FONT SIZE=3D2 FACE=3D"Courier =
+New">TestContinuousReceivingOfSIR - 2008-06-15 - 1813 - ~10 missing =
+chars out of ~360'000 chars total</FONT></SPAN>
+
+<BR><SPAN LANG=3D"en-us"><FONT SIZE=3D2 FACE=3D"Courier =
+New">TestContinuousReceivingOfSIR - 2008-06-16 - 1032 - ~130 missing =
+chars out of ~9'000'000 chars total</FONT></SPAN>
+
+<BR><SPAN LANG=3D"en-us"><FONT SIZE=3D2 FACE=3D"Courier =
+New">TestContinuousReceivingOfSIR - 2008-06-16 - 2245 - ~6 missing chars =
+out of ~360'000 chars total</FONT></SPAN><SPAN LANG=3D"de-ch"></SPAN>
+</P>
+
+<P><SPAN LANG=3D"de-ch"><B><FONT SIZE=3D2 FACE=3D"Arial">Desktop Rechner =
+@ Work mit PL-2303 USB-RS232 Adapter:</FONT></B></SPAN>
+
+<BR><SPAN LANG=3D"en-us"><FONT SIZE=3D2 FACE=3D"Courier =
+New">TestContinuousReceivingOfSIR - 2008-06-18 - 1111 - 0 missing chars =
+out of ~360'000 chars total :-)</FONT></SPAN><SPAN =
+LANG=3D"de-ch"></SPAN>
+</P>
+
+<P><SPAN LANG=3D"de-ch"><FONT SIZE=3D2 FACE=3D"Arial">Bei Gelegenheit =
+werde ich die Messungen mit einer Alternative zu =
+System.IO.Ports.SerialPort wiederholen und herausfinden, ob der Fehler =
+in System.IO.Ports.SerialPort oder im USB-RS232 Adapter Treiber =
+geschieht.</FONT></SPAN></P>
+
+<P><SPAN LANG=3D"de-ch"><FONT SIZE=3D2 =
+FACE=3D"Arial">Gr=FCsse</FONT></SPAN>
+
+<BR><SPAN LANG=3D"de-ch"><FONT SIZE=3D2 =
+FACE=3D"Arial">Matthias</FONT></SPAN>
+</P>
+
+</BODY>
+</HTML>
+------_=_NextPart_001_01C8D129.03C60E04--
+
+
