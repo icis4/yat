@@ -40,6 +40,13 @@ You can also download .NET under "http://www.microsoft.com/net/"
 YAT 2.0
 =======
 
+YAT 2.0 Beta 3 Candidate 1 Version 1.99.23 :: 2009-09-10
+--------------------------------------------------------
+
+Fixed bugs:
+- Installer prerequisites fixed to .NET 3.5 (bug #2855869)
+
+
 YAT 2.0 Beta 3 Candidate 1 Version 1.99.22 :: 2009-09-08
 --------------------------------------------------------
 
