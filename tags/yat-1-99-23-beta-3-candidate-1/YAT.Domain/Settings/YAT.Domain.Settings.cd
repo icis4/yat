@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Tahoma" Size="8.25" />
+  <Class Name="YAT.Domain.Settings.TerminalSettings">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Settings\TerminalSettings.cs</FileName>
+      <HashCode>AAgDgAAgAEAAAAAAgEBAAQACMAAAAIAAAEAAAIAAQiA=</HashCode>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_io" />
+      <Field Name="_buffer" />
+      <Field Name="_display" />
+      <Field Name="_send" />
+      <Field Name="_textTerminal" />
+      <Field Name="_binaryTerminal" />
+    </ShowAsAssociation>
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <AssociationLine Name="_io" Type="YAT.Domain.Settings.IOSettings" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.25" Y="3.201" />
+        <Point X="1.25" Y="3.625" />
+        <Point X="3.25" Y="3.625" />
+        <Point X="3.25" Y="4" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_buffer" Type="YAT.Domain.Settings.BufferSettings" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.25" Y="3.201" />
+        <Point X="1.25" Y="3.625" />
+        <Point X="5.25" Y="3.625" />
+        <Point X="5.25" Y="4" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_display" Type="YAT.Domain.Settings.DisplaySettings" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.25" Y="3.201" />
+        <Point X="1.25" Y="3.625" />
+        <Point X="7.25" Y="3.625" />
+        <Point X="7.25" Y="4" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_send" Type="YAT.Domain.Settings.SendSettings" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.25" Y="3.201" />
+        <Point X="1.25" Y="3.625" />
+        <Point X="9.25" Y="3.625" />
+        <Point X="9.25" Y="4" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_textTerminal" Type="YAT.Domain.Settings.TextTerminalSettings" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.25" Y="3.201" />
+        <Point X="1.25" Y="3.625" />
+        <Point X="11.667" Y="3.625" />
+        <Point X="11.667" Y="4" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_binaryTerminal" Type="YAT.Domain.Settings.BinaryTerminalSettings" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.25" Y="3.201" />
+        <Point X="1.25" Y="3.625" />
+        <Point X="13.75" Y="3.625" />
+        <Point X="13.75" Y="4" />
+      </Path>
+    </AssociationLine>
+  </Class>
+  <Class Name="YAT.Domain.Settings.IOSettings">
+    <Position X="2.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Settings\IOSettings.cs</FileName>
+      <HashCode>AAAAAAAAEAAAAAAAggAAIAACoAAAAYAAAAAAQAAAAiA=</HashCode>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_serialPort" />
+      <Field Name="_socket" />
+    </ShowAsAssociation>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+  </Class>
+  <Class Name="YAT.Domain.Settings.BufferSettings">
+    <Position X="4.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Settings\BufferSettings.cs</FileName>
+      <HashCode>AAAAAAAAAQCAAABAgEAAAIACAAAAAIAAACAAAAAAAiA=</HashCode>
+    </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+  </Class>
+  <Class Name="YAT.Domain.Settings.DisplaySettings">
+    <Position X="6.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Settings\DisplaySettings.cs</FileName>
+      <HashCode>ACAAAAIAAAAAAEAAwAQAAAACAAIAAIACgAAAAAAAEig=</HashCode>
+    </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+  </Class>
+  <Class Name="YAT.Domain.Settings.SendSettings">
+    <Position X="8.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Settings\SendSettings.cs</FileName>
+      <HashCode>AAAAABAAAAAAAACAgAAAAAACAAAAAIAAACAAAAAAAiA=</HashCode>
+    </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+  </Class>
+  <Class Name="YAT.Domain.Settings.SerialPort.SerialPortSettings">
+    <Position X="1.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Settings\SerialPort\SerialPortSettings.cs</FileName>
+      <HashCode>AASAAAAACAAAAAEAgIAAgAACIAAAIIAAABBAAAIAAiA=</HashCode>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_communication" />
+    </ShowAsAssociation>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+  </Class>
+  <Class Name="YAT.Domain.Settings.Socket.SocketSettings">
+    <Position X="3.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Settings\Socket\SocketSettings.cs</FileName>
+      <HashCode>AAAACAgAAAAABAgEgAAAAAACCAAkAIAEAACAAAAAAyI=</HashCode>
+    </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+  </Class>
+  <Class Name="YAT.Domain.Settings.SerialPort.SerialCommunicationSettings">
+    <Position X="1.5" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <FileName>Settings\SerialPort\SerialCommunicationSettings.cs</FileName>
+      <HashCode>AAAAAAAAACAAADAEgABAAAgCAAQCAIAAAgAMAAAUAiA=</HashCode>
+    </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+  </Class>
+  <Class Name="YAT.Domain.Settings.BinaryTerminalSettings">
+    <Position X="12.75" Y="4" Width="2" />
+    <TypeIdentifier>
+      <FileName>BinaryTerminal\Settings\BinaryTerminalSettings.cs</FileName>
+      <HashCode>AIAAoAAAQAAAAAAAgAAAAAACIAAAAIAIAAAAIAAAAiA=</HashCode>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_rxDisplay" />
+      <Field Name="_txDisplay" />
+    </ShowAsAssociation>
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+  </Class>
+  <Class Name="YAT.Domain.Settings.TextTerminalSettings">
+    <Position X="10.5" Y="4" Width="1.75" />
+    <TypeIdentifier>
+      <FileName>TextTerminal\Settings\TextTerminalSettings.cs</FileName>
+      <HashCode>AAAIAAAAAAAAAiAEgIAAAQECqIoACIABACAgAgAEAyA=</HashCode>
+    </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+  </Class>
+  <Class Name="YAT.Domain.Settings.BinaryDisplaySettings">
+    <Position X="12.75" Y="6.75" Width="2" />
+    <TypeIdentifier>
+      <FileName>BinaryTerminal\Settings\BinaryDisplaySettings.cs</FileName>
+      <HashCode>AAgACAAAAAAAAAAAgAAAAAACACAAAIAAAIhAAAAAAiM=</HashCode>
+    </TypeIdentifier>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+  </Class>
+</ClassDiagram>

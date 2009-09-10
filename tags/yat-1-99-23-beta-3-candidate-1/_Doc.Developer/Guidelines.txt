@@ -1,0 +1,79 @@
+
+Comments
+--------
+
+Use special tags
+\fixme
+\remind
+\attention
+
+
+Preprocessor statements
+-----------------------
+
+Use
+#if (FALSE)
+to permanently disable blocks of code.
+FALSE is never defined in C#, #if (FALSE) clearly states that block isn't in use.
+
+Write
+#if (FALSE)
+			<Block>
+#endif
+at column 0 to keep code structure clear of disabled block.
+
+Use
+		#if (!DEBUG)
+			try
+			{
+		#endif
+to enable or disable blocks of code depending on configuration switches.
+Write preprocessor statements one level out of normal code structure to clearly show that these
+statements do not belong to the normal code. Still, don't use
+#if (!DEBUG)
+			try
+			{
+#endif
+because it adds agitation to the code structure.
+
+
+Classes
+-------
+Use static classes instead of Singletons
+
+
+override and new
+----------------
+
+Write
+public override <Name>
+but
+new public <Name>
+to emphasize the intended hiding of a method.
+
+
+Inheritance
+-----------
+- Implement IEquatable
+- Implement ICloneable (Problem: return type is object)
+- Implement TryParse() and Parse()
+- Use and TryParse() instead of Parse()
+
+
+Variables
+---------
+- Do not re-initialize fields with default value of respective type
+- Always initialize local variables
+
+
+.NET classes
+------------
+- Console.Title/.ForegroundColor/.ResetColor
+- System.Media.SystemSounds
+- DefaultFontValue
+
+
+Known issues
+------------
+- Die ReadLine() Methode der .NET Komponente funktioniert nicht zuverlässig mit USB-RS232 Konvertern
+- "Excel sample [.NET Framework]"

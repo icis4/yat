@@ -1,0 +1,27 @@
+
+Editor
+------
+
+Options
+  > Text Editor
+    > C#
+      > General
+        > Diplay > Line numers = true
+      > Tabs
+        > Indenting = Smart [Default]
+        > Tab size = 4 [Default]
+        > Indent size = 4 [Default]
+        > Keep tabs
+
+
+NUnit as external tool
+----------------------
+
+Tools
+  > External Tools
+    > Add"
+      > Title       = "NUnit"
+      > Command     = "<NUnitInstallPath>\bin\nunit.exe"
+      > Arguments   = "$(SolutionFileName)"
+      > Initial Dir = "$(SolutionDir)"
+    > Confirm "OK"

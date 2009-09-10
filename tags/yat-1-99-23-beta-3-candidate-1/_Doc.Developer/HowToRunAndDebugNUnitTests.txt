@@ -1,0 +1,30 @@
+
+1.	Ensure that environment is set up
+	---------------------------------
+	> COM1 and COM2 must be available
+		> If not available, use VSPE to create/connect missing ports
+
+
+2.	Start NUnit from within Visual Studio
+	-------------------------------------
+	> Run "Menu > Tools > External Tools > NUnit"
+
+
+3.	Run an NUnit test
+	-----------------
+	> Select a test and select "Run"
+
+
+4.	Run all NUnit tests
+	-------------------
+	> Open categories
+	> Add and exclude categories depending on required tests and test machine
+	> Select test root and select "Run"
+
+
+5.	Debug NUnit test from within Visual Studio
+	------------------------------------------
+	> Select "Menu > Debug > Attach to Process..."
+		> Select process "NUnit"
+	> Confirm "Attach"
+	> Set breakpoints in tests or tested code as ususal

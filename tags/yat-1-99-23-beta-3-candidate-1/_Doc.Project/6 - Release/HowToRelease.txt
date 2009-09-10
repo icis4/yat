@@ -1,0 +1,126 @@
+
+Note:	The whole release process takes about 4 hours
+
+
+1.	Set versions if not already done
+	--------------------------------
+	[ ] Set product name post fix in
+		"YAT.Utilities.ApplicationInfo.ProductNamePostFix" and
+	[ ] Set product versions in all YAT assembly infos
+		Attention: Ensure to replace version number including leading quote
+		           to keep SettingsFilesProvider and FileVersionsTest untouched
+		           e.g. replace "1.99.18 by "1.99.19
+	[ ] Set product versions in all MKY assembly infos
+		Attention: Ensure to replace version number including leading quote
+		           e.g. replace "1.0.1 by "1.0.2
+
+
+2.	Set installation version if not already done
+	--------------------------------------------
+	[ ] Set product title in "YAT.Setup"
+	[ ] Set product version in "YAT.Setup"
+
+
+3.	Update and add settings archive
+	-------------------------------
+	[ ] Add new settings set to "_Settings"
+		> Run YAT, open settings, modify settings, save upgraded settings to new directory
+	[ ] Run YAT and save settings
+	[ ] Diff and verify the new settings
+	[ ] Add new settings to "YAT.Settings.Test.SettingsFilesProvider"
+	[ ] Add new settings to "YAT.Settings.Test.FileVersionsTest"
+
+
+4.	Run automated tests
+	-------------------
+	[ ] Use NUnit
+
+
+5.	Run manual tests
+	----------------
+	[ ] According to manual test cases
+
+
+6.	Write release notes
+	-------------------
+	[ ] Add them cumulatively to "\_Doc.User\YAT Release Notes.txt"
+	[ ] Add the cumulative release notes to the release package directory
+
+
+7.	Build YAT
+	---------
+	[ ] Check "YAT.Setup" prerequisites for "Release"
+	[ ] Check "YAT.Setup" prerequisites for "Release with Redistributable"
+	[ ] Build "Release" configuration
+	[ ] Build "Release with Redistributable" configuration
+
+
+8.	Close Visual Studio
+	-------------------
+	[ ] Needed to ensure that YAT doesn't detect already running "YAT.vshost.exe" on startup
+
+
+9.	Install YAT
+	-----------
+
+
+10.	Run manual after-installation tests
+	-----------------------------------
+	[ ] According to manual after-installation test cases
+
+
+11.	Close feature requests and bugs that are covered by release
+	-----------------------------------------------------------
+
+
+12.	Commit and tag YAT
+	------------------
+	[ ] Commit any modifications to the subversion repository
+	[ ] Tag/checkpoint the project
+		> e.g. "/tags/yat-1-99-18-beta-2-candidate-2"
+		> e.g. "YAT 2.0 Beta 2 Candidate 2 Version 1.99.18"
+
+
+13.	Immediately increment product name and versions
+	-----------------------------------------------
+	[ ] Commit modifications to the subversion repository according to 1. and 2.
+
+
+14.	Pack YAT
+	--------
+	[ ] Add a new directory to the offline archive "\YAT\Releases and Checkpoints"
+	[ ] Update "\Distribution\Release" and "\Distribution\Release With Redistributable"
+	[ ] Update the two according .zip files
+
+
+15.	Upload YAT
+	----------
+	[ ] According to "HowToUploadDistributionToSourcForge.txt"
+
+
+16.	Send e-mail to the YAT mailing list
+	-----------------------------------
+	[ ] "y-a-terminal-users@lists.sourceforge.net"
+	[ ] Send as text and HTML formatted
+	[ ] Save e-mail in offline archive "\Distribution"
+
+
+17.	Recreate YAT working copy
+	-------------------------
+	[ ] Remove existing backups "_Trunk_Old"
+	[ ] Rename the existing working copy to "_Trunk_Old"
+	[ ] Create a new folder "_Trunk"
+	[ ] Check the head revision out into "_Trunk"
+
+
+18.	Archive YAT
+	-----------
+	[ ] Copy the working copy to "\YAT\Releases and Checkpoints\Working Copy"
+	[ ] Clean the copy using "\_Scripts\CleanAll.bat"
+	[ ] Pack the copy into a properly named zip file
+
+
+19.	Verify YAT working copy
+	-----------------------
+	[ ] Open the YAT solution and verify that it still properly builds and runs
+		> To be done after archiving to keep temporaries at a minimum
