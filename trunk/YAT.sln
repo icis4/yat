@@ -187,8 +187,8 @@ Global
 		{1E91D8B1-CFE6-4914-BDCF-AA204773CECA}.Release Test|Any CPU.Build.0 = Release|Any CPU
 		{1E91D8B1-CFE6-4914-BDCF-AA204773CECA}.Release with Redistributable|Any CPU.ActiveCfg = Release|Any CPU
 		{1E91D8B1-CFE6-4914-BDCF-AA204773CECA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F46DFE27-1F74-4558-AD39-E7EA74822483}.Debug Test|Any CPU.ActiveCfg = Debug
-		{F46DFE27-1F74-4558-AD39-E7EA74822483}.Debug|Any CPU.ActiveCfg = Debug
+		{F46DFE27-1F74-4558-AD39-E7EA74822483}.Debug Test|Any CPU.ActiveCfg = Release
+		{F46DFE27-1F74-4558-AD39-E7EA74822483}.Debug|Any CPU.ActiveCfg = Release
 		{F46DFE27-1F74-4558-AD39-E7EA74822483}.Release Test|Any CPU.ActiveCfg = Release
 		{F46DFE27-1F74-4558-AD39-E7EA74822483}.Release with Redistributable|Any CPU.ActiveCfg = Release with Redistributable
 		{F46DFE27-1F74-4558-AD39-E7EA74822483}.Release with Redistributable|Any CPU.Build.0 = Release with Redistributable

@@ -45,12 +45,12 @@ Note:	The whole release process takes about 4 hours
 	-------------------
 	[ ] Add them cumulatively to "\_Doc.User\YAT Release Notes.txt"
 	[ ] Add the cumulative release notes to the release package directory
-	[ ] Prepare the current release notes in offline archive "\Distribution"
 
 
 7.	Build YAT
 	---------
-	[ ] Check "YAT.Setup" prerequisites
+	[ ] Check "YAT.Setup" prerequisites for "Release"
+	[ ] Check "YAT.Setup" prerequisites for "Release with Redistributable"
 	[ ] Build "Release" configuration
 	[ ] Build "Release with Redistributable" configuration
 
@@ -81,16 +81,16 @@ Note:	The whole release process takes about 4 hours
 		> e.g. "YAT 2.0 Beta 2 Candidate 2 Version 1.99.18"
 
 
-13.	Pack YAT
+13.	Immediately increment product name and versions
+	-----------------------------------------------
+	[ ] Commit modifications to the subversion repository according to 1. and 2.
+
+
+14.	Pack YAT
 	--------
 	[ ] Add a new directory to the offline archive "\YAT\Releases and Checkpoints"
 	[ ] Update "\Distribution\Release" and "\Distribution\Release With Redistributable"
 	[ ] Update the two according .zip files
-
-
-14.	Immediately increment product name and versions
-	-----------------------------------------------
-	[ ] Commit modifications to the subversion repository according to 1. and 2.
 
 
 15.	Upload YAT
@@ -105,10 +105,12 @@ Note:	The whole release process takes about 4 hours
 	[ ] Save e-mail in offline archive "\Distribution"
 
 
-17.	Recreate YAT sandbox
-	--------------------
-	[ ] Temporarily rename the sandbox
-	[ ] 
+17.	Recreate YAT working copy
+	-------------------------
+	[ ] Remove existing backups "_Trunk_Old"
+	[ ] Rename the existing working copy to "_Trunk_Old"
+	[ ] Create a new folder "_Trunk"
+	[ ] Check the head revision out into "_Trunk"
 
 
 18.	Archive YAT
@@ -116,3 +118,9 @@ Note:	The whole release process takes about 4 hours
 	[ ] Copy the working copy to "\YAT\Releases and Checkpoints\Working Copy"
 	[ ] Clean the copy using "\_Scripts\CleanAll.bat"
 	[ ] Pack the copy into a properly named zip file
+
+
+19.	Verify YAT working copy
+	-----------------------
+	[ ] Open the YAT solution and verify that it still properly builds and runs
+		> To be done after archiving to keep temporaries at a minimum
