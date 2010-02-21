@@ -63,7 +63,7 @@ namespace UsbLibrary
                 {
                     DataSend(this, new DataSendEventArgs(data));
                 }
-            }catch (HIDDeviceException ex)
+            }catch (HIDDeviceException)
             {
                 // Device may have been removed!
             }catch (Exception ex)
