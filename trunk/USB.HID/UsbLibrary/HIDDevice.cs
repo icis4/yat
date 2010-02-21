@@ -106,7 +106,7 @@ namespace UsbLibrary
 
                         BeginAsyncRead();	// kick off the first asynchronous read                              
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         throw HIDDeviceException.GenerateWithWinError("Failed to get the detailed data from the hid.");
                     }
@@ -158,7 +158,7 @@ namespace UsbLibrary
                     BeginAsyncRead();	// when all that is done, kick off another read for the next report
                 }                
             }
-            catch(IOException ex)	// if we got an IO exception, the device was removed
+            catch(IOException)	// if we got an IO exception, the device was removed
             {
                 HandleDeviceRemoved();
                 if (OnDeviceRemoved != null)
@@ -178,7 +178,7 @@ namespace UsbLibrary
             {
                 m_oFile.Write(oOutRep.Buffer, 0, oOutRep.BufferLength);
             }
-            catch (IOException ex)
+            catch (IOException)
             {
                 //Console.WriteLine(ex.ToString());
                 // The device was removed!

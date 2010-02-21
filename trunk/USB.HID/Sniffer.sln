@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsbLibrary", "UsbLibrary\UsbLibrary.csproj", "{71E42A6D-C432-4C03-BF4F-ABFD2A3173E0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsbApp", "UsbApp\UsbApp.csproj", "{8A576B45-04F3-4811-9BEE-09860C05F2EF}"
