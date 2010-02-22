@@ -7,7 +7,7 @@
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2009 Matthias Kläy.
+// Copyright © 2003-2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -21,7 +21,7 @@ using System.Threading;
 
 using MKY.Utilities.Event;
 
-// The MKY.IO.Serial namespace combines serial port and socket infrastructure. This code is
+// The MKY.IO.Serial namespace combines various serial interface infrastructure. This code is
 // intentionally placed into the MKY.IO.Serial namespace even though the file is located in
 // MKY.IO.Serial\Socket for better separation of the implementation files.
 namespace MKY.IO.Serial
@@ -186,7 +186,47 @@ namespace MKY.IO.Serial
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
+        /// <summary></summary>
+        public System.Net.IPAddress RemoteIPAddress
+        {
+            get
+            {
+                AssertNotDisposed();
+                return (_remoteIPAddress);
+            }
+        }
+
+        /// <summary></summary>
+        public int RemotePort
+        {
+            get
+            {
+                AssertNotDisposed();
+                return (_remotePort);
+            }
+        }
+
+        /// <summary></summary>
+        public System.Net.IPAddress LocalIPAddress
+        {
+            get
+            {
+                AssertNotDisposed();
+                return (_localIPAddress);
+            }
+        }
+
+        /// <summary></summary>
+        public int LocalPort
+        {
+            get
+            {
+                AssertNotDisposed();
+                return (_localPort);
+            }
+        }
+
+        /// <summary></summary>
 		public bool IsStarted
 		{
 			get
@@ -351,30 +391,30 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public int Receive(out byte[] buffer)
+        public int Receive(out byte[] data)
 		{
 			AssertNotDisposed();
 
 			if (IsClient)
-				return (_client.Receive(out buffer));
+                return (_client.Receive(out data));
 			else if (IsServer)
-				return (_server.Receive(out buffer));
+                return (_server.Receive(out data));
 			else
 			{
-				buffer = new byte[] { };
+                data = new byte[] { };
 				return (0);
 			}
 		}
 
 		/// <summary></summary>
-		public void Send(byte[] buffer)
+        public void Send(byte[] data)
 		{
 			AssertNotDisposed();
 
 			if (IsClient)
-				_client.Send(buffer);
+                _client.Send(data);
 			else if (IsServer)
-				_server.Send(buffer);
+                _server.Send(data);
 		}
 
 		#endregion

@@ -7,7 +7,7 @@
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2009 Matthias Kläy.
+// Copyright © 2003-2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
@@ -75,6 +75,15 @@ namespace YAT.Domain
 						settings.Socket.LocalUdpPort
 						));
 				}
+
+                case Domain.IOType.UsbHid:
+                {
+                    return (new UsbHidPort
+                        (
+                        settings.UsbHidPort.DeviceId,
+                        settings.UsbHidPort.AutoReconnect
+                        ));
+                }
 
 				default: throw (new NotImplementedException("Unknown IO type"));
 			}

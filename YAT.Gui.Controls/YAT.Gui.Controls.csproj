@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{0762E929-7EB5-4BDA-9018-DBA94DA8BDE5}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -53,6 +53,18 @@
     </Compile>
     <Compile Include="BinaryDisplaySettingsSet.Designer.cs">
       <DependentUpon>BinaryDisplaySettingsSet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UsbHidPortSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UsbHidPortSettings.Designer.cs">
+      <DependentUpon>UsbHidPortSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UsbHidPortSelection.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UsbHidPortSelection.Designer.cs">
+      <DependentUpon>UsbHidPortSelection.cs</DependentUpon>
     </Compile>
     <Compile Include="Send.cs">
       <SubType>UserControl</SubType>
@@ -153,6 +165,14 @@
     <EmbeddedResource Include="BinaryDisplaySettingsSet.resx">
       <SubType>Designer</SubType>
       <DependentUpon>BinaryDisplaySettingsSet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UsbHidPortSettings.resx">
+      <DependentUpon>UsbHidPortSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UsbHidPortSelection.resx">
+      <DependentUpon>UsbHidPortSelection.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Send.resx">
       <SubType>Designer</SubType>

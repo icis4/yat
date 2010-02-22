@@ -1,8 +1,20 @@
 
+Assemblies
+----------
+
+Sign all library/dll assemblies using the strong name tool:
+1. Open the Visual Studio command prompt with administrator rights
+2. Go to "C:\"
+3. Enter "sn -k <FileName>.snk"
+4. Move the .snk file to the "\Properties" directory of the project
+5. Project Properties > Signing > Sign
+
+
 Comments
 --------
 
 Use special tags
+\todo
 \fixme
 \remind
 \attention
@@ -66,8 +78,8 @@ Variables
 - Always initialize local variables
 
 
-.NET classes
-------------
+Useful .NET classes
+-------------------
 - Console.Title/.ForegroundColor/.ResetColor
 - System.Media.SystemSounds
 - DefaultFontValue

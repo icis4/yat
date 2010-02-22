@@ -91,6 +91,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Windows.Forms.Test", "M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Serial.Test", "MKY.IO.Serial.Test\MKY.IO.Serial.Test.csproj", "{CAEC3FFA-F303-4CCB-A42A-36F45AA00BD2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsbLibrary", "USB.HID\UsbLibrary\UsbLibrary.csproj", "{71E42A6D-C432-4C03-BF4F-ABFD2A3173E0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Test|Any CPU = Debug Test|Any CPU
@@ -390,6 +392,16 @@ Global
 		{CAEC3FFA-F303-4CCB-A42A-36F45AA00BD2}.Release Test|Any CPU.Build.0 = Release|Any CPU
 		{CAEC3FFA-F303-4CCB-A42A-36F45AA00BD2}.Release with Redistributable|Any CPU.ActiveCfg = Release|Any CPU
 		{CAEC3FFA-F303-4CCB-A42A-36F45AA00BD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71E42A6D-C432-4C03-BF4F-ABFD2A3173E0}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{71E42A6D-C432-4C03-BF4F-ABFD2A3173E0}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
+		{71E42A6D-C432-4C03-BF4F-ABFD2A3173E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71E42A6D-C432-4C03-BF4F-ABFD2A3173E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71E42A6D-C432-4C03-BF4F-ABFD2A3173E0}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
+		{71E42A6D-C432-4C03-BF4F-ABFD2A3173E0}.Release Test|Any CPU.Build.0 = Release|Any CPU
+		{71E42A6D-C432-4C03-BF4F-ABFD2A3173E0}.Release with Redistributable|Any CPU.ActiveCfg = Release|Any CPU
+		{71E42A6D-C432-4C03-BF4F-ABFD2A3173E0}.Release with Redistributable|Any CPU.Build.0 = Release|Any CPU
+		{71E42A6D-C432-4C03-BF4F-ABFD2A3173E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71E42A6D-C432-4C03-BF4F-ABFD2A3173E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

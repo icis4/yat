@@ -7,7 +7,7 @@
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2009 Matthias Kläy.
+// Copyright © 2003-2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -58,12 +58,10 @@ namespace MKY.IO.Ports
 		public const string FirstStandardPortName = "COM1";
 
 		/// <summary></summary>
-		public const string DefaultDescriptionSeparator = "-";
-
-		/// <summary></summary>
-		public const string DefaultInUseSeparator = "-";
-		/// <summary></summary>
 		public const string DefaultInUseText = "(in use)";
+
+        /// <summary></summary>
+        public const string DefaultSeparator = " - ";
 
 		/// <summary></summary>
 		public static readonly Regex StandardPortNumberRegex;
@@ -86,13 +84,13 @@ namespace MKY.IO.Ports
 		private string _name = FirstStandardPortName;
 		private int _standardPortNumber = FirstStandardPortNumber;
 
-		private string _description = null;
-		private string _descriptionSeparator = null;
+		private string _description = "";
 		private bool _hasDescriptonFromSystem = false;
 
 		private bool _isInUse = false;
-		private string _inUseText = null;
-		private string _inUseSeparator = null;
+		private string _inUseText = "";
+
+        private string _separator = DefaultSeparator;
 
 		#endregion
 
@@ -146,8 +144,6 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public SerialPortId()
 		{
-			_name = FirstStandardPortName;
-			_standardPortNumber = FirstStandardPortNumber;
 		}
 
 		/// <summary></summary>
@@ -186,11 +182,19 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		public SerialPortId(SerialPortId id)
+		public SerialPortId(SerialPortId rhs)
 		{
-			_name = id._name;
-			_standardPortNumber = id._standardPortNumber;
-		}
+            _name = rhs._name;
+            _standardPortNumber = rhs._standardPortNumber;
+
+            _description = rhs._description;
+            _hasDescriptonFromSystem = rhs._hasDescriptonFromSystem;
+
+            _isInUse = rhs._isInUse;
+            _inUseText = rhs._inUseText;
+
+            _separator = rhs._separator;
+        }
 
 		#endregion
 
@@ -257,36 +261,7 @@ namespace MKY.IO.Ports
 		public string Description
 		{
 			get { return (_description); }
-			set
-			{
-				if (value == "")
-					_description = null;
-				else
-					_description = value;
-			}
-		}
-
-		/// <summary>
-		/// The separator which is shown when port is currently in use, e.g. "COM1 - Serial On USB Port".
-		/// </summary>
-		[XmlIgnore]
-		[DefaultValue(DefaultDescriptionSeparator)]
-		public string DescriptionSeparator
-		{
-			get
-			{
-				if (_descriptionSeparator == null)
-					return (DefaultDescriptionSeparator);
-				else
-					return (_descriptionSeparator);
-			}
-			set
-			{
-				if (value == "")
-					_descriptionSeparator = null;
-				else
-					_descriptionSeparator = value;
-			}
+			set { _description = value;  }
 		}
 
 		/// <summary>
@@ -318,42 +293,36 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				if (_inUseText == null)
+				if (_inUseText == "")
 					return (DefaultInUseText);
 				else
 					return (_inUseText);
 			}
 			set
 			{
-				if (value == "")
-					_inUseText = null;
-				else
-					_inUseText = value;
+				_inUseText = value;
 			}
 		}
 
-		/// <summary>
-		/// The separator which is shown when port is currently in use, e.g. "COM1 - (in use)".
-		/// </summary>
-		[XmlIgnore]
-		[DefaultValue(DefaultInUseSeparator)]
-		public string InUseSeparator
-		{
-			get
-			{
-				if (_inUseSeparator == null)
-					return (DefaultInUseSeparator);
-				else
-					return (_inUseSeparator);
-			}
-			set
-			{
-				if (value == "")
-					_inUseSeparator = null;
-				else
-					_inUseSeparator = value;
-			}
-		}
+        /// <summary>
+        /// The separator, e.g. "COM1 - Serial On USB Port".
+        /// </summary>
+        [XmlIgnore]
+        [DefaultValue(DefaultSeparator)]
+        public string Separator
+        {
+            get
+            {
+                if (_separator == "")
+                    return (DefaultSeparator);
+                else
+                    return (_separator);
+            }
+            set
+            {
+                _separator = value;
+            }
+        }
 
 		#endregion
 
@@ -363,7 +332,7 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 
 		/// <summary>
-		/// Queries WMI (Windows Management Instrumentation) trying to retrieve to description
+		/// Queries WMI (Windows Management Instrumentation) trying to retrieve the description
 		/// that is associated with the serial port.
 		/// </summary>
 		/// <remarks>
@@ -426,19 +395,15 @@ namespace MKY.IO.Ports
 
 			sb.Append(Name);                     // "COM10"
 
-			if (appendDescription && (Description != null))
+            if (appendDescription && (Description != null) && (Description != ""))
 			{
-				sb.Append(" ");
-				sb.Append(DescriptionSeparator); // "COM10 -"
-				sb.Append(" ");
+				sb.Append(Separator);            // "COM10 - "
 				sb.Append(Description);          // "COM10 - Serial On USB Port"
 			}
 
 			if (appendInUseText && IsInUse)
 			{
-				sb.Append(" ");
-				sb.Append(InUseSeparator);       // "COM10 - Serial On USB Port -"
-				sb.Append(" ");
+				sb.Append(Separator);            // "COM10 - Serial On USB Port - "
 				sb.Append(InUseText);            // "COM10 - Serial On USB Port - (in use)"
 			}
 
@@ -657,9 +622,9 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 
 		/// <summary></summary>
-		public static implicit operator string(SerialPortId port)
+		public static implicit operator string(SerialPortId id)
 		{
-			return (port.Name);
+            return (id.Name);
 		}
 
 		/// <summary></summary>
@@ -669,9 +634,9 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(SerialPortId port)
+        public static implicit operator int(SerialPortId id)
 		{
-			return (port.StandardPortNumber);
+            return (id.StandardPortNumber);
 		}
 
 		/// <summary></summary>

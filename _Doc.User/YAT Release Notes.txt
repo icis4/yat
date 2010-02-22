@@ -6,7 +6,7 @@
    RS-232/422/423/485 TCP/UDP terminal to operate and debug serial connections
  ------------------------------------------------------------------------------
            Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-                         Copyright © 2003-2009 Matthias Kläy.
+                         Copyright © 2003-2010 Matthias Kläy.
                                 All rights reserved.
 ********************************************************************************
 
@@ -39,6 +39,20 @@ You can also download .NET under "http://www.microsoft.com/net/"
 
 YAT 2.0
 =======
+
+YAT 2.0 Beta 3 Candidate 1 Version 1.99.2x :: 2010-0x-xx
+--------------------------------------------------------
+
+New:
+- Support for USB Ser/HID added (feature request #2825931)
+
+Important changes:
+- Update to NUnit 2.5.3
+- <>(bug #2813227)
+
+Fixed bugs:
+- <> (bug #2855869)
+
 
 YAT 2.0 Beta 3 Candidate 1 Version 1.99.23 :: 2009-09-10
 --------------------------------------------------------
@@ -377,7 +391,7 @@ YAT 2.1 :: Not planned yet
 --------------------------------------------------------------------------------
 
 Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-Copyright © 2003-2009 Matthias Kläy.
+Copyright © 2003-2010 Matthias Kläy.
 All rights reserved.
 
 YAT is licensed under the GNU LGPL.

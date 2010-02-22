@@ -7,7 +7,7 @@
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2009 Matthias Kläy.
+// Copyright © 2003-2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
@@ -39,7 +39,9 @@ namespace YAT.Model.Settings
 		private int _socketLocalTcpPort;
 		private int _socketLocalUdpPort;
 
-		private bool _startTerminal;
+        private MKY.IO.Serial.UsbDeviceId _usbDeviceId;
+
+        private bool _startTerminal;
 
 		/// <summary></summary>
 		public NewTerminalSettings()
@@ -74,6 +76,8 @@ namespace YAT.Model.Settings
 			_socketLocalTcpPort   = rhs.SocketLocalTcpPort;
 			_socketLocalUdpPort   = rhs.SocketLocalUdpPort;
 
+            _usbDeviceId          = rhs.UsbDeviceId;
+
 			_startTerminal        = rhs.StartTerminal;
 
 			ClearChanged();
@@ -95,6 +99,8 @@ namespace YAT.Model.Settings
 			SocketLocalInterface = MKY.IO.Serial.SocketSettings.DefaultLocalInterface;
 			SocketLocalTcpPort   = MKY.IO.Serial.SocketSettings.DefaultPort;
 			SocketLocalUdpPort   = MKY.IO.Serial.SocketSettings.DefaultPort + 1;
+
+            UsbDeviceId          = MKY.IO.Serial.UsbDeviceId.DefaultDevice;
 
 			StartTerminal = true;
 		}
@@ -261,7 +267,22 @@ namespace YAT.Model.Settings
 			}
 		}
 
-		/// <summary></summary>
+        /// <summary></summary>
+        [XmlElement("UsbDeviceId")]
+        public MKY.IO.Serial.UsbDeviceId UsbDeviceId
+        {
+            get { return (_usbDeviceId); }
+            set
+            {
+                if (_usbDeviceId != value)
+                {
+                    _usbDeviceId = value;
+                    SetChanged();
+                }
+            }
+        }
+
+        /// <summary></summary>
 		[XmlElement("StartTerminal")]
 		public bool StartTerminal
 		{
@@ -309,6 +330,7 @@ namespace YAT.Model.Settings
 					_socketLocalInterface.Equals(value._socketLocalInterface) &&
 					_socketLocalTcpPort.Equals(value._socketLocalTcpPort) &&
 					_socketLocalUdpPort.Equals(value._socketLocalUdpPort) &&
+					_usbDeviceId.Equals       (value._usbDeviceId) &&
 					_startTerminal.Equals     (value._startTerminal)
 					);
 			}

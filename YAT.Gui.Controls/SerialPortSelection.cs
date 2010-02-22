@@ -7,7 +7,7 @@
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2009 Matthias Kläy.
+// Copyright © 2003-2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
@@ -35,15 +35,6 @@ namespace YAT.Gui.Controls
 	[DefaultEvent("PortIdChanged")]
 	public partial class SerialPortSelection : UserControl
 	{
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private const bool _ShowSerialPortDefault = true;
-
-		#endregion
-
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -51,8 +42,6 @@ namespace YAT.Gui.Controls
 
 		private bool _isStartingUp = true;
 		private bool _isSettingControls = false;
-
-		private bool _showSerialPort = _ShowSerialPortDefault;
 
 		private SerialPortId _portId = SerialPortId.DefaultPort;
 
@@ -85,22 +74,6 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
-
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public bool ShowSerialPort
-		{
-			get { return (_showSerialPort); }
-			set
-			{
-				if (_showSerialPort != value)
-				{
-					_showSerialPort = value;
-					SetSerialPortList(); // refresh serial port list if allowed and needed
-					SetControls();
-				}
-			}
-		}
 
 		[Category("Serial Port")]
 		[Description("Serial port ID.")]
@@ -257,7 +230,7 @@ namespace YAT.Gui.Controls
 
 		private void SetSerialPortList()
 		{
-			if (Enabled && ShowSerialPort)
+            if (Enabled && !DesignMode)
 			{
 				_isSettingControls = true;
 
@@ -267,7 +240,7 @@ namespace YAT.Gui.Controls
 				ports.FillWithAvailablePorts();
 				ports.GetDescriptionsFromSystem();
 
-				if (!DesignMode && ApplicationSettings.LocalUser.General.DetectSerialPortsInUse)
+				if (ApplicationSettings.LocalUser.General.DetectSerialPortsInUse)
 				{
 					// Install timer which shows a dialog if scanning takes more than 500ms
 					timer_ShowScanDialog.Start();
@@ -321,8 +294,8 @@ namespace YAT.Gui.Controls
 		{
 			_isSettingControls = true;
 
-			if (_showSerialPort)
-			{
+            if ((comboBox_Port.Items.Count > 0) && !DesignMode)
+            {
 				if (_portId != null)
 					comboBox_Port.SelectedItem = _portId;
 				else

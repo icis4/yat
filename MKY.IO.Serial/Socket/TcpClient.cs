@@ -7,7 +7,7 @@
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2009 Matthias Kläy.
+// Copyright © 2003-2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -21,7 +21,7 @@ using System.Threading;
 
 using MKY.Utilities.Event;
 
-// The MKY.IO.Serial namespace combines serial port and socket infrastructure. This code is
+// The MKY.IO.Serial namespace combines various serial interface infrastructure. This code is
 // intentionally placed into the MKY.IO.Serial namespace even though the file is located in
 // MKY.IO.Serial\Socket for better separation of the implementation files.
 namespace MKY.IO.Serial
@@ -36,11 +36,11 @@ namespace MKY.IO.Serial
 
 		private enum SocketState
 		{
-			Disconnecting,
-			Disconnected,
 			Connecting,
 			Connected,
-			WaitingForReconnect,
+            Disconnecting,
+            Disconnected,
+            WaitingForReconnect,
 			Error,
 		}
 
@@ -62,13 +62,13 @@ namespace MKY.IO.Serial
 		private SocketState _state = SocketState.Disconnected;
 		private object _stateSyncObj = new object();
 
-		private Queue<byte> _receiveBuffer = new Queue<byte>();
-
 		private ALAZ.SystemEx.NetEx.SocketsEx.SocketClient _socket;
 		private ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection _socketConnection;
 		private object _socketConnectionSyncObj = new object();
 
-		private System.Timers.Timer _reconnectTimer;
+        private Queue<byte> _receiveQueue = new Queue<byte>();
+
+        private System.Timers.Timer _reconnectTimer;
 
 		#endregion
 
@@ -175,7 +175,37 @@ namespace MKY.IO.Serial
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
+        /// <summary></summary>
+        public System.Net.IPAddress RemoteIPAddress
+        {
+            get
+            {
+                AssertNotDisposed();
+                return (_remoteIPAddress);
+            }
+        }
+
+        /// <summary></summary>
+        public int RemotePort
+        {
+            get
+            {
+                AssertNotDisposed();
+                return (_remotePort);
+            }
+        }
+
+        /// <summary></summary>
+        public AutoRetry AutoReconnect
+        {
+            get
+            {
+                AssertNotDisposed();
+                return (_autoReconnect);
+            }
+        }
+
+        /// <summary></summary>
 		public bool IsStarted
 		{
 			get
@@ -249,11 +279,23 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_receiveBuffer.Count);
+				return (_receiveQueue.Count);
 			}
 		}
 
-		/// <summary></summary>
+        private bool AutoReconnectEnabledAndAllowed
+        {
+            get
+            {
+                return
+                    (
+                        !IsDisposed && IsStarted && !IsOpen &&
+                        _autoReconnect.Enabled
+                    );
+            }
+        }
+
+        /// <summary></summary>
 		public object UnderlyingIOInstance
 		{
 			get
@@ -293,36 +335,36 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public int Receive(out byte[] buffer)
+		public int Receive(out byte[] data)
 		{
 			AssertNotDisposed();
 		
-			if (_receiveBuffer.Count > 0)
+			if (_receiveQueue.Count > 0)
 			{
-				lock (_receiveBuffer)
+				lock (_receiveQueue)
 				{
-					int count = _receiveBuffer.Count;
-					buffer = new byte[count];
+					int count = _receiveQueue.Count;
+					data = new byte[count];
 					for (int i = 0; i < count; i++)
-						buffer[i] = _receiveBuffer.Dequeue();
+						data[i] = _receiveQueue.Dequeue();
 				}
 			}
 			else
 			{
-				buffer = new byte[] { };
+				data = new byte[] { };
 			}
-			return (buffer.Length);
+			return (data.Length);
 		}
 
 		/// <summary></summary>
-		public void Send(byte[] buffer)
+        public void Send(byte[] data)
 		{
 			AssertNotDisposed();
 
 			if (IsStarted)
 			{
 				if (_socketConnection != null)
-					_socketConnection.BeginSend(buffer);
+                    _socketConnection.BeginSend(data);
 			}
 		}
 
@@ -373,6 +415,9 @@ namespace MKY.IO.Serial
 
 		private void StartSocket()
 		{
+            if (_socket != null)
+                DisposeSocket();
+
 			SetStateAndNotify(SocketState.Connecting);
 
 			_socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketClient(System.Net.Sockets.ProtocolType.Tcp,
@@ -391,12 +436,6 @@ namespace MKY.IO.Serial
 			// The ALAZ sockets by default stop synchronously. However, due to some other issues
 			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
 			_socket.Stop();
-		}
-
-		private void RestartSocket()
-		{
-			Stop();
-			Start();
 		}
 
 		#endregion
@@ -431,10 +470,10 @@ namespace MKY.IO.Serial
 		/// </param>
 		public void OnReceived(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
-			lock (_receiveBuffer)
+			lock (_receiveQueue)
 			{
 				foreach (byte b in e.Buffer)
-					_receiveBuffer.Enqueue(b);
+					_receiveQueue.Enqueue(b);
 			}
 			OnDataReceived(new EventArgs());
 
@@ -464,10 +503,9 @@ namespace MKY.IO.Serial
 			lock (_socketConnectionSyncObj)
 				_socketConnection = null;
 
-			if (_autoReconnect.Enabled)
+			if (AutoReconnectEnabledAndAllowed)
 			{
 				SetStateAndNotify(SocketState.WaitingForReconnect);
-
 				StartReconnectTimer();
 			}
 			else
@@ -484,10 +522,9 @@ namespace MKY.IO.Serial
 		/// </param>
 		public void OnException(ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs e)
 		{
-			if (_autoReconnect.Enabled)
+			if (AutoReconnectEnabledAndAllowed)
 			{
 				SetStateAndNotify(SocketState.WaitingForReconnect);
-
 				StartReconnectTimer();
 			}
 			else
@@ -532,7 +569,7 @@ namespace MKY.IO.Serial
 
 		private void _reconnectTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			if (!IsDisposed && IsStarted && !IsConnectedOrConnecting)
+			if (AutoReconnectEnabledAndAllowed)
 			{
 				try
 				{
@@ -565,16 +602,16 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-			EventHelper.FireSync(IOControlChanged, this, e);
-			throw (new NotSupportedException("Event not in use"));
-		}
+            MKY.Utilities.Unused.PreventCompilerWarning(IOControlChanged);
+            throw (new NotSupportedException("Event not in use"));
+        }
 
 		/// <summary></summary>
 		protected virtual void OnIORequest(IORequestEventArgs e)
 		{
-			EventHelper.FireSync(IORequest, this, e);
+            MKY.Utilities.Unused.PreventCompilerWarning(IORequest);
 			throw (new NotSupportedException("Event not in use"));
-		}
+        }
 
 		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
