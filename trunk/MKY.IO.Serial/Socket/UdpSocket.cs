@@ -7,7 +7,7 @@
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2009 Matthias Kläy.
+// Copyright © 2003-2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -21,7 +21,7 @@ using System.Threading;
 
 using MKY.Utilities.Event;
 
-// The MKY.IO.Serial namespace combines serial port and socket infrastructure. This code is
+// The MKY.IO.Serial namespace combines various serial interface infrastructure. This code is
 // intentionally placed into the MKY.IO.Serial namespace even though the file is located in
 // MKY.IO.Serial\Socket for better separation of the implementation files.
 namespace MKY.IO.Serial
@@ -37,7 +37,7 @@ namespace MKY.IO.Serial
 		private enum SocketState
 		{
 			Opening,
-			Open,
+			Opened,
 			Closing,
 			Closed,
 			Error,
@@ -61,13 +61,13 @@ namespace MKY.IO.Serial
 		private SocketState _state = SocketState.Closed;
 		private object _stateSyncObj = new object();
 
-		private Queue<byte> _receiveBuffer = new Queue<byte>();
-
 		private ALAZ.SystemEx.NetEx.SocketsEx.SocketClient _socket;
 		private ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection _socketConnection;
 		private object _socketConnectionSyncObj = new object();
 
-		#endregion
+        private Queue<byte> _receiveQueue = new Queue<byte>();
+
+        #endregion
 
 		#region Events
 		//==========================================================================================
@@ -160,6 +160,36 @@ namespace MKY.IO.Serial
 		// Properties
 		//==========================================================================================
 
+        /// <summary></summary>
+        public System.Net.IPAddress RemoteIPAddress
+        {
+            get
+            {
+                AssertNotDisposed();
+                return (_remoteIPAddress);
+            }
+        }
+
+        /// <summary></summary>
+        public int RemotePort
+        {
+            get
+            {
+                AssertNotDisposed();
+                return (_remotePort);
+            }
+        }
+
+        /// <summary></summary>
+        public int LocalPort
+        {
+            get
+            {
+                AssertNotDisposed();
+                return (_localPort);
+            }
+        }
+
 		/// <summary></summary>
 		public bool IsStarted
 		{
@@ -169,7 +199,7 @@ namespace MKY.IO.Serial
 				switch (_state)
 				{
 					case SocketState.Opening:
-					case SocketState.Open:
+					case SocketState.Opened:
 					{
 						return (true);
 					}
@@ -189,7 +219,7 @@ namespace MKY.IO.Serial
 				AssertNotDisposed();
 				switch (_state)
 				{
-					case SocketState.Open:
+					case SocketState.Opened:
 					{
 						return (true);
 					}
@@ -213,7 +243,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_receiveBuffer.Count);
+				return (_receiveQueue.Count);
 			}
 		}
 
@@ -257,36 +287,36 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public int Receive(out byte[] buffer)
+		public int Receive(out byte[] data)
 		{
 			AssertNotDisposed();
 		
-			if (_receiveBuffer.Count > 0)
+			if (_receiveQueue.Count > 0)
 			{
-				lock (_receiveBuffer)
+				lock (_receiveQueue)
 				{
-					int count = _receiveBuffer.Count;
-					buffer = new byte[count];
+					int count = _receiveQueue.Count;
+					data = new byte[count];
 					for (int i = 0; i < count; i++)
-						buffer[i] = _receiveBuffer.Dequeue();
+						data[i] = _receiveQueue.Dequeue();
 				}
 			}
 			else
 			{
-				buffer = new byte[] { };
+				data = new byte[] { };
 			}
-			return (buffer.Length);
+			return (data.Length);
 		}
 
 		/// <summary></summary>
-		public void Send(byte[] buffer)
+        public void Send(byte[] data)
 		{
 			AssertNotDisposed();
 
 			if (IsStarted)
 			{
 				if (_socketConnection != null)
-					_socketConnection.BeginSend(buffer);
+                    _socketConnection.BeginSend(data);
 			}
 		}
 
@@ -337,7 +367,10 @@ namespace MKY.IO.Serial
 
 		private void StartSocket()
 		{
-			SetStateAndNotify(SocketState.Opening);
+            if (_socket != null)
+                DisposeSocket();
+
+            SetStateAndNotify(SocketState.Opening);
 
 			_socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketClient(System.Net.Sockets.ProtocolType.Udp,
 				                                                     ALAZ.SystemEx.NetEx.SocketsEx.CallbackThreadType.ctWorkerThread,
@@ -383,7 +416,7 @@ namespace MKY.IO.Serial
 			lock (_socketConnectionSyncObj)
 				_socketConnection = e.Connection;
 
-			SetStateAndNotify(SocketState.Open);
+			SetStateAndNotify(SocketState.Opened);
 
 			// Immediately begin receiving data
 			e.Connection.BeginReceive();
@@ -397,10 +430,10 @@ namespace MKY.IO.Serial
         /// </param>
 		public void OnReceived(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
-			lock (_receiveBuffer)
+			lock (_receiveQueue)
 			{
 				foreach (byte b in e.Buffer)
-					_receiveBuffer.Enqueue(b);
+					_receiveQueue.Enqueue(b);
 			}
 			OnDataReceived(new EventArgs());
 

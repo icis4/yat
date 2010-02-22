@@ -7,7 +7,7 @@
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2009 Matthias Kläy.
+// Copyright © 2003-2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
@@ -198,7 +198,19 @@ namespace YAT.Gui.Forms
 				_settings_Form.IO.Socket.TcpClientAutoReconnect = socketSettings.TcpClientAutoReconnect;
 		}
 
-		private void button_AdvancedSettings_Click(object sender, EventArgs e)
+        private void usbHidPortSelection_DeviceIdChanged(object sender, EventArgs e)
+        {
+            if (!_isSettingControls)
+                _settings_Form.IO.UsbHidPort.DeviceId = usbHidPortSelection.DeviceId;
+        }
+
+        private void usbHidPortSettings_AutoReconnectChanged(object sender, EventArgs e)
+        {
+            if (!_isSettingControls)
+                _settings_Form.IO.UsbHidPort.AutoReconnect = usbHidPortSettings.AutoReconnect;
+        }
+
+        private void button_AdvancedSettings_Click(object sender, EventArgs e)
 		{
 			ShowAdvancedSettings();
 		}
@@ -280,11 +292,12 @@ namespace YAT.Gui.Forms
 			text += " Settings...";
 			button_TextOrBinarySettings.Text = text;
 
-			bool isSerialPort = (ioType == Domain.IOType.SerialPort);
+            bool isSerialPort = (ioType == Domain.IOType.SerialPort);
+            bool isUsbHid     = (ioType == Domain.IOType.UsbHid);
 
 			// Set socket control before serial port control since that might need to refresh the
 			//   serial port list first (which takes time, which looks ulgy)
-			socketSelection.Visible        = !isSerialPort;
+			socketSelection.Visible        = !isSerialPort && !isUsbHid;
 			socketSelection.HostType       = (Domain.XIOType)ioType;
 			socketSelection.RemoteHost     = _settings_Form.IO.Socket.RemoteHost;
 			socketSelection.RemotePort     = _settings_Form.IO.Socket.RemotePort;
@@ -292,12 +305,12 @@ namespace YAT.Gui.Forms
 			socketSelection.LocalTcpPort   = _settings_Form.IO.Socket.LocalTcpPort;
 			socketSelection.LocalUdpPort   = _settings_Form.IO.Socket.LocalUdpPort;
 
-			socketSettings.Visible                = !isSerialPort;
-			socketSettings.HostType               = (Domain.XIOType)ioType;
+            socketSettings.Visible         = !isSerialPort && !isUsbHid;
+			socketSettings.HostType        = (Domain.XIOType)ioType;
 			socketSettings.TcpClientAutoReconnect = _settings_Form.IO.Socket.TcpClientAutoReconnect;
 
-			serialPortSelection.Visible = isSerialPort;
-			serialPortSelection.PortId  = _settings_Form.IO.SerialPort.PortId;
+			serialPortSelection.Visible    = isSerialPort;
+			serialPortSelection.PortId     = _settings_Form.IO.SerialPort.PortId;
 
 			serialPortSettings.Visible     = isSerialPort;
 			serialPortSettings.BaudRate    = _settings_Form.IO.SerialPort.Communication.BaudRate;
@@ -306,6 +319,12 @@ namespace YAT.Gui.Forms
 			serialPortSettings.StopBits    = _settings_Form.IO.SerialPort.Communication.StopBits;
 			serialPortSettings.FlowControl = _settings_Form.IO.SerialPort.Communication.FlowControl;
 			serialPortSettings.AutoReopen  = _settings_Form.IO.SerialPort.AutoReopen;
+
+            usbHidPortSelection.Visible    = isUsbHid;
+            usbHidPortSelection.DeviceId   = _settings_Form.IO.UsbHidPort.DeviceId;
+
+            usbHidPortSettings.Visible     = isUsbHid;
+            usbHidPortSettings.AutoReconnect = _settings_Form.IO.UsbHidPort.AutoReconnect;
 
 			_isSettingControls = false;
 		}

@@ -7,7 +7,7 @@
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2009 Matthias Kläy.
+// Copyright © 2003-2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
@@ -178,7 +178,17 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void checkBox_StartTerminal_CheckedChanged(object sender, EventArgs e)
+        private void usbHidPortSelection_DeviceIdChanged(object sender, EventArgs e)
+        {
+            if (!_isSettingControls)
+            {
+                MKY.IO.Serial.UsbDeviceId usbDeviceId = usbHidPortSelection.DeviceId;
+                _newTerminalSettings_Form.UsbDeviceId = usbDeviceId;
+                SetControls();
+            }
+        }
+
+        private void checkBox_StartTerminal_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
 			{
@@ -208,6 +218,8 @@ namespace YAT.Gui.Forms
 			_terminalSettings.Terminal.IO.Socket.ResolvedLocalIPAddress  = socketSelection.ResolvedLocalIPAddress;
 			_terminalSettings.Terminal.IO.Socket.LocalTcpPort            = _newTerminalSettings.SocketLocalTcpPort;
 			_terminalSettings.Terminal.IO.Socket.LocalUdpPort            = _newTerminalSettings.SocketLocalUdpPort;
+
+            _terminalSettings.Terminal.IO.UsbHidPort.DeviceId            = _newTerminalSettings.UsbDeviceId;
 
 			_terminalSettings.TerminalIsStarted                          = _newTerminalSettings.StartTerminal;
 
@@ -260,11 +272,12 @@ namespace YAT.Gui.Forms
 			Domain.IOType ioType = _newTerminalSettings_Form.IOType;
 			terminalSelection.IOType = ioType;
 
-			bool isSerialPort = (ioType == Domain.IOType.SerialPort);
+            bool isSerialPort = (ioType == Domain.IOType.SerialPort);
+            bool isUsbHid     = (ioType == Domain.IOType.UsbHid);
 
 			// Set socket control before serial port control since that might need to refresh the
 			//   serial port list first (which takes time, which looks ulgy)
-			socketSelection.Enabled        = !isSerialPort;
+			socketSelection.Enabled        = !isSerialPort && !isUsbHid;
 			socketSelection.HostType       = (Domain.XIOType)ioType;
 			socketSelection.RemoteHost     = _newTerminalSettings_Form.SocketRemoteHost;
 			socketSelection.RemotePort     = _newTerminalSettings_Form.SocketRemotePort;
@@ -272,11 +285,13 @@ namespace YAT.Gui.Forms
 			socketSelection.LocalTcpPort   = _newTerminalSettings_Form.SocketLocalTcpPort;
 			socketSelection.LocalUdpPort   = _newTerminalSettings_Form.SocketLocalUdpPort;
 
-			serialPortSelection.Enabled        = isSerialPort;
-			serialPortSelection.ShowSerialPort = isSerialPort;
-			serialPortSelection.PortId         = _newTerminalSettings_Form.SerialPortId;
+			serialPortSelection.Enabled    = isSerialPort;
+			serialPortSelection.PortId     = _newTerminalSettings_Form.SerialPortId;
 
-			checkBox_StartTerminal.Checked     = _newTerminalSettings_Form.StartTerminal;
+            usbHidPortSelection.Enabled    = isUsbHid;
+            usbHidPortSelection.DeviceId   = _newTerminalSettings_Form.UsbDeviceId;
+
+			checkBox_StartTerminal.Checked = _newTerminalSettings_Form.StartTerminal;
 
 			_isSettingControls = false;
 		}

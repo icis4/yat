@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E3A19532-D12A-4A90-B7F3-637A0A8FA6BD}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -64,6 +64,10 @@
     <Compile Include="Socket\SocketHostType.cs" />
     <Compile Include="Socket\UdpSocket.cs" />
     <Compile Include="Structs.cs" />
+    <Compile Include="USB\UsbDeviceCollection.cs" />
+    <Compile Include="USB\UsbDeviceId.cs" />
+    <Compile Include="USB\UsbHidPortSettings.cs" />
+    <Compile Include="USB\UsbHidPort.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\MKY.IO.Serial.snk" />
@@ -84,6 +88,10 @@
     <ProjectReference Include="..\MKY.Utilities\MKY.Utilities.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\USB.HID\UsbLibrary\UsbLibrary.csproj">
+      <Project>{71E42A6D-C432-4C03-BF4F-ABFD2A3173E0}</Project>
+      <Name>UsbLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -7,7 +7,7 @@
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2009 Matthias Kläy.
+// Copyright © 2003-2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
@@ -41,9 +41,11 @@ namespace YAT.Domain
 		TcpServer,
 		/// <summary></summary>
 		TcpAutoSocket,
-		/// <summary></summary>
-		Udp
-	}
+        /// <summary></summary>
+        Udp,
+        /// <summary></summary>
+        UsbHid,
+    }
 
 	#endregion
 
@@ -55,11 +57,12 @@ namespace YAT.Domain
 		#region String Definitions
 
 		private const string Unknown_string = "Unknown";
-		private const string SerialPort_string = "Serial port (COM)";
+		private const string SerialPort_string = "Serial Port (COM)";
 		private const string TcpClient_string = "TCP/IP Client";
 		private const string TcpServer_string = "TCP/IP Server";
 		private const string TcpAutoSocket_string = "TCP/IP AutoSocket";
-		private const string Udp_string = "UDP/IP Socket";
+        private const string Udp_string = "UDP/IP Socket";
+        private const string UsbHid_string = "USB Ser/HID";
 
 		#endregion
 
@@ -87,6 +90,7 @@ namespace YAT.Domain
 				case IOType.TcpServer:     return (TcpServer_string);
 				case IOType.TcpAutoSocket: return (TcpAutoSocket_string);
 				case IOType.Udp:           return (Udp_string);
+				case IOType.UsbHid:        return (UsbHid_string);
 				default:                   return (Unknown_string);
 			}
 		}
@@ -104,6 +108,7 @@ namespace YAT.Domain
 			a.Add(new XIOType(IOType.TcpServer));
 			a.Add(new XIOType(IOType.TcpAutoSocket));
 			a.Add(new XIOType(IOType.Udp));
+            a.Add(new XIOType(IOType.UsbHid));
 			return (a.ToArray());
 		}
 
@@ -145,9 +150,14 @@ namespace YAT.Domain
 				result = new XIOType(IOType.TcpAutoSocket);
 				return (true);
 			}
-			else if (string.Compare(type, Udp_string, true) == 0)
+            else if (string.Compare(type, Udp_string, true) == 0)
+            {
+                result = new XIOType(IOType.Udp);
+                return (true);
+            }
+            else if (string.Compare(type, UsbHid_string, true) == 0)
 			{
-				result = new XIOType(IOType.Udp);
+				result = new XIOType(IOType.UsbHid);
 				return (true);
 			}
 			else

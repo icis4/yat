@@ -7,7 +7,7 @@
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2009 Matthias Kläy.
+// Copyright © 2003-2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -39,7 +39,7 @@ using MKY.Utilities.Event;
 
 #endregion
 
-// The MKY.IO.Serial namespace combines serial port and socket infrastructure. This code is
+// The MKY.IO.Serial namespace combines various serial interface infrastructure. This code is
 // intentionally placed into the MKY.IO.Serial namespace even though the file is located in
 // MKY.IO.Serial\SerialPort for better separation of the implementation files.
 namespace MKY.IO.Serial
@@ -127,7 +127,7 @@ namespace MKY.IO.Serial
 		{
 			Reset,
 			Closed,
-			Openend,
+			Opened,
 			WaitingForReopen,
 			Error,
 		}
@@ -157,7 +157,9 @@ namespace MKY.IO.Serial
 		private MKY.IO.Ports.ISerialPort _port;
 		private object _portSyncObj = new object();
 
-		// async receiving
+        /// <summary>
+        /// Async receiving.
+        /// </summary>
 		private Queue<byte> _receiveQueue = new Queue<byte>();
 		
 		/// <summary>
@@ -260,6 +262,16 @@ namespace MKY.IO.Serial
 		// Properties
 		//==========================================================================================
 
+        /// <summary></summary>
+        public SerialPortSettings Settings
+        {
+            get
+            {
+                AssertNotDisposed();
+                return (_settings);
+            }
+        }
+
 		/// <summary></summary>
 		public bool IsStarted
 		{
@@ -269,7 +281,7 @@ namespace MKY.IO.Serial
 				switch (_state)
 				{
 					case PortState.Closed:
-					case PortState.Openend:
+					case PortState.Opened:
 					case PortState.WaitingForReopen:
 					{
 						return (true);
@@ -387,9 +399,10 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public int Receive(out byte[] buffer)
+		public int Receive(out byte[] data)
 		{
 			// AssertNotDisposed() is called by IsOpen
+            // OnDataReceived has been fired before
 
 			int bytesReceived = 0;
 			if (IsOpen)
@@ -397,20 +410,20 @@ namespace MKY.IO.Serial
 				lock (_receiveQueue)
 				{
 					bytesReceived = _receiveQueue.Count;
-					buffer = new byte[bytesReceived];
+					data = new byte[bytesReceived];
 					for (int i = 0; i < bytesReceived; i++)
-						buffer[i] = _receiveQueue.Dequeue();
+						data[i] = _receiveQueue.Dequeue();
 				}
 			}
 			else
 			{
-				buffer = new byte[] { };
+				data = new byte[] { };
 			}
 			return (bytesReceived);
 		}
 
 		/// <summary></summary>
-		public void Send(byte[] buffer)
+		public void Send(byte[] data)
 		{
 			// AssertNotDisposed() is called by IsOpen
 
@@ -421,7 +434,7 @@ namespace MKY.IO.Serial
 					if (_settings.Communication.FlowControl == SerialFlowControl.RS485)
 						_port.RtsEnable = true;
 
-					_port.Write(buffer, 0, buffer.Length);
+					_port.Write(data, 0, data.Length);
 
 					if (_settings.Communication.FlowControl == SerialFlowControl.RS485)
 						_port.RtsEnable = false;
@@ -445,7 +458,7 @@ namespace MKY.IO.Serial
 
 			lock (_portSyncObj)
 			{
-				// no need to set encoding, only bytes are handled, encoding is done by text terminal
+				// No need to set encoding, only bytes are handled, encoding is done by text terminal
 				//_port.Encoding = _ioSettings.Encoding;
 
 				_port.PortId = _settings.PortId;
@@ -457,7 +470,7 @@ namespace MKY.IO.Serial
 				_port.StopBits = s.StopBits;
 				_port.Handshake = (XSerialFlowControl)s.FlowControl;
 
-				// parity replace
+				// Parity replace
 				_port.ParityReplace = _settings.ParityErrorReplacement;
 
 				// RTS and DTR
@@ -555,7 +568,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		private void CreateAndOpenPort()
 		{
-			CreatePort();          // port must be created each time because _port.Close()
+			CreatePort();          // Port must be created each time because _port.Close()
 			ApplySettings();       //   disposes the underlying IO instance
 
 			lock (_portSyncObj)
@@ -578,7 +591,7 @@ namespace MKY.IO.Serial
 
 					case SerialFlowControl.RequestToSend:
 					case SerialFlowControl.RequestToSendXOnXOff:
-						// do nothing, RTS is used for hand shake
+						// Do nothing, RTS is used for hand shake
 						break;
 				}
 
@@ -601,7 +614,7 @@ namespace MKY.IO.Serial
 
 			OpenPort();
 			StartAliveTimer();
-			SetStateAndNotify(PortState.Openend);
+			SetStateAndNotify(PortState.Opened);
 		}
 
 	#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
@@ -622,7 +635,7 @@ namespace MKY.IO.Serial
 				Stop();
 			}
 		}
-#endif // DETECT_BREAKS_AND_TRY_AUTO_REOPEN
+    #endif // DETECT_BREAKS_AND_TRY_AUTO_REOPEN
 
 		/// <summary></summary>
 		private void ClosePortAndStartReopenTimer()
@@ -660,7 +673,7 @@ namespace MKY.IO.Serial
 
 		private void _port_DataReceived(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
 		{
-			if (_state == PortState.Openend) // Ensure not to forward any events during closing anymore
+			if (_state == PortState.Opened) // Ensure not to forward any events during closing anymore
 			{
 				// Immediately read data on this thread
 				int bytesToRead = _port.BytesToRead;
@@ -717,7 +730,7 @@ namespace MKY.IO.Serial
 
 		private void _port_PinChanged(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
-			if (_state == PortState.Openend) // ensure not to forward any events during closing anymore
+			if (_state == PortState.Opened) // Ensure not to forward any events during closing anymore
 			{
 				_port_PinChangedDelegate asyncInvoker = new _port_PinChangedDelegate(_port_PinChangedAsync);
 				asyncInvoker.BeginInvoke(sender, e, null, null);
@@ -726,14 +739,14 @@ namespace MKY.IO.Serial
 
 		private void _port_PinChangedAsync(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
-			// if pin has changed, but access to port throws exception, port has been shut down,
+			// If pin has changed, but access to port throws exception, port has been shut down,
 			//   e.g. USB to serial converter disconnected
 			try
 			{
-				// force access to port to check whether it's still alive
+				// Force access to port to check whether it's still alive
 				bool cts = _port.CtsHolding;
 
-				if (_state == PortState.Openend) // ensure not to forward any events during closing anymore
+				if (_state == PortState.Opened) // Ensure not to forward any events during closing anymore
 					OnIOControlChanged(new EventArgs());
 			}
 			catch
@@ -754,7 +767,7 @@ namespace MKY.IO.Serial
 
 		private void _port_ErrorReceived(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e)
 		{
-			if (_state == PortState.Openend) // ensure not to forward any events during closing anymore
+			if (_state == PortState.Opened) // Ensure not to forward any events during closing anymore
 			{
 				_port_ErrorReceivedDelegate asyncInvoker = new _port_ErrorReceivedDelegate(_port_ErrorReceivedAsync);
 				asyncInvoker.BeginInvoke(sender, e, null, null);
@@ -815,7 +828,7 @@ namespace MKY.IO.Serial
 			{
 				try
 				{
-					// if port isn't open anymore, or access to port throws exception,
+					// If port isn't open anymore, or access to port throws exception,
 					//   port has been shut down, e.g. USB to serial converter disconnected
 					if (!_port.IsOpen)
 					{
@@ -886,7 +899,7 @@ namespace MKY.IO.Serial
 			{
 				try
 				{
-					// try to re-open port
+					// Try to re-open port
 					OnIORequest(new IORequestEventArgs(Serial.IORequest.Open));
 
 				#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN

@@ -106,7 +106,7 @@ namespace UsbLibrary
 
                         BeginAsyncRead();	// kick off the first asynchronous read                              
                     }
-                    catch (Exception)
+                    catch
                     {
                         throw HIDDeviceException.GenerateWithWinError("Failed to get the detailed data from the hid.");
                     }

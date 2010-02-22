@@ -4,14 +4,9 @@ Editor
 
 Options
   > Text Editor
-    > C#
+    > All Languages
       > General
         > Diplay > Line numers = true
-      > Tabs
-        > Indenting = Smart [Default]
-        > Tab size = 4 [Default]
-        > Indent size = 4 [Default]
-        > Keep tabs
 
 
 NUnit as external tool

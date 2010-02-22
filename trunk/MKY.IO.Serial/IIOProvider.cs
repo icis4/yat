@@ -7,7 +7,7 @@
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2009 Matthias Kläy.
+// Copyright © 2003-2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -150,19 +150,19 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Receives data from a the underlying I/O instance into a receive buffer.
 		/// </summary>
-		/// <param name="buffer">
+        /// <param name="data">
 		/// An array of type System.Byte that is the storage location for the received data.
 		/// </param>
 		/// <returns>The number of bytes received.</returns>
-		int Receive(out byte[] buffer);
+        int Receive(out byte[] data);
 
 		/// <summary>
 		/// Sends data to a the underlying I/O instance.
 		/// </summary>
-		/// <param name="buffer">
+        /// <param name="data">
 		/// An array of type System.Byte that contains the data to be sent.
 		/// </param>
-		void Send(byte[] buffer);
+		void Send(byte[] data);
 
 		#endregion
 	}
