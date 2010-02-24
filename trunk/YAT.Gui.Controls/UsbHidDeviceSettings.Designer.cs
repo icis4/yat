@@ -1,6 +1,6 @@
 namespace YAT.Gui.Controls
 {
-	partial class UsbHidPortSettings
+	partial class UsbHidDeviceSettings
 	{
 		/// <summary> 
 		/// Required designer variable.

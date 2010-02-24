@@ -1,0 +1,44 @@
+
+UsbLibrary should be signed with an .snk file
+
+UsbLibrary.UsbLibrary.csproj
+- Build > Advanced > Check for arithmetic overflow/underflow
+- Build > Output > Disable XML documentation
+  - OR BETTER -
+  Completely document classes and members
+
+UsbLibrary.UsbHidPort.cs
+- OnDataRecieved has a spelling mistake and should be OnDataReceived
+- In proper English, OnDataSend should be OnDataSent
+- DeviceArrived and SpecifiedDeviceArrived seem suboptimal names in my opinion
+  What about DeviceConnected and SpecifiedDeviceConnected?
+- I question the implementation of RegisterHandle(). Isn't there a better way to register
+  the USB event? Without requiring the application to call this function?
+- Variable usb_event_handle isn't used at all
+- I also question ParseMessages(). Isn't there a way to register for the Windows events
+  without requiring the application to forward all messages?
+- CheckDevicePresent() attaches to DataReceived and DataSent events but nobody ever
+  detaches these handlers
+
+UsbLibrary.SpecifiedDevice.cs
+- Warning	The variable 'ex' is declared but never used	UsbLibrary\SpecifiedDevice.cs#66
+- DataRecievedEventArgs also has a spelling mistake
+- DataRecievedEventArgs.data should be DataRecievedEventArgs.Data since it's public
+- DataSendEventArgs.data should be DataSendEventArgs.Data since it's public
+- DataRecievedEventArgs and DataSendEventArgs should be placed into a separate file
+
+UsbLibrary.HIDDevice
+- Warning	The variable 'ex' is declared but never used	UsbLibrary\HIDDevice.cs#109
+- Warning	The variable 'ex' is declared but never used	UsbLibrary\HIDDevice.cs#161
+- Warning	The variable 'ex' is declared but never used	UsbLibrary\HIDDevice.cs#181
+- HIDDevice should be written HidDevice for consistency with other identifiers
+- Initialise should be Initialize like in many .NET classes
+- HIDDevice should contain members/properties that tell vendor and product ID
+- HIDDevice should contain members/properties that tell whether it is currently in use
+- FindDevice() should return oNewDevice at the end of the method to clarify that
+  SetupDiDestroyDeviceInfoList() is always called
+- In addition to FindDevice(), there should also be a FindDevices() method returning a
+  collection of available HID devices
+
+There should be a method to retrieve user readable device information such as the
+  manufacturer and product name

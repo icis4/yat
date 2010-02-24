@@ -1,6 +1,6 @@
 namespace YAT.Gui.Controls
 {
-	partial class UsbHidPortSelection
+	partial class UsbHidDeviceSelection
 	{
 		/// <summary> 
 		/// Required designer variable.
@@ -30,8 +30,8 @@ namespace YAT.Gui.Controls
 		{
             this.components = new System.ComponentModel.Container();
             this.button_RefreshPorts = new System.Windows.Forms.Button();
-            this.comboBox_Port = new System.Windows.Forms.ComboBox();
-            this.label_Port = new System.Windows.Forms.Label();
+            this.comboBox_Device = new System.Windows.Forms.ComboBox();
+            this.label_Device = new System.Windows.Forms.Label();
             this.timer_ShowScanDialog = new System.Windows.Forms.Timer(this.components);
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
@@ -48,25 +48,25 @@ namespace YAT.Gui.Controls
             this.toolTip.SetToolTip(this.button_RefreshPorts, "Refresh serial port list");
             this.button_RefreshPorts.Click += new System.EventHandler(this.button_RefreshPorts_Click);
             // 
-            // comboBox_Port
+            // comboBox_Device
             // 
-            this.comboBox_Port.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.comboBox_Device.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBox_Port.ItemHeight = 13;
-            this.comboBox_Port.Location = new System.Drawing.Point(6, 22);
-            this.comboBox_Port.Name = "comboBox_Port";
-            this.comboBox_Port.Size = new System.Drawing.Size(251, 21);
-            this.comboBox_Port.TabIndex = 1;
-            this.comboBox_Port.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Port_Validating);
+            this.comboBox_Device.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_Device.ItemHeight = 13;
+            this.comboBox_Device.Location = new System.Drawing.Point(6, 22);
+            this.comboBox_Device.Name = "comboBox_Device";
+            this.comboBox_Device.Size = new System.Drawing.Size(251, 21);
+            this.comboBox_Device.TabIndex = 1;
             // 
-            // label_Port
+            // label_Device
             // 
-            this.label_Port.AutoSize = true;
-            this.label_Port.Location = new System.Drawing.Point(3, 6);
-            this.label_Port.Name = "label_Port";
-            this.label_Port.Size = new System.Drawing.Size(112, 13);
-            this.label_Port.TabIndex = 0;
-            this.label_Port.Text = "USB Ser/HID Device:";
+            this.label_Device.AutoSize = true;
+            this.label_Device.Location = new System.Drawing.Point(3, 6);
+            this.label_Device.Name = "label_Device";
+            this.label_Device.Size = new System.Drawing.Size(112, 13);
+            this.label_Device.TabIndex = 0;
+            this.label_Device.Text = "USB Ser/HID Device:";
             // 
             // timer_ShowScanDialog
             // 
@@ -78,8 +78,8 @@ namespace YAT.Gui.Controls
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.button_RefreshPorts);
-            this.Controls.Add(this.comboBox_Port);
-            this.Controls.Add(this.label_Port);
+            this.Controls.Add(this.comboBox_Device);
+            this.Controls.Add(this.label_Device);
             this.Name = "UsbHidPortSelection";
             this.Size = new System.Drawing.Size(285, 46);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.UsbHidPortSelection_Paint);
@@ -91,8 +91,8 @@ namespace YAT.Gui.Controls
 		#endregion
 
 		private System.Windows.Forms.Button button_RefreshPorts;
-		private System.Windows.Forms.ComboBox comboBox_Port;
-		private System.Windows.Forms.Label label_Port;
+		private System.Windows.Forms.ComboBox comboBox_Device;
+		private System.Windows.Forms.Label label_Device;
 		private System.Windows.Forms.Timer timer_ShowScanDialog;
 		private System.Windows.Forms.ToolTip toolTip;
 	}

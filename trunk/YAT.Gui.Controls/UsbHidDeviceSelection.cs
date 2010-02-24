@@ -32,8 +32,8 @@ using YAT.Settings.Application;
 namespace YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
-	[DefaultEvent("PortIdChanged")]
-	public partial class UsbHidPortSelection : UserControl
+	[DefaultEvent("DeviceIdChanged")]
+	public partial class UsbHidDeviceSelection : UserControl
 	{
 		#region Fields
 		//==========================================================================================
@@ -41,7 +41,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		private bool _isStartingUp = true;
-		private bool _isSettingControls = false;
+		//private bool _isSettingControls = false;
 
 		private UsbDeviceId _deviceId = UsbDeviceId.DefaultDevice;
 
@@ -63,7 +63,7 @@ namespace YAT.Gui.Controls
 		// Object Lifetime
 		//==========================================================================================
 
-		public UsbHidPortSelection()
+		public UsbHidDeviceSelection()
 		{
 			InitializeComponent();
 		}
@@ -116,41 +116,6 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 		// Controls Event Handlers
 		//==========================================================================================
-
-		private void comboBox_Port_Validating(object sender, CancelEventArgs e)
-		{
-			if (!_isSettingControls)
-			{
-				// \attention
-				// Do not assume that the selected item maches the actual text in the box
-				//   because SelectedItem is also set if text has changed in the meantime.
-
-				UsbDeviceId id = comboBox_Port.SelectedItem as UsbDeviceId;
-				if ((id != null) && (id.ToString() == comboBox_Port.Text))
-				{
-					DeviceId = id;
-				}
-				else
-				{
-					if (UsbDeviceId.TryParse(comboBox_Port.Text, out id))
-					{
-						DeviceId = id;
-					}
-					else
-					{
-						MessageBox.Show
-							(
-							this,
-							"Serial port name is invalid",
-							"Invalid Input",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Error
-							);
-						e.Cancel = true;
-					}
-				}
-			}
-		}
 
 		private void button_RefreshPorts_Click(object sender, EventArgs e)
 		{
@@ -220,7 +185,7 @@ namespace YAT.Gui.Controls
 
 			bool setting = ApplicationSettings.LocalUser.General.DetectSerialPortsInUse;
 
-            if (StatusBox.Show(this, "Scanning ports...", "Serial Port Scan", _markDevicesInUseThread.Status2, "&Detect ports that are in use", ref setting) != DialogResult.OK)
+            if (StatusBox.Show(this, "Scanning devices...", "USB Device Scan", _markDevicesInUseThread.Status2, "&Detect ports that are in use", ref setting) != DialogResult.OK)
                 _markDevicesInUseThread.CancelScanning();
 			
 			ApplicationSettings.LocalUser.General.DetectSerialPortsInUse = setting;
@@ -231,13 +196,12 @@ namespace YAT.Gui.Controls
 		{
             if (Enabled && !DesignMode)
 			{
-				_isSettingControls = true;
+				//_isSettingControls = true;
 
-				UsbDeviceId old = comboBox_Port.SelectedItem as UsbDeviceId;
+				UsbDeviceId old = comboBox_Device.SelectedItem as UsbDeviceId;
 
 				UsbDeviceCollection devices = new UsbDeviceCollection();
 				devices.FillWithAvailableDevices();
-				devices.GetInformationFromDevices();
 
 				if (ApplicationSettings.LocalUser.General.DetectSerialPortsInUse)
 				{
@@ -258,20 +222,20 @@ namespace YAT.Gui.Controls
 					timer_ShowScanDialog.Stop();
 				}
 
-				comboBox_Port.Items.Clear();
-				comboBox_Port.Items.AddRange(devices.ToArray());
+				comboBox_Device.Items.Clear();
+				comboBox_Device.Items.AddRange(devices.ToArray());
 
-				if (comboBox_Port.Items.Count > 0)
+				if (comboBox_Device.Items.Count > 0)
 				{
 					if ((_deviceId != null) && (devices.Contains(_deviceId)))
-						comboBox_Port.SelectedItem = _deviceId;
+						comboBox_Device.SelectedItem = _deviceId;
 					else if ((old != null) && (devices.Contains(old)))
-						comboBox_Port.SelectedItem = old;
+						comboBox_Device.SelectedItem = old;
 					else
-						comboBox_Port.SelectedIndex = 0;
+						comboBox_Device.SelectedIndex = 0;
 
 					// set property instead of member to ensure that changed event is fired
-					DeviceId = comboBox_Port.SelectedItem as UsbDeviceId;
+					DeviceId = comboBox_Device.SelectedItem as UsbDeviceId;
 				}
 				else
 				{
@@ -285,27 +249,27 @@ namespace YAT.Gui.Controls
 						);
 				}
 
-				_isSettingControls = false;
+				//_isSettingControls = false;
 			}
 		}
 
 		private void SetControls()
 		{
-			_isSettingControls = true;
+			//_isSettingControls = true;
 
-            if ((comboBox_Port.Items.Count > 0) && !DesignMode)
+            if ((comboBox_Device.Items.Count > 0) && !DesignMode)
 			{
 				if (_deviceId != null)
-					comboBox_Port.SelectedItem = _deviceId;
+					comboBox_Device.SelectedItem = _deviceId;
                 else
-                    comboBox_Port.SelectedIndex = 0;
+                    comboBox_Device.SelectedIndex = 0;
 			}
 			else
 			{
-				comboBox_Port.SelectedIndex = -1;
+				comboBox_Device.SelectedIndex = -1;
 			}
 
-			_isSettingControls = false;
+			//_isSettingControls = false;
 		}
 
 		#endregion
