@@ -70,7 +70,10 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Fills list with all ports from <see cref="System.IO.Ports.SerialPort.GetPortNames()"/>.
 		/// </summary>
-		public void FillWithAvailablePorts()
+        /// <param name="getPortDescriptionsFromSystem">
+        /// On request, this method queries the port descriptions from the system.
+        /// </param>
+        public void FillWithAvailablePorts(bool getPortDescriptionsFromSystem)
 		{
 			Clear();
 			foreach (string portName in System.IO.Ports.SerialPort.GetPortNames())
@@ -78,6 +81,9 @@ namespace MKY.IO.Ports
 				base.Add(new SerialPortId(portName));
 			}
 			Sort();
+
+            if (getPortDescriptionsFromSystem)
+                GetPortDescriptionsFromSystem();
 		}
 
 		/// <summary>
@@ -87,7 +93,7 @@ namespace MKY.IO.Ports
 		/// <remarks>
 		/// Query is never done automatically because it takes quite some time.
 		/// </remarks>
-		public void GetDescriptionsFromSystem()
+		public void GetPortDescriptionsFromSystem()
 		{
 			Dictionary<string, string> descriptions = SerialPortSearcher.GetDescriptionsFromSystem();
 

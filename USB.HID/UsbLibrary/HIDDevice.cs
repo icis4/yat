@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 
@@ -39,7 +40,10 @@ namespace UsbLibrary
 		private int m_nOutputReportLength;
 		/// <summary>Handle to the device</summary>
 		private IntPtr m_hHandle;
-		#endregion
+        /// <summary>Keep path for further processing</summary>
+        private string m_sStrPath;
+
+        #endregion
 
         #region IDisposable Members
 		/// <summary>
@@ -80,12 +84,59 @@ namespace UsbLibrary
         #endregion
 
 		#region Privates/protected
-		/// <summary>
+        /// <summary>
+        /// Initialises the device
+        /// </summary>
+        /// <param name="strPath">Path to the device</param>
+        private void Probe(string strPath)
+        {
+            // Keep path for further processing
+            m_sStrPath = strPath;
+
+            // Create the file from the device path
+            m_hHandle = CreateFile(strPath, GENERIC_READ | GENERIC_WRITE, 0, IntPtr.Zero, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, IntPtr.Zero);
+
+            if (m_hHandle != InvalidHandleValue || m_hHandle == null)	// if the open worked...
+            {
+                IntPtr lpData;
+                if (HidD_GetPreparsedData(m_hHandle, out lpData))	// get windows to read the device data into an internal buffer
+                {
+                    try
+                    {
+                        HidCaps oCaps;
+                        HidP_GetCaps(lpData, out oCaps);	// extract the device capabilities from the internal buffer
+                        m_nInputReportLength = oCaps.InputReportByteLength;	// get the input...
+                        m_nOutputReportLength = oCaps.OutputReportByteLength;	// ... and output report lengths
+                    }
+                    catch
+                    {
+                        throw HIDDeviceException.GenerateWithWinError("Failed to get the detailed data from the hid.");
+                    }
+                    finally
+                    {
+                        HidD_FreePreparsedData(ref lpData);	// before we quit the funtion, we must free the internal buffer reserved in GetPreparsedData
+                    }
+                }
+                else	// GetPreparsedData failed? Chuck an exception
+                {
+                    throw HIDDeviceException.GenerateWithWinError("GetPreparsedData failed");
+                }
+            }
+            else	// File open failed? Chuck an exception
+            {
+                m_hHandle = IntPtr.Zero;
+                throw HIDDeviceException.GenerateWithWinError("Failed to create device file");
+            }
+        }
+        /// <summary>
 		/// Initialises the device
 		/// </summary>
 		/// <param name="strPath">Path to the device</param>
 		private void Initialise(string strPath)
 		{
+            // Keep path for further processing
+            m_sStrPath = strPath;
+
 			// Create the file from the device path
             m_hHandle = CreateFile(strPath, GENERIC_READ | GENERIC_WRITE, 0, IntPtr.Zero, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, IntPtr.Zero);
 
@@ -236,6 +287,7 @@ namespace UsbLibrary
 		/// <returns>A new device class of the given type or null</returns>
 		public static HIDDevice FindDevice(int nVid, int nPid, Type oType)
         {
+            HIDDevice oNewDevice = null;
             string strPath = string.Empty;
 			string strSearch = string.Format("vid_{0:x4}&pid_{1:x4}", nVid, nPid); // first, build the path search string
             Guid gHid = HIDGuid;
@@ -253,9 +305,9 @@ namespace UsbLibrary
                     string strDevicePath = GetDevicePath(hInfoSet, ref oInterface);	// get the device path (see helper method 'GetDevicePath')
                     if (strDevicePath.IndexOf(strSearch) >= 0)	// do a string search, if we find the VID/PID string then we found our device!
                     {
-                        HIDDevice oNewDevice = (HIDDevice)Activator.CreateInstance(oType);	// create an instance of the class for this device
+                        oNewDevice = (HIDDevice)Activator.CreateInstance(oType);	// create an instance of the class for this device
                         oNewDevice.Initialise(strDevicePath);	// initialise it with the device path
-                        return oNewDevice;	// and return it
+                        break; // and return
                     }
                     nIndex++;	// if we get here, we didn't find our device. So move on to the next one.
                 }
@@ -270,15 +322,72 @@ namespace UsbLibrary
 				// Before we go, we have to free up the InfoSet memory reserved by SetupDiGetClassDevs
                 SetupDiDestroyDeviceInfoList(hInfoSet);
             }
-            return null;	// oops, didn't find our device
+
+            if (oNewDevice != null)
+                return oNewDevice;
+            else
+                return null;	// oops, didn't find our device
         }
-		#endregion
+        /// <summary>
+        /// Find all available devices
+        /// </summary>
+        /// <returns>A collection of the available devices or null</returns>
+        public static List<HIDDevice> FindDevices(Type oType)
+        {
+            List<HIDDevice> devices = new List<HIDDevice>();
+            string strPath = string.Empty;
+            Guid gHid = HIDGuid;
+            //HidD_GetHidGuid(out gHid);	// next, get the GUID from Windows that it uses to represent the HID USB interface
+            IntPtr hInfoSet = SetupDiGetClassDevs(ref gHid, null, IntPtr.Zero, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);	// this gets a list of all HID devices currently connected to the computer (InfoSet)
+            try
+            {
+                DeviceInterfaceData oInterface = new DeviceInterfaceData();	// build up a device interface data block
+                oInterface.Size = Marshal.SizeOf(oInterface);
+                // Now iterate through the InfoSet memory block assigned within Windows in the call to SetupDiGetClassDevs
+                // to get device details for each device connected
+                int nIndex = 0;
+                while (SetupDiEnumDeviceInterfaces(hInfoSet, 0, ref gHid, (uint)nIndex, ref oInterface))	// this gets the device interface information for a device at index 'nIndex' in the memory block
+                {
+                    string strDevicePath = GetDevicePath(hInfoSet, ref oInterface);	// get the device path (see helper method 'GetDevicePath')
+                    HIDDevice oNewDevice = (HIDDevice)Activator.CreateInstance(oType);	// create an instance of the class for this device
+                    try
+                    {
+                        oNewDevice.Probe(strDevicePath);	// initialise it with the device path
+                        devices.Add(oNewDevice);
+                    }
+                    catch
+                    {
+                        // if we get here, the device supports no serial HID
+                    }
+                    nIndex++;	// move on to the next one.
+                }
+            }
+            catch (Exception ex)
+            {
+                throw HIDDeviceException.GenerateError(ex.ToString());
+                //Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                // Before we go, we have to free up the InfoSet memory reserved by SetupDiGetClassDevs
+                SetupDiDestroyDeviceInfoList(hInfoSet);
+            }
+            return (devices);
+        }
+        #endregion
 
 		#region Publics
 		/// <summary>
 		/// Event handler called when device has been removed
 		/// </summary>
 		public event EventHandler OnDeviceRemoved;
+        public string StrPath
+        {
+            get
+            {
+                return m_sStrPath;
+            }
+        }
 		/// <summary>
 		/// Accessor for output report length
 		/// </summary>

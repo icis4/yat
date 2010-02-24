@@ -20,7 +20,7 @@ using System.Collections.Generic;
 namespace MKY.IO.Serial
 {
 	/// <summary>
-	/// List containing USB Ser/HID port IDs.
+	/// List containing USB Ser/HID device IDs.
 	/// </summary>
 	[Serializable]
 	public class UsbDeviceCollection : List<UsbDeviceId>
@@ -53,38 +53,34 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary>
-		/// Fills list with all available USH Ser/HID devices.
+		/// Fills list with all available USB Ser/HID devices.
 		/// </summary>
 		public void FillWithAvailableDevices()
 		{
 			Clear();
-			foreach (string portName in System.IO.Ports.SerialPort.GetPortNames())
+            foreach (UsbLibrary.HIDDevice device in UsbLibrary.AvailableDevice.FindAvailableDevices())
 			{
-                // \todo
-				//base.Add(new UsbDeviceId(portName));
+                UsbDeviceId id;
+                if (UsbDeviceId.TryParse(device.StrPath, out id))
+                {
+                    id.GetInformationFromDevice();
+                    base.Add(id);
+                }
+
+                // \remind
+                // Find a better way to free the available devices
+                device.Dispose();
 			}
 			Sort();
-		}
-
-        /// <summary>
-        /// Queries the USB device for user readable strings like vendor or product name.
-        /// </summary>
-        /// <remarks>
-        /// Query is never done automatically because it takes quite some time.
-        /// </remarks>
-        public void GetInformationFromDevices()
-		{
-			foreach (UsbDeviceId deviceId in this)
-                deviceId.GetInformationFromDevice();
 		}
 
         /// <summary>
         /// Checks all ports whether they are currently in use and marks them.
         /// </summary>
         /// <remarks>
-        /// In .NET 2.0, no class provides a method to retrieve whether a port is currently
-        /// in use or not. Therefore, this method actively tries to open every port. This
-        /// takes some time.
+        /// <see cref="UsbLibrary"/> doesn't provide a method to retrieve whether a device
+        /// is currently in use or not. Therefore, this method always marks devices as not
+        /// in use.
         /// </remarks>
         public void MarkDevicesInUse()
         {
@@ -95,9 +91,9 @@ namespace MKY.IO.Serial
         /// Checks all ports whether they are currently in use and marks them.
         /// </summary>
         /// <remarks>
-        /// In .NET 2.0, no class provides a method to retrieve whether a port is currently
-        /// in use or not. Therefore, this method actively tries to open every port. This
-        /// takes some time.
+        /// <see cref="UsbLibrary"/> doesn't provide a method to retrieve whether a device
+        /// is currently in use or not. Therefore, this method always marks devices as not
+        /// in use.
         /// </remarks>
         /// <param name="deviceChangedCallback">
         /// Callback delegate, can be used to get an event each time a new port is being
@@ -116,22 +112,9 @@ namespace MKY.IO.Serial
                         break;
                 }
 
-                // \todo
-                //System.IO.Ports.SerialPort p = new System.IO.Ports.SerialPort(deviceId);
-                try
-                {
-                    //p.Open();
-                    //p.Close();
-                    deviceId.IsInUse = false;
-                }
-                catch
-                {
-                    deviceId.IsInUse = true;
-                }
-                finally
-                {
-                    //p.Dispose();
-                }
+                // \remind
+                // See remarks above.
+                deviceId.IsInUse = false;
             }
         }
     }

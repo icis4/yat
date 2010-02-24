@@ -131,25 +131,26 @@ namespace YAT.Gui.Controls
 				{
 					PortId = id;
 				}
-				else
+				else if (SerialPortId.TryParse(comboBox_Port.Text, out id))
 				{
-					if (SerialPortId.TryParse(comboBox_Port.Text, out id))
-					{
-						PortId = id;
-					}
-					else
-					{
-						MessageBox.Show
-							(
-							this,
-							"Serial port name is invalid",
-							"Invalid Input",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Error
-							);
-						e.Cancel = true;
-					}
+					PortId = id;
 				}
+				else if (comboBox_Port.Text == "")
+                {
+                    PortId = null;
+                }
+                else
+                {
+                    MessageBox.Show
+                        (
+                        this,
+                        "Serial port name is invalid",
+                        "Invalid Input",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                        );
+                    e.Cancel = true;
+                }
 			}
 		}
 
@@ -237,8 +238,7 @@ namespace YAT.Gui.Controls
 				SerialPortId old = comboBox_Port.SelectedItem as SerialPortId;
 
 				SerialPortCollection ports = new SerialPortCollection();
-				ports.FillWithAvailablePorts();
-				ports.GetDescriptionsFromSystem();
+				ports.FillWithAvailablePorts(true);
 
 				if (ApplicationSettings.LocalUser.General.DetectSerialPortsInUse)
 				{

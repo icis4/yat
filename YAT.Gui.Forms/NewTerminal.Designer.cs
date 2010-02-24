@@ -36,13 +36,13 @@ namespace YAT.Gui.Forms
             this.button_OK = new System.Windows.Forms.Button();
             this.groupBox_NewTerminal = new System.Windows.Forms.GroupBox();
             this.groupBox_PortSettings = new System.Windows.Forms.GroupBox();
-            this.checkBox_StartTerminal = new System.Windows.Forms.CheckBox();
-            this.pictureBox_New = new System.Windows.Forms.PictureBox();
-            this.button_Help = new System.Windows.Forms.Button();
-            this.usbHidPortSelection = new YAT.Gui.Controls.UsbHidPortSelection();
+            this.usbHidPortSelection = new YAT.Gui.Controls.UsbHidDeviceSelection();
             this.serialPortSelection = new YAT.Gui.Controls.SerialPortSelection();
             this.socketSelection = new YAT.Gui.Controls.SocketSelection();
             this.terminalSelection = new YAT.Gui.Controls.TerminalSelection();
+            this.checkBox_StartTerminal = new System.Windows.Forms.CheckBox();
+            this.pictureBox_New = new System.Windows.Forms.PictureBox();
+            this.button_Help = new System.Windows.Forms.Button();
             this.groupBox_NewTerminal.SuspendLayout();
             this.groupBox_PortSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_New)).BeginInit();
@@ -99,42 +99,10 @@ namespace YAT.Gui.Forms
             this.groupBox_PortSettings.TabStop = false;
             this.groupBox_PortSettings.Text = "Port &Settings";
             // 
-            // checkBox_StartTerminal
-            // 
-            this.checkBox_StartTerminal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.checkBox_StartTerminal.AutoSize = true;
-            this.checkBox_StartTerminal.Checked = true;
-            this.checkBox_StartTerminal.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_StartTerminal.Location = new System.Drawing.Point(113, 335);
-            this.checkBox_StartTerminal.Name = "checkBox_StartTerminal";
-            this.checkBox_StartTerminal.Size = new System.Drawing.Size(91, 17);
-            this.checkBox_StartTerminal.TabIndex = 2;
-            this.checkBox_StartTerminal.Text = "&Open terminal";
-            this.checkBox_StartTerminal.CheckedChanged += new System.EventHandler(this.checkBox_StartTerminal_CheckedChanged);
-            // 
-            // pictureBox_New
-            // 
-            this.pictureBox_New.Image = global::YAT.Gui.Forms.Properties.Resources.Image_NewDocument_16x16;
-            this.pictureBox_New.Location = new System.Drawing.Point(12, 18);
-            this.pictureBox_New.Name = "pictureBox_New";
-            this.pictureBox_New.Size = new System.Drawing.Size(48, 48);
-            this.pictureBox_New.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox_New.TabIndex = 40;
-            this.pictureBox_New.TabStop = false;
-            // 
-            // button_Help
-            // 
-            this.button_Help.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_Help.Location = new System.Drawing.Point(398, 112);
-            this.button_Help.Name = "button_Help";
-            this.button_Help.Size = new System.Drawing.Size(75, 23);
-            this.button_Help.TabIndex = 3;
-            this.button_Help.Text = "Help";
-            this.button_Help.UseVisualStyleBackColor = true;
-            this.button_Help.Click += new System.EventHandler(this.button_Help_Click);
-            // 
             // usbHidPortSelection
             // 
+            this.usbHidPortSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.usbHidPortSelection.DeviceId = null;
             this.usbHidPortSelection.Location = new System.Drawing.Point(6, 190);
             this.usbHidPortSelection.Name = "usbHidPortSelection";
@@ -178,6 +146,40 @@ namespace YAT.Gui.Forms
             this.terminalSelection.IOTypeChanged += new System.EventHandler(this.terminalSelection_IOTypeChanged);
             this.terminalSelection.TerminalTypeChanged += new System.EventHandler(this.terminalSelection_TerminalTypeChanged);
             // 
+            // checkBox_StartTerminal
+            // 
+            this.checkBox_StartTerminal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkBox_StartTerminal.AutoSize = true;
+            this.checkBox_StartTerminal.Checked = true;
+            this.checkBox_StartTerminal.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_StartTerminal.Location = new System.Drawing.Point(113, 335);
+            this.checkBox_StartTerminal.Name = "checkBox_StartTerminal";
+            this.checkBox_StartTerminal.Size = new System.Drawing.Size(91, 17);
+            this.checkBox_StartTerminal.TabIndex = 2;
+            this.checkBox_StartTerminal.Text = "&Open terminal";
+            this.checkBox_StartTerminal.CheckedChanged += new System.EventHandler(this.checkBox_StartTerminal_CheckedChanged);
+            // 
+            // pictureBox_New
+            // 
+            this.pictureBox_New.Image = global::YAT.Gui.Forms.Properties.Resources.Image_NewDocument_16x16;
+            this.pictureBox_New.Location = new System.Drawing.Point(12, 18);
+            this.pictureBox_New.Name = "pictureBox_New";
+            this.pictureBox_New.Size = new System.Drawing.Size(48, 48);
+            this.pictureBox_New.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_New.TabIndex = 40;
+            this.pictureBox_New.TabStop = false;
+            // 
+            // button_Help
+            // 
+            this.button_Help.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_Help.Location = new System.Drawing.Point(398, 112);
+            this.button_Help.Name = "button_Help";
+            this.button_Help.Size = new System.Drawing.Size(75, 23);
+            this.button_Help.TabIndex = 3;
+            this.button_Help.Text = "Help";
+            this.button_Help.UseVisualStyleBackColor = true;
+            this.button_Help.Click += new System.EventHandler(this.button_Help_Click);
+            // 
             // NewTerminal
             // 
             this.AcceptButton = this.button_OK;
@@ -220,6 +222,6 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.GroupBox groupBox_PortSettings;
 		private YAT.Gui.Controls.SocketSelection socketSelection;
 		private YAT.Gui.Controls.SerialPortSelection serialPortSelection;
-        private YAT.Gui.Controls.UsbHidPortSelection usbHidPortSelection;
+        private YAT.Gui.Controls.UsbHidDeviceSelection usbHidPortSelection;
 	}
 }

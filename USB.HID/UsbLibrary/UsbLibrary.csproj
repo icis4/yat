@@ -65,6 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AvailableDevice.cs" />
     <Compile Include="HIDDevice.cs" />
     <Compile Include="Report.cs" />
     <Compile Include="SpecifiedDevice.cs" />

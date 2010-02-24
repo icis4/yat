@@ -125,7 +125,7 @@ namespace MKY.IO.Ports
 			get
 			{
 				SerialPortCollection l = new SerialPortCollection();
-				l.FillWithAvailablePorts();
+				l.FillWithAvailablePorts(false);
 
 				if (l.Count > 0)
 					return (new SerialPortId(l[0]));

@@ -29,7 +29,7 @@ namespace YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("AutoReconnectChanged")]
-	public partial class UsbHidPortSettings : UserControl
+	public partial class UsbHidDeviceSettings : UserControl
 	{
 		#region Fields
 		//==========================================================================================
@@ -59,7 +59,7 @@ namespace YAT.Gui.Controls
 		// Object Lifetime
 		//==========================================================================================
 
-		public UsbHidPortSettings()
+		public UsbHidDeviceSettings()
 		{
 			InitializeComponent();
 			SetControls();

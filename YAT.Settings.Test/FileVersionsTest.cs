@@ -51,7 +51,7 @@ namespace YAT.Settings.Test
 		{
 			// serial ports
 			_serialPorts = new MKY.IO.Ports.SerialPortCollection();
-			_serialPorts.FillWithAvailablePorts();
+			_serialPorts.FillWithAvailablePorts(false);
 		}
 
 		#endregion
