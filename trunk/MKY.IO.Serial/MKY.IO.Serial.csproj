@@ -64,10 +64,8 @@
     <Compile Include="Socket\SocketHostType.cs" />
     <Compile Include="Socket\UdpSocket.cs" />
     <Compile Include="Structs.cs" />
-    <Compile Include="USB\UsbDeviceCollection.cs" />
-    <Compile Include="USB\UsbDeviceId.cs" />
-    <Compile Include="USB\UsbHidPortSettings.cs" />
-    <Compile Include="USB\UsbHidPort.cs" />
+    <Compile Include="USB_\UsbHidPortSettings.cs" />
+    <Compile Include="USB_\UsbHidPort.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\MKY.IO.Serial.snk" />
