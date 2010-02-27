@@ -51,7 +51,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerialPort\SerialPortSettingsTest.cs" />
     <Compile Include="Socket\SocketSettingsTest.cs" />
-    <Compile Include="USB\UsbDeviceIdTest.cs" />
+    <Compile Include="Usb\UsbHidPortSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ALAZ\Source\ALAZ.SystemEx.NetEx\ALAZ.SystemEx.NetEx.csproj">
