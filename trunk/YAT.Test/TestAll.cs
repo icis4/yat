@@ -37,14 +37,26 @@ namespace YAT.Test
 				ArrayList suite = new ArrayList();
 
 				// MKY.IO.Ports.Test
-				suite.Add(new MKY.IO.Ports.Test.SerialPort.SerialPortIdTest());
+                suite.Add(new MKY.IO.Ports.Test.SerialPort.SerialPortIdTest());
+                suite.Add(new MKY.IO.Ports.Test.SerialPort.SerialPortSettingsTest());
 
-				// MKY.Utilities.Test
+                // MKY.IO.Serial.Test
+                suite.Add(new MKY.IO.Serial.Test.SerialPort.SerialPortSettingsTest());
+                suite.Add(new MKY.IO.Serial.Test.Socket.SocketSettingsTest());
+
+                // MKY.IO.Usb.Test
+                suite.Add(new MKY.IO.Usb.Test.UsbDeviceIdTest());
+
+                // MKY.Utilities.Test
 				suite.Add(new MKY.Utilities.Test.IO.XPathTest());
 				suite.Add(new MKY.Utilities.Test.Settings.DocumentSettingsHandlerTest());
 				suite.Add(new MKY.Utilities.Test.Types.XByteTest());
 				suite.Add(new MKY.Utilities.Test.Types.XInt32Test());
 				suite.Add(new MKY.Utilities.Test.Types.XUInt64Test());
+
+                // MKY.Windows.Forms
+                // MKY.Windows.Forms.Test.FastListBoxTest is a manual test
+                //suite.Add(new MKY.Windows.Forms.Test.<>());
 
 				// YAT.Controller.Test
 				suite.Add(new YAT.Controller.Test.ControllerTest());

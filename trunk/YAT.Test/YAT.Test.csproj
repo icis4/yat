@@ -57,6 +57,10 @@
       <Project>{CAEC3FFA-F303-4CCB-A42A-36F45AA00BD2}</Project>
       <Name>MKY.IO.Serial.Test</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MKY.IO.Usb.Test\MKY.IO.Usb.Test.csproj">
+      <Project>{E909B6F9-F856-4ED5-8D8F-6E77BC02C24C}</Project>
+      <Name>MKY.IO.Usb.Test</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MKY.Utilities.Test\MKY.Utilities.Test.csproj">
       <Project>{644F7C29-CCE6-4827-9EF2-8B7D34194101}</Project>
       <Name>MKY.Utilities.Test</Name>
