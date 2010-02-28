@@ -78,7 +78,7 @@ namespace YAT.Domain
 
                 case Domain.IOType.UsbHid:
                 {
-                    return (new UsbHidPort
+                    return (new UsbHidDevice
                         (
                         settings.UsbHidPort.DeviceId,
                         settings.UsbHidPort.AutoReconnect

@@ -85,19 +85,19 @@ namespace MKY.IO.Serial.Test.USB
 		[Test]
 		public void TestConstructorAndParse()
 		{
-			UsbDeviceId id;
+			DeviceId id;
 
 			foreach (TestSet ts in _testSets)
 			{
                 if (ts.IsValid)
                 {
-                    id = new UsbDeviceId(ts.VendorId, ts.ProductId);
+                    id = new DeviceId(ts.VendorId, ts.ProductId);
                     Assert.AreEqual(ts.VendorId,  id.VendorId);
                     Assert.AreEqual(ts.ProductId, id.ProductId);
 
                     foreach (string description in ts.Descriptions)
                     {
-                        id = UsbDeviceId.Parse(description);
+                        id = DeviceId.Parse(description);
                         Assert.AreEqual(ts.VendorId,  id.VendorId);
                         Assert.AreEqual(ts.ProductId, id.ProductId);
                     }
@@ -106,7 +106,7 @@ namespace MKY.IO.Serial.Test.USB
                 {
                     try
                     {
-                        id = new UsbDeviceId(ts.VendorId, ts.ProductId);
+                        id = new DeviceId(ts.VendorId, ts.ProductId);
                         Assert.Fail
                             (
                             "Invalid ID pair " + ts.VendorId + "/" + ts.ProductId +
@@ -122,7 +122,7 @@ namespace MKY.IO.Serial.Test.USB
                     {
                         try
                         {
-                            id = UsbDeviceId.Parse(description);
+                            id = DeviceId.Parse(description);
                             Assert.Fail
                                 (
                                 "Invalid descripton " + description +

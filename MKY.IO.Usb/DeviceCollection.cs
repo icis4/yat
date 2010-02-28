@@ -17,39 +17,52 @@
 using System;
 using System.Collections.Generic;
 
-namespace MKY.IO.Serial
+namespace MKY.IO.Usb
 {
 	/// <summary>
-	/// List containing USB Ser/HID device IDs.
+	/// List containing USB device IDs.
 	/// </summary>
 	[Serializable]
-	public class UsbDeviceCollection : List<UsbDeviceId>
+	public class DeviceCollection : List<DeviceId>
 	{
         /// <summary></summary>
         public class DeviceChangedAndCancelEventArgs : EventArgs
         {
             /// <summary></summary>
-            public readonly UsbDeviceId Device;
+            public readonly DeviceId Device;
 
             /// <summary></summary>
             public bool Cancel = false;
 
             /// <summary></summary>
-            public DeviceChangedAndCancelEventArgs(UsbDeviceId device)
+            public DeviceChangedAndCancelEventArgs(DeviceId device)
             {
                 Device = device;
             }
         }
 
+        private Guid _classGuid = new Guid();
+
         /// <summary></summary>
-        public UsbDeviceCollection()
+        public DeviceCollection()
         {
         }
 
         /// <summary></summary>
-		public UsbDeviceCollection(IEnumerable<UsbDeviceId> rhs)
+        public DeviceCollection(Guid classGuid)
+        {
+            _classGuid = classGuid;
+        }
+
+        /// <summary></summary>
+		public DeviceCollection(IEnumerable<DeviceId> rhs)
 			: base(rhs)
 		{
+            DeviceCollection casted = rhs as DeviceCollection;
+            if (casted != null)
+                _classGuid = casted._classGuid;
+            else
+                _classGuid = new Guid();
 		}
 
 		/// <summary>
@@ -58,18 +71,14 @@ namespace MKY.IO.Serial
 		public void FillWithAvailableDevices()
 		{
 			Clear();
-            foreach (UsbLibrary.HIDDevice device in UsbLibrary.AvailableDevice.FindAvailableDevices())
+            foreach (string path in Utilities.Win32.DeviceManagement.GetDevicesFromGuid(_classGuid))
 			{
-                UsbDeviceId id;
-                if (UsbDeviceId.TryParse(device.StrPath, out id))
+                DeviceId id;
+                if (DeviceId.TryParse(path, out id))
                 {
                     id.GetInformationFromDevice();
                     base.Add(id);
                 }
-
-                // \remind
-                // Find a better way to free the available devices
-                device.Dispose();
 			}
 			Sort();
 		}
@@ -77,11 +86,6 @@ namespace MKY.IO.Serial
         /// <summary>
         /// Checks all ports whether they are currently in use and marks them.
         /// </summary>
-        /// <remarks>
-        /// <see cref="UsbLibrary"/> doesn't provide a method to retrieve whether a device
-        /// is currently in use or not. Therefore, this method always marks devices as not
-        /// in use.
-        /// </remarks>
         public void MarkDevicesInUse()
         {
             MarkDevicesInUse(null);
@@ -90,11 +94,6 @@ namespace MKY.IO.Serial
         /// <summary>
         /// Checks all ports whether they are currently in use and marks them.
         /// </summary>
-        /// <remarks>
-        /// <see cref="UsbLibrary"/> doesn't provide a method to retrieve whether a device
-        /// is currently in use or not. Therefore, this method always marks devices as not
-        /// in use.
-        /// </remarks>
         /// <param name="deviceChangedCallback">
         /// Callback delegate, can be used to get an event each time a new port is being
         /// tried to be opened. Set the <see cref="DeviceChangedAndCancelEventArgs.Cancel"/>
@@ -102,7 +101,7 @@ namespace MKY.IO.Serial
         /// </param>
         public void MarkDevicesInUse(EventHandler<DeviceChangedAndCancelEventArgs> deviceChangedCallback)
         {
-            foreach (UsbDeviceId deviceId in this)
+            foreach (DeviceId deviceId in this)
             {
                 if (deviceChangedCallback != null)
                 {

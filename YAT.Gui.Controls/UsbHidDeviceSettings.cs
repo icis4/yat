@@ -39,7 +39,7 @@ namespace YAT.Gui.Controls
 		private bool _isStartingUp = true;
 		private bool _isSettingControls = false;
 
-		private AutoRetry _autoReconnect = MKY.IO.Serial.UsbHidPortSettings.AutoReconnectDefault;
+		private AutoRetry _autoReconnect = MKY.IO.Serial.UsbHidDeviceSettings.AutoReconnectDefault;
 
 		#endregion
 

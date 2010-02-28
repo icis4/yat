@@ -276,6 +276,16 @@ namespace MKY.Utilities.Win32
         //==========================================================================================
 
         /// <summary>
+        /// Returns the GUID associated with USB HID.
+        /// </summary>
+        public static System.Guid GetHidGuid()
+        {
+            System.Guid hidGuid = new System.Guid();
+            HidD_GetHidGuid(ref hidGuid);
+            return (hidGuid);
+        }
+
+        /// <summary>
         /// Remove any input reports waiting in the buffer.
         /// </summary>
         /// <param name="hidHandle">A handle to a device.</param>

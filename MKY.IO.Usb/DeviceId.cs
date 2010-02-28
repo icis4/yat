@@ -26,11 +26,11 @@ using System.Xml.Serialization;
 // The MKY.IO.Serial namespace combines various serial interface infrastructure. This code is
 // intentionally placed into the MKY.IO.Serial namespace even though the file is located in
 // MKY.IO.Serial\USB for better separation of the implementation files.
-namespace MKY.IO.Serial
+namespace MKY.IO.Usb
 {
 	/// <summary></summary>
 	[Serializable]
-    public class UsbDeviceId : IEquatable<UsbDeviceId>, IComparable
+    public class DeviceId : IEquatable<DeviceId>, IComparable
 	{
 		#region Public Constants
 		//==========================================================================================
@@ -72,9 +72,9 @@ namespace MKY.IO.Serial
 		private int _vendorId = DefaultVendorId;
 		private int _productId = DefaultProductId;
 
-        private string _vendorName = "";
+        private string _manufacturerName = "";
         private string _productName = "";
-        private string _description = "";
+        private string _serialNumber = "";
 
         private bool _isInUse = false;
         private string _inUseText = "";
@@ -89,7 +89,7 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-        static UsbDeviceId()
+        static DeviceId()
 		{
             // "VID:0ABC / PID:1234" or "vid_0ABC & pid_1234"
             VendorIdRegex  = new Regex(@"VID[^0-9a-fA-F](?<vendorId>[0-9a-fA-F]+)",  RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -107,15 +107,15 @@ namespace MKY.IO.Serial
 		/// Returns default device on system. Default is the first device available.
         /// Returns <c>null</c> if no devices are available.
 		/// </summary>
-        public static UsbDeviceId DefaultDevice
+        public static DeviceId DefaultDevice
 		{
 			get
 			{
-				UsbDeviceCollection l = new UsbDeviceCollection();
+				DeviceCollection l = new DeviceCollection();
 				l.FillWithAvailableDevices();
 
 				if (l.Count > 0)
-                    return (new UsbDeviceId(l[0]));
+                    return (new DeviceId(l[0]));
 				else
 					return (null);
 			}
@@ -129,12 +129,12 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		public UsbDeviceId()
+		public DeviceId()
 		{
 		}
 
         /// <summary></summary>
-        public UsbDeviceId(int vendorId, int productId)
+        public DeviceId(int vendorId, int productId)
         {
             if ((vendorId  < FirstVendorId)  || (vendorId  > LastVendorId))
                 throw (new ArgumentOutOfRangeException("vendorId",  vendorId,  "Invalid vendor ID"));
@@ -146,14 +146,14 @@ namespace MKY.IO.Serial
         }
 
         /// <summary></summary>
-        public UsbDeviceId(UsbDeviceId rhs)
+        public DeviceId(DeviceId rhs)
 		{
             _vendorId = rhs._vendorId;
             _productId = rhs._productId;
 
-            _vendorName = rhs._vendorName;
+            _manufacturerName = rhs._manufacturerName;
             _productName = rhs._productName;
-            _description = rhs._description;
+            _serialNumber = rhs._serialNumber;
 
             _isInUse = rhs._isInUse;
             _inUseText = rhs._inUseText;
@@ -208,10 +208,10 @@ namespace MKY.IO.Serial
 
         /// <summary></summary>
         [XmlIgnore]
-        public string VendorName
+        public string ManufacturerName
         {
-            get { return (_vendorName); }
-            set { _vendorName = value;  }
+            get { return (_manufacturerName); }
+            set { _manufacturerName = value;  }
         }
 
         /// <summary></summary>
@@ -222,14 +222,12 @@ namespace MKY.IO.Serial
             set { _productName = value;  }
         }
 
-        /// <summary>
-        /// Device description (e.g. "Generic USB Hub").
-        /// </summary>
+        /// <summary></summary>
         [XmlIgnore]
-        public string Description
+        public string SerialNumber
         {
-            get { return (_description); }
-            set { _description = value;  }
+            get { return (_serialNumber); }
+            set { _serialNumber = value;  }
         }
 
         /// <summary>
@@ -243,7 +241,8 @@ namespace MKY.IO.Serial
         }
 
         /// <summary>
-        /// The text which is shown when device is currently in use, e.g. "COM1 - (in use)".
+        /// The text which is shown when device is currently in use,
+        /// e.g. "Company (VID:0ABC) Product (PID:1234) 000123A - (in use)".
         /// </summary>
         [XmlIgnore]
         [DefaultValue(DefaultInUseText)]
@@ -263,7 +262,8 @@ namespace MKY.IO.Serial
         }
 
         /// <summary>
-        /// The separator, e.g. "Company (VID:0ABC) Product (PID:1234) Generic USB Hub - (in use)".
+        /// The separator,
+        /// e.g. "Company (VID:0ABC) Product (PID:1234) 000123A - (in use)".
         /// </summary>
         [XmlIgnore]
         [DefaultValue(DefaultSeparator)]
@@ -319,8 +319,8 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-            if (obj is UsbDeviceId)
-                return (Equals((UsbDeviceId)obj));
+            if (obj is DeviceId)
+                return (Equals((DeviceId)obj));
 
 			return (false);
 		}
@@ -328,7 +328,7 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-        public bool Equals(UsbDeviceId value)
+        public bool Equals(DeviceId value)
 		{
 			// Ensure that object.operator!=() is called
 			if ((object)value != null)
@@ -359,7 +359,7 @@ namespace MKY.IO.Serial
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(VendorName);               // "Company"
+            sb.Append(ManufacturerName);         // "Company"
 
             if (appendIds)
             {
@@ -379,12 +379,12 @@ namespace MKY.IO.Serial
             }
 
             sb.Append(" ");
-            sb.Append(Description);              // "Company (VID:0ABC) Product (PID:1234) Generic USB Hub"
+            sb.Append(SerialNumber);             // "Company (VID:0ABC) Product (PID:1234) 000123A"
 
             if (appendInUseText && IsInUse)
             {
-                sb.Append(Separator);            // "Company (VID:0ABC) Product (PID:1234) Generic USB Hub - "
-                sb.Append(InUseText);            // "Company (VID:0ABC) Product (PID:1234) Generic USB Hub - (in use)"
+                sb.Append(Separator);            // "Company (VID:0ABC) Product (PID:1234) 000123A - "
+                sb.Append(InUseText);            // "Company (VID:0ABC) Product (PID:1234) 000123A - (in use)"
             }
 
             return (sb.ToString());
@@ -393,19 +393,19 @@ namespace MKY.IO.Serial
         /// <summary>
         /// Parses s for the first integer number and returns the corresponding device.
         /// </summary>
-        public static UsbDeviceId Parse(string s)
+        public static DeviceId Parse(string s)
         {
-            UsbDeviceId result;
+            DeviceId result;
             if (TryParse(s, out result))
                 return (result);
             else
-                throw (new FormatException(s + " does not specify a valid USB Ser/HID device ID"));
+                throw (new FormatException(s + " does not specify a valid USB device ID"));
         }
 
         /// <summary>
         /// Tries to parse s for the first integer number and returns the corresponding device.
         /// </summary>
-        public static bool TryParse(string s, out UsbDeviceId result)
+        public static bool TryParse(string s, out DeviceId result)
         {
             Match m;
 
@@ -422,7 +422,7 @@ namespace MKY.IO.Serial
                         int productId;
                         if (int.TryParse(m.Groups[1].Value, NumberStyles.HexNumber, null, out productId))
                         {
-                            result = new UsbDeviceId(vendorId, productId);
+                            result = new DeviceId(vendorId, productId);
                             return (true);
                         }
                     }
@@ -441,9 +441,9 @@ namespace MKY.IO.Serial
         public int CompareTo(object obj)
         {
             if (obj == null) return (1);
-            if (obj is UsbDeviceId)
+            if (obj is DeviceId)
             {
-                UsbDeviceId id = (UsbDeviceId)obj;
+                DeviceId id = (DeviceId)obj;
                 if (VendorId != id.VendorId)
                     return (VendorId.CompareTo(id.VendorId));
                 else
@@ -460,9 +460,9 @@ namespace MKY.IO.Serial
         public static int Compare(object objA, object objB)
         {
             if (ReferenceEquals(objA, objB)) return (0);
-            if (objA is UsbDeviceId)
+            if (objA is DeviceId)
             {
-                UsbDeviceId casted = (UsbDeviceId)objA;
+                DeviceId casted = (DeviceId)objA;
                 return (casted.CompareTo(objB));
             }
             return (-1);
@@ -478,7 +478,7 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-        public static bool operator ==(UsbDeviceId lhs, UsbDeviceId rhs)
+        public static bool operator ==(DeviceId lhs, DeviceId rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))
 				return (true);
@@ -492,7 +492,7 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-        public static bool operator !=(UsbDeviceId lhs, UsbDeviceId rhs)
+        public static bool operator !=(DeviceId lhs, DeviceId rhs)
 		{
 			return (!(lhs == rhs));
 		}
@@ -505,7 +505,7 @@ namespace MKY.IO.Serial
         //==========================================================================================
 
         /// <summary></summary>
-        public static implicit operator string(UsbDeviceId id)
+        public static implicit operator string(DeviceId id)
         {
             return (id.ToString());
         }

@@ -19,6 +19,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
+using MKY.IO.Usb;
+
 // The MKY.IO.Serial namespace combines various serial interface infrastructure. This code is
 // intentionally placed into the MKY.IO.Serial namespace even though the file is located in
 // MKY.IO.Serial\USB for better separation of the implementation files.
@@ -26,23 +28,23 @@ namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	[Serializable]
-	public class UsbHidPortSettings : MKY.Utilities.Settings.Settings, IEquatable<UsbHidPortSettings>
+	public class UsbHidDeviceSettings : MKY.Utilities.Settings.Settings, IEquatable<UsbHidDeviceSettings>
 	{
 		/// <summary></summary>
 		public static readonly AutoRetry AutoReconnectDefault = new AutoRetry(true, 2000);
 
-		private UsbDeviceId _deviceId;
+		private DeviceId _deviceId;
 		private AutoRetry _autoReconnect;
 
 		/// <summary></summary>
-		public UsbHidPortSettings()
+		public UsbHidDeviceSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
 		/// <summary></summary>
-		public UsbHidPortSettings(MKY.Utilities.Settings.SettingsType settingsType)
+		public UsbHidDeviceSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -53,10 +55,10 @@ namespace MKY.IO.Serial
 		/// <remarks>
 		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
 		/// </remarks>
-		public UsbHidPortSettings(UsbHidPortSettings rhs)
+		public UsbHidDeviceSettings(UsbHidDeviceSettings rhs)
 			: base(rhs)
 		{
-            DeviceId    = new UsbDeviceId(rhs.DeviceId);
+            DeviceId       = new DeviceId(rhs.DeviceId);
 			_autoReconnect = rhs._autoReconnect;
 
 			ClearChanged();
@@ -76,8 +78,8 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		[XmlElement("Device")]
-        public UsbDeviceId DeviceId
+        [XmlElement("DeviceId")]
+        public DeviceId DeviceId
 		{
 			get { return (_deviceId); }
 			set
@@ -114,8 +116,8 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is UsbHidPortSettings)
-				return (Equals((UsbHidPortSettings)obj));
+			if (obj is UsbHidDeviceSettings)
+				return (Equals((UsbHidDeviceSettings)obj));
 
 			return (false);
 		}
@@ -123,7 +125,7 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(UsbHidPortSettings value)
+		public bool Equals(UsbHidDeviceSettings value)
 		{
 			// Ensure that object.operator!=() is called
 			if ((object)value != null)
@@ -150,7 +152,7 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(UsbHidPortSettings lhs, UsbHidPortSettings rhs)
+		public static bool operator ==(UsbHidDeviceSettings lhs, UsbHidDeviceSettings rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))
 				return (true);
@@ -164,7 +166,7 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(UsbHidPortSettings lhs, UsbHidPortSettings rhs)
+		public static bool operator !=(UsbHidDeviceSettings lhs, UsbHidDeviceSettings rhs)
 		{
 			return (!(lhs == rhs));
 		}
