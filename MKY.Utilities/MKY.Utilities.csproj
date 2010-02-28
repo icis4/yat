@@ -96,6 +96,11 @@
     <Compile Include="Types\XString.cs" />
     <Compile Include="Net\Browser.cs" />
     <Compile Include="Types\XUInt64.cs" />
+    <Compile Include="Win32\HidReports.cs" />
+    <Compile Include="Win32\Debugging.cs" />
+    <Compile Include="Win32\DeviceManagement.cs" />
+    <Compile Include="Win32\FileIO.cs" />
+    <Compile Include="Win32\Hid.cs" />
     <Compile Include="Windows.Forms\XForm.cs" />
     <Compile Include="Windows.Forms\XOrientation.cs" />
     <Compile Include="Xml\AlternateTolerantXmlSerializer.cs" />

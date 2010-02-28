@@ -64,8 +64,8 @@
     <Compile Include="Socket\SocketHostType.cs" />
     <Compile Include="Socket\UdpSocket.cs" />
     <Compile Include="Structs.cs" />
-    <Compile Include="USB_\UsbHidPortSettings.cs" />
-    <Compile Include="USB_\UsbHidPort.cs" />
+    <Compile Include="Usb\UsbHidPort.cs" />
+    <Compile Include="Usb\UsbHidPortSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\MKY.IO.Serial.snk" />
@@ -86,10 +86,6 @@
     <ProjectReference Include="..\MKY.Utilities\MKY.Utilities.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY.Utilities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\USB.HID\UsbLibrary\UsbLibrary.csproj">
-      <Project>{71E42A6D-C432-4C03-BF4F-ABFD2A3173E0}</Project>
-      <Name>UsbLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

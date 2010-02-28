@@ -117,6 +117,7 @@ namespace YAT.Gui.Forms
 						 "   > AnkhSVN" + Environment.NewLine +
 						 "   > NUnit" + Environment.NewLine +
 						 "   > System.IO.Ports serial port extension by Matthias Kläy" + Environment.NewLine +
+
 						 "   > System.Net.Sockets socket extension ";
 			textLink =                                            "ALAZ";
 			textAfter =                                               " by Andre Luis Azevedo";
@@ -126,7 +127,28 @@ namespace YAT.Gui.Forms
 			linkLabel_Environment.Links.Add(start, textLink.Length, "http://www.codeproject.com/cs/internet/AsyncSocketServerandClien.asp");
 			linkLabel_Environment.Text += textAfter + Environment.NewLine;
 
-			textBefore = "   > YAT icons based on ";
+            textBefore = "   > USB HID library based on ";
+            textLink =                                 "GenericHid";
+            linkLabel_Environment.Text += textBefore;
+            start = linkLabel_Environment.Text.Length;
+            linkLabel_Environment.Text += textLink;
+            linkLabel_Environment.Links.Add(start, textLink.Length, "http://www.lvr.com/hidpage.htm");
+
+            textBefore =                                         "/";
+            textLink =                                            "UsbLibrary";
+            linkLabel_Environment.Text += textBefore;
+            start = linkLabel_Environment.Text.Length;
+            linkLabel_Environment.Text += textLink;
+            linkLabel_Environment.Links.Add(start, textLink.Length, "http://www.codeproject.com/KB/cs/USB_HID.aspx?msg=2816038");
+
+            textBefore =                                                    "/";
+            textLink =                                                       "UsbHid";
+            linkLabel_Environment.Text += textBefore;
+            start = linkLabel_Environment.Text.Length;
+            linkLabel_Environment.Text += textLink;
+            linkLabel_Environment.Links.Add(start, textLink.Length, "http://www.florian-leitner.de/index.php/category/usb-hid-library/");
+
+            textBefore = "   > YAT icons based on ";
 			textLink =                           "Nuvola";
 			textAfter =                                " by David Vignoni";
 			linkLabel_Environment.Text += textBefore;
