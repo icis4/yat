@@ -96,7 +96,7 @@ namespace MKY.Utilities.Win32
         /// <param name="lpName">An event object name (optional).</param>
         /// <returns>A handle to the event object.</returns>
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        internal static extern IntPtr CreateEvent( IntPtr SecurityAttributes, Boolean bManualReset, Boolean bInitialState, String lpName );
+        internal static extern IntPtr CreateEvent(IntPtr SecurityAttributes, Boolean bManualReset, Boolean bInitialState, String lpName);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         internal static extern SafeFileHandle CreateFile(String lpFileName, UInt32 dwDesiredAccess, Int32 dwShareMode, IntPtr lpSecurityAttributes, Int32 dwCreationDisposition, Int32 dwFlagsAndAttributes, Int32 hTemplateFile);
@@ -129,7 +129,7 @@ namespace MKY.Utilities.Win32
         /// <param name="lpOverlapped">An overlapped structure whose hEvent member is set to an event object.</param>
         /// <returns>The report in ReadBuffer.</returns>
         [DllImport("kernel32.dll", SetLastError = true)]
-        internal static extern Boolean ReadFile( SafeFileHandle hFile, IntPtr lpBuffer, Int32 nNumberOfBytesToRead, ref Int32 lpNumberOfBytesRead, IntPtr lpOverlapped );
+        internal static extern Boolean ReadFile(SafeFileHandle hFile, IntPtr lpBuffer, Int32 nNumberOfBytesToRead, ref Int32 lpNumberOfBytesRead, IntPtr lpOverlapped);
 
         /// <summary>
         /// Waits for at least one report or a timeout.
@@ -139,7 +139,7 @@ namespace MKY.Utilities.Win32
         /// <param name="dwMilliseconds">A timeout value in milliseconds.</param>
         /// <returns>A result code.</returns>
         [DllImport("kernel32.dll", SetLastError = true)]
-        internal static extern Int32 WaitForSingleObject( IntPtr hHandle, Int32 dwMilliseconds );
+        internal static extern Int32 WaitForSingleObject(IntPtr hHandle, Int32 dwMilliseconds);
 
         /// <summary>
         /// Writes an Output report to the device.

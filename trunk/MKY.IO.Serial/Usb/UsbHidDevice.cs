@@ -26,6 +26,7 @@ using System.Threading;
 using System.ComponentModel;
 
 using MKY.Utilities.Event;
+using MKY.IO.Usb;
 
 #endregion
 
@@ -35,7 +36,7 @@ using MKY.Utilities.Event;
 namespace MKY.IO.Serial
 {
     /// <summary></summary>
-    public class UsbHidPort : IIOProvider, IDisposable
+    public class UsbHidDevice : IIOProvider, IDisposable
 	{
         #region Types
         //==========================================================================================
@@ -61,7 +62,7 @@ namespace MKY.IO.Serial
 
         private bool _isDisposed;
 
-        private UsbDeviceId _deviceId;
+        private DeviceId _deviceId;
         private AutoRetry _autoReconnect;
 
         private PortState _state = PortState.Disconnected;
@@ -102,13 +103,13 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
         /// <summary></summary>
-        public UsbHidPort(UsbDeviceId deviceId)
+        public UsbHidDevice(UsbDeviceId deviceId)
         {
             Initialize(deviceId, new AutoRetry());
         }
 
         /// <summary></summary>
-        public UsbHidPort(UsbDeviceId deviceId, AutoRetry autoReconnect)
+        public UsbHidDevice(UsbDeviceId deviceId, AutoRetry autoReconnect)
 		{
             Initialize(deviceId, autoReconnect);
 		}
@@ -149,7 +150,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-        ~UsbHidPort()
+        ~UsbHidDevice()
 		{
 			Dispose(false);
 		}

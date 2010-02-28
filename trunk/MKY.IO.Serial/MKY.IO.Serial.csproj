@@ -64,8 +64,8 @@
     <Compile Include="Socket\SocketHostType.cs" />
     <Compile Include="Socket\UdpSocket.cs" />
     <Compile Include="Structs.cs" />
-    <Compile Include="Usb\UsbHidPort.cs" />
-    <Compile Include="Usb\UsbHidPortSettings.cs" />
+    <Compile Include="Usb\UsbHidDevice.cs" />
+    <Compile Include="Usb\UsbHidDeviceSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\MKY.IO.Serial.snk" />
@@ -82,6 +82,10 @@
     <ProjectReference Include="..\MKY.IO.Ports\MKY.IO.Ports.csproj">
       <Project>{D8940035-D30A-48A3-AC28-E8A4B8910CB9}</Project>
       <Name>MKY.IO.Ports</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MKY.IO.Usb\MKY.IO.Usb.csproj">
+      <Project>{1B657329-940D-4AA1-9768-431288B555E2}</Project>
+      <Name>MKY.IO.Usb</Name>
     </ProjectReference>
     <ProjectReference Include="..\MKY.Utilities\MKY.Utilities.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>

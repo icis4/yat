@@ -20,6 +20,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -95,18 +96,13 @@ namespace MKY.Utilities.Win32
             public IntPtr Reserved;
 		}
 
-#if (FALSE)
-        // Not in use (yet)
         [StructLayout(LayoutKind.Sequential)]
         private struct SP_DEVICE_INTERFACE_DETAIL_DATA
 		{
             public Int32 cbSize;
             public String DevicePath;
 		}
-#endif
 
-#if (FALSE)
-        // Not in use (yet)
         [StructLayout(LayoutKind.Sequential)]
         private struct SP_DEVINFO_DATA
 		{
@@ -115,7 +111,6 @@ namespace MKY.Utilities.Win32
             public Int32 DevInst;
             public Int32 Reserved;
 		}
-#endif
 
         #endregion
 
@@ -170,7 +165,7 @@ namespace MKY.Utilities.Win32
 
         /// <summary>
         /// Retrieves a handle to a SP_DEVICE_INTERFACE_DATA structure for a device.
-        /// On return, MyDeviceInterfaceData contains the handle to a SP_DEVICE_INTERFACE_DATA structure for a detected device.
+        /// On return, DeviceInterfaceData contains the handle to a SP_DEVICE_INTERFACE_DATA structure for a detected device.
         /// </summary>
         /// <param name="DeviceInfoSet">DeviceInfoSet returned by SetupDiGetClassDevs.</param>
         /// <param name="DeviceInfoData">Optional SP_DEVINFO_DATA structure that defines a device
@@ -281,90 +276,72 @@ namespace MKY.Utilities.Win32
                     else
                         return (false);
                 }
+
+                return (false);
             }
             catch
             {
                 throw;
             }
-
-            return (false);
         }
 
         /// <summary>
-        /// Use SetupDi API functions to retrieve the device path name of an attached device that
-        /// belongs to a device interface class.
+        /// Use SetupDi API functions to retrieve the device path names of attached devices that
+        /// belong to a device interface class.
         /// </summary>
         /// <param name="classGuid">An interface class GUID.</param>
-        /// <param name="devicePathName">A pointer to the device path name of an attached device.</param>
-        /// <returns>True if a device is found, False if not.</returns>
-        public static bool FindDeviceFromGuid(System.Guid classGuid, ref String[] devicePathName)
+        /// <returns>An array containing the path names of the devices currently available on the system.</returns>
+        public static string[] GetDevicesFromGuid(System.Guid classGuid)
         {
             int bufferSize = 0;
             IntPtr detailDataBuffer = IntPtr.Zero;
-            bool deviceFound;
             IntPtr deviceInfoSet = new System.IntPtr();
             bool lastDevice = false;
             int memberIndex = 0;
-            SP_DEVICE_INTERFACE_DATA MyDeviceInterfaceData = new SP_DEVICE_INTERFACE_DATA();
-            bool success;
+            SP_DEVICE_INTERFACE_DATA deviceInterfaceData = new SP_DEVICE_INTERFACE_DATA();
+            List<string> devicePaths = new List<string>();
 
             try
             {
                 deviceInfoSet = SetupDiGetClassDevs(ref classGuid, IntPtr.Zero, IntPtr.Zero, DIGCF_PRESENT | DIGCF_DEVICEINTERFACE);
-                deviceFound = false;
-                memberIndex = 0;
 
-                // The cbSize element of the MyDeviceInterfaceData structure must be set to
-                // the structure's size in bytes. 
+                // The cbSize element of the deviceInterfaceData structure must be set to the structure's size in bytes. 
                 // The size is 28 bytes for 32-bit code and 32 bits for 64-bit code.
-                MyDeviceInterfaceData.cbSize = Marshal.SizeOf(MyDeviceInterfaceData);
+                deviceInterfaceData.cbSize = Marshal.SizeOf(deviceInterfaceData);
 
                 do
                 {
-                    // Begin with 0 and increment through the device information set until
-                    // no more devices are available.
-                    success = SetupDiEnumDeviceInterfaces(deviceInfoSet, IntPtr.Zero, ref classGuid, memberIndex, ref MyDeviceInterfaceData);
-
-                    // Find out if a device information set was retrieved.
-                    if (!success)
+                    // Begin with 0 and increment through the device information set until no more devices are available.
+                    if (SetupDiEnumDeviceInterfaces(deviceInfoSet, IntPtr.Zero, ref classGuid, memberIndex, ref deviceInterfaceData))
                     {
-                        lastDevice = true;
+                        // A device is present.
+                        if (SetupDiGetDeviceInterfaceDetail(deviceInfoSet, ref deviceInterfaceData, IntPtr.Zero, 0, ref bufferSize, IntPtr.Zero))
+                        {
+                            // Allocate memory for the SP_DEVICE_INTERFACE_DETAIL_DATA structure using the returned buffer size.
+                            detailDataBuffer = Marshal.AllocHGlobal(bufferSize);
+
+                            // Store cbSize in the first bytes of the array. The number of bytes varies with 32- and 64-bit systems.
+                            Marshal.WriteInt32(detailDataBuffer, (IntPtr.Size == 4) ? (4 + Marshal.SystemDefaultCharSize) : 8);
+
+                            // Call SetupDiGetDeviceInterfaceDetail again.
+                            // This time, pass a pointer to DetailDataBuffer and the returned required buffer size.
+                            if (SetupDiGetDeviceInterfaceDetail(deviceInfoSet, ref deviceInterfaceData, detailDataBuffer, bufferSize, ref bufferSize, IntPtr.Zero))
+                            {
+                                // Skip over cbsize (4 bytes) to get the address of the devicePathName.
+                                IntPtr pDevicePathName = new IntPtr(detailDataBuffer.ToInt32() + 4);
+
+                                // Get the String containing the devicePathName.
+                                devicePaths.Add(Marshal.PtrToStringAuto(pDevicePathName));
+                            }
+                        }
                     }
                     else
                     {
-                        // A device is present.
-                        success = SetupDiGetDeviceInterfaceDetail(deviceInfoSet, ref MyDeviceInterfaceData, IntPtr.Zero, 0, ref bufferSize, IntPtr.Zero);
-
-                        // Allocate memory for the SP_DEVICE_INTERFACE_DETAIL_DATA structure using the returned buffer size.
-                        detailDataBuffer = Marshal.AllocHGlobal(bufferSize);
-
-                        // Store cbSize in the first bytes of the array. The number of bytes varies with 32- and 64-bit systems.
-                        Marshal.WriteInt32(detailDataBuffer, (IntPtr.Size == 4) ? (4 + Marshal.SystemDefaultCharSize) : 8);
-
-                        // Call SetupDiGetDeviceInterfaceDetail again.
-                        // This time, pass a pointer to DetailDataBuffer
-                        // and the returned required buffer size.
-                        success = SetupDiGetDeviceInterfaceDetail
-                            (deviceInfoSet,
-                            ref MyDeviceInterfaceData,
-                            detailDataBuffer,
-                            bufferSize,
-                            ref bufferSize,
-                            IntPtr.Zero);
-
-                        // Skip over cbsize (4 bytes) to get the address of the devicePathName.
-                        IntPtr pDevicePathName = new IntPtr(detailDataBuffer.ToInt32() + 4);
-
-                        // Get the String containing the devicePathName.
-                        devicePathName[memberIndex] = Marshal.PtrToStringAuto(pDevicePathName);
-
-                        deviceFound = true;
+                        lastDevice = true;
                     }
                     memberIndex = memberIndex + 1;
                 }
                 while (!((lastDevice == true)));
-
-                return (deviceFound);
             }
             catch
             {
@@ -381,6 +358,8 @@ namespace MKY.Utilities.Win32
                 if (deviceInfoSet != IntPtr.Zero)
                     SetupDiDestroyDeviceInfoList(deviceInfoSet);
             }
+
+            return (devicePaths.ToArray());
         }
 
         /// <summary>
@@ -426,9 +405,9 @@ namespace MKY.Utilities.Win32
                 Marshal.PtrToStructure(devBroadcastDeviceInterfaceBuffer, devBroadcastDeviceInterface);
 
                 if ((deviceNotificationHandle.ToInt32() == IntPtr.Zero.ToInt32()))
-                    return false;
+                    return (false);
                 else
-                    return true;
+                    return (true);
             }
             catch
             {
@@ -454,8 +433,7 @@ namespace MKY.Utilities.Win32
             try
             {
                 DeviceManagement.UnregisterDeviceNotification(deviceNotificationHandle);
-
-                //  Ignore failures.
+                // Ignore failures.
             }
             catch
             {
