@@ -73,14 +73,14 @@ namespace YAT.Gui.Controls
             this.timer_ShowScanDialog.Interval = 500;
             this.timer_ShowScanDialog.Tick += new System.EventHandler(this.timer_ShowScanDialog_Tick);
             // 
-            // UsbHidPortSelection
+            // UsbHidDeviceSelection
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.button_RefreshPorts);
             this.Controls.Add(this.comboBox_Device);
             this.Controls.Add(this.label_Device);
-            this.Name = "UsbHidPortSelection";
+            this.Name = "UsbHidDeviceSelection";
             this.Size = new System.Drawing.Size(285, 46);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.UsbHidPortSelection_Paint);
             this.ResumeLayout(false);

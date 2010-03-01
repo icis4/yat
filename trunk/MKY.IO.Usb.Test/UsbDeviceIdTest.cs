@@ -21,9 +21,9 @@ using System.Text;
 
 using NUnit.Framework;
 
-using MKY.IO.Ports;
+using MKY.IO.Usb;
 
-namespace MKY.IO.Serial.Test.USB
+namespace MKY.IO.Usb.Test
 {
 	[TestFixture]
 	public class UsbDeviceIdTest

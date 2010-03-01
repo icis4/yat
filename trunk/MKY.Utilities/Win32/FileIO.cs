@@ -46,11 +46,15 @@ namespace MKY.Utilities.Win32
         // Types
         //==========================================================================================
 
+        /// <summary></summary>
         [StructLayout(LayoutKind.Sequential)]
-        private struct SECURITY_ATTRIBUTES
+        public struct SECURITY_ATTRIBUTES
         {
+            /// <summary></summary>
             public Int32 nLength;
+            /// <summary></summary>
             public Int32 lpSecurityDescriptor;
+            /// <summary></summary>
             public Int32 bInheritHandle;
         }
 
@@ -61,15 +65,26 @@ namespace MKY.Utilities.Win32
 		// Constants
 		//==========================================================================================
 
-        private const Int32 FILE_FLAG_OVERLAPPED = 0x40000000;
-        private const Int32 FILE_SHARE_READ = 1;
-        private const Int32 FILE_SHARE_WRITE = 2;
-        private const UInt32 GENERIC_READ = 0x80000000;
-        private const UInt32 GENERIC_WRITE = 0x40000000;
-        private const Int32 INVALID_HANDLE_VALUE = -1;
-        private const Int32 OPEN_EXISTING = 3;
-        internal const Int32 WAIT_TIMEOUT = 0x102;
-        internal const Int32 WAIT_OBJECT_0 = 0;         
+        /// <summary></summary>
+        public const Int32 FILE_FLAG_OVERLAPPED = 0x40000000;
+        /// <summary></summary>
+        public const Int32 FILE_SHARE_READ = 1;
+        /// <summary></summary>
+        public const Int32 FILE_SHARE_WRITE = 2;
+        /// <summary></summary>
+        [CLSCompliant(false)]
+        public const UInt32 GENERIC_READ = 0x80000000;
+        /// <summary></summary>
+        [CLSCompliant(false)]
+        public const UInt32 GENERIC_WRITE = 0x40000000;
+        /// <summary></summary>
+        public const Int32 INVALID_HANDLE_VALUE = -1;
+        /// <summary></summary>
+        public const Int32 OPEN_EXISTING = 3;
+        /// <summary></summary>
+        public const Int32 WAIT_TIMEOUT = 0x102;
+        /// <summary></summary>
+        public const Int32 WAIT_OBJECT_0 = 0;         
     
         #endregion
 
@@ -84,7 +99,7 @@ namespace MKY.Utilities.Win32
         /// <param name="hFile">The device handle.</param>
         /// <returns>True on success, false on failure.</returns>
         [DllImport("kernel32.dll", SetLastError = true)]
-		internal static extern Int32 CancelIo(SafeFileHandle hFile);
+        public static extern Int32 CancelIo(SafeFileHandle hFile);
 
         /// <summary>
         /// Creates an event object for the overlapped structure used with ReadFile.
@@ -96,10 +111,12 @@ namespace MKY.Utilities.Win32
         /// <param name="lpName">An event object name (optional).</param>
         /// <returns>A handle to the event object.</returns>
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        internal static extern IntPtr CreateEvent(IntPtr SecurityAttributes, Boolean bManualReset, Boolean bInitialState, String lpName);
+        public static extern IntPtr CreateEvent(IntPtr SecurityAttributes, Boolean bManualReset, Boolean bInitialState, String lpName);
 
+        /// <summary></summary>
+        [CLSCompliant(false)]
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        internal static extern SafeFileHandle CreateFile(String lpFileName, UInt32 dwDesiredAccess, Int32 dwShareMode, IntPtr lpSecurityAttributes, Int32 dwCreationDisposition, Int32 dwFlagsAndAttributes, Int32 hTemplateFile);
+        public static extern SafeFileHandle CreateFile(String lpFileName, UInt32 dwDesiredAccess, Int32 dwShareMode, IntPtr lpSecurityAttributes, Int32 dwCreationDisposition, Int32 dwFlagsAndAttributes, Int32 hTemplateFile);
 
         /// <summary>
         /// Gets the result of an overlapped operation.
@@ -110,7 +127,7 @@ namespace MKY.Utilities.Win32
         /// <param name="bWait">False to return immediately.</param>
         /// <returns>Non-zero on success and the number of bytes read.</returns>
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-		internal static extern Boolean GetOverlappedResult(SafeFileHandle hFile, IntPtr lpOverlapped, ref Int32 lpNumberOfBytesTransferred, Boolean bWait);
+        public static extern Boolean GetOverlappedResult(SafeFileHandle hFile, IntPtr lpOverlapped, ref Int32 lpNumberOfBytesTransferred, Boolean bWait);
 
         /// <summary>
         /// Attempts to read an Input report from the device.
@@ -129,7 +146,7 @@ namespace MKY.Utilities.Win32
         /// <param name="lpOverlapped">An overlapped structure whose hEvent member is set to an event object.</param>
         /// <returns>The report in ReadBuffer.</returns>
         [DllImport("kernel32.dll", SetLastError = true)]
-        internal static extern Boolean ReadFile(SafeFileHandle hFile, IntPtr lpBuffer, Int32 nNumberOfBytesToRead, ref Int32 lpNumberOfBytesRead, IntPtr lpOverlapped);
+        public static extern Boolean ReadFile(SafeFileHandle hFile, IntPtr lpBuffer, Int32 nNumberOfBytesToRead, ref Int32 lpNumberOfBytesRead, IntPtr lpOverlapped);
 
         /// <summary>
         /// Waits for at least one report or a timeout.
@@ -139,7 +156,7 @@ namespace MKY.Utilities.Win32
         /// <param name="dwMilliseconds">A timeout value in milliseconds.</param>
         /// <returns>A result code.</returns>
         [DllImport("kernel32.dll", SetLastError = true)]
-        internal static extern Int32 WaitForSingleObject(IntPtr hHandle, Int32 dwMilliseconds);
+        public static extern Int32 WaitForSingleObject(IntPtr hHandle, Int32 dwMilliseconds);
 
         /// <summary>
         /// Writes an Output report to the device.
@@ -151,7 +168,7 @@ namespace MKY.Utilities.Win32
         /// <param name="lpOverlapped"></param>
         /// <returns>True on success, false on failure.</returns>
         [DllImport("kernel32.dll", SetLastError = true)]
-        internal static extern Boolean WriteFile(SafeFileHandle hFile, Byte[] lpBuffer, Int32 nNumberOfBytesToWrite, ref Int32 lpNumberOfBytesWritten, IntPtr lpOverlapped);        
+        public static extern Boolean WriteFile(SafeFileHandle hFile, Byte[] lpBuffer, Int32 nNumberOfBytesToWrite, ref Int32 lpNumberOfBytesWritten, IntPtr lpOverlapped);        
 
         #endregion
     }

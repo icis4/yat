@@ -52,8 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Device.cs" />
-    <Compile Include="Hid\Device.cs" />
-    <Compile Include="Hid\DeviceCollection.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="HidDevice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DeviceCollection.cs" />
     <Compile Include="DeviceId.cs" />

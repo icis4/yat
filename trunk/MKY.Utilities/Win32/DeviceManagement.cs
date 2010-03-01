@@ -295,7 +295,7 @@ namespace MKY.Utilities.Win32
         {
             int bufferSize = 0;
             IntPtr detailDataBuffer = IntPtr.Zero;
-            IntPtr deviceInfoSet = new System.IntPtr();
+            IntPtr deviceInfoSet = new IntPtr();
             bool lastDevice = false;
             int memberIndex = 0;
             SP_DEVICE_INTERFACE_DATA deviceInterfaceData = new SP_DEVICE_INTERFACE_DATA();
@@ -314,32 +314,31 @@ namespace MKY.Utilities.Win32
                     // Begin with 0 and increment through the device information set until no more devices are available.
                     if (SetupDiEnumDeviceInterfaces(deviceInfoSet, IntPtr.Zero, ref classGuid, memberIndex, ref deviceInterfaceData))
                     {
-                        // A device is present.
-                        if (SetupDiGetDeviceInterfaceDetail(deviceInfoSet, ref deviceInterfaceData, IntPtr.Zero, 0, ref bufferSize, IntPtr.Zero))
+                        // A device is present. Retrieve the size of the data buffer. Don't care about the return value, it will be false.
+                        SetupDiGetDeviceInterfaceDetail(deviceInfoSet, ref deviceInterfaceData, IntPtr.Zero, 0, ref bufferSize, IntPtr.Zero);
+
+                        // Allocate memory for the SP_DEVICE_INTERFACE_DETAIL_DATA structure using the returned buffer size.
+                        detailDataBuffer = Marshal.AllocHGlobal(bufferSize);
+
+                        // Store cbSize in the first bytes of the array. The number of bytes varies with 32- and 64-bit systems.
+                        Marshal.WriteInt32(detailDataBuffer, (IntPtr.Size == 4) ? (4 + Marshal.SystemDefaultCharSize) : 8);
+
+                        // Call SetupDiGetDeviceInterfaceDetail again.
+                        // This time, pass a pointer to DetailDataBuffer and the returned required buffer size.
+                        if (SetupDiGetDeviceInterfaceDetail(deviceInfoSet, ref deviceInterfaceData, detailDataBuffer, bufferSize, ref bufferSize, IntPtr.Zero))
                         {
-                            // Allocate memory for the SP_DEVICE_INTERFACE_DETAIL_DATA structure using the returned buffer size.
-                            detailDataBuffer = Marshal.AllocHGlobal(bufferSize);
+                            // Skip over cbsize (4 bytes) to get the address of the devicePathName.
+                            IntPtr pDevicePathName = new IntPtr(detailDataBuffer.ToInt32() + 4);
 
-                            // Store cbSize in the first bytes of the array. The number of bytes varies with 32- and 64-bit systems.
-                            Marshal.WriteInt32(detailDataBuffer, (IntPtr.Size == 4) ? (4 + Marshal.SystemDefaultCharSize) : 8);
-
-                            // Call SetupDiGetDeviceInterfaceDetail again.
-                            // This time, pass a pointer to DetailDataBuffer and the returned required buffer size.
-                            if (SetupDiGetDeviceInterfaceDetail(deviceInfoSet, ref deviceInterfaceData, detailDataBuffer, bufferSize, ref bufferSize, IntPtr.Zero))
-                            {
-                                // Skip over cbsize (4 bytes) to get the address of the devicePathName.
-                                IntPtr pDevicePathName = new IntPtr(detailDataBuffer.ToInt32() + 4);
-
-                                // Get the String containing the devicePathName.
-                                devicePaths.Add(Marshal.PtrToStringAuto(pDevicePathName));
-                            }
+                            // Get the String containing the devicePathName.
+                            devicePaths.Add(Marshal.PtrToStringAuto(pDevicePathName));
                         }
                     }
                     else
                     {
                         lastDevice = true;
                     }
-                    memberIndex = memberIndex + 1;
+                    memberIndex++;
                 }
                 while (!((lastDevice == true)));
             }

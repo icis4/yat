@@ -35,8 +35,6 @@ namespace MKY.Windows.Forms
 		// Fields
 		//==========================================================================================
 
-		private bool _isStartingUp = true;
-
 		private string _inputText = "";
 		private string _inputText_Form = "";
 
@@ -79,16 +77,22 @@ namespace MKY.Windows.Forms
 		// Form Event Handlers
 		//==========================================================================================
 
-		private void TextInputBox_Paint(object sender, PaintEventArgs e)
+        /// <summary>
+        /// Startup flag only used in the following event handler.
+        /// </summary>
+        private bool _isStartingUp = true;
+
+        /// <summary>
+        /// Initially set controls and validate its contents where needed.
+        /// </summary>
+        private void TextInputBox_Paint(object sender, PaintEventArgs e)
 		{
 			if (_isStartingUp)
 			{
 				_isStartingUp = false;
-
-				// Initially set controls and validate its contents where needed
 				SetControls();
 
-				// move cursor to end
+				// Move cursor to end
 				textBox_InputText.SelectionStart = textBox_InputText.Text.Length;
 			}
 		}

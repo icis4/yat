@@ -41,6 +41,7 @@ namespace MKY.IO.Usb
             }
         }
 
+        private DeviceClass _deviceClass = DeviceClass.Any;
         private Guid _classGuid = new Guid();
 
         /// <summary></summary>
@@ -49,9 +50,14 @@ namespace MKY.IO.Usb
         }
 
         /// <summary></summary>
-        public DeviceCollection(Guid classGuid)
+        public DeviceCollection(DeviceClass deviceClass)
         {
-            _classGuid = classGuid;
+            _deviceClass = deviceClass;
+
+            switch (_deviceClass)
+            {
+                case DeviceClass.Hid: _classGuid = Utilities.Win32.Hid.GetHidGuid(); break;
+            }
         }
 
         /// <summary></summary>
@@ -60,9 +66,10 @@ namespace MKY.IO.Usb
 		{
             DeviceCollection casted = rhs as DeviceCollection;
             if (casted != null)
-                _classGuid = casted._classGuid;
-            else
-                _classGuid = new Guid();
+            {
+                _deviceClass = casted._deviceClass;
+                _classGuid   = casted._classGuid;
+            }
 		}
 
 		/// <summary>
@@ -71,15 +78,8 @@ namespace MKY.IO.Usb
 		public void FillWithAvailableDevices()
 		{
 			Clear();
-            foreach (string path in Utilities.Win32.DeviceManagement.GetDevicesFromGuid(_classGuid))
-			{
-                DeviceId id;
-                if (DeviceId.TryParse(path, out id))
-                {
-                    id.GetInformationFromDevice();
-                    base.Add(id);
-                }
-			}
+            foreach (DeviceId id in Device.GetDevicesFromGuid(_classGuid))
+                base.Add(id);
 			Sort();
 		}
 

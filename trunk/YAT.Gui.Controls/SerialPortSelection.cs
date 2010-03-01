@@ -40,7 +40,6 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool _isStartingUp = true;
 		private bool _isSettingControls = false;
 
 		private SerialPortId _portId = SerialPortId.DefaultPort;
@@ -99,13 +98,19 @@ namespace YAT.Gui.Controls
 		// Control Event Handlers
 		//==========================================================================================
 
-		private void SerialPortSelection_Paint(object sender, PaintEventArgs e)
+        /// <summary>
+        /// Startup flag only used in the following event handler.
+        /// </summary>
+        private bool _isStartingUp = true;
+
+        /// <summary>
+        /// Initially set controls and validate its contents where needed.
+        /// </summary>
+        private void SerialPortSelection_Paint(object sender, PaintEventArgs e)
 		{
 			if (_isStartingUp)
 			{
 				_isStartingUp = false;
-
-				// Initially set controls and validate its contents where needed
 				SetSerialPortList();
 				SetControls();
 			}
@@ -231,6 +236,7 @@ namespace YAT.Gui.Controls
 
 		private void SetSerialPortList()
 		{
+            // Only scan for ports if control is enabled. This saves some time.
             if (Enabled && !DesignMode)
 			{
 				_isSettingControls = true;
@@ -242,10 +248,10 @@ namespace YAT.Gui.Controls
 
 				if (ApplicationSettings.LocalUser.General.DetectSerialPortsInUse)
 				{
-					// Install timer which shows a dialog if scanning takes more than 500ms
+					// Install timer which shows a dialog if scanning takes more than 500ms.
 					timer_ShowScanDialog.Start();
 
-					// Start scanning on different thread
+					// Start scanning on different thread.
 					_markPortsInUseThread = new MarkPortsInUseThread(ports);
 					Thread t = new Thread(new ThreadStart(_markPortsInUseThread.MarkPortsInUse));
 					t.Start();
@@ -255,7 +261,7 @@ namespace YAT.Gui.Controls
 
 					t.Join();
 
-					// Cleanup
+					// Cleanup.
 					timer_ShowScanDialog.Stop();
 				}
 
@@ -271,7 +277,7 @@ namespace YAT.Gui.Controls
 					else
 						comboBox_Port.SelectedIndex = 0;
 
-					// set property instead of member to ensure that changed event is fired
+					// Set property instead of member to ensure that changed event is fired.
 					PortId = comboBox_Port.SelectedItem as SerialPortId;
 				}
 				else
