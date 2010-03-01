@@ -26,7 +26,6 @@ using System.Threading;
 using System.ComponentModel;
 
 using MKY.Utilities.Event;
-using MKY.IO.Usb;
 
 #endregion
 
@@ -62,13 +61,13 @@ namespace MKY.IO.Serial
 
         private bool _isDisposed;
 
-        private DeviceId _deviceId;
+        private Usb.DeviceId _deviceId;
         private AutoRetry _autoReconnect;
 
         private PortState _state = PortState.Disconnected;
         private object _stateSyncObj = new object();
 
-        private UsbLibrary.UsbHidPort _port;
+        private Usb.HidDevice _port;
         private object _portSyncObj = new object();
 
         private Queue<byte> _receiveQueue = new Queue<byte>();
@@ -103,18 +102,18 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
         /// <summary></summary>
-        public UsbHidDevice(UsbDeviceId deviceId)
+        public UsbHidDevice(Usb.DeviceId deviceId)
         {
             Initialize(deviceId, new AutoRetry());
         }
 
         /// <summary></summary>
-        public UsbHidDevice(UsbDeviceId deviceId, AutoRetry autoReconnect)
+        public UsbHidDevice(Usb.DeviceId deviceId, AutoRetry autoReconnect)
 		{
             Initialize(deviceId, autoReconnect);
 		}
 
-        private void Initialize(UsbDeviceId deviceId, AutoRetry autoReconnect)
+        private void Initialize(Usb.DeviceId deviceId, AutoRetry autoReconnect)
         {
             _deviceId = deviceId;
             _autoReconnect = autoReconnect;
@@ -178,7 +177,7 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
         /// <summary></summary>
-        public UsbDeviceId DeviceId
+        public Usb.DeviceId DeviceId
         {
             get
             {
@@ -231,11 +230,7 @@ namespace MKY.IO.Serial
             get
             {
                 AssertNotDisposed();
-                return
-                    (
-                        (_port != null) &&
-                        (_port.SpecifiedDevice != null)
-                    );
+                return (_port != null);
             }
         }
 
@@ -333,8 +328,8 @@ namespace MKY.IO.Serial
 
             if (IsOpen)
             {
-                lock (_portSyncObj)
-                    _port.SpecifiedDevice.SendData(data);
+                /*lock (_portSyncObj)
+                    _port.SpecifiedDevice.SendData(data);*/
             }
 
             // OnDataSent will be fired by UsbLibrary.UsbHidPort
@@ -387,13 +382,6 @@ namespace MKY.IO.Serial
         //==========================================================================================
 
         /// <summary></summary>
-        /// <remarks>
-        /// The <see cref="UsbLibrary.UsbHidPort"/> fires the
-        /// <see cref="UsbLibrary.UsbHidPort.OnSpecifiedDeviceArrived"/> and
-        /// <see cref="UsbLibrary.UsbHidPort.OnSpecifiedDeviceRemoved"/> events only if the
-        /// <see cref="UsbLibrary.UsbHidPort.OnDeviceArrived"/> and
-        /// <see cref="UsbLibrary.UsbHidPort.OnDeviceRemoved"/> events are registered.
-        /// </remarks>
         private void StartConnection()
         {
             if (_port != null)
@@ -403,7 +391,7 @@ namespace MKY.IO.Serial
 
             lock (_portSyncObj)
             {
-                _port = new UsbLibrary.UsbHidPort();
+                /* _port = new UsbLibrary.UsbHidPort();
                 _port.OnDeviceArrived += new EventHandler(_port_OnDeviceArrived);
                 _port.OnDeviceRemoved += new EventHandler(_port_OnDeviceRemoved);
                 _port.OnSpecifiedDeviceArrived += new EventHandler(_port_OnSpecifiedDeviceArrived);
@@ -412,7 +400,7 @@ namespace MKY.IO.Serial
                 _port.OnDataSend += new EventHandler(_port_OnDataSend);
 
                 _port.VendorId = _deviceId.VendorId;
-                _port.ProductId = _deviceId.ProductId;
+                _port.ProductId = _deviceId.ProductId; */
             }
         }
 
@@ -453,7 +441,7 @@ namespace MKY.IO.Serial
         /// Asynchronously invoke incoming events to prevent potential dead-locks if close/dispose
         /// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
         /// </summary>
-        private delegate void _port_DataReceivedDelegate(object sender, UsbLibrary.DataRecievedEventArgs e);
+        /* private delegate void _port_DataReceivedDelegate(object sender, UsbLibrary.DataRecievedEventArgs e);
         private object _port_DataReceivedSyncObj = new object();
 
         private void _port_OnDataRecieved(object sender, UsbLibrary.DataRecievedEventArgs e)
@@ -482,9 +470,9 @@ namespace MKY.IO.Serial
                     }
                 }
             }
-        }
+        } */
 
-        private void _port_DataReceivedAsync(object sender, UsbLibrary.DataRecievedEventArgs e)
+        /* private void _port_DataReceivedAsync(object sender, UsbLibrary.DataRecievedEventArgs e)
         {
             // Ensure that only one data received event thread is active at the same time.
             // Without this exclusivity, two receive threads could create a race condition.
@@ -501,7 +489,7 @@ namespace MKY.IO.Serial
             {
                 Monitor.Exit(_port_DataReceivedSyncObj);
             }
-        }
+        } */
 
         private void _port_OnDataSend(object sender, EventArgs e)
         {

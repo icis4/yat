@@ -73,7 +73,6 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool _isStartingUp = true;
 		private bool _isSettingControls = false;
 
 		private Model.Types.Command _command = new Model.Types.Command();
@@ -156,13 +155,19 @@ namespace YAT.Gui.Controls
 		// Control Event Handlers
 		//==========================================================================================
 
-		private void PredefinedCommandSettingsSet_Paint(object sender, PaintEventArgs e)
+        /// <summary>
+        /// Startup flag only used in the following event handler.
+        /// </summary>
+        private bool _isStartingUp = true;
+
+        /// <summary>
+        /// Initially set controls and validate its contents where needed.
+        /// </summary>
+        private void PredefinedCommandSettingsSet_Paint(object sender, PaintEventArgs e)
 		{
 			if (_isStartingUp)
 			{
 				_isStartingUp = false;
-
-				// Initially set controls and validate its contents where needed
 				SetControls();
 
 				// Move cursor to end

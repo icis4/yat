@@ -24,12 +24,12 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace MKY.IO.Usb.Hid
+namespace MKY.IO.Usb
 {
     /// <summary>
     /// A USB HID device.
     /// </summary>
-	public class Device : Usb.Device
+	public class HidDevice : Device
 	{
 		#region Static Methods
 		//==========================================================================================
@@ -53,25 +53,25 @@ namespace MKY.IO.Usb.Hid
 		//==========================================================================================
 
         /// <summary></summary>
-        public Device(int vid, int pid)
-            : base(vid, pid)
+        public HidDevice(int vendorId, int productId)
+            : base(vendorId, productId)
         {
         }
 
         /// <summary></summary>
-        public Device(int vid, int pid, string serialNumber)
-            : base(vid, pid, serialNumber)
+        public HidDevice(int vendorId, int productId, string serialNumber)
+            : base(vendorId, productId, serialNumber)
         {
         }
 
         /// <summary></summary>
-        public Device(DeviceId deviceId)
+        public HidDevice(DeviceId deviceId)
             : base(deviceId)
         {
         }
 
         /// <summary></summary>
-        public Device(string path)
+        public HidDevice(string path)
             : base(path)
         {
         }

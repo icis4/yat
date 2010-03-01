@@ -33,7 +33,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public static readonly AutoRetry AutoReconnectDefault = new AutoRetry(true, 2000);
 
-		private DeviceId _deviceId;
+        private DeviceId _deviceId;
 		private AutoRetry _autoReconnect;
 
 		/// <summary></summary>

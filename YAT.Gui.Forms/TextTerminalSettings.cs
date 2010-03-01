@@ -35,7 +35,6 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		private bool _isStartingUp = true;
 		private bool _isSettingControls = false;
 
 		private Domain.Settings.TextTerminalSettings _settings;
@@ -76,13 +75,19 @@ namespace YAT.Gui.Forms
 		// Form Event Handlers
 		//==========================================================================================
 
-		private void TextTerminalSettings_Paint(object sender, PaintEventArgs e)
+        /// <summary>
+        /// Startup flag only used in the following event handler.
+        /// </summary>
+        private bool _isStartingUp = true;
+
+        /// <summary>
+        /// Initially set controls and validate its contents where needed.
+        /// </summary>
+        private void TextTerminalSettings_Paint(object sender, PaintEventArgs e)
 		{
 			if (_isStartingUp)
 			{
 				_isStartingUp = false;
-
-				// Initially set controls and validate its contents where needed
 				SetControls();
 			}
 		}

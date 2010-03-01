@@ -49,34 +49,59 @@ namespace MKY.Utilities.Win32
 		// Types
 		//==========================================================================================
 
+        /// <summary></summary>
         [StructLayout(LayoutKind.Sequential)]
-        internal struct HIDD_ATTRIBUTES 
+        public struct HIDD_ATTRIBUTES 
         {
+            /// <summary></summary>
             public Int32 Size;
+            /// <summary></summary>
+            [CLSCompliant(false)]
             public UInt16 VendorID;
+            /// <summary></summary>
+            [CLSCompliant(false)]
             public UInt16 ProductID;
+            /// <summary></summary>
+            [CLSCompliant(false)]
             public UInt16 VersionNumber;
         }
 
+        /// <summary></summary>
         [StructLayout(LayoutKind.Sequential)]
-        internal struct HIDP_CAPS
+        public struct HIDP_CAPS
         {
+            /// <summary></summary>
             public Int16 Usage;
+            /// <summary></summary>
             public Int16 UsagePage;
+            /// <summary></summary>
             public Int16 InputReportByteLength;
+            /// <summary></summary>
             public Int16 OutputReportByteLength;
+            /// <summary></summary>
             public Int16 FeatureReportByteLength;
+            /// <summary></summary>
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 17)]
             public Int16[] Reserved;
+            /// <summary></summary>
             public Int16 NumberLinkCollectionNodes;
+            /// <summary></summary>
             public Int16 NumberInputButtonCaps;
+            /// <summary></summary>
             public Int16 NumberInputValueCaps;
+            /// <summary></summary>
             public Int16 NumberInputDataIndices;
+            /// <summary></summary>
             public Int16 NumberOutputButtonCaps;
+            /// <summary></summary>
             public Int16 NumberOutputValueCaps;
+            /// <summary></summary>
             public Int16 NumberOutputDataIndices;
+            /// <summary></summary>
             public Int16 NumberFeatureButtonCaps;
+            /// <summary></summary>
             public Int16 NumberFeatureValueCaps;
+            /// <summary></summary>
             public Int16 NumberFeatureDataIndices;
         }
         
@@ -86,39 +111,71 @@ namespace MKY.Utilities.Win32
         /// If IsDesignatorRange is false, DesignatorMin is the designator index and DesignatorMax is unused.
         /// </summary>
         [StructLayout(LayoutKind.Sequential)]
-        internal struct HidP_Value_Caps 
+        public struct HidP_Value_Caps 
         {
+            /// <summary></summary>
             public Int16 UsagePage;
+            /// <summary></summary>
             public Byte ReportID;
+            /// <summary></summary>
             public Int32 IsAlias;
+            /// <summary></summary>
             public Int16 BitField;
+            /// <summary></summary>
             public Int16 LinkCollection;
+            /// <summary></summary>
             public Int16 LinkUsage;
+            /// <summary></summary>
             public Int16 LinkUsagePage;
+            /// <summary></summary>
             public Int32 IsRange;
+            /// <summary></summary>
             public Int32 IsStringRange;
+            /// <summary></summary>
             public Int32 IsDesignatorRange;
+            /// <summary></summary>
             public Int32 IsAbsolute;
+            /// <summary></summary>
             public Int32 HasNull;
+            /// <summary></summary>
             public Byte Reserved;
+            /// <summary></summary>
             public Int16 BitSize;
+            /// <summary></summary>
             public Int16 ReportCount;
+            /// <summary></summary>
             public Int16 Reserved2;
+            /// <summary></summary>
             public Int16 Reserved3;
+            /// <summary></summary>
             public Int16 Reserved4;
+            /// <summary></summary>
             public Int16 Reserved5;
+            /// <summary></summary>
             public Int16 Reserved6;
+            /// <summary></summary>
             public Int32 LogicalMin;
+            /// <summary></summary>
             public Int32 LogicalMax;
+            /// <summary></summary>
             public Int32 PhysicalMin;
+            /// <summary></summary>
             public Int32 PhysicalMax;
+            /// <summary></summary>
             public Int16 UsageMin;
+            /// <summary></summary>
             public Int16 UsageMax;
+            /// <summary></summary>
             public Int16 StringMin;
+            /// <summary></summary>
             public Int16 StringMax;
+            /// <summary></summary>
             public Int16 DesignatorMin;
+            /// <summary></summary>
             public Int16 DesignatorMax;
+            /// <summary></summary>
             public Int16 DataIndexMin;
+            /// <summary></summary>
             public Int16 DataIndexMax;
         }
         
@@ -148,7 +205,7 @@ namespace MKY.Utilities.Win32
         /// <param name="HidDeviceObject">A handle to the device.</param>
         /// <returns>True on success, false on failure.</returns>
         [DllImport("hid.dll", SetLastError = true)]
-        internal static extern Boolean HidD_FlushQueue(SafeFileHandle HidDeviceObject);
+        public static extern Boolean HidD_FlushQueue(SafeFileHandle HidDeviceObject);
 
         /// <summary>
         /// Frees the buffer reserved by HidD_GetPreparsedData.
@@ -156,10 +213,11 @@ namespace MKY.Utilities.Win32
         /// <param name="PreparsedData">A pointer to the PreparsedData structure returned by HidD_GetPreparsedData.</param>
         /// <returns>True on success, false on failure.</returns>
         [DllImport("hid.dll", SetLastError = true)]
-        internal static extern Boolean HidD_FreePreparsedData(IntPtr PreparsedData);
+        public static extern Boolean HidD_FreePreparsedData(IntPtr PreparsedData);
 
+        /// <summary></summary>
         [DllImport("hid.dll", SetLastError = true)]
-        internal static extern Boolean HidD_GetAttributes(SafeFileHandle HidDeviceObject, ref HIDD_ATTRIBUTES Attributes);
+        public static extern Boolean HidD_GetAttributes(SafeFileHandle HidDeviceObject, ref HIDD_ATTRIBUTES Attributes);
 
         /// <summary>
         /// Attempts to read a Feature report from the device.
@@ -169,7 +227,7 @@ namespace MKY.Utilities.Win32
         /// <param name="ReportBufferLength">The size of the buffer.</param>
         /// <returns>True on success, false on failure.</returns>
         [DllImport("hid.dll", SetLastError = true)]
-        internal static extern Boolean HidD_GetFeature(SafeFileHandle HidDeviceObject, Byte[] lpReportBuffer, Int32 ReportBufferLength);
+        public static extern Boolean HidD_GetFeature(SafeFileHandle HidDeviceObject, Byte[] lpReportBuffer, Int32 ReportBufferLength);
 
         /// <summary>
         /// Attempts to read an Input report from the device using a control transfer.
@@ -182,10 +240,11 @@ namespace MKY.Utilities.Win32
         /// <param name="ReportBufferLength">The size of the buffer.</param>
         /// <returns>True on success, false on failure.</returns>
         [DllImport("hid.dll", SetLastError = true)]
-        internal static extern Boolean HidD_GetInputReport(SafeFileHandle HidDeviceObject, Byte[] lpReportBuffer, Int32 ReportBufferLength);
+        public static extern Boolean HidD_GetInputReport(SafeFileHandle HidDeviceObject, Byte[] lpReportBuffer, Int32 ReportBufferLength);
 
+        /// <summary></summary>
         [DllImport("hid.dll", SetLastError = true)]
-        internal static extern void HidD_GetHidGuid(ref System.Guid HidGuid);
+        public static extern void HidD_GetHidGuid(ref System.Guid HidGuid);
 
         /// <summary>
         /// Retrieves the number of Input reports the host can store.
@@ -198,7 +257,7 @@ namespace MKY.Utilities.Win32
         /// <param name="NumberBuffers">True on success, false on failure.</param>
         /// <returns></returns>
         [DllImport("hid.dll", SetLastError = true)]
-        internal static extern Boolean HidD_GetNumInputBuffers(SafeFileHandle HidDeviceObject, ref Int32 NumberBuffers);
+        public static extern Boolean HidD_GetNumInputBuffers(SafeFileHandle HidDeviceObject, ref Int32 NumberBuffers);
 
         /// <summary>
         /// Retrieves a pointer to a buffer containing information about the device's capabilities.
@@ -208,7 +267,7 @@ namespace MKY.Utilities.Win32
         /// <param name="PreparsedData">A pointer to a buffer.</param>
         /// <returns>True on success, false on failure.</returns>
         [DllImport("hid.dll", SetLastError = true)]
-        internal static extern Boolean HidD_GetPreparsedData(SafeFileHandle HidDeviceObject, ref IntPtr PreparsedData);
+        public static extern Boolean HidD_GetPreparsedData(SafeFileHandle HidDeviceObject, ref IntPtr PreparsedData);
 
         /// <summary>
         /// Attempts to send a Feature report to the device.
@@ -218,7 +277,7 @@ namespace MKY.Utilities.Win32
         /// <param name="ReportBufferLength">The size of the buffer.</param>
         /// <returns>True on success, false on failure.</returns>
         [DllImport("hid.dll", SetLastError = true)]
-        internal static extern Boolean HidD_SetFeature(SafeFileHandle HidDeviceObject, Byte[] lpReportBuffer, Int32 ReportBufferLength);
+        public static extern Boolean HidD_SetFeature(SafeFileHandle HidDeviceObject, Byte[] lpReportBuffer, Int32 ReportBufferLength);
 
         /// <summary>
         /// Sets the number of Input reports the host can store.
@@ -230,7 +289,7 @@ namespace MKY.Utilities.Win32
         /// <param name="NumberBuffers">An integer to hold the number of buffers.</param>
         /// <returns>True on success, false on failure.</returns>
         [DllImport("hid.dll", SetLastError = true)]
-        internal static extern Boolean HidD_SetNumInputBuffers(SafeFileHandle HidDeviceObject, Int32 NumberBuffers);
+        public static extern Boolean HidD_SetNumInputBuffers(SafeFileHandle HidDeviceObject, Int32 NumberBuffers);
 
         /// <summary>
         /// Attempts to send an Output report to the device using a control transfer.
@@ -243,7 +302,7 @@ namespace MKY.Utilities.Win32
         /// <param name="ReportBufferLength">The size of the buffer.</param>
         /// <returns>True on success, false on failure.</returns>
         [DllImport("hid.dll", SetLastError = true)]
-        internal static extern Boolean HidD_SetOutputReport(SafeFileHandle HidDeviceObject, Byte[] lpReportBuffer, Int32 ReportBufferLength);
+        public static extern Boolean HidD_SetOutputReport(SafeFileHandle HidDeviceObject, Byte[] lpReportBuffer, Int32 ReportBufferLength);
 
         /// <summary>
         /// Find out a device's capabilities. For standard devices such as joysticks, you can find
@@ -254,7 +313,7 @@ namespace MKY.Utilities.Win32
         /// <param name="Capabilities">A pointer to a HIDP_CAPS structure.</param>
         /// <returns>True on success, false on failure.</returns>
         [DllImport("hid.dll", SetLastError = true)]
-        internal static extern Int32 HidP_GetCaps(IntPtr PreparsedData, ref HIDP_CAPS Capabilities);
+        public static extern Int32 HidP_GetCaps(IntPtr PreparsedData, ref HIDP_CAPS Capabilities);
 
         /// <summary>
         /// Retrieves a buffer containing an array of HidP_ValueCaps structures. Each structure
@@ -265,8 +324,8 @@ namespace MKY.Utilities.Win32
         /// <param name="ValueCapsLength">The NumberInputValueCaps member of the device's HidP_Caps structure.</param>
         /// <param name="PreparsedData"> A pointer to the PreparsedData structure returned by HidD_GetPreparsedData.</param>
         /// <returns>True on success, false on failure.</returns>
-        [DllImport("hid.dll", SetLastError = true)]       
-		internal static extern Int32 HidP_GetValueCaps(Int32 ReportType, Byte[] ValueCaps, ref Int32 ValueCapsLength, IntPtr PreparsedData);
+        [DllImport("hid.dll", SetLastError = true)]
+        public static extern Int32 HidP_GetValueCaps(Int32 ReportType, Byte[] ValueCaps, ref Int32 ValueCapsLength, IntPtr PreparsedData);
 
         #endregion
 
@@ -290,7 +349,7 @@ namespace MKY.Utilities.Win32
         /// </summary>
         /// <param name="hidHandle">A handle to a device.</param>
         /// <returns> True on success, false on failure.</returns>
-        internal static bool FlushQueue(SafeFileHandle hidHandle)
+        public static bool FlushQueue(SafeFileHandle hidHandle)
         {
             try
             {
@@ -309,10 +368,10 @@ namespace MKY.Utilities.Win32
         /// </summary>
         /// <param name="hidHandle">A handle to a device.</param>
         /// <returns>An HIDP_CAPS structure.</returns>
-        internal static HIDP_CAPS GetDeviceCapabilities(SafeFileHandle hidHandle)
+        public static HIDP_CAPS GetDeviceCapabilities(SafeFileHandle hidHandle)
         {
             HIDP_CAPS capabilities = new HIDP_CAPS();
-            IntPtr preparsedData = new System.IntPtr();
+            IntPtr preparsedData = new IntPtr();
             bool success = false;
 
             try
@@ -364,7 +423,7 @@ namespace MKY.Utilities.Win32
         /// </summary>
         /// <param name="capabilities">A HIDP_CAPS structure retrieved with HidP_GetCaps.</param>
         /// <returns>A String describing the usage.</returns>
-        internal static string GetHidUsage(HIDP_CAPS capabilities)
+        public static string GetHidUsage(HIDP_CAPS capabilities)
         {
             try
             {
@@ -394,7 +453,7 @@ namespace MKY.Utilities.Win32
         /// <param name="hidDeviceObject">A handle to a device.</param>
         /// <param name="numberOfInputBuffers">An integer to hold the returned value.</param>
         /// <returns>True on success, false on failure.</returns>
-        internal static bool GetNumberOfInputBuffers(SafeFileHandle hidDeviceObject, ref Int32 numberOfInputBuffers)
+        public static bool GetNumberOfInputBuffers(SafeFileHandle hidDeviceObject, ref Int32 numberOfInputBuffers)
         {
 
             try
@@ -428,7 +487,7 @@ namespace MKY.Utilities.Win32
         /// <param name="hidDeviceObject">A handle to the device.</param>
         /// <param name="numberBuffers">The requested number of input reports.</param>
         /// <returns>True on success. False on failure.</returns>
-        internal static bool SetNumberOfInputBuffers(SafeFileHandle hidDeviceObject, Int32 numberBuffers)
+        public static bool SetNumberOfInputBuffers(SafeFileHandle hidDeviceObject, Int32 numberBuffers)
         {
             try
             {
@@ -456,7 +515,7 @@ namespace MKY.Utilities.Win32
         /// <remarks>
         /// Windows XP or later is required for HidD_GetInputReport and HidD_SetInputReport.
         /// </remarks>
-        internal static bool IsWindowsXpOrLater()
+        private static bool IsWindowsXpOrLater()
         {
             try
             {
@@ -492,7 +551,7 @@ namespace MKY.Utilities.Win32
         /// - HidD_GetNumInputBuffers and HidD_SetNumInputBuffers
         /// (Not yet tested on a Windows 98 Standard Edition system.)
         /// </remarks>
-        internal static bool IsWindows98SE()
+        private static bool IsWindows98SE()
         {
             try
             {

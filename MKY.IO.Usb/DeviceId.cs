@@ -23,9 +23,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Xml.Serialization;
 
-// The MKY.IO.Serial namespace combines various serial interface infrastructure. This code is
-// intentionally placed into the MKY.IO.Serial namespace even though the file is located in
-// MKY.IO.Serial\USB for better separation of the implementation files.
 namespace MKY.IO.Usb
 {
 	/// <summary></summary>
@@ -107,19 +104,16 @@ namespace MKY.IO.Usb
 		/// Returns default device on system. Default is the first device available.
         /// Returns <c>null</c> if no devices are available.
 		/// </summary>
-        public static DeviceId DefaultDevice
+        public static DeviceId GetDefaultDevice(DeviceClass deviceClass)
 		{
-			get
-			{
-				DeviceCollection l = new DeviceCollection();
-				l.FillWithAvailableDevices();
+            DeviceCollection l = new DeviceCollection(deviceClass);
+            l.FillWithAvailableDevices();
 
-				if (l.Count > 0)
-                    return (new DeviceId(l[0]));
-				else
-					return (null);
-			}
-		}
+            if (l.Count > 0)
+                return (new DeviceId(l[0]));
+            else
+                return (null);
+        }
 
 		#endregion
 
@@ -143,6 +137,19 @@ namespace MKY.IO.Usb
 
             _vendorId = vendorId;
             _productId = productId;
+        }
+
+        /// <summary></summary>
+        public DeviceId(int vendorId, int productId, string serialNumber)
+        {
+            if ((vendorId  < FirstVendorId)  || (vendorId  > LastVendorId))
+                throw (new ArgumentOutOfRangeException("vendorId",  vendorId,  "Invalid vendor ID"));
+            if ((productId < FirstProductId) || (productId > LastProductId))
+                throw (new ArgumentOutOfRangeException("productId", productId, "Invalid product ID"));
+
+            _vendorId = vendorId;
+            _productId = productId;
+            _serialNumber = serialNumber;
         }
 
         /// <summary></summary>

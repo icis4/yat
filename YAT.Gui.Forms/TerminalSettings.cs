@@ -31,7 +31,6 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		private bool _isStartingUp = true;
 		private bool _isSettingControls = false;
 
 		private Domain.Settings.TerminalSettings _settings;
@@ -71,13 +70,19 @@ namespace YAT.Gui.Forms
 		// Form Event Handlers
 		//==========================================================================================
 
-		private void TerminalSettings_Paint(object sender, PaintEventArgs e)
-		{
-			if (_isStartingUp)
-			{
-				_isStartingUp = false;
+        /// <summary>
+        /// Startup flag only used in the following event handler.
+        /// </summary>
+        private bool _isStartingUp = true;
 
-				// Initially set controls and validate its contents where needed
+        /// <summary>
+        /// Initially set controls and validate its contents where needed.
+        /// </summary>
+        private void TerminalSettings_Paint(object sender, PaintEventArgs e)
+		{
+            if (_isStartingUp)
+			{
+                _isStartingUp = false;
 				SetControls();
 			}
 		}

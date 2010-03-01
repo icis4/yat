@@ -25,7 +25,7 @@ using System.Threading;
 
 using MKY.Utilities.Event;
 using MKY.Windows.Forms;
-using MKY.IO.Serial;
+using MKY.IO.Usb;
 
 using YAT.Settings.Application;
 
@@ -40,10 +40,9 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool _isStartingUp = true;
 		//private bool _isSettingControls = false;
 
-		private UsbDeviceId _deviceId = UsbDeviceId.DefaultDevice;
+        private DeviceId _deviceId = DeviceId.GetDefaultDevice(DeviceClass.Hid);
 
 		#endregion
 
@@ -77,7 +76,7 @@ namespace YAT.Gui.Controls
 
 		[Category("USB Device")]
 		[Description("USB device ID.")]
-		public UsbDeviceId DeviceId
+        public DeviceId DeviceId
 		{
 			get { return (_deviceId); }
 			set
@@ -98,19 +97,39 @@ namespace YAT.Gui.Controls
 		// Control Event Handlers
 		//==========================================================================================
 
-		private void UsbHidPortSelection_Paint(object sender, PaintEventArgs e)
+        /// <summary>
+        /// Startup flag only used in the following event handler.
+        /// </summary>
+        private bool _isStartingUp = true;
+
+        /// <summary>
+        /// Only set device list and controls once as soon as this control is enabled. This saves
+        /// some time on startup since scanning for the ports takes quite some time.
+        /// </summary>
+        private bool _deviceListIsInitialized = false;
+
+        /// <summary>
+        /// Initially set controls and validate its contents where needed.
+        /// </summary>
+        private void UsbHidPortSelection_Paint(object sender, PaintEventArgs e)
 		{
-			if (_isStartingUp)
-			{
-				_isStartingUp = false;
+            if (_isStartingUp)
+            {
+                _isStartingUp = false;
+                SetControls();
+            }
 
-				// Initially set controls and validate its contents where needed
-				SetDeviceList();
-				SetControls();
-			}
-		}
+            // Ensure that device list is set as soon as this control gets enabled.
+            // Could also be implemented in a EnabledChanged event handler. However, it's easier
+            // to implement this here so it also done on initial Paint event.
+            if (Enabled && !_deviceListIsInitialized)
+            {
+                _deviceListIsInitialized = true;
+                SetDeviceList();
+            }
+        }
 
-		#endregion
+        #endregion
 
 		#region Controls Event Handlers
 		//==========================================================================================
@@ -131,19 +150,19 @@ namespace YAT.Gui.Controls
 
 		private class MarkDevicesInUseThread
 		{
-			private UsbDeviceCollection _portList;
+			private DeviceCollection _deviceList;
 			private bool _isScanning = true;
 			private string _status2 = "";
 			private bool _cancelScanning = false;
 
-            public MarkDevicesInUseThread(UsbDeviceCollection portList)
+            public MarkDevicesInUseThread(DeviceCollection deviceList)
 			{
-				_portList = portList;
+                _deviceList = deviceList;
 			}
 
-			public UsbDeviceCollection PortList
+            public DeviceCollection DeviceList
 			{
-				get { return (_portList); }
+				get { return (_deviceList); }
 			}
 
 			public bool IsScanning
@@ -158,7 +177,7 @@ namespace YAT.Gui.Controls
 
 			public void MarkDevicesInUse()
 			{
-                _portList.MarkDevicesInUse(portList_MarkDevicesInUseCallback);
+                _deviceList.MarkDevicesInUse(portList_MarkDevicesInUseCallback);
 				_isScanning = false;
 
 				StatusBox.AcceptAndClose();
@@ -169,7 +188,7 @@ namespace YAT.Gui.Controls
 				_cancelScanning = true;
 			}
 
-            private void portList_MarkDevicesInUseCallback(object sender, UsbDeviceCollection.DeviceChangedAndCancelEventArgs e)
+            private void portList_MarkDevicesInUseCallback(object sender, DeviceCollection.DeviceChangedAndCancelEventArgs e)
 			{
 				_status2 = "Scanning " + e.Device + "...";
 				StatusBox.UpdateStatus2(_status2);
@@ -194,21 +213,22 @@ namespace YAT.Gui.Controls
 
 		private void SetDeviceList()
 		{
+            // Only scan for ports if control is enabled. This saves some time.
             if (Enabled && !DesignMode)
 			{
 				//_isSettingControls = true;
 
-				UsbDeviceId old = comboBox_Device.SelectedItem as UsbDeviceId;
+                DeviceId old = comboBox_Device.SelectedItem as DeviceId;
 
-				UsbDeviceCollection devices = new UsbDeviceCollection();
+				DeviceCollection devices = new DeviceCollection(DeviceClass.Hid);
 				devices.FillWithAvailableDevices();
 
 				if (ApplicationSettings.LocalUser.General.DetectSerialPortsInUse)
 				{
-					// Install timer which shows a dialog if scanning takes more than 500ms
+					// Install timer which shows a dialog if scanning takes more than 500ms.
 					timer_ShowScanDialog.Start();
 
-					// Start scanning on different thread
+					// Start scanning on different thread.
                     _markDevicesInUseThread = new MarkDevicesInUseThread(devices);
                     Thread t = new Thread(new ThreadStart(_markDevicesInUseThread.MarkDevicesInUse));
 					t.Start();
@@ -218,7 +238,7 @@ namespace YAT.Gui.Controls
 
 					t.Join();
 
-					// Cleanup
+					// Cleanup.
 					timer_ShowScanDialog.Stop();
 				}
 
@@ -234,8 +254,8 @@ namespace YAT.Gui.Controls
 					else
 						comboBox_Device.SelectedIndex = 0;
 
-					// set property instead of member to ensure that changed event is fired
-					DeviceId = comboBox_Device.SelectedItem as UsbDeviceId;
+					// Set property instead of member to ensure that changed event is fired.
+                    DeviceId = comboBox_Device.SelectedItem as DeviceId;
 				}
 				else
 				{
@@ -272,7 +292,7 @@ namespace YAT.Gui.Controls
 			//_isSettingControls = false;
 		}
 
-		#endregion
+        #endregion
 
 		#region Event Invoking
 		//==========================================================================================

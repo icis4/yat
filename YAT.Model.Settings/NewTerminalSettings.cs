@@ -39,7 +39,7 @@ namespace YAT.Model.Settings
 		private int _socketLocalTcpPort;
 		private int _socketLocalUdpPort;
 
-        private MKY.IO.Serial.UsbDeviceId _usbDeviceId;
+        private MKY.IO.Usb.DeviceId _usbHidDeviceId;
 
         private bool _startTerminal;
 
@@ -76,7 +76,7 @@ namespace YAT.Model.Settings
 			_socketLocalTcpPort   = rhs.SocketLocalTcpPort;
 			_socketLocalUdpPort   = rhs.SocketLocalUdpPort;
 
-            _usbDeviceId          = rhs.UsbDeviceId;
+            _usbHidDeviceId       = rhs.UsbHidDeviceId;
 
 			_startTerminal        = rhs.StartTerminal;
 
@@ -100,9 +100,9 @@ namespace YAT.Model.Settings
 			SocketLocalTcpPort   = MKY.IO.Serial.SocketSettings.DefaultPort;
 			SocketLocalUdpPort   = MKY.IO.Serial.SocketSettings.DefaultPort + 1;
 
-            UsbDeviceId          = MKY.IO.Serial.UsbDeviceId.DefaultDevice;
+            UsbHidDeviceId       = MKY.IO.Usb.DeviceId.GetDefaultDevice(MKY.IO.Usb.DeviceClass.Hid);
 
-			StartTerminal = true;
+			StartTerminal        = true;
 		}
 
 		#region Properties
@@ -268,15 +268,15 @@ namespace YAT.Model.Settings
 		}
 
         /// <summary></summary>
-        [XmlElement("UsbDeviceId")]
-        public MKY.IO.Serial.UsbDeviceId UsbDeviceId
+        [XmlElement("UsbHidDeviceId")]
+        public MKY.IO.Usb.DeviceId UsbHidDeviceId
         {
-            get { return (_usbDeviceId); }
+            get { return (_usbHidDeviceId); }
             set
             {
-                if (_usbDeviceId != value)
+                if (_usbHidDeviceId != value)
                 {
-                    _usbDeviceId = value;
+                    _usbHidDeviceId = value;
                     SetChanged();
                 }
             }
@@ -330,7 +330,7 @@ namespace YAT.Model.Settings
 					_socketLocalInterface.Equals(value._socketLocalInterface) &&
 					_socketLocalTcpPort.Equals(value._socketLocalTcpPort) &&
 					_socketLocalUdpPort.Equals(value._socketLocalUdpPort) &&
-					_usbDeviceId.Equals       (value._usbDeviceId) &&
+					_usbHidDeviceId.Equals       (value._usbHidDeviceId) &&
 					_startTerminal.Equals     (value._startTerminal)
 					);
 			}
