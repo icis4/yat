@@ -1,0 +1,29 @@
+
+1.	Go to the working directory root, e.g. "D:\YAT\Trunk", below referred to as "<Root>"
+	Note: Do not use "<Root>\libusb" as the clone directory, use "<Root>" itself
+
+2.	Right-click > Git Clone...
+
+3.	Set <git://git.libusb.org/libusb-pbatard.git> as repository
+
+4.	Set "<Root>\libusb" as clone
+	Note: Do not use the suggested "<Root>\libusb-pbatard"
+
+5.	Clone the repository
+
+6.	Commit libusb to the YAT SVN repository
+	Note: Check for added, renamed and deleted files
+
+7.	Do the following modifications on the original libusb files
+	> Project > Properties
+		> General > All Configurations
+			Output Directory       = $(ProjectDir)\bin\$(PlatformName)_$(ConfigurationName)
+			Intermediate Directory = $(ProjectDir)\obj\$(PlatformName)_$(ConfigurationName)
+		> Linker > General > Debug
+			Output File            = $(OutDir)\libusb-1.0_$(PlatformName)_Debug.dll
+		> Linker > General > Release
+			Output File            = $(OutDir)\libusb-1.0_$(PlatformName).dll
+		> Linker > General > All Configurations
+			Register Output        = Yes
+
+8.	Again commit libusb to the YAT SVN repository
