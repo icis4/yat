@@ -36,7 +36,12 @@ namespace YAT.Test
 			{
 				ArrayList suite = new ArrayList();
 
-				// MKY.IO.Ports.Test
+                // libusb.NET
+                // libusb.NET.Test is a manual test
+                // Set libusb.NET.Test as start up project and run it
+                //suite.Add(new libusb.NET.Test.<>());
+
+                // MKY.IO.Ports.Test
                 suite.Add(new MKY.IO.Ports.Test.SerialPort.SerialPortIdTest());
                 suite.Add(new MKY.IO.Ports.Test.SerialPort.SerialPortSettingsTest());
 
@@ -54,8 +59,9 @@ namespace YAT.Test
 				suite.Add(new MKY.Utilities.Test.Types.XInt32Test());
 				suite.Add(new MKY.Utilities.Test.Types.XUInt64Test());
 
-                // MKY.Windows.Forms
+                // MKY.Windows.Forms.Test
                 // MKY.Windows.Forms.Test.FastListBoxTest is a manual test
+                // Set MKY.Windows.Forms.Test as start up project and run it
                 //suite.Add(new MKY.Windows.Forms.Test.<>());
 
 				// YAT.Controller.Test

@@ -1,0 +1,22 @@
+
+MKY.IO.Usb
+==========
+
+This USB library is based on three existing libraries available on the internet:
+- "GenericHid" from <http://www.lvr.com/hidpage.htm>
+- "UsbLibrary" from <http://www.codeproject.com/KB/cs/USB_HID.aspx?msg=2816038>
+- "UsbHid"     from <http://www.florian-leitner.de/index.php/category/usb-hid-library/>
+
+The approach of merging these libraries into MKY.IO.Usb was choosen due to:
+- None of the libraries provided all the features required for USB Ser/HID for YAT
+- Need for a compact though complete library for USB Ser/HID for YAT
+
+An alternative would have been to make use of a Win32 port of "libusb". However:
+- "libusb-win32" seems to have serious portability issues on Vista, Win7, x64
+- "libusb-win32" is based on libusb-0.1.12 but libusb-1.0 has been available since 2008-12
+- A library completely written in C isn't an optimal match for a C#.NET based project
+
+In the end, it seemed much easier to go for a slim MKY.IO.Usb focusing on USB Ser/HID.
+
+-----------------------
+2010-Q1 / Matthias Kläy

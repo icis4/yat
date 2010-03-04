@@ -3,4 +3,4 @@
 CALL CleanAll-Options.bat
 CALL CleanAll-Setup.bat
 CALL CleanAll-Temp.bat
-CALL CleanAll-SVN.bat
+CALL CleanAll-SCM.bat
