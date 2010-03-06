@@ -33,7 +33,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public static readonly AutoRetry AutoReconnectDefault = new AutoRetry(true, 2000);
 
-        private DeviceId _deviceId;
+        private DeviceInfo _deviceId;
 		private AutoRetry _autoReconnect;
 
 		/// <summary></summary>
@@ -58,7 +58,7 @@ namespace MKY.IO.Serial
 		public UsbHidDeviceSettings(UsbHidDeviceSettings rhs)
 			: base(rhs)
 		{
-            DeviceId       = new DeviceId(rhs.DeviceId);
+            DeviceId       = new DeviceInfo(rhs.DeviceId);
 			_autoReconnect = rhs._autoReconnect;
 
 			ClearChanged();
@@ -79,7 +79,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
         [XmlElement("DeviceId")]
-        public DeviceId DeviceId
+        public DeviceInfo DeviceId
 		{
 			get { return (_deviceId); }
 			set

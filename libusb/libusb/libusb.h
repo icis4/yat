@@ -160,7 +160,7 @@ enum libusb_descriptor_type {
 #define LIBUSB_DT_DEVICE_SIZE			18
 #define LIBUSB_DT_CONFIG_SIZE			9
 #define LIBUSB_DT_INTERFACE_SIZE		9
-#define LIBUSB_DT_ENDPOINT_SIZE		7
+#define LIBUSB_DT_ENDPOINT_SIZE		    7
 #define LIBUSB_DT_ENDPOINT_AUDIO_SIZE	9	/* Audio extension */
 #define LIBUSB_DT_HUB_NONVAR_SIZE		7
 
@@ -801,21 +801,16 @@ void libusb_exit(libusb_context *ctx);
 void libusb_set_debug(libusb_context *ctx, int level);
 const char* libusb_strerror(enum libusb_error errcode);
 
-ssize_t libusb_get_device_list(libusb_context *ctx,
-	libusb_device ***list);
+ssize_t libusb_get_device_list(libusb_context *ctx, libusb_device ***list);
 void libusb_free_device_list(libusb_device **list, int unref_devices);
 libusb_device *libusb_ref_device(libusb_device *dev);
 void libusb_unref_device(libusb_device *dev);
 
 int libusb_get_configuration(libusb_device_handle *dev, int *config);
-int libusb_get_device_descriptor(libusb_device *dev,
-	struct libusb_device_descriptor *desc);
-int libusb_get_active_config_descriptor(libusb_device *dev,
-	struct libusb_config_descriptor **config);
-int libusb_get_config_descriptor(libusb_device *dev, uint8_t config_index,
-	struct libusb_config_descriptor **config);
-int libusb_get_config_descriptor_by_value(libusb_device *dev,
-	uint8_t bConfigurationValue, struct libusb_config_descriptor **config);
+int libusb_get_device_descriptor(libusb_device *dev, struct libusb_device_descriptor *desc);
+int libusb_get_active_config_descriptor(libusb_device *dev, struct libusb_config_descriptor **config);
+int libusb_get_config_descriptor(libusb_device *dev, uint8_t config_index, struct libusb_config_descriptor **config);
+int libusb_get_config_descriptor_by_value(libusb_device *dev, uint8_t bConfigurationValue, struct libusb_config_descriptor **config);
 void libusb_free_config_descriptor(struct libusb_config_descriptor *config);
 uint8_t libusb_get_bus_number(libusb_device *dev);
 uint8_t libusb_get_device_address(libusb_device *dev);
@@ -830,11 +825,9 @@ int libusb_set_configuration(libusb_device_handle *dev, int configuration);
 int libusb_claim_interface(libusb_device_handle *dev, int interface_number);
 int libusb_release_interface(libusb_device_handle *dev, int interface_number);
 
-libusb_device_handle *libusb_open_device_with_vid_pid(libusb_context *ctx,
-	uint16_t vendor_id, uint16_t product_id);
+libusb_device_handle *libusb_open_device_with_vid_pid(libusb_context *ctx, uint16_t vendor_id, uint16_t product_id);
 
-int libusb_set_interface_alt_setting(libusb_device_handle *dev,
-	int interface_number, int alternate_setting);
+int libusb_set_interface_alt_setting(libusb_device_handle *dev, int interface_number, int alternate_setting);
 int libusb_clear_halt(libusb_device_handle *dev, unsigned char endpoint);
 int libusb_reset_device(libusb_device_handle *dev);
 

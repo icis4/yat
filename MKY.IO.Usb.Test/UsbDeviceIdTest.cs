@@ -6,8 +6,7 @@
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2010 Matthias Kläy.
+// Copyright © 2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -85,19 +84,19 @@ namespace MKY.IO.Usb.Test
 		[Test]
 		public void TestConstructorAndParse()
 		{
-			DeviceId id;
+			DeviceInfo id;
 
 			foreach (TestSet ts in _testSets)
 			{
                 if (ts.IsValid)
                 {
-                    id = new DeviceId(ts.VendorId, ts.ProductId);
+                    id = new DeviceInfo(ts.VendorId, ts.ProductId);
                     Assert.AreEqual(ts.VendorId,  id.VendorId);
                     Assert.AreEqual(ts.ProductId, id.ProductId);
 
                     foreach (string description in ts.Descriptions)
                     {
-                        id = DeviceId.Parse(description);
+                        id = DeviceInfo.Parse(description);
                         Assert.AreEqual(ts.VendorId,  id.VendorId);
                         Assert.AreEqual(ts.ProductId, id.ProductId);
                     }
@@ -106,7 +105,7 @@ namespace MKY.IO.Usb.Test
                 {
                     try
                     {
-                        id = new DeviceId(ts.VendorId, ts.ProductId);
+                        id = new DeviceInfo(ts.VendorId, ts.ProductId);
                         Assert.Fail
                             (
                             "Invalid ID pair " + ts.VendorId + "/" + ts.ProductId +
@@ -122,7 +121,7 @@ namespace MKY.IO.Usb.Test
                     {
                         try
                         {
-                            id = DeviceId.Parse(description);
+                            id = DeviceInfo.Parse(description);
                             Assert.Fail
                                 (
                                 "Invalid descripton " + description +

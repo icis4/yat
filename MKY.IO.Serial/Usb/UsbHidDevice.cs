@@ -61,7 +61,7 @@ namespace MKY.IO.Serial
 
         private bool _isDisposed;
 
-        private Usb.DeviceId _deviceId;
+        private Usb.DeviceInfo _deviceId;
         private AutoRetry _autoReconnect;
 
         private PortState _state = PortState.Disconnected;
@@ -102,18 +102,18 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
         /// <summary></summary>
-        public UsbHidDevice(Usb.DeviceId deviceId)
+        public UsbHidDevice(Usb.DeviceInfo deviceId)
         {
             Initialize(deviceId, new AutoRetry());
         }
 
         /// <summary></summary>
-        public UsbHidDevice(Usb.DeviceId deviceId, AutoRetry autoReconnect)
+        public UsbHidDevice(Usb.DeviceInfo deviceId, AutoRetry autoReconnect)
 		{
             Initialize(deviceId, autoReconnect);
 		}
 
-        private void Initialize(Usb.DeviceId deviceId, AutoRetry autoReconnect)
+        private void Initialize(Usb.DeviceInfo deviceId, AutoRetry autoReconnect)
         {
             _deviceId = deviceId;
             _autoReconnect = autoReconnect;
@@ -177,7 +177,7 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
         /// <summary></summary>
-        public Usb.DeviceId DeviceId
+        public Usb.DeviceInfo DeviceId
         {
             get
             {

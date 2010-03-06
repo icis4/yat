@@ -77,7 +77,7 @@ namespace MKY.Utilities.Win32
         {
             try
             {
-                bool success = Hid.HidD_GetFeature(hidHandle, inFeatureReportBuffer, inFeatureReportBuffer.Length);
+                bool success = Hid.HidD_GetFeature(hidHandle, inFeatureReportBuffer);
                 Debug.Print("HidD_GetFeature success = " + success);
                 return (success);
             }
@@ -113,7 +113,7 @@ namespace MKY.Utilities.Win32
         {
             try
             {
-                bool success = Hid.HidD_GetInputReport(hidHandle, inputReportBuffer, inputReportBuffer.Length + 1);
+                bool success = Hid.HidD_GetInputReport(hidHandle, inputReportBuffer);
                 Debug.Print("HidD_GetInputReport success = " + success);
                 return (success);
             }
@@ -333,7 +333,7 @@ namespace MKY.Utilities.Win32
         {
             try
             {
-                bool success = Hid.HidD_SetFeature(hidHandle, outFeatureReportBuffer, outFeatureReportBuffer.Length);
+                bool success = Hid.HidD_SetFeature(hidHandle, outFeatureReportBuffer);
                 Debug.Print("HidD_SetFeature success = " + success);
                 return (success);
             }
@@ -367,7 +367,7 @@ namespace MKY.Utilities.Win32
         {
             try
             {
-                bool success = Hid.HidD_SetOutputReport(hidHandle, outputReportBuffer, outputReportBuffer.Length + 1);
+                bool success = Hid.HidD_SetOutputReport(hidHandle, outputReportBuffer);
                 Debug.Print("HidD_SetOutputReport success = " + success);
                 return (success);
             }
@@ -409,7 +409,7 @@ namespace MKY.Utilities.Win32
                 //  Otherwise the the host will use a control transfer.
                 //  The application doesn't have to know or care which type of transfer is used.
                 Int32 numberOfBytesWritten = 0;
-                bool success = FileIO.WriteFile(writeHandle, outputReportBuffer, outputReportBuffer.Length, ref numberOfBytesWritten, IntPtr.Zero);
+                bool success = FileIO.WriteFile(writeHandle, outputReportBuffer, ref numberOfBytesWritten, IntPtr.Zero);
 
                 Debug.Print("WriteFile success = " + success);
 

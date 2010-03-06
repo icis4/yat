@@ -45,7 +45,9 @@ namespace MKY.Utilities.Win32
         // Constants
         //==========================================================================================
 
-        private const Int16 FORMAT_MESSAGE_FROM_SYSTEM = 0x1000;
+        private const string KERNEL_DLL = "kernel32.dll";
+
+        private const Int32 FORMAT_MESSAGE_FROM_SYSTEM = 0x1000;
 
         #endregion
 
@@ -54,8 +56,8 @@ namespace MKY.Utilities.Win32
         // External Function Declaration
         //==========================================================================================
 
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern Int32 FormatMessage(Int32 dwFlags, ref Int64 lpSource, Int32 dwMessageId, Int32 dwLanguageZId, String lpBuffer, Int32 nSize, Int32 Arguments);
+        [DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern Int32 FormatMessage(Int32 dwFlags, ref Int64 lpSource, Int32 dwMessageId, Int32 dwLanguageId, String lpBuffer, Int32 nSize, IntPtr Arguments);
 
         #endregion
 
@@ -82,7 +84,7 @@ namespace MKY.Utilities.Win32
 
             // Get the result message that corresponds to the code.
             Int64 temp = 0;
-            bytes = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, ref temp, resultCode, 0, resultString, 128, 0);
+            bytes = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, ref temp, resultCode, 0, resultString, 128, IntPtr.Zero);
 
             // Subtract two characters from the message to strip EOL.
             int eolLength = Environment.NewLine.Length;

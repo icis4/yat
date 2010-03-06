@@ -6,8 +6,7 @@
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2010 Matthias Kläy.
+// Copyright © 2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -27,7 +26,7 @@ namespace MKY.IO.Usb
 {
 	/// <summary></summary>
 	[Serializable]
-    public class DeviceId : IEquatable<DeviceId>, IComparable
+    public class DeviceInfo : IEquatable<DeviceInfo>, IComparable
 	{
 		#region Public Constants
 		//==========================================================================================
@@ -66,27 +65,29 @@ namespace MKY.IO.Usb
 		// Fields
 		//==========================================================================================
 
+        private string _systemPath;
+
 		private int _vendorId = DefaultVendorId;
 		private int _productId = DefaultProductId;
 
-        private string _manufacturerName = "";
-        private string _productName = "";
-        private string _serialNumber = "";
+        private string _manufacturer;
+        private string _product;
+        private string _serialNumber;
 
-        private bool _isInUse = false;
-        private string _inUseText = "";
+        private bool _isInUse;
+        private string _inUseText;
 
-        private string _separator = "";
+        private string _separator;
 
 		#endregion
 
-		#region Static Object Lifetime
+		#region Static Lifetime
 		//==========================================================================================
-		// Static Object Lifetime
+		// Static Lifetime
 		//==========================================================================================
 
 		/// <summary></summary>
-        static DeviceId()
+        static DeviceInfo()
 		{
             // "VID:0ABC / PID:1234" or "vid_0ABC & pid_1234"
             VendorIdRegex  = new Regex(@"VID[^0-9a-fA-F](?<vendorId>[0-9a-fA-F]+)",  RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -104,13 +105,13 @@ namespace MKY.IO.Usb
 		/// Returns default device on system. Default is the first device available.
         /// Returns <c>null</c> if no devices are available.
 		/// </summary>
-        public static DeviceId GetDefaultDevice(DeviceClass deviceClass)
+        public static DeviceInfo GetDefaultDevice(DeviceClass deviceClass)
 		{
             DeviceCollection l = new DeviceCollection(deviceClass);
             l.FillWithAvailableDevices();
 
             if (l.Count > 0)
-                return (new DeviceId(l[0]));
+                return (new DeviceInfo(l[0]));
             else
                 return (null);
         }
@@ -123,43 +124,72 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
-		public DeviceId()
+		public DeviceInfo()
 		{
 		}
 
         /// <summary></summary>
-        public DeviceId(int vendorId, int productId)
+        public DeviceInfo(string systemPath)
         {
-            if ((vendorId  < FirstVendorId)  || (vendorId  > LastVendorId))
-                throw (new ArgumentOutOfRangeException("vendorId",  vendorId,  "Invalid vendor ID"));
-            if ((productId < FirstProductId) || (productId > LastProductId))
-                throw (new ArgumentOutOfRangeException("productId", productId, "Invalid product ID"));
-
-            _vendorId = vendorId;
-            _productId = productId;
+            int vendorId, productId;
+            string manufacturer, product, serialNumber;
+            Device.GetDeviceInfoFromSystemPath(systemPath, out vendorId, out productId, out manufacturer, out product, out serialNumber);
+            Initialize(systemPath, vendorId, productId, manufacturer, product, serialNumber);
         }
 
         /// <summary></summary>
-        public DeviceId(int vendorId, int productId, string serialNumber)
+        public DeviceInfo(int vendorId, int productId)
+            : this(vendorId, productId, "")
+        {
+        }
+
+        /// <summary></summary>
+        public DeviceInfo(int vendorId, int productId, string serialNumber)
+        {
+            string systemPath;
+            Device.GetSystemPathFromVidAndPid(vendorId, productId, out systemPath);
+            Initialize(systemPath, vendorId, productId, "", "", serialNumber);
+        }
+
+        /// <summary></summary>
+        public DeviceInfo(string systemPath, int vendorId, int productId)
+            : this(systemPath, vendorId, productId, "", "", "")
+        {
+        }
+
+        /// <summary></summary>
+        public DeviceInfo(string systemPath, int vendorId, int productId, string manufacturer, string product, string serialNumber)
+        {
+            Initialize(systemPath, vendorId, productId, manufacturer, product, serialNumber);
+        }
+
+        private void Initialize(string systemPath, int vendorId, int productId, string manufacturer, string product, string serialNumber)
         {
             if ((vendorId  < FirstVendorId)  || (vendorId  > LastVendorId))
                 throw (new ArgumentOutOfRangeException("vendorId",  vendorId,  "Invalid vendor ID"));
             if ((productId < FirstProductId) || (productId > LastProductId))
                 throw (new ArgumentOutOfRangeException("productId", productId, "Invalid product ID"));
 
+            _systemPath = systemPath;
+
             _vendorId = vendorId;
             _productId = productId;
+
+            _manufacturer = manufacturer;
+            _product = product;
             _serialNumber = serialNumber;
         }
 
         /// <summary></summary>
-        public DeviceId(DeviceId rhs)
+        public DeviceInfo(DeviceInfo rhs)
 		{
+            _systemPath = rhs._systemPath;
+
             _vendorId = rhs._vendorId;
             _productId = rhs._productId;
 
-            _manufacturerName = rhs._manufacturerName;
-            _productName = rhs._productName;
+            _manufacturer = rhs._manufacturer;
+            _product = rhs._product;
             _serialNumber = rhs._serialNumber;
 
             _isInUse = rhs._isInUse;
@@ -175,7 +205,14 @@ namespace MKY.IO.Usb
 		// Properties
 		//==========================================================================================
 
-		/// <summary></summary>
+        /// <summary></summary>
+        [XmlIgnore]
+        public string SystemPath
+        {
+            get { return (_systemPath); }
+        }
+
+        /// <summary></summary>
         [XmlElement("VendorId")]
         public int VendorId
 		{
@@ -191,7 +228,7 @@ namespace MKY.IO.Usb
         [XmlIgnore]
         public string VendorIdString
         {
-            get { return (_vendorId.ToString("X4")); }
+            get { return (VendorId.ToString("X4")); }
         }
 
         /// <summary></summary>
@@ -210,27 +247,26 @@ namespace MKY.IO.Usb
         [XmlIgnore]
         public string ProductIdString
         {
-            get { return (_productId.ToString("X4")); }
+            get { return (ProductId.ToString("X4")); }
         }
 
         /// <summary></summary>
         [XmlIgnore]
-        public string ManufacturerName
+        public string Manufacturer
         {
-            get { return (_manufacturerName); }
-            set { _manufacturerName = value;  }
+            get { return (_manufacturer); }
+            set { _manufacturer = value;  }
         }
 
         /// <summary></summary>
         [XmlIgnore]
-        public string ProductName
+        public string Product
         {
-            get { return (_productName); }
-            set { _productName = value;  }
+            get { return (_product); }
+            set { _product = value;  }
         }
 
         /// <summary></summary>
-        [XmlIgnore]
         public string SerialNumber
         {
             get { return (_serialNumber); }
@@ -326,8 +362,8 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-            if (obj is DeviceId)
-                return (Equals((DeviceId)obj));
+            if (obj is DeviceInfo)
+                return (Equals((DeviceInfo)obj));
 
 			return (false);
 		}
@@ -335,17 +371,12 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-        public bool Equals(DeviceId value)
+        public bool Equals(DeviceInfo value)
 		{
 			// Ensure that object.operator!=() is called
 			if ((object)value != null)
-			{
-				return
-					(
-                    _vendorId.Equals(value._vendorId) &&
-                    _productId.Equals(value._productId)
-					);
-			}
+				return (_systemPath.Equals(value._systemPath));
+
 			return (false);
 		}
 
@@ -366,27 +397,46 @@ namespace MKY.IO.Usb
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(ManufacturerName);         // "Company"
+            if (Manufacturer != "")
+            {
+                sb.Append(Manufacturer);         // "Company"
+            }
 
             if (appendIds)
             {
-                sb.Append(" (VID:");
+                if (sb.Length > 0)
+                    sb.Append(" ");              // "Company "
+
+                sb.Append("(VID:");
                 sb.Append(VendorIdString);       // "Company (VID:0ABC)"
                 sb.Append(")");
             }
 
-            sb.Append(" ");
-            sb.Append(ProductName);              // "Company (VID:0ABC) Product"
+            if (Product != "")
+            {
+                if (sb.Length > 0)
+                    sb.Append(" ");              // "Company (VID:0ABC) "
+
+                sb.Append(Product);              // "Company (VID:0ABC) Product"
+            }
 
             if (appendIds)
             {
-                sb.Append(" (PID:");
+                if (sb.Length > 0)
+                    sb.Append(" ");              // "Company (VID:0ABC) Product "
+
+                sb.Append("(PID:");
                 sb.Append(ProductIdString);      // "Company (VID:0ABC) Product (PID:1234)"
                 sb.Append(")");
             }
 
-            sb.Append(" ");
-            sb.Append(SerialNumber);             // "Company (VID:0ABC) Product (PID:1234) 000123A"
+            if (SerialNumber != "")
+            {
+                if (sb.Length > 0)
+                    sb.Append(" ");              // "Company (VID:0ABC) Product (PID:1234) "
+
+                sb.Append(SerialNumber);         // "Company (VID:0ABC) Product (PID:1234) 000123A"
+            }
 
             if (appendInUseText && IsInUse)
             {
@@ -400,9 +450,9 @@ namespace MKY.IO.Usb
         /// <summary>
         /// Parses s for the first integer number and returns the corresponding device.
         /// </summary>
-        public static DeviceId Parse(string s)
+        public static DeviceInfo Parse(string s)
         {
-            DeviceId result;
+            DeviceInfo result;
             if (TryParse(s, out result))
                 return (result);
             else
@@ -412,7 +462,7 @@ namespace MKY.IO.Usb
         /// <summary>
         /// Tries to parse s for the first integer number and returns the corresponding device.
         /// </summary>
-        public static bool TryParse(string s, out DeviceId result)
+        public static bool TryParse(string s, out DeviceInfo result)
         {
             Match m;
 
@@ -429,7 +479,7 @@ namespace MKY.IO.Usb
                         int productId;
                         if (int.TryParse(m.Groups[1].Value, NumberStyles.HexNumber, null, out productId))
                         {
-                            result = new DeviceId(vendorId, productId);
+                            result = new DeviceInfo(vendorId, productId);
                             return (true);
                         }
                     }
@@ -448,9 +498,9 @@ namespace MKY.IO.Usb
         public int CompareTo(object obj)
         {
             if (obj == null) return (1);
-            if (obj is DeviceId)
+            if (obj is DeviceInfo)
             {
-                DeviceId id = (DeviceId)obj;
+                DeviceInfo id = (DeviceInfo)obj;
                 if (VendorId != id.VendorId)
                     return (VendorId.CompareTo(id.VendorId));
                 else
@@ -467,9 +517,9 @@ namespace MKY.IO.Usb
         public static int Compare(object objA, object objB)
         {
             if (ReferenceEquals(objA, objB)) return (0);
-            if (objA is DeviceId)
+            if (objA is DeviceInfo)
             {
-                DeviceId casted = (DeviceId)objA;
+                DeviceInfo casted = (DeviceInfo)objA;
                 return (casted.CompareTo(objB));
             }
             return (-1);
@@ -485,7 +535,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-        public static bool operator ==(DeviceId lhs, DeviceId rhs)
+        public static bool operator ==(DeviceInfo lhs, DeviceInfo rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))
 				return (true);
@@ -499,7 +549,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-        public static bool operator !=(DeviceId lhs, DeviceId rhs)
+        public static bool operator !=(DeviceInfo lhs, DeviceInfo rhs)
 		{
 			return (!(lhs == rhs));
 		}
@@ -512,7 +562,7 @@ namespace MKY.IO.Usb
         //==========================================================================================
 
         /// <summary></summary>
-        public static implicit operator string(DeviceId id)
+        public static implicit operator string(DeviceInfo id)
         {
             return (id.ToString());
         }

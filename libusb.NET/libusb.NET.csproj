@@ -53,15 +53,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bus.cs" />
-    <Compile Include="BusCollection.cs" />
-    <Compile Include="Descriptor.cs" />
-    <Compile Include="DescriptorCollection.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="Enums.cs" />
-    <Compile Include="Internal\NativeCode.cs" />
+    <Compile Include="Native\Classes.cs" />
+    <Compile Include="Native\Callbacks.cs" />
+    <Compile Include="Native\Enums.cs" />
+    <Compile Include="Native\Functions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="USBException.cs" />
+    <Compile Include="Exceptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\libusb.NET.snk" />
