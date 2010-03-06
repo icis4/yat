@@ -6,8 +6,7 @@
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2010 Matthias Kläy.
+// Copyright © 2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -23,25 +22,25 @@ namespace MKY.IO.Usb
 	/// List containing USB device IDs.
 	/// </summary>
 	[Serializable]
-	public class DeviceCollection : List<DeviceId>
+	public class DeviceCollection : List<DeviceInfo>
 	{
         /// <summary></summary>
         public class DeviceChangedAndCancelEventArgs : EventArgs
         {
             /// <summary></summary>
-            public readonly DeviceId Device;
+            public readonly DeviceInfo Device;
 
             /// <summary></summary>
             public bool Cancel = false;
 
             /// <summary></summary>
-            public DeviceChangedAndCancelEventArgs(DeviceId device)
+            public DeviceChangedAndCancelEventArgs(DeviceInfo device)
             {
                 Device = device;
             }
         }
 
-        private DeviceClass _deviceClass = DeviceClass.Any;
+        private DeviceClass _deviceClass = DeviceClass.Default;
         private Guid _classGuid = new Guid();
 
         /// <summary></summary>
@@ -53,15 +52,11 @@ namespace MKY.IO.Usb
         public DeviceCollection(DeviceClass deviceClass)
         {
             _deviceClass = deviceClass;
-
-            switch (_deviceClass)
-            {
-                case DeviceClass.Hid: _classGuid = Utilities.Win32.Hid.GetHidGuid(); break;
-            }
+            _classGuid = Device.GetGuidFromDeviceClass(deviceClass);
         }
 
         /// <summary></summary>
-		public DeviceCollection(IEnumerable<DeviceId> rhs)
+		public DeviceCollection(IEnumerable<DeviceInfo> rhs)
 			: base(rhs)
 		{
             DeviceCollection casted = rhs as DeviceCollection;
@@ -78,7 +73,7 @@ namespace MKY.IO.Usb
 		public void FillWithAvailableDevices()
 		{
 			Clear();
-            foreach (DeviceId id in Device.GetDevicesFromGuid(_classGuid))
+            foreach (DeviceInfo id in Device.GetDevicesFromGuid(_classGuid))
                 base.Add(id);
 			Sort();
 		}
@@ -101,7 +96,7 @@ namespace MKY.IO.Usb
         /// </param>
         public void MarkDevicesInUse(EventHandler<DeviceChangedAndCancelEventArgs> deviceChangedCallback)
         {
-            foreach (DeviceId deviceId in this)
+            foreach (DeviceInfo deviceId in this)
             {
                 if (deviceChangedCallback != null)
                 {

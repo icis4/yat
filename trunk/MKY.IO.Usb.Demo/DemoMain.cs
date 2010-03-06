@@ -1,12 +1,11 @@
 ﻿//==================================================================================================
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Ports/Properties/AssemblyInfo.cs $
+// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Usb.Test/UsbDeviceIdTest.cs $
 // $Author: maettu_this $
-// $Date: 2010-02-23 00:18:29 +0100 (Di, 23 Feb 2010) $
-// $Revision: 254 $
+// $Date: 2010-03-01 22:31:11 +0100 (Mo, 01 Mrz 2010) $
+// $Revision: 261 $
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2004 Mike Krueger. 
 // Copyright © 2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
@@ -19,35 +18,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using libusb.NET;
+using MKY.IO.Usb;
 
-namespace libusb.NET.Test
+namespace MKY.IO.Usb.Demo
 {
-    public class TestMain
+    public class DemoMain
     {
         public static void Main(string[] args)
         {
-            /*Native.libusb_device[] nativeDevices = Device.GetAvailableDevices();
-            foreach (Native.libusb_device nativeDevice in nativeDevices)
-            {
-            }*/
+            DeviceCollection devices = new DeviceCollection(DeviceClass.Hid);
+            devices.FillWithAvailableDevices();
 
-            Device device = new Device(0x0EB8, 0x2200);
-            Console.Write    ("VID = ");
-            Console.WriteLine(device.VendorIdString);
-            Console.Write    ("PID = ");
-            Console.WriteLine(device.ProductIdString);
-            Console.Write    ("MAN = ");
-            Console.WriteLine(device.Manufacturer);
-            Console.Write    ("PRD = ");
-            Console.WriteLine(device.Product);
-            Console.Write    ("SNR = ");
-            Console.WriteLine(device.SerialNumber);
+            Console.WriteLine();
+            Console.WriteLine("USB HID Devices:");
+            foreach (DeviceInfo device in devices)
+            {
+                Console.Write(" + ");
+                Console.WriteLine(device.ToString());
+                Console.Write("   ");
+                Console.WriteLine(device.SystemPath);
+            }
+            Console.WriteLine();
+
+            Console.WriteLine("Press <Enter> to exit");
+            Console.ReadLine();
         }
     }
 }
 
 //==================================================================================================
 // End of
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Ports/Properties/AssemblyInfo.cs $
+// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Usb.Test/UsbDeviceIdTest.cs $
 //==================================================================================================

@@ -1,12 +1,11 @@
 ﻿//==================================================================================================
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Ports/Properties/AssemblyInfo.cs $
+// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Ports.Test/Properties/AssemblyInfo.cs $
 // $Author: maettu_this $
 // $Date: 2010-02-23 00:18:29 +0100 (Di, 23 Feb 2010) $
 // $Revision: 254 $
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2004 Mike Krüger.
 // Copyright © 2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
@@ -22,12 +21,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("libusb.NET")]
-[assembly: AssemblyDescription("libusb wrapper for .NET")]
+[assembly: AssemblyTitle("MKY.IO.Usb.Demo")]
+[assembly: AssemblyDescription("USB library for Windows test")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("libusb")]
-[assembly: AssemblyProduct("libusb.NET")]
-[assembly: AssemblyCopyright("Copyright © 2004 Mike Krüger. Copyright © 2010 Matthias Kläy. All rights reserved.")]
+[assembly: AssemblyCompany("MKY")]
+[assembly: AssemblyProduct("MKY.IO.Usb.Demo")]
+[assembly: AssemblyCopyright("Copyright © 2010 Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -37,7 +36,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("68305500-709a-4172-9d07-ec8745469a9d")]
+[assembly: Guid("9da9a508-a6bb-453d-a8a7-fe7633dc0517")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -54,9 +53,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyInformationalVersion("1.0.0")]
 
 // CLS compliance
-[assembly: CLSCompliant(false)]
+[assembly: CLSCompliant(true)]
 
 //==================================================================================================
 // End of
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Ports/Properties/AssemblyInfo.cs $
+// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Ports.Test/Properties/AssemblyInfo.cs $
 //==================================================================================================

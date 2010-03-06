@@ -94,9 +94,9 @@ namespace MKY.IO.Ports
 
 		#endregion
 
-		#region Static Object Lifetime
+		#region Static Lifetime
 		//==========================================================================================
-		// Static Object Lifetime
+		// Static Lifetime
 		//==========================================================================================
 
 		/// <summary></summary>

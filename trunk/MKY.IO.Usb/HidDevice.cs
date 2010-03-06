@@ -6,8 +6,7 @@
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2010 Matthias Kläy.
+// Copyright © 2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -53,6 +52,12 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
         /// <summary></summary>
+        public HidDevice(string systemPath)
+            : base(systemPath)
+        {
+        }
+
+        /// <summary></summary>
         public HidDevice(int vendorId, int productId)
             : base(vendorId, productId)
         {
@@ -65,14 +70,8 @@ namespace MKY.IO.Usb
         }
 
         /// <summary></summary>
-        public HidDevice(DeviceId deviceId)
+        public HidDevice(DeviceInfo deviceId)
             : base(deviceId)
-        {
-        }
-
-        /// <summary></summary>
-        public HidDevice(string path)
-            : base(path)
         {
         }
 

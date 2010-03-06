@@ -46,24 +46,31 @@ namespace MKY.Utilities.Win32
         // Types
         //==========================================================================================
 
+        // Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+        // warnings for each undocumented member below. Documenting each member makes little sense
+        // since they pretty much tell their purpose and documentation tags between the members
+        // makes the code less readable.
+        #pragma warning disable 1591
+
         /// <summary></summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct SECURITY_ATTRIBUTES
         {
-            /// <summary></summary>
             public Int32 nLength;
-            /// <summary></summary>
             public Int32 lpSecurityDescriptor;
-            /// <summary></summary>
             public Int32 bInheritHandle;
         }
+
+        #pragma warning restore 1591
 
         #endregion
 
         #region Constants
-		//==========================================================================================
+        //==========================================================================================
 		// Constants
 		//==========================================================================================
+
+        private const string KERNEL_DLL = "kernel32.dll";
 
         /// <summary></summary>
         public const Int32 FILE_FLAG_OVERLAPPED = 0x40000000;
@@ -98,7 +105,7 @@ namespace MKY.Utilities.Win32
         /// </summary>
         /// <param name="hFile">The device handle.</param>
         /// <returns>True on success, false on failure.</returns>
-        [DllImport("kernel32.dll", SetLastError = true)]
+        [DllImport(KERNEL_DLL, SetLastError = true)]
         public static extern Int32 CancelIo(SafeFileHandle hFile);
 
         /// <summary>
@@ -110,12 +117,12 @@ namespace MKY.Utilities.Win32
         /// <param name="bInitialState">Initial state = False (Not signaled.)</param>
         /// <param name="lpName">An event object name (optional).</param>
         /// <returns>A handle to the event object.</returns>
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern IntPtr CreateEvent(IntPtr SecurityAttributes, Boolean bManualReset, Boolean bInitialState, String lpName);
 
         /// <summary></summary>
         [CLSCompliant(false)]
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern SafeFileHandle CreateFile(String lpFileName, UInt32 dwDesiredAccess, Int32 dwShareMode, IntPtr lpSecurityAttributes, Int32 dwCreationDisposition, Int32 dwFlagsAndAttributes, Int32 hTemplateFile);
 
         /// <summary>
@@ -126,7 +133,7 @@ namespace MKY.Utilities.Win32
         /// <param name="lpNumberOfBytesTransferred">A pointer to a variable to hold the number of bytes read.</param>
         /// <param name="bWait">False to return immediately.</param>
         /// <returns>Non-zero on success and the number of bytes read.</returns>
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern Boolean GetOverlappedResult(SafeFileHandle hFile, IntPtr lpOverlapped, ref Int32 lpNumberOfBytesTransferred, Boolean bWait);
 
         /// <summary>
@@ -145,7 +152,7 @@ namespace MKY.Utilities.Win32
         /// <param name="lpNumberOfBytesRead">A pointer to a variable that will hold the number of bytes read.</param>
         /// <param name="lpOverlapped">An overlapped structure whose hEvent member is set to an event object.</param>
         /// <returns>The report in ReadBuffer.</returns>
-        [DllImport("kernel32.dll", SetLastError = true)]
+        [DllImport(KERNEL_DLL, SetLastError = true)]
         public static extern Boolean ReadFile(SafeFileHandle hFile, IntPtr lpBuffer, Int32 nNumberOfBytesToRead, ref Int32 lpNumberOfBytesRead, IntPtr lpOverlapped);
 
         /// <summary>
@@ -155,20 +162,23 @@ namespace MKY.Utilities.Win32
         /// <param name="hHandle">An event object created with CreateEvent.</param>
         /// <param name="dwMilliseconds">A timeout value in milliseconds.</param>
         /// <returns>A result code.</returns>
-        [DllImport("kernel32.dll", SetLastError = true)]
+        [DllImport(KERNEL_DLL, SetLastError = true)]
         public static extern Int32 WaitForSingleObject(IntPtr hHandle, Int32 dwMilliseconds);
 
+        [DllImport(KERNEL_DLL, SetLastError = true)]
+        private static extern Boolean WriteFile(SafeFileHandle hFile, Byte[] lpBuffer, Int32 nNumberOfBytesToWrite, ref Int32 lpNumberOfBytesWritten, IntPtr lpOverlapped);
         /// <summary>
         /// Writes an Output report to the device.
         /// </summary>
         /// <param name="hFile">A handle returned by CreateFile.</param>
         /// <param name="lpBuffer"></param>
-        /// <param name="nNumberOfBytesToWrite"></param>
         /// <param name="lpNumberOfBytesWritten">An integer to hold the number of bytes written.</param>
         /// <param name="lpOverlapped"></param>
         /// <returns>True on success, false on failure.</returns>
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern Boolean WriteFile(SafeFileHandle hFile, Byte[] lpBuffer, Int32 nNumberOfBytesToWrite, ref Int32 lpNumberOfBytesWritten, IntPtr lpOverlapped);        
+        public  static        Boolean WriteFile(SafeFileHandle hFile, Byte[] lpBuffer, ref Int32 lpNumberOfBytesWritten, IntPtr lpOverlapped)
+        {
+            return (WriteFile(hFile, lpBuffer, lpBuffer.Length, ref lpNumberOfBytesWritten, lpOverlapped));
+        }
 
         #endregion
     }

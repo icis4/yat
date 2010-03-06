@@ -187,7 +187,7 @@ namespace YAT.Gui.Forms
         {
             if (!_isSettingControls)
             {
-                MKY.IO.Usb.DeviceId deviceId = usbHidPortSelection.DeviceId;
+                MKY.IO.Usb.DeviceInfo deviceId = usbHidPortSelection.DeviceId;
                 _newTerminalSettings_Form.UsbHidDeviceId = deviceId;
                 SetControls();
             }

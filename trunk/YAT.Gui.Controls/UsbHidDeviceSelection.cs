@@ -42,7 +42,7 @@ namespace YAT.Gui.Controls
 
 		//private bool _isSettingControls = false;
 
-        private DeviceId _deviceId = DeviceId.GetDefaultDevice(DeviceClass.Hid);
+        private DeviceInfo _deviceId = DeviceInfo.GetDefaultDevice(DeviceClass.Hid);
 
 		#endregion
 
@@ -76,7 +76,7 @@ namespace YAT.Gui.Controls
 
 		[Category("USB Device")]
 		[Description("USB device ID.")]
-        public DeviceId DeviceId
+        public DeviceInfo DeviceId
 		{
 			get { return (_deviceId); }
 			set
@@ -218,7 +218,7 @@ namespace YAT.Gui.Controls
 			{
 				//_isSettingControls = true;
 
-                DeviceId old = comboBox_Device.SelectedItem as DeviceId;
+                DeviceInfo old = comboBox_Device.SelectedItem as DeviceInfo;
 
 				DeviceCollection devices = new DeviceCollection(DeviceClass.Hid);
 				devices.FillWithAvailableDevices();
@@ -255,7 +255,7 @@ namespace YAT.Gui.Controls
 						comboBox_Device.SelectedIndex = 0;
 
 					// Set property instead of member to ensure that changed event is fired.
-                    DeviceId = comboBox_Device.SelectedItem as DeviceId;
+                    DeviceId = comboBox_Device.SelectedItem as DeviceInfo;
 				}
 				else
 				{
