@@ -1,8 +1,8 @@
 ﻿//==================================================================================================
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Usb.Test/UsbDeviceIdTest.cs $
-// $Author: maettu_this $
-// $Date: 2010-03-01 22:31:11 +0100 (Mo, 01 Mrz 2010) $
-// $Revision: 261 $
+// $URL$
+// $Author$
+// $Date$
+// $Revision$
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
@@ -48,5 +48,5 @@ namespace MKY.IO.Usb.Demo
 
 //==================================================================================================
 // End of
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Usb.Test/UsbDeviceIdTest.cs $
+// $URL$
 //==================================================================================================
