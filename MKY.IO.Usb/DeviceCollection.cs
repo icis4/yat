@@ -41,7 +41,7 @@ namespace MKY.IO.Usb
         }
 
         private DeviceClass _deviceClass = DeviceClass.Default;
-        private Guid _classGuid = new Guid();
+        private Guid _classGuid = Guid.Empty;
 
         /// <summary></summary>
         public DeviceCollection()

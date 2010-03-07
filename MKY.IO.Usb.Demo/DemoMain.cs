@@ -30,7 +30,7 @@ namespace MKY.IO.Usb.Demo
             devices.FillWithAvailableDevices();
 
             Console.WriteLine();
-            Console.WriteLine("USB HID Devices:");
+            Console.WriteLine("USB HID Devices");
             foreach (DeviceInfo device in devices)
             {
                 Console.Write(" + ");
