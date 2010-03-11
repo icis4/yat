@@ -70,19 +70,19 @@ namespace YAT.Gui.Forms
 		// Form Event Handlers
 		//==========================================================================================
 
-        /// <summary>
-        /// Startup flag only used in the following event handler.
-        /// </summary>
-        private bool _isStartingUp = true;
+		/// <summary>
+		/// Startup flag only used in the following event handler.
+		/// </summary>
+		private bool _isStartingUp = true;
 
-        /// <summary>
-        /// Initially set controls and validate its contents where needed.
-        /// </summary>
-        private void TerminalSettings_Paint(object sender, PaintEventArgs e)
+		/// <summary>
+		/// Initially set controls and validate its contents where needed.
+		/// </summary>
+		private void TerminalSettings_Paint(object sender, PaintEventArgs e)
 		{
-            if (_isStartingUp)
+			if (_isStartingUp)
 			{
-                _isStartingUp = false;
+				_isStartingUp = false;
 				SetControls();
 			}
 		}
@@ -203,19 +203,19 @@ namespace YAT.Gui.Forms
 				_settings_Form.IO.Socket.TcpClientAutoReconnect = socketSettings.TcpClientAutoReconnect;
 		}
 
-        private void usbHidPortSelection_DeviceIdChanged(object sender, EventArgs e)
-        {
-            if (!_isSettingControls)
-                _settings_Form.IO.UsbHidPort.DeviceId = usbHidPortSelection.DeviceId;
-        }
+		private void usbHidPortSelection_DeviceIdChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+				_settings_Form.IO.UsbHidPort.DeviceId = usbHidPortSelection.DeviceId;
+		}
 
-        private void usbHidPortSettings_AutoReconnectChanged(object sender, EventArgs e)
-        {
-            if (!_isSettingControls)
-                _settings_Form.IO.UsbHidPort.AutoReconnect = usbHidPortSettings.AutoReconnect;
-        }
+		private void usbHidPortSettings_AutoReconnectChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+				_settings_Form.IO.UsbHidPort.AutoReconnect = usbHidPortSettings.AutoReconnect;
+		}
 
-        private void button_AdvancedSettings_Click(object sender, EventArgs e)
+		private void button_AdvancedSettings_Click(object sender, EventArgs e)
 		{
 			ShowAdvancedSettings();
 		}
@@ -297,8 +297,8 @@ namespace YAT.Gui.Forms
 			text += " Settings...";
 			button_TextOrBinarySettings.Text = text;
 
-            bool isSerialPort = (ioType == Domain.IOType.SerialPort);
-            bool isUsbHid     = (ioType == Domain.IOType.UsbHid);
+			bool isSerialPort = (ioType == Domain.IOType.SerialPort);
+			bool isUsbHid     = (ioType == Domain.IOType.UsbHid);
 
 			// Set socket control before serial port control since that might need to refresh the
 			//   serial port list first (which takes time, which looks ulgy)
@@ -310,7 +310,7 @@ namespace YAT.Gui.Forms
 			socketSelection.LocalTcpPort   = _settings_Form.IO.Socket.LocalTcpPort;
 			socketSelection.LocalUdpPort   = _settings_Form.IO.Socket.LocalUdpPort;
 
-            socketSettings.Visible         = !isSerialPort && !isUsbHid;
+			socketSettings.Visible         = !isSerialPort && !isUsbHid;
 			socketSettings.HostType        = (Domain.XIOType)ioType;
 			socketSettings.TcpClientAutoReconnect = _settings_Form.IO.Socket.TcpClientAutoReconnect;
 
@@ -325,11 +325,11 @@ namespace YAT.Gui.Forms
 			serialPortSettings.FlowControl = _settings_Form.IO.SerialPort.Communication.FlowControl;
 			serialPortSettings.AutoReopen  = _settings_Form.IO.SerialPort.AutoReopen;
 
-            usbHidPortSelection.Visible    = isUsbHid;
-            usbHidPortSelection.DeviceId   = _settings_Form.IO.UsbHidPort.DeviceId;
+			usbHidPortSelection.Visible    = isUsbHid;
+			usbHidPortSelection.DeviceId   = _settings_Form.IO.UsbHidPort.DeviceId;
 
-            usbHidPortSettings.Visible     = isUsbHid;
-            usbHidPortSettings.AutoReconnect = _settings_Form.IO.UsbHidPort.AutoReconnect;
+			usbHidPortSettings.Visible     = isUsbHid;
+			usbHidPortSettings.AutoReconnect = _settings_Form.IO.UsbHidPort.AutoReconnect;
 
 			_isSettingControls = false;
 		}

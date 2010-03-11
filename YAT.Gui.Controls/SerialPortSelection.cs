@@ -98,15 +98,15 @@ namespace YAT.Gui.Controls
 		// Control Event Handlers
 		//==========================================================================================
 
-        /// <summary>
-        /// Startup flag only used in the following event handler.
-        /// </summary>
-        private bool _isStartingUp = true;
+		/// <summary>
+		/// Startup flag only used in the following event handler.
+		/// </summary>
+		private bool _isStartingUp = true;
 
-        /// <summary>
-        /// Initially set controls and validate its contents where needed.
-        /// </summary>
-        private void SerialPortSelection_Paint(object sender, PaintEventArgs e)
+		/// <summary>
+		/// Initially set controls and validate its contents where needed.
+		/// </summary>
+		private void SerialPortSelection_Paint(object sender, PaintEventArgs e)
 		{
 			if (_isStartingUp)
 			{
@@ -141,21 +141,21 @@ namespace YAT.Gui.Controls
 					PortId = id;
 				}
 				else if (comboBox_Port.Text == "")
-                {
-                    PortId = null;
-                }
-                else
-                {
-                    MessageBox.Show
-                        (
-                        this,
-                        "Serial port name is invalid",
-                        "Invalid Input",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
-                        );
-                    e.Cancel = true;
-                }
+				{
+					PortId = null;
+				}
+				else
+				{
+					MessageBox.Show
+						(
+						this,
+						"Serial port name is invalid",
+						"Invalid Input",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+						);
+					e.Cancel = true;
+				}
 			}
 		}
 
@@ -236,8 +236,8 @@ namespace YAT.Gui.Controls
 
 		private void SetSerialPortList()
 		{
-            // Only scan for ports if control is enabled. This saves some time.
-            if (Enabled && !DesignMode)
+			// Only scan for ports if control is enabled. This saves some time.
+			if (Enabled && !DesignMode)
 			{
 				_isSettingControls = true;
 
@@ -300,8 +300,8 @@ namespace YAT.Gui.Controls
 		{
 			_isSettingControls = true;
 
-            if ((comboBox_Port.Items.Count > 0) && !DesignMode)
-            {
+			if ((comboBox_Port.Items.Count > 0) && !DesignMode)
+			{
 				if (_portId != null)
 					comboBox_Port.SelectedItem = _portId;
 				else

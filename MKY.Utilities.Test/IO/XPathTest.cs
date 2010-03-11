@@ -26,15 +26,15 @@ namespace MKY.Utilities.Test.IO
 {
 	[TestFixture]
 	public class XPathTest
-    {
-        #region Constants
-        //==========================================================================================
-        // Constants
+	{
+		#region Constants
+		//==========================================================================================
+		// Constants
 		//==========================================================================================
 
 		private const int _TestCasesPerTestSet = 4;
 
-        private readonly string[,] _TestPaths =
+		private readonly string[,] _TestPaths =
 		{
 			// ---- Local ----
 

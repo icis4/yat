@@ -25,9 +25,9 @@ using System.Collections.Generic;
 
 namespace MKY.IO.Usb
 {
-    /// <summary>
-    /// A USB HID device.
-    /// </summary>
+	/// <summary>
+	/// A USB HID device.
+	/// </summary>
 	public class HidDevice : Device
 	{
 		#region Static Methods
@@ -35,14 +35,14 @@ namespace MKY.IO.Usb
 		// Static Methods
 		//==========================================================================================
 
-        /// <summary>
-        /// Returns an array of all USB HID devices currently available on the system.
-        /// </summary>
-        public static string[] GetDevices()
-        {
-            Guid hidGuid = Utilities.Win32.Hid.GetHidGuid();
-            return (Utilities.Win32.DeviceManagement.GetDevicesFromGuid(hidGuid));
-        }
+		/// <summary>
+		/// Returns an array of all USB HID devices currently available on the system.
+		/// </summary>
+		public static string[] GetDevices()
+		{
+			Guid hidGuid = Utilities.Win32.Hid.GetHidGuid();
+			return (Utilities.Win32.DeviceManagement.GetDevicesFromGuid(hidGuid));
+		}
 
 		#endregion
 
@@ -51,31 +51,31 @@ namespace MKY.IO.Usb
 		// Object Lifetime
 		//==========================================================================================
 
-        /// <summary></summary>
-        public HidDevice(string systemPath)
-            : base(systemPath)
-        {
-        }
+		/// <summary></summary>
+		public HidDevice(string systemPath)
+			: base(systemPath)
+		{
+		}
 
-        /// <summary></summary>
-        public HidDevice(int vendorId, int productId)
-            : base(vendorId, productId)
-        {
-        }
+		/// <summary></summary>
+		public HidDevice(int vendorId, int productId)
+			: base(vendorId, productId)
+		{
+		}
 
-        /// <summary></summary>
-        public HidDevice(int vendorId, int productId, string serialNumber)
-            : base(vendorId, productId, serialNumber)
-        {
-        }
+		/// <summary></summary>
+		public HidDevice(int vendorId, int productId, string serialNumber)
+			: base(vendorId, productId, serialNumber)
+		{
+		}
 
-        /// <summary></summary>
-        public HidDevice(DeviceInfo deviceId)
-            : base(deviceId)
-        {
-        }
+		/// <summary></summary>
+		public HidDevice(DeviceInfo deviceId)
+			: base(deviceId)
+		{
+		}
 
-        #endregion
+		#endregion
 
 		#region Properties
 		//==========================================================================================

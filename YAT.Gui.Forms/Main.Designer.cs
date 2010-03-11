@@ -132,13 +132,13 @@ namespace YAT.Gui.Forms
 			// contextMenuStrip_Main
 			// 
 			this.contextMenuStrip_Main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem_MainContextMenu_File_New,
-            this.toolStripMenuItem_MainContextMenu_File_Open,
-            this.toolStripMenuItem_MainContextMenu_File_OpenWorkspace,
-            this.toolStripSeparator_MainContextMenu_1,
-            this.toolStripMenuItem_MainContextMenu_File_Recent,
-            this.toolStripSeparator_MainContextMenu_2,
-            this.toolStripMenuItem_MainContextMenu_File_Exit});
+			this.toolStripMenuItem_MainContextMenu_File_New,
+			this.toolStripMenuItem_MainContextMenu_File_Open,
+			this.toolStripMenuItem_MainContextMenu_File_OpenWorkspace,
+			this.toolStripSeparator_MainContextMenu_1,
+			this.toolStripMenuItem_MainContextMenu_File_Recent,
+			this.toolStripSeparator_MainContextMenu_2,
+			this.toolStripMenuItem_MainContextMenu_File_Exit});
 			this.contextMenuStrip_Main.Name = "contextMenuStrip_Main";
 			this.contextMenuStrip_Main.Size = new System.Drawing.Size(174, 126);
 			this.contextMenuStrip_Main.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Main_Opening);
@@ -180,14 +180,14 @@ namespace YAT.Gui.Forms
 			// contextMenuStrip_FileRecent
 			// 
 			this.contextMenuStrip_FileRecent.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem_FileRecentContextMenu_1,
-            this.toolStripMenuItem_FileRecentContextMenu_2,
-            this.toolStripMenuItem_FileRecentContextMenu_3,
-            this.toolStripMenuItem_FileRecentContextMenu_4,
-            this.toolStripMenuItem_FileRecentContextMenu_5,
-            this.toolStripMenuItem_FileRecentContextMenu_6,
-            this.toolStripMenuItem_FileRecentContextMenu_7,
-            this.toolStripMenuItem_FileRecentContextMenu_8});
+			this.toolStripMenuItem_FileRecentContextMenu_1,
+			this.toolStripMenuItem_FileRecentContextMenu_2,
+			this.toolStripMenuItem_FileRecentContextMenu_3,
+			this.toolStripMenuItem_FileRecentContextMenu_4,
+			this.toolStripMenuItem_FileRecentContextMenu_5,
+			this.toolStripMenuItem_FileRecentContextMenu_6,
+			this.toolStripMenuItem_FileRecentContextMenu_7,
+			this.toolStripMenuItem_FileRecentContextMenu_8});
 			this.contextMenuStrip_FileRecent.Name = "contextMenuStrip_FileRecent";
 			this.contextMenuStrip_FileRecent.OwnerItem = this.toolStripMenuItem_MainMenu_File_Recent;
 			this.contextMenuStrip_FileRecent.Size = new System.Drawing.Size(87, 180);
@@ -297,9 +297,9 @@ namespace YAT.Gui.Forms
 			// menuStrip_Main
 			// 
 			this.menuStrip_Main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem_MainMenu_File,
-            this.toolStripMenuItem_MainMenu_Window,
-            this.toolStripMenuItem_MainMenu_Help});
+			this.toolStripMenuItem_MainMenu_File,
+			this.toolStripMenuItem_MainMenu_Window,
+			this.toolStripMenuItem_MainMenu_Help});
 			this.menuStrip_Main.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip_Main.MdiWindowListItem = this.toolStripMenuItem_MainMenu_Window;
 			this.menuStrip_Main.Name = "menuStrip_Main";
@@ -309,20 +309,20 @@ namespace YAT.Gui.Forms
 			// toolStripMenuItem_MainMenu_File
 			// 
 			this.toolStripMenuItem_MainMenu_File.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem_MainMenu_File_New,
-            this.toolStripMenuItem_MainMenu_File_Open,
-            this.toolStripSeparator_MainMenu_File_1,
-            this.toolStripMenuItem_MainMenu_File_CloseAll,
-            this.toolStripSeparator_MainMenu_File_2,
-            this.toolStripMenuItem_MainMenu_File_SaveAll,
-            this.toolStripSeparator_MainMenu_File_3,
-            this.toolStripMenuItem_MainMenu_File_Workspace,
-            this.toolStripSeparator_MainMenu_File_4,
-            this.toolStripMenuItem_MainMenu_File_Preferences,
-            this.toolStripSeparator_MainMenu_File_5,
-            this.toolStripMenuItem_MainMenu_File_Recent,
-            this.toolStripSeparator_MainMenu_File_6,
-            this.toolStripMenuItem_MainMenu_File_Exit});
+			this.toolStripMenuItem_MainMenu_File_New,
+			this.toolStripMenuItem_MainMenu_File_Open,
+			this.toolStripSeparator_MainMenu_File_1,
+			this.toolStripMenuItem_MainMenu_File_CloseAll,
+			this.toolStripSeparator_MainMenu_File_2,
+			this.toolStripMenuItem_MainMenu_File_SaveAll,
+			this.toolStripSeparator_MainMenu_File_3,
+			this.toolStripMenuItem_MainMenu_File_Workspace,
+			this.toolStripSeparator_MainMenu_File_4,
+			this.toolStripMenuItem_MainMenu_File_Preferences,
+			this.toolStripSeparator_MainMenu_File_5,
+			this.toolStripMenuItem_MainMenu_File_Recent,
+			this.toolStripSeparator_MainMenu_File_6,
+			this.toolStripMenuItem_MainMenu_File_Exit});
 			this.toolStripMenuItem_MainMenu_File.MergeIndex = 0;
 			this.toolStripMenuItem_MainMenu_File.Name = "toolStripMenuItem_MainMenu_File";
 			this.toolStripMenuItem_MainMenu_File.Size = new System.Drawing.Size(37, 20);
@@ -388,13 +388,13 @@ namespace YAT.Gui.Forms
 			// toolStripMenuItem_MainMenu_File_Workspace
 			// 
 			this.toolStripMenuItem_MainMenu_File_Workspace.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem_MainMenu_File_Workspace_New,
-            this.toolStripMenuItem_MainMenu_File_Workspace_Open,
-            this.toolStripSeparator_MainMenu_File_Workspace_1,
-            this.toolStripMenuItem_MainMenu_File_Workspace_Close,
-            this.toolStripSeparator_MainMenu_File_Workspace_2,
-            this.toolStripMenuItem_MainMenu_File_Workspace_Save,
-            this.toolStripMenuItem_MainMenu_File_Workspace_SaveAs});
+			this.toolStripMenuItem_MainMenu_File_Workspace_New,
+			this.toolStripMenuItem_MainMenu_File_Workspace_Open,
+			this.toolStripSeparator_MainMenu_File_Workspace_1,
+			this.toolStripMenuItem_MainMenu_File_Workspace_Close,
+			this.toolStripSeparator_MainMenu_File_Workspace_2,
+			this.toolStripMenuItem_MainMenu_File_Workspace_Save,
+			this.toolStripMenuItem_MainMenu_File_Workspace_SaveAs});
 			this.toolStripMenuItem_MainMenu_File_Workspace.Name = "toolStripMenuItem_MainMenu_File_Workspace";
 			this.toolStripMenuItem_MainMenu_File_Workspace.Size = new System.Drawing.Size(155, 22);
 			this.toolStripMenuItem_MainMenu_File_Workspace.Text = "&Workspace";
@@ -477,11 +477,11 @@ namespace YAT.Gui.Forms
 			// toolStripMenuItem_MainMenu_Window
 			// 
 			this.toolStripMenuItem_MainMenu_Window.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem_MainMenu_Window_Cascade,
-            this.toolStripMenuItem_MainMenu_Window_TileHorizontal,
-            this.toolStripMenuItem_MainMenu_Window_TileVertical,
-            this.toolStripSeparator_MainMenu_Window_1,
-            this.toolStripMenuItem_MainMenu_Window_ArrangeIcons});
+			this.toolStripMenuItem_MainMenu_Window_Cascade,
+			this.toolStripMenuItem_MainMenu_Window_TileHorizontal,
+			this.toolStripMenuItem_MainMenu_Window_TileVertical,
+			this.toolStripSeparator_MainMenu_Window_1,
+			this.toolStripMenuItem_MainMenu_Window_ArrangeIcons});
 			this.toolStripMenuItem_MainMenu_Window.MergeIndex = 5;
 			this.toolStripMenuItem_MainMenu_Window.Name = "toolStripMenuItem_MainMenu_Window";
 			this.toolStripMenuItem_MainMenu_Window.Size = new System.Drawing.Size(63, 20);
@@ -528,15 +528,15 @@ namespace YAT.Gui.Forms
 			// toolStripMenuItem_MainMenu_Help
 			// 
 			this.toolStripMenuItem_MainMenu_Help.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem_MainMenu_Help_Contents,
-            this.toolStripSeparator_MainMenu_Help_1,
-            this.toolStripMenuItem_MainMenu_Help_ReleaseNotes,
-            this.toolStripSeparator_MainMenu_Help_2,
-            this.toolStripMenuItem_MainMenu_Help_RequestSupport,
-            this.toolStripMenuItem_MainMenu_Help_RequestFeature,
-            this.toolStripMenuItem_MainMenu_Help_SubmitBug,
-            this.toolStripSeparator_MainMenu_Help_3,
-            this.toolStripMenuItem_MainMenu_Help_About});
+			this.toolStripMenuItem_MainMenu_Help_Contents,
+			this.toolStripSeparator_MainMenu_Help_1,
+			this.toolStripMenuItem_MainMenu_Help_ReleaseNotes,
+			this.toolStripSeparator_MainMenu_Help_2,
+			this.toolStripMenuItem_MainMenu_Help_RequestSupport,
+			this.toolStripMenuItem_MainMenu_Help_RequestFeature,
+			this.toolStripMenuItem_MainMenu_Help_SubmitBug,
+			this.toolStripSeparator_MainMenu_Help_3,
+			this.toolStripMenuItem_MainMenu_Help_About});
 			this.toolStripMenuItem_MainMenu_Help.MergeIndex = 6;
 			this.toolStripMenuItem_MainMenu_Help.Name = "toolStripMenuItem_MainMenu_Help";
 			this.toolStripMenuItem_MainMenu_Help.Size = new System.Drawing.Size(44, 20);
@@ -603,8 +603,8 @@ namespace YAT.Gui.Forms
 			// statusStrip_Main
 			// 
 			this.statusStrip_Main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel_MainStatus_Status,
-            this.toolStripStatusLabel_MainStatus_Chrono});
+			this.toolStripStatusLabel_MainStatus_Status,
+			this.toolStripStatusLabel_MainStatus_Chrono});
 			this.statusStrip_Main.Location = new System.Drawing.Point(0, 549);
 			this.statusStrip_Main.Name = "statusStrip_Main";
 			this.statusStrip_Main.Size = new System.Drawing.Size(792, 24);
@@ -636,26 +636,26 @@ namespace YAT.Gui.Forms
 			// 
 			this.toolStrip_Main.Dock = System.Windows.Forms.DockStyle.None;
 			this.toolStrip_Main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton_MainTool_File_New,
-            this.toolStripButton_MainTool_File_Open,
-            this.toolStripButton_MainTool_File_Save,
-            this.toolStripSeparator_MainTool_1,
-            this.toolStripButton_MainTool_Terminal_Start,
-            this.toolStripButton_MainTool_Terminal_Stop,
-            this.toolStripSeparator_MainTool_2,
-            this.toolStripButton_MainTool_Terminal_Radix_String,
-            this.toolStripButton_MainTool_Terminal_Radix_Char,
-            this.toolStripButton_MainTool_Terminal_Radix_Bin,
-            this.toolStripButton_MainTool_Terminal_Radix_Oct,
-            this.toolStripButton_MainTool_Terminal_Radix_Dec,
-            this.toolStripButton_MainTool_Terminal_Radix_Hex,
-            this.toolStripSeparator_MainTool_3,
-            this.toolStripButton_MainTool_Terminal_Clear,
-            this.toolStripButton_MainTool_Terminal_SaveToFile,
-            this.toolStripButton_MainTool_Terminal_CopyToClipboard,
-            this.toolStripButton_MainTool_Terminal_Print,
-            this.toolStripSeparator_MainTool_4,
-            this.toolStripButton_MainTool_Terminal_Settings});
+			this.toolStripButton_MainTool_File_New,
+			this.toolStripButton_MainTool_File_Open,
+			this.toolStripButton_MainTool_File_Save,
+			this.toolStripSeparator_MainTool_1,
+			this.toolStripButton_MainTool_Terminal_Start,
+			this.toolStripButton_MainTool_Terminal_Stop,
+			this.toolStripSeparator_MainTool_2,
+			this.toolStripButton_MainTool_Terminal_Radix_String,
+			this.toolStripButton_MainTool_Terminal_Radix_Char,
+			this.toolStripButton_MainTool_Terminal_Radix_Bin,
+			this.toolStripButton_MainTool_Terminal_Radix_Oct,
+			this.toolStripButton_MainTool_Terminal_Radix_Dec,
+			this.toolStripButton_MainTool_Terminal_Radix_Hex,
+			this.toolStripSeparator_MainTool_3,
+			this.toolStripButton_MainTool_Terminal_Clear,
+			this.toolStripButton_MainTool_Terminal_SaveToFile,
+			this.toolStripButton_MainTool_Terminal_CopyToClipboard,
+			this.toolStripButton_MainTool_Terminal_Print,
+			this.toolStripSeparator_MainTool_4,
+			this.toolStripButton_MainTool_Terminal_Settings});
 			this.toolStrip_Main.Location = new System.Drawing.Point(3, 0);
 			this.toolStrip_Main.Name = "toolStrip_Main";
 			this.toolStrip_Main.Size = new System.Drawing.Size(444, 25);

@@ -1,7 +1,7 @@
 /* ====================================================================
  * Copyright (c) 2009 Andre Luis Azevedo (az.andrel@yahoo.com.br)
  * All rights reserved.
- *                       
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -42,39 +42,39 @@ using System;
 namespace ALAZ.SystemEx.NetEx.SocketsEx
 {
 
-    /// <summary>
-    /// Base event arguments for connection events.
-    /// </summary>
-    public class ConnectionEventArgs : EventArgs
-    {
+	/// <summary>
+	/// Base event arguments for connection events.
+	/// </summary>
+	public class ConnectionEventArgs : EventArgs
+	{
 
-        #region Fields
+		#region Fields
 
-        private ISocketConnection FConnection;
+		private ISocketConnection FConnection;
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        public ConnectionEventArgs(ISocketConnection connection)
-        {
-            FConnection = connection;
-        }
+		public ConnectionEventArgs(ISocketConnection connection)
+		{
+			FConnection = connection;
+		}
 
-        #endregion
+		#endregion
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Gets the ISocketConnection from event.
-        /// </summary>
-        public ISocketConnection Connection
-        {
-            get { return FConnection; }
-        }
+		/// <summary>
+		/// Gets the ISocketConnection from event.
+		/// </summary>
+		public ISocketConnection Connection
+		{
+			get { return FConnection; }
+		}
 
-        #endregion
+		#endregion
 
-    }
+	}
 
 }

@@ -51,7 +51,7 @@ namespace YAT.Gui.Controls
 
 		private Domain.TerminalType _terminalType = _TerminalTypeDefault;
 		private bool _terminalIsOpen = _TerminalIsOpenDefault;
-        private float _splitterRatio = _SplitterRatioDefault;
+		private float _splitterRatio = _SplitterRatioDefault;
 
 		#endregion
 
@@ -109,25 +109,25 @@ namespace YAT.Gui.Controls
 		// Properties
 		//==========================================================================================
 
-        /// <summary>
+		/// <summary>
 		/// Command always returns a Command object, it never returns <c>null</c>.
-        /// </summary>
-        [Browsable(false)]
+		/// </summary>
+		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Command Command
-        {
-            get { return (sendCommand.Command); }
-            set { sendCommand.Command = value;  }
-        }
+		{
+			get { return (sendCommand.Command); }
+			set { sendCommand.Command = value;  }
+		}
 
-        [Browsable(false)]
+		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public RecentItemCollection<Command> RecentCommands
-        {
-            set { sendCommand.RecentCommands = value;  }
-        }
+		{
+			set { sendCommand.RecentCommands = value;  }
+		}
 
-        /// <summary>
+		/// <summary>
 		/// Command always returns a Command object, it never returns <c>null</c>.
 		/// </summary>
 		[Browsable(false)]
@@ -149,43 +149,43 @@ namespace YAT.Gui.Controls
 			}
 		}
 
-        [Browsable(false)]
+		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool TerminalIsOpen
-        {
-            set
-            {
-                _terminalIsOpen = value;
-                SetControls();
-            }
-        }
+		{
+			set
+			{
+				_terminalIsOpen = value;
+				SetControls();
+			}
+		}
 
-        [DefaultValue(true)]
-        public bool CommandPanelIsVisible
-        {
-            get { return (!splitContainer_Send.Panel1Collapsed); }
-            set { splitContainer_Send.Panel1Collapsed = !value;  }
-        }
+		[DefaultValue(true)]
+		public bool CommandPanelIsVisible
+		{
+			get { return (!splitContainer_Send.Panel1Collapsed); }
+			set { splitContainer_Send.Panel1Collapsed = !value;  }
+		}
 
-        [DefaultValue(true)]
-        public bool FilePanelIsVisible
-        {
-            get { return (!splitContainer_Send.Panel2Collapsed); }
-            set { splitContainer_Send.Panel2Collapsed = !value;  }
-        }
+		[DefaultValue(true)]
+		public bool FilePanelIsVisible
+		{
+			get { return (!splitContainer_Send.Panel2Collapsed); }
+			set { splitContainer_Send.Panel2Collapsed = !value;  }
+		}
 
-        [DefaultValue(_SplitterRatioDefault)]
-        public float SplitterRatio
-        {
-            get { return (_splitterRatio); }
-            set
-            {
-                _splitterRatio = value;
-                SetControls();
-            }
-        }
+		[DefaultValue(_SplitterRatioDefault)]
+		public float SplitterRatio
+		{
+			get { return (_splitterRatio); }
+			set
+			{
+				_splitterRatio = value;
+				SetControls();
+			}
+		}
 
-        #endregion
+		#endregion
 
 		#region Controls Event Handlers
 		//==========================================================================================
@@ -236,11 +236,11 @@ namespace YAT.Gui.Controls
 		private void SetControls()
 		{
 			sendCommand.TerminalIsOpen = _terminalIsOpen;
-            sendCommand.SplitterRatio = _splitterRatio;
+			sendCommand.SplitterRatio = _splitterRatio;
 
 			sendFile.TerminalType = _terminalType;
 			sendFile.TerminalIsOpen = _terminalIsOpen;
-            sendFile.SplitterRatio = _splitterRatio;
+			sendFile.SplitterRatio = _splitterRatio;
 		}
 
 		#endregion

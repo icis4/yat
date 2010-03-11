@@ -23,28 +23,28 @@ using libusb.NET;
 
 namespace libusb.NET.Test
 {
-    public class TestMain
-    {
-        public static void Main(string[] args)
-        {
-            /*Native.libusb_device[] nativeDevices = Device.GetAvailableDevices();
-            foreach (Native.libusb_device nativeDevice in nativeDevices)
-            {
-            }*/
+	public class TestMain
+	{
+		public static void Main(string[] args)
+		{
+			/*Native.libusb_device[] nativeDevices = Device.GetAvailableDevices();
+			foreach (Native.libusb_device nativeDevice in nativeDevices)
+			{
+			}*/
 
-            Device device = new Device(0x0EB8, 0x2200);
-            Console.Write    ("VID = ");
-            Console.WriteLine(device.VendorIdString);
-            Console.Write    ("PID = ");
-            Console.WriteLine(device.ProductIdString);
-            Console.Write    ("MAN = ");
-            Console.WriteLine(device.Manufacturer);
-            Console.Write    ("PRD = ");
-            Console.WriteLine(device.Product);
-            Console.Write    ("SNR = ");
-            Console.WriteLine(device.SerialNumber);
-        }
-    }
+			Device device = new Device(0x0EB8, 0x2200);
+			Console.Write    ("VID = ");
+			Console.WriteLine(device.VendorIdString);
+			Console.Write    ("PID = ");
+			Console.WriteLine(device.ProductIdString);
+			Console.Write    ("MAN = ");
+			Console.WriteLine(device.Manufacturer);
+			Console.Write    ("PRD = ");
+			Console.WriteLine(device.Product);
+			Console.Write    ("SNR = ");
+			Console.WriteLine(device.SerialNumber);
+		}
+	}
 }
 
 //==================================================================================================

@@ -29,57 +29,57 @@ namespace YAT.Domain.Test.Parser
 	[TestFixture]
 	public class ParserTest
 	{
-        #region Types
-        //==========================================================================================
-        // Types
-        //==========================================================================================
+		#region Types
+		//==========================================================================================
+		// Types
+		//==========================================================================================
 
-        private struct TestSet
-        {
-            public readonly Endianess Endianess;
+		private struct TestSet
+		{
+			public readonly Endianess Endianess;
 			public readonly Encoding Encoding;
 			public readonly Radix DefaultRadix;
 			public readonly string InputString;
 			public readonly byte[] OutputBytes;
 
-            public TestSet(string inputString, byte[] outputBytes)
-            {
-                Endianess = Endianess.LittleEndian;
-                Encoding = Encoding.Default;
-                DefaultRadix = Radix.String;
-                InputString = inputString;
-                OutputBytes = outputBytes;
-            }
+			public TestSet(string inputString, byte[] outputBytes)
+			{
+				Endianess = Endianess.LittleEndian;
+				Encoding = Encoding.Default;
+				DefaultRadix = Radix.String;
+				InputString = inputString;
+				OutputBytes = outputBytes;
+			}
 
-            public TestSet(Endianess endianess, string inputString, byte[] outputBytes)
-            {
-                Endianess = endianess;
-                Encoding = Encoding.Default;
-                DefaultRadix = Radix.String;
-                InputString = inputString;
-                OutputBytes = outputBytes;
-            }
+			public TestSet(Endianess endianess, string inputString, byte[] outputBytes)
+			{
+				Endianess = endianess;
+				Encoding = Encoding.Default;
+				DefaultRadix = Radix.String;
+				InputString = inputString;
+				OutputBytes = outputBytes;
+			}
 
-            public TestSet(Encoding encoding, string inputString, byte[] outputBytes)
-            {
-                Endianess = Endianess.LittleEndian;
-                Encoding = encoding;
-                DefaultRadix = Radix.String;
-                InputString = inputString;
-                OutputBytes = outputBytes;
-            }
+			public TestSet(Encoding encoding, string inputString, byte[] outputBytes)
+			{
+				Endianess = Endianess.LittleEndian;
+				Encoding = encoding;
+				DefaultRadix = Radix.String;
+				InputString = inputString;
+				OutputBytes = outputBytes;
+			}
 
-            public TestSet(Radix defaultRadix, string inputString, byte[] outputBytes)
-            {
-                Endianess = Endianess.LittleEndian;
-                Encoding = Encoding.Default;
-                DefaultRadix = defaultRadix;
-                InputString = inputString;
-                OutputBytes = outputBytes;
-            }
-        };
+			public TestSet(Radix defaultRadix, string inputString, byte[] outputBytes)
+			{
+				Endianess = Endianess.LittleEndian;
+				Encoding = Encoding.Default;
+				DefaultRadix = defaultRadix;
+				InputString = inputString;
+				OutputBytes = outputBytes;
+			}
+		};
 
-        #endregion
+		#endregion
 
 		#region Fields
 		//==========================================================================================

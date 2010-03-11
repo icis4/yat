@@ -1,7 +1,7 @@
 /* ====================================================================
  * Copyright (c) 2009 Andre Luis Azevedo (az.andrel@yahoo.com.br)
  * All rights reserved.
- *                       
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -59,287 +59,287 @@ using ALAZ.SystemEx.ThreadingEx;
 namespace ALAZ.SystemEx.NetEx.SocketsEx
 {
 
-    /// <summary>
-    /// The connection host.
-    /// </summary>
-    public abstract class BaseSocketConnectionHost : BaseDisposable, IBaseSocketConnectionHost
-    {
+	/// <summary>
+	/// The connection host.
+	/// </summary>
+	public abstract class BaseSocketConnectionHost : BaseDisposable, IBaseSocketConnectionHost
+	{
 
-        #region Fields
+		#region Fields
 
-        private bool FActive;
-        private object FSyncActive;
-        
-        private HostType FHostType;
+		private bool FActive;
+		private object FSyncActive;
+		
+		private HostType FHostType;
 		private ProtocolType FProtocolType;
-        private long FConnectionId;
+		private long FConnectionId;
 
-        private DelimiterType FDelimiterType;
-        private CallbackThreadType FCallbackThreadType;
+		private DelimiterType FDelimiterType;
+		private CallbackThreadType FCallbackThreadType;
 
-        private int FMessageBufferSize;
-        private int FSocketBufferSize;
+		private int FMessageBufferSize;
+		private int FSocketBufferSize;
 
-        //----- Enumerates the connections and creators!
-        private ReaderWriterLockSlim FSocketConnectionsSync;
-        private Dictionary<long, BaseSocketConnection> FSocketConnections;
-        private BufferManager FBufferManager;
+		//----- Enumerates the connections and creators!
+		private ReaderWriterLockSlim FSocketConnectionsSync;
+		private Dictionary<long, BaseSocketConnection> FSocketConnections;
+		private BufferManager FBufferManager;
 
-        private List<BaseSocketConnectionCreator> FSocketCreators;
+		private List<BaseSocketConnectionCreator> FSocketCreators;
 
-        //----- The Socket Service.
-        private ISocketService FSocketService;
+		//----- The Socket Service.
+		private ISocketService FSocketService;
 
-        //----- Waits for objects removing!
-        private ManualResetEvent FWaitCreatorsDisposing;
-        private ManualResetEvent FWaitConnectionsDisposing;
-        private ManualResetEvent FWaitThreadsDisposing;
+		//----- Waits for objects removing!
+		private ManualResetEvent FWaitCreatorsDisposing;
+		private ManualResetEvent FWaitConnectionsDisposing;
+		private ManualResetEvent FWaitThreadsDisposing;
 
-        //----- Check idle timer!
-        private Timer FIdleTimer;
-        private int FIdleCheckInterval;
-        private int FIdleTimeOutValue;
+		//----- Check idle timer!
+		private Timer FIdleTimer;
+		private int FIdleCheckInterval;
+		private int FIdleTimeOutValue;
 
-        //----- Socket delimiter and buffer size!
-        private byte[] FDelimiter;
-        private byte[] FDelimiterEncrypt;
+		//----- Socket delimiter and buffer size!
+		private byte[] FDelimiter;
+		private byte[] FDelimiterEncrypt;
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
 		public BaseSocketConnectionHost(HostType hostType, ProtocolType protocolType, CallbackThreadType callbackThreadtype, ISocketService socketService, DelimiterType delimiterType, byte[] delimiter, int socketBufferSize, int messageBufferSize, int idleCheckInterval, int idleTimeOutValue)
-        {
+		{
 
-            FHostType = hostType;
+			FHostType = hostType;
 			FProtocolType = protocolType;
-            FConnectionId = 1000;
+			FConnectionId = 1000;
 
-            FSocketConnectionsSync = new ReaderWriterLockSlim();
+			FSocketConnectionsSync = new ReaderWriterLockSlim();
 
-            FSocketConnections = new Dictionary<long, BaseSocketConnection>();
-            FSocketCreators = new List<BaseSocketConnectionCreator>();
-            FBufferManager = BufferManager.CreateBufferManager(0, messageBufferSize);
-            FSocketService = socketService;
+			FSocketConnections = new Dictionary<long, BaseSocketConnection>();
+			FSocketCreators = new List<BaseSocketConnectionCreator>();
+			FBufferManager = BufferManager.CreateBufferManager(0, messageBufferSize);
+			FSocketService = socketService;
 
-            FWaitCreatorsDisposing = new ManualResetEvent(false);
-            FWaitConnectionsDisposing = new ManualResetEvent(false);
-            FWaitThreadsDisposing = new ManualResetEvent(false);
+			FWaitCreatorsDisposing = new ManualResetEvent(false);
+			FWaitConnectionsDisposing = new ManualResetEvent(false);
+			FWaitThreadsDisposing = new ManualResetEvent(false);
 
-            FIdleCheckInterval = idleCheckInterval;
-            FIdleTimeOutValue = idleTimeOutValue;
+			FIdleCheckInterval = idleCheckInterval;
+			FIdleTimeOutValue = idleTimeOutValue;
 
-            FCallbackThreadType = callbackThreadtype;
-            FDelimiterType = delimiterType;
+			FCallbackThreadType = callbackThreadtype;
+			FDelimiterType = delimiterType;
 
-            FDelimiter = delimiter;
-            FDelimiterEncrypt = new byte[] { 0xFE, 0xDC, 0xBA, 0x98, 0xBA, 0xDC, 0xFE };
+			FDelimiter = delimiter;
+			FDelimiterEncrypt = new byte[] { 0xFE, 0xDC, 0xBA, 0x98, 0xBA, 0xDC, 0xFE };
 
-            FMessageBufferSize = messageBufferSize;
-            FSocketBufferSize = socketBufferSize;
+			FMessageBufferSize = messageBufferSize;
+			FSocketBufferSize = socketBufferSize;
 
-            FActive = false;
-            FSyncActive = new Object();
+			FActive = false;
+			FSyncActive = new Object();
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region Destructor
+		#region Destructor
 
-        protected override void Free(bool canAccessFinalizable)
-        {
+		protected override void Free(bool canAccessFinalizable)
+		{
 
-            if (FIdleTimer != null)
-            {
-                FIdleTimer.Change(Timeout.Infinite, Timeout.Infinite);
-                FIdleTimer.Dispose();
-                FIdleTimer = null;
-            }
+			if (FIdleTimer != null)
+			{
+				FIdleTimer.Change(Timeout.Infinite, Timeout.Infinite);
+				FIdleTimer.Dispose();
+				FIdleTimer = null;
+			}
 
-            if (FWaitCreatorsDisposing != null)
-            {
-                FWaitCreatorsDisposing.Set();
-                FWaitCreatorsDisposing.Close();
-                FWaitCreatorsDisposing = null;
-            }
+			if (FWaitCreatorsDisposing != null)
+			{
+				FWaitCreatorsDisposing.Set();
+				FWaitCreatorsDisposing.Close();
+				FWaitCreatorsDisposing = null;
+			}
 
-            if (FWaitConnectionsDisposing != null)
-            {
-                FWaitConnectionsDisposing.Set();
-                FWaitConnectionsDisposing.Close();
-                FWaitConnectionsDisposing = null;
-            }
+			if (FWaitConnectionsDisposing != null)
+			{
+				FWaitConnectionsDisposing.Set();
+				FWaitConnectionsDisposing.Close();
+				FWaitConnectionsDisposing = null;
+			}
 
-            if (FWaitThreadsDisposing != null)
-            {
-                FWaitThreadsDisposing.Set();
-                FWaitThreadsDisposing.Close();
-                FWaitThreadsDisposing = null;
-            }
+			if (FWaitThreadsDisposing != null)
+			{
+				FWaitThreadsDisposing.Set();
+				FWaitThreadsDisposing.Close();
+				FWaitThreadsDisposing = null;
+			}
 
-            if (FSocketConnections != null)
-            {
-                FSocketConnections.Clear();
-                FSocketConnections = null;
-            }
+			if (FSocketConnections != null)
+			{
+				FSocketConnections.Clear();
+				FSocketConnections = null;
+			}
 
-            if (FSocketCreators != null)
-            {
-                FSocketCreators.Clear();
-                FSocketCreators = null;
-            }
+			if (FSocketCreators != null)
+			{
+				FSocketCreators.Clear();
+				FSocketCreators = null;
+			}
 
-            if (FBufferManager != null)
-            {
-                FBufferManager.Clear();
-                FBufferManager = null;
-            }
+			if (FBufferManager != null)
+			{
+				FBufferManager.Clear();
+				FBufferManager = null;
+			}
 
-            FSocketConnectionsSync = null;
-            FSocketService = null;
-            FDelimiter = null;
-            FDelimiterEncrypt = null;
+			FSocketConnectionsSync = null;
+			FSocketService = null;
+			FDelimiter = null;
+			FDelimiterEncrypt = null;
 
-            base.Free(canAccessFinalizable);
+			base.Free(canAccessFinalizable);
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        #region Start
+		#region Start
 
-        /// <summary>
-        /// Starts the base host.
-        /// </summary>
-        public void Start()
-        {
+		/// <summary>
+		/// Starts the base host.
+		/// </summary>
+		public void Start()
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                //ThreadPool.SetMinThreads(2, Environment.ProcessorCount * 2);
-                //ThreadPool.SetMaxThreads(48, Environment.ProcessorCount * 2);
+				//ThreadPool.SetMinThreads(2, Environment.ProcessorCount * 2);
+				//ThreadPool.SetMaxThreads(48, Environment.ProcessorCount * 2);
 
-                int loopSleep = 0;
+				int loopSleep = 0;
 
-                foreach (BaseSocketConnectionCreator creator in FSocketCreators)
-                {
-                    creator.Start();
-                    ThreadEx.LoopSleep(ref loopSleep);
-                }
+				foreach (BaseSocketConnectionCreator creator in FSocketCreators)
+				{
+					creator.Start();
+					ThreadEx.LoopSleep(ref loopSleep);
+				}
 
-                if ((FIdleCheckInterval > 0) && (FIdleTimeOutValue > 0))
-                {
-                    FIdleTimer = new Timer(new TimerCallback(CheckSocketConnections));
-                }
+				if ((FIdleCheckInterval > 0) && (FIdleTimeOutValue > 0))
+				{
+					FIdleTimer = new Timer(new TimerCallback(CheckSocketConnections));
+				}
 
-                if (FIdleTimer != null)
-                {
-                    FIdleTimer.Change(FIdleCheckInterval, FIdleCheckInterval);
-                }
+				if (FIdleTimer != null)
+				{
+					FIdleTimer.Change(FIdleCheckInterval, FIdleCheckInterval);
+				}
 
-                Active = true;
+				Active = true;
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region Stop
+		#region Stop
 
-        /// <summary>
-        /// Stop the base host.
-        /// </summary>
-        public virtual void Stop()
-        {
-            
-            if (!Disposed)
-            {
-                Active = false;
-            }
+		/// <summary>
+		/// Stop the base host.
+		/// </summary>
+		public virtual void Stop()
+		{
+			
+			if (!Disposed)
+			{
+				Active = false;
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region StopCreators
+		#region StopCreators
 
-        /// <summary>
-        /// Stop the host creators.
-        /// </summary>
-        protected void StopCreators()
-        {
+		/// <summary>
+		/// Stop the host creators.
+		/// </summary>
+		protected void StopCreators()
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                //----- Stop Creators!
-                BaseSocketConnectionCreator[] creators = GetSocketCreators();
+				//----- Stop Creators!
+				BaseSocketConnectionCreator[] creators = GetSocketCreators();
 
-                if (creators != null)
-                {
+				if (creators != null)
+				{
 
-                    FWaitCreatorsDisposing.Reset();
+					FWaitCreatorsDisposing.Reset();
 
-                    int loopCount = 0;
+					int loopCount = 0;
 
-                    foreach (BaseSocketConnectionCreator creator in creators)
-                    {
+					foreach (BaseSocketConnectionCreator creator in creators)
+					{
 
-                        try
-                        {
-                            creator.Stop();
-                        }
-                        finally
-                        {
+						try
+						{
+							creator.Stop();
+						}
+						finally
+						{
 
-                            RemoveCreator(creator);
-                            creator.Dispose();
+							RemoveCreator(creator);
+							creator.Dispose();
 
-                            ThreadEx.LoopSleep(ref loopCount);
+							ThreadEx.LoopSleep(ref loopCount);
 
-                        }
+						}
 
-                    }
+					}
 
-                    if (creators.Length > 0)
-                    {
-                        FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
-                    }
+					if (creators.Length > 0)
+					{
+						FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
+					}
 
-                }
-            }
-        }
+				}
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #region StopConnections
+		#region StopConnections
 
-        protected void StopConnections()
-        {
+		protected void StopConnections()
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                //----- Stop Connections!
-                BaseSocketConnection[] connections = GetSocketConnections();
+				//----- Stop Connections!
+				BaseSocketConnection[] connections = GetSocketConnections();
 
-                if (connections != null)
-                {
+				if (connections != null)
+				{
 
-                    FWaitConnectionsDisposing.Reset();
-                    
-                    int loopSleep = 0;
+					FWaitConnectionsDisposing.Reset();
+					
+					int loopSleep = 0;
 
-                    foreach (BaseSocketConnection connection in connections)
-                    {
-                        connection.BeginDisconnect();
-                        ThreadEx.LoopSleep(ref loopSleep);
-                    }
+					foreach (BaseSocketConnection connection in connections)
+					{
+						connection.BeginDisconnect();
+						ThreadEx.LoopSleep(ref loopSleep);
+					}
 
 					// ----- \remind BEGIN -----
 
@@ -351,1457 +351,1457 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 					//   - FireOnDisconnected is blocked when trying to synchronize
 					//     Invoke() onto the GUI thread
 
-                    //if (connections.Length > 0)
-                    //{
-                    //    FWaitConnectionsDisposing.WaitOne(Timeout.Infinite, false);
-                    //}
+					//if (connections.Length > 0)
+					//{
+					//    FWaitConnectionsDisposing.WaitOne(Timeout.Infinite, false);
+					//}
 
 					// ----- \remind END -----
 				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region Fire Methods
+		#region Fire Methods
 
-        #region FireOnConnected
+		#region FireOnConnected
 
-        internal void FireOnConnected(BaseSocketConnection connection)
-        {
+		internal void FireOnConnected(BaseSocketConnection connection)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                if (connection.Active)
-                {
+				if (connection.Active)
+				{
 
-                    try
-                    {
+					try
+					{
 
-                        switch (connection.EventProcessing)
-                        {
-                            
-                            case EventProcessing.epUser:
+						switch (connection.EventProcessing)
+						{
+							
+							case EventProcessing.epUser:
 
-                                FSocketService.OnConnected(new ConnectionEventArgs(connection));
-                                break;
+								FSocketService.OnConnected(new ConnectionEventArgs(connection));
+								break;
 
-                            case EventProcessing.epEncrypt:
+							case EventProcessing.epEncrypt:
 
-                                OnConnected(connection);
-                                break;
+								OnConnected(connection);
+								break;
 
-                            case EventProcessing.epProxy:
+							case EventProcessing.epProxy:
 
-                                OnConnected(connection);
-                                break;
+								OnConnected(connection);
+								break;
 
-                        }
+						}
 
-                    }
-                    finally
-                    { 
-                    //
-                    }
+					}
+					finally
+					{ 
+					//
+					}
 
-                }
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region FireOnSent
+		#region FireOnSent
 
-        private void FireOnSent(BaseSocketConnection connection, bool sentByServer)
-        {
+		private void FireOnSent(BaseSocketConnection connection, bool sentByServer)
+		{
 
-            if (!Disposed)
-            {
-                
-                if (connection.Active)
-                {
+			if (!Disposed)
+			{
+				
+				if (connection.Active)
+				{
 
-                    try
-                    {
+					try
+					{
 
-                        switch (connection.EventProcessing)
-                        {
+						switch (connection.EventProcessing)
+						{
 
-                            case EventProcessing.epUser:
+							case EventProcessing.epUser:
 
-                                FSocketService.OnSent(new MessageEventArgs(connection, null, sentByServer));
-                                break;
+								FSocketService.OnSent(new MessageEventArgs(connection, null, sentByServer));
+								break;
 
-                            case EventProcessing.epEncrypt:
+							case EventProcessing.epEncrypt:
 
-                                OnSent(connection);
-                                break;
+								OnSent(connection);
+								break;
 
-                            case EventProcessing.epProxy:
+							case EventProcessing.epProxy:
 
-                                OnSent(connection);
-                                break;
+								OnSent(connection);
+								break;
 
-                        }
+						}
 
-                    }
-                    finally
-                    {
-                        //
-                    }
+					}
+					finally
+					{
+						//
+					}
 
-                }
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region FireOnReceived
+		#region FireOnReceived
 
-        private void FireOnReceived(BaseSocketConnection connection, byte[] buffer)
-        {
+		private void FireOnReceived(BaseSocketConnection connection, byte[] buffer)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                if (connection.Active)
-                {
+				if (connection.Active)
+				{
 
-                    try
-                    {
+					try
+					{
 
-                        switch (connection.EventProcessing)
-                        {
+						switch (connection.EventProcessing)
+						{
 
-                            case EventProcessing.epUser:
+							case EventProcessing.epUser:
 
-                                FSocketService.OnReceived(new MessageEventArgs(connection, buffer, false));
-                                break;
+								FSocketService.OnReceived(new MessageEventArgs(connection, buffer, false));
+								break;
 
-                            case EventProcessing.epEncrypt:
+							case EventProcessing.epEncrypt:
 
-                                OnReceived(connection, buffer);
-                                break;
+								OnReceived(connection, buffer);
+								break;
 
-                            case EventProcessing.epProxy:
+							case EventProcessing.epProxy:
 
-                                OnReceived(connection, buffer);
-                                break;
+								OnReceived(connection, buffer);
+								break;
 
-                        }
+						}
 
-                    }
-                    finally
-                    {
-                        //
-                    }
+					}
+					finally
+					{
+						//
+					}
 
-                }
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region FireOnDisconnected
+		#region FireOnDisconnected
 
-        private void FireOnDisconnected(BaseSocketConnection connection)
-        {
-            
-            if (!Disposed)
-            {
+		private void FireOnDisconnected(BaseSocketConnection connection)
+		{
+			
+			if (!Disposed)
+			{
 
-                try
-                {
-                    FSocketService.OnDisconnected(new ConnectionEventArgs(connection));
-                }
-                finally
-                {
-                }
+				try
+				{
+					FSocketService.OnDisconnected(new ConnectionEventArgs(connection));
+				}
+				finally
+				{
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region FireOnException
+		#region FireOnException
 
-        internal void FireOnException(BaseSocketConnection connection, Exception ex)
-        {
+		internal void FireOnException(BaseSocketConnection connection, Exception ex)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                if (connection == null)
-                {
-                    FSocketService.OnException(new ExceptionEventArgs(connection, ex));
-                }
-                else
-                {
+				if (connection == null)
+				{
+					FSocketService.OnException(new ExceptionEventArgs(connection, ex));
+				}
+				else
+				{
 
-                    if (connection.Active)
-                    {
+					if (connection.Active)
+					{
 
-                        try
-                        {
-                            FSocketService.OnException(new ExceptionEventArgs(connection, ex));
-                        }
-                        finally
-                        {
-                        }
-                    }
-                }
+						try
+						{
+							FSocketService.OnException(new ExceptionEventArgs(connection, ex));
+						}
+						finally
+						{
+						}
+					}
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #endregion
+		#endregion
 
-        #region Begin Methods
+		#region Begin Methods
 
-        #region BeginSend
+		#region BeginSend
 
-        /// <summary>
-        /// Begin send the data.
-        /// </summary>
-        internal void BeginSend(BaseSocketConnection connection, byte[] buffer, bool sentByServer)
-        {
+		/// <summary>
+		/// Begin send the data.
+		/// </summary>
+		internal void BeginSend(BaseSocketConnection connection, byte[] buffer, bool sentByServer)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                byte[] sendBuffer = null;
+				byte[] sendBuffer = null;
 
-                try
-                {
+				try
+				{
 
-                    if (connection.Active)
-                    {
+					if (connection.Active)
+					{
 
-                        if ( (connection.EventProcessing == EventProcessing.epUser) && (buffer.Length > FMessageBufferSize) )
-                        {
-                            throw new MessageLengthException("Message length is greater than Host maximum message length.");
-                        }
+						if ( (connection.EventProcessing == EventProcessing.epUser) && (buffer.Length > FMessageBufferSize) )
+						{
+							throw new MessageLengthException("Message length is greater than Host maximum message length.");
+						}
 
-                        bool completedAsync = true;
-                        int bufferSize = 0;
+						bool completedAsync = true;
+						int bufferSize = 0;
 
-                        sendBuffer = BufferUtils.GetPacketBuffer(connection, buffer, ref bufferSize);
+						sendBuffer = BufferUtils.GetPacketBuffer(connection, buffer, ref bufferSize);
 
-                        lock (connection.WriteQueue)
-                        {
+						lock (connection.WriteQueue)
+						{
 
-                            if (connection.WriteQueueHasItems)
-                            {
+							if (connection.WriteQueueHasItems)
+							{
 
-                                //----- If the connection is sending, enqueue the message!
-                                MessageBuffer message = new MessageBuffer(sendBuffer, bufferSize, sentByServer);
-                                connection.WriteQueue.Enqueue(message);
+								//----- If the connection is sending, enqueue the message!
+								MessageBuffer message = new MessageBuffer(sendBuffer, bufferSize, sentByServer);
+								connection.WriteQueue.Enqueue(message);
 
-                            }
-                            else
-                            {
+							}
+							else
+							{
 
-                                connection.WriteOV.SetBuffer(sendBuffer, 0, bufferSize);
-                                connection.WriteOV.UserToken = new WriteData(connection, sentByServer);
+								connection.WriteOV.SetBuffer(sendBuffer, 0, bufferSize);
+								connection.WriteOV.UserToken = new WriteData(connection, sentByServer);
 
-                                //----- If the connection is not sending, send the message!
-                                if (connection.Stream != null)
-                                {
-                                    //----- Ssl!
-                                    connection.Stream.BeginWrite(connection.WriteOV.Buffer, 0, bufferSize, new AsyncCallback(BeginSendCallbackSSL), new WriteData(connection, sentByServer));
-                                }
-                                else
-                                {
-                                    //----- Socket!
-                                    completedAsync = connection.Socket.SendAsync(connection.WriteOV);
+								//----- If the connection is not sending, send the message!
+								if (connection.Stream != null)
+								{
+									//----- Ssl!
+									connection.Stream.BeginWrite(connection.WriteOV.Buffer, 0, bufferSize, new AsyncCallback(BeginSendCallbackSSL), new WriteData(connection, sentByServer));
+								}
+								else
+								{
+									//----- Socket!
+									completedAsync = connection.Socket.SendAsync(connection.WriteOV);
 
-                                }
+								}
 
-                                connection.WriteQueueHasItems = true;
+								connection.WriteQueueHasItems = true;
 
-                            }
+							}
 
-                        }
+						}
 
-                        sendBuffer = null;
+						sendBuffer = null;
 
-                        if (!completedAsync)
-                        {
-                            BeginSendCallbackAsync(this, connection.WriteOV);
-                        }
+						if (!completedAsync)
+						{
+							BeginSendCallbackAsync(this, connection.WriteOV);
+						}
 
-                    }
+					}
 
-                }
-                catch (SocketException soex)
-                {
+				}
+				catch (SocketException soex)
+				{
 
-                    if ((soex.SocketErrorCode == SocketError.ConnectionReset)
-                        || (soex.SocketErrorCode == SocketError.ConnectionAborted)
-                        || (soex.SocketErrorCode == SocketError.NotConnected)
-                        || (soex.SocketErrorCode == SocketError.Shutdown)
-                        || (soex.SocketErrorCode == SocketError.Disconnecting))
-                    {
-                        connection.BeginDisconnect();
-                    }
-                    else
-                    {
-                        FireOnException(connection, soex);
-                    }
+					if ((soex.SocketErrorCode == SocketError.ConnectionReset)
+						|| (soex.SocketErrorCode == SocketError.ConnectionAborted)
+						|| (soex.SocketErrorCode == SocketError.NotConnected)
+						|| (soex.SocketErrorCode == SocketError.Shutdown)
+						|| (soex.SocketErrorCode == SocketError.Disconnecting))
+					{
+						connection.BeginDisconnect();
+					}
+					else
+					{
+						FireOnException(connection, soex);
+					}
 
 
-                }
-                catch (Exception ex)
-                {
-                    FireOnException(connection, ex);
-                }
+				}
+				catch (Exception ex)
+				{
+					FireOnException(connection, ex);
+				}
 
-                if (sendBuffer != null)
-                {
-                    FBufferManager.ReturnBuffer(sendBuffer);
-                }
+				if (sendBuffer != null)
+				{
+					FBufferManager.ReturnBuffer(sendBuffer);
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region BeginSendCallbackSSL
+		#region BeginSendCallbackSSL
 
-        private void BeginSendCallbackSSL(IAsyncResult ar)
-        {
+		private void BeginSendCallbackSSL(IAsyncResult ar)
+		{
 
-            switch (FCallbackThreadType)
-            {
-             
-                case CallbackThreadType.ctWorkerThread:
-                    
-                    ThreadPool.QueueUserWorkItem(new WaitCallback(BeginSendCallbackSSLP), ar);
-                    break;
+			switch (FCallbackThreadType)
+			{
+			 
+				case CallbackThreadType.ctWorkerThread:
+					
+					ThreadPool.QueueUserWorkItem(new WaitCallback(BeginSendCallbackSSLP), ar);
+					break;
 
-                case CallbackThreadType.ctIOThread:
-                    
-                    BeginSendCallbackSSLP(ar);
-                    break;
+				case CallbackThreadType.ctIOThread:
+					
+					BeginSendCallbackSSLP(ar);
+					break;
 
-            }
+			}
 
-        }
+		}
 
-        private void BeginSendCallbackSSLP(object state)
-        {
+		private void BeginSendCallbackSSLP(object state)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                IAsyncResult ar = null;
-                WriteData writeData = null;
-                BaseSocketConnection connection = null;
-                bool sentByServer = false;
+				IAsyncResult ar = null;
+				WriteData writeData = null;
+				BaseSocketConnection connection = null;
+				bool sentByServer = false;
 
-                try
-                {
+				try
+				{
 
-                    ar = (IAsyncResult)state;
-                    writeData = (WriteData)ar.AsyncState;
+					ar = (IAsyncResult)state;
+					writeData = (WriteData)ar.AsyncState;
 
-                    connection = writeData.Connection;
-                    sentByServer = writeData.SentByServer;
+					connection = writeData.Connection;
+					sentByServer = writeData.SentByServer;
 
-                    writeData.Connection = null;
+					writeData.Connection = null;
 
-                    if (connection.Active)
-                    {
+					if (connection.Active)
+					{
 
-                        //----- Ssl!
-                        connection.Stream.EndWrite(ar);
-                        connection.SetConnectionData(0, connection.WriteOV.Count);
+						//----- Ssl!
+						connection.Stream.EndWrite(ar);
+						connection.SetConnectionData(0, connection.WriteOV.Count);
 
-                        FBufferManager.ReturnBuffer(connection.WriteOV.Buffer);
+						FBufferManager.ReturnBuffer(connection.WriteOV.Buffer);
 
-                        FireOnSent(connection, sentByServer);
+						FireOnSent(connection, sentByServer);
 
-                        if (connection.Active)
-                        {
+						if (connection.Active)
+						{
 
-                            lock (connection.WriteQueue)
-                            {
+							lock (connection.WriteQueue)
+							{
 
-                                if (connection.WriteQueue.Count > 0)
-                                {
+								if (connection.WriteQueue.Count > 0)
+								{
 
-                                    MessageBuffer messageBuffer = connection.WriteQueue.Dequeue();
+									MessageBuffer messageBuffer = connection.WriteQueue.Dequeue();
 
-                                    connection.WriteOV.SetBuffer(messageBuffer.Buffer, 0, messageBuffer.Count);
-                                    connection.WriteOV.UserToken = new WriteData(connection, messageBuffer.SentByServer);
+									connection.WriteOV.SetBuffer(messageBuffer.Buffer, 0, messageBuffer.Count);
+									connection.WriteOV.UserToken = new WriteData(connection, messageBuffer.SentByServer);
 
-                                    connection.Stream.BeginWrite(connection.WriteOV.Buffer, 0, messageBuffer.Count, new AsyncCallback(BeginSendCallbackSSL), new WriteData(connection, sentByServer));
+									connection.Stream.BeginWrite(connection.WriteOV.Buffer, 0, messageBuffer.Count, new AsyncCallback(BeginSendCallbackSSL), new WriteData(connection, sentByServer));
 
-                                }
-                                else
-                                {
-                                    connection.WriteQueueHasItems = false;
-                                }
+								}
+								else
+								{
+									connection.WriteQueueHasItems = false;
+								}
 
-                            }
+							}
 
-                        }
+						}
 
-                    }
+					}
 
-                }
-                catch (Exception ex)
-                {
-                    FireOnException(connection, ex);
-                }
+				}
+				catch (Exception ex)
+				{
+					FireOnException(connection, ex);
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region BeginSendCallbackAsync
+		#region BeginSendCallbackAsync
 
-        private void BeginSendCallbackAsync(object sender, SocketAsyncEventArgs e)
-        {
+		private void BeginSendCallbackAsync(object sender, SocketAsyncEventArgs e)
+		{
 
-            switch (FCallbackThreadType)
-            {
+			switch (FCallbackThreadType)
+			{
 
-                case CallbackThreadType.ctWorkerThread:
-        
-                    ThreadPool.QueueUserWorkItem(new WaitCallback(BeginSendCallbackAsyncP), e);
-                    break;
-                
-                case CallbackThreadType.ctIOThread:
-                    
-                    BeginSendCallbackAsyncP(e);
-                    break;
+				case CallbackThreadType.ctWorkerThread:
+		
+					ThreadPool.QueueUserWorkItem(new WaitCallback(BeginSendCallbackAsyncP), e);
+					break;
+				
+				case CallbackThreadType.ctIOThread:
+					
+					BeginSendCallbackAsyncP(e);
+					break;
 
-            }
+			}
 
-        }
+		}
 
-        private void BeginSendCallbackAsyncP(object state)
-        {
+		private void BeginSendCallbackAsyncP(object state)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                SocketAsyncEventArgs e = null;
-                WriteData writeData = null;
-                BaseSocketConnection connection = null;
+				SocketAsyncEventArgs e = null;
+				WriteData writeData = null;
+				BaseSocketConnection connection = null;
 
-                bool sentByServer = false;
-                bool canReadQueue = true;
+				bool sentByServer = false;
+				bool canReadQueue = true;
 
-                try
-                {
+				try
+				{
 
-                    e = (SocketAsyncEventArgs)state;
-                    writeData = (WriteData)e.UserToken;
+					e = (SocketAsyncEventArgs)state;
+					writeData = (WriteData)e.UserToken;
 
-                    connection = writeData.Connection;
-                    sentByServer = writeData.SentByServer;
+					connection = writeData.Connection;
+					sentByServer = writeData.SentByServer;
 
-                    writeData.Connection = null;
+					writeData.Connection = null;
 
-                    if (connection.Active)
-                    {
-                        
-                        if (e.SocketError == SocketError.Success)
-                        {
+					if (connection.Active)
+					{
+						
+						if (e.SocketError == SocketError.Success)
+						{
 
-                            connection.SetConnectionData(0, e.BytesTransferred);
+							connection.SetConnectionData(0, e.BytesTransferred);
 
-                            if ((e.Offset + e.BytesTransferred) < e.Count)
-                            {
+							if ((e.Offset + e.BytesTransferred) < e.Count)
+							{
 
-                                //----- Continue to send until all bytes are sent!
-                                e.SetBuffer(e.Offset + e.BytesTransferred, e.Count - e.BytesTransferred - e.Offset);
+								//----- Continue to send until all bytes are sent!
+								e.SetBuffer(e.Offset + e.BytesTransferred, e.Count - e.BytesTransferred - e.Offset);
 
-                                if (!connection.Socket.SendAsync(e))
-                                {
-                                    BeginSendCallbackAsync(this, e);
-                                }
+								if (!connection.Socket.SendAsync(e))
+								{
+									BeginSendCallbackAsync(this, e);
+								}
 
-                                canReadQueue = false;
+								canReadQueue = false;
 
-                            }
-                            else
-                            {
+							}
+							else
+							{
 
-                                FBufferManager.ReturnBuffer(e.Buffer);
-                                e.SetBuffer(null, 0, 0);
+								FBufferManager.ReturnBuffer(e.Buffer);
+								e.SetBuffer(null, 0, 0);
 
-                                FireOnSent(connection, sentByServer);
+								FireOnSent(connection, sentByServer);
 
-                            }
+							}
 
-                        }
-                        else
-                        {
+						}
+						else
+						{
 
-                            canReadQueue = false;
+							canReadQueue = false;
 
-                            if ((e.SocketError == SocketError.ConnectionReset)
-                                || (e.SocketError == SocketError.NotConnected)
-                                || (e.SocketError == SocketError.Shutdown)
-                                || (e.SocketError == SocketError.ConnectionAborted)
-                                || (e.SocketError == SocketError.Disconnecting))
-                            {
-                                connection.BeginDisconnect();
-                            }
-                            else
-                            {
-                                FireOnException(connection, new SocketException((int)e.SocketError));
-                            }
+							if ((e.SocketError == SocketError.ConnectionReset)
+								|| (e.SocketError == SocketError.NotConnected)
+								|| (e.SocketError == SocketError.Shutdown)
+								|| (e.SocketError == SocketError.ConnectionAborted)
+								|| (e.SocketError == SocketError.Disconnecting))
+							{
+								connection.BeginDisconnect();
+							}
+							else
+							{
+								FireOnException(connection, new SocketException((int)e.SocketError));
+							}
 
-                        }
+						}
 
-                        //----- Check Queue!
-                        if (canReadQueue)
-                        {
+						//----- Check Queue!
+						if (canReadQueue)
+						{
 
-                            bool completedAsync = true;
+							bool completedAsync = true;
 
-                            if (connection.Active)
-                            {
+							if (connection.Active)
+							{
 
-                                lock (connection.WriteQueue)
-                                {
+								lock (connection.WriteQueue)
+								{
 
-                                    if (connection.WriteQueue.Count > 0)
-                                    {
+									if (connection.WriteQueue.Count > 0)
+									{
 
-                                        //----- If has items, send it!
-                                        MessageBuffer sendMessage = connection.WriteQueue.Dequeue();
+										//----- If has items, send it!
+										MessageBuffer sendMessage = connection.WriteQueue.Dequeue();
 
-                                        e.SetBuffer(sendMessage.Buffer, 0, sendMessage.Count);
-                                        e.UserToken = new WriteData(connection, sendMessage.SentByServer);
+										e.SetBuffer(sendMessage.Buffer, 0, sendMessage.Count);
+										e.UserToken = new WriteData(connection, sendMessage.SentByServer);
 
-                                        completedAsync = connection.Socket.SendAsync(e);
+										completedAsync = connection.Socket.SendAsync(e);
 
-                                    }
-                                    else
-                                    {
-                                        connection.WriteQueueHasItems = false;
-                                    }
+									}
+									else
+									{
+										connection.WriteQueueHasItems = false;
+									}
 
-                                }
+								}
 
-                                if (!completedAsync)
-                                {
-                                    BeginSendCallbackAsync(this, e);
-                                }
+								if (!completedAsync)
+								{
+									BeginSendCallbackAsync(this, e);
+								}
 
-                            }
+							}
 
-                        }
+						}
 
-                    }
+					}
 
-                }
-                catch (SocketException soex)
-                {
+				}
+				catch (SocketException soex)
+				{
 
-                    if ((soex.SocketErrorCode == SocketError.ConnectionReset)
-                        || (e.SocketError == SocketError.NotConnected)
-                        || (soex.SocketErrorCode == SocketError.Shutdown)
-                        || (soex.SocketErrorCode == SocketError.ConnectionAborted)
-                        || (soex.SocketErrorCode == SocketError.Disconnecting))
-                    {
-                        connection.BeginDisconnect();
-                    }
-                    else
-                    {
-                        FireOnException(connection, soex);
-                    }
+					if ((soex.SocketErrorCode == SocketError.ConnectionReset)
+						|| (e.SocketError == SocketError.NotConnected)
+						|| (soex.SocketErrorCode == SocketError.Shutdown)
+						|| (soex.SocketErrorCode == SocketError.ConnectionAborted)
+						|| (soex.SocketErrorCode == SocketError.Disconnecting))
+					{
+						connection.BeginDisconnect();
+					}
+					else
+					{
+						FireOnException(connection, soex);
+					}
 
-                }
-                catch (Exception ex)
-                {
-                    FireOnException(connection, ex);
-                }
+				}
+				catch (Exception ex)
+				{
+					FireOnException(connection, ex);
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region BeginReceive
+		#region BeginReceive
 
-        /// <summary>
-        /// Receive data from connetion.
-        /// </summary>
-        internal void BeginReceive(BaseSocketConnection connection)
-        {
+		/// <summary>
+		/// Receive data from connetion.
+		/// </summary>
+		internal void BeginReceive(BaseSocketConnection connection)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                byte[] readMessage = null;
+				byte[] readMessage = null;
 
-                try
-                {
+				try
+				{
 
-                    if (connection.Active)
-                    {
+					if (connection.Active)
+					{
 
-                        bool completedAsync = true;
+						bool completedAsync = true;
 
-                        lock (connection.SyncReadPending)
-                        {
+						lock (connection.SyncReadPending)
+						{
 
-                            if (!connection.ReadPending)
-                            {
+							if (!connection.ReadPending)
+							{
 
-                                //----- if the connection is not receiving, start the receive!
-                                if (connection.EventProcessing == EventProcessing.epUser)
-                                {
-                                    readMessage = FBufferManager.TakeBuffer(FMessageBufferSize);
-                                }
-                                else
-                                {
-                                    readMessage = FBufferManager.TakeBuffer(2048);
-                                }
+								//----- if the connection is not receiving, start the receive!
+								if (connection.EventProcessing == EventProcessing.epUser)
+								{
+									readMessage = FBufferManager.TakeBuffer(FMessageBufferSize);
+								}
+								else
+								{
+									readMessage = FBufferManager.TakeBuffer(2048);
+								}
 
-                                connection.ReadOV.SetBuffer(readMessage, 0, readMessage.Length);
-                                connection.ReadOV.UserToken = connection;
+								connection.ReadOV.SetBuffer(readMessage, 0, readMessage.Length);
+								connection.ReadOV.UserToken = connection;
 
-                                if (connection.Stream != null)
-                                {
-                                    //----- Ssl!
-                                    connection.Stream.BeginRead(connection.ReadOV.Buffer, 0, readMessage.Length, new AsyncCallback(BeginReadCallbackSSL), connection);
-                                }
-                                else
-                                {
-                                    completedAsync = connection.Socket.ReceiveAsync(connection.ReadOV);
-                                }
+								if (connection.Stream != null)
+								{
+									//----- Ssl!
+									connection.Stream.BeginRead(connection.ReadOV.Buffer, 0, readMessage.Length, new AsyncCallback(BeginReadCallbackSSL), connection);
+								}
+								else
+								{
+									completedAsync = connection.Socket.ReceiveAsync(connection.ReadOV);
+								}
 
-                                connection.ReadPending = true;
+								connection.ReadPending = true;
 
-                            }
+							}
 
-                        }
+						}
 
-                        if (!completedAsync)
-                        {
-                            BeginReadCallbackAsync(this, connection.ReadOV);
-                        }
+						if (!completedAsync)
+						{
+							BeginReadCallbackAsync(this, connection.ReadOV);
+						}
 
-                        readMessage = null;
+						readMessage = null;
 
-                    }
+					}
 
-                }
-                catch (SocketException soex)
-                {
+				}
+				catch (SocketException soex)
+				{
 
-                    if ((soex.SocketErrorCode == SocketError.ConnectionReset)
-                        || (soex.SocketErrorCode == SocketError.NotConnected)
-                        || (soex.SocketErrorCode == SocketError.ConnectionAborted)
-                        || (soex.SocketErrorCode == SocketError.Shutdown)
-                        || (soex.SocketErrorCode == SocketError.Disconnecting))
-                    {
-                        connection.BeginDisconnect();
-                    }
-                    else
-                    {
-                        FireOnException(connection, soex);
-                    }
+					if ((soex.SocketErrorCode == SocketError.ConnectionReset)
+						|| (soex.SocketErrorCode == SocketError.NotConnected)
+						|| (soex.SocketErrorCode == SocketError.ConnectionAborted)
+						|| (soex.SocketErrorCode == SocketError.Shutdown)
+						|| (soex.SocketErrorCode == SocketError.Disconnecting))
+					{
+						connection.BeginDisconnect();
+					}
+					else
+					{
+						FireOnException(connection, soex);
+					}
 
-                }
-                catch (Exception ex)
-                {
-                    FireOnException(connection, ex);
-                }
+				}
+				catch (Exception ex)
+				{
+					FireOnException(connection, ex);
+				}
 
-                if (readMessage != null)
-                {
-                    FBufferManager.ReturnBuffer(readMessage);
-                }
+				if (readMessage != null)
+				{
+					FBufferManager.ReturnBuffer(readMessage);
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region BeginReadCallbackSSL
+		#region BeginReadCallbackSSL
 
-        private void BeginReadCallbackSSL(IAsyncResult ar)
-        {
+		private void BeginReadCallbackSSL(IAsyncResult ar)
+		{
 
-            switch (FCallbackThreadType)
-            {
-                case CallbackThreadType.ctWorkerThread:
-                    
-                    ThreadPool.QueueUserWorkItem(new WaitCallback(BeginReadCallbackSSLP), ar);
-                    break;
+			switch (FCallbackThreadType)
+			{
+				case CallbackThreadType.ctWorkerThread:
+					
+					ThreadPool.QueueUserWorkItem(new WaitCallback(BeginReadCallbackSSLP), ar);
+					break;
 
-                case CallbackThreadType.ctIOThread:
+				case CallbackThreadType.ctIOThread:
 
-                    BeginReadCallbackSSLP(ar);
-                    break;
-            }
+					BeginReadCallbackSSLP(ar);
+					break;
+			}
 
-        }
+		}
 
-        private void BeginReadCallbackSSLP(object state)
-        {
+		private void BeginReadCallbackSSLP(object state)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                IAsyncResult ar = null;
-                BaseSocketConnection connection = null;
+				IAsyncResult ar = null;
+				BaseSocketConnection connection = null;
 
-                try
-                {
+				try
+				{
 
-                    ar = (IAsyncResult)state;
-                    connection = (BaseSocketConnection)ar.AsyncState;
+					ar = (IAsyncResult)state;
+					connection = (BaseSocketConnection)ar.AsyncState;
 
-                    if (connection.Active)
-                    {
+					if (connection.Active)
+					{
 
-                        int readBytes = 0;
+						int readBytes = 0;
 
-                        readBytes = connection.Stream.EndRead(ar);
-                        connection.SetConnectionData(readBytes, 0);
-                        
-                        if (readBytes > 0)
-                        {
-                            ReadFromConnection(connection, readBytes);
-                        }
-                        else
-                        {
-                            connection.BeginDisconnect();
-                        }
+						readBytes = connection.Stream.EndRead(ar);
+						connection.SetConnectionData(readBytes, 0);
+						
+						if (readBytes > 0)
+						{
+							ReadFromConnection(connection, readBytes);
+						}
+						else
+						{
+							connection.BeginDisconnect();
+						}
 
-                    }
-                }
-                catch (Exception ex)
-                {
-                    FireOnException(connection, ex);
-                }
+					}
+				}
+				catch (Exception ex)
+				{
+					FireOnException(connection, ex);
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region BeginReadCallbackAsync
+		#region BeginReadCallbackAsync
 
-        private void BeginReadCallbackAsync(object sender, SocketAsyncEventArgs e)
-        {
-            switch (FCallbackThreadType)
-            {
-                case CallbackThreadType.ctWorkerThread:
+		private void BeginReadCallbackAsync(object sender, SocketAsyncEventArgs e)
+		{
+			switch (FCallbackThreadType)
+			{
+				case CallbackThreadType.ctWorkerThread:
 
-                    ThreadPool.QueueUserWorkItem(new WaitCallback(BeginReadCallbackAsyncP), e);
-                    break;
+					ThreadPool.QueueUserWorkItem(new WaitCallback(BeginReadCallbackAsyncP), e);
+					break;
 
-                case CallbackThreadType.ctIOThread:
+				case CallbackThreadType.ctIOThread:
 
-                    BeginReadCallbackAsyncP(e);
-                    break;
+					BeginReadCallbackAsyncP(e);
+					break;
 
-            }
-        }
+			}
+		}
 
-        private void BeginReadCallbackAsyncP(object state)
-        {
+		private void BeginReadCallbackAsyncP(object state)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                SocketAsyncEventArgs e = null;
-                BaseSocketConnection connection = null;
+				SocketAsyncEventArgs e = null;
+				BaseSocketConnection connection = null;
 
-                try
-                {
+				try
+				{
 
-                    e = (SocketAsyncEventArgs)state;
-                    connection = (BaseSocketConnection) e.UserToken;
+					e = (SocketAsyncEventArgs)state;
+					connection = (BaseSocketConnection) e.UserToken;
 
-                    if (connection.Active)
-                    {
+					if (connection.Active)
+					{
 
-                        if (e.SocketError == SocketError.Success)
-                        {
+						if (e.SocketError == SocketError.Success)
+						{
 
-                            connection.SetConnectionData(e.BytesTransferred, 0);
+							connection.SetConnectionData(e.BytesTransferred, 0);
 
-                            if (e.BytesTransferred > 0)
-                            {
-                                ReadFromConnection(connection, e.BytesTransferred);
-                            }
-                            else
-                            {
-                                //----- Is has no data to read then the connection has been terminated!
-                                connection.BeginDisconnect();
-                            }
+							if (e.BytesTransferred > 0)
+							{
+								ReadFromConnection(connection, e.BytesTransferred);
+							}
+							else
+							{
+								//----- Is has no data to read then the connection has been terminated!
+								connection.BeginDisconnect();
+							}
 
-                        }
-                        
-                        else
-                        {
+						}
+						
+						else
+						{
 
-                            if ((e.SocketError == SocketError.ConnectionReset)
-                                || (e.SocketError == SocketError.NotConnected)
-                                || (e.SocketError == SocketError.Shutdown)
-                                || (e.SocketError == SocketError.ConnectionAborted)
-                                || (e.SocketError == SocketError.Disconnecting))
-                            {
-                                connection.BeginDisconnect();
-                            }
-                            else
-                            {
-                                FireOnException(connection, new SocketException((int)e.SocketError));
-                            }
+							if ((e.SocketError == SocketError.ConnectionReset)
+								|| (e.SocketError == SocketError.NotConnected)
+								|| (e.SocketError == SocketError.Shutdown)
+								|| (e.SocketError == SocketError.ConnectionAborted)
+								|| (e.SocketError == SocketError.Disconnecting))
+							{
+								connection.BeginDisconnect();
+							}
+							else
+							{
+								FireOnException(connection, new SocketException((int)e.SocketError));
+							}
 
-                        }
+						}
 
-                    }
+					}
 
-                }
-                catch (SocketException soex)
-                {
+				}
+				catch (SocketException soex)
+				{
 
-                    if ((soex.SocketErrorCode == SocketError.ConnectionReset)
-                        || (soex.SocketErrorCode == SocketError.NotConnected)
-                        || (soex.SocketErrorCode == SocketError.Shutdown)
-                        || (soex.SocketErrorCode == SocketError.ConnectionAborted)
-                        || (soex.SocketErrorCode == SocketError.Disconnecting))
-                    {
-                        connection.BeginDisconnect();
-                    }
-                    else
-                    {
-                        FireOnException(connection, soex);
-                    }
+					if ((soex.SocketErrorCode == SocketError.ConnectionReset)
+						|| (soex.SocketErrorCode == SocketError.NotConnected)
+						|| (soex.SocketErrorCode == SocketError.Shutdown)
+						|| (soex.SocketErrorCode == SocketError.ConnectionAborted)
+						|| (soex.SocketErrorCode == SocketError.Disconnecting))
+					{
+						connection.BeginDisconnect();
+					}
+					else
+					{
+						FireOnException(connection, soex);
+					}
 
-                }
-                catch (Exception ex)
-                {
-                    FireOnException(connection, ex);
-                }
+				}
+				catch (Exception ex)
+				{
+					FireOnException(connection, ex);
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region ReadFromConnection
+		#region ReadFromConnection
 
-        private void ReadFromConnection(BaseSocketConnection connection, int readBytes)
-        {
+		private void ReadFromConnection(BaseSocketConnection connection, int readBytes)
+		{
 
-            
-            bool onePacketFound = false;
-            int remainingBytes = 0;
-            SocketAsyncEventArgs e = connection.ReadOV;
+			
+			bool onePacketFound = false;
+			int remainingBytes = 0;
+			SocketAsyncEventArgs e = connection.ReadOV;
 
-            switch (connection.DelimiterType)
-            {
+			switch (connection.DelimiterType)
+			{
 
-                case DelimiterType.dtNone:
+				case DelimiterType.dtNone:
 
-                    //----- Message with no delimiter!
-                    remainingBytes = ReadMessageWithNoDelimiter(connection, e, readBytes);
-                    break;
+					//----- Message with no delimiter!
+					remainingBytes = ReadMessageWithNoDelimiter(connection, e, readBytes);
+					break;
 
-                case DelimiterType.dtMessageTailExcludeOnReceive:
-                case DelimiterType.dtMessageTailIncludeOnReceive:
+				case DelimiterType.dtMessageTailExcludeOnReceive:
+				case DelimiterType.dtMessageTailIncludeOnReceive:
 
 
-                    //----- Message with tail!
-                    remainingBytes = ReadMessageWithTail(connection, e, readBytes, ref onePacketFound);
-                    break;
+					//----- Message with tail!
+					remainingBytes = ReadMessageWithTail(connection, e, readBytes, ref onePacketFound);
+					break;
 
-            }
+			}
 
-            if (remainingBytes == 0)
-            {
-                e.SetBuffer(0, e.Buffer.Length);
-            }
-            else
-            {
+			if (remainingBytes == 0)
+			{
+				e.SetBuffer(0, e.Buffer.Length);
+			}
+			else
+			{
 
-                if (!onePacketFound)
-                {
-                    e.SetBuffer(remainingBytes, e.Buffer.Length - remainingBytes);
-                }
-                else
-                {
+				if (!onePacketFound)
+				{
+					e.SetBuffer(remainingBytes, e.Buffer.Length - remainingBytes);
+				}
+				else
+				{
 
-                    byte[] readMessage = connection.BaseHost.BufferManager.TakeBuffer(FMessageBufferSize);
-                    Buffer.BlockCopy(e.Buffer, e.Offset, readMessage, 0, remainingBytes);
+					byte[] readMessage = connection.BaseHost.BufferManager.TakeBuffer(FMessageBufferSize);
+					Buffer.BlockCopy(e.Buffer, e.Offset, readMessage, 0, remainingBytes);
 
-                    connection.BaseHost.BufferManager.ReturnBuffer(e.Buffer);
-                    e.SetBuffer(null, 0, 0);
-                    e.SetBuffer(readMessage, remainingBytes, readMessage.Length - remainingBytes);
+					connection.BaseHost.BufferManager.ReturnBuffer(e.Buffer);
+					e.SetBuffer(null, 0, 0);
+					e.SetBuffer(readMessage, remainingBytes, readMessage.Length - remainingBytes);
 
-                }
+				}
 
-            }
+			}
 
-            if (connection.Active)
-            {
+			if (connection.Active)
+			{
 
-                //----- Read!
-                bool completedAsync = true;
+				//----- Read!
+				bool completedAsync = true;
 
-                if (connection.Stream != null)
-                {
-                    connection.Stream.BeginRead(e.Buffer, 0, e.Count, new AsyncCallback(BeginReadCallbackSSL), connection);
-                }
-                else
-                {
-                    completedAsync = connection.Socket.ReceiveAsync(e);
-                }
+				if (connection.Stream != null)
+				{
+					connection.Stream.BeginRead(e.Buffer, 0, e.Count, new AsyncCallback(BeginReadCallbackSSL), connection);
+				}
+				else
+				{
+					completedAsync = connection.Socket.ReceiveAsync(e);
+				}
 
-                if (!completedAsync)
-                {
-                    BeginReadCallbackAsync(this, e);
-                }
+				if (!completedAsync)
+				{
+					BeginReadCallbackAsync(this, e);
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region ReadMessageWithNoDelimiter
+		#region ReadMessageWithNoDelimiter
 
-        private int ReadMessageWithNoDelimiter(BaseSocketConnection connection, SocketAsyncEventArgs e, int readBytes)
-        {
+		private int ReadMessageWithNoDelimiter(BaseSocketConnection connection, SocketAsyncEventArgs e, int readBytes)
+		{
 
-            byte[] rawBuffer = null;
-            rawBuffer = BufferUtils.GetRawBuffer(connection, e.Buffer, readBytes);
-            
-            FireOnReceived(connection, rawBuffer);
-            return 0;
+			byte[] rawBuffer = null;
+			rawBuffer = BufferUtils.GetRawBuffer(connection, e.Buffer, readBytes);
+			
+			FireOnReceived(connection, rawBuffer);
+			return 0;
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region ReadMessageWithTail
+		#region ReadMessageWithTail
 
-        private int ReadMessageWithTail(BaseSocketConnection connection, SocketAsyncEventArgs e, int readBytes, ref bool onePacketFound)
-        {
+		private int ReadMessageWithTail(BaseSocketConnection connection, SocketAsyncEventArgs e, int readBytes, ref bool onePacketFound)
+		{
 
-            byte[] rawBuffer = null;
+			byte[] rawBuffer = null;
 
-            byte[] delimiter = connection.Delimiter;
-            int delimiterSize = delimiter.Length;
-            
-            bool readPacket = false;
-            bool packetFound = false;
+			byte[] delimiter = connection.Delimiter;
+			int delimiterSize = delimiter.Length;
+			
+			bool readPacket = false;
+			bool packetFound = false;
 
-            int remainingBytes = readBytes + e.Offset;
+			int remainingBytes = readBytes + e.Offset;
 
-            int bufferLength = e.Buffer.Length;
-            byte[] buffer = e.Buffer;
-            int offsetToFind = 0;
-            int offsetBuffer = e.Offset;
+			int bufferLength = e.Buffer.Length;
+			byte[] buffer = e.Buffer;
+			int offsetToFind = 0;
+			int offsetBuffer = e.Offset;
 
-            do
-            {
+			do
+			{
 
-                rawBuffer = null;
-                packetFound = false;
-                readPacket = false;
+				rawBuffer = null;
+				packetFound = false;
+				readPacket = false;
 
-                while (offsetToFind < bufferLength)
-                {
+				while (offsetToFind < bufferLength)
+				{
 
-                    offsetToFind = Array.IndexOf<byte>(buffer, delimiter[0], offsetToFind);
+					offsetToFind = Array.IndexOf<byte>(buffer, delimiter[0], offsetToFind);
 
-                    if (offsetToFind == -1)
-                    {
-                        packetFound = false;
-                        break;
-                    }
-                    else
-                    {
+					if (offsetToFind == -1)
+					{
+						packetFound = false;
+						break;
+					}
+					else
+					{
 
-                        if (delimiterSize == 1)
-                        {
-                            offsetToFind++;
-                            packetFound = true;
-                            break;
-                        }
-                        else
-                        {
+						if (delimiterSize == 1)
+						{
+							offsetToFind++;
+							packetFound = true;
+							break;
+						}
+						else
+						{
 
-                            packetFound = true;
+							packetFound = true;
 
-                            for (int i = 1; i < delimiterSize; i++)
-                            {
+							for (int i = 1; i < delimiterSize; i++)
+							{
 
-                                offsetToFind++;
+								offsetToFind++;
 
-                                if (buffer[offsetToFind] != delimiter[i])
-                                {
-                                    packetFound = false;
-                                    break;
-                                }
+								if (buffer[offsetToFind] != delimiter[i])
+								{
+									packetFound = false;
+									break;
+								}
 
-                            }
+							}
 
-                            if (packetFound)
-                            {
-                                break;
-                            }
+							if (packetFound)
+							{
+								break;
+							}
 
-                        }
+						}
 
-                    }
+					}
 
-                }
+				}
 
-                if (packetFound)
-                {
+				if (packetFound)
+				{
 
-                    onePacketFound = true;
+					onePacketFound = true;
 
-                    rawBuffer = BufferUtils.GetRawBufferWithTail(connection, e, offsetToFind, delimiterSize);
-                    rawBuffer = CryptUtils.DecryptData(connection, rawBuffer, FMessageBufferSize);
+					rawBuffer = BufferUtils.GetRawBufferWithTail(connection, e, offsetToFind, delimiterSize);
+					rawBuffer = CryptUtils.DecryptData(connection, rawBuffer, FMessageBufferSize);
 
-                    offsetToFind += 1;
-                    remainingBytes -= (offsetToFind - e.Offset);
+					offsetToFind += 1;
+					remainingBytes -= (offsetToFind - e.Offset);
 
-                    e.SetBuffer(offsetToFind, bufferLength - offsetToFind);
-                    offsetBuffer = offsetToFind;
+					e.SetBuffer(offsetToFind, bufferLength - offsetToFind);
+					offsetBuffer = offsetToFind;
 
-                    FireOnReceived(connection, rawBuffer);
+					FireOnReceived(connection, rawBuffer);
 
-                    if (remainingBytes == 0)
-                    {
-                        readPacket = false;
-                    }
-                    else
-                    {
-                        readPacket = true;
-                    }
+					if (remainingBytes == 0)
+					{
+						readPacket = false;
+					}
+					else
+					{
+						readPacket = true;
+					}
 
-                }
-                else
-                {
-                    readPacket = false;
-                }
+				}
+				else
+				{
+					readPacket = false;
+				}
 
-            } while (readPacket);
+			} while (readPacket);
 
-            return remainingBytes;
+			return remainingBytes;
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region BeginDisconnect
+		#region BeginDisconnect
 
-        /// <summary>
-        /// Begin disconnect the connection
-        /// </summary>
-        internal void BeginDisconnect(BaseSocketConnection connection)
-        {
+		/// <summary>
+		/// Begin disconnect the connection
+		/// </summary>
+		internal void BeginDisconnect(BaseSocketConnection connection)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                if (connection.Active)
-                {
+				if (connection.Active)
+				{
 
-                    try
-                    {
+					try
+					{
 
-                        SocketAsyncEventArgs e = new SocketAsyncEventArgs();
-                        e.Completed += new EventHandler<SocketAsyncEventArgs>(BeginDisconnectCallbackAsync);
-                        e.UserToken = connection;
+						SocketAsyncEventArgs e = new SocketAsyncEventArgs();
+						e.Completed += new EventHandler<SocketAsyncEventArgs>(BeginDisconnectCallbackAsync);
+						e.UserToken = connection;
 
-                        if (!connection.Socket.DisconnectAsync(e))
-                        {
-                            BeginDisconnectCallbackAsync(this, e);
-                        }
+						if (!connection.Socket.DisconnectAsync(e))
+						{
+							BeginDisconnectCallbackAsync(this, e);
+						}
 
-                    }
-                    catch (Exception ex)
-                    {
-                        FireOnException(connection, ex);
-                    }
+					}
+					catch (Exception ex)
+					{
+						FireOnException(connection, ex);
+					}
 
-                }
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region BeginDisconnectCallbackAsync
+		#region BeginDisconnectCallbackAsync
 
-        private void BeginDisconnectCallbackAsync(object sender, SocketAsyncEventArgs e)
-        {
+		private void BeginDisconnectCallbackAsync(object sender, SocketAsyncEventArgs e)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                BaseSocketConnection connection = null;
+				BaseSocketConnection connection = null;
 
-                try
-                {
+				try
+				{
 
-                    connection = (BaseSocketConnection)e.UserToken;
+					connection = (BaseSocketConnection)e.UserToken;
 
-                    e.Completed -= new EventHandler<SocketAsyncEventArgs>(BeginDisconnectCallbackAsync);
-                    e.UserToken = null;
-                    e.Dispose();
-                    e = null;
+					e.Completed -= new EventHandler<SocketAsyncEventArgs>(BeginDisconnectCallbackAsync);
+					e.UserToken = null;
+					e.Dispose();
+					e = null;
 
-                    if (connection.Active)
-                    {
-                        
-                        lock (connection.SyncActive)
-                        {
-                            CloseConnection(connection);
-                            FireOnDisconnected(connection);
-                        }
+					if (connection.Active)
+					{
+						
+						lock (connection.SyncActive)
+						{
+							CloseConnection(connection);
+							FireOnDisconnected(connection);
+						}
 
-                    }
+					}
 
-                }
-                finally
-                {
-                    DisposeConnection(connection);
-                    RemoveSocketConnection(connection);
-                    connection = null;
-                }
+				}
+				finally
+				{
+					DisposeConnection(connection);
+					RemoveSocketConnection(connection);
+					connection = null;
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
-        
-        #endregion
+		#endregion
+		
+		#endregion
 
-        #region Abstract Methods
+		#region Abstract Methods
 
-        internal abstract void BeginReconnect(ClientSocketConnection connection);
-        internal abstract void BeginSendToAll(ServerSocketConnection connection, byte[] buffer, bool includeMe);
-        internal abstract void BeginSendTo(BaseSocketConnection connectionTo, byte[] buffer);
+		internal abstract void BeginReconnect(ClientSocketConnection connection);
+		internal abstract void BeginSendToAll(ServerSocketConnection connection, byte[] buffer, bool includeMe);
+		internal abstract void BeginSendTo(BaseSocketConnection connectionTo, byte[] buffer);
 
-        #endregion
+		#endregion
 
-        #region Public Methods
+		#region Public Methods
 
-        public ISocketConnection[] GetConnections()
-        {
+		public ISocketConnection[] GetConnections()
+		{
 
-            ISocketConnection[] result = null;
+			ISocketConnection[] result = null;
 
-            if (!Disposed)
-            {
-                result = GetSocketConnections();
-            }
+			if (!Disposed)
+			{
+				result = GetSocketConnections();
+			}
 
-            return result;
+			return result;
 
-        }
+		}
 
-        public ISocketConnection GetConnectionById(long connectionId)
-        {
-            
-            ISocketConnection result = null;
+		public ISocketConnection GetConnectionById(long connectionId)
+		{
+			
+			ISocketConnection result = null;
 
-            if (!Disposed)
-            {
-                result = GetSocketConnectionById(connectionId);
-            }
+			if (!Disposed)
+			{
+				result = GetSocketConnectionById(connectionId);
+			}
 
-            return result;
+			return result;
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #endregion
+		#endregion
 
-        #region Connection Methods
+		#region Connection Methods
 
-        #region InitializeConnection
+		#region InitializeConnection
 
-        /// <summary>
-        /// Initializes the connection
-        /// </summary>
-        /// <param name="connection"></param>
-        internal virtual void InitializeConnection(BaseSocketConnection connection)
-        {
+		/// <summary>
+		/// Initializes the connection
+		/// </summary>
+		/// <param name="connection"></param>
+		internal virtual void InitializeConnection(BaseSocketConnection connection)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                switch (connection.EventProcessing)
-	            {
-		            
-                    case EventProcessing.epNone:
+				switch (connection.EventProcessing)
+				{
 
-                        if (InitializeConnectionProxy(connection))
-                        {
-                            FireOnConnected(connection);
-                        }
-                        else
-                        {
+					case EventProcessing.epNone:
 
-                            if (InitializeConnectionEncrypt(connection))
-                            {
-                                FireOnConnected(connection);
-                            }
-                            else
-                            {
-                                connection.EventProcessing = EventProcessing.epUser;
-                                FireOnConnected(connection);
-                            }
+						if (InitializeConnectionProxy(connection))
+						{
+							FireOnConnected(connection);
+						}
+						else
+						{
 
-                        }
+							if (InitializeConnectionEncrypt(connection))
+							{
+								FireOnConnected(connection);
+							}
+							else
+							{
+								connection.EventProcessing = EventProcessing.epUser;
+								FireOnConnected(connection);
+							}
 
-                        break;
+						}
 
-                    case EventProcessing.epProxy:
+						break;
 
-                        if (InitializeConnectionEncrypt(connection))
-                        {
-                            FireOnConnected(connection);
-                        }
-                        else
-                        {
-                            connection.EventProcessing = EventProcessing.epUser;
-                            FireOnConnected(connection);
-                        }
+					case EventProcessing.epProxy:
 
-                        break;
-            
-                    case EventProcessing.epEncrypt:
+						if (InitializeConnectionEncrypt(connection))
+						{
+							FireOnConnected(connection);
+						}
+						else
+						{
+							connection.EventProcessing = EventProcessing.epUser;
+							FireOnConnected(connection);
+						}
 
-                        connection.EventProcessing = EventProcessing.epUser;
-                        FireOnConnected(connection);
+						break;
+			
+					case EventProcessing.epEncrypt:
 
-                        break;
-    
+						connection.EventProcessing = EventProcessing.epUser;
+						FireOnConnected(connection);
+
+						break;
+	
 	            }
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region InitializeConnectionProxy
+		#region InitializeConnectionProxy
 
-        private bool InitializeConnectionProxy(BaseSocketConnection connection)
-        {
+		private bool InitializeConnectionProxy(BaseSocketConnection connection)
+		{
 
-            bool result = false;
+			bool result = false;
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                if (connection.BaseCreator is SocketConnector)
-                {
+				if (connection.BaseCreator is SocketConnector)
+				{
 
-                    if (((SocketConnector)connection.BaseCreator).ProxyInfo != null)
-                    {
-                        connection.EventProcessing = EventProcessing.epProxy;
-                        result = true;
-                    }
+					if (((SocketConnector)connection.BaseCreator).ProxyInfo != null)
+					{
+						connection.EventProcessing = EventProcessing.epProxy;
+						result = true;
+					}
 
-                }
+				}
 
-            }
+			}
 
-            return result;
+			return result;
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region InitializeConnectionEncrypt
+		#region InitializeConnectionEncrypt
 
-        internal bool InitializeConnectionEncrypt(BaseSocketConnection connection)
-        {
+		internal bool InitializeConnectionEncrypt(BaseSocketConnection connection)
+		{
 
-            bool result = false;
+			bool result = false;
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                ICryptoService cryptService = connection.BaseCreator.CryptoService;
+				ICryptoService cryptService = connection.BaseCreator.CryptoService;
 
-                if ((cryptService != null) && (connection.EncryptType != EncryptType.etNone))
-                {
-                    connection.EventProcessing = EventProcessing.epEncrypt;
-                    result = true;
-                }
+				if ((cryptService != null) && (connection.EncryptType != EncryptType.etNone))
+				{
+					connection.EventProcessing = EventProcessing.epEncrypt;
+					result = true;
+				}
 
-            }
+			}
 
-            return result;
+			return result;
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region GetConnectionId
+		#region GetConnectionId
 
-        internal long GetConnectionId()
-        {
-            return Interlocked.Increment(ref FConnectionId);
-        }
+		internal long GetConnectionId()
+		{
+			return Interlocked.Increment(ref FConnectionId);
+		}
 
-        #endregion
+		#endregion
 
-        #region AddSocketConnection
+		#region AddSocketConnection
 
-        internal void AddSocketConnection(BaseSocketConnection socketConnection)
-        {
+		internal void AddSocketConnection(BaseSocketConnection socketConnection)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                FSocketConnectionsSync.EnterWriteLock();
+				FSocketConnectionsSync.EnterWriteLock();
 
-                try
-                {
-                    FSocketConnections.Add(socketConnection.ConnectionId, socketConnection);
+				try
+				{
+					FSocketConnections.Add(socketConnection.ConnectionId, socketConnection);
 
-                    socketConnection.WriteOV.Completed += new EventHandler<SocketAsyncEventArgs>(BeginSendCallbackAsync);
-                    socketConnection.ReadOV.Completed += new EventHandler<SocketAsyncEventArgs>(BeginReadCallbackAsync);
+					socketConnection.WriteOV.Completed += new EventHandler<SocketAsyncEventArgs>(BeginSendCallbackAsync);
+					socketConnection.ReadOV.Completed += new EventHandler<SocketAsyncEventArgs>(BeginReadCallbackAsync);
 
-                }
-                finally
-                {
-                    FSocketConnectionsSync.ExitWriteLock();
-                }
+				}
+				finally
+				{
+					FSocketConnectionsSync.ExitWriteLock();
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region RemoveSocketConnection
+		#region RemoveSocketConnection
 
-        internal void RemoveSocketConnection(BaseSocketConnection socketConnection)
-        {
+		internal void RemoveSocketConnection(BaseSocketConnection socketConnection)
+		{
 
-          if (!Disposed)
-          {
+		  if (!Disposed)
+		  {
 
-              if (socketConnection != null)
-              {
+			  if (socketConnection != null)
+			  {
 
 
-                  FSocketConnectionsSync.EnterWriteLock();
+				  FSocketConnectionsSync.EnterWriteLock();
 
-                  try
-                  {
+				  try
+				  {
 
-                      FSocketConnections.Remove(socketConnection.ConnectionId);
+					  FSocketConnections.Remove(socketConnection.ConnectionId);
 
-                  }
-                  finally
-                  {
+				  }
+				  finally
+				  {
 
-                      if (FSocketConnections.Count <= 0)
-                      {
-                          FWaitConnectionsDisposing.Set();
-                      }
+					  if (FSocketConnections.Count <= 0)
+					  {
+						  FWaitConnectionsDisposing.Set();
+					  }
 
-                      FSocketConnectionsSync.ExitWriteLock();
+					  FSocketConnectionsSync.ExitWriteLock();
 
-                  }
+				  }
 
-              }
+			  }
 
-        }
+		}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region DisposeAndNullConnection
+		#region DisposeAndNullConnection
 
-        internal void DisposeConnection(BaseSocketConnection connection)
-        {
+		internal void DisposeConnection(BaseSocketConnection connection)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                if (connection != null)
-                {
+				if (connection != null)
+				{
 
-                    if (connection.WriteOV != null)
-                    {
+					if (connection.WriteOV != null)
+					{
 
-                        if (connection.WriteOV.Buffer != null)
-                        {
-                            FBufferManager.ReturnBuffer(connection.WriteOV.Buffer);
-                        }
+						if (connection.WriteOV.Buffer != null)
+						{
+							FBufferManager.ReturnBuffer(connection.WriteOV.Buffer);
+						}
 
-                    }
+					}
 
-                    if (connection.ReadOV != null)
-                    {
+					if (connection.ReadOV != null)
+					{
 
-                        if (connection.ReadOV.Buffer != null)
-                        {
-                            FBufferManager.ReturnBuffer(connection.ReadOV.Buffer);
-                        }
+						if (connection.ReadOV.Buffer != null)
+						{
+							FBufferManager.ReturnBuffer(connection.ReadOV.Buffer);
+						}
 
-                    }
-                    
-                    connection.Dispose();
+					}
+					
+					connection.Dispose();
 
-                }
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region CloseConnection
+		#region CloseConnection
 
-        internal void CloseConnection(BaseSocketConnection connection)
-        {
+		internal void CloseConnection(BaseSocketConnection connection)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                connection.Active = false;
+				connection.Active = false;
 
 				// ----- \remind BEGIN -----
 
@@ -1812,811 +1812,811 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
 				// ----- \remind END -----
 
-                lock (connection.WriteQueue)
-                {
+				lock (connection.WriteQueue)
+				{
 
-                    if (connection.WriteQueue.Count > 0)
-                    {
+					if (connection.WriteQueue.Count > 0)
+					{
 
-                        for (int i = 1; i <= connection.WriteQueue.Count; i++)
-                        {
+						for (int i = 1; i <= connection.WriteQueue.Count; i++)
+						{
 
-                            MessageBuffer message = connection.WriteQueue.Dequeue();
+							MessageBuffer message = connection.WriteQueue.Dequeue();
 
-                            if (message != null)
-                            {
-                                FBufferManager.ReturnBuffer(message.Buffer);
-                            }
+							if (message != null)
+							{
+								FBufferManager.ReturnBuffer(message.Buffer);
+							}
 
-                        }
+						}
 
-                    }
+					}
 
-                }
-            }
-        }
+				}
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #region GetSocketConnections
+		#region GetSocketConnections
 
-        internal BaseSocketConnection[] GetSocketConnections()
-        {
+		internal BaseSocketConnection[] GetSocketConnections()
+		{
 
-            BaseSocketConnection[] items = null;
+			BaseSocketConnection[] items = null;
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                FSocketConnectionsSync.EnterReadLock();
+				FSocketConnectionsSync.EnterReadLock();
 
-                try
-                {
-                    items = new BaseSocketConnection[FSocketConnections.Count];
-                    FSocketConnections.Values.CopyTo(items, 0);
-                }
-                finally
-                {
-                    FSocketConnectionsSync.ExitReadLock();
-                }
+				try
+				{
+					items = new BaseSocketConnection[FSocketConnections.Count];
+					FSocketConnections.Values.CopyTo(items, 0);
+				}
+				finally
+				{
+					FSocketConnectionsSync.ExitReadLock();
+				}
 
-            }
+			}
 
-            return items;
+			return items;
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region GetSocketConnectionById
+		#region GetSocketConnectionById
 
-        internal BaseSocketConnection GetSocketConnectionById(long connectionId)
-        {
+		internal BaseSocketConnection GetSocketConnectionById(long connectionId)
+		{
 
-            BaseSocketConnection item = null;
+			BaseSocketConnection item = null;
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                
-                FSocketConnectionsSync.EnterReadLock();
+				
+				FSocketConnectionsSync.EnterReadLock();
 
-                try
-                {
-                    item = FSocketConnections[connectionId];
-                }
-                finally
-                {
-                    FSocketConnectionsSync.ExitReadLock();
-                }
+				try
+				{
+					item = FSocketConnections[connectionId];
+				}
+				finally
+				{
+					FSocketConnectionsSync.ExitReadLock();
+				}
 
-            }
+			}
 
-            return item;
+			return item;
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region CheckSocketConnections
+		#region CheckSocketConnections
 
-        private void CheckSocketConnections(Object stateInfo)
-        {
+		private void CheckSocketConnections(Object stateInfo)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                //----- Disable timer event!
-                FIdleTimer.Change(Timeout.Infinite, Timeout.Infinite);
+				//----- Disable timer event!
+				FIdleTimer.Change(Timeout.Infinite, Timeout.Infinite);
 
-                try
-                {
+				try
+				{
 
-                    //----- Get connections!
-                    BaseSocketConnection[] items = GetSocketConnections();
+					//----- Get connections!
+					BaseSocketConnection[] items = GetSocketConnections();
 
-                    if (items != null)
-                    {
+					if (items != null)
+					{
 
-                        int loopSleep = 0;
-                        
-                        foreach (BaseSocketConnection cnn in items)
-                        {
+						int loopSleep = 0;
+						
+						foreach (BaseSocketConnection cnn in items)
+						{
 
-                            if (Disposed)
-                            {
-                                break;
-                            }
-                            
-                            try
-                            {
+							if (Disposed)
+							{
+								break;
+							}
+							
+							try
+							{
 
-                                if (cnn != null)
-                                {
+								if (cnn != null)
+								{
 
-                                    //----- Check the idle timeout!
-                                    if (DateTime.Now > (cnn.LastAction.AddMilliseconds(FIdleTimeOutValue)))
-                                    {
-                                        cnn.BeginDisconnect();
-                                    }
+									//----- Check the idle timeout!
+									if (DateTime.Now > (cnn.LastAction.AddMilliseconds(FIdleTimeOutValue)))
+									{
+										cnn.BeginDisconnect();
+									}
 
-                                }
+								}
 
-                            }
-                            finally
-                            {
+							}
+							finally
+							{
 
-                                ThreadEx.LoopSleep(ref loopSleep);
+								ThreadEx.LoopSleep(ref loopSleep);
 
-                            }
+							}
 
-                        }
+						}
 
-                    }
+					}
 
-                }
-                finally
-                {
-                    
-                    if (!Disposed)
-                    {
-                        //----- Restart the timer event!
-                        FIdleTimer.Change(FIdleCheckInterval, FIdleCheckInterval);
-                    }
+				}
+				finally
+				{
+					
+					if (!Disposed)
+					{
+						//----- Restart the timer event!
+						FIdleTimer.Change(FIdleCheckInterval, FIdleCheckInterval);
+					}
 
-                }
+				}
 
-                GC.Collect();
+				GC.Collect();
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region Creators Methods
+		#region Creators Methods
 
-        #region AddCreator
+		#region AddCreator
 
-        protected void AddCreator(BaseSocketConnectionCreator creator)
-        {
+		protected void AddCreator(BaseSocketConnectionCreator creator)
+		{
 
-            if (!Disposed)
-            {
-                lock (FSocketCreators)
-                {
-                    FSocketCreators.Add(creator);
-                }
+			if (!Disposed)
+			{
+				lock (FSocketCreators)
+				{
+					FSocketCreators.Add(creator);
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region RemoveCreator
+		#region RemoveCreator
 
-        protected void RemoveCreator(BaseSocketConnectionCreator creator)
-        {
-            
-            if (!Disposed)
-            {
-                
-                lock (FSocketCreators)
-                {
-                    
-                    FSocketCreators.Remove(creator);
+		protected void RemoveCreator(BaseSocketConnectionCreator creator)
+		{
+			
+			if (!Disposed)
+			{
+				
+				lock (FSocketCreators)
+				{
+					
+					FSocketCreators.Remove(creator);
 
-                    if (FSocketCreators.Count <= 0)
-                    {
-                        FWaitCreatorsDisposing.Set();
-                    }
+					if (FSocketCreators.Count <= 0)
+					{
+						FWaitCreatorsDisposing.Set();
+					}
 
-                }
-            }
-        }
+				}
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #region GetSocketCreators
+		#region GetSocketCreators
 
-        protected BaseSocketConnectionCreator[] GetSocketCreators()
-        {
+		protected BaseSocketConnectionCreator[] GetSocketCreators()
+		{
 
-            BaseSocketConnectionCreator[] items = null;
+			BaseSocketConnectionCreator[] items = null;
 
-            if (!Disposed)
-            {
-                lock (FSocketCreators)
-                {
-                    items = new BaseSocketConnectionCreator[FSocketCreators.Count];
-                    FSocketCreators.CopyTo(items, 0);
-                }
+			if (!Disposed)
+			{
+				lock (FSocketCreators)
+				{
+					items = new BaseSocketConnectionCreator[FSocketCreators.Count];
+					FSocketCreators.CopyTo(items, 0);
+				}
 
-            }
+			}
 
-            return items;
+			return items;
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #endregion
+		#endregion
 
-        #endregion
+		#endregion
 
-        #region EventProcessing Methods
+		#region EventProcessing Methods
 
-        #region OnConnected
+		#region OnConnected
 
-        internal void OnConnected(BaseSocketConnection connection)
-        {
+		internal void OnConnected(BaseSocketConnection connection)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                try
-                {
+				try
+				{
 
-                    if (connection.Active)
-                    {
+					if (connection.Active)
+					{
 
 
-                        switch (connection.EventProcessing)
-                        {
+						switch (connection.EventProcessing)
+						{
 
-                            case EventProcessing.epEncrypt:
+							case EventProcessing.epEncrypt:
 
-                                switch (connection.EncryptType)
-                                {
+								switch (connection.EncryptType)
+								{
 
-                                    case EncryptType.etRijndael:
+									case EncryptType.etRijndael:
 
 
-                                        if (connection.Host.HostType == HostType.htClient)
-                                        {
+										if (connection.Host.HostType == HostType.htClient)
+										{
 
-                                            #region Client
+											#region Client
 
-                                            //----- Generate client asymmetric key pair (public and private)
-                                            RSACryptoServiceProvider clientKeyPair = new RSACryptoServiceProvider(2048);
+											//----- Generate client asymmetric key pair (public and private)
+											RSACryptoServiceProvider clientKeyPair = new RSACryptoServiceProvider(2048);
 
-                                            //----- Get the server public key
-                                            RSACryptoServiceProvider serverPublicKey;
-                                            connection.BaseCreator.CryptoService.OnSymmetricAuthenticate(connection, out serverPublicKey);
+											//----- Get the server public key
+											RSACryptoServiceProvider serverPublicKey;
+											connection.BaseCreator.CryptoService.OnSymmetricAuthenticate(connection, out serverPublicKey);
 
-                                            //----- Generates symmetric algoritm
-                                            SymmetricAlgorithm sa = CryptUtils.CreateSymmetricAlgoritm(connection.EncryptType);
+											//----- Generates symmetric algoritm
+											SymmetricAlgorithm sa = CryptUtils.CreateSymmetricAlgoritm(connection.EncryptType);
 
-                                            //----- Adjust connection cryptors
-                                            connection.Encryptor = sa.CreateEncryptor();
-                                            connection.Decryptor = sa.CreateDecryptor();
+											//----- Adjust connection cryptors
+											connection.Encryptor = sa.CreateEncryptor();
+											connection.Decryptor = sa.CreateDecryptor();
 
-                                            //----- Create authenticate message
-                                            AuthMessage am = new AuthMessage();
+											//----- Create authenticate message
+											AuthMessage am = new AuthMessage();
 
-                                            //----- Encrypt session IV and session Key with server public key
-                                            am.SessionIV = serverPublicKey.Encrypt(sa.IV, true);
-                                            am.SessionKey = serverPublicKey.Encrypt(sa.Key, true);
+											//----- Encrypt session IV and session Key with server public key
+											am.SessionIV = serverPublicKey.Encrypt(sa.IV, true);
+											am.SessionKey = serverPublicKey.Encrypt(sa.Key, true);
 
-                                            //----- Encrypt client public key with symmetric algorithm
-                                            am.ClientKey = CryptUtils.EncryptDataForAuthenticate(connection.Encryptor, Encoding.UTF8.GetBytes(clientKeyPair.ToXmlString(false)));
+											//----- Encrypt client public key with symmetric algorithm
+											am.ClientKey = CryptUtils.EncryptDataForAuthenticate(connection.Encryptor, Encoding.UTF8.GetBytes(clientKeyPair.ToXmlString(false)));
 
-                                            //----- Create hash salt!
-                                            am.Data = new byte[32];
-                                            RNGCryptoServiceProvider.Create().GetBytes(am.Data);
+											//----- Create hash salt!
+											am.Data = new byte[32];
+											RNGCryptoServiceProvider.Create().GetBytes(am.Data);
 
-                                            MemoryStream m = new MemoryStream();
+											MemoryStream m = new MemoryStream();
 
-                                            //----- Create a sign with am.SourceKey, am.SessionKey and am.Data (salt)!
-                                            m.Write(am.SessionKey, 0, am.SessionKey.Length);
-                                            m.Write(am.ClientKey, 0, am.ClientKey.Length);
-                                            m.Write(am.Data, 0, am.Data.Length);
+											//----- Create a sign with am.SourceKey, am.SessionKey and am.Data (salt)!
+											m.Write(am.SessionKey, 0, am.SessionKey.Length);
+											m.Write(am.ClientKey, 0, am.ClientKey.Length);
+											m.Write(am.Data, 0, am.Data.Length);
 
-                                            am.Sign = clientKeyPair.SignData(CryptUtils.EncryptDataForAuthenticate(connection.Encryptor, m.ToArray()), "SHA256");
+											am.Sign = clientKeyPair.SignData(CryptUtils.EncryptDataForAuthenticate(connection.Encryptor, m.ToArray()), "SHA256");
 
-                                            //----- Serialize authentication message
-                                            m.SetLength(0);
-                                            new BinaryFormatter().Serialize(m, am);
+											//----- Serialize authentication message
+											m.SetLength(0);
+											new BinaryFormatter().Serialize(m, am);
 
-                                            connection.BeginSend(m.ToArray());
+											connection.BeginSend(m.ToArray());
 
-                                            m.Close();
+											m.Close();
 
-                                            am.SessionIV.Initialize();
-                                            am.SessionKey.Initialize();
+											am.SessionIV.Initialize();
+											am.SessionKey.Initialize();
 
-                                            serverPublicKey.Clear();
-                                            clientKeyPair.Clear();
+											serverPublicKey.Clear();
+											clientKeyPair.Clear();
 
-                                            #endregion
+											#endregion
 
-                                        }
-                                        else
-                                        {
+										}
+										else
+										{
 
-                                            #region Server
+											#region Server
 
-                                            connection.BeginReceive();
+											connection.BeginReceive();
 
-                                            #endregion
+											#endregion
 
-                                        }
+										}
 
-                                        break;
+										break;
 
-                                    case EncryptType.etSSL:
+									case EncryptType.etSSL:
 
 
-                                        if (connection.Host.HostType == HostType.htClient)
-                                        {
+										if (connection.Host.HostType == HostType.htClient)
+										{
 
-                                            #region Client
+											#region Client
 
-                                            //----- Get SSL items
-                                            X509Certificate2Collection certs = null;
-                                            string serverName = null;
-                                            bool checkRevocation = true;
+											//----- Get SSL items
+											X509Certificate2Collection certs = null;
+											string serverName = null;
+											bool checkRevocation = true;
 
-                                            connection.BaseCreator.CryptoService.OnSSLClientAuthenticate(connection, out serverName, ref certs, ref checkRevocation);
+											connection.BaseCreator.CryptoService.OnSSLClientAuthenticate(connection, out serverName, ref certs, ref checkRevocation);
 
-                                            //----- Authenticate SSL!
-                                            SslStream ssl = new SslStream(new NetworkStream(connection.Socket), true, new RemoteCertificateValidationCallback(connection.BaseCreator.ValidateServerCertificateCallback));
+											//----- Authenticate SSL!
+											SslStream ssl = new SslStream(new NetworkStream(connection.Socket), true, new RemoteCertificateValidationCallback(connection.BaseCreator.ValidateServerCertificateCallback));
 
-                                            if (certs == null)
-                                            {
-                                                ssl.BeginAuthenticateAsClient(serverName, new AsyncCallback(SslAuthenticateCallback), new AuthenticateCallbackData(connection, ssl, HostType.htClient));
-                                            }
-                                            else
-                                            {
-                                                ssl.BeginAuthenticateAsClient(serverName, certs, System.Security.Authentication.SslProtocols.Tls, checkRevocation, new AsyncCallback(SslAuthenticateCallback), new AuthenticateCallbackData(connection, ssl, HostType.htClient));
-                                            }
+											if (certs == null)
+											{
+												ssl.BeginAuthenticateAsClient(serverName, new AsyncCallback(SslAuthenticateCallback), new AuthenticateCallbackData(connection, ssl, HostType.htClient));
+											}
+											else
+											{
+												ssl.BeginAuthenticateAsClient(serverName, certs, System.Security.Authentication.SslProtocols.Tls, checkRevocation, new AsyncCallback(SslAuthenticateCallback), new AuthenticateCallbackData(connection, ssl, HostType.htClient));
+											}
 
-                                            #endregion
+											#endregion
 
-                                        }
-                                        else
-                                        {
+										}
+										else
+										{
 
-                                            #region Server
+											#region Server
 
-                                            //----- Get SSL items!
-                                            X509Certificate2 cert = null;
-                                            bool clientAuthenticate = false;
-                                            bool checkRevocation = true;
+											//----- Get SSL items!
+											X509Certificate2 cert = null;
+											bool clientAuthenticate = false;
+											bool checkRevocation = true;
 
-                                            connection.BaseCreator.CryptoService.OnSSLServerAuthenticate(connection, out cert, out clientAuthenticate, ref checkRevocation);
+											connection.BaseCreator.CryptoService.OnSSLServerAuthenticate(connection, out cert, out clientAuthenticate, ref checkRevocation);
 
-                                            //----- Authneticate SSL!
-                                            SslStream ssl = new SslStream(new NetworkStream(connection.Socket));
-                                            ssl.BeginAuthenticateAsServer(cert, clientAuthenticate, System.Security.Authentication.SslProtocols.Default, checkRevocation, new AsyncCallback(SslAuthenticateCallback), new AuthenticateCallbackData(connection, ssl, HostType.htServer));
+											//----- Authneticate SSL!
+											SslStream ssl = new SslStream(new NetworkStream(connection.Socket));
+											ssl.BeginAuthenticateAsServer(cert, clientAuthenticate, System.Security.Authentication.SslProtocols.Default, checkRevocation, new AsyncCallback(SslAuthenticateCallback), new AuthenticateCallbackData(connection, ssl, HostType.htServer));
 
-                                            #endregion
+											#endregion
 
-                                        }
+										}
 
-                                        break;
+										break;
 
-                                }
+								}
 
-                                break;
+								break;
 
-                            case EventProcessing.epProxy:
+							case EventProcessing.epProxy:
 
-                                ProxyInfo proxyInfo = ((SocketConnector) connection.BaseCreator).ProxyInfo;
-                                IPEndPoint endPoint = ((SocketConnector) connection.BaseCreator).RemoteEndPoint;
-                                byte[] proxyBuffer = ProxyUtils.GetProxyRequestData(proxyInfo, endPoint);
+								ProxyInfo proxyInfo = ((SocketConnector) connection.BaseCreator).ProxyInfo;
+								IPEndPoint endPoint = ((SocketConnector) connection.BaseCreator).RemoteEndPoint;
+								byte[] proxyBuffer = ProxyUtils.GetProxyRequestData(proxyInfo, endPoint);
 
-                                connection.BeginSend(proxyBuffer);
+								connection.BeginSend(proxyBuffer);
 
-                                break;
+								break;
 
-                        }
+						}
 
-                        
+						
 
-                    }
+					}
 
-                }
-                catch(Exception ex)
-                {
-                    FireOnException(connection, ex);
-                }
+				}
+				catch(Exception ex)
+				{
+					FireOnException(connection, ex);
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region OnSent
+		#region OnSent
 
-        internal void OnSent(BaseSocketConnection connection)
-        {
+		internal void OnSent(BaseSocketConnection connection)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                if (connection.Active)
-                {
+				if (connection.Active)
+				{
 
-                    try
-                    {
+					try
+					{
 
-                        switch (connection.EventProcessing)
-                        {
+						switch (connection.EventProcessing)
+						{
 
-                            case EventProcessing.epEncrypt:
+							case EventProcessing.epEncrypt:
 
-                                if (connection.Host.HostType == HostType.htServer)
-                                {
-                                    connection.EventProcessing = EventProcessing.epUser;
-                                    FireOnConnected(connection);
-                                }
-                                else
-                                {
-                                    connection.BeginReceive();
-                                }
+								if (connection.Host.HostType == HostType.htServer)
+								{
+									connection.EventProcessing = EventProcessing.epUser;
+									FireOnConnected(connection);
+								}
+								else
+								{
+									connection.BeginReceive();
+								}
 
-                                break;
+								break;
 
-                            case EventProcessing.epProxy:
+							case EventProcessing.epProxy:
 
-                                connection.BeginReceive();
-                                break;
+								connection.BeginReceive();
+								break;
 
-                        }
+						}
 
 
-                    }
-                    catch (Exception ex)
-                    {
-                        FireOnException(connection, ex);
-                    }
+					}
+					catch (Exception ex)
+					{
+						FireOnException(connection, ex);
+					}
 
-                }
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region OnReceived
+		#region OnReceived
 
-        internal void OnReceived(BaseSocketConnection connection, byte[] buffer)
-        {
+		internal void OnReceived(BaseSocketConnection connection, byte[] buffer)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                if (connection.Active)
-                {
+				if (connection.Active)
+				{
 
-                    try
-                    {
+					try
+					{
 
-                        switch (connection.EventProcessing)
-                        {
+						switch (connection.EventProcessing)
+						{
 
-                            case EventProcessing.epEncrypt:
+							case EventProcessing.epEncrypt:
 
-                                if (connection.Host.HostType == HostType.htServer)
-                                {
+								if (connection.Host.HostType == HostType.htServer)
+								{
 
-                                    #region Server
+									#region Server
 
-                                    //----- Deserialize authentication message
-                                    MemoryStream m = new MemoryStream();
-                                    m.Write(buffer, 0, buffer.Length);
-                                    m.Position = 0;
+									//----- Deserialize authentication message
+									MemoryStream m = new MemoryStream();
+									m.Write(buffer, 0, buffer.Length);
+									m.Position = 0;
 
-                                    BinaryFormatter b = new BinaryFormatter();
+									BinaryFormatter b = new BinaryFormatter();
 
-                                    AuthMessage am = null;
+									AuthMessage am = null;
 
-                                    try
-                                    {
-                                        am = (AuthMessage) b.Deserialize(m);
-                                    }
-                                    catch
-                                    {
-                                        am = null;
-                                    }
+									try
+									{
+										am = (AuthMessage) b.Deserialize(m);
+									}
+									catch
+									{
+										am = null;
+									}
 
-                                    if (am != null)
-                                    {
+									if (am != null)
+									{
 
-                                        //----- Server private key
-                                        RSACryptoServiceProvider serverPrivateKey;
-                                        connection.BaseCreator.CryptoService.OnSymmetricAuthenticate(connection, out serverPrivateKey);
+										//----- Server private key
+										RSACryptoServiceProvider serverPrivateKey;
+										connection.BaseCreator.CryptoService.OnSymmetricAuthenticate(connection, out serverPrivateKey);
 
-                                        //----- Decrypt session Key and session IV with server private key
-                                        SymmetricAlgorithm sa = CryptUtils.CreateSymmetricAlgoritm(connection.Creator.EncryptType);
-                                        sa.Key = serverPrivateKey.Decrypt(am.SessionKey, true);
-                                        sa.IV = serverPrivateKey.Decrypt(am.SessionIV, true);
+										//----- Decrypt session Key and session IV with server private key
+										SymmetricAlgorithm sa = CryptUtils.CreateSymmetricAlgoritm(connection.Creator.EncryptType);
+										sa.Key = serverPrivateKey.Decrypt(am.SessionKey, true);
+										sa.IV = serverPrivateKey.Decrypt(am.SessionIV, true);
 
-                                        //----- Adjust connection cryptors
-                                        connection.Encryptor = sa.CreateEncryptor();
-                                        connection.Decryptor = sa.CreateDecryptor();
+										//----- Adjust connection cryptors
+										connection.Encryptor = sa.CreateEncryptor();
+										connection.Decryptor = sa.CreateDecryptor();
 
-                                        //----- Verify sign
-                                        RSACryptoServiceProvider clientPublicKey = new RSACryptoServiceProvider();
-                                        clientPublicKey.FromXmlString(Encoding.UTF8.GetString(CryptUtils.DecryptDataForAuthenticate(connection.Decryptor, am.ClientKey)));
+										//----- Verify sign
+										RSACryptoServiceProvider clientPublicKey = new RSACryptoServiceProvider();
+										clientPublicKey.FromXmlString(Encoding.UTF8.GetString(CryptUtils.DecryptDataForAuthenticate(connection.Decryptor, am.ClientKey)));
 
-                                        m.SetLength(0);
-                                        m.Write(am.SessionKey, 0, am.SessionKey.Length);
-                                        m.Write(am.ClientKey, 0, am.ClientKey.Length);
-                                        m.Write(am.Data, 0, am.Data.Length);
+										m.SetLength(0);
+										m.Write(am.SessionKey, 0, am.SessionKey.Length);
+										m.Write(am.ClientKey, 0, am.ClientKey.Length);
+										m.Write(am.Data, 0, am.Data.Length);
 
-                                        am.SessionIV.Initialize();
-                                        am.SessionKey.Initialize();
-                                        am.ClientKey.Initialize();
+										am.SessionIV.Initialize();
+										am.SessionKey.Initialize();
+										am.ClientKey.Initialize();
 
-                                        if (clientPublicKey.VerifyData(CryptUtils.EncryptDataForAuthenticate(connection.Encryptor, m.ToArray()), "SHA256", am.Sign))
-                                        {
+										if (clientPublicKey.VerifyData(CryptUtils.EncryptDataForAuthenticate(connection.Encryptor, m.ToArray()), "SHA256", am.Sign))
+										{
 
-                                            am.Data = new byte[32];
-                                            RNGCryptoServiceProvider.Create().GetBytes(am.Data);
+											am.Data = new byte[32];
+											RNGCryptoServiceProvider.Create().GetBytes(am.Data);
 
-                                            am.SessionIV = null;
-                                            am.SessionKey = null;
-                                            am.ClientKey = null;
-                                            am.Sign = serverPrivateKey.SignData(am.Data, "SHA256");
+											am.SessionIV = null;
+											am.SessionKey = null;
+											am.ClientKey = null;
+											am.Sign = serverPrivateKey.SignData(am.Data, "SHA256");
 
-                                            m.SetLength(0);
-                                            b.Serialize(m, am);
+											m.SetLength(0);
+											b.Serialize(m, am);
 
-                                            BeginSend(connection, m.ToArray(), false);
+											BeginSend(connection, m.ToArray(), false);
 
-                                        }
-                                        else
-                                        {
-                                            FireOnException(connection, new SymmetricAuthenticationException("Symmetric sign error."));
-                                        }
+										}
+										else
+										{
+											FireOnException(connection, new SymmetricAuthenticationException("Symmetric sign error."));
+										}
 
-                                        am.Sign.Initialize();
-                                        m.Close();
+										am.Sign.Initialize();
+										m.Close();
 
-                                        serverPrivateKey.Clear();
-                                        clientPublicKey.Clear();
+										serverPrivateKey.Clear();
+										clientPublicKey.Clear();
 
-                                    }
-                                    else
-                                    {
-                                        FireOnException(connection, new SymmetricAuthenticationException("Symmetric sign error."));
-                                    }
+									}
+									else
+									{
+										FireOnException(connection, new SymmetricAuthenticationException("Symmetric sign error."));
+									}
 
-                                    #endregion
+									#endregion
 
-                                }
-                                else
-                                {
+								}
+								else
+								{
 
-                                    #region Client
+									#region Client
 
-                                    //----- Deserialize authentication message
-                                    MemoryStream m = new MemoryStream();
-                                    m.Write(buffer, 0, buffer.Length);
-                                    m.Position = 0;
+									//----- Deserialize authentication message
+									MemoryStream m = new MemoryStream();
+									m.Write(buffer, 0, buffer.Length);
+									m.Position = 0;
 
-                                    AuthMessage am = null;
-                                    BinaryFormatter b = new BinaryFormatter();
+									AuthMessage am = null;
+									BinaryFormatter b = new BinaryFormatter();
 
-                                    try
-                                    {
-                                        am = (AuthMessage)b.Deserialize(m);
-                                    }
-                                    catch
-                                    {
-                                        am = null;
-                                    }
+									try
+									{
+										am = (AuthMessage)b.Deserialize(m);
+									}
+									catch
+									{
+										am = null;
+									}
 
-                                    if (am != null)
-                                    {
+									if (am != null)
+									{
 
-                                        RSACryptoServiceProvider serverPublicKey;
-                                        connection.BaseCreator.CryptoService.OnSymmetricAuthenticate(connection, out serverPublicKey);
+										RSACryptoServiceProvider serverPublicKey;
+										connection.BaseCreator.CryptoService.OnSymmetricAuthenticate(connection, out serverPublicKey);
 
-                                        //----- Verify sign
-                                        if (serverPublicKey.VerifyData(am.Data, "SHA256", am.Sign))
-                                        {
-                                            connection.EventProcessing = EventProcessing.epUser;
-                                            FireOnConnected(connection);
-                                        }
-                                        else
-                                        {
-                                            FireOnException(connection, new SymmetricAuthenticationException("Symmetric sign error."));
-                                        }
+										//----- Verify sign
+										if (serverPublicKey.VerifyData(am.Data, "SHA256", am.Sign))
+										{
+											connection.EventProcessing = EventProcessing.epUser;
+											FireOnConnected(connection);
+										}
+										else
+										{
+											FireOnException(connection, new SymmetricAuthenticationException("Symmetric sign error."));
+										}
 
-                                        am.Data.Initialize();
-                                        am.Sign.Initialize();
+										am.Data.Initialize();
+										am.Sign.Initialize();
 
-                                        serverPublicKey.Clear();
+										serverPublicKey.Clear();
 
-                                    }
-                                    else
-                                    {
-                                        FireOnException(connection, new SymmetricAuthenticationException("Symmetric sign error."));
-                                    }
+									}
+									else
+									{
+										FireOnException(connection, new SymmetricAuthenticationException("Symmetric sign error."));
+									}
 
-                                    m.Close();
+									m.Close();
 
-                                    #endregion
+									#endregion
 
-                                }
+								}
 
-                                break;
+								break;
 
-                            case EventProcessing.epProxy:
+							case EventProcessing.epProxy:
 
-                                ProxyInfo proxyInfo = ((SocketConnector)connection.BaseCreator).ProxyInfo;
-                                ProxyUtils.GetProxyResponseStatus(proxyInfo, buffer);
+								ProxyInfo proxyInfo = ((SocketConnector)connection.BaseCreator).ProxyInfo;
+								ProxyUtils.GetProxyResponseStatus(proxyInfo, buffer);
 
-                                if (proxyInfo.Completed)
-                                {
+								if (proxyInfo.Completed)
+								{
 
-                                    InitializeConnection(connection);
+									InitializeConnection(connection);
 
-                                }
-                                else
-                                {
+								}
+								else
+								{
 
-                                    IPEndPoint endPoint = ((SocketConnector)connection.BaseCreator).RemoteEndPoint;
-                                    byte[] proxyBuffer = ProxyUtils.GetProxyRequestData(proxyInfo, endPoint);
+									IPEndPoint endPoint = ((SocketConnector)connection.BaseCreator).RemoteEndPoint;
+									byte[] proxyBuffer = ProxyUtils.GetProxyRequestData(proxyInfo, endPoint);
 
-                                    connection.BeginSend(proxyBuffer);
+									connection.BeginSend(proxyBuffer);
 
-                                }
+								}
 
-                                break;
+								break;
 
 
-                        }
+						}
 
-                    }
-                    catch (Exception ex)
-                    {
-                        FireOnException(connection, ex);
-                    }
+					}
+					catch (Exception ex)
+					{
+						FireOnException(connection, ex);
+					}
 
-                }
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region SslAuthenticateCallback
+		#region SslAuthenticateCallback
 
-        private void SslAuthenticateCallback(IAsyncResult ar)
-        {
+		private void SslAuthenticateCallback(IAsyncResult ar)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                BaseSocketConnection connection = null;
-                SslStream stream = null;
-                bool completed = false;
+				BaseSocketConnection connection = null;
+				SslStream stream = null;
+				bool completed = false;
 
-                try
-                {
+				try
+				{
 
-                    AuthenticateCallbackData callbackData = (AuthenticateCallbackData)ar.AsyncState;
+					AuthenticateCallbackData callbackData = (AuthenticateCallbackData)ar.AsyncState;
 
-                    connection = callbackData.Connection;
-                    stream = callbackData.Stream;
+					connection = callbackData.Connection;
+					stream = callbackData.Stream;
 
-                    if (connection.Active)
-                    {
+					if (connection.Active)
+					{
 
-                        if (callbackData.HostType == HostType.htClient)
-                        {
-                            stream.EndAuthenticateAsClient(ar);
-                        }
-                        else
-                        {
-                            stream.EndAuthenticateAsServer(ar);
-                        }
+						if (callbackData.HostType == HostType.htClient)
+						{
+							stream.EndAuthenticateAsClient(ar);
+						}
+						else
+						{
+							stream.EndAuthenticateAsServer(ar);
+						}
 
-                        if ((stream.IsSigned && stream.IsEncrypted))
-                        {
-                            completed = true;
-                        }
+						if ((stream.IsSigned && stream.IsEncrypted))
+						{
+							completed = true;
+						}
 
-                        callbackData = null;
-                        connection.Stream = stream;
+						callbackData = null;
+						connection.Stream = stream;
 
-                        if (completed)
-                        {
-                            connection.EventProcessing = EventProcessing.epUser;
-                            FireOnConnected(connection);
-                        }
-                        else
-                        {
-                            FireOnException(connection, new SSLAuthenticationException("Ssl authenticate is not signed or not encrypted."));
-                        }
+						if (completed)
+						{
+							connection.EventProcessing = EventProcessing.epUser;
+							FireOnConnected(connection);
+						}
+						else
+						{
+							FireOnException(connection, new SSLAuthenticationException("Ssl authenticate is not signed or not encrypted."));
+						}
 
-                    }
+					}
 
-                }
-                catch (Exception ex)
-                {
-                    FireOnException(connection, ex);
-                }
+				}
+				catch (Exception ex)
+				{
+					FireOnException(connection, ex);
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #endregion
+		#endregion
 
-        #region Properties
+		#region Properties
 
-        internal BufferManager BufferManager
-        {
-            get { return FBufferManager; }
-        }
+		internal BufferManager BufferManager
+		{
+			get { return FBufferManager; }
+		}
 
-        public int SocketBufferSize
-        {
-            get { return FSocketBufferSize; }
-            set { FSocketBufferSize = value; }  
-        }
+		public int SocketBufferSize
+		{
+			get { return FSocketBufferSize; }
+			set { FSocketBufferSize = value; }
+		}
 
-        public int MessageBufferSize
-        {
-            get { return FMessageBufferSize; }
-            set { FMessageBufferSize = value; }  
-        }
+		public int MessageBufferSize
+		{
+			get { return FMessageBufferSize; }
+			set { FMessageBufferSize = value; }
+		}
 
-        public byte[] DelimiterEncrypt
-        {
-            get { return FDelimiterEncrypt; }
-            set { FDelimiterEncrypt = value; }
-        }
+		public byte[] DelimiterEncrypt
+		{
+			get { return FDelimiterEncrypt; }
+			set { FDelimiterEncrypt = value; }
+		}
 
-        public byte[] Delimiter
-        {
-            get { return FDelimiter; }
-            set { FDelimiter = value; }
-        }
+		public byte[] Delimiter
+		{
+			get { return FDelimiter; }
+			set { FDelimiter = value; }
+		}
 
-        public DelimiterType DelimiterType
-        {
-            get { return FDelimiterType; }
-            set { FDelimiterType = value; }
-        }
+		public DelimiterType DelimiterType
+		{
+			get { return FDelimiterType; }
+			set { FDelimiterType = value; }
+		}
 
-        public ISocketService SocketService
-        {
-            get { return FSocketService; }
-        }
+		public ISocketService SocketService
+		{
+			get { return FSocketService; }
+		}
 
-        protected Timer CheckTimeOutTimer
-        {
-            get { return CheckTimeOutTimer; }
-        }
+		protected Timer CheckTimeOutTimer
+		{
+			get { return CheckTimeOutTimer; }
+		}
 
-        public int IdleCheckInterval
-        {
-            get { return FIdleCheckInterval; }
-            set { FIdleCheckInterval = value; }
-        }
+		public int IdleCheckInterval
+		{
+			get { return FIdleCheckInterval; }
+			set { FIdleCheckInterval = value; }
+		}
 
-        public int IdleTimeOutValue
-        {
-            get { return FIdleTimeOutValue; }
-            set { FIdleTimeOutValue = value; } 
-        }
+		public int IdleTimeOutValue
+		{
+			get { return FIdleTimeOutValue; }
+			set { FIdleTimeOutValue = value; } 
+		}
 
-        public HostType HostType
-        {
-            get { return FHostType; }
-        }
+		public HostType HostType
+		{
+			get { return FHostType; }
+		}
 
 		public ProtocolType ProtocolType
 		{
@@ -2624,34 +2624,34 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 		}
 
 		public bool Active
-        {
+		{
 
-            get
-            {
-                if (Disposed)
-                {
-                    return false;
-                }
+			get
+			{
+				if (Disposed)
+				{
+					return false;
+				}
 
-                lock (FSyncActive)
-                {
-                    return FActive;
-                }
-            }
+				lock (FSyncActive)
+				{
+					return FActive;
+				}
+			}
 
-            internal set
-            {
-                lock (FSyncActive)
-                {
-                    FActive = value;
-                }
-            }
+			internal set
+			{
+				lock (FSyncActive)
+				{
+					FActive = value;
+				}
+			}
 
-        }
+		}
 
 
-        #endregion
+		#endregion
 
-    }
+	}
 
 }

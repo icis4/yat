@@ -41,11 +41,11 @@ namespace YAT.Domain
 		TcpServer,
 		/// <summary></summary>
 		TcpAutoSocket,
-        /// <summary></summary>
-        Udp,
-        /// <summary></summary>
-        UsbHid,
-    }
+		/// <summary></summary>
+		Udp,
+		/// <summary></summary>
+		UsbHid,
+	}
 
 	#endregion
 
@@ -61,8 +61,8 @@ namespace YAT.Domain
 		private const string TcpClient_string = "TCP/IP Client";
 		private const string TcpServer_string = "TCP/IP Server";
 		private const string TcpAutoSocket_string = "TCP/IP AutoSocket";
-        private const string Udp_string = "UDP/IP Socket";
-        private const string UsbHid_string = "USB Ser/HID";
+		private const string Udp_string = "UDP/IP Socket";
+		private const string UsbHid_string = "USB Ser/HID";
 
 		#endregion
 
@@ -108,7 +108,7 @@ namespace YAT.Domain
 			a.Add(new XIOType(IOType.TcpServer));
 			a.Add(new XIOType(IOType.TcpAutoSocket));
 			a.Add(new XIOType(IOType.Udp));
-            a.Add(new XIOType(IOType.UsbHid));
+			a.Add(new XIOType(IOType.UsbHid));
 			return (a.ToArray());
 		}
 
@@ -150,12 +150,12 @@ namespace YAT.Domain
 				result = new XIOType(IOType.TcpAutoSocket);
 				return (true);
 			}
-            else if (string.Compare(type, Udp_string, true) == 0)
-            {
-                result = new XIOType(IOType.Udp);
-                return (true);
-            }
-            else if (string.Compare(type, UsbHid_string, true) == 0)
+			else if (string.Compare(type, Udp_string, true) == 0)
+			{
+				result = new XIOType(IOType.Udp);
+				return (true);
+			}
+			else if (string.Compare(type, UsbHid_string, true) == 0)
 			{
 				result = new XIOType(IOType.UsbHid);
 				return (true);

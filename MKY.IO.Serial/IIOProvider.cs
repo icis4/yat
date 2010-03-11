@@ -150,16 +150,16 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Receives data from a the underlying I/O instance into a receive buffer.
 		/// </summary>
-        /// <param name="data">
+		/// <param name="data">
 		/// An array of type System.Byte that is the storage location for the received data.
 		/// </param>
 		/// <returns>The number of bytes received.</returns>
-        int Receive(out byte[] data);
+		int Receive(out byte[] data);
 
 		/// <summary>
 		/// Sends data to a the underlying I/O instance.
 		/// </summary>
-        /// <param name="data">
+		/// <param name="data">
 		/// An array of type System.Byte that contains the data to be sent.
 		/// </param>
 		void Send(byte[] data);

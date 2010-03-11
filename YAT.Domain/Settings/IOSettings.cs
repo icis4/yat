@@ -36,8 +36,8 @@ namespace YAT.Domain.Settings
 		private MKY.IO.Serial.SerialPortSettings _serialPort;
 		private string _serialParityErrorReplacement;
 		private MKY.IO.Serial.SocketSettings _socket;
-        private MKY.IO.Serial.UsbHidDeviceSettings _usbHidPort;
-        private Endianess _endianess;
+		private MKY.IO.Serial.UsbHidDeviceSettings _usbHidPort;
+		private Endianess _endianess;
 
 		/// <summary></summary>
 		public IOSettings()
@@ -60,7 +60,7 @@ namespace YAT.Domain.Settings
 		{
 			SerialPort = new MKY.IO.Serial.SerialPortSettings(SettingsType);
 			Socket     = new MKY.IO.Serial.SocketSettings(SettingsType);
-            UsbHidPort = new MKY.IO.Serial.UsbHidDeviceSettings(SettingsType);
+			UsbHidPort = new MKY.IO.Serial.UsbHidDeviceSettings(SettingsType);
 		}
 
 		/// <summary></summary>
@@ -74,7 +74,7 @@ namespace YAT.Domain.Settings
 			SerialPort = new MKY.IO.Serial.SerialPortSettings(rhs.SerialPort);
 			_serialParityErrorReplacement = rhs.SerialParityErrorReplacement;
 			Socket     = new MKY.IO.Serial.SocketSettings(rhs.Socket);
-            UsbHidPort = new MKY.IO.Serial.UsbHidDeviceSettings(rhs.UsbHidPort);
+			UsbHidPort = new MKY.IO.Serial.UsbHidDeviceSettings(rhs.UsbHidPort);
 			_endianess = rhs.Endianess;
 
 			ClearChanged();
@@ -167,28 +167,28 @@ namespace YAT.Domain.Settings
 			}
 		}
 
-        /// <summary></summary>
-        [XmlElement("UsbHidPort")]
-        public MKY.IO.Serial.UsbHidDeviceSettings UsbHidPort
-        {
-            get { return (_usbHidPort); }
-            set
-            {
-                if (_usbHidPort == null)
-                {
-                    _usbHidPort = value;
-                    AttachNode(_usbHidPort);
-                }
-                else if (_usbHidPort != value)
-                {
-                    MKY.IO.Serial.UsbHidDeviceSettings old = _usbHidPort;
-                    _usbHidPort = value;
-                    ReplaceNode(old, _usbHidPort);
-                }
-            }
-        }
+		/// <summary></summary>
+		[XmlElement("UsbHidPort")]
+		public MKY.IO.Serial.UsbHidDeviceSettings UsbHidPort
+		{
+			get { return (_usbHidPort); }
+			set
+			{
+				if (_usbHidPort == null)
+				{
+					_usbHidPort = value;
+					AttachNode(_usbHidPort);
+				}
+				else if (_usbHidPort != value)
+				{
+					MKY.IO.Serial.UsbHidDeviceSettings old = _usbHidPort;
+					_usbHidPort = value;
+					ReplaceNode(old, _usbHidPort);
+				}
+			}
+		}
 
-        /// <summary></summary>
+		/// <summary></summary>
 		[XmlElement("Endianess")]
 		public Endianess Endianess
 		{

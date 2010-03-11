@@ -1,7 +1,7 @@
 /* ====================================================================
  * Copyright (c) 2009 Andre Luis Azevedo (az.andrel@yahoo.com.br)
  * All rights reserved.
- *                       
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -42,50 +42,50 @@ using System;
 namespace ALAZ.SystemEx.NetEx.SocketsEx
 {
 
-    /// <summary>
-    /// Message event arguments for message events.
-    /// </summary>
-    public class MessageEventArgs : ConnectionEventArgs
-    {
+	/// <summary>
+	/// Message event arguments for message events.
+	/// </summary>
+	public class MessageEventArgs : ConnectionEventArgs
+	{
 
-        #region Fields
+		#region Fields
 
-        private byte[] FBuffer;
-        private bool FSentByserver;
+		private byte[] FBuffer;
+		private bool FSentByserver;
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        public MessageEventArgs(ISocketConnection connection, byte[] buffer, bool sentByServer)
-            : base(connection)
-        {
-            FBuffer = buffer;
-            FSentByserver = sentByServer;
-        }
+		public MessageEventArgs(ISocketConnection connection, byte[] buffer, bool sentByServer)
+			: base(connection)
+		{
+			FBuffer = buffer;
+			FSentByserver = sentByServer;
+		}
 
-        #endregion
+		#endregion
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Gets sent or received buffer.
-        /// </summary>
-        public byte[] Buffer
-        {
-            get { return FBuffer; }
-        }
-        
-        /// <summary>
-        /// Indicates if event was fired by server´s BeginSendTo() or BeginSendToAll().
-        /// </summary>
-        public bool SentByServer
-        {
-            get { return FSentByserver; }
-        }
+		/// <summary>
+		/// Gets sent or received buffer.
+		/// </summary>
+		public byte[] Buffer
+		{
+			get { return FBuffer; }
+		}
+		
+		/// <summary>
+		/// Indicates if event was fired by server´s BeginSendTo() or BeginSendToAll().
+		/// </summary>
+		public bool SentByServer
+		{
+			get { return FSentByserver; }
+		}
 
-        #endregion
+		#endregion
 
-    }
+	}
 
 }

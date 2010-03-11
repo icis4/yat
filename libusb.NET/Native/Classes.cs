@@ -25,11 +25,11 @@ using System.Runtime.InteropServices;
 /// </summary>
 namespace libusb.NET.Native
 {
-    /// <remarks>
-    /// Must be a class to allow two levels of indirection when calling the native function.
-    /// For details, see "Passing Structures" in the MSDN.
-    /// </remarks>
-    [StructLayout(LayoutKind.Sequential)]
+	/// <remarks>
+	/// Must be a class to allow two levels of indirection when calling the native function.
+	/// For details, see "Passing Structures" in the MSDN.
+	/// </remarks>
+	[StructLayout(LayoutKind.Sequential)]
 	public class libusb_device 
 	{
 	    public IntPtr refcnt_lock;
@@ -42,49 +42,49 @@ namespace libusb.NET.Native
 	    public byte num_configurations;
 
 		public IntPtr prev = IntPtr.Zero;
-        public IntPtr next = IntPtr.Zero;
+		public IntPtr next = IntPtr.Zero;
 
 	    public ulong session_data;
 	    public byte[] os_priv;
 	}
 
-    /// <remarks>
-    /// Must be a class to allow two levels of indirection when calling the native function.
-    /// For details, see "Passing Structures" in the MSDN.
-    /// </remarks>
+	/// <remarks>
+	/// Must be a class to allow two levels of indirection when calling the native function.
+	/// For details, see "Passing Structures" in the MSDN.
+	/// </remarks>
 	[StructLayout(LayoutKind.Sequential)]
 	public class libusb_device_handle
-    {
+	{
 	    public IntPtr claimed_interfaces_lock;
 	    public ulong claimed_interfaces;
 
 		public IntPtr prev = IntPtr.Zero;
-        public IntPtr next = IntPtr.Zero;
+		public IntPtr next = IntPtr.Zero;
 
 	    public libusb_device dev;
 	    public byte[] os_priv;
-    }
+	}
 
-    /// <remarks>
-    /// Must be a class to allow two levels of indirection when calling the native function.
-    /// For details, see "Passing Structures" in the MSDN.
-    /// </remarks>
+	/// <remarks>
+	/// Must be a class to allow two levels of indirection when calling the native function.
+	/// For details, see "Passing Structures" in the MSDN.
+	/// </remarks>
 	[StructLayout(LayoutKind.Sequential)]
 	public class libusb_iso_packet_descriptor
-    {
+	{
 	    uint length;
 	    uint actual_length;
 	    libusb_transfer_status status;
-    }
+	}
 
-    /// <remarks>
-    /// Must be a class to allow two levels of indirection when calling the native function.
-    /// For details, see "Passing Structures" in the MSDN.
-    /// </remarks>
+	/// <remarks>
+	/// Must be a class to allow two levels of indirection when calling the native function.
+	/// For details, see "Passing Structures" in the MSDN.
+	/// </remarks>
 	[StructLayout(LayoutKind.Sequential)]
 	public class libusb_transfer
-    {
-        public libusb_device_handle dev_handle;
+	{
+		public libusb_device_handle dev_handle;
 	    public byte flags;
 	    public byte endpoint;
 	    public byte type;
@@ -97,68 +97,68 @@ namespace libusb.NET.Native
 	    public byte[] buffer;
 	    public int num_iso_packets;
 	    public libusb_iso_packet_descriptor[] iso_packet_desc;
-    }
+	}
 
-    /// <remarks>
-    /// Must be a class to allow two levels of indirection when calling the native function.
-    /// For details, see "Passing Structures" in the MSDN.
-    /// </remarks>
+	/// <remarks>
+	/// Must be a class to allow two levels of indirection when calling the native function.
+	/// For details, see "Passing Structures" in the MSDN.
+	/// </remarks>
 	[StructLayout(LayoutKind.Sequential)]
 	public class libusb_pollfd
-    {
-        public int fd;
-        public short events;
-    }
+	{
+		public int fd;
+		public short events;
+	}
 
-    /// <remarks>
-    /// Must be a class to allow two levels of indirection when calling the native function.
-    /// For details, see "Passing Structures" in the MSDN.
-    /// </remarks>
-    [StructLayout(LayoutKind.Sequential)]
-    public class libusb_device_descriptor
-    {
-        public byte   bLength;
-        public byte   bDescriptorType;
-        public ushort bcdUSB;
-        public byte   bDeviceClass;
-        public byte   bDeviceSubClass;
-        public byte   bDeviceProtocol;
-        public byte   bMaxPacketSize0;
-        public ushort idVendor;
-        public ushort idProduct;
-        public ushort bcdDevice;
-        public byte   iManufacturer;
-        public byte   iProduct;
-        public byte   iSerialNumber;
-        public byte   bNumConfigurations;
-    }
+	/// <remarks>
+	/// Must be a class to allow two levels of indirection when calling the native function.
+	/// For details, see "Passing Structures" in the MSDN.
+	/// </remarks>
+	[StructLayout(LayoutKind.Sequential)]
+	public class libusb_device_descriptor
+	{
+		public byte   bLength;
+		public byte   bDescriptorType;
+		public ushort bcdUSB;
+		public byte   bDeviceClass;
+		public byte   bDeviceSubClass;
+		public byte   bDeviceProtocol;
+		public byte   bMaxPacketSize0;
+		public ushort idVendor;
+		public ushort idProduct;
+		public ushort bcdDevice;
+		public byte   iManufacturer;
+		public byte   iProduct;
+		public byte   iSerialNumber;
+		public byte   bNumConfigurations;
+	}
 
-    /// <remarks>
-    /// Must be a class to allow two levels of indirection when calling the native function.
-    /// For details, see "Passing Structures" in the MSDN.
-    /// </remarks>
-    [StructLayout(LayoutKind.Sequential)]
-    public class libusb_endpoint_descriptor
-    {
-        public byte   bLength;
-        public byte   bDescriptorType;
-        public byte   bEndpointAddress;
-        public byte   bmAttributes;
-        public byte   wMaxPacketSize;
-        public byte   bInterval;
-        public byte   bRefresh;
-        public byte   bSynchAddress;
-        public string extra;
-        public int    extra_length;
-    }
+	/// <remarks>
+	/// Must be a class to allow two levels of indirection when calling the native function.
+	/// For details, see "Passing Structures" in the MSDN.
+	/// </remarks>
+	[StructLayout(LayoutKind.Sequential)]
+	public class libusb_endpoint_descriptor
+	{
+		public byte   bLength;
+		public byte   bDescriptorType;
+		public byte   bEndpointAddress;
+		public byte   bmAttributes;
+		public byte   wMaxPacketSize;
+		public byte   bInterval;
+		public byte   bRefresh;
+		public byte   bSynchAddress;
+		public string extra;
+		public int    extra_length;
+	}
 
-    /// <remarks>
-    /// Must be a class to allow two levels of indirection when calling the native function.
-    /// For details, see "Passing Structures" in the MSDN.
-    /// </remarks>
-    [StructLayout(LayoutKind.Sequential)]
-    public class libusb_interface_descriptor
-    {
+	/// <remarks>
+	/// Must be a class to allow two levels of indirection when calling the native function.
+	/// For details, see "Passing Structures" in the MSDN.
+	/// </remarks>
+	[StructLayout(LayoutKind.Sequential)]
+	public class libusb_interface_descriptor
+	{
 	    public byte   bLength;
 	    public byte   bDescriptorType;
 	    public byte   bInterfaceNumber;
@@ -171,26 +171,26 @@ namespace libusb.NET.Native
 	    public libusb_endpoint_descriptor endpoint;
 	    public string extra;
 	    public int    extra_length;
-    }
+	}
 
-    /// <remarks>
-    /// Must be a class to allow two levels of indirection when calling the native function.
-    /// For details, see "Passing Structures" in the MSDN.
-    /// </remarks>
+	/// <remarks>
+	/// Must be a class to allow two levels of indirection when calling the native function.
+	/// For details, see "Passing Structures" in the MSDN.
+	/// </remarks>
 	[StructLayout(LayoutKind.Sequential)]
 	public class libusb_interface
-    {
+	{
 	    libusb_interface_descriptor altsetting;
 	    int num_altsetting;
-    }
+	}
 
-    /// <remarks>
-    /// Must be a class to allow two levels of indirection when calling the native function.
-    /// For details, see "Passing Structures" in the MSDN.
-    /// </remarks>
+	/// <remarks>
+	/// Must be a class to allow two levels of indirection when calling the native function.
+	/// For details, see "Passing Structures" in the MSDN.
+	/// </remarks>
 	[StructLayout(LayoutKind.Sequential)]
 	public class libusb_config_descriptor
-    {
+	{
 	    public byte  bLength;
 	    public byte  bDescriptorType;
 	    public ushort wTotalLength;
@@ -202,7 +202,7 @@ namespace libusb.NET.Native
 	    public libusb_interface iface;
 	    public byte[] extra;
 	    public int extra_length;
-    }
+	}
 }
 
 //==================================================================================================

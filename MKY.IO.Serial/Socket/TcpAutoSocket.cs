@@ -186,47 +186,47 @@ namespace MKY.IO.Serial
 		// Properties
 		//==========================================================================================
 
-        /// <summary></summary>
-        public System.Net.IPAddress RemoteIPAddress
-        {
-            get
-            {
-                AssertNotDisposed();
-                return (_remoteIPAddress);
-            }
-        }
+		/// <summary></summary>
+		public System.Net.IPAddress RemoteIPAddress
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_remoteIPAddress);
+			}
+		}
 
-        /// <summary></summary>
-        public int RemotePort
-        {
-            get
-            {
-                AssertNotDisposed();
-                return (_remotePort);
-            }
-        }
+		/// <summary></summary>
+		public int RemotePort
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_remotePort);
+			}
+		}
 
-        /// <summary></summary>
-        public System.Net.IPAddress LocalIPAddress
-        {
-            get
-            {
-                AssertNotDisposed();
-                return (_localIPAddress);
-            }
-        }
+		/// <summary></summary>
+		public System.Net.IPAddress LocalIPAddress
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_localIPAddress);
+			}
+		}
 
-        /// <summary></summary>
-        public int LocalPort
-        {
-            get
-            {
-                AssertNotDisposed();
-                return (_localPort);
-            }
-        }
+		/// <summary></summary>
+		public int LocalPort
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_localPort);
+			}
+		}
 
-        /// <summary></summary>
+		/// <summary></summary>
 		public bool IsStarted
 		{
 			get
@@ -391,30 +391,30 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-        public int Receive(out byte[] data)
+		public int Receive(out byte[] data)
 		{
 			AssertNotDisposed();
 
 			if (IsClient)
-                return (_client.Receive(out data));
+				return (_client.Receive(out data));
 			else if (IsServer)
-                return (_server.Receive(out data));
+				return (_server.Receive(out data));
 			else
 			{
-                data = new byte[] { };
+				data = new byte[] { };
 				return (0);
 			}
 		}
 
 		/// <summary></summary>
-        public void Send(byte[] data)
+		public void Send(byte[] data)
 		{
 			AssertNotDisposed();
 
 			if (IsClient)
-                _client.Send(data);
+				_client.Send(data);
 			else if (IsServer)
-                _server.Send(data);
+				_server.Send(data);
 		}
 
 		#endregion

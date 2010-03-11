@@ -61,7 +61,7 @@ namespace MKY.Utilities.Types
 	///     {
 	///         return (UnderlyingEnum.GetHashCode().ToString());
 	///     }
-	///   
+	///
 	///     public static XMode[] GetItems()
 	///     {
 	///         List[XMode] a = new List[XMode](); // [] must be replaced be angle brackets
@@ -70,16 +70,16 @@ namespace MKY.Utilities.Types
 	///         a.Add(new XMode(Mode.Slow));
 	///         return (a.ToArray());
 	///     }
-	///   
+	///
 	///     public static XMode Parse(string mode)
 	///     {
 	///         return ((XMode)int.Parse(mode));
 	///     }
-	///   
+	///
 	///     public static bool TryParse(string mode, out XMode result)
 	///     {
 	///         int intResult;
-	///         
+	///
 	///         if (int.TryParse(mode, out intResult))
 	///         {
 	///             result = (XMode)intResult;
@@ -91,34 +91,34 @@ namespace MKY.Utilities.Types
 	///             return (false);
 	///         }
 	///     }
-	///   
+	///
 	///     public static implicit operator Mode(XMode mode)
 	///     {
 	///         return ((Mode)mode.UnderlyingEnum);
 	///     }
-	///   
+	///
 	///     public static implicit operator XMode(Mode mode)
 	///     {
 	///         return (new XMode(mode));
 	///     }
-	///   
+	///
 	///     public static implicit operator int(XMode mode)
 	///     {
 	///         return (mode.GetHashCode());
 	///     }
-	///   
+	///
 	///     public static implicit operator XMode(int mode)
 	///     {
 	///         if      (mode >= (int)Mode.Slow)   return (new XMode(Mode.Slow));
-	///   	    else if (mode >= (int)Mode.Normal) return (new XMode(Mode.Normal));
+	///         else if (mode >= (int)Mode.Normal) return (new XMode(Mode.Normal));
 	///         else                               return (new XMode(Mode.Fast));
 	///     }
-	///   
+	///
 	///     public static implicit operator string(XMode mode)
 	///     {
-	///		    return (mode.ToString());
-	///	    }
-	///		
+	///         return (mode.ToString());
+	///     }
+	///
 	///     public static implicit operator XMode(string mode)
 	///     {
 	///        return (Parse(mode));

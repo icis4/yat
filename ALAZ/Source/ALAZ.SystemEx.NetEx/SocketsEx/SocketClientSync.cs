@@ -1,7 +1,7 @@
 /* ====================================================================
  * Copyright (c) 2009 Andre Luis Azevedo (az.andrel@yahoo.com.br)
  * All rights reserved.
- *                       
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -50,841 +50,841 @@ using System.Security.Cryptography.X509Certificates;
 namespace ALAZ.SystemEx.NetEx.SocketsEx
 {
 
-    #region SocketClientSync
+	#region SocketClientSync
 
-    public class SocketClientSync: BaseDisposable
-    {
+	public class SocketClientSync: BaseDisposable
+	{
 
-        #region Fields
+		#region Fields
 
 		private ProtocolType FProtocolType;
 
 		//----- EndPoints!
-        private IPEndPoint FLocalEndPoint;
-        private IPEndPoint FRemoteEndPoint;
+		private IPEndPoint FLocalEndPoint;
+		private IPEndPoint FRemoteEndPoint;
 
-        //----- Message Types!
-        private EncryptType FEncryptType;
-        private CompressionType FCompressionType;
-        private DelimiterType FDelimiterType;
+		//----- Message Types!
+		private EncryptType FEncryptType;
+		private CompressionType FCompressionType;
+		private DelimiterType FDelimiterType;
 
-        //----- Proxy!
-        private ProxyInfo FProxyInfo;
+		//----- Proxy!
+		private ProxyInfo FProxyInfo;
 
-        //----- Socket delimiter and buffer size!
-        private byte[] FDelimiter;
+		//----- Socket delimiter and buffer size!
+		private byte[] FDelimiter;
 
-        private int FMessageBufferSize;
-        private int FSocketBufferSize;
-        
-        private event OnSymmetricAuthenticateEvent FOnSymmetricAuthenticateEvent;
-        private event OnSSLClientAuthenticateEvent FOnSSLClientAuthenticateEvent;
-        private event OnDisconnectEvent FOnDisconnectedEvent;
+		private int FMessageBufferSize;
+		private int FSocketBufferSize;
+		
+		private event OnSymmetricAuthenticateEvent FOnSymmetricAuthenticateEvent;
+		private event OnSSLClientAuthenticateEvent FOnSSLClientAuthenticateEvent;
+		private event OnDisconnectEvent FOnDisconnectedEvent;
 
-        private ISocketConnection FSocketConnection;
-        private SocketClient FSocketClient;
-        private SocketClientSyncSocketService FSocketClientEvents;
-        private SocketClientSyncCryptService FCryptClientEvents;
+		private ISocketConnection FSocketConnection;
+		private SocketClient FSocketClient;
+		private SocketClientSyncSocketService FSocketClientEvents;
+		private SocketClientSyncCryptService FCryptClientEvents;
 
-        private AutoResetEvent FExceptionEvent;
+		private AutoResetEvent FExceptionEvent;
 
-        private AutoResetEvent FConnectEvent;
-        private int FConnectTimeout;
-        private bool FConnected;
-        private object FConnectedSync;
+		private AutoResetEvent FConnectEvent;
+		private int FConnectTimeout;
+		private bool FConnected;
+		private object FConnectedSync;
 
-        private AutoResetEvent FSentEvent;
-        private int FSentTimeout;
+		private AutoResetEvent FSentEvent;
+		private int FSentTimeout;
 
-        private Queue<string> FReceivedQueue;
-        private AutoResetEvent FReceivedEvent;
+		private Queue<string> FReceivedQueue;
+		private AutoResetEvent FReceivedEvent;
 
-        private ManualResetEvent FDisconnectEvent;
+		private ManualResetEvent FDisconnectEvent;
 
-        private Exception FLastException;
+		private Exception FLastException;
 
-        #endregion
-        
-        #region Constructor
+		#endregion
+		
+		#region Constructor
 
 		public SocketClientSync(ProtocolType protocolType, IPEndPoint host)
-        {
+		{
 
 			FProtocolType = protocolType;
 
-            FReceivedEvent = new AutoResetEvent(false);
-            FExceptionEvent = new AutoResetEvent(false);
-            FSentEvent = new AutoResetEvent(false);
-            FConnectEvent = new AutoResetEvent(false);
-            FDisconnectEvent = new ManualResetEvent(false);
+			FReceivedEvent = new AutoResetEvent(false);
+			FExceptionEvent = new AutoResetEvent(false);
+			FSentEvent = new AutoResetEvent(false);
+			FConnectEvent = new AutoResetEvent(false);
+			FDisconnectEvent = new ManualResetEvent(false);
 
-            FReceivedQueue = new Queue<string>();
+			FReceivedQueue = new Queue<string>();
 
-            FConnectTimeout = 10000;
-            FSentTimeout = 10000;
+			FConnectTimeout = 10000;
+			FSentTimeout = 10000;
 
-            FConnectedSync = new object();
-            FConnected = false;
+			FConnectedSync = new object();
+			FConnected = false;
 
-            FSocketClientEvents = new SocketClientSyncSocketService(this);
-            FCryptClientEvents = new SocketClientSyncCryptService(this);
-            
-            FLocalEndPoint = null;
-            FRemoteEndPoint = host;
+			FSocketClientEvents = new SocketClientSyncSocketService(this);
+			FCryptClientEvents = new SocketClientSyncCryptService(this);
+			
+			FLocalEndPoint = null;
+			FRemoteEndPoint = host;
 
-            //----- Message Types!
-            FEncryptType = EncryptType.etNone;
-            FCompressionType = CompressionType.ctNone;
-            FDelimiterType = DelimiterType.dtNone;
+			//----- Message Types!
+			FEncryptType = EncryptType.etNone;
+			FCompressionType = CompressionType.ctNone;
+			FDelimiterType = DelimiterType.dtNone;
 
-            //----- Proxy!
-            FProxyInfo = null;
+			//----- Proxy!
+			FProxyInfo = null;
 
-            //----- Socket delimiter and buffer size!
-            FDelimiter = null;
+			//----- Socket delimiter and buffer size!
+			FDelimiter = null;
 
-            FMessageBufferSize = 4096;
-            FSocketBufferSize = 2048;
+			FMessageBufferSize = 4096;
+			FSocketBufferSize = 2048;
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region Destructor
+		#region Destructor
 
-        protected override void Free(bool canAccessFinalizable)
-        {
+		protected override void Free(bool canAccessFinalizable)
+		{
 
-            FSocketConnection = null;
-            FSocketClientEvents = null;
-            FCryptClientEvents = null;
-            FConnectedSync = null;
-            FLastException = null;
+			FSocketConnection = null;
+			FSocketClientEvents = null;
+			FCryptClientEvents = null;
+			FConnectedSync = null;
+			FLastException = null;
 
-            if (FReceivedQueue != null)
-            {
-                FReceivedQueue.Clear();
-                FReceivedQueue = null;
-            }
+			if (FReceivedQueue != null)
+			{
+				FReceivedQueue.Clear();
+				FReceivedQueue = null;
+			}
 
-            if (FSocketClient != null)
-            {
-                FSocketClient.Stop();
-                FSocketClient.Dispose();
-                FSocketClient = null;
-            }
+			if (FSocketClient != null)
+			{
+				FSocketClient.Stop();
+				FSocketClient.Dispose();
+				FSocketClient = null;
+			}
 
-            if (FExceptionEvent != null)
-            {
-                FExceptionEvent.Close();
-                FExceptionEvent = null;
-            }
+			if (FExceptionEvent != null)
+			{
+				FExceptionEvent.Close();
+				FExceptionEvent = null;
+			}
 
-            if (FConnectEvent != null)
-            {
-                FConnectEvent.Close();
-                FConnectEvent = null;
-            }
+			if (FConnectEvent != null)
+			{
+				FConnectEvent.Close();
+				FConnectEvent = null;
+			}
 
-            if (FSentEvent != null)
-            {
-                FSentEvent.Close();
-                FSentEvent = null;
-            }
+			if (FSentEvent != null)
+			{
+				FSentEvent.Close();
+				FSentEvent = null;
+			}
 
-            if (FReceivedEvent != null)
-            {
-                FReceivedEvent.Close();
-                FReceivedEvent = null;
-            }
+			if (FReceivedEvent != null)
+			{
+				FReceivedEvent.Close();
+				FReceivedEvent = null;
+			}
 
-            if (FDisconnectEvent != null)
-            {
-                FDisconnectEvent.Close();
-                FDisconnectEvent = null;
-            }
+			if (FDisconnectEvent != null)
+			{
+				FDisconnectEvent.Close();
+				FDisconnectEvent = null;
+			}
 
-            base.Free(canAccessFinalizable);
+			base.Free(canAccessFinalizable);
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        #region DoOnSSLClientAuthenticate
+		#region DoOnSSLClientAuthenticate
 
-        internal void DoOnSSLClientAuthenticate(ISocketConnection connection, out string serverName, ref X509Certificate2Collection certs, ref bool checkRevocation)
-        {
+		internal void DoOnSSLClientAuthenticate(ISocketConnection connection, out string serverName, ref X509Certificate2Collection certs, ref bool checkRevocation)
+		{
 
-            serverName = String.Empty;
+			serverName = String.Empty;
 
-            if (FOnSSLClientAuthenticateEvent != null)
-            {
-                FOnSSLClientAuthenticateEvent(connection, out serverName, ref certs, ref checkRevocation);
-            }
+			if (FOnSSLClientAuthenticateEvent != null)
+			{
+				FOnSSLClientAuthenticateEvent(connection, out serverName, ref certs, ref checkRevocation);
+			}
 
-        }
+		}
 
 
-        #endregion
+		#endregion
 
-        #region DoOnSymmetricAuthenticate
+		#region DoOnSymmetricAuthenticate
 
-        internal void DoOnSymmetricAuthenticate(ISocketConnection connection, out RSACryptoServiceProvider serverKey)
-        {
+		internal void DoOnSymmetricAuthenticate(ISocketConnection connection, out RSACryptoServiceProvider serverKey)
+		{
 
-            serverKey = new RSACryptoServiceProvider();
-            serverKey.Clear();
+			serverKey = new RSACryptoServiceProvider();
+			serverKey.Clear();
 
-            if (FOnSymmetricAuthenticateEvent != null)
-            {
-                FOnSymmetricAuthenticateEvent(connection, out serverKey);
-            }   
+			if (FOnSymmetricAuthenticateEvent != null)
+			{
+				FOnSymmetricAuthenticateEvent(connection, out serverKey);
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region Connect
+		#region Connect
 
-        public void Connect()
-        {
+		public void Connect()
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                FLastException = null;
+				FLastException = null;
 
-                if (!Connected)
-                {
+				if (!Connected)
+				{
 
-                    FConnectEvent.Reset();
-                    FExceptionEvent.Reset();
-                    FDisconnectEvent.Reset();
+					FConnectEvent.Reset();
+					FExceptionEvent.Reset();
+					FDisconnectEvent.Reset();
 
-                    FSocketClient = new SocketClient(FProtocolType, CallbackThreadType.ctWorkerThread, FSocketClientEvents, FDelimiterType, FDelimiter, FSocketBufferSize, FMessageBufferSize);
-                    
-                    SocketConnector connector = FSocketClient.AddConnector("SocketClientSync", FRemoteEndPoint);
-                    
-                    connector.EncryptType = FEncryptType;
-                    connector.CompressionType = FCompressionType;
-                    connector.CryptoService = FCryptClientEvents;
-                    connector.ProxyInfo = FProxyInfo;
+					FSocketClient = new SocketClient(FProtocolType, CallbackThreadType.ctWorkerThread, FSocketClientEvents, FDelimiterType, FDelimiter, FSocketBufferSize, FMessageBufferSize);
+					
+					SocketConnector connector = FSocketClient.AddConnector("SocketClientSync", FRemoteEndPoint);
+					
+					connector.EncryptType = FEncryptType;
+					connector.CompressionType = FCompressionType;
+					connector.CryptoService = FCryptClientEvents;
+					connector.ProxyInfo = FProxyInfo;
 
-                    WaitHandle[] wait = new WaitHandle[] { FConnectEvent, FExceptionEvent };
+					WaitHandle[] wait = new WaitHandle[] { FConnectEvent, FExceptionEvent };
 
-                    FSocketClient.Start();
+					FSocketClient.Start();
 
-                    int signal = WaitHandle.WaitAny(wait, FConnectTimeout, false);
+					int signal = WaitHandle.WaitAny(wait, FConnectTimeout, false);
 
-                    switch (signal)
-                    {
+					switch (signal)
+					{
 
-                        case 0:
+						case 0:
 
-                            //----- Connect!
-                            FLastException = null;
-                            Connected = true;
-                            
-                            break;
+							//----- Connect!
+							FLastException = null;
+							Connected = true;
+							
+							break;
 
-                        case 1:
+						case 1:
 
-                            //----- Exception!
-                            Connected = false;
-                            FSocketConnection = null;
-                            
-                            FSocketClient.Stop();
-                            FSocketClient.Dispose();
-                            FSocketClient = null;
+							//----- Exception!
+							Connected = false;
+							FSocketConnection = null;
+							
+							FSocketClient.Stop();
+							FSocketClient.Dispose();
+							FSocketClient = null;
 
-                            break;
+							break;
 
-                        default:
+						default:
 
-                            //----- TimeOut!
-                            FLastException = new TimeoutException("Connect timeout.");
+							//----- TimeOut!
+							FLastException = new TimeoutException("Connect timeout.");
 
-                            Connected = false;
-                            FSocketConnection = null;
-                            
-                            FSocketClient.Stop();
-                            FSocketClient.Dispose();
-                            FSocketClient = null;
+							Connected = false;
+							FSocketConnection = null;
+							
+							FSocketClient.Stop();
+							FSocketClient.Dispose();
+							FSocketClient = null;
 
-                            break;
+							break;
 
-                    }
+					}
 
-                }
+				}
 
-            }
-            
-        }
+			}
+			
+		}
 
-        #endregion
+		#endregion
 
-        #region Write
-        
-        public void Write(string buffer)
-        {
-            Write(Encoding.GetEncoding(1252).GetBytes(buffer));
-        }
+		#region Write
+		
+		public void Write(string buffer)
+		{
+			Write(Encoding.GetEncoding(1252).GetBytes(buffer));
+		}
 
-        public void Write(byte[] buffer)
-        {
+		public void Write(byte[] buffer)
+		{
 
-            FLastException = null;
+			FLastException = null;
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                if (Connected)
-                {
+				if (Connected)
+				{
 
-                    FSentEvent.Reset();
-                    FExceptionEvent.Reset();
+					FSentEvent.Reset();
+					FExceptionEvent.Reset();
 
-                    WaitHandle[] wait = new WaitHandle[] { FSentEvent, FDisconnectEvent, FExceptionEvent };
+					WaitHandle[] wait = new WaitHandle[] { FSentEvent, FDisconnectEvent, FExceptionEvent };
 
-                    FSocketConnection.BeginSend(buffer);
+					FSocketConnection.BeginSend(buffer);
 
-                    int signaled = WaitHandle.WaitAny(wait, FSentTimeout, false);
+					int signaled = WaitHandle.WaitAny(wait, FSentTimeout, false);
 
-                    switch (signaled)
-                    {
+					switch (signaled)
+					{
 
-                        case 0:
+						case 0:
 
-                            //----- Sent!
-                            FLastException = null;
-                            break;
+							//----- Sent!
+							FLastException = null;
+							break;
 
-                        case 1:
+						case 1:
 
-                            //----- Disconnected!
-                            DoDisconnect();
-                            break;
+							//----- Disconnected!
+							DoDisconnect();
+							break;
 
-                        case 2:
+						case 2:
 
-                            //----- Exception!
-                            break;
+							//----- Exception!
+							break;
 
-                        default:
+						default:
 
-                            //----- TimeOut!
-                            FLastException = new TimeoutException("Write timeout.");
-                            break;
+							//----- TimeOut!
+							FLastException = new TimeoutException("Write timeout.");
+							break;
 
-                    }
+					}
 
-                }
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region Enqueue
+		#region Enqueue
 
-        internal void Enqueue(string data)
-        {
+		internal void Enqueue(string data)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                lock (FReceivedQueue)
-                {
-                    FReceivedQueue.Enqueue(data);
-                    FReceivedEvent.Set();
-                }
+				lock (FReceivedQueue)
+				{
+					FReceivedQueue.Enqueue(data);
+					FReceivedEvent.Set();
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region Read
-        
-        public string Read(int timeOut)
-        {
+		#region Read
+		
+		public string Read(int timeOut)
+		{
 
-            string result = null;
+			string result = null;
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                FLastException = null;
+				FLastException = null;
 
-                if (Connected)
-                {
+				if (Connected)
+				{
 
-                    lock (FReceivedQueue)
-                    {
+					lock (FReceivedQueue)
+					{
 
-                        if (FReceivedQueue.Count > 0)
-                        {
-                            result = FReceivedQueue.Dequeue();
-                        }
+						if (FReceivedQueue.Count > 0)
+						{
+							result = FReceivedQueue.Dequeue();
+						}
 
-                    }
+					}
 
-                    if (result == null)
-                    {
+					if (result == null)
+					{
 
-                        WaitHandle[] wait = new WaitHandle[] { FReceivedEvent, FDisconnectEvent, FExceptionEvent };
+						WaitHandle[] wait = new WaitHandle[] { FReceivedEvent, FDisconnectEvent, FExceptionEvent };
 
-                        int signaled = WaitHandle.WaitAny(wait, timeOut, false);
+						int signaled = WaitHandle.WaitAny(wait, timeOut, false);
 
-                        switch (signaled)
-                        {
+						switch (signaled)
+						{
 
-                            case 0:
+							case 0:
 
-                                //----- Received!
-                                lock (FReceivedQueue)
-                                {
+								//----- Received!
+								lock (FReceivedQueue)
+								{
 
-                                    if (FReceivedQueue.Count > 0)
-                                    {
-                                        result = FReceivedQueue.Dequeue();
-                                    }
+									if (FReceivedQueue.Count > 0)
+									{
+										result = FReceivedQueue.Dequeue();
+									}
 
-                                }
+								}
 
-                                FLastException = null;
+								FLastException = null;
 
-                                break;
+								break;
 
-                            case 1:
+							case 1:
 
-                                //----- Disconnected!
-                                DoDisconnect();
-                                break;
+								//----- Disconnected!
+								DoDisconnect();
+								break;
 
-                            case 2:
+							case 2:
 
-                                //----- Exception!
-                                break;
+								//----- Exception!
+								break;
 
-                            default:
+							default:
 
-                                //----- TimeOut!
-                                FLastException = new TimeoutException("Read timeout.");
-                                break;
+								//----- TimeOut!
+								FLastException = new TimeoutException("Read timeout.");
+								break;
 
-                        }
+						}
 
-                    }
+					}
 
-                }
+				}
 
-            }
+			}
 
-            return result;
+			return result;
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region DoDisconnect
+		#region DoDisconnect
 
-        internal void DoDisconnect()
-        {
+		internal void DoDisconnect()
+		{
 
-            bool fireEvent = false;
-            
-            lock (FConnectedSync)
-            {
+			bool fireEvent = false;
+			
+			lock (FConnectedSync)
+			{
 
-                if (FConnected)
-                {
+				if (FConnected)
+				{
 
-                    //----- Disconnect!
-                    FConnected = false;
-                    FSocketConnection = null;
+					//----- Disconnect!
+					FConnected = false;
+					FSocketConnection = null;
 
-                    if (FSocketClient != null)
-                    {
-                        FSocketClient.Stop();
-                        FSocketClient.Dispose();
-                        FSocketClient = null;
-                    }
-                    
-                    fireEvent = true;
-                    
-                }
+					if (FSocketClient != null)
+					{
+						FSocketClient.Stop();
+						FSocketClient.Dispose();
+						FSocketClient = null;
+					}
+					
+					fireEvent = true;
+					
+				}
 
-            }
+			}
 
-            if ( (FOnDisconnectedEvent != null) && fireEvent)
-            {
-                FOnDisconnectedEvent();
-            }
+			if ( (FOnDisconnectedEvent != null) && fireEvent)
+			{
+				FOnDisconnectedEvent();
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region Disconnect
+		#region Disconnect
 
-        public void Disconnect()
-        {
+		public void Disconnect()
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                FLastException = null;
+				FLastException = null;
 
-                if (Connected)
-                {
+				if (Connected)
+				{
 
-                    FExceptionEvent.Reset();
+					FExceptionEvent.Reset();
 
-                    if (FSocketConnection != null)
-                    {
+					if (FSocketConnection != null)
+					{
 
-                        WaitHandle[] wait = new WaitHandle[] { FDisconnectEvent, FExceptionEvent };
+						WaitHandle[] wait = new WaitHandle[] { FDisconnectEvent, FExceptionEvent };
 
-                        FSocketConnection.BeginDisconnect();
+						FSocketConnection.BeginDisconnect();
 
-                        int signaled = WaitHandle.WaitAny(wait, FConnectTimeout, false);
+						int signaled = WaitHandle.WaitAny(wait, FConnectTimeout, false);
 
-                        switch (signaled)
-                        {
+						switch (signaled)
+						{
 
-                            case 0:
+							case 0:
 
-                                DoDisconnect();
-                                break;
+								DoDisconnect();
+								break;
 
-                            case 1:
+							case 1:
 
-                                //----- Exception!
-                                DoDisconnect();
-                                break;
+								//----- Exception!
+								DoDisconnect();
+								break;
 
-                            default:
+							default:
 
-                                //----- TimeOut!
-                                FLastException = new TimeoutException("Disconnect timeout.");
-                                break;
+								//----- TimeOut!
+								FLastException = new TimeoutException("Disconnect timeout.");
+								break;
 
-                        }
+						}
 
-                    }
+					}
 
-                }
-            }
-        }
+				}
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #endregion
+		#endregion
 
-        #region Properties
+		#region Properties
 
-        public event OnDisconnectEvent OnDisconnected
-        {
+		public event OnDisconnectEvent OnDisconnected
+		{
 
-                add
-                {
-                    FOnDisconnectedEvent += value;
-                }
+				add
+				{
+					FOnDisconnectedEvent += value;
+				}
 
-                remove
-                {
-                    FOnDisconnectedEvent -= value;
-                }
-        
-        }
+				remove
+				{
+					FOnDisconnectedEvent -= value;
+				}
+		
+		}
 
-        public event OnSymmetricAuthenticateEvent OnSymmetricAuthenticate
-        {
+		public event OnSymmetricAuthenticateEvent OnSymmetricAuthenticate
+		{
 
-            add 
-            {
-                FOnSymmetricAuthenticateEvent += value;
-            }
+			add 
+			{
+				FOnSymmetricAuthenticateEvent += value;
+			}
 
-            remove 
-            {
-                FOnSymmetricAuthenticateEvent -= value;
-            }
+			remove 
+			{
+				FOnSymmetricAuthenticateEvent -= value;
+			}
 
-        }
+		}
 
-        public event OnSSLClientAuthenticateEvent OnSSLClientAuthenticate
-        {
+		public event OnSSLClientAuthenticateEvent OnSSLClientAuthenticate
+		{
 
-            add
-            {
-                FOnSSLClientAuthenticateEvent += value;
-            }
+			add
+			{
+				FOnSSLClientAuthenticateEvent += value;
+			}
 
-            remove
-            {
-                FOnSSLClientAuthenticateEvent -= value;
-            }
+			remove
+			{
+				FOnSSLClientAuthenticateEvent -= value;
+			}
 
-        }
-        
-        public IPEndPoint RemoteEndPoint
-        {
-            get { return FRemoteEndPoint; }
-            set { FRemoteEndPoint = value; }
-        }
+		}
+		
+		public IPEndPoint RemoteEndPoint
+		{
+			get { return FRemoteEndPoint; }
+			set { FRemoteEndPoint = value; }
+		}
 
-        public IPEndPoint LocalEndPoint
-        {
-            get { return FLocalEndPoint; }
-            set { FLocalEndPoint = value; }
-        }
-        
-        public DelimiterType DelimiterType
-        {
-            get { return FDelimiterType; }
-            set { FDelimiterType = value; }
-        }
+		public IPEndPoint LocalEndPoint
+		{
+			get { return FLocalEndPoint; }
+			set { FLocalEndPoint = value; }
+		}
+		
+		public DelimiterType DelimiterType
+		{
+			get { return FDelimiterType; }
+			set { FDelimiterType = value; }
+		}
 
-        public EncryptType EncryptType
-        {
-            get { return FEncryptType; }
-            set { FEncryptType = value; }
-        }
+		public EncryptType EncryptType
+		{
+			get { return FEncryptType; }
+			set { FEncryptType = value; }
+		}
 
-        public CompressionType CompressionType
-        {
-            get { return FCompressionType; }
-            set { FCompressionType = value; }
-        }
-        
-        public byte[] Delimiter
-        {
-            get { return FDelimiter; }
-            set { FDelimiter = value; }
-        }
+		public CompressionType CompressionType
+		{
+			get { return FCompressionType; }
+			set { FCompressionType = value; }
+		}
+		
+		public byte[] Delimiter
+		{
+			get { return FDelimiter; }
+			set { FDelimiter = value; }
+		}
 
-        public ProxyInfo ProxyInfo
-        {
-            get { return FProxyInfo; }
-            set { FProxyInfo = value; }
-        }
-        
-        public int MessageBufferSize
-        {
-            get { return FMessageBufferSize; }
-            set { FMessageBufferSize = value; }
-        }
+		public ProxyInfo ProxyInfo
+		{
+			get { return FProxyInfo; }
+			set { FProxyInfo = value; }
+		}
+		
+		public int MessageBufferSize
+		{
+			get { return FMessageBufferSize; }
+			set { FMessageBufferSize = value; }
+		}
 
-        public int SocketBufferSize
-        {
-            get { return FSocketBufferSize; }
-            set { FSocketBufferSize = value; }
-        }
+		public int SocketBufferSize
+		{
+			get { return FSocketBufferSize; }
+			set { FSocketBufferSize = value; }
+		}
 
-        internal ManualResetEvent DisconnectEvent
-        {
+		internal ManualResetEvent DisconnectEvent
+		{
 
-            get
-            {
-                return FDisconnectEvent;
-            }
+			get
+			{
+				return FDisconnectEvent;
+			}
 
-        }
+		}
 
-        internal AutoResetEvent ConnectEvent
-        {
+		internal AutoResetEvent ConnectEvent
+		{
 
-            get
-            {
-                return FConnectEvent;
-            }
+			get
+			{
+				return FConnectEvent;
+			}
 
-        }
+		}
 
-        internal AutoResetEvent SentEvent
-        {
+		internal AutoResetEvent SentEvent
+		{
 
-            get
-            {
-                return FSentEvent;
-            }
+			get
+			{
+				return FSentEvent;
+			}
 
-        }
+		}
 
-        internal AutoResetEvent ExceptionEvent
-        {
+		internal AutoResetEvent ExceptionEvent
+		{
 
-            get
-            {
-                return FExceptionEvent;
-            }
+			get
+			{
+				return FExceptionEvent;
+			}
 
-        }
+		}
 
-        internal ISocketConnection SocketConnection
-        {
+		internal ISocketConnection SocketConnection
+		{
 
-            get
-            {
-                return FSocketConnection;
-            }
+			get
+			{
+				return FSocketConnection;
+			}
 
-            set 
-            {
-                FSocketConnection = value;
-            }
+			set 
+			{
+				FSocketConnection = value;
+			}
 
-        }
+		}
 
-        public bool Connected
-        {
-            
-            get
-            {
+		public bool Connected
+		{
+			
+			get
+			{
 
-                bool connected = false;
+				bool connected = false;
 
-                lock (FConnectedSync)
-                {
-                    connected = FConnected;
-                }
+				lock (FConnectedSync)
+				{
+					connected = FConnected;
+				}
 
-                return connected;
-                
-            }
+				return connected;
+				
+			}
 
-            internal set 
-            {
+			internal set 
+			{
 
-                lock (FConnectedSync)
-                {
-                    FConnected = value;
-                }
+				lock (FConnectedSync)
+				{
+					FConnected = value;
+				}
 
-            }
+			}
 
-        }
+		}
 
-        public Exception LastException
-        {
-            
-            get
-            {
-                return FLastException;
-            }
+		public Exception LastException
+		{
+			
+			get
+			{
+				return FLastException;
+			}
 
-            internal set
-            {
-                FLastException = value;
-            }
+			internal set
+			{
+				FLastException = value;
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-    }
+	}
 
-    #endregion
+	#endregion
 
-    #region SocketClientSyncSocketService
-    
-    internal class SocketClientSyncSocketService: BaseSocketService
-    {
+	#region SocketClientSyncSocketService
+	
+	internal class SocketClientSyncSocketService: BaseSocketService
+	{
 
-        #region Fields
+		#region Fields
 
-        private SocketClientSync FSocketClient;
+		private SocketClientSync FSocketClient;
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        public SocketClientSyncSocketService(SocketClientSync client)
-        {
-            FSocketClient = client;
-        }
+		public SocketClientSyncSocketService(SocketClientSync client)
+		{
+			FSocketClient = client;
+		}
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        public override void OnConnected(ConnectionEventArgs e)
-        {
-            FSocketClient.SocketConnection = e.Connection;
-            FSocketClient.SocketConnection.BeginReceive();
-            FSocketClient.ConnectEvent.Set();
-        }
+		public override void OnConnected(ConnectionEventArgs e)
+		{
+			FSocketClient.SocketConnection = e.Connection;
+			FSocketClient.SocketConnection.BeginReceive();
+			FSocketClient.ConnectEvent.Set();
+		}
 
-        public override void OnException(ExceptionEventArgs e)
-        {
-            FSocketClient.LastException = e.Exception;
-            FSocketClient.ExceptionEvent.Set();
-        }
+		public override void OnException(ExceptionEventArgs e)
+		{
+			FSocketClient.LastException = e.Exception;
+			FSocketClient.ExceptionEvent.Set();
+		}
 
-        public override void OnSent(MessageEventArgs e)
-        {
-            FSocketClient.SentEvent.Set();
-        }
+		public override void OnSent(MessageEventArgs e)
+		{
+			FSocketClient.SentEvent.Set();
+		}
 
-        public override void OnReceived(MessageEventArgs e)
-        {
-            FSocketClient.Enqueue(Encoding.GetEncoding(1252).GetString(e.Buffer));
-            FSocketClient.SocketConnection.BeginReceive();
-        }
+		public override void OnReceived(MessageEventArgs e)
+		{
+			FSocketClient.Enqueue(Encoding.GetEncoding(1252).GetString(e.Buffer));
+			FSocketClient.SocketConnection.BeginReceive();
+		}
 
-        public override void OnDisconnected(ConnectionEventArgs e)
-        {
-            FSocketClient.DisconnectEvent.Set();
-        }
+		public override void OnDisconnected(ConnectionEventArgs e)
+		{
+			FSocketClient.DisconnectEvent.Set();
+		}
 
-        #endregion
+		#endregion
 
-    }
+	}
 
-    #endregion
+	#endregion
 
-    #region SocketClientSyncCryptService
+	#region SocketClientSyncCryptService
 
-    internal class SocketClientSyncCryptService : BaseCryptoService
-    {
+	internal class SocketClientSyncCryptService : BaseCryptoService
+	{
 
-        #region Fields
+		#region Fields
 
-        private SocketClientSync FSocketClient;
+		private SocketClientSync FSocketClient;
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        public SocketClientSyncCryptService(SocketClientSync client)
-        {
-            FSocketClient = client;
-        }
+		public SocketClientSyncCryptService(SocketClientSync client)
+		{
+			FSocketClient = client;
+		}
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        public override void OnSymmetricAuthenticate(ISocketConnection connection, out RSACryptoServiceProvider serverKey)
-        {
-            FSocketClient.DoOnSymmetricAuthenticate(connection, out serverKey);
-        }
+		public override void OnSymmetricAuthenticate(ISocketConnection connection, out RSACryptoServiceProvider serverKey)
+		{
+			FSocketClient.DoOnSymmetricAuthenticate(connection, out serverKey);
+		}
 
-        public override void OnSSLClientAuthenticate(ISocketConnection connection, out string serverName, ref X509Certificate2Collection certs, ref bool checkRevocation)
-        {
-            FSocketClient.DoOnSSLClientAuthenticate(connection, out serverName, ref certs, ref checkRevocation);
-        }
+		public override void OnSSLClientAuthenticate(ISocketConnection connection, out string serverName, ref X509Certificate2Collection certs, ref bool checkRevocation)
+		{
+			FSocketClient.DoOnSSLClientAuthenticate(connection, out serverName, ref certs, ref checkRevocation);
+		}
 
-        #endregion
+		#endregion
 
-    }
+	}
 
-    #endregion
+	#endregion
 
 }

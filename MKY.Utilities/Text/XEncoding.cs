@@ -25,11 +25,11 @@ namespace MKY.Utilities.Text
 	#region Enum SupportedEncoding
 
 	/// <summary>
-    /// Encodings that are supported by YAT.
-    /// </summary>
-    /// <remarks>
-    /// Enum value corresponds to code page.
-    /// </remarks>
+	/// Encodings that are supported by YAT.
+	/// </summary>
+	/// <remarks>
+	/// Enum value corresponds to code page.
+	/// </remarks>
 	public enum SupportedEncoding
 	{
 		//------------------------------------------------------------------------------------------

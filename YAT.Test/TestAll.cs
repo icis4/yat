@@ -36,33 +36,33 @@ namespace YAT.Test
 			{
 				ArrayList suite = new ArrayList();
 
-                // libusb.NET
-                // libusb.NET.Test is a manual test
-                // Set libusb.NET.Test as start up project and run it
-                //suite.Add(new libusb.NET.Test.<>());
+				// libusb.NET
+				// libusb.NET.Test is a manual test
+				// Set libusb.NET.Test as start up project and run it
+				//suite.Add(new libusb.NET.Test.<>());
 
-                // MKY.IO.Ports.Test
-                suite.Add(new MKY.IO.Ports.Test.SerialPort.SerialPortIdTest());
-                suite.Add(new MKY.IO.Ports.Test.SerialPort.SerialPortSettingsTest());
+				// MKY.IO.Ports.Test
+				suite.Add(new MKY.IO.Ports.Test.SerialPort.SerialPortIdTest());
+				suite.Add(new MKY.IO.Ports.Test.SerialPort.SerialPortSettingsTest());
 
-                // MKY.IO.Serial.Test
-                suite.Add(new MKY.IO.Serial.Test.SerialPort.SerialPortSettingsTest());
-                suite.Add(new MKY.IO.Serial.Test.Socket.SocketSettingsTest());
+				// MKY.IO.Serial.Test
+				suite.Add(new MKY.IO.Serial.Test.SerialPort.SerialPortSettingsTest());
+				suite.Add(new MKY.IO.Serial.Test.Socket.SocketSettingsTest());
 
-                // MKY.IO.Usb.Test
-                suite.Add(new MKY.IO.Usb.Test.UsbDeviceIdTest());
+				// MKY.IO.Usb.Test
+				suite.Add(new MKY.IO.Usb.Test.UsbDeviceIdTest());
 
-                // MKY.Utilities.Test
+				// MKY.Utilities.Test
 				suite.Add(new MKY.Utilities.Test.IO.XPathTest());
 				suite.Add(new MKY.Utilities.Test.Settings.DocumentSettingsHandlerTest());
 				suite.Add(new MKY.Utilities.Test.Types.XByteTest());
 				suite.Add(new MKY.Utilities.Test.Types.XInt32Test());
 				suite.Add(new MKY.Utilities.Test.Types.XUInt64Test());
 
-                // MKY.Windows.Forms.Test
-                // MKY.Windows.Forms.Test.FastListBoxTest is a manual test
-                // Set MKY.Windows.Forms.Test as start up project and run it
-                //suite.Add(new MKY.Windows.Forms.Test.<>());
+				// MKY.Windows.Forms.Test
+				// MKY.Windows.Forms.Test.FastListBoxTest is a manual test
+				// Set MKY.Windows.Forms.Test as start up project and run it
+				//suite.Add(new MKY.Windows.Forms.Test.<>());
 
 				// YAT.Controller.Test
 				suite.Add(new YAT.Controller.Test.ControllerTest());

@@ -18,13 +18,13 @@ using System;
 
 namespace libusb.NET
 {
-    public static class Constants
-    {
-        /// <summary>
-        /// Maximum of 126 characters in UCS-2 format.
-        /// </summary>
-        public const int MaximumStringDescriptorByteLength = 256;
-    }
+	public static class Constants
+	{
+		/// <summary>
+		/// Maximum of 126 characters in UCS-2 format.
+		/// </summary>
+		public const int MaximumStringDescriptorByteLength = 256;
+	}
 }
 
 //==================================================================================================

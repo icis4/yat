@@ -76,14 +76,14 @@ namespace YAT.Domain
 						));
 				}
 
-                case Domain.IOType.UsbHid:
-                {
-                    return (new UsbHidDevice
-                        (
-                        settings.UsbHidPort.DeviceId,
-                        settings.UsbHidPort.AutoReconnect
-                        ));
-                }
+				case Domain.IOType.UsbHid:
+				{
+					return (new UsbHidDevice
+						(
+						settings.UsbHidPort.DeviceId,
+						settings.UsbHidPort.AutoReconnect
+						));
+				}
 
 				default: throw (new NotImplementedException("Unknown IO type"));
 			}

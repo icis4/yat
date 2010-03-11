@@ -15,19 +15,47 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
+using System.IO;
 
-namespace MKY.Utilities
+namespace MKY.Utilities.Globalization
 {
-	/// <summary></summary>
-	public static class Unused
+	/// <summary>
+	/// Some CultureInfo utilities.
+	/// </summary>
+	public static class XCultureInfo
 	{
 		/// <summary>
-		/// Utility method that can be applied to unused objects to prevent compiler warnings.
+		/// Returns the most appropriate culture info from a collection of culture infos.
 		/// </summary>
-		public static void PreventCompilerWarning(object obj)
+		public static CultureInfo GetMostAppropriateCultureInfo(IEnumerable<CultureInfo> cultureInfos)
 		{
-			if ((bool)obj)
-				return;
+			CultureInfo ci;
+			List<CultureInfo> l = new List<CultureInfo>(cultureInfos);
+
+			// Verify that list contains items
+			if (l.Count <= 0)
+				return (null);
+
+			// 1st prio: The culture of the user interface
+			ci = CultureInfo.CurrentUICulture;
+			if (l.Contains(ci))
+				return (ci);
+
+			// 2nd prio: The current culture
+			ci = CultureInfo.CurrentCulture;
+			if (l.Contains(ci))
+				return (ci);
+
+			// 3rd prio: English (United States)
+			ci = CultureInfo.GetCultureInfo("en-US");
+			if (l.Contains(ci))
+				return (ci);
+
+			// 4th prio: The first entry in the list
+			return (l[0]);
 		}
 	}
 }

@@ -1,7 +1,7 @@
 /* ====================================================================
  * Copyright (c) 2009 Andre Luis Azevedo (az.andrel@yahoo.com.br)
  * All rights reserved.
- *                       
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -42,41 +42,41 @@ using System;
 namespace ALAZ.SystemEx.NetEx.SocketsEx
 {
 
-    internal class WriteData
-    {
+	internal class WriteData
+	{
 
-        #region Fields
+		#region Fields
 
-        private BaseSocketConnection FConnection;
-        private bool FSentByServer;
-        
-        #endregion
+		private BaseSocketConnection FConnection;
+		private bool FSentByServer;
+		
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        public WriteData(BaseSocketConnection connection, bool sentByServer)
-        {
-            FConnection = connection;
-            FSentByServer = sentByServer;
-        }
+		public WriteData(BaseSocketConnection connection, bool sentByServer)
+		{
+			FConnection = connection;
+			FSentByServer = sentByServer;
+		}
 
-        #endregion
+		#endregion
 
-        #region Properties
+		#region Properties
 
-        public BaseSocketConnection Connection
-        {
-            get { return FConnection; }
-            set { FConnection = value; }
-        }
+		public BaseSocketConnection Connection
+		{
+			get { return FConnection; }
+			set { FConnection = value; }
+		}
 
-        public bool SentByServer
-        {
-            get { return FSentByServer; }
-        }
-        
-        #endregion
+		public bool SentByServer
+		{
+			get { return FSentByServer; }
+		}
+		
+		#endregion
 
-    }
+	}
 
 }

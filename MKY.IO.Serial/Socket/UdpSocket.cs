@@ -65,9 +65,9 @@ namespace MKY.IO.Serial
 		private ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection _socketConnection;
 		private object _socketConnectionSyncObj = new object();
 
-        private Queue<byte> _receiveQueue = new Queue<byte>();
+		private Queue<byte> _receiveQueue = new Queue<byte>();
 
-        #endregion
+		#endregion
 
 		#region Events
 		//==========================================================================================
@@ -160,35 +160,35 @@ namespace MKY.IO.Serial
 		// Properties
 		//==========================================================================================
 
-        /// <summary></summary>
-        public System.Net.IPAddress RemoteIPAddress
-        {
-            get
-            {
-                AssertNotDisposed();
-                return (_remoteIPAddress);
-            }
-        }
+		/// <summary></summary>
+		public System.Net.IPAddress RemoteIPAddress
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_remoteIPAddress);
+			}
+		}
 
-        /// <summary></summary>
-        public int RemotePort
-        {
-            get
-            {
-                AssertNotDisposed();
-                return (_remotePort);
-            }
-        }
+		/// <summary></summary>
+		public int RemotePort
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_remotePort);
+			}
+		}
 
-        /// <summary></summary>
-        public int LocalPort
-        {
-            get
-            {
-                AssertNotDisposed();
-                return (_localPort);
-            }
-        }
+		/// <summary></summary>
+		public int LocalPort
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_localPort);
+			}
+		}
 
 		/// <summary></summary>
 		public bool IsStarted
@@ -309,14 +309,14 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-        public void Send(byte[] data)
+		public void Send(byte[] data)
 		{
 			AssertNotDisposed();
 
 			if (IsStarted)
 			{
 				if (_socketConnection != null)
-                    _socketConnection.BeginSend(data);
+					_socketConnection.BeginSend(data);
 			}
 		}
 
@@ -367,10 +367,10 @@ namespace MKY.IO.Serial
 
 		private void StartSocket()
 		{
-            if (_socket != null)
-                DisposeSocket();
+			if (_socket != null)
+				DisposeSocket();
 
-            SetStateAndNotify(SocketState.Opening);
+			SetStateAndNotify(SocketState.Opening);
 
 			_socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketClient(System.Net.Sockets.ProtocolType.Udp,
 				                                                     ALAZ.SystemEx.NetEx.SocketsEx.CallbackThreadType.ctWorkerThread,
@@ -405,12 +405,12 @@ namespace MKY.IO.Serial
 		// ISocketService Members
 		//==========================================================================================
 
-        /// <summary>
-        /// Fired when connected.
-        /// </summary>
-        /// <param name="e">
-        /// Information about the connection.
-        /// </param>
+		/// <summary>
+		/// Fired when connected.
+		/// </summary>
+		/// <param name="e">
+		/// Information about the connection.
+		/// </param>
 		public void OnConnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
 			lock (_socketConnectionSyncObj)
@@ -422,12 +422,12 @@ namespace MKY.IO.Serial
 			e.Connection.BeginReceive();
 		}
 
-        /// <summary>
-        /// Fired when data arrives.
-        /// </summary>
-        /// <param name="e">
-        /// Information about the Message.
-        /// </param>
+		/// <summary>
+		/// Fired when data arrives.
+		/// </summary>
+		/// <param name="e">
+		/// Information about the Message.
+		/// </param>
 		public void OnReceived(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
 			lock (_receiveQueue)
@@ -441,23 +441,23 @@ namespace MKY.IO.Serial
 			e.Connection.BeginReceive();
 		}
 
-        /// <summary>
-        /// Fired when data is sent.
-        /// </summary>
-        /// <param name="e">
-        /// Information about the Message.
-        /// </param>
+		/// <summary>
+		/// Fired when data is sent.
+		/// </summary>
+		/// <param name="e">
+		/// Information about the Message.
+		/// </param>
 		public void OnSent(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
 			// Nothing to do
 		}
 
-        /// <summary>
-        /// Fired when disconnected.
-        /// </summary>
-        /// <param name="e">
-        /// Information about the connection.
-        /// </param>
+		/// <summary>
+		/// Fired when disconnected.
+		/// </summary>
+		/// <param name="e">
+		/// Information about the connection.
+		/// </param>
 		public void OnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
 			// Normal disconnect
@@ -467,12 +467,12 @@ namespace MKY.IO.Serial
 			SetStateAndNotify(SocketState.Closed);
 		}
 
-        /// <summary>
-        /// Fired when exception occurs.
-        /// </summary>
-        /// <param name="e">
-        /// Information about the exception and connection.
-        /// </param>
+		/// <summary>
+		/// Fired when exception occurs.
+		/// </summary>
+		/// <param name="e">
+		/// Information about the exception and connection.
+		/// </param>
 		public void OnException(ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs e)
 		{
 			DisposeSocket();

@@ -1,7 +1,7 @@
 /* ====================================================================
  * Copyright (c) 2009 Andre Luis Azevedo (az.andrel@yahoo.com.br)
  * All rights reserved.
- *                       
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -49,556 +49,556 @@ using System.Reflection;
 namespace ALAZ.SystemEx.NetEx.SocketsEx
 {
 
-    /// <summary>
-    /// Base socket connection
-    /// </summary>
-    public abstract class BaseSocketConnection : BaseDisposable, ISocketConnection
-    {
+	/// <summary>
+	/// Base socket connection
+	/// </summary>
+	public abstract class BaseSocketConnection : BaseDisposable, ISocketConnection
+	{
 
-        #region Fields
+		#region Fields
 
-        //----- Connection!
-        private object FUserData;
-        private long FId;
+		//----- Connection!
+		private object FUserData;
+		private long FId;
 
-        private object FSyncData;
-        private DateTime FLastAction;
-        private long FWriteBytes;
-        private long FReadBytes;
+		private object FSyncData;
+		private DateTime FLastAction;
+		private long FWriteBytes;
+		private long FReadBytes;
 
-        //----- Active!
-        private object FSyncActive;
-        private bool FActive;
+		//----- Active!
+		private object FSyncActive;
+		private bool FActive;
 
-        //----- Event Processing!
-        private object FSyncEventProcessing;
-        private EventProcessing FEventProcessing;
+		//----- Event Processing!
+		private object FSyncEventProcessing;
+		private EventProcessing FEventProcessing;
 
-        //----- Connection Host and Creator!
-        private BaseSocketConnectionHost FHost;
-        private BaseSocketConnectionCreator FCreator;
+		//----- Connection Host and Creator!
+		private BaseSocketConnectionHost FHost;
+		private BaseSocketConnectionCreator FCreator;
 
-        //----- Socket and Stream!
-        private Socket FSocket;
-        private Stream FStream;
+		//----- Socket and Stream!
+		private Socket FSocket;
+		private Stream FStream;
 
-        //----- Write items!
-        SocketAsyncEventArgs FWriteOV;
-        private Queue<MessageBuffer> FWriteQueue;
-        private bool FWriteQueueHasItems;
+		//----- Write items!
+		SocketAsyncEventArgs FWriteOV;
+		private Queue<MessageBuffer> FWriteQueue;
+		private bool FWriteQueueHasItems;
 
-        //----- Read items!
-        SocketAsyncEventArgs FReadOV;
-        private object FSyncReadPending;
-        private bool FReadPending;
+		//----- Read items!
+		SocketAsyncEventArgs FReadOV;
+		private object FSyncReadPending;
+		private bool FReadPending;
 
-        private ICryptoTransform FDecryptor;
-        private ICryptoTransform FEncryptor;
+		private ICryptoTransform FDecryptor;
+		private ICryptoTransform FEncryptor;
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        internal BaseSocketConnection(BaseSocketConnectionHost host, BaseSocketConnectionCreator creator, Socket socket)
-        {
+		internal BaseSocketConnection(BaseSocketConnectionHost host, BaseSocketConnectionCreator creator, Socket socket)
+		{
 
-            //----- Connection Id!
-            FId = host.GetConnectionId();
-            
-            FSyncData = new object();
-            FReadBytes = 0;
-            FWriteBytes = 0;
+			//----- Connection Id!
+			FId = host.GetConnectionId();
+			
+			FSyncData = new object();
+			FReadBytes = 0;
+			FWriteBytes = 0;
 
-            FHost = host;
-            FCreator = creator;
-            FSocket = socket;
+			FHost = host;
+			FCreator = creator;
+			FSocket = socket;
 
-            FSyncActive = new Object();
-            FActive = false;
+			FSyncActive = new Object();
+			FActive = false;
 
-            FWriteOV = new SocketAsyncEventArgs();
-            FReadOV = new SocketAsyncEventArgs();
+			FWriteOV = new SocketAsyncEventArgs();
+			FReadOV = new SocketAsyncEventArgs();
 
-            FWriteQueue = new Queue<MessageBuffer>();
-            FWriteQueueHasItems = false;
+			FWriteQueue = new Queue<MessageBuffer>();
+			FWriteQueueHasItems = false;
 
-            FSyncReadPending = new object();
-            FReadPending = false;
+			FSyncReadPending = new object();
+			FReadPending = false;
 
-            FSyncEventProcessing = new object();
-            FEventProcessing = EventProcessing.epNone;
+			FSyncEventProcessing = new object();
+			FEventProcessing = EventProcessing.epNone;
 
-            FLastAction = DateTime.Now;
+			FLastAction = DateTime.Now;
 
-            FUserData = null;
-            FEncryptor = null;
-            FDecryptor = null;
+			FUserData = null;
+			FEncryptor = null;
+			FDecryptor = null;
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region Destructor
+		#region Destructor
 
-        protected override void Free(bool canAccessFinalizable)
-        {
+		protected override void Free(bool canAccessFinalizable)
+		{
 
-            if (FWriteQueue != null)
-            {
-                FWriteQueue.Clear();
-                FWriteQueue = null;
-            }
+			if (FWriteQueue != null)
+			{
+				FWriteQueue.Clear();
+				FWriteQueue = null;
+			}
 
-            if (FStream != null)
-            {
-                FStream.Close();
-                FStream = null;
-            }
-
-            if (FDecryptor != null)
-            {
-                FDecryptor.Dispose();
-                FDecryptor = null;
-            }
-
-            if (FEncryptor != null)
-            {
-                FEncryptor.Dispose();
-                FEncryptor = null;
-            }
-
-            if (FReadOV != null)
-            {
-                
-                Type t = typeof(SocketAsyncEventArgs);
-
-                FieldInfo f = t.GetField("m_Completed", BindingFlags.Instance | BindingFlags.NonPublic);
-                f.SetValue(FReadOV, null);
-
-                FReadOV.SetBuffer(null, 0, 0);
-                FReadOV.Dispose();
-                FReadOV = null;
-
-            }
-
-            if (FWriteOV != null)
-            {
-
-                Type t = typeof(SocketAsyncEventArgs);
-
-                FieldInfo f = t.GetField("m_Completed", BindingFlags.Instance | BindingFlags.NonPublic);
-                f.SetValue(FWriteOV, null);
-
-                FWriteOV.SetBuffer(null, 0, 0);
-                FWriteOV.Dispose();
-                FWriteOV = null;
-
-            }
-
-            if (FSocket != null)
-            {
-                FSocket.Close();
-                FSocket = null;
-            }
-
-            FHost = null;
-            FCreator = null;
-            FSyncReadPending = null;
-            FSyncData = null;
-            FSyncEventProcessing = null;
-
-            base.Free(canAccessFinalizable);
-
-        }
-
-        #endregion
-
-        #region Properties
-
-        internal Queue<MessageBuffer> WriteQueue
-        {
-            get { return FWriteQueue; }
-        }
-
-        internal bool WriteQueueHasItems
-        {
-            get { return FWriteQueueHasItems; }
-            set { FWriteQueueHasItems = value; }
-        }
-
-        internal bool ReadPending
-        {
-            get { return FReadPending; }
-            set { FReadPending = value; }
-        }
-
-        internal object SyncReadPending
-        {
-            get { return FSyncReadPending; }
-        }
-
-        internal SocketAsyncEventArgs WriteOV
-        {
-            get { return FWriteOV; }
-        }
-
-        internal SocketAsyncEventArgs ReadOV
-        {
-            get { return FReadOV; }
-        }
-
-        internal object SyncActive
-        {
-            get { return FSyncActive; }
-        }
-
-        internal EventProcessing EventProcessing
-        {
-
-            get
-            {
-                lock (FSyncEventProcessing)
-                {
-                    return FEventProcessing;
-                }
-            }
-
-            set
-            {
-                lock (FSyncEventProcessing)
-                {
-                    FEventProcessing = value;
-                }
-            }
-
-        }
+			if (FStream != null)
+			{
+				FStream.Close();
+				FStream = null;
+			}
+
+			if (FDecryptor != null)
+			{
+				FDecryptor.Dispose();
+				FDecryptor = null;
+			}
+
+			if (FEncryptor != null)
+			{
+				FEncryptor.Dispose();
+				FEncryptor = null;
+			}
+
+			if (FReadOV != null)
+			{
+				
+				Type t = typeof(SocketAsyncEventArgs);
+
+				FieldInfo f = t.GetField("m_Completed", BindingFlags.Instance | BindingFlags.NonPublic);
+				f.SetValue(FReadOV, null);
+
+				FReadOV.SetBuffer(null, 0, 0);
+				FReadOV.Dispose();
+				FReadOV = null;
+
+			}
+
+			if (FWriteOV != null)
+			{
+
+				Type t = typeof(SocketAsyncEventArgs);
+
+				FieldInfo f = t.GetField("m_Completed", BindingFlags.Instance | BindingFlags.NonPublic);
+				f.SetValue(FWriteOV, null);
+
+				FWriteOV.SetBuffer(null, 0, 0);
+				FWriteOV.Dispose();
+				FWriteOV = null;
+
+			}
+
+			if (FSocket != null)
+			{
+				FSocket.Close();
+				FSocket = null;
+			}
+
+			FHost = null;
+			FCreator = null;
+			FSyncReadPending = null;
+			FSyncData = null;
+			FSyncEventProcessing = null;
+
+			base.Free(canAccessFinalizable);
+
+		}
+
+		#endregion
+
+		#region Properties
+
+		internal Queue<MessageBuffer> WriteQueue
+		{
+			get { return FWriteQueue; }
+		}
+
+		internal bool WriteQueueHasItems
+		{
+			get { return FWriteQueueHasItems; }
+			set { FWriteQueueHasItems = value; }
+		}
+
+		internal bool ReadPending
+		{
+			get { return FReadPending; }
+			set { FReadPending = value; }
+		}
+
+		internal object SyncReadPending
+		{
+			get { return FSyncReadPending; }
+		}
+
+		internal SocketAsyncEventArgs WriteOV
+		{
+			get { return FWriteOV; }
+		}
+
+		internal SocketAsyncEventArgs ReadOV
+		{
+			get { return FReadOV; }
+		}
+
+		internal object SyncActive
+		{
+			get { return FSyncActive; }
+		}
+
+		internal EventProcessing EventProcessing
+		{
+
+			get
+			{
+				lock (FSyncEventProcessing)
+				{
+					return FEventProcessing;
+				}
+			}
+
+			set
+			{
+				lock (FSyncEventProcessing)
+				{
+					FEventProcessing = value;
+				}
+			}
+
+		}
 
-        internal bool Active
-        {
+		internal bool Active
+		{
 
-            get 
-            {
-                if (Disposed)
-                {
-                    return false;
-                }
+			get 
+			{
+				if (Disposed)
+				{
+					return false;
+				}
 
-                lock (FSyncActive)
-                {
-                    return FActive;
-                }
-            }
+				lock (FSyncActive)
+				{
+					return FActive;
+				}
+			}
 
-            set 
-            {
-                lock (FSyncActive)
-                {
-                    FActive = value;    
-                }
-            }
+			set 
+			{
+				lock (FSyncActive)
+				{
+					FActive = value;
+				}
+			}
 
-        }
+		}
 
-        internal ICryptoTransform Encryptor
-        {
-            get { return FEncryptor; }
-            set { FEncryptor = value; }
-        }
+		internal ICryptoTransform Encryptor
+		{
+			get { return FEncryptor; }
+			set { FEncryptor = value; }
+		}
 
-        internal ICryptoTransform Decryptor
-        {
-            get { return FDecryptor; }
-            set { FDecryptor = value; }
-        }
+		internal ICryptoTransform Decryptor
+		{
+			get { return FDecryptor; }
+			set { FDecryptor = value; }
+		}
 
-        internal Stream Stream
-        {
-            get { return FStream; }
-            set { FStream = value; }
-        }
+		internal Stream Stream
+		{
+			get { return FStream; }
+			set { FStream = value; }
+		}
 
-        internal Socket Socket
-        {
-            get { return FSocket; }
-            set { FSocket = value; }
-        }
+		internal Socket Socket
+		{
+			get { return FSocket; }
+			set { FSocket = value; }
+		}
 
-        internal byte[] Delimiter
-        {
-            
-            get
-            {
+		internal byte[] Delimiter
+		{
+			
+			get
+			{
 
-                switch (EventProcessing)
-                {
+				switch (EventProcessing)
+				{
 
-                    case EventProcessing.epUser:
-                        
-                        return FHost.Delimiter;
+					case EventProcessing.epUser:
+						
+						return FHost.Delimiter;
 
-                    case EventProcessing.epEncrypt:
-                        
-                        return FHost.DelimiterEncrypt;
+					case EventProcessing.epEncrypt:
+						
+						return FHost.DelimiterEncrypt;
 
-                    case EventProcessing.epProxy:
+					case EventProcessing.epProxy:
 
-                        return null;
+						return null;
 
-                    default:
+					default:
 
-                        return null;
+						return null;
 
-                }
+				}
 
-            }
+			}
 
-        }
+		}
 
-        internal DelimiterType DelimiterType
-        {
-            get
-            {
+		internal DelimiterType DelimiterType
+		{
+			get
+			{
 
-                switch (EventProcessing)
-                {
+				switch (EventProcessing)
+				{
 
-                    case EventProcessing.epUser:
+					case EventProcessing.epUser:
 
-                        return FHost.DelimiterType;
+						return FHost.DelimiterType;
 
-                    case EventProcessing.epEncrypt:
+					case EventProcessing.epEncrypt:
 
-                        return DelimiterType.dtMessageTailExcludeOnReceive;
+						return DelimiterType.dtMessageTailExcludeOnReceive;
 
-                    case EventProcessing.epProxy:
+					case EventProcessing.epProxy:
 
-                        return DelimiterType.dtNone;
+						return DelimiterType.dtNone;
 
-                    default:
+					default:
 
-                        return DelimiterType.dtNone;
+						return DelimiterType.dtNone;
 
-                }
+				}
 
-            }
+			}
 
-        }
+		}
 
-        internal EncryptType EncryptType
-        {
-            get { return FCreator.EncryptType; }
-        }
+		internal EncryptType EncryptType
+		{
+			get { return FCreator.EncryptType; }
+		}
 
-        internal CompressionType CompressionType
-        {
-            get { return FCreator.CompressionType; }
-        }
+		internal CompressionType CompressionType
+		{
+			get { return FCreator.CompressionType; }
+		}
 
-        internal HostType HostType
-        {
-            get { return FHost.HostType; }
-        }
+		internal HostType HostType
+		{
+			get { return FHost.HostType; }
+		}
 
-        internal BaseSocketConnectionCreator BaseCreator
-        {
-            get { return FCreator; }
-        }
+		internal BaseSocketConnectionCreator BaseCreator
+		{
+			get { return FCreator; }
+		}
 
-        internal BaseSocketConnectionHost BaseHost
-        {
-            get { return FHost; }
-        }
+		internal BaseSocketConnectionHost BaseHost
+		{
+			get { return FHost; }
+		}
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        internal void SetConnectionData(int readBytes, int writeBytes)
-        {
+		internal void SetConnectionData(int readBytes, int writeBytes)
+		{
 
-            if (!Disposed)
-            {
+			if (!Disposed)
+			{
 
-                lock (FSyncData)
-                {
-                 
-                    if (readBytes > 0)
-                    {
-                        FReadBytes += readBytes;
-                    }
+				lock (FSyncData)
+				{
+				 
+					if (readBytes > 0)
+					{
+						FReadBytes += readBytes;
+					}
 
-                    if (writeBytes > 0)
-                    {
-                        FWriteBytes += writeBytes;
-                    }
+					if (writeBytes > 0)
+					{
+						FWriteBytes += writeBytes;
+					}
 
-                    FLastAction = DateTime.Now;
+					FLastAction = DateTime.Now;
 
-                }
+				}
 
-            }
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region ISocketConnection Members
+		#region ISocketConnection Members
 
-        #region Properties
+		#region Properties
 
-        public object UserData
-        {
-            get { return FUserData; }
-            set { FUserData = value; }
-        }
+		public object UserData
+		{
+			get { return FUserData; }
+			set { FUserData = value; }
+		}
 
-        public IPEndPoint LocalEndPoint
-        {
-            get { return (IPEndPoint)FSocket.LocalEndPoint; }
-        }
+		public IPEndPoint LocalEndPoint
+		{
+			get { return (IPEndPoint)FSocket.LocalEndPoint; }
+		}
 
-        public IPEndPoint RemoteEndPoint
-        {
-            get { return (IPEndPoint)FSocket.RemoteEndPoint; }
-        }
+		public IPEndPoint RemoteEndPoint
+		{
+			get { return (IPEndPoint)FSocket.RemoteEndPoint; }
+		}
 
-        public IntPtr SocketHandle
-        {
-            get { return FSocket.Handle; }
-        }
+		public IntPtr SocketHandle
+		{
+			get { return FSocket.Handle; }
+		}
 
-        public long ConnectionId
-        {
-          get { return FId; }
-        }
+		public long ConnectionId
+		{
+		  get { return FId; }
+		}
 
-        public IBaseSocketConnectionCreator Creator
-        {
-          get { return FCreator; }
-        }
+		public IBaseSocketConnectionCreator Creator
+		{
+		  get { return FCreator; }
+		}
 
-        public IBaseSocketConnectionHost Host
-        {
-            get { return FHost; }
-        }
+		public IBaseSocketConnectionHost Host
+		{
+			get { return FHost; }
+		}
 
-        public DateTime LastAction
-        {
-            get { return FLastAction; }
-        }
+		public DateTime LastAction
+		{
+			get { return FLastAction; }
+		}
 
-        public long ReadBytes
-        {
-            get { return FReadBytes; }
-        }
+		public long ReadBytes
+		{
+			get { return FReadBytes; }
+		}
 
-        public long WriteBytes
-        {
-            get { return FWriteBytes; }
-        }
+		public long WriteBytes
+		{
+			get { return FWriteBytes; }
+		}
 
-        #endregion
+		#endregion
 
-        #region Socket Options
+		#region Socket Options
 
-        public void SetTTL(short value)
-        {
-          FSocket.Ttl = value;
-        }
+		public void SetTTL(short value)
+		{
+		  FSocket.Ttl = value;
+		}
 
-        public void SetLinger(LingerOption lo)
-        {
-          FSocket.LingerState = lo;
-        }
+		public void SetLinger(LingerOption lo)
+		{
+		  FSocket.LingerState = lo;
+		}
 
-        public void SetNagle(bool value)
-        {
-          FSocket.NoDelay = value;
-        }
+		public void SetNagle(bool value)
+		{
+		  FSocket.NoDelay = value;
+		}
 
-        #endregion
+		#endregion
 
-        #region Abstract Methods
+		#region Abstract Methods
 
-        public abstract IClientSocketConnection AsClientConnection();
-        public abstract IServerSocketConnection AsServerConnection();
+		public abstract IClientSocketConnection AsClientConnection();
+		public abstract IServerSocketConnection AsServerConnection();
 
-        #endregion
+		#endregion
 
-        #region BeginSend
+		#region BeginSend
 
-        public void BeginSend(byte[] buffer)
-        {
-            if (!Disposed)
-            {
-                FHost.BeginSend(this, buffer, false);
-            }
-        }
+		public void BeginSend(byte[] buffer)
+		{
+			if (!Disposed)
+			{
+				FHost.BeginSend(this, buffer, false);
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #region BeginReceive
+		#region BeginReceive
 
-        public void BeginReceive()
-        {
-            if (!Disposed)
-            {
-                FHost.BeginReceive(this);
-            }
-        }
+		public void BeginReceive()
+		{
+			if (!Disposed)
+			{
+				FHost.BeginReceive(this);
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #region BeginDisconnect
+		#region BeginDisconnect
 
-        public void BeginDisconnect()
-        {
-            if (!Disposed)
-            {
-                FHost.BeginDisconnect(this);
-            }
-        }
+		public void BeginDisconnect()
+		{
+			if (!Disposed)
+			{
+				FHost.BeginDisconnect(this);
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #region GetConnections
+		#region GetConnections
 
-        public ISocketConnection[] GetConnections()
-        {
+		public ISocketConnection[] GetConnections()
+		{
 
-            if (!Disposed)
-            {
-                return FHost.GetConnections();
-            }
-            else
-            {
-                return null;
-            }
+			if (!Disposed)
+			{
+				return FHost.GetConnections();
+			}
+			else
+			{
+				return null;
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region GetConnectionById
+		#region GetConnectionById
 
-        public ISocketConnection GetConnectionById(long id)
-        {
+		public ISocketConnection GetConnectionById(long id)
+		{
 
-            if (!Disposed)
-            {
-                return FHost.GetSocketConnectionById(id);
-            }
-            else
-            {
-                return null;
-            }
+			if (!Disposed)
+			{
+				return FHost.GetSocketConnectionById(id);
+			}
+			else
+			{
+				return null;
+			}
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #endregion
+		#endregion
 
-    }
+	}
 
 }

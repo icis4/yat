@@ -1,7 +1,7 @@
 /* ====================================================================
  * Copyright (c) 2009 Andre Luis Azevedo (az.andrel@yahoo.com.br)
  * All rights reserved.
- *                       
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -43,50 +43,50 @@ using System.Net.Security;
 namespace ALAZ.SystemEx.NetEx.SocketsEx
 {
 
-    /// <summary>
-    /// Keeps connection authenticate information between callbacks.
-    /// </summary>
-    internal class AuthenticateCallbackData
-    {
+	/// <summary>
+	/// Keeps connection authenticate information between callbacks.
+	/// </summary>
+	internal class AuthenticateCallbackData
+	{
 
-        #region Fields
+		#region Fields
 
-        private BaseSocketConnection FConnection;
-        private SslStream FStream;
-        private HostType FHostType;
+		private BaseSocketConnection FConnection;
+		private SslStream FStream;
+		private HostType FHostType;
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        public AuthenticateCallbackData(BaseSocketConnection connection, SslStream stream, HostType hostType)
-        {
-            FConnection = connection;
-            FStream = stream;
-            FHostType = hostType;
-        }
+		public AuthenticateCallbackData(BaseSocketConnection connection, SslStream stream, HostType hostType)
+		{
+			FConnection = connection;
+			FStream = stream;
+			FHostType = hostType;
+		}
 
-        #endregion
+		#endregion
 
-        #region Properties
+		#region Properties
 
-        public BaseSocketConnection Connection
-        {
-            get { return FConnection; }
-        }
+		public BaseSocketConnection Connection
+		{
+			get { return FConnection; }
+		}
 
-        public SslStream Stream
-        {
-            get { return FStream; }
-        }
+		public SslStream Stream
+		{
+			get { return FStream; }
+		}
 
-        public HostType HostType
-        {
-            get { return FHostType; }
-        }
+		public HostType HostType
+		{
+			get { return FHostType; }
+		}
 
-        #endregion
+		#endregion
 
-    }
+	}
 
 }

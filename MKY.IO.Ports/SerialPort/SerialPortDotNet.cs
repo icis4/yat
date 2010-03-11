@@ -551,7 +551,7 @@ namespace MKY.IO.Ports
 			#endif
 
 				// Immediately send XOn if software flow control enabled to ensure that
-                //   device gets put into XOn if it was XOff before
+				//   device gets put into XOn if it was XOff before
 				if ((Handshake == System.IO.Ports.Handshake.XOnXOff) ||
 					(Handshake == System.IO.Ports.Handshake.RequestToSendXOnXOff))
 				{

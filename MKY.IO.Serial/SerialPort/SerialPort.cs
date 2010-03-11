@@ -157,9 +157,9 @@ namespace MKY.IO.Serial
 		private MKY.IO.Ports.ISerialPort _port;
 		private object _portSyncObj = new object();
 
-        /// <summary>
-        /// Async receiving.
-        /// </summary>
+		/// <summary>
+		/// Async receiving.
+		/// </summary>
 		private Queue<byte> _receiveQueue = new Queue<byte>();
 		
 		/// <summary>
@@ -262,15 +262,15 @@ namespace MKY.IO.Serial
 		// Properties
 		//==========================================================================================
 
-        /// <summary></summary>
-        public SerialPortSettings Settings
-        {
-            get
-            {
-                AssertNotDisposed();
-                return (_settings);
-            }
-        }
+		/// <summary></summary>
+		public SerialPortSettings Settings
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_settings);
+			}
+		}
 
 		/// <summary></summary>
 		public bool IsStarted
@@ -402,7 +402,7 @@ namespace MKY.IO.Serial
 		public int Receive(out byte[] data)
 		{
 			// AssertNotDisposed() is called by IsOpen
-            // OnDataReceived has been fired before
+			// OnDataReceived has been fired before
 
 			int bytesReceived = 0;
 			if (IsOpen)
@@ -635,7 +635,7 @@ namespace MKY.IO.Serial
 				Stop();
 			}
 		}
-    #endif // DETECT_BREAKS_AND_TRY_AUTO_REOPEN
+	#endif // DETECT_BREAKS_AND_TRY_AUTO_REOPEN
 
 		/// <summary></summary>
 		private void ClosePortAndStartReopenTimer()

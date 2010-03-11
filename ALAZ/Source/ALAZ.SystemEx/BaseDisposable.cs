@@ -1,7 +1,7 @@
 /* ====================================================================
  * Copyright (c) 2009 Andre Luis Azevedo (az.andrel@yahoo.com.br)
  * All rights reserved.
- *                       
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -48,106 +48,106 @@ namespace ALAZ.SystemEx
   public abstract class BaseDisposable : IDisposable
   {
 
-    #region Fields
+	#region Fields
 
-    private bool FDisposed = false;
+	private bool FDisposed = false;
 
-    #endregion
+	#endregion
 
-    #region Methods
+	#region Methods
 
-    #region Free
+	#region Free
 
-    /// <summary>
-    /// This method is called when object is being disposed. Override this method to free resources.
-    /// </summary>
-    /// <param name="canAccessFinalizable">
-    /// Indicates if the method can access Finalizable member objects.
-    /// If canAccessFinalizable = false the method was called by GC and you can´t access finalizable member objects.
-    /// If canAccessFinalizable = true the method was called by user and you can access all member objects.
-    /// </param>
-    protected virtual void Free(bool canAccessFinalizable)
-    {
-      FDisposed = true;
-    }
+	/// <summary>
+	/// This method is called when object is being disposed. Override this method to free resources.
+	/// </summary>
+	/// <param name="canAccessFinalizable">
+	/// Indicates if the method can access Finalizable member objects.
+	/// If canAccessFinalizable = false the method was called by GC and you can´t access finalizable member objects.
+	/// If canAccessFinalizable = true the method was called by user and you can access all member objects.
+	/// </param>
+	protected virtual void Free(bool canAccessFinalizable)
+	{
+	  FDisposed = true;
+	}
 
-    #endregion
+	#endregion
 
-    #region CheckDisposedWithException
+	#region CheckDisposedWithException
 
-    /// <summary>
-    /// Checks if object is already disposed.
-    /// </summary>
-    protected void CheckDisposedWithException()
-    {
+	/// <summary>
+	/// Checks if object is already disposed.
+	/// </summary>
+	protected void CheckDisposedWithException()
+	{
 
-      if (Disposed)
-      {
-        throw new ObjectDisposedException(this.ToString());
-      }
+	  if (Disposed)
+	  {
+		throw new ObjectDisposedException(this.ToString());
+	  }
 
-    }
+	}
 
-    #endregion
+	#endregion
 
-    #region Dispose
+	#region Dispose
 
-    /// <summary>
-    /// Dispose object resources.
-    /// </summary>
-    public void Dispose()
-    {
+	/// <summary>
+	/// Dispose object resources.
+	/// </summary>
+	public void Dispose()
+	{
 
-      lock (this)
-      {
+	  lock (this)
+	  {
 
-        if (!FDisposed)
-        {
-          try
-          {
-            Free(true);
-          }
-          finally
-          {
-            FDisposed = true;
-          }
-        }
+		if (!FDisposed)
+		{
+		  try
+		  {
+			Free(true);
+		  }
+		  finally
+		  {
+			FDisposed = true;
+		  }
+		}
 
-      }
+	  }
 
-    }
+	}
 
-    #endregion
+	#endregion
 
-    #endregion
+	#endregion
 
-    #region Properties
+	#region Properties
 
-    /// <summary>
-    /// Indicates is object is already disposed.
-    /// </summary>
-    protected bool Disposed
-    {
+	/// <summary>
+	/// Indicates is object is already disposed.
+	/// </summary>
+	protected bool Disposed
+	{
 
-      get
-      {
-        lock (this)
-        {
-          return FDisposed;
-        }
-      }
+	  get
+	  {
+		lock (this)
+		{
+		  return FDisposed;
+		}
+	  }
 
-      set
-      {
-        lock (this)
-        {
-          FDisposed = value;
-        }
-      }
+	  set
+	  {
+		lock (this)
+		{
+		  FDisposed = value;
+		}
+	  }
 
-    }
+	}
 
-    #endregion
+	#endregion
 
   }
 

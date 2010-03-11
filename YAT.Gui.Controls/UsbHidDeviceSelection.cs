@@ -42,7 +42,7 @@ namespace YAT.Gui.Controls
 
 		//private bool _isSettingControls = false;
 
-        private DeviceInfo _deviceId = DeviceInfo.GetDefaultDevice(DeviceClass.Hid);
+		private DeviceInfo _deviceId = DeviceInfo.GetDefaultDevice(DeviceClass.Hid);
 
 		#endregion
 
@@ -52,8 +52,8 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		[Category("Property Changed")]
-        [Description("Event raised when the DeviceId property is changed.")]
-        public event EventHandler DeviceIdChanged;
+		[Description("Event raised when the DeviceId property is changed.")]
+		public event EventHandler DeviceIdChanged;
 
 		#endregion
 
@@ -76,7 +76,7 @@ namespace YAT.Gui.Controls
 
 		[Category("USB Device")]
 		[Description("USB device ID.")]
-        public DeviceInfo DeviceId
+		public DeviceInfo DeviceId
 		{
 			get { return (_deviceId); }
 			set
@@ -85,7 +85,7 @@ namespace YAT.Gui.Controls
 				{
 					_deviceId = value;
 					SetControls();
-                    OnDeviceIdChanged(new EventArgs());
+					OnDeviceIdChanged(new EventArgs());
 				}
 			}
 		}
@@ -97,39 +97,39 @@ namespace YAT.Gui.Controls
 		// Control Event Handlers
 		//==========================================================================================
 
-        /// <summary>
-        /// Startup flag only used in the following event handler.
-        /// </summary>
-        private bool _isStartingUp = true;
+		/// <summary>
+		/// Startup flag only used in the following event handler.
+		/// </summary>
+		private bool _isStartingUp = true;
 
-        /// <summary>
-        /// Only set device list and controls once as soon as this control is enabled. This saves
-        /// some time on startup since scanning for the ports takes quite some time.
-        /// </summary>
-        private bool _deviceListIsInitialized = false;
+		/// <summary>
+		/// Only set device list and controls once as soon as this control is enabled. This saves
+		/// some time on startup since scanning for the ports takes quite some time.
+		/// </summary>
+		private bool _deviceListIsInitialized = false;
 
-        /// <summary>
-        /// Initially set controls and validate its contents where needed.
-        /// </summary>
-        private void UsbHidPortSelection_Paint(object sender, PaintEventArgs e)
+		/// <summary>
+		/// Initially set controls and validate its contents where needed.
+		/// </summary>
+		private void UsbHidPortSelection_Paint(object sender, PaintEventArgs e)
 		{
-            if (_isStartingUp)
-            {
-                _isStartingUp = false;
-                SetControls();
-            }
+			if (_isStartingUp)
+			{
+				_isStartingUp = false;
+				SetControls();
+			}
 
-            // Ensure that device list is set as soon as this control gets enabled.
-            // Could also be implemented in a EnabledChanged event handler. However, it's easier
-            // to implement this here so it also done on initial Paint event.
-            if (Enabled && !_deviceListIsInitialized)
-            {
-                _deviceListIsInitialized = true;
-                SetDeviceList();
-            }
-        }
+			// Ensure that device list is set as soon as this control gets enabled.
+			// Could also be implemented in a EnabledChanged event handler. However, it's easier
+			// to implement this here so it also done on initial Paint event.
+			if (Enabled && !_deviceListIsInitialized)
+			{
+				_deviceListIsInitialized = true;
+				SetDeviceList();
+			}
+		}
 
-        #endregion
+		#endregion
 
 		#region Controls Event Handlers
 		//==========================================================================================
@@ -155,12 +155,12 @@ namespace YAT.Gui.Controls
 			private string _status2 = "";
 			private bool _cancelScanning = false;
 
-            public MarkDevicesInUseThread(DeviceCollection deviceList)
+			public MarkDevicesInUseThread(DeviceCollection deviceList)
 			{
-                _deviceList = deviceList;
+				_deviceList = deviceList;
 			}
 
-            public DeviceCollection DeviceList
+			public DeviceCollection DeviceList
 			{
 				get { return (_deviceList); }
 			}
@@ -177,7 +177,7 @@ namespace YAT.Gui.Controls
 
 			public void MarkDevicesInUse()
 			{
-                _deviceList.MarkDevicesInUse(portList_MarkDevicesInUseCallback);
+				_deviceList.MarkDevicesInUse(portList_MarkDevicesInUseCallback);
 				_isScanning = false;
 
 				StatusBox.AcceptAndClose();
@@ -188,7 +188,7 @@ namespace YAT.Gui.Controls
 				_cancelScanning = true;
 			}
 
-            private void portList_MarkDevicesInUseCallback(object sender, DeviceCollection.DeviceChangedAndCancelEventArgs e)
+			private void portList_MarkDevicesInUseCallback(object sender, DeviceCollection.DeviceChangedAndCancelEventArgs e)
 			{
 				_status2 = "Scanning " + e.Device + "...";
 				StatusBox.UpdateStatus2(_status2);
@@ -196,7 +196,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
-        private MarkDevicesInUseThread _markDevicesInUseThread;
+		private MarkDevicesInUseThread _markDevicesInUseThread;
 
 		private void timer_ShowScanDialog_Tick(object sender, EventArgs e)
 		{
@@ -204,8 +204,8 @@ namespace YAT.Gui.Controls
 
 			bool setting = ApplicationSettings.LocalUser.General.DetectSerialPortsInUse;
 
-            if (StatusBox.Show(this, "Scanning devices...", "USB Device Scan", _markDevicesInUseThread.Status2, "&Detect ports that are in use", ref setting) != DialogResult.OK)
-                _markDevicesInUseThread.CancelScanning();
+			if (StatusBox.Show(this, "Scanning devices...", "USB Device Scan", _markDevicesInUseThread.Status2, "&Detect ports that are in use", ref setting) != DialogResult.OK)
+				_markDevicesInUseThread.CancelScanning();
 			
 			ApplicationSettings.LocalUser.General.DetectSerialPortsInUse = setting;
 			ApplicationSettings.Save();
@@ -213,12 +213,12 @@ namespace YAT.Gui.Controls
 
 		private void SetDeviceList()
 		{
-            // Only scan for ports if control is enabled. This saves some time.
-            if (Enabled && !DesignMode)
+			// Only scan for ports if control is enabled. This saves some time.
+			if (Enabled && !DesignMode)
 			{
 				//_isSettingControls = true;
 
-                DeviceInfo old = comboBox_Device.SelectedItem as DeviceInfo;
+				DeviceInfo old = comboBox_Device.SelectedItem as DeviceInfo;
 
 				DeviceCollection devices = new DeviceCollection(DeviceClass.Hid);
 				devices.FillWithAvailableDevices();
@@ -229,11 +229,11 @@ namespace YAT.Gui.Controls
 					timer_ShowScanDialog.Start();
 
 					// Start scanning on different thread.
-                    _markDevicesInUseThread = new MarkDevicesInUseThread(devices);
-                    Thread t = new Thread(new ThreadStart(_markDevicesInUseThread.MarkDevicesInUse));
+					_markDevicesInUseThread = new MarkDevicesInUseThread(devices);
+					Thread t = new Thread(new ThreadStart(_markDevicesInUseThread.MarkDevicesInUse));
 					t.Start();
 
-                    while (_markDevicesInUseThread.IsScanning)
+					while (_markDevicesInUseThread.IsScanning)
 						Application.DoEvents();
 
 					t.Join();
@@ -255,7 +255,7 @@ namespace YAT.Gui.Controls
 						comboBox_Device.SelectedIndex = 0;
 
 					// Set property instead of member to ensure that changed event is fired.
-                    DeviceId = comboBox_Device.SelectedItem as DeviceInfo;
+					DeviceId = comboBox_Device.SelectedItem as DeviceInfo;
 				}
 				else
 				{
@@ -277,12 +277,12 @@ namespace YAT.Gui.Controls
 		{
 			//_isSettingControls = true;
 
-            if ((comboBox_Device.Items.Count > 0) && !DesignMode)
+			if ((comboBox_Device.Items.Count > 0) && !DesignMode)
 			{
 				if (_deviceId != null)
 					comboBox_Device.SelectedItem = _deviceId;
-                else
-                    comboBox_Device.SelectedIndex = 0;
+				else
+					comboBox_Device.SelectedIndex = 0;
 			}
 			else
 			{
@@ -292,7 +292,7 @@ namespace YAT.Gui.Controls
 			//_isSettingControls = false;
 		}
 
-        #endregion
+		#endregion
 
 		#region Event Invoking
 		//==========================================================================================
@@ -301,7 +301,7 @@ namespace YAT.Gui.Controls
 
 		protected virtual void OnDeviceIdChanged(EventArgs e)
 		{
-            EventHelper.FireSync(DeviceIdChanged, this, e);
+			EventHelper.FireSync(DeviceIdChanged, this, e);
 		}
 
 		#endregion
