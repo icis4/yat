@@ -61,6 +61,7 @@
     <Compile Include="Diagnostics\XDebug.cs" />
     <Compile Include="Diagnostics\XTrace.cs" />
     <Compile Include="Drawing\XDrawing.cs" />
+    <Compile Include="Globalization\XCultureInfo.cs" />
     <Compile Include="Guid\GuidList.cs" />
     <Compile Include="Guid\IGuidProvider.cs" />
     <Compile Include="Guid\XGuid.cs" />
@@ -96,7 +97,8 @@
     <Compile Include="Types\XString.cs" />
     <Compile Include="Net\Browser.cs" />
     <Compile Include="Types\XUInt64.cs" />
-    <Compile Include="Win32\HidReports.cs" />
+    <Compile Include="Win32\Usb.cs" />
+    <Compile Include="Win32\Version.cs" />
     <Compile Include="Win32\Debugging.cs" />
     <Compile Include="Win32\DeviceManagement.cs" />
     <Compile Include="Win32\FileIO.cs" />

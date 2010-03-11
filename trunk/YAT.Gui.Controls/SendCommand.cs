@@ -64,7 +64,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		private const bool _TerminalIsOpenDefault = false;
-        private const float _SplitterRatioDefault = (float)0.75;
+		private const float _SplitterRatioDefault = (float)0.75;
 
 		#endregion
 
@@ -78,7 +78,7 @@ namespace YAT.Gui.Controls
 		private Command _command = new Command();
 		private RecentItemCollection<Command> _recents;
 		private bool _terminalIsOpen = _TerminalIsOpenDefault;
-        private float _splitterRatio = _SplitterRatioDefault;
+		private float _splitterRatio = _SplitterRatioDefault;
 
 		private FocusState _focusState = FocusState.Inactive;
 		private bool _isValidated = false;
@@ -219,15 +219,15 @@ namespace YAT.Gui.Controls
 		// Control Event Handlers
 		//==========================================================================================
 
-        /// <summary>
-        /// Startup flag only used in the following event handler.
-        /// </summary>
-        private bool _isStartingUp = true;
+		/// <summary>
+		/// Startup flag only used in the following event handler.
+		/// </summary>
+		private bool _isStartingUp = true;
 
-        /// <summary>
-        /// Initially set controls and validate its contents where needed.
-        /// </summary>
-        private void SendCommand_Paint(object sender, PaintEventArgs e)
+		/// <summary>
+		/// Initially set controls and validate its contents where needed.
+		/// </summary>
+		private void SendCommand_Paint(object sender, PaintEventArgs e)
 		{
 			if (_isStartingUp)
 			{
@@ -358,7 +358,7 @@ namespace YAT.Gui.Controls
 					_focusState = FocusState.HasFocus;
 					comboBox_Command.Select(invalidTextStart, invalidTextLength);
 					e.Cancel = true;
-                }
+				}
 			}
 		}
 
@@ -370,8 +370,8 @@ namespace YAT.Gui.Controls
 				SetCommand((Command)((RecentItem<Command>)comboBox_Command.SelectedItem));
 			}
 		}
-        
-        private void button_MultiLineCommand_Click(object sender, EventArgs e)
+		
+		private void button_MultiLineCommand_Click(object sender, EventArgs e)
 		{
 			ShowMultiLineCommandBox(button_MultiLineCommand);
 		}
@@ -462,7 +462,7 @@ namespace YAT.Gui.Controls
 			OnCommandChanged(new EventArgs());
 		}
 
-        private void ShowMultiLineCommandBox(Control requestingControl)
+		private void ShowMultiLineCommandBox(Control requestingControl)
 		{
 			// indicate multi line command
 			_isSettingControls = true;

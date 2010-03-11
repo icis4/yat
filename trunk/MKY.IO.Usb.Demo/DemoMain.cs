@@ -22,28 +22,28 @@ using MKY.IO.Usb;
 
 namespace MKY.IO.Usb.Demo
 {
-    public class DemoMain
-    {
-        public static void Main(string[] args)
-        {
-            DeviceCollection devices = new DeviceCollection(DeviceClass.Hid);
-            devices.FillWithAvailableDevices();
+	public class DemoMain
+	{
+		public static void Main(string[] args)
+		{
+			DeviceCollection devices = new DeviceCollection(DeviceClass.Hid);
+			devices.FillWithAvailableDevices();
 
-            Console.WriteLine();
-            Console.WriteLine("USB HID Devices");
-            foreach (DeviceInfo device in devices)
-            {
-                Console.Write(" + ");
-                Console.WriteLine(device.ToString());
-                Console.Write("   ");
-                Console.WriteLine(device.SystemPath);
-            }
-            Console.WriteLine();
+			Console.WriteLine();
+			Console.WriteLine("USB HID Devices");
+			foreach (DeviceInfo device in devices)
+			{
+				Console.Write(" + ");
+				Console.WriteLine(device.ToString());
+				Console.Write("   ");
+				Console.WriteLine(device.SystemPath);
+			}
+			Console.WriteLine();
 
-            Console.WriteLine("Press <Enter> to exit");
-            Console.ReadLine();
-        }
-    }
+			Console.WriteLine("Press <Enter> to exit");
+			Console.ReadLine();
+		}
+	}
 }
 
 //==================================================================================================

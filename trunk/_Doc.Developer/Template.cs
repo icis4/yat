@@ -53,9 +53,9 @@ namespace YAT.<...>
 
 		#endregion
 
-		#region External Function Declaration
+		#region External Functions
 		//==========================================================================================
-		// External Function Declaration
+		// External Functions
 		//==========================================================================================
 
 		#endregion

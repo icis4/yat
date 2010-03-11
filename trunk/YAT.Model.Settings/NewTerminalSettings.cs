@@ -39,9 +39,9 @@ namespace YAT.Model.Settings
 		private int _socketLocalTcpPort;
 		private int _socketLocalUdpPort;
 
-        private MKY.IO.Usb.DeviceInfo _usbHidDeviceId;
+		private MKY.IO.Usb.DeviceInfo _usbHidDeviceId;
 
-        private bool _startTerminal;
+		private bool _startTerminal;
 
 		/// <summary></summary>
 		public NewTerminalSettings()
@@ -76,7 +76,7 @@ namespace YAT.Model.Settings
 			_socketLocalTcpPort   = rhs.SocketLocalTcpPort;
 			_socketLocalUdpPort   = rhs.SocketLocalUdpPort;
 
-            _usbHidDeviceId       = rhs.UsbHidDeviceId;
+			_usbHidDeviceId       = rhs.UsbHidDeviceId;
 
 			_startTerminal        = rhs.StartTerminal;
 
@@ -100,7 +100,7 @@ namespace YAT.Model.Settings
 			SocketLocalTcpPort   = MKY.IO.Serial.SocketSettings.DefaultPort;
 			SocketLocalUdpPort   = MKY.IO.Serial.SocketSettings.DefaultPort + 1;
 
-            UsbHidDeviceId       = MKY.IO.Usb.DeviceInfo.GetDefaultDevice(MKY.IO.Usb.DeviceClass.Hid);
+			UsbHidDeviceId       = MKY.IO.Usb.DeviceInfo.GetDefaultDevice(MKY.IO.Usb.DeviceClass.Hid);
 
 			StartTerminal        = true;
 		}
@@ -267,22 +267,22 @@ namespace YAT.Model.Settings
 			}
 		}
 
-        /// <summary></summary>
-        [XmlElement("UsbHidDeviceId")]
-        public MKY.IO.Usb.DeviceInfo UsbHidDeviceId
-        {
-            get { return (_usbHidDeviceId); }
-            set
-            {
-                if (_usbHidDeviceId != value)
-                {
-                    _usbHidDeviceId = value;
-                    SetChanged();
-                }
-            }
-        }
+		/// <summary></summary>
+		[XmlElement("UsbHidDeviceId")]
+		public MKY.IO.Usb.DeviceInfo UsbHidDeviceId
+		{
+			get { return (_usbHidDeviceId); }
+			set
+			{
+				if (_usbHidDeviceId != value)
+				{
+					_usbHidDeviceId = value;
+					SetChanged();
+				}
+			}
+		}
 
-        /// <summary></summary>
+		/// <summary></summary>
 		[XmlElement("StartTerminal")]
 		public bool StartTerminal
 		{

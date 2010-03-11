@@ -36,7 +36,7 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-        private bool _isSettingControls = false;
+		private bool _isSettingControls = false;
 
 		private AutoRetry _autoReconnect = MKY.IO.Serial.UsbHidDeviceSettings.AutoReconnectDefault;
 
@@ -94,15 +94,15 @@ namespace YAT.Gui.Controls
 		// Form Event Handlers
 		//==========================================================================================
 
-        /// <summary>
-        /// Startup flag only used in the following event handler.
-        /// </summary>
-        private bool _isStartingUp = true;
+		/// <summary>
+		/// Startup flag only used in the following event handler.
+		/// </summary>
+		private bool _isStartingUp = true;
 
-        /// <summary>
-        /// Initially set controls and validate its contents where needed.
-        /// </summary>
-        private void UsbHidPortSettings_Paint(object sender, PaintEventArgs e)
+		/// <summary>
+		/// Initially set controls and validate its contents where needed.
+		/// </summary>
+		private void UsbHidPortSettings_Paint(object sender, PaintEventArgs e)
 		{
 			if (_isStartingUp)
 			{
@@ -165,8 +165,8 @@ namespace YAT.Gui.Controls
 		{
 			_isSettingControls = true;
 
-            checkBox_AutoReconnect.Checked = _autoReconnect.Enabled;
-            textBox_AutoReconnectInterval.Enabled = _autoReconnect.Enabled;
+			checkBox_AutoReconnect.Checked = _autoReconnect.Enabled;
+			textBox_AutoReconnectInterval.Enabled = _autoReconnect.Enabled;
 			textBox_AutoReconnectInterval.Text = _autoReconnect.Interval.ToString();
 
 			_isSettingControls = false;

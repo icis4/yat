@@ -1,7 +1,7 @@
 /* ====================================================================
  * Copyright (c) 2009 Andre Luis Azevedo (az.andrel@yahoo.com.br)
  * All rights reserved.
- *                       
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -48,49 +48,49 @@ namespace ALAZ.SystemEx
   public abstract class BaseFinalizable : BaseDisposable
   {
 
-    #region Destructor
+	#region Destructor
 
-    ~BaseFinalizable()
-    {
-      Free(false);
-    }
+	~BaseFinalizable()
+	{
+	  Free(false);
+	}
 
-    #endregion
+	#endregion
 
-    #region Methods
-    
-    #region Dispose
+	#region Methods
+	
+	#region Dispose
 
-    /// <summary>
-    /// Disposes object resources.
-    /// </summary>
-    public new void Dispose()
-    {
+	/// <summary>
+	/// Disposes object resources.
+	/// </summary>
+	public new void Dispose()
+	{
 
-      lock (this)
-      {
+	  lock (this)
+	  {
 
-        if (!Disposed)
-        {
+		if (!Disposed)
+		{
 
-          try
-          {
-            Free(true);
-          }
-          finally
-          {
-            Disposed = true;
-            GC.SuppressFinalize(this);
-          }
+		  try
+		  {
+			Free(true);
+		  }
+		  finally
+		  {
+			Disposed = true;
+			GC.SuppressFinalize(this);
+		  }
 
-        }
+		}
 
-      }
+	  }
 
-    }
-    #endregion
+	}
+	#endregion
 
-    #endregion
+	#endregion
 
 }
 

@@ -51,9 +51,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Descriptors.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="HidDevice.cs" />
+    <Compile Include="HidReports.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DeviceCollection.cs" />
     <Compile Include="DeviceInfo.cs" />

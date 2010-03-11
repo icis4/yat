@@ -60,8 +60,8 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public const string DefaultInUseText = "(in use)";
 
-        /// <summary></summary>
-        public const string DefaultSeparator = " - ";
+		/// <summary></summary>
+		public const string DefaultSeparator = " - ";
 
 		/// <summary></summary>
 		public static readonly Regex StandardPortNumberRegex;
@@ -90,7 +90,7 @@ namespace MKY.IO.Ports
 		private bool _isInUse = false;
 		private string _inUseText = "";
 
-        private string _separator = DefaultSeparator;
+		private string _separator = DefaultSeparator;
 
 		#endregion
 
@@ -184,17 +184,17 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public SerialPortId(SerialPortId rhs)
 		{
-            _name = rhs._name;
-            _standardPortNumber = rhs._standardPortNumber;
+			_name = rhs._name;
+			_standardPortNumber = rhs._standardPortNumber;
 
-            _description = rhs._description;
-            _hasDescriptonFromSystem = rhs._hasDescriptonFromSystem;
+			_description = rhs._description;
+			_hasDescriptonFromSystem = rhs._hasDescriptonFromSystem;
 
-            _isInUse = rhs._isInUse;
-            _inUseText = rhs._inUseText;
+			_isInUse = rhs._isInUse;
+			_inUseText = rhs._inUseText;
 
-            _separator = rhs._separator;
-        }
+			_separator = rhs._separator;
+		}
 
 		#endregion
 
@@ -304,25 +304,25 @@ namespace MKY.IO.Ports
 			}
 		}
 
-        /// <summary>
-        /// The separator, e.g. "COM1 - Serial On USB Port".
-        /// </summary>
-        [XmlIgnore]
-        [DefaultValue(DefaultSeparator)]
-        public string Separator
-        {
-            get
-            {
-                if (_separator == "")
-                    return (DefaultSeparator);
-                else
-                    return (_separator);
-            }
-            set
-            {
-                _separator = value;
-            }
-        }
+		/// <summary>
+		/// The separator, e.g. "COM1 - Serial On USB Port".
+		/// </summary>
+		[XmlIgnore]
+		[DefaultValue(DefaultSeparator)]
+		public string Separator
+		{
+			get
+			{
+				if (_separator == "")
+					return (DefaultSeparator);
+				else
+					return (_separator);
+			}
+			set
+			{
+				_separator = value;
+			}
+		}
 
 		#endregion
 
@@ -395,7 +395,7 @@ namespace MKY.IO.Ports
 
 			sb.Append(Name);                     // "COM10"
 
-            if (appendDescription && (Description != null) && (Description != ""))
+			if (appendDescription && (Description != null) && (Description != ""))
 			{
 				sb.Append(Separator);            // "COM10 - "
 				sb.Append(Description);          // "COM10 - Serial On USB Port"
@@ -624,7 +624,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static implicit operator string(SerialPortId id)
 		{
-            return (id.Name);
+			return (id.Name);
 		}
 
 		/// <summary></summary>
@@ -634,9 +634,9 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-        public static implicit operator int(SerialPortId id)
+		public static implicit operator int(SerialPortId id)
 		{
-            return (id.StandardPortNumber);
+			return (id.StandardPortNumber);
 		}
 
 		/// <summary></summary>

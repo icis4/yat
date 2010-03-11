@@ -1,7 +1,7 @@
 /* ====================================================================
  * Copyright (c) 2009 Andre Luis Azevedo (az.andrel@yahoo.com.br)
  * All rights reserved.
- *                       
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -43,50 +43,50 @@ using System.Net.Sockets;
 namespace ALAZ.SystemEx.NetEx.SocketsEx
 {
 
-    /// <summary>
-    /// Server connection implementation.
-    /// </summary>
-    internal class ServerSocketConnection : BaseSocketConnection, IServerSocketConnection
-    {
+	/// <summary>
+	/// Server connection implementation.
+	/// </summary>
+	internal class ServerSocketConnection : BaseSocketConnection, IServerSocketConnection
+	{
 
-        #region Constructor
+		#region Constructor
 
-        internal ServerSocketConnection(BaseSocketConnectionHost host, BaseSocketConnectionCreator creator, Socket socket)
-          : base(host, creator, socket)
-        {
-            //-----
-        }
+		internal ServerSocketConnection(BaseSocketConnectionHost host, BaseSocketConnectionCreator creator, Socket socket)
+		  : base(host, creator, socket)
+		{
+			//-----
+		}
 
-        #endregion
+		#endregion
 
-        #region ISocketConnection Members
+		#region ISocketConnection Members
 
-        public override IClientSocketConnection AsClientConnection()
-        {
-            return null;
-        }
+		public override IClientSocketConnection AsClientConnection()
+		{
+			return null;
+		}
 
-        public override IServerSocketConnection AsServerConnection()
-        {
-            return (this as IServerSocketConnection);
-        }
+		public override IServerSocketConnection AsServerConnection()
+		{
+			return (this as IServerSocketConnection);
+		}
 
-        #endregion
+		#endregion
 
-        #region IServerSocketConnection Members
+		#region IServerSocketConnection Members
 
-        public void BeginSendToAll(byte[] buffer, bool includeMe)
-        {
-            BaseHost.BeginSendToAll(this, buffer, includeMe);
-        }
+		public void BeginSendToAll(byte[] buffer, bool includeMe)
+		{
+			BaseHost.BeginSendToAll(this, buffer, includeMe);
+		}
 
-        public void BeginSendTo(ISocketConnection connection, byte[] buffer)
-        {
-            BaseHost.BeginSendTo((BaseSocketConnection)connection, buffer);
-        }
+		public void BeginSendTo(ISocketConnection connection, byte[] buffer)
+		{
+			BaseHost.BeginSendTo((BaseSocketConnection)connection, buffer);
+		}
 
-        #endregion
+		#endregion
 
-    }
+	}
 
 }

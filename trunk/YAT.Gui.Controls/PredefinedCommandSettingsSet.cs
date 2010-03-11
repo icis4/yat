@@ -155,15 +155,15 @@ namespace YAT.Gui.Controls
 		// Control Event Handlers
 		//==========================================================================================
 
-        /// <summary>
-        /// Startup flag only used in the following event handler.
-        /// </summary>
-        private bool _isStartingUp = true;
+		/// <summary>
+		/// Startup flag only used in the following event handler.
+		/// </summary>
+		private bool _isStartingUp = true;
 
-        /// <summary>
-        /// Initially set controls and validate its contents where needed.
-        /// </summary>
-        private void PredefinedCommandSettingsSet_Paint(object sender, PaintEventArgs e)
+		/// <summary>
+		/// Initially set controls and validate its contents where needed.
+		/// </summary>
+		private void PredefinedCommandSettingsSet_Paint(object sender, PaintEventArgs e)
 		{
 			if (_isStartingUp)
 			{

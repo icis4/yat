@@ -79,15 +79,15 @@ namespace YAT.Gui.Forms
 		// Form Event Handlers
 		//==========================================================================================
 
-        /// <summary>
-        /// Startup flag only used in the following event handler.
-        /// </summary>
-        private bool _isStartingUp = true;
+		/// <summary>
+		/// Startup flag only used in the following event handler.
+		/// </summary>
+		private bool _isStartingUp = true;
 
-        /// <summary>
-        /// Initially set controls and validate its contents where needed.
-        /// </summary>
-        private void NewTerminal_Paint(object sender, PaintEventArgs e)
+		/// <summary>
+		/// Initially set controls and validate its contents where needed.
+		/// </summary>
+		private void NewTerminal_Paint(object sender, PaintEventArgs e)
 		{
 			if (_isStartingUp)
 			{
@@ -183,17 +183,17 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-        private void usbHidPortSelection_DeviceIdChanged(object sender, EventArgs e)
-        {
-            if (!_isSettingControls)
-            {
-                MKY.IO.Usb.DeviceInfo deviceId = usbHidPortSelection.DeviceId;
-                _newTerminalSettings_Form.UsbHidDeviceId = deviceId;
-                SetControls();
-            }
-        }
+		private void usbHidPortSelection_DeviceIdChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+			{
+				MKY.IO.Usb.DeviceInfo deviceId = usbHidPortSelection.DeviceId;
+				_newTerminalSettings_Form.UsbHidDeviceId = deviceId;
+				SetControls();
+			}
+		}
 
-        private void checkBox_StartTerminal_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_StartTerminal_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
 			{
@@ -224,7 +224,7 @@ namespace YAT.Gui.Forms
 			_terminalSettings.Terminal.IO.Socket.LocalTcpPort            = _newTerminalSettings.SocketLocalTcpPort;
 			_terminalSettings.Terminal.IO.Socket.LocalUdpPort            = _newTerminalSettings.SocketLocalUdpPort;
 
-            _terminalSettings.Terminal.IO.UsbHidPort.DeviceId            = _newTerminalSettings.UsbHidDeviceId;
+			_terminalSettings.Terminal.IO.UsbHidPort.DeviceId            = _newTerminalSettings.UsbHidDeviceId;
 
 			_terminalSettings.TerminalIsStarted                          = _newTerminalSettings.StartTerminal;
 
@@ -261,7 +261,7 @@ namespace YAT.Gui.Forms
 				);
 		}
 
-        #endregion
+		#endregion
 
 		#region Private Methods
 		//==========================================================================================
@@ -277,8 +277,8 @@ namespace YAT.Gui.Forms
 			Domain.IOType ioType = _newTerminalSettings_Form.IOType;
 			terminalSelection.IOType = ioType;
 
-            bool isSerialPort = (ioType == Domain.IOType.SerialPort);
-            bool isUsbHid     = (ioType == Domain.IOType.UsbHid);
+			bool isSerialPort = (ioType == Domain.IOType.SerialPort);
+			bool isUsbHid     = (ioType == Domain.IOType.UsbHid);
 
 			// Set socket control before serial port control since that might need to refresh the
 			//   serial port list first (which takes time, which looks ulgy)
@@ -293,8 +293,8 @@ namespace YAT.Gui.Forms
 			serialPortSelection.Enabled    = isSerialPort;
 			serialPortSelection.PortId     = _newTerminalSettings_Form.SerialPortId;
 
-            usbHidPortSelection.Enabled    = isUsbHid;
-            usbHidPortSelection.DeviceId   = _newTerminalSettings_Form.UsbHidDeviceId;
+			usbHidPortSelection.Enabled    = isUsbHid;
+			usbHidPortSelection.DeviceId   = _newTerminalSettings_Form.UsbHidDeviceId;
 
 			checkBox_StartTerminal.Checked = _newTerminalSettings_Form.StartTerminal;
 

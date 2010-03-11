@@ -19,77 +19,77 @@ using System.Text;
 
 namespace libusb.NET
 {
-    [Serializable]
-    public class UsbException : Exception
-    {
-        public UsbException()
-        {
-        }
-
-        public UsbException(string message)
-            : base(message)
-        {
-        }
-    }
-
-    [Serializable]
-    public class UsbDeviceAlreadyOpenException : UsbException
+	[Serializable]
+	public class UsbException : Exception
 	{
-        public UsbDeviceAlreadyOpenException()
-        {
+		public UsbException()
+		{
+		}
+
+		public UsbException(string message)
+			: base(message)
+		{
 		}
 	}
 
 	[Serializable]
-    public class UsbDeviceNotOpenException : UsbException
+	public class UsbDeviceAlreadyOpenException : UsbException
 	{
-        public UsbDeviceNotOpenException()
-        {
+		public UsbDeviceAlreadyOpenException()
+		{
 		}
 	}
 
 	[Serializable]
-    public class UsbNativeMethodCallException : UsbException
+	public class UsbDeviceNotOpenException : UsbException
+	{
+		public UsbDeviceNotOpenException()
+		{
+		}
+	}
+
+	[Serializable]
+	public class UsbNativeMethodCallException : UsbException
 	{
 		public readonly string Method;
-        public readonly int    ReturnCode;
-        public readonly string NativeMessage;
+		public readonly int    ReturnCode;
+		public readonly string NativeMessage;
 
-        public UsbNativeMethodCallException(string method)
-            : this(method, "", 0)
-        {
-        }
-
-        public UsbNativeMethodCallException(string method, string message)
-            : this(method, message, 0)
-        {
-        }
-
-        public UsbNativeMethodCallException(string method, string message, int returnCode)
-            : base(message)
+		public UsbNativeMethodCallException(string method)
+			: this(method, "", 0)
 		{
-            Method = method;
+		}
+
+		public UsbNativeMethodCallException(string method, string message)
+			: this(method, message, 0)
+		{
+		}
+
+		public UsbNativeMethodCallException(string method, string message, int returnCode)
+			: base(message)
+		{
+			Method = method;
 			ReturnCode = returnCode;
-            NativeMessage = Native.Functions.libusb_strerror((Native.libusb_error)returnCode);
+			NativeMessage = Native.Functions.libusb_strerror((Native.libusb_error)returnCode);
 		}
 			
 		public override string ToString()
 		{
-            StringBuilder sb = new StringBuilder();
+			StringBuilder sb = new StringBuilder();
 
-            sb.Append("USB exception while calling ");
-            sb.AppendLine(Method);
+			sb.Append("USB exception while calling ");
+			sb.AppendLine(Method);
 
-            sb.Append("  Message : ");
-            sb.AppendLine(Message);
+			sb.Append("  Message : ");
+			sb.AppendLine(Message);
 
-            sb.Append("  Return  : ");
-            sb.AppendLine(ReturnCode.ToString());
+			sb.Append("  Return  : ");
+			sb.AppendLine(ReturnCode.ToString());
 
-            sb.Append("  Native  : ");
-            sb.AppendLine(NativeMessage);
+			sb.Append("  Native  : ");
+			sb.AppendLine(NativeMessage);
 
-            return (sb.ToString());
+			return (sb.ToString());
 		}
 	}
 }

@@ -22,14 +22,14 @@ using System;
 /// </summary>
 namespace libusb.NET.Native
 {
-    // typedef void (*libusb_pollfd_added_cb)(int fd, short events, void *user_data);
-    public delegate void libusb_pollfd_added_cb(int fd, short events, object user_param);
+	// typedef void (*libusb_pollfd_added_cb)(int fd, short events, void *user_data);
+	public delegate void libusb_pollfd_added_cb(int fd, short events, object user_param);
 
-    // typedef void (*libusb_pollfd_removed_cb)(int fd, void *user_data);
-    public delegate void libusb_pollfd_removed_cb(int fd, object user_param);
+	// typedef void (*libusb_pollfd_removed_cb)(int fd, void *user_data);
+	public delegate void libusb_pollfd_removed_cb(int fd, object user_param);
 
-    // typedef void (*libusb_transfer_cb_fn)(struct libusb_transfer *transfer);
-    public delegate void libusb_transfer_cb_fn(libusb_transfer transfer);
+	// typedef void (*libusb_transfer_cb_fn)(struct libusb_transfer *transfer);
+	public delegate void libusb_transfer_cb_fn(libusb_transfer transfer);
 }
 
 //==================================================================================================

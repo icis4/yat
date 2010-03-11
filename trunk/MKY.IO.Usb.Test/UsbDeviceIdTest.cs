@@ -34,14 +34,14 @@ namespace MKY.IO.Usb.Test
 
 		private struct TestSet
 		{
-            public readonly bool IsValid;
+			public readonly bool IsValid;
 			public readonly int VendorId;
 			public readonly int ProductId;
 			public readonly string[] Descriptions;
 
 			public TestSet(bool isValid, int vendorId, int productId, string[] descriptions)
 			{
-                IsValid      = isValid;
+				IsValid      = isValid;
 				VendorId     = vendorId;
 				ProductId    = productId;
 				Descriptions = descriptions;
@@ -88,52 +88,52 @@ namespace MKY.IO.Usb.Test
 
 			foreach (TestSet ts in _testSets)
 			{
-                if (ts.IsValid)
-                {
-                    id = new DeviceInfo(ts.VendorId, ts.ProductId);
-                    Assert.AreEqual(ts.VendorId,  id.VendorId);
-                    Assert.AreEqual(ts.ProductId, id.ProductId);
+				if (ts.IsValid)
+				{
+					id = new DeviceInfo(ts.VendorId, ts.ProductId);
+					Assert.AreEqual(ts.VendorId,  id.VendorId);
+					Assert.AreEqual(ts.ProductId, id.ProductId);
 
-                    foreach (string description in ts.Descriptions)
-                    {
-                        id = DeviceInfo.Parse(description);
-                        Assert.AreEqual(ts.VendorId,  id.VendorId);
-                        Assert.AreEqual(ts.ProductId, id.ProductId);
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        id = new DeviceInfo(ts.VendorId, ts.ProductId);
-                        Assert.Fail
-                            (
-                            "Invalid ID pair " + ts.VendorId + "/" + ts.ProductId +
-                            " wasn't properly handled"
-                            );
-                    }
-                    catch
-                    {
-                        // Invalid input must throw an exception
-                    }
+					foreach (string description in ts.Descriptions)
+					{
+						id = DeviceInfo.Parse(description);
+						Assert.AreEqual(ts.VendorId,  id.VendorId);
+						Assert.AreEqual(ts.ProductId, id.ProductId);
+					}
+				}
+				else
+				{
+					try
+					{
+						id = new DeviceInfo(ts.VendorId, ts.ProductId);
+						Assert.Fail
+							(
+							"Invalid ID pair " + ts.VendorId + "/" + ts.ProductId +
+							" wasn't properly handled"
+							);
+					}
+					catch
+					{
+						// Invalid input must throw an exception
+					}
 
-                    foreach (string description in ts.Descriptions)
-                    {
-                        try
-                        {
-                            id = DeviceInfo.Parse(description);
-                            Assert.Fail
-                                (
-                                "Invalid descripton " + description +
-                                " wasn't properly handled"
-                                );
-                        }
-                        catch
-                        {
-                            // Invalid input must throw an exception
-                        }
-                    }
-                }
+					foreach (string description in ts.Descriptions)
+					{
+						try
+						{
+							id = DeviceInfo.Parse(description);
+							Assert.Fail
+								(
+								"Invalid descripton " + description +
+								" wasn't properly handled"
+								);
+						}
+						catch
+						{
+							// Invalid input must throw an exception
+						}
+					}
+				}
 			}
 		}
 

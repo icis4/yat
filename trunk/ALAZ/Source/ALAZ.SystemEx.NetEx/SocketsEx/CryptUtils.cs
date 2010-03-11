@@ -1,7 +1,7 @@
 /* ====================================================================
  * Copyright (c) 2009 Andre Luis Azevedo (az.andrel@yahoo.com.br)
  * All rights reserved.
- *                       
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -46,314 +46,313 @@ using System.Diagnostics;
 namespace ALAZ.SystemEx.NetEx.SocketsEx
 {
 
-    /// <summary>
-    /// Crypt tools.
-    /// </summary>
-    internal static class CryptUtils
-    {
+	/// <summary>
+	/// Crypt tools.
+	/// </summary>
+	internal static class CryptUtils
+	{
 
-        #region CreateSymmetricAlgoritm
+		#region CreateSymmetricAlgoritm
 
-        /// <summary>
-        /// Creates an asymmetric algoritm.
-        /// </summary>
-        /// <param name="encryptType">
-        /// Encrypt type.
-        /// </param>
-        public static SymmetricAlgorithm CreateSymmetricAlgoritm(EncryptType encryptType)
-        {
+		/// <summary>
+		/// Creates an asymmetric algoritm.
+		/// </summary>
+		/// <param name="encryptType">
+		/// Encrypt type.
+		/// </param>
+		public static SymmetricAlgorithm CreateSymmetricAlgoritm(EncryptType encryptType)
+		{
 
-            SymmetricAlgorithm result = null;
+			SymmetricAlgorithm result = null;
 
-            switch (encryptType)
-            {
+			switch (encryptType)
+			{
 
-                case EncryptType.etRijndael:
-                    {
+				case EncryptType.etRijndael:
+					{
 
-                        result = new RijndaelManaged();
+						result = new RijndaelManaged();
 
-                        result.KeySize = 256;
-                        result.BlockSize = 256;
+						result.KeySize = 256;
+						result.BlockSize = 256;
 
-                        break;
-                    }
+						break;
+					}
 
-            }
+			}
 
-            if (result != null)
-            {
-                result.Mode = CipherMode.CBC;
-            }
+			if (result != null)
+			{
+				result.Mode = CipherMode.CBC;
+			}
 
-            return result;
+			return result;
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region EncryptDataForAuthenticate
+		#region EncryptDataForAuthenticate
 
-        /// <summary>
-        /// Encrypts using default padding.
-        /// </summary>
-        /// <param name="buffer">
-        /// Data to be rncrypted
-        /// </param>
-        public static byte[] EncryptDataForAuthenticate(ICryptoTransform ct, byte[] buffer)
-        {
+		/// <summary>
+		/// Encrypts using default padding.
+		/// </summary>
+		/// <param name="buffer">
+		/// Data to be rncrypted
+		/// </param>
+		public static byte[] EncryptDataForAuthenticate(ICryptoTransform ct, byte[] buffer)
+		{
 
-            byte[] result = null;
+			byte[] result = null;
 
-            using (MemoryStream ms = new MemoryStream())
-            {
+			using (MemoryStream ms = new MemoryStream())
+			{
 
-                using (CryptoStream cs = new CryptoStream(ms, ct, CryptoStreamMode.Write))
-                {
+				using (CryptoStream cs = new CryptoStream(ms, ct, CryptoStreamMode.Write))
+				{
 
-                    cs.Write(buffer, 0, buffer.Length);
-                    cs.FlushFinalBlock();
+					cs.Write(buffer, 0, buffer.Length);
+					cs.FlushFinalBlock();
 
-                    result = ms.ToArray();
+					result = ms.ToArray();
 
-                }
+				}
 
-            }
+			}
 
-            return result;
+			return result;
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region DecryptDataForAuthenticate
+		#region DecryptDataForAuthenticate
 
-        /// <summary>
-        /// Encrypts using default padding.
-        /// </summary>
-        /// <param name="buffer">
-        /// Data to be encrypted
-        /// </param>
-        public static byte[] DecryptDataForAuthenticate(ICryptoTransform ct, byte[] buffer)
-        {
+		/// <summary>
+		/// Encrypts using default padding.
+		/// </summary>
+		/// <param name="buffer">
+		/// Data to be encrypted
+		/// </param>
+		public static byte[] DecryptDataForAuthenticate(ICryptoTransform ct, byte[] buffer)
+		{
 
-            byte[] result = null;
+			byte[] result = null;
 
-            using (MemoryStream ms = new MemoryStream(buffer))
-            {
+			using (MemoryStream ms = new MemoryStream(buffer))
+			{
 
-                using (CryptoStream cs = new CryptoStream(ms, ct, CryptoStreamMode.Read))
-                using (BinaryReader b = new BinaryReader(cs))
-                {
-                    ms.Position = 0;
-                    result = b.ReadBytes(4096);
-                }
-
-            }
-            
-            return result;
-
-        }
-
-        #endregion
-
-        #region EncryptData
-
-        /// <summary>
-        /// Encrypts the data.
-        /// </summary>
-        /// <param name="connection">
-        /// Connection information.
-        /// </param>
-        /// <param name="buffer">
-        /// Data to be encrypted.
-        /// </param>
-        /// <param name="signOnly">
-        /// Indicates is encrypt method only uses symmetric algoritm.
-        /// </param>
-        public static byte[] EncryptData(BaseSocketConnection connection, byte[] buffer)
-        {
-
-            byte[] result = null;
-
-            if (
-                 (connection.EventProcessing == EventProcessing.epEncrypt)
-                 || (connection.EventProcessing == EventProcessing.epProxy)
-                 || (connection.EncryptType == EncryptType.etSSL && connection.CompressionType == CompressionType.ctNone)
-                 || (connection.EncryptType == EncryptType.etNone && connection.CompressionType == CompressionType.ctNone)
-                )
-            {
-                result = buffer;
-            }
-            else
-            {
-
-                using(MemoryStream ms = new MemoryStream())
-                {
-
-                    CryptoStream cs = null;
-                    GZipStream gs = null;
-
-                    switch (connection.EncryptType)
-                    {
-
-                        case EncryptType.etNone:
-                        case EncryptType.etSSL:
-                            {
-                                break;
-                            }
-
-                        default:
-                            {
-                                cs = new CryptoStream(ms, connection.Encryptor, CryptoStreamMode.Write);
-                                break;
-                            }
-                    }
-
-                    switch (connection.CompressionType)
-                    {
-
-                        case CompressionType.ctGZIP:
-                            {
-
-                                if (cs != null)
-                                {
-                                    gs = new GZipStream(cs, CompressionMode.Compress, true);
-                                }
-                                else
-                                {
-                                    gs = new GZipStream(ms, CompressionMode.Compress, true);
-                                }
-
-                                break;
-                            }
-
-                    }
-
-                    if (gs != null)
-                    {
-                        gs.Write(buffer, 0, buffer.Length);
-                        gs.Flush();
-                        gs.Close();
-                    }
-                    else
-                    {
-                        cs.Write(buffer, 0, buffer.Length);
-                    }
-
-                    if (cs != null)
-                    {
-                        cs.FlushFinalBlock();
-                        cs.Close();
-                    }
-
-                    result = ms.ToArray();
-
-                }
-
-            }
-
-            return result;
-
-        }
-
-        #endregion
-
-        #region DecryptData
-
-        /// <summary>
-        /// Decrypts the data.
-        /// </summary>
-        /// <param name="connection">
-        /// Connection information.
-        /// </param>
-        /// <param name="buffer">
-        /// Data to be encrypted.
-        /// </param>
-        /// <param name="maxBufferSize">
-        /// Max buffer size accepted.
-        /// </param>
-        public static byte[] DecryptData(BaseSocketConnection connection, byte[] buffer, int maxBufferSize)
-        {
-
-            byte[] result = null;
-
-            if (
-                 (connection.EventProcessing == EventProcessing.epEncrypt)
-                 || (connection.EventProcessing == EventProcessing.epProxy)
-                 || (connection.EncryptType == EncryptType.etSSL && connection.CompressionType == CompressionType.ctNone) 
-                 || (connection.EncryptType == EncryptType.etNone && connection.CompressionType == CompressionType.ctNone)
-                  
-                )
-            {
-                result = buffer;
-            }
-            else
-            {
-
-                MemoryStream ms = new MemoryStream(buffer);
-                CryptoStream cs = null;
-                GZipStream gs = null;
-
-                switch (connection.EncryptType)
-                {
-
-                    case EncryptType.etNone:
-                    case EncryptType.etSSL:
-                        {
-                            break;
-                        }
-
-                    default:
-                        {
-                            cs = new CryptoStream(ms, connection.Decryptor, CryptoStreamMode.Read);
-                            break;
-                        }
-                }
-
-                switch (connection.CompressionType)
-                {
-
-                    case CompressionType.ctGZIP:
-                        {
-
-                            if (cs != null)
-                            {
-                                gs = new GZipStream(cs, CompressionMode.Decompress, true);
-                            }
-                            else
-                            {
-                                gs = new GZipStream(ms, CompressionMode.Decompress, true);
-                            }
-
-                            break;
-                        }
-
-                }
-
-                BinaryReader b = null;
-
-                if (gs != null)
-                {
-                    b = new BinaryReader(gs);
-                }
-                else
-                {
-                    b = new BinaryReader(cs);
-                }
-
-                result = b.ReadBytes(maxBufferSize);
-
-                b.Close();
-
-            }
-
-            return result;
-
-        }
-
-        #endregion
-
-    }
+				using (CryptoStream cs = new CryptoStream(ms, ct, CryptoStreamMode.Read))
+				using (BinaryReader b = new BinaryReader(cs))
+				{
+					ms.Position = 0;
+					result = b.ReadBytes(4096);
+				}
+
+			}
+			
+			return result;
+
+		}
+
+		#endregion
+
+		#region EncryptData
+
+		/// <summary>
+		/// Encrypts the data.
+		/// </summary>
+		/// <param name="connection">
+		/// Connection information.
+		/// </param>
+		/// <param name="buffer">
+		/// Data to be encrypted.
+		/// </param>
+		/// <param name="signOnly">
+		/// Indicates is encrypt method only uses symmetric algoritm.
+		/// </param>
+		public static byte[] EncryptData(BaseSocketConnection connection, byte[] buffer)
+		{
+
+			byte[] result = null;
+
+			if (
+				 (connection.EventProcessing == EventProcessing.epEncrypt)
+				 || (connection.EventProcessing == EventProcessing.epProxy)
+				 || (connection.EncryptType == EncryptType.etSSL && connection.CompressionType == CompressionType.ctNone)
+				 || (connection.EncryptType == EncryptType.etNone && connection.CompressionType == CompressionType.ctNone)
+				)
+			{
+				result = buffer;
+			}
+			else
+			{
+
+				using(MemoryStream ms = new MemoryStream())
+				{
+
+					CryptoStream cs = null;
+					GZipStream gs = null;
+
+					switch (connection.EncryptType)
+					{
+
+						case EncryptType.etNone:
+						case EncryptType.etSSL:
+							{
+								break;
+							}
+
+						default:
+							{
+								cs = new CryptoStream(ms, connection.Encryptor, CryptoStreamMode.Write);
+								break;
+							}
+					}
+
+					switch (connection.CompressionType)
+					{
+
+						case CompressionType.ctGZIP:
+							{
+
+								if (cs != null)
+								{
+									gs = new GZipStream(cs, CompressionMode.Compress, true);
+								}
+								else
+								{
+									gs = new GZipStream(ms, CompressionMode.Compress, true);
+								}
+
+								break;
+							}
+
+					}
+
+					if (gs != null)
+					{
+						gs.Write(buffer, 0, buffer.Length);
+						gs.Flush();
+						gs.Close();
+					}
+					else
+					{
+						cs.Write(buffer, 0, buffer.Length);
+					}
+
+					if (cs != null)
+					{
+						cs.FlushFinalBlock();
+						cs.Close();
+					}
+
+					result = ms.ToArray();
+
+				}
+
+			}
+
+			return result;
+
+		}
+
+		#endregion
+
+		#region DecryptData
+
+		/// <summary>
+		/// Decrypts the data.
+		/// </summary>
+		/// <param name="connection">
+		/// Connection information.
+		/// </param>
+		/// <param name="buffer">
+		/// Data to be encrypted.
+		/// </param>
+		/// <param name="maxBufferSize">
+		/// Max buffer size accepted.
+		/// </param>
+		public static byte[] DecryptData(BaseSocketConnection connection, byte[] buffer, int maxBufferSize)
+		{
+
+			byte[] result = null;
+
+			if  (
+				 (connection.EventProcessing == EventProcessing.epEncrypt)
+				 || (connection.EventProcessing == EventProcessing.epProxy)
+				 || (connection.EncryptType == EncryptType.etSSL && connection.CompressionType == CompressionType.ctNone)
+				 || (connection.EncryptType == EncryptType.etNone && connection.CompressionType == CompressionType.ctNone)
+				)
+			{
+				result = buffer;
+			}
+			else
+			{
+
+				MemoryStream ms = new MemoryStream(buffer);
+				CryptoStream cs = null;
+				GZipStream gs = null;
+
+				switch (connection.EncryptType)
+				{
+
+					case EncryptType.etNone:
+					case EncryptType.etSSL:
+						{
+							break;
+						}
+
+					default:
+						{
+							cs = new CryptoStream(ms, connection.Decryptor, CryptoStreamMode.Read);
+							break;
+						}
+				}
+
+				switch (connection.CompressionType)
+				{
+
+					case CompressionType.ctGZIP:
+						{
+
+							if (cs != null)
+							{
+								gs = new GZipStream(cs, CompressionMode.Decompress, true);
+							}
+							else
+							{
+								gs = new GZipStream(ms, CompressionMode.Decompress, true);
+							}
+
+							break;
+						}
+
+				}
+
+				BinaryReader b = null;
+
+				if (gs != null)
+				{
+					b = new BinaryReader(gs);
+				}
+				else
+				{
+					b = new BinaryReader(cs);
+				}
+
+				result = b.ReadBytes(maxBufferSize);
+
+				b.Close();
+
+			}
+
+			return result;
+
+		}
+
+		#endregion
+
+	}
 
 }

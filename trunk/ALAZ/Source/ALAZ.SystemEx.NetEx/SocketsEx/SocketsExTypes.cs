@@ -1,7 +1,7 @@
 /* ====================================================================
  * Copyright (c) 2009 Andre Luis Azevedo (az.andrel@yahoo.com.br)
  * All rights reserved.
- *                       
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -49,721 +49,721 @@ using System.Web;
 namespace ALAZ.SystemEx.NetEx.SocketsEx
 {
 
-    #region Delegates
+	#region Delegates
 
-    public delegate void OnDisconnectEvent();
-    public delegate void OnSymmetricAuthenticateEvent(ISocketConnection connection, out RSACryptoServiceProvider serverKey);
-    public delegate void OnSSLClientAuthenticateEvent(ISocketConnection connection, out string ServerName, ref X509Certificate2Collection certs, ref bool checkRevocation);
-    public delegate void OnSSLServerAuthenticateEvent(ISocketConnection connection, out X509Certificate2 certificate, out bool clientAuthenticate, ref bool checkRevocation);
+	public delegate void OnDisconnectEvent();
+	public delegate void OnSymmetricAuthenticateEvent(ISocketConnection connection, out RSACryptoServiceProvider serverKey);
+	public delegate void OnSSLClientAuthenticateEvent(ISocketConnection connection, out string ServerName, ref X509Certificate2Collection certs, ref bool checkRevocation);
+	public delegate void OnSSLServerAuthenticateEvent(ISocketConnection connection, out X509Certificate2 certificate, out bool clientAuthenticate, ref bool checkRevocation);
 
-    #endregion
+	#endregion
 
-    #region Exceptions
+	#region Exceptions
 
-    /// <summary>
-    /// Reconnect attempted exception.
-    /// </summary>
-    public class ReconnectAttemptException : Exception
-    {
-        private int FAttempt;
-        private bool FMaxReached;
-        private IBaseSocketConnectionCreator FCreator;
+	/// <summary>
+	/// Reconnect attempted exception.
+	/// </summary>
+	public class ReconnectAttemptException : Exception
+	{
+		private int FAttempt;
+		private bool FMaxReached;
+		private IBaseSocketConnectionCreator FCreator;
 
-        public ReconnectAttemptException(string message, IBaseSocketConnectionCreator creator, Exception innerException, int attempt, bool maxReached)
-            : base(message, innerException)
-        {
-            FAttempt = attempt;
-            FMaxReached = maxReached;
-            FCreator = creator;
-        }
+		public ReconnectAttemptException(string message, IBaseSocketConnectionCreator creator, Exception innerException, int attempt, bool maxReached)
+			: base(message, innerException)
+		{
+			FAttempt = attempt;
+			FMaxReached = maxReached;
+			FCreator = creator;
+		}
 
-        public int Attempt
-        {
-            get { return FAttempt; }
-        }
+		public int Attempt
+		{
+			get { return FAttempt; }
+		}
 
-        public bool MaxReached
-        {
-            get { return FMaxReached; }
-        }
+		public bool MaxReached
+		{
+			get { return FMaxReached; }
+		}
 
-        public IBaseSocketConnectionCreator Creator
-        {
-            get { return FCreator; }
-        }
+		public IBaseSocketConnectionCreator Creator
+		{
+			get { return FCreator; }
+		}
 
-    }
+	}
 
-    /// <summary>
-    /// Bad Delimiter.
-    /// </summary>
-    public class BadDelimiterException : Exception
-    {
-        public BadDelimiterException(string message) : base(message) { }
-    }
+	/// <summary>
+	/// Bad Delimiter.
+	/// </summary>
+	public class BadDelimiterException : Exception
+	{
+		public BadDelimiterException(string message) : base(message) { }
+	}
 
-    /// <summary>
-    /// Message length is greater than the maximum value.
-    /// </summary>
-    public class MessageLengthException : Exception
-    {
-        public MessageLengthException(string message): base(message) { }
-    }
+	/// <summary>
+	/// Message length is greater than the maximum value.
+	/// </summary>
+	public class MessageLengthException : Exception
+	{
+		public MessageLengthException(string message): base(message) { }
+	}
 
-    /// <summary>
-    /// Symmetric authentication failure.
-    /// </summary>
-    public class SymmetricAuthenticationException: Exception
-    {
-        public SymmetricAuthenticationException(string message) : base(message) { } 
-    }
+	/// <summary>
+	/// Symmetric authentication failure.
+	/// </summary>
+	public class SymmetricAuthenticationException: Exception
+	{
+		public SymmetricAuthenticationException(string message) : base(message) { } 
+	}
 
-    /// <summary>
-    /// SSL authentication failure.
-    /// </summary>
-    public class SSLAuthenticationException : Exception
-    {
-        public SSLAuthenticationException(string message) : base(message) { }
-    }
+	/// <summary>
+	/// SSL authentication failure.
+	/// </summary>
+	public class SSLAuthenticationException : Exception
+	{
+		public SSLAuthenticationException(string message) : base(message) { }
+	}
 
-    /// <summary>
-    /// Proxy authentication failure.
-    /// </summary>
-    public class ProxyAuthenticationException :  HttpException
-    {
+	/// <summary>
+	/// Proxy authentication failure.
+	/// </summary>
+	public class ProxyAuthenticationException :  HttpException
+	{
 
-      public ProxyAuthenticationException(int code, string message) : base(code, message) { }
+	  public ProxyAuthenticationException(int code, string message) : base(code, message) { }
 
-    }
+	}
 
 
-    #endregion 
+	#endregion 
 
-    #region Structures
+	#region Structures
 
-    #region AuthMessage
+	#region AuthMessage
 
-    [Serializable]
-    public class AuthMessage
-    {
-        public byte[] SessionKey;
-        public byte[] SessionIV;
-        public byte[] ClientKey;
-        public byte[] Data;
-        public byte[] Sign;
-    }
+	[Serializable]
+	public class AuthMessage
+	{
+		public byte[] SessionKey;
+		public byte[] SessionIV;
+		public byte[] ClientKey;
+		public byte[] Data;
+		public byte[] Sign;
+	}
 
-    #endregion
+	#endregion
 
-    #endregion
+	#endregion
 
-    #region Enums
+	#region Enums
 
-    #region CallbackThreadType
+	#region CallbackThreadType
 
-    public enum CallbackThreadType
-    {
-        ctWorkerThread,
-        ctIOThread
-    }
+	public enum CallbackThreadType
+	{
+		ctWorkerThread,
+		ctIOThread
+	}
 
-    #endregion
+	#endregion
 
-    #region HostType
+	#region HostType
 
-    /// <summary>
-    /// Defines the host type.
-    /// </summary>
-    public enum HostType
-    {
-        htServer,
-        htClient
-    }
+	/// <summary>
+	/// Defines the host type.
+	/// </summary>
+	public enum HostType
+	{
+		htServer,
+		htClient
+	}
 
-    #endregion
+	#endregion
 
-    #region EncryptType
+	#region EncryptType
 
-    /// <summary>
-    /// Defines the encrypt method used.
-    /// </summary>
-    public enum EncryptType
-    {
-        etNone,
-        etRijndael,
-        etSSL
-    }
+	/// <summary>
+	/// Defines the encrypt method used.
+	/// </summary>
+	public enum EncryptType
+	{
+		etNone,
+		etRijndael,
+		etSSL
+	}
 
-    #endregion
+	#endregion
 
-    #region CompressionType
+	#region CompressionType
 
-    /// <summary>
-    /// Defines the compression method used.
-    /// </summary>
-    public enum CompressionType
-    {
-        ctNone,
-        ctGZIP
-    }
+	/// <summary>
+	/// Defines the compression method used.
+	/// </summary>
+	public enum CompressionType
+	{
+		ctNone,
+		ctGZIP
+	}
 
-    #endregion
+	#endregion
 
-    #region DelimiterType
+	#region DelimiterType
 
-    /// <summary>
-    /// Defines message delimiter type.
-    /// </summary>
-    public enum DelimiterType
-    {
-        dtNone,
-        dtMessageTailExcludeOnReceive,
-        dtMessageTailIncludeOnReceive
-    }
+	/// <summary>
+	/// Defines message delimiter type.
+	/// </summary>
+	public enum DelimiterType
+	{
+		dtNone,
+		dtMessageTailExcludeOnReceive,
+		dtMessageTailIncludeOnReceive
+	}
 
-    #endregion
+	#endregion
 
-    #region EventProcessing
+	#region EventProcessing
 
-    internal enum EventProcessing
-    {
-        epNone,
-        epProxy,
-        epEncrypt,
-        epUser
-    }
+	internal enum EventProcessing
+	{
+		epNone,
+		epProxy,
+		epEncrypt,
+		epUser
+	}
 
-    #endregion
+	#endregion
 
-    #region ProxyType
+	#region ProxyType
 
-    /// <summary>
-    /// Defines the proxy host type.
-    /// </summary>
-    public enum ProxyType
-    {
-      ptSOCKS4,
-      ptSOCKS4a,
-      ptSOCKS5,
-      ptHTTP
-    }
+	/// <summary>
+	/// Defines the proxy host type.
+	/// </summary>
+	public enum ProxyType
+	{
+	  ptSOCKS4,
+	  ptSOCKS4a,
+	  ptSOCKS5,
+	  ptHTTP
+	}
 
-    #endregion
+	#endregion
 
-    #region SOCKS5AuthMode
+	#region SOCKS5AuthMode
 		 
-    /// <summary>
-    /// Defines the SOCK5 authentication mode.
-    /// </summary>
-    internal enum SOCKS5AuthMode
-    {
-      saNoAuth = 0,
-      ssUserPass = 2
-    }
+	/// <summary>
+	/// Defines the SOCK5 authentication mode.
+	/// </summary>
+	internal enum SOCKS5AuthMode
+	{
+	  saNoAuth = 0,
+	  ssUserPass = 2
+	}
 
   	#endregion
 
-    #region SOCKS5Phase
+	#region SOCKS5Phase
 		 
 	  /// <summary>
-    /// Defines the SOCKS5 authentication phase
-    /// </summary>
-    internal enum SOCKS5Phase
-    {
+	/// Defines the SOCKS5 authentication phase
+	/// </summary>
+	internal enum SOCKS5Phase
+	{
 
-      spIdle,
-      spGreeting,
-      spAuthenticating,
-      spConnecting
-
-    }
+	  spIdle,
+	  spGreeting,
+	  spAuthenticating,
+	  spConnecting
 
-    #endregion
-  
-    #endregion
-
-    #region Interfaces
-
-    #region IBaseSocketConnectionCreator
-
-    public interface IBaseSocketConnectionCreator
-    {
-
-        string Name
-        {
-            get;
-        }
-
-        CompressionType CompressionType
-        {
-            get;
-        }
-
-        EncryptType EncryptType
-        {
-            get;
-        }
-
-    }
-
-    #endregion
-
-    #region IBaseSocketConnectionHost
-
-    public interface IBaseSocketConnectionHost
-    {
-
-        int SocketBufferSize
-        {
-            get;
-        }
-
-        int MessageBufferSize
-        {
-            get;
-        }
-
-        byte[] Delimiter
-        {
-            get;
-        }
-
-        DelimiterType DelimiterType
-        {
-            get;
-        }
-
-        int IdleCheckInterval
-        {
-            get;
-        }
-
-        int IdleTimeOutValue
-        {
-            get;
-        }
-
-        HostType HostType
-        {
-            get;
-        }
-
-    }
-
-    #endregion
-
-    #region ISocketConnection
-
-    #region ISocketConnectionInfo
-
-    public interface ISocketConnectionInfo
-    {
-
-        /// <summary>
-        /// Connection user data.
-        /// </summary>
-        object UserData
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Connection Session Id.
-        /// </summary>
-        long ConnectionId
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Connection Creator object.
-        /// </summary>
-        IBaseSocketConnectionCreator Creator
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Connection Host object.
-        /// </summary>
-        IBaseSocketConnectionHost Host
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Handle of the OS Socket.
-        /// </summary>
-        IntPtr SocketHandle
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Local socket endpoint.
-        /// </summary>
-        IPEndPoint LocalEndPoint
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Remote socket endpoint.
-        /// </summary>
-        IPEndPoint RemoteEndPoint
-        {
-            get;
-        }
-
-        DateTime LastAction
-        {
-            get;
-        }
-
-        long ReadBytes
-        {
-            get;
-        }
-
-        long WriteBytes
-        {
-            get;
-        }
-        
-    }
-    
-    #endregion
-
-    #region ISocketConnection
-
-    /// <summary>
-    /// Common connection properties and methods.
-    /// </summary>
-    public interface ISocketConnection : ISocketConnectionInfo
-    {
-
-        /// <summary>
-        /// Set Socket Time To Live option
-        /// </summary>
-        /// <param name="value">
-        /// Value for TTL in seconds
-        /// </param>
-        void SetTTL(short value);
-        /// <summary>
-        /// Set Socket Linger option.
-        /// </summary>
-        /// <param name="lo">
-        /// LingerOption value to be set
-        /// </param>
-        void SetLinger(LingerOption lo);
-        /// <summary>
-        /// Set Socket Nagle algoritm.
-        /// </summary>
-        /// <param name="value">
-        /// Enable/Disable value
-        /// </param>
-        void SetNagle(bool value);
-      
-        /// <summary>
-        /// Represents the connection as a IClientSocketConnection.
-        /// </summary>
-        /// <returns>
-        /// 
-        /// </returns>
-        IClientSocketConnection AsClientConnection();
-
-        /// <summary>
-        /// Represents the connection as a IServerSocketConnection.
-        /// </summary>
-        /// <returns></returns>
-        IServerSocketConnection AsServerConnection();
-
-        /// <summary>
-        /// Get the connection from the connectionId.
-        /// </summary>
-        /// <param name="connectionId">
-        /// The connectionId.
-        /// </param>
-        /// <returns>
-        /// ISocketConnection to use.
-        /// </returns>
-        ISocketConnection GetConnectionById(long connectionId);
-
-        /// <summary>
-        /// Get all the connections.
-        /// </summary>
-        ISocketConnection[] GetConnections();
-
-        /// <summary>
-        /// Begin send data.
-        /// </summary>
-        /// <param name="buffer">
-        /// Data to be sent.
-        /// </param>
-        void BeginSend(byte[] buffer);
-
-        /// <summary>
-        /// Begin receive the data.
-        /// </summary>
-        void BeginReceive();
-
-        /// <summary>
-        /// Begin disconnect the connection.
-        /// </summary>
-        void BeginDisconnect();
-
-    }
-
-    #endregion
-
-    #region IClientSocketConnection
-
-    /// <summary>
-    /// Client connection methods.
-    /// </summary>
-    public interface IClientSocketConnection: ISocketConnection
-    {
-
-        /// <summary>
-        /// Proxy information.
-        /// </summary>
-        ProxyInfo ProxyInfo
-        {
-          get;
-        }
-
-        /// <summary>
-        /// Begin reconnect the connection.
-        /// </summary>
-        void BeginReconnect();
-    }
-
-    #endregion
-
-    #region IServerSocketConnection
-
-    /// <summary>
-    /// Server connection methods.
-    /// </summary>
-    public interface IServerSocketConnection: ISocketConnection
-    {
-
-        /// <summary>
-        /// Begin send data to all server connections.
-        /// </summary>
-        /// <param name="buffer">
-        /// Data to be sent.
-        /// </param>
-        /// <param name="includeMe">
-        /// Includes the current connection in send´s loop
-        /// </param>
-        void BeginSendToAll(byte[] buffer, bool includeMe);
-
-        /// <summary>
-        /// Begin send data to the connection.
-        /// </summary>
-        /// <param name="connection">
-        /// The connection that the data will be sent.
-        /// </param>
-        /// <param name="buffer">
-        /// Data to be sent.
-        /// </param>
-        void BeginSendTo(ISocketConnection connection, byte[] buffer);
-
-    }
-
-    #endregion
-
-    #endregion
-
-    #region ISocketService
-
-    /// <summary>
-    /// Socket service methods.
-    /// </summary>
-    public interface ISocketService
-    {
-        /// <summary>
-        /// Fired when connected.
-        /// </summary>
-        /// <param name="e">
-        /// Information about the connection.
-        /// </param>
-        void OnConnected(ConnectionEventArgs e);
-
-        /// <summary>
-        /// Fired when data arrives.
-        /// </summary>
-        /// <param name="e">
-        /// Information about the Message.
-        /// </param>
-        void OnReceived(MessageEventArgs e);
-
-        /// <summary>
-        /// Fired when data is sent.
-        /// </summary>
-        /// <param name="e">
-        /// Information about the Message.
-        /// </param>
-        void OnSent(MessageEventArgs e);
-
-        /// <summary>
-        /// Fired when disconnected.
-        /// </summary>
-        /// <param name="e">
-        /// Information about the connection.
-        /// </param>
-        void OnDisconnected(ConnectionEventArgs e);
-
-        /// <summary>
-        /// Fired when exception occurs.
-        /// </summary>
-        /// <param name="e">
-        /// Information about the exception and connection.
-        /// </param>
-        void OnException(ExceptionEventArgs e);
-
-    }
-
-    #endregion
-
-    #region ICryptoService
-
-    /// <summary>
-    /// Crypto service methods.
-    /// </summary>
-    public interface ICryptoService
-    {
-        
-        /// <summary>
-        /// Fired when symmetric encryption is used.
-        /// </summary>
-        /// <param name="serverKey">
-        /// The RSA provider used to encrypt symmetric IV and Key.
-        /// </param>
-        void OnSymmetricAuthenticate(ISocketConnection connection, out RSACryptoServiceProvider serverKey);
-
-        /// <summary>
-        /// Fired when SSL encryption is used in client host.
-        /// </summary>
-        /// <param name="ServerName">
-        /// The host name in certificate.
-        /// </param>
-        /// <param name="certs">
-        /// The certification collection to be used (null if not using client certification).
-        /// </param>
-        /// <param name="checkRevocation">
-        /// Indicates if the certificated must be checked for revocation.
-        /// </param>
-        void OnSSLClientAuthenticate(ISocketConnection connection, out string ServerName, ref X509Certificate2Collection certs, ref bool checkRevocation);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <param name="serverCertificate"></param>
-        /// <param name="chain"></param>
-        /// <param name="sslPolicyErrors"></param>
-        /// <param name="acceptCertificate"></param>
-        void OnSSLClientValidateServerCertificate(X509Certificate serverCertificate, X509Chain chain, SslPolicyErrors sslPolicyErrors, out bool acceptCertificate);
-
-        /// <summary>
-        /// Fired when SSL encryption is used in server host.
-        /// </summary>
-        /// <param name="certificate">
-        /// The certificate to be used.
-        /// </param>
-        /// <param name="clientAuthenticate">
-        /// Indicates if client connection will be authenticated (uses certificate).
-        /// </param>
-        /// <param name="checkRevocation">
-        /// Indicates if the certificated must be checked for revocation.
-        /// </param>
-        void OnSSLServerAuthenticate(ISocketConnection connection, out X509Certificate2 certificate, out bool clientAuthenticate, ref bool checkRevocation);
-
-    }
-
-    #endregion
-
-    #endregion
-
-    #region Classes
-
-    #region SocketConnection
-
-    public class SocketConnection
-    { 
-
-        public int ConnectionId;
-        public IPAddress LocalAddress;
-        public IPAddress RemoteAddress;
-    
-    }
-
-    #endregion
-
-    #region BaseSocketService
-
-    /// <summary>
-    /// Base class for ISocketServive. Use it overriding the virtual methods.
-    /// </summary>
-    public abstract class BaseSocketService : ISocketService
-    {
-
-        #region ISocketService Members
-
-        public virtual void OnConnected(ConnectionEventArgs e) { }
-        public virtual void OnSent(MessageEventArgs e) { }
-        public virtual void OnReceived(MessageEventArgs e) { }
-        public virtual void OnDisconnected(ConnectionEventArgs e) { }
-        public virtual void OnException(ExceptionEventArgs e) { }
-
-        #endregion
-
-    }
-
-    #endregion
-
-    #region BaseCryptoService
-
-    /// <summary>
-    /// Base class for ICryptoServive. Use it overriding the virtual methods.
-    /// </summary>
-    public abstract class BaseCryptoService : ICryptoService
-    {
-
-        #region ICryptoService Members
-
-        public virtual void OnSymmetricAuthenticate(ISocketConnection connection, out RSACryptoServiceProvider serverKey)
-        {
-
-            serverKey = new RSACryptoServiceProvider();
-            serverKey.Clear();
-        }
-
-        public virtual void OnSSLClientAuthenticate(ISocketConnection connection, out string serverName, ref X509Certificate2Collection certs, ref bool checkRevocation)
-        {
-            serverName = String.Empty;
-        }
-
-        public virtual void OnSSLServerAuthenticate(ISocketConnection connection, out X509Certificate2 certificate, out bool clientAuthenticate, ref bool checkRevocation)
-        {
-            certificate = new X509Certificate2();
-            clientAuthenticate = true;
-        }
-
-        public virtual void OnSSLClientValidateServerCertificate(X509Certificate serverCertificate, X509Chain chain, SslPolicyErrors sslPolicyErrors, out bool acceptCertificate)
-        {
-            acceptCertificate = false;    
-        }
-
-        #endregion
-
-    }
-
-    #endregion
-
-    #endregion
+	}
+
+	#endregion
+
+	#endregion
+
+	#region Interfaces
+
+	#region IBaseSocketConnectionCreator
+
+	public interface IBaseSocketConnectionCreator
+	{
+
+		string Name
+		{
+			get;
+		}
+
+		CompressionType CompressionType
+		{
+			get;
+		}
+
+		EncryptType EncryptType
+		{
+			get;
+		}
+
+	}
+
+	#endregion
+
+	#region IBaseSocketConnectionHost
+
+	public interface IBaseSocketConnectionHost
+	{
+
+		int SocketBufferSize
+		{
+			get;
+		}
+
+		int MessageBufferSize
+		{
+			get;
+		}
+
+		byte[] Delimiter
+		{
+			get;
+		}
+
+		DelimiterType DelimiterType
+		{
+			get;
+		}
+
+		int IdleCheckInterval
+		{
+			get;
+		}
+
+		int IdleTimeOutValue
+		{
+			get;
+		}
+
+		HostType HostType
+		{
+			get;
+		}
+
+	}
+
+	#endregion
+
+	#region ISocketConnection
+
+	#region ISocketConnectionInfo
+
+	public interface ISocketConnectionInfo
+	{
+
+		/// <summary>
+		/// Connection user data.
+		/// </summary>
+		object UserData
+		{
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// Connection Session Id.
+		/// </summary>
+		long ConnectionId
+		{
+			get;
+		}
+
+		/// <summary>
+		/// Connection Creator object.
+		/// </summary>
+		IBaseSocketConnectionCreator Creator
+		{
+			get;
+		}
+
+		/// <summary>
+		/// Connection Host object.
+		/// </summary>
+		IBaseSocketConnectionHost Host
+		{
+			get;
+		}
+
+		/// <summary>
+		/// Handle of the OS Socket.
+		/// </summary>
+		IntPtr SocketHandle
+		{
+			get;
+		}
+
+		/// <summary>
+		/// Local socket endpoint.
+		/// </summary>
+		IPEndPoint LocalEndPoint
+		{
+			get;
+		}
+
+		/// <summary>
+		/// Remote socket endpoint.
+		/// </summary>
+		IPEndPoint RemoteEndPoint
+		{
+			get;
+		}
+
+		DateTime LastAction
+		{
+			get;
+		}
+
+		long ReadBytes
+		{
+			get;
+		}
+
+		long WriteBytes
+		{
+			get;
+		}
+		
+	}
+	
+	#endregion
+
+	#region ISocketConnection
+
+	/// <summary>
+	/// Common connection properties and methods.
+	/// </summary>
+	public interface ISocketConnection : ISocketConnectionInfo
+	{
+
+		/// <summary>
+		/// Set Socket Time To Live option
+		/// </summary>
+		/// <param name="value">
+		/// Value for TTL in seconds
+		/// </param>
+		void SetTTL(short value);
+		/// <summary>
+		/// Set Socket Linger option.
+		/// </summary>
+		/// <param name="lo">
+		/// LingerOption value to be set
+		/// </param>
+		void SetLinger(LingerOption lo);
+		/// <summary>
+		/// Set Socket Nagle algoritm.
+		/// </summary>
+		/// <param name="value">
+		/// Enable/Disable value
+		/// </param>
+		void SetNagle(bool value);
+
+		/// <summary>
+		/// Represents the connection as a IClientSocketConnection.
+		/// </summary>
+		/// <returns>
+		/// 
+		/// </returns>
+		IClientSocketConnection AsClientConnection();
+
+		/// <summary>
+		/// Represents the connection as a IServerSocketConnection.
+		/// </summary>
+		/// <returns></returns>
+		IServerSocketConnection AsServerConnection();
+
+		/// <summary>
+		/// Get the connection from the connectionId.
+		/// </summary>
+		/// <param name="connectionId">
+		/// The connectionId.
+		/// </param>
+		/// <returns>
+		/// ISocketConnection to use.
+		/// </returns>
+		ISocketConnection GetConnectionById(long connectionId);
+
+		/// <summary>
+		/// Get all the connections.
+		/// </summary>
+		ISocketConnection[] GetConnections();
+
+		/// <summary>
+		/// Begin send data.
+		/// </summary>
+		/// <param name="buffer">
+		/// Data to be sent.
+		/// </param>
+		void BeginSend(byte[] buffer);
+
+		/// <summary>
+		/// Begin receive the data.
+		/// </summary>
+		void BeginReceive();
+
+		/// <summary>
+		/// Begin disconnect the connection.
+		/// </summary>
+		void BeginDisconnect();
+
+	}
+
+	#endregion
+
+	#region IClientSocketConnection
+
+	/// <summary>
+	/// Client connection methods.
+	/// </summary>
+	public interface IClientSocketConnection: ISocketConnection
+	{
+
+		/// <summary>
+		/// Proxy information.
+		/// </summary>
+		ProxyInfo ProxyInfo
+		{
+		  get;
+		}
+
+		/// <summary>
+		/// Begin reconnect the connection.
+		/// </summary>
+		void BeginReconnect();
+	}
+
+	#endregion
+
+	#region IServerSocketConnection
+
+	/// <summary>
+	/// Server connection methods.
+	/// </summary>
+	public interface IServerSocketConnection: ISocketConnection
+	{
+
+		/// <summary>
+		/// Begin send data to all server connections.
+		/// </summary>
+		/// <param name="buffer">
+		/// Data to be sent.
+		/// </param>
+		/// <param name="includeMe">
+		/// Includes the current connection in send´s loop
+		/// </param>
+		void BeginSendToAll(byte[] buffer, bool includeMe);
+
+		/// <summary>
+		/// Begin send data to the connection.
+		/// </summary>
+		/// <param name="connection">
+		/// The connection that the data will be sent.
+		/// </param>
+		/// <param name="buffer">
+		/// Data to be sent.
+		/// </param>
+		void BeginSendTo(ISocketConnection connection, byte[] buffer);
+
+	}
+
+	#endregion
+
+	#endregion
+
+	#region ISocketService
+
+	/// <summary>
+	/// Socket service methods.
+	/// </summary>
+	public interface ISocketService
+	{
+		/// <summary>
+		/// Fired when connected.
+		/// </summary>
+		/// <param name="e">
+		/// Information about the connection.
+		/// </param>
+		void OnConnected(ConnectionEventArgs e);
+
+		/// <summary>
+		/// Fired when data arrives.
+		/// </summary>
+		/// <param name="e">
+		/// Information about the Message.
+		/// </param>
+		void OnReceived(MessageEventArgs e);
+
+		/// <summary>
+		/// Fired when data is sent.
+		/// </summary>
+		/// <param name="e">
+		/// Information about the Message.
+		/// </param>
+		void OnSent(MessageEventArgs e);
+
+		/// <summary>
+		/// Fired when disconnected.
+		/// </summary>
+		/// <param name="e">
+		/// Information about the connection.
+		/// </param>
+		void OnDisconnected(ConnectionEventArgs e);
+
+		/// <summary>
+		/// Fired when exception occurs.
+		/// </summary>
+		/// <param name="e">
+		/// Information about the exception and connection.
+		/// </param>
+		void OnException(ExceptionEventArgs e);
+
+	}
+
+	#endregion
+
+	#region ICryptoService
+
+	/// <summary>
+	/// Crypto service methods.
+	/// </summary>
+	public interface ICryptoService
+	{
+		
+		/// <summary>
+		/// Fired when symmetric encryption is used.
+		/// </summary>
+		/// <param name="serverKey">
+		/// The RSA provider used to encrypt symmetric IV and Key.
+		/// </param>
+		void OnSymmetricAuthenticate(ISocketConnection connection, out RSACryptoServiceProvider serverKey);
+
+		/// <summary>
+		/// Fired when SSL encryption is used in client host.
+		/// </summary>
+		/// <param name="ServerName">
+		/// The host name in certificate.
+		/// </param>
+		/// <param name="certs">
+		/// The certification collection to be used (null if not using client certification).
+		/// </param>
+		/// <param name="checkRevocation">
+		/// Indicates if the certificated must be checked for revocation.
+		/// </param>
+		void OnSSLClientAuthenticate(ISocketConnection connection, out string ServerName, ref X509Certificate2Collection certs, ref bool checkRevocation);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="connection"></param>
+		/// <param name="serverCertificate"></param>
+		/// <param name="chain"></param>
+		/// <param name="sslPolicyErrors"></param>
+		/// <param name="acceptCertificate"></param>
+		void OnSSLClientValidateServerCertificate(X509Certificate serverCertificate, X509Chain chain, SslPolicyErrors sslPolicyErrors, out bool acceptCertificate);
+
+		/// <summary>
+		/// Fired when SSL encryption is used in server host.
+		/// </summary>
+		/// <param name="certificate">
+		/// The certificate to be used.
+		/// </param>
+		/// <param name="clientAuthenticate">
+		/// Indicates if client connection will be authenticated (uses certificate).
+		/// </param>
+		/// <param name="checkRevocation">
+		/// Indicates if the certificated must be checked for revocation.
+		/// </param>
+		void OnSSLServerAuthenticate(ISocketConnection connection, out X509Certificate2 certificate, out bool clientAuthenticate, ref bool checkRevocation);
+
+	}
+
+	#endregion
+
+	#endregion
+
+	#region Classes
+
+	#region SocketConnection
+
+	public class SocketConnection
+	{ 
+
+		public int ConnectionId;
+		public IPAddress LocalAddress;
+		public IPAddress RemoteAddress;
+	
+	}
+
+	#endregion
+
+	#region BaseSocketService
+
+	/// <summary>
+	/// Base class for ISocketServive. Use it overriding the virtual methods.
+	/// </summary>
+	public abstract class BaseSocketService : ISocketService
+	{
+
+		#region ISocketService Members
+
+		public virtual void OnConnected(ConnectionEventArgs e) { }
+		public virtual void OnSent(MessageEventArgs e) { }
+		public virtual void OnReceived(MessageEventArgs e) { }
+		public virtual void OnDisconnected(ConnectionEventArgs e) { }
+		public virtual void OnException(ExceptionEventArgs e) { }
+
+		#endregion
+
+	}
+
+	#endregion
+
+	#region BaseCryptoService
+
+	/// <summary>
+	/// Base class for ICryptoServive. Use it overriding the virtual methods.
+	/// </summary>
+	public abstract class BaseCryptoService : ICryptoService
+	{
+
+		#region ICryptoService Members
+
+		public virtual void OnSymmetricAuthenticate(ISocketConnection connection, out RSACryptoServiceProvider serverKey)
+		{
+
+			serverKey = new RSACryptoServiceProvider();
+			serverKey.Clear();
+		}
+
+		public virtual void OnSSLClientAuthenticate(ISocketConnection connection, out string serverName, ref X509Certificate2Collection certs, ref bool checkRevocation)
+		{
+			serverName = String.Empty;
+		}
+
+		public virtual void OnSSLServerAuthenticate(ISocketConnection connection, out X509Certificate2 certificate, out bool clientAuthenticate, ref bool checkRevocation)
+		{
+			certificate = new X509Certificate2();
+			clientAuthenticate = true;
+		}
+
+		public virtual void OnSSLClientValidateServerCertificate(X509Certificate serverCertificate, X509Chain chain, SslPolicyErrors sslPolicyErrors, out bool acceptCertificate)
+		{
+			acceptCertificate = false;
+		}
+
+		#endregion
+
+	}
+
+	#endregion
+
+	#endregion
 
 }

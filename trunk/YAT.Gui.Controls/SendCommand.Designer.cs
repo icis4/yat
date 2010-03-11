@@ -120,10 +120,10 @@ namespace YAT.Gui.Controls
 
 		#endregion
 
-        private System.Windows.Forms.ToolTip toolTip;
-        private System.Windows.Forms.SplitContainer splitContainer;
-        private System.Windows.Forms.Button button_MultiLineCommand;
-        private System.Windows.Forms.Button button_SendCommand;
-        private System.Windows.Forms.ComboBox comboBox_Command;
+		private System.Windows.Forms.ToolTip toolTip;
+		private System.Windows.Forms.SplitContainer splitContainer;
+		private System.Windows.Forms.Button button_MultiLineCommand;
+		private System.Windows.Forms.Button button_SendCommand;
+		private System.Windows.Forms.ComboBox comboBox_Command;
 	}
 }

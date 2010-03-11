@@ -38,9 +38,9 @@ namespace MKY.IO.Serial
 		{
 			Connecting,
 			Connected,
-            Disconnecting,
-            Disconnected,
-            WaitingForReconnect,
+			Disconnecting,
+			Disconnected,
+			WaitingForReconnect,
 			Error,
 		}
 
@@ -66,9 +66,9 @@ namespace MKY.IO.Serial
 		private ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection _socketConnection;
 		private object _socketConnectionSyncObj = new object();
 
-        private Queue<byte> _receiveQueue = new Queue<byte>();
+		private Queue<byte> _receiveQueue = new Queue<byte>();
 
-        private System.Timers.Timer _reconnectTimer;
+		private System.Timers.Timer _reconnectTimer;
 
 		#endregion
 
@@ -175,37 +175,37 @@ namespace MKY.IO.Serial
 		// Properties
 		//==========================================================================================
 
-        /// <summary></summary>
-        public System.Net.IPAddress RemoteIPAddress
-        {
-            get
-            {
-                AssertNotDisposed();
-                return (_remoteIPAddress);
-            }
-        }
+		/// <summary></summary>
+		public System.Net.IPAddress RemoteIPAddress
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_remoteIPAddress);
+			}
+		}
 
-        /// <summary></summary>
-        public int RemotePort
-        {
-            get
-            {
-                AssertNotDisposed();
-                return (_remotePort);
-            }
-        }
+		/// <summary></summary>
+		public int RemotePort
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_remotePort);
+			}
+		}
 
-        /// <summary></summary>
-        public AutoRetry AutoReconnect
-        {
-            get
-            {
-                AssertNotDisposed();
-                return (_autoReconnect);
-            }
-        }
+		/// <summary></summary>
+		public AutoRetry AutoReconnect
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_autoReconnect);
+			}
+		}
 
-        /// <summary></summary>
+		/// <summary></summary>
 		public bool IsStarted
 		{
 			get
@@ -283,19 +283,19 @@ namespace MKY.IO.Serial
 			}
 		}
 
-        private bool AutoReconnectEnabledAndAllowed
-        {
-            get
-            {
-                return
-                    (
-                        !IsDisposed && IsStarted && !IsOpen &&
-                        _autoReconnect.Enabled
-                    );
-            }
-        }
+		private bool AutoReconnectEnabledAndAllowed
+		{
+			get
+			{
+				return
+					(
+						!IsDisposed && IsStarted && !IsOpen &&
+						_autoReconnect.Enabled
+					);
+			}
+		}
 
-        /// <summary></summary>
+		/// <summary></summary>
 		public object UnderlyingIOInstance
 		{
 			get
@@ -357,14 +357,14 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-        public void Send(byte[] data)
+		public void Send(byte[] data)
 		{
 			AssertNotDisposed();
 
 			if (IsStarted)
 			{
 				if (_socketConnection != null)
-                    _socketConnection.BeginSend(data);
+					_socketConnection.BeginSend(data);
 			}
 		}
 
@@ -415,8 +415,8 @@ namespace MKY.IO.Serial
 
 		private void StartSocket()
 		{
-            if (_socket != null)
-                DisposeSocket();
+			if (_socket != null)
+				DisposeSocket();
 
 			SetStateAndNotify(SocketState.Connecting);
 
@@ -602,16 +602,16 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-            MKY.Utilities.Unused.PreventCompilerWarning(IOControlChanged);
-            throw (new NotSupportedException("Event not in use"));
-        }
+			MKY.Utilities.Unused.PreventCompilerWarning(IOControlChanged);
+			throw (new NotSupportedException("Event not in use"));
+		}
 
 		/// <summary></summary>
 		protected virtual void OnIORequest(IORequestEventArgs e)
 		{
-            MKY.Utilities.Unused.PreventCompilerWarning(IORequest);
+			MKY.Utilities.Unused.PreventCompilerWarning(IORequest);
 			throw (new NotSupportedException("Event not in use"));
-        }
+		}
 
 		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)

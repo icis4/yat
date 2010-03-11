@@ -73,9 +73,9 @@ namespace MKY.IO.Serial
 		private ALAZ.SystemEx.NetEx.SocketsEx.SocketServer _socket;
 		private List<ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection> _socketConnections = new List<ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection>();
 
-        private Queue<byte> _receiveQueue = new Queue<byte>();
+		private Queue<byte> _receiveQueue = new Queue<byte>();
 
-        #endregion
+		#endregion
 
 		#region Events
 		//==========================================================================================
@@ -167,27 +167,27 @@ namespace MKY.IO.Serial
 		// Properties
 		//==========================================================================================
 
-        /// <summary></summary>
-        public System.Net.IPAddress LocalIPAddress
-        {
-            get
-            {
-                AssertNotDisposed();
-                return (_localIPAddress);
-            }
-        }
+		/// <summary></summary>
+		public System.Net.IPAddress LocalIPAddress
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_localIPAddress);
+			}
+		}
 
-        /// <summary></summary>
-        public int LocalPort
-        {
-            get
-            {
-                AssertNotDisposed();
-                return (_localPort);
-            }
-        }
+		/// <summary></summary>
+		public int LocalPort
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (_localPort);
+			}
+		}
 
-        /// <summary></summary>
+		/// <summary></summary>
 		public bool IsStarted
 		{
 			get
@@ -316,14 +316,14 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-        public void Send(byte[] data)
+		public void Send(byte[] data)
 		{
 			AssertNotDisposed();
 
 			if (IsStarted)
 			{
 				foreach (ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection connection in _socketConnections)
-                    connection.BeginSend(data);
+					connection.BeginSend(data);
 			}
 		}
 
@@ -374,8 +374,8 @@ namespace MKY.IO.Serial
 
 		private void StartSocket()
 		{
-            if (_socket != null)
-                DisposeSocket();
+			if (_socket != null)
+				DisposeSocket();
 
 			SetStateAndNotify(SocketState.Listening);
 

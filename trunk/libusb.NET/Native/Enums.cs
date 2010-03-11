@@ -22,34 +22,34 @@ using System;
 /// </summary>
 namespace libusb.NET.Native
 {
-    public enum libusb_transfer_status
-    {
-        LIBUSB_TRANSFER_COMPLETED,
-        LIBUSB_TRANSFER_ERROR,
-        LIBUSB_TRANSFER_TIMED_OUT,
-        LIBUSB_TRANSFER_CANCELLED,
-        LIBUSB_TRANSFER_STALL,
-        LIBUSB_TRANSFER_NO_DEVICE,
-        LIBUSB_TRANSFER_OVERFLOW,
-    }
+	public enum libusb_transfer_status
+	{
+		LIBUSB_TRANSFER_COMPLETED,
+		LIBUSB_TRANSFER_ERROR,
+		LIBUSB_TRANSFER_TIMED_OUT,
+		LIBUSB_TRANSFER_CANCELLED,
+		LIBUSB_TRANSFER_STALL,
+		LIBUSB_TRANSFER_NO_DEVICE,
+		LIBUSB_TRANSFER_OVERFLOW,
+	}
 
-    public enum libusb_error
-    {
-        LIBUSB_SUCCESS             =   0,
-        LIBUSB_ERROR_IO            =  -1,
-        LIBUSB_ERROR_INVALID_PARAM =  -2,
-        LIBUSB_ERROR_ACCESS        =  -3,
-        LIBUSB_ERROR_NO_DEVICE     =  -4,
-        LIBUSB_ERROR_NOT_FOUND     =  -5,
-        LIBUSB_ERROR_BUSY          =  -6,
-        LIBUSB_ERROR_TIMEOUT       =  -7,
-        LIBUSB_ERROR_OVERFLOW      =  -8,
-        LIBUSB_ERROR_PIPE          =  -9,
-        LIBUSB_ERROR_INTERRUPTED   = -10,
-        LIBUSB_ERROR_NO_MEM        = -11,
-        LIBUSB_ERROR_NOT_SUPPORTED = -12,
-        LIBUSB_ERROR_OTHER         = -99,
-    }
+	public enum libusb_error
+	{
+		LIBUSB_SUCCESS             =   0,
+		LIBUSB_ERROR_IO            =  -1,
+		LIBUSB_ERROR_INVALID_PARAM =  -2,
+		LIBUSB_ERROR_ACCESS        =  -3,
+		LIBUSB_ERROR_NO_DEVICE     =  -4,
+		LIBUSB_ERROR_NOT_FOUND     =  -5,
+		LIBUSB_ERROR_BUSY          =  -6,
+		LIBUSB_ERROR_TIMEOUT       =  -7,
+		LIBUSB_ERROR_OVERFLOW      =  -8,
+		LIBUSB_ERROR_PIPE          =  -9,
+		LIBUSB_ERROR_INTERRUPTED   = -10,
+		LIBUSB_ERROR_NO_MEM        = -11,
+		LIBUSB_ERROR_NOT_SUPPORTED = -12,
+		LIBUSB_ERROR_OTHER         = -99,
+	}
 }
 
 //==================================================================================================

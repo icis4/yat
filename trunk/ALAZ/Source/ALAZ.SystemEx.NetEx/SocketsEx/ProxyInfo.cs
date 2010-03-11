@@ -1,7 +1,7 @@
 /* ====================================================================
  * Copyright (c) 2009 Andre Luis Azevedo (az.andrel@yahoo.com.br)
  * All rights reserved.
- *                       
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -45,71 +45,71 @@ using System.Text.RegularExpressions;
 namespace ALAZ.SystemEx.NetEx.SocketsEx
 {
 
-  public class ProxyInfo
-  {
+	public class ProxyInfo
+	{
 
-    #region Fields
+		#region Fields
 
-    private ProxyType FProxyType;
-    private IPEndPoint FProxyEndPoint;
-    private NetworkCredential FProxyCredential;
-    private SOCKS5Phase FSOCKS5Phase;
-    private SOCKS5AuthMode FSOCKS5Authentication;
-    private bool FCompleted;
+		private ProxyType FProxyType;
+		private IPEndPoint FProxyEndPoint;
+		private NetworkCredential FProxyCredential;
+		private SOCKS5Phase FSOCKS5Phase;
+		private SOCKS5AuthMode FSOCKS5Authentication;
+		private bool FCompleted;
 
-    #endregion
+		#endregion
 
-    #region Constructor
+		#region Constructor
 
-    public ProxyInfo(ProxyType proxyType, IPEndPoint proxyEndPoint, NetworkCredential proxyCredential)
-    {
-      
-      FProxyType = proxyType;
-      FProxyEndPoint = proxyEndPoint;
-      FProxyCredential = proxyCredential;
-      FSOCKS5Phase = SOCKS5Phase.spIdle;
+		public ProxyInfo(ProxyType proxyType, IPEndPoint proxyEndPoint, NetworkCredential proxyCredential)
+		{
 
-    }
+			FProxyType = proxyType;
+			FProxyEndPoint = proxyEndPoint;
+			FProxyCredential = proxyCredential;
+			FSOCKS5Phase = SOCKS5Phase.spIdle;
 
-    #endregion
+		}
 
-    #region Properties
+		#endregion
 
-    public NetworkCredential ProxyCredential
-    {
-      get {return FProxyCredential; }
-    }
+		#region Properties
 
-    public IPEndPoint ProxyEndPoint
-    {
-      get { return FProxyEndPoint; }
-    }
+		public NetworkCredential ProxyCredential
+		{
+			get { return FProxyCredential; }
+		}
 
-    public ProxyType ProxyType
-    {
-      get { return FProxyType; }
-    }
+		public IPEndPoint ProxyEndPoint
+		{
+			get { return FProxyEndPoint; }
+		}
 
-    internal SOCKS5Phase SOCKS5Phase
-    {
-      get { return FSOCKS5Phase; }
-      set { FSOCKS5Phase = value; }
-    }
+		public ProxyType ProxyType
+		{
+			get { return FProxyType; }
+		}
 
-    internal SOCKS5AuthMode SOCKS5Authentication
-    {
-      get { return FSOCKS5Authentication;  }
-      set { FSOCKS5Authentication = value;  }
-    }
+		internal SOCKS5Phase SOCKS5Phase
+		{
+			get { return FSOCKS5Phase; }
+			set { FSOCKS5Phase = value; }
+		}
 
-    internal bool Completed
-    { 
-      get { return FCompleted; }
-      set  {FCompleted = value; }
-    }
+		internal SOCKS5AuthMode SOCKS5Authentication
+		{
+			get { return FSOCKS5Authentication; }
+			set { FSOCKS5Authentication = value; }
+		}
 
-    #endregion
+		internal bool Completed
+		{
+			get { return FCompleted; }
+			set { FCompleted = value; }
+		}
 
-  }
+		#endregion
+
+	}
 
 }

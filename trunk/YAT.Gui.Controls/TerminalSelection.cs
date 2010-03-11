@@ -36,43 +36,43 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		// \fixme Replace this help text with a real help
-        public static readonly string NewTerminalHelpText =
-            "Text vs. Binary:" + Environment.NewLine +
-            Environment.NewLine +
-            "Use a text terminal for text based protocols:" + Environment.NewLine +
-            "   - Characters 0x00..0x1F are treated as control characters" + Environment.NewLine +
-            "   - Line break is done using end of line sequence (EOL), e.g. <CR><LF>" + Environment.NewLine +
-            Environment.NewLine +
-            "Use a binary terminal for binary protocols:" + Environment.NewLine +
-            "   - Characters 0x00..0x1F are treated as normal data" + Environment.NewLine +
-            "   - Line break is done based on various binary settings" + Environment.NewLine +
-            Environment.NewLine +
-            Environment.NewLine +
-            "TCP/IP AutoSocket:" + Environment.NewLine +
-            Environment.NewLine +
-            "TCP/IP AutoSocket automatically determines whether to run as client or server. On start, it tries to" + Environment.NewLine +
-            "   connect to a remote server and run as client. If this fails, it tries to run as server. Retry cycles and" + Environment.NewLine +
-            "   random wait times always ensure proper operation." + Environment.NewLine +
-            Environment.NewLine +
-            Environment.NewLine +
-            "TCP/IP and UDP/IP:" + Environment.NewLine +
-            Environment.NewLine +
-            "The remote host is the remote computer to connect to or an other program running on this machine." + Environment.NewLine +
-            "Examples:" + Environment.NewLine +
-            "   '127.0.0.1' is the IP v4 localhost" + Environment.NewLine +
-            "   '::1' is the IP v6 localhost" + Environment.NewLine +
-            Environment.NewLine +
-            "The local interface is the network interface that on this machine that is used for this connection." + Environment.NewLine +
-            "Examples:" + Environment.NewLine +
-            "   '127.0.0.1' is the IP v4 loopback interface" + Environment.NewLine +
-            "   '::1' is the IP v6 loopback interface" +
-            Environment.NewLine +
-            Environment.NewLine +
-            "USB Ser/HID:" + Environment.NewLine +
-            Environment.NewLine +
-            "USB Ser/HID is a serial port using the standard USB HID profile. Ser/HID is no USB standard but used" + Environment.NewLine +
-            "   by several device manufacturers which simply need to replace an 'old fashioned' serial interfcae." + Environment.NewLine +
-            "   USB Ser/HID requires no additional driver to be installed on the computer.";
+		public static readonly string NewTerminalHelpText =
+			"Text vs. Binary:" + Environment.NewLine +
+			Environment.NewLine +
+			"Use a text terminal for text based protocols:" + Environment.NewLine +
+			"   - Characters 0x00..0x1F are treated as control characters" + Environment.NewLine +
+			"   - Line break is done using end of line sequence (EOL), e.g. <CR><LF>" + Environment.NewLine +
+			Environment.NewLine +
+			"Use a binary terminal for binary protocols:" + Environment.NewLine +
+			"   - Characters 0x00..0x1F are treated as normal data" + Environment.NewLine +
+			"   - Line break is done based on various binary settings" + Environment.NewLine +
+			Environment.NewLine +
+			Environment.NewLine +
+			"TCP/IP AutoSocket:" + Environment.NewLine +
+			Environment.NewLine +
+			"TCP/IP AutoSocket automatically determines whether to run as client or server. On start, it tries to" + Environment.NewLine +
+			"   connect to a remote server and run as client. If this fails, it tries to run as server. Retry cycles and" + Environment.NewLine +
+			"   random wait times always ensure proper operation." + Environment.NewLine +
+			Environment.NewLine +
+			Environment.NewLine +
+			"TCP/IP and UDP/IP:" + Environment.NewLine +
+			Environment.NewLine +
+			"The remote host is the remote computer to connect to or an other program running on this machine." + Environment.NewLine +
+			"Examples:" + Environment.NewLine +
+			"   '127.0.0.1' is the IP v4 localhost" + Environment.NewLine +
+			"   '::1' is the IP v6 localhost" + Environment.NewLine +
+			Environment.NewLine +
+			"The local interface is the network interface that on this machine that is used for this connection." + Environment.NewLine +
+			"Examples:" + Environment.NewLine +
+			"   '127.0.0.1' is the IP v4 loopback interface" + Environment.NewLine +
+			"   '::1' is the IP v6 loopback interface" +
+			Environment.NewLine +
+			Environment.NewLine +
+			"USB Ser/HID:" + Environment.NewLine +
+			Environment.NewLine +
+			"USB Ser/HID is a serial port using the standard USB HID profile. Ser/HID is no USB standard but used" + Environment.NewLine +
+			"   by several device manufacturers which simply need to replace an 'old fashioned' serial interfcae." + Environment.NewLine +
+			"   USB Ser/HID requires no additional driver to be installed on the computer.";
 
 		private const Domain.TerminalType _TerminalTypeDefault = Domain.TerminalType.Text;
 		private const Domain.IOType       _IOTypeDefault       = Domain.IOType.SerialPort;

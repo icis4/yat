@@ -419,7 +419,7 @@ namespace YAT.Gui.Forms
 			ShowTerminalSettings();
 		}
 
-        #endregion
+		#endregion
 
 		#region Controls Event Handlers > Terminal Menu > Send
 		//------------------------------------------------------------------------------------------
@@ -677,12 +677,12 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-        #region Controls Event Handlers > Preset Context Menu
-        //------------------------------------------------------------------------------------------
-        // Controls Event Handlers > Preset Context Menu
-        //------------------------------------------------------------------------------------------
+		#region Controls Event Handlers > Preset Context Menu
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Preset Context Menu
+		//------------------------------------------------------------------------------------------
 
-        private List<ToolStripMenuItem> _menuItems_preset;
+		private List<ToolStripMenuItem> _menuItems_preset;
 
 		private void contextMenuStrip_Preset_Initialize()
 		{
@@ -711,20 +711,20 @@ namespace YAT.Gui.Forms
 			_isSettingControls = false;
 		}
 
-        private void contextMenuStrip_Preset_Opening(object sender, CancelEventArgs e)
-        {
-            contextMenuStrip_Preset_SetMenuItems();
-        }
+		private void contextMenuStrip_Preset_Opening(object sender, CancelEventArgs e)
+		{
+			contextMenuStrip_Preset_SetMenuItems();
+		}
 
 		private void toolStripMenuItem_PresetContextMenu_Preset_Click(object sender, EventArgs e)
-        {
-            RequestPreset(int.Parse((string)(((ToolStripMenuItem)sender).Tag)));
-        }
+		{
+			RequestPreset(int.Parse((string)(((ToolStripMenuItem)sender).Tag)));
+		}
 
-        #endregion
+		#endregion
 
-        #region Controls Event Handlers > Monitor Context Menu
-        //------------------------------------------------------------------------------------------
+		#region Controls Event Handlers > Monitor Context Menu
+		//------------------------------------------------------------------------------------------
 		// Controls Event Handlers > Monitor Context Menu
 		//------------------------------------------------------------------------------------------
 
@@ -1074,10 +1074,10 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-        #region Controls Event Handlers > Predefined Context Menu
-        //------------------------------------------------------------------------------------------
-        // Controls Event Handlers > Predefined Context Menu
-        //------------------------------------------------------------------------------------------
+		#region Controls Event Handlers > Predefined Context Menu
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Predefined Context Menu
+		//------------------------------------------------------------------------------------------
 
 		private List<ToolStripMenuItem> _menuItems_predefined;
 
@@ -1166,8 +1166,8 @@ namespace YAT.Gui.Forms
 		private int contextMenuStrip_Predefined_SelectedCommand = 0;
 		private Model.Types.Command contextMenuStrip_Predefined_CopyToSendCommand = null;
 
-        private void contextMenuStrip_Predefined_Opening(object sender, CancelEventArgs e)
-        {
+		private void contextMenuStrip_Predefined_Opening(object sender, CancelEventArgs e)
+		{
 			if (contextMenuStrip_Predefined.SourceControl == groupBox_Predefined)
 			{
 				int id = predefined.GetCommandIdFromScreenPoint(new Point(contextMenuStrip_Predefined.Left, contextMenuStrip_Predefined.Top));
@@ -1213,23 +1213,23 @@ namespace YAT.Gui.Forms
 			contextMenuStrip_Predefined_SetMenuItems();
 		}
 
-        private void toolStripMenuItem_PredefinedContextMenu_Command_Click(object sender, EventArgs e)
-        {
-            RequestPredefined(predefined.SelectedPage, int.Parse((string)(((ToolStripMenuItem)sender).Tag)));
-        }
+		private void toolStripMenuItem_PredefinedContextMenu_Command_Click(object sender, EventArgs e)
+		{
+			RequestPredefined(predefined.SelectedPage, int.Parse((string)(((ToolStripMenuItem)sender).Tag)));
+		}
 
-        private void toolStripMenuItem_PredefinedContextMenu_Page_Next_Click(object sender, EventArgs e)
-        {
-            predefined.NextPage();
-        }
+		private void toolStripMenuItem_PredefinedContextMenu_Page_Next_Click(object sender, EventArgs e)
+		{
+			predefined.NextPage();
+		}
 
-        private void toolStripMenuItem_PredefinedContextMenu_Page_Previous_Click(object sender, EventArgs e)
-        {
-            predefined.PreviousPage();
-        }
+		private void toolStripMenuItem_PredefinedContextMenu_Page_Previous_Click(object sender, EventArgs e)
+		{
+			predefined.PreviousPage();
+		}
 
-        private void toolStripMenuItem_PredefinedContextMenu_Define_Click(object sender, EventArgs e)
-        {
+		private void toolStripMenuItem_PredefinedContextMenu_Define_Click(object sender, EventArgs e)
+		{
 			if (contextMenuStrip_Predefined_SelectedCommand != 0)
 				ShowPredefinedCommandSettings(predefined.SelectedPage, contextMenuStrip_Predefined_SelectedCommand);
 			else
@@ -1259,16 +1259,16 @@ namespace YAT.Gui.Forms
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Hide_Click(object sender, EventArgs e)
-        {
-            _settingsRoot.Layout.PredefinedPanelIsVisible = false;
-        }
+		{
+			_settingsRoot.Layout.PredefinedPanelIsVisible = false;
+		}
 
-        #endregion
+		#endregion
 
-        #region Controls Event Handlers > Send Context Menu
-        //------------------------------------------------------------------------------------------
-        // Controls Event Handlers > Send Context Menu
-        //------------------------------------------------------------------------------------------
+		#region Controls Event Handlers > Send Context Menu
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Send Context Menu
+		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
 		/// Must be called each time send status changes.
@@ -1279,10 +1279,10 @@ namespace YAT.Gui.Forms
 			_isSettingControls = true;
 
 			toolStripMenuItem_SendContextMenu_SendCommand.Enabled = _settingsRoot.SendCommand.Command.IsValidCommand;
-            toolStripMenuItem_SendContextMenu_SendFile.Enabled = _settingsRoot.SendCommand.Command.IsValidFilePath;
+			toolStripMenuItem_SendContextMenu_SendFile.Enabled = _settingsRoot.SendCommand.Command.IsValidFilePath;
 
-            toolStripMenuItem_SendContextMenu_Panels_SendCommand.Checked = _settingsRoot.Layout.SendCommandPanelIsVisible;
-            toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = _settingsRoot.Layout.SendFilePanelIsVisible;
+			toolStripMenuItem_SendContextMenu_Panels_SendCommand.Checked = _settingsRoot.Layout.SendCommandPanelIsVisible;
+			toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = _settingsRoot.Layout.SendFilePanelIsVisible;
 
 			toolStripMenuItem_SendContextMenu_KeepCommand.Checked = _settingsRoot.Send.KeepCommand;
 			toolStripMenuItem_SendContextMenu_CopyPredefined.Checked = _settingsRoot.Send.CopyPredefined;
@@ -1296,24 +1296,24 @@ namespace YAT.Gui.Forms
 		}
 
 		private void toolStripMenuItem_SendContextMenu_SendCommand_Click(object sender, EventArgs e)
-        {
-            _terminal.SendCommand();
-        }
+		{
+			_terminal.SendCommand();
+		}
 
-        private void toolStripMenuItem_SendContextMenu_SendFile_Click(object sender, EventArgs e)
-        {
+		private void toolStripMenuItem_SendContextMenu_SendFile_Click(object sender, EventArgs e)
+		{
 			_terminal.SendFile();
-        }
+		}
 
-        private void toolStripMenuItem_SendContextMenu_Panels_SendCommand_Click(object sender, EventArgs e)
-        {
-            _settingsRoot.Layout.SendCommandPanelIsVisible = !_settingsRoot.Layout.SendCommandPanelIsVisible;
-        }
+		private void toolStripMenuItem_SendContextMenu_Panels_SendCommand_Click(object sender, EventArgs e)
+		{
+			_settingsRoot.Layout.SendCommandPanelIsVisible = !_settingsRoot.Layout.SendCommandPanelIsVisible;
+		}
 
-        private void toolStripMenuItem_SendContextMenu_Panels_SendFile_Click(object sender, EventArgs e)
-        {
-            _settingsRoot.Layout.SendFilePanelIsVisible = !_settingsRoot.Layout.SendFilePanelIsVisible;
-        }
+		private void toolStripMenuItem_SendContextMenu_Panels_SendFile_Click(object sender, EventArgs e)
+		{
+			_settingsRoot.Layout.SendFilePanelIsVisible = !_settingsRoot.Layout.SendFilePanelIsVisible;
+		}
 
 		private void toolStripMenuItem_SendContextMenu_KeepCommand_Click(object sender, EventArgs e)
 		{
@@ -1327,7 +1327,7 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-        #region Controls Event Handlers > Panel Layout
+		#region Controls Event Handlers > Panel Layout
 		//------------------------------------------------------------------------------------------
 		// Controls Event Handlers > Panel Layout
 		//------------------------------------------------------------------------------------------
@@ -1537,7 +1537,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_View_Initialize();
 
 			contextMenuStrip_Preset_Initialize();
-            contextMenuStrip_Predefined_Initialize();
+			contextMenuStrip_Predefined_Initialize();
 			contextMenuStrip_Monitor_Initialize();
 
 			toolStripStatusLabel_TerminalStatus_Initialize();
@@ -1671,9 +1671,9 @@ namespace YAT.Gui.Forms
 				splitContainer_Terminal.SplitterDistance = splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth;
 			}
 
-            send.CommandPanelIsVisible = _settingsRoot.Layout.SendCommandPanelIsVisible;
-            send.FilePanelIsVisible = _settingsRoot.Layout.SendFilePanelIsVisible;
-            send.SplitterRatio = _settingsRoot.Layout.PredefinedSplitterRatio;
+			send.CommandPanelIsVisible = _settingsRoot.Layout.SendCommandPanelIsVisible;
+			send.FilePanelIsVisible = _settingsRoot.Layout.SendFilePanelIsVisible;
+			send.SplitterRatio = _settingsRoot.Layout.PredefinedSplitterRatio;
 
 			ResumeLayout();
 			_isSettingControls = false;
@@ -2093,7 +2093,7 @@ namespace YAT.Gui.Forms
 						(commands[command - 1].IsDefined)
 						);
 				}
-                if (isDefined)
+				if (isDefined)
 				{
 					_terminal.SendPredefined(page, command);
 					return;
