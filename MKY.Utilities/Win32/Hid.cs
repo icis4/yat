@@ -20,8 +20,10 @@
 //==================================================================================================
 
 using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Text;
+using System.Globalization;
+using System.IO;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
@@ -57,9 +59,20 @@ namespace MKY.Utilities.Win32
 		// makes the code less readable.
 		#pragma warning disable 1591
 
+		/// <summary>
+		/// String descriptor types.
+		/// </summary>
+		private enum StringDescriptorIndex
+		{
+			LanguageIds  = 0,
+			Manufacturer = 1,
+			Product      = 2,
+			SerialNumber = 3,
+		}
+
 		/// <summary></summary>
 		[StructLayout(LayoutKind.Sequential)]
-		public struct HIDD_ATTRIBUTES 
+		public struct HIDD_ATTRIBUTES
 		{
 			public Int32 Size;
 			[CLSCompliant(false)]
@@ -159,6 +172,8 @@ namespace MKY.Utilities.Win32
 
 		#pragma warning restore 1591
 
+		private delegate bool GetHidStringDelegate(SafeFileHandle hidDeviceObject, out string hidString);
+
 		#endregion
 
 		#region Constants
@@ -224,7 +239,7 @@ namespace MKY.Utilities.Win32
 		/// <summary></summary>
 		public  static        Boolean HidD_GetIndexedString(SafeFileHandle HidDeviceObject, int StringIndex, out string IndexedString)
 		{
-			StringBuilder s = new StringBuilder(Usb.MaximumStringDescriptorCharLength);
+			StringBuilder s = new StringBuilder(Utilities.Usb.Descriptors.MaximumStringDescriptorCharLength);
 			if (HidD_GetIndexedString(HidDeviceObject, (UInt32)StringIndex, s, (UInt32)s.Capacity))
 			{
 				IndexedString = s.ToString();
@@ -256,7 +271,7 @@ namespace MKY.Utilities.Win32
 		/// <summary></summary>
 		public  static        Boolean HidD_GetManufacturerString(SafeFileHandle HidDeviceObject, out string Manufacturer)
 		{
-			StringBuilder s = new StringBuilder(Usb.MaximumStringDescriptorCharLength);
+			StringBuilder s = new StringBuilder(Utilities.Usb.Descriptors.MaximumStringDescriptorCharLength);
 			if (HidD_GetManufacturerString(HidDeviceObject, s, (UInt32)s.Capacity))
 			{
 				Manufacturer = s.ToString();
@@ -305,7 +320,7 @@ namespace MKY.Utilities.Win32
 		/// <summary></summary>
 		public  static        Boolean HidD_GetProductString(SafeFileHandle HidDeviceObject, out string Product)
 		{
-			StringBuilder s = new StringBuilder(Usb.MaximumStringDescriptorCharLength);
+			StringBuilder s = new StringBuilder(Utilities.Usb.Descriptors.MaximumStringDescriptorCharLength);
 			if (HidD_GetProductString(HidDeviceObject, s, (UInt32)s.Capacity))
 			{
 				Product = s.ToString();
@@ -320,7 +335,7 @@ namespace MKY.Utilities.Win32
 		/// <summary></summary>
 		public  static        Boolean HidD_GetSerialNumberString(SafeFileHandle HidDeviceObject, out string SerialNumber)
 		{
-			StringBuilder s = new StringBuilder(Usb.MaximumStringDescriptorCharLength);
+			StringBuilder s = new StringBuilder(Utilities.Usb.Descriptors.MaximumStringDescriptorCharLength);
 			if (HidD_GetSerialNumberString(HidDeviceObject, s, (UInt32)s.Capacity))
 			{
 				SerialNumber = s.ToString();
@@ -421,30 +436,37 @@ namespace MKY.Utilities.Win32
 		}
 
 		/// <summary>
-		/// Remove any input reports waiting in the buffer.
+		/// Retrieves the device handle of the HID device at the given systemPath.
 		/// </summary>
-		/// <param name="hidHandle">A handle to a device.</param>
-		/// <returns> True on success, false on failure.</returns>
-		public static bool FlushQueue(SafeFileHandle hidHandle)
+		public static bool GetHidHandle(string systemPath, out SafeFileHandle hidDeviceObject)
 		{
-			try
+			SafeFileHandle h = Utilities.Win32.FileIO.CreateFile
+				(
+				systemPath,
+				Utilities.Win32.FileIO.Access.QUERY_ONLY,
+				Utilities.Win32.FileIO.ShareMode.SHARE_READ_WRITE,
+				IntPtr.Zero,
+				Utilities.Win32.FileIO.CreationDisposition.OPEN_EXISTING,
+				Utilities.Win32.FileIO.AttributesAndFlags.NONE,
+				IntPtr.Zero
+				);
+
+			if (!h.IsInvalid)
 			{
-				bool success = HidD_FlushQueue(hidHandle);
-				return (success);
+				hidDeviceObject = h;
+				return (true);
 			}
-			catch (Exception ex)
-			{
-				XDebug.WriteException(typeof(Hid), ex);
-				throw;
-			}
+
+			hidDeviceObject = null;
+			return (false);
 		}
 
 		/// <summary>
 		/// Retrieves a structure with information about a device's capabilities. 
 		/// </summary>
-		/// <param name="hidHandle">A handle to a device.</param>
+		/// <param name="hidDeviceObject">A handle to a device.</param>
 		/// <returns>An HIDP_CAPS structure.</returns>
-		public static HIDP_CAPS GetDeviceCapabilities(SafeFileHandle hidHandle)
+		public static HIDP_CAPS GetDeviceCapabilities(SafeFileHandle hidDeviceObject)
 		{
 			HIDP_CAPS capabilities = new HIDP_CAPS();
 			IntPtr preparsedData = new IntPtr();
@@ -452,26 +474,26 @@ namespace MKY.Utilities.Win32
 
 			try
 			{
-				success = HidD_GetPreparsedData(hidHandle, ref preparsedData);
+				success = HidD_GetPreparsedData(hidDeviceObject, ref preparsedData);
 				Int32 result = HidP_GetCaps(preparsedData, ref capabilities);
 				if ((result != 0))
 				{
-					Debug.WriteLine("");
-					Debug.WriteLine("  Usage: " + Convert.ToString(capabilities.Usage, 16));
-					Debug.WriteLine("  Usage Page: " + Convert.ToString(capabilities.UsagePage, 16));
-					Debug.WriteLine("  Input Report Byte Length: " + capabilities.InputReportByteLength);
-					Debug.WriteLine("  Output Report Byte Length: " + capabilities.OutputReportByteLength);
-					Debug.WriteLine("  Feature Report Byte Length: " + capabilities.FeatureReportByteLength);
-					Debug.WriteLine("  Number of Link Collection Nodes: " + capabilities.NumberLinkCollectionNodes);
-					Debug.WriteLine("  Number of Input Button Caps: " + capabilities.NumberInputButtonCaps);
-					Debug.WriteLine("  Number of Input Value Caps: " + capabilities.NumberInputValueCaps);
-					Debug.WriteLine("  Number of Input Data Indices: " + capabilities.NumberInputDataIndices);
-					Debug.WriteLine("  Number of Output Button Caps: " + capabilities.NumberOutputButtonCaps);
-					Debug.WriteLine("  Number of Output Value Caps: " + capabilities.NumberOutputValueCaps);
-					Debug.WriteLine("  Number of Output Data Indices: " + capabilities.NumberOutputDataIndices);
-					Debug.WriteLine("  Number of Feature Button Caps: " + capabilities.NumberFeatureButtonCaps);
-					Debug.WriteLine("  Number of Feature Value Caps: " + capabilities.NumberFeatureValueCaps);
-					Debug.WriteLine("  Number of Feature Data Indices: " + capabilities.NumberFeatureDataIndices);
+					System.Diagnostics.Debug.WriteLine("");
+					System.Diagnostics.Debug.WriteLine("  Usage:                           " + Convert.ToString(capabilities.Usage, 16));
+					System.Diagnostics.Debug.WriteLine("  Usage Page:                      " + Convert.ToString(capabilities.UsagePage, 16));
+					System.Diagnostics.Debug.WriteLine("  Input Report Byte Length:        " + capabilities.InputReportByteLength);
+					System.Diagnostics.Debug.WriteLine("  Output Report Byte Length:       " + capabilities.OutputReportByteLength);
+					System.Diagnostics.Debug.WriteLine("  Feature Report Byte Length:      " + capabilities.FeatureReportByteLength);
+					System.Diagnostics.Debug.WriteLine("  Number of Link Collection Nodes: " + capabilities.NumberLinkCollectionNodes);
+					System.Diagnostics.Debug.WriteLine("  Number of Input Button Caps:     " + capabilities.NumberInputButtonCaps);
+					System.Diagnostics.Debug.WriteLine("  Number of Input Value Caps:      " + capabilities.NumberInputValueCaps);
+					System.Diagnostics.Debug.WriteLine("  Number of Input Data Indices:    " + capabilities.NumberInputDataIndices);
+					System.Diagnostics.Debug.WriteLine("  Number of Output Button Caps:    " + capabilities.NumberOutputButtonCaps);
+					System.Diagnostics.Debug.WriteLine("  Number of Output Value Caps:     " + capabilities.NumberOutputValueCaps);
+					System.Diagnostics.Debug.WriteLine("  Number of Output Data Indices:   " + capabilities.NumberOutputDataIndices);
+					System.Diagnostics.Debug.WriteLine("  Number of Feature Button Caps:   " + capabilities.NumberFeatureButtonCaps);
+					System.Diagnostics.Debug.WriteLine("  Number of Feature Value Caps:    " + capabilities.NumberFeatureValueCaps);
+					System.Diagnostics.Debug.WriteLine("  Number of Feature Data Indices:  " + capabilities.NumberFeatureDataIndices);
 
 					HIDP_VALUE_CAPS valueCaps = new HIDP_VALUE_CAPS();
 					HidP_GetValueCaps(HIDP_REPORT_TYPE.HidP_Input, ref valueCaps, preparsedData);
@@ -520,6 +542,77 @@ namespace MKY.Utilities.Win32
 				XDebug.WriteException(typeof(Hid), ex);
 				throw;
 			}
+		}
+
+		/// <summary></summary>
+		public static bool GetManufacturerString(SafeFileHandle hidDeviceObject, out string manufacturer)
+		{
+			return (GetString(hidDeviceObject, HidD_GetManufacturerString, out manufacturer));
+		}
+
+		/// <summary></summary>
+		public static bool GetProductString(SafeFileHandle hidDeviceObject, out string product)
+		{
+			return (GetString(hidDeviceObject, HidD_GetProductString, out product));
+		}
+
+		/// <summary></summary>
+		public static bool GetSerialNumberString(SafeFileHandle hidDeviceObject, out string serialNumber)
+		{
+			return (GetString(hidDeviceObject, HidD_GetSerialNumberString, out serialNumber));
+		}
+
+		private static bool GetString(SafeFileHandle hidDeviceObject, GetHidStringDelegate method, out string hidString)
+		{
+			if (!hidDeviceObject.IsInvalid)
+			{
+				try
+				{
+					// Retrieve language IDs at index 0
+					string languageString;
+					if (HidD_GetIndexedString(hidDeviceObject, (int)StringDescriptorIndex.LanguageIds, out languageString))
+					{
+						// Retrieve invariant string
+						string invariantString;
+						if (method(hidDeviceObject, out invariantString)) // GetManufacturerString() or GetProductString() or GetSerialNumberString()
+						{
+							if (invariantString != languageString) // Looks like a proper invariant string
+							{
+								hidString = invariantString;
+								return (true);
+							}
+							else // invariantString == languageString means that invariant string not really contains useful data
+							{
+								// Retrieve culture specific strings
+
+								// \fixme MKY 2010-03-14
+								// Don't know how to retrieve culture specific strings based on language ID. Simply return "".
+
+								/*
+								CultureInfo[] l = Usb.Descriptors.GetCultureInfoFromLanguageString(languageString);
+								Dictionary<CultureInfo, string> d = GetCultureSpecificStrings(hidDeviceObject, index, l);
+								CultureInfo ci = Globalization.XCultureInfo.GetMostAppropriateCultureInfo(d.Keys);
+								if ((ci != null) && (d.ContainsKey(ci)))
+								{
+									hidString = d[ci];
+									return (true);
+								}
+								*/
+
+								string cultureSpecificString = "";
+								hidString = cultureSpecificString;
+								return (true);
+							}
+						}
+					}
+				}
+				catch (Exception ex)
+				{
+					XDebug.WriteException(typeof(Hid), ex);
+				}
+			}
+			hidString = "";
+			return (false);
 		}
 
 		/// <summary>
@@ -633,6 +726,25 @@ namespace MKY.Utilities.Win32
 					return (HidD_SetOutputReport(hidDeviceObject, reportBuffer));
 				else
 					return (false); // Not supported before Windows XP.
+			}
+			catch (Exception ex)
+			{
+				XDebug.WriteException(typeof(Hid), ex);
+				throw;
+			}
+		}
+
+		/// <summary>
+		/// Remove any input reports waiting in the buffer.
+		/// </summary>
+		/// <param name="hidDeviceObject">A handle to a device.</param>
+		/// <returns> True on success, false on failure.</returns>
+		public static bool FlushQueue(SafeFileHandle hidDeviceObject)
+		{
+			try
+			{
+				bool success = HidD_FlushQueue(hidDeviceObject);
+				return (success);
 			}
 			catch (Exception ex)
 			{

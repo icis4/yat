@@ -78,7 +78,7 @@ namespace MKY.IO.Usb
 			try
 			{
 				bool success = Hid.HidD_GetFeature(hidHandle, inFeatureReportBuffer);
-				Debug.Print("HidD_GetFeature success = " + success);
+				System.Diagnostics.Debug.Print("HidD_GetFeature success = " + success);
 				return (success);
 			}
 			catch (Exception ex)
@@ -112,7 +112,7 @@ namespace MKY.IO.Usb
 		internal override bool Read(SafeFileHandle hidHandle, SafeFileHandle readHandle, SafeFileHandle writeHandle, ref bool deviceDetected, ref Byte[] inputReportBuffer)
 		{
 			bool success = Hid.GetInputReport(hidHandle, inputReportBuffer);
-			Debug.Print("HidD_GetInputReport success = " + success);
+			System.Diagnostics.Debug.Print("HidD_GetInputReport success = " + success);
 			return (success);
 		}
 	}
@@ -142,9 +142,11 @@ namespace MKY.IO.Usb
 			{
 				FileIO.CancelIo(readHandle);
 
-				Debug.WriteLine("Transfer cancelled");
-				Debug.WriteLine(Debugging.ResultOfAPICall("CancelIo"));
-				Debug.WriteLine("");
+				System.Diagnostics.Debug.WriteLine("Transfer cancelled:");
+				System.Diagnostics.Debug.Indent();
+				System.Diagnostics.Debug.WriteLine(Utilities.Win32.Debug.GetLastErrorMessage());
+				System.Diagnostics.Debug.Unindent();
+				System.Diagnostics.Debug.WriteLine("");
 
 				// The failure may have been because the device was removed, so close any open
 				// handles and set deviceDetected=False to cause the application to look for the
@@ -203,8 +205,8 @@ namespace MKY.IO.Usb
 			NativeOverlapped HidOverlapped = new NativeOverlapped();
 			IntPtr nonManagedBuffer = IntPtr.Zero;
 			IntPtr nonManagedOverlapped = IntPtr.Zero;
-			Int32 numberOfBytesRead = 0;
-			Int32 result = 0;
+			UInt32 numberOfBytesRead = 0;
+			UInt32 result = 0;
 
 			try
 			{
@@ -216,20 +218,20 @@ namespace MKY.IO.Usb
 				nonManagedOverlapped = Marshal.AllocHGlobal(Marshal.SizeOf(HidOverlapped));
 				Marshal.StructureToPtr(HidOverlapped, nonManagedOverlapped, false);
 
-				bool success = FileIO.ReadFile(readHandle, nonManagedBuffer, inputReportBuffer.Length, ref numberOfBytesRead, nonManagedOverlapped);
+				bool success = FileIO.ReadFile(readHandle, nonManagedBuffer, (UInt32)inputReportBuffer.Length, ref numberOfBytesRead, nonManagedOverlapped);
 				if (!success)
 				{
-					Debug.WriteLine("Waiting for ReadFile");
+					System.Diagnostics.Debug.WriteLine("Waiting for ReadFile");
 					result = FileIO.WaitForSingleObject(eventObject, 3000);
 
 					//  Find out if ReadFile completed or timeout.
 					switch (result)
 					{
-						case (System.Int32)FileIO.WAIT_OBJECT_0:
+						case FileIO.WAIT_OBJECT_0:
 						{
 							// ReadFile has completed
 							success = true;
-							Debug.WriteLine("ReadFile completed successfully");
+							System.Diagnostics.Debug.WriteLine("ReadFile completed successfully");
 
 							// Get the number of bytes read.
 							FileIO.GetOverlappedResult(readHandle, nonManagedOverlapped, ref numberOfBytesRead, false);
@@ -240,7 +242,7 @@ namespace MKY.IO.Usb
 						{
 							//  Cancel the operation on timeout
 							CancelTransfer(hidHandle, readHandle, writeHandle, eventObject);
-							Debug.WriteLine("ReadFile timeout");
+							System.Diagnostics.Debug.WriteLine("ReadFile timeout");
 							success = false;
 							deviceDetected = false;
 							break;
@@ -249,7 +251,7 @@ namespace MKY.IO.Usb
 						{
 							//  Cancel the operation on other error.
 							CancelTransfer(hidHandle, readHandle, writeHandle, eventObject);
-							Debug.WriteLine("ReadFile undefined error");
+							System.Diagnostics.Debug.WriteLine("ReadFile undefined error");
 							success = false;
 							deviceDetected = false;
 							break;
@@ -262,7 +264,7 @@ namespace MKY.IO.Usb
 				{
 					// A report was received.
 					// Copy the received data to inputReportBuffer for the application to use.
-					Marshal.Copy(nonManagedBuffer, inputReportBuffer, 0, numberOfBytesRead);
+					Marshal.Copy(nonManagedBuffer, inputReportBuffer, 0, (int)numberOfBytesRead);
 				}
 
 				return (success);
@@ -326,7 +328,7 @@ namespace MKY.IO.Usb
 			try
 			{
 				bool success = Hid.HidD_SetFeature(hidHandle, outFeatureReportBuffer);
-				Debug.Print("HidD_SetFeature success = " + success);
+				System.Diagnostics.Debug.Print("HidD_SetFeature success = " + success);
 				return (success);
 			}
 			catch (Exception ex)
@@ -358,7 +360,7 @@ namespace MKY.IO.Usb
 		internal override bool Write(Byte[] outputReportBuffer, SafeFileHandle hidHandle)
 		{
 			bool success = Hid.SetOutputReport(hidHandle, outputReportBuffer);
-			Debug.Print("HidD_SetOutputReport success = " + success);
+			System.Diagnostics.Debug.Print("HidD_SetOutputReport success = " + success);
 			return (success);
 		}
 	}
@@ -392,18 +394,15 @@ namespace MKY.IO.Usb
 				//  endpoint (requires USB 1.1 or later) AND the OS is NOT Windows 98 Standard Edition. 
 				//  Otherwise the the host will use a control transfer.
 				//  The application doesn't have to know or care which type of transfer is used.
-				Int32 numberOfBytesWritten = 0;
+				UInt32 numberOfBytesWritten = 0;
 				bool success = FileIO.WriteFile(writeHandle, outputReportBuffer, ref numberOfBytesWritten, IntPtr.Zero);
 
-				Debug.Print("WriteFile success = " + success);
+				System.Diagnostics.Debug.Print("WriteFile success = " + success);
 
 				if (!((success)))
 				{
-
 					if ((!(writeHandle.IsInvalid)))
-					{
 						writeHandle.Close();
-					}
 				}
 				return (success);
 			}

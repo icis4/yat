@@ -52,6 +52,90 @@ namespace MKY.Utilities.Win32
 		// makes the code less readable.
 		#pragma warning disable 1591
 
+		/// <summary>
+		/// Encapsulates Win32 GENERIC_ file access flags into a C# flag enum.
+		/// </summary>
+		[Flags]
+		[CLSCompliant(false)]
+		public enum Access : uint
+		{
+			GENERIC_READ       = 0x80000000,
+			GENERIC_WRITE      = 0x40000000,
+			GENERIC_EXECUTE    = 0x20000000,
+			GENERIC_ALL        = 0x10000000,
+
+			GENERIC_READ_WRITE = 0xC0000000,
+
+			QUERY_ONLY         = 0x00000000,
+		}
+
+		/// <summary>
+		/// Encapsulates Win32 FILE_SHARE_ file share mode flags into a C# flag enum.
+		/// </summary>
+		[Flags]
+		[CLSCompliant(false)]
+		public enum ShareMode : uint
+		{
+			SHARE_NONE       = 0x00000000,
+			SHARE_READ       = 0x00000001,
+			SHARE_WRITE      = 0x00000002,
+			SHARE_DELETE     = 0x00000004,
+
+			SHARE_READ_WRITE = 0x00000003,
+			SHARE_ALL        = 0x00000007,
+		}
+
+		/// <summary>
+		/// Replicates Win32 creation disposition selectors into a C# enum.
+		/// </summary>
+		public enum CreationDisposition
+		{
+			CREATE_NEW        = System.IO.FileMode.CreateNew,
+			CREATE_ALWAYS     = System.IO.FileMode.Create,
+			OPEN_EXISTING     = System.IO.FileMode.Open,
+			OPEN_ALWAYS       = System.IO.FileMode.OpenOrCreate,
+			TRUNCATE_EXISTING = System.IO.FileMode.Truncate,
+			APPEND            = System.IO.FileMode.Append,
+		}
+
+		/// <summary>
+		/// Encapsulates Win32 FILE_ATTRIBUTE_ and FILE_FLAG_ values into a C# flag enum.
+		/// </summary>
+		[Flags]
+		[CLSCompliant(false)]
+		public enum AttributesAndFlags : uint
+		{
+			NONE                          = System.IO.FileOptions.None,
+
+			ATTRIBUTE_READONLY            = System.IO.FileAttributes.ReadOnly,
+			ATTRIBUTE_HIDDEN              = System.IO.FileAttributes.Hidden,
+			ATTRIBUTE_SYSTEM              = System.IO.FileAttributes.System,
+			ATTRIBUTE_DIRECTORY           = System.IO.FileAttributes.Directory,
+			ATTRIBUTE_ARCHIVE             = System.IO.FileAttributes.Archive,
+			ATTRIBUTE_DEVICE              = System.IO.FileAttributes.Device,
+			ATTRIBUTE_NORMAL              = System.IO.FileAttributes.Normal,
+			ATTRIBUTE_TEMPORARY           = System.IO.FileAttributes.Temporary,
+			ATTRIBUTE_SPARSE_FILE         = System.IO.FileAttributes.SparseFile,
+			ATTRIBUTE_REPARSE_POINT       = System.IO.FileAttributes.ReparsePoint,
+			ATTRIBUTE_COMPRESSED          = System.IO.FileAttributes.Compressed,
+			ATTRIBUTE_OFFLINE             = System.IO.FileAttributes.Offline,
+			ATTRIBUTE_NOT_CONTENT_INDEXED = System.IO.FileAttributes.NotContentIndexed,
+			ATTRIBUTE_ENCRYPTED           = System.IO.FileAttributes.Encrypted,
+			ATTRIBUTE_VIRTUAL             = 0x00010000,
+
+			FLAG_WRITE_THROUGH            = 0x80000000,
+			FLAG_OVERLAPPED               = 0x40000000,
+			FLAG_NO_BUFFERING             = 0x20000000,
+			FLAG_RANDOM_ACCESS            = System.IO.FileOptions.RandomAccess,
+			FLAG_SEQUENTIAL_SCAN          = System.IO.FileOptions.SequentialScan,
+			FLAG_DELETE_ON_CLOSE          = System.IO.FileOptions.DeleteOnClose,
+			FLAG_BACKUP_SEMANTICS         = 0x02000000,
+			FLAG_POSIX_SEMANTICS          = 0x01000000,
+			FLAG_OPEN_REPARSE_POINT       = 0x00200000,
+			FLAG_OPEN_NO_RECALL           = 0x00100000,
+			FLAG_FIRST_PIPE_INSTANCE      = 0x00080000,
+		}
+
 		/// <summary></summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct SECURITY_ATTRIBUTES
@@ -73,32 +157,12 @@ namespace MKY.Utilities.Win32
 		private const string KERNEL_DLL = "kernel32.dll";
 
 		/// <summary></summary>
-		[CLSCompliant(false)]
-		public const UInt32 GENERIC_READ = 0x80000000;
+		public const int INVALID_HANDLE_VALUE = -1;
 		/// <summary></summary>
-		[CLSCompliant(false)]
-		public const UInt32 GENERIC_WRITE = 0x40000000;
+		public const int WAIT_TIMEOUT = 0x0102;
+		/// <summary></summary>
+		public const int WAIT_OBJECT_0 = 0;
 
-		/// <summary></summary>
-		public const Int32 FILE_SHARE_READ = 1;
-		/// <summary></summary>
-		public const Int32 FILE_SHARE_WRITE = 2;
-
-		/// <summary></summary>
-		public const Int32 FILE_ATTRIBUTE_NORMAL = 0x00000080;
-		/// <summary></summary>
-		public const Int32 FILE_FLAG_OVERLAPPED = 0x40000000;
-
-		/// <summary></summary>
-		public const Int32 INVALID_HANDLE_VALUE = -1;
-		/// <summary></summary>
-		public const Int32 OPEN_EXISTING = 3;
-
-		/// <summary></summary>
-		public const Int32 WAIT_TIMEOUT = 0x102;
-		/// <summary></summary>
-		public const Int32 WAIT_OBJECT_0 = 0;
-	
 		#endregion
 
 		#region External Functions
@@ -112,7 +176,7 @@ namespace MKY.Utilities.Win32
 		/// <param name="hFile">The device handle.</param>
 		/// <returns>True on success, false on failure.</returns>
 		[DllImport(KERNEL_DLL, SetLastError = true)]
-		public static extern Int32 CancelIo(SafeFileHandle hFile);
+		public static extern Boolean CancelIo(SafeFileHandle hFile);
 
 		/// <summary>
 		/// Creates an event object for the overlapped structure used with ReadFile.
@@ -129,7 +193,7 @@ namespace MKY.Utilities.Win32
 		/// <summary></summary>
 		[CLSCompliant(false)]
 		[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		public static extern SafeFileHandle CreateFile(String lpFileName, UInt32 dwDesiredAccess, Int32 dwShareMode, IntPtr lpSecurityAttributes, Int32 dwCreationDisposition, Int32 dwFlagsAndAttributes, Int32 hTemplateFile);
+		public static extern SafeFileHandle CreateFile(String lpFileName, Access dwDesiredAccess, ShareMode dwShareMode, IntPtr lpSecurityAttributes, CreationDisposition dwCreationDisposition, AttributesAndFlags dwFlagsAndAttributes, IntPtr hTemplateFile);
 
 		/// <summary>
 		/// Gets the result of an overlapped operation.
@@ -139,8 +203,9 @@ namespace MKY.Utilities.Win32
 		/// <param name="lpNumberOfBytesTransferred">A pointer to a variable to hold the number of bytes read.</param>
 		/// <param name="bWait">False to return immediately.</param>
 		/// <returns>Non-zero on success and the number of bytes read.</returns>
+		[CLSCompliant(false)]
 		[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		public static extern Boolean GetOverlappedResult(SafeFileHandle hFile, IntPtr lpOverlapped, ref Int32 lpNumberOfBytesTransferred, Boolean bWait);
+		public static extern Boolean GetOverlappedResult(SafeFileHandle hFile, IntPtr lpOverlapped, ref UInt32 lpNumberOfBytesTransferred, Boolean bWait);
 
 		/// <summary>
 		/// Attempts to read an Input report from the device.
@@ -158,8 +223,9 @@ namespace MKY.Utilities.Win32
 		/// <param name="lpNumberOfBytesRead">A pointer to a variable that will hold the number of bytes read.</param>
 		/// <param name="lpOverlapped">An overlapped structure whose hEvent member is set to an event object.</param>
 		/// <returns>The report in ReadBuffer.</returns>
+		[CLSCompliant(false)]
 		[DllImport(KERNEL_DLL, SetLastError = true)]
-		public static extern Boolean ReadFile(SafeFileHandle hFile, IntPtr lpBuffer, Int32 nNumberOfBytesToRead, ref Int32 lpNumberOfBytesRead, IntPtr lpOverlapped);
+		public static extern Boolean ReadFile(SafeFileHandle hFile, IntPtr lpBuffer, UInt32 nNumberOfBytesToRead, ref UInt32 lpNumberOfBytesRead, IntPtr lpOverlapped);
 
 		/// <summary>
 		/// Waits for at least one report or a timeout.
@@ -168,11 +234,12 @@ namespace MKY.Utilities.Win32
 		/// <param name="hHandle">An event object created with CreateEvent.</param>
 		/// <param name="dwMilliseconds">A timeout value in milliseconds.</param>
 		/// <returns>A result code.</returns>
+		[CLSCompliant(false)]
 		[DllImport(KERNEL_DLL, SetLastError = true)]
-		public static extern Int32 WaitForSingleObject(IntPtr hHandle, Int32 dwMilliseconds);
+		public static extern UInt32 WaitForSingleObject(IntPtr hHandle, UInt32 dwMilliseconds);
 
 		[DllImport(KERNEL_DLL, SetLastError = true)]
-		private static extern Boolean WriteFile(SafeFileHandle hFile, Byte[] lpBuffer, Int32 nNumberOfBytesToWrite, ref Int32 lpNumberOfBytesWritten, IntPtr lpOverlapped);
+		private static extern Boolean WriteFile(SafeFileHandle hFile, Byte[] lpBuffer, UInt32 nNumberOfBytesToWrite, ref UInt32 lpNumberOfBytesWritten, IntPtr lpOverlapped);
 		/// <summary>
 		/// Writes an Output report to the device.
 		/// </summary>
@@ -181,9 +248,10 @@ namespace MKY.Utilities.Win32
 		/// <param name="lpNumberOfBytesWritten">An integer to hold the number of bytes written.</param>
 		/// <param name="lpOverlapped"></param>
 		/// <returns>True on success, false on failure.</returns>
-		public  static        Boolean WriteFile(SafeFileHandle hFile, Byte[] lpBuffer, ref Int32 lpNumberOfBytesWritten, IntPtr lpOverlapped)
+		[CLSCompliant(false)]
+		public  static        Boolean WriteFile(SafeFileHandle hFile, Byte[] lpBuffer, ref UInt32 lpNumberOfBytesWritten, IntPtr lpOverlapped)
 		{
-			return (WriteFile(hFile, lpBuffer, lpBuffer.Length, ref lpNumberOfBytesWritten, lpOverlapped));
+			return (WriteFile(hFile, lpBuffer, (UInt32)lpBuffer.Length, ref lpNumberOfBytesWritten, lpOverlapped));
 		}
 
 		#endregion

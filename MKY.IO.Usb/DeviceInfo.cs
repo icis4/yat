@@ -331,7 +331,7 @@ namespace MKY.IO.Usb
 		{
 			if      (_systemPath != "")
 			{
-				return (Device.GetDeviceInfoFromSystemPath(_systemPath, out _vendorId, out _productId, out _manufacturer, out _product, out _serialNumber));
+				return (Device.GetDeviceInfoFromPath(_systemPath, out _vendorId, out _productId, out _manufacturer, out _product, out _serialNumber));
 			}
 			else if ((_vendorId != 0) && (_productId != 0))
 			{

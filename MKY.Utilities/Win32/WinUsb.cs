@@ -20,8 +20,10 @@
 //==================================================================================================
 
 using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Text;
+using System.Globalization;
+using System.IO;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
@@ -33,9 +35,13 @@ using MKY.Utilities.Diagnostics;
 namespace MKY.Utilities.Win32
 {
 	/// <summary>
-	/// Encapsulates parts of the Win32 API for USB communications.
+	/// Encapsulates parts of the WinUSB API.
 	/// </summary>
-	public static class Usb
+	/// <remarks>
+	/// The WinUSB API is only useful with devices that provide a WinUSB based drivers.
+	/// See http://download.microsoft.com/download/9/C/5/9C5B2167-8017-4BAE-9FDE-D599BAC8184A/WinUsb_HowTo.docx for details.
+	/// </remarks>
+	public static class WinUsb
 	{
 		#region Types
 		//==========================================================================================
@@ -65,17 +71,7 @@ namespace MKY.Utilities.Win32
 		// Constants
 		//==========================================================================================
 
-		private const string USB_DLL = "winusb.dll";
-
-		/// <summary>
-		/// Maximum of 126 characters in UCS-2 format.
-		/// </summary>
-		public const int MaximumStringDescriptorCharLength = 126;
-
-		/// <summary>
-		/// 2 x 126 characters + 2 x '\0' results in 254.
-		/// </summary>
-		public const int MaximumStringDescriptorByteLength = 254;
+		private const string WINUSB_DLL = "winusb.dll";
 
 		#endregion
 
@@ -84,14 +80,14 @@ namespace MKY.Utilities.Win32
 		// External Functions
 		//==========================================================================================
 
-		[DllImport(USB_DLL, SetLastError = true)]
-		private static extern Boolean WinUsb_Initialize(SafeFileHandle DeviceHandle, out IntPtr InterfaceHandle);
+		[DllImport(WINUSB_DLL, SetLastError = true)]
+		private static extern Boolean WinUsb_Initialize(SafeFileHandle DeviceHandle, out SafeFileHandle InterfaceHandle);
 
-		[DllImport(USB_DLL, SetLastError = true)]
-		private static extern Boolean WinUsb_GetDescriptor(IntPtr InterfaceHandle, DescriptorType DescriptorType, Byte Index, UInt16 LanguageID, Byte[] Buffer, UInt32 BufferLength, ref UInt32 LengthTransferred);
+		[DllImport(WINUSB_DLL, SetLastError = true)]
+		private static extern Boolean WinUsb_GetDescriptor(SafeFileHandle InterfaceHandle, DescriptorType DescriptorType, Byte Index, UInt16 LanguageID, Byte[] Buffer, UInt32 BufferLength, ref UInt32 LengthTransferred);
 
-		[DllImport(USB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern Boolean WinUsb_GetDescriptor(IntPtr InterfaceHandle, DescriptorType DescriptorType, Byte Index, UInt16 LanguageID, StringBuilder Buffer, UInt32 BufferLength, ref UInt32 LengthTransferred);
+		[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+		private static extern Boolean WinUsb_GetDescriptor(SafeFileHandle InterfaceHandle, DescriptorType DescriptorType, Byte Index, UInt16 LanguageID, StringBuilder Buffer, UInt32 BufferLength, ref UInt32 LengthTransferred);
 
 		#endregion
 
@@ -101,9 +97,50 @@ namespace MKY.Utilities.Win32
 		//==========================================================================================
 
 		/// <summary>
+		/// Retrieves the device handle of the HID device at the given path.
+		/// </summary>
+		public static bool GetUsbHandle(string path, out SafeFileHandle usbHandle)
+		{
+			SafeFileHandle h = Utilities.Win32.FileIO.CreateFile
+				(
+				path,
+				Utilities.Win32.FileIO.Access.GENERIC_READ_WRITE,
+				Utilities.Win32.FileIO.ShareMode.SHARE_READ_WRITE,
+				IntPtr.Zero,
+				Utilities.Win32.FileIO.CreationDisposition.OPEN_EXISTING,
+				Utilities.Win32.FileIO.AttributesAndFlags.ATTRIBUTE_NORMAL | Utilities.Win32.FileIO.AttributesAndFlags.FLAG_OVERLAPPED,
+				IntPtr.Zero
+				);
+
+			if (!h.IsInvalid)
+			{
+				usbHandle = h;
+				return (true);
+			}
+
+			usbHandle = null;
+			return (false);
+		}
+
+		/// <summary>
 		/// Retrieves a handle for the interface that is associated with the indicated device.
 		/// </summary>
-		public static bool InitializeHandle(SafeFileHandle deviceHandle, out IntPtr interfaceHandle)
+		/// <param name="deviceHandle">
+		/// The handle to the device that CreateFile returned. WinUSB uses overlapped I/O, so
+		/// FILE_FLAG_OVERLAPPED must be specified in the dwFlagsAndAttributes parameter of
+		/// CreateFile call for DeviceHandle to have the characteristics necessary for
+		/// WinUsb_Initialize to function properly.
+		/// </param>
+		/// <param name="interfaceHandle">
+		/// The interface handle that WinUsb_Initialize returns. All other WinUSB routines require
+		/// this handle as input. The handle is opaque.
+		/// </param>
+		/// <returns>
+		/// TRUE if the operation succeeds. Otherwise, this routine returns FALSE, and the caller
+		/// can retrieve the logged error by calling <see cref="Debug.GetLastErrorCode"/> or
+		/// <see cref="Debug.GetLastErrorMessage"/>.
+		/// </returns>
+		public static bool InitializeInterfaceHandle(SafeFileHandle deviceHandle, out SafeFileHandle interfaceHandle)
 		{
 			return (WinUsb_Initialize(deviceHandle, out interfaceHandle));
 		}
@@ -114,14 +151,14 @@ namespace MKY.Utilities.Win32
 		/// <remarks>
 		/// Supported under Windows Vista and later only. Applies to all methods of WinUsb.
 		/// </remarks>
-		public static bool GetDeviceDescriptor(IntPtr interfaceHandle, byte index, int languageId, byte[] buffer, out int lengthTransferred)
+		public static bool GetDeviceDescriptor(SafeFileHandle interfaceHandle, int index, int languageId, byte[] buffer, out int lengthTransferred)
 		{
 			try
 			{
-				if (!Version.IsWindowsVistaOrLater())
+				if (Version.IsWindowsVistaOrLater())
 				{
 					UInt32 transferred = 0;
-					if (WinUsb_GetDescriptor(interfaceHandle, DescriptorType.Device, index, (UInt16)languageId, buffer, (UInt32)buffer.Length, ref transferred))
+					if (WinUsb_GetDescriptor(interfaceHandle, DescriptorType.Device, (Byte)index, (UInt16)languageId, buffer, (UInt32)buffer.Length, ref transferred))
 					{
 						lengthTransferred = (int)transferred;
 						return (true);
@@ -132,7 +169,7 @@ namespace MKY.Utilities.Win32
 			}
 			catch (Exception ex)
 			{
-				XDebug.WriteException(typeof(Usb), ex);
+				XDebug.WriteException(typeof(WinUsb), ex);
 				throw;
 			}
 		}
@@ -143,14 +180,14 @@ namespace MKY.Utilities.Win32
 		/// <remarks>
 		/// Supported under Windows Vista and later only. Applies to all methods of WinUsb.
 		/// </remarks>
-		public static bool GetConfigurationDescriptor(IntPtr interfaceHandle, byte index, int languageId, byte[] buffer, out int lengthTransferred)
+		public static bool GetConfigurationDescriptor(SafeFileHandle interfaceHandle, int index, int languageId, byte[] buffer, out int lengthTransferred)
 		{
 			try
 			{
-				if (!Version.IsWindowsVistaOrLater())
+				if (Version.IsWindowsVistaOrLater())
 				{
 					UInt32 transferred = 0;
-					if (WinUsb_GetDescriptor(interfaceHandle, DescriptorType.Configuration, index, (UInt16)languageId, buffer, (UInt32)buffer.Length, ref transferred))
+					if (WinUsb_GetDescriptor(interfaceHandle, DescriptorType.Configuration, (Byte)index, (UInt16)languageId, buffer, (UInt32)buffer.Length, ref transferred))
 					{
 						lengthTransferred = (int)transferred;
 						return (true);
@@ -161,7 +198,7 @@ namespace MKY.Utilities.Win32
 			}
 			catch (Exception ex)
 			{
-				XDebug.WriteException(typeof(Usb), ex);
+				XDebug.WriteException(typeof(WinUsb), ex);
 				throw;
 			}
 		}
@@ -172,13 +209,13 @@ namespace MKY.Utilities.Win32
 		/// <remarks>
 		/// Supported under Windows Vista and later only. Applies to all methods of WinUsb.
 		/// </remarks>
-		public static bool GetStringDescriptor(IntPtr interfaceHandle, int index, int languageId, out string buffer, out int lengthTransferred)
+		public static bool GetStringDescriptor(SafeFileHandle interfaceHandle, int index, int languageId, out string buffer, out int lengthTransferred)
 		{
 			try
 			{
-				if (!Version.IsWindowsVistaOrLater())
+				if (Version.IsWindowsVistaOrLater())
 				{
-					StringBuilder s = new StringBuilder(Usb.MaximumStringDescriptorCharLength);
+					StringBuilder s = new StringBuilder(Utilities.Usb.Descriptors.MaximumStringDescriptorCharLength);
 					UInt32 transferred = 0;
 					if (WinUsb_GetDescriptor(interfaceHandle, DescriptorType.String, (Byte)index, (UInt16)languageId, s, (UInt32)s.Capacity, ref transferred))
 					{
@@ -193,9 +230,25 @@ namespace MKY.Utilities.Win32
 			}
 			catch (Exception ex)
 			{
-				XDebug.WriteException(typeof(Usb), ex);
+				XDebug.WriteException(typeof(WinUsb), ex);
 				throw;
 			}
+		}
+
+		/// <summary>
+		/// Returns all culture specific strings of the given index string descriptor.
+		/// </summary>
+		public static Dictionary<CultureInfo, string> GetCultureSpecificStrings(SafeFileHandle interfaceHandle, int index, IEnumerable<CultureInfo> cultureInfo)
+		{
+			Dictionary<CultureInfo, string> d = new Dictionary<CultureInfo, string>();
+			foreach (CultureInfo ci in cultureInfo)
+			{
+				string s;
+				int lengthTransferred;
+				if (Utilities.Win32.WinUsb.GetStringDescriptor(interfaceHandle, index, ci.LCID, out s, out lengthTransferred))
+					d.Add(ci, s);
+			}
+			return (d);
 		}
 
 		#endregion

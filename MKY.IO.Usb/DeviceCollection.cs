@@ -40,7 +40,7 @@ namespace MKY.IO.Usb
 			}
 		}
 
-		private DeviceClass _deviceClass = DeviceClass.Default;
+		private DeviceClass _deviceClass = DeviceClass.Any;
 		private Guid _classGuid = Guid.Empty;
 
 		/// <summary></summary>

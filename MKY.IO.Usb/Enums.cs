@@ -55,7 +55,7 @@ namespace MKY.IO.Usb
 		ApplicationSpecific = 0xFE,
 		VendorSpecific      = 0xFF,
 
-		Default             = 0x00,
+		Any                 = 0x00,
 	}
 	
 	/// <summary>
