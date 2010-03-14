@@ -48,6 +48,43 @@ namespace MKY.Utilities.Win32
 		// Types
 		//==========================================================================================
 
+		/// <remarks>dbt.h</remarks>
+		[Flags]
+		private enum DIGCF : uint
+		{
+			/// <remarks>
+			/// Only valid with DIGCF_DEVICEINTERFACE
+			/// </remarks>
+			DEFAULT         = 0x00000001,
+			PRESENT         = 0x00000002,
+			ALLCLASSES      = 0x00000004,
+			PROFILE         = 0x00000008,
+			DEVICEINTERFACE = 0x00000010,
+		}
+
+		/// <remarks>dbt.h</remarks>
+		[Flags]
+		private enum DBT : uint
+		{
+			DEVICEARRIVAL        = 0x8000,
+			DEVICEREMOVECOMPLETE = 0x8004,
+		}
+
+		/// <remarks>dbt.h</remarks>
+		private enum DBT_DEVTYP
+		{
+			DEVICEINTERFACE = 5,
+			HANDLE          = 6,
+		}
+
+		[Flags]
+		private enum DEVICE_NOTIFY : uint
+		{
+			WINDOW_HANDLE         = 0x0000,
+			SERVICE_HANDLE        = 0x0001,
+			ALL_INTERFACE_CLASSES = 0x0004,
+		}
+
 		/// <summary>
 		/// Two declarations for the DEV_BROADCAST_DEVICEINTERFACE structure.
 		/// Use this one in the call to RegisterDeviceNotification() and
@@ -57,7 +94,7 @@ namespace MKY.Utilities.Win32
 		private struct DEV_BROADCAST_DEVICEINTERFACE
 		{
 			public Int32 dbcc_size;
-			public Int32 dbcc_devicetype;
+			public DBT_DEVTYP dbcc_devicetype;
 			public Int32 dbcc_reserved;
 			public System.Guid dbcc_classguid;
 			public Int16 dbcc_name;
@@ -83,7 +120,7 @@ namespace MKY.Utilities.Win32
 		private struct DEV_BROADCAST_HDR
 		{
 			public Int32 dbch_size;
-			public Int32 dbch_devicetype;
+			public DBT_DEVTYP dbch_devicetype;
 			public Int32 dbch_reserved;
 		}
 
@@ -122,19 +159,8 @@ namespace MKY.Utilities.Win32
 		private const string SETUP_DLL = "setupapi.dll";
 		private const string USER_DLL = "user32.dll";
 
-		// dbt.h
-		private const Int32 DBT_DEVICEARRIVAL = 0x8000;
-		private const Int32 DBT_DEVICEREMOVECOMPLETE = 0x8004;
-		private const Int32 DBT_DEVTYP_DEVICEINTERFACE = 5;
-		private const Int32 DBT_DEVTYP_HANDLE = 6;
-		private const Int32 DEVICE_NOTIFY_ALL_INTERFACE_CLASSES = 4;
-		private const Int32 DEVICE_NOTIFY_SERVICE_HANDLE = 1;
-		private const Int32 DEVICE_NOTIFY_WINDOW_HANDLE = 0;
-		private const Int32 WM_DEVICECHANGE = 0x219;
-
-		// setupapi.h
-		private const Int32 DIGCF_PRESENT = 2;
-		private const Int32 DIGCF_DEVICEINTERFACE = 0x10;
+		/// <remarks>dbt.h</remarks>
+		private const UInt32 WM_DEVICECHANGE = 0x0219;
 
 		#endregion
 
@@ -153,7 +179,7 @@ namespace MKY.Utilities.Win32
 		/// <param name="Flags">DEVICE_NOTIFY_WINDOW_HANDLE indicates the handle is a window handle.</param>
 		/// <returns>Device notification handle or NULL on failure.</returns>
 		[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern IntPtr RegisterDeviceNotification(IntPtr hRecipient, IntPtr NotificationFilter, Int32 Flags);
+		private static extern IntPtr RegisterDeviceNotification(IntPtr hRecipient, IntPtr NotificationFilter, DEVICE_NOTIFY Flags);
 
 		[DllImport(SETUP_DLL, SetLastError = true)]
 		private static extern Int32 SetupDiCreateDeviceInfoList(ref System.Guid ClassGuid, Int32 hwndParent);
@@ -191,7 +217,7 @@ namespace MKY.Utilities.Win32
 		/// and devices that expose interfaces in the class specified by the GUID.</param>
 		/// <returns>Handle to a device information set for the devices.</returns>
 		[DllImport(SETUP_DLL, SetLastError = true, CharSet = CharSet.Auto)]
-		private static extern IntPtr SetupDiGetClassDevs(ref System.Guid ClassGuid, IntPtr Enumerator, IntPtr hwndParent, Int32 Flags);
+		private static extern IntPtr SetupDiGetClassDevs(ref System.Guid ClassGuid, IntPtr Enumerator, IntPtr hwndParent, DIGCF Flags);
 
 		/// <summary>
 		/// Retrieves an SP_DEVICE_INTERFACE_DETAIL_DATA structure containing information about a device.
@@ -249,7 +275,7 @@ namespace MKY.Utilities.Win32
 				// The LParam parameter of Message is a pointer to a DEV_BROADCAST_HDR structure.
 				Marshal.PtrToStructure(message.LParam, devBroadcastHeader);
 
-				if ((devBroadcastHeader.dbch_devicetype == DBT_DEVTYP_DEVICEINTERFACE))
+				if ((devBroadcastHeader.dbch_devicetype == DBT_DEVTYP.DEVICEINTERFACE))
 				{
 					// The dbch_devicetype parameter indicates that the event applies to a device interface.
 					// So the structure in LParam is actually a DEV_BROADCAST_INTERFACE structure, 
@@ -306,7 +332,7 @@ namespace MKY.Utilities.Win32
 
 			try
 			{
-				deviceInfoSet = SetupDiGetClassDevs(ref classGuid, IntPtr.Zero, IntPtr.Zero, DIGCF_PRESENT | DIGCF_DEVICEINTERFACE);
+				deviceInfoSet = SetupDiGetClassDevs(ref classGuid, IntPtr.Zero, IntPtr.Zero, DIGCF.PRESENT | DIGCF.DEVICEINTERFACE);
 
 				// The cbSize element of the deviceInterfaceData structure must be set to the structure's size in bytes. 
 				// The size is 28 bytes for 32-bit code and 32 bits for 64-bit code.
@@ -387,7 +413,7 @@ namespace MKY.Utilities.Win32
 				devBroadcastDeviceInterface.dbcc_size = size;
 
 				// Request to receive notifications about a class of devices.
-				devBroadcastDeviceInterface.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
+				devBroadcastDeviceInterface.dbcc_devicetype = DBT_DEVTYP.DEVICEINTERFACE;
 				devBroadcastDeviceInterface.dbcc_reserved = 0;
 
 				// Specify the interface class to receive notifications about.
@@ -400,7 +426,7 @@ namespace MKY.Utilities.Win32
 				// Set fDeleteOld True to prevent memory leaks.
 				Marshal.StructureToPtr(devBroadcastDeviceInterface, devBroadcastDeviceInterfaceBuffer, true);
 
-				deviceNotificationHandle = RegisterDeviceNotification(formHandle, devBroadcastDeviceInterfaceBuffer, DEVICE_NOTIFY_WINDOW_HANDLE);
+				deviceNotificationHandle = RegisterDeviceNotification(formHandle, devBroadcastDeviceInterfaceBuffer, DEVICE_NOTIFY.WINDOW_HANDLE);
 
 				// Marshal data from the unmanaged block devBroadcastDeviceInterfaceBuffer to
 				// the managed object devBroadcastDeviceInterface

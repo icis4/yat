@@ -147,7 +147,7 @@ namespace MKY.Utilities.Diagnostics
 			}
 			writer.Unindent();
 
-		} // WriteException()
+		} // WriteStack()
 
 	} // DiagnosticsWriterOutput
 }

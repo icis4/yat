@@ -37,6 +37,12 @@ static void print_devs(libusb_device **devs)
 		printf("%04x:%04x (bus %d, device %d)\n",
 			desc.idVendor, desc.idProduct,
 			libusb_get_bus_number(dev), libusb_get_device_address(dev));
+
+		// MKY BEGIN
+		{
+			r = libusb_claim_interface(dev, 1);
+		}
+		// MKY END
 	}
 }
 

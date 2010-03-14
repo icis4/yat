@@ -20,6 +20,7 @@
 //==================================================================================================
 
 using System;
+using System.Text;
 using System.Runtime.InteropServices;
 
 #endregion
@@ -38,7 +39,7 @@ namespace MKY.Utilities.Win32
 	/// - Missing features required for YAT
 	/// - Potential reuse of this class for other services directly using the Win32 API
 	/// </remarks>
-	public static class Debugging
+	public static class Debug
 	{
 		#region Constants
 		//==========================================================================================
@@ -57,7 +58,7 @@ namespace MKY.Utilities.Win32
 		//==========================================================================================
 
 		[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern Int32 FormatMessage(Int32 dwFlags, ref Int64 lpSource, Int32 dwMessageId, Int32 dwLanguageId, String lpBuffer, Int32 nSize, IntPtr Arguments);
+		private static extern Int32 FormatMessage(Int32 dwFlags, ref Int64 lpSource, Int32 dwMessageId, Int32 dwLanguageId, StringBuilder lpBuffer, Int32 nSize, IntPtr Arguments);
 
 		#endregion
 
@@ -67,36 +68,35 @@ namespace MKY.Utilities.Win32
 		//==========================================================================================
 
 		/// <summary>
-		/// Get text that describes the result of an API call.
+		/// Get code that describes the error of an API call.
 		/// </summary>
-		/// <param name="functionName"> the name of the API function.</param>
-		/// <returns>The resulting text.</returns>
-		public static string ResultOfAPICall(string functionName)
+		/// <returns>The resulting code.</returns>
+		public static int GetLastErrorCode()
 		{
-			Int32 bytes = 0;
-			Int32 resultCode = 0;
-			String resultString = "";
+			// Get the error code for the last API call.
+			return (System.Runtime.InteropServices.Marshal.GetLastWin32Error());
+		}
 
-			resultString = new String(Convert.ToChar(0), 129);
-
-			// Get the result code for the last API call.
-			resultCode = System.Runtime.InteropServices.Marshal.GetLastWin32Error();
+		/// <summary>
+		/// Get message that describes the error of an API call.
+		/// </summary>
+		/// <returns>The resulting message.</returns>
+		public static string GetLastErrorMessage()
+		{
+			// Get the error code for the last API call.
+			Int32 errorCode = GetLastErrorCode();
 
 			// Get the result message that corresponds to the code.
 			Int64 temp = 0;
-			bytes = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, ref temp, resultCode, 0, resultString, 128, IntPtr.Zero);
+			StringBuilder message = new StringBuilder(256);
+			Int32 bytes = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, ref temp, errorCode, 0, message, message.Capacity, IntPtr.Zero);
 
 			// Subtract two characters from the message to strip EOL.
 			int eolLength = Environment.NewLine.Length;
 			if (bytes > eolLength)
-				resultString = resultString.Remove(bytes - eolLength, eolLength);
+				message = message.Remove(bytes - eolLength, eolLength);
 
-			// Create the String to return.
-			resultString = Environment.NewLine +
-				"Win32 API function = " + functionName + Environment.NewLine +
-				"Win32 API result = "   + resultString + Environment.NewLine;
-
-			return (resultString);
+			return (message.ToString());
 		}
 
 		#endregion

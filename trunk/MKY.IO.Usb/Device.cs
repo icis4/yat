@@ -76,7 +76,7 @@ namespace MKY.IO.Usb
 
 			foreach (string systemPath in Utilities.Win32.DeviceManagement.GetDevicesFromGuid(classGuid))
 			{
-				DeviceInfo device = GetDeviceInfoFromSystemPath(systemPath);
+				DeviceInfo device = GetDeviceInfoFromPath(systemPath);
 				if (device != null)
 				{
 					if (device.TryValidate())
@@ -88,39 +88,21 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Returns VID and PID of a given system path.
+		/// Returns VID and PID of a given systemPath.
 		/// </summary>
-		public static bool GetVidAndPidFromSystemPath(string systemPath, out int vendorId, out int productId)
+		public static bool GetVidAndPidFromPath(string systemPath, out int vendorId, out int productId)
 		{
-			SafeFileHandle deviceHandle = Utilities.Win32.FileIO.CreateFile
-				(
-				systemPath,
-				0,
-				Utilities.Win32.FileIO.FILE_SHARE_READ | Utilities.Win32.FileIO.FILE_SHARE_WRITE,
-				IntPtr.Zero,
-				Utilities.Win32.FileIO.OPEN_EXISTING,
-				0,
-				0
-				);
-
-			if (!deviceHandle.IsInvalid)
+			SafeFileHandle hidHandle;
+			if (Utilities.Win32.Hid.GetHidHandle(systemPath, out hidHandle))
 			{
 				try
 				{
-					// Set the size property of attributes to the number of bytes in the structure.
-					Utilities.Win32.Hid.HIDD_ATTRIBUTES attributes = new Utilities.Win32.Hid.HIDD_ATTRIBUTES();
-					attributes.Size = Marshal.SizeOf(attributes);
-
-					if (Utilities.Win32.Hid.HidD_GetAttributes(deviceHandle, ref attributes))
-					{
-						vendorId = attributes.VendorID;
-						productId = attributes.ProductID;
+					if (GetVidAndPidFromHandle(hidHandle, out vendorId, out productId))
 						return (true);
-					}
 				}
 				finally
 				{
-					deviceHandle.Close();
+					hidHandle.Close();
 				}
 			}
 
@@ -129,35 +111,93 @@ namespace MKY.IO.Usb
 			return (false);
 		}
 
+		private static bool GetVidAndPidFromHandle(SafeFileHandle hidHandle, out int vendorId, out int productId)
+		{
+			// Set the size property of attributes to the number of bytes in the structure.
+			Utilities.Win32.Hid.HIDD_ATTRIBUTES attributes = new Utilities.Win32.Hid.HIDD_ATTRIBUTES();
+			attributes.Size = Marshal.SizeOf(attributes);
+
+			if (Utilities.Win32.Hid.HidD_GetAttributes(hidHandle, ref attributes))
+			{
+				vendorId = attributes.VendorID;
+				productId = attributes.ProductID;
+				return (true);
+			}
+
+			vendorId = 0;
+			productId = 0;
+			return (false);
+		}
+
 		/// <summary>
-		/// Returns the information of the device with the given system path,
-		/// or <c>null</c> if no device could be found on the give path.
+		/// Returns manufacturer, product and serial number strings of a given systemPath.
 		/// </summary>
-		public static DeviceInfo GetDeviceInfoFromSystemPath(string systemPath)
+		public static bool GetStringsFromPath(string systemPath, out string manufacturer, out string product, out string serialNumber)
+		{
+			SafeFileHandle hidHandle;
+			if (Utilities.Win32.Hid.GetHidHandle(systemPath, out hidHandle))
+			{
+				try
+				{
+					if (GetStringsFromHandle(hidHandle, out manufacturer, out product, out serialNumber))
+						return (true);
+				}
+				finally
+				{
+					hidHandle.Close();
+				}
+			}
+
+			manufacturer = "";
+			product = "";
+			serialNumber = "";
+			return (false);
+		}
+
+		private static bool GetStringsFromHandle(SafeFileHandle hidHandle, out string manufacturer, out string product, out string serialNumber)
+		{
+			Utilities.Win32.Hid.GetManufacturerString(hidHandle, out manufacturer);
+			Utilities.Win32.Hid.GetProductString(hidHandle, out product);
+			Utilities.Win32.Hid.GetSerialNumberString(hidHandle, out serialNumber);
+			return (true);
+		}
+
+		/// <summary>
+		/// Returns the information of the device with the given systemPath,
+		/// or <c>null</c> if no device could be found on the given systemPath.
+		/// </summary>
+		public static DeviceInfo GetDeviceInfoFromPath(string systemPath)
 		{
 			int vendorId, productId;
 			string manufacturer, product, serialNumber;
 
-			if (GetDeviceInfoFromSystemPath(systemPath, out vendorId, out productId, out manufacturer, out product, out serialNumber))
+			if (GetDeviceInfoFromPath(systemPath, out vendorId, out productId, out manufacturer, out product, out serialNumber))
 				return (new DeviceInfo(systemPath, vendorId, productId, manufacturer, product, serialNumber));
 			else
 				return (null);
 		}
 
 		/// <summary>
-		/// Returns the information of the device with the given system path.
+		/// Returns the information of the device with the given systemPath.
 		/// </summary>
 		/// <remarks>
 		/// \todo This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
 		/// </remarks>
-		public static bool GetDeviceInfoFromSystemPath(string systemPath, out int vendorId, out int productId, out string manufacturer, out string product, out string serialNumber)
+		public static bool GetDeviceInfoFromPath(string systemPath, out int vendorId, out int productId, out string manufacturer, out string product, out string serialNumber)
 		{
-			if (GetVidAndPidFromSystemPath(systemPath, out vendorId, out productId))
+			SafeFileHandle hidHandle;
+			if (Utilities.Win32.Hid.GetHidHandle(systemPath, out hidHandle))
 			{
-				StringDescriptor.TryGetManufacturerString(systemPath, out manufacturer);
-				StringDescriptor.TryGetProductString     (systemPath, out product);
-				StringDescriptor.TryGetSerialNumberString(systemPath, out serialNumber);
-				return (true);
+				try
+				{
+					if (GetVidAndPidFromHandle(hidHandle, out vendorId, out productId))
+						if (GetStringsFromHandle(hidHandle, out manufacturer, out product, out serialNumber))
+							return (true);
+				}
+				finally
+				{
+					hidHandle.Close();
+				}
 			}
 
 			vendorId = 0;
@@ -170,7 +210,7 @@ namespace MKY.IO.Usb
 
 		/// <summary>
 		/// Returns the information of the device with the given VID and PID,
-		/// or <c>null</c> if no device could be found on the give path.
+		/// or <c>null</c> if no device could be found on the given systemPath.
 		/// </summary>
 		/// <remarks>
 		/// If multiple devices with the same VID and PID are connected to the sytem, the first device is returned.
@@ -194,7 +234,7 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		/// <param name="vendorId">Given VID.</param>
 		/// <param name="productId">Given PID.</param>
-		/// <param name="systemPath">Retrieved system path, or "" if no valable device found.</param>
+		/// <param name="systemPath">Retrieved system systemPath, or "" if no valable device found.</param>
 		/// <param name="manufacturer">Retrieved manufacturer, or "" if no valable device found.</param>
 		/// <param name="product">Retrieved product, or "" if no valable device found.</param>
 		/// <param name="serialNumber">Retrieved serial number, or "" if no valable device found.</param>
@@ -226,7 +266,7 @@ namespace MKY.IO.Usb
 
 		/// <summary>
 		/// Returns the information of the device with the given VID and PID and serial number.
-		/// or <c>null</c> if no device could be found on the give path.
+		/// or <c>null</c> if no device could be found on the give systemPath.
 		/// </summary>
 		/// <returns>Retrieved device info, or <c>null</c> if no valable device found.</returns>
 		public static DeviceInfo GetDeviceInfoFromVidAndPidAndSerial(int vendorId, int productId, string serialNumber)
@@ -245,7 +285,7 @@ namespace MKY.IO.Usb
 		/// <param name="vendorId">Given VID.</param>
 		/// <param name="productId">Given PID.</param>
 		/// <param name="serialNumber">Given serial number.</param>
-		/// <param name="systemPath">Retrieved system path, or "" if no valable device found.</param>
+		/// <param name="systemPath">Retrieved system systemPath, or "" if no valable device found.</param>
 		/// <param name="manufacturer">Retrieved manufacturer, or "" if no valable device found.</param>
 		/// <param name="product">Retrieved product, or "" if no valable device found.</param>
 		public static bool GetDeviceInfoFromVidAndPidAndSerial(int vendorId, int productId, string serialNumber, out string systemPath, out string manufacturer, out string product)
@@ -295,7 +335,7 @@ namespace MKY.IO.Usb
 		{
 			int vendorId, productId;
 			string manufacturer, product, serialNumber;
-			Device.GetDeviceInfoFromSystemPath(systemPath, out vendorId, out productId, out manufacturer, out product, out serialNumber);
+			Device.GetDeviceInfoFromPath(systemPath, out vendorId, out productId, out manufacturer, out product, out serialNumber);
 			_deviceId = new DeviceInfo(systemPath, vendorId, productId, manufacturer, product, serialNumber);
 		}
 
