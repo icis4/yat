@@ -123,7 +123,7 @@ namespace MKY.IO.Serial
 		// Types
 		//==========================================================================================
 
-		private enum PortState
+		private enum State
 		{
 			Reset,
 			Closed,
@@ -150,11 +150,11 @@ namespace MKY.IO.Serial
 
 		private bool _isDisposed;
 
-		private PortState _state = PortState.Reset;
+		private State _state = State.Reset;
 		private object _stateSyncObj = new object();
 		
 		private SerialPortSettings _settings;
-		private MKY.IO.Ports.ISerialPort _port;
+		private Ports.ISerialPort _port;
 		private object _portSyncObj = new object();
 
 		/// <summary>
@@ -185,13 +185,13 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public event EventHandler IOControlChanged;
 		/// <summary></summary>
-		public event EventHandler<IORequestEventArgs> IORequest;
-		/// <summary></summary>
-		public event EventHandler<IOErrorEventArgs> IOError;
-		/// <summary></summary>
 		public event EventHandler DataReceived;
 		/// <summary></summary>
 		public event EventHandler DataSent;
+		/// <summary></summary>
+		public event EventHandler<IORequestEventArgs> IORequest;
+		/// <summary></summary>
+		public event EventHandler<IOErrorEventArgs> IOError;
 
 		#endregion
 
@@ -204,7 +204,6 @@ namespace MKY.IO.Serial
 		public SerialPort(SerialPortSettings settings)
 		{
 			_settings = settings;
-			ApplySettings();
 		}
 
 		#region Disposal
@@ -263,7 +262,7 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		public SerialPortSettings Settings
+		public virtual SerialPortSettings Settings
 		{
 			get
 			{
@@ -273,16 +272,16 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public bool IsStarted
+		public virtual bool IsStarted
 		{
 			get
 			{
 				AssertNotDisposed();
 				switch (_state)
 				{
-					case PortState.Closed:
-					case PortState.Opened:
-					case PortState.WaitingForReopen:
+					case State.Closed:
+					case State.Opened:
+					case State.WaitingForReopen:
 					{
 						return (true);
 					}
@@ -307,7 +306,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public bool IsOpen
+		public virtual bool IsOpen
 		{
 			get
 			{
@@ -321,7 +320,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public bool IsConnected
+		public virtual bool IsConnected
 		{
 			get
 			{
@@ -335,7 +334,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public int BytesAvailable
+		public virtual int BytesAvailable
 		{
 			get
 			{
@@ -351,7 +350,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public object UnderlyingIOInstance
+		public virtual object UnderlyingIOInstance
 		{
 			get
 			{
@@ -368,16 +367,18 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		public void Start()
+		public virtual bool Start()
 		{
 			// AssertNotDisposed() is called by IsStarted
 
 			if (!IsStarted)
 				CreateAndOpenPort();
+
+			return (true);
 		}
 
 		/// <summary></summary>
-		public void Stop()
+		public virtual void Stop()
 		{
 			// AssertNotDisposed() is called by IsStarted
 
@@ -399,7 +400,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public int Receive(out byte[] data)
+		public virtual int Receive(out byte[] data)
 		{
 			// AssertNotDisposed() is called by IsOpen
 			// OnDataReceived has been fired before
@@ -423,7 +424,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public void Send(byte[] data)
+		public virtual void Send(byte[] data)
 		{
 			// AssertNotDisposed() is called by IsOpen
 
@@ -495,10 +496,10 @@ namespace MKY.IO.Serial
 		// State Methods
 		//==========================================================================================
 
-		private void SetStateAndNotify(PortState state)
+		private void SetStateAndNotify(State state)
 		{
 #if (DEBUG)
-			PortState oldState = _state;
+			State oldState = _state;
 #endif
 			lock (_stateSyncObj)
 				_state = state;
@@ -523,10 +524,10 @@ namespace MKY.IO.Serial
 
 			lock (_portSyncObj)
 			{
-				_port = new MKY.IO.Ports.SerialPortDotNet();
-				_port.DataReceived += new MKY.IO.Ports.SerialDataReceivedEventHandler(_port_DataReceived);
-				_port.PinChanged += new MKY.IO.Ports.SerialPinChangedEventHandler(_port_PinChanged);
-				_port.ErrorReceived += new MKY.IO.Ports.SerialErrorReceivedEventHandler(_port_ErrorReceived);
+				_port = new Ports.SerialPortDotNet();
+				_port.DataReceived  += new Ports.SerialDataReceivedEventHandler (_port_DataReceived);
+				_port.PinChanged    += new Ports.SerialPinChangedEventHandler   (_port_PinChanged);
+				_port.ErrorReceived += new Ports.SerialErrorReceivedEventHandler(_port_ErrorReceived);
 			}
 		}
 
@@ -614,7 +615,7 @@ namespace MKY.IO.Serial
 
 			OpenPort();
 			StartAliveTimer();
-			SetStateAndNotify(PortState.Opened);
+			SetStateAndNotify(State.Opened);
 		}
 
 	#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
@@ -643,7 +644,7 @@ namespace MKY.IO.Serial
 			StopAndDisposeAliveTimer();
 			StopAndDisposeReopenTimer();
 			CloseAndDisposePort();
-			SetStateAndNotify(PortState.Closed);
+			SetStateAndNotify(State.Closed);
 
 			StartReopenTimer();
 		}
@@ -654,7 +655,7 @@ namespace MKY.IO.Serial
 			StopAndDisposeAliveTimer();
 			StopAndDisposeReopenTimer();
 			CloseAndDisposePort();
-			SetStateAndNotify(PortState.Reset);
+			SetStateAndNotify(State.Reset);
 		}
 
 		#endregion
@@ -673,9 +674,9 @@ namespace MKY.IO.Serial
 
 		private void _port_DataReceived(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
 		{
-			if (_state == PortState.Opened) // Ensure not to forward any events during closing anymore
+			if (_state == State.Opened) // Ensure not to forward any events during closing anymore.
 			{
-				// Immediately read data on this thread
+				// Immediately read data on this thread.
 				int bytesToRead = _port.BytesToRead;
 				byte[] buffer = new byte[bytesToRead];
 				_port.Read(buffer, 0, bytesToRead);
@@ -730,7 +731,7 @@ namespace MKY.IO.Serial
 
 		private void _port_PinChanged(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
-			if (_state == PortState.Opened) // Ensure not to forward any events during closing anymore
+			if (_state == State.Opened) // Ensure not to forward any events during closing anymore
 			{
 				_port_PinChangedDelegate asyncInvoker = new _port_PinChangedDelegate(_port_PinChangedAsync);
 				asyncInvoker.BeginInvoke(sender, e, null, null);
@@ -746,7 +747,7 @@ namespace MKY.IO.Serial
 				// Force access to port to check whether it's still alive
 				bool cts = _port.CtsHolding;
 
-				if (_state == PortState.Opened) // Ensure not to forward any events during closing anymore
+				if (_state == State.Opened) // Ensure not to forward any events during closing anymore
 					OnIOControlChanged(new EventArgs());
 			}
 			catch
@@ -767,7 +768,7 @@ namespace MKY.IO.Serial
 
 		private void _port_ErrorReceived(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e)
 		{
-			if (_state == PortState.Opened) // Ensure not to forward any events during closing anymore
+			if (_state == State.Opened) // Ensure not to forward any events during closing anymore
 			{
 				_port_ErrorReceivedDelegate asyncInvoker = new _port_ErrorReceivedDelegate(_port_ErrorReceivedAsync);
 				asyncInvoker.BeginInvoke(sender, e, null, null);
@@ -909,7 +910,7 @@ namespace MKY.IO.Serial
 				catch
 				{
 					CloseAndDisposePort();
-					SetStateAndNotify(PortState.Closed); // Re-open failed, cleanup and restart
+					SetStateAndNotify(State.Closed); // Re-open failed, cleanup and restart
 					StartReopenTimer();
 				}
 			}
@@ -939,6 +940,18 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
+		protected virtual void OnDataReceived(EventArgs e)
+		{
+			EventHelper.FireSync(DataReceived, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnDataSent(EventArgs e)
+		{
+			EventHelper.FireSync(DataSent, this, e);
+		}
+
+		/// <summary></summary>
 		protected virtual void OnIORequest(IORequestEventArgs e)
 		{
 		#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
@@ -959,18 +972,6 @@ namespace MKY.IO.Serial
 			EventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
-		/// <summary></summary>
-		protected virtual void OnDataReceived(EventArgs e)
-		{
-			EventHelper.FireSync(DataReceived, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnDataSent(EventArgs e)
-		{
-			EventHelper.FireSync(DataSent, this, e);
-		}
-
 		#endregion
 
 		#region Object Members
@@ -979,7 +980,7 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		public string ToShortPortString()
+		public virtual string ToShortPortString()
 		{
 			if (_port != null)
 				return (_port.PortId);

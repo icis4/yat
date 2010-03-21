@@ -37,7 +37,7 @@ namespace MKY.Utilities.Diagnostics
 		/// <summary>
 		/// Sets a writer to write to. Set <param name="writer"></param> to <c>null</c> after writing.
 		/// </summary>
-		public void SetWriter(TextWriter writer)
+		public virtual void SetWriter(TextWriter writer)
 		{
 			_writer = writer;
 		}
@@ -59,7 +59,7 @@ namespace MKY.Utilities.Diagnostics
 		/// <value>
 		/// The indent level. The default is zero.
 		/// </value>
-		public int IndentLevel
+		public virtual int IndentLevel
 		{
 			get { return (_indentLevel); }
 			set { _indentLevel = value; }
@@ -71,7 +71,7 @@ namespace MKY.Utilities.Diagnostics
 		/// <value>
 		/// The number of spaces in an indent. The default is four.
 		/// </value>
-		public int IndentSize
+		public virtual int IndentSize
 		{
 			get { return (_indentSize); }
 			set
@@ -88,7 +88,7 @@ namespace MKY.Utilities.Diagnostics
 		/// <summary>
 		/// Increases the current <see cref="IndentLevel"/> by one.
 		/// </summary>
-		public void Indent()
+		public virtual void Indent()
 		{
 			_indentLevel++;
 		}
@@ -96,7 +96,7 @@ namespace MKY.Utilities.Diagnostics
 		/// <summary>
 		/// Decreases the current <see cref="IndentLevel"/> by one.
 		/// </summary>
-		public void Unindent()
+		public virtual void Unindent()
 		{
 			_indentLevel--;
 		}
@@ -114,7 +114,7 @@ namespace MKY.Utilities.Diagnostics
 		/// Writes a message to the diagnostics listeners.
 		/// </summary>
 		/// <param name="message">A message to write.</param>
-		public void Write(string message)
+		public virtual void Write(string message)
 		{
 			if (_beginOfLine)
 				WriteIndent();
@@ -127,7 +127,7 @@ namespace MKY.Utilities.Diagnostics
 		/// Writes a message to the diagnostics listeners.
 		/// </summary>
 		/// <param name="message">A message to write.</param>
-		public void WriteLine(string message)
+		public virtual void WriteLine(string message)
 		{
 			if (_beginOfLine)
 				WriteIndent();
@@ -142,7 +142,7 @@ namespace MKY.Utilities.Diagnostics
 		/// Writes <see cref="IndentLevel"/> times <see cref="IndentSize"/> spaces to the
 		/// diagnostics listeners.
 		/// </summary>
-		public void WriteIndent()
+		public virtual void WriteIndent()
 		{
 			if (_writer != null)
 			{

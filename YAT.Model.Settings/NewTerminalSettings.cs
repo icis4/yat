@@ -39,7 +39,7 @@ namespace YAT.Model.Settings
 		private int _socketLocalTcpPort;
 		private int _socketLocalUdpPort;
 
-		private MKY.IO.Usb.DeviceInfo _usbHidDeviceId;
+		private MKY.IO.Usb.DeviceInfo _usbHidDeviceInfo;
 
 		private bool _startTerminal;
 
@@ -76,7 +76,7 @@ namespace YAT.Model.Settings
 			_socketLocalTcpPort   = rhs.SocketLocalTcpPort;
 			_socketLocalUdpPort   = rhs.SocketLocalUdpPort;
 
-			_usbHidDeviceId       = rhs.UsbHidDeviceId;
+			_usbHidDeviceInfo     = rhs.UsbHidDeviceInfo;
 
 			_startTerminal        = rhs.StartTerminal;
 
@@ -100,7 +100,7 @@ namespace YAT.Model.Settings
 			SocketLocalTcpPort   = MKY.IO.Serial.SocketSettings.DefaultPort;
 			SocketLocalUdpPort   = MKY.IO.Serial.SocketSettings.DefaultPort + 1;
 
-			UsbHidDeviceId       = MKY.IO.Usb.DeviceInfo.GetDefaultDevice(MKY.IO.Usb.DeviceClass.Hid);
+			UsbHidDeviceInfo     = MKY.IO.Usb.DeviceInfo.GetDefaultDevice(MKY.IO.Usb.DeviceClass.Hid);
 
 			StartTerminal        = true;
 		}
@@ -112,7 +112,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("TerminalType")]
-		public Domain.TerminalType TerminalType
+		public virtual Domain.TerminalType TerminalType
 		{
 			get { return (_terminalType); }
 			set
@@ -127,7 +127,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("IOType")]
-		public Domain.IOType IOType
+		public virtual Domain.IOType IOType
 		{
 			get { return (_ioType); }
 			set
@@ -142,7 +142,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("SerialPortId")]
-		public MKY.IO.Ports.SerialPortId SerialPortId
+		public virtual MKY.IO.Ports.SerialPortId SerialPortId
 		{
 			get { return (_serialPortId); }
 			set
@@ -157,7 +157,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("SocketRemoteHost")]
-		public XIPHost SocketRemoteHost
+		public virtual XIPHost SocketRemoteHost
 		{
 			get { return (_socketRemoteHost); }
 			set
@@ -172,7 +172,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("SocketRemotePort")]
-		public int SocketRemotePort
+		public virtual int SocketRemotePort
 		{
 			get { return (_socketRemotePort); }
 			set
@@ -187,7 +187,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("SocketLocalInterface")]
-		public XNetworkInterface SocketLocalInterface
+		public virtual XNetworkInterface SocketLocalInterface
 		{
 			get { return (_socketLocalInterface); }
 			set
@@ -202,7 +202,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public int SocketLocalPort
+		public virtual int SocketLocalPort
 		{
 			get
 			{
@@ -239,7 +239,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("SocketLocalTcpPort")]
-		public int SocketLocalTcpPort
+		public virtual int SocketLocalTcpPort
 		{
 			get { return (_socketLocalTcpPort); }
 			set
@@ -254,7 +254,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("SocketLocalUdpPort")]
-		public int SocketLocalUdpPort
+		public virtual int SocketLocalUdpPort
 		{
 			get { return (_socketLocalUdpPort); }
 			set
@@ -268,15 +268,15 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("UsbHidDeviceId")]
-		public MKY.IO.Usb.DeviceInfo UsbHidDeviceId
+		[XmlElement("UsbHidDeviceInfo")]
+		public virtual MKY.IO.Usb.DeviceInfo UsbHidDeviceInfo
 		{
-			get { return (_usbHidDeviceId); }
+			get { return (_usbHidDeviceInfo); }
 			set
 			{
-				if (_usbHidDeviceId != value)
+				if (_usbHidDeviceInfo != value)
 				{
-					_usbHidDeviceId = value;
+					_usbHidDeviceInfo = value;
 					SetChanged();
 				}
 			}
@@ -284,7 +284,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("StartTerminal")]
-		public bool StartTerminal
+		public virtual bool StartTerminal
 		{
 			get { return (_startTerminal); }
 			set
@@ -330,7 +330,7 @@ namespace YAT.Model.Settings
 					_socketLocalInterface.Equals(value._socketLocalInterface) &&
 					_socketLocalTcpPort.Equals(value._socketLocalTcpPort) &&
 					_socketLocalUdpPort.Equals(value._socketLocalUdpPort) &&
-					_usbHidDeviceId.Equals       (value._usbHidDeviceId) &&
+					_usbHidDeviceInfo.Equals       (value._usbHidDeviceInfo) &&
 					_startTerminal.Equals     (value._startTerminal)
 					);
 			}

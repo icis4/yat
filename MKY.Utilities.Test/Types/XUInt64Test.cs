@@ -140,7 +140,7 @@ namespace MKY.Utilities.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestToString()
+		public virtual void TestToString()
 		{
 			foreach (TestSet[] tsArray in _testSets)
 			{
@@ -164,7 +164,7 @@ namespace MKY.Utilities.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestToByteArray()
+		public virtual void TestToByteArray()
 		{
 			Exception exceptionToNUnit = null;
 
@@ -220,7 +220,7 @@ namespace MKY.Utilities.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestTryParse()
+		public virtual void TestTryParse()
 		{
 			foreach (TestSet[] tsArray in _testSets)
 			{

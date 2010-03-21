@@ -60,7 +60,7 @@ namespace MKY.Utilities.Guid
 		/// <summary>
 		/// Add or replaces the item that has the same <see cref="System.Guid"/> as item.
 		/// </summary>
-		public void AddOrReplaceGuidItem(T item)
+		public virtual void AddOrReplaceGuidItem(T item)
 		{
 			// replace or add if not contained yet
 			if (!ReplaceGuidItem(item))
@@ -70,7 +70,7 @@ namespace MKY.Utilities.Guid
 		/// <summary>
 		/// Replaces the item that has the same <see cref="System.Guid"/> as item.
 		/// </summary>
-		public bool ReplaceGuidItem(T item)
+		public virtual bool ReplaceGuidItem(T item)
 		{
 			GuidList<T> clone = new GuidList<T>(this);
 			for (int i = 0; i < clone.Count; i++)
@@ -88,7 +88,7 @@ namespace MKY.Utilities.Guid
 		/// Returns first item within the list that has the specified <see cref="System.Guid"/>,
 		/// <c>null</c> otherwise.
 		/// </summary>
-		public T GetGuidItem(System.Guid guid)
+		public virtual T GetGuidItem(System.Guid guid)
 		{
 			foreach (T item in this)
 			{
@@ -101,7 +101,7 @@ namespace MKY.Utilities.Guid
 		/// <summary>
 		/// Removes all items that have the specified <see cref="System.Guid"/>.
 		/// </summary>
-		public void RemoveGuid(System.Guid guid)
+		public virtual void RemoveGuid(System.Guid guid)
 		{
 			GuidList<T> obsoleteItems = new GuidList<T>();
 

@@ -276,7 +276,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Guid Guid
+		public virtual Guid Guid
 		{
 			get
 			{
@@ -286,7 +286,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public string UserName
+		public virtual string UserName
 		{
 			get
 			{
@@ -304,7 +304,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public bool IsStarted
+		public virtual bool IsStarted
 		{
 			get
 			{
@@ -314,7 +314,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public bool IsOpen
+		public virtual bool IsOpen
 		{
 			get
 			{
@@ -324,7 +324,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public bool IsConnected
+		public virtual bool IsConnected
 		{
 			get
 			{
@@ -334,7 +334,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public bool LogIsStarted
+		public virtual bool LogIsStarted
 		{
 			get
 			{
@@ -344,7 +344,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public MKY.IO.Serial.IIOProvider UnderlyingIOProvider
+		public virtual MKY.IO.Serial.IIOProvider UnderlyingIOProvider
 		{
 			get
 			{
@@ -354,7 +354,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public object UnderlyingIOInstance
+		public virtual object UnderlyingIOInstance
 		{
 			get
 			{
@@ -373,7 +373,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Starts terminal, i.e. starts log and open I/O.
 		/// </summary>
-		public void Start()
+		public virtual void Start()
 		{
 			// begin logging (in case opening of terminal needs to be logged)
 			if (_settingsRoot.LogIsStarted)
@@ -387,7 +387,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Sets terminal settings
 		/// </summary>
-		public void SetSettings(Domain.Settings.TerminalSettings settings)
+		public virtual void SetSettings(Domain.Settings.TerminalSettings settings)
 		{
 			// Settings have changed, recreate terminal with new settings
 			if (_terminal.IsStarted)
@@ -426,7 +426,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Sets log settings
 		/// </summary>
-		public void SetLogSettings(Log.Settings.LogSettings settings)
+		public virtual void SetLogSettings(Log.Settings.LogSettings settings)
 		{
 			_settingsRoot.Log = settings;
 			_log.Settings = _settingsRoot.Log;
@@ -476,7 +476,7 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public bool SettingsFileExists
+		public virtual bool SettingsFileExists
 		{
 			get
 			{
@@ -486,7 +486,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public string SettingsFilePath
+		public virtual string SettingsFilePath
 		{
 			get
 			{
@@ -496,7 +496,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public TerminalSettingsRoot SettingsRoot
+		public virtual TerminalSettingsRoot SettingsRoot
 		{
 			get
 			{
@@ -506,7 +506,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public WindowSettings WindowSettings
+		public virtual WindowSettings WindowSettings
 		{
 			get
 			{
@@ -541,7 +541,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Saves terminal to file, prompts for file if it doesn't exist yet
 		/// </summary>
-		public bool Save()
+		public virtual bool Save()
 		{
 			return (Save(true));
 		}
@@ -549,7 +549,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Saves terminal to file, prompts for file if it doesn't exist yet
 		/// </summary>
-		public bool Save(bool autoSaveIsAllowed)
+		public virtual bool Save(bool autoSaveIsAllowed)
 		{
 			AssertNotDisposed();
 
@@ -584,7 +584,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Saves terminal to given file
 		/// </summary>
-		public bool SaveAs(string filePath)
+		public virtual bool SaveAs(string filePath)
 		{
 			AssertNotDisposed();
 
@@ -625,7 +625,7 @@ namespace YAT.Model
 
 			if (doAutoSave && (!_settingsHandler.SettingsFilePathIsValid))
 			{
-				string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveTerminalFileNamePrefix + Guid.ToString() + ExtensionSettings.TerminalFiles;
+				string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveTerminalFileNamePrefix + Guid.ToString() + ExtensionSettings.TerminalFile;
 				_settingsHandler.SettingsFilePath = autoSaveFilePath;
 			}
 
@@ -687,7 +687,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary>Closes the terminal and prompts if needed if settings have changed.</summary>
-		public bool Close()
+		public virtual bool Close()
 		{
 			return (Close(false, false));
 		}
@@ -719,7 +719,7 @@ namespace YAT.Model
 		///   - normal, existing file, auto save    => auto save, if it fails => question : (t4a)
 		///   - normal, existing file, no auto save => question                           : (t4b)
 		/// </remarks>
-		public bool Close(bool isWorkspaceClose, bool tryAutoSave)
+		public virtual bool Close(bool isWorkspaceClose, bool tryAutoSave)
 		{
 			// Don't try to auto save if there is no existing file (w1)
 			if (!isWorkspaceClose && !_settingsHandler.SettingsFileExists)
@@ -1028,7 +1028,7 @@ namespace YAT.Model
 		/// Starts the terminal's I/O instance
 		/// </summary>
 		/// <returns>true if successful, false otherwise</returns>
-		public bool StartIO()
+		public virtual bool StartIO()
 		{
 			return (StartIO(true));
 		}
@@ -1044,13 +1044,14 @@ namespace YAT.Model
 			OnFixedStatusTextRequest("Starting terminal...");
 			try
 			{
-				_terminal.Start();
+				if (_terminal.Start())
+				{
+					if (saveStatus)
+						_settingsRoot.TerminalIsStarted = _terminal.IsStarted;
 
-				if (saveStatus)
-					_settingsRoot.TerminalIsStarted = _terminal.IsStarted;
-
-				OnTimedStatusTextRequest("Terminal started");
-				success = true;
+					OnTimedStatusTextRequest("Terminal started");
+					success = true;
+				}
 			}
 			catch (Exception ex)
 			{
@@ -1082,7 +1083,7 @@ namespace YAT.Model
 		/// Stops the terminal's I/O instance
 		/// </summary>
 		/// <returns>true if successful, false otherwise</returns>
-		public bool StopIO()
+		public virtual bool StopIO()
 		{
 			return (StopIO(true));
 		}
@@ -1134,7 +1135,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Toggles RTS line if current flow control settings allow this
 		/// </summary>
-		public void RequestToggleRts()
+		public virtual void RequestToggleRts()
 		{
 			if (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual)
 			{
@@ -1147,7 +1148,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Toggles DTR line if current flow control settings allow this
 		/// </summary>
-		public void RequestToggleDtr()
+		public virtual void RequestToggleDtr()
 		{
 			if (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual)
 			{
@@ -1252,7 +1253,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Sends command given by terminal settings.
 		/// </summary>
-		public void SendCommand()
+		public virtual void SendCommand()
 		{
 			SendCommand(_settingsRoot.SendCommand.Command);
 			_settingsRoot.SendCommand.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
@@ -1269,7 +1270,7 @@ namespace YAT.Model
 		/// Sends given command.
 		/// </summary>
 		/// <param name="command">Command to be sent.</param>
-		public void SendCommand(Command command)
+		public virtual void SendCommand(Command command)
 		{
 			if (command.IsValidCommand)
 			{
@@ -1302,7 +1303,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Sends file given by terminal settings
 		/// </summary>
-		public void SendFile()
+		public virtual void SendFile()
 		{
 			SendFile(_settingsRoot.SendFile.Command);
 		}
@@ -1311,7 +1312,7 @@ namespace YAT.Model
 		/// Sends given file
 		/// </summary>
 		/// <param name="command">File to be sent</param>
-		public void SendFile(Command command)
+		public virtual void SendFile(Command command)
 		{
 			if (!command.IsValidFilePath)
 				return;
@@ -1391,7 +1392,7 @@ namespace YAT.Model
 		/// </summary>
 		/// <param name="page">Page 1..max</param>
 		/// <param name="command">Command 1..max</param>
-		public void SendPredefined(int page, int command)
+		public virtual void SendPredefined(int page, int command)
 		{
 			Model.Types.Command c = _settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
 
@@ -1421,7 +1422,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Forces complete reload of repositories.
 		/// </summary>
-		public void ReloadRepositories()
+		public virtual void ReloadRepositories()
 		{
 			AssertNotDisposed();
 			_terminal.ReloadRepositories();
@@ -1430,7 +1431,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Returns contents of desired repository.
 		/// </summary>
-		public List<Domain.DisplayLine> RepositoryToDisplayLines(Domain.RepositoryType repositoryType)
+		public virtual List<Domain.DisplayLine> RepositoryToDisplayLines(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 			return (_terminal.RepositoryToDisplayLines(repositoryType));
@@ -1442,7 +1443,7 @@ namespace YAT.Model
 		/// <remarks>
 		/// Can be used for debugging purposes.
 		/// </remarks>
-		public string RepositoryToString(Domain.RepositoryType repositoryType)
+		public virtual string RepositoryToString(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 			return (_terminal.RepositoryToString(repositoryType));
@@ -1451,7 +1452,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Clears given repository.
 		/// </summary>
-		public void ClearRepository(Domain.RepositoryType repositoryType)
+		public virtual void ClearRepository(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
 			_terminal.ClearRepository(repositoryType);
@@ -1460,7 +1461,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Clears all repositories.
 		/// </summary>
-		public void ClearRepositories()
+		public virtual void ClearRepositories()
 		{
 			AssertNotDisposed();
 			_terminal.ClearRepositories();
@@ -1474,7 +1475,7 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public TimeSpan IOConnectTime
+		public virtual TimeSpan IOConnectTime
 		{
 			get
 			{
@@ -1484,7 +1485,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public void RestartIOConnectTime()
+		public virtual void RestartIOConnectTime()
 		{
 			AssertNotDisposed();
 			_ioConnectChrono.Restart();
@@ -1503,31 +1504,31 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public int TxByteCount
+		public virtual int TxByteCount
 		{
 			get { return (_txByteCount); }
 		}
 
 		/// <summary></summary>
-		public int TxLineCount
+		public virtual int TxLineCount
 		{
 			get { return (_txLineCount); }
 		}
 
 		/// <summary></summary>
-		public int RxByteCount
+		public virtual int RxByteCount
 		{
 			get { return (_rxByteCount); }
 		}
 
 		/// <summary></summary>
-		public int RxLineCount
+		public virtual int RxLineCount
 		{
 			get { return (_rxLineCount); }
 		}
 
 		/// <summary></summary>
-		public void ResetIOCount()
+		public virtual void ResetIOCount()
 		{
 			_txByteCount = 0;
 			_txLineCount = 0;
@@ -1547,7 +1548,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public void BeginLog()
+		public virtual void BeginLog()
 		{
 			try
 			{
@@ -1571,7 +1572,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public void ClearLog()
+		public virtual void ClearLog()
 		{
 			try
 			{
@@ -1592,13 +1593,13 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public void EndLog()
+		public virtual void EndLog()
 		{
 			EndLog(true);
 		}
 
 		/// <summary></summary>
-		public void EndLog(bool saveStatus)
+		public virtual void EndLog(bool saveStatus)
 		{
 			try
 			{

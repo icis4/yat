@@ -145,18 +145,18 @@ namespace YAT.Gui.Forms
 			this.usbHidPortSettings.Name = "usbHidPortSettings";
 			this.usbHidPortSettings.Size = new System.Drawing.Size(260, 42);
 			this.usbHidPortSettings.TabIndex = 3;
-			this.usbHidPortSettings.AutoReconnectChanged += new System.EventHandler(this.usbHidPortSettings_AutoReconnectChanged);
+			this.usbHidPortSettings.AutoReopenChanged += new System.EventHandler(this.usbHidPortSettings_AutoReopenChanged);
 			// 
 			// usbHidPortSelection
 			// 
 			this.usbHidPortSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.usbHidPortSelection.DeviceId = null;
+			this.usbHidPortSelection.DeviceInfo = null;
 			this.usbHidPortSelection.Location = new System.Drawing.Point(6, 20);
 			this.usbHidPortSelection.Name = "usbHidPortSelection";
 			this.usbHidPortSelection.Size = new System.Drawing.Size(285, 45);
 			this.usbHidPortSelection.TabIndex = 4;
-			this.usbHidPortSelection.DeviceIdChanged += new System.EventHandler(this.usbHidPortSelection_DeviceIdChanged);
+			this.usbHidPortSelection.DeviceInfoChanged += new System.EventHandler(this.usbHidPortSelection_DeviceInfoChanged);
 			// 
 			// socketSettings
 			// 

@@ -183,22 +183,22 @@ namespace YAT.Gui.Controls
 				_portList = portList;
 			}
 
-			public SerialPortCollection PortList
+			public virtual SerialPortCollection PortList
 			{
 				get { return (_portList); }
 			}
 
-			public bool IsScanning
+			public virtual bool IsScanning
 			{
 				get { return (_isScanning); }
 			}
 
-			public string Status2
+			public virtual string Status2
 			{
 				get { return (_status2); }
 			}
 
-			public void MarkPortsInUse()
+			public virtual void MarkPortsInUse()
 			{
 				_portList.MarkPortsInUse(portList_MarkPortsInUseCallback);
 				_isScanning = false;
@@ -206,7 +206,7 @@ namespace YAT.Gui.Controls
 				StatusBox.AcceptAndClose();
 			}
 
-			public void CancelScanning()
+			public virtual void CancelScanning()
 			{
 				_cancelScanning = true;
 			}

@@ -77,14 +77,14 @@ namespace MKY.Windows.Forms
 
 		/// <summary></summary>
 		[DefaultValue(100)]
-		public int Interval
+		public virtual int Interval
 		{
 			get { return (timer_Chronometer.Interval); }
 			set { timer_Chronometer.Interval = value;  }
 		}
 
 		/// <summary></summary>
-		public TimeSpan TimeSpan
+		public virtual TimeSpan TimeSpan
 		{
 			get
 			{
@@ -103,7 +103,7 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public void Start()
+		public virtual void Start()
 		{
 			if (!timer_Chronometer.Enabled)
 			{
@@ -114,7 +114,7 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary></summary>
-		public void Stop()
+		public virtual void Stop()
 		{
 			if (timer_Chronometer.Enabled)
 			{
@@ -125,7 +125,7 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary></summary>
-		public void StartStop()
+		public virtual void StartStop()
 		{
 			if (!timer_Chronometer.Enabled)
 				Start();
@@ -134,7 +134,7 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary></summary>
-		public void Reset()
+		public virtual void Reset()
 		{
 			_startTimeStamp = DateTime.Now;
 			_accumulatedTimeSpan = TimeSpan.Zero;
@@ -142,7 +142,7 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary></summary>
-		public void Restart()
+		public virtual void Restart()
 		{
 			Stop();
 			Reset();

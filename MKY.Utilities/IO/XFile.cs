@@ -25,6 +25,11 @@ namespace MKY.Utilities.IO
 	public static class XFile
 	{
 		/// <summary>
+		/// Default extension for backup files.
+		/// </summary>
+		public const string BackupFileExtension = ".bak";
+
+		/// <summary>
 		/// Returns a unique file name for a file specified by path.
 		/// </summary>
 		public static string MakeUniqueFileName(string path)
@@ -54,6 +59,28 @@ namespace MKY.Utilities.IO
 				return (dir + name + separator + unique + ext);
 			}
 			return (dir + name + ext);
+		}
+
+		/// <summary>
+		/// Inidactes whether the given file steam is ready for seek/read/write.
+		/// </summary>
+		/// <remarks>
+		/// The implementation intentionally checks the state step-by-step to emphasize the hierarchy.
+		/// </remarks>
+		public static bool IsReady(FileStream stream)
+		{
+			if (stream != null)
+			{
+				if (stream.CanSeek || stream.CanRead || stream.CanWrite)
+				{
+					if (stream.SafeFileHandle != null)
+					{
+						if (!stream.SafeFileHandle.IsInvalid && !stream.SafeFileHandle.IsClosed)
+							return (true);
+					}
+				}
+			}
+			return (false);
 		}
 	}
 }

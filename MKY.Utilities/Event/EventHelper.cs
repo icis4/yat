@@ -49,44 +49,40 @@ namespace MKY.Utilities.Event
 	/// </summary>
 	public static class EventHelper
 	{
-		#region Unhandled Exception Callback
+		#region Types
 		//==========================================================================================
-		// Unhandled Exception Callback
+		// Types
 		//==========================================================================================
 
-		/// <summary>
-		/// Unhandled exception callback delegate.
-		/// </summary>
-		public delegate void UnhandledExceptionCallback(Exception ex);
-
-		private static UnhandledExceptionCallback _unhandledExceptionCallback = null;
-		private static ISynchronizeInvoke _unhandledExceptionCallbackTarget = null;
-
-		/// <summary>
-		/// Installs a callback that is called on unhandled exceptions.
-		/// </summary>
-		public static void InstallUnhandledExceptionCallback(UnhandledExceptionCallback callback)
+		/// <summary></summary>
+		public class UnhandledExceptionEventArgs : EventArgs
 		{
-			InstallUnhandledExceptionCallback(callback, null);
+			/// <summary></summary>
+			public readonly Exception UnhandledException;
+
+			/// <summary></summary>
+			public UnhandledExceptionEventArgs(Exception unhandledException)
+			{
+				UnhandledException = unhandledException;
+			}
 		}
 
-		/// <summary>
-		/// Installs a callback that is called on unhandled exceptions.
-		/// </summary>
-		public static void InstallUnhandledExceptionCallback(UnhandledExceptionCallback callback, ISynchronizeInvoke target)
-		{
-			_unhandledExceptionCallback = callback;
-			_unhandledExceptionCallbackTarget = target;
-		}
+		#endregion
+
+		#region Static Events
+		//==========================================================================================
+		// Static Events
+		//==========================================================================================
+
+	#if (!DEBUG)
 
 		/// <summary>
-		/// Installs the callback that is called on unhandled exceptions.
+		/// Event on unhandled exceptions. An application can install an event handler that handles
+		/// the unhandled exceptions.
 		/// </summary>
-		public static void UninstallUnhandledExceptionCallback()
-		{
-			_unhandledExceptionCallback = null;
-			_unhandledExceptionCallbackTarget = null;
-		}
+		public static event EventHandler<UnhandledExceptionEventArgs> UnhandledException;
+
+	#endif
 
 		#endregion
 
@@ -143,11 +139,9 @@ namespace MKY.Utilities.Event
 		}
 
 		/// <summary>
-		/// Fires event with supplied arguments synchronously. Event is
-		/// fired safely, exceptions are caught. If an event sink implements
-		/// <see cref="System.ComponentModel.ISynchronizeInvoke"/>,
-		/// the event is invoked on that thread. Otherwise, the event is
-		/// invoked on the current thread.
+		/// Fires event with supplied arguments synchronously. Event is fired safely, exceptions are
+		/// caught. If an event sink implements <see cref="System.ComponentModel.ISynchronizeInvoke"/>,
+		/// the event is invoked on that thread. Otherwise, the event is invoked on the current thread.
 		/// </summary>
 		public static void FireSync<TEventArgs>(Delegate eventDelegate, params object[] args)
 			where TEventArgs : EventArgs
@@ -191,12 +185,13 @@ namespace MKY.Utilities.Event
 		}
 
 		/// <summary>
-		/// Fires event with supplied arguments synchronously. Event is
-		/// fired safely, exceptions are caught. If an event sink implements
-		/// <see cref="System.ComponentModel.ISynchronizeInvoke"/>,
-		/// the event is invoked on that thread. Otherwise, the event is
-		/// invoked on the current thread.
+		/// Fires event with supplied arguments synchronously. Event is fired safely, exceptions are
+		/// caught. If an event sink implements <see cref="System.ComponentModel.ISynchronizeInvoke"/>,
+		/// the event is invoked on that thread. Otherwise, the event is invoked on the current thread.
 		/// </summary>
+		/// <remarks>
+		/// This overloaded method is provided for backward compatibility with .NET 1.0/1.1 style events.
+		/// </remarks>
 		public static void FireSync<TEventArgs, TEventHandler>(Delegate eventDelegate, params object[] args)
 			where TEventArgs : EventArgs
 		{
@@ -272,17 +267,8 @@ namespace MKY.Utilities.Event
 			#if (DEBUG) // Output as much data as possible for debugging support
 				WriteExceptionToDebugOutput(ex, sink);
 			#else // NON-DEBUG: Forward or discard exception
-				if (_unhandledExceptionCallback != null)
-				{
-					try
-					{
-						if ((_unhandledExceptionCallbackTarget != null) && (_unhandledExceptionCallbackTarget.InvokeRequired))
-							_unhandledExceptionCallbackTarget.Invoke(_unhandledExceptionCallback, new object[] { ex });
-						else
-							_unhandledExceptionCallback.Invoke(ex);
-					}
-					catch { }
-				}
+				UnhandledExceptionEventArgs e = new UnhandledExceptionEventArgs(ex);
+				FireSync<UnhandledExceptionEventArgs>(UnhandledException, typeof(EventHelper), e);
 			#endif
 			}
 		}
@@ -306,17 +292,8 @@ namespace MKY.Utilities.Event
 			#if (DEBUG) // output as much data as possible for debugging support
 				WriteExceptionToDebugOutput(ex, sink);
 			#else // NON-DEBUG, forward or discard exception
-				if (_unhandledExceptionCallback != null)
-				{
-					try
-					{
-						if ((_unhandledExceptionCallbackTarget != null) && (_unhandledExceptionCallbackTarget.InvokeRequired))
-							_unhandledExceptionCallbackTarget.Invoke(_unhandledExceptionCallback, new object[] { ex });
-						else
-							_unhandledExceptionCallback.Invoke(ex);
-					}
-					catch { }
-				}
+				UnhandledExceptionEventArgs e = new UnhandledExceptionEventArgs(ex);
+				FireSync<UnhandledExceptionEventArgs>(UnhandledException, typeof(EventHelper), e);
 			#endif
 			}
 		}

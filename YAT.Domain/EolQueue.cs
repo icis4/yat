@@ -82,19 +82,19 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public byte[] Eol
+		public virtual byte[] Eol
 		{
 			get { return (_eol); }
 		}
 
 		/// <summary></summary>
-		public bool IsPartlyMatch
+		public virtual bool IsPartlyMatch
 		{
 			get { return ( _state == State.PartlyMatch || _state == State.CompleteMatch ); }
 		}
 
 		/// <summary></summary>
-		public bool IsCompleteMatch
+		public virtual bool IsCompleteMatch
 		{
 			get { return (_state == State.CompleteMatch); }
 		}
@@ -107,7 +107,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public void Enqueue(byte b)
+		public virtual void Enqueue(byte b)
 		{
 			// Reset queue if it previously matched
 			if (_state == State.CompleteMatch)
@@ -136,7 +136,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public void Reset()
+		public virtual void Reset()
 		{
 			_queue.Clear();
 			Evaluate();

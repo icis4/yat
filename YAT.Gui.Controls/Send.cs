@@ -96,7 +96,7 @@ namespace YAT.Gui.Controls
 		// Methods
 		//==========================================================================================
 
-		public void SelectSendCommandInput()
+		public virtual void SelectSendCommandInput()
 		{
 			sendCommand.Select();
 			sendCommand.SelectInput();
@@ -114,7 +114,7 @@ namespace YAT.Gui.Controls
 		/// </summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Command Command
+		public virtual Command Command
 		{
 			get { return (sendCommand.Command); }
 			set { sendCommand.Command = value;  }
@@ -122,7 +122,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public RecentItemCollection<Command> RecentCommands
+		public virtual RecentItemCollection<Command> RecentCommands
 		{
 			set { sendCommand.RecentCommands = value;  }
 		}
@@ -132,7 +132,7 @@ namespace YAT.Gui.Controls
 		/// </summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Command FileCommand
+		public virtual Command FileCommand
 		{
 			get { return (sendFile.FileCommand); }
 			set	{ sendFile.FileCommand = value;  }
@@ -140,7 +140,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Domain.TerminalType TerminalType
+		public virtual Domain.TerminalType TerminalType
 		{
 			set
 			{
@@ -151,7 +151,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public bool TerminalIsOpen
+		public virtual bool TerminalIsOpen
 		{
 			set
 			{
@@ -161,21 +161,21 @@ namespace YAT.Gui.Controls
 		}
 
 		[DefaultValue(true)]
-		public bool CommandPanelIsVisible
+		public virtual bool CommandPanelIsVisible
 		{
 			get { return (!splitContainer_Send.Panel1Collapsed); }
 			set { splitContainer_Send.Panel1Collapsed = !value;  }
 		}
 
 		[DefaultValue(true)]
-		public bool FilePanelIsVisible
+		public virtual bool FilePanelIsVisible
 		{
 			get { return (!splitContainer_Send.Panel2Collapsed); }
 			set { splitContainer_Send.Panel2Collapsed = !value;  }
 		}
 
 		[DefaultValue(_SplitterRatioDefault)]
-		public float SplitterRatio
+		public virtual float SplitterRatio
 		{
 			get { return (_splitterRatio); }
 			set

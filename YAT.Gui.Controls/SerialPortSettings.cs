@@ -113,7 +113,7 @@ namespace YAT.Gui.Controls
 		[Category("Serial Port")]
 		[Description("The baud rate.")]
 		[DefaultValue(_BaudRateDefault)]
-		public int BaudRate
+		public virtual int BaudRate
 		{
 			get { return (_baudRate); }
 			set
@@ -130,7 +130,7 @@ namespace YAT.Gui.Controls
 		[Category("Serial Port")]
 		[Description("The number of data bits.")]
 		[DefaultValue(_DataBitsDefault)]
-		public MKY.IO.Ports.DataBits DataBits
+		public virtual MKY.IO.Ports.DataBits DataBits
 		{
 			get { return (_dataBits); }
 			set
@@ -147,7 +147,7 @@ namespace YAT.Gui.Controls
 		[Category("Serial Port")]
 		[Description("The partiy type.")]
 		[DefaultValue(_ParityDefault)]
-		public System.IO.Ports.Parity Parity
+		public virtual System.IO.Ports.Parity Parity
 		{
 			get { return (_parity); }
 			set
@@ -164,7 +164,7 @@ namespace YAT.Gui.Controls
 		[Category("Serial Port")]
 		[Description("The number of stop bits.")]
 		[DefaultValue(_StopBitsDefault)]
-		public System.IO.Ports.StopBits StopBits
+		public virtual System.IO.Ports.StopBits StopBits
 		{
 			get { return (_stopBits); }
 			set
@@ -181,7 +181,7 @@ namespace YAT.Gui.Controls
 		[Category("Serial Port")]
 		[Description("The flow control type.")]
 		[DefaultValue(_FlowControlDefault)]
-		public MKY.IO.Serial.SerialFlowControl FlowControl
+		public virtual MKY.IO.Serial.SerialFlowControl FlowControl
 		{
 			get { return (_flowControl); }
 			set
@@ -197,7 +197,7 @@ namespace YAT.Gui.Controls
 
 		[Category("Serial Port")]
 		[Description("Auto reopen optione.")]
-		public MKY.IO.Serial.AutoRetry AutoReopen
+		public virtual MKY.IO.Serial.AutoRetry AutoReopen
 		{
 			get { return (_autoReopen); }
 			set

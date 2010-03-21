@@ -157,7 +157,7 @@ namespace YAT.Gui.Controls
 		[Category("Monitor")]
 		[Description("The repository type.")]
 		[DefaultValue(_RepositoryTypeDefault)]
-		public Domain.RepositoryType RepositoryType
+		public virtual Domain.RepositoryType RepositoryType
 		{
 			get { return (_repositoryType); }
 			set
@@ -173,7 +173,7 @@ namespace YAT.Gui.Controls
 		[Category("Monitor")]
 		[Description("The activity state.")]
 		[DefaultValue(_ActivityStateDefault)]
-		public MonitorActivityState ActivityState
+		public virtual MonitorActivityState ActivityState
 		{
 			get { return (_activityState); }
 			set
@@ -189,7 +189,7 @@ namespace YAT.Gui.Controls
 		[Category("Monitor")]
 		[Description("The maxmimal number of lines to display.")]
 		[DefaultValue(_MaxLineCountDefault)]
-		public int MaxLineCount
+		public virtual int MaxLineCount
 		{
 			get { return (_maxLineCount); }
 			set
@@ -204,7 +204,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Model.Settings.FormatSettings FormatSettings
+		public virtual Model.Settings.FormatSettings FormatSettings
 		{
 			set
 			{
@@ -219,7 +219,7 @@ namespace YAT.Gui.Controls
 		[Category("Monitor")]
 		[Description("Show the time status.")]
 		[DefaultValue(_ShowTimeStatusDefault)]
-		public bool ShowTimeStatus
+		public virtual bool ShowTimeStatus
 		{
 			get { return (_showTimeStatus); }
 			set
@@ -235,7 +235,7 @@ namespace YAT.Gui.Controls
 		[Category("Monitor")]
 		[Description("The connect time status.")]
 		[DefaultValue(0)]
-		public TimeSpan ConnectTime
+		public virtual TimeSpan ConnectTime
 		{
 			get { return (_connectTime); }
 			set
@@ -251,7 +251,7 @@ namespace YAT.Gui.Controls
 		[Category("Monitor")]
 		[Description("Show the count status.")]
 		[DefaultValue(_ShowCountStatusDefault)]
-		public bool ShowCountStatus
+		public virtual bool ShowCountStatus
 		{
 			get { return (_showCountStatus); }
 			set
@@ -267,7 +267,7 @@ namespace YAT.Gui.Controls
 		[Category("Monitor")]
 		[Description("The Tx byte count status.")]
 		[DefaultValue(0)]
-		public int TxByteCountStatus
+		public virtual int TxByteCountStatus
 		{
 			get { return (_txByteCountStatus); }
 			set
@@ -283,7 +283,7 @@ namespace YAT.Gui.Controls
 		[Category("Monitor")]
 		[Description("The Tx line count status.")]
 		[DefaultValue(0)]
-		public int TxLineCountStatus
+		public virtual int TxLineCountStatus
 		{
 			get { return (_txLineCountStatus); }
 			set
@@ -299,7 +299,7 @@ namespace YAT.Gui.Controls
 		[Category("Monitor")]
 		[Description("The Rx byte count status.")]
 		[DefaultValue(0)]
-		public int RxByteCountStatus
+		public virtual int RxByteCountStatus
 		{
 			get { return (_rxByteCountStatus); }
 			set
@@ -315,7 +315,7 @@ namespace YAT.Gui.Controls
 		[Category("Monitor")]
 		[Description("The Rx line count status.")]
 		[DefaultValue(0)]
-		public int RxLineCountStatus
+		public virtual int RxLineCountStatus
 		{
 			get { return (_rxLineCountStatus); }
 			set
@@ -335,7 +335,7 @@ namespace YAT.Gui.Controls
 		// Methods
 		//==========================================================================================
 
-		public void AddElement(Domain.DisplayElement element)
+		public virtual void AddElement(Domain.DisplayElement element)
 		{
 			FastListBox flb = fastListBox_Monitor;
 			flb.BeginUpdate();
@@ -346,7 +346,7 @@ namespace YAT.Gui.Controls
 			flb.EndUpdate();
 		}
 
-		public void AddElements(List<Domain.DisplayElement> elements)
+		public virtual void AddElements(List<Domain.DisplayElement> elements)
 		{
 			FastListBox flb = fastListBox_Monitor;
 			flb.BeginUpdate();
@@ -358,7 +358,7 @@ namespace YAT.Gui.Controls
 			flb.EndUpdate();
 		}
 
-		public void AddLine(Domain.DisplayLine line)
+		public virtual void AddLine(Domain.DisplayLine line)
 		{
 			FastListBox flb = fastListBox_Monitor;
 			flb.BeginUpdate();
@@ -370,7 +370,7 @@ namespace YAT.Gui.Controls
 			flb.Refresh();
 		}
 
-		public void AddLines(List<Domain.DisplayLine> lines)
+		public virtual void AddLines(List<Domain.DisplayLine> lines)
 		{
 			FastListBox flb = fastListBox_Monitor;
 			flb.BeginUpdate();
@@ -383,12 +383,12 @@ namespace YAT.Gui.Controls
 			flb.EndUpdate();
 		}
 
-		public void Clear()
+		public virtual void Clear()
 		{
 			ClearListBox();
 		}
 
-		public void Reload()
+		public virtual void Reload()
 		{
 			FastListBox flb = fastListBox_Monitor;
 
@@ -405,26 +405,26 @@ namespace YAT.Gui.Controls
 			AddLines(lines);
 		}
 
-		public void Reload(List<Domain.DisplayElement> elements)
+		public virtual void Reload(List<Domain.DisplayElement> elements)
 		{
 			Clear();
 			AddElements(elements);
 		}
 
-		private void Reload(List<Domain.DisplayLine> lines)
+		public virtual void Reload(List<Domain.DisplayLine> lines)
 		{
 			Clear();
 			AddLines(lines);
 		}
 
-		public void ResetTimeStatus()
+		public virtual void ResetTimeStatus()
 		{
 			_connectTime = TimeSpan.Zero;
 
 			SetTimeStatusControls();
 		}
 
-		public void ResetCountStatus()
+		public virtual void ResetCountStatus()
 		{
 			_txByteCountStatus = 0;
 			_txLineCountStatus = 0;
@@ -434,7 +434,7 @@ namespace YAT.Gui.Controls
 			SetCountStatusControls();
 		}
 
-		public void SelectAll()
+		public virtual void SelectAll()
 		{
 			FastListBox flb = fastListBox_Monitor;
 			flb.BeginUpdate();
@@ -445,7 +445,7 @@ namespace YAT.Gui.Controls
 			flb.EndUpdate();
 		}
 
-		public void SelectNone()
+		public virtual void SelectNone()
 		{
 			FastListBox flb = fastListBox_Monitor;
 			flb.BeginUpdate();
@@ -455,12 +455,12 @@ namespace YAT.Gui.Controls
 			flb.EndUpdate();
 		}
 
-		public int SelectedLineCount
+		public virtual int SelectedLineCount
 		{
 			get { return (fastListBox_Monitor.SelectedItems.Count); }
 		}
 
-		public List<YAT.Domain.DisplayLine> SelectedLines
+		public virtual List<YAT.Domain.DisplayLine> SelectedLines
 		{
 			get
 			{

@@ -54,22 +54,86 @@ Classes
 Use static classes instead of Singletons
 
 
-override and new
-----------------
-
-Write
-public override <Name>
-but
-new public <Name>
-to emphasize the intended hiding of a method.
-
-
 Inheritance
 -----------
 - Implement IEquatable
 - Implement ICloneable (Problem: return type is object)
 - Implement TryParse() and Parse()
 - Use and TryParse() instead of Parse()
+
+
+Dispose
+-------
+
+Base class
+
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary></summary>
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!_isDisposed)
+			{
+				if (disposing)
+				{
+					// Dispose of unmanaged resources.
+				}
+				_isDisposed = true;
+			}
+		}
+
+		/// <summary></summary>
+		~Device()
+		{
+			Dispose(false);
+		}
+
+		/// <summary></summary>
+		protected bool IsDisposed
+		{
+			get { return (_isDisposed); }
+		}
+
+		/// <summary></summary>
+		protected void AssertNotDisposed()
+		{
+			if (_isDisposed)
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+		}
+
+		#endregion
+
+
+Inherited class
+
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				// Dispose of unmanaged resources.
+			}
+			base.Dispose(disposing);
+		}
+
+		#endregion
+
+
+Also see "Implementing Finalize and Dispose to Clean Up Unmanaged Resources" in the MSDN.
 
 
 Variables

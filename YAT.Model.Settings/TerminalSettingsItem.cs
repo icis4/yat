@@ -73,7 +73,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("FilePath")]
-		public string FilePath
+		public virtual string FilePath
 		{
 			get { return (_filePath); }
 			set
@@ -92,7 +92,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public Guid Guid
+		public virtual Guid Guid
 		{
 			get { return (_guid); }
 			set
@@ -107,7 +107,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("Window")]
-		public WindowSettings Window
+		public virtual WindowSettings Window
 		{
 			get { return (_window); }
 			set

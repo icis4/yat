@@ -131,7 +131,7 @@ namespace MKY.Utilities.Test.Settings
 		//==========================================================================================
 
 		[TearDown]
-		public void TearDown()
+		public virtual void TearDown()
 		{
 			foreach (string filePath in Directory.GetFiles(MakeTempPath(), MakeTempFileName("*")))
 				File.Delete(filePath);
@@ -150,7 +150,7 @@ namespace MKY.Utilities.Test.Settings
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestDeserialization()
+		public virtual void TestDeserialization()
 		{
 			foreach (TestSet ts in _testSets)
 			{

@@ -89,7 +89,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public new string ToShortString()
+		public override string ToShortString()
 		{
 			switch ((SerialFlowControl)UnderlyingEnum)
 			{

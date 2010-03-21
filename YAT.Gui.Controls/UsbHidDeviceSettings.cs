@@ -28,7 +28,7 @@ using MKY.IO.Serial;
 namespace YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
-	[DefaultEvent("AutoReconnectChanged")]
+	[DefaultEvent("AutoReopenChanged")]
 	public partial class UsbHidDeviceSettings : UserControl
 	{
 		#region Fields
@@ -38,7 +38,7 @@ namespace YAT.Gui.Controls
 
 		private bool _isSettingControls = false;
 
-		private AutoRetry _autoReconnect = MKY.IO.Serial.UsbHidDeviceSettings.AutoReconnectDefault;
+		private AutoRetry _autoReopen = MKY.IO.Serial.UsbHidDeviceSettings.AutoReopenDefault;
 
 		#endregion
 
@@ -48,8 +48,8 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		[Category("Property Changed")]
-		[Description("Event raised when the AutoReconnect property is changed.")]
-		public event EventHandler AutoReconnectChanged;
+		[Description("Event raised when the AutoReopen property is changed.")]
+		public event EventHandler AutoReopenChanged;
 
 		#endregion
 
@@ -72,17 +72,17 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		[Category("Socket")]
-		[Description("Sets auto reconnect.")]
-		public AutoRetry AutoReconnect
+		[Description("Sets auto reopen.")]
+		public AutoRetry AutoReopen
 		{
-			get { return (_autoReconnect); }
+			get { return (_autoReopen); }
 			set
 			{
-				if (_autoReconnect != value)
+				if (_autoReopen != value)
 				{
-					_autoReconnect = value;
+					_autoReopen = value;
 					SetControls();
-					OnAutoReconnectChanged(new EventArgs());
+					OnAutoReopenChanged(new EventArgs());
 				}
 			}
 		}
@@ -118,33 +118,33 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		private void checkBox_AutoReconnect_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_AutoReopen_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
 			{
-				MKY.IO.Serial.AutoRetry ar = _autoReconnect;
-				ar.Enabled = checkBox_AutoReconnect.Checked;
-				AutoReconnect = ar;
+				MKY.IO.Serial.AutoRetry ar = _autoReopen;
+				ar.Enabled = checkBox_AutoReopen.Checked;
+				AutoReopen = ar;
 			}
 		}
 
-		private void textBox_AutoReconnectInterval_Validating(object sender, CancelEventArgs e)
+		private void textBox_AutoReopenInterval_Validating(object sender, CancelEventArgs e)
 		{
 			if (!_isSettingControls)
 			{
 				int interval;
-				if (int.TryParse(textBox_AutoReconnectInterval.Text, out interval) && (interval >= 100))
+				if (int.TryParse(textBox_AutoReopenInterval.Text, out interval) && (interval >= 100))
 				{
-					MKY.IO.Serial.AutoRetry ar = _autoReconnect;
+					MKY.IO.Serial.AutoRetry ar = _autoReopen;
 					ar.Interval = interval;
-					AutoReconnect = ar;
+					AutoReopen = ar;
 				}
 				else
 				{
 					MessageBox.Show
 						(
 						this,
-						"Reconnect interval must be at least 100 ms!",
+						"Reopen interval must be at least 100 ms!",
 						"Invalid Input",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
@@ -165,9 +165,9 @@ namespace YAT.Gui.Controls
 		{
 			_isSettingControls = true;
 
-			checkBox_AutoReconnect.Checked = _autoReconnect.Enabled;
-			textBox_AutoReconnectInterval.Enabled = _autoReconnect.Enabled;
-			textBox_AutoReconnectInterval.Text = _autoReconnect.Interval.ToString();
+			checkBox_AutoReopen.Checked = _autoReopen.Enabled;
+			textBox_AutoReopenInterval.Enabled = _autoReopen.Enabled;
+			textBox_AutoReopenInterval.Text = _autoReopen.Interval.ToString();
 
 			_isSettingControls = false;
 		}
@@ -179,9 +179,9 @@ namespace YAT.Gui.Controls
 		// Event Invoking
 		//==========================================================================================
 
-		protected virtual void OnAutoReconnectChanged(EventArgs e)
+		protected virtual void OnAutoReopenChanged(EventArgs e)
 		{
-			EventHelper.FireSync(AutoReconnectChanged, this, e);
+			EventHelper.FireSync(AutoReopenChanged, this, e);
 		}
 
 		#endregion

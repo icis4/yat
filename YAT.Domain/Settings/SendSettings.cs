@@ -76,7 +76,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("KeepCommand")]
-		public bool KeepCommand
+		public virtual bool KeepCommand
 		{
 			get { return (_keepCommand); }
 			set
@@ -91,7 +91,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("CopyPredefined")]
-		public bool CopyPredefined
+		public virtual bool CopyPredefined
 		{
 			get { return (_copyPredefined); }
 			set

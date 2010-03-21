@@ -84,7 +84,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlElement("Name")]
-		public string Name
+		public virtual string Name
 		{
 			get { return (_name); }
 			set
@@ -96,7 +96,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlElement("Size")]
-		public float Size
+		public virtual float Size
 		{
 			get { return (_size); }
 			set
@@ -108,7 +108,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlElement("Style")]
-		public FontStyle Style
+		public virtual FontStyle Style
 		{
 			get { return (_style); }
 			set
@@ -120,7 +120,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public Font Font
+		public virtual Font Font
 		{
 			get { return (_font); }
 			set

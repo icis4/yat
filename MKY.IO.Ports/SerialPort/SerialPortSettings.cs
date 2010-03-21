@@ -242,7 +242,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Returns port settings summary.
 		/// </summary>
-		public string ToShortString()
+		public virtual string ToShortString()
 		{
 			return
 			  (
@@ -255,7 +255,7 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Returns port settings summary.
 		/// </summary>
-		public string ToLongString()
+		public virtual string ToLongString()
 		{
 			return
 			  (

@@ -150,7 +150,7 @@ namespace MKY.Utilities.Time
 		//==========================================================================================
 
 		/// <summary></summary>
-		public void Start()
+		public virtual void Start()
 		{
 			AssertNotDisposed();
 
@@ -163,7 +163,7 @@ namespace MKY.Utilities.Time
 		}
 
 		/// <summary></summary>
-		public void Stop()
+		public virtual void Stop()
 		{
 			AssertNotDisposed();
 
@@ -176,7 +176,7 @@ namespace MKY.Utilities.Time
 		}
 
 		/// <summary></summary>
-		public void StartStop()
+		public virtual void StartStop()
 		{
 			if (!_timer.Enabled)
 				Start();
@@ -185,7 +185,7 @@ namespace MKY.Utilities.Time
 		}
 
 		/// <summary></summary>
-		public void Reset()
+		public virtual void Reset()
 		{
 			AssertNotDisposed();
 
@@ -195,7 +195,7 @@ namespace MKY.Utilities.Time
 		}
 
 		/// <summary></summary>
-		public void Restart()
+		public virtual void Restart()
 		{
 			AssertNotDisposed();
 

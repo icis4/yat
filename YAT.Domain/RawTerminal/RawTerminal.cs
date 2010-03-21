@@ -160,7 +160,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Settings.BufferSettings BufferSettings
+		public virtual Settings.BufferSettings BufferSettings
 		{
 			get
 			{
@@ -176,7 +176,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public Settings.IOSettings IOSettings
+		public virtual Settings.IOSettings IOSettings
 		{
 			get
 			{
@@ -192,7 +192,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public bool IsStarted
+		public virtual bool IsStarted
 		{
 			get
 			{
@@ -202,7 +202,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public bool IsConnected
+		public virtual bool IsConnected
 		{
 			get
 			{
@@ -212,7 +212,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public bool IsOpen
+		public virtual bool IsOpen
 		{
 			get
 			{
@@ -222,7 +222,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public IIOProvider UnderlyingIOProvider
+		public virtual IIOProvider UnderlyingIOProvider
 		{
 			get
 			{
@@ -232,7 +232,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public object UnderlyingIOInstance
+		public virtual object UnderlyingIOInstance
 		{
 			get
 			{
@@ -253,14 +253,14 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public void Start()
+		public virtual bool Start()
 		{
 			AssertNotDisposed();
-			_io.Start();
+			return (_io.Start());
 		}
 
 		/// <summary></summary>
-		public void Stop()
+		public virtual void Stop()
 		{
 			AssertNotDisposed();
 			_io.Stop();
@@ -271,7 +271,7 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public void Send(byte[] data)
+		public virtual void Send(byte[] data)
 		{
 			AssertNotDisposed();
 			
@@ -288,7 +288,7 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public List<RawElement> RepositoryToElements(RepositoryType repository)
+		public virtual List<RawElement> RepositoryToElements(RepositoryType repository)
 		{
 			AssertNotDisposed();
 			
@@ -302,7 +302,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public void ClearRepository(RepositoryType repository)
+		public virtual void ClearRepository(RepositoryType repository)
 		{
 			AssertNotDisposed();
 			
@@ -321,7 +321,7 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		new public string ToString()
+		public override string ToString()
 		{
 			AssertNotDisposed();
 
@@ -329,7 +329,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public string ToString(string indent)
+		public virtual string ToString(string indent)
 		{
 			AssertNotDisposed();
 
@@ -340,7 +340,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public string RepositoryToString(RepositoryType repository, string indent)
+		public virtual string RepositoryToString(RepositoryType repository, string indent)
 		{
 			AssertNotDisposed();
 			
@@ -443,18 +443,18 @@ namespace YAT.Domain
 			_io = io;
 			_io.IOChanged        += new EventHandler(_io_IOChanged);
 			_io.IOControlChanged += new EventHandler(_io_IOControlChanged);
+			_io.DataReceived     += new EventHandler(_io_DataReceived);
 			_io.IORequest        += new EventHandler<MKY.IO.Serial.IORequestEventArgs>(_io_IORequest);
 			_io.IOError          += new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(_io_IOError);
-			_io.DataReceived     += new EventHandler(_io_DataReceived);
 		}
 
 		private void DetachIO()
 		{
 			_io.IOChanged        -= new EventHandler(_io_IOChanged);
 			_io.IOControlChanged -= new EventHandler(_io_IOControlChanged);
+			_io.DataReceived     -= new EventHandler(_io_DataReceived);
 			_io.IORequest        -= new EventHandler<MKY.IO.Serial.IORequestEventArgs>(_io_IORequest);
 			_io.IOError          -= new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(_io_IOError);
-			_io.DataReceived     -= new EventHandler(_io_DataReceived);
 			_io = null;
 		}
 
@@ -475,6 +475,18 @@ namespace YAT.Domain
 			OnIOControlChanged(new EventArgs());
 		}
 
+		private void _io_DataReceived(object sender, EventArgs e)
+		{
+			byte[] data;
+			if (_io.Receive(out data) > 0)
+			{
+				RawElement re = new RawElement(data, SerialDirection.Rx);
+				_rxRepository.Enqueue(re);
+				_bidirRepository.Enqueue(re);
+				OnRawElementReceived(new RawElementEventArgs(re));
+			}
+		}
+
 		private void _io_IORequest(object sender, MKY.IO.Serial.IORequestEventArgs e)
 		{
 			OnIORequest(new IORequestEventArgs((IORequest)e.Request));
@@ -487,18 +499,6 @@ namespace YAT.Domain
 				OnIOError(new IOErrorEventArgs(e.Message));
 			else
 				OnIOError(new SerialPortErrorEventArgs(serialPortErrorEventArgs.Message, serialPortErrorEventArgs.SerialPortError));
-		}
-
-		private void _io_DataReceived(object sender, EventArgs e)
-		{
-			byte[] data;
-			if (_io.Receive(out data) > 0)
-			{
-				RawElement re = new RawElement(data, SerialDirection.Rx);
-				_rxRepository.Enqueue(re);
-				_bidirRepository.Enqueue(re);
-				OnRawElementReceived(new RawElementEventArgs(re));
-			}
 		}
 
 		#endregion

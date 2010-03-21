@@ -62,7 +62,7 @@ namespace YAT.Settings.Test
 		//==========================================================================================
 
 		[TestFixtureSetUp]
-		public void TestFixtureSetUp()
+		public virtual void TestFixtureSetUp()
 		{
 			// prevent auto-save of workspace settings
 			_autoSaveWorkspaceToRestore = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
@@ -77,7 +77,7 @@ namespace YAT.Settings.Test
 		//==========================================================================================
 
 		[TestFixtureTearDown]
-		public void TestFixtureTearDown()
+		public virtual void TestFixtureTearDown()
 		{
 			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = _autoSaveWorkspaceToRestore;
 		}
@@ -97,7 +97,7 @@ namespace YAT.Settings.Test
 		// 01_COM1_Open_Default
 		[Test]
 		[Category("Support for COM1 required")]
-		public void Test_V1_99_12_TerminalSettingsCase01()
+		public virtual void Test_V1_99_12_TerminalSettingsCase01()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -115,7 +115,7 @@ namespace YAT.Settings.Test
 		// 02_COM2_Open_Binary_115200
 		[Test]
 		[Category("Support for COM2 required")]
-		public void Test_V1_99_12_TerminalSettingsCase02()
+		public virtual void Test_V1_99_12_TerminalSettingsCase02()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -132,7 +132,7 @@ namespace YAT.Settings.Test
 
 		// 03_COM1_Closed_Predefined
 		[Test]
-		public void Test_V1_99_12_TerminalSettingsCase03()
+		public virtual void Test_V1_99_12_TerminalSettingsCase03()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -157,7 +157,7 @@ namespace YAT.Settings.Test
 		// 01_COM1_Open_Default
 		[Test]
 		[Category("Support for COM1 required")]
-		public void Test_V1_99_13_TerminalSettingsCase01()
+		public virtual void Test_V1_99_13_TerminalSettingsCase01()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -175,7 +175,7 @@ namespace YAT.Settings.Test
 		// 02_COM2_Open_Binary_115200
 		[Test]
 		[Category("Support for COM2 required")]
-		public void Test_V1_99_13_TerminalSettingsCase02()
+		public virtual void Test_V1_99_13_TerminalSettingsCase02()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -192,7 +192,7 @@ namespace YAT.Settings.Test
 
 		// 03_COM1_Closed_Predefined
 		[Test]
-		public void Test_V1_99_13_TerminalSettingsCase03()
+		public virtual void Test_V1_99_13_TerminalSettingsCase03()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -215,7 +215,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void Test_V1_99_13_WorkspaceSettingsCase04()
+		public virtual void Test_V1_99_13_WorkspaceSettingsCase04()
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
 				(
@@ -240,7 +240,7 @@ namespace YAT.Settings.Test
 		// 01_COM1_Open_Default
 		[Test]
 		[Category("Support for COM1 required")]
-		public void Test_V1_99_17_TerminalSettingsCase01()
+		public virtual void Test_V1_99_17_TerminalSettingsCase01()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -258,7 +258,7 @@ namespace YAT.Settings.Test
 		// 02_COM2_Open_Binary_115200
 		[Test]
 		[Category("Support for COM2 required")]
-		public void Test_V1_99_17_TerminalSettingsCase02()
+		public virtual void Test_V1_99_17_TerminalSettingsCase02()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -275,7 +275,7 @@ namespace YAT.Settings.Test
 
 		// 03_COM1_Closed_Predefined
 		[Test]
-		public void Test_V1_99_17_TerminalSettingsCase03()
+		public virtual void Test_V1_99_17_TerminalSettingsCase03()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -298,7 +298,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void Test_V1_99_17_WorkspaceSettingsCase04()
+		public virtual void Test_V1_99_17_WorkspaceSettingsCase04()
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
 				(
@@ -323,7 +323,7 @@ namespace YAT.Settings.Test
 		// 01_COM1_Open_Default
 		[Test]
 		[Category("Support for COM1 required")]
-		public void Test_V1_99_18_TerminalSettingsCase01()
+		public virtual void Test_V1_99_18_TerminalSettingsCase01()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -341,7 +341,7 @@ namespace YAT.Settings.Test
 		// 02_COM2_Open_Binary_115200
 		[Test]
 		[Category("Support for COM2 required")]
-		public void Test_V1_99_18_TerminalSettingsCase02()
+		public virtual void Test_V1_99_18_TerminalSettingsCase02()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -358,7 +358,7 @@ namespace YAT.Settings.Test
 
 		// 03_COM1_Closed_Predefined
 		[Test]
-		public void Test_V1_99_18_TerminalSettingsCase03()
+		public virtual void Test_V1_99_18_TerminalSettingsCase03()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -381,7 +381,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void Test_V1_99_18_WorkspaceSettingsCase04()
+		public virtual void Test_V1_99_18_WorkspaceSettingsCase04()
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
 				(
@@ -406,7 +406,7 @@ namespace YAT.Settings.Test
 		// 01_COM1_Open_Default
 		[Test]
 		[Category("Support for COM1 required")]
-		public void Test_V1_99_19_TerminalSettingsCase01()
+		public virtual void Test_V1_99_19_TerminalSettingsCase01()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -424,7 +424,7 @@ namespace YAT.Settings.Test
 		// 02_COM2_Open_Binary_115200
 		[Test]
 		[Category("Support for COM2 required")]
-		public void Test_V1_99_19_TerminalSettingsCase02()
+		public virtual void Test_V1_99_19_TerminalSettingsCase02()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -441,7 +441,7 @@ namespace YAT.Settings.Test
 
 		// 03_COM1_Closed_Predefined
 		[Test]
-		public void Test_V1_99_19_TerminalSettingsCase03()
+		public virtual void Test_V1_99_19_TerminalSettingsCase03()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -464,7 +464,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void Test_V1_99_19_WorkspaceSettingsCase04()
+		public virtual void Test_V1_99_19_WorkspaceSettingsCase04()
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
 				(
@@ -489,7 +489,7 @@ namespace YAT.Settings.Test
 		// 01_COM1_Open_Default
 		[Test]
 		[Category("Support for COM1 required")]
-		public void Test_V1_99_20_TerminalSettingsCase01()
+		public virtual void Test_V1_99_20_TerminalSettingsCase01()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -507,7 +507,7 @@ namespace YAT.Settings.Test
 		// 02_COM2_Open_Binary_115200
 		[Test]
 		[Category("Support for COM2 required")]
-		public void Test_V1_99_20_TerminalSettingsCase02()
+		public virtual void Test_V1_99_20_TerminalSettingsCase02()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -524,7 +524,7 @@ namespace YAT.Settings.Test
 
 		// 03_COM1_Closed_Predefined
 		[Test]
-		public void Test_V1_99_20_TerminalSettingsCase03()
+		public virtual void Test_V1_99_20_TerminalSettingsCase03()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -547,7 +547,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void Test_V1_99_20_WorkspaceSettingsCase04()
+		public virtual void Test_V1_99_20_WorkspaceSettingsCase04()
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
 				(
@@ -572,7 +572,7 @@ namespace YAT.Settings.Test
 		// 01_COM1_Open_Default
 		[Test]
 		[Category("Support for COM1 required")]
-		public void Test_V1_99_22_TerminalSettingsCase01()
+		public virtual void Test_V1_99_22_TerminalSettingsCase01()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -590,7 +590,7 @@ namespace YAT.Settings.Test
 		// 02_COM2_Open_Binary_115200
 		[Test]
 		[Category("Support for COM2 required")]
-		public void Test_V1_99_22_TerminalSettingsCase02()
+		public virtual void Test_V1_99_22_TerminalSettingsCase02()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -607,7 +607,7 @@ namespace YAT.Settings.Test
 
 		// 03_COM1_Closed_Predefined
 		[Test]
-		public void Test_V1_99_22_TerminalSettingsCase03()
+		public virtual void Test_V1_99_22_TerminalSettingsCase03()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
 				(
@@ -630,7 +630,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void Test_V1_99_22_WorkspaceSettingsCase04()
+		public virtual void Test_V1_99_22_WorkspaceSettingsCase04()
 		{
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
 				(

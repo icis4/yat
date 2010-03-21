@@ -57,7 +57,7 @@ namespace MKY.Utilities.IO
 		/// <summary>
 		/// Writes a line into log file and adds a timestamp.
 		/// </summary>
-		public void WriteLine(string line)
+		public virtual void WriteLine(string line)
 		{
 			DateTime now = DateTime.Now;
 			try
@@ -76,7 +76,7 @@ namespace MKY.Utilities.IO
 		/// <summary>
 		/// Closes log file.
 		/// </summary>
-		public void Close()
+		public virtual void Close()
 		{
 			try
 			{

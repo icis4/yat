@@ -40,7 +40,7 @@ namespace YAT.Model.Test
 		/// Starts 100 terminals in parallel and lets them work on 100 data firing devices.
 		/// </summary>
 		[Test]
-		public void HeavySimultaneousUsage()
+		public virtual void HeavySimultaneousUsage()
 		{
 			// nothing yet (waiting for PowerShell intro to build stress test script)
 		}

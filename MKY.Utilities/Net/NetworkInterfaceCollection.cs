@@ -42,7 +42,7 @@ namespace MKY.Utilities.Net
 		/// <summary>
 		/// Fills list with all interfaces.
 		/// </summary>
-		public void FillWithAvailableInterfaces()
+		public virtual void FillWithAvailableInterfaces()
 		{
 			Clear();
 

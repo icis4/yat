@@ -75,7 +75,7 @@ namespace YAT.Settings
 		//==========================================================================================
 
 		[XmlElement("TerminalFilesPath")]
-		public string TerminalFilesPath
+		public virtual string TerminalFilesPath
 		{
 			get { return (_terminalFilesPath); }
 			set
@@ -89,7 +89,7 @@ namespace YAT.Settings
 		}
 
 		[XmlElement("WorkspaceFilesPath")]
-		public string WorkspaceFilesPath
+		public virtual string WorkspaceFilesPath
 		{
 			get { return (_workspaceFilesPath); }
 			set
@@ -103,7 +103,7 @@ namespace YAT.Settings
 		}
 
 		[XmlElement("SendFilesPath")]
-		public string SendFilesPath
+		public virtual string SendFilesPath
 		{
 			get { return (_sendFilesPath); }
 			set
@@ -117,7 +117,7 @@ namespace YAT.Settings
 		}
 
 		[XmlElement("LogFilesPath")]
-		public string LogFilesPath
+		public virtual string LogFilesPath
 		{
 			get { return (_logFilesPath); }
 			set
@@ -131,7 +131,7 @@ namespace YAT.Settings
 		}
 
 		[XmlElement("MonitorFilesPath")]
-		public string MonitorFilesPath
+		public virtual string MonitorFilesPath
 		{
 			get { return (_monitorFilesPath); }
 			set
@@ -169,11 +169,11 @@ namespace YAT.Settings
 			{
 				return
 					(
-					_terminalFilesPath.Equals(value._terminalFilesPath) &&
+					_terminalFilesPath.Equals (value._terminalFilesPath) &&
 					_workspaceFilesPath.Equals(value._workspaceFilesPath) &&
-					_sendFilesPath.Equals(value._sendFilesPath) &&
-					_logFilesPath.Equals(value._logFilesPath) &&
-					_monitorFilesPath.Equals(value._monitorFilesPath)
+					_sendFilesPath.Equals     (value._sendFilesPath) &&
+					_logFilesPath.Equals      (value._logFilesPath) &&
+					_monitorFilesPath.Equals  (value._monitorFilesPath)
 					);
 			}
 			return (false);

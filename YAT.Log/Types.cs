@@ -114,7 +114,7 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		new public string ToString()
+		public override string ToString()
 		{
 			return (Separator);
 		}

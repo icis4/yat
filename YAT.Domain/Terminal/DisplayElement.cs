@@ -358,7 +358,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[XmlAttribute("Direction")]
-		public SerialDirection Direction
+		public virtual SerialDirection Direction
 		{
 			get { return (_direction); }
 			set { _direction = value; }
@@ -366,7 +366,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[XmlAttribute("Origin")]
-		public List<byte> Origin
+		public virtual List<byte> Origin
 		{
 			get { return (_origin); }
 			set { _origin = value; }
@@ -374,14 +374,14 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[XmlIgnore()]
-		public int OriginCount
+		public virtual int OriginCount
 		{
 			get { return (_origin.Count); }
 		}
 
 		/// <summary></summary>
 		[XmlAttribute("Text")]
-		public string Text
+		public virtual string Text
 		{
 			get { return (_text); }
 			set { _text = value; }
@@ -389,7 +389,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[XmlAttribute("DataCount")]
-		public int DataCount
+		public virtual int DataCount
 		{
 			get { return (_dataCount); }
 			set { _dataCount = value; }
@@ -397,7 +397,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[XmlAttribute("IsData")]
-		public bool IsData
+		public virtual bool IsData
 		{
 			get { return (_isData); }
 			set { _isData = value; }
@@ -405,14 +405,14 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public bool IsNoData
+		public virtual bool IsNoData
 		{
 			get { return (!_isData); }
 		}
 
 		/// <summary></summary>
 		[XmlAttribute("IsEol")]
-		public bool IsEol
+		public virtual bool IsEol
 		{
 			get { return (_isEol); }
 			set { _isEol = value; }
@@ -426,7 +426,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public DisplayElement Clone()
+		public virtual DisplayElement Clone()
 		{
 			// Ensure to use the proper constructor
 
@@ -462,7 +462,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Compares too display elements and returns true if both are of the same kind.
 		/// </summary>
-		public bool IsSameKindAs(DisplayElement de)
+		public virtual bool IsSameKindAs(DisplayElement de)
 		{
 			if (this.GetType() != de.GetType())
 				return (false);
@@ -486,7 +486,7 @@ namespace YAT.Domain
 		/// Useful to improve performance. Appending keeps number of display elements as low as
 		/// possible, thus iteration through display element gets faster.
 		/// </remarks>
-		public void Append(DisplayElement de)
+		public virtual void Append(DisplayElement de)
 		{
 			if (this.GetType() != de.GetType())
 				throw (new InvalidOperationException("Cannot append because type doesn't match"));
@@ -523,7 +523,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Extended ToString method which can be used for trace/debug.
 		/// </summary>
-		public string ToString(string indent)
+		public virtual string ToString(string indent)
 		{
 			return (indent + "- Type: "      + GetType().Name + Environment.NewLine +
 					indent + "- Direction: " + _direction     + Environment.NewLine +

@@ -65,7 +65,7 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public string InputText
+		public virtual string InputText
 		{
 			get { return (_inputText); }
 		}

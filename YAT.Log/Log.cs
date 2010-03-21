@@ -164,13 +164,13 @@ namespace YAT.Log
 			//==========================================================================================
 
 			/// <summary></summary>
-			protected bool IsEnabled
+			protected virtual bool IsEnabled
 			{
 				get { return (_isEnabled); }
 			}
 
 			/// <summary></summary>
-			public bool IsStarted
+			public virtual bool IsStarted
 			{
 				get { return (_isStarted); }
 			}
@@ -183,13 +183,13 @@ namespace YAT.Log
 			//==========================================================================================
 
 			/// <summary></summary>
-			public void SetSettings(bool enabled, string file, LogFileWriteMode writeMode)
+			public virtual void SetSettings(bool enabled, string file, LogFileWriteMode writeMode)
 			{
 				SetSettings(enabled, file, writeMode, new FileNameSeparator(""));
 			}
 
 			/// <summary></summary>
-			public void SetSettings(bool enabled, string file, LogFileWriteMode writeMode, FileNameSeparator separator)
+			public virtual void SetSettings(bool enabled, string file, LogFileWriteMode writeMode, FileNameSeparator separator)
 			{
 				if (_isStarted && (enabled != _isEnabled))
 				{
@@ -215,7 +215,7 @@ namespace YAT.Log
 			}
 
 			/// <summary></summary>
-			public void Open()
+			public virtual void Open()
 			{
 				if (!_isEnabled)
 					return;
@@ -243,7 +243,7 @@ namespace YAT.Log
 			}
 
 			/// <summary></summary>
-			public void Flush()
+			public virtual void Flush()
 			{
 				if (_isEnabled && _isStarted)
 				{
@@ -252,7 +252,7 @@ namespace YAT.Log
 			}
 
 			/// <summary></summary>
-			public void Truncate()
+			public virtual void Truncate()
 			{
 				if (_isEnabled && _isStarted)
 				{
@@ -264,7 +264,7 @@ namespace YAT.Log
 			}
 
 			/// <summary></summary>
-			public void Close()
+			public virtual void Close()
 			{
 				if (_isEnabled && _isStarted)
 				{
@@ -282,21 +282,21 @@ namespace YAT.Log
 			protected abstract void CloseWriter();
 
 			/// <summary></summary>
-			protected void StartFlushTimer()
+			protected virtual void StartFlushTimer()
 			{
 				TimerCallback timerDelegate = new TimerCallback(_flushTimer_Timeout);
 				_flushTimer = new Timer(timerDelegate, null, _FlushTimeout, System.Threading.Timeout.Infinite);
 			}
 
 			/// <summary></summary>
-			protected void RestartFlushTimer()
+			protected virtual void RestartFlushTimer()
 			{
 				StopFlushTimer();
 				StartFlushTimer();
 			}
 
 			/// <summary></summary>
-			protected void StopFlushTimer()
+			protected virtual void StopFlushTimer()
 			{
 				_flushTimer = null; ;
 			}
@@ -353,7 +353,7 @@ namespace YAT.Log
 			}
 
 			/// <summary></summary>
-			public void WriteByte(byte value)
+			public virtual void WriteByte(byte value)
 			{
 				if (IsEnabled && IsStarted)
 				{
@@ -363,7 +363,7 @@ namespace YAT.Log
 			}
 
 			/// <summary></summary>
-			public void WriteBytes(byte[] array)
+			public virtual void WriteBytes(byte[] array)
 			{
 				if (IsEnabled && IsStarted)
 				{
@@ -416,7 +416,7 @@ namespace YAT.Log
 			}
 
 			/// <summary></summary>
-			public void WriteString(string value)
+			public virtual void WriteString(string value)
 			{
 				if (IsEnabled && IsStarted)
 				{
@@ -426,7 +426,7 @@ namespace YAT.Log
 			}
 
 			/// <summary></summary>
-			public void WriteEol()
+			public virtual void WriteEol()
 			{
 				if (IsEnabled && IsStarted)
 				{
@@ -543,7 +543,7 @@ namespace YAT.Log
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Settings.LogSettings Settings
+		public virtual Settings.LogSettings Settings
 		{
 			get { return (_settings); }
 			set
@@ -561,7 +561,7 @@ namespace YAT.Log
 		}
 
 		/// <summary></summary>
-		public bool IsStarted
+		public virtual bool IsStarted
 		{
 			get
 			{
@@ -580,53 +580,53 @@ namespace YAT.Log
 		//==========================================================================================
 
 		/// <summary></summary>
-		public void Begin()
+		public virtual void Begin()
 		{
 			foreach (Log l in _logs)
 				l.Open();
 		}
 
 		/// <summary></summary>
-		public void Clear()
+		public virtual void Clear()
 		{
 			foreach (Log l in _logs)
 				l.Truncate();
 		}
 
 		/// <summary></summary>
-		public void Flush()
+		public virtual void Flush()
 		{
 			foreach (Log l in _logs)
 				l.Flush();
 		}
 
 		/// <summary></summary>
-		public void End()
+		public virtual void End()
 		{
 			foreach (Log l in _logs)
 				l.Close();
 		}
 
 		/// <summary></summary>
-		public void WriteByte(byte value, LogStreams writeStream)
+		public virtual void WriteByte(byte value, LogStreams writeStream)
 		{
 			((BinaryLog)GetLog(writeStream)).WriteByte(value);
 		}
 
 		/// <summary></summary>
-		public void WriteBytes(byte[] array, LogStreams writeStream)
+		public virtual void WriteBytes(byte[] array, LogStreams writeStream)
 		{
 			((BinaryLog)GetLog(writeStream)).WriteBytes(array);
 		}
 
 		/// <summary></summary>
-		public void WriteString(string value, LogStreams writeStream)
+		public virtual void WriteString(string value, LogStreams writeStream)
 		{
 			((TextLog)GetLog(writeStream)).WriteString(value);
 		}
 
 		/// <summary></summary>
-		public void WriteEol(LogStreams writeStream)
+		public virtual void WriteEol(LogStreams writeStream)
 		{
 			((TextLog)GetLog(writeStream)).WriteEol();
 		}

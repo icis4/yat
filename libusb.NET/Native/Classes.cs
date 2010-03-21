@@ -32,20 +32,20 @@ namespace libusb.NET.Native
 	[StructLayout(LayoutKind.Sequential)]
 	public class libusb_device 
 	{
-	    public IntPtr refcnt_lock;
-	    public int refcnt;
+		public IntPtr refcnt_lock;
+		public int refcnt;
 
-	    public IntPtr ctx;
+		public IntPtr ctx;
 
-	    public byte bus_number;
-	    public byte device_address;
-	    public byte num_configurations;
+		public byte bus_number;
+		public byte device_address;
+		public byte num_configurations;
 
 		public IntPtr prev = IntPtr.Zero;
 		public IntPtr next = IntPtr.Zero;
 
-	    public ulong session_data;
-	    public byte[] os_priv;
+		public ulong session_data;
+		public byte[] os_priv;
 	}
 
 	/// <remarks>
@@ -55,14 +55,14 @@ namespace libusb.NET.Native
 	[StructLayout(LayoutKind.Sequential)]
 	public class libusb_device_handle
 	{
-	    public IntPtr claimed_interfaces_lock;
-	    public ulong claimed_interfaces;
+		public IntPtr claimed_interfaces_lock;
+		public ulong claimed_interfaces;
 
 		public IntPtr prev = IntPtr.Zero;
 		public IntPtr next = IntPtr.Zero;
 
-	    public libusb_device dev;
-	    public byte[] os_priv;
+		public libusb_device dev;
+		public byte[] os_priv;
 	}
 
 	/// <remarks>
@@ -72,9 +72,9 @@ namespace libusb.NET.Native
 	[StructLayout(LayoutKind.Sequential)]
 	public class libusb_iso_packet_descriptor
 	{
-	    uint length;
-	    uint actual_length;
-	    libusb_transfer_status status;
+		uint length;
+		uint actual_length;
+		libusb_transfer_status status;
 	}
 
 	/// <remarks>
@@ -85,18 +85,18 @@ namespace libusb.NET.Native
 	public class libusb_transfer
 	{
 		public libusb_device_handle dev_handle;
-	    public byte flags;
-	    public byte endpoint;
-	    public byte type;
-	    public uint timeout;
-	    public libusb_transfer_status status;
-	    public int length;
-	    public int actual_length;
-	    public libusb_transfer_cb_fn callback;
-	    public object user_data;
-	    public byte[] buffer;
-	    public int num_iso_packets;
-	    public libusb_iso_packet_descriptor[] iso_packet_desc;
+		public byte flags;
+		public byte endpoint;
+		public byte type;
+		public uint timeout;
+		public libusb_transfer_status status;
+		public int length;
+		public int actual_length;
+		public libusb_transfer_cb_fn callback;
+		public object user_data;
+		public byte[] buffer;
+		public int num_iso_packets;
+		public libusb_iso_packet_descriptor[] iso_packet_desc;
 	}
 
 	/// <remarks>
@@ -159,18 +159,18 @@ namespace libusb.NET.Native
 	[StructLayout(LayoutKind.Sequential)]
 	public class libusb_interface_descriptor
 	{
-	    public byte   bLength;
-	    public byte   bDescriptorType;
-	    public byte   bInterfaceNumber;
-	    public byte   bAlternateSetting;
-	    public byte   bNumEndpoints;
-	    public byte   bInterfaceClass;
-	    public byte   bInterfaceSubClass;
-	    public byte   bInterfaceProtocol;
-	    public byte   iInterface;
-	    public libusb_endpoint_descriptor endpoint;
-	    public string extra;
-	    public int    extra_length;
+		public byte   bLength;
+		public byte   bDescriptorType;
+		public byte   bInterfaceNumber;
+		public byte   bAlternateSetting;
+		public byte   bNumEndpoints;
+		public byte   bInterfaceClass;
+		public byte   bInterfaceSubClass;
+		public byte   bInterfaceProtocol;
+		public byte   iInterface;
+		public libusb_endpoint_descriptor endpoint;
+		public string extra;
+		public int    extra_length;
 	}
 
 	/// <remarks>
@@ -180,8 +180,8 @@ namespace libusb.NET.Native
 	[StructLayout(LayoutKind.Sequential)]
 	public class libusb_interface
 	{
-	    libusb_interface_descriptor altsetting;
-	    int num_altsetting;
+		libusb_interface_descriptor altsetting;
+		int num_altsetting;
 	}
 
 	/// <remarks>
@@ -191,17 +191,17 @@ namespace libusb.NET.Native
 	[StructLayout(LayoutKind.Sequential)]
 	public class libusb_config_descriptor
 	{
-	    public byte  bLength;
-	    public byte  bDescriptorType;
-	    public ushort wTotalLength;
-	    public byte  bNumInterfaces;
-	    public byte  bConfigurationValue;
-	    public byte  iConfiguration;
-	    public byte  bmAttributes;
-	    public byte  MaxPower;
-	    public libusb_interface iface;
-	    public byte[] extra;
-	    public int extra_length;
+		public byte  bLength;
+		public byte  bDescriptorType;
+		public ushort wTotalLength;
+		public byte  bNumInterfaces;
+		public byte  bConfigurationValue;
+		public byte  iConfiguration;
+		public byte  bmAttributes;
+		public byte  MaxPower;
+		public libusb_interface iface;
+		public byte[] extra;
+		public int extra_length;
 	}
 }
 

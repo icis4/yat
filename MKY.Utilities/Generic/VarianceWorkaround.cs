@@ -99,12 +99,12 @@ namespace MKY.Utilities.Generic
 					get { return (_source.Current); }
 				}
 
-				public bool MoveNext()
+				public virtual bool MoveNext()
 				{
 					return (_source.MoveNext());
 				}
 
-				public void Reset()
+				public virtual void Reset()
 				{
 					_source.Reset();
 				}
@@ -139,7 +139,7 @@ namespace MKY.Utilities.Generic
 			/// variance going the wrong way ... 
 			/// ... can yield exceptions at runtime 
 			/// </summary>
-			public void Add(D item)
+			public virtual void Add(D item)
 			{
 				if (item is S)
 				{
@@ -152,7 +152,7 @@ namespace MKY.Utilities.Generic
 			}
 
 			/// <summary></summary>
-			public void Clear()
+			public virtual void Clear()
 			{
 				_source.Clear();
 			}
@@ -161,7 +161,7 @@ namespace MKY.Utilities.Generic
 			/// variance going the wrong way ... 
 			/// ... but the semantics of the method yields reasonable semantics
 			/// </summary>
-			public bool Contains(D item)
+			public virtual bool Contains(D item)
 			{
 				if (item is S)
 				{
@@ -176,7 +176,7 @@ namespace MKY.Utilities.Generic
 			/// <summary>
 			/// variance going the right way ... 
 			/// </summary>
-			public void CopyTo(D[] array, int arrayIndex)
+			public virtual void CopyTo(D[] array, int arrayIndex)
 			{
 				foreach (S src in _source)
 				{
@@ -185,13 +185,13 @@ namespace MKY.Utilities.Generic
 			}
 
 			/// <summary></summary>
-			public int Count
+			public virtual int Count
 			{
 				get { return (_source.Count); }
 			}
 
 			/// <summary></summary>
-			public bool IsReadOnly
+			public virtual bool IsReadOnly
 			{
 				get { return (_source.IsReadOnly); }
 			}
@@ -200,7 +200,7 @@ namespace MKY.Utilities.Generic
 			/// variance going the wrong way ... 
 			/// ... but the semantics of the method yields reasonable semantics
 			/// </summary>
-			public bool Remove(D item)
+			public virtual bool Remove(D item)
 			{
 				if (item is S)
 				{
@@ -238,7 +238,7 @@ namespace MKY.Utilities.Generic
 			}
 
 			/// <summary></summary>
-			public int IndexOf(D item)
+			public virtual int IndexOf(D item)
 			{
 				if (item is S)
 				{
@@ -254,7 +254,7 @@ namespace MKY.Utilities.Generic
 			/// variance the wrong way ...
 			/// ... can throw exceptions at runtime
 			/// </summary>
-			public void Insert(int index, D item)
+			public virtual void Insert(int index, D item)
 			{
 				if (item is S)
 				{
@@ -267,7 +267,7 @@ namespace MKY.Utilities.Generic
 			}
 
 			/// <summary></summary>
-			public void RemoveAt(int index)
+			public virtual void RemoveAt(int index)
 			{
 				_source.RemoveAt(index);
 			}

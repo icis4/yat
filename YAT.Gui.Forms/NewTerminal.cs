@@ -183,12 +183,12 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void usbHidPortSelection_DeviceIdChanged(object sender, EventArgs e)
+		private void usbHidPortSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
 			{
-				MKY.IO.Usb.DeviceInfo deviceId = usbHidPortSelection.DeviceId;
-				_newTerminalSettings_Form.UsbHidDeviceId = deviceId;
+				MKY.IO.Usb.DeviceInfo di = usbHidPortSelection.DeviceInfo;
+				_newTerminalSettings_Form.UsbHidDeviceInfo = di;
 				SetControls();
 			}
 		}
@@ -224,7 +224,7 @@ namespace YAT.Gui.Forms
 			_terminalSettings.Terminal.IO.Socket.LocalTcpPort            = _newTerminalSettings.SocketLocalTcpPort;
 			_terminalSettings.Terminal.IO.Socket.LocalUdpPort            = _newTerminalSettings.SocketLocalUdpPort;
 
-			_terminalSettings.Terminal.IO.UsbHidPort.DeviceId            = _newTerminalSettings.UsbHidDeviceId;
+			_terminalSettings.Terminal.IO.UsbHidDevice.DeviceInfo          = _newTerminalSettings.UsbHidDeviceInfo;
 
 			_terminalSettings.TerminalIsStarted                          = _newTerminalSettings.StartTerminal;
 
@@ -294,7 +294,7 @@ namespace YAT.Gui.Forms
 			serialPortSelection.PortId     = _newTerminalSettings_Form.SerialPortId;
 
 			usbHidPortSelection.Enabled    = isUsbHid;
-			usbHidPortSelection.DeviceId   = _newTerminalSettings_Form.UsbHidDeviceId;
+			usbHidPortSelection.DeviceInfo = _newTerminalSettings_Form.UsbHidDeviceInfo;
 
 			checkBox_StartTerminal.Checked = _newTerminalSettings_Form.StartTerminal;
 

@@ -936,7 +936,7 @@ namespace YAT.Gui.Forms
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Title = "Open";
 			ofd.Filter = ExtensionSettings.WorkspaceFilesFilter;
-			ofd.DefaultExt = ExtensionSettings.WorkspaceFiles;
+			ofd.DefaultExt = ExtensionSettings.WorkspaceFile;
 			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath;
 			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName != ""))
 			{
@@ -960,7 +960,7 @@ namespace YAT.Gui.Forms
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Title = "Save Workspace As";
 			sfd.Filter = ExtensionSettings.WorkspaceFilesFilter;
-			sfd.DefaultExt = ExtensionSettings.WorkspaceFiles;
+			sfd.DefaultExt = ExtensionSettings.WorkspaceFile;
 			sfd.InitialDirectory = ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath;
 			sfd.FileName = Environment.UserName + "." + sfd.DefaultExt;
 
@@ -1123,7 +1123,7 @@ namespace YAT.Gui.Forms
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Title = "Open";
 			ofd.Filter = ExtensionSettings.TerminalFilesFilter;
-			ofd.DefaultExt = ExtensionSettings.TerminalFiles;
+			ofd.DefaultExt = ExtensionSettings.TerminalFile;
 			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.TerminalFilesPath;
 			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName != ""))
 			{

@@ -97,7 +97,7 @@ namespace YAT.Gui.Controls
 		/// </summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Command FileCommand
+		public virtual Command FileCommand
 		{
 			get { return (_fileCommand); }
 			set
@@ -114,7 +114,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Domain.TerminalType TerminalType
+		public virtual Domain.TerminalType TerminalType
 		{
 			set
 			{
@@ -125,7 +125,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public bool TerminalIsOpen
+		public virtual bool TerminalIsOpen
 		{
 			set
 			{
@@ -135,7 +135,7 @@ namespace YAT.Gui.Controls
 		}
 
 		[DefaultValue(_SplitterRatioDefault)]
-		public float SplitterRatio
+		public virtual float SplitterRatio
 		{
 			get { return (_splitterRatio); }
 			set

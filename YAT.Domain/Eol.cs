@@ -114,7 +114,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public string ToSequenceString()
+		public virtual string ToSequenceString()
 		{
 			switch ((Eol)UnderlyingEnum)
 			{

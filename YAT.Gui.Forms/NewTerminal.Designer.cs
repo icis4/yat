@@ -103,12 +103,12 @@ namespace YAT.Gui.Forms
 			// 
 			this.usbHidPortSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.usbHidPortSelection.DeviceId = null;
+			this.usbHidPortSelection.DeviceInfo = null;
 			this.usbHidPortSelection.Location = new System.Drawing.Point(6, 190);
 			this.usbHidPortSelection.Name = "usbHidPortSelection";
 			this.usbHidPortSelection.Size = new System.Drawing.Size(285, 46);
 			this.usbHidPortSelection.TabIndex = 0;
-			this.usbHidPortSelection.DeviceIdChanged += new System.EventHandler(this.usbHidPortSelection_DeviceIdChanged);
+			this.usbHidPortSelection.DeviceInfoChanged += new System.EventHandler(this.usbHidPortSelection_DeviceInfoChanged);
 			// 
 			// serialPortSelection
 			// 

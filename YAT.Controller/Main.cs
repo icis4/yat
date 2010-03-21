@@ -187,17 +187,17 @@ namespace YAT.Controller
 		// Properties
 		//==========================================================================================
 
-		public bool CommandLineError
+		public virtual bool CommandLineError
 		{
 			get { return (_commandLineError); }
 		}
 
-		public bool CommandLineHelpIsRequested
+		public virtual bool CommandLineHelpIsRequested
 		{
 			get { return (_commandLineHelpIsRequested); }
 		}
 
-		public string RequestedFilePath
+		public virtual string RequestedFilePath
 		{
 			get { return (_requestedFilePath); }
 		}

@@ -124,7 +124,7 @@ namespace YAT.Gui.Controls
 		/// </summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Command Command
+		public virtual Command Command
 		{
 			get { return (_command); }
 			set
@@ -141,7 +141,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public RecentItemCollection<Command> RecentCommands
+		public virtual RecentItemCollection<Command> RecentCommands
 		{
 			set
 			{
@@ -152,7 +152,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public bool TerminalIsOpen
+		public virtual bool TerminalIsOpen
 		{
 			set
 			{
@@ -162,7 +162,7 @@ namespace YAT.Gui.Controls
 		}
 
 		[DefaultValue(_SplitterRatioDefault)]
-		public float SplitterRatio
+		public virtual float SplitterRatio
 		{
 			get { return (_splitterRatio); }
 			set
@@ -179,7 +179,7 @@ namespace YAT.Gui.Controls
 		// Methods
 		//==========================================================================================
 
-		public void SelectInput()
+		public virtual void SelectInput()
 		{
 			comboBox_Command.Select();
 		}

@@ -94,7 +94,7 @@ namespace YAT.Model.Settings
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public void CreateDefaultPage()
+		public virtual void CreateDefaultPage()
 		{
 			_pages = new PredefinedCommandPageCollection();
 			_pages.Add(new PredefinedCommandPage("Page 1"));
@@ -105,7 +105,7 @@ namespace YAT.Model.Settings
 		/// <param name="selectedPage">Index 0..max-1.</param>
 		/// <param name="selectedCommand">Index 0..max-1.</param>
 		/// <param name="command">Command to be set.</param>
-		public void SetCommand(int selectedPage, int selectedCommand, Command command)
+		public virtual void SetCommand(int selectedPage, int selectedCommand, Command command)
 		{
 			if ((selectedPage == 0) && (_pages.Count == 0))
 				CreateDefaultPage();

@@ -95,7 +95,7 @@ namespace YAT.Model.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestSingleLineTransmissionTCP()
+		public virtual void TestSingleLineTransmissionTCP()
 		{
 			PerformCommandTransmissionTCP(_SingleLineCommand);
 		}
@@ -108,13 +108,13 @@ namespace YAT.Model.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestDoubleLineTransmissionTCP()
+		public virtual void TestDoubleLineTransmissionTCP()
 		{
 			PerformCommandTransmissionTCP(_DoubleLineCommand);
 		}
 
 		[Test]
-		public void TestDoubleLineDoubleTransmissionTCP()
+		public virtual void TestDoubleLineDoubleTransmissionTCP()
 		{
 			PerformCommandTransmissionTCP(_DoubleLineCommand, 2);
 		}
@@ -127,13 +127,13 @@ namespace YAT.Model.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestTripleLineTransmissionTCP()
+		public virtual void TestTripleLineTransmissionTCP()
 		{
 			PerformCommandTransmissionTCP(_TripleLineCommand);
 		}
 
 		[Test]
-		public void TestTripleLineTripleTransmissionTCP()
+		public virtual void TestTripleLineTripleTransmissionTCP()
 		{
 			PerformCommandTransmissionTCP(_TripleLineCommand, 3);
 		}
@@ -146,13 +146,13 @@ namespace YAT.Model.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestMultiLineTransmissionTCP()
+		public virtual void TestMultiLineTransmissionTCP()
 		{
 			PerformCommandTransmissionTCP(_MultiLineCommand);
 		}
 
 		[Test]
-		public void TestMultiLineMultiTransmissionTCP()
+		public virtual void TestMultiLineMultiTransmissionTCP()
 		{
 			PerformCommandTransmissionTCP(_MultiLineCommand, _TestCommandLines.Length);
 		}
@@ -165,7 +165,7 @@ namespace YAT.Model.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestMultiEOLTransmissionTCP()
+		public virtual void TestMultiEOLTransmissionTCP()
 		{
 			PerformCommandTransmissionTCP(_MultiEOLCommand);
 		}
@@ -178,7 +178,7 @@ namespace YAT.Model.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestMixedEOLTransmissionTCP()
+		public virtual void TestMixedEOLTransmissionTCP()
 		{
 			PerformCommandTransmissionTCP(_MixedEOLCommand);
 		}
@@ -191,7 +191,7 @@ namespace YAT.Model.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestEOLPartsTransmissionTCP()
+		public virtual void TestEOLPartsTransmissionTCP()
 		{
 			PerformCommandTransmissionTCP(_EOLPartsCommand);
 		}
@@ -204,13 +204,13 @@ namespace YAT.Model.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestSingleNoEOLTransmissionTCP()
+		public virtual void TestSingleNoEOLTransmissionTCP()
 		{
 			PerformCommandTransmissionTCP(_SingleNoEOLCommand);
 		}
 
 		[Test]
-		public void TestDoubleNoEOLTransmissionTCP()
+		public virtual void TestDoubleNoEOLTransmissionTCP()
 		{
 			PerformCommandTransmissionTCP(_DoubleNoEOLCommand);
 		}

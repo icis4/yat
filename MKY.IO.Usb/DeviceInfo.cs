@@ -195,7 +195,7 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public string SystemPath
+		public virtual string SystemPath
 		{
 			get { return (_systemPath); }
 			set { _systemPath = value;  }
@@ -203,7 +203,7 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		[XmlElement("VendorId")]
-		public int VendorId
+		public virtual int VendorId
 		{
 			get { return (_vendorId); }
 			set
@@ -215,14 +215,14 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public string VendorIdString
+		public virtual string VendorIdString
 		{
 			get { return (VendorId.ToString("X4")); }
 		}
 
 		/// <summary></summary>
 		[XmlElement("ProductId")]
-		public int ProductId
+		public virtual int ProductId
 		{
 			get { return (_productId); }
 			set
@@ -234,14 +234,14 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public string ProductIdString
+		public virtual string ProductIdString
 		{
 			get { return (ProductId.ToString("X4")); }
 		}
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public string Manufacturer
+		public virtual string Manufacturer
 		{
 			get { return (_manufacturer); }
 			set { _manufacturer = value;  }
@@ -249,14 +249,14 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public string Product
+		public virtual string Product
 		{
 			get { return (_product); }
 			set { _product = value;  }
 		}
 
 		/// <summary></summary>
-		public string SerialNumber
+		public virtual string SerialNumber
 		{
 			get { return (_serialNumber); }
 			set { _serialNumber = value;  }
@@ -266,7 +266,7 @@ namespace MKY.IO.Usb
 		/// Indicates whether device is currently in use.
 		/// </summary>
 		[XmlIgnore]
-		public bool IsInUse
+		public virtual bool IsInUse
 		{
 			get { return (_isInUse); }
 			set { _isInUse = value; }
@@ -278,7 +278,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		[XmlIgnore]
 		[DefaultValue(DefaultInUseText)]
-		public string InUseText
+		public virtual string InUseText
 		{
 			get
 			{
@@ -299,7 +299,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		[XmlIgnore]
 		[DefaultValue(DefaultSeparator)]
-		public string Separator
+		public virtual string Separator
 		{
 			get
 			{
@@ -327,7 +327,7 @@ namespace MKY.IO.Usb
 		/// <remarks>
 		/// Query is never done automatically because it takes quite some time.
 		/// </remarks>
-		public bool TryValidate()
+		public virtual bool TryValidate()
 		{
 			if      (_systemPath != "")
 			{
@@ -389,7 +389,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		public string ToString(bool appendIds, bool appendInUseText)
+		public virtual string ToString(bool appendIds, bool appendInUseText)
 		{
 			StringBuilder sb = new StringBuilder();
 
@@ -443,6 +443,25 @@ namespace MKY.IO.Usb
 			return (sb.ToString());
 		}
 
+		/// <summary></summary>
+		public virtual string ToShortString()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			if (Product != "")
+			{
+				sb.Append(Product);              // "Product"
+			}
+			else
+			{
+				sb.Append("(PID:");
+				sb.Append(ProductIdString);      // "(PID:1234)"
+				sb.Append(")");
+			}
+
+			return (sb.ToString());
+		}
+
 		/// <summary>
 		/// Parses s for the first integer number and returns the corresponding device.
 		/// </summary>
@@ -491,7 +510,7 @@ namespace MKY.IO.Usb
 		#region IComparable Members
 
 		/// <summary></summary>
-		public int CompareTo(object obj)
+		public virtual int CompareTo(object obj)
 		{
 			if (obj == null) return (1);
 			if (obj is DeviceInfo)

@@ -21,22 +21,64 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using Microsoft.Win32.SafeHandles;
+
+using MKY.Utilities.Event;
+using MKY.Utilities.Windows.Forms;
 
 #endregion
 
 namespace MKY.IO.Usb
 {
 	/// <summary>
-	/// A USB device.
+	/// Encapsulates functions and properties that are common to all USB devices.
 	/// </summary>
-	public class Device
+	public abstract class Device : IDisposable, IDeviceInfo, IDevice
 	{
+		#region Static Events
+		//==========================================================================================
+		// Static Events
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static event EventHandler DeviceConnected;
+		/// <summary></summary>
+		public static event EventHandler DeviceDisconnected;
+
+		#endregion
+
+		#region Static Lifetime
+		//==========================================================================================
+		// Static Lifetime
+		//==========================================================================================
+
+		static Device()
+		{
+			RegisterStaticDeviceNotificationHandler();
+		}
+
+		// \todo 2010-03-21 / mky
+		// Properly unregister without relying on garbage collection
+		//
+		//static ~Device()
+		//{
+		//	UnregisterStaticDeviceNotificationHandler();
+		//}
+
+		#endregion
+
 		#region Static Methods
 		//==========================================================================================
 		// Static Methods
 		//==========================================================================================
+
+		#region Static Methods > Device Enummeration
+		//------------------------------------------------------------------------------------------
+		// Static Methods > Device Enummeration
+		//------------------------------------------------------------------------------------------
 
 		/// <summary>
 		/// Returns the GUID for the given device class.
@@ -46,9 +88,20 @@ namespace MKY.IO.Usb
 		{
 			switch (deviceClass)
 			{
-				case DeviceClass.Hid: return (Utilities.Win32.Hid.GetHidGuid());
+				case DeviceClass.Hid: return (HidDevice.HidGuid);
 				default:              return (Guid.Empty);
 			}
+		}
+
+		/// <summary>
+		/// Returns an array of all USB devices of the given class currently available on the system.
+		/// </summary>
+		/// <remarks>
+		/// \todo This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
+		/// </remarks>
+		public static DeviceInfo[] GetDevices()
+		{
+			return (GetDevicesFromGuid(GetGuidFromDeviceClass(DeviceClass.Any)));
 		}
 
 		/// <summary>
@@ -87,13 +140,20 @@ namespace MKY.IO.Usb
 			return (devices.ToArray());
 		}
 
+		#endregion
+
+		#region Static Methods > Device Info
+		//------------------------------------------------------------------------------------------
+		// Static Methods > Device Info
+		//------------------------------------------------------------------------------------------
+
 		/// <summary>
 		/// Returns VID and PID of a given systemPath.
 		/// </summary>
 		public static bool GetVidAndPidFromPath(string systemPath, out int vendorId, out int productId)
 		{
 			SafeFileHandle hidHandle;
-			if (Utilities.Win32.Hid.GetHidHandle(systemPath, out hidHandle))
+			if (Utilities.Win32.Hid.GetDeviceHandle(systemPath, out hidHandle))
 			{
 				try
 				{
@@ -135,7 +195,7 @@ namespace MKY.IO.Usb
 		public static bool GetStringsFromPath(string systemPath, out string manufacturer, out string product, out string serialNumber)
 		{
 			SafeFileHandle hidHandle;
-			if (Utilities.Win32.Hid.GetHidHandle(systemPath, out hidHandle))
+			if (Utilities.Win32.Hid.GetDeviceHandle(systemPath, out hidHandle))
 			{
 				try
 				{
@@ -186,7 +246,7 @@ namespace MKY.IO.Usb
 		public static bool GetDeviceInfoFromPath(string systemPath, out int vendorId, out int productId, out string manufacturer, out string product, out string serialNumber)
 		{
 			SafeFileHandle hidHandle;
-			if (Utilities.Win32.Hid.GetHidHandle(systemPath, out hidHandle))
+			if (Utilities.Win32.Hid.GetDeviceHandle(systemPath, out hidHandle))
 			{
 				try
 				{
@@ -314,6 +374,64 @@ namespace MKY.IO.Usb
 
 		#endregion
 
+		#region Static Methods > Device Notification
+		//------------------------------------------------------------------------------------------
+		// Static Methods > Device Notification
+		//------------------------------------------------------------------------------------------
+
+		private static NativeMessageHandler _staticDeviceNotificationWindow = new NativeMessageHandler(StaticDeviceNotificationHandler);
+		private static IntPtr _staticDeviceNotificationHandle = IntPtr.Zero;
+
+		/// <remarks>
+		/// \todo Don't know how to retrieve the GUID for any USB device class. So only HID devices are detected
+		/// </remarks>
+		private static void RegisterStaticDeviceNotificationHandler()
+		{
+			Utilities.Win32.DeviceManagement.RegisterDeviceNotificationHandle(_staticDeviceNotificationWindow.Handle, HidDevice.HidGuid, ref _staticDeviceNotificationHandle);
+		}
+
+		private static void UnregisterStaticDeviceNotificationHandler()
+		{
+			Utilities.Win32.DeviceManagement.UnregisterDeviceNotificationHandle(_staticDeviceNotificationHandle);
+		}
+
+		private static void StaticDeviceNotificationHandler(ref Message m)
+		{
+			switch (MessageToDeviceEvent(ref m))
+			{
+				case DeviceEvent.Connected:
+					Debug.WriteLine("USB device connected");
+					EventHelper.FireSync(DeviceConnected, typeof(Device), new EventArgs());
+					break;
+
+				case DeviceEvent.Disconnected:
+					Debug.WriteLine("USB device removed");
+					EventHelper.FireSync(DeviceDisconnected, typeof(Device), new EventArgs());
+					break;
+			}
+		}
+
+		internal static DeviceEvent MessageToDeviceEvent(ref Message m)
+		{
+			if (m.Msg == Utilities.Win32.DeviceManagement.WM_DEVICECHANGE)
+			{
+				Utilities.Win32.DeviceManagement.DBT e = (Utilities.Win32.DeviceManagement.DBT)m.WParam.ToInt32();
+				switch (e)
+				{
+					case Utilities.Win32.DeviceManagement.DBT.DEVICEARRIVAL:
+						return (DeviceEvent.Connected);
+
+					case Utilities.Win32.DeviceManagement.DBT.DEVICEREMOVECOMPLETE:
+						return (DeviceEvent.Connected);
+				}
+			}
+			return (DeviceEvent.None);
+		}
+
+		#endregion
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -321,7 +439,32 @@ namespace MKY.IO.Usb
 
 		private bool _isDisposed;
 
-		private DeviceInfo _deviceId;
+		private DeviceInfo _deviceInfo;
+		private SafeFileHandle _deviceHandle;
+
+		private bool _isConnected;
+
+		#endregion
+
+		#region Events
+		//==========================================================================================
+		// Events
+		//==========================================================================================
+
+		/// <summary>
+		/// Fired after the device has been connected or reconnected.
+		/// </summary>
+		public event EventHandler Connected;
+
+		/// <summary>
+		/// Fired after the device has been disconnected.
+		/// </summary>
+		public event EventHandler Disconnected;
+
+		/// <summary>
+		/// Fired after an error has occured.
+		/// </summary>
+		public event EventHandler<ErrorEventArgs> Error;
 
 		#endregion
 
@@ -331,30 +474,58 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Device(string systemPath)
+		public Device(Guid classGuid, string systemPath)
 		{
 			int vendorId, productId;
 			string manufacturer, product, serialNumber;
-			Device.GetDeviceInfoFromPath(systemPath, out vendorId, out productId, out manufacturer, out product, out serialNumber);
-			_deviceId = new DeviceInfo(systemPath, vendorId, productId, manufacturer, product, serialNumber);
+			GetDeviceInfoFromPath(systemPath, out vendorId, out productId, out manufacturer, out product, out serialNumber);
+			_deviceInfo = new DeviceInfo(systemPath, vendorId, productId, manufacturer, product, serialNumber);
+			Initialize();
 		}
 
 		/// <summary></summary>
-		public Device(int vendorId, int productId)
+		public Device(Guid classGuid, int vendorId, int productId)
 		{
-			_deviceId = new DeviceInfo(vendorId, productId);
+			_deviceInfo = new DeviceInfo(vendorId, productId);
+			Initialize();
 		}
 
 		/// <summary></summary>
-		public Device(int vendorId, int productId, string serialNumber)
+		public Device(Guid classGuid, int vendorId, int productId, string serialNumber)
 		{
-			_deviceId = new DeviceInfo(vendorId, productId, serialNumber);
+			_deviceInfo = new DeviceInfo(vendorId, productId, serialNumber);
+			Initialize();
 		}
 
 		/// <summary></summary>
-		public Device(DeviceInfo deviceId)
+		public Device(Guid classGuid, DeviceInfo deviceInfo)
 		{
-			_deviceId = new DeviceInfo(deviceId);
+			_deviceInfo = new DeviceInfo(deviceInfo);
+			Initialize();
+		}
+
+		private void Initialize()
+		{
+			// Get and store the handle to the USB device.
+			if (!Utilities.Win32.Hid.GetDeviceHandle(_deviceInfo.SystemPath, out _deviceHandle))
+				throw (new UsbException("Failed to retrieve device handle for USB device" + Environment.NewLine + _deviceInfo.SystemPath));
+
+			// Getting a handle means that the device is connected to the computer.
+			_isConnected = true;
+
+			AttachEventHandlers();
+		}
+
+		private void AttachEventHandlers()
+		{
+			DeviceConnected    += new EventHandler(Device_DeviceConnected);
+			DeviceDisconnected += new EventHandler(Device_DeviceDisconnected);
+		}
+
+		private void DetachEventHandlers()
+		{
+			DeviceConnected    -= new EventHandler(Device_DeviceConnected);
+			DeviceDisconnected -= new EventHandler(Device_DeviceDisconnected);
 		}
 
 		#region Disposal
@@ -376,8 +547,7 @@ namespace MKY.IO.Usb
 			{
 				if (disposing)
 				{
-					// \fixme
-					// Nothing yet
+					DetachEventHandlers();
 				}
 				_isDisposed = true;
 			}
@@ -412,45 +582,178 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
-		public int VendorId
+		protected virtual string SystemPath
 		{
-			get { return (_deviceId.VendorId); }
+			get { return (_deviceInfo.SystemPath); }
 		}
 
 		/// <summary></summary>
-		public string VendorIdString
+		protected virtual SafeFileHandle DeviceHandle
 		{
-			get { return (_deviceId.VendorIdString); }
+			get { return (_deviceHandle); }
+		}
+
+		#region Properties > IDeviceInfo
+		//------------------------------------------------------------------------------------------
+		// Properties > IDeviceInfo
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Returns the complete device info. To read a specific device property, use the property
+		/// members below.
+		/// </summary>
+		public virtual DeviceInfo Info
+		{
+			get { return (_deviceInfo); }
 		}
 
 		/// <summary></summary>
-		public int ProductId
+		public virtual int VendorId
 		{
-			get { return (_deviceId.ProductId); }
+			get { return (_deviceInfo.VendorId); }
 		}
 
 		/// <summary></summary>
-		public string ProductIdString
+		public virtual string VendorIdString
 		{
-			get { return (_deviceId.ProductIdString); }
+			get { return (_deviceInfo.VendorIdString); }
 		}
 
 		/// <summary></summary>
-		public string Manufacturer
+		public virtual int ProductId
 		{
-			get { return (_deviceId.Manufacturer); }
+			get { return (_deviceInfo.ProductId); }
 		}
 
 		/// <summary></summary>
-		public string Product
+		public virtual string ProductIdString
 		{
-			get { return (_deviceId.Product); }
+			get { return (_deviceInfo.ProductIdString); }
 		}
 
 		/// <summary></summary>
-		public string SerialNumber
+		public virtual string Manufacturer
 		{
-			get { return (_deviceId.SerialNumber); }
+			get { return (_deviceInfo.Manufacturer); }
+		}
+
+		/// <summary></summary>
+		public virtual string Product
+		{
+			get { return (_deviceInfo.Product); }
+		}
+
+		/// <summary></summary>
+		public virtual string SerialNumber
+		{
+			get { return (_deviceInfo.SerialNumber); }
+		}
+
+		#endregion
+
+		#region Properties > IDevice
+		//------------------------------------------------------------------------------------------
+		// Properties > IDevice
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Indicates whether the device is connected to the computer.
+		/// </summary>
+		/// <returns>
+		/// true if the device is connected to the computer; otherwise, false.
+		/// </returns>
+		public bool IsConnected
+		{
+			get { return (_isConnected); }
+		}
+
+		#endregion
+
+		#endregion
+
+		#region Event Handling
+		//==========================================================================================
+		// Event Handling
+		//==========================================================================================
+
+		private void Device_DeviceConnected(object sender, EventArgs e)
+		{
+			if (!_isConnected) // Only care about a connect event if the device is currently disconnected.
+			{
+				bool found = false;
+				foreach (DeviceInfo di in Device.GetDevices())
+				{
+					if (_deviceInfo == di)
+					{
+						found = true;
+						break;
+					}
+				}
+
+				if (found)
+				{
+					_isConnected = true;
+					OnConnected_Async(new EventArgs());
+				}
+			}
+		}
+
+		private void Device_DeviceDisconnected(object sender, EventArgs e)
+		{
+			if (_isConnected) // Only care about a disconnect event if the device is currently connected.
+			{
+				bool found = false;
+				foreach (DeviceInfo di in Device.GetDevices())
+				{
+					if (_deviceInfo == di)
+					{
+						found = true;
+						break;
+					}
+				}
+
+				if (!found)
+				{
+					_isConnected = false;
+					OnDisconnected_Async(new EventArgs());
+				}
+			}
+		}
+
+		#endregion
+
+		#region Event Invoking
+		//==========================================================================================
+		// Event Invoking
+		//==========================================================================================
+
+		/// <remarks>
+		/// Asynchronously fire this event to prevent potential deadlocks when immediately reading
+		/// from the device.
+		/// </remarks>
+		protected virtual void OnConnected_Async(EventArgs e)
+		{
+			EventHelper.FireAsync(Connected, this, e);
+		}
+
+		/// <remarks>
+		/// Asynchronously fire this event to prevent potential race conditions on closing.
+		/// </remarks>
+		protected virtual void OnDisconnected_Async(EventArgs e)
+		{
+			EventHelper.FireAsync(Disconnected, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnDisconnected_Sync(EventArgs e)
+		{
+			EventHelper.FireSync(Disconnected, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnError_Sync(ErrorEventArgs e)
+		{
+			EventHelper.FireSync<ErrorEventArgs>(Error, this, e);
 		}
 
 		#endregion
@@ -459,6 +762,22 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 		// Object Members
 		//==========================================================================================
+
+		/// <summary>
+		/// Returns a string describing the USB device as accurate as possible.
+		/// </summary>
+		public override string ToString()
+		{
+			return (_deviceInfo.ToString());
+		}
+
+		/// <summary>
+		/// Returns a string describing the USB device in a short form.
+		/// </summary>
+		public virtual string ToShortString()
+		{
+			return (_deviceInfo.ToShortString());
+		}
 
 		#endregion
 	}

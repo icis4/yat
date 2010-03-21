@@ -70,7 +70,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlElement("PageName")]
-		public string PageName
+		public virtual string PageName
 		{
 			get { return (_pageName); }
 			set { _pageName = value; }
@@ -78,7 +78,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlElement("Commands")]
-		public List<Command> Commands
+		public virtual List<Command> Commands
 		{
 			get { return (_commands); }
 			set { _commands = value; }
@@ -94,7 +94,7 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		/// <param name="selectedCommand">Index 0..max-1.</param>
 		/// <param name="command">Command to be set.</param>
-		public void SetCommand(int selectedCommand, Command command)
+		public virtual void SetCommand(int selectedCommand, Command command)
 		{
 			if (selectedCommand >= 0)
 			{

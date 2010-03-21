@@ -94,7 +94,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public PredefinedCommandPageCollection Pages
+		public virtual PredefinedCommandPageCollection Pages
 		{
 			get { return (_pages); }
 			set
@@ -113,7 +113,7 @@ namespace YAT.Gui.Controls
 		[Category("Commands")]
 		[Description("The selected page.")]
 		[DefaultValue(_SelectedPageDefault)]
-		public int SelectedPage
+		public virtual int SelectedPage
 		{
 			get { return (_selectedPage); }
 			set
@@ -135,7 +135,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public bool TerminalIsOpen
+		public virtual bool TerminalIsOpen
 		{
 			set
 			{
@@ -151,12 +151,12 @@ namespace YAT.Gui.Controls
 		// Methods
 		//==========================================================================================
 
-		public void NextPage()
+		public virtual void NextPage()
 		{
 			SelectedPage++;
 		}
 
-		public void PreviousPage()
+		public virtual void PreviousPage()
 		{
 			SelectedPage--;
 		}
@@ -165,7 +165,7 @@ namespace YAT.Gui.Controls
 		/// Returns command at the specified id.
 		/// Returns <c>null</c> if command is undefined or not valid.
 		/// </summary>
-		public Command GetCommandFromId(int id)
+		public virtual Command GetCommandFromId(int id)
 		{
 			return (pageButtons.GetCommandFromId(id));
 		}
@@ -174,7 +174,7 @@ namespace YAT.Gui.Controls
 		/// Returns command ID (1..max) that is assigned to the button at the specified location.
 		/// Returns 0 if no button.
 		/// </summary>
-		public int GetCommandIdFromScreenPoint(Point p)
+		public virtual int GetCommandIdFromScreenPoint(Point p)
 		{
 			return (pageButtons.GetCommandIdFromScreenPoint(p));
 		}
@@ -183,7 +183,7 @@ namespace YAT.Gui.Controls
 		/// Returns command that is assigned to the button at the specified location.
 		/// Returns <c>null</c> if no button or if command is undefined or not valid.
 		/// </summary>
-		public Command GetCommandFromScreenPoint(Point p)
+		public virtual Command GetCommandFromScreenPoint(Point p)
 		{
 			return (pageButtons.GetCommandFromScreenPoint(p));
 		}

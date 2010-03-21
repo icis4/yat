@@ -102,7 +102,7 @@ namespace MKY.Utilities.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestLimitToBounds()
+		public virtual void TestLimitToBounds()
 		{
 			foreach (TestSet ts in _testSets)
 			{

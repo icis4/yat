@@ -112,7 +112,7 @@ namespace MKY.Utilities.Settings
 		/// <summary>
 		/// Returns whether this handler has common settings.
 		/// </summary>
-		public bool HasCommonSettings
+		public virtual bool HasCommonSettings
 		{
 			get { return (_hasCommonSettings); }
 		}
@@ -120,7 +120,7 @@ namespace MKY.Utilities.Settings
 		/// <summary>
 		/// Returns whether this handler has local user settings.
 		/// </summary>
-		public bool HasLocalUserSettings
+		public virtual bool HasLocalUserSettings
 		{
 			get { return (_hasLocalUserSettings); }
 		}
@@ -128,7 +128,7 @@ namespace MKY.Utilities.Settings
 		/// <summary>
 		/// Returns whether this handler has user settings.
 		/// </summary>
-		public bool HasRoamingUserSettings
+		public virtual bool HasRoamingUserSettings
 		{
 			get { return (_hasRoamingUserSettings); }
 		}
@@ -140,7 +140,7 @@ namespace MKY.Utilities.Settings
 		/// <exception cref="NullReferenceException">
 		/// Thrown if attempted to set file if this handler has no common settings.
 		/// </exception>
-		public string CommonSettingsFilePath
+		public virtual string CommonSettingsFilePath
 		{
 			get { return (_commonSettingsFilePath); }
 			set
@@ -159,7 +159,7 @@ namespace MKY.Utilities.Settings
 		/// <exception cref="NullReferenceException">
 		/// Thrown if attempted to set file if this handler has no local user settings.
 		/// </exception>
-		public string LocalUserSettingsFilePath
+		public virtual string LocalUserSettingsFilePath
 		{
 			get { return (_localUserSettingsFilePath); }
 			set
@@ -178,7 +178,7 @@ namespace MKY.Utilities.Settings
 		/// <exception cref="NullReferenceException">
 		/// Thrown if attempted to set file if this handler has no roaming user settings.
 		/// </exception>
-		public string RoamingUserSettingsFilePath
+		public virtual string RoamingUserSettingsFilePath
 		{
 			get { return (_roamingUserSettingsFilePath); }
 			set
@@ -193,7 +193,7 @@ namespace MKY.Utilities.Settings
 		/// <summary>
 		/// Handler to common settings, if has common settings, <c>null</c> otherwise.
 		/// </summary>
-		public TCommonSettings CommonSettings
+		public virtual TCommonSettings CommonSettings
 		{
 			get { return (_commonSettings); }
 		}
@@ -201,7 +201,7 @@ namespace MKY.Utilities.Settings
 		/// <summary>
 		/// Handler to local user settings, if has local user settings, <c>null</c> otherwise.
 		/// </summary>
-		public TLocalUserSettings LocalUserSettings
+		public virtual TLocalUserSettings LocalUserSettings
 		{
 			get { return (_localUserSettings); }
 		}
@@ -209,7 +209,7 @@ namespace MKY.Utilities.Settings
 		/// <summary>
 		/// Handler to roaming user settings, if has roaming user settings, <c>null</c> otherwise.
 		/// </summary>
-		public TRoamingUserSettings RoamingUserSettings
+		public virtual TRoamingUserSettings RoamingUserSettings
 		{
 			get { return (_roamingUserSettings); }
 		}
@@ -218,7 +218,7 @@ namespace MKY.Utilities.Settings
 		/// Returns whether common settings have successfully been loaded, <c>false</c> if
 		/// they was no valid settings file and they were set to their defaults.
 		/// </summary>
-		public bool CommonSettingsSuccessfullyLoaded
+		public virtual bool CommonSettingsSuccessfullyLoaded
 		{
 			get { return (_commonSettingsSuccessfullyLoaded); }
 		}
@@ -227,7 +227,7 @@ namespace MKY.Utilities.Settings
 		/// Returns whether local user settings have successfully been loaded, <c>false</c> if
 		/// they was no valid settings file and they were set to their defaults.
 		/// </summary>
-		public bool LocalUserSettingsSuccessfullyLoaded
+		public virtual bool LocalUserSettingsSuccessfullyLoaded
 		{
 			get { return (_localUserSettingsSuccessfullyLoaded); }
 		}
@@ -236,7 +236,7 @@ namespace MKY.Utilities.Settings
 		/// Returns whether roaming user settings have successfully been loaded, <c>false</c> if
 		/// they was no valid settings file and they were set to their defaults.
 		/// </summary>
-		public bool RoamingUserSettingsSuccessfullyLoaded
+		public virtual bool RoamingUserSettingsSuccessfullyLoaded
 		{
 			get { return (_roamingUserSettingsSuccessfullyLoaded); }
 		}
@@ -245,7 +245,7 @@ namespace MKY.Utilities.Settings
 		/// Returns whether all settings have successfully been loaded, <c>false</c> if
 		/// they were no valid settings files and they were set to their defaults.
 		/// </summary>
-		public bool AllSettingsSuccessfullyLoaded
+		public virtual bool AllSettingsSuccessfullyLoaded
 		{
 			get { return (_allSettingsSuccessfullyLoaded); }
 		}
@@ -254,7 +254,7 @@ namespace MKY.Utilities.Settings
 		/// Handler to common settings, if has common settings,
 		/// <c>null</c> otherwise.
 		/// </summary>
-		public TCommonSettings CommonSettingsDefault
+		public virtual TCommonSettings CommonSettingsDefault
 		{
 			get
 			{
@@ -269,7 +269,7 @@ namespace MKY.Utilities.Settings
 		/// Handler to local user settings defaults, if has local user settings,
 		/// <c>null</c> otherwise.
 		/// </summary>
-		public TLocalUserSettings LocalUserSettingsDefault
+		public virtual TLocalUserSettings LocalUserSettingsDefault
 		{
 			get
 			{
@@ -284,7 +284,7 @@ namespace MKY.Utilities.Settings
 		/// Handler to user settings defaults, if has user settings,
 		/// <c>null</c> otherwise.
 		/// </summary>
-		public TRoamingUserSettings RoamingUserSettingsDefault
+		public virtual TRoamingUserSettings RoamingUserSettingsDefault
 		{
 			get
 			{
@@ -305,7 +305,7 @@ namespace MKY.Utilities.Settings
 		/// <summary>
 		/// Resets file names to system defaults.
 		/// </summary>
-		public void ResetFilePaths()
+		public virtual void ResetFilePaths()
 		{
 			if (_hasCommonSettings)
 				_commonSettingsFilePath = Application.CommonAppDataPath + Path.DirectorySeparatorChar + _CommonFileName;
@@ -335,7 +335,7 @@ namespace MKY.Utilities.Settings
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be created.
 		/// </exception>
-		public bool Load()
+		public virtual bool Load()
 		{
 			_allSettingsSuccessfullyLoaded = true;
 
@@ -368,7 +368,7 @@ namespace MKY.Utilities.Settings
 		/// Returns false if either settings could not be loaded from
 		/// its file path and have been set to defaults.
 		/// </returns>
-		public bool LoadCommon()
+		public virtual bool LoadCommon()
 		{
 			bool result = true;
 			if (HasCommonSettings)
@@ -392,7 +392,7 @@ namespace MKY.Utilities.Settings
 		/// Returns false if either settings could not be loaded from
 		/// its file path and have been set to defaults.
 		/// </returns>
-		public bool LoadLocalUser()
+		public virtual bool LoadLocalUser()
 		{
 			bool result = true;
 			if (HasLocalUserSettings)
@@ -416,7 +416,7 @@ namespace MKY.Utilities.Settings
 		/// Returns false if either settings could not be loaded from
 		/// its file path and have been set to defaults.
 		/// </returns>
-		public bool LoadRoamingUser()
+		public virtual bool LoadRoamingUser()
 		{
 			bool result = true;
 			if (HasRoamingUserSettings)
@@ -534,7 +534,7 @@ namespace MKY.Utilities.Settings
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
-		public void Save()
+		public virtual void Save()
 		{
 			Exception result = null;
 
@@ -582,7 +582,7 @@ namespace MKY.Utilities.Settings
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
-		public void SaveCommon()
+		public virtual void SaveCommon()
 		{
 			if (HasCommonSettings)
 				SaveToFile(typeof(TCommonSettings), _commonSettingsFilePath, _commonSettings);
@@ -594,7 +594,7 @@ namespace MKY.Utilities.Settings
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
-		public void SaveLocalUser()
+		public virtual void SaveLocalUser()
 		{
 			if (HasLocalUserSettings)
 				SaveToFile(typeof(TLocalUserSettings), _localUserSettingsFilePath, _localUserSettings);
@@ -606,7 +606,7 @@ namespace MKY.Utilities.Settings
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
-		public void SaveRoamingUser()
+		public virtual void SaveRoamingUser()
 		{
 			if (HasRoamingUserSettings)
 				SaveToFile(typeof(TRoamingUserSettings), _roamingUserSettingsFilePath, _roamingUserSettings);
@@ -614,7 +614,7 @@ namespace MKY.Utilities.Settings
 
 		private void SaveToFile(Type type, string filePath, object settings)
 		{
-			string backup = filePath + ".bak";
+			string backup = filePath + IO.XFile.BackupFileExtension;
 
 			try
 			{

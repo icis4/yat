@@ -47,7 +47,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public int Capacity
+		public virtual int Capacity
 		{
 			get { return (_capacity); }
 			set
@@ -66,7 +66,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public void Enqueue(RawElement re)
+		public virtual void Enqueue(RawElement re)
 		{
 			while (_queue.Count >= _capacity)
 				_queue.Dequeue();
@@ -75,13 +75,13 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public void Clear()
+		public virtual void Clear()
 		{
 			_queue.Clear();
 		}
 
 		/// <summary></summary>
-		public byte[] ToByteArray()
+		public virtual byte[] ToByteArray()
 		{
 			List<byte> to = new List<byte>(_queue.Count);
 			foreach (RawElement re in _queue.ToArray())
@@ -91,31 +91,31 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public List<RawElement> ToElements()
+		public virtual List<RawElement> ToElements()
 		{
 			return (new List<RawElement>(_queue));
 		}
 
 		/// <summary></summary>
-		new public string ToString()
+		public override string ToString()
 		{
 			return (ToString(""));
 		}
 
 		/// <summary></summary>
-		public string ToString(string indent)
+		public virtual string ToString(string indent)
 		{
 			return (QueueToString(indent));
 		}
 
 		/// <summary></summary>
-		public string ToDetailedString()
+		public virtual string ToDetailedString()
 		{
 			return (ToDetailedString(""));
 		}
 
 		/// <summary></summary>
-		public string ToDetailedString(string indent)
+		public virtual string ToDetailedString(string indent)
 		{
 			return (indent + "- Capacity: " + _capacity + Environment.NewLine +
 					indent + "- Queue: " + Environment.NewLine +
@@ -123,13 +123,13 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public string QueueToString()
+		public virtual string QueueToString()
 		{
 			return (QueueToString(""));
 		}
 
 		/// <summary></summary>
-		public string QueueToString(string indent)
+		public virtual string QueueToString(string indent)
 		{
 			StringWriter to = new StringWriter();
 			foreach (RawElement re in ToElements())
@@ -139,13 +139,13 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public string QueueToDetailedString()
+		public virtual string QueueToDetailedString()
 		{
 			return (QueueToDetailedString(""));
 		}
 
 		/// <summary></summary>
-		public string QueueToDetailedString(string indent)
+		public virtual string QueueToDetailedString(string indent)
 		{
 			StringWriter to = new StringWriter();
 			int i = 1;

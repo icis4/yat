@@ -73,7 +73,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("FilePaths")]
-		public RecentItemCollection<string> FilePaths
+		public virtual RecentItemCollection<string> FilePaths
 		{
 			get { return (_filePaths); }
 			set
@@ -91,7 +91,7 @@ namespace YAT.Model.Settings
 		/// generic collection <see cref="T:RecentItemCollection`1"/>.
 		/// </remarks>
 		[XmlElement("FilePathsCapacity")]
-		public int FilePathsCapacity
+		public virtual int FilePathsCapacity
 		{
 			get { return (_filePaths.Capacity); }
 			set { _filePaths.Capacity = value; }

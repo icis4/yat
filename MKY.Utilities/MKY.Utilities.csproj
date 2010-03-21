@@ -105,6 +105,7 @@
     <Compile Include="Win32\DeviceManagement.cs" />
     <Compile Include="Win32\FileIO.cs" />
     <Compile Include="Win32\Hid.cs" />
+    <Compile Include="Windows.Forms\NativeMessageHandler.cs" />
     <Compile Include="Windows.Forms\XForm.cs" />
     <Compile Include="Windows.Forms\XOrientation.cs" />
     <Compile Include="Xml\AlternateTolerantXmlSerializer.cs" />

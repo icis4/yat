@@ -59,21 +59,21 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public void Start()
+			public virtual void Start()
 			{
 				TimerCallback timerDelegate = new TimerCallback(_timer_Timeout);
 				_timer = new Timer(timerDelegate, null, _timeout, System.Threading.Timeout.Infinite);
 			}
 
 			/// <summary></summary>
-			public void Restart()
+			public virtual void Restart()
 			{
 				Stop();
 				Start();
 			}
 
 			/// <summary></summary>
-			public void Stop()
+			public virtual void Stop()
 			{
 				_timer = null; ;
 			}
@@ -121,7 +121,7 @@ namespace YAT.Domain
 				LineBreakTimer = lineBreakTimer;
 			}
 
-			public void Reset()
+			public virtual void Reset()
 			{
 				LinePosition = BinaryTerminal.LinePosition.Begin;
 				LineElements.Clear();
@@ -206,6 +206,23 @@ namespace YAT.Domain
 		{
 			InitializeStates();
 		}
+
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				// Nothing to do (yet).
+			}
+			base.Dispose(disposing);
+		}
+
+		#endregion
 
 		#endregion
 

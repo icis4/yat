@@ -83,7 +83,7 @@ namespace YAT.Settings
 		//==========================================================================================
 
 		[XmlElement("AutoOpenWorkspace")]
-		public bool AutoOpenWorkspace
+		public virtual bool AutoOpenWorkspace
 		{
 			get { return (_autoOpenWorkspace); }
 			set
@@ -97,7 +97,7 @@ namespace YAT.Settings
 		}
 
 		[XmlElement("AutoSaveWorkspace")]
-		public bool AutoSaveWorkspace
+		public virtual bool AutoSaveWorkspace
 		{
 			get { return (_autoSaveWorkspace); }
 			set
@@ -111,7 +111,7 @@ namespace YAT.Settings
 		}
 
 		[XmlElement("UseRelativePaths")]
-		public bool UseRelativePaths
+		public virtual bool UseRelativePaths
 		{
 			get { return (_useRelativePaths); }
 			set
@@ -125,7 +125,7 @@ namespace YAT.Settings
 		}
 
 		[XmlElement("DetectSerialPortsInUse")]
-		public bool DetectSerialPortsInUse
+		public virtual bool DetectSerialPortsInUse
 		{
 			get { return (_detectSerialPortsInUse); }
 			set

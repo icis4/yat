@@ -83,7 +83,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestConstructorAndParse()
+		public virtual void TestConstructorAndParse()
 		{
 			SerialPortId port;
 

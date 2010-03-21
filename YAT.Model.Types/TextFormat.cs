@@ -62,7 +62,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public Color Color
+		public virtual Color Color
 		{
 			get { return (_color); }
 			set { _color = value; }
@@ -70,7 +70,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlElement("Color")]
-		public int ColorAsArgb
+		public virtual int ColorAsArgb
 		{
 			get { return (_color.ToArgb()); }
 			set { _color = Color.FromArgb(value); }
@@ -78,7 +78,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlElement("FontStyle")]
-		public FontStyle FontStyle
+		public virtual FontStyle FontStyle
 		{
 			get { return (_fontStyle); }
 			set { _fontStyle = value; }
@@ -86,7 +86,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public bool Bold
+		public virtual bool Bold
 		{
 			get { return ((_fontStyle & FontStyle.Bold) == FontStyle.Bold); }
 			set
@@ -100,7 +100,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public bool Italic
+		public virtual bool Italic
 		{
 			get { return ((_fontStyle & FontStyle.Italic) == FontStyle.Italic); }
 			set
@@ -114,7 +114,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public bool Underline
+		public virtual bool Underline
 		{
 			get { return ((_fontStyle & FontStyle.Underline) == FontStyle.Underline); }
 			set
@@ -128,7 +128,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public bool Strikeout
+		public virtual bool Strikeout
 		{
 			get { return ((_fontStyle & FontStyle.Strikeout) == FontStyle.Strikeout); }
 			set

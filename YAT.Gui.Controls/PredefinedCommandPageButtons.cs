@@ -90,7 +90,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public List<Command> Commands
+		public virtual List<Command> Commands
 		{
 			set
 			{
@@ -101,7 +101,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public bool TerminalIsOpen
+		public virtual bool TerminalIsOpen
 		{
 			set
 			{
@@ -121,7 +121,7 @@ namespace YAT.Gui.Controls
 		/// Returns command at the specified id.
 		/// Returns <c>null</c> if command is undefined or not valid.
 		/// </summary>
-		public Command GetCommandFromId(int id)
+		public virtual Command GetCommandFromId(int id)
 		{
 			int i = (id - 1); // command ID = 1..max
 
@@ -143,7 +143,7 @@ namespace YAT.Gui.Controls
 		/// Returns command ID (1..max) that is assigned to the button at the specified location.
 		/// Returns 0 if no button.
 		/// </summary>
-		public int GetCommandIdFromScreenPoint(Point p)
+		public virtual int GetCommandIdFromScreenPoint(Point p)
 		{
 			Point client = PointToClient(p);
 

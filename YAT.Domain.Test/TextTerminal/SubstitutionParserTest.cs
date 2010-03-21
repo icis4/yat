@@ -71,7 +71,7 @@ namespace YAT.Domain.Test.TextTerminal
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestSubstitutionParser()
+		public virtual void TestSubstitutionParser()
 		{
 			Exception exceptionToNUnit = null;
 

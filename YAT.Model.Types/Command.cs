@@ -157,7 +157,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlElement("IsDefined")]
-		public bool IsDefined
+		public virtual bool IsDefined
 		{
 			get { return (_isDefined); }
 			set { _isDefined = value;  }
@@ -171,7 +171,7 @@ namespace YAT.Model.Types
 		/// deserialization issues. Instead, use <see cref="ClearDescription()"/>.
 		/// </remarks>
 		[XmlElement("Description")]
-		public string Description
+		public virtual string Description
 		{
 			get
 			{
@@ -208,7 +208,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlElement("CommandLines")]
-		public string[] CommandLines
+		public virtual string[] CommandLines
 		{
 			get
 			{
@@ -236,7 +236,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlElement("DefaultRadix")]
-		public Domain.Radix DefaultRadix
+		public virtual Domain.Radix DefaultRadix
 		{
 			get { return (_defaultRadix); }
 			set { _defaultRadix = value; }
@@ -244,7 +244,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlElement("IsFilePath")]
-		public bool IsFilePath
+		public virtual bool IsFilePath
 		{
 			get
 			{
@@ -271,7 +271,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlElement("FilePath")]
-		public string FilePath
+		public virtual string FilePath
 		{
 			get
 			{
@@ -304,7 +304,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public bool IsCommand
+		public virtual bool IsCommand
 		{
 			get
 			{
@@ -321,7 +321,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public bool IsSingleLineCommand
+		public virtual bool IsSingleLineCommand
 		{
 			get
 			{
@@ -334,7 +334,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public bool IsMultiLineCommand
+		public virtual bool IsMultiLineCommand
 		{
 			get
 			{
@@ -347,7 +347,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public bool IsValidCommand
+		public virtual bool IsValidCommand
 		{
 			get
 			{
@@ -366,7 +366,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public string SingleLineCommand
+		public virtual string SingleLineCommand
 		{
 			get
 			{
@@ -401,7 +401,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public string[] MultiLineCommand
+		public virtual string[] MultiLineCommand
 		{
 			get
 			{
@@ -420,7 +420,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public bool IsValidFilePath
+		public virtual bool IsValidFilePath
 		{
 			get
 			{
@@ -433,7 +433,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public bool IsValid
+		public virtual bool IsValid
 		{
 			get
 			{
@@ -452,13 +452,13 @@ namespace YAT.Model.Types
 		//==========================================================================================
 
 		/// <summary></summary>
-		public void Clear()
+		public virtual void Clear()
 		{
 			Initialize();
 		}
 
 		/// <summary></summary>
-		public void ClearDescription()
+		public virtual void ClearDescription()
 		{
 			_description = "";
 		}
@@ -522,7 +522,7 @@ namespace YAT.Model.Types
 		//==========================================================================================
 
 		/// <summary></summary>
-		public int CompareTo(object obj)
+		public virtual int CompareTo(object obj)
 		{
 			if (obj is Command)
 			{

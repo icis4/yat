@@ -83,7 +83,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("BaudRate")]
-		public int BaudRate
+		public virtual int BaudRate
 		{
 			get { return (_baudRate); }
 			set
@@ -98,7 +98,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("DataBits")]
-		public MKY.IO.Ports.DataBits DataBits
+		public virtual MKY.IO.Ports.DataBits DataBits
 		{
 			get { return (_dataBits); }
 			set
@@ -113,7 +113,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("Parity")]
-		public System.IO.Ports.Parity Parity
+		public virtual System.IO.Ports.Parity Parity
 		{
 			get { return (_parity); }
 			set
@@ -128,7 +128,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("StopBits")]
-		public System.IO.Ports.StopBits StopBits
+		public virtual System.IO.Ports.StopBits StopBits
 		{
 			get { return (_stopBits); }
 			set
@@ -143,7 +143,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("FlowControl")]
-		public SerialFlowControl FlowControl
+		public virtual SerialFlowControl FlowControl
 		{
 			get { return (_flowControl); }
 			set
@@ -213,7 +213,7 @@ namespace MKY.IO.Serial
 		#endregion
 
 		/// <summary></summary>
-		public string ToShortString()
+		public virtual string ToShortString()
 		{
 			return
 			  (
@@ -224,7 +224,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public string ToLongString()
+		public virtual string ToLongString()
 		{
 			return
 			  (

@@ -203,16 +203,16 @@ namespace YAT.Gui.Forms
 				_settings_Form.IO.Socket.TcpClientAutoReconnect = socketSettings.TcpClientAutoReconnect;
 		}
 
-		private void usbHidPortSelection_DeviceIdChanged(object sender, EventArgs e)
+		private void usbHidPortSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
-				_settings_Form.IO.UsbHidPort.DeviceId = usbHidPortSelection.DeviceId;
+				_settings_Form.IO.UsbHidDevice.DeviceInfo = usbHidPortSelection.DeviceInfo;
 		}
 
-		private void usbHidPortSettings_AutoReconnectChanged(object sender, EventArgs e)
+		private void usbHidPortSettings_AutoReopenChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
-				_settings_Form.IO.UsbHidPort.AutoReconnect = usbHidPortSettings.AutoReconnect;
+				_settings_Form.IO.UsbHidDevice.AutoReopen = usbHidPortSettings.AutoReopen;
 		}
 
 		private void button_AdvancedSettings_Click(object sender, EventArgs e)
@@ -326,10 +326,10 @@ namespace YAT.Gui.Forms
 			serialPortSettings.AutoReopen  = _settings_Form.IO.SerialPort.AutoReopen;
 
 			usbHidPortSelection.Visible    = isUsbHid;
-			usbHidPortSelection.DeviceId   = _settings_Form.IO.UsbHidPort.DeviceId;
+			usbHidPortSelection.DeviceInfo = _settings_Form.IO.UsbHidDevice.DeviceInfo;
 
 			usbHidPortSettings.Visible     = isUsbHid;
-			usbHidPortSettings.AutoReconnect = _settings_Form.IO.UsbHidPort.AutoReconnect;
+			usbHidPortSettings.AutoReopen  = _settings_Form.IO.UsbHidDevice.AutoReopen;
 
 			_isSettingControls = false;
 		}

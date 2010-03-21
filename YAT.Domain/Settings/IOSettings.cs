@@ -36,7 +36,7 @@ namespace YAT.Domain.Settings
 		private MKY.IO.Serial.SerialPortSettings _serialPort;
 		private string _serialParityErrorReplacement;
 		private MKY.IO.Serial.SocketSettings _socket;
-		private MKY.IO.Serial.UsbHidDeviceSettings _usbHidPort;
+		private MKY.IO.Serial.UsbHidDeviceSettings _usbHidDevice;
 		private Endianess _endianess;
 
 		/// <summary></summary>
@@ -58,9 +58,9 @@ namespace YAT.Domain.Settings
 
 		private void InitializeNodes()
 		{
-			SerialPort = new MKY.IO.Serial.SerialPortSettings(SettingsType);
-			Socket     = new MKY.IO.Serial.SocketSettings(SettingsType);
-			UsbHidPort = new MKY.IO.Serial.UsbHidDeviceSettings(SettingsType);
+			SerialPort   = new MKY.IO.Serial.SerialPortSettings(SettingsType);
+			Socket       = new MKY.IO.Serial.SocketSettings(SettingsType);
+			UsbHidDevice = new MKY.IO.Serial.UsbHidDeviceSettings(SettingsType);
 		}
 
 		/// <summary></summary>
@@ -70,12 +70,12 @@ namespace YAT.Domain.Settings
 		public IOSettings(IOSettings rhs)
 			: base(rhs)
 		{
-			_ioType = rhs.IOType;
-			SerialPort = new MKY.IO.Serial.SerialPortSettings(rhs.SerialPort);
+			_ioType      = rhs.IOType;
+			SerialPort   = new MKY.IO.Serial.SerialPortSettings(rhs.SerialPort);
 			_serialParityErrorReplacement = rhs.SerialParityErrorReplacement;
-			Socket     = new MKY.IO.Serial.SocketSettings(rhs.Socket);
-			UsbHidPort = new MKY.IO.Serial.UsbHidDeviceSettings(rhs.UsbHidPort);
-			_endianess = rhs.Endianess;
+			Socket       = new MKY.IO.Serial.SocketSettings(rhs.Socket);
+			UsbHidDevice = new MKY.IO.Serial.UsbHidDeviceSettings(rhs.UsbHidDevice);
+			_endianess   = rhs.Endianess;
 
 			ClearChanged();
 		}
@@ -97,7 +97,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("IOType")]
-		public Domain.IOType IOType
+		public virtual Domain.IOType IOType
 		{
 			get { return (_ioType); }
 			set
@@ -112,7 +112,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("SerialPort")]
-		public MKY.IO.Serial.SerialPortSettings SerialPort
+		public virtual MKY.IO.Serial.SerialPortSettings SerialPort
 		{
 			get { return (_serialPort); }
 			set
@@ -133,7 +133,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("SerialParityErrorReplacement")]
-		public string SerialParityErrorReplacement
+		public virtual string SerialParityErrorReplacement
 		{
 			get { return (_serialParityErrorReplacement); }
 			set
@@ -148,7 +148,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("Socket")]
-		public MKY.IO.Serial.SocketSettings Socket
+		public virtual MKY.IO.Serial.SocketSettings Socket
 		{
 			get { return (_socket); }
 			set
@@ -168,29 +168,29 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("UsbHidPort")]
-		public MKY.IO.Serial.UsbHidDeviceSettings UsbHidPort
+		[XmlElement("UsbHidDevice")]
+		public virtual MKY.IO.Serial.UsbHidDeviceSettings UsbHidDevice
 		{
-			get { return (_usbHidPort); }
+			get { return (_usbHidDevice); }
 			set
 			{
-				if (_usbHidPort == null)
+				if (_usbHidDevice == null)
 				{
-					_usbHidPort = value;
-					AttachNode(_usbHidPort);
+					_usbHidDevice = value;
+					AttachNode(_usbHidDevice);
 				}
-				else if (_usbHidPort != value)
+				else if (_usbHidDevice != value)
 				{
-					MKY.IO.Serial.UsbHidDeviceSettings old = _usbHidPort;
-					_usbHidPort = value;
-					ReplaceNode(old, _usbHidPort);
+					MKY.IO.Serial.UsbHidDeviceSettings old = _usbHidDevice;
+					_usbHidDevice = value;
+					ReplaceNode(old, _usbHidDevice);
 				}
 			}
 		}
 
 		/// <summary></summary>
 		[XmlElement("Endianess")]
-		public Endianess Endianess
+		public virtual Endianess Endianess
 		{
 			get { return (_endianess); }
 			set

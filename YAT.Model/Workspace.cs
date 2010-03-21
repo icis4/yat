@@ -202,7 +202,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Guid Guid
+		public virtual Guid Guid
 		{
 			get
 			{
@@ -212,7 +212,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public string UserName
+		public virtual string UserName
 		{
 			get
 			{
@@ -226,7 +226,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public bool SettingsFileExists
+		public virtual bool SettingsFileExists
 		{
 			get
 			{
@@ -236,7 +236,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public string SettingsFilePath
+		public virtual string SettingsFilePath
 		{
 			get
 			{
@@ -248,7 +248,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Returns number of terminals within workspace.
 		/// </summary>
-		public int TerminalCount
+		public virtual int TerminalCount
 		{
 			get
 			{
@@ -260,7 +260,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Returns an array of all terminals within workspace or <c>null</c> if there are no terminals.
 		/// </summary>
-		public Terminal[] Terminals
+		public virtual Terminal[] Terminals
 		{
 			get
 			{
@@ -272,7 +272,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Returns active terminal within workspace or <c>null</c> if no terminal is active.
 		/// </summary>
-		public Terminal ActiveTerminal
+		public virtual Terminal ActiveTerminal
 		{
 			get
 			{
@@ -337,7 +337,7 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public bool SettingsHaveChanged
+		public virtual bool SettingsHaveChanged
 		{
 			get
 			{
@@ -347,7 +347,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public WorkspaceSettingsRoot SettingsRoot
+		public virtual WorkspaceSettingsRoot SettingsRoot
 		{
 			get
 			{
@@ -399,7 +399,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Saves all terminals and workspace to file(s), prompts for file(s) if they doesn't exist yet
 		/// </summary>
-		public bool Save()
+		public virtual bool Save()
 		{
 			return (Save(true));
 		}
@@ -407,7 +407,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Saves all terminals and workspace to file(s), prompts for file(s) if they doesn't exist yet
 		/// </summary>
-		public bool Save(bool autoSaveIsAllowed)
+		public virtual bool Save(bool autoSaveIsAllowed)
 		{
 			AssertNotDisposed();
 
@@ -442,7 +442,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Saves all terminals and workspace to given file
 		/// </summary>
-		public bool SaveAs(string filePath)
+		public virtual bool SaveAs(string filePath)
 		{
 			AssertNotDisposed();
 
@@ -485,7 +485,7 @@ namespace YAT.Model
 			// This ensures that relative paths are correctly retrieved by SaveAllTerminals()
 			if (doAutoSave && (!_settingsHandler.SettingsFilePathIsValid))
 			{
-				string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveWorkspaceFileNamePrefix + Guid.ToString() + ExtensionSettings.WorkspaceFiles;
+				string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveWorkspaceFileNamePrefix + Guid.ToString() + ExtensionSettings.WorkspaceFile;
 				_settingsHandler.SettingsFilePath = autoSaveFilePath;
 			}
 
@@ -554,7 +554,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary>Closes the workspace and prompts if the settings have changed.</summary>
-		public bool Close()
+		public virtual bool Close()
 		{
 			return (Close(false));
 		}
@@ -585,7 +585,7 @@ namespace YAT.Model
 		///   - normal, existing file, auto save    => auto save, if it fails => question : (w4a)
 		///   - normal, existing file, no auto save => question                           : (w4b)
 		/// </remarks>
-		public bool Close(bool isMainClose)
+		public virtual bool Close(bool isMainClose)
 		{
 			bool tryAutoSave = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
 
@@ -673,7 +673,7 @@ namespace YAT.Model
 		/// Method to check wheter auto save is really desired. Needed because of the MDI issue
 		/// on close described in YAT.Gui.Forms.Main/Terminal.
 		/// </summary>
-		public bool TryTerminalAutoSaveIsDesired(bool tryAutoSave, Terminal terminal)
+		public virtual bool TryTerminalAutoSaveIsDesired(bool tryAutoSave, Terminal terminal)
 		{
 			// Do not auto save if terminal file already exists but workspace doesn't.
 			// Applies to terminal use case w4a/b.
@@ -783,7 +783,7 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public bool CreateNewTerminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
+		public virtual bool CreateNewTerminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
 			OnFixedStatusTextRequest("Creating new terminal...");
 
@@ -799,7 +799,7 @@ namespace YAT.Model
 		/// Opens terminals according to workspace settings and returns number of successfully
 		/// opened terminals.
 		/// </summary>
-		public int OpenTerminals()
+		public virtual int OpenTerminals()
 		{
 			int requestedTerminalCount = _settingsRoot.TerminalSettings.Count;
 			if (requestedTerminalCount == 1)
@@ -844,7 +844,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public bool OpenTerminalFromFile(string filePath)
+		public virtual bool OpenTerminalFromFile(string filePath)
 		{
 			return (OpenTerminalFromFile(filePath, Guid.Empty, null, false));
 		}
@@ -996,13 +996,13 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public bool SaveAllTerminals()
+		public virtual bool SaveAllTerminals()
 		{
 			return (SaveAllTerminals(true));
 		}
 
 		/// <summary></summary>
-		public bool SaveAllTerminals(bool autoSaveIsAllowed)
+		public virtual bool SaveAllTerminals(bool autoSaveIsAllowed)
 		{
 			bool success = true;
 
@@ -1017,7 +1017,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public bool CloseAllTerminals()
+		public virtual bool CloseAllTerminals()
 		{
 			return (CloseAllTerminals(false, false));
 		}
@@ -1047,31 +1047,31 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public void ActivateTerminal(Terminal terminal)
+		public virtual void ActivateTerminal(Terminal terminal)
 		{
 			_activeTerminal = terminal;
 		}
 
 		/// <summary></summary>
-		public bool SaveActiveTerminal()
+		public virtual bool SaveActiveTerminal()
 		{
 			return (_activeTerminal.Save());
 		}
 
 		/// <summary></summary>
-		public bool CloseActiveTerminal()
+		public virtual bool CloseActiveTerminal()
 		{
 			return (_activeTerminal.Close());
 		}
 
 		/// <summary></summary>
-		public bool OpenActiveTerminalIO()
+		public virtual bool OpenActiveTerminalIO()
 		{
 			return (_activeTerminal.StartIO());
 		}
 
 		/// <summary></summary>
-		public bool CloseActiveTerminalIO()
+		public virtual bool CloseActiveTerminalIO()
 		{
 			return (_activeTerminal.StopIO());
 		}
