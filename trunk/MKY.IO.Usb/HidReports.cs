@@ -32,38 +32,38 @@ using MKY.Utilities.Win32;
 namespace MKY.IO.Usb
 {
 	#region Input Reports
-	//==========================================================================================
+	//==============================================================================================
 	// Input Reports
-	//==========================================================================================
+	//==============================================================================================
 
-	#region Input Reports > InputReport
-	//------------------------------------------------------------------------------------------
-	// Input Reports > InputReport
-	//------------------------------------------------------------------------------------------
+	#region Input Reports > IInputReport
+	//----------------------------------------------------------------------------------------------
+	// Input Reports > IInputReport
+	//----------------------------------------------------------------------------------------------
 
 	/// <summary>
 	/// For reports the device sends to the host.
 	/// </summary>
-	internal abstract class InputReport
+	interface IInputReport
 	{
 		/// <summary>
 		/// Each class that handles reading reports defines a read method for reading a type
 		/// of report.
 		/// </summary>
-		internal abstract bool Read(SafeFileHandle hidHandle, SafeFileHandle readHandle, SafeFileHandle writeHandle, ref bool deviceDetected, ref Byte[] readBuffer);
+		bool Read(SafeFileHandle hidHandle, SafeFileHandle readHandle, SafeFileHandle writeHandle, ref bool deviceDetected, ref Byte[] readBuffer);
 	}
 
 	#endregion
 
 	#region Input Reports > InputFeatureReport
-	//------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
 	// Input Reports > InputFeatureReport
-	//------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
 
 	/// <summary>
 	/// For reading feature reports.
 	/// </summary>
-	internal class InputFeatureReport : InputReport
+	public class InputFeatureReport : IInputReport
 	{
 		/// <summary>
 		/// Reads a feature report from the device.
@@ -73,7 +73,7 @@ namespace MKY.IO.Usb
 		/// <param name="writeHandle">The handle for writing output reports to the device.</param>
 		/// <param name="deviceDetected">Tells whether the device is currently attached.</param>
 		/// <param name="inFeatureReportBuffer">contains the requested report.</param>
-		internal override bool Read(SafeFileHandle hidHandle, SafeFileHandle readHandle, SafeFileHandle writeHandle, ref bool deviceDetected, ref Byte[] inFeatureReportBuffer)
+		public virtual bool Read(SafeFileHandle hidHandle, SafeFileHandle readHandle, SafeFileHandle writeHandle, ref bool deviceDetected, ref Byte[] inFeatureReportBuffer)
 		{
 			try
 			{
@@ -81,10 +81,11 @@ namespace MKY.IO.Usb
 				System.Diagnostics.Debug.Print("HidD_GetFeature success = " + success);
 				return (success);
 			}
-			catch (Exception ex)
+			catch (Exception nativeEx)
 			{
+				NativeMethodCallUsbException ex = new NativeMethodCallUsbException("Hid.HidD_GetFeature", nativeEx.Message);
 				XDebug.WriteException(this, ex);
-				throw;
+				throw (ex);
 			}
 		}
 	}
@@ -92,14 +93,14 @@ namespace MKY.IO.Usb
 	#endregion
 
 	#region Input Reports > InputReportViaControlTransfer
-	//------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
 	// Input Reports > InputReportViaControlTransfer
-	//------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
 
 	/// <summary>
 	/// For reading input reports via control transfers.
 	/// </summary>
-	internal class InputReportViaControlTransfer : InputReport
+	public class InputReportViaControlTransfer : IInputReport
 	{
 		/// <summary>
 		/// Reads an Input report from the device using a control transfer.
@@ -109,7 +110,7 @@ namespace MKY.IO.Usb
 		/// <param name="writeHandle">The handle for writing output reports to the device.</param>
 		/// <param name="deviceDetected">Tells whether the device is currently attached.</param>
 		/// <param name="inputReportBuffer">contains the requested report.</param>
-		internal override bool Read(SafeFileHandle hidHandle, SafeFileHandle readHandle, SafeFileHandle writeHandle, ref bool deviceDetected, ref Byte[] inputReportBuffer)
+		public virtual bool Read(SafeFileHandle hidHandle, SafeFileHandle readHandle, SafeFileHandle writeHandle, ref bool deviceDetected, ref Byte[] inputReportBuffer)
 		{
 			bool success = Hid.GetInputReport(hidHandle, inputReportBuffer);
 			System.Diagnostics.Debug.Print("HidD_GetInputReport success = " + success);
@@ -120,14 +121,14 @@ namespace MKY.IO.Usb
 	#endregion
 
 	#region Input Reports > InputReportViaInterruptTransfer
-	//------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
 	// Input Reports > InputReportViaInterruptTransfer
-	//------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
 
 	/// <summary>
 	/// For reading input reports.
 	/// </summary>
-	internal class InputReportViaInterruptTransfer : InputReport
+	public class InputReportViaInterruptTransfer : IInputReport
 	{
 		/// <summary>
 		/// Closes open handles to a device.
@@ -136,7 +137,7 @@ namespace MKY.IO.Usb
 		/// <param name="readHandle">The handle for reading input reports from the device.</param>
 		/// <param name="writeHandle">The handle for writing output reports to the device.</param>
 		/// <param name="eventObject"></param>
-		internal void CancelTransfer(SafeFileHandle hidHandle, SafeFileHandle readHandle, SafeFileHandle writeHandle, IntPtr eventObject)
+		public virtual void CancelTransfer(SafeFileHandle hidHandle, SafeFileHandle readHandle, SafeFileHandle writeHandle, IntPtr eventObject)
 		{
 			try
 			{
@@ -161,10 +162,11 @@ namespace MKY.IO.Usb
 				if ((!(writeHandle.IsInvalid)))
 					writeHandle.Close();
 			}
-			catch (Exception ex)
+			catch (Exception nativeEx)
 			{
+				NativeMethodCallUsbException ex = new NativeMethodCallUsbException("FileIO.CancelIo", nativeEx.Message);
 				XDebug.WriteException(this, ex);
-				throw;
+				throw (ex);
 			}
 		}
 
@@ -173,7 +175,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		/// <param name="hidOverlapped">The overlapped structure.</param>
 		/// <param name="eventObject">The event object.</param>
-		internal void PrepareForOverlappedTransfer(ref NativeOverlapped hidOverlapped, ref IntPtr eventObject)
+		public virtual void PrepareForOverlappedTransfer(ref NativeOverlapped hidOverlapped, ref IntPtr eventObject)
 		{
 			try
 			{
@@ -184,10 +186,11 @@ namespace MKY.IO.Usb
 				hidOverlapped.OffsetHigh = 0;
 				hidOverlapped.EventHandle = eventObject;
 			}
-			catch (Exception ex)
+			catch (Exception nativeEx)
 			{
+				NativeMethodCallUsbException ex = new NativeMethodCallUsbException("FileIO.CreateEvent", nativeEx.Message);
 				XDebug.WriteException(this, ex);
-				throw;
+				throw (ex);
 			}
 		}
 
@@ -199,7 +202,7 @@ namespace MKY.IO.Usb
 		/// <param name="writeHandle">The handle for writing output reports to the device.</param>
 		/// <param name="deviceDetected">Tells whether the device is currently attached.</param>
 		/// <param name="inputReportBuffer">contains the requested report.</param>
-		internal override bool Read(SafeFileHandle hidHandle, SafeFileHandle readHandle, SafeFileHandle writeHandle, ref bool deviceDetected, ref Byte[] inputReportBuffer)
+		public virtual bool Read(SafeFileHandle hidHandle, SafeFileHandle readHandle, SafeFileHandle writeHandle, ref bool deviceDetected, ref Byte[] inputReportBuffer)
 		{
 			IntPtr eventObject = IntPtr.Zero;
 			NativeOverlapped HidOverlapped = new NativeOverlapped();
@@ -210,7 +213,7 @@ namespace MKY.IO.Usb
 
 			try
 			{
-				//  Set up the overlapped structure for ReadFile.
+				// Set up the overlapped structure for ReadFile.
 				PrepareForOverlappedTransfer(ref HidOverlapped, ref eventObject);
 
 				// Allocate memory for the input buffer and overlapped structure. 
@@ -224,7 +227,7 @@ namespace MKY.IO.Usb
 					System.Diagnostics.Debug.WriteLine("Waiting for ReadFile");
 					result = FileIO.WaitForSingleObject(eventObject, 3000);
 
-					//  Find out if ReadFile completed or timeout.
+					// Find out if ReadFile completed or timeout.
 					switch (result)
 					{
 						case FileIO.WAIT_OBJECT_0:
@@ -240,7 +243,7 @@ namespace MKY.IO.Usb
 						}
 						case FileIO.WAIT_TIMEOUT:
 						{
-							//  Cancel the operation on timeout
+							// Cancel the operation on timeout
 							CancelTransfer(hidHandle, readHandle, writeHandle, eventObject);
 							System.Diagnostics.Debug.WriteLine("ReadFile timeout");
 							success = false;
@@ -249,7 +252,7 @@ namespace MKY.IO.Usb
 						}
 						default:
 						{
-							//  Cancel the operation on other error.
+							// Cancel the operation on other error.
 							CancelTransfer(hidHandle, readHandle, writeHandle, eventObject);
 							System.Diagnostics.Debug.WriteLine("ReadFile undefined error");
 							success = false;
@@ -269,10 +272,11 @@ namespace MKY.IO.Usb
 
 				return (success);
 			}
-			catch (Exception ex)
+			catch (Exception nativeEx)
 			{
+				NativeMethodCallUsbException ex = new NativeMethodCallUsbException("FileIO.ReadFile", nativeEx.Message);
 				XDebug.WriteException(this, ex);
-				throw;
+				throw (ex);
 			}
 		}
 	}
@@ -282,19 +286,19 @@ namespace MKY.IO.Usb
 	#endregion
 
 	#region Output Reports
-	//==========================================================================================
+	//==============================================================================================
 	// Output Reports
-	//==========================================================================================
+	//==============================================================================================
 
-	#region Output Reports > OutputReport
-	//------------------------------------------------------------------------------------------
-	// Output Reports > OutputReport
-	//------------------------------------------------------------------------------------------
+	#region Output Reports > IOutputReport
+	//----------------------------------------------------------------------------------------------
+	// Output Reports > IOutputReport
+	//----------------------------------------------------------------------------------------------
 
 	/// <summary>
 	/// For reports the host sends to the device.
 	/// </summary>
-	internal abstract class OutputReport
+	interface IOutputReport
 	{
 		/// <summary>
 		/// Each class that handles writing reports defines a write method for writing a type of report.
@@ -302,20 +306,20 @@ namespace MKY.IO.Usb
 		/// <param name="reportBuffer">Contains the report ID and report data.</param>
 		/// <param name="deviceHandle">Handle to the device.</param>
 		/// <returns>True on success. False on failure.</returns>
-		internal abstract bool Write(Byte[] reportBuffer, SafeFileHandle deviceHandle);
+		bool Write(Byte[] reportBuffer, SafeFileHandle deviceHandle);
 	}
 
 	#endregion
 
 	#region Output Reports > OutputFeatureReport
-	//------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
 	// Output Reports > OutputFeatureReport
-	//------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
 
 	/// <summary>
 	/// For feature reports the host sends to the device.
 	/// </summary>
-	internal class OutputFeatureReport : OutputReport
+	public class OutputFeatureReport : IOutputReport
 	{
 		/// <summary>
 		/// Writes a feature report to the device.
@@ -323,7 +327,7 @@ namespace MKY.IO.Usb
 		/// <param name="outFeatureReportBuffer">Contains the report ID and report data.</param>
 		/// <param name="hidHandle">Handle to the device.</param>
 		/// <returns>True on success. False on failure.</returns>
-		internal override bool Write(Byte[] outFeatureReportBuffer, SafeFileHandle hidHandle)
+		public virtual bool Write(Byte[] outFeatureReportBuffer, SafeFileHandle hidHandle)
 		{
 			try
 			{
@@ -331,10 +335,11 @@ namespace MKY.IO.Usb
 				System.Diagnostics.Debug.Print("HidD_SetFeature success = " + success);
 				return (success);
 			}
-			catch (Exception ex)
+			catch (Exception nativeEx)
 			{
+				NativeMethodCallUsbException ex = new NativeMethodCallUsbException("Hid.HidD_SetFeature", nativeEx.Message);
 				XDebug.WriteException(this, ex);
-				throw;
+				throw (ex);
 			}
 		}
 	}
@@ -342,14 +347,14 @@ namespace MKY.IO.Usb
 	#endregion
 
 	#region Output Reports > OutputReportViaControlTransfer
-	//------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
 	// Output Reports > OutputReportViaControlTransfer
-	//------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
 
 	/// <summary>
 	/// For writing output reports via control transfers.
 	/// </summary>
-	internal class OutputReportViaControlTransfer : OutputReport
+	public class OutputReportViaControlTransfer : IOutputReport
 	{
 		/// <summary>
 		/// Writes an output report to the device using a control transfer.
@@ -357,7 +362,7 @@ namespace MKY.IO.Usb
 		/// <param name="outputReportBuffer">Contains the report ID and report data.</param>
 		/// <param name="hidHandle">Handle to the device.</param>
 		/// <returns>True on success. False on failure.</returns>
-		internal override bool Write(Byte[] outputReportBuffer, SafeFileHandle hidHandle)
+		public virtual bool Write(Byte[] outputReportBuffer, SafeFileHandle hidHandle)
 		{
 			bool success = Hid.SetOutputReport(hidHandle, outputReportBuffer);
 			System.Diagnostics.Debug.Print("HidD_SetOutputReport success = " + success);
@@ -368,9 +373,9 @@ namespace MKY.IO.Usb
 	#endregion
 
 	#region Output Reports > OutputReportViaInterruptTransfer
-	//------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
 	// Output Reports > OutputReportViaInterruptTransfer
-	//------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
 
 	/// <summary>
 	/// For Output reports the host sends to the device.
@@ -378,22 +383,24 @@ namespace MKY.IO.Usb
 	/// <remarks>
 	/// Uses interrupt or control transfers depending on the device and OS.
 	/// </remarks>
-	internal class OutputReportViaInterruptTransfer : OutputReport
+	public class OutputReportViaInterruptTransfer : IOutputReport
 	{
 		/// <summary>
 		/// Writes an output report to the device.
 		/// </summary>
+		/// <remarks>
+		/// The host will use an interrupt transfer if the HID has an interrupt OUT endpoint
+		/// (requires USB 1.1 or later) AND the OS is NOT Windows 98 Standard Edition. Otherwise
+		/// the host will use a control transfer. The application doesn't have to know or care
+		/// which type of transfer is used.
+		/// </remarks>
 		/// <param name="outputReportBuffer">Contains the report ID and report data.</param>
 		/// <param name="writeHandle">Handle to the device.</param>
 		/// <returns>True on success. False on failure.</returns>
-		internal override bool Write(Byte[] outputReportBuffer, SafeFileHandle writeHandle)
+		public virtual bool Write(Byte[] outputReportBuffer, SafeFileHandle writeHandle)
 		{
 			try
 			{
-				//  The host will use an interrupt transfer if the the HID has an interrupt OUT
-				//  endpoint (requires USB 1.1 or later) AND the OS is NOT Windows 98 Standard Edition. 
-				//  Otherwise the the host will use a control transfer.
-				//  The application doesn't have to know or care which type of transfer is used.
 				UInt32 numberOfBytesWritten = 0;
 				bool success = FileIO.WriteFile(writeHandle, outputReportBuffer, ref numberOfBytesWritten, IntPtr.Zero);
 
@@ -406,10 +413,11 @@ namespace MKY.IO.Usb
 				}
 				return (success);
 			}
-			catch (Exception ex)
+			catch (Exception nativeEx)
 			{
+				NativeMethodCallUsbException ex = new NativeMethodCallUsbException("FileIO.WriteFile", nativeEx.Message);
 				XDebug.WriteException(this, ex);
-				throw;
+				throw (ex);
 			}
 		}
 	}

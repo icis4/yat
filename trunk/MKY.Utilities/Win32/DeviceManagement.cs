@@ -48,6 +48,12 @@ namespace MKY.Utilities.Win32
 		// Types
 		//==========================================================================================
 
+		// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+		// warnings for each undocumented member below. Documenting each member makes little sense
+		// since they pretty much tell their purpose and documentation tags between the members
+		// makes the code less readable.
+		#pragma warning disable 1591
+
 		/// <remarks>dbt.h</remarks>
 		[Flags]
 		private enum DIGCF : uint
@@ -64,7 +70,8 @@ namespace MKY.Utilities.Win32
 
 		/// <remarks>dbt.h</remarks>
 		[Flags]
-		private enum DBT : uint
+		[CLSCompliant(false)]
+		public enum DBT : uint
 		{
 			DEVICEARRIVAL        = 0x8000,
 			DEVICEREMOVECOMPLETE = 0x8004,
@@ -149,6 +156,8 @@ namespace MKY.Utilities.Win32
 			public Int32 Reserved;
 		}
 
+		#pragma warning restore 1591
+
 		#endregion
 
 		#region Constants
@@ -160,7 +169,8 @@ namespace MKY.Utilities.Win32
 		private const string USER_DLL = "user32.dll";
 
 		/// <remarks>dbt.h</remarks>
-		private const UInt32 WM_DEVICECHANGE = 0x0219;
+		[CLSCompliant(false)]
+		public const UInt32 WM_DEVICECHANGE = 0x0219;
 
 		#endregion
 
@@ -393,23 +403,25 @@ namespace MKY.Utilities.Win32
 		/// <summary>
 		/// Requests to receive a notification when a device is attached or removed.
 		/// </summary>
-		/// <param name="devicePathName">Handle to a device.</param>
-		/// <param name="formHandle">Handle to the window that will receive device events.</param>
+		/// <param name="windowHandle">Handle to the window that will receive device events.</param>
 		/// <param name="classGuid">Device interface GUID.</param>
 		/// <param name="deviceNotificationHandle">Returned device notification handle.</param>
 		/// <returns>True on success.</returns>
-		public static Boolean RegisterForDeviceNotifications(string devicePathName, IntPtr formHandle, System.Guid classGuid, ref IntPtr deviceNotificationHandle)
+		public static Boolean RegisterDeviceNotificationHandle(IntPtr windowHandle, System.Guid classGuid, ref IntPtr deviceNotificationHandle)
 		{
-			// A DEV_BROADCAST_DEVICEINTERFACE header holds information about the request.
-			DEV_BROADCAST_DEVICEINTERFACE devBroadcastDeviceInterface = new DEV_BROADCAST_DEVICEINTERFACE();
+			// \fixme
+			return (true);
+
 			IntPtr devBroadcastDeviceInterfaceBuffer = IntPtr.Zero;
-			int size = 0;
 
 			try
 			{
+				// A DEV_BROADCAST_DEVICEINTERFACE header holds information about the request.
+				DEV_BROADCAST_DEVICEINTERFACE devBroadcastDeviceInterface = new DEV_BROADCAST_DEVICEINTERFACE();
+
 				// Set the parameters in the DEV_BROADCAST_DEVICEINTERFACE structure.
 				// Set the size.
-				size = Marshal.SizeOf(devBroadcastDeviceInterface);
+				int size = Marshal.SizeOf(devBroadcastDeviceInterface);
 				devBroadcastDeviceInterface.dbcc_size = size;
 
 				// Request to receive notifications about a class of devices.
@@ -426,20 +438,18 @@ namespace MKY.Utilities.Win32
 				// Set fDeleteOld True to prevent memory leaks.
 				Marshal.StructureToPtr(devBroadcastDeviceInterface, devBroadcastDeviceInterfaceBuffer, true);
 
-				deviceNotificationHandle = RegisterDeviceNotification(formHandle, devBroadcastDeviceInterfaceBuffer, DEVICE_NOTIFY.WINDOW_HANDLE);
+				deviceNotificationHandle = RegisterDeviceNotification(windowHandle, devBroadcastDeviceInterfaceBuffer, DEVICE_NOTIFY.WINDOW_HANDLE);
 
 				// Marshal data from the unmanaged block devBroadcastDeviceInterfaceBuffer to
 				// the managed object devBroadcastDeviceInterface
 				Marshal.PtrToStructure(devBroadcastDeviceInterfaceBuffer, devBroadcastDeviceInterface);
 
-				if ((deviceNotificationHandle.ToInt32() == IntPtr.Zero.ToInt32()))
-					return (false);
-				else
-					return (true);
+				return (deviceNotificationHandle != IntPtr.Zero);
 			}
-			catch
+			catch (Exception ex)
 			{
-				throw;
+				Diagnostics.XDebug.WriteException(typeof(DeviceManagement), ex);
+				throw (ex);
 			}
 			finally
 			{
@@ -456,17 +466,14 @@ namespace MKY.Utilities.Win32
 		/// is attached or removed.
 		/// </summary>
 		/// <param name="deviceNotificationHandle">Handle returned previously by RegisterDeviceNotification.</param>
-		public static void StopReceivingDeviceNotifications(IntPtr deviceNotificationHandle)
+		public static void UnregisterDeviceNotificationHandle(IntPtr deviceNotificationHandle)
 		{
 			try
 			{
-				DeviceManagement.UnregisterDeviceNotification(deviceNotificationHandle);
+				UnregisterDeviceNotification(deviceNotificationHandle);
 				// Ignore failures.
 			}
-			catch
-			{
-				throw;
-			}
+			catch {}
 		}
 
 		#endregion

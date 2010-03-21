@@ -41,7 +41,7 @@ namespace YAT.Settings.Test
 		//==========================================================================================
 
 		[TearDown]
-		public void TearDown()
+		public virtual void TearDown()
 		{
 			foreach (string filePath in Directory.GetFiles(MakeTempPath(), MakeTempFileName("*")))
 				File.Delete(filePath);
@@ -65,7 +65,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestArraySerialization()
+		public virtual void TestArraySerialization()
 		{
 			string filePath = "";
 
@@ -94,7 +94,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestListSerialization()
+		public virtual void TestListSerialization()
 		{
 			string filePath = "";
 
@@ -133,7 +133,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestEmptyCommandSerialization()
+		public virtual void TestEmptyCommandSerialization()
 		{
 			string filePath = "";
 
@@ -154,7 +154,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestRecentSerialization()
+		public virtual void TestRecentSerialization()
 		{
 			string filePath = "";
 
@@ -180,7 +180,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestPredefinedSerialization()
+		public virtual void TestPredefinedSerialization()
 		{
 			string filePath = "";
 
@@ -208,7 +208,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestExplicitSerialization()
+		public virtual void TestExplicitSerialization()
 		{
 			string filePath = "";
 
@@ -225,7 +225,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestImplicitSerialization()
+		public virtual void TestImplicitSerialization()
 		{
 			string filePath = "";
 

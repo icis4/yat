@@ -70,35 +70,35 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>File type is a kind of title, therefore capital 'T' and 'S'.</remarks>
 		[XmlElement("FileType")]
-		public string FileType
+		public virtual string FileType
 		{
 			get { return ("YAT Terminal Settings"); }
 			set { } // do nothing
 		}
 
 		[XmlElement("Warning")]
-		public string Warning
+		public virtual string Warning
 		{
 			get { return ("Modifying this file may cause undefined behaviour!"); }
 			set { } // do nothing
 		}
 
 		[XmlElement("ProductVersion")]
-		public string ProductVersion
+		public virtual string ProductVersion
 		{
 			get { return (_productVersion); }
 			set { } // do nothing
 		}
 
 		[XmlElement("Saved")]
-		public SaveInfo Saved
+		public virtual SaveInfo Saved
 		{
 			get { return (new SaveInfo(DateTime.Now, Environment.UserName)); }
 			set { } // do nothing
 		}
 
 		[XmlElement("AutoSaved")]
-		public bool AutoSaved
+		public virtual bool AutoSaved
 		{
 			get { return (_autoSaved); }
 			set
@@ -112,7 +112,7 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlElement("Explicit")]
-		public ExplicitSettings Explicit
+		public virtual ExplicitSettings Explicit
 		{
 			get { return (_explicit); }
 			set
@@ -132,7 +132,7 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlElement("Implicit")]
-		public ImplicitSettings Implicit
+		public virtual ImplicitSettings Implicit
 		{
 			get { return (_implicit); }
 			set
@@ -152,7 +152,7 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlIgnore]
-		public MKY.Utilities.Xml.AlternateXmlElement[] AlternateXmlElements
+		public virtual MKY.Utilities.Xml.AlternateXmlElement[] AlternateXmlElements
 		{
 			get { return (_AlternateXmlElements); }
 		}
@@ -166,7 +166,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public bool TerminalIsStarted
+		public virtual bool TerminalIsStarted
 		{
 			get { return (_implicit.TerminalIsStarted); }
 			set { _implicit.TerminalIsStarted = value;  }
@@ -174,7 +174,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public bool LogIsStarted
+		public virtual bool LogIsStarted
 		{
 			get { return (_implicit.LogIsStarted); }
 			set { _implicit.LogIsStarted = value;  }
@@ -182,7 +182,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public Domain.TerminalType TerminalType
+		public virtual Domain.TerminalType TerminalType
 		{
 			get { return (_explicit.Terminal.TerminalType); }
 			set { _explicit.Terminal.TerminalType = value;  }
@@ -190,7 +190,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public Domain.Settings.TerminalSettings Terminal
+		public virtual Domain.Settings.TerminalSettings Terminal
 		{
 			get { return (_explicit.Terminal); }
 			set { _explicit.Terminal = value;  }
@@ -198,7 +198,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public Domain.Settings.IOSettings IO
+		public virtual Domain.Settings.IOSettings IO
 		{
 			get { return (_explicit.Terminal.IO); }
 			set { _explicit.Terminal.IO = value;  }
@@ -206,7 +206,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public Domain.IOType IOType
+		public virtual Domain.IOType IOType
 		{
 			get { return (_explicit.Terminal.IO.IOType); }
 			set { _explicit.Terminal.IO.IOType = value;  }
@@ -214,7 +214,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public MKY.IO.Ports.SerialPortId SerialPortId
+		public virtual MKY.IO.Ports.SerialPortId SerialPortId
 		{
 			get { return (_explicit.Terminal.IO.SerialPort.PortId); }
 			set { _explicit.Terminal.IO.SerialPort.PortId = value;  }
@@ -222,7 +222,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public int SocketLocalPort
+		public virtual int SocketLocalPort
 		{
 			get { return (_explicit.Terminal.IO.Socket.LocalPort); }
 			set { _explicit.Terminal.IO.Socket.LocalPort = value;  }
@@ -230,7 +230,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public string SocketRemoteHost
+		public virtual string SocketRemoteHost
 		{
 			get { return (_explicit.Terminal.IO.Socket.RemoteHost); }
 			set { _explicit.Terminal.IO.Socket.RemoteHost = value;  }
@@ -238,7 +238,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public int SocketRemotePort
+		public virtual int SocketRemotePort
 		{
 			get { return (_explicit.Terminal.IO.Socket.RemotePort); }
 			set { _explicit.Terminal.IO.Socket.RemotePort = value;  }
@@ -246,7 +246,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public Domain.Settings.BufferSettings Buffer
+		public virtual Domain.Settings.BufferSettings Buffer
 		{
 			get { return (_explicit.Terminal.Buffer); }
 			set { _explicit.Terminal.Buffer = value;  }
@@ -254,7 +254,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public Domain.Settings.DisplaySettings Display
+		public virtual Domain.Settings.DisplaySettings Display
 		{
 			get { return (_explicit.Terminal.Display); }
 			set { _explicit.Terminal.Display = value;  }
@@ -262,7 +262,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public Domain.Settings.CharReplaceSettings CharReplace
+		public virtual Domain.Settings.CharReplaceSettings CharReplace
 		{
 			get { return (_explicit.Terminal.CharReplace); }
 			set { _explicit.Terminal.CharReplace = value;  }
@@ -270,7 +270,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public Domain.Settings.SendSettings Send
+		public virtual Domain.Settings.SendSettings Send
 		{
 			get { return (_explicit.Terminal.Send); }
 			set { _explicit.Terminal.Send = value;  }
@@ -278,7 +278,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public Domain.Settings.TextTerminalSettings TextTerminal
+		public virtual Domain.Settings.TextTerminalSettings TextTerminal
 		{
 			get { return (_explicit.Terminal.TextTerminal); }
 			set { _explicit.Terminal.TextTerminal = value;  }
@@ -286,7 +286,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public Domain.Settings.BinaryTerminalSettings BinaryTerminal
+		public virtual Domain.Settings.BinaryTerminalSettings BinaryTerminal
 		{
 			get { return (_explicit.Terminal.BinaryTerminal); }
 			set { _explicit.Terminal.BinaryTerminal = value;  }
@@ -294,7 +294,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public Model.Settings.SendCommandSettings SendCommand
+		public virtual Model.Settings.SendCommandSettings SendCommand
 		{
 			get { return (_implicit.SendCommand); }
 			set { _implicit.SendCommand = value;  }
@@ -302,7 +302,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public Model.Settings.SendFileSettings SendFile
+		public virtual Model.Settings.SendFileSettings SendFile
 		{
 			get { return (_implicit.SendFile); }
 			set { _implicit.SendFile = value;  }
@@ -310,7 +310,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public Model.Settings.PredefinedSettings Predefined
+		public virtual Model.Settings.PredefinedSettings Predefined
 		{
 			get { return (_implicit.Predefined); }
 			set { _implicit.Predefined = value;  }
@@ -318,7 +318,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public Model.Settings.WindowSettings Window
+		public virtual Model.Settings.WindowSettings Window
 		{
 			get { return (_implicit.Window); }
 			set { _implicit.Window = value;  }
@@ -326,7 +326,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public Model.Settings.LayoutSettings Layout
+		public virtual Model.Settings.LayoutSettings Layout
 		{
 			get { return (_implicit.Layout); }
 			set { _implicit.Layout = value;  }
@@ -334,7 +334,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public Model.Settings.PredefinedCommandSettings PredefinedCommand
+		public virtual Model.Settings.PredefinedCommandSettings PredefinedCommand
 		{
 			get { return (_explicit.PredefinedCommand); }
 			set { _explicit.PredefinedCommand = value;  }
@@ -342,7 +342,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public Model.Settings.FormatSettings Format
+		public virtual Model.Settings.FormatSettings Format
 		{
 			get { return (_explicit.Format); }
 			set { _explicit.Format = value;  }
@@ -350,7 +350,7 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public Log.Settings.LogSettings Log
+		public virtual Log.Settings.LogSettings Log
 		{
 			get { return (_explicit.Log); }
 			set { _explicit.Log = value;  }

@@ -122,27 +122,27 @@ namespace libusb.NET
 		// Properties
 		//==========================================================================================
 
-		public int VendorId
+		public virtual int VendorId
 		{
 			get { return (_nativeDeviceDescriptor.idVendor); }
 		}
 
-		public string VendorIdString
+		public virtual string VendorIdString
 		{
 			get { return (VendorId.ToString("X4")); }
 		}
 
-		public int ProductId
+		public virtual int ProductId
 		{
 			get { return (_nativeDeviceDescriptor.idProduct); }
 		}
 
-		public string ProductIdString
+		public virtual string ProductIdString
 		{
 			get { return (ProductId.ToString("X4")); }
 		}
 
-		public string Manufacturer
+		public virtual string Manufacturer
 		{
 			get
 			{
@@ -160,8 +160,8 @@ namespace libusb.NET
 				return null;
 			}
 		}
-		
-		public string Product
+
+		public virtual string Product
 		{
 			get
 			{
@@ -179,8 +179,8 @@ namespace libusb.NET
 				return null;
 			}
 		}
-		
-		public string SerialNumber
+
+		public virtual string SerialNumber
 		{
 			get
 			{
@@ -198,8 +198,8 @@ namespace libusb.NET
 				return null;
 			}
 		}
-		
-		public int Timeout
+
+		public virtual int Timeout
 		{
 			get { return (_timeout); }
 			set { _timeout = value; }
@@ -212,39 +212,39 @@ namespace libusb.NET
 		// Public Methods
 		//==========================================================================================
 
-		public void ControlRead(RequestType requestType, byte request, int value, int index, ref byte[] data)
+		public virtual void ControlRead(RequestType requestType, byte request, int value, int index, ref byte[] data)
 		{
 			AssertIsOpen();
 			Native.Functions.libusb_control_transfer(_nativeDeviceHandle, (byte)requestType, request, (ushort)value, (ushort)index, ref data, _timeout);
 		}
 
-		public void ControlReadStandardRequest(StandardRequest request, int value, int index, ref byte[] data)
+		public virtual void ControlReadStandardRequest(StandardRequest request, int value, int index, ref byte[] data)
 		{
 			ControlRead(RequestType.Standard, (byte)request, value, index, ref data);
 		}
 
-		public void BulkWrite(byte endpoint, byte[] data)
+		public virtual void BulkWrite(byte endpoint, byte[] data)
 		{
 			AssertIsOpen();
 			int transferred;
 			Native.Functions.libusb_bulk_transfer(_nativeDeviceHandle, endpoint, ref data, out transferred, _timeout);
 		}
 
-		public void BulkRead(byte endpoint, ref byte[] data)
+		public virtual void BulkRead(byte endpoint, ref byte[] data)
 		{
 			AssertIsOpen();
 			int transferred;
 			Native.Functions.libusb_bulk_transfer(_nativeDeviceHandle, endpoint, ref data, out transferred, _timeout);
 		}
 
-		public void InterruptWrite(byte endpoint, byte[] data)
+		public virtual void InterruptWrite(byte endpoint, byte[] data)
 		{
 			AssertIsOpen();
 			int transferred;
 			Native.Functions.libusb_interrupt_transfer(_nativeDeviceHandle, endpoint, ref data, out transferred, _timeout);
 		}
 
-		public void InterruptRead(byte endpoint, ref byte[] data)
+		public virtual void InterruptRead(byte endpoint, ref byte[] data)
 		{
 			AssertIsOpen();
 			int transferred;

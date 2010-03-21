@@ -20,6 +20,9 @@
 #pragma warning disable 1591
 
 using System;
+using System.Collections.Generic;
+
+using MKY.Utilities.Types;
 
 namespace MKY.IO.Usb
 {
@@ -100,16 +103,16 @@ namespace MKY.IO.Usb
 
 	public enum EndpointDirection
 	{
-	    In  = 0x80,
-	    Out = 0x00,
+		In  = 0x80,
+		Out = 0x00,
 	}
 
 	public enum TransferType
 	{
-	    Control     = 0,
-	    Isochronous = 1,
-	    Bulk        = 2,
-	    Interrupt   = 3,
+		Control     = 0,
+		Isochronous = 1,
+		Bulk        = 2,
+		Interrupt   = 3,
 	}
 
 	public enum RequestType
@@ -147,17 +150,17 @@ namespace MKY.IO.Usb
 
 	public enum IsoSyncType
 	{
-	    None     = 0,
-	    Async    = 1,
-	    Adaptive = 2,
-	    Sync     = 3,
+		None     = 0,
+		Async    = 1,
+		Adaptive = 2,
+		Sync     = 3,
 	}
 
 	public enum IsoUsageType
 	{
-	    Data     = 0,
-	    Feedback = 1,
-	    Implicit = 2,
+		Data     = 0,
+		Feedback = 1,
+		Implicit = 2,
 	}
 
 	public enum TransferFlags
@@ -165,6 +168,153 @@ namespace MKY.IO.Usb
 		ShortNotOk   = 1 << 0,
 		FreeBuffer   = 1 << 1,
 		FreeTransfer = 1 << 2,
+	}
+
+	public enum DeviceEvent
+	{
+		None,
+		Connected,
+		Disconnected,
+	}
+
+	public enum HidUsage
+	{
+		Generic  = Utilities.Win32.Hid.Usage.Generic,
+		Keyboard = Utilities.Win32.Hid.Usage.Keyboard,
+		Mouse    = Utilities.Win32.Hid.Usage.Mouse,
+	}
+
+	#region HidUsage XEnum
+
+	/// <summary>
+	/// Extended enum XHidUsage.
+	/// </summary>
+	public class XHidUsage : XEnum
+	{
+		/// <summary>Default is <see cref="HidUsage.Generic"/></summary>
+		public XHidUsage()
+			: base(HidUsage.Generic)
+		{
+		}
+
+		/// <summary></summary>
+		protected XHidUsage(HidUsage usage)
+			: base(usage)
+		{
+		}
+
+		/// <summary></summary>
+		protected XHidUsage(Utilities.Win32.Hid.Usage usage)
+			: base((HidUsage)usage)
+		{
+		}
+
+		#region ToString
+
+		/// <summary></summary>
+		public override string ToString()
+		{
+			return (UnderlyingEnum.GetHashCode().ToString());
+		}
+
+		#endregion
+
+		#region GetItems
+
+		/// <summary></summary>
+		public static XHidUsage[] GetItems()
+		{
+			List<XHidUsage> a = new List<XHidUsage>();
+			a.Add(new XHidUsage(HidUsage.Generic));
+			a.Add(new XHidUsage(HidUsage.Keyboard));
+			a.Add(new XHidUsage(HidUsage.Mouse));
+			return (a.ToArray());
+		}
+
+		#endregion
+
+		#region Parse
+
+		/// <summary></summary>
+		public static XHidUsage Parse(string usage)
+		{
+			return ((XHidUsage)int.Parse(usage));
+		}
+
+		/// <summary></summary>
+		public static bool TryParse(string usage, out XHidUsage result)
+		{
+			int intResult;
+
+			if (int.TryParse(usage, out intResult))
+			{
+				result = (XHidUsage)intResult;
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
+		}
+
+		#endregion
+
+		#region Conversion Operators
+
+		/// <summary></summary>
+		public static implicit operator HidUsage(XHidUsage usage)
+		{
+			return ((HidUsage)usage.UnderlyingEnum);
+		}
+
+		/// <summary></summary>
+		public static implicit operator XHidUsage(HidUsage usage)
+		{
+			return (new XHidUsage(usage));
+		}
+
+		/// <summary></summary>
+		public static implicit operator Utilities.Win32.Hid.Usage(XHidUsage usage)
+		{
+			return ((Utilities.Win32.Hid.Usage)usage.UnderlyingEnum);
+		}
+
+		/// <summary></summary>
+		public static implicit operator XHidUsage(Utilities.Win32.Hid.Usage usage)
+		{
+			return (new XHidUsage(usage));
+		}
+
+		/// <summary></summary>
+		public static implicit operator int(XHidUsage usage)
+		{
+			return (usage.GetHashCode());
+		}
+
+		/// <summary></summary>
+		public static implicit operator XHidUsage(int usage)
+		{
+			if      (usage >= (int)HidUsage.Mouse)    return (new XHidUsage(HidUsage.Mouse));
+			else if (usage >= (int)HidUsage.Keyboard) return (new XHidUsage(HidUsage.Keyboard));
+			else                                      return (new XHidUsage(HidUsage.Generic));
+		}
+
+		/// <summary></summary>
+		public static implicit operator string(XHidUsage usage)
+		{
+			return (usage.ToString());
+		}
+
+		/// <summary></summary>
+		public static implicit operator XHidUsage(string usage)
+		{
+			return (Parse(usage));
+		}
+
+		#endregion
+
+		#endregion
 	}
 }
 

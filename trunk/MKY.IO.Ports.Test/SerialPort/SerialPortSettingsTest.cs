@@ -39,7 +39,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestSerialization()
+		public virtual void TestSerialization()
 		{
 			// \fixme
 			// Improve SerialPortSettings and XBaudRate such that they can handle user defined baud rates.

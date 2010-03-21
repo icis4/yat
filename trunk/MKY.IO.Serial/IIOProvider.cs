@@ -44,16 +44,6 @@ namespace MKY.IO.Serial
 		event EventHandler IOControlChanged;
 
 		/// <summary>
-		/// Fired to request an operation.
-		/// </summary>
-		event EventHandler<IORequestEventArgs> IORequest;
-
-		/// <summary>
-		/// Fired after an I/O error has occured.
-		/// </summary>
-		event EventHandler<IOErrorEventArgs> IOError;
-
-		/// <summary>
 		/// Fired after the I/O provider has received data.
 		/// </summary>
 		event EventHandler DataReceived;
@@ -62,6 +52,16 @@ namespace MKY.IO.Serial
 		/// Fired after the I/O provider has sent data.
 		/// </summary>
 		event EventHandler DataSent;
+
+		/// <summary>
+		/// Fired to request an operation.
+		/// </summary>
+		event EventHandler<IORequestEventArgs> IORequest;
+
+		/// <summary>
+		/// Fired after an I/O error has occured.
+		/// </summary>
+		event EventHandler<IOErrorEventArgs> IOError;
 
 		#endregion
 
@@ -82,29 +82,29 @@ namespace MKY.IO.Serial
 		/// Gets a value indicating whether the underlying I/O instance is open.
 		/// </summary>
 		/// <remarks>
-		/// For TCP sockets, this property indicates that the the underlying I/O
-		/// instance is connected to a remote resource.
+		/// For TCP sockets, this property indicates that the the underlying I/O /// instance is
+		/// connected to a remote resource.
 		/// </remarks>
 		/// <returns>
-		/// true if the underlying I/O instance is open as of the most recent
-		/// operation; otherwise, false.
+		/// true if the underlying I/O instance is open as of the most recent operation;
+		/// otherwise, false.
 		/// </returns>
 		bool IsOpen { get; }
 
 		/// <summary>
-		/// Gets a value indicating whether the underlying I/O instance
-		/// is open and/or connected to a remote resource.
+		/// Gets a value indicating whether the underlying I/O instance is open and/or
+		/// connected to a remote resource.
 		/// </summary>
 		/// <remarks>
-		/// For serial ports, this property indicates that the port is open
-		/// and no break state is detected (if supported by the I/O instance).
+		/// For serial ports, this property indicates that the port is open and no break
+		/// state is detected (if supported by the I/O instance).
 		/// </remarks>
 		/// <remarks>
 		/// For UDP sockets, this property indicates that the socket is open.
 		/// </remarks>
 		/// <returns>
-		/// true if the underlying I/O instance is open and/or connected to a
-		/// remote resource as of the most recent operation; otherwise, false.
+		/// true if the underlying I/O instance is open and/or connected to a remote
+		/// resource as of the most recent operation; otherwise, false.
 		/// </returns>
 		bool IsConnected { get; }
 
@@ -137,7 +137,7 @@ namespace MKY.IO.Serial
 		/// <remarks>
 		/// For serial ports, the port is opened.
 		/// </remarks>
-		void Start();
+		bool Start();
 
 		/// <summary>
 		/// Stops the I/O provider.

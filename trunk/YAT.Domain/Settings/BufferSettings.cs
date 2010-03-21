@@ -74,7 +74,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("TxBufferSize")]
-		public int TxBufferSize
+		public virtual int TxBufferSize
 		{
 			get { return (_txBufferSize); }
 			set
@@ -89,7 +89,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("RxBufferSize")]
-		public int RxBufferSize
+		public virtual int RxBufferSize
 		{
 			get { return (_rxBufferSize); }
 			set
@@ -104,7 +104,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public int BidirBufferSize
+		public virtual int BidirBufferSize
 		{
 			get { return (TxBufferSize + RxBufferSize); }
 		}

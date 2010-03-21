@@ -55,35 +55,35 @@ namespace YAT.Settings.Workspace
 
 		/// <remarks>File type is a kind of title, therefore capital 'W' and 'S'.</remarks>
 		[XmlElement("FileType")]
-		public string FileType
+		public virtual string FileType
 		{
 			get { return ("YAT Workspace Settings"); }
 			set { } // do nothing
 		}
 
 		[XmlElement("Warning")]
-		public string Warning
+		public virtual string Warning
 		{
 			get { return ("Modifying this file may cause undefined behaviour!"); }
 			set { } // do nothing
 		}
 
 		[XmlElement("Saved")]
-		public SaveInfo Saved
+		public virtual SaveInfo Saved
 		{
 			get { return (new SaveInfo(DateTime.Now, Environment.UserName)); }
 			set { } // do nothing
 		}
 
 		[XmlElement("ProductVersion")]
-		public string ProductVersion
+		public virtual string ProductVersion
 		{
 			get { return (_productVersion); }
 			set { } // do nothing
 		}
 
 		[XmlElement("AutoSaved")]
-		public bool AutoSaved
+		public virtual bool AutoSaved
 		{
 			get { return (_autoSaved); }
 			set
@@ -97,7 +97,7 @@ namespace YAT.Settings.Workspace
 		}
 
 		[XmlElement("Workspace")]
-		public WorkspaceSettings Workspace
+		public virtual WorkspaceSettings Workspace
 		{
 			get { return (_workspace); }
 			set

@@ -105,7 +105,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("PortId")]
-		public SerialPortId PortId
+		public virtual SerialPortId PortId
 		{
 			get { return (_portId); }
 			set
@@ -124,7 +124,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("Communication")]
-		public SerialCommunicationSettings Communication
+		public virtual SerialCommunicationSettings Communication
 		{
 			get { return (_communication); }
 			set
@@ -145,7 +145,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("AutoReopen")]
-		public AutoRetry AutoReopen
+		public virtual AutoRetry AutoReopen
 		{
 			get { return (_autoReopen); }
 			set
@@ -160,7 +160,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("ReplaceParityErrors")]
-		public bool ReplaceParityErrors
+		public virtual bool ReplaceParityErrors
 		{
 			get { return (_replaceParityErrors); }
 			set
@@ -175,7 +175,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("ParityErrorReplacement")]
-		public byte ParityErrorReplacement
+		public virtual byte ParityErrorReplacement
 		{
 			get { return (_parityErrorReplacement); }
 			set
@@ -190,7 +190,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("RtsEnabled")]
-		public bool RtsEnabled
+		public virtual bool RtsEnabled
 		{
 			get { return (_rtsEnabled); }
 			set
@@ -205,7 +205,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("DtrEnabled")]
-		public bool DtrEnabled
+		public virtual bool DtrEnabled
 		{
 			get { return (_dtrEnabled); }
 			set

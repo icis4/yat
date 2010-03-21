@@ -68,7 +68,7 @@ namespace YAT.Settings
 		//==========================================================================================
 
 		[XmlElement("FilePath")]
-		public string FilePath
+		public virtual string FilePath
 		{
 			get { return (_filePath); }
 			set
@@ -82,7 +82,7 @@ namespace YAT.Settings
 		}
 
 		[XmlElement("FilePathUser")]
-		public Guid FilePathUser
+		public virtual Guid FilePathUser
 		{
 			get { return (_filePathUser); }
 			set
@@ -96,21 +96,21 @@ namespace YAT.Settings
 		}
 
 		/// <summary></summary>
-		public void SetFilePathAndUser(string filePath, Guid filePathUser)
+		public virtual void SetFilePathAndUser(string filePath, Guid filePathUser)
 		{
 			FilePath = filePath;
 			FilePathUser = filePathUser;
 		}
 
 		/// <summary></summary>
-		public void ResetFilePathAndUser()
+		public virtual void ResetFilePathAndUser()
 		{
 			FilePath = "";
 			FilePathUser = Guid.Empty;
 		}
 
 		/// <summary></summary>
-		public void ResetUserOnly()
+		public virtual void ResetUserOnly()
 		{
 			FilePathUser = Guid.Empty;
 		}

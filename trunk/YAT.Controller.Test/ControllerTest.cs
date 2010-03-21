@@ -43,7 +43,7 @@ namespace YAT.Controller.Test
 		//==========================================================================================
 
 		[TestFixtureSetUp]
-		public void TestFixtureSetUp()
+		public virtual void TestFixtureSetUp()
 		{
 			// prevent auto-save of workspace settings
 			_autoSaveWorkspaceToRestore = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
@@ -58,7 +58,7 @@ namespace YAT.Controller.Test
 		//==========================================================================================
 
 		[TestFixtureTearDown]
-		public void TestFixtureTearDown()
+		public virtual void TestFixtureTearDown()
 		{
 			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = _autoSaveWorkspaceToRestore;
 		}
@@ -76,7 +76,7 @@ namespace YAT.Controller.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestEmptyCommandLine()
+		public virtual void TestEmptyCommandLine()
 		{
 			using (Controller.Main main = new Main(EmptyArgs))
 			{
@@ -93,7 +93,7 @@ namespace YAT.Controller.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestTerminalCommandLineArg()
+		public virtual void TestTerminalCommandLineArg()
 		{
 			using (Controller.Main main = new Main(TerminalArgs))
 			{
@@ -111,7 +111,7 @@ namespace YAT.Controller.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestWorkspaceCommandLineArg()
+		public virtual void TestWorkspaceCommandLineArg()
 		{
 			using (Controller.Main main = new Main(WorkspaceArgs))
 			{
@@ -129,7 +129,7 @@ namespace YAT.Controller.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestEmptyCommandLineRun()
+		public virtual void TestEmptyCommandLineRun()
 		{
 			using (Controller.Main main = new Main(EmptyArgs))
 			{
@@ -145,7 +145,7 @@ namespace YAT.Controller.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestTerminalCommandLineArgRun()
+		public virtual void TestTerminalCommandLineArgRun()
 		{
 			using (Controller.Main main = new Main(TerminalArgs))
 			{
@@ -161,7 +161,7 @@ namespace YAT.Controller.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestWorkspaceCommandLineArgRun()
+		public virtual void TestWorkspaceCommandLineArgRun()
 		{
 			using (Controller.Main main = new Main(WorkspaceArgs))
 			{
@@ -178,7 +178,7 @@ namespace YAT.Controller.Test
 
 		[Test]
 		[Category("Interactive")]
-		public void TestEmptyCommandLineRunInteractive()
+		public virtual void TestEmptyCommandLineRunInteractive()
 		{
 			using (Controller.Main main = new Main(EmptyArgs))
 			{
@@ -195,7 +195,7 @@ namespace YAT.Controller.Test
 
 		[Test]
 		[Category("Interactive")]
-		public void TestTerminalCommandLineArgRunInteractive()
+		public virtual void TestTerminalCommandLineArgRunInteractive()
 		{
 			using (Controller.Main main = new Main(TerminalArgs))
 			{
@@ -212,7 +212,7 @@ namespace YAT.Controller.Test
 
 		[Test]
 		[Category("Interactive")]
-		public void TestWorkspaceCommandLineArgRunInteractive()
+		public virtual void TestWorkspaceCommandLineArgRunInteractive()
 		{
 			using (Controller.Main main = new Main(WorkspaceArgs))
 			{

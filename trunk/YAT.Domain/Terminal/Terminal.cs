@@ -180,7 +180,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Settings.TerminalSettings TerminalSettings
+		public virtual Settings.TerminalSettings TerminalSettings
 		{
 			get
 			{
@@ -196,7 +196,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public bool IsStarted
+		public virtual bool IsStarted
 		{
 			get
 			{
@@ -206,7 +206,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public bool IsConnected
+		public virtual bool IsConnected
 		{
 			get
 			{
@@ -216,7 +216,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public bool IsOpen
+		public virtual bool IsOpen
 		{
 			get
 			{
@@ -226,7 +226,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public MKY.IO.Serial.IIOProvider UnderlyingIOProvider
+		public virtual MKY.IO.Serial.IIOProvider UnderlyingIOProvider
 		{
 			get
 			{
@@ -236,7 +236,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public object UnderlyingIOInstance
+		public virtual object UnderlyingIOInstance
 		{
 			get
 			{
@@ -246,31 +246,31 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		protected RawTerminal RawTerminal
+		protected virtual RawTerminal RawTerminal
 		{
 			get { return (_rawTerminal); }
 		}
 
 		/// <summary></summary>
-		protected DisplayRepository TxRepository
+		protected virtual DisplayRepository TxRepository
 		{
 			get { return (_txRepository); }
 		}
 
 		/// <summary></summary>
-		protected DisplayRepository BidirRepository
+		protected virtual DisplayRepository BidirRepository
 		{
 			get { return (_bidirRepository); }
 		}
 
 		/// <summary></summary>
-		protected DisplayRepository RxRepository
+		protected virtual DisplayRepository RxRepository
 		{
 			get { return (_rxRepository); }
 		}
 
 		/// <summary></summary>
-		protected bool Reload
+		protected virtual bool Reload
 		{
 			get { return (_eventsSuspendedForReload); }
 		}
@@ -288,10 +288,10 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public virtual void Start()
+		public virtual bool Start()
 		{
 			AssertNotDisposed();
-			_rawTerminal.Start();
+			return (_rawTerminal.Start());
 		}
 
 		/// <summary></summary>
@@ -648,7 +648,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public int GetRepositoryDataCount(RepositoryType repository)
+		public virtual int GetRepositoryDataCount(RepositoryType repository)
 		{
 			AssertNotDisposed();
 
@@ -662,7 +662,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public int GetRepositoryLineCount(RepositoryType repository)
+		public virtual int GetRepositoryLineCount(RepositoryType repository)
 		{
 			AssertNotDisposed();
 
@@ -718,7 +718,7 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		new public virtual string ToString()
+		public override string ToString()
 		{
 			AssertNotDisposed();
 			
@@ -738,7 +738,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public string RepositoryToString(RepositoryType repository, string indent)
+		public virtual string RepositoryToString(RepositoryType repository, string indent)
 		{
 			AssertNotDisposed();
 			

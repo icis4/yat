@@ -114,42 +114,42 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 
 		/// <summary></summary>
-		public byte[] Parse(string s, CharSubstitution substitution)
+		public virtual byte[] Parse(string s, CharSubstitution substitution)
 		{
 			string parsed;
 			return (Parse(s, substitution, out parsed));
 		}
 
 		/// <summary></summary>
-		public byte[] Parse(string s, CharSubstitution substitution, out string parsed)
+		public virtual byte[] Parse(string s, CharSubstitution substitution, out string parsed)
 		{
 			_substitution = substitution;
 			return (Parse(s, out parsed));
 		}
 
 		/// <summary></summary>
-		public Result[] Parse(string s, CharSubstitution substitution, ParseMode mode)
+		public virtual Result[] Parse(string s, CharSubstitution substitution, ParseMode mode)
 		{
 			string parsed;
 			return (Parse(s, substitution, mode, out parsed));
 		}
 
 		/// <summary></summary>
-		public Result[] Parse(string s, CharSubstitution substitution, ParseMode mode, out string parsed)
+		public virtual Result[] Parse(string s, CharSubstitution substitution, ParseMode mode, out string parsed)
 		{
 			_substitution = substitution;
 			return (Parse(s, mode, out parsed));
 		}
 
 		/// <summary></summary>
-		public bool TryParse(string s, CharSubstitution substitution, out byte[] result)
+		public virtual bool TryParse(string s, CharSubstitution substitution, out byte[] result)
 		{
 			string parsed;
 			return (TryParse(s, substitution, out result, out parsed));
 		}
 
 		/// <summary></summary>
-		public bool TryParse(string s, CharSubstitution substitution, out byte[] result, out string parsed)
+		public virtual bool TryParse(string s, CharSubstitution substitution, out byte[] result, out string parsed)
 		{
 			_substitution = substitution;
 			return (TryParse(s, out result, out parsed));

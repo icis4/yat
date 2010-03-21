@@ -119,7 +119,7 @@ namespace MKY.Utilities.Test.IO
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestCompare()
+		public virtual void TestCompare()
 		{
 			string path1 = "";
 			string path2 = "";
@@ -189,7 +189,7 @@ namespace MKY.Utilities.Test.IO
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestCombine()
+		public virtual void TestCombine()
 		{
 			string path1 = "";
 			string path2 = "";

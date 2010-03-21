@@ -140,7 +140,7 @@ namespace YAT.Gui.Forms
 		// MDI Parent > Properties
 		//------------------------------------------------------------------------------------------
 
-		public string UserName
+		public virtual string UserName
 		{
 			get
 			{
@@ -151,7 +151,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		public bool IsStarted
+		public virtual bool IsStarted
 		{
 			get
 			{
@@ -162,7 +162,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		public Model.Terminal UnderlyingTerminal
+		public virtual Model.Terminal UnderlyingTerminal
 		{
 			get { return (_terminal); }
 		}
@@ -174,52 +174,52 @@ namespace YAT.Gui.Forms
 		// MDI Parent > Methods
 		//------------------------------------------------------------------------------------------
 
-		public bool RequestSaveFile()
+		public virtual bool RequestSaveFile()
 		{
 			return (_terminal.Save());
 		}
 
-		public bool RequestCloseFile()
+		public virtual bool RequestCloseFile()
 		{
 			return (_terminal.Close());
 		}
 
-		public bool RequestStartTerminal()
+		public virtual bool RequestStartTerminal()
 		{
 			return (_terminal.StartIO());
 		}
 
-		public bool RequestStopTerminal()
+		public virtual bool RequestStopTerminal()
 		{
 			return (_terminal.StopIO());
 		}
 
-		public void RequestRadix(Domain.Radix radix)
+		public virtual void RequestRadix(Domain.Radix radix)
 		{
 			_settingsRoot.Display.TxRadix = radix;
 		}
 
-		public void RequestClear()
+		public virtual void RequestClear()
 		{
 			_terminal.ClearRepositories();
 		}
 
-		public void RequestSaveToFile()
+		public virtual void RequestSaveToFile()
 		{
 			ShowSaveMonitorDialog(GetMonitor(_monitorSelection));
 		}
 
-		public void RequestCopyToClipboard()
+		public virtual void RequestCopyToClipboard()
 		{
 			CopyMonitorToClipboard(GetMonitor(_monitorSelection));
 		}
 
-		public void RequestPrint()
+		public virtual void RequestPrint()
 		{
 			ShowPrintMonitorDialog(GetMonitor(_monitorSelection));
 		}
 
-		public void RequestEditTerminalSettings()
+		public virtual void RequestEditTerminalSettings()
 		{
 			ShowTerminalSettings();
 		}
@@ -2579,7 +2579,7 @@ namespace YAT.Gui.Forms
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Title = "Save " + UserName + " As";
 			sfd.Filter = ExtensionSettings.TerminalFilesFilter;
-			sfd.DefaultExt = ExtensionSettings.TerminalFiles;
+			sfd.DefaultExt = ExtensionSettings.TerminalFile;
 			sfd.InitialDirectory = ApplicationSettings.LocalUser.Paths.TerminalFilesPath;
 			sfd.FileName = UserName + "." + sfd.DefaultExt;
 
@@ -2646,111 +2646,139 @@ namespace YAT.Gui.Forms
 
 		private void SetTerminalCaption()
 		{
-			bool isStarted = false;
-			bool isOpen = false;
+			bool isStarted   = false;
+			bool isOpen      = false;
 			bool isConnected = false;
 
 			if (_terminal != null)
 			{
-				isStarted = _terminal.IsStarted;
-				isOpen = _terminal.IsOpen;
+				isStarted   = _terminal.IsStarted;
+				isOpen      = _terminal.IsOpen;
 				isConnected = _terminal.IsConnected;
 			}
 
 			StringBuilder sb = new StringBuilder(UserName);
 
-			if ((_settingsRoot != null) && _settingsRoot.ExplicitHaveChanged)
-				sb.Append("*");
-
 			if (_settingsRoot != null)
 			{
-				if (_settingsRoot.IOType == Domain.IOType.SerialPort)
+				if (_settingsRoot.ExplicitHaveChanged)
+					sb.Append("*");
+
+				switch (_settingsRoot.IOType)
 				{
-					MKY.IO.Serial.SerialPortSettings s = _settingsRoot.IO.SerialPort;
-					sb.Append(" - ");
-					sb.Append(s.PortId.ToString(true, false));
-					sb.Append(" - ");
-					sb.Append(isOpen ? "Open" : "Closed");
-				}
-				else
-				{
-					MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
-					switch (_settingsRoot.IOType)
+					case Domain.IOType.SerialPort:
 					{
-						case Domain.IOType.TcpClient:
-							sb.Append(" - ");
-							sb.Append(s.ResolvedRemoteIPAddress.ToString());
-							sb.Append(":");
-							sb.Append(s.RemotePort.ToString());
-							sb.Append(" - ");
-							sb.Append(isConnected ? "Connected" : "Disconnected");
-							break;
+						MKY.IO.Serial.SerialPortSettings s = _settingsRoot.IO.SerialPort;
+						sb.Append(" - ");
+						sb.Append(s.PortId.ToString(true, false));
+						sb.Append(" - ");
+						sb.Append(isOpen ? "Open" : "Closed");
+						break;
+					}
 
-						case Domain.IOType.TcpServer:
-							sb.Append(" - ");
-							sb.Append("Server:");
-							sb.Append(s.LocalPort.ToString());
-							sb.Append(" - ");
-							if (isStarted)
-								sb.Append(isConnected ? "Connected" : "Listening");
-							else
-								sb.Append("Closed");
-							break;
+					case Domain.IOType.TcpClient:
+					{
+						MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
+						sb.Append(" - ");
+						sb.Append(s.ResolvedRemoteIPAddress.ToString());
+						sb.Append(":");
+						sb.Append(s.RemotePort.ToString());
+						sb.Append(" - ");
+						sb.Append(isConnected ? "Connected" : "Disconnected");
+						break;
+					}
 
-						case Domain.IOType.TcpAutoSocket:
-							bool isClient = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsClient;
-							bool isServer = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsServer;
-							if (isStarted)
-							{
-								if (isClient)
-								{
-									sb.Append(" - ");
-									sb.Append(s.ResolvedRemoteIPAddress.ToString());
-									sb.Append(":");
-									sb.Append(s.RemotePort.ToString());
-									sb.Append(" - ");
-									sb.Append(isConnected ? "Connected" : "Disconnected");
-								}
-								else if (isServer)
-								{
-									sb.Append(" - ");
-									sb.Append("Server:");
-									sb.Append(s.LocalPort.ToString());
-									sb.Append(" - ");
-									sb.Append(isConnected ? "Connected" : "Listening");
-								}
-								else
-								{
-									sb.Append(" - ");
-									sb.Append("Starting on port ");
-									sb.Append(s.RemotePort.ToString());
-								}
-							}
-							else
+					case Domain.IOType.TcpServer:
+					{
+						MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
+						sb.Append(" - ");
+						sb.Append("Server:");
+						sb.Append(s.LocalPort.ToString());
+						sb.Append(" - ");
+						if (isStarted)
+							sb.Append(isConnected ? "Connected" : "Listening");
+						else
+							sb.Append("Closed");
+						break;
+					}
+
+					case Domain.IOType.TcpAutoSocket:
+					{
+						MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
+						bool isClient = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsClient;
+						bool isServer = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsServer;
+						if (isStarted)
+						{
+							if (isClient)
 							{
 								sb.Append(" - ");
-								sb.Append("AutoSocket:");
+								sb.Append(s.ResolvedRemoteIPAddress.ToString());
+								sb.Append(":");
 								sb.Append(s.RemotePort.ToString());
 								sb.Append(" - ");
-								sb.Append("Disconnected");
+								sb.Append(isConnected ? "Connected" : "Disconnected");
 							}
-							break;
-
-						case Domain.IOType.Udp:
+							else if (isServer)
+							{
+								sb.Append(" - ");
+								sb.Append("Server:");
+								sb.Append(s.LocalPort.ToString());
+								sb.Append(" - ");
+								sb.Append(isConnected ? "Connected" : "Listening");
+							}
+							else
+							{
+								sb.Append(" - ");
+								sb.Append("Starting on port ");
+								sb.Append(s.RemotePort.ToString());
+							}
+						}
+						else
+						{
 							sb.Append(" - ");
-							sb.Append(s.ResolvedRemoteIPAddress.ToString());
-							sb.Append(":");
+							sb.Append("AutoSocket:");
 							sb.Append(s.RemotePort.ToString());
 							sb.Append(" - ");
-							sb.Append("Receive:");
-							sb.Append(s.LocalPort.ToString());
+							sb.Append("Disconnected");
+						}
+						break;
+					}
+
+					case Domain.IOType.Udp:
+					{
+						MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
+						sb.Append(" - ");
+						sb.Append(s.ResolvedRemoteIPAddress.ToString());
+						sb.Append(":");
+						sb.Append(s.RemotePort.ToString());
+						sb.Append(" - ");
+						sb.Append("Receive:");
+						sb.Append(s.LocalPort.ToString());
+						sb.Append(" - ");
+						sb.Append(isOpen ? "Open" : "Closed");
+						break;
+					}
+
+					case Domain.IOType.UsbHid:
+					{
+						MKY.IO.Serial.UsbHidDeviceSettings s = _settingsRoot.IO.UsbHidDevice;
+						sb.Append(" - ");
+						sb.Append(s.DeviceInfo.ToString());
+						sb.Append(" - ");
+						if (isConnected)
+						{
+							sb.Append("Connected");
 							sb.Append(" - ");
 							sb.Append(isOpen ? "Open" : "Closed");
-							break;
+						}
+						else
+						{
+							sb.Append("Disconneted");
+						}
+						break;
 					}
 				}
 			}
-
 			Text = sb.ToString();
 		}
 
@@ -2777,38 +2805,46 @@ namespace YAT.Gui.Forms
 
 		private void SetIOStatus()
 		{
-			bool isStarted = _terminal.IsStarted;
-			bool isOpen = _terminal.IsOpen;
-			bool isConnected = _terminal.IsConnected;
-			bool isSerialPort = (_settingsRoot.IOType == Domain.IOType.SerialPort);
+			bool isStarted    = _terminal.IsStarted;
+			bool isOpen       = _terminal.IsOpen;
+			bool isConnected  = _terminal.IsConnected;
+			bool isSerialPort = false;
 
 			StringBuilder sb = new StringBuilder();
 
 			Image on = Properties.Resources.Image_On_12x12;
 			Image off = Properties.Resources.Image_Off_12x12;
 
-			if (isSerialPort)
+			if (_settingsRoot != null)
 			{
-				MKY.IO.Serial.SerialPortSettings s = _settingsRoot.IO.SerialPort;
-				sb.Append("Serial port ");
-				sb.Append(s.PortId.ToString(true, false));
-				sb.Append(" (" + s.Communication + ") is ");
-				sb.Append(isOpen ? "open" : "closed");
-			}
-			else
-			{
-				MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
 				switch (_settingsRoot.IOType)
 				{
+					case Domain.IOType.SerialPort:
+					{
+						isSerialPort = true;
+
+						MKY.IO.Serial.SerialPortSettings s = _settingsRoot.IO.SerialPort;
+						sb.Append("Serial port ");
+						sb.Append(s.PortId.ToString(true, false));
+						sb.Append(" (" + s.Communication + ") is ");
+						sb.Append(isOpen ? "open" : "closed");
+						break;
+					}
+
 					case Domain.IOType.TcpClient:
+					{
+						MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
 						sb.Append("TCP client is ");
 						sb.Append(isConnected ? "connected to " : "disconnected from ");
 						sb.Append(s.ResolvedRemoteIPAddress.ToString());
 						sb.Append(" on remote port ");
 						sb.Append(s.RemotePort.ToString());
 						break;
+					}
 
 					case Domain.IOType.TcpServer:
+					{
+						MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
 						sb.Append("TCP server is ");
 						if (isStarted)
 						{
@@ -2836,8 +2872,11 @@ namespace YAT.Gui.Forms
 						sb.Append(" on local port ");
 						sb.Append(s.LocalPort.ToString());
 						break;
+					}
 
 					case Domain.IOType.TcpAutoSocket:
+					{
+						MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
 						bool isClient = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsClient;
 						bool isServer = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsServer;
 						sb.Append("TCP auto socket is ");
@@ -2868,8 +2907,11 @@ namespace YAT.Gui.Forms
 							sb.Append(s.RemotePort.ToString());
 						}
 						break;
+					}
 
 					case Domain.IOType.Udp:
+					{
+						MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
 						sb.Append("UDP socket is ");
 						sb.Append(isOpen ? "open" : "closed");
 						sb.Append(" for sending to ");
@@ -2879,6 +2921,31 @@ namespace YAT.Gui.Forms
 						sb.Append(" and receiving on local port ");
 						sb.Append(s.LocalPort.ToString());
 						break;
+					}
+
+					case Domain.IOType.UsbHid:
+					{
+						MKY.IO.Serial.UsbHidDeviceSettings s = _settingsRoot.IO.UsbHidDevice;
+						sb.Append("USB HID device ");
+						sb.Append(s.DeviceInfo.ToString());
+						sb.Append(" is ");
+						if (isConnected)
+						{
+							sb.Append("connected and ");
+							sb.Append(isOpen ? "open" : "closed");
+						}
+						else
+						{
+							sb.Append("disconneted");
+						}
+						break;
+					}
+
+					default:
+					{
+						// Do nothing.
+						break;
+					}
 				}
 			}
 
@@ -2892,9 +2959,6 @@ namespace YAT.Gui.Forms
 
 		private void SetIOControlControls()
 		{
-			bool isStarted    = _terminal.IsStarted;
-			bool isOpen       = _terminal.IsOpen;
-			bool isConnected  = _terminal.IsConnected;
 			bool isSerialPort = (_settingsRoot.IOType == Domain.IOType.SerialPort);
 
 			foreach (ToolStripStatusLabel sl in _statusLabels_ioControl)
@@ -2902,6 +2966,10 @@ namespace YAT.Gui.Forms
 
 			if (isSerialPort)
 			{
+				bool isStarted    = _terminal.IsStarted;
+				bool isOpen       = _terminal.IsOpen;
+				bool isConnected  = _terminal.IsConnected;
+
 				foreach (ToolStripStatusLabel sl in _statusLabels_ioControl)
 					sl.Enabled = isOpen;
 

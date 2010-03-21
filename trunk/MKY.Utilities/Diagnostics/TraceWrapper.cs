@@ -38,7 +38,7 @@ namespace MKY.Utilities.Diagnostics
 		/// <value>
 		/// The indent level. The default is zero.
 		/// </value>
-		public int IndentLevel
+		public virtual int IndentLevel
 		{
 			get { return (Trace.IndentLevel); }
 			set { Trace.IndentLevel = value;  }
@@ -50,7 +50,7 @@ namespace MKY.Utilities.Diagnostics
 		/// <value>
 		/// The number of spaces in an indent. The default is four.
 		/// </value>
-		public int IndentSize
+		public virtual int IndentSize
 		{
 			get { return (Trace.IndentSize); }
 			set { Trace.IndentSize = value;  }
@@ -59,7 +59,7 @@ namespace MKY.Utilities.Diagnostics
 		/// <summary>
 		/// Increases the current <see cref="IndentLevel"/> by one.
 		/// </summary>
-		public void Indent()
+		public virtual void Indent()
 		{
 			Trace.Indent();
 		}
@@ -67,7 +67,7 @@ namespace MKY.Utilities.Diagnostics
 		/// <summary>
 		/// Decreases the current <see cref="IndentLevel"/> by one.
 		/// </summary>
-		public void Unindent()
+		public virtual void Unindent()
 		{
 			Trace.Unindent();
 		}
@@ -83,7 +83,7 @@ namespace MKY.Utilities.Diagnostics
 		/// Writes a message to the diagnostics listeners.
 		/// </summary>
 		/// <param name="message">A message to write.</param>
-		public void Write(string message)
+		public virtual void Write(string message)
 		{
 			Trace.Write(message);
 		}
@@ -92,7 +92,7 @@ namespace MKY.Utilities.Diagnostics
 		/// Writes a message to the diagnostics listeners.
 		/// </summary>
 		/// <param name="message">A message to write.</param>
-		public void WriteLine(string message)
+		public virtual void WriteLine(string message)
 		{
 			Trace.WriteLine(message);
 		}

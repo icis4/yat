@@ -412,7 +412,7 @@ namespace MKY.Utilities.Text
 		/// <summary>
 		/// Encoding code page.
 		/// </summary>
-		public int CodePage
+		public virtual int CodePage
 		{
 			get
 			{
@@ -423,7 +423,7 @@ namespace MKY.Utilities.Text
 		/// <summary>
 		/// Unified encoding name.
 		/// </summary>
-		public string Name
+		public virtual string Name
 		{
 			get
 			{
@@ -439,7 +439,7 @@ namespace MKY.Utilities.Text
 		/// <summary>
 		/// Human readable encoding name.
 		/// </summary>
-		public string DisplayName
+		public virtual string DisplayName
 		{
 			get
 			{
@@ -460,7 +460,7 @@ namespace MKY.Utilities.Text
 		/// <summary>
 		/// Returns encoding object.
 		/// </summary>
-		public Encoding GetEncoding()
+		public virtual Encoding GetEncoding()
 		{
 			// default encoding
 			if (IsDefault)
@@ -485,7 +485,7 @@ namespace MKY.Utilities.Text
 		/// <summary>
 		/// Returns whether this instance is using the default encoding.
 		/// </summary>
-		public bool IsDefault
+		public virtual bool IsDefault
 		{
 			get
 			{

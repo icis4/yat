@@ -65,35 +65,35 @@ namespace YAT.Settings.Application
 		//==========================================================================================
 
 		[XmlElement("FileType")]
-		public string FileType
+		public virtual string FileType
 		{
 			get { return ("YAT local user settings"); }
 			set { } // do nothing
 		}
 
 		[XmlElement("Warning")]
-		public string Warning
+		public virtual string Warning
 		{
 			get { return ("Modifying this file may cause undefined behaviour!"); }
 			set { } // do nothing
 		}
 
 		[XmlElement("Saved")]
-		public SaveInfo Saved
+		public virtual SaveInfo Saved
 		{
 			get { return (new SaveInfo(DateTime.Now, Environment.UserName)); }
 			set { } // do nothing
 		}
 
 		[XmlElement("ProductVersion")]
-		public string ProductVersion
+		public virtual string ProductVersion
 		{
 			get { return (_productVersion); }
 			set { } // do nothing
 		}
 
 		[XmlElement("General")]
-		public Settings.GeneralSettings General
+		public virtual Settings.GeneralSettings General
 		{
 			get { return (_general); }
 			set
@@ -113,7 +113,7 @@ namespace YAT.Settings.Application
 		}
 
 		[XmlElement("Paths")]
-		public Settings.PathSettings Paths
+		public virtual Settings.PathSettings Paths
 		{
 			get { return (_paths); }
 			set
@@ -133,7 +133,7 @@ namespace YAT.Settings.Application
 		}
 
 		[XmlElement("AutoWorkspace")]
-		public Settings.AutoWorkspaceSettings AutoWorkspace
+		public virtual Settings.AutoWorkspaceSettings AutoWorkspace
 		{
 			get { return (_autoAutoWorkspace); }
 			set
@@ -153,7 +153,7 @@ namespace YAT.Settings.Application
 		}
 
 		[XmlElement("MainWindow")]
-		public Model.Settings.MainWindowSettings MainWindow
+		public virtual Model.Settings.MainWindowSettings MainWindow
 		{
 			get { return (_mainWindow); }
 			set
@@ -173,7 +173,7 @@ namespace YAT.Settings.Application
 		}
 
 		[XmlElement("NewTerminal")]
-		public Model.Settings.NewTerminalSettings NewTerminal
+		public virtual Model.Settings.NewTerminalSettings NewTerminal
 		{
 			get { return (_newTerminal); }
 			set
@@ -193,7 +193,7 @@ namespace YAT.Settings.Application
 		}
 
 		[XmlElement("RecentFiles")]
-		public Model.Settings.RecentFileSettings RecentFiles
+		public virtual Model.Settings.RecentFileSettings RecentFiles
 		{
 			get { return (_recentFiles); }
 			set

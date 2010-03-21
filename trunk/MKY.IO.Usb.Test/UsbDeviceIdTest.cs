@@ -82,7 +82,7 @@ namespace MKY.IO.Usb.Test
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestConstructorAndParse()
+		public virtual void TestConstructorAndParse()
 		{
 			DeviceInfo id;
 

@@ -25,22 +25,22 @@ namespace YAT.Settings
 	/// </summary>
 	public static class ExtensionSettings
 	{
-		private static string _terminalFileExtension  = ".yat";
-		private static string _workspaceFileExtension = ".yaw";
+		private static string _terminalFile  = ".yat";
+		private static string _workspaceFile = ".yaw";
 
 		/// <summary>
 		/// Allows to alter the file extension used for terminal files,
 		/// e.g. ".ab1" instead of ".yat".
 		/// </summary>
-		public static string TerminalFiles
+		public static string TerminalFile
 		{
-			get { return (_terminalFileExtension); }
-			set { _terminalFileExtension = value; }
+			get { return (_terminalFile); }
+			set { _terminalFile = value; }
 		}
 
 		public static bool IsTerminalFile(string extension)
 		{
-			if (extension == TerminalFiles)
+			if (extension == TerminalFile)
 				return (true);
 			else
 				return (false);
@@ -48,22 +48,22 @@ namespace YAT.Settings
 
 		public static string TerminalFilesFilter
 		{
-			get { return ("Terminal Files (*" + TerminalFiles + ")|*" + TerminalFiles); }
+			get { return ("Terminal Files (*" + TerminalFile + ")|*" + TerminalFile); }
 		}
 
 		/// <summary>
 		/// Allows to alter the file extension used for workspace files,
 		/// e.g. ".ab2" instead of ".yaw".
 		/// </summary>
-		public static string WorkspaceFiles
+		public static string WorkspaceFile
 		{
-			get { return (_workspaceFileExtension); }
-			set { _workspaceFileExtension = value; }
+			get { return (_workspaceFile); }
+			set { _workspaceFile = value; }
 		}
 
 		public static bool IsWorkspaceFile(string extension)
 		{
-			if (extension == WorkspaceFiles)
+			if (extension == WorkspaceFile)
 				return (true);
 			else
 				return (false);
@@ -71,7 +71,7 @@ namespace YAT.Settings
 
 		public static string WorkspaceFilesFilter
 		{
-			get { return ("Workspace Files (*" + WorkspaceFiles + ")|*" + WorkspaceFiles); }
+			get { return ("Workspace Files (*" + WorkspaceFile + ")|*" + WorkspaceFile); }
 		}
 
 		public static string TextFilesFilter

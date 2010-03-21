@@ -118,7 +118,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public MKY.IO.Serial.SocketHostType HostType
+		public virtual MKY.IO.Serial.SocketHostType HostType
 		{
 			set
 			{
@@ -132,7 +132,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public XIPHost RemoteHost
+		public virtual XIPHost RemoteHost
 		{
 			get { return (_remoteHost); }
 			set
@@ -148,7 +148,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public IPAddress ResolvedRemoteIPAddress
+		public virtual IPAddress ResolvedRemoteIPAddress
 		{
 			get { return (_resolvedRemoteIPAddress); }
 		}
@@ -156,7 +156,7 @@ namespace YAT.Gui.Controls
 		[Category("Socket")]
 		[Description("The remote TCP or UDP port.")]
 		[DefaultValue(_DefaultRemotePort)]
-		public int RemotePort
+		public virtual int RemotePort
 		{
 			get { return (_remotePort); }
 			set
@@ -172,7 +172,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public string LocalInterface
+		public virtual string LocalInterface
 		{
 			get { return (_localInterface); }
 			set
@@ -188,7 +188,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public IPAddress ResolvedLocalIPAddress
+		public virtual IPAddress ResolvedLocalIPAddress
 		{
 			get { return (_resolvedLocalIPAddress); }
 		}
@@ -196,7 +196,7 @@ namespace YAT.Gui.Controls
 		[Category("Socket")]
 		[Description("The local TCP port.")]
 		[DefaultValue(_DefaultLocalTcpPort)]
-		public int LocalTcpPort
+		public virtual int LocalTcpPort
 		{
 			get { return (_localTcpPort); }
 			set
@@ -213,7 +213,7 @@ namespace YAT.Gui.Controls
 		[Category("Socket")]
 		[Description("The local UDP port.")]
 		[DefaultValue(_DefaultLocalUdpPort)]
-		public int LocalUdpPort
+		public virtual int LocalUdpPort
 		{
 			get { return (_localUdpPort); }
 			set

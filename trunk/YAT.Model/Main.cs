@@ -178,7 +178,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Guid Guid
+		public virtual Guid Guid
 		{
 			get
 			{
@@ -188,7 +188,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public string UserName
+		public virtual string UserName
 		{
 			get
 			{
@@ -204,7 +204,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Returns workspace within main or <c>null</c> if no workspace is active.
 		/// </summary>
-		public Workspace Workspace
+		public virtual Workspace Workspace
 		{
 			get
 			{
@@ -227,7 +227,7 @@ namespace YAT.Model
 		/// If still unsuccessful, a new workspace is created.
 		/// </summary>
 		/// <returns>Returns true if either operation succeeded, false otherwise.</returns>
-		public bool Start()
+		public virtual bool Start()
 		{
 			AssertNotDisposed();
 
@@ -363,7 +363,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public bool OpenRecent(int userIndex)
+		public virtual bool OpenRecent(int userIndex)
 		{
 			AssertNotDisposed();
 			return (OpenFromFile(ApplicationSettings.LocalUser.RecentFiles.FilePaths[userIndex - 1].Item));
@@ -387,7 +387,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public bool Exit()
+		public virtual bool Exit()
 		{
 			bool success;
 
@@ -480,7 +480,7 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public bool CreateNewWorkspace()
+		public virtual bool CreateNewWorkspace()
 		{
 			// close workspace, only one workspace can exist within application
 			if (_workspace != null)
@@ -501,7 +501,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public bool CreateNewWorkspaceAndTerminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
+		public virtual bool CreateNewWorkspaceAndTerminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
 			if (!CreateNewWorkspace())
 				return (false);
@@ -515,7 +515,7 @@ namespace YAT.Model
 		/// </summary>
 		/// <param name="filePath">Workspace or terminal file</param>
 		/// <returns>true if successfully opened the workspace or terminal</returns>
-		public bool OpenFromFile(string filePath)
+		public virtual bool OpenFromFile(string filePath)
 		{
 			AssertNotDisposed();
 
@@ -551,7 +551,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public bool OpenWorkspaceFromFile(string filePath)
+		public virtual bool OpenWorkspaceFromFile(string filePath)
 		{
 			AssertNotDisposed();
 
@@ -645,7 +645,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Closes the active workspace.
 		/// </summary>
-		public bool CloseWorkspace()
+		public virtual bool CloseWorkspace()
 		{
 			if (_workspace != null)
 				return (_workspace.Close());

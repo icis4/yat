@@ -102,7 +102,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("TxMonitorPanelIsVisible")]
-		public bool TxMonitorPanelIsVisible
+		public virtual bool TxMonitorPanelIsVisible
 		{
 			get { return (_txMonitorPanelIsVisible); }
 			set
@@ -117,7 +117,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("BidirMonitorPanelIsVisible")]
-		public bool BidirMonitorPanelIsVisible
+		public virtual bool BidirMonitorPanelIsVisible
 		{
 			get { return (_bidirMonitorPanelIsVisible); }
 			set
@@ -132,7 +132,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("RxMonitorPanelIsVisible")]
-		public bool RxMonitorPanelIsVisible
+		public virtual bool RxMonitorPanelIsVisible
 		{
 			get { return (_rxMonitorPanelIsVisible); }
 			set
@@ -147,7 +147,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("MonitorOrientation")]
-		public Orientation MonitorOrientation
+		public virtual Orientation MonitorOrientation
 		{
 			get { return (_monitorOrientation); }
 			set
@@ -162,7 +162,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("TxMonitorSplitterRatio")]
-		public float TxMonitorSplitterRatio
+		public virtual float TxMonitorSplitterRatio
 		{
 			get { return (_txMonitorSplitterRatio); }
 			set
@@ -177,7 +177,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("RxMonitorSplitterRatio")]
-		public float RxMonitorSplitterRatio
+		public virtual float RxMonitorSplitterRatio
 		{
 			get { return (_rxMonitorSplitterRatio); }
 			set
@@ -192,7 +192,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("PredefinedPanelIsVisible")]
-		public bool PredefinedPanelIsVisible
+		public virtual bool PredefinedPanelIsVisible
 		{
 			get { return (_predefinedPanelIsVisible); }
 			set
@@ -207,7 +207,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("PredefinedSplitterRatio")]
-		public float PredefinedSplitterRatio
+		public virtual float PredefinedSplitterRatio
 		{
 			get { return (_predefinedSplitterRatio); }
 			set
@@ -222,7 +222,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("SendCommandPanelIsVisible")]
-		public bool SendCommandPanelIsVisible
+		public virtual bool SendCommandPanelIsVisible
 		{
 			get { return (_sendCommandPanelIsVisible); }
 			set
@@ -237,7 +237,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("SendFilePanelIsVisible")]
-		public bool SendFilePanelIsVisible
+		public virtual bool SendFilePanelIsVisible
 		{
 			get { return (_sendFilePanelIsVisible); }
 			set

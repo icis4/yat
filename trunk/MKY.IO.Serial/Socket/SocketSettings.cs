@@ -150,7 +150,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("HostType")]
-		public SocketHostType HostType
+		public virtual SocketHostType HostType
 		{
 			get { return (_hostType); }
 			set
@@ -165,7 +165,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("RemoteHost")]
-		public string RemoteHost
+		public virtual string RemoteHost
 		{
 			get { return (_remoteHost); }
 			set
@@ -180,7 +180,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public IPAddress ResolvedRemoteIPAddress
+		public virtual IPAddress ResolvedRemoteIPAddress
 		{
 			get { return (_resolvedRemoteIPAddress); }
 			set { _resolvedRemoteIPAddress = value;  }
@@ -188,7 +188,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("RemotePort")]
-		public int RemotePort
+		public virtual int RemotePort
 		{
 			get { return (_remotePort); }
 			set
@@ -203,7 +203,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("LocalInterface")]
-		public string LocalInterface
+		public virtual string LocalInterface
 		{
 			get { return (_localInterface); }
 			set
@@ -218,7 +218,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public IPAddress ResolvedLocalIPAddress
+		public virtual IPAddress ResolvedLocalIPAddress
 		{
 			get { return (_resolvedLocalIPAddress); }
 			set { _resolvedLocalIPAddress = value; }
@@ -226,7 +226,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public int LocalPort
+		public virtual int LocalPort
 		{
 			get
 			{
@@ -263,7 +263,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("LocalTcpPort")]
-		public int LocalTcpPort
+		public virtual int LocalTcpPort
 		{
 			get { return (_localTcpPort); }
 			set
@@ -278,7 +278,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("LocalUdpPort")]
-		public int LocalUdpPort
+		public virtual int LocalUdpPort
 		{
 			get { return (_localUdpPort); }
 			set
@@ -293,7 +293,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("TcpClientAutoReconnect")]
-		public AutoRetry TcpClientAutoReconnect
+		public virtual AutoRetry TcpClientAutoReconnect
 		{
 			get { return (_tcpClientAutoReconnect); }
 			set
@@ -320,7 +320,7 @@ namespace MKY.IO.Serial
 		/// <returns>
 		/// true if successfully resolved; false otherwise
 		/// </returns>
-		public bool TryResolveIPAddresses()
+		public virtual bool TryResolveIPAddresses()
 		{
 			try
 			{

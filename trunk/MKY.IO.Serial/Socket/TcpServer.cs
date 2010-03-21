@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Diagnostics;
 
 using MKY.Utilities.Event;
 
@@ -87,13 +88,13 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public event EventHandler IOControlChanged;
 		/// <summary></summary>
-		public event EventHandler<IORequestEventArgs> IORequest;
-		/// <summary></summary>
-		public event EventHandler<IOErrorEventArgs> IOError;
-		/// <summary></summary>
 		public event EventHandler DataReceived;
 		/// <summary></summary>
 		public event EventHandler DataSent;
+		/// <summary></summary>
+		public event EventHandler<IORequestEventArgs> IORequest;
+		/// <summary></summary>
+		public event EventHandler<IOErrorEventArgs> IOError;
 
 		#endregion
 
@@ -133,9 +134,8 @@ namespace MKY.IO.Serial
 					DisposeSocket();
 				}
 				_isDisposed = true;
-#if (DEBUG)
-				System.Diagnostics.Debug.WriteLine(GetType() + "     (" + _instanceId + ")(" + ToShortEndPointString() + "                  ): Disposed");
-#endif
+
+				Debug.WriteLine(GetType() + "     (" + _instanceId + ")(" + ToShortEndPointString() + "                  ): Disposed");
 			}
 		}
 
@@ -168,7 +168,7 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		public System.Net.IPAddress LocalIPAddress
+		public virtual System.Net.IPAddress LocalIPAddress
 		{
 			get
 			{
@@ -178,7 +178,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public int LocalPort
+		public virtual int LocalPort
 		{
 			get
 			{
@@ -188,7 +188,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public bool IsStarted
+		public virtual bool IsStarted
 		{
 			get
 			{
@@ -209,13 +209,13 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public bool IsOpen
+		public virtual bool IsOpen
 		{
 			get { return (IsConnected); }
 		}
 
 		/// <summary></summary>
-		public bool IsConnected
+		public virtual bool IsConnected
 		{
 			get
 			{
@@ -235,7 +235,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public int ConnectedClientCount
+		public virtual int ConnectedClientCount
 		{
 			get
 			{
@@ -245,7 +245,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public int BytesAvailable
+		public virtual int BytesAvailable
 		{
 			get
 			{
@@ -255,7 +255,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public object UnderlyingIOInstance
+		public virtual object UnderlyingIOInstance
 		{
 			get
 			{
@@ -272,20 +272,24 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		public void Start()
+		public virtual bool Start()
 		{
 			AssertNotDisposed();
 
 			if (!IsStarted)
+			{
 				StartSocket();
-#if (DEBUG)
+				return (true);
+			}
 			else
+			{
 				System.Diagnostics.Debug.WriteLine(GetType() + "     (" + _instanceId + ")(" + ToShortEndPointString() + "                  ): Start() requested but state is " + _state);
-#endif
+				return (false);
+			}
 		}
 
 		/// <summary></summary>
-		public void Stop()
+		public virtual void Stop()
 		{
 			AssertNotDisposed();
 
@@ -294,7 +298,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public int Receive(out byte[] data)
+		public virtual int Receive(out byte[] data)
 		{
 			AssertNotDisposed();
 		
@@ -316,7 +320,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public void Send(byte[] data)
+		public virtual void Send(byte[] data)
 		{
 			AssertNotDisposed();
 
@@ -342,7 +346,7 @@ namespace MKY.IO.Serial
 			lock (_stateSyncObj)
 				_state = state;
 #if (DEBUG)
-			System.Diagnostics.Debug.WriteLine(GetType() + "     (" + _instanceId + ")(" + ToShortEndPointString() + "                  ): State has changed from " + oldState + " to " + _state);
+			Debug.WriteLine(GetType() + "     (" + _instanceId + ")(" + ToShortEndPointString() + "                  ): State has changed from " + oldState + " to " + _state);
 #endif
 			OnIOChanged(new EventArgs());
 		}
@@ -416,7 +420,7 @@ namespace MKY.IO.Serial
 		/// <param name="e">
 		/// Information about the connection.
 		/// </param>
-		public void OnConnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
+		public virtual void OnConnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
 			lock (_socketConnections)
 				_socketConnections.Add(e.Connection);
@@ -433,7 +437,7 @@ namespace MKY.IO.Serial
 		/// <param name="e">
 		/// Information about the Message.
 		/// </param>
-		public void OnReceived(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
+		public virtual void OnReceived(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
 			lock (_receiveQueue)
 			{
@@ -452,7 +456,7 @@ namespace MKY.IO.Serial
 		/// <param name="e">
 		/// Information about the Message.
 		/// </param>
-		public void OnSent(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
+		public virtual void OnSent(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
 			// Nothing to do
 		}
@@ -463,7 +467,7 @@ namespace MKY.IO.Serial
 		/// <param name="e">
 		/// Information about the connection.
 		/// </param>
-		public void OnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
+		public virtual void OnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
 			bool isConnected = false;
 			lock (_socketConnections)
@@ -482,7 +486,7 @@ namespace MKY.IO.Serial
 		/// <param name="e">
 		/// Information about the exception and connection.
 		/// </param>
-		public void OnException(ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs e)
+		public virtual void OnException(ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs e)
 		{
 			DisposeSocket();
 
@@ -511,6 +515,18 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
+		protected virtual void OnDataReceived(EventArgs e)
+		{
+			EventHelper.FireSync(DataReceived, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnDataSent(EventArgs e)
+		{
+			EventHelper.FireSync(DataSent, this, e);
+		}
+
+		/// <summary></summary>
 		protected virtual void OnIORequest(IORequestEventArgs e)
 		{
 			EventHelper.FireSync(IORequest, this, e);
@@ -523,18 +539,6 @@ namespace MKY.IO.Serial
 			EventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
-		/// <summary></summary>
-		protected virtual void OnDataReceived(EventArgs e)
-		{
-			EventHelper.FireSync(DataReceived, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnDataSent(EventArgs e)
-		{
-			EventHelper.FireSync(DataSent, this, e);
-		}
-
 		#endregion
 
 		#region Object Members
@@ -543,7 +547,7 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		public string ToShortEndPointString()
+		public virtual string ToShortEndPointString()
 		{
 			return ("Server:" + _localPort);
 		}

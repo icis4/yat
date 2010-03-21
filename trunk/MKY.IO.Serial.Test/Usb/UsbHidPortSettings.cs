@@ -39,7 +39,7 @@ namespace MKY.IO.Serial.Test.USB
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestSerialization()
+		public virtual void TestSerialization()
 		{
 			// \fixme
 			// Add a test case that verifies that settings are properly handled.

@@ -80,7 +80,7 @@ namespace YAT.Settings.Terminal
 		//==========================================================================================
 
 		[XmlElement("TerminalIsStarted")]
-		public bool TerminalIsStarted
+		public virtual bool TerminalIsStarted
 		{
 			get { return (_terminalIsStarted); }
 			set
@@ -94,7 +94,7 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlElement("LogIsStarted")]
-		public bool LogIsStarted
+		public virtual bool LogIsStarted
 		{
 			get { return (_logIsStarted); }
 			set
@@ -108,7 +108,7 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlElement("SendCommand")]
-		public Model.Settings.SendCommandSettings SendCommand
+		public virtual Model.Settings.SendCommandSettings SendCommand
 		{
 			get { return (_sendCommand); }
 			set
@@ -128,7 +128,7 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlElement("SendFile")]
-		public Model.Settings.SendFileSettings SendFile
+		public virtual Model.Settings.SendFileSettings SendFile
 		{
 			get { return (_sendFile); }
 			set
@@ -148,7 +148,7 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlElement("Predefined")]
-		public Model.Settings.PredefinedSettings Predefined
+		public virtual Model.Settings.PredefinedSettings Predefined
 		{
 			get { return (_predefined); }
 			set
@@ -168,7 +168,7 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlElement("Window")]
-		public Model.Settings.WindowSettings Window
+		public virtual Model.Settings.WindowSettings Window
 		{
 			get { return (_window); }
 			set
@@ -188,7 +188,7 @@ namespace YAT.Settings.Terminal
 		}
 
 		[XmlElement("Layout")]
-		public Model.Settings.LayoutSettings Layout
+		public virtual Model.Settings.LayoutSettings Layout
 		{
 			get { return (_layout); }
 			set

@@ -38,10 +38,10 @@ namespace YAT.Model.Test
 		private bool _autoSaveWorkspaceToRestore;
 		private string _workspaceFilePathToRestore;
 
-		string _normalWorkspaceFilePath = MakeTempFilePath("NormalWorkspace", YAT.Settings.ExtensionSettings.WorkspaceFiles);
-		string _normalTerminal1FilePath = MakeTempFilePath("NormalTerminal1", YAT.Settings.ExtensionSettings.TerminalFiles);
-		string _normalTerminal2FilePath = MakeTempFilePath("NormalTerminal2", YAT.Settings.ExtensionSettings.TerminalFiles);
-		string _normalTerminal3FilePath = MakeTempFilePath("NormalTerminal3", YAT.Settings.ExtensionSettings.TerminalFiles);
+		string _normalWorkspaceFilePath = MakeTempFilePath("NormalWorkspace", YAT.Settings.ExtensionSettings.WorkspaceFile);
+		string _normalTerminal1FilePath = MakeTempFilePath("NormalTerminal1", YAT.Settings.ExtensionSettings.TerminalFile);
+		string _normalTerminal2FilePath = MakeTempFilePath("NormalTerminal2", YAT.Settings.ExtensionSettings.TerminalFile);
+		string _normalTerminal3FilePath = MakeTempFilePath("NormalTerminal3", YAT.Settings.ExtensionSettings.TerminalFile);
 
 		#endregion
 
@@ -51,7 +51,7 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		[TestFixtureSetUp]
-		public void TestFixtureSetUp()
+		public virtual void TestFixtureSetUp()
 		{
 			// allow modification of auto save setting
 			_autoOpenWorkspaceToRestore = ApplicationSettings.LocalUser.General.AutoOpenWorkspace;
@@ -67,7 +67,7 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		[TestFixtureTearDown]
-		public void TestFixtureTearDown()
+		public virtual void TestFixtureTearDown()
 		{
 			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = _autoOpenWorkspaceToRestore;
 			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = _autoSaveWorkspaceToRestore;
@@ -82,7 +82,7 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		[TearDown]
-		public void TearDown()
+		public virtual void TearDown()
 		{
 			foreach (string filePath in Directory.GetFiles(MakeTempPath(), MakeTempFileName("*", ".*")))
 				File.Delete(filePath);
@@ -105,7 +105,7 @@ namespace YAT.Model.Test
 		/// Expected:  Auto save of terminal and workspace.
 		/// </summary>
 		[Test]
-		public void TestInitialAutoSaveOnMainClose()
+		public virtual void TestInitialAutoSaveOnMainClose()
 		{
 			Main main;
 			Workspace workspace;
@@ -121,7 +121,7 @@ namespace YAT.Model.Test
 		/// Expected:  No auto save.
 		/// </summary>
 		[Test]
-		public void TestInitialAutoSaveOnWorkspaceAndMainClose()
+		public virtual void TestInitialAutoSaveOnWorkspaceAndMainClose()
 		{
 			Main main;
 			Workspace workspace;
@@ -139,7 +139,7 @@ namespace YAT.Model.Test
 		/// Expected:  Auto save of workspace.
 		/// </summary>
 		[Test]
-		public void TestInitialAutoSaveOnTerminalAndMainClose()
+		public virtual void TestInitialAutoSaveOnTerminalAndMainClose()
 		{
 			Main main;
 			Workspace workspace;
@@ -157,7 +157,7 @@ namespace YAT.Model.Test
 		/// Expected:  No auto save.
 		/// </summary>
 		[Test]
-		public void TestInitialAutoSaveOnTerminalAndWorkspaceAndMainClose()
+		public virtual void TestInitialAutoSaveOnTerminalAndWorkspaceAndMainClose()
 		{
 			Main main;
 			Workspace workspace;
@@ -182,7 +182,7 @@ namespace YAT.Model.Test
 		/// Use cases according to ufi.
 		/// </summary>
 		[Test]
-		public void TestSequenceOfUseCases_1_through_5a_()
+		public virtual void TestSequenceOfUseCases_1_through_5a_()
 		{
 			bool success = false;
 
@@ -584,7 +584,7 @@ namespace YAT.Model.Test
 		/// Use cases according to ufi.
 		/// </summary>
 		[Test]
-		public void TestSequenceOfUseCases_6_through_9_()
+		public virtual void TestSequenceOfUseCases_6_through_9_()
 		{
 			bool success = false;
 

@@ -38,7 +38,7 @@ namespace MKY.Utilities.Win32
 	/// Encapsulates parts of the WinUSB API.
 	/// </summary>
 	/// <remarks>
-	/// The WinUSB API is only useful with devices that provide a WinUSB based drivers.
+	/// The WinUSB API is only useful with devices that provide a WinUSB based driver.
 	/// See http://download.microsoft.com/download/9/C/5/9C5B2167-8017-4BAE-9FDE-D599BAC8184A/WinUsb_HowTo.docx for details.
 	/// </remarks>
 	public static class WinUsb

@@ -71,7 +71,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		public string ToShortString()
+		public virtual string ToShortString()
 		{
 			switch ((Handshake)UnderlyingEnum)
 			{

@@ -16,20 +16,18 @@
 
 using System;
 
-namespace MKY.Utilities
+namespace MKY.IO.Usb
 {
 	/// <summary></summary>
-	public static class Unused
+	public class ErrorEventArgs : EventArgs
 	{
-		/// <summary>
-		/// Utility method that can be applied to unused objects to prevent compiler warnings.
-		/// </summary>
-		public static void PreventCompilerWarning(object obj)
-		{
-			if ((bool)obj)
-				return;
+		/// <summary></summary>
+		public readonly string Message;
 
-			// else return too...
+		/// <summary></summary>
+		public ErrorEventArgs(string message)
+		{
+			Message = message;
 		}
 	}
 }

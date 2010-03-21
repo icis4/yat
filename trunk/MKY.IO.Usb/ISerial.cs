@@ -17,85 +17,85 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Diagnostics;
 
-namespace MKY.Utilities.Diagnostics
+namespace MKY.IO.Usb
 {
 	/// <summary>
-	/// Wraps part of the interface of <see cref="System.Diagnostics.Debug"/> to the common
-	/// interface <see cref="IDiagnosticsWriter"/>.
+	/// Interface for serial communication, e.g. VSer/CDC or Ser/HID.
 	/// </summary>
-	public class DebugWrapper : IDiagnosticsWriter
+	public interface ISerial
 	{
-		#region Indent
+		#region Events
 		//==========================================================================================
-		// Indent
+		// Events
 		//==========================================================================================
 
 		/// <summary>
-		/// Gets or sets the indent level.
+		/// Fired after data has been received from the device.
 		/// </summary>
-		/// <value>
-		/// The indent level. The default is zero.
-		/// </value>
-		public virtual int IndentLevel
-		{
-			get { return (Debug.IndentLevel); }
-			set { Debug.IndentLevel = value;  }
-		}
+		event EventHandler DataReceived;
 
 		/// <summary>
-		/// Gets or sets the number of spaces in an indent.
+		/// Fired after data has completely be sent to the device.
 		/// </summary>
-		/// <value>
-		/// The number of spaces in an indent. The default is four.
-		/// </value>
-		public virtual int IndentSize
-		{
-			get { return (Debug.IndentSize); }
-			set { Debug.IndentSize = value;  }
-		}
-
-		/// <summary>
-		/// Increases the current <see cref="IndentLevel"/> by one.
-		/// </summary>
-		public virtual void Indent()
-		{
-			Debug.Indent();
-		}
-
-		/// <summary>
-		/// Decreases the current <see cref="IndentLevel"/> by one.
-		/// </summary>
-		public virtual void Unindent()
-		{
-			Debug.Unindent();
-		}
+		event EventHandler DataSent;
 
 		#endregion
 
-		#region Write
+		#region Properties
 		//==========================================================================================
-		// Write
+		// Properties
 		//==========================================================================================
 
 		/// <summary>
-		/// Writes a message to the diagnostics listeners.
+		/// Indicates whether the serial communication port to the device is open.
 		/// </summary>
-		/// <param name="message">A message to write.</param>
-		public virtual void Write(string message)
-		{
-			Debug.Write(message);
-		}
+		/// <returns>
+		/// true if the serial communication port is open; otherwise, false.
+		/// </returns>
+		bool IsOpen { get; }
 
 		/// <summary>
-		/// Writes a message to the diagnostics listeners.
+		/// Gets the amount of data received from the device that is available to read.
 		/// </summary>
-		/// <param name="message">A message to write.</param>
-		public virtual void WriteLine(string message)
-		{
-			Debug.WriteLine(message);
-		}
+		/// <returns>
+		/// The number of bytes of data received from the device.
+		/// </returns>
+		int BytesAvailable { get; }
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		/// <summary>
+		/// Opens the serial communication port to the device.
+		/// </summary>
+		bool Open();
+
+		/// <summary>
+		/// Closes the serial communication port to the device.
+		/// </summary>
+		void Close();
+
+		/// <summary>
+		/// Receives data from the device into a receive buffer.
+		/// </summary>
+		/// <param name="data">
+		/// An array of type System.Byte that is the storage location for the received data.
+		/// </param>
+		/// <returns>The number of bytes received.</returns>
+		int Receive(out byte[] data);
+
+		/// <summary>
+		/// Sends data to the device.
+		/// </summary>
+		/// <param name="data">
+		/// An array of type System.Byte that contains the data to be sent.
+		/// </param>
+		void Send(byte[] data);
 
 		#endregion
 	}

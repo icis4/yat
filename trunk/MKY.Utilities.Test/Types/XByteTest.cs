@@ -83,7 +83,7 @@ namespace MKY.Utilities.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestToString()
+		public virtual void TestToString()
 		{
 			foreach (TestSet ts in _testSets)
 			{

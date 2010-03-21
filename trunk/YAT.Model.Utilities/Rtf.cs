@@ -160,7 +160,7 @@ namespace YAT.Model.Utilities
 		}
 
 		/// <summary></summary>
-		public void Print(RichTextBox rtb)
+		public virtual void Print(RichTextBox rtb)
 		{
 			_rtb = rtb;
 			_reader = new StringReader(_rtb.Text);

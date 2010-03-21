@@ -87,7 +87,7 @@ namespace MKY.Utilities.Settings
 		/// <summary>
 		/// Complete path to document settings filePath.
 		/// </summary>
-		public string SettingsFilePath
+		public virtual string SettingsFilePath
 		{
 			get { return (_settingsFilePath); }
 			set { _settingsFilePath = value; }
@@ -96,7 +96,7 @@ namespace MKY.Utilities.Settings
 		/// <summary>
 		/// Returns whether the settings file path is valid.
 		/// </summary>
-		public bool SettingsFilePathIsValid
+		public virtual bool SettingsFilePathIsValid
 		{
 			get
 			{
@@ -113,7 +113,7 @@ namespace MKY.Utilities.Settings
 		/// <summary>
 		/// Returns whether the settings file exists.
 		/// </summary>
-		public bool SettingsFileExists
+		public virtual bool SettingsFileExists
 		{
 			get
 			{
@@ -128,7 +128,7 @@ namespace MKY.Utilities.Settings
 		/// <summary>
 		/// Returns whether the settings file is up to date.
 		/// </summary>
-		public bool SettingsFileIsUpToDate
+		public virtual bool SettingsFileIsUpToDate
 		{
 			get
 			{
@@ -147,7 +147,7 @@ namespace MKY.Utilities.Settings
 		/// <summary>
 		/// Handler to settings.
 		/// </summary>
-		public TDocumentSettings Settings
+		public virtual TDocumentSettings Settings
 		{
 			get { return (_settings); }
 		}
@@ -155,7 +155,7 @@ namespace MKY.Utilities.Settings
 		/// <summary>
 		/// Handler to settings default.
 		/// </summary>
-		public TDocumentSettings SettingsDefault
+		public virtual TDocumentSettings SettingsDefault
 		{
 			get { return (new TDocumentSettings()); }
 		}
@@ -178,7 +178,7 @@ namespace MKY.Utilities.Settings
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be created.
 		/// </exception>
-		public bool Load()
+		public virtual bool Load()
 		{
 			bool loadSuccess = true;
 			object settings = null;
@@ -246,7 +246,7 @@ namespace MKY.Utilities.Settings
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
-		public void Save()
+		public virtual void Save()
 		{
 			Exception result = null;
 
@@ -316,7 +316,7 @@ namespace MKY.Utilities.Settings
 		/// <returns>
 		/// Returns true if file successfully saved.
 		/// </returns>
-		public bool Delete()
+		public virtual bool Delete()
 		{
 			try
 			{

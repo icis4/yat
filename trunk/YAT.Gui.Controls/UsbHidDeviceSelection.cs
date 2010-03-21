@@ -32,7 +32,7 @@ using YAT.Settings.Application;
 namespace YAT.Gui.Controls
 {
 	[DesignerCategory("Windows Forms")]
-	[DefaultEvent("DeviceIdChanged")]
+	[DefaultEvent("DeviceInfoChanged")]
 	public partial class UsbHidDeviceSelection : UserControl
 	{
 		#region Fields
@@ -40,9 +40,9 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		//private bool _isSettingControls = false;
+		private bool _isSettingControls = false;
 
-		private DeviceInfo _deviceId = DeviceInfo.GetDefaultDevice(DeviceClass.Hid);
+		private DeviceInfo _deviceInfo = DeviceInfo.GetDefaultDevice(DeviceClass.Hid);
 
 		#endregion
 
@@ -52,8 +52,8 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		[Category("Property Changed")]
-		[Description("Event raised when the DeviceId property is changed.")]
-		public event EventHandler DeviceIdChanged;
+		[Description("Event raised when the DeviceInfo property is changed.")]
+		public event EventHandler DeviceInfoChanged;
 
 		#endregion
 
@@ -75,17 +75,17 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		[Category("USB Device")]
-		[Description("USB device ID.")]
-		public DeviceInfo DeviceId
+		[Description("USB device info.")]
+		public DeviceInfo DeviceInfo
 		{
-			get { return (_deviceId); }
+			get { return (_deviceInfo); }
 			set
 			{
-				if (_deviceId != value)
+				if (_deviceInfo != value)
 				{
-					_deviceId = value;
+					_deviceInfo = value;
 					SetControls();
-					OnDeviceIdChanged(new EventArgs());
+					OnDeviceInfoChanged(new EventArgs());
 				}
 			}
 		}
@@ -136,6 +136,12 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
+		private void comboBox_Device_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+				DeviceInfo = comboBox_Device.SelectedItem as DeviceInfo;
+		}
+
 		private void button_RefreshPorts_Click(object sender, EventArgs e)
 		{
 			SetDeviceList();
@@ -160,22 +166,22 @@ namespace YAT.Gui.Controls
 				_deviceList = deviceList;
 			}
 
-			public DeviceCollection DeviceList
+			public virtual DeviceCollection DeviceList
 			{
 				get { return (_deviceList); }
 			}
 
-			public bool IsScanning
+			public virtual bool IsScanning
 			{
 				get { return (_isScanning); }
 			}
 
-			public string Status2
+			public virtual string Status2
 			{
 				get { return (_status2); }
 			}
 
-			public void MarkDevicesInUse()
+			public virtual void MarkDevicesInUse()
 			{
 				_deviceList.MarkDevicesInUse(portList_MarkDevicesInUseCallback);
 				_isScanning = false;
@@ -183,7 +189,7 @@ namespace YAT.Gui.Controls
 				StatusBox.AcceptAndClose();
 			}
 
-			public void CancelScanning()
+			public virtual void CancelScanning()
 			{
 				_cancelScanning = true;
 			}
@@ -216,7 +222,7 @@ namespace YAT.Gui.Controls
 			// Only scan for ports if control is enabled. This saves some time.
 			if (Enabled && !DesignMode)
 			{
-				//_isSettingControls = true;
+				_isSettingControls = true;
 
 				DeviceInfo old = comboBox_Device.SelectedItem as DeviceInfo;
 
@@ -247,15 +253,15 @@ namespace YAT.Gui.Controls
 
 				if (comboBox_Device.Items.Count > 0)
 				{
-					if ((_deviceId != null) && (devices.Contains(_deviceId)))
-						comboBox_Device.SelectedItem = _deviceId;
+					if ((_deviceInfo != null) && (devices.Contains(_deviceInfo)))
+						comboBox_Device.SelectedItem = _deviceInfo;
 					else if ((old != null) && (devices.Contains(old)))
 						comboBox_Device.SelectedItem = old;
 					else
 						comboBox_Device.SelectedIndex = 0;
 
 					// Set property instead of member to ensure that changed event is fired.
-					DeviceId = comboBox_Device.SelectedItem as DeviceInfo;
+					DeviceInfo = comboBox_Device.SelectedItem as DeviceInfo;
 				}
 				else
 				{
@@ -269,18 +275,18 @@ namespace YAT.Gui.Controls
 						);
 				}
 
-				//_isSettingControls = false;
+				_isSettingControls = false;
 			}
 		}
 
 		private void SetControls()
 		{
-			//_isSettingControls = true;
+			_isSettingControls = true;
 
 			if ((comboBox_Device.Items.Count > 0) && !DesignMode)
 			{
-				if (_deviceId != null)
-					comboBox_Device.SelectedItem = _deviceId;
+				if (_deviceInfo != null)
+					comboBox_Device.SelectedItem = _deviceInfo;
 				else
 					comboBox_Device.SelectedIndex = 0;
 			}
@@ -289,7 +295,7 @@ namespace YAT.Gui.Controls
 				comboBox_Device.SelectedIndex = -1;
 			}
 
-			//_isSettingControls = false;
+			_isSettingControls = false;
 		}
 
 		#endregion
@@ -299,9 +305,9 @@ namespace YAT.Gui.Controls
 		// Event Invoking
 		//==========================================================================================
 
-		protected virtual void OnDeviceIdChanged(EventArgs e)
+		protected virtual void OnDeviceInfoChanged(EventArgs e)
 		{
-			EventHelper.FireSync(DeviceIdChanged, this, e);
+			EventHelper.FireSync(DeviceInfoChanged, this, e);
 		}
 
 		#endregion

@@ -207,7 +207,7 @@ namespace MKY.IO.Ports
 		/// Port number (e.g. 1).
 		/// </summary>
 		[XmlIgnore]
-		public int StandardPortNumber
+		public virtual int StandardPortNumber
 		{
 			get { return (_standardPortNumber); }
 			set
@@ -229,7 +229,7 @@ namespace MKY.IO.Ports
 		/// Port name (e.g. "COM1").
 		/// </summary>
 		[XmlElement("Name")]
-		public string Name
+		public virtual string Name
 		{
 			get { return (_name); }
 			set
@@ -248,7 +248,7 @@ namespace MKY.IO.Ports
 		/// Returns whether this port ID is a standard port COM1 to COM65536.
 		/// </summary>
 		[XmlIgnore]
-		public bool IsStandardPort
+		public virtual bool IsStandardPort
 		{
 			get { return (IsStandardPortNumber(_standardPortNumber)); }
 		}
@@ -258,7 +258,7 @@ namespace MKY.IO.Ports
 		/// Port description (e.g. "Serial On USB Port").
 		/// </summary>
 		[XmlIgnore]
-		public string Description
+		public virtual string Description
 		{
 			get { return (_description); }
 			set { _description = value;  }
@@ -268,7 +268,7 @@ namespace MKY.IO.Ports
 		/// Indicates whether port has retrieved description from system.
 		/// </summary>
 		[XmlIgnore]
-		public bool HasDescriptionFromSystem
+		public virtual bool HasDescriptionFromSystem
 		{
 			get { return (_hasDescriptonFromSystem); }
 			set { _hasDescriptonFromSystem = value; }
@@ -278,7 +278,7 @@ namespace MKY.IO.Ports
 		/// Indicates whether port is currently in use.
 		/// </summary>
 		[XmlIgnore]
-		public bool IsInUse
+		public virtual bool IsInUse
 		{
 			get { return (_isInUse); }
 			set { _isInUse = value; }
@@ -289,7 +289,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		[XmlIgnore]
 		[DefaultValue(DefaultInUseText)]
-		public string InUseText
+		public virtual string InUseText
 		{
 			get
 			{
@@ -309,7 +309,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		[XmlIgnore]
 		[DefaultValue(DefaultSeparator)]
-		public string Separator
+		public virtual string Separator
 		{
 			get
 			{
@@ -338,7 +338,7 @@ namespace MKY.IO.Ports
 		/// <remarks>
 		/// Query is never done automatically because it takes quite some time.
 		/// </remarks>
-		public void GetDescriptionFromSystem()
+		public virtual void GetDescriptionFromSystem()
 		{
 			Dictionary<string, string> descriptions = SerialPortSearcher.GetDescriptionsFromSystem();
 
@@ -389,7 +389,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		public string ToString(bool appendDescription, bool appendInUseText)
+		public virtual string ToString(bool appendDescription, bool appendInUseText)
 		{
 			StringBuilder sb = new StringBuilder();
 
@@ -531,7 +531,7 @@ namespace MKY.IO.Ports
 		#region IComparable Members
 
 		/// <summary></summary>
-		public int CompareTo(object obj)
+		public virtual int CompareTo(object obj)
 		{
 			if (obj == null) return (1);
 			if (obj is SerialPortId)

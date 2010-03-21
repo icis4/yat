@@ -46,31 +46,31 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public byte[] Data
+		public virtual byte[] Data
 		{
 			get { return (_data); }
 		}
 
 		/// <summary></summary>
-		public SerialDirection Direction
+		public virtual SerialDirection Direction
 		{
 			get { return (_direction); }
 		}
 
 		/// <summary></summary>
-		public DateTime TimeStamp
+		public virtual DateTime TimeStamp
 		{
 			get { return (_timestamp); }
 		}
 
 		/// <summary></summary>
-		new public string ToString()
+		public override string ToString()
 		{
 			return (ToString(""));
 		}
 
 		/// <summary></summary>
-		public string ToString(string indent)
+		public virtual string ToString(string indent)
 		{
 			StringWriter to = new StringWriter();
 			foreach (byte b in _data)
@@ -80,13 +80,13 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public string ToDetailedString()
+		public virtual string ToDetailedString()
 		{
 			return (ToDetailedString(""));
 		}
 
 		/// <summary></summary>
-		public string ToDetailedString(string indent)
+		public virtual string ToDetailedString(string indent)
 		{
 			bool begin = true;
 			StringWriter data = new StringWriter();

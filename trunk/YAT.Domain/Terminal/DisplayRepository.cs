@@ -70,7 +70,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public int Capacity
+		public virtual int Capacity
 		{
 			get { return (_capacity); }
 			set
@@ -92,7 +92,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Returns number of lines within repository.
 		/// </summary>
-		new public int Count
+		public new int Count
 		{
 			get
 			{
@@ -106,7 +106,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Returns number of data elements within repository.
 		/// </summary>
-		public int DataCount
+		public virtual int DataCount
 		{
 			get { return (_dataCount); }
 		}
@@ -119,7 +119,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		public void Enqueue(DisplayElement item)
+		public virtual void Enqueue(DisplayElement item)
 		{
 			// Add element to current line
 			_currentLine.Add(item);
@@ -140,14 +140,14 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public void Enqueue(IEnumerable<DisplayElement> collection)
+		public virtual void Enqueue(IEnumerable<DisplayElement> collection)
 		{
 			foreach (DisplayElement de in collection)
 				Enqueue(de);
 		}
 
 		/// <summary></summary>
-		new public void Clear()
+		public new void Clear()
 		{
 			base.Clear();
 			_currentLine.Clear();
@@ -155,13 +155,13 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		new public DisplayLine[] ToArray()
+		public new DisplayLine[] ToArray()
 		{
 			return (ToLines().ToArray());
 		}
 
 		/// <summary></summary>
-		public List<DisplayLine> ToLines()
+		public virtual List<DisplayLine> ToLines()
 		{
 			List<DisplayLine> lines = new List<DisplayLine>(base.ToArray());
 
@@ -200,7 +200,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		/// <summary></summary>
-		new public string ToString()
+		public override string ToString()
 		{
 			return (ToString(""));
 		}
@@ -211,7 +211,7 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public string ToString(string indent)
+		public virtual string ToString(string indent)
 		{
 			return (indent + "- LineCapacity: " + Capacity.ToString("D") + Environment.NewLine +
 					indent + "- LineCount: " + Count.ToString("D") + Environment.NewLine +
@@ -220,13 +220,13 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public string LinesToString()
+		public virtual string LinesToString()
 		{
 			return (LinesToString(""));
 		}
 
 		/// <summary></summary>
-		public string LinesToString(string indent)
+		public virtual string LinesToString(string indent)
 		{
 			StringBuilder sb = new StringBuilder();
 			int i = 0;

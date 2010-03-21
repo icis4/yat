@@ -57,7 +57,7 @@ namespace MKY.IO.Ports
 		/// Fills list with all ports from <see cref="SerialPortId.FirstStandardPortNumber"/> to
 		/// <see cref="SerialPortId.LastStandardPortNumber"/>.
 		/// </summary>
-		public void FillWithStandardPorts()
+		public virtual void FillWithStandardPorts()
 		{
 			Clear();
 			for (int i = SerialPortId.FirstStandardPortNumber; i <= SerialPortId.LastStandardPortNumber; i++)
@@ -73,7 +73,7 @@ namespace MKY.IO.Ports
 		/// <param name="getPortDescriptionsFromSystem">
 		/// On request, this method queries the port descriptions from the system.
 		/// </param>
-		public void FillWithAvailablePorts(bool getPortDescriptionsFromSystem)
+		public virtual void FillWithAvailablePorts(bool getPortDescriptionsFromSystem)
 		{
 			Clear();
 			foreach (string portName in System.IO.Ports.SerialPort.GetPortNames())
@@ -93,7 +93,7 @@ namespace MKY.IO.Ports
 		/// <remarks>
 		/// Query is never done automatically because it takes quite some time.
 		/// </remarks>
-		public void GetPortDescriptionsFromSystem()
+		public virtual void GetPortDescriptionsFromSystem()
 		{
 			Dictionary<string, string> descriptions = SerialPortSearcher.GetDescriptionsFromSystem();
 
@@ -112,7 +112,7 @@ namespace MKY.IO.Ports
 		/// in use or not. Therefore, this method actively tries to open every port. This
 		/// takes some time.
 		/// </remarks>
-		public void MarkPortsInUse()
+		public virtual void MarkPortsInUse()
 		{
 			MarkPortsInUse(null);
 		}
@@ -130,7 +130,7 @@ namespace MKY.IO.Ports
 		/// tried to be opened. Set the <see cref="PortChangedAndCancelEventArgs.Cancel"/>
 		/// property the true to cancel port scanning.
 		/// </param>
-		public void MarkPortsInUse(EventHandler<PortChangedAndCancelEventArgs> portChangedCallback)
+		public virtual void MarkPortsInUse(EventHandler<PortChangedAndCancelEventArgs> portChangedCallback)
 		{
 			foreach (SerialPortId portId in this)
 			{

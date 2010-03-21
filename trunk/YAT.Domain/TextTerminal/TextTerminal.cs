@@ -84,7 +84,7 @@ namespace YAT.Domain
 				Eol = eol;
 			}
 
-			public void Reset()
+			public virtual void Reset()
 			{
 				LinePosition = TextTerminal.LinePosition.Begin;
 				LineElements.Clear();
@@ -162,6 +162,23 @@ namespace YAT.Domain
 		{
 			InitializeStates();
 		}
+
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				// Nothing to do (yet).
+			}
+			base.Dispose(disposing);
+		}
+
+		#endregion
 
 		#endregion
 

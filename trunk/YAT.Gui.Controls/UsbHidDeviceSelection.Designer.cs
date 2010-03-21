@@ -58,6 +58,7 @@ namespace YAT.Gui.Controls
 			this.comboBox_Device.Name = "comboBox_Device";
 			this.comboBox_Device.Size = new System.Drawing.Size(251, 21);
 			this.comboBox_Device.TabIndex = 1;
+			this.comboBox_Device.SelectedIndexChanged += new System.EventHandler(this.comboBox_Device_SelectedIndexChanged);
 			// 
 			// label_Device
 			// 

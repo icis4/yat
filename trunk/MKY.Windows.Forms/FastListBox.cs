@@ -149,7 +149,7 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Scroll list to bottom if no items are selected.
 		/// </summary>
-		public void ScrollToBottomIfNoItemsSelected()
+		public virtual void ScrollToBottomIfNoItemsSelected()
 		{
 			if ((SelectedItems.Count == 0) && (Items.Count > 0))
 				TopIndex = Items.Count - 1;

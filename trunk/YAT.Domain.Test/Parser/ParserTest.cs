@@ -162,7 +162,7 @@ namespace YAT.Domain.Test.Parser
 		//------------------------------------------------------------------------------------------
 
 		[Test]
-		public void TestParser()
+		public virtual void TestParser()
 		{
 			Exception exceptionToNUnit = null;
 

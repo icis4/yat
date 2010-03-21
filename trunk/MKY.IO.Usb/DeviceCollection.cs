@@ -70,7 +70,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Fills list with all available USB Ser/HID devices.
 		/// </summary>
-		public void FillWithAvailableDevices()
+		public virtual void FillWithAvailableDevices()
 		{
 			Clear();
 			foreach (DeviceInfo id in Device.GetDevicesFromGuid(_classGuid))
@@ -81,7 +81,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Checks all ports whether they are currently in use and marks them.
 		/// </summary>
-		public void MarkDevicesInUse()
+		public virtual void MarkDevicesInUse()
 		{
 			MarkDevicesInUse(null);
 		}
@@ -94,13 +94,13 @@ namespace MKY.IO.Usb
 		/// tried to be opened. Set the <see cref="DeviceChangedAndCancelEventArgs.Cancel"/>
 		/// property the true to cancel port scanning.
 		/// </param>
-		public void MarkDevicesInUse(EventHandler<DeviceChangedAndCancelEventArgs> deviceChangedCallback)
+		public virtual void MarkDevicesInUse(EventHandler<DeviceChangedAndCancelEventArgs> deviceChangedCallback)
 		{
-			foreach (DeviceInfo deviceId in this)
+			foreach (DeviceInfo di in this)
 			{
 				if (deviceChangedCallback != null)
 				{
-					DeviceChangedAndCancelEventArgs args = new DeviceChangedAndCancelEventArgs(deviceId);
+					DeviceChangedAndCancelEventArgs args = new DeviceChangedAndCancelEventArgs(di);
 					deviceChangedCallback.Invoke(this, args);
 					if (args.Cancel)
 						break;
@@ -108,7 +108,7 @@ namespace MKY.IO.Usb
 
 				// \remind
 				// See remarks above.
-				deviceId.IsInUse = false;
+				di.IsInUse = false;
 			}
 		}
 	}

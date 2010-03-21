@@ -93,7 +93,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("SeparateTxRxDisplay")]
-		public bool SeparateTxRxDisplay
+		public virtual bool SeparateTxRxDisplay
 		{
 			get { return (_separateTxRxDisplay); }
 			set
@@ -108,7 +108,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("TxDisplay")]
-		public BinaryDisplaySettings TxDisplay
+		public virtual BinaryDisplaySettings TxDisplay
 		{
 			get { return (_txDisplay); }
 			set
@@ -129,7 +129,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("RxDisplay")]
-		public BinaryDisplaySettings RxDisplay
+		public virtual BinaryDisplaySettings RxDisplay
 		{
 			get
 			{

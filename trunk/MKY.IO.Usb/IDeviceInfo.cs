@@ -13,19 +13,45 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Runtime.InteropServices;
-using Microsoft.Win32.SafeHandles;
-
-using MKY.Utilities.Globalization;
-
 namespace MKY.IO.Usb
 {
-	/// <summary></summary>
-	public static class StringDescriptor
+	/// <summary>
+	/// Information that every USB device provides.
+	/// </summary>
+	public interface IDeviceInfo
 	{
+		/// <summary>
+		/// Returns the complete device info. To read a specific device property, use the property
+		/// members below.
+		/// </summary>
+		DeviceInfo Info { get; }
+
+		/// <summary></summary>
+		int VendorId { get; }
+
+		/// <summary></summary>
+		string VendorIdString { get; }
+
+		/// <summary></summary>
+		int ProductId { get; }
+
+		/// <summary></summary>
+		string ProductIdString { get; }
+
+		/// <summary></summary>
+		string Manufacturer { get; }
+
+		/// <summary></summary>
+		string Product { get; }
+
+		/// <summary></summary>
+		string SerialNumber { get; }
+
+		/// <summary></summary>
+		string ToString();
+
+		/// <summary></summary>
+		string ToShortString();
 	}
 }
 

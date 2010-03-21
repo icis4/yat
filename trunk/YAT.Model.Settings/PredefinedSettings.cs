@@ -67,7 +67,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("SelectedPage")]
-		public int SelectedPage
+		public virtual int SelectedPage
 		{
 			get { return (_selectedPage); }
 			set

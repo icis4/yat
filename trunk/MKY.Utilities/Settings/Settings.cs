@@ -74,7 +74,7 @@ namespace MKY.Utilities.Settings
 		}
 
 		/// <summary></summary>
-		protected void AttachNode(Settings node)
+		protected virtual void AttachNode(Settings node)
 		{
 			SuspendChangeEvent();
 
@@ -87,7 +87,7 @@ namespace MKY.Utilities.Settings
 		}
 
 		/// <summary></summary>
-		protected void ReplaceNode(Settings nodeOld, Settings nodeNew)
+		protected virtual void ReplaceNode(Settings nodeOld, Settings nodeNew)
 		{
 			SuspendChangeEvent();
 
@@ -103,13 +103,13 @@ namespace MKY.Utilities.Settings
 		}
 
 		/// <summary></summary>
-		public SettingsType SettingsType
+		public virtual SettingsType SettingsType
 		{
 			get { return (_settingsType); }
 		}
 
 		/// <summary></summary>
-		public bool HaveChanged
+		public virtual bool HaveChanged
 		{
 			get
 			{
@@ -121,7 +121,7 @@ namespace MKY.Utilities.Settings
 		}
 
 		/// <summary></summary>
-		public bool ExplicitHaveChanged
+		public virtual bool ExplicitHaveChanged
 		{
 			get
 			{
@@ -259,7 +259,7 @@ namespace MKY.Utilities.Settings
 		/// <summary>
 		/// Temporarily suspends the change event for the settings and all nodes of the settings tree.
 		/// </summary>
-		public void SuspendChangeEvent()
+		public virtual void SuspendChangeEvent()
 		{
 			foreach (Settings node in _nodes)
 				node.SuspendChangeEvent();
@@ -273,13 +273,13 @@ namespace MKY.Utilities.Settings
 		/// <remarks>
 		/// Calling the ResumeChangeEvent method forces changed events if there are any pending events.
 		/// </remarks>
-		public void ResumeChangeEvent()
+		public virtual void ResumeChangeEvent()
 		{
 			ResumeChangeEvent(true);
 		}
 
 		/// <summary></summary>
-		public void ResumeChangeEvent(bool forcePendingChangeEvent)
+		public virtual void ResumeChangeEvent(bool forcePendingChangeEvent)
 		{
 			_changeEventSuspendedCount--;
 
@@ -294,7 +294,7 @@ namespace MKY.Utilities.Settings
 		/// Forces a change event on the settings and all nodes of the settings tree.
 		/// The event is fired even if the settings have not changed.
 		/// </summary>
-		public void ForceChangeEvent()
+		public virtual void ForceChangeEvent()
 		{
 			foreach (Settings node in _nodes)
 				node.ForceChangeEvent();

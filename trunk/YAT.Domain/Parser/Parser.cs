@@ -529,20 +529,20 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		public Endianess Endianess
+		public virtual Endianess Endianess
 		{
 			get { return (_endianess); }
 		}
 
 		/// <summary></summary>
-		public Encoding Encoding
+		public virtual Encoding Encoding
 		{
 			get { return (_encoding); }
 		}
 
 		/// <summary></summary>
 		/// <remarks>Radix: public get, private set</remarks>
-		public Radix Radix
+		public virtual Radix Radix
 		{
 			get { return (_defaultRadix); }
 		}
@@ -553,7 +553,7 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		public bool IsTopLevel
+		public virtual bool IsTopLevel
 		{
 			get { return (_parentParser == null); }
 		}
@@ -589,14 +589,14 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 
 		/// <summary></summary>
-		public byte[] Parse(string s)
+		public virtual byte[] Parse(string s)
 		{
 			string parsed;
 			return (Parse(s, out parsed));
 		}
 
 		/// <summary></summary>
-		public byte[] Parse(string s, out string parsed)
+		public virtual byte[] Parse(string s, out string parsed)
 		{
 			Result[] resultResult = Parse(s, ParseMode.AllByteArrayResults, out parsed);
 			MemoryStream byteResult = new MemoryStream();
@@ -612,14 +612,14 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		public Result[] Parse(string s, ParseMode mode)
+		public virtual Result[] Parse(string s, ParseMode mode)
 		{
 			string parsed;
 			return (Parse(s, mode, out parsed));
 		}
 
 		/// <summary></summary>
-		public Result[] Parse(string s, ParseMode mode, out string parsed)
+		public virtual Result[] Parse(string s, ParseMode mode, out string parsed)
 		{
 			Result[] result;
 			FormatException formatException = new FormatException("");
@@ -629,14 +629,14 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		public bool TryParse(string s, out byte[] result)
+		public virtual bool TryParse(string s, out byte[] result)
 		{
 			string parsed;
 			return (TryParse(s, out result, out parsed));
 		}
 
 		/// <summary></summary>
-		public bool TryParse(string s, out byte[] result, out string parsed)
+		public virtual bool TryParse(string s, out byte[] result, out string parsed)
 		{
 			Result[] resultResult;
 			bool tryResult = TryParse(s, ParseMode.AllByteArrayResults, out resultResult, out parsed);
@@ -656,48 +656,48 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		public bool TryParse(string s)
+		public virtual bool TryParse(string s)
 		{
 			return (TryParse(s, ParseMode.All));
 		}
 
 		/// <summary></summary>
-		public bool TryParse(string s, ParseMode mode)
+		public virtual bool TryParse(string s, ParseMode mode)
 		{
 			string parsed;
 			return (TryParse(s, mode, out parsed));
 		}
 
 		/// <summary></summary>
-		public bool TryParse(string s, ParseMode mode, out Result[] result)
+		public virtual bool TryParse(string s, ParseMode mode, out Result[] result)
 		{
 			string parsed;
 			return (TryParse(s, mode, out result, out parsed));
 		}
 
 		/// <summary></summary>
-		public bool TryParse(string s, ParseMode mode, out string parsed)
+		public virtual bool TryParse(string s, ParseMode mode, out string parsed)
 		{
 			Result[] result;
 			return (TryParse(s, mode, out result, out parsed));
 		}
 
 		/// <summary></summary>
-		public bool TryParse(string s, ParseMode mode, out string parsed, ref FormatException formatException)
+		public virtual bool TryParse(string s, ParseMode mode, out string parsed, ref FormatException formatException)
 		{
 			Result[] result;
 			return (TryParse(s, mode, out result, out parsed, ref formatException));
 		}
 
 		/// <summary></summary>
-		public bool TryParse(string s, ParseMode mode, out Result[] result, out string parsed)
+		public virtual bool TryParse(string s, ParseMode mode, out Result[] result, out string parsed)
 		{
 			FormatException formatException = new FormatException("");
 			return (TryParse(s, mode, out result, out parsed, ref formatException));
 		}
 
 		/// <summary></summary>
-		public bool TryParse(string s, ParseMode mode, out Result[] result, out string parsed, ref FormatException formatException)
+		public virtual bool TryParse(string s, ParseMode mode, out Result[] result, out string parsed, ref FormatException formatException)
 		{
 			InitializeTopLevelParse(s, mode);
 
@@ -729,7 +729,7 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected void EndByteArray()
+		protected virtual void EndByteArray()
 		{
 			if (_byteArrayWriter.Length > 0)
 			{

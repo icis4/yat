@@ -88,7 +88,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Returns number of data elements within repository.
 		/// </summary>
-		public int DataCount
+		public virtual int DataCount
 		{
 			get { return (_dataCount); }
 		}
@@ -103,7 +103,7 @@ namespace YAT.Domain
 		/// <remarks>
 		/// Item must be cloned to prevent unexpected behaviour of the reference type.
 		/// </remarks>
-		new public void Add(DisplayElement item)
+		public new void Add(DisplayElement item)
 		{
 			if (Count <= 0)
 			{
@@ -122,14 +122,14 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		new public void AddRange(IEnumerable<DisplayElement> collection)
+		public new void AddRange(IEnumerable<DisplayElement> collection)
 		{
 			foreach (DisplayElement item in collection)
 				Add(item);
 		}
 
 		/// <summary></summary>
-		new public void RemoveAt(int index)
+		public new void RemoveAt(int index)
 		{
 			if (this[index].IsData)
 				_dataCount -= this[index].DataCount;
@@ -138,20 +138,20 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public void RemoveAtEnd()
+		public virtual void RemoveAtEnd()
 		{
 			RemoveAt(Count - 1);
 		}
 
 		/// <summary></summary>
-		public void RemoveAtEnd(int count)
+		public virtual void RemoveAtEnd(int count)
 		{
 			for (int i = 0; i < count; i++)
 				RemoveAtEnd();
 		}
 
 		/// <summary></summary>
-		new public void RemoveRange(int index, int count)
+		public new void RemoveRange(int index, int count)
 		{
 			for (int i = 0; i < count; i++)
 				RemoveAt(index + i);
@@ -161,7 +161,7 @@ namespace YAT.Domain
 		/// Creates a shallow copy of the collection.
 		/// </summary>
 		/// <returns>A shallow copy of the collection.</returns>
-		public DisplayElementCollection Clone()
+		public virtual DisplayElementCollection Clone()
 		{
 			DisplayElementCollection c = new DisplayElementCollection();
 
@@ -198,7 +198,7 @@ namespace YAT.Domain
 		/// <summary>
 		/// Extended ToString method which can be used for trace/debug.
 		/// </summary>
-		public string ToString(string indent)
+		public virtual string ToString(string indent)
 		{
 			return (indent + "- ElementCount: " + Count.ToString("D") + Environment.NewLine +
 					indent + "- DataCount: " + _dataCount.ToString("D") + Environment.NewLine +
@@ -206,13 +206,13 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public string ElementsToString()
+		public virtual string ElementsToString()
 		{
 			return (ElementsToString(""));
 		}
 
 		/// <summary></summary>
-		public string ElementsToString(string indent)
+		public virtual string ElementsToString(string indent)
 		{
 			StringBuilder sb = new StringBuilder();
 			int i = 0;
@@ -280,7 +280,7 @@ namespace YAT.Domain
 		/// Creates a shallow copy of the collection.
 		/// </summary>
 		/// <returns>A shallow copy of the collection.</returns>
-		new public DisplayLine Clone()
+		public new DisplayLine Clone()
 		{
 			DisplayLine dl = new DisplayLine();
 

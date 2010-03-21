@@ -168,7 +168,7 @@ namespace MKY.Utilities.Xml
 		/// <remarks>
 		/// <see cref="CopyTolerantly"/> on why input must be matched to output and not vice-versa.
 		/// </remarks>
-		virtual protected bool TryToMatchAttribute(XPathNavigator inputNavigator, ref XPathNavigator outputNavigator)
+		protected virtual bool TryToMatchAttribute(XPathNavigator inputNavigator, ref XPathNavigator outputNavigator)
 		{
 			return (outputNavigator.MoveToAttribute(inputNavigator.LocalName, inputNavigator.NamespaceURI));
 		}
@@ -179,7 +179,7 @@ namespace MKY.Utilities.Xml
 		/// <remarks>
 		/// <see cref="CopyTolerantly"/> on why input must be matched to output and not vice-versa.
 		/// </remarks>
-		virtual protected bool TryToMatchChild(XPathNavigator inputNavigator, ref XPathNavigator outputNavigator)
+		protected virtual bool TryToMatchChild(XPathNavigator inputNavigator, ref XPathNavigator outputNavigator)
 		{
 			return (outputNavigator.MoveToChild(inputNavigator.LocalName, inputNavigator.NamespaceURI));
 		}

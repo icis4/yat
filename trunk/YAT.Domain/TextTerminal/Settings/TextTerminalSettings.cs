@@ -96,7 +96,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("SeparateTxRxEol")]
-		public bool SeparateTxRxEol
+		public virtual bool SeparateTxRxEol
 		{
 			get { return (_separateTxRxEol); }
 			set
@@ -111,7 +111,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("TxEol")]
-		public string TxEol
+		public virtual string TxEol
 		{
 			get { return (_txEol); }
 			set
@@ -126,7 +126,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("RxEol")]
-		public string RxEol
+		public virtual string RxEol
 		{
 			get
 			{
@@ -147,7 +147,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("Encoding")]
-		public int Encoding
+		public virtual int Encoding
 		{
 			get { return (_encoding); }
 			set
@@ -162,7 +162,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("ShowEol")]
-		public bool ShowEol
+		public virtual bool ShowEol
 		{
 			get { return (_showEol); }
 			set
@@ -177,7 +177,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("LineSendDelay")]
-		public TextLineSendDelay LineSendDelay
+		public virtual TextLineSendDelay LineSendDelay
 		{
 			get { return (_lineSendDelay); }
 			set
@@ -192,7 +192,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("WaitForResponse")]
-		public WaitForResponse WaitForResponse
+		public virtual WaitForResponse WaitForResponse
 		{
 			get { return (_waitForResponse); }
 			set
@@ -207,7 +207,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("CharSubstitution")]
-		public CharSubstitution CharSubstitution
+		public virtual CharSubstitution CharSubstitution
 		{
 			get { return (_charSubstitution); }
 			set

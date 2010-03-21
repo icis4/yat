@@ -89,7 +89,7 @@ namespace YAT.Domain
 		#region ToString
 
 		/// <summary></summary>
-		public string ToShortString()
+		public virtual string ToShortString()
 		{
 			switch ((Radix)UnderlyingEnum)
 			{
@@ -104,7 +104,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public string ToMiddleString()
+		public virtual string ToMiddleString()
 		{
 			switch ((Radix)UnderlyingEnum)
 			{

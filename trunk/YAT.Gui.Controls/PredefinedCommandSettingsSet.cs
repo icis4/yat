@@ -117,7 +117,7 @@ namespace YAT.Gui.Controls
 		/// </summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Model.Types.Command Command
+		public virtual Model.Types.Command Command
 		{
 			get { return (_command); }
 			set
@@ -134,7 +134,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Domain.TerminalType TerminalType
+		public virtual Domain.TerminalType TerminalType
 		{
 			set { _terminalType = value; }
 		}
@@ -142,7 +142,7 @@ namespace YAT.Gui.Controls
 		[Category("Command")]
 		[Description("The command shortcut.")]
 		[DefaultValue(_ShortcutStringDefault)]
-		public string ShortcutString
+		public virtual string ShortcutString
 		{
 			get { return (label_Shortcut.Text); }
 			set { label_Shortcut.Text = value; }

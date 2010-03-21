@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY.Utilities;
 using MKY.Utilities.Event;
 
 namespace YAT
@@ -27,8 +28,8 @@ namespace YAT
 	/// Application main class of YAT.
 	/// </summary>
 	/// <remarks>
-	/// This class is separated into its own .exe project for those who want to use YAT
-	/// components within their own application context.
+	/// This class is separated into its own .exe project for those who want to use YAT components
+	/// within their own application context.
 	/// </remarks>
 	public class YAT
 	{
@@ -36,17 +37,17 @@ namespace YAT
 		/// Displays welcome screen and starts YAT.
 		/// </summary>
 		/// <remarks>
-		/// If built as release, unhandled exceptions are caught here and shown to the user
-		/// in an exception dialog. The user can then choose to send in the exception as
-		/// feedback. In case of debug, unhandled exceptions are intentionally not handled
-		/// here but by the development environment instead.
+		/// If built as release, unhandled exceptions are caught here and shown to the user in an
+		/// exception dialog. The user can then choose to send in the exception as feedback.
+		/// In case of debug, unhandled exceptions are intentionally not handled here. Instead,
+		/// they are handled by the development environment.
 		/// </remarks>
 		public Controller.MainResult Run(string[] commandLineArgs)
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 		#if (!DEBUG)
-			EventHelper.InstallUnhandledExceptionCallback(UnhandledExceptionCallback);
+			EventHelper.UnhandledException += new EventHandler<EventHelper.UnhandledExceptionEventArgs>(EventHelper_UnhandledException);
 		#endif
 		#if (!DEBUG)
 			try
@@ -60,11 +61,11 @@ namespace YAT
 			catch (Exception ex)
 			{
 				if (MessageBox.Show("An unhandled exception occured while loading " + Application.ProductName + "." + Environment.NewLine +
-				                    "Show detailed information?",
-				                    Application.ProductName,
-				                    MessageBoxButtons.YesNoCancel,
-				                    MessageBoxIcon.Stop,
-				                    MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+									"Show detailed information?",
+									Application.ProductName,
+									MessageBoxButtons.YesNoCancel,
+									MessageBoxIcon.Stop,
+									MessageBoxDefaultButton.Button2) == DialogResult.Yes)
 				{
 					Gui.Forms.UnhandledException f = new Gui.Forms.UnhandledException(ex);
 					f.ShowDialog();
@@ -83,23 +84,27 @@ namespace YAT
 			catch (Exception ex)
 			{
 				if (MessageBox.Show("An unhandled exception occured in " + Application.ProductName + "." + Environment.NewLine +
-				                    "Show detailed information?",
-				                    Application.ProductName,
-				                    MessageBoxButtons.YesNoCancel,
-				                    MessageBoxIcon.Stop,
-				                    MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+									"Show detailed information?",
+									Application.ProductName,
+									MessageBoxButtons.YesNoCancel,
+									MessageBoxIcon.Stop,
+									MessageBoxDefaultButton.Button2) == DialogResult.Yes)
 				{
 					Gui.Forms.UnhandledException f = new Gui.Forms.UnhandledException(ex);
 					f.ShowDialog();
 				}
 				return (Controller.MainResult.UnhandledException);
 			}
+			finally
+			{
+				EventHelper.UnhandledException -= new EventHandler<EventHelper.UnhandledExceptionEventArgs>(EventHelper_UnhandledException);
+			}
 		#endif
 			return (Controller.MainResult.OK);
 		}
 
 		#if (!DEBUG)
-		private void UnhandledExceptionCallback(Exception ex)
+		private void EventHelper_UnhandledException(object sender, EventHelper.UnhandledExceptionEventArgs e)
 		{
 			if (MessageBox.Show("An unhandled exception occured in " + Application.ProductName + "." + Environment.NewLine +
 								"Show detailed information?",
@@ -108,7 +113,7 @@ namespace YAT
 								MessageBoxIcon.Stop,
 								MessageBoxDefaultButton.Button2) == DialogResult.Yes)
 			{
-				Gui.Forms.UnhandledException f = new Gui.Forms.UnhandledException(ex);
+				Gui.Forms.UnhandledException f = new Gui.Forms.UnhandledException(e.UnhandledException);
 				f.ShowDialog();
 			}
 		}

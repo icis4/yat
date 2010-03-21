@@ -88,25 +88,25 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public void SetStatus1(string value)
+		public virtual void SetStatus1(string value)
 		{
 			label_Status1.Text = value;
 		}
 
 		/// <summary></summary>
-		public void SetStatus2(string value)
+		public virtual void SetStatus2(string value)
 		{
 			label_Status2.Text = value;
 		}
 
 		/// <summary></summary>
-		public bool GetSetting()
+		public virtual bool GetSetting()
 		{
 			return (checkBox_Setting.Checked);
 		}
 
 		/// <summary></summary>
-		public void RequestClose(DialogResult value)
+		public virtual void RequestClose(DialogResult value)
 		{
 			DialogResult = value;
 			Close();

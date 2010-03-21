@@ -17,85 +17,48 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Diagnostics;
 
-namespace MKY.Utilities.Diagnostics
+namespace MKY.IO.Usb
 {
 	/// <summary>
-	/// Wraps part of the interface of <see cref="System.Diagnostics.Debug"/> to the common
-	/// interface <see cref="IDiagnosticsWriter"/>.
+	/// Interface for USB devices.
 	/// </summary>
-	public class DebugWrapper : IDiagnosticsWriter
+	public interface IDevice
 	{
-		#region Indent
+		#region Events
 		//==========================================================================================
-		// Indent
+		// Events
 		//==========================================================================================
 
 		/// <summary>
-		/// Gets or sets the indent level.
+		/// Fired after the device has been connected or reconnected.
 		/// </summary>
-		/// <value>
-		/// The indent level. The default is zero.
-		/// </value>
-		public virtual int IndentLevel
-		{
-			get { return (Debug.IndentLevel); }
-			set { Debug.IndentLevel = value;  }
-		}
+		event EventHandler Connected;
 
 		/// <summary>
-		/// Gets or sets the number of spaces in an indent.
+		/// Fired after the device has been disconnected.
 		/// </summary>
-		/// <value>
-		/// The number of spaces in an indent. The default is four.
-		/// </value>
-		public virtual int IndentSize
-		{
-			get { return (Debug.IndentSize); }
-			set { Debug.IndentSize = value;  }
-		}
+		event EventHandler Disconnected;
 
 		/// <summary>
-		/// Increases the current <see cref="IndentLevel"/> by one.
+		/// Fired after an error has occured.
 		/// </summary>
-		public virtual void Indent()
-		{
-			Debug.Indent();
-		}
-
-		/// <summary>
-		/// Decreases the current <see cref="IndentLevel"/> by one.
-		/// </summary>
-		public virtual void Unindent()
-		{
-			Debug.Unindent();
-		}
+		event EventHandler<ErrorEventArgs> Error;
 
 		#endregion
 
-		#region Write
+		#region Properties
 		//==========================================================================================
-		// Write
+		// Properties
 		//==========================================================================================
 
 		/// <summary>
-		/// Writes a message to the diagnostics listeners.
+		/// Indicates whether the device is connected to the computer.
 		/// </summary>
-		/// <param name="message">A message to write.</param>
-		public virtual void Write(string message)
-		{
-			Debug.Write(message);
-		}
-
-		/// <summary>
-		/// Writes a message to the diagnostics listeners.
-		/// </summary>
-		/// <param name="message">A message to write.</param>
-		public virtual void WriteLine(string message)
-		{
-			Debug.WriteLine(message);
-		}
+		/// <returns>
+		/// true if the device is connected to the computer; otherwise, false.
+		/// </returns>
+		bool IsConnected { get; }
 
 		#endregion
 	}

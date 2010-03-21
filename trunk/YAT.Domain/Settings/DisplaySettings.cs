@@ -118,7 +118,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("SeparateTxRxRadix")]
-		public bool SeparateTxRxRadix
+		public virtual bool SeparateTxRxRadix
 		{
 			get { return (_separateTxRxRadix); }
 			set
@@ -133,7 +133,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("TxRadix")]
-		public Radix TxRadix
+		public virtual Radix TxRadix
 		{
 			get { return (_txRadix); }
 			set
@@ -148,7 +148,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("RxRadix")]
-		public Radix RxRadix
+		public virtual Radix RxRadix
 		{
 			get
 			{
@@ -169,7 +169,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("ShowRadix")]
-		public bool ShowRadix
+		public virtual bool ShowRadix
 		{
 			get { return (_showRadix); }
 			set
@@ -184,7 +184,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("ShowTimeStamp")]
-		public bool ShowTimeStamp
+		public virtual bool ShowTimeStamp
 		{
 			get { return (_showTimeStamp); }
 			set
@@ -199,7 +199,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("ShowLength")]
-		public bool ShowLength
+		public virtual bool ShowLength
 		{
 			get { return (_showLength); }
 			set
@@ -214,7 +214,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("ShowConnectTime")]
-		public bool ShowConnectTime
+		public virtual bool ShowConnectTime
 		{
 			get { return (_showConnectTime); }
 			set
@@ -229,7 +229,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("ShowCounters")]
-		public bool ShowCounters
+		public virtual bool ShowCounters
 		{
 			get { return (_showCounters); }
 			set
@@ -244,7 +244,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("TxMaxLineCount")]
-		public int TxMaxLineCount
+		public virtual int TxMaxLineCount
 		{
 			get { return (_txMaxLineCount); }
 			set
@@ -262,7 +262,7 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlElement("RxMaxLineCount")]
-		public int RxMaxLineCount
+		public virtual int RxMaxLineCount
 		{
 			get { return (_rxMaxLineCount); }
 			set
@@ -280,14 +280,14 @@ namespace YAT.Domain.Settings
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public int BidirMaxLineCount
+		public virtual int BidirMaxLineCount
 		{
 			get { return (TxMaxLineCount + RxMaxLineCount); }
 		}
 
 		/// <summary></summary>
 		[XmlElement("DirectionLineBreakEnabled")]
-		public bool DirectionLineBreakEnabled
+		public virtual bool DirectionLineBreakEnabled
 		{
 			get { return (_directionLineBreakEnabled); }
 			set
