@@ -148,29 +148,24 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public Terminal()
+			: this(new DocumentSettingsHandler<TerminalSettingsRoot>(), Guid.NewGuid())
 		{
-			Initialize(new DocumentSettingsHandler<TerminalSettingsRoot>(), Guid.NewGuid());
 		}
 
 		/// <summary></summary>
 		public Terminal(TerminalSettingsRoot settings)
+			: this(new DocumentSettingsHandler<TerminalSettingsRoot>(settings), Guid.NewGuid())
 		{
-			Initialize(new DocumentSettingsHandler<TerminalSettingsRoot>(settings), Guid.NewGuid());
 		}
 
 		/// <summary></summary>
 		public Terminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
+			: this(settingsHandler, Guid.NewGuid())
 		{
-			Initialize(settingsHandler, Guid.NewGuid());
 		}
 
 		/// <summary></summary>
 		public Terminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid)
-		{
-			Initialize(settingsHandler, guid);
-		}
-
-		private void Initialize(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid)
 		{
 			if (guid != Guid.Empty)
 				_guid = guid;

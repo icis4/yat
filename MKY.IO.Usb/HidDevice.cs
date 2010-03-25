@@ -58,9 +58,29 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
-		public static new event EventHandler DeviceConnected;
+		public static new event EventHandler<DeviceEventArgs> DeviceConnected;
 		/// <summary></summary>
-		public static new event EventHandler DeviceDisconnected;
+		public static new event EventHandler<DeviceEventArgs> DeviceDisconnected;
+
+		#endregion
+
+		#region Static Lifetime
+		//==========================================================================================
+		// Static Lifetime
+		//==========================================================================================
+
+		static HidDevice()
+		{
+			RegisterStaticDeviceNotificationHandler();
+		}
+
+		// \todo 2010-03-21 / mky
+		// Properly unregister without relying on garbage collection
+		//
+		//static ~HidDevice()
+		//{
+		//	UnregisterStaticDeviceNotificationHandler();
+		//}
 
 		#endregion
 
@@ -94,7 +114,7 @@ namespace MKY.IO.Usb
 
 		private static void RegisterStaticDeviceNotificationHandler()
 		{
-			Utilities.Win32.DeviceManagement.RegisterDeviceNotificationHandle(_staticDeviceNotificationWindow.Handle, HidGuid, ref _staticDeviceNotificationHandle);
+			Utilities.Win32.DeviceManagement.RegisterDeviceNotificationHandle(_staticDeviceNotificationWindow.Handle, HidGuid, out _staticDeviceNotificationHandle);
 		}
 
 		private static void UnregisterStaticDeviceNotificationHandler()
@@ -104,17 +124,28 @@ namespace MKY.IO.Usb
 
 		private static void StaticDeviceNotificationHandler(ref Message m)
 		{
-			switch (Device.MessageToDeviceEvent(ref m))
-			{
-				case DeviceEvent.Connected:
-					Debug.WriteLine("USB HID device connected");
-					EventHelper.FireSync(DeviceConnected, typeof(HidDevice), new EventArgs());
-					break;
+			DeviceEvent de = MessageToDeviceEvent(ref m);
 
-				case DeviceEvent.Disconnected:
-					Debug.WriteLine("USB HID device removed");
-					EventHelper.FireSync(DeviceDisconnected, typeof(HidDevice), new EventArgs());
-					break;
+			if ((de == DeviceEvent.Connected) ||
+				(de == DeviceEvent.Disconnected))
+			{
+				string devicePath;
+				if (Utilities.Win32.DeviceManagement.DeviceChangeMessageToDevicePath(m, out devicePath))
+				{
+					DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Hid, devicePath);
+					switch (de)
+					{
+						case DeviceEvent.Connected:
+							Debug.WriteLine("USB HID device " + devicePath + " connected");
+							EventHelper.FireAsync(DeviceConnected, typeof(HidDevice), e);
+							break;
+
+						case DeviceEvent.Disconnected:
+							Debug.WriteLine("USB HID device " + devicePath + " disconnected");
+							EventHelper.FireAsync(DeviceDisconnected, typeof(HidDevice), e);
+							break;
+					}
+				}
 			}
 		}
 

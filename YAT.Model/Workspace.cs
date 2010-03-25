@@ -95,29 +95,24 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public Workspace()
+			: this(new DocumentSettingsHandler<WorkspaceSettingsRoot>(), Guid.NewGuid())
 		{
-			Initialize(new DocumentSettingsHandler<WorkspaceSettingsRoot>(), Guid.NewGuid());
 		}
 
 		/// <summary></summary>
 		public Workspace(WorkspaceSettingsRoot settings)
+			: this(new DocumentSettingsHandler<WorkspaceSettingsRoot>(settings), Guid.Empty)
 		{
-			Initialize(new DocumentSettingsHandler<WorkspaceSettingsRoot>(settings), Guid.Empty);
 		}
 
 		/// <summary></summary>
 		public Workspace(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler)
+			: this(settingsHandler, Guid.Empty)
 		{
-			Initialize(settingsHandler, Guid.Empty);
 		}
 
 		/// <summary></summary>
 		public Workspace(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, Guid guid)
-		{
-			Initialize(settingsHandler, guid);
-		}
-
-		private void Initialize(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, Guid guid)
 		{
 			if (guid != Guid.Empty)
 				_guid = guid;

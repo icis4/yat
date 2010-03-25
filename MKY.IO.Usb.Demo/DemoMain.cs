@@ -36,7 +36,7 @@ namespace MKY.IO.Usb.Demo
 				Console.Write(" + ");
 				Console.WriteLine(device.ToString());
 				Console.Write("   ");
-				Console.WriteLine(device.SystemPath);
+				Console.WriteLine(device.Path);
 			}
 			Console.WriteLine();
 

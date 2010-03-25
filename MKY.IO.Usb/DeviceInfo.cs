@@ -65,7 +65,7 @@ namespace MKY.IO.Usb
 		// Fields
 		//==========================================================================================
 
-		private string _systemPath;
+		private string _path;
 
 		private int _vendorId = DefaultVendorId;
 		private int _productId = DefaultProductId;
@@ -96,24 +96,22 @@ namespace MKY.IO.Usb
 
 		#endregion
 
-		#region Static Properties
+		#region Static Methods
 		//==========================================================================================
-		// Static Properties
+		// Static Methods
 		//==========================================================================================
 
 		/// <summary>
-		/// Returns default device on system. Default is the first device available.
-		/// Returns <c>null</c> if no devices are available.
+		/// For USB, no device can be consiered to be the default device. Therefore, this method
+		/// always returns <c>null</c>.
 		/// </summary>
+		/// <remarks>
+		/// Do not create a new USB device collection here. Filling the collection with all
+		/// available devices takes some time which makes little sense for USB as described above.
+		/// </remarks>
 		public static DeviceInfo GetDefaultDevice(DeviceClass deviceClass)
 		{
-			DeviceCollection l = new DeviceCollection(deviceClass);
-			l.FillWithAvailableDevices();
-
-			if (l.Count > 0)
-				return (new DeviceInfo(l[0]));
-			else
-				return (null);
+			return (null);
 		}
 
 		#endregion
@@ -158,7 +156,7 @@ namespace MKY.IO.Usb
 			if ((productId < FirstProductId) || (productId > LastProductId))
 				throw (new ArgumentOutOfRangeException("productId", productId, "Invalid product ID"));
 
-			_systemPath = systemPath;
+			_path = systemPath;
 
 			_vendorId = vendorId;
 			_productId = productId;
@@ -171,7 +169,7 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public DeviceInfo(DeviceInfo rhs)
 		{
-			_systemPath = rhs._systemPath;
+			_path = rhs._path;
 
 			_vendorId = rhs._vendorId;
 			_productId = rhs._productId;
@@ -195,10 +193,10 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public virtual string SystemPath
+		public virtual string Path
 		{
-			get { return (_systemPath); }
-			set { _systemPath = value;  }
+			get { return (_path); }
+			set { _path = value;  }
 		}
 
 		/// <summary></summary>
@@ -329,16 +327,16 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public virtual bool TryValidate()
 		{
-			if      (_systemPath != "")
+			if      (_path != "")
 			{
-				return (Device.GetDeviceInfoFromPath(_systemPath, out _vendorId, out _productId, out _manufacturer, out _product, out _serialNumber));
+				return (Device.GetDeviceInfoFromPath(_path, out _vendorId, out _productId, out _manufacturer, out _product, out _serialNumber));
 			}
 			else if ((_vendorId != 0) && (_productId != 0))
 			{
 				if (_serialNumber != "")
-					return (Device.GetDeviceInfoFromVidAndPidAndSerial(_vendorId, _productId, _serialNumber, out _systemPath, out _manufacturer, out _product));
+					return (Device.GetDeviceInfoFromVidAndPidAndSerial(_vendorId, _productId, _serialNumber, out _path, out _manufacturer, out _product));
 				else
-					return (Device.GetDeviceInfoFromVidAndPid(_vendorId, _productId, out _systemPath, out _manufacturer, out _product, out _serialNumber));
+					return (Device.GetDeviceInfoFromVidAndPid(_vendorId, _productId, out _path, out _manufacturer, out _product, out _serialNumber));
 			}
 			else
 			{
@@ -371,7 +369,7 @@ namespace MKY.IO.Usb
 		{
 			// Ensure that object.operator!=() is called
 			if ((object)value != null)
-				return (_systemPath.Equals(value._systemPath));
+				return (_path.Equals(value._path));
 
 			return (false);
 		}
@@ -516,10 +514,12 @@ namespace MKY.IO.Usb
 			if (obj is DeviceInfo)
 			{
 				DeviceInfo id = (DeviceInfo)obj;
-				if (VendorId != id.VendorId)
+				if      (VendorId != id.VendorId)
 					return (VendorId.CompareTo(id.VendorId));
-				else
+				else if (ProductId != id.ProductId)
 					return (ProductId.CompareTo(id.ProductId));
+				else
+					return (SerialNumber.CompareTo(id.SerialNumber));
 			}
 			throw (new ArgumentException("Object is not a UsbDeviceId entry"));
 		}

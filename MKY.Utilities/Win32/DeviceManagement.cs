@@ -69,27 +69,27 @@ namespace MKY.Utilities.Win32
 		}
 
 		/// <remarks>dbt.h</remarks>
-		[Flags]
+		//[Flags]
 		[CLSCompliant(false)]
 		public enum DBT : uint
 		{
-			DEVICEARRIVAL        = 0x8000,
-			DEVICEREMOVECOMPLETE = 0x8004,
+			DEVICEARRIVAL        = 0x00008000,
+			DEVICEREMOVECOMPLETE = 0x00008004,
 		}
 
 		/// <remarks>dbt.h</remarks>
-		private enum DBT_DEVTYP
+		private enum DBT_DEVTYP : uint
 		{
-			DEVICEINTERFACE = 5,
-			HANDLE          = 6,
+			DEVICEINTERFACE = 0x00000005,
+			HANDLE          = 0x00000006,
 		}
 
-		[Flags]
+		//[Flags]
 		private enum DEVICE_NOTIFY : uint
 		{
-			WINDOW_HANDLE         = 0x0000,
-			SERVICE_HANDLE        = 0x0001,
-			ALL_INTERFACE_CLASSES = 0x0004,
+			WINDOW_HANDLE         = 0x00000000,
+			SERVICE_HANDLE        = 0x00000001,
+			ALL_INTERFACE_CLASSES = 0x00000004,
 		}
 
 		/// <summary>
@@ -97,63 +97,55 @@ namespace MKY.Utilities.Win32
 		/// Use this one in the call to RegisterDeviceNotification() and
 		/// in checking dbch_devicetype in a DEV_BROADCAST_HDR structure:
 		/// </summary>
-		[StructLayout(LayoutKind.Sequential)]
-		private struct DEV_BROADCAST_DEVICEINTERFACE
-		{
-			public Int32 dbcc_size;
-			public DBT_DEVTYP dbcc_devicetype;
-			public Int32 dbcc_reserved;
-			public System.Guid dbcc_classguid;
-			public Int16 dbcc_name;
-		}
-
-		/// <summary>
-		/// Two declarations for the DEV_BROADCAST_DEVICEINTERFACE structure.
-		/// Use this to read the dbcc_name String and classguid:
-		/// </summary>
+		/// <remarks>
+		/// Must be a class because <see cref="Marshal.PtrToStructure(IntPtr, object)"/> and
+		/// <see cref="RegisterDeviceNotification"/> require a reference type.
+		/// </remarks>
 		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-		private struct DEV_BROADCAST_DEVICEINTERFACE_1
+		private class DEV_BROADCAST_DEVICEINTERFACE
 		{
-			public Int32 dbcc_size;
-			public Int32 dbcc_devicetype;
-			public Int32 dbcc_reserved;
-			[MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.U1, SizeConst = 16)]
-			public Byte[] dbcc_classguid;
-			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 255)]
-			public Char[] dbcc_name;
+			public UInt32      dbcc_size;
+			public DBT_DEVTYP  dbcc_devicetype;
+			public UInt32      dbcc_reserved;
+			public System.Guid dbcc_classguid;
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
+			public Char[]      dbcc_name;
 		}
 
+		/// <remarks>
+		/// Must be a class because <see cref="Marshal.PtrToStructure(IntPtr, object)"/> requires a reference type.
+		/// </remarks>
 		[StructLayout(LayoutKind.Sequential)]
-		private struct DEV_BROADCAST_HDR
+		private class DEV_BROADCAST_HDR
 		{
-			public Int32 dbch_size;
+			public UInt32     dbch_size;
 			public DBT_DEVTYP dbch_devicetype;
-			public Int32 dbch_reserved;
+			public UInt32     dbch_reserved;
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
 		private struct SP_DEVICE_INTERFACE_DATA
 		{
-			public Int32 cbSize;
+			public UInt32 cbSize;
 			public System.Guid InterfaceClassGuid;
-			public Int32 Flags;
+			public UInt32 Flags;
 			public IntPtr Reserved;
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
 		private struct SP_DEVICE_INTERFACE_DETAIL_DATA
 		{
-			public Int32 cbSize;
+			public UInt32 cbSize;
 			public String DevicePath;
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
 		private struct SP_DEVINFO_DATA
 		{
-			public Int32 cbSize;
+			public UInt32 cbSize;
 			public System.Guid ClassGuid;
-			public Int32 DevInst;
-			public Int32 Reserved;
+			public UInt32 DevInst;
+			public UInt32 Reserved;
 		}
 
 		#pragma warning restore 1591
@@ -170,7 +162,7 @@ namespace MKY.Utilities.Win32
 
 		/// <remarks>dbt.h</remarks>
 		[CLSCompliant(false)]
-		public const UInt32 WM_DEVICECHANGE = 0x0219;
+		public const UInt32 WM_DEVICECHANGE = 0x00000219;
 
 		#endregion
 
@@ -189,7 +181,7 @@ namespace MKY.Utilities.Win32
 		/// <param name="Flags">DEVICE_NOTIFY_WINDOW_HANDLE indicates the handle is a window handle.</param>
 		/// <returns>Device notification handle or NULL on failure.</returns>
 		[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern IntPtr RegisterDeviceNotification(IntPtr hRecipient, IntPtr NotificationFilter, DEVICE_NOTIFY Flags);
+		private static extern IntPtr RegisterDeviceNotification(IntPtr hRecipient, DEV_BROADCAST_DEVICEINTERFACE NotificationFilter, DEVICE_NOTIFY Flags);
 
 		[DllImport(SETUP_DLL, SetLastError = true)]
 		private static extern Int32 SetupDiCreateDeviceInfoList(ref System.Guid ClassGuid, Int32 hwndParent);
@@ -262,69 +254,6 @@ namespace MKY.Utilities.Win32
 		//==========================================================================================
 
 		/// <summary>
-		/// Compares two device path names. Used to find out if the device name of a recently
-		/// attached or removed device matches the name of a device the application is
-		/// communicating with.
-		/// </summary>
-		/// <param name="message">
-		/// A WM_DEVICECHANGE message. A call to RegisterDeviceNotification causes
-		/// WM_DEVICECHANGE messages to be passed to an OnDeviceChange routine..
-		/// </param>
-		/// <param name="devicePathName">
-		/// A device pathname returned by SetupDiGetDeviceInterfaceDetail in an
-		/// SP_DEVICE_INTERFACE_DETAIL_DATA structure.
-		/// </param>
-		/// <returns>True if the names match, False if not.</returns>
-		public static Boolean DeviceNameMatch(Message message, string devicePathName)
-		{
-			try
-			{
-				DEV_BROADCAST_DEVICEINTERFACE_1 devBroadcastDeviceInterface = new DEV_BROADCAST_DEVICEINTERFACE_1();
-				DEV_BROADCAST_HDR devBroadcastHeader = new DEV_BROADCAST_HDR();
-
-				// The LParam parameter of Message is a pointer to a DEV_BROADCAST_HDR structure.
-				Marshal.PtrToStructure(message.LParam, devBroadcastHeader);
-
-				if ((devBroadcastHeader.dbch_devicetype == DBT_DEVTYP.DEVICEINTERFACE))
-				{
-					// The dbch_devicetype parameter indicates that the event applies to a device interface.
-					// So the structure in LParam is actually a DEV_BROADCAST_INTERFACE structure, 
-					// which begins with a DEV_BROADCAST_HDR.
-
-					// Obtain the number of characters in dbch_name by subtracting the 32 bytes
-					// in the strucutre that are not part of dbch_name and dividing by 2 because there are 
-					// 2 bytes per character.
-					int stringSize = System.Convert.ToInt32((devBroadcastHeader.dbch_size - 32) / 2);
-
-					// The dbcc_name parameter of devBroadcastDeviceInterface contains the device name. 
-					// Trim dbcc_name to match the size of the String.
-					devBroadcastDeviceInterface.dbcc_name = new Char[stringSize + 1];
-
-					// Marshal data from the unmanaged block pointed to by m.LParam 
-					// to the managed object devBroadcastDeviceInterface.
-					Marshal.PtrToStructure(message.LParam, devBroadcastDeviceInterface);
-
-					// Store the device name in a String.
-					String DeviceNameString = new String(devBroadcastDeviceInterface.dbcc_name, 0, stringSize);
-
-					// Compare the name of the newly attached device with the name of the device 
-					// the application is accessing (devicePathName).
-					// Set ignorecase True.
-					if ((String.Compare(DeviceNameString, devicePathName, true) == 0))
-						return (true);
-					else
-						return (false);
-				}
-
-				return (false);
-			}
-			catch
-			{
-				throw;
-			}
-		}
-
-		/// <summary>
 		/// Use SetupDi API functions to retrieve the device path names of attached devices that
 		/// belong to a device interface class.
 		/// </summary>
@@ -346,7 +275,7 @@ namespace MKY.Utilities.Win32
 
 				// The cbSize element of the deviceInterfaceData structure must be set to the structure's size in bytes. 
 				// The size is 28 bytes for 32-bit code and 32 bits for 64-bit code.
-				deviceInterfaceData.cbSize = Marshal.SizeOf(deviceInterfaceData);
+				deviceInterfaceData.cbSize = (UInt32)Marshal.SizeOf(deviceInterfaceData);
 
 				do
 				{
@@ -407,22 +336,17 @@ namespace MKY.Utilities.Win32
 		/// <param name="classGuid">Device interface GUID.</param>
 		/// <param name="deviceNotificationHandle">Returned device notification handle.</param>
 		/// <returns>True on success.</returns>
-		public static Boolean RegisterDeviceNotificationHandle(IntPtr windowHandle, System.Guid classGuid, ref IntPtr deviceNotificationHandle)
+		public static bool RegisterDeviceNotificationHandle(IntPtr windowHandle, System.Guid classGuid, out IntPtr deviceNotificationHandle)
 		{
-			// \fixme
-			return (true);
-
-			IntPtr devBroadcastDeviceInterfaceBuffer = IntPtr.Zero;
+			deviceNotificationHandle = IntPtr.Zero;
 
 			try
 			{
 				// A DEV_BROADCAST_DEVICEINTERFACE header holds information about the request.
 				DEV_BROADCAST_DEVICEINTERFACE devBroadcastDeviceInterface = new DEV_BROADCAST_DEVICEINTERFACE();
 
-				// Set the parameters in the DEV_BROADCAST_DEVICEINTERFACE structure.
-				// Set the size.
-				int size = Marshal.SizeOf(devBroadcastDeviceInterface);
-				devBroadcastDeviceInterface.dbcc_size = size;
+				// Set the parameters in the DEV_BROADCAST_DEVICEINTERFACE structure. Set the size.
+				devBroadcastDeviceInterface.dbcc_size = (UInt32)Marshal.SizeOf(devBroadcastDeviceInterface);
 
 				// Request to receive notifications about a class of devices.
 				devBroadcastDeviceInterface.dbcc_devicetype = DBT_DEVTYP.DEVICEINTERFACE;
@@ -431,18 +355,7 @@ namespace MKY.Utilities.Win32
 				// Specify the interface class to receive notifications about.
 				devBroadcastDeviceInterface.dbcc_classguid = classGuid;
 
-				// Allocate memory for the buffer that holds the DEV_BROADCAST_DEVICEINTERFACE structure.
-				devBroadcastDeviceInterfaceBuffer = Marshal.AllocHGlobal(size);
-
-				// Copy the DEV_BROADCAST_DEVICEINTERFACE structure to the buffer.
-				// Set fDeleteOld True to prevent memory leaks.
-				Marshal.StructureToPtr(devBroadcastDeviceInterface, devBroadcastDeviceInterfaceBuffer, true);
-
-				deviceNotificationHandle = RegisterDeviceNotification(windowHandle, devBroadcastDeviceInterfaceBuffer, DEVICE_NOTIFY.WINDOW_HANDLE);
-
-				// Marshal data from the unmanaged block devBroadcastDeviceInterfaceBuffer to
-				// the managed object devBroadcastDeviceInterface
-				Marshal.PtrToStructure(devBroadcastDeviceInterfaceBuffer, devBroadcastDeviceInterface);
+				deviceNotificationHandle = RegisterDeviceNotification(windowHandle, devBroadcastDeviceInterface, DEVICE_NOTIFY.WINDOW_HANDLE);
 
 				return (deviceNotificationHandle != IntPtr.Zero);
 			}
@@ -450,14 +363,6 @@ namespace MKY.Utilities.Win32
 			{
 				Diagnostics.XDebug.WriteException(typeof(DeviceManagement), ex);
 				throw (ex);
-			}
-			finally
-			{
-				if (devBroadcastDeviceInterfaceBuffer != IntPtr.Zero)
-				{
-					// Free the memory allocated previously by AllocHGlobal.
-					Marshal.FreeHGlobal(devBroadcastDeviceInterfaceBuffer);
-				}
 			}
 		}
 
@@ -474,6 +379,84 @@ namespace MKY.Utilities.Win32
 				// Ignore failures.
 			}
 			catch {}
+		}
+
+		/// <summary>
+		/// Converts a device change message the a device path. Used to find out if
+		/// the device name of a recently attached or removed device matches the name
+		/// of a device the application is communicating with.
+		/// </summary>
+		/// <param name="deviceChangeMessage">
+		/// A WM_DEVICECHANGE message. A call to RegisterDeviceNotification causes
+		/// WM_DEVICECHANGE messages to be passed to an OnDeviceChange routine.
+		/// </param>
+		/// <param name="devicePath">
+		/// A device pathname returned by SetupDiGetDeviceInterfaceDetail in an
+		/// SP_DEVICE_INTERFACE_DETAIL_DATA structure.
+		/// </param>
+		/// <returns>True if the conversion succeeded, False if not.</returns>
+		public static bool DeviceChangeMessageToDevicePath(Message deviceChangeMessage, out string devicePath)
+		{
+			try
+			{
+				DEV_BROADCAST_DEVICEINTERFACE devBroadcastDeviceInterface = new DEV_BROADCAST_DEVICEINTERFACE();
+				DEV_BROADCAST_HDR devBroadcastHeader = new DEV_BROADCAST_HDR();
+
+				// The LParam parameter of Message is a pointer to a DEV_BROADCAST_HDR structure.
+				Marshal.PtrToStructure(deviceChangeMessage.LParam, devBroadcastHeader);
+
+				if ((devBroadcastHeader.dbch_devicetype == DBT_DEVTYP.DEVICEINTERFACE))
+				{
+					// The dbch_devicetype parameter indicates that the event applies to a device
+					// interface. So the structure in LParam is actually a DEV_BROADCAST_INTERFACE
+					// structure, which begins with a DEV_BROADCAST_HDR.
+
+					// Obtain the number of characters in dbch_name by subtracting the 32 bytes in
+					// the strucutre that are not part of dbch_name and dividing by 2 because there
+					// are 2 bytes per character.
+					int stringSize = System.Convert.ToInt32((devBroadcastHeader.dbch_size - 32) / 2);
+
+					// The dbcc_name parameter of devBroadcastDeviceInterface contains the device
+					// name. Trim dbcc_name to match the size of the String.
+					devBroadcastDeviceInterface.dbcc_name = new Char[stringSize + 1];
+
+					// Marshal data from the unmanaged block pointed to by m.LParam to the managed
+					// object devBroadcastDeviceInterface.
+					Marshal.PtrToStructure(deviceChangeMessage.LParam, devBroadcastDeviceInterface);
+
+					// Store the device name in a String.
+					devicePath = new String(devBroadcastDeviceInterface.dbcc_name, 0, stringSize);
+					return (true);
+				}
+			}
+			catch { }
+
+			devicePath = "";
+			return (false);
+		}
+
+		/// <summary>
+		/// Compares two device path names. Used to find out if the device name of a recently
+		/// attached or removed device matches the name of a device the application is
+		/// communicating with.
+		/// </summary>
+		/// <param name="deviceChangeMessage">
+		/// A WM_DEVICECHANGE message. A call to RegisterDeviceNotification causes
+		/// WM_DEVICECHANGE messages to be passed to an OnDeviceChange routine.
+		/// </param>
+		/// <param name="devicePath">
+		/// A device pathname returned by SetupDiGetDeviceInterfaceDetail in an
+		/// SP_DEVICE_INTERFACE_DETAIL_DATA structure.
+		/// </param>
+		/// <returns>True if the names match, False if not.</returns>
+		public static bool CompareDeviceChangeMessageToDevicePath(Message deviceChangeMessage, string devicePath)
+		{
+			string devicePathFromMessage;
+
+			if (DeviceChangeMessageToDevicePath(deviceChangeMessage, out devicePathFromMessage))
+				return (String.Compare(devicePathFromMessage, devicePath, true) == 0);
+
+			return (false);
 		}
 
 		#endregion

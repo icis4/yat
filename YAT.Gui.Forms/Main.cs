@@ -81,19 +81,14 @@ namespace YAT.Gui.Forms
 		// - (In source code, proceed according to the MenuStrip class example in the MSDN)
 
 		public Main()
+			: this(new Model.Main())
 		{
-			InitializeComponent();
-			Initialize(new Model.Main());
 		}
 
 		public Main(Model.Main main)
 		{
 			InitializeComponent();
-			Initialize(main);
-		}
 
-		private void Initialize(Model.Main main)
-		{
 			InitializeControls();
 
 			// Link and attach to main model

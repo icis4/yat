@@ -19,6 +19,7 @@
 //==================================================================================================
 
 using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Diagnostics;
@@ -44,9 +45,9 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
-		public static event EventHandler DeviceConnected;
+		public static event EventHandler<DeviceEventArgs> DeviceConnected;
 		/// <summary></summary>
-		public static event EventHandler DeviceDisconnected;
+		public static event EventHandler<DeviceEventArgs> DeviceDisconnected;
 
 		#endregion
 
@@ -127,9 +128,9 @@ namespace MKY.IO.Usb
 		{
 			List<DeviceInfo> devices = new List<DeviceInfo>();
 
-			foreach (string systemPath in Utilities.Win32.DeviceManagement.GetDevicesFromGuid(classGuid))
+			foreach (string path in Utilities.Win32.DeviceManagement.GetDevicesFromGuid(classGuid))
 			{
-				DeviceInfo device = GetDeviceInfoFromPath(systemPath);
+				DeviceInfo device = GetDeviceInfoFromPath(path);
 				if (device != null)
 				{
 					if (device.TryValidate())
@@ -148,12 +149,12 @@ namespace MKY.IO.Usb
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Returns VID and PID of a given systemPath.
+		/// Returns VID and PID of a given path.
 		/// </summary>
-		public static bool GetVidAndPidFromPath(string systemPath, out int vendorId, out int productId)
+		public static bool GetVidAndPidFromPath(string path, out int vendorId, out int productId)
 		{
 			SafeFileHandle hidHandle;
-			if (Utilities.Win32.Hid.GetDeviceHandle(systemPath, out hidHandle))
+			if (Utilities.Win32.Hid.GetDeviceHandle(path, out hidHandle))
 			{
 				try
 				{
@@ -190,12 +191,12 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Returns manufacturer, product and serial number strings of a given systemPath.
+		/// Returns manufacturer, product and serial number strings of a given path.
 		/// </summary>
-		public static bool GetStringsFromPath(string systemPath, out string manufacturer, out string product, out string serialNumber)
+		public static bool GetStringsFromPath(string path, out string manufacturer, out string product, out string serialNumber)
 		{
 			SafeFileHandle hidHandle;
-			if (Utilities.Win32.Hid.GetDeviceHandle(systemPath, out hidHandle))
+			if (Utilities.Win32.Hid.GetDeviceHandle(path, out hidHandle))
 			{
 				try
 				{
@@ -223,30 +224,30 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Returns the information of the device with the given systemPath,
-		/// or <c>null</c> if no device could be found on the given systemPath.
+		/// Returns the information of the device with the given path,
+		/// or <c>null</c> if no device could be found on the given path.
 		/// </summary>
-		public static DeviceInfo GetDeviceInfoFromPath(string systemPath)
+		public static DeviceInfo GetDeviceInfoFromPath(string path)
 		{
 			int vendorId, productId;
 			string manufacturer, product, serialNumber;
 
-			if (GetDeviceInfoFromPath(systemPath, out vendorId, out productId, out manufacturer, out product, out serialNumber))
-				return (new DeviceInfo(systemPath, vendorId, productId, manufacturer, product, serialNumber));
+			if (GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serialNumber))
+				return (new DeviceInfo(path, vendorId, productId, manufacturer, product, serialNumber));
 			else
 				return (null);
 		}
 
 		/// <summary>
-		/// Returns the information of the device with the given systemPath.
+		/// Returns the information of the device with the given path.
 		/// </summary>
 		/// <remarks>
 		/// \todo This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
 		/// </remarks>
-		public static bool GetDeviceInfoFromPath(string systemPath, out int vendorId, out int productId, out string manufacturer, out string product, out string serialNumber)
+		public static bool GetDeviceInfoFromPath(string path, out int vendorId, out int productId, out string manufacturer, out string product, out string serialNumber)
 		{
 			SafeFileHandle hidHandle;
-			if (Utilities.Win32.Hid.GetDeviceHandle(systemPath, out hidHandle))
+			if (Utilities.Win32.Hid.GetDeviceHandle(path, out hidHandle))
 			{
 				try
 				{
@@ -270,7 +271,7 @@ namespace MKY.IO.Usb
 
 		/// <summary>
 		/// Returns the information of the device with the given VID and PID,
-		/// or <c>null</c> if no device could be found on the given systemPath.
+		/// or <c>null</c> if no device could be found on the given path.
 		/// </summary>
 		/// <remarks>
 		/// If multiple devices with the same VID and PID are connected to the sytem, the first device is returned.
@@ -278,10 +279,10 @@ namespace MKY.IO.Usb
 		/// <returns>Retrieved device info, or <c>null</c> if no valable device found.</returns>
 		public static DeviceInfo GetDeviceInfoFromVidAndPid(int vendorId, int productId)
 		{
-			string systemPath, manufacturer, product, serialNumber;
+			string path, manufacturer, product, serialNumber;
 
-			if (GetDeviceInfoFromVidAndPid(vendorId, productId, out systemPath, out manufacturer, out product, out serialNumber))
-				return (new DeviceInfo(systemPath, vendorId, productId, manufacturer, product, serialNumber));
+			if (GetDeviceInfoFromVidAndPid(vendorId, productId, out path, out manufacturer, out product, out serialNumber))
+				return (new DeviceInfo(path, vendorId, productId, manufacturer, product, serialNumber));
 			else
 				return (null);
 		}
@@ -294,11 +295,11 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		/// <param name="vendorId">Given VID.</param>
 		/// <param name="productId">Given PID.</param>
-		/// <param name="systemPath">Retrieved system systemPath, or "" if no valable device found.</param>
+		/// <param name="path">Retrieved system path, or "" if no valable device found.</param>
 		/// <param name="manufacturer">Retrieved manufacturer, or "" if no valable device found.</param>
 		/// <param name="product">Retrieved product, or "" if no valable device found.</param>
 		/// <param name="serialNumber">Retrieved serial number, or "" if no valable device found.</param>
-		public static bool GetDeviceInfoFromVidAndPid(int vendorId, int productId, out string systemPath, out string manufacturer, out string product, out string serialNumber)
+		public static bool GetDeviceInfoFromVidAndPid(int vendorId, int productId, out string path, out string manufacturer, out string product, out string serialNumber)
 		{
 			DeviceCollection devices = new DeviceCollection();
 			devices.FillWithAvailableDevices();
@@ -307,7 +308,7 @@ namespace MKY.IO.Usb
 			{
 				if ((device.VendorId == vendorId) && (device.ProductId == productId))
 				{
-					systemPath = device.SystemPath;
+					path = device.Path;
 					manufacturer = device.Manufacturer;
 					product = device.Product;
 					serialNumber = device.SerialNumber;
@@ -316,7 +317,7 @@ namespace MKY.IO.Usb
 				}
 			}
 
-			systemPath = "";
+			path = "";
 			manufacturer = "";
 			product = "";
 			serialNumber = "";
@@ -326,15 +327,15 @@ namespace MKY.IO.Usb
 
 		/// <summary>
 		/// Returns the information of the device with the given VID and PID and serial number.
-		/// or <c>null</c> if no device could be found on the give systemPath.
+		/// or <c>null</c> if no device could be found on the give path.
 		/// </summary>
 		/// <returns>Retrieved device info, or <c>null</c> if no valable device found.</returns>
 		public static DeviceInfo GetDeviceInfoFromVidAndPidAndSerial(int vendorId, int productId, string serialNumber)
 		{
-			string systemPath, manufacturer, product;
+			string path, manufacturer, product;
 
-			if (GetDeviceInfoFromVidAndPidAndSerial(vendorId, productId, serialNumber, out systemPath, out manufacturer, out product))
-				return (new DeviceInfo(systemPath, vendorId, productId, manufacturer, product, serialNumber));
+			if (GetDeviceInfoFromVidAndPidAndSerial(vendorId, productId, serialNumber, out path, out manufacturer, out product))
+				return (new DeviceInfo(path, vendorId, productId, manufacturer, product, serialNumber));
 			else
 				return (null);
 		}
@@ -345,10 +346,10 @@ namespace MKY.IO.Usb
 		/// <param name="vendorId">Given VID.</param>
 		/// <param name="productId">Given PID.</param>
 		/// <param name="serialNumber">Given serial number.</param>
-		/// <param name="systemPath">Retrieved system systemPath, or "" if no valable device found.</param>
+		/// <param name="path">Retrieved system path, or "" if no valable device found.</param>
 		/// <param name="manufacturer">Retrieved manufacturer, or "" if no valable device found.</param>
 		/// <param name="product">Retrieved product, or "" if no valable device found.</param>
-		public static bool GetDeviceInfoFromVidAndPidAndSerial(int vendorId, int productId, string serialNumber, out string systemPath, out string manufacturer, out string product)
+		public static bool GetDeviceInfoFromVidAndPidAndSerial(int vendorId, int productId, string serialNumber, out string path, out string manufacturer, out string product)
 		{
 			DeviceCollection devices = new DeviceCollection();
 			devices.FillWithAvailableDevices();
@@ -357,7 +358,7 @@ namespace MKY.IO.Usb
 			{
 				if ((device.VendorId == vendorId) && (device.ProductId == productId) && (device.SerialNumber == serialNumber))
 				{
-					systemPath = device.SystemPath;
+					path = device.Path;
 					manufacturer = device.Manufacturer;
 					product = device.Product;
 
@@ -365,7 +366,7 @@ namespace MKY.IO.Usb
 				}
 			}
 
-			systemPath = "";
+			path = "";
 			manufacturer = "";
 			product = "";
 
@@ -379,41 +380,52 @@ namespace MKY.IO.Usb
 		// Static Methods > Device Notification
 		//------------------------------------------------------------------------------------------
 
-		private static NativeMessageHandler _staticDeviceNotificationWindow = new NativeMessageHandler(StaticDeviceNotificationHandler);
-		private static IntPtr _staticDeviceNotificationHandle = IntPtr.Zero;
+		//private static NativeMessageHandler _staticDeviceNotificationWindow = new NativeMessageHandler(StaticDeviceNotificationHandler);
+		//private static IntPtr _staticDeviceNotificationHandle = IntPtr.Zero;
 
 		/// <remarks>
-		/// \todo Don't know how to retrieve the GUID for any USB device class. So only HID devices are detected
+		/// \todo Don't know how to retrieve the GUID for any USB device class. So only HID devices are detected.
 		/// </remarks>
 		private static void RegisterStaticDeviceNotificationHandler()
 		{
-			Utilities.Win32.DeviceManagement.RegisterDeviceNotificationHandle(_staticDeviceNotificationWindow.Handle, HidDevice.HidGuid, ref _staticDeviceNotificationHandle);
+			//Utilities.Win32.DeviceManagement.RegisterDeviceNotificationHandle(_staticDeviceNotificationWindow.Handle, HidDevice.HidGuid, ref _staticDeviceNotificationHandle);
 		}
 
 		private static void UnregisterStaticDeviceNotificationHandler()
 		{
-			Utilities.Win32.DeviceManagement.UnregisterDeviceNotificationHandle(_staticDeviceNotificationHandle);
+			//Utilities.Win32.DeviceManagement.UnregisterDeviceNotificationHandle(_staticDeviceNotificationHandle);
 		}
 
 		private static void StaticDeviceNotificationHandler(ref Message m)
 		{
-			switch (MessageToDeviceEvent(ref m))
-			{
-				case DeviceEvent.Connected:
-					Debug.WriteLine("USB device connected");
-					EventHelper.FireSync(DeviceConnected, typeof(Device), new EventArgs());
-					break;
+			DeviceEvent de = MessageToDeviceEvent(ref m);
 
-				case DeviceEvent.Disconnected:
-					Debug.WriteLine("USB device removed");
-					EventHelper.FireSync(DeviceDisconnected, typeof(Device), new EventArgs());
-					break;
+			if ((de == DeviceEvent.Connected) ||
+				(de == DeviceEvent.Disconnected))
+			{
+				string devicePath;
+				if (Utilities.Win32.DeviceManagement.DeviceChangeMessageToDevicePath(m, out devicePath))
+				{
+					DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Any, devicePath);
+					switch (de)
+					{
+						case DeviceEvent.Connected:
+							Debug.WriteLine("USB device connected: " + devicePath);
+							EventHelper.FireAsync(DeviceConnected, typeof(Device), e);
+							break;
+
+						case DeviceEvent.Disconnected:
+							Debug.WriteLine("USB device disconnected: " + devicePath);
+							EventHelper.FireAsync(DeviceDisconnected, typeof(Device), e);
+							break;
+					}
+				}
 			}
 		}
 
 		internal static DeviceEvent MessageToDeviceEvent(ref Message m)
 		{
-			if (m.Msg == Utilities.Win32.DeviceManagement.WM_DEVICECHANGE)
+			if (m.Msg == (int)Utilities.Win32.DeviceManagement.WM_DEVICECHANGE)
 			{
 				Utilities.Win32.DeviceManagement.DBT e = (Utilities.Win32.DeviceManagement.DBT)m.WParam.ToInt32();
 				switch (e)
@@ -422,7 +434,7 @@ namespace MKY.IO.Usb
 						return (DeviceEvent.Connected);
 
 					case Utilities.Win32.DeviceManagement.DBT.DEVICEREMOVECOMPLETE:
-						return (DeviceEvent.Connected);
+						return (DeviceEvent.Disconnected);
 				}
 			}
 			return (DeviceEvent.None);
@@ -474,12 +486,12 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Device(Guid classGuid, string systemPath)
+		public Device(Guid classGuid, string path)
 		{
 			int vendorId, productId;
 			string manufacturer, product, serialNumber;
-			GetDeviceInfoFromPath(systemPath, out vendorId, out productId, out manufacturer, out product, out serialNumber);
-			_deviceInfo = new DeviceInfo(systemPath, vendorId, productId, manufacturer, product, serialNumber);
+			GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serialNumber);
+			_deviceInfo = new DeviceInfo(path, vendorId, productId, manufacturer, product, serialNumber);
 			Initialize();
 		}
 
@@ -507,8 +519,8 @@ namespace MKY.IO.Usb
 		private void Initialize()
 		{
 			// Get and store the handle to the USB device.
-			if (!Utilities.Win32.Hid.GetDeviceHandle(_deviceInfo.SystemPath, out _deviceHandle))
-				throw (new UsbException("Failed to retrieve device handle for USB device" + Environment.NewLine + _deviceInfo.SystemPath));
+			if (!Utilities.Win32.Hid.GetDeviceHandle(_deviceInfo.Path, out _deviceHandle))
+				throw (new UsbException("Failed to retrieve device handle for USB device" + Environment.NewLine + _deviceInfo.Path));
 
 			// Getting a handle means that the device is connected to the computer.
 			_isConnected = true;
@@ -518,14 +530,14 @@ namespace MKY.IO.Usb
 
 		private void AttachEventHandlers()
 		{
-			DeviceConnected    += new EventHandler(Device_DeviceConnected);
-			DeviceDisconnected += new EventHandler(Device_DeviceDisconnected);
+			DeviceConnected    += new EventHandler<DeviceEventArgs>(Device_DeviceConnected);
+			DeviceDisconnected += new EventHandler<DeviceEventArgs>(Device_DeviceDisconnected);
 		}
 
 		private void DetachEventHandlers()
 		{
-			DeviceConnected    -= new EventHandler(Device_DeviceConnected);
-			DeviceDisconnected -= new EventHandler(Device_DeviceDisconnected);
+			DeviceConnected    -= new EventHandler<DeviceEventArgs>(Device_DeviceConnected);
+			DeviceDisconnected -= new EventHandler<DeviceEventArgs>(Device_DeviceDisconnected);
 		}
 
 		#region Disposal
@@ -584,7 +596,7 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected virtual string SystemPath
 		{
-			get { return (_deviceInfo.SystemPath); }
+			get { return (_deviceInfo.Path); }
 		}
 
 		/// <summary></summary>
@@ -676,47 +688,21 @@ namespace MKY.IO.Usb
 		// Event Handling
 		//==========================================================================================
 
-		private void Device_DeviceConnected(object sender, EventArgs e)
+		private void Device_DeviceConnected(object sender, DeviceEventArgs e)
 		{
-			if (!_isConnected) // Only care about a connect event if the device is currently disconnected.
+			if (_deviceInfo.Path == e.DevicePath)
 			{
-				bool found = false;
-				foreach (DeviceInfo di in Device.GetDevices())
-				{
-					if (_deviceInfo == di)
-					{
-						found = true;
-						break;
-					}
-				}
-
-				if (found)
-				{
-					_isConnected = true;
-					OnConnected_Async(new EventArgs());
-				}
+				_isConnected = true;
+				OnConnected_Async(new EventArgs());
 			}
 		}
 
-		private void Device_DeviceDisconnected(object sender, EventArgs e)
+		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
 		{
-			if (_isConnected) // Only care about a disconnect event if the device is currently connected.
+			if (_deviceInfo.Path == e.DevicePath)
 			{
-				bool found = false;
-				foreach (DeviceInfo di in Device.GetDevices())
-				{
-					if (_deviceInfo == di)
-					{
-						found = true;
-						break;
-					}
-				}
-
-				if (!found)
-				{
-					_isConnected = false;
-					OnDisconnected_Async(new EventArgs());
-				}
+				_isConnected = false;
+				OnDisconnected_Async(new EventArgs());
 			}
 		}
 

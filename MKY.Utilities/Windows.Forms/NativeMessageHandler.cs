@@ -44,6 +44,12 @@ namespace MKY.Utilities.Windows.Forms
 		/// <summary>
 		/// Gets the handle for this window.
 		/// </summary>
+		/// <remarks>
+		/// If no handle is associated, a new is create once upon first call of this property.
+		/// Attention:
+		/// Such handle must not be created within the constructor because that would lead
+		/// to exceptions in <see cref="WndProc"/>.
+		/// </remarks>
 		/// <returns>
 		/// If successful, an System.IntPtr representing the handle to the associated
 		/// native Win32 window; otherwise, 0 if no handle is associated with the window.
@@ -74,7 +80,7 @@ namespace MKY.Utilities.Windows.Forms
 			}
 			catch (Exception ex)
 			{
-				Utilities.Diagnostics.XDebug.WriteException(this, ex);
+				Diagnostics.XDebug.WriteException(this, ex);
 			}
 		}
 	}
