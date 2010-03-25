@@ -15,8 +15,8 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace MKY.Utilities.Diagnostics
 {
@@ -33,15 +33,48 @@ namespace MKY.Utilities.Diagnostics
 		/// </summary>
 		public static void WriteException(object obj, Exception ex)
 		{
-			DiagnosticsWriterOutput.WriteException(_consoleWrapper, obj, ex);
+			WriteException(obj, ex, "");
+		}
+
+		/// <summary>
+		/// Writes source, type, message and stack of the given exception and its inner exceptions
+		/// to <see cref="System.Console"/>.
+		/// </summary>
+		public static void WriteException(object obj, Exception ex, string additionalMessage)
+		{
+			DiagnosticsWriterOutput.WriteException(_consoleWrapper, obj, ex, additionalMessage);
 		}
 
 		/// <summary>
 		/// Writes message and stack to <see cref="System.Console"/>.
 		/// </summary>
-		public static void WriteStack(object obj, string message)
+		public static void WriteStack(object obj, StackTrace st)
 		{
-			DiagnosticsWriterOutput.WriteStack(_consoleWrapper, obj, message);
+			WriteStack(obj, st, "");
+		}
+
+		/// <summary>
+		/// Writes message and stack to <see cref="System.Console"/>.
+		/// </summary>
+		public static void WriteStack(object obj, StackTrace st, string additionalMessage)
+		{
+			DiagnosticsWriterOutput.WriteStack(_consoleWrapper, obj, st, additionalMessage);
+		}
+
+		/// <summary>
+		/// Writes message and stack to <see cref="System.Console"/>.
+		/// </summary>
+		public static void WriteWindowsFormsMessage(object obj, Message m)
+		{
+			WriteWindowsFormsMessage(obj, m, "");
+		}
+
+		/// <summary>
+		/// Writes message and stack to <see cref="System.Console"/>.
+		/// </summary>
+		public static void WriteWindowsFormsMessage(object obj, Message m, string additionalMessage)
+		{
+			DiagnosticsWriterOutput.WriteWindowsFormsMessage(_consoleWrapper, obj, m, additionalMessage);
 		}
 	}
 }

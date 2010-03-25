@@ -99,20 +99,14 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public Main()
+			: this("")
 		{
-			Initialize("");
 		}
 
 		/// <summary></summary>
 		public Main(string requestedFilePath)
 		{
-			Initialize(requestedFilePath);
-		}
-
-		private void Initialize(string requestedFilePath)
-		{
 			_guid = Guid.NewGuid();
-
 			_requestedFilePath = requestedFilePath;
 		}
 

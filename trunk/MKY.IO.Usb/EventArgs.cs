@@ -30,6 +30,23 @@ namespace MKY.IO.Usb
 			Message = message;
 		}
 	}
+
+	/// <summary></summary>
+	public class DeviceEventArgs : EventArgs
+	{
+		/// <summary></summary>
+		public readonly DeviceClass DeviceClass;
+
+		/// <summary></summary>
+		public readonly string DevicePath;
+
+		/// <summary></summary>
+		public DeviceEventArgs(DeviceClass deviceClass, string devicePath)
+		{
+			DeviceClass = deviceClass;
+			DevicePath = devicePath;
+		}
+	}
 }
 
 //==================================================================================================

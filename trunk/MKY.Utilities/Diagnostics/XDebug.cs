@@ -15,9 +15,8 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace MKY.Utilities.Diagnostics
 {
@@ -46,8 +45,24 @@ namespace MKY.Utilities.Diagnostics
 		[Conditional("DEBUG")]
 		public static void WriteException(object obj, Exception ex)
 		{
+			WriteException(obj, ex, "");
+		}
+
+		/// <summary>
+		/// Writes source, type, message and stack of the given exception and its inner exceptions
+		/// to <see cref="System.Diagnostics.Debug"/>.
+		/// </summary>
+		/// <remarks>
+		/// There also is a <see cref="System.Diagnostics.Trace"/> variant of this method available
+		/// in <see cref="MKY.Utilities.Diagnostics.XTrace"/>.
+		/// Unfortunately, the Debug and Trace objects do not provide access to their underlying
+		/// output writers. Therefore, the two implementations use writer wrappers.
+		/// </remarks>
+		[Conditional("DEBUG")]
+		public static void WriteException(object obj, Exception ex, string additionalMessage)
+		{
 		#if (DEBUG)
-			DiagnosticsWriterOutput.WriteException(_debugWrapper, obj, ex);
+			DiagnosticsWriterOutput.WriteException(_debugWrapper, obj, ex, additionalMessage);
 		#endif
 		}
 
@@ -61,10 +76,57 @@ namespace MKY.Utilities.Diagnostics
 		/// output writers. Therefore, the two implementations use writer wrappers.
 		/// </remarks>
 		[Conditional("DEBUG")]
-		public static void WriteStack(object obj, string message)
+		public static void WriteStack(object obj, StackTrace st)
+		{
+			WriteStack(obj, st, "");
+		}
+
+		/// <summary>
+		/// Writes message and stack to <see cref="System.Diagnostics.Debug"/>.
+		/// </summary>
+		/// <remarks>
+		/// There also is a <see cref="System.Diagnostics.Trace"/> variant of this method available
+		/// in <see cref="MKY.Utilities.Diagnostics.XTrace"/>.
+		/// Unfortunately, the Debug and Trace objects do not provide access to their underlying
+		/// output writers. Therefore, the two implementations use writer wrappers.
+		/// </remarks>
+		[Conditional("DEBUG")]
+		public static void WriteStack(object obj, StackTrace st, string additionalMessage)
 		{
 		#if (DEBUG)
-			DiagnosticsWriterOutput.WriteStack(_debugWrapper, obj, message);
+			DiagnosticsWriterOutput.WriteStack(_debugWrapper, obj, st, additionalMessage);
+		#endif
+		}
+
+		/// <summary>
+		/// Writes a windows forms message to <see cref="System.Diagnostics.Debug"/>.
+		/// </summary>
+		/// <remarks>
+		/// There also is a <see cref="System.Diagnostics.Trace"/> variant of this method available
+		/// in <see cref="MKY.Utilities.Diagnostics.XTrace"/>.
+		/// Unfortunately, the Debug and Trace objects do not provide access to their underlying
+		/// output writers. Therefore, the two implementations use writer wrappers.
+		/// </remarks>
+		[Conditional("DEBUG")]
+		public static void WriteWindowsFormsMessage(object obj, Message m)
+		{
+			WriteWindowsFormsMessage(obj, m, "");
+		}
+
+		/// <summary>
+		/// Writes a windows forms message to <see cref="System.Diagnostics.Debug"/>.
+		/// </summary>
+		/// <remarks>
+		/// There also is a <see cref="System.Diagnostics.Trace"/> variant of this method available
+		/// in <see cref="MKY.Utilities.Diagnostics.XTrace"/>.
+		/// Unfortunately, the Debug and Trace objects do not provide access to their underlying
+		/// output writers. Therefore, the two implementations use writer wrappers.
+		/// </remarks>
+		[Conditional("DEBUG")]
+		public static void WriteWindowsFormsMessage(object obj, Message m, string additionalMessage)
+		{
+		#if (DEBUG)
+			DiagnosticsWriterOutput.WriteWindowsFormsMessage(_debugWrapper, obj, m, additionalMessage);
 		#endif
 		}
 	}

@@ -92,19 +92,14 @@ namespace YAT.Gui.Forms
 		//     3. Place "splitContainer_Terminal" and dock it to fill
 
 		public Terminal()
+			: this(new Model.Terminal())
 		{
-			InitializeComponent();
-			Initialize(new Model.Terminal());
 		}
 
 		public Terminal(Model.Terminal terminal)
 		{
 			InitializeComponent();
-			Initialize(terminal);
-		}
 
-		private void Initialize(Model.Terminal terminal)
-		{
 			FixContextMenus();
 
 			InitializeControls();

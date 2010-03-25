@@ -553,7 +553,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected virtual void OnIOError(IOErrorEventArgs e)
 		{
-			EventHelper.FireSync(IOError, this, e);
+			EventHelper.FireSync<IOErrorEventArgs>(IOError, this, e);
 		}
 
 		#endregion
