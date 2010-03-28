@@ -147,7 +147,6 @@ namespace MKY.IO.Usb
 				System.Diagnostics.Debug.Indent();
 				System.Diagnostics.Debug.WriteLine(Utilities.Win32.Debug.GetLastErrorMessage());
 				System.Diagnostics.Debug.Unindent();
-				System.Diagnostics.Debug.WriteLine("");
 
 				// The failure may have been because the device was removed, so close any open
 				// handles and set deviceDetected=False to cause the application to look for the
@@ -208,7 +207,7 @@ namespace MKY.IO.Usb
 			NativeOverlapped HidOverlapped = new NativeOverlapped();
 			IntPtr nonManagedBuffer = IntPtr.Zero;
 			IntPtr nonManagedOverlapped = IntPtr.Zero;
-			UInt32 numberOfBytesRead = 0;
+			int numberOfBytesRead = 0;
 			UInt32 result = 0;
 
 			try
@@ -221,10 +220,10 @@ namespace MKY.IO.Usb
 				nonManagedOverlapped = Marshal.AllocHGlobal(Marshal.SizeOf(HidOverlapped));
 				Marshal.StructureToPtr(HidOverlapped, nonManagedOverlapped, false);
 
-				bool success = FileIO.ReadFile(readHandle, nonManagedBuffer, (UInt32)inputReportBuffer.Length, ref numberOfBytesRead, nonManagedOverlapped);
+				bool success = FileIO.ReadFile(readHandle, nonManagedBuffer, inputReportBuffer.Length, out numberOfBytesRead, nonManagedOverlapped);
 				if (!success)
 				{
-					System.Diagnostics.Debug.WriteLine("Waiting for ReadFile");
+					System.Diagnostics.Debug.WriteLine("Waiting for ReadFile.");
 					result = FileIO.WaitForSingleObject(eventObject, 3000);
 
 					// Find out if ReadFile completed or timeout.
@@ -234,10 +233,10 @@ namespace MKY.IO.Usb
 						{
 							// ReadFile has completed
 							success = true;
-							System.Diagnostics.Debug.WriteLine("ReadFile completed successfully");
+							System.Diagnostics.Debug.WriteLine("ReadFile completed successfully.");
 
 							// Get the number of bytes read.
-							FileIO.GetOverlappedResult(readHandle, nonManagedOverlapped, ref numberOfBytesRead, false);
+							FileIO.GetOverlappedResult(readHandle, nonManagedOverlapped, out numberOfBytesRead, false);
 
 							break;
 						}
@@ -245,7 +244,7 @@ namespace MKY.IO.Usb
 						{
 							// Cancel the operation on timeout
 							CancelTransfer(hidHandle, readHandle, writeHandle, eventObject);
-							System.Diagnostics.Debug.WriteLine("ReadFile timeout");
+							System.Diagnostics.Debug.WriteLine("ReadFile timeout.");
 							success = false;
 							deviceDetected = false;
 							break;
@@ -254,7 +253,7 @@ namespace MKY.IO.Usb
 						{
 							// Cancel the operation on other error.
 							CancelTransfer(hidHandle, readHandle, writeHandle, eventObject);
-							System.Diagnostics.Debug.WriteLine("ReadFile undefined error");
+							System.Diagnostics.Debug.WriteLine("ReadFile undefined error.");
 							success = false;
 							deviceDetected = false;
 							break;
@@ -401,8 +400,8 @@ namespace MKY.IO.Usb
 		{
 			try
 			{
-				UInt32 numberOfBytesWritten = 0;
-				bool success = FileIO.WriteFile(writeHandle, outputReportBuffer, ref numberOfBytesWritten, IntPtr.Zero);
+				int numberOfBytesWritten = 0;
+				bool success = FileIO.WriteFile(writeHandle, outputReportBuffer, out numberOfBytesWritten, IntPtr.Zero);
 
 				System.Diagnostics.Debug.Print("WriteFile success = " + success);
 
