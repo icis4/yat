@@ -65,7 +65,7 @@ namespace MKY.IO.Serial
 		private object _stateSyncObj = new object();
 
 		private UsbHidDeviceSettings _settings;
-		private Usb.HidDevice _device;
+		private Usb.SerialHidDevice _device;
 		private object _deviceSyncObj = new object();
 
 		private System.Timers.Timer _reopenTimer;
@@ -329,7 +329,7 @@ namespace MKY.IO.Serial
 			lock (_stateSyncObj)
 				_state = state;
 #if (DEBUG)
-			System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortString() + ")(" + _state + "): State has changed from " + oldState + " to " + _state);
+			System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortString() + ")(" + _state + "): State has changed from " + oldState + " to " + _state + ".");
 #endif
 			OnIOChanged(new EventArgs());
 		}
@@ -348,7 +348,7 @@ namespace MKY.IO.Serial
 
 			lock (_deviceSyncObj)
 			{
-				_device = new Usb.HidDevice(_settings.DeviceInfo);
+				_device = new Usb.SerialHidDevice(_settings.DeviceInfo);
 				_device.Connected    += new EventHandler(_device_Connected);
 				_device.Disconnected += new EventHandler(_device_Disconnected);
 				_device.DataReceived += new EventHandler(_device_DataReceived);

@@ -154,7 +154,7 @@ namespace MKY.IO.Serial
 				}
 				_isDisposed = true;
 
-				Debug.WriteLine(GetType() + " (" + _instanceId + ")(" + ToShortEndPointString() + "): Disposed");
+				Debug.WriteLine(GetType() + " (" + _instanceId + ")(" + ToShortEndPointString() + "): Disposed.");
 			}
 		}
 
@@ -375,7 +375,7 @@ namespace MKY.IO.Serial
 				}
 				default:
 				{
-					Debug.WriteLine(GetType() + " (" + _instanceId + ")(" + ToShortEndPointString() + "): Start() requested but state is " + _state);
+					Debug.WriteLine(GetType() + " (" + _instanceId + ")(" + ToShortEndPointString() + "): Start() requested but state is " + _state + ".");
 					return (false);
 				}
 			}
@@ -430,7 +430,7 @@ namespace MKY.IO.Serial
 			lock (_stateSyncObj)
 				_state = state;
 #if (DEBUG)
-			Debug.WriteLine(GetType() + " (" + _instanceId + ")(" + ToShortEndPointString() + "): State has changed from " + oldState + " to " + _state);
+			Debug.WriteLine(GetType() + " (" + _instanceId + ")(" + ToShortEndPointString() + "): State has changed from " + oldState + " to " + _state + ".");
 #endif
 			OnIOChanged(new EventArgs());
 		}
@@ -534,7 +534,7 @@ namespace MKY.IO.Serial
 			}
 			if (tryAgain)
 			{
-				Debug.WriteLine(GetType() + " (" + _instanceId + ")(" + ToShortEndPointString() + "): Trying connect cycle " + _startCycleCounter);
+				Debug.WriteLine(GetType() + " (" + _instanceId + ")(" + ToShortEndPointString() + "): Trying connect cycle " + _startCycleCounter + ".");
 				StartConnecting();
 			}
 			else

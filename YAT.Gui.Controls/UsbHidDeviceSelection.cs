@@ -81,11 +81,16 @@ namespace YAT.Gui.Controls
 			get { return (_deviceInfo); }
 			set
 			{
-				if (_deviceInfo != value)
+				// Don't accept to set the device to null/nothing. Master is the device list. If
+				// devices are available, there is always a device selected.
+				if (_deviceInfo != null)
 				{
-					_deviceInfo = value;
-					SetControls();
-					OnDeviceInfoChanged(new EventArgs());
+					if (_deviceInfo != value)
+					{
+						_deviceInfo = value;
+						SetControls();
+						OnDeviceInfoChanged(new EventArgs());
+					}
 				}
 			}
 		}

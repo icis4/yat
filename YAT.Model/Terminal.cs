@@ -1172,15 +1172,9 @@ namespace YAT.Model
 			{
 				OnFixedStatusTextRequest("Error sending " + b.Length + " bytes!");
 
-				string text = "Unable to write to ";
+				string text;
 				string title;
-				switch (_settingsRoot.IOType)
-				{
-					case Domain.IOType.SerialPort: text += "port"; title = "Serial Port"; break;
-					default: text += "socket"; title = "Socket"; break;
-				}
-				text += ":";
-				title += " Error";
+				PrepareSendMessageInputRequest(out text, out title);
 				OnMessageInputRequest
 					(
 					text + Environment.NewLine + Environment.NewLine + ex.Message,
@@ -1205,15 +1199,9 @@ namespace YAT.Model
 			{
 				OnFixedStatusTextRequest(@"Error sending """ + s + @"""!");
 
-				string text = "Unable to write to ";
+				string text;
 				string title;
-				switch (_settingsRoot.IOType)
-				{
-					case Domain.IOType.SerialPort: text += "port"; title = "Serial Port"; break;
-					default: text += "socket"; title = "Socket"; break;
-				}
-				text += ":";
-				title += " Error";
+				PrepareSendMessageInputRequest(out text, out title);
 				OnMessageInputRequest
 					(
 					text + Environment.NewLine + Environment.NewLine + ex.Message,
@@ -1236,6 +1224,42 @@ namespace YAT.Model
 					);
 				OnTimedStatusTextRequest("Data not sent!");
 			}
+		}
+
+		private void PrepareSendMessageInputRequest(out string text, out string title)
+		{
+			StringBuilder textBuilder = new StringBuilder();
+			StringBuilder titleBuilder = new StringBuilder();
+
+			textBuilder.Append("Unable to write to ");
+			switch (_settingsRoot.IOType)
+			{
+				case Domain.IOType.SerialPort:
+					textBuilder.Append("port");
+					titleBuilder.Append("Serial Port");
+					break;
+
+				case Domain.IOType.TcpClient:
+				case Domain.IOType.TcpServer:
+				case Domain.IOType.TcpAutoSocket:
+				case Domain.IOType.Udp:
+					textBuilder.Append("socket");
+					titleBuilder.Append("Socket");
+					break;
+
+				case Domain.IOType.UsbHid:
+					textBuilder.Append("device");
+					titleBuilder.Append("Device");
+					break;
+
+				default:
+					throw (new NotImplementedException("I/O type " + _settingsRoot.IOType + "misses implementation"));
+			}
+			textBuilder.Append(":");
+			titleBuilder.Append(" Error");
+
+			text = textBuilder.ToString();
+			title = titleBuilder.ToString();
 		}
 
 		#endregion

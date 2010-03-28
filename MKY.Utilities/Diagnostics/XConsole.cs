@@ -15,6 +15,7 @@
 //==================================================================================================
 
 using System;
+using System.IO;
 using System.Diagnostics;
 using System.Windows.Forms;
 
@@ -46,7 +47,7 @@ namespace MKY.Utilities.Diagnostics
 		}
 
 		/// <summary>
-		/// Writes message and stack to <see cref="System.Console"/>.
+		/// Writes a <see cref="StackTrace"/> to <see cref="System.Console"/>.
 		/// </summary>
 		public static void WriteStack(object obj, StackTrace st)
 		{
@@ -54,7 +55,7 @@ namespace MKY.Utilities.Diagnostics
 		}
 
 		/// <summary>
-		/// Writes message and stack to <see cref="System.Console"/>.
+		/// Writes a <see cref="StackTrace"/> to <see cref="System.Console"/>.
 		/// </summary>
 		public static void WriteStack(object obj, StackTrace st, string additionalMessage)
 		{
@@ -62,7 +63,7 @@ namespace MKY.Utilities.Diagnostics
 		}
 
 		/// <summary>
-		/// Writes message and stack to <see cref="System.Console"/>.
+		/// Writes the properties of a <see cref="Message"/> to <see cref="System.Console"/>.
 		/// </summary>
 		public static void WriteWindowsFormsMessage(object obj, Message m)
 		{
@@ -70,11 +71,27 @@ namespace MKY.Utilities.Diagnostics
 		}
 
 		/// <summary>
-		/// Writes message and stack to <see cref="System.Console"/>.
+		/// Writes the properties of a <see cref="Message"/> to <see cref="System.Console"/>.
 		/// </summary>
 		public static void WriteWindowsFormsMessage(object obj, Message m, string additionalMessage)
 		{
 			DiagnosticsWriterOutput.WriteWindowsFormsMessage(_consoleWrapper, obj, m, additionalMessage);
+		}
+
+		/// <summary>
+		/// Writes the properties of a <see cref="FileStream"/> to <see cref="System.Console"/>.
+		/// </summary>
+		public static void WriteFileStream(object obj, FileStream fs)
+		{
+			WriteFileStream(obj, fs, "");
+		}
+
+		/// <summary>
+		/// Writes the properties of a <see cref="FileStream"/> to <see cref="System.Console"/>.
+		/// </summary>
+		public static void WriteFileStream(object obj, FileStream fs, string additionalMessage)
+		{
+			DiagnosticsWriterOutput.WriteFileStream(_consoleWrapper, obj, fs, additionalMessage);
 		}
 	}
 }

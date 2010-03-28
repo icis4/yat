@@ -89,7 +89,7 @@ namespace MKY.IO.Usb
 		{
 			switch (deviceClass)
 			{
-				case DeviceClass.Hid: return (HidDevice.HidGuid);
+				case DeviceClass.Hid: return (SerialHidDevice.HidGuid);
 				default:              return (Guid.Empty);
 			}
 		}
@@ -128,7 +128,7 @@ namespace MKY.IO.Usb
 		{
 			List<DeviceInfo> devices = new List<DeviceInfo>();
 
-			foreach (string path in Utilities.Win32.DeviceManagement.GetDevicesFromGuid(classGuid))
+			/*foreach (string path in Utilities.Win32.DeviceManagement.GetDevicesFromGuid(classGuid))
 			{
 				DeviceInfo device = GetDeviceInfoFromPath(path);
 				if (device != null)
@@ -136,7 +136,9 @@ namespace MKY.IO.Usb
 					if (device.TryValidate())
 						devices.Add(device);
 				}
-			}
+			}*/
+
+			devices.Add(new DeviceInfo("\\\\?\\hid#vid_0eb8&pid_2200#7&60895a0&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}", 0x0EB8, 0x2200, "MT", "RB", "1234"));
 
 			return (devices.ToArray());
 		}
@@ -153,17 +155,18 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public static bool GetVidAndPidFromPath(string path, out int vendorId, out int productId)
 		{
-			SafeFileHandle hidHandle;
-			if (Utilities.Win32.Hid.GetDeviceHandle(path, out hidHandle))
+//			SafeFileHandle deviceHandle;
+			IntPtr deviceHandle;
+			if (Utilities.Win32.Hid.CreateDeviceHandle(path, out deviceHandle))
 			{
 				try
 				{
-					if (GetVidAndPidFromHandle(hidHandle, out vendorId, out productId))
+					if (GetVidAndPidFromHandle(deviceHandle, out vendorId, out productId))
 						return (true);
 				}
 				finally
 				{
-					hidHandle.Close();
+//					deviceHandle.Close();
 				}
 			}
 
@@ -172,13 +175,14 @@ namespace MKY.IO.Usb
 			return (false);
 		}
 
-		private static bool GetVidAndPidFromHandle(SafeFileHandle hidHandle, out int vendorId, out int productId)
+//		private static bool GetVidAndPidFromHandle(SafeFileHandle deviceHandle, out int vendorId, out int productId)
+		private static bool GetVidAndPidFromHandle(IntPtr deviceHandle, out int vendorId, out int productId)
 		{
 			// Set the size property of attributes to the number of bytes in the structure.
 			Utilities.Win32.Hid.HIDD_ATTRIBUTES attributes = new Utilities.Win32.Hid.HIDD_ATTRIBUTES();
 			attributes.Size = Marshal.SizeOf(attributes);
 
-			if (Utilities.Win32.Hid.HidD_GetAttributes(hidHandle, ref attributes))
+			if (Utilities.Win32.Hid.HidD_GetAttributes(deviceHandle, ref attributes))
 			{
 				vendorId = attributes.VendorID;
 				productId = attributes.ProductID;
@@ -195,17 +199,18 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public static bool GetStringsFromPath(string path, out string manufacturer, out string product, out string serialNumber)
 		{
-			SafeFileHandle hidHandle;
-			if (Utilities.Win32.Hid.GetDeviceHandle(path, out hidHandle))
+			IntPtr deviceHandle;
+//			SafeFileHandle deviceHandle;
+			if (Utilities.Win32.Hid.CreateDeviceHandle(path, out deviceHandle))
 			{
 				try
 				{
-					if (GetStringsFromHandle(hidHandle, out manufacturer, out product, out serialNumber))
+					if (GetStringsFromHandle(deviceHandle, out manufacturer, out product, out serialNumber))
 						return (true);
 				}
 				finally
 				{
-					hidHandle.Close();
+//					deviceHandle.Close();
 				}
 			}
 
@@ -215,11 +220,12 @@ namespace MKY.IO.Usb
 			return (false);
 		}
 
-		private static bool GetStringsFromHandle(SafeFileHandle hidHandle, out string manufacturer, out string product, out string serialNumber)
+		private static bool GetStringsFromHandle(IntPtr deviceHandle, out string manufacturer, out string product, out string serialNumber)
+//		private static bool GetStringsFromHandle(SafeFileHandle deviceHandle, out string manufacturer, out string product, out string serialNumber)
 		{
-			Utilities.Win32.Hid.GetManufacturerString(hidHandle, out manufacturer);
-			Utilities.Win32.Hid.GetProductString(hidHandle, out product);
-			Utilities.Win32.Hid.GetSerialNumberString(hidHandle, out serialNumber);
+			Utilities.Win32.Hid.GetManufacturerString(deviceHandle, out manufacturer);
+			Utilities.Win32.Hid.GetProductString(deviceHandle, out product);
+			Utilities.Win32.Hid.GetSerialNumberString(deviceHandle, out serialNumber);
 			return (true);
 		}
 
@@ -246,18 +252,19 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public static bool GetDeviceInfoFromPath(string path, out int vendorId, out int productId, out string manufacturer, out string product, out string serialNumber)
 		{
-			SafeFileHandle hidHandle;
-			if (Utilities.Win32.Hid.GetDeviceHandle(path, out hidHandle))
+			IntPtr deviceHandle;
+//			SafeFileHandle deviceHandle;
+			if (Utilities.Win32.Hid.CreateDeviceHandle(path, out deviceHandle))
 			{
 				try
 				{
-					if (GetVidAndPidFromHandle(hidHandle, out vendorId, out productId))
-						if (GetStringsFromHandle(hidHandle, out manufacturer, out product, out serialNumber))
+					if (GetVidAndPidFromHandle(deviceHandle, out vendorId, out productId))
+						if (GetStringsFromHandle(deviceHandle, out manufacturer, out product, out serialNumber))
 							return (true);
 				}
 				finally
 				{
-					hidHandle.Close();
+//					deviceHandle.Close();
 				}
 			}
 
@@ -410,12 +417,12 @@ namespace MKY.IO.Usb
 					switch (de)
 					{
 						case DeviceEvent.Connected:
-							Debug.WriteLine("USB device connected: " + devicePath);
+							Debug.WriteLine("USB device connected: " + devicePath + ".");
 							EventHelper.FireAsync(DeviceConnected, typeof(Device), e);
 							break;
 
 						case DeviceEvent.Disconnected:
-							Debug.WriteLine("USB device disconnected: " + devicePath);
+							Debug.WriteLine("USB device disconnected: " + devicePath + ".");
 							EventHelper.FireAsync(DeviceDisconnected, typeof(Device), e);
 							break;
 					}
@@ -452,7 +459,8 @@ namespace MKY.IO.Usb
 		private bool _isDisposed;
 
 		private DeviceInfo _deviceInfo;
-		private SafeFileHandle _deviceHandle;
+		private IntPtr _deviceHandle;
+//		private SafeFileHandle _deviceHandle;
 
 		private bool _isConnected;
 
@@ -519,7 +527,7 @@ namespace MKY.IO.Usb
 		private void Initialize()
 		{
 			// Get and store the handle to the USB device.
-			if (!Utilities.Win32.Hid.GetDeviceHandle(_deviceInfo.Path, out _deviceHandle))
+			if (!Utilities.Win32.Hid.CreateDeviceHandle(_deviceInfo.Path, out _deviceHandle))
 				throw (new UsbException("Failed to retrieve device handle for USB device" + Environment.NewLine + _deviceInfo.Path));
 
 			// Getting a handle means that the device is connected to the computer.
@@ -600,7 +608,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		protected virtual SafeFileHandle DeviceHandle
+//		protected virtual SafeFileHandle DeviceHandle
+		protected virtual IntPtr DeviceHandle
 		{
 			get { return (_deviceHandle); }
 		}

@@ -22,21 +22,27 @@ using System.Windows.Forms;
 namespace MKY.Utilities.Diagnostics
 {
 	/// <summary>
-	/// Provides methods to write to <see cref="System.Diagnostics.Debug"/> and
-	/// <see cref="System.Diagnostics.Trace"/> through appropriate wrappers.
+	/// A collection of methods to write the state of certain objects to a given diagnostics writer.
 	/// </summary>
 	public static class DiagnosticsWriterOutput
 	{
+		#region Static Methods
+		//==========================================================================================
+		// Static Methods
+		//==========================================================================================
+
 		/// <summary>
 		/// Writes source, type, message and stack of the given exception and its inner exceptions
-		/// to to given writer.
+		/// to the given writer.
 		/// </summary>
 		/// <remarks>
-		/// There are also two predefined variants for the static objects
+		/// There are predefined variants for the static objects
 		/// <see cref="System.Diagnostics.Debug"/> and 
-		/// <see cref="System.Diagnostics.Trace"/> available in
+		/// <see cref="System.Diagnostics.Trace"/> and
+		/// <see cref="System.Console"/> available in
 		/// <see cref="MKY.Utilities.Diagnostics.XDebug"/> and
-		/// <see cref="MKY.Utilities.Diagnostics.XTrace"/>.
+		/// <see cref="MKY.Utilities.Diagnostics.XTrace"/> and
+		/// <see cref="MKY.Utilities.Diagnostics.XConsole"/>.
 		/// </remarks>
 		public static void WriteException(IDiagnosticsWriter writer, object obj, Exception ex, string additionalMessage)
 		{
@@ -52,14 +58,16 @@ namespace MKY.Utilities.Diagnostics
 		}
 
 		/// <summary>
-		/// Writes additionalMessage and stack to given writer.
+		/// Writes a <see cref="StackTrace"/> to the given writer.
 		/// </summary>
 		/// <remarks>
-		/// There are also two predefined variants for the static objects
+		/// There are predefined variants for the static objects
 		/// <see cref="System.Diagnostics.Debug"/> and 
-		/// <see cref="System.Diagnostics.Trace"/> available in
+		/// <see cref="System.Diagnostics.Trace"/> and
+		/// <see cref="System.Console"/> available in
 		/// <see cref="MKY.Utilities.Diagnostics.XDebug"/> and
-		/// <see cref="MKY.Utilities.Diagnostics.XTrace"/>.
+		/// <see cref="MKY.Utilities.Diagnostics.XTrace"/> and
+		/// <see cref="MKY.Utilities.Diagnostics.XConsole"/>.
 		/// </remarks>
 		public static void WriteStack(IDiagnosticsWriter writer, object obj, StackTrace st, string additionalMessage)
 		{
@@ -75,18 +83,20 @@ namespace MKY.Utilities.Diagnostics
 		}
 
 		/// <summary>
-		/// Writes a windows forms message to <see cref="System.Diagnostics.Debug"/>.
+		/// Writes the properties of a <see cref="Message"/> to the given writer.
 		/// </summary>
 		/// <remarks>
-		/// There are also two predefined variants for the static objects
+		/// There are predefined variants for the static objects
 		/// <see cref="System.Diagnostics.Debug"/> and 
-		/// <see cref="System.Diagnostics.Trace"/> available in
+		/// <see cref="System.Diagnostics.Trace"/> and
+		/// <see cref="System.Console"/> available in
 		/// <see cref="MKY.Utilities.Diagnostics.XDebug"/> and
-		/// <see cref="MKY.Utilities.Diagnostics.XTrace"/>.
+		/// <see cref="MKY.Utilities.Diagnostics.XTrace"/> and
+		/// <see cref="MKY.Utilities.Diagnostics.XConsole"/>.
 		/// </remarks>
 		public static void WriteWindowsFormsMessage(IDiagnosticsWriter writer, object obj, Message m, string additionalMessage)
 		{
-			writer.Write("Message in ");
+			writer.Write("Windows.Forms.Message in ");
 			writer.WriteLine(obj.GetType().FullName);
 
 			writer.Indent();
@@ -96,6 +106,38 @@ namespace MKY.Utilities.Diagnostics
 			}
 			writer.Unindent();
 		}
+
+		/// <summary>
+		/// Writes the properties of a <see cref="FileStream"/> to the given writer.
+		/// </summary>
+		/// <remarks>
+		/// There are predefined variants for the static objects
+		/// <see cref="System.Diagnostics.Debug"/> and 
+		/// <see cref="System.Diagnostics.Trace"/> and
+		/// <see cref="System.Console"/> available in
+		/// <see cref="MKY.Utilities.Diagnostics.XDebug"/> and
+		/// <see cref="MKY.Utilities.Diagnostics.XTrace"/> and
+		/// <see cref="MKY.Utilities.Diagnostics.XConsole"/>.
+		/// </remarks>
+		public static void WriteFileStream(IDiagnosticsWriter writer, object obj, FileStream fs, string additionalMessage)
+		{
+			writer.Write("FileStream in ");
+			writer.WriteLine(obj.GetType().FullName);
+
+			writer.Indent();
+			{
+				WriteMessage(writer, additionalMessage);
+				WriteFileStream(writer, fs);
+			}
+			writer.Unindent();
+		}
+
+		#endregion
+
+		#region Private Static Methods
+		//==========================================================================================
+		// Private Static Methods
+		//==========================================================================================
 
 		private static void WriteMessage(IDiagnosticsWriter writer, string message)
 		{
@@ -132,14 +174,9 @@ namespace MKY.Utilities.Diagnostics
 
 				writer.Indent();
 				{
-					writer.Write("Type: ");
-					writer.WriteLine(exception.GetType().ToString());
-
+					WriteType(writer, exception.GetType());
 					WriteMessage(writer, exception.Message);
-
-					writer.Write("Source: ");
-					writer.WriteLine(exception.Source);
-
+					WriteSource(writer, exception.Source);
 					WriteStack(writer, exception.StackTrace);
 				}
 				writer.Unindent();
@@ -149,33 +186,91 @@ namespace MKY.Utilities.Diagnostics
 			}
 		}
 
+		private static void WriteType(IDiagnosticsWriter writer, Type type)
+		{
+			writer.Write("Type: ");
+			writer.WriteLine(type.ToString());
+		}
+
+		private static void WriteSource(IDiagnosticsWriter writer, string source)
+		{
+			if ((source != null) && (source != ""))
+			{
+				writer.Write("Source: ");
+				writer.WriteLine(source);
+			}
+		}
+
 		private static void WriteStack(IDiagnosticsWriter writer, string stackTrace)
 		{
-			writer.WriteLine("Stack:");
-			
-			// Stack trace is already indented. No need to indent again.
-
-			StringReader sr = new StringReader(stackTrace.ToString());
-			string line;
-			do
+			if ((stackTrace != null) && (stackTrace != ""))
 			{
-				line = sr.ReadLine();
-				if (line != null)
-					writer.WriteLine(line);
+				writer.WriteLine("Stack:");
+
+				// Stack trace is already indented. No need to indent again.
+
+				StringReader sr = new StringReader(stackTrace.ToString());
+				string line;
+				do
+				{
+					line = sr.ReadLine();
+					if (line != null)
+						writer.WriteLine(line);
+				}
+				while (line != null);
 			}
-			while (line != null);
 		}
 
 		private static void WriteWindowsFormsMessage(IDiagnosticsWriter writer, Message m)
 		{
-			writer.WriteLine("Windows Forms Message:");
-			writer.Indent();
+			if (m != null)
 			{
-				// msg=0x24 (WM_GETMINMAXINFO) hwnd=0x260bb2 wparam=0x0 lparam=0x7dad8e0 result=0x0
-				writer.WriteLine(m.ToString());
+				writer.WriteLine("Windows.Forms.Message:");
+				writer.Indent();
+				{
+					// msg=0x24 (WM_GETMINMAXINFO) hwnd=0x260bb2 wparam=0x0 lparam=0x7dad8e0 result=0x0
+					writer.WriteLine(m.ToString());
+				}
+				writer.Unindent();
 			}
-			writer.Unindent();
 		}
+
+		private static void WriteFileStream(IDiagnosticsWriter writer, FileStream fs)
+		{
+			if (fs != null)
+			{
+				writer.WriteLine("FileStream:");
+				writer.Indent();
+				{
+					writer.Write("Name:     ");
+					writer.WriteLine(fs.Name);
+					writer.Write("CanSeek:  ");
+					writer.WriteLine(fs.CanSeek.ToString());
+					writer.Write("CanRead:  ");
+					writer.WriteLine(fs.CanRead.ToString());
+					writer.Write("CanWrite: ");
+					writer.WriteLine(fs.CanWrite.ToString());
+
+					if (fs.SafeFileHandle != null)
+					{
+						writer.WriteLine("SafeFileHandle:");
+						writer.Indent();
+						{
+							writer.Write("Handle:    ");
+							writer.WriteLine(fs.SafeFileHandle.DangerousGetHandle().ToString());
+							writer.Write("IsInvalid: ");
+							writer.WriteLine(fs.SafeFileHandle.IsInvalid.ToString());
+							writer.Write("IsClosed:  ");
+							writer.WriteLine(fs.SafeFileHandle.IsClosed.ToString());
+						}
+						writer.Unindent();
+					}
+				}
+				writer.Unindent();
+			}
+		}
+
+		#endregion
 	}
 }
 
