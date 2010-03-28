@@ -179,7 +179,7 @@ namespace MKY.IO.Usb
 
 	public enum HidUsage
 	{
-		Generic  = Utilities.Win32.Hid.Usage.Generic,
+		Unknown  = Utilities.Win32.Hid.Usage.Unknown,
 		Keyboard = Utilities.Win32.Hid.Usage.Keyboard,
 		Mouse    = Utilities.Win32.Hid.Usage.Mouse,
 	}
@@ -191,9 +191,9 @@ namespace MKY.IO.Usb
 	/// </summary>
 	public class XHidUsage : XEnum
 	{
-		/// <summary>Default is <see cref="HidUsage.Generic"/></summary>
+		/// <summary>Default is <see cref="HidUsage.Unknown"/></summary>
 		public XHidUsage()
-			: base(HidUsage.Generic)
+			: base(HidUsage.Unknown)
 		{
 		}
 
@@ -225,7 +225,7 @@ namespace MKY.IO.Usb
 		public static XHidUsage[] GetItems()
 		{
 			List<XHidUsage> a = new List<XHidUsage>();
-			a.Add(new XHidUsage(HidUsage.Generic));
+			a.Add(new XHidUsage(HidUsage.Unknown));
 			a.Add(new XHidUsage(HidUsage.Keyboard));
 			a.Add(new XHidUsage(HidUsage.Mouse));
 			return (a.ToArray());
@@ -297,7 +297,7 @@ namespace MKY.IO.Usb
 		{
 			if      (usage >= (int)HidUsage.Mouse)    return (new XHidUsage(HidUsage.Mouse));
 			else if (usage >= (int)HidUsage.Keyboard) return (new XHidUsage(HidUsage.Keyboard));
-			else                                      return (new XHidUsage(HidUsage.Generic));
+			else                                      return (new XHidUsage(HidUsage.Unknown));
 		}
 
 		/// <summary></summary>
@@ -313,9 +313,9 @@ namespace MKY.IO.Usb
 		}
 
 		#endregion
-
-		#endregion
 	}
+
+	#endregion
 }
 
 //==================================================================================================

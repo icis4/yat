@@ -58,7 +58,7 @@ namespace MKY.IO.Serial
 		public UsbHidDeviceSettings(UsbHidDeviceSettings rhs)
 			: base(rhs)
 		{
-			DeviceInfo     = new DeviceInfo(rhs.DeviceInfo);
+			DeviceInfo  = new DeviceInfo(rhs.DeviceInfo);
 			_autoReopen = rhs._autoReopen;
 
 			ClearChanged();
@@ -69,6 +69,7 @@ namespace MKY.IO.Serial
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			DeviceInfo = DeviceInfo.GetDefaultDevice(DeviceClass.Hid);
 			AutoReopen = AutoReopenDefault;
 		}
 
@@ -132,7 +133,7 @@ namespace MKY.IO.Serial
 			{
 				return 
 					(
-					_deviceInfo.Equals  (value._deviceInfo)   &&
+					_deviceInfo.Equals(value._deviceInfo) &&
 					_autoReopen.Equals(value._autoReopen)
 					);
 			}

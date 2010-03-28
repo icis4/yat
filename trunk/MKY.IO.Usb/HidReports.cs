@@ -19,18 +19,142 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Threading;
-using Microsoft.Win32.SafeHandles;
+using System.Collections.Generic;
+//using System.Diagnostics;
+//using System.Runtime.InteropServices;
+//using System.Threading;
+//using Microsoft.Win32.SafeHandles;
 
-using MKY.Utilities.Diagnostics;
-using MKY.Utilities.Win32;
+//using MKY.Utilities.Diagnostics;
+//using MKY.Utilities.Win32;
 
 #endregion
 
 namespace MKY.IO.Usb
 {
+	/// <summary>
+	/// Abstract base for all HID report containers.
+	/// </summary>
+	public abstract class HidReportContainer
+	{
+		private HidDevice _device;
+		private int _reportLength;
+
+		/// <summary>
+		/// Creates a report container and stores the reference to the device in use as well as
+		/// the length of a report.
+		/// </summary>
+		public HidReportContainer(HidDevice device, int reportLength)
+		{
+			_device = device;
+			_reportLength = reportLength;
+		}
+
+		/// <summary>
+		/// The length of a report. The length is given by the device capabilities.
+		/// </summary>
+		public int ReportLength
+		{
+			get { return (_reportLength); }
+		}
+	}
+
+	/// <summary>
+	/// An HID input report container is a simple wrapper around a byte buffer.
+	/// </summary>
+	public class HidInputReportContainer : HidReportContainer
+	{
+		private byte[] _data;
+
+		/// <summary>
+		/// Creates an input report container.
+		/// </summary>
+		public HidInputReportContainer(HidDevice device)
+			: base(device, device.InputReportLength)
+		{
+		}
+
+		/// <summary>
+		/// Returns the data that was received via input reports.
+		/// </summary>
+		public byte[] Data
+		{
+			get { return (_data); }
+		}
+
+		/// <summary>
+		/// Create the data from a given input report.
+		/// </summary>
+		public void CreateDataFromReport(byte[] report)
+		{
+			List<byte> data = new List<byte>();
+
+			// Skip first byte, it always contains 0
+			for (int i = 1; i < report.Length; i++)
+			{
+				if (report[i] != 0x00)
+					data.Add(report[i]);
+				else
+					break;
+			}
+
+			_data = data.ToArray();
+		}
+	}
+
+	/// <summary>
+	/// An HID output report container puts any amount of data into chunks that match the size of
+	/// the device's reported output report capabilities.
+	/// </summary>
+	public class HidOutputReportContainer : HidReportContainer
+	{
+		private byte[][] _reports;
+
+		/// <summary>
+		/// Creates an output report container.
+		/// </summary>
+		public HidOutputReportContainer(HidDevice device)
+			: base(device, device.OutputReportLength)
+		{
+		}
+
+		/// <summary>
+		/// Returns the output reports that were created from any amount of data.
+		/// </summary>
+		public byte[][] Reports
+		{
+			get { return (_reports); }
+		}
+
+		/// <summary>
+		/// Create the report(s) from given data. The data is splitted into chunks that match the
+		/// size of the device's reported output report capabilities.
+		/// </summary>
+		public void CreateReportsFromData(byte[] data)
+		{
+			List<byte[]> reports = new List<byte[]>();
+
+			int usableLength = ReportLength - 1;
+			int offset = 0;
+			while (offset < (data.Length))
+			{
+				// Create report and set first byte to 0.
+				byte[] report = new byte[ReportLength];
+				report[0] = 0x00;
+
+				// Copy as much as possible into remaining usable bytes of the report.
+				int lengthToCopy = (data.Length - offset) % usableLength;
+				Array.Copy(data, offset, report, 1, lengthToCopy);
+				reports.Add(report);
+
+				offset += usableLength;
+			}
+
+			_reports = reports.ToArray();
+		}
+	}
+
+	/*
 	#region Input Reports
 	//==============================================================================================
 	// Input Reports
@@ -424,6 +548,7 @@ namespace MKY.IO.Usb
 	#endregion
 
 	#endregion
+	*/
 }
 
 //==================================================================================================

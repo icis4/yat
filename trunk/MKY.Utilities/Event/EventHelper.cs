@@ -312,10 +312,13 @@ namespace MKY.Utilities.Event
 			Diagnostics.XDebug.WriteException(typeof(EventHelper), ex);
 			Debug.Indent();
 			{
-				Debug.Write("Event: ");
-				Debug.Write(sink.Method.Name);
-				Debug.Write(" in ");
-				Debug.WriteLine(sink.Target.GetType().ToString());
+				StringBuilder sb = new StringBuilder();
+				sb.Append("Event: ");
+				sb.Append(sink.Method.Name);
+				sb.Append(" in ");
+				sb.Append(sink.Target.GetType().ToString());
+				sb.Append(".");
+				Debug.WriteLine(sb.ToString());
 			}
 			Debug.Unindent();
 		}

@@ -22,7 +22,7 @@ using System.Windows.Forms;
 namespace MKY.Utilities.Diagnostics
 {
 	/// <summary>
-	/// Provides static methods to write diagnostics output to any <see cref="System.IO.TextWriter"/>.
+	/// Provides static methods to write diagnostics output to any <see cref="TextWriter"/>.
 	/// </summary>
 	public static class AnyWriter
 	{
@@ -30,7 +30,7 @@ namespace MKY.Utilities.Diagnostics
 
 		/// <summary>
 		/// Writes source, type, message and stack of the given exception and its inner exceptions
-		/// to the given <see cref="System.IO.TextWriter"/>.
+		/// to the given <see cref="TextWriter"/>.
 		/// </summary>
 		public static void WriteException(TextWriter writer, object obj, Exception ex)
 		{
@@ -39,7 +39,7 @@ namespace MKY.Utilities.Diagnostics
 
 		/// <summary>
 		/// Writes source, type, message and stack of the given exception and its inner exceptions
-		/// to the given <see cref="System.IO.TextWriter"/>.
+		/// to the given <see cref="TextWriter"/>.
 		/// </summary>
 		public static void WriteException(TextWriter writer, object obj, Exception ex, string additionalMessage)
 		{
@@ -49,7 +49,7 @@ namespace MKY.Utilities.Diagnostics
 		}
 
 		/// <summary>
-		/// Writes message and stack to the given <see cref="System.IO.TextWriter"/>.
+		/// Writes a <see cref="StackTrace"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
 		public static void WriteStack(TextWriter writer, object obj, StackTrace st)
 		{
@@ -57,7 +57,7 @@ namespace MKY.Utilities.Diagnostics
 		}
 
 		/// <summary>
-		/// Writes message and stack to the given <see cref="System.IO.TextWriter"/>.
+		/// Writes a <see cref="StackTrace"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
 		public static void WriteStack(TextWriter writer, object obj, StackTrace st, string additionalMessage)
 		{
@@ -67,7 +67,7 @@ namespace MKY.Utilities.Diagnostics
 		}
 
 		/// <summary>
-		/// Writes message and stack to the given <see cref="System.IO.TextWriter"/>.
+		/// Writes the properties of a <see cref="Message"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
 		public static void WriteWindowsFormsMessage(TextWriter writer, object obj, Message m)
 		{
@@ -75,12 +75,30 @@ namespace MKY.Utilities.Diagnostics
 		}
 
 		/// <summary>
-		/// Writes message and stack to the given <see cref="System.IO.TextWriter"/>.
+		/// Writes the properties of a <see cref="Message"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
 		public static void WriteWindowsFormsMessage(TextWriter writer, object obj, Message m, string additionalMessage)
 		{
 			_anyWriterWrapper.SetWriter(writer);
 			DiagnosticsWriterOutput.WriteWindowsFormsMessage(_anyWriterWrapper, obj, m, additionalMessage);
+			_anyWriterWrapper.SetWriter(null);
+		}
+
+		/// <summary>
+		/// Writes the properties of a <see cref="FileStream"/> to the given <see cref="TextWriter"/>.
+		/// </summary>
+		public static void WriteFileStream(TextWriter writer, object obj, FileStream fs)
+		{
+			WriteFileStream(writer, obj, fs, "");
+		}
+
+		/// <summary>
+		/// Writes the properties of a <see cref="FileStream"/> to the given <see cref="TextWriter"/>.
+		/// </summary>
+		public static void WriteFileStream(TextWriter writer, object obj, FileStream fs, string additionalMessage)
+		{
+			_anyWriterWrapper.SetWriter(writer);
+			DiagnosticsWriterOutput.WriteFileStream(_anyWriterWrapper, obj, fs, additionalMessage);
 			_anyWriterWrapper.SetWriter(null);
 		}
 	}

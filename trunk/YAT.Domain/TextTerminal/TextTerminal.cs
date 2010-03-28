@@ -233,7 +233,7 @@ namespace YAT.Domain
 		{
 			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianess, (XEncoding)TextTerminalSettings.Encoding);
 
-			// prepare eol
+			// Prepare EOL.
 			MemoryStream eolWriter = new MemoryStream();;
 			foreach (Parser.Result result in p.Parse(eol, TextTerminalSettings.CharSubstitution, Parser.ParseMode.AllByteArrayResults))
 			{
@@ -245,7 +245,7 @@ namespace YAT.Domain
 			}
 			byte[] eolByteArray = eolWriter.ToArray();
 
-			// parse string and execute keywords
+			// Parse string and execute keywords.
 			bool sendEol = (eol != null);
 			foreach (Parser.Result result in p.Parse(s, TextTerminalSettings.CharSubstitution, Parser.ParseMode.All))
 			{
@@ -272,7 +272,7 @@ namespace YAT.Domain
 				}
 			}
 
-			// finally send EOL
+			// Finally send EOL.
 			if (sendEol)
 			{
 				Send(eolByteArray);

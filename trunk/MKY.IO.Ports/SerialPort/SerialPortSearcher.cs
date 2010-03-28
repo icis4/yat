@@ -47,46 +47,69 @@ namespace MKY.IO.Ports
 
 			try
 			{
-				// Use a tool like "WMI Explorer" to browse through the WMI entries
+				// Use a tool like "WMI Explorer" to browse through the WMI entries.
 
 				ManagementObjectSearcher searcher;
 
 				searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PnPEntity");
 				foreach (ManagementObject obj in searcher.Get())
 				{
-					// Check all objects with given GUID
-					// Results in all LPT and COM ports except modems
-					if (obj["ClassGuid"].ToString() == "{4D36E978-E325-11CE-BFC1-08002BE10318}")
+					try
 					{
-						// "Caption" contains something like "Serial On USB Port (COM2)"
-						Match m = SerialPortId.StandardPortNameWithParenthesesRegex.Match(obj["Caption"].ToString());
-						if (m.Success)
+						// Check all objects with given GUID.
+						// Results in all LPT and COM ports except modems.
+						if ((obj["ClassGuid"] != null) &&
+							(obj["ClassGuid"].ToString() == "{4D36E978-E325-11CE-BFC1-08002BE10318}"))
 						{
-							int portNumber;
-							if (int.TryParse(m.Groups[1].Value, out portNumber))
+							if ((obj["Caption"] != null) && (obj["Description"] != null))
 							{
-								string portName = SerialPortId.StandardPortNumberToString(portNumber);
-								if (!descriptions.ContainsKey(portName))
-									descriptions.Add(portName, obj["Description"].ToString());
+								// "Caption" contains something like "Serial On USB Port (COM2)".
+								Match m = SerialPortId.StandardPortNameWithParenthesesRegex.Match(obj["Caption"].ToString());
+								if (m.Success)
+								{
+									int portNumber;
+									if (int.TryParse(m.Groups[1].Value, out portNumber))
+									{
+										// Retrieve description.
+										string portName = SerialPortId.StandardPortNumberToString(portNumber);
+										if (!descriptions.ContainsKey(portName))
+											descriptions.Add(portName, obj["Description"].ToString());
+									}
+								}
 							}
 						}
+					}
+					catch (Exception ex)
+					{
+						XDebug.WriteException(typeof(SerialPortSearcher), ex);
 					}
 				}
 
 				searcher = new ManagementObjectSearcher("SELECT * FROM Win32_POTSModem");
 				foreach (ManagementObject obj in searcher.Get())
 				{
-					// "AttachedTo" contains something like "COM1"
-					Match m = SerialPortId.StandardPortNameOnlyRegex.Match(obj["AttachedTo"].ToString());
-					if (m.Success)
+					try
 					{
-						int portNumber;
-						if (int.TryParse(m.Groups[1].Value, out portNumber))
+						if ((obj["AttachedTo"] != null) && (obj["Description"] != null))
 						{
-							string portName = SerialPortId.StandardPortNumberToString(portNumber);
-							if (!descriptions.ContainsKey(portName))
-								descriptions.Add(portName, obj["Description"].ToString());
+							// "AttachedTo" contains something like "COM1".
+							Match m = SerialPortId.StandardPortNameOnlyRegex.Match(obj["AttachedTo"].ToString());
+							if (m.Success)
+							{
+								int portNumber;
+								if (int.TryParse(m.Groups[1].Value, out portNumber))
+								{
+									// Retrieve description.
+									string portName = SerialPortId.StandardPortNumberToString(portNumber);
+									if (!descriptions.ContainsKey(portName))
+										descriptions.Add(portName, obj["Description"].ToString());
+								}
+							}
 						}
+					}
+					catch (Exception ex)
+					{
+						XDebug.WriteException(typeof(SerialPortSearcher), ex);
 					}
 				}
 			}

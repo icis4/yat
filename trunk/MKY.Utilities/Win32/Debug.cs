@@ -99,6 +99,21 @@ namespace MKY.Utilities.Win32
 			return (message.ToString());
 		}
 
+		/// <summary>
+		/// Get string that describes the error of an API call.
+		/// </summary>
+		/// <returns>The resulting string.</returns>
+		public static string GetLastError()
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.Append("API call returned code '");
+			sb.Append(GetLastErrorCode());
+			sb.Append("' meaning '");
+			sb.Append(GetLastErrorMessage());
+			sb.Append("'.");
+			return (sb.ToString());
+		}
+
 		#endregion
 	}
 }

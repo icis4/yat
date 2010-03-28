@@ -60,28 +60,6 @@ namespace MKY.Utilities.IO
 			}
 			return (dir + name + ext);
 		}
-
-		/// <summary>
-		/// Inidactes whether the given file steam is ready for seek/read/write.
-		/// </summary>
-		/// <remarks>
-		/// The implementation intentionally checks the state step-by-step to emphasize the hierarchy.
-		/// </remarks>
-		public static bool IsReady(FileStream stream)
-		{
-			if (stream != null)
-			{
-				if (stream.CanSeek || stream.CanRead || stream.CanWrite)
-				{
-					if (stream.SafeFileHandle != null)
-					{
-						if (!stream.SafeFileHandle.IsInvalid && !stream.SafeFileHandle.IsClosed)
-							return (true);
-					}
-				}
-			}
-			return (false);
-		}
 	}
 }
 

@@ -224,7 +224,7 @@ namespace YAT.Gui.Forms
 			_terminalSettings.Terminal.IO.Socket.LocalTcpPort            = _newTerminalSettings.SocketLocalTcpPort;
 			_terminalSettings.Terminal.IO.Socket.LocalUdpPort            = _newTerminalSettings.SocketLocalUdpPort;
 
-			_terminalSettings.Terminal.IO.UsbHidDevice.DeviceInfo          = _newTerminalSettings.UsbHidDeviceInfo;
+			_terminalSettings.Terminal.IO.UsbHidDevice.DeviceInfo        = _newTerminalSettings.UsbHidDeviceInfo;
 
 			_terminalSettings.TerminalIsStarted                          = _newTerminalSettings.StartTerminal;
 
