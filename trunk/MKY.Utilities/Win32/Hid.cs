@@ -486,11 +486,11 @@ namespace MKY.Utilities.Win32
 			IntPtr h = Utilities.Win32.FileIO.CreateFile
 				(
 				systemPath,
-				0xC0000000, //FileIO.Access.GENERIC_READ_WRITE,
-				0x00000000, //FileIO.ShareMode.SHARE_NONE,
+				FileIO.Access.GENERIC_READ_WRITE,
+				FileIO.ShareMode.SHARE_NONE,
 				IntPtr.Zero,
-				3, //FileIO.CreationDisposition.OPEN_EXISTING,
-				0x40000000, //FileIO.AttributesAndFlags.FLAG_OVERLAPPED,
+				FileIO.CreationDisposition.OPEN_EXISTING,
+				FileIO.AttributesAndFlags.FLAG_OVERLAPPED,
 				IntPtr.Zero
 				);
 
@@ -618,8 +618,8 @@ namespace MKY.Utilities.Win32
 				{
 					System.Diagnostics.Debug.WriteLine("USB device capabilities:");
 					System.Diagnostics.Debug.Indent();
-					System.Diagnostics.Debug.WriteLine("Usage (hex):                     " + capabilities.Usage.ToString("X4"));
-					System.Diagnostics.Debug.WriteLine("Usage Page (hex):                " + capabilities.UsagePage.ToString("X4"));
+					System.Diagnostics.Debug.WriteLine("Usage (hex):                     " + capabilities.Usage.ToString("X2"));
+					System.Diagnostics.Debug.WriteLine("Usage Page (hex):                " + capabilities.UsagePage.ToString("X2"));
 					System.Diagnostics.Debug.WriteLine("Input Report Byte Length:        " + capabilities.InputReportByteLength);
 					System.Diagnostics.Debug.WriteLine("Output Report Byte Length:       " + capabilities.OutputReportByteLength);
 					System.Diagnostics.Debug.WriteLine("Feature Report Byte Length:      " + capabilities.FeatureReportByteLength);

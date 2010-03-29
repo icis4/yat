@@ -152,9 +152,6 @@ namespace MKY.IO.Usb
 		/// </summary>
 		private FileStream _streams;
 
-		//private SafeFileHandle _readHandle;
-		//private SafeFileHandle _writeHandle;
-
 		/// <summary>
 		/// Async receiving.
 		/// </summary>
@@ -377,28 +374,8 @@ namespace MKY.IO.Usb
 		{
 			try
 			{
-				/*SafeFileHandle readWriteHandle;
-				if (!Utilities.Win32.Hid.CreateReadWriteHandle(SystemPath, out readWriteHandle))
-				{
-					Debug.WriteLine(Utilities.Win32.Debug.GetLastError());
-					OnError_Sync(new ErrorEventArgs("Couldn't create read/write handle for USB HID device" + Environment.NewLine + ToString()));
-					return;
-				}*/
-
 //				_streams = new FileStream(new SafeFileHandle(DeviceHandle.DangerousGetHandle(), false), FileAccess.Read | FileAccess.Write, _inputReportLength, true);
 				_streams = new FileStream(new SafeFileHandle(DeviceHandle, false), FileAccess.Read | FileAccess.Write, InputReportLength, true);
-				XDebug.WriteFileStream(this, _streams, "Created.");
-
-				/*SafeFileHandle readHandle;
-				if (!Utilities.Win32.Hid.CreateReadHandle(SystemPath, out readHandle))
-					throw (new UsbException("Couldn't create read handle for USB HID device" + Environment.NewLine + SystemPath));
-
-				SafeFileHandle writeHandle;
-				if (!Utilities.Win32.Hid.CreateWriteHandle(SystemPath, out writeHandle))
-					throw (new UsbException("Couldn't create write handle for USB HID device" + Environment.NewLine + SystemPath));
-
-				_readHandle = readHandle;
-				_writeHandle = writeHandle;*/
 			}
 			catch (Exception ex)
 			{
@@ -464,17 +441,6 @@ namespace MKY.IO.Usb
 
 				foreach (byte[] report in output.Reports)
 					_streams.Write(report, 0, report.Length);
-
-				XDebug.WriteFileStream(this, _streams, "Written.");
-				/*int bytesWritten;
-//				if (!Utilities.Win32.FileIO.WriteFile(_writeHandle, data, out bytesWritten, IntPtr.Zero) || (bytesWritten != data.Length))
-				if (!Utilities.Win32.FileIO.WriteFile(_writeHandle, data, out bytesWritten, IntPtr.Zero))
-				{
-					Debug.WriteLine(Utilities.Win32.Debug.GetLastError());
-					OnDisconnected_Sync(new EventArgs());
-					OnError_Sync(new ErrorEventArgs("Error while writing an output report to the device"));
-				}*/
-
 			}
 			catch (Exception ex)
 			{
@@ -490,19 +456,7 @@ namespace MKY.IO.Usb
 			{
 				_streams.Dispose();
 				_streams = null;
-				XDebug.WriteFileStream(this, _streams, "Disposed.");
 			}
-
-			/*if (_readHandle != null)
-			{
-				_readHandle.Dispose();
-				_readHandle = null;
-			}
-			if (_writeHandle != null)
-			{
-				_writeHandle.Dispose();
-				_writeHandle = null;
-			}*/
 		}
 
 		#endregion
