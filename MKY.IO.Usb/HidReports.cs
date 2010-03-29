@@ -39,6 +39,7 @@ namespace MKY.IO.Usb
 	{
 		private HidDevice _device;
 		private int _reportLength;
+		private byte _reportId;
 
 		/// <summary>
 		/// Creates a report container and stores the reference to the device in use as well as
@@ -51,11 +52,35 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
+		/// The device associated with this report.
+		/// </summary>
+		protected HidDevice Device
+		{
+			get { return (_device); }
+		}
+
+		/// <summary>
 		/// The length of a report. The length is given by the device capabilities.
 		/// </summary>
 		public int ReportLength
 		{
 			get { return (_reportLength); }
+		}
+
+		/// <summary>
+		/// The ID of a report. The ID is given by the device capabilities.
+		/// </summary>
+		public byte ReportId
+		{
+			get { return (_reportId); }
+		}
+
+		/// <summary>
+		/// Sets the ID of a report. The ID is given by the device capabilities.
+		/// </summary>
+		protected void SetReportId(byte id)
+		{
+			_reportId = id;
 		}
 	}
 
@@ -87,9 +112,15 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public void CreateDataFromReport(byte[] report)
 		{
-			List<byte> data = new List<byte>();
+			// Ensure that report length matches
+			if (report.Length < Device.InputReportLength)
+				throw (new ArgumentException("Length of input report doesn't match the device's capabilities", "report"));
 
-			// Skip first byte, it always contains 0
+			// Get report ID which is located in the first byte
+			SetReportId(report[0]);
+
+			// Get report data without the report ID
+			List<byte> data = new List<byte>();
 			for (int i = 1; i < report.Length; i++)
 			{
 				if (report[i] != 0x00)
@@ -97,7 +128,6 @@ namespace MKY.IO.Usb
 				else
 					break;
 			}
-
 			_data = data.ToArray();
 		}
 	}
@@ -130,17 +160,19 @@ namespace MKY.IO.Usb
 		/// Create the report(s) from given data. The data is splitted into chunks that match the
 		/// size of the device's reported output report capabilities.
 		/// </summary>
-		public void CreateReportsFromData(byte[] data)
+		public void CreateReportsFromData(byte reportId, byte[] data)
 		{
 			List<byte[]> reports = new List<byte[]>();
-
-			int usableLength = ReportLength - 1;
+			int usableLength = ReportLength - 1; // 1 byte is used by the report ID.
+			
 			int offset = 0;
 			while (offset < (data.Length))
 			{
-				// Create report and set first byte to 0.
+				// Create the report.
 				byte[] report = new byte[ReportLength];
-				report[0] = 0x00;
+
+				// Set the report ID.
+				report[0] = reportId;
 
 				// Copy as much as possible into remaining usable bytes of the report.
 				int lengthToCopy = (data.Length - offset) % usableLength;
