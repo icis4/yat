@@ -104,6 +104,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Usb.Demo", "MKY.IO.Usb.Demo\MKY.IO.Usb.Demo.csproj", "{55647A42-640F-4D93-AFA3-72393D101DBA}"
 EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Test|Any CPU = Debug Test|Any CPU
 		Debug Test|Mixed Platforms = Debug Test|Mixed Platforms

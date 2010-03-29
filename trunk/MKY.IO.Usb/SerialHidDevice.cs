@@ -428,6 +428,8 @@ namespace MKY.IO.Usb
 					HidInputReportContainer input = new HidInputReportContainer(this);
 					input.CreateDataFromReport(inputReportBuffer);
 
+					// Don't care about report ID, SerialHidDevice only supports report 0.
+
 					// Read data on this thread.
 					lock (_receiveQueue)
 					{
@@ -454,8 +456,11 @@ namespace MKY.IO.Usb
 		{
 			try
 			{
+				// SerialHidDevice only supports report 0.
+				byte reportId = 0;
+
 				HidOutputReportContainer output = new HidOutputReportContainer(this);
-				output.CreateReportsFromData(data);
+				output.CreateReportsFromData(reportId, data);
 
 				foreach (byte[] report in output.Reports)
 					_streams.Write(report, 0, report.Length);
