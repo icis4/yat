@@ -245,14 +245,6 @@ namespace MKY.IO.Usb
 					return ((_streams.CanRead) && (_streams.CanWrite));
 
 				return (false);
-
-				/*if ((_readHandle == null) || (_readHandle.IsInvalid) || (_readHandle.IsClosed))
-					return (false);
-
-				if ((_writeHandle == null) || (_writeHandle.IsInvalid) || (_writeHandle.IsClosed))
-					return (false);
-
-				return (true);*/
 			}
 		}
 
@@ -374,8 +366,7 @@ namespace MKY.IO.Usb
 		{
 			try
 			{
-//				_streams = new FileStream(new SafeFileHandle(DeviceHandle.DangerousGetHandle(), false), FileAccess.Read | FileAccess.Write, _inputReportLength, true);
-				_streams = new FileStream(new SafeFileHandle(DeviceHandle, false), FileAccess.Read | FileAccess.Write, InputReportLength, true);
+				_streams = new FileStream(new SafeFileHandle(DeviceHandle.DangerousGetHandle(), false), FileAccess.Read | FileAccess.Write, InputReportLength, true);
 			}
 			catch (Exception ex)
 			{
