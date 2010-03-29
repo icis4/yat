@@ -99,21 +99,9 @@ namespace MKY.Utilities.Win32
 		/// <summary>
 		/// Retrieves the device handle of the HID device at the given path.
 		/// </summary>
-		public static bool GetUsbHandle(string path, out IntPtr usbHandle)
-//		public static bool GetUsbHandle(string path, out SafeFileHandle usbHandle)
+		public static bool GetUsbHandle(string path, out SafeFileHandle usbHandle)
 		{
-			/*SafeFileHandle h = Utilities.Win32.FileIO.CreateFile
-				(
-				path,
-				Utilities.Win32.FileIO.Access.GENERIC_READ_WRITE,
-				Utilities.Win32.FileIO.ShareMode.SHARE_READ_WRITE,
-				IntPtr.Zero,
-				Utilities.Win32.FileIO.CreationDisposition.OPEN_EXISTING,
-				Utilities.Win32.FileIO.AttributesAndFlags.ATTRIBUTE_NORMAL | Utilities.Win32.FileIO.AttributesAndFlags.FLAG_OVERLAPPED,
-				IntPtr.Zero
-				);*/
-
-			/*IntPtr h = Utilities.Win32.FileIO.CreateFile
+			SafeFileHandle h = Utilities.Win32.FileIO.CreateFile
 				(
 				path,
 				Utilities.Win32.FileIO.Access.GENERIC_READ_WRITE,
@@ -124,23 +112,14 @@ namespace MKY.Utilities.Win32
 				IntPtr.Zero
 				);
 
-			if (h != IntPtr.Zero)
-			{
-				usbHandle = h;
-				return (true);
-			}*/
-
-			usbHandle = IntPtr.Zero;
-			return (false);
-
-			/*if (!h.IsInvalid)
+			if (!h.IsInvalid)
 			{
 				usbHandle = h;
 				return (true);
 			}
 
 			usbHandle = null;
-			return (false);*/
+			return (false);
 		}
 
 		/// <summary>
