@@ -186,8 +186,7 @@ namespace MKY.Utilities.Win32
 		/// <summary></summary>
 		[CLSCompliant(false)]
 		[DllImport(KERNEL_DLL, CharSet = CharSet.Ansi, SetLastError = true)]
-		public static extern IntPtr CreateFile([MarshalAs(UnmanagedType.LPStr)] String lpFileName, uint dwDesiredAccess, uint dwShareMode, IntPtr lpSecurityAttributes, uint dwCreationDisposition, uint dwFlagsAndAttributes, IntPtr hTemplateFile);
-//		public static extern IntPtr CreateFile([MarshalAs(UnmanagedType.LPStr)] String lpFileName, Access dwDesiredAccess, ShareMode dwShareMode, IntPtr lpSecurityAttributes, CreationDisposition dwCreationDisposition, AttributesAndFlags dwFlagsAndAttributes, IntPtr hTemplateFile);
+		public static extern IntPtr CreateFile([MarshalAs(UnmanagedType.LPStr)] String lpFileName, Access dwDesiredAccess, ShareMode dwShareMode, IntPtr lpSecurityAttributes, CreationDisposition dwCreationDisposition, AttributesAndFlags dwFlagsAndAttributes, IntPtr hTemplateFile);
 //		public static extern SafeFileHandle CreateFile([MarshalAs(UnmanagedType.LPStr)] String lpFileName, Access dwDesiredAccess, ShareMode dwShareMode, IntPtr lpSecurityAttributes, CreationDisposition dwCreationDisposition, AttributesAndFlags dwFlagsAndAttributes, IntPtr hTemplateFile);
 
 		[DllImport(KERNEL_DLL, SetLastError = true)]
