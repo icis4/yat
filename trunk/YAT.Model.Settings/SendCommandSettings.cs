@@ -82,7 +82,7 @@ namespace YAT.Model.Settings
 			get { return (_command); }
 			set
 			{
-				if (_command != value)
+				if (value != _command)
 				{
 					_command = value;
 					SetChanged();
@@ -97,7 +97,7 @@ namespace YAT.Model.Settings
 			get { return (_recentsCommands); }
 			set
 			{
-				if (_recentsCommands != value)
+				if (value != _recentsCommands)
 				{
 					_recentsCommands = value;
 					SetChanged();

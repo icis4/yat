@@ -73,7 +73,7 @@ namespace YAT.Settings
 			get { return (_filePath); }
 			set
 			{
-				if (_filePath != value)
+				if (value != _filePath)
 				{
 					_filePath = value;
 					SetChanged();
@@ -87,7 +87,7 @@ namespace YAT.Settings
 			get { return (_filePathUser); }
 			set
 			{
-				if (_filePathUser != value)
+				if (value != _filePathUser)
 				{
 					_filePathUser = value;
 					SetChanged();

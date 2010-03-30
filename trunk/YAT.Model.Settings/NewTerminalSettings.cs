@@ -117,7 +117,7 @@ namespace YAT.Model.Settings
 			get { return (_terminalType); }
 			set
 			{
-				if (_terminalType != value)
+				if (value != _terminalType)
 				{
 					_terminalType = value;
 					SetChanged();
@@ -132,7 +132,7 @@ namespace YAT.Model.Settings
 			get { return (_ioType); }
 			set
 			{
-				if (_ioType != value)
+				if (value != _ioType)
 				{
 					_ioType = value;
 					SetChanged();
@@ -147,7 +147,7 @@ namespace YAT.Model.Settings
 			get { return (_serialPortId); }
 			set
 			{
-				if (_serialPortId != value)
+				if (value != _serialPortId)
 				{
 					_serialPortId = value;
 					SetChanged();
@@ -162,7 +162,7 @@ namespace YAT.Model.Settings
 			get { return (_socketRemoteHost); }
 			set
 			{
-				if (_socketRemoteHost != value)
+				if (value != _socketRemoteHost)
 				{
 					_socketRemoteHost = value;
 					SetChanged();
@@ -177,7 +177,7 @@ namespace YAT.Model.Settings
 			get { return (_socketRemotePort); }
 			set
 			{
-				if (_socketRemotePort != value)
+				if (value != _socketRemotePort)
 				{
 					_socketRemotePort = value;
 					SetChanged();
@@ -192,7 +192,7 @@ namespace YAT.Model.Settings
 			get { return (_socketLocalInterface); }
 			set
 			{
-				if (_socketLocalInterface != value)
+				if (value != _socketLocalInterface)
 				{
 					_socketLocalInterface = value;
 					SetChanged();
@@ -244,7 +244,7 @@ namespace YAT.Model.Settings
 			get { return (_socketLocalTcpPort); }
 			set
 			{
-				if (_socketLocalTcpPort != value)
+				if (value != _socketLocalTcpPort)
 				{
 					_socketLocalTcpPort = value;
 					SetChanged();
@@ -259,7 +259,7 @@ namespace YAT.Model.Settings
 			get { return (_socketLocalUdpPort); }
 			set
 			{
-				if (_socketLocalUdpPort != value)
+				if (value != _socketLocalUdpPort)
 				{
 					_socketLocalUdpPort = value;
 					SetChanged();
@@ -274,7 +274,7 @@ namespace YAT.Model.Settings
 			get { return (_usbHidDeviceInfo); }
 			set
 			{
-				if (_usbHidDeviceInfo != value)
+				if (value != _usbHidDeviceInfo)
 				{
 					_usbHidDeviceInfo = value;
 					SetChanged();
@@ -289,7 +289,7 @@ namespace YAT.Model.Settings
 			get { return (_startTerminal); }
 			set
 			{
-				if (_startTerminal != value)
+				if (value != _startTerminal)
 				{
 					_startTerminal = value;
 					SetChanged();

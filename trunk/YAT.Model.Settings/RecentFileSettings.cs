@@ -78,7 +78,7 @@ namespace YAT.Model.Settings
 			get { return (_filePaths); }
 			set
 			{
-				if (_filePaths != value)
+				if (value != _filePaths)
 				{
 					_filePaths = value;
 					SetChanged();

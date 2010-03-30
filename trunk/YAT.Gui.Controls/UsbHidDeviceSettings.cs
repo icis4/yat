@@ -78,7 +78,7 @@ namespace YAT.Gui.Controls
 			get { return (_autoReopen); }
 			set
 			{
-				if (_autoReopen != value)
+				if (value != _autoReopen)
 				{
 					_autoReopen = value;
 					SetControls();

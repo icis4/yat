@@ -183,11 +183,11 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void usbHidPortSelection_DeviceInfoChanged(object sender, EventArgs e)
+		private void usbHidDeviceSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
 			if (!_isSettingControls)
 			{
-				MKY.IO.Usb.DeviceInfo di = usbHidPortSelection.DeviceInfo;
+				MKY.IO.Usb.DeviceInfo di = usbHidDeviceSelection.DeviceInfo;
 				_newTerminalSettings_Form.UsbHidDeviceInfo = di;
 				SetControls();
 			}
@@ -204,10 +204,10 @@ namespace YAT.Gui.Forms
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{
-			// New terminal settings
+			// New terminal settings.
 			_newTerminalSettings = _newTerminalSettings_Form;
 
-			// Create document settings and fill it with new terminal settings
+			// Create document settings and fill it with new terminal settings.
 			_terminalSettings = new Settings.Terminal.TerminalSettingsRoot();
 
 			_terminalSettings.Terminal.TerminalType                      = _newTerminalSettings.TerminalType;
@@ -245,7 +245,7 @@ namespace YAT.Gui.Forms
 
 		private void button_Cancel_Click(object sender, EventArgs e)
 		{
-			// do nothing
+			// Do nothing.
 		}
 
 		private void button_Help_Click(object sender, EventArgs e)
@@ -277,11 +277,26 @@ namespace YAT.Gui.Forms
 			Domain.IOType ioType = _newTerminalSettings_Form.IOType;
 			terminalSelection.IOType = ioType;
 
-			bool isSerialPort = (ioType == Domain.IOType.SerialPort);
-			bool isUsbHid     = (ioType == Domain.IOType.UsbHid);
+			bool isSerialPort = false;
+			bool isUsbHid = false;
+			
+			bool isValid = true;
+
+			switch (ioType)
+			{
+				case Domain.IOType.SerialPort:
+					isSerialPort = true;
+					isValid = serialPortSelection.IsValid;
+					break;
+
+				case Domain.IOType.UsbHid:
+					isUsbHid = true;
+					isValid = usbHidDeviceSelection.IsValid;
+					break;
+			}
 
 			// Set socket control before serial port control since that might need to refresh the
-			//   serial port list first (which takes time, which looks ulgy)
+			//   serial port list first (which takes time, which looks ulgy).
 			socketSelection.Enabled        = !isSerialPort && !isUsbHid;
 			socketSelection.HostType       = (Domain.XIOType)ioType;
 			socketSelection.RemoteHost     = _newTerminalSettings_Form.SocketRemoteHost;
@@ -293,10 +308,12 @@ namespace YAT.Gui.Forms
 			serialPortSelection.Enabled    = isSerialPort;
 			serialPortSelection.PortId     = _newTerminalSettings_Form.SerialPortId;
 
-			usbHidPortSelection.Enabled    = isUsbHid;
-			usbHidPortSelection.DeviceInfo = _newTerminalSettings_Form.UsbHidDeviceInfo;
+			usbHidDeviceSelection.Enabled    = isUsbHid;
+			usbHidDeviceSelection.DeviceInfo = _newTerminalSettings_Form.UsbHidDeviceInfo;
 
 			checkBox_StartTerminal.Checked = _newTerminalSettings_Form.StartTerminal;
+
+			button_OK.Enabled = isValid;
 
 			_isSettingControls = false;
 		}

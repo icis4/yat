@@ -78,7 +78,7 @@ namespace YAT.Model.Settings
 			get { return (_filePath); }
 			set
 			{
-				if (_filePath != value)
+				if (value != _filePath)
 				{
 					_filePath = value;
 					SetChanged();
@@ -97,7 +97,7 @@ namespace YAT.Model.Settings
 			get { return (_guid); }
 			set
 			{
-				if (_guid != value)
+				if (value != _guid)
 				{
 					_guid = value;
 					SetChanged();
@@ -117,7 +117,7 @@ namespace YAT.Model.Settings
 					_window = value;
 					AttachNode(_window);
 				}
-				else if (_window != value)
+				else if (value != _window)
 				{
 					WindowSettings old = _window;
 					_window = value;

@@ -35,6 +35,61 @@ namespace YAT.Gui.Controls
 	[DefaultEvent("PortIdChanged")]
 	public partial class SerialPortSelection : UserControl
 	{
+		#region Types
+		//==========================================================================================
+		// Types
+		//==========================================================================================
+
+		private class MarkPortsInUseThread
+		{
+			private SerialPortCollection _portList;
+			private bool _isScanning = true;
+			private string _status2 = "";
+			private bool _cancelScanning = false;
+
+			public MarkPortsInUseThread(SerialPortCollection portList)
+			{
+				_portList = portList;
+			}
+
+			public virtual SerialPortCollection PortList
+			{
+				get { return (_portList); }
+			}
+
+			public virtual bool IsScanning
+			{
+				get { return (_isScanning); }
+			}
+
+			public virtual string Status2
+			{
+				get { return (_status2); }
+			}
+
+			public virtual void MarkPortsInUse()
+			{
+				_portList.MarkPortsInUse(portList_MarkPortsInUseCallback);
+				_isScanning = false;
+
+				StatusBox.AcceptAndClose();
+			}
+
+			public virtual void CancelScanning()
+			{
+				_cancelScanning = true;
+			}
+
+			private void portList_MarkPortsInUseCallback(object sender, SerialPortCollection.PortChangedAndCancelEventArgs e)
+			{
+				_status2 = "Scanning " + e.Port + "...";
+				StatusBox.UpdateStatus2(_status2);
+				e.Cancel = _cancelScanning;
+			}
+		}
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -43,6 +98,8 @@ namespace YAT.Gui.Controls
 		private bool _isSettingControls = false;
 
 		private SerialPortId _portId = SerialPortId.DefaultPort;
+
+		private MarkPortsInUseThread _markPortsInUseThread;
 
 		#endregion
 
@@ -82,13 +139,26 @@ namespace YAT.Gui.Controls
 			get { return (_portId); }
 			set
 			{
-				if (_portId != value)
+				// Don't accept to set the device to null/nothing. Master is the device list. If
+				// devices are available, there is always a device selected.
+				if (value != null)
 				{
-					_portId = value;
-					SetControls();
-					OnPortIdChanged(new EventArgs());
+					if (value != _portId)
+					{
+						_portId = value;
+						SetControls();
+						OnPortIdChanged(new EventArgs());
+					}
 				}
 			}
+		}
+
+		/// <summary>
+		/// Indicates whether the device selection is a valid device.
+		/// </summary>
+		public bool IsValid
+		{
+			get { return (_portId != null); }
 		}
 
 		#endregion
@@ -164,63 +234,6 @@ namespace YAT.Gui.Controls
 			SetSerialPortList();
 		}
 
-		#endregion
-
-		#region Private Methods
-		//==========================================================================================
-		// Private Methods
-		//==========================================================================================
-
-		private class MarkPortsInUseThread
-		{
-			private SerialPortCollection _portList;
-			private bool _isScanning = true;
-			private string _status2 = "";
-			private bool _cancelScanning = false;
-
-			public MarkPortsInUseThread(SerialPortCollection portList)
-			{
-				_portList = portList;
-			}
-
-			public virtual SerialPortCollection PortList
-			{
-				get { return (_portList); }
-			}
-
-			public virtual bool IsScanning
-			{
-				get { return (_isScanning); }
-			}
-
-			public virtual string Status2
-			{
-				get { return (_status2); }
-			}
-
-			public virtual void MarkPortsInUse()
-			{
-				_portList.MarkPortsInUse(portList_MarkPortsInUseCallback);
-				_isScanning = false;
-
-				StatusBox.AcceptAndClose();
-			}
-
-			public virtual void CancelScanning()
-			{
-				_cancelScanning = true;
-			}
-
-			private void portList_MarkPortsInUseCallback(object sender, SerialPortCollection.PortChangedAndCancelEventArgs e)
-			{
-				_status2 = "Scanning " + e.Port + "...";
-				StatusBox.UpdateStatus2(_status2);
-				e.Cancel = _cancelScanning;
-			}
-		}
-
-		private MarkPortsInUseThread _markPortsInUseThread;
-
 		private void timer_ShowScanDialog_Tick(object sender, EventArgs e)
 		{
 			timer_ShowScanDialog.Stop();
@@ -229,10 +242,17 @@ namespace YAT.Gui.Controls
 
 			if (StatusBox.Show(this, "Scanning ports...", "Serial Port Scan", _markPortsInUseThread.Status2, "&Detect ports that are in use", ref setting) != DialogResult.OK)
 				_markPortsInUseThread.CancelScanning();
-			
+
 			ApplicationSettings.LocalUser.General.DetectSerialPortsInUse = setting;
 			ApplicationSettings.Save();
 		}
+
+		#endregion
+
+		#region Private Methods
+		//==========================================================================================
+		// Private Methods
+		//==========================================================================================
 
 		private void SetSerialPortList()
 		{

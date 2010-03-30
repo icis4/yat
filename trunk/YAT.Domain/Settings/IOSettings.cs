@@ -102,7 +102,7 @@ namespace YAT.Domain.Settings
 			get { return (_ioType); }
 			set
 			{
-				if (_ioType != value)
+				if (value != _ioType)
 				{
 					_ioType = value;
 					SetChanged();
@@ -122,7 +122,7 @@ namespace YAT.Domain.Settings
 					_serialPort = value;
 					AttachNode(_serialPort);
 				}
-				else if (_serialPort != value)
+				else if (value != _serialPort)
 				{
 					MKY.IO.Serial.SerialPortSettings old = _serialPort;
 					_serialPort = value;
@@ -138,7 +138,7 @@ namespace YAT.Domain.Settings
 			get { return (_serialParityErrorReplacement); }
 			set
 			{
-				if (_serialParityErrorReplacement != value)
+				if (value != _serialParityErrorReplacement)
 				{
 					_serialParityErrorReplacement = value;
 					SetChanged();
@@ -158,7 +158,7 @@ namespace YAT.Domain.Settings
 					_socket = value;
 					AttachNode(_socket);
 				}
-				else if (_socket != value)
+				else if (value != _socket)
 				{
 					MKY.IO.Serial.SocketSettings old = _socket;
 					_socket = value;
@@ -179,7 +179,7 @@ namespace YAT.Domain.Settings
 					_usbHidDevice = value;
 					AttachNode(_usbHidDevice);
 				}
-				else if (_usbHidDevice != value)
+				else if (value != _usbHidDevice)
 				{
 					MKY.IO.Serial.UsbHidDeviceSettings old = _usbHidDevice;
 					_usbHidDevice = value;
@@ -195,7 +195,7 @@ namespace YAT.Domain.Settings
 			get { return (_endianess); }
 			set
 			{
-				if (_endianess != value)
+				if (value != _endianess)
 				{
 					_endianess = value;
 					SetChanged();

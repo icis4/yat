@@ -74,7 +74,7 @@ namespace YAT.Model.Settings
 			get { return (_command); }
 			set
 			{
-				if (_command != value)
+				if (value != _command)
 				{
 					_command = value;
 					SetChanged();

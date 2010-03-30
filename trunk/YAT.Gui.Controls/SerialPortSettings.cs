@@ -118,7 +118,7 @@ namespace YAT.Gui.Controls
 			get { return (_baudRate); }
 			set
 			{
-				if (_baudRate != value)
+				if (value != _baudRate)
 				{
 					_baudRate = value;
 					SetControls();
@@ -135,7 +135,7 @@ namespace YAT.Gui.Controls
 			get { return (_dataBits); }
 			set
 			{
-				if (_dataBits != value)
+				if (value != _dataBits)
 				{
 					_dataBits = value;
 					SetControls();
@@ -152,7 +152,7 @@ namespace YAT.Gui.Controls
 			get { return (_parity); }
 			set
 			{
-				if (_parity != value)
+				if (value != _parity)
 				{
 					_parity = value;
 					SetControls();
@@ -169,7 +169,7 @@ namespace YAT.Gui.Controls
 			get { return (_stopBits); }
 			set
 			{
-				if (_stopBits != value)
+				if (value != _stopBits)
 				{
 					_stopBits = value;
 					SetControls();
@@ -186,7 +186,7 @@ namespace YAT.Gui.Controls
 			get { return (_flowControl); }
 			set
 			{
-				if (_flowControl != value)
+				if (value != _flowControl)
 				{
 					_flowControl = value;
 					SetControls();
@@ -202,7 +202,7 @@ namespace YAT.Gui.Controls
 			get { return (_autoReopen); }
 			set
 			{
-				if (_autoReopen != value)
+				if (value != _autoReopen)
 				{
 					_autoReopen = value;
 					SetControls();

@@ -80,10 +80,10 @@ namespace MKY.Utilities.Win32
 		// External Functions
 		//==========================================================================================
 
-		[DllImport(WINUSB_DLL, SetLastError = true)]
+		[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern Boolean WinUsb_Initialize(SafeFileHandle DeviceHandle, out SafeFileHandle InterfaceHandle);
 
-		[DllImport(WINUSB_DLL, SetLastError = true)]
+		[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern Boolean WinUsb_GetDescriptor(SafeFileHandle InterfaceHandle, DescriptorType DescriptorType, Byte Index, UInt16 LanguageID, Byte[] Buffer, UInt32 BufferLength, ref UInt32 LengthTransferred);
 
 		[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
@@ -97,18 +97,18 @@ namespace MKY.Utilities.Win32
 		//==========================================================================================
 
 		/// <summary>
-		/// Retrieves the device handle of the HID device at the given path.
+		/// Retrieves the device handle of the HID device at the given system path.
 		/// </summary>
-		public static bool GetUsbHandle(string path, out SafeFileHandle usbHandle)
+		public static bool GetUsbHandle(string systemPath, out SafeFileHandle usbHandle)
 		{
 			SafeFileHandle h = Utilities.Win32.FileIO.CreateFile
 				(
-				path,
+				systemPath,
 				Utilities.Win32.FileIO.Access.GENERIC_READ_WRITE,
 				Utilities.Win32.FileIO.ShareMode.SHARE_READ_WRITE,
 				IntPtr.Zero,
 				Utilities.Win32.FileIO.CreationDisposition.OPEN_EXISTING,
-				Utilities.Win32.FileIO.AttributesAndFlags.ATTRIBUTE_NORMAL | Utilities.Win32.FileIO.AttributesAndFlags.FLAG_OVERLAPPED,
+				Utilities.Win32.FileIO.AttributesAndFlags.FLAG_OVERLAPPED,
 				IntPtr.Zero
 				);
 

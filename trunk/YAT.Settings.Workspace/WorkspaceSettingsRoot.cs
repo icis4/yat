@@ -79,7 +79,7 @@ namespace YAT.Settings.Workspace
 		public virtual string ProductVersion
 		{
 			get { return (_productVersion); }
-			set { } // do nothing
+			set { } // Do nothing.
 		}
 
 		[XmlElement("AutoSaved")]
@@ -88,10 +88,10 @@ namespace YAT.Settings.Workspace
 			get { return (_autoSaved); }
 			set
 			{
-				if (_autoSaved != value)
+				if (value != _autoSaved)
 				{
 					_autoSaved = value;
-					// do not set changed;
+					// Do not set changed.
 				}
 			}
 		}
@@ -107,7 +107,7 @@ namespace YAT.Settings.Workspace
 					_workspace = value;
 					AttachNode(_workspace);
 				}
-				else if (_workspace != value)
+				else if (value != _workspace)
 				{
 					WorkspaceSettings old = _workspace;
 					_workspace = value;

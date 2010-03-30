@@ -110,7 +110,7 @@ namespace YAT.Domain.Settings
 			get { return (_terminalType); }
 			set
 			{
-				if (_terminalType != value)
+				if (value != _terminalType)
 				{
 					_terminalType = value;
 					SetChanged();
@@ -130,7 +130,7 @@ namespace YAT.Domain.Settings
 					_io = value;
 					AttachNode(_io);
 				}
-				else if (_io != value)
+				else if (value != _io)
 				{
 					IOSettings old = _io;
 					_io = value;
@@ -151,7 +151,7 @@ namespace YAT.Domain.Settings
 					_buffer = value;
 					AttachNode(_buffer);
 				}
-				else if (_buffer != value)
+				else if (value != _buffer)
 				{
 					BufferSettings old = _buffer;
 					_buffer = value;
@@ -172,7 +172,7 @@ namespace YAT.Domain.Settings
 					_display = value;
 					AttachNode(_display);
 				}
-				else if (_display != value)
+				else if (value != _display)
 				{
 					DisplaySettings old = _display;
 					_display = value;
@@ -193,7 +193,7 @@ namespace YAT.Domain.Settings
 					_charReplace = value;
 					AttachNode(_charReplace);
 				}
-				else if (_charReplace != value)
+				else if (value != _charReplace)
 				{
 					CharReplaceSettings old = _charReplace;
 					_charReplace = value;
@@ -214,7 +214,7 @@ namespace YAT.Domain.Settings
 					_send = value;
 					AttachNode(_send);
 				}
-				else if (_send != value)
+				else if (value != _send)
 				{
 					SendSettings old = _send;
 					_send = value;
@@ -235,7 +235,7 @@ namespace YAT.Domain.Settings
 					_textTerminal = value;
 					AttachNode(_textTerminal);
 				}
-				else if (_textTerminal != value)
+				else if (value != _textTerminal)
 				{
 					TextTerminalSettings old = _textTerminal;
 					_textTerminal = value;
@@ -256,7 +256,7 @@ namespace YAT.Domain.Settings
 					_binaryTerminal = value;
 					AttachNode(_binaryTerminal);
 				}
-				else if (_binaryTerminal != value)
+				else if (value != _binaryTerminal)
 				{
 					BinaryTerminalSettings old = _binaryTerminal;
 					_binaryTerminal = value;

@@ -18,10 +18,14 @@
 // Configuration
 //==================================================================================================
 
-// Choose <...>:
-// - Uncomment to <...>
-// - Comment out for normal operation
-//#define <...>
+#if (DEBUG)
+
+	// Choose <...>:
+	// - Uncomment to <...>
+	// - Comment out for normal operation
+	//#define DEBUG_<...>
+
+#endif
 
 #region Using
 //==================================================================================================

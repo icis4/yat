@@ -85,7 +85,7 @@ namespace MKY.IO.Serial
 			get { return (_deviceInfo); }
 			set
 			{
-				if (_deviceInfo != value)
+				if (value != _deviceInfo)
 				{
 					_deviceInfo = value;
 					SetChanged();
@@ -100,7 +100,7 @@ namespace MKY.IO.Serial
 			get { return (_autoReopen); }
 			set
 			{
-				if (_autoReopen != value)
+				if (value != _autoReopen)
 				{
 					_autoReopen = value;
 					SetChanged();

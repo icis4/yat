@@ -205,7 +205,7 @@ namespace MKY.Utilities.Win32
 		/// </remarks>
 		/// <param name="HidDeviceObject">A handle to the device.</param>
 		/// <returns>True on success, false on failure.</returns>
-		[DllImport(HID_DLL, SetLastError = true)]
+		[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern Boolean HidD_FlushQueue(SafeFileHandle HidDeviceObject);
 
 		/// <summary>
@@ -213,16 +213,16 @@ namespace MKY.Utilities.Win32
 		/// </summary>
 		/// <param name="PreparsedData">A pointer to the PreparsedData structure returned by HidD_GetPreparsedData.</param>
 		/// <returns>True on success, false on failure.</returns>
-		[DllImport(HID_DLL, SetLastError = true)]
+		[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		public static extern Boolean HidD_FreePreparsedData(IntPtr PreparsedData);
 
 		/// <summary></summary>
-		[DllImport(HID_DLL, SetLastError = true)]
+		[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		public static extern Boolean HidD_GetAttributes(SafeFileHandle HidDeviceObject, ref HIDD_ATTRIBUTES Attributes);
 
 		// HidD_GetConfiguration() is reserved for internal system use
 
-		[DllImport(HID_DLL, SetLastError = true)]
+		[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern Boolean HidD_GetFeature(SafeFileHandle HidDeviceObject, Byte[] ReportBuffer, UInt32 ReportBufferLength);
 		/// <summary>
 		/// Attempts to read a Feature report from the device.
@@ -238,7 +238,7 @@ namespace MKY.Utilities.Win32
 		/// <remarks>
 		/// Public via <see cref="GetHidGuid()"/>.
 		/// </remarks>
-		[DllImport(HID_DLL, SetLastError = true)]
+		[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern void HidD_GetHidGuid(ref System.Guid HidGuid);
 
 		[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
@@ -256,7 +256,7 @@ namespace MKY.Utilities.Win32
 			return (false);
 		}
 
-		[DllImport(HID_DLL, SetLastError = true)]
+		[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern Boolean HidD_GetInputReport(SafeFileHandle HidDeviceObject, Byte[] ReportBuffer, UInt32 ReportBufferLength);
 		/// <summary>
 		/// Attempts to read an Input report from the device using a control transfer.
@@ -301,10 +301,10 @@ namespace MKY.Utilities.Win32
 		/// <param name="HidDeviceObject">A handle to a device and an integer to hold the number of buffers.</param>
 		/// <param name="NumberBuffers">True on success, false on failure.</param>
 		/// <returns></returns>
-		[DllImport(HID_DLL, SetLastError = true)]
+		[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern Boolean HidD_GetNumInputBuffers(SafeFileHandle HidDeviceObject, ref UInt32 NumberBuffers);
 
-		[DllImport(HID_DLL, SetLastError = true)]
+		[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern Boolean HidD_GetPhysicalDescriptor(SafeFileHandle HidDeviceObject, Byte[] Buffer, UInt32 BufferLength);
 		/// <summary></summary>
 		public  static        Boolean HidD_GetPhysicalDescriptor(SafeFileHandle HidDeviceObject, Byte[] Buffer)
@@ -319,7 +319,7 @@ namespace MKY.Utilities.Win32
 		/// <param name="HidDeviceObject">A handle returned by CreateFile.</param>
 		/// <param name="PreparsedData">A pointer to a buffer.</param>
 		/// <returns>True on success, false on failure.</returns>
-		[DllImport(HID_DLL, SetLastError = true)]
+		[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		public static extern Boolean HidD_GetPreparsedData(SafeFileHandle HidDeviceObject, ref IntPtr PreparsedData);
 
 		[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
@@ -354,7 +354,7 @@ namespace MKY.Utilities.Win32
 
 		// HidD_SetConfiguration() is reserved for internal system use
 
-		[DllImport(HID_DLL, SetLastError = true)]
+		[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern Boolean HidD_SetFeature(SafeFileHandle HidDeviceObject, Byte[] ReportBuffer, UInt32 ReportBufferLength);
 		/// <summary>
 		/// Attempts to send a Feature report to the device.
@@ -377,10 +377,10 @@ namespace MKY.Utilities.Win32
 		/// <param name="HidDeviceObject">A handle to an HID.</param>
 		/// <param name="NumberBuffers">An integer to hold the number of buffers.</param>
 		/// <returns>True on success, false on failure.</returns>
-		[DllImport(HID_DLL, SetLastError = true)]
+		[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern Boolean HidD_SetNumInputBuffers(SafeFileHandle HidDeviceObject, UInt32 NumberBuffers);
 
-		[DllImport(HID_DLL, SetLastError = true)]
+		[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern Boolean HidD_SetOutputReport(SafeFileHandle HidDeviceObject, Byte[] ReportBuffer, UInt32 ReportBufferLength);
 		/// <summary>
 		/// Attempts to send an Output report to the device using a control transfer.
@@ -405,10 +405,10 @@ namespace MKY.Utilities.Win32
 		/// <param name="PreparsedData">A pointer returned by HidD_GetPreparsedData.</param>
 		/// <param name="Capabilities">A pointer to a HIDP_CAPS structure.</param>
 		/// <returns>True on success, false on failure.</returns>
-		[DllImport(HID_DLL, SetLastError = true)]
+		[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		public static extern Int32 HidP_GetCaps(IntPtr PreparsedData, ref HIDP_CAPS Capabilities);
 
-		[DllImport(HID_DLL, SetLastError = true)]
+		[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern HIDP_STATUS HidP_GetValueCaps(HIDP_REPORT_TYPE ReportType, ref HIDP_VALUE_CAPS ValueCaps, ref UInt32 ValueCapsLength, IntPtr PreparsedData);
 		/// <summary>
 		/// Retrieves a buffer containing an array of HidP_ValueCaps structures. Each structure
@@ -447,6 +447,8 @@ namespace MKY.Utilities.Win32
 		/// </summary>
 		public static bool CreateDeviceHandle(string systemPath, out SafeFileHandle deviceHandle)
 		{
+			//return (CreateReadWriteHandle(systemPath, out deviceHandle));
+
 			SafeFileHandle h = Utilities.Win32.FileIO.CreateFile
 				(
 				systemPath,
@@ -463,6 +465,9 @@ namespace MKY.Utilities.Win32
 				deviceHandle = h;
 				return (true);
 			}
+
+			System.Diagnostics.Debug.WriteLine("Couldn't create USB device handle.");
+			System.Diagnostics.Debug.WriteLine(Debug.GetLastError());
 
 			deviceHandle = null;
 			return (false);
@@ -523,13 +528,13 @@ namespace MKY.Utilities.Win32
 		/// <summary>
 		/// Creates a handle to read and write to the HID device at the given systemPath.
 		/// </summary>
-		public static bool CreateReadWriteHandle(string systemPath, out SafeFileHandle writeHandle)
+		public static bool CreateReadWriteHandle(string systemPath, out SafeFileHandle readWriteHandle)
 		{
 			SafeFileHandle h = Utilities.Win32.FileIO.CreateFile
 				(
 				systemPath,
 				FileIO.Access.GENERIC_READ_WRITE,
-				FileIO.ShareMode.SHARE_NONE,
+				FileIO.ShareMode.SHARE_READ_WRITE,
 				IntPtr.Zero,
 				FileIO.CreationDisposition.OPEN_EXISTING,
 				FileIO.AttributesAndFlags.FLAG_OVERLAPPED,
@@ -538,110 +543,15 @@ namespace MKY.Utilities.Win32
 
 			if (!h.IsInvalid)
 			{
-				writeHandle = h;
+				readWriteHandle = h;
 				return (true);
 			}
 
-			writeHandle = null;
+			System.Diagnostics.Debug.WriteLine("Couldn't create USB device read/write handle.");
+			System.Diagnostics.Debug.WriteLine(Debug.GetLastError());
+
+			readWriteHandle = null;
 			return (false);
-		}
-
-		/// <summary>
-		/// Retrieves a structure with information about a device's capabilities. 
-		/// </summary>
-		/// <param name="deviceHandle">A handle to a device.</param>
-		/// <returns>An HIDP_CAPS structure.</returns>
-		public static HIDP_CAPS GetDeviceCapabilities(SafeFileHandle deviceHandle)
-		{
-			HIDP_CAPS capabilities = new HIDP_CAPS();
-			IntPtr preparsedData = new IntPtr();
-			bool success = false;
-
-			try
-			{
-				success = HidD_GetPreparsedData(deviceHandle, ref preparsedData);
-				Int32 result = HidP_GetCaps(preparsedData, ref capabilities);
-				if ((result != 0))
-				{
-					System.Diagnostics.Debug.WriteLine("USB device capabilities:");
-					System.Diagnostics.Debug.Indent();
-					System.Diagnostics.Debug.WriteLine("Usage (hex):                     " + capabilities.Usage.ToString("X2"));
-					System.Diagnostics.Debug.WriteLine("Usage Page (hex):                " + capabilities.UsagePage.ToString("X2"));
-					System.Diagnostics.Debug.WriteLine("Input Report Byte Length:        " + capabilities.InputReportByteLength);
-					System.Diagnostics.Debug.WriteLine("Output Report Byte Length:       " + capabilities.OutputReportByteLength);
-					System.Diagnostics.Debug.WriteLine("Feature Report Byte Length:      " + capabilities.FeatureReportByteLength);
-					System.Diagnostics.Debug.WriteLine("Number of Link Collection Nodes: " + capabilities.NumberLinkCollectionNodes);
-					System.Diagnostics.Debug.WriteLine("Number of Input Button Caps:     " + capabilities.NumberInputButtonCaps);
-					System.Diagnostics.Debug.WriteLine("Number of Input Value Caps:      " + capabilities.NumberInputValueCaps);
-					System.Diagnostics.Debug.WriteLine("Number of Input Data Indices:    " + capabilities.NumberInputDataIndices);
-					System.Diagnostics.Debug.WriteLine("Number of Output Button Caps:    " + capabilities.NumberOutputButtonCaps);
-					System.Diagnostics.Debug.WriteLine("Number of Output Value Caps:     " + capabilities.NumberOutputValueCaps);
-					System.Diagnostics.Debug.WriteLine("Number of Output Data Indices:   " + capabilities.NumberOutputDataIndices);
-					System.Diagnostics.Debug.WriteLine("Number of Feature Button Caps:   " + capabilities.NumberFeatureButtonCaps);
-					System.Diagnostics.Debug.WriteLine("Number of Feature Value Caps:    " + capabilities.NumberFeatureValueCaps);
-					System.Diagnostics.Debug.WriteLine("Number of Feature Data Indices:  " + capabilities.NumberFeatureDataIndices);
-					System.Diagnostics.Debug.Unindent();
-
-					// \remind 2010-03-21 / mky
-					// The following two lines demonstrate how the devices value capabilities can be retrieved.
-					// However, due to some reaseon HidP_GetValueCaps() overwrites 'deviceHandle'. Before
-					// making use of the following lines, ensure that 'deviceHandle' isn't overwritten anymore.
-					//
-					//HIDP_VALUE_CAPS valueCaps = new HIDP_VALUE_CAPS();
-					//HidP_GetValueCaps(HIDP_REPORT_TYPE.HidP_Input, ref valueCaps, preparsedData);
-				}
-			}
-			catch (Exception ex)
-			{
-				XDebug.WriteException(typeof(Hid), ex);
-				throw;
-			}
-			finally
-			{
-				if (preparsedData != IntPtr.Zero)
-				{
-					success = HidD_FreePreparsedData(preparsedData);
-					preparsedData = IntPtr.Zero;
-				}
-			}
-
-			return (capabilities);
-		}
-
-		/// <summary>
-		/// Creates a 32-bit Usage from the Usage Page and Usage ID. 
-		/// Determines whether the Usage is a system mouse or keyboard.
-		/// Can be modified to detect other Usages.
-		/// </summary>
-		/// <param name="capabilities">A HIDP_CAPS structure retrieved with HidP_GetCaps.</param>
-		/// <returns>A String describing the usage.</returns>
-		public static Usage GetHidUsage(HIDP_CAPS capabilities)
-		{
-			try
-			{
-				// For a complete list,.see http://www.usb.org/developers/devclass_docs/Hut1_12.pdf.
-				switch (capabilities.UsagePage)
-				{
-					case 0x01: // Generic Desktop Page
-					{
-						switch (capabilities.Usage)
-						{
-							case 0x02: // Mouse
-								return (Usage.Mouse);
-
-							case 0x06: // Keyboard
-								return (Usage.Keyboard);
-						}
-						break;
-					}
-				}
-				return (Usage.Unknown);
-			}
-			catch (Exception ex)
-			{
-				XDebug.WriteException(typeof(Hid), ex);
-				throw;
-			}
 		}
 
 		/// <summary></summary>
@@ -862,6 +772,104 @@ namespace MKY.Utilities.Win32
 			{
 				bool success = HidD_FlushQueue(deviceHandle);
 				return (success);
+			}
+			catch (Exception ex)
+			{
+				XDebug.WriteException(typeof(Hid), ex);
+				throw;
+			}
+		}
+
+		/// <summary>
+		/// Retrieves a structure with information about a device's capabilities. 
+		/// </summary>
+		/// <param name="deviceHandle">A handle to a device.</param>
+		/// <returns>An HIDP_CAPS structure.</returns>
+		public static HIDP_CAPS GetDeviceCapabilities(SafeFileHandle deviceHandle)
+		{
+			HIDP_CAPS capabilities = new HIDP_CAPS();
+			IntPtr pPreparsedData = new IntPtr();
+			bool success = false;
+
+			try
+			{
+				success = HidD_GetPreparsedData(deviceHandle, ref pPreparsedData);
+				Int32 result = HidP_GetCaps(pPreparsedData, ref capabilities);
+				if ((result != 0))
+				{
+					System.Diagnostics.Debug.WriteLine("USB device capabilities:");
+					System.Diagnostics.Debug.Indent();
+					System.Diagnostics.Debug.WriteLine("Usage (hex):                     " + capabilities.Usage.ToString("X2"));
+					System.Diagnostics.Debug.WriteLine("Usage Page (hex):                " + capabilities.UsagePage.ToString("X2"));
+					System.Diagnostics.Debug.WriteLine("Input Report Byte Length:        " + capabilities.InputReportByteLength);
+					System.Diagnostics.Debug.WriteLine("Output Report Byte Length:       " + capabilities.OutputReportByteLength);
+					System.Diagnostics.Debug.WriteLine("Feature Report Byte Length:      " + capabilities.FeatureReportByteLength);
+					System.Diagnostics.Debug.WriteLine("Number of Link Collection Nodes: " + capabilities.NumberLinkCollectionNodes);
+					System.Diagnostics.Debug.WriteLine("Number of Input Button Caps:     " + capabilities.NumberInputButtonCaps);
+					System.Diagnostics.Debug.WriteLine("Number of Input Value Caps:      " + capabilities.NumberInputValueCaps);
+					System.Diagnostics.Debug.WriteLine("Number of Input Data Indices:    " + capabilities.NumberInputDataIndices);
+					System.Diagnostics.Debug.WriteLine("Number of Output Button Caps:    " + capabilities.NumberOutputButtonCaps);
+					System.Diagnostics.Debug.WriteLine("Number of Output Value Caps:     " + capabilities.NumberOutputValueCaps);
+					System.Diagnostics.Debug.WriteLine("Number of Output Data Indices:   " + capabilities.NumberOutputDataIndices);
+					System.Diagnostics.Debug.WriteLine("Number of Feature Button Caps:   " + capabilities.NumberFeatureButtonCaps);
+					System.Diagnostics.Debug.WriteLine("Number of Feature Value Caps:    " + capabilities.NumberFeatureValueCaps);
+					System.Diagnostics.Debug.WriteLine("Number of Feature Data Indices:  " + capabilities.NumberFeatureDataIndices);
+					System.Diagnostics.Debug.Unindent();
+
+					// \remind 2010-03-21 / mky
+					// The following two lines demonstrate how the devices value capabilities can be retrieved.
+					// However, due to some reaseon HidP_GetValueCaps() overwrites 'deviceHandle'. Before
+					// making use of the following lines, ensure that 'deviceHandle' isn't overwritten anymore.
+					//
+					//HIDP_VALUE_CAPS valueCaps = new HIDP_VALUE_CAPS();
+					//HidP_GetValueCaps(HIDP_REPORT_TYPE.HidP_Input, ref valueCaps, preparsedData);
+				}
+			}
+			catch (Exception ex)
+			{
+				XDebug.WriteException(typeof(Hid), ex);
+				throw;
+			}
+			finally
+			{
+				if (pPreparsedData != IntPtr.Zero)
+				{
+					success = HidD_FreePreparsedData(pPreparsedData);
+					pPreparsedData = IntPtr.Zero;
+				}
+			}
+
+			return (capabilities);
+		}
+
+		/// <summary>
+		/// Creates a 32-bit Usage from the Usage Page and Usage ID. 
+		/// Determines whether the Usage is a system mouse or keyboard.
+		/// Can be modified to detect other Usages.
+		/// </summary>
+		/// <param name="capabilities">A HIDP_CAPS structure retrieved with HidP_GetCaps.</param>
+		/// <returns>A String describing the usage.</returns>
+		public static Usage GetHidUsage(HIDP_CAPS capabilities)
+		{
+			try
+			{
+				// For a complete list,.see http://www.usb.org/developers/devclass_docs/Hut1_12.pdf.
+				switch (capabilities.UsagePage)
+				{
+					case 0x01: // Generic Desktop Page
+					{
+						switch (capabilities.Usage)
+						{
+							case 0x02: // Mouse
+								return (Usage.Mouse);
+
+							case 0x06: // Keyboard
+								return (Usage.Keyboard);
+						}
+						break;
+					}
+				}
+				return (Usage.Unknown);
 			}
 			catch (Exception ex)
 			{

@@ -94,7 +94,7 @@ namespace YAT.Settings.Terminal
 		public virtual SaveInfo Saved
 		{
 			get { return (new SaveInfo(DateTime.Now, Environment.UserName)); }
-			set { } // do nothing
+			set { } // Do nothing.
 		}
 
 		[XmlElement("AutoSaved")]
@@ -103,10 +103,10 @@ namespace YAT.Settings.Terminal
 			get { return (_autoSaved); }
 			set
 			{
-				if (_autoSaved != value)
+				if (value != _autoSaved)
 				{
 					_autoSaved = value;
-					// do not set changed;
+					// Do not set changed.
 				}
 			}
 		}
@@ -122,7 +122,7 @@ namespace YAT.Settings.Terminal
 					_explicit = value;
 					AttachNode(_explicit);
 				}
-				else if (_explicit != value)
+				else if (value != _explicit)
 				{
 					ExplicitSettings old = _explicit;
 					_explicit = value;
@@ -142,7 +142,7 @@ namespace YAT.Settings.Terminal
 					_implicit = value;
 					AttachNode(_implicit);
 				}
-				else if (_implicit != value)
+				else if (value != _implicit)
 				{
 					ImplicitSettings old = _implicit;
 					_implicit = value;

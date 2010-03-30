@@ -18,13 +18,17 @@
 // Configuration
 //==================================================================================================
 
-// Choose whether exceptions should be handled or execution immediately stopped:
-// - Uncomment to handle exceptions
-// - Comment out to break exceptions
-#define HANDLE_EXCEPTIONS
+#if (DEBUG)
 
-#if (!HANDLE_EXCEPTIONS) // Break exceptions is mutual exclusive against handle exceptions
-	#define BREAK_EXCEPTIONS
+	// Choose whether exceptions should be handled or execution immediately stopped:
+	// - Uncomment to handle exceptions
+	// - Comment out to break exceptions
+	#define DEBUG_HANDLE_EXCEPTIONS
+
+	#if (!DEBUG_HANDLE_EXCEPTIONS) // Break exceptions is mutual exclusive against handle exceptions
+		#define DEBUG_BREAK_EXCEPTIONS
+	#endif
+
 #endif
 
 #region Using
@@ -114,7 +118,7 @@ namespace MKY.Utilities.Event
 				}
 				else
 				{
-				#if (DEBUG && HANDLE_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen
+				#if (DEBUG_HANDLE_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen
 					EventHandler castedSink = (EventHandler)sink;
 					object sender = args[0];
 					EventArgs eventArgs = (EventArgs)args[1];
@@ -126,7 +130,7 @@ namespace MKY.Utilities.Event
 					{
 						WriteExceptionToDebugOutput(ex, sink);
 					}
-				#elif (DEBUG && BREAK_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen
+				#elif (DEBUG_BREAK_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen
 					EventHandler castedSink = (EventHandler)sink;
 					object sender = args[0];
 					EventArgs eventArgs = (EventArgs)args[1];
@@ -160,7 +164,7 @@ namespace MKY.Utilities.Event
 				}
 				else
 				{
-				#if (DEBUG && HANDLE_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen
+				#if (DEBUG_HANDLE_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen
 					EventHandler<TEventArgs> castedSink = (EventHandler<TEventArgs>)sink;
 					object sender = args[0];
 					TEventArgs eventArgs = (TEventArgs)args[1];
@@ -172,7 +176,7 @@ namespace MKY.Utilities.Event
 					{
 						WriteExceptionToDebugOutput(ex, sink);
 					}
-				#elif (DEBUG && BREAK_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen
+				#elif (DEBUG_BREAK_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen
 					EventHandler<TEventArgs> castedSink = (EventHandler<TEventArgs>)sink;
 					object sender = args[0];
 					TEventArgs eventArgs = (TEventArgs)args[1];

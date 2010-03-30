@@ -85,7 +85,7 @@ namespace YAT.Settings.Terminal
 			get { return (_terminalIsStarted); }
 			set
 			{
-				if (_terminalIsStarted != value)
+				if (value != _terminalIsStarted)
 				{
 					_terminalIsStarted = value;
 					SetChanged();
@@ -99,7 +99,7 @@ namespace YAT.Settings.Terminal
 			get { return (_logIsStarted); }
 			set
 			{
-				if (_logIsStarted != value)
+				if (value != _logIsStarted)
 				{
 					_logIsStarted = value;
 					SetChanged();
@@ -118,7 +118,7 @@ namespace YAT.Settings.Terminal
 					_sendCommand = value;
 					AttachNode(_sendCommand);
 				}
-				else if (_sendCommand != value)
+				else if (value != _sendCommand)
 				{
 					Model.Settings.SendCommandSettings old = _sendCommand;
 					_sendCommand = value;
@@ -138,7 +138,7 @@ namespace YAT.Settings.Terminal
 					_sendFile = value;
 					AttachNode(_sendFile);
 				}
-				else if (_sendFile != value)
+				else if (value != _sendFile)
 				{
 					Model.Settings.SendFileSettings old = _sendFile;
 					_sendFile = value;
@@ -158,7 +158,7 @@ namespace YAT.Settings.Terminal
 					_predefined = value;
 					AttachNode(_predefined);
 				}
-				else if (_predefined != value)
+				else if (value != _predefined)
 				{
 					Model.Settings.PredefinedSettings old = _predefined;
 					_predefined = value;
@@ -178,7 +178,7 @@ namespace YAT.Settings.Terminal
 					_window = value;
 					AttachNode(_window);
 				}
-				else if (_window != value)
+				else if (value != _window)
 				{
 					Model.Settings.WindowSettings old = _window;
 					_window = value;
@@ -198,7 +198,7 @@ namespace YAT.Settings.Terminal
 					_layout = value;
 					AttachNode(_layout);
 				}
-				else if (_layout != value)
+				else if (value != _layout)
 				{
 					Model.Settings.LayoutSettings old = _layout;
 					_layout = value;

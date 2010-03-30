@@ -81,7 +81,7 @@ namespace YAT.Domain.Settings
 			get { return (_keepCommand); }
 			set
 			{
-				if (_keepCommand != value)
+				if (value != _keepCommand)
 				{
 					_keepCommand = value;
 					SetChanged();
@@ -96,7 +96,7 @@ namespace YAT.Domain.Settings
 			get { return (_copyPredefined); }
 			set
 			{
-				if (_copyPredefined != value)
+				if (value != _copyPredefined)
 				{
 					_copyPredefined = value;
 					SetChanged();

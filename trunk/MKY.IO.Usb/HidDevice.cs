@@ -158,10 +158,23 @@ namespace MKY.IO.Usb
 		// Fields
 		//==========================================================================================
 
+		private HidUsage _usage;
+		private int _usagePage;
+
 		private int _inputReportLength;
 		private int _outputReportLength;
+		private int _featureReportLength;
 
-		private HidUsage _usage;
+		private int _linkCollectionNodes;
+		private int _inputButtonCaps;
+		private int _inputValueCaps;
+		private int _inputDataIndices;
+		private int _outputButtonCaps;
+		private int _outputValueCaps;
+		private int _outputDataIndices;
+		private int _featureButtonCaps;
+		private int _featureValueCaps;
+		private int _featureDataIndices;
 
 		#endregion
 
@@ -202,10 +215,23 @@ namespace MKY.IO.Usb
 		{
 			Utilities.Win32.Hid.HIDP_CAPS caps = Utilities.Win32.Hid.GetDeviceCapabilities(DeviceHandle);
 
-			_inputReportLength = caps.InputReportByteLength;
-			_outputReportLength = caps.OutputReportByteLength;
-
 			_usage = (XHidUsage)Utilities.Win32.Hid.GetHidUsage(caps);
+			_usagePage = caps.UsagePage;
+
+			_inputReportLength   = caps.InputReportByteLength;
+			_outputReportLength  = caps.OutputReportByteLength;
+			_featureReportLength = caps.FeatureReportByteLength;
+
+			_linkCollectionNodes = caps.NumberLinkCollectionNodes;
+			_inputButtonCaps     = caps.NumberInputButtonCaps;
+			_inputValueCaps      = caps.NumberInputValueCaps;
+			_inputDataIndices    = caps.NumberInputDataIndices;
+			_outputButtonCaps    = caps.NumberOutputButtonCaps;
+			_outputValueCaps     = caps.NumberOutputValueCaps;
+			_outputDataIndices   = caps.NumberOutputDataIndices;
+			_featureButtonCaps   = caps.NumberFeatureButtonCaps;
+			_featureValueCaps    = caps.NumberFeatureValueCaps;
+			_featureDataIndices  = caps.NumberFeatureDataIndices;
 
 			Utilities.Win32.Hid.FlushQueue(DeviceHandle);
 		}
@@ -235,6 +261,18 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
+		public virtual HidUsage Usage
+		{
+			get { return (_usage); }
+		}
+
+		/// <summary></summary>
+		public virtual int UsagePage
+		{
+			get { return (_usagePage); }
+		}
+
+		/// <summary></summary>
 		public virtual int InputReportLength
 		{
 			get { return (_inputReportLength); }
@@ -247,9 +285,69 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		public virtual HidUsage Usage
+		public virtual int FeatureReportLength
 		{
-			get { return (_usage); }
+			get { return (_featureReportLength); }
+		}
+
+		/// <summary></summary>
+		public virtual int LinkCollectionNodes
+		{
+			get { return (_linkCollectionNodes); }
+		}
+
+		/// <summary></summary>
+		public virtual int InputButtonCaps
+		{
+			get { return (_inputButtonCaps); }
+		}
+
+		/// <summary></summary>
+		public virtual int InputValueCaps
+		{
+			get { return (_inputValueCaps); }
+		}
+
+		/// <summary></summary>
+		public virtual int InputDataIndices
+		{
+			get { return (_inputDataIndices); }
+		}
+
+		/// <summary></summary>
+		public virtual int OutputButtonCaps
+		{
+			get { return (_outputButtonCaps); }
+		}
+
+		/// <summary></summary>
+		public virtual int OutputValueCaps
+		{
+			get { return (_outputValueCaps); }
+		}
+
+		/// <summary></summary>
+		public virtual int OutputDataIndices
+		{
+			get { return (_outputDataIndices); }
+		}
+
+		/// <summary></summary>
+		public virtual int FeatureButtonCaps
+		{
+			get { return (_featureButtonCaps); }
+		}
+
+		/// <summary></summary>
+		public virtual int FeatureValueCaps
+		{
+			get { return (_featureValueCaps); }
+		}
+
+		/// <summary></summary>
+		public virtual int FeatureDataIndices
+		{
+			get { return (_featureDataIndices); }
 		}
 
 		#endregion

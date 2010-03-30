@@ -72,6 +72,7 @@
     <Compile Include="Recent\RecentItemCollection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Runtime.InteropServices\XIntPtr.cs" />
     <Compile Include="Settings\ApplicationSettingsHandler.cs" />
     <Compile Include="Settings\DocumentSettingsHandler.cs" />
     <Compile Include="Event\EventHelper.cs" />

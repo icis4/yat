@@ -15,19 +15,17 @@
 //==================================================================================================
 
 using System;
+using System.Runtime.InteropServices;
 
 namespace MKY.Utilities.Win32
 {
 	/// <summary>
-	/// Encapsulates general constants of the Win32 API.
+	/// Extends <see cref=" IntPtr"/>.
 	/// </summary>
-	public static class Constants
+	public static class XIntPtr
 	{
 		/// <summary></summary>
-		public const int WAIT_TIMEOUT = 0x0102;
-	
-		/// <summary></summary>
-		public const int WAIT_OBJECT_0 = 0;
+		public static readonly IntPtr Invalid = new IntPtr(-1);
 	}
 }
 

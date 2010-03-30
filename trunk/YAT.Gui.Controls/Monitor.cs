@@ -162,7 +162,7 @@ namespace YAT.Gui.Controls
 			get { return (_repositoryType); }
 			set
 			{
-				if (_repositoryType != value)
+				if (value != _repositoryType)
 				{
 					_repositoryType = value;
 					SetControls();
@@ -178,7 +178,7 @@ namespace YAT.Gui.Controls
 			get { return (_activityState); }
 			set
 			{
-				if (_activityState != value)
+				if (value != _activityState)
 				{
 					_activityState = value;
 					SetControls();
@@ -194,7 +194,7 @@ namespace YAT.Gui.Controls
 			get { return (_maxLineCount); }
 			set
 			{
-				if (_maxLineCount != value)
+				if (value != _maxLineCount)
 				{
 					_maxLineCount = value;
 					Reload();
@@ -208,7 +208,7 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				if (_formatSettings != value)
+				if (value != _formatSettings)
 				{
 					_formatSettings = value;
 					SetFormatDependentControls();
@@ -224,7 +224,7 @@ namespace YAT.Gui.Controls
 			get { return (_showTimeStatus); }
 			set
 			{
-				if (_showTimeStatus != value)
+				if (value != _showTimeStatus)
 				{
 					_showTimeStatus = value;
 					SetTimeStatusControls();
@@ -240,7 +240,7 @@ namespace YAT.Gui.Controls
 			get { return (_connectTime); }
 			set
 			{
-				if (_connectTime != value)
+				if (value != _connectTime)
 				{
 					_connectTime = value;
 					SetTimeStatusControls();
@@ -256,7 +256,7 @@ namespace YAT.Gui.Controls
 			get { return (_showCountStatus); }
 			set
 			{
-				if (_showCountStatus != value)
+				if (value != _showCountStatus)
 				{
 					_showCountStatus = value;
 					SetCountStatusControls();
@@ -272,7 +272,7 @@ namespace YAT.Gui.Controls
 			get { return (_txByteCountStatus); }
 			set
 			{
-				if (_txByteCountStatus != value)
+				if (value != _txByteCountStatus)
 				{
 					_txByteCountStatus = value;
 					SetCountStatusControls();
@@ -288,7 +288,7 @@ namespace YAT.Gui.Controls
 			get { return (_txLineCountStatus); }
 			set
 			{
-				if (_txLineCountStatus != value)
+				if (value != _txLineCountStatus)
 				{
 					_txLineCountStatus = value;
 					SetCountStatusControls();
@@ -304,7 +304,7 @@ namespace YAT.Gui.Controls
 			get { return (_rxByteCountStatus); }
 			set
 			{
-				if (_rxByteCountStatus != value)
+				if (value != _rxByteCountStatus)
 				{
 					_rxByteCountStatus = value;
 					SetCountStatusControls();
@@ -320,7 +320,7 @@ namespace YAT.Gui.Controls
 			get { return (_rxLineCountStatus); }
 			set
 			{
-				if (_rxLineCountStatus != value)
+				if (value != _rxLineCountStatus)
 				{
 					_rxLineCountStatus = value;
 					SetCountStatusControls();

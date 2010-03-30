@@ -128,7 +128,7 @@ namespace MKY.IO.Usb
 		{
 			List<DeviceInfo> devices = new List<DeviceInfo>();
 
-			/*foreach (string path in Utilities.Win32.DeviceManagement.GetDevicesFromGuid(classGuid))
+			foreach (string path in Utilities.Win32.DeviceManagement.GetDevicesFromGuid(classGuid))
 			{
 				DeviceInfo device = GetDeviceInfoFromPath(path);
 				if (device != null)
@@ -136,9 +136,7 @@ namespace MKY.IO.Usb
 					if (device.TryValidate())
 						devices.Add(device);
 				}
-			}*/
-
-			devices.Add(new DeviceInfo("\\\\?\\hid#vid_0eb8&pid_2200#7&60895a0&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}", 0x0EB8, 0x2200, "MT", "RB", "1234"));
+			}
 
 			return (devices.ToArray());
 		}
@@ -521,8 +519,7 @@ namespace MKY.IO.Usb
 		private void Initialize()
 		{
 			// Get and store the handle to the USB device.
-			if (!Utilities.Win32.Hid.CreateReadWriteHandle(_deviceInfo.Path, out _deviceHandle))
-//			if (!Utilities.Win32.Hid.CreateDeviceHandle(_deviceInfo.Path, out _deviceHandle))
+			if (!Utilities.Win32.Hid.CreateDeviceHandle(_deviceInfo.Path, out _deviceHandle))
 				throw (new UsbException("Failed to retrieve device handle for USB device" + Environment.NewLine + _deviceInfo.Path));
 
 			// Getting a handle means that the device is connected to the computer.

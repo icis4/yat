@@ -79,7 +79,7 @@ namespace YAT.Domain.Settings
 			get { return (_txBufferSize); }
 			set
 			{
-				if (_txBufferSize != value)
+				if (value != _txBufferSize)
 				{
 					_txBufferSize = value;
 					SetChanged();
@@ -94,7 +94,7 @@ namespace YAT.Domain.Settings
 			get { return (_rxBufferSize); }
 			set
 			{
-				if (_rxBufferSize != value)
+				if (value != _rxBufferSize)
 				{
 					_rxBufferSize = value;
 					SetChanged();

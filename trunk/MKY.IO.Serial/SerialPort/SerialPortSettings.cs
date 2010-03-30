@@ -110,7 +110,7 @@ namespace MKY.IO.Serial
 			get { return (_portId); }
 			set
 			{
-				if (_portId != value)
+				if (value != _portId)
 				{
 					_portId = value;
 
@@ -134,7 +134,7 @@ namespace MKY.IO.Serial
 					_communication = value;
 					AttachNode(_communication);
 				}
-				else if (_communication != value)
+				else if (value != _communication)
 				{
 					SerialCommunicationSettings old = _communication;
 					_communication = value;
@@ -150,7 +150,7 @@ namespace MKY.IO.Serial
 			get { return (_autoReopen); }
 			set
 			{
-				if (_autoReopen != value)
+				if (value != _autoReopen)
 				{
 					_autoReopen = value;
 					SetChanged();
@@ -165,7 +165,7 @@ namespace MKY.IO.Serial
 			get { return (_replaceParityErrors); }
 			set
 			{
-				if (_replaceParityErrors != value)
+				if (value != _replaceParityErrors)
 				{
 					_replaceParityErrors = value;
 					SetChanged();
@@ -180,7 +180,7 @@ namespace MKY.IO.Serial
 			get { return (_parityErrorReplacement); }
 			set
 			{
-				if (_parityErrorReplacement != value)
+				if (value != _parityErrorReplacement)
 				{
 					_parityErrorReplacement = value;
 					SetChanged();
@@ -195,7 +195,7 @@ namespace MKY.IO.Serial
 			get { return (_rtsEnabled); }
 			set
 			{
-				if (_rtsEnabled != value)
+				if (value != _rtsEnabled)
 				{
 					_rtsEnabled = value;
 					SetChanged();
@@ -210,7 +210,7 @@ namespace MKY.IO.Serial
 			get { return (_dtrEnabled); }
 			set
 			{
-				if (_dtrEnabled != value)
+				if (value != _dtrEnabled)
 				{
 					_dtrEnabled = value;
 					SetChanged();

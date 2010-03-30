@@ -123,7 +123,7 @@ namespace YAT.Domain.Settings
 			get { return (_separateTxRxRadix); }
 			set
 			{
-				if (_separateTxRxRadix != value)
+				if (value != _separateTxRxRadix)
 				{
 					_separateTxRxRadix = value;
 					SetChanged();
@@ -138,7 +138,7 @@ namespace YAT.Domain.Settings
 			get { return (_txRadix); }
 			set
 			{
-				if (_txRadix != value)
+				if (value != _txRadix)
 				{
 					_txRadix = value;
 					SetChanged();
@@ -159,7 +159,7 @@ namespace YAT.Domain.Settings
 			}
 			set
 			{
-				if (_rxRadix != value)
+				if (value != _rxRadix)
 				{
 					_rxRadix = value;
 					SetChanged();
@@ -174,7 +174,7 @@ namespace YAT.Domain.Settings
 			get { return (_showRadix); }
 			set
 			{
-				if (_showRadix != value)
+				if (value != _showRadix)
 				{
 					_showRadix = value;
 					SetChanged();
@@ -189,7 +189,7 @@ namespace YAT.Domain.Settings
 			get { return (_showTimeStamp); }
 			set
 			{
-				if (_showTimeStamp != value)
+				if (value != _showTimeStamp)
 				{
 					_showTimeStamp = value;
 					SetChanged();
@@ -204,7 +204,7 @@ namespace YAT.Domain.Settings
 			get { return (_showLength); }
 			set
 			{
-				if (_showLength != value)
+				if (value != _showLength)
 				{
 					_showLength = value;
 					SetChanged();
@@ -219,7 +219,7 @@ namespace YAT.Domain.Settings
 			get { return (_showConnectTime); }
 			set
 			{
-				if (_showConnectTime != value)
+				if (value != _showConnectTime)
 				{
 					_showConnectTime = value;
 					SetChanged();
@@ -234,7 +234,7 @@ namespace YAT.Domain.Settings
 			get { return (_showCounters); }
 			set
 			{
-				if (_showCounters != value)
+				if (value != _showCounters)
 				{
 					_showCounters = value;
 					SetChanged();
@@ -249,7 +249,7 @@ namespace YAT.Domain.Settings
 			get { return (_txMaxLineCount); }
 			set
 			{
-				if (_txMaxLineCount != value)
+				if (value != _txMaxLineCount)
 				{
 					if (value < 1)
 						throw (new ArgumentOutOfRangeException("TxMaxLineCount", "Line count must at least be 1"));
@@ -267,7 +267,7 @@ namespace YAT.Domain.Settings
 			get { return (_rxMaxLineCount); }
 			set
 			{
-				if (_rxMaxLineCount != value)
+				if (value != _rxMaxLineCount)
 				{
 					if (value < 1)
 						throw (new ArgumentOutOfRangeException("RxMaxLineCount", "Line count must at least be 1"));
@@ -292,7 +292,7 @@ namespace YAT.Domain.Settings
 			get { return (_directionLineBreakEnabled); }
 			set
 			{
-				if (_directionLineBreakEnabled != value)
+				if (value != _directionLineBreakEnabled)
 				{
 					_directionLineBreakEnabled = value;
 					SetChanged();
