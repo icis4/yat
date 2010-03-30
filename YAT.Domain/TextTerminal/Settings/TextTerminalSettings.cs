@@ -101,7 +101,7 @@ namespace YAT.Domain.Settings
 			get { return (_separateTxRxEol); }
 			set
 			{
-				if (_separateTxRxEol != value)
+				if (value != _separateTxRxEol)
 				{
 					_separateTxRxEol = value;
 					SetChanged();
@@ -116,7 +116,7 @@ namespace YAT.Domain.Settings
 			get { return (_txEol); }
 			set
 			{
-				if (_txEol != value)
+				if (value != _txEol)
 				{
 					_txEol = value;
 					SetChanged();
@@ -137,7 +137,7 @@ namespace YAT.Domain.Settings
 			}
 			set
 			{
-				if (_rxEol != value)
+				if (value != _rxEol)
 				{
 					_rxEol = value;
 					SetChanged();
@@ -152,7 +152,7 @@ namespace YAT.Domain.Settings
 			get { return (_encoding); }
 			set
 			{
-				if (_encoding != value)
+				if (value != _encoding)
 				{
 					_encoding = value;
 					SetChanged();
@@ -167,7 +167,7 @@ namespace YAT.Domain.Settings
 			get { return (_showEol); }
 			set
 			{
-				if (_showEol != value)
+				if (value != _showEol)
 				{
 					_showEol = value;
 					SetChanged();
@@ -182,7 +182,7 @@ namespace YAT.Domain.Settings
 			get { return (_lineSendDelay); }
 			set
 			{
-				if (_lineSendDelay != value)
+				if (value != _lineSendDelay)
 				{
 					_lineSendDelay = value;
 					SetChanged();
@@ -197,7 +197,7 @@ namespace YAT.Domain.Settings
 			get { return (_waitForResponse); }
 			set
 			{
-				if (_waitForResponse != value)
+				if (value != _waitForResponse)
 				{
 					_waitForResponse = value;
 					SetChanged();
@@ -212,7 +212,7 @@ namespace YAT.Domain.Settings
 			get { return (_charSubstitution); }
 			set
 			{
-				if (_charSubstitution != value)
+				if (value != _charSubstitution)
 				{
 					_charSubstitution = value;
 					SetChanged();

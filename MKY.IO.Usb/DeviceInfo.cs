@@ -221,11 +221,7 @@ namespace MKY.IO.Usb
 		public virtual int VendorId
 		{
 			get { return (_vendorId); }
-			set
-			{
-				if (_vendorId != value)
-					_vendorId = value;
-			}
+			set { _vendorId = value;  }
 		}
 
 		/// <summary></summary>
@@ -240,11 +236,7 @@ namespace MKY.IO.Usb
 		public virtual int ProductId
 		{
 			get { return (_productId); }
-			set
-			{
-				if (_productId != value)
-					_productId = value;
-			}
+			set { _productId = value;  }
 		}
 
 		/// <summary></summary>

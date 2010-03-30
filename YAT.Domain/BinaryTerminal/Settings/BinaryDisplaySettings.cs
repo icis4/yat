@@ -79,7 +79,7 @@ namespace YAT.Domain.Settings
 			get { return (_lengthLineBreak); }
 			set
 			{
-				if (_lengthLineBreak != value)
+				if (value != _lengthLineBreak)
 				{
 					_lengthLineBreak = value;
 					SetChanged();
@@ -94,7 +94,7 @@ namespace YAT.Domain.Settings
 			get { return (_sequenceLineBreak); }
 			set
 			{
-				if (_sequenceLineBreak != value)
+				if (value != _sequenceLineBreak)
 				{
 					_sequenceLineBreak = value;
 					SetChanged();
@@ -109,7 +109,7 @@ namespace YAT.Domain.Settings
 			get { return (_timedLineBreak); }
 			set
 			{
-				if (_timedLineBreak != value)
+				if (value != _timedLineBreak)
 				{
 					_timedLineBreak = value;
 					SetChanged();

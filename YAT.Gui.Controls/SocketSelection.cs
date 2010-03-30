@@ -122,7 +122,7 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				if (_hostType != value)
+				if (value != _hostType)
 				{
 					_hostType = value;
 					SetControls();
@@ -137,7 +137,7 @@ namespace YAT.Gui.Controls
 			get { return (_remoteHost); }
 			set
 			{
-				if (_remoteHost != value)
+				if (value != _remoteHost)
 				{
 					_remoteHost = value;
 					SetControls();
@@ -161,7 +161,7 @@ namespace YAT.Gui.Controls
 			get { return (_remotePort); }
 			set
 			{
-				if (_remotePort != value)
+				if (value != _remotePort)
 				{
 					_remotePort = value;
 					SetControls();
@@ -177,7 +177,7 @@ namespace YAT.Gui.Controls
 			get { return (_localInterface); }
 			set
 			{
-				if (_localInterface != value)
+				if (value != _localInterface)
 				{
 					_localInterface = value;
 					SetControls();
@@ -201,7 +201,7 @@ namespace YAT.Gui.Controls
 			get { return (_localTcpPort); }
 			set
 			{
-				if (_localTcpPort != value)
+				if (value != _localTcpPort)
 				{
 					_localTcpPort = value;
 					SetControls();
@@ -218,7 +218,7 @@ namespace YAT.Gui.Controls
 			get { return (_localUdpPort); }
 			set
 			{
-				if (_localUdpPort != value)
+				if (value != _localUdpPort)
 				{
 					_localUdpPort = value;
 					SetControls();

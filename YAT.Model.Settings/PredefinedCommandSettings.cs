@@ -78,7 +78,7 @@ namespace YAT.Model.Settings
 			get { return (_pages); }
 			set
 			{
-				if (_pages != value)
+				if (value != _pages)
 				{
 					_pages = value;
 					SetChanged();

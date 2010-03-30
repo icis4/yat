@@ -168,7 +168,7 @@ namespace MKY.Utilities.Win32
 		/// </summary>
 		/// <param name="hFile">The device handle.</param>
 		/// <returns>True on success, false on failure.</returns>
-		[DllImport(KERNEL_DLL, SetLastError = true)]
+		[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		public static extern Boolean CancelIo(SafeFileHandle hFile);
 
 		/// <summary>
@@ -180,15 +180,15 @@ namespace MKY.Utilities.Win32
 		/// <param name="bInitialState">Initial state = False (Not signaled.)</param>
 		/// <param name="lpName">An event object name (optional).</param>
 		/// <returns>A handle to the event object.</returns>
-		[DllImport(KERNEL_DLL, CharSet = CharSet.Ansi, SetLastError = true)]
-		public static extern IntPtr CreateEvent(IntPtr SecurityAttributes, Boolean bManualReset, Boolean bInitialState, [MarshalAs(UnmanagedType.LPStr)] String lpName);
+		[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+		public static extern IntPtr CreateEvent(IntPtr SecurityAttributes, Boolean bManualReset, Boolean bInitialState, String lpName);
 
 		/// <summary></summary>
 		[CLSCompliant(false)]
-		[DllImport(KERNEL_DLL, CharSet = CharSet.Ansi, SetLastError = true)]
-		public static extern SafeFileHandle CreateFile([MarshalAs(UnmanagedType.LPStr)] String lpFileName, Access dwDesiredAccess, ShareMode dwShareMode, IntPtr lpSecurityAttributes, CreationDisposition dwCreationDisposition, AttributesAndFlags dwFlagsAndAttributes, IntPtr hTemplateFile);
+		[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+		public static extern SafeFileHandle CreateFile(String lpFileName, Access dwDesiredAccess, ShareMode dwShareMode, IntPtr lpSecurityAttributes, CreationDisposition dwCreationDisposition, AttributesAndFlags dwFlagsAndAttributes, IntPtr hTemplateFile);
 
-		[DllImport(KERNEL_DLL, SetLastError = true)]
+		[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern Boolean GetOverlappedResult(SafeFileHandle hFile, IntPtr lpOverlapped, out UInt32 lpNumberOfBytesTransferred, Boolean bWait);
 		/// <summary>
 		/// Gets the result of an overlapped operation.
@@ -206,7 +206,7 @@ namespace MKY.Utilities.Win32
 			return (success);
 		}
 
-		[DllImport(KERNEL_DLL, SetLastError = true)]
+		[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern Boolean ReadFile(SafeFileHandle hFile, IntPtr lpBuffer, UInt32 nNumberOfBytesToRead, out UInt32 lpNumberOfBytesRead, IntPtr lpOverlapped);
 		/// <summary>
 		/// Attempts to read an Input report from the device.
@@ -240,10 +240,10 @@ namespace MKY.Utilities.Win32
 		/// <param name="dwMilliseconds">A timeout value in milliseconds.</param>
 		/// <returns>A result code.</returns>
 		[CLSCompliant(false)]
-		[DllImport(KERNEL_DLL, SetLastError = true)]
+		[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		public static extern UInt32 WaitForSingleObject(IntPtr hHandle, UInt32 dwMilliseconds);
 
-		[DllImport(KERNEL_DLL, SetLastError = true)]
+		[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern Boolean WriteFile(SafeFileHandle hFile, Byte[] lpBuffer, UInt32 nNumberOfBytesToWrite, out UInt32 lpNumberOfBytesWritten, IntPtr lpOverlapped);
 		/// <summary>
 		/// Writes an Output report to the device.

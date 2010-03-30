@@ -88,7 +88,7 @@ namespace YAT.Settings
 			get { return (_autoOpenWorkspace); }
 			set
 			{
-				if (_autoOpenWorkspace != value)
+				if (value != _autoOpenWorkspace)
 				{
 					_autoOpenWorkspace = value;
 					SetChanged();
@@ -102,7 +102,7 @@ namespace YAT.Settings
 			get { return (_autoSaveWorkspace); }
 			set
 			{
-				if (_autoSaveWorkspace != value)
+				if (value != _autoSaveWorkspace)
 				{
 					_autoSaveWorkspace = value;
 					SetChanged();
@@ -116,7 +116,7 @@ namespace YAT.Settings
 			get { return (_useRelativePaths); }
 			set
 			{
-				if (_useRelativePaths != value)
+				if (value != _useRelativePaths)
 				{
 					_useRelativePaths = value;
 					SetChanged();
@@ -130,7 +130,7 @@ namespace YAT.Settings
 			get { return (_detectSerialPortsInUse); }
 			set
 			{
-				if (_detectSerialPortsInUse != value)
+				if (value != _detectSerialPortsInUse)
 				{
 					_detectSerialPortsInUse = value;
 					SetChanged();

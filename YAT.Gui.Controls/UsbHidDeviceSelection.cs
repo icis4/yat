@@ -35,6 +35,61 @@ namespace YAT.Gui.Controls
 	[DefaultEvent("DeviceInfoChanged")]
 	public partial class UsbHidDeviceSelection : UserControl
 	{
+		#region Types
+		//==========================================================================================
+		// Types
+		//==========================================================================================
+
+		private class MarkDevicesInUseThread
+		{
+			private DeviceCollection _deviceList;
+			private bool _isScanning = true;
+			private string _status2 = "";
+			private bool _cancelScanning = false;
+
+			public MarkDevicesInUseThread(DeviceCollection deviceList)
+			{
+				_deviceList = deviceList;
+			}
+
+			public virtual DeviceCollection DeviceList
+			{
+				get { return (_deviceList); }
+			}
+
+			public virtual bool IsScanning
+			{
+				get { return (_isScanning); }
+			}
+
+			public virtual string Status2
+			{
+				get { return (_status2); }
+			}
+
+			public virtual void MarkDevicesInUse()
+			{
+				_deviceList.MarkDevicesInUse(portList_MarkDevicesInUseCallback);
+				_isScanning = false;
+
+				StatusBox.AcceptAndClose();
+			}
+
+			public virtual void CancelScanning()
+			{
+				_cancelScanning = true;
+			}
+
+			private void portList_MarkDevicesInUseCallback(object sender, DeviceCollection.DeviceChangedAndCancelEventArgs e)
+			{
+				_status2 = "Scanning " + e.Device + "...";
+				StatusBox.UpdateStatus2(_status2);
+				e.Cancel = _cancelScanning;
+			}
+		}
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -43,6 +98,8 @@ namespace YAT.Gui.Controls
 		private bool _isSettingControls = false;
 
 		private DeviceInfo _deviceInfo = DeviceInfo.GetDefaultDevice(DeviceClass.Hid);
+
+		private MarkDevicesInUseThread _markDevicesInUseThread;
 
 		#endregion
 
@@ -83,9 +140,9 @@ namespace YAT.Gui.Controls
 			{
 				// Don't accept to set the device to null/nothing. Master is the device list. If
 				// devices are available, there is always a device selected.
-				if (_deviceInfo != null)
+				if (value != null)
 				{
-					if (_deviceInfo != value)
+					if (value != _deviceInfo)
 					{
 						_deviceInfo = value;
 						SetControls();
@@ -93,6 +150,14 @@ namespace YAT.Gui.Controls
 					}
 				}
 			}
+		}
+
+		/// <summary>
+		/// Indicates whether the device selection is a valid device.
+		/// </summary>
+		public bool IsValid
+		{
+			get { return (_deviceInfo != null); }
 		}
 
 		#endregion
@@ -152,63 +217,6 @@ namespace YAT.Gui.Controls
 			SetDeviceList();
 		}
 
-		#endregion
-
-		#region Private Methods
-		//==========================================================================================
-		// Private Methods
-		//==========================================================================================
-
-		private class MarkDevicesInUseThread
-		{
-			private DeviceCollection _deviceList;
-			private bool _isScanning = true;
-			private string _status2 = "";
-			private bool _cancelScanning = false;
-
-			public MarkDevicesInUseThread(DeviceCollection deviceList)
-			{
-				_deviceList = deviceList;
-			}
-
-			public virtual DeviceCollection DeviceList
-			{
-				get { return (_deviceList); }
-			}
-
-			public virtual bool IsScanning
-			{
-				get { return (_isScanning); }
-			}
-
-			public virtual string Status2
-			{
-				get { return (_status2); }
-			}
-
-			public virtual void MarkDevicesInUse()
-			{
-				_deviceList.MarkDevicesInUse(portList_MarkDevicesInUseCallback);
-				_isScanning = false;
-
-				StatusBox.AcceptAndClose();
-			}
-
-			public virtual void CancelScanning()
-			{
-				_cancelScanning = true;
-			}
-
-			private void portList_MarkDevicesInUseCallback(object sender, DeviceCollection.DeviceChangedAndCancelEventArgs e)
-			{
-				_status2 = "Scanning " + e.Device + "...";
-				StatusBox.UpdateStatus2(_status2);
-				e.Cancel = _cancelScanning;
-			}
-		}
-
-		private MarkDevicesInUseThread _markDevicesInUseThread;
-
 		private void timer_ShowScanDialog_Tick(object sender, EventArgs e)
 		{
 			timer_ShowScanDialog.Stop();
@@ -217,10 +225,17 @@ namespace YAT.Gui.Controls
 
 			if (StatusBox.Show(this, "Scanning devices...", "USB Device Scan", _markDevicesInUseThread.Status2, "&Detect ports that are in use", ref setting) != DialogResult.OK)
 				_markDevicesInUseThread.CancelScanning();
-			
+
 			ApplicationSettings.LocalUser.General.DetectSerialPortsInUse = setting;
 			ApplicationSettings.Save();
 		}
+
+		#endregion
+
+		#region Private Methods
+		//==========================================================================================
+		// Private Methods
+		//==========================================================================================
 
 		private void SetDeviceList()
 		{

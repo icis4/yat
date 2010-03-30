@@ -81,7 +81,7 @@ namespace YAT.Settings.Terminal
 					_terminal = value;
 					AttachNode(_terminal);
 				}
-				else if (_terminal != value)
+				else if (value != _terminal)
 				{
 					Domain.Settings.TerminalSettings old = _terminal;
 					_terminal = value;
@@ -101,7 +101,7 @@ namespace YAT.Settings.Terminal
 					_predefinedCommand = value;
 					AttachNode(_predefinedCommand);
 				}
-				else if (_predefinedCommand != value)
+				else if (value != _predefinedCommand)
 				{
 					Model.Settings.PredefinedCommandSettings old = _predefinedCommand;
 					_predefinedCommand = value;
@@ -121,7 +121,7 @@ namespace YAT.Settings.Terminal
 					_format = value;
 					AttachNode(_format);
 				}
-				else if (_format != value)
+				else if (value != _format)
 				{
 					Model.Settings.FormatSettings old = _format;
 					_format = value;
@@ -141,7 +141,7 @@ namespace YAT.Settings.Terminal
 					_charReplace = value;
 					AttachNode(_charReplace);
 				}
-				else if (_charReplace != value)
+				else if (value != _charReplace)
 				{
 					Domain.Settings.CharReplaceSettings old = _charReplace;
 					_charReplace = value;
@@ -161,7 +161,7 @@ namespace YAT.Settings.Terminal
 					_log = value;
 					AttachNode(_log);
 				}
-				else if (_log != value)
+				else if (value != _log)
 				{
 					Log.Settings.LogSettings old = _log;
 					_log = value;

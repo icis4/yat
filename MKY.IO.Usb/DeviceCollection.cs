@@ -19,7 +19,7 @@ using System.Collections.Generic;
 namespace MKY.IO.Usb
 {
 	/// <summary>
-	/// List containing USB device IDs.
+	/// List containing USB device infos.
 	/// </summary>
 	[Serializable]
 	public class DeviceCollection : List<DeviceInfo>
@@ -87,12 +87,12 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Checks all ports whether they are currently in use and marks them.
+		/// Checks all devices whether they are currently in use and marks them.
 		/// </summary>
 		/// <param name="deviceChangedCallback">
-		/// Callback delegate, can be used to get an event each time a new port is being
-		/// tried to be opened. Set the <see cref="DeviceChangedAndCancelEventArgs.Cancel"/>
-		/// property the true to cancel port scanning.
+		/// Callback delegate, can be used to get an event each time a new device is being queried.
+		/// Set the <see cref="DeviceChangedAndCancelEventArgs.Cancel"/> property the true to
+		/// cancel device scanning.
 		/// </param>
 		public virtual void MarkDevicesInUse(EventHandler<DeviceChangedAndCancelEventArgs> deviceChangedCallback)
 		{

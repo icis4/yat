@@ -240,7 +240,7 @@ namespace YAT.Log.Settings
 			get { return (_rootPath); }
 			set
 			{
-				if (_rootPath != value)
+				if (value != _rootPath)
 				{
 					_rootPath = value;
 					SetChanged();
@@ -255,7 +255,7 @@ namespace YAT.Log.Settings
 			get { return (_rootFileName); }
 			set
 			{
-				if (_rootFileName != value)
+				if (value != _rootFileName)
 				{
 					_rootFileName = value;
 					SetChanged();
@@ -279,7 +279,7 @@ namespace YAT.Log.Settings
 			get { return (_rawLogTx); }
 			set
 			{
-				if (_rawLogTx != value)
+				if (value != _rawLogTx)
 				{
 					_rawLogTx = value;
 					SetChanged();
@@ -314,7 +314,7 @@ namespace YAT.Log.Settings
 			get { return (_rawLogBidir); }
 			set
 			{
-				if (_rawLogBidir != value)
+				if (value != _rawLogBidir)
 				{
 					_rawLogBidir = value;
 					SetChanged();
@@ -349,7 +349,7 @@ namespace YAT.Log.Settings
 			get { return (_rawLogRx); }
 			set
 			{
-				if (_rawLogRx != value)
+				if (value != _rawLogRx)
 				{
 					_rawLogRx = value;
 					SetChanged();
@@ -384,7 +384,7 @@ namespace YAT.Log.Settings
 			get { return (_rawExtension); }
 			set
 			{
-				if (_rawExtension != value)
+				if (value != _rawExtension)
 				{
 					_rawExtension = value;
 					SetChanged();
@@ -401,7 +401,7 @@ namespace YAT.Log.Settings
 			get { return (_neatLogTx); }
 			set
 			{
-				if (_neatLogTx != value)
+				if (value != _neatLogTx)
 				{
 					_neatLogTx = value;
 					SetChanged();
@@ -436,7 +436,7 @@ namespace YAT.Log.Settings
 			get { return (_neatLogBidir); }
 			set
 			{
-				if (_neatLogBidir != value)
+				if (value != _neatLogBidir)
 				{
 					_neatLogBidir = value;
 					SetChanged();
@@ -471,7 +471,7 @@ namespace YAT.Log.Settings
 			get { return (_neatLogRx); }
 			set
 			{
-				if (_neatLogRx != value)
+				if (value != _neatLogRx)
 				{
 					_neatLogRx = value;
 					SetChanged();
@@ -506,7 +506,7 @@ namespace YAT.Log.Settings
 			get { return (_neatExtension); }
 			set
 			{
-				if (_neatExtension != value)
+				if (value != _neatExtension)
 				{
 					_neatExtension = value;
 					SetChanged();
@@ -591,7 +591,7 @@ namespace YAT.Log.Settings
 			get { return (_writeMode); }
 			set
 			{
-				if (_writeMode != value)
+				if (value != _writeMode)
 				{
 					_writeMode = value;
 					SetChanged();
@@ -608,7 +608,7 @@ namespace YAT.Log.Settings
 			get { return (_subdirectoriesFormat); }
 			set
 			{
-				if (_subdirectoriesFormat != value)
+				if (value != _subdirectoriesFormat)
 				{
 					_subdirectoriesFormat = value;
 					SetChanged();
@@ -623,7 +623,7 @@ namespace YAT.Log.Settings
 			get { return (_subdirectoriesChannel); }
 			set
 			{
-				if (_subdirectoriesChannel != value)
+				if (value != _subdirectoriesChannel)
 				{
 					_subdirectoriesChannel = value;
 					SetChanged();
@@ -640,7 +640,7 @@ namespace YAT.Log.Settings
 			get { return (_nameFormat); }
 			set
 			{
-				if (_nameFormat != value)
+				if (value != _nameFormat)
 				{
 					_nameFormat = value;
 					SetChanged();
@@ -655,7 +655,7 @@ namespace YAT.Log.Settings
 			get { return (_nameChannel); }
 			set
 			{
-				if (_nameChannel != value)
+				if (value != _nameChannel)
 				{
 					_nameChannel = value;
 					SetChanged();
@@ -670,7 +670,7 @@ namespace YAT.Log.Settings
 			get { return (_nameDate); }
 			set
 			{
-				if (_nameDate != value)
+				if (value != _nameDate)
 				{
 					_nameDate = value;
 					SetChanged();
@@ -685,7 +685,7 @@ namespace YAT.Log.Settings
 			get { return (_nameTime); }
 			set
 			{
-				if (_nameTime != value)
+				if (value != _nameTime)
 				{
 					_nameTime = value;
 					SetChanged();
@@ -700,7 +700,7 @@ namespace YAT.Log.Settings
 			get { return (_nameSeparator); }
 			set
 			{
-				if (_nameSeparator != value)
+				if (value != _nameSeparator)
 				{
 					_nameSeparator = value;
 					SetChanged();

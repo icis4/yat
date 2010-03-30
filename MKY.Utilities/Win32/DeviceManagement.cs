@@ -101,7 +101,7 @@ namespace MKY.Utilities.Win32
 		/// Must be a class because <see cref="Marshal.PtrToStructure(IntPtr, object)"/> and
 		/// <see cref="RegisterDeviceNotification"/> require a reference type.
 		/// </remarks>
-		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+		[StructLayout(LayoutKind.Sequential)]
 		private class DEV_BROADCAST_DEVICEINTERFACE
 		{
 			public UInt32      dbcc_size;
@@ -183,7 +183,7 @@ namespace MKY.Utilities.Win32
 		[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern IntPtr RegisterDeviceNotification(IntPtr hRecipient, DEV_BROADCAST_DEVICEINTERFACE NotificationFilter, DEVICE_NOTIFY Flags);
 
-		[DllImport(SETUP_DLL, SetLastError = true)]
+		[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern Int32 SetupDiCreateDeviceInfoList(ref System.Guid ClassGuid, Int32 hwndParent);
 
 		/// <summary>
@@ -191,7 +191,7 @@ namespace MKY.Utilities.Win32
 		/// </summary>
 		/// <param name="DeviceInfoSet"></param>
 		/// <returns>True on success.</returns>
-		[DllImport(SETUP_DLL, SetLastError = true)]
+		[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern Int32 SetupDiDestroyDeviceInfoList(IntPtr DeviceInfoSet);
 
 		/// <summary>
@@ -205,7 +205,7 @@ namespace MKY.Utilities.Win32
 		/// <param name="MemberIndex">Index to specify a device in a device information set.</param>
 		/// <param name="DeviceInterfaceData">Pointer to a handle to a SP_DEVICE_INTERFACE_DATA structure for a device.</param>
 		/// <returns>True on success.</returns>
-		[DllImport(SETUP_DLL, SetLastError = true)]
+		[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern Boolean SetupDiEnumDeviceInterfaces(IntPtr DeviceInfoSet, IntPtr DeviceInfoData, ref System.Guid InterfaceClassGuid, Int32 MemberIndex, ref SP_DEVICE_INTERFACE_DATA DeviceInterfaceData);
 
 		/// <summary>
@@ -218,7 +218,7 @@ namespace MKY.Utilities.Win32
 		/// <param name="Flags">Flags to limit the returned information to currently present devices
 		/// and devices that expose interfaces in the class specified by the GUID.</param>
 		/// <returns>Handle to a device information set for the devices.</returns>
-		[DllImport(SETUP_DLL, SetLastError = true, CharSet = CharSet.Auto)]
+		[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern IntPtr SetupDiGetClassDevs(ref System.Guid ClassGuid, IntPtr Enumerator, IntPtr hwndParent, DIGCF Flags);
 
 		/// <summary>
@@ -235,7 +235,7 @@ namespace MKY.Utilities.Win32
 		/// SP_DEVICE_INTERFACE_DETAIL_DATA structure.</param>
 		/// <param name="DeviceInfoData">Returned pointer to an SP_DEVINFO_DATA structure to receive information about the device.</param>
 		/// <returns>True on success.</returns>
-		[DllImport(SETUP_DLL, SetLastError = true, CharSet = CharSet.Auto)]
+		[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern Boolean SetupDiGetDeviceInterfaceDetail(IntPtr DeviceInfoSet, ref SP_DEVICE_INTERFACE_DATA DeviceInterfaceData, IntPtr DeviceInterfaceDetailData, Int32 DeviceInterfaceDetailDataSize, ref Int32 RequiredSize, IntPtr DeviceInfoData);
 
 		/// <summary>
@@ -243,7 +243,7 @@ namespace MKY.Utilities.Win32
 		/// </summary>
 		/// <param name="Handle">Handle returned previously by RegisterDeviceNotification.</param>
 		/// <returns>True on success.</returns>
-		[DllImport(USER_DLL, SetLastError = true)]
+		[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern Boolean UnregisterDeviceNotification(IntPtr Handle);
 
 		#endregion
@@ -262,16 +262,16 @@ namespace MKY.Utilities.Win32
 		public static string[] GetDevicesFromGuid(System.Guid classGuid)
 		{
 			int bufferSize = 0;
-			IntPtr detailDataBuffer = IntPtr.Zero;
-			IntPtr deviceInfoSet = new IntPtr();
-			Boolean lastDevice = false;
+			IntPtr pDetailDataBuffer = IntPtr.Zero;
+			IntPtr pDeviceInfoSet = new IntPtr();
+			bool lastDevice = false;
 			int memberIndex = 0;
 			SP_DEVICE_INTERFACE_DATA deviceInterfaceData = new SP_DEVICE_INTERFACE_DATA();
 			List<string> devicePaths = new List<string>();
 
 			try
 			{
-				deviceInfoSet = SetupDiGetClassDevs(ref classGuid, IntPtr.Zero, IntPtr.Zero, DIGCF.PRESENT | DIGCF.DEVICEINTERFACE);
+				pDeviceInfoSet = SetupDiGetClassDevs(ref classGuid, IntPtr.Zero, IntPtr.Zero, DIGCF.PRESENT | DIGCF.DEVICEINTERFACE);
 
 				// The cbSize element of the deviceInterfaceData structure must be set to the structure's size in bytes. 
 				// The size is 28 bytes for 32-bit code and 32 bits for 64-bit code.
@@ -280,23 +280,23 @@ namespace MKY.Utilities.Win32
 				do
 				{
 					// Begin with 0 and increment through the device information set until no more devices are available.
-					if (SetupDiEnumDeviceInterfaces(deviceInfoSet, IntPtr.Zero, ref classGuid, memberIndex, ref deviceInterfaceData))
+					if (SetupDiEnumDeviceInterfaces(pDeviceInfoSet, IntPtr.Zero, ref classGuid, memberIndex, ref deviceInterfaceData))
 					{
 						// A device is present. Retrieve the size of the data buffer. Don't care about the return value, it will be false.
-						SetupDiGetDeviceInterfaceDetail(deviceInfoSet, ref deviceInterfaceData, IntPtr.Zero, 0, ref bufferSize, IntPtr.Zero);
+						SetupDiGetDeviceInterfaceDetail(pDeviceInfoSet, ref deviceInterfaceData, IntPtr.Zero, 0, ref bufferSize, IntPtr.Zero);
 
 						// Allocate memory for the SP_DEVICE_INTERFACE_DETAIL_DATA structure using the returned buffer size.
-						detailDataBuffer = Marshal.AllocHGlobal(bufferSize);
+						pDetailDataBuffer = Marshal.AllocHGlobal(bufferSize);
 
 						// Store cbSize in the first bytes of the array. The number of bytes varies with 32- and 64-bit systems.
-						Marshal.WriteInt32(detailDataBuffer, (IntPtr.Size == 4) ? (4 + Marshal.SystemDefaultCharSize) : 8);
+						Marshal.WriteInt32(pDetailDataBuffer, (IntPtr.Size == 4) ? (4 + Marshal.SystemDefaultCharSize) : 8);
 
 						// Call SetupDiGetDeviceInterfaceDetail again.
 						// This time, pass a pointer to DetailDataBuffer and the returned required buffer size.
-						if (SetupDiGetDeviceInterfaceDetail(deviceInfoSet, ref deviceInterfaceData, detailDataBuffer, bufferSize, ref bufferSize, IntPtr.Zero))
+						if (SetupDiGetDeviceInterfaceDetail(pDeviceInfoSet, ref deviceInterfaceData, pDetailDataBuffer, bufferSize, ref bufferSize, IntPtr.Zero))
 						{
 							// Skip over cbsize (4 bytes) to get the address of the devicePathName.
-							IntPtr pDevicePathName = new IntPtr(detailDataBuffer.ToInt32() + 4);
+							IntPtr pDevicePathName = new IntPtr(pDetailDataBuffer.ToInt32() + 4);
 
 							// Get the String containing the devicePathName.
 							devicePaths.Add(Marshal.PtrToStringAuto(pDevicePathName));
@@ -316,14 +316,14 @@ namespace MKY.Utilities.Win32
 			}
 			finally
 			{
-				if (detailDataBuffer != IntPtr.Zero)
+				if (pDetailDataBuffer != IntPtr.Zero)
 				{
 					// Free the memory allocated previously by AllocHGlobal.
-					Marshal.FreeHGlobal(detailDataBuffer);
+					Marshal.FreeHGlobal(pDetailDataBuffer);
 				}
 
-				if (deviceInfoSet != IntPtr.Zero)
-					SetupDiDestroyDeviceInfoList(deviceInfoSet);
+				if (pDeviceInfoSet != IntPtr.Zero)
+					SetupDiDestroyDeviceInfoList(pDeviceInfoSet);
 			}
 
 			return (devicePaths.ToArray());

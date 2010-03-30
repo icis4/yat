@@ -177,7 +177,7 @@ namespace MKY.IO.Ports
 			set
 			{
 				AssertNotDisposed();
-				if (base.PortName != value)
+				if (value != base.PortName)
 				{
 					base.PortName = value;
 					OnPortChanged(new EventArgs());
@@ -231,7 +231,7 @@ namespace MKY.IO.Ports
 			set
 			{
 				AssertNotDisposed();
-				if (base.BaudRate != value)
+				if (value != base.BaudRate)
 				{
 					base.BaudRate = value;
 					OnPortSettingsChanged(new EventArgs());
@@ -255,7 +255,7 @@ namespace MKY.IO.Ports
 			set
 			{
 				AssertNotDisposed();
-				if (base.DataBits != value)
+				if (value != base.DataBits)
 				{
 					base.DataBits = value;
 					OnPortSettingsChanged(new EventArgs());
@@ -279,7 +279,7 @@ namespace MKY.IO.Ports
 			set
 			{
 				AssertNotDisposed();
-				if (base.Parity != value)
+				if (value != base.Parity)
 				{
 					base.Parity = value;
 					OnPortSettingsChanged(new EventArgs());
@@ -303,7 +303,7 @@ namespace MKY.IO.Ports
 			set
 			{
 				AssertNotDisposed();
-				if (base.StopBits != value)
+				if (value != base.StopBits)
 				{
 					base.StopBits = value;
 					OnPortSettingsChanged(new EventArgs());
@@ -327,7 +327,7 @@ namespace MKY.IO.Ports
 			set
 			{
 				AssertNotDisposed();
-				if (base.Handshake != value)
+				if (value != base.Handshake)
 				{
 					base.Handshake = value;
 					OnPortSettingsChanged(new EventArgs());
@@ -409,7 +409,7 @@ namespace MKY.IO.Ports
 
 				if (HandshakeIsNotUsingRequestToSend)
 				{
-					if (base.RtsEnable != value)
+					if (value != base.RtsEnable)
 					{
 						base.RtsEnable = value;
 						OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.RtsChanged));
@@ -450,7 +450,7 @@ namespace MKY.IO.Ports
 			set
 			{
 				AssertNotDisposed();
-				if (base.DtrEnable != value)
+				if (value != base.DtrEnable)
 				{
 					base.DtrEnable = value;
 					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.DtrChanged));

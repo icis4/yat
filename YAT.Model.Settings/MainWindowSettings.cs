@@ -84,7 +84,7 @@ namespace YAT.Model.Settings
 			get { return (_startPosition); }
 			set
 			{
-				if (_startPosition != value)
+				if (value != _startPosition)
 				{
 					_startPosition = value;
 					SetChanged();
@@ -99,7 +99,7 @@ namespace YAT.Model.Settings
 			get { return (_windowState); }
 			set
 			{
-				if (_windowState != value)
+				if (value != _windowState)
 				{
 					_windowState = value;
 					SetChanged();
@@ -114,7 +114,7 @@ namespace YAT.Model.Settings
 			get { return (_location); }
 			set
 			{
-				if (_location != value)
+				if (value != _location)
 				{
 					_location = value;
 					SetChanged();
@@ -129,7 +129,7 @@ namespace YAT.Model.Settings
 			get { return (_size); }
 			set
 			{
-				if (_size != value)
+				if (value != _size)
 				{
 					_size = value;
 					SetChanged();

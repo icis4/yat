@@ -99,7 +99,7 @@ namespace YAT.Model.Settings
 			get { return (_font); }
 			set
 			{
-				if (_font != value)
+				if (value != _font)
 				{
 					_font = value;
 					SetChanged();
@@ -114,7 +114,7 @@ namespace YAT.Model.Settings
 			get { return (_font.Font); }
 			set
 			{
-				if (_font.Font != value)
+				if (value != _font.Font)
 				{
 					_font.Font = value;
 					SetChanged();
@@ -129,7 +129,7 @@ namespace YAT.Model.Settings
 			get { return (_txDataFormat); }
 			set
 			{
-				if (_txDataFormat != value)
+				if (value != _txDataFormat)
 				{
 					_txDataFormat = value;
 					SetChanged();
@@ -144,7 +144,7 @@ namespace YAT.Model.Settings
 			get { return (_txControlFormat); }
 			set
 			{
-				if (_txControlFormat != value)
+				if (value != _txControlFormat)
 				{
 					_txControlFormat = value;
 					SetChanged();
@@ -159,7 +159,7 @@ namespace YAT.Model.Settings
 			get { return (_rxDataFormat); }
 			set
 			{
-				if (_rxDataFormat != value)
+				if (value != _rxDataFormat)
 				{
 					_rxDataFormat = value;
 					SetChanged();
@@ -174,7 +174,7 @@ namespace YAT.Model.Settings
 			get { return (_rxControlFormat); }
 			set
 			{
-				if (_rxControlFormat != value)
+				if (value != _rxControlFormat)
 				{
 					_rxControlFormat = value;
 					SetChanged();
@@ -189,7 +189,7 @@ namespace YAT.Model.Settings
 			get { return (_timeStampFormat); }
 			set
 			{
-				if (_timeStampFormat != value)
+				if (value != _timeStampFormat)
 				{
 					_timeStampFormat = value;
 					SetChanged();
@@ -204,7 +204,7 @@ namespace YAT.Model.Settings
 			get { return (_lengthFormat); }
 			set
 			{
-				if (_lengthFormat != value)
+				if (value != _lengthFormat)
 				{
 					_lengthFormat = value;
 					SetChanged();
@@ -219,7 +219,7 @@ namespace YAT.Model.Settings
 			get { return (_whiteSpacesFormat); }
 			set
 			{
-				if (_whiteSpacesFormat != value)
+				if (value != _whiteSpacesFormat)
 				{
 					_whiteSpacesFormat = value;
 					SetChanged();
@@ -234,7 +234,7 @@ namespace YAT.Model.Settings
 			get { return (_errorFormat); }
 			set
 			{
-				if (_errorFormat != value)
+				if (value != _errorFormat)
 				{
 					_errorFormat = value;
 					SetChanged();

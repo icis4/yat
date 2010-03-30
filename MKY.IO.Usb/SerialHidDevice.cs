@@ -366,7 +366,11 @@ namespace MKY.IO.Usb
 		{
 			try
 			{
-				_streams = new FileStream(new SafeFileHandle(DeviceHandle.DangerousGetHandle(), false), FileAccess.Read | FileAccess.Write, InputReportLength, true);
+				SafeFileHandle readWriteHandle;
+				if (!Utilities.Win32.Hid.CreateReadWriteHandle(SystemPath, out readWriteHandle))
+					OnError_Sync(new ErrorEventArgs("Couldn't create read/write stream for USB HID device" + Environment.NewLine + ToString()));
+
+				_streams = new FileStream(new SafeFileHandle(readWriteHandle.DangerousGetHandle(), false), FileAccess.Read | FileAccess.Write, InputReportLength, true);
 			}
 			catch (Exception ex)
 			{

@@ -155,7 +155,7 @@ namespace MKY.IO.Serial
 			get { return (_hostType); }
 			set
 			{
-				if (_hostType != value)
+				if (value != _hostType)
 				{
 					_hostType = value;
 					SetChanged();
@@ -170,7 +170,7 @@ namespace MKY.IO.Serial
 			get { return (_remoteHost); }
 			set
 			{
-				if (_remoteHost != value)
+				if (value != _remoteHost)
 				{
 					_remoteHost = value;
 					SetChanged();
@@ -193,7 +193,7 @@ namespace MKY.IO.Serial
 			get { return (_remotePort); }
 			set
 			{
-				if (_remotePort != value)
+				if (value != _remotePort)
 				{
 					_remotePort = value;
 					SetChanged();
@@ -208,7 +208,7 @@ namespace MKY.IO.Serial
 			get { return (_localInterface); }
 			set
 			{
-				if (_localInterface != value)
+				if (value != _localInterface)
 				{
 					_localInterface = value;
 					SetChanged();
@@ -268,7 +268,7 @@ namespace MKY.IO.Serial
 			get { return (_localTcpPort); }
 			set
 			{
-				if (_localTcpPort != value)
+				if (value != _localTcpPort)
 				{
 					_localTcpPort = value;
 					SetChanged();
@@ -283,7 +283,7 @@ namespace MKY.IO.Serial
 			get { return (_localUdpPort); }
 			set
 			{
-				if (_localUdpPort != value)
+				if (value != _localUdpPort)
 				{
 					_localUdpPort = value;
 					SetChanged();
@@ -298,7 +298,7 @@ namespace MKY.IO.Serial
 			get { return (_tcpClientAutoReconnect); }
 			set
 			{
-				if (_tcpClientAutoReconnect != value)
+				if (value != _tcpClientAutoReconnect)
 				{
 					_tcpClientAutoReconnect = value;
 					SetChanged();

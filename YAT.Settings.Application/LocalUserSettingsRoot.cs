@@ -103,7 +103,7 @@ namespace YAT.Settings.Application
 					_general = value;
 					AttachNode(_general);
 				}
-				else if (_general != value)
+				else if (value != _general)
 				{
 					Settings.GeneralSettings old = _general;
 					_general = value;
@@ -123,7 +123,7 @@ namespace YAT.Settings.Application
 					_paths = value;
 					AttachNode(_paths);
 				}
-				else if (_paths != value)
+				else if (value != _paths)
 				{
 					Settings.PathSettings old = _paths;
 					_paths = value;
@@ -143,7 +143,7 @@ namespace YAT.Settings.Application
 					_autoAutoWorkspace = value;
 					AttachNode(_autoAutoWorkspace);
 				}
-				else if (_autoAutoWorkspace != value)
+				else if (value != _autoAutoWorkspace)
 				{
 					Settings.AutoWorkspaceSettings old = _autoAutoWorkspace;
 					_autoAutoWorkspace = value;
@@ -163,7 +163,7 @@ namespace YAT.Settings.Application
 					_mainWindow = value;
 					AttachNode(_mainWindow);
 				}
-				else if (_mainWindow != value)
+				else if (value != _mainWindow)
 				{
 					Model.Settings.MainWindowSettings old = _mainWindow;
 					_mainWindow = value;
@@ -183,7 +183,7 @@ namespace YAT.Settings.Application
 					_newTerminal = value;
 					AttachNode(_newTerminal);
 				}
-				else if (_newTerminal != value)
+				else if (value != _newTerminal)
 				{
 					Model.Settings.NewTerminalSettings old = _newTerminal;
 					_newTerminal = value;
@@ -203,7 +203,7 @@ namespace YAT.Settings.Application
 					_recentFiles = value;
 					AttachNode(_recentFiles);
 				}
-				else if (_recentFiles != value)
+				else if (value != _recentFiles)
 				{
 					Model.Settings.RecentFileSettings old = _recentFiles;
 					_recentFiles = value;

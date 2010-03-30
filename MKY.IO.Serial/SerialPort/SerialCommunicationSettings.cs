@@ -88,7 +88,7 @@ namespace MKY.IO.Serial
 			get { return (_baudRate); }
 			set
 			{
-				if (_baudRate != value)
+				if (value != _baudRate)
 				{
 					_baudRate = value;
 					SetChanged();
@@ -103,7 +103,7 @@ namespace MKY.IO.Serial
 			get { return (_dataBits); }
 			set
 			{
-				if (_dataBits != value)
+				if (value != _dataBits)
 				{
 					_dataBits = value;
 					SetChanged();
@@ -118,7 +118,7 @@ namespace MKY.IO.Serial
 			get { return (_parity); }
 			set
 			{
-				if (_parity != value)
+				if (value != _parity)
 				{
 					_parity = value;
 					SetChanged();
@@ -133,7 +133,7 @@ namespace MKY.IO.Serial
 			get { return (_stopBits); }
 			set
 			{
-				if (_stopBits != value)
+				if (value != _stopBits)
 				{
 					_stopBits = value;
 					SetChanged();
@@ -148,7 +148,7 @@ namespace MKY.IO.Serial
 			get { return (_flowControl); }
 			set
 			{
-				if (_flowControl != value)
+				if (value != _flowControl)
 				{
 					_flowControl = value;
 					SetChanged();
