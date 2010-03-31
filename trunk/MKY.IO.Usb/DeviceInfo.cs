@@ -263,6 +263,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
+		[XmlElement("SerialNumber")]
 		public virtual string SerialNumber
 		{
 			get { return (_serialNumber); }

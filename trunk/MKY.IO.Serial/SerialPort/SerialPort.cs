@@ -306,20 +306,6 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public virtual bool IsOpen
-		{
-			get
-			{
-				AssertNotDisposed();
-
-				if (_port != null)
-					return (_port.IsOpen);
-				else
-					return (false);
-			}
-		}
-
-		/// <summary></summary>
 		public virtual bool IsConnected
 		{
 			get
@@ -328,6 +314,20 @@ namespace MKY.IO.Serial
 
 				if (_port != null)
 					return (_port.IsOpen && !_port.BreakState);
+				else
+					return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool IsOpen
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (_port != null)
+					return (_port.IsOpen);
 				else
 					return (false);
 			}

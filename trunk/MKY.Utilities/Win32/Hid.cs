@@ -597,37 +597,18 @@ namespace MKY.Utilities.Win32
 					string languageString;
 					if (HidD_GetIndexedString(deviceHandle, (int)StringDescriptorIndex.LanguageIds, out languageString))
 					{
-						// Retrieve invariant string
-						string invariantString;
-						if (method(deviceHandle, out invariantString)) // GetManufacturerString() or GetProductString() or GetSerialNumberString()
+						// Retrieve content string
+						string contentString;
+						if (method(deviceHandle, out contentString)) // GetManufacturerString() or GetProductString() or GetSerialNumberString()
 						{
-							if (invariantString != languageString) // Looks like a proper invariant string
+							if (contentString != languageString) // Looks like a proper invariant string
 							{
-								hidString = invariantString;
+								hidString = contentString;
 								return (true);
 							}
-							else // invariantString == languageString means that invariant string not really contains useful data
+							else // contentString == languageString means that content isn't available and index 0 has be retrieved
 							{
-								// Retrieve culture specific strings
-
-								// \fixme
-								//
-								// Q & A
-								//  Index 0 
-
-								/*
-								CultureInfo[] l = Usb.Descriptors.GetCultureInfoFromLanguageString(languageString);
-								Dictionary<CultureInfo, string> d = GetCultureSpecificStrings(deviceHandle, index, l);
-								CultureInfo ci = Globalization.XCultureInfo.GetMostAppropriateCultureInfo(d.Keys);
-								if ((ci != null) && (d.ContainsKey(ci)))
-								{
-									hidString = d[ci];
-									return (true);
-								}
-								*/
-
-								string cultureSpecificString = "";
-								hidString = cultureSpecificString;
+								hidString = "";
 								return (true);
 							}
 						}
