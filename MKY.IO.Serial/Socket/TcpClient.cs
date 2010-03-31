@@ -227,12 +227,6 @@ namespace MKY.IO.Serial
 			}
 		}
 
-		/// <summary></summary>
-		public virtual bool IsOpen
-		{
-			get { return (IsConnected); }
-		}
-
 		private bool IsConnectedOrConnecting
 		{
 			get
@@ -271,6 +265,12 @@ namespace MKY.IO.Serial
 					}
 				}
 			}
+		}
+
+		/// <summary></summary>
+		public virtual bool IsOpen
+		{
+			get { return (IsConnected); }
 		}
 
 		/// <summary></summary>

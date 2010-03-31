@@ -132,10 +132,7 @@ namespace MKY.IO.Usb
 			{
 				DeviceInfo device = GetDeviceInfoFromPath(path);
 				if (device != null)
-				{
-					if (device.TryValidate())
-						devices.Add(device);
-				}
+					devices.Add(device);
 			}
 
 			return (devices.ToArray());

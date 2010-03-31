@@ -209,12 +209,6 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public virtual bool IsOpen
-		{
-			get { return (IsConnected); }
-		}
-
-		/// <summary></summary>
 		public virtual bool IsConnected
 		{
 			get
@@ -242,6 +236,12 @@ namespace MKY.IO.Serial
 				AssertNotDisposed();
 				return (_socketConnections.Count);
 			}
+		}
+
+		/// <summary></summary>
+		public virtual bool IsOpen
+		{
+			get { return (IsConnected); }
 		}
 
 		/// <summary></summary>
