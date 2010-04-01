@@ -500,9 +500,19 @@ namespace YAT.Domain
 			if (_isEol != de._isEol)
 				throw (new InvalidOperationException("Cannot append because EOL doesn't match"));
 
-			_origin.AddRange(de._origin);
-			_text += de._text;
-			_dataCount += de._dataCount;
+			// \fixme 2010-04-01 / mky
+			// Weird ArgumentException when receiving large chunks of data.
+			try
+			{
+				_origin.AddRange(de._origin);
+				_text += de._text;
+				_dataCount += de._dataCount;
+			}
+			catch (Exception ex)
+			{
+				MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
+				System.Diagnostics.Debug.WriteLine(de.ToString());
+			}
 		}
 
 		#endregion

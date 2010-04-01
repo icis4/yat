@@ -213,27 +213,36 @@ namespace MKY.IO.Usb
 
 		private void Initialize()
 		{
-			Utilities.Win32.Hid.HIDP_CAPS caps = Utilities.Win32.Hid.GetDeviceCapabilities(DeviceHandle);
+			SafeFileHandle deviceHandle;
+			if (Utilities.Win32.Hid.CreateSharedQueryOnlyDeviceHandle(SystemPath, out deviceHandle))
+			{
+				try
+				{
+					Utilities.Win32.Hid.HIDP_CAPS caps = Utilities.Win32.Hid.GetDeviceCapabilities(deviceHandle);
 
-			_usage = (XHidUsage)Utilities.Win32.Hid.GetHidUsage(caps);
-			_usagePage = caps.UsagePage;
+					_usage = (XHidUsage)Utilities.Win32.Hid.GetHidUsage(caps);
+					_usagePage = caps.UsagePage;
 
-			_inputReportLength   = caps.InputReportByteLength;
-			_outputReportLength  = caps.OutputReportByteLength;
-			_featureReportLength = caps.FeatureReportByteLength;
+					_inputReportLength   = caps.InputReportByteLength;
+					_outputReportLength  = caps.OutputReportByteLength;
+					_featureReportLength = caps.FeatureReportByteLength;
 
-			_linkCollectionNodes = caps.NumberLinkCollectionNodes;
-			_inputButtonCaps     = caps.NumberInputButtonCaps;
-			_inputValueCaps      = caps.NumberInputValueCaps;
-			_inputDataIndices    = caps.NumberInputDataIndices;
-			_outputButtonCaps    = caps.NumberOutputButtonCaps;
-			_outputValueCaps     = caps.NumberOutputValueCaps;
-			_outputDataIndices   = caps.NumberOutputDataIndices;
-			_featureButtonCaps   = caps.NumberFeatureButtonCaps;
-			_featureValueCaps    = caps.NumberFeatureValueCaps;
-			_featureDataIndices  = caps.NumberFeatureDataIndices;
-
-			Utilities.Win32.Hid.FlushQueue(DeviceHandle);
+					_linkCollectionNodes = caps.NumberLinkCollectionNodes;
+					_inputButtonCaps     = caps.NumberInputButtonCaps;
+					_inputValueCaps      = caps.NumberInputValueCaps;
+					_inputDataIndices    = caps.NumberInputDataIndices;
+					_outputButtonCaps    = caps.NumberOutputButtonCaps;
+					_outputValueCaps     = caps.NumberOutputValueCaps;
+					_outputDataIndices   = caps.NumberOutputDataIndices;
+					_featureButtonCaps   = caps.NumberFeatureButtonCaps;
+					_featureValueCaps    = caps.NumberFeatureValueCaps;
+					_featureDataIndices  = caps.NumberFeatureDataIndices;
+				}
+				finally
+				{
+					deviceHandle.Close();
+				}
+			}
 		}
 
 		#region Disposal

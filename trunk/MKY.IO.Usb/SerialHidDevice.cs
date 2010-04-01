@@ -20,6 +20,7 @@
 
 using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Diagnostics;
@@ -150,7 +151,7 @@ namespace MKY.IO.Usb
 		/// It just a single stream object, but it contains the basically independent input and
 		/// output streams.
 		/// </summary>
-		private FileStream _streams;
+		private FileStream _stream;
 
 		/// <summary>
 		/// Async receiving.
@@ -163,6 +164,16 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 		// Events
 		//==========================================================================================
+
+		/// <summary>
+		/// Fired after port successfully opened.
+		/// </summary>
+		public event EventHandler Opened;
+
+		/// <summary>
+		/// Fired after port successfully closed.
+		/// </summary>
+		public event EventHandler Closed;
 
 		/// <summary>
 		/// Fired after data has been received from the device.
@@ -241,8 +252,8 @@ namespace MKY.IO.Usb
 			{
 				AssertNotDisposed();
 				
-				if (_streams != null)
-					return ((_streams.CanRead) && (_streams.CanWrite));
+				if (_stream != null)
+					return ((_stream.CanRead) && (_stream.CanWrite));
 
 				return (false);
 			}
@@ -282,7 +293,7 @@ namespace MKY.IO.Usb
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Opens the serial communication port to the device.
+		/// Opens the serial communication to the device.
 		/// </summary>
 		public virtual bool Open()
 		{
@@ -291,17 +302,18 @@ namespace MKY.IO.Usb
 				return (true);
 
 			// Create a new file and begin to read data from the device.
-			try
+			if (CreateStream())
 			{
-				CreateStreams();
 				BeginAsyncRead();
+				OnOpened_Sync(new EventArgs());
 				return (true);
 			}
-			catch (Exception ex)
+			else
 			{
-				XDebug.WriteException(this, ex);
-				CloseStreams();
-				throw (new UsbException(ex.Message));
+				StringBuilder sb = new StringBuilder();
+				sb.AppendLine("Couldn't open serial communication to USB HID device");
+				sb.AppendLine(ToString());
+				throw (new UsbException(sb.ToString()));
 			}
 		}
 
@@ -310,7 +322,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public virtual void Close()
 		{
-			CloseStreams();
+			CloseStream();
 		}
 
 		/// <summary>
@@ -357,32 +369,28 @@ namespace MKY.IO.Usb
 
 		#endregion
 
-		#region Methods > Streams
+		#region Methods > Stream
 		//------------------------------------------------------------------------------------------
-		// Methods > Streams
+		// Methods > Stream
 		//------------------------------------------------------------------------------------------
 
-		private void CreateStreams()
+		private bool CreateStream()
 		{
-			try
-			{
-				SafeFileHandle readWriteHandle;
-				if (!Utilities.Win32.Hid.CreateReadWriteHandle(SystemPath, out readWriteHandle))
-					OnError_Sync(new ErrorEventArgs("Couldn't create read/write stream for USB HID device" + Environment.NewLine + ToString()));
+			SafeFileHandle readWriteHandle;
+			if (!Utilities.Win32.Hid.CreateExclusiveReadWriteHandle(SystemPath, out readWriteHandle))
+				return (false);
 
-				_streams = new FileStream(new SafeFileHandle(readWriteHandle.DangerousGetHandle(), false), FileAccess.Read | FileAccess.Write, InputReportLength, true);
-			}
-			catch (Exception ex)
-			{
-				XDebug.WriteException(this, ex);
-				OnError_Sync(new ErrorEventArgs("Couldn't create read/write stream for USB HID device" + Environment.NewLine + ToString()));
-			}
+			if (!Utilities.Win32.Hid.FlushQueue(readWriteHandle))
+				return (false);
+
+			_stream = new FileStream(readWriteHandle, FileAccess.Read | FileAccess.Write, InputReportLength, true);
+			return (true);
 		}
 
 		private void BeginAsyncRead()
 		{
 			byte[] inputReportBuffer = new byte[InputReportLength];
-			_streams.BeginRead(inputReportBuffer, 0, InputReportLength, new AsyncCallback(AsyncReadCompleted), inputReportBuffer);
+			_stream.BeginRead(inputReportBuffer, 0, InputReportLength, new AsyncCallback(AsyncReadCompleted), inputReportBuffer);
 		}
 
 		private void AsyncReadCompleted(IAsyncResult result)
@@ -394,13 +402,13 @@ namespace MKY.IO.Usb
 					// Retrieve the read data and finalize read. In case of an exception
 					// during the read, the call of EndRead() throws it.
 					byte[] inputReportBuffer = (byte[])result.AsyncState; 
-					_streams.EndRead(result);
+					_stream.EndRead(result);
 
 					// Convert the input report into usable data.
 					HidInputReportContainer input = new HidInputReportContainer(this);
 					input.CreateDataFromReport(inputReportBuffer);
 
-					// Don't care about report ID, SerialHidDevice only supports report 0.
+					// Don't care about report ID, Ser/HID only supports report 0.
 
 					// Read data on this thread.
 					lock (_receiveQueue)
@@ -418,7 +426,6 @@ namespace MKY.IO.Usb
 				catch (Exception ex)
 				{
 					XDebug.WriteException(this, ex);
-					OnDisconnected_Sync(new EventArgs());
 					OnError_Sync(new ErrorEventArgs("Error while reading an input report from the USB HID device" + Environment.NewLine + ToString()));
 				}
 			}
@@ -428,29 +435,45 @@ namespace MKY.IO.Usb
 		{
 			try
 			{
-				// SerialHidDevice only supports report 0.
+				// Report ID is fixed, Ser/HID only supports report 0.
 				byte reportId = 0;
 
 				HidOutputReportContainer output = new HidOutputReportContainer(this);
 				output.CreateReportsFromData(reportId, data);
 
 				foreach (byte[] report in output.Reports)
-					_streams.Write(report, 0, report.Length);
+					_stream.Write(report, 0, report.Length);
 			}
 			catch (Exception ex)
 			{
 				XDebug.WriteException(this, ex);
-				OnDisconnected_Sync(new EventArgs());
 				OnError_Sync(new ErrorEventArgs("Error while writing an output report to the USB HID device" + Environment.NewLine + ToString()));
 			}
 		}
 
-		private void CloseStreams()
+		private void CloseStream()
 		{
-			if (_streams != null)
+			CloseStream(false);
+		}
+
+		private void CloseStream(bool async)
+		{
+			bool wasOpen = false;
+			if (IsOpen)
+				wasOpen = true;
+
+			if (_stream != null)
 			{
-				_streams.Dispose();
-				_streams = null;
+				_stream.Close();
+				_stream = null;
+			}
+
+			if (wasOpen)
+			{
+				if (async)
+					OnClosed_Async(new EventArgs());
+				else
+					OnClosed_Sync(new EventArgs());
 			}
 		}
 
@@ -472,22 +495,40 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected override void OnDisconnected_Async(EventArgs e)
 		{
-			CloseStreams();
+			CloseStream(true);
 			base.OnDisconnected_Async(e);
 		}
 
 		/// <summary></summary>
 		protected override void OnDisconnected_Sync(EventArgs e)
 		{
-			CloseStreams();
+			CloseStream();
 			base.OnDisconnected_Sync(e);
 		}
 
 		/// <summary></summary>
 		protected override void OnError_Sync(ErrorEventArgs e)
 		{
-			CloseStreams();
+			CloseStream();
 			base.OnError_Sync(e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnOpened_Sync(EventArgs e)
+		{
+			EventHelper.FireSync(Opened, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnClosed_Sync(EventArgs e)
+		{
+			EventHelper.FireSync(Closed, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnClosed_Async(EventArgs e)
+		{
+			EventHelper.FireAsync(Closed, this, e);
 		}
 
 		/// <remarks>

@@ -151,7 +151,7 @@ namespace MKY.IO.Usb
 		public static bool GetVidAndPidFromPath(string path, out int vendorId, out int productId)
 		{
 			SafeFileHandle deviceHandle;
-			if (Utilities.Win32.Hid.CreateDeviceHandle(path, out deviceHandle))
+			if (Utilities.Win32.Hid.CreateSharedQueryOnlyDeviceHandle(path, out deviceHandle))
 			{
 				try
 				{
@@ -193,7 +193,7 @@ namespace MKY.IO.Usb
 		public static bool GetStringsFromPath(string path, out string manufacturer, out string product, out string serialNumber)
 		{
 			SafeFileHandle deviceHandle;
-			if (Utilities.Win32.Hid.CreateDeviceHandle(path, out deviceHandle))
+			if (Utilities.Win32.Hid.CreateSharedQueryOnlyDeviceHandle(path, out deviceHandle))
 			{
 				try
 				{
@@ -244,7 +244,7 @@ namespace MKY.IO.Usb
 		public static bool GetDeviceInfoFromPath(string path, out int vendorId, out int productId, out string manufacturer, out string product, out string serialNumber)
 		{
 			SafeFileHandle deviceHandle;
-			if (Utilities.Win32.Hid.CreateDeviceHandle(path, out deviceHandle))
+			if (Utilities.Win32.Hid.CreateSharedQueryOnlyDeviceHandle(path, out deviceHandle))
 			{
 				try
 				{
@@ -449,7 +449,6 @@ namespace MKY.IO.Usb
 		private bool _isDisposed;
 
 		private DeviceInfo _deviceInfo;
-		private SafeFileHandle _deviceHandle;
 
 		private bool _isConnected;
 
@@ -515,12 +514,14 @@ namespace MKY.IO.Usb
 
 		private void Initialize()
 		{
-			// Get and store the handle to the USB device.
-			if (!Utilities.Win32.Hid.CreateDeviceHandle(_deviceInfo.Path, out _deviceHandle))
-				throw (new UsbException("Failed to retrieve device handle for USB device" + Environment.NewLine + _deviceInfo.Path));
+			SafeFileHandle deviceHandle;
+			if (Utilities.Win32.Hid.CreateSharedQueryOnlyDeviceHandle(SystemPath, out deviceHandle))
+			{
+				deviceHandle.Close();
 
-			// Getting a handle means that the device is connected to the computer.
-			_isConnected = true;
+				// Getting a handle means that the device is connected to the computer.
+				_isConnected = true;
+			}
 
 			AttachEventHandlers();
 		}
@@ -594,12 +595,6 @@ namespace MKY.IO.Usb
 		protected virtual string SystemPath
 		{
 			get { return (_deviceInfo.Path); }
-		}
-
-		/// <summary></summary>
-		protected virtual SafeFileHandle DeviceHandle
-		{
-			get { return (_deviceHandle); }
 		}
 
 		#region Properties > IDeviceInfo
@@ -688,19 +683,13 @@ namespace MKY.IO.Usb
 		private void Device_DeviceConnected(object sender, DeviceEventArgs e)
 		{
 			if (_deviceInfo.Path == e.DevicePath)
-			{
-				_isConnected = true;
 				OnConnected_Async(new EventArgs());
-			}
 		}
 
 		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
 		{
 			if (_deviceInfo.Path == e.DevicePath)
-			{
-				_isConnected = false;
 				OnDisconnected_Async(new EventArgs());
-			}
 		}
 
 		#endregion
@@ -716,6 +705,7 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		protected virtual void OnConnected_Async(EventArgs e)
 		{
+			_isConnected = true;
 			EventHelper.FireAsync(Connected, this, e);
 		}
 
@@ -724,12 +714,14 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		protected virtual void OnDisconnected_Async(EventArgs e)
 		{
+			_isConnected = false;
 			EventHelper.FireAsync(Disconnected, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisconnected_Sync(EventArgs e)
 		{
+			_isConnected = false;
 			EventHelper.FireSync(Disconnected, this, e);
 		}
 

@@ -167,30 +167,40 @@ namespace YAT.Domain
 			// - EOL >= 1
 			// - Queue >= 1
 
-			// Evaluate EOL until there is either a match or no match.
-			// Covers cases like <CR><CR><LF>.
-			State evaluatedState = State.Armed;
-			while ((evaluatedState == State.Armed) && (_queue.Count > 0))
+			// \fixme 2010-04-01 / mky
+			// Weird InvalidOperationException when receiving large chunks of data.
+			try
 			{
-				byte[] queue = _queue.ToArray();
-				for (int i = 0; i < queue.Length; i++)
+				// Evaluate EOL until there is either a match or no match.
+				// Covers cases like <CR><CR><LF>.
+				State evaluatedState = State.Armed;
+				while ((evaluatedState == State.Armed) && (_queue.Count > 0))
 				{
-					if (queue[i] == _eol[i])
+					byte[] queue = _queue.ToArray();
+					for (int i = 0; i < queue.Length; i++)
 					{
-						if (i < (_eol.Length - 1))
-							evaluatedState = State.PartlyMatch;
+						if (queue[i] == _eol[i])
+						{
+							if (i < (_eol.Length - 1))
+								evaluatedState = State.PartlyMatch;
+							else
+								evaluatedState = State.CompleteMatch;
+						}
 						else
-							evaluatedState = State.CompleteMatch;
-					}
-					else
-					{
-						_queue.Dequeue(); // dequeue one element, then retry
-						evaluatedState = State.Armed;
-						break;
+						{
+							_queue.Dequeue(); // dequeue one element, then retry
+							evaluatedState = State.Armed;
+							break;
+						}
 					}
 				}
+				_state = evaluatedState;
 			}
-			_state = evaluatedState;
+			catch (Exception ex)
+			{
+				MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
+				System.Diagnostics.Debug.WriteLine("Queue.Count = " + _queue.Count);
+			}
 		}
 
 		#endregion

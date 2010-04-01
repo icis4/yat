@@ -104,7 +104,7 @@ namespace MKY.Utilities.Types
 		/// </summary>
 		/// <param name="value">Value to convert</param>
 		/// <param name="boundary">
-		/// Byte boundary (e.g. 1/2/4/8 bytes). Set to 0 for
+		/// byte boundary (e.g. 1/2/4/8 bytes). Set to 0 for
 		/// automatic expansion to next 1/2/4/8 byte boundary.
 		/// </param>
 		/// <param name="useBigEndian">Use big endian instead of little endian</param>
@@ -135,7 +135,7 @@ namespace MKY.Utilities.Types
 		/// </summary>
 		/// <param name="value">Value to convert</param>
 		/// <param name="boundary">
-		/// Byte boundary (e.g. 1/2/4/8 bytes). Set to 0 for
+		/// byte boundary (e.g. 1/2/4/8 bytes). Set to 0 for
 		/// automatic expansion to next 1/2/4/8 byte boundary.
 		/// </param>
 		/// <param name="expandNegative">True to expand negative values.</param>

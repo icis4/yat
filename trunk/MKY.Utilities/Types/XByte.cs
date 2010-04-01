@@ -21,7 +21,7 @@ using System.Text;
 namespace MKY.Utilities.Types
 {
 	/// <summary>
-	/// Byte/byte utility methods.
+	/// byte/byte utility methods.
 	/// </summary>
 	public class XByte
 	{
