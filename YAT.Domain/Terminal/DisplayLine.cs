@@ -111,7 +111,7 @@ namespace YAT.Domain
 			}
 			else
 			{
-				// For performance reasons, append the item to the last item if possible
+				// For performance reasons, append the item to the last item if possible.
 				int lastIndex = Count - 1;
 				if (this[lastIndex].IsSameKindAs(item))
 					this[lastIndex].Append(item.Clone());
@@ -124,8 +124,18 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public new void AddRange(IEnumerable<DisplayElement> collection)
 		{
-			foreach (DisplayElement item in collection)
-				Add(item);
+			// \fixme 2010-04-01 / mky
+			// Weird InvalidOperationException when receiving large chunks of data.
+			try
+			{
+				foreach (DisplayElement item in collection)
+					Add(item);
+			}
+			catch (Exception ex)
+			{
+				MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
+				System.Diagnostics.Debug.WriteLine(collection.ToString());
+			}
 		}
 
 		/// <summary></summary>

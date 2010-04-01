@@ -36,22 +36,22 @@ namespace MKY.IO.Ports
 		event EventHandler PortSettingsChanged;
 
 		/// <summary>
-		/// Fired before connection is being opened.
+		/// Fired before port is being opened.
 		/// </summary>
 		event EventHandler Opening;
 
 		/// <summary>
-		/// Fired after connection successfully opened.
+		/// Fired after port successfully opened.
 		/// </summary>
 		event EventHandler Opened;
 
 		/// <summary>
-		/// Fired before connection is being closed.
+		/// Fired before port is being closed.
 		/// </summary>
 		event EventHandler Closing;
 
 		/// <summary>
-		/// Fired after connection successfully closed.
+		/// Fired after port successfully closed.
 		/// </summary>
 		event EventHandler Closed;
 

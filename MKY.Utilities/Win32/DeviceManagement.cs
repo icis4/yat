@@ -109,7 +109,7 @@ namespace MKY.Utilities.Win32
 			public UInt32      dbcc_reserved;
 			public System.Guid dbcc_classguid;
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
-			public Char[]      dbcc_name;
+			public char[]      dbcc_name;
 		}
 
 		/// <remarks>
@@ -136,7 +136,7 @@ namespace MKY.Utilities.Win32
 		private struct SP_DEVICE_INTERFACE_DETAIL_DATA
 		{
 			public UInt32 cbSize;
-			public String DevicePath;
+			public string DevicePath;
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -206,7 +206,7 @@ namespace MKY.Utilities.Win32
 		/// <param name="DeviceInterfaceData">Pointer to a handle to a SP_DEVICE_INTERFACE_DATA structure for a device.</param>
 		/// <returns>True on success.</returns>
 		[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern Boolean SetupDiEnumDeviceInterfaces(IntPtr DeviceInfoSet, IntPtr DeviceInfoData, ref System.Guid InterfaceClassGuid, Int32 MemberIndex, ref SP_DEVICE_INTERFACE_DATA DeviceInterfaceData);
+		private static extern bool SetupDiEnumDeviceInterfaces(IntPtr DeviceInfoSet, IntPtr DeviceInfoData, ref System.Guid InterfaceClassGuid, Int32 MemberIndex, ref SP_DEVICE_INTERFACE_DATA DeviceInterfaceData);
 
 		/// <summary>
 		/// Retrieves a device information set for a specified group of devices.
@@ -236,7 +236,7 @@ namespace MKY.Utilities.Win32
 		/// <param name="DeviceInfoData">Returned pointer to an SP_DEVINFO_DATA structure to receive information about the device.</param>
 		/// <returns>True on success.</returns>
 		[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern Boolean SetupDiGetDeviceInterfaceDetail(IntPtr DeviceInfoSet, ref SP_DEVICE_INTERFACE_DATA DeviceInterfaceData, IntPtr DeviceInterfaceDetailData, Int32 DeviceInterfaceDetailDataSize, ref Int32 RequiredSize, IntPtr DeviceInfoData);
+		private static extern bool SetupDiGetDeviceInterfaceDetail(IntPtr DeviceInfoSet, ref SP_DEVICE_INTERFACE_DATA DeviceInterfaceData, IntPtr DeviceInterfaceDetailData, Int32 DeviceInterfaceDetailDataSize, ref Int32 RequiredSize, IntPtr DeviceInfoData);
 
 		/// <summary>
 		/// Stop receiving notification messages.
@@ -244,7 +244,7 @@ namespace MKY.Utilities.Win32
 		/// <param name="Handle">Handle returned previously by RegisterDeviceNotification.</param>
 		/// <returns>True on success.</returns>
 		[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern Boolean UnregisterDeviceNotification(IntPtr Handle);
+		private static extern bool UnregisterDeviceNotification(IntPtr Handle);
 
 		#endregion
 
@@ -418,14 +418,14 @@ namespace MKY.Utilities.Win32
 
 					// The dbcc_name parameter of devBroadcastDeviceInterface contains the device
 					// name. Trim dbcc_name to match the size of the String.
-					devBroadcastDeviceInterface.dbcc_name = new Char[stringSize + 1];
+					devBroadcastDeviceInterface.dbcc_name = new char[stringSize + 1];
 
 					// Marshal data from the unmanaged block pointed to by m.LParam to the managed
 					// object devBroadcastDeviceInterface.
 					Marshal.PtrToStructure(deviceChangeMessage.LParam, devBroadcastDeviceInterface);
 
 					// Store the device name in a String.
-					devicePath = new String(devBroadcastDeviceInterface.dbcc_name, 0, stringSize);
+					devicePath = new string(devBroadcastDeviceInterface.dbcc_name, 0, stringSize);
 					return (true);
 				}
 			}
@@ -454,7 +454,7 @@ namespace MKY.Utilities.Win32
 			string devicePathFromMessage;
 
 			if (DeviceChangeMessageToDevicePath(deviceChangeMessage, out devicePathFromMessage))
-				return (String.Compare(devicePathFromMessage, devicePath, true) == 0);
+				return (string.Compare(devicePathFromMessage, devicePath, true) == 0);
 
 			return (false);
 		}

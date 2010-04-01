@@ -33,6 +33,12 @@ namespace MKY.IO.Usb
 			: base(message)
 		{
 		}
+
+		/// <summary></summary>
+		public UsbException(string message, Exception innerException)
+			: base(message, innerException)
+		{
+		}
 	}
 
 	/// <summary></summary>

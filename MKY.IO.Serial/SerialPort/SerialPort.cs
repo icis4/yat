@@ -101,8 +101,8 @@ namespace MKY.IO.Serial
 	/// 3. Disconnect USB-to-serial adapter
 	/// 4. Reconnect USB-to-serial adapter
 	///    => System.UnauthorizedAccssException("Access is denied.")
-	///       @ System.IO.Ports.InternalResources.WinIOError(Int32 errorCode, String str)
-	///       @ System.IO.Ports.SerialStream.Dispose(Boolean disposing)
+	///       @ System.IO.Ports.InternalResources.WinIOError(int errorCode, string str)
+	///       @ System.IO.Ports.SerialStream.Dispose(bool disposing)
 	///       @ System.IO.Ports.SerialStream.Finalize()
 	/// 5. Repeat disconnect/reconnect multiple times
 	/// 6. Exit YAT
