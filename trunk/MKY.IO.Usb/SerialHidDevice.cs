@@ -24,7 +24,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Diagnostics;
-using System.Runtime.ConstrainedExecution;
+using System.Threading;
 
 using Microsoft.Win32.SafeHandles;
 
@@ -84,11 +84,14 @@ namespace MKY.IO.Usb
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Returns an array of all USB HID devices currently available on the system.
+		/// Returns an array of all USB Ser/HID devices currently available on the system.
 		/// </summary>
-		public static new string[] GetDevices()
+		public static new DeviceInfo[] GetDevices()
 		{
-			return (Utilities.Win32.DeviceManagement.GetDevicesFromGuid(HidGuid));
+			// \fixme 2010-04-02 mky
+			// Ser/HID should be Generic/Undefined
+			//return (HidDevice.GetDevices(HidUsagePage.GenericDesktopControls, HidUsage.Undefined));
+			return (HidDevice.GetDevices());
 		}
 
 		#endregion
@@ -305,7 +308,7 @@ namespace MKY.IO.Usb
 			if (CreateStream())
 			{
 				BeginAsyncRead();
-				OnOpened_Sync(new EventArgs());
+				OnOpened(new EventArgs());
 				return (true);
 			}
 			else
@@ -377,7 +380,7 @@ namespace MKY.IO.Usb
 		private bool CreateStream()
 		{
 			SafeFileHandle readWriteHandle;
-			if (!Utilities.Win32.Hid.CreateExclusiveReadWriteHandle(SystemPath, out readWriteHandle))
+			if (!Utilities.Win32.Hid.CreateSharedReadWriteHandle(SystemPath, out readWriteHandle))
 				return (false);
 
 			if (!Utilities.Win32.Hid.FlushQueue(readWriteHandle))
@@ -393,12 +396,27 @@ namespace MKY.IO.Usb
 			_stream.BeginRead(inputReportBuffer, 0, InputReportLength, new AsyncCallback(AsyncReadCompleted), inputReportBuffer);
 		}
 
+		/// <summary>
+		/// Asynchronously invoke incoming events to prevent potential dead-locks if close/dispose
+		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
+		/// Also, the mechanism implemented below reduces the amount of events that are propagated
+		/// to the main application. Small chunks of received data will generate many events
+		/// handled by <see cref="AsyncReadCompleted"/>. However, since <see cref="OnDataReceived"/>
+		/// synchronously invokes the event, it will take some time until the monitor is released
+		/// again. During this time, no more new events are invoked, instead, incoming data is
+		/// buffered.
+		/// </summary>
+		private delegate void AsyncReadCompletedDelegate();
+		private object AsyncReadCompletedSyncObj = new object();
+
 		private void AsyncReadCompleted(IAsyncResult result)
 		{
-			if (IsOpen) // Ensure not to perform any operations during closing anymore.
+			if (!IsDisposed && IsOpen) // Ensure not to perform any operations during closing anymore.
 			{
 				try
 				{
+					// Immediately read data on this thread.
+
 					// Retrieve the read data and finalize read. In case of an exception
 					// during the read, the call of EndRead() throws it.
 					byte[] inputReportBuffer = (byte[])result.AsyncState; 
@@ -417,8 +435,20 @@ namespace MKY.IO.Usb
 							_receiveQueue.Enqueue(b);
 					}
 
-					// Asynchronously signal that data has been received.
-					OnDataReceived_Async(new EventArgs());
+					// Ensure that only one data received event thread is active at the same time.
+					// Without this exclusivity, two receive threads could create a race condition.
+					if (Monitor.TryEnter(AsyncReadCompletedSyncObj))
+					{
+						try
+						{
+							AsyncReadCompletedDelegate asyncInvoker = new AsyncReadCompletedDelegate(AsyncReadCompletedAsync);
+							asyncInvoker.BeginInvoke(null, null);
+						}
+						finally
+						{
+							Monitor.Exit(AsyncReadCompletedSyncObj);
+						}
+					}
 
 					// Trigger the next async read.
 					BeginAsyncRead();
@@ -426,8 +456,27 @@ namespace MKY.IO.Usb
 				catch (Exception ex)
 				{
 					XDebug.WriteException(this, ex);
-					OnError_Sync(new ErrorEventArgs("Error while reading an input report from the USB HID device" + Environment.NewLine + ToString()));
+					OnError(new ErrorEventArgs("Error while reading an input report from the USB HID device" + Environment.NewLine + ToString()));
 				}
+			}
+		}
+
+		private void AsyncReadCompletedAsync()
+		{
+			// Ensure that only one data received event thread is active at the same time.
+			// Without this exclusivity, two receive threads could create a race condition.
+			Monitor.Enter(AsyncReadCompletedSyncObj);
+			try
+			{
+				// Fire events until there is no more data available. Must be done to ensure
+				// that events are fired even for data that was enqueued above while the sync
+				// obj was busy.
+				while (BytesAvailable > 0)
+					OnDataReceived(new EventArgs());
+			}
+			finally
+			{
+				Monitor.Exit(AsyncReadCompletedSyncObj);
 			}
 		}
 
@@ -447,16 +496,11 @@ namespace MKY.IO.Usb
 			catch (Exception ex)
 			{
 				XDebug.WriteException(this, ex);
-				OnError_Sync(new ErrorEventArgs("Error while writing an output report to the USB HID device" + Environment.NewLine + ToString()));
+				OnError(new ErrorEventArgs("Error while writing an output report to the USB HID device" + Environment.NewLine + ToString()));
 			}
 		}
 
 		private void CloseStream()
-		{
-			CloseStream(false);
-		}
-
-		private void CloseStream(bool async)
 		{
 			bool wasOpen = false;
 			if (IsOpen)
@@ -469,12 +513,7 @@ namespace MKY.IO.Usb
 			}
 
 			if (wasOpen)
-			{
-				if (async)
-					OnClosed_Async(new EventArgs());
-				else
-					OnClosed_Sync(new EventArgs());
-			}
+				OnClosed(new EventArgs());
 		}
 
 		#endregion
@@ -487,64 +526,47 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected override void OnConnected_Async(EventArgs e)
+		protected override void OnConnected(EventArgs e)
 		{
-			base.OnConnected_Async(e);
+			base.OnConnected(e);
 		}
 
 		/// <summary></summary>
-		protected override void OnDisconnected_Async(EventArgs e)
-		{
-			CloseStream(true);
-			base.OnDisconnected_Async(e);
-		}
-
-		/// <summary></summary>
-		protected override void OnDisconnected_Sync(EventArgs e)
+		protected override void OnDisconnected(EventArgs e)
 		{
 			CloseStream();
-			base.OnDisconnected_Sync(e);
+			base.OnDisconnected(e);
 		}
 
 		/// <summary></summary>
-		protected override void OnError_Sync(ErrorEventArgs e)
+		protected override void OnError(ErrorEventArgs e)
 		{
 			CloseStream();
-			base.OnError_Sync(e);
+			base.OnError(e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnOpened_Sync(EventArgs e)
+		protected virtual void OnOpened(EventArgs e)
 		{
 			EventHelper.FireSync(Opened, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnClosed_Sync(EventArgs e)
+		protected virtual void OnClosed(EventArgs e)
 		{
 			EventHelper.FireSync(Closed, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnClosed_Async(EventArgs e)
+		protected virtual void OnDataReceived(EventArgs e)
 		{
-			EventHelper.FireAsync(Closed, this, e);
+			EventHelper.FireSync(DataReceived, this, e);
 		}
 
-		/// <remarks>
-		/// Asynchronously fire this event to prevent potential race conditions on closing.
-		/// </remarks>
-		protected virtual void OnDataReceived_Async(EventArgs e)
+		/// <summary></summary>
+		protected virtual void OnDataSent(EventArgs e)
 		{
-			EventHelper.FireAsync(DataReceived, this, e);
-		}
-
-		/// <remarks>
-		/// Asynchronously fire this event to prevent potential race conditions on closing.
-		/// </remarks>
-		protected virtual void OnDataSent_Async(EventArgs e)
-		{
-			EventHelper.FireAsync(DataSent, this, e);
+			EventHelper.FireSync(DataSent, this, e);
 		}
 
 		#endregion

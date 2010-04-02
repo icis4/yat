@@ -126,16 +126,16 @@ namespace MKY.IO.Usb
 		/// <param name="classGuid">GUID of a class of devices.</param>
 		public static DeviceInfo[] GetDevicesFromGuid(Guid classGuid)
 		{
-			List<DeviceInfo> devices = new List<DeviceInfo>();
+			List<DeviceInfo> l = new List<DeviceInfo>();
 
 			foreach (string path in Utilities.Win32.DeviceManagement.GetDevicesFromGuid(classGuid))
 			{
 				DeviceInfo device = GetDeviceInfoFromPath(path);
 				if (device != null)
-					devices.Add(device);
+					l.Add(device);
 			}
 
-			return (devices.ToArray());
+			return (l.ToArray());
 		}
 
 		#endregion
@@ -683,13 +683,13 @@ namespace MKY.IO.Usb
 		private void Device_DeviceConnected(object sender, DeviceEventArgs e)
 		{
 			if (_deviceInfo.Path == e.DevicePath)
-				OnConnected_Async(new EventArgs());
+				OnConnected(new EventArgs());
 		}
 
 		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
 		{
 			if (_deviceInfo.Path == e.DevicePath)
-				OnDisconnected_Async(new EventArgs());
+				OnDisconnected(new EventArgs());
 		}
 
 		#endregion
@@ -699,34 +699,22 @@ namespace MKY.IO.Usb
 		// Event Invoking
 		//==========================================================================================
 
-		/// <remarks>
-		/// Asynchronously fire this event to prevent potential deadlocks when immediately reading
-		/// from the device.
-		/// </remarks>
-		protected virtual void OnConnected_Async(EventArgs e)
+		/// <summary></summary>
+		protected virtual void OnConnected(EventArgs e)
 		{
 			_isConnected = true;
-			EventHelper.FireAsync(Connected, this, e);
-		}
-
-		/// <remarks>
-		/// Asynchronously fire this event to prevent potential race conditions on closing.
-		/// </remarks>
-		protected virtual void OnDisconnected_Async(EventArgs e)
-		{
-			_isConnected = false;
-			EventHelper.FireAsync(Disconnected, this, e);
+			EventHelper.FireSync(Connected, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnDisconnected_Sync(EventArgs e)
+		protected virtual void OnDisconnected(EventArgs e)
 		{
 			_isConnected = false;
 			EventHelper.FireSync(Disconnected, this, e);
 		}
 
 		/// <summary></summary>
-		protected virtual void OnError_Sync(ErrorEventArgs e)
+		protected virtual void OnError(ErrorEventArgs e)
 		{
 			EventHelper.FireSync<ErrorEventArgs>(Error, this, e);
 		}

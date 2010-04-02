@@ -100,7 +100,7 @@ namespace YAT.Model.Settings
 			SocketLocalTcpPort   = MKY.IO.Serial.SocketSettings.DefaultPort;
 			SocketLocalUdpPort   = MKY.IO.Serial.SocketSettings.DefaultPort + 1;
 
-			UsbHidDeviceInfo     = MKY.IO.Usb.DeviceInfo.GetDefaultDevice(MKY.IO.Usb.DeviceClass.Hid);
+			UsbHidDeviceInfo     = null;
 
 			StartTerminal        = true;
 		}

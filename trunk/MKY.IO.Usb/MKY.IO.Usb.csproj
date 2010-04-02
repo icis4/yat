@@ -52,6 +52,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SerialHidDeviceCollection.cs" />
+    <Compile Include="HidDeviceCollection.cs" />
     <Compile Include="HidDevice.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="EventArgs.cs" />

@@ -37,7 +37,7 @@ namespace MKY.IO.Usb
 		Audio               = 0x01,
 		CdcControl          = 0x02,
 		Hid                 = 0x03,
-		//                    0x04
+		// Reserved           0x04
 		Physical            = 0x05,
 		Image               = 0x06,
 		Printer             = 0x07,
@@ -45,7 +45,7 @@ namespace MKY.IO.Usb
 		Hub                 = 0x09,
 		CdcData             = 0x0A,
 		SmartCard           = 0x0B,
-		//                    0x0C
+		// Reserved           0x0C
 		ContentSecurity     = 0x0D,
 		Video               = 0x0E,
 		PersonalHealthcare  = 0x0F,
@@ -177,11 +177,169 @@ namespace MKY.IO.Usb
 		Disconnected,
 	}
 
+	/// <summary>
+	/// The USB usage page as described in http://www.usb.org/developers/devclass_docs/Hut1_12.pdf.
+	/// </summary>
+	public enum HidUsagePage
+	{
+		Unknown                      =   -1,
+		Undefined                    = 0x00,
+		GenericDesktopControls       = 0x01,
+		SimulationControls           = 0x02,
+		VirtualRealityControls       = 0x03,
+		SportControls                = 0x04,
+		GameControls                 = 0x05,
+		GenericDeviceControls        = 0x06,
+		KeyboardKeypad               = 0x07,
+		LEDs                         = 0x08,
+		Button                       = 0x09,
+		Ordinal                      = 0x0A,
+		Telephony                    = 0x0B,
+		Consumer                     = 0x0C,
+		Digitizer                    = 0x0D,
+		// Reserved                    0x0E
+		PID                          = 0x0F,
+		Unicode                      = 0x10,
+		// Reserved                    0x11..0x13
+		AlphanumericDisplay          = 0x14,
+		// Reserved                    0x15..0x3F
+		MedicalInstruments           = 0x40,
+		// Reserved                    0x41..0x7F
+		Monitor_1                    = 0x80,
+		Monitor_2                    = 0x81,
+		Monitor_3                    = 0x82,
+		Monitor_4                    = 0x83,
+		Power_1                      = 0x84,
+		Power_2                      = 0x85,
+		Power_3                      = 0x86,
+		Power_4                      = 0x87,
+		// Reserved                    0x88..0x8B
+		BarCodeScanner               = 0x8C,
+		Scale                        = 0x8D,
+		MagneticStripeReadingDevices = 0x8E,
+		PointOfSale                  = 0x8F,
+		CameraControl                = 0x90,
+		Arcade                       = 0x91,
+		// Reserved                    0x92..0xFEFF
+		// Vendor-defined            0xFF00..0xFFFF
+	}
+
+	#region HidUsagePage XEnum
+
+	/// <summary>
+	/// Extended enum XHidUsagePage.
+	/// </summary>
+	public class XHidUsagePage : XEnum
+	{
+		/// <summary>Default is <see cref="HidUsagePage.Unknown"/></summary>
+		public XHidUsagePage()
+			: base(HidUsagePage.Unknown)
+		{
+		}
+
+		/// <summary></summary>
+		protected XHidUsagePage(HidUsagePage page)
+			: base(page)
+		{
+		}
+
+		#region ToString
+
+		/// <summary></summary>
+		public override string ToString()
+		{
+			return (UnderlyingEnum.GetHashCode().ToString());
+		}
+
+		#endregion
+
+		#region Parse
+
+		/// <summary></summary>
+		public static XHidUsagePage Parse(string page)
+		{
+			return ((XHidUsagePage)int.Parse(page));
+		}
+
+		/// <summary></summary>
+		public static bool TryParse(string page, out XHidUsagePage result)
+		{
+			int intResult;
+
+			if (int.TryParse(page, out intResult))
+			{
+				result = (XHidUsagePage)intResult;
+				return (true);
+			}
+			else
+			{
+				result = null;
+				return (false);
+			}
+		}
+
+		#endregion
+
+		#region Conversion Operators
+
+		/// <summary></summary>
+		public static implicit operator HidUsagePage(XHidUsagePage page)
+		{
+			return ((HidUsagePage)page.UnderlyingEnum);
+		}
+
+		/// <summary></summary>
+		public static implicit operator XHidUsagePage(HidUsagePage page)
+		{
+			return (new XHidUsagePage(page));
+		}
+
+		/// <summary></summary>
+		public static implicit operator int(XHidUsagePage page)
+		{
+			return (page.GetHashCode());
+		}
+
+		/// <summary></summary>
+		public static implicit operator XHidUsagePage(int page)
+		{
+			return (new XHidUsagePage((HidUsagePage)page));
+		}
+
+		/// <summary></summary>
+		public static implicit operator string(XHidUsagePage page)
+		{
+			return (page.ToString());
+		}
+
+		/// <summary></summary>
+		public static implicit operator XHidUsagePage(string page)
+		{
+			return (Parse(page));
+		}
+
+		#endregion
+	}
+
+	#endregion
+
+	/// <summary>
+	/// The USB HID usage as described in http://www.usb.org/developers/devclass_docs/Hut1_12.pdf.
+	/// </summary>
 	public enum HidUsage
 	{
-		Unknown  = Utilities.Win32.Hid.Usage.Unknown,
-		Keyboard = Utilities.Win32.Hid.Usage.Keyboard,
-		Mouse    = Utilities.Win32.Hid.Usage.Mouse,
+		Unknown   =   -1,
+		Undefined = 0x00,
+		Pointer   = 0x01,
+		Mouse     = 0x02,
+		// Reserved 0x03,
+		Joystick  = 0x04,
+		GamePad   = 0x05,
+		Keyboard  = 0x06,
+		Keypad    = 0x07,
+		MultiAxis = 0x08,
+		TabletPC  = 0x09,
+		// See document above.
 	}
 
 	#region HidUsage XEnum
@@ -203,32 +361,12 @@ namespace MKY.IO.Usb
 		{
 		}
 
-		/// <summary></summary>
-		protected XHidUsage(Utilities.Win32.Hid.Usage usage)
-			: base((HidUsage)usage)
-		{
-		}
-
 		#region ToString
 
 		/// <summary></summary>
 		public override string ToString()
 		{
 			return (UnderlyingEnum.GetHashCode().ToString());
-		}
-
-		#endregion
-
-		#region GetItems
-
-		/// <summary></summary>
-		public static XHidUsage[] GetItems()
-		{
-			List<XHidUsage> a = new List<XHidUsage>();
-			a.Add(new XHidUsage(HidUsage.Unknown));
-			a.Add(new XHidUsage(HidUsage.Keyboard));
-			a.Add(new XHidUsage(HidUsage.Mouse));
-			return (a.ToArray());
 		}
 
 		#endregion
@@ -275,18 +413,6 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		public static implicit operator Utilities.Win32.Hid.Usage(XHidUsage usage)
-		{
-			return ((Utilities.Win32.Hid.Usage)usage.UnderlyingEnum);
-		}
-
-		/// <summary></summary>
-		public static implicit operator XHidUsage(Utilities.Win32.Hid.Usage usage)
-		{
-			return (new XHidUsage(usage));
-		}
-
-		/// <summary></summary>
 		public static implicit operator int(XHidUsage usage)
 		{
 			return (usage.GetHashCode());
@@ -295,9 +421,7 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public static implicit operator XHidUsage(int usage)
 		{
-			if      (usage >= (int)HidUsage.Mouse)    return (new XHidUsage(HidUsage.Mouse));
-			else if (usage >= (int)HidUsage.Keyboard) return (new XHidUsage(HidUsage.Keyboard));
-			else                                      return (new XHidUsage(HidUsage.Unknown));
+			return (new XHidUsage((HidUsage)usage));
 		}
 
 		/// <summary></summary>

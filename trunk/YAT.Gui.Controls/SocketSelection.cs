@@ -503,17 +503,11 @@ namespace YAT.Gui.Controls
 				textBox_RemotePort.Text = "";
 			}
 
-			// Local host address.
+			// Local interface.
 			if (Enabled && (_hostType != SocketHostType.Unknown))
-			{
-				comboBox_LocalInterface.Enabled = true;
 				comboBox_LocalInterface.Text = _localInterface;
-			}
 			else
-			{
-				comboBox_LocalInterface.Enabled = false;
 				comboBox_LocalInterface.SelectedIndex = -1;
-			}
 
 			// Local port label.
 			if (Enabled && (_hostType == SocketHostType.Udp))
@@ -523,20 +517,11 @@ namespace YAT.Gui.Controls
 
 			// Local port.
 			if (Enabled && ((_hostType == SocketHostType.TcpServer) || (_hostType == SocketHostType.TcpAutoSocket)))
-			{
-				textBox_LocalPort.Enabled = true;
 				textBox_LocalPort.Text = _localTcpPort.ToString();
-			}
 			else if (Enabled && (_hostType == SocketHostType.Udp))
-			{
-				textBox_LocalPort.Enabled = true;
 				textBox_LocalPort.Text = _localUdpPort.ToString();
-			}
 			else
-			{
-				textBox_LocalPort.Enabled = false;
 				textBox_LocalPort.Text = "";
-			}
 
 			_isSettingControls = false;
 		}

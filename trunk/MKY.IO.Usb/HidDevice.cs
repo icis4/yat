@@ -97,9 +97,50 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Returns an array of all USB HID devices currently available on the system.
 		/// </summary>
-		public static new string[] GetDevices()
+		public static new DeviceInfo[] GetDevices()
 		{
-			return (Utilities.Win32.DeviceManagement.GetDevicesFromGuid(HidGuid));
+			return (GetDevicesFromGuid(GetGuidFromDeviceClass(DeviceClass.Hid)));
+		}
+
+		/// <summary>
+		/// Returns an array of the USB HID devices of the given usage page currently available
+		/// on the system.
+		/// </summary>
+		public static DeviceInfo[] GetDevices(HidUsagePage usagePage)
+		{
+			List<DeviceInfo> l = new List<DeviceInfo>();
+
+			foreach (DeviceInfo di in GetDevices())
+			{
+				using (HidDevice device = new HidDevice(di))
+				{
+					if (device.UsagePage == usagePage)
+						l.Add(di);
+				}
+			}
+
+			return (l.ToArray());
+		}
+
+		/// <summary>
+		/// Returns an array of the USB HID devices of the given usage page and usage currently
+		/// available on the system.
+		/// </summary>
+		public static DeviceInfo[] GetDevices(HidUsagePage usagePage, HidUsage usage)
+		{
+			List<DeviceInfo> l = new List<DeviceInfo>();
+
+			foreach (DeviceInfo di in GetDevices())
+			{
+				using (HidDevice device = new HidDevice(di))
+				{
+					if (device.UsagePage == usagePage)
+						if (device.Usage == usage)
+							l.Add(di);
+				}
+			}
+
+			return (l.ToArray());
 		}
 
 		#endregion
@@ -158,8 +199,8 @@ namespace MKY.IO.Usb
 		// Fields
 		//==========================================================================================
 
+		private HidUsagePage _usagePage;
 		private HidUsage _usage;
-		private int _usagePage;
 
 		private int _inputReportLength;
 		private int _outputReportLength;
@@ -220,8 +261,8 @@ namespace MKY.IO.Usb
 				{
 					Utilities.Win32.Hid.HIDP_CAPS caps = Utilities.Win32.Hid.GetDeviceCapabilities(deviceHandle);
 
-					_usage = (XHidUsage)Utilities.Win32.Hid.GetHidUsage(caps);
-					_usagePage = caps.UsagePage;
+					_usagePage = (XHidUsagePage)caps.UsagePage;
+					_usage     = (XHidUsage)caps.Usage;
 
 					_inputReportLength   = caps.InputReportByteLength;
 					_outputReportLength  = caps.OutputReportByteLength;
@@ -270,15 +311,15 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual HidUsage Usage
+		public virtual HidUsagePage UsagePage
 		{
-			get { return (_usage); }
+			get { return (_usagePage); }
 		}
 
 		/// <summary></summary>
-		public virtual int UsagePage
+		public virtual HidUsage Usage
 		{
-			get { return (_usagePage); }
+			get { return (_usage); }
 		}
 
 		/// <summary></summary>

@@ -219,6 +219,23 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary>
+		/// Startup flag only used in the following event handler.
+		/// </summary>
+		private bool _isStartingUp = true;
+
+		/// <summary>
+		/// Initially set controls and validate its contents where needed.
+		/// </summary>
+		private void SerialPortSettings_Paint(object sender, PaintEventArgs e)
+		{
+			if (_isStartingUp)
+			{
+				_isStartingUp = false;
+				SetControls();
+			}
+		}
+
+		/// <summary>
 		/// Ensure that all controls are cleared when control gets disabled.
 		/// </summary>
 		private void SerialPortSettings_EnabledChanged(object sender, EventArgs e)

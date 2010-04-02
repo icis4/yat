@@ -80,7 +80,7 @@ namespace YAT.Domain
 		#region GetItems
 
 		/// <summary></summary>
-		public new static XControlCharRadix[] GetItems()
+		public static new XControlCharRadix[] GetItems()
 		{
 			List<XControlCharRadix> items = new List<XControlCharRadix>();
 			foreach (XRadix radix in XRadix.GetItems())
@@ -96,7 +96,7 @@ namespace YAT.Domain
 		#region Parse
 
 		/// <summary></summary>
-		public new static XControlCharRadix Parse(string radix)
+		public static new XControlCharRadix Parse(string radix)
 		{
 			if (string.Compare(radix, AsciiMnemonic_string, true) == 0)
 			{

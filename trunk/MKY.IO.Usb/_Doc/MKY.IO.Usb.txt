@@ -3,26 +3,26 @@ MKY.IO.Usb
 ==========
 
 This USB library is based on three existing libraries available on the internet:
-- "GenericHid" from <http://www.lvr.com/hidpage.htm>
-- "UsbLibrary" from <http://www.codeproject.com/KB/cs/USB_HID.aspx?msg=2816038>
-- "UsbHid"     from <http://www.florian-leitner.de/index.php/category/usb-hid-library/>
+- 'GenericHid' from <http://www.lvr.com/hidpage.htm>
+- 'UsbLibrary' from <http://www.codeproject.com/KB/cs/USB_HID.aspx?msg=2816038>
+- 'UsbHid'     from <http://www.florian-leitner.de/index.php/category/usb-hid-library/>
 
 The approach of merging these libraries into MKY.IO.Usb was choosen due to:
 - None of the libraries provided all the features required for USB Ser/HID for YAT
 - Need for a compact though complete library for USB Ser/HID for YAT
 
-An alternative would have been to make use of a Win32 port of "libusb". Such approach is shown
-in "libusb.NET"/"libusb.NET.Test". "libusb.NET" uses the "Winbows Backend" port of "libusb".
-"libusb.NET" is based on "SharpUSBLib" by Mike Krüger.
+An alternative would have been to make use of a Win32 port of 'libusb'. Such approach is shown
+in 'libusb.NET'/'libusb.NET.Test'. 'libusb.NET' uses the 'Winbows Backend' port of 'libusb'.
+'libusb.NET' is based on 'SharpUSBLib' by Mike Krüger.
 
-However, experience has shown that a "libusb" based approach isn't feasible:
-- The API of "libusb" isn't a good match for a C#.NET based project
-- "libusb" doesn't easily fit into a managed .NET solution
-- "libusb" is implemented platform dependent and must be separately built for Win32/x86 and Win64/x64
-- "libusb" only provides the basic USB functions but no HID specifics
-- "libusb Windows Backend" doesn't yet support detection of hot plug-in/out
-- "libusb-win32" seems to have serious portability issues on Vista, Win7, x64
-- "libusb-win32" is based on libusb-0.1.12 but libusb-1.0 has been available since 2008-12
+However, experience has shown that a 'libusb' based approach isn't feasible:
+- The API of 'libusb' isn't a good match for a C#.NET based project
+- 'libusb' doesn't easily fit into a managed .NET solution
+- 'libusb' is implemented platform dependent and must be separately built for Win32/x86 and Win64/x64
+- 'libusb' only provides the basic USB functions but no HID specifics
+- 'libusb windows_backend' doesn't yet support detection of hot plug-in/out
+- 'libusb-win32' seems to have serious portability issues on Vista, Win7, x64
+- 'libusb-win32' is based on libusb-0.1.12 but libusb-1.0 has been available since 2008-12
 
 In the end, it proved much more promising to go for a new MKY.IO.Usb.
 

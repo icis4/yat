@@ -104,7 +104,7 @@ namespace MKY.IO.Serial
 		#region GetItems
 
 		/// <summary></summary>
-		public new static XSerialFlowControl[] GetItems()
+		public static new XSerialFlowControl[] GetItems()
 		{
 			List<XSerialFlowControl> a = new List<XSerialFlowControl>();
 			a.Add(new XSerialFlowControl(SerialFlowControl.None));
@@ -121,7 +121,7 @@ namespace MKY.IO.Serial
 		#region Parse
 
 		/// <summary></summary>
-		public new static XSerialFlowControl Parse(string flowControl)
+		public static new XSerialFlowControl Parse(string flowControl)
 		{
 			if      ((string.Compare(flowControl, Manual_string, true) == 0) ||
 					 (string.Compare(flowControl, Manual_stringShort, true) == 0))

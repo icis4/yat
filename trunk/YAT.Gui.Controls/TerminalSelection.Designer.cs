@@ -84,6 +84,8 @@ namespace YAT.Gui.Controls
 			this.Controls.Add(this.label_IOType);
 			this.Name = "TerminalSelection";
 			this.Size = new System.Drawing.Size(260, 54);
+			this.Paint += new System.Windows.Forms.PaintEventHandler(this.TerminalSelection_Paint);
+			this.EnabledChanged += new System.EventHandler(this.TerminalSelection_EnabledChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

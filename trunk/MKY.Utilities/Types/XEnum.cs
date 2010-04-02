@@ -180,7 +180,8 @@ namespace MKY.Utilities.Types
 		{
 			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
-				return (UnderlyingEnum == value.UnderlyingEnum);
+				return ((UnderlyingEnum != null) && (UnderlyingEnum.Equals(value.UnderlyingEnum)));
+				// Attention, Enum doesn't override operators == and !=, use Equals().
 
 			return (false);
 		}

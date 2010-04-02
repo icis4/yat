@@ -96,43 +96,6 @@ namespace MKY.IO.Usb
 
 		#endregion
 
-		#region Static Methods
-		//==========================================================================================
-		// Static Methods
-		//==========================================================================================
-
-		// \fixme Decide which is better
-
-		/*/// <summary>
-		/// For USB, no device can be consiered to be the default device. Therefore, this method
-		/// always returns <c>null</c>.
-		/// </summary>
-		/// <remarks>
-		/// Do not create a new USB device collection here. Filling the collection with all
-		/// available devices takes some time which makes little sense for USB as described above.
-		/// </remarks>
-		public static DeviceInfo GetDefaultDevice(DeviceClass deviceClass)
-		{
-			return (null);
-		}*/
-
-		/// <summary>
-		/// Returns default device on system. Default is the first device available.
-		/// Returns <c>null</c> if no devices are available.
-		/// </summary>
-		public static DeviceInfo GetDefaultDevice(DeviceClass deviceClass)
-		{
-			/*DeviceCollection l = new DeviceCollection(deviceClass);
-			l.FillWithAvailableDevices();
-
-			if (l.Count > 0)
-				return (new DeviceInfo(l[0]));
-			else*/
-				return (null);
-		}
-
-		#endregion
-
 		#region Object Lifetime
 		//==========================================================================================
 		// Object Lifetime

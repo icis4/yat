@@ -70,14 +70,6 @@ namespace MKY.Utilities.Win32
 		}
 
 		/// <summary></summary>
-		public enum Usage
-		{
-			Unknown  = 0,
-			Keyboard = 0x0106,
-			Mouse    = 0x0102,
-		}
-
-		/// <summary></summary>
 		[StructLayout(LayoutKind.Sequential)]
 		public struct HIDD_ATTRIBUTES
 		{
@@ -466,6 +458,7 @@ namespace MKY.Utilities.Win32
 
 			System.Diagnostics.Debug.WriteLine("Couldn't create shared USB device query handle.");
 			System.Diagnostics.Debug.WriteLine(Debug.GetLastError());
+			XDebug.WriteStack(typeof(Hid));
 
 			deviceHandle = null;
 			return (false);
@@ -495,37 +488,9 @@ namespace MKY.Utilities.Win32
 
 			System.Diagnostics.Debug.WriteLine("Couldn't create shared USB device read/write handle.");
 			System.Diagnostics.Debug.WriteLine(Debug.GetLastError());
+			XDebug.WriteStack(typeof(Hid));
 
 			readHandle = null;
-			return (false);
-		}
-
-		/// <summary>
-		/// Creates a device handle of the HID device at the given system path.
-		/// </summary>
-		public static bool CreateExclusiveReadWriteHandle(string systemPath, out SafeFileHandle readWriteHandle)
-		{
-			SafeFileHandle h = Utilities.Win32.FileIO.CreateFile
-				(
-				systemPath,
-				FileIO.Access.GENERIC_READ_WRITE,
-				FileIO.ShareMode.SHARE_NONE,
-				IntPtr.Zero,
-				FileIO.CreationDisposition.OPEN_EXISTING,
-				FileIO.AttributesAndFlags.FLAG_OVERLAPPED,
-				IntPtr.Zero
-				);
-
-			if (!h.IsInvalid)
-			{
-				readWriteHandle = h;
-				return (true);
-			}
-
-			System.Diagnostics.Debug.WriteLine("Couldn't create exclusive USB device read/write handle.");
-			System.Diagnostics.Debug.WriteLine(Debug.GetLastError());
-
-			readWriteHandle = null;
 			return (false);
 		}
 
@@ -796,42 +761,6 @@ namespace MKY.Utilities.Win32
 			}
 
 			return (capabilities);
-		}
-
-		/// <summary>
-		/// Creates a 32-bit Usage from the Usage Page and Usage ID. 
-		/// Determines whether the Usage is a system mouse or keyboard.
-		/// Can be modified to detect other Usages.
-		/// </summary>
-		/// <param name="capabilities">A HIDP_CAPS structure retrieved with HidP_GetCaps.</param>
-		/// <returns>A String describing the usage.</returns>
-		public static Usage GetHidUsage(HIDP_CAPS capabilities)
-		{
-			try
-			{
-				// For a complete list,.see http://www.usb.org/developers/devclass_docs/Hut1_12.pdf.
-				switch (capabilities.UsagePage)
-				{
-					case 0x01: // Generic Desktop Page
-					{
-						switch (capabilities.Usage)
-						{
-							case 0x02: // Mouse
-								return (Usage.Mouse);
-
-							case 0x06: // Keyboard
-								return (Usage.Keyboard);
-						}
-						break;
-					}
-				}
-				return (Usage.Unknown);
-			}
-			catch (Exception ex)
-			{
-				XDebug.WriteException(typeof(Hid), ex);
-				throw;
-			}
 		}
 
 		#endregion

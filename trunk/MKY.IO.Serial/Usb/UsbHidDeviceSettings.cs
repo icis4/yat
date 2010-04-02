@@ -69,7 +69,7 @@ namespace MKY.IO.Serial
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			DeviceInfo = DeviceInfo.GetDefaultDevice(DeviceClass.Hid);
+			DeviceInfo = null;
 			AutoReopen = AutoReopenDefault;
 		}
 
