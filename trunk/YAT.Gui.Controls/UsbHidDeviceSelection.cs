@@ -199,6 +199,15 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary>
+		/// Ensure that all controls are cleared when control gets disabled.
+		/// </summary>
+		private void UsbHidDeviceSelection_EnabledChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+				SetControls();
+		}
+
 		#endregion
 
 		#region Controls Event Handlers
@@ -303,7 +312,7 @@ namespace YAT.Gui.Controls
 		{
 			_isSettingControls = true;
 
-			if ((comboBox_Device.Items.Count > 0) && !DesignMode)
+			if (!DesignMode && Enabled && (comboBox_Device.Items.Count > 0))
 			{
 				if (_deviceInfo != null)
 					comboBox_Device.SelectedItem = _deviceInfo;

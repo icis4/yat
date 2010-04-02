@@ -215,6 +215,7 @@ namespace YAT.Gui.Controls
 			this.Controls.Add(this.label_BaudRate);
 			this.Name = "SerialPortSettings";
 			this.Size = new System.Drawing.Size(260, 232);
+			this.EnabledChanged += new System.EventHandler(this.SerialPortSettings_EnabledChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

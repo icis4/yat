@@ -113,9 +113,9 @@ namespace YAT.Gui.Controls
 
 		#endregion
 
-		#region Form Event Handlers
+		#region Control Event Handlers
 		//==========================================================================================
-		// Form Event Handlers
+		// Control Event Handlers
 		//==========================================================================================
 
 		/// <summary>
@@ -133,6 +133,15 @@ namespace YAT.Gui.Controls
 				_isStartingUp = false;
 				SetControls();
 			}
+		}
+
+		/// <summary>
+		/// Ensure that all controls are cleared when control gets disabled.
+		/// </summary>
+		private void SocketSettings_EnabledChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+				SetControls();
 		}
 
 		#endregion
@@ -189,19 +198,19 @@ namespace YAT.Gui.Controls
 		{
 			_isSettingControls = true;
 
-			bool isTcpClient = (_hostType == SocketHostType.TcpClient);
+			bool enabledTcpClient = (Enabled && (_hostType == SocketHostType.TcpClient));
 
 			bool autoReconnectEnabled;
-			if (isTcpClient)
+			if (enabledTcpClient)
 				autoReconnectEnabled = _tcpClientAutoReconnect.Enabled;
 			else
 				autoReconnectEnabled = false;
 
-			checkBox_TcpClientAutoReconnect.Enabled = isTcpClient;
+			checkBox_TcpClientAutoReconnect.Enabled = enabledTcpClient;
 			checkBox_TcpClientAutoReconnect.Checked = autoReconnectEnabled;
 
 			string autoReconnectIntervalText;
-			if (isTcpClient)
+			if (enabledTcpClient)
 				autoReconnectIntervalText = _tcpClientAutoReconnect.Interval.ToString();
 			else
 				autoReconnectIntervalText = "";
@@ -209,8 +218,8 @@ namespace YAT.Gui.Controls
 			textBox_TcpClientAutoReconnectInterval.Enabled = autoReconnectEnabled;
 			textBox_TcpClientAutoReconnectInterval.Text = autoReconnectIntervalText;
 
-			label_TcpClientAutoReconnectInterval.Enabled = isTcpClient;
-			label_TcpClientAutoReconnectIntervalUnit.Enabled = isTcpClient;
+			label_TcpClientAutoReconnectInterval.Enabled = enabledTcpClient;
+			label_TcpClientAutoReconnectIntervalUnit.Enabled = enabledTcpClient;
 
 			_isSettingControls = false;
 		}

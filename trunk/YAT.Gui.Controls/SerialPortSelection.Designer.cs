@@ -83,6 +83,7 @@ namespace YAT.Gui.Controls
 			this.Name = "SerialPortSelection";
 			this.Size = new System.Drawing.Size(285, 46);
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.SerialPortSelection_Paint);
+			this.EnabledChanged += new System.EventHandler(this.SerialPortSelection_EnabledChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

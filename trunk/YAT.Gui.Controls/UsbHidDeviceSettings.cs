@@ -89,9 +89,9 @@ namespace YAT.Gui.Controls
 
 		#endregion
 
-		#region Form Event Handlers
+		#region Control Event Handlers
 		//==========================================================================================
-		// Form Event Handlers
+		// Control Event Handlers
 		//==========================================================================================
 
 		/// <summary>
@@ -109,6 +109,15 @@ namespace YAT.Gui.Controls
 				_isStartingUp = false;
 				SetControls();
 			}
+		}
+
+		/// <summary>
+		/// Ensure that all controls are cleared when control gets disabled.
+		/// </summary>
+		private void UsbHidDeviceSettings_EnabledChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+				SetControls();
 		}
 
 		#endregion
@@ -165,9 +174,19 @@ namespace YAT.Gui.Controls
 		{
 			_isSettingControls = true;
 
-			checkBox_AutoReopen.Checked = _autoReopen.Enabled;
-			textBox_AutoReopenInterval.Enabled = _autoReopen.Enabled;
-			textBox_AutoReopenInterval.Text = _autoReopen.Interval.ToString();
+			if (Enabled)
+			{
+				bool autoReopenEnabled = _autoReopen.Enabled;
+				checkBox_AutoReopen.Checked = autoReopenEnabled;
+				textBox_AutoReopenInterval.Enabled = autoReopenEnabled;
+				textBox_AutoReopenInterval.Text = _autoReopen.Interval.ToString();
+			}
+			else
+			{
+				checkBox_AutoReopen.Checked = false;
+				textBox_AutoReopenInterval.Enabled = false;
+				textBox_AutoReopenInterval.Text = "";
+			}
 
 			_isSettingControls = false;
 		}
