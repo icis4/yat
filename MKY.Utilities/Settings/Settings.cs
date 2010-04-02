@@ -177,7 +177,7 @@ namespace MKY.Utilities.Settings
 		/// <summary></summary>
 		protected virtual void SetMyDefaults()
 		{
-			// default implementation has nothing to do
+			// Default implementation has nothing to do (yet).
 		}
 
 		#region Object Members
@@ -195,7 +195,7 @@ namespace MKY.Utilities.Settings
 			{
 				Settings value = (Settings)obj;
 
-				// Ensure that object.operator!=() is called
+				// Ensure that object.operator!=() is called.
 				if ((object)value != null)
 				{
 					if (this.GetType() == value.GetType())
@@ -205,7 +205,7 @@ namespace MKY.Utilities.Settings
 						{
 							for (int i = 0; i < _nodes.Count; i++)
 							{
-								if (!_nodes[i].Equals(value._nodes[i]))
+								if (_nodes[i] != value._nodes[i])
 									return (false);
 							}
 							return (true);

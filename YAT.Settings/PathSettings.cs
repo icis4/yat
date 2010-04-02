@@ -164,16 +164,16 @@ namespace YAT.Settings
 		/// </summary>
 		public bool Equals(PathSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_terminalFilesPath.Equals (value._terminalFilesPath) &&
-					_workspaceFilesPath.Equals(value._workspaceFilesPath) &&
-					_sendFilesPath.Equals     (value._sendFilesPath) &&
-					_logFilesPath.Equals      (value._logFilesPath) &&
-					_monitorFilesPath.Equals  (value._monitorFilesPath)
+					(_terminalFilesPath  == value._terminalFilesPath) &&
+					(_workspaceFilesPath == value._workspaceFilesPath) &&
+					(_sendFilesPath      == value._sendFilesPath) &&
+					(_logFilesPath       == value._logFilesPath) &&
+					(_monitorFilesPath   == value._monitorFilesPath)
 					);
 			}
 			return (false);

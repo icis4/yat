@@ -227,14 +227,14 @@ namespace YAT.Settings.Terminal
 		/// </summary>
 		public bool Equals(ImplicitSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_terminalIsStarted.Equals(value._terminalIsStarted) &&
-					_logIsStarted.Equals(value._logIsStarted) &&
-					base.Equals((MKY.Utilities.Settings.Settings)value) // compares all settings nodes
+					(_terminalIsStarted == value._terminalIsStarted) &&
+					(_logIsStarted      == value._logIsStarted) &&
+					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
 					);
 			}
 			return (false);

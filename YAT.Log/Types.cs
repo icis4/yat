@@ -95,13 +95,13 @@ namespace YAT.Log
 		/// </summary>
 		public bool Equals(FileNameSeparator value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					Separator.Equals(value.Separator) &&
-					Description.Equals(value.Description)
+					(Separator   == value.Separator) &&
+					(Description == value.Description)
 					);
 			}
 			return (false);
@@ -178,13 +178,13 @@ namespace YAT.Log
 		{
 			switch (description)
 			{
-				case UnderscoreToString: return (Underscore);
-				case DashToString: return (Dash);
+				case UnderscoreToString:     return (Underscore);
+				case DashToString:           return (Dash);
 				case DashWithSpacesToString: return (DashWithSpaces);
-				case BallToString: return (Ball);
+				case BallToString:           return (Ball);
 				case BallWithSpacesToString: return (BallWithSpaces);
-				case NoneToString: return (None);
-				default: return (new FileNameSeparator(description, description));
+				case NoneToString:           return (None);
+				default:                     return (new FileNameSeparator(description, description));
 			}
 		}
 

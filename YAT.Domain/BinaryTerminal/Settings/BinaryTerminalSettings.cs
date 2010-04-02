@@ -177,13 +177,13 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public bool Equals(BinaryTerminalSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_separateTxRxDisplay.Equals(value._separateTxRxDisplay) &&
-					base.Equals((MKY.Utilities.Settings.Settings)value) // compares all settings nodes
+					(_separateTxRxDisplay == value._separateTxRxDisplay) &&
+					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
 					);
 			}
 			return (false);

@@ -223,15 +223,15 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public bool Equals(IOSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return 
 					(
-					_ioType.Equals(value._ioType) &&
-					_serialParityErrorReplacement.Equals(value._serialParityErrorReplacement) &&
-					_endianess.Equals(value._endianess) &&
-					base.Equals((MKY.Utilities.Settings.Settings)value) // compares all settings nodes
+					(_ioType                       == value._ioType) &&
+					(_serialParityErrorReplacement == value._serialParityErrorReplacement) &&
+					(_endianess                    == value._endianess) &&
+					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
 					);
 			}
 			return (false);

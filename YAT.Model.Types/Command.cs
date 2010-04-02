@@ -492,17 +492,17 @@ namespace YAT.Model.Types
 		/// </summary>
 		public bool Equals(Command value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_isDefined.Equals   (value._isDefined) &&
-					_description.Equals (value._description) &&
-					XArray.ValuesEqual  (_commandLines, value._commandLines) &&
-					_defaultRadix.Equals(value._defaultRadix) &&
-					_isFilePath.Equals  (value._isFilePath) &&
-					_filePath.Equals    (value._filePath)
+					(_isDefined    == value._isDefined) &&
+					(_description  == value._description) &&
+					XArray.ValuesEqual(_commandLines, value._commandLines) &&
+					(_defaultRadix == value._defaultRadix) &&
+					(_isFilePath   == value._isFilePath) &&
+					(_filePath     == value._filePath)
 					);
 			}
 			return (false);

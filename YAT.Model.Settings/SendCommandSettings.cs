@@ -125,13 +125,13 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public bool Equals(SendCommandSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_command.Equals(value._command) &&
-					_recentsCommands.Equals(value._recentsCommands)
+					(_command         == value._command) &&
+					(_recentsCommands == value._recentsCommands)
 					);
 			}
 			return (false);

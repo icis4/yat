@@ -240,19 +240,19 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public bool Equals(TextTerminalSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_separateTxRxEol.Equals (value._separateTxRxEol) &&
-					_txEol.Equals           (value._txEol) &&
-					_rxEol.Equals           (value._rxEol) &&
-					_encoding.Equals        (value._encoding) &&
-					_showEol.Equals         (value._showEol) &&
-					_lineSendDelay.Equals   (value._lineSendDelay) &&
-					_waitForResponse.Equals (value._waitForResponse) &&
-					_charSubstitution.Equals(value._charSubstitution)
+					(_separateTxRxEol  == value._separateTxRxEol) &&
+					(_txEol            == value._txEol) &&
+					(_rxEol            == value._rxEol) &&
+					(_encoding         == value._encoding) &&
+					(_showEol          == value._showEol) &&
+					(_lineSendDelay    == value._lineSendDelay) &&
+					(_waitForResponse  == value._waitForResponse) &&
+					(_charSubstitution == value._charSubstitution)
 					);
 			}
 			return (false);

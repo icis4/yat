@@ -178,9 +178,9 @@ namespace MKY.Utilities.Types
 		/// </summary>
 		public bool Equals(XEnum value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
-				return (UnderlyingEnum.Equals(value.UnderlyingEnum));
+				return (UnderlyingEnum == value.UnderlyingEnum);
 
 			return (false);
 		}

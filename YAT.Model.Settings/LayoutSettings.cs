@@ -270,23 +270,23 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public bool Equals(LayoutSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_txMonitorPanelIsVisible.Equals(value._txMonitorPanelIsVisible) &&
-					_bidirMonitorPanelIsVisible.Equals(value._bidirMonitorPanelIsVisible) &&
-					_rxMonitorPanelIsVisible.Equals(value._rxMonitorPanelIsVisible) &&
-					_monitorOrientation.Equals(value._monitorOrientation) &&
-					_txMonitorSplitterRatio.Equals(value._txMonitorSplitterRatio) &&
-					_rxMonitorSplitterRatio.Equals(value._rxMonitorSplitterRatio) &&
+					(_txMonitorPanelIsVisible    == value._txMonitorPanelIsVisible) &&
+					(_bidirMonitorPanelIsVisible == value._bidirMonitorPanelIsVisible) &&
+					(_rxMonitorPanelIsVisible    == value._rxMonitorPanelIsVisible) &&
+					(_monitorOrientation         == value._monitorOrientation) &&
+					(_txMonitorSplitterRatio     == value._txMonitorSplitterRatio) &&
+					(_rxMonitorSplitterRatio     == value._rxMonitorSplitterRatio) &&
 
-					_predefinedPanelIsVisible.Equals(value._predefinedPanelIsVisible) &&
-					_predefinedSplitterRatio.Equals(value._predefinedSplitterRatio) &&
+					(_predefinedPanelIsVisible   == value._predefinedPanelIsVisible) &&
+					(_predefinedSplitterRatio    == value._predefinedSplitterRatio) &&
 
-					_sendCommandPanelIsVisible.Equals(value._sendCommandPanelIsVisible) &&
-					_sendFilePanelIsVisible.Equals(value._sendFilePanelIsVisible)
+					(_sendCommandPanelIsVisible  == value._sendCommandPanelIsVisible) &&
+					(_sendFilePanelIsVisible     == value._sendFilePanelIsVisible)
 					);
 			}
 			return (false);

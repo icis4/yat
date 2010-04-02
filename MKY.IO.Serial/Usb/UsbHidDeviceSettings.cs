@@ -128,13 +128,13 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public bool Equals(UsbHidDeviceSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
-				return 
+				return
 					(
-					_deviceInfo.Equals(value._deviceInfo) &&
-					_autoReopen.Equals(value._autoReopen)
+					(_deviceInfo == value._deviceInfo) &&
+					(_autoReopen == value._autoReopen)
 					);
 			}
 			return (false);

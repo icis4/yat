@@ -103,14 +103,10 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public bool Equals(WorkspaceSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
-			{
-				return
-					(
-					_terminalSettings.Equals(value._terminalSettings)
-					);
-			}
+				return (_terminalSettings == value._terminalSettings);
+
 			return (false);
 		}
 

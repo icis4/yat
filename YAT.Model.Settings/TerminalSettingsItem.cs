@@ -146,14 +146,14 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public bool Equals(TerminalSettingsItem value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_filePath.Equals(value._filePath) &&
-					_guid.Equals(value._guid) &&
-					base.Equals((MKY.Utilities.Settings.Settings)value) // compares all settings nodes
+					(_filePath == value._filePath) &&
+					(_guid     == value._guid) &&
+					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
 					);
 			}
 			return (false);

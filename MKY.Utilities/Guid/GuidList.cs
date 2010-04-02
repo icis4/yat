@@ -75,7 +75,7 @@ namespace MKY.Utilities.Guid
 			GuidList<T> clone = new GuidList<T>(this);
 			for (int i = 0; i < clone.Count; i++)
 			{
-				if (this[i].Guid.Equals(item.Guid))
+				if (this[i].Guid == item.Guid)
 				{
 					this[i] = item;
 					return (true);

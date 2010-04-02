@@ -285,13 +285,13 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public bool Equals(TerminalSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_terminalType.Equals(value._terminalType) &&
-					base.Equals((MKY.Utilities.Settings.Settings)value) // compares all settings nodes
+					(_terminalType == value._terminalType) &&
+					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
 					);
 			}
 			return (false);

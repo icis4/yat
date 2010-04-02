@@ -135,13 +135,13 @@ namespace YAT.Settings
 		/// </summary>
 		public bool Equals(AutoWorkspaceSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_filePath.       Equals(value._filePath) &&
-					_filePathUser.Equals(value._filePathUser)
+					(_filePath     == value._filePath) &&
+					(_filePathUser == value._filePathUser)
 					);
 			}
 			return (false);

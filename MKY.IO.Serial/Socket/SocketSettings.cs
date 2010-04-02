@@ -363,18 +363,18 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public bool Equals(SocketSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_hostType.Equals(value._hostType) &&
-					_remoteHost.Equals(value._remoteHost) &&
-					_remotePort.Equals(value._remotePort) &&
-					_localInterface.Equals(value._localInterface) &&
-					_localTcpPort.Equals(value._localTcpPort) &&
-					_localUdpPort.Equals(value._localUdpPort) &&
-					_tcpClientAutoReconnect.Equals(value._tcpClientAutoReconnect)
+					(_hostType               == value._hostType) &&
+					(_remoteHost             == value._remoteHost) &&
+					(_remotePort             == value._remotePort) &&
+					(_localInterface         == value._localInterface) &&
+					(_localTcpPort           == value._localTcpPort) &&
+					(_localUdpPort           == value._localUdpPort) &&
+					(_tcpClientAutoReconnect == value._tcpClientAutoReconnect)
 					);
 			}
 			return (false);
@@ -390,15 +390,15 @@ namespace MKY.IO.Serial
 		public override string ToString()
 		{
 			return
-			  (
-			  ((XSocketHostType)_hostType).ToString() + ", " +
-			  _remoteHost + ", " +
-			  _remotePort.ToString() + ", " +
-			  _localInterface + ", " +
-			  _localTcpPort.ToString() + ", " +
-			  _localUdpPort.ToString() + ", " +
-			  _tcpClientAutoReconnect.ToString()
-			  );
+				(
+				((XSocketHostType)_hostType) + ", " +
+				_remoteHost                  + ", " +
+				_remotePort                  + ", " +
+				_localInterface              + ", " +
+				_localTcpPort                + ", " +
+				_localUdpPort                + ", " +
+				_tcpClientAutoReconnect
+				);
 		}
 
 		#endregion

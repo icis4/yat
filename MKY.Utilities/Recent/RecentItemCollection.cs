@@ -24,6 +24,7 @@ namespace MKY.Utilities.Recent
 	/// Collection for recent items like recent files, provides methods to handle the recent items.
 	/// </summary>
 	public class RecentItemCollection<T> : List<RecentItem<T>>
+		where T : IEquatable<T>
 	{
 		/// <summary></summary>
 		public RecentItemCollection()

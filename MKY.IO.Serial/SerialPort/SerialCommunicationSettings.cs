@@ -176,16 +176,16 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public bool Equals(SerialCommunicationSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_baudRate.Equals(value._baudRate) &&
-					_dataBits.Equals(value._dataBits) &&
-					_parity.Equals(value._parity) &&
-					_stopBits.Equals(value._stopBits) &&
-					_flowControl.Equals(value._flowControl)
+					(_baudRate    == value._baudRate) &&
+					(_dataBits    == value._dataBits) &&
+					(_parity      == value._parity) &&
+					(_stopBits    == value._stopBits) &&
+					(_flowControl == value._flowControl)
 					);
 			}
 			return (false);
@@ -201,13 +201,13 @@ namespace MKY.IO.Serial
 		public override string ToString()
 		{
 			return
-			  (
-			  _baudRate.ToString() + ", " +
-			  ((MKY.IO.Ports.XDataBits)_dataBits).ToString() + ", " +
-			  ((MKY.IO.Ports.XParity)_parity).ToString() + ", " +
-			  ((MKY.IO.Ports.XStopBits)_stopBits).ToString() + ", " +
-			  ((XSerialFlowControl)_flowControl).ToShortString()
-			  );
+				(
+				_baudRate                           + ", " +
+				((MKY.IO.Ports.XDataBits)_dataBits) + ", " +
+				((MKY.IO.Ports.XParity)_parity)     + ", " +
+				((MKY.IO.Ports.XStopBits)_stopBits) + ", " +
+				((XSerialFlowControl)_flowControl).ToShortString()
+				);
 		}
 
 		#endregion
@@ -216,24 +216,24 @@ namespace MKY.IO.Serial
 		public virtual string ToShortString()
 		{
 			return
-			  (
-			  _baudRate.ToString() + ", " +
-			  ((MKY.IO.Ports.XDataBits)_dataBits).ToString() + ", " +
-			  ((MKY.IO.Ports.XParity)_parity).ToShortString()
-			  );
+				(
+				_baudRate                           + ", " +
+				((MKY.IO.Ports.XDataBits)_dataBits) + ", " +
+				((MKY.IO.Ports.XParity)_parity).ToShortString()
+				);
 		}
 
 		/// <summary></summary>
 		public virtual string ToLongString()
 		{
 			return
-			  (
-			  _baudRate.ToString() + ", " +
-			  ((MKY.IO.Ports.XDataBits)_dataBits).ToString() + ", " +
-			  ((MKY.IO.Ports.XParity)_parity).ToString() + ", " +
-			  ((MKY.IO.Ports.XStopBits)_stopBits).ToString() + ", " +
-			  ((XSerialFlowControl)_flowControl).ToString()
-			  );
+				(
+				_baudRate                           + ", " +
+				((MKY.IO.Ports.XDataBits)_dataBits) + ", " +
+				((MKY.IO.Ports.XParity)_parity)     + ", " +
+				((MKY.IO.Ports.XStopBits)_stopBits) + ", " +
+				((XSerialFlowControl)_flowControl)
+				);
 		}
 
 		#region Comparison Operators

@@ -728,29 +728,29 @@ namespace YAT.Log.Settings
 		/// </summary>
 		public bool Equals(LogSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_rootPath.Equals        (value._rootPath) &&
-					_rootFileName.Equals             (value._rootFileName) &&
-					_rawLogTx.Equals             (value._rawLogTx) &&
-					_rawLogBidir.Equals          (value._rawLogBidir) &&
-					_rawLogRx.Equals             (value._rawLogRx) &&
-					_rawExtension.Equals         (value._rawExtension) &&
-					_neatLogTx.Equals            (value._neatLogTx) &&
-					_neatLogBidir.Equals         (value._neatLogBidir) &&
-					_neatLogRx.Equals            (value._neatLogRx) &&
-					_neatExtension.Equals        (value._neatExtension) &&
-					_writeMode.Equals            (value._writeMode) &&
-					_subdirectoriesFormat.Equals (value._subdirectoriesFormat) &&
-					_subdirectoriesChannel.Equals(value._subdirectoriesChannel) &&
-					_nameFormat.Equals           (value._nameFormat) &&
-					_nameChannel.Equals          (value._nameChannel) &&
-					_nameDate.Equals             (value._nameDate) &&
-					_nameTime.Equals             (value._nameTime) &&
-					_nameSeparator.Equals        (value._nameSeparator)
+					(_rootPath              == value._rootPath) &&
+					(_rootFileName          == value._rootFileName) &&
+					(_rawLogTx              == value._rawLogTx) &&
+					(_rawLogBidir           == value._rawLogBidir) &&
+					(_rawLogRx              == value._rawLogRx) &&
+					(_rawExtension          == value._rawExtension) &&
+					(_neatLogTx             == value._neatLogTx) &&
+					(_neatLogBidir          == value._neatLogBidir) &&
+					(_neatLogRx             == value._neatLogRx) &&
+					(_neatExtension         == value._neatExtension) &&
+					(_writeMode             == value._writeMode) &&
+					(_subdirectoriesFormat  == value._subdirectoriesFormat) &&
+					(_subdirectoriesChannel == value._subdirectoriesChannel) &&
+					(_nameFormat            == value._nameFormat) &&
+					(_nameChannel           == value._nameChannel) &&
+					(_nameDate              == value._nameDate) &&
+					(_nameTime              == value._nameTime) &&
+					(_nameSeparator         == value._nameSeparator)
 					);
 			}
 			return (false);

@@ -160,13 +160,13 @@ namespace YAT.Model.Types
 		/// </summary>
 		public bool Equals(TextFormat value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_fontStyle.Equals(value._fontStyle) &&
-					_color.Equals(value._color)
+					(_fontStyle == value._fontStyle) &&
+					(_color     == value._color)
 					);
 			}
 			return (false);

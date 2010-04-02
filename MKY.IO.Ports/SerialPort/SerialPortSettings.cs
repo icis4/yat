@@ -163,16 +163,16 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public bool Equals(SerialPortSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_baudRate.Equals(value._baudRate) &&
-					_dataBits.Equals(value._dataBits) &&
-					_parity.Equals(value._parity) &&
-					_stopBits.Equals(value._stopBits) &&
-					_handshake.Equals(value._handshake)
+					(_baudRate  == value._baudRate) &&
+					(_dataBits  == value._dataBits) &&
+					(_parity    == value._parity) &&
+					(_stopBits  == value._stopBits) &&
+					(_handshake == value._handshake)
 					);
 			}
 			return (false);
@@ -192,13 +192,13 @@ namespace MKY.IO.Ports
 		public override string ToString()
 		{
 			return
-			  (
-			  ((XBaudRate)_baudRate).ToString() + ", " +
-			  ((XDataBits)_dataBits).ToString() + ", " +
-			  ((XParity)_parity).ToString() + ", " +
-			  ((XStopBits)_stopBits).ToString() + ", " +
-			  ((XHandshake)_handshake).ToShortString()
-			  );
+				(
+				((XBaudRate)_baudRate) + ", " +
+				((XDataBits)_dataBits) + ", " +
+				((XParity)_parity)     + ", " +
+				((XStopBits)_stopBits) + ", " +
+				((XHandshake)_handshake).ToShortString()
+				);
 		}
 
 		/// <summary>

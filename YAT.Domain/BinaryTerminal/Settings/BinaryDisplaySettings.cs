@@ -137,14 +137,14 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public bool Equals(BinaryDisplaySettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_lengthLineBreak.Equals(value._lengthLineBreak) &&
-					_sequenceLineBreak.Equals(value._sequenceLineBreak) &&
-					_timedLineBreak.Equals(value._timedLineBreak)
+					(_lengthLineBreak   == value._lengthLineBreak) &&
+					(_sequenceLineBreak == value._sequenceLineBreak) &&
+					(_timedLineBreak    == value._timedLineBreak)
 					);
 			}
 			return (false);
