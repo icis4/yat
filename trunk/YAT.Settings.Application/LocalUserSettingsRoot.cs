@@ -232,13 +232,13 @@ namespace YAT.Settings.Application
 		/// </summary>
 		public bool Equals(LocalUserSettingsRoot value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_productVersion.Equals(value._productVersion) &&
-					base.Equals((MKY.Utilities.Settings.Settings)value) // compares all settings nodes
+					(_productVersion == value._productVersion) &&
+					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
 					);
 			}
 			return (false);

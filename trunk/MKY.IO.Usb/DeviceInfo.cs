@@ -122,12 +122,12 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public static DeviceInfo GetDefaultDevice(DeviceClass deviceClass)
 		{
-			DeviceCollection l = new DeviceCollection(deviceClass);
+			/*DeviceCollection l = new DeviceCollection(deviceClass);
 			l.FillWithAvailableDevices();
 
 			if (l.Count > 0)
 				return (new DeviceInfo(l[0]));
-			else
+			else*/
 				return (null);
 		}
 
@@ -377,9 +377,9 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public bool Equals(DeviceInfo value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
-				return (_path.Equals(value._path));
+				return (_path == value._path);
 
 			return (false);
 		}

@@ -51,6 +51,7 @@ Important changes:
 - Use of FxCop (feature request #<>)
 - Use of StyleCop (feature request #<>)
 - Methods and properties marked "virtual", unless there are reasons against
+- Null reference safe implementation of Equals()
 - Selection and settings controls now clear contents when disabled
 
 Fixed bugs:

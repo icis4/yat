@@ -317,31 +317,21 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public bool Equals(NewTerminalSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
-				// Serial port ID can be null if no serial ports are available.
-				bool serialPortIdEquals = false;
-				if (_serialPortId != null)
-					serialPortIdEquals = _serialPortId.Equals(value._serialPortId);
-
-				// USB device info can be null if no USb devices are available.
-				bool usbHidDeviceInfoEquals = false;
-				if (_usbHidDeviceInfo != null)
-					usbHidDeviceInfoEquals = _usbHidDeviceInfo.Equals(value._usbHidDeviceInfo);
-
 				return
 					(
-					_terminalType.Equals        (value._terminalType) &&
-					_ioType.Equals              (value._ioType) &&
-					serialPortIdEquals &&
-					_socketRemoteHost.Equals    (value._socketRemoteHost) &&
-					_socketRemotePort.Equals    (value._socketRemotePort) &&
-					_socketLocalInterface.Equals(value._socketLocalInterface) &&
-					_socketLocalTcpPort.Equals  (value._socketLocalTcpPort) &&
-					_socketLocalUdpPort.Equals  (value._socketLocalUdpPort) &&
-					usbHidDeviceInfoEquals &&
-					_startTerminal.Equals       (value._startTerminal)
+					(_terminalType         == value._terminalType) &&
+					(_ioType               == value._ioType) &&
+					(_serialPortId         == value._serialPortId) &&
+					(_socketRemoteHost     == value._socketRemoteHost) &&
+					(_socketRemotePort     == value._socketRemotePort) &&
+					(_socketLocalInterface == value._socketLocalInterface) &&
+					(_socketLocalTcpPort   == value._socketLocalTcpPort) &&
+					(_socketLocalUdpPort   == value._socketLocalUdpPort) &&
+					(_usbHidDeviceInfo     == value._usbHidDeviceInfo) &&
+					(_startTerminal        == value._startTerminal)
 					);
 			}
 			return (false);

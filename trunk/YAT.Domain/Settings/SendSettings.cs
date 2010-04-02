@@ -124,13 +124,13 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public bool Equals(SendSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_keepCommand.Equals(value._keepCommand) &&
-					_copyPredefined.Equals(value._copyPredefined)
+					(_keepCommand    == value._keepCommand) &&
+					(_copyPredefined == value._copyPredefined)
 					);
 			}
 			return (false);

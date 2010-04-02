@@ -154,6 +154,12 @@ namespace MKY.IO.Serial
 		private object _stateSyncObj = new object();
 		
 		private SerialPortSettings _settings;
+
+		/// <summary>
+		/// Separate string containing the port name. Used for diagnostics/debug purposes.
+		/// </summary>
+		private string _portName;
+
 		private Ports.ISerialPort _port;
 		private object _portSyncObj = new object();
 
@@ -462,6 +468,8 @@ namespace MKY.IO.Serial
 				// No need to set encoding, only bytes are handled, encoding is done by text terminal
 				//_port.Encoding = _ioSettings.Encoding;
 
+				// Keep port name for diagnostics/debug purposes
+				_portName = _settings.PortId;
 				_port.PortId = _settings.PortId;
 
 				SerialCommunicationSettings s = _settings.Communication;
@@ -984,6 +992,8 @@ namespace MKY.IO.Serial
 		{
 			if (_port != null)
 				return (_port.PortId);
+			else if ((_portName != null) && (_portName != ""))
+				return (_portName);
 			else
 				return ("<Undefined>");
 		}

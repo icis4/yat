@@ -26,6 +26,7 @@ namespace MKY.Utilities.Recent
 	/// </summary>
 	[Serializable]
 	public class RecentItem<T> : IEquatable<RecentItem<T>>, IComparable
+		where T: IEquatable<T>
 	{
 		private T _item;
 		private DateTime _timeStamp;
@@ -131,15 +132,11 @@ namespace MKY.Utilities.Recent
 		/// </summary>
 		public bool Equals(RecentItem<T> value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
-			{
-				return
-					(
-					_item.Equals(value._item)
-					// do not compare time stamp
-					);
-			}
+				return ((_item != null) && (_item.Equals(value._item)));
+				// Do not compare time stamp.
+
 			return (false);
 		}
 

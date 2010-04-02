@@ -117,14 +117,10 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public bool Equals(RecentFileSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
-			{
-				return
-					(
-					_filePaths.Equals(value._filePaths)
-					);
-			}
+				return (_filePaths == value._filePaths);
+
 			return (false);
 		}
 

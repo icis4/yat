@@ -48,7 +48,7 @@ namespace MKY.Utilities.Types
 			while (objAEnumerator.MoveNext() && (objAEnumerator.Current != null) &&
 				   objBEnumerator.MoveNext() && (objBEnumerator.Current != null))
 			{
-				if (!objAEnumerator.Current.Equals(objBEnumerator.Current))
+				if (objAEnumerator.Current != objBEnumerator.Current)
 					return (false);
 			}
 

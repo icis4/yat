@@ -320,22 +320,22 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public bool Equals(DisplaySettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_separateTxRxRadix.Equals  (value._separateTxRxRadix) &&
-					_txRadix.Equals            (value._txRadix) &&
-					_rxRadix.Equals            (value._rxRadix) &&
-					_showRadix.Equals          (value._showRadix) &&
-					_showTimeStamp.Equals      (value._showTimeStamp) &&
-					_showLength.Equals         (value._showLength) &&
-					_showConnectTime.Equals    (value._showConnectTime) &&
-					_showCounters.Equals       (value._showCounters) &&
-					_txMaxLineCount.Equals (value._txMaxLineCount) &&
-					_rxMaxLineCount.Equals (value._rxMaxLineCount) &&
-					_directionLineBreakEnabled.Equals(value._directionLineBreakEnabled)
+					(_separateTxRxRadix         == value._separateTxRxRadix) &&
+					(_txRadix                   == value._txRadix) &&
+					(_rxRadix                   == value._rxRadix) &&
+					(_showRadix                 == value._showRadix) &&
+					(_showTimeStamp             == value._showTimeStamp) &&
+					(_showLength                == value._showLength) &&
+					(_showConnectTime           == value._showConnectTime) &&
+					(_showCounters              == value._showCounters) &&
+					(_txMaxLineCount            == value._txMaxLineCount) &&
+					(_rxMaxLineCount            == value._rxMaxLineCount) &&
+					(_directionLineBreakEnabled == value._directionLineBreakEnabled)
 					);
 			}
 			return (false);

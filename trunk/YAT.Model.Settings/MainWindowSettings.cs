@@ -157,15 +157,15 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public bool Equals(MainWindowSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_startPosition.Equals(value._startPosition) &&
-					_windowState.Equals(value._windowState) &&
-					_location.Equals(value._location) &&
-					_size.Equals(value._size)
+					(_startPosition == value._startPosition) &&
+					(_windowState   == value._windowState) &&
+					(_location      == value._location) &&
+					(_size          == value._size)
 					);
 			}
 			return (false);

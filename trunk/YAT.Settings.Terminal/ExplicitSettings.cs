@@ -190,9 +190,9 @@ namespace YAT.Settings.Terminal
 		/// </summary>
 		public bool Equals(ExplicitSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
-				return (base.Equals((MKY.Utilities.Settings.Settings)value)); // compares all settings nodes
+				return (base.Equals((MKY.Utilities.Settings.Settings)value)); // Compare all settings nodes.
 
 			return (false);
 		}

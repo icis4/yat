@@ -238,18 +238,18 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public bool Equals(SerialPortSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return 
 					(
-					_portId.Equals                (value._portId) &&
-					_communication.Equals         (value._communication) &&
-					_autoReopen.Equals            (value._autoReopen) &&
-					_replaceParityErrors.Equals   (value._replaceParityErrors) &&
-					_parityErrorReplacement.Equals(value._parityErrorReplacement) &&
-					_rtsEnabled.Equals            (value._rtsEnabled) &&
-					_dtrEnabled.Equals            (value._dtrEnabled)
+					(_portId                 == value._portId) &&
+					(_communication          == value._communication) &&
+					(_autoReopen             == value._autoReopen) &&
+					(_replaceParityErrors    == value._replaceParityErrors) &&
+					(_parityErrorReplacement == value._parityErrorReplacement) &&
+					(_rtsEnabled             == value._rtsEnabled) &&
+					(_dtrEnabled             == value._dtrEnabled)
 					);
 			}
 			return (false);

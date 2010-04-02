@@ -129,13 +129,13 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public bool Equals(BufferSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_txBufferSize.Equals(value._txBufferSize) &&
-					_rxBufferSize.Equals(value._rxBufferSize)
+					(_txBufferSize == value._txBufferSize) &&
+					(_rxBufferSize == value._rxBufferSize)
 					);
 			}
 			return (false);

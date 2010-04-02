@@ -141,9 +141,9 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public bool Equals(PredefinedCommandSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
-				return (_pages.Equals(value._pages));
+				return (_pages == value._pages);
 
 			return (false);
 		}

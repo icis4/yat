@@ -262,20 +262,20 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public bool Equals(FormatSettings value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_font.Equals             (value._font) &&
-					_txDataFormat.Equals     (value._txDataFormat) &&
-					_txControlFormat.Equals  (value._txControlFormat) &&
-					_rxDataFormat.Equals     (value._rxDataFormat) &&
-					_rxControlFormat.Equals  (value._rxControlFormat) &&
-					_timeStampFormat.Equals  (value._timeStampFormat) &&
-					_lengthFormat.Equals     (value._lengthFormat) &&
-					_whiteSpacesFormat.Equals(value._whiteSpacesFormat) &&
-					_errorFormat.Equals      (value._errorFormat)
+					(_font              == value._font) &&
+					(_txDataFormat      == value._txDataFormat) &&
+					(_txControlFormat   == value._txControlFormat) &&
+					(_rxDataFormat      == value._rxDataFormat) &&
+					(_rxControlFormat   == value._rxControlFormat) &&
+					(_timeStampFormat   == value._timeStampFormat) &&
+					(_lengthFormat      == value._lengthFormat) &&
+					(_whiteSpacesFormat == value._whiteSpacesFormat) &&
+					(_errorFormat       == value._errorFormat)
 					);
 			}
 			return (false);

@@ -135,15 +135,15 @@ namespace YAT.Model.Types
 		/// </summary>
 		public bool Equals(PredefinedCommandPage value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
-				if (!_pageName.Equals(value._pageName))
+				if (_pageName != value._pageName)
 					return (false);
 
 				for (int i = 0; i < _commands.Count; i++)
 				{
-					if (!_commands[i].Equals(value._commands[i]))
+					if (_commands[i] != value._commands[i])
 						return (false);
 				}
 				return (true);

@@ -151,15 +151,15 @@ namespace YAT.Settings.Workspace
 		/// </summary>
 		public bool Equals(WorkspaceSettingsRoot value)
 		{
-			// Ensure that object.operator!=() is called
+			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
 				return
 					(
-					_productVersion.Equals(value._productVersion) &&
-					base.Equals((MKY.Utilities.Settings.Settings)value) // compares all settings nodes
+					(_productVersion == value._productVersion) &&
+					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
 					);
-				// do not compare AutoSaved
+				// Do not compare AutoSaved.
 			}
 			return (false);
 		}
