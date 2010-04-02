@@ -84,6 +84,7 @@ namespace YAT.Gui.Controls
 			this.Name = "UsbHidDeviceSelection";
 			this.Size = new System.Drawing.Size(285, 46);
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.UsbHidPortSelection_Paint);
+			this.EnabledChanged += new System.EventHandler(this.UsbHidDeviceSelection_EnabledChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

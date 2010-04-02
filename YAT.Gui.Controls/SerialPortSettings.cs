@@ -213,6 +213,22 @@ namespace YAT.Gui.Controls
 
 		#endregion
 
+		#region Control Event Handlers
+		//==========================================================================================
+		// Control Event Handlers
+		//==========================================================================================
+
+		/// <summary>
+		/// Ensure that all controls are cleared when control gets disabled.
+		/// </summary>
+		private void SerialPortSettings_EnabledChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+				SetControls();
+		}
+
+		#endregion
+
 		#region Controls Event Handlers
 		//==========================================================================================
 		// Controls Event Handlers
@@ -337,25 +353,55 @@ namespace YAT.Gui.Controls
 			_isSettingControls = true;
 
 			MKY.IO.Ports.XBaudRate baudRate = (MKY.IO.Ports.XBaudRate)_baudRate;
-			if (baudRate != MKY.IO.Ports.BaudRate.UserDefined)
+			if (Enabled && (baudRate != MKY.IO.Ports.BaudRate.UserDefined))
 				comboBox_BaudRate.SelectedItem = baudRate;
-			else
+			else if (Enabled)
 				comboBox_BaudRate.Text = _baudRate.ToString();
+			else
+				comboBox_BaudRate.SelectedIndex = -1;
 
-			comboBox_DataBits.SelectedItem    = (MKY.IO.Ports.XDataBits)_dataBits;
-			comboBox_Parity.SelectedItem      = (MKY.IO.Ports.XParity)_parity;
-			comboBox_StopBits.SelectedItem    = (MKY.IO.Ports.XStopBits)_stopBits;
-			comboBox_FlowControl.SelectedItem = (MKY.IO.Serial.XSerialFlowControl)_flowControl;
+			if (Enabled)
+			{
+				comboBox_DataBits.SelectedItem    = (MKY.IO.Ports.XDataBits)_dataBits;
+				comboBox_Parity.SelectedItem      = (MKY.IO.Ports.XParity)_parity;
+				comboBox_StopBits.SelectedItem    = (MKY.IO.Ports.XStopBits)_stopBits;
+				comboBox_FlowControl.SelectedItem = (MKY.IO.Serial.XSerialFlowControl)_flowControl;
+			}
+			else
+			{
+				comboBox_DataBits.SelectedIndex    = -1;
+				comboBox_Parity.SelectedIndex      = -1;
+				comboBox_StopBits.SelectedIndex    = -1;
+				comboBox_FlowControl.SelectedIndex = -1;
+			}
 
 			// \fixme Auto-reopen doesn't work because of deadlock issue mentioned in SerialPort.
-			checkBox_AutoReopen.Visible = false;
-			textBox_AutoReopenInterval.Visible = false;
-			label_AutoReopenIntervalUnit.Visible = false;
+			if (Enabled)
+			{
+				checkBox_AutoReopen.Visible = false;
+				textBox_AutoReopenInterval.Visible = false;
+				label_AutoReopenIntervalUnit.Visible = false;
+			}
+			else
+			{
+				checkBox_AutoReopen.Visible = false;
+				textBox_AutoReopenInterval.Visible = false;
+				label_AutoReopenIntervalUnit.Visible = false;
+			}
 
-			bool autoOpenEnabled = _autoReopen.Enabled;
-			checkBox_AutoReopen.Checked = autoOpenEnabled;
-			textBox_AutoReopenInterval.Enabled = autoOpenEnabled;
-			textBox_AutoReopenInterval.Text = _autoReopen.Interval.ToString();
+			if (Enabled)
+			{
+				bool autoReopenEnabled = _autoReopen.Enabled;
+				checkBox_AutoReopen.Checked = autoReopenEnabled;
+				textBox_AutoReopenInterval.Enabled = autoReopenEnabled;
+				textBox_AutoReopenInterval.Text = _autoReopen.Interval.ToString();
+			}
+			else
+			{
+				checkBox_AutoReopen.Checked = false;
+				textBox_AutoReopenInterval.Enabled = false;
+				textBox_AutoReopenInterval.Text = "";
+			}
 
 			_isSettingControls = false;
 		}

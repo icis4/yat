@@ -143,6 +143,7 @@ namespace YAT.Gui.Controls
 			this.Name = "SocketSelection";
 			this.Size = new System.Drawing.Size(285, 125);
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.SocketSelection_Paint);
+			this.EnabledChanged += new System.EventHandler(this.SocketSelection_EnabledChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

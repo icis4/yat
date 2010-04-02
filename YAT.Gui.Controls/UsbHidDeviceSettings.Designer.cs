@@ -39,7 +39,7 @@ namespace YAT.Gui.Controls
 			this.checkBox_AutoReopen.AutoSize = true;
 			this.checkBox_AutoReopen.Location = new System.Drawing.Point(3, 3);
 			this.checkBox_AutoReopen.Name = "checkBox_AutoReopen";
-			this.checkBox_AutoReopen.Size = new System.Drawing.Size(232, 17);
+			this.checkBox_AutoReopen.Size = new System.Drawing.Size(217, 17);
 			this.checkBox_AutoReopen.TabIndex = 0;
 			this.checkBox_AutoReopen.Text = "When connection is lost, try to reopen to";
 			this.checkBox_AutoReopen.UseVisualStyleBackColor = true;
@@ -75,7 +75,7 @@ namespace YAT.Gui.Controls
 			this.label_AutoReopenInterval.Text = "device every";
 			this.label_AutoReopenInterval.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// UsbHidPortSettings
+			// UsbHidDeviceSettings
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -83,9 +83,10 @@ namespace YAT.Gui.Controls
 			this.Controls.Add(this.label_AutoReopenIntervalUnit);
 			this.Controls.Add(this.textBox_AutoReopenInterval);
 			this.Controls.Add(this.checkBox_AutoReopen);
-			this.Name = "UsbHidPortSettings";
+			this.Name = "UsbHidDeviceSettings";
 			this.Size = new System.Drawing.Size(260, 42);
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.UsbHidPortSettings_Paint);
+			this.EnabledChanged += new System.EventHandler(this.UsbHidDeviceSettings_EnabledChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
