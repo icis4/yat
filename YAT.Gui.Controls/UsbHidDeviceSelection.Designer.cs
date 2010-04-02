@@ -32,7 +32,6 @@ namespace YAT.Gui.Controls
 			this.button_RefreshPorts = new System.Windows.Forms.Button();
 			this.comboBox_Device = new System.Windows.Forms.ComboBox();
 			this.label_Device = new System.Windows.Forms.Label();
-			this.timer_ShowScanDialog = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.SuspendLayout();
 			// 
@@ -45,7 +44,7 @@ namespace YAT.Gui.Controls
 			this.button_RefreshPorts.Name = "button_RefreshPorts";
 			this.button_RefreshPorts.Size = new System.Drawing.Size(24, 21);
 			this.button_RefreshPorts.TabIndex = 2;
-			this.toolTip.SetToolTip(this.button_RefreshPorts, "Refresh serial port list");
+			this.toolTip.SetToolTip(this.button_RefreshPorts, "Refresh device list");
 			this.button_RefreshPorts.Click += new System.EventHandler(this.button_RefreshPorts_Click);
 			// 
 			// comboBox_Device
@@ -69,11 +68,6 @@ namespace YAT.Gui.Controls
 			this.label_Device.TabIndex = 0;
 			this.label_Device.Text = "USB Ser/HID Device:";
 			// 
-			// timer_ShowScanDialog
-			// 
-			this.timer_ShowScanDialog.Interval = 500;
-			this.timer_ShowScanDialog.Tick += new System.EventHandler(this.timer_ShowScanDialog_Tick);
-			// 
 			// UsbHidDeviceSelection
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -95,7 +89,6 @@ namespace YAT.Gui.Controls
 		private System.Windows.Forms.Button button_RefreshPorts;
 		private System.Windows.Forms.ComboBox comboBox_Device;
 		private System.Windows.Forms.Label label_Device;
-		private System.Windows.Forms.Timer timer_ShowScanDialog;
 		private System.Windows.Forms.ToolTip toolTip;
 	}
 }

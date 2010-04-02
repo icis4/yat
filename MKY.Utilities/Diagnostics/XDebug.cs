@@ -65,6 +65,15 @@ namespace MKY.Utilities.Diagnostics
 		/// Writes a <see cref="StackTrace"/> to <see cref="System.Diagnostics.Debug"/>.
 		/// </summary>
 		[Conditional("DEBUG")]
+		public static void WriteStack(object obj)
+		{
+			WriteStack(obj, new StackTrace(), "");
+		}
+
+		/// <summary>
+		/// Writes a <see cref="StackTrace"/> to <see cref="System.Diagnostics.Debug"/>.
+		/// </summary>
+		[Conditional("DEBUG")]
 		public static void WriteStack(object obj, StackTrace st)
 		{
 			WriteStack(obj, st, "");

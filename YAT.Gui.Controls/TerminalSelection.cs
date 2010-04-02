@@ -164,6 +164,39 @@ namespace YAT.Gui.Controls
 
 		#endregion
 
+		#region Control Event Handlers
+		//==========================================================================================
+		// Control Event Handlers
+		//==========================================================================================
+
+		/// <summary>
+		/// Startup flag only used in the following event handler.
+		/// </summary>
+		private bool _isStartingUp = true;
+
+		/// <summary>
+		/// Initially set controls and validate its contents where needed.
+		/// </summary>
+		private void TerminalSelection_Paint(object sender, PaintEventArgs e)
+		{
+			if (_isStartingUp)
+			{
+				_isStartingUp = false;
+				SetControls();
+			}
+		}
+
+		/// <summary>
+		/// Ensure that all controls are cleared when control gets disabled.
+		/// </summary>
+		private void TerminalSelection_EnabledChanged(object sender, EventArgs e)
+		{
+			if (!_isSettingControls)
+				SetControls();
+		}
+
+		#endregion
+
 		#region Controls Event Handlers
 		//==========================================================================================
 		// Controls Event Handlers
@@ -192,8 +225,16 @@ namespace YAT.Gui.Controls
 		{
 			_isSettingControls = true;
 
-			comboBox_TerminalType.SelectedItem = (Domain.XTerminalType)_terminalType;
-			comboBox_IOType.SelectedItem = (Domain.XIOType)_ioType;
+			if (Enabled)
+			{
+				comboBox_TerminalType.SelectedItem = (Domain.XTerminalType)_terminalType;
+				comboBox_IOType.SelectedItem       = (Domain.XIOType)_ioType;
+			}
+			else
+			{
+				comboBox_TerminalType.SelectedIndex = -1;
+				comboBox_IOType.SelectedIndex       = -1;
+			}
 
 			_isSettingControls = false;
 		}

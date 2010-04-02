@@ -2768,7 +2768,7 @@ namespace YAT.Gui.Forms
 						}
 						else
 						{
-							sb.Append("Disconneted");
+							sb.Append("Disconnected");
 						}
 						break;
 					}
@@ -2931,7 +2931,7 @@ namespace YAT.Gui.Forms
 						}
 						else
 						{
-							sb.Append("disconneted");
+							sb.Append("disconnected");
 						}
 						break;
 					}

@@ -26,7 +26,7 @@ using MKY.Utilities.Net;
 
 namespace YAT.Gui.Forms
 {
-	public partial class NewTerminal : System.Windows.Forms.Form
+	public partial class NewTerminal : Form
 	{
 		#region Fields
 		//==========================================================================================

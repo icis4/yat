@@ -19,45 +19,29 @@ using System.Collections.Generic;
 namespace MKY.IO.Usb
 {
 	/// <summary>
-	/// List containing USB device infos.
+	/// List containing USB Ser/HID device infos.
 	/// </summary>
 	[Serializable]
-	public class DeviceCollection : List<DeviceInfo>
+	public class SerialHidDeviceCollection : HidDeviceCollection
 	{
-		private DeviceClass _deviceClass = DeviceClass.Any;
-		private Guid _classGuid = Guid.Empty;
-
 		/// <summary></summary>
-		public DeviceCollection()
+		public SerialHidDeviceCollection()
 		{
 		}
 
 		/// <summary></summary>
-		public DeviceCollection(DeviceClass deviceClass)
-		{
-			_deviceClass = deviceClass;
-			_classGuid = Device.GetGuidFromDeviceClass(deviceClass);
-		}
-
-		/// <summary></summary>
-		public DeviceCollection(IEnumerable<DeviceInfo> rhs)
+		public SerialHidDeviceCollection(IEnumerable<DeviceInfo> rhs)
 			: base(rhs)
 		{
-			DeviceCollection casted = rhs as DeviceCollection;
-			if (casted != null)
-			{
-				_deviceClass = casted._deviceClass;
-				_classGuid   = casted._classGuid;
-			}
 		}
 
 		/// <summary>
-		/// Fills list with the available USB devices.
+		/// Fills list with the available USB Ser/HID devices.
 		/// </summary>
-		public virtual void FillWithAvailableDevices()
+		public override void FillWithAvailableDevices()
 		{
 			Clear();
-			foreach (DeviceInfo di in Device.GetDevicesFromGuid(_classGuid))
+			foreach (DeviceInfo di in SerialHidDevice.GetDevices())
 				base.Add(di);
 			Sort();
 		}

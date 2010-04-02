@@ -19,45 +19,54 @@ using System.Collections.Generic;
 namespace MKY.IO.Usb
 {
 	/// <summary>
-	/// List containing USB device infos.
+	/// List containing USB HID device infos.
 	/// </summary>
 	[Serializable]
-	public class DeviceCollection : List<DeviceInfo>
+	public class HidDeviceCollection : DeviceCollection
 	{
-		private DeviceClass _deviceClass = DeviceClass.Any;
-		private Guid _classGuid = Guid.Empty;
+		private HidUsagePage _usagePage = HidUsagePage.Unknown;
+		private HidUsage     _usage     = HidUsage.Unknown;
 
 		/// <summary></summary>
-		public DeviceCollection()
+		public HidDeviceCollection()
+			: base(DeviceClass.Hid)
 		{
 		}
 
 		/// <summary></summary>
-		public DeviceCollection(DeviceClass deviceClass)
+		public HidDeviceCollection(HidUsagePage usagePage)
+			: base(DeviceClass.Hid)
 		{
-			_deviceClass = deviceClass;
-			_classGuid = Device.GetGuidFromDeviceClass(deviceClass);
+			_usagePage = usagePage;
 		}
 
 		/// <summary></summary>
-		public DeviceCollection(IEnumerable<DeviceInfo> rhs)
+		public HidDeviceCollection(HidUsagePage usagePage, HidUsage usage)
+			: base(DeviceClass.Hid)
+		{
+			_usagePage = usagePage;
+			_usage     = usage;
+		}
+
+		/// <summary></summary>
+		public HidDeviceCollection(IEnumerable<DeviceInfo> rhs)
 			: base(rhs)
 		{
-			DeviceCollection casted = rhs as DeviceCollection;
+			HidDeviceCollection casted = rhs as HidDeviceCollection;
 			if (casted != null)
 			{
-				_deviceClass = casted._deviceClass;
-				_classGuid   = casted._classGuid;
+				_usagePage = casted._usagePage;
+				_usage     = casted._usage;
 			}
 		}
 
 		/// <summary>
-		/// Fills list with the available USB devices.
+		/// Fills list with the available USB HID devices.
 		/// </summary>
-		public virtual void FillWithAvailableDevices()
+		public override void FillWithAvailableDevices()
 		{
 			Clear();
-			foreach (DeviceInfo di in Device.GetDevicesFromGuid(_classGuid))
+			foreach (DeviceInfo di in HidDevice.GetDevices(_usagePage, _usage))
 				base.Add(di);
 			Sort();
 		}

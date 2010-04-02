@@ -231,9 +231,8 @@ namespace MKY.IO.Serial
 			{
 				if (disposing)
 				{
-					StopAndDisposeAliveTimer();
-					StopAndDisposeReopenTimer();
-					CloseAndDisposePort();
+					// Ensure to reset state during Dispose().
+					ResetPort();
 				}
 				_isDisposed = true;
 			}
@@ -676,6 +675,12 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Asynchronously invoke incoming events to prevent potential dead-locks if close/dispose
 		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
+		/// Also, the mechanism implemented below reduces the amount of events that are propagated
+		/// to the main application. Small chunks of received data will generate many events
+		/// handled by <see cref="_port_DataReceived"/>. However, since <see cref="OnDataReceived"/>
+		/// synchronously invokes the event, it will take some time until the monitor is released
+		/// again. During this time, no more new events are invoked, instead, incoming data is
+		/// buffered.
 		/// </summary>
 		private delegate void _port_DataReceivedDelegate(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e);
 		private object _port_DataReceivedSyncObj = new object();
