@@ -52,7 +52,7 @@ namespace MKY.Utilities.Win32
 		/// <param name="hObject">A valid handle to an open object.</param>
 		/// <returns>True on success, false on failure.</returns>
 		[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		public static extern bool CloseHandle(SafeFileHandle hObject);
+		public static extern bool CloseHandle([In] SafeFileHandle hObject);
 
 		#endregion
 	}

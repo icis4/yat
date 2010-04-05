@@ -81,13 +81,13 @@ namespace MKY.Utilities.Win32
 		//==========================================================================================
 
 		[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern bool WinUsb_Initialize(SafeFileHandle DeviceHandle, out SafeFileHandle InterfaceHandle);
+		private static extern bool WinUsb_Initialize([In] SafeFileHandle DeviceHandle, [Out] out SafeFileHandle InterfaceHandle);
 
 		[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern bool WinUsb_GetDescriptor(SafeFileHandle InterfaceHandle, DescriptorType DescriptorType, byte Index, UInt16 LanguageID, byte[] Buffer, UInt32 BufferLength, ref UInt32 LengthTransferred);
+		private static extern bool WinUsb_GetDescriptor([In] SafeFileHandle InterfaceHandle, [In] DescriptorType DescriptorType, [In] byte Index, [In] UInt16 LanguageID, [Out] byte[] Buffer, [In] UInt32 BufferLength, [Out] out UInt32 LengthTransferred);
 
 		[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern bool WinUsb_GetDescriptor(SafeFileHandle InterfaceHandle, DescriptorType DescriptorType, byte Index, UInt16 LanguageID, StringBuilder Buffer, UInt32 BufferLength, ref UInt32 LengthTransferred);
+		private static extern bool WinUsb_GetDescriptor([In] SafeFileHandle InterfaceHandle, [In] DescriptorType DescriptorType, [In] byte Index, [In] UInt16 LanguageID, [Out] StringBuilder Buffer, [In] UInt32 BufferLength, [Out] out UInt32 LengthTransferred);
 
 		#endregion
 
@@ -157,10 +157,10 @@ namespace MKY.Utilities.Win32
 			{
 				if (Version.IsWindowsVistaOrLater())
 				{
-					UInt32 transferred = 0;
-					if (WinUsb_GetDescriptor(interfaceHandle, DescriptorType.Device, (byte)index, (UInt16)languageId, buffer, (UInt32)buffer.Length, ref transferred))
+					UInt32 l;
+					if (WinUsb_GetDescriptor(interfaceHandle, DescriptorType.Device, (byte)index, (UInt16)languageId, buffer, (UInt32)buffer.Length, out l))
 					{
-						lengthTransferred = (int)transferred;
+						lengthTransferred = (int)l;
 						return (true);
 					}
 				}
@@ -186,10 +186,10 @@ namespace MKY.Utilities.Win32
 			{
 				if (Version.IsWindowsVistaOrLater())
 				{
-					UInt32 transferred = 0;
-					if (WinUsb_GetDescriptor(interfaceHandle, DescriptorType.Configuration, (byte)index, (UInt16)languageId, buffer, (UInt32)buffer.Length, ref transferred))
+					UInt32 l;
+					if (WinUsb_GetDescriptor(interfaceHandle, DescriptorType.Configuration, (byte)index, (UInt16)languageId, buffer, (UInt32)buffer.Length, out l))
 					{
-						lengthTransferred = (int)transferred;
+						lengthTransferred = (int)l;
 						return (true);
 					}
 				}
@@ -216,11 +216,11 @@ namespace MKY.Utilities.Win32
 				if (Version.IsWindowsVistaOrLater())
 				{
 					StringBuilder s = new StringBuilder(Utilities.Usb.Descriptors.MaximumStringDescriptorCharLength);
-					UInt32 transferred = 0;
-					if (WinUsb_GetDescriptor(interfaceHandle, DescriptorType.String, (byte)index, (UInt16)languageId, s, (UInt32)s.Capacity, ref transferred))
+					UInt32 l;
+					if (WinUsb_GetDescriptor(interfaceHandle, DescriptorType.String, (byte)index, (UInt16)languageId, s, (UInt32)s.Capacity, out l))
 					{
 						buffer = s.ToString();
-						lengthTransferred = (int)transferred;
+						lengthTransferred = (int)l;
 						return (true);
 					}
 				}
