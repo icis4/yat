@@ -181,10 +181,10 @@ namespace MKY.Utilities.Win32
 		/// <param name="Flags">DEVICE_NOTIFY_WINDOW_HANDLE indicates the handle is a window handle.</param>
 		/// <returns>Device notification handle or NULL on failure.</returns>
 		[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern IntPtr RegisterDeviceNotification(IntPtr hRecipient, DEV_BROADCAST_DEVICEINTERFACE NotificationFilter, DEVICE_NOTIFY Flags);
+		private static extern IntPtr RegisterDeviceNotification([In] IntPtr hRecipient, [In] DEV_BROADCAST_DEVICEINTERFACE NotificationFilter, [In] DEVICE_NOTIFY Flags);
 
 		[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern Int32 SetupDiCreateDeviceInfoList(ref System.Guid ClassGuid, Int32 hwndParent);
+		private static extern Int32 SetupDiCreateDeviceInfoList([In] ref System.Guid ClassGuid, [In] Int32 hwndParent);
 
 		/// <summary>
 		/// Frees the memory reserved for the DeviceInfoSet returned by SetupDiGetClassDevs.
@@ -192,7 +192,7 @@ namespace MKY.Utilities.Win32
 		/// <param name="DeviceInfoSet"></param>
 		/// <returns>True on success.</returns>
 		[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern Int32 SetupDiDestroyDeviceInfoList(IntPtr DeviceInfoSet);
+		private static extern Int32 SetupDiDestroyDeviceInfoList([In] IntPtr DeviceInfoSet);
 
 		/// <summary>
 		/// Retrieves a handle to a SP_DEVICE_INTERFACE_DATA structure for a device.
@@ -206,7 +206,7 @@ namespace MKY.Utilities.Win32
 		/// <param name="DeviceInterfaceData">Pointer to a handle to a SP_DEVICE_INTERFACE_DATA structure for a device.</param>
 		/// <returns>True on success.</returns>
 		[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern bool SetupDiEnumDeviceInterfaces(IntPtr DeviceInfoSet, IntPtr DeviceInfoData, ref System.Guid InterfaceClassGuid, Int32 MemberIndex, ref SP_DEVICE_INTERFACE_DATA DeviceInterfaceData);
+		private static extern bool SetupDiEnumDeviceInterfaces([In] IntPtr DeviceInfoSet, [In] IntPtr DeviceInfoData, [In] ref System.Guid InterfaceClassGuid, [In] Int32 MemberIndex, [In, Out] ref SP_DEVICE_INTERFACE_DATA DeviceInterfaceData);
 
 		/// <summary>
 		/// Retrieves a device information set for a specified group of devices.
@@ -219,7 +219,7 @@ namespace MKY.Utilities.Win32
 		/// and devices that expose interfaces in the class specified by the GUID.</param>
 		/// <returns>Handle to a device information set for the devices.</returns>
 		[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern IntPtr SetupDiGetClassDevs(ref System.Guid ClassGuid, IntPtr Enumerator, IntPtr hwndParent, DIGCF Flags);
+		private static extern IntPtr SetupDiGetClassDevs([In] ref System.Guid ClassGuid, [In] IntPtr Enumerator, [In] IntPtr hwndParent, [In] DIGCF Flags);
 
 		/// <summary>
 		/// Retrieves an SP_DEVICE_INTERFACE_DETAIL_DATA structure containing information about a device.
@@ -236,7 +236,7 @@ namespace MKY.Utilities.Win32
 		/// <param name="DeviceInfoData">Returned pointer to an SP_DEVINFO_DATA structure to receive information about the device.</param>
 		/// <returns>True on success.</returns>
 		[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern bool SetupDiGetDeviceInterfaceDetail(IntPtr DeviceInfoSet, ref SP_DEVICE_INTERFACE_DATA DeviceInterfaceData, IntPtr DeviceInterfaceDetailData, Int32 DeviceInterfaceDetailDataSize, ref Int32 RequiredSize, IntPtr DeviceInfoData);
+		private static extern bool SetupDiGetDeviceInterfaceDetail([In] IntPtr DeviceInfoSet, [In] ref SP_DEVICE_INTERFACE_DATA DeviceInterfaceData, [Out] IntPtr DeviceInterfaceDetailData, [In] Int32 DeviceInterfaceDetailDataSize, [Out] out Int32 RequiredSize, [Out] IntPtr DeviceInfoData);
 
 		/// <summary>
 		/// Stop receiving notification messages.
@@ -244,7 +244,7 @@ namespace MKY.Utilities.Win32
 		/// <param name="Handle">Handle returned previously by RegisterDeviceNotification.</param>
 		/// <returns>True on success.</returns>
 		[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern bool UnregisterDeviceNotification(IntPtr Handle);
+		private static extern bool UnregisterDeviceNotification([In] IntPtr Handle);
 
 		#endregion
 
@@ -283,7 +283,7 @@ namespace MKY.Utilities.Win32
 					if (SetupDiEnumDeviceInterfaces(pDeviceInfoSet, IntPtr.Zero, ref classGuid, memberIndex, ref deviceInterfaceData))
 					{
 						// A device is present. Retrieve the size of the data buffer. Don't care about the return value, it will be false.
-						SetupDiGetDeviceInterfaceDetail(pDeviceInfoSet, ref deviceInterfaceData, IntPtr.Zero, 0, ref bufferSize, IntPtr.Zero);
+						SetupDiGetDeviceInterfaceDetail(pDeviceInfoSet, ref deviceInterfaceData, IntPtr.Zero, 0, out bufferSize, IntPtr.Zero);
 
 						// Allocate memory for the SP_DEVICE_INTERFACE_DETAIL_DATA structure using the returned buffer size.
 						pDetailDataBuffer = Marshal.AllocHGlobal(bufferSize);
@@ -293,7 +293,7 @@ namespace MKY.Utilities.Win32
 
 						// Call SetupDiGetDeviceInterfaceDetail again.
 						// This time, pass a pointer to DetailDataBuffer and the returned required buffer size.
-						if (SetupDiGetDeviceInterfaceDetail(pDeviceInfoSet, ref deviceInterfaceData, pDetailDataBuffer, bufferSize, ref bufferSize, IntPtr.Zero))
+						if (SetupDiGetDeviceInterfaceDetail(pDeviceInfoSet, ref deviceInterfaceData, pDetailDataBuffer, bufferSize, out bufferSize, IntPtr.Zero))
 						{
 							// Skip over cbsize (4 bytes) to get the address of the devicePathName.
 							IntPtr pDevicePathName = new IntPtr(pDetailDataBuffer.ToInt32() + 4);

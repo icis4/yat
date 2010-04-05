@@ -92,7 +92,7 @@ namespace MKY.Utilities.Win32
 
 		/// <summary></summary>
 		[DllImport(ADVANCED_DLL, SetLastError = true)]
-		public static extern bool ImpersonateSelf(SECURITY_IMPERSONATION_LEVEL ImpersonationLevel);
+		public static extern bool ImpersonateSelf([In] SECURITY_IMPERSONATION_LEVEL ImpersonationLevel);
 
 		#endregion
 	}
