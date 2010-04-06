@@ -62,6 +62,8 @@ Limitations and known issues:
   (feature request #1960299)
 - Support for serial ports which are named other than COM isn't supported by .NET
   (feature request #2848228)
+- USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
+  of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
 - UTF-16/32 testing pending (bug #1931537)
 - More advanced text line send and receive options not yet implemented
   (feature requests #1808508 and #1808509)
