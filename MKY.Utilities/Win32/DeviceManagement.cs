@@ -43,214 +43,224 @@ namespace MKY.Utilities.Win32
 	/// </remarks>
 	public static class DeviceManagement
 	{
-		#region Types
+		#region Native
 		//==========================================================================================
-		// Types
+		// Native
 		//==========================================================================================
 
-		// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
-		// warnings for each undocumented member below. Documenting each member makes little sense
-		// since they pretty much tell their purpose and documentation tags between the members
-		// makes the code less readable.
-		#pragma warning disable 1591
-
-		/// <remarks>dbt.h</remarks>
-		[Flags]
-		private enum DIGCF : uint
+		/// <summary>
+		/// Class encapsulating native Win32 types, constants and functions.
+		/// </summary>
+		private static class Native
 		{
+			#region Types
+			//==========================================================================================
+			// Types
+			//==========================================================================================
+
+			// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+			// warnings for each undocumented member below. Documenting each member makes little sense
+			// since they pretty much tell their purpose and documentation tags between the members
+			// makes the code less readable.
+			#pragma warning disable 1591
+
+			/// <remarks>dbt.h</remarks>
+			[Flags]
+			public enum DIGCF : uint
+			{
+				/// <remarks>
+				/// Only valid with DIGCF_DEVICEINTERFACE
+				/// </remarks>
+				DEFAULT         = 0x00000001,
+				PRESENT         = 0x00000002,
+				ALLCLASSES      = 0x00000004,
+				PROFILE         = 0x00000008,
+				DEVICEINTERFACE = 0x00000010,
+			}
+
+			/// <remarks>dbt.h</remarks>
+			public enum DBT : uint
+			{
+				DEVICEARRIVAL        = 0x00008000,
+				DEVICEREMOVECOMPLETE = 0x00008004,
+			}
+
+			/// <remarks>dbt.h</remarks>
+			public enum DBT_DEVTYP : uint
+			{
+				DEVICEINTERFACE = 0x00000005,
+				HANDLE          = 0x00000006,
+			}
+
+			[Flags]
+			public enum DEVICE_NOTIFY : uint
+			{
+				WINDOW_HANDLE         = 0x00000000,
+				SERVICE_HANDLE        = 0x00000001,
+				ALL_INTERFACE_CLASSES = 0x00000004,
+			}
+
+			/// <summary>
+			/// Two declarations for the DEV_BROADCAST_DEVICEINTERFACE structure.
+			/// Use this one in the call to RegisterDeviceNotification() and
+			/// in checking dbch_devicetype in a DEV_BROADCAST_HDR structure:
+			/// </summary>
 			/// <remarks>
-			/// Only valid with DIGCF_DEVICEINTERFACE
+			/// Must be a class because <see cref="Marshal.PtrToStructure(IntPtr, object)"/> and
+			/// <see cref="RegisterDeviceNotification"/> require a reference type.
 			/// </remarks>
-			DEFAULT         = 0x00000001,
-			PRESENT         = 0x00000002,
-			ALLCLASSES      = 0x00000004,
-			PROFILE         = 0x00000008,
-			DEVICEINTERFACE = 0x00000010,
-		}
+			[StructLayout(LayoutKind.Sequential)]
+			public class DEV_BROADCAST_DEVICEINTERFACE
+			{
+				public UInt32      dbcc_size;
+				public DBT_DEVTYP  dbcc_devicetype;
+				public UInt32      dbcc_reserved;
+				public System.Guid dbcc_classguid;
+				[MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
+				public char[]      dbcc_name;
+			}
 
-		/// <remarks>dbt.h</remarks>
-		//[Flags]
-		[CLSCompliant(false)]
-		public enum DBT : uint
-		{
-			DEVICEARRIVAL        = 0x00008000,
-			DEVICEREMOVECOMPLETE = 0x00008004,
-		}
+			/// <remarks>
+			/// Must be a class because <see cref="Marshal.PtrToStructure(IntPtr, object)"/> requires a reference type.
+			/// </remarks>
+			[StructLayout(LayoutKind.Sequential)]
+			public class DEV_BROADCAST_HDR
+			{
+				public UInt32     dbch_size;
+				public DBT_DEVTYP dbch_devicetype;
+				public UInt32     dbch_reserved;
+			}
 
-		/// <remarks>dbt.h</remarks>
-		private enum DBT_DEVTYP : uint
-		{
-			DEVICEINTERFACE = 0x00000005,
-			HANDLE          = 0x00000006,
-		}
+			[StructLayout(LayoutKind.Sequential)]
+			public struct SP_DEVICE_INTERFACE_DATA
+			{
+				public UInt32 cbSize;
+				public System.Guid InterfaceClassGuid;
+				public UInt32 Flags;
+				public IntPtr Reserved;
+			}
 
-		//[Flags]
-		private enum DEVICE_NOTIFY : uint
-		{
-			WINDOW_HANDLE         = 0x00000000,
-			SERVICE_HANDLE        = 0x00000001,
-			ALL_INTERFACE_CLASSES = 0x00000004,
-		}
+			[StructLayout(LayoutKind.Sequential)]
+			public struct SP_DEVICE_INTERFACE_DETAIL_DATA
+			{
+				public UInt32 cbSize;
+				public string DevicePath;
+			}
 
-		/// <summary>
-		/// Two declarations for the DEV_BROADCAST_DEVICEINTERFACE structure.
-		/// Use this one in the call to RegisterDeviceNotification() and
-		/// in checking dbch_devicetype in a DEV_BROADCAST_HDR structure:
-		/// </summary>
-		/// <remarks>
-		/// Must be a class because <see cref="Marshal.PtrToStructure(IntPtr, object)"/> and
-		/// <see cref="RegisterDeviceNotification"/> require a reference type.
-		/// </remarks>
-		[StructLayout(LayoutKind.Sequential)]
-		private class DEV_BROADCAST_DEVICEINTERFACE
-		{
-			public UInt32      dbcc_size;
-			public DBT_DEVTYP  dbcc_devicetype;
-			public UInt32      dbcc_reserved;
-			public System.Guid dbcc_classguid;
-			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
-			public char[]      dbcc_name;
-		}
+			[StructLayout(LayoutKind.Sequential)]
+			public struct SP_DEVINFO_DATA
+			{
+				public UInt32 cbSize;
+				public System.Guid ClassGuid;
+				public UInt32 DevInst;
+				public UInt32 Reserved;
+			}
 
-		/// <remarks>
-		/// Must be a class because <see cref="Marshal.PtrToStructure(IntPtr, object)"/> requires a reference type.
-		/// </remarks>
-		[StructLayout(LayoutKind.Sequential)]
-		private class DEV_BROADCAST_HDR
-		{
-			public UInt32     dbch_size;
-			public DBT_DEVTYP dbch_devicetype;
-			public UInt32     dbch_reserved;
-		}
+			#pragma warning restore 1591
 
-		[StructLayout(LayoutKind.Sequential)]
-		private struct SP_DEVICE_INTERFACE_DATA
-		{
-			public UInt32 cbSize;
-			public System.Guid InterfaceClassGuid;
-			public UInt32 Flags;
-			public IntPtr Reserved;
-		}
+			#endregion
 
-		[StructLayout(LayoutKind.Sequential)]
-		private struct SP_DEVICE_INTERFACE_DETAIL_DATA
-		{
-			public UInt32 cbSize;
-			public string DevicePath;
-		}
+			#region Constants
+			//==========================================================================================
+			// Constants
+			//==========================================================================================
 
-		[StructLayout(LayoutKind.Sequential)]
-		private struct SP_DEVINFO_DATA
-		{
-			public UInt32 cbSize;
-			public System.Guid ClassGuid;
-			public UInt32 DevInst;
-			public UInt32 Reserved;
-		}
+			private const string SETUP_DLL = "setupapi.dll";
+			private const string USER_DLL = "user32.dll";
 
-		#pragma warning restore 1591
+			/// <remarks>dbt.h</remarks>
+			public const UInt32 WM_DEVICECHANGE = 0x00000219;
+
+			#endregion
+
+			#region External Functions
+			//==========================================================================================
+			// External Functions
+			//==========================================================================================
+
+			/// <summary>
+			/// Request to receive notification messages when a device in an interface class is attached
+			/// or removed.
+			/// </summary>
+			/// <param name="hRecipient">Handle to the window that will receive device events.</param>
+			/// <param name="NotificationFilter">Pointer to a DEV_BROADCAST_DEVICEINTERFACE to specify
+			/// the type of device to send notifications for.</param>
+			/// <param name="Flags">DEVICE_NOTIFY_WINDOW_HANDLE indicates the handle is a window handle.</param>
+			/// <returns>Device notification handle or NULL on failure.</returns>
+			[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			public static extern IntPtr RegisterDeviceNotification([In] IntPtr hRecipient, [In] DEV_BROADCAST_DEVICEINTERFACE NotificationFilter, [In] DEVICE_NOTIFY Flags);
+
+			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			public static extern Int32 SetupDiCreateDeviceInfoList([In] ref System.Guid ClassGuid, [In] Int32 hwndParent);
+
+			/// <summary>
+			/// Frees the memory reserved for the DeviceInfoSet returned by SetupDiGetClassDevs.
+			/// </summary>
+			/// <param name="DeviceInfoSet"></param>
+			/// <returns>True on success.</returns>
+			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			public static extern Int32 SetupDiDestroyDeviceInfoList([In] IntPtr DeviceInfoSet);
+
+			/// <summary>
+			/// Retrieves a handle to a SP_DEVICE_INTERFACE_DATA structure for a device.
+			/// On return, DeviceInterfaceData contains the handle to a SP_DEVICE_INTERFACE_DATA structure for a detected device.
+			/// </summary>
+			/// <param name="DeviceInfoSet">DeviceInfoSet returned by SetupDiGetClassDevs.</param>
+			/// <param name="DeviceInfoData">Optional SP_DEVINFO_DATA structure that defines a device
+			/// instance that is a member of a device information set.</param>
+			/// <param name="InterfaceClassGuid">Device interface GUID.</param>
+			/// <param name="MemberIndex">Index to specify a device in a device information set.</param>
+			/// <param name="DeviceInterfaceData">Pointer to a handle to a SP_DEVICE_INTERFACE_DATA structure for a device.</param>
+			/// <returns>True on success.</returns>
+			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			public static extern bool SetupDiEnumDeviceInterfaces([In] IntPtr DeviceInfoSet, [In] IntPtr DeviceInfoData, [In] ref System.Guid InterfaceClassGuid, [In] Int32 MemberIndex, [In, Out] ref SP_DEVICE_INTERFACE_DATA DeviceInterfaceData);
+
+			/// <summary>
+			/// Retrieves a device information set for a specified group of devices.
+			/// SetupDiEnumDeviceInterfaces uses the device information set.
+			/// </summary>
+			/// <param name="ClassGuid">Interface class GUID.</param>
+			/// <param name="Enumerator">Null to retrieve information for all device instances.</param>
+			/// <param name="hwndParent">Optional handle to a top-level window (unused here).</param>
+			/// <param name="Flags">Flags to limit the returned information to currently present devices
+			/// and devices that expose interfaces in the class specified by the GUID.</param>
+			/// <returns>Handle to a device information set for the devices.</returns>
+			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			public static extern IntPtr SetupDiGetClassDevs([In] ref System.Guid ClassGuid, [In] IntPtr Enumerator, [In] IntPtr hwndParent, [In] DIGCF Flags);
+
+			/// <summary>
+			/// Retrieves an SP_DEVICE_INTERFACE_DETAIL_DATA structure containing information about a device.
+			/// To retrieve the information, call this function twice. The first time returns the size of the structure.
+			/// The second time returns a pointer to the data.
+			/// </summary>
+			/// <param name="DeviceInfoSet">DeviceInfoSet returned by SetupDiGetClassDevs</param>
+			/// <param name="DeviceInterfaceData">SP_DEVICE_INTERFACE_DATA structure returned by SetupDiEnumDeviceInterfaces</param>
+			/// <param name="DeviceInterfaceDetailData">A returned pointer to an SP_DEVICE_INTERFACE_DETAIL_DATA.
+			/// Structure to receive information about the specified interface.</param>
+			/// <param name="DeviceInterfaceDetailDataSize">The size of the SP_DEVICE_INTERFACE_DETAIL_DATA structure.</param>
+			/// <param name="RequiredSize">Pointer to a variable that will receive the returned required size of the
+			/// SP_DEVICE_INTERFACE_DETAIL_DATA structure.</param>
+			/// <param name="DeviceInfoData">Returned pointer to an SP_DEVINFO_DATA structure to receive information about the device.</param>
+			/// <returns>True on success.</returns>
+			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			public static extern bool SetupDiGetDeviceInterfaceDetail([In] IntPtr DeviceInfoSet, [In] ref SP_DEVICE_INTERFACE_DATA DeviceInterfaceData, [Out] IntPtr DeviceInterfaceDetailData, [In] Int32 DeviceInterfaceDetailDataSize, [Out] out Int32 RequiredSize, [Out] IntPtr DeviceInfoData);
+
+			/// <summary>
+			/// Stop receiving notification messages.
+			/// </summary>
+			/// <param name="Handle">Handle returned previously by RegisterDeviceNotification.</param>
+			/// <returns>True on success.</returns>
+			[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			public static extern bool UnregisterDeviceNotification([In] IntPtr Handle);
+
+			#endregion
+		}
 
 		#endregion
 
-		#region Constants
+		#region Static Methods
 		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private const string SETUP_DLL = "setupapi.dll";
-		private const string USER_DLL = "user32.dll";
-
-		/// <remarks>dbt.h</remarks>
-		[CLSCompliant(false)]
-		public const UInt32 WM_DEVICECHANGE = 0x00000219;
-
-		#endregion
-
-		#region External Functions
-		//==========================================================================================
-		// External Functions
-		//==========================================================================================
-
-		/// <summary>
-		/// Request to receive notification messages when a device in an interface class is attached
-		/// or removed.
-		/// </summary>
-		/// <param name="hRecipient">Handle to the window that will receive device events.</param>
-		/// <param name="NotificationFilter">Pointer to a DEV_BROADCAST_DEVICEINTERFACE to specify
-		/// the type of device to send notifications for.</param>
-		/// <param name="Flags">DEVICE_NOTIFY_WINDOW_HANDLE indicates the handle is a window handle.</param>
-		/// <returns>Device notification handle or NULL on failure.</returns>
-		[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern IntPtr RegisterDeviceNotification([In] IntPtr hRecipient, [In] DEV_BROADCAST_DEVICEINTERFACE NotificationFilter, [In] DEVICE_NOTIFY Flags);
-
-		[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern Int32 SetupDiCreateDeviceInfoList([In] ref System.Guid ClassGuid, [In] Int32 hwndParent);
-
-		/// <summary>
-		/// Frees the memory reserved for the DeviceInfoSet returned by SetupDiGetClassDevs.
-		/// </summary>
-		/// <param name="DeviceInfoSet"></param>
-		/// <returns>True on success.</returns>
-		[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern Int32 SetupDiDestroyDeviceInfoList([In] IntPtr DeviceInfoSet);
-
-		/// <summary>
-		/// Retrieves a handle to a SP_DEVICE_INTERFACE_DATA structure for a device.
-		/// On return, DeviceInterfaceData contains the handle to a SP_DEVICE_INTERFACE_DATA structure for a detected device.
-		/// </summary>
-		/// <param name="DeviceInfoSet">DeviceInfoSet returned by SetupDiGetClassDevs.</param>
-		/// <param name="DeviceInfoData">Optional SP_DEVINFO_DATA structure that defines a device
-		/// instance that is a member of a device information set.</param>
-		/// <param name="InterfaceClassGuid">Device interface GUID.</param>
-		/// <param name="MemberIndex">Index to specify a device in a device information set.</param>
-		/// <param name="DeviceInterfaceData">Pointer to a handle to a SP_DEVICE_INTERFACE_DATA structure for a device.</param>
-		/// <returns>True on success.</returns>
-		[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern bool SetupDiEnumDeviceInterfaces([In] IntPtr DeviceInfoSet, [In] IntPtr DeviceInfoData, [In] ref System.Guid InterfaceClassGuid, [In] Int32 MemberIndex, [In, Out] ref SP_DEVICE_INTERFACE_DATA DeviceInterfaceData);
-
-		/// <summary>
-		/// Retrieves a device information set for a specified group of devices.
-		/// SetupDiEnumDeviceInterfaces uses the device information set.
-		/// </summary>
-		/// <param name="ClassGuid">Interface class GUID.</param>
-		/// <param name="Enumerator">Null to retrieve information for all device instances.</param>
-		/// <param name="hwndParent">Optional handle to a top-level window (unused here).</param>
-		/// <param name="Flags">Flags to limit the returned information to currently present devices
-		/// and devices that expose interfaces in the class specified by the GUID.</param>
-		/// <returns>Handle to a device information set for the devices.</returns>
-		[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern IntPtr SetupDiGetClassDevs([In] ref System.Guid ClassGuid, [In] IntPtr Enumerator, [In] IntPtr hwndParent, [In] DIGCF Flags);
-
-		/// <summary>
-		/// Retrieves an SP_DEVICE_INTERFACE_DETAIL_DATA structure containing information about a device.
-		/// To retrieve the information, call this function twice. The first time returns the size of the structure.
-		/// The second time returns a pointer to the data.
-		/// </summary>
-		/// <param name="DeviceInfoSet">DeviceInfoSet returned by SetupDiGetClassDevs</param>
-		/// <param name="DeviceInterfaceData">SP_DEVICE_INTERFACE_DATA structure returned by SetupDiEnumDeviceInterfaces</param>
-		/// <param name="DeviceInterfaceDetailData">A returned pointer to an SP_DEVICE_INTERFACE_DETAIL_DATA.
-		/// Structure to receive information about the specified interface.</param>
-		/// <param name="DeviceInterfaceDetailDataSize">The size of the SP_DEVICE_INTERFACE_DETAIL_DATA structure.</param>
-		/// <param name="RequiredSize">Pointer to a variable that will receive the returned required size of the
-		/// SP_DEVICE_INTERFACE_DETAIL_DATA structure.</param>
-		/// <param name="DeviceInfoData">Returned pointer to an SP_DEVINFO_DATA structure to receive information about the device.</param>
-		/// <returns>True on success.</returns>
-		[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern bool SetupDiGetDeviceInterfaceDetail([In] IntPtr DeviceInfoSet, [In] ref SP_DEVICE_INTERFACE_DATA DeviceInterfaceData, [Out] IntPtr DeviceInterfaceDetailData, [In] Int32 DeviceInterfaceDetailDataSize, [Out] out Int32 RequiredSize, [Out] IntPtr DeviceInfoData);
-
-		/// <summary>
-		/// Stop receiving notification messages.
-		/// </summary>
-		/// <param name="Handle">Handle returned previously by RegisterDeviceNotification.</param>
-		/// <returns>True on success.</returns>
-		[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern bool UnregisterDeviceNotification([In] IntPtr Handle);
-
-		#endregion
-
-		#region Methods
-		//==========================================================================================
-		// Methods
+		// Static Methods
 		//==========================================================================================
 
 		/// <summary>
@@ -266,12 +276,12 @@ namespace MKY.Utilities.Win32
 			IntPtr pDeviceInfoSet = new IntPtr();
 			bool lastDevice = false;
 			int memberIndex = 0;
-			SP_DEVICE_INTERFACE_DATA deviceInterfaceData = new SP_DEVICE_INTERFACE_DATA();
+			Native.SP_DEVICE_INTERFACE_DATA deviceInterfaceData = new Native.SP_DEVICE_INTERFACE_DATA();
 			List<string> devicePaths = new List<string>();
 
 			try
 			{
-				pDeviceInfoSet = SetupDiGetClassDevs(ref classGuid, IntPtr.Zero, IntPtr.Zero, DIGCF.PRESENT | DIGCF.DEVICEINTERFACE);
+				pDeviceInfoSet = Native.SetupDiGetClassDevs(ref classGuid, IntPtr.Zero, IntPtr.Zero, Native.DIGCF.PRESENT | Native.DIGCF.DEVICEINTERFACE);
 
 				// The cbSize element of the deviceInterfaceData structure must be set to the structure's size in bytes. 
 				// The size is 28 bytes for 32-bit code and 32 bits for 64-bit code.
@@ -280,10 +290,10 @@ namespace MKY.Utilities.Win32
 				do
 				{
 					// Begin with 0 and increment through the device information set until no more devices are available.
-					if (SetupDiEnumDeviceInterfaces(pDeviceInfoSet, IntPtr.Zero, ref classGuid, memberIndex, ref deviceInterfaceData))
+					if (Native.SetupDiEnumDeviceInterfaces(pDeviceInfoSet, IntPtr.Zero, ref classGuid, memberIndex, ref deviceInterfaceData))
 					{
 						// A device is present. Retrieve the size of the data buffer. Don't care about the return value, it will be false.
-						SetupDiGetDeviceInterfaceDetail(pDeviceInfoSet, ref deviceInterfaceData, IntPtr.Zero, 0, out bufferSize, IntPtr.Zero);
+						Native.SetupDiGetDeviceInterfaceDetail(pDeviceInfoSet, ref deviceInterfaceData, IntPtr.Zero, 0, out bufferSize, IntPtr.Zero);
 
 						// Allocate memory for the SP_DEVICE_INTERFACE_DETAIL_DATA structure using the returned buffer size.
 						pDetailDataBuffer = Marshal.AllocHGlobal(bufferSize);
@@ -293,7 +303,7 @@ namespace MKY.Utilities.Win32
 
 						// Call SetupDiGetDeviceInterfaceDetail again.
 						// This time, pass a pointer to DetailDataBuffer and the returned required buffer size.
-						if (SetupDiGetDeviceInterfaceDetail(pDeviceInfoSet, ref deviceInterfaceData, pDetailDataBuffer, bufferSize, out bufferSize, IntPtr.Zero))
+						if (Native.SetupDiGetDeviceInterfaceDetail(pDeviceInfoSet, ref deviceInterfaceData, pDetailDataBuffer, bufferSize, out bufferSize, IntPtr.Zero))
 						{
 							// Skip over cbsize (4 bytes) to get the address of the devicePathName.
 							IntPtr pDevicePathName = new IntPtr(pDetailDataBuffer.ToInt32() + 4);
@@ -323,7 +333,7 @@ namespace MKY.Utilities.Win32
 				}
 
 				if (pDeviceInfoSet != IntPtr.Zero)
-					SetupDiDestroyDeviceInfoList(pDeviceInfoSet);
+					Native.SetupDiDestroyDeviceInfoList(pDeviceInfoSet);
 			}
 
 			return (devicePaths.ToArray());
@@ -343,19 +353,19 @@ namespace MKY.Utilities.Win32
 			try
 			{
 				// A DEV_BROADCAST_DEVICEINTERFACE header holds information about the request.
-				DEV_BROADCAST_DEVICEINTERFACE devBroadcastDeviceInterface = new DEV_BROADCAST_DEVICEINTERFACE();
+				Native.DEV_BROADCAST_DEVICEINTERFACE devBroadcastDeviceInterface = new Native.DEV_BROADCAST_DEVICEINTERFACE();
 
 				// Set the parameters in the DEV_BROADCAST_DEVICEINTERFACE structure. Set the size.
 				devBroadcastDeviceInterface.dbcc_size = (UInt32)Marshal.SizeOf(devBroadcastDeviceInterface);
 
 				// Request to receive notifications about a class of devices.
-				devBroadcastDeviceInterface.dbcc_devicetype = DBT_DEVTYP.DEVICEINTERFACE;
+				devBroadcastDeviceInterface.dbcc_devicetype = Native.DBT_DEVTYP.DEVICEINTERFACE;
 				devBroadcastDeviceInterface.dbcc_reserved = 0;
 
 				// Specify the interface class to receive notifications about.
 				devBroadcastDeviceInterface.dbcc_classguid = classGuid;
 
-				deviceNotificationHandle = RegisterDeviceNotification(windowHandle, devBroadcastDeviceInterface, DEVICE_NOTIFY.WINDOW_HANDLE);
+				deviceNotificationHandle = Native.RegisterDeviceNotification(windowHandle, devBroadcastDeviceInterface, Native.DEVICE_NOTIFY.WINDOW_HANDLE);
 
 				return (deviceNotificationHandle != IntPtr.Zero);
 			}
@@ -375,7 +385,7 @@ namespace MKY.Utilities.Win32
 		{
 			try
 			{
-				UnregisterDeviceNotification(deviceNotificationHandle);
+				Native.UnregisterDeviceNotification(deviceNotificationHandle);
 				// Ignore failures.
 			}
 			catch {}
@@ -399,13 +409,13 @@ namespace MKY.Utilities.Win32
 		{
 			try
 			{
-				DEV_BROADCAST_DEVICEINTERFACE devBroadcastDeviceInterface = new DEV_BROADCAST_DEVICEINTERFACE();
-				DEV_BROADCAST_HDR devBroadcastHeader = new DEV_BROADCAST_HDR();
+				Native.DEV_BROADCAST_DEVICEINTERFACE devBroadcastDeviceInterface = new Native.DEV_BROADCAST_DEVICEINTERFACE();
+				Native.DEV_BROADCAST_HDR devBroadcastHeader = new Native.DEV_BROADCAST_HDR();
 
 				// The LParam parameter of Message is a pointer to a DEV_BROADCAST_HDR structure.
 				Marshal.PtrToStructure(deviceChangeMessage.LParam, devBroadcastHeader);
 
-				if ((devBroadcastHeader.dbch_devicetype == DBT_DEVTYP.DEVICEINTERFACE))
+				if ((devBroadcastHeader.dbch_devicetype == Native.DBT_DEVTYP.DEVICEINTERFACE))
 				{
 					// The dbch_devicetype parameter indicates that the event applies to a device
 					// interface. So the structure in LParam is actually a DEV_BROADCAST_INTERFACE

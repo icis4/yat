@@ -31,68 +31,81 @@ namespace MKY.Utilities.Win32
 	/// </summary>
 	public static class Security
 	{
-		#region Types
+		#region Native
 		//==========================================================================================
-		// Types
+		// Native
 		//==========================================================================================
 
-		/// <summary></summary>
-		public enum SECURITY_IMPERSONATION_LEVEL
+		/// <summary>
+		/// Class encapsulating native Win32 types, constants and functions.
+		/// </summary>
+		public static class Native
 		{
-			/// <summary>
-			/// The server process cannot obtain identification information about the client,
-			/// and it cannot impersonate the client.
-			/// </summary>
-			/// <remarks>
-			/// It is defined with no value given, and thus, by ANSI C rules, defaults to a value of zero.
-			/// </remarks>
-			SecurityAnonymous = 0,
+			#region Types
+			//==========================================================================================
+			// Types
+			//==========================================================================================
 
-			/// <summary>
-			/// The server process can obtain information about the client, such as security
-			/// identifiers and privileges, but it cannot impersonate the client. This is useful
-			/// for servers that export their own objects, for example, database products that
-			/// export tables and views. Using the retrieved client-security information, the
-			/// server can make access-validation decisions without being able to use other
-			/// services that are using the client's security context.
-			/// </summary>
-			SecurityIdentification = 1,
+			/// <summary></summary>
+			public enum SECURITY_IMPERSONATION_LEVEL
+			{
+				/// <summary>
+				/// The server process cannot obtain identification information about the client,
+				/// and it cannot impersonate the client.
+				/// </summary>
+				/// <remarks>
+				/// It is defined with no value given, and thus, by ANSI C rules, defaults to a value of zero.
+				/// </remarks>
+				SecurityAnonymous = 0,
 
-			/// <summary>
-			/// The server process can impersonate the client's security context on its local
-			/// system. The server cannot impersonate the client on remote systems.
-			/// </summary>
-			SecurityImpersonation = 2,
+				/// <summary>
+				/// The server process can obtain information about the client, such as security
+				/// identifiers and privileges, but it cannot impersonate the client. This is useful
+				/// for servers that export their own objects, for example, database products that
+				/// export tables and views. Using the retrieved client-security information, the
+				/// server can make access-validation decisions without being able to use other
+				/// services that are using the client's security context.
+				/// </summary>
+				SecurityIdentification = 1,
 
-			/// <summary>
-			/// The server process can impersonate the client's security context on remote systems.
-			/// </summary>
-			/// <remarks>
-			/// Windows NT:  This impersonation level is not supported.
-			/// </remarks>
-			SecurityDelegation = 3,
-		
+				/// <summary>
+				/// The server process can impersonate the client's security context on its local
+				/// system. The server cannot impersonate the client on remote systems.
+				/// </summary>
+				SecurityImpersonation = 2,
+
+				/// <summary>
+				/// The server process can impersonate the client's security context on remote systems.
+				/// </summary>
+				/// <remarks>
+				/// Windows NT:  This impersonation level is not supported.
+				/// </remarks>
+				SecurityDelegation = 3,
+			
+			}
+
+			#endregion
+
+			#region Constants
+			//==========================================================================================
+			// Constants
+			//==========================================================================================
+
+			private const string ADVANCED_DLL = "advapi32.dll";
+
+			#endregion
+
+			#region External Functions
+			//==========================================================================================
+			// External Functions
+			//==========================================================================================
+
+			/// <summary></summary>
+			[DllImport(ADVANCED_DLL, SetLastError = true)]
+			public static extern bool ImpersonateSelf([In] SECURITY_IMPERSONATION_LEVEL ImpersonationLevel);
+
+			#endregion
 		}
-
-		#endregion
-
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private const string ADVANCED_DLL = "advapi32.dll";
-
-		#endregion
-
-		#region External Functions
-		//==========================================================================================
-		// External Functions
-		//==========================================================================================
-
-		/// <summary></summary>
-		[DllImport(ADVANCED_DLL, SetLastError = true)]
-		public static extern bool ImpersonateSelf([In] SECURITY_IMPERSONATION_LEVEL ImpersonationLevel);
 
 		#endregion
 	}
