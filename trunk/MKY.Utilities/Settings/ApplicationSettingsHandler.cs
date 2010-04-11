@@ -41,10 +41,10 @@ namespace MKY.Utilities.Settings
 		// Constants
 		//==========================================================================================
 
-		private const string _Extension = ".xml";
-		private const string _CommonFileName = "CommonSettings" + _Extension;
-		private const string _LocalUserFileName = "LocalUserSettings" + _Extension;
-		private const string _RoamingUserFileName = "RoamingUserSettings" + _Extension;
+		private const string Extension = ".xml";
+		private const string CommonFileName = "CommonSettings" + Extension;
+		private const string LocalUserFileName = "LocalUserSettings" + Extension;
+		private const string RoamingUserFileName = "RoamingUserSettings" + Extension;
 
 		#endregion
 
@@ -53,23 +53,23 @@ namespace MKY.Utilities.Settings
 		// Fields
 		//==========================================================================================
 
-		private bool _hasCommonSettings = false;
-		private bool _hasLocalUserSettings = false;
-		private bool _hasRoamingUserSettings = false;
+		private bool hasCommonSettings = false;
+		private bool hasLocalUserSettings = false;
+		private bool hasRoamingUserSettings = false;
 
-		private string _commonSettingsFilePath = "";
-		private string _localUserSettingsFilePath = "";
-		private string _roamingUserSettingsFilePath = "";
+		private string commonSettingsFilePath = "";
+		private string localUserSettingsFilePath = "";
+		private string roamingUserSettingsFilePath = "";
 
-		private TCommonSettings _commonSettings = default(TCommonSettings);
-		private TLocalUserSettings _localUserSettings = default(TLocalUserSettings);
-		private TRoamingUserSettings _roamingUserSettings = default(TRoamingUserSettings);
+		private TCommonSettings commonSettings = default(TCommonSettings);
+		private TLocalUserSettings localUserSettings = default(TLocalUserSettings);
+		private TRoamingUserSettings roamingUserSettings = default(TRoamingUserSettings);
 
-		private bool _commonSettingsSuccessfullyLoaded = false;
-		private bool _localUserSettingsSuccessfullyLoaded = false;
-		private bool _roamingUserSettingsSuccessfullyLoaded = false;
+		private bool commonSettingsSuccessfullyLoaded = false;
+		private bool localUserSettingsSuccessfullyLoaded = false;
+		private bool roamingUserSettingsSuccessfullyLoaded = false;
 
-		private bool _allSettingsSuccessfullyLoaded = false;
+		private bool allSettingsSuccessfullyLoaded = false;
 
 		#endregion
 
@@ -86,20 +86,20 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public ApplicationSettingsHandler(bool hasCommonSettings, bool hasLocalUserSettings, bool hasRoamingUserSettings)
 		{
-			_hasCommonSettings = hasCommonSettings;
-			_hasLocalUserSettings = hasLocalUserSettings;
-			_hasRoamingUserSettings = hasRoamingUserSettings;
+			this.hasCommonSettings = hasCommonSettings;
+			this.hasLocalUserSettings = hasLocalUserSettings;
+			this.hasRoamingUserSettings = hasRoamingUserSettings;
 
 			ResetFilePaths();
 
-			if (_hasCommonSettings)
-				_commonSettings = CommonSettingsDefault;
+			if (this.hasCommonSettings)
+				this.commonSettings = CommonSettingsDefault;
 
-			if (_hasLocalUserSettings)
-				_localUserSettings = LocalUserSettingsDefault;
+			if (this.hasLocalUserSettings)
+				this.localUserSettings = LocalUserSettingsDefault;
 
-			if (_hasRoamingUserSettings)
-				_roamingUserSettings = RoamingUserSettingsDefault;
+			if (this.hasRoamingUserSettings)
+				this.roamingUserSettings = RoamingUserSettingsDefault;
 		}
 
 		#endregion
@@ -114,7 +114,7 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public virtual bool HasCommonSettings
 		{
-			get { return (_hasCommonSettings); }
+			get { return (this.hasCommonSettings); }
 		}
 
 		/// <summary>
@@ -122,7 +122,7 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public virtual bool HasLocalUserSettings
 		{
-			get { return (_hasLocalUserSettings); }
+			get { return (this.hasLocalUserSettings); }
 		}
 
 		/// <summary>
@@ -130,7 +130,7 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public virtual bool HasRoamingUserSettings
 		{
-			get { return (_hasRoamingUserSettings); }
+			get { return (this.hasRoamingUserSettings); }
 		}
 
 		/// <summary>
@@ -142,11 +142,11 @@ namespace MKY.Utilities.Settings
 		/// </exception>
 		public virtual string CommonSettingsFilePath
 		{
-			get { return (_commonSettingsFilePath); }
+			get { return (this.commonSettingsFilePath); }
 			set
 			{
 				if (HasCommonSettings)
-					_commonSettingsFilePath = value;
+					this.commonSettingsFilePath = value;
 				else
 					throw (new NullReferenceException("This handler has no common settings!"));
 			}
@@ -161,11 +161,11 @@ namespace MKY.Utilities.Settings
 		/// </exception>
 		public virtual string LocalUserSettingsFilePath
 		{
-			get { return (_localUserSettingsFilePath); }
+			get { return (this.localUserSettingsFilePath); }
 			set
 			{
 				if (HasLocalUserSettings)
-					_localUserSettingsFilePath = value;
+					this.localUserSettingsFilePath = value;
 				else
 					throw (new NullReferenceException("This handler has no local user settings!"));
 			}
@@ -180,11 +180,11 @@ namespace MKY.Utilities.Settings
 		/// </exception>
 		public virtual string RoamingUserSettingsFilePath
 		{
-			get { return (_roamingUserSettingsFilePath); }
+			get { return (this.roamingUserSettingsFilePath); }
 			set
 			{
 				if (HasRoamingUserSettings)
-					_roamingUserSettingsFilePath = value;
+					this.roamingUserSettingsFilePath = value;
 				else
 					throw (new NullReferenceException("This handler has no roaming user settings!"));
 			}
@@ -195,7 +195,7 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public virtual TCommonSettings CommonSettings
 		{
-			get { return (_commonSettings); }
+			get { return (this.commonSettings); }
 		}
 
 		/// <summary>
@@ -203,7 +203,7 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public virtual TLocalUserSettings LocalUserSettings
 		{
-			get { return (_localUserSettings); }
+			get { return (this.localUserSettings); }
 		}
 
 		/// <summary>
@@ -211,7 +211,7 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public virtual TRoamingUserSettings RoamingUserSettings
 		{
-			get { return (_roamingUserSettings); }
+			get { return (this.roamingUserSettings); }
 		}
 
 		/// <summary>
@@ -220,7 +220,7 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public virtual bool CommonSettingsSuccessfullyLoaded
 		{
-			get { return (_commonSettingsSuccessfullyLoaded); }
+			get { return (this.commonSettingsSuccessfullyLoaded); }
 		}
 
 		/// <summary>
@@ -229,7 +229,7 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public virtual bool LocalUserSettingsSuccessfullyLoaded
 		{
-			get { return (_localUserSettingsSuccessfullyLoaded); }
+			get { return (this.localUserSettingsSuccessfullyLoaded); }
 		}
 
 		/// <summary>
@@ -238,7 +238,7 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public virtual bool RoamingUserSettingsSuccessfullyLoaded
 		{
-			get { return (_roamingUserSettingsSuccessfullyLoaded); }
+			get { return (this.roamingUserSettingsSuccessfullyLoaded); }
 		}
 
 		/// <summary>
@@ -247,7 +247,7 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public virtual bool AllSettingsSuccessfullyLoaded
 		{
-			get { return (_allSettingsSuccessfullyLoaded); }
+			get { return (this.allSettingsSuccessfullyLoaded); }
 		}
 
 		/// <summary>
@@ -307,20 +307,20 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public virtual void ResetFilePaths()
 		{
-			if (_hasCommonSettings)
-				_commonSettingsFilePath = Application.CommonAppDataPath + Path.DirectorySeparatorChar + _CommonFileName;
+			if (this.hasCommonSettings)
+				this.commonSettingsFilePath = Application.CommonAppDataPath + Path.DirectorySeparatorChar + CommonFileName;
 			else
-				_commonSettingsFilePath = "";
+				this.commonSettingsFilePath = "";
 
-			if (_hasLocalUserSettings)
-				_localUserSettingsFilePath = Application.LocalUserAppDataPath + Path.DirectorySeparatorChar + _LocalUserFileName;
+			if (this.hasLocalUserSettings)
+				this.localUserSettingsFilePath = Application.LocalUserAppDataPath + Path.DirectorySeparatorChar + LocalUserFileName;
 			else
-				_localUserSettingsFilePath = "";
+				this.localUserSettingsFilePath = "";
 
-			if (_hasRoamingUserSettings)
-				_roamingUserSettingsFilePath = Application.UserAppDataPath + Path.DirectorySeparatorChar + _RoamingUserFileName;
+			if (this.hasRoamingUserSettings)
+				this.roamingUserSettingsFilePath = Application.UserAppDataPath + Path.DirectorySeparatorChar + RoamingUserFileName;
 			else
-				_roamingUserSettingsFilePath = "";
+				this.roamingUserSettingsFilePath = "";
 		}
 
 		/// <summary>
@@ -337,16 +337,16 @@ namespace MKY.Utilities.Settings
 		/// </exception>
 		public virtual bool Load()
 		{
-			_allSettingsSuccessfullyLoaded = true;
+			this.allSettingsSuccessfullyLoaded = true;
 
 			if (!LoadCommon())
-				_allSettingsSuccessfullyLoaded = false;
+				this.allSettingsSuccessfullyLoaded = false;
 
 			if (!LoadLocalUser())
-				_allSettingsSuccessfullyLoaded = false;
+				this.allSettingsSuccessfullyLoaded = false;
 
 			if (!LoadRoamingUser())
-				_allSettingsSuccessfullyLoaded = false;
+				this.allSettingsSuccessfullyLoaded = false;
 
 			// Immediately try to save settings to reflect current version
 			try
@@ -358,7 +358,7 @@ namespace MKY.Utilities.Settings
 			}
 
 			// Return load result
-			return (_allSettingsSuccessfullyLoaded);
+			return (this.allSettingsSuccessfullyLoaded);
 		}
 
 		/// <summary>
@@ -373,14 +373,14 @@ namespace MKY.Utilities.Settings
 			bool result = true;
 			if (HasCommonSettings)
 			{
-				object settings = LoadFromFile(typeof(TCommonSettings), _commonSettingsFilePath);
-				_commonSettingsSuccessfullyLoaded = (settings != null);
-				if (!_commonSettingsSuccessfullyLoaded)
+				object settings = LoadFromFile(typeof(TCommonSettings), this.commonSettingsFilePath);
+				this.commonSettingsSuccessfullyLoaded = (settings != null);
+				if (!this.commonSettingsSuccessfullyLoaded)
 				{
 					settings = CommonSettingsDefault;
 					result = false;
 				}
-				_commonSettings = (TCommonSettings)settings;
+				this.commonSettings = (TCommonSettings)settings;
 			}
 			return (result);
 		}
@@ -397,14 +397,14 @@ namespace MKY.Utilities.Settings
 			bool result = true;
 			if (HasLocalUserSettings)
 			{
-				object settings = LoadFromFile(typeof(TLocalUserSettings), _localUserSettingsFilePath);
-				_localUserSettingsSuccessfullyLoaded = (settings != null);
-				if (!_localUserSettingsSuccessfullyLoaded)
+				object settings = LoadFromFile(typeof(TLocalUserSettings), this.localUserSettingsFilePath);
+				this.localUserSettingsSuccessfullyLoaded = (settings != null);
+				if (!this.localUserSettingsSuccessfullyLoaded)
 				{
 					settings = LocalUserSettingsDefault;
 					result = false;
 				}
-				_localUserSettings = (TLocalUserSettings)settings;
+				this.localUserSettings = (TLocalUserSettings)settings;
 			}
 			return (result);
 		}
@@ -421,14 +421,14 @@ namespace MKY.Utilities.Settings
 			bool result = true;
 			if (HasRoamingUserSettings)
 			{
-				object settings = LoadFromFile(typeof(TRoamingUserSettings), _roamingUserSettingsFilePath);
-				_roamingUserSettingsSuccessfullyLoaded = (settings != null);
-				if (!_roamingUserSettingsSuccessfullyLoaded)
+				object settings = LoadFromFile(typeof(TRoamingUserSettings), this.roamingUserSettingsFilePath);
+				this.roamingUserSettingsSuccessfullyLoaded = (settings != null);
+				if (!this.roamingUserSettingsSuccessfullyLoaded)
 				{
 					settings = RoamingUserSettingsDefault;
 					result = false;
 				}
-				_roamingUserSettings = (TRoamingUserSettings)settings;
+				this.roamingUserSettings = (TRoamingUserSettings)settings;
 			}
 			return (result);
 		}
@@ -585,7 +585,7 @@ namespace MKY.Utilities.Settings
 		public virtual void SaveCommon()
 		{
 			if (HasCommonSettings)
-				SaveToFile(typeof(TCommonSettings), _commonSettingsFilePath, _commonSettings);
+				SaveToFile(typeof(TCommonSettings), this.commonSettingsFilePath, this.commonSettings);
 		}
 
 		/// <summary>
@@ -597,7 +597,7 @@ namespace MKY.Utilities.Settings
 		public virtual void SaveLocalUser()
 		{
 			if (HasLocalUserSettings)
-				SaveToFile(typeof(TLocalUserSettings), _localUserSettingsFilePath, _localUserSettings);
+				SaveToFile(typeof(TLocalUserSettings), this.localUserSettingsFilePath, this.localUserSettings);
 		}
 
 		/// <summary>
@@ -609,7 +609,7 @@ namespace MKY.Utilities.Settings
 		public virtual void SaveRoamingUser()
 		{
 			if (HasRoamingUserSettings)
-				SaveToFile(typeof(TRoamingUserSettings), _roamingUserSettingsFilePath, _roamingUserSettings);
+				SaveToFile(typeof(TRoamingUserSettings), this.roamingUserSettingsFilePath, this.roamingUserSettings);
 		}
 
 		private void SaveToFile(Type type, string filePath, object settings)

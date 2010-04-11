@@ -44,11 +44,11 @@ namespace MKY.Utilities.Settings
 	/// </remarks>
 	public abstract class Settings
 	{
-		private SettingsType _settingsType = SettingsType.Explicit;
+		private SettingsType settingsType = SettingsType.Explicit;
 
-		private List<Settings> _nodes;
-		private bool _haveChanged = false;
-		private int _changeEventSuspendedCount = 0;
+		private List<Settings> nodes;
+		private bool haveChanged = false;
+		private int changeEventSuspendedCount = 0;
 
 		/// <summary></summary>
 		public event EventHandler<SettingsEventArgs> Changed;
@@ -56,21 +56,21 @@ namespace MKY.Utilities.Settings
 		/// <summary></summary>
 		public Settings()
 		{
-			_nodes = new List<Settings>();
+			this.nodes = new List<Settings>();
 		}
 
 		/// <summary></summary>
 		public Settings(SettingsType type)
 		{
-			_settingsType = type;
-			_nodes = new List<Settings>();
+			this.settingsType = type;
+			this.nodes = new List<Settings>();
 		}
 
 		/// <summary></summary>
 		public Settings(Settings settings)
 		{
-			_settingsType = settings._settingsType;
-			_nodes = new List<Settings>();         // do not copy nodes
+			this.settingsType = settings.settingsType;
+			this.nodes = new List<Settings>();         // do not copy nodes
 		}
 
 		/// <summary></summary>
@@ -80,8 +80,8 @@ namespace MKY.Utilities.Settings
 
 			node.SuspendChangeEvent();
 			node.SetChanged();
-			node.Changed += new EventHandler<SettingsEventArgs>(_node_Changed);
-			_nodes.Add(node);
+			node.Changed += new EventHandler<SettingsEventArgs>(this.node_Changed);
+			this.nodes.Add(node);
 
 			ResumeChangeEvent();
 		}
@@ -91,13 +91,13 @@ namespace MKY.Utilities.Settings
 		{
 			SuspendChangeEvent();
 
-			nodeOld.Changed -= new EventHandler<SettingsEventArgs>(_node_Changed);
-			_nodes.Remove(nodeOld);
+			nodeOld.Changed -= new EventHandler<SettingsEventArgs>(this.node_Changed);
+			this.nodes.Remove(nodeOld);
 
 			nodeNew.SuspendChangeEvent();
 			nodeNew.SetChanged();
-			nodeNew.Changed += new EventHandler<SettingsEventArgs>(_node_Changed);
-			_nodes.Add(nodeNew);
+			nodeNew.Changed += new EventHandler<SettingsEventArgs>(this.node_Changed);
+			this.nodes.Add(nodeNew);
 
 			ResumeChangeEvent();
 		}
@@ -105,7 +105,7 @@ namespace MKY.Utilities.Settings
 		/// <summary></summary>
 		public virtual SettingsType SettingsType
 		{
-			get { return (_settingsType); }
+			get { return (this.settingsType); }
 		}
 
 		/// <summary></summary>
@@ -113,8 +113,8 @@ namespace MKY.Utilities.Settings
 		{
 			get
 			{
-				bool hc = _haveChanged;
-				foreach (Settings node in _nodes)
+				bool hc = this.haveChanged;
+				foreach (Settings node in this.nodes)
 					hc = hc || node.HaveChanged;
 				return (hc);
 			}
@@ -125,11 +125,11 @@ namespace MKY.Utilities.Settings
 		{
 			get
 			{
-				if (_settingsType == SettingsType.Implicit)
+				if (this.settingsType == SettingsType.Implicit)
 					return (false);
 
-				bool hc = _haveChanged;
-				foreach (Settings node in _nodes)
+				bool hc = this.haveChanged;
+				foreach (Settings node in this.nodes)
 					hc = hc || node.ExplicitHaveChanged;
 				return (hc);
 			}
@@ -140,10 +140,10 @@ namespace MKY.Utilities.Settings
 		{
 			SuspendChangeEvent();
 
-			foreach (Settings node in _nodes)
+			foreach (Settings node in this.nodes)
 				node.SetChanged();
 
-			_haveChanged = true;
+			this.haveChanged = true;
 
 			ResumeChangeEvent();
 		}
@@ -153,10 +153,10 @@ namespace MKY.Utilities.Settings
 		{
 			SuspendChangeEvent();
 
-			foreach (Settings node in _nodes)
+			foreach (Settings node in this.nodes)
 				node.ClearChanged();
 
-			_haveChanged = false;
+			this.haveChanged = false;
 
 			ResumeChangeEvent();
 		}
@@ -166,7 +166,7 @@ namespace MKY.Utilities.Settings
 		{
 			SuspendChangeEvent();
 
-			foreach (Settings node in _nodes)
+			foreach (Settings node in this.nodes)
 				node.SetDefaults();
 
 			SetMyDefaults();
@@ -201,11 +201,11 @@ namespace MKY.Utilities.Settings
 					if (this.GetType() == value.GetType())
 					{
 						// compare all nodes, settings values have already been compared by inheriting class
-						if (_nodes.Count == value._nodes.Count)
+						if (this.nodes.Count == value.nodes.Count)
 						{
-							for (int i = 0; i < _nodes.Count; i++)
+							for (int i = 0; i < this.nodes.Count; i++)
 							{
-								if (_nodes[i] != value._nodes[i])
+								if (this.nodes[i] != value.nodes[i])
 									return (false);
 							}
 							return (true);
@@ -230,7 +230,7 @@ namespace MKY.Utilities.Settings
 		//------------------------------------------------------------------------------------------
 		// Node Events
 		//------------------------------------------------------------------------------------------
-		private void _node_Changed(object sender, SettingsEventArgs e)
+		private void node_Changed(object sender, SettingsEventArgs e)
 		{
 			OnChanged(new SettingsEventArgs(this, e));
 		}
@@ -245,7 +245,7 @@ namespace MKY.Utilities.Settings
 		/// <summary></summary>
 		protected virtual void OnChanged(SettingsEventArgs e)
 		{
-			if (_changeEventSuspendedCount == 0)
+			if (this.changeEventSuspendedCount == 0)
 				EventHelper.FireSync<SettingsEventArgs>(Changed, this, e);
 		}
 
@@ -261,10 +261,10 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public virtual void SuspendChangeEvent()
 		{
-			foreach (Settings node in _nodes)
+			foreach (Settings node in this.nodes)
 				node.SuspendChangeEvent();
 
-			_changeEventSuspendedCount++;
+			this.changeEventSuspendedCount++;
 		}
 
 		/// <summary>
@@ -281,12 +281,12 @@ namespace MKY.Utilities.Settings
 		/// <summary></summary>
 		public virtual void ResumeChangeEvent(bool forcePendingChangeEvent)
 		{
-			_changeEventSuspendedCount--;
+			this.changeEventSuspendedCount--;
 
-			foreach (Settings node in _nodes)
+			foreach (Settings node in this.nodes)
 				node.ResumeChangeEvent(forcePendingChangeEvent);
 
-			if (forcePendingChangeEvent && _haveChanged)
+			if (forcePendingChangeEvent && this.haveChanged)
 				OnChanged(new SettingsEventArgs(this));
 		}
 
@@ -296,7 +296,7 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public virtual void ForceChangeEvent()
 		{
-			foreach (Settings node in _nodes)
+			foreach (Settings node in this.nodes)
 				node.ForceChangeEvent();
 
 			OnChanged(new SettingsEventArgs(this));

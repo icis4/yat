@@ -58,13 +58,23 @@ namespace MKY.IO.Serial
 		// Constants
 		//==========================================================================================
 
-		private const int _MaxStartCycles = 3;
+		private const int MaxStartCycles = 3;
 
-		private const int _MinConnectDelay = 50;
-		private const int _MaxConnectDelay = 300;
+		private const int MinConnectDelay = 50;
+		private const int MaxConnectDelay = 300;
 
-		private const int _MinListenDelay = 50;
-		private const int _MaxListenDelay = 300;
+		private const int MinListenDelay = 50;
+		private const int MaxListenDelay = 300;
+
+		#endregion
+
+		#region Static Fields
+		//==========================================================================================
+		// Static Fields
+		//==========================================================================================
+
+		private static int staticInstanceCounter = 0;
+		private static Random staticRandom = new Random();
 
 		#endregion
 
@@ -73,25 +83,22 @@ namespace MKY.IO.Serial
 		// Fields
 		//==========================================================================================
 
-		private static int _instanceCounter = 0;
-		private static Random _random = new Random();
+		private int instanceId = 0;
+		private bool isDisposed;
 
-		private int _instanceId = 0;
-		private bool _isDisposed;
+		private System.Net.IPAddress remoteIPAddress;
+		private int remotePort;
+		private System.Net.IPAddress localIPAddress;
+		private int localPort;
 
-		private System.Net.IPAddress _remoteIPAddress;
-		private int _remotePort;
-		private System.Net.IPAddress _localIPAddress;
-		private int _localPort;
+		private SocketState state = SocketState.Reset;
+		private object stateSyncObj = new object();
 
-		private SocketState _state = SocketState.Reset;
-		private object _stateSyncObj = new object();
+		private int startCycleCounter = 0;
+		private object startCycleCounterSyncObj = new object();
 
-		private int _startCycleCounter = 0;
-		private object _startCycleCounterSyncObj = new object();
-
-		private TcpClient _client;
-		private TcpServer _server;
+		private TcpClient client;
+		private TcpServer server;
 
 		#endregion
 
@@ -123,12 +130,12 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public TcpAutoSocket(System.Net.IPAddress remoteIPAddress, int remotePort, System.Net.IPAddress localIPAddress, int localPort)
 		{
-			_instanceId = _instanceCounter++;
+			this.instanceId = staticInstanceCounter++;
 
-			_remoteIPAddress = remoteIPAddress;
-			_remotePort = remotePort;
-			_localIPAddress = localIPAddress;
-			_localPort = localPort;
+			this.remoteIPAddress = remoteIPAddress;
+			this.remotePort = remotePort;
+			this.localIPAddress = localIPAddress;
+			this.localPort = localPort;
 		}
 
 		#region Disposal
@@ -146,15 +153,15 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!_isDisposed)
+			if (!this.isDisposed)
 			{
 				if (disposing)
 				{
 					DisposeSockets();
 				}
-				_isDisposed = true;
+				this.isDisposed = true;
 
-				Debug.WriteLine(GetType() + " (" + _instanceId + ")(" + ToShortEndPointString() + "): Disposed.");
+				Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): Disposed.");
 			}
 		}
 
@@ -167,13 +174,13 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected bool IsDisposed
 		{
-			get { return (_isDisposed); }
+			get { return (this.isDisposed); }
 		}
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (_isDisposed)
+			if (this.isDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
 		}
 
@@ -192,7 +199,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_remoteIPAddress);
+				return (this.remoteIPAddress);
 			}
 		}
 
@@ -202,7 +209,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_remotePort);
+				return (this.remotePort);
 			}
 		}
 
@@ -212,7 +219,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_localIPAddress);
+				return (this.localIPAddress);
 			}
 		}
 
@@ -222,7 +229,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_localPort);
+				return (this.localPort);
 			}
 		}
 
@@ -232,7 +239,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				switch (_state)
+				switch (this.state)
 				{
 					case SocketState.Starting:
 					case SocketState.Connecting:
@@ -260,7 +267,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				switch (_state)
+				switch (this.state)
 				{
 					case SocketState.Connected:
 					case SocketState.Accepted:
@@ -287,7 +294,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				switch (_state)
+				switch (this.state)
 				{
 					case SocketState.Connected:
 					{
@@ -307,7 +314,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				switch (_state)
+				switch (this.state)
 				{
 					case SocketState.Listening:
 					case SocketState.Accepted:
@@ -330,9 +337,9 @@ namespace MKY.IO.Serial
 				AssertNotDisposed();
 
 				if (IsClient)
-					return (_client.BytesAvailable);
+					return (this.client.BytesAvailable);
 				else if (IsServer)
-					return (_server.BytesAvailable);
+					return (this.server.BytesAvailable);
 				else
 					return (0);
 			}
@@ -346,9 +353,9 @@ namespace MKY.IO.Serial
 				AssertNotDisposed();
 
 				if (IsClient)
-					return (_client.UnderlyingIOInstance);
+					return (this.client.UnderlyingIOInstance);
 				else if (IsServer)
-					return (_server.UnderlyingIOInstance);
+					return (this.server.UnderlyingIOInstance);
 				else
 					return (null);
 			}
@@ -365,7 +372,7 @@ namespace MKY.IO.Serial
 		public virtual bool Start()
 		{
 			AssertNotDisposed();
-			switch (_state)
+			switch (this.state)
 			{
 				case SocketState.Reset:
 				case SocketState.Error:
@@ -375,7 +382,7 @@ namespace MKY.IO.Serial
 				}
 				default:
 				{
-					Debug.WriteLine(GetType() + " (" + _instanceId + ")(" + ToShortEndPointString() + "): Start() requested but state is " + _state + ".");
+					Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): Start() requested but state is " + this.state + ".");
 					return (false);
 				}
 			}
@@ -394,9 +401,9 @@ namespace MKY.IO.Serial
 			AssertNotDisposed();
 
 			if (IsClient)
-				return (_client.Receive(out data));
+				return (this.client.Receive(out data));
 			else if (IsServer)
-				return (_server.Receive(out data));
+				return (this.server.Receive(out data));
 			else
 			{
 				data = new byte[] { };
@@ -410,9 +417,9 @@ namespace MKY.IO.Serial
 			AssertNotDisposed();
 
 			if (IsClient)
-				_client.Send(data);
+				this.client.Send(data);
 			else if (IsServer)
-				_server.Send(data);
+				this.server.Send(data);
 		}
 
 		#endregion
@@ -425,12 +432,12 @@ namespace MKY.IO.Serial
 		private void SetStateAndNotify(SocketState state)
 		{
 #if (DEBUG)
-			SocketState oldState = _state;
+			SocketState oldState = this.state;
 #endif
-			lock (_stateSyncObj)
-				_state = state;
+			lock (this.stateSyncObj)
+				this.state = state;
 #if (DEBUG)
-			Debug.WriteLine(GetType() + " (" + _instanceId + ")(" + ToShortEndPointString() + "): State has changed from " + oldState + " to " + _state + ".");
+			Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): State has changed from " + oldState + " to " + this.state + ".");
 #endif
 			OnIOChanged(new EventArgs());
 		}
@@ -447,10 +454,10 @@ namespace MKY.IO.Serial
 			// \remind
 			// The ALAZ sockets by default stop synchronously. However, due to some other issues
 			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
-			if (_client != null)
-				_client.Stop();
-			if (_server != null)
-				_server.Stop();
+			if (this.client != null)
+				this.client.Stop();
+			if (this.server != null)
+				this.server.Stop();
 		}
 
 		private void DisposeSockets()
@@ -468,8 +475,8 @@ namespace MKY.IO.Serial
 
 		private void StartAutoSocket()
 		{
-			lock (_startCycleCounterSyncObj)
-				_startCycleCounter = 1;
+			lock (this.startCycleCounterSyncObj)
+				this.startCycleCounter = 1;
 
 			SetStateAndNotify(SocketState.Starting);
 			StartConnecting();
@@ -478,22 +485,22 @@ namespace MKY.IO.Serial
 		// Try to start as client
 		private void StartConnecting()
 		{
-			int delay = _random.Next(_MinConnectDelay, _MaxConnectDelay);
+			int delay = staticRandom.Next(MinConnectDelay, MaxConnectDelay);
 #if (FALSE)
-			Debug.WriteLine(GetType() + " (" + _instanceId + ")(" + ToShortEndPointString() + "): Delaying connecting by " + delay);
+			Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): Delaying connecting by " + delay);
 #endif
 			Thread.Sleep(delay);
 
 			SetStateAndNotify(SocketState.Connecting);
-			CreateClient(_remoteIPAddress, _remotePort);
+			CreateClient(this.remoteIPAddress, this.remotePort);
 			try
 			{
-				_client.Start(); // Client will be started asynchronously
+				this.client.Start(); // Client will be started asynchronously
 			}
 			catch
 			{
-				_client.Dispose();
-				_client = null;
+				this.client.Dispose();
+				this.client = null;
 
 				StartListening();
 			}
@@ -502,22 +509,22 @@ namespace MKY.IO.Serial
 		// try to start as server
 		private void StartListening()
 		{
-			int delay = _random.Next(_MinListenDelay, _MaxListenDelay);
+			int delay = staticRandom.Next(MinListenDelay, MaxListenDelay);
 #if (FALSE)
-			Debug.WriteLine(GetType() + " (" + _instanceId + ")(" + ToShortEndPointString() + "): Delaying listening by " + delay);
+			Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): Delaying listening by " + delay);
 #endif
 			Thread.Sleep(delay);
 
 			SetStateAndNotify(SocketState.StartingListening);
-			CreateServer(_localIPAddress, _localPort);
+			CreateServer(this.localIPAddress, this.localPort);
 			try
 			{
-				_server.Start(); // Server will be started asynchronously
+				this.server.Start(); // Server will be started asynchronously
 			}
 			catch
 			{
-				_server.Dispose();
-				_server = null;
+				this.server.Dispose();
+				this.server = null;
 
 				RequestTryAgain();
 			}
@@ -526,15 +533,15 @@ namespace MKY.IO.Serial
 		private void RequestTryAgain()
 		{
 			bool tryAgain = false;
-			lock (_startCycleCounterSyncObj)
+			lock (this.startCycleCounterSyncObj)
 			{
-				_startCycleCounter++;
-				if (_startCycleCounter <= _MaxStartCycles)
+				this.startCycleCounter++;
+				if (this.startCycleCounter <= MaxStartCycles)
 					tryAgain = true;
 			}
 			if (tryAgain)
 			{
-				Debug.WriteLine(GetType() + " (" + _instanceId + ")(" + ToShortEndPointString() + "): Trying connect cycle " + _startCycleCounter + ".");
+				Debug.WriteLine(GetType() + " (" + this.instanceId + ")(" + ToShortEndPointString() + "): Trying connect cycle " + this.startCycleCounter + ".");
 				StartConnecting();
 			}
 			else
@@ -597,25 +604,25 @@ namespace MKY.IO.Serial
 
 		private void CreateClient(System.Net.IPAddress remoteIPAddress, int remotePort)
 		{
-			_client = new TcpClient(_remoteIPAddress, _remotePort);
+			this.client = new TcpClient(this.remoteIPAddress, this.remotePort);
 
-			_client.IOChanged    += new EventHandler(_client_IOChanged);
-			_client.IOError      += new EventHandler<IOErrorEventArgs>(_client_IOError);
-			_client.DataReceived += new EventHandler(_client_DataReceived);
-			_client.DataSent     += new EventHandler(_client_DataSent);
+			this.client.IOChanged    += new EventHandler(this.client_IOChanged);
+			this.client.IOError      += new EventHandler<IOErrorEventArgs>(this.client_IOError);
+			this.client.DataReceived += new EventHandler(this.client_DataReceived);
+			this.client.DataSent     += new EventHandler(this.client_DataSent);
 		}
 
 		private void DestroyClient()
 		{
-			if (_client != null)
+			if (this.client != null)
 			{
-				_client.IOChanged    -= new EventHandler(_client_IOChanged);
-				_client.IOError      -= new EventHandler<IOErrorEventArgs>(_client_IOError);
-				_client.DataReceived -= new EventHandler(_client_DataReceived);
-				_client.DataSent     -= new EventHandler(_client_DataSent);
+				this.client.IOChanged    -= new EventHandler(this.client_IOChanged);
+				this.client.IOError      -= new EventHandler<IOErrorEventArgs>(this.client_IOError);
+				this.client.DataReceived -= new EventHandler(this.client_DataReceived);
+				this.client.DataSent     -= new EventHandler(this.client_DataSent);
 
-				_client.Dispose();
-				_client = null;
+				this.client.Dispose();
+				this.client = null;
 			}
 		}
 
@@ -626,13 +633,13 @@ namespace MKY.IO.Serial
 		// Client > Events
 		//------------------------------------------------------------------------------------------
 
-		private void _client_IOChanged(object sender, EventArgs e)
+		private void client_IOChanged(object sender, EventArgs e)
 		{
-			switch (_state)
+			switch (this.state)
 			{
 				case SocketState.Connecting:
 				{
-					if (_client.IsConnected)          // If IO changed during startup,
+					if (this.client.IsConnected)          // If IO changed during startup,
 					{                                 //   check for connected and change state
 						SetStateAndNotify(SocketState.Connected);
 					}
@@ -640,7 +647,7 @@ namespace MKY.IO.Serial
 				}
 				case SocketState.Connected:
 				{
-					if (_client.IsConnected)          // If IO changed during client operation
+					if (this.client.IsConnected)          // If IO changed during client operation
 					{                                 //   and client is connected to a server,
 						OnIOChanged(e);               //   simply forward the event
 					}
@@ -654,9 +661,9 @@ namespace MKY.IO.Serial
 			}
 		}
 
-		private void _client_IOError(object sender, IOErrorEventArgs e)
+		private void client_IOError(object sender, IOErrorEventArgs e)
 		{
-			switch (_state)
+			switch (this.state)
 			{
 				case SocketState.Connecting:
 				case SocketState.ConnectingFailed:
@@ -674,13 +681,13 @@ namespace MKY.IO.Serial
 			}
 		}
 
-		private void _client_DataReceived(object sender, EventArgs e)
+		private void client_DataReceived(object sender, EventArgs e)
 		{
 			if (IsClient)
 				OnDataReceived(e);
 		}
 
-		private void _client_DataSent(object sender, EventArgs e)
+		private void client_DataSent(object sender, EventArgs e)
 		{
 			if (IsClient)
 				OnDataSent(e);
@@ -702,25 +709,25 @@ namespace MKY.IO.Serial
 
 		private void CreateServer(System.Net.IPAddress localIPAddress, int localPort)
 		{
-			_server = new TcpServer(_localIPAddress, _localPort);
+			this.server = new TcpServer(this.localIPAddress, this.localPort);
 
-			_server.IOChanged    += new EventHandler(_server_IOChanged);
-			_server.IOError      += new EventHandler<IOErrorEventArgs>(_server_IOError);
-			_server.DataReceived += new EventHandler(_server_DataReceived);
-			_server.DataSent     += new EventHandler(_server_DataSent);
+			this.server.IOChanged    += new EventHandler(this.server_IOChanged);
+			this.server.IOError      += new EventHandler<IOErrorEventArgs>(this.server_IOError);
+			this.server.DataReceived += new EventHandler(this.server_DataReceived);
+			this.server.DataSent     += new EventHandler(this.server_DataSent);
 		}
 
 		private void DestroyServer()
 		{
-			if (_server != null)
+			if (this.server != null)
 			{
-				_server.IOChanged    -= new EventHandler(_server_IOChanged);
-				_server.IOError      -= new EventHandler<IOErrorEventArgs>(_server_IOError);
-				_server.DataReceived -= new EventHandler(_server_DataReceived);
-				_server.DataSent     -= new EventHandler(_server_DataSent);
+				this.server.IOChanged    -= new EventHandler(this.server_IOChanged);
+				this.server.IOError      -= new EventHandler<IOErrorEventArgs>(this.server_IOError);
+				this.server.DataReceived -= new EventHandler(this.server_DataReceived);
+				this.server.DataSent     -= new EventHandler(this.server_DataSent);
 
-				_server.Dispose();
-				_server = null;
+				this.server.Dispose();
+				this.server = null;
 			}
 		}
 
@@ -731,34 +738,34 @@ namespace MKY.IO.Serial
 		// Server > Events
 		//------------------------------------------------------------------------------------------
 
-		private void _server_IOChanged(object sender, EventArgs e)
+		private void server_IOChanged(object sender, EventArgs e)
 		{
-			switch (_state)
+			switch (this.state)
 			{
 				case SocketState.StartingListening:
 				{
-					if (_server.IsStarted)                        // If IO changed during startup,
+					if (this.server.IsStarted)                        // If IO changed during startup,
 						SetStateAndNotify(SocketState.Listening); //   check for start and change state
 					break;
 				}
 				case SocketState.Listening:
 				{
-					if (_server.ConnectedClientCount > 0)         // If IO changed during listening,
+					if (this.server.ConnectedClientCount > 0)         // If IO changed during listening,
 						SetStateAndNotify(SocketState.Accepted);  //   change state to accepted if
 					break;                                        //   clients are connected
 				}
 				case SocketState.Accepted:
 				{
-					if (_server.ConnectedClientCount <= 0)        // If IO changed during accepted,
+					if (this.server.ConnectedClientCount <= 0)        // If IO changed during accepted,
 						SetStateAndNotify(SocketState.Listening); //   change state to listening if
 					break;                                        //   no clients are connected
 				}
 			}
 		}
 
-		private void _server_IOError(object sender, IOErrorEventArgs e)
+		private void server_IOError(object sender, IOErrorEventArgs e)
 		{
-			switch (_state)
+			switch (this.state)
 			{
 				case SocketState.StartingListening:   // In case of error during startup,
 				{                                     //   increment start cycles and
@@ -775,13 +782,13 @@ namespace MKY.IO.Serial
 			}
 		}
 
-		private void _server_DataReceived(object sender, EventArgs e)
+		private void server_DataReceived(object sender, EventArgs e)
 		{
 			if (IsServer)
 				OnDataReceived(e);
 		}
 
-		private void _server_DataSent(object sender, EventArgs e)
+		private void server_DataSent(object sender, EventArgs e)
 		{
 			if (IsServer)
 				OnDataSent(e);
@@ -844,7 +851,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public virtual string ToShortEndPointString()
 		{
-			return ("Server:" + _localPort + " / " + _remoteIPAddress + ":" + _remotePort);
+			return ("Server:" + this.localPort + " / " + this.remoteIPAddress + ":" + this.remotePort);
 		}
 
 		#endregion

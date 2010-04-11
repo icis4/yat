@@ -28,9 +28,9 @@ namespace YAT.Model.Settings
 	[Serializable]
 	public class TerminalSettingsItem : MKY.Utilities.Settings.Settings, IEquatable<TerminalSettingsItem>, IGuidProvider
 	{
-		private string _filePath;
-		private Guid _guid;
-		private WindowSettings _window;
+		private string filePath;
+		private Guid guid;
+		private WindowSettings window;
 
 		/// <summary></summary>
 		public TerminalSettingsItem()
@@ -49,8 +49,8 @@ namespace YAT.Model.Settings
 		public TerminalSettingsItem(TerminalSettingsItem rhs)
 			: base(rhs)
 		{
-			_filePath = rhs.FilePath;
-			_guid = rhs.Guid;
+			this.filePath = rhs.FilePath;
+			this.guid = rhs.Guid;
 
 			Window = new WindowSettings(rhs.Window);
 
@@ -75,18 +75,18 @@ namespace YAT.Model.Settings
 		[XmlElement("FilePath")]
 		public virtual string FilePath
 		{
-			get { return (_filePath); }
+			get { return (this.filePath); }
 			set
 			{
-				if (value != _filePath)
+				if (value != this.filePath)
 				{
-					_filePath = value;
+					this.filePath = value;
 					SetChanged();
 				}
 				
 				// Create GUID from file path
-				if ((_guid == Guid.Empty) && (_filePath != ""))
-					_guid = XGuid.CreateGuidFromFilePath(_filePath, YAT.Settings.GeneralSettings.AutoSaveTerminalFileNamePrefix);
+				if ((this.guid == Guid.Empty) && (this.filePath != ""))
+					this.guid = XGuid.CreateGuidFromFilePath(this.filePath, YAT.Settings.GeneralSettings.AutoSaveTerminalFileNamePrefix);
 			}
 		}
 
@@ -94,12 +94,12 @@ namespace YAT.Model.Settings
 		[XmlIgnore]
 		public virtual Guid Guid
 		{
-			get { return (_guid); }
+			get { return (this.guid); }
 			set
 			{
-				if (value != _guid)
+				if (value != this.guid)
 				{
-					_guid = value;
+					this.guid = value;
 					SetChanged();
 				}
 			}
@@ -109,19 +109,19 @@ namespace YAT.Model.Settings
 		[XmlElement("Window")]
 		public virtual WindowSettings Window
 		{
-			get { return (_window); }
+			get { return (this.window); }
 			set
 			{
-				if (_window == null)
+				if (this.window == null)
 				{
-					_window = value;
-					AttachNode(_window);
+					this.window = value;
+					AttachNode(this.window);
 				}
-				else if (value != _window)
+				else if (value != this.window)
 				{
-					WindowSettings old = _window;
-					_window = value;
-					ReplaceNode(old, _window);
+					WindowSettings old = this.window;
+					this.window = value;
+					ReplaceNode(old, this.window);
 				}
 			}
 		}
@@ -151,8 +151,8 @@ namespace YAT.Model.Settings
 			{
 				return
 					(
-					(_filePath == value._filePath) &&
-					(_guid     == value._guid) &&
+					(this.filePath == value.filePath) &&
+					(this.guid     == value.guid) &&
 					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
 					);
 			}

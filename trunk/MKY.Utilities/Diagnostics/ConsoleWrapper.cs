@@ -31,9 +31,9 @@ namespace MKY.Utilities.Diagnostics
 		// Indent
 		//==========================================================================================
 
-		private int _indentLevel = 0;
-		private int _indentSize = 4;
-		private string _indentString = "    ";
+		private int indentLevel = 0;
+		private int indentSize = 4;
+		private string indentString = "    ";
 
 		/// <summary>
 		/// Gets or sets the indent level.
@@ -43,8 +43,8 @@ namespace MKY.Utilities.Diagnostics
 		/// </value>
 		public virtual int IndentLevel
 		{
-			get { return (_indentLevel); }
-			set { _indentLevel = value; }
+			get { return (this.indentLevel); }
+			set { this.indentLevel = value; }
 		}
 
 		/// <summary>
@@ -55,15 +55,15 @@ namespace MKY.Utilities.Diagnostics
 		/// </value>
 		public virtual int IndentSize
 		{
-			get { return (_indentSize); }
+			get { return (this.indentSize); }
 			set
 			{
-				_indentSize = value;
+				this.indentSize = value;
 
 				StringBuilder sb = new StringBuilder();
-				for (int i = 0; i < _indentSize; i++)
+				for (int i = 0; i < this.indentSize; i++)
 					sb.Append(" ");
-				_indentString = sb.ToString();
+				this.indentString = sb.ToString();
 			}
 		}
 
@@ -72,7 +72,7 @@ namespace MKY.Utilities.Diagnostics
 		/// </summary>
 		public virtual void Indent()
 		{
-			_indentLevel++;
+			this.indentLevel++;
 		}
 
 		/// <summary>
@@ -80,7 +80,7 @@ namespace MKY.Utilities.Diagnostics
 		/// </summary>
 		public virtual void Unindent()
 		{
-			_indentLevel--;
+			this.indentLevel--;
 		}
 
 		#endregion
@@ -90,7 +90,7 @@ namespace MKY.Utilities.Diagnostics
 		// Write
 		//==========================================================================================
 
-		private bool _beginOfLine = true;
+		private bool beginOfLine = true;
 
 		/// <summary>
 		/// Writes a message to the diagnostics listeners.
@@ -98,7 +98,7 @@ namespace MKY.Utilities.Diagnostics
 		/// <param name="message">A message to write.</param>
 		public virtual void Write(string message)
 		{
-			if (_beginOfLine)
+			if (this.beginOfLine)
 				WriteIndent();
 
 			Console.Write(message);
@@ -110,11 +110,11 @@ namespace MKY.Utilities.Diagnostics
 		/// <param name="message">A message to write.</param>
 		public virtual void WriteLine(string message)
 		{
-			if (_beginOfLine)
+			if (this.beginOfLine)
 				WriteIndent();
 
 			Console.WriteLine(message);
-			_beginOfLine = true;
+			this.beginOfLine = true;
 		}
 
 		/// <summary>
@@ -123,10 +123,10 @@ namespace MKY.Utilities.Diagnostics
 		/// </summary>
 		public virtual void WriteIndent()
 		{
-			for (int i = 0; i < _indentLevel; i++)
-				Console.Write(_indentString);
+			for (int i = 0; i < this.indentLevel; i++)
+				Console.Write(this.indentString);
 
-			_beginOfLine = false;
+			this.beginOfLine = false;
 		}
 
 		#endregion

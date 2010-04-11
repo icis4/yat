@@ -24,8 +24,8 @@ namespace MKY.IO.Usb
 	[Serializable]
 	public class HidDeviceCollection : DeviceCollection
 	{
-		private HidUsagePage _usagePage = HidUsagePage.Unknown;
-		private HidUsage     _usage     = HidUsage.Unknown;
+		private HidUsagePage usagePage = HidUsagePage.Unknown;
+		private HidUsage     usage     = HidUsage.Unknown;
 
 		/// <summary></summary>
 		public HidDeviceCollection()
@@ -37,15 +37,15 @@ namespace MKY.IO.Usb
 		public HidDeviceCollection(HidUsagePage usagePage)
 			: base(DeviceClass.Hid)
 		{
-			_usagePage = usagePage;
+			this.usagePage = usagePage;
 		}
 
 		/// <summary></summary>
 		public HidDeviceCollection(HidUsagePage usagePage, HidUsage usage)
 			: base(DeviceClass.Hid)
 		{
-			_usagePage = usagePage;
-			_usage     = usage;
+			this.usagePage = usagePage;
+			this.usage     = usage;
 		}
 
 		/// <summary></summary>
@@ -55,8 +55,8 @@ namespace MKY.IO.Usb
 			HidDeviceCollection casted = rhs as HidDeviceCollection;
 			if (casted != null)
 			{
-				_usagePage = casted._usagePage;
-				_usage     = casted._usage;
+				this.usagePage = casted.usagePage;
+				this.usage     = casted.usage;
 			}
 		}
 
@@ -66,7 +66,7 @@ namespace MKY.IO.Usb
 		public override void FillWithAvailableDevices()
 		{
 			Clear();
-			foreach (DeviceInfo di in HidDevice.GetDevices(_usagePage, _usage))
+			foreach (DeviceInfo di in HidDevice.GetDevices(this.usagePage, this.usage))
 				base.Add(di);
 			Sort();
 		}

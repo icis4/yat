@@ -55,18 +55,18 @@ namespace MKY.Utilities.Generic
 		public class EnumerableWrapper<S, D> : IEnumerable<D>
 			where S : D
 		{
-			private IEnumerable<S> _source;
+			private IEnumerable<S> source;
 
 			/// <summary></summary>
 			public EnumerableWrapper(IEnumerable<S> source)
 			{
-				_source = source;
+				this.source = source;
 			}
 
 			/// <summary></summary>
 			public IEnumerator<D> GetEnumerator()
 			{
-				return (new EnumeratorWrapper(_source.GetEnumerator()));
+				return (new EnumeratorWrapper(this.source.GetEnumerator()));
 			}
 
 			/// <summary></summary>
@@ -77,36 +77,36 @@ namespace MKY.Utilities.Generic
 
 			private class EnumeratorWrapper : IEnumerator<D>
 			{
-				private IEnumerator<S> _source;
+				private IEnumerator<S> source;
 
 				public EnumeratorWrapper(IEnumerator<S> source)
 				{
-					_source = source;
+					this.source = source;
 				}
 
 				public D Current
 				{
-					get { return (_source.Current); }
+					get { return (this.source.Current); }
 				}
 
 				public void Dispose()
 				{
-					_source.Dispose();
+					this.source.Dispose();
 				}
 
 				object System.Collections.IEnumerator.Current
 				{
-					get { return (_source.Current); }
+					get { return (this.source.Current); }
 				}
 
 				public virtual bool MoveNext()
 				{
-					return (_source.MoveNext());
+					return (this.source.MoveNext());
 				}
 
 				public virtual void Reset()
 				{
-					_source.Reset();
+					this.source.Reset();
 				}
 			}
 		}
@@ -126,13 +126,13 @@ namespace MKY.Utilities.Generic
 		public class CollectionWrapper<S, D> : EnumerableWrapper<S, D>, ICollection<D>
 			where S : D
 		{
-			private ICollection<S> _source;
+			private ICollection<S> source;
 
 			/// <summary></summary>
 			public CollectionWrapper(ICollection<S> source)
 				: base(source)
 			{
-				_source = source;
+				this.source = source;
 			}
 
 			/// <summary>
@@ -143,7 +143,7 @@ namespace MKY.Utilities.Generic
 			{
 				if (item is S)
 				{
-					_source.Add((S)item);
+					this.source.Add((S)item);
 				}
 				else
 				{
@@ -154,7 +154,7 @@ namespace MKY.Utilities.Generic
 			/// <summary></summary>
 			public virtual void Clear()
 			{
-				_source.Clear();
+				this.source.Clear();
 			}
 
 			/// <summary>
@@ -165,7 +165,7 @@ namespace MKY.Utilities.Generic
 			{
 				if (item is S)
 				{
-					return (_source.Contains((S)item));
+					return (this.source.Contains((S)item));
 				}
 				else
 				{
@@ -178,7 +178,7 @@ namespace MKY.Utilities.Generic
 			/// </summary>
 			public virtual void CopyTo(D[] array, int arrayIndex)
 			{
-				foreach (S src in _source)
+				foreach (S src in this.source)
 				{
 					array[arrayIndex++] = src;
 				}
@@ -187,13 +187,13 @@ namespace MKY.Utilities.Generic
 			/// <summary></summary>
 			public virtual int Count
 			{
-				get { return (_source.Count); }
+				get { return (this.source.Count); }
 			}
 
 			/// <summary></summary>
 			public virtual bool IsReadOnly
 			{
-				get { return (_source.IsReadOnly); }
+				get { return (this.source.IsReadOnly); }
 			}
 
 			/// <summary>
@@ -204,7 +204,7 @@ namespace MKY.Utilities.Generic
 			{
 				if (item is S)
 				{
-					return (_source.Remove((S)item));
+					return (this.source.Remove((S)item));
 				}
 				else
 				{
@@ -228,13 +228,13 @@ namespace MKY.Utilities.Generic
 		public class ListWrapper<S, D> : CollectionWrapper<S, D>, IList<D>
 			where S : D
 		{
-			private IList<S> _source;
+			private IList<S> source;
 
 			/// <summary></summary>
 			public ListWrapper(IList<S> source)
 				: base(source)
 			{
-				_source = source;
+				this.source = source;
 			}
 
 			/// <summary></summary>
@@ -242,7 +242,7 @@ namespace MKY.Utilities.Generic
 			{
 				if (item is S)
 				{
-					return (_source.IndexOf((S)item));
+					return (this.source.IndexOf((S)item));
 				}
 				else
 				{
@@ -258,7 +258,7 @@ namespace MKY.Utilities.Generic
 			{
 				if (item is S)
 				{
-					_source.Insert(index, (S)item);
+					this.source.Insert(index, (S)item);
 				}
 				else
 				{
@@ -269,7 +269,7 @@ namespace MKY.Utilities.Generic
 			/// <summary></summary>
 			public virtual void RemoveAt(int index)
 			{
-				_source.RemoveAt(index);
+				this.source.RemoveAt(index);
 			}
 
 			/// <summary></summary>
@@ -277,12 +277,12 @@ namespace MKY.Utilities.Generic
 			{
 				get
 				{
-					return (_source[index]);
+					return (this.source[index]);
 				}
 				set
 				{
 					if (value is S)
-						_source[index] = (S)value;
+						this.source[index] = (S)value;
 					else
 						throw (new Exception("Invalid type!"));
 				}

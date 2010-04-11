@@ -131,12 +131,12 @@ namespace MKY.Utilities.Types
 	/// 
 	/// public class XEnumClient
 	/// {
-	///     private Mode _mode = Mode.Fast;         // Mode is a normal enum
+	///     private Mode mode = Mode.Fast;         // Mode is a normal enum
 	///     ...
 	///     public Mode.Mode
 	///     {
-	///         get { return (_mode); }
-	///         set { _mode = value;  }
+	///         get { return (this.mode); }
+	///         set { this.mode = value;  }
 	///     }
 	/// }
 	/// 

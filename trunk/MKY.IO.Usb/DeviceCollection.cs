@@ -24,8 +24,8 @@ namespace MKY.IO.Usb
 	[Serializable]
 	public class DeviceCollection : List<DeviceInfo>
 	{
-		private DeviceClass _deviceClass = DeviceClass.Any;
-		private Guid _classGuid = Guid.Empty;
+		private DeviceClass deviceClass = DeviceClass.Any;
+		private Guid classGuid = Guid.Empty;
 
 		/// <summary></summary>
 		public DeviceCollection()
@@ -35,8 +35,8 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public DeviceCollection(DeviceClass deviceClass)
 		{
-			_deviceClass = deviceClass;
-			_classGuid = Device.GetGuidFromDeviceClass(deviceClass);
+			this.deviceClass = deviceClass;
+			this.classGuid = Device.GetGuidFromDeviceClass(deviceClass);
 		}
 
 		/// <summary></summary>
@@ -46,8 +46,8 @@ namespace MKY.IO.Usb
 			DeviceCollection casted = rhs as DeviceCollection;
 			if (casted != null)
 			{
-				_deviceClass = casted._deviceClass;
-				_classGuid   = casted._classGuid;
+				this.deviceClass = casted.deviceClass;
+				this.classGuid   = casted.classGuid;
 			}
 		}
 
@@ -57,7 +57,7 @@ namespace MKY.IO.Usb
 		public virtual void FillWithAvailableDevices()
 		{
 			Clear();
-			foreach (DeviceInfo di in Device.GetDevicesFromGuid(_classGuid))
+			foreach (DeviceInfo di in Device.GetDevicesFromGuid(this.classGuid))
 				base.Add(di);
 			Sort();
 		}

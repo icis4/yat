@@ -25,13 +25,13 @@ namespace YAT.Settings.Application
 	[XmlRoot("LocalUserSettings")]
 	public class LocalUserSettingsRoot : MKY.Utilities.Settings.Settings, IEquatable<LocalUserSettingsRoot>
 	{
-		private string _productVersion = System.Windows.Forms.Application.ProductVersion;
-		private Settings.GeneralSettings _general;
-		private Settings.PathSettings _paths;
-		private Settings.AutoWorkspaceSettings _autoAutoWorkspace;
-		private Model.Settings.MainWindowSettings _mainWindow;
-		private Model.Settings.NewTerminalSettings _newTerminal;
-		private Model.Settings.RecentFileSettings _recentFiles;
+		private string productVersion = System.Windows.Forms.Application.ProductVersion;
+		private Settings.GeneralSettings general;
+		private Settings.PathSettings paths;
+		private Settings.AutoWorkspaceSettings autoAutoWorkspace;
+		private Model.Settings.MainWindowSettings mainWindow;
+		private Model.Settings.NewTerminalSettings newTerminal;
+		private Model.Settings.RecentFileSettings recentFiles;
 
 		public LocalUserSettingsRoot()
 			: base(MKY.Utilities.Settings.SettingsType.Explicit)
@@ -88,26 +88,26 @@ namespace YAT.Settings.Application
 		[XmlElement("ProductVersion")]
 		public virtual string ProductVersion
 		{
-			get { return (_productVersion); }
+			get { return (this.productVersion); }
 			set { } // do nothing
 		}
 
 		[XmlElement("General")]
 		public virtual Settings.GeneralSettings General
 		{
-			get { return (_general); }
+			get { return (this.general); }
 			set
 			{
-				if (_general == null)
+				if (this.general == null)
 				{
-					_general = value;
-					AttachNode(_general);
+					this.general = value;
+					AttachNode(this.general);
 				}
-				else if (value != _general)
+				else if (value != this.general)
 				{
-					Settings.GeneralSettings old = _general;
-					_general = value;
-					ReplaceNode(old, _general);
+					Settings.GeneralSettings old = this.general;
+					this.general = value;
+					ReplaceNode(old, this.general);
 				}
 			}
 		}
@@ -115,19 +115,19 @@ namespace YAT.Settings.Application
 		[XmlElement("Paths")]
 		public virtual Settings.PathSettings Paths
 		{
-			get { return (_paths); }
+			get { return (this.paths); }
 			set
 			{
-				if (_paths == null)
+				if (this.paths == null)
 				{
-					_paths = value;
-					AttachNode(_paths);
+					this.paths = value;
+					AttachNode(this.paths);
 				}
-				else if (value != _paths)
+				else if (value != this.paths)
 				{
-					Settings.PathSettings old = _paths;
-					_paths = value;
-					ReplaceNode(old, _paths);
+					Settings.PathSettings old = this.paths;
+					this.paths = value;
+					ReplaceNode(old, this.paths);
 				}
 			}
 		}
@@ -135,19 +135,19 @@ namespace YAT.Settings.Application
 		[XmlElement("AutoWorkspace")]
 		public virtual Settings.AutoWorkspaceSettings AutoWorkspace
 		{
-			get { return (_autoAutoWorkspace); }
+			get { return (this.autoAutoWorkspace); }
 			set
 			{
-				if (_autoAutoWorkspace == null)
+				if (this.autoAutoWorkspace == null)
 				{
-					_autoAutoWorkspace = value;
-					AttachNode(_autoAutoWorkspace);
+					this.autoAutoWorkspace = value;
+					AttachNode(this.autoAutoWorkspace);
 				}
-				else if (value != _autoAutoWorkspace)
+				else if (value != this.autoAutoWorkspace)
 				{
-					Settings.AutoWorkspaceSettings old = _autoAutoWorkspace;
-					_autoAutoWorkspace = value;
-					ReplaceNode(old, _autoAutoWorkspace);
+					Settings.AutoWorkspaceSettings old = this.autoAutoWorkspace;
+					this.autoAutoWorkspace = value;
+					ReplaceNode(old, this.autoAutoWorkspace);
 				}
 			}
 		}
@@ -155,19 +155,19 @@ namespace YAT.Settings.Application
 		[XmlElement("MainWindow")]
 		public virtual Model.Settings.MainWindowSettings MainWindow
 		{
-			get { return (_mainWindow); }
+			get { return (this.mainWindow); }
 			set
 			{
-				if (_mainWindow == null)
+				if (this.mainWindow == null)
 				{
-					_mainWindow = value;
-					AttachNode(_mainWindow);
+					this.mainWindow = value;
+					AttachNode(this.mainWindow);
 				}
-				else if (value != _mainWindow)
+				else if (value != this.mainWindow)
 				{
-					Model.Settings.MainWindowSettings old = _mainWindow;
-					_mainWindow = value;
-					ReplaceNode(old, _mainWindow);
+					Model.Settings.MainWindowSettings old = this.mainWindow;
+					this.mainWindow = value;
+					ReplaceNode(old, this.mainWindow);
 				}
 			}
 		}
@@ -175,19 +175,19 @@ namespace YAT.Settings.Application
 		[XmlElement("NewTerminal")]
 		public virtual Model.Settings.NewTerminalSettings NewTerminal
 		{
-			get { return (_newTerminal); }
+			get { return (this.newTerminal); }
 			set
 			{
-				if (_newTerminal == null)
+				if (this.newTerminal == null)
 				{
-					_newTerminal = value;
-					AttachNode(_newTerminal);
+					this.newTerminal = value;
+					AttachNode(this.newTerminal);
 				}
-				else if (value != _newTerminal)
+				else if (value != this.newTerminal)
 				{
-					Model.Settings.NewTerminalSettings old = _newTerminal;
-					_newTerminal = value;
-					ReplaceNode(old, _newTerminal);
+					Model.Settings.NewTerminalSettings old = this.newTerminal;
+					this.newTerminal = value;
+					ReplaceNode(old, this.newTerminal);
 				}
 			}
 		}
@@ -195,19 +195,19 @@ namespace YAT.Settings.Application
 		[XmlElement("RecentFiles")]
 		public virtual Model.Settings.RecentFileSettings RecentFiles
 		{
-			get { return (_recentFiles); }
+			get { return (this.recentFiles); }
 			set
 			{
-				if (_recentFiles == null)
+				if (this.recentFiles == null)
 				{
-					_recentFiles = value;
-					AttachNode(_recentFiles);
+					this.recentFiles = value;
+					AttachNode(this.recentFiles);
 				}
-				else if (value != _recentFiles)
+				else if (value != this.recentFiles)
 				{
-					Model.Settings.RecentFileSettings old = _recentFiles;
-					_recentFiles = value;
-					ReplaceNode(old, _recentFiles);
+					Model.Settings.RecentFileSettings old = this.recentFiles;
+					this.recentFiles = value;
+					ReplaceNode(old, this.recentFiles);
 				}
 			}
 		}
@@ -237,7 +237,7 @@ namespace YAT.Settings.Application
 			{
 				return
 					(
-					(_productVersion == value._productVersion) &&
+					(this.productVersion == value.productVersion) &&
 					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
 					);
 			}

@@ -10,7 +10,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
-		private bool _isDisposed;
+		private bool isDisposed;
 
 		/// <summary>
 		/// Clean up any resources being used.
@@ -18,7 +18,7 @@ namespace MKY.IO.Ports
 		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
-			if (!_isDisposed)
+			if (!this.isDisposed)
 			{
 				try
 				{
@@ -26,7 +26,7 @@ namespace MKY.IO.Ports
 					{
 						components.Dispose();
 					}
-					_isDisposed = true;
+					this.isDisposed = true;
 				}
 				finally
 				{
@@ -55,13 +55,13 @@ namespace MKY.IO.Ports
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public bool IsDisposed
 		{
-			get { return (_isDisposed); }
+			get { return (this.isDisposed); }
 		}
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (_isDisposed)
+			if (this.isDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
 		}
 	}

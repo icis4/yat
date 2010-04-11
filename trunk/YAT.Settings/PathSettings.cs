@@ -24,11 +24,11 @@ namespace YAT.Settings
 	[Serializable]
 	public class PathSettings : MKY.Utilities.Settings.Settings, IEquatable<PathSettings>
 	{
-		private string _terminalFilesPath;
-		private string _workspaceFilesPath;
-		private string _sendFilesPath;
-		private string _logFilesPath;
-		private string _monitorFilesPath;
+		private string terminalFilesPath;
+		private string workspaceFilesPath;
+		private string sendFilesPath;
+		private string logFilesPath;
+		private string monitorFilesPath;
 
 		public PathSettings()
 		{
@@ -49,11 +49,11 @@ namespace YAT.Settings
 		public PathSettings(PathSettings rhs)
 			: base(rhs)
 		{
-			_terminalFilesPath  = rhs.TerminalFilesPath;
-			_workspaceFilesPath = rhs.WorkspaceFilesPath;
-			_sendFilesPath      = rhs.SendFilesPath;
-			_logFilesPath       = rhs.LogFilesPath;
-			_monitorFilesPath   = rhs.MonitorFilesPath;
+			this.terminalFilesPath  = rhs.TerminalFilesPath;
+			this.workspaceFilesPath = rhs.WorkspaceFilesPath;
+			this.sendFilesPath      = rhs.SendFilesPath;
+			this.logFilesPath       = rhs.LogFilesPath;
+			this.monitorFilesPath   = rhs.MonitorFilesPath;
 			ClearChanged();
 		}
 
@@ -77,12 +77,12 @@ namespace YAT.Settings
 		[XmlElement("TerminalFilesPath")]
 		public virtual string TerminalFilesPath
 		{
-			get { return (_terminalFilesPath); }
+			get { return (this.terminalFilesPath); }
 			set
 			{
-				if (value != _terminalFilesPath)
+				if (value != this.terminalFilesPath)
 				{
-					_terminalFilesPath = value;
+					this.terminalFilesPath = value;
 					SetChanged();
 				}
 			}
@@ -91,12 +91,12 @@ namespace YAT.Settings
 		[XmlElement("WorkspaceFilesPath")]
 		public virtual string WorkspaceFilesPath
 		{
-			get { return (_workspaceFilesPath); }
+			get { return (this.workspaceFilesPath); }
 			set
 			{
-				if (value != _workspaceFilesPath)
+				if (value != this.workspaceFilesPath)
 				{
-					_workspaceFilesPath = value;
+					this.workspaceFilesPath = value;
 					SetChanged();
 				}
 			}
@@ -105,12 +105,12 @@ namespace YAT.Settings
 		[XmlElement("SendFilesPath")]
 		public virtual string SendFilesPath
 		{
-			get { return (_sendFilesPath); }
+			get { return (this.sendFilesPath); }
 			set
 			{
-				if (value != _sendFilesPath)
+				if (value != this.sendFilesPath)
 				{
-					_sendFilesPath = value;
+					this.sendFilesPath = value;
 					SetChanged();
 				}
 			}
@@ -119,12 +119,12 @@ namespace YAT.Settings
 		[XmlElement("LogFilesPath")]
 		public virtual string LogFilesPath
 		{
-			get { return (_logFilesPath); }
+			get { return (this.logFilesPath); }
 			set
 			{
-				if (value != _logFilesPath)
+				if (value != this.logFilesPath)
 				{
-					_logFilesPath = value;
+					this.logFilesPath = value;
 					SetChanged();
 				}
 			}
@@ -133,12 +133,12 @@ namespace YAT.Settings
 		[XmlElement("MonitorFilesPath")]
 		public virtual string MonitorFilesPath
 		{
-			get { return (_monitorFilesPath); }
+			get { return (this.monitorFilesPath); }
 			set
 			{
-				if (value != _monitorFilesPath)
+				if (value != this.monitorFilesPath)
 				{
-					_monitorFilesPath = value;
+					this.monitorFilesPath = value;
 					SetChanged();
 				}
 			}
@@ -169,11 +169,11 @@ namespace YAT.Settings
 			{
 				return
 					(
-					(_terminalFilesPath  == value._terminalFilesPath) &&
-					(_workspaceFilesPath == value._workspaceFilesPath) &&
-					(_sendFilesPath      == value._sendFilesPath) &&
-					(_logFilesPath       == value._logFilesPath) &&
-					(_monitorFilesPath   == value._monitorFilesPath)
+					(this.terminalFilesPath  == value.terminalFilesPath) &&
+					(this.workspaceFilesPath == value.workspaceFilesPath) &&
+					(this.sendFilesPath      == value.sendFilesPath) &&
+					(this.logFilesPath       == value.logFilesPath) &&
+					(this.monitorFilesPath   == value.monitorFilesPath)
 					);
 			}
 			return (false);

@@ -1,0 +1,48 @@
+
+http://code.msdn.microsoft.com/sourceanalysis
+
+
+Filing
+------
+
+Place StyleCop settings into solution folder and inherit settings in each project whenever applicable.
+
+Do not merge settings for third-party projects...
+...and use the third-party provided settings instead.
+...and disable all rules if third-party supplies no settings.
+
+
+Rules
+-----
+
+Enable all rules including
+- Documentation > Element Documentation > PropertyDocumentationMustHaveValue (SA1609)
+- Documentation > Element Documentation > PropertyDocumentationMustHaveValueText (SA1610)
+- Documentation > Element Documentation > DocumentationTextMustBeginWithACapitalLetter (SA1628)
+- Documentation > Element Documentation > DocumentationTextMustEndWithAPeriod (SA1629)
+- Documentation > File Headers > FileHeaderMustHaveSummary (SA1639)
+
+Keep the following rules disabled (default)
+- Readability > Regions > DoNotUseRegions (SA1124)
+
+Disable the following rules
+- Layout > Curly Brackets > CurlyBracketsForMultiLineStatementsMustNotShareLine (SA1500)
+  > Allow propertie get/set to be written on a single line.
+- Layout > Curly Brackets > CurlyBracketsMustNotBeOmitted (SA1503)
+  > Allow single statements (e.g. within 'if') to be implemented without curly bracktes.
+- Maintainability > Parenthesis > StatementMustNotUseUnnecessaryParenthesis (SA1119)
+  > Keyword expressions such as 'return (<Expression>)' and 'throw (<Expression>)' are better readable when additional parenthesis are used.
+  > Mathematical and logical expressions may be better readable when additional parenthesis are used. This is to be decided by the implementer.
+- Ordering > Element Order > UsingDirectivesMustBePlacedWithinNamespace (SA1200)
+  > Visual Studio places using directives outside namespace itself, looks like a Microsoft internal strife.
+- Spacing > SingleLineCommentsMustBeginWithSingleSpace (SA1005)
+  > Allow headers to be framed with '//===============...' or '//---------------...' or similar
+- Spacing > TabsMustNotBeUsed (SA1027)
+  > So far tabs have always been preferred, no reason why this shouldn't be the case anymore.
+
+
+In-Code Exceptions
+------------------
+
+If really needed, suppress rules in-code using the following attribute:
+[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented")]

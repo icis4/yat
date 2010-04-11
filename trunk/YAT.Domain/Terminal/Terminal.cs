@@ -43,17 +43,17 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private bool _isDisposed;
+		private bool isDisposed;
 
-		private Settings.TerminalSettings _terminalSettings;
+		private Settings.TerminalSettings terminalSettings;
 
-		private RawTerminal _rawTerminal;
+		private RawTerminal rawTerminal;
 
-		private DisplayRepository _txRepository;
-		private DisplayRepository _bidirRepository;
-		private DisplayRepository _rxRepository;
+		private DisplayRepository txRepository;
+		private DisplayRepository bidirRepository;
+		private DisplayRepository rxRepository;
 
-		private bool _eventsSuspendedForReload = false;
+		private bool eventsSuspendedForReload = false;
 
 		#endregion
 
@@ -98,31 +98,31 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public Terminal(Settings.TerminalSettings settings)
 		{
-			_txRepository    = new DisplayRepository(settings.Display.TxMaxLineCount);
-			_bidirRepository = new DisplayRepository(settings.Display.BidirMaxLineCount);
-			_rxRepository    = new DisplayRepository(settings.Display.RxMaxLineCount);
+			this.txRepository    = new DisplayRepository(settings.Display.TxMaxLineCount);
+			this.bidirRepository = new DisplayRepository(settings.Display.BidirMaxLineCount);
+			this.rxRepository    = new DisplayRepository(settings.Display.RxMaxLineCount);
 
 			AttachTerminalSettings(settings);
-			AttachRawTerminal(new RawTerminal(_terminalSettings.IO, _terminalSettings.Buffer));
+			AttachRawTerminal(new RawTerminal(this.terminalSettings.IO, this.terminalSettings.Buffer));
 
-			_eventsSuspendedForReload = false;
+			this.eventsSuspendedForReload = false;
 		}
 
 		/// <summary></summary>
 		public Terminal(Settings.TerminalSettings settings, Terminal terminal)
 		{
-			_txRepository    = new DisplayRepository(terminal._txRepository);
-			_bidirRepository = new DisplayRepository(terminal._bidirRepository);
-			_rxRepository    = new DisplayRepository(terminal._rxRepository);
+			this.txRepository    = new DisplayRepository(terminal.txRepository);
+			this.bidirRepository = new DisplayRepository(terminal.bidirRepository);
+			this.rxRepository    = new DisplayRepository(terminal.rxRepository);
 
-			_txRepository.Capacity    = settings.Display.TxMaxLineCount;
-			_bidirRepository.Capacity = settings.Display.BidirMaxLineCount;
-			_rxRepository.Capacity    = settings.Display.RxMaxLineCount;
+			this.txRepository.Capacity    = settings.Display.TxMaxLineCount;
+			this.bidirRepository.Capacity = settings.Display.BidirMaxLineCount;
+			this.rxRepository.Capacity    = settings.Display.RxMaxLineCount;
 
 			AttachTerminalSettings(settings);
-			AttachRawTerminal(new RawTerminal(_terminalSettings.IO, _terminalSettings.Buffer, terminal._rawTerminal));
+			AttachRawTerminal(new RawTerminal(this.terminalSettings.IO, this.terminalSettings.Buffer, terminal.rawTerminal));
 
-			_eventsSuspendedForReload = terminal._eventsSuspendedForReload;
+			this.eventsSuspendedForReload = terminal.eventsSuspendedForReload;
 		}
 
 		#region Disposal
@@ -140,14 +140,14 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!_isDisposed)
+			if (!this.isDisposed)
 			{
 				if (disposing)
 				{
-					if (_rawTerminal != null)
-						_rawTerminal.Dispose();
+					if (this.rawTerminal != null)
+						this.rawTerminal.Dispose();
 				}
-				_isDisposed = true;
+				this.isDisposed = true;
 			}
 		}
 
@@ -160,13 +160,13 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected bool IsDisposed
 		{
-			get { return (_isDisposed); }
+			get { return (this.isDisposed); }
 		}
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (_isDisposed)
+			if (this.isDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
 		}
 
@@ -185,7 +185,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
-				return (_terminalSettings);
+				return (this.terminalSettings);
 			}
 			set
 			{
@@ -201,7 +201,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
-				return (_rawTerminal.IsStarted);
+				return (this.rawTerminal.IsStarted);
 			}
 		}
 
@@ -211,7 +211,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
-				return (_rawTerminal.IsConnected);
+				return (this.rawTerminal.IsConnected);
 			}
 		}
 
@@ -221,7 +221,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
-				return (_rawTerminal.IsOpen);
+				return (this.rawTerminal.IsOpen);
 			}
 		}
 
@@ -231,7 +231,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
-				return (_rawTerminal.UnderlyingIOProvider);
+				return (this.rawTerminal.UnderlyingIOProvider);
 			}
 		}
 
@@ -241,38 +241,38 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
-				return (_rawTerminal.UnderlyingIOInstance);
+				return (this.rawTerminal.UnderlyingIOInstance);
 			}
 		}
 
 		/// <summary></summary>
 		protected virtual RawTerminal RawTerminal
 		{
-			get { return (_rawTerminal); }
+			get { return (this.rawTerminal); }
 		}
 
 		/// <summary></summary>
 		protected virtual DisplayRepository TxRepository
 		{
-			get { return (_txRepository); }
+			get { return (this.txRepository); }
 		}
 
 		/// <summary></summary>
 		protected virtual DisplayRepository BidirRepository
 		{
-			get { return (_bidirRepository); }
+			get { return (this.bidirRepository); }
 		}
 
 		/// <summary></summary>
 		protected virtual DisplayRepository RxRepository
 		{
-			get { return (_rxRepository); }
+			get { return (this.rxRepository); }
 		}
 
 		/// <summary></summary>
 		protected virtual bool Reload
 		{
-			get { return (_eventsSuspendedForReload); }
+			get { return (this.eventsSuspendedForReload); }
 		}
 
 		#endregion
@@ -291,14 +291,14 @@ namespace YAT.Domain
 		public virtual bool Start()
 		{
 			AssertNotDisposed();
-			return (_rawTerminal.Start());
+			return (this.rawTerminal.Start());
 		}
 
 		/// <summary></summary>
 		public virtual void Stop()
 		{
 			AssertNotDisposed();
-			_rawTerminal.Stop();
+			this.rawTerminal.Stop();
 		}
 
 		#endregion
@@ -312,7 +312,7 @@ namespace YAT.Domain
 		public virtual void Send(byte[] data)
 		{
 			AssertNotDisposed();
-			_rawTerminal.Send(data);
+			this.rawTerminal.Send(data);
 		}
 
 		/// <summary></summary>
@@ -325,7 +325,7 @@ namespace YAT.Domain
 			{
 				if (result is Parser.ByteArrayResult)
 				{
-					_rawTerminal.Send(((Parser.ByteArrayResult)result).ByteArray);
+					this.rawTerminal.Send(((Parser.ByteArrayResult)result).ByteArray);
 				}
 				else if (result is Parser.KeywordResult)
 				{
@@ -352,9 +352,9 @@ namespace YAT.Domain
 		protected virtual DisplayElement ByteToElement(byte b, SerialDirection d)
 		{
 			if (d == SerialDirection.Tx)
-				return (ByteToElement(b, d, _terminalSettings.Display.TxRadix));
+				return (ByteToElement(b, d, this.terminalSettings.Display.TxRadix));
 			else
-				return (ByteToElement(b, d, _terminalSettings.Display.RxRadix));
+				return (ByteToElement(b, d, this.terminalSettings.Display.RxRadix));
 		}
 
 		/// <summary></summary>
@@ -424,7 +424,7 @@ namespace YAT.Domain
 
 			if (!error)
 			{
-				if ((b == 0x09) && !_terminalSettings.CharReplace.ReplaceTab) // Tab
+				if ((b == 0x09) && !this.terminalSettings.CharReplace.ReplaceTab) // Tab
 				{
 					if (d == SerialDirection.Tx)
 						return (new DisplayElement.TxData(b, text));
@@ -455,7 +455,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual string ByteToAsciiString(byte b)
 		{
-			if ((b == 0x09) && !_terminalSettings.CharReplace.ReplaceTab)
+			if ((b == 0x09) && !this.terminalSettings.CharReplace.ReplaceTab)
 				return ("\t");
 			else
 				return ("<" + Ascii.ConvertToMnemonic(b) + ">");
@@ -468,28 +468,28 @@ namespace YAT.Domain
 			{
 				case Radix.Bin:
 				{
-					if (_terminalSettings.Display.ShowRadix)
+					if (this.terminalSettings.Display.ShowRadix)
 						return (XByte.ConvertToBinaryString(b) + "b");
 					else
 						return (XByte.ConvertToBinaryString(b));
 				}
 				case Radix.Oct:
 				{
-					if (_terminalSettings.Display.ShowRadix)
+					if (this.terminalSettings.Display.ShowRadix)
 						return (XByte.ConvertToOctalString(b) + "o");
 					else
 						return (XByte.ConvertToOctalString(b));
 				}
 				case Radix.Dec:
 				{
-					if (_terminalSettings.Display.ShowRadix)
+					if (this.terminalSettings.Display.ShowRadix)
 						return (b.ToString("D3") + "d");
 					else
 						return (b.ToString("D3"));
 				}
 				case Radix.Hex:
 				{
-					if (_terminalSettings.Display.ShowRadix)
+					if (this.terminalSettings.Display.ShowRadix)
 						return (b.ToString("X2") + "h");
 					else
 						return (b.ToString("X2"));
@@ -502,9 +502,9 @@ namespace YAT.Domain
 		protected virtual bool ElementsAreSeparate(SerialDirection d)
 		{
 			if (d == SerialDirection.Tx)
-				return (ElementsAreSeparate(_terminalSettings.Display.TxRadix));
+				return (ElementsAreSeparate(this.terminalSettings.Display.TxRadix));
 			else
-				return (ElementsAreSeparate(_terminalSettings.Display.RxRadix));
+				return (ElementsAreSeparate(this.terminalSettings.Display.RxRadix));
 		}
 
 		/// <summary></summary>
@@ -525,13 +525,13 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected void SuspendEventsForReload()
 		{
-			_eventsSuspendedForReload = true;
+			this.eventsSuspendedForReload = true;
 		}
 
 		/// <summary></summary>
 		protected void ResumeEventsAfterReload()
 		{
-			_eventsSuspendedForReload = false;
+			this.eventsSuspendedForReload = false;
 		}
 
 		/// <summary></summary>
@@ -540,7 +540,7 @@ namespace YAT.Domain
 			DisplayLine dl = new DisplayLine();
 
 			// Line begin and time stamp
-			if (_terminalSettings.Display.ShowTimeStamp)
+			if (this.terminalSettings.Display.ShowTimeStamp)
 			{
 				dl.Add(new DisplayElement.TimeStamp(re.Direction, re.TimeStamp));
 				dl.Add(new DisplayElement.LeftMargin());
@@ -553,7 +553,7 @@ namespace YAT.Domain
 			}
 
 			// Line length and end
-			if (_terminalSettings.Display.ShowLength)
+			if (this.terminalSettings.Display.ShowLength)
 			{
 				dl.Add(new DisplayElement.RightMargin());
 				dl.Add(new DisplayElement.LineLength(re.Direction, 1));
@@ -597,7 +597,7 @@ namespace YAT.Domain
 		public virtual void ClearRepository(RepositoryType repository)
 		{
 			AssertNotDisposed();
-			_rawTerminal.ClearRepository(repository);
+			this.rawTerminal.ClearRepository(repository);
 		}
 
 		/// <summary></summary>
@@ -625,7 +625,7 @@ namespace YAT.Domain
 
 			// reload display repository
 			SuspendEventsForReload();
-			foreach (RawElement re in _rawTerminal.RepositoryToElements(RepositoryType.Bidir))
+			foreach (RawElement re in this.rawTerminal.RepositoryToElements(RepositoryType.Bidir))
 			{
 				ProcessAndSignalRawElement(re);
 			}
@@ -640,9 +640,9 @@ namespace YAT.Domain
 		{
 			switch (repository)
 			{
-				case RepositoryType.Tx:    _txRepository.Clear();    break;
-				case RepositoryType.Bidir: _bidirRepository.Clear(); break;
-				case RepositoryType.Rx:    _rxRepository.Clear();    break;
+				case RepositoryType.Tx:    this.txRepository.Clear();    break;
+				case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
+				case RepositoryType.Rx:    this.rxRepository.Clear();    break;
 				default: throw (new NotImplementedException("Unknown RepositoryType"));
 			}
 		}
@@ -654,9 +654,9 @@ namespace YAT.Domain
 
 			switch (repository)
 			{
-				case RepositoryType.Tx:    return (_txRepository.DataCount);
-				case RepositoryType.Bidir: return (_bidirRepository.DataCount);
-				case RepositoryType.Rx:    return (_rxRepository.DataCount);
+				case RepositoryType.Tx:    return (this.txRepository.DataCount);
+				case RepositoryType.Bidir: return (this.bidirRepository.DataCount);
+				case RepositoryType.Rx:    return (this.rxRepository.DataCount);
 				default: throw (new NotImplementedException("Unknown RepositoryType"));
 			}
 		}
@@ -668,9 +668,9 @@ namespace YAT.Domain
 
 			switch (repository)
 			{
-				case RepositoryType.Tx:    return (_txRepository.Count);
-				case RepositoryType.Bidir: return (_bidirRepository.Count);
-				case RepositoryType.Rx:    return (_rxRepository.Count);
+				case RepositoryType.Tx:    return (this.txRepository.Count);
+				case RepositoryType.Bidir: return (this.bidirRepository.Count);
+				case RepositoryType.Rx:    return (this.rxRepository.Count);
 				default: throw (new NotImplementedException("Unknown RepositoryType"));
 			}
 		}
@@ -682,9 +682,9 @@ namespace YAT.Domain
 
 			switch (repository)
 			{
-				case RepositoryType.Tx:    return (_txRepository.ToLines());
-				case RepositoryType.Bidir: return (_bidirRepository.ToLines());
-				case RepositoryType.Rx:    return (_rxRepository.ToLines());
+				case RepositoryType.Tx:    return (this.txRepository.ToLines());
+				case RepositoryType.Bidir: return (this.bidirRepository.ToLines());
+				case RepositoryType.Rx:    return (this.rxRepository.ToLines());
 				default: throw (new NotImplementedException("Unknown RepositoryType"));
 			}
 		}
@@ -696,9 +696,9 @@ namespace YAT.Domain
 
 			switch (repository)
 			{
-				case RepositoryType.Tx:    return (_txRepository.ToString());
-				case RepositoryType.Bidir: return (_bidirRepository.ToString());
-				case RepositoryType.Rx:    return (_rxRepository.ToString());
+				case RepositoryType.Tx:    return (this.txRepository.ToString());
+				case RepositoryType.Bidir: return (this.bidirRepository.ToString());
+				case RepositoryType.Rx:    return (this.rxRepository.ToString());
 				default: throw (new NotImplementedException("Unknown RepositoryType"));
 			}
 		}
@@ -707,7 +707,7 @@ namespace YAT.Domain
 		public virtual List<RawElement> RepositoryToRawElements(RepositoryType repository)
 		{
 			AssertNotDisposed();
-			return (_rawTerminal.RepositoryToElements(repository));
+			return (this.rawTerminal.RepositoryToElements(repository));
 		}
 
 		#endregion
@@ -730,11 +730,11 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 			
-			return (indent + "- Settings: " + _terminalSettings + Environment.NewLine +
-					indent + "- RawTerminal: "     + Environment.NewLine + _rawTerminal.ToString(indent + "--") +
-					indent + "- TxRepository: "    + Environment.NewLine + _txRepository.ToString(indent + "--") +
-					indent + "- BidirRepository: " + Environment.NewLine + _bidirRepository.ToString(indent + "--") +
-					indent + "- RxRepository: "    + Environment.NewLine  + _rxRepository.ToString(indent + "--"));
+			return (indent + "- Settings: " + this.terminalSettings + Environment.NewLine +
+					indent + "- RawTerminal: "     + Environment.NewLine + this.rawTerminal.ToString(indent + "--") +
+					indent + "- TxRepository: "    + Environment.NewLine + this.txRepository.ToString(indent + "--") +
+					indent + "- BidirRepository: " + Environment.NewLine + this.bidirRepository.ToString(indent + "--") +
+					indent + "- RxRepository: "    + Environment.NewLine  + this.rxRepository.ToString(indent + "--"));
 		}
 
 		/// <summary></summary>
@@ -744,9 +744,9 @@ namespace YAT.Domain
 			
 			switch (repository)
 			{
-				case RepositoryType.Tx:    return (_txRepository.ToString(indent));
-				case RepositoryType.Bidir: return (_bidirRepository.ToString(indent));
-				case RepositoryType.Rx:    return (_rxRepository.ToString(indent));
+				case RepositoryType.Tx:    return (this.txRepository.ToString(indent));
+				case RepositoryType.Bidir: return (this.bidirRepository.ToString(indent));
+				case RepositoryType.Rx:    return (this.rxRepository.ToString(indent));
 				default: throw (new NotImplementedException("Unknown RepositoryType"));
 			}
 		}
@@ -762,20 +762,20 @@ namespace YAT.Domain
 
 		private void AttachTerminalSettings(Settings.TerminalSettings terminalSettings)
 		{
-			if (Settings.TerminalSettings.ReferenceEquals(_terminalSettings, terminalSettings))
+			if (Settings.TerminalSettings.ReferenceEquals(this.terminalSettings, terminalSettings))
 				return;
 
-			if (_terminalSettings != null)
+			if (this.terminalSettings != null)
 				DetachTerminalSettings();
 
-			_terminalSettings = terminalSettings;
-			_terminalSettings.Changed += new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(_terminalSettings_Changed);
+			this.terminalSettings = terminalSettings;
+			this.terminalSettings.Changed += new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(this.terminalSettings_Changed);
 		}
 
 		private void DetachTerminalSettings()
 		{
-			_terminalSettings.Changed -= new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(_terminalSettings_Changed);
-			_terminalSettings = null;
+			this.terminalSettings.Changed -= new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(this.terminalSettings_Changed);
+			this.terminalSettings = null;
 		}
 
 		private void ApplyTerminalSettings()
@@ -787,21 +787,21 @@ namespace YAT.Domain
 
 		private void ApplyIOSettings()
 		{
-			_rawTerminal.IOSettings = _terminalSettings.IO;
+			this.rawTerminal.IOSettings = this.terminalSettings.IO;
 		}
 
 		private void ApplyBufferSettings()
 		{
-			_rawTerminal.BufferSettings = _terminalSettings.Buffer;
+			this.rawTerminal.BufferSettings = this.terminalSettings.Buffer;
 		}
 
 		private void ApplyDisplaySettings()
 		{
-			Settings.DisplaySettings s = _terminalSettings.Display;
+			Settings.DisplaySettings s = this.terminalSettings.Display;
 
-			_txRepository.Capacity    = s.TxMaxLineCount;
-			_bidirRepository.Capacity = s.BidirMaxLineCount;
-			_rxRepository.Capacity    = s.RxMaxLineCount;
+			this.txRepository.Capacity    = s.TxMaxLineCount;
+			this.bidirRepository.Capacity = s.BidirMaxLineCount;
+			this.rxRepository.Capacity    = s.RxMaxLineCount;
 		}
 
 		#endregion
@@ -811,7 +811,7 @@ namespace YAT.Domain
 		// Settings Events
 		//==========================================================================================
 		
-		private void _terminalSettings_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
+		private void terminalSettings_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
 		{
 			if (e.Inner == null)
 			{
@@ -820,17 +820,17 @@ namespace YAT.Domain
 			}
 			else
 			{
-				if (Settings.IOSettings.ReferenceEquals(e.Inner.Source, _terminalSettings.IO))
+				if (Settings.IOSettings.ReferenceEquals(e.Inner.Source, this.terminalSettings.IO))
 				{
 					// IOSettings changed
 					ApplyIOSettings();
 				}
-				else if (Settings.BufferSettings.ReferenceEquals(e.Inner.Source, _terminalSettings.Buffer))
+				else if (Settings.BufferSettings.ReferenceEquals(e.Inner.Source, this.terminalSettings.Buffer))
 				{
 					// BufferSettings changed
 					ApplyBufferSettings();
 				}
-				else if (Settings.DisplaySettings.ReferenceEquals(e.Inner.Source, _terminalSettings.Display))
+				else if (Settings.DisplaySettings.ReferenceEquals(e.Inner.Source, this.terminalSettings.Display))
 				{
 					// DisplaySettings changed
 					ApplyDisplaySettings();
@@ -847,16 +847,16 @@ namespace YAT.Domain
 
 		private void AttachRawTerminal(RawTerminal rawTerminal)
 		{
-			_rawTerminal = rawTerminal;
+			this.rawTerminal = rawTerminal;
 
-			_rawTerminal.IOChanged          += new EventHandler(_rawTerminal_IOChanged);
-			_rawTerminal.IOControlChanged   += new EventHandler(_rawTerminal_IOControlChanged);
-			_rawTerminal.IORequest          += new EventHandler<IORequestEventArgs>(_rawTerminal_IORequest);
-			_rawTerminal.IOError            += new EventHandler<IOErrorEventArgs>(_rawTerminal_IOError);
+			this.rawTerminal.IOChanged          += new EventHandler(this.rawTerminal_IOChanged);
+			this.rawTerminal.IOControlChanged   += new EventHandler(this.rawTerminal_IOControlChanged);
+			this.rawTerminal.IORequest          += new EventHandler<IORequestEventArgs>(this.rawTerminal_IORequest);
+			this.rawTerminal.IOError            += new EventHandler<IOErrorEventArgs>(this.rawTerminal_IOError);
 
-			_rawTerminal.RawElementSent     += new EventHandler<RawElementEventArgs>(_rawTerminal_RawElementSent);
-			_rawTerminal.RawElementReceived += new EventHandler<RawElementEventArgs>(_rawTerminal_RawElementReceived);
-			_rawTerminal.RepositoryCleared  += new EventHandler<RepositoryEventArgs>(_rawTerminal_RepositoryCleared);
+			this.rawTerminal.RawElementSent     += new EventHandler<RawElementEventArgs>(this.rawTerminal_RawElementSent);
+			this.rawTerminal.RawElementReceived += new EventHandler<RawElementEventArgs>(this.rawTerminal_RawElementReceived);
+			this.rawTerminal.RepositoryCleared  += new EventHandler<RepositoryEventArgs>(this.rawTerminal_RepositoryCleared);
 		}
 
 		#endregion
@@ -866,22 +866,22 @@ namespace YAT.Domain
 		// Raw Terminal Events
 		//==========================================================================================
 
-		private void _rawTerminal_IOChanged(object sender, EventArgs e)
+		private void rawTerminal_IOChanged(object sender, EventArgs e)
 		{
 			OnIOChanged(e);
 		}
 
-		private void _rawTerminal_IOControlChanged(object sender, EventArgs e)
+		private void rawTerminal_IOControlChanged(object sender, EventArgs e)
 		{
 			OnIOControlChanged(e);
 		}
 
-		private void _rawTerminal_IORequest(object sender, IORequestEventArgs e)
+		private void rawTerminal_IORequest(object sender, IORequestEventArgs e)
 		{
 			OnIORequest(e);
 		}
 
-		private void _rawTerminal_IOError(object sender, IOErrorEventArgs e)
+		private void rawTerminal_IOError(object sender, IOErrorEventArgs e)
 		{
 			SerialPortErrorEventArgs serialPortErrorEventArgs = (e as SerialPortErrorEventArgs);
 			if (serialPortErrorEventArgs == null)
@@ -903,19 +903,19 @@ namespace YAT.Domain
 			}
 		}
 
-		private void _rawTerminal_RawElementSent(object sender, RawElementEventArgs e)
+		private void rawTerminal_RawElementSent(object sender, RawElementEventArgs e)
 		{
 			OnRawElementSent(e);
 			ProcessAndSignalRawElement(e.Element);
 		}
 
-		private void _rawTerminal_RawElementReceived(object sender, RawElementEventArgs e)
+		private void rawTerminal_RawElementReceived(object sender, RawElementEventArgs e)
 		{
 			OnRawElementReceived(e);
 			ProcessAndSignalRawElement(e.Element);
 		}
 
-		private void _rawTerminal_RepositoryCleared(object sender, RepositoryEventArgs e)
+		private void rawTerminal_RepositoryCleared(object sender, RepositoryEventArgs e)
 		{
 			ClearMyRepository(e.Repository);
 			OnRepositoryCleared(e);
@@ -977,18 +977,18 @@ namespace YAT.Domain
 		{
 			if (direction == SerialDirection.Tx)
 			{
-				_txRepository.Enqueue(elements);
-				_bidirRepository.Enqueue(elements);
+				this.txRepository.Enqueue(elements);
+				this.bidirRepository.Enqueue(elements);
 
-				if (!_eventsSuspendedForReload)
+				if (!this.eventsSuspendedForReload)
 					OnDisplayElementsSent(new DisplayElementsEventArgs(elements));
 			}
 			else
 			{
-				_bidirRepository.Enqueue(elements);
-				_rxRepository.Enqueue(elements);
+				this.bidirRepository.Enqueue(elements);
+				this.rxRepository.Enqueue(elements);
 
-				if (!_eventsSuspendedForReload)
+				if (!this.eventsSuspendedForReload)
 					OnDisplayElementsReceived(new DisplayElementsEventArgs(elements));
 			}
 		}
@@ -996,21 +996,21 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsSent(DisplayElementsEventArgs e)
 		{
-			if (!_eventsSuspendedForReload)
+			if (!this.eventsSuspendedForReload)
 				EventHelper.FireSync<DisplayElementsEventArgs>(DisplayElementsSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayElementsReceived(DisplayElementsEventArgs e)
 		{
-			if (!_eventsSuspendedForReload)
+			if (!this.eventsSuspendedForReload)
 				EventHelper.FireSync<DisplayElementsEventArgs>(DisplayElementsReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesProcessed(SerialDirection direction, List<DisplayLine> lines)
 		{
-			if (!_eventsSuspendedForReload)
+			if (!this.eventsSuspendedForReload)
 			{
 				if (direction == SerialDirection.Tx)
 					OnDisplayLinesSent(new DisplayLinesEventArgs(lines));
@@ -1022,28 +1022,28 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesSent(DisplayLinesEventArgs e)
 		{
-			if (!_eventsSuspendedForReload)
+			if (!this.eventsSuspendedForReload)
 				EventHelper.FireSync<DisplayLinesEventArgs>(DisplayLinesSent, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisplayLinesReceived(DisplayLinesEventArgs e)
 		{
-			if (!_eventsSuspendedForReload)
+			if (!this.eventsSuspendedForReload)
 				EventHelper.FireSync<DisplayLinesEventArgs>(DisplayLinesReceived, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryCleared(RepositoryEventArgs e)
 		{
-			if (!_eventsSuspendedForReload)
+			if (!this.eventsSuspendedForReload)
 				EventHelper.FireSync<RepositoryEventArgs>(RepositoryCleared, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnRepositoryReloaded(RepositoryEventArgs e)
 		{
-			if (!_eventsSuspendedForReload)
+			if (!this.eventsSuspendedForReload)
 				EventHelper.FireSync<RepositoryEventArgs>(RepositoryReloaded, this, e);
 		}
 

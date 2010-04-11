@@ -52,8 +52,8 @@ namespace MKY.Utilities.Xml
 		// Fields
 		//==========================================================================================
 
-		private Type _type;
-		private XmlDocument _defaultDocument;
+		private Type type;
+		private XmlDocument defaultDocument;
 
 		#endregion
 
@@ -65,10 +65,10 @@ namespace MKY.Utilities.Xml
 		/// <summary></summary>
 		public TolerantXmlSerializer(Type type)
 		{
-			_type = type;
+			this.type = type;
 
 			// Create an empty object tree of the type to be able to serialize it afterwards
-			object obj = _type.GetConstructor(new System.Type[] { }).Invoke(new object[] { });
+			object obj = this.type.GetConstructor(new System.Type[] { }).Invoke(new object[] { });
 
 			// Serialize the empty object tree into a string
 			// Unlike file serialization, this string serialization will be UTF-16 encoded
@@ -78,8 +78,8 @@ namespace MKY.Utilities.Xml
 			serializer.Serialize(writer, obj);
 
 			// Load that string into an XML document that serves as base for new documents
-			_defaultDocument = new XmlDocument();
-			_defaultDocument.LoadXml(sb.ToString());
+			this.defaultDocument = new XmlDocument();
+			this.defaultDocument.LoadXml(sb.ToString());
 
 			// Retrieve default schema
 			XmlReflectionImporter reflectionImporter = new XmlReflectionImporter();
@@ -89,12 +89,12 @@ namespace MKY.Utilities.Xml
 			schemaExporter.ExportTypeMapping(typeMapping);
 
 			// Set and compile default schema
-			_defaultDocument.Schemas.Add(schemas[0]);
-			_defaultDocument.Schemas.Compile();
-			_defaultDocument.Validate(null);
+			this.defaultDocument.Schemas.Add(schemas[0]);
+			this.defaultDocument.Schemas.Compile();
+			this.defaultDocument.Validate(null);
 
 		#if (WRITE_SCHEMAS_TO_FILES)
-			WriteSchemasToFiles(_defaultDocument.Schemas, "DefaultSchema");
+			WriteSchemasToFiles(this.defaultDocument.Schemas, "DefaultSchema");
 		#endif
 		}
 
@@ -136,8 +136,8 @@ namespace MKY.Utilities.Xml
 
 			// Create output document from default
 			XmlDocument outputDocument = new XmlDocument();
-			outputDocument.LoadXml(_defaultDocument.InnerXml);
-			outputDocument.Schemas = _defaultDocument.Schemas;
+			outputDocument.LoadXml(this.defaultDocument.InnerXml);
+			outputDocument.Schemas = this.defaultDocument.Schemas;
 			outputDocument.Validate(null);
 
 		#if (WRITE_SCHEMAS_TO_FILES)
@@ -217,7 +217,7 @@ namespace MKY.Utilities.Xml
 
 			// Deserialize that string into an object tree
 			StringReader sr = new StringReader(sb.ToString());
-			XmlSerializer serializer = new XmlSerializer(_type);
+			XmlSerializer serializer = new XmlSerializer(this.type);
 			return (serializer.Deserialize(sr));
 		}
 

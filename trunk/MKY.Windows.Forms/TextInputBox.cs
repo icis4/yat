@@ -35,8 +35,8 @@ namespace MKY.Windows.Forms
 		// Fields
 		//==========================================================================================
 
-		private string _inputText = "";
-		private string _inputText_Form = "";
+		private string inputText = "";
+		private string inputText_Form = "";
 
 		#endregion
 
@@ -52,7 +52,7 @@ namespace MKY.Windows.Forms
 
 			Text = caption;
 			label_Text.Text = text;
-			_inputText_Form = initialInputText;
+			this.inputText_Form = initialInputText;
 		}
 
 		#endregion
@@ -67,7 +67,7 @@ namespace MKY.Windows.Forms
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual string InputText
 		{
-			get { return (_inputText); }
+			get { return (this.inputText); }
 		}
 
 		#endregion
@@ -80,16 +80,16 @@ namespace MKY.Windows.Forms
 		/// <summary>
 		/// Startup flag only used in the following event handler.
 		/// </summary>
-		private bool _isStartingUp = true;
+		private bool isStartingUp = true;
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
 		private void TextInputBox_Paint(object sender, PaintEventArgs e)
 		{
-			if (_isStartingUp)
+			if (this.isStartingUp)
 			{
-				_isStartingUp = false;
+				this.isStartingUp = false;
 				SetControls();
 
 				// Move cursor to end
@@ -106,12 +106,12 @@ namespace MKY.Windows.Forms
 
 		private void textBox_InputText_Validating(object sender, CancelEventArgs e)
 		{
-			_inputText_Form = textBox_InputText.Text;
+			this.inputText_Form = textBox_InputText.Text;
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{
-			_inputText = _inputText_Form;
+			this.inputText = this.inputText_Form;
 		}
 
 		private void button_Cancel_Click(object sender, EventArgs e)
@@ -128,7 +128,7 @@ namespace MKY.Windows.Forms
 
 		private void SetControls()
 		{
-			textBox_InputText.Text = _inputText_Form;
+			textBox_InputText.Text = this.inputText_Form;
 		}
 
 		#endregion

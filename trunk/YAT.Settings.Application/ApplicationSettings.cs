@@ -28,7 +28,7 @@ namespace YAT.Settings.Application
 		// LocalUserSettings
 		//------------------------------------------------------------------------------------------
 
-		private static ApplicationSettingsHandler<object, LocalUserSettingsRoot, object> _settingsHandler =
+		private static ApplicationSettingsHandler<object, LocalUserSettingsRoot, object> settingsHandler =
 			new ApplicationSettingsHandler<object, LocalUserSettingsRoot, object>(false, true, false);
 
 		/// <summary>
@@ -37,7 +37,7 @@ namespace YAT.Settings.Application
 		/// <returns></returns>
 		public static bool Load()
 		{
-			return (_settingsHandler.LoadLocalUser());
+			return (settingsHandler.LoadLocalUser());
 		}
 
 		/// <summary>
@@ -46,28 +46,28 @@ namespace YAT.Settings.Application
 		/// </summary>
 		public static void Save()
 		{
-			if (_settingsHandler.LocalUserSettings.HaveChanged)
-				_settingsHandler.SaveLocalUser();
+			if (settingsHandler.LocalUserSettings.HaveChanged)
+				settingsHandler.SaveLocalUser();
 		}
 
 		public static LocalUserSettingsRoot LocalUser
 		{
-			get { return (_settingsHandler.LocalUserSettings); }
+			get { return (settingsHandler.LocalUserSettings); }
 		}
 
 		public static bool LocalUserSettingsSuccessfullyLoaded
 		{
-			get { return (_settingsHandler.LocalUserSettingsSuccessfullyLoaded); }
+			get { return (settingsHandler.LocalUserSettingsSuccessfullyLoaded); }
 		}
 
 		public static string LocalUserSettingsFilePath
 		{
-			get { return (_settingsHandler.LocalUserSettingsFilePath); }
+			get { return (settingsHandler.LocalUserSettingsFilePath); }
 		}
 
 		public static bool SettingsSuccessfullyLoaded
 		{
-			get { return (_settingsHandler.LocalUserSettingsSuccessfullyLoaded); }
+			get { return (settingsHandler.LocalUserSettingsSuccessfullyLoaded); }
 		}
 	}
 }

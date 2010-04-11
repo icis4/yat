@@ -38,8 +38,8 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const int _SelectedPageDefault = 1;
-		private const bool _TerminalIsOpenDefault = false;
+		private const int SelectedPageDefault = 1;
+		private const bool TerminalIsOpenDefault = false;
 
 		#endregion
 
@@ -48,10 +48,10 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool _isSettingControls = false;
-		private PredefinedCommandPageCollection _pages;
-		private int _selectedPage = _SelectedPageDefault;
-		private bool _terminalIsOpen = _TerminalIsOpenDefault;
+		private bool isSettingControls = false;
+		private PredefinedCommandPageCollection pages;
+		private int selectedPage = SelectedPageDefault;
+		private bool terminalIsOpen = TerminalIsOpenDefault;
 
 		#endregion
 
@@ -96,15 +96,15 @@ namespace YAT.Gui.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual PredefinedCommandPageCollection Pages
 		{
-			get { return (_pages); }
+			get { return (this.pages); }
 			set
 			{
-				_pages = value;
+				this.pages = value;
 
-				if ((_pages == null) || (_pages.Count == 0)) // even if no pages, select page 1 anyway
+				if ((this.pages == null) || (this.pages.Count == 0)) // even if no pages, select page 1 anyway
 					SelectedPage = 1;
-				else if (_selectedPage > _pages.Count)
-					SelectedPage = _pages.Count;
+				else if (this.selectedPage > this.pages.Count)
+					SelectedPage = this.pages.Count;
 				else
 					SetControls();
 			}
@@ -112,21 +112,21 @@ namespace YAT.Gui.Controls
 
 		[Category("Commands")]
 		[Description("The selected page.")]
-		[DefaultValue(_SelectedPageDefault)]
+		[DefaultValue(SelectedPageDefault)]
 		public virtual int SelectedPage
 		{
-			get { return (_selectedPage); }
+			get { return (this.selectedPage); }
 			set
 			{
 				int selectedPageNew;
-				if ((_pages != null) && (_pages.Count > 0))
-					selectedPageNew = XInt32.LimitToBounds(value, _SelectedPageDefault, _pages.Count);
+				if ((this.pages != null) && (this.pages.Count > 0))
+					selectedPageNew = XInt32.LimitToBounds(value, SelectedPageDefault, this.pages.Count);
 				else
-					selectedPageNew = _SelectedPageDefault;
+					selectedPageNew = SelectedPageDefault;
 
-				if (_selectedPage != selectedPageNew)
+				if (this.selectedPage != selectedPageNew)
 				{
-					_selectedPage = selectedPageNew;
+					this.selectedPage = selectedPageNew;
 					SetControls();
 					OnSelectedPageChanged(new EventArgs());
 				}
@@ -139,7 +139,7 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				_terminalIsOpen = value;
+				this.terminalIsOpen = value;
 				SetControls();
 			}
 		}
@@ -217,7 +217,7 @@ namespace YAT.Gui.Controls
 
 		private void comboBox_Pages_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				SelectedPage = comboBox_Pages.SelectedIndex + 1;
 		}
 
@@ -230,28 +230,28 @@ namespace YAT.Gui.Controls
 
 		private int SelectedPageIndex
 		{
-			get { return (_selectedPage - 1); }
+			get { return (this.selectedPage - 1); }
 		}
 
 		private void SetControls()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
-			pageButtons.TerminalIsOpen = _terminalIsOpen;
+			pageButtons.TerminalIsOpen = this.terminalIsOpen;
 
-			if ((_pages != null) && (_pages.Count > 0) && (_selectedPage >= 1) && (_selectedPage <= _pages.Count))
+			if ((this.pages != null) && (this.pages.Count > 0) && (this.selectedPage >= 1) && (this.selectedPage <= this.pages.Count))
 			{
-				pageButtons.Commands = _pages[SelectedPageIndex].Commands;
+				pageButtons.Commands = this.pages[SelectedPageIndex].Commands;
 
-				button_PagePrevious.Enabled = (_selectedPage > 1);
-				button_PageNext.Enabled = (_selectedPage < _pages.Count);
+				button_PagePrevious.Enabled = (this.selectedPage > 1);
+				button_PageNext.Enabled = (this.selectedPage < this.pages.Count);
 
 				label_Page.Enabled = true;
-				label_Page.Text = "Page " + _selectedPage + "/" + _pages.Count;
+				label_Page.Text = "Page " + this.selectedPage + "/" + this.pages.Count;
 
 				comboBox_Pages.Enabled = true;
 				comboBox_Pages.Items.Clear();
-				foreach (PredefinedCommandPage p in _pages)
+				foreach (PredefinedCommandPage p in this.pages)
 					comboBox_Pages.Items.Add(p.PageName);
 				comboBox_Pages.SelectedIndex = SelectedPageIndex;
 			}
@@ -267,17 +267,17 @@ namespace YAT.Gui.Controls
 				comboBox_Pages.Items.Clear();
 			}
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void RequestSendCommand(int command)
 		{
-			OnSendCommandRequest(new PredefinedCommandEventArgs(_selectedPage, command));
+			OnSendCommandRequest(new PredefinedCommandEventArgs(this.selectedPage, command));
 		}
 
 		private void RequestDefineCommand(int command)
 		{
-			OnDefineCommandRequest(new PredefinedCommandEventArgs(_selectedPage, command));
+			OnDefineCommandRequest(new PredefinedCommandEventArgs(this.selectedPage, command));
 		}
 
 		#endregion

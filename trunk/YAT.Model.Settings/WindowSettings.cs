@@ -27,9 +27,9 @@ namespace YAT.Model.Settings
 	[Serializable]
 	public class WindowSettings : MKY.Utilities.Settings.Settings, IEquatable<WindowSettings>
 	{
-		private FormWindowState _state;
-		private Point _location;
-		private Size _size;
+		private FormWindowState state;
+		private Point location;
+		private Size size;
 
 		/// <summary></summary>
 		public WindowSettings()
@@ -53,9 +53,9 @@ namespace YAT.Model.Settings
 			: base(rhs)
 		{
 
-			_state    = rhs.State;
-			_location = rhs.Location;
-			_size     = rhs.Size;
+			this.state    = rhs.State;
+			this.location = rhs.Location;
+			this.size     = rhs.Size;
 			ClearChanged();
 		}
 
@@ -78,12 +78,12 @@ namespace YAT.Model.Settings
 		[XmlElement("State")]
 		public FormWindowState State
 		{
-			get { return (_state); }
+			get { return (this.state); }
 			set
 			{
-				if (value != _state)
+				if (value != this.state)
 				{
-					_state = value;
+					this.state = value;
 					SetChanged();
 				}
 			}
@@ -93,13 +93,13 @@ namespace YAT.Model.Settings
 		[XmlElement("Location")]
 		public Point Location
 		{
-			get { return (_location); }
+			get { return (this.location); }
 			set
 			{
-				if (value != _location)
+				if (value != this.location)
 				{
-					_location = value;
-					if (_state == FormWindowState.Normal)
+					this.location = value;
+					if (this.state == FormWindowState.Normal)
 						SetChanged();
 				}
 			}
@@ -109,13 +109,13 @@ namespace YAT.Model.Settings
 		[XmlElement("Size")]
 		public Size Size
 		{
-			get { return (_size); }
+			get { return (this.size); }
 			set
 			{
-				if (value != _size)
+				if (value != this.size)
 				{
-					_size = value;
-					if (_state == FormWindowState.Normal)
+					this.size = value;
+					if (this.state == FormWindowState.Normal)
 						SetChanged();
 				}
 			}
@@ -144,20 +144,20 @@ namespace YAT.Model.Settings
 			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
-				if (_state == FormWindowState.Normal)
+				if (this.state == FormWindowState.Normal)
 				{   // Normal
 					return
 						(
-						(_state    == value._state) &&
-						(_location == value._location) &&
-						(_size     == value._size)
+						(this.state    == value.state) &&
+						(this.location == value.location) &&
+						(this.size     == value.size)
 						);
 				}
 				else
 				{   // Maximized or Minimized
 					return
 						(
-						(_state    == value._state)
+						(this.state    == value.state)
 						);
 				}
 			}

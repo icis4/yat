@@ -24,8 +24,8 @@ namespace MKY.Utilities.IO
 	/// </summary>
 	public class LogFile
 	{
-		private string _filePath;
-		private StreamWriter _writer;
+		private string filePath;
+		private StreamWriter writer;
 
 		/// <summary>
 		/// Starts Logfile.
@@ -34,8 +34,8 @@ namespace MKY.Utilities.IO
 		/// <param name="append">true to append to file, false to replace file.</param>
 		public LogFile(string filePath, bool append)
 		{
-			_filePath = filePath;
-			_writer = new System.IO.StreamWriter(_filePath, append);
+			this.filePath = filePath;
+			this.writer = new System.IO.StreamWriter(this.filePath, append);
 		}
 
 		/// <summary>
@@ -43,7 +43,7 @@ namespace MKY.Utilities.IO
 		/// </summary>
 		public String FilePath
 		{
-			get { return (_filePath); }
+			get { return (this.filePath); }
 		}
 
 		/// <summary>
@@ -51,7 +51,7 @@ namespace MKY.Utilities.IO
 		/// </summary>
 		public Stream UnderlyingStream
 		{
-			get { return (_writer.BaseStream); }
+			get { return (this.writer.BaseStream); }
 		}
 
 		/// <summary>
@@ -62,10 +62,10 @@ namespace MKY.Utilities.IO
 			DateTime now = DateTime.Now;
 			try
 			{
-				lock (_writer)
+				lock (this.writer)
 				{
-					_writer.WriteLine(now.ToString("HH:mm:ss.") + string.Format("{0:000}", now.Millisecond) + "  " + line);
-					_writer.Flush();
+					this.writer.WriteLine(now.ToString("HH:mm:ss.") + string.Format("{0:000}", now.Millisecond) + "  " + line);
+					this.writer.Flush();
 				}
 			}
 			catch
@@ -80,9 +80,9 @@ namespace MKY.Utilities.IO
 		{
 			try
 			{
-				lock (_writer)
+				lock (this.writer)
 				{
-					_writer.Close();
+					this.writer.Close();
 				}
 			}
 			catch

@@ -33,9 +33,9 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private int _capacity = 0;
-		private DisplayLine _currentLine;
-		private int _dataCount = 0;
+		private int capacity = 0;
+		private DisplayLine currentLine;
+		private int dataCount = 0;
 
 		#endregion
 
@@ -48,18 +48,18 @@ namespace YAT.Domain
 		public DisplayRepository(int capacity)
 			: base(capacity)
 		{
-			_capacity = capacity;
-			_currentLine = new DisplayLine();
-			_dataCount = 0;
+			this.capacity = capacity;
+			this.currentLine = new DisplayLine();
+			this.dataCount = 0;
 		}
 
 		/// <summary></summary>
 		public DisplayRepository(DisplayRepository rhs)
 			: base(rhs)
 		{
-			_capacity = rhs._capacity;
-			_currentLine = new DisplayLine(rhs._currentLine);
-			_dataCount = rhs._dataCount;
+			this.capacity = rhs.capacity;
+			this.currentLine = new DisplayLine(rhs.currentLine);
+			this.dataCount = rhs.dataCount;
 		}
 
 		#endregion
@@ -72,19 +72,19 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual int Capacity
 		{
-			get { return (_capacity); }
+			get { return (this.capacity); }
 			set
 			{
 				if (value > Count)
 				{
-					_capacity = value;
+					this.capacity = value;
 				}
 				else if (value < Count)
 				{
 					while (Count > value)
 						DequeueExcessLine();
 
-					_capacity = value;
+					this.capacity = value;
 				}
 			}
 		}
@@ -96,7 +96,7 @@ namespace YAT.Domain
 		{
 			get
 			{
-				if (_currentLine.Count <= 0)
+				if (this.currentLine.Count <= 0)
 					return (base.Count);
 				else
 					return (base.Count + 1); // Current line adds one line
@@ -108,7 +108,7 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual int DataCount
 		{
-			get { return (_dataCount); }
+			get { return (this.dataCount); }
 		}
 
 		#endregion
@@ -122,9 +122,9 @@ namespace YAT.Domain
 		public virtual void Enqueue(DisplayElement item)
 		{
 			// Add element to current line
-			_currentLine.Add(item);
+			this.currentLine.Add(item);
 			if (item.IsData)
-				_dataCount++;
+				this.dataCount++;
 
 			// Check whether a line break is needed
 			if (item is Domain.DisplayElement.LineBreak)
@@ -134,8 +134,8 @@ namespace YAT.Domain
 					DequeueExcessLine();
 
 				// Enqueue new line and reset current line
-				base.Enqueue(_currentLine.Clone());
-				_currentLine.Clear();
+				base.Enqueue(this.currentLine.Clone());
+				this.currentLine.Clear();
 			}
 		}
 
@@ -150,8 +150,8 @@ namespace YAT.Domain
 		public new void Clear()
 		{
 			base.Clear();
-			_currentLine.Clear();
-			_dataCount = 0;
+			this.currentLine.Clear();
+			this.dataCount = 0;
 		}
 
 		/// <summary></summary>
@@ -166,8 +166,8 @@ namespace YAT.Domain
 			List<DisplayLine> lines = new List<DisplayLine>(base.ToArray());
 
 			// Add current line if it contains elements
-			if (_currentLine.Count > 0)
-				lines.Add(new DisplayLine(_currentLine));
+			if (this.currentLine.Count > 0)
+				lines.Add(new DisplayLine(this.currentLine));
 
 			return (lines);
 		}
@@ -187,7 +187,7 @@ namespace YAT.Domain
 				foreach (DisplayElement de in dl)
 				{
 					if (de.IsData)
-						_dataCount--;
+						this.dataCount--;
 				}
 			}
 		}
@@ -215,7 +215,7 @@ namespace YAT.Domain
 		{
 			return (indent + "- LineCapacity: " + Capacity.ToString("D") + Environment.NewLine +
 					indent + "- LineCount: " + Count.ToString("D") + Environment.NewLine +
-					indent + "- DataCount: " + _dataCount.ToString("D") + Environment.NewLine +
+					indent + "- DataCount: " + this.dataCount.ToString("D") + Environment.NewLine +
 					indent + "- Lines: " + Environment.NewLine + LinesToString(indent + "--"));
 		}
 

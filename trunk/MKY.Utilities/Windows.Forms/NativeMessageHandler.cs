@@ -32,12 +32,12 @@ namespace MKY.Utilities.Windows.Forms
 	/// </remarks>
 	public class NativeMessageHandler : NativeWindow
 	{
-		private NativeMessageHandlerCallback _messageHandlerCallback;
+		private NativeMessageHandlerCallback messageHandlerCallback;
 
 		/// <summary></summary>
 		public NativeMessageHandler(NativeMessageHandlerCallback messageHandlerCallback)
 		{
-			_messageHandlerCallback = messageHandlerCallback;
+			this.messageHandlerCallback = messageHandlerCallback;
 		}
 
 
@@ -75,7 +75,7 @@ namespace MKY.Utilities.Windows.Forms
 		{
 			try
 			{
-				_messageHandlerCallback(ref m);
+				this.messageHandlerCallback(ref m);
 				base.WndProc(ref m);
 			}
 			catch (Exception ex)

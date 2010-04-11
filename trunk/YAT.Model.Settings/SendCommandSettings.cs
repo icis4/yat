@@ -32,8 +32,8 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		public const int MaxRecentCommands = 24;
 
-		private Command _command;
-		private RecentItemCollection<Command> _recentsCommands;
+		private Command command;
+		private RecentItemCollection<Command> recentsCommands;
 
 		/// <summary></summary>
 		public SendCommandSettings()
@@ -79,12 +79,12 @@ namespace YAT.Model.Settings
 		[XmlElement("Command")]
 		public Command Command
 		{
-			get { return (_command); }
+			get { return (this.command); }
 			set
 			{
-				if (value != _command)
+				if (value != this.command)
 				{
-					_command = value;
+					this.command = value;
 					SetChanged();
 				}
 			}
@@ -94,12 +94,12 @@ namespace YAT.Model.Settings
 		[XmlElement("RecentCommands")]
 		public RecentItemCollection<Command> RecentCommands
 		{
-			get { return (_recentsCommands); }
+			get { return (this.recentsCommands); }
 			set
 			{
-				if (value != _recentsCommands)
+				if (value != this.recentsCommands)
 				{
-					_recentsCommands = value;
+					this.recentsCommands = value;
 					SetChanged();
 				}
 			}
@@ -130,8 +130,8 @@ namespace YAT.Model.Settings
 			{
 				return
 					(
-					(_command         == value._command) &&
-					(_recentsCommands == value._recentsCommands)
+					(this.command         == value.command) &&
+					(this.recentsCommands == value.recentsCommands)
 					);
 			}
 			return (false);
@@ -176,12 +176,12 @@ namespace YAT.Model.Settings
 		// Comparision ;-)
 		//------------------------------------------------------------------------------------------
 
-		private const string _EasterEggCommand = @"\easteregg";
+		private const string EasterEggCommand = @"\easteregg";
 
 		/// <summary></summary>
 		public static bool IsEasterEggCommand(string command)
 		{
-			return (string.Compare(command, _EasterEggCommand, true) == 0);
+			return (string.Compare(command, EasterEggCommand, true) == 0);
 		}
 
 		/// <summary></summary>

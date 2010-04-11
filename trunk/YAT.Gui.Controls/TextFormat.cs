@@ -35,10 +35,10 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const bool _BoldDefault = false;
-		private const bool _ItalicDefault = false;
-		private const bool _UnderlineDefault = false;
-		private const bool _StrikeoutDefault = false;
+		private const bool BoldDefault = false;
+		private const bool ItalicDefault = false;
+		private const bool UnderlineDefault = false;
+		private const bool StrikeoutDefault = false;
 
 		#endregion
 
@@ -47,10 +47,10 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool _isSettingControls = false;
+		private bool isSettingControls = false;
 
-		private Font _font = new Font(Model.Types.FontFormat.NameDefault, Model.Types.FontFormat.SizeDefault, Model.Types.FontFormat.StyleDefault);
-		private Color _color = Color.Black;
+		private Font font = new Font(Model.Types.FontFormat.NameDefault, Model.Types.FontFormat.SizeDefault, Model.Types.FontFormat.StyleDefault);
+		private Color color = Color.Black;
 
 		#endregion
 
@@ -86,10 +86,10 @@ namespace YAT.Gui.Controls
 		[Description("The font.")]
 		public Font FormatFont
 		{
-			get { return (_font); }
+			get { return (this.font); }
 			set
 			{
-				_font = new Font(value.Name, value.Size, value.Style);
+				this.font = new Font(value.Name, value.Size, value.Style);
 				SetControls();
 				OnFormatChanged(new EventArgs());
 			}
@@ -101,7 +101,7 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				_font = new Font(value.Name, value.Size, _font.Style);
+				this.font = new Font(value.Name, value.Size, this.font.Style);
 				SetControls();
 				OnFormatChanged(new EventArgs());
 			}
@@ -112,7 +112,7 @@ namespace YAT.Gui.Controls
 		[DefaultValue(Model.Types.FontFormat.StyleDefault)]
 		public FontStyle FormatFontStyle
 		{
-			get { return (_font.Style); }
+			get { return (this.font.Style); }
 			set
 			{
 				Bold = ((value & FontStyle.Bold) == FontStyle.Bold);
@@ -124,18 +124,18 @@ namespace YAT.Gui.Controls
 
 		[Category("Format")]
 		[Description("Bold.")]
-		[DefaultValue(_BoldDefault)]
+		[DefaultValue(BoldDefault)]
 		private bool Bold
 		{
-			get { return (_font.Bold); }
+			get { return (this.font.Bold); }
 			set
 			{
-				FontStyle style = _font.Style;
+				FontStyle style = this.font.Style;
 				if (value)
 					style |= FontStyle.Bold;
 				else
 					style &= ~FontStyle.Bold;
-				_font = new Font(_font.Name, _font.Size, style);
+				this.font = new Font(this.font.Name, this.font.Size, style);
 				SetControls();
 				OnFormatChanged(new EventArgs());
 			}
@@ -143,18 +143,18 @@ namespace YAT.Gui.Controls
 
 		[Category("Format")]
 		[Description("Italic.")]
-		[DefaultValue(_ItalicDefault)]
+		[DefaultValue(ItalicDefault)]
 		private bool Italic
 		{
-			get { return (_font.Italic); }
+			get { return (this.font.Italic); }
 			set
 			{
-				FontStyle style = _font.Style;
+				FontStyle style = this.font.Style;
 				if (value)
 					style |= FontStyle.Italic;
 				else
 					style &= ~FontStyle.Italic;
-				_font = new Font(_font.Name, _font.Size, style);
+				this.font = new Font(this.font.Name, this.font.Size, style);
 				SetControls();
 				OnFormatChanged(new EventArgs());
 			}
@@ -162,18 +162,18 @@ namespace YAT.Gui.Controls
 
 		[Category("Format")]
 		[Description("Underline.")]
-		[DefaultValue(_UnderlineDefault)]
+		[DefaultValue(UnderlineDefault)]
 		private bool Underline
 		{
-			get { return (_font.Underline); }
+			get { return (this.font.Underline); }
 			set
 			{
-				FontStyle style = _font.Style;
+				FontStyle style = this.font.Style;
 				if (value)
 					style |= FontStyle.Underline;
 				else
 					style &= ~FontStyle.Underline;
-				_font = new Font(_font.Name, _font.Size, style);
+				this.font = new Font(this.font.Name, this.font.Size, style);
 				SetControls();
 				OnFormatChanged(new EventArgs());
 			}
@@ -181,18 +181,18 @@ namespace YAT.Gui.Controls
 
 		[Category("Format")]
 		[Description("Strikeout.")]
-		[DefaultValue(_StrikeoutDefault)]
+		[DefaultValue(StrikeoutDefault)]
 		private bool Strikeout
 		{
-			get { return (_font.Strikeout); }
+			get { return (this.font.Strikeout); }
 			set
 			{
-				FontStyle style = _font.Style;
+				FontStyle style = this.font.Style;
 				if (value)
 					style |= FontStyle.Strikeout;
 				else
 					style &= ~FontStyle.Strikeout;
-				_font = new Font(_font.Name, _font.Size, style);
+				this.font = new Font(this.font.Name, this.font.Size, style);
 				SetControls();
 				OnFormatChanged(new EventArgs());
 			}
@@ -202,10 +202,10 @@ namespace YAT.Gui.Controls
 		[Description("The color.")]
 		public Color FormatColor
 		{
-			get { return (_color); }
+			get { return (this.color); }
 			set
 			{
-				_color = value;
+				this.color = value;
 				SetControls();
 				OnFormatChanged(new EventArgs());
 			}
@@ -220,25 +220,25 @@ namespace YAT.Gui.Controls
 
 		private void checkBox_Bold_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				Bold = checkBox_Bold.Checked;
 		}
 
 		private void checkBox_Italic_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				Italic = checkBox_Italic.Checked;
 		}
 
 		private void checkBox_Underline_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				Underline = checkBox_Underline.Checked;
 		}
 
 		private void checkBox_Strikeout_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				Strikeout = checkBox_Strikeout.Checked;
 		}
 
@@ -255,14 +255,14 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
 			checkBox_Bold.Checked = Bold;
 			checkBox_Italic.Checked = Italic;
 			checkBox_Underline.Checked = Underline;
 			checkBox_Strikeout.Checked = Strikeout;
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		#endregion

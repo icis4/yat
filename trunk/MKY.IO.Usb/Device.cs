@@ -172,10 +172,10 @@ namespace MKY.IO.Usb
 		private static bool GetVidAndPidFromHandle(SafeFileHandle deviceHandle, out int vendorId, out int productId)
 		{
 			// Set the size property of attributes to the number of bytes in the structure.
-			Utilities.Win32.Hid.HIDD_ATTRIBUTES attributes = new Utilities.Win32.Hid.HIDD_ATTRIBUTES();
+			Utilities.Win32.Hid.Native.HIDD_ATTRIBUTES attributes = new Utilities.Win32.Hid.Native.HIDD_ATTRIBUTES();
 			attributes.Size = Marshal.SizeOf(attributes);
 
-			if (Utilities.Win32.Hid.HidD_GetAttributes(deviceHandle, ref attributes))
+			if (Utilities.Win32.Hid.Native.HidD_GetAttributes(deviceHandle, ref attributes))
 			{
 				vendorId = attributes.VendorID;
 				productId = attributes.ProductID;
@@ -377,20 +377,20 @@ namespace MKY.IO.Usb
 		// Static Methods > Device Notification
 		//------------------------------------------------------------------------------------------
 
-		//private static NativeMessageHandler _staticDeviceNotificationWindow = new NativeMessageHandler(StaticDeviceNotificationHandler);
-		//private static IntPtr _staticDeviceNotificationHandle = IntPtr.Zero;
+		//private static NativeMessageHandler staticDeviceNotificationWindow = new NativeMessageHandler(StaticDeviceNotificationHandler);
+		//private static IntPtr staticDeviceNotificationHandle = IntPtr.Zero;
 
 		/// <remarks>
 		/// \todo Don't know how to retrieve the GUID for any USB device class. So only HID devices are detected.
 		/// </remarks>
 		private static void RegisterStaticDeviceNotificationHandler()
 		{
-			//Utilities.Win32.DeviceManagement.RegisterDeviceNotificationHandle(_staticDeviceNotificationWindow.Handle, HidDevice.HidGuid, ref _staticDeviceNotificationHandle);
+			//Utilities.Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationWindow.Handle, HidDevice.HidGuid, ref staticDeviceNotificationHandle);
 		}
 
 		private static void UnregisterStaticDeviceNotificationHandler()
 		{
-			//Utilities.Win32.DeviceManagement.UnregisterDeviceNotificationHandle(_staticDeviceNotificationHandle);
+			//Utilities.Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
 		}
 
 		private static void StaticDeviceNotificationHandler(ref Message m)
@@ -422,15 +422,15 @@ namespace MKY.IO.Usb
 
 		internal static DeviceEvent MessageToDeviceEvent(ref Message m)
 		{
-			if (m.Msg == (int)Utilities.Win32.DeviceManagement.WM_DEVICECHANGE)
+			if (m.Msg == (int)Utilities.Win32.DeviceManagement.Native.WM_DEVICECHANGE)
 			{
-				Utilities.Win32.DeviceManagement.DBT e = (Utilities.Win32.DeviceManagement.DBT)m.WParam.ToInt32();
+				Utilities.Win32.DeviceManagement.Native.DBT e = (Utilities.Win32.DeviceManagement.Native.DBT)m.WParam.ToInt32();
 				switch (e)
 				{
-					case Utilities.Win32.DeviceManagement.DBT.DEVICEARRIVAL:
+					case Utilities.Win32.DeviceManagement.Native.DBT.DEVICEARRIVAL:
 						return (DeviceEvent.Connected);
 
-					case Utilities.Win32.DeviceManagement.DBT.DEVICEREMOVECOMPLETE:
+					case Utilities.Win32.DeviceManagement.Native.DBT.DEVICEREMOVECOMPLETE:
 						return (DeviceEvent.Disconnected);
 				}
 			}
@@ -446,11 +446,11 @@ namespace MKY.IO.Usb
 		// Fields
 		//==========================================================================================
 
-		private bool _isDisposed;
+		private bool isDisposed;
 
-		private DeviceInfo _deviceInfo;
+		private DeviceInfo deviceInfo;
 
-		private bool _isConnected;
+		private bool isConnected;
 
 		#endregion
 
@@ -487,28 +487,28 @@ namespace MKY.IO.Usb
 			int vendorId, productId;
 			string manufacturer, product, serialNumber;
 			GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serialNumber);
-			_deviceInfo = new DeviceInfo(path, vendorId, productId, manufacturer, product, serialNumber);
+			this.deviceInfo = new DeviceInfo(path, vendorId, productId, manufacturer, product, serialNumber);
 			Initialize();
 		}
 
 		/// <summary></summary>
 		public Device(Guid classGuid, int vendorId, int productId)
 		{
-			_deviceInfo = new DeviceInfo(vendorId, productId);
+			this.deviceInfo = new DeviceInfo(vendorId, productId);
 			Initialize();
 		}
 
 		/// <summary></summary>
 		public Device(Guid classGuid, int vendorId, int productId, string serialNumber)
 		{
-			_deviceInfo = new DeviceInfo(vendorId, productId, serialNumber);
+			this.deviceInfo = new DeviceInfo(vendorId, productId, serialNumber);
 			Initialize();
 		}
 
 		/// <summary></summary>
 		public Device(Guid classGuid, DeviceInfo deviceInfo)
 		{
-			_deviceInfo = new DeviceInfo(deviceInfo);
+			this.deviceInfo = new DeviceInfo(deviceInfo);
 			Initialize();
 		}
 
@@ -520,7 +520,7 @@ namespace MKY.IO.Usb
 				deviceHandle.Close();
 
 				// Getting a handle means that the device is connected to the computer.
-				_isConnected = true;
+				this.isConnected = true;
 			}
 
 			AttachEventHandlers();
@@ -553,13 +553,13 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!_isDisposed)
+			if (!this.isDisposed)
 			{
 				if (disposing)
 				{
 					DetachEventHandlers();
 				}
-				_isDisposed = true;
+				this.isDisposed = true;
 			}
 		}
 
@@ -572,13 +572,13 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected bool IsDisposed
 		{
-			get { return (_isDisposed); }
+			get { return (this.isDisposed); }
 		}
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (_isDisposed)
+			if (this.isDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
 		}
 
@@ -594,7 +594,7 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected virtual string SystemPath
 		{
-			get { return (_deviceInfo.Path); }
+			get { return (this.deviceInfo.Path); }
 		}
 
 		#region Properties > IDeviceInfo
@@ -608,49 +608,49 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public virtual DeviceInfo Info
 		{
-			get { return (_deviceInfo); }
+			get { return (this.deviceInfo); }
 		}
 
 		/// <summary></summary>
 		public virtual int VendorId
 		{
-			get { return (_deviceInfo.VendorId); }
+			get { return (this.deviceInfo.VendorId); }
 		}
 
 		/// <summary></summary>
 		public virtual string VendorIdString
 		{
-			get { return (_deviceInfo.VendorIdString); }
+			get { return (this.deviceInfo.VendorIdString); }
 		}
 
 		/// <summary></summary>
 		public virtual int ProductId
 		{
-			get { return (_deviceInfo.ProductId); }
+			get { return (this.deviceInfo.ProductId); }
 		}
 
 		/// <summary></summary>
 		public virtual string ProductIdString
 		{
-			get { return (_deviceInfo.ProductIdString); }
+			get { return (this.deviceInfo.ProductIdString); }
 		}
 
 		/// <summary></summary>
 		public virtual string Manufacturer
 		{
-			get { return (_deviceInfo.Manufacturer); }
+			get { return (this.deviceInfo.Manufacturer); }
 		}
 
 		/// <summary></summary>
 		public virtual string Product
 		{
-			get { return (_deviceInfo.Product); }
+			get { return (this.deviceInfo.Product); }
 		}
 
 		/// <summary></summary>
 		public virtual string SerialNumber
 		{
-			get { return (_deviceInfo.SerialNumber); }
+			get { return (this.deviceInfo.SerialNumber); }
 		}
 
 		#endregion
@@ -668,7 +668,7 @@ namespace MKY.IO.Usb
 		/// </returns>
 		public bool IsConnected
 		{
-			get { return (_isConnected); }
+			get { return (this.isConnected); }
 		}
 
 		#endregion
@@ -682,13 +682,13 @@ namespace MKY.IO.Usb
 
 		private void Device_DeviceConnected(object sender, DeviceEventArgs e)
 		{
-			if (_deviceInfo.Path == e.DevicePath)
+			if (this.deviceInfo.Path == e.DevicePath)
 				OnConnected(new EventArgs());
 		}
 
 		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
 		{
-			if (_deviceInfo.Path == e.DevicePath)
+			if (this.deviceInfo.Path == e.DevicePath)
 				OnDisconnected(new EventArgs());
 		}
 
@@ -702,14 +702,14 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected virtual void OnConnected(EventArgs e)
 		{
-			_isConnected = true;
+			this.isConnected = true;
 			EventHelper.FireSync(Connected, this, e);
 		}
 
 		/// <summary></summary>
 		protected virtual void OnDisconnected(EventArgs e)
 		{
-			_isConnected = false;
+			this.isConnected = false;
 			EventHelper.FireSync(Disconnected, this, e);
 		}
 
@@ -731,7 +731,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public override string ToString()
 		{
-			return (_deviceInfo.ToString());
+			return (this.deviceInfo.ToString());
 		}
 
 		/// <summary>
@@ -739,7 +739,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public virtual string ToShortString()
 		{
-			return (_deviceInfo.ToShortString());
+			return (this.deviceInfo.ToShortString());
 		}
 
 		#endregion

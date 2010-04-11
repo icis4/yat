@@ -28,8 +28,8 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const int BufferSizeDefault = 65536;
 
-		private int _txBufferSize;
-		private int _rxBufferSize;
+		private int txBufferSize;
+		private int rxBufferSize;
 
 		/// <summary></summary>
 		public BufferSettings()
@@ -53,8 +53,8 @@ namespace YAT.Domain.Settings
 		public BufferSettings(BufferSettings rhs)
 			: base(rhs)
 		{
-			_txBufferSize = rhs.TxBufferSize;
-			_rxBufferSize = rhs.RxBufferSize;
+			this.txBufferSize = rhs.TxBufferSize;
+			this.rxBufferSize = rhs.RxBufferSize;
 			ClearChanged();
 		}
 
@@ -76,12 +76,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("TxBufferSize")]
 		public virtual int TxBufferSize
 		{
-			get { return (_txBufferSize); }
+			get { return (this.txBufferSize); }
 			set
 			{
-				if (value != _txBufferSize)
+				if (value != this.txBufferSize)
 				{
-					_txBufferSize = value;
+					this.txBufferSize = value;
 					SetChanged();
 				}
 			}
@@ -91,12 +91,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("RxBufferSize")]
 		public virtual int RxBufferSize
 		{
-			get { return (_rxBufferSize); }
+			get { return (this.rxBufferSize); }
 			set
 			{
-				if (value != _rxBufferSize)
+				if (value != this.rxBufferSize)
 				{
-					_rxBufferSize = value;
+					this.rxBufferSize = value;
 					SetChanged();
 				}
 			}
@@ -134,8 +134,8 @@ namespace YAT.Domain.Settings
 			{
 				return
 					(
-					(_txBufferSize == value._txBufferSize) &&
-					(_rxBufferSize == value._rxBufferSize)
+					(this.txBufferSize == value.txBufferSize) &&
+					(this.rxBufferSize == value.rxBufferSize)
 					);
 			}
 			return (false);

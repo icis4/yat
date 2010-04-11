@@ -147,46 +147,46 @@ namespace YAT.Model.Utilities
 	/// </summary>
 	public class RtfPrinter
 	{
-		private PrintDocument _pd;
-		private RichTextBox _rtb;
-		private StringReader _reader;
+		private PrintDocument pd;
+		private RichTextBox rtb;
+		private StringReader reader;
 
 		/// <summary></summary>
 		public RtfPrinter(PrinterSettings settings)
 		{
-			_pd = new PrintDocument();
-			_pd.PrintPage += new PrintPageEventHandler(_pd_PrintPage);
-			_pd.PrinterSettings = settings;
+			this.pd = new PrintDocument();
+			this.pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);
+			this.pd.PrinterSettings = settings;
 		}
 
 		/// <summary></summary>
 		public virtual void Print(RichTextBox rtb)
 		{
-			_rtb = rtb;
-			_reader = new StringReader(_rtb.Text);
+			this.rtb = rtb;
+			this.reader = new StringReader(this.rtb.Text);
 			try
 			{
-				_pd.Print();
+				this.pd.Print();
 			}
 			finally
 			{
-				_reader.Close();
+				this.reader.Close();
 			}
 		}
 
-		private void _pd_PrintPage(object sender, PrintPageEventArgs e)
+		private void pd_PrintPage(object sender, PrintPageEventArgs e)
 		{
 			// Calculate the number of lines per page.
-			int linesPerPage = (int)(e.MarginBounds.Height / _rtb.Font.GetHeight(e.Graphics));
+			int linesPerPage = (int)(e.MarginBounds.Height / this.rtb.Font.GetHeight(e.Graphics));
 			int lineCount = 0;
 
 			// Print each line of the file.
 			string line = null;
-			while (lineCount < linesPerPage && ((line = _reader.ReadLine()) != null))
+			while (lineCount < linesPerPage && ((line = this.reader.ReadLine()) != null))
 			{
 				float yPos = 0;
-				yPos = e.MarginBounds.Top + (lineCount * _rtb.Font.GetHeight(e.Graphics));
-				e.Graphics.DrawString(line, _rtb.Font, Brushes.Black, e.MarginBounds.Left, yPos, new StringFormat());
+				yPos = e.MarginBounds.Top + (lineCount * this.rtb.Font.GetHeight(e.Graphics));
+				e.Graphics.DrawString(line, this.rtb.Font, Brushes.Black, e.MarginBounds.Left, yPos, new StringFormat());
 				lineCount++;
 			}
 

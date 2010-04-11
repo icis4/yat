@@ -26,41 +26,41 @@ namespace YAT.Model.Types
 	[Serializable]
 	public class PredefinedCommandPage : IEquatable<PredefinedCommandPage>, IComparable
 	{
-		private string _pageName;
-		private List<Command> _commands;
+		private string pageName;
+		private List<Command> commands;
 
 		/// <summary></summary>
 		public PredefinedCommandPage()
 		{
-			_pageName = "";
-			_commands = new List<Command>();
+			this.pageName = "";
+			this.commands = new List<Command>();
 		}
 
 		/// <summary></summary>
 		public PredefinedCommandPage(string pageName)
 		{
-			_pageName = pageName;
-			_commands = new List<Command>();
+			this.pageName = pageName;
+			this.commands = new List<Command>();
 		}
 
 		/// <summary></summary>
 		public PredefinedCommandPage(PredefinedCommandPage rhs)
 		{
-			_pageName = rhs._pageName;
+			this.pageName = rhs.pageName;
 
 			// clone all commands
-			_commands = new List<Command>();
-			foreach (Command c in rhs._commands)
+			this.commands = new List<Command>();
+			foreach (Command c in rhs.commands)
 			{
-				_commands.Add(new Command(c));
+				this.commands.Add(new Command(c));
 			}
 		}
 
 		/// <summary></summary>
 		public PredefinedCommandPage(int capacity, string pageName)
 		{
-			_pageName = pageName;
-			_commands = new List<Command>(capacity);
+			this.pageName = pageName;
+			this.commands = new List<Command>(capacity);
 		}
 
 		#region Properties
@@ -72,16 +72,16 @@ namespace YAT.Model.Types
 		[XmlElement("PageName")]
 		public virtual string PageName
 		{
-			get { return (_pageName); }
-			set { _pageName = value; }
+			get { return (this.pageName); }
+			set { this.pageName = value; }
 		}
 
 		/// <summary></summary>
 		[XmlElement("Commands")]
 		public virtual List<Command> Commands
 		{
-			get { return (_commands); }
-			set { _commands = value; }
+			get { return (this.commands); }
+			set { this.commands = value; }
 		}
 
 		#endregion
@@ -98,16 +98,16 @@ namespace YAT.Model.Types
 		{
 			if (selectedCommand >= 0)
 			{
-				if (selectedCommand < _commands.Count)
+				if (selectedCommand < this.commands.Count)
 				{
-					_commands[selectedCommand] = new Command(command);
+					this.commands[selectedCommand] = new Command(command);
 				}
 				else
 				{
-					while (_commands.Count < (selectedCommand))
-						_commands.Add(new Command());
+					while (this.commands.Count < (selectedCommand))
+						this.commands.Add(new Command());
 
-					_commands.Add(new Command(command));
+					this.commands.Add(new Command(command));
 				}
 			}
 		}
@@ -138,12 +138,12 @@ namespace YAT.Model.Types
 			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
-				if (_pageName != value._pageName)
+				if (this.pageName != value.pageName)
 					return (false);
 
-				for (int i = 0; i < _commands.Count; i++)
+				for (int i = 0; i < this.commands.Count; i++)
 				{
-					if (_commands[i] != value._commands[i])
+					if (this.commands[i] != value.commands[i])
 						return (false);
 				}
 				return (true);
@@ -177,7 +177,7 @@ namespace YAT.Model.Types
 			if (obj is PredefinedCommandPage)
 			{
 				PredefinedCommandPage p = (PredefinedCommandPage)obj;
-				return (_pageName.CompareTo(p._pageName));
+				return (this.pageName.CompareTo(p.pageName));
 			}
 			throw (new ArgumentException("Object is not a PredefinedCommandPage"));
 		}

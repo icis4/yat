@@ -31,14 +31,14 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public static readonly int DefaultEncoding = (XEncoding)(System.Text.Encoding.Default);
 
-		private bool              _separateTxRxEol;
-		private string            _txEol;
-		private string            _rxEol;
-		private int               _encoding;
-		private bool              _showEol;
-		private TextLineSendDelay _lineSendDelay;
-		private WaitForResponse   _waitForResponse;
-		private CharSubstitution  _charSubstitution;
+		private bool              separateTxRxEol;
+		private string            txEol;
+		private string            rxEol;
+		private int               encoding;
+		private bool              showEol;
+		private TextLineSendDelay lineSendDelay;
+		private WaitForResponse   waitForResponse;
+		private CharSubstitution  charSubstitution;
 
 		/// <summary></summary>
 		public TextTerminalSettings()
@@ -62,14 +62,14 @@ namespace YAT.Domain.Settings
 		public TextTerminalSettings(TextTerminalSettings rhs)
 			: base(rhs)
 		{
-			_separateTxRxEol     = rhs.SeparateTxRxEol;
-			_txEol               = rhs.TxEol;
-			_rxEol               = rhs.RxEol;
-			_encoding            = rhs.Encoding;
-			_showEol             = rhs.ShowEol;
-			_lineSendDelay       = rhs.LineSendDelay;
-			_waitForResponse     = rhs.WaitForResponse;
-			_charSubstitution    = rhs.CharSubstitution;
+			this.separateTxRxEol     = rhs.SeparateTxRxEol;
+			this.txEol               = rhs.TxEol;
+			this.rxEol               = rhs.RxEol;
+			this.encoding            = rhs.Encoding;
+			this.showEol             = rhs.ShowEol;
+			this.lineSendDelay       = rhs.LineSendDelay;
+			this.waitForResponse     = rhs.WaitForResponse;
+			this.charSubstitution    = rhs.CharSubstitution;
 
 			ClearChanged();
 		}
@@ -98,12 +98,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("SeparateTxRxEol")]
 		public virtual bool SeparateTxRxEol
 		{
-			get { return (_separateTxRxEol); }
+			get { return (this.separateTxRxEol); }
 			set
 			{
-				if (value != _separateTxRxEol)
+				if (value != this.separateTxRxEol)
 				{
-					_separateTxRxEol = value;
+					this.separateTxRxEol = value;
 					SetChanged();
 				}
 			}
@@ -113,12 +113,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("TxEol")]
 		public virtual string TxEol
 		{
-			get { return (_txEol); }
+			get { return (this.txEol); }
 			set
 			{
-				if (value != _txEol)
+				if (value != this.txEol)
 				{
-					_txEol = value;
+					this.txEol = value;
 					SetChanged();
 				}
 			}
@@ -130,16 +130,16 @@ namespace YAT.Domain.Settings
 		{
 			get
 			{
-				if (_separateTxRxEol)
-					return (_rxEol);
+				if (this.separateTxRxEol)
+					return (this.rxEol);
 				else
-					return (_txEol);
+					return (this.txEol);
 			}
 			set
 			{
-				if (value != _rxEol)
+				if (value != this.rxEol)
 				{
-					_rxEol = value;
+					this.rxEol = value;
 					SetChanged();
 				}
 			}
@@ -149,12 +149,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("Encoding")]
 		public virtual int Encoding
 		{
-			get { return (_encoding); }
+			get { return (this.encoding); }
 			set
 			{
-				if (value != _encoding)
+				if (value != this.encoding)
 				{
-					_encoding = value;
+					this.encoding = value;
 					SetChanged();
 				}
 			}
@@ -164,12 +164,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("ShowEol")]
 		public virtual bool ShowEol
 		{
-			get { return (_showEol); }
+			get { return (this.showEol); }
 			set
 			{
-				if (value != _showEol)
+				if (value != this.showEol)
 				{
-					_showEol = value;
+					this.showEol = value;
 					SetChanged();
 				}
 			}
@@ -179,12 +179,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("LineSendDelay")]
 		public virtual TextLineSendDelay LineSendDelay
 		{
-			get { return (_lineSendDelay); }
+			get { return (this.lineSendDelay); }
 			set
 			{
-				if (value != _lineSendDelay)
+				if (value != this.lineSendDelay)
 				{
-					_lineSendDelay = value;
+					this.lineSendDelay = value;
 					SetChanged();
 				}
 			}
@@ -194,12 +194,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("WaitForResponse")]
 		public virtual WaitForResponse WaitForResponse
 		{
-			get { return (_waitForResponse); }
+			get { return (this.waitForResponse); }
 			set
 			{
-				if (value != _waitForResponse)
+				if (value != this.waitForResponse)
 				{
-					_waitForResponse = value;
+					this.waitForResponse = value;
 					SetChanged();
 				}
 			}
@@ -209,12 +209,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("CharSubstitution")]
 		public virtual CharSubstitution CharSubstitution
 		{
-			get { return (_charSubstitution); }
+			get { return (this.charSubstitution); }
 			set
 			{
-				if (value != _charSubstitution)
+				if (value != this.charSubstitution)
 				{
-					_charSubstitution = value;
+					this.charSubstitution = value;
 					SetChanged();
 				}
 			}
@@ -245,14 +245,14 @@ namespace YAT.Domain.Settings
 			{
 				return
 					(
-					(_separateTxRxEol  == value._separateTxRxEol) &&
-					(_txEol            == value._txEol) &&
-					(_rxEol            == value._rxEol) &&
-					(_encoding         == value._encoding) &&
-					(_showEol          == value._showEol) &&
-					(_lineSendDelay    == value._lineSendDelay) &&
-					(_waitForResponse  == value._waitForResponse) &&
-					(_charSubstitution == value._charSubstitution)
+					(this.separateTxRxEol  == value.separateTxRxEol) &&
+					(this.txEol            == value.txEol) &&
+					(this.rxEol            == value.rxEol) &&
+					(this.encoding         == value.encoding) &&
+					(this.showEol          == value.showEol) &&
+					(this.lineSendDelay    == value.lineSendDelay) &&
+					(this.waitForResponse  == value.waitForResponse) &&
+					(this.charSubstitution == value.charSubstitution)
 					);
 			}
 			return (false);

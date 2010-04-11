@@ -38,7 +38,7 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const bool _TerminalIsOpenDefault = false;
+		private const bool TerminalIsOpenDefault = false;
 
 		#endregion
 
@@ -47,10 +47,10 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private List<Button> _buttons_commands;
+		private List<Button> buttons_commands;
 
-		private List<Command> _commands;
-		private bool _terminalIsOpen = _TerminalIsOpenDefault;
+		private List<Command> commands;
+		private bool terminalIsOpen = TerminalIsOpenDefault;
 
 		#endregion
 
@@ -94,7 +94,7 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				_commands = value;
+				this.commands = value;
 				SetControls();
 			}
 		}
@@ -105,7 +105,7 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				_terminalIsOpen = value;
+				this.terminalIsOpen = value;
 				SetControls();
 			}
 		}
@@ -125,14 +125,14 @@ namespace YAT.Gui.Controls
 		{
 			int i = (id - 1); // command ID = 1..max
 
-			if (_commands != null)
+			if (this.commands != null)
 			{
-				if ((i >= 0) && (i < _commands.Count))
+				if ((i >= 0) && (i < this.commands.Count))
 				{
-					if (_commands[i] != null)
+					if (this.commands[i] != null)
 					{
-						if (_commands[i].IsDefined)
-							return (_commands[i]);
+						if (this.commands[i].IsDefined)
+							return (this.commands[i]);
 					}
 				}
 			}
@@ -154,9 +154,9 @@ namespace YAT.Gui.Controls
 				return (0);
 
 			int ySum = 0;
-			for (int i = 0; i < _buttons_commands.Count; i++)
+			for (int i = 0; i < this.buttons_commands.Count; i++)
 			{
-				ySum += _buttons_commands[i].Height;
+				ySum += this.buttons_commands[i].Height;
 				if (client.Y <= ySum)
 					return (i + 1); // commmand ID = 1..max
 			}
@@ -193,53 +193,53 @@ namespace YAT.Gui.Controls
 
 		private void InitializeButtons()
 		{
-			_buttons_commands = new List<Button>(PredefinedCommandSettings.MaxCommandsPerPage);
-			_buttons_commands.Add(button_Command_1);
-			_buttons_commands.Add(button_Command_2);
-			_buttons_commands.Add(button_Command_3);
-			_buttons_commands.Add(button_Command_4);
-			_buttons_commands.Add(button_Command_5);
-			_buttons_commands.Add(button_Command_6);
-			_buttons_commands.Add(button_Command_7);
-			_buttons_commands.Add(button_Command_8);
-			_buttons_commands.Add(button_Command_9);
-			_buttons_commands.Add(button_Command_10);
-			_buttons_commands.Add(button_Command_11);
-			_buttons_commands.Add(button_Command_12);
+			this.buttons_commands = new List<Button>(PredefinedCommandSettings.MaxCommandsPerPage);
+			this.buttons_commands.Add(button_Command_1);
+			this.buttons_commands.Add(button_Command_2);
+			this.buttons_commands.Add(button_Command_3);
+			this.buttons_commands.Add(button_Command_4);
+			this.buttons_commands.Add(button_Command_5);
+			this.buttons_commands.Add(button_Command_6);
+			this.buttons_commands.Add(button_Command_7);
+			this.buttons_commands.Add(button_Command_8);
+			this.buttons_commands.Add(button_Command_9);
+			this.buttons_commands.Add(button_Command_10);
+			this.buttons_commands.Add(button_Command_11);
+			this.buttons_commands.Add(button_Command_12);
 		}
 
 		private void SetControls()
 		{
 			int commandCount = 0;
-			if (_commands != null)
-				commandCount = _commands.Count;
+			if (this.commands != null)
+				commandCount = this.commands.Count;
 
 			for (int i = 0; i < commandCount; i++)
 			{
-				bool isDefined = ((_commands[i] != null) && _commands[i].IsDefined);
-				bool isValid = (isDefined && _terminalIsOpen && _commands[i].IsValid);
+				bool isDefined = ((this.commands[i] != null) && this.commands[i].IsDefined);
+				bool isValid = (isDefined && this.terminalIsOpen && this.commands[i].IsValid);
 
 				if (isDefined)
 				{
-					_buttons_commands[i].Text      = _commands[i].Description;
-					_buttons_commands[i].ForeColor = SystemColors.ControlText;
-					_buttons_commands[i].Font      = SystemFonts.DefaultFont;
-					_buttons_commands[i].Enabled   = isValid;
+					this.buttons_commands[i].Text      = this.commands[i].Description;
+					this.buttons_commands[i].ForeColor = SystemColors.ControlText;
+					this.buttons_commands[i].Font      = SystemFonts.DefaultFont;
+					this.buttons_commands[i].Enabled   = isValid;
 				}
 				else
 				{
-					_buttons_commands[i].Text      = Command.DefineCommandText;
-					_buttons_commands[i].ForeColor = SystemColors.GrayText;
-					_buttons_commands[i].Font      = Utilities.Drawing.ItalicDefaultFont;
-					_buttons_commands[i].Enabled   = true;
+					this.buttons_commands[i].Text      = Command.DefineCommandText;
+					this.buttons_commands[i].ForeColor = SystemColors.GrayText;
+					this.buttons_commands[i].Font      = Utilities.Drawing.ItalicDefaultFont;
+					this.buttons_commands[i].Enabled   = true;
 				}
 			}
 			for (int i = commandCount; i < PredefinedCommandSettings.MaxCommandsPerPage; i++)
 			{
-				_buttons_commands[i].Text      = Command.DefineCommandText;
-				_buttons_commands[i].ForeColor = SystemColors.GrayText;
-				_buttons_commands[i].Font      = Utilities.Drawing.ItalicDefaultFont;
-				_buttons_commands[i].Enabled   = true;
+				this.buttons_commands[i].Text      = Command.DefineCommandText;
+				this.buttons_commands[i].ForeColor = SystemColors.GrayText;
+				this.buttons_commands[i].Font      = Utilities.Drawing.ItalicDefaultFont;
+				this.buttons_commands[i].Enabled   = true;
 			}
 		}
 
@@ -247,10 +247,10 @@ namespace YAT.Gui.Controls
 		{
 			bool isDefined =
 				(
-				(_commands != null) &&
-				(_commands.Count >= command) &&
-				(_commands[command - 1] != null) &&
-				(_commands[command - 1].IsDefined)
+				(this.commands != null) &&
+				(this.commands.Count >= command) &&
+				(this.commands[command - 1] != null) &&
+				(this.commands[command - 1].IsDefined)
 				);
 
 			if (isDefined)

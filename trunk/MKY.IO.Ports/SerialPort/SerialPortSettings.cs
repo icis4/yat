@@ -41,11 +41,11 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public const string XOffDescription = "XOff = 13h (DC3)";
 
-		private BaudRate _baudRate;
-		private DataBits _dataBits;
-		private Parity _parity;
-		private StopBits _stopBits;
-		private Handshake _handshake;
+		private BaudRate baudRate;
+		private DataBits dataBits;
+		private Parity parity;
+		private StopBits stopBits;
+		private Handshake handshake;
 
 		/// <summary>
 		/// Creates new port settings with defaults.
@@ -99,8 +99,8 @@ namespace MKY.IO.Ports
 		[XmlElement("BaudRate")]
 		public BaudRate BaudRate
 		{
-			get { return (_baudRate); }
-			set { _baudRate = value; }
+			get { return (this.baudRate); }
+			set { this.baudRate = value; }
 		}
 
 		/// <summary>
@@ -109,8 +109,8 @@ namespace MKY.IO.Ports
 		[XmlElement("DataBits")]
 		public DataBits DataBits
 		{
-			get { return (_dataBits); }
-			set { _dataBits = value; }
+			get { return (this.dataBits); }
+			set { this.dataBits = value; }
 		}
 
 		/// <summary>
@@ -119,8 +119,8 @@ namespace MKY.IO.Ports
 		[XmlElement("Parity")]
 		public Parity Parity
 		{
-			get { return (_parity); }
-			set { _parity = value; }
+			get { return (this.parity); }
+			set { this.parity = value; }
 		}
 
 		/// <summary>
@@ -129,8 +129,8 @@ namespace MKY.IO.Ports
 		[XmlElement("StopBits")]
 		public StopBits StopBits
 		{
-			get { return (_stopBits); }
-			set { _stopBits = value; }
+			get { return (this.stopBits); }
+			set { this.stopBits = value; }
 		}
 
 		/// <summary>
@@ -139,8 +139,8 @@ namespace MKY.IO.Ports
 		[XmlElement("Handshake")]
 		public Handshake Handshake
 		{
-			get { return (_handshake); }
-			set { _handshake = value; }
+			get { return (this.handshake); }
+			set { this.handshake = value; }
 		}
 
 		#endregion
@@ -168,11 +168,11 @@ namespace MKY.IO.Ports
 			{
 				return
 					(
-					(_baudRate  == value._baudRate) &&
-					(_dataBits  == value._dataBits) &&
-					(_parity    == value._parity) &&
-					(_stopBits  == value._stopBits) &&
-					(_handshake == value._handshake)
+					(this.baudRate  == value.baudRate) &&
+					(this.dataBits  == value.dataBits) &&
+					(this.parity    == value.parity) &&
+					(this.stopBits  == value.stopBits) &&
+					(this.handshake == value.handshake)
 					);
 			}
 			return (false);
@@ -193,11 +193,11 @@ namespace MKY.IO.Ports
 		{
 			return
 				(
-				((XBaudRate)_baudRate) + ", " +
-				((XDataBits)_dataBits) + ", " +
-				((XParity)_parity)     + ", " +
-				((XStopBits)_stopBits) + ", " +
-				((XHandshake)_handshake).ToShortString()
+				((XBaudRate)this.baudRate) + ", " +
+				((XDataBits)this.dataBits) + ", " +
+				((XParity)this.parity)     + ", " +
+				((XStopBits)this.stopBits) + ", " +
+				((XHandshake)this.handshake).ToShortString()
 				);
 		}
 
@@ -210,11 +210,11 @@ namespace MKY.IO.Ports
 
 			string delimiters = "/,;";
 			string[] sa = s.Split(delimiters.ToCharArray());
-			ps._baudRate = XBaudRate.Parse(sa[0]);
-			ps._dataBits = XDataBits.Parse(sa[1]);
-			ps._parity = XParity.Parse(sa[2]);
-			ps._stopBits = XStopBits.Parse(sa[3]);
-			ps._handshake = XHandshake.Parse(sa[4]);
+			ps.baudRate  = XBaudRate.Parse(sa[0]);
+			ps.dataBits  = XDataBits.Parse(sa[1]);
+			ps.parity    = XParity.Parse(sa[2]);
+			ps.stopBits  = XStopBits.Parse(sa[3]);
+			ps.handshake = XHandshake.Parse(sa[4]);
 
 			return (ps);
 		}
@@ -227,7 +227,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public double PacketSize
 		{
-			get { return (1 + (double)_dataBits + (double)_stopBits); }
+			get { return (1 + (double)this.dataBits + (double)this.stopBits); }
 		}
 
 		/// <summary>
@@ -236,7 +236,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public long PacketLength
 		{
-			get { return ((long)(1000 * PacketSize * (1 / (int)_baudRate))); }
+			get { return ((long)(1000 * PacketSize * (1 / (int)this.baudRate))); }
 		}
 
 		/// <summary>
@@ -246,9 +246,9 @@ namespace MKY.IO.Ports
 		{
 			return
 			  (
-			  ((XBaudRate)_baudRate).ToString() + ", " +
-			  ((XDataBits)_dataBits).ToString() + ", " +
-			  ((XParity)_parity).ToShortString()
+			  ((XBaudRate)this.baudRate).ToString() + ", " +
+			  ((XDataBits)this.dataBits).ToString() + ", " +
+			  ((XParity)this.parity).ToShortString()
 			  );
 		}
 
@@ -259,11 +259,11 @@ namespace MKY.IO.Ports
 		{
 			return
 			  (
-			  ((XBaudRate)_baudRate).ToString() + ", " +
-			  ((XDataBits)_dataBits).ToString() + ", " +
-			  ((XParity)_parity).ToShortString() + ", " +
-			  ((XStopBits)_stopBits).ToString() + ", " +
-			  ((XHandshake)_handshake).ToShortString()
+			  ((XBaudRate)this.baudRate).ToString() + ", " +
+			  ((XDataBits)this.dataBits).ToString() + ", " +
+			  ((XParity)this.parity).ToShortString() + ", " +
+			  ((XStopBits)this.stopBits).ToString() + ", " +
+			  ((XHandshake)this.handshake).ToShortString()
 			  );
 		}
 

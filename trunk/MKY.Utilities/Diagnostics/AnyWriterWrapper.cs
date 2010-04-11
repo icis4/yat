@@ -32,14 +32,14 @@ namespace MKY.Utilities.Diagnostics
 		// Writer
 		//==========================================================================================
 
-		private TextWriter _writer = null;
+		private TextWriter writer = null;
 
 		/// <summary>
 		/// Sets a writer to write to. Set <param name="writer"></param> to <c>null</c> after writing.
 		/// </summary>
 		public virtual void SetWriter(TextWriter writer)
 		{
-			_writer = writer;
+			this.writer = writer;
 		}
 
 		#endregion
@@ -49,9 +49,9 @@ namespace MKY.Utilities.Diagnostics
 		// Indent
 		//==========================================================================================
 
-		private int _indentLevel = 0;
-		private int _indentSize = 4;
-		private string _indentString = "    ";
+		private int indentLevel = 0;
+		private int indentSize = 4;
+		private string indentString = "    ";
 
 		/// <summary>
 		/// Gets or sets the indent level.
@@ -61,8 +61,8 @@ namespace MKY.Utilities.Diagnostics
 		/// </value>
 		public virtual int IndentLevel
 		{
-			get { return (_indentLevel); }
-			set { _indentLevel = value; }
+			get { return (this.indentLevel); }
+			set { this.indentLevel = value; }
 		}
 
 		/// <summary>
@@ -73,15 +73,15 @@ namespace MKY.Utilities.Diagnostics
 		/// </value>
 		public virtual int IndentSize
 		{
-			get { return (_indentSize); }
+			get { return (this.indentSize); }
 			set
 			{
-				_indentSize = value;
+				this.indentSize = value;
 
 				StringBuilder sb = new StringBuilder();
-				for (int i = 0; i < _indentSize; i++)
+				for (int i = 0; i < this.indentSize; i++)
 					sb.Append(" ");
-				_indentString = sb.ToString();
+				this.indentString = sb.ToString();
 			}
 		}
 
@@ -90,7 +90,7 @@ namespace MKY.Utilities.Diagnostics
 		/// </summary>
 		public virtual void Indent()
 		{
-			_indentLevel++;
+			this.indentLevel++;
 		}
 
 		/// <summary>
@@ -98,7 +98,7 @@ namespace MKY.Utilities.Diagnostics
 		/// </summary>
 		public virtual void Unindent()
 		{
-			_indentLevel--;
+			this.indentLevel--;
 		}
 
 		#endregion
@@ -108,7 +108,7 @@ namespace MKY.Utilities.Diagnostics
 		// Write
 		//==========================================================================================
 
-		private bool _beginOfLine = true;
+		private bool beginOfLine = true;
 
 		/// <summary>
 		/// Writes a message to the diagnostics listeners.
@@ -116,11 +116,11 @@ namespace MKY.Utilities.Diagnostics
 		/// <param name="message">A message to write.</param>
 		public virtual void Write(string message)
 		{
-			if (_beginOfLine)
+			if (this.beginOfLine)
 				WriteIndent();
 
-			if (_writer != null)
-				_writer.Write(message);
+			if (this.writer != null)
+				this.writer.Write(message);
 		}
 
 		/// <summary>
@@ -129,13 +129,13 @@ namespace MKY.Utilities.Diagnostics
 		/// <param name="message">A message to write.</param>
 		public virtual void WriteLine(string message)
 		{
-			if (_beginOfLine)
+			if (this.beginOfLine)
 				WriteIndent();
 
-			if (_writer != null)
-				_writer.WriteLine(message);
+			if (this.writer != null)
+				this.writer.WriteLine(message);
 
-			_beginOfLine = true;
+			this.beginOfLine = true;
 		}
 
 		/// <summary>
@@ -144,12 +144,12 @@ namespace MKY.Utilities.Diagnostics
 		/// </summary>
 		public virtual void WriteIndent()
 		{
-			if (_writer != null)
+			if (this.writer != null)
 			{
-				for (int i = 0; i < _indentLevel; i++)
-					_writer.Write(_indentString);
+				for (int i = 0; i < this.indentLevel; i++)
+					this.writer.Write(this.indentString);
 			}
-			_beginOfLine = false;
+			this.beginOfLine = false;
 		}
 
 		#endregion

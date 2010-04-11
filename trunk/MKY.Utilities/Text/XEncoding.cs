@@ -378,19 +378,19 @@ namespace MKY.Utilities.Text
 			}
 		}
 
-		private static XEncodingInfo[] _infos;
+		private static XEncodingInfo[] infos;
 
 		static XEncoding()
 		{
-			List<XEncodingInfo> infos = new List<XEncodingInfo>();
-			infos.Add(new XEncodingInfo(SupportedEncoding.ASCII,   "ASCII",                     Encoding.ASCII));
-			infos.Add(new XEncodingInfo(SupportedEncoding.UTF7,    "Unicode UTF-7",             Encoding.UTF7));
-			infos.Add(new XEncodingInfo(SupportedEncoding.UTF8,    "Unicode UTF-8",             Encoding.UTF8));
-			infos.Add(new XEncodingInfo(SupportedEncoding.UTF16,   "Unicode UTF-16",            Encoding.Unicode));
-			infos.Add(new XEncodingInfo(SupportedEncoding.UTF16BE, "Unicode UTF-16 Big Endian", Encoding.BigEndianUnicode));
-			infos.Add(new XEncodingInfo(SupportedEncoding.UTF32,   "Unicode UTF-32",            Encoding.UTF32));
-			infos.Add(new XEncodingInfo(SupportedEncoding.UTF32BE, "Unicode UTF-32 Big Endian", new UTF32Encoding(true, false)));
-			_infos = infos.ToArray(); 
+			List<XEncodingInfo> l = new List<XEncodingInfo>();
+			l.Add(new XEncodingInfo(SupportedEncoding.ASCII,   "ASCII",                     Encoding.ASCII));
+			l.Add(new XEncodingInfo(SupportedEncoding.UTF7,    "Unicode UTF-7",             Encoding.UTF7));
+			l.Add(new XEncodingInfo(SupportedEncoding.UTF8,    "Unicode UTF-8",             Encoding.UTF8));
+			l.Add(new XEncodingInfo(SupportedEncoding.UTF16,   "Unicode UTF-16",            Encoding.Unicode));
+			l.Add(new XEncodingInfo(SupportedEncoding.UTF16BE, "Unicode UTF-16 Big Endian", Encoding.BigEndianUnicode));
+			l.Add(new XEncodingInfo(SupportedEncoding.UTF32,   "Unicode UTF-32",            Encoding.UTF32));
+			l.Add(new XEncodingInfo(SupportedEncoding.UTF32BE, "Unicode UTF-32 Big Endian", new UTF32Encoding(true, false)));
+			infos = l.ToArray(); 
 		}
 
 		/// <summary>
@@ -443,7 +443,7 @@ namespace MKY.Utilities.Text
 		{
 			get
 			{
-				foreach (XEncodingInfo info in _infos)
+				foreach (XEncodingInfo info in infos)
 				{
 					if ((SupportedEncoding)UnderlyingEnum == info.SupportedEncoding)
 						return (info.BetterDisplayName);
@@ -467,7 +467,7 @@ namespace MKY.Utilities.Text
 				return (Encoding.Default);
 
 			// cached encodings
-			foreach (XEncodingInfo info in _infos)
+			foreach (XEncodingInfo info in infos)
 			{
 				if ((SupportedEncoding)UnderlyingEnum == info.SupportedEncoding)
 				{
@@ -720,7 +720,7 @@ namespace MKY.Utilities.Text
 		/// <summary></summary>
 		public static bool TryParse(string encoding, out XEncoding result)
 		{
-			foreach (XEncodingInfo info in _infos)
+			foreach (XEncodingInfo info in infos)
 			{
 				if (string.Compare(encoding, info.BetterDisplayName, true) == 0)
 				{

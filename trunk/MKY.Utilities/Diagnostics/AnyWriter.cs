@@ -26,7 +26,7 @@ namespace MKY.Utilities.Diagnostics
 	/// </summary>
 	public static class AnyWriter
 	{
-		private static AnyWriterWrapper _anyWriterWrapper = new AnyWriterWrapper();
+		private static AnyWriterWrapper anyWriterWrapper = new AnyWriterWrapper();
 
 		/// <summary>
 		/// Writes source, type, message and stack of the given exception and its inner exceptions
@@ -43,9 +43,9 @@ namespace MKY.Utilities.Diagnostics
 		/// </summary>
 		public static void WriteException(TextWriter writer, object obj, Exception ex, string additionalMessage)
 		{
-			_anyWriterWrapper.SetWriter(writer);
-			DiagnosticsWriterOutput.WriteException(_anyWriterWrapper, obj, ex, additionalMessage);
-			_anyWriterWrapper.SetWriter(null);
+			anyWriterWrapper.SetWriter(writer);
+			DiagnosticsWriterOutput.WriteException(anyWriterWrapper, obj, ex, additionalMessage);
+			anyWriterWrapper.SetWriter(null);
 		}
 
 		/// <summary>
@@ -69,9 +69,9 @@ namespace MKY.Utilities.Diagnostics
 		/// </summary>
 		public static void WriteStack(TextWriter writer, object obj, StackTrace st, string additionalMessage)
 		{
-			_anyWriterWrapper.SetWriter(writer);
-			DiagnosticsWriterOutput.WriteStack(_anyWriterWrapper, obj, st, additionalMessage);
-			_anyWriterWrapper.SetWriter(null);
+			anyWriterWrapper.SetWriter(writer);
+			DiagnosticsWriterOutput.WriteStack(anyWriterWrapper, obj, st, additionalMessage);
+			anyWriterWrapper.SetWriter(null);
 		}
 
 		/// <summary>
@@ -87,9 +87,9 @@ namespace MKY.Utilities.Diagnostics
 		/// </summary>
 		public static void WriteWindowsFormsMessage(TextWriter writer, object obj, Message m, string additionalMessage)
 		{
-			_anyWriterWrapper.SetWriter(writer);
-			DiagnosticsWriterOutput.WriteWindowsFormsMessage(_anyWriterWrapper, obj, m, additionalMessage);
-			_anyWriterWrapper.SetWriter(null);
+			anyWriterWrapper.SetWriter(writer);
+			DiagnosticsWriterOutput.WriteWindowsFormsMessage(anyWriterWrapper, obj, m, additionalMessage);
+			anyWriterWrapper.SetWriter(null);
 		}
 
 		/// <summary>
@@ -105,9 +105,9 @@ namespace MKY.Utilities.Diagnostics
 		/// </summary>
 		public static void WriteFileStream(TextWriter writer, object obj, FileStream fs, string additionalMessage)
 		{
-			_anyWriterWrapper.SetWriter(writer);
-			DiagnosticsWriterOutput.WriteFileStream(_anyWriterWrapper, obj, fs, additionalMessage);
-			_anyWriterWrapper.SetWriter(null);
+			anyWriterWrapper.SetWriter(writer);
+			DiagnosticsWriterOutput.WriteFileStream(anyWriterWrapper, obj, fs, additionalMessage);
+			anyWriterWrapper.SetWriter(null);
 		}
 	}
 }

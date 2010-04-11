@@ -39,16 +39,16 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const SocketHostType _DefaultHostType                     = SocketHostType.TcpAutoSocket;
+		private const SocketHostType DefaultHostType                     = SocketHostType.TcpAutoSocket;
 
-		private static readonly XIPHost _DefaultRemoteHost                = MKY.IO.Serial.SocketSettings.DefaultRemoteHost;
-		private static readonly IPAddress _DefaultResolvedRemoteIPAddress = MKY.IO.Serial.SocketSettings.DefaultResolvedRemoteIPAddress;
-		private const int _DefaultRemotePort                              = MKY.IO.Serial.SocketSettings.DefaultRemotePort;
+		private static readonly XIPHost DefaultRemoteHost                = MKY.IO.Serial.SocketSettings.DefaultRemoteHost;
+		private static readonly IPAddress DefaultResolvedRemoteIPAddress = MKY.IO.Serial.SocketSettings.DefaultResolvedRemoteIPAddress;
+		private const int DefaultRemotePort                              = MKY.IO.Serial.SocketSettings.DefaultRemotePort;
 
-		private static readonly XNetworkInterface _DefaultLocalInterface  = MKY.IO.Serial.SocketSettings.DefaultLocalInterface;
-		private static readonly IPAddress _DefaultResolvedLocalIPAddress  = MKY.IO.Serial.SocketSettings.DefaultResolvedLocalIPAddress;
-		private const int _DefaultLocalTcpPort                            = MKY.IO.Serial.SocketSettings.DefaultLocalTcpPort;
-		private const int _DefaultLocalUdpPort                            = MKY.IO.Serial.SocketSettings.DefaultLocalUdpPort;
+		private static readonly XNetworkInterface DefaultLocalInterface  = MKY.IO.Serial.SocketSettings.DefaultLocalInterface;
+		private static readonly IPAddress DefaultResolvedLocalIPAddress  = MKY.IO.Serial.SocketSettings.DefaultResolvedLocalIPAddress;
+		private const int DefaultLocalTcpPort                            = MKY.IO.Serial.SocketSettings.DefaultLocalTcpPort;
+		private const int DefaultLocalUdpPort                            = MKY.IO.Serial.SocketSettings.DefaultLocalUdpPort;
 
 		#endregion
 
@@ -57,18 +57,18 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool _isSettingControls = false;
+		private bool isSettingControls = false;
 
-		private SocketHostType _hostType = _DefaultHostType;
+		private SocketHostType hostType = DefaultHostType;
 
-		private XIPHost _remoteHost                = _DefaultRemoteHost;
-		private IPAddress _resolvedRemoteIPAddress = _DefaultResolvedRemoteIPAddress;
-		private int _remotePort                    = _DefaultRemotePort;
+		private XIPHost remoteHost                = DefaultRemoteHost;
+		private IPAddress resolvedRemoteIPAddress = DefaultResolvedRemoteIPAddress;
+		private int remotePort                    = DefaultRemotePort;
 
-		private XNetworkInterface _localInterface  = _DefaultLocalInterface;
-		private IPAddress _resolvedLocalIPAddress  = _DefaultResolvedLocalIPAddress;
-		private int _localTcpPort                  = _DefaultLocalTcpPort;
-		private int _localUdpPort                  = _DefaultLocalUdpPort;
+		private XNetworkInterface localInterface  = DefaultLocalInterface;
+		private IPAddress resolvedLocalIPAddress  = DefaultResolvedLocalIPAddress;
+		private int localTcpPort                  = DefaultLocalTcpPort;
+		private int localUdpPort                  = DefaultLocalUdpPort;
 
 		#endregion
 
@@ -122,9 +122,9 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				if (value != _hostType)
+				if (value != this.hostType)
 				{
-					_hostType = value;
+					this.hostType = value;
 					SetControls();
 				}
 			}
@@ -134,12 +134,12 @@ namespace YAT.Gui.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual XIPHost RemoteHost
 		{
-			get { return (_remoteHost); }
+			get { return (this.remoteHost); }
 			set
 			{
-				if (value != _remoteHost)
+				if (value != this.remoteHost)
 				{
-					_remoteHost = value;
+					this.remoteHost = value;
 					SetControls();
 					OnRemoteHostChanged(new EventArgs());
 				}
@@ -150,20 +150,20 @@ namespace YAT.Gui.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual IPAddress ResolvedRemoteIPAddress
 		{
-			get { return (_resolvedRemoteIPAddress); }
+			get { return (this.resolvedRemoteIPAddress); }
 		}
 
 		[Category("Socket")]
 		[Description("The remote TCP or UDP port.")]
-		[DefaultValue(_DefaultRemotePort)]
+		[DefaultValue(DefaultRemotePort)]
 		public virtual int RemotePort
 		{
-			get { return (_remotePort); }
+			get { return (this.remotePort); }
 			set
 			{
-				if (value != _remotePort)
+				if (value != this.remotePort)
 				{
-					_remotePort = value;
+					this.remotePort = value;
 					SetControls();
 					OnRemotePortChanged(new EventArgs());
 				}
@@ -174,12 +174,12 @@ namespace YAT.Gui.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual string LocalInterface
 		{
-			get { return (_localInterface); }
+			get { return (this.localInterface); }
 			set
 			{
-				if (value != _localInterface)
+				if (value != this.localInterface)
 				{
-					_localInterface = value;
+					this.localInterface = value;
 					SetControls();
 					OnLocalInterfaceChanged(new EventArgs());
 				}
@@ -190,20 +190,20 @@ namespace YAT.Gui.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual IPAddress ResolvedLocalIPAddress
 		{
-			get { return (_resolvedLocalIPAddress); }
+			get { return (this.resolvedLocalIPAddress); }
 		}
 
 		[Category("Socket")]
 		[Description("The local TCP port.")]
-		[DefaultValue(_DefaultLocalTcpPort)]
+		[DefaultValue(DefaultLocalTcpPort)]
 		public virtual int LocalTcpPort
 		{
-			get { return (_localTcpPort); }
+			get { return (this.localTcpPort); }
 			set
 			{
-				if (value != _localTcpPort)
+				if (value != this.localTcpPort)
 				{
-					_localTcpPort = value;
+					this.localTcpPort = value;
 					SetControls();
 					OnLocalTcpPortChanged(new EventArgs());
 				}
@@ -212,15 +212,15 @@ namespace YAT.Gui.Controls
 
 		[Category("Socket")]
 		[Description("The local UDP port.")]
-		[DefaultValue(_DefaultLocalUdpPort)]
+		[DefaultValue(DefaultLocalUdpPort)]
 		public virtual int LocalUdpPort
 		{
-			get { return (_localUdpPort); }
+			get { return (this.localUdpPort); }
 			set
 			{
-				if (value != _localUdpPort)
+				if (value != this.localUdpPort)
 				{
-					_localUdpPort = value;
+					this.localUdpPort = value;
 					SetControls();
 					OnLocalUdpPortChanged(new EventArgs());
 				}
@@ -237,16 +237,16 @@ namespace YAT.Gui.Controls
 		/// <summary>
 		/// Startup flag only used in the following event handler.
 		/// </summary>
-		private bool _isStartingUp = true;
+		private bool isStartingUp = true;
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
 		private void SocketSelection_Paint(object sender, PaintEventArgs e)
 		{
-			if (_isStartingUp)
+			if (this.isStartingUp)
 			{
-				_isStartingUp = false;
+				this.isStartingUp = false;
 
 				InitializeControls();
 				SetLocalInterfaceList();
@@ -259,7 +259,7 @@ namespace YAT.Gui.Controls
 		/// </summary>
 		private void SocketSelection_EnabledChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				SetControls();
 		}
 
@@ -272,7 +272,7 @@ namespace YAT.Gui.Controls
 
 		private void comboBox_RemoteHost_Validating(object sender, CancelEventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				// \attention
 				// Do not assume that the selected item maches the actual text in the box
@@ -283,7 +283,7 @@ namespace YAT.Gui.Controls
 					(host.ToString() == comboBox_RemoteHost.Text))
 				{
 					RemoteHost = host;
-					_resolvedRemoteIPAddress = host.IPAddress;
+					this.resolvedRemoteIPAddress = host.IPAddress;
 				}
 				else
 				{
@@ -293,8 +293,8 @@ namespace YAT.Gui.Controls
 
 					if (IPAddress.TryParse(nameOrAddress, out ipAddress))
 					{
-						_resolvedRemoteIPAddress = ipAddress;
-						RemoteHost = new XIPHost(_resolvedRemoteIPAddress);
+						this.resolvedRemoteIPAddress = ipAddress;
+						RemoteHost = new XIPHost(this.resolvedRemoteIPAddress);
 					}
 					else
 					{
@@ -302,8 +302,8 @@ namespace YAT.Gui.Controls
 						{
 							IPAddress[] ipAddresses;
 							ipAddresses = Dns.GetHostAddresses(nameOrAddress);
-							_resolvedRemoteIPAddress = ipAddresses[0];
-							RemoteHost = new XIPHost(_resolvedRemoteIPAddress);
+							this.resolvedRemoteIPAddress = ipAddresses[0];
+							RemoteHost = new XIPHost(this.resolvedRemoteIPAddress);
 						}
 						catch (Exception ex)
 						{
@@ -325,7 +325,7 @@ namespace YAT.Gui.Controls
 
 		private void textBox_RemotePort_Validating(object sender, CancelEventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				int port;
 				if (int.TryParse(textBox_RemotePort.Text, out port) &&
@@ -334,7 +334,7 @@ namespace YAT.Gui.Controls
 					RemotePort = port;
 
 					// Also set local port to same number
-					if ((_hostType == SocketHostType.TcpClient) || (_hostType == SocketHostType.TcpAutoSocket) || (_hostType == SocketHostType.Udp))
+					if ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket) || (this.hostType == SocketHostType.Udp))
 					{
 						LocalTcpPort = port;
 
@@ -363,10 +363,10 @@ namespace YAT.Gui.Controls
 
 		private void comboBox_LocalInterface_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				_localInterface = comboBox_LocalInterface.SelectedItem as XNetworkInterface;
-				_resolvedLocalIPAddress = _localInterface.IPAddress;
+				this.localInterface = comboBox_LocalInterface.SelectedItem as XNetworkInterface;
+				this.resolvedLocalIPAddress = this.localInterface.IPAddress;
 			}
 		}
 
@@ -377,7 +377,7 @@ namespace YAT.Gui.Controls
 
 		private void textBox_LocalPort_Validating(object sender, CancelEventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				int port;
 				if (int.TryParse(textBox_LocalPort.Text, out port) &&
@@ -387,7 +387,7 @@ namespace YAT.Gui.Controls
 					LocalUdpPort = port;
 
 					// Also set remote port to same number
-					if (_hostType == SocketHostType.TcpServer)
+					if (this.hostType == SocketHostType.TcpServer)
 					{
 						RemotePort = port;
 					}
@@ -418,20 +418,20 @@ namespace YAT.Gui.Controls
 
 		private void InitializeControls()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
 			// Remote host.
 			comboBox_RemoteHost.Items.Clear();
 			comboBox_RemoteHost.Items.AddRange(XIPHost.GetItems());
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void SetLocalInterfaceList()
 		{
 			if (Enabled)
 			{
-				_isSettingControls = true;
+				this.isSettingControls = true;
 
 				XNetworkInterface old = comboBox_LocalInterface.SelectedItem as XNetworkInterface;
 
@@ -443,8 +443,8 @@ namespace YAT.Gui.Controls
 
 				if (comboBox_LocalInterface.Items.Count > 0)
 				{
-					if ((_localInterface != null) && (localInterfaces.Contains(_localInterface)))
-						comboBox_LocalInterface.SelectedItem = _localInterface;
+					if ((this.localInterface != null) && (localInterfaces.Contains(this.localInterface)))
+						comboBox_LocalInterface.SelectedItem = this.localInterface;
 					else if ((old != null) && (localInterfaces.Contains(old)))
 						comboBox_LocalInterface.SelectedItem = old;
 					else
@@ -465,19 +465,19 @@ namespace YAT.Gui.Controls
 						);
 				}
 
-				_isSettingControls = false;
+				this.isSettingControls = false;
 			}
 		}
 
 		private void SetControls()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
 			// Remote host address.
-			if (Enabled && ((_hostType == SocketHostType.TcpClient) || (_hostType == SocketHostType.TcpAutoSocket) || (_hostType == SocketHostType.Udp)))
+			if (Enabled && ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket) || (this.hostType == SocketHostType.Udp)))
 			{
 				comboBox_RemoteHost.Enabled = true;
-				comboBox_RemoteHost.Text = _remoteHost;
+				comboBox_RemoteHost.Text = this.remoteHost;
 			}
 			else
 			{
@@ -486,16 +486,16 @@ namespace YAT.Gui.Controls
 			}
 
 			// Remote port label.
-			if (Enabled && (_hostType == SocketHostType.Udp))
+			if (Enabled && (this.hostType == SocketHostType.Udp))
 				label_RemotePort.Text = "Remote UDP port:";
 			else
 				label_RemotePort.Text = "Remote TCP port:";
 
 			// Remote port.
-			if (Enabled && ((_hostType == SocketHostType.TcpClient) || (_hostType == SocketHostType.TcpAutoSocket) || (_hostType == SocketHostType.Udp)))
+			if (Enabled && ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket) || (this.hostType == SocketHostType.Udp)))
 			{
 				textBox_RemotePort.Enabled = true;
-				textBox_RemotePort.Text = _remotePort.ToString();
+				textBox_RemotePort.Text = this.remotePort.ToString();
 			}
 			else
 			{
@@ -504,26 +504,26 @@ namespace YAT.Gui.Controls
 			}
 
 			// Local interface.
-			if (Enabled && (_hostType != SocketHostType.Unknown))
-				comboBox_LocalInterface.Text = _localInterface;
+			if (Enabled && (this.hostType != SocketHostType.Unknown))
+				comboBox_LocalInterface.Text = this.localInterface;
 			else
 				comboBox_LocalInterface.SelectedIndex = -1;
 
 			// Local port label.
-			if (Enabled && (_hostType == SocketHostType.Udp))
+			if (Enabled && (this.hostType == SocketHostType.Udp))
 				label_LocalPort.Text = "Local UDP port:";
 			else
 				label_LocalPort.Text = "Local TCP port:";
 
 			// Local port.
-			if (Enabled && ((_hostType == SocketHostType.TcpServer) || (_hostType == SocketHostType.TcpAutoSocket)))
-				textBox_LocalPort.Text = _localTcpPort.ToString();
-			else if (Enabled && (_hostType == SocketHostType.Udp))
-				textBox_LocalPort.Text = _localUdpPort.ToString();
+			if (Enabled && ((this.hostType == SocketHostType.TcpServer) || (this.hostType == SocketHostType.TcpAutoSocket)))
+				textBox_LocalPort.Text = this.localTcpPort.ToString();
+			else if (Enabled && (this.hostType == SocketHostType.Udp))
+				textBox_LocalPort.Text = this.localUdpPort.ToString();
 			else
 				textBox_LocalPort.Text = "";
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		#endregion

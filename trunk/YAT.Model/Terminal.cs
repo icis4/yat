@@ -44,7 +44,7 @@ namespace YAT.Model
 		// Constants
 		//==========================================================================================
 
-		private const string _TerminalText = "Terminal";
+		private const string TerminalText = "Terminal";
 
 		#endregion
 
@@ -57,7 +57,7 @@ namespace YAT.Model
 		/// Static counter to number terminals. Counter is incremented before first use, first
 		/// terminal therefore is "Terminal1".
 		/// </summary>
-		private static int _terminalIdCounter = 0;
+		private static int staticTerminalIdCounter = 0;
 
 		#endregion
 
@@ -66,29 +66,29 @@ namespace YAT.Model
 		// Fields
 		//==========================================================================================
 
-		private bool _isDisposed;
+		private bool isDisposed;
 
-		private Guid _guid;
-		private string _userName;
+		private Guid guid;
+		private string userName;
 
 		// settings
-		private DocumentSettingsHandler<TerminalSettingsRoot> _settingsHandler;
-		private TerminalSettingsRoot _settingsRoot;
+		private DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler;
+		private TerminalSettingsRoot settingsRoot;
 
 		// terminal
-		private Domain.Terminal _terminal;
+		private Domain.Terminal terminal;
 
 		// logs
-		private Log.Logs _log;
+		private Log.Logs log;
 
 		// time status
-		private Chronometer _ioConnectChrono;
+		private Chronometer ioConnectChrono;
 
 		// count status
-		private int _txByteCount;
-		private int _rxByteCount;
-		private int _txLineCount;
-		private int _rxLineCount;
+		private int txByteCount;
+		private int rxByteCount;
+		private int txLineCount;
+		private int rxLineCount;
 
 		#endregion
 
@@ -168,34 +168,34 @@ namespace YAT.Model
 		public Terminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler, Guid guid)
 		{
 			if (guid != Guid.Empty)
-				_guid = guid;
+				this.guid = guid;
 			else
-				_guid = Guid.NewGuid();
+				this.guid = Guid.NewGuid();
 
 			// link and attach to settings
-			_settingsHandler = settingsHandler;
-			_settingsRoot = _settingsHandler.Settings;
-			_settingsRoot.ClearChanged();
+			this.settingsHandler = settingsHandler;
+			this.settingsRoot = this.settingsHandler.Settings;
+			this.settingsRoot.ClearChanged();
 			AttachSettingsEventHandlers();
 
 			// set user name
-			_terminalIdCounter++;
-			if (!_settingsHandler.SettingsFilePathIsValid || _settingsRoot.AutoSaved)
-				_userName = _TerminalText + _terminalIdCounter.ToString();
+			staticTerminalIdCounter++;
+			if (!this.settingsHandler.SettingsFilePathIsValid || this.settingsRoot.AutoSaved)
+				this.userName = TerminalText + staticTerminalIdCounter.ToString();
 			else
-				UserNameFromFile = _settingsHandler.SettingsFilePath;
+				UserNameFromFile = this.settingsHandler.SettingsFilePath;
 
 			// Create underlying terminal
-			_terminal = Domain.TerminalFactory.CreateTerminal(_settingsRoot.Terminal);
+			this.terminal = Domain.TerminalFactory.CreateTerminal(this.settingsRoot.Terminal);
 			AttachTerminalEventHandlers();
 
 			// Create log
-			_log = new Log.Logs(_settingsRoot.Log);
+			this.log = new Log.Logs(this.settingsRoot.Log);
 
 			// Create chrono
-			_ioConnectChrono = new Chronometer();
-			_ioConnectChrono.Interval = 1000;
-			_ioConnectChrono.TimeSpanChanged += new EventHandler<TimeSpanEventArgs>(_ioConnectChrono_TimeSpanChanged);
+			this.ioConnectChrono = new Chronometer();
+			this.ioConnectChrono.Interval = 1000;
+			this.ioConnectChrono.TimeSpanChanged += new EventHandler<TimeSpanEventArgs>(this.ioConnectChrono_TimeSpanChanged);
 		}
 
 		#region Disposal
@@ -213,7 +213,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!_isDisposed)
+			if (!this.isDisposed)
 			{
 				if (disposing)
 				{
@@ -222,23 +222,23 @@ namespace YAT.Model
 					DetachSettingsEventHandlers();
 
 					// Then, dispose of objects
-					if (_ioConnectChrono != null)
+					if (this.ioConnectChrono != null)
 					{
-						_ioConnectChrono.Dispose();
-						_ioConnectChrono = null;
+						this.ioConnectChrono.Dispose();
+						this.ioConnectChrono = null;
 					}
-					if (_log != null)
+					if (this.log != null)
 					{
-						_log.Dispose();
-						_log = null;
+						this.log.Dispose();
+						this.log = null;
 					}
-					if (_terminal != null)
+					if (this.terminal != null)
 					{
-						_terminal.Dispose();
-						_terminal = null;
+						this.terminal.Dispose();
+						this.terminal = null;
 					}
 				}
-				_isDisposed = true;
+				this.isDisposed = true;
 			}
 		}
 
@@ -251,13 +251,13 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected bool IsDisposed
 		{
-			get { return (_isDisposed); }
+			get { return (this.isDisposed); }
 		}
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (_isDisposed)
+			if (this.isDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
 		}
 
@@ -276,7 +276,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_guid);
+				return (this.guid);
 			}
 		}
 
@@ -286,7 +286,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_userName);
+				return (this.userName);
 			}
 		}
 
@@ -294,7 +294,7 @@ namespace YAT.Model
 		{
 			set
 			{
-				_userName = Path.GetFileNameWithoutExtension(value);
+				this.userName = Path.GetFileNameWithoutExtension(value);
 			}
 		}
 
@@ -304,7 +304,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_terminal.IsStarted);
+				return (this.terminal.IsStarted);
 			}
 		}
 
@@ -314,7 +314,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_terminal.IsOpen);
+				return (this.terminal.IsOpen);
 			}
 		}
 
@@ -324,7 +324,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_terminal.IsConnected);
+				return (this.terminal.IsConnected);
 			}
 		}
 
@@ -334,7 +334,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_log.IsStarted);
+				return (this.log.IsStarted);
 			}
 		}
 
@@ -344,7 +344,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_terminal.UnderlyingIOProvider);
+				return (this.terminal.UnderlyingIOProvider);
 			}
 		}
 
@@ -354,7 +354,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_terminal.UnderlyingIOInstance);
+				return (this.terminal.UnderlyingIOInstance);
 			}
 		}
 
@@ -371,11 +371,11 @@ namespace YAT.Model
 		public virtual void Start()
 		{
 			// begin logging (in case opening of terminal needs to be logged)
-			if (_settingsRoot.LogIsStarted)
+			if (this.settingsRoot.LogIsStarted)
 				BeginLog();
 
 			// then open terminal
-			if (_settingsRoot.TerminalIsStarted)
+			if (this.settingsRoot.TerminalIsStarted)
 				StartIO();
 		}
 
@@ -385,16 +385,16 @@ namespace YAT.Model
 		public virtual void SetSettings(Domain.Settings.TerminalSettings settings)
 		{
 			// Settings have changed, recreate terminal with new settings
-			if (_terminal.IsStarted)
+			if (this.terminal.IsStarted)
 			{
 				// Terminal is open, re-open it with the new settings
 				if (StopIO(false))
 				{
 					DetachTerminalEventHandlers();    // Detach to suspend events
-					_settingsRoot.Terminal = settings;
-					_terminal = Domain.TerminalFactory.RecreateTerminal(_settingsRoot.Terminal, _terminal);
+					this.settingsRoot.Terminal = settings;
+					this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Terminal, this.terminal);
 					AttachTerminalEventHandlers();    // Attach and resume events
-					_terminal.ReloadRepositories();
+					this.terminal.ReloadRepositories();
 
 					StartIO(false);
 
@@ -409,10 +409,10 @@ namespace YAT.Model
 			{
 				// Terminal is closed, simply set the new settings
 				DetachTerminalEventHandlers();        // Detach to suspend events
-				_settingsRoot.Terminal = settings;
-				_terminal = Domain.TerminalFactory.RecreateTerminal(_settingsRoot.Terminal, _terminal);
+				this.settingsRoot.Terminal = settings;
+				this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Terminal, this.terminal);
 				AttachTerminalEventHandlers();        // Attach and resume events
-				_terminal.ReloadRepositories();
+				this.terminal.ReloadRepositories();
 
 				OnTimedStatusTextRequest("Terminal settings applied.");
 			}
@@ -423,8 +423,8 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SetLogSettings(Log.Settings.LogSettings settings)
 		{
-			_settingsRoot.Log = settings;
-			_log.Settings = _settingsRoot.Log;
+			this.settingsRoot.Log = settings;
+			this.log.Settings = this.settingsRoot.Log;
 		}
 
 		#endregion
@@ -441,14 +441,14 @@ namespace YAT.Model
 
 		private void AttachSettingsEventHandlers()
 		{
-			if (_settingsRoot != null)
-				_settingsRoot.Changed += new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
+			if (this.settingsRoot != null)
+				this.settingsRoot.Changed += new EventHandler<SettingsEventArgs>(this.settingsRoot_Changed);
 		}
 
 		private void DetachSettingsEventHandlers()
 		{
-			if (_settingsRoot != null)
-				_settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
+			if (this.settingsRoot != null)
+				this.settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(this.settingsRoot_Changed);
 		}
 
 		#endregion
@@ -458,9 +458,9 @@ namespace YAT.Model
 		// Settings > Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		private void _settingsRoot_Changed(object sender, SettingsEventArgs e)
+		private void settingsRoot_Changed(object sender, SettingsEventArgs e)
 		{
-			// Nothing to do yet
+			// Nothing to do yet.
 		}
 
 		#endregion
@@ -476,7 +476,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_settingsHandler.SettingsFileExists);
+				return (this.settingsHandler.SettingsFileExists);
 			}
 		}
 
@@ -486,7 +486,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_settingsHandler.SettingsFilePath);
+				return (this.settingsHandler.SettingsFilePath);
 			}
 		}
 
@@ -496,7 +496,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_settingsRoot);
+				return (this.settingsRoot);
 			}
 		}
 
@@ -506,7 +506,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_settingsRoot.Window);
+				return (this.settingsRoot.Window);
 			}
 		}
 
@@ -526,7 +526,7 @@ namespace YAT.Model
 		private bool TryAutoSave()
 		{
 			bool success = false;
-			if (_settingsHandler.SettingsFileExists && !_settingsRoot.AutoSaved)
+			if (this.settingsHandler.SettingsFileExists && !this.settingsRoot.AutoSaved)
 				success = SaveToFile(false);
 			else
 				success = SaveToFile(true);
@@ -551,9 +551,9 @@ namespace YAT.Model
 			bool success = false;
 
 			// Save terminal if file path is valid
-			if (_settingsHandler.SettingsFilePathIsValid)
+			if (this.settingsHandler.SettingsFilePathIsValid)
 			{
-				if (_settingsHandler.Settings.AutoSaved)
+				if (this.settingsHandler.Settings.AutoSaved)
 				{
 					if (autoSaveIsAllowed)
 						success = SaveToFile(true);
@@ -584,10 +584,10 @@ namespace YAT.Model
 			AssertNotDisposed();
 
 			string autoSaveFilePathToDelete = "";
-			if (_settingsRoot.AutoSaved)
-				autoSaveFilePathToDelete = _settingsHandler.SettingsFilePath;
+			if (this.settingsRoot.AutoSaved)
+				autoSaveFilePathToDelete = this.settingsHandler.SettingsFilePath;
 
-			_settingsHandler.SettingsFilePath = filePath;
+			this.settingsHandler.SettingsFilePath = filePath;
 			return (SaveToFile(false, autoSaveFilePathToDelete));
 		}
 
@@ -602,10 +602,10 @@ namespace YAT.Model
 			// Skip save if file is up to date and there were no changes
 			// -------------------------------------------------------------------------------------
 
-			if (_settingsHandler.SettingsFileIsUpToDate && (!_settingsRoot.HaveChanged))
+			if (this.settingsHandler.SettingsFileIsUpToDate && (!this.settingsRoot.HaveChanged))
 			{
 				// Event must be fired anyway to ensure that dependent objects are updated
-				OnSaved(new SavedEventArgs(_settingsHandler.SettingsFilePath, doAutoSave));
+				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, doAutoSave));
 				return (true);
 			}
 
@@ -618,26 +618,26 @@ namespace YAT.Model
 			if (!doAutoSave)
 				OnFixedStatusTextRequest("Saving terminal...");
 
-			if (doAutoSave && (!_settingsHandler.SettingsFilePathIsValid))
+			if (doAutoSave && (!this.settingsHandler.SettingsFilePathIsValid))
 			{
 				string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveTerminalFileNamePrefix + Guid.ToString() + ExtensionSettings.TerminalFile;
-				_settingsHandler.SettingsFilePath = autoSaveFilePath;
+				this.settingsHandler.SettingsFilePath = autoSaveFilePath;
 			}
 
 			try
 			{
-				_settingsHandler.Settings.AutoSaved = doAutoSave;
-				_settingsHandler.Save();
+				this.settingsHandler.Settings.AutoSaved = doAutoSave;
+				this.settingsHandler.Save();
 
 				if (!doAutoSave)
-					UserNameFromFile = _settingsHandler.SettingsFilePath;
+					UserNameFromFile = this.settingsHandler.SettingsFilePath;
 
 				success = true;
-				OnSaved(new SavedEventArgs(_settingsHandler.SettingsFilePath, doAutoSave));
+				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, doAutoSave));
 
 				if (!doAutoSave)
 				{
-					SetRecent(_settingsHandler.SettingsFilePath);
+					SetRecent(this.settingsHandler.SettingsFilePath);
 					OnTimedStatusTextRequest("Terminal saved");
 				}
 
@@ -661,7 +661,7 @@ namespace YAT.Model
 					OnFixedStatusTextRequest("Error saving terminal!");
 					OnMessageInputRequest
 						(
-						"Unable to save file" + Environment.NewLine + _settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
+						"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
 						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
 						"File error message: " + ex.InnerException.Message,
 						"File Error",
@@ -717,7 +717,7 @@ namespace YAT.Model
 		public virtual bool Close(bool isWorkspaceClose, bool tryAutoSave)
 		{
 			// Don't try to auto save if there is no existing file (w1)
-			if (!isWorkspaceClose && !_settingsHandler.SettingsFileExists)
+			if (!isWorkspaceClose && !this.settingsHandler.SettingsFileExists)
 				tryAutoSave = false;
 
 			OnFixedStatusTextRequest("Closing terminal...");
@@ -732,16 +732,16 @@ namespace YAT.Model
 			if (!success)
 			{
 				// No file (w1, w3, t1, t3)
-				if (!_settingsHandler.SettingsFileExists)
+				if (!this.settingsHandler.SettingsFileExists)
 				{
 					success = true; // Consider it successful if there was no file to save
 				}
 				// Existing file
 				else
 				{
-					if (_settingsRoot.AutoSaved) // Existing auto file (w2a/b, t2)
+					if (this.settingsRoot.AutoSaved) // Existing auto file (w2a/b, t2)
 					{
-						_settingsHandler.Delete();
+						this.settingsHandler.Delete();
 						success = true; // Don't care if auto file not successfully deleted
 					}
 
@@ -749,7 +749,7 @@ namespace YAT.Model
 				}
 
 				// Normal (w4a/b, t4a/b)
-				if (!success && _settingsRoot.ExplicitHaveChanged)
+				if (!success && this.settingsRoot.ExplicitHaveChanged)
 				{
 					DialogResult dr = OnMessageInputRequest
 						(
@@ -777,11 +777,11 @@ namespace YAT.Model
 			} // End of if no success on auto save or auto save disabled
 
 			// Next, close underlying terminal
-			if (_terminal.IsStarted)
+			if (this.terminal.IsStarted)
 				success = StopIO(false);
 
 			// Last, close log
-			if (_log.IsStarted)
+			if (this.log.IsStarted)
 				EndLog();
 
 			if (success)
@@ -828,41 +828,41 @@ namespace YAT.Model
 
 		private void AttachTerminalEventHandlers()
 		{
-			if (_terminal != null)
+			if (this.terminal != null)
 			{
-				_terminal.IOChanged        += new EventHandler(_terminal_IOChanged);
-				_terminal.IOControlChanged += new EventHandler(_terminal_IOControlChanged);
-				_terminal.IORequest        += new EventHandler<Domain.IORequestEventArgs>(_terminal_IORequest);
-				_terminal.IOError          += new EventHandler<Domain.IOErrorEventArgs>(_terminal_IOError);
+				this.terminal.IOChanged        += new EventHandler(this.terminal_IOChanged);
+				this.terminal.IOControlChanged += new EventHandler(this.terminal_IOControlChanged);
+				this.terminal.IORequest        += new EventHandler<Domain.IORequestEventArgs>(this.terminal_IORequest);
+				this.terminal.IOError          += new EventHandler<Domain.IOErrorEventArgs>(this.terminal_IOError);
 
-				_terminal.RawElementSent          += new EventHandler<Domain.RawElementEventArgs>(_terminal_RawElementSent);
-				_terminal.RawElementReceived      += new EventHandler<Domain.RawElementEventArgs>(_terminal_RawElementReceived);
-				_terminal.DisplayElementsSent     += new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsSent);
-				_terminal.DisplayElementsReceived += new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsReceived);
-				_terminal.DisplayLinesSent        += new EventHandler<Domain.DisplayLinesEventArgs>(_terminal_DisplayLinesSent);
-				_terminal.DisplayLinesReceived    += new EventHandler<Domain.DisplayLinesEventArgs>(_terminal_DisplayLinesReceived);
-				_terminal.RepositoryCleared       += new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryCleared);
-				_terminal.RepositoryReloaded      += new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryReloaded);
+				this.terminal.RawElementSent          += new EventHandler<Domain.RawElementEventArgs>(this.terminal_RawElementSent);
+				this.terminal.RawElementReceived      += new EventHandler<Domain.RawElementEventArgs>(this.terminal_RawElementReceived);
+				this.terminal.DisplayElementsSent     += new EventHandler<Domain.DisplayElementsEventArgs>(this.terminal_DisplayElementsSent);
+				this.terminal.DisplayElementsReceived += new EventHandler<Domain.DisplayElementsEventArgs>(this.terminal_DisplayElementsReceived);
+				this.terminal.DisplayLinesSent        += new EventHandler<Domain.DisplayLinesEventArgs>(this.terminal_DisplayLinesSent);
+				this.terminal.DisplayLinesReceived    += new EventHandler<Domain.DisplayLinesEventArgs>(this.terminal_DisplayLinesReceived);
+				this.terminal.RepositoryCleared       += new EventHandler<Domain.RepositoryEventArgs>(this.terminal_RepositoryCleared);
+				this.terminal.RepositoryReloaded      += new EventHandler<Domain.RepositoryEventArgs>(this.terminal_RepositoryReloaded);
 			}
 		}
 
 		private void DetachTerminalEventHandlers()
 		{
-			if (_terminal != null)
+			if (this.terminal != null)
 			{
-				_terminal.IOChanged        -= new EventHandler(_terminal_IOChanged);
-				_terminal.IOControlChanged -= new EventHandler(_terminal_IOControlChanged);
-				_terminal.IORequest        -= new EventHandler<Domain.IORequestEventArgs>(_terminal_IORequest);
-				_terminal.IOError          -= new EventHandler<Domain.IOErrorEventArgs>(_terminal_IOError);
+				this.terminal.IOChanged        -= new EventHandler(this.terminal_IOChanged);
+				this.terminal.IOControlChanged -= new EventHandler(this.terminal_IOControlChanged);
+				this.terminal.IORequest        -= new EventHandler<Domain.IORequestEventArgs>(this.terminal_IORequest);
+				this.terminal.IOError          -= new EventHandler<Domain.IOErrorEventArgs>(this.terminal_IOError);
 
-				_terminal.RawElementSent          -= new EventHandler<Domain.RawElementEventArgs>(_terminal_RawElementSent);
-				_terminal.RawElementReceived      -= new EventHandler<Domain.RawElementEventArgs>(_terminal_RawElementReceived);
-				_terminal.DisplayElementsSent     -= new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsSent);
-				_terminal.DisplayElementsReceived -= new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsReceived);
-				_terminal.DisplayLinesSent        -= new EventHandler<Domain.DisplayLinesEventArgs>(_terminal_DisplayLinesSent);
-				_terminal.DisplayLinesReceived    -= new EventHandler<Domain.DisplayLinesEventArgs>(_terminal_DisplayLinesReceived);
-				_terminal.RepositoryCleared       -= new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryCleared);
-				_terminal.RepositoryReloaded      -= new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryReloaded);
+				this.terminal.RawElementSent          -= new EventHandler<Domain.RawElementEventArgs>(this.terminal_RawElementSent);
+				this.terminal.RawElementReceived      -= new EventHandler<Domain.RawElementEventArgs>(this.terminal_RawElementReceived);
+				this.terminal.DisplayElementsSent     -= new EventHandler<Domain.DisplayElementsEventArgs>(this.terminal_DisplayElementsSent);
+				this.terminal.DisplayElementsReceived -= new EventHandler<Domain.DisplayElementsEventArgs>(this.terminal_DisplayElementsReceived);
+				this.terminal.DisplayLinesSent        -= new EventHandler<Domain.DisplayLinesEventArgs>(this.terminal_DisplayLinesSent);
+				this.terminal.DisplayLinesReceived    -= new EventHandler<Domain.DisplayLinesEventArgs>(this.terminal_DisplayLinesReceived);
+				this.terminal.RepositoryCleared       -= new EventHandler<Domain.RepositoryEventArgs>(this.terminal_RepositoryCleared);
+				this.terminal.RepositoryReloaded      -= new EventHandler<Domain.RepositoryEventArgs>(this.terminal_RepositoryReloaded);
 			}
 		}
 
@@ -877,64 +877,64 @@ namespace YAT.Model
 		/// Local field to maintain connection state in order to be able to detect a change of the
 		/// connection state.
 		/// </summary>
-		private bool _terminal_IOChanged_isConnected;
+		private bool terminal_IOChanged_isConnected;
 
-		private void _terminal_IOChanged(object sender, EventArgs e)
+		private void terminal_IOChanged(object sender, EventArgs e)
 		{
 			OnIOChanged(e);
 
-			if      ( _terminal.IsConnected && !_terminal_IOChanged_isConnected)
-				_ioConnectChrono.Start();
-			else if (!_terminal.IsConnected &&  _terminal_IOChanged_isConnected)
-				_ioConnectChrono.Stop();
+			if      ( this.terminal.IsConnected && !this.terminal_IOChanged_isConnected)
+				this.ioConnectChrono.Start();
+			else if (!this.terminal.IsConnected &&  this.terminal_IOChanged_isConnected)
+				this.ioConnectChrono.Stop();
 
-			_terminal_IOChanged_isConnected = _terminal.IsConnected;
+			this.terminal_IOChanged_isConnected = this.terminal.IsConnected;
 		}
 
-		private void _terminal_IOControlChanged(object sender, EventArgs e)
+		private void terminal_IOControlChanged(object sender, EventArgs e)
 		{
 			OnIOControlChanged(e);
 		}
 
-		private void _terminal_IORequest(object sender, Domain.IORequestEventArgs e)
+		private void terminal_IORequest(object sender, Domain.IORequestEventArgs e)
 		{
 			OnIORequest(e);
 		}
 
-		private void _terminal_IOError(object sender, Domain.IOErrorEventArgs e)
+		private void terminal_IOError(object sender, Domain.IOErrorEventArgs e)
 		{
 			OnIOError(e);
 		}
 
-		private void _terminal_RawElementSent(object sender, Domain.RawElementEventArgs e)
+		private void terminal_RawElementSent(object sender, Domain.RawElementEventArgs e)
 		{
 			// Count
-			_txByteCount += e.Element.Data.Length;
+			this.txByteCount += e.Element.Data.Length;
 			OnIOCountChanged(new EventArgs());
 
 			// Log
-			if (_log.IsStarted)
+			if (this.log.IsStarted)
 			{
-				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawTx);
-				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawBidir);
+				this.log.WriteBytes(e.Element.Data, Log.LogStreams.RawTx);
+				this.log.WriteBytes(e.Element.Data, Log.LogStreams.RawBidir);
 			}
 		}
 
-		private void _terminal_RawElementReceived(object sender, Domain.RawElementEventArgs e)
+		private void terminal_RawElementReceived(object sender, Domain.RawElementEventArgs e)
 		{
 			// Count
-			_rxByteCount += e.Element.Data.Length;
+			this.rxByteCount += e.Element.Data.Length;
 			OnIOCountChanged(new EventArgs());
 
 			// Log
-			if (_log.IsStarted)
+			if (this.log.IsStarted)
 			{
-				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawBidir);
-				_log.WriteBytes(e.Element.Data, Log.LogStreams.RawRx);
+				this.log.WriteBytes(e.Element.Data, Log.LogStreams.RawBidir);
+				this.log.WriteBytes(e.Element.Data, Log.LogStreams.RawRx);
 			}
 		}
 
-		private void _terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
+		private void terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			// Display
 			OnDisplayElementsSent(e);
@@ -942,23 +942,23 @@ namespace YAT.Model
 			// Log
 			foreach (Domain.DisplayElement de in e.Elements)
 			{
-				if (_log.IsStarted)
+				if (this.log.IsStarted)
 				{
 					if (de is Domain.DisplayElement.LineBreak)
 					{
-						_log.WriteEol(Log.LogStreams.NeatTx);
-						_log.WriteEol(Log.LogStreams.NeatBidir);
+						this.log.WriteEol(Log.LogStreams.NeatTx);
+						this.log.WriteEol(Log.LogStreams.NeatBidir);
 					}
 					else
 					{
-						_log.WriteString(de.Text, Log.LogStreams.NeatTx);
-						_log.WriteString(de.Text, Log.LogStreams.NeatBidir);
+						this.log.WriteString(de.Text, Log.LogStreams.NeatTx);
+						this.log.WriteString(de.Text, Log.LogStreams.NeatBidir);
 					}
 				}
 			}
 		}
 
-		private void _terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
+		private void terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			// Display
 			OnDisplayElementsReceived(e);
@@ -966,48 +966,48 @@ namespace YAT.Model
 			// Log
 			foreach (Domain.DisplayElement de in e.Elements)
 			{
-				if (_log.IsStarted)
+				if (this.log.IsStarted)
 				{
 					if (de is Domain.DisplayElement.LineBreak)
 					{
-						_log.WriteEol(Log.LogStreams.NeatBidir);
-						_log.WriteEol(Log.LogStreams.NeatRx);
+						this.log.WriteEol(Log.LogStreams.NeatBidir);
+						this.log.WriteEol(Log.LogStreams.NeatRx);
 					}
 					else
 					{
-						_log.WriteString(de.Text, Log.LogStreams.NeatBidir);
-						_log.WriteString(de.Text, Log.LogStreams.NeatRx);
+						this.log.WriteString(de.Text, Log.LogStreams.NeatBidir);
+						this.log.WriteString(de.Text, Log.LogStreams.NeatRx);
 					}
 				}
 			}
 		}
 
-		private void _terminal_DisplayLinesSent(object sender, Domain.DisplayLinesEventArgs e)
+		private void terminal_DisplayLinesSent(object sender, Domain.DisplayLinesEventArgs e)
 		{
 			// Count
-			_txLineCount += e.Lines.Count;
+			this.txLineCount += e.Lines.Count;
 			OnIOCountChanged(new EventArgs());
 
 			// Display
 			OnDisplayLinesSent(e);
 		}
 
-		private void _terminal_DisplayLinesReceived(object sender, Domain.DisplayLinesEventArgs e)
+		private void terminal_DisplayLinesReceived(object sender, Domain.DisplayLinesEventArgs e)
 		{
 			// Count
-			_rxLineCount += e.Lines.Count;
+			this.rxLineCount += e.Lines.Count;
 			OnIOCountChanged(new EventArgs());
 
 			// Display
 			OnDisplayLinesReceived(e);
 		}
 
-		private void _terminal_RepositoryCleared(object sender, Domain.RepositoryEventArgs e)
+		private void terminal_RepositoryCleared(object sender, Domain.RepositoryEventArgs e)
 		{
 			OnRepositoryCleared(e);
 		}
 
-		private void _terminal_RepositoryReloaded(object sender, Domain.RepositoryEventArgs e)
+		private void terminal_RepositoryReloaded(object sender, Domain.RepositoryEventArgs e)
 		{
 			OnRepositoryReloaded(e);
 		}
@@ -1039,10 +1039,10 @@ namespace YAT.Model
 			OnFixedStatusTextRequest("Starting terminal...");
 			try
 			{
-				if (_terminal.Start())
+				if (this.terminal.Start())
 				{
 					if (saveStatus)
-						_settingsRoot.TerminalIsStarted = _terminal.IsStarted;
+						this.settingsRoot.TerminalIsStarted = this.terminal.IsStarted;
 
 					OnTimedStatusTextRequest("Terminal started");
 					success = true;
@@ -1053,7 +1053,7 @@ namespace YAT.Model
 				OnFixedStatusTextRequest("Error starting terminal!");
 
 				string ioText;
-				if (_settingsRoot.IOType == Domain.IOType.SerialPort)
+				if (this.settingsRoot.IOType == Domain.IOType.SerialPort)
 					ioText = "Port";
 				else
 					ioText = "Socket";
@@ -1094,10 +1094,10 @@ namespace YAT.Model
 			OnFixedStatusTextRequest("Stopping terminal...");
 			try
 			{
-				_terminal.Stop();
+				this.terminal.Stop();
 
 				if (saveStatus)
-					_settingsRoot.TerminalIsStarted = _terminal.IsStarted;
+					this.settingsRoot.TerminalIsStarted = this.terminal.IsStarted;
 
 				OnTimedStatusTextRequest("Terminal stopped");
 				success = true;
@@ -1132,11 +1132,11 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void RequestToggleRts()
 		{
-			if (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual)
+			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual)
 			{
-				MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance;
+				MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)this.terminal.UnderlyingIOInstance;
 				port.ToggleRts();
-				_settingsRoot.Terminal.IO.SerialPort.RtsEnabled = port.RtsEnable;
+				this.settingsRoot.Terminal.IO.SerialPort.RtsEnabled = port.RtsEnable;
 			}
 		}
 
@@ -1145,11 +1145,11 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void RequestToggleDtr()
 		{
-			if (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual)
+			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual)
 			{
-				MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)_terminal.UnderlyingIOInstance;
+				MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)this.terminal.UnderlyingIOInstance;
 				port.ToggleDtr();
-				_settingsRoot.Terminal.IO.SerialPort.DtrEnabled = port.DtrEnable;
+				this.settingsRoot.Terminal.IO.SerialPort.DtrEnabled = port.DtrEnable;
 			}
 		}
 
@@ -1165,7 +1165,7 @@ namespace YAT.Model
 			OnFixedStatusTextRequest("Sending " + b.Length + " bytes...");
 			try
 			{
-				_terminal.Send(b);
+				this.terminal.Send(b);
 				OnTimedStatusTextRequest(b.Length + " bytes sent");
 			}
 			catch (System.IO.IOException ex)
@@ -1192,7 +1192,7 @@ namespace YAT.Model
 			OnFixedStatusTextRequest(@"Sending """ + s + @"""...");
 			try
 			{
-				_terminal.SendLine(s);
+				this.terminal.SendLine(s);
 				OnTimedStatusTextRequest(@"""" + s + @""" sent");
 			}
 			catch (System.IO.IOException ex)
@@ -1232,7 +1232,7 @@ namespace YAT.Model
 			StringBuilder titleBuilder = new StringBuilder();
 
 			textBuilder.Append("Unable to write to ");
-			switch (_settingsRoot.IOType)
+			switch (this.settingsRoot.IOType)
 			{
 				case Domain.IOType.SerialPort:
 					textBuilder.Append("port");
@@ -1253,7 +1253,7 @@ namespace YAT.Model
 					break;
 
 				default:
-					throw (new NotImplementedException("I/O type " + _settingsRoot.IOType + "misses implementation"));
+					throw (new NotImplementedException("I/O type " + this.settingsRoot.IOType + "misses implementation"));
 			}
 			textBuilder.Append(":");
 			titleBuilder.Append(" Error");
@@ -1274,15 +1274,15 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendCommand()
 		{
-			SendCommand(_settingsRoot.SendCommand.Command);
-			_settingsRoot.SendCommand.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
+			SendCommand(this.settingsRoot.SendCommand.Command);
+			this.settingsRoot.SendCommand.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
 				(
-				new RecentItem<Command>(new Command(_settingsRoot.SendCommand.Command))
+				new RecentItem<Command>(new Command(this.settingsRoot.SendCommand.Command))
 				);
 
 			// Clear command if desired
-			if (!_settingsRoot.Send.KeepCommand)
-				_settingsRoot.SendCommand.Command = new Command(); // set command to ""
+			if (!this.settingsRoot.Send.KeepCommand)
+				this.settingsRoot.SendCommand.Command = new Command(); // set command to ""
 		}
 
 		/// <summary>
@@ -1324,7 +1324,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendFile()
 		{
-			SendFile(_settingsRoot.SendFile.Command);
+			SendFile(this.settingsRoot.SendFile.Command);
 		}
 
 		/// <summary>
@@ -1340,7 +1340,7 @@ namespace YAT.Model
 
 			try
 			{
-				if (_terminal is Domain.TextTerminal)
+				if (this.terminal is Domain.TextTerminal)
 				{
 					string[] lines;
 					if (ExtensionSettings.IsXmlFile(System.IO.Path.GetExtension(filePath)))
@@ -1413,21 +1413,21 @@ namespace YAT.Model
 		/// <param name="command">Command 1..max</param>
 		public virtual void SendPredefined(int page, int command)
 		{
-			Model.Types.Command c = _settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
+			Model.Types.Command c = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
 
 			if (c.IsValidCommand)
 			{
 				SendCommand(c);
 
-				if (_settingsRoot.Send.CopyPredefined)
-					_settingsRoot.SendCommand.Command = new Command(c); // copy command if desired
+				if (this.settingsRoot.Send.CopyPredefined)
+					this.settingsRoot.SendCommand.Command = new Command(c); // copy command if desired
 			}
 			else if (c.IsValidFilePath)
 			{
 				SendFile(c);
 
-				if (_settingsRoot.Send.CopyPredefined)
-					_settingsRoot.SendFile.Command = new Command(c); // copy command if desired
+				if (this.settingsRoot.Send.CopyPredefined)
+					this.settingsRoot.SendFile.Command = new Command(c); // copy command if desired
 			}
 		}
 
@@ -1444,7 +1444,7 @@ namespace YAT.Model
 		public virtual void ReloadRepositories()
 		{
 			AssertNotDisposed();
-			_terminal.ReloadRepositories();
+			this.terminal.ReloadRepositories();
 		}
 
 		/// <summary>
@@ -1453,7 +1453,7 @@ namespace YAT.Model
 		public virtual List<Domain.DisplayLine> RepositoryToDisplayLines(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
-			return (_terminal.RepositoryToDisplayLines(repositoryType));
+			return (this.terminal.RepositoryToDisplayLines(repositoryType));
 		}
 
 		/// <summary>
@@ -1465,7 +1465,7 @@ namespace YAT.Model
 		public virtual string RepositoryToString(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
-			return (_terminal.RepositoryToString(repositoryType));
+			return (this.terminal.RepositoryToString(repositoryType));
 		}
 
 		/// <summary>
@@ -1474,7 +1474,7 @@ namespace YAT.Model
 		public virtual void ClearRepository(Domain.RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
-			_terminal.ClearRepository(repositoryType);
+			this.terminal.ClearRepository(repositoryType);
 		}
 
 		/// <summary>
@@ -1483,7 +1483,7 @@ namespace YAT.Model
 		public virtual void ClearRepositories()
 		{
 			AssertNotDisposed();
-			_terminal.ClearRepositories();
+			this.terminal.ClearRepositories();
 		}
 
 		#endregion
@@ -1499,7 +1499,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_ioConnectChrono.TimeSpan);
+				return (this.ioConnectChrono.TimeSpan);
 			}
 		}
 
@@ -1507,10 +1507,10 @@ namespace YAT.Model
 		public virtual void RestartIOConnectTime()
 		{
 			AssertNotDisposed();
-			_ioConnectChrono.Restart();
+			this.ioConnectChrono.Restart();
 		}
 
-		private void _ioConnectChrono_TimeSpanChanged(object sender, TimeSpanEventArgs e)
+		private void ioConnectChrono_TimeSpanChanged(object sender, TimeSpanEventArgs e)
 		{
 			OnIOConnectTimeChanged(e);
 		}
@@ -1525,34 +1525,34 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual int TxByteCount
 		{
-			get { return (_txByteCount); }
+			get { return (this.txByteCount); }
 		}
 
 		/// <summary></summary>
 		public virtual int TxLineCount
 		{
-			get { return (_txLineCount); }
+			get { return (this.txLineCount); }
 		}
 
 		/// <summary></summary>
 		public virtual int RxByteCount
 		{
-			get { return (_rxByteCount); }
+			get { return (this.rxByteCount); }
 		}
 
 		/// <summary></summary>
 		public virtual int RxLineCount
 		{
-			get { return (_rxLineCount); }
+			get { return (this.rxLineCount); }
 		}
 
 		/// <summary></summary>
 		public virtual void ResetIOCount()
 		{
-			_txByteCount = 0;
-			_txLineCount = 0;
-			_rxByteCount = 0;
-			_rxLineCount = 0;
+			this.txByteCount = 0;
+			this.txLineCount = 0;
+			this.rxByteCount = 0;
+			this.rxLineCount = 0;
 
 			OnIOCountChanged(new EventArgs());
 		}
@@ -1572,9 +1572,9 @@ namespace YAT.Model
 			try
 			{
 				// reapply settings NOW, makes sure date/time in filenames is refreshed
-				_log.Settings = _settingsRoot.Log;
-				_log.Begin();
-				_settingsRoot.LogIsStarted = true;
+				this.log.Settings = this.settingsRoot.Log;
+				this.log.Begin();
+				this.settingsRoot.LogIsStarted = true;
 			}
 			catch (System.IO.IOException ex)
 			{
@@ -1595,7 +1595,7 @@ namespace YAT.Model
 		{
 			try
 			{
-				_log.Clear();
+				this.log.Clear();
 			}
 			catch (System.IO.IOException ex)
 			{
@@ -1622,10 +1622,10 @@ namespace YAT.Model
 		{
 			try
 			{
-				_log.End();
+				this.log.End();
 
 				if (saveStatus)
-					_settingsRoot.LogIsStarted = false;
+					this.settingsRoot.LogIsStarted = false;
 			}
 			catch (System.IO.IOException ex)
 			{

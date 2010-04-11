@@ -46,7 +46,7 @@ namespace MKY.Windows.Forms
 		// Fields
 		//==========================================================================================
 
-		private static StatusBox _sb;
+		private static StatusBox staticStatusBox;
 
 		#endregion
 
@@ -184,25 +184,25 @@ namespace MKY.Windows.Forms
 		public static DialogResult Show(IWin32Window owner, string status1, string caption, string status2, string settingText, ref bool setting)
 		{
 			DialogResult dialogResult = DialogResult.OK;
-			_sb = new StatusBox(status1, caption, status2, settingText, setting);
+			staticStatusBox = new StatusBox(status1, caption, status2, settingText, setting);
 
 			ISynchronizeInvoke sinkTarget = owner as ISynchronizeInvoke;
 			if (sinkTarget != null)
 			{
 				if (sinkTarget.InvokeRequired)
 				{
-					ShowDialogDelegate del = new ShowDialogDelegate(_sb.ShowDialog);
+					ShowDialogDelegate del = new ShowDialogDelegate(staticStatusBox.ShowDialog);
 					object[] args = { owner };
 					dialogResult = (DialogResult)sinkTarget.Invoke(del, args);
 				}
 				else
 				{
-					dialogResult = _sb.ShowDialog(owner);
+					dialogResult = staticStatusBox.ShowDialog(owner);
 				}
-				setting = _sb.GetSetting();
+				setting = staticStatusBox.GetSetting();
 			}
 			
-			_sb = null;
+			staticStatusBox = null;
 			return (dialogResult);
 		}
 
@@ -211,18 +211,18 @@ namespace MKY.Windows.Forms
 		/// </summary>
 		public static void UpdateStatus1(string status)
 		{
-			ISynchronizeInvoke sinkTarget = _sb as ISynchronizeInvoke;
+			ISynchronizeInvoke sinkTarget = staticStatusBox as ISynchronizeInvoke;
 			if (sinkTarget != null)
 			{
 				if (sinkTarget.InvokeRequired)
 				{
-					StringMethodDelegate del = new StringMethodDelegate(_sb.SetStatus1);
+					StringMethodDelegate del = new StringMethodDelegate(staticStatusBox.SetStatus1);
 					object[] args = { status };
 					sinkTarget.Invoke(del, args);
 				}
 				else
 				{
-					_sb.SetStatus1(status);
+					staticStatusBox.SetStatus1(status);
 				}
 			}
 		}
@@ -232,18 +232,18 @@ namespace MKY.Windows.Forms
 		/// </summary>
 		public static void UpdateStatus2(string status)
 		{
-			ISynchronizeInvoke sinkTarget = _sb as ISynchronizeInvoke;
+			ISynchronizeInvoke sinkTarget = staticStatusBox as ISynchronizeInvoke;
 			if (sinkTarget != null)
 			{
 				if (sinkTarget.InvokeRequired)
 				{
-					StringMethodDelegate del = new StringMethodDelegate(_sb.SetStatus2);
+					StringMethodDelegate del = new StringMethodDelegate(staticStatusBox.SetStatus2);
 					object[] args = { status };
 					sinkTarget.Invoke(del, args);
 				}
 				else
 				{
-					_sb.SetStatus1(status);
+					staticStatusBox.SetStatus1(status);
 				}
 			}
 		}
@@ -253,19 +253,19 @@ namespace MKY.Windows.Forms
 		/// </summary>
 		public static void AcceptAndClose()
 		{
-			ISynchronizeInvoke sinkTarget = _sb as ISynchronizeInvoke;
+			ISynchronizeInvoke sinkTarget = staticStatusBox as ISynchronizeInvoke;
 			if (sinkTarget != null)
 			{
 				DialogResult dialogResult = DialogResult.OK;
 				if (sinkTarget.InvokeRequired)
 				{
-					DialogResultMethodDelegate del = new DialogResultMethodDelegate(_sb.RequestClose);
+					DialogResultMethodDelegate del = new DialogResultMethodDelegate(staticStatusBox.RequestClose);
 					object[] args = { dialogResult };
 					sinkTarget.Invoke(del, args);
 				}
 				else
 				{
-					_sb.RequestClose(dialogResult);
+					staticStatusBox.RequestClose(dialogResult);
 				}
 			}
 		}

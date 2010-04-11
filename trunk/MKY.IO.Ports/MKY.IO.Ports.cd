@@ -8,7 +8,7 @@
       <HashCode>AAAgAAABAQAAAgQEgECAAgQAAAAgIIAQAABgAABAByA=</HashCode>
     </TypeIdentifier>
     <Members>
-      <Field Name="_number" Hidden="true" />
+      <Field Name="this.number" Hidden="true" />
     </Members>
     <Lollipop Position="0.2" />
   </Class>
@@ -59,7 +59,7 @@
       <Property Name="PortSettings" />
     </ShowAsAssociation>
     <Members>
-      <Field Name="_isDisposed" Hidden="true" />
+      <Field Name="this.isDisposed" Hidden="true" />
       <Method Name="AssertNotDisposed" Hidden="true" />
       <Method Name="base_DataReceived" Hidden="true" />
       <Method Name="base_ErrorReceived" Hidden="true" />

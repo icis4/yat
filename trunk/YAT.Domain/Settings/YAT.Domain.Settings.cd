@@ -8,18 +8,18 @@
       <HashCode>AAgDgAAgAEAAAAAAgEBAAQACMAAAAIAAAEAAAIAAQiA=</HashCode>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Field Name="_io" />
-      <Field Name="_buffer" />
-      <Field Name="_display" />
-      <Field Name="_send" />
-      <Field Name="_textTerminal" />
-      <Field Name="_binaryTerminal" />
+      <Field Name="this.io" />
+      <Field Name="this.buffer" />
+      <Field Name="this.display" />
+      <Field Name="this.send" />
+      <Field Name="this.textTerminal" />
+      <Field Name="this.binaryTerminal" />
     </ShowAsAssociation>
     <Compartments>
       <Compartment Name="Methods" Collapsed="true" />
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
-    <AssociationLine Name="_io" Type="YAT.Domain.Settings.IOSettings" FixedFromPoint="true" FixedToPoint="true">
+    <AssociationLine Name="this.io" Type="YAT.Domain.Settings.IOSettings" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="1.25" Y="3.201" />
         <Point X="1.25" Y="3.625" />
@@ -27,7 +27,7 @@
         <Point X="3.25" Y="4" />
       </Path>
     </AssociationLine>
-    <AssociationLine Name="_buffer" Type="YAT.Domain.Settings.BufferSettings" FixedFromPoint="true" FixedToPoint="true">
+    <AssociationLine Name="this.buffer" Type="YAT.Domain.Settings.BufferSettings" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="1.25" Y="3.201" />
         <Point X="1.25" Y="3.625" />
@@ -35,7 +35,7 @@
         <Point X="5.25" Y="4" />
       </Path>
     </AssociationLine>
-    <AssociationLine Name="_display" Type="YAT.Domain.Settings.DisplaySettings" FixedFromPoint="true" FixedToPoint="true">
+    <AssociationLine Name="this.display" Type="YAT.Domain.Settings.DisplaySettings" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="1.25" Y="3.201" />
         <Point X="1.25" Y="3.625" />
@@ -43,7 +43,7 @@
         <Point X="7.25" Y="4" />
       </Path>
     </AssociationLine>
-    <AssociationLine Name="_send" Type="YAT.Domain.Settings.SendSettings" FixedFromPoint="true" FixedToPoint="true">
+    <AssociationLine Name="this.send" Type="YAT.Domain.Settings.SendSettings" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="1.25" Y="3.201" />
         <Point X="1.25" Y="3.625" />
@@ -51,7 +51,7 @@
         <Point X="9.25" Y="4" />
       </Path>
     </AssociationLine>
-    <AssociationLine Name="_textTerminal" Type="YAT.Domain.Settings.TextTerminalSettings" FixedFromPoint="true" FixedToPoint="true">
+    <AssociationLine Name="this.textTerminal" Type="YAT.Domain.Settings.TextTerminalSettings" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="1.25" Y="3.201" />
         <Point X="1.25" Y="3.625" />
@@ -59,7 +59,7 @@
         <Point X="11.667" Y="4" />
       </Path>
     </AssociationLine>
-    <AssociationLine Name="_binaryTerminal" Type="YAT.Domain.Settings.BinaryTerminalSettings" FixedFromPoint="true" FixedToPoint="true">
+    <AssociationLine Name="this.binaryTerminal" Type="YAT.Domain.Settings.BinaryTerminalSettings" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="1.25" Y="3.201" />
         <Point X="1.25" Y="3.625" />
@@ -75,8 +75,8 @@
       <HashCode>AAAAAAAAEAAAAAAAggAAIAACoAAAAYAAAAAAQAAAAiA=</HashCode>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Field Name="_serialPort" />
-      <Field Name="_socket" />
+      <Field Name="this.serialPort" />
+      <Field Name="this.socket" />
     </ShowAsAssociation>
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
@@ -123,7 +123,7 @@
       <HashCode>AASAAAAACAAAAAEAgIAAgAACIAAAIIAAABBAAAIAAiA=</HashCode>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Field Name="_communication" />
+      <Field Name="this.communication" />
     </ShowAsAssociation>
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
@@ -159,8 +159,8 @@
       <HashCode>AIAAoAAAQAAAAAAAgAAAAAACIAAAAIAIAAAAIAAAAiA=</HashCode>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Field Name="_rxDisplay" />
-      <Field Name="_txDisplay" />
+      <Field Name="this.rxDisplay" />
+      <Field Name="this.txDisplay" />
     </ShowAsAssociation>
     <Compartments>
       <Compartment Name="Methods" Collapsed="true" />

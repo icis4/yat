@@ -23,20 +23,23 @@ namespace MKY.IO.Ports
 {
 	#region Enum DataBits
 
+	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+	// warnings for each undocumented member below. Documenting each member makes little sense
+	// since they pretty much tell their purpose and documentation tags between the members
+	// makes the code less readable.
+	#pragma warning disable 1591
+
 	/// <summary></summary>
 	public enum DataBits
 	{
-		/// <summary></summary>
-		Four = 4,
-		/// <summary></summary>
-		Five = 5,
-		/// <summary></summary>
-		Six = 6,
-		/// <summary></summary>
+		Four  = 4,
+		Five  = 5,
+		Six   = 6,
 		Seven = 7,
-		/// <summary></summary>
 		Eight = 8,
 	}
+
+	#pragma warning restore 1591
 
 	#endregion
 
@@ -133,11 +136,11 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static implicit operator XDataBits(int bits)
 		{
-			if (bits >= (int)DataBits.Eight) return (new XDataBits(DataBits.Eight));
+			if      (bits >= (int)DataBits.Eight) return (new XDataBits(DataBits.Eight));
 			else if (bits >= (int)DataBits.Seven) return (new XDataBits(DataBits.Seven));
-			else if (bits >= (int)DataBits.Six) return (new XDataBits(DataBits.Six));
-			else if (bits >= (int)DataBits.Five) return (new XDataBits(DataBits.Five));
-			else return (new XDataBits(DataBits.Four));
+			else if (bits >= (int)DataBits.Six)   return (new XDataBits(DataBits.Six));
+			else if (bits >= (int)DataBits.Five)  return (new XDataBits(DataBits.Five));
+			else                                  return (new XDataBits(DataBits.Four));
 		}
 
 		/// <summary></summary>

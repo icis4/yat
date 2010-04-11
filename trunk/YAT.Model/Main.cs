@@ -51,7 +51,7 @@ namespace YAT.Model
 		/// Keep track of how many instances of main are running, needed to check for multiple
 		/// instances in <see cref="Start()"/>.
 		/// </summary>
-		private static int _instancesRunning = 0;
+		private static int staticInstancesRunning = 0;
 
 		#endregion
 
@@ -60,13 +60,13 @@ namespace YAT.Model
 		// Fields
 		//==========================================================================================
 
-		private bool _isDisposed;
+		private bool isDisposed;
 
-		private Guid _guid;
+		private Guid guid;
 
-		private string _requestedFilePath = "";
+		private string requestedFilePath = "";
 
-		private Workspace _workspace;
+		private Workspace workspace;
 
 		#endregion
 
@@ -106,8 +106,8 @@ namespace YAT.Model
 		/// <summary></summary>
 		public Main(string requestedFilePath)
 		{
-			_guid = Guid.NewGuid();
-			_requestedFilePath = requestedFilePath;
+			this.guid = Guid.NewGuid();
+			this.requestedFilePath = requestedFilePath;
 		}
 
 		#region Disposal
@@ -125,7 +125,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!_isDisposed)
+			if (!this.isDisposed)
 			{
 				if (disposing)
 				{
@@ -133,13 +133,13 @@ namespace YAT.Model
 					DetachWorkspaceEventHandlers();
 
 					// Then, dispose of objects
-					if (_workspace != null)
+					if (this.workspace != null)
 					{
-						_workspace.Dispose();
-						_workspace = null;
+						this.workspace.Dispose();
+						this.workspace = null;
 					}
 				}
-				_isDisposed = true;
+				this.isDisposed = true;
 			}
 		}
 
@@ -152,13 +152,13 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected bool IsDisposed
 		{
-			get { return (_isDisposed); }
+			get { return (this.isDisposed); }
 		}
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (_isDisposed)
+			if (this.isDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
 		}
 
@@ -177,7 +177,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_guid);
+				return (this.guid);
 			}
 		}
 
@@ -188,8 +188,8 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
-				if (_workspace != null)
-					return (_workspace.UserName);
+				if (this.workspace != null)
+					return (this.workspace.UserName);
 				else
 					return (ApplicationInfo.ProductName);
 			}
@@ -203,7 +203,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_workspace);
+				return (this.workspace);
 			}
 		}
 
@@ -228,9 +228,9 @@ namespace YAT.Model
 			bool otherInstanceIsAlreadyRunning = OtherInstanceIsAlreadyRunning();
 			bool success = false;
 
-			if ((_requestedFilePath != null) && (_requestedFilePath != ""))
+			if ((this.requestedFilePath != null) && (this.requestedFilePath != ""))
 			{
-				success = OpenFromFile(_requestedFilePath);
+				success = OpenFromFile(this.requestedFilePath);
 
 				if (success)
 				{
@@ -271,7 +271,7 @@ namespace YAT.Model
 
 			// Update number of running instances
 			if (success)
-				_instancesRunning++;
+				staticInstancesRunning++;
 
 			return (success);
 		}
@@ -299,7 +299,7 @@ namespace YAT.Model
 			}
 
 			// Consider multiple processes as well as multiple instances within this process
-			return ((processes.Count > 0) || (_instancesRunning > 0));
+			return ((processes.Count > 0) || (staticInstancesRunning > 0));
 		}
 
 		private void CleanupLocalUserDirectory()
@@ -321,14 +321,14 @@ namespace YAT.Model
 
 			// Get all active file paths
 			List<string> activeFilePaths = new List<string>();
-			if (_workspace != null)
+			if (this.workspace != null)
 			{
 				// Add workspace settings file
-				if (_workspace.SettingsFileExists)
-					activeFilePaths.Add(_workspace.SettingsFilePath);
+				if (this.workspace.SettingsFileExists)
+					activeFilePaths.Add(this.workspace.SettingsFilePath);
 
 				// Add terminal settings files
-				activeFilePaths.AddRange(_workspace.TerminalSettingsFilePaths);
+				activeFilePaths.AddRange(this.workspace.TerminalSettingsFilePaths);
 			}
 
 			// Ensure to leave all active settings untouched
@@ -385,13 +385,13 @@ namespace YAT.Model
 		{
 			bool success;
 
-			if (_workspace != null)
-				success = _workspace.Close(true);
+			if (this.workspace != null)
+				success = this.workspace.Close(true);
 			else
 				success = true;
 
 			if (success)
-				_instancesRunning--;
+				staticInstancesRunning--;
 
 			if (success)
 				OnFixedStatusTextRequest("Exiting " + Application.ProductName + "...");
@@ -418,19 +418,19 @@ namespace YAT.Model
 
 		private void AttachWorkspaceEventHandlers()
 		{
-			if (_workspace != null)
+			if (this.workspace != null)
 			{
-				_workspace.Saved  += new EventHandler<SavedEventArgs> (_workspace_Saved);
-				_workspace.Closed += new EventHandler<ClosedEventArgs>(_workspace_Closed);
+				this.workspace.Saved  += new EventHandler<SavedEventArgs> (this.workspace_Saved);
+				this.workspace.Closed += new EventHandler<ClosedEventArgs>(this.workspace_Closed);
 			}
 		}
 
 		private void DetachWorkspaceEventHandlers()
 		{
-			if (_workspace != null)
+			if (this.workspace != null)
 			{
-				_workspace.Saved  -= new EventHandler<SavedEventArgs> (_workspace_Saved);
-				_workspace.Closed -= new EventHandler<ClosedEventArgs>(_workspace_Closed);
+				this.workspace.Saved  -= new EventHandler<SavedEventArgs> (this.workspace_Saved);
+				this.workspace.Closed -= new EventHandler<ClosedEventArgs>(this.workspace_Closed);
 			}
 		}
 
@@ -441,7 +441,7 @@ namespace YAT.Model
 		// Workspace > Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		private void _workspace_Saved(object sender, SavedEventArgs e)
+		private void workspace_Saved(object sender, SavedEventArgs e)
 		{
 			ApplicationSettings.LocalUser.AutoWorkspace.SetFilePathAndUser(e.FilePath, Guid);
 			ApplicationSettings.Save();
@@ -451,7 +451,7 @@ namespace YAT.Model
 		/// See remarks of <see cref="YAT.Model.Workspace.Close(bool)"/> for details on why this event handler
 		/// needs to treat the Closed event differently in case of a parent (i.e. main) close.
 		/// </remarks>
-		private void _workspace_Closed(object sender, ClosedEventArgs e)
+		private void workspace_Closed(object sender, ClosedEventArgs e)
 		{
 			if (!e.IsParentClose) // In case of workspace intended close, completely reset workspace info
 				ApplicationSettings.LocalUser.AutoWorkspace.ResetFilePathAndUser();
@@ -461,7 +461,7 @@ namespace YAT.Model
 			ApplicationSettings.Save();
 
 			DetachWorkspaceEventHandlers();
-			_workspace = null;
+			this.workspace = null;
 
 			OnWorkspaceClosed(e);
 		}
@@ -477,18 +477,18 @@ namespace YAT.Model
 		public virtual bool CreateNewWorkspace()
 		{
 			// close workspace, only one workspace can exist within application
-			if (_workspace != null)
+			if (this.workspace != null)
 			{
-				if (!_workspace.Close())
+				if (!this.workspace.Close())
 					return (false);
 			}
 
 			OnFixedStatusTextRequest("Creating new workspace...");
 
 			// Create workspace
-			_workspace = new Workspace(new DocumentSettingsHandler<WorkspaceSettingsRoot>());
+			this.workspace = new Workspace(new DocumentSettingsHandler<WorkspaceSettingsRoot>());
 			AttachWorkspaceEventHandlers();
-			OnWorkspaceOpened(new WorkspaceEventArgs(_workspace));
+			OnWorkspaceOpened(new WorkspaceEventArgs(this.workspace));
 
 			OnTimedStatusTextRequest("New workspace created");
 			return (true);
@@ -500,7 +500,7 @@ namespace YAT.Model
 			if (!CreateNewWorkspace())
 				return (false);
 
-			return (_workspace.CreateNewTerminal(settingsHandler));
+			return (this.workspace.CreateNewTerminal(settingsHandler));
 		}
 
 		/// <summary>
@@ -526,7 +526,7 @@ namespace YAT.Model
 					return (false);
 
 				OnFixedStatusTextRequest("Opening terminal " + fileName + "...");
-				return (_workspace.OpenTerminalFromFile(filePath));
+				return (this.workspace.OpenTerminalFromFile(filePath));
 			}
 			else
 			{
@@ -553,9 +553,9 @@ namespace YAT.Model
 			// check whether workspace is already opened
 			// -------------------------------------------------------------------------------------
 
-			if (_workspace != null)
+			if (this.workspace != null)
 			{
-				if (filePath == _workspace.SettingsFilePath)
+				if (filePath == this.workspace.SettingsFilePath)
 				{
 					OnFixedStatusTextRequest("Workspace is already open.");
 					OnMessageInputRequest
@@ -571,9 +571,9 @@ namespace YAT.Model
 			}
 
 			// close workspace, only one workspace can exist within application
-			if (_workspace != null)
+			if (this.workspace != null)
 			{
-				if (!_workspace.Close())
+				if (!this.workspace.Close())
 					return (false);
 			}
 
@@ -595,13 +595,13 @@ namespace YAT.Model
 				Guid guid = XGuid.CreateGuidFromFilePath(filePath, GeneralSettings.AutoSaveWorkspaceFileNamePrefix);
 
 				// Create workspace
-				_workspace = new Workspace(sh, guid);
+				this.workspace = new Workspace(sh, guid);
 				AttachWorkspaceEventHandlers();
 
 				if (!sh.Settings.AutoSaved)
 					SetRecent(filePath);
 
-				OnWorkspaceOpened(new WorkspaceEventArgs(_workspace));
+				OnWorkspaceOpened(new WorkspaceEventArgs(this.workspace));
 				OnTimedStatusTextRequest("Workspace opened");
 			}
 			catch (System.Xml.XmlException ex)
@@ -624,7 +624,7 @@ namespace YAT.Model
 			// open workspace terminals
 			// -------------------------------------------------------------------------------------
 
-			int terminalCount = _workspace.OpenTerminals();
+			int terminalCount = this.workspace.OpenTerminals();
 
 			if (terminalCount == 1)
 				OnTimedStatusTextRequest("Workspace terminal opened");
@@ -641,8 +641,8 @@ namespace YAT.Model
 		/// </summary>
 		public virtual bool CloseWorkspace()
 		{
-			if (_workspace != null)
-				return (_workspace.Close());
+			if (this.workspace != null)
+				return (this.workspace.Close());
 			else
 				return (false);
 		}

@@ -31,7 +31,17 @@ Note:	The whole release process takes about 4 hours
 	[ ] Add new settings to "YAT.Settings.Test.FileVersionsTest"
 
 
-4.	Run automated tests
+4a)	Run coding style checks
+	-----------------------
+	[ ] Use StyleCop
+
+
+4b)	Run assembly checks
+	-------------------
+	[ ] Use FxCop
+
+
+4c)	Run automated tests
 	-------------------
 	[ ] Use NUnit
 

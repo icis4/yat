@@ -36,7 +36,7 @@ namespace MKY.Windows.Forms
 		// Fields
 		//==========================================================================================
 
-		private bool _normal_UserPaint = false;
+		private bool normal_UserPaint = false;
 
 		#endregion
 
@@ -165,13 +165,13 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		protected virtual void StoreNormalPaintStyle()
 		{
-			_normal_UserPaint = GetStyle(ControlStyles.UserPaint);
+			this.normal_UserPaint = GetStyle(ControlStyles.UserPaint);
 		}
 
 		/// <summary></summary>
 		protected virtual void RestoreNormalPaintStyle()
 		{
-			SetStyle(ControlStyles.UserPaint, _normal_UserPaint);
+			SetStyle(ControlStyles.UserPaint, this.normal_UserPaint);
 		}
 
 		/// <summary></summary>

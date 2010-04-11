@@ -33,8 +33,8 @@ namespace MKY.Windows.Forms
 		// Fields
 		//==========================================================================================
 
-		private TimeSpan _accumulatedTimeSpan = TimeSpan.Zero;
-		private DateTime _startTimeStamp = DateTime.Now;
+		private TimeSpan accumulatedTimeSpan = TimeSpan.Zero;
+		private DateTime startTimeStamp = DateTime.Now;
 
 		#endregion
 
@@ -89,9 +89,9 @@ namespace MKY.Windows.Forms
 			get
 			{
 				if (!timer_Chronometer.Enabled)
-					return (_accumulatedTimeSpan);
+					return (this.accumulatedTimeSpan);
 				else
-					return (_accumulatedTimeSpan + (DateTime.Now - _startTimeStamp));
+					return (this.accumulatedTimeSpan + (DateTime.Now - this.startTimeStamp));
 			}
 		}
 
@@ -108,7 +108,7 @@ namespace MKY.Windows.Forms
 			if (!timer_Chronometer.Enabled)
 			{
 				timer_Chronometer.Start();
-				_startTimeStamp = DateTime.Now;
+				this.startTimeStamp = DateTime.Now;
 				OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
 			}
 		}
@@ -119,7 +119,7 @@ namespace MKY.Windows.Forms
 			if (timer_Chronometer.Enabled)
 			{
 				timer_Chronometer.Stop();
-				_accumulatedTimeSpan += (DateTime.Now - _startTimeStamp);
+				this.accumulatedTimeSpan += (DateTime.Now - this.startTimeStamp);
 				OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
 			}
 		}
@@ -136,8 +136,8 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		public virtual void Reset()
 		{
-			_startTimeStamp = DateTime.Now;
-			_accumulatedTimeSpan = TimeSpan.Zero;
+			this.startTimeStamp = DateTime.Now;
+			this.accumulatedTimeSpan = TimeSpan.Zero;
 			OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan.Zero));
 		}
 

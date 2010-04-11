@@ -34,10 +34,10 @@ namespace YAT.Settings
 		/// <summary></summary>
 		public const string AutoSaveWorkspaceFileNamePrefix = "Workspace-";
 
-		private bool _autoOpenWorkspace;
-		private bool _autoSaveWorkspace;
-		private bool _useRelativePaths;
-		private bool _detectSerialPortsInUse;
+		private bool autoOpenWorkspace;
+		private bool autoSaveWorkspace;
+		private bool useRelativePaths;
+		private bool detectSerialPortsInUse;
 
 		public GeneralSettings()
 		{
@@ -58,10 +58,10 @@ namespace YAT.Settings
 		public GeneralSettings(GeneralSettings rhs)
 			: base(rhs)
 		{
-			_autoOpenWorkspace      = rhs.AutoOpenWorkspace;
-			_autoSaveWorkspace      = rhs.AutoSaveWorkspace;
-			_useRelativePaths       = rhs.UseRelativePaths;
-			_detectSerialPortsInUse = rhs.DetectSerialPortsInUse;
+			this.autoOpenWorkspace      = rhs.AutoOpenWorkspace;
+			this.autoSaveWorkspace      = rhs.AutoSaveWorkspace;
+			this.useRelativePaths       = rhs.UseRelativePaths;
+			this.detectSerialPortsInUse = rhs.DetectSerialPortsInUse;
 
 			ClearChanged();
 		}
@@ -85,12 +85,12 @@ namespace YAT.Settings
 		[XmlElement("AutoOpenWorkspace")]
 		public virtual bool AutoOpenWorkspace
 		{
-			get { return (_autoOpenWorkspace); }
+			get { return (this.autoOpenWorkspace); }
 			set
 			{
-				if (value != _autoOpenWorkspace)
+				if (value != this.autoOpenWorkspace)
 				{
-					_autoOpenWorkspace = value;
+					this.autoOpenWorkspace = value;
 					SetChanged();
 				}
 			}
@@ -99,12 +99,12 @@ namespace YAT.Settings
 		[XmlElement("AutoSaveWorkspace")]
 		public virtual bool AutoSaveWorkspace
 		{
-			get { return (_autoSaveWorkspace); }
+			get { return (this.autoSaveWorkspace); }
 			set
 			{
-				if (value != _autoSaveWorkspace)
+				if (value != this.autoSaveWorkspace)
 				{
-					_autoSaveWorkspace = value;
+					this.autoSaveWorkspace = value;
 					SetChanged();
 				}
 			}
@@ -113,12 +113,12 @@ namespace YAT.Settings
 		[XmlElement("UseRelativePaths")]
 		public virtual bool UseRelativePaths
 		{
-			get { return (_useRelativePaths); }
+			get { return (this.useRelativePaths); }
 			set
 			{
-				if (value != _useRelativePaths)
+				if (value != this.useRelativePaths)
 				{
-					_useRelativePaths = value;
+					this.useRelativePaths = value;
 					SetChanged();
 				}
 			}
@@ -127,12 +127,12 @@ namespace YAT.Settings
 		[XmlElement("DetectSerialPortsInUse")]
 		public virtual bool DetectSerialPortsInUse
 		{
-			get { return (_detectSerialPortsInUse); }
+			get { return (this.detectSerialPortsInUse); }
 			set
 			{
-				if (value != _detectSerialPortsInUse)
+				if (value != this.detectSerialPortsInUse)
 				{
-					_detectSerialPortsInUse = value;
+					this.detectSerialPortsInUse = value;
 					SetChanged();
 				}
 			}
@@ -163,10 +163,10 @@ namespace YAT.Settings
 			{
 				return
 					(
-					_autoOpenWorkspace.        Equals(value._autoOpenWorkspace) &&
-					_autoSaveWorkspace.        Equals(value._autoSaveWorkspace) &&
-					_useRelativePaths.         Equals(value._useRelativePaths) &&
-					_detectSerialPortsInUse.   Equals(value._detectSerialPortsInUse)
+					this.autoOpenWorkspace.        Equals(value.autoOpenWorkspace) &&
+					this.autoSaveWorkspace.        Equals(value.autoSaveWorkspace) &&
+					this.useRelativePaths.         Equals(value.useRelativePaths) &&
+					this.detectSerialPortsInUse.   Equals(value.detectSerialPortsInUse)
 					);
 			}
 			return (false);

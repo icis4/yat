@@ -27,7 +27,7 @@ namespace YAT.Model.Settings
 	[Serializable]
 	public class SendFileSettings : MKY.Utilities.Settings.Settings, IEquatable<SendFileSettings>
 	{
-		private Command _command;
+		private Command command;
 
 		/// <summary></summary>
 		public SendFileSettings()
@@ -71,12 +71,12 @@ namespace YAT.Model.Settings
 		[XmlElement("Command")]
 		public Command Command
 		{
-			get { return (_command); }
+			get { return (this.command); }
 			set
 			{
-				if (value != _command)
+				if (value != this.command)
 				{
-					_command = value;
+					this.command = value;
 					SetChanged();
 				}
 			}
@@ -104,7 +104,7 @@ namespace YAT.Model.Settings
 		{
 			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
-				return (_command == value._command);
+				return (this.command == value.command);
 
 			return (false);
 		}

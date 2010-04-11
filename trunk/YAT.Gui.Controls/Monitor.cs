@@ -70,21 +70,21 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		// State
-		private const Domain.RepositoryType _RepositoryTypeDefault = Domain.RepositoryType.None;
-		private const MonitorActivityState  _ActivityStateDefault  = MonitorActivityState.Inactive;
+		private const Domain.RepositoryType RepositoryTypeDefault = Domain.RepositoryType.None;
+		private const MonitorActivityState  ActivityStateDefault  = MonitorActivityState.Inactive;
 
 		// Image
-		private const double _MinImageOpacity       =  0.00; //   0%
-		private const double _MaxImageOpacity       =  1.00; // 100%
-		private const double _ImageOpacityIncrement = +0.10; // +10%
-		private const double _ImageOpacityDecrement = -0.10; // -10%
+		private const double MinImageOpacity       =  0.00; //   0%
+		private const double MaxImageOpacity       =  1.00; // 100%
+		private const double ImageOpacityIncrement = +0.10; // +10%
+		private const double ImageOpacityDecrement = -0.10; // -10%
 
 		// Lines
-		private const int _MaxLineCountDefault = Domain.Settings.DisplaySettings.MaxLineCountDefault;
+		private const int MaxLineCountDefault = Domain.Settings.DisplaySettings.MaxLineCountDefault;
 
 		// Time status
-		private const bool _ShowTimeStatusDefault = false;
-		private const bool _ShowCountStatusDefault = false;
+		private const bool ShowTimeStatusDefault = false;
+		private const bool ShowCountStatusDefault = false;
 
 		#endregion
 
@@ -94,30 +94,30 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		// State
-		private Domain.RepositoryType _repositoryType = _RepositoryTypeDefault;
-		private MonitorActivityState _activityState = _ActivityStateDefault;
-		private MonitorActivityState _activityStateOld = _ActivityStateDefault;
+		private Domain.RepositoryType repositoryType = RepositoryTypeDefault;
+		private MonitorActivityState activityState = ActivityStateDefault;
+		private MonitorActivityState activityStateOld = ActivityStateDefault;
 
 		// Image
-		private Image _imageInactive = null;
-		private Image _imageActive = null;
-		private OpacityState _imageOpacityState = OpacityState.Inactive;
-		private double _imageOpacity = _MinImageOpacity;
+		private Image imageInactive = null;
+		private Image imageActive = null;
+		private OpacityState imageOpacityState = OpacityState.Inactive;
+		private double imageOpacity = MinImageOpacity;
 
 		// Lines
-		private int _maxLineCount = _MaxLineCountDefault;
-		private Model.Settings.FormatSettings _formatSettings = new Model.Settings.FormatSettings();
+		private int maxLineCount = MaxLineCountDefault;
+		private Model.Settings.FormatSettings formatSettings = new Model.Settings.FormatSettings();
 
 		// Time status
-		private bool _showTimeStatus = _ShowTimeStatusDefault;
-		private TimeSpan _connectTime;
+		private bool showTimeStatus = ShowTimeStatusDefault;
+		private TimeSpan connectTime;
 
 		// Count status
-		private bool _showCountStatus = _ShowCountStatusDefault;
-		private int _txByteCountStatus;
-		private int _rxByteCountStatus;
-		private int _txLineCountStatus;
-		private int _rxLineCountStatus;
+		private bool showCountStatus = ShowCountStatusDefault;
+		private int txByteCountStatus;
+		private int rxByteCountStatus;
+		private int txLineCountStatus;
+		private int rxLineCountStatus;
 
 		#endregion
 
@@ -156,15 +156,15 @@ namespace YAT.Gui.Controls
 
 		[Category("Monitor")]
 		[Description("The repository type.")]
-		[DefaultValue(_RepositoryTypeDefault)]
+		[DefaultValue(RepositoryTypeDefault)]
 		public virtual Domain.RepositoryType RepositoryType
 		{
-			get { return (_repositoryType); }
+			get { return (this.repositoryType); }
 			set
 			{
-				if (value != _repositoryType)
+				if (value != this.repositoryType)
 				{
-					_repositoryType = value;
+					this.repositoryType = value;
 					SetControls();
 				}
 			}
@@ -172,15 +172,15 @@ namespace YAT.Gui.Controls
 
 		[Category("Monitor")]
 		[Description("The activity state.")]
-		[DefaultValue(_ActivityStateDefault)]
+		[DefaultValue(ActivityStateDefault)]
 		public virtual MonitorActivityState ActivityState
 		{
-			get { return (_activityState); }
+			get { return (this.activityState); }
 			set
 			{
-				if (value != _activityState)
+				if (value != this.activityState)
 				{
-					_activityState = value;
+					this.activityState = value;
 					SetControls();
 				}
 			}
@@ -188,15 +188,15 @@ namespace YAT.Gui.Controls
 
 		[Category("Monitor")]
 		[Description("The maxmimal number of lines to display.")]
-		[DefaultValue(_MaxLineCountDefault)]
+		[DefaultValue(MaxLineCountDefault)]
 		public virtual int MaxLineCount
 		{
-			get { return (_maxLineCount); }
+			get { return (this.maxLineCount); }
 			set
 			{
-				if (value != _maxLineCount)
+				if (value != this.maxLineCount)
 				{
-					_maxLineCount = value;
+					this.maxLineCount = value;
 					Reload();
 				}
 			}
@@ -208,9 +208,9 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				if (value != _formatSettings)
+				if (value != this.formatSettings)
 				{
-					_formatSettings = value;
+					this.formatSettings = value;
 					SetFormatDependentControls();
 				}
 			}
@@ -218,15 +218,15 @@ namespace YAT.Gui.Controls
 
 		[Category("Monitor")]
 		[Description("Show the time status.")]
-		[DefaultValue(_ShowTimeStatusDefault)]
+		[DefaultValue(ShowTimeStatusDefault)]
 		public virtual bool ShowTimeStatus
 		{
-			get { return (_showTimeStatus); }
+			get { return (this.showTimeStatus); }
 			set
 			{
-				if (value != _showTimeStatus)
+				if (value != this.showTimeStatus)
 				{
-					_showTimeStatus = value;
+					this.showTimeStatus = value;
 					SetTimeStatusControls();
 				}
 			}
@@ -237,12 +237,12 @@ namespace YAT.Gui.Controls
 		[DefaultValue(0)]
 		public virtual TimeSpan ConnectTime
 		{
-			get { return (_connectTime); }
+			get { return (this.connectTime); }
 			set
 			{
-				if (value != _connectTime)
+				if (value != this.connectTime)
 				{
-					_connectTime = value;
+					this.connectTime = value;
 					SetTimeStatusControls();
 				}
 			}
@@ -250,15 +250,15 @@ namespace YAT.Gui.Controls
 
 		[Category("Monitor")]
 		[Description("Show the count status.")]
-		[DefaultValue(_ShowCountStatusDefault)]
+		[DefaultValue(ShowCountStatusDefault)]
 		public virtual bool ShowCountStatus
 		{
-			get { return (_showCountStatus); }
+			get { return (this.showCountStatus); }
 			set
 			{
-				if (value != _showCountStatus)
+				if (value != this.showCountStatus)
 				{
-					_showCountStatus = value;
+					this.showCountStatus = value;
 					SetCountStatusControls();
 				}
 			}
@@ -269,12 +269,12 @@ namespace YAT.Gui.Controls
 		[DefaultValue(0)]
 		public virtual int TxByteCountStatus
 		{
-			get { return (_txByteCountStatus); }
+			get { return (this.txByteCountStatus); }
 			set
 			{
-				if (value != _txByteCountStatus)
+				if (value != this.txByteCountStatus)
 				{
-					_txByteCountStatus = value;
+					this.txByteCountStatus = value;
 					SetCountStatusControls();
 				}
 			}
@@ -285,12 +285,12 @@ namespace YAT.Gui.Controls
 		[DefaultValue(0)]
 		public virtual int TxLineCountStatus
 		{
-			get { return (_txLineCountStatus); }
+			get { return (this.txLineCountStatus); }
 			set
 			{
-				if (value != _txLineCountStatus)
+				if (value != this.txLineCountStatus)
 				{
-					_txLineCountStatus = value;
+					this.txLineCountStatus = value;
 					SetCountStatusControls();
 				}
 			}
@@ -301,12 +301,12 @@ namespace YAT.Gui.Controls
 		[DefaultValue(0)]
 		public virtual int RxByteCountStatus
 		{
-			get { return (_rxByteCountStatus); }
+			get { return (this.rxByteCountStatus); }
 			set
 			{
-				if (value != _rxByteCountStatus)
+				if (value != this.rxByteCountStatus)
 				{
-					_rxByteCountStatus = value;
+					this.rxByteCountStatus = value;
 					SetCountStatusControls();
 				}
 			}
@@ -317,12 +317,12 @@ namespace YAT.Gui.Controls
 		[DefaultValue(0)]
 		public virtual int RxLineCountStatus
 		{
-			get { return (_rxLineCountStatus); }
+			get { return (this.rxLineCountStatus); }
 			set
 			{
-				if (value != _rxLineCountStatus)
+				if (value != this.rxLineCountStatus)
 				{
-					_rxLineCountStatus = value;
+					this.rxLineCountStatus = value;
 					SetCountStatusControls();
 				}
 			}
@@ -419,17 +419,17 @@ namespace YAT.Gui.Controls
 
 		public virtual void ResetTimeStatus()
 		{
-			_connectTime = TimeSpan.Zero;
+			this.connectTime = TimeSpan.Zero;
 
 			SetTimeStatusControls();
 		}
 
 		public virtual void ResetCountStatus()
 		{
-			_txByteCountStatus = 0;
-			_txLineCountStatus = 0;
-			_rxByteCountStatus = 0;
-			_rxLineCountStatus = 0;
+			this.txByteCountStatus = 0;
+			this.txLineCountStatus = 0;
+			this.rxByteCountStatus = 0;
+			this.rxLineCountStatus = 0;
 
 			SetCountStatusControls();
 		}
@@ -536,32 +536,32 @@ namespace YAT.Gui.Controls
 
 		private void timer_Opacity_Tick(object sender, EventArgs e)
 		{
-			if (_imageOpacityState != OpacityState.Inactive)
+			if (this.imageOpacityState != OpacityState.Inactive)
 			{
-				if (_imageOpacityState == OpacityState.Incrementing)
+				if (this.imageOpacityState == OpacityState.Incrementing)
 				{
-					_imageOpacity += _ImageOpacityIncrement;
-					if (_imageOpacity > _MaxImageOpacity)
+					this.imageOpacity += ImageOpacityIncrement;
+					if (this.imageOpacity > MaxImageOpacity)
 					{
-						_imageOpacity = _MaxImageOpacity;
-						_imageOpacityState = OpacityState.Decrementing;
+						this.imageOpacity = MaxImageOpacity;
+						this.imageOpacityState = OpacityState.Decrementing;
 					}
 				}
 				else
 				{
-					_imageOpacity += _ImageOpacityDecrement;
-					if (_imageOpacity < _MinImageOpacity)
+					this.imageOpacity += ImageOpacityDecrement;
+					if (this.imageOpacity < MinImageOpacity)
 					{
-						_imageOpacity = _MinImageOpacity;
-						_imageOpacityState = OpacityState.Incrementing;
+						this.imageOpacity = MinImageOpacity;
+						this.imageOpacityState = OpacityState.Incrementing;
 					}
 				}
 #if (FALSE)
 				// \fixme Don't know how to alter image opacity yet
-				pictureBox_Monitor.Image.Opacity = _imageOpacity
+				pictureBox_Monitor.Image.Opacity = this.imageOpacity
 #endif
-				if (_imageOpacity >= ((_MaxImageOpacity - _MinImageOpacity) / 2))
-					pictureBox_Monitor.Image = _imageActive;
+				if (this.imageOpacity >= ((MaxImageOpacity - MinImageOpacity) / 2))
+					pictureBox_Monitor.Image = this.imageActive;
 				else
 					pictureBox_Monitor.Image = null;
 			}
@@ -579,7 +579,7 @@ namespace YAT.Gui.Controls
 				{
 					FastListBox flb = listBox_Monitor;
 
-					SizeF size = Draw.MeasureItem((List<Domain.DisplayElement>)(flb.Items[e.Index]), _formatSettings, e.Graphics, e.Bounds);
+					SizeF size = Draw.MeasureItem((List<Domain.DisplayElement>)(flb.Items[e.Index]), this.formatSettings, e.Graphics, e.Bounds);
 
 					int width  = (int)Math.Ceiling(size.Width);
 					int height = (int)Math.Ceiling(size.Height);
@@ -643,7 +643,7 @@ namespace YAT.Gui.Controls
 					FastListBox flb = fastListBox_Monitor;
 
 					e.DrawBackground();
-					SizeF size = Drawing.DrawItem(flb.Items[e.Index] as Domain.DisplayLine, _formatSettings, e.Graphics, e.Bounds, e.State);
+					SizeF size = Drawing.DrawItem(flb.Items[e.Index] as Domain.DisplayLine, this.formatSettings, e.Graphics, e.Bounds, e.State);
 					e.DrawFocusRectangle();
 
 					int width  = (int)Math.Ceiling(size.Width);
@@ -673,44 +673,44 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			if (_repositoryType != Domain.RepositoryType.None)
+			if (this.repositoryType != Domain.RepositoryType.None)
 			{
-				switch (_repositoryType)
+				switch (this.repositoryType)
 				{
-					case Domain.RepositoryType.Tx:    _imageInactive = Properties.Resources.Image_Monitor_Tx_28x28;    _imageActive = Properties.Resources.Image_Monitor_Tx_28x28_Green;    break;
-					case Domain.RepositoryType.Bidir: _imageInactive = Properties.Resources.Image_Monitor_Bidir_28x28; _imageActive = Properties.Resources.Image_Monitor_Bidir_28x28_Green; break;
-					case Domain.RepositoryType.Rx:    _imageInactive = Properties.Resources.Image_Monitor_Rx_28x28;    _imageActive = Properties.Resources.Image_Monitor_Rx_28x28_Green;    break;
+					case Domain.RepositoryType.Tx:    this.imageInactive = Properties.Resources.Image_Monitor_Tx_28x28;    this.imageActive = Properties.Resources.Image_Monitor_Tx_28x28_Green;    break;
+					case Domain.RepositoryType.Bidir: this.imageInactive = Properties.Resources.Image_Monitor_Bidir_28x28; this.imageActive = Properties.Resources.Image_Monitor_Bidir_28x28_Green; break;
+					case Domain.RepositoryType.Rx:    this.imageInactive = Properties.Resources.Image_Monitor_Rx_28x28;    this.imageActive = Properties.Resources.Image_Monitor_Rx_28x28_Green;    break;
 				}
-				pictureBox_Monitor.BackgroundImage = _imageInactive;
+				pictureBox_Monitor.BackgroundImage = this.imageInactive;
 
 				// image blending
-				switch (_activityState)
+				switch (this.activityState)
 				{
-					case MonitorActivityState.Active:   _imageOpacityState = OpacityState.Inactive; pictureBox_Monitor.Image = _imageActive; break;
-					case MonitorActivityState.Inactive: _imageOpacityState = OpacityState.Inactive; pictureBox_Monitor.Image = null;         break;
+					case MonitorActivityState.Active:   this.imageOpacityState = OpacityState.Inactive; pictureBox_Monitor.Image = this.imageActive; break;
+					case MonitorActivityState.Inactive: this.imageOpacityState = OpacityState.Inactive; pictureBox_Monitor.Image = null;         break;
 					case MonitorActivityState.Pending:
 					{
-						if (_imageOpacityState == OpacityState.Inactive)
+						if (this.imageOpacityState == OpacityState.Inactive)
 						{
-							if (_activityStateOld == MonitorActivityState.Active)
+							if (this.activityStateOld == MonitorActivityState.Active)
 							{
-								pictureBox_Monitor.Image = _imageActive;
-								_imageOpacity = _MaxImageOpacity;
-								_imageOpacityState = OpacityState.Decrementing;
+								pictureBox_Monitor.Image = this.imageActive;
+								this.imageOpacity = MaxImageOpacity;
+								this.imageOpacityState = OpacityState.Decrementing;
 							}
-							if (_activityStateOld == MonitorActivityState.Inactive)
+							if (this.activityStateOld == MonitorActivityState.Inactive)
 							{
-								pictureBox_Monitor.Image = _imageActive;
-								_imageOpacity = _MinImageOpacity;
-								_imageOpacityState = OpacityState.Incrementing;
+								pictureBox_Monitor.Image = this.imageActive;
+								this.imageOpacity = MinImageOpacity;
+								this.imageOpacityState = OpacityState.Incrementing;
 							}
 						}
 						break;
 					}
 				}
-				_activityStateOld = _activityState;
+				this.activityStateOld = this.activityState;
 
-				timer_Opacity.Enabled = (_imageOpacityState != OpacityState.Inactive);
+				timer_Opacity.Enabled = (this.imageOpacityState != OpacityState.Inactive);
 				panel_Picture.Visible = true;
 
 				fastListBox_Monitor.BringToFront();
@@ -733,8 +733,8 @@ namespace YAT.Gui.Controls
 
 			flb.BeginUpdate();
 
-			flb.Font = _formatSettings.Font;
-			flb.ItemHeight = _formatSettings.Font.Height;
+			flb.Font = this.formatSettings.Font;
+			flb.ItemHeight = this.formatSettings.Font.Height;
 			flb.ScrollToBottomIfNoItemsSelected();
 			flb.Invalidate();
 
@@ -748,43 +748,43 @@ namespace YAT.Gui.Controls
 
 		private void SetTimeStatusControls()
 		{
-			label_TimeStatus.Text = XTimeSpan.FormatTimeSpan(_connectTime);
-			label_TimeStatus.Visible = _showTimeStatus;
+			label_TimeStatus.Text = XTimeSpan.FormatTimeSpan(this.connectTime);
+			label_TimeStatus.Visible = this.showTimeStatus;
 		}
 
 		private void SetCountStatusControls()
 		{
 			StringBuilder sb = new StringBuilder();
-			switch (_repositoryType)
+			switch (this.repositoryType)
 			{
 				case Domain.RepositoryType.Tx:
 				{
-					sb.Append(_txByteCountStatus.ToString());
+					sb.Append(this.txByteCountStatus.ToString());
 					sb.Append(" / ");
-					sb.Append(_txLineCountStatus.ToString());
+					sb.Append(this.txLineCountStatus.ToString());
 					break;
 				}
 				case Domain.RepositoryType.Bidir:
 				{
-					sb.Append(_txByteCountStatus.ToString());
+					sb.Append(this.txByteCountStatus.ToString());
 					sb.Append(" / ");
-					sb.Append(_txLineCountStatus.ToString());
+					sb.Append(this.txLineCountStatus.ToString());
 					sb.Append(Environment.NewLine);
-					sb.Append(_rxByteCountStatus.ToString());
+					sb.Append(this.rxByteCountStatus.ToString());
 					sb.Append(" / ");
-					sb.Append(_rxLineCountStatus.ToString());
+					sb.Append(this.rxLineCountStatus.ToString());
 					break;
 				}
 				case Domain.RepositoryType.Rx:
 				{
-					sb.Append(_rxByteCountStatus.ToString());
+					sb.Append(this.rxByteCountStatus.ToString());
 					sb.Append(" / ");
-					sb.Append(_rxLineCountStatus.ToString());
+					sb.Append(this.rxLineCountStatus.ToString());
 					break;
 				}
 			}
 			label_CountStatus.Text = sb.ToString();
-			label_CountStatus.Visible = _showCountStatus;
+			label_CountStatus.Visible = this.showCountStatus;
 		}
 
 		/// <summary>
@@ -823,7 +823,7 @@ namespace YAT.Gui.Controls
 					if (current[lastElementIndex] is Domain.DisplayElement.LineBreak)
 					{
 						// Remove lines if maximum exceeded
-						while (flb.Items.Count >= (_maxLineCount))
+						while (flb.Items.Count >= (this.maxLineCount))
 							flb.Items.RemoveAt(0);
 
 						// Add element to a new line

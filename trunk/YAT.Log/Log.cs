@@ -62,7 +62,7 @@ namespace YAT.Log
 			// Constants
 			//==========================================================================================
 
-			private const int _FlushTimeout = 250;
+			private const int FlushTimeout = 250;
 
 			#endregion
 
@@ -71,17 +71,17 @@ namespace YAT.Log
 			// Fields
 			//==========================================================================================
 
-			private bool _isDisposed;
+			private bool isDisposed;
 
-			private bool _isEnabled = false;
-			private string _file;
-			private LogFileWriteMode _writeMode;
-			private FileNameSeparator _separator;
+			private bool isEnabled = false;
+			private string file;
+			private LogFileWriteMode writeMode;
+			private FileNameSeparator separator;
 
-			private FileStream _fileStream;
-			private bool _isStarted = false;
+			private FileStream fileStream;
+			private bool isStarted = false;
 
-			private Timer _flushTimer;
+			private Timer flushTimer;
 
 			#endregion
 
@@ -104,10 +104,10 @@ namespace YAT.Log
 
 			private void Initialize(bool enabled, string file, LogFileWriteMode writeMode, FileNameSeparator separator)
 			{
-				_isEnabled = enabled;
-				_file = file;
-				_writeMode = writeMode;
-				_separator = separator;
+				this.isEnabled = enabled;
+				this.file = file;
+				this.writeMode = writeMode;
+				this.separator = separator;
 			}
 
 			#region Disposal
@@ -125,13 +125,13 @@ namespace YAT.Log
 			/// <summary></summary>
 			protected virtual void Dispose(bool disposing)
 			{
-				if (!_isDisposed)
+				if (!this.isDisposed)
 				{
 					if (disposing)
 					{
 						Close();
 					}
-					_isDisposed = true;
+					this.isDisposed = true;
 				}
 			}
 
@@ -144,13 +144,13 @@ namespace YAT.Log
 			/// <summary></summary>
 			protected bool IsDisposed
 			{
-				get { return (_isDisposed); }
+				get { return (this.isDisposed); }
 			}
 
 			/// <summary></summary>
 			protected void AssertNotDisposed()
 			{
-				if (_isDisposed)
+				if (this.isDisposed)
 					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
 			}
 
@@ -166,13 +166,13 @@ namespace YAT.Log
 			/// <summary></summary>
 			protected virtual bool IsEnabled
 			{
-				get { return (_isEnabled); }
+				get { return (this.isEnabled); }
 			}
 
 			/// <summary></summary>
 			public virtual bool IsStarted
 			{
-				get { return (_isStarted); }
+				get { return (this.isStarted); }
 			}
 
 			#endregion
@@ -191,7 +191,7 @@ namespace YAT.Log
 			/// <summary></summary>
 			public virtual void SetSettings(bool enabled, string file, LogFileWriteMode writeMode, FileNameSeparator separator)
 			{
-				if (_isStarted && (enabled != _isEnabled))
+				if (this.isStarted && (enabled != this.isEnabled))
 				{
 					if (enabled)
 					{
@@ -204,7 +204,7 @@ namespace YAT.Log
 						Initialize(enabled, file, writeMode, separator);
 					}
 				}
-				else if (_isStarted && (file != _file))
+				else if (this.isStarted && (file != this.file))
 				{
 					Close();
 					Initialize(enabled, file, writeMode, separator);
@@ -217,35 +217,35 @@ namespace YAT.Log
 			/// <summary></summary>
 			public virtual void Open()
 			{
-				if (!_isEnabled)
+				if (!this.isEnabled)
 					return;
 
-				if (!Directory.Exists(Path.GetDirectoryName(_file)))
-					Directory.CreateDirectory(Path.GetDirectoryName(_file));
+				if (!Directory.Exists(Path.GetDirectoryName(this.file)))
+					Directory.CreateDirectory(Path.GetDirectoryName(this.file));
 
-				if (_writeMode == LogFileWriteMode.Create)
+				if (this.writeMode == LogFileWriteMode.Create)
 				{
-					_file = XFile.MakeUniqueFileName(_file, _separator.Separator);
-					_fileStream = File.Open(_file, FileMode.Create, FileAccess.Write, FileShare.Read);
+					this.file = XFile.MakeUniqueFileName(this.file, this.separator.Separator);
+					this.fileStream = File.Open(this.file, FileMode.Create, FileAccess.Write, FileShare.Read);
 				}
-				else if (_writeMode == LogFileWriteMode.Append)
+				else if (this.writeMode == LogFileWriteMode.Append)
 				{
-					if (File.Exists(_file))
-						_fileStream = File.Open(_file, FileMode.Append, FileAccess.Write, FileShare.Read);
+					if (File.Exists(this.file))
+						this.fileStream = File.Open(this.file, FileMode.Append, FileAccess.Write, FileShare.Read);
 					else
-						_fileStream = File.Open(_file, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
+						this.fileStream = File.Open(this.file, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
 				}
 				else
 					throw (new ArgumentException("Write mode not supported"));
 
-				OpenWriter(_fileStream);
-				_isStarted = true;
+				OpenWriter(this.fileStream);
+				this.isStarted = true;
 			}
 
 			/// <summary></summary>
 			public virtual void Flush()
 			{
-				if (_isEnabled && _isStarted)
+				if (this.isEnabled && this.isStarted)
 				{
 					FlushWriter();
 				}
@@ -254,24 +254,24 @@ namespace YAT.Log
 			/// <summary></summary>
 			public virtual void Truncate()
 			{
-				if (_isEnabled && _isStarted)
+				if (this.isEnabled && this.isStarted)
 				{
 					CloseWriter();
-					_fileStream.Close();
-					_fileStream = File.Open(_file, FileMode.Truncate, FileAccess.Write, FileShare.Read);
-					OpenWriter(_fileStream);
+					this.fileStream.Close();
+					this.fileStream = File.Open(this.file, FileMode.Truncate, FileAccess.Write, FileShare.Read);
+					OpenWriter(this.fileStream);
 				}
 			}
 
 			/// <summary></summary>
 			public virtual void Close()
 			{
-				if (_isEnabled && _isStarted)
+				if (this.isEnabled && this.isStarted)
 				{
 					CloseWriter();
-					_fileStream.Close();
+					this.fileStream.Close();
 				}
-				_isStarted = false;
+				this.isStarted = false;
 			}
 
 			/// <summary></summary>
@@ -284,8 +284,8 @@ namespace YAT.Log
 			/// <summary></summary>
 			protected virtual void StartFlushTimer()
 			{
-				TimerCallback timerDelegate = new TimerCallback(_flushTimer_Timeout);
-				_flushTimer = new Timer(timerDelegate, null, _FlushTimeout, System.Threading.Timeout.Infinite);
+				TimerCallback timerDelegate = new TimerCallback(this.flushTimer_Timeout);
+				this.flushTimer = new Timer(timerDelegate, null, FlushTimeout, System.Threading.Timeout.Infinite);
 			}
 
 			/// <summary></summary>
@@ -298,11 +298,11 @@ namespace YAT.Log
 			/// <summary></summary>
 			protected virtual void StopFlushTimer()
 			{
-				_flushTimer = null; ;
+				this.flushTimer = null; ;
 			}
 
 			/// <summary></summary>
-			private void _flushTimer_Timeout(object obj)
+			private void flushTimer_Timeout(object obj)
 			{
 				Flush();
 			}
@@ -320,7 +320,7 @@ namespace YAT.Log
 		/// <summary></summary>
 		protected class BinaryLog : Log
 		{
-			private BinaryWriter _writer;
+			private BinaryWriter writer;
 
 			/// <summary></summary>
 			public BinaryLog(bool enabled, string file, LogFileWriteMode writeMode)
@@ -337,19 +337,19 @@ namespace YAT.Log
 			/// <summary></summary>
 			protected override void OpenWriter(FileStream stream)
 			{
-				_writer = new BinaryWriter(stream);
+				this.writer = new BinaryWriter(stream);
 			}
 
 			/// <summary></summary>
 			protected override void FlushWriter()
 			{
-				_writer.Flush();
+				this.writer.Flush();
 			}
 
 			/// <summary></summary>
 			protected override void CloseWriter()
 			{
-				_writer.Close();
+				this.writer.Close();
 			}
 
 			/// <summary></summary>
@@ -357,7 +357,7 @@ namespace YAT.Log
 			{
 				if (IsEnabled && IsStarted)
 				{
-					_writer.Write(value);
+					this.writer.Write(value);
 					RestartFlushTimer();
 				}
 			}
@@ -367,7 +367,7 @@ namespace YAT.Log
 			{
 				if (IsEnabled && IsStarted)
 				{
-					_writer.Write(array);
+					this.writer.Write(array);
 					RestartFlushTimer();
 				}
 			}
@@ -383,7 +383,7 @@ namespace YAT.Log
 		/// <summary></summary>
 		protected class TextLog : Log
 		{
-			private StreamWriter _writer;
+			private StreamWriter writer;
 
 			/// <summary></summary>
 			public TextLog(bool enabled, string file, LogFileWriteMode writeMode)
@@ -400,19 +400,19 @@ namespace YAT.Log
 			/// <summary></summary>
 			protected override void OpenWriter(FileStream stream)
 			{
-				_writer = new StreamWriter(stream);
+				this.writer = new StreamWriter(stream);
 			}
 
 			/// <summary></summary>
 			protected override void FlushWriter()
 			{
-				_writer.Flush();
+				this.writer.Flush();
 			}
 
 			/// <summary></summary>
 			protected override void CloseWriter()
 			{
-				_writer.Close();
+				this.writer.Close();
 			}
 
 			/// <summary></summary>
@@ -420,7 +420,7 @@ namespace YAT.Log
 			{
 				if (IsEnabled && IsStarted)
 				{
-					_writer.Write(value);
+					this.writer.Write(value);
 					RestartFlushTimer();
 				}
 			}
@@ -430,7 +430,7 @@ namespace YAT.Log
 			{
 				if (IsEnabled && IsStarted)
 				{
-					_writer.WriteLine();
+					this.writer.WriteLine();
 					RestartFlushTimer();
 				}
 			}
@@ -445,21 +445,21 @@ namespace YAT.Log
 		// Fields
 		//==========================================================================================
 
-		private bool _isDisposed;
+		private bool isDisposed;
 
-		private Settings.LogSettings _settings;
+		private Settings.LogSettings settings;
 
-		private List<Log> _logs;
-		private List<Log> _rawLogs;
-		private List<Log> _neatLogs;
+		private List<Log> logs;
+		private List<Log> rawLogs;
+		private List<Log> neatLogs;
 
-		private BinaryLog _rawTxLog;
-		private BinaryLog _rawBidirLog;
-		private BinaryLog _rawRxLog;
+		private BinaryLog rawTxLog;
+		private BinaryLog rawBidirLog;
+		private BinaryLog rawRxLog;
 
-		private TextLog _neatTxLog;
-		private TextLog _neatBidirLog;
-		private TextLog _neatRxLog;
+		private TextLog neatTxLog;
+		private TextLog neatBidirLog;
+		private TextLog neatRxLog;
 
 		#endregion
 
@@ -471,22 +471,22 @@ namespace YAT.Log
 		/// <summary></summary>
 		public Logs(Settings.LogSettings settings)
 		{
-			_settings = settings;
+			this.settings = settings;
 
-			_logs = new List<Log>();
-			_rawLogs = new List<Log>();
-			_neatLogs = new List<Log>();
+			this.logs = new List<Log>();
+			this.rawLogs = new List<Log>();
+			this.neatLogs = new List<Log>();
 
-			_rawLogs.Add(_rawTxLog = new BinaryLog(_settings.RawLogTx, _settings.RawTxFilePath, _settings.WriteMode, _settings.NameSeparator));
-			_rawLogs.Add(_rawBidirLog = new BinaryLog(_settings.RawLogBidir, _settings.RawBidirFilePath, _settings.WriteMode, _settings.NameSeparator));
-			_rawLogs.Add(_rawRxLog = new BinaryLog(_settings.RawLogRx, _settings.RawRxFilePath, _settings.WriteMode, _settings.NameSeparator));
+			this.rawLogs.Add(this.rawTxLog = new BinaryLog(this.settings.RawLogTx, this.settings.RawTxFilePath, this.settings.WriteMode, this.settings.NameSeparator));
+			this.rawLogs.Add(this.rawBidirLog = new BinaryLog(this.settings.RawLogBidir, this.settings.RawBidirFilePath, this.settings.WriteMode, this.settings.NameSeparator));
+			this.rawLogs.Add(this.rawRxLog = new BinaryLog(this.settings.RawLogRx, this.settings.RawRxFilePath, this.settings.WriteMode, this.settings.NameSeparator));
 
-			_neatLogs.Add(_neatTxLog = new TextLog(_settings.NeatLogTx, _settings.NeatTxFilePath, _settings.WriteMode, _settings.NameSeparator));
-			_neatLogs.Add(_neatBidirLog = new TextLog(_settings.NeatLogBidir, _settings.NeatBidirFilePath, _settings.WriteMode, _settings.NameSeparator));
-			_neatLogs.Add(_neatRxLog = new TextLog(_settings.NeatLogRx, _settings.NeatRxFilePath, _settings.WriteMode, _settings.NameSeparator));
+			this.neatLogs.Add(this.neatTxLog = new TextLog(this.settings.NeatLogTx, this.settings.NeatTxFilePath, this.settings.WriteMode, this.settings.NameSeparator));
+			this.neatLogs.Add(this.neatBidirLog = new TextLog(this.settings.NeatLogBidir, this.settings.NeatBidirFilePath, this.settings.WriteMode, this.settings.NameSeparator));
+			this.neatLogs.Add(this.neatRxLog = new TextLog(this.settings.NeatLogRx, this.settings.NeatRxFilePath, this.settings.WriteMode, this.settings.NameSeparator));
 
-			_logs.AddRange(_rawLogs);
-			_logs.AddRange(_neatLogs);
+			this.logs.AddRange(this.rawLogs);
+			this.logs.AddRange(this.neatLogs);
 		}
 
 		#region Disposal
@@ -504,13 +504,13 @@ namespace YAT.Log
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!_isDisposed)
+			if (!this.isDisposed)
 			{
 				if (disposing)
 				{
 					End();
 				}
-				_isDisposed = true;
+				this.isDisposed = true;
 			}
 		}
 
@@ -523,13 +523,13 @@ namespace YAT.Log
 		/// <summary></summary>
 		protected bool IsDisposed
 		{
-			get { return (_isDisposed); }
+			get { return (this.isDisposed); }
 		}
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (_isDisposed)
+			if (this.isDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
 		}
 
@@ -545,18 +545,18 @@ namespace YAT.Log
 		/// <summary></summary>
 		public virtual Settings.LogSettings Settings
 		{
-			get { return (_settings); }
+			get { return (this.settings); }
 			set
 			{
-				_settings = value;
+				this.settings = value;
 
-				_rawTxLog.SetSettings(_settings.RawLogTx, _settings.RawTxFilePath, _settings.WriteMode, _settings.NameSeparator);
-				_rawBidirLog.SetSettings(_settings.RawLogBidir, _settings.RawBidirFilePath, _settings.WriteMode, _settings.NameSeparator);
-				_rawRxLog.SetSettings(_settings.RawLogRx, _settings.RawRxFilePath, _settings.WriteMode, _settings.NameSeparator);
+				this.rawTxLog.SetSettings(this.settings.RawLogTx, this.settings.RawTxFilePath, this.settings.WriteMode, this.settings.NameSeparator);
+				this.rawBidirLog.SetSettings(this.settings.RawLogBidir, this.settings.RawBidirFilePath, this.settings.WriteMode, this.settings.NameSeparator);
+				this.rawRxLog.SetSettings(this.settings.RawLogRx, this.settings.RawRxFilePath, this.settings.WriteMode, this.settings.NameSeparator);
 
-				_neatTxLog.SetSettings(_settings.NeatLogTx, _settings.NeatTxFilePath, _settings.WriteMode, _settings.NameSeparator);
-				_neatBidirLog.SetSettings(_settings.NeatLogBidir, _settings.NeatBidirFilePath, _settings.WriteMode, _settings.NameSeparator);
-				_neatRxLog.SetSettings(_settings.NeatLogRx, _settings.NeatRxFilePath, _settings.WriteMode, _settings.NameSeparator);
+				this.neatTxLog.SetSettings(this.settings.NeatLogTx, this.settings.NeatTxFilePath, this.settings.WriteMode, this.settings.NameSeparator);
+				this.neatBidirLog.SetSettings(this.settings.NeatLogBidir, this.settings.NeatBidirFilePath, this.settings.WriteMode, this.settings.NameSeparator);
+				this.neatRxLog.SetSettings(this.settings.NeatLogRx, this.settings.NeatRxFilePath, this.settings.WriteMode, this.settings.NameSeparator);
 			}
 		}
 
@@ -566,7 +566,7 @@ namespace YAT.Log
 			get
 			{
 				bool isStarted = false;
-				foreach (Log l in _logs)
+				foreach (Log l in this.logs)
 					isStarted = isStarted || l.IsStarted;
 				return (isStarted);
 			}
@@ -582,28 +582,28 @@ namespace YAT.Log
 		/// <summary></summary>
 		public virtual void Begin()
 		{
-			foreach (Log l in _logs)
+			foreach (Log l in this.logs)
 				l.Open();
 		}
 
 		/// <summary></summary>
 		public virtual void Clear()
 		{
-			foreach (Log l in _logs)
+			foreach (Log l in this.logs)
 				l.Truncate();
 		}
 
 		/// <summary></summary>
 		public virtual void Flush()
 		{
-			foreach (Log l in _logs)
+			foreach (Log l in this.logs)
 				l.Flush();
 		}
 
 		/// <summary></summary>
 		public virtual void End()
 		{
-			foreach (Log l in _logs)
+			foreach (Log l in this.logs)
 				l.Close();
 		}
 
@@ -634,7 +634,7 @@ namespace YAT.Log
 		/// <summary></summary>
 		private Log GetLog(LogStreams stream)
 		{
-			return (_logs[stream.GetHashCode()]);
+			return (this.logs[stream.GetHashCode()]);
 		}
 
 		#endregion

@@ -29,9 +29,9 @@ namespace YAT.Domain.Settings
 		// Fields
 		//==========================================================================================
 
-		private bool _separateTxRxDisplay;
-		private BinaryDisplaySettings _txDisplay;
-		private BinaryDisplaySettings _rxDisplay;
+		private bool separateTxRxDisplay;
+		private BinaryDisplaySettings txDisplay;
+		private BinaryDisplaySettings rxDisplay;
 
 		#endregion
 
@@ -70,7 +70,7 @@ namespace YAT.Domain.Settings
 		public BinaryTerminalSettings(BinaryTerminalSettings rhs)
 			: base(rhs)
 		{
-			_separateTxRxDisplay = rhs.SeparateTxRxDisplay;
+			this.separateTxRxDisplay = rhs.SeparateTxRxDisplay;
 			TxDisplay = new BinaryDisplaySettings(rhs.TxDisplay);
 			RxDisplay = new BinaryDisplaySettings(rhs.RxDisplay);
 			ClearChanged();
@@ -95,12 +95,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("SeparateTxRxDisplay")]
 		public virtual bool SeparateTxRxDisplay
 		{
-			get { return (_separateTxRxDisplay); }
+			get { return (this.separateTxRxDisplay); }
 			set
 			{
-				if (value != _separateTxRxDisplay)
+				if (value != this.separateTxRxDisplay)
 				{
-					_separateTxRxDisplay = value;
+					this.separateTxRxDisplay = value;
 					SetChanged();
 				}
 			}
@@ -110,19 +110,19 @@ namespace YAT.Domain.Settings
 		[XmlElement("TxDisplay")]
 		public virtual BinaryDisplaySettings TxDisplay
 		{
-			get { return (_txDisplay); }
+			get { return (this.txDisplay); }
 			set
 			{
-				if (_txDisplay == null)
+				if (this.txDisplay == null)
 				{
-					_txDisplay = value;
-					AttachNode(_txDisplay);
+					this.txDisplay = value;
+					AttachNode(this.txDisplay);
 				}
-				else if (value != _txDisplay)
+				else if (value != this.txDisplay)
 				{
-					BinaryDisplaySettings old = _txDisplay;
-					_txDisplay = value;
-					ReplaceNode(old, _txDisplay);
+					BinaryDisplaySettings old = this.txDisplay;
+					this.txDisplay = value;
+					ReplaceNode(old, this.txDisplay);
 				}
 			}
 		}
@@ -133,23 +133,23 @@ namespace YAT.Domain.Settings
 		{
 			get
 			{
-				if (_separateTxRxDisplay)
-					return (_rxDisplay);
+				if (this.separateTxRxDisplay)
+					return (this.rxDisplay);
 				else
-					return (_txDisplay);
+					return (this.txDisplay);
 			}
 			set
 			{
-				if (_rxDisplay == null)
+				if (this.rxDisplay == null)
 				{
-					_rxDisplay = value;
-					AttachNode(_rxDisplay);
+					this.rxDisplay = value;
+					AttachNode(this.rxDisplay);
 				}
-				else if (value != _rxDisplay)
+				else if (value != this.rxDisplay)
 				{
-					BinaryDisplaySettings old = _rxDisplay;
-					_rxDisplay = value;
-					ReplaceNode(old, _rxDisplay);
+					BinaryDisplaySettings old = this.rxDisplay;
+					this.rxDisplay = value;
+					ReplaceNode(old, this.rxDisplay);
 				}
 			}
 		}
@@ -182,7 +182,7 @@ namespace YAT.Domain.Settings
 			{
 				return
 					(
-					(_separateTxRxDisplay == value._separateTxRxDisplay) &&
+					(this.separateTxRxDisplay == value.separateTxRxDisplay) &&
 					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
 					);
 			}

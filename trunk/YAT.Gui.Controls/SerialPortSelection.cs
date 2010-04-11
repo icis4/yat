@@ -42,49 +42,49 @@ namespace YAT.Gui.Controls
 
 		private class MarkPortsInUseThread
 		{
-			private SerialPortCollection _portList;
-			private bool _isScanning = true;
-			private string _status2 = "";
-			private bool _cancelScanning = false;
+			private SerialPortCollection portList;
+			private bool isScanning = true;
+			private string status2 = "";
+			private bool cancelScanning = false;
 
 			public MarkPortsInUseThread(SerialPortCollection portList)
 			{
-				_portList = portList;
+				this.portList = portList;
 			}
 
 			public virtual SerialPortCollection PortList
 			{
-				get { return (_portList); }
+				get { return (this.portList); }
 			}
 
 			public virtual bool IsScanning
 			{
-				get { return (_isScanning); }
+				get { return (this.isScanning); }
 			}
 
 			public virtual string Status2
 			{
-				get { return (_status2); }
+				get { return (this.status2); }
 			}
 
 			public virtual void MarkPortsInUse()
 			{
-				_portList.MarkPortsInUse(portList_MarkPortsInUseCallback);
-				_isScanning = false;
+				this.portList.MarkPortsInUse(portList_MarkPortsInUseCallback);
+				this.isScanning = false;
 
 				StatusBox.AcceptAndClose();
 			}
 
 			public virtual void CancelScanning()
 			{
-				_cancelScanning = true;
+				this.cancelScanning = true;
 			}
 
 			private void portList_MarkPortsInUseCallback(object sender, SerialPortCollection.PortChangedAndCancelEventArgs e)
 			{
-				_status2 = "Scanning " + e.Port + "...";
-				StatusBox.UpdateStatus2(_status2);
-				e.Cancel = _cancelScanning;
+				this.status2 = "Scanning " + e.Port + "...";
+				StatusBox.UpdateStatus2(this.status2);
+				e.Cancel = this.cancelScanning;
 			}
 		}
 
@@ -95,11 +95,11 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool _isSettingControls = false;
+		private bool isSettingControls = false;
 
-		private SerialPortId _portId = SerialPortId.DefaultPort;
+		private SerialPortId portId = SerialPortId.DefaultPort;
 
-		private MarkPortsInUseThread _markPortsInUseThread;
+		private MarkPortsInUseThread markPortsInUseThread;
 
 		#endregion
 
@@ -136,16 +136,16 @@ namespace YAT.Gui.Controls
 		[DefaultValue(SerialPortId.FirstStandardPortNumber)]
 		public SerialPortId PortId
 		{
-			get { return (_portId); }
+			get { return (this.portId); }
 			set
 			{
 				// Don't accept to set the device to null/nothing. Master is the device list. If
 				// devices are available, there is always a device selected.
 				if (value != null)
 				{
-					if (value != _portId)
+					if (value != this.portId)
 					{
-						_portId = value;
+						this.portId = value;
 						SetControls();
 						OnPortIdChanged(new EventArgs());
 					}
@@ -158,7 +158,7 @@ namespace YAT.Gui.Controls
 		/// </summary>
 		public bool IsValid
 		{
-			get { return (_portId != null); }
+			get { return (this.portId != null); }
 		}
 
 		#endregion
@@ -171,16 +171,16 @@ namespace YAT.Gui.Controls
 		/// <summary>
 		/// Startup flag only used in the following event handler.
 		/// </summary>
-		private bool _isStartingUp = true;
+		private bool isStartingUp = true;
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
 		private void SerialPortSelection_Paint(object sender, PaintEventArgs e)
 		{
-			if (_isStartingUp)
+			if (this.isStartingUp)
 			{
-				_isStartingUp = false;
+				this.isStartingUp = false;
 				SetSerialPortList();
 				SetControls();
 			}
@@ -191,7 +191,7 @@ namespace YAT.Gui.Controls
 		/// </summary>
 		private void SerialPortSelection_EnabledChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				SetControls();
 		}
 
@@ -204,7 +204,7 @@ namespace YAT.Gui.Controls
 
 		private void comboBox_Port_Validating(object sender, CancelEventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				// \attention
 				// Do not assume that the selected item maches the actual text in the box
@@ -249,8 +249,8 @@ namespace YAT.Gui.Controls
 
 			bool setting = ApplicationSettings.LocalUser.General.DetectSerialPortsInUse;
 
-			if (StatusBox.Show(this, "Scanning ports...", "Serial Port Scan", _markPortsInUseThread.Status2, "&Detect ports that are in use", ref setting) != DialogResult.OK)
-				_markPortsInUseThread.CancelScanning();
+			if (StatusBox.Show(this, "Scanning ports...", "Serial Port Scan", this.markPortsInUseThread.Status2, "&Detect ports that are in use", ref setting) != DialogResult.OK)
+				this.markPortsInUseThread.CancelScanning();
 
 			ApplicationSettings.LocalUser.General.DetectSerialPortsInUse = setting;
 			ApplicationSettings.Save();
@@ -268,7 +268,7 @@ namespace YAT.Gui.Controls
 			// Only scan for ports if control is enabled. This saves some time.
 			if (Enabled && !DesignMode)
 			{
-				_isSettingControls = true;
+				this.isSettingControls = true;
 
 				SerialPortId old = comboBox_Port.SelectedItem as SerialPortId;
 
@@ -281,11 +281,11 @@ namespace YAT.Gui.Controls
 					timer_ShowScanDialog.Start();
 
 					// Start scanning on different thread.
-					_markPortsInUseThread = new MarkPortsInUseThread(ports);
-					Thread t = new Thread(new ThreadStart(_markPortsInUseThread.MarkPortsInUse));
+					this.markPortsInUseThread = new MarkPortsInUseThread(ports);
+					Thread t = new Thread(new ThreadStart(this.markPortsInUseThread.MarkPortsInUse));
 					t.Start();
 
-					while (_markPortsInUseThread.IsScanning)
+					while (this.markPortsInUseThread.IsScanning)
 						Application.DoEvents();
 
 					t.Join();
@@ -299,8 +299,8 @@ namespace YAT.Gui.Controls
 
 				if (comboBox_Port.Items.Count > 0)
 				{
-					if ((_portId != null) && (ports.Contains(_portId)))
-						comboBox_Port.SelectedItem = _portId;
+					if ((this.portId != null) && (ports.Contains(this.portId)))
+						comboBox_Port.SelectedItem = this.portId;
 					else if ((old != null) && (ports.Contains(old)))
 						comboBox_Port.SelectedItem = old;
 					else
@@ -321,18 +321,18 @@ namespace YAT.Gui.Controls
 						);
 				}
 
-				_isSettingControls = false;
+				this.isSettingControls = false;
 			}
 		}
 
 		private void SetControls()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
 			if (!DesignMode && Enabled && (comboBox_Port.Items.Count > 0))
 			{
-				if (_portId != null)
-					comboBox_Port.SelectedItem = _portId;
+				if (this.portId != null)
+					comboBox_Port.SelectedItem = this.portId;
 				else
 					comboBox_Port.SelectedIndex = 0;
 			}
@@ -341,7 +341,7 @@ namespace YAT.Gui.Controls
 				comboBox_Port.SelectedIndex = -1;
 			}
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		#endregion

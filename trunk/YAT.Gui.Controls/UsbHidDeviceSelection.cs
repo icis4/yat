@@ -40,9 +40,9 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool _isSettingControls = false;
+		private bool isSettingControls = false;
 
-		private DeviceInfo _deviceInfo = null;
+		private DeviceInfo deviceInfo = null;
 
 		#endregion
 
@@ -78,16 +78,16 @@ namespace YAT.Gui.Controls
 		[Description("USB device info.")]
 		public DeviceInfo DeviceInfo
 		{
-			get { return (_deviceInfo); }
+			get { return (this.deviceInfo); }
 			set
 			{
 				// Don't accept to set the device to null/nothing. Master is the device list. If
 				// devices are available, there is always a device selected.
 				if (value != null)
 				{
-					if (value != _deviceInfo)
+					if (value != this.deviceInfo)
 					{
-						_deviceInfo = value;
+						this.deviceInfo = value;
 						SetControls();
 						OnDeviceInfoChanged(new EventArgs());
 					}
@@ -100,7 +100,7 @@ namespace YAT.Gui.Controls
 		/// </summary>
 		public bool IsValid
 		{
-			get { return (_deviceInfo != null); }
+			get { return (this.deviceInfo != null); }
 		}
 
 		#endregion
@@ -113,31 +113,31 @@ namespace YAT.Gui.Controls
 		/// <summary>
 		/// Startup flag only used in the following event handler.
 		/// </summary>
-		private bool _isStartingUp = true;
+		private bool isStartingUp = true;
 
 		/// <summary>
 		/// Only set device list and controls once as soon as this control is enabled. This saves
 		/// some time on startup since scanning for the ports takes quite some time.
 		/// </summary>
-		private bool _deviceListIsInitialized = false;
+		private bool deviceListIsInitialized = false;
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
 		private void UsbHidPortSelection_Paint(object sender, PaintEventArgs e)
 		{
-			if (_isStartingUp)
+			if (this.isStartingUp)
 			{
-				_isStartingUp = false;
+				this.isStartingUp = false;
 				SetControls();
 			}
 
 			// Ensure that device list is set as soon as this control gets enabled.
 			// Could also be implemented in a EnabledChanged event handler. However, it's easier
 			// to implement this here so it also done on initial Paint event.
-			if (Enabled && !_deviceListIsInitialized)
+			if (Enabled && !this.deviceListIsInitialized)
 			{
-				_deviceListIsInitialized = true;
+				this.deviceListIsInitialized = true;
 				SetDeviceList();
 			}
 		}
@@ -147,7 +147,7 @@ namespace YAT.Gui.Controls
 		/// </summary>
 		private void UsbHidDeviceSelection_EnabledChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				SetControls();
 		}
 
@@ -160,7 +160,7 @@ namespace YAT.Gui.Controls
 
 		private void comboBox_Device_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				DeviceInfo = comboBox_Device.SelectedItem as DeviceInfo;
 		}
 
@@ -181,7 +181,7 @@ namespace YAT.Gui.Controls
 			// Only scan for ports if control is enabled. This saves some time.
 			if (Enabled && !DesignMode)
 			{
-				_isSettingControls = true;
+				this.isSettingControls = true;
 
 				DeviceInfo old = comboBox_Device.SelectedItem as DeviceInfo;
 
@@ -193,8 +193,8 @@ namespace YAT.Gui.Controls
 
 				if (comboBox_Device.Items.Count > 0)
 				{
-					if ((_deviceInfo != null) && (devices.Contains(_deviceInfo)))
-						comboBox_Device.SelectedItem = _deviceInfo;
+					if ((this.deviceInfo != null) && (devices.Contains(this.deviceInfo)))
+						comboBox_Device.SelectedItem = this.deviceInfo;
 					else if ((old != null) && (devices.Contains(old)))
 						comboBox_Device.SelectedItem = old;
 					else
@@ -215,18 +215,18 @@ namespace YAT.Gui.Controls
 						);
 				}
 
-				_isSettingControls = false;
+				this.isSettingControls = false;
 			}
 		}
 
 		private void SetControls()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
 			if (!DesignMode && Enabled && (comboBox_Device.Items.Count > 0))
 			{
-				if (_deviceInfo != null)
-					comboBox_Device.SelectedItem = _deviceInfo;
+				if (this.deviceInfo != null)
+					comboBox_Device.SelectedItem = this.deviceInfo;
 				else
 					comboBox_Device.SelectedIndex = 0;
 			}
@@ -235,7 +235,7 @@ namespace YAT.Gui.Controls
 				comboBox_Device.SelectedIndex = -1;
 			}
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		#endregion

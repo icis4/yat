@@ -101,17 +101,17 @@ namespace MKY.IO.Usb
 		// Static Methods > Device Notification
 		//------------------------------------------------------------------------------------------
 
-		private static NativeMessageHandler _staticDeviceNotificationWindow = new NativeMessageHandler(StaticDeviceNotificationHandler);
-		private static IntPtr _staticDeviceNotificationHandle = IntPtr.Zero;
+		private static NativeMessageHandler staticDeviceNotificationWindow = new NativeMessageHandler(StaticDeviceNotificationHandler);
+		private static IntPtr staticDeviceNotificationHandle = IntPtr.Zero;
 
 		private static void RegisterStaticDeviceNotificationHandler()
 		{
-			Utilities.Win32.DeviceManagement.RegisterDeviceNotificationHandle(_staticDeviceNotificationWindow.Handle, HidGuid, out _staticDeviceNotificationHandle);
+			Utilities.Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationWindow.Handle, HidGuid, out staticDeviceNotificationHandle);
 		}
 
 		private static void UnregisterStaticDeviceNotificationHandler()
 		{
-			Utilities.Win32.DeviceManagement.UnregisterDeviceNotificationHandle(_staticDeviceNotificationHandle);
+			Utilities.Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
 		}
 
 		private static void StaticDeviceNotificationHandler(ref Message m)
@@ -154,12 +154,12 @@ namespace MKY.IO.Usb
 		/// It just a single stream object, but it contains the basically independent input and
 		/// output streams.
 		/// </summary>
-		private FileStream _stream;
+		private FileStream stream;
 
 		/// <summary>
 		/// Async receiving.
 		/// </summary>
-		private Queue<byte> _receiveQueue = new Queue<byte>();
+		private Queue<byte> receiveQueue = new Queue<byte>();
 
 		#endregion
 
@@ -255,8 +255,8 @@ namespace MKY.IO.Usb
 			{
 				AssertNotDisposed();
 				
-				if (_stream != null)
-					return ((_stream.CanRead) && (_stream.CanWrite));
+				if (this.stream != null)
+					return ((this.stream.CanRead) && (this.stream.CanWrite));
 
 				return (false);
 			}
@@ -275,9 +275,9 @@ namespace MKY.IO.Usb
 				AssertNotDisposed();
 
 				int bytesAvailable = 0;
-				lock (_receiveQueue)
+				lock (this.receiveQueue)
 				{
-					bytesAvailable = _receiveQueue.Count;
+					bytesAvailable = this.receiveQueue.Count;
 				}
 				return (bytesAvailable);
 			}
@@ -343,12 +343,12 @@ namespace MKY.IO.Usb
 			int bytesReceived = 0;
 			if (IsOpen)
 			{
-				lock (_receiveQueue)
+				lock (this.receiveQueue)
 				{
-					bytesReceived = _receiveQueue.Count;
+					bytesReceived = this.receiveQueue.Count;
 					data = new byte[bytesReceived];
 					for (int i = 0; i < bytesReceived; i++)
-						data[i] = _receiveQueue.Dequeue();
+						data[i] = this.receiveQueue.Dequeue();
 				}
 			}
 			else
@@ -386,14 +386,14 @@ namespace MKY.IO.Usb
 			if (!Utilities.Win32.Hid.FlushQueue(readWriteHandle))
 				return (false);
 
-			_stream = new FileStream(readWriteHandle, FileAccess.Read | FileAccess.Write, InputReportLength, true);
+			this.stream = new FileStream(readWriteHandle, FileAccess.Read | FileAccess.Write, InputReportLength, true);
 			return (true);
 		}
 
 		private void BeginAsyncRead()
 		{
 			byte[] inputReportBuffer = new byte[InputReportLength];
-			_stream.BeginRead(inputReportBuffer, 0, InputReportLength, new AsyncCallback(AsyncReadCompleted), inputReportBuffer);
+			this.stream.BeginRead(inputReportBuffer, 0, InputReportLength, new AsyncCallback(AsyncReadCompleted), inputReportBuffer);
 		}
 
 		/// <summary>
@@ -420,7 +420,7 @@ namespace MKY.IO.Usb
 					// Retrieve the read data and finalize read. In case of an exception
 					// during the read, the call of EndRead() throws it.
 					byte[] inputReportBuffer = (byte[])result.AsyncState; 
-					_stream.EndRead(result);
+					this.stream.EndRead(result);
 
 					// Convert the input report into usable data.
 					HidInputReportContainer input = new HidInputReportContainer(this);
@@ -429,10 +429,10 @@ namespace MKY.IO.Usb
 					// Don't care about report ID, Ser/HID only supports report 0.
 
 					// Read data on this thread.
-					lock (_receiveQueue)
+					lock (this.receiveQueue)
 					{
 						foreach (byte b in input.Data)
-							_receiveQueue.Enqueue(b);
+							this.receiveQueue.Enqueue(b);
 					}
 
 					// Ensure that only one data received event thread is active at the same time.
@@ -491,7 +491,7 @@ namespace MKY.IO.Usb
 				output.CreateReportsFromData(reportId, data);
 
 				foreach (byte[] report in output.Reports)
-					_stream.Write(report, 0, report.Length);
+					this.stream.Write(report, 0, report.Length);
 			}
 			catch (Exception ex)
 			{
@@ -506,10 +506,10 @@ namespace MKY.IO.Usb
 			if (IsOpen)
 				wasOpen = true;
 
-			if (_stream != null)
+			if (this.stream != null)
 			{
-				_stream.Close();
-				_stream = null;
+				this.stream.Close();
+				this.stream = null;
 			}
 
 			if (wasOpen)

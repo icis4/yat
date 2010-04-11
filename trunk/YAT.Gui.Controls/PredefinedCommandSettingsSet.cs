@@ -63,8 +63,8 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const string _ShortcutStringDefault = "Shift+F1";
-		private const Domain.TerminalType _TerminalTypeDefault = Domain.TerminalType.Text;
+		private const string ShortcutStringDefault = "Shift+F1";
+		private const Domain.TerminalType TerminalTypeDefault = Domain.TerminalType.Text;
 
 		#endregion
 
@@ -73,13 +73,13 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool _isSettingControls = false;
+		private bool isSettingControls = false;
 
-		private Model.Types.Command _command = new Model.Types.Command();
-		private Domain.TerminalType _terminalType = _TerminalTypeDefault;
+		private Model.Types.Command command = new Model.Types.Command();
+		private Domain.TerminalType terminalType = TerminalTypeDefault;
 
-		private FocusState _focusState = FocusState.Inactive;
-		private bool _isValidated = false;
+		private FocusState focusState = FocusState.Inactive;
+		private bool isValidated = false;
 
 		#endregion
 
@@ -119,13 +119,13 @@ namespace YAT.Gui.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Model.Types.Command Command
 		{
-			get { return (_command); }
+			get { return (this.command); }
 			set
 			{
 				if (value != null)
-					_command = value;
+					this.command = value;
 				else
-					_command = new Model.Types.Command();
+					this.command = new Model.Types.Command();
 
 				OnCommandChanged(new EventArgs());
 				SetControls();
@@ -136,12 +136,12 @@ namespace YAT.Gui.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Domain.TerminalType TerminalType
 		{
-			set { _terminalType = value; }
+			set { this.terminalType = value; }
 		}
 
 		[Category("Command")]
 		[Description("The command shortcut.")]
-		[DefaultValue(_ShortcutStringDefault)]
+		[DefaultValue(ShortcutStringDefault)]
 		public virtual string ShortcutString
 		{
 			get { return (label_Shortcut.Text); }
@@ -158,16 +158,16 @@ namespace YAT.Gui.Controls
 		/// <summary>
 		/// Startup flag only used in the following event handler.
 		/// </summary>
-		private bool _isStartingUp = true;
+		private bool isStartingUp = true;
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
 		private void PredefinedCommandSettingsSet_Paint(object sender, PaintEventArgs e)
 		{
-			if (_isStartingUp)
+			if (this.isStartingUp)
 			{
-				_isStartingUp = false;
+				this.isStartingUp = false;
 				SetControls();
 
 				// Move cursor to end
@@ -177,8 +177,8 @@ namespace YAT.Gui.Controls
 
 		private void PredefinedCommandSettingsSet_Enter(object sender, EventArgs e)
 		{
-			_focusState = FocusState.Inactive;
-			_isValidated = false;
+			this.focusState = FocusState.Inactive;
+			this.isValidated = false;
 		}
 
 		#endregion
@@ -190,18 +190,18 @@ namespace YAT.Gui.Controls
 
 		private void textBox_Description_Validating(object sender, CancelEventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				SetDescription(textBox_Description.Text);
 		}
 
 		private void textBox_Command_Enter(object sender, EventArgs e)
 		{
 			// Clear "<Enter a command...>" if needed
-			if ((_focusState == FocusState.Inactive) && !_command.IsSingleLineCommand)
+			if ((this.focusState == FocusState.Inactive) && !this.command.IsSingleLineCommand)
 				ClearCommand();
 
-			_focusState = FocusState.HasFocus;
-			_isValidated = false;
+			this.focusState = FocusState.HasFocus;
+			this.isValidated = false;
 		}
 
 		/// <remarks>
@@ -211,16 +211,16 @@ namespace YAT.Gui.Controls
 		/// </remarks>
 		private void textBox_Command_Leave(object sender, System.EventArgs e)
 		{
-			if (_isValidated)
-				_focusState = FocusState.Inactive;
+			if (this.isValidated)
+				this.focusState = FocusState.Inactive;
 			else
-				_focusState = FocusState.IsLeaving;
+				this.focusState = FocusState.IsLeaving;
 		}
 
 		private void textBox_Command_TextChanged(object sender, System.EventArgs e)
 		{
-			if (!_isSettingControls)
-				_isValidated = false;
+			if (!this.isSettingControls)
+				this.isValidated = false;
 		}
 
 		/// <remarks>
@@ -230,16 +230,16 @@ namespace YAT.Gui.Controls
 		/// </remarks>
 		private void textBox_Command_Validating(object sender, CancelEventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				if (Model.Settings.SendCommandSettings.IsEasterEggCommand(textBox_Command.Text))
 				{
-					_isValidated = true;
+					this.isValidated = true;
 
-					if (_focusState == FocusState.IsLeaving)
-						_focusState = FocusState.Inactive;
+					if (this.focusState == FocusState.IsLeaving)
+						this.focusState = FocusState.Inactive;
 					else
-						_focusState = FocusState.HasFocus;
+						this.focusState = FocusState.HasFocus;
 
 					SetSingleLineCommand(textBox_Command.Text);
 					return;
@@ -249,18 +249,18 @@ namespace YAT.Gui.Controls
 				int invalidTextLength;
 				if (Validation.ValidateSequence(this, "Command", textBox_Command.Text, out invalidTextStart, out invalidTextLength))
 				{
-					_isValidated = true;
+					this.isValidated = true;
 
-					if (_focusState == FocusState.IsLeaving)
-						_focusState = FocusState.Inactive;
+					if (this.focusState == FocusState.IsLeaving)
+						this.focusState = FocusState.Inactive;
 					else
-						_focusState = FocusState.HasFocus;
+						this.focusState = FocusState.HasFocus;
 
 					SetSingleLineCommand(textBox_Command.Text);
 					return;
 				}
 
-				_focusState = FocusState.HasFocus;
+				this.focusState = FocusState.HasFocus;
 				textBox_Command.Select(invalidTextStart, invalidTextLength);
 				e.Cancel = true;
 			}
@@ -273,15 +273,15 @@ namespace YAT.Gui.Controls
 
 		private void checkBox_IsFile_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				if (checkBox_IsFile.Checked && !_command.IsValidFilePath)
+				if (checkBox_IsFile.Checked && !this.command.IsValidFilePath)
 				{
 					ShowOpenFileDialog();
 				}
 				else
 				{
-					_command.IsFilePath = checkBox_IsFile.Checked;
+					this.command.IsFilePath = checkBox_IsFile.Checked;
 					SetControls();
 					OnCommandChanged(new EventArgs());
 				}
@@ -300,7 +300,7 @@ namespace YAT.Gui.Controls
 
 		private void button_Delete_Click(object sender, EventArgs e)
 		{
-			_command.Clear();
+			this.command.Clear();
 			SetControls();
 			OnCommandChanged(new EventArgs());
 		}
@@ -314,18 +314,18 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
 			// description
-			textBox_Description.Text = _command.Description;
+			textBox_Description.Text = this.command.Description;
 
-			if (_command.IsCommand)
+			if (this.command.IsCommand)
 			{
 				// command
 				textBox_Command.Visible = true;
-				if (_focusState == FocusState.Inactive)
+				if (this.focusState == FocusState.Inactive)
 				{
-					textBox_Command.Text      = _command.SingleLineCommand;
+					textBox_Command.Text      = this.command.SingleLineCommand;
 					textBox_Command.ForeColor = SystemColors.ControlText;
 					textBox_Command.Font      = SystemFonts.DefaultFont;
 				}
@@ -344,7 +344,7 @@ namespace YAT.Gui.Controls
 				// delete
 				button_Delete.Enabled = true;
 			}
-			else if (_command.IsFilePath)
+			else if (this.command.IsFilePath)
 			{
 				// command
 				textBox_Command.Visible = false;
@@ -358,9 +358,9 @@ namespace YAT.Gui.Controls
 
 				// file path
 				pathLabel_FilePath.Visible = true;
-				if (_command.IsFilePath)
+				if (this.command.IsFilePath)
 				{
-					pathLabel_FilePath.Text      = _command.FilePath;
+					pathLabel_FilePath.Text      = this.command.FilePath;
 					pathLabel_FilePath.ForeColor = SystemColors.ControlText;
 					pathLabel_FilePath.Font      = SystemFonts.DefaultFont;
 				}
@@ -380,7 +380,7 @@ namespace YAT.Gui.Controls
 			{
 				// command
 				textBox_Command.Visible = true;
-				if (_focusState == FocusState.Inactive)
+				if (this.focusState == FocusState.Inactive)
 				{
 					textBox_Command.Text      = Command.EnterCommandText;
 					textBox_Command.ForeColor = SystemColors.GrayText;
@@ -402,15 +402,15 @@ namespace YAT.Gui.Controls
 				button_Delete.Enabled = false;
 			}
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void SetDescription(string description)
 		{
 			if (description != "")
-				_command.Description = description;
+				this.command.Description = description;
 			else
-				_command.ClearDescription();
+				this.command.ClearDescription();
 
 			SetControls();
 			OnCommandChanged(new EventArgs());
@@ -418,8 +418,8 @@ namespace YAT.Gui.Controls
 
 		private void SetSingleLineCommand(string commandLine)
 		{
-			_command.IsFilePath = false;
-			_command.SingleLineCommand = commandLine;
+			this.command.IsFilePath = false;
+			this.command.SingleLineCommand = commandLine;
 
 			SetControls();
 			OnCommandChanged(new EventArgs());
@@ -427,21 +427,21 @@ namespace YAT.Gui.Controls
 
 		private void ClearCommand()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 			textBox_Command.Text      = "";
 			textBox_Command.ForeColor = SystemColors.ControlText;
 			textBox_Command.Font      = SystemFonts.DefaultFont;
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void ShowMultiLineCommandBox(Control requestingControl)
 		{
 			// indicate multi line command
-			_isSettingControls = true;
+			this.isSettingControls = true;
 			textBox_Command.Text      = Command.MultiLineCommandText;
 			textBox_Command.ForeColor = SystemColors.ControlText;
 			textBox_Command.Font      = SystemFonts.DefaultFont;
-			_isSettingControls = false;
+			this.isSettingControls = false;
 
 			// calculate startup location
 			Rectangle area = requestingControl.RectangleToScreen(requestingControl.DisplayRectangle);
@@ -450,11 +450,11 @@ namespace YAT.Gui.Controls
 			formStartupLocation.Y = area.Y + area.Height;
 
 			// show multi line box
-			MultiLineBox f = new MultiLineBox(_command, formStartupLocation);
+			MultiLineBox f = new MultiLineBox(this.command, formStartupLocation);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
-				_command = f.CommandResult;
+				this.command = f.CommandResult;
 
 				SetControls();
 				Parent.SelectNextControl(this, true, true, true, false);
@@ -472,7 +472,7 @@ namespace YAT.Gui.Controls
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Title = "Set File";
-			switch (_terminalType)
+			switch (this.terminalType)
 			{
 				case Domain.TerminalType.Text:
 				{
@@ -488,7 +488,7 @@ namespace YAT.Gui.Controls
 				}
 				default:
 				{
-					throw (new NotImplementedException("Terminal type \"" + (Domain.XTerminalType)_terminalType + "\" unknown"));
+					throw (new NotImplementedException("Terminal type \"" + (Domain.XTerminalType)this.terminalType + "\" unknown"));
 				}
 			}
 			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.SendFilesPath;
@@ -499,8 +499,8 @@ namespace YAT.Gui.Controls
 				ApplicationSettings.LocalUser.Paths.SendFilesPath = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
-				_command.IsFilePath = true;
-				_command.FilePath = ofd.FileName;
+				this.command.IsFilePath = true;
+				this.command.FilePath = ofd.FileName;
 				OnCommandChanged(new EventArgs());
 				SetControls();
 			}

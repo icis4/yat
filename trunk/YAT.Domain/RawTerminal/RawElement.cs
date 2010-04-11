@@ -33,34 +33,34 @@ namespace YAT.Domain
 	/// </summary>
 	public class RawElement
 	{
-		private byte[] _data;
-		private SerialDirection _direction;
-		private DateTime _timestamp;
+		private byte[] data;
+		private SerialDirection direction;
+		private DateTime timestamp;
 
 		/// <summary></summary>
 		public RawElement(byte[] data, SerialDirection direction)
 		{
-			_data = data;
-			_direction = direction;
-			_timestamp = DateTime.Now;
+			this.data = data;
+			this.direction = direction;
+			this.timestamp = DateTime.Now;
 		}
 
 		/// <summary></summary>
 		public virtual byte[] Data
 		{
-			get { return (_data); }
+			get { return (this.data); }
 		}
 
 		/// <summary></summary>
 		public virtual SerialDirection Direction
 		{
-			get { return (_direction); }
+			get { return (this.direction); }
 		}
 
 		/// <summary></summary>
 		public virtual DateTime TimeStamp
 		{
-			get { return (_timestamp); }
+			get { return (this.timestamp); }
 		}
 
 		/// <summary></summary>
@@ -73,7 +73,7 @@ namespace YAT.Domain
 		public virtual string ToString(string indent)
 		{
 			StringWriter to = new StringWriter();
-			foreach (byte b in _data)
+			foreach (byte b in this.data)
 				to.Write(Convert.ToChar(b));
 
 			return (to.ToString());
@@ -90,7 +90,7 @@ namespace YAT.Domain
 		{
 			bool begin = true;
 			StringWriter data = new StringWriter();
-			foreach (byte b in _data)
+			foreach (byte b in this.data)
 			{
 				if (!begin)
 					data.Write(" ");
@@ -99,8 +99,8 @@ namespace YAT.Domain
 				data.Write(b.ToString("X2") + "h");
 			}
 			return (indent + "- Data: " + data + Environment.NewLine +
-					indent + "- Direction: " + _direction + Environment.NewLine +
-					indent + "- TimeStamp: " + _timestamp.ToLongTimeString() + "." + XString.Left(_timestamp.Millisecond.ToString("D3"), 2) + Environment.NewLine);
+					indent + "- Direction: " + this.direction + Environment.NewLine +
+					indent + "- TimeStamp: " + this.timestamp.ToLongTimeString() + "." + XString.Left(this.timestamp.Millisecond.ToString("D3"), 2) + Environment.NewLine);
 		}
 	}
 }

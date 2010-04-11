@@ -36,6 +36,10 @@ namespace YAT
 		/// <summary>
 		/// Displays welcome screen and starts YAT.
 		/// </summary>
+		/// <param name="commandLineArgs">An array containing the command line arguments.</param>
+		/// <returns>
+		/// The application's exit code according to <see cref="Controller.MainResult"/>.
+		/// </returns>
 		/// <remarks>
 		/// If built as release, unhandled exceptions are caught here and shown to the user in an
 		/// exception dialog. The user can then choose to send in the exception as feedback.
@@ -122,8 +126,12 @@ namespace YAT
 		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>
+		/// <param name="commandLineArgs">An array containing the command line arguments.</param>
+		/// <returns>
+		/// The application's exit code according to <see cref="Controller.MainResult"/>.
+		/// </returns>
 		[STAThread]
-		static int Main(string[] commandLineArgs)
+		private static int Main(string[] commandLineArgs)
 		{
 			YAT yat = new YAT();
 			Controller.MainResult result = yat.Run(commandLineArgs);

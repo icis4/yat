@@ -27,10 +27,10 @@ namespace YAT.Model.Settings
 	[Serializable]
 	public class MainWindowSettings : MKY.Utilities.Settings.Settings, IEquatable<MainWindowSettings>
 	{
-		private FormStartPosition _startPosition;
-		private FormWindowState _windowState;
-		private Point _location;
-		private Size _size;
+		private FormStartPosition startPosition;
+		private FormWindowState windowState;
+		private Point location;
+		private Size size;
 
 		/// <summary></summary>
 		public MainWindowSettings()
@@ -53,10 +53,10 @@ namespace YAT.Model.Settings
 		public MainWindowSettings(MainWindowSettings rhs)
 			: base(rhs)
 		{
-			_startPosition = rhs.StartPosition;
-			_windowState   = rhs.WindowState;
-			_location      = rhs.Location;
-			_size          = rhs.Size;
+			this.startPosition = rhs.StartPosition;
+			this.windowState   = rhs.WindowState;
+			this.location      = rhs.Location;
+			this.size          = rhs.Size;
 
 			ClearChanged();
 		}
@@ -81,12 +81,12 @@ namespace YAT.Model.Settings
 		[XmlElement("StartPosition")]
 		public FormStartPosition StartPosition
 		{
-			get { return (_startPosition); }
+			get { return (this.startPosition); }
 			set
 			{
-				if (value != _startPosition)
+				if (value != this.startPosition)
 				{
-					_startPosition = value;
+					this.startPosition = value;
 					SetChanged();
 				}
 			}
@@ -96,12 +96,12 @@ namespace YAT.Model.Settings
 		[XmlElement("WindowState")]
 		public FormWindowState WindowState
 		{
-			get { return (_windowState); }
+			get { return (this.windowState); }
 			set
 			{
-				if (value != _windowState)
+				if (value != this.windowState)
 				{
-					_windowState = value;
+					this.windowState = value;
 					SetChanged();
 				}
 			}
@@ -111,12 +111,12 @@ namespace YAT.Model.Settings
 		[XmlElement("Location")]
 		public Point Location
 		{
-			get { return (_location); }
+			get { return (this.location); }
 			set
 			{
-				if (value != _location)
+				if (value != this.location)
 				{
-					_location = value;
+					this.location = value;
 					SetChanged();
 				}
 			}
@@ -126,12 +126,12 @@ namespace YAT.Model.Settings
 		[XmlElement("Size")]
 		public Size Size
 		{
-			get { return (_size); }
+			get { return (this.size); }
 			set
 			{
-				if (value != _size)
+				if (value != this.size)
 				{
-					_size = value;
+					this.size = value;
 					SetChanged();
 				}
 			}
@@ -162,10 +162,10 @@ namespace YAT.Model.Settings
 			{
 				return
 					(
-					(_startPosition == value._startPosition) &&
-					(_windowState   == value._windowState) &&
-					(_location      == value._location) &&
-					(_size          == value._size)
+					(this.startPosition == value.startPosition) &&
+					(this.windowState   == value.windowState) &&
+					(this.location      == value.location) &&
+					(this.size          == value.size)
 					);
 			}
 			return (false);

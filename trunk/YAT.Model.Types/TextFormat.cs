@@ -26,22 +26,22 @@ namespace YAT.Model.Types
 	[Serializable]
 	public class TextFormat : IEquatable<TextFormat>
 	{
-		private Color _color;
-		private FontStyle _fontStyle;
+		private Color color;
+		private FontStyle fontStyle;
 
 		/// <summary></summary>
 		public TextFormat()
 		{
-			_color = Color.Black;
-			_fontStyle = FontStyle.Regular;
+			this.color = Color.Black;
+			this.fontStyle = FontStyle.Regular;
 		}
 
 		/// <summary></summary>
 		public TextFormat(Color color, bool bold, bool italic, bool underline, bool strikeout)
 		{
-			_color = color;
+			this.color = color;
 
-			_fontStyle = FontStyle.Regular;
+			this.fontStyle = FontStyle.Regular;
 			Bold = bold;
 			Italic = italic;
 			Underline = underline;
@@ -51,8 +51,8 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public TextFormat(TextFormat rhs)
 		{
-			_color = rhs._color;
-			_fontStyle = rhs._fontStyle;
+			this.color = rhs.color;
+			this.fontStyle = rhs.fontStyle;
 		}
 
 		#region Properties
@@ -64,37 +64,37 @@ namespace YAT.Model.Types
 		[XmlIgnore]
 		public virtual Color Color
 		{
-			get { return (_color); }
-			set { _color = value; }
+			get { return (this.color); }
+			set { this.color = value; }
 		}
 
 		/// <summary></summary>
 		[XmlElement("Color")]
 		public virtual int ColorAsArgb
 		{
-			get { return (_color.ToArgb()); }
-			set { _color = Color.FromArgb(value); }
+			get { return (this.color.ToArgb()); }
+			set { this.color = Color.FromArgb(value); }
 		}
 
 		/// <summary></summary>
 		[XmlElement("FontStyle")]
 		public virtual FontStyle FontStyle
 		{
-			get { return (_fontStyle); }
-			set { _fontStyle = value; }
+			get { return (this.fontStyle); }
+			set { this.fontStyle = value; }
 		}
 
 		/// <summary></summary>
 		[XmlIgnore]
 		public virtual bool Bold
 		{
-			get { return ((_fontStyle & FontStyle.Bold) == FontStyle.Bold); }
+			get { return ((this.fontStyle & FontStyle.Bold) == FontStyle.Bold); }
 			set
 			{
 				if (value)
-					_fontStyle |= FontStyle.Bold;
+					this.fontStyle |= FontStyle.Bold;
 				else
-					_fontStyle &= ~FontStyle.Bold;
+					this.fontStyle &= ~FontStyle.Bold;
 			}
 		}
 
@@ -102,13 +102,13 @@ namespace YAT.Model.Types
 		[XmlIgnore]
 		public virtual bool Italic
 		{
-			get { return ((_fontStyle & FontStyle.Italic) == FontStyle.Italic); }
+			get { return ((this.fontStyle & FontStyle.Italic) == FontStyle.Italic); }
 			set
 			{
 				if (value)
-					_fontStyle |= FontStyle.Italic;
+					this.fontStyle |= FontStyle.Italic;
 				else
-					_fontStyle &= ~FontStyle.Italic;
+					this.fontStyle &= ~FontStyle.Italic;
 			}
 		}
 
@@ -116,13 +116,13 @@ namespace YAT.Model.Types
 		[XmlIgnore]
 		public virtual bool Underline
 		{
-			get { return ((_fontStyle & FontStyle.Underline) == FontStyle.Underline); }
+			get { return ((this.fontStyle & FontStyle.Underline) == FontStyle.Underline); }
 			set
 			{
 				if (value)
-					_fontStyle |= FontStyle.Underline;
+					this.fontStyle |= FontStyle.Underline;
 				else
-					_fontStyle &= ~FontStyle.Underline;
+					this.fontStyle &= ~FontStyle.Underline;
 			}
 		}
 
@@ -130,13 +130,13 @@ namespace YAT.Model.Types
 		[XmlIgnore]
 		public virtual bool Strikeout
 		{
-			get { return ((_fontStyle & FontStyle.Strikeout) == FontStyle.Strikeout); }
+			get { return ((this.fontStyle & FontStyle.Strikeout) == FontStyle.Strikeout); }
 			set
 			{
 				if (value)
-					_fontStyle |= FontStyle.Strikeout;
+					this.fontStyle |= FontStyle.Strikeout;
 				else
-					_fontStyle &= ~FontStyle.Strikeout;
+					this.fontStyle &= ~FontStyle.Strikeout;
 			}
 		}
 
@@ -165,8 +165,8 @@ namespace YAT.Model.Types
 			{
 				return
 					(
-					(_fontStyle == value._fontStyle) &&
-					(_color     == value._color)
+					(this.fontStyle == value.fontStyle) &&
+					(this.color     == value.color)
 					);
 			}
 			return (false);

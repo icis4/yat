@@ -150,17 +150,17 @@ namespace MKY.IO.Usb
 		// Static Methods > Device Notification
 		//------------------------------------------------------------------------------------------
 
-		private static NativeMessageHandler _staticDeviceNotificationWindow = new NativeMessageHandler(StaticDeviceNotificationHandler);
-		private static IntPtr _staticDeviceNotificationHandle = IntPtr.Zero;
+		private static NativeMessageHandler staticDeviceNotificationWindow = new NativeMessageHandler(StaticDeviceNotificationHandler);
+		private static IntPtr staticDeviceNotificationHandle = IntPtr.Zero;
 
 		private static void RegisterStaticDeviceNotificationHandler()
 		{
-			Utilities.Win32.DeviceManagement.RegisterDeviceNotificationHandle(_staticDeviceNotificationWindow.Handle, HidGuid, out _staticDeviceNotificationHandle);
+			Utilities.Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationWindow.Handle, HidGuid, out staticDeviceNotificationHandle);
 		}
 
 		private static void UnregisterStaticDeviceNotificationHandler()
 		{
-			Utilities.Win32.DeviceManagement.UnregisterDeviceNotificationHandle(_staticDeviceNotificationHandle);
+			Utilities.Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
 		}
 
 		private static void StaticDeviceNotificationHandler(ref Message m)
@@ -199,23 +199,23 @@ namespace MKY.IO.Usb
 		// Fields
 		//==========================================================================================
 
-		private HidUsagePage _usagePage;
-		private HidUsage _usage;
+		private HidUsagePage usagePage;
+		private HidUsage usage;
 
-		private int _inputReportLength;
-		private int _outputReportLength;
-		private int _featureReportLength;
+		private int inputReportLength;
+		private int outputReportLength;
+		private int featureReportLength;
 
-		private int _linkCollectionNodes;
-		private int _inputButtonCaps;
-		private int _inputValueCaps;
-		private int _inputDataIndices;
-		private int _outputButtonCaps;
-		private int _outputValueCaps;
-		private int _outputDataIndices;
-		private int _featureButtonCaps;
-		private int _featureValueCaps;
-		private int _featureDataIndices;
+		private int linkCollectionNodes;
+		private int inputButtonCaps;
+		private int inputValueCaps;
+		private int inputDataIndices;
+		private int outputButtonCaps;
+		private int outputValueCaps;
+		private int outputDataIndices;
+		private int featureButtonCaps;
+		private int featureValueCaps;
+		private int featureDataIndices;
 
 		#endregion
 
@@ -259,25 +259,25 @@ namespace MKY.IO.Usb
 			{
 				try
 				{
-					Utilities.Win32.Hid.HIDP_CAPS caps = Utilities.Win32.Hid.GetDeviceCapabilities(deviceHandle);
+					Utilities.Win32.Hid.Native.HIDP_CAPS caps = Utilities.Win32.Hid.GetDeviceCapabilities(deviceHandle);
 
-					_usagePage = (XHidUsagePage)caps.UsagePage;
-					_usage     = (XHidUsage)caps.Usage;
+					this.usagePage = (XHidUsagePage)caps.UsagePage;
+					this.usage     = (XHidUsage)caps.Usage;
 
-					_inputReportLength   = caps.InputReportByteLength;
-					_outputReportLength  = caps.OutputReportByteLength;
-					_featureReportLength = caps.FeatureReportByteLength;
+					this.inputReportLength   = caps.InputReportByteLength;
+					this.outputReportLength  = caps.OutputReportByteLength;
+					this.featureReportLength = caps.FeatureReportByteLength;
 
-					_linkCollectionNodes = caps.NumberLinkCollectionNodes;
-					_inputButtonCaps     = caps.NumberInputButtonCaps;
-					_inputValueCaps      = caps.NumberInputValueCaps;
-					_inputDataIndices    = caps.NumberInputDataIndices;
-					_outputButtonCaps    = caps.NumberOutputButtonCaps;
-					_outputValueCaps     = caps.NumberOutputValueCaps;
-					_outputDataIndices   = caps.NumberOutputDataIndices;
-					_featureButtonCaps   = caps.NumberFeatureButtonCaps;
-					_featureValueCaps    = caps.NumberFeatureValueCaps;
-					_featureDataIndices  = caps.NumberFeatureDataIndices;
+					this.linkCollectionNodes = caps.NumberLinkCollectionNodes;
+					this.inputButtonCaps     = caps.NumberInputButtonCaps;
+					this.inputValueCaps      = caps.NumberInputValueCaps;
+					this.inputDataIndices    = caps.NumberInputDataIndices;
+					this.outputButtonCaps    = caps.NumberOutputButtonCaps;
+					this.outputValueCaps     = caps.NumberOutputValueCaps;
+					this.outputDataIndices   = caps.NumberOutputDataIndices;
+					this.featureButtonCaps   = caps.NumberFeatureButtonCaps;
+					this.featureValueCaps    = caps.NumberFeatureValueCaps;
+					this.featureDataIndices  = caps.NumberFeatureDataIndices;
 				}
 				finally
 				{
@@ -313,91 +313,91 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public virtual HidUsagePage UsagePage
 		{
-			get { return (_usagePage); }
+			get { return (this.usagePage); }
 		}
 
 		/// <summary></summary>
 		public virtual HidUsage Usage
 		{
-			get { return (_usage); }
+			get { return (this.usage); }
 		}
 
 		/// <summary></summary>
 		public virtual int InputReportLength
 		{
-			get { return (_inputReportLength); }
+			get { return (this.inputReportLength); }
 		}
 
 		/// <summary></summary>
 		public virtual int OutputReportLength
 		{
-			get { return (_outputReportLength); }
+			get { return (this.outputReportLength); }
 		}
 
 		/// <summary></summary>
 		public virtual int FeatureReportLength
 		{
-			get { return (_featureReportLength); }
+			get { return (this.featureReportLength); }
 		}
 
 		/// <summary></summary>
 		public virtual int LinkCollectionNodes
 		{
-			get { return (_linkCollectionNodes); }
+			get { return (this.linkCollectionNodes); }
 		}
 
 		/// <summary></summary>
 		public virtual int InputButtonCaps
 		{
-			get { return (_inputButtonCaps); }
+			get { return (this.inputButtonCaps); }
 		}
 
 		/// <summary></summary>
 		public virtual int InputValueCaps
 		{
-			get { return (_inputValueCaps); }
+			get { return (this.inputValueCaps); }
 		}
 
 		/// <summary></summary>
 		public virtual int InputDataIndices
 		{
-			get { return (_inputDataIndices); }
+			get { return (this.inputDataIndices); }
 		}
 
 		/// <summary></summary>
 		public virtual int OutputButtonCaps
 		{
-			get { return (_outputButtonCaps); }
+			get { return (this.outputButtonCaps); }
 		}
 
 		/// <summary></summary>
 		public virtual int OutputValueCaps
 		{
-			get { return (_outputValueCaps); }
+			get { return (this.outputValueCaps); }
 		}
 
 		/// <summary></summary>
 		public virtual int OutputDataIndices
 		{
-			get { return (_outputDataIndices); }
+			get { return (this.outputDataIndices); }
 		}
 
 		/// <summary></summary>
 		public virtual int FeatureButtonCaps
 		{
-			get { return (_featureButtonCaps); }
+			get { return (this.featureButtonCaps); }
 		}
 
 		/// <summary></summary>
 		public virtual int FeatureValueCaps
 		{
-			get { return (_featureValueCaps); }
+			get { return (this.featureValueCaps); }
 		}
 
 		/// <summary></summary>
 		public virtual int FeatureDataIndices
 		{
-			get { return (_featureDataIndices); }
+			get { return (this.featureDataIndices); }
 		}
 
 		#endregion

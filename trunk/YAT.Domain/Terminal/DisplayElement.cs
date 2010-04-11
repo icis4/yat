@@ -283,12 +283,12 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private SerialDirection _direction;
-		private List<byte> _origin;
-		private string _text;
-		private int _dataCount;
-		private bool _isData;
-		private bool _isEol;
+		private SerialDirection direction;
+		private List<byte> origin;
+		private string text;
+		private int dataCount;
+		private bool isData;
+		private bool isEol;
 
 		#endregion
 
@@ -341,12 +341,12 @@ namespace YAT.Domain
 
 		private void Initialize(SerialDirection direction, List<byte> origin, string text, int dataCount, bool isData, bool isEol)
 		{
-			_direction = direction;
-			_origin = origin;
-			_text = text;
-			_dataCount = dataCount;
-			_isData = isData;
-			_isEol = isEol;
+			this.direction = direction;
+			this.origin = origin;
+			this.text = text;
+			this.dataCount = dataCount;
+			this.isData = isData;
+			this.isEol = isEol;
 		}
 
 		#endregion
@@ -360,62 +360,62 @@ namespace YAT.Domain
 		[XmlAttribute("Direction")]
 		public virtual SerialDirection Direction
 		{
-			get { return (_direction); }
-			set { _direction = value; }
+			get { return (this.direction); }
+			set { this.direction = value; }
 		}
 
 		/// <summary></summary>
 		[XmlAttribute("Origin")]
 		public virtual List<byte> Origin
 		{
-			get { return (_origin); }
-			set { _origin = value; }
+			get { return (this.origin); }
+			set { this.origin = value; }
 		}
 
 		/// <summary></summary>
 		[XmlIgnore()]
 		public virtual int OriginCount
 		{
-			get { return (_origin.Count); }
+			get { return (this.origin.Count); }
 		}
 
 		/// <summary></summary>
 		[XmlAttribute("Text")]
 		public virtual string Text
 		{
-			get { return (_text); }
-			set { _text = value; }
+			get { return (this.text); }
+			set { this.text = value; }
 		}
 
 		/// <summary></summary>
 		[XmlAttribute("DataCount")]
 		public virtual int DataCount
 		{
-			get { return (_dataCount); }
-			set { _dataCount = value; }
+			get { return (this.dataCount); }
+			set { this.dataCount = value; }
 		}
 
 		/// <summary></summary>
 		[XmlAttribute("IsData")]
 		public virtual bool IsData
 		{
-			get { return (_isData); }
-			set { _isData = value; }
+			get { return (this.isData); }
+			set { this.isData = value; }
 		}
 
 		/// <summary></summary>
 		[XmlIgnore]
 		public virtual bool IsNoData
 		{
-			get { return (!_isData); }
+			get { return (!this.isData); }
 		}
 
 		/// <summary></summary>
 		[XmlAttribute("IsEol")]
 		public virtual bool IsEol
 		{
-			get { return (_isEol); }
-			set { _isEol = value; }
+			get { return (this.isEol); }
+			set { this.isEol = value; }
 		}
 
 		#endregion
@@ -449,12 +449,12 @@ namespace YAT.Domain
 			else if (this is Error)       de = new Error();
 			else throw (new TypeLoadException("Unknown display element type"));
 
-			de._direction = _direction;
-			de._origin = _origin;
-			de._text = _text;
-			de._dataCount = _dataCount;
-			de._isData = _isData;
-			de._isEol = _isEol;
+			de.direction = this.direction;
+			de.origin    = this.origin;
+			de.text      = this.text;
+			de.dataCount = this.dataCount;
+			de.isData    = this.isData;
+			de.isEol     = this.isEol;
 
 			return (de);
 		}
@@ -467,13 +467,13 @@ namespace YAT.Domain
 			if (this.GetType() != de.GetType())
 				return (false);
 
-			if (_direction != de._direction)
+			if (this.direction != de.direction)
 				return (false);
 
-			if (_isData != de._isData)
+			if (this.isData != de.isData)
 				return (false);
 
-			if (_isEol != de._isEol)
+			if (this.isEol != de.isEol)
 				return (false);
 
 			return (true);
@@ -491,22 +491,22 @@ namespace YAT.Domain
 			if (this.GetType() != de.GetType())
 				throw (new InvalidOperationException("Cannot append because type doesn't match"));
 
-			if (_direction != de._direction)
+			if (this.direction != de.direction)
 				throw (new InvalidOperationException("Cannot append because direction doesn't match"));
 
-			if (_isData != de._isData)
+			if (this.isData != de.isData)
 				throw (new InvalidOperationException("Cannot append because kind doesn't match"));
 
-			if (_isEol != de._isEol)
+			if (this.isEol != de.isEol)
 				throw (new InvalidOperationException("Cannot append because EOL doesn't match"));
 
 			// \fixme 2010-04-01 / mky
 			// Weird ArgumentException when receiving large chunks of data.
 			try
 			{
-				_origin.AddRange(de._origin);
-				_text += de._text;
-				_dataCount += de._dataCount;
+				this.origin.AddRange(de.origin);
+				this.text      += de.text;
+				this.dataCount += de.dataCount;
 			}
 			catch (Exception ex)
 			{
@@ -527,7 +527,7 @@ namespace YAT.Domain
 		/// </summary>
 		public override string ToString()
 		{
-			return (_text);
+			return (this.text);
 		}
 
 		/// <summary>
@@ -536,12 +536,12 @@ namespace YAT.Domain
 		public virtual string ToString(string indent)
 		{
 			return (indent + "- Type: "      + GetType().Name + Environment.NewLine +
-					indent + "- Direction: " + _direction     + Environment.NewLine +
-					indent + "- Origin: "    + _origin        + Environment.NewLine +
-					indent + "- Text: "      + _text          + Environment.NewLine +
-					indent + "- DataCount: " + _dataCount     + Environment.NewLine +
-					indent + "- IsData: "    + _isData        + Environment.NewLine +
-					indent + "- IsEol: "     + _isEol         + Environment.NewLine);
+					indent + "- Direction: " + this.direction     + Environment.NewLine +
+					indent + "- Origin: "    + this.origin        + Environment.NewLine +
+					indent + "- Text: "      + this.text          + Environment.NewLine +
+					indent + "- DataCount: " + this.dataCount     + Environment.NewLine +
+					indent + "- IsData: "    + this.isData        + Environment.NewLine +
+					indent + "- IsEol: "     + this.isEol         + Environment.NewLine);
 		}
 
 		#endregion

@@ -36,12 +36,12 @@ namespace MKY.Utilities.Settings
 		// Fields
 		//==========================================================================================
 
-		private string _settingsFilePath = "";
-		private string _accessedSettingsFilePath = "";
+		private string settingsFilePath = "";
+		private string accessedSettingsFilePath = "";
 
-		private TDocumentSettings _settings = default(TDocumentSettings);
+		private TDocumentSettings settings = default(TDocumentSettings);
 
-		private AlternateXmlElement[] _alternateXmlElements = null;
+		private AlternateXmlElement[] alternateXmlElements = null;
 
 		#endregion
 
@@ -70,11 +70,11 @@ namespace MKY.Utilities.Settings
 
 		private void Initialize(TDocumentSettings settings)
 		{
-			_settings = settings;
+			this.settings = settings;
 
 			IAlternateXmlElementProvider aep = settings	as IAlternateXmlElementProvider;
 			if (aep != null)
-				_alternateXmlElements = aep.AlternateXmlElements;
+				this.alternateXmlElements = aep.AlternateXmlElements;
 		}
 
 		#endregion
@@ -89,8 +89,8 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public virtual string SettingsFilePath
 		{
-			get { return (_settingsFilePath); }
-			set { _settingsFilePath = value; }
+			get { return (this.settingsFilePath); }
+			set { this.settingsFilePath = value; }
 		}
 
 		/// <summary>
@@ -100,11 +100,11 @@ namespace MKY.Utilities.Settings
 		{
 			get
 			{
-				if (_settingsFilePath == null)
+				if (this.settingsFilePath == null)
 					return (false);
-				if (_settingsFilePath == "")
+				if (this.settingsFilePath == "")
 					return (false);
-				if (System.IO.Path.GetFullPath(_settingsFilePath) == "")
+				if (System.IO.Path.GetFullPath(this.settingsFilePath) == "")
 					return (false);
 				return (true);
 			}
@@ -117,11 +117,11 @@ namespace MKY.Utilities.Settings
 		{
 			get
 			{
-				if (_settingsFilePath == null)
+				if (this.settingsFilePath == null)
 					return (false);
-				if (_settingsFilePath == "")
+				if (this.settingsFilePath == "")
 					return (false);
-				return (System.IO.File.Exists(_settingsFilePath));
+				return (System.IO.File.Exists(this.settingsFilePath));
 			}
 		}
 
@@ -132,15 +132,15 @@ namespace MKY.Utilities.Settings
 		{
 			get
 			{
-				if (_settingsFilePath == null)
+				if (this.settingsFilePath == null)
 					return (false);
-				if (_settingsFilePath == "")
+				if (this.settingsFilePath == "")
 					return (false);
-				if (!System.IO.File.Exists(_settingsFilePath))
+				if (!System.IO.File.Exists(this.settingsFilePath))
 					return (false);
 
 				// return whether current settings file path is still the same as the last access
-				return (_settingsFilePath == _accessedSettingsFilePath);
+				return (this.settingsFilePath == this.accessedSettingsFilePath);
 			}
 		}
 
@@ -149,7 +149,7 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public virtual TDocumentSettings Settings
 		{
-			get { return (_settings); }
+			get { return (this.settings); }
 		}
 
 		/// <summary>
@@ -183,7 +183,7 @@ namespace MKY.Utilities.Settings
 			bool loadSuccess = true;
 			object settings = null;
 
-			settings = LoadFromFile(_settings.GetType(), _settingsFilePath);
+			settings = LoadFromFile(this.settings.GetType(), this.settingsFilePath);
 			if (settings == null)
 			{
 				settings = SettingsDefault;
@@ -191,10 +191,10 @@ namespace MKY.Utilities.Settings
 			}
 			else
 			{
-				_accessedSettingsFilePath = _settingsFilePath;
+				this.accessedSettingsFilePath = this.settingsFilePath;
 			}
-			_settings = (TDocumentSettings)settings;
-			_settings.ClearChanged();
+			this.settings = (TDocumentSettings)settings;
+			this.settings.ClearChanged();
 
 			// return load status
 			return (loadSuccess);
@@ -225,7 +225,7 @@ namespace MKY.Utilities.Settings
 					object settings = null;
 					using (StreamReader sr = new StreamReader(filePath))
 					{
-						AlternateTolerantXmlSerializer serializer = new AlternateTolerantXmlSerializer(type, _alternateXmlElements);
+						AlternateTolerantXmlSerializer serializer = new AlternateTolerantXmlSerializer(type, this.alternateXmlElements);
 						settings = serializer.Deserialize(sr);
 					}
 					return (settings);
@@ -252,9 +252,9 @@ namespace MKY.Utilities.Settings
 
 			try
 			{
-				SaveToFile(_settings.GetType(), _settingsFilePath, _settings);
-				_accessedSettingsFilePath = _settingsFilePath;
-				_settings.ClearChanged();
+				SaveToFile(this.settings.GetType(), this.settingsFilePath, this.settings);
+				this.accessedSettingsFilePath = this.settingsFilePath;
+				this.settings.ClearChanged();
 			}
 			catch (Exception ex)
 			{
@@ -320,7 +320,7 @@ namespace MKY.Utilities.Settings
 		{
 			try
 			{
-				File.Delete(_settingsFilePath);
+				File.Delete(this.settingsFilePath);
 				return (true);
 			}
 			catch

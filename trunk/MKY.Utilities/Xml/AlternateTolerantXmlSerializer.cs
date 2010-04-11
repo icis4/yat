@@ -55,7 +55,7 @@ namespace MKY.Utilities.Xml
 		// Fields
 		//==========================================================================================
 
-		AlternateXmlElement[] _alternates;
+		private AlternateXmlElement[] alternates;
 
 		#endregion
 
@@ -68,7 +68,7 @@ namespace MKY.Utilities.Xml
 		public AlternateTolerantXmlSerializer(Type type, AlternateXmlElement[] alternates)
 			: base (type)
 		{
-			_alternates = alternates;
+			this.alternates = alternates;
 		}
 
 		#endregion
@@ -94,7 +94,7 @@ namespace MKY.Utilities.Xml
 			XmlNode inputNode = inputNavigator.UnderlyingObject as XmlNode;
 			if (inputNode != null)
 			{
-				string localName = GetLocalNameAlternateTolerant(GetXmlPath(inputNode), inputNavigator.Name, _alternates);
+				string localName = GetLocalNameAlternateTolerant(GetXmlPath(inputNode), inputNavigator.Name, this.alternates);
 				if ((localName != null) && (localName != ""))
 				{
 					if (outputNavigator.MoveToAttribute(localName, inputNavigator.NamespaceURI))
@@ -122,7 +122,7 @@ namespace MKY.Utilities.Xml
 			XmlNode inputNode = inputNavigator.UnderlyingObject as XmlNode;
 			if (inputNode != null)
 			{
-				string localName = GetLocalNameAlternateTolerant(GetXmlPath(inputNode), inputNavigator.Name, _alternates);
+				string localName = GetLocalNameAlternateTolerant(GetXmlPath(inputNode), inputNavigator.Name, this.alternates);
 				if ((localName != null) && (localName != ""))
 				{
 					if (outputNavigator.MoveToChild(localName, inputNavigator.NamespaceURI))

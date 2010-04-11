@@ -63,8 +63,8 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const bool _TerminalIsOpenDefault = false;
-		private const float _SplitterRatioDefault = (float)0.75;
+		private const bool TerminalIsOpenDefault = false;
+		private const float SplitterRatioDefault = (float)0.75;
 
 		#endregion
 
@@ -73,16 +73,16 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool _isSettingControls = false;
+		private bool isSettingControls = false;
 
-		private Command _command = new Command();
-		private RecentItemCollection<Command> _recents;
-		private bool _terminalIsOpen = _TerminalIsOpenDefault;
-		private float _splitterRatio = _SplitterRatioDefault;
+		private Command command = new Command();
+		private RecentItemCollection<Command> recents;
+		private bool terminalIsOpen = TerminalIsOpenDefault;
+		private float splitterRatio = SplitterRatioDefault;
 
-		private FocusState _focusState = FocusState.Inactive;
-		private bool _isValidated = false;
-		private bool _sendIsRequested = false;
+		private FocusState focusState = FocusState.Inactive;
+		private bool isValidated = false;
+		private bool sendIsRequested = false;
 
 		#endregion
 
@@ -126,13 +126,13 @@ namespace YAT.Gui.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Command Command
 		{
-			get { return (_command); }
+			get { return (this.command); }
 			set
 			{
 				if (value != null)
-					_command = value;
+					this.command = value;
 				else
-					_command = new Command();
+					this.command = new Command();
 
 				OnCommandChanged(new EventArgs());
 				SetControls();
@@ -145,7 +145,7 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				_recents = value;
+				this.recents = value;
 				// don't call SetControls(), recents are shown at DropDown
 			}
 		}
@@ -156,18 +156,18 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				_terminalIsOpen = value;
+				this.terminalIsOpen = value;
 				SetControls();
 			}
 		}
 
-		[DefaultValue(_SplitterRatioDefault)]
+		[DefaultValue(SplitterRatioDefault)]
 		public virtual float SplitterRatio
 		{
-			get { return (_splitterRatio); }
+			get { return (this.splitterRatio); }
 			set
 			{
-				_splitterRatio = value;
+				this.splitterRatio = value;
 				SetControls();
 			}
 		}
@@ -193,11 +193,11 @@ namespace YAT.Gui.Controls
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if ((_focusState != FocusState.Inactive) && (keyData == Keys.Enter))
+			if ((this.focusState != FocusState.Inactive) && (keyData == Keys.Enter))
 			{
 				if (button_SendCommand.Enabled)
 				{
-					if (_isValidated)
+					if (this.isValidated)
 					{
 						RequestSendCommand();
 					}
@@ -222,16 +222,16 @@ namespace YAT.Gui.Controls
 		/// <summary>
 		/// Startup flag only used in the following event handler.
 		/// </summary>
-		private bool _isStartingUp = true;
+		private bool isStartingUp = true;
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
 		private void SendCommand_Paint(object sender, PaintEventArgs e)
 		{
-			if (_isStartingUp)
+			if (this.isStartingUp)
 			{
-				_isStartingUp = false;
+				this.isStartingUp = false;
 				SetControls();
 
 				// Move cursor to end.
@@ -241,8 +241,8 @@ namespace YAT.Gui.Controls
 
 		private void SendCommand_Enter(object sender, EventArgs e)
 		{
-			_focusState = FocusState.Inactive;
-			_isValidated = false;
+			this.focusState = FocusState.Inactive;
+			this.isValidated = false;
 		}
 
 		/// <remarks>
@@ -253,10 +253,10 @@ namespace YAT.Gui.Controls
 		/// </remarks>
 		private void SendCommand_Leave(object sender, EventArgs e)
 		{
-			if (_isValidated)
-				_focusState = FocusState.Inactive;
+			if (this.isValidated)
+				this.focusState = FocusState.Inactive;
 			else
-				_focusState = FocusState.IsLeavingControl;
+				this.focusState = FocusState.IsLeavingControl;
 		}
 
 		#endregion
@@ -274,17 +274,17 @@ namespace YAT.Gui.Controls
 		private void comboBox_Command_Enter(object sender, EventArgs e)
 		{
 			// Clear "<Enter a command...>" if needed
-			if ((_focusState == FocusState.Inactive) && !_command.IsSingleLineCommand)
+			if ((this.focusState == FocusState.Inactive) && !this.command.IsSingleLineCommand)
 			{
-				_isSettingControls = true;
+				this.isSettingControls = true;
 				comboBox_Command.Text      = "";
 				comboBox_Command.ForeColor = SystemColors.ControlText;
 				comboBox_Command.Font      = SystemFonts.DefaultFont; 
-				_isSettingControls = false;
+				this.isSettingControls = false;
 			}
 
-			_focusState = FocusState.HasFocus;
-			_isValidated = false;
+			this.focusState = FocusState.HasFocus;
+			this.isValidated = false;
 		}
 
 		/// <remarks>
@@ -299,16 +299,16 @@ namespace YAT.Gui.Controls
 		/// </remarks>
 		private void comboBox_Command_Leave(object sender, EventArgs e)
 		{
-			if (_isValidated)
-				_focusState = FocusState.Inactive;
+			if (this.isValidated)
+				this.focusState = FocusState.Inactive;
 			else
-				_focusState = FocusState.IsLeaving;
+				this.focusState = FocusState.IsLeaving;
 		}
 
 		private void comboBox_Command_TextChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
-				_isValidated = false;
+			if (!this.isSettingControls)
+				this.isValidated = false;
 		}
 
 		/// <remarks>
@@ -323,18 +323,18 @@ namespace YAT.Gui.Controls
 		/// </remarks>
 		private void comboBox_Command_Validating(object sender, CancelEventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				if (!_isValidated && (_focusState != FocusState.IsLeavingControl))
+				if (!this.isValidated && (this.focusState != FocusState.IsLeavingControl))
 				{
 					if (SendCommandSettings.IsEasterEggCommand(comboBox_Command.Text))
 					{
-						_isValidated = true;
+						this.isValidated = true;
 
-						if (_focusState == FocusState.IsLeaving)
-							_focusState = FocusState.Inactive;
+						if (this.focusState == FocusState.IsLeaving)
+							this.focusState = FocusState.Inactive;
 						else
-							_focusState = FocusState.HasFocus;
+							this.focusState = FocusState.HasFocus;
 
 						CreateSingleLineCommand(comboBox_Command.Text);
 						return;
@@ -344,18 +344,18 @@ namespace YAT.Gui.Controls
 					int invalidTextLength;
 					if (Validation.ValidateSequence(this, "Command", comboBox_Command.Text, out invalidTextStart, out invalidTextLength))
 					{
-						_isValidated = true;
+						this.isValidated = true;
 
-						if (_focusState == FocusState.IsLeaving)
-							_focusState = FocusState.Inactive;
+						if (this.focusState == FocusState.IsLeaving)
+							this.focusState = FocusState.Inactive;
 						else
-							_focusState = FocusState.HasFocus;
+							this.focusState = FocusState.HasFocus;
 
 						CreateSingleLineCommand(comboBox_Command.Text);
 						return;
 					}
 
-					_focusState = FocusState.HasFocus;
+					this.focusState = FocusState.HasFocus;
 					comboBox_Command.Select(invalidTextStart, invalidTextLength);
 					e.Cancel = true;
 				}
@@ -364,9 +364,9 @@ namespace YAT.Gui.Controls
 
 		private void comboBox_Command_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				_isValidated = true; // Commands in history have already been validated
+				this.isValidated = true; // Commands in history have already been validated
 				SetCommand((Command)((RecentItem<Command>)comboBox_Command.SelectedItem));
 			}
 		}
@@ -378,7 +378,7 @@ namespace YAT.Gui.Controls
 
 		private void button_SendCommand_Click(object sender, EventArgs e)
 		{
-			if (_isValidated)
+			if (this.isValidated)
 			{
 				RequestSendCommand();
 			}
@@ -398,15 +398,15 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
-			splitContainer.SplitterDistance = (int)(_splitterRatio * splitContainer.Width);
+			splitContainer.SplitterDistance = (int)(this.splitterRatio * splitContainer.Width);
 
-			if (_focusState == FocusState.Inactive)
+			if (this.focusState == FocusState.Inactive)
 			{
-				if (_command.IsCommand)
+				if (this.command.IsCommand)
 				{
-					comboBox_Command.Text      = _command.SingleLineCommand;
+					comboBox_Command.Text      = this.command.SingleLineCommand;
 					comboBox_Command.ForeColor = SystemColors.ControlText;
 					comboBox_Command.Font      = SystemFonts.DefaultFont;
 				}
@@ -417,35 +417,35 @@ namespace YAT.Gui.Controls
 					comboBox_Command.Font      = Utilities.Drawing.ItalicDefaultFont;
 				}
 			}
-			else if (_sendIsRequested)
+			else if (this.sendIsRequested)
 			{   // Needed when command is modified (e.g. cleared) after send
-				if (_command.IsCommand)
-					comboBox_Command.Text  = _command.SingleLineCommand;
+				if (this.command.IsCommand)
+					comboBox_Command.Text  = this.command.SingleLineCommand;
 				else
 					comboBox_Command.Text  = "";
 
 				comboBox_Command.ForeColor = SystemColors.ControlText;
 				comboBox_Command.Font      = SystemFonts.DefaultFont;
 			}
-			button_SendCommand.Enabled = _terminalIsOpen;
+			button_SendCommand.Enabled = this.terminalIsOpen;
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void SetRecents()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
 			comboBox_Command.Items.Clear();
-			if (_recents != null)
-				comboBox_Command.Items.AddRange(_recents.ToArray());
+			if (this.recents != null)
+				comboBox_Command.Items.AddRange(this.recents.ToArray());
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void SetCommand(Command command)
 		{
-			_command = command;
+			this.command = command;
 
 			SetControls();
 			OnCommandChanged(new EventArgs());
@@ -456,7 +456,7 @@ namespace YAT.Gui.Controls
 		/// </remarks>
 		private void CreateSingleLineCommand(string commandLine)
 		{
-			_command = new Command(commandLine);
+			this.command = new Command(commandLine);
 
 			SetControls();
 			OnCommandChanged(new EventArgs());
@@ -465,11 +465,11 @@ namespace YAT.Gui.Controls
 		private void ShowMultiLineCommandBox(Control requestingControl)
 		{
 			// indicate multi line command
-			_isSettingControls = true;
+			this.isSettingControls = true;
 			comboBox_Command.Text      = Command.MultiLineCommandText;
 			comboBox_Command.ForeColor = SystemColors.ControlText;
 			comboBox_Command.Font      = SystemFonts.DefaultFont;
-			_isSettingControls = false;
+			this.isSettingControls = false;
 
 			// calculate startup location
 			Rectangle area = requestingControl.RectangleToScreen(requestingControl.DisplayRectangle);
@@ -478,11 +478,11 @@ namespace YAT.Gui.Controls
 			formStartupLocation.Y = area.Y + area.Height;
 
 			// show multi line box
-			MultiLineBox f = new MultiLineBox(_command, formStartupLocation);
+			MultiLineBox f = new MultiLineBox(this.command, formStartupLocation);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
-				_command = f.CommandResult;
+				this.command = f.CommandResult;
 
 				SetControls();
 				button_SendCommand.Select();
@@ -498,7 +498,7 @@ namespace YAT.Gui.Controls
 
 		private void RequestSendCommand()
 		{
-			if (_focusState == FocusState.Inactive)
+			if (this.focusState == FocusState.Inactive)
 			{
 				OnSendCommandRequest(new EventArgs());
 			}
@@ -506,9 +506,9 @@ namespace YAT.Gui.Controls
 			{
 				// notifying the send state is needed when command is automatically
 				//   modified (e.g. cleared) after send
-				_sendIsRequested = true;
+				this.sendIsRequested = true;
 				OnSendCommandRequest(new EventArgs());
-				_sendIsRequested = false;
+				this.sendIsRequested = false;
 			}
 		}
 

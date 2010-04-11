@@ -38,10 +38,10 @@ namespace YAT.Gui.Forms
 		//==========================================================================================
 
 		// settings
-		private System.Timers.Timer _settingsTimer = new System.Timers.Timer();
+		private System.Timers.Timer settingsTimer = new System.Timers.Timer();
 
-		private bool _applicationSettingsLoaded = false;
-		private bool _applicationSettingsReady = false;
+		private bool applicationSettingsLoaded = false;
+		private bool applicationSettingsReady = false;
 
 		#endregion
 
@@ -73,10 +73,10 @@ namespace YAT.Gui.Forms
 			if (Width < width)
 				Width = width;
 
-			_settingsTimer.Interval = 100;
-			_settingsTimer.AutoReset = false;
-			_settingsTimer.Elapsed += new System.Timers.ElapsedEventHandler(_applicationSettingsTimer_Elapsed);
-			_settingsTimer.Start();
+			this.settingsTimer.Interval = 100;
+			this.settingsTimer.AutoReset = false;
+			this.settingsTimer.Elapsed += new System.Timers.ElapsedEventHandler(this.applicationSettingsTimer_Elapsed);
+			this.settingsTimer.Start();
 		}
 
 		#endregion
@@ -89,7 +89,7 @@ namespace YAT.Gui.Forms
 		private void WelcomeScreen_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			timer_Opacity.Dispose();
-			_settingsTimer.Dispose();
+			this.settingsTimer.Dispose();
 		}
 
 		private void timer_Opacity_Tick(object sender, EventArgs e)
@@ -97,7 +97,7 @@ namespace YAT.Gui.Forms
 			// - close welcome screen immediately if application settings successfully loaded
 			// - close welcome screen after opacity transition if application settings
 			//   could not be loaded successfully
-			if (!_applicationSettingsLoaded && (Opacity < 1.00))
+			if (!this.applicationSettingsLoaded && (Opacity < 1.00))
 			{
 				// opacity starts at 0.25 (25%)
 				// 25% opacity increase per second in 1% steps
@@ -105,7 +105,7 @@ namespace YAT.Gui.Forms
 				Opacity += 0.01;
 				Refresh();
 			}
-			else if (_applicationSettingsReady)
+			else if (this.applicationSettingsReady)
 			{
 				timer_Opacity.Stop();
 
@@ -114,18 +114,18 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void _applicationSettingsTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private void applicationSettingsTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			try
 			{
-				_applicationSettingsLoaded = ApplicationSettings.Load();
+				this.applicationSettingsLoaded = ApplicationSettings.Load();
 			}
 			catch
 			{
 			}
 			finally
 			{
-				_applicationSettingsReady = true;
+				this.applicationSettingsReady = true;
 			}
 		}
 

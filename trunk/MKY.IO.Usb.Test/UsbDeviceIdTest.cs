@@ -55,7 +55,7 @@ namespace MKY.IO.Usb.Test
 		// Fields
 		//==========================================================================================
 
-		private readonly TestSet[] _testSets =
+		private readonly TestSet[] testSets =
 		{
 			new TestSet(true,   0x0ABC,  0x1234, new string[] { "VID:0ABC PID:1234", "vid:0ABC pid:1234"} ),
 			new TestSet(true,   0x0ABC,  0x1234, new string[] { "VID_0ABC PID_1234", "vid_0ABC pid_1234"} ),
@@ -86,7 +86,7 @@ namespace MKY.IO.Usb.Test
 		{
 			DeviceInfo id;
 
-			foreach (TestSet ts in _testSets)
+			foreach (TestSet ts in this.testSets)
 			{
 				if (ts.IsValid)
 				{

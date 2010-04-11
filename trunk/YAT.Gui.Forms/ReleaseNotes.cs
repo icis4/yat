@@ -31,31 +31,31 @@ namespace YAT.Gui.Forms
 {
 	public partial class ReleaseNotes : Form
 	{
-		private const string _ReleaseNotesFileName = @"YAT Release Notes.txt";
+		private const string ReleaseNotesFileName = @"YAT Release Notes.txt";
 
-		private readonly string _ReleaseNotesFilePath = Application.StartupPath + Path.DirectorySeparatorChar + _ReleaseNotesFileName;
+		private readonly string ReleaseNotesFilePath = Application.StartupPath + Path.DirectorySeparatorChar + ReleaseNotesFileName;
 
-		private readonly string _ReleaseNotesDevelopmentRelativeFilePath =
+		private readonly string ReleaseNotesDevelopmentRelativeFilePath =
 			@".." + Path.DirectorySeparatorChar +
 			@".." + Path.DirectorySeparatorChar +
 			@".." + Path.DirectorySeparatorChar +
-			@"_Doc.User" + Path.DirectorySeparatorChar + _ReleaseNotesFileName;
+			@"Doc.User" + Path.DirectorySeparatorChar + ReleaseNotesFileName;
 
 		public ReleaseNotes()
 		{
 			InitializeComponent();
 
 			// Get file path depending on development or installation
-			string _filePath;
+			string filePath;
 			switch (Path.GetFileName(Application.StartupPath))
 			{
 				case "Debug":
 				case "Release":
-					_filePath = XPath.CombineDirectoryAndFilePaths(Application.StartupPath, _ReleaseNotesDevelopmentRelativeFilePath);
+					filePath = XPath.CombineDirectoryAndFilePaths(Application.StartupPath, ReleaseNotesDevelopmentRelativeFilePath);
 					break;
 
 				default:
-					_filePath = _ReleaseNotesFilePath;
+					filePath = ReleaseNotesFilePath;
 					break;
 			}
 
@@ -66,9 +66,9 @@ namespace YAT.Gui.Forms
 
 			// Open and fill release notes
 			textBox_ReleaseNotes.Text = "";
-			if (File.Exists(_filePath))
+			if (File.Exists(filePath))
 			{
-				using (StreamReader sr = new StreamReader(_filePath, Encoding.UTF8, true))
+				using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
 				{
 					if (sr != null)
 						textBox_ReleaseNotes.Text = sr.ReadToEnd();
@@ -76,7 +76,7 @@ namespace YAT.Gui.Forms
 			}
 			if (textBox_ReleaseNotes.Text == "")
 			{
-				textBox_ReleaseNotes.Text = "Couldn't read release notes from" + Environment.NewLine + _filePath;
+				textBox_ReleaseNotes.Text = "Couldn't read release notes from" + Environment.NewLine + filePath;
 			}
 			textBox_ReleaseNotes.SelectionStart = 0;
 			textBox_ReleaseNotes.SelectionLength = 0;

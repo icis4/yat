@@ -27,21 +27,21 @@ namespace YAT.Model.Settings
 	[Serializable]
 	public class NewTerminalSettings : MKY.Utilities.Settings.Settings, IEquatable<NewTerminalSettings>
 	{
-		private Domain.TerminalType _terminalType;
-		private Domain.IOType _ioType;
+		private Domain.TerminalType terminalType;
+		private Domain.IOType ioType;
 
-		private MKY.IO.Ports.SerialPortId _serialPortId;
+		private MKY.IO.Ports.SerialPortId serialPortId;
 
-		private XIPHost _socketRemoteHost;
-		private int _socketRemotePort;
+		private XIPHost socketRemoteHost;
+		private int socketRemotePort;
 
-		private XNetworkInterface _socketLocalInterface;
-		private int _socketLocalTcpPort;
-		private int _socketLocalUdpPort;
+		private XNetworkInterface socketLocalInterface;
+		private int socketLocalTcpPort;
+		private int socketLocalUdpPort;
 
-		private MKY.IO.Usb.DeviceInfo _usbHidDeviceInfo;
+		private MKY.IO.Usb.DeviceInfo usbHidDeviceInfo;
 
-		private bool _startTerminal;
+		private bool startTerminal;
 
 		/// <summary></summary>
 		public NewTerminalSettings()
@@ -64,21 +64,21 @@ namespace YAT.Model.Settings
 		public NewTerminalSettings(NewTerminalSettings rhs)
 			: base(rhs)
 		{
-			_terminalType         = rhs.TerminalType;
-			_ioType               = rhs.IOType;
+			this.terminalType         = rhs.TerminalType;
+			this.ioType               = rhs.IOType;
 
-			_serialPortId         = rhs.SerialPortId;
+			this.serialPortId         = rhs.SerialPortId;
 
-			_socketRemoteHost     = rhs.SocketRemoteHost;
-			_socketRemotePort     = rhs.SocketRemotePort;
+			this.socketRemoteHost     = rhs.SocketRemoteHost;
+			this.socketRemotePort     = rhs.SocketRemotePort;
 
-			_socketLocalInterface = rhs.SocketLocalInterface;
-			_socketLocalTcpPort   = rhs.SocketLocalTcpPort;
-			_socketLocalUdpPort   = rhs.SocketLocalUdpPort;
+			this.socketLocalInterface = rhs.SocketLocalInterface;
+			this.socketLocalTcpPort   = rhs.SocketLocalTcpPort;
+			this.socketLocalUdpPort   = rhs.SocketLocalUdpPort;
 
-			_usbHidDeviceInfo     = rhs.UsbHidDeviceInfo;
+			this.usbHidDeviceInfo     = rhs.UsbHidDeviceInfo;
 
-			_startTerminal        = rhs.StartTerminal;
+			this.startTerminal        = rhs.StartTerminal;
 
 			ClearChanged();
 		}
@@ -114,12 +114,12 @@ namespace YAT.Model.Settings
 		[XmlElement("TerminalType")]
 		public virtual Domain.TerminalType TerminalType
 		{
-			get { return (_terminalType); }
+			get { return (this.terminalType); }
 			set
 			{
-				if (value != _terminalType)
+				if (value != this.terminalType)
 				{
-					_terminalType = value;
+					this.terminalType = value;
 					SetChanged();
 				}
 			}
@@ -129,12 +129,12 @@ namespace YAT.Model.Settings
 		[XmlElement("IOType")]
 		public virtual Domain.IOType IOType
 		{
-			get { return (_ioType); }
+			get { return (this.ioType); }
 			set
 			{
-				if (value != _ioType)
+				if (value != this.ioType)
 				{
-					_ioType = value;
+					this.ioType = value;
 					SetChanged();
 				}
 			}
@@ -144,12 +144,12 @@ namespace YAT.Model.Settings
 		[XmlElement("SerialPortId")]
 		public virtual MKY.IO.Ports.SerialPortId SerialPortId
 		{
-			get { return (_serialPortId); }
+			get { return (this.serialPortId); }
 			set
 			{
-				if (value != _serialPortId)
+				if (value != this.serialPortId)
 				{
-					_serialPortId = value;
+					this.serialPortId = value;
 					SetChanged();
 				}
 			}
@@ -159,12 +159,12 @@ namespace YAT.Model.Settings
 		[XmlElement("SocketRemoteHost")]
 		public virtual XIPHost SocketRemoteHost
 		{
-			get { return (_socketRemoteHost); }
+			get { return (this.socketRemoteHost); }
 			set
 			{
-				if (value != _socketRemoteHost)
+				if (value != this.socketRemoteHost)
 				{
-					_socketRemoteHost = value;
+					this.socketRemoteHost = value;
 					SetChanged();
 				}
 			}
@@ -174,12 +174,12 @@ namespace YAT.Model.Settings
 		[XmlElement("SocketRemotePort")]
 		public virtual int SocketRemotePort
 		{
-			get { return (_socketRemotePort); }
+			get { return (this.socketRemotePort); }
 			set
 			{
-				if (value != _socketRemotePort)
+				if (value != this.socketRemotePort)
 				{
-					_socketRemotePort = value;
+					this.socketRemotePort = value;
 					SetChanged();
 				}
 			}
@@ -189,12 +189,12 @@ namespace YAT.Model.Settings
 		[XmlElement("SocketLocalInterface")]
 		public virtual XNetworkInterface SocketLocalInterface
 		{
-			get { return (_socketLocalInterface); }
+			get { return (this.socketLocalInterface); }
 			set
 			{
-				if (value != _socketLocalInterface)
+				if (value != this.socketLocalInterface)
 				{
-					_socketLocalInterface = value;
+					this.socketLocalInterface = value;
 					SetChanged();
 				}
 			}
@@ -206,7 +206,7 @@ namespace YAT.Model.Settings
 		{
 			get
 			{
-				switch (_ioType)
+				switch (this.ioType)
 				{
 					case Domain.IOType.TcpClient:
 					case Domain.IOType.TcpServer:
@@ -222,7 +222,7 @@ namespace YAT.Model.Settings
 			}
 			set
 			{
-				switch (_ioType)
+				switch (this.ioType)
 				{
 					case Domain.IOType.TcpClient:
 					case Domain.IOType.TcpServer:
@@ -241,12 +241,12 @@ namespace YAT.Model.Settings
 		[XmlElement("SocketLocalTcpPort")]
 		public virtual int SocketLocalTcpPort
 		{
-			get { return (_socketLocalTcpPort); }
+			get { return (this.socketLocalTcpPort); }
 			set
 			{
-				if (value != _socketLocalTcpPort)
+				if (value != this.socketLocalTcpPort)
 				{
-					_socketLocalTcpPort = value;
+					this.socketLocalTcpPort = value;
 					SetChanged();
 				}
 			}
@@ -256,12 +256,12 @@ namespace YAT.Model.Settings
 		[XmlElement("SocketLocalUdpPort")]
 		public virtual int SocketLocalUdpPort
 		{
-			get { return (_socketLocalUdpPort); }
+			get { return (this.socketLocalUdpPort); }
 			set
 			{
-				if (value != _socketLocalUdpPort)
+				if (value != this.socketLocalUdpPort)
 				{
-					_socketLocalUdpPort = value;
+					this.socketLocalUdpPort = value;
 					SetChanged();
 				}
 			}
@@ -271,12 +271,12 @@ namespace YAT.Model.Settings
 		[XmlElement("UsbHidDeviceInfo")]
 		public virtual MKY.IO.Usb.DeviceInfo UsbHidDeviceInfo
 		{
-			get { return (_usbHidDeviceInfo); }
+			get { return (this.usbHidDeviceInfo); }
 			set
 			{
-				if (value != _usbHidDeviceInfo)
+				if (value != this.usbHidDeviceInfo)
 				{
-					_usbHidDeviceInfo = value;
+					this.usbHidDeviceInfo = value;
 					SetChanged();
 				}
 			}
@@ -286,12 +286,12 @@ namespace YAT.Model.Settings
 		[XmlElement("StartTerminal")]
 		public virtual bool StartTerminal
 		{
-			get { return (_startTerminal); }
+			get { return (this.startTerminal); }
 			set
 			{
-				if (value != _startTerminal)
+				if (value != this.startTerminal)
 				{
-					_startTerminal = value;
+					this.startTerminal = value;
 					SetChanged();
 				}
 			}
@@ -322,16 +322,16 @@ namespace YAT.Model.Settings
 			{
 				return
 					(
-					(_terminalType         == value._terminalType) &&
-					(_ioType               == value._ioType) &&
-					(_serialPortId         == value._serialPortId) &&
-					(_socketRemoteHost     == value._socketRemoteHost) &&
-					(_socketRemotePort     == value._socketRemotePort) &&
-					(_socketLocalInterface == value._socketLocalInterface) &&
-					(_socketLocalTcpPort   == value._socketLocalTcpPort) &&
-					(_socketLocalUdpPort   == value._socketLocalUdpPort) &&
-					(_usbHidDeviceInfo     == value._usbHidDeviceInfo) &&
-					(_startTerminal        == value._startTerminal)
+					(this.terminalType         == value.terminalType) &&
+					(this.ioType               == value.ioType) &&
+					(this.serialPortId         == value.serialPortId) &&
+					(this.socketRemoteHost     == value.socketRemoteHost) &&
+					(this.socketRemotePort     == value.socketRemotePort) &&
+					(this.socketLocalInterface == value.socketLocalInterface) &&
+					(this.socketLocalTcpPort   == value.socketLocalTcpPort) &&
+					(this.socketLocalUdpPort   == value.socketLocalUdpPort) &&
+					(this.usbHidDeviceInfo     == value.usbHidDeviceInfo) &&
+					(this.startTerminal        == value.startTerminal)
 					);
 			}
 			return (false);

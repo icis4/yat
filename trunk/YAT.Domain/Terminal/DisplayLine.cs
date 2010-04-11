@@ -41,7 +41,7 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private int _dataCount;
+		private int dataCount;
 
 		#endregion
 
@@ -53,20 +53,20 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public DisplayElementCollection()
 		{
-			_dataCount = 0;
+			this.dataCount = 0;
 		}
 
 		/// <summary></summary>
 		public DisplayElementCollection(int elementCapacity)
 			: base(elementCapacity)
 		{
-			_dataCount = 0;
+			this.dataCount = 0;
 		}
 
 		/// <summary></summary>
 		public DisplayElementCollection(DisplayElementCollection collection)
 		{
-			_dataCount = 0;
+			this.dataCount = 0;
 			foreach (DisplayElement item in collection)
 				Add(item);
 		}
@@ -74,7 +74,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public DisplayElementCollection(DisplayElement displayElement)
 		{
-			_dataCount = 0;
+			this.dataCount = 0;
 			Add(displayElement);
 		}
 
@@ -90,7 +90,7 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual int DataCount
 		{
-			get { return (_dataCount); }
+			get { return (this.dataCount); }
 		}
 
 		#endregion
@@ -118,7 +118,7 @@ namespace YAT.Domain
 				else
 					base.Add(item.Clone());
 			}
-			_dataCount += item.DataCount;
+			this.dataCount += item.DataCount;
 		}
 
 		/// <summary></summary>
@@ -142,7 +142,7 @@ namespace YAT.Domain
 		public new void RemoveAt(int index)
 		{
 			if (this[index].IsData)
-				_dataCount -= this[index].DataCount;
+				this.dataCount -= this[index].DataCount;
 
 			base.RemoveAt(index);
 		}
@@ -211,7 +211,7 @@ namespace YAT.Domain
 		public virtual string ToString(string indent)
 		{
 			return (indent + "- ElementCount: " + Count.ToString("D") + Environment.NewLine +
-					indent + "- DataCount: " + _dataCount.ToString("D") + Environment.NewLine +
+					indent + "- DataCount: " + this.dataCount.ToString("D") + Environment.NewLine +
 					indent + "- Elements: " + Environment.NewLine + ElementsToString(indent + "--"));
 		}
 

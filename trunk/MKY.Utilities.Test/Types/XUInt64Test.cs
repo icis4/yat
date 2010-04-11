@@ -80,7 +80,7 @@ namespace MKY.Utilities.Test.Types
 		// Fields
 		//==========================================================================================
 
-		private readonly TestSet[][] _testSets =
+		private readonly TestSet[][] testSets =
 		{
 			// automatic boundary
 			new TestSet[]
@@ -142,7 +142,7 @@ namespace MKY.Utilities.Test.Types
 		[Test]
 		public virtual void TestToString()
 		{
-			foreach (TestSet[] tsArray in _testSets)
+			foreach (TestSet[] tsArray in this.testSets)
 			{
 				foreach (TestSet ts in tsArray)
 				{
@@ -168,7 +168,7 @@ namespace MKY.Utilities.Test.Types
 		{
 			Exception exceptionToNUnit = null;
 
-			foreach (TestSet[] tsArray in _testSets)
+			foreach (TestSet[] tsArray in this.testSets)
 			{
 				foreach (TestSet ts in tsArray)
 				{
@@ -222,7 +222,7 @@ namespace MKY.Utilities.Test.Types
 		[Test]
 		public virtual void TestTryParse()
 		{
-			foreach (TestSet[] tsArray in _testSets)
+			foreach (TestSet[] tsArray in this.testSets)
 			{
 				foreach (TestSet ts in tsArray)
 				{
