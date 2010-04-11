@@ -32,27 +32,40 @@ namespace MKY.Utilities.Win32
 	/// </summary>
 	public static class Handle
 	{
-		#region Constants
+		#region Native
 		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private const string KERNEL_DLL = "kernel32.dll";
-
-		#endregion
-
-		#region External Functions
-		//==========================================================================================
-		// External Functions
+		// Native
 		//==========================================================================================
 
 		/// <summary>
-		/// Closes an open object handle.
+		/// Class encapsulating native Win32 types, constants and functions.
 		/// </summary>
-		/// <param name="hObject">A valid handle to an open object.</param>
-		/// <returns>True on success, false on failure.</returns>
-		[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		public static extern bool CloseHandle([In] SafeFileHandle hObject);
+		public static class Native
+		{
+			#region Constants
+			//==========================================================================================
+			// Constants
+			//==========================================================================================
+
+			private const string KERNEL_DLL = "kernel32.dll";
+
+			#endregion
+
+			#region External Functions
+			//==========================================================================================
+			// External Functions
+			//==========================================================================================
+
+			/// <summary>
+			/// Closes an open object handle.
+			/// </summary>
+			/// <param name="hObject">A valid handle to an open object.</param>
+			/// <returns>True on success, false on failure.</returns>
+			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			public static extern bool CloseHandle([In] SafeFileHandle hObject);
+
+			#endregion
+		}
 
 		#endregion
 	}

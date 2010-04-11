@@ -41,24 +41,37 @@ namespace MKY.Utilities.Win32
 	/// </remarks>
 	public static class Debug
 	{
-		#region Constants
+		#region Native
 		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private const string KERNEL_DLL = "kernel32.dll";
-
-		private const Int32 FORMAT_MESSAGE_FROM_SYSTEM = 0x1000;
-
-		#endregion
-
-		#region External Functions
-		//==========================================================================================
-		// External Functions
+		// Native
 		//==========================================================================================
 
-		[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern Int32 FormatMessage([In] Int32 dwFlags, [In] ref Int64 lpSource, [In] Int32 dwMessageId, [In] Int32 dwLanguageId, [Out] StringBuilder lpBuffer, [In] Int32 nSize, [In] IntPtr Arguments);
+		/// <summary>
+		/// Class encapsulating native Win32 types, constants and functions.
+		/// </summary>
+		private static class Native
+		{
+			#region Constants
+			//==========================================================================================
+			// Constants
+			//==========================================================================================
+
+			private const string KERNEL_DLL = "kernel32.dll";
+
+			public const Int32 FORMAT_MESSAGE_FROM_SYSTEM = 0x1000;
+
+			#endregion
+
+			#region External Functions
+			//==========================================================================================
+			// External Functions
+			//==========================================================================================
+
+			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			public static extern Int32 FormatMessage([In] Int32 dwFlags, [In] ref Int64 lpSource, [In] Int32 dwMessageId, [In] Int32 dwLanguageId, [Out] StringBuilder lpBuffer, [In] Int32 nSize, [In] IntPtr Arguments);
+
+			#endregion
+		}
 
 		#endregion
 
@@ -89,7 +102,7 @@ namespace MKY.Utilities.Win32
 			// Get the result message that corresponds to the code.
 			Int64 temp = 0;
 			StringBuilder message = new StringBuilder(256);
-			Int32 bytes = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, ref temp, errorCode, 0, message, message.Capacity, IntPtr.Zero);
+			Int32 bytes = Native.FormatMessage(Native.FORMAT_MESSAGE_FROM_SYSTEM, ref temp, errorCode, 0, message, message.Capacity, IntPtr.Zero);
 
 			// Subtract two characters from the message to strip EOL.
 			int eolLength = Environment.NewLine.Length;

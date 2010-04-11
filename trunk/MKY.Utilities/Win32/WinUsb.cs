@@ -43,6 +43,44 @@ namespace MKY.Utilities.Win32
 	/// </remarks>
 	public static class WinUsb
 	{
+		#region Native
+		//==========================================================================================
+		// Native
+		//==========================================================================================
+
+		/// <summary>
+		/// Class encapsulating native Win32 types, constants and functions.
+		/// </summary>
+		private static class Native
+		{
+			#region Constants
+			//==========================================================================================
+			// Constants
+			//==========================================================================================
+
+			private const string WINUSB_DLL = "winusb.dll";
+
+			#endregion
+
+			#region External Functions
+			//==========================================================================================
+			// External Functions
+			//==========================================================================================
+
+			[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			public static extern bool WinUsb_Initialize([In] SafeFileHandle DeviceHandle, [Out] out SafeFileHandle InterfaceHandle);
+
+			[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			public static extern bool WinUsb_GetDescriptor([In] SafeFileHandle InterfaceHandle, [In] DescriptorType DescriptorType, [In] byte Index, [In] UInt16 LanguageID, [Out] byte[] Buffer, [In] UInt32 BufferLength, [Out] out UInt32 LengthTransferred);
+
+			[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			public static extern bool WinUsb_GetDescriptor([In] SafeFileHandle InterfaceHandle, [In] DescriptorType DescriptorType, [In] byte Index, [In] UInt16 LanguageID, [Out] StringBuilder Buffer, [In] UInt32 BufferLength, [Out] out UInt32 LengthTransferred);
+
+			#endregion
+		}
+
+		#endregion
+
 		#region Types
 		//==========================================================================================
 		// Types
@@ -66,31 +104,6 @@ namespace MKY.Utilities.Win32
 
 		#endregion
 
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private const string WINUSB_DLL = "winusb.dll";
-
-		#endregion
-
-		#region External Functions
-		//==========================================================================================
-		// External Functions
-		//==========================================================================================
-
-		[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern bool WinUsb_Initialize([In] SafeFileHandle DeviceHandle, [Out] out SafeFileHandle InterfaceHandle);
-
-		[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern bool WinUsb_GetDescriptor([In] SafeFileHandle InterfaceHandle, [In] DescriptorType DescriptorType, [In] byte Index, [In] UInt16 LanguageID, [Out] byte[] Buffer, [In] UInt32 BufferLength, [Out] out UInt32 LengthTransferred);
-
-		[DllImport(WINUSB_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-		private static extern bool WinUsb_GetDescriptor([In] SafeFileHandle InterfaceHandle, [In] DescriptorType DescriptorType, [In] byte Index, [In] UInt16 LanguageID, [Out] StringBuilder Buffer, [In] UInt32 BufferLength, [Out] out UInt32 LengthTransferred);
-
-		#endregion
-
 		#region Static Methods
 		//==========================================================================================
 		// Static Methods
@@ -101,14 +114,14 @@ namespace MKY.Utilities.Win32
 		/// </summary>
 		public static bool GetUsbHandle(string systemPath, out SafeFileHandle usbHandle)
 		{
-			SafeFileHandle h = Utilities.Win32.FileIO.CreateFile
+			SafeFileHandle h = Utilities.Win32.FileIO.Native.CreateFile
 				(
 				systemPath,
-				Utilities.Win32.FileIO.Access.GENERIC_READ_WRITE,
-				Utilities.Win32.FileIO.ShareMode.SHARE_READ_WRITE,
+				Utilities.Win32.FileIO.Native.Access.GENERIC_READ_WRITE,
+				Utilities.Win32.FileIO.Native.ShareMode.SHARE_READ_WRITE,
 				IntPtr.Zero,
-				Utilities.Win32.FileIO.CreationDisposition.OPEN_EXISTING,
-				Utilities.Win32.FileIO.AttributesAndFlags.FLAG_OVERLAPPED,
+				Utilities.Win32.FileIO.Native.CreationDisposition.OPEN_EXISTING,
+				Utilities.Win32.FileIO.Native.AttributesAndFlags.FLAG_OVERLAPPED,
 				IntPtr.Zero
 				);
 
@@ -142,7 +155,7 @@ namespace MKY.Utilities.Win32
 		/// </returns>
 		public static bool InitializeInterfaceHandle(SafeFileHandle deviceHandle, out SafeFileHandle interfaceHandle)
 		{
-			return (WinUsb_Initialize(deviceHandle, out interfaceHandle));
+			return (Native.WinUsb_Initialize(deviceHandle, out interfaceHandle));
 		}
 
 		/// <summary>
@@ -158,7 +171,7 @@ namespace MKY.Utilities.Win32
 				if (Version.IsWindowsVistaOrLater())
 				{
 					UInt32 l;
-					if (WinUsb_GetDescriptor(interfaceHandle, DescriptorType.Device, (byte)index, (UInt16)languageId, buffer, (UInt32)buffer.Length, out l))
+					if (Native.WinUsb_GetDescriptor(interfaceHandle, DescriptorType.Device, (byte)index, (UInt16)languageId, buffer, (UInt32)buffer.Length, out l))
 					{
 						lengthTransferred = (int)l;
 						return (true);
@@ -187,7 +200,7 @@ namespace MKY.Utilities.Win32
 				if (Version.IsWindowsVistaOrLater())
 				{
 					UInt32 l;
-					if (WinUsb_GetDescriptor(interfaceHandle, DescriptorType.Configuration, (byte)index, (UInt16)languageId, buffer, (UInt32)buffer.Length, out l))
+					if (Native.WinUsb_GetDescriptor(interfaceHandle, DescriptorType.Configuration, (byte)index, (UInt16)languageId, buffer, (UInt32)buffer.Length, out l))
 					{
 						lengthTransferred = (int)l;
 						return (true);
@@ -217,7 +230,7 @@ namespace MKY.Utilities.Win32
 				{
 					StringBuilder s = new StringBuilder(Utilities.Usb.Descriptors.MaximumStringDescriptorCharLength);
 					UInt32 l;
-					if (WinUsb_GetDescriptor(interfaceHandle, DescriptorType.String, (byte)index, (UInt16)languageId, s, (UInt32)s.Capacity, out l))
+					if (Native.WinUsb_GetDescriptor(interfaceHandle, DescriptorType.String, (byte)index, (UInt16)languageId, s, (UInt32)s.Capacity, out l))
 					{
 						buffer = s.ToString();
 						lengthTransferred = (int)l;
