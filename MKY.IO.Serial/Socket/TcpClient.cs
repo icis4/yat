@@ -47,29 +47,37 @@ namespace MKY.IO.Serial
 
 		#endregion
 
+		#region Static Fields
+		//==========================================================================================
+		// Static Fields
+		//==========================================================================================
+
+		private static int staticInstanceCounter = 0;
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
 		//==========================================================================================
 
-		private static int _instanceCounter = 0;
-		private int _instanceId = 0;
-		private bool _isDisposed;
+		private int instanceId = 0;
+		private bool isDisposed;
 
-		private System.Net.IPAddress _remoteIPAddress;
-		private int _remotePort;
-		private AutoRetry _autoReconnect;
+		private System.Net.IPAddress remoteIPAddress;
+		private int remotePort;
+		private AutoRetry autoReconnect;
 
-		private SocketState _state = SocketState.Disconnected;
-		private object _stateSyncObj = new object();
+		private SocketState state = SocketState.Disconnected;
+		private object stateSyncObj = new object();
 
-		private ALAZ.SystemEx.NetEx.SocketsEx.SocketClient _socket;
-		private ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection _socketConnection;
-		private object _socketConnectionSyncObj = new object();
+		private ALAZ.SystemEx.NetEx.SocketsEx.SocketClient socket;
+		private ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection socketConnection;
+		private object socketConnectionSyncObj = new object();
 
-		private Queue<byte> _receiveQueue = new Queue<byte>();
+		private Queue<byte> receiveQueue = new Queue<byte>();
 
-		private System.Timers.Timer _reconnectTimer;
+		private System.Timers.Timer reconnectTimer;
 
 		#endregion
 
@@ -112,11 +120,11 @@ namespace MKY.IO.Serial
 
 		private void Initialize(System.Net.IPAddress remoteIPAddress, int remotePort, AutoRetry autoReconnect)
 		{
-			_instanceId = _instanceCounter++;
+			this.instanceId = staticInstanceCounter++;
 
-			_remoteIPAddress = remoteIPAddress;
-			_remotePort = remotePort;
-			_autoReconnect = autoReconnect;
+			this.remoteIPAddress = remoteIPAddress;
+			this.remotePort = remotePort;
+			this.autoReconnect = autoReconnect;
 		}
 
 		#region Disposal
@@ -134,16 +142,16 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!_isDisposed)
+			if (!this.isDisposed)
 			{
 				if (disposing)
 				{
 					StopAndDisposeReconnectTimer();
 					DisposeSocket();
 				}
-				_isDisposed = true;
+				this.isDisposed = true;
 
-				Debug.WriteLine(GetType() + "     (" + _instanceId + ")(               " + ToShortEndPointString() + "): Disposed.");
+				Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(               " + ToShortEndPointString() + "): Disposed.");
 			}
 		}
 
@@ -156,13 +164,13 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected bool IsDisposed
 		{
-			get { return (_isDisposed); }
+			get { return (this.isDisposed); }
 		}
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (_isDisposed)
+			if (this.isDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
 		}
 
@@ -181,7 +189,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_remoteIPAddress);
+				return (this.remoteIPAddress);
 			}
 		}
 
@@ -191,7 +199,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_remotePort);
+				return (this.remotePort);
 			}
 		}
 
@@ -201,7 +209,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_autoReconnect);
+				return (this.autoReconnect);
 			}
 		}
 
@@ -211,7 +219,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				switch (_state)
+				switch (this.state)
 				{
 					case SocketState.Connecting:
 					case SocketState.Connected:
@@ -232,7 +240,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				switch (_state)
+				switch (this.state)
 				{
 					case SocketState.Connecting:
 					case SocketState.Connected:
@@ -253,7 +261,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				switch (_state)
+				switch (this.state)
 				{
 					case SocketState.Connected:
 					{
@@ -279,7 +287,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_receiveQueue.Count);
+				return (this.receiveQueue.Count);
 			}
 		}
 
@@ -290,7 +298,7 @@ namespace MKY.IO.Serial
 				return
 					(
 						!IsDisposed && IsStarted && !IsOpen &&
-						_autoReconnect.Enabled
+						this.autoReconnect.Enabled
 					);
 			}
 		}
@@ -301,7 +309,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_socket);
+				return (this.socket);
 			}
 		}
 
@@ -324,7 +332,7 @@ namespace MKY.IO.Serial
 			}
 			else
 			{
-				Debug.WriteLine(GetType() + "     (" + _instanceId + ")(               " + ToShortEndPointString() + "): Start() requested but state is " + _state + ".");
+				Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(               " + ToShortEndPointString() + "): Start() requested but state is " + this.state + ".");
 				return (false);
 			}
 		}
@@ -343,14 +351,14 @@ namespace MKY.IO.Serial
 		{
 			AssertNotDisposed();
 		
-			if (_receiveQueue.Count > 0)
+			if (this.receiveQueue.Count > 0)
 			{
-				lock (_receiveQueue)
+				lock (this.receiveQueue)
 				{
-					int count = _receiveQueue.Count;
+					int count = this.receiveQueue.Count;
 					data = new byte[count];
 					for (int i = 0; i < count; i++)
-						data[i] = _receiveQueue.Dequeue();
+						data[i] = this.receiveQueue.Dequeue();
 				}
 			}
 			else
@@ -367,8 +375,8 @@ namespace MKY.IO.Serial
 
 			if (IsStarted)
 			{
-				if (_socketConnection != null)
-					_socketConnection.BeginSend(data);
+				if (this.socketConnection != null)
+					this.socketConnection.BeginSend(data);
 			}
 		}
 
@@ -382,12 +390,12 @@ namespace MKY.IO.Serial
 		private void SetStateAndNotify(SocketState state)
 		{
 #if (DEBUG)
-			SocketState oldState = _state;
+			SocketState oldState = this.state;
 #endif
-			lock (_stateSyncObj)
-				_state = state;
+			lock (this.stateSyncObj)
+				this.state = state;
 #if (DEBUG)
-			Debug.WriteLine(GetType() + "     (" + _instanceId + ")(               " + ToShortEndPointString() + "): State has changed from " + oldState + " to " + _state + ".");
+			Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(               " + ToShortEndPointString() + "): State has changed from " + oldState + " to " + this.state + ".");
 #endif
 			OnIOChanged(new EventArgs());
 		}
@@ -401,12 +409,12 @@ namespace MKY.IO.Serial
 
 		private void DisposeSocket()
 		{
-			if (_socket != null)
+			if (this.socket != null)
 			{
-				_socket.Stop();
-				_socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose()
-				_socket = null;
-				_socketConnection = null;
+				this.socket.Stop();
+				this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose()
+				this.socket = null;
+				this.socketConnection = null;
 			}
 		}
 
@@ -419,19 +427,19 @@ namespace MKY.IO.Serial
 
 		private void StartSocket()
 		{
-			if (_socket != null)
+			if (this.socket != null)
 				DisposeSocket();
 
 			SetStateAndNotify(SocketState.Connecting);
 
-			_socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketClient(System.Net.Sockets.ProtocolType.Tcp,
+			this.socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketClient(System.Net.Sockets.ProtocolType.Tcp,
 																	 ALAZ.SystemEx.NetEx.SocketsEx.CallbackThreadType.ctWorkerThread,
 																	(ALAZ.SystemEx.NetEx.SocketsEx.ISocketService)this,
 																	 ALAZ.SystemEx.NetEx.SocketsEx.DelimiterType.dtNone, null,
 																	 SocketDefaults.SocketBufferSize, SocketDefaults.MessageBufferSize,
 																	 Timeout.Infinite, Timeout.Infinite);
-			_socket.AddConnector("YAT TCP Client Connector", new System.Net.IPEndPoint(_remoteIPAddress, _remotePort));
-			_socket.Start(); // The ALAZ socket will be started asynchronously
+			this.socket.AddConnector("YAT TCP Client Connector", new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort));
+			this.socket.Start(); // The ALAZ socket will be started asynchronously
 		}
 
 		private void StopSocket()
@@ -439,7 +447,7 @@ namespace MKY.IO.Serial
 			// \remind
 			// The ALAZ sockets by default stop synchronously. However, due to some other issues
 			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
-			_socket.Stop();
+			this.socket.Stop();
 		}
 
 		#endregion
@@ -457,8 +465,8 @@ namespace MKY.IO.Serial
 		/// </param>
 		public virtual void OnConnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
-			lock (_socketConnectionSyncObj)
-				_socketConnection = e.Connection;
+			lock (this.socketConnectionSyncObj)
+				this.socketConnection = e.Connection;
 
 			SetStateAndNotify(SocketState.Connected);
 
@@ -474,10 +482,10 @@ namespace MKY.IO.Serial
 		/// </param>
 		public virtual void OnReceived(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
-			lock (_receiveQueue)
+			lock (this.receiveQueue)
 			{
 				foreach (byte b in e.Buffer)
-					_receiveQueue.Enqueue(b);
+					this.receiveQueue.Enqueue(b);
 			}
 			OnDataReceived(new EventArgs());
 
@@ -504,8 +512,8 @@ namespace MKY.IO.Serial
 		/// </param>
 		public virtual void OnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
-			lock (_socketConnectionSyncObj)
-				_socketConnection = null;
+			lock (this.socketConnectionSyncObj)
+				this.socketConnection = null;
 
 			if (AutoReconnectEnabledAndAllowed)
 			{
@@ -535,8 +543,8 @@ namespace MKY.IO.Serial
 			{
 				DisposeSocket();
 
-				lock (_socketConnectionSyncObj)
-					_socketConnection = null;
+				lock (this.socketConnectionSyncObj)
+					this.socketConnection = null;
 
 				SetStateAndNotify(SocketState.Error);
 				OnIOError(new IOErrorEventArgs(e.Exception.Message));
@@ -552,26 +560,26 @@ namespace MKY.IO.Serial
 
 		private void StartReconnectTimer()
 		{
-			if (_reconnectTimer != null)
+			if (this.reconnectTimer != null)
 				StopAndDisposeReconnectTimer();
 
-			_reconnectTimer = new System.Timers.Timer(_autoReconnect.Interval);
-			_reconnectTimer.AutoReset = false;
-			_reconnectTimer.Elapsed += new System.Timers.ElapsedEventHandler(_reconnectTimer_Elapsed);
-			_reconnectTimer.Start();
+			this.reconnectTimer = new System.Timers.Timer(this.autoReconnect.Interval);
+			this.reconnectTimer.AutoReset = false;
+			this.reconnectTimer.Elapsed += new System.Timers.ElapsedEventHandler(this.reconnectTimer_Elapsed);
+			this.reconnectTimer.Start();
 		}
 
 		private void StopAndDisposeReconnectTimer()
 		{
-			if (_reconnectTimer != null)
+			if (this.reconnectTimer != null)
 			{
-				_reconnectTimer.Stop();
-				_reconnectTimer.Dispose();
-				_reconnectTimer = null;
+				this.reconnectTimer.Stop();
+				this.reconnectTimer.Dispose();
+				this.reconnectTimer = null;
 			}
 		}
 
-		private void _reconnectTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private void reconnectTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			if (AutoReconnectEnabledAndAllowed)
 			{
@@ -645,7 +653,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public virtual string ToShortEndPointString()
 		{
-			return (_remoteIPAddress + ":" + _remotePort);
+			return (this.remoteIPAddress + ":" + this.remotePort);
 		}
 
 		#endregion

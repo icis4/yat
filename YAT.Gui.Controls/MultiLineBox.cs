@@ -35,10 +35,10 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool _isSettingControls = false;
+		private bool isSettingControls = false;
 
-		private Command _command;
-		private Command _command_Form;
+		private Command command;
+		private Command command_Form;
 
 		#endregion
 
@@ -55,8 +55,8 @@ namespace YAT.Gui.Controls
 			Location = startupLocation;
 			ResumeLayout();
 
-			_command = command;
-			_command_Form = new Command(command);
+			this.command = command;
+			this.command_Form = new Command(command);
 		}
 
 		#endregion
@@ -68,7 +68,7 @@ namespace YAT.Gui.Controls
 
 		public Command CommandResult
 		{
-			get { return (_command); }
+			get { return (this.command); }
 		}
 
 		#endregion
@@ -100,16 +100,16 @@ namespace YAT.Gui.Controls
 		/// <summary>
 		/// Startup flag only used in the following event handler.
 		/// </summary>
-		private bool _isStartingUp = true;
+		private bool isStartingUp = true;
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
 		private void MultiLineBox_Paint(object sender, PaintEventArgs e)
 		{
-			if (_isStartingUp)
+			if (this.isStartingUp)
 			{
-				_isStartingUp = false;
+				this.isStartingUp = false;
 				SetControls();
 
 				// move cursor to end
@@ -133,7 +133,7 @@ namespace YAT.Gui.Controls
 
 		private void textBox_Command_Validating(object sender, CancelEventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				// retrieve lines from text box with Environment.NewLine
 				StringReader reader = new StringReader(textBox_Command.Text);
@@ -163,7 +163,7 @@ namespace YAT.Gui.Controls
 				}
 				if (isValid)
 				{
-					_command_Form.MultiLineCommand = multiLineCommand.ToArray();
+					this.command_Form.MultiLineCommand = multiLineCommand.ToArray();
 					SetControls();
 				}
 				else
@@ -198,30 +198,30 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
-			if (_command_Form.IsSingleLineCommand)
+			if (this.command_Form.IsSingleLineCommand)
 			{
-				textBox_Command.Text = _command_Form.SingleLineCommand;
+				textBox_Command.Text = this.command_Form.SingleLineCommand;
 			}
 			else
 			{
 				string text = "";
-				for (int i = 0; i < _command_Form.MultiLineCommand.Length; i++)
+				for (int i = 0; i < this.command_Form.MultiLineCommand.Length; i++)
 				{
-					text += _command_Form.MultiLineCommand[i];
-					if (i < (_command_Form.MultiLineCommand.Length - 1))
+					text += this.command_Form.MultiLineCommand[i];
+					if (i < (this.command_Form.MultiLineCommand.Length - 1))
 						text += Environment.NewLine;
 				}
 				textBox_Command.Text = text;
 			}
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void AcceptAndClose()
 		{
-			_command = _command_Form;
+			this.command = this.command_Form;
 			DialogResult = DialogResult.OK;
 			Close();
 		}

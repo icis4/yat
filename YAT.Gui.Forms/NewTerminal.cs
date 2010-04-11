@@ -33,12 +33,12 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		private bool _isSettingControls = false;
+		private bool isSettingControls = false;
 
-		private Model.Settings.NewTerminalSettings _newTerminalSettings;
-		private Model.Settings.NewTerminalSettings _newTerminalSettings_Form;
+		private Model.Settings.NewTerminalSettings newTerminalSettings;
+		private Model.Settings.NewTerminalSettings newTerminalSettings_Form;
 
-		private Settings.Terminal.TerminalSettingsRoot _terminalSettings;
+		private Settings.Terminal.TerminalSettingsRoot terminalSettings;
 
 		#endregion
 
@@ -51,8 +51,8 @@ namespace YAT.Gui.Forms
 		{
 			InitializeComponent();
 
-			_newTerminalSettings = newTerminalSettings;
-			_newTerminalSettings_Form = new Model.Settings.NewTerminalSettings(newTerminalSettings);
+			this.newTerminalSettings = newTerminalSettings;
+			this.newTerminalSettings_Form = new Model.Settings.NewTerminalSettings(newTerminalSettings);
 		}
 
 		#endregion
@@ -64,12 +64,12 @@ namespace YAT.Gui.Forms
 
 		public Model.Settings.NewTerminalSettings NewTerminalSettingsResult
 		{
-			get { return (_newTerminalSettings); }
+			get { return (this.newTerminalSettings); }
 		}
 
 		public Settings.Terminal.TerminalSettingsRoot TerminalSettingsResult
 		{
-			get { return (_terminalSettings); }
+			get { return (this.terminalSettings); }
 		}
 
 		#endregion
@@ -82,16 +82,16 @@ namespace YAT.Gui.Forms
 		/// <summary>
 		/// Startup flag only used in the following event handler.
 		/// </summary>
-		private bool _isStartingUp = true;
+		private bool isStartingUp = true;
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
 		private void NewTerminal_Paint(object sender, PaintEventArgs e)
 		{
-			if (_isStartingUp)
+			if (this.isStartingUp)
 			{
-				_isStartingUp = false;
+				this.isStartingUp = false;
 				SetControls();
 			}
 		}
@@ -105,140 +105,140 @@ namespace YAT.Gui.Forms
 
 		private void terminalSelection_TerminalTypeChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				Domain.TerminalType terminalType = terminalSelection.TerminalType;
-				_newTerminalSettings_Form.TerminalType = terminalType;
+				this.newTerminalSettings_Form.TerminalType = terminalType;
 				SetControls();
 			}
 		}
 
 		private void terminalSelection_IOTypeChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				Domain.IOType ioType = terminalSelection.IOType;
-				_newTerminalSettings_Form.IOType = ioType;
+				this.newTerminalSettings_Form.IOType = ioType;
 				SetControls();
 			}
 		}
 
 		private void serialPortSelection_PortIdChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				MKY.IO.Ports.SerialPortId serialPortId = serialPortSelection.PortId;
-				_newTerminalSettings_Form.SerialPortId = serialPortId;
+				this.newTerminalSettings_Form.SerialPortId = serialPortId;
 				SetControls();
 			}
 		}
 
 		private void socketSelection_RemoteHostChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				XIPHost host = socketSelection.RemoteHost;
-				_newTerminalSettings_Form.SocketRemoteHost = host;
+				this.newTerminalSettings_Form.SocketRemoteHost = host;
 				SetControls();
 			}
 		}
 
 		private void socketSelection_RemotePortChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				int port = socketSelection.RemotePort;
-				_newTerminalSettings_Form.SocketRemotePort = port;
+				this.newTerminalSettings_Form.SocketRemotePort = port;
 				SetControls();
 			}
 		}
 
 		private void socketSelection_LocalInterfaceChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				XNetworkInterface localInterface = socketSelection.LocalInterface;
-				_newTerminalSettings_Form.SocketLocalInterface = localInterface;
+				this.newTerminalSettings_Form.SocketLocalInterface = localInterface;
 				SetControls();
 			}
 		}
 
 		private void socketSelection_LocalTcpPortChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				int port = socketSelection.LocalTcpPort;
-				_newTerminalSettings_Form.SocketLocalTcpPort = port;
+				this.newTerminalSettings_Form.SocketLocalTcpPort = port;
 				SetControls();
 			}
 		}
 
 		private void socketSelection_LocalUdpPortChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				int port = socketSelection.LocalUdpPort;
-				_newTerminalSettings_Form.SocketLocalUdpPort = port;
+				this.newTerminalSettings_Form.SocketLocalUdpPort = port;
 				SetControls();
 			}
 		}
 
 		private void usbHidDeviceSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				MKY.IO.Usb.DeviceInfo di = usbHidDeviceSelection.DeviceInfo;
-				_newTerminalSettings_Form.UsbHidDeviceInfo = di;
+				this.newTerminalSettings_Form.UsbHidDeviceInfo = di;
 				SetControls();
 			}
 		}
 
 		private void checkBox_StartTerminal_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				bool start = checkBox_StartTerminal.Checked;
-				_newTerminalSettings_Form.StartTerminal = start;
+				this.newTerminalSettings_Form.StartTerminal = start;
 			}
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{
 			// New terminal settings.
-			_newTerminalSettings = _newTerminalSettings_Form;
+			this.newTerminalSettings = this.newTerminalSettings_Form;
 
 			// Create document settings and fill it with new terminal settings.
-			_terminalSettings = new Settings.Terminal.TerminalSettingsRoot();
+			this.terminalSettings = new Settings.Terminal.TerminalSettingsRoot();
 
-			_terminalSettings.Terminal.TerminalType                      = _newTerminalSettings.TerminalType;
-			_terminalSettings.Terminal.IO.IOType                         = _newTerminalSettings.IOType;
+			this.terminalSettings.Terminal.TerminalType                      = this.newTerminalSettings.TerminalType;
+			this.terminalSettings.Terminal.IO.IOType                         = this.newTerminalSettings.IOType;
 
-			_terminalSettings.Terminal.IO.SerialPort.PortId              = _newTerminalSettings.SerialPortId;
+			this.terminalSettings.Terminal.IO.SerialPort.PortId              = this.newTerminalSettings.SerialPortId;
 
-			_terminalSettings.Terminal.IO.Socket.RemoteHost              = _newTerminalSettings.SocketRemoteHost;
-			_terminalSettings.Terminal.IO.Socket.ResolvedRemoteIPAddress = socketSelection.ResolvedRemoteIPAddress;
-			_terminalSettings.Terminal.IO.Socket.RemotePort              = _newTerminalSettings.SocketRemotePort;
+			this.terminalSettings.Terminal.IO.Socket.RemoteHost              = this.newTerminalSettings.SocketRemoteHost;
+			this.terminalSettings.Terminal.IO.Socket.ResolvedRemoteIPAddress = socketSelection.ResolvedRemoteIPAddress;
+			this.terminalSettings.Terminal.IO.Socket.RemotePort              = this.newTerminalSettings.SocketRemotePort;
 
-			_terminalSettings.Terminal.IO.Socket.LocalInterface          = _newTerminalSettings.SocketLocalInterface;
-			_terminalSettings.Terminal.IO.Socket.ResolvedLocalIPAddress  = socketSelection.ResolvedLocalIPAddress;
-			_terminalSettings.Terminal.IO.Socket.LocalTcpPort            = _newTerminalSettings.SocketLocalTcpPort;
-			_terminalSettings.Terminal.IO.Socket.LocalUdpPort            = _newTerminalSettings.SocketLocalUdpPort;
+			this.terminalSettings.Terminal.IO.Socket.LocalInterface          = this.newTerminalSettings.SocketLocalInterface;
+			this.terminalSettings.Terminal.IO.Socket.ResolvedLocalIPAddress  = socketSelection.ResolvedLocalIPAddress;
+			this.terminalSettings.Terminal.IO.Socket.LocalTcpPort            = this.newTerminalSettings.SocketLocalTcpPort;
+			this.terminalSettings.Terminal.IO.Socket.LocalUdpPort            = this.newTerminalSettings.SocketLocalUdpPort;
 
-			_terminalSettings.Terminal.IO.UsbHidDevice.DeviceInfo        = _newTerminalSettings.UsbHidDeviceInfo;
+			this.terminalSettings.Terminal.IO.UsbHidDevice.DeviceInfo        = this.newTerminalSettings.UsbHidDeviceInfo;
 
-			_terminalSettings.TerminalIsStarted                          = _newTerminalSettings.StartTerminal;
+			this.terminalSettings.TerminalIsStarted                          = this.newTerminalSettings.StartTerminal;
 
-			switch (_newTerminalSettings.TerminalType)
+			switch (this.newTerminalSettings.TerminalType)
 			{
 				case Domain.TerminalType.Binary:
-					_terminalSettings.Display.TxRadix = Domain.Radix.Hex;
-					_terminalSettings.Display.RxRadix = Domain.Radix.Hex;
+					this.terminalSettings.Display.TxRadix = Domain.Radix.Hex;
+					this.terminalSettings.Display.RxRadix = Domain.Radix.Hex;
 					break;
 
 				case Domain.TerminalType.Text:
 				default:
-					_terminalSettings.Display.TxRadix = Domain.Radix.String;
-					_terminalSettings.Display.RxRadix = Domain.Radix.String;
+					this.terminalSettings.Display.TxRadix = Domain.Radix.String;
+					this.terminalSettings.Display.RxRadix = Domain.Radix.String;
 					break;
 			}
 		}
@@ -270,11 +270,11 @@ namespace YAT.Gui.Forms
 
 		private void SetControls()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
-			terminalSelection.TerminalType = _newTerminalSettings_Form.TerminalType;
+			terminalSelection.TerminalType = this.newTerminalSettings_Form.TerminalType;
 
-			Domain.IOType ioType = _newTerminalSettings_Form.IOType;
+			Domain.IOType ioType = this.newTerminalSettings_Form.IOType;
 			terminalSelection.IOType = ioType;
 
 			bool isSerialPort = false;
@@ -299,23 +299,23 @@ namespace YAT.Gui.Forms
 			//   serial port list first (which takes time, which looks ulgy).
 			socketSelection.Enabled        = !isSerialPort && !isUsbHid;
 			socketSelection.HostType       = (Domain.XIOType)ioType;
-			socketSelection.RemoteHost     = _newTerminalSettings_Form.SocketRemoteHost;
-			socketSelection.RemotePort     = _newTerminalSettings_Form.SocketRemotePort;
-			socketSelection.LocalInterface = _newTerminalSettings_Form.SocketLocalInterface;
-			socketSelection.LocalTcpPort   = _newTerminalSettings_Form.SocketLocalTcpPort;
-			socketSelection.LocalUdpPort   = _newTerminalSettings_Form.SocketLocalUdpPort;
+			socketSelection.RemoteHost     = this.newTerminalSettings_Form.SocketRemoteHost;
+			socketSelection.RemotePort     = this.newTerminalSettings_Form.SocketRemotePort;
+			socketSelection.LocalInterface = this.newTerminalSettings_Form.SocketLocalInterface;
+			socketSelection.LocalTcpPort   = this.newTerminalSettings_Form.SocketLocalTcpPort;
+			socketSelection.LocalUdpPort   = this.newTerminalSettings_Form.SocketLocalUdpPort;
 
 			serialPortSelection.Enabled    = isSerialPort;
-			serialPortSelection.PortId     = _newTerminalSettings_Form.SerialPortId;
+			serialPortSelection.PortId     = this.newTerminalSettings_Form.SerialPortId;
 
 			usbHidDeviceSelection.Enabled    = isUsbHid;
-			usbHidDeviceSelection.DeviceInfo = _newTerminalSettings_Form.UsbHidDeviceInfo;
+			usbHidDeviceSelection.DeviceInfo = this.newTerminalSettings_Form.UsbHidDeviceInfo;
 
-			checkBox_StartTerminal.Checked = _newTerminalSettings_Form.StartTerminal;
+			checkBox_StartTerminal.Checked = this.newTerminalSettings_Form.StartTerminal;
 
 			button_OK.Enabled = isValid;
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		#endregion

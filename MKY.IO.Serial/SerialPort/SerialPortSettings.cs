@@ -37,13 +37,13 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public const byte ParityErrorReplacementDefault = 0x00;
 
-		private SerialPortId _portId;
-		private SerialCommunicationSettings _communication;
-		private AutoRetry _autoReopen;
-		private bool _replaceParityErrors;
-		private byte _parityErrorReplacement;
-		private bool _rtsEnabled;
-		private bool _dtrEnabled;
+		private SerialPortId portId;
+		private SerialCommunicationSettings communication;
+		private AutoRetry autoReopen;
+		private bool replaceParityErrors;
+		private byte parityErrorReplacement;
+		private bool rtsEnabled;
+		private bool dtrEnabled;
 
 		/// <summary></summary>
 		public SerialPortSettings()
@@ -76,11 +76,11 @@ namespace MKY.IO.Serial
 		{
 			PortId                  = new SerialPortId(rhs.PortId);
 			Communication           = new SerialCommunicationSettings(rhs.Communication);
-			_autoReopen             = rhs._autoReopen;
-			_replaceParityErrors    = rhs._replaceParityErrors;
-			_parityErrorReplacement = rhs._parityErrorReplacement;
-			_rtsEnabled             = rhs.RtsEnabled;
-			_dtrEnabled             = rhs.DtrEnabled;
+			this.autoReopen             = rhs.autoReopen;
+			this.replaceParityErrors    = rhs.replaceParityErrors;
+			this.parityErrorReplacement = rhs.parityErrorReplacement;
+			this.rtsEnabled             = rhs.RtsEnabled;
+			this.dtrEnabled             = rhs.DtrEnabled;
 
 			ClearChanged();
 		}
@@ -107,15 +107,15 @@ namespace MKY.IO.Serial
 		[XmlElement("PortId")]
 		public virtual SerialPortId PortId
 		{
-			get { return (_portId); }
+			get { return (this.portId); }
 			set
 			{
-				if (value != _portId)
+				if (value != this.portId)
 				{
-					_portId = value;
+					this.portId = value;
 
-					if (!_portId.HasDescriptionFromSystem)
-						_portId.GetDescriptionFromSystem();
+					if (!this.portId.HasDescriptionFromSystem)
+						this.portId.GetDescriptionFromSystem();
 
 					SetChanged();
 				}
@@ -126,19 +126,19 @@ namespace MKY.IO.Serial
 		[XmlElement("Communication")]
 		public virtual SerialCommunicationSettings Communication
 		{
-			get { return (_communication); }
+			get { return (this.communication); }
 			set
 			{
-				if (_communication == null)
+				if (this.communication == null)
 				{
-					_communication = value;
-					AttachNode(_communication);
+					this.communication = value;
+					AttachNode(this.communication);
 				}
-				else if (value != _communication)
+				else if (value != this.communication)
 				{
-					SerialCommunicationSettings old = _communication;
-					_communication = value;
-					ReplaceNode(old, _communication);
+					SerialCommunicationSettings old = this.communication;
+					this.communication = value;
+					ReplaceNode(old, this.communication);
 				}
 			}
 		}
@@ -147,12 +147,12 @@ namespace MKY.IO.Serial
 		[XmlElement("AutoReopen")]
 		public virtual AutoRetry AutoReopen
 		{
-			get { return (_autoReopen); }
+			get { return (this.autoReopen); }
 			set
 			{
-				if (value != _autoReopen)
+				if (value != this.autoReopen)
 				{
-					_autoReopen = value;
+					this.autoReopen = value;
 					SetChanged();
 				}
 			}
@@ -162,12 +162,12 @@ namespace MKY.IO.Serial
 		[XmlElement("ReplaceParityErrors")]
 		public virtual bool ReplaceParityErrors
 		{
-			get { return (_replaceParityErrors); }
+			get { return (this.replaceParityErrors); }
 			set
 			{
-				if (value != _replaceParityErrors)
+				if (value != this.replaceParityErrors)
 				{
-					_replaceParityErrors = value;
+					this.replaceParityErrors = value;
 					SetChanged();
 				}
 			}
@@ -177,12 +177,12 @@ namespace MKY.IO.Serial
 		[XmlElement("ParityErrorReplacement")]
 		public virtual byte ParityErrorReplacement
 		{
-			get { return (_parityErrorReplacement); }
+			get { return (this.parityErrorReplacement); }
 			set
 			{
-				if (value != _parityErrorReplacement)
+				if (value != this.parityErrorReplacement)
 				{
-					_parityErrorReplacement = value;
+					this.parityErrorReplacement = value;
 					SetChanged();
 				}
 			}
@@ -192,12 +192,12 @@ namespace MKY.IO.Serial
 		[XmlElement("RtsEnabled")]
 		public virtual bool RtsEnabled
 		{
-			get { return (_rtsEnabled); }
+			get { return (this.rtsEnabled); }
 			set
 			{
-				if (value != _rtsEnabled)
+				if (value != this.rtsEnabled)
 				{
-					_rtsEnabled = value;
+					this.rtsEnabled = value;
 					SetChanged();
 				}
 			}
@@ -207,12 +207,12 @@ namespace MKY.IO.Serial
 		[XmlElement("DtrEnabled")]
 		public virtual bool DtrEnabled
 		{
-			get { return (_dtrEnabled); }
+			get { return (this.dtrEnabled); }
 			set
 			{
-				if (value != _dtrEnabled)
+				if (value != this.dtrEnabled)
 				{
-					_dtrEnabled = value;
+					this.dtrEnabled = value;
 					SetChanged();
 				}
 			}
@@ -243,13 +243,13 @@ namespace MKY.IO.Serial
 			{
 				return 
 					(
-					(_portId                 == value._portId) &&
-					(_communication          == value._communication) &&
-					(_autoReopen             == value._autoReopen) &&
-					(_replaceParityErrors    == value._replaceParityErrors) &&
-					(_parityErrorReplacement == value._parityErrorReplacement) &&
-					(_rtsEnabled             == value._rtsEnabled) &&
-					(_dtrEnabled             == value._dtrEnabled)
+					(this.portId                 == value.portId) &&
+					(this.communication          == value.communication) &&
+					(this.autoReopen             == value.autoReopen) &&
+					(this.replaceParityErrors    == value.replaceParityErrors) &&
+					(this.parityErrorReplacement == value.parityErrorReplacement) &&
+					(this.rtsEnabled             == value.rtsEnabled) &&
+					(this.dtrEnabled             == value.dtrEnabled)
 					);
 			}
 			return (false);

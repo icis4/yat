@@ -33,10 +33,10 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		private bool _isSettingControls = false;
+		private bool isSettingControls = false;
 
-		private Domain.Settings.TerminalSettings _settings;
-		private Domain.Settings.TerminalSettings _settings_Form;
+		private Domain.Settings.TerminalSettings settings;
+		private Domain.Settings.TerminalSettings settings_Form;
 
 		#endregion
 
@@ -49,8 +49,8 @@ namespace YAT.Gui.Forms
 		{
 			InitializeComponent();
 
-			_settings = settings;
-			_settings_Form = new Domain.Settings.TerminalSettings(settings);
+			this.settings = settings;
+			this.settings_Form = new Domain.Settings.TerminalSettings(settings);
 			InitializeControls();
 		}
 
@@ -63,7 +63,7 @@ namespace YAT.Gui.Forms
 
 		public Domain.Settings.TerminalSettings SettingsResult
 		{
-			get { return (_settings); }
+			get { return (this.settings); }
 		}
 
 		#endregion
@@ -76,16 +76,16 @@ namespace YAT.Gui.Forms
 		/// <summary>
 		/// Startup flag only used in the following event handler.
 		/// </summary>
-		private bool _isStartingUp = true;
+		private bool isStartingUp = true;
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
 		private void ExtendendTerminalSettings_Paint(object sender, PaintEventArgs e)
 		{
-			if (_isStartingUp)
+			if (this.isStartingUp)
 			{
-				_isStartingUp = false;
+				this.isStartingUp = false;
 				SetControls();
 			}
 		}
@@ -99,60 +99,60 @@ namespace YAT.Gui.Forms
 
 		private void checkBox_SeparateTxRxRadix_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				_settings_Form.Display.SeparateTxRxRadix = checkBox_SeparateTxRxRadix.Checked;
+				this.settings_Form.Display.SeparateTxRxRadix = checkBox_SeparateTxRxRadix.Checked;
 				SetControls();
 			}
 		}
 
 		private void comboBox_TxRadix_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
-				_settings_Form.Display.TxRadix = (Domain.XRadix)comboBox_TxRadix.SelectedItem;
+			if (!this.isSettingControls)
+				this.settings_Form.Display.TxRadix = (Domain.XRadix)comboBox_TxRadix.SelectedItem;
 		}
 
 		private void comboBox_RxRadix_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
-				_settings_Form.Display.RxRadix = (Domain.XRadix)comboBox_RxRadix.SelectedItem;
+			if (!this.isSettingControls)
+				this.settings_Form.Display.RxRadix = (Domain.XRadix)comboBox_RxRadix.SelectedItem;
 		}
 
 		private void checkBox_ShowRadix_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
-				_settings_Form.Display.ShowRadix = checkBox_ShowRadix.Checked;
+			if (!this.isSettingControls)
+				this.settings_Form.Display.ShowRadix = checkBox_ShowRadix.Checked;
 		}
 
 		private void checkBox_ShowTimeStamp_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
-				_settings_Form.Display.ShowTimeStamp = checkBox_ShowTimeStamp.Checked;
+			if (!this.isSettingControls)
+				this.settings_Form.Display.ShowTimeStamp = checkBox_ShowTimeStamp.Checked;
 		}
 
 		private void checkBox_ShowLength_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
-				_settings_Form.Display.ShowLength = checkBox_ShowLength.Checked;
+			if (!this.isSettingControls)
+				this.settings_Form.Display.ShowLength = checkBox_ShowLength.Checked;
 		}
 
 		private void checkBox_ShowConnectTime_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
-				_settings_Form.Display.ShowConnectTime = checkBox_ShowConnectTime.Checked;
+			if (!this.isSettingControls)
+				this.settings_Form.Display.ShowConnectTime = checkBox_ShowConnectTime.Checked;
 		}
 
 		private void checkBox_ShowCounters_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
-				_settings_Form.Display.ShowCounters = checkBox_ShowCounters.Checked;
+			if (!this.isSettingControls)
+				this.settings_Form.Display.ShowCounters = checkBox_ShowCounters.Checked;
 		}
 
 		private void checkBox_DirectionLineBreak_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				_settings_Form.Display.DirectionLineBreakEnabled = checkBox_DirectionLineBreak.Checked;
+				this.settings_Form.Display.DirectionLineBreakEnabled = checkBox_DirectionLineBreak.Checked;
 				SetControls();
 			}
 		}
@@ -168,13 +168,13 @@ namespace YAT.Gui.Forms
 
 		private void textBox_MaxLineCount_Validating(object sender, CancelEventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				int lineCount;
 				if (int.TryParse(textBox_MaxLineCount.Text, out lineCount) && (lineCount >= 1))
 				{
-					_settings_Form.Display.TxMaxLineCount = lineCount;
-					_settings_Form.Display.RxMaxLineCount = lineCount;
+					this.settings_Form.Display.TxMaxLineCount = lineCount;
+					this.settings_Form.Display.RxMaxLineCount = lineCount;
 					SetControls();
 				}
 				else
@@ -194,60 +194,60 @@ namespace YAT.Gui.Forms
 
 		private void checkBox_ReplaceControlCharacters_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				_settings_Form.CharReplace.ReplaceControlChars = checkBox_ReplaceControlCharacters.Checked;
+				this.settings_Form.CharReplace.ReplaceControlChars = checkBox_ReplaceControlCharacters.Checked;
 				SetControls();
 			}
 		}
 
 		private void comboBox_ControlCharacterRadix_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
-				_settings_Form.CharReplace.ControlCharRadix = (Domain.XControlCharRadix)comboBox_ControlCharacterRadix.SelectedItem;
+			if (!this.isSettingControls)
+				this.settings_Form.CharReplace.ControlCharRadix = (Domain.XControlCharRadix)comboBox_ControlCharacterRadix.SelectedItem;
 		}
 
 		private void checkBox_ReplaceTab_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
-				_settings_Form.CharReplace.ReplaceTab = checkBox_ReplaceTab.Checked;
+			if (!this.isSettingControls)
+				this.settings_Form.CharReplace.ReplaceTab = checkBox_ReplaceTab.Checked;
 		}
 
 		private void checkBox_ReplaceSpace_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
-				_settings_Form.CharReplace.ReplaceSpace = checkBox_ReplaceSpace.Checked;
+			if (!this.isSettingControls)
+				this.settings_Form.CharReplace.ReplaceSpace = checkBox_ReplaceSpace.Checked;
 		}
 
 		private void comboBox_Endianess_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
-				_settings_Form.IO.Endianess = (Domain.XEndianess)comboBox_Endianess.SelectedItem;
+			if (!this.isSettingControls)
+				this.settings_Form.IO.Endianess = (Domain.XEndianess)comboBox_Endianess.SelectedItem;
 		}
 
 		private void checkBox_KeepCommand_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				_settings_Form.Send.KeepCommand = checkBox_KeepCommand.Checked;
+				this.settings_Form.Send.KeepCommand = checkBox_KeepCommand.Checked;
 				SetControls();
 			}
 		}
 
 		private void checkBox_CopyPredefined_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				_settings_Form.Send.CopyPredefined = checkBox_CopyPredefined.Checked;
+				this.settings_Form.Send.CopyPredefined = checkBox_CopyPredefined.Checked;
 				SetControls();
 			}
 		}
 
 		private void checkBox_ReplaceParityError_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				_settings_Form.IO.SerialPort.ReplaceParityErrors = checkBox_ReplaceParityError.Checked;
+				this.settings_Form.IO.SerialPort.ReplaceParityErrors = checkBox_ReplaceParityError.Checked;
 				SetControls();
 			}
 		}
@@ -264,10 +264,10 @@ namespace YAT.Gui.Forms
 				int length = bytes.Length;
 				if (length == 1)
 				{
-					if (!_isSettingControls)
+					if (!this.isSettingControls)
 					{
-						_settings_Form.IO.SerialPort.ParityErrorReplacement = bytes[0];
-						_settings_Form.IO.SerialParityErrorReplacement = replacement;
+						this.settings_Form.IO.SerialPort.ParityErrorReplacement = bytes[0];
+						this.settings_Form.IO.SerialParityErrorReplacement = replacement;
 						SetControls();
 					}
 				}
@@ -303,7 +303,7 @@ namespace YAT.Gui.Forms
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{
-			_settings = _settings_Form;
+			this.settings = this.settings_Form;
 		}
 
 		private void button_Cancel_Click(object sender, EventArgs e)
@@ -326,7 +326,7 @@ namespace YAT.Gui.Forms
 
 		private void InitializeControls()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
 			comboBox_TxRadix.Items.AddRange(Domain.XRadix.GetItems());
 			comboBox_RxRadix.Items.AddRange(Domain.XRadix.GetItems());
@@ -335,59 +335,59 @@ namespace YAT.Gui.Forms
 			comboBox_ControlCharacterRadix.Items.Clear();
 			comboBox_ControlCharacterRadix.Items.AddRange(Domain.XControlCharRadix.GetItems());
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void SetControls()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
 			// Radix
-			bool separateRadix = _settings_Form.Display.SeparateTxRxRadix;
+			bool separateRadix = this.settings_Form.Display.SeparateTxRxRadix;
 			if (!separateRadix)
 				label_TxRadix.Text = "R&adix:";
 			else
 				label_TxRadix.Text = "&Tx Radix:";
 
-			comboBox_TxRadix.SelectedItem      = (Domain.XRadix)_settings_Form.Display.TxRadix;
+			comboBox_TxRadix.SelectedItem      = (Domain.XRadix)this.settings_Form.Display.TxRadix;
 			checkBox_SeparateTxRxRadix.Checked = separateRadix;
 			label_RxRadix.Enabled              = separateRadix;
 			comboBox_RxRadix.Enabled           = separateRadix;
-			comboBox_RxRadix.SelectedItem      = (Domain.XRadix)_settings_Form.Display.RxRadix;
+			comboBox_RxRadix.SelectedItem      = (Domain.XRadix)this.settings_Form.Display.RxRadix;
 
 			// Display
-			checkBox_ShowRadix.Checked       = _settings_Form.Display.ShowRadix;
-			checkBox_ShowTimeStamp.Checked   = _settings_Form.Display.ShowTimeStamp;
-			checkBox_ShowLength.Checked      = _settings_Form.Display.ShowLength;
-			checkBox_ShowConnectTime.Checked = _settings.Display.ShowConnectTime;
-			checkBox_ShowCounters.Checked    = _settings_Form.Display.ShowCounters;
+			checkBox_ShowRadix.Checked       = this.settings_Form.Display.ShowRadix;
+			checkBox_ShowTimeStamp.Checked   = this.settings_Form.Display.ShowTimeStamp;
+			checkBox_ShowLength.Checked      = this.settings_Form.Display.ShowLength;
+			checkBox_ShowConnectTime.Checked = this.settings.Display.ShowConnectTime;
+			checkBox_ShowCounters.Checked    = this.settings_Form.Display.ShowCounters;
 
-			checkBox_DirectionLineBreak.Checked = _settings_Form.Display.DirectionLineBreakEnabled;
-			textBox_MaxLineCount.Text           = _settings_Form.Display.TxMaxLineCount.ToString();
+			checkBox_DirectionLineBreak.Checked = this.settings_Form.Display.DirectionLineBreakEnabled;
+			textBox_MaxLineCount.Text           = this.settings_Form.Display.TxMaxLineCount.ToString();
 
 			// Char replace
-			bool replaceControlChars                    = _settings_Form.CharReplace.ReplaceControlChars;
+			bool replaceControlChars                    = this.settings_Form.CharReplace.ReplaceControlChars;
 			checkBox_ReplaceControlCharacters.Checked   = replaceControlChars;
 			comboBox_ControlCharacterRadix.Enabled      = replaceControlChars;
-			comboBox_ControlCharacterRadix.SelectedItem = (Domain.XControlCharRadix)_settings_Form.CharReplace.ControlCharRadix;
-			checkBox_ReplaceTab.Checked                 = _settings_Form.CharReplace.ReplaceTab;
-			checkBox_ReplaceSpace.Checked               = _settings_Form.CharReplace.ReplaceSpace;
+			comboBox_ControlCharacterRadix.SelectedItem = (Domain.XControlCharRadix)this.settings_Form.CharReplace.ControlCharRadix;
+			checkBox_ReplaceTab.Checked                 = this.settings_Form.CharReplace.ReplaceTab;
+			checkBox_ReplaceSpace.Checked               = this.settings_Form.CharReplace.ReplaceSpace;
 
 			// Communication
-			comboBox_Endianess.SelectedItem = (Domain.XEndianess)_settings_Form.IO.Endianess;
+			comboBox_Endianess.SelectedItem = (Domain.XEndianess)this.settings_Form.IO.Endianess;
 
 			// Send
-			checkBox_KeepCommand.Checked = _settings_Form.Send.KeepCommand;
-			checkBox_CopyPredefined.Checked = _settings_Form.Send.CopyPredefined;
+			checkBox_KeepCommand.Checked = this.settings_Form.Send.KeepCommand;
+			checkBox_CopyPredefined.Checked = this.settings_Form.Send.CopyPredefined;
 
 			// Receive
-			groupBox_ReceiveSettings.Enabled = (_settings_Form.IO.IOType == Domain.IOType.SerialPort);
-			bool replaceParityErrors = _settings_Form.IO.SerialPort.ReplaceParityErrors;
+			groupBox_ReceiveSettings.Enabled = (this.settings_Form.IO.IOType == Domain.IOType.SerialPort);
+			bool replaceParityErrors = this.settings_Form.IO.SerialPort.ReplaceParityErrors;
 			checkBox_ReplaceParityError.Checked = replaceParityErrors;
 			textBox_ParityReplacement.Enabled = replaceParityErrors;
-			textBox_ParityReplacement.Text = _settings_Form.IO.SerialParityErrorReplacement;
+			textBox_ParityReplacement.Text = this.settings_Form.IO.SerialParityErrorReplacement;
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		/// <remarks>
@@ -396,33 +396,33 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void SetDefaults()
 		{
-			_settings_Form.Display.SeparateTxRxRadix = Domain.Settings.DisplaySettings.SeparateTxRxRadixDefault;
-			_settings_Form.Display.TxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
-			_settings_Form.Display.RxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
+			this.settings_Form.Display.SeparateTxRxRadix = Domain.Settings.DisplaySettings.SeparateTxRxRadixDefault;
+			this.settings_Form.Display.TxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
+			this.settings_Form.Display.RxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
 
-			_settings_Form.Display.ShowRadix       = Domain.Settings.DisplaySettings.ShowRadixDefault;
-			_settings_Form.Display.ShowTimeStamp   = Domain.Settings.DisplaySettings.ShowTimeStampDefault;
-			_settings_Form.Display.ShowLength      = Domain.Settings.DisplaySettings.ShowLengthDefault;
-			_settings_Form.Display.ShowConnectTime = Domain.Settings.DisplaySettings.ShowConnectTimeDefault;
-			_settings_Form.Display.ShowCounters    = Domain.Settings.DisplaySettings.ShowCountersDefault;
+			this.settings_Form.Display.ShowRadix       = Domain.Settings.DisplaySettings.ShowRadixDefault;
+			this.settings_Form.Display.ShowTimeStamp   = Domain.Settings.DisplaySettings.ShowTimeStampDefault;
+			this.settings_Form.Display.ShowLength      = Domain.Settings.DisplaySettings.ShowLengthDefault;
+			this.settings_Form.Display.ShowConnectTime = Domain.Settings.DisplaySettings.ShowConnectTimeDefault;
+			this.settings_Form.Display.ShowCounters    = Domain.Settings.DisplaySettings.ShowCountersDefault;
 
-			_settings_Form.Display.DirectionLineBreakEnabled = Domain.Settings.DisplaySettings.DirectionLineBreakEnabledDefault;
-			_settings_Form.Display.TxMaxLineCount            = Domain.Settings.DisplaySettings.MaxLineCountDefault;
-			_settings_Form.Display.RxMaxLineCount            = Domain.Settings.DisplaySettings.MaxLineCountDefault;
+			this.settings_Form.Display.DirectionLineBreakEnabled = Domain.Settings.DisplaySettings.DirectionLineBreakEnabledDefault;
+			this.settings_Form.Display.TxMaxLineCount            = Domain.Settings.DisplaySettings.MaxLineCountDefault;
+			this.settings_Form.Display.RxMaxLineCount            = Domain.Settings.DisplaySettings.MaxLineCountDefault;
 
-			_settings_Form.CharReplace.ReplaceControlChars = Domain.Settings.CharReplaceSettings.ReplaceControlCharsDefault;
-			_settings_Form.CharReplace.ControlCharRadix    = Domain.Settings.CharReplaceSettings.ControlCharRadixDefault;
-			_settings_Form.CharReplace.ReplaceTab          = Domain.Settings.CharReplaceSettings.ReplaceTabDefault;
-			_settings_Form.CharReplace.ReplaceSpace        = Domain.Settings.CharReplaceSettings.ReplaceSpaceDefault;
+			this.settings_Form.CharReplace.ReplaceControlChars = Domain.Settings.CharReplaceSettings.ReplaceControlCharsDefault;
+			this.settings_Form.CharReplace.ControlCharRadix    = Domain.Settings.CharReplaceSettings.ControlCharRadixDefault;
+			this.settings_Form.CharReplace.ReplaceTab          = Domain.Settings.CharReplaceSettings.ReplaceTabDefault;
+			this.settings_Form.CharReplace.ReplaceSpace        = Domain.Settings.CharReplaceSettings.ReplaceSpaceDefault;
 
-			_settings_Form.IO.Endianess = Domain.Settings.IOSettings.EndianessDefault;
+			this.settings_Form.IO.Endianess = Domain.Settings.IOSettings.EndianessDefault;
 
-			_settings_Form.Send.KeepCommand    = Domain.Settings.SendSettings.KeepCommandDefault;
-			_settings_Form.Send.CopyPredefined = Domain.Settings.SendSettings.CopyPredefinedDefault;
+			this.settings_Form.Send.KeepCommand    = Domain.Settings.SendSettings.KeepCommandDefault;
+			this.settings_Form.Send.CopyPredefined = Domain.Settings.SendSettings.CopyPredefinedDefault;
 
-			_settings_Form.IO.SerialPort.ReplaceParityErrors    = MKY.IO.Serial.SerialPortSettings.ReplaceParityErrorsDefault;
-			_settings_Form.IO.SerialPort.ParityErrorReplacement = MKY.IO.Serial.SerialPortSettings.ParityErrorReplacementDefault;
-			_settings_Form.IO.SerialParityErrorReplacement      = Domain.Settings.IOSettings.SerialParityErrorReplacementDefault;
+			this.settings_Form.IO.SerialPort.ReplaceParityErrors    = MKY.IO.Serial.SerialPortSettings.ReplaceParityErrorsDefault;
+			this.settings_Form.IO.SerialPort.ParityErrorReplacement = MKY.IO.Serial.SerialPortSettings.ParityErrorReplacementDefault;
+			this.settings_Form.IO.SerialParityErrorReplacement      = Domain.Settings.IOSettings.SerialParityErrorReplacementDefault;
 		}
 
 		#endregion

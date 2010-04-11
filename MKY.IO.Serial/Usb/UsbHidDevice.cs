@@ -59,16 +59,16 @@ namespace MKY.IO.Serial
 		// Fields
 		//==========================================================================================
 
-		private bool _isDisposed;
+		private bool isDisposed;
 
-		private State _state = State.Reset;
-		private object _stateSyncObj = new object();
+		private State state = State.Reset;
+		private object stateSyncObj = new object();
 
-		private UsbHidDeviceSettings _settings;
-		private Usb.SerialHidDevice _device;
-		private object _deviceSyncObj = new object();
+		private UsbHidDeviceSettings settings;
+		private Usb.SerialHidDevice device;
+		private object deviceSyncObj = new object();
 
-		private System.Timers.Timer _reopenTimer;
+		private System.Timers.Timer reopenTimer;
 
 		#endregion
 
@@ -100,7 +100,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public UsbHidDevice(UsbHidDeviceSettings settings)
 		{
-			_settings = settings;
+			this.settings = settings;
 		}
 
 		#region Disposal
@@ -118,14 +118,14 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!_isDisposed)
+			if (!this.isDisposed)
 			{
 				if (disposing)
 				{
 					StopAndDisposeReopenTimer();
 					CloseAndDisposeDevice();
 				}
-				_isDisposed = true;
+				this.isDisposed = true;
 			}
 		}
 
@@ -138,13 +138,13 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected bool IsDisposed
 		{
-			get { return (_isDisposed); }
+			get { return (this.isDisposed); }
 		}
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (_isDisposed)
+			if (this.isDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
 		}
 
@@ -163,7 +163,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_settings);
+				return (this.settings);
 			}
 		}
 
@@ -173,7 +173,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				switch (_state)
+				switch (this.state)
 				{
 					case State.Connected:
 					case State.Disconnected:
@@ -197,8 +197,8 @@ namespace MKY.IO.Serial
 			{
 				AssertNotDisposed();
 
-				if (_device != null)
-					return (_device.IsConnected);
+				if (this.device != null)
+					return (this.device.IsConnected);
 
 				return (false);
 			}
@@ -211,8 +211,8 @@ namespace MKY.IO.Serial
 			{
 				AssertNotDisposed();
 
-				if (_device != null)
-					return (_device.IsOpen);
+				if (this.device != null)
+					return (this.device.IsOpen);
 
 				return (false);
 			}
@@ -225,8 +225,8 @@ namespace MKY.IO.Serial
 			{
 				AssertNotDisposed();
 
-				if (_device != null)
-					return (_device.BytesAvailable);
+				if (this.device != null)
+					return (this.device.BytesAvailable);
 
 				return (0);
 			}
@@ -239,7 +239,7 @@ namespace MKY.IO.Serial
 				return
 					(
 						!IsDisposed && IsStarted && !IsOpen &&
-						_settings.AutoReopen.Enabled
+						this.settings.AutoReopen.Enabled
 					);
 			}
 		}
@@ -250,7 +250,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_device);
+				return (this.device);
 			}
 		}
 
@@ -290,8 +290,8 @@ namespace MKY.IO.Serial
 			int bytesReceived = 0;
 			if (IsOpen)
 			{
-				lock (_deviceSyncObj)
-					bytesReceived = _device.Receive(out data);
+				lock (this.deviceSyncObj)
+					bytesReceived = this.device.Receive(out data);
 			}
 			else
 			{
@@ -307,8 +307,8 @@ namespace MKY.IO.Serial
 
 			if (IsOpen)
 			{
-				lock (_deviceSyncObj)
-					_device.Send(data);
+				lock (this.deviceSyncObj)
+					this.device.Send(data);
 			}
 
 			// OnDataSent will be fired by Usb.HidDevice
@@ -324,12 +324,12 @@ namespace MKY.IO.Serial
 		private void SetStateAndNotify(State state)
 		{
 #if (DEBUG)
-			State oldState = _state;
+			State oldState = this.state;
 #endif
-			lock (_stateSyncObj)
-				_state = state;
+			lock (this.stateSyncObj)
+				this.state = state;
 #if (DEBUG)
-			System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortString() + ")(" + _state + "): State has changed from " + oldState + " to " + _state + ".");
+			System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortString() + ")(" + this.state + "): State has changed from " + oldState + " to " + this.state + ".");
 #endif
 			OnIOChanged(new EventArgs());
 		}
@@ -343,42 +343,42 @@ namespace MKY.IO.Serial
 
 		private void CreateDevice()
 		{
-			if (_device != null)
+			if (this.device != null)
 				CloseAndDisposeDevice();
 
-			lock (_deviceSyncObj)
+			lock (this.deviceSyncObj)
 			{
-				_device = new Usb.SerialHidDevice(_settings.DeviceInfo);
-				_device.Connected    += new EventHandler(_device_Connected);
-				_device.Disconnected += new EventHandler(_device_Disconnected);
-				_device.DataReceived += new EventHandler(_device_DataReceived);
-				_device.DataSent     += new EventHandler(_device_DataSent);
-				_device.Error        += new EventHandler<Usb.ErrorEventArgs>(_device_Error);
+				this.device = new Usb.SerialHidDevice(this.settings.DeviceInfo);
+				this.device.Connected    += new EventHandler(this.device_Connected);
+				this.device.Disconnected += new EventHandler(this.device_Disconnected);
+				this.device.DataReceived += new EventHandler(this.device_DataReceived);
+				this.device.DataSent     += new EventHandler(this.device_DataSent);
+				this.device.Error        += new EventHandler<Usb.ErrorEventArgs>(this.device_Error);
 			}
 		}
 
 		private void OpenDevice()
 		{
-			if (!_device.IsOpen)
+			if (!this.device.IsOpen)
 			{
-				lock (_deviceSyncObj)
-					_device.Open();
+				lock (this.deviceSyncObj)
+					this.device.Open();
 			}
 		}
 
 		private void CloseAndDisposeDevice()
 		{
-			if (_device != null)
+			if (this.device != null)
 			{
 				try
 				{
-					lock (_deviceSyncObj)
+					lock (this.deviceSyncObj)
 					{
-						if (_device.IsOpen)
-							_device.Close();
+						if (this.device.IsOpen)
+							this.device.Close();
 
-						_device.Dispose();
-						_device = null;
+						this.device.Dispose();
+						this.device = null;
 					}
 				}
 				catch { }
@@ -439,27 +439,27 @@ namespace MKY.IO.Serial
 		// Port Events
 		//==========================================================================================
 
-		private void _device_Connected(object sender, EventArgs e)
+		private void device_Connected(object sender, EventArgs e)
 		{
 			SetStateAndNotify(State.Connected);
 		}
 
-		private void _device_Disconnected(object sender, EventArgs e)
+		private void device_Disconnected(object sender, EventArgs e)
 		{
 			SetStateAndNotify(State.Disconnected);
 		}
 
-		private void _device_DataReceived(object sender, EventArgs e)
+		private void device_DataReceived(object sender, EventArgs e)
 		{
 			OnDataReceived(e);
 		}
 
-		private void _device_DataSent(object sender, EventArgs e)
+		private void device_DataSent(object sender, EventArgs e)
 		{
 			OnDataSent(e);
 		}
 
-		private void _device_Error(object sender, Usb.ErrorEventArgs e)
+		private void device_Error(object sender, Usb.ErrorEventArgs e)
 		{
 			OnIOError(new IOErrorEventArgs(e.Message));
 		}
@@ -473,26 +473,26 @@ namespace MKY.IO.Serial
 
 		private void StartReopenTimer()
 		{
-			if (_reopenTimer == null)
+			if (this.reopenTimer == null)
 			{
-				_reopenTimer = new System.Timers.Timer(_settings.AutoReopen.Interval);
-				_reopenTimer.AutoReset = false;
-				_reopenTimer.Elapsed += new System.Timers.ElapsedEventHandler(_reopenTimer_Elapsed);
+				this.reopenTimer = new System.Timers.Timer(this.settings.AutoReopen.Interval);
+				this.reopenTimer.AutoReset = false;
+				this.reopenTimer.Elapsed += new System.Timers.ElapsedEventHandler(this.reopenTimer_Elapsed);
 			}
-			_reopenTimer.Start();
+			this.reopenTimer.Start();
 		}
 
 		private void StopAndDisposeReopenTimer()
 		{
-			if (_reopenTimer != null)
+			if (this.reopenTimer != null)
 			{
-				_reopenTimer.Stop();
-				_reopenTimer.Dispose();
-				_reopenTimer = null;
+				this.reopenTimer.Stop();
+				this.reopenTimer.Dispose();
+				this.reopenTimer = null;
 			}
 		}
 
-		private void _reopenTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private void reopenTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			if (AutoReopenEnabledAndAllowed)
 			{
@@ -566,8 +566,8 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public override string ToString()
 		{
-			if (_device != null)
-				return (_device.ToString());
+			if (this.device != null)
+				return (this.device.ToString());
 			else
 				return ("<Undefined>");
 		}
@@ -575,8 +575,8 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public virtual string ToShortString()
 		{
-			if (_device != null)
-				return (_device.ToShortString());
+			if (this.device != null)
+				return (this.device.ToShortString());
 			else
 				return ("<Undefined>");
 		}

@@ -110,7 +110,7 @@ namespace MKY.Utilities.Test.Settings
 		// Fields
 		//==========================================================================================
 
-		private readonly TestSet[] _testSets =
+		private readonly TestSet[] testSets =
 		{
 			new TestSet(_11, "TestObjectV1", typeof(TestClassV1), typeof(TestClassV1)),
 			new TestSet(_12, "TestObjectV1", typeof(TestClassV1), typeof(TestClassV2)),
@@ -152,7 +152,7 @@ namespace MKY.Utilities.Test.Settings
 		[Test]
 		public virtual void TestDeserialization()
 		{
-			foreach (TestSet ts in _testSets)
+			foreach (TestSet ts in this.testSets)
 			{
 				string filePath = MakeTempFilePath(ts.FileName);
 

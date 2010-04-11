@@ -47,17 +47,17 @@ namespace YAT.Model
 		// Fields
 		//==========================================================================================
 
-		private bool _isDisposed;
+		private bool isDisposed;
 
-		private Guid _guid;
+		private Guid guid;
 
 		// settings
-		private DocumentSettingsHandler<WorkspaceSettingsRoot> _settingsHandler;
-		private WorkspaceSettingsRoot _settingsRoot;
+		private DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler;
+		private WorkspaceSettingsRoot settingsRoot;
 
 		// terminal list
-		private GuidList<Terminal> _terminals = new GuidList<Terminal>();
-		private Terminal _activeTerminal = null;
+		private GuidList<Terminal> terminals = new GuidList<Terminal>();
+		private Terminal activeTerminal = null;
 
 		#endregion
 
@@ -115,14 +115,14 @@ namespace YAT.Model
 		public Workspace(DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler, Guid guid)
 		{
 			if (guid != Guid.Empty)
-				_guid = guid;
+				this.guid = guid;
 			else
-				_guid = Guid.NewGuid();
+				this.guid = Guid.NewGuid();
 
 			// link and attach to settings
-			_settingsHandler = settingsHandler;
-			_settingsRoot = _settingsHandler.Settings;
-			_settingsRoot.ClearChanged();
+			this.settingsHandler = settingsHandler;
+			this.settingsRoot = this.settingsHandler.Settings;
+			this.settingsRoot.ClearChanged();
 			AttachSettingsEventHandlers();
 		}
 
@@ -141,30 +141,30 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!_isDisposed)
+			if (!this.isDisposed)
 			{
 				if (disposing)
 				{
-					if (_terminals != null)
+					if (this.terminals != null)
 					{
 						// First, detach event handlers to ensure that no more events are received
-						foreach (Terminal t in _terminals)
+						foreach (Terminal t in this.terminals)
 							DetachTerminalEventHandlers(t);
 					}
 
 					DetachSettingsEventHandlers();
 
-					if (_terminals != null)
+					if (this.terminals != null)
 					{
 						// Then, dispose of objects
-						foreach (Terminal t in _terminals)
+						foreach (Terminal t in this.terminals)
 							t.Dispose();
 
-						_terminals.Clear();
-						_terminals = null;
+						this.terminals.Clear();
+						this.terminals = null;
 					}
 				}
-				_isDisposed = true;
+				this.isDisposed = true;
 			}
 		}
 
@@ -177,13 +177,13 @@ namespace YAT.Model
 		/// <summary></summary>
 		protected bool IsDisposed
 		{
-			get { return (_isDisposed); }
+			get { return (this.isDisposed); }
 		}
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (_isDisposed)
+			if (this.isDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
 		}
 
@@ -202,7 +202,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_guid);
+				return (this.guid);
 			}
 		}
 
@@ -213,8 +213,8 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 
-				if (_activeTerminal != null)
-					return (_activeTerminal.UserName);
+				if (this.activeTerminal != null)
+					return (this.activeTerminal.UserName);
 				else
 					return (ApplicationInfo.ProductName);
 			}
@@ -226,7 +226,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_settingsHandler.SettingsFileExists);
+				return (this.settingsHandler.SettingsFileExists);
 			}
 		}
 
@@ -236,7 +236,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_settingsHandler.SettingsFilePath);
+				return (this.settingsHandler.SettingsFilePath);
 			}
 		}
 
@@ -248,7 +248,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_terminals.Count);
+				return (this.terminals.Count);
 			}
 		}
 
@@ -260,7 +260,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_terminals.ToArray());
+				return (this.terminals.ToArray());
 			}
 		}
 
@@ -272,7 +272,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_activeTerminal);
+				return (this.activeTerminal);
 			}
 		}
 
@@ -290,14 +290,14 @@ namespace YAT.Model
 
 		private void AttachSettingsEventHandlers()
 		{
-			if (_settingsRoot != null)
-				_settingsRoot.Changed += new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
+			if (this.settingsRoot != null)
+				this.settingsRoot.Changed += new EventHandler<SettingsEventArgs>(this.settingsRoot_Changed);
 		}
 
 		private void DetachSettingsEventHandlers()
 		{
-			if (_settingsRoot != null)
-				_settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
+			if (this.settingsRoot != null)
+				this.settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(this.settingsRoot_Changed);
 		}
 
 		#endregion
@@ -307,20 +307,20 @@ namespace YAT.Model
 		// Settings > Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		private bool _settingsRoot_Changed_handlingSettingsIsSuspended = false;
+		private bool settingsRoot_Changed_handlingSettingsIsSuspended = false;
 
-		private void _settingsRoot_Changed(object sender, SettingsEventArgs e)
+		private void settingsRoot_Changed(object sender, SettingsEventArgs e)
 		{
 
-			if (_settingsRoot_Changed_handlingSettingsIsSuspended)
+			if (this.settingsRoot_Changed_handlingSettingsIsSuspended)
 				return;
 
 			if (ApplicationSettings.LocalUser.General.AutoSaveWorkspace)
 			{
 				// prevent recursive calls
-				_settingsRoot_Changed_handlingSettingsIsSuspended = true;
+				this.settingsRoot_Changed_handlingSettingsIsSuspended = true;
 				TryAutoSaveIfFileAlreadyAutoSaved();
-				_settingsRoot_Changed_handlingSettingsIsSuspended = false;
+				this.settingsRoot_Changed_handlingSettingsIsSuspended = false;
 			}
 		}
 
@@ -337,7 +337,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_settingsRoot.HaveChanged);
+				return (this.settingsRoot.HaveChanged);
 			}
 		}
 
@@ -347,7 +347,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (_settingsRoot);
+				return (this.settingsRoot);
 			}
 		}
 
@@ -367,7 +367,7 @@ namespace YAT.Model
 		private bool TryAutoSave()
 		{
 			bool success = false;
-			if (_settingsHandler.SettingsFileExists && !_settingsRoot.AutoSaved)
+			if (this.settingsHandler.SettingsFileExists && !this.settingsRoot.AutoSaved)
 				success = SaveToFile(false);
 			else
 				success = SaveToFile(true);
@@ -384,7 +384,7 @@ namespace YAT.Model
 		private bool TryAutoSaveIfFileAlreadyAutoSaved()
 		{
 			bool success = false;
-			if (_settingsHandler.SettingsFileExists && _settingsRoot.AutoSaved)
+			if (this.settingsHandler.SettingsFileExists && this.settingsRoot.AutoSaved)
 			{
 				success = SaveToFile(true);
 			}
@@ -409,9 +409,9 @@ namespace YAT.Model
 			bool success = false;
 
 			// Save workspace if file path is valid
-			if (_settingsHandler.SettingsFilePathIsValid)
+			if (this.settingsHandler.SettingsFilePathIsValid)
 			{
-				if (_settingsHandler.Settings.AutoSaved)
+				if (this.settingsHandler.Settings.AutoSaved)
 				{
 					if (autoSaveIsAllowed)
 						success = SaveToFile(true);
@@ -442,10 +442,10 @@ namespace YAT.Model
 			AssertNotDisposed();
 
 			string autoSaveFilePathToDelete = "";
-			if (_settingsRoot.AutoSaved)
-				autoSaveFilePathToDelete = _settingsHandler.SettingsFilePath;
+			if (this.settingsRoot.AutoSaved)
+				autoSaveFilePathToDelete = this.settingsHandler.SettingsFilePath;
 
-			_settingsHandler.SettingsFilePath = filePath;
+			this.settingsHandler.SettingsFilePath = filePath;
 			return (SaveToFile(false, autoSaveFilePathToDelete));
 		}
 
@@ -460,10 +460,10 @@ namespace YAT.Model
 			// Skip save if file is up to date and there were no changes
 			// -------------------------------------------------------------------------------------
 
-			if (_settingsHandler.SettingsFileIsUpToDate && (!_settingsRoot.HaveChanged))
+			if (this.settingsHandler.SettingsFileIsUpToDate && (!this.settingsRoot.HaveChanged))
 			{
 				// Event must be fired anyway to ensure that dependent objects are updated
-				OnSaved(new SavedEventArgs(_settingsHandler.SettingsFilePath, doAutoSave));
+				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, doAutoSave));
 				return (true);
 			}
 
@@ -478,10 +478,10 @@ namespace YAT.Model
 
 			// In case of auto save, assign workspace settings file path before saving terminals
 			// This ensures that relative paths are correctly retrieved by SaveAllTerminals()
-			if (doAutoSave && (!_settingsHandler.SettingsFilePathIsValid))
+			if (doAutoSave && (!this.settingsHandler.SettingsFilePathIsValid))
 			{
 				string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveWorkspaceFileNamePrefix + Guid.ToString() + ExtensionSettings.WorkspaceFile;
-				_settingsHandler.SettingsFilePath = autoSaveFilePath;
+				this.settingsHandler.SettingsFilePath = autoSaveFilePath;
 			}
 
 			if (!SaveAllTerminals(doAutoSave))
@@ -496,15 +496,15 @@ namespace YAT.Model
 				// Save workspace
 				// ---------------------------------------------------------------------------------
 
-				_settingsHandler.Settings.AutoSaved = doAutoSave;
-				_settingsHandler.Save();
+				this.settingsHandler.Settings.AutoSaved = doAutoSave;
+				this.settingsHandler.Save();
 
 				success = true;
-				OnSaved(new SavedEventArgs(_settingsHandler.SettingsFilePath, doAutoSave));
+				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, doAutoSave));
 
 				if (!doAutoSave)
 				{
-					SetRecent(_settingsHandler.SettingsFilePath);
+					SetRecent(this.settingsHandler.SettingsFilePath);
 					OnTimedStatusTextRequest("Workspace saved");
 				}
 
@@ -528,7 +528,7 @@ namespace YAT.Model
 					OnFixedStatusTextRequest("Error saving workspace!");
 					OnMessageInputRequest
 						(
-						"Unable to save file" + Environment.NewLine + _settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
+						"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
 						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
 						"File error message: " + ex.InnerException.Message,
 						"File Error",
@@ -585,7 +585,7 @@ namespace YAT.Model
 			bool tryAutoSave = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
 
 			// Don't try to auto save if there is no existing file (w1)
-			if (!isMainClose && !_settingsHandler.SettingsFileExists)
+			if (!isMainClose && !this.settingsHandler.SettingsFileExists)
 				tryAutoSave = false;
 
 			OnFixedStatusTextRequest("Closing workspace...");
@@ -607,16 +607,16 @@ namespace YAT.Model
 			if (!success)
 			{
 				// No file (m1, m3, w1, w3)
-				if (!_settingsHandler.SettingsFileExists)
+				if (!this.settingsHandler.SettingsFileExists)
 				{
 					success = true; // Consider it successful if there was no file to save
 				}
 				// Existing file
 				else
 				{
-					if (_settingsRoot.AutoSaved) // Existing auto file (m2a/b, w2)
+					if (this.settingsRoot.AutoSaved) // Existing auto file (m2a/b, w2)
 					{
-						_settingsHandler.Delete();
+						this.settingsHandler.Delete();
 						success = true; // Don't care if auto file not successfully deleted
 					}
 
@@ -624,7 +624,7 @@ namespace YAT.Model
 				}
 
 				// Normal (m4a/b, w4a/b)
-				if (!success && _settingsRoot.ExplicitHaveChanged)
+				if (!success && this.settingsRoot.ExplicitHaveChanged)
 				{
 					DialogResult dr = OnMessageInputRequest
 						(
@@ -761,7 +761,7 @@ namespace YAT.Model
 				AssertNotDisposed();
 
 				List<string> filePaths = new List<string>();
-				foreach (Terminal t in _terminals)
+				foreach (Terminal t in this.terminals)
 				{
 					if (t.SettingsFileExists)
 						filePaths.Add(t.SettingsFilePath);
@@ -796,14 +796,14 @@ namespace YAT.Model
 		/// </summary>
 		public virtual int OpenTerminals()
 		{
-			int requestedTerminalCount = _settingsRoot.TerminalSettings.Count;
+			int requestedTerminalCount = this.settingsRoot.TerminalSettings.Count;
 			if (requestedTerminalCount == 1)
 				OnFixedStatusTextRequest("Opening workspace terminal...");
 			else if (requestedTerminalCount > 1)
 				OnFixedStatusTextRequest("Opening workspace terminals...");
 
 			int openedTerminalCount = 0;
-			GuidList<TerminalSettingsItem> clone = new GuidList<TerminalSettingsItem>(_settingsRoot.TerminalSettings);
+			GuidList<TerminalSettingsItem> clone = new GuidList<TerminalSettingsItem>(this.settingsRoot.TerminalSettings);
 			foreach (TerminalSettingsItem item in clone)
 			{
 				try
@@ -833,7 +833,7 @@ namespace YAT.Model
 
 			// On success, clear changed flag since all terminals got openend
 			if (openedTerminalCount == requestedTerminalCount)
-				_settingsRoot.ClearChanged();
+				this.settingsRoot.ClearChanged();
 
 			return (openedTerminalCount);
 		}
@@ -852,10 +852,10 @@ namespace YAT.Model
 			try
 			{
 				// Combine absolute workspace path with terminal path if that one is relative
-				absoluteFilePath = XPath.CombineFilePaths(_settingsHandler.SettingsFilePath, filePath);
+				absoluteFilePath = XPath.CombineFilePaths(this.settingsHandler.SettingsFilePath, filePath);
 
 				// Check whether terminal is already contained in workspace
-				foreach (Terminal t in _terminals)
+				foreach (Terminal t in this.terminals)
 				{
 					if (absoluteFilePath == t.SettingsFilePath)
 					{
@@ -922,7 +922,7 @@ namespace YAT.Model
 			string filePath = terminal.SettingsFilePath;
 			if (ApplicationSettings.LocalUser.General.UseRelativePaths)
 			{
-				XPathCompareResult pcr = XPath.CompareFilePaths(_settingsHandler.SettingsFilePath, terminal.SettingsFilePath);
+				XPathCompareResult pcr = XPath.CompareFilePaths(this.settingsHandler.SettingsFilePath, terminal.SettingsFilePath);
 				if (pcr.AreRelative)
 					filePath = pcr.RelativePath;
 			}
@@ -939,13 +939,13 @@ namespace YAT.Model
 			AttachTerminalEventHandlers(terminal);
 
 			// Add terminal to terminal list
-			_terminals.Add(terminal);
-			_activeTerminal = terminal;
+			this.terminals.Add(terminal);
+			this.activeTerminal = terminal;
 
 			// Add terminal settings for new terminals
 			// Replace terminal settings if workspace settings have been loaded from file prior
-			_settingsRoot.TerminalSettings.AddOrReplaceGuidItem(CreateTerminalSettingsItem(terminal));
-			_settingsRoot.SetChanged();
+			this.settingsRoot.TerminalSettings.AddOrReplaceGuidItem(CreateTerminalSettingsItem(terminal));
+			this.settingsRoot.SetChanged();
 
 			// Fire terminal added event
 			OnTerminalAdded(new TerminalEventArgs(terminal));
@@ -954,16 +954,16 @@ namespace YAT.Model
 		private void ReplaceInWorkspace(Terminal terminal)
 		{
 			// Replace terminal in terminal list
-			_terminals.ReplaceGuidItem(terminal);
-			_activeTerminal = terminal;
+			this.terminals.ReplaceGuidItem(terminal);
+			this.activeTerminal = terminal;
 
 			// Replace terminal in workspace settings if the settings have indeed changed
 			TerminalSettingsItem tsiNew = CreateTerminalSettingsItem(terminal);
-			TerminalSettingsItem tsiOld = _settingsRoot.TerminalSettings.GetGuidItem(terminal.Guid);
+			TerminalSettingsItem tsiOld = this.settingsRoot.TerminalSettings.GetGuidItem(terminal.Guid);
 			if ((tsiOld == null) || (tsiNew != tsiOld))
 			{
-				_settingsRoot.TerminalSettings.ReplaceGuidItem(tsiNew);
-				_settingsRoot.SetChanged();
+				this.settingsRoot.TerminalSettings.ReplaceGuidItem(tsiNew);
+				this.settingsRoot.SetChanged();
 			}
 		}
 
@@ -972,12 +972,12 @@ namespace YAT.Model
 			DetachTerminalEventHandlers(terminal);
 
 			// Remove terminal from terminal list
-			_terminals.RemoveGuid(terminal.Guid);
-			_activeTerminal = null;
+			this.terminals.RemoveGuid(terminal.Guid);
+			this.activeTerminal = null;
 
 			// Remove terminal from workspace settings
-			_settingsRoot.TerminalSettings.RemoveGuid(terminal.Guid);
-			_settingsRoot.SetChanged();
+			this.settingsRoot.TerminalSettings.RemoveGuid(terminal.Guid);
+			this.settingsRoot.SetChanged();
 
 			// Fire terminal added event
 			OnTerminalRemoved(new TerminalEventArgs(terminal));
@@ -1002,7 +1002,7 @@ namespace YAT.Model
 			bool success = true;
 
 			// Calling Close() on a terminal will modify the list, therefore clone it first
-			List<Terminal> clone = new List<Terminal>(_terminals);
+			List<Terminal> clone = new List<Terminal>(this.terminals);
 			foreach (Terminal t in clone)
 			{
 				if (!t.Save(autoSaveIsAllowed))
@@ -1025,7 +1025,7 @@ namespace YAT.Model
 			bool success = true;
 
 			// Calling Close() on a terminal will modify the list, therefore clone it first
-			List<Terminal> clone = new List<Terminal>(_terminals);
+			List<Terminal> clone = new List<Terminal>(this.terminals);
 			foreach (Terminal t in clone)
 			{
 				if (!t.Close(isWorkspaceClose, TryTerminalAutoSaveIsDesired(tryAutoSave, t)))
@@ -1044,31 +1044,31 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual void ActivateTerminal(Terminal terminal)
 		{
-			_activeTerminal = terminal;
+			this.activeTerminal = terminal;
 		}
 
 		/// <summary></summary>
 		public virtual bool SaveActiveTerminal()
 		{
-			return (_activeTerminal.Save());
+			return (this.activeTerminal.Save());
 		}
 
 		/// <summary></summary>
 		public virtual bool CloseActiveTerminal()
 		{
-			return (_activeTerminal.Close());
+			return (this.activeTerminal.Close());
 		}
 
 		/// <summary></summary>
 		public virtual bool OpenActiveTerminalIO()
 		{
-			return (_activeTerminal.StartIO());
+			return (this.activeTerminal.StartIO());
 		}
 
 		/// <summary></summary>
 		public virtual bool CloseActiveTerminalIO()
 		{
-			return (_activeTerminal.StopIO());
+			return (this.activeTerminal.StopIO());
 		}
 
 		#endregion

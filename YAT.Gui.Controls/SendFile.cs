@@ -41,9 +41,9 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const Domain.TerminalType _TerminalTypeDefault = Domain.TerminalType.Text;
-		private const bool _TerminalIsOpenDefault = false;
-		private const float _SplitterRatioDefault = (float)0.75;
+		private const Domain.TerminalType TerminalTypeDefault = Domain.TerminalType.Text;
+		private const bool TerminalIsOpenDefault = false;
+		private const float SplitterRatioDefault = (float)0.75;
 
 		#endregion
 
@@ -52,10 +52,10 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private Command _fileCommand = new Command();
-		private Domain.TerminalType _terminalType = _TerminalTypeDefault;
-		private bool _terminalIsOpen = _TerminalIsOpenDefault;
-		private float _splitterRatio = _SplitterRatioDefault;
+		private Command fileCommand = new Command();
+		private Domain.TerminalType terminalType = TerminalTypeDefault;
+		private bool terminalIsOpen = TerminalIsOpenDefault;
+		private float splitterRatio = SplitterRatioDefault;
 
 		#endregion
 
@@ -99,13 +99,13 @@ namespace YAT.Gui.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Command FileCommand
 		{
-			get { return (_fileCommand); }
+			get { return (this.fileCommand); }
 			set
 			{
 				if (value != null)
-					_fileCommand = value;
+					this.fileCommand = value;
 				else
-					_fileCommand = new Command();
+					this.fileCommand = new Command();
 
 				OnFileCommandChanged(new EventArgs());
 				SetControls();
@@ -118,7 +118,7 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				_terminalType = value;
+				this.terminalType = value;
 				SetControls();
 			}
 		}
@@ -129,18 +129,18 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				_terminalIsOpen = value;
+				this.terminalIsOpen = value;
 				SetControls();
 			}
 		}
 
-		[DefaultValue(_SplitterRatioDefault)]
+		[DefaultValue(SplitterRatioDefault)]
 		public virtual float SplitterRatio
 		{
-			get { return (_splitterRatio); }
+			get { return (this.splitterRatio); }
 			set
 			{
-				_splitterRatio = value;
+				this.splitterRatio = value;
 				SetControls();
 			}
 		}
@@ -176,11 +176,11 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			splitContainer.SplitterDistance = (int)(_splitterRatio * splitContainer.Width);
+			splitContainer.SplitterDistance = (int)(this.splitterRatio * splitContainer.Width);
 
-			if (_fileCommand.IsFilePath)
+			if (this.fileCommand.IsFilePath)
 			{
-				pathLabel_FilePath.Text      = _fileCommand.FilePath;
+				pathLabel_FilePath.Text      = this.fileCommand.FilePath;
 				pathLabel_FilePath.ForeColor = SystemColors.ControlText;
 				pathLabel_FilePath.Font      = SystemFonts.DefaultFont;
 			}
@@ -191,8 +191,8 @@ namespace YAT.Gui.Controls
 				pathLabel_FilePath.Font      = Utilities.Drawing.ItalicDefaultFont;
 			}
 
-			if (_fileCommand.IsValidFilePath)
-				button_SendFile.Enabled = _terminalIsOpen;
+			if (this.fileCommand.IsValidFilePath)
+				button_SendFile.Enabled = this.terminalIsOpen;
 			else
 				button_SendFile.Enabled = false;
 		}
@@ -201,7 +201,7 @@ namespace YAT.Gui.Controls
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Title = "Set File";
-			switch (_terminalType)
+			switch (this.terminalType)
 			{
 				case Domain.TerminalType.Binary:
 				{
@@ -224,8 +224,8 @@ namespace YAT.Gui.Controls
 				ApplicationSettings.LocalUser.Paths.SendFilesPath = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
-				_fileCommand.IsFilePath = true;
-				_fileCommand.FilePath = ofd.FileName;
+				this.fileCommand.IsFilePath = true;
+				this.fileCommand.FilePath = ofd.FileName;
 
 				SetControls();
 				button_SendFile.Select();
@@ -239,7 +239,7 @@ namespace YAT.Gui.Controls
 
 		private void RequestSendCommand()
 		{
-			if (!_fileCommand.IsValidFilePath)
+			if (!this.fileCommand.IsValidFilePath)
 			{
 				if (MessageBox.Show
 					(
@@ -261,7 +261,7 @@ namespace YAT.Gui.Controls
 				}
 			}
 
-			if (_fileCommand.IsValidFilePath)
+			if (this.fileCommand.IsValidFilePath)
 			{
 				OnSendFileCommandRequest(new EventArgs());
 			}

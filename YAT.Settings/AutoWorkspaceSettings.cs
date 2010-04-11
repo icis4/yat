@@ -25,8 +25,8 @@ namespace YAT.Settings
 	[Serializable]
 	public class AutoWorkspaceSettings : MKY.Utilities.Settings.Settings, IEquatable<AutoWorkspaceSettings>
 	{
-		private string _filePath;
-		private Guid _filePathUser;
+		private string filePath;
+		private Guid filePathUser;
 
 		public AutoWorkspaceSettings()
 		{
@@ -47,8 +47,8 @@ namespace YAT.Settings
 		public AutoWorkspaceSettings(AutoWorkspaceSettings rhs)
 			: base(rhs)
 		{
-			_filePath     = rhs.FilePath;
-			_filePathUser = rhs.FilePathUser;
+			this.filePath     = rhs.FilePath;
+			this.filePathUser = rhs.FilePathUser;
 
 			ClearChanged();
 		}
@@ -70,12 +70,12 @@ namespace YAT.Settings
 		[XmlElement("FilePath")]
 		public virtual string FilePath
 		{
-			get { return (_filePath); }
+			get { return (this.filePath); }
 			set
 			{
-				if (value != _filePath)
+				if (value != this.filePath)
 				{
-					_filePath = value;
+					this.filePath = value;
 					SetChanged();
 				}
 			}
@@ -84,12 +84,12 @@ namespace YAT.Settings
 		[XmlElement("FilePathUser")]
 		public virtual Guid FilePathUser
 		{
-			get { return (_filePathUser); }
+			get { return (this.filePathUser); }
 			set
 			{
-				if (value != _filePathUser)
+				if (value != this.filePathUser)
 				{
-					_filePathUser = value;
+					this.filePathUser = value;
 					SetChanged();
 				}
 			}
@@ -140,8 +140,8 @@ namespace YAT.Settings
 			{
 				return
 					(
-					(_filePath     == value._filePath) &&
-					(_filePathUser == value._filePathUser)
+					(this.filePath     == value.filePath) &&
+					(this.filePathUser == value.filePathUser)
 					);
 			}
 			return (false);

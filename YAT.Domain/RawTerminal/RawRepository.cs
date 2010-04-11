@@ -29,38 +29,38 @@ namespace YAT.Domain
 	/// </summary>
 	public class RawRepository
 	{
-		private int _capacity;
-		private Queue<RawElement> _queue;
+		private int capacity;
+		private Queue<RawElement> queue;
 
 		/// <summary></summary>
 		public RawRepository(int capacity)
 		{
-			_capacity = capacity;
-			_queue = new Queue<RawElement>(_capacity);
+			this.capacity = capacity;
+			this.queue = new Queue<RawElement>(this.capacity);
 		}
 
 		/// <summary></summary>
 		public RawRepository(RawRepository rhs)
 		{
-			_capacity = rhs._capacity;
-			_queue = new Queue<RawElement>(rhs._queue);
+			this.capacity = rhs.capacity;
+			this.queue = new Queue<RawElement>(rhs.queue);
 		}
 
 		/// <summary></summary>
 		public virtual int Capacity
 		{
-			get { return (_capacity); }
+			get { return (this.capacity); }
 			set
 			{
-				if (value == _queue.Count)
+				if (value == this.queue.Count)
 					return;
 
-				if (value < _queue.Count)
+				if (value < this.queue.Count)
 				{
-					while (_queue.Count > value)
-						_queue.Dequeue();
+					while (this.queue.Count > value)
+						this.queue.Dequeue();
 
-					_capacity = value;
+					this.capacity = value;
 				}
 			}
 		}
@@ -68,23 +68,23 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual void Enqueue(RawElement re)
 		{
-			while (_queue.Count >= _capacity)
-				_queue.Dequeue();
+			while (this.queue.Count >= this.capacity)
+				this.queue.Dequeue();
 
-			_queue.Enqueue(re);
+			this.queue.Enqueue(re);
 		}
 
 		/// <summary></summary>
 		public virtual void Clear()
 		{
-			_queue.Clear();
+			this.queue.Clear();
 		}
 
 		/// <summary></summary>
 		public virtual byte[] ToByteArray()
 		{
-			List<byte> to = new List<byte>(_queue.Count);
-			foreach (RawElement re in _queue.ToArray())
+			List<byte> to = new List<byte>(this.queue.Count);
+			foreach (RawElement re in this.queue.ToArray())
 				to.AddRange(re.Data);
 
 			return (to.ToArray());
@@ -93,7 +93,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual List<RawElement> ToElements()
 		{
-			return (new List<RawElement>(_queue));
+			return (new List<RawElement>(this.queue));
 		}
 
 		/// <summary></summary>
@@ -117,7 +117,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual string ToDetailedString(string indent)
 		{
-			return (indent + "- Capacity: " + _capacity + Environment.NewLine +
+			return (indent + "- Capacity: " + this.capacity + Environment.NewLine +
 					indent + "- Queue: " + Environment.NewLine +
 					QueueToDetailedString(indent + "--"));
 		}

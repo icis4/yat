@@ -30,7 +30,7 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		public const int MaxCommandsPerPage = 12;
 
-		private PredefinedCommandPageCollection _pages;
+		private PredefinedCommandPageCollection pages;
 
 		/// <summary></summary>
 		public PredefinedCommandSettings()
@@ -75,12 +75,12 @@ namespace YAT.Model.Settings
 		[XmlElement("Pages")]
 		public PredefinedCommandPageCollection Pages
 		{
-			get { return (_pages); }
+			get { return (this.pages); }
 			set
 			{
-				if (value != _pages)
+				if (value != this.pages)
 				{
-					_pages = value;
+					this.pages = value;
 					SetChanged();
 				}
 			}
@@ -96,8 +96,8 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		public virtual void CreateDefaultPage()
 		{
-			_pages = new PredefinedCommandPageCollection();
-			_pages.Add(new PredefinedCommandPage("Page 1"));
+			this.pages = new PredefinedCommandPageCollection();
+			this.pages.Add(new PredefinedCommandPage("Page 1"));
 			SetChanged();
 		}
 
@@ -107,12 +107,12 @@ namespace YAT.Model.Settings
 		/// <param name="command">Command to be set.</param>
 		public virtual void SetCommand(int selectedPage, int selectedCommand, Command command)
 		{
-			if ((selectedPage == 0) && (_pages.Count == 0))
+			if ((selectedPage == 0) && (this.pages.Count == 0))
 				CreateDefaultPage();
 
-			if ((selectedPage >= 0) && (selectedPage < _pages.Count))
+			if ((selectedPage >= 0) && (selectedPage < this.pages.Count))
 			{
-				PredefinedCommandPage page = _pages[selectedPage];
+				PredefinedCommandPage page = this.pages[selectedPage];
 				if ((selectedCommand >= 0) && (selectedCommand < MaxCommandsPerPage))
 				{
 					page.SetCommand(selectedCommand, command);
@@ -143,7 +143,7 @@ namespace YAT.Model.Settings
 		{
 			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
-				return (_pages == value._pages);
+				return (this.pages == value.pages);
 
 			return (false);
 		}

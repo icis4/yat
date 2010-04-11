@@ -36,7 +36,7 @@ namespace MKY.Utilities.Diagnostics
 	public static class XTrace
 	{
 		#if (TRACE)
-			private static TraceWrapper _traceWrapper = new TraceWrapper();
+			private static TraceWrapper traceWrapper = new TraceWrapper();
 		#endif
 
 		/// <summary>
@@ -57,7 +57,7 @@ namespace MKY.Utilities.Diagnostics
 		public static void WriteException(object obj, Exception ex, string additionalMessage)
 		{
 		#if (TRACE)
-			DiagnosticsWriterOutput.WriteException(_traceWrapper, obj, ex, additionalMessage);
+			DiagnosticsWriterOutput.WriteException(traceWrapper, obj, ex, additionalMessage);
 		#endif
 		}
 
@@ -86,7 +86,7 @@ namespace MKY.Utilities.Diagnostics
 		public static void WriteStack(object obj, StackTrace st, string additionalMessage)
 		{
 		#if (TRACE)
-			DiagnosticsWriterOutput.WriteStack(_traceWrapper, obj, st, additionalMessage);
+			DiagnosticsWriterOutput.WriteStack(traceWrapper, obj, st, additionalMessage);
 		#endif
 		}
 
@@ -106,7 +106,7 @@ namespace MKY.Utilities.Diagnostics
 		public static void WriteWindowsFormsMessage(object obj, Message m, string additionalMessage)
 		{
 		#if (TRACE)
-			DiagnosticsWriterOutput.WriteWindowsFormsMessage(_traceWrapper, obj, m, additionalMessage);
+			DiagnosticsWriterOutput.WriteWindowsFormsMessage(traceWrapper, obj, m, additionalMessage);
 		#endif
 		}
 
@@ -126,7 +126,7 @@ namespace MKY.Utilities.Diagnostics
 		public static void WriteFileStream(object obj, FileStream fs, string additionalMessage)
 		{
 		#if (TRACE)
-			DiagnosticsWriterOutput.WriteFileStream(_traceWrapper, obj, fs, additionalMessage);
+			DiagnosticsWriterOutput.WriteFileStream(traceWrapper, obj, fs, additionalMessage);
 		#endif
 		}
 	}

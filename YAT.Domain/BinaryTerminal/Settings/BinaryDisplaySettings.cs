@@ -24,9 +24,9 @@ namespace YAT.Domain.Settings
 	/// <summary></summary>
 	public class BinaryDisplaySettings : MKY.Utilities.Settings.Settings, IEquatable<BinaryDisplaySettings>
 	{
-		private BinaryLengthLineBreak _lengthLineBreak;
-		private BinarySequenceLineBreak _sequenceLineBreak;
-		private BinaryTimedLineBreak _timedLineBreak;
+		private BinaryLengthLineBreak lengthLineBreak;
+		private BinarySequenceLineBreak sequenceLineBreak;
+		private BinaryTimedLineBreak timedLineBreak;
 
 		/// <summary></summary>
 		public BinaryDisplaySettings()
@@ -50,9 +50,9 @@ namespace YAT.Domain.Settings
 		public BinaryDisplaySettings(BinaryDisplaySettings rhs)
 			: base(rhs)
 		{
-			_lengthLineBreak   = rhs.LengthLineBreak;
-			_sequenceLineBreak = rhs.SequenceLineBreak;
-			_timedLineBreak    = rhs.TimedLineBreak;
+			this.lengthLineBreak   = rhs.LengthLineBreak;
+			this.sequenceLineBreak = rhs.SequenceLineBreak;
+			this.timedLineBreak    = rhs.TimedLineBreak;
 			ClearChanged();
 		}
 
@@ -76,12 +76,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("LengthLineBreak")]
 		public BinaryLengthLineBreak LengthLineBreak
 		{
-			get { return (_lengthLineBreak); }
+			get { return (this.lengthLineBreak); }
 			set
 			{
-				if (value != _lengthLineBreak)
+				if (value != this.lengthLineBreak)
 				{
-					_lengthLineBreak = value;
+					this.lengthLineBreak = value;
 					SetChanged();
 				}
 			}
@@ -91,12 +91,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("SequenceLineBreak")]
 		public BinarySequenceLineBreak SequenceLineBreak
 		{
-			get { return (_sequenceLineBreak); }
+			get { return (this.sequenceLineBreak); }
 			set
 			{
-				if (value != _sequenceLineBreak)
+				if (value != this.sequenceLineBreak)
 				{
-					_sequenceLineBreak = value;
+					this.sequenceLineBreak = value;
 					SetChanged();
 				}
 			}
@@ -106,12 +106,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("TimedLineBreak")]
 		public BinaryTimedLineBreak TimedLineBreak
 		{
-			get { return (_timedLineBreak); }
+			get { return (this.timedLineBreak); }
 			set
 			{
-				if (value != _timedLineBreak)
+				if (value != this.timedLineBreak)
 				{
-					_timedLineBreak = value;
+					this.timedLineBreak = value;
 					SetChanged();
 				}
 			}
@@ -142,9 +142,9 @@ namespace YAT.Domain.Settings
 			{
 				return
 					(
-					(_lengthLineBreak   == value._lengthLineBreak) &&
-					(_sequenceLineBreak == value._sequenceLineBreak) &&
-					(_timedLineBreak    == value._timedLineBreak)
+					(this.lengthLineBreak   == value.lengthLineBreak) &&
+					(this.sequenceLineBreak == value.sequenceLineBreak) &&
+					(this.timedLineBreak    == value.timedLineBreak)
 					);
 			}
 			return (false);

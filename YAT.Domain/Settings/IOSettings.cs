@@ -32,12 +32,12 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const Endianess EndianessDefault = Endianess.BigEndian;
 
-		private Domain.IOType _ioType;
-		private MKY.IO.Serial.SerialPortSettings _serialPort;
-		private string _serialParityErrorReplacement;
-		private MKY.IO.Serial.SocketSettings _socket;
-		private MKY.IO.Serial.UsbHidDeviceSettings _usbHidDevice;
-		private Endianess _endianess;
+		private Domain.IOType ioType;
+		private MKY.IO.Serial.SerialPortSettings serialPort;
+		private string serialParityErrorReplacement;
+		private MKY.IO.Serial.SocketSettings socket;
+		private MKY.IO.Serial.UsbHidDeviceSettings usbHidDevice;
+		private Endianess endianess;
 
 		/// <summary></summary>
 		public IOSettings()
@@ -70,12 +70,12 @@ namespace YAT.Domain.Settings
 		public IOSettings(IOSettings rhs)
 			: base(rhs)
 		{
-			_ioType      = rhs.IOType;
+			this.ioType      = rhs.IOType;
 			SerialPort   = new MKY.IO.Serial.SerialPortSettings(rhs.SerialPort);
-			_serialParityErrorReplacement = rhs.SerialParityErrorReplacement;
+			this.serialParityErrorReplacement = rhs.SerialParityErrorReplacement;
 			Socket       = new MKY.IO.Serial.SocketSettings(rhs.Socket);
 			UsbHidDevice = new MKY.IO.Serial.UsbHidDeviceSettings(rhs.UsbHidDevice);
-			_endianess   = rhs.Endianess;
+			this.endianess   = rhs.Endianess;
 
 			ClearChanged();
 		}
@@ -99,12 +99,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("IOType")]
 		public virtual Domain.IOType IOType
 		{
-			get { return (_ioType); }
+			get { return (this.ioType); }
 			set
 			{
-				if (value != _ioType)
+				if (value != this.ioType)
 				{
-					_ioType = value;
+					this.ioType = value;
 					SetChanged();
 				}
 			}
@@ -114,19 +114,19 @@ namespace YAT.Domain.Settings
 		[XmlElement("SerialPort")]
 		public virtual MKY.IO.Serial.SerialPortSettings SerialPort
 		{
-			get { return (_serialPort); }
+			get { return (this.serialPort); }
 			set
 			{
-				if (_serialPort == null)
+				if (this.serialPort == null)
 				{
-					_serialPort = value;
-					AttachNode(_serialPort);
+					this.serialPort = value;
+					AttachNode(this.serialPort);
 				}
-				else if (value != _serialPort)
+				else if (value != this.serialPort)
 				{
-					MKY.IO.Serial.SerialPortSettings old = _serialPort;
-					_serialPort = value;
-					ReplaceNode(old, _serialPort);
+					MKY.IO.Serial.SerialPortSettings old = this.serialPort;
+					this.serialPort = value;
+					ReplaceNode(old, this.serialPort);
 				}
 			}
 		}
@@ -135,12 +135,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("SerialParityErrorReplacement")]
 		public virtual string SerialParityErrorReplacement
 		{
-			get { return (_serialParityErrorReplacement); }
+			get { return (this.serialParityErrorReplacement); }
 			set
 			{
-				if (value != _serialParityErrorReplacement)
+				if (value != this.serialParityErrorReplacement)
 				{
-					_serialParityErrorReplacement = value;
+					this.serialParityErrorReplacement = value;
 					SetChanged();
 				}
 			}
@@ -150,19 +150,19 @@ namespace YAT.Domain.Settings
 		[XmlElement("Socket")]
 		public virtual MKY.IO.Serial.SocketSettings Socket
 		{
-			get { return (_socket); }
+			get { return (this.socket); }
 			set
 			{
-				if (_socket == null)
+				if (this.socket == null)
 				{
-					_socket = value;
-					AttachNode(_socket);
+					this.socket = value;
+					AttachNode(this.socket);
 				}
-				else if (value != _socket)
+				else if (value != this.socket)
 				{
-					MKY.IO.Serial.SocketSettings old = _socket;
-					_socket = value;
-					ReplaceNode(old, _socket);
+					MKY.IO.Serial.SocketSettings old = this.socket;
+					this.socket = value;
+					ReplaceNode(old, this.socket);
 				}
 			}
 		}
@@ -171,19 +171,19 @@ namespace YAT.Domain.Settings
 		[XmlElement("UsbHidDevice")]
 		public virtual MKY.IO.Serial.UsbHidDeviceSettings UsbHidDevice
 		{
-			get { return (_usbHidDevice); }
+			get { return (this.usbHidDevice); }
 			set
 			{
-				if (_usbHidDevice == null)
+				if (this.usbHidDevice == null)
 				{
-					_usbHidDevice = value;
-					AttachNode(_usbHidDevice);
+					this.usbHidDevice = value;
+					AttachNode(this.usbHidDevice);
 				}
-				else if (value != _usbHidDevice)
+				else if (value != this.usbHidDevice)
 				{
-					MKY.IO.Serial.UsbHidDeviceSettings old = _usbHidDevice;
-					_usbHidDevice = value;
-					ReplaceNode(old, _usbHidDevice);
+					MKY.IO.Serial.UsbHidDeviceSettings old = this.usbHidDevice;
+					this.usbHidDevice = value;
+					ReplaceNode(old, this.usbHidDevice);
 				}
 			}
 		}
@@ -192,12 +192,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("Endianess")]
 		public virtual Endianess Endianess
 		{
-			get { return (_endianess); }
+			get { return (this.endianess); }
 			set
 			{
-				if (value != _endianess)
+				if (value != this.endianess)
 				{
-					_endianess = value;
+					this.endianess = value;
 					SetChanged();
 				}
 			}
@@ -228,9 +228,9 @@ namespace YAT.Domain.Settings
 			{
 				return 
 					(
-					(_ioType                       == value._ioType) &&
-					(_serialParityErrorReplacement == value._serialParityErrorReplacement) &&
-					(_endianess                    == value._endianess) &&
+					(this.ioType                       == value.ioType) &&
+					(this.serialParityErrorReplacement == value.serialParityErrorReplacement) &&
+					(this.endianess                    == value.endianess) &&
 					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
 					);
 			}

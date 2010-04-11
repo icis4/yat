@@ -28,8 +28,8 @@ namespace MKY.Utilities.Recent
 	public class RecentItem<T> : IEquatable<RecentItem<T>>, IComparable
 		where T: IEquatable<T>
 	{
-		private T _item;
-		private DateTime _timeStamp;
+		private T item;
+		private DateTime timeStamp;
 
 		/// <summary></summary>
 		/// <remarks>
@@ -37,22 +37,22 @@ namespace MKY.Utilities.Recent
 		/// </remarks>
 		public RecentItem()
 		{
-			_item = default(T);
-			_timeStamp = DateTime.Now;
+			this.item = default(T);
+			this.timeStamp = DateTime.Now;
 		}
 
 		/// <summary></summary>
 		public RecentItem(T item)
 		{
-			_item = item;
-			_timeStamp = DateTime.Now;
+			this.item = item;
+			this.timeStamp = DateTime.Now;
 		}
 
 		/// <summary></summary>
 		public RecentItem(T item, DateTime timeStamp)
 		{
-			_item = item;
-			_timeStamp = timeStamp;
+			this.item = item;
+			this.timeStamp = timeStamp;
 		}
 
 		#region Properties
@@ -69,8 +69,8 @@ namespace MKY.Utilities.Recent
 		[XmlElement("Item")]
 		public T Item
 		{
-			get { return (_item); }
-			set { _item = value;  }
+			get { return (this.item); }
+			set { this.item = value;  }
 		}
 
 		/// <summary>
@@ -82,8 +82,8 @@ namespace MKY.Utilities.Recent
 		[XmlElement("TimeStamp")]
 		public DateTime TimeStamp
 		{
-			get { return (_timeStamp); }
-			set { _timeStamp = value;  }
+			get { return (this.timeStamp); }
+			set { this.timeStamp = value;  }
 		}
 
 		#endregion
@@ -98,7 +98,7 @@ namespace MKY.Utilities.Recent
 		/// </summary>
 		public virtual bool IsValid
 		{
-			get { return (_item != null); }
+			get { return (this.item != null); }
 		}
 
 		#endregion
@@ -113,7 +113,7 @@ namespace MKY.Utilities.Recent
 		/// </summary>
 		public override string ToString()
 		{
-			return (_item.ToString());
+			return (this.item.ToString());
 		}
 
 		/// <summary>
@@ -134,7 +134,7 @@ namespace MKY.Utilities.Recent
 		{
 			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
-				return ((_item != null) && (_item.Equals(value._item)));
+				return ((this.item != null) && (this.item.Equals(value.item)));
 				// Do not compare time stamp.
 
 			return (false);
@@ -146,7 +146,7 @@ namespace MKY.Utilities.Recent
 		/// <returns>A 32-bit signed integer hash code.</returns>
 		public override int GetHashCode()
 		{
-			return (_item.GetHashCode());
+			return (this.item.GetHashCode());
 		}
 
 		#endregion
@@ -166,7 +166,7 @@ namespace MKY.Utilities.Recent
 			if (obj is RecentItem<T>)
 			{
 				RecentItem<T> ri = (RecentItem<T>)obj;
-				return (-(_timeStamp.CompareTo(ri._timeStamp))); // sort inverse
+				return (-(this.timeStamp.CompareTo(ri.timeStamp))); // sort inverse
 			}
 			throw (new ArgumentException("Object is not a RecentItem"));
 		}
@@ -242,15 +242,15 @@ namespace MKY.Utilities.Recent
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator T(RecentItem<T> _item)
+		public static implicit operator T(RecentItem<T> item)
 		{
-			return (_item.Item);
+			return (item.Item);
 		}
 
 		/// <summary></summary>
-		public static implicit operator RecentItem<T>(T _item)
+		public static implicit operator RecentItem<T>(T item)
 		{
-			return (new RecentItem<T>(_item));
+			return (new RecentItem<T>(item));
 		}
 
 		#endregion

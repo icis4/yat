@@ -40,41 +40,41 @@ namespace YAT.Model.Types
 
 		#endregion
 
-		private string _name;
-		private float _size;
-		private FontStyle _style;
-		private Font _font;
+		private string name;
+		private float size;
+		private FontStyle style;
+		private Font font;
 
 		/// <summary></summary>
 		public FontFormat()
 		{
-			_name = NameDefault;
-			_size = SizeDefault;
-			_style = StyleDefault;
+			this.name = NameDefault;
+			this.size = SizeDefault;
+			this.style = StyleDefault;
 			MakeFont();
 		}
 
 		/// <summary></summary>
 		public FontFormat(string name, float size, FontStyle style)
 		{
-			_name = name;
-			_size = size;
-			_style = style;
+			this.name = name;
+			this.size = size;
+			this.style = style;
 			MakeFont();
 		}
 
 		/// <summary></summary>
 		public FontFormat(FontFormat rhs)
 		{
-			_name = rhs._name;
-			_size = rhs._size;
-			_style = rhs._style;
+			this.name = rhs.name;
+			this.size = rhs.size;
+			this.style = rhs.style;
 			MakeFont();
 		}
 
 		private void MakeFont()
 		{
-			_font = new Font(_name, _size, _style);
+			this.font = new Font(this.name, this.size, this.style);
 		}
 
 		#region Properties
@@ -86,10 +86,10 @@ namespace YAT.Model.Types
 		[XmlElement("Name")]
 		public virtual string Name
 		{
-			get { return (_name); }
+			get { return (this.name); }
 			set
 			{
-				_name = value;
+				this.name = value;
 				MakeFont();
 			}
 		}
@@ -98,10 +98,10 @@ namespace YAT.Model.Types
 		[XmlElement("Size")]
 		public virtual float Size
 		{
-			get { return (_size); }
+			get { return (this.size); }
 			set
 			{
-				_size = value;
+				this.size = value;
 				MakeFont();
 			}
 		}
@@ -110,10 +110,10 @@ namespace YAT.Model.Types
 		[XmlElement("Style")]
 		public virtual FontStyle Style
 		{
-			get { return (_style); }
+			get { return (this.style); }
 			set
 			{
-				_style = value;
+				this.style = value;
 				MakeFont();
 			}
 		}
@@ -122,12 +122,12 @@ namespace YAT.Model.Types
 		[XmlIgnore]
 		public virtual Font Font
 		{
-			get { return (_font); }
+			get { return (this.font); }
 			set
 			{
-				_name = value.Name;
-				_size = value.Size;
-				_style = value.Style;
+				this.name = value.Name;
+				this.size = value.Size;
+				this.style = value.Style;
 				MakeFont();
 			}
 		}
@@ -157,9 +157,9 @@ namespace YAT.Model.Types
 			{
 				return
 					(
-					(_name  == value._name) &&
-					(_size  == value._size) &&
-					(_style == value._style)
+					(this.name  == value.name) &&
+					(this.size  == value.size) &&
+					(this.style == value.style)
 					);
 			}
 			return (false);

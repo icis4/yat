@@ -53,7 +53,7 @@ namespace YAT.Domain
 		// Element State
 		//==========================================================================================
 
-		private List<byte> _rxDecodingStream;
+		private List<byte> rxDecodingStream;
 
 		#endregion
 
@@ -118,10 +118,10 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private LineState _txLineState;
-		private LineState _rxLineState;
+		private LineState txLineState;
+		private LineState rxLineState;
 
-		private BidirLineState _bidirLineState;
+		private BidirLineState bidirLineState;
 
 		#endregion
 
@@ -146,11 +146,11 @@ namespace YAT.Domain
 			if (terminal is TextTerminal)
 			{
 				TextTerminal casted = (TextTerminal)terminal;
-				_rxDecodingStream = casted._rxDecodingStream;
-				_txLineState = casted._txLineState;
-				_rxLineState = casted._rxLineState;
+				this.rxDecodingStream = casted.rxDecodingStream;
+				this.txLineState = casted.txLineState;
+				this.rxLineState = casted.rxLineState;
 
-				_bidirLineState = new BidirLineState(casted._bidirLineState);
+				this.bidirLineState = new BidirLineState(casted.bidirLineState);
 			}
 			else
 			{
@@ -288,7 +288,7 @@ namespace YAT.Domain
 
 		private void InitializeStates()
 		{
-			_rxDecodingStream = new List<byte>();
+			this.rxDecodingStream = new List<byte>();
 
 			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianess, (XEncoding)TextTerminalSettings.Encoding);
 			byte[] txEol;
@@ -303,10 +303,10 @@ namespace YAT.Domain
 				TextTerminalSettings.RxEol = Settings.TextTerminalSettings.DefaultEol;
 				rxEol = p.Parse(TextTerminalSettings.RxEol, TextTerminalSettings.CharSubstitution);
 			}
-			_txLineState = new LineState(new EolQueue(txEol));
-			_rxLineState = new LineState(new EolQueue(rxEol));
+			this.txLineState = new LineState(new EolQueue(txEol));
+			this.rxLineState = new LineState(new EolQueue(rxEol));
 
-			_bidirLineState = new BidirLineState(true, SerialDirection.Tx);
+			this.bidirLineState = new BidirLineState(true, SerialDirection.Tx);
 		}
 
 		/// <summary></summary>
@@ -327,8 +327,8 @@ namespace YAT.Domain
 				case Radix.String:
 				{
 					// Add byte to ElementState
-					_rxDecodingStream.Add(b);
-					byte[] decodingArray = _rxDecodingStream.ToArray();
+					this.rxDecodingStream.Add(b);
+					byte[] decodingArray = this.rxDecodingStream.ToArray();
 
 					// Get encoding and retrieve char count
 					Encoding e = (XEncoding)TextTerminalSettings.Encoding;
@@ -345,7 +345,7 @@ namespace YAT.Domain
 							int code = (int)chars[0];
 							if (code != 0xFFFD)
 							{
-								_rxDecodingStream.Clear();
+								this.rxDecodingStream.Clear();
 
 								if ((code < 0x20) || (code == 0x7F)) // Control chars
 								{
@@ -374,7 +374,7 @@ namespace YAT.Domain
 					else
 					{
 						// Nothing useful to decode into, reset stream
-						_rxDecodingStream.Clear();
+						this.rxDecodingStream.Clear();
 					}
 
 					// Nothing to decode (yet)
@@ -536,9 +536,9 @@ namespace YAT.Domain
 		{
 			LineState lineState;
 			if (re.Direction == SerialDirection.Tx)
-				lineState = _txLineState;
+				lineState = this.txLineState;
 			else
-				lineState = _rxLineState;
+				lineState = this.rxLineState;
 
 			foreach (byte b in re.Data)
 			{
@@ -559,32 +559,32 @@ namespace YAT.Domain
 		{
 			if (TerminalSettings.Display.DirectionLineBreakEnabled)
 			{
-				if (_bidirLineState.IsFirstLine)
+				if (this.bidirLineState.IsFirstLine)
 				{
-					_bidirLineState.IsFirstLine = false;
+					this.bidirLineState.IsFirstLine = false;
 				}
 				else
 				{
 					LineState lineState; // Attention: Direction changed => Use opposite state
 					if (d == SerialDirection.Tx)
-						lineState = _rxLineState;
+						lineState = this.rxLineState;
 					else
-						lineState = _txLineState;
+						lineState = this.txLineState;
 
 					if ((lineState.LineElements.Count > 0) &&
-						(d != _bidirLineState.Direction))
+						(d != this.bidirLineState.Direction))
 					{
 						DisplayElementCollection elements = new DisplayElementCollection();
 						List<DisplayLine> lines = new List<DisplayLine>();
 
 						ExecuteLineEnd(lineState, d, elements, lines);
 
-						OnDisplayElementsProcessed(_bidirLineState.Direction, elements);
-						OnDisplayLinesProcessed(_bidirLineState.Direction, lines);
+						OnDisplayElementsProcessed(this.bidirLineState.Direction, elements);
+						OnDisplayLinesProcessed(this.bidirLineState.Direction, lines);
 					}
 				}
 			}
-			_bidirLineState.Direction = d;
+			this.bidirLineState.Direction = d;
 		}
 
 		/// <summary></summary>

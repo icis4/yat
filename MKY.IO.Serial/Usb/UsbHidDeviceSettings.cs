@@ -33,8 +33,8 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public static readonly AutoRetry AutoReopenDefault = new AutoRetry(true, 2000);
 
-		private DeviceInfo _deviceInfo;
-		private AutoRetry _autoReopen;
+		private DeviceInfo deviceInfo;
+		private AutoRetry autoReopen;
 
 		/// <summary></summary>
 		public UsbHidDeviceSettings()
@@ -59,7 +59,7 @@ namespace MKY.IO.Serial
 			: base(rhs)
 		{
 			DeviceInfo  = new DeviceInfo(rhs.DeviceInfo);
-			_autoReopen = rhs._autoReopen;
+			this.autoReopen = rhs.autoReopen;
 
 			ClearChanged();
 		}
@@ -82,12 +82,12 @@ namespace MKY.IO.Serial
 		[XmlElement("DeviceInfo")]
 		public DeviceInfo DeviceInfo
 		{
-			get { return (_deviceInfo); }
+			get { return (this.deviceInfo); }
 			set
 			{
-				if (value != _deviceInfo)
+				if (value != this.deviceInfo)
 				{
-					_deviceInfo = value;
+					this.deviceInfo = value;
 					SetChanged();
 				}
 			}
@@ -97,12 +97,12 @@ namespace MKY.IO.Serial
 		[XmlElement("AutoReopen")]
 		public AutoRetry AutoReopen
 		{
-			get { return (_autoReopen); }
+			get { return (this.autoReopen); }
 			set
 			{
-				if (value != _autoReopen)
+				if (value != this.autoReopen)
 				{
-					_autoReopen = value;
+					this.autoReopen = value;
 					SetChanged();
 				}
 			}
@@ -133,8 +133,8 @@ namespace MKY.IO.Serial
 			{
 				return
 					(
-					(_deviceInfo == value._deviceInfo) &&
-					(_autoReopen == value._autoReopen)
+					(this.deviceInfo == value.deviceInfo) &&
+					(this.autoReopen == value.autoReopen)
 					);
 			}
 			return (false);

@@ -26,7 +26,7 @@ namespace MKY.Utilities.Diagnostics
 	/// </summary>
 	public static class XConsole
 	{
-		private static ConsoleWrapper _consoleWrapper = new ConsoleWrapper();
+		private static ConsoleWrapper consoleWrapper = new ConsoleWrapper();
 
 		/// <summary>
 		/// Writes source, type, message and stack of the given exception and its inner exceptions
@@ -43,7 +43,7 @@ namespace MKY.Utilities.Diagnostics
 		/// </summary>
 		public static void WriteException(object obj, Exception ex, string additionalMessage)
 		{
-			DiagnosticsWriterOutput.WriteException(_consoleWrapper, obj, ex, additionalMessage);
+			DiagnosticsWriterOutput.WriteException(consoleWrapper, obj, ex, additionalMessage);
 		}
 
 		/// <summary>
@@ -67,7 +67,7 @@ namespace MKY.Utilities.Diagnostics
 		/// </summary>
 		public static void WriteStack(object obj, StackTrace st, string additionalMessage)
 		{
-			DiagnosticsWriterOutput.WriteStack(_consoleWrapper, obj, st, additionalMessage);
+			DiagnosticsWriterOutput.WriteStack(consoleWrapper, obj, st, additionalMessage);
 		}
 
 		/// <summary>
@@ -83,7 +83,7 @@ namespace MKY.Utilities.Diagnostics
 		/// </summary>
 		public static void WriteWindowsFormsMessage(object obj, Message m, string additionalMessage)
 		{
-			DiagnosticsWriterOutput.WriteWindowsFormsMessage(_consoleWrapper, obj, m, additionalMessage);
+			DiagnosticsWriterOutput.WriteWindowsFormsMessage(consoleWrapper, obj, m, additionalMessage);
 		}
 
 		/// <summary>
@@ -99,7 +99,7 @@ namespace MKY.Utilities.Diagnostics
 		/// </summary>
 		public static void WriteFileStream(object obj, FileStream fs, string additionalMessage)
 		{
-			DiagnosticsWriterOutput.WriteFileStream(_consoleWrapper, obj, fs, additionalMessage);
+			DiagnosticsWriterOutput.WriteFileStream(consoleWrapper, obj, fs, additionalMessage);
 		}
 	}
 }

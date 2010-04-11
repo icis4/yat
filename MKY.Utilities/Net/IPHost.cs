@@ -53,7 +53,7 @@ namespace MKY.Utilities.Net
 
 		#endregion
 
-		private IPAddress _otherAddress = IPAddress.None;
+		private IPAddress otherAddress = IPAddress.None;
 
 		/// <summary>Default is <see cref="CommonIPHost.Localhost"/></summary>
 		public XIPHost()
@@ -71,7 +71,7 @@ namespace MKY.Utilities.Net
 		public XIPHost(IPAddress address)
 			: base(CommonIPHost.Other)
 		{
-			_otherAddress = address;
+			this.otherAddress = address;
 		}
 
 		#region Properties
@@ -86,7 +86,7 @@ namespace MKY.Utilities.Net
 					case CommonIPHost.Localhost:     return (IPAddress.Loopback);
 					case CommonIPHost.IPv4Localhost: return (IPAddress.Loopback);
 					case CommonIPHost.IPv6Localhost: return (IPAddress.IPv6Loopback);
-					case CommonIPHost.Other:         return (_otherAddress);
+					case CommonIPHost.Other:         return (this.otherAddress);
 				}
 				throw (new NotImplementedException(UnderlyingEnum.ToString()));
 			}
@@ -104,7 +104,7 @@ namespace MKY.Utilities.Net
 				case CommonIPHost.Localhost:     return (Localhost_stringNice);
 				case CommonIPHost.IPv4Localhost: return (IPv4Localhost_string);
 				case CommonIPHost.IPv6Localhost: return (IPv6Localhost_string);
-				case CommonIPHost.Other:         return (_otherAddress.ToString());
+				case CommonIPHost.Other:         return (this.otherAddress.ToString());
 			}
 			throw (new NotImplementedException(UnderlyingEnum.ToString()));
 		}

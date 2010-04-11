@@ -39,15 +39,15 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private bool _isDisposed;
+		private bool isDisposed;
 
-		private Settings.BufferSettings _bufferSettings;
-		private RawRepository _txRepository;
-		private RawRepository _bidirRepository;
-		private RawRepository _rxRepository;
+		private Settings.BufferSettings bufferSettings;
+		private RawRepository txRepository;
+		private RawRepository bidirRepository;
+		private RawRepository rxRepository;
 
-		private Settings.IOSettings _ioSettings;
-		private IIOProvider _io;
+		private Settings.IOSettings ioSettings;
+		private IIOProvider io;
 
 		#endregion
 
@@ -82,9 +82,9 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public RawTerminal(Settings.IOSettings ioSettings, Settings.BufferSettings bufferSettings)
 		{
-			_txRepository    = new RawRepository(bufferSettings.TxBufferSize);
-			_bidirRepository = new RawRepository(bufferSettings.BidirBufferSize);
-			_rxRepository    = new RawRepository(bufferSettings.RxBufferSize);
+			this.txRepository    = new RawRepository(bufferSettings.TxBufferSize);
+			this.bidirRepository = new RawRepository(bufferSettings.BidirBufferSize);
+			this.rxRepository    = new RawRepository(bufferSettings.RxBufferSize);
 
 			AttachBufferSettings(bufferSettings);
 
@@ -95,9 +95,9 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public RawTerminal(Settings.IOSettings ioSettings, Settings.BufferSettings bufferSettings, RawTerminal rhs)
 		{
-			_txRepository    = new RawRepository(rhs._txRepository);
-			_bidirRepository = new RawRepository(rhs._bidirRepository);
-			_rxRepository    = new RawRepository(rhs._rxRepository);
+			this.txRepository    = new RawRepository(rhs.txRepository);
+			this.bidirRepository = new RawRepository(rhs.bidirRepository);
+			this.rxRepository    = new RawRepository(rhs.rxRepository);
 
 			AttachBufferSettings(bufferSettings);
 
@@ -120,14 +120,14 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!_isDisposed)
+			if (!this.isDisposed)
 			{
 				if (disposing)
 				{
-					if (_io != null)
-						_io.Dispose();
+					if (this.io != null)
+						this.io.Dispose();
 				}
-				_isDisposed = true;
+				this.isDisposed = true;
 			}
 		}
 
@@ -140,13 +140,13 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected bool IsDisposed
 		{
-			get { return (_isDisposed); }
+			get { return (this.isDisposed); }
 		}
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (_isDisposed)
+			if (this.isDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
 		}
 
@@ -165,7 +165,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
-				return (_bufferSettings);
+				return (this.bufferSettings);
 			}
 			set
 			{
@@ -181,7 +181,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
-				return (_ioSettings);
+				return (this.ioSettings);
 			}
 			set
 			{
@@ -197,7 +197,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
-				return (_io.IsStarted);
+				return (this.io.IsStarted);
 			}
 		}
 
@@ -207,7 +207,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
-				return (_io.IsConnected);
+				return (this.io.IsConnected);
 			}
 		}
 
@@ -217,7 +217,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
-				return (_io.IsOpen);
+				return (this.io.IsOpen);
 			}
 		}
 
@@ -227,7 +227,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
-				return (_io);
+				return (this.io);
 			}
 		}
 
@@ -237,7 +237,7 @@ namespace YAT.Domain
 			get
 			{
 				AssertNotDisposed();
-				return (_io.UnderlyingIOInstance);
+				return (this.io.UnderlyingIOInstance);
 			}
 		}
 
@@ -256,14 +256,14 @@ namespace YAT.Domain
 		public virtual bool Start()
 		{
 			AssertNotDisposed();
-			return (_io.Start());
+			return (this.io.Start());
 		}
 
 		/// <summary></summary>
 		public virtual void Stop()
 		{
 			AssertNotDisposed();
-			_io.Stop();
+			this.io.Stop();
 		}
 
 		//------------------------------------------------------------------------------------------
@@ -275,11 +275,11 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 			
-			_io.Send(data);
+			this.io.Send(data);
 
 			RawElement re = new RawElement(data, SerialDirection.Tx);
-			_txRepository.Enqueue(re);
-			_bidirRepository.Enqueue(re);
+			this.txRepository.Enqueue(re);
+			this.bidirRepository.Enqueue(re);
 			OnRawElementSent(new RawElementEventArgs(re));
 		}
 
@@ -294,9 +294,9 @@ namespace YAT.Domain
 			
 			switch (repository)
 			{
-				case RepositoryType.Tx:    return (_txRepository.ToElements());
-				case RepositoryType.Bidir: return (_bidirRepository.ToElements());
-				case RepositoryType.Rx:    return (_rxRepository.ToElements());
+				case RepositoryType.Tx:    return (this.txRepository.ToElements());
+				case RepositoryType.Bidir: return (this.bidirRepository.ToElements());
+				case RepositoryType.Rx:    return (this.rxRepository.ToElements());
 				default: throw (new NotImplementedException("Unknown RepositoryType"));
 			}
 		}
@@ -308,9 +308,9 @@ namespace YAT.Domain
 			
 			switch (repository)
 			{
-				case RepositoryType.Tx:    _txRepository.Clear();    break;
-				case RepositoryType.Bidir: _bidirRepository.Clear(); break;
-				case RepositoryType.Rx:    _rxRepository.Clear();    break;
+				case RepositoryType.Tx:    this.txRepository.Clear();    break;
+				case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
+				case RepositoryType.Rx:    this.rxRepository.Clear();    break;
 				default: throw (new NotImplementedException("Unknown RepositoryType"));
 			}
 			OnRepositoryCleared(new RepositoryEventArgs(repository));
@@ -333,10 +333,10 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			return (indent + "- IOSettings: " + _ioSettings + Environment.NewLine +
-					indent + "- TxRepository: " + Environment.NewLine + _txRepository.ToString(indent + "- ") +
-					indent + "- BidirRepository: " + Environment.NewLine + _bidirRepository.ToString(indent + "- ") +
-					indent + "- RxRepository: " + Environment.NewLine + _rxRepository.ToString(indent + "- "));
+			return (indent + "- IOSettings: " + this.ioSettings + Environment.NewLine +
+					indent + "- TxRepository: " + Environment.NewLine + this.txRepository.ToString(indent + "- ") +
+					indent + "- BidirRepository: " + Environment.NewLine + this.bidirRepository.ToString(indent + "- ") +
+					indent + "- RxRepository: " + Environment.NewLine + this.rxRepository.ToString(indent + "- "));
 		}
 
 		/// <summary></summary>
@@ -346,9 +346,9 @@ namespace YAT.Domain
 			
 			switch (repository)
 			{
-				case RepositoryType.Tx:    return (_txRepository.ToString(indent));
-				case RepositoryType.Bidir: return (_bidirRepository.ToString(indent));
-				case RepositoryType.Rx:    return (_rxRepository.ToString(indent));
+				case RepositoryType.Tx:    return (this.txRepository.ToString(indent));
+				case RepositoryType.Bidir: return (this.bidirRepository.ToString(indent));
+				case RepositoryType.Rx:    return (this.rxRepository.ToString(indent));
 				default: throw (new NotImplementedException("Unknown RepositoryType"));
 			}
 		}
@@ -362,45 +362,45 @@ namespace YAT.Domain
 
 		private void AttachBufferSettings(Settings.BufferSettings bufferSettings)
 		{
-			if (Settings.IOSettings.ReferenceEquals(_bufferSettings, bufferSettings))
+			if (Settings.IOSettings.ReferenceEquals(this.bufferSettings, bufferSettings))
 				return;
 
-			if (_bufferSettings != null)
+			if (this.bufferSettings != null)
 				DetachBufferSettings();
 
-			_bufferSettings = bufferSettings;
-			_bufferSettings.Changed += new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(_bufferSettings_Changed);
+			this.bufferSettings = bufferSettings;
+			this.bufferSettings.Changed += new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(this.bufferSettings_Changed);
 		}
 
 		private void DetachBufferSettings()
 		{
-			_bufferSettings.Changed -= new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(_bufferSettings_Changed);
-			_bufferSettings = null;
+			this.bufferSettings.Changed -= new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(this.bufferSettings_Changed);
+			this.bufferSettings = null;
 		}
 
 		private void ApplyBufferSettings()
 		{
-			_txRepository.Capacity    = _bufferSettings.TxBufferSize;
-			_bidirRepository.Capacity = _bufferSettings.BidirBufferSize;
-			_rxRepository.Capacity    = _bufferSettings.RxBufferSize;
+			this.txRepository.Capacity    = this.bufferSettings.TxBufferSize;
+			this.bidirRepository.Capacity = this.bufferSettings.BidirBufferSize;
+			this.rxRepository.Capacity    = this.bufferSettings.RxBufferSize;
 		}
 
 		private void AttachIOSettings(Settings.IOSettings ioSettings)
 		{
-			if (Settings.IOSettings.ReferenceEquals(_ioSettings, ioSettings))
+			if (Settings.IOSettings.ReferenceEquals(this.ioSettings, ioSettings))
 				return;
 
-			if (_ioSettings != null)
+			if (this.ioSettings != null)
 				DetachIOSettings();
 
-			_ioSettings = ioSettings;
-			_ioSettings.Changed += new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(_ioSettings_Changed);
+			this.ioSettings = ioSettings;
+			this.ioSettings.Changed += new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(this.ioSettings_Changed);
 		}
 
 		private void DetachIOSettings()
 		{
-			_ioSettings.Changed -= new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(_ioSettings_Changed);
-			_ioSettings = null;
+			this.ioSettings.Changed -= new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(this.ioSettings_Changed);
+			this.ioSettings = null;
 		}
 
 		private void ApplyIOSettings()
@@ -415,12 +415,12 @@ namespace YAT.Domain
 		// Settings Events
 		//==========================================================================================
 
-		private void _bufferSettings_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
+		private void bufferSettings_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
 		{
 			ApplyBufferSettings();
 		}
 
-		private void _ioSettings_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
+		private void ioSettings_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
 		{
 			ApplyIOSettings();
 		}
@@ -434,28 +434,28 @@ namespace YAT.Domain
 
 		private void AttachIO(IIOProvider io)
 		{
-			if (IIOProvider.ReferenceEquals(_io, io))
+			if (IIOProvider.ReferenceEquals(this.io, io))
 				return;
 
-			if (_io != null)
+			if (this.io != null)
 				DetachIO();
 
-			_io = io;
-			_io.IOChanged        += new EventHandler(_io_IOChanged);
-			_io.IOControlChanged += new EventHandler(_io_IOControlChanged);
-			_io.DataReceived     += new EventHandler(_io_DataReceived);
-			_io.IORequest        += new EventHandler<MKY.IO.Serial.IORequestEventArgs>(_io_IORequest);
-			_io.IOError          += new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(_io_IOError);
+			this.io = io;
+			this.io.IOChanged        += new EventHandler(this.io_IOChanged);
+			this.io.IOControlChanged += new EventHandler(this.io_IOControlChanged);
+			this.io.DataReceived     += new EventHandler(this.io_DataReceived);
+			this.io.IORequest        += new EventHandler<MKY.IO.Serial.IORequestEventArgs>(this.io_IORequest);
+			this.io.IOError          += new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(this.io_IOError);
 		}
 
 		private void DetachIO()
 		{
-			_io.IOChanged        -= new EventHandler(_io_IOChanged);
-			_io.IOControlChanged -= new EventHandler(_io_IOControlChanged);
-			_io.DataReceived     -= new EventHandler(_io_DataReceived);
-			_io.IORequest        -= new EventHandler<MKY.IO.Serial.IORequestEventArgs>(_io_IORequest);
-			_io.IOError          -= new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(_io_IOError);
-			_io = null;
+			this.io.IOChanged        -= new EventHandler(this.io_IOChanged);
+			this.io.IOControlChanged -= new EventHandler(this.io_IOControlChanged);
+			this.io.DataReceived     -= new EventHandler(this.io_DataReceived);
+			this.io.IORequest        -= new EventHandler<MKY.IO.Serial.IORequestEventArgs>(this.io_IORequest);
+			this.io.IOError          -= new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(this.io_IOError);
+			this.io = null;
 		}
 
 		#endregion
@@ -465,34 +465,34 @@ namespace YAT.Domain
 		// IO Events
 		//==========================================================================================
 
-		private void _io_IOChanged(object sender, EventArgs e)
+		private void io_IOChanged(object sender, EventArgs e)
 		{
 			OnIOChanged(new EventArgs());
 		}
 
-		private void _io_IOControlChanged(object sender, EventArgs e)
+		private void io_IOControlChanged(object sender, EventArgs e)
 		{
 			OnIOControlChanged(new EventArgs());
 		}
 
-		private void _io_DataReceived(object sender, EventArgs e)
+		private void io_DataReceived(object sender, EventArgs e)
 		{
 			byte[] data;
-			if (_io.Receive(out data) > 0)
+			if (this.io.Receive(out data) > 0)
 			{
 				RawElement re = new RawElement(data, SerialDirection.Rx);
-				_rxRepository.Enqueue(re);
-				_bidirRepository.Enqueue(re);
+				this.rxRepository.Enqueue(re);
+				this.bidirRepository.Enqueue(re);
 				OnRawElementReceived(new RawElementEventArgs(re));
 			}
 		}
 
-		private void _io_IORequest(object sender, MKY.IO.Serial.IORequestEventArgs e)
+		private void io_IORequest(object sender, MKY.IO.Serial.IORequestEventArgs e)
 		{
 			OnIORequest(new IORequestEventArgs((IORequest)e.Request));
 		}
 
-		private void _io_IOError(object sender, MKY.IO.Serial.IOErrorEventArgs e)
+		private void io_IOError(object sender, MKY.IO.Serial.IOErrorEventArgs e)
 		{
 			SerialPortIOErrorEventArgs serialPortErrorEventArgs = (e as SerialPortIOErrorEventArgs);
 			if (serialPortErrorEventArgs == null)

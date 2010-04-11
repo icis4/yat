@@ -24,11 +24,11 @@ namespace YAT.Settings.Terminal
 	[Serializable]
 	public class ExplicitSettings : MKY.Utilities.Settings.Settings, IEquatable<ExplicitSettings>
 	{
-		private Domain.Settings.TerminalSettings _terminal;
-		private Model.Settings.PredefinedCommandSettings _predefinedCommand;
-		private Model.Settings.FormatSettings _format;
-		private Domain.Settings.CharReplaceSettings _charReplace;
-		private Log.Settings.LogSettings _log;
+		private Domain.Settings.TerminalSettings terminal;
+		private Model.Settings.PredefinedCommandSettings predefinedCommand;
+		private Model.Settings.FormatSettings format;
+		private Domain.Settings.CharReplaceSettings charReplace;
+		private Log.Settings.LogSettings log;
 
 		public ExplicitSettings()
 			: base(MKY.Utilities.Settings.SettingsType.Explicit)
@@ -73,19 +73,19 @@ namespace YAT.Settings.Terminal
 		[XmlElement("Terminal")]
 		public Domain.Settings.TerminalSettings Terminal
 		{
-			get { return (_terminal); }
+			get { return (this.terminal); }
 			set
 			{
-				if (_terminal == null)
+				if (this.terminal == null)
 				{
-					_terminal = value;
-					AttachNode(_terminal);
+					this.terminal = value;
+					AttachNode(this.terminal);
 				}
-				else if (value != _terminal)
+				else if (value != this.terminal)
 				{
-					Domain.Settings.TerminalSettings old = _terminal;
-					_terminal = value;
-					ReplaceNode(old, _terminal);
+					Domain.Settings.TerminalSettings old = this.terminal;
+					this.terminal = value;
+					ReplaceNode(old, this.terminal);
 				}
 			}
 		}
@@ -93,19 +93,19 @@ namespace YAT.Settings.Terminal
 		[XmlElement("PredefinedCommand")]
 		public Model.Settings.PredefinedCommandSettings PredefinedCommand
 		{
-			get { return (_predefinedCommand); }
+			get { return (this.predefinedCommand); }
 			set
 			{
-				if (_predefinedCommand == null)
+				if (this.predefinedCommand == null)
 				{
-					_predefinedCommand = value;
-					AttachNode(_predefinedCommand);
+					this.predefinedCommand = value;
+					AttachNode(this.predefinedCommand);
 				}
-				else if (value != _predefinedCommand)
+				else if (value != this.predefinedCommand)
 				{
-					Model.Settings.PredefinedCommandSettings old = _predefinedCommand;
-					_predefinedCommand = value;
-					ReplaceNode(old, _predefinedCommand);
+					Model.Settings.PredefinedCommandSettings old = this.predefinedCommand;
+					this.predefinedCommand = value;
+					ReplaceNode(old, this.predefinedCommand);
 				}
 			}
 		}
@@ -113,19 +113,19 @@ namespace YAT.Settings.Terminal
 		[XmlElement("Format")]
 		public Model.Settings.FormatSettings Format
 		{
-			get { return (_format); }
+			get { return (this.format); }
 			set
 			{
-				if (_format == null)
+				if (this.format == null)
 				{
-					_format = value;
-					AttachNode(_format);
+					this.format = value;
+					AttachNode(this.format);
 				}
-				else if (value != _format)
+				else if (value != this.format)
 				{
-					Model.Settings.FormatSettings old = _format;
-					_format = value;
-					ReplaceNode(old, _format);
+					Model.Settings.FormatSettings old = this.format;
+					this.format = value;
+					ReplaceNode(old, this.format);
 				}
 			}
 		}
@@ -133,19 +133,19 @@ namespace YAT.Settings.Terminal
 		[XmlElement("CharReplace")]
 		public Domain.Settings.CharReplaceSettings CharReplace
 		{
-			get { return (_charReplace); }
+			get { return (this.charReplace); }
 			set
 			{
-				if (_charReplace == null)
+				if (this.charReplace == null)
 				{
-					_charReplace = value;
-					AttachNode(_charReplace);
+					this.charReplace = value;
+					AttachNode(this.charReplace);
 				}
-				else if (value != _charReplace)
+				else if (value != this.charReplace)
 				{
-					Domain.Settings.CharReplaceSettings old = _charReplace;
-					_charReplace = value;
-					ReplaceNode(old, _charReplace);
+					Domain.Settings.CharReplaceSettings old = this.charReplace;
+					this.charReplace = value;
+					ReplaceNode(old, this.charReplace);
 				}
 			}
 		}
@@ -153,19 +153,19 @@ namespace YAT.Settings.Terminal
 		[XmlElement("Log")]
 		public Log.Settings.LogSettings Log
 		{
-			get { return (_log); }
+			get { return (this.log); }
 			set
 			{
-				if (_log == null)
+				if (this.log == null)
 				{
-					_log = value;
-					AttachNode(_log);
+					this.log = value;
+					AttachNode(this.log);
 				}
-				else if (value != _log)
+				else if (value != this.log)
 				{
-					Log.Settings.LogSettings old = _log;
-					_log = value;
-					ReplaceNode(old, _log);
+					Log.Settings.LogSettings old = this.log;
+					this.log = value;
+					ReplaceNode(old, this.log);
 				}
 			}
 		}

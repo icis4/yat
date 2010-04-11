@@ -81,16 +81,16 @@ namespace MKY.IO.Ports
 		// Fields
 		//==========================================================================================
 
-		private string _name = FirstStandardPortName;
-		private int _standardPortNumber = FirstStandardPortNumber;
+		private string name = FirstStandardPortName;
+		private int standardPortNumber = FirstStandardPortNumber;
 
-		private string _description = "";
-		private bool _hasDescriptonFromSystem = false;
+		private string description = "";
+		private bool hasDescriptonFromSystem = false;
 
-		private bool _isInUse = false;
-		private string _inUseText = "";
+		private bool isInUse = false;
+		private string inUseText = "";
 
-		private string _separator = DefaultSeparator;
+		private string separator = DefaultSeparator;
 
 		#endregion
 
@@ -151,8 +151,8 @@ namespace MKY.IO.Ports
 		{
 			if (IsStandardPortNumber(standardPortNumber))
 			{
-				_name = StandardPortNumberToString(standardPortNumber);
-				_standardPortNumber = standardPortNumber;
+				this.name = StandardPortNumberToString(standardPortNumber);
+				this.standardPortNumber = standardPortNumber;
 			}
 			else
 			{
@@ -171,29 +171,29 @@ namespace MKY.IO.Ports
 			SerialPortId id;
 			if (TryParseStandardPortName(portName, out id))
 			{
-				_name = id.Name;
-				_standardPortNumber = id.StandardPortNumber;
+				this.name = id.Name;
+				this.standardPortNumber = id.StandardPortNumber;
 			}
 			else
 			{
-				_name = portName;
-				_standardPortNumber = 0;
+				this.name = portName;
+				this.standardPortNumber = 0;
 			}
 		}
 
 		/// <summary></summary>
 		public SerialPortId(SerialPortId rhs)
 		{
-			_name = rhs._name;
-			_standardPortNumber = rhs._standardPortNumber;
+			this.name = rhs.name;
+			this.standardPortNumber = rhs.standardPortNumber;
 
-			_description = rhs._description;
-			_hasDescriptonFromSystem = rhs._hasDescriptonFromSystem;
+			this.description = rhs.description;
+			this.hasDescriptonFromSystem = rhs.hasDescriptonFromSystem;
 
-			_isInUse = rhs._isInUse;
-			_inUseText = rhs._inUseText;
+			this.isInUse = rhs.isInUse;
+			this.inUseText = rhs.inUseText;
 
-			_separator = rhs._separator;
+			this.separator = rhs.separator;
 		}
 
 		#endregion
@@ -209,18 +209,18 @@ namespace MKY.IO.Ports
 		[XmlIgnore]
 		public virtual int StandardPortNumber
 		{
-			get { return (_standardPortNumber); }
+			get { return (this.standardPortNumber); }
 			set
 			{
 				if (IsStandardPortNumber(value))
 				{
-					_name = StandardPortNumberToString(value);
-					_standardPortNumber = value;
+					this.name = StandardPortNumberToString(value);
+					this.standardPortNumber = value;
 				}
 				else
 				{
-					_name = value.ToString();
-					_standardPortNumber = 0;
+					this.name = value.ToString();
+					this.standardPortNumber = 0;
 				}
 			}
 		}
@@ -231,16 +231,16 @@ namespace MKY.IO.Ports
 		[XmlElement("Name")]
 		public virtual string Name
 		{
-			get { return (_name); }
+			get { return (this.name); }
 			set
 			{
-				_name = value;
+				this.name = value;
 
 				SerialPortId id;
 				if (TryParseStandardPortName(value, out id))
-					_standardPortNumber = id.StandardPortNumber;
+					this.standardPortNumber = id.StandardPortNumber;
 				else
-					_standardPortNumber = 0;
+					this.standardPortNumber = 0;
 			}
 		}
 
@@ -250,7 +250,7 @@ namespace MKY.IO.Ports
 		[XmlIgnore]
 		public virtual bool IsStandardPort
 		{
-			get { return (IsStandardPortNumber(_standardPortNumber)); }
+			get { return (IsStandardPortNumber(this.standardPortNumber)); }
 		}
 
 
@@ -260,8 +260,8 @@ namespace MKY.IO.Ports
 		[XmlIgnore]
 		public virtual string Description
 		{
-			get { return (_description); }
-			set { _description = value;  }
+			get { return (this.description); }
+			set { this.description = value;  }
 		}
 
 		/// <summary>
@@ -270,8 +270,8 @@ namespace MKY.IO.Ports
 		[XmlIgnore]
 		public virtual bool HasDescriptionFromSystem
 		{
-			get { return (_hasDescriptonFromSystem); }
-			set { _hasDescriptonFromSystem = value; }
+			get { return (this.hasDescriptonFromSystem); }
+			set { this.hasDescriptonFromSystem = value; }
 		}
 
 		/// <summary>
@@ -280,8 +280,8 @@ namespace MKY.IO.Ports
 		[XmlIgnore]
 		public virtual bool IsInUse
 		{
-			get { return (_isInUse); }
-			set { _isInUse = value; }
+			get { return (this.isInUse); }
+			set { this.isInUse = value; }
 		}
 
 		/// <summary>
@@ -293,14 +293,14 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				if (_inUseText == "")
+				if (this.inUseText == "")
 					return (DefaultInUseText);
 				else
-					return (_inUseText);
+					return (this.inUseText);
 			}
 			set
 			{
-				_inUseText = value;
+				this.inUseText = value;
 			}
 		}
 
@@ -313,14 +313,14 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				if (_separator == "")
+				if (this.separator == "")
 					return (DefaultSeparator);
 				else
-					return (_separator);
+					return (this.separator);
 			}
 			set
 			{
-				_separator = value;
+				this.separator = value;
 			}
 		}
 
@@ -342,10 +342,10 @@ namespace MKY.IO.Ports
 		{
 			Dictionary<string, string> descriptions = SerialPortSearcher.GetDescriptionsFromSystem();
 
-			if (descriptions.ContainsKey(_name))
+			if (descriptions.ContainsKey(this.name))
 			{
-				Description = descriptions[_name];
-				_hasDescriptonFromSystem = true;
+				Description = descriptions[this.name];
+				this.hasDescriptonFromSystem = true;
 			}
 		}
 
@@ -371,7 +371,7 @@ namespace MKY.IO.Ports
 		{
 			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
-				return (_name == value._name);
+				return (this.name == value.name);
 
 			return (false);
 		}
@@ -656,13 +656,13 @@ namespace MKY.IO.Ports
 	/// <summary></summary>
 	public class SerialPortIdConverter : TypeConverter
 	{
-		private SerialPortCollection _portList;
+		private SerialPortCollection portList;
 
 		/// <summary></summary>
 		public SerialPortIdConverter()
 		{
-			_portList = new SerialPortCollection();
-			_portList.FillWithStandardPorts();
+			this.portList = new SerialPortCollection();
+			this.portList.FillWithStandardPorts();
 		}
 
 		/// <summary>
@@ -678,7 +678,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(System.ComponentModel.ITypeDescriptorContext context)
 		{
-			return (new StandardValuesCollection(_portList));
+			return (new StandardValuesCollection(this.portList));
 		}
 
 		/// <summary>

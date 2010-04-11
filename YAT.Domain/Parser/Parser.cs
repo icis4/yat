@@ -88,12 +88,12 @@ namespace YAT.Domain.Parser
 		/// </summary>
 		protected class DefaultState : ParserState
 		{
-			private StringWriter _contiguous;
+			private StringWriter contiguous;
 
 			/// <summary></summary>
 			public DefaultState()
 			{
-				_contiguous = new StringWriter();
+				this.contiguous = new StringWriter();
 			}
 
 			/// <summary></summary>
@@ -128,14 +128,14 @@ namespace YAT.Domain.Parser
 				}
 				else                                     // write contiguous string
 				{
-					_contiguous.Write((char)parseChar);
+					this.contiguous.Write((char)parseChar);
 				}
 				return (true);
 			}
 
 			private bool TryWriteContiguous(Parser parser, ref FormatException formatException)
 			{
-				string contiguousString = _contiguous.ToString();
+				string contiguousString = this.contiguous.ToString();
 				if (contiguousString != "")
 				{
 					if (!parser.IsKeywordParser)
@@ -218,7 +218,7 @@ namespace YAT.Domain.Parser
 					}
 					case '!':
 					{
-						if ((parser._parseMode & ParseMode.Keywords) == ParseMode.Keywords)
+						if ((parser.parseMode & ParseMode.Keywords) == ParseMode.Keywords)
 						{
 							parser.IsKeywordParser = true;
 							ChangeState(parser, new OpeningState());
@@ -321,12 +321,12 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		protected class AsciiMnemonicState : ParserState
 		{
-			private StringWriter _mnemonic;
+			private StringWriter mnemonic;
 
 			/// <summary></summary>
 			public AsciiMnemonicState()
 			{
-				_mnemonic = new StringWriter();
+				this.mnemonic = new StringWriter();
 			}
 
 			/// <summary></summary>
@@ -336,7 +336,7 @@ namespace YAT.Domain.Parser
 				{
 					byte[] a;
 
-					if (!TryParseAsciiMnemonic(parser, _mnemonic.ToString(), out a, ref formatException))
+					if (!TryParseAsciiMnemonic(parser, this.mnemonic.ToString(), out a, ref formatException))
 						return (false);
 
 					foreach (byte b in a)
@@ -349,7 +349,7 @@ namespace YAT.Domain.Parser
 				}
 				else                                     // write contiguous string
 				{
-					_mnemonic.Write((char)parseChar);
+					this.mnemonic.Write((char)parseChar);
 				}
 				return (true);
 			}
@@ -412,21 +412,21 @@ namespace YAT.Domain.Parser
 		// Fields
 		//==========================================================================================
 
-		private Endianess _endianess = Endianess.BigEndian;
-		private Encoding _encoding = Encoding.Default;
-		private Radix _defaultRadix = Radix.String;
-		private ParseMode _parseMode = ParseMode.All;
+		private Endianess endianess = Endianess.BigEndian;
+		private Encoding encoding = Encoding.Default;
+		private Radix defaultRadix = Radix.String;
+		private ParseMode parseMode = ParseMode.All;
 
-		private StringReader _reader = null;
-		private MemoryStream _byteArrayWriter = null;
-		private List<Result> _resultList = null;
-		private ParserState _state = null;
+		private StringReader reader = null;
+		private MemoryStream byteArrayWriter = null;
+		private List<Result> resultList = null;
+		private ParserState state = null;
 
-		private Parser _parentParser = null;
-		private Parser _nestedChildParser = null;
-		private bool _isKeywordParser = false;
+		private Parser parentParser = null;
+		private Parser nestedChildParser = null;
+		private bool isKeywordParser = false;
 
-		private bool _hasFinished = false;
+		private bool hasFinished = false;
 
 		#endregion
 
@@ -443,41 +443,41 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public Parser(Endianess endianess)
 		{
-			_endianess = endianess;
+			this.endianess = endianess;
 		}
 
 		/// <summary></summary>
 		public Parser(Encoding encoding)
 		{
-			_encoding = encoding;
+			this.encoding = encoding;
 		}
 
 		/// <summary></summary>
 		public Parser(Endianess endianess, Encoding encoding)
 		{
-			_endianess = endianess;
-			_encoding = encoding;
+			this.endianess = endianess;
+			this.encoding = encoding;
 		}
 
 		/// <summary></summary>
 		public Parser(Radix defaultRadix)
 		{
-			_defaultRadix = defaultRadix;
+			this.defaultRadix = defaultRadix;
 		}
 
 		/// <summary></summary>
 		public Parser(Encoding encoding, Radix defaultRadix)
 		{
-			_encoding = encoding;
-			_defaultRadix = defaultRadix;
+			this.encoding = encoding;
+			this.defaultRadix = defaultRadix;
 		}
 
 		/// <summary></summary>
 		public Parser(Endianess endianess, Encoding encoding, Radix defaultRadix)
 		{
-			_endianess = endianess;
-			_encoding = encoding;
-			_defaultRadix = defaultRadix;
+			this.endianess = endianess;
+			this.encoding = encoding;
+			this.defaultRadix = defaultRadix;
 		}
 
 		/// <summary></summary>
@@ -509,76 +509,76 @@ namespace YAT.Domain.Parser
 
 		private StringReader Reader
 		{
-			get { return (_reader); }
+			get { return (this.reader); }
 		}
 
 		private MemoryStream ByteArrayWriter
 		{
-			get { return (_byteArrayWriter); }
+			get { return (this.byteArrayWriter); }
 		}
 
 		private List<Result> ResultList
 		{
-			get { return (_resultList); }
+			get { return (this.resultList); }
 		}
 
 		private ParserState State
 		{
-			get { return (_state); }
-			set { _state = value; }
+			get { return (this.state); }
+			set { this.state = value; }
 		}
 
 		/// <summary></summary>
 		public virtual Endianess Endianess
 		{
-			get { return (_endianess); }
+			get { return (this.endianess); }
 		}
 
 		/// <summary></summary>
 		public virtual Encoding Encoding
 		{
-			get { return (_encoding); }
+			get { return (this.encoding); }
 		}
 
 		/// <summary></summary>
 		/// <remarks>Radix: public get, private set</remarks>
 		public virtual Radix Radix
 		{
-			get { return (_defaultRadix); }
+			get { return (this.defaultRadix); }
 		}
 
 		private void SetDefaultRadix(Radix defaultRadix)
 		{
-			_defaultRadix = defaultRadix;
+			this.defaultRadix = defaultRadix;
 		}
 
 		/// <summary></summary>
 		public virtual bool IsTopLevel
 		{
-			get { return (_parentParser == null); }
+			get { return (this.parentParser == null); }
 		}
 
 		private Parser Parent
 		{
-			get { return (_parentParser); }
+			get { return (this.parentParser); }
 		}
 
 		private Parser NestedParser
 		{
-			get { return (_nestedChildParser); }
-			set { _nestedChildParser = value; }
+			get { return (this.nestedChildParser); }
+			set { this.nestedChildParser = value; }
 		}
 
 		private bool IsKeywordParser
 		{
-			get { return (_isKeywordParser); }
-			set { _isKeywordParser = value; }
+			get { return (this.isKeywordParser); }
+			set { this.isKeywordParser = value; }
 		}
 
 		private bool HasFinished
 		{
-			get { return (_hasFinished); }
-			set { _hasFinished = value; }
+			get { return (this.hasFinished); }
+			set { this.hasFinished = value; }
 		}
 
 		#endregion
@@ -703,13 +703,13 @@ namespace YAT.Domain.Parser
 
 			while (!HasFinished)
 			{
-				if (!_state.TryParse(this, _reader.Read(), ref formatException))
+				if (!this.state.TryParse(this, this.reader.Read(), ref formatException))
 				{
 					EndByteArray();
 
 					// Return part of string that could be parsed
-					parsed = XString.Left(s, s.Length - _reader.ReadToEnd().Length - 1);
-					result = _resultList.ToArray();
+					parsed = XString.Left(s, s.Length - this.reader.ReadToEnd().Length - 1);
+					result = this.resultList.ToArray();
 					return (false);
 				}
 			}
@@ -717,7 +717,7 @@ namespace YAT.Domain.Parser
 			EndByteArray();
 
 			parsed = s;
-			result = _resultList.ToArray();
+			result = this.resultList.ToArray();
 			return (true);
 		}
 
@@ -731,10 +731,10 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		protected virtual void EndByteArray()
 		{
-			if (_byteArrayWriter.Length > 0)
+			if (this.byteArrayWriter.Length > 0)
 			{
-				_resultList.Add(new ByteArrayResult(_byteArrayWriter.ToArray()));
-				_byteArrayWriter = new MemoryStream();
+				this.resultList.Add(new ByteArrayResult(this.byteArrayWriter.ToArray()));
+				this.byteArrayWriter = new MemoryStream();
 			}
 		}
 
@@ -744,7 +744,7 @@ namespace YAT.Domain.Parser
 			// String
 			if (parseRadix == Radix.String)
 			{
-				result = _encoding.GetBytes(token);
+				result = this.encoding.GetBytes(token);
 				return (true);
 			}
 
@@ -754,7 +754,7 @@ namespace YAT.Domain.Parser
 				char c;
 				if (char.TryParse(token, out c))
 				{
-					result = _encoding.GetBytes(new char[] { c });
+					result = this.encoding.GetBytes(new char[] { c });
 					return (true);
 				}
 				else
@@ -786,7 +786,7 @@ namespace YAT.Domain.Parser
 			}
 			if (success)
 			{
-				bool useBigEndian = (_endianess == Endianess.BigEndian);
+				bool useBigEndian = (this.endianess == Endianess.BigEndian);
 				result = XUInt64.ConvertToByteArray(value, negative, useBigEndian);
 				return (true);
 			}
@@ -815,33 +815,33 @@ namespace YAT.Domain.Parser
 
 		private void InitializeTopLevelParse(string parseString, ParseMode parseMode)
 		{
-			_parseMode = parseMode;
+			this.parseMode       = parseMode;
 
-			_reader = new StringReader(parseString);
-			_byteArrayWriter = new MemoryStream();
-			_resultList = new List<Result>();
-			_state = new DefaultState();
+			this.reader          = new StringReader(parseString);
+			this.byteArrayWriter = new MemoryStream();
+			this.resultList      = new List<Result>();
+			this.state           = new DefaultState();
 
-			_isKeywordParser = false;
+			this.isKeywordParser = false;
 
-			_hasFinished = false;
+			this.hasFinished     = false;
 		}
 
 		private void InitializeNestedParse(ParserState parserState, Parser parent)
 		{
-			_encoding = parent._encoding;
-			_defaultRadix = parent._defaultRadix;
-			_parseMode = parent._parseMode;
+			this.encoding        = parent.encoding;
+			this.defaultRadix    = parent.defaultRadix;
+			this.parseMode       = parent.parseMode;
 
-			_reader = parent._reader;
-			_byteArrayWriter = new MemoryStream();
-			_resultList = parent._resultList;
-			_state = parserState;
+			this.reader          = parent.reader;
+			this.byteArrayWriter = new MemoryStream();
+			this.resultList      = parent.resultList;
+			this.state           = parserState;
 
-			_parentParser = parent;
-			_isKeywordParser = false;
+			this.parentParser    = parent;
+			this.isKeywordParser = false;
 
-			_hasFinished = false;
+			this.hasFinished     = false;
 		}
 
 		/// <summary>

@@ -30,8 +30,8 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const bool CopyPredefinedDefault = false;
 
-		private bool _keepCommand;
-		private bool _copyPredefined;
+		private bool keepCommand;
+		private bool copyPredefined;
 
 		/// <summary></summary>
 		public SendSettings()
@@ -55,8 +55,8 @@ namespace YAT.Domain.Settings
 		public SendSettings(SendSettings rhs)
 			: base(rhs)
 		{
-			_keepCommand = rhs._keepCommand;
-			_copyPredefined = rhs._copyPredefined;
+			this.keepCommand = rhs.keepCommand;
+			this.copyPredefined = rhs.copyPredefined;
 			ClearChanged();
 		}
 
@@ -78,12 +78,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("KeepCommand")]
 		public virtual bool KeepCommand
 		{
-			get { return (_keepCommand); }
+			get { return (this.keepCommand); }
 			set
 			{
-				if (value != _keepCommand)
+				if (value != this.keepCommand)
 				{
-					_keepCommand = value;
+					this.keepCommand = value;
 					SetChanged();
 				}
 			}
@@ -93,12 +93,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("CopyPredefined")]
 		public virtual bool CopyPredefined
 		{
-			get { return (_copyPredefined); }
+			get { return (this.copyPredefined); }
 			set
 			{
-				if (value != _copyPredefined)
+				if (value != this.copyPredefined)
 				{
-					_copyPredefined = value;
+					this.copyPredefined = value;
 					SetChanged();
 				}
 			}
@@ -129,8 +129,8 @@ namespace YAT.Domain.Settings
 			{
 				return
 					(
-					(_keepCommand    == value._keepCommand) &&
-					(_copyPredefined == value._copyPredefined)
+					(this.keepCommand    == value.keepCommand) &&
+					(this.copyPredefined == value.copyPredefined)
 					);
 			}
 			return (false);

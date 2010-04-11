@@ -36,7 +36,7 @@ namespace MKY.Utilities.Diagnostics
 	public static class XDebug
 	{
 		#if (DEBUG)
-			private static DebugWrapper _debugWrapper = new DebugWrapper();
+			private static DebugWrapper debugWrapper = new DebugWrapper();
 		#endif
 
 		/// <summary>
@@ -57,7 +57,7 @@ namespace MKY.Utilities.Diagnostics
 		public static void WriteException(object obj, Exception ex, string additionalMessage)
 		{
 		#if (DEBUG)
-			DiagnosticsWriterOutput.WriteException(_debugWrapper, obj, ex, additionalMessage);
+			DiagnosticsWriterOutput.WriteException(debugWrapper, obj, ex, additionalMessage);
 		#endif
 		}
 
@@ -86,7 +86,7 @@ namespace MKY.Utilities.Diagnostics
 		public static void WriteStack(object obj, StackTrace st, string additionalMessage)
 		{
 		#if (DEBUG)
-			DiagnosticsWriterOutput.WriteStack(_debugWrapper, obj, st, additionalMessage);
+			DiagnosticsWriterOutput.WriteStack(debugWrapper, obj, st, additionalMessage);
 		#endif
 		}
 
@@ -106,7 +106,7 @@ namespace MKY.Utilities.Diagnostics
 		public static void WriteWindowsFormsMessage(object obj, Message m, string additionalMessage)
 		{
 		#if (DEBUG)
-			DiagnosticsWriterOutput.WriteWindowsFormsMessage(_debugWrapper, obj, m, additionalMessage);
+			DiagnosticsWriterOutput.WriteWindowsFormsMessage(debugWrapper, obj, m, additionalMessage);
 		#endif
 		}
 
@@ -126,7 +126,7 @@ namespace MKY.Utilities.Diagnostics
 		public static void WriteFileStream(object obj, FileStream fs, string additionalMessage)
 		{
 		#if (DEBUG)
-			DiagnosticsWriterOutput.WriteFileStream(_debugWrapper, obj, fs, additionalMessage);
+			DiagnosticsWriterOutput.WriteFileStream(debugWrapper, obj, fs, additionalMessage);
 		#endif
 		}
 	}

@@ -25,8 +25,8 @@ namespace YAT.Settings
 	/// </summary>
 	public static class ExtensionSettings
 	{
-		private static string _terminalFile  = ".yat";
-		private static string _workspaceFile = ".yaw";
+		private static string terminalFile  = ".yat";
+		private static string workspaceFile = ".yaw";
 
 		/// <summary>
 		/// Allows to alter the file extension used for terminal files,
@@ -34,8 +34,8 @@ namespace YAT.Settings
 		/// </summary>
 		public static string TerminalFile
 		{
-			get { return (_terminalFile); }
-			set { _terminalFile = value; }
+			get { return (terminalFile); }
+			set { terminalFile = value; }
 		}
 
 		public static bool IsTerminalFile(string extension)
@@ -57,8 +57,8 @@ namespace YAT.Settings
 		/// </summary>
 		public static string WorkspaceFile
 		{
-			get { return (_workspaceFile); }
-			set { _workspaceFile = value; }
+			get { return (workspaceFile); }
+			set { workspaceFile = value; }
 		}
 
 		public static bool IsWorkspaceFile(string extension)

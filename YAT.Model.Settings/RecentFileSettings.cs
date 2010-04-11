@@ -30,7 +30,7 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		public const int MaxFilePaths = 8;
 
-		private RecentItemCollection<string> _filePaths;
+		private RecentItemCollection<string> filePaths;
 
 		/// <summary></summary>
 		public RecentFileSettings()
@@ -75,12 +75,12 @@ namespace YAT.Model.Settings
 		[XmlElement("FilePaths")]
 		public virtual RecentItemCollection<string> FilePaths
 		{
-			get { return (_filePaths); }
+			get { return (this.filePaths); }
 			set
 			{
-				if (value != _filePaths)
+				if (value != this.filePaths)
 				{
-					_filePaths = value;
+					this.filePaths = value;
 					SetChanged();
 				}
 			}
@@ -93,8 +93,8 @@ namespace YAT.Model.Settings
 		[XmlElement("FilePathsCapacity")]
 		public virtual int FilePathsCapacity
 		{
-			get { return (_filePaths.Capacity); }
-			set { _filePaths.Capacity = value; }
+			get { return (this.filePaths.Capacity); }
+			set { this.filePaths.Capacity = value; }
 		}
 
 		#endregion
@@ -119,7 +119,7 @@ namespace YAT.Model.Settings
 		{
 			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
-				return (_filePaths == value._filePaths);
+				return (this.filePaths == value.filePaths);
 
 			return (false);
 		}

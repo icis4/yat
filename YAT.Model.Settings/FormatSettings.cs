@@ -28,15 +28,15 @@ namespace YAT.Model.Settings
 	[Serializable]
 	public class FormatSettings : MKY.Utilities.Settings.Settings, IEquatable<FormatSettings>
 	{
-		private FontFormat _font;
-		private TextFormat _txDataFormat;
-		private TextFormat _txControlFormat;
-		private TextFormat _rxDataFormat;
-		private TextFormat _rxControlFormat;
-		private TextFormat _timeStampFormat;
-		private TextFormat _lengthFormat;
-		private TextFormat _whiteSpacesFormat;
-		private TextFormat _errorFormat;
+		private FontFormat font;
+		private TextFormat txDataFormat;
+		private TextFormat txControlFormat;
+		private TextFormat rxDataFormat;
+		private TextFormat rxControlFormat;
+		private TextFormat timeStampFormat;
+		private TextFormat lengthFormat;
+		private TextFormat whiteSpacesFormat;
+		private TextFormat errorFormat;
 
 		/// <summary></summary>
 		public FormatSettings()
@@ -96,12 +96,12 @@ namespace YAT.Model.Settings
 		[XmlElement("Font")]
 		public FontFormat FontFormat
 		{
-			get { return (_font); }
+			get { return (this.font); }
 			set
 			{
-				if (value != _font)
+				if (value != this.font)
 				{
-					_font = value;
+					this.font = value;
 					SetChanged();
 				}
 			}
@@ -111,12 +111,12 @@ namespace YAT.Model.Settings
 		[XmlIgnore]
 		public Font Font
 		{
-			get { return (_font.Font); }
+			get { return (this.font.Font); }
 			set
 			{
-				if (value != _font.Font)
+				if (value != this.font.Font)
 				{
-					_font.Font = value;
+					this.font.Font = value;
 					SetChanged();
 				}
 			}
@@ -126,12 +126,12 @@ namespace YAT.Model.Settings
 		[XmlElement("TxDataFormat")]
 		public TextFormat TxDataFormat
 		{
-			get { return (_txDataFormat); }
+			get { return (this.txDataFormat); }
 			set
 			{
-				if (value != _txDataFormat)
+				if (value != this.txDataFormat)
 				{
-					_txDataFormat = value;
+					this.txDataFormat = value;
 					SetChanged();
 				}
 			}
@@ -141,12 +141,12 @@ namespace YAT.Model.Settings
 		[XmlElement("TxControlFormat")]
 		public TextFormat TxControlFormat
 		{
-			get { return (_txControlFormat); }
+			get { return (this.txControlFormat); }
 			set
 			{
-				if (value != _txControlFormat)
+				if (value != this.txControlFormat)
 				{
-					_txControlFormat = value;
+					this.txControlFormat = value;
 					SetChanged();
 				}
 			}
@@ -156,12 +156,12 @@ namespace YAT.Model.Settings
 		[XmlElement("RxDataFormat")]
 		public TextFormat RxDataFormat
 		{
-			get { return (_rxDataFormat); }
+			get { return (this.rxDataFormat); }
 			set
 			{
-				if (value != _rxDataFormat)
+				if (value != this.rxDataFormat)
 				{
-					_rxDataFormat = value;
+					this.rxDataFormat = value;
 					SetChanged();
 				}
 			}
@@ -171,12 +171,12 @@ namespace YAT.Model.Settings
 		[XmlElement("RxControlFormat")]
 		public TextFormat RxControlFormat
 		{
-			get { return (_rxControlFormat); }
+			get { return (this.rxControlFormat); }
 			set
 			{
-				if (value != _rxControlFormat)
+				if (value != this.rxControlFormat)
 				{
-					_rxControlFormat = value;
+					this.rxControlFormat = value;
 					SetChanged();
 				}
 			}
@@ -186,12 +186,12 @@ namespace YAT.Model.Settings
 		[XmlElement("TimeStampFormat")]
 		public TextFormat TimeStampFormat
 		{
-			get { return (_timeStampFormat); }
+			get { return (this.timeStampFormat); }
 			set
 			{
-				if (value != _timeStampFormat)
+				if (value != this.timeStampFormat)
 				{
-					_timeStampFormat = value;
+					this.timeStampFormat = value;
 					SetChanged();
 				}
 			}
@@ -201,12 +201,12 @@ namespace YAT.Model.Settings
 		[XmlElement("LengthFormat")]
 		public TextFormat LengthFormat
 		{
-			get { return (_lengthFormat); }
+			get { return (this.lengthFormat); }
 			set
 			{
-				if (value != _lengthFormat)
+				if (value != this.lengthFormat)
 				{
-					_lengthFormat = value;
+					this.lengthFormat = value;
 					SetChanged();
 				}
 			}
@@ -216,12 +216,12 @@ namespace YAT.Model.Settings
 		[XmlElement("WhiteSpacesFormat")]
 		public TextFormat WhiteSpacesFormat
 		{
-			get { return (_whiteSpacesFormat); }
+			get { return (this.whiteSpacesFormat); }
 			set
 			{
-				if (value != _whiteSpacesFormat)
+				if (value != this.whiteSpacesFormat)
 				{
-					_whiteSpacesFormat = value;
+					this.whiteSpacesFormat = value;
 					SetChanged();
 				}
 			}
@@ -231,12 +231,12 @@ namespace YAT.Model.Settings
 		[XmlElement("ErrorFormat")]
 		public TextFormat ErrorFormat
 		{
-			get { return (_errorFormat); }
+			get { return (this.errorFormat); }
 			set
 			{
-				if (value != _errorFormat)
+				if (value != this.errorFormat)
 				{
-					_errorFormat = value;
+					this.errorFormat = value;
 					SetChanged();
 				}
 			}
@@ -267,15 +267,15 @@ namespace YAT.Model.Settings
 			{
 				return
 					(
-					(_font              == value._font) &&
-					(_txDataFormat      == value._txDataFormat) &&
-					(_txControlFormat   == value._txControlFormat) &&
-					(_rxDataFormat      == value._rxDataFormat) &&
-					(_rxControlFormat   == value._rxControlFormat) &&
-					(_timeStampFormat   == value._timeStampFormat) &&
-					(_lengthFormat      == value._lengthFormat) &&
-					(_whiteSpacesFormat == value._whiteSpacesFormat) &&
-					(_errorFormat       == value._errorFormat)
+					(this.font              == value.font) &&
+					(this.txDataFormat      == value.txDataFormat) &&
+					(this.txControlFormat   == value.txControlFormat) &&
+					(this.rxDataFormat      == value.rxDataFormat) &&
+					(this.rxControlFormat   == value.rxControlFormat) &&
+					(this.timeStampFormat   == value.timeStampFormat) &&
+					(this.lengthFormat      == value.lengthFormat) &&
+					(this.whiteSpacesFormat == value.whiteSpacesFormat) &&
+					(this.errorFormat       == value.errorFormat)
 					);
 			}
 			return (false);

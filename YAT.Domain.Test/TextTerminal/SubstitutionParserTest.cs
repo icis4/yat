@@ -53,7 +53,7 @@ namespace YAT.Domain.Test.TextTerminal
 		// Fields
 		//==========================================================================================
 
-		private readonly TestSet[] _testSets =
+		private readonly TestSet[] testSets =
 		{
 			new TestSet(CharSubstitution.ToUpper, @"\c(A)\c(b)CdEfGhIiKlMnOpQrStUvWxYz<Cr><Lf>",	new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x49, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x0D, 0x0A } ) ,
 		};
@@ -75,7 +75,7 @@ namespace YAT.Domain.Test.TextTerminal
 		{
 			Exception exceptionToNUnit = null;
 
-			foreach (TestSet ts in _testSets)
+			foreach (TestSet ts in this.testSets)
 			{
 				Domain.Parser.SubstitutionParser parser;
 				byte[] outputBytes = new byte[] { };

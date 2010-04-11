@@ -28,11 +28,11 @@ namespace MKY.IO.Serial
 	[Serializable]
 	public class SerialCommunicationSettings : MKY.Utilities.Settings.Settings, IEquatable<SerialCommunicationSettings>
 	{
-		private int _baudRate;
-		private MKY.IO.Ports.DataBits _dataBits;
-		private System.IO.Ports.Parity _parity;
-		private System.IO.Ports.StopBits _stopBits;
-		private SerialFlowControl _flowControl;
+		private int baudRate;
+		private MKY.IO.Ports.DataBits dataBits;
+		private System.IO.Ports.Parity parity;
+		private System.IO.Ports.StopBits stopBits;
+		private SerialFlowControl flowControl;
 
 		/// <summary></summary>
 		public SerialCommunicationSettings()
@@ -56,11 +56,11 @@ namespace MKY.IO.Serial
 		public SerialCommunicationSettings(SerialCommunicationSettings rhs)
 			: base(rhs)
 		{
-			_baudRate    = rhs.BaudRate;
-			_dataBits    = rhs.DataBits;
-			_parity      = rhs.Parity;
-			_stopBits    = rhs.StopBits;
-			_flowControl = rhs.FlowControl;
+			this.baudRate    = rhs.BaudRate;
+			this.dataBits    = rhs.DataBits;
+			this.parity      = rhs.Parity;
+			this.stopBits    = rhs.StopBits;
+			this.flowControl = rhs.FlowControl;
 			ClearChanged();
 		}
 
@@ -85,12 +85,12 @@ namespace MKY.IO.Serial
 		[XmlElement("BaudRate")]
 		public virtual int BaudRate
 		{
-			get { return (_baudRate); }
+			get { return (this.baudRate); }
 			set
 			{
-				if (value != _baudRate)
+				if (value != this.baudRate)
 				{
-					_baudRate = value;
+					this.baudRate = value;
 					SetChanged();
 				}
 			}
@@ -100,12 +100,12 @@ namespace MKY.IO.Serial
 		[XmlElement("DataBits")]
 		public virtual MKY.IO.Ports.DataBits DataBits
 		{
-			get { return (_dataBits); }
+			get { return (this.dataBits); }
 			set
 			{
-				if (value != _dataBits)
+				if (value != this.dataBits)
 				{
-					_dataBits = value;
+					this.dataBits = value;
 					SetChanged();
 				}
 			}
@@ -115,12 +115,12 @@ namespace MKY.IO.Serial
 		[XmlElement("Parity")]
 		public virtual System.IO.Ports.Parity Parity
 		{
-			get { return (_parity); }
+			get { return (this.parity); }
 			set
 			{
-				if (value != _parity)
+				if (value != this.parity)
 				{
-					_parity = value;
+					this.parity = value;
 					SetChanged();
 				}
 			}
@@ -130,12 +130,12 @@ namespace MKY.IO.Serial
 		[XmlElement("StopBits")]
 		public virtual System.IO.Ports.StopBits StopBits
 		{
-			get { return (_stopBits); }
+			get { return (this.stopBits); }
 			set
 			{
-				if (value != _stopBits)
+				if (value != this.stopBits)
 				{
-					_stopBits = value;
+					this.stopBits = value;
 					SetChanged();
 				}
 			}
@@ -145,12 +145,12 @@ namespace MKY.IO.Serial
 		[XmlElement("FlowControl")]
 		public virtual SerialFlowControl FlowControl
 		{
-			get { return (_flowControl); }
+			get { return (this.flowControl); }
 			set
 			{
-				if (value != _flowControl)
+				if (value != this.flowControl)
 				{
-					_flowControl = value;
+					this.flowControl = value;
 					SetChanged();
 				}
 			}
@@ -181,11 +181,11 @@ namespace MKY.IO.Serial
 			{
 				return
 					(
-					(_baudRate    == value._baudRate) &&
-					(_dataBits    == value._dataBits) &&
-					(_parity      == value._parity) &&
-					(_stopBits    == value._stopBits) &&
-					(_flowControl == value._flowControl)
+					(this.baudRate    == value.baudRate) &&
+					(this.dataBits    == value.dataBits) &&
+					(this.parity      == value.parity) &&
+					(this.stopBits    == value.stopBits) &&
+					(this.flowControl == value.flowControl)
 					);
 			}
 			return (false);
@@ -202,11 +202,11 @@ namespace MKY.IO.Serial
 		{
 			return
 				(
-				_baudRate                           + ", " +
-				((MKY.IO.Ports.XDataBits)_dataBits) + ", " +
-				((MKY.IO.Ports.XParity)_parity)     + ", " +
-				((MKY.IO.Ports.XStopBits)_stopBits) + ", " +
-				((XSerialFlowControl)_flowControl).ToShortString()
+				this.baudRate                           + ", " +
+				((MKY.IO.Ports.XDataBits)this.dataBits) + ", " +
+				((MKY.IO.Ports.XParity)this.parity)     + ", " +
+				((MKY.IO.Ports.XStopBits)this.stopBits) + ", " +
+				((XSerialFlowControl)this.flowControl).ToShortString()
 				);
 		}
 
@@ -217,9 +217,9 @@ namespace MKY.IO.Serial
 		{
 			return
 				(
-				_baudRate                           + ", " +
-				((MKY.IO.Ports.XDataBits)_dataBits) + ", " +
-				((MKY.IO.Ports.XParity)_parity).ToShortString()
+				this.baudRate                           + ", " +
+				((MKY.IO.Ports.XDataBits)this.dataBits) + ", " +
+				((MKY.IO.Ports.XParity)this.parity).ToShortString()
 				);
 		}
 
@@ -228,11 +228,11 @@ namespace MKY.IO.Serial
 		{
 			return
 				(
-				_baudRate                           + ", " +
-				((MKY.IO.Ports.XDataBits)_dataBits) + ", " +
-				((MKY.IO.Ports.XParity)_parity)     + ", " +
-				((MKY.IO.Ports.XStopBits)_stopBits) + ", " +
-				((XSerialFlowControl)_flowControl)
+				this.baudRate                           + ", " +
+				((MKY.IO.Ports.XDataBits)this.dataBits) + ", " +
+				((MKY.IO.Ports.XParity)this.parity)     + ", " +
+				((MKY.IO.Ports.XStopBits)this.stopBits) + ", " +
+				((XSerialFlowControl)this.flowControl)
 				);
 		}
 

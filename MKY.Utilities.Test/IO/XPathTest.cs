@@ -32,9 +32,9 @@ namespace MKY.Utilities.Test.IO
 		// Constants
 		//==========================================================================================
 
-		private const int _TestCasesPerTestSet = 4;
+		private const int TestCasesPerTestSet = 4;
 
-		private readonly string[,] _TestPaths =
+		private readonly string[,] TestPaths =
 		{
 			// ---- Local ----
 
@@ -126,15 +126,15 @@ namespace MKY.Utilities.Test.IO
 			string expected = "";
 			XPathCompareResult pcResult;
 
-			for (int i = 0; i < _TestPaths.GetLength(0); i++)
+			for (int i = 0; i < TestPaths.GetLength(0); i++)
 			{
-				int testSet  = i / _TestCasesPerTestSet;
-				int testCase = i % _TestCasesPerTestSet;
+				int testSet  = i / TestCasesPerTestSet;
+				int testCase = i % TestCasesPerTestSet;
 
 				// A compared to B results in A relative
-				path1    = _TestPaths[i, 0];
-				path2    = _TestPaths[i, 1];
-				expected = _TestPaths[i, 2];
+				path1    = TestPaths[i, 0];
+				path2    = TestPaths[i, 1];
+				expected = TestPaths[i, 2];
 				pcResult.RelativePath = "";
 
 				try
@@ -156,9 +156,9 @@ namespace MKY.Utilities.Test.IO
 				}
 
 				// B compared to A results in B relative
-				path1    = _TestPaths[i, 1];
-				path2    = _TestPaths[i, 0];
-				expected = _TestPaths[i, 3];
+				path1    = TestPaths[i, 1];
+				path2    = TestPaths[i, 0];
+				expected = TestPaths[i, 3];
 				pcResult.RelativePath = "";
 
 				try
@@ -196,18 +196,18 @@ namespace MKY.Utilities.Test.IO
 			string expected = "";
 			string result = "";
 
-			for (int i = 0; i < _TestPaths.GetLength(0); i++)
+			for (int i = 0; i < TestPaths.GetLength(0); i++)
 			{
-				int testSet  = i / _TestCasesPerTestSet;
-				int testCase = i % _TestCasesPerTestSet;
+				int testSet  = i / TestCasesPerTestSet;
+				int testCase = i % TestCasesPerTestSet;
 
 				//if ((testSet == 6) && (testCase == 0))
 				//	System.Diagnostics.Debugger.Break();
 
 				// A combined with A relative results in B
-				path1    = _TestPaths[i, 0];
-				path2    = _TestPaths[i, 2];
-				expected = _TestPaths[i, 1];
+				path1    = TestPaths[i, 0];
+				path2    = TestPaths[i, 2];
+				expected = TestPaths[i, 1];
 				result   = "";
 
 				try
@@ -229,9 +229,9 @@ namespace MKY.Utilities.Test.IO
 				}
 
 				// B combined with B relative results in A
-				path1    = _TestPaths[i, 1];
-				path2    = _TestPaths[i, 3];
-				expected = _TestPaths[i, 0];
+				path1    = TestPaths[i, 1];
+				path2    = TestPaths[i, 3];
+				expected = TestPaths[i, 0];
 				result = "";
 
 				try

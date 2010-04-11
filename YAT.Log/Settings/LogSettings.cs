@@ -35,34 +35,34 @@ namespace YAT.Log.Settings
 		//==========================================================================================
 
 		// root
-		private string _rootPath;
-		private string _rootFileName;
+		private string rootPath;
+		private string rootFileName;
 
 		// raw
-		private bool _rawLogTx;
-		private bool _rawLogBidir;
-		private bool _rawLogRx;
-		private string _rawExtension;
+		private bool rawLogTx;
+		private bool rawLogBidir;
+		private bool rawLogRx;
+		private string rawExtension;
 
 		// neat
-		private bool _neatLogTx;
-		private bool _neatLogBidir;
-		private bool _neatLogRx;
-		private string _neatExtension;
+		private bool neatLogTx;
+		private bool neatLogBidir;
+		private bool neatLogRx;
+		private string neatExtension;
 
 		// write mode
-		private LogFileWriteMode _writeMode;
+		private LogFileWriteMode writeMode;
 
 		// subdirectories
-		private bool _subdirectoriesFormat;
-		private bool _subdirectoriesChannel;
+		private bool subdirectoriesFormat;
+		private bool subdirectoriesChannel;
 
 		// naming
-		private bool _nameFormat;
-		private bool _nameChannel;
-		private bool _nameDate;
-		private bool _nameTime;
-		private FileNameSeparator _nameSeparator;
+		private bool nameFormat;
+		private bool nameChannel;
+		private bool nameDate;
+		private bool nameTime;
+		private FileNameSeparator nameSeparator;
 
 		#endregion
 
@@ -92,29 +92,29 @@ namespace YAT.Log.Settings
 		public LogSettings(LogSettings rhs)
 			: base(rhs)
 		{
-			_rootPath     = rhs.RootPath;
-			_rootFileName = rhs.RootFileName;
+			this.rootPath     = rhs.RootPath;
+			this.rootFileName = rhs.RootFileName;
 
-			_rawLogTx     = rhs.RawLogTx;
-			_rawLogBidir  = rhs.RawLogBidir;
-			_rawLogRx     = rhs.RawLogRx;
-			_rawExtension = rhs.RawExtension;
+			this.rawLogTx     = rhs.RawLogTx;
+			this.rawLogBidir  = rhs.RawLogBidir;
+			this.rawLogRx     = rhs.RawLogRx;
+			this.rawExtension = rhs.RawExtension;
 
-			_neatLogTx     = rhs.NeatLogTx;
-			_neatLogBidir  = rhs.NeatLogBidir;
-			_neatLogRx     = rhs.NeatLogRx;
-			_neatExtension = rhs.NeatExtension;
+			this.neatLogTx     = rhs.NeatLogTx;
+			this.neatLogBidir  = rhs.NeatLogBidir;
+			this.neatLogRx     = rhs.NeatLogRx;
+			this.neatExtension = rhs.NeatExtension;
 
-			_writeMode = rhs.WriteMode;
+			this.writeMode = rhs.WriteMode;
 
-			_subdirectoriesFormat  = rhs.SubdirectoriesFormat;
-			_subdirectoriesChannel = rhs.SubdirectoriesChannel;
+			this.subdirectoriesFormat  = rhs.SubdirectoriesFormat;
+			this.subdirectoriesChannel = rhs.SubdirectoriesChannel;
 
-			_nameFormat    = rhs.NameFormat;
-			_nameChannel   = rhs.NameChannel;
-			_nameDate      = rhs.NameDate;
-			_nameTime      = rhs.NameTime;
-			_nameSeparator = rhs.NameSeparator;
+			this.nameFormat    = rhs.NameFormat;
+			this.nameChannel   = rhs.NameChannel;
+			this.nameDate      = rhs.NameDate;
+			this.nameTime      = rhs.NameTime;
+			this.nameSeparator = rhs.NameSeparator;
 
 			ClearChanged();
 		}
@@ -181,12 +181,12 @@ namespace YAT.Log.Settings
 		{
 			StringBuilder subdirectories = new StringBuilder();
 
-			if (_subdirectoriesFormat)
+			if (this.subdirectoriesFormat)
 			{
 				subdirectories.Append(MakeFormat(format));
 				subdirectories.Append(Path.DirectorySeparatorChar);
 			}
-			if (_subdirectoriesChannel)
+			if (this.subdirectoriesChannel)
 			{
 				subdirectories.Append(MakeChannel(channelType));
 				subdirectories.Append(Path.DirectorySeparatorChar);
@@ -199,26 +199,26 @@ namespace YAT.Log.Settings
 			DateTime now = DateTime.Now;
 			StringBuilder postFix = new StringBuilder();
 
-			if (_nameFormat)
+			if (this.nameFormat)
 			{
-				postFix.Append(_nameSeparator.Separator);
+				postFix.Append(this.nameSeparator.Separator);
 				postFix.Append(MakeFormat(format));
 			}
-			if (_nameChannel)
+			if (this.nameChannel)
 			{
-				postFix.Append(_nameSeparator.Separator);
+				postFix.Append(this.nameSeparator.Separator);
 				postFix.Append(MakeChannel(channelType));
 			}
-			if (_nameDate)
+			if (this.nameDate)
 			{
-				postFix.Append(_nameSeparator.Separator);
+				postFix.Append(this.nameSeparator.Separator);
 				postFix.Append(now.Year.ToString("D4"));
 				postFix.Append(now.Month.ToString("D2"));
 				postFix.Append(now.Day.ToString("D2"));
 			}
-			if (_nameTime)
+			if (this.nameTime)
 			{
-				postFix.Append(_nameSeparator.Separator);
+				postFix.Append(this.nameSeparator.Separator);
 				postFix.Append(now.Hour.ToString("D2"));
 				postFix.Append(now.Minute.ToString("D2"));
 				postFix.Append(now.Second.ToString("D2"));
@@ -237,12 +237,12 @@ namespace YAT.Log.Settings
 		[XmlElement("RootPath")]
 		public virtual string RootPath
 		{
-			get { return (_rootPath); }
+			get { return (this.rootPath); }
 			set
 			{
-				if (value != _rootPath)
+				if (value != this.rootPath)
 				{
-					_rootPath = value;
+					this.rootPath = value;
 					SetChanged();
 				}
 			}
@@ -252,12 +252,12 @@ namespace YAT.Log.Settings
 		[XmlElement("RootFileName")]
 		public virtual string RootFileName
 		{
-			get { return (_rootFileName); }
+			get { return (this.rootFileName); }
 			set
 			{
-				if (value != _rootFileName)
+				if (value != this.rootFileName)
 				{
-					_rootFileName = value;
+					this.rootFileName = value;
 					SetChanged();
 				}
 			}
@@ -267,7 +267,7 @@ namespace YAT.Log.Settings
 		[XmlIgnore]
 		public virtual string RootFilePath
 		{
-			get { return (_rootPath + Path.DirectorySeparatorChar + _rootFileName); }
+			get { return (this.rootPath + Path.DirectorySeparatorChar + this.rootFileName); }
 		}
 
 		//- Raw -------------------------------------------------------------------
@@ -276,12 +276,12 @@ namespace YAT.Log.Settings
 		[XmlElement("RawLogTx")]
 		public virtual bool RawLogTx
 		{
-			get { return (_rawLogTx); }
+			get { return (this.rawLogTx); }
 			set
 			{
-				if (value != _rawLogTx)
+				if (value != this.rawLogTx)
 				{
-					_rawLogTx = value;
+					this.rawLogTx = value;
 					SetChanged();
 				}
 			}
@@ -294,9 +294,9 @@ namespace YAT.Log.Settings
 			get
 			{
 				return (MakeSubdirectory(LogFormat.Raw, LogStreamType.Tx) +
-						_rootFileName +
+						this.rootFileName +
 						MakeFileNamePostFix(LogFormat.Raw, LogStreamType.Tx) +
-						_rawExtension);
+						this.rawExtension);
 			}
 		}
 
@@ -304,19 +304,19 @@ namespace YAT.Log.Settings
 		[XmlIgnore]
 		public virtual string RawTxFilePath
 		{
-			get { return (_rootPath + Path.DirectorySeparatorChar + RawTxRootRelativeFilePath); }
+			get { return (this.rootPath + Path.DirectorySeparatorChar + RawTxRootRelativeFilePath); }
 		}
 
 		/// <summary></summary>
 		[XmlElement("RawLogBidir")]
 		public virtual bool RawLogBidir
 		{
-			get { return (_rawLogBidir); }
+			get { return (this.rawLogBidir); }
 			set
 			{
-				if (value != _rawLogBidir)
+				if (value != this.rawLogBidir)
 				{
-					_rawLogBidir = value;
+					this.rawLogBidir = value;
 					SetChanged();
 				}
 			}
@@ -329,9 +329,9 @@ namespace YAT.Log.Settings
 			get
 			{
 				return (MakeSubdirectory(LogFormat.Raw, LogStreamType.Bidir) +
-						_rootFileName +
+						this.rootFileName +
 						MakeFileNamePostFix(LogFormat.Raw, LogStreamType.Bidir) +
-						_rawExtension);
+						this.rawExtension);
 			}
 		}
 
@@ -339,19 +339,19 @@ namespace YAT.Log.Settings
 		[XmlIgnore]
 		public virtual string RawBidirFilePath
 		{
-			get { return (_rootPath + Path.DirectorySeparatorChar + RawBidirRootRelativeFilePath); }
+			get { return (this.rootPath + Path.DirectorySeparatorChar + RawBidirRootRelativeFilePath); }
 		}
 
 		/// <summary></summary>
 		[XmlElement("RawLogRx")]
 		public virtual bool RawLogRx
 		{
-			get { return (_rawLogRx); }
+			get { return (this.rawLogRx); }
 			set
 			{
-				if (value != _rawLogRx)
+				if (value != this.rawLogRx)
 				{
-					_rawLogRx = value;
+					this.rawLogRx = value;
 					SetChanged();
 				}
 			}
@@ -364,9 +364,9 @@ namespace YAT.Log.Settings
 			get
 			{
 				return (MakeSubdirectory(LogFormat.Raw, LogStreamType.Rx) +
-						_rootFileName +
+						this.rootFileName +
 						MakeFileNamePostFix(LogFormat.Raw, LogStreamType.Rx) +
-						_rawExtension);
+						this.rawExtension);
 			}
 		}
 
@@ -374,19 +374,19 @@ namespace YAT.Log.Settings
 		[XmlIgnore]
 		public virtual string RawRxFilePath
 		{
-			get { return (_rootPath + Path.DirectorySeparatorChar + RawRxRootRelativeFilePath); }
+			get { return (this.rootPath + Path.DirectorySeparatorChar + RawRxRootRelativeFilePath); }
 		}
 
 		/// <summary></summary>
 		[XmlElement("RawExtension")]
 		public virtual string RawExtension
 		{
-			get { return (_rawExtension); }
+			get { return (this.rawExtension); }
 			set
 			{
-				if (value != _rawExtension)
+				if (value != this.rawExtension)
 				{
-					_rawExtension = value;
+					this.rawExtension = value;
 					SetChanged();
 				}
 			}
@@ -398,12 +398,12 @@ namespace YAT.Log.Settings
 		[XmlElement("NeatLogTx")]
 		public virtual bool NeatLogTx
 		{
-			get { return (_neatLogTx); }
+			get { return (this.neatLogTx); }
 			set
 			{
-				if (value != _neatLogTx)
+				if (value != this.neatLogTx)
 				{
-					_neatLogTx = value;
+					this.neatLogTx = value;
 					SetChanged();
 				}
 			}
@@ -416,9 +416,9 @@ namespace YAT.Log.Settings
 			get
 			{
 				return (MakeSubdirectory(LogFormat.Neat, LogStreamType.Tx) +
-						_rootFileName +
+						this.rootFileName +
 						MakeFileNamePostFix(LogFormat.Neat, LogStreamType.Tx) +
-						_neatExtension);
+						this.neatExtension);
 			}
 		}
 
@@ -426,19 +426,19 @@ namespace YAT.Log.Settings
 		[XmlIgnore]
 		public virtual string NeatTxFilePath
 		{
-			get { return (_rootPath + Path.DirectorySeparatorChar + NeatTxRootRelativeFilePath); }
+			get { return (this.rootPath + Path.DirectorySeparatorChar + NeatTxRootRelativeFilePath); }
 		}
 
 		/// <summary></summary>
 		[XmlElement("NeatLogBidir")]
 		public virtual bool NeatLogBidir
 		{
-			get { return (_neatLogBidir); }
+			get { return (this.neatLogBidir); }
 			set
 			{
-				if (value != _neatLogBidir)
+				if (value != this.neatLogBidir)
 				{
-					_neatLogBidir = value;
+					this.neatLogBidir = value;
 					SetChanged();
 				}
 			}
@@ -451,9 +451,9 @@ namespace YAT.Log.Settings
 			get
 			{
 				return (MakeSubdirectory(LogFormat.Neat, LogStreamType.Bidir) +
-						_rootFileName +
+						this.rootFileName +
 						MakeFileNamePostFix(LogFormat.Neat, LogStreamType.Bidir) +
-						_neatExtension);
+						this.neatExtension);
 			}
 		}
 
@@ -461,19 +461,19 @@ namespace YAT.Log.Settings
 		[XmlIgnore]
 		public virtual string NeatBidirFilePath
 		{
-			get { return (_rootPath + Path.DirectorySeparatorChar + NeatBidirRootRelativeFilePath); }
+			get { return (this.rootPath + Path.DirectorySeparatorChar + NeatBidirRootRelativeFilePath); }
 		}
 
 		/// <summary></summary>
 		[XmlElement("NeatLogRx")]
 		public virtual bool NeatLogRx
 		{
-			get { return (_neatLogRx); }
+			get { return (this.neatLogRx); }
 			set
 			{
-				if (value != _neatLogRx)
+				if (value != this.neatLogRx)
 				{
-					_neatLogRx = value;
+					this.neatLogRx = value;
 					SetChanged();
 				}
 			}
@@ -486,9 +486,9 @@ namespace YAT.Log.Settings
 			get
 			{
 				return (MakeSubdirectory(LogFormat.Neat, LogStreamType.Rx) +
-						_rootFileName +
+						this.rootFileName +
 						MakeFileNamePostFix(LogFormat.Neat, LogStreamType.Rx) +
-						_neatExtension);
+						this.neatExtension);
 			}
 		}
 
@@ -496,19 +496,19 @@ namespace YAT.Log.Settings
 		[XmlIgnore]
 		public virtual string NeatRxFilePath
 		{
-			get { return (_rootPath + Path.DirectorySeparatorChar + NeatRxRootRelativeFilePath); }
+			get { return (this.rootPath + Path.DirectorySeparatorChar + NeatRxRootRelativeFilePath); }
 		}
 
 		/// <summary></summary>
 		[XmlElement("NeatExtension")]
 		public virtual string NeatExtension
 		{
-			get { return (_neatExtension); }
+			get { return (this.neatExtension); }
 			set
 			{
-				if (value != _neatExtension)
+				if (value != this.neatExtension)
 				{
-					_neatExtension = value;
+					this.neatExtension = value;
 					SetChanged();
 				}
 			}
@@ -588,12 +588,12 @@ namespace YAT.Log.Settings
 		[XmlElement("WriteMode")]
 		public virtual LogFileWriteMode WriteMode
 		{
-			get { return (_writeMode); }
+			get { return (this.writeMode); }
 			set
 			{
-				if (value != _writeMode)
+				if (value != this.writeMode)
 				{
-					_writeMode = value;
+					this.writeMode = value;
 					SetChanged();
 				}
 			}
@@ -605,12 +605,12 @@ namespace YAT.Log.Settings
 		[XmlElement("SubdirectoriesFormat")]
 		public virtual bool SubdirectoriesFormat
 		{
-			get { return (_subdirectoriesFormat); }
+			get { return (this.subdirectoriesFormat); }
 			set
 			{
-				if (value != _subdirectoriesFormat)
+				if (value != this.subdirectoriesFormat)
 				{
-					_subdirectoriesFormat = value;
+					this.subdirectoriesFormat = value;
 					SetChanged();
 				}
 			}
@@ -620,12 +620,12 @@ namespace YAT.Log.Settings
 		[XmlElement("SubdirectoriesChannel")]
 		public virtual bool SubdirectoriesChannel
 		{
-			get { return (_subdirectoriesChannel); }
+			get { return (this.subdirectoriesChannel); }
 			set
 			{
-				if (value != _subdirectoriesChannel)
+				if (value != this.subdirectoriesChannel)
 				{
-					_subdirectoriesChannel = value;
+					this.subdirectoriesChannel = value;
 					SetChanged();
 				}
 			}
@@ -637,12 +637,12 @@ namespace YAT.Log.Settings
 		[XmlElement("NameFormat")]
 		public virtual bool NameFormat
 		{
-			get { return (_nameFormat); }
+			get { return (this.nameFormat); }
 			set
 			{
-				if (value != _nameFormat)
+				if (value != this.nameFormat)
 				{
-					_nameFormat = value;
+					this.nameFormat = value;
 					SetChanged();
 				}
 			}
@@ -652,12 +652,12 @@ namespace YAT.Log.Settings
 		[XmlElement("NameChannel")]
 		public virtual bool NameChannel
 		{
-			get { return (_nameChannel); }
+			get { return (this.nameChannel); }
 			set
 			{
-				if (value != _nameChannel)
+				if (value != this.nameChannel)
 				{
-					_nameChannel = value;
+					this.nameChannel = value;
 					SetChanged();
 				}
 			}
@@ -667,12 +667,12 @@ namespace YAT.Log.Settings
 		[XmlElement("NameDate")]
 		public virtual bool NameDate
 		{
-			get { return (_nameDate); }
+			get { return (this.nameDate); }
 			set
 			{
-				if (value != _nameDate)
+				if (value != this.nameDate)
 				{
-					_nameDate = value;
+					this.nameDate = value;
 					SetChanged();
 				}
 			}
@@ -682,12 +682,12 @@ namespace YAT.Log.Settings
 		[XmlElement("NameTime")]
 		public virtual bool NameTime
 		{
-			get { return (_nameTime); }
+			get { return (this.nameTime); }
 			set
 			{
-				if (value != _nameTime)
+				if (value != this.nameTime)
 				{
-					_nameTime = value;
+					this.nameTime = value;
 					SetChanged();
 				}
 			}
@@ -697,12 +697,12 @@ namespace YAT.Log.Settings
 		[XmlElement("NameSeparator")]
 		public virtual FileNameSeparator NameSeparator
 		{
-			get { return (_nameSeparator); }
+			get { return (this.nameSeparator); }
 			set
 			{
-				if (value != _nameSeparator)
+				if (value != this.nameSeparator)
 				{
-					_nameSeparator = value;
+					this.nameSeparator = value;
 					SetChanged();
 				}
 			}
@@ -733,24 +733,24 @@ namespace YAT.Log.Settings
 			{
 				return
 					(
-					(_rootPath              == value._rootPath) &&
-					(_rootFileName          == value._rootFileName) &&
-					(_rawLogTx              == value._rawLogTx) &&
-					(_rawLogBidir           == value._rawLogBidir) &&
-					(_rawLogRx              == value._rawLogRx) &&
-					(_rawExtension          == value._rawExtension) &&
-					(_neatLogTx             == value._neatLogTx) &&
-					(_neatLogBidir          == value._neatLogBidir) &&
-					(_neatLogRx             == value._neatLogRx) &&
-					(_neatExtension         == value._neatExtension) &&
-					(_writeMode             == value._writeMode) &&
-					(_subdirectoriesFormat  == value._subdirectoriesFormat) &&
-					(_subdirectoriesChannel == value._subdirectoriesChannel) &&
-					(_nameFormat            == value._nameFormat) &&
-					(_nameChannel           == value._nameChannel) &&
-					(_nameDate              == value._nameDate) &&
-					(_nameTime              == value._nameTime) &&
-					(_nameSeparator         == value._nameSeparator)
+					(this.rootPath              == value.rootPath) &&
+					(this.rootFileName          == value.rootFileName) &&
+					(this.rawLogTx              == value.rawLogTx) &&
+					(this.rawLogBidir           == value.rawLogBidir) &&
+					(this.rawLogRx              == value.rawLogRx) &&
+					(this.rawExtension          == value.rawExtension) &&
+					(this.neatLogTx             == value.neatLogTx) &&
+					(this.neatLogBidir          == value.neatLogBidir) &&
+					(this.neatLogRx             == value.neatLogRx) &&
+					(this.neatExtension         == value.neatExtension) &&
+					(this.writeMode             == value.writeMode) &&
+					(this.subdirectoriesFormat  == value.subdirectoriesFormat) &&
+					(this.subdirectoriesChannel == value.subdirectoriesChannel) &&
+					(this.nameFormat            == value.nameFormat) &&
+					(this.nameChannel           == value.nameChannel) &&
+					(this.nameDate              == value.nameDate) &&
+					(this.nameTime              == value.nameTime) &&
+					(this.nameSeparator         == value.nameSeparator)
 					);
 			}
 			return (false);

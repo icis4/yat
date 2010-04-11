@@ -43,28 +43,28 @@ namespace YAT.Gui.Forms
 		//==========================================================================================
 
 		// Startup/update/closing
-		private bool _isStartingUp = true;
-		private bool _isSettingControls = false;
-		private bool _isClosingFromForm = false;
-		private bool _isClosingFromModel = false;
+		private bool isStartingUp = true;
+		private bool isSettingControls = false;
+		private bool isClosingFromForm = false;
+		private bool isClosingFromModel = false;
 
 		// MDI
-		private Form _mdiParent;
+		private Form mdiParent;
 
 		// Terminal
-		private Model.Terminal _terminal;
+		private Model.Terminal terminal;
 
 		// Monitors
-		private Domain.RepositoryType _monitorSelection = Domain.RepositoryType.None;
+		private Domain.RepositoryType monitorSelection = Domain.RepositoryType.None;
 
 		// Settings
-		private TerminalSettingsRoot _settingsRoot;
-		private bool _handlingTerminalSettingsIsSuspended = false;
+		private TerminalSettingsRoot settingsRoot;
+		private bool handlingTerminalSettingsIsSuspended = false;
 
 		// Status
-		private const string _DefaultStatusText = "";
-		private const int _TimedStatusInterval = 2000;
-		private const int _RtsLuminescenceInterval = 150;
+		private const string DefaultStatusText = "";
+		private const int TimedStatusInterval = 2000;
+		private const int RtsLuminescenceInterval = 150;
 
 		#endregion
 
@@ -105,11 +105,11 @@ namespace YAT.Gui.Forms
 			InitializeControls();
 
 			// Link and attach to terminal model
-			_terminal = terminal;
+			this.terminal = terminal;
 			AttachTerminalEventHandlers();
 
 			// Link and attach to terminal settings
-			_settingsRoot = _terminal.SettingsRoot;
+			this.settingsRoot = this.terminal.SettingsRoot;
 			AttachSettingsEventHandlers();
 
 			ApplyWindowSettings();
@@ -118,8 +118,8 @@ namespace YAT.Gui.Forms
 			// Force settings changed event to set all controls
 			// For improved performance, manually suspend/resume handler for terminal settings
 			SuspendHandlingTerminalSettings();
-			_settingsRoot.ClearChanged();
-			_settingsRoot.ForceChangeEvent();
+			this.settingsRoot.ClearChanged();
+			this.settingsRoot.ForceChangeEvent();
 			ResumeHandlingTerminalSettings();
 		}
 
@@ -139,8 +139,8 @@ namespace YAT.Gui.Forms
 		{
 			get
 			{
-				if (_terminal != null)
-					return (_terminal.UserName);
+				if (this.terminal != null)
+					return (this.terminal.UserName);
 				else
 					return ("");
 			}
@@ -150,8 +150,8 @@ namespace YAT.Gui.Forms
 		{
 			get
 			{
-				if (_terminal != null)
-					return (_terminal.IsStarted);
+				if (this.terminal != null)
+					return (this.terminal.IsStarted);
 				else
 					return (false);
 			}
@@ -159,7 +159,7 @@ namespace YAT.Gui.Forms
 
 		public virtual Model.Terminal UnderlyingTerminal
 		{
-			get { return (_terminal); }
+			get { return (this.terminal); }
 		}
 
 		#endregion
@@ -171,47 +171,47 @@ namespace YAT.Gui.Forms
 
 		public virtual bool RequestSaveFile()
 		{
-			return (_terminal.Save());
+			return (this.terminal.Save());
 		}
 
 		public virtual bool RequestCloseFile()
 		{
-			return (_terminal.Close());
+			return (this.terminal.Close());
 		}
 
 		public virtual bool RequestStartTerminal()
 		{
-			return (_terminal.StartIO());
+			return (this.terminal.StartIO());
 		}
 
 		public virtual bool RequestStopTerminal()
 		{
-			return (_terminal.StopIO());
+			return (this.terminal.StopIO());
 		}
 
 		public virtual void RequestRadix(Domain.Radix radix)
 		{
-			_settingsRoot.Display.TxRadix = radix;
+			this.settingsRoot.Display.TxRadix = radix;
 		}
 
 		public virtual void RequestClear()
 		{
-			_terminal.ClearRepositories();
+			this.terminal.ClearRepositories();
 		}
 
 		public virtual void RequestSaveToFile()
 		{
-			ShowSaveMonitorDialog(GetMonitor(_monitorSelection));
+			ShowSaveMonitorDialog(GetMonitor(this.monitorSelection));
 		}
 
 		public virtual void RequestCopyToClipboard()
 		{
-			CopyMonitorToClipboard(GetMonitor(_monitorSelection));
+			CopyMonitorToClipboard(GetMonitor(this.monitorSelection));
 		}
 
 		public virtual void RequestPrint()
 		{
-			ShowPrintMonitorDialog(GetMonitor(_monitorSelection));
+			ShowPrintMonitorDialog(GetMonitor(this.monitorSelection));
 		}
 
 		public virtual void RequestEditTerminalSettings()
@@ -230,11 +230,11 @@ namespace YAT.Gui.Forms
 
 		private void Terminal_Paint(object sender, PaintEventArgs e)
 		{
-			if (_isStartingUp)
+			if (this.isStartingUp)
 			{
-				_isStartingUp = false;
+				this.isStartingUp = false;
 
-				_mdiParent = MdiParent;
+				this.mdiParent = MdiParent;
 
 				// immediately set terminal controls so the terminal "looks" nice from the very start
 				SetTerminalControls();
@@ -243,19 +243,19 @@ namespace YAT.Gui.Forms
 				SelectSendCommandInput();
 
 				// then start terminal
-				_terminal.Start();
+				this.terminal.Start();
 			}
 		}
 
 		private void Terminal_LocationChanged(object sender, EventArgs e)
 		{
-			if (!_isStartingUp && !_isClosingFromForm && !_isClosingFromModel)
+			if (!this.isStartingUp && !this.isClosingFromForm && !this.isClosingFromModel)
 				SaveWindowSettings();
 		}
 
 		private void Terminal_SizeChanged(object sender, EventArgs e)
 		{
-			if (!_isStartingUp && !_isClosingFromForm && !_isClosingFromModel)
+			if (!this.isStartingUp && !this.isClosingFromForm && !this.isClosingFromModel)
 				SaveWindowSettings();
 		}
 
@@ -269,34 +269,34 @@ namespace YAT.Gui.Forms
 		private void Terminal_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			// Prevent multiple calls to Close()
-			if (!_isClosingFromModel)
+			if (!this.isClosingFromModel)
 			{
-				_isClosingFromForm = true;
+				this.isClosingFromForm = true;
 
 				if (e.CloseReason == CloseReason.UserClosing)
 				{
-					e.Cancel = (!_terminal.Close());
+					e.Cancel = (!this.terminal.Close());
 				}
 				else
 				{
 					bool tryAutoSave = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
-					Forms.Main m = _mdiParent as Forms.Main;
+					Forms.Main m = this.mdiParent as Forms.Main;
 					Model.Workspace w = m.UnderlyingWorkspace;
-					e.Cancel = (!_terminal.Close(true, w.TryTerminalAutoSaveIsDesired(tryAutoSave, _terminal)));
+					e.Cancel = (!this.terminal.Close(true, w.TryTerminalAutoSaveIsDesired(tryAutoSave, this.terminal)));
 				}
 
 				if (e.Cancel)
-					_isClosingFromForm = false;
+					this.isClosingFromForm = false;
 			}
 		}
 
 		private void Terminal_FormClosed(object sender, FormClosedEventArgs e)
 		{
 			DetachTerminalEventHandlers();
-			_terminal = null;
+			this.terminal = null;
 
 			DetachSettingsEventHandlers();
-			_settingsRoot = null;
+			this.settingsRoot = null;
 		}
 
 		#endregion
@@ -318,7 +318,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_File_Save_Click(object sender, EventArgs e)
 		{
-			_terminal.Save();
+			this.terminal.Save();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_File_SaveAs_Click(object sender, EventArgs e)
@@ -328,7 +328,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_File_Close_Click(object sender, EventArgs e)
 		{
-			_terminal.Close();
+			this.terminal.Close();
 		}
 
 		#endregion
@@ -344,22 +344,22 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
 			// Start/stop
-			bool terminalIsStarted = _terminal.IsStarted;
+			bool terminalIsStarted = this.terminal.IsStarted;
 			toolStripMenuItem_TerminalMenu_Terminal_Start.Enabled = !terminalIsStarted;
 			toolStripMenuItem_TerminalMenu_Terminal_Stop.Enabled  =  terminalIsStarted;
 
 			// Edit
-			bool monitorIsSelected = (_monitorSelection != Domain.RepositoryType.None);
+			bool monitorIsSelected = (this.monitorSelection != Domain.RepositoryType.None);
 			toolStripMenuItem_TerminalMenu_Terminal_SelectAll.Enabled       = monitorIsSelected;
 			toolStripMenuItem_TerminalMenu_Terminal_SelectNone.Enabled      = monitorIsSelected;
 			toolStripMenuItem_TerminalMenu_Terminal_SaveToFile.Enabled      = monitorIsSelected;
 			toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = monitorIsSelected;
 			toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled           = monitorIsSelected;
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_DropDownOpening(object sender, EventArgs e)
@@ -369,12 +369,12 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Start_Click(object sender, EventArgs e)
 		{
-			_terminal.StartIO();
+			this.terminal.StartIO();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Stop_Click(object sender, EventArgs e)
 		{
-			_terminal.StopIO();
+			this.terminal.StopIO();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Clear_Click(object sender, EventArgs e)
@@ -384,29 +384,29 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_SelectAll_Click(object sender, EventArgs e)
 		{
-			Controls.Monitor monitor = GetMonitor(_monitorSelection);
+			Controls.Monitor monitor = GetMonitor(this.monitorSelection);
 			monitor.SelectAll();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_SelectNone_Click(object sender, EventArgs e)
 		{
-			Controls.Monitor monitor = GetMonitor(_monitorSelection);
+			Controls.Monitor monitor = GetMonitor(this.monitorSelection);
 			monitor.SelectNone();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_SaveToFile_Click(object sender, EventArgs e)
 		{
-			ShowSaveMonitorDialog(GetMonitor(_monitorSelection));
+			ShowSaveMonitorDialog(GetMonitor(this.monitorSelection));
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard_Click(object sender, EventArgs e)
 		{
-			CopyMonitorToClipboard(GetMonitor(_monitorSelection));
+			CopyMonitorToClipboard(GetMonitor(this.monitorSelection));
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Print_Click(object sender, EventArgs e)
 		{
-			ShowPrintMonitorDialog(GetMonitor(_monitorSelection));
+			ShowPrintMonitorDialog(GetMonitor(this.monitorSelection));
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_Settings_Click(object sender, EventArgs e)
@@ -427,15 +427,15 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
-			toolStripMenuItem_TerminalMenu_Send_Command.Enabled = _settingsRoot.SendCommand.Command.IsValidCommand;
-			toolStripMenuItem_TerminalMenu_Send_File.Enabled    = _settingsRoot.SendFile.Command.IsValidFilePath;
+			toolStripMenuItem_TerminalMenu_Send_Command.Enabled = this.settingsRoot.SendCommand.Command.IsValidCommand;
+			toolStripMenuItem_TerminalMenu_Send_File.Enabled    = this.settingsRoot.SendFile.Command.IsValidFilePath;
 
-			toolStripMenuItem_TerminalMenu_Send_KeepCommand.Checked    = _settingsRoot.Send.KeepCommand;
-			toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked = _settingsRoot.Send.CopyPredefined;
+			toolStripMenuItem_TerminalMenu_Send_KeepCommand.Checked    = this.settingsRoot.Send.KeepCommand;
+			toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked = this.settingsRoot.Send.CopyPredefined;
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_DropDownOpening(object sender, EventArgs e)
@@ -445,22 +445,22 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Send_Command_Click(object sender, EventArgs e)
 		{
-			_terminal.SendCommand();
+			this.terminal.SendCommand();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_File_Click(object sender, EventArgs e)
 		{
-			_terminal.SendFile();
+			this.terminal.SendFile();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_KeepCommand_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Send.KeepCommand = !_settingsRoot.Send.KeepCommand;
+			this.settingsRoot.Send.KeepCommand = !this.settingsRoot.Send.KeepCommand;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_CopyPredefined_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Send.CopyPredefined = !_settingsRoot.Send.CopyPredefined;
+			this.settingsRoot.Send.CopyPredefined = !this.settingsRoot.Send.CopyPredefined;
 		}
 
 		#endregion
@@ -476,16 +476,16 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void toolStripMenuItem_TerminalMenu_Log_SetMenuItems()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
-			bool logIsSelected = _settingsRoot.Log.AnyRawOrNeat;
-			bool logIsStarted  = _settingsRoot.LogIsStarted;
+			bool logIsSelected = this.settingsRoot.Log.AnyRawOrNeat;
+			bool logIsStarted  = this.settingsRoot.LogIsStarted;
 
 			toolStripMenuItem_TerminalMenu_Log_Begin.Enabled = logIsSelected && !logIsStarted;
 			toolStripMenuItem_TerminalMenu_Log_End.Enabled = logIsSelected && logIsStarted;
 			toolStripMenuItem_TerminalMenu_Log_Clear.Enabled = logIsSelected && logIsStarted;
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Log_DropDownOpening(object sender, EventArgs e)
@@ -495,17 +495,17 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Log_Begin_Click(object sender, EventArgs e)
 		{
-			_terminal.BeginLog();
+			this.terminal.BeginLog();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Log_End_Click(object sender, EventArgs e)
 		{
-			_terminal.EndLog();
+			this.terminal.EndLog();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Log_Clear_Click(object sender, EventArgs e)
 		{
-			_terminal.ClearLog();
+			this.terminal.ClearLog();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Log_Settings_Click(object sender, EventArgs e)
@@ -522,11 +522,11 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_View_Initialize()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
 			toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.AddRange(XOrientation.GetItems());
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		/// <remarks>
@@ -535,46 +535,46 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void toolStripMenuItem_TerminalMenu_View_SetMenuItems()
 		{
-			_isSettingControls = true;
-			Domain.TerminalType terminalType = _settingsRoot.TerminalType;
+			this.isSettingControls = true;
+			Domain.TerminalType terminalType = this.settingsRoot.TerminalType;
 
 			// Panels
-			toolStripMenuItem_TerminalMenu_View_Panels_Tx.Checked    = _settingsRoot.Layout.TxMonitorPanelIsVisible;
-			toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Checked = _settingsRoot.Layout.BidirMonitorPanelIsVisible;
-			toolStripMenuItem_TerminalMenu_View_Panels_Rx.Checked    = _settingsRoot.Layout.RxMonitorPanelIsVisible;
+			toolStripMenuItem_TerminalMenu_View_Panels_Tx.Checked    = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
+			toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Checked = this.settingsRoot.Layout.BidirMonitorPanelIsVisible;
+			toolStripMenuItem_TerminalMenu_View_Panels_Rx.Checked    = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
 
 			// Disable monitor item if the other monitors are hidden
-			toolStripMenuItem_TerminalMenu_View_Panels_Tx.Enabled    = (_settingsRoot.Layout.BidirMonitorPanelIsVisible || _settingsRoot.Layout.RxMonitorPanelIsVisible);
-			toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Enabled = (_settingsRoot.Layout.TxMonitorPanelIsVisible || _settingsRoot.Layout.RxMonitorPanelIsVisible);
-			toolStripMenuItem_TerminalMenu_View_Panels_Rx.Enabled    = (_settingsRoot.Layout.TxMonitorPanelIsVisible || _settingsRoot.Layout.BidirMonitorPanelIsVisible);
+			toolStripMenuItem_TerminalMenu_View_Panels_Tx.Enabled    = (this.settingsRoot.Layout.BidirMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
+			toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Enabled = (this.settingsRoot.Layout.TxMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
+			toolStripMenuItem_TerminalMenu_View_Panels_Rx.Enabled    = (this.settingsRoot.Layout.TxMonitorPanelIsVisible || this.settingsRoot.Layout.BidirMonitorPanelIsVisible);
 
-			toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem = (XOrientation)_settingsRoot.Layout.MonitorOrientation;
+			toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem = (XOrientation)this.settingsRoot.Layout.MonitorOrientation;
 
-			toolStripMenuItem_TerminalMenu_View_Panels_SendCommand.Checked = _settingsRoot.Layout.SendCommandPanelIsVisible;
-			toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Checked    = _settingsRoot.Layout.SendFilePanelIsVisible;
+			toolStripMenuItem_TerminalMenu_View_Panels_SendCommand.Checked = this.settingsRoot.Layout.SendCommandPanelIsVisible;
+			toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Checked    = this.settingsRoot.Layout.SendFilePanelIsVisible;
 
-			toolStripMenuItem_TerminalMenu_View_Panels_Predefined.Checked = _settingsRoot.Layout.PredefinedPanelIsVisible;
+			toolStripMenuItem_TerminalMenu_View_Panels_Predefined.Checked = this.settingsRoot.Layout.PredefinedPanelIsVisible;
 
 			// Connect time
-			bool showConnectTime = _settingsRoot.Display.ShowConnectTime;
+			bool showConnectTime = this.settingsRoot.Display.ShowConnectTime;
 			toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Checked    = showConnectTime;
 			toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime.Enabled = showConnectTime;
 
 			// Counters
-			bool showCounters = _settingsRoot.Display.ShowCounters;
+			bool showCounters = this.settingsRoot.Display.ShowCounters;
 			toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters.Checked  = showCounters;
 			toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters.Enabled = showCounters;
 
 			// Options
-			toolStripMenuItem_TerminalMenu_View_ShowRadix.Checked     = _settingsRoot.Display.ShowRadix;
-			toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Checked = _settingsRoot.Display.ShowTimeStamp;
-			toolStripMenuItem_TerminalMenu_View_ShowLength.Checked    = _settingsRoot.Display.ShowLength;
+			toolStripMenuItem_TerminalMenu_View_ShowRadix.Checked     = this.settingsRoot.Display.ShowRadix;
+			toolStripMenuItem_TerminalMenu_View_ShowTimeStamp.Checked = this.settingsRoot.Display.ShowTimeStamp;
+			toolStripMenuItem_TerminalMenu_View_ShowLength.Checked    = this.settingsRoot.Display.ShowLength;
 			
 			bool isText = (terminalType == Domain.TerminalType.Text);
 			toolStripMenuItem_TerminalMenu_View_ShowEol.Enabled = isText;
-			toolStripMenuItem_TerminalMenu_View_ShowEol.Checked = isText && _settingsRoot.TextTerminal.ShowEol;
+			toolStripMenuItem_TerminalMenu_View_ShowEol.Checked = isText && this.settingsRoot.TextTerminal.ShowEol;
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_DropDownOpening(object sender, EventArgs e)
@@ -584,38 +584,38 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_View_Panels_Tx_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Layout.TxMonitorPanelIsVisible = !_settingsRoot.Layout.TxMonitorPanelIsVisible;
+			this.settingsRoot.Layout.TxMonitorPanelIsVisible = !this.settingsRoot.Layout.TxMonitorPanelIsVisible;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Panels_Bidir_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Layout.BidirMonitorPanelIsVisible = !_settingsRoot.Layout.BidirMonitorPanelIsVisible;
+			this.settingsRoot.Layout.BidirMonitorPanelIsVisible = !this.settingsRoot.Layout.BidirMonitorPanelIsVisible;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Panels_Rx_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Layout.RxMonitorPanelIsVisible = !_settingsRoot.Layout.RxMonitorPanelIsVisible;
+			this.settingsRoot.Layout.RxMonitorPanelIsVisible = !this.settingsRoot.Layout.RxMonitorPanelIsVisible;
 		}
 
 		private void toolStripComboBox_TerminalMenu_View_Panels_Orientation_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				SetMonitorOrientation((XOrientation)toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem);
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Panels_Predefined_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Layout.PredefinedPanelIsVisible = !_settingsRoot.Layout.PredefinedPanelIsVisible;
+			this.settingsRoot.Layout.PredefinedPanelIsVisible = !this.settingsRoot.Layout.PredefinedPanelIsVisible;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Panels_SendCommand_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Layout.SendCommandPanelIsVisible = !_settingsRoot.Layout.SendCommandPanelIsVisible;
+			this.settingsRoot.Layout.SendCommandPanelIsVisible = !this.settingsRoot.Layout.SendCommandPanelIsVisible;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Panels_SendFile_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Layout.SendFilePanelIsVisible = !_settingsRoot.Layout.SendFilePanelIsVisible;
+			this.settingsRoot.Layout.SendFilePanelIsVisible = !this.settingsRoot.Layout.SendFilePanelIsVisible;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Panels_Rearrange_Click(object sender, EventArgs e)
@@ -625,42 +625,42 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Display.ShowConnectTime = !_settingsRoot.Display.ShowConnectTime;
+			this.settingsRoot.Display.ShowConnectTime = !this.settingsRoot.Display.ShowConnectTime;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime_Click(object sender, EventArgs e)
 		{
-			_terminal.RestartIOConnectTime();
+			this.terminal.RestartIOConnectTime();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Display.ShowCounters = !_settingsRoot.Display.ShowCounters;
+			this.settingsRoot.Display.ShowCounters = !this.settingsRoot.Display.ShowCounters;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters_Click(object sender, EventArgs e)
 		{
-			_terminal.ResetIOCount();
+			this.terminal.ResetIOCount();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowRadix_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Display.ShowRadix = !_settingsRoot.Display.ShowRadix;
+			this.settingsRoot.Display.ShowRadix = !this.settingsRoot.Display.ShowRadix;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowTimeStamp_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Display.ShowTimeStamp = !_settingsRoot.Display.ShowTimeStamp;
+			this.settingsRoot.Display.ShowTimeStamp = !this.settingsRoot.Display.ShowTimeStamp;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowLength_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Display.ShowLength = !_settingsRoot.Display.ShowLength;
+			this.settingsRoot.Display.ShowLength = !this.settingsRoot.Display.ShowLength;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowEol_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.TextTerminal.ShowEol = !_settingsRoot.TextTerminal.ShowEol;
+			this.settingsRoot.TextTerminal.ShowEol = !this.settingsRoot.TextTerminal.ShowEol;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Format_Click(object sender, EventArgs e)
@@ -677,17 +677,17 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Preset Context Menu
 		//------------------------------------------------------------------------------------------
 
-		private List<ToolStripMenuItem> _menuItems_preset;
+		private List<ToolStripMenuItem> menuItems_preset;
 
 		private void contextMenuStrip_Preset_Initialize()
 		{
-			_menuItems_preset = new List<ToolStripMenuItem>();
-			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_1);
-			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_2);
-			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_3);
-			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_4);
-			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_5);
-			_menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_6);
+			this.menuItems_preset = new List<ToolStripMenuItem>();
+			this.menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_1);
+			this.menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_2);
+			this.menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_3);
+			this.menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_4);
+			this.menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_5);
+			this.menuItems_preset.Add(toolStripMenuItem_PresetContextMenu_Preset_6);
 		}
 
 		/// <remarks>
@@ -696,14 +696,14 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void contextMenuStrip_Preset_SetMenuItems()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
-			bool isSerialPort = (_settingsRoot.IOType == Domain.IOType.SerialPort);
+			bool isSerialPort = (this.settingsRoot.IOType == Domain.IOType.SerialPort);
 
-			foreach (ToolStripMenuItem item in _menuItems_preset)
+			foreach (ToolStripMenuItem item in this.menuItems_preset)
 				item.Enabled = isSerialPort;
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void contextMenuStrip_Preset_Opening(object sender, CancelEventArgs e)
@@ -725,11 +725,11 @@ namespace YAT.Gui.Forms
 
 		private void contextMenuStrip_Monitor_Initialize()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
 			toolStripComboBox_MonitorContextMenu_Panels_Orientation.Items.AddRange(XOrientation.GetItems());
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void contextMenuStrip_Monitor_Opening(object sender, CancelEventArgs e)
@@ -743,47 +743,47 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void contextMenuStrip_Monitor_SetMenuItems()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
-			Domain.TerminalType terminalType = _settingsRoot.TerminalType;
+			Domain.TerminalType terminalType = this.settingsRoot.TerminalType;
 			Domain.RepositoryType monitorType = GetMonitorType(contextMenuStrip_Monitor.SourceControl);
 			bool isMonitor = (monitorType != Domain.RepositoryType.None);
 
-			toolStripMenuItem_MonitorContextMenu_Panels_Tx.Checked    = _settingsRoot.Layout.TxMonitorPanelIsVisible;
-			toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Checked = _settingsRoot.Layout.BidirMonitorPanelIsVisible;
-			toolStripMenuItem_MonitorContextMenu_Panels_Rx.Checked    = _settingsRoot.Layout.RxMonitorPanelIsVisible;
+			toolStripMenuItem_MonitorContextMenu_Panels_Tx.Checked    = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
+			toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Checked = this.settingsRoot.Layout.BidirMonitorPanelIsVisible;
+			toolStripMenuItem_MonitorContextMenu_Panels_Rx.Checked    = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
 
 			// Disable "Monitor" item if the other monitors are hidden
-			toolStripMenuItem_MonitorContextMenu_Panels_Tx.Enabled    = (_settingsRoot.Layout.BidirMonitorPanelIsVisible || _settingsRoot.Layout.RxMonitorPanelIsVisible);
-			toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Enabled = (_settingsRoot.Layout.TxMonitorPanelIsVisible    || _settingsRoot.Layout.RxMonitorPanelIsVisible);
-			toolStripMenuItem_MonitorContextMenu_Panels_Rx.Enabled    = (_settingsRoot.Layout.TxMonitorPanelIsVisible    || _settingsRoot.Layout.BidirMonitorPanelIsVisible);
+			toolStripMenuItem_MonitorContextMenu_Panels_Tx.Enabled    = (this.settingsRoot.Layout.BidirMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
+			toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Enabled = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
+			toolStripMenuItem_MonitorContextMenu_Panels_Rx.Enabled    = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.BidirMonitorPanelIsVisible);
 
-			toolStripComboBox_MonitorContextMenu_Panels_Orientation.SelectedItem = (XOrientation)_settingsRoot.Layout.MonitorOrientation;
+			toolStripComboBox_MonitorContextMenu_Panels_Orientation.SelectedItem = (XOrientation)this.settingsRoot.Layout.MonitorOrientation;
 
 			// Hide "Hide" item if only this monitor is visible
 			bool hideIsAllowed = false;
 			switch (monitorType)
 			{
-				case Domain.RepositoryType.Tx:    hideIsAllowed = (_settingsRoot.Layout.BidirMonitorPanelIsVisible || _settingsRoot.Layout.RxMonitorPanelIsVisible);    break;
-				case Domain.RepositoryType.Bidir: hideIsAllowed = (_settingsRoot.Layout.TxMonitorPanelIsVisible    || _settingsRoot.Layout.RxMonitorPanelIsVisible);    break;
-				case Domain.RepositoryType.Rx:    hideIsAllowed = (_settingsRoot.Layout.TxMonitorPanelIsVisible    || _settingsRoot.Layout.BidirMonitorPanelIsVisible); break;
+				case Domain.RepositoryType.Tx:    hideIsAllowed = (this.settingsRoot.Layout.BidirMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);    break;
+				case Domain.RepositoryType.Bidir: hideIsAllowed = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.RxMonitorPanelIsVisible);    break;
+				case Domain.RepositoryType.Rx:    hideIsAllowed = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.BidirMonitorPanelIsVisible); break;
 			}
 			toolStripMenuItem_MonitorContextMenu_Hide.Visible = hideIsAllowed;
 			toolStripMenuItem_MonitorContextMenu_Hide.Enabled = isMonitor && hideIsAllowed;
 
-			toolStripMenuItem_MonitorContextMenu_ShowRadix.Checked     = _settingsRoot.Display.ShowRadix;
-			toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Checked = _settingsRoot.Display.ShowTimeStamp;
-			toolStripMenuItem_MonitorContextMenu_ShowLength.Checked    = _settingsRoot.Display.ShowLength;
+			toolStripMenuItem_MonitorContextMenu_ShowRadix.Checked     = this.settingsRoot.Display.ShowRadix;
+			toolStripMenuItem_MonitorContextMenu_ShowTimeStamp.Checked = this.settingsRoot.Display.ShowTimeStamp;
+			toolStripMenuItem_MonitorContextMenu_ShowLength.Checked    = this.settingsRoot.Display.ShowLength;
 
 			bool isText = (terminalType == Domain.TerminalType.Text);
 			toolStripMenuItem_MonitorContextMenu_ShowEol.Enabled = isText;
-			toolStripMenuItem_MonitorContextMenu_ShowEol.Checked = isText && _settingsRoot.TextTerminal.ShowEol;
+			toolStripMenuItem_MonitorContextMenu_ShowEol.Checked = isText && this.settingsRoot.TextTerminal.ShowEol;
 
-			bool showConnectTime = _settingsRoot.Display.ShowConnectTime;
+			bool showConnectTime = this.settingsRoot.Display.ShowConnectTime;
 			toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Checked    = showConnectTime;
 			toolStripMenuItem_MonitorContextMenu_RestartConnectTime.Enabled = showConnectTime;
 
-			bool showCounters = _settingsRoot.Display.ShowCounters;
+			bool showCounters = this.settingsRoot.Display.ShowCounters;
 			toolStripMenuItem_MonitorContextMenu_ShowCounters.Checked  = showCounters;
 			toolStripMenuItem_MonitorContextMenu_ResetCounters.Enabled = showCounters;
 
@@ -796,27 +796,27 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Enabled = isMonitor;
 			toolStripMenuItem_MonitorContextMenu_Print.Enabled           = isMonitor;
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Panels_Tx_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Layout.TxMonitorPanelIsVisible = !_settingsRoot.Layout.TxMonitorPanelIsVisible;
+			this.settingsRoot.Layout.TxMonitorPanelIsVisible = !this.settingsRoot.Layout.TxMonitorPanelIsVisible;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Panels_Bidir_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Layout.BidirMonitorPanelIsVisible = !_settingsRoot.Layout.BidirMonitorPanelIsVisible;
+			this.settingsRoot.Layout.BidirMonitorPanelIsVisible = !this.settingsRoot.Layout.BidirMonitorPanelIsVisible;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Panels_Rx_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Layout.RxMonitorPanelIsVisible = !_settingsRoot.Layout.RxMonitorPanelIsVisible;
+			this.settingsRoot.Layout.RxMonitorPanelIsVisible = !this.settingsRoot.Layout.RxMonitorPanelIsVisible;
 		}
 
 		private void toolStripComboBox_MonitorContextMenu_Panels_Orientation_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				SetMonitorOrientation((XOrientation)toolStripComboBox_MonitorContextMenu_Panels_Orientation.SelectedItem);
 		}
 
@@ -824,9 +824,9 @@ namespace YAT.Gui.Forms
 		{
 			switch (GetMonitorType(contextMenuStrip_Monitor.SourceControl))
 			{
-				case Domain.RepositoryType.Tx:    _settingsRoot.Layout.TxMonitorPanelIsVisible    = false; break;
-				case Domain.RepositoryType.Bidir: _settingsRoot.Layout.BidirMonitorPanelIsVisible = false; break;
-				case Domain.RepositoryType.Rx:    _settingsRoot.Layout.RxMonitorPanelIsVisible    = false; break;
+				case Domain.RepositoryType.Tx:    this.settingsRoot.Layout.TxMonitorPanelIsVisible    = false; break;
+				case Domain.RepositoryType.Bidir: this.settingsRoot.Layout.BidirMonitorPanelIsVisible = false; break;
+				case Domain.RepositoryType.Rx:    this.settingsRoot.Layout.RxMonitorPanelIsVisible    = false; break;
 			}
 		}
 
@@ -837,42 +837,42 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowRadix_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Display.ShowRadix = !_settingsRoot.Display.ShowRadix;
+			this.settingsRoot.Display.ShowRadix = !this.settingsRoot.Display.ShowRadix;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowTimeStamp_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Display.ShowTimeStamp = !_settingsRoot.Display.ShowTimeStamp;
+			this.settingsRoot.Display.ShowTimeStamp = !this.settingsRoot.Display.ShowTimeStamp;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowLength_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Display.ShowLength = !_settingsRoot.Display.ShowLength;
+			this.settingsRoot.Display.ShowLength = !this.settingsRoot.Display.ShowLength;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowEol_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.TextTerminal.ShowEol = !_settingsRoot.TextTerminal.ShowEol;
+			this.settingsRoot.TextTerminal.ShowEol = !this.settingsRoot.TextTerminal.ShowEol;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowConnectTime_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Display.ShowConnectTime = !_settingsRoot.Display.ShowConnectTime;
+			this.settingsRoot.Display.ShowConnectTime = !this.settingsRoot.Display.ShowConnectTime;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_RestartConnectTime_Click(object sender, EventArgs e)
 		{
-			_terminal.RestartIOConnectTime();
+			this.terminal.RestartIOConnectTime();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowCounters_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Display.ShowCounters = !_settingsRoot.Display.ShowCounters;
+			this.settingsRoot.Display.ShowCounters = !this.settingsRoot.Display.ShowCounters;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ResetCounters_Click(object sender, EventArgs e)
 		{
-			_terminal.ResetIOCount();
+			this.terminal.ResetIOCount();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Clear_Click(object sender, EventArgs e)
@@ -918,9 +918,9 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void contextMenuStrip_Radix_SetMenuItems()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
-			bool separateTxRx = _settingsRoot.Display.SeparateTxRxRadix;
+			bool separateTxRx = this.settingsRoot.Display.SeparateTxRxRadix;
 
 			toolStripMenuItem_RadixContextMenu_String.Visible = !separateTxRx;
 			toolStripMenuItem_RadixContextMenu_Char.Visible   = !separateTxRx;
@@ -940,31 +940,31 @@ namespace YAT.Gui.Forms
 
 			if (!separateTxRx)
 			{
-				toolStripMenuItem_RadixContextMenu_String.Checked = (_settingsRoot.Display.TxRadix == Domain.Radix.String);
-				toolStripMenuItem_RadixContextMenu_Char.Checked   = (_settingsRoot.Display.TxRadix == Domain.Radix.Char);
-				toolStripMenuItem_RadixContextMenu_Bin.Checked    = (_settingsRoot.Display.TxRadix == Domain.Radix.Bin);
-				toolStripMenuItem_RadixContextMenu_Oct.Checked    = (_settingsRoot.Display.TxRadix == Domain.Radix.Oct);
-				toolStripMenuItem_RadixContextMenu_Dec.Checked    = (_settingsRoot.Display.TxRadix == Domain.Radix.Dec);
-				toolStripMenuItem_RadixContextMenu_Hex.Checked    = (_settingsRoot.Display.TxRadix == Domain.Radix.Hex);
+				toolStripMenuItem_RadixContextMenu_String.Checked = (this.settingsRoot.Display.TxRadix == Domain.Radix.String);
+				toolStripMenuItem_RadixContextMenu_Char.Checked   = (this.settingsRoot.Display.TxRadix == Domain.Radix.Char);
+				toolStripMenuItem_RadixContextMenu_Bin.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Bin);
+				toolStripMenuItem_RadixContextMenu_Oct.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Oct);
+				toolStripMenuItem_RadixContextMenu_Dec.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Dec);
+				toolStripMenuItem_RadixContextMenu_Hex.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Hex);
 			}
 			else
 			{
-				toolStripMenuItem_RadixContextMenu_Tx_String.Checked = (_settingsRoot.Display.TxRadix == Domain.Radix.String);
-				toolStripMenuItem_RadixContextMenu_Tx_Char.Checked   = (_settingsRoot.Display.TxRadix == Domain.Radix.Char);
-				toolStripMenuItem_RadixContextMenu_Tx_Bin.Checked    = (_settingsRoot.Display.TxRadix == Domain.Radix.Bin);
-				toolStripMenuItem_RadixContextMenu_Tx_Oct.Checked    = (_settingsRoot.Display.TxRadix == Domain.Radix.Oct);
-				toolStripMenuItem_RadixContextMenu_Tx_Dec.Checked    = (_settingsRoot.Display.TxRadix == Domain.Radix.Dec);
-				toolStripMenuItem_RadixContextMenu_Tx_Hex.Checked    = (_settingsRoot.Display.TxRadix == Domain.Radix.Hex);
+				toolStripMenuItem_RadixContextMenu_Tx_String.Checked = (this.settingsRoot.Display.TxRadix == Domain.Radix.String);
+				toolStripMenuItem_RadixContextMenu_Tx_Char.Checked   = (this.settingsRoot.Display.TxRadix == Domain.Radix.Char);
+				toolStripMenuItem_RadixContextMenu_Tx_Bin.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Bin);
+				toolStripMenuItem_RadixContextMenu_Tx_Oct.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Oct);
+				toolStripMenuItem_RadixContextMenu_Tx_Dec.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Dec);
+				toolStripMenuItem_RadixContextMenu_Tx_Hex.Checked    = (this.settingsRoot.Display.TxRadix == Domain.Radix.Hex);
 
-				toolStripMenuItem_RadixContextMenu_Rx_String.Checked = (_settingsRoot.Display.RxRadix == Domain.Radix.String);
-				toolStripMenuItem_RadixContextMenu_Rx_Char.Checked   = (_settingsRoot.Display.RxRadix == Domain.Radix.Char);
-				toolStripMenuItem_RadixContextMenu_Rx_Bin.Checked    = (_settingsRoot.Display.RxRadix == Domain.Radix.Bin);
-				toolStripMenuItem_RadixContextMenu_Rx_Oct.Checked    = (_settingsRoot.Display.RxRadix == Domain.Radix.Oct);
-				toolStripMenuItem_RadixContextMenu_Rx_Dec.Checked    = (_settingsRoot.Display.RxRadix == Domain.Radix.Dec);
-				toolStripMenuItem_RadixContextMenu_Rx_Hex.Checked    = (_settingsRoot.Display.RxRadix == Domain.Radix.Hex);
+				toolStripMenuItem_RadixContextMenu_Rx_String.Checked = (this.settingsRoot.Display.RxRadix == Domain.Radix.String);
+				toolStripMenuItem_RadixContextMenu_Rx_Char.Checked   = (this.settingsRoot.Display.RxRadix == Domain.Radix.Char);
+				toolStripMenuItem_RadixContextMenu_Rx_Bin.Checked    = (this.settingsRoot.Display.RxRadix == Domain.Radix.Bin);
+				toolStripMenuItem_RadixContextMenu_Rx_Oct.Checked    = (this.settingsRoot.Display.RxRadix == Domain.Radix.Oct);
+				toolStripMenuItem_RadixContextMenu_Rx_Dec.Checked    = (this.settingsRoot.Display.RxRadix == Domain.Radix.Dec);
+				toolStripMenuItem_RadixContextMenu_Rx_Hex.Checked    = (this.settingsRoot.Display.RxRadix == Domain.Radix.Hex);
 			}
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void contextMenuStrip_Radix_Opening(object sender, CancelEventArgs e)
@@ -1004,7 +1004,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_RadixContextMenu_SeparateTxRx_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Display.SeparateTxRxRadix = !_settingsRoot.Display.SeparateTxRxRadix;
+			this.settingsRoot.Display.SeparateTxRxRadix = !this.settingsRoot.Display.SeparateTxRxRadix;
 		}
 
 		private void toolStripMenuItem_RadixContextMenu_Tx_String_Click(object sender, EventArgs e)
@@ -1074,23 +1074,23 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Predefined Context Menu
 		//------------------------------------------------------------------------------------------
 
-		private List<ToolStripMenuItem> _menuItems_predefined;
+		private List<ToolStripMenuItem> menuItems_predefined;
 
 		private void contextMenuStrip_Predefined_Initialize()
 		{
-			_menuItems_predefined = new List<ToolStripMenuItem>(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_1);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_2);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_3);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_4);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_5);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_6);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_7);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_8);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_9);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_10);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_11);
-			_menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_12);
+			this.menuItems_predefined = new List<ToolStripMenuItem>(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage);
+			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_1);
+			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_2);
+			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_3);
+			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_4);
+			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_5);
+			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_6);
+			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_7);
+			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_8);
+			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_9);
+			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_10);
+			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_11);
+			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_12);
 		}
 
 		/// <remarks>
@@ -1099,10 +1099,10 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void contextMenuStrip_Predefined_SetMenuItems()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
 			// pages
-			List<Model.Types.PredefinedCommandPage> pages = _settingsRoot.PredefinedCommand.Pages;
+			List<Model.Types.PredefinedCommandPage> pages = this.settingsRoot.PredefinedCommand.Pages;
 
 			if ((pages != null) && (pages.Count > 0))
 			{
@@ -1118,7 +1118,7 @@ namespace YAT.Gui.Forms
 			// commands
 			List<Model.Types.Command> commands = null;
 			if ((pages != null) && (pages.Count > 0))
-				commands = _settingsRoot.PredefinedCommand.Pages[predefined.SelectedPage - 1].Commands;
+				commands = this.settingsRoot.PredefinedCommand.Pages[predefined.SelectedPage - 1].Commands;
 
 			int commandCount = 0;
 			if (commands != null)
@@ -1127,32 +1127,32 @@ namespace YAT.Gui.Forms
 			for (int i = 0; i < commandCount; i++)
 			{
 				bool isDefined = ((commands[i] != null) && commands[i].IsDefined);
-				bool isValid = (isDefined && _terminal.IsOpen && commands[i].IsValid);
+				bool isValid = (isDefined && this.terminal.IsOpen && commands[i].IsValid);
 
 				if (isDefined)
 				{
-					_menuItems_predefined[i].Text      = commands[i].Description;
-					_menuItems_predefined[i].ForeColor = SystemColors.ControlText;
-					_menuItems_predefined[i].Font      = SystemFonts.DefaultFont;
-					_menuItems_predefined[i].Enabled   = isValid;
+					this.menuItems_predefined[i].Text      = commands[i].Description;
+					this.menuItems_predefined[i].ForeColor = SystemColors.ControlText;
+					this.menuItems_predefined[i].Font      = SystemFonts.DefaultFont;
+					this.menuItems_predefined[i].Enabled   = isValid;
 				}
 				else
 				{
-					_menuItems_predefined[i].Text      = Model.Types.Command.DefineCommandText;
-					_menuItems_predefined[i].ForeColor = SystemColors.GrayText;
-					_menuItems_predefined[i].Font      = Utilities.Drawing.ItalicDefaultFont;
-					_menuItems_predefined[i].Enabled   = true;
+					this.menuItems_predefined[i].Text      = Model.Types.Command.DefineCommandText;
+					this.menuItems_predefined[i].ForeColor = SystemColors.GrayText;
+					this.menuItems_predefined[i].Font      = Utilities.Drawing.ItalicDefaultFont;
+					this.menuItems_predefined[i].Enabled   = true;
 				}
 			}
 			for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage; i++)
 			{
-				_menuItems_predefined[i].Text      = Model.Types.Command.DefineCommandText;
-				_menuItems_predefined[i].ForeColor = SystemColors.GrayText;
-				_menuItems_predefined[i].Font      = Utilities.Drawing.ItalicDefaultFont;
-				_menuItems_predefined[i].Enabled   = true;
+				this.menuItems_predefined[i].Text      = Model.Types.Command.DefineCommandText;
+				this.menuItems_predefined[i].ForeColor = SystemColors.GrayText;
+				this.menuItems_predefined[i].Font      = Utilities.Drawing.ItalicDefaultFont;
+				this.menuItems_predefined[i].Enabled   = true;
 			}
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		/// <summary>
@@ -1192,9 +1192,9 @@ namespace YAT.Gui.Forms
 				}
 
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand.Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand.Enabled = ((id != 0) && (_settingsRoot.SendCommand.Command.IsCommand));
+				toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand.Enabled = ((id != 0) && (this.settingsRoot.SendCommand.Command.IsCommand));
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Enabled = ((id != 0) && (_settingsRoot.SendFile.Command.IsFilePath));
+				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Enabled = ((id != 0) && (this.settingsRoot.SendFile.Command.IsFilePath));
 			}
 			else
 			{
@@ -1237,25 +1237,25 @@ namespace YAT.Gui.Forms
 			if (c != null)
 			{
 				if (c.IsCommand)
-					_settingsRoot.SendCommand.Command = c;
+					this.settingsRoot.SendCommand.Command = c;
 				else if (c.IsFilePath)
-					_settingsRoot.SendFile.Command = c;
+					this.settingsRoot.SendFile.Command = c;
 			}
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommand - 1, _settingsRoot.SendCommand.Command);
+			this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommand - 1, this.settingsRoot.SendCommand.Command);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommand - 1, _settingsRoot.SendFile.Command);
+			this.settingsRoot.PredefinedCommand.SetCommand(predefined.SelectedPage - 1, contextMenuStrip_Predefined_SelectedCommand - 1, this.settingsRoot.SendFile.Command);
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Hide_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Layout.PredefinedPanelIsVisible = false;
+			this.settingsRoot.Layout.PredefinedPanelIsVisible = false;
 		}
 
 		#endregion
@@ -1271,18 +1271,18 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void contextMenuStrip_Send_SetMenuItems()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
-			toolStripMenuItem_SendContextMenu_SendCommand.Enabled = _settingsRoot.SendCommand.Command.IsValidCommand;
-			toolStripMenuItem_SendContextMenu_SendFile.Enabled = _settingsRoot.SendCommand.Command.IsValidFilePath;
+			toolStripMenuItem_SendContextMenu_SendCommand.Enabled = this.settingsRoot.SendCommand.Command.IsValidCommand;
+			toolStripMenuItem_SendContextMenu_SendFile.Enabled = this.settingsRoot.SendCommand.Command.IsValidFilePath;
 
-			toolStripMenuItem_SendContextMenu_Panels_SendCommand.Checked = _settingsRoot.Layout.SendCommandPanelIsVisible;
-			toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = _settingsRoot.Layout.SendFilePanelIsVisible;
+			toolStripMenuItem_SendContextMenu_Panels_SendCommand.Checked = this.settingsRoot.Layout.SendCommandPanelIsVisible;
+			toolStripMenuItem_SendContextMenu_Panels_SendFile.Checked = this.settingsRoot.Layout.SendFilePanelIsVisible;
 
-			toolStripMenuItem_SendContextMenu_KeepCommand.Checked = _settingsRoot.Send.KeepCommand;
-			toolStripMenuItem_SendContextMenu_CopyPredefined.Checked = _settingsRoot.Send.CopyPredefined;
+			toolStripMenuItem_SendContextMenu_KeepCommand.Checked = this.settingsRoot.Send.KeepCommand;
+			toolStripMenuItem_SendContextMenu_CopyPredefined.Checked = this.settingsRoot.Send.CopyPredefined;
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void contextMenuStrip_Send_Opening(object sender, CancelEventArgs e)
@@ -1292,32 +1292,32 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_SendContextMenu_SendCommand_Click(object sender, EventArgs e)
 		{
-			_terminal.SendCommand();
+			this.terminal.SendCommand();
 		}
 
 		private void toolStripMenuItem_SendContextMenu_SendFile_Click(object sender, EventArgs e)
 		{
-			_terminal.SendFile();
+			this.terminal.SendFile();
 		}
 
 		private void toolStripMenuItem_SendContextMenu_Panels_SendCommand_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Layout.SendCommandPanelIsVisible = !_settingsRoot.Layout.SendCommandPanelIsVisible;
+			this.settingsRoot.Layout.SendCommandPanelIsVisible = !this.settingsRoot.Layout.SendCommandPanelIsVisible;
 		}
 
 		private void toolStripMenuItem_SendContextMenu_Panels_SendFile_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Layout.SendFilePanelIsVisible = !_settingsRoot.Layout.SendFilePanelIsVisible;
+			this.settingsRoot.Layout.SendFilePanelIsVisible = !this.settingsRoot.Layout.SendFilePanelIsVisible;
 		}
 
 		private void toolStripMenuItem_SendContextMenu_KeepCommand_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Send.KeepCommand = !_settingsRoot.Send.KeepCommand;
+			this.settingsRoot.Send.KeepCommand = !this.settingsRoot.Send.KeepCommand;
 		}
 
 		private void toolStripMenuItem_SendContextMenu_CopyPredefined_Click(object sender, EventArgs e)
 		{
-			_settingsRoot.Send.CopyPredefined = !_settingsRoot.Send.CopyPredefined;
+			this.settingsRoot.Send.CopyPredefined = !this.settingsRoot.Send.CopyPredefined;
 		}
 
 		#endregion
@@ -1329,36 +1329,36 @@ namespace YAT.Gui.Forms
 
 		private void splitContainer_TxMonitor_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!_isStartingUp && !_isSettingControls)
+			if (!this.isStartingUp && !this.isSettingControls)
 			{
 				int widthOrHeight = 0;
-				if (_settingsRoot.Layout.MonitorOrientation == Orientation.Vertical)
+				if (this.settingsRoot.Layout.MonitorOrientation == Orientation.Vertical)
 					widthOrHeight = splitContainer_TxMonitor.Width;
 				else
 					widthOrHeight = splitContainer_TxMonitor.Height;
 
-				_settingsRoot.Layout.TxMonitorSplitterRatio = (float)splitContainer_TxMonitor.SplitterDistance / widthOrHeight;
+				this.settingsRoot.Layout.TxMonitorSplitterRatio = (float)splitContainer_TxMonitor.SplitterDistance / widthOrHeight;
 			}
 		}
 
 		private void splitContainer_RxMonitor_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!_isStartingUp && !_isSettingControls)
+			if (!this.isStartingUp && !this.isSettingControls)
 			{
 				int widthOrHeight = 0;
-				if (_settingsRoot.Layout.MonitorOrientation == Orientation.Vertical)
+				if (this.settingsRoot.Layout.MonitorOrientation == Orientation.Vertical)
 					widthOrHeight = splitContainer_RxMonitor.Width;
 				else
 					widthOrHeight = splitContainer_RxMonitor.Height;
 
-				_settingsRoot.Layout.RxMonitorSplitterRatio = (float)splitContainer_RxMonitor.SplitterDistance / widthOrHeight;
+				this.settingsRoot.Layout.RxMonitorSplitterRatio = (float)splitContainer_RxMonitor.SplitterDistance / widthOrHeight;
 			}
 		}
 
 		private void splitContainer_Predefined_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!_isStartingUp && !_isSettingControls)
-				_settingsRoot.Layout.PredefinedSplitterRatio = (float)splitContainer_Predefined.SplitterDistance / splitContainer_Predefined.Width;
+			if (!this.isStartingUp && !this.isSettingControls)
+				this.settingsRoot.Layout.PredefinedSplitterRatio = (float)splitContainer_Predefined.SplitterDistance / splitContainer_Predefined.Width;
 		}
 
 		#endregion
@@ -1371,7 +1371,7 @@ namespace YAT.Gui.Forms
 		private void monitor_Tx_Enter(object sender, EventArgs e)
 		{
 			// Remember which monitor has been actived last
-			_monitorSelection = Domain.RepositoryType.Tx;
+			this.monitorSelection = Domain.RepositoryType.Tx;
 		}
 
 		private void monitor_Tx_CopyRequest(object sender, System.EventArgs e)
@@ -1387,7 +1387,7 @@ namespace YAT.Gui.Forms
 		private void monitor_Bidir_Enter(object sender, EventArgs e)
 		{
 			// Remember which monitor has been actived last
-			_monitorSelection = Domain.RepositoryType.Bidir;
+			this.monitorSelection = Domain.RepositoryType.Bidir;
 		}
 
 		private void monitor_Bidir_CopyRequest(object sender, System.EventArgs e)
@@ -1403,7 +1403,7 @@ namespace YAT.Gui.Forms
 		private void monitor_Rx_Enter(object sender, EventArgs e)
 		{
 			// Remember which monitor has been actived last
-			_monitorSelection = Domain.RepositoryType.Rx;
+			this.monitorSelection = Domain.RepositoryType.Rx;
 		}
 
 		private void monitor_Rx_CopyRequest(object sender, System.EventArgs e)
@@ -1425,13 +1425,13 @@ namespace YAT.Gui.Forms
 
 		private void predefined_SelectedPageChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
-				_settingsRoot.Implicit.Predefined.SelectedPage = predefined.SelectedPage;
+			if (!this.isSettingControls)
+				this.settingsRoot.Implicit.Predefined.SelectedPage = predefined.SelectedPage;
 		}
 
 		private void predefined_SendCommandRequest(object sender, Model.Types.PredefinedCommandEventArgs e)
 		{
-			_terminal.SendPredefined(e.Page, e.Command);
+			this.terminal.SendPredefined(e.Page, e.Command);
 		}
 
 		private void predefined_DefineCommandRequest(object sender, Model.Types.PredefinedCommandEventArgs e)
@@ -1448,22 +1448,22 @@ namespace YAT.Gui.Forms
 
 		private void send_CommandChanged(object sender, EventArgs e)
 		{
-			_settingsRoot.Implicit.SendCommand.Command = send.Command;
+			this.settingsRoot.Implicit.SendCommand.Command = send.Command;
 		}
 
 		private void send_SendCommandRequest(object sender, EventArgs e)
 		{
-			_terminal.SendCommand();
+			this.terminal.SendCommand();
 		}
 
 		private void send_FileCommandChanged(object sender, EventArgs e)
 		{
-			_settingsRoot.Implicit.SendFile.Command = send.FileCommand;
+			this.settingsRoot.Implicit.SendFile.Command = send.FileCommand;
 		}
 
 		private void send_SendFileCommandRequest(object sender, EventArgs e)
 		{
-			_terminal.SendFile();
+			this.terminal.SendFile();
 		}
 
 		#endregion
@@ -1473,16 +1473,16 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Status
 		//------------------------------------------------------------------------------------------
 
-		private List<ToolStripStatusLabel> _statusLabels_ioControl;
+		private List<ToolStripStatusLabel> statusLabels_ioControl;
 
 		private void toolStripStatusLabel_TerminalStatus_Initialize()
 		{
-			_statusLabels_ioControl = new List<ToolStripStatusLabel>();
-			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_RTS);
-			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_CTS);
-			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DTR);
-			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DSR);
-			_statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DCD);
+			this.statusLabels_ioControl = new List<ToolStripStatusLabel>();
+			this.statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_RTS);
+			this.statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_CTS);
+			this.statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DTR);
+			this.statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DSR);
+			this.statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DCD);
 		}
 
 		private void toolStripStatusLabel_TerminalStatus_IOStatus_Click(object sender, EventArgs e)
@@ -1492,12 +1492,12 @@ namespace YAT.Gui.Forms
 
 		private void toolStripStatusLabel_TerminalStatus_RTS_Click(object sender, EventArgs e)
 		{
-			_terminal.RequestToggleRts();
+			this.terminal.RequestToggleRts();
 		}
 
 		private void toolStripStatusLabel_TerminalStatus_DTR_Click(object sender, EventArgs e)
 		{
-			_terminal.RequestToggleDtr();
+			this.terminal.RequestToggleDtr();
 		}
 
 		#endregion
@@ -1541,42 +1541,42 @@ namespace YAT.Gui.Forms
 		private void ApplyWindowSettings()
 		{
 			SuspendLayout();
-			WindowState = _settingsRoot.Window.State;
+			WindowState = this.settingsRoot.Window.State;
 			if (WindowState == FormWindowState.Normal)
 			{
 				StartPosition = FormStartPosition.Manual;
-				Location      = _settingsRoot.Window.Location;
-				Size          = _settingsRoot.Window.Size;
+				Location      = this.settingsRoot.Window.Location;
+				Size          = this.settingsRoot.Window.Size;
 			}
 			ResumeLayout();
 		}
 
 		private void SaveWindowSettings()
 		{
-			_settingsRoot.Window.State = WindowState;
+			this.settingsRoot.Window.State = WindowState;
 			if (WindowState == FormWindowState.Normal)
 			{
-				_settingsRoot.Window.Location = Location;
-				_settingsRoot.Window.Size = Size;
+				this.settingsRoot.Window.Location = Location;
+				this.settingsRoot.Window.Size = Size;
 			}
 		}
 
 		private void ViewRearrange()
 		{
 			// simply set defaults, settings event handler will then call LayoutTerminal()
-			_settingsRoot.Layout.SetDefaults();
+			this.settingsRoot.Layout.SetDefaults();
 		}
 
 		private void LayoutTerminal()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 			SuspendLayout();
 
 			// splitContainer_Predefined
-			if (_settingsRoot.Layout.PredefinedPanelIsVisible)
+			if (this.settingsRoot.Layout.PredefinedPanelIsVisible)
 			{
 				splitContainer_Predefined.Panel2Collapsed = false;
-				splitContainer_Predefined.SplitterDistance = (int)(_settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width);
+				splitContainer_Predefined.SplitterDistance = (int)(this.settingsRoot.Layout.PredefinedSplitterRatio * splitContainer_Predefined.Width);
 			}
 			else
 			{
@@ -1585,12 +1585,12 @@ namespace YAT.Gui.Forms
 
 			// splitContainer_TxMonitor and splitContainer_RxMonitor
 			// one of the panels MUST be visible, if none is visible, then bidir is shown anyway
-			bool txIsVisible = _settingsRoot.Layout.TxMonitorPanelIsVisible;
-			bool bidirIsVisible = _settingsRoot.Layout.BidirMonitorPanelIsVisible || (!_settingsRoot.Layout.TxMonitorPanelIsVisible && !_settingsRoot.Layout.RxMonitorPanelIsVisible);
-			bool rxIsVisible = _settingsRoot.Layout.RxMonitorPanelIsVisible;
+			bool txIsVisible = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
+			bool bidirIsVisible = this.settingsRoot.Layout.BidirMonitorPanelIsVisible || (!this.settingsRoot.Layout.TxMonitorPanelIsVisible && !this.settingsRoot.Layout.RxMonitorPanelIsVisible);
+			bool rxIsVisible = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
 
 			// orientation
-			Orientation orientation = _settingsRoot.Layout.MonitorOrientation;
+			Orientation orientation = this.settingsRoot.Layout.MonitorOrientation;
 			splitContainer_TxMonitor.Orientation = orientation;
 			splitContainer_RxMonitor.Orientation = orientation;
 
@@ -1607,7 +1607,7 @@ namespace YAT.Gui.Forms
 					else
 						widthOrHeight = splitContainer_TxMonitor.Height;
 
-					splitContainer_TxMonitor.SplitterDistance = (int)(_settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight);
+					splitContainer_TxMonitor.SplitterDistance = (int)(this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight);
 				}
 			}
 			else
@@ -1629,7 +1629,7 @@ namespace YAT.Gui.Forms
 					else
 						widthOrHeight = splitContainer_RxMonitor.Height;
 
-					splitContainer_RxMonitor.SplitterDistance = (int)(_settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight);
+					splitContainer_RxMonitor.SplitterDistance = (int)(this.settingsRoot.Layout.RxMonitorSplitterRatio * widthOrHeight);
 				}
 			}
 			else
@@ -1639,7 +1639,7 @@ namespace YAT.Gui.Forms
 			splitContainer_RxMonitor.Panel2Collapsed = !rxIsVisible;
 
 			// splitContainer_Terminal and splitContainer_SendCommand
-			if (_settingsRoot.Layout.SendCommandPanelIsVisible || _settingsRoot.Layout.SendFilePanelIsVisible)
+			if (this.settingsRoot.Layout.SendCommandPanelIsVisible || this.settingsRoot.Layout.SendFilePanelIsVisible)
 			{
 				splitContainer_Terminal.Panel2Collapsed = false;
 				panel_Monitor.Padding = new System.Windows.Forms.Padding(3, 3, 1, 0);
@@ -1653,25 +1653,25 @@ namespace YAT.Gui.Forms
 			}
 
 			// set send panel size depending on one or two sub-panels
-			if (_settingsRoot.Layout.SendCommandPanelIsVisible && _settingsRoot.Layout.SendFilePanelIsVisible)
+			if (this.settingsRoot.Layout.SendCommandPanelIsVisible && this.settingsRoot.Layout.SendFilePanelIsVisible)
 			{
 				int height = 97;
 				splitContainer_Terminal.Panel2MinSize = height;
 				splitContainer_Terminal.SplitterDistance = splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth;
 			}
-			else if (_settingsRoot.Layout.SendCommandPanelIsVisible || _settingsRoot.Layout.SendFilePanelIsVisible)
+			else if (this.settingsRoot.Layout.SendCommandPanelIsVisible || this.settingsRoot.Layout.SendFilePanelIsVisible)
 			{
 				int height = 48;
 				splitContainer_Terminal.Panel2MinSize = height;
 				splitContainer_Terminal.SplitterDistance = splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth;
 			}
 
-			send.CommandPanelIsVisible = _settingsRoot.Layout.SendCommandPanelIsVisible;
-			send.FilePanelIsVisible = _settingsRoot.Layout.SendFilePanelIsVisible;
-			send.SplitterRatio = _settingsRoot.Layout.PredefinedSplitterRatio;
+			send.CommandPanelIsVisible = this.settingsRoot.Layout.SendCommandPanelIsVisible;
+			send.FilePanelIsVisible = this.settingsRoot.Layout.SendFilePanelIsVisible;
+			send.SplitterRatio = this.settingsRoot.Layout.PredefinedSplitterRatio;
 
 			ResumeLayout();
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void SetDisplayControls()
@@ -1690,7 +1690,7 @@ namespace YAT.Gui.Forms
 		{
 			contextMenuStrip_Predefined_SetMenuItems(); // ensure that shortcuts are activated
 
-			predefined.TerminalIsOpen = _terminal.IsOpen;
+			predefined.TerminalIsOpen = this.terminal.IsOpen;
 		}
 
 		private void SetPresetControls()
@@ -1703,7 +1703,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_Send_SetMenuItems();
 			contextMenuStrip_Send_SetMenuItems();
 
-			send.TerminalIsOpen = _terminal.IsOpen;
+			send.TerminalIsOpen = this.terminal.IsOpen;
 		}
 
 		#endregion
@@ -1731,7 +1731,7 @@ namespace YAT.Gui.Forms
 				case 6:	presetString = "19200, 8, None, 1, XOn/XOff"; break;
 			}
 
-			MKY.IO.Serial.SerialCommunicationSettings settings = _settingsRoot.Terminal.IO.SerialPort.Communication;
+			MKY.IO.Serial.SerialCommunicationSettings settings = this.settingsRoot.Terminal.IO.SerialPort.Communication;
 			settings.SuspendChangeEvent();
 			switch (preset)
 			{
@@ -1850,14 +1850,14 @@ namespace YAT.Gui.Forms
 		private void SetMonitorRadix(Domain.SerialDirection direction, Domain.Radix radix)
 		{
 			if (direction == Domain.SerialDirection.Tx)
-				_settingsRoot.Display.TxRadix = radix;
+				this.settingsRoot.Display.TxRadix = radix;
 			else
-				_settingsRoot.Display.RxRadix = radix;
+				this.settingsRoot.Display.RxRadix = radix;
 		}
 
 		private void SetMonitorOrientation(Orientation orientation)
 		{
-			_settingsRoot.Layout.MonitorOrientation = orientation;
+			this.settingsRoot.Layout.MonitorOrientation = orientation;
 
 			SuspendLayout();
 			splitContainer_TxMonitor.Orientation = orientation;
@@ -1868,11 +1868,11 @@ namespace YAT.Gui.Forms
 		private void SetMonitorIOStatus()
 		{
 			Gui.Controls.MonitorActivityState activityState = Gui.Controls.MonitorActivityState.Inactive;
-			if (_terminal != null)
+			if (this.terminal != null)
 			{
-				if (_terminal.IsStarted)
+				if (this.terminal.IsStarted)
 				{
-					if (_terminal.IsConnected)
+					if (this.terminal.IsConnected)
 						activityState = Gui.Controls.MonitorActivityState.Active;
 					else
 						activityState = Gui.Controls.MonitorActivityState.Pending;
@@ -1885,19 +1885,19 @@ namespace YAT.Gui.Forms
 
 		private void SetMonitorContents()
 		{
-			bool showConnectTime = _settingsRoot.Display.ShowConnectTime;
+			bool showConnectTime = this.settingsRoot.Display.ShowConnectTime;
 			monitor_Tx.ShowTimeStatus    = showConnectTime;
 			monitor_Bidir.ShowTimeStatus = showConnectTime;
 			monitor_Rx.ShowTimeStatus    = showConnectTime;
 
-			bool showCounters = _settingsRoot.Display.ShowCounters;
+			bool showCounters = this.settingsRoot.Display.ShowCounters;
 			monitor_Tx.ShowCountStatus    = showCounters;
 			monitor_Bidir.ShowCountStatus = showCounters;
 			monitor_Rx.ShowCountStatus    = showCounters;
 
-			monitor_Tx.MaxLineCount    = _settingsRoot.Display.TxMaxLineCount;
-			monitor_Bidir.MaxLineCount = _settingsRoot.Display.BidirMaxLineCount;
-			monitor_Rx.MaxLineCount    = _settingsRoot.Display.RxMaxLineCount;
+			monitor_Tx.MaxLineCount    = this.settingsRoot.Display.TxMaxLineCount;
+			monitor_Bidir.MaxLineCount = this.settingsRoot.Display.BidirMaxLineCount;
+			monitor_Rx.MaxLineCount    = this.settingsRoot.Display.RxMaxLineCount;
 
 			// reload from repositories
 			ReloadMonitors();
@@ -1908,7 +1908,7 @@ namespace YAT.Gui.Forms
 			SetFixedStatusText("Reloading...");
 			Cursor = Cursors.WaitCursor;
 
-			_terminal.ReloadRepositories();
+			this.terminal.ReloadRepositories();
 
 			Cursor = Cursors.Default;
 			SetTimedStatusText("Reloading done");
@@ -1919,9 +1919,9 @@ namespace YAT.Gui.Forms
 			SetFixedStatusText("Reformatting...");
 			Cursor = Cursors.WaitCursor;
 
-			monitor_Tx.FormatSettings    = _settingsRoot.Format;
-			monitor_Bidir.FormatSettings = _settingsRoot.Format;
-			monitor_Rx.FormatSettings    = _settingsRoot.Format;
+			monitor_Tx.FormatSettings    = this.settingsRoot.Format;
+			monitor_Bidir.FormatSettings = this.settingsRoot.Format;
+			monitor_Rx.FormatSettings    = this.settingsRoot.Format;
 
 			Cursor = Cursors.Default;
 			SetTimedStatusText("Reformatting done");
@@ -1929,12 +1929,12 @@ namespace YAT.Gui.Forms
 
 		private void ClearMonitor(Domain.RepositoryType repositoryType)
 		{
-			_terminal.ClearRepository(repositoryType);
+			this.terminal.ClearRepository(repositoryType);
 		}
 
 		private void ClearAllMonitors()
 		{
-			_terminal.ClearRepositories();
+			this.terminal.ClearRepositories();
 		}
 
 		#endregion
@@ -1946,11 +1946,11 @@ namespace YAT.Gui.Forms
 
 		private void ShowFormatSettings()
 		{
-			Gui.Forms.FormatSettings f = new Gui.Forms.FormatSettings(_settingsRoot.Format);
+			Gui.Forms.FormatSettings f = new Gui.Forms.FormatSettings(this.settingsRoot.Format);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
-				_settingsRoot.Format = f.FormatSettingsResult;
+				this.settingsRoot.Format = f.FormatSettingsResult;
 			}
 		}
 
@@ -1985,9 +1985,9 @@ namespace YAT.Gui.Forms
 				if (ExtensionSettings.IsXmlFile(System.IO.Path.GetExtension(filePath)))
 					Model.Utilities.XmlWriter.LinesToXmlFile(monitor.SelectedLines, filePath);
 				else if (ExtensionSettings.IsRtfFile(System.IO.Path.GetExtension(filePath)))
-					Model.Utilities.RtfWriter.LinesToRtfFile(monitor.SelectedLines, filePath, _settingsRoot.Format, RichTextBoxStreamType.RichText);
+					Model.Utilities.RtfWriter.LinesToRtfFile(monitor.SelectedLines, filePath, this.settingsRoot.Format, RichTextBoxStreamType.RichText);
 				else
-					Model.Utilities.RtfWriter.LinesToRtfFile(monitor.SelectedLines, filePath, _settingsRoot.Format, RichTextBoxStreamType.PlainText);
+					Model.Utilities.RtfWriter.LinesToRtfFile(monitor.SelectedLines, filePath, this.settingsRoot.Format, RichTextBoxStreamType.PlainText);
 
 				SetTimedStatusText("Monitor saved");
 			}
@@ -2012,7 +2012,7 @@ namespace YAT.Gui.Forms
 		private void CopyMonitorToClipboard(Controls.Monitor monitor)
 		{
 			SetFixedStatusText("Copying monitor...");
-			Model.Utilities.RtfWriter.LinesToClipboard(monitor.SelectedLines, _settingsRoot.Format);
+			Model.Utilities.RtfWriter.LinesToClipboard(monitor.SelectedLines, this.settingsRoot.Format);
 			SetTimedStatusText("Monitor copied");
 		}
 
@@ -2039,7 +2039,7 @@ namespace YAT.Gui.Forms
 			try
 			{
 				Model.Utilities.RtfPrinter printer = new Model.Utilities.RtfPrinter(settings);
-				printer.Print(Model.Utilities.RtfWriter.LinesToRichTextBox(monitor.SelectedLines, _settingsRoot.Format));
+				printer.Print(Model.Utilities.RtfWriter.LinesToRichTextBox(monitor.SelectedLines, this.settingsRoot.Format));
 				SetTimedStatusText("Monitor printed");
 			}
 			catch (Exception e)
@@ -2073,13 +2073,13 @@ namespace YAT.Gui.Forms
 		/// <param name="command">Command 1..max</param>
 		private void RequestPredefined(int page, int command)
 		{
-			List<Model.Types.PredefinedCommandPage> pages = _settingsRoot.PredefinedCommand.Pages;
+			List<Model.Types.PredefinedCommandPage> pages = this.settingsRoot.PredefinedCommand.Pages;
 			if (page <= pages.Count)
 			{
 				bool isDefined = false;
 				if (page > 0)
 				{
-					List<Model.Types.Command> commands = _settingsRoot.PredefinedCommand.Pages[page - 1].Commands;
+					List<Model.Types.Command> commands = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands;
 					isDefined =
 						(
 						(commands != null) &&
@@ -2090,7 +2090,7 @@ namespace YAT.Gui.Forms
 				}
 				if (isDefined)
 				{
-					_terminal.SendPredefined(page, command);
+					this.terminal.SendPredefined(page, command);
 					return;
 				}
 			}
@@ -2103,12 +2103,12 @@ namespace YAT.Gui.Forms
 		/// <param name="command">Command 1..max</param>
 		private void ShowPredefinedCommandSettings(int page, int command)
 		{
-			PredefinedCommandSettings f = new PredefinedCommandSettings(_settingsRoot.PredefinedCommand, page, command);
+			PredefinedCommandSettings f = new PredefinedCommandSettings(this.settingsRoot.PredefinedCommand, page, command);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
-				_settingsRoot.PredefinedCommand = f.SettingsResult;
-				_settingsRoot.Predefined.SelectedPage = f.SelectedPage;
+				this.settingsRoot.PredefinedCommand = f.SettingsResult;
+				this.settingsRoot.Predefined.SelectedPage = f.SelectedPage;
 			}
 		}
 
@@ -2138,14 +2138,14 @@ namespace YAT.Gui.Forms
 
 		private void AttachSettingsEventHandlers()
 		{
-			if (_settingsRoot != null)
-				_settingsRoot.Changed += new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
+			if (this.settingsRoot != null)
+				this.settingsRoot.Changed += new EventHandler<SettingsEventArgs>(this.settingsRoot_Changed);
 		}
 
 		private void DetachSettingsEventHandlers()
 		{
-			if (_settingsRoot != null)
-				_settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(_settingsRoot_Changed);
+			if (this.settingsRoot != null)
+				this.settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(this.settingsRoot_Changed);
 		}
 
 		#endregion
@@ -2155,7 +2155,7 @@ namespace YAT.Gui.Forms
 		// Settings > Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		private void _settingsRoot_Changed(object sender, SettingsEventArgs e)
+		private void settingsRoot_Changed(object sender, SettingsEventArgs e)
 		{
 			SetTerminalCaption();
 			if (e.Inner == null)
@@ -2163,12 +2163,12 @@ namespace YAT.Gui.Forms
 				// SettingsRoot changed
 				// Nothing to do, no need to care about ProductVersion
 			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Explicit))
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Explicit))
 			{
 				// ExplicitSettings changed
 				HandleExplicitSettings(e.Inner);
 			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Implicit))
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Implicit))
 			{
 				// ImplicitSettings changed
 				HandleImplicitSettings(e.Inner);
@@ -2183,26 +2183,26 @@ namespace YAT.Gui.Forms
 				// ExplicitSettings changed
 				// Nothing to do
 			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Terminal))
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal))
 			{
 				// TerminalSettings changed
 				HandleTerminalSettings(e.Inner);
 			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.PredefinedCommand))
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.PredefinedCommand))
 			{
 				// PredefinedCommandSettings changed
-				_isSettingControls = true;
-				predefined.Pages = _settingsRoot.PredefinedCommand.Pages;
-				_isSettingControls = false;
+				this.isSettingControls = true;
+				predefined.Pages = this.settingsRoot.PredefinedCommand.Pages;
+				this.isSettingControls = false;
 
 				SetPredefinedControls();
 			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Format))
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Format))
 			{
 				// FormatSettings changed
 				ReformatMonitors();
 			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Log))
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Log))
 			{
 				// LogSettings changed
 				SetLogControls();
@@ -2217,38 +2217,38 @@ namespace YAT.Gui.Forms
 				SetTerminalControls();
 				SetLogControls();
 			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.SendCommand))
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendCommand))
 			{
 				// SendCommandSettings changed
-				_isSettingControls = true;
-				send.Command = _settingsRoot.SendCommand.Command;
-				send.RecentCommands = _settingsRoot.SendCommand.RecentCommands;
-				_isSettingControls = false;
+				this.isSettingControls = true;
+				send.Command = this.settingsRoot.SendCommand.Command;
+				send.RecentCommands = this.settingsRoot.SendCommand.RecentCommands;
+				this.isSettingControls = false;
 
 				SetSendControls();
 			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.SendFile))
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendFile))
 			{
 				// SendFileSettings changed
-				_isSettingControls = true;
-				send.FileCommand = _settingsRoot.SendFile.Command;
-				_isSettingControls = false;
+				this.isSettingControls = true;
+				send.FileCommand = this.settingsRoot.SendFile.Command;
+				this.isSettingControls = false;
 
 				SetSendControls();
 			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Predefined))
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Predefined))
 			{
 				// PredefinedSettings changed
-				_isSettingControls = true;
-				predefined.SelectedPage = _settingsRoot.Predefined.SelectedPage;
-				_isSettingControls = false;
+				this.isSettingControls = true;
+				predefined.SelectedPage = this.settingsRoot.Predefined.SelectedPage;
+				this.isSettingControls = false;
 			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Window))
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Window))
 			{
 				// WindowSettings changed
 				// Nothing to do, windows settings are only saved
 			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Layout))
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Layout))
 			{
 				// LayoutSettings changed
 				LayoutTerminal();
@@ -2258,7 +2258,7 @@ namespace YAT.Gui.Forms
 
 		private void HandleTerminalSettings(SettingsEventArgs e)
 		{
-			if (_handlingTerminalSettingsIsSuspended)
+			if (this.handlingTerminalSettingsIsSuspended)
 				return;
 
 			if (e.Inner == null)
@@ -2268,38 +2268,38 @@ namespace YAT.Gui.Forms
 				SetIOControlControls();
 				SetMonitorIOStatus();
 			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.IO))
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.IO))
 			{
 				// IOSettings changed
 				SetIOStatus();
 				SetIOControlControls();
 			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Buffer))
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Buffer))
 			{
 				// BufferSettings changed
 				ReloadMonitors();
 			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Display))
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Display))
 			{
 				// DisplaySettings changed
 				SetMonitorContents();
 				SetDisplayControls();
 			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.Send))
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Send))
 			{
 				// SendSettings changed
 				// nothing to do
 			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.TextTerminal))
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.TextTerminal))
 			{
 				// TextTerminalSettings changed
-				if (_settingsRoot.TerminalType == Domain.TerminalType.Text)
+				if (this.settingsRoot.TerminalType == Domain.TerminalType.Text)
 					ReloadMonitors();
 			}
-			else if (ReferenceEquals(e.Inner.Source, _settingsRoot.BinaryTerminal))
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.BinaryTerminal))
 			{
 				// BinaryTerminalSettings changed
-				if (_settingsRoot.TerminalType == Domain.TerminalType.Binary)
+				if (this.settingsRoot.TerminalType == Domain.TerminalType.Binary)
 					ReloadMonitors();
 			}
 		}
@@ -2313,12 +2313,12 @@ namespace YAT.Gui.Forms
 
 		private void SuspendHandlingTerminalSettings()
 		{
-			_handlingTerminalSettingsIsSuspended = true;
+			this.handlingTerminalSettingsIsSuspended = true;
 		}
 
 		private void ResumeHandlingTerminalSettings()
 		{
-			_handlingTerminalSettingsIsSuspended = false;
+			this.handlingTerminalSettingsIsSuspended = false;
 
 			SetIOStatus();
 			SetIOControlControls();
@@ -2342,57 +2342,57 @@ namespace YAT.Gui.Forms
 
 		private void AttachTerminalEventHandlers()
 		{
-			if (_terminal != null)
+			if (this.terminal != null)
 			{
-				_terminal.IOChanged            += new EventHandler(_terminal_IOChanged);
-				_terminal.IOControlChanged     += new EventHandler(_terminal_IOControlChanged);
-				_terminal.IOConnectTimeChanged += new EventHandler<TimeSpanEventArgs>(_terminal_IOConnectTimeChanged);
-				_terminal.IOCountChanged       += new EventHandler(_terminal_IOCountChanged);
-				_terminal.IORequest            += new EventHandler<Domain.IORequestEventArgs>(_terminal_IORequest);
-				_terminal.IOError              += new EventHandler<Domain.IOErrorEventArgs>(_terminal_IOError);
+				this.terminal.IOChanged            += new EventHandler(this.terminal_IOChanged);
+				this.terminal.IOControlChanged     += new EventHandler(this.terminal_IOControlChanged);
+				this.terminal.IOConnectTimeChanged += new EventHandler<TimeSpanEventArgs>(this.terminal_IOConnectTimeChanged);
+				this.terminal.IOCountChanged       += new EventHandler(this.terminal_IOCountChanged);
+				this.terminal.IORequest            += new EventHandler<Domain.IORequestEventArgs>(this.terminal_IORequest);
+				this.terminal.IOError              += new EventHandler<Domain.IOErrorEventArgs>(this.terminal_IOError);
 
-				_terminal.DisplayElementsSent     += new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsSent);
-				_terminal.DisplayElementsReceived += new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsReceived);
+				this.terminal.DisplayElementsSent     += new EventHandler<Domain.DisplayElementsEventArgs>(this.terminal_DisplayElementsSent);
+				this.terminal.DisplayElementsReceived += new EventHandler<Domain.DisplayElementsEventArgs>(this.terminal_DisplayElementsReceived);
 
-				_terminal.RepositoryCleared  += new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryCleared);
-				_terminal.RepositoryReloaded += new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryReloaded);
+				this.terminal.RepositoryCleared  += new EventHandler<Domain.RepositoryEventArgs>(this.terminal_RepositoryCleared);
+				this.terminal.RepositoryReloaded += new EventHandler<Domain.RepositoryEventArgs>(this.terminal_RepositoryReloaded);
 
-				_terminal.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_terminal_TimedStatusTextRequest);
-				_terminal.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(_terminal_FixedStatusTextRequest);
-				_terminal.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(_terminal_MessageInputRequest);
+				this.terminal.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(this.terminal_TimedStatusTextRequest);
+				this.terminal.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(this.terminal_FixedStatusTextRequest);
+				this.terminal.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(this.terminal_MessageInputRequest);
 
-				_terminal.SaveAsFileDialogRequest += new EventHandler<Model.DialogEventArgs>(_terminal_SaveAsFileDialogRequest);
+				this.terminal.SaveAsFileDialogRequest += new EventHandler<Model.DialogEventArgs>(this.terminal_SaveAsFileDialogRequest);
 
-				_terminal.Saved  += new EventHandler<Model.SavedEventArgs>(_terminal_Saved);
-				_terminal.Closed += new EventHandler<Model.ClosedEventArgs>(_terminal_Closed);
+				this.terminal.Saved  += new EventHandler<Model.SavedEventArgs>(this.terminal_Saved);
+				this.terminal.Closed += new EventHandler<Model.ClosedEventArgs>(this.terminal_Closed);
 			}
 		}
 
 		private void DetachTerminalEventHandlers()
 		{
-			if (_terminal != null)
+			if (this.terminal != null)
 			{
-				_terminal.IOChanged            -= new EventHandler(_terminal_IOChanged);
-				_terminal.IOControlChanged     -= new EventHandler(_terminal_IOControlChanged);
-				_terminal.IOConnectTimeChanged -= new EventHandler<TimeSpanEventArgs>(_terminal_IOConnectTimeChanged);
-				_terminal.IOCountChanged       -= new EventHandler(_terminal_IOCountChanged);
-				_terminal.IORequest            -= new EventHandler<Domain.IORequestEventArgs>(_terminal_IORequest);
-				_terminal.IOError              -= new EventHandler<Domain.IOErrorEventArgs>(_terminal_IOError);
+				this.terminal.IOChanged            -= new EventHandler(this.terminal_IOChanged);
+				this.terminal.IOControlChanged     -= new EventHandler(this.terminal_IOControlChanged);
+				this.terminal.IOConnectTimeChanged -= new EventHandler<TimeSpanEventArgs>(this.terminal_IOConnectTimeChanged);
+				this.terminal.IOCountChanged       -= new EventHandler(this.terminal_IOCountChanged);
+				this.terminal.IORequest            -= new EventHandler<Domain.IORequestEventArgs>(this.terminal_IORequest);
+				this.terminal.IOError              -= new EventHandler<Domain.IOErrorEventArgs>(this.terminal_IOError);
 
-				_terminal.DisplayElementsSent     -= new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsSent);
-				_terminal.DisplayElementsReceived -= new EventHandler<Domain.DisplayElementsEventArgs>(_terminal_DisplayElementsReceived);
+				this.terminal.DisplayElementsSent     -= new EventHandler<Domain.DisplayElementsEventArgs>(this.terminal_DisplayElementsSent);
+				this.terminal.DisplayElementsReceived -= new EventHandler<Domain.DisplayElementsEventArgs>(this.terminal_DisplayElementsReceived);
 
-				_terminal.RepositoryCleared  -= new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryCleared);
-				_terminal.RepositoryReloaded -= new EventHandler<Domain.RepositoryEventArgs>(_terminal_RepositoryReloaded);
+				this.terminal.RepositoryCleared  -= new EventHandler<Domain.RepositoryEventArgs>(this.terminal_RepositoryCleared);
+				this.terminal.RepositoryReloaded -= new EventHandler<Domain.RepositoryEventArgs>(this.terminal_RepositoryReloaded);
 
-				_terminal.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_terminal_TimedStatusTextRequest);
-				_terminal.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(_terminal_FixedStatusTextRequest);
-				_terminal.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(_terminal_MessageInputRequest);
+				this.terminal.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(this.terminal_TimedStatusTextRequest);
+				this.terminal.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(this.terminal_FixedStatusTextRequest);
+				this.terminal.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(this.terminal_MessageInputRequest);
 
-				_terminal.SaveAsFileDialogRequest -= new EventHandler<Model.DialogEventArgs>(_terminal_SaveAsFileDialogRequest);
+				this.terminal.SaveAsFileDialogRequest -= new EventHandler<Model.DialogEventArgs>(this.terminal_SaveAsFileDialogRequest);
 
-				_terminal.Saved  -= new EventHandler<Model.SavedEventArgs>(_terminal_Saved);
-				_terminal.Closed -= new EventHandler<Model.ClosedEventArgs>(_terminal_Closed);
+				this.terminal.Saved  -= new EventHandler<Model.SavedEventArgs>(this.terminal_Saved);
+				this.terminal.Closed -= new EventHandler<Model.ClosedEventArgs>(this.terminal_Closed);
 			}
 		}
 
@@ -2403,31 +2403,31 @@ namespace YAT.Gui.Forms
 		// Terminal > Event Handlers
 		//------------------------------------------------------------------------------------------
 
-		private void _terminal_IOChanged(object sender, EventArgs e)
+		private void terminal_IOChanged(object sender, EventArgs e)
 		{
 			SetTerminalControls();
 			OnTerminalChanged(new EventArgs());
 		}
 
-		private void _terminal_IOControlChanged(object sender, EventArgs e)
+		private void terminal_IOControlChanged(object sender, EventArgs e)
 		{
 			SetIOControlControls();
 		}
 
-		private void _terminal_IOConnectTimeChanged(object sender, TimeSpanEventArgs e)
+		private void terminal_IOConnectTimeChanged(object sender, TimeSpanEventArgs e)
 		{
 			monitor_Tx.ConnectTime    = e.TimeSpan;
 			monitor_Bidir.ConnectTime = e.TimeSpan;
 			monitor_Rx.ConnectTime    = e.TimeSpan;
 		}
 
-		private void _terminal_IOCountChanged(object sender, EventArgs e)
+		private void terminal_IOCountChanged(object sender, EventArgs e)
 		{
-			int txByteCount = _terminal.TxByteCount;
-			int rxByteCount = _terminal.RxByteCount;
+			int txByteCount = this.terminal.TxByteCount;
+			int rxByteCount = this.terminal.RxByteCount;
 
-			int txLineCount = _terminal.TxLineCount;
-			int rxLineCount = _terminal.RxLineCount;
+			int txLineCount = this.terminal.TxLineCount;
+			int rxLineCount = this.terminal.RxLineCount;
 
 			monitor_Tx.TxByteCountStatus    = txByteCount;
 			monitor_Tx.TxLineCountStatus    = txLineCount;
@@ -2444,21 +2444,21 @@ namespace YAT.Gui.Forms
 		/// Event is used to invoke I/O start/stop operations on the main thread. This procedure
 		/// fixes the deadlock issue as described in <see cref="MKY.IO.Serial.SerialPort"/>.
 		/// </remarks>
-		private void _terminal_IORequest(object sender, Domain.IORequestEventArgs e)
+		private void terminal_IORequest(object sender, Domain.IORequestEventArgs e)
 		{
 			switch (e.Request)
 			{
 				case Domain.IORequest.StartIO:
-					_terminal.StartIO();
+					this.terminal.StartIO();
 					break;
 
 				case Domain.IORequest.StopIO:
-					_terminal.StopIO();
+					this.terminal.StopIO();
 					break;
 			}
 		}
 
-		private void _terminal_IOError(object sender, Domain.IOErrorEventArgs e)
+		private void terminal_IOError(object sender, Domain.IOErrorEventArgs e)
 		{
 			SetTerminalControls();
 			OnTerminalChanged(new EventArgs());
@@ -2490,21 +2490,21 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void _terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
+		private void terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			// Display elements immediately
 			monitor_Tx.AddElements(e.Elements);
 			monitor_Bidir.AddElements(e.Elements);
 		}
 
-		private void _terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
+		private void terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
 		{
 			// Display elements immediately
 			monitor_Bidir.AddElements(e.Elements);
 			monitor_Rx.AddElements(e.Elements);
 		}
 
-		private void _terminal_RepositoryCleared(object sender, Domain.RepositoryEventArgs e)
+		private void terminal_RepositoryCleared(object sender, Domain.RepositoryEventArgs e)
 		{
 			switch (e.Repository)
 			{
@@ -2514,48 +2514,48 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void _terminal_RepositoryReloaded(object sender, Domain.RepositoryEventArgs e)
+		private void terminal_RepositoryReloaded(object sender, Domain.RepositoryEventArgs e)
 		{
 			switch (e.Repository)
 			{
-				case Domain.RepositoryType.Tx:    monitor_Tx.AddLines   (_terminal.RepositoryToDisplayLines(Domain.RepositoryType.Tx));    break;
-				case Domain.RepositoryType.Bidir: monitor_Bidir.AddLines(_terminal.RepositoryToDisplayLines(Domain.RepositoryType.Bidir)); break;
-				case Domain.RepositoryType.Rx:    monitor_Rx.AddLines   (_terminal.RepositoryToDisplayLines(Domain.RepositoryType.Rx));    break;
+				case Domain.RepositoryType.Tx:    monitor_Tx.AddLines   (this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Tx));    break;
+				case Domain.RepositoryType.Bidir: monitor_Bidir.AddLines(this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Bidir)); break;
+				case Domain.RepositoryType.Rx:    monitor_Rx.AddLines   (this.terminal.RepositoryToDisplayLines(Domain.RepositoryType.Rx));    break;
 			}
 		}
 
-		private void _terminal_TimedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
+		private void terminal_TimedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
 		{
 			SetTimedStatusText(e.Text);
 		}
 
-		private void _terminal_FixedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
+		private void terminal_FixedStatusTextRequest(object sender, Model.StatusTextEventArgs e)
 		{
 			SetFixedStatusText(e.Text);
 		}
 
-		private void _terminal_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
+		private void terminal_MessageInputRequest(object sender, Model.MessageInputEventArgs e)
 		{
 			e.Result = MessageBox.Show(this, e.Text, e.Caption, e.Buttons, e.Icon, e.DefaultButton);
 		}
 
-		private void _terminal_SaveAsFileDialogRequest(object sender, Model.DialogEventArgs e)
+		private void terminal_SaveAsFileDialogRequest(object sender, Model.DialogEventArgs e)
 		{
 			e.Result = ShowSaveTerminalAsFileDialog();
 		}
 
-		private void _terminal_Saved(object sender, Model.SavedEventArgs e)
+		private void terminal_Saved(object sender, Model.SavedEventArgs e)
 		{
 			SetTerminalControls();
 			SelectSendCommandInput();
 		}
 
-		private void _terminal_Closed(object sender, Model.ClosedEventArgs e)
+		private void terminal_Closed(object sender, Model.ClosedEventArgs e)
 		{
 			// Prevent multiple calls to Close()
-			if (!_isClosingFromForm)
+			if (!this.isClosingFromForm)
 			{
-				_isClosingFromModel = true;
+				this.isClosingFromModel = true;
 				Close();
 			}
 		}
@@ -2586,7 +2586,7 @@ namespace YAT.Gui.Forms
 				ApplicationSettings.LocalUser.Paths.TerminalFilesPath = Path.GetDirectoryName(sfd.FileName);
 				ApplicationSettings.Save();
 
-				_terminal.SaveAs(sfd.FileName);
+				this.terminal.SaveAs(sfd.FileName);
 			}
 			else
 			{
@@ -2607,7 +2607,7 @@ namespace YAT.Gui.Forms
 		{
 			SetFixedStatusText("Terminal Settings...");
 
-			Gui.Forms.TerminalSettings f = new Gui.Forms.TerminalSettings(_settingsRoot.Terminal);
+			Gui.Forms.TerminalSettings f = new Gui.Forms.TerminalSettings(this.settingsRoot.Terminal);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
@@ -2616,7 +2616,7 @@ namespace YAT.Gui.Forms
 				if (s.HaveChanged)
 				{
 					SuspendHandlingTerminalSettings();
-					_terminal.SetSettings(s);
+					this.terminal.SetSettings(s);
 					ResumeHandlingTerminalSettings();
 				}
 				else
@@ -2645,25 +2645,25 @@ namespace YAT.Gui.Forms
 			bool isOpen      = false;
 			bool isConnected = false;
 
-			if (_terminal != null)
+			if (this.terminal != null)
 			{
-				isStarted   = _terminal.IsStarted;
-				isOpen      = _terminal.IsOpen;
-				isConnected = _terminal.IsConnected;
+				isStarted   = this.terminal.IsStarted;
+				isOpen      = this.terminal.IsOpen;
+				isConnected = this.terminal.IsConnected;
 			}
 
 			StringBuilder sb = new StringBuilder(UserName);
 
-			if (_settingsRoot != null)
+			if (this.settingsRoot != null)
 			{
-				if (_settingsRoot.ExplicitHaveChanged)
+				if (this.settingsRoot.ExplicitHaveChanged)
 					sb.Append("*");
 
-				switch (_settingsRoot.IOType)
+				switch (this.settingsRoot.IOType)
 				{
 					case Domain.IOType.SerialPort:
 					{
-						MKY.IO.Serial.SerialPortSettings s = _settingsRoot.IO.SerialPort;
+						MKY.IO.Serial.SerialPortSettings s = this.settingsRoot.IO.SerialPort;
 						sb.Append(" - ");
 						sb.Append(s.PortId.ToString(true, false));
 						sb.Append(" - ");
@@ -2673,7 +2673,7 @@ namespace YAT.Gui.Forms
 
 					case Domain.IOType.TcpClient:
 					{
-						MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
+						MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
 						sb.Append(" - ");
 						sb.Append(s.ResolvedRemoteIPAddress.ToString());
 						sb.Append(":");
@@ -2685,7 +2685,7 @@ namespace YAT.Gui.Forms
 
 					case Domain.IOType.TcpServer:
 					{
-						MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
+						MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
 						sb.Append(" - ");
 						sb.Append("Server:");
 						sb.Append(s.LocalPort.ToString());
@@ -2699,9 +2699,9 @@ namespace YAT.Gui.Forms
 
 					case Domain.IOType.TcpAutoSocket:
 					{
-						MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
-						bool isClient = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsClient;
-						bool isServer = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsServer;
+						MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+						bool isClient = ((MKY.IO.Serial.TcpAutoSocket)(this.terminal.UnderlyingIOProvider)).IsClient;
+						bool isServer = ((MKY.IO.Serial.TcpAutoSocket)(this.terminal.UnderlyingIOProvider)).IsServer;
 						if (isStarted)
 						{
 							if (isClient)
@@ -2741,7 +2741,7 @@ namespace YAT.Gui.Forms
 
 					case Domain.IOType.Udp:
 					{
-						MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
+						MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
 						sb.Append(" - ");
 						sb.Append(s.ResolvedRemoteIPAddress.ToString());
 						sb.Append(":");
@@ -2756,7 +2756,7 @@ namespace YAT.Gui.Forms
 
 					case Domain.IOType.UsbHid:
 					{
-						MKY.IO.Serial.UsbHidDeviceSettings s = _settingsRoot.IO.UsbHidDevice;
+						MKY.IO.Serial.UsbHidDeviceSettings s = this.settingsRoot.IO.UsbHidDevice;
 						sb.Append(" - ");
 						sb.Append(s.DeviceInfo.ToString());
 						sb.Append(" - ");
@@ -2800,9 +2800,9 @@ namespace YAT.Gui.Forms
 
 		private void SetIOStatus()
 		{
-			bool isStarted    = _terminal.IsStarted;
-			bool isOpen       = _terminal.IsOpen;
-			bool isConnected  = _terminal.IsConnected;
+			bool isStarted    = this.terminal.IsStarted;
+			bool isOpen       = this.terminal.IsOpen;
+			bool isConnected  = this.terminal.IsConnected;
 			bool isSerialPort = false;
 
 			StringBuilder sb = new StringBuilder();
@@ -2810,15 +2810,15 @@ namespace YAT.Gui.Forms
 			Image on = Properties.Resources.Image_On_12x12;
 			Image off = Properties.Resources.Image_Off_12x12;
 
-			if (_settingsRoot != null)
+			if (this.settingsRoot != null)
 			{
-				switch (_settingsRoot.IOType)
+				switch (this.settingsRoot.IOType)
 				{
 					case Domain.IOType.SerialPort:
 					{
 						isSerialPort = true;
 
-						MKY.IO.Serial.SerialPortSettings s = _settingsRoot.IO.SerialPort;
+						MKY.IO.Serial.SerialPortSettings s = this.settingsRoot.IO.SerialPort;
 						sb.Append("Serial port ");
 						sb.Append(s.PortId.ToString(true, false));
 						sb.Append(" (" + s.Communication + ") is ");
@@ -2828,7 +2828,7 @@ namespace YAT.Gui.Forms
 
 					case Domain.IOType.TcpClient:
 					{
-						MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
+						MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
 						sb.Append("TCP client is ");
 						sb.Append(isConnected ? "connected to " : "disconnected from ");
 						sb.Append(s.ResolvedRemoteIPAddress.ToString());
@@ -2839,13 +2839,13 @@ namespace YAT.Gui.Forms
 
 					case Domain.IOType.TcpServer:
 					{
-						MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
+						MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
 						sb.Append("TCP server is ");
 						if (isStarted)
 						{
 							if (isConnected)
 							{
-								MKY.IO.Serial.TcpServer server = (MKY.IO.Serial.TcpServer)_terminal.UnderlyingIOProvider;
+								MKY.IO.Serial.TcpServer server = (MKY.IO.Serial.TcpServer)this.terminal.UnderlyingIOProvider;
 								int count = server.ConnectedClientCount;
 
 								sb.Append("connected to ");
@@ -2871,9 +2871,9 @@ namespace YAT.Gui.Forms
 
 					case Domain.IOType.TcpAutoSocket:
 					{
-						MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
-						bool isClient = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsClient;
-						bool isServer = ((MKY.IO.Serial.TcpAutoSocket)(_terminal.UnderlyingIOProvider)).IsServer;
+						MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+						bool isClient = ((MKY.IO.Serial.TcpAutoSocket)(this.terminal.UnderlyingIOProvider)).IsClient;
+						bool isServer = ((MKY.IO.Serial.TcpAutoSocket)(this.terminal.UnderlyingIOProvider)).IsServer;
 						sb.Append("TCP auto socket is ");
 						if (isStarted)
 						{
@@ -2906,7 +2906,7 @@ namespace YAT.Gui.Forms
 
 					case Domain.IOType.Udp:
 					{
-						MKY.IO.Serial.SocketSettings s = _settingsRoot.IO.Socket;
+						MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
 						sb.Append("UDP socket is ");
 						sb.Append(isOpen ? "open" : "closed");
 						sb.Append(" for sending to ");
@@ -2920,7 +2920,7 @@ namespace YAT.Gui.Forms
 
 					case Domain.IOType.UsbHid:
 					{
-						MKY.IO.Serial.UsbHidDeviceSettings s = _settingsRoot.IO.UsbHidDevice;
+						MKY.IO.Serial.UsbHidDeviceSettings s = this.settingsRoot.IO.UsbHidDevice;
 						sb.Append("USB HID device ");
 						sb.Append(s.DeviceInfo.ToString());
 						sb.Append(" is ");
@@ -2954,18 +2954,18 @@ namespace YAT.Gui.Forms
 
 		private void SetIOControlControls()
 		{
-			bool isSerialPort = (_settingsRoot.IOType == Domain.IOType.SerialPort);
+			bool isSerialPort = (this.settingsRoot.IOType == Domain.IOType.SerialPort);
 
-			foreach (ToolStripStatusLabel sl in _statusLabels_ioControl)
+			foreach (ToolStripStatusLabel sl in this.statusLabels_ioControl)
 				sl.Visible = isSerialPort;
 
 			if (isSerialPort)
 			{
-				bool isStarted    = _terminal.IsStarted;
-				bool isOpen       = _terminal.IsOpen;
-				bool isConnected  = _terminal.IsConnected;
+				bool isStarted    = this.terminal.IsStarted;
+				bool isOpen       = this.terminal.IsOpen;
+				bool isConnected  = this.terminal.IsConnected;
 
-				foreach (ToolStripStatusLabel sl in _statusLabels_ioControl)
+				foreach (ToolStripStatusLabel sl in this.statusLabels_ioControl)
 					sl.Enabled = isOpen;
 
 				Image on = Properties.Resources.Image_On_12x12;
@@ -2974,11 +2974,11 @@ namespace YAT.Gui.Forms
 				if (isOpen)
 				{
 					MKY.IO.Ports.SerialPortControlPins pins = new MKY.IO.Ports.SerialPortControlPins();
-					MKY.IO.Ports.ISerialPort port = _terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
+					MKY.IO.Ports.ISerialPort port = this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
 					if (port != null)
 						pins = port.ControlPins;
 
-					bool rs485FlowControl = (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.RS485);
+					bool rs485FlowControl = (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.RS485);
 
 					if (rs485FlowControl)
 					{
@@ -2995,7 +2995,7 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_DSR.Image = (pins.Dsr ? on : off);
 					toolStripStatusLabel_TerminalStatus_DCD.Image = (pins.Cd ? on : off);
 
-					bool manualFlowControl = (_settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual);
+					bool manualFlowControl = (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual);
 
 					toolStripStatusLabel_TerminalStatus_RTS.ForeColor = (manualFlowControl ? SystemColors.ControlText : SystemColors.GrayText);
 					toolStripStatusLabel_TerminalStatus_CTS.ForeColor = SystemColors.GrayText;
@@ -3005,10 +3005,10 @@ namespace YAT.Gui.Forms
 				}
 				else
 				{
-					foreach (ToolStripStatusLabel sl in _statusLabels_ioControl)
+					foreach (ToolStripStatusLabel sl in this.statusLabels_ioControl)
 						sl.Image = off;
 
-					foreach (ToolStripStatusLabel sl in _statusLabels_ioControl)
+					foreach (ToolStripStatusLabel sl in this.statusLabels_ioControl)
 						sl.ForeColor = SystemColors.ControlText;
 				}
 			}
@@ -3018,13 +3018,13 @@ namespace YAT.Gui.Forms
 		{
 			timer_RtsLuminescence.Enabled = false;
 			toolStripStatusLabel_TerminalStatus_RTS.Image = Properties.Resources.Image_On_12x12;
-			timer_RtsLuminescence.Interval = _RtsLuminescenceInterval;
+			timer_RtsLuminescence.Interval = RtsLuminescenceInterval;
 			timer_RtsLuminescence.Enabled = true;
 		}
 
 		private void ResetRts()
 		{
-			bool isOpen = _terminal.IsOpen;
+			bool isOpen = this.terminal.IsOpen;
 
 			toolStripStatusLabel_TerminalStatus_RTS.Enabled = isOpen;
 
@@ -3034,7 +3034,7 @@ namespace YAT.Gui.Forms
 			if (isOpen)
 			{
 				MKY.IO.Ports.SerialPortControlPins pins = new MKY.IO.Ports.SerialPortControlPins();
-				MKY.IO.Ports.ISerialPort port = _terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
+				MKY.IO.Ports.ISerialPort port = this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
 				if (port != null)
 					pins = port.ControlPins;
 
@@ -3068,11 +3068,11 @@ namespace YAT.Gui.Forms
 
 		private void ShowLogSettings()
 		{
-			Gui.Forms.LogSettings f = new Gui.Forms.LogSettings(_settingsRoot.Log);
+			Gui.Forms.LogSettings f = new Gui.Forms.LogSettings(this.settingsRoot.Log);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
-				_terminal.SetLogSettings(f.SettingsResult);
+				this.terminal.SetLogSettings(f.SettingsResult);
 			}
 
 			SelectSendCommandInput();
@@ -3111,7 +3111,7 @@ namespace YAT.Gui.Forms
 		{
 			switch (status)
 			{
-				default: return (_DefaultStatusText);
+				default: return (DefaultStatusText);
 			}
 		}
 
@@ -3130,7 +3130,7 @@ namespace YAT.Gui.Forms
 		{
 			timer_Status.Enabled = false;
 			toolStripStatusLabel_TerminalStatus_Status.Text = text;
-			timer_Status.Interval = _TimedStatusInterval;
+			timer_Status.Interval = TimedStatusInterval;
 			timer_Status.Enabled = true;
 		}
 

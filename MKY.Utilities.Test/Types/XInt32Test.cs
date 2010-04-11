@@ -57,7 +57,7 @@ namespace MKY.Utilities.Test.Types
 		// Fields
 		//==========================================================================================
 
-		private readonly TestSet[] _testSets =
+		private readonly TestSet[] testSets =
 		{
 			new TestSet(  0,  0, -1,  true,  true ),
 			new TestSet(  0,  0,  0,  true,  true ),
@@ -104,7 +104,7 @@ namespace MKY.Utilities.Test.Types
 		[Test]
 		public virtual void TestLimitToBounds()
 		{
-			foreach (TestSet ts in _testSets)
+			foreach (TestSet ts in this.testSets)
 			{
 				int limited = XInt32.LimitToBounds(ts.Value, ts.Min, ts.Max);
 

@@ -55,9 +55,9 @@ namespace YAT.Domain
 		// Fields
 		//==========================================================================================
 
-		private byte[] _eol;
-		private Queue<byte> _queue;
-		private State _state;
+		private byte[] eol;
+		private Queue<byte> queue;
+		private State state;
 
 		#endregion
 
@@ -69,8 +69,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public EolQueue(byte[] eol)
 		{
-			_eol = eol;
-			_queue = new Queue<byte>(_eol.Length);
+			this.eol = eol;
+			this.queue = new Queue<byte>(this.eol.Length);
 			Evaluate();
 		}
 
@@ -84,19 +84,19 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual byte[] Eol
 		{
-			get { return (_eol); }
+			get { return (this.eol); }
 		}
 
 		/// <summary></summary>
 		public virtual bool IsPartlyMatch
 		{
-			get { return ( _state == State.PartlyMatch || _state == State.CompleteMatch ); }
+			get { return ( this.state == State.PartlyMatch || this.state == State.CompleteMatch ); }
 		}
 
 		/// <summary></summary>
 		public virtual bool IsCompleteMatch
 		{
-			get { return (_state == State.CompleteMatch); }
+			get { return (this.state == State.CompleteMatch); }
 		}
 
 		#endregion
@@ -110,17 +110,17 @@ namespace YAT.Domain
 		public virtual void Enqueue(byte b)
 		{
 			// Reset queue if it previously matched
-			if (_state == State.CompleteMatch)
+			if (this.state == State.CompleteMatch)
 				Reset();
 
 			// Enqueue incoming byte according to state
-			switch (_state)
+			switch (this.state)
 			{
 				case State.Armed:       // EOL not started yet
 				{
-					if (b == _eol[0])   // Start of EOL detected
+					if (b == this.eol[0])   // Start of EOL detected
 					{
-						_queue.Enqueue(b);
+						this.queue.Enqueue(b);
 						Evaluate();
 					}
 					break;
@@ -128,7 +128,7 @@ namespace YAT.Domain
 
 				case State.PartlyMatch: // EOL already started
 				{
-					_queue.Enqueue(b);
+					this.queue.Enqueue(b);
 					Evaluate();
 					break;
 				}
@@ -138,7 +138,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual void Reset()
 		{
-			_queue.Clear();
+			this.queue.Clear();
 			Evaluate();
 		}
 
@@ -151,15 +151,15 @@ namespace YAT.Domain
 
 		private void Evaluate()
 		{
-			if (_eol.Length <= 0)       // Empty EOL => Inactive
+			if (this.eol.Length <= 0)       // Empty EOL => Inactive
 			{
-				_state = State.Inactive;
+				this.state = State.Inactive;
 				return;
 			}
 			
-			if (_queue.Count <= 0)     // Empty queue => Armed
+			if (this.queue.Count <= 0)     // Empty queue => Armed
 			{
-				_state = State.Armed;
+				this.state = State.Armed;
 				return;
 			}
 
@@ -174,32 +174,32 @@ namespace YAT.Domain
 				// Evaluate EOL until there is either a match or no match.
 				// Covers cases like <CR><CR><LF>.
 				State evaluatedState = State.Armed;
-				while ((evaluatedState == State.Armed) && (_queue.Count > 0))
+				while ((evaluatedState == State.Armed) && (this.queue.Count > 0))
 				{
-					byte[] queue = _queue.ToArray();
+					byte[] queue = this.queue.ToArray();
 					for (int i = 0; i < queue.Length; i++)
 					{
-						if (queue[i] == _eol[i])
+						if (queue[i] == this.eol[i])
 						{
-							if (i < (_eol.Length - 1))
+							if (i < (this.eol.Length - 1))
 								evaluatedState = State.PartlyMatch;
 							else
 								evaluatedState = State.CompleteMatch;
 						}
 						else
 						{
-							_queue.Dequeue(); // dequeue one element, then retry
+							this.queue.Dequeue(); // dequeue one element, then retry
 							evaluatedState = State.Armed;
 							break;
 						}
 					}
 				}
-				_state = evaluatedState;
+				this.state = evaluatedState;
 			}
 			catch (Exception ex)
 			{
 				MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
-				System.Diagnostics.Debug.WriteLine("Queue.Count = " + _queue.Count);
+				System.Diagnostics.Debug.WriteLine("Queue.Count = " + this.queue.Count);
 			}
 		}
 

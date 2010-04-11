@@ -34,14 +34,14 @@ namespace YAT.Model.Test
 		// Fields
 		//==========================================================================================
 
-		private bool _autoOpenWorkspaceToRestore;
-		private bool _autoSaveWorkspaceToRestore;
-		private string _workspaceFilePathToRestore;
+		private bool autoOpenWorkspaceToRestore;
+		private bool autoSaveWorkspaceToRestore;
+		private string workspaceFilePathToRestore;
 
-		string _normalWorkspaceFilePath = MakeTempFilePath("NormalWorkspace", YAT.Settings.ExtensionSettings.WorkspaceFile);
-		string _normalTerminal1FilePath = MakeTempFilePath("NormalTerminal1", YAT.Settings.ExtensionSettings.TerminalFile);
-		string _normalTerminal2FilePath = MakeTempFilePath("NormalTerminal2", YAT.Settings.ExtensionSettings.TerminalFile);
-		string _normalTerminal3FilePath = MakeTempFilePath("NormalTerminal3", YAT.Settings.ExtensionSettings.TerminalFile);
+		private string normalWorkspaceFilePath = MakeTempFilePath("NormalWorkspace", YAT.Settings.ExtensionSettings.WorkspaceFile);
+		private string normalTerminal1FilePath = MakeTempFilePath("NormalTerminal1", YAT.Settings.ExtensionSettings.TerminalFile);
+		private string normalTerminal2FilePath = MakeTempFilePath("NormalTerminal2", YAT.Settings.ExtensionSettings.TerminalFile);
+		private string normalTerminal3FilePath = MakeTempFilePath("NormalTerminal3", YAT.Settings.ExtensionSettings.TerminalFile);
 
 		#endregion
 
@@ -54,9 +54,9 @@ namespace YAT.Model.Test
 		public virtual void TestFixtureSetUp()
 		{
 			// allow modification of auto save setting
-			_autoOpenWorkspaceToRestore = ApplicationSettings.LocalUser.General.AutoOpenWorkspace;
-			_autoSaveWorkspaceToRestore = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
-			_workspaceFilePathToRestore = ApplicationSettings.LocalUser.AutoWorkspace.FilePath;
+			this.autoOpenWorkspaceToRestore = ApplicationSettings.LocalUser.General.AutoOpenWorkspace;
+			this.autoSaveWorkspaceToRestore = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
+			this.workspaceFilePathToRestore = ApplicationSettings.LocalUser.AutoWorkspace.FilePath;
 		}
 
 		#endregion
@@ -69,9 +69,9 @@ namespace YAT.Model.Test
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = _autoOpenWorkspaceToRestore;
-			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = _autoSaveWorkspaceToRestore;
-			ApplicationSettings.LocalUser.AutoWorkspace.FilePath = _workspaceFilePathToRestore;
+			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = this.autoOpenWorkspaceToRestore;
+			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = this.autoSaveWorkspaceToRestore;
+			ApplicationSettings.LocalUser.AutoWorkspace.FilePath = this.workspaceFilePathToRestore;
 		}
 
 		#endregion
@@ -203,7 +203,7 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(workspace, "Workspace not created");
 				Assert.AreEqual(0, workspace.TerminalCount, "Workspace doesn't contain 0 terminals");
 
-				success = workspace.CreateNewTerminal(Utilities.GetTextTCPSettingsHandler());
+				success = workspace.CreateNewTerminal(Utilities.GetTextTcpSettingsHandler());
 				Assert.IsTrue(success, "Terminal could not be created");
 				Assert.AreEqual(1, workspace.TerminalCount, "Workspace doesn't contain 1 terminal");
 
@@ -265,7 +265,7 @@ namespace YAT.Model.Test
 				VerifyFiles(workspace, true, terminal, true);
 
 				string defaultTerminal1FilePath = terminal.SettingsFilePath;
-				success = terminal.SaveAs(_normalTerminal1FilePath);
+				success = terminal.SaveAs(this.normalTerminal1FilePath);
 				Assert.IsTrue(success, "Terminal could not be saved as");
 				Assert.AreEqual(1, workspace.TerminalCount, "Workspace doesn't contain 1 terminal");
 				Assert.IsFalse(File.Exists(defaultTerminal1FilePath), "Auto terminal file not deleted");
@@ -294,16 +294,16 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(terminal1, "Terminal 1 not opened from file");
 
 				VerifyFiles(workspace, true, terminal1, true, false);
-				StringAssert.AreEqualIgnoringCase(_normalTerminal1FilePath, terminal1.SettingsFilePath, "Terminal 1 is not stored at user terminal 1 location");
+				StringAssert.AreEqualIgnoringCase(this.normalTerminal1FilePath, terminal1.SettingsFilePath, "Terminal 1 is not stored at user terminal 1 location");
 
-				success = workspace.CreateNewTerminal(Utilities.GetTextTCPSettingsHandler());
+				success = workspace.CreateNewTerminal(Utilities.GetTextTcpSettingsHandler());
 				Assert.IsTrue(success, "Terminal 2 could not be created");
 				Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals");
 
 				Terminal terminal2 = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal2, "Terminal 2 could not be created");
 
-				Assert.IsTrue(workspace.CreateNewTerminal(Utilities.GetTextTCPSettingsHandler()), "Terminal 3 could not be created");
+				Assert.IsTrue(workspace.CreateNewTerminal(Utilities.GetTextTcpSettingsHandler()), "Terminal 3 could not be created");
 				Assert.AreEqual(3, workspace.TerminalCount, "Workspace doesn't contain 3 terminals");
 
 				Terminal terminal3 = workspace.ActiveTerminal;
@@ -450,7 +450,7 @@ namespace YAT.Model.Test
 
 				string autoWorkspaceFilePath = workspace.SettingsFilePath;
 				string autoTerminal2FilePath = terminal2.SettingsFilePath;
-				success = workspace.SaveAs(_normalWorkspaceFilePath);
+				success = workspace.SaveAs(this.normalWorkspaceFilePath);
 				Assert.IsTrue(success, "Workspace could not be saved as");
 				Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals");
 				Assert.IsFalse(File.Exists(autoWorkspaceFilePath), "Auto workspace file not deleted");
@@ -499,7 +499,7 @@ namespace YAT.Model.Test
 					new bool[]     { false,     false     }  // auto
 					);
 
-				success = workspace.CreateNewTerminal(Utilities.GetTextTCPSettingsHandler());
+				success = workspace.CreateNewTerminal(Utilities.GetTextTcpSettingsHandler());
 				Assert.IsTrue(success, "Terminal 3 could not be created");
 				Assert.AreEqual(3, workspace.TerminalCount, "Workspace doesn't contain 3 terminals");
 
@@ -606,18 +606,18 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(workspace, "Workspace not created");
 				Assert.AreEqual(0, workspace.TerminalCount, "Workspace doesn't contain 0 terminals");
 
-				success = workspace.CreateNewTerminal(Utilities.GetTextTCPSettingsHandler());
+				success = workspace.CreateNewTerminal(Utilities.GetTextTcpSettingsHandler());
 				Assert.IsTrue(success, "Terminal 1 could not be created");
 				Terminal terminal1 = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal1, "Terminal 1 could not be created");
-				success = terminal1.SaveAs(_normalTerminal1FilePath);
+				success = terminal1.SaveAs(this.normalTerminal1FilePath);
 				Assert.IsTrue(success, "Terminal 1 could not be saved as");
 
-				success = workspace.CreateNewTerminal(Utilities.GetTextTCPSettingsHandler());
+				success = workspace.CreateNewTerminal(Utilities.GetTextTcpSettingsHandler());
 				Assert.IsTrue(success, "Terminal 2 could not be created");
 				Terminal terminal2 = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal2, "Terminal 2 could not be created");
-				success = terminal2.SaveAs(_normalTerminal2FilePath);
+				success = terminal2.SaveAs(this.normalTerminal2FilePath);
 				Assert.IsTrue(success, "Terminal 2 could not be saved as");
 
 				success = main.Exit();
@@ -637,7 +637,7 @@ namespace YAT.Model.Test
 			#region Use case 6
 			// - Start and request normal terminal
 			//   => Auto workspace with 1 normal terminal
-			using (Main main = new Main(_normalTerminal1FilePath))
+			using (Main main = new Main(this.normalTerminal1FilePath))
 			{
 				success = main.Start();
 				Assert.IsTrue(success, "Main could not be started");
@@ -662,7 +662,7 @@ namespace YAT.Model.Test
 			// - Start and request normal terminal
 			// - Create another terminal
 			//   => Auto workspace with 1 normal and 1 auto terminal
-			using (Main main = new Main(_normalTerminal1FilePath))
+			using (Main main = new Main(this.normalTerminal1FilePath))
 			{
 				success = main.Start();
 				Assert.IsTrue(success, "Main could not be started");
@@ -676,7 +676,7 @@ namespace YAT.Model.Test
 
 				VerifyFiles(workspace, false, terminal1, true, false);
 
-				success = workspace.CreateNewTerminal(Utilities.GetTextTCPSettingsHandler());
+				success = workspace.CreateNewTerminal(Utilities.GetTextTcpSettingsHandler());
 				Assert.IsTrue(success, "Terminal 2 could not be created");
 				Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals");
 
@@ -702,8 +702,8 @@ namespace YAT.Model.Test
 			// - Start and request normal terminal in another main
 			// - Close first main, then second
 			//   => 2 auto workspaces with 1 normal terminal each
-			using (Main main1 = new Main(_normalTerminal1FilePath),
-				        main2 = new Main(_normalTerminal2FilePath))
+			using (Main main1 = new Main(this.normalTerminal1FilePath),
+				        main2 = new Main(this.normalTerminal2FilePath))
 			{
 				Workspace workspace1;
 				Workspace workspace2;
@@ -863,7 +863,7 @@ namespace YAT.Model.Test
 			main = new Main();
 			main.Start();              // Creates empty workspace
 			workspace = main.Workspace;
-			workspace.CreateNewTerminal(Utilities.GetTextTCPSettingsHandler());
+			workspace.CreateNewTerminal(Utilities.GetTextTcpSettingsHandler());
 			terminal = workspace.ActiveTerminal;
 		}
 
@@ -977,14 +977,14 @@ namespace YAT.Model.Test
 		private void terminal2_SaveAsFileDialogRequest(object sender, DialogEventArgs e)
 		{
 			Terminal terminal = sender as Terminal;
-			Assert.IsTrue(terminal.SaveAs(_normalTerminal2FilePath), "Terminal 2 could not be saved as");
+			Assert.IsTrue(terminal.SaveAs(this.normalTerminal2FilePath), "Terminal 2 could not be saved as");
 			e.Result = System.Windows.Forms.DialogResult.OK;
 		}
 
 		private void terminal3_SaveAsFileDialogRequest(object sender, DialogEventArgs e)
 		{
 			Terminal terminal = sender as Terminal;
-			Assert.IsTrue(terminal.SaveAs(_normalTerminal3FilePath), "Terminal 3 could not be saved as");
+			Assert.IsTrue(terminal.SaveAs(this.normalTerminal3FilePath), "Terminal 3 could not be saved as");
 			e.Result = System.Windows.Forms.DialogResult.OK;
 		}
 

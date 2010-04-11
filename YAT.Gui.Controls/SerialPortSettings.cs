@@ -35,11 +35,11 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const int                      _BaudRateDefault    = (int)MKY.IO.Ports.BaudRate.Baud009600;
-		private const MKY.IO.Ports.DataBits    _DataBitsDefault    = MKY.IO.Ports.DataBits.Eight;
-		private const System.IO.Ports.Parity   _ParityDefault      = System.IO.Ports.Parity.None;
-		private const System.IO.Ports.StopBits _StopBitsDefault    = System.IO.Ports.StopBits.One;
-		private const MKY.IO.Serial.SerialFlowControl _FlowControlDefault = MKY.IO.Serial.SerialFlowControl.None;
+		private const int                             BaudRateDefault    = (int)MKY.IO.Ports.BaudRate.Baud009600;
+		private const MKY.IO.Ports.DataBits           DataBitsDefault    = MKY.IO.Ports.DataBits.Eight;
+		private const System.IO.Ports.Parity          ParityDefault      = System.IO.Ports.Parity.None;
+		private const System.IO.Ports.StopBits        StopBitsDefault    = System.IO.Ports.StopBits.One;
+		private const MKY.IO.Serial.SerialFlowControl FlowControlDefault = MKY.IO.Serial.SerialFlowControl.None;
 
 		#endregion
 
@@ -48,14 +48,14 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool _isSettingControls = false;
+		private bool isSettingControls = false;
 
-		private int                      _baudRate    = _BaudRateDefault;
-		private MKY.IO.Ports.DataBits    _dataBits    = _DataBitsDefault;
-		private System.IO.Ports.Parity   _parity      = _ParityDefault;
-		private System.IO.Ports.StopBits _stopBits    = _StopBitsDefault;
-		private MKY.IO.Serial.SerialFlowControl _flowControl = _FlowControlDefault;
-		private MKY.IO.Serial.AutoRetry _autoReopen = MKY.IO.Serial.SerialPortSettings.AutoReopenDefault;
+		private int                             baudRate    = BaudRateDefault;
+		private MKY.IO.Ports.DataBits           dataBits    = DataBitsDefault;
+		private System.IO.Ports.Parity          parity      = ParityDefault;
+		private System.IO.Ports.StopBits        stopBits    = StopBitsDefault;
+		private MKY.IO.Serial.SerialFlowControl flowControl = FlowControlDefault;
+		private MKY.IO.Serial.AutoRetry         autoReopen = MKY.IO.Serial.SerialPortSettings.AutoReopenDefault;
 
 		#endregion
 
@@ -112,15 +112,15 @@ namespace YAT.Gui.Controls
 
 		[Category("Serial Port")]
 		[Description("The baud rate.")]
-		[DefaultValue(_BaudRateDefault)]
+		[DefaultValue(BaudRateDefault)]
 		public virtual int BaudRate
 		{
-			get { return (_baudRate); }
+			get { return (this.baudRate); }
 			set
 			{
-				if (value != _baudRate)
+				if (value != this.baudRate)
 				{
-					_baudRate = value;
+					this.baudRate = value;
 					SetControls();
 					OnBaudRateChanged(new EventArgs());
 				}
@@ -129,15 +129,15 @@ namespace YAT.Gui.Controls
 
 		[Category("Serial Port")]
 		[Description("The number of data bits.")]
-		[DefaultValue(_DataBitsDefault)]
+		[DefaultValue(DataBitsDefault)]
 		public virtual MKY.IO.Ports.DataBits DataBits
 		{
-			get { return (_dataBits); }
+			get { return (this.dataBits); }
 			set
 			{
-				if (value != _dataBits)
+				if (value != this.dataBits)
 				{
-					_dataBits = value;
+					this.dataBits = value;
 					SetControls();
 					OnDataBitsChanged(new EventArgs());
 				}
@@ -146,15 +146,15 @@ namespace YAT.Gui.Controls
 
 		[Category("Serial Port")]
 		[Description("The partiy type.")]
-		[DefaultValue(_ParityDefault)]
+		[DefaultValue(ParityDefault)]
 		public virtual System.IO.Ports.Parity Parity
 		{
-			get { return (_parity); }
+			get { return (this.parity); }
 			set
 			{
-				if (value != _parity)
+				if (value != this.parity)
 				{
-					_parity = value;
+					this.parity = value;
 					SetControls();
 					OnParityChanged(new EventArgs());
 				}
@@ -163,15 +163,15 @@ namespace YAT.Gui.Controls
 
 		[Category("Serial Port")]
 		[Description("The number of stop bits.")]
-		[DefaultValue(_StopBitsDefault)]
+		[DefaultValue(StopBitsDefault)]
 		public virtual System.IO.Ports.StopBits StopBits
 		{
-			get { return (_stopBits); }
+			get { return (this.stopBits); }
 			set
 			{
-				if (value != _stopBits)
+				if (value != this.stopBits)
 				{
-					_stopBits = value;
+					this.stopBits = value;
 					SetControls();
 					OnStopBitsChanged(new EventArgs());
 				}
@@ -180,15 +180,15 @@ namespace YAT.Gui.Controls
 
 		[Category("Serial Port")]
 		[Description("The flow control type.")]
-		[DefaultValue(_FlowControlDefault)]
+		[DefaultValue(FlowControlDefault)]
 		public virtual MKY.IO.Serial.SerialFlowControl FlowControl
 		{
-			get { return (_flowControl); }
+			get { return (this.flowControl); }
 			set
 			{
-				if (value != _flowControl)
+				if (value != this.flowControl)
 				{
-					_flowControl = value;
+					this.flowControl = value;
 					SetControls();
 					OnFlowControlChanged(new EventArgs());
 				}
@@ -199,12 +199,12 @@ namespace YAT.Gui.Controls
 		[Description("Auto reopen optione.")]
 		public virtual MKY.IO.Serial.AutoRetry AutoReopen
 		{
-			get { return (_autoReopen); }
+			get { return (this.autoReopen); }
 			set
 			{
-				if (value != _autoReopen)
+				if (value != this.autoReopen)
 				{
-					_autoReopen = value;
+					this.autoReopen = value;
 					SetControls();
 					OnAutoReopenChanged(new EventArgs());
 				}
@@ -221,16 +221,16 @@ namespace YAT.Gui.Controls
 		/// <summary>
 		/// Startup flag only used in the following event handler.
 		/// </summary>
-		private bool _isStartingUp = true;
+		private bool isStartingUp = true;
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
 		private void SerialPortSettings_Paint(object sender, PaintEventArgs e)
 		{
-			if (_isStartingUp)
+			if (this.isStartingUp)
 			{
-				_isStartingUp = false;
+				this.isStartingUp = false;
 				SetControls();
 			}
 		}
@@ -240,7 +240,7 @@ namespace YAT.Gui.Controls
 		/// </summary>
 		private void SerialPortSettings_EnabledChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				SetControls();
 		}
 
@@ -253,13 +253,13 @@ namespace YAT.Gui.Controls
 
 		private void comboBox_BaudRate_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				BaudRate = (MKY.IO.Ports.XBaudRate)comboBox_BaudRate.SelectedItem;
 		}
 
 		private void comboBox_BaudRate_Validating(object sender, CancelEventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				// \attention
 				// Do not assume that the selected item maches the actual text in the box
@@ -287,33 +287,33 @@ namespace YAT.Gui.Controls
 
 		private void comboBox_DataBits_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				DataBits = (MKY.IO.Ports.XDataBits)comboBox_DataBits.SelectedItem;
 		}
 
 		private void comboBox_Parity_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				Parity = (MKY.IO.Ports.XParity)comboBox_Parity.SelectedItem;
 		}
 
 		private void comboBox_StopBits_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				StopBits = (MKY.IO.Ports.XStopBits)comboBox_StopBits.SelectedItem;
 		}
 
 		private void comboBox_FlowControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				FlowControl = (MKY.IO.Serial.XSerialFlowControl)comboBox_FlowControl.SelectedItem;
 		}
 
 		private void checkBox_AutoReopen_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				MKY.IO.Serial.AutoRetry ar = _autoReopen;
+				MKY.IO.Serial.AutoRetry ar = this.autoReopen;
 				ar.Enabled = checkBox_AutoReopen.Checked;
 				AutoReopen = ar;
 			}
@@ -321,12 +321,12 @@ namespace YAT.Gui.Controls
 
 		private void textBox_AutoReopenInterval_Validating(object sender, CancelEventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				int interval;
 				if (int.TryParse(textBox_AutoReopenInterval.Text, out interval) && (interval >= 100))
 				{
-					MKY.IO.Serial.AutoRetry ar = _autoReopen;
+					MKY.IO.Serial.AutoRetry ar = this.autoReopen;
 					ar.Interval = interval;
 					AutoReopen = ar;
 				}
@@ -354,7 +354,7 @@ namespace YAT.Gui.Controls
 
 		private void InitializeControls()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
 			comboBox_BaudRate.Items.AddRange(MKY.IO.Ports.XBaudRate.GetItems());
 			comboBox_DataBits.Items.AddRange(MKY.IO.Ports.XDataBits.GetItems());
@@ -362,27 +362,27 @@ namespace YAT.Gui.Controls
 			comboBox_StopBits.Items.AddRange(MKY.IO.Ports.XStopBits.GetItems());
 			comboBox_FlowControl.Items.AddRange(MKY.IO.Serial.XSerialFlowControl.GetItems());
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void SetControls()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
-			MKY.IO.Ports.XBaudRate baudRate = (MKY.IO.Ports.XBaudRate)_baudRate;
+			MKY.IO.Ports.XBaudRate baudRate = (MKY.IO.Ports.XBaudRate)this.baudRate;
 			if (Enabled && (baudRate != MKY.IO.Ports.BaudRate.UserDefined))
 				comboBox_BaudRate.SelectedItem = baudRate;
 			else if (Enabled)
-				comboBox_BaudRate.Text = _baudRate.ToString();
+				comboBox_BaudRate.Text = this.baudRate.ToString();
 			else
 				comboBox_BaudRate.SelectedIndex = -1;
 
 			if (Enabled)
 			{
-				comboBox_DataBits.SelectedItem    = (MKY.IO.Ports.XDataBits)_dataBits;
-				comboBox_Parity.SelectedItem      = (MKY.IO.Ports.XParity)_parity;
-				comboBox_StopBits.SelectedItem    = (MKY.IO.Ports.XStopBits)_stopBits;
-				comboBox_FlowControl.SelectedItem = (MKY.IO.Serial.XSerialFlowControl)_flowControl;
+				comboBox_DataBits.SelectedItem    = (MKY.IO.Ports.XDataBits)this.dataBits;
+				comboBox_Parity.SelectedItem      = (MKY.IO.Ports.XParity)this.parity;
+				comboBox_StopBits.SelectedItem    = (MKY.IO.Ports.XStopBits)this.stopBits;
+				comboBox_FlowControl.SelectedItem = (MKY.IO.Serial.XSerialFlowControl)this.flowControl;
 			}
 			else
 			{
@@ -408,10 +408,10 @@ namespace YAT.Gui.Controls
 
 			if (Enabled)
 			{
-				bool autoReopenEnabled = _autoReopen.Enabled;
+				bool autoReopenEnabled = this.autoReopen.Enabled;
 				checkBox_AutoReopen.Checked = autoReopenEnabled;
 				textBox_AutoReopenInterval.Enabled = autoReopenEnabled;
-				textBox_AutoReopenInterval.Text = _autoReopen.Interval.ToString();
+				textBox_AutoReopenInterval.Text = this.autoReopen.Interval.ToString();
 			}
 			else
 			{
@@ -420,7 +420,7 @@ namespace YAT.Gui.Controls
 				textBox_AutoReopenInterval.Text = "";
 			}
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		#endregion

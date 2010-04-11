@@ -38,9 +38,9 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const Domain.TerminalType _TerminalTypeDefault = Domain.TerminalType.Text;
-		private const bool _TerminalIsOpenDefault = false;
-		private const float _SplitterRatioDefault = (float)0.75;
+		private const Domain.TerminalType TerminalTypeDefault = Domain.TerminalType.Text;
+		private const bool TerminalIsOpenDefault = false;
+		private const float SplitterRatioDefault = (float)0.75;
 
 		#endregion
 
@@ -49,9 +49,9 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private Domain.TerminalType _terminalType = _TerminalTypeDefault;
-		private bool _terminalIsOpen = _TerminalIsOpenDefault;
-		private float _splitterRatio = _SplitterRatioDefault;
+		private Domain.TerminalType terminalType = TerminalTypeDefault;
+		private bool terminalIsOpen = TerminalIsOpenDefault;
+		private float splitterRatio = SplitterRatioDefault;
 
 		#endregion
 
@@ -144,7 +144,7 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				_terminalType = value;
+				this.terminalType = value;
 				SetControls();
 			}
 		}
@@ -155,7 +155,7 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				_terminalIsOpen = value;
+				this.terminalIsOpen = value;
 				SetControls();
 			}
 		}
@@ -174,13 +174,13 @@ namespace YAT.Gui.Controls
 			set { splitContainer_Send.Panel2Collapsed = !value;  }
 		}
 
-		[DefaultValue(_SplitterRatioDefault)]
+		[DefaultValue(SplitterRatioDefault)]
 		public virtual float SplitterRatio
 		{
-			get { return (_splitterRatio); }
+			get { return (this.splitterRatio); }
 			set
 			{
-				_splitterRatio = value;
+				this.splitterRatio = value;
 				SetControls();
 			}
 		}
@@ -235,12 +235,12 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			sendCommand.TerminalIsOpen = _terminalIsOpen;
-			sendCommand.SplitterRatio = _splitterRatio;
+			sendCommand.TerminalIsOpen = this.terminalIsOpen;
+			sendCommand.SplitterRatio = this.splitterRatio;
 
-			sendFile.TerminalType = _terminalType;
-			sendFile.TerminalIsOpen = _terminalIsOpen;
-			sendFile.SplitterRatio = _splitterRatio;
+			sendFile.TerminalType = this.terminalType;
+			sendFile.TerminalIsOpen = this.terminalIsOpen;
+			sendFile.SplitterRatio = this.splitterRatio;
 		}
 
 		#endregion

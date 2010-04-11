@@ -139,7 +139,7 @@ namespace MKY.IO.Serial
 		// Constants
 		//==========================================================================================
 
-		private const int _AliveInterval = 500;
+		private const int AliveInterval = 500;
 
 		#endregion
 
@@ -148,36 +148,36 @@ namespace MKY.IO.Serial
 		// Fields
 		//==========================================================================================
 
-		private bool _isDisposed;
+		private bool isDisposed;
 
-		private State _state = State.Reset;
-		private object _stateSyncObj = new object();
+		private State state = State.Reset;
+		private object stateSyncObj = new object();
 		
-		private SerialPortSettings _settings;
+		private SerialPortSettings settings;
 
 		/// <summary>
 		/// Separate string containing the port name. Used for diagnostics/debug purposes.
 		/// </summary>
-		private string _portName;
+		private string portName;
 
-		private Ports.ISerialPort _port;
-		private object _portSyncObj = new object();
+		private Ports.ISerialPort port;
+		private object portSyncObj = new object();
 
 		/// <summary>
 		/// Async receiving.
 		/// </summary>
-		private Queue<byte> _receiveQueue = new Queue<byte>();
+		private Queue<byte> receiveQueue = new Queue<byte>();
 		
 		/// <summary>
 		/// Alive timer detects port break states, i.e. when a USB to serial converter is disconnected.
 		/// </summary>
-		private System.Timers.Timer _aliveTimer;
-		private System.Timers.Timer _reopenTimer;
+		private System.Timers.Timer aliveTimer;
+		private System.Timers.Timer reopenTimer;
 
 	#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
-		private bool _isInternalStopRequest = false;
+		private bool isInternalStopRequest = false;
 	#endif
-		private ReaderWriterLockSlim _isInternalStopRequestLock = new ReaderWriterLockSlim();
+		private ReaderWriterLockSlim isInternalStopRequestLock = new ReaderWriterLockSlim();
 
 		#endregion
 
@@ -209,7 +209,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public SerialPort(SerialPortSettings settings)
 		{
-			_settings = settings;
+			this.settings = settings;
 		}
 
 		#region Disposal
@@ -227,14 +227,14 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!_isDisposed)
+			if (!this.isDisposed)
 			{
 				if (disposing)
 				{
 					// Ensure to reset state during Dispose().
 					ResetPort();
 				}
-				_isDisposed = true;
+				this.isDisposed = true;
 			}
 		}
 
@@ -247,13 +247,13 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected bool IsDisposed
 		{
-			get { return (_isDisposed); }
+			get { return (this.isDisposed); }
 		}
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (_isDisposed)
+			if (this.isDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
 		}
 
@@ -272,7 +272,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_settings);
+				return (this.settings);
 			}
 		}
 
@@ -282,7 +282,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				switch (_state)
+				switch (this.state)
 				{
 					case State.Closed:
 					case State.Opened:
@@ -305,7 +305,7 @@ namespace MKY.IO.Serial
 				return
 					(
 						!IsDisposed && IsStarted && !IsOpen &&
-						_settings.AutoReopen.Enabled
+						this.settings.AutoReopen.Enabled
 					);
 			}
 		}
@@ -317,8 +317,8 @@ namespace MKY.IO.Serial
 			{
 				AssertNotDisposed();
 
-				if (_port != null)
-					return (_port.IsOpen && !_port.BreakState);
+				if (this.port != null)
+					return (this.port.IsOpen && !this.port.BreakState);
 				else
 					return (false);
 			}
@@ -331,8 +331,8 @@ namespace MKY.IO.Serial
 			{
 				AssertNotDisposed();
 
-				if (_port != null)
-					return (_port.IsOpen);
+				if (this.port != null)
+					return (this.port.IsOpen);
 				else
 					return (false);
 			}
@@ -346,9 +346,9 @@ namespace MKY.IO.Serial
 				AssertNotDisposed();
 
 				int bytesAvailable = 0;
-				lock (_receiveQueue)
+				lock (this.receiveQueue)
 				{
-					bytesAvailable = _receiveQueue.Count;
+					bytesAvailable = this.receiveQueue.Count;
 				}
 				return (bytesAvailable); 
 			}
@@ -360,7 +360,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_port);
+				return (this.port);
 			}
 		}
 
@@ -390,11 +390,11 @@ namespace MKY.IO.Serial
 			if (IsStarted)
 			{
 			#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
-				_isInternalStopRequestLock.EnterReadLock();
-				bool isInternalStopRequest = _isInternalStopRequest;
-				_isInternalStopRequestLock.ExitReadLock();
+				this.isInternalStopRequestLock.EnterReadLock();
+				bool isInternalStopRequest = this.isInternalStopRequest;
+				this.isInternalStopRequestLock.ExitReadLock();
 
-				if (isInternalStopRequest && _settings.AutoReopen.Enabled)
+				if (isInternalStopRequest && this.settings.AutoReopen.Enabled)
 					ClosePortAndStartReopenTimer();
 				else
 					ResetPort();
@@ -413,12 +413,12 @@ namespace MKY.IO.Serial
 			int bytesReceived = 0;
 			if (IsOpen)
 			{
-				lock (_receiveQueue)
+				lock (this.receiveQueue)
 				{
-					bytesReceived = _receiveQueue.Count;
+					bytesReceived = this.receiveQueue.Count;
 					data = new byte[bytesReceived];
 					for (int i = 0; i < bytesReceived; i++)
-						data[i] = _receiveQueue.Dequeue();
+						data[i] = this.receiveQueue.Dequeue();
 				}
 			}
 			else
@@ -435,15 +435,15 @@ namespace MKY.IO.Serial
 
 			if (IsOpen)
 			{
-				lock (_portSyncObj)
+				lock (this.portSyncObj)
 				{
-					if (_settings.Communication.FlowControl == SerialFlowControl.RS485)
-						_port.RtsEnable = true;
+					if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
+						this.port.RtsEnable = true;
 
-					_port.Write(data, 0, data.Length);
+					this.port.Write(data, 0, data.Length);
 
-					if (_settings.Communication.FlowControl == SerialFlowControl.RS485)
-						_port.RtsEnable = false;
+					if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
+						this.port.RtsEnable = false;
 				}
 
 				OnDataSent(new EventArgs());
@@ -459,38 +459,38 @@ namespace MKY.IO.Serial
 
 		private void ApplySettings()
 		{
-			if (_port == null)
+			if (this.port == null)
 				return;
 
-			lock (_portSyncObj)
+			lock (this.portSyncObj)
 			{
 				// No need to set encoding, only bytes are handled, encoding is done by text terminal
-				//_port.Encoding = _ioSettings.Encoding;
+				//this.port.Encoding = this.ioSettings.Encoding;
 
 				// Keep port name for diagnostics/debug purposes
-				_portName = _settings.PortId;
-				_port.PortId = _settings.PortId;
+				this.portName = this.settings.PortId;
+				this.port.PortId = this.settings.PortId;
 
-				SerialCommunicationSettings s = _settings.Communication;
-				_port.BaudRate = (MKY.IO.Ports.XBaudRate)s.BaudRate;
-				_port.DataBits = (MKY.IO.Ports.XDataBits)s.DataBits;
-				_port.Parity = s.Parity;
-				_port.StopBits = s.StopBits;
-				_port.Handshake = (XSerialFlowControl)s.FlowControl;
+				SerialCommunicationSettings s = this.settings.Communication;
+				this.port.BaudRate = (MKY.IO.Ports.XBaudRate)s.BaudRate;
+				this.port.DataBits = (MKY.IO.Ports.XDataBits)s.DataBits;
+				this.port.Parity = s.Parity;
+				this.port.StopBits = s.StopBits;
+				this.port.Handshake = (XSerialFlowControl)s.FlowControl;
 
 				// Parity replace
-				_port.ParityReplace = _settings.ParityErrorReplacement;
+				this.port.ParityReplace = this.settings.ParityErrorReplacement;
 
 				// RTS and DTR
-				switch (_settings.Communication.FlowControl)
+				switch (this.settings.Communication.FlowControl)
 				{
 					case SerialFlowControl.Manual:
-						_port.RtsEnable = _settings.RtsEnabled;
-						_port.DtrEnable = _settings.DtrEnabled;
+						this.port.RtsEnable = this.settings.RtsEnabled;
+						this.port.DtrEnable = this.settings.DtrEnabled;
 						break;
 
 					case SerialFlowControl.RS485:
-						_port.RtsEnable = false;
+						this.port.RtsEnable = false;
 						break;
 				}
 			}
@@ -506,12 +506,12 @@ namespace MKY.IO.Serial
 		private void SetStateAndNotify(State state)
 		{
 #if (DEBUG)
-			State oldState = _state;
+			State oldState = this.state;
 #endif
-			lock (_stateSyncObj)
-				_state = state;
+			lock (this.stateSyncObj)
+				this.state = state;
 #if (DEBUG)
-			System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortPortString() + ")(" + _state + "): State has changed from " + oldState + " to " + _state + ".");
+			System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortPortString() + ")(" + this.state + "): State has changed from " + oldState + " to " + this.state + ".");
 #endif
 			OnIOChanged(new EventArgs());
 			OnIOControlChanged(new EventArgs());
@@ -526,40 +526,40 @@ namespace MKY.IO.Serial
 
 		private void CreatePort()
 		{
-			if (_port != null)
+			if (this.port != null)
 				CloseAndDisposePort();
 
-			lock (_portSyncObj)
+			lock (this.portSyncObj)
 			{
-				_port = new Ports.SerialPortDotNet();
-				_port.DataReceived  += new Ports.SerialDataReceivedEventHandler (_port_DataReceived);
-				_port.PinChanged    += new Ports.SerialPinChangedEventHandler   (_port_PinChanged);
-				_port.ErrorReceived += new Ports.SerialErrorReceivedEventHandler(_port_ErrorReceived);
+				this.port = new Ports.SerialPortDotNet();
+				this.port.DataReceived  += new Ports.SerialDataReceivedEventHandler (this.port_DataReceived);
+				this.port.PinChanged    += new Ports.SerialPinChangedEventHandler   (this.port_PinChanged);
+				this.port.ErrorReceived += new Ports.SerialErrorReceivedEventHandler(this.port_ErrorReceived);
 			}
 		}
 
 		private void OpenPort()
 		{
-			if (!_port.IsOpen)
+			if (!this.port.IsOpen)
 			{
-				lock (_portSyncObj)
-					_port.Open();
+				lock (this.portSyncObj)
+					this.port.Open();
 			}
 		}
 
 		private void CloseAndDisposePort()
 		{
-			if (_port != null)
+			if (this.port != null)
 			{
 				try
 				{
-					lock (_portSyncObj)
+					lock (this.portSyncObj)
 					{
-						if (_port.IsOpen)
-							_port.Close();
+						if (this.port.IsOpen)
+							this.port.Close();
 
-						_port.Dispose();
-						_port = null;
+						this.port.Dispose();
+						this.port = null;
 					}
 				}
 				catch { }
@@ -576,25 +576,25 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		private void CreateAndOpenPort()
 		{
-			CreatePort();          // Port must be created each time because _port.Close()
+			CreatePort();          // Port must be created each time because this.port.Close()
 			ApplySettings();       //   disposes the underlying IO instance
 
-			lock (_portSyncObj)
+			lock (this.portSyncObj)
 			{
 				// RTS
-				switch (_settings.Communication.FlowControl)
+				switch (this.settings.Communication.FlowControl)
 				{
 					case SerialFlowControl.None:
 					case SerialFlowControl.XOnXOff:
-						_port.RtsEnable = false;
+						this.port.RtsEnable = false;
 						break;
 
 					case SerialFlowControl.Manual:
-						_port.RtsEnable = _settings.RtsEnabled;
+						this.port.RtsEnable = this.settings.RtsEnabled;
 						break;
 
 					case SerialFlowControl.RS485:
-						_port.RtsEnable = false;
+						this.port.RtsEnable = false;
 						break;
 
 					case SerialFlowControl.RequestToSend:
@@ -604,21 +604,21 @@ namespace MKY.IO.Serial
 				}
 
 				// DTR
-				switch (_settings.Communication.FlowControl)
+				switch (this.settings.Communication.FlowControl)
 				{
 					case SerialFlowControl.None:
 					case SerialFlowControl.RequestToSend:
 					case SerialFlowControl.XOnXOff:
 					case SerialFlowControl.RequestToSendXOnXOff:
 					case SerialFlowControl.RS485:
-						_port.DtrEnable = false;
+						this.port.DtrEnable = false;
 						break;
 
 					case SerialFlowControl.Manual:
-						_port.DtrEnable = _settings.DtrEnabled;
+						this.port.DtrEnable = this.settings.DtrEnabled;
 						break;
 				}
-			} // lock (_portSyncObj)
+			} // lock (this.portSyncObj)
 
 			OpenPort();
 			StartAliveTimer();
@@ -629,7 +629,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		private void StopOrClosePort()
 		{
-			if (_settings.AutoReopen.Enabled)
+			if (this.settings.AutoReopen.Enabled)
 			{
 				StopAndDisposeAliveTimer();
 				CloseAndDisposePort();
@@ -677,51 +677,51 @@ namespace MKY.IO.Serial
 		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
 		/// Also, the mechanism implemented below reduces the amount of events that are propagated
 		/// to the main application. Small chunks of received data will generate many events
-		/// handled by <see cref="_port_DataReceived"/>. However, since <see cref="OnDataReceived"/>
+		/// handled by <see cref="port_DataReceived"/>. However, since <see cref="OnDataReceived"/>
 		/// synchronously invokes the event, it will take some time until the monitor is released
 		/// again. During this time, no more new events are invoked, instead, incoming data is
 		/// buffered.
 		/// </summary>
-		private delegate void _port_DataReceivedDelegate(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e);
-		private object _port_DataReceivedSyncObj = new object();
+		private delegate void port_DataReceivedDelegate(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e);
+		private object port_DataReceivedSyncObj = new object();
 
-		private void _port_DataReceived(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
+		private void port_DataReceived(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
 		{
-			if (_state == State.Opened) // Ensure not to forward any events during closing anymore.
+			if (this.state == State.Opened) // Ensure not to forward any events during closing anymore.
 			{
 				// Immediately read data on this thread.
-				int bytesToRead = _port.BytesToRead;
+				int bytesToRead = this.port.BytesToRead;
 				byte[] buffer = new byte[bytesToRead];
-				_port.Read(buffer, 0, bytesToRead);
+				this.port.Read(buffer, 0, bytesToRead);
 
-				lock (_receiveQueue)
+				lock (this.receiveQueue)
 				{
 					foreach (byte b in buffer)
-						_receiveQueue.Enqueue(b);
+						this.receiveQueue.Enqueue(b);
 				}
 
 				// Ensure that only one data received event thread is active at the same time.
 				// Without this exclusivity, two receive threads could create a race condition.
-				if (Monitor.TryEnter(_port_DataReceivedSyncObj))
+				if (Monitor.TryEnter(this.port_DataReceivedSyncObj))
 				{
 					try
 					{
-						_port_DataReceivedDelegate asyncInvoker = new _port_DataReceivedDelegate(_port_DataReceivedAsync);
+						port_DataReceivedDelegate asyncInvoker = new port_DataReceivedDelegate(port_DataReceivedAsync);
 						asyncInvoker.BeginInvoke(sender, e, null, null);
 					}
 					finally
 					{
-						Monitor.Exit(_port_DataReceivedSyncObj);
+						Monitor.Exit(this.port_DataReceivedSyncObj);
 					}
 				}
 			}
 		}
 
-		private void _port_DataReceivedAsync(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
+		private void port_DataReceivedAsync(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
 		{
 			// Ensure that only one data received event thread is active at the same time.
 			// Without this exclusivity, two receive threads could create a race condition.
-			Monitor.Enter(_port_DataReceivedSyncObj);
+			Monitor.Enter(this.port_DataReceivedSyncObj);
 			try
 			{
 				// Fire events until there is no more data available. Must be done to ensure
@@ -732,7 +732,7 @@ namespace MKY.IO.Serial
 			}
 			finally
 			{
-				Monitor.Exit(_port_DataReceivedSyncObj);
+				Monitor.Exit(this.port_DataReceivedSyncObj);
 			}
 		}
 
@@ -740,27 +740,27 @@ namespace MKY.IO.Serial
 		/// Asynchronously invoke incoming events to prevent potential dead-locks if close/dispose
 		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
 		/// </summary>
-		private delegate void _port_PinChangedDelegate(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e);
+		private delegate void port_PinChangedDelegate(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e);
 
-		private void _port_PinChanged(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
+		private void port_PinChanged(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
-			if (_state == State.Opened) // Ensure not to forward any events during closing anymore
+			if (this.state == State.Opened) // Ensure not to forward any events during closing anymore
 			{
-				_port_PinChangedDelegate asyncInvoker = new _port_PinChangedDelegate(_port_PinChangedAsync);
+				port_PinChangedDelegate asyncInvoker = new port_PinChangedDelegate(port_PinChangedAsync);
 				asyncInvoker.BeginInvoke(sender, e, null, null);
 			}
 		}
 
-		private void _port_PinChangedAsync(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
+		private void port_PinChangedAsync(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
 			// If pin has changed, but access to port throws exception, port has been shut down,
 			//   e.g. USB to serial converter disconnected
 			try
 			{
 				// Force access to port to check whether it's still alive
-				bool cts = _port.CtsHolding;
+				bool cts = this.port.CtsHolding;
 
-				if (_state == State.Opened) // Ensure not to forward any events during closing anymore
+				if (this.state == State.Opened) // Ensure not to forward any events during closing anymore
 					OnIOControlChanged(new EventArgs());
 			}
 			catch
@@ -777,18 +777,18 @@ namespace MKY.IO.Serial
 		/// Asynchronously invoke incoming events to prevent potential dead-locks if close/dispose
 		/// was called from a ISynchronizeInvoke target (i.e. a form) on an event thread.
 		/// </summary>
-		private delegate void _port_ErrorReceivedDelegate(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e);
+		private delegate void port_ErrorReceivedDelegate(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e);
 
-		private void _port_ErrorReceived(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e)
+		private void port_ErrorReceived(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e)
 		{
-			if (_state == State.Opened) // Ensure not to forward any events during closing anymore
+			if (this.state == State.Opened) // Ensure not to forward any events during closing anymore
 			{
-				_port_ErrorReceivedDelegate asyncInvoker = new _port_ErrorReceivedDelegate(_port_ErrorReceivedAsync);
+				port_ErrorReceivedDelegate asyncInvoker = new port_ErrorReceivedDelegate(port_ErrorReceivedAsync);
 				asyncInvoker.BeginInvoke(sender, e, null, null);
 			}
 		}
 
-		private void _port_ErrorReceivedAsync(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e)
+		private void port_ErrorReceivedAsync(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e)
 		{
 			string message;
 			switch (e.EventType)
@@ -812,31 +812,31 @@ namespace MKY.IO.Serial
 
 		private void StartAliveTimer()
 		{
-			if (_aliveTimer == null)
+			if (this.aliveTimer == null)
 			{
-				_aliveTimer = new System.Timers.Timer(_AliveInterval);
-				_aliveTimer.AutoReset = true;
-				_aliveTimer.Elapsed += new System.Timers.ElapsedEventHandler(_aliveTimer_Elapsed);
-				_aliveTimer.Start();
+				this.aliveTimer = new System.Timers.Timer(AliveInterval);
+				this.aliveTimer.AutoReset = true;
+				this.aliveTimer.Elapsed += new System.Timers.ElapsedEventHandler(this.aliveTimer_Elapsed);
+				this.aliveTimer.Start();
 			}
 		}
 
 		private void StopAndDisposeAliveTimer()
 		{
-			if (_aliveTimer != null)
+			if (this.aliveTimer != null)
 			{
-				_aliveTimer.Stop();
-				_aliveTimer.Dispose();
-				_aliveTimer = null;
+				this.aliveTimer.Stop();
+				this.aliveTimer.Dispose();
+				this.aliveTimer = null;
 			}
 		}
 
 #if (FALSE)
 		// \fixme break state detection doesn't work
-		private bool _aliveTimer_BreakState = false;
+		private bool aliveTimer_BreakState = false;
 #endif
 
-		private void _aliveTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private void aliveTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			if (!IsDisposed && IsStarted)
 			{
@@ -844,7 +844,7 @@ namespace MKY.IO.Serial
 				{
 					// If port isn't open anymore, or access to port throws exception,
 					//   port has been shut down, e.g. USB to serial converter disconnected
-					if (!_port.IsOpen)
+					if (!this.port.IsOpen)
 					{
 						OnIORequest(new IORequestEventArgs(Serial.IORequest.Close));
 
@@ -857,10 +857,10 @@ namespace MKY.IO.Serial
 					else
 					{
 						// detect break state changes
-						if (_aliveTimer_BreakState != _port.BreakState)
+						if (this.aliveTimer_BreakState != this.port.BreakState)
 							OnIOChanged(new EventArgs());
 
-						_aliveTimer_BreakState = _port.BreakState;
+						this.aliveTimer_BreakState = this.port.BreakState;
 					}
 #endif
 				}
@@ -888,26 +888,26 @@ namespace MKY.IO.Serial
 
 		private void StartReopenTimer()
 		{
-			if (_reopenTimer == null)
+			if (this.reopenTimer == null)
 			{
-				_reopenTimer = new System.Timers.Timer(_settings.AutoReopen.Interval);
-				_reopenTimer.AutoReset = false;
-				_reopenTimer.Elapsed += new System.Timers.ElapsedEventHandler(_reopenTimer_Elapsed);
+				this.reopenTimer = new System.Timers.Timer(this.settings.AutoReopen.Interval);
+				this.reopenTimer.AutoReset = false;
+				this.reopenTimer.Elapsed += new System.Timers.ElapsedEventHandler(this.reopenTimer_Elapsed);
 			}
-			_reopenTimer.Start();
+			this.reopenTimer.Start();
 		}
 
 		private void StopAndDisposeReopenTimer()
 		{
-			if (_reopenTimer != null)
+			if (this.reopenTimer != null)
 			{
-				_reopenTimer.Stop();
-				_reopenTimer.Dispose();
-				_reopenTimer = null;
+				this.reopenTimer.Stop();
+				this.reopenTimer.Dispose();
+				this.reopenTimer = null;
 			}
 		}
 
-		private void _reopenTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private void reopenTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			if (AutoReopenEnabledAndAllowed)
 			{
@@ -970,9 +970,9 @@ namespace MKY.IO.Serial
 		#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
 			if (e.Request == Serial.IORequest.Close)
 			{
-				_isInternalStopRequestLock.EnterWriteLock();
-				_isInternalStopRequest = true;
-				_isInternalStopRequestLock.ExitWriteLock();
+				this.isInternalStopRequestLock.EnterWriteLock();
+				this.isInternalStopRequest = true;
+				this.isInternalStopRequestLock.ExitWriteLock();
 			}
 		#endif
 
@@ -995,10 +995,10 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public virtual string ToShortPortString()
 		{
-			if (_port != null)
-				return (_port.PortId);
-			else if ((_portName != null) && (_portName != ""))
-				return (_portName);
+			if (this.port != null)
+				return (this.port.PortId);
+			else if ((this.portName != null) && (this.portName != ""))
+				return (this.portName);
 			else
 				return ("<Undefined>");
 		}

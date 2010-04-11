@@ -27,18 +27,18 @@ namespace YAT.Domain.Settings
 	[Serializable]
 	public class TerminalSettings : MKY.Utilities.Settings.Settings, IEquatable<TerminalSettings>
 	{
-		private TerminalType _terminalType;
+		private TerminalType terminalType;
 
 		// type independent settings
-		private IOSettings _io;
-		private BufferSettings _buffer;
-		private DisplaySettings _display;
-		private CharReplaceSettings _charReplace;
-		private SendSettings _send;
+		private IOSettings io;
+		private BufferSettings buffer;
+		private DisplaySettings display;
+		private CharReplaceSettings charReplace;
+		private SendSettings send;
 
 		// type dependent settings
-		private TextTerminalSettings _textTerminal;
-		private BinaryTerminalSettings _binaryTerminal;
+		private TextTerminalSettings textTerminal;
+		private BinaryTerminalSettings binaryTerminal;
 
 		/// <summary></summary>
 		public TerminalSettings()
@@ -76,7 +76,7 @@ namespace YAT.Domain.Settings
 		public TerminalSettings(TerminalSettings rhs)
 			: base(rhs)
 		{
-			_terminalType = rhs.TerminalType;
+			this.terminalType = rhs.TerminalType;
 
 			IO = new IOSettings(rhs.IO);
 			Buffer = new BufferSettings(rhs.Buffer);
@@ -107,12 +107,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("TerminalType")]
 		public TerminalType TerminalType
 		{
-			get { return (_terminalType); }
+			get { return (this.terminalType); }
 			set
 			{
-				if (value != _terminalType)
+				if (value != this.terminalType)
 				{
-					_terminalType = value;
+					this.terminalType = value;
 					SetChanged();
 				}
 			}
@@ -122,19 +122,19 @@ namespace YAT.Domain.Settings
 		[XmlElement("IO")]
 		public IOSettings IO
 		{
-			get { return (_io); }
+			get { return (this.io); }
 			set
 			{
-				if (_io == null)
+				if (this.io == null)
 				{
-					_io = value;
-					AttachNode(_io);
+					this.io = value;
+					AttachNode(this.io);
 				}
-				else if (value != _io)
+				else if (value != this.io)
 				{
-					IOSettings old = _io;
-					_io = value;
-					ReplaceNode(old, _io);
+					IOSettings old = this.io;
+					this.io = value;
+					ReplaceNode(old, this.io);
 				}
 			}
 		}
@@ -143,19 +143,19 @@ namespace YAT.Domain.Settings
 		[XmlElement("Buffer")]
 		public BufferSettings Buffer
 		{
-			get { return (_buffer); }
+			get { return (this.buffer); }
 			set
 			{
-				if (_buffer == null)
+				if (this.buffer == null)
 				{
-					_buffer = value;
-					AttachNode(_buffer);
+					this.buffer = value;
+					AttachNode(this.buffer);
 				}
-				else if (value != _buffer)
+				else if (value != this.buffer)
 				{
-					BufferSettings old = _buffer;
-					_buffer = value;
-					ReplaceNode(old, _buffer);
+					BufferSettings old = this.buffer;
+					this.buffer = value;
+					ReplaceNode(old, this.buffer);
 				}
 			}
 		}
@@ -164,19 +164,19 @@ namespace YAT.Domain.Settings
 		[XmlElement("Display")]
 		public DisplaySettings Display
 		{
-			get { return (_display); }
+			get { return (this.display); }
 			set
 			{
-				if (_display == null)
+				if (this.display == null)
 				{
-					_display = value;
-					AttachNode(_display);
+					this.display = value;
+					AttachNode(this.display);
 				}
-				else if (value != _display)
+				else if (value != this.display)
 				{
-					DisplaySettings old = _display;
-					_display = value;
-					ReplaceNode(old, _display);
+					DisplaySettings old = this.display;
+					this.display = value;
+					ReplaceNode(old, this.display);
 				}
 			}
 		}
@@ -185,19 +185,19 @@ namespace YAT.Domain.Settings
 		[XmlElement("CharReplace")]
 		public CharReplaceSettings CharReplace
 		{
-			get { return (_charReplace); }
+			get { return (this.charReplace); }
 			set
 			{
-				if (_charReplace == null)
+				if (this.charReplace == null)
 				{
-					_charReplace = value;
-					AttachNode(_charReplace);
+					this.charReplace = value;
+					AttachNode(this.charReplace);
 				}
-				else if (value != _charReplace)
+				else if (value != this.charReplace)
 				{
-					CharReplaceSettings old = _charReplace;
-					_charReplace = value;
-					ReplaceNode(old, _charReplace);
+					CharReplaceSettings old = this.charReplace;
+					this.charReplace = value;
+					ReplaceNode(old, this.charReplace);
 				}
 			}
 		}
@@ -206,19 +206,19 @@ namespace YAT.Domain.Settings
 		[XmlElement("Send")]
 		public SendSettings Send
 		{
-			get { return (_send); }
+			get { return (this.send); }
 			set
 			{
-				if (_send == null)
+				if (this.send == null)
 				{
-					_send = value;
-					AttachNode(_send);
+					this.send = value;
+					AttachNode(this.send);
 				}
-				else if (value != _send)
+				else if (value != this.send)
 				{
-					SendSettings old = _send;
-					_send = value;
-					ReplaceNode(old, _send);
+					SendSettings old = this.send;
+					this.send = value;
+					ReplaceNode(old, this.send);
 				}
 			}
 		}
@@ -227,19 +227,19 @@ namespace YAT.Domain.Settings
 		[XmlElement("TextTerminal")]
 		public TextTerminalSettings TextTerminal
 		{
-			get { return (_textTerminal); }
+			get { return (this.textTerminal); }
 			set
 			{
-				if (_textTerminal == null)
+				if (this.textTerminal == null)
 				{
-					_textTerminal = value;
-					AttachNode(_textTerminal);
+					this.textTerminal = value;
+					AttachNode(this.textTerminal);
 				}
-				else if (value != _textTerminal)
+				else if (value != this.textTerminal)
 				{
-					TextTerminalSettings old = _textTerminal;
-					_textTerminal = value;
-					ReplaceNode(old, _textTerminal);
+					TextTerminalSettings old = this.textTerminal;
+					this.textTerminal = value;
+					ReplaceNode(old, this.textTerminal);
 				}
 			}
 		}
@@ -248,19 +248,19 @@ namespace YAT.Domain.Settings
 		[XmlElement("BinaryTerminal")]
 		public BinaryTerminalSettings BinaryTerminal
 		{
-			get { return (_binaryTerminal); }
+			get { return (this.binaryTerminal); }
 			set
 			{
-				if (_binaryTerminal == null)
+				if (this.binaryTerminal == null)
 				{
-					_binaryTerminal = value;
-					AttachNode(_binaryTerminal);
+					this.binaryTerminal = value;
+					AttachNode(this.binaryTerminal);
 				}
-				else if (value != _binaryTerminal)
+				else if (value != this.binaryTerminal)
 				{
-					BinaryTerminalSettings old = _binaryTerminal;
-					_binaryTerminal = value;
-					ReplaceNode(old, _binaryTerminal);
+					BinaryTerminalSettings old = this.binaryTerminal;
+					this.binaryTerminal = value;
+					ReplaceNode(old, this.binaryTerminal);
 				}
 			}
 		}
@@ -290,7 +290,7 @@ namespace YAT.Domain.Settings
 			{
 				return
 					(
-					(_terminalType == value._terminalType) &&
+					(this.terminalType == value.terminalType) &&
 					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
 					);
 			}

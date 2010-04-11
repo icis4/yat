@@ -26,18 +26,18 @@ namespace YAT.Model.Settings
 	[Serializable]
 	public class LayoutSettings : MKY.Utilities.Settings.Settings, IEquatable<LayoutSettings>
 	{
-		private bool _txMonitorPanelIsVisible;
-		private bool _bidirMonitorPanelIsVisible;
-		private bool _rxMonitorPanelIsVisible;
-		private Orientation _monitorOrientation;
-		private float _txMonitorSplitterRatio;
-		private float _rxMonitorSplitterRatio;
+		private bool txMonitorPanelIsVisible;
+		private bool bidirMonitorPanelIsVisible;
+		private bool rxMonitorPanelIsVisible;
+		private Orientation monitorOrientation;
+		private float txMonitorSplitterRatio;
+		private float rxMonitorSplitterRatio;
 
-		private bool _predefinedPanelIsVisible;
-		private float _predefinedSplitterRatio;
+		private bool predefinedPanelIsVisible;
+		private float predefinedSplitterRatio;
 
-		private bool _sendCommandPanelIsVisible;
-		private bool _sendFilePanelIsVisible;
+		private bool sendCommandPanelIsVisible;
+		private bool sendFilePanelIsVisible;
 
 		/// <summary></summary>
 		public LayoutSettings()
@@ -60,18 +60,18 @@ namespace YAT.Model.Settings
 		public LayoutSettings(LayoutSettings rhs)
 			: base(rhs)
 		{
-			_txMonitorPanelIsVisible    = rhs.TxMonitorPanelIsVisible;
-			_bidirMonitorPanelIsVisible = rhs.BidirMonitorPanelIsVisible;
-			_rxMonitorPanelIsVisible    = rhs.RxMonitorPanelIsVisible;
-			_monitorOrientation         = rhs.MonitorOrientation;
-			_txMonitorSplitterRatio     = rhs.TxMonitorSplitterRatio;
-			_rxMonitorSplitterRatio     = rhs.RxMonitorSplitterRatio;
+			this.txMonitorPanelIsVisible    = rhs.TxMonitorPanelIsVisible;
+			this.bidirMonitorPanelIsVisible = rhs.BidirMonitorPanelIsVisible;
+			this.rxMonitorPanelIsVisible    = rhs.RxMonitorPanelIsVisible;
+			this.monitorOrientation         = rhs.MonitorOrientation;
+			this.txMonitorSplitterRatio     = rhs.TxMonitorSplitterRatio;
+			this.rxMonitorSplitterRatio     = rhs.RxMonitorSplitterRatio;
 
-			_predefinedPanelIsVisible = rhs.PredefinedPanelIsVisible;
-			_predefinedSplitterRatio  = rhs.PredefinedSplitterRatio;
+			this.predefinedPanelIsVisible = rhs.PredefinedPanelIsVisible;
+			this.predefinedSplitterRatio  = rhs.PredefinedSplitterRatio;
 
-			_sendCommandPanelIsVisible = rhs.SendCommandPanelIsVisible;
-			_sendFilePanelIsVisible = rhs.SendFilePanelIsVisible;
+			this.sendCommandPanelIsVisible = rhs.SendCommandPanelIsVisible;
+			this.sendFilePanelIsVisible = rhs.SendFilePanelIsVisible;
 
 			ClearChanged();
 		}
@@ -104,12 +104,12 @@ namespace YAT.Model.Settings
 		[XmlElement("TxMonitorPanelIsVisible")]
 		public virtual bool TxMonitorPanelIsVisible
 		{
-			get { return (_txMonitorPanelIsVisible); }
+			get { return (this.txMonitorPanelIsVisible); }
 			set
 			{
-				if (value != _txMonitorPanelIsVisible)
+				if (value != this.txMonitorPanelIsVisible)
 				{
-					_txMonitorPanelIsVisible = value;
+					this.txMonitorPanelIsVisible = value;
 					SetChanged();
 				}
 			}
@@ -119,12 +119,12 @@ namespace YAT.Model.Settings
 		[XmlElement("BidirMonitorPanelIsVisible")]
 		public virtual bool BidirMonitorPanelIsVisible
 		{
-			get { return (_bidirMonitorPanelIsVisible); }
+			get { return (this.bidirMonitorPanelIsVisible); }
 			set
 			{
-				if (value != _bidirMonitorPanelIsVisible)
+				if (value != this.bidirMonitorPanelIsVisible)
 				{
-					_bidirMonitorPanelIsVisible = value;
+					this.bidirMonitorPanelIsVisible = value;
 					SetChanged();
 				}
 			}
@@ -134,12 +134,12 @@ namespace YAT.Model.Settings
 		[XmlElement("RxMonitorPanelIsVisible")]
 		public virtual bool RxMonitorPanelIsVisible
 		{
-			get { return (_rxMonitorPanelIsVisible); }
+			get { return (this.rxMonitorPanelIsVisible); }
 			set
 			{
-				if (value != _rxMonitorPanelIsVisible)
+				if (value != this.rxMonitorPanelIsVisible)
 				{
-					_rxMonitorPanelIsVisible = value;
+					this.rxMonitorPanelIsVisible = value;
 					SetChanged();
 				}
 			}
@@ -149,12 +149,12 @@ namespace YAT.Model.Settings
 		[XmlElement("MonitorOrientation")]
 		public virtual Orientation MonitorOrientation
 		{
-			get { return (_monitorOrientation); }
+			get { return (this.monitorOrientation); }
 			set
 			{
-				if (value != _monitorOrientation)
+				if (value != this.monitorOrientation)
 				{
-					_monitorOrientation = value;
+					this.monitorOrientation = value;
 					SetChanged();
 				}
 			}
@@ -164,12 +164,12 @@ namespace YAT.Model.Settings
 		[XmlElement("TxMonitorSplitterRatio")]
 		public virtual float TxMonitorSplitterRatio
 		{
-			get { return (_txMonitorSplitterRatio); }
+			get { return (this.txMonitorSplitterRatio); }
 			set
 			{
-				if (value != _txMonitorSplitterRatio)
+				if (value != this.txMonitorSplitterRatio)
 				{
-					_txMonitorSplitterRatio = value;
+					this.txMonitorSplitterRatio = value;
 					SetChanged();
 				}
 			}
@@ -179,12 +179,12 @@ namespace YAT.Model.Settings
 		[XmlElement("RxMonitorSplitterRatio")]
 		public virtual float RxMonitorSplitterRatio
 		{
-			get { return (_rxMonitorSplitterRatio); }
+			get { return (this.rxMonitorSplitterRatio); }
 			set
 			{
-				if (value != _rxMonitorSplitterRatio)
+				if (value != this.rxMonitorSplitterRatio)
 				{
-					_rxMonitorSplitterRatio = value;
+					this.rxMonitorSplitterRatio = value;
 					SetChanged();
 				}
 			}
@@ -194,12 +194,12 @@ namespace YAT.Model.Settings
 		[XmlElement("PredefinedPanelIsVisible")]
 		public virtual bool PredefinedPanelIsVisible
 		{
-			get { return (_predefinedPanelIsVisible); }
+			get { return (this.predefinedPanelIsVisible); }
 			set
 			{
-				if (value != _predefinedPanelIsVisible)
+				if (value != this.predefinedPanelIsVisible)
 				{
-					_predefinedPanelIsVisible = value;
+					this.predefinedPanelIsVisible = value;
 					SetChanged();
 				}
 			}
@@ -209,12 +209,12 @@ namespace YAT.Model.Settings
 		[XmlElement("PredefinedSplitterRatio")]
 		public virtual float PredefinedSplitterRatio
 		{
-			get { return (_predefinedSplitterRatio); }
+			get { return (this.predefinedSplitterRatio); }
 			set
 			{
-				if (value != _predefinedSplitterRatio)
+				if (value != this.predefinedSplitterRatio)
 				{
-					_predefinedSplitterRatio = value;
+					this.predefinedSplitterRatio = value;
 					SetChanged();
 				}
 			}
@@ -224,12 +224,12 @@ namespace YAT.Model.Settings
 		[XmlElement("SendCommandPanelIsVisible")]
 		public virtual bool SendCommandPanelIsVisible
 		{
-			get { return (_sendCommandPanelIsVisible); }
+			get { return (this.sendCommandPanelIsVisible); }
 			set
 			{
-				if (value != _sendCommandPanelIsVisible)
+				if (value != this.sendCommandPanelIsVisible)
 				{
-					_sendCommandPanelIsVisible = value;
+					this.sendCommandPanelIsVisible = value;
 					SetChanged();
 				}
 			}
@@ -239,12 +239,12 @@ namespace YAT.Model.Settings
 		[XmlElement("SendFilePanelIsVisible")]
 		public virtual bool SendFilePanelIsVisible
 		{
-			get { return (_sendFilePanelIsVisible); }
+			get { return (this.sendFilePanelIsVisible); }
 			set
 			{
-				if (value != _sendFilePanelIsVisible)
+				if (value != this.sendFilePanelIsVisible)
 				{
-					_sendFilePanelIsVisible = value;
+					this.sendFilePanelIsVisible = value;
 					SetChanged();
 				}
 			}
@@ -275,18 +275,18 @@ namespace YAT.Model.Settings
 			{
 				return
 					(
-					(_txMonitorPanelIsVisible    == value._txMonitorPanelIsVisible) &&
-					(_bidirMonitorPanelIsVisible == value._bidirMonitorPanelIsVisible) &&
-					(_rxMonitorPanelIsVisible    == value._rxMonitorPanelIsVisible) &&
-					(_monitorOrientation         == value._monitorOrientation) &&
-					(_txMonitorSplitterRatio     == value._txMonitorSplitterRatio) &&
-					(_rxMonitorSplitterRatio     == value._rxMonitorSplitterRatio) &&
+					(this.txMonitorPanelIsVisible    == value.txMonitorPanelIsVisible) &&
+					(this.bidirMonitorPanelIsVisible == value.bidirMonitorPanelIsVisible) &&
+					(this.rxMonitorPanelIsVisible    == value.rxMonitorPanelIsVisible) &&
+					(this.monitorOrientation         == value.monitorOrientation) &&
+					(this.txMonitorSplitterRatio     == value.txMonitorSplitterRatio) &&
+					(this.rxMonitorSplitterRatio     == value.rxMonitorSplitterRatio) &&
 
-					(_predefinedPanelIsVisible   == value._predefinedPanelIsVisible) &&
-					(_predefinedSplitterRatio    == value._predefinedSplitterRatio) &&
+					(this.predefinedPanelIsVisible   == value.predefinedPanelIsVisible) &&
+					(this.predefinedSplitterRatio    == value.predefinedSplitterRatio) &&
 
-					(_sendCommandPanelIsVisible  == value._sendCommandPanelIsVisible) &&
-					(_sendFilePanelIsVisible     == value._sendFilePanelIsVisible)
+					(this.sendCommandPanelIsVisible  == value.sendCommandPanelIsVisible) &&
+					(this.sendFilePanelIsVisible     == value.sendFilePanelIsVisible)
 					);
 			}
 			return (false);

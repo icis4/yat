@@ -37,8 +37,8 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool _isSettingControls = false;
-		private BinaryDisplaySettings _settings = new BinaryDisplaySettings();
+		private bool isSettingControls = false;
+		private BinaryDisplaySettings settings = new BinaryDisplaySettings();
 
 		#endregion
 
@@ -73,13 +73,13 @@ namespace YAT.Gui.Controls
 
 		public BinaryDisplaySettings Settings
 		{
-			get { return (_settings); }
+			get { return (this.settings); }
 			set
 			{
 				if (value != null)
-					_settings = value;
+					this.settings = value;
 				else
-					_settings = new BinaryDisplaySettings();
+					this.settings = new BinaryDisplaySettings();
 
 				SetControls();
 			}
@@ -94,11 +94,11 @@ namespace YAT.Gui.Controls
 
 		private void checkBox_LengthLineBreak_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				Domain.BinaryLengthLineBreak llb = _settings.LengthLineBreak;
+				Domain.BinaryLengthLineBreak llb = this.settings.LengthLineBreak;
 				llb.Enabled = checkBox_LengthLineBreak.Checked;
-				_settings.LengthLineBreak = llb;
+				this.settings.LengthLineBreak = llb;
 				SetControls();
 				OnSettingsChanged(new EventArgs());
 			}
@@ -115,14 +115,14 @@ namespace YAT.Gui.Controls
 
 		private void textBox_LengthLineBreak_Validating(object sender, CancelEventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				int length;
 				if (int.TryParse(textBox_LengthLineBreak.Text, out length) && (length >= 1))
 				{
-					Domain.BinaryLengthLineBreak llb = _settings.LengthLineBreak;
+					Domain.BinaryLengthLineBreak llb = this.settings.LengthLineBreak;
 					llb.LineLength = length;
-					_settings.LengthLineBreak = llb;
+					this.settings.LengthLineBreak = llb;
 					SetControls();
 					OnSettingsChanged(new EventArgs());
 				}
@@ -143,11 +143,11 @@ namespace YAT.Gui.Controls
 
 		private void checkBox_SequenceLineBreak_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				Domain.BinarySequenceLineBreak slb = _settings.SequenceLineBreak;
+				Domain.BinarySequenceLineBreak slb = this.settings.SequenceLineBreak;
 				slb.Enabled = checkBox_SequenceLineBreak.Checked;
-				_settings.SequenceLineBreak = slb;
+				this.settings.SequenceLineBreak = slb;
 				SetControls();
 				OnSettingsChanged(new EventArgs());
 			}
@@ -159,9 +159,9 @@ namespace YAT.Gui.Controls
 			int invalidTextLength;
 			if (Validation.ValidateSequence(this, "Sequence", textBox_SequenceLineBreakSequence.Text, out invalidTextStart, out invalidTextLength))
 			{
-				Domain.BinarySequenceLineBreak slb = _settings.SequenceLineBreak;
+				Domain.BinarySequenceLineBreak slb = this.settings.SequenceLineBreak;
 				slb.Sequence = textBox_SequenceLineBreakSequence.Text;
-				_settings.SequenceLineBreak = slb;
+				this.settings.SequenceLineBreak = slb;
 				SetControls();
 				OnSettingsChanged(new EventArgs());
 			}
@@ -174,11 +174,11 @@ namespace YAT.Gui.Controls
 
 		private void checkBox_TimedLineBreak_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				Domain.BinaryTimedLineBreak tlb = _settings.TimedLineBreak;
+				Domain.BinaryTimedLineBreak tlb = this.settings.TimedLineBreak;
 				tlb.Enabled = checkBox_TimedLineBreak.Checked;
-				_settings.TimedLineBreak = tlb;
+				this.settings.TimedLineBreak = tlb;
 				SetControls();
 				OnSettingsChanged(new EventArgs());
 			}
@@ -186,14 +186,14 @@ namespace YAT.Gui.Controls
 
 		private void textBox_TimedLineBreakTimeout_Validating(object sender, CancelEventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				int timeout;
 				if (int.TryParse(textBox_TimedLineBreakTimeout.Text, out timeout) && (timeout >= 0))
 				{
-					Domain.BinaryTimedLineBreak tlb = _settings.TimedLineBreak;
+					Domain.BinaryTimedLineBreak tlb = this.settings.TimedLineBreak;
 					tlb.Timeout = timeout;
-					_settings.TimedLineBreak = tlb;
+					this.settings.TimedLineBreak = tlb;
 					SetControls();
 					OnSettingsChanged(new EventArgs());
 				}
@@ -223,24 +223,24 @@ namespace YAT.Gui.Controls
 		{
 			bool enabled;
 
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
-			enabled = _settings.LengthLineBreak.Enabled;
+			enabled = this.settings.LengthLineBreak.Enabled;
 			checkBox_LengthLineBreak.Checked = enabled;
 			textBox_LengthLineBreak.Enabled = enabled;
-			textBox_LengthLineBreak.Text = _settings.LengthLineBreak.LineLength.ToString();
+			textBox_LengthLineBreak.Text = this.settings.LengthLineBreak.LineLength.ToString();
 
-			enabled = _settings.SequenceLineBreak.Enabled;
+			enabled = this.settings.SequenceLineBreak.Enabled;
 			checkBox_SequenceLineBreak.Checked = enabled;
 			textBox_SequenceLineBreakSequence.Enabled = enabled;
-			textBox_SequenceLineBreakSequence.Text = _settings.SequenceLineBreak.Sequence;
+			textBox_SequenceLineBreakSequence.Text = this.settings.SequenceLineBreak.Sequence;
 
-			enabled = _settings.TimedLineBreak.Enabled;
+			enabled = this.settings.TimedLineBreak.Enabled;
 			checkBox_TimedLineBreak.Checked = enabled;
 			textBox_TimedLineBreakTimeout.Enabled = enabled;
-			textBox_TimedLineBreakTimeout.Text = _settings.TimedLineBreak.Timeout.ToString();
+			textBox_TimedLineBreakTimeout.Text = this.settings.TimedLineBreak.Timeout.ToString();
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		#endregion

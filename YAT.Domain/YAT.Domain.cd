@@ -65,19 +65,19 @@
       <HashCode>ICDBEhMAKKBgJEBOBUhwABaABQESRJMhSRKBJwjCsCA=</HashCode>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Field Name="_rawTerminal" />
-      <Field Name="_bidirRepository" />
-      <Field Name="_rxRepository" />
-      <Field Name="_txRepository" />
+      <Field Name="this.rawTerminal" />
+      <Field Name="this.bidirRepository" />
+      <Field Name="this.rxRepository" />
+      <Field Name="this.txRepository" />
     </ShowAsAssociation>
     <Members>
-      <Method Name="_rawTerminal_RepositoryCleared" Hidden="true" />
-      <Method Name="_rawTerminal_RawElementReceived" Hidden="true" />
-      <Method Name="_rawTerminal_RawElementSent" Hidden="true" />
-      <Method Name="_rawTerminal_TerminalChanged" Hidden="true" />
-      <Method Name="_rawTerminal_TerminalControlChanged" Hidden="true" />
-      <Method Name="_rawTerminal_TerminalError" Hidden="true" />
-      <Method Name="_terminalSettings_Changed" Hidden="true" />
+      <Method Name="this.rawTerminal_RepositoryCleared" Hidden="true" />
+      <Method Name="this.rawTerminal_RawElementReceived" Hidden="true" />
+      <Method Name="this.rawTerminal_RawElementSent" Hidden="true" />
+      <Method Name="this.rawTerminal_TerminalChanged" Hidden="true" />
+      <Method Name="this.rawTerminal_TerminalControlChanged" Hidden="true" />
+      <Method Name="this.rawTerminal_TerminalError" Hidden="true" />
+      <Method Name="this.terminalSettings_Changed" Hidden="true" />
       <Method Name="~Terminal" Hidden="true" />
       <Method Name="ApplyBufferSettings" Hidden="true" />
       <Method Name="ApplyIOSettings" Hidden="true" />
@@ -188,18 +188,18 @@
       <HashCode>IiYBACkAIiKBIABGCEhAEBKABQAAQJIBAAKAAwmDEEA=</HashCode>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Field Name="_io" />
-      <Field Name="_bidirRepository" />
-      <Field Name="_rxRepository" />
-      <Field Name="_txRepository" />
+      <Field Name="this.io" />
+      <Field Name="this.bidirRepository" />
+      <Field Name="this.rxRepository" />
+      <Field Name="this.txRepository" />
     </ShowAsAssociation>
     <Members>
-      <Method Name="_bufferSettings_Changed" Hidden="true" />
-      <Method Name="_io_DataReceived" Hidden="true" />
-      <Method Name="_io_IOChanged" Hidden="true" />
-      <Method Name="_io_IOControlChanged" Hidden="true" />
-      <Method Name="_io_IOError" Hidden="true" />
-      <Method Name="_ioSettings_Changed" Hidden="true" />
+      <Method Name="this.bufferSettings_Changed" Hidden="true" />
+      <Method Name="this.io_DataReceived" Hidden="true" />
+      <Method Name="this.io_IOChanged" Hidden="true" />
+      <Method Name="this.io_IOControlChanged" Hidden="true" />
+      <Method Name="this.io_IOError" Hidden="true" />
+      <Method Name="this.ioSettings_Changed" Hidden="true" />
       <Method Name="~RawTerminal" Hidden="true" />
       <Method Name="ApplyBufferSettings" Hidden="true" />
       <Method Name="ApplyIOSettings" Hidden="true" />
@@ -223,10 +223,10 @@
       <HashCode>AASAAAIAAAAAAQIEAAAQAAAIUAACAAgAAQAAAAAAAAI=</HashCode>
     </TypeIdentifier>
     <Members>
-      <Method Name="_rawTerminal_RawElementReceived" Hidden="true" />
-      <Method Name="_rawTerminal_RawElementSent" Hidden="true" />
-      <Method Name="_rxTimer_Timeout" Hidden="true" />
-      <Method Name="_txTimer_Timeout" Hidden="true" />
+      <Method Name="this.rawTerminal_RawElementReceived" Hidden="true" />
+      <Method Name="this.rawTerminal_RawElementSent" Hidden="true" />
+      <Method Name="this.rxTimer_Timeout" Hidden="true" />
+      <Method Name="this.txTimer_Timeout" Hidden="true" />
     </Members>
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />

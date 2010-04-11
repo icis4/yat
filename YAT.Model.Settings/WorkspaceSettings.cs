@@ -27,7 +27,7 @@ namespace YAT.Model.Settings
 	[Serializable]
 	public class WorkspaceSettings : MKY.Utilities.Settings.Settings, IEquatable<WorkspaceSettings>
 	{
-		private GuidList<TerminalSettingsItem> _terminalSettings;
+		private GuidList<TerminalSettingsItem> terminalSettings;
 
 		/// <summary></summary>
 		public WorkspaceSettings()
@@ -72,12 +72,12 @@ namespace YAT.Model.Settings
 		[XmlElement("TerminalSettings")]
 		public GuidList<TerminalSettingsItem> TerminalSettings
 		{
-			get { return (_terminalSettings); }
+			get { return (this.terminalSettings); }
 			set
 			{
-				if (value != _terminalSettings)
+				if (value != this.terminalSettings)
 				{
-					_terminalSettings = value;
+					this.terminalSettings = value;
 					SetChanged();
 				}
 			}
@@ -105,7 +105,7 @@ namespace YAT.Model.Settings
 		{
 			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
-				return (_terminalSettings == value._terminalSettings);
+				return (this.terminalSettings == value.terminalSettings);
 
 			return (false);
 		}

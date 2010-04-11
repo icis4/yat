@@ -79,7 +79,7 @@ namespace MKY.IO.Ports
 	/// </summary>
 	public class XBaudRate : XEnum
 	{
-		private int _userDefinedBaudRate = 0;
+		private int userDefinedBaudRate = 0;
 
 		/// <summary>Default is <see cref="BaudRate.Baud009600"/></summary>
 		public XBaudRate()
@@ -97,7 +97,7 @@ namespace MKY.IO.Ports
 		protected XBaudRate(int baudRate)
 			: base(BaudRate.UserDefined)
 		{
-			_userDefinedBaudRate = baudRate;
+			this.userDefinedBaudRate = baudRate;
 		}
 
 		#region ToString
@@ -187,7 +187,7 @@ namespace MKY.IO.Ports
 		public static implicit operator int(XBaudRate baudRate)
 		{
 			if (baudRate == BaudRate.UserDefined)
-				return (baudRate._userDefinedBaudRate);
+				return (baudRate.userDefinedBaudRate);
 			else
 				return (baudRate.GetHashCode());
 		}

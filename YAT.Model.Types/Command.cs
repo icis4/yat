@@ -53,12 +53,12 @@ namespace YAT.Model.Types
 		// Fields
 		//==========================================================================================
 
-		private bool     _isDefined;
-		private string   _description;
-		private string[] _commandLines;
-		private Domain.Radix _defaultRadix;
-		private bool    _isFilePath;
-		private string  _filePath;
+		private bool         isDefined;
+		private string       description;
+		private string[]     commandLines;
+		private Domain.Radix defaultRadix;
+		private bool         isFilePath;
+		private string       filePath;
 
 		#endregion
 
@@ -122,12 +122,12 @@ namespace YAT.Model.Types
 
 		private void Initialize(bool isDefined, string description, bool isFilePath, string[] commandLines, Domain.Radix defaultRadix, string filePath)
 		{
-			_isDefined    = isDefined;
-			_description  = description;
-			_commandLines = commandLines;
-			_defaultRadix = defaultRadix;
-			_isFilePath   = isFilePath;
-			_filePath     = filePath;
+			this.isDefined    = isDefined;
+			this.description  = description;
+			this.commandLines = commandLines;
+			this.defaultRadix = defaultRadix;
+			this.isFilePath   = isFilePath;
+			this.filePath     = filePath;
 		}
 
 		/// <summary></summary>
@@ -135,12 +135,12 @@ namespace YAT.Model.Types
 		{
 			if (rhs != null)
 			{
-				_isDefined    = rhs._isDefined;
-				_description  = rhs._description;
-				_commandLines = rhs._commandLines;
-				_defaultRadix = rhs._defaultRadix;
-				_isFilePath   = rhs._isFilePath;
-				_filePath     = rhs._filePath;
+				this.isDefined    = rhs.isDefined;
+				this.description  = rhs.description;
+				this.commandLines = rhs.commandLines;
+				this.defaultRadix = rhs.defaultRadix;
+				this.isFilePath   = rhs.isFilePath;
+				this.filePath     = rhs.filePath;
 			}
 			else
 			{
@@ -159,8 +159,8 @@ namespace YAT.Model.Types
 		[XmlElement("IsDefined")]
 		public virtual bool IsDefined
 		{
-			get { return (_isDefined); }
-			set { _isDefined = value;  }
+			get { return (this.isDefined); }
+			set { this.isDefined = value;  }
 		}
 
 		/// <summary>
@@ -177,8 +177,8 @@ namespace YAT.Model.Types
 			{
 				if (IsDefined)
 				{
-					if (!string.IsNullOrEmpty(_description))
-						return (_description);
+					if (!string.IsNullOrEmpty(this.description))
+						return (this.description);
 					else if (IsCommand)
 						return (SingleLineCommand);
 					else if (IsFilePath)
@@ -195,13 +195,13 @@ namespace YAT.Model.Types
 			{
 				if (IsDefined)
 				{
-					_description = value;
+					this.description = value;
 				}
 				else if ((value != null) &&
 						 (value != "")) // ensure that XML deserialization keeps command undefined
 				{
-					_isDefined = true;
-					_description = value;
+					this.isDefined = true;
+					this.description = value;
 				}
 			}
 		}
@@ -213,7 +213,7 @@ namespace YAT.Model.Types
 			get
 			{
 				if (IsDefined)
-					return (_commandLines);
+					return (this.commandLines);
 				else
 					return (new string[] { "" });
 			}
@@ -221,15 +221,15 @@ namespace YAT.Model.Types
 			{
 				if (IsDefined)
 				{
-					_commandLines = value;
+					this.commandLines = value;
 				}
 				else if ((value != null) &&
 						 (value.Length >= 1) &&
 						 (value[0] != null) &&
 						 (value[0] != "")) // ensure that XML deserialization keeps command undefined
 				{
-					_isDefined = true;
-					_commandLines = value;
+					this.isDefined = true;
+					this.commandLines = value;
 				}
 			}
 		}
@@ -238,8 +238,8 @@ namespace YAT.Model.Types
 		[XmlElement("DefaultRadix")]
 		public virtual Domain.Radix DefaultRadix
 		{
-			get { return (_defaultRadix); }
-			set { _defaultRadix = value; }
+			get { return (this.defaultRadix); }
+			set { this.defaultRadix = value; }
 		}
 
 		/// <summary></summary>
@@ -251,20 +251,20 @@ namespace YAT.Model.Types
 				return
 					(
 					IsDefined &&
-					_isFilePath &&
-					!string.IsNullOrEmpty(_filePath)
+					this.isFilePath &&
+					!string.IsNullOrEmpty(this.filePath)
 					);
 			}
 			set
 			{
 				if (IsDefined)
 				{
-					_isFilePath = value;
+					this.isFilePath = value;
 				}
 				else if (value != false) // ensure that XML deserialization keeps command undefined
 				{
-					_isDefined = true;
-					_isFilePath = value;
+					this.isDefined = true;
+					this.isFilePath = value;
 				}
 			}
 		}
@@ -276,7 +276,7 @@ namespace YAT.Model.Types
 			get
 			{
 				if (IsFilePath)
-					return (_filePath);
+					return (this.filePath);
 				else
 					return ("");
 			}
@@ -284,13 +284,13 @@ namespace YAT.Model.Types
 			{
 				if (IsDefined)
 				{
-					_filePath = value;
+					this.filePath = value;
 				}
 				else if ((value != null) &&
 						 (value != "")) // ensure that XML deserialization keeps command undefined
 				{
-					_isDefined = true;
-					_filePath = value;
+					this.isDefined = true;
+					this.filePath = value;
 				}
 			}
 		}
@@ -312,9 +312,9 @@ namespace YAT.Model.Types
 					(
 					IsDefined &&
 					!IsFilePath &&
-					(_commandLines != null) &&
-					(_commandLines.Length >= 1) &&
-					(_commandLines[0] != null)
+					(this.commandLines != null) &&
+					(this.commandLines.Length >= 1) &&
+					(this.commandLines[0] != null)
 					);
 			}
 		}
@@ -326,7 +326,7 @@ namespace YAT.Model.Types
 			get
 			{
 				if (IsCommand)
-					return ((_commandLines.Length == 1));
+					return ((this.commandLines.Length == 1));
 				else
 					return (false);
 			}
@@ -339,7 +339,7 @@ namespace YAT.Model.Types
 			get
 			{
 				if (IsCommand)
-					return ((_commandLines.Length > 1));
+					return ((this.commandLines.Length > 1));
 				else
 					return (false);
 			}
@@ -354,8 +354,8 @@ namespace YAT.Model.Types
 				if (!IsCommand)
 					return (false);
 
-				Domain.Parser.Parser p = new Domain.Parser.Parser(_defaultRadix);
-				foreach (string commandLine in _commandLines)
+				Domain.Parser.Parser p = new Domain.Parser.Parser(this.defaultRadix);
+				foreach (string commandLine in this.commandLines)
 				{
 					if (!p.TryParse(commandLine))
 						return (false);
@@ -372,7 +372,7 @@ namespace YAT.Model.Types
 			{
 				if (IsSingleLineCommand)
 				{
-					return (_commandLines[0]);
+					return (this.commandLines[0]);
 				}
 				else if (IsMultiLineCommand)
 				{
@@ -406,7 +406,7 @@ namespace YAT.Model.Types
 			get
 			{
 				if (IsMultiLineCommand)
-					return (_commandLines);
+					return (this.commandLines);
 				else if (IsSingleLineCommand)
 					return (new string[] { SingleLineCommand });
 				else
@@ -427,7 +427,7 @@ namespace YAT.Model.Types
 				if (!IsFilePath)
 					return (false);
 
-				return (System.IO.File.Exists(_filePath));
+				return (System.IO.File.Exists(this.filePath));
 			}
 		}
 
@@ -460,7 +460,7 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public virtual void ClearDescription()
 		{
-			_description = "";
+			this.description = "";
 		}
 
 		#endregion
@@ -497,12 +497,12 @@ namespace YAT.Model.Types
 			{
 				return
 					(
-					(_isDefined    == value._isDefined) &&
-					(_description  == value._description) &&
-					XArray.ValuesEqual(_commandLines, value._commandLines) &&
-					(_defaultRadix == value._defaultRadix) &&
-					(_isFilePath   == value._isFilePath) &&
-					(_filePath     == value._filePath)
+					(this.isDefined    == value.isDefined) &&
+					(this.description  == value.description) &&
+					XArray.ValuesEqual(this.commandLines, value.commandLines) &&
+					(this.defaultRadix == value.defaultRadix) &&
+					(this.isFilePath   == value.isFilePath) &&
+					(this.filePath     == value.filePath)
 					);
 			}
 			return (false);
@@ -527,7 +527,7 @@ namespace YAT.Model.Types
 			if (obj is Command)
 			{
 				Command c = (Command)obj;
-				return (_description.CompareTo(c._description));
+				return (this.description.CompareTo(c.description));
 			}
 			throw (new ArgumentException("Object is not a Command entry"));
 		}

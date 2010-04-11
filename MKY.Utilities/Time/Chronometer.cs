@@ -32,12 +32,12 @@ namespace MKY.Utilities.Time
 		// Fields
 		//==========================================================================================
 
-		private bool _isDisposed;
+		private bool isDisposed;
 
-		private System.Timers.Timer _timer;
+		private System.Timers.Timer timer;
 
-		private TimeSpan _accumulatedTimeSpan = TimeSpan.Zero;
-		private DateTime _startTimeStamp = DateTime.Now;
+		private TimeSpan accumulatedTimeSpan = TimeSpan.Zero;
+		private DateTime startTimeStamp = DateTime.Now;
 
 		#endregion
 
@@ -61,10 +61,10 @@ namespace MKY.Utilities.Time
 		/// <summary></summary>
 		public Chronometer()
 		{
-			_timer = new System.Timers.Timer();
-			_timer.AutoReset = true;
-			_timer.Interval = 1000;
-			_timer.Elapsed += new System.Timers.ElapsedEventHandler(_timer_Elapsed);
+			this.timer = new System.Timers.Timer();
+			this.timer.AutoReset = true;
+			this.timer.Interval = 1000;
+			this.timer.Elapsed += new System.Timers.ElapsedEventHandler(this.timer_Elapsed);
 		}
 
 		#region Disposal
@@ -82,14 +82,14 @@ namespace MKY.Utilities.Time
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!_isDisposed)
+			if (!this.isDisposed)
 			{
 				if (disposing)
 				{
-					if (_timer != null)
-						_timer.Dispose();
+					if (this.timer != null)
+						this.timer.Dispose();
 				}
-				_isDisposed = true;
+				this.isDisposed = true;
 			}
 		}
 
@@ -102,13 +102,13 @@ namespace MKY.Utilities.Time
 		/// <summary></summary>
 		protected bool IsDisposed
 		{
-			get { return (_isDisposed); }
+			get { return (this.isDisposed); }
 		}
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (_isDisposed)
+			if (this.isDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
 		}
 
@@ -124,8 +124,8 @@ namespace MKY.Utilities.Time
 		/// <summary></summary>
 		public double Interval
 		{
-			get { AssertNotDisposed(); return (_timer.Interval); }
-			set { AssertNotDisposed(); _timer.Interval = value;  }
+			get { AssertNotDisposed(); return (this.timer.Interval); }
+			set { AssertNotDisposed(); this.timer.Interval = value;  }
 		}
 
 		/// <summary></summary>
@@ -135,10 +135,10 @@ namespace MKY.Utilities.Time
 			{
 				AssertNotDisposed();
 
-				if (!_timer.Enabled)
-					return (_accumulatedTimeSpan);
+				if (!this.timer.Enabled)
+					return (this.accumulatedTimeSpan);
 				else
-					return (_accumulatedTimeSpan + (DateTime.Now - _startTimeStamp));
+					return (this.accumulatedTimeSpan + (DateTime.Now - this.startTimeStamp));
 			}
 		}
 
@@ -154,10 +154,10 @@ namespace MKY.Utilities.Time
 		{
 			AssertNotDisposed();
 
-			if (!_timer.Enabled)
+			if (!this.timer.Enabled)
 			{
-				_timer.Start();
-				_startTimeStamp = DateTime.Now;
+				this.timer.Start();
+				this.startTimeStamp = DateTime.Now;
 				OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
 			}
 		}
@@ -167,10 +167,10 @@ namespace MKY.Utilities.Time
 		{
 			AssertNotDisposed();
 
-			if (_timer.Enabled)
+			if (this.timer.Enabled)
 			{
-				_timer.Stop();
-				_accumulatedTimeSpan += (DateTime.Now - _startTimeStamp);
+				this.timer.Stop();
+				this.accumulatedTimeSpan += (DateTime.Now - this.startTimeStamp);
 				OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
 			}
 		}
@@ -178,7 +178,7 @@ namespace MKY.Utilities.Time
 		/// <summary></summary>
 		public virtual void StartStop()
 		{
-			if (!_timer.Enabled)
+			if (!this.timer.Enabled)
 				Start();
 			else
 				Stop();
@@ -189,8 +189,8 @@ namespace MKY.Utilities.Time
 		{
 			AssertNotDisposed();
 
-			_startTimeStamp = DateTime.Now;
-			_accumulatedTimeSpan = TimeSpan.Zero;
+			this.startTimeStamp = DateTime.Now;
+			this.accumulatedTimeSpan = TimeSpan.Zero;
 			OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan.Zero));
 		}
 
@@ -218,7 +218,7 @@ namespace MKY.Utilities.Time
 		// Timer Event Handlers
 		//==========================================================================================
 
-		private void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
 		}

@@ -31,31 +31,31 @@ namespace YAT.Gui.Utilities
 			public SolidBrush Brush;
 		}
 
-		private static Font _italicDefaultFont = new Font(SystemFonts.DefaultFont, FontStyle.Italic);
+		private static Font italicDefaultFont = new Font(SystemFonts.DefaultFont, FontStyle.Italic);
 
 		/// <remarks>
 		/// For performance reasons, cache fonts and brushes used for drawing.
 		/// </remarks>
-		private static DrawingElements _txData      = new DrawingElements();
-		private static DrawingElements _txControl   = new DrawingElements();
-		private static DrawingElements _rxData      = new DrawingElements();
-		private static DrawingElements _rxControl   = new DrawingElements();
-		private static DrawingElements _timeStamp   = new DrawingElements();
-		private static DrawingElements _lineLength  = new DrawingElements();
-		private static DrawingElements _whiteSpaces = new DrawingElements();
-		private static DrawingElements _error       = new DrawingElements();
+		private static DrawingElements txData      = new DrawingElements();
+		private static DrawingElements txControl   = new DrawingElements();
+		private static DrawingElements rxData      = new DrawingElements();
+		private static DrawingElements rxControl   = new DrawingElements();
+		private static DrawingElements timeStamp   = new DrawingElements();
+		private static DrawingElements lineLength  = new DrawingElements();
+		private static DrawingElements whiteSpaces = new DrawingElements();
+		private static DrawingElements error       = new DrawingElements();
 
 		/// <summary>String format used for drawing.</summary>
-		private static StringFormat _stringFormat = new StringFormat();
+		private static StringFormat stringFormat = new StringFormat();
 
 		static Drawing()
 		{
 			// Use GenericTypographic format to be able to measure characters indiviually,
 			//   i.e. without a small margin before and after the character
-			_stringFormat = StringFormat.GenericTypographic;
+			stringFormat = StringFormat.GenericTypographic;
 
 			// Additionally enable trailing spaces to be able to correctly measure single spaces
-			_stringFormat.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
+			stringFormat.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
 		}
 
 		public static Font ItalicDefaultFont
@@ -63,13 +63,13 @@ namespace YAT.Gui.Utilities
 			get
 			{
 				// Recreate font if system font has changed
-				if ((_italicDefaultFont.Name != SystemFonts.DefaultFont.Name) ||
-					(_italicDefaultFont.Size != SystemFonts.DefaultFont.Size))
+				if ((italicDefaultFont.Name != SystemFonts.DefaultFont.Name) ||
+					(italicDefaultFont.Size != SystemFonts.DefaultFont.Size))
 				{
-					_italicDefaultFont = new Font(SystemFonts.DefaultFont, FontStyle.Italic);
+					italicDefaultFont = new Font(SystemFonts.DefaultFont, FontStyle.Italic);
 				}
 
-				return (_italicDefaultFont);
+				return (italicDefaultFont);
 			}
 		}
 
@@ -93,7 +93,7 @@ namespace YAT.Gui.Utilities
 			Brush brush;
 			SetDrawingItems(element, formatSettings, graphics, out font, out brush);
 
-			return (graphics.MeasureString(element.Text, font, bounds.Size, _stringFormat));
+			return (graphics.MeasureString(element.Text, font, bounds.Size, stringFormat));
 		}
 
 		public static SizeF DrawItem(Domain.DisplayLine line, Model.Settings.FormatSettings formatSettings,
@@ -125,10 +125,10 @@ namespace YAT.Gui.Utilities
 				brush = SystemBrushes.HighlightText;
 
 			// perform the painting
-			graphics.DrawString(element.Text, font, brush, bounds, _stringFormat);
+			graphics.DrawString(element.Text, font, brush, bounds, stringFormat);
 
 			// measure consumed rectangle
-			return (graphics.MeasureString(element.Text, font, bounds.Size, _stringFormat));
+			return (graphics.MeasureString(element.Text, font, bounds.Size, stringFormat));
 		}
 
 		private static void SetDrawingItems(Domain.DisplayElement element, Model.Settings.FormatSettings settings,
@@ -143,43 +143,43 @@ namespace YAT.Gui.Utilities
 			{
 				fontStyle = settings.TxDataFormat.FontStyle;
 				fontColor = settings.TxDataFormat.Color;
-				font  = SetFont (ref _txData.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref _txData.Brush, fontColor);
+				font  = SetFont (ref txData.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref txData.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.TxControl)
 			{
 				fontStyle = settings.TxControlFormat.FontStyle;
 				fontColor = settings.TxControlFormat.Color;
-				font  = SetFont (ref _txControl.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref _txControl.Brush, fontColor);
+				font  = SetFont (ref txControl.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref txControl.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.RxData)
 			{
 				fontStyle = settings.RxDataFormat.FontStyle;
 				fontColor = settings.RxDataFormat.Color;
-				font  = SetFont (ref _rxData.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref _rxData.Brush, fontColor);
+				font  = SetFont (ref rxData.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref rxData.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.RxControl)
 			{
 				fontStyle = settings.RxControlFormat.FontStyle;
 				fontColor = settings.RxControlFormat.Color;
-				font  = SetFont (ref _rxControl.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref _rxControl.Brush, fontColor);
+				font  = SetFont (ref rxControl.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref rxControl.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.TimeStamp)
 			{
 				fontStyle = settings.TimeStampFormat.FontStyle;
 				fontColor = settings.TimeStampFormat.Color;
-				font  = SetFont (ref _timeStamp.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref _timeStamp.Brush, fontColor);
+				font  = SetFont (ref timeStamp.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref timeStamp.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.LineLength)
 			{
 				fontStyle = settings.LengthFormat.FontStyle;
 				fontColor = settings.LengthFormat.Color;
-				font  = SetFont (ref _lineLength.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref _lineLength.Brush, fontColor);
+				font  = SetFont (ref lineLength.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref lineLength.Brush, fontColor);
 			}
 			else if ((element is Domain.DisplayElement.LeftMargin) ||
 					 (element is Domain.DisplayElement.Space) ||
@@ -188,15 +188,15 @@ namespace YAT.Gui.Utilities
 			{
 				fontStyle = settings.WhiteSpacesFormat.FontStyle;
 				fontColor = settings.WhiteSpacesFormat.Color;
-				font  = SetFont (ref _whiteSpaces.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref _whiteSpaces.Brush, fontColor);
+				font  = SetFont (ref whiteSpaces.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref whiteSpaces.Brush, fontColor);
 			}
 			else if (element is Domain.DisplayElement.Error)
 			{
 				fontStyle = settings.ErrorFormat.FontStyle;
 				fontColor = settings.ErrorFormat.Color;
-				font  = SetFont (ref _error.Font, fontName, fontSize, fontStyle, graphics);
-				brush = SetBrush(ref _error.Brush, fontColor);
+				font  = SetFont (ref error.Font, fontName, fontSize, fontStyle, graphics);
+				brush = SetBrush(ref error.Brush, fontColor);
 			}
 			else
 			{
@@ -237,7 +237,7 @@ namespace YAT.Gui.Utilities
 			float[] tabStops = new float[256];
 			for (int i = 0; i < 256; i++)
 				tabStops[i] = size.Width * 14.5f;
-			_stringFormat.SetTabStops(0, tabStops);
+			stringFormat.SetTabStops(0, tabStops);
 		}
 
 		private static SolidBrush SetBrush(ref SolidBrush cachedBrush, Color color)

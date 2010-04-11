@@ -36,7 +36,7 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const SocketHostType _HostTypeDefault = SocketHostType.TcpAutoSocket;
+		private const SocketHostType HostTypeDefault = SocketHostType.TcpAutoSocket;
 
 		#endregion
 
@@ -45,10 +45,10 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool _isSettingControls = false;
+		private bool isSettingControls = false;
 
-		private SocketHostType _hostType = _HostTypeDefault;
-		private AutoRetry _tcpClientAutoReconnect = MKY.IO.Serial.SocketSettings.TcpClientAutoReconnectDefault;
+		private SocketHostType hostType = HostTypeDefault;
+		private AutoRetry tcpClientAutoReconnect = MKY.IO.Serial.SocketSettings.TcpClientAutoReconnectDefault;
 
 		#endregion
 
@@ -87,9 +87,9 @@ namespace YAT.Gui.Controls
 		{
 			set
 			{
-				if (value != _hostType)
+				if (value != this.hostType)
 				{
-					_hostType = value;
+					this.hostType = value;
 					SetControls();
 				}
 			}
@@ -99,12 +99,12 @@ namespace YAT.Gui.Controls
 		[Description("Sets TCP client auto reconnect.")]
 		public AutoRetry TcpClientAutoReconnect
 		{
-			get { return (_tcpClientAutoReconnect); }
+			get { return (this.tcpClientAutoReconnect); }
 			set
 			{
-				if (value != _tcpClientAutoReconnect)
+				if (value != this.tcpClientAutoReconnect)
 				{
-					_tcpClientAutoReconnect = value;
+					this.tcpClientAutoReconnect = value;
 					SetControls();
 					OnTcpClientAutoReconnectChanged(new EventArgs());
 				}
@@ -121,16 +121,16 @@ namespace YAT.Gui.Controls
 		/// <summary>
 		/// Startup flag only used in the following event handler.
 		/// </summary>
-		private bool _isStartingUp = true;
+		private bool isStartingUp = true;
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
 		private void SocketSettings_Paint(object sender, PaintEventArgs e)
 		{
-			if (_isStartingUp)
+			if (this.isStartingUp)
 			{
-				_isStartingUp = false;
+				this.isStartingUp = false;
 				SetControls();
 			}
 		}
@@ -140,7 +140,7 @@ namespace YAT.Gui.Controls
 		/// </summary>
 		private void SocketSettings_EnabledChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				SetControls();
 		}
 
@@ -153,9 +153,9 @@ namespace YAT.Gui.Controls
 
 		private void checkBox_TcpClientAutoReconnect_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				MKY.IO.Serial.AutoRetry ar = _tcpClientAutoReconnect;
+				MKY.IO.Serial.AutoRetry ar = this.tcpClientAutoReconnect;
 				ar.Enabled = checkBox_TcpClientAutoReconnect.Checked;
 				TcpClientAutoReconnect = ar;
 			}
@@ -163,12 +163,12 @@ namespace YAT.Gui.Controls
 
 		private void textBox_TcpClientAutoReconnectInterval_Validating(object sender, CancelEventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				int interval;
 				if (int.TryParse(textBox_TcpClientAutoReconnectInterval.Text, out interval) && (interval >= 100))
 				{
-					MKY.IO.Serial.AutoRetry ar = _tcpClientAutoReconnect;
+					MKY.IO.Serial.AutoRetry ar = this.tcpClientAutoReconnect;
 					ar.Interval = interval;
 					TcpClientAutoReconnect = ar;
 				}
@@ -196,13 +196,13 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
-			bool enabledTcpClient = (Enabled && (_hostType == SocketHostType.TcpClient));
+			bool enabledTcpClient = (Enabled && (this.hostType == SocketHostType.TcpClient));
 
 			bool autoReconnectEnabled;
 			if (enabledTcpClient)
-				autoReconnectEnabled = _tcpClientAutoReconnect.Enabled;
+				autoReconnectEnabled = this.tcpClientAutoReconnect.Enabled;
 			else
 				autoReconnectEnabled = false;
 
@@ -211,7 +211,7 @@ namespace YAT.Gui.Controls
 
 			string autoReconnectIntervalText;
 			if (enabledTcpClient)
-				autoReconnectIntervalText = _tcpClientAutoReconnect.Interval.ToString();
+				autoReconnectIntervalText = this.tcpClientAutoReconnect.Interval.ToString();
 			else
 				autoReconnectIntervalText = "";
 
@@ -221,7 +221,7 @@ namespace YAT.Gui.Controls
 			label_TcpClientAutoReconnectInterval.Enabled = enabledTcpClient;
 			label_TcpClientAutoReconnectIntervalUnit.Enabled = enabledTcpClient;
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		#endregion

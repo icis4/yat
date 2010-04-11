@@ -35,17 +35,17 @@ namespace YAT.Settings.Terminal
 		/// XML path wouldn't need to be considered, i.e. name changes in the path could be handled.
 		/// That is not the case currently.
 		/// </remarks>
-		private static readonly MKY.Utilities.Xml.AlternateXmlElement[] _AlternateXmlElements =
+		private static readonly MKY.Utilities.Xml.AlternateXmlElement[] alternateXmlElements =
 			{
 				new MKY.Utilities.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "SerialPort", "Communication" }, "FlowControl",       new string[] { "Handshake" } ),
 				new MKY.Utilities.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "TerminalIsStarted", new string[] { "TerminalIsOpen" } ),
 				new MKY.Utilities.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "LogIsStarted",      new string[] { "LogIsOpen" } ),
 			};
 
-		private string _productVersion = System.Windows.Forms.Application.ProductVersion;
-		private bool _autoSaved = false;
-		private ExplicitSettings _explicit;
-		private ImplicitSettings _implicit;
+		private string productVersion = System.Windows.Forms.Application.ProductVersion;
+		private bool autoSaved = false;
+		private ExplicitSettings explicit_;
+		private ImplicitSettings implicit_;
 
 		public TerminalSettingsRoot()
 			: base(MKY.Utilities.Settings.SettingsType.Explicit)
@@ -86,7 +86,7 @@ namespace YAT.Settings.Terminal
 		[XmlElement("ProductVersion")]
 		public virtual string ProductVersion
 		{
-			get { return (_productVersion); }
+			get { return (this.productVersion); }
 			set { } // do nothing
 		}
 
@@ -100,12 +100,12 @@ namespace YAT.Settings.Terminal
 		[XmlElement("AutoSaved")]
 		public virtual bool AutoSaved
 		{
-			get { return (_autoSaved); }
+			get { return (this.autoSaved); }
 			set
 			{
-				if (value != _autoSaved)
+				if (value != this.autoSaved)
 				{
-					_autoSaved = value;
+					this.autoSaved = value;
 					// Do not set changed.
 				}
 			}
@@ -114,19 +114,19 @@ namespace YAT.Settings.Terminal
 		[XmlElement("Explicit")]
 		public virtual ExplicitSettings Explicit
 		{
-			get { return (_explicit); }
+			get { return (this.explicit_); }
 			set
 			{
-				if (_explicit == null)
+				if (this.explicit_ == null)
 				{
-					_explicit = value;
-					AttachNode(_explicit);
+					this.explicit_ = value;
+					AttachNode(this.explicit_);
 				}
-				else if (value != _explicit)
+				else if (value != this.explicit_)
 				{
-					ExplicitSettings old = _explicit;
-					_explicit = value;
-					ReplaceNode(old, _explicit);
+					ExplicitSettings old = this.explicit_;
+					this.explicit_ = value;
+					ReplaceNode(old, this.explicit_);
 				}
 			}
 		}
@@ -134,19 +134,19 @@ namespace YAT.Settings.Terminal
 		[XmlElement("Implicit")]
 		public virtual ImplicitSettings Implicit
 		{
-			get { return (_implicit); }
+			get { return (this.implicit_); }
 			set
 			{
-				if (_implicit == null)
+				if (this.implicit_ == null)
 				{
-					_implicit = value;
-					AttachNode(_implicit);
+					this.implicit_ = value;
+					AttachNode(this.implicit_);
 				}
-				else if (value != _implicit)
+				else if (value != this.implicit_)
 				{
-					ImplicitSettings old = _implicit;
-					_implicit = value;
-					ReplaceNode(old, _implicit);
+					ImplicitSettings old = this.implicit_;
+					this.implicit_ = value;
+					ReplaceNode(old, this.implicit_);
 				}
 			}
 		}
@@ -154,7 +154,7 @@ namespace YAT.Settings.Terminal
 		[XmlIgnore]
 		public virtual MKY.Utilities.Xml.AlternateXmlElement[] AlternateXmlElements
 		{
-			get { return (_AlternateXmlElements); }
+			get { return (alternateXmlElements); }
 		}
 
 		#endregion
@@ -168,192 +168,192 @@ namespace YAT.Settings.Terminal
 		[XmlIgnore]
 		public virtual bool TerminalIsStarted
 		{
-			get { return (_implicit.TerminalIsStarted); }
-			set { _implicit.TerminalIsStarted = value;  }
+			get { return (this.implicit_.TerminalIsStarted); }
+			set { this.implicit_.TerminalIsStarted = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual bool LogIsStarted
 		{
-			get { return (_implicit.LogIsStarted); }
-			set { _implicit.LogIsStarted = value;  }
+			get { return (this.implicit_.LogIsStarted); }
+			set { this.implicit_.LogIsStarted = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual Domain.TerminalType TerminalType
 		{
-			get { return (_explicit.Terminal.TerminalType); }
-			set { _explicit.Terminal.TerminalType = value;  }
+			get { return (this.explicit_.Terminal.TerminalType); }
+			set { this.explicit_.Terminal.TerminalType = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual Domain.Settings.TerminalSettings Terminal
 		{
-			get { return (_explicit.Terminal); }
-			set { _explicit.Terminal = value;  }
+			get { return (this.explicit_.Terminal); }
+			set { this.explicit_.Terminal = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual Domain.Settings.IOSettings IO
 		{
-			get { return (_explicit.Terminal.IO); }
-			set { _explicit.Terminal.IO = value;  }
+			get { return (this.explicit_.Terminal.IO); }
+			set { this.explicit_.Terminal.IO = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual Domain.IOType IOType
 		{
-			get { return (_explicit.Terminal.IO.IOType); }
-			set { _explicit.Terminal.IO.IOType = value;  }
+			get { return (this.explicit_.Terminal.IO.IOType); }
+			set { this.explicit_.Terminal.IO.IOType = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual MKY.IO.Ports.SerialPortId SerialPortId
 		{
-			get { return (_explicit.Terminal.IO.SerialPort.PortId); }
-			set { _explicit.Terminal.IO.SerialPort.PortId = value;  }
+			get { return (this.explicit_.Terminal.IO.SerialPort.PortId); }
+			set { this.explicit_.Terminal.IO.SerialPort.PortId = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual int SocketLocalPort
 		{
-			get { return (_explicit.Terminal.IO.Socket.LocalPort); }
-			set { _explicit.Terminal.IO.Socket.LocalPort = value;  }
+			get { return (this.explicit_.Terminal.IO.Socket.LocalPort); }
+			set { this.explicit_.Terminal.IO.Socket.LocalPort = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual string SocketRemoteHost
 		{
-			get { return (_explicit.Terminal.IO.Socket.RemoteHost); }
-			set { _explicit.Terminal.IO.Socket.RemoteHost = value;  }
+			get { return (this.explicit_.Terminal.IO.Socket.RemoteHost); }
+			set { this.explicit_.Terminal.IO.Socket.RemoteHost = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual int SocketRemotePort
 		{
-			get { return (_explicit.Terminal.IO.Socket.RemotePort); }
-			set { _explicit.Terminal.IO.Socket.RemotePort = value;  }
+			get { return (this.explicit_.Terminal.IO.Socket.RemotePort); }
+			set { this.explicit_.Terminal.IO.Socket.RemotePort = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual Domain.Settings.BufferSettings Buffer
 		{
-			get { return (_explicit.Terminal.Buffer); }
-			set { _explicit.Terminal.Buffer = value;  }
+			get { return (this.explicit_.Terminal.Buffer); }
+			set { this.explicit_.Terminal.Buffer = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual Domain.Settings.DisplaySettings Display
 		{
-			get { return (_explicit.Terminal.Display); }
-			set { _explicit.Terminal.Display = value;  }
+			get { return (this.explicit_.Terminal.Display); }
+			set { this.explicit_.Terminal.Display = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual Domain.Settings.CharReplaceSettings CharReplace
 		{
-			get { return (_explicit.Terminal.CharReplace); }
-			set { _explicit.Terminal.CharReplace = value;  }
+			get { return (this.explicit_.Terminal.CharReplace); }
+			set { this.explicit_.Terminal.CharReplace = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual Domain.Settings.SendSettings Send
 		{
-			get { return (_explicit.Terminal.Send); }
-			set { _explicit.Terminal.Send = value;  }
+			get { return (this.explicit_.Terminal.Send); }
+			set { this.explicit_.Terminal.Send = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual Domain.Settings.TextTerminalSettings TextTerminal
 		{
-			get { return (_explicit.Terminal.TextTerminal); }
-			set { _explicit.Terminal.TextTerminal = value;  }
+			get { return (this.explicit_.Terminal.TextTerminal); }
+			set { this.explicit_.Terminal.TextTerminal = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual Domain.Settings.BinaryTerminalSettings BinaryTerminal
 		{
-			get { return (_explicit.Terminal.BinaryTerminal); }
-			set { _explicit.Terminal.BinaryTerminal = value;  }
+			get { return (this.explicit_.Terminal.BinaryTerminal); }
+			set { this.explicit_.Terminal.BinaryTerminal = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual Model.Settings.SendCommandSettings SendCommand
 		{
-			get { return (_implicit.SendCommand); }
-			set { _implicit.SendCommand = value;  }
+			get { return (this.implicit_.SendCommand); }
+			set { this.implicit_.SendCommand = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual Model.Settings.SendFileSettings SendFile
 		{
-			get { return (_implicit.SendFile); }
-			set { _implicit.SendFile = value;  }
+			get { return (this.implicit_.SendFile); }
+			set { this.implicit_.SendFile = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual Model.Settings.PredefinedSettings Predefined
 		{
-			get { return (_implicit.Predefined); }
-			set { _implicit.Predefined = value;  }
+			get { return (this.implicit_.Predefined); }
+			set { this.implicit_.Predefined = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual Model.Settings.WindowSettings Window
 		{
-			get { return (_implicit.Window); }
-			set { _implicit.Window = value;  }
+			get { return (this.implicit_.Window); }
+			set { this.implicit_.Window = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual Model.Settings.LayoutSettings Layout
 		{
-			get { return (_implicit.Layout); }
-			set { _implicit.Layout = value;  }
+			get { return (this.implicit_.Layout); }
+			set { this.implicit_.Layout = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual Model.Settings.PredefinedCommandSettings PredefinedCommand
 		{
-			get { return (_explicit.PredefinedCommand); }
-			set { _explicit.PredefinedCommand = value;  }
+			get { return (this.explicit_.PredefinedCommand); }
+			set { this.explicit_.PredefinedCommand = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual Model.Settings.FormatSettings Format
 		{
-			get { return (_explicit.Format); }
-			set { _explicit.Format = value;  }
+			get { return (this.explicit_.Format); }
+			set { this.explicit_.Format = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
 		public virtual Log.Settings.LogSettings Log
 		{
-			get { return (_explicit.Log); }
-			set { _explicit.Log = value;  }
+			get { return (this.explicit_.Log); }
+			set { this.explicit_.Log = value;  }
 		}
 
 		#endregion
@@ -381,7 +381,7 @@ namespace YAT.Settings.Terminal
 			{
 				return
 					(
-					(_productVersion == value._productVersion) &&
+					(this.productVersion == value.productVersion) &&
 					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
 					);
 				// Do not compare AutoSaved.

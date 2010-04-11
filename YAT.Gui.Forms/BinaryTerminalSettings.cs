@@ -31,10 +31,10 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		private bool _isSettingControls = false;
+		private bool isSettingControls = false;
 
-		private Domain.Settings.BinaryTerminalSettings _settings;
-		private Domain.Settings.BinaryTerminalSettings _settings_Form;
+		private Domain.Settings.BinaryTerminalSettings settings;
+		private Domain.Settings.BinaryTerminalSettings settings_Form;
 
 		#endregion
 
@@ -47,9 +47,9 @@ namespace YAT.Gui.Forms
 		{
 			InitializeComponent();
 
-			_settings = settings;
-			_settings_Form = new Domain.Settings.BinaryTerminalSettings(settings);
-			_settings_Form.Changed += new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(_settings_Form_Changed);
+			this.settings = settings;
+			this.settings_Form = new Domain.Settings.BinaryTerminalSettings(settings);
+			this.settings_Form.Changed += new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(this.settings_Form_Changed);
 		}
 
 		#endregion
@@ -61,7 +61,7 @@ namespace YAT.Gui.Forms
 
 		public Domain.Settings.BinaryTerminalSettings SettingsResult
 		{
-			get { return (_settings); }
+			get { return (this.settings); }
 		}
 
 		#endregion
@@ -71,7 +71,7 @@ namespace YAT.Gui.Forms
 		// Settings Event Handlers
 		//==========================================================================================
 
-		private void _settings_Form_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
+		private void settings_Form_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
 		{
 			SetControls();
 		}
@@ -86,16 +86,16 @@ namespace YAT.Gui.Forms
 		/// <summary>
 		/// Startup flag only used in the following event handler.
 		/// </summary>
-		private bool _isStartingUp = true;
+		private bool isStartingUp = true;
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
 		private void BinaryTerminalSettings_Paint(object sender, PaintEventArgs e)
 		{
-			if (_isStartingUp)
+			if (this.isStartingUp)
 			{
-				_isStartingUp = false;
+				this.isStartingUp = false;
 				SetControls();
 			}
 		}
@@ -109,35 +109,35 @@ namespace YAT.Gui.Forms
 
 		private void binaryTerminalSettingsSet_Tx_SettingsChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				_settings_Form.TxDisplay = binaryTerminalSettingsSet_Tx.Settings;
+				this.settings_Form.TxDisplay = binaryTerminalSettingsSet_Tx.Settings;
 				SetControls();
 			}
 		}
 
 		private void checkBox_SeparateTxRxDisplay_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				_settings_Form.SeparateTxRxDisplay = checkBox_SeparateTxRxDisplay.Checked;
+				this.settings_Form.SeparateTxRxDisplay = checkBox_SeparateTxRxDisplay.Checked;
 				SetControls();
 			}
 		}
 
 		private void binaryTerminalSettingsSet_Rx_SettingsChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				_settings_Form.RxDisplay = binaryTerminalSettingsSet_Rx.Settings;
+				this.settings_Form.RxDisplay = binaryTerminalSettingsSet_Rx.Settings;
 				SetControls();
 			}
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{
-			_settings_Form.Changed -= new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(_settings_Form_Changed);
-			_settings = _settings_Form;
+			this.settings_Form.Changed -= new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(this.settings_Form_Changed);
+			this.settings = this.settings_Form;
 		}
 
 		private void button_Cancel_Click(object sender, EventArgs e)
@@ -147,7 +147,7 @@ namespace YAT.Gui.Forms
 
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
-			_settings_Form.SetDefaults();
+			this.settings_Form.SetDefaults();
 			SetControls();
 		}
 
@@ -160,19 +160,19 @@ namespace YAT.Gui.Forms
 
 		private void SetControls()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
-			if (_settings_Form.SeparateTxRxDisplay)
+			if (this.settings_Form.SeparateTxRxDisplay)
 				groupBox_TxDisplay.Text = "&Tx and Rx";
 			else
 				groupBox_TxDisplay.Text = "&Tx";
-			binaryTerminalSettingsSet_Tx.Settings = _settings_Form.TxDisplay;
+			binaryTerminalSettingsSet_Tx.Settings = this.settings_Form.TxDisplay;
 
-			checkBox_SeparateTxRxDisplay.Checked = _settings_Form.SeparateTxRxDisplay;
-			groupBox_RxDisplay.Enabled = _settings_Form.SeparateTxRxDisplay;
-			binaryTerminalSettingsSet_Rx.Settings = _settings_Form.RxDisplay;
+			checkBox_SeparateTxRxDisplay.Checked = this.settings_Form.SeparateTxRxDisplay;
+			groupBox_RxDisplay.Enabled = this.settings_Form.SeparateTxRxDisplay;
+			binaryTerminalSettingsSet_Rx.Settings = this.settings_Form.RxDisplay;
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		#endregion

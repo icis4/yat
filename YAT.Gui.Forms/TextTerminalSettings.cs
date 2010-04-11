@@ -35,10 +35,10 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		private bool _isSettingControls = false;
+		private bool isSettingControls = false;
 
-		private Domain.Settings.TextTerminalSettings _settings;
-		private Domain.Settings.TextTerminalSettings _settings_Form;
+		private Domain.Settings.TextTerminalSettings settings;
+		private Domain.Settings.TextTerminalSettings settings_Form;
 
 		#endregion
 
@@ -51,8 +51,8 @@ namespace YAT.Gui.Forms
 		{
 			InitializeComponent();
 
-			_settings = settings;
-			_settings_Form = new Domain.Settings.TextTerminalSettings(settings);
+			this.settings = settings;
+			this.settings_Form = new Domain.Settings.TextTerminalSettings(settings);
 			InitializeControls();
 		}
 
@@ -65,7 +65,7 @@ namespace YAT.Gui.Forms
 
 		public Domain.Settings.TextTerminalSettings SettingsResult
 		{
-			get { return (_settings); }
+			get { return (this.settings); }
 		}
 
 		#endregion
@@ -78,16 +78,16 @@ namespace YAT.Gui.Forms
 		/// <summary>
 		/// Startup flag only used in the following event handler.
 		/// </summary>
-		private bool _isStartingUp = true;
+		private bool isStartingUp = true;
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
 		private void TextTerminalSettings_Paint(object sender, PaintEventArgs e)
 		{
-			if (_isStartingUp)
+			if (this.isStartingUp)
 			{
-				_isStartingUp = false;
+				this.isStartingUp = false;
 				SetControls();
 			}
 		}
@@ -101,29 +101,29 @@ namespace YAT.Gui.Forms
 
 		private void comboBox_Encoding_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
-				_settings_Form.Encoding = (XEncoding)comboBox_Encoding.SelectedItem;
+			if (!this.isSettingControls)
+				this.settings_Form.Encoding = (XEncoding)comboBox_Encoding.SelectedItem;
 		}
 
 		private void checkBox_SeparateTxRxEol_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				_settings_Form.SeparateTxRxEol = checkBox_SeparateTxRxEol.Checked;
+				this.settings_Form.SeparateTxRxEol = checkBox_SeparateTxRxEol.Checked;
 				SetControls();
 			}
 		}
 
 		private void comboBox_TxEol_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				Domain.XEol eol = comboBox_TxEol.SelectedItem as Domain.XEol;
 
 				if (eol != null)
-					_settings_Form.TxEol = eol.ToSequenceString();
+					this.settings_Form.TxEol = eol.ToSequenceString();
 				else
-					_settings_Form.TxEol = comboBox_TxEol.Text;
+					this.settings_Form.TxEol = comboBox_TxEol.Text;
 
 				SetControls();
 			}
@@ -136,7 +136,7 @@ namespace YAT.Gui.Forms
 
 			if (Domain.XEol.TryParse(eolString, out eol))
 			{
-				_settings_Form.TxEol = eol.ToSequenceString();
+				this.settings_Form.TxEol = eol.ToSequenceString();
 			}
 			else
 			{
@@ -144,9 +144,9 @@ namespace YAT.Gui.Forms
 				int invalidTextLength;
 				if (Validation.ValidateSequence(this, "EOL", eolString, out invalidTextStart, out invalidTextLength))
 				{
-					if (!_isSettingControls)
+					if (!this.isSettingControls)
 					{
-						_settings_Form.TxEol = eolString;
+						this.settings_Form.TxEol = eolString;
 						SetControls();
 					}
 				}
@@ -160,14 +160,14 @@ namespace YAT.Gui.Forms
 
 		private void comboBox_RxEol_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				Domain.XEol eol = comboBox_RxEol.SelectedItem as Domain.XEol;
 
 				if (eol != null)
-					_settings_Form.RxEol = eol.ToSequenceString();
+					this.settings_Form.RxEol = eol.ToSequenceString();
 				else
-					_settings_Form.RxEol = comboBox_RxEol.Text;
+					this.settings_Form.RxEol = comboBox_RxEol.Text;
 
 				SetControls();
 			}
@@ -180,7 +180,7 @@ namespace YAT.Gui.Forms
 
 			if (Domain.XEol.TryParse(eolString, out eol))
 			{
-				_settings_Form.RxEol = eol.ToSequenceString();
+				this.settings_Form.RxEol = eol.ToSequenceString();
 			}
 			else
 			{
@@ -188,9 +188,9 @@ namespace YAT.Gui.Forms
 				int invalidTextLength;
 				if (Validation.ValidateSequence(this, "EOL", eolString, out invalidTextStart, out invalidTextLength))
 				{
-					if (!_isSettingControls)
+					if (!this.isSettingControls)
 					{
-						_settings_Form.RxEol = eolString;
+						this.settings_Form.RxEol = eolString;
 						SetControls();
 					}
 				}
@@ -204,34 +204,34 @@ namespace YAT.Gui.Forms
 
 		private void checkBox_ShowEol_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				_settings_Form.ShowEol = checkBox_ShowEol.Checked;
+				this.settings_Form.ShowEol = checkBox_ShowEol.Checked;
 				SetControls();
 			}
 		}
 
 		private void checkBox_Delay_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				Domain.TextLineSendDelay lsd = _settings_Form.LineSendDelay;
+				Domain.TextLineSendDelay lsd = this.settings_Form.LineSendDelay;
 				lsd.Enabled = checkBox_Delay.Checked;
-				_settings_Form.LineSendDelay = lsd;
+				this.settings_Form.LineSendDelay = lsd;
 				SetControls();
 			}
 		}
 
 		private void textBox_Delay_Validating(object sender, CancelEventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				int delay;
 				if (int.TryParse(textBox_Delay.Text, out delay) && (delay >= 1))
 				{
-					Domain.TextLineSendDelay lsd = _settings_Form.LineSendDelay;
+					Domain.TextLineSendDelay lsd = this.settings_Form.LineSendDelay;
 					lsd.Delay = delay;
-					_settings_Form.LineSendDelay = lsd;
+					this.settings_Form.LineSendDelay = lsd;
 					SetControls();
 				}
 				else
@@ -260,14 +260,14 @@ namespace YAT.Gui.Forms
 
 		private void textBox_DelayInterval_Validating(object sender, CancelEventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				int interval;
 				if (int.TryParse(textBox_DelayInterval.Text, out interval) || (interval >= 1))
 				{
-					Domain.TextLineSendDelay lsd = _settings_Form.LineSendDelay;
+					Domain.TextLineSendDelay lsd = this.settings_Form.LineSendDelay;
 					lsd.LineInterval = interval;
-					_settings_Form.LineSendDelay = lsd;
+					this.settings_Form.LineSendDelay = lsd;
 					SetControls();
 				}
 				else
@@ -287,25 +287,25 @@ namespace YAT.Gui.Forms
 
 		private void checkBox_WaitForResponse_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				Domain.WaitForResponse wfr = _settings_Form.WaitForResponse;
+				Domain.WaitForResponse wfr = this.settings_Form.WaitForResponse;
 				wfr.Enabled = checkBox_WaitForResponse.Checked;
-				_settings_Form.WaitForResponse = wfr;
+				this.settings_Form.WaitForResponse = wfr;
 				SetControls();
 			}
 		}
 
 		private void textBox_WaitForResponse_Validating(object sender, CancelEventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				int timeout;
 				if (int.TryParse(textBox_WaitForResponse.Text, out timeout) && (timeout >= 1))
 				{
-					Domain.WaitForResponse wfr = _settings_Form.WaitForResponse;
+					Domain.WaitForResponse wfr = this.settings_Form.WaitForResponse;
 					wfr.Timeout = timeout;
-					_settings_Form.WaitForResponse = wfr;
+					this.settings_Form.WaitForResponse = wfr;
 					SetControls();
 				}
 				else
@@ -325,25 +325,25 @@ namespace YAT.Gui.Forms
 
 		private void radioButton_SubstituteNone_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls && radioButton_SubstituteNone.Checked)
-				_settings_Form.CharSubstitution = Domain.CharSubstitution.None;
+			if (!this.isSettingControls && radioButton_SubstituteNone.Checked)
+				this.settings_Form.CharSubstitution = Domain.CharSubstitution.None;
 		}
 
 		private void radioButton_SubstituteToUpper_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls && radioButton_SubstituteToUpper.Checked)
-				_settings_Form.CharSubstitution = Domain.CharSubstitution.ToUpper;
+			if (!this.isSettingControls && radioButton_SubstituteToUpper.Checked)
+				this.settings_Form.CharSubstitution = Domain.CharSubstitution.ToUpper;
 		}
 
 		private void radioButton_SubstituteToLower_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls && radioButton_SubstituteToLower.Checked)
-				_settings_Form.CharSubstitution = Domain.CharSubstitution.ToLower;
+			if (!this.isSettingControls && radioButton_SubstituteToLower.Checked)
+				this.settings_Form.CharSubstitution = Domain.CharSubstitution.ToLower;
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{
-			_settings = _settings_Form;
+			this.settings = this.settings_Form;
 		}
 
 		private void button_Cancel_Click(object sender, EventArgs e)
@@ -353,7 +353,7 @@ namespace YAT.Gui.Forms
 
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
-			_settings_Form.SetDefaults();
+			this.settings_Form.SetDefaults();
 			SetControls();
 		}
 
@@ -366,7 +366,7 @@ namespace YAT.Gui.Forms
 
 		private void InitializeControls()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
 			comboBox_TxEol.Items.Clear();
 			comboBox_TxEol.Items.AddRange(Domain.XEol.GetItems());
@@ -377,18 +377,18 @@ namespace YAT.Gui.Forms
 			comboBox_Encoding.Items.Clear();
 			comboBox_Encoding.Items.AddRange(XEncoding.GetItems());
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void SetControls()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
 			// encoding
-			comboBox_Encoding.SelectedItem = (XEncoding)_settings_Form.Encoding;
+			comboBox_Encoding.SelectedItem = (XEncoding)this.settings_Form.Encoding;
 
 			// EOL
-			bool separateEol = _settings_Form.SeparateTxRxEol;
+			bool separateEol = this.settings_Form.SeparateTxRxEol;
 			if (!separateEol)
 				label_TxEol.Text = "E&OL sequence:";
 			else
@@ -398,39 +398,39 @@ namespace YAT.Gui.Forms
 			comboBox_RxEol.Enabled = separateEol;
 
 			Domain.XEol eol;
-			if (Domain.XEol.TryParse(_settings_Form.TxEol, out eol))
+			if (Domain.XEol.TryParse(this.settings_Form.TxEol, out eol))
 				comboBox_TxEol.SelectedItem = eol;
 			else
-				comboBox_TxEol.Text = _settings_Form.TxEol;
-			if (Domain.XEol.TryParse(_settings_Form.RxEol, out eol))
+				comboBox_TxEol.Text = this.settings_Form.TxEol;
+			if (Domain.XEol.TryParse(this.settings_Form.RxEol, out eol))
 				comboBox_RxEol.SelectedItem = eol;
 			else
-				comboBox_RxEol.Text = _settings_Form.RxEol;
+				comboBox_RxEol.Text = this.settings_Form.RxEol;
 
 			// display
-			checkBox_ShowEol.Checked = _settings_Form.ShowEol;
+			checkBox_ShowEol.Checked = this.settings_Form.ShowEol;
 
 			// transmit
-			bool delayEnabled = _settings_Form.LineSendDelay.Enabled;
+			bool delayEnabled = this.settings_Form.LineSendDelay.Enabled;
 			checkBox_Delay.Checked = delayEnabled;
 			textBox_Delay.Enabled = delayEnabled;
-			textBox_Delay.Text = _settings_Form.LineSendDelay.Delay.ToString();
+			textBox_Delay.Text = this.settings_Form.LineSendDelay.Delay.ToString();
 			textBox_DelayInterval.Enabled = delayEnabled;
-			textBox_DelayInterval.Text = _settings_Form.LineSendDelay.LineInterval.ToString();
+			textBox_DelayInterval.Text = this.settings_Form.LineSendDelay.LineInterval.ToString();
 
-			bool waitEnabled = _settings_Form.WaitForResponse.Enabled;
+			bool waitEnabled = this.settings_Form.WaitForResponse.Enabled;
 			checkBox_WaitForResponse.Checked = waitEnabled;
 			textBox_WaitForResponse.Enabled = waitEnabled;
-			textBox_WaitForResponse.Text = _settings_Form.WaitForResponse.Timeout.ToString();
+			textBox_WaitForResponse.Text = this.settings_Form.WaitForResponse.Timeout.ToString();
 
-			switch (_settings_Form.CharSubstitution)
+			switch (this.settings_Form.CharSubstitution)
 			{
 				case Domain.CharSubstitution.ToUpper: radioButton_SubstituteToUpper.Checked = true; break;
 				case Domain.CharSubstitution.ToLower: radioButton_SubstituteToLower.Checked = true; break;
 				default:                              radioButton_SubstituteNone.Checked    = true; break;
 			}
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		#endregion

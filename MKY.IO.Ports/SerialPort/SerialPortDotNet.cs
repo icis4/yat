@@ -118,12 +118,12 @@ namespace MKY.IO.Ports
 		// Constants
 		//==========================================================================================
 
-		private const int _BaudRateDefault = 9600;
-		private const int _DataBitsDefault = 8;
-		private const System.IO.Ports.Parity _ParityDefault = System.IO.Ports.Parity.None;
-		private const System.IO.Ports.StopBits _StopBitsDefault = System.IO.Ports.StopBits.One;
-		private const System.IO.Ports.Handshake _HandshakeDefault = System.IO.Ports.Handshake.None;
-		private const string _PortSettingsDefault = "9600, 8, None, 1, None";
+		private const int BaudRateDefault = 9600;
+		private const int DataBitsDefault = 8;
+		private const System.IO.Ports.Parity ParityDefault = System.IO.Ports.Parity.None;
+		private const System.IO.Ports.StopBits StopBitsDefault = System.IO.Ports.StopBits.One;
+		private const System.IO.Ports.Handshake HandshakeDefault = System.IO.Ports.Handshake.None;
+		private const string PortSettingsDefault = "9600, 8, None, 1, None";
 
 		#endregion
 
@@ -220,7 +220,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		[Category("Port")]
 		[Description("Baud rate.")]
-		[DefaultValue(_BaudRateDefault)]
+		[DefaultValue(BaudRateDefault)]
 		public new int BaudRate
 		{
 			get
@@ -244,7 +244,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		[Category("Port")]
 		[Description("Data bits.")]
-		[DefaultValue(_DataBitsDefault)]
+		[DefaultValue(DataBitsDefault)]
 		public new int DataBits
 		{
 			get
@@ -268,7 +268,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		[Category("Port")]
 		[Description("Parity")]
-		[DefaultValue(_ParityDefault)]
+		[DefaultValue(ParityDefault)]
 		public new System.IO.Ports.Parity Parity
 		{
 			get
@@ -292,7 +292,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		[Category("Port")]
 		[Description("Stop bits.")]
-		[DefaultValue(_StopBitsDefault)]
+		[DefaultValue(StopBitsDefault)]
 		public new System.IO.Ports.StopBits StopBits
 		{
 			get
@@ -316,7 +316,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		[Category("Port")]
 		[Description("Handshake.")]
-		[DefaultValue(_HandshakeDefault)]
+		[DefaultValue(HandshakeDefault)]
 		public new System.IO.Ports.Handshake Handshake
 		{
 			get
@@ -350,8 +350,8 @@ namespace MKY.IO.Ports
 		/// Communications port settings.
 		/// </summary>
 		[Category("Port")]
-		[Description(@"Port settings. Default settings are """ + _PortSettingsDefault + @""".")]
-		[DefaultValue(_PortSettingsDefault)]
+		[Description(@"Port settings. Default settings are """ + PortSettingsDefault + @""".")]
+		[DefaultValue(PortSettingsDefault)]
 		[TypeConverter(typeof(IO.Ports.SerialPortSettingsConverter))]
 		public virtual SerialPortSettings PortSettings
 		{

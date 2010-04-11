@@ -74,8 +74,8 @@ namespace YAT.Gui.Controls
 			"   by several device manufacturers which simply need to replace an 'old fashioned' serial interfcae." + Environment.NewLine +
 			"   USB Ser/HID requires no additional driver to be installed on the computer.";
 
-		private const Domain.TerminalType _TerminalTypeDefault = Domain.TerminalType.Text;
-		private const Domain.IOType       _IOTypeDefault       = Domain.IOType.SerialPort;
+		private const Domain.TerminalType TerminalTypeDefault = Domain.TerminalType.Text;
+		private const Domain.IOType       IOTypeDefault       = Domain.IOType.SerialPort;
 
 		#endregion
 
@@ -84,10 +84,10 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool _isSettingControls = false;
+		private bool isSettingControls = false;
 
-		private Domain.TerminalType _terminalType = _TerminalTypeDefault;
-		private Domain.IOType       _ioType       = _IOTypeDefault;
+		private Domain.TerminalType terminalType = TerminalTypeDefault;
+		private Domain.IOType       ioType       = IOTypeDefault;
 
 		#endregion
 
@@ -130,15 +130,15 @@ namespace YAT.Gui.Controls
 
 		[Category("Terminal")]
 		[Description("The terminal type.")]
-		[DefaultValue(_TerminalTypeDefault)]
+		[DefaultValue(TerminalTypeDefault)]
 		public Domain.TerminalType TerminalType
 		{
-			get { return (_terminalType); }
+			get { return (this.terminalType); }
 			set
 			{
-				if (value != _terminalType)
+				if (value != this.terminalType)
 				{
-					_terminalType = value;
+					this.terminalType = value;
 					SetControls();
 					OnTerminalTypeChanged(new EventArgs());
 				}
@@ -147,15 +147,15 @@ namespace YAT.Gui.Controls
 
 		[Category("Terminal")]
 		[Description("The port type.")]
-		[DefaultValue(_IOTypeDefault)]
+		[DefaultValue(IOTypeDefault)]
 		public Domain.IOType IOType
 		{
-			get { return (_ioType); }
+			get { return (this.ioType); }
 			set
 			{
-				if (value != _ioType)
+				if (value != this.ioType)
 				{
-					_ioType = value;
+					this.ioType = value;
 					SetControls();
 					OnIOTypeChanged(new EventArgs());
 				}
@@ -172,16 +172,16 @@ namespace YAT.Gui.Controls
 		/// <summary>
 		/// Startup flag only used in the following event handler.
 		/// </summary>
-		private bool _isStartingUp = true;
+		private bool isStartingUp = true;
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
 		private void TerminalSelection_Paint(object sender, PaintEventArgs e)
 		{
-			if (_isStartingUp)
+			if (this.isStartingUp)
 			{
-				_isStartingUp = false;
+				this.isStartingUp = false;
 				SetControls();
 			}
 		}
@@ -191,7 +191,7 @@ namespace YAT.Gui.Controls
 		/// </summary>
 		private void TerminalSelection_EnabledChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				SetControls();
 		}
 
@@ -204,13 +204,13 @@ namespace YAT.Gui.Controls
 
 		private void comboBox_TerminalType_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				TerminalType = (Domain.XTerminalType)comboBox_TerminalType.SelectedItem;
 		}
 
 		private void comboBox_IOType_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				IOType = (Domain.XIOType)comboBox_IOType.SelectedItem;
 		}
 
@@ -223,12 +223,12 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
 			if (Enabled)
 			{
-				comboBox_TerminalType.SelectedItem = (Domain.XTerminalType)_terminalType;
-				comboBox_IOType.SelectedItem       = (Domain.XIOType)_ioType;
+				comboBox_TerminalType.SelectedItem = (Domain.XTerminalType)this.terminalType;
+				comboBox_IOType.SelectedItem       = (Domain.XIOType)this.ioType;
 			}
 			else
 			{
@@ -236,7 +236,7 @@ namespace YAT.Gui.Controls
 				comboBox_IOType.SelectedIndex       = -1;
 			}
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		#endregion

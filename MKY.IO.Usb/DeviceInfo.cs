@@ -48,9 +48,6 @@ namespace MKY.IO.Usb
 		public const int DefaultProductId = 0;
 
 		/// <summary></summary>
-		public const string DefaultInUseText = "(in use)";
-
-		/// <summary></summary>
 		public const string DefaultSeparator = " - ";
 
 		/// <summary></summary>
@@ -65,19 +62,14 @@ namespace MKY.IO.Usb
 		// Fields
 		//==========================================================================================
 
-		private string _path;
+		private string path;
 
-		private int _vendorId = DefaultVendorId;
-		private int _productId = DefaultProductId;
+		private int vendorId = DefaultVendorId;
+		private int productId = DefaultProductId;
 
-		private string _manufacturer;
-		private string _product;
-		private string _serialNumber;
-
-		private bool _isInUse;
-		private string _inUseText;
-
-		private string _separator;
+		private string manufacturer;
+		private string product;
+		private string serialNumber;
 
 		#endregion
 
@@ -136,32 +128,27 @@ namespace MKY.IO.Usb
 			if ((productId < FirstProductId) || (productId > LastProductId))
 				throw (new ArgumentOutOfRangeException("productId", productId, "Invalid product ID"));
 
-			_path = systemPath;
+			this.path = systemPath;
 
-			_vendorId = vendorId;
-			_productId = productId;
+			this.vendorId  = vendorId;
+			this.productId = productId;
 
-			_manufacturer = manufacturer;
-			_product = product;
-			_serialNumber = serialNumber;
+			this.manufacturer = manufacturer;
+			this.product      = product;
+			this.serialNumber = serialNumber;
 		}
 
 		/// <summary></summary>
 		public DeviceInfo(DeviceInfo rhs)
 		{
-			_path = rhs._path;
+			this.path = rhs.path;
 
-			_vendorId = rhs._vendorId;
-			_productId = rhs._productId;
+			this.vendorId  = rhs.vendorId;
+			this.productId = rhs.productId;
 
-			_manufacturer = rhs._manufacturer;
-			_product = rhs._product;
-			_serialNumber = rhs._serialNumber;
-
-			_isInUse = rhs._isInUse;
-			_inUseText = rhs._inUseText;
-
-			_separator = rhs._separator;
+			this.manufacturer = rhs.manufacturer;
+			this.product      = rhs.product;
+			this.serialNumber = rhs.serialNumber;
 		}
 
 		#endregion
@@ -175,16 +162,16 @@ namespace MKY.IO.Usb
 		[XmlIgnore]
 		public virtual string Path
 		{
-			get { return (_path); }
-			set { _path = value;  }
+			get { return (this.path); }
+			set { this.path = value;  }
 		}
 
 		/// <summary></summary>
 		[XmlElement("VendorId")]
 		public virtual int VendorId
 		{
-			get { return (_vendorId); }
-			set { _vendorId = value;  }
+			get { return (this.vendorId); }
+			set { this.vendorId = value;  }
 		}
 
 		/// <summary></summary>
@@ -198,8 +185,8 @@ namespace MKY.IO.Usb
 		[XmlElement("ProductId")]
 		public virtual int ProductId
 		{
-			get { return (_productId); }
-			set { _productId = value;  }
+			get { return (this.productId); }
+			set { this.productId = value;  }
 		}
 
 		/// <summary></summary>
@@ -213,76 +200,24 @@ namespace MKY.IO.Usb
 		[XmlIgnore]
 		public virtual string Manufacturer
 		{
-			get { return (_manufacturer); }
-			set { _manufacturer = value;  }
+			get { return (this.manufacturer); }
+			set { this.manufacturer = value;  }
 		}
 
 		/// <summary></summary>
 		[XmlIgnore]
 		public virtual string Product
 		{
-			get { return (_product); }
-			set { _product = value;  }
+			get { return (this.product); }
+			set { this.product = value;  }
 		}
 
 		/// <summary></summary>
 		[XmlElement("SerialNumber")]
 		public virtual string SerialNumber
 		{
-			get { return (_serialNumber); }
-			set { _serialNumber = value;  }
-		}
-
-		/// <summary>
-		/// Indicates whether device is currently in use.
-		/// </summary>
-		[XmlIgnore]
-		public virtual bool IsInUse
-		{
-			get { return (_isInUse); }
-			set { _isInUse = value; }
-		}
-
-		/// <summary>
-		/// The text which is shown when device is currently in use,
-		/// e.g. "Company (VID:0ABC) Product (PID:1234) 000123A - (in use)".
-		/// </summary>
-		[XmlIgnore]
-		[DefaultValue(DefaultInUseText)]
-		public virtual string InUseText
-		{
-			get
-			{
-				if (_inUseText == "")
-					return (DefaultInUseText);
-				else
-					return (_inUseText);
-			}
-			set
-			{
-				_inUseText = value;
-			}
-		}
-
-		/// <summary>
-		/// The separator,
-		/// e.g. "Company (VID:0ABC) Product (PID:1234) 000123A - (in use)".
-		/// </summary>
-		[XmlIgnore]
-		[DefaultValue(DefaultSeparator)]
-		public virtual string Separator
-		{
-			get
-			{
-				if (_separator == "")
-					return (DefaultSeparator);
-				else
-					return (_separator);
-			}
-			set
-			{
-				_separator = value;
-			}
+			get { return (this.serialNumber); }
+			set { this.serialNumber = value;  }
 		}
 
 		#endregion
@@ -300,16 +235,16 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public virtual bool TryValidate()
 		{
-			if      (_path != "")
+			if      (this.path != "")
 			{
-				return (Device.GetDeviceInfoFromPath(_path, out _vendorId, out _productId, out _manufacturer, out _product, out _serialNumber));
+				return (Device.GetDeviceInfoFromPath(this.path, out this.vendorId, out this.productId, out this.manufacturer, out this.product, out this.serialNumber));
 			}
-			else if ((_vendorId != 0) && (_productId != 0))
+			else if ((this.vendorId != 0) && (this.productId != 0))
 			{
-				if (_serialNumber != "")
-					return (Device.GetDeviceInfoFromVidAndPidAndSerial(_vendorId, _productId, _serialNumber, out _path, out _manufacturer, out _product));
+				if (this.serialNumber != "")
+					return (Device.GetDeviceInfoFromVidAndPidAndSerial(this.vendorId, this.productId, this.serialNumber, out this.path, out this.manufacturer, out this.product));
 				else
-					return (Device.GetDeviceInfoFromVidAndPid(_vendorId, _productId, out _path, out _manufacturer, out _product, out _serialNumber));
+					return (Device.GetDeviceInfoFromVidAndPid(this.vendorId, this.productId, out this.path, out this.manufacturer, out this.product, out this.serialNumber));
 			}
 			else
 			{
@@ -342,7 +277,7 @@ namespace MKY.IO.Usb
 		{
 			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
-				return (_path == value._path);
+				return (this.path == value.path);
 
 			return (false);
 		}
@@ -403,12 +338,6 @@ namespace MKY.IO.Usb
 					sb.Append(" ");              // "Company (VID:0ABC) Product (PID:1234) "
 
 				sb.Append(SerialNumber);         // "Company (VID:0ABC) Product (PID:1234) 000123A"
-			}
-
-			if (appendInUseText && IsInUse)
-			{
-				sb.Append(Separator);            // "Company (VID:0ABC) Product (PID:1234) 000123A - "
-				sb.Append(InUseText);            // "Company (VID:0ABC) Product (PID:1234) 000123A - (in use)"
 			}
 
 			return (sb.ToString());

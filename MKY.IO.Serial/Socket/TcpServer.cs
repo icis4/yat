@@ -56,25 +56,33 @@ namespace MKY.IO.Serial
 
 		#endregion
 
+		#region Static Fields
+		//==========================================================================================
+		// Static Fields
+		//==========================================================================================
+
+		private static int staticInstanceCounter = 0;
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
 		//==========================================================================================
 
-		private static int _instanceCounter = 0;
-		private int _instanceId = 0;
-		private bool _isDisposed;
+		private int instanceId = 0;
+		private bool isDisposed;
 
-		private System.Net.IPAddress _localIPAddress;
-		private int _localPort;
+		private System.Net.IPAddress localIPAddress;
+		private int localPort;
 
-		private SocketState _state = SocketState.Reset;
-		private object _stateSyncObj = new object();
+		private SocketState state = SocketState.Reset;
+		private object stateSyncObj = new object();
 
-		private ALAZ.SystemEx.NetEx.SocketsEx.SocketServer _socket;
-		private List<ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection> _socketConnections = new List<ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection>();
+		private ALAZ.SystemEx.NetEx.SocketsEx.SocketServer socket;
+		private List<ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection> socketConnections = new List<ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection>();
 
-		private Queue<byte> _receiveQueue = new Queue<byte>();
+		private Queue<byte> receiveQueue = new Queue<byte>();
 
 		#endregion
 
@@ -106,10 +114,10 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public TcpServer(System.Net.IPAddress localIPAddress, int localPort)
 		{
-			_instanceId = _instanceCounter++;
+			this.instanceId = staticInstanceCounter++;
 
-			_localIPAddress = localIPAddress;
-			_localPort = localPort;
+			this.localIPAddress = localIPAddress;
+			this.localPort = localPort;
 		}
 
 		#region Disposal
@@ -127,15 +135,15 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!_isDisposed)
+			if (!this.isDisposed)
 			{
 				if (disposing)
 				{
 					DisposeSocket();
 				}
-				_isDisposed = true;
+				this.isDisposed = true;
 
-				Debug.WriteLine(GetType() + "     (" + _instanceId + ")(" + ToShortEndPointString() + "                  ): Disposed.");
+				Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "                  ): Disposed.");
 			}
 		}
 
@@ -148,13 +156,13 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected bool IsDisposed
 		{
-			get { return (_isDisposed); }
+			get { return (this.isDisposed); }
 		}
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (_isDisposed)
+			if (this.isDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
 		}
 
@@ -173,7 +181,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_localIPAddress);
+				return (this.localIPAddress);
 			}
 		}
 
@@ -183,7 +191,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_localPort);
+				return (this.localPort);
 			}
 		}
 
@@ -193,7 +201,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				switch (_state)
+				switch (this.state)
 				{
 					case SocketState.Listening:
 					case SocketState.Accepted:
@@ -214,7 +222,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				switch (_state)
+				switch (this.state)
 				{
 					case SocketState.Accepted:
 					{
@@ -234,7 +242,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_socketConnections.Count);
+				return (this.socketConnections.Count);
 			}
 		}
 
@@ -250,7 +258,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_receiveQueue.Count);
+				return (this.receiveQueue.Count);
 			}
 		}
 
@@ -260,7 +268,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-				return (_socket);
+				return (this.socket);
 			}
 		}
 
@@ -283,7 +291,7 @@ namespace MKY.IO.Serial
 			}
 			else
 			{
-				System.Diagnostics.Debug.WriteLine(GetType() + "     (" + _instanceId + ")(" + ToShortEndPointString() + "                  ): Start() requested but state is " + _state + ".");
+				System.Diagnostics.Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "                  ): Start() requested but state is " + this.state + ".");
 				return (false);
 			}
 		}
@@ -302,14 +310,14 @@ namespace MKY.IO.Serial
 		{
 			AssertNotDisposed();
 		
-			if (_receiveQueue.Count > 0)
+			if (this.receiveQueue.Count > 0)
 			{
-				lock (_receiveQueue)
+				lock (this.receiveQueue)
 				{
-					int count = _receiveQueue.Count;
+					int count = this.receiveQueue.Count;
 					data = new byte[count];
 					for (int i = 0; i < count; i++)
-						data[i] = _receiveQueue.Dequeue();
+						data[i] = this.receiveQueue.Dequeue();
 				}
 			}
 			else
@@ -326,7 +334,7 @@ namespace MKY.IO.Serial
 
 			if (IsStarted)
 			{
-				foreach (ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection connection in _socketConnections)
+				foreach (ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection connection in this.socketConnections)
 					connection.BeginSend(data);
 			}
 		}
@@ -341,12 +349,12 @@ namespace MKY.IO.Serial
 		private void SetStateAndNotify(SocketState state)
 		{
 #if (DEBUG)
-			SocketState oldState = _state;
+			SocketState oldState = this.state;
 #endif
-			lock (_stateSyncObj)
-				_state = state;
+			lock (this.stateSyncObj)
+				this.state = state;
 #if (DEBUG)
-			Debug.WriteLine(GetType() + "     (" + _instanceId + ")(" + ToShortEndPointString() + "                  ): State has changed from " + oldState + " to " + _state + ".");
+			Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "                  ): State has changed from " + oldState + " to " + this.state + ".");
 #endif
 			OnIOChanged(new EventArgs());
 		}
@@ -360,12 +368,12 @@ namespace MKY.IO.Serial
 
 		private void DisposeSocket()
 		{
-			if (_socket != null)
+			if (this.socket != null)
 			{
-				_socket.Stop();
-				_socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose()
-				_socket = null;
-				_socketConnections.Clear();
+				this.socket.Stop();
+				this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose()
+				this.socket = null;
+				this.socketConnections.Clear();
 			}
 		}
 
@@ -378,19 +386,19 @@ namespace MKY.IO.Serial
 
 		private void StartSocket()
 		{
-			if (_socket != null)
+			if (this.socket != null)
 				DisposeSocket();
 
 			SetStateAndNotify(SocketState.Listening);
 
-			_socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketServer(System.Net.Sockets.ProtocolType.Tcp,
+			this.socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketServer(System.Net.Sockets.ProtocolType.Tcp,
 																	 ALAZ.SystemEx.NetEx.SocketsEx.CallbackThreadType.ctWorkerThread,
 																	(ALAZ.SystemEx.NetEx.SocketsEx.ISocketService)this,
 																	 ALAZ.SystemEx.NetEx.SocketsEx.DelimiterType.dtNone, null,
 																	 SocketDefaults.SocketBufferSize, SocketDefaults.MessageBufferSize,
 																	 Timeout.Infinite, Timeout.Infinite);
-			_socket.AddListener("YAT TCP Server Listener", new System.Net.IPEndPoint(System.Net.IPAddress.Any, _localPort));
-			_socket.Start(); // The ALAZ socket will be started asynchronously
+			this.socket.AddListener("YAT TCP Server Listener", new System.Net.IPEndPoint(System.Net.IPAddress.Any, this.localPort));
+			this.socket.Start(); // The ALAZ socket will be started asynchronously
 		}
 
 		private void StopSocket()
@@ -398,7 +406,7 @@ namespace MKY.IO.Serial
 			// \remind
 			// The ALAZ sockets by default stop synchronously. However, due to some other issues
 			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
-			_socket.Stop();
+			this.socket.Stop();
 		}
 
 		private void RestartSocket()
@@ -422,8 +430,8 @@ namespace MKY.IO.Serial
 		/// </param>
 		public virtual void OnConnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
-			lock (_socketConnections)
-				_socketConnections.Add(e.Connection);
+			lock (this.socketConnections)
+				this.socketConnections.Add(e.Connection);
 
 			SetStateAndNotify(SocketState.Accepted);
 
@@ -439,10 +447,10 @@ namespace MKY.IO.Serial
 		/// </param>
 		public virtual void OnReceived(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
-			lock (_receiveQueue)
+			lock (this.receiveQueue)
 			{
 				foreach (byte b in e.Buffer)
-					_receiveQueue.Enqueue(b);
+					this.receiveQueue.Enqueue(b);
 			}
 			OnDataReceived(new EventArgs());
 
@@ -470,10 +478,10 @@ namespace MKY.IO.Serial
 		public virtual void OnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
 			bool isConnected = false;
-			lock (_socketConnections)
+			lock (this.socketConnections)
 			{
-				_socketConnections.Remove(e.Connection);
-				isConnected = (_socketConnections.Count > 0);
+				this.socketConnections.Remove(e.Connection);
+				isConnected = (this.socketConnections.Count > 0);
 			}
 
 			if (!isConnected)
@@ -549,7 +557,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public virtual string ToShortEndPointString()
 		{
-			return ("Server:" + _localPort);
+			return ("Server:" + this.localPort);
 		}
 
 		#endregion

@@ -44,17 +44,17 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const bool DirectionLineBreakEnabledDefault = true;
 
-		private bool _separateTxRxRadix;
-		private Radix _txRadix;
-		private Radix _rxRadix;
-		private bool _showRadix;
-		private bool _showTimeStamp;
-		private bool _showLength;
-		private bool _showConnectTime;
-		private bool _showCounters;
-		private int _txMaxLineCount;
-		private int _rxMaxLineCount;
-		private bool _directionLineBreakEnabled;
+		private bool separateTxRxRadix;
+		private Radix txRadix;
+		private Radix rxRadix;
+		private bool showRadix;
+		private bool showTimeStamp;
+		private bool showLength;
+		private bool showConnectTime;
+		private bool showCounters;
+		private int txMaxLineCount;
+		private int rxMaxLineCount;
+		private bool directionLineBreakEnabled;
 
 		/// <summary></summary>
 		public DisplaySettings()
@@ -78,17 +78,17 @@ namespace YAT.Domain.Settings
 		public DisplaySettings(DisplaySettings rhs)
 			: base(rhs)
 		{
-			_separateTxRxRadix  = rhs.SeparateTxRxRadix;
-			_txRadix            = rhs.TxRadix;
-			_rxRadix            = rhs.RxRadix;
-			_showRadix          = rhs.ShowRadix;
-			_showTimeStamp      = rhs.ShowTimeStamp;
-			_showLength         = rhs.ShowLength;
-			_showConnectTime    = rhs.ShowConnectTime;
-			_showCounters       = rhs.ShowCounters;
-			_txMaxLineCount     = rhs.TxMaxLineCount;
-			_rxMaxLineCount     = rhs.RxMaxLineCount;
-			_directionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
+			this.separateTxRxRadix  = rhs.SeparateTxRxRadix;
+			this.txRadix            = rhs.TxRadix;
+			this.rxRadix            = rhs.RxRadix;
+			this.showRadix          = rhs.ShowRadix;
+			this.showTimeStamp      = rhs.ShowTimeStamp;
+			this.showLength         = rhs.ShowLength;
+			this.showConnectTime    = rhs.ShowConnectTime;
+			this.showCounters       = rhs.ShowCounters;
+			this.txMaxLineCount     = rhs.TxMaxLineCount;
+			this.rxMaxLineCount     = rhs.RxMaxLineCount;
+			this.directionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
 
 			ClearChanged();
 		}
@@ -120,12 +120,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("SeparateTxRxRadix")]
 		public virtual bool SeparateTxRxRadix
 		{
-			get { return (_separateTxRxRadix); }
+			get { return (this.separateTxRxRadix); }
 			set
 			{
-				if (value != _separateTxRxRadix)
+				if (value != this.separateTxRxRadix)
 				{
-					_separateTxRxRadix = value;
+					this.separateTxRxRadix = value;
 					SetChanged();
 				}
 			}
@@ -135,12 +135,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("TxRadix")]
 		public virtual Radix TxRadix
 		{
-			get { return (_txRadix); }
+			get { return (this.txRadix); }
 			set
 			{
-				if (value != _txRadix)
+				if (value != this.txRadix)
 				{
-					_txRadix = value;
+					this.txRadix = value;
 					SetChanged();
 				}
 			}
@@ -152,16 +152,16 @@ namespace YAT.Domain.Settings
 		{
 			get
 			{
-				if (_separateTxRxRadix)
-					return (_rxRadix);
+				if (this.separateTxRxRadix)
+					return (this.rxRadix);
 				else
-					return (_txRadix);
+					return (this.txRadix);
 			}
 			set
 			{
-				if (value != _rxRadix)
+				if (value != this.rxRadix)
 				{
-					_rxRadix = value;
+					this.rxRadix = value;
 					SetChanged();
 				}
 			}
@@ -171,12 +171,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("ShowRadix")]
 		public virtual bool ShowRadix
 		{
-			get { return (_showRadix); }
+			get { return (this.showRadix); }
 			set
 			{
-				if (value != _showRadix)
+				if (value != this.showRadix)
 				{
-					_showRadix = value;
+					this.showRadix = value;
 					SetChanged();
 				}
 			}
@@ -186,12 +186,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("ShowTimeStamp")]
 		public virtual bool ShowTimeStamp
 		{
-			get { return (_showTimeStamp); }
+			get { return (this.showTimeStamp); }
 			set
 			{
-				if (value != _showTimeStamp)
+				if (value != this.showTimeStamp)
 				{
-					_showTimeStamp = value;
+					this.showTimeStamp = value;
 					SetChanged();
 				}
 			}
@@ -201,12 +201,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("ShowLength")]
 		public virtual bool ShowLength
 		{
-			get { return (_showLength); }
+			get { return (this.showLength); }
 			set
 			{
-				if (value != _showLength)
+				if (value != this.showLength)
 				{
-					_showLength = value;
+					this.showLength = value;
 					SetChanged();
 				}
 			}
@@ -216,12 +216,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("ShowConnectTime")]
 		public virtual bool ShowConnectTime
 		{
-			get { return (_showConnectTime); }
+			get { return (this.showConnectTime); }
 			set
 			{
-				if (value != _showConnectTime)
+				if (value != this.showConnectTime)
 				{
-					_showConnectTime = value;
+					this.showConnectTime = value;
 					SetChanged();
 				}
 			}
@@ -231,12 +231,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("ShowCounters")]
 		public virtual bool ShowCounters
 		{
-			get { return (_showCounters); }
+			get { return (this.showCounters); }
 			set
 			{
-				if (value != _showCounters)
+				if (value != this.showCounters)
 				{
-					_showCounters = value;
+					this.showCounters = value;
 					SetChanged();
 				}
 			}
@@ -246,15 +246,15 @@ namespace YAT.Domain.Settings
 		[XmlElement("TxMaxLineCount")]
 		public virtual int TxMaxLineCount
 		{
-			get { return (_txMaxLineCount); }
+			get { return (this.txMaxLineCount); }
 			set
 			{
-				if (value != _txMaxLineCount)
+				if (value != this.txMaxLineCount)
 				{
 					if (value < 1)
 						throw (new ArgumentOutOfRangeException("TxMaxLineCount", "Line count must at least be 1"));
 
-					_txMaxLineCount = value;
+					this.txMaxLineCount = value;
 					SetChanged();
 				}
 			}
@@ -264,15 +264,15 @@ namespace YAT.Domain.Settings
 		[XmlElement("RxMaxLineCount")]
 		public virtual int RxMaxLineCount
 		{
-			get { return (_rxMaxLineCount); }
+			get { return (this.rxMaxLineCount); }
 			set
 			{
-				if (value != _rxMaxLineCount)
+				if (value != this.rxMaxLineCount)
 				{
 					if (value < 1)
 						throw (new ArgumentOutOfRangeException("RxMaxLineCount", "Line count must at least be 1"));
 
-					_rxMaxLineCount = value;
+					this.rxMaxLineCount = value;
 					SetChanged();
 				}
 			}
@@ -289,12 +289,12 @@ namespace YAT.Domain.Settings
 		[XmlElement("DirectionLineBreakEnabled")]
 		public virtual bool DirectionLineBreakEnabled
 		{
-			get { return (_directionLineBreakEnabled); }
+			get { return (this.directionLineBreakEnabled); }
 			set
 			{
-				if (value != _directionLineBreakEnabled)
+				if (value != this.directionLineBreakEnabled)
 				{
-					_directionLineBreakEnabled = value;
+					this.directionLineBreakEnabled = value;
 					SetChanged();
 				}
 			}
@@ -325,17 +325,17 @@ namespace YAT.Domain.Settings
 			{
 				return
 					(
-					(_separateTxRxRadix         == value._separateTxRxRadix) &&
-					(_txRadix                   == value._txRadix) &&
-					(_rxRadix                   == value._rxRadix) &&
-					(_showRadix                 == value._showRadix) &&
-					(_showTimeStamp             == value._showTimeStamp) &&
-					(_showLength                == value._showLength) &&
-					(_showConnectTime           == value._showConnectTime) &&
-					(_showCounters              == value._showCounters) &&
-					(_txMaxLineCount            == value._txMaxLineCount) &&
-					(_rxMaxLineCount            == value._rxMaxLineCount) &&
-					(_directionLineBreakEnabled == value._directionLineBreakEnabled)
+					(this.separateTxRxRadix         == value.separateTxRxRadix) &&
+					(this.txRadix                   == value.txRadix) &&
+					(this.rxRadix                   == value.rxRadix) &&
+					(this.showRadix                 == value.showRadix) &&
+					(this.showTimeStamp             == value.showTimeStamp) &&
+					(this.showLength                == value.showLength) &&
+					(this.showConnectTime           == value.showConnectTime) &&
+					(this.showCounters              == value.showCounters) &&
+					(this.txMaxLineCount            == value.txMaxLineCount) &&
+					(this.rxMaxLineCount            == value.rxMaxLineCount) &&
+					(this.directionLineBreakEnabled == value.directionLineBreakEnabled)
 					);
 			}
 			return (false);

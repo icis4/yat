@@ -24,14 +24,14 @@ namespace YAT.Settings.Terminal
 	[Serializable]
 	public class ImplicitSettings : MKY.Utilities.Settings.Settings, IEquatable<ImplicitSettings>
 	{
-		private bool _terminalIsStarted;
-		private bool _logIsStarted;
+		private bool terminalIsStarted;
+		private bool logIsStarted;
 
-		private Model.Settings.SendCommandSettings _sendCommand;
-		private Model.Settings.SendFileSettings _sendFile;
-		private Model.Settings.PredefinedSettings _predefined;
-		private Model.Settings.WindowSettings _window;
-		private Model.Settings.LayoutSettings _layout;
+		private Model.Settings.SendCommandSettings sendCommand;
+		private Model.Settings.SendFileSettings sendFile;
+		private Model.Settings.PredefinedSettings predefined;
+		private Model.Settings.WindowSettings window;
+		private Model.Settings.LayoutSettings layout;
 
 		public ImplicitSettings()
 			: base(MKY.Utilities.Settings.SettingsType.Implicit)
@@ -53,8 +53,8 @@ namespace YAT.Settings.Terminal
 		public ImplicitSettings(ImplicitSettings rhs)
 			: base(rhs)
 		{
-			_terminalIsStarted = rhs.TerminalIsStarted;
-			_logIsStarted      = rhs.LogIsStarted;
+			this.terminalIsStarted = rhs.TerminalIsStarted;
+			this.logIsStarted      = rhs.LogIsStarted;
 
 			SendCommand = new Model.Settings.SendCommandSettings(rhs.SendCommand);
 			SendFile    = new Model.Settings.SendFileSettings(rhs.SendFile);
@@ -82,12 +82,12 @@ namespace YAT.Settings.Terminal
 		[XmlElement("TerminalIsStarted")]
 		public virtual bool TerminalIsStarted
 		{
-			get { return (_terminalIsStarted); }
+			get { return (this.terminalIsStarted); }
 			set
 			{
-				if (value != _terminalIsStarted)
+				if (value != this.terminalIsStarted)
 				{
-					_terminalIsStarted = value;
+					this.terminalIsStarted = value;
 					SetChanged();
 				}
 			}
@@ -96,12 +96,12 @@ namespace YAT.Settings.Terminal
 		[XmlElement("LogIsStarted")]
 		public virtual bool LogIsStarted
 		{
-			get { return (_logIsStarted); }
+			get { return (this.logIsStarted); }
 			set
 			{
-				if (value != _logIsStarted)
+				if (value != this.logIsStarted)
 				{
-					_logIsStarted = value;
+					this.logIsStarted = value;
 					SetChanged();
 				}
 			}
@@ -110,19 +110,19 @@ namespace YAT.Settings.Terminal
 		[XmlElement("SendCommand")]
 		public virtual Model.Settings.SendCommandSettings SendCommand
 		{
-			get { return (_sendCommand); }
+			get { return (this.sendCommand); }
 			set
 			{
-				if (_sendCommand == null)
+				if (this.sendCommand == null)
 				{
-					_sendCommand = value;
-					AttachNode(_sendCommand);
+					this.sendCommand = value;
+					AttachNode(this.sendCommand);
 				}
-				else if (value != _sendCommand)
+				else if (value != this.sendCommand)
 				{
-					Model.Settings.SendCommandSettings old = _sendCommand;
-					_sendCommand = value;
-					ReplaceNode(old, _sendCommand);
+					Model.Settings.SendCommandSettings old = this.sendCommand;
+					this.sendCommand = value;
+					ReplaceNode(old, this.sendCommand);
 				}
 			}
 		}
@@ -130,19 +130,19 @@ namespace YAT.Settings.Terminal
 		[XmlElement("SendFile")]
 		public virtual Model.Settings.SendFileSettings SendFile
 		{
-			get { return (_sendFile); }
+			get { return (this.sendFile); }
 			set
 			{
-				if (_sendFile == null)
+				if (this.sendFile == null)
 				{
-					_sendFile = value;
-					AttachNode(_sendFile);
+					this.sendFile = value;
+					AttachNode(this.sendFile);
 				}
-				else if (value != _sendFile)
+				else if (value != this.sendFile)
 				{
-					Model.Settings.SendFileSettings old = _sendFile;
-					_sendFile = value;
-					ReplaceNode(old, _sendFile);
+					Model.Settings.SendFileSettings old = this.sendFile;
+					this.sendFile = value;
+					ReplaceNode(old, this.sendFile);
 				}
 			}
 		}
@@ -150,19 +150,19 @@ namespace YAT.Settings.Terminal
 		[XmlElement("Predefined")]
 		public virtual Model.Settings.PredefinedSettings Predefined
 		{
-			get { return (_predefined); }
+			get { return (this.predefined); }
 			set
 			{
-				if (_predefined == null)
+				if (this.predefined == null)
 				{
-					_predefined = value;
-					AttachNode(_predefined);
+					this.predefined = value;
+					AttachNode(this.predefined);
 				}
-				else if (value != _predefined)
+				else if (value != this.predefined)
 				{
-					Model.Settings.PredefinedSettings old = _predefined;
-					_predefined = value;
-					ReplaceNode(old, _predefined);
+					Model.Settings.PredefinedSettings old = this.predefined;
+					this.predefined = value;
+					ReplaceNode(old, this.predefined);
 				}
 			}
 		}
@@ -170,19 +170,19 @@ namespace YAT.Settings.Terminal
 		[XmlElement("Window")]
 		public virtual Model.Settings.WindowSettings Window
 		{
-			get { return (_window); }
+			get { return (this.window); }
 			set
 			{
-				if (_window == null)
+				if (this.window == null)
 				{
-					_window = value;
-					AttachNode(_window);
+					this.window = value;
+					AttachNode(this.window);
 				}
-				else if (value != _window)
+				else if (value != this.window)
 				{
-					Model.Settings.WindowSettings old = _window;
-					_window = value;
-					ReplaceNode(old, _window);
+					Model.Settings.WindowSettings old = this.window;
+					this.window = value;
+					ReplaceNode(old, this.window);
 				}
 			}
 		}
@@ -190,19 +190,19 @@ namespace YAT.Settings.Terminal
 		[XmlElement("Layout")]
 		public virtual Model.Settings.LayoutSettings Layout
 		{
-			get { return (_layout); }
+			get { return (this.layout); }
 			set
 			{
-				if (_layout == null)
+				if (this.layout == null)
 				{
-					_layout = value;
-					AttachNode(_layout);
+					this.layout = value;
+					AttachNode(this.layout);
 				}
-				else if (value != _layout)
+				else if (value != this.layout)
 				{
-					Model.Settings.LayoutSettings old = _layout;
-					_layout = value;
-					ReplaceNode(old, _layout);
+					Model.Settings.LayoutSettings old = this.layout;
+					this.layout = value;
+					ReplaceNode(old, this.layout);
 				}
 			}
 		}
@@ -232,8 +232,8 @@ namespace YAT.Settings.Terminal
 			{
 				return
 					(
-					(_terminalIsStarted == value._terminalIsStarted) &&
-					(_logIsStarted      == value._logIsStarted) &&
+					(this.terminalIsStarted == value.terminalIsStarted) &&
+					(this.logIsStarted      == value.logIsStarted) &&
 					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
 					);
 			}

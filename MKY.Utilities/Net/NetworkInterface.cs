@@ -61,8 +61,8 @@ namespace MKY.Utilities.Net
 
 		#endregion
 
-		private IPAddress _otherAddress = IPAddress.None;
-		private string _otherDescription = "";
+		private IPAddress otherAddress = IPAddress.None;
+		private string otherDescription = "";
 
 		/// <summary>Default is <see cref="CommonNetworkInterface.Any"/></summary>
 		public XNetworkInterface()
@@ -80,8 +80,8 @@ namespace MKY.Utilities.Net
 		public XNetworkInterface(IPAddress address, string description)
 			: base(CommonNetworkInterface.Other)
 		{
-			_otherAddress = address;
-			_otherDescription = description;
+			this.otherAddress = address;
+			this.otherDescription = description;
 		}
 
 		#region Properties
@@ -98,7 +98,7 @@ namespace MKY.Utilities.Net
 					case CommonNetworkInterface.IPv4Loopback: return (IPAddress.Loopback);
 					case CommonNetworkInterface.IPv6Any:      return (IPAddress.IPv6Any);
 					case CommonNetworkInterface.IPv6Loopback: return (IPAddress.IPv6Loopback);
-					case CommonNetworkInterface.Other:        return (_otherAddress);
+					case CommonNetworkInterface.Other:        return (this.otherAddress);
 				}
 				throw (new NotImplementedException(UnderlyingEnum.ToString()));
 			}
@@ -120,17 +120,17 @@ namespace MKY.Utilities.Net
 				case CommonNetworkInterface.IPv6Loopback: return (IPv6Loopback_string + " (" + IPAddress.IPv6Loopback + ")");
 				case CommonNetworkInterface.Other:
 				{
-					if (_otherDescription != "")
+					if (this.otherDescription != "")
 					{
-						if (_otherAddress != IPAddress.None)
-							return (_otherDescription + " (" + _otherAddress + ")");
+						if (this.otherAddress != IPAddress.None)
+							return (this.otherDescription + " (" + this.otherAddress + ")");
 						else
-							return (_otherDescription);
+							return (this.otherDescription);
 					}
 					else
 					{
-						if (_otherAddress != IPAddress.None)
-							return (_otherAddress.ToString());
+						if (this.otherAddress != IPAddress.None)
+							return (this.otherAddress.ToString());
 						else
 							throw (new ArgumentOutOfRangeException("address and description", "IP address and interface description or both undefined"));
 					}

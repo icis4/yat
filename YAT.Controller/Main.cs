@@ -40,7 +40,7 @@ namespace YAT.Controller
 		// Constants
 		//==========================================================================================
 
-		private static readonly string[] _Title =
+		private static readonly string[] Title =
 		{
 			ApplicationInfo.ProductName + " - Version " + Application.ProductVersion,
 			"YAT - Yet Another Terminal",
@@ -49,7 +49,7 @@ namespace YAT.Controller
 			"Copyright © 2003-2010 Matthias Kläy.",
 		};
 
-		private static readonly string[] _FileOptions =
+		private static readonly string[] FileOptions =
 		{
 			"Usage:    ",
 			"  YAT[.exe] [<WorkspaceSettings>.yaw|<TerminalSettings>.yat]",
@@ -61,7 +61,7 @@ namespace YAT.Controller
 			"          Start YAT and open given terminal settings",
 		};
 
-		private static readonly string[] _AdvancedOptions =
+		private static readonly string[] AdvancedOptions =
 		{
 			"Advanced usage:    ",
 			"  YAT[.exe] [/r]",
@@ -73,13 +73,13 @@ namespace YAT.Controller
 			"  YAT /r  Start YAT and open most recent file",
 		};
 
-		private static readonly string[] _RecentArg =
+		private static readonly string[] RecentArg =
 		{
 			"/r",
 			"-r",
 		};
 
-		private static readonly string[] _Help =
+		private static readonly string[] Help =
 		{
 			"  /?      ",
 			"  -?      ",
@@ -87,7 +87,7 @@ namespace YAT.Controller
 			"  --help  Display this help text",
 		};
 
-		private static readonly string[] _HelpArg =
+		private static readonly string[] HelpArg =
 		{
 			"/?",
 			"-?",
@@ -95,7 +95,7 @@ namespace YAT.Controller
 			"--help",
 		};
 
-		private static readonly string[] _Return =
+		private static readonly string[] Return =
 		{
 			"Return codes:",
 			"   0      Successful exit",
@@ -113,13 +113,13 @@ namespace YAT.Controller
 		// Fields
 		//==========================================================================================
 
-		private bool _isDisposed;
+		private bool isDisposed;
 
 		// command line
-		private bool _commandLineError = false;
-		private bool _commandLineHelpIsRequested = false;
+		private bool commandLineError = false;
+		private bool commandLineHelpIsRequested = false;
 
-		private string _requestedFilePath = "";
+		private string requestedFilePath = "";
 
 		#endregion
 
@@ -132,7 +132,7 @@ namespace YAT.Controller
 		{
 			// parse command line args if there are
 			if (commandLineArgs.Length > 0)
-				_commandLineError = (!ParseCommandLineArgs(commandLineArgs));
+				this.commandLineError = (!ParseCommandLineArgs(commandLineArgs));
 		}
 
 		#region Disposal
@@ -150,12 +150,14 @@ namespace YAT.Controller
 		/// <summary></summary>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!_isDisposed)
+			if (!this.isDisposed)
 			{
 				if (disposing)
 				{
+					// Nothing to do yet.
 				}
-				_isDisposed = true;
+
+				this.isDisposed = true;
 			}
 		}
 
@@ -168,13 +170,13 @@ namespace YAT.Controller
 		/// <summary></summary>
 		protected bool IsDisposed
 		{
-			get { return (_isDisposed); }
+			get { return (this.isDisposed); }
 		}
 
 		/// <summary></summary>
 		protected void AssertNotDisposed()
 		{
-			if (_isDisposed)
+			if (this.isDisposed)
 				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
 		}
 
@@ -189,17 +191,17 @@ namespace YAT.Controller
 
 		public virtual bool CommandLineError
 		{
-			get { return (_commandLineError); }
+			get { return (this.commandLineError); }
 		}
 
 		public virtual bool CommandLineHelpIsRequested
 		{
-			get { return (_commandLineHelpIsRequested); }
+			get { return (this.commandLineHelpIsRequested); }
 		}
 
 		public virtual string RequestedFilePath
 		{
-			get { return (_requestedFilePath); }
+			get { return (this.requestedFilePath); }
 		}
 
 		#endregion
@@ -217,14 +219,14 @@ namespace YAT.Controller
 		public MainResult Run(bool runWithView)
 		{
 			// Show command line help in case of error
-			if (_commandLineError)
+			if (this.commandLineError)
 			{
 				WriteHelp();
 				return (MainResult.CommandLineArgsError);
 			}
 
 			// Show command line help if requested
-			if (_commandLineHelpIsRequested)
+			if (this.commandLineHelpIsRequested)
 			{
 				WriteHelp();
 				return (MainResult.OK);
@@ -232,7 +234,7 @@ namespace YAT.Controller
 
 			// Create model and view and run application
 			MainResult mainResult;
-			using (Model.Main model = new Model.Main(_requestedFilePath))
+			using (Model.Main model = new Model.Main(this.requestedFilePath))
 			{
 				if (runWithView)
 				{
@@ -242,6 +244,7 @@ namespace YAT.Controller
 						// \attention This call does not return until the application exits
 						Application.Run(view);
 					}
+
 					mainResult = MainResult.OK;
 				}
 				else // Non-view application for automated test usage
@@ -258,8 +261,7 @@ namespace YAT.Controller
 						mainResult = MainResult.ApplicationStartError;
 					}
 				}
-			}
-			// Dispose of model and view to ensure immediate release of resources
+			} // Dispose of model and view to ensure immediate release of resources
 
 			return (mainResult);
 		}
@@ -289,23 +291,23 @@ namespace YAT.Controller
 		// write help text onto console
 		private void WriteHelp()
 		{
-			foreach (string line in _Title)
+			foreach (string line in Title)
 				Console.WriteLine(line);
 			Console.WriteLine();
 
-			foreach (string line in _FileOptions)
+			foreach (string line in FileOptions)
 				Console.WriteLine(line);
 			Console.WriteLine();
 
-			foreach (string line in _AdvancedOptions)
+			foreach (string line in AdvancedOptions)
 				Console.WriteLine(line);
 			Console.WriteLine();
 
-			foreach (string line in _Help)
+			foreach (string line in Help)
 				Console.WriteLine(line);
 			Console.WriteLine();
 
-			foreach (string line in _Return)
+			foreach (string line in Return)
 				Console.WriteLine(line);
 			Console.WriteLine();
 		}
@@ -317,11 +319,11 @@ namespace YAT.Controller
 			foreach (string arg in commandLineArgs)
 			{
 				// check for help args
-				foreach (string helpArg in _HelpArg)
+				foreach (string helpArg in HelpArg)
 				{
 					if (string.Compare(arg, helpArg, true) == 0)
 					{
-						_commandLineHelpIsRequested = true;
+						this.commandLineHelpIsRequested = true;
 						argsParsed++;
 					}
 				}
@@ -338,14 +340,14 @@ namespace YAT.Controller
 				// check for workspace file args
 				if (ExtensionSettings.IsWorkspaceFile(Path.GetExtension(arg)))
 				{
-					_requestedFilePath = arg;
+					this.requestedFilePath = arg;
 					argsParsed++;
 				}
 
 				// check for terminal file args
 				if (ExtensionSettings.IsTerminalFile(Path.GetExtension(arg)))
 				{
-					_requestedFilePath = arg;
+					this.requestedFilePath = arg;
 					argsParsed++;
 				}
 			}
@@ -358,7 +360,7 @@ namespace YAT.Controller
 			int argsParsed = 0;
 			foreach (string arg in commandLineArgs)
 			{
-				foreach (string recentArg in _RecentArg)
+				foreach (string recentArg in RecentArg)
 				{
 					if (string.Compare(arg, recentArg, true) == 0)
 					{
@@ -366,7 +368,7 @@ namespace YAT.Controller
 						bool recentsReady = (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count > 0);
 						if (recentsReady)
 						{
-							_requestedFilePath = ApplicationSettings.LocalUser.RecentFiles.FilePaths[0].Item;
+							this.requestedFilePath = ApplicationSettings.LocalUser.RecentFiles.FilePaths[0].Item;
 							argsParsed++;
 						}
 					}

@@ -36,9 +36,9 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool _isSettingControls = false;
+		private bool isSettingControls = false;
 
-		private AutoRetry _autoReopen = MKY.IO.Serial.UsbHidDeviceSettings.AutoReopenDefault;
+		private AutoRetry autoReopen = MKY.IO.Serial.UsbHidDeviceSettings.AutoReopenDefault;
 
 		#endregion
 
@@ -75,12 +75,12 @@ namespace YAT.Gui.Controls
 		[Description("Sets auto reopen.")]
 		public AutoRetry AutoReopen
 		{
-			get { return (_autoReopen); }
+			get { return (this.autoReopen); }
 			set
 			{
-				if (value != _autoReopen)
+				if (value != this.autoReopen)
 				{
-					_autoReopen = value;
+					this.autoReopen = value;
 					SetControls();
 					OnAutoReopenChanged(new EventArgs());
 				}
@@ -97,16 +97,16 @@ namespace YAT.Gui.Controls
 		/// <summary>
 		/// Startup flag only used in the following event handler.
 		/// </summary>
-		private bool _isStartingUp = true;
+		private bool isStartingUp = true;
 
 		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
 		private void UsbHidPortSettings_Paint(object sender, PaintEventArgs e)
 		{
-			if (_isStartingUp)
+			if (this.isStartingUp)
 			{
-				_isStartingUp = false;
+				this.isStartingUp = false;
 				SetControls();
 			}
 		}
@@ -116,7 +116,7 @@ namespace YAT.Gui.Controls
 		/// </summary>
 		private void UsbHidDeviceSettings_EnabledChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 				SetControls();
 		}
 
@@ -129,9 +129,9 @@ namespace YAT.Gui.Controls
 
 		private void checkBox_AutoReopen_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
-				MKY.IO.Serial.AutoRetry ar = _autoReopen;
+				MKY.IO.Serial.AutoRetry ar = this.autoReopen;
 				ar.Enabled = checkBox_AutoReopen.Checked;
 				AutoReopen = ar;
 			}
@@ -139,12 +139,12 @@ namespace YAT.Gui.Controls
 
 		private void textBox_AutoReopenInterval_Validating(object sender, CancelEventArgs e)
 		{
-			if (!_isSettingControls)
+			if (!this.isSettingControls)
 			{
 				int interval;
 				if (int.TryParse(textBox_AutoReopenInterval.Text, out interval) && (interval >= 100))
 				{
-					MKY.IO.Serial.AutoRetry ar = _autoReopen;
+					MKY.IO.Serial.AutoRetry ar = this.autoReopen;
 					ar.Interval = interval;
 					AutoReopen = ar;
 				}
@@ -172,14 +172,14 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			_isSettingControls = true;
+			this.isSettingControls = true;
 
 			if (Enabled)
 			{
-				bool autoReopenEnabled = _autoReopen.Enabled;
+				bool autoReopenEnabled = this.autoReopen.Enabled;
 				checkBox_AutoReopen.Checked = autoReopenEnabled;
 				textBox_AutoReopenInterval.Enabled = autoReopenEnabled;
-				textBox_AutoReopenInterval.Text = _autoReopen.Interval.ToString();
+				textBox_AutoReopenInterval.Text = this.autoReopen.Interval.ToString();
 			}
 			else
 			{
@@ -188,7 +188,7 @@ namespace YAT.Gui.Controls
 				textBox_AutoReopenInterval.Text = "";
 			}
 
-			_isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		#endregion

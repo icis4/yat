@@ -37,8 +37,8 @@ namespace YAT.Settings.Test
 		// Fields
 		//==========================================================================================
 
-		private bool _autoSaveWorkspaceToRestore;
-		private MKY.IO.Ports.SerialPortCollection _serialPorts;
+		private bool autoSaveWorkspaceToRestore;
+		private MKY.IO.Ports.SerialPortCollection serialPorts;
 
 		#endregion
 
@@ -50,8 +50,8 @@ namespace YAT.Settings.Test
 		public FileVersionsTest()
 		{
 			// serial ports
-			_serialPorts = new MKY.IO.Ports.SerialPortCollection();
-			_serialPorts.FillWithAvailablePorts(false);
+			this.serialPorts = new MKY.IO.Ports.SerialPortCollection();
+			this.serialPorts.FillWithAvailablePorts(false);
 		}
 
 		#endregion
@@ -65,7 +65,7 @@ namespace YAT.Settings.Test
 		public virtual void TestFixtureSetUp()
 		{
 			// prevent auto-save of workspace settings
-			_autoSaveWorkspaceToRestore = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
+			this.autoSaveWorkspaceToRestore = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
 			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = false;
 		}
 
@@ -79,7 +79,7 @@ namespace YAT.Settings.Test
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
-			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = _autoSaveWorkspaceToRestore;
+			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = this.autoSaveWorkspaceToRestore;
 		}
 
 		#endregion
@@ -692,7 +692,7 @@ namespace YAT.Settings.Test
 		{
 			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1");
 
-			if (_serialPorts.Contains(1))
+			if (this.serialPorts.Contains(1))
 				Assert.IsTrue(terminal.IsOpen, "Terminal is not open on COM1");
 			else
 				Assert.Ignore("COM1 isn't supported on this machine");
@@ -718,7 +718,7 @@ namespace YAT.Settings.Test
 			if (!ignoreBaudRate)
 				Assert.AreEqual(115200, terminal.SettingsRoot.IO.SerialPort.Communication.BaudRate, "Serial port baud rate isn't set to 115200");
 
-			if (_serialPorts.Contains(2))
+			if (this.serialPorts.Contains(2))
 				Assert.IsTrue(terminal.IsOpen, "Terminal is not open on COM2");
 			else
 				Assert.Ignore("COM2 isn't supported on this machine");

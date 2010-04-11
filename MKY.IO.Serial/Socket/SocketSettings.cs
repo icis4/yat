@@ -64,18 +64,18 @@ namespace MKY.IO.Serial
 		// Fields
 		//==========================================================================================
 
-		private SocketHostType _hostType;
+		private SocketHostType hostType;
 
-		private string _remoteHost;
-		private IPAddress _resolvedRemoteIPAddress;
-		private int _remotePort;
+		private string remoteHost;
+		private IPAddress resolvedRemoteIPAddress;
+		private int remotePort;
 
-		private string _localInterface;
-		private IPAddress _resolvedLocalIPAddress;
-		private int _localTcpPort;
-		private int _localUdpPort;
+		private string localInterface;
+		private IPAddress resolvedLocalIPAddress;
+		private int localTcpPort;
+		private int localUdpPort;
 
-		private AutoRetry _tcpClientAutoReconnect;
+		private AutoRetry tcpClientAutoReconnect;
 
 		#endregion
 
@@ -106,18 +106,18 @@ namespace MKY.IO.Serial
 		public SocketSettings(SocketSettings rhs)
 			: base(rhs)
 		{
-			_hostType                = rhs.HostType;
+			this.hostType                = rhs.HostType;
 
-			_remoteHost              = rhs.RemoteHost;
-			_resolvedRemoteIPAddress = rhs.ResolvedRemoteIPAddress;
-			_remotePort              = rhs.RemotePort;
+			this.remoteHost              = rhs.RemoteHost;
+			this.resolvedRemoteIPAddress = rhs.ResolvedRemoteIPAddress;
+			this.remotePort              = rhs.RemotePort;
 
-			_localInterface          = rhs.LocalInterface;
-			_resolvedLocalIPAddress  = rhs.ResolvedLocalIPAddress;
-			_localTcpPort            = rhs.LocalTcpPort;
-			_localUdpPort            = rhs.LocalUdpPort;
+			this.localInterface          = rhs.LocalInterface;
+			this.resolvedLocalIPAddress  = rhs.ResolvedLocalIPAddress;
+			this.localTcpPort            = rhs.LocalTcpPort;
+			this.localUdpPort            = rhs.LocalUdpPort;
 
-			_tcpClientAutoReconnect  = rhs.TcpClientAutoReconnect;
+			this.tcpClientAutoReconnect  = rhs.TcpClientAutoReconnect;
 
 			ClearChanged();
 		}
@@ -152,12 +152,12 @@ namespace MKY.IO.Serial
 		[XmlElement("HostType")]
 		public virtual SocketHostType HostType
 		{
-			get { return (_hostType); }
+			get { return (this.hostType); }
 			set
 			{
-				if (value != _hostType)
+				if (value != this.hostType)
 				{
-					_hostType = value;
+					this.hostType = value;
 					SetChanged();
 				}
 			}
@@ -167,12 +167,12 @@ namespace MKY.IO.Serial
 		[XmlElement("RemoteHost")]
 		public virtual string RemoteHost
 		{
-			get { return (_remoteHost); }
+			get { return (this.remoteHost); }
 			set
 			{
-				if (value != _remoteHost)
+				if (value != this.remoteHost)
 				{
-					_remoteHost = value;
+					this.remoteHost = value;
 					SetChanged();
 				}
 			}
@@ -182,20 +182,20 @@ namespace MKY.IO.Serial
 		[XmlIgnore]
 		public virtual IPAddress ResolvedRemoteIPAddress
 		{
-			get { return (_resolvedRemoteIPAddress); }
-			set { _resolvedRemoteIPAddress = value;  }
+			get { return (this.resolvedRemoteIPAddress); }
+			set { this.resolvedRemoteIPAddress = value;  }
 		}
 
 		/// <summary></summary>
 		[XmlElement("RemotePort")]
 		public virtual int RemotePort
 		{
-			get { return (_remotePort); }
+			get { return (this.remotePort); }
 			set
 			{
-				if (value != _remotePort)
+				if (value != this.remotePort)
 				{
-					_remotePort = value;
+					this.remotePort = value;
 					SetChanged();
 				}
 			}
@@ -205,12 +205,12 @@ namespace MKY.IO.Serial
 		[XmlElement("LocalInterface")]
 		public virtual string LocalInterface
 		{
-			get { return (_localInterface); }
+			get { return (this.localInterface); }
 			set
 			{
-				if (value != _localInterface)
+				if (value != this.localInterface)
 				{
-					_localInterface = value;
+					this.localInterface = value;
 					SetChanged();
 				}
 			}
@@ -220,8 +220,8 @@ namespace MKY.IO.Serial
 		[XmlIgnore]
 		public virtual IPAddress ResolvedLocalIPAddress
 		{
-			get { return (_resolvedLocalIPAddress); }
-			set { _resolvedLocalIPAddress = value; }
+			get { return (this.resolvedLocalIPAddress); }
+			set { this.resolvedLocalIPAddress = value; }
 		}
 
 		/// <summary></summary>
@@ -230,7 +230,7 @@ namespace MKY.IO.Serial
 		{
 			get
 			{
-				switch (_hostType)
+				switch (this.hostType)
 				{
 					case SocketHostType.TcpClient:
 					case SocketHostType.TcpServer:
@@ -246,7 +246,7 @@ namespace MKY.IO.Serial
 			}
 			set
 			{
-				switch (_hostType)
+				switch (this.hostType)
 				{
 					case SocketHostType.TcpClient:
 					case SocketHostType.TcpServer:
@@ -265,12 +265,12 @@ namespace MKY.IO.Serial
 		[XmlElement("LocalTcpPort")]
 		public virtual int LocalTcpPort
 		{
-			get { return (_localTcpPort); }
+			get { return (this.localTcpPort); }
 			set
 			{
-				if (value != _localTcpPort)
+				if (value != this.localTcpPort)
 				{
-					_localTcpPort = value;
+					this.localTcpPort = value;
 					SetChanged();
 				}
 			}
@@ -280,12 +280,12 @@ namespace MKY.IO.Serial
 		[XmlElement("LocalUdpPort")]
 		public virtual int LocalUdpPort
 		{
-			get { return (_localUdpPort); }
+			get { return (this.localUdpPort); }
 			set
 			{
-				if (value != _localUdpPort)
+				if (value != this.localUdpPort)
 				{
-					_localUdpPort = value;
+					this.localUdpPort = value;
 					SetChanged();
 				}
 			}
@@ -295,12 +295,12 @@ namespace MKY.IO.Serial
 		[XmlElement("TcpClientAutoReconnect")]
 		public virtual AutoRetry TcpClientAutoReconnect
 		{
-			get { return (_tcpClientAutoReconnect); }
+			get { return (this.tcpClientAutoReconnect); }
 			set
 			{
-				if (value != _tcpClientAutoReconnect)
+				if (value != this.tcpClientAutoReconnect)
 				{
-					_tcpClientAutoReconnect = value;
+					this.tcpClientAutoReconnect = value;
 					SetChanged();
 				}
 			}
@@ -326,11 +326,11 @@ namespace MKY.IO.Serial
 			{
 				IPAddress[] ipAddresses;
 
-				ipAddresses = System.Net.Dns.GetHostAddresses(_remoteHost);
-				_resolvedRemoteIPAddress = ipAddresses[0];
+				ipAddresses = System.Net.Dns.GetHostAddresses(this.remoteHost);
+				this.resolvedRemoteIPAddress = ipAddresses[0];
 
-				ipAddresses = System.Net.Dns.GetHostAddresses(_localInterface);
-				_resolvedLocalIPAddress = ipAddresses[0];
+				ipAddresses = System.Net.Dns.GetHostAddresses(this.localInterface);
+				this.resolvedLocalIPAddress = ipAddresses[0];
 
 				return (true);
 			}
@@ -368,13 +368,13 @@ namespace MKY.IO.Serial
 			{
 				return
 					(
-					(_hostType               == value._hostType) &&
-					(_remoteHost             == value._remoteHost) &&
-					(_remotePort             == value._remotePort) &&
-					(_localInterface         == value._localInterface) &&
-					(_localTcpPort           == value._localTcpPort) &&
-					(_localUdpPort           == value._localUdpPort) &&
-					(_tcpClientAutoReconnect == value._tcpClientAutoReconnect)
+					(this.hostType               == value.hostType) &&
+					(this.remoteHost             == value.remoteHost) &&
+					(this.remotePort             == value.remotePort) &&
+					(this.localInterface         == value.localInterface) &&
+					(this.localTcpPort           == value.localTcpPort) &&
+					(this.localUdpPort           == value.localUdpPort) &&
+					(this.tcpClientAutoReconnect == value.tcpClientAutoReconnect)
 					);
 			}
 			return (false);
@@ -391,13 +391,13 @@ namespace MKY.IO.Serial
 		{
 			return
 				(
-				((XSocketHostType)_hostType) + ", " +
-				_remoteHost                  + ", " +
-				_remotePort                  + ", " +
-				_localInterface              + ", " +
-				_localTcpPort                + ", " +
-				_localUdpPort                + ", " +
-				_tcpClientAutoReconnect
+				((XSocketHostType)this.hostType) + ", " +
+				this.remoteHost                  + ", " +
+				this.remotePort                  + ", " +
+				this.localInterface              + ", " +
+				this.localTcpPort                + ", " +
+				this.localUdpPort                + ", " +
+				this.tcpClientAutoReconnect
 				);
 		}
 

@@ -86,7 +86,7 @@ namespace YAT.Domain.Test.Parser
 		// Fields
 		//==========================================================================================
 
-		private readonly TestSet[][] _testSets =
+		private readonly TestSet[][] testSets =
 		{
 			// mixed
 			new TestSet[]
@@ -166,7 +166,7 @@ namespace YAT.Domain.Test.Parser
 		{
 			Exception exceptionToNUnit = null;
 
-			foreach (TestSet[] tsArray in _testSets)
+			foreach (TestSet[] tsArray in this.testSets)
 			{
 				foreach (TestSet ts in tsArray)
 				{

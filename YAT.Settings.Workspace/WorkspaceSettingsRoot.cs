@@ -30,9 +30,9 @@ namespace YAT.Settings.Workspace
 	[XmlRoot("Settings")]
 	public class WorkspaceSettingsRoot : MKY.Utilities.Settings.Settings, IEquatable<WorkspaceSettingsRoot>
 	{
-		private string _productVersion = System.Windows.Forms.Application.ProductVersion;
-		private bool _autoSaved = false;
-		private WorkspaceSettings _workspace;
+		private string productVersion = System.Windows.Forms.Application.ProductVersion;
+		private bool autoSaved = false;
+		private WorkspaceSettings workspace;
 
 		public WorkspaceSettingsRoot()
 			: base(MKY.Utilities.Settings.SettingsType.Explicit)
@@ -78,19 +78,19 @@ namespace YAT.Settings.Workspace
 		[XmlElement("ProductVersion")]
 		public virtual string ProductVersion
 		{
-			get { return (_productVersion); }
+			get { return (this.productVersion); }
 			set { } // Do nothing.
 		}
 
 		[XmlElement("AutoSaved")]
 		public virtual bool AutoSaved
 		{
-			get { return (_autoSaved); }
+			get { return (this.autoSaved); }
 			set
 			{
-				if (value != _autoSaved)
+				if (value != this.autoSaved)
 				{
-					_autoSaved = value;
+					this.autoSaved = value;
 					// Do not set changed.
 				}
 			}
@@ -99,19 +99,19 @@ namespace YAT.Settings.Workspace
 		[XmlElement("Workspace")]
 		public virtual WorkspaceSettings Workspace
 		{
-			get { return (_workspace); }
+			get { return (this.workspace); }
 			set
 			{
-				if (_workspace == null)
+				if (this.workspace == null)
 				{
-					_workspace = value;
-					AttachNode(_workspace);
+					this.workspace = value;
+					AttachNode(this.workspace);
 				}
-				else if (value != _workspace)
+				else if (value != this.workspace)
 				{
-					WorkspaceSettings old = _workspace;
-					_workspace = value;
-					ReplaceNode(old, _workspace);
+					WorkspaceSettings old = this.workspace;
+					this.workspace = value;
+					ReplaceNode(old, this.workspace);
 				}
 			}
 		}
@@ -127,8 +127,8 @@ namespace YAT.Settings.Workspace
 		[XmlIgnore]
 		public GuidList<TerminalSettingsItem> TerminalSettings
 		{
-			get { return (_workspace.TerminalSettings); }
-			set { _workspace.TerminalSettings = value; }
+			get { return (this.workspace.TerminalSettings); }
+			set { this.workspace.TerminalSettings = value; }
 		}
 
 		#endregion
@@ -156,7 +156,7 @@ namespace YAT.Settings.Workspace
 			{
 				return
 					(
-					(_productVersion == value._productVersion) &&
+					(this.productVersion == value.productVersion) &&
 					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
 					);
 				// Do not compare AutoSaved.

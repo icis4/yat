@@ -51,7 +51,7 @@ namespace MKY.Utilities.Win32
 		/// <summary>
 		/// Class encapsulating native Win32 types, constants and functions.
 		/// </summary>
-		private static class Native
+		public static class Native
 		{
 			#region Types
 			//==========================================================================================
@@ -66,6 +66,7 @@ namespace MKY.Utilities.Win32
 
 			/// <remarks>dbt.h</remarks>
 			[Flags]
+			[CLSCompliant(false)]
 			public enum DIGCF : uint
 			{
 				/// <remarks>
@@ -79,6 +80,7 @@ namespace MKY.Utilities.Win32
 			}
 
 			/// <remarks>dbt.h</remarks>
+			[CLSCompliant(false)]
 			public enum DBT : uint
 			{
 				DEVICEARRIVAL        = 0x00008000,
@@ -86,6 +88,7 @@ namespace MKY.Utilities.Win32
 			}
 
 			/// <remarks>dbt.h</remarks>
+			[CLSCompliant(false)]
 			public enum DBT_DEVTYP : uint
 			{
 				DEVICEINTERFACE = 0x00000005,
@@ -93,6 +96,7 @@ namespace MKY.Utilities.Win32
 			}
 
 			[Flags]
+			[CLSCompliant(false)]
 			public enum DEVICE_NOTIFY : uint
 			{
 				WINDOW_HANDLE         = 0x00000000,
@@ -109,6 +113,7 @@ namespace MKY.Utilities.Win32
 			/// Must be a class because <see cref="Marshal.PtrToStructure(IntPtr, object)"/> and
 			/// <see cref="RegisterDeviceNotification"/> require a reference type.
 			/// </remarks>
+			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
 			public class DEV_BROADCAST_DEVICEINTERFACE
 			{
@@ -123,6 +128,7 @@ namespace MKY.Utilities.Win32
 			/// <remarks>
 			/// Must be a class because <see cref="Marshal.PtrToStructure(IntPtr, object)"/> requires a reference type.
 			/// </remarks>
+			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
 			public class DEV_BROADCAST_HDR
 			{
@@ -131,6 +137,7 @@ namespace MKY.Utilities.Win32
 				public UInt32     dbch_reserved;
 			}
 
+			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct SP_DEVICE_INTERFACE_DATA
 			{
@@ -140,6 +147,7 @@ namespace MKY.Utilities.Win32
 				public IntPtr Reserved;
 			}
 
+			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct SP_DEVICE_INTERFACE_DETAIL_DATA
 			{
@@ -147,6 +155,7 @@ namespace MKY.Utilities.Win32
 				public string DevicePath;
 			}
 
+			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct SP_DEVINFO_DATA
 			{
@@ -169,6 +178,7 @@ namespace MKY.Utilities.Win32
 			private const string USER_DLL = "user32.dll";
 
 			/// <remarks>dbt.h</remarks>
+			[CLSCompliant(false)]
 			public const UInt32 WM_DEVICECHANGE = 0x00000219;
 
 			#endregion
@@ -188,9 +198,12 @@ namespace MKY.Utilities.Win32
 			/// <param name="Flags">DEVICE_NOTIFY_WINDOW_HANDLE indicates the handle is a window handle.</param>
 			/// <returns>Device notification handle or NULL on failure.</returns>
 			[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[CLSCompliant(false)]
 			public static extern IntPtr RegisterDeviceNotification([In] IntPtr hRecipient, [In] DEV_BROADCAST_DEVICEINTERFACE NotificationFilter, [In] DEVICE_NOTIFY Flags);
 
+			/// <summary></summary>
 			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[CLSCompliant(false)]
 			public static extern Int32 SetupDiCreateDeviceInfoList([In] ref System.Guid ClassGuid, [In] Int32 hwndParent);
 
 			/// <summary>
@@ -213,6 +226,7 @@ namespace MKY.Utilities.Win32
 			/// <param name="DeviceInterfaceData">Pointer to a handle to a SP_DEVICE_INTERFACE_DATA structure for a device.</param>
 			/// <returns>True on success.</returns>
 			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[CLSCompliant(false)]
 			public static extern bool SetupDiEnumDeviceInterfaces([In] IntPtr DeviceInfoSet, [In] IntPtr DeviceInfoData, [In] ref System.Guid InterfaceClassGuid, [In] Int32 MemberIndex, [In, Out] ref SP_DEVICE_INTERFACE_DATA DeviceInterfaceData);
 
 			/// <summary>
@@ -226,6 +240,7 @@ namespace MKY.Utilities.Win32
 			/// and devices that expose interfaces in the class specified by the GUID.</param>
 			/// <returns>Handle to a device information set for the devices.</returns>
 			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[CLSCompliant(false)]
 			public static extern IntPtr SetupDiGetClassDevs([In] ref System.Guid ClassGuid, [In] IntPtr Enumerator, [In] IntPtr hwndParent, [In] DIGCF Flags);
 
 			/// <summary>
@@ -243,6 +258,7 @@ namespace MKY.Utilities.Win32
 			/// <param name="DeviceInfoData">Returned pointer to an SP_DEVINFO_DATA structure to receive information about the device.</param>
 			/// <returns>True on success.</returns>
 			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			[CLSCompliant(false)]
 			public static extern bool SetupDiGetDeviceInterfaceDetail([In] IntPtr DeviceInfoSet, [In] ref SP_DEVICE_INTERFACE_DATA DeviceInterfaceData, [Out] IntPtr DeviceInterfaceDetailData, [In] Int32 DeviceInterfaceDetailDataSize, [Out] out Int32 RequiredSize, [Out] IntPtr DeviceInfoData);
 
 			/// <summary>

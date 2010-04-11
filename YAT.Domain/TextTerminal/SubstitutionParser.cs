@@ -34,7 +34,7 @@ namespace YAT.Domain.Parser
 		// Fields
 		//==========================================================================================
 
-		private CharSubstitution _substitution;
+		private CharSubstitution substitution;
 
 		#endregion
 
@@ -89,7 +89,7 @@ namespace YAT.Domain.Parser
 		protected SubstitutionParser(ParserState parserState, Parser parser)
 			: base(parserState, parser)
 		{
-			_substitution = ((SubstitutionParser)parser)._substitution;
+			this.substitution = ((SubstitutionParser)parser).substitution;
 		}
 
 		#endregion
@@ -123,7 +123,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual byte[] Parse(string s, CharSubstitution substitution, out string parsed)
 		{
-			_substitution = substitution;
+			this.substitution = substitution;
 			return (Parse(s, out parsed));
 		}
 
@@ -137,7 +137,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual Result[] Parse(string s, CharSubstitution substitution, ParseMode mode, out string parsed)
 		{
-			_substitution = substitution;
+			this.substitution = substitution;
 			return (Parse(s, mode, out parsed));
 		}
 
@@ -151,7 +151,7 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual bool TryParse(string s, CharSubstitution substitution, out byte[] result, out string parsed)
 		{
-			_substitution = substitution;
+			this.substitution = substitution;
 			return (TryParse(s, out result, out parsed));
 		}
 
@@ -163,7 +163,7 @@ namespace YAT.Domain.Parser
 
 		private string Substitute(string token)
 		{
-			switch (_substitution)
+			switch (this.substitution)
 			{
 				case CharSubstitution.ToUpper: return (token.ToUpper());
 				case CharSubstitution.ToLower: return (token.ToLower());

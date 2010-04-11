@@ -25,7 +25,7 @@ namespace YAT.Model.Settings
 	[Serializable]
 	public class PredefinedSettings : MKY.Utilities.Settings.Settings, IEquatable<PredefinedSettings>
 	{
-		private int _selectedPage;
+		private int selectedPage;
 
 		/// <summary></summary>
 		public PredefinedSettings()
@@ -48,7 +48,7 @@ namespace YAT.Model.Settings
 		public PredefinedSettings(PredefinedSettings rhs)
 			: base(rhs)
 		{
-			_selectedPage = rhs.SelectedPage;
+			this.selectedPage = rhs.SelectedPage;
 			ClearChanged();
 		}
 
@@ -69,12 +69,12 @@ namespace YAT.Model.Settings
 		[XmlElement("SelectedPage")]
 		public virtual int SelectedPage
 		{
-			get { return (_selectedPage); }
+			get { return (this.selectedPage); }
 			set
 			{
-				if (value != _selectedPage)
+				if (value != this.selectedPage)
 				{
-					_selectedPage = value;
+					this.selectedPage = value;
 					SetChanged();
 				}
 			}
@@ -102,7 +102,7 @@ namespace YAT.Model.Settings
 		{
 			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
-				return (_selectedPage == value._selectedPage);
+				return (this.selectedPage == value.selectedPage);
 
 			return (false);
 		}

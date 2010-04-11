@@ -37,9 +37,9 @@ namespace MKY.IO.Usb
 	/// </summary>
 	public abstract class HidReportContainer
 	{
-		private HidDevice _device;
-		private int _reportLength;
-		private byte _reportId;
+		private HidDevice device;
+		private int reportLength;
+		private byte reportId;
 
 		/// <summary>
 		/// Creates a report container and stores the reference to the device in use as well as
@@ -47,8 +47,8 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public HidReportContainer(HidDevice device, int reportLength)
 		{
-			_device = device;
-			_reportLength = reportLength;
+			this.device = device;
+			this.reportLength = reportLength;
 		}
 
 		/// <summary>
@@ -56,7 +56,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		protected HidDevice Device
 		{
-			get { return (_device); }
+			get { return (this.device); }
 		}
 
 		/// <summary>
@@ -64,7 +64,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public int ReportLength
 		{
-			get { return (_reportLength); }
+			get { return (this.reportLength); }
 		}
 
 		/// <summary>
@@ -72,7 +72,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public byte ReportId
 		{
-			get { return (_reportId); }
+			get { return (this.reportId); }
 		}
 
 		/// <summary>
@@ -80,7 +80,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		protected void SetReportId(byte id)
 		{
-			_reportId = id;
+			this.reportId = id;
 		}
 	}
 
@@ -89,7 +89,7 @@ namespace MKY.IO.Usb
 	/// </summary>
 	public class HidInputReportContainer : HidReportContainer
 	{
-		private byte[] _data;
+		private byte[] data;
 
 		/// <summary>
 		/// Creates an input report container.
@@ -104,7 +104,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public byte[] Data
 		{
-			get { return (_data); }
+			get { return (this.data); }
 		}
 
 		/// <summary>
@@ -128,7 +128,7 @@ namespace MKY.IO.Usb
 				else
 					break;
 			}
-			_data = data.ToArray();
+			this.data = data.ToArray();
 		}
 	}
 
@@ -138,7 +138,7 @@ namespace MKY.IO.Usb
 	/// </summary>
 	public class HidOutputReportContainer : HidReportContainer
 	{
-		private byte[][] _reports;
+		private byte[][] reports;
 
 		/// <summary>
 		/// Creates an output report container.
@@ -153,7 +153,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public byte[][] Reports
 		{
-			get { return (_reports); }
+			get { return (this.reports); }
 		}
 
 		/// <summary>
@@ -182,7 +182,7 @@ namespace MKY.IO.Usb
 				offset += usableLength;
 			}
 
-			_reports = reports.ToArray();
+			this.reports = reports.ToArray();
 		}
 	}
 }
