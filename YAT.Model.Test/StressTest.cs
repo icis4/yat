@@ -23,6 +23,7 @@ using NUnit.Framework;
 
 namespace YAT.Model.Test
 {
+	/// <summary></summary>
 	[TestFixture]
 	public class StressTest
 	{

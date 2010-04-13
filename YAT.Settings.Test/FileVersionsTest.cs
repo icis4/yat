@@ -29,6 +29,7 @@ using YAT.Settings.Workspace;
 
 namespace YAT.Settings.Test
 {
+	/// <summary></summary>
 	[TestFixture]
 	public class FileVersionsTest
 	{
@@ -47,6 +48,7 @@ namespace YAT.Settings.Test
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public FileVersionsTest()
 		{
 			// serial ports
@@ -61,6 +63,7 @@ namespace YAT.Settings.Test
 		// Set Up Fixture
 		//==========================================================================================
 
+		/// <summary></summary>
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
@@ -76,6 +79,7 @@ namespace YAT.Settings.Test
 		// Tear Down Fixture
 		//==========================================================================================
 
+		/// <summary></summary>
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
@@ -94,7 +98,7 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 1 Version 1.99.12 > Terminal
 		//------------------------------------------------------------------------------------------
 
-		// 01_COM1_Open_Default
+		/// <summary>01_COM1_Open_Default</summary>
 		[Test]
 		[Category("Support for COM1 required")]
 		public virtual void Test_V1_99_12_TerminalSettingsCase01()
@@ -112,7 +116,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		// 02_COM2_Open_Binary_115200
+		/// <summary>02_COM2_Open_Binary_115200</summary>
 		[Test]
 		[Category("Support for COM2 required")]
 		public virtual void Test_V1_99_12_TerminalSettingsCase02()
@@ -130,7 +134,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		// 03_COM1_Closed_Predefined
+		/// <summary>03_COM1_Closed_Predefined</summary>
 		[Test]
 		public virtual void Test_V1_99_12_TerminalSettingsCase03()
 		{
@@ -154,7 +158,7 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 2 Preliminary Version 1.99.13 > Terminal
 		//------------------------------------------------------------------------------------------
 
-		// 01_COM1_Open_Default
+		/// <summary>01_COM1_Open_Default</summary>
 		[Test]
 		[Category("Support for COM1 required")]
 		public virtual void Test_V1_99_13_TerminalSettingsCase01()
@@ -172,7 +176,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		// 02_COM2_Open_Binary_115200
+		/// <summary>02_COM2_Open_Binary_115200</summary>
 		[Test]
 		[Category("Support for COM2 required")]
 		public virtual void Test_V1_99_13_TerminalSettingsCase02()
@@ -190,7 +194,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		// 03_COM1_Closed_Predefined
+		/// <summary>03_COM1_Closed_Predefined</summary>
 		[Test]
 		public virtual void Test_V1_99_13_TerminalSettingsCase03()
 		{
@@ -214,6 +218,7 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 2 Preliminary Version 1.99.13 > Workspace
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void Test_V1_99_13_WorkspaceSettingsCase04()
 		{
@@ -237,7 +242,7 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.17 > Terminal
 		//------------------------------------------------------------------------------------------
 
-		// 01_COM1_Open_Default
+		/// <summary>01_COM1_Open_Default</summary>
 		[Test]
 		[Category("Support for COM1 required")]
 		public virtual void Test_V1_99_17_TerminalSettingsCase01()
@@ -255,7 +260,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		// 02_COM2_Open_Binary_115200
+		/// <summary>02_COM2_Open_Binary_115200</summary>
 		[Test]
 		[Category("Support for COM2 required")]
 		public virtual void Test_V1_99_17_TerminalSettingsCase02()
@@ -273,7 +278,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		// 03_COM1_Closed_Predefined
+		/// <summary>03_COM1_Closed_Predefined</summary>
 		[Test]
 		public virtual void Test_V1_99_17_TerminalSettingsCase03()
 		{
@@ -297,6 +302,7 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.17 > Workspace
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void Test_V1_99_17_WorkspaceSettingsCase04()
 		{
@@ -320,7 +326,7 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 2 Candidate 2 Version 1.99.18 > Terminal
 		//------------------------------------------------------------------------------------------
 
-		// 01_COM1_Open_Default
+		/// <summary>01_COM1_Open_Default</summary>
 		[Test]
 		[Category("Support for COM1 required")]
 		public virtual void Test_V1_99_18_TerminalSettingsCase01()
@@ -338,7 +344,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		// 02_COM2_Open_Binary_115200
+		/// <summary>02_COM2_Open_Binary_115200</summary>
 		[Test]
 		[Category("Support for COM2 required")]
 		public virtual void Test_V1_99_18_TerminalSettingsCase02()
@@ -356,7 +362,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		// 03_COM1_Closed_Predefined
+		/// <summary>03_COM1_Closed_Predefined</summary>
 		[Test]
 		public virtual void Test_V1_99_18_TerminalSettingsCase03()
 		{
@@ -380,6 +386,7 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 2 Candidate 2 Version 1.99.18 > Workspace
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void Test_V1_99_18_WorkspaceSettingsCase04()
 		{
@@ -403,7 +410,7 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 2 Candidate 3 Version 1.99.19 > Terminal
 		//------------------------------------------------------------------------------------------
 
-		// 01_COM1_Open_Default
+		/// <summary>01_COM1_Open_Default</summary>
 		[Test]
 		[Category("Support for COM1 required")]
 		public virtual void Test_V1_99_19_TerminalSettingsCase01()
@@ -421,7 +428,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		// 02_COM2_Open_Binary_115200
+		/// <summary>02_COM2_Open_Binary_115200</summary>
 		[Test]
 		[Category("Support for COM2 required")]
 		public virtual void Test_V1_99_19_TerminalSettingsCase02()
@@ -439,7 +446,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		// 03_COM1_Closed_Predefined
+		/// <summary>03_COM1_Closed_Predefined</summary>
 		[Test]
 		public virtual void Test_V1_99_19_TerminalSettingsCase03()
 		{
@@ -463,6 +470,7 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 2 Candidate 3 Version 1.99.19 > Workspace
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void Test_V1_99_19_WorkspaceSettingsCase04()
 		{
@@ -486,7 +494,7 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 2 Candidate 4 Version 1.99.20 > Terminal
 		//------------------------------------------------------------------------------------------
 
-		// 01_COM1_Open_Default
+		/// <summary>01_COM1_Open_Default</summary>
 		[Test]
 		[Category("Support for COM1 required")]
 		public virtual void Test_V1_99_20_TerminalSettingsCase01()
@@ -504,7 +512,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		// 02_COM2_Open_Binary_115200
+		/// <summary>02_COM2_Open_Binary_115200</summary>
 		[Test]
 		[Category("Support for COM2 required")]
 		public virtual void Test_V1_99_20_TerminalSettingsCase02()
@@ -522,7 +530,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		// 03_COM1_Closed_Predefined
+		/// <summary>03_COM1_Closed_Predefined</summary>
 		[Test]
 		public virtual void Test_V1_99_20_TerminalSettingsCase03()
 		{
@@ -546,6 +554,7 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 2 Candidate 4 Version 1.99.20 > Workspace
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void Test_V1_99_20_WorkspaceSettingsCase04()
 		{
@@ -569,7 +578,7 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.22 > Terminal
 		//------------------------------------------------------------------------------------------
 
-		// 01_COM1_Open_Default
+		/// <summary>01_COM1_Open_Default</summary>
 		[Test]
 		[Category("Support for COM1 required")]
 		public virtual void Test_V1_99_22_TerminalSettingsCase01()
@@ -587,7 +596,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		// 02_COM2_Open_Binary_115200
+		/// <summary>02_COM2_Open_Binary_115200</summary>
 		[Test]
 		[Category("Support for COM2 required")]
 		public virtual void Test_V1_99_22_TerminalSettingsCase02()
@@ -605,7 +614,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		// 03_COM1_Closed_Predefined
+		/// <summary>03_COM1_Closed_Predefined</summary>
 		[Test]
 		public virtual void Test_V1_99_22_TerminalSettingsCase03()
 		{
@@ -629,6 +638,7 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.22 > Workspace
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void Test_V1_99_22_WorkspaceSettingsCase04()
 		{

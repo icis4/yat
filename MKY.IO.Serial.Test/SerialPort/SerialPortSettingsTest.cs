@@ -25,6 +25,7 @@ using MKY.IO.Serial;
 
 namespace MKY.IO.Serial.Test.SerialPort
 {
+	/// <summary></summary>
 	[TestFixture]
 	public class SerialPortSettingsTest
 	{
@@ -38,6 +39,7 @@ namespace MKY.IO.Serial.Test.SerialPort
 		// Tests > Serialization()
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestSerialization()
 		{

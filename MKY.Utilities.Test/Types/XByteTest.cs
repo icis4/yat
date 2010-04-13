@@ -24,6 +24,7 @@ using MKY.Utilities.Types;
 
 namespace MKY.Utilities.Test.Types
 {
+	/// <summary></summary>
 	[TestFixture]
 	public class XByteTest
 	{
@@ -82,6 +83,7 @@ namespace MKY.Utilities.Test.Types
 		// Tests > ToString()
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestToString()
 		{

@@ -24,6 +24,7 @@ using YAT.Settings.Terminal;
 
 namespace YAT.Model.Test
 {
+	/// <summary></summary>
 	[TestFixture]
 	public class ClearTest
 	{
@@ -37,6 +38,7 @@ namespace YAT.Model.Test
 		// Tests > TestClearCompleteLine
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestClearCompleteLine()
 		{
@@ -86,6 +88,7 @@ namespace YAT.Model.Test
 		// Tests > TestClearIncompleteLine
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestClearIncompleteLine()
 		{

@@ -26,6 +26,7 @@ using YAT.Settings.Application;
 
 namespace YAT.Model.Test
 {
+	/// <summary></summary>
 	[TestFixture]
 	public class FileHandlingTest
 	{
@@ -50,6 +51,7 @@ namespace YAT.Model.Test
 		// Set Up Fixture
 		//==========================================================================================
 
+		/// <summary></summary>
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
@@ -66,6 +68,7 @@ namespace YAT.Model.Test
 		// Tear Down Fixture
 		//==========================================================================================
 
+		/// <summary></summary>
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
@@ -81,6 +84,7 @@ namespace YAT.Model.Test
 		// Tear Down
 		//==========================================================================================
 
+		/// <summary></summary>
 		[TearDown]
 		public virtual void TearDown()
 		{

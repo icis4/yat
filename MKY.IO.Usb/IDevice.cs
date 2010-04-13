@@ -56,7 +56,7 @@ namespace MKY.IO.Usb
 		/// Indicates whether the device is connected to the computer.
 		/// </summary>
 		/// <returns>
-		/// true if the device is connected to the computer; otherwise, false.
+		/// <c>true</c> if the device is connected to the computer; otherwise, <c>false</c>.
 		/// </returns>
 		bool IsConnected { get; }
 

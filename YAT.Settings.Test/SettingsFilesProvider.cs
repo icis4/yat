@@ -31,6 +31,13 @@ namespace YAT.Settings.Test
 	// Types > Settings Enums
 	//------------------------------------------------------------------------------------------
 
+	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+	// warnings for each undocumented member below. Documenting each member makes little sense
+	// since they pretty much tell their purpose and documentation tags between the members
+	// makes the code less readable.
+	#pragma warning disable 1591
+
+	/// <summary></summary>
 	public enum TerminalSettingsTestCases
 	{
 		T_01_COM1_Open_Default,
@@ -38,20 +45,27 @@ namespace YAT.Settings.Test
 		T_03_COM1_Closed_Predefined,
 	}
 
+	/// <summary></summary>
 	public enum WorkspaceSettingsTestCases
 	{
 		W_04_Matthias,
 	}
 
+	#pragma warning restore 1591
+
 	#endregion
 
+	/// <summary></summary>
 	public struct SettingsFilePaths
 	{
 		private readonly string FilePath;
 
-		public readonly Dictionary<TerminalSettingsTestCases,  string> TerminalFilePaths;
+		/// <summary></summary>
+		public readonly Dictionary<TerminalSettingsTestCases, string> TerminalFilePaths;
+		/// <summary></summary>
 		public readonly Dictionary<WorkspaceSettingsTestCases, string> WorkspaceFilePaths;
 
+		/// <summary></summary>
 		public SettingsFilePaths(string directory)
 		{
 			// Traverse path from "<Root>\YAT\bin\[Debug|Release]\YAT.exe" to "<Root>".
@@ -66,11 +80,13 @@ namespace YAT.Settings.Test
 			WorkspaceFilePaths = new Dictionary<WorkspaceSettingsTestCases, string>();
 		}
 
+		/// <summary></summary>
 		public void AddTerminalFileName(TerminalSettingsTestCases fileKey, string fileName)
 		{
 			TerminalFilePaths.Add(fileKey, FilePath + fileName);
 		}
 
+		/// <summary></summary>
 		public void AddWorkspaceFileName(WorkspaceSettingsTestCases fileKey, string fileName)
 		{
 			WorkspaceFilePaths.Add(fileKey, FilePath + fileName);
@@ -79,6 +95,7 @@ namespace YAT.Settings.Test
 
 	#endregion
 
+	/// <summary></summary>
 	public static class SettingsFilesProvider
 	{
 		#region Static Fields
@@ -86,12 +103,19 @@ namespace YAT.Settings.Test
 		// Static Fields
 		//==========================================================================================
 
+		/// <summary></summary>
 		public static readonly SettingsFilePaths FilePaths_V1_99_12;
+		/// <summary></summary>
 		public static readonly SettingsFilePaths FilePaths_V1_99_13;
+		/// <summary></summary>
 		public static readonly SettingsFilePaths FilePaths_V1_99_17;
+		/// <summary></summary>
 		public static readonly SettingsFilePaths FilePaths_V1_99_18;
+		/// <summary></summary>
 		public static readonly SettingsFilePaths FilePaths_V1_99_19;
+		/// <summary></summary>
 		public static readonly SettingsFilePaths FilePaths_V1_99_20;
+		/// <summary></summary>
 		public static readonly SettingsFilePaths FilePaths_V1_99_22;
 
 		#endregion
@@ -101,6 +125,7 @@ namespace YAT.Settings.Test
 		// Static Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		static SettingsFilesProvider()
 		{
 			// V1.99.12
@@ -172,6 +197,7 @@ namespace YAT.Settings.Test
 		// Static Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		public static SettingsFilePaths FilePaths_Current
 		{
 			get { return (FilePaths_V1_99_22); }

@@ -26,6 +26,7 @@ using YAT.Domain;
 
 namespace YAT.Domain.Test.Parser
 {
+	/// <summary></summary>
 	[TestFixture]
 	public class ParserTest
 	{
@@ -161,6 +162,7 @@ namespace YAT.Domain.Test.Parser
 		// Tests > Parser
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestParser()
 		{

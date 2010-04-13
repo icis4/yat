@@ -314,7 +314,7 @@ namespace MKY.Utilities.Settings
 		/// Tries to delete file <see cref="SettingsFilePath"/>.
 		/// </summary>
 		/// <returns>
-		/// Returns true if file successfully saved.
+		/// Returns <c>true</c> if file successfully saved.
 		/// </returns>
 		public virtual bool Delete()
 		{

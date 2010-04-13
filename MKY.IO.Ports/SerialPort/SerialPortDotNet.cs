@@ -29,8 +29,8 @@
 //==================================================================================================
 
 using System;
-using System.ComponentModel;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
 
@@ -205,7 +205,7 @@ namespace MKY.IO.Ports
 
 				if (base.PortName != value.Name)
 				{
-					if (base.IsOpen)
+					if (IsOpen)
 						throw (new System.InvalidOperationException("The specified port is open."));
 
 					base.PortName = value.Name;
@@ -483,10 +483,10 @@ namespace MKY.IO.Ports
 				else
 					pins.Rts = true;
 
-				pins.Cts = base.CtsHolding;
+				pins.Cts = CtsHolding;
 				pins.Dtr = base.DtrEnable;
-				pins.Dsr = base.DsrHolding;
-				pins.Cd  = base.CDHolding;
+				pins.Dsr = DsrHolding;
+				pins.Cd  = CDHolding;
 
 				return (pins);
 			}
@@ -530,7 +530,7 @@ namespace MKY.IO.Ports
 		public new void Open()
 		{
 			AssertNotDisposed();
-			if (!base.IsOpen)
+			if (!IsOpen)
 			{
 				OnOpening(new EventArgs());
 			#if (DEBUG && DEBUG_OPEN_CLOSE)
@@ -556,7 +556,7 @@ namespace MKY.IO.Ports
 					(Handshake == System.IO.Ports.Handshake.RequestToSendXOnXOff))
 				{
 					byte[] xOn = { SerialPortSettings.XOnByte };
-					base.Write(xOn, 0, 1);
+					Write(xOn, 0, 1);
 				}
 
 				OnOpened(new EventArgs());
@@ -564,7 +564,7 @@ namespace MKY.IO.Ports
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.DtrChanged));
 
 				// Immediately check whether there is already data pending
-				if (base.BytesToRead > 0)
+				if (BytesToRead > 0)
 					OnDataReceived(new SerialDataReceivedEventArgs());
 			}
 		}
@@ -575,12 +575,12 @@ namespace MKY.IO.Ports
 		public virtual void Flush()
 		{
 			AssertNotDisposed();
-			if (base.IsOpen)
+			if (IsOpen)
 			{
 				try
 				{
 					// Flush() can throw System.Exception
-					while (base.BytesToWrite > 0)
+					while (BytesToWrite > 0)
 					{
 						System.Threading.Thread.Sleep(0);
 					}
@@ -607,7 +607,7 @@ namespace MKY.IO.Ports
 		public new void Close()
 		{
 			AssertNotDisposed();
-			if (base.IsOpen)
+			if (IsOpen)
 			{
 				OnClosing(new EventArgs());
 			#if (DEBUG && DEBUG_OPEN_CLOSE)
@@ -714,7 +714,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnDataReceived(SerialDataReceivedEventArgs e)
 		{
-			if (!IsDisposed && base.IsOpen)      // make sure to propagate event only if port active
+			if (!IsDisposed && IsOpen)      // make sure to propagate event only if port active
 				EventHelper.FireSync<SerialDataReceivedEventArgs, SerialDataReceivedEventHandler>(DataReceived, this, e);
 		}
 
@@ -723,7 +723,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnErrorReceived(SerialErrorReceivedEventArgs e)
 		{
-			if (!IsDisposed && base.IsOpen)      // make sure to propagate event only if port active
+			if (!IsDisposed && IsOpen)      // make sure to propagate event only if port active
 				EventHelper.FireSync<SerialErrorReceivedEventArgs, SerialErrorReceivedEventHandler>(ErrorReceived, this, e);
 		}
 
@@ -732,7 +732,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected virtual void OnPinChanged(SerialPinChangedEventArgs e)
 		{
-			if (!IsDisposed && base.IsOpen)      // make sure to propagate event only if port active
+			if (!IsDisposed && IsOpen)      // make sure to propagate event only if port active
 				EventHelper.FireSync<SerialPinChangedEventArgs, SerialPinChangedEventHandler>(PinChanged, this, e);
 		}
 

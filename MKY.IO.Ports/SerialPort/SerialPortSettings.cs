@@ -15,12 +15,12 @@
 //==================================================================================================
 
 using System;
-using System.Xml.Serialization;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
-using System.Reflection;
 using System.IO.Ports;
+using System.Reflection;
+using System.Xml.Serialization;
 
 namespace MKY.IO.Ports
 {
@@ -33,11 +33,13 @@ namespace MKY.IO.Ports
 	{
 		/// <summary></summary>
 		public const byte XOnByte  = 0x11;
+
 		/// <summary></summary>
 		public const byte XOffByte = 0x13;
 
 		/// <summary></summary>
 		public const string XOnDescription = "XOn = 11h (DC1)";
+
 		/// <summary></summary>
 		public const string XOffDescription = "XOff = 13h (DC3)";
 
@@ -93,9 +95,7 @@ namespace MKY.IO.Ports
 
 		#region Properties
 
-		/// <summary>
-		/// BaudRate.
-		/// </summary>
+		/// <summary></summary>
 		[XmlElement("BaudRate")]
 		public BaudRate BaudRate
 		{
@@ -103,9 +103,7 @@ namespace MKY.IO.Ports
 			set { this.baudRate = value; }
 		}
 
-		/// <summary>
-		/// DataBits.
-		/// </summary>
+		/// <summary></summary>
 		[XmlElement("DataBits")]
 		public DataBits DataBits
 		{
@@ -113,9 +111,7 @@ namespace MKY.IO.Ports
 			set { this.dataBits = value; }
 		}
 
-		/// <summary>
-		/// Parity.
-		/// </summary>
+		/// <summary></summary>
 		[XmlElement("Parity")]
 		public Parity Parity
 		{
@@ -123,9 +119,7 @@ namespace MKY.IO.Ports
 			set { this.parity = value; }
 		}
 
-		/// <summary>
-		/// StopBits.
-		/// </summary>
+		/// <summary></summary>
 		[XmlElement("StopBits")]
 		public StopBits StopBits
 		{
@@ -133,9 +127,7 @@ namespace MKY.IO.Ports
 			set { this.stopBits = value; }
 		}
 
-		/// <summary>
-		/// Handshake.
-		/// </summary>
+		/// <summary></summary>
 		[XmlElement("Handshake")]
 		public Handshake Handshake
 		{
@@ -186,9 +178,7 @@ namespace MKY.IO.Ports
 			return (base.GetHashCode());
 		}
 
-		/// <summary>
-		/// ToString.
-		/// </summary>
+		/// <summary></summary>
 		public override string ToString()
 		{
 			return

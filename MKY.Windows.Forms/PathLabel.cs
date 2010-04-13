@@ -17,8 +17,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
@@ -39,11 +39,11 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary>
-		/// Draws string with ellipsis
+		/// Draws string with ellipsis.
 		/// </summary>
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			// try to fit file path with path ellipsis
+			// Try to fit file path with path ellipsis.
 			TextFormatFlags pathEllipsisFlags = XDrawing.ConvertContentAlignmentToTextFormatFlags(TextAlign);
 
 			if (RightToLeft == RightToLeft.Yes)
@@ -59,7 +59,7 @@ namespace MKY.Windows.Forms
 			}
 			else
 			{
-				// path ellipsis, don't fit, draw text with end ellipsis
+				// Path ellipsis, don't fit, draw text with end ellipsis.
 				TextFormatFlags endEllipsisFlags = XDrawing.ConvertContentAlignmentToTextFormatFlags(TextAlign);
 
 				if (RightToLeft == RightToLeft.Yes)

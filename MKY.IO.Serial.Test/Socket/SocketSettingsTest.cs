@@ -25,6 +25,7 @@ using MKY.IO.Serial;
 
 namespace MKY.IO.Serial.Test.Socket
 {
+	/// <summary></summary>
 	[TestFixture]
 	public class SocketSettingsTest
 	{
@@ -38,6 +39,7 @@ namespace MKY.IO.Serial.Test.Socket
 		// Tests > Serialization()
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestSerialization()
 		{

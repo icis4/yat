@@ -460,7 +460,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary>
-		/// Compares too display elements and returns true if both are of the same kind.
+		/// Compares too display elements and returns <c>true</c> if both are of the same kind.
 		/// </summary>
 		public virtual bool IsSameKindAs(DisplayElement de)
 		{

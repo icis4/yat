@@ -25,8 +25,14 @@ using System.Windows.Forms;
 
 namespace MKY.Windows.Forms.Test
 {
+	/// <summary>
+	/// Test form for <see cref="FastListBox"/>.
+	/// </summary>
 	public partial class FastListBoxTest : Form
 	{
+		/// <summary>
+		/// Creates the test form for <see cref="FastListBox"/>.
+		/// </summary>
 		public FastListBoxTest()
 		{
 			InitializeComponent();
@@ -38,7 +44,7 @@ namespace MKY.Windows.Forms.Test
 			{
 				e.DrawBackground();
 
-				string s = (string)fastListBox.Items[e.Index];
+				string s = (string)this.fastListBox.Items[e.Index];
 				Brush brush = SystemBrushes.ControlText;
 				Font font = SystemFonts.DefaultFont;
 				StringFormat sf = StringFormat.GenericTypographic;
@@ -51,12 +57,12 @@ namespace MKY.Windows.Forms.Test
 
 		private void button_Add_Click(object sender, EventArgs e)
 		{
-			FastListBox flb = fastListBox;
+			FastListBox flb = this.fastListBox;
 			flb.BeginUpdate();
 
 			flb.Items.Add("TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
 
-			// scroll list
+			// Scroll list.
 			if ((flb.SelectedItems.Count == 0) && (flb.Items.Count > 0))
 				flb.TopIndex = flb.Items.Count - 1;
 
@@ -65,13 +71,13 @@ namespace MKY.Windows.Forms.Test
 
 		private void button_AddMany_Click(object sender, EventArgs e)
 		{
-			FastListBox flb = fastListBox;
+			FastListBox flb = this.fastListBox;
 			flb.BeginUpdate();
 
 			for (int i = 0; i < 50; i++)
 				flb.Items.Add("TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST");
 
-			// scroll list
+			// Scroll list.
 			if ((flb.SelectedItems.Count == 0) && (flb.Items.Count > 0))
 				flb.TopIndex = flb.Items.Count - 1;
 
@@ -80,13 +86,13 @@ namespace MKY.Windows.Forms.Test
 
 		private void button_Remove_Click(object sender, EventArgs e)
 		{
-			FastListBox flb = fastListBox;
+			FastListBox flb = this.fastListBox;
 			flb.BeginUpdate();
 
 			if (flb.Items.Count > 0)
 				flb.Items.RemoveAt(0);
 
-			// scroll list
+			// Scroll list.
 			if ((flb.SelectedItems.Count == 0) && (flb.Items.Count > 0))
 				flb.TopIndex = flb.Items.Count - 1;
 
@@ -95,7 +101,7 @@ namespace MKY.Windows.Forms.Test
 
 		private void button_RemoveMany_Click(object sender, EventArgs e)
 		{
-			FastListBox flb = fastListBox;
+			FastListBox flb = this.fastListBox;
 			flb.BeginUpdate();
 
 			for (int i = 0; i < 50; i++)
@@ -104,7 +110,7 @@ namespace MKY.Windows.Forms.Test
 					flb.Items.RemoveAt(0);
 			}
 
-			// scroll list
+			// Scroll list.
 			if ((flb.SelectedItems.Count == 0) && (flb.Items.Count > 0))
 				flb.TopIndex = flb.Items.Count - 1;
 

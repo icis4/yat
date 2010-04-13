@@ -24,6 +24,7 @@ using YAT.Domain;
 
 namespace YAT.Domain.Test.TextTerminal
 {
+	/// <summary></summary>
 	[TestFixture]
 	public class SubstitutionParserTest
 	{
@@ -70,6 +71,7 @@ namespace YAT.Domain.Test.TextTerminal
 		// Test SubstitutionParser
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestSubstitutionParser()
 		{

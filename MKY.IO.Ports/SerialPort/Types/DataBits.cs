@@ -48,7 +48,7 @@ namespace MKY.IO.Ports
 	/// </summary>
 	public class XDataBits : XEnum
 	{
-		/// <summary>Default is <see cref="DataBits.Eight"/></summary>
+		/// <summary>Default is <see cref="DataBits.Eight"/>.</summary>
 		public XDataBits()
 			: base(DataBits.Eight)
 		{

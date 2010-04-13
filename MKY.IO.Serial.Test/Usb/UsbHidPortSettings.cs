@@ -25,6 +25,7 @@ using MKY.IO.Serial;
 
 namespace MKY.IO.Serial.Test.USB
 {
+	/// <summary></summary>
 	[TestFixture]
 	public class UsbHidPortSettingsTest
 	{
@@ -38,6 +39,7 @@ namespace MKY.IO.Serial.Test.USB
 		// Tests > Serialization()
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestSerialization()
 		{

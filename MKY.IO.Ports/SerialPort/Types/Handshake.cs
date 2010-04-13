@@ -43,7 +43,7 @@ namespace MKY.IO.Ports
 
 		#endregion
 
-		/// <summary>Default is <see cref="Handshake.None"/></summary>
+		/// <summary>Default is <see cref="Handshake.None"/>.</summary>
 		public XHandshake()
 			: base(Handshake.None)
 		{

@@ -42,7 +42,7 @@ namespace MKY.IO.Ports
 
 		#endregion
 
-		/// <summary>Default is <see cref="Parity.None"/></summary>
+		/// <summary>Default is <see cref="Parity.None"/>.</summary>
 		public XParity()
 			: base(Parity.None)
 		{

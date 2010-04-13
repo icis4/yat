@@ -71,8 +71,8 @@ namespace MKY.Utilities.Recent
 		/// Remove the most recent item if the collection already contains <see cref="T:RecentItemCollection`1.Capacity"/> items.
 		/// </summary>
 		/// <returns>
-		/// true if an item is successfully removed; otherwise, false. This method also returns
-		/// false if no item was not found in the collection.
+		/// <c>true</c> if an item is successfully removed; otherwise, <c>false</c>. This method also
+		/// returns <c>false</c> if no item was not found in the collection.
 		/// </returns>
 		public virtual bool RemoveMostRecent()
 		{

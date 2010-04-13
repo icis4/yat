@@ -25,6 +25,7 @@ using MKY.IO.Ports;
 
 namespace MKY.IO.Ports.Test.SerialPort
 {
+	/// <summary></summary>
 	[TestFixture]
 	public class SerialPortIdTest
 	{
@@ -82,6 +83,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		// Tests > Constructor/Parse()
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestConstructorAndParse()
 		{

@@ -25,6 +25,7 @@ using MKY.Utilities.Types;
 
 namespace MKY.Utilities.Test.Types
 {
+	/// <summary></summary>
 	[TestFixture]
 	public class XUInt64Test
 	{
@@ -139,6 +140,7 @@ namespace MKY.Utilities.Test.Types
 		// Tests > ToString()
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestToString()
 		{
@@ -163,6 +165,7 @@ namespace MKY.Utilities.Test.Types
 		// Tests > ToByteArray()
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestToByteArray()
 		{
@@ -219,6 +222,7 @@ namespace MKY.Utilities.Test.Types
 		// Tests > TryParse()
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestTryParse()
 		{

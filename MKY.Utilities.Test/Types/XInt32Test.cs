@@ -24,6 +24,7 @@ using MKY.Utilities.Types;
 
 namespace MKY.Utilities.Test.Types
 {
+	/// <summary></summary>
 	[TestFixture]
 	public class XInt32Test
 	{
@@ -101,6 +102,7 @@ namespace MKY.Utilities.Test.Types
 		// Tests > LimitToBounds()
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestLimitToBounds()
 		{

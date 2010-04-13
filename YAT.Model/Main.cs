@@ -220,7 +220,9 @@ namespace YAT.Model
 		/// Else, this method tries to open the most recent workspace of the current user.
 		/// If still unsuccessful, a new workspace is created.
 		/// </summary>
-		/// <returns>Returns true if either operation succeeded, false otherwise.</returns>
+		/// <returns>
+		/// Returns <c>true</c> if either operation succeeded, <c>false</c> otherwise.
+		/// </returns>
 		public virtual bool Start()
 		{
 			AssertNotDisposed();
@@ -508,7 +510,7 @@ namespace YAT.Model
 		/// be called from the main providing the command line arguments.
 		/// </summary>
 		/// <param name="filePath">Workspace or terminal file</param>
-		/// <returns>true if successfully opened the workspace or terminal</returns>
+		/// <returns><c>true</c> if successfully opened the workspace or terminal</returns>
 		public virtual bool OpenFromFile(string filePath)
 		{
 			AssertNotDisposed();
