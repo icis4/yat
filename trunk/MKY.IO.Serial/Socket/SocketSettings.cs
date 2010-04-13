@@ -318,7 +318,7 @@ namespace MKY.IO.Serial
 		/// stores it in <see cref="ResolvedRemoteIPAddress"/>
 		/// </summary>
 		/// <returns>
-		/// true if successfully resolved; false otherwise
+		/// <c>true</c> if successfully resolved; <c>false</c> otherwise
 		/// </returns>
 		public virtual bool TryResolveIPAddresses()
 		{

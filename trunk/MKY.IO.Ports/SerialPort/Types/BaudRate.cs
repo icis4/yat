@@ -23,54 +23,40 @@ namespace MKY.IO.Ports
 {
 	#region Enum BaudRate
 
+	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+	// warnings for each undocumented member below. Documenting each member makes little sense
+	// since they pretty much tell their purpose and documentation tags between the members
+	// makes the code less readable.
+	#pragma warning disable 1591
+
 	/// <summary></summary>
 	public enum BaudRate
 	{
-		/// <summary></summary>
 		Baud000075 = 75,
-		/// <summary></summary>
 		Baud000110 = 110,
-		/// <summary></summary>
 		Baud000134 = 134,
-		/// <summary></summary>
 		Baud000150 = 150,
-		/// <summary></summary>
 		Baud000300 = 300,
-		/// <summary></summary>
 		Baud000600 = 600,
-		/// <summary></summary>
 		Baud001200 = 1200,
-		/// <summary></summary>
 		Baud001800 = 1800,
-		/// <summary></summary>
 		Baud002400 = 2400,
-		/// <summary></summary>
 		Baud004800 = 4800,
-		/// <summary></summary>
 		Baud007200 = 7200,
-		/// <summary></summary>
 		Baud009600 = 9600,
-		/// <summary></summary>
 		Baud014400 = 14400,
-		/// <summary></summary>
 		Baud019200 = 19200,
-		/// <summary></summary>
 		Baud038400 = 38400,
-		/// <summary></summary>
 		Baud057600 = 57600,
-		/// <summary></summary>
 		Baud115200 = 115200,
-		/// <summary></summary>
 		Baud128000 = 128000,
-		/// <summary></summary>
 		Baud230400 = 230400,
-		/// <summary></summary>
 		Baud460800 = 460800,
-		/// <summary></summary>
 		Baud921600 = 921600,
-		/// <summary></summary>
 		UserDefined = 0
 	}
+
+	#pragma warning restore 1591
 
 	#endregion
 
@@ -81,7 +67,7 @@ namespace MKY.IO.Ports
 	{
 		private int userDefinedBaudRate = 0;
 
-		/// <summary>Default is <see cref="BaudRate.Baud009600"/></summary>
+		/// <summary>Default is <see cref="BaudRate.Baud009600"/>.</summary>
 		public XBaudRate()
 			: base(BaudRate.Baud009600)
 		{

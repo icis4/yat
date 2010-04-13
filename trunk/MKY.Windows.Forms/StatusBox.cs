@@ -41,6 +41,152 @@ namespace MKY.Windows.Forms
 
 		#endregion
 
+		#region Static Methods
+		//==========================================================================================
+		// Static Methods
+		//==========================================================================================
+
+		/// <summary>
+		/// Displays a status box in front of the specified object and with the specified
+		/// status and caption and returns the result.
+		/// </summary>
+		/// <param name="owner">
+		/// An implementation of System.Windows.Forms.IWin32Window that will own the modal dialog box.
+		/// </param>
+		/// <param name="status1">
+		/// The text to display in the first line of status box.
+		/// </param>
+		/// <param name="caption">
+		/// The text to display in the title bar of the status box.
+		/// </param>
+		/// <param name="status2">
+		/// The text to display in the second line of status box.
+		/// </param>
+		/// <returns>
+		/// One of the System.Windows.Forms.DialogResult values.
+		/// </returns>
+		public static DialogResult Show(IWin32Window owner, string status1, string caption, string status2)
+		{
+			bool setting = false;
+			return (Show(owner, status1, caption, status2, "", ref setting));
+		}
+
+		/// <summary>
+		/// Displays a status box in front of the specified object and with the specified
+		/// status and caption and returns the result.
+		/// </summary>
+		/// <param name="owner">
+		/// An implementation of System.Windows.Forms.IWin32Window that will own the modal dialog box.
+		/// </param>
+		/// <param name="status1">
+		/// The text to display in the first line of status box.
+		/// </param>
+		/// <param name="caption">
+		/// The text to display in the title bar of the status box.
+		/// </param>
+		/// <param name="status2">
+		/// The text to display in the second line of status box.
+		/// </param>
+		/// <param name="settingText">
+		/// The text of the setting check box.
+		/// </param>
+		/// <param name="setting">
+		/// The value of the setting.
+		/// </param>
+		/// <returns>
+		/// One of the System.Windows.Forms.DialogResult values.
+		/// </returns>
+		public static DialogResult Show(IWin32Window owner, string status1, string caption, string status2, string settingText, ref bool setting)
+		{
+			DialogResult dialogResult = DialogResult.OK;
+			staticStatusBox = new StatusBox(status1, caption, status2, settingText, setting);
+
+			ISynchronizeInvoke sinkTarget = owner as ISynchronizeInvoke;
+			if (sinkTarget != null)
+			{
+				if (sinkTarget.InvokeRequired)
+				{
+					ShowDialogDelegate del = new ShowDialogDelegate(staticStatusBox.ShowDialog);
+					object[] args = { owner };
+					dialogResult = (DialogResult)sinkTarget.Invoke(del, args);
+				}
+				else
+				{
+					dialogResult = staticStatusBox.ShowDialog(owner);
+				}
+				setting = staticStatusBox.GetSetting();
+			}
+
+			staticStatusBox = null;
+			return (dialogResult);
+		}
+
+		/// <summary>
+		/// Updates the first status line of the status box.
+		/// </summary>
+		public static void UpdateStatus1(string status)
+		{
+			ISynchronizeInvoke sinkTarget = staticStatusBox as ISynchronizeInvoke;
+			if (sinkTarget != null)
+			{
+				if (sinkTarget.InvokeRequired)
+				{
+					StringMethodDelegate del = new StringMethodDelegate(staticStatusBox.SetStatus1);
+					object[] args = { status };
+					sinkTarget.Invoke(del, args);
+				}
+				else
+				{
+					staticStatusBox.SetStatus1(status);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Updates the second status line of the status box.
+		/// </summary>
+		public static void UpdateStatus2(string status)
+		{
+			ISynchronizeInvoke sinkTarget = staticStatusBox as ISynchronizeInvoke;
+			if (sinkTarget != null)
+			{
+				if (sinkTarget.InvokeRequired)
+				{
+					StringMethodDelegate del = new StringMethodDelegate(staticStatusBox.SetStatus2);
+					object[] args = { status };
+					sinkTarget.Invoke(del, args);
+				}
+				else
+				{
+					staticStatusBox.SetStatus1(status);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Closes the status box.
+		/// </summary>
+		public static void AcceptAndClose()
+		{
+			ISynchronizeInvoke sinkTarget = staticStatusBox as ISynchronizeInvoke;
+			if (sinkTarget != null)
+			{
+				DialogResult dialogResult = DialogResult.OK;
+				if (sinkTarget.InvokeRequired)
+				{
+					DialogResultMethodDelegate del = new DialogResultMethodDelegate(staticStatusBox.RequestClose);
+					object[] args = { dialogResult };
+					sinkTarget.Invoke(del, args);
+				}
+				else
+				{
+					staticStatusBox.RequestClose(dialogResult);
+				}
+			}
+		}
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -122,152 +268,6 @@ namespace MKY.Windows.Forms
 		private void button_Cancel_Click(object sender, EventArgs e)
 		{
 			// do nothing
-		}
-
-		#endregion
-
-		#region Public Static Methods
-		//==========================================================================================
-		// Public Static Methods
-		//==========================================================================================
-
-		/// <summary>
-		/// Displays a status box in front of the specified object and with the specified
-		/// status and caption and returns the result.
-		/// </summary>
-		/// <param name="owner">
-		/// An implementation of System.Windows.Forms.IWin32Window that will own the modal dialog box.
-		/// </param>
-		/// <param name="status1">
-		/// The text to display in the first line of status box.
-		/// </param>
-		/// <param name="caption">
-		/// The text to display in the title bar of the status box.
-		/// </param>
-		/// <param name="status2">
-		/// The text to display in the second line of status box.
-		/// </param>
-		/// <returns>
-		/// One of the System.Windows.Forms.DialogResult values.
-		/// </returns>
-		public static DialogResult Show(IWin32Window owner, string status1, string caption, string status2)
-		{
-			bool setting = false;
-			return (Show(owner, status1, caption, status2, "", ref setting));
-		}
-
-		/// <summary>
-		/// Displays a status box in front of the specified object and with the specified
-		/// status and caption and returns the result.
-		/// </summary>
-		/// <param name="owner">
-		/// An implementation of System.Windows.Forms.IWin32Window that will own the modal dialog box.
-		/// </param>
-		/// <param name="status1">
-		/// The text to display in the first line of status box.
-		/// </param>
-		/// <param name="caption">
-		/// The text to display in the title bar of the status box.
-		/// </param>
-		/// <param name="status2">
-		/// The text to display in the second line of status box.
-		/// </param>
-		/// <param name="settingText">
-		/// The text of the setting check box.
-		/// </param>
-		/// <param name="setting">
-		/// The value of the setting.
-		/// </param>
-		/// <returns>
-		/// One of the System.Windows.Forms.DialogResult values.
-		/// </returns>
-		public static DialogResult Show(IWin32Window owner, string status1, string caption, string status2, string settingText, ref bool setting)
-		{
-			DialogResult dialogResult = DialogResult.OK;
-			staticStatusBox = new StatusBox(status1, caption, status2, settingText, setting);
-
-			ISynchronizeInvoke sinkTarget = owner as ISynchronizeInvoke;
-			if (sinkTarget != null)
-			{
-				if (sinkTarget.InvokeRequired)
-				{
-					ShowDialogDelegate del = new ShowDialogDelegate(staticStatusBox.ShowDialog);
-					object[] args = { owner };
-					dialogResult = (DialogResult)sinkTarget.Invoke(del, args);
-				}
-				else
-				{
-					dialogResult = staticStatusBox.ShowDialog(owner);
-				}
-				setting = staticStatusBox.GetSetting();
-			}
-			
-			staticStatusBox = null;
-			return (dialogResult);
-		}
-
-		/// <summary>
-		/// Updates the first status line of the status box.
-		/// </summary>
-		public static void UpdateStatus1(string status)
-		{
-			ISynchronizeInvoke sinkTarget = staticStatusBox as ISynchronizeInvoke;
-			if (sinkTarget != null)
-			{
-				if (sinkTarget.InvokeRequired)
-				{
-					StringMethodDelegate del = new StringMethodDelegate(staticStatusBox.SetStatus1);
-					object[] args = { status };
-					sinkTarget.Invoke(del, args);
-				}
-				else
-				{
-					staticStatusBox.SetStatus1(status);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Updates the second status line of the status box.
-		/// </summary>
-		public static void UpdateStatus2(string status)
-		{
-			ISynchronizeInvoke sinkTarget = staticStatusBox as ISynchronizeInvoke;
-			if (sinkTarget != null)
-			{
-				if (sinkTarget.InvokeRequired)
-				{
-					StringMethodDelegate del = new StringMethodDelegate(staticStatusBox.SetStatus2);
-					object[] args = { status };
-					sinkTarget.Invoke(del, args);
-				}
-				else
-				{
-					staticStatusBox.SetStatus1(status);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Closes the status box.
-		/// </summary>
-		public static void AcceptAndClose()
-		{
-			ISynchronizeInvoke sinkTarget = staticStatusBox as ISynchronizeInvoke;
-			if (sinkTarget != null)
-			{
-				DialogResult dialogResult = DialogResult.OK;
-				if (sinkTarget.InvokeRequired)
-				{
-					DialogResultMethodDelegate del = new DialogResultMethodDelegate(staticStatusBox.RequestClose);
-					object[] args = { dialogResult };
-					sinkTarget.Invoke(del, args);
-				}
-				else
-				{
-					staticStatusBox.RequestClose(dialogResult);
-				}
-			}
 		}
 
 		#endregion

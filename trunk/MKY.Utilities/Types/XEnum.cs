@@ -370,8 +370,8 @@ namespace MKY.Utilities.Types
 		/// <param name="xEnumType">The Type of the XEnum.</param>
 		/// <param name="value">The value or name of a constant in ex.</param>
 		/// <returns>
-		/// true if a constant in enumType has a value equal to value;
-		/// otherwise, false.
+		/// <c>true</c> if a constant in enumType has a value equal to value;
+		/// otherwise, <c>false</c>.
 		/// </returns>
 		/// <exception cref="ArgumentNullException">
 		/// ex or value is a null reference (Nothing in Visual Basic).

@@ -22,6 +22,9 @@ using NUnit.Framework;
 
 namespace YAT.Test
 {
+	/// <summary>
+	/// The YAT test suite.
+	/// </summary>
 	public class TestAll
 	{
 		#region Suite
@@ -29,6 +32,9 @@ namespace YAT.Test
 		// Suite
 		//==========================================================================================
 
+		/// <summary>
+		/// The NUnit enumerable YAT test suite.
+		/// </summary>
 		[Suite]
 		public static IEnumerable Suite
 		{

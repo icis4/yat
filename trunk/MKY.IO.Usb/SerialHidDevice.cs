@@ -247,7 +247,7 @@ namespace MKY.IO.Usb
 		/// Indicates whether the serial communication port to the device is open.
 		/// </summary>
 		/// <returns>
-		/// true if the serial communication port is open; otherwise, false.
+		/// <c>true</c> if the serial communication port is open; otherwise, <c>false</c>.
 		/// </returns>
 		public virtual bool IsOpen
 		{

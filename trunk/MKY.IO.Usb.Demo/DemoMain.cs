@@ -22,8 +22,10 @@ using MKY.IO.Usb;
 
 namespace MKY.IO.Usb.Demo
 {
+	/// <summary></summary>
 	public class DemoMain
 	{
+		/// <summary></summary>
 		public static void Main(string[] args)
 		{
 			DeviceCollection devices = new DeviceCollection(DeviceClass.Hid);

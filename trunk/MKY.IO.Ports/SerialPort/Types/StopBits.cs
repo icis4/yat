@@ -36,7 +36,7 @@ namespace MKY.IO.Ports
 
 		#endregion
 
-		/// <summary>Default is <see cref="StopBits.One"/></summary>
+		/// <summary>Default is <see cref="StopBits.One"/>.</summary>
 		public XStopBits()
 			: base(StopBits.One)
 		{

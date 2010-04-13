@@ -19,13 +19,16 @@ using System.Windows.Forms;
 
 namespace MKY.Windows.Forms.Test
 {
-	static class TestMain
+	/// <summary>
+	/// Test application for <see cref="MKY.Windows.Forms"/>.
+	/// </summary>
+	public class TestMain
 	{
 		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		static void Main()
+		private static void Main()
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);

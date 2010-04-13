@@ -74,7 +74,7 @@ namespace MKY.IO.Serial
 		/// Gets a value indicating whether the I/O provider has been started.
 		/// </summary>
 		/// <returns>
-		/// true if the I/O provider has been started; otherwise, false.
+		/// <c>true</c> if the I/O provider has been started; otherwise, <c>false</c>.
 		/// </returns>
 		bool IsStarted { get; }
 
@@ -90,8 +90,8 @@ namespace MKY.IO.Serial
 		/// For UDP sockets, this property indicates that the socket is open.
 		/// </remarks>
 		/// <returns>
-		/// true if the underlying I/O instance is open and/or connected to a remote
-		/// resource as of the most recent operation; otherwise, false.
+		/// <c>true</c> if the underlying I/O instance is open and/or connected to a remote
+		/// resource as of the most recent operation; otherwise, <c>false</c>.
 		/// </returns>
 		bool IsConnected { get; }
 
@@ -103,8 +103,8 @@ namespace MKY.IO.Serial
 		/// connected to a remote resource.
 		/// </remarks>
 		/// <returns>
-		/// true if the underlying I/O instance is open as of the most recent operation;
-		/// otherwise, false.
+		/// <c>true</c> if the underlying I/O instance is open as of the most recent operation;
+		/// otherwise, <c>false</c>.
 		/// </returns>
 		bool IsOpen { get; }
 

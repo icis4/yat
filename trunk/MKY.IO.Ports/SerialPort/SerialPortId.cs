@@ -16,20 +16,18 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
-using System.Reflection;
 using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 namespace MKY.IO.Ports
 {
-	/// <summary>
-	/// SerialPortId.
-	/// </summary>
+	/// <summary></summary>
 	[Serializable]
 	[TypeConverter(typeof(SerialPortIdConverter))]
 	public class SerialPortId : IEquatable<SerialPortId>, IComparable
@@ -44,8 +42,10 @@ namespace MKY.IO.Ports
 
 		/// <summary></summary>
 		public const int FirstStandardPortNumber = 1;
+
 		/// <summary></summary>
 		public const int LastStandardPortNumber = 256;
+
 		/// <summary></summary>
 		public const int MaxStandardPortNumber = 65536;
 
@@ -65,12 +65,16 @@ namespace MKY.IO.Ports
 
 		/// <summary></summary>
 		public static readonly Regex StandardPortNumberRegex;
+
 		/// <summary></summary>
 		public static readonly Regex StandardPortNameRegex;
+
 		/// <summary></summary>
 		public static readonly Regex StandardPortNameWithParenthesesRegex;
+
 		/// <summary></summary>
 		public static readonly Regex StandardPortNameOnlyRegex;
+
 		/// <summary></summary>
 		public static readonly Regex UserPortNameRegex;
 
@@ -252,7 +256,6 @@ namespace MKY.IO.Ports
 		{
 			get { return (IsStandardPortNumber(this.standardPortNumber)); }
 		}
-
 
 		/// <summary>
 		/// Port description (e.g. "Serial On USB Port").

@@ -24,6 +24,7 @@ using MKY.Utilities.IO;
 
 namespace MKY.Utilities.Test.IO
 {
+	/// <summary></summary>
 	[TestFixture]
 	public class XPathTest
 	{
@@ -118,6 +119,7 @@ namespace MKY.Utilities.Test.IO
 		// Tests > Compare()
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestCompare()
 		{
@@ -188,6 +190,7 @@ namespace MKY.Utilities.Test.IO
 		// Tests > Combine()
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestCombine()
 		{

@@ -25,6 +25,7 @@ using YAT.Settings.Application;
 
 namespace YAT.Controller.Test
 {
+	/// <summary></summary>
 	[TestFixture]
 	public class ControllerTest
 	{
@@ -42,6 +43,7 @@ namespace YAT.Controller.Test
 		// Set Up Fixture
 		//==========================================================================================
 
+		/// <summary></summary>
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
@@ -57,6 +59,7 @@ namespace YAT.Controller.Test
 		// Tear Down Fixture
 		//==========================================================================================
 
+		/// <summary></summary>
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
@@ -75,6 +78,7 @@ namespace YAT.Controller.Test
 		// Tests > EmptyCommandLine
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestEmptyCommandLine()
 		{
@@ -92,6 +96,7 @@ namespace YAT.Controller.Test
 		// Tests > TerminalCommandLineArg
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestTerminalCommandLineArg()
 		{
@@ -110,6 +115,7 @@ namespace YAT.Controller.Test
 		// Tests > WorkspaceCommandLineArg
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestWorkspaceCommandLineArg()
 		{
@@ -128,6 +134,7 @@ namespace YAT.Controller.Test
 		// Tests > EmptyCommandLineRun
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestEmptyCommandLineRun()
 		{
@@ -144,6 +151,7 @@ namespace YAT.Controller.Test
 		// Tests > TerminalCommandLineArgRun
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestTerminalCommandLineArgRun()
 		{
@@ -160,6 +168,7 @@ namespace YAT.Controller.Test
 		// Tests > WorkspaceCommandLineArgRun
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestWorkspaceCommandLineArgRun()
 		{
@@ -176,6 +185,7 @@ namespace YAT.Controller.Test
 		// Tests > EmptyCommandLineRunInteractive
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		[Category("Interactive")]
 		public virtual void TestEmptyCommandLineRunInteractive()
@@ -193,6 +203,7 @@ namespace YAT.Controller.Test
 		// Tests > TerminalCommandLineArgRunInteractive
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		[Category("Interactive")]
 		public virtual void TestTerminalCommandLineArgRunInteractive()
@@ -210,6 +221,7 @@ namespace YAT.Controller.Test
 		// Tests > WorkspaceCommandLineArgRunInteractive
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		[Category("Interactive")]
 		public virtual void TestWorkspaceCommandLineArgRunInteractive()

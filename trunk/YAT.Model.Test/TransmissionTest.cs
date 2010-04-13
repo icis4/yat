@@ -24,6 +24,7 @@ using YAT.Settings.Terminal;
 
 namespace YAT.Model.Test
 {
+	/// <summary></summary>
 	[TestFixture]
 	public class TransmissionTest
 	{
@@ -66,6 +67,7 @@ namespace YAT.Model.Test
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public TransmissionTest()
 		{
 			SingleLineCommand  = new Utilities.TestSet(new Types.Command(TestCommandLines[0]));
@@ -94,6 +96,7 @@ namespace YAT.Model.Test
 		// Tests > SingleLineTransmissionTcp
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestSingleLineTransmissionTcp()
 		{
@@ -107,12 +110,14 @@ namespace YAT.Model.Test
 		// Tests > DoubleLineTransmissionTcp
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestDoubleLineTransmissionTcp()
 		{
 			PerformCommandTransmissionTcp(DoubleLineCommand);
 		}
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestDoubleLineDoubleTransmissionTcp()
 		{
@@ -126,12 +131,14 @@ namespace YAT.Model.Test
 		// Tests > TripleLineTransmissionTcp
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestTripleLineTransmissionTcp()
 		{
 			PerformCommandTransmissionTcp(TripleLineCommand);
 		}
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestTripleLineTripleTransmissionTcp()
 		{
@@ -145,12 +152,14 @@ namespace YAT.Model.Test
 		// Tests > MultiLineTransmissionTcp
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestMultiLineTransmissionTcp()
 		{
 			PerformCommandTransmissionTcp(MultiLineCommand);
 		}
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestMultiLineMultiTransmissionTcp()
 		{
@@ -164,6 +173,7 @@ namespace YAT.Model.Test
 		// Tests > MultiEolTransmissionTcp
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestMultiEolTransmissionTcp()
 		{
@@ -177,6 +187,7 @@ namespace YAT.Model.Test
 		// Tests > MixedEolTransmissionTcp
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestMixedEolTransmissionTcp()
 		{
@@ -190,6 +201,7 @@ namespace YAT.Model.Test
 		// Tests > EolPartsTransmissionTcp
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestEolPartsTransmissionTcp()
 		{
@@ -203,12 +215,14 @@ namespace YAT.Model.Test
 		// Tests > NoEolTransmissionTcp
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestSingleNoEolTransmissionTcp()
 		{
 			PerformCommandTransmissionTcp(SingleNoEolCommand);
 		}
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestDoubleNoEolTransmissionTcp()
 		{

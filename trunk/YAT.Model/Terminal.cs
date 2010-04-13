@@ -1022,7 +1022,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Starts the terminal's I/O instance
 		/// </summary>
-		/// <returns>true if successful, false otherwise</returns>
+		/// <returns><c>true</c> if successful, <c>false</c> otherwise</returns>
 		public virtual bool StartIO()
 		{
 			return (StartIO(true));
@@ -1031,7 +1031,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Starts the terminal's I/O instance
 		/// </summary>
-		/// <returns>true if successful, false otherwise</returns>
+		/// <returns><c>true</c> if successful, <c>false</c> otherwise</returns>
 		private bool StartIO(bool saveStatus)
 		{
 			bool success = false;
@@ -1077,7 +1077,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Stops the terminal's I/O instance
 		/// </summary>
-		/// <returns>true if successful, false otherwise</returns>
+		/// <returns><c>true</c> if successful, <c>false</c> otherwise</returns>
 		public virtual bool StopIO()
 		{
 			return (StopIO(true));
@@ -1086,7 +1086,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Stops the terminal's I/O instance
 		/// </summary>
-		/// <returns>true if successful, false otherwise</returns>
+		/// <returns><c>true</c> if successful, <c>false</c> otherwise</returns>
 		private bool StopIO(bool saveStatus)
 		{
 			bool success = false;

@@ -135,7 +135,7 @@ namespace MKY.Windows.Forms
 				}
 
 				// Request drawing of item
-				base.OnDrawItem(new DrawItemEventArgs(e.Graphics, Font, bounds, i, state));
+				OnDrawItem(new DrawItemEventArgs(e.Graphics, Font, bounds, i, state));
 			}
 		}
 

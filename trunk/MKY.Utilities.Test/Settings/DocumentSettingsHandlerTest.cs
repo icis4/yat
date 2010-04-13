@@ -27,6 +27,7 @@ using MKY.Utilities.Settings;
 
 namespace MKY.Utilities.Test.Settings
 {
+	/// <summary></summary>
 	[TestFixture]
 	public class DocumentSettingsHandlerTest
 	{
@@ -76,7 +77,9 @@ namespace MKY.Utilities.Test.Settings
 		[XmlRoot("TestSettings")]
 		public class TestClassV1
 		{
+			/// <summary></summary>
 			public int Data1 = _11;
+			/// <summary></summary>
 			public int Data2 = _12;
 		};
 
@@ -87,8 +90,11 @@ namespace MKY.Utilities.Test.Settings
 		[XmlRoot("TestSettings")]
 		public class TestClassV2
 		{
+			/// <summary></summary>
 			public int Data1 = _21;
+			/// <summary></summary>
 			public int Data2 = _22;
+			/// <summary></summary>
 			public int Data3 = _23;
 		};
 
@@ -99,7 +105,9 @@ namespace MKY.Utilities.Test.Settings
 		[XmlRoot("TestSettings")]
 		public class TestClassV3
 		{
+			/// <summary></summary>
 			public int Data1 = _31;
+			/// <summary></summary>
 			public int Data3 = _33;
 		};
 
@@ -130,6 +138,7 @@ namespace MKY.Utilities.Test.Settings
 		// Tear Down
 		//==========================================================================================
 
+		/// <summary></summary>
 		[TearDown]
 		public virtual void TearDown()
 		{
@@ -149,6 +158,7 @@ namespace MKY.Utilities.Test.Settings
 		// Tests > Deserialization
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestDeserialization()
 		{

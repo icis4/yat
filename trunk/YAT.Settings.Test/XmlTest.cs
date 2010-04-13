@@ -32,6 +32,7 @@ using YAT.Settings.Terminal;
 
 namespace YAT.Settings.Test
 {
+	/// <summary></summary>
 	[TestFixture]
 	public class XmlTest
 	{
@@ -40,6 +41,7 @@ namespace YAT.Settings.Test
 		// Tear Down
 		//==========================================================================================
 
+		/// <summary></summary>
 		[TearDown]
 		public virtual void TearDown()
 		{
@@ -64,6 +66,7 @@ namespace YAT.Settings.Test
 		// Tests > Serialization > Array
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestArraySerialization()
 		{
@@ -93,6 +96,7 @@ namespace YAT.Settings.Test
 		// Tests > Serialization > List
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestListSerialization()
 		{
@@ -132,6 +136,7 @@ namespace YAT.Settings.Test
 		// Tests > Serialization > EmptyCommand
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestEmptyCommandSerialization()
 		{
@@ -153,6 +158,7 @@ namespace YAT.Settings.Test
 		// Tests > Serialization > Recent
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestRecentSerialization()
 		{
@@ -179,6 +185,7 @@ namespace YAT.Settings.Test
 		// Tests > Serialization > Predefined
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestPredefinedSerialization()
 		{
@@ -207,6 +214,7 @@ namespace YAT.Settings.Test
 		// Tests > Serialization > Explicit
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestExplicitSerialization()
 		{
@@ -224,6 +232,7 @@ namespace YAT.Settings.Test
 		// Tests > Serialization > Implicit
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestImplicitSerialization()
 		{

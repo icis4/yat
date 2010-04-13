@@ -27,6 +27,7 @@ namespace MKY.IO.Ports
 	/// </summary>
 	public interface ISerialPortDotNet : IComponent
 	{
+		#region Mapped SerialPort Events
 		//==========================================================================================
 		// Mapped SerialPort Events
 		//------------------------------------------------------------------------------------------
@@ -56,7 +57,9 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		event SerialPinChangedEventHandler PinChanged;
 
+		#endregion
 
+		#region 1:1 code compatible interface
 		//==========================================================================================
 		// 1:1 code compatible interface
 		//==========================================================================================
@@ -179,8 +182,8 @@ namespace MKY.IO.Ports
 		/// is enabled during serial communication.
 		/// </summary>
 		/// <value>
-		/// true to enable Request to Transmit (RTS); otherwise, false. The default
-		/// is false.
+		/// <c>true</c> to enable Request to Transmit (RTS); otherwise, <c>false</c>.
+		/// The default is <c>false</c>.
 		/// </value>
 		/// <remarks>
 		/// Attention: No <see cref="PinChanged"/> event is fired.
@@ -203,7 +206,7 @@ namespace MKY.IO.Ports
 		/// Gets the state of the Clear-to-Send line.
 		/// </summary>
 		/// <value>
-		/// true if the Clear-to-Send line is detected; otherwise, false.
+		/// <c>true</c> if the Clear-to-Send line is detected; otherwise, <c>false</c>.
 		/// </value>
 		/// <exception cref="System.InvalidOperationException">
 		/// The stream is closed. This can occur because the
@@ -223,8 +226,8 @@ namespace MKY.IO.Ports
 		/// during serial communication.
 		/// </summary>
 		/// <value>
-		/// true to enable Data Terminal Ready (DTR); otherwise, false. The default
-		/// is false.
+		/// <c>true</c> to enable Data Terminal Ready (DTR); otherwise, <c>false</c>.
+		/// The default is <c>false</c>.
 		/// </value>
 		/// <remarks>
 		/// Attention: No <see cref="PinChanged"/> event is fired.
@@ -240,7 +243,8 @@ namespace MKY.IO.Ports
 		/// Gets the state of the Data Set Ready (DSR) signal.
 		/// </summary>
 		/// <value>
-		/// true if a Data Set Ready signal has been sent to the port; otherwise, false.
+		/// <c>true</c> if a Data Set Ready signal has been sent to the port;
+		/// otherwise, <c>false</c>.
 		/// </value>
 		/// <exception cref="System.InvalidOperationException">
 		/// The stream is closed. This can occur because the
@@ -259,7 +263,7 @@ namespace MKY.IO.Ports
 		/// Gets the state of the Carrier Detect line for the port.
 		/// </summary>
 		/// <value>
-		/// true if the carrier is detected; otherwise, false.
+		/// <c>true</c> if the carrier is detected; otherwise, <c>false</c>.
 		/// </value>
 		/// <exception cref="System.InvalidOperationException">
 		/// The stream is closed. This can occur because the
@@ -278,7 +282,7 @@ namespace MKY.IO.Ports
 		/// Gets or sets the break signal state.
 		/// </summary>
 		/// <value>
-		/// true if the port is in a break state; otherwise, false.
+		/// <c>true</c> if the port is in a break state; otherwise, <c>false</c>.
 		/// </value>
 		/// <exception cref="System.IO.IOException">
 		/// The port is in an invalid state. - or - An attempt to set the state of the
@@ -337,7 +341,8 @@ namespace MKY.IO.Ports
 		/// transmitted between the port and the receive buffer.
 		/// </summary>
 		/// <value>
-		/// true if null bytes are ignored; otherwise false. The default is false.
+		/// <c>true</c> if null bytes are ignored; otherwise <c>false</c>.
+		/// The default is <c>false</c>.
 		/// </value>
 		/// <exception cref="System.InvalidOperationException">
 		/// The stream is closed. This can occur because the
@@ -465,7 +470,8 @@ namespace MKY.IO.Ports
 		/// <see cref="System.IO.Ports.SerialPort"/> object.
 		/// </summary>
 		/// <value>
-		/// true if the serial port is open; otherwise, false. The default is false.
+		/// <c>true</c> if the serial port is open; otherwise, <c>false</c>.
+		/// The default is <c>false</c>.
 		/// </value>
 		bool IsOpen { get; }
 
@@ -548,9 +554,9 @@ namespace MKY.IO.Ports
 		/// <see cref="System.IO.Ports.SerialPort"/> input buffer and writes
 		/// those bytes into a byte array at the specified offset.
 		/// </summary>
+		/// <param name="buffer">The byte array to write the input to.</param>
 		/// <param name="offset">The offset in the buffer array to begin writing.</param>
 		/// <param name="count">The number of bytes to read.</param>
-		/// <param name="buffer">The byte array to write the input to.</param>
 		/// <returns>The number of bytes read.</returns>
 		/// <exception cref="System.TimeoutException">
 		/// No bytes were available to read.
@@ -575,9 +581,9 @@ namespace MKY.IO.Ports
 		/// <see cref="System.IO.Ports.SerialPort"/> input buffer and writes
 		/// those bytes into a byte array at a given offset.
 		/// </summary>
+		/// <param name="buffer">The character array to write the input to.</param>
 		/// <param name="offset">The offset in the buffer array to begin writing.</param>
 		/// <param name="count">The number of bytes to read.</param>
-		/// <param name="buffer">The character array to write the input to.</param>
 		/// <returns>The number of bytes read.</returns>
 		/// <exception cref="System.TimeoutException">
 		/// No bytes were available to read.
@@ -695,10 +701,9 @@ namespace MKY.IO.Ports
 		/// Writes a specified number of bytes to an output buffer at the
 		/// specified offset.
 		/// </summary>
+		/// <param name="buffer">The byte array to write the output to.</param>
 		/// <param name="offset">The offset in the buffer array to begin writing.</param>
 		/// <param name="count">The number of bytes to write.</param>
-		/// <param name="buffer">The byte array to write the output to.</param>
-		/// <returns>The number of bytes read.</returns>
 		/// <exception cref="System.ArgumentException">
 		/// offset plus count is greater than the length of the buffer.
 		/// </exception>
@@ -721,9 +726,9 @@ namespace MKY.IO.Ports
 		/// Writes a specified number of characters to an output buffer at the
 		/// specified offset.
 		/// </summary>
+		/// <param name="buffer">The character array to write the output to.</param>
 		/// <param name="offset">The offset in the buffer array to begin writing.</param>
 		/// <param name="count">The number of characters to write.</param>
-		/// <param name="buffer">The character array to write the output to.</param>
 		/// <exception cref="System.ArgumentException">
 		/// offset plus count is greater than the length of the buffer.
 		/// </exception>
@@ -790,6 +795,8 @@ namespace MKY.IO.Ports
 		/// <see cref="System.IO.Ports.SerialPort"/> object were invalid.
 		/// </exception>
 		void DiscardOutBuffer();
+
+		#endregion
 	}
 }
 

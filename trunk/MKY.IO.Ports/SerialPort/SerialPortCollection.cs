@@ -32,12 +32,19 @@ namespace MKY.IO.Ports
 			public readonly SerialPortId Port;
 
 			/// <summary></summary>
-			public bool Cancel = false;
+			private bool cancel = false;
 
 			/// <summary></summary>
 			public PortChangedAndCancelEventArgs(SerialPortId port)
 			{
 				Port = port;
+			}
+
+			/// <summary></summary>
+			public bool Cancel
+			{
+				get { return (this.cancel); }
+				set { this.cancel = value;  }
 			}
 		}
 
@@ -62,7 +69,7 @@ namespace MKY.IO.Ports
 			Clear();
 			for (int i = SerialPortId.FirstStandardPortNumber; i <= SerialPortId.LastStandardPortNumber; i++)
 			{
-				base.Add(new SerialPortId(i));
+				Add(new SerialPortId(i));
 			}
 			Sort();
 		}
@@ -78,7 +85,7 @@ namespace MKY.IO.Ports
 			Clear();
 			foreach (string portName in System.IO.Ports.SerialPort.GetPortNames())
 			{
-				base.Add(new SerialPortId(portName));
+				Add(new SerialPortId(portName));
 			}
 			Sort();
 
@@ -128,7 +135,7 @@ namespace MKY.IO.Ports
 		/// <param name="portChangedCallback">
 		/// Callback delegate, can be used to get an event each time a new port is being
 		/// tried to be opened. Set the <see cref="PortChangedAndCancelEventArgs.Cancel"/>
-		/// property the true to cancel port scanning.
+		/// property to <c>true</c> to cancel port scanning.
 		/// </param>
 		public virtual void MarkPortsInUse(EventHandler<PortChangedAndCancelEventArgs> portChangedCallback)
 		{

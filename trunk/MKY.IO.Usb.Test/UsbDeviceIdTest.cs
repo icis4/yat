@@ -24,6 +24,7 @@ using MKY.IO.Usb;
 
 namespace MKY.IO.Usb.Test
 {
+	/// <summary></summary>
 	[TestFixture]
 	public class UsbDeviceIdTest
 	{
@@ -81,6 +82,7 @@ namespace MKY.IO.Usb.Test
 		// Tests > Constructor/Parse()
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		[Test]
 		public virtual void TestConstructorAndParse()
 		{

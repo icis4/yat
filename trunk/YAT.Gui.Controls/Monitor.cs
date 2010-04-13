@@ -622,7 +622,7 @@ namespace YAT.Gui.Controls
 		/// 1.99.22 with owner drawn without DrawItem() => 10% CPU usage
 		/// 1.99.22 with normal drawn => 20% CPU usage
 		/// 
-		/// Double-buffered = true (form and control) doesn't make much difference either...
+		/// Double-buffered = <c>true</c> (form and control) doesn't make much difference either...
 		///
 		///
 		/// FastListBox
