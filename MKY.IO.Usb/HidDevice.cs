@@ -19,17 +19,17 @@
 //==================================================================================================
 
 using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.ConstrainedExecution;
+using System.Windows.Forms;
 
 using Microsoft.Win32.SafeHandles;
 
+using MKY.Utilities.Diagnostics;
 using MKY.Utilities.Event;
 using MKY.Utilities.Windows.Forms;
-using MKY.Utilities.Diagnostics;
 
 #endregion
 
@@ -59,6 +59,7 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		public static new event EventHandler<DeviceEventArgs> DeviceConnected;
+
 		/// <summary></summary>
 		public static new event EventHandler<DeviceEventArgs> DeviceDisconnected;
 

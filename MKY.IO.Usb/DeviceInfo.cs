@@ -15,11 +15,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Globalization;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
+using System.Globalization;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
 namespace MKY.IO.Usb
@@ -35,15 +35,19 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		public const int FirstVendorId  = 0x0000;
+
 		/// <summary></summary>
 		public const int LastVendorId   = 0xFFFF;
+
 		/// <summary></summary>
 		public const int FirstProductId = 0x0000;
+
 		/// <summary></summary>
 		public const int LastProductId  = 0xFFFF;
 
 		/// <summary></summary>
 		public const int DefaultVendorId = 0;
+
 		/// <summary></summary>
 		public const int DefaultProductId = 0;
 
@@ -52,6 +56,7 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		public static readonly Regex VendorIdRegex;
+
 		/// <summary></summary>
 		public static readonly Regex ProductIdRegex;
 

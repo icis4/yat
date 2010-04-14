@@ -37,12 +37,10 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.ComponentModel;
-using System.Runtime.Remoting.Messaging;
 using System.Diagnostics;
-using System.IO;
+using System.Runtime.Remoting.Messaging;
+using System.Text;
 
 #endregion
 
@@ -147,6 +145,7 @@ namespace MKY.Utilities.Event
 		/// caught. If an event sink implements <see cref="System.ComponentModel.ISynchronizeInvoke"/>,
 		/// the event is invoked on that thread. Otherwise, the event is invoked on the current thread.
 		/// </summary>
+		/// <typeparam name="TEventArgs">The type of the EventArgs of the requested event.</typeparam>
 		public static void FireSync<TEventArgs>(Delegate eventDelegate, params object[] args)
 			where TEventArgs : EventArgs
 		{
@@ -196,6 +195,8 @@ namespace MKY.Utilities.Event
 		/// <remarks>
 		/// This overloaded method is provided for backward compatibility with .NET 1.0/1.1 style events.
 		/// </remarks>
+		/// <typeparam name="TEventArgs">The type of the EventArgs of the requested event.</typeparam>
+		/// <typeparam name="TEventHandler">The type of the requested event.</typeparam>
 		public static void FireSync<TEventArgs, TEventHandler>(Delegate eventDelegate, params object[] args)
 			where TEventArgs : EventArgs
 		{

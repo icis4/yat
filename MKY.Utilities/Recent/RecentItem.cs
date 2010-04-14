@@ -24,9 +24,10 @@ namespace MKY.Utilities.Recent
 	/// <summary>
 	/// Item for collections like recent files, encapsulates an item with a time stamp.
 	/// </summary>
+	/// <typeparam name="T">The underlying type of the recent item.</typeparam>
 	[Serializable]
 	public class RecentItem<T> : IEquatable<RecentItem<T>>, IComparable
-		where T: IEquatable<T>
+		where T : IEquatable<T>
 	{
 		private T item;
 		private DateTime timeStamp;
@@ -134,8 +135,10 @@ namespace MKY.Utilities.Recent
 		{
 			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
-				return ((this.item != null) && (this.item.Equals(value.item)));
+			{
 				// Do not compare time stamp.
+				return ((this.item != null) && (this.item.Equals(value.item)));
+			}
 
 			return (false);
 		}

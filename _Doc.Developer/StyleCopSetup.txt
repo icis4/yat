@@ -41,6 +41,8 @@ Disable the following rules
   > Conflicts with valid C# comments '<c>true</c> to...' or '<c>false</c> to...'.
 - C# > Documentation > Element Documentation > DestructorSummaryDocumentationMustBeginWithStandardText (SA1643)
   > Actual text shall describe the purpose as clear as possible.
+- C# > Documentation > Element Documentation > DocumentationHeadersMustNotContainBlankLines (SA1644)
+  > Any good reason for this?
 - C# > Documentation > File Headers > FileHeaderMustShowCopyright (SA1634)
   > YAT/MKY file headers already contain copyright information in a user readable and SVN compatible form.
 - C# > Documentation > File Headers > FileHeaderMustHaveSummary (SA1639)
@@ -64,14 +66,6 @@ Disable the following rules
   > Mathematical and logical expressions may be better readable when additional parenthesis are used. This is to be decided by the implementer.
 - C# > Maintainability > File Contents > FileMayOnlyContainASingleClass (SA1402)
   > Simple types like Exceptions or EventArgs should be placed into a single file. Unfortunately, StyleCop suppression cannot be applied on file level.
-- C# > Readability > Method Parameter Placement > OpeningParenthesisMustBeOnDeclarationLine (SA1110)
-  > Prevents readable implementation of multi-argument constructors.
-- C# > Readability > Method Parameter Placement > ClosingParenthesisMustBeOnDeclarationLine (SA1111)
-  > Prevents readable implementation of multi-argument constructors.
-- C# > Readability > Statements > CodeMustNotContainMultipleStatementsOnOneLine (SA1107)
-  > Too restrictive, in some cases this really makes sense.
-- C# > Readability > Strings > UseStringEmptyForEmptyStrings (SA1122)
-  > "" is way more obvious and readable then string.Empty. It's the task of the compiler to optimize this.
 - C# > Naming > ElementMustBeginWithUpperCaseLetter (SA1300)
   > Control event handlers are prefixed by the control's name in Visual Studio.
 - C# > Naming > FieldNamesMustNotContainUnderscore (SA1310)
@@ -86,14 +80,26 @@ Disable the following rules
   > Prevents placing operator overloads to the end of a file.
 - C# > Readability > Member Access > PrefixLocalCallsWithThis (SA1101)
   > Prefixing local calls with this. reduces readability.
+- C# > Readability > Method Parameter Placement > OpeningParenthesisMustBeOnDeclarationLine (SA1110)
+  > Prevents readable implementation of multi-argument constructors.
+- C# > Readability > Method Parameter Placement > ClosingParenthesisMustBeOnDeclarationLine (SA1111)
+  > Prevents readable implementation of multi-argument constructors.
+- C# > Readability > Statements > CodeMustNotContainMultipleStatementsOnOneLine (SA1107)
+  > Too restrictive, in some cases this really makes sense.
+- C# > Readability > Statements > BlockStatementsMustNotContainEmbeddedComments (SA1108)
+  > ?!?.
+- C# > Readability > Strings > UseStringEmptyForEmptyStrings (SA1122)
+  > "" is way more obvious and readable then string.Empty. It's the task of the compiler to optimize this.
 - C# > Spacing > SingleLineCommentsMustBeginWithSingleSpace (SA1005)
   > Allow headers to be framed with '//===============...' or '//---------------...' or similar.
 - C# > Spacing > OpeningParenthesisMustBeSpacedCorrectly (SA1008)
   > Prevents readable implementation of multi-argument methods.
 - C# > Spacing > ClosingParenthesisMustBeSpacedCorrectly (SA1009)
   > Prevents readable implementation of multi-argument methods.
+- C# > Spacing > ClosingCurlyBracketsMustBeSpacedCorrectly (SA1013)
+  > Prevents implementation of aligned table-style code.
 - C# > Spacing > CodeMustNotContainMultipleWhitespaceInRow (SA1025)
-  > In many cases, aligned table style code is more readable than not aligned code.
+  > In many cases, aligned table-style code is more readable than not aligned code.
 - C# > Spacing > TabsMustNotBeUsed (SA1027)
   > So far tabs have always been preferred, no reason why this shouldn't be the case anymore.
 
@@ -105,6 +111,12 @@ Temporarily disable the following rules during transition from non-StyleCop to S
 - C# > Documentation > Element Documentation > PropertyDocumentationMustHaveValue (SA1609)
 - C# > Documentation > Element Documentation > ElementParametersMustBeDocumented (SA1611)
 - C# > Documentation > Element Documentation > ElementReturnValueMustBeDocumented (SA1615)
+
+Add the following prefixes to the list of allowed Hungarian prefixes
+- ip
+- pc
+- ts
+- x
 
 
 In-Code Exceptions

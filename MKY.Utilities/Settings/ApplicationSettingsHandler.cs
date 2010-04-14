@@ -16,13 +16,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Xml;
-using System.Xml.Serialization;
 using System.IO;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
-using MKY.Utilities.Diagnostics;
 using MKY.Utilities.Xml;
 
 namespace MKY.Utilities.Settings
@@ -31,6 +28,9 @@ namespace MKY.Utilities.Settings
 	/// Generic class to handle standard application settings. It covers common, local user
 	/// as well as roaming user settings.
 	/// </summary>
+	/// <typeparam name="TCommonSettings">The type of the common settings.</typeparam>
+	/// <typeparam name="TLocalUserSettings">The type of the local user settings.</typeparam>
+	/// <typeparam name="TRoamingUserSettings">The type of the roaming user settings.</typeparam>
 	public class ApplicationSettingsHandler<TCommonSettings, TLocalUserSettings, TRoamingUserSettings>
 		where TCommonSettings : new()
 		where TLocalUserSettings : new()

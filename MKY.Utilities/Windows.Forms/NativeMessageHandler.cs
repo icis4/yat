@@ -40,7 +40,6 @@ namespace MKY.Utilities.Windows.Forms
 			this.messageHandlerCallback = messageHandlerCallback;
 		}
 
-
 		/// <summary>
 		/// Gets the handle for this window.
 		/// </summary>

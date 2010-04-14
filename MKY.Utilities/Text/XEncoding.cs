@@ -30,330 +30,473 @@ namespace MKY.Utilities.Text
 	/// <remarks>
 	/// Enum value corresponds to code page.
 	/// </remarks>
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1630:DocumentationTextMustContainWhitespace", Justification = "Text is given by the MSDN.")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1631:DocumentationMustMeetCharacterPercentage", Justification = "Text is given by the MSDN.")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1632:DocumentationTextMustMeetMinimumCharacterLength", Justification = "Text is given by the MSDN.")]
 	public enum SupportedEncoding
 	{
 		//------------------------------------------------------------------------------------------
 		// ASCII and Unicode
 		//------------------------------------------------------------------------------------------
-		/// <summary>US-ASCII</summary>
+
+		/// <summary>US-ASCII.</summary>
 		ASCII = 20127,
-		/// <summary>Unicode (UTF-7)</summary>
+
+		/// <summary>Unicode (UTF-7).</summary>
 		UTF7 = 65000,
-		/// <summary>Unicode (UTF-8)</summary>
+
+		/// <summary>Unicode (UTF-8).</summary>
 		UTF8 = 65001,
-		/// <summary>Unicode</summary>
+
+		/// <summary>Unicode.</summary>
 		UTF16 = 1200,
-		/// <summary>Unicode (Big-Endian)</summary>
+
+		/// <summary>Unicode (Big-Endian).</summary>
 		UTF16BE = 1201,
-		/// <summary>Unicode (UTF-32)</summary>
+
+		/// <summary>Unicode (UTF-32).</summary>
 		UTF32 = 65005,
-		/// <summary>Unicode (UTF-32 Big-Endian)</summary>
+
+		/// <summary>Unicode (UTF-32 Big-Endian).</summary>
 		UTF32BE = 65006,
 
 		//------------------------------------------------------------------------------------------
 		// ISO
 		//------------------------------------------------------------------------------------------
-		/// <summary>Western European (ISO)</summary>
+
+		/// <summary>Western European (ISO).</summary>
 		ISO8859_1 = 28591,
-		/// <summary>Central European (ISO)</summary>
+
+		/// <summary>Central European (ISO).</summary>
 		ISO8859_2 = 28592,
-		/// <summary>Latin 3 (ISO)</summary>
+
+		/// <summary>Latin 3 (ISO).</summary>
 		ISO8859_3 = 28593,
-		/// <summary>Baltic (ISO)</summary>
+
+		/// <summary>Baltic (ISO).</summary>
 		ISO8859_4 = 28594,
-		/// <summary>Cyrillic (ISO)</summary>
+
+		/// <summary>Cyrillic (ISO).</summary>
 		ISO8859_5 = 28595,
-		/// <summary>Arabic (ISO)</summary>
+
+		/// <summary>Arabic (ISO).</summary>
 		ISO8859_6 = 28596,
-		/// <summary>Greek (ISO)</summary>
+
+		/// <summary>Greek (ISO).</summary>
 		ISO8859_7 = 28597,
-		/// <summary>Hebrew (ISO-Visual)</summary>
+
+		/// <summary>Hebrew (ISO-Visual).</summary>
 		ISO8859_8 = 28598,
-		/// <summary>Hebrew (ISO-Logical)</summary>
+
+		/// <summary>Hebrew (ISO-Logical).</summary>
 		ISO8859_8I = 38598,
-		/// <summary>Turkish (ISO)</summary>
+
+		/// <summary>Turkish (ISO).</summary>
 		ISO8859_9 = 28599,
-		/// <summary>Estonian (ISO)</summary>
+
+		/// <summary>Estonian (ISO).</summary>
 		ISO8859_13 = 28603,
-		/// <summary>Latin 9 (ISO)</summary>
+
+		/// <summary>Latin 9 (ISO).</summary>
 		ISO8859_15 = 28605,
-		/// <summary>Japanese (JIS)</summary>
+
+		/// <summary>Japanese (JIS).</summary>
 		ISO2022JP = 50220,
-		/// <summary>Japanese (JIS-Allow 1 byte Kana)</summary>
+
+		/// <summary>Japanese (JIS-Allow 1 byte Kana).</summary>
 		CSISO2022JP = 50221,
-		/// <summary>Japanese (JIS-Allow 1 byte Kana - SO/SI)</summary>
+
+		/// <summary>Japanese (JIS-Allow 1 byte Kana - SO/SI).</summary>
 		ISO2022JP_A = 50222,
-		/// <summary>Korean (ISO)</summary>
+
+		/// <summary>Korean (ISO).</summary>
 		ISO2022KR = 50225,
 
 		//------------------------------------------------------------------------------------------
 		// Windows
 		//------------------------------------------------------------------------------------------
-		/// <summary>Western European (Windows)</summary>
+
+		/// <summary>Western European (Windows).</summary>
 		Windows1252 = 1252,
-		/// <summary>Central European (Windows)</summary>
+
+		/// <summary>Central European (Windows).</summary>
 		Windows1250 = 1250,
-		/// <summary>Cyrillic (Windows)</summary>
+
+		/// <summary>Cyrillic (Windows).</summary>
 		Windows1251 = 1251,
-		/// <summary>Greek (Windows)</summary>
+
+		/// <summary>Greek (Windows).</summary>
 		Windows1253 = 1253,
-		/// <summary>Turkish (Windows)</summary>
+
+		/// <summary>Turkish (Windows).</summary>
 		Windows1254 = 1254,
-		/// <summary>Hebrew (Windows)</summary>
+
+		/// <summary>Hebrew (Windows).</summary>
 		Windows1255 = 1255,
-		/// <summary>Arabic (Windows)</summary>
+
+		/// <summary>Arabic (Windows).</summary>
 		Windows1256 = 1256,
-		/// <summary>Baltic (Windows)</summary>
+
+		/// <summary>Baltic (Windows).</summary>
 		Windows1257 = 1257,
-		/// <summary>Vietnamese (Windows)</summary>
+
+		/// <summary>Vietnamese (Windows).</summary>
 		Windows1258 = 1258,
-		/// <summary>Thai (Windows)</summary>
+
+		/// <summary>Thai (Windows).</summary>
 		Windows874 = 874,
 
 		//------------------------------------------------------------------------------------------
 		// Mac
 		//------------------------------------------------------------------------------------------
-		/// <summary>Western European (Mac)</summary>
+
+		/// <summary>Western European (Mac).</summary>
 		Macintosh = 10000,
-		/// <summary>Central European (Mac)</summary>
+
+		/// <summary>Central European (Mac).</summary>
 		XMacCE = 10029,
-		/// <summary>Japanese (Mac)</summary>
+
+		/// <summary>Japanese (Mac).</summary>
 		XMacJapanese = 10001,
-		/// <summary>Chinese Traditional (Mac)</summary>
+
+		/// <summary>Chinese Traditional (Mac).</summary>
 		XMacChineseTrad = 10002,
-		/// <summary>Chinese Simplified (Mac)</summary>
+
+		/// <summary>Chinese Simplified (Mac).</summary>
 		XMacChineseSimp = 10008,
-		/// <summary>Korean (Mac)</summary>
+
+		/// <summary>Korean (Mac).</summary>
 		XMacKorean = 10003,
-		/// <summary>Arabic (Mac)</summary>
+
+		/// <summary>Arabic (Mac).</summary>
 		XMacArabic = 10004,
-		/// <summary>Hebrew (Mac)</summary>
+
+		/// <summary>Hebrew (Mac).</summary>
 		XMacHebrew = 10005,
-		/// <summary>Greek (Mac)</summary>
+
+		/// <summary>Greek (Mac).</summary>
 		XMacGreek = 10006,
-		/// <summary>Cyrillic (Mac)</summary>
+
+		/// <summary>Cyrillic (Mac).</summary>
 		XMacCyrillic = 10007,
-		/// <summary>Romanian (Mac)</summary>
+
+		/// <summary>Romanian (Mac).</summary>
 		XMacRomanian = 10010,
-		/// <summary>Ukrainian (Mac)</summary>
+
+		/// <summary>Ukrainian (Mac).</summary>
 		XMacUkrainian = 10017,
-		/// <summary>Thai (Mac)</summary>
+
+		/// <summary>Thai (Mac).</summary>
 		XMacThai = 10021,
-		/// <summary>Icelandic (Mac)</summary>
+
+		/// <summary>Icelandic (Mac).</summary>
 		XMacIcelandic = 10079,
-		/// <summary>Turkish (Mac)</summary>
+
+		/// <summary>Turkish (Mac).</summary>
 		XMacTurkish = 10081,
-		/// <summary>Croatian (Mac)</summary>
+
+		/// <summary>Croatian (Mac).</summary>
 		XMacCroatian = 10082,
 
 		//------------------------------------------------------------------------------------------
 		// Unix
 		//------------------------------------------------------------------------------------------
-		/// <summary>Japanese (JIS 0208-1990 and 0212-1990)</summary>
+
+		/// <summary>Japanese (JIS 0208-1990 and 0212-1990).</summary>
 		EUC_JP = 20932,
-		/// <summary>Japanese (EUC)</summary>
+
+		/// <summary>Japanese (EUC).</summary>
 		EUC_JP_A = 51932,
-		/// <summary>Chinese Simplified (EUC)</summary>
+
+		/// <summary>Chinese Simplified (EUC).</summary>
 		EUC_CN = 51936,
-		/// <summary>Korean (EUC)</summary>
+
+		/// <summary>Korean (EUC).</summary>
 		EUC_KR = 51949,
 
 		//------------------------------------------------------------------------------------------
 		// IBM EBCDIC
 		//------------------------------------------------------------------------------------------
-		/// <summary>IBM Latin-1</summary>
+
+		/// <summary>IBM Latin-1.</summary>
 		IBM1047 = 1047,
-		/// <summary>IBM Latin-1</summary>
+
+		/// <summary>IBM Latin-1.</summary>
 		IBM924 = 20924,
-		/// <summary>IBM EBCDIC (International)</summary>
+
+		/// <summary>IBM EBCDIC (International).</summary>
 		IBM500 = 500,
-		/// <summary>IBM EBCDIC (US-Canada)</summary>
+
+		/// <summary>IBM EBCDIC (US-Canada).</summary>
 		IBM037 = 37,
-		/// <summary>IBM EBCDIC (Multilingual Latin-2)</summary>
+
+		/// <summary>IBM EBCDIC (Multilingual Latin-2).</summary>
 		IBM870 = 870,
-		/// <summary>IBM EBCDIC (Greek)</summary>
+
+		/// <summary>IBM EBCDIC (Greek).</summary>
 		IBM423 = 20423,
-		/// <summary>IBM EBCDIC (Greek Modern)</summary>
+
+		/// <summary>IBM EBCDIC (Greek Modern).</summary>
 		CP875 = 875,
-		/// <summary>IBM EBCDIC (Cyrillic Russian)</summary>
+
+		/// <summary>IBM EBCDIC (Cyrillic Russian).</summary>
 		IBM880 = 20880,
-		/// <summary>IBM EBCDIC (Cyrillic Serbian-Bulgarian)</summary>
+
+		/// <summary>IBM EBCDIC (Cyrillic Serbian-Bulgarian).</summary>
 		CP1025 = 21025,
-		/// <summary>IBM EBCDIC (Turkish)</summary>
+
+		/// <summary>IBM EBCDIC (Turkish).</summary>
 		IBM905 = 20905,
-		/// <summary>IBM EBCDIC (Turkish Latin-5)</summary>
+
+		/// <summary>IBM EBCDIC (Turkish Latin-5).</summary>
 		IBM1026 = 1026,
-		/// <summary>IBM EBCDIC (US-Canada-Euro)</summary>
+
+		/// <summary>IBM EBCDIC (US-Canada-Euro).</summary>
 		IBM1140 = 1140,
-		/// <summary>IBM EBCDIC (Germany-Euro)</summary>
+
+		/// <summary>IBM EBCDIC (Germany-Euro).</summary>
 		IBM1141 = 1141,
-		/// <summary>IBM EBCDIC (Denmark-Norway-Euro)</summary>
+
+		/// <summary>IBM EBCDIC (Denmark-Norway-Euro).</summary>
 		IBM1142 = 1142,
-		/// <summary>IBM EBCDIC (Finland-Sweden-Euro)</summary>
+
+		/// <summary>IBM EBCDIC (Finland-Sweden-Euro).</summary>
 		IBM1143 = 1143,
-		/// <summary>IBM EBCDIC (Italy-Euro)</summary>
+
+		/// <summary>IBM EBCDIC (Italy-Euro).</summary>
 		IBM1144 = 1144,
-		/// <summary>IBM EBCDIC (Spain-Euro)</summary>
+
+		/// <summary>IBM EBCDIC (Spain-Euro).</summary>
 		IBM1145 = 1145,
-		/// <summary>IBM EBCDIC (UK-Euro)</summary>
+
+		/// <summary>IBM EBCDIC (UK-Euro).</summary>
 		IBM1146 = 1146,
-		/// <summary>IBM EBCDIC (France-Euro)</summary>
+
+		/// <summary>IBM EBCDIC (France-Euro).</summary>
 		IBM1147 = 1147,
-		/// <summary>IBM EBCDIC (International-Euro)</summary>
+
+		/// <summary>IBM EBCDIC (International-Euro).</summary>
 		IBM1148 = 1148,
-		/// <summary>IBM EBCDIC (Icelandic-Euro)</summary>
+
+		/// <summary>IBM EBCDIC (Icelandic-Euro).</summary>
 		IBM1149 = 1149,
-		/// <summary>IBM EBCDIC (Germany)</summary>
+
+		/// <summary>IBM EBCDIC (Germany).</summary>
 		IBM273 = 20273,
-		/// <summary>IBM EBCDIC (Denmark-Norway)</summary>
+
+		/// <summary>IBM EBCDIC (Denmark-Norway).</summary>
 		IBM277 = 20277,
-		/// <summary>IBM EBCDIC (Finland-Sweden)</summary>
+
+		/// <summary>IBM EBCDIC (Finland-Sweden).</summary>
 		IBM278 = 20278,
-		/// <summary>IBM EBCDIC (Icelandic)</summary>
+
+		/// <summary>IBM EBCDIC (Icelandic).</summary>
 		IBM871 = 20871,
-		/// <summary>IBM EBCDIC (Italy)</summary>
+
+		/// <summary>IBM EBCDIC (Italy).</summary>
 		IBM280 = 20280,
-		/// <summary>IBM EBCDIC (Spain)</summary>
+
+		/// <summary>IBM EBCDIC (Spain).</summary>
 		IBM284 = 20284,
-		/// <summary>IBM EBCDIC (UK)</summary>
+
+		/// <summary>IBM EBCDIC (UK).</summary>
 		IBM285 = 20285,
-		/// <summary>IBM EBCDIC (France)</summary>
+
+		/// <summary>IBM EBCDIC (France).</summary>
 		IBM297 = 20297,
-		/// <summary>IBM EBCDIC (Arabic)</summary>
+
+		/// <summary>IBM EBCDIC (Arabic).</summary>
 		IBM420 = 20420,
-		/// <summary>IBM EBCDIC (Hebrew)</summary>
+
+		/// <summary>IBM EBCDIC (Hebrew).</summary>
 		IBM424 = 20424,
-		/// <summary>IBM EBCDIC (Japanese katakana)</summary>
+
+		/// <summary>IBM EBCDIC (Japanese katakana).</summary>
 		IBM290 = 20290,
-		/// <summary>IBM EBCDIC (Thai)</summary>
+
+		/// <summary>IBM EBCDIC (Thai).</summary>
 		IBMThai = 20838,
-		/// <summary>IBM EBCDIC (Korean Extended)</summary>
+
+		/// <summary>IBM EBCDIC (Korean Extended).</summary>
 		X_EBCDIC_KoreanExtended = 20833,
 
 		//------------------------------------------------------------------------------------------
 		// IBM OEM
 		//------------------------------------------------------------------------------------------
-		/// <summary>OEM United States</summary>
+
+		/// <summary>OEM United States.</summary>
 		IBM437 = 437,
-		/// <summary>OEM Cyrillic</summary>
+
+		/// <summary>OEM Cyrillic.</summary>
 		IBM855 = 855,
-		/// <summary>OEM Multilingual Latin I</summary>
+
+		/// <summary>OEM Multilingual Latin I.</summary>
 		IBM858 = 858,
 
 		//------------------------------------------------------------------------------------------
 		// DOS
 		//------------------------------------------------------------------------------------------
-		/// <summary>Western European (DOS)</summary>
+
+		/// <summary>Western European (DOS).</summary>
 		IBM850 = 850,
-		/// <summary>Central European (DOS)</summary>
+
+		/// <summary>Central European (DOS).</summary>
 		IBM852 = 852,
-		/// <summary>Greek (DOS)</summary>
+
+		/// <summary>Greek (DOS).</summary>
 		IBM737 = 737,
-		/// <summary>Greek, Modern (DOS)</summary>
+
+		/// <summary>Greek, Modern (DOS).</summary>
 		IBM869 = 869,
-		/// <summary>Baltic (DOS)</summary>
+
+		/// <summary>Baltic (DOS).</summary>
 		IBM775 = 775,
-		/// <summary>Cyrillic (DOS)</summary>
+
+		/// <summary>Cyrillic (DOS).</summary>
 		CP866 = 866,
-		/// <summary>Portuguese (DOS)</summary>
+
+		/// <summary>Portuguese (DOS).</summary>
 		IBM860 = 860,
-		/// <summary>Icelandic (DOS)</summary>
+
+		/// <summary>Icelandic (DOS).</summary>
 		IBM861 = 861,
-		/// <summary>French Canadian (DOS)</summary>
+
+		/// <summary>French Canadian (DOS).</summary>
 		IBM863 = 863,
-		/// <summary>Nordic (DOS)</summary>
+
+		/// <summary>Nordic (DOS).</summary>
 		IBM865 = 865,
-		/// <summary>Turkish (DOS)</summary>
+
+		/// <summary>Turkish (DOS).</summary>
 		IBM857 = 857,
-		/// <summary>Arabic (DOS)</summary>
+
+		/// <summary>Arabic (DOS).</summary>
 		DOS720 = 720,
-		/// <summary>Arabic (864)</summary>
+
+		/// <summary>Arabic (864).</summary>
 		IBM864 = 864,
-		/// <summary>Hebrew (DOS)</summary>
+
+		/// <summary>Hebrew (DOS).</summary>
 		DOS862 = 862,
 
 		//------------------------------------------------------------------------------------------
 		// Misc
 		//------------------------------------------------------------------------------------------
-		/// <summary>Cyrillic (KOI8-R)</summary>
+
+		/// <summary>Cyrillic (KOI8-R).</summary>
 		KOI8_R = 20866,
-		/// <summary>Cyrillic (KOI8-U)</summary>
+
+		/// <summary>Cyrillic (KOI8-U).</summary>
 		KOI8_U = 21866,
-		/// <summary>Arabic (ASMO 708)</summary>
+
+		/// <summary>Arabic (ASMO 708).</summary>
 		ASMO_708 = 708,
-		/// <summary>Japanese (Shift-JIS)</summary>
+
+		/// <summary>Japanese (Shift-JIS).</summary>
 		Shift_JIS = 932,
-		/// <summary>Chinese Simplified (GB2312)</summary>
+
+		/// <summary>Chinese Simplified (GB2312).</summary>
 		GB2312 = 936,
-		/// <summary>Chinese Simplified (GB18030)</summary>
+
+		/// <summary>Chinese Simplified (GB18030).</summary>
 		GB18030 = 54936,
-		/// <summary>Chinese Simplified (HZ)</summary>
+
+		/// <summary>Chinese Simplified (HZ).</summary>
 		HZ_GB_2312 = 52936,
-		/// <summary>Chinese Traditional (Big5)</summary>
+
+		/// <summary>Chinese Traditional (Big5).</summary>
 		Big5 = 950,
-		/// <summary>Chinese Simplified (GB2312-80)</summary>
+
+		/// <summary>Chinese Simplified (GB2312-80).</summary>
 		X_CP20936 = 20936,
-		/// <summary>Korean Wansung</summary>
+
+		/// <summary>Korean Wansung.</summary>
 		X_CP20949 = 20949,
-		/// <summary>Korean</summary>
+
+		/// <summary>Korean.</summary>
 		KS_C_5601_1987 = 949,
-		/// <summary>Korean (Johab)</summary>
+
+		/// <summary>Korean (Johab).</summary>
 		Johab = 1361,
 
 		//------------------------------------------------------------------------------------------
 		// X
 		//------------------------------------------------------------------------------------------
-		/// <summary>Europa</summary>
+
+		/// <summary>Europa.</summary>
 		X_Europa = 29001,
-		/// <summary>Chinese Traditional (CNS)</summary>
+
+		/// <summary>Chinese Traditional (CNS).</summary>
 		X_ChineseCNS = 20000,
-		/// <summary>Chinese Traditional (Eten)</summary>
+
+		/// <summary>Chinese Traditional (Eten).</summary>
 		X_ChineseEten = 20002,
-		/// <summary>Western European (IA5)</summary>
+
+		/// <summary>Western European (IA5).</summary>
 		X_IA5 = 20105,
-		/// <summary>German (IA5)</summary>
+
+		/// <summary>German (IA5).</summary>
 		X_IA5_German = 20106,
-		/// <summary>Swedish (IA5)</summary>
+
+		/// <summary>Swedish (IA5).</summary>
 		X_IA5_Swedish = 20107,
-		/// <summary>Norwegian (IA5)</summary>
+
+		/// <summary>Norwegian (IA5).</summary>
 		X_IA5_Norwegian = 20108,
-		/// <summary>TCA Taiwan</summary>
+
+		/// <summary>TCA Taiwan.</summary>
 		X_CP20001 = 20001,
-		/// <summary>IBM5550 Taiwan</summary>
+
+		/// <summary>IBM5550 Taiwan.</summary>
 		X_CP20003 = 20003,
-		/// <summary>TeleText Taiwan</summary>
+
+		/// <summary>TeleText Taiwan.</summary>
 		X_CP20004 = 20004,
-		/// <summary>Wang Taiwan</summary>
+
+		/// <summary>Wang Taiwan.</summary>
 		X_CP20005 = 20005,
-		/// <summary>Chinese Simplified (ISO-2022)</summary>
+
+		/// <summary>Chinese Simplified (ISO-2022).</summary>
 		X_CP50227 = 50227,
-		/// <summary>T.61</summary>
+
+		/// <summary>T.61.</summary>
 		X_CP20261 = 20261,
-		/// <summary>ISO-6937</summary>
+
+		/// <summary>ISO-6937.</summary>
 		X_CP20269 = 20269,
 
 		//------------------------------------------------------------------------------------------
 		// X-ISCII
 		//------------------------------------------------------------------------------------------
-		/// <summary>ISCII Devanagari</summary>
+
+		/// <summary>ISCII Devanagari.</summary>
 		X_ISCII_DE = 57002,
-		/// <summary>ISCII Bengali</summary>
+
+		/// <summary>ISCII Bengali.</summary>
 		X_ISCII_BE = 57003,
-		/// <summary>ISCII Tamil</summary>
+
+		/// <summary>ISCII Tamil.</summary>
 		X_ISCII_TA = 57004,
-		/// <summary>ISCII Telugu</summary>
+
+		/// <summary>ISCII Telugu.</summary>
 		X_ISCII_TE = 57005,
-		/// <summary>ISCII Assamese</summary>
+
+		/// <summary>ISCII Assamese.</summary>
 		X_ISCII_AS = 57006,
-		/// <summary>ISCII Oriya</summary>
+
+		/// <summary>ISCII Oriya.</summary>
 		X_ISCII_OR = 57007,
-		/// <summary>ISCII Kannada</summary>
+
+		/// <summary>ISCII Kannada.</summary>
 		X_ISCII_KA = 57008,
-		/// <summary>ISCII Malayalam</summary>
+
+		/// <summary>ISCII Malayalam.</summary>
 		X_ISCII_MA = 57009,
-		/// <summary>ISCII Gujarati</summary>
+
+		/// <summary>ISCII Gujarati.</summary>
 		X_ISCII_GU = 57010,
-		/// <summary>ISCII Punjabi</summary>
+
+		/// <summary>ISCII Punjabi.</summary>
 		X_ISCII_PA = 57011,
 	}
 

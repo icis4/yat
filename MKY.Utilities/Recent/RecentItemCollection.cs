@@ -23,6 +23,7 @@ namespace MKY.Utilities.Recent
 	/// <summary>
 	/// Collection for recent items like recent files, provides methods to handle the recent items.
 	/// </summary>
+	/// <typeparam name="T">The underlying type of the recent item.</typeparam>
 	public class RecentItemCollection<T> : List<RecentItem<T>>
 		where T : IEquatable<T>
 	{
@@ -85,7 +86,7 @@ namespace MKY.Utilities.Recent
 		}
 
 		/// <summary>
-		/// Validates all recent items, invalid items are removed from the collection
+		/// Validates all recent items, invalid items are removed from the collection.
 		/// </summary>
 		public virtual void ValidateAll()
 		{

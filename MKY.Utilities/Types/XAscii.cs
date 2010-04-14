@@ -21,7 +21,7 @@ using System.Text;
 namespace MKY.Utilities.Types
 {
 	/// <summary>
-	/// Ascii code conversions. Source: www.asciitable.com
+	/// Ascii code conversions. Source: http://www.asciitable.com.
 	/// </summary>
 	public class Ascii
 	{

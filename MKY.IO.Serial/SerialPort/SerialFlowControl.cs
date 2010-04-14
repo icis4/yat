@@ -27,26 +27,26 @@ namespace MKY.IO.Serial
 {
 	#region Enum SerialFlowControl
 
-	/// <summary></summary>
+	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+	// warnings for each undocumented member below. Documenting each member makes little sense
+	// since they pretty much tell their purpose and documentation tags between the members
+	// makes the code less readable.
+	#pragma warning disable 1591
+
 	/// <remarks>
-	/// I think flow control is the better identifier, no clue why .NET uses the
-	/// term flowControl.
+	/// I think flow control is the better identifier, no clue why .NET uses the term handshake.
 	/// </remarks>
 	public enum SerialFlowControl
 	{
-		/// <summary></summary>
-		None = System.IO.Ports.Handshake.None,
-		/// <summary></summary>
-		RequestToSend = System.IO.Ports.Handshake.RequestToSend,
-		/// <summary></summary>
-		XOnXOff = System.IO.Ports.Handshake.XOnXOff,
-		/// <summary></summary>
+		None                 = System.IO.Ports.Handshake.None,
+		RequestToSend        = System.IO.Ports.Handshake.RequestToSend,
+		XOnXOff              = System.IO.Ports.Handshake.XOnXOff,
 		RequestToSendXOnXOff = System.IO.Ports.Handshake.RequestToSendXOnXOff,
-		/// <summary></summary>
 		Manual,
-		/// <summary></summary>
 		RS485,
 	}
+
+	#pragma warning restore 1591
 
 	#endregion
 
@@ -63,7 +63,7 @@ namespace MKY.IO.Serial
 
 		#endregion
 
-		/// <summary>Default is <see cref="SerialFlowControl.None"/></summary>
+		/// <summary>Default is <see cref="SerialFlowControl.None"/>.</summary>
 		public XSerialFlowControl()
 			: base((System.IO.Ports.Handshake)SerialFlowControl.None)
 		{

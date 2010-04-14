@@ -41,7 +41,7 @@ namespace MKY.Utilities.IO
 		/// <summary>
 		/// Returns complete path of log file.
 		/// </summary>
-		public String FilePath
+		public string FilePath
 		{
 			get { return (this.filePath); }
 		}

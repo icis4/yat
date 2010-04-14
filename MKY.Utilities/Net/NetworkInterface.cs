@@ -16,9 +16,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Net;
-using System.Net.NetworkInformation;
 
 using MKY.Utilities.Types;
 
@@ -26,22 +24,24 @@ namespace MKY.Utilities.Net
 {
 	#region Enum CommonNetworkInterface
 
+	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+	// warnings for each undocumented member below. Documenting each member makes little sense
+	// since they pretty much tell their purpose and documentation tags between the members
+	// makes the code less readable.
+	#pragma warning disable 1591
+
 	/// <summary></summary>
 	public enum CommonNetworkInterface
 	{
-		/// <summary></summary>
 		Any,
-		/// <summary></summary>
 		IPv4Any,
-		/// <summary></summary>
 		IPv4Loopback,
-		/// <summary></summary>
 		IPv6Any,
-		/// <summary></summary>
 		IPv6Loopback,
-		/// <summary></summary>
 		Other,
 	}
+
+	#pragma warning restore 1591
 
 	#endregion
 
@@ -64,7 +64,7 @@ namespace MKY.Utilities.Net
 		private IPAddress otherAddress = IPAddress.None;
 		private string otherDescription = "";
 
-		/// <summary>Default is <see cref="CommonNetworkInterface.Any"/></summary>
+		/// <summary>Default is <see cref="CommonNetworkInterface.Any"/>.</summary>
 		public XNetworkInterface()
 			: base(CommonNetworkInterface.Any)
 		{

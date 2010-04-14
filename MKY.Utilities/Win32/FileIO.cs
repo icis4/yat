@@ -49,6 +49,9 @@ namespace MKY.Utilities.Win32
 		/// <summary>
 		/// Class encapsulating native Win32 types, constants and functions.
 		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
 		public static class Native
 		{
 			#region Types
@@ -186,7 +189,7 @@ namespace MKY.Utilities.Win32
 			/// </summary>
 			/// <param name="SecurityAttributes">A security attributes structure or IntPtr.Zero.</param>
 			/// <param name="bManualReset">Manual Reset = False (The system automatically resets the
-			/// state to nonsignaled after a waiting thread has been released.)</param>
+			/// state to nonsignaled after a waiting thread has been released.).</param>
 			/// <param name="bInitialState">Initial state = False (Not signaled.)</param>
 			/// <param name="lpName">An event object name (optional).</param>
 			/// <returns>A handle to the event object.</returns>
@@ -198,8 +201,6 @@ namespace MKY.Utilities.Win32
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern SafeFileHandle CreateFile([In] string lpFileName, [In] Access dwDesiredAccess, [In] ShareMode dwShareMode, [In] IntPtr lpSecurityAttributes, [In] CreationDisposition dwCreationDisposition, [In] AttributesAndFlags dwFlagsAndAttributes, [In] IntPtr hTemplateFile);
 
-			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			private static extern bool GetOverlappedResult([In] SafeFileHandle hFile, [In] IntPtr lpOverlapped, [Out] out UInt32 lpNumberOfBytesTransferred, [In] bool bWait);
 			/// <summary>
 			/// Gets the result of an overlapped operation.
 			/// </summary>
@@ -217,7 +218,8 @@ namespace MKY.Utilities.Win32
 			}
 
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			private static extern bool ReadFile([In] SafeFileHandle hFile, [Out] IntPtr lpBuffer, [In] UInt32 nNumberOfBytesToRead, [Out] out UInt32 lpNumberOfBytesRead, [In] IntPtr lpOverlapped);
+			private static extern bool GetOverlappedResult([In] SafeFileHandle hFile, [In] IntPtr lpOverlapped, [Out] out UInt32 lpNumberOfBytesTransferred, [In] bool bWait);
+
 			/// <summary>
 			/// Attempts to read an Input report from the device.
 			/// </summary>
@@ -225,10 +227,10 @@ namespace MKY.Utilities.Win32
 			/// The overlapped call returns immediately, even if the data hasn't been received yet.
 			/// To read multiple reports with one ReadFile, increase the size of ReadBuffer and use
 			/// NumberOfBytesRead to determine how many reports were returned. Use a larger buffer
-			/// if the application can't keep up with reading each report individually. 
+			/// if the application can't keep up with reading each report individually.
 			/// </remarks>
 			/// <param name="hFile">A device handle returned by CreateFile
-			/// (for overlapped I/O, CreateFile must have been called with FILE_FLAG_OVERLAPPED)</param>
+			/// (for overlapped I/O, CreateFile must have been called with FILE_FLAG_OVERLAPPED).</param>
 			/// <param name="lpBuffer">A pointer to a buffer for storing the report.</param>
 			/// <param name="nNumberOfBytesToRead">The Input report length in bytes returned by HidP_GetCaps.</param>
 			/// <param name="lpNumberOfBytesRead">A pointer to a variable that will hold the number of bytes read.</param>
@@ -242,6 +244,9 @@ namespace MKY.Utilities.Win32
 				return (success);
 			}
 
+			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			private static extern bool ReadFile([In] SafeFileHandle hFile, [Out] IntPtr lpBuffer, [In] UInt32 nNumberOfBytesToRead, [Out] out UInt32 lpNumberOfBytesRead, [In] IntPtr lpOverlapped);
+
 			/// <summary>
 			/// Waits for at least one report or a timeout.
 			/// Used with overlapped ReadFile.
@@ -253,15 +258,13 @@ namespace MKY.Utilities.Win32
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern UInt32 WaitForSingleObject([In] IntPtr hHandle, [In] UInt32 dwMilliseconds);
 
-			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			private static extern bool WriteFile([In] SafeFileHandle hFile, [In] byte[] lpBuffer, [In] UInt32 nNumberOfBytesToWrite, [Out] out UInt32 lpNumberOfBytesWritten, [In] IntPtr lpOverlapped);
 			/// <summary>
 			/// Writes an Output report to the device.
 			/// </summary>
 			/// <param name="hFile">A handle returned by CreateFile.</param>
-			/// <param name="lpBuffer"></param>
+			/// <param name="lpBuffer">A pointer to a buffer containing the report.</param>
 			/// <param name="lpNumberOfBytesWritten">An integer to hold the number of bytes written.</param>
-			/// <param name="lpOverlapped"></param>
+			/// <param name="lpOverlapped">An overlapped structure whose hEvent member is set to an event object.</param>
 			/// <returns>True on success, false on failure.</returns>
 			public static bool WriteFile(SafeFileHandle hFile, byte[] lpBuffer, out int lpNumberOfBytesWritten, IntPtr lpOverlapped)
 			{
@@ -270,6 +273,9 @@ namespace MKY.Utilities.Win32
 				lpNumberOfBytesWritten = (int)bytesWritten;
 				return (success);
 			}
+
+			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			private static extern bool WriteFile([In] SafeFileHandle hFile, [In] byte[] lpBuffer, [In] UInt32 nNumberOfBytesToWrite, [Out] out UInt32 lpNumberOfBytesWritten, [In] IntPtr lpOverlapped);
 
 			#endregion
 		}

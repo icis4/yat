@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Reflection;
 
 namespace MKY.Utilities.Types
@@ -180,8 +179,10 @@ namespace MKY.Utilities.Types
 		{
 			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
-				return ((UnderlyingEnum != null) && (UnderlyingEnum.Equals(value.UnderlyingEnum)));
+			{
 				// Attention, Enum doesn't override operators == and !=, use Equals().
+				return ((UnderlyingEnum != null) && (UnderlyingEnum.Equals(value.UnderlyingEnum)));
+			}
 
 			return (false);
 		}

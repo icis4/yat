@@ -26,20 +26,23 @@ namespace MKY.IO.Serial
 {
 	#region Enum SocketHostType
 
+	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+	// warnings for each undocumented member below. Documenting each member makes little sense
+	// since they pretty much tell their purpose and documentation tags between the members
+	// makes the code less readable.
+	#pragma warning disable 1591
+
 	/// <summary></summary>
 	public enum SocketHostType
 	{
-		/// <summary></summary>
 		Unknown,
-		/// <summary></summary>
 		TcpClient,
-		/// <summary></summary>
 		TcpServer,
-		/// <summary></summary>
 		TcpAutoSocket,
-		/// <summary></summary>
 		Udp,
 	}
+
+	#pragma warning restore 1591
 
 	#endregion
 
@@ -58,7 +61,7 @@ namespace MKY.IO.Serial
 
 		#endregion
 
-		/// <summary>Default is <see cref="SocketHostType.TcpAutoSocket"/></summary>
+		/// <summary>Default is <see cref="SocketHostType.TcpAutoSocket"/>.</summary>
 		public XSocketHostType()
 			: base(SocketHostType.TcpAutoSocket)
 		{

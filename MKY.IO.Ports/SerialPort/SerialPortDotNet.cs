@@ -341,8 +341,8 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				return ((base.Handshake != System.IO.Ports.Handshake.RequestToSend) &&
-						(base.Handshake != System.IO.Ports.Handshake.RequestToSendXOnXOff));
+				return ((Handshake != System.IO.Ports.Handshake.RequestToSend) &&
+						(Handshake != System.IO.Ports.Handshake.RequestToSendXOnXOff));
 			}
 		}
 
@@ -360,10 +360,10 @@ namespace MKY.IO.Ports
 				AssertNotDisposed();
 
 				SerialPortSettings settings = new SerialPortSettings();
-				settings.BaudRate = (XBaudRate)base.BaudRate;
-				settings.DataBits = (XDataBits)base.DataBits;
-				settings.Parity = (XParity)base.Parity;
-				settings.StopBits = (XStopBits)base.StopBits;
+				settings.BaudRate  = (XBaudRate)base.BaudRate;
+				settings.DataBits  = (XDataBits)base.DataBits;
+				settings.Parity    = (XParity)base.Parity;
+				settings.StopBits  = (XStopBits)base.StopBits;
 				settings.Handshake = (XHandshake)base.Handshake;
 
 				return (settings);
@@ -372,10 +372,10 @@ namespace MKY.IO.Ports
 			{
 				AssertNotDisposed();
 
-				base.BaudRate = (XBaudRate)value.BaudRate;
-				base.DataBits = (XDataBits)value.DataBits;
-				base.Parity = (XParity)value.Parity;
-				base.StopBits = (XStopBits)value.StopBits;
+				base.BaudRate  = (XBaudRate)value.BaudRate;
+				base.DataBits  = (XDataBits)value.DataBits;
+				base.Parity    = (XParity)value.Parity;
+				base.StopBits  = (XStopBits)value.StopBits;
 				base.Handshake = (XHandshake)value.Handshake;
 
 				OnPortSettingsChanged(new EventArgs());
@@ -424,12 +424,7 @@ namespace MKY.IO.Ports
 		public virtual void ToggleRts()
 		{
 			AssertNotDisposed();
-
-			if (HandshakeIsNotUsingRequestToSend)
-			{
-				this.RtsEnable = !this.RtsEnable;
-				OnPinChanged(new SerialPinChangedEventArgs());
-			}
+			this.RtsEnable = !this.RtsEnable;
 		}
 
 		/// <summary>
@@ -464,7 +459,7 @@ namespace MKY.IO.Ports
 		public virtual void ToggleDtr()
 		{
 			AssertNotDisposed();
-			DtrEnable = !DtrEnable;
+			this.DtrEnable = !this.DtrEnable;
 		}
 
 		/// <summary>
@@ -479,12 +474,12 @@ namespace MKY.IO.Ports
 				SerialPortControlPins pins = new SerialPortControlPins();
 
 				if (HandshakeIsNotUsingRequestToSend)
-					pins.Rts = base.RtsEnable;
+					pins.Rts = RtsEnable;
 				else
 					pins.Rts = true;
 
 				pins.Cts = CtsHolding;
-				pins.Dtr = base.DtrEnable;
+				pins.Dtr = DtrEnable;
 				pins.Dsr = DsrHolding;
 				pins.Cd  = CDHolding;
 

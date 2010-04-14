@@ -19,18 +19,18 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Diagnostics;
 using System.Threading;
+using System.Windows.Forms;
 
 using Microsoft.Win32.SafeHandles;
 
+using MKY.Utilities.Diagnostics;
 using MKY.Utilities.Event;
 using MKY.Utilities.Windows.Forms;
-using MKY.Utilities.Diagnostics;
 
 #endregion
 
@@ -48,6 +48,7 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		public static new event EventHandler<DeviceEventArgs> DeviceConnected;
+
 		/// <summary></summary>
 		public static new event EventHandler<DeviceEventArgs> DeviceDisconnected;
 
@@ -407,6 +408,8 @@ namespace MKY.IO.Usb
 		/// buffered.
 		/// </summary>
 		private delegate void AsyncReadCompletedDelegate();
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This field strictly belows to the method below and is therefore prefixed with the method's name.")]
 		private object AsyncReadCompletedSyncObj = new object();
 
 		private void AsyncReadCompleted(IAsyncResult result)

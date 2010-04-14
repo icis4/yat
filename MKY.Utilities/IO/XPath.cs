@@ -15,9 +15,9 @@
 //==================================================================================================
 
 using System;
-using System.Text;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 namespace MKY.Utilities.IO
 {
@@ -37,9 +37,9 @@ namespace MKY.Utilities.IO
 
 			if (path.Length <= length)                 // Path string too long ?
 				return (path);
-			                                           // Local path ?
+
 			if (path.IndexOf(Path.VolumeSeparatorChar) < 0)
-			{
+			{                                          // Local path ?
 				limitedPath = Types.XString.Left(path, 3) + "..." +
 							  Types.XString.Right(path, Math.Max(length - 6, 0));
 			}
@@ -326,9 +326,9 @@ namespace MKY.Utilities.IO
 					while ((di != null) && (di.FullName != commonPath))
 					{
 						nearRelativeDirectoryCount++;
-						                                   // actually, stepping in is
-						if (relativePath.Length > 0)       //   done by stepping out
-						{
+
+						if (relativePath.Length > 0)       // Actually, stepping in is
+						{                                  //   done by stepping out
 							relativePath.Insert(0, Path.DirectorySeparatorChar);
 							relativePath.Insert(0, di.Name);
 						}
@@ -382,9 +382,9 @@ namespace MKY.Utilities.IO
 				while ((di != null) && (di.FullName != commonPath)) // step into path B
 				{
 					farRelativeDirectoryCount++;
-					                                           // actually, stepping in is
-					if (relativePath.Length > commonPartIndex) //   done by stepping out
-					{
+
+					if (relativePath.Length > commonPartIndex) // actually, stepping in is
+					{                                          //   done by stepping out
 						relativePath.Insert(commonPartIndex, Path.DirectorySeparatorChar);
 						relativePath.Insert(commonPartIndex + 1, di.Name);
 					}
@@ -508,11 +508,7 @@ namespace MKY.Utilities.IO
 
 		#region DoPrepareDirectoryPath Method
 
-		private static void DoPrepareDirectoryPath
-			(
-			string path, out DirectoryInfo pathInfo,
-			out string dirPath, out DirectoryInfo dirInfo
-			)
+		private static void DoPrepareDirectoryPath(string path, out DirectoryInfo pathInfo, out string dirPath, out DirectoryInfo dirInfo)
 		{
 			try
 			{
@@ -549,12 +545,7 @@ namespace MKY.Utilities.IO
 
 		#region DoPrepareFilePath Method
 
-		private static void DoPrepareFilePath
-			(
-			string path, out DirectoryInfo pathInfo,
-			out string dirPath, out DirectoryInfo dirInfo,
-			out string fileName
-			)
+		private static void DoPrepareFilePath(string path, out DirectoryInfo pathInfo, out string dirPath, out DirectoryInfo dirInfo, out string fileName)
 		{
 			try
 			{
@@ -618,27 +609,13 @@ namespace MKY.Utilities.IO
 		public string RelativePath;
 
 		/// <summary>Creates a directory info compare result structure.</summary>
-		public XPathCompareResult
-			(
-			bool haveCommon
-			)
+		public XPathCompareResult(bool haveCommon)
+			: this (haveCommon, "")
 		{
-			HaveCommon = haveCommon;
-			CommonPath = null;
-			CommonDirectoryCount = 0;
-			AreRelative = false;
-			RelativeDirectoryCount = 0;
-			AreNearRelative = false;
-			NearRelativeDirectoryCount = 0;
-			RelativePath = "";
 		}
 
 		/// <summary>Creates a directory info compare result structure.</summary>
-		public XPathCompareResult
-			(
-			bool haveCommon,
-			string relativePath
-			)
+		public XPathCompareResult(bool haveCommon, string relativePath)
 		{
 			HaveCommon = haveCommon;
 			CommonPath = null;
@@ -651,31 +628,13 @@ namespace MKY.Utilities.IO
 		}
 
 		/// <summary>Creates a directory info compare result structure.</summary>
-		public XPathCompareResult
-			(
-			string commonPath, int commonDirectoryCount,
-			int relativeDirectoryCount,
-			string relativePath
-			)
+		public XPathCompareResult(string commonPath, int commonDirectoryCount, int relativeDirectoryCount, string relativePath)
+			: this (commonPath, commonDirectoryCount, relativeDirectoryCount, 0, relativePath)
 		{
-			HaveCommon = true;
-			CommonPath = commonPath;
-			CommonDirectoryCount = commonDirectoryCount;
-			AreRelative = true;
-			RelativeDirectoryCount = relativeDirectoryCount;
-			AreNearRelative = false;
-			NearRelativeDirectoryCount = 0;
-			RelativePath = relativePath;
 		}
 
 		/// <summary>Creates a directory info compare result structure.</summary>
-		public XPathCompareResult
-			(
-			string commonPath, int commonDirectoryCount,
-			int relativeDirectoryCount,
-			int nearRelativeDirectoryCount,
-			string relativePath
-			)
+		public XPathCompareResult(string commonPath, int commonDirectoryCount, int relativeDirectoryCount, int nearRelativeDirectoryCount, string relativePath)
 		{
 			HaveCommon = true;
 			CommonPath = commonPath;

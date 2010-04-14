@@ -21,9 +21,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using System.Threading;
-using System.ComponentModel;
 
 using MKY.Utilities.Event;
 
@@ -79,14 +79,19 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		public event EventHandler IOChanged;
+
 		/// <summary></summary>
 		public event EventHandler IOControlChanged;
+
 		/// <summary></summary>
 		public event EventHandler<IORequestEventArgs> IORequest;
+
 		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
+
 		/// <summary></summary>
 		public event EventHandler DataReceived;
+
 		/// <summary></summary>
 		public event EventHandler DataSent;
 

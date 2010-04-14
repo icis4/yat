@@ -71,7 +71,6 @@ namespace MKY.Utilities.Test.IO
 			{	@"X:\MyDir1\MyFile1.abc",			@"X:\MyDir2",						@"..\MyDir2",					@"..\MyDir1\MyFile1.abc",		},
 			{	@"X:\MyDir1\MyFile1.abc",			@"X:\MyDir2\MyFile2.abc",			@"..\MyDir2\MyFile2.abc",		@"..\MyDir1\MyFile1.abc",		},
 
-
 			// ---- Network ----
 
 			//	PATH A												PATH B												RESULT A						RESULT B

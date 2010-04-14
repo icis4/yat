@@ -67,7 +67,7 @@ namespace MKY.IO.Usb
 		{
 			Clear();
 			foreach (DeviceInfo di in HidDevice.GetDevices(this.usagePage, this.usage))
-				base.Add(di);
+				Add(di);
 			Sort();
 		}
 	}

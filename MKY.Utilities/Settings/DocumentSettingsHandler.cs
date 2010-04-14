@@ -15,8 +15,6 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -28,6 +26,7 @@ namespace MKY.Utilities.Settings
 	/// <summary>
 	/// Generic class to handle any kind of document settings, e.g. MDI application settings.
 	/// </summary>
+	/// <typeparam name="TDocumentSettings">The type of the settings.</typeparam>
 	public class DocumentSettingsHandler<TDocumentSettings>
 		where TDocumentSettings : Settings, new()
 	{
@@ -51,7 +50,7 @@ namespace MKY.Utilities.Settings
 		//==========================================================================================
 
 		/// <summary>
-		/// Handles document settings. Settings are stored in filePath
+		/// Handles document settings. Settings are stored in filePath.
 		/// <see cref="SettingsFilePath"/>
 		/// </summary>
 		public DocumentSettingsHandler()
@@ -60,7 +59,7 @@ namespace MKY.Utilities.Settings
 		}
 
 		/// <summary>
-		/// Handles document settings. Settings are stored in filePath
+		/// Handles document settings. Settings are stored in filePath.
 		/// <see cref="SettingsFilePath"/>
 		/// </summary>
 		public DocumentSettingsHandler(TDocumentSettings settings)

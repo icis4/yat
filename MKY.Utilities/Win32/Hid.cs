@@ -20,11 +20,9 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Globalization;
-using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
+
 using Microsoft.Win32.SafeHandles;
 
 using MKY.Utilities.Diagnostics;
@@ -55,6 +53,9 @@ namespace MKY.Utilities.Win32
 		/// <summary>
 		/// Class encapsulating native Win32 types, constants and functions.
 		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
 		public static class Native
 		{
 			#region Types
@@ -211,8 +212,6 @@ namespace MKY.Utilities.Win32
 
 			// HidD_GetConfiguration() is reserved for internal system use
 
-			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			private static extern bool HidD_GetFeature([In] SafeFileHandle HidDeviceObject, [Out] byte[] ReportBuffer, [In] UInt32 ReportBufferLength);
 			/// <summary>
 			/// Attempts to read a Feature report from the device.
 			/// </summary>
@@ -224,14 +223,15 @@ namespace MKY.Utilities.Win32
 				return (HidD_GetFeature(HidDeviceObject, ReportBuffer, (UInt32)ReportBuffer.Length));
 			}
 
+			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			private static extern bool HidD_GetFeature([In] SafeFileHandle HidDeviceObject, [Out] byte[] ReportBuffer, [In] UInt32 ReportBufferLength);
+
 			/// <remarks>
 			/// Public via <see cref="GetHidGuid()"/>.
 			/// </remarks>
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern void HidD_GetHidGuid([In, Out] ref System.Guid HidGuid);
 
-			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			private static extern bool HidD_GetIndexedString([In] SafeFileHandle HidDeviceObject, [In] UInt32 StringIndex, [Out] StringBuilder Buffer, [In] UInt32 BufferLength);
 			/// <summary></summary>
 			public static bool HidD_GetIndexedString(SafeFileHandle HidDeviceObject, int StringIndex, out string IndexedString)
 			{
@@ -246,7 +246,8 @@ namespace MKY.Utilities.Win32
 			}
 
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			private static extern bool HidD_GetInputReport([In] SafeFileHandle HidDeviceObject, [In, Out] byte[] ReportBuffer, [In] UInt32 ReportBufferLength);
+			private static extern bool HidD_GetIndexedString([In] SafeFileHandle HidDeviceObject, [In] UInt32 StringIndex, [Out] StringBuilder Buffer, [In] UInt32 BufferLength);
+
 			/// <summary>
 			/// Attempts to read an Input report from the device using a control transfer.
 			/// </summary>
@@ -263,7 +264,8 @@ namespace MKY.Utilities.Win32
 			}
 
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			private static extern bool HidD_GetManufacturerString([In] SafeFileHandle HidDeviceObject, [Out] StringBuilder Buffer, [In] UInt32 BufferLength);
+			private static extern bool HidD_GetInputReport([In] SafeFileHandle HidDeviceObject, [In, Out] byte[] ReportBuffer, [In] UInt32 ReportBufferLength);
+
 			/// <summary></summary>
 			public static bool HidD_GetManufacturerString(SafeFileHandle HidDeviceObject, out string Manufacturer)
 			{
@@ -277,6 +279,9 @@ namespace MKY.Utilities.Win32
 				return (false);
 			}
 
+			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			private static extern bool HidD_GetManufacturerString([In] SafeFileHandle HidDeviceObject, [Out] StringBuilder Buffer, [In] UInt32 BufferLength);
+
 			// HidD_GetMsGenreDescriptor() is reserved for internal system use
 
 			/// <summary>
@@ -289,18 +294,18 @@ namespace MKY.Utilities.Win32
 			/// </remarks>
 			/// <param name="HidDeviceObject">A handle to a device and an integer to hold the number of buffers.</param>
 			/// <param name="NumberBuffers">True on success, false on failure.</param>
-			/// <returns></returns>
 			[CLSCompliant(false)]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern bool HidD_GetNumInputBuffers([In] SafeFileHandle HidDeviceObject, [Out] out UInt32 NumberBuffers);
 
-			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			private static extern bool HidD_GetPhysicalDescriptor([In] SafeFileHandle HidDeviceObject, [Out] byte[] Buffer, [In] UInt32 BufferLength);
 			/// <summary></summary>
 			public static bool HidD_GetPhysicalDescriptor(SafeFileHandle HidDeviceObject, byte[] Buffer)
 			{
 				return (HidD_GetPhysicalDescriptor(HidDeviceObject, Buffer, (UInt32)Buffer.Length));
 			}
+
+			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			private static extern bool HidD_GetPhysicalDescriptor([In] SafeFileHandle HidDeviceObject, [Out] byte[] Buffer, [In] UInt32 BufferLength);
 
 			/// <summary>
 			/// Retrieves a pointer to a buffer containing information about the device's capabilities.
@@ -312,8 +317,6 @@ namespace MKY.Utilities.Win32
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern bool HidD_GetPreparsedData([In] SafeFileHandle HidDeviceObject, [Out] out IntPtr PreparsedData);
 
-			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			private static extern bool HidD_GetProductString([In] SafeFileHandle HidDeviceObject, [Out] StringBuilder Buffer, [In] UInt32 BufferLength);
 			/// <summary></summary>
 			public static bool HidD_GetProductString(SafeFileHandle HidDeviceObject, out string Product)
 			{
@@ -328,7 +331,8 @@ namespace MKY.Utilities.Win32
 			}
 
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			private static extern bool HidD_GetSerialNumberString([In] SafeFileHandle HidDeviceObject, [Out] StringBuilder Buffer, [In] UInt32 BufferLength);
+			private static extern bool HidD_GetProductString([In] SafeFileHandle HidDeviceObject, [Out] StringBuilder Buffer, [In] UInt32 BufferLength);
+
 			/// <summary></summary>
 			public static bool HidD_GetSerialNumberString(SafeFileHandle HidDeviceObject, out string SerialNumber)
 			{
@@ -342,10 +346,11 @@ namespace MKY.Utilities.Win32
 				return (false);
 			}
 
+			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			private static extern bool HidD_GetSerialNumberString([In] SafeFileHandle HidDeviceObject, [Out] StringBuilder Buffer, [In] UInt32 BufferLength);
+
 			// HidD_SetConfiguration() is reserved for internal system use
 
-			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			private static extern bool HidD_SetFeature([In] SafeFileHandle HidDeviceObject, [In] byte[] ReportBuffer, [In] UInt32 ReportBufferLength);
 			/// <summary>
 			/// Attempts to send a Feature report to the device.
 			/// </summary>
@@ -356,6 +361,9 @@ namespace MKY.Utilities.Win32
 			{
 				return (HidD_SetFeature(HidDeviceObject, ReportBuffer, (UInt32)ReportBuffer.Length));
 			}
+
+			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			private static extern bool HidD_SetFeature([In] SafeFileHandle HidDeviceObject, [In] byte[] ReportBuffer, [In] UInt32 ReportBufferLength);
 
 			/// <summary>
 			/// Sets the number of Input reports the host can store.
@@ -371,8 +379,6 @@ namespace MKY.Utilities.Win32
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern bool HidD_SetNumInputBuffers([In] SafeFileHandle HidDeviceObject, [In] UInt32 NumberBuffers);
 
-			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			private static extern bool HidD_SetOutputReport([In] SafeFileHandle HidDeviceObject, [In] byte[] ReportBuffer, [In] UInt32 ReportBufferLength);
 			/// <summary>
 			/// Attempts to send an Output report to the device using a control transfer.
 			/// </summary>
@@ -388,6 +394,9 @@ namespace MKY.Utilities.Win32
 				return (HidD_SetOutputReport(HidDeviceObject, ReportBuffer, (UInt32)ReportBuffer.Length));
 			}
 
+			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			private static extern bool HidD_SetOutputReport([In] SafeFileHandle HidDeviceObject, [In] byte[] ReportBuffer, [In] UInt32 ReportBufferLength);
+
 			/// <summary>
 			/// Find out a device's capabilities. For standard devices such as joysticks, you can find
 			/// out the specific capabilities of the device. For a custom device where the software
@@ -399,8 +408,6 @@ namespace MKY.Utilities.Win32
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern Int32 HidP_GetCaps([In] IntPtr PreparsedData, [In, Out] ref HIDP_CAPS Capabilities);
 
-			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			private static extern HIDP_STATUS HidP_GetValueCaps([In] HIDP_REPORT_TYPE ReportType, [In, Out] ref HIDP_VALUE_CAPS ValueCaps, [In] ref UInt32 ValueCapsLength, [In] IntPtr PreparsedData);
 			/// <summary>
 			/// Retrieves a buffer containing an array of HidP_ValueCaps structures. Each structure
 			/// defines the capabilities of one value. This application doesn't use this data.
@@ -415,6 +422,9 @@ namespace MKY.Utilities.Win32
 				UInt32 ValueCapsLength = (UInt32)Marshal.SizeOf(typeof(HIDP_VALUE_CAPS));
 				return (HidP_GetValueCaps(ReportType, ref ValueCaps, ref ValueCapsLength, PreparsedData));
 			}
+
+			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			private static extern HIDP_STATUS HidP_GetValueCaps([In] HIDP_REPORT_TYPE ReportType, [In, Out] ref HIDP_VALUE_CAPS ValueCaps, [In] ref UInt32 ValueCapsLength, [In] IntPtr PreparsedData);
 
 			#endregion
 		}
@@ -607,7 +617,6 @@ namespace MKY.Utilities.Win32
 		/// <returns>True on success, false on failure.</returns>
 		public static bool GetNumberOfInputBuffers(SafeFileHandle deviceHandle, out int numberOfInputBuffers)
 		{
-
 			try
 			{
 				bool success = false;

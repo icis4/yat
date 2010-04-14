@@ -46,7 +46,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 				PortName           = portName;
 				PortDescriptions   = portDescriptions;
 			}
-		};
+		}
 
 		#endregion
 

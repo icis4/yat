@@ -26,8 +26,10 @@ namespace MKY.IO.Serial
 	{
 		/// <summary></summary>
 		public const int FrameSize = 1024;
+
 		/// <summary></summary>
 		public const int SocketBufferSize = 2 * FrameSize;
+
 		/// <summary></summary>
 		public const int MessageBufferSize = 16 * FrameSize;
 	}

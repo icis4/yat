@@ -16,11 +16,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.IO;
 using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
 using System.Xml.XPath;
 
 namespace MKY.Utilities.Xml
@@ -30,8 +26,10 @@ namespace MKY.Utilities.Xml
 	{
 		/// <summary></summary>
 		public string[] XmlPath;
+
 		/// <summary></summary>
 		public string LocalName;
+
 		/// <summary></summary>
 		public string[] AlternateLocalNames;
 

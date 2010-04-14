@@ -58,7 +58,7 @@ namespace MKY.IO.Usb
 		{
 			Clear();
 			foreach (DeviceInfo di in Device.GetDevicesFromGuid(this.classGuid))
-				base.Add(di);
+				Add(di);
 			Sort();
 		}
 	}
