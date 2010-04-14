@@ -20,8 +20,8 @@
 //==================================================================================================
 
 using System;
-using System.Text;
 using System.Runtime.InteropServices;
+using System.Text;
 
 #endregion
 
@@ -49,6 +49,9 @@ namespace MKY.Utilities.Win32
 		/// <summary>
 		/// Class encapsulating native Win32 types, constants and functions.
 		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
 		private static class Native
 		{
 			#region Constants
@@ -97,12 +100,12 @@ namespace MKY.Utilities.Win32
 		public static string GetLastErrorMessage()
 		{
 			// Get the error code for the last API call.
-			Int32 errorCode = GetLastErrorCode();
+			int errorCode = GetLastErrorCode();
 
 			// Get the result message that corresponds to the code.
-			Int64 temp = 0;
+			long temp = 0;
 			StringBuilder message = new StringBuilder(256);
-			Int32 bytes = Native.FormatMessage(Native.FORMAT_MESSAGE_FROM_SYSTEM, ref temp, errorCode, 0, message, message.Capacity, IntPtr.Zero);
+			int bytes = Native.FormatMessage(Native.FORMAT_MESSAGE_FROM_SYSTEM, ref temp, errorCode, 0, message, message.Capacity, IntPtr.Zero);
 
 			// Subtract two characters from the message to strip EOL.
 			int eolLength = Environment.NewLine.Length;

@@ -15,8 +15,6 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
 
 namespace MKY.Utilities.Types
@@ -29,6 +27,7 @@ namespace MKY.Utilities.Types
 		/// <summary>
 		/// Converts value into binary string (e.g. "0000000000000000000000000000000000000000000000000000000000010100").
 		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1631:DocumentationTextMustMeetCharacterPercentage", Justification = "Sorry, 64 bits are that long...")]
 		[CLSCompliant(false)]
 		public static string ConvertToBinaryString(ulong value)
 		{
@@ -38,6 +37,7 @@ namespace MKY.Utilities.Types
 		/// <summary>
 		/// Converts value into binary string (e.g. "0000000000000000000000000000000000000000000000000000000000010100").
 		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1631:DocumentationTextMustMeetCharacterPercentage", Justification = "Sorry, 64 bits are that long...")]
 		[CLSCompliant(false)]
 		public static string ConvertToBinaryString(ulong value, ulong max)
 		{
@@ -65,9 +65,9 @@ namespace MKY.Utilities.Types
 		/// <summary>
 		/// Converts value into a string with the given numeric base.
 		/// </summary>
-		/// <param name="numericBase">Numeric base (0 to 9)</param>
-		/// <param name="value">Value to be converted</param>
-		/// <param name="max">Maximum value</param>
+		/// <param name="numericBase">Numeric base (0 to 9).</param>
+		/// <param name="value">Value to be converted.</param>
+		/// <param name="max">Maximum value.</param>
 		[CLSCompliant(false)]
 		public static string ConvertToNumericBaseString(int numericBase, ulong value, ulong max)
 		{
@@ -90,8 +90,8 @@ namespace MKY.Utilities.Types
 		/// Converts value into a byte array. Negative numbers can optionally be converted,
 		/// they are aligned to the specified boundary.
 		/// </summary>
-		/// <param name="value">Value to convert</param>
-		/// <returns>Converted byte array</returns>
+		/// <param name="value">Value to convert.</param>
+		/// <returns>Converted byte array.</returns>
 		[CLSCompliant(false)]
 		public static byte[] ConvertToByteArray(ulong value)
 		{
@@ -107,8 +107,8 @@ namespace MKY.Utilities.Types
 		/// byte boundary (e.g. 1/2/4/8 bytes). Set to 0 for
 		/// automatic expansion to next 1/2/4/8 byte boundary.
 		/// </param>
-		/// <param name="useBigEndian">Use big endian instead of little endian</param>
-		/// <returns>Converted byte array</returns>
+		/// <param name="useBigEndian">Use big endian instead of little endian.</param>
+		/// <returns>Converted byte array.</returns>
 		[CLSCompliant(false)]
 		public static byte[] ConvertToByteArray(ulong value, int boundary, bool useBigEndian)
 		{
@@ -121,8 +121,8 @@ namespace MKY.Utilities.Types
 		/// </summary>
 		/// <param name="value">Value to convert</param>
 		/// <param name="expandNegative">True to expand negative values.</param>
-		/// <param name="useBigEndian">Use big endian instead of little endian</param>
-		/// <returns>Converted byte array</returns>
+		/// <param name="useBigEndian">Use big endian instead of little endian.</param>
+		/// <returns>Converted byte array.</returns>
 		[CLSCompliant(false)]
 		public static byte[] ConvertToByteArray(ulong value, bool expandNegative, bool useBigEndian)
 		{
@@ -139,8 +139,8 @@ namespace MKY.Utilities.Types
 		/// automatic expansion to next 1/2/4/8 byte boundary.
 		/// </param>
 		/// <param name="expandNegative">True to expand negative values.</param>
-		/// <param name="useBigEndian">Use big endian instead of little endian</param>
-		/// <returns>Converted byte array</returns>
+		/// <param name="useBigEndian">Use big endian instead of little endian.</param>
+		/// <returns>Converted byte array.</returns>
 		[CLSCompliant(false)]
 		public static byte[] ConvertToByteArray(ulong value, int boundary, bool expandNegative, bool useBigEndian)
 		{
@@ -284,7 +284,7 @@ namespace MKY.Utilities.Types
 		/// Parses a string containing a value in any numeric base. String must not
 		/// contain leading or trailing non-numeric characters.
 		/// </summary>
-		/// <param name="numericBase">Numeric base (0 to 9)</param>
+		/// <param name="numericBase">Numeric base (0 to 9).</param>
 		/// <param name="parseString">String to be parsed.</param>
 		/// <param name="result">
 		/// When this method returns, contains the 64-bit unsigned value equivalent

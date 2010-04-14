@@ -16,9 +16,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Xml.Serialization;
-using System.Net;
 
 using MKY.Utilities.Net;
 
@@ -38,19 +38,25 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		public static readonly XIPHost DefaultRemoteHost = new XIPHost(CommonIPHost.Localhost);
+
 		/// <summary></summary>
 		public static readonly IPAddress DefaultResolvedRemoteIPAddress = IPAddress.Loopback;
+
 		/// <summary></summary>
 		public static readonly XNetworkInterface DefaultLocalInterface = new XNetworkInterface(CommonNetworkInterface.Any);
+
 		/// <summary></summary>
 		public static readonly IPAddress DefaultResolvedLocalIPAddress = IPAddress.Any;
 
 		/// <summary></summary>
 		public const int DefaultPort = 10000;
+
 		/// <summary></summary>
 		public const int DefaultRemotePort = DefaultPort;
+
 		/// <summary></summary>
 		public const int DefaultLocalTcpPort = DefaultPort;
+
 		/// <summary></summary>
 		public const int DefaultLocalUdpPort = DefaultPort + 1;
 
@@ -315,10 +321,10 @@ namespace MKY.IO.Serial
 
 		/// <summary>
 		/// Tries to resolve the IP address from <see cref="RemoteHost"/> and
-		/// stores it in <see cref="ResolvedRemoteIPAddress"/>
+		/// stores it in <see cref="ResolvedRemoteIPAddress"/>.
 		/// </summary>
 		/// <returns>
-		/// <c>true</c> if successfully resolved; <c>false</c> otherwise
+		/// <c>true</c> if successfully resolved; <c>false</c> otherwise.
 		/// </returns>
 		public virtual bool TryResolveIPAddresses()
 		{

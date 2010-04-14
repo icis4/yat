@@ -14,10 +14,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 using NUnit.Framework;
 
 using MKY.Utilities.Types;
@@ -51,7 +47,7 @@ namespace MKY.Utilities.Test.Types
 				DecString = decString;
 				HexString = hexString;
 			}
-		};
+		}
 
 		#endregion
 

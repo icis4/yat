@@ -48,8 +48,8 @@ New:
 Important changes:
 - <>(bug #<>)
 - Update to NUnit 2.5.3
-- Use of FxCop (feature request #<>)
-- Use of StyleCop (feature request #<>)
+- Use of FxCop (feature request #2970221)
+- Use of StyleCop (feature request #2970222)
 - Methods and properties marked "virtual", unless there are reasons against
 - Null reference safe implementation of Equals()
 - Selection and settings controls now clear contents when disabled

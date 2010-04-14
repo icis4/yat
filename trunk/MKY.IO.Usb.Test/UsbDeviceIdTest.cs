@@ -47,7 +47,7 @@ namespace MKY.IO.Usb.Test
 				ProductId    = productId;
 				Descriptions = descriptions;
 			}
-		};
+		}
 
 		#endregion
 

@@ -15,8 +15,8 @@
 //==================================================================================================
 
 using System;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
 using System.Windows.Forms;
 
 namespace MKY.Utilities.Diagnostics

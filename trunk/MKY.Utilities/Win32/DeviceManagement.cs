@@ -51,6 +51,9 @@ namespace MKY.Utilities.Win32
 		/// <summary>
 		/// Class encapsulating native Win32 types, constants and functions.
 		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
 		public static class Native
 		{
 			#region Types
@@ -107,7 +110,7 @@ namespace MKY.Utilities.Win32
 			/// <summary>
 			/// Two declarations for the DEV_BROADCAST_DEVICEINTERFACE structure.
 			/// Use this one in the call to RegisterDeviceNotification() and
-			/// in checking dbch_devicetype in a DEV_BROADCAST_HDR structure:
+			/// in checking dbch_devicetype in a DEV_BROADCAST_HDR structure.
 			/// </summary>
 			/// <remarks>
 			/// Must be a class because <see cref="Marshal.PtrToStructure(IntPtr, object)"/> and
@@ -115,6 +118,7 @@ namespace MKY.Utilities.Win32
 			/// </remarks>
 			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "See remarks above.")]
 			public class DEV_BROADCAST_DEVICEINTERFACE
 			{
 				public UInt32      dbcc_size;
@@ -130,6 +134,7 @@ namespace MKY.Utilities.Win32
 			/// </remarks>
 			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "See remarks above.")]
 			public class DEV_BROADCAST_HDR
 			{
 				public UInt32     dbch_size;
@@ -209,7 +214,6 @@ namespace MKY.Utilities.Win32
 			/// <summary>
 			/// Frees the memory reserved for the DeviceInfoSet returned by SetupDiGetClassDevs.
 			/// </summary>
-			/// <param name="DeviceInfoSet"></param>
 			/// <returns>True on success.</returns>
 			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern Int32 SetupDiDestroyDeviceInfoList([In] IntPtr DeviceInfoSet);
@@ -248,8 +252,8 @@ namespace MKY.Utilities.Win32
 			/// To retrieve the information, call this function twice. The first time returns the size of the structure.
 			/// The second time returns a pointer to the data.
 			/// </summary>
-			/// <param name="DeviceInfoSet">DeviceInfoSet returned by SetupDiGetClassDevs</param>
-			/// <param name="DeviceInterfaceData">SP_DEVICE_INTERFACE_DATA structure returned by SetupDiEnumDeviceInterfaces</param>
+			/// <param name="DeviceInfoSet">DeviceInfoSet returned by SetupDiGetClassDevs.</param>
+			/// <param name="DeviceInterfaceData">SP_DEVICE_INTERFACE_DATA structure returned by SetupDiEnumDeviceInterfaces.</param>
 			/// <param name="DeviceInterfaceDetailData">A returned pointer to an SP_DEVICE_INTERFACE_DETAIL_DATA.
 			/// Structure to receive information about the specified interface.</param>
 			/// <param name="DeviceInterfaceDetailDataSize">The size of the SP_DEVICE_INTERFACE_DETAIL_DATA structure.</param>
@@ -402,9 +406,12 @@ namespace MKY.Utilities.Win32
 			try
 			{
 				Native.UnregisterDeviceNotification(deviceNotificationHandle);
+
 				// Ignore failures.
 			}
-			catch {}
+			catch
+			{
+			}
 		}
 
 		/// <summary>

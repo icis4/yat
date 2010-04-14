@@ -24,14 +24,16 @@ namespace MKY.Utilities.Generic
 	/// Variance workaround, allows casts of generics (e.g. List of device to List of object)
 	/// </summary>
 	/// <remarks>
-	/// Taken from "C# Programming Guide" topic "Variance in Generic Types"
+	/// Taken from "C# Programming Guide" topic "Variance in Generic Types".
 	/// </remarks>
 	public static class VarianceWorkaround
 	{
 		/// <summary>
-		/// Simple variance for single method, variance in one direction only 
+		/// Simple variance for single method, variance in one direction only.
 		/// </summary>
-		public static void Add<S, D>(List<S> source, List<D> destination)
+		/// <typeparam name="S">IList source.</typeparam>
+		/// <typeparam name="D">IList destination.</typeparam>
+		public static void Add<S, D>(IList<S> source, IList<D> destination)
 			where S : D
 		{
 			foreach (S sourceElement in source)
@@ -41,8 +43,10 @@ namespace MKY.Utilities.Generic
 		}
 
 		/// <summary>
-		/// Variance for enummerator, variance in one direction only so type expressinos are natural
+		/// Variance for enummerator, variance in one direction only so type expressinos are natural.
 		/// </summary>
+		/// <typeparam name="S">IEnumerable source.</typeparam>
+		/// <typeparam name="D">IEnumerable destination.</typeparam>
 		public static IEnumerable<D> Convert<S, D>(IEnumerable<S> source)
 			where S : D
 		{
@@ -50,8 +54,10 @@ namespace MKY.Utilities.Generic
 		}
 
 		/// <summary>
-		/// Wrapper for enummerator variance
+		/// Wrapper for enummerator variance.
 		/// </summary>
+		/// <typeparam name="S">IEnumerable source.</typeparam>
+		/// <typeparam name="D">IEnumerable destination.</typeparam>
 		public class EnumerableWrapper<S, D> : IEnumerable<D>
 			where S : D
 		{
@@ -112,8 +118,10 @@ namespace MKY.Utilities.Generic
 		}
 
 		/// <summary>
-		/// Variance for collection, variance in both directions, causes issues similar to existing array variance
+		/// Variance for collection, variance in both directions, causes issues similar to existing array variance.
 		/// </summary>
+		/// <typeparam name="S">ICollection source.</typeparam>
+		/// <typeparam name="D">ICollection destination.</typeparam>
 		public static ICollection<D> Convert<S, D>(ICollection<S> source)
 			where S : D
 		{
@@ -121,8 +129,10 @@ namespace MKY.Utilities.Generic
 		}
 
 		/// <summary>
-		/// Wrapper for collection variance
+		/// Wrapper for collection variance.
 		/// </summary>
+		/// <typeparam name="S">ICollection source.</typeparam>
+		/// <typeparam name="D">ICollection destination.</typeparam>
 		public class CollectionWrapper<S, D> : EnumerableWrapper<S, D>, ICollection<D>
 			where S : D
 		{
@@ -136,19 +146,15 @@ namespace MKY.Utilities.Generic
 			}
 
 			/// <summary>
-			/// variance going the wrong way ... 
-			/// ... can yield exceptions at runtime 
+			/// Variance going the wrong way...
+			/// ...can yield exceptions at runtime.
 			/// </summary>
 			public virtual void Add(D item)
 			{
 				if (item is S)
-				{
 					this.source.Add((S)item);
-				}
 				else
-				{
 					throw (new Exception("Type mismatch due to type hole introduced by variance!"));
-				}
 			}
 
 			/// <summary></summary>
@@ -158,8 +164,8 @@ namespace MKY.Utilities.Generic
 			}
 
 			/// <summary>
-			/// variance going the wrong way ... 
-			/// ... but the semantics of the method yields reasonable semantics
+			/// Variance going the wrong way...
+			/// ...but the semantics of the method yields reasonable semantics.
 			/// </summary>
 			public virtual bool Contains(D item)
 			{
@@ -174,7 +180,7 @@ namespace MKY.Utilities.Generic
 			}
 
 			/// <summary>
-			/// variance going the right way ... 
+			/// Variance going the right way...
 			/// </summary>
 			public virtual void CopyTo(D[] array, int arrayIndex)
 			{
@@ -197,8 +203,8 @@ namespace MKY.Utilities.Generic
 			}
 
 			/// <summary>
-			/// variance going the wrong way ... 
-			/// ... but the semantics of the method yields reasonable semantics
+			/// Variance going the wrong way...
+			/// ...but the semantics of the method yields reasonable semantics.
 			/// </summary>
 			public virtual bool Remove(D item)
 			{
@@ -214,8 +220,10 @@ namespace MKY.Utilities.Generic
 		}
 
 		/// <summary>
-		/// Variance for collection, variance in both directions, causes issues similar to existing array variance
+		/// Variance for collection, variance in both directions, causes issues similar to existing array variance.
 		/// </summary>
+		/// <typeparam name="S">IList source.</typeparam>
+		/// <typeparam name="D">IList destination.</typeparam>
 		public static IList<D> Convert<S, D>(IList<S> source)
 			where S : D
 		{
@@ -223,8 +231,10 @@ namespace MKY.Utilities.Generic
 		}
 
 		/// <summary>
-		/// Wrapper for list variance
+		/// Wrapper for list variance.
 		/// </summary>
+		/// <typeparam name="S">IList source.</typeparam>
+		/// <typeparam name="D">IList destination.</typeparam>
 		public class ListWrapper<S, D> : CollectionWrapper<S, D>, IList<D>
 			where S : D
 		{
@@ -251,8 +261,8 @@ namespace MKY.Utilities.Generic
 			}
 
 			/// <summary>
-			/// variance the wrong way ...
-			/// ... can throw exceptions at runtime
+			/// Variance the wrong way...
+			/// ...can throw exceptions at runtime.
 			/// </summary>
 			public virtual void Insert(int index, D item)
 			{

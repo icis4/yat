@@ -20,13 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-//using System.Diagnostics;
-//using System.Runtime.InteropServices;
-//using System.Threading;
-//using Microsoft.Win32.SafeHandles;
-
-//using MKY.Utilities.Diagnostics;
-//using MKY.Utilities.Win32;
 
 #endregion
 

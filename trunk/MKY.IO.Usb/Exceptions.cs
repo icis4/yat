@@ -47,8 +47,10 @@ namespace MKY.IO.Usb
 	{
 		/// <summary></summary>
 		public readonly string Method;
+
 		/// <summary></summary>
 		public readonly int ErrorCode;
+
 		/// <summary></summary>
 		public readonly string NativeMessage;
 

@@ -16,9 +16,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
-using System.Diagnostics;
 
 using MKY.Utilities.Event;
 
@@ -93,14 +93,19 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		public event EventHandler IOChanged;
+
 		/// <summary></summary>
 		public event EventHandler IOControlChanged;
+
 		/// <summary></summary>
 		public event EventHandler DataReceived;
+
 		/// <summary></summary>
 		public event EventHandler DataSent;
+
 		/// <summary></summary>
 		public event EventHandler<IORequestEventArgs> IORequest;
+
 		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
 
@@ -391,12 +396,19 @@ namespace MKY.IO.Serial
 
 			SetStateAndNotify(SocketState.Listening);
 
-			this.socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketServer(System.Net.Sockets.ProtocolType.Tcp,
-																	 ALAZ.SystemEx.NetEx.SocketsEx.CallbackThreadType.ctWorkerThread,
-																	(ALAZ.SystemEx.NetEx.SocketsEx.ISocketService)this,
-																	 ALAZ.SystemEx.NetEx.SocketsEx.DelimiterType.dtNone, null,
-																	 SocketDefaults.SocketBufferSize, SocketDefaults.MessageBufferSize,
-																	 Timeout.Infinite, Timeout.Infinite);
+			this.socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketServer
+				(
+				System.Net.Sockets.ProtocolType.Tcp,
+				ALAZ.SystemEx.NetEx.SocketsEx.CallbackThreadType.ctWorkerThread,
+				(ALAZ.SystemEx.NetEx.SocketsEx.ISocketService)this,
+				ALAZ.SystemEx.NetEx.SocketsEx.DelimiterType.dtNone,
+				null,
+				SocketDefaults.SocketBufferSize,
+				SocketDefaults.MessageBufferSize,
+				Timeout.Infinite,
+				Timeout.Infinite
+				);
+
 			this.socket.AddListener("YAT TCP Server Listener", new System.Net.IPEndPoint(System.Net.IPAddress.Any, this.localPort));
 			this.socket.Start(); // The ALAZ socket will be started asynchronously
 		}

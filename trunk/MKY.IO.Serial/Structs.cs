@@ -28,7 +28,7 @@ namespace MKY.IO.Serial
 		[XmlElement("Enabled")]
 		public bool Enabled;
 
-		/// <summary>Interval of reconnect in ms</summary>
+		/// <summary>Interval of reconnect in ms.</summary>
 		[XmlElement("Interval")]
 		public int Interval;
 

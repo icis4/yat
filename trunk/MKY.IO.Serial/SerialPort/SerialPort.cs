@@ -31,9 +31,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using System.Threading;
-using System.ComponentModel;
 
 using MKY.Utilities.Event;
 
@@ -188,14 +188,19 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		public event EventHandler IOChanged;
+
 		/// <summary></summary>
 		public event EventHandler IOControlChanged;
+
 		/// <summary></summary>
 		public event EventHandler DataReceived;
+
 		/// <summary></summary>
 		public event EventHandler DataSent;
+
 		/// <summary></summary>
 		public event EventHandler<IORequestEventArgs> IORequest;
+
 		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
 
@@ -744,7 +749,7 @@ namespace MKY.IO.Serial
 
 		private void port_PinChanged(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
-			if (this.state == State.Opened) // Ensure not to forward any events during closing anymore
+			if (this.state == State.Opened) // Ensure not to forward any events during closing anymore.
 			{
 				port_PinChangedDelegate asyncInvoker = new port_PinChangedDelegate(port_PinChangedAsync);
 				asyncInvoker.BeginInvoke(sender, e, null, null);
@@ -781,7 +786,7 @@ namespace MKY.IO.Serial
 
 		private void port_ErrorReceived(object sender, MKY.IO.Ports.SerialErrorReceivedEventArgs e)
 		{
-			if (this.state == State.Opened) // Ensure not to forward any events during closing anymore
+			if (this.state == State.Opened) // Ensure not to forward any events during closing anymore.
 			{
 				port_ErrorReceivedDelegate asyncInvoker = new port_ErrorReceivedDelegate(port_ErrorReceivedAsync);
 				asyncInvoker.BeginInvoke(sender, e, null, null);

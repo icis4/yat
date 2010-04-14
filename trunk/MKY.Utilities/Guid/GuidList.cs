@@ -21,9 +21,9 @@ using System.Text;
 namespace MKY.Utilities.Guid
 {
 	/// <summary>
-	/// List with additional methods to handle items providing a <see cref="Guid"/>
+	/// List with additional methods to handle items providing a <see cref="Guid"/>.
 	/// </summary>
-	/// <typeparam name="T">Type that implements <see cref="IGuidProvider"/></typeparam>
+	/// <typeparam name="T">Type that implements <see cref="IGuidProvider"/>.</typeparam>
 	public class GuidList<T> : List<T>
 		where T : IGuidProvider
 	{

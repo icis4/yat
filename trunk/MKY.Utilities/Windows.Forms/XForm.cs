@@ -35,7 +35,7 @@ namespace MKY.Utilities.Windows.Forms
 		/// </summary>
 		/// <param name="parent">Parent form.</param>
 		/// <param name="child">Child form to be placed to the center of the parent.</param>
-		/// <returns>Center parent location</returns>
+		/// <returns>Center parent location.</returns>
 		public static Point CalculateManualCenterParentLocation(Form parent, Form child)
 		{
 			int left = parent.Left + (parent.Width  / 2) - (child.Width  / 2);

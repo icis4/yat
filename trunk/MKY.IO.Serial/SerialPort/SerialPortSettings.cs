@@ -32,8 +32,10 @@ namespace MKY.IO.Serial
 	{
 		/// <summary></summary>
 		public static readonly AutoRetry AutoReopenDefault = new AutoRetry(true, 2000);
+
 		/// <summary></summary>
 		public const bool ReplaceParityErrorsDefault = false;
+
 		/// <summary></summary>
 		public const byte ParityErrorReplacementDefault = 0x00;
 

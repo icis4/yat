@@ -37,7 +37,7 @@ namespace MKY.IO.Usb
 		Audio               = 0x01,
 		CdcControl          = 0x02,
 		Hid                 = 0x03,
-		// Reserved           0x04
+		//// Reserved         0x04
 		Physical            = 0x05,
 		Image               = 0x06,
 		Printer             = 0x07,
@@ -45,7 +45,7 @@ namespace MKY.IO.Usb
 		Hub                 = 0x09,
 		CdcData             = 0x0A,
 		SmartCard           = 0x0B,
-		// Reserved           0x0C
+		//// Reserved         0x0C
 		ContentSecurity     = 0x0D,
 		Video               = 0x0E,
 		PersonalHealthcare  = 0x0F,
@@ -127,9 +127,9 @@ namespace MKY.IO.Usb
 	{
 		GetStatus        = 0x00,
 		ClearFeature     = 0x01,
-		//                 0x02 is reserved 
+		////               0x02 is reserved 
 		SetFeature       = 0x03,
-		//                 0x04 is reserved
+		////               0x04 is reserved
 		SetAddress       = 0x05,
 		GetDescriptor    = 0x06,
 		SetDescriptor    = 0x07,
@@ -197,14 +197,14 @@ namespace MKY.IO.Usb
 		Telephony                    = 0x0B,
 		Consumer                     = 0x0C,
 		Digitizer                    = 0x0D,
-		// Reserved                    0x0E
+		//// Reserved                  0x0E
 		PID                          = 0x0F,
 		Unicode                      = 0x10,
-		// Reserved                    0x11..0x13
+		//// Reserved                  0x11..0x13
 		AlphanumericDisplay          = 0x14,
-		// Reserved                    0x15..0x3F
+		//// Reserved                  0x15..0x3F
 		MedicalInstruments           = 0x40,
-		// Reserved                    0x41..0x7F
+		//// Reserved                  0x41..0x7F
 		Monitor_1                    = 0x80,
 		Monitor_2                    = 0x81,
 		Monitor_3                    = 0x82,
@@ -213,15 +213,15 @@ namespace MKY.IO.Usb
 		Power_2                      = 0x85,
 		Power_3                      = 0x86,
 		Power_4                      = 0x87,
-		// Reserved                    0x88..0x8B
+		//// Reserved                  0x88..0x8B
 		BarCodeScanner               = 0x8C,
 		Scale                        = 0x8D,
 		MagneticStripeReadingDevices = 0x8E,
 		PointOfSale                  = 0x8F,
 		CameraControl                = 0x90,
 		Arcade                       = 0x91,
-		// Reserved                    0x92..0xFEFF
-		// Vendor-defined            0xFF00..0xFFFF
+		//// Reserved                  0x92..0xFEFF
+		//// Vendor-defined          0xFF00..0xFFFF
 	}
 
 	#region HidUsagePage XEnum
@@ -231,7 +231,7 @@ namespace MKY.IO.Usb
 	/// </summary>
 	public class XHidUsagePage : XEnum
 	{
-		/// <summary>Default is <see cref="HidUsagePage.Unknown"/></summary>
+		/// <summary>Default is <see cref="HidUsagePage.Unknown"/>.</summary>
 		public XHidUsagePage()
 			: base(HidUsagePage.Unknown)
 		{
@@ -328,18 +328,18 @@ namespace MKY.IO.Usb
 	/// </summary>
 	public enum HidUsage
 	{
-		Unknown   =   -1,
-		Undefined = 0x00,
-		Pointer   = 0x01,
-		Mouse     = 0x02,
-		// Reserved 0x03,
-		Joystick  = 0x04,
-		GamePad   = 0x05,
-		Keyboard  = 0x06,
-		Keypad    = 0x07,
-		MultiAxis = 0x08,
-		TabletPC  = 0x09,
-		// See document above.
+		Unknown     =   -1,
+		Undefined   = 0x00,
+		Pointer     = 0x01,
+		Mouse       = 0x02,
+		//// Reserved 0x03,
+		Joystick    = 0x04,
+		GamePad     = 0x05,
+		Keyboard    = 0x06,
+		Keypad      = 0x07,
+		MultiAxis   = 0x08,
+		TabletPC    = 0x09,
+		//// See document above.
 	}
 
 	#region HidUsage XEnum
@@ -349,7 +349,7 @@ namespace MKY.IO.Usb
 	/// </summary>
 	public class XHidUsage : XEnum
 	{
-		/// <summary>Default is <see cref="HidUsage.Unknown"/></summary>
+		/// <summary>Default is <see cref="HidUsage.Unknown"/>.</summary>
 		public XHidUsage()
 			: base(HidUsage.Unknown)
 		{

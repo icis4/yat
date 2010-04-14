@@ -15,8 +15,8 @@
 //==================================================================================================
 
 using System;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
 using System.Windows.Forms;
 
 namespace MKY.Utilities.Diagnostics
@@ -120,7 +120,7 @@ namespace MKY.Utilities.Diagnostics
 		}
 
 		/// <summary>
-		///Writes the properties of a <see cref="FileStream"/> to <see cref="System.Diagnostics.Debug"/>.
+		/// Writes the properties of a <see cref="FileStream"/> to <see cref="System.Diagnostics.Debug"/>.
 		/// </summary>
 		[Conditional("DEBUG")]
 		public static void WriteFileStream(object obj, FileStream fs, string additionalMessage)

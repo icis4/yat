@@ -15,8 +15,6 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Globalization;
 
 using NUnit.Framework;
@@ -72,7 +70,7 @@ namespace MKY.Utilities.Test.Types
 
 				ByteArray = byteArray;
 			}
-		};
+		}
 
 		#endregion
 

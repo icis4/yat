@@ -19,12 +19,13 @@
 //==================================================================================================
 
 using System;
-using System.Text;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
+
 using Microsoft.Win32.SafeHandles;
 
 using MKY.Utilities.Event;
@@ -46,6 +47,7 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		public static event EventHandler<DeviceEventArgs> DeviceConnected;
+
 		/// <summary></summary>
 		public static event EventHandler<DeviceEventArgs> DeviceDisconnected;
 
@@ -84,7 +86,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Returns the GUID for the given device class.
 		/// </summary>
-		/// <param name="deviceClass">USB device class</param>
+		/// <param name="deviceClass">USB device class.</param>
 		public static Guid GetGuidFromDeviceClass(DeviceClass deviceClass)
 		{
 			switch (deviceClass)

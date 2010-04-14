@@ -14,6 +14,12 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+// warnings for each undocumented member below. Documenting each member makes little sense
+// since they pretty much tell their purpose and documentation tags between the members
+// makes the code less readable.
+#pragma warning disable 1591
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,9 +29,7 @@ namespace MKY.IO.Serial
 	/// <summary></summary>
 	public enum IORequest
 	{
-		/// <summary></summary>
 		Open,
-		/// <summary></summary>
 		Close,
 	}
 }

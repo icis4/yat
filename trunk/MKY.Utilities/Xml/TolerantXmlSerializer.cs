@@ -30,9 +30,8 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -286,10 +285,10 @@ namespace MKY.Utilities.Xml
 									while (inputNavigator.MoveToNextAttribute());
 								}
 							}
-							// in case of <c>null</c> values and sequences, input may contain attributes
-							// that output doesn't, then try to copy complete node
 							else
 							{
+								// In case of <c>null</c> values and sequences, input may contain
+								// attributes that output doesn't, then try to copy complete node.
 								TryToCopyNode(inputNavigator.Clone(), outputNavigator.Clone());
 							}
 						}
@@ -326,10 +325,10 @@ namespace MKY.Utilities.Xml
 									}
 								}
 							}
-							// in case of <c>null</c> values and sequences, input may contain children
-							// that output doesn't, then try to copy complete node
 							else
 							{
+								// In case of <c>null</c> values and sequences, input may contain
+								// children that output doesn't, then try to copy complete node.
 								TryToCopyNode(inputNavigator, outputNavigator);
 							}
 						}

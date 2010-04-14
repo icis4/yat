@@ -14,9 +14,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -32,7 +29,7 @@ namespace MKY.Utilities.Drawing
 		/// Can be used for user drawn controls.
 		/// </summary>
 		/// <param name="contentAlignment">ContentAlignment to be converted.</param>
-		/// <returns>Converted TextFormatFlags</returns>
+		/// <returns>Converted TextFormatFlags.</returns>
 		public static TextFormatFlags ConvertContentAlignmentToTextFormatFlags(ContentAlignment contentAlignment)
 		{
 			return (ApplyContentAlignmentToTextFormatFlags(contentAlignment, TextFormatFlags.Default));
@@ -44,41 +41,41 @@ namespace MKY.Utilities.Drawing
 		/// </summary>
 		/// <param name="contentAlignment">ContentAlignment to be converted.</param>
 		/// <param name="textFormatFlags">TextFormatFlags to be changed.</param>
-		/// <returns>Changed TextFormatFlags</returns>
+		/// <returns>Changed TextFormatFlags.</returns>
 		public static TextFormatFlags ApplyContentAlignmentToTextFormatFlags(ContentAlignment contentAlignment, TextFormatFlags textFormatFlags)
 		{
 			// ATTENTION
-			// Do not care about TextFormatFlags.Top and TextFormatFlags.Left; their values are 0
+			// Do not care about TextFormatFlags.Top and TextFormatFlags.Left; their values are 0.
 
-			// clear alignment related flags
-			//textFormatFlags &= ~TextFormatFlags.Top;
+			// Clear alignment related flags.
+		////textFormatFlags &= ~TextFormatFlags.Top;
 			textFormatFlags &= ~TextFormatFlags.VerticalCenter;
 			textFormatFlags &= ~TextFormatFlags.Bottom;
 
-			//textFormatFlags &= ~TextFormatFlags.Left;
+		////textFormatFlags &= ~TextFormatFlags.Left;
 			textFormatFlags &= ~TextFormatFlags.HorizontalCenter;
 			textFormatFlags &= ~TextFormatFlags.Right;
 
-			// set alignment related flags
+			// Set alignment related flags.
 			switch (contentAlignment)
 			{
 				case ContentAlignment.TopLeft:
-					//textFormatFlags |= TextFormatFlags.Top;
-					//textFormatFlags |= TextFormatFlags.Left;
+				////textFormatFlags |= TextFormatFlags.Top;
+				////textFormatFlags |= TextFormatFlags.Left;
 					break;
 
 				case ContentAlignment.MiddleLeft:
 					textFormatFlags |= TextFormatFlags.VerticalCenter;
-					//textFormatFlags |= TextFormatFlags.Left;
+				////textFormatFlags |= TextFormatFlags.Left;
 					break;
 
 				case ContentAlignment.BottomLeft:
 					textFormatFlags |= TextFormatFlags.Bottom;
-					//textFormatFlags |= TextFormatFlags.Left;
+				////textFormatFlags |= TextFormatFlags.Left;
 					break;
 
 				case ContentAlignment.TopCenter:
-					//textFormatFlags |= TextFormatFlags.Top;
+				////textFormatFlags |= TextFormatFlags.Top;
 					textFormatFlags |= TextFormatFlags.HorizontalCenter;
 					break;
 
@@ -93,7 +90,7 @@ namespace MKY.Utilities.Drawing
 					break;
 
 				case ContentAlignment.TopRight:
-					//textFormatFlags |= TextFormatFlags.Top;
+				////textFormatFlags |= TextFormatFlags.Top;
 					textFormatFlags |= TextFormatFlags.Right;
 					break;
 

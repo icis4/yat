@@ -42,7 +42,7 @@ namespace MKY.IO.Usb
 		{
 			Clear();
 			foreach (DeviceInfo di in SerialHidDevice.GetDevices())
-				base.Add(di);
+				Add(di);
 			Sort();
 		}
 	}

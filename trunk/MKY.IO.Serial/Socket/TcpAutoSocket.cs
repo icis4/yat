@@ -16,9 +16,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
-using System.Diagnostics;
 
 using MKY.Utilities.Event;
 
@@ -109,14 +109,19 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		public event EventHandler IOChanged;
+
 		/// <summary></summary>
 		public event EventHandler IOControlChanged;
+
 		/// <summary></summary>
 		public event EventHandler DataReceived;
+
 		/// <summary></summary>
 		public event EventHandler DataSent;
+
 		/// <summary></summary>
 		public event EventHandler<IORequestEventArgs> IORequest;
+
 		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
 
@@ -562,6 +567,7 @@ namespace MKY.IO.Serial
 			// The ALAZ sockets by default stop synchronously. However, due to some other issues
 			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
 			StopSockets();
+
 			// \remind
 			//DisposeSockets();
 
@@ -576,6 +582,7 @@ namespace MKY.IO.Serial
 			// The ALAZ sockets by default stop synchronously. However, due to some other issues
 			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
 			StopSockets();
+
 			// \remind
 			//DisposeSockets();
 

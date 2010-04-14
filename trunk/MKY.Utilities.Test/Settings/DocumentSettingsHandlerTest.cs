@@ -15,15 +15,12 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
 using System.Xml.Serialization;
 
 using NUnit.Framework;
 
 using MKY.Utilities.Diagnostics;
-using MKY.Utilities.Settings;
 
 namespace MKY.Utilities.Test.Settings
 {
@@ -67,7 +64,7 @@ namespace MKY.Utilities.Test.Settings
 				TypeToSerialize = typeToSerialize;
 				TypeToDeserialize = typeToDeserialize;
 			}
-		};
+		}
 
 		/// <summary>
 		/// The following classes serve to test what happens if different versions of a type are
@@ -81,7 +78,7 @@ namespace MKY.Utilities.Test.Settings
 			public int Data1 = _11;
 			/// <summary></summary>
 			public int Data2 = _12;
-		};
+		}
 
 		/// <summary>
 		/// V2 adds a third element.
@@ -96,7 +93,7 @@ namespace MKY.Utilities.Test.Settings
 			public int Data2 = _22;
 			/// <summary></summary>
 			public int Data3 = _23;
-		};
+		}
 
 		/// <summary>
 		/// V3 removes the second element.
@@ -109,7 +106,7 @@ namespace MKY.Utilities.Test.Settings
 			public int Data1 = _31;
 			/// <summary></summary>
 			public int Data3 = _33;
-		};
+		}
 
 		#endregion
 

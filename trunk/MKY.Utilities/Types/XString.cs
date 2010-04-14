@@ -59,7 +59,7 @@ namespace MKY.Utilities.Types
 		}
 
 		/// <summary>
-		/// Returns whether "str" contains any of the "searchChars"
+		/// Returns whether "str" contains any of the "searchChars".
 		/// </summary>
 		public static bool Contains(string str, char[] searchChars)
 		{

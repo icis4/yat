@@ -24,18 +24,22 @@ namespace MKY.Utilities.Net
 {
 	#region Enum CommonIPHost
 
+	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+	// warnings for each undocumented member below. Documenting each member makes little sense
+	// since they pretty much tell their purpose and documentation tags between the members
+	// makes the code less readable.
+	#pragma warning disable 1591
+
 	/// <summary></summary>
 	public enum CommonIPHost
 	{
-		/// <summary></summary>
 		Localhost,
-		/// <summary></summary>
 		IPv4Localhost,
-		/// <summary></summary>
 		IPv6Localhost,
-		/// <summary></summary>
 		Other,
 	}
+
+	#pragma warning restore 1591
 
 	#endregion
 
@@ -55,7 +59,7 @@ namespace MKY.Utilities.Net
 
 		private IPAddress otherAddress = IPAddress.None;
 
-		/// <summary>Default is <see cref="CommonIPHost.Localhost"/></summary>
+		/// <summary>Default is <see cref="CommonIPHost.Localhost"/>.</summary>
 		public XIPHost()
 			: base(CommonIPHost.Localhost)
 		{
