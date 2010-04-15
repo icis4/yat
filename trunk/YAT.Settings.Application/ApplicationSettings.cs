@@ -34,7 +34,6 @@ namespace YAT.Settings.Application
 		/// <summary>
 		/// Loads settings. So far, there are only local user settings.
 		/// </summary>
-		/// <returns></returns>
 		public static bool Load()
 		{
 			return (settingsHandler.LoadLocalUser());

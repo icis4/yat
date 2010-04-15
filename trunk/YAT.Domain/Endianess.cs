@@ -30,9 +30,10 @@ namespace YAT.Domain
 	/// <summary></summary>
 	public enum Endianess
 	{
-		/// <summary>e.g. Network, Motorola</summary>
+		/// <summary>e.g. Network, Motorola.</summary>
 		BigEndian,
-		/// <summary>e.g. Intel</summary>
+
+		/// <summary>e.g. Intel.</summary>
 		LittleEndian
 	}
 
@@ -51,7 +52,7 @@ namespace YAT.Domain
 
 		#endregion
 
-		/// <summary>Default is <see cref="Endianess.BigEndian"/></summary>
+		/// <summary>Default is <see cref="Endianess.BigEndian"/>.</summary>
 		public XEndianess()
 			: base(Endianess.BigEndian)
 		{

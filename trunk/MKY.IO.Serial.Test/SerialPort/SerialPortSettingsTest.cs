@@ -14,14 +14,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using NUnit.Framework;
-
-using MKY.IO.Serial;
 
 namespace MKY.IO.Serial.Test.SerialPort
 {

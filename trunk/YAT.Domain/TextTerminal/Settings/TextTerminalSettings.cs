@@ -28,6 +28,7 @@ namespace YAT.Domain.Settings
 	{
 		/// <summary></summary>
 		public static readonly string DefaultEol = (string)XEol.Parse(Environment.NewLine);
+
 		/// <summary></summary>
 		public static readonly int DefaultEncoding = (XEncoding)(System.Text.Encoding.Default);
 

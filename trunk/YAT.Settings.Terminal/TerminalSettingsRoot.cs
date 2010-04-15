@@ -73,21 +73,21 @@ namespace YAT.Settings.Terminal
 		public virtual string FileType
 		{
 			get { return ("YAT Terminal Settings"); }
-			set { } // do nothing
+			set { } // Do nothing.
 		}
 
 		[XmlElement("Warning")]
 		public virtual string Warning
 		{
 			get { return ("Modifying this file may cause undefined behaviour!"); }
-			set { } // do nothing
+			set { } // Do nothing.
 		}
 
 		[XmlElement("ProductVersion")]
 		public virtual string ProductVersion
 		{
 			get { return (this.productVersion); }
-			set { } // do nothing
+			set { } // Do nothing.
 		}
 
 		[XmlElement("Saved")]
@@ -106,6 +106,7 @@ namespace YAT.Settings.Terminal
 				if (value != this.autoSaved)
 				{
 					this.autoSaved = value;
+
 					// Do not set changed.
 				}
 			}
@@ -379,12 +380,12 @@ namespace YAT.Settings.Terminal
 			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
+				// Do not compare AutoSaved.
 				return
 					(
 					(this.productVersion == value.productVersion) &&
 					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
 					);
-				// Do not compare AutoSaved.
 			}
 			return (false);
 		}

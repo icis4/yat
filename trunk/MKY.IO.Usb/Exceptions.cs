@@ -59,8 +59,8 @@ namespace MKY.IO.Usb
 			: base(message)
 		{
 			Method        = method;
-			ErrorCode     = Utilities.Win32.Debug.GetLastErrorCode();
-			NativeMessage = Utilities.Win32.Debug.GetLastErrorMessage();
+			ErrorCode     = Win32.Debug.GetLastErrorCode();
+			NativeMessage = Win32.Debug.GetLastErrorMessage();
 		}
 
 		/// <summary></summary>

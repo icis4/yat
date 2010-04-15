@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -25,7 +24,6 @@ using NUnit.Framework;
 using MKY.Utilities.Diagnostics;
 using MKY.Utilities.Recent;
 
-using YAT.Domain.Settings;
 using YAT.Model.Settings;
 using YAT.Model.Types;
 using YAT.Settings.Terminal;

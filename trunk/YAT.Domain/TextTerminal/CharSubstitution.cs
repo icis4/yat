@@ -32,8 +32,10 @@ namespace YAT.Domain
 	{
 		/// <summary></summary>
 		None,
+
 		/// <summary></summary>
 		ToUpper,
+
 		/// <summary></summary>
 		ToLower,
 	}
@@ -53,7 +55,7 @@ namespace YAT.Domain
 
 		#endregion
 
-		/// <summary>Default is <see cref="CharSubstitution.None"/></summary>
+		/// <summary>Default is <see cref="CharSubstitution.None"/>.</summary>
 		public XCharSubstitution()
 			: base(CharSubstitution.None)
 		{

@@ -24,6 +24,7 @@ using System.Windows.Forms;
 
 namespace YAT.Gui.Forms
 {
+	/// <summary></summary>
 	public partial class Preferences : Form
 	{
 		#region Fields
@@ -138,7 +139,7 @@ namespace YAT.Gui.Forms
 
 		private void button_Cancel_Click(object sender, EventArgs e)
 		{
-			// do nothing
+			// Do nothing.
 		}
 
 		private void button_Defaults_Click(object sender, EventArgs e)

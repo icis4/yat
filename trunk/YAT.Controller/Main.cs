@@ -15,10 +15,8 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 
 using YAT.Settings;
 using YAT.Settings.Application;
@@ -288,7 +286,7 @@ namespace YAT.Controller
 			return (CheckParsedArgsForConsistency());
 		}
 
-		// write help text onto console
+		// Write help text onto console.
 		private void WriteHelp()
 		{
 			foreach (string line in Title)
@@ -312,13 +310,13 @@ namespace YAT.Controller
 			Console.WriteLine();
 		}
 
-		// parse args for help
+		// Parse args for help.
 		private int ParseArgsForHelp(string[] commandLineArgs)
 		{
 			int argsParsed = 0;
 			foreach (string arg in commandLineArgs)
 			{
-				// check for help args
+				// Check for help args.
 				foreach (string helpArg in HelpArg)
 				{
 					if (string.Compare(arg, helpArg, true) == 0)
@@ -331,20 +329,20 @@ namespace YAT.Controller
 			return (argsParsed);
 		}
 
-		// parse args for file
+		// Parse args for file.
 		private int ParseArgsForFile(string[] commandLineArgs)
 		{
 			int argsParsed = 0;
 			foreach (string arg in commandLineArgs)
 			{
-				// check for workspace file args
+				// Check for workspace file args.
 				if (ExtensionSettings.IsWorkspaceFile(Path.GetExtension(arg)))
 				{
 					this.requestedFilePath = arg;
 					argsParsed++;
 				}
 
-				// check for terminal file args
+				// Check for terminal file args.
 				if (ExtensionSettings.IsTerminalFile(Path.GetExtension(arg)))
 				{
 					this.requestedFilePath = arg;
@@ -354,7 +352,7 @@ namespace YAT.Controller
 			return (argsParsed);
 		}
 
-		// parse args for recent
+		// Parse args for recent.
 		private int ParseArgsForRecent(string[] commandLineArgs)
 		{
 			int argsParsed = 0;
@@ -377,10 +375,10 @@ namespace YAT.Controller
 			return (argsParsed);
 		}
 
-		// check whether parsed command line args are consistent
-		bool CheckParsedArgsForConsistency()
+		// Check whether parsed command line args are consistent.
+		private bool CheckParsedArgsForConsistency()
 		{
-			// nothing to check yet, always return true
+			// Nothing to check yet, always return <c>true</c>.
 			return (true);
 		}
 

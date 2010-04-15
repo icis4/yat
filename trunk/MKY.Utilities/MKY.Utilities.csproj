@@ -99,15 +99,6 @@
     <Compile Include="Net\Browser.cs" />
     <Compile Include="Types\XUInt64.cs" />
     <Compile Include="Usb\Descriptors.cs" />
-    <Compile Include="Win32\Constants.cs" />
-    <Compile Include="Win32\Handle.cs" />
-    <Compile Include="Win32\Security.cs" />
-    <Compile Include="Win32\WinUsb.cs" />
-    <Compile Include="Win32\Version.cs" />
-    <Compile Include="Win32\Debug.cs" />
-    <Compile Include="Win32\DeviceManagement.cs" />
-    <Compile Include="Win32\FileIO.cs" />
-    <Compile Include="Win32\Hid.cs" />
     <Compile Include="Windows.Forms\NativeMessageHandler.cs" />
     <Compile Include="Windows.Forms\XForm.cs" />
     <Compile Include="Windows.Forms\XOrientation.cs" />

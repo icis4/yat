@@ -16,16 +16,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
-using System.Diagnostics;
 
-using MKY.Utilities.Guid;
 using MKY.Utilities.Event;
-using MKY.Utilities.Recent;
+using MKY.Utilities.Guid;
 using MKY.Utilities.Settings;
-using MKY.Utilities.IO;
 
 using YAT.Settings;
 using YAT.Settings.Application;
@@ -77,13 +74,16 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public event EventHandler<WorkspaceEventArgs> WorkspaceOpened;
+
 		/// <summary></summary>
 		public event EventHandler WorkspaceClosed;
 
 		/// <summary></summary>
 		public event EventHandler<StatusTextEventArgs> FixedStatusTextRequest;
+
 		/// <summary></summary>
 		public event EventHandler<StatusTextEventArgs> TimedStatusTextRequest;
+
 		/// <summary></summary>
 		public event EventHandler<MessageInputEventArgs> MessageInputRequest;
 
@@ -509,8 +509,8 @@ namespace YAT.Model
 		/// Opens YAT and opens the workspace or terminal file given. This method can directly
 		/// be called from the main providing the command line arguments.
 		/// </summary>
-		/// <param name="filePath">Workspace or terminal file</param>
-		/// <returns><c>true</c> if successfully opened the workspace or terminal</returns>
+		/// <param name="filePath">Workspace or terminal file.</param>
+		/// <returns><c>true</c> if successfully opened the workspace or terminal.</returns>
 		public virtual bool OpenFromFile(string filePath)
 		{
 			AssertNotDisposed();

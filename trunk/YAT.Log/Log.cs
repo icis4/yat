@@ -15,8 +15,8 @@
 //==================================================================================================
 
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 
 using MKY.Utilities.IO;
@@ -28,15 +28,19 @@ namespace YAT.Log
 	{
 		/// <summary></summary>
 		RawTx = 0,
+
 		/// <summary></summary>
 		RawBidir = 1,
+
 		/// <summary></summary>
 		RawRx = 2,
 
 		/// <summary></summary>
 		NeatTx = 3,
+
 		/// <summary></summary>
 		NeatBidir = 4,
+
 		/// <summary></summary>
 		NeatRx = 5
 	}
@@ -276,8 +280,10 @@ namespace YAT.Log
 
 			/// <summary></summary>
 			protected abstract void OpenWriter(FileStream stream);
+
 			/// <summary></summary>
 			protected abstract void FlushWriter();
+
 			/// <summary></summary>
 			protected abstract void CloseWriter();
 
@@ -298,7 +304,7 @@ namespace YAT.Log
 			/// <summary></summary>
 			protected virtual void StopFlushTimer()
 			{
-				this.flushTimer = null; ;
+				this.flushTimer = null;
 			}
 
 			/// <summary></summary>

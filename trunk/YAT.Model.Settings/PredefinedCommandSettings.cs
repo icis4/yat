@@ -102,8 +102,8 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		/// <param name="selectedPage">Index 0..max-1.</param>
-		/// <param name="selectedCommand">Index 0..max-1.</param>
+		/// <param name="selectedPage">Page index 0..max-1.</param>
+		/// <param name="selectedCommand">Command index 0..max-1.</param>
 		/// <param name="command">Command to be set.</param>
 		public virtual void SetCommand(int selectedPage, int selectedCommand, Command command)
 		{

@@ -58,21 +58,21 @@ namespace YAT.Settings.Workspace
 		public virtual string FileType
 		{
 			get { return ("YAT Workspace Settings"); }
-			set { } // do nothing
+			set { } // Do nothing.
 		}
 
 		[XmlElement("Warning")]
 		public virtual string Warning
 		{
 			get { return ("Modifying this file may cause undefined behaviour!"); }
-			set { } // do nothing
+			set { } // Do nothing.
 		}
 
 		[XmlElement("Saved")]
 		public virtual SaveInfo Saved
 		{
 			get { return (new SaveInfo(DateTime.Now, Environment.UserName)); }
-			set { } // do nothing
+			set { } // Do nothing.
 		}
 
 		[XmlElement("ProductVersion")]
@@ -91,6 +91,7 @@ namespace YAT.Settings.Workspace
 				if (value != this.autoSaved)
 				{
 					this.autoSaved = value;
+
 					// Do not set changed.
 				}
 			}
@@ -154,12 +155,12 @@ namespace YAT.Settings.Workspace
 			// Ensure that object.operator!=() is called.
 			if ((object)value != null)
 			{
+				// Do not compare AutoSaved.
 				return
 					(
 					(this.productVersion == value.productVersion) &&
 					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
 					);
-				// Do not compare AutoSaved.
 			}
 			return (false);
 		}

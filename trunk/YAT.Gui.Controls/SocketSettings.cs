@@ -15,18 +15,15 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 
-using MKY.Utilities.Event;
 using MKY.IO.Serial;
+using MKY.Utilities.Event;
 
 namespace YAT.Gui.Controls
 {
+	/// <summary></summary>
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("TcpClientAutoReconnectChanged")]
 	public partial class SocketSettings : UserControl

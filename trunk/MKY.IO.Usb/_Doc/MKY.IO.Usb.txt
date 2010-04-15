@@ -48,12 +48,13 @@ Architecture
 
 For MKY.IO.Usb, the following main parts are involved:
 - MKY.Utilities.Usb   => Basic USB specific utilities
-- MKY.Utilities.Win32 => Wrappers for Win32 API functions and types (system32/kernel32/user32/setupapi/hid.dll)
+- MKY.Win32           => Wrappers for Win32 API functions and types (system32/kernel32/user32/setupapi/hid.dll)
 - MKY.IO.Usb          => The USB library itself
 - MKY.IO.Serial       => Wrappers that implement the generic interface IIOProvider for various kinds of serial communications
 
 In addition, there are the following supporting projects:
 - MKY.Utilities.Test  => NUnit based test environment for MKY.Utilities
+- MKY.Win32.Test      => NUnit based test environment for MKY.Win32
 - MKY.IO.Usb.Demo     => Demo client showing the use of MKY.IO.Usb
 - MKY.IO.Usb.Test     => NUnit based test environment for MKY.IO.Usb
 - MKY.IO.Serial.Test  => NUnit based test environment for MKY.IO.Serial

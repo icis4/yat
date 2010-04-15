@@ -28,10 +28,13 @@ namespace YAT.Domain
 	{
 		/// <summary></summary>
 		None,
+
 		/// <summary></summary>
 		Tx,
+
 		/// <summary></summary>
 		Bidir,
+
 		/// <summary></summary>
 		Rx
 	}

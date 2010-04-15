@@ -16,11 +16,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Xml.Serialization;
 using System.Globalization;
-
-using MKY.Utilities.Types;
+using System.Xml.Serialization;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -152,24 +149,18 @@ namespace YAT.Domain
 			/// <summary></summary>
 			public TimeStamp()
 				: base("(" + DateTime.Now.ToString("HH:mm:ss.ff", DateTimeFormatInfo.InvariantInfo) + ")")
-//				: base("(" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.ffzzz", DateTimeFormatInfo.InvariantInfo) + ")")
-//				: base("(" + DateTime.Now.ToLongTimeString() + "." + XString.Left((DateTime.Now.Millisecond/10).ToString("D2"), 2) + ")")
 			{
 			}
 
 			/// <summary></summary>
 			public TimeStamp(DateTime timeStamp)
 				: base("(" + timeStamp.ToString("HH:mm:ss.ff", DateTimeFormatInfo.InvariantInfo) + ")")
-			//				: base("(" + timeStamp.ToString("yyyy-MM-dd HH:mm:ss.ffzzz", DateTimeFormatInfo.InvariantInfo) + ")")
-			//				: base("(" + timeStamp.ToLongTimeString() + "." + XString.Left((timeStamp.Millisecond/10).ToString("D2"), 2) + ")")
 			{
 			}
 
 			/// <summary></summary>
 			public TimeStamp(SerialDirection direction, DateTime timeStamp)
 				: base(direction, "(" + timeStamp.ToString("HH:mm:ss.ff", DateTimeFormatInfo.InvariantInfo) + ")")
-//				: base(direction, "(" + timeStamp.ToString("yyyy-MM-dd HH:mm:ss.ffzzz", DateTimeFormatInfo.InvariantInfo) + ")")
-//				: base(direction, "(" + timeStamp.ToLongTimeString() + "." + XString.Left((timeStamp.Millisecond/10).ToString("D2"), 2) + ")")
 			{
 			}
 

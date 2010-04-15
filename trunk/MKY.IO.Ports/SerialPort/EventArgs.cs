@@ -30,7 +30,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public SerialDataReceivedEventArgs()
 		{
-			// do nothing
+			// Do nothing.
 		}
 
 		/// <summary></summary>
@@ -50,7 +50,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public SerialErrorReceivedEventArgs()
 		{
-			// do nothing
+			// Do nothing.
 		}
 
 		/// <summary></summary>
@@ -70,7 +70,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public SerialPinChangedEventArgs()
 		{
-			// do nothing
+			// Do nothing.
 		}
 
 		/// <summary></summary>

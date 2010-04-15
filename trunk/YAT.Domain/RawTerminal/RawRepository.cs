@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code

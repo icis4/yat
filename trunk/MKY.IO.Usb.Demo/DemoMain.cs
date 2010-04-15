@@ -14,11 +14,6 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using MKY.IO.Usb;
 
 namespace MKY.IO.Usb.Demo
 {

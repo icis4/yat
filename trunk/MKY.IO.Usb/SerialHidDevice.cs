@@ -107,12 +107,12 @@ namespace MKY.IO.Usb
 
 		private static void RegisterStaticDeviceNotificationHandler()
 		{
-			Utilities.Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationWindow.Handle, HidGuid, out staticDeviceNotificationHandle);
+			Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationWindow.Handle, HidGuid, out staticDeviceNotificationHandle);
 		}
 
 		private static void UnregisterStaticDeviceNotificationHandler()
 		{
-			Utilities.Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
+			Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
 		}
 
 		private static void StaticDeviceNotificationHandler(ref Message m)
@@ -123,7 +123,7 @@ namespace MKY.IO.Usb
 				(de == DeviceEvent.Disconnected))
 			{
 				string devicePath;
-				if (Utilities.Win32.DeviceManagement.DeviceChangeMessageToDevicePath(m, out devicePath))
+				if (Win32.DeviceManagement.DeviceChangeMessageToDevicePath(m, out devicePath))
 				{
 					DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Hid, devicePath);
 					switch (de)
@@ -381,10 +381,10 @@ namespace MKY.IO.Usb
 		private bool CreateStream()
 		{
 			SafeFileHandle readWriteHandle;
-			if (!Utilities.Win32.Hid.CreateSharedReadWriteHandle(SystemPath, out readWriteHandle))
+			if (!Win32.Hid.CreateSharedReadWriteHandle(SystemPath, out readWriteHandle))
 				return (false);
 
-			if (!Utilities.Win32.Hid.FlushQueue(readWriteHandle))
+			if (!Win32.Hid.FlushQueue(readWriteHandle))
 				return (false);
 
 			this.stream = new FileStream(readWriteHandle, FileAccess.Read | FileAccess.Write, InputReportLength, true);

@@ -16,8 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace YAT.Model.Types
 {
@@ -43,7 +41,7 @@ namespace YAT.Model.Types
 		{
 			// Perfom a deep copy of the pages to break command references
 			foreach (PredefinedCommandPage pcp in collection)
-				base.Add(new PredefinedCommandPage(pcp));
+				Add(new PredefinedCommandPage(pcp));
 		}
 	}
 }

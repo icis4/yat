@@ -28,6 +28,7 @@ namespace YAT.Domain
 	{
 		/// <summary></summary>
 		StartIO = MKY.IO.Serial.IORequest.Open,
+
 		/// <summary></summary>
 		StopIO = MKY.IO.Serial.IORequest.Close,
 	}

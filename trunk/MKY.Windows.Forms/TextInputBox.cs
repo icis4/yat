@@ -116,7 +116,7 @@ namespace MKY.Windows.Forms
 
 		private void button_Cancel_Click(object sender, EventArgs e)
 		{
-			// do nothing
+			// Do nothing.
 		}
 
 		#endregion

@@ -24,6 +24,7 @@ namespace YAT.Log
 	{
 		/// <summary></summary>
 		Raw,
+
 		/// <summary></summary>
 		Neat
 	}
@@ -33,8 +34,10 @@ namespace YAT.Log
 	{
 		/// <summary></summary>
 		Tx,
+
 		/// <summary></summary>
 		Bidir,
+
 		/// <summary></summary>
 		Rx
 	}
@@ -44,6 +47,7 @@ namespace YAT.Log
 	{
 		/// <summary></summary>
 		Create,
+
 		/// <summary></summary>
 		Append
 	}
@@ -53,6 +57,7 @@ namespace YAT.Log
 	{
 		/// <summary></summary>
 		public readonly string Separator;
+
 		/// <summary></summary>
 		public readonly string Description;
 
@@ -121,29 +126,39 @@ namespace YAT.Log
 
 		/// <summary></summary>
 		public const string UnderscoreToString = "Underscore (this.)";
+
 		/// <summary></summary>
 		public const string DashToString = "Dash (-)";
+
 		/// <summary></summary>
 		public const string DashWithSpacesToString = "Dash with spaces ( - )";
+
 		/// <summary></summary>
 		public const string BallToString = "Ball (°)";
+
 		/// <summary></summary>
 		public const string BallWithSpacesToString = "Ball with spaces ( ° )";
+
 		/// <summary></summary>
 		public const string NoneToString = "None";
 
 		/// <summary></summary>
-		public readonly static FileNameSeparator Underscore = new FileNameSeparator("this.", UnderscoreToString);
+		public static readonly FileNameSeparator Underscore = new FileNameSeparator("this.", UnderscoreToString);
+
 		/// <summary></summary>
-		public readonly static FileNameSeparator Dash = new FileNameSeparator("-", DashToString);
+		public static readonly FileNameSeparator Dash = new FileNameSeparator("-", DashToString);
+
 		/// <summary></summary>
-		public readonly static FileNameSeparator DashWithSpaces = new FileNameSeparator(" - ", DashWithSpacesToString);
+		public static readonly FileNameSeparator DashWithSpaces = new FileNameSeparator(" - ", DashWithSpacesToString);
+
 		/// <summary></summary>
-		public readonly static FileNameSeparator Ball = new FileNameSeparator("°", BallToString);
+		public static readonly FileNameSeparator Ball = new FileNameSeparator("°", BallToString);
+
 		/// <summary></summary>
-		public readonly static FileNameSeparator BallWithSpaces = new FileNameSeparator(" ° ", BallWithSpacesToString);
+		public static readonly FileNameSeparator BallWithSpaces = new FileNameSeparator(" ° ", BallWithSpacesToString);
+
 		/// <summary></summary>
-		public readonly static FileNameSeparator None = new FileNameSeparator("", NoneToString);
+		public static readonly FileNameSeparator None = new FileNameSeparator("", NoneToString);
 
 		/// <summary></summary>
 		public static FileNameSeparator[] Items

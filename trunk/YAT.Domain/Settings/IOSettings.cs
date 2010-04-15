@@ -27,8 +27,10 @@ namespace YAT.Domain.Settings
 	{
 		/// <summary></summary>
 		public const Domain.IOType IOTypeDefault = Domain.IOType.SerialPort;
+
 		/// <summary></summary>
 		public const string SerialParityErrorReplacementDefault = @"\h(00)";
+
 		/// <summary></summary>
 		public const Endianess EndianessDefault = Endianess.BigEndian;
 

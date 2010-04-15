@@ -27,6 +27,7 @@ namespace YAT.Domain.Settings
 	{
 		/// <summary></summary>
 		public const bool KeepCommandDefault = true;
+
 		/// <summary></summary>
 		public const bool CopyPredefinedDefault = false;
 

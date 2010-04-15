@@ -15,17 +15,13 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 
 using YAT.Utilities;
 
 namespace YAT.Gui.Forms
 {
+	/// <summary></summary>
 	public partial class Help : System.Windows.Forms.Form
 	{
 		/// <summary>

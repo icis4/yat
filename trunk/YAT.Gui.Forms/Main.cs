@@ -17,11 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
-using System.IO;
 
 using MKY.Utilities.IO;
 using MKY.Utilities.Settings;
@@ -31,17 +27,25 @@ using MKY.Utilities.Windows.Forms;
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
-using YAT.Settings.Workspace;
-
-using YAT.Utilities;
 
 namespace YAT.Gui.Forms
 {
 	/// <summary>
-	/// Main form, provides setup dialogs and hosts terminal forms (MDI forms)
+	/// Main form, provides setup dialogs and hosts terminal forms (MDI forms).
 	/// </summary>
 	public partial class Main : Form
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		// Status
+		private const string DefaultStatusText = "Ready";
+		private const int TimedStatusInterval = 2000;
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -49,17 +53,13 @@ namespace YAT.Gui.Forms
 
 		// Startup
 		private bool isStartingUp = true;
-		// Not needed yet: private bool isSettingControls = false;
+		//// Not needed yet: private bool isSettingControls = false;
 		private bool isClosingFromForm = false;
 		private bool isClosingFromModel = false;
 
 		// Model
 		private Model.Main main;
 		private Model.Workspace workspace;
-
-		// Status
-		private const string DefaultStatusText = "Ready";
-		private const int TimedStatusInterval = 2000;
 
 		#endregion
 
@@ -1267,8 +1267,7 @@ namespace YAT.Gui.Forms
 				switch (status)
 				{
 					case Status.ChildActivated: return (childText + " activated");
-					//case Status.ChildActive:  return (childText + " active");
-					case Status.ChildActive:    return (""); // display nothing to keep information lower
+					case Status.ChildActive:    return (""); // Display nothing to limit information.
 					case Status.ChildChanged:   return (childText + " changed");
 					case Status.ChildSaved:     return (childText + " saved");
 					case Status.ChildClosed:    return (childText + " closed");

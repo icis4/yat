@@ -15,20 +15,18 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 
-using MKY.Utilities.Types;
 using MKY.Utilities.Event;
+using MKY.Utilities.Types;
 
 using YAT.Model.Types;
 
 namespace YAT.Gui.Controls
 {
+	/// <summary></summary>
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("SendCommandRequest")]
 	public partial class PredefinedCommands : UserControl

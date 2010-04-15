@@ -15,17 +15,14 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 
 using YAT.Gui.Utilities;
 
 namespace YAT.Gui.Forms
 {
+	/// <summary></summary>
 	public partial class AdvancedTerminalSettings : Form
 	{
 		#region Fields
@@ -308,7 +305,7 @@ namespace YAT.Gui.Forms
 
 		private void button_Cancel_Click(object sender, EventArgs e)
 		{
-			// do nothing
+			// Do nothing.
 		}
 
 		private void button_Defaults_Click(object sender, EventArgs e)

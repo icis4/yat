@@ -18,7 +18,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
@@ -794,39 +793,38 @@ namespace YAT.Gui.Controls
 		/// Neither calls <see cref="ListBox.BeginUpdate()"/> nor <see cref="ListBox.EndUpdate()"/>.
 		/// If performance requires it, the calling function must do so.
 		/// </remarks>
-		/// <param name="element"></param>
 		private void AddElementToListBox(Domain.DisplayElement element)
 		{
 			FastListBox flb = fastListBox_Monitor;
 
-			// If first line, add element to a new line
+			// If first line, add element to a new line.
 			if (flb.Items.Count <= 0)
 			{
 				flb.Items.Add(new Domain.DisplayLine(element));
 			}
 			else
 			{
-				// Get current line
+				// Get current line.
 				int lastLineIndex = flb.Items.Count - 1;
 				Domain.DisplayLine current = flb.Items[lastLineIndex] as Domain.DisplayLine;
 
-				// If first element, add element to line
+				// If first element, add element to line.
 				if (current.Count <= 0)
 				{
 					current.Add(element);
 				}
 				else
 				{
-					// If current line has ended, add element to a new line
-					// Otherwise, simply add element to current line
+					// If current line has ended, add element to a new line.
+					// Otherwise, simply add element to current line.
 					int lastElementIndex = current.Count - 1;
 					if (current[lastElementIndex] is Domain.DisplayElement.LineBreak)
 					{
-						// Remove lines if maximum exceeded
+						// Remove lines if maximum exceeded.
 						while (flb.Items.Count >= (this.maxLineCount))
 							flb.Items.RemoveAt(0);
 
-						// Add element to a new line
+						// Add element to a new line.
 						flb.Items.Add(new Domain.DisplayLine(element));
 					}
 					else

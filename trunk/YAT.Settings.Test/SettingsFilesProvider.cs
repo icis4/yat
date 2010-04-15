@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
 
 namespace YAT.Settings.Test
@@ -62,6 +61,7 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		public readonly Dictionary<TerminalSettingsTestCases, string> TerminalFilePaths;
+
 		/// <summary></summary>
 		public readonly Dictionary<WorkspaceSettingsTestCases, string> WorkspaceFilePaths;
 
@@ -105,16 +105,22 @@ namespace YAT.Settings.Test
 
 		/// <summary></summary>
 		public static readonly SettingsFilePaths FilePaths_V1_99_12;
+
 		/// <summary></summary>
 		public static readonly SettingsFilePaths FilePaths_V1_99_13;
+
 		/// <summary></summary>
 		public static readonly SettingsFilePaths FilePaths_V1_99_17;
+
 		/// <summary></summary>
 		public static readonly SettingsFilePaths FilePaths_V1_99_18;
+
 		/// <summary></summary>
 		public static readonly SettingsFilePaths FilePaths_V1_99_19;
+
 		/// <summary></summary>
 		public static readonly SettingsFilePaths FilePaths_V1_99_20;
+
 		/// <summary></summary>
 		public static readonly SettingsFilePaths FilePaths_V1_99_22;
 

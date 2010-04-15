@@ -28,8 +28,10 @@ namespace YAT.Domain
 	{
 		/// <summary></summary>
 		None = 0,
+
 		/// <summary></summary>
 		Tx   = 1,
+
 		/// <summary></summary>
 		Rx   = 2,
 	}

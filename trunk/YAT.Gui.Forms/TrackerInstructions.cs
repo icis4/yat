@@ -26,6 +26,7 @@ using YAT.Utilities;
 
 namespace YAT.Gui.Forms
 {
+	/// <summary></summary>
 	public partial class TrackerInstructions : Form
 	{
 		public enum Tracker

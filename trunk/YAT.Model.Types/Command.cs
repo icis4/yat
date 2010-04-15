@@ -39,10 +39,13 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		public const string EnterCommandText = "<Enter a command...>";
+
 		/// <summary></summary>
 		public const string DefineCommandText = "<Define...>";
+
 		/// <summary></summary>
 		public const string MultiLineCommandText = "<Multi line...>";
+
 		/// <summary></summary>
 		public const string UndefinedFilePathText = "<Set a file...>";
 

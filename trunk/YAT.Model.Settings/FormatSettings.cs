@@ -15,10 +15,8 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.Serialization;
 using System.Drawing;
+using System.Xml.Serialization;
 
 using YAT.Model.Types;
 
