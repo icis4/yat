@@ -15,22 +15,18 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 
 using MKY.Utilities.Types;
 
 using YAT.Settings;
 using YAT.Settings.Application;
-using YAT.Settings.Terminal;
 
 namespace YAT.Gui.Forms
 {
+	/// <summary></summary>
 	public partial class LogSettings : System.Windows.Forms.Form
 	{
 		#region Fields
@@ -353,7 +349,7 @@ namespace YAT.Gui.Forms
 
 		private void button_Cancel_Click(object sender, EventArgs e)
 		{
-			// do nothing
+			// Do nothing.
 		}
 
 		private void button_Defaults_Click(object sender, EventArgs e)
@@ -466,6 +462,7 @@ namespace YAT.Gui.Forms
 		// Validation
 		//------------------------------------------------------------------------------------------
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
 		private bool ValidateFilenameChars(string filenameChars, string title)
 		{
 			StringWriter invalid = new StringWriter();
@@ -502,14 +499,14 @@ namespace YAT.Gui.Forms
 			MessageBox.Show
 				(
 				this,
-				"To avoid naming conflicts, raw and neat log files must " +
-				"have different extensions. Choose a different extension.",
+				"To avoid naming conflicts, raw and neat log files must have different extensions. Choose a different extension.",
 				"Extension Conflict",
 				MessageBoxButtons.OK,
 				MessageBoxIcon.Exclamation
 				);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Message too long.")]
 		private bool ResolveNamingConflicts()
 		{
 			if ((this.settings_Form.SameRawAndNeat) && (this.settings_Form.RawExtension == this.settings_Form.NeatExtension) &&
@@ -518,11 +515,9 @@ namespace YAT.Gui.Forms
 				switch (MessageBox.Show
 					(
 					this,
-					"To avoid naming conflicts, files must either be placed in " +
-					"format subdirectories or named by format (Raw/Neat). Do you " +
-					"want to place the files in subdirectories (Yes) or name " +
-					"them by format (No)? You can also press Cancel and set " +
-					"different extensions.",
+					"To avoid naming conflicts, files must either be placed in format subdirectories or named by format (Raw/Neat). " +
+						"Do you want to place the files in subdirectories (Yes) or name them by format (No)? You can also press " +
+						"Cancel and set different extensions.",
 					"Naming Conflict",
 					MessageBoxButtons.YesNoCancel,
 					MessageBoxIcon.Question
@@ -540,10 +535,9 @@ namespace YAT.Gui.Forms
 				switch (MessageBox.Show
 					(
 					this,
-					"To avoid naming conflicts, files must either be placed in " +
-					"channel subdirectories or named by channel (Tx/Bidir/Rx). " +
-					"Do you want to place the files in subdirectories (Yes) or " +
-					"name them by channel (No)?",
+					"To avoid naming conflicts, files must either be placed in channel " +
+						"subdirectories or named by channel (Tx/Bidir/Rx). Do you want to place " +
+						"the files in subdirectories (Yes) or name them by channel (No)?",
 					"Naming Conflict",
 					MessageBoxButtons.YesNoCancel,
 					MessageBoxIcon.Question

@@ -15,20 +15,17 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 
 using MKY.Utilities.Event;
 
+using YAT.Gui.Utilities;
 using YAT.Model.Types;
 using YAT.Settings;
 using YAT.Settings.Application;
-using YAT.Gui.Utilities;
 
 namespace YAT.Gui.Controls
 {

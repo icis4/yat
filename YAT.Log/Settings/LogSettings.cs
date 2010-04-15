@@ -15,10 +15,9 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Xml.Serialization;
-using System.IO;
 
 using YAT.Settings;
 using YAT.Settings.Application;

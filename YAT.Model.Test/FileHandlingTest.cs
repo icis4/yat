@@ -15,9 +15,6 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 using NUnit.Framework;
@@ -27,6 +24,7 @@ using YAT.Settings.Application;
 namespace YAT.Model.Test
 {
 	/// <summary></summary>
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1123:DoNotPlaceRegionsWithinElements", Justification = "Group use cases into regions.")]
 	[TestFixture]
 	public class FileHandlingTest
 	{
@@ -182,6 +180,7 @@ namespace YAT.Model.Test
 		//------------------------------------------------------------------------------------------
 		// Tests > TestSequenceOfUseCases_1_through_5a_
 		//------------------------------------------------------------------------------------------
+
 		/// <summary>
 		/// Use cases according to ufi.
 		/// </summary>
@@ -584,6 +583,7 @@ namespace YAT.Model.Test
 		//------------------------------------------------------------------------------------------
 		// Tests > TestSequenceOfUseCases_6_through_9_
 		//------------------------------------------------------------------------------------------
+
 		/// <summary>
 		/// Use cases according to ufi.
 		/// </summary>
@@ -880,40 +880,30 @@ namespace YAT.Model.Test
 
 		private void VerifyFiles(Workspace workspace, bool workspaceFileExpected)
 		{
-			VerifyFiles(workspace, workspaceFileExpected,
-						new Terminal[] { }, new bool[] { });
+			VerifyFiles(workspace, workspaceFileExpected, new Terminal[] { }, new bool[] { });
 		}
 
-		private void VerifyFiles(Workspace workspace, bool workspaceFileExpected,
-								 Terminal terminal, bool terminalFileExpected)
+		private void VerifyFiles(Workspace workspace, bool workspaceFileExpected, Terminal terminal, bool terminalFileExpected)
 		{
-			VerifyFiles(workspace, workspaceFileExpected,
-						new Terminal[] { terminal }, new bool[] { terminalFileExpected });
+			VerifyFiles(workspace, workspaceFileExpected, new Terminal[] { terminal }, new bool[] { terminalFileExpected });
 		}
 
-		private void VerifyFiles(Workspace workspace, bool workspaceFileExpected,
-								 Terminal terminal, bool terminalFileExpected, bool terminalFileAutoExpected)
+		private void VerifyFiles(Workspace workspace, bool workspaceFileExpected, Terminal terminal, bool terminalFileExpected, bool terminalFileAutoExpected)
 		{
-			VerifyFiles(workspace, workspaceFileExpected,
-						new Terminal[] { terminal }, new bool[] { terminalFileExpected }, new bool[] { terminalFileAutoExpected });
+			VerifyFiles(workspace, workspaceFileExpected, new Terminal[] { terminal }, new bool[] { terminalFileExpected }, new bool[] { terminalFileAutoExpected });
 		}
 
-		private void VerifyFiles(Workspace workspace, bool workspaceFileExpected,
-								 Terminal[] terminal, bool[] terminalFileExpected)
+		private void VerifyFiles(Workspace workspace, bool workspaceFileExpected, Terminal[] terminal, bool[] terminalFileExpected)
 		{
-			VerifyFiles(workspace, workspaceFileExpected, workspaceFileExpected,
-				        terminal, terminalFileExpected, terminalFileExpected);
+			VerifyFiles(workspace, workspaceFileExpected, workspaceFileExpected, terminal, terminalFileExpected, terminalFileExpected);
 		}
 
-		private void VerifyFiles(Workspace workspace, bool workspaceFileExpected,
-								 Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
+		private void VerifyFiles(Workspace workspace, bool workspaceFileExpected, Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
 		{
-			VerifyFiles(workspace, workspaceFileExpected, workspaceFileExpected,
-				        terminal, terminalFileExpected, terminalFileAutoExpected);
+			VerifyFiles(workspace, workspaceFileExpected, workspaceFileExpected, terminal, terminalFileExpected, terminalFileAutoExpected);
 		}
 
-		private void VerifyFiles(Workspace workspace, bool workspaceFileExpected, bool workspaceFileAutoExpected,
-			                     Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
+		private void VerifyFiles(Workspace workspace, bool workspaceFileExpected, bool workspaceFileAutoExpected, Terminal[] terminal, bool[] terminalFileExpected, bool[] terminalFileAutoExpected)
 		{
 			// Verify workspace file(s)
 			if (workspaceFileExpected)

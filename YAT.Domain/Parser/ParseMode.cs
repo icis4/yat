@@ -26,8 +26,10 @@ namespace YAT.Domain.Parser
 	{
 		/// <summary></summary>
 		Radix = 1,
+
 		/// <summary></summary>
 		Ascii = 2,
+
 		/// <summary></summary>
 		AllByteArrayResults = 3,
 

@@ -15,12 +15,8 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
-using System.IO;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace YAT.Settings
 {
@@ -29,8 +25,10 @@ namespace YAT.Settings
 	{
 		/// <summary></summary>
 		public static readonly string AutoSaveRoot = Application.LocalUserAppDataPath;
+
 		/// <summary></summary>
 		public const string AutoSaveTerminalFileNamePrefix = "Terminal-";
+
 		/// <summary></summary>
 		public const string AutoSaveWorkspaceFileNamePrefix = "Workspace-";
 

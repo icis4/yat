@@ -15,13 +15,9 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using System.IO;
 
 using MKY.Utilities.IO;
 
@@ -29,6 +25,7 @@ using YAT.Utilities;
 
 namespace YAT.Gui.Forms
 {
+	/// <summary></summary>
 	public partial class ReleaseNotes : Form
 	{
 		private const string ReleaseNotesFileName = @"YAT Release Notes.txt";

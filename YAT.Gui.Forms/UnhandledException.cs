@@ -15,18 +15,14 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 
 using MKY.Utilities.Windows.Forms;
 
 namespace YAT.Gui.Forms
 {
+	/// <summary></summary>
 	public partial class UnhandledException : System.Windows.Forms.Form
 	{
 		private Exception exeption;

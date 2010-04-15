@@ -15,21 +15,17 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
 using System.Net;
-using System.Net.NetworkInformation;
+using System.Windows.Forms;
 
+using MKY.IO.Serial;
 using MKY.Utilities.Event;
 using MKY.Utilities.Net;
-using MKY.IO.Serial;
 
 namespace YAT.Gui.Controls
 {
+	/// <summary></summary>
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("HostNameOrAddressChanged")]
 	public partial class SocketSelection : UserControl
@@ -270,6 +266,7 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
 		private void comboBox_RemoteHost_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -323,6 +320,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Table-style coding.")]
 		private void textBox_RemotePort_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -375,6 +373,7 @@ namespace YAT.Gui.Controls
 			SetLocalInterfaceList();
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Table-style coding.")]
 		private void textBox_LocalPort_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)

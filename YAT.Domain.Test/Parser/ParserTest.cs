@@ -78,7 +78,7 @@ namespace YAT.Domain.Test.Parser
 				InputString = inputString;
 				OutputBytes = outputBytes;
 			}
-		};
+		}
 
 		#endregion
 

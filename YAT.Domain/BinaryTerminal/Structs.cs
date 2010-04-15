@@ -33,8 +33,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[XmlElement("LineLength", typeof(int))]
-		public int LineLength;                       // in chars/bytes
-
+		public int LineLength; // In chars/bytes.
 
 		/// <summary></summary>
 		public BinaryLengthLineBreak(bool enabled, int lineLength)
@@ -152,7 +151,7 @@ namespace YAT.Domain
 		[XmlElement("Enabled")]
 		public bool Enabled;
 
-		/// <summary>Timeout in ms</summary>
+		/// <summary>Timeout in ms.</summary>
 		[XmlElement("Timeout")]
 		public int Timeout;
 

@@ -15,19 +15,16 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 
 using MKY.Utilities.Event;
 using MKY.Utilities.Recent;
 
 using YAT.Gui.Utilities;
-using YAT.Model.Types;
 using YAT.Model.Settings;
+using YAT.Model.Types;
 
 namespace YAT.Gui.Controls
 {
@@ -146,7 +143,8 @@ namespace YAT.Gui.Controls
 			set
 			{
 				this.recents = value;
-				// don't call SetControls(), recents are shown at DropDown
+
+				// Don't call SetControls(), recents are shown at DropDown.
 			}
 		}
 

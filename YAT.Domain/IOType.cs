@@ -16,10 +16,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-using MKY.Utilities.Types;
 using MKY.IO.Serial;
+using MKY.Utilities.Types;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -28,24 +27,25 @@ namespace YAT.Domain
 {
 	#region Enum IOType
 
+	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+	// warnings for each undocumented member below. Documenting each member makes little sense
+	// since they pretty much tell their purpose and documentation tags between the members
+	// makes the code less readable.
+	#pragma warning disable 1591
+
 	/// <summary></summary>
 	public enum IOType
 	{
-		/// <summary></summary>
 		Unknown,
-		/// <summary></summary>
 		SerialPort,
-		/// <summary></summary>
 		TcpClient,
-		/// <summary></summary>
 		TcpServer,
-		/// <summary></summary>
 		TcpAutoSocket,
-		/// <summary></summary>
 		Udp,
-		/// <summary></summary>
 		UsbHid,
 	}
+
+	#pragma warning restore 1591
 
 	#endregion
 
@@ -66,7 +66,7 @@ namespace YAT.Domain
 
 		#endregion
 
-		/// <summary>Default is <see cref="IOType.SerialPort"/></summary>
+		/// <summary>Default is <see cref="IOType.SerialPort"/>.</summary>
 		public XIOType()
 			: base(IOType.SerialPort)
 		{

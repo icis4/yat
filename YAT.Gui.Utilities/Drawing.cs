@@ -15,14 +15,14 @@
 //==================================================================================================
 
 using System;
-using System.Windows.Forms;
 using System.Drawing;
-using System.Drawing.Printing;
-using System.Collections.Generic;
-using System.IO;
+using System.Windows.Forms;
 
 namespace YAT.Gui.Utilities
 {
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1115:ParameterMustFollowComma", Justification = "Too long for one line.")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too long for one line.")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too long for one line.")]
 	public static class Drawing
 	{
 		private struct DrawingElements
@@ -232,7 +232,7 @@ namespace YAT.Gui.Utilities
 
 			// \remind 2009-08-29 / mky
 			// This is a somewhat strange calculation, however, don't know to do it better.
-			//
+
 			SizeF size = graphics.MeasureString(" ", font);
 			float[] tabStops = new float[256];
 			for (int i = 0; i < 256; i++)

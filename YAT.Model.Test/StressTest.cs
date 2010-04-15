@@ -14,11 +14,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using NUnit.Framework;
 
 namespace YAT.Model.Test
@@ -49,7 +44,6 @@ namespace YAT.Model.Test
 		#endregion
 
 		#endregion
-
 	}
 }
 

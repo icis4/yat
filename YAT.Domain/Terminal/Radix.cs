@@ -32,16 +32,22 @@ namespace YAT.Domain
 	{
 		/// <summary></summary>
 		None,
+
 		/// <summary></summary>
 		Bin,
+
 		/// <summary></summary>
 		Oct,
+
 		/// <summary></summary>
 		Dec,
+
 		/// <summary></summary>
 		Hex,
+
 		/// <summary></summary>
 		Char,
+
 		/// <summary></summary>
 		String,
 	}
@@ -74,7 +80,7 @@ namespace YAT.Domain
 
 		#endregion
 
-		/// <summary>Default is <see cref="Radix.String"/></summary>
+		/// <summary>Default is <see cref="Radix.String"/>.</summary>
 		public XRadix()
 			: base(Radix.String)
 		{

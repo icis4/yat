@@ -15,19 +15,15 @@
 //==================================================================================================
 
 using System;
-using System.Drawing;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Windows.Forms;
-using System.IO;
 
 using MKY.Utilities.Types;
 using MKY.Windows.Forms;
 
-using YAT.Settings.Application;
-
 namespace YAT.Gui.Forms
 {
+	/// <summary></summary>
 	public partial class PredefinedCommandSettings : System.Windows.Forms.Form
 	{
 		#region Types
@@ -38,8 +34,10 @@ namespace YAT.Gui.Forms
 		private struct StartupControl
 		{
 			public bool Startup;
+
 			/// <param name="RequestedPage">Page 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
 			public int RequestedPage;
+
 			/// <param name="RequestedCommand">Command 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
 			public int RequestedCommand;
 
@@ -75,8 +73,9 @@ namespace YAT.Gui.Forms
 		// Object Lifetime
 		//==========================================================================================
 
-		/// <param name="requestedPage">Page 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/></param>
-		/// <param name="requestedCommand">Command 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/></param>
+		/// <param name="settings">Settings to be displayed.</param>
+		/// <param name="requestedPage">Page 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
+		/// <param name="requestedCommand">Command 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
 		public PredefinedCommandSettings(Model.Settings.PredefinedCommandSettings settings, int requestedPage, int requestedCommand)
 		{
 			InitializeComponent();
@@ -237,7 +236,7 @@ namespace YAT.Gui.Forms
 
 		private void button_Cancel_Click(object sender, EventArgs e)
 		{
-			// do nothing
+			// Do nothing.
 		}
 
 		private void button_Help_Click(object sender, EventArgs e)

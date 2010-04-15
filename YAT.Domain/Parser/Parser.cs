@@ -16,17 +16,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.IO;
 using System.Globalization;
+using System.IO;
+using System.Text;
 
 using MKY.Utilities.Types;
 
 namespace YAT.Domain.Parser
 {
-	/// <summary>
-	/// Parser.
-	/// </summary>
+	/// <summary></summary>
 	public class Parser
 	{
 		#region Help
@@ -357,9 +355,9 @@ namespace YAT.Domain.Parser
 			/// <summary>
 			/// Parses "parseString" for ascii mnemonics.
 			/// </summary>
-			/// <param name="parser"></param>
-			/// <param name="parseString">String to be parsed</param>
-			/// <param name="result"></param>
+			/// <param name="parser">Parser to retrieve settings.</param>
+			/// <param name="parseString">String to be parsed.</param>
+			/// <param name="result">Array containing the resulting bytes.</param>
 			/// <param name="formatException">Returned if invalid string format.</param>
 			/// <returns>Bytearray containing the values encoded in Encoding.Default.</returns>
 			public static bool TryParseAsciiMnemonic(Parser parser, string parseString, out byte[] result, ref FormatException formatException)
@@ -850,7 +848,7 @@ namespace YAT.Domain.Parser
 		/// </summary>
 		/// <param name="parseString">String to be parsed.</param>
 		/// <param name="parseRadix">Numeric radix.</param>
-		/// <param name="result"></param>
+		/// <param name="result">Array containing the resulting bytes.</param>
 		/// <param name="formatException">Returned if invalid string format.</param>
 		/// <returns>Bytearray containing the values encoded in Encoding.Default.</returns>
 		/// <exception cref="OverflowException">Thrown if a value cannot be converted into bytes.</exception>
@@ -897,8 +895,8 @@ namespace YAT.Domain.Parser
 		/// <summary>
 		/// Parses "parseString" for keywords.
 		/// </summary>
-		/// <param name="parseString">String to be parsed</param>
-		/// <param name="result"></param>
+		/// <param name="parseString">String to be parsed.</param>
+		/// <param name="result">Array containing the results.</param>
 		/// <param name="formatException">Returned if invalid string format.</param>
 		/// <returns>Bytearray containing the values encoded in Encoding.Default.</returns>
 		private bool TryParseContiguousKeywords(string parseString, out Result[] result, ref FormatException formatException)

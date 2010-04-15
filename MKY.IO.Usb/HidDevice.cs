@@ -48,7 +48,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Returns the GUID associated with USB HID.
 		/// </summary>
-		public static readonly Guid HidGuid = Utilities.Win32.Hid.GetHidGuid();
+		public static readonly Guid HidGuid = Win32.Hid.GetHidGuid();
 
 		#endregion
 
@@ -156,12 +156,12 @@ namespace MKY.IO.Usb
 
 		private static void RegisterStaticDeviceNotificationHandler()
 		{
-			Utilities.Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationWindow.Handle, HidGuid, out staticDeviceNotificationHandle);
+			Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationWindow.Handle, HidGuid, out staticDeviceNotificationHandle);
 		}
 
 		private static void UnregisterStaticDeviceNotificationHandler()
 		{
-			Utilities.Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
+			Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
 		}
 
 		private static void StaticDeviceNotificationHandler(ref Message m)
@@ -172,7 +172,7 @@ namespace MKY.IO.Usb
 				(de == DeviceEvent.Disconnected))
 			{
 				string devicePath;
-				if (Utilities.Win32.DeviceManagement.DeviceChangeMessageToDevicePath(m, out devicePath))
+				if (Win32.DeviceManagement.DeviceChangeMessageToDevicePath(m, out devicePath))
 				{
 					DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Hid, devicePath);
 					switch (de)
@@ -256,11 +256,11 @@ namespace MKY.IO.Usb
 		private void Initialize()
 		{
 			SafeFileHandle deviceHandle;
-			if (Utilities.Win32.Hid.CreateSharedQueryOnlyDeviceHandle(SystemPath, out deviceHandle))
+			if (Win32.Hid.CreateSharedQueryOnlyDeviceHandle(SystemPath, out deviceHandle))
 			{
 				try
 				{
-					Utilities.Win32.Hid.Native.HIDP_CAPS caps = Utilities.Win32.Hid.GetDeviceCapabilities(deviceHandle);
+					Win32.Hid.Native.HIDP_CAPS caps = Win32.Hid.GetDeviceCapabilities(deviceHandle);
 
 					this.usagePage = (XHidUsagePage)caps.UsagePage;
 					this.usage     = (XHidUsage)caps.Usage;

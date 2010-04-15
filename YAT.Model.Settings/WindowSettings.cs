@@ -15,11 +15,9 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.Serialization;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace YAT.Model.Settings
 {
@@ -52,7 +50,6 @@ namespace YAT.Model.Settings
 		public WindowSettings(WindowSettings rhs)
 			: base(rhs)
 		{
-
 			this.state    = rhs.State;
 			this.location = rhs.Location;
 			this.size     = rhs.Size;

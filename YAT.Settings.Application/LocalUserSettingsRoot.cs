@@ -68,28 +68,28 @@ namespace YAT.Settings.Application
 		public virtual string FileType
 		{
 			get { return ("YAT local user settings"); }
-			set { } // do nothing
+			set { } // Do nothing.
 		}
 
 		[XmlElement("Warning")]
 		public virtual string Warning
 		{
 			get { return ("Modifying this file may cause undefined behaviour!"); }
-			set { } // do nothing
+			set { } // Do nothing.
 		}
 
 		[XmlElement("Saved")]
 		public virtual SaveInfo Saved
 		{
 			get { return (new SaveInfo(DateTime.Now, Environment.UserName)); }
-			set { } // do nothing
+			set { } // Do nothing.
 		}
 
 		[XmlElement("ProductVersion")]
 		public virtual string ProductVersion
 		{
 			get { return (this.productVersion); }
-			set { } // do nothing
+			set { } // Do nothing.
 		}
 
 		[XmlElement("General")]

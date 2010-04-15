@@ -15,13 +15,10 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 
 using MKY.Utilities.Event;
 
@@ -32,6 +29,7 @@ using YAT.Settings.Application;
 
 namespace YAT.Gui.Controls
 {
+	/// <summary></summary>
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("SendFileCommandRequest")]
 	public partial class SendFile : UserControl

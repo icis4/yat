@@ -268,8 +268,8 @@ namespace YAT.Model.Test
 
 						// Verify transmission
 						Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-							                  terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-									          testSet, i + 1);
+						                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
+						                      testSet, i + 1);
 					}
 				}
 			}

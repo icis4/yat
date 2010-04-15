@@ -23,7 +23,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MKY.Utilities")]
-[assembly: AssemblyDescription("C# Utilities")]
+[assembly: AssemblyDescription("Utilities")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MKY")]
 [assembly: AssemblyProduct("MKY.Utilities")]

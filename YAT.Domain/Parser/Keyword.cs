@@ -24,25 +24,29 @@ namespace YAT.Domain.Parser
 {
 	#region Enum Keyword
 
+	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+	// warnings for each undocumented member below. Documenting each member makes little sense
+	// since they pretty much tell their purpose and documentation tags between the members
+	// makes the code less readable.
+	#pragma warning disable 1591
+
 	/// <summary></summary>
 	public enum Keyword
 	{
-		/// <summary></summary>
 		None,
-		/// <summary></summary>
 		Delay,
-		/// <summary></summary>
 		Eol,
-		/// <summary></summary>
 		NoEol,
 	}
+
+	#pragma warning restore 1591
 
 	#endregion
 
 	/// <summary>
 	/// Extended enum XKeyword.
 	/// </summary>
-	class XKeyword : XEnum
+	public class XKeyword : XEnum
 	{
 		#region String Definitions
 
@@ -52,7 +56,7 @@ namespace YAT.Domain.Parser
 
 		#endregion
 
-		/// <summary>Default is <see cref="Keyword.None"/></summary>
+		/// <summary>Default is <see cref="Keyword.None"/>.</summary>
 		public XKeyword()
 			: base(Keyword.None)
 		{

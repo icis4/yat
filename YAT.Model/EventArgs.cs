@@ -52,6 +52,7 @@ namespace YAT.Model
 	{
 		/// <summary></summary>
 		public readonly string FilePath;
+
 		/// <summary></summary>
 		public readonly bool IsAutoSave;
 
@@ -107,14 +108,19 @@ namespace YAT.Model
 	{
 		/// <summary></summary>
 		public readonly string Text = "";
+
 		/// <summary></summary>
 		public readonly string Caption = "";
+
 		/// <summary></summary>
 		public readonly MessageBoxButtons Buttons = MessageBoxButtons.OK;
+
 		/// <summary></summary>
 		public readonly MessageBoxIcon Icon = MessageBoxIcon.Information;
+
 		/// <summary></summary>
 		public readonly MessageBoxDefaultButton DefaultButton = MessageBoxDefaultButton.Button1;
+
 		/// <summary></summary>
 		public DialogResult Result;
 

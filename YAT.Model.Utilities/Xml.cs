@@ -14,16 +14,15 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace YAT.Model.Utilities
 {
 	/// <summary>
-	/// Static utility class providing XML reader functionality for YAT
+	/// Static utility class providing XML reader functionality for YAT.
 	/// </summary>
 	public static class XmlReader
 	{
@@ -54,7 +53,7 @@ namespace YAT.Model.Utilities
 	}
 
 	/// <summary>
-	/// Static utility class providing XML writer functionality for YAT
+	/// Static utility class providing XML writer functionality for YAT.
 	/// </summary>
 	public class XmlWriter
 	{

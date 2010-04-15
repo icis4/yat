@@ -18,17 +18,16 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 
 using MKY.Utilities.Event;
 
-using YAT.Model.Types;
 using YAT.Model.Settings;
+using YAT.Model.Types;
 
 namespace YAT.Gui.Controls
 {
+	/// <summary></summary>
 	[DesignerCategory("Windows Forms")]
 	[DefaultEvent("SendCommandRequest")]
 	public partial class PredefinedCommandPageButtons : UserControl

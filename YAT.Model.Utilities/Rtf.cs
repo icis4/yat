@@ -15,16 +15,16 @@
 //==================================================================================================
 
 using System;
-using System.Windows.Forms;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
-using System.Collections.Generic;
 using System.IO;
+using System.Windows.Forms;
 
 namespace YAT.Model.Utilities
 {
 	/// <summary>
-	/// Static utility class providing RTF reader functionality for YAT
+	/// Static utility class providing RTF reader functionality for YAT.
 	/// </summary>
 	public static class RtfReader
 	{
@@ -41,7 +41,7 @@ namespace YAT.Model.Utilities
 	}
 
 	/// <summary>
-	/// Static utility class providing RTF writer functionality for YAT
+	/// Static utility class providing RTF writer functionality for YAT.
 	/// </summary>
 	public static class RtfWriter
 	{
@@ -134,7 +134,7 @@ namespace YAT.Model.Utilities
 				throw (new NotImplementedException("Unknown DisplayElement"));
 			}
 
-			// handle line break according to current system
+			// Handle line break according to current system.
 			if (element is Domain.DisplayElement.LineBreak)
 				rtb.AppendText(Environment.NewLine);
 			else
@@ -143,7 +143,7 @@ namespace YAT.Model.Utilities
 	}
 
 	/// <summary>
-	/// Static utility class providing RTF printer functionality for YAT
+	/// Static utility class providing RTF printer functionality for YAT.
 	/// </summary>
 	public class RtfPrinter
 	{

@@ -27,20 +27,28 @@ namespace YAT.Domain.Settings
 	{
 		/// <summary></summary>
 		public const bool SeparateTxRxRadixDefault = false;
+
 		/// <summary></summary>
 		public const Radix RadixDefault = Radix.String;
+
 		/// <summary></summary>
 		public const bool ShowRadixDefault = true;
+
 		/// <summary></summary>
 		public const bool ShowTimeStampDefault = false;
+
 		/// <summary></summary>
 		public const bool ShowLengthDefault = false;
+
 		/// <summary></summary>
 		public const bool ShowConnectTimeDefault = false;
+
 		/// <summary></summary>
 		public const bool ShowCountersDefault = false;
+
 		/// <summary></summary>
 		public const int MaxLineCountDefault = 1000;
+
 		/// <summary></summary>
 		public const bool DirectionLineBreakEnabledDefault = true;
 

@@ -176,6 +176,7 @@ namespace YAT.Model.Settings
 		// Comparision ;-)
 		//------------------------------------------------------------------------------------------
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "This is the easter egg!")]
 		private const string EasterEggCommand = @"\easteregg";
 
 		/// <summary></summary>

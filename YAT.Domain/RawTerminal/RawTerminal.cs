@@ -16,12 +16,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-using MKY.Utilities.Event;
 using MKY.IO.Serial;
-
-using YAT.Domain;
+using MKY.Utilities.Event;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -58,17 +55,22 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		public event EventHandler IOChanged;
+
 		/// <summary></summary>
 		public event EventHandler IOControlChanged;
+
 		/// <summary></summary>
 		public event EventHandler<IORequestEventArgs> IORequest;
+
 		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
 		public event EventHandler<RawElementEventArgs> RawElementSent;
+
 		/// <summary></summary>
 		public event EventHandler<RawElementEventArgs> RawElementReceived;
+
 		/// <summary></summary>
 		public event EventHandler<RepositoryEventArgs> RepositoryCleared;
 

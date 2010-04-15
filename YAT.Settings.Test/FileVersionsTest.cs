@@ -98,7 +98,7 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 1 Version 1.99.12 > Terminal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>01_COM1_Open_Default</summary>
+		/// <summary>01_COM1_Open_Default.</summary>
 		[Test]
 		[Category("Support for COM1 required")]
 		public virtual void Test_V1_99_12_TerminalSettingsCase01()
@@ -108,7 +108,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -116,7 +116,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		/// <summary>02_COM2_Open_Binary_115200</summary>
+		/// <summary>02_COM2_Open_Binary_115200.</summary>
 		[Test]
 		[Category("Support for COM2 required")]
 		public virtual void Test_V1_99_12_TerminalSettingsCase02()
@@ -126,15 +126,15 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
-				VerifySettingsCase02(terminal, true); // ignore baud rate because it changed from enum to int
+				VerifySettingsCase02(terminal, true); // Ignore baud rate because it changed from enum to int.
 			}
 		}
 
-		/// <summary>03_COM1_Closed_Predefined</summary>
+		/// <summary>03_COM1_Closed_Predefined.</summary>
 		[Test]
 		public virtual void Test_V1_99_12_TerminalSettingsCase03()
 		{
@@ -143,7 +143,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_12.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -158,7 +158,7 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 2 Preliminary Version 1.99.13 > Terminal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>01_COM1_Open_Default</summary>
+		/// <summary>01_COM1_Open_Default.</summary>
 		[Test]
 		[Category("Support for COM1 required")]
 		public virtual void Test_V1_99_13_TerminalSettingsCase01()
@@ -168,7 +168,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -176,7 +176,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		/// <summary>02_COM2_Open_Binary_115200</summary>
+		/// <summary>02_COM2_Open_Binary_115200.</summary>
 		[Test]
 		[Category("Support for COM2 required")]
 		public virtual void Test_V1_99_13_TerminalSettingsCase02()
@@ -186,7 +186,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -194,7 +194,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		/// <summary>03_COM1_Closed_Predefined</summary>
+		/// <summary>03_COM1_Closed_Predefined.</summary>
 		[Test]
 		public virtual void Test_V1_99_13_TerminalSettingsCase03()
 		{
@@ -203,7 +203,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_13.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -227,7 +227,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_13.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
 				);
 
-			// Create workspace from settings and check whether settings are correctly set
+			// Create workspace from settings and check whether settings are correctly set.
 			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
 			{
 				workspace.OpenTerminals();
@@ -242,7 +242,7 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.17 > Terminal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>01_COM1_Open_Default</summary>
+		/// <summary>01_COM1_Open_Default.</summary>
 		[Test]
 		[Category("Support for COM1 required")]
 		public virtual void Test_V1_99_17_TerminalSettingsCase01()
@@ -252,7 +252,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -260,7 +260,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		/// <summary>02_COM2_Open_Binary_115200</summary>
+		/// <summary>02_COM2_Open_Binary_115200.</summary>
 		[Test]
 		[Category("Support for COM2 required")]
 		public virtual void Test_V1_99_17_TerminalSettingsCase02()
@@ -270,7 +270,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -278,7 +278,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		/// <summary>03_COM1_Closed_Predefined</summary>
+		/// <summary>03_COM1_Closed_Predefined.</summary>
 		[Test]
 		public virtual void Test_V1_99_17_TerminalSettingsCase03()
 		{
@@ -287,7 +287,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_17.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -311,7 +311,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_17.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
 				);
 
-			// Create workspace from settings and check whether settings are correctly set
+			// Create workspace from settings and check whether settings are correctly set.
 			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
 			{
 				workspace.OpenTerminals();
@@ -326,7 +326,7 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 2 Candidate 2 Version 1.99.18 > Terminal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>01_COM1_Open_Default</summary>
+		/// <summary>01_COM1_Open_Default.</summary>
 		[Test]
 		[Category("Support for COM1 required")]
 		public virtual void Test_V1_99_18_TerminalSettingsCase01()
@@ -336,7 +336,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -344,7 +344,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		/// <summary>02_COM2_Open_Binary_115200</summary>
+		/// <summary>02_COM2_Open_Binary_115200.</summary>
 		[Test]
 		[Category("Support for COM2 required")]
 		public virtual void Test_V1_99_18_TerminalSettingsCase02()
@@ -354,7 +354,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -362,7 +362,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		/// <summary>03_COM1_Closed_Predefined</summary>
+		/// <summary>03_COM1_Closed_Predefined.</summary>
 		[Test]
 		public virtual void Test_V1_99_18_TerminalSettingsCase03()
 		{
@@ -371,7 +371,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_18.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -395,7 +395,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_18.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
 				);
 
-			// Create workspace from settings and check whether settings are correctly set
+			// Create workspace from settings and check whether settings are correctly set.
 			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
 			{
 				workspace.OpenTerminals();
@@ -410,7 +410,7 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 2 Candidate 3 Version 1.99.19 > Terminal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>01_COM1_Open_Default</summary>
+		/// <summary>01_COM1_Open_Default.</summary>
 		[Test]
 		[Category("Support for COM1 required")]
 		public virtual void Test_V1_99_19_TerminalSettingsCase01()
@@ -420,7 +420,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_19.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -428,7 +428,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		/// <summary>02_COM2_Open_Binary_115200</summary>
+		/// <summary>02_COM2_Open_Binary_115200.</summary>
 		[Test]
 		[Category("Support for COM2 required")]
 		public virtual void Test_V1_99_19_TerminalSettingsCase02()
@@ -438,7 +438,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_19.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -446,7 +446,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		/// <summary>03_COM1_Closed_Predefined</summary>
+		/// <summary>03_COM1_Closed_Predefined.</summary>
 		[Test]
 		public virtual void Test_V1_99_19_TerminalSettingsCase03()
 		{
@@ -455,7 +455,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_19.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -479,7 +479,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_19.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
 				);
 
-			// Create workspace from settings and check whether settings are correctly set
+			// Create workspace from settings and check whether settings are correctly set.
 			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
 			{
 				workspace.OpenTerminals();
@@ -494,7 +494,7 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 2 Candidate 4 Version 1.99.20 > Terminal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>01_COM1_Open_Default</summary>
+		/// <summary>01_COM1_Open_Default.</summary>
 		[Test]
 		[Category("Support for COM1 required")]
 		public virtual void Test_V1_99_20_TerminalSettingsCase01()
@@ -504,7 +504,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_20.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -512,7 +512,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		/// <summary>02_COM2_Open_Binary_115200</summary>
+		/// <summary>02_COM2_Open_Binary_115200.</summary>
 		[Test]
 		[Category("Support for COM2 required")]
 		public virtual void Test_V1_99_20_TerminalSettingsCase02()
@@ -522,7 +522,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_20.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -530,7 +530,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		/// <summary>03_COM1_Closed_Predefined</summary>
+		/// <summary>03_COM1_Closed_Predefined.</summary>
 		[Test]
 		public virtual void Test_V1_99_20_TerminalSettingsCase03()
 		{
@@ -539,7 +539,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_20.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -563,7 +563,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_20.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
 				);
 
-			// Create workspace from settings and check whether settings are correctly set
+			// Create workspace from settings and check whether settings are correctly set.
 			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
 			{
 				workspace.OpenTerminals();
@@ -578,7 +578,7 @@ namespace YAT.Settings.Test
 		// Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.22 > Terminal
 		//------------------------------------------------------------------------------------------
 
-		/// <summary>01_COM1_Open_Default</summary>
+		/// <summary>01_COM1_Open_Default.</summary>
 		[Test]
 		[Category("Support for COM1 required")]
 		public virtual void Test_V1_99_22_TerminalSettingsCase01()
@@ -588,7 +588,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -596,7 +596,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		/// <summary>02_COM2_Open_Binary_115200</summary>
+		/// <summary>02_COM2_Open_Binary_115200.</summary>
 		[Test]
 		[Category("Support for COM2 required")]
 		public virtual void Test_V1_99_22_TerminalSettingsCase02()
@@ -606,7 +606,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -614,7 +614,7 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		/// <summary>03_COM1_Closed_Predefined</summary>
+		/// <summary>03_COM1_Closed_Predefined.</summary>
 		[Test]
 		public virtual void Test_V1_99_22_TerminalSettingsCase03()
 		{
@@ -623,7 +623,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_22.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
 				);
 
-			// Create terminal from settings and check whether settings are correctly set
+			// Create terminal from settings and check whether settings are correctly set.
 			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
 			{
 				terminal.Start();
@@ -647,7 +647,7 @@ namespace YAT.Settings.Test
 				SettingsFilesProvider.FilePaths_V1_99_22.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
 				);
 
-			// Create workspace from settings and check whether settings are correctly set
+			// Create workspace from settings and check whether settings are correctly set.
 			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
 			{
 				workspace.OpenTerminals();

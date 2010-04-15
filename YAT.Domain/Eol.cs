@@ -27,24 +27,25 @@ namespace YAT.Domain
 {
 	#region Enum Eol
 
+	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
+	// warnings for each undocumented member below. Documenting each member makes little sense
+	// since they pretty much tell their purpose and documentation tags between the members
+	// makes the code less readable.
+	#pragma warning disable 1591
+
 	/// <summary></summary>
 	public enum Eol
 	{
-		/// <summary></summary>
 		None,
-		/// <summary></summary>
 		Cr,
-		/// <summary></summary>
 		Lf,
-		/// <summary></summary>
 		CrLf,
-		/// <summary></summary>
 		LfCr,
-		/// <summary></summary>
 		Tab,
-		/// <summary></summary>
 		Nul,
 	}
+
+	#pragma warning restore 1591
 
 	#endregion
 
@@ -83,7 +84,7 @@ namespace YAT.Domain
 
 		#endregion
 
-		/// <summary>Default is <see cref="Eol.CrLf"/></summary>
+		/// <summary>Default is <see cref="Eol.CrLf"/>.</summary>
 		public XEol()
 			: base(Eol.CrLf)
 		{

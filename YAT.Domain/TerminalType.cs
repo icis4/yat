@@ -32,6 +32,7 @@ namespace YAT.Domain
 	{
 		/// <summary></summary>
 		Text,
+
 		/// <summary></summary>
 		Binary
 	}
@@ -50,7 +51,7 @@ namespace YAT.Domain
 
 		#endregion
 
-		/// <summary>Default is <see cref="TerminalType.Text"/></summary>
+		/// <summary>Default is <see cref="TerminalType.Text"/>.</summary>
 		public XTerminalType()
 			: base(TerminalType.Text)
 		{

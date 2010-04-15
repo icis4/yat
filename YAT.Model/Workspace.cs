@@ -16,14 +16,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
 using System.Windows.Forms;
 
-using MKY.Utilities.IO;
-using MKY.Utilities.Guid;
 using MKY.Utilities.Event;
-using MKY.Utilities.Recent;
+using MKY.Utilities.Guid;
+using MKY.Utilities.IO;
 using MKY.Utilities.Settings;
 
 using YAT.Settings;
@@ -31,9 +29,7 @@ using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
 
-using YAT.Model.Types;
 using YAT.Model.Settings;
-using YAT.Model.Utilities;
 
 using YAT.Utilities;
 
@@ -68,13 +64,16 @@ namespace YAT.Model
 
 		/// <summary>Fired when a new terminal was added to the workspace.</summary>
 		public event EventHandler<TerminalEventArgs> TerminalAdded;
+
 		/// <summary>Fired when a terminal was removed from the workspace.</summary>
 		public event EventHandler<TerminalEventArgs> TerminalRemoved;
 
 		/// <summary></summary>
 		public event EventHandler<StatusTextEventArgs> FixedStatusTextRequest;
+
 		/// <summary></summary>
 		public event EventHandler<StatusTextEventArgs> TimedStatusTextRequest;
+
 		/// <summary></summary>
 		public event EventHandler<MessageInputEventArgs> MessageInputRequest;
 
@@ -83,6 +82,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public event EventHandler<SavedEventArgs> Saved;
+
 		/// <summary></summary>
 		public event EventHandler<ClosedEventArgs> Closed;
 
@@ -311,7 +311,6 @@ namespace YAT.Model
 
 		private void settingsRoot_Changed(object sender, SettingsEventArgs e)
 		{
-
 			if (this.settingsRoot_Changed_handlingSettingsIsSuspended)
 				return;
 
@@ -392,7 +391,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Saves all terminals and workspace to file(s), prompts for file(s) if they doesn't exist yet
+		/// Saves all terminals and workspace to file(s), prompts for file(s) if they doesn't exist yet.
 		/// </summary>
 		public virtual bool Save()
 		{
@@ -400,7 +399,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Saves all terminals and workspace to file(s), prompts for file(s) if they doesn't exist yet
+		/// Saves all terminals and workspace to file(s), prompts for file(s) if they doesn't exist yet.
 		/// </summary>
 		public virtual bool Save(bool autoSaveIsAllowed)
 		{
@@ -408,7 +407,7 @@ namespace YAT.Model
 
 			bool success = false;
 
-			// Save workspace if file path is valid
+			// Save workspace if file path is valid.
 			if (this.settingsHandler.SettingsFilePathIsValid)
 			{
 				if (this.settingsHandler.Settings.AutoSaved)
@@ -421,13 +420,13 @@ namespace YAT.Model
 					success = SaveToFile(false);
 				}
 			}
-			else // Auto save creates default file path
+			else // Auto save creates default file path.
 			{
 				if (autoSaveIsAllowed)
 					success = SaveToFile(true);
 			}
 
-			// If not successful yet, request new file path
+			// If not successful yet, request new file path.
 			if (!success)
 				success = (OnSaveAsFileDialogRequest() == DialogResult.OK);
 
@@ -435,7 +434,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Saves all terminals and workspace to given file
+		/// Saves all terminals and workspace to given file.
 		/// </summary>
 		public virtual bool SaveAs(string filePath)
 		{
@@ -457,18 +456,18 @@ namespace YAT.Model
 		private bool SaveToFile(bool doAutoSave, string autoSaveFilePathToDelete)
 		{
 			// -------------------------------------------------------------------------------------
-			// Skip save if file is up to date and there were no changes
+			// Skip save if file is up to date and there were no changes.
 			// -------------------------------------------------------------------------------------
 
 			if (this.settingsHandler.SettingsFileIsUpToDate && (!this.settingsRoot.HaveChanged))
 			{
-				// Event must be fired anyway to ensure that dependent objects are updated
+				// Event must be fired anyway to ensure that dependent objects are updated.
 				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, doAutoSave));
 				return (true);
 			}
 
 			// -------------------------------------------------------------------------------------
-			// First, save all contained terminals
+			// First, save all contained terminals.
 			// -------------------------------------------------------------------------------------
 
 			bool success = false;
@@ -476,8 +475,8 @@ namespace YAT.Model
 			if (!doAutoSave)
 				OnFixedStatusTextRequest("Saving workspace...");
 
-			// In case of auto save, assign workspace settings file path before saving terminals
-			// This ensures that relative paths are correctly retrieved by SaveAllTerminals()
+			// In case of auto save, assign workspace settings file path before saving terminals.
+			// This ensures that relative paths are correctly retrieved by SaveAllTerminals().
 			if (doAutoSave && (!this.settingsHandler.SettingsFilePathIsValid))
 			{
 				string autoSaveFilePath = GeneralSettings.AutoSaveRoot + Path.DirectorySeparatorChar + GeneralSettings.AutoSaveWorkspaceFileNamePrefix + Guid.ToString() + ExtensionSettings.WorkspaceFile;
@@ -493,7 +492,7 @@ namespace YAT.Model
 			try
 			{
 				// ---------------------------------------------------------------------------------
-				// Save workspace
+				// Save workspace.
 				// ---------------------------------------------------------------------------------
 
 				this.settingsHandler.Settings.AutoSaved = doAutoSave;
@@ -509,7 +508,7 @@ namespace YAT.Model
 				}
 
 				// ---------------------------------------------------------------------------------
-				// Try to delete existing auto save file
+				// Try to delete existing auto save file.
 				// ---------------------------------------------------------------------------------
 
 				try
@@ -611,8 +610,7 @@ namespace YAT.Model
 				{
 					success = true; // Consider it successful if there was no file to save
 				}
-				// Existing file
-				else
+				else // Existing file
 				{
 					if (this.settingsRoot.AutoSaved) // Existing auto file (m2a/b, w2)
 					{
@@ -752,7 +750,7 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Returns settings file paths of the all the terminals in the workspace
+		/// Returns settings file paths of the all the terminals in the workspace.
 		/// </summary>
 		public List<string> TerminalSettingsFilePaths
 		{

@@ -16,12 +16,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
-using MKY.Utilities.Guid;
 using MKY.Utilities.Event;
+using MKY.Utilities.Guid;
 using MKY.Utilities.Recent;
 using MKY.Utilities.Settings;
 using MKY.Utilities.Time;
@@ -99,35 +99,46 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public event EventHandler IOChanged;
+
 		/// <summary></summary>
 		public event EventHandler IOControlChanged;
+
 		/// <summary></summary>
 		public event EventHandler<TimeSpanEventArgs> IOConnectTimeChanged;
+
 		/// <summary></summary>
 		public event EventHandler IOCountChanged;
+
 		/// <summary></summary>
 		public event EventHandler<Domain.IORequestEventArgs> IORequest;
+
 		/// <summary></summary>
 		public event EventHandler<Domain.IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
 		public event EventHandler<Domain.DisplayElementsEventArgs> DisplayElementsSent;
+
 		/// <summary></summary>
 		public event EventHandler<Domain.DisplayElementsEventArgs> DisplayElementsReceived;
+
 		/// <summary></summary>
 		public event EventHandler<Domain.DisplayLinesEventArgs> DisplayLinesSent;
+
 		/// <summary></summary>
 		public event EventHandler<Domain.DisplayLinesEventArgs> DisplayLinesReceived;
 
 		/// <summary></summary>
 		public event EventHandler<Domain.RepositoryEventArgs> RepositoryCleared;
+
 		/// <summary></summary>
 		public event EventHandler<Domain.RepositoryEventArgs> RepositoryReloaded;
 
 		/// <summary></summary>
 		public event EventHandler<StatusTextEventArgs> FixedStatusTextRequest;
+
 		/// <summary></summary>
 		public event EventHandler<StatusTextEventArgs> TimedStatusTextRequest;
+
 		/// <summary></summary>
 		public event EventHandler<MessageInputEventArgs> MessageInputRequest;
 
@@ -136,6 +147,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public event EventHandler<SavedEventArgs> Saved;
+
 		/// <summary></summary>
 		public event EventHandler<ClosedEventArgs> Closed;
 
@@ -380,7 +392,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Sets terminal settings
+		/// Sets terminal settings.
 		/// </summary>
 		public virtual void SetSettings(Domain.Settings.TerminalSettings settings)
 		{
@@ -419,7 +431,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Sets log settings
+		/// Sets log settings.
 		/// </summary>
 		public virtual void SetLogSettings(Log.Settings.LogSettings settings)
 		{
@@ -534,7 +546,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Saves terminal to file, prompts for file if it doesn't exist yet
+		/// Saves terminal to file, prompts for file if it doesn't exist yet.
 		/// </summary>
 		public virtual bool Save()
 		{
@@ -542,7 +554,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Saves terminal to file, prompts for file if it doesn't exist yet
+		/// Saves terminal to file, prompts for file if it doesn't exist yet.
 		/// </summary>
 		public virtual bool Save(bool autoSaveIsAllowed)
 		{
@@ -550,7 +562,7 @@ namespace YAT.Model
 
 			bool success = false;
 
-			// Save terminal if file path is valid
+			// Save terminal if file path is valid.
 			if (this.settingsHandler.SettingsFilePathIsValid)
 			{
 				if (this.settingsHandler.Settings.AutoSaved)
@@ -563,13 +575,13 @@ namespace YAT.Model
 					success = SaveToFile(false);
 				}
 			}
-			else // Auto save creates default file path
+			else // Auto save creates default file path.
 			{
 				if (autoSaveIsAllowed)
 					success = SaveToFile(true);
 			}
 
-			// If not successful yet, request new file path
+			// If not successful yet, request new file path.
 			if (!success)
 				success = (OnSaveAsFileDialogRequest() == DialogResult.OK);
 
@@ -577,7 +589,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Saves terminal to given file
+		/// Saves terminal to given file.
 		/// </summary>
 		public virtual bool SaveAs(string filePath)
 		{
@@ -599,18 +611,18 @@ namespace YAT.Model
 		private bool SaveToFile(bool doAutoSave, string autoSaveFilePathToDelete)
 		{
 			// -------------------------------------------------------------------------------------
-			// Skip save if file is up to date and there were no changes
+			// Skip save if file is up to date and there were no changes.
 			// -------------------------------------------------------------------------------------
 
 			if (this.settingsHandler.SettingsFileIsUpToDate && (!this.settingsRoot.HaveChanged))
 			{
-				// Event must be fired anyway to ensure that dependent objects are updated
+				// Event must be fired anyway to ensure that dependent objects are updated.
 				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, doAutoSave));
 				return (true);
 			}
 
 			// -------------------------------------------------------------------------------------
-			// Save terminal
+			// Save terminal.
 			// -------------------------------------------------------------------------------------
 
 			bool success = false;
@@ -642,7 +654,7 @@ namespace YAT.Model
 				}
 
 				// ---------------------------------------------------------------------------------
-				// Try to delete existing auto save file
+				// Try to delete existing auto save file.
 				// ---------------------------------------------------------------------------------
 
 				try
@@ -736,8 +748,7 @@ namespace YAT.Model
 				{
 					success = true; // Consider it successful if there was no file to save
 				}
-				// Existing file
-				else
+				else // Existing file
 				{
 					if (this.settingsRoot.AutoSaved) // Existing auto file (w2a/b, t2)
 					{
@@ -1020,18 +1031,18 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Starts the terminal's I/O instance
+		/// Starts the terminal's I/O instance.
 		/// </summary>
-		/// <returns><c>true</c> if successful, <c>false</c> otherwise</returns>
+		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
 		public virtual bool StartIO()
 		{
 			return (StartIO(true));
 		}
 
 		/// <summary>
-		/// Starts the terminal's I/O instance
+		/// Starts the terminal's I/O instance.
 		/// </summary>
-		/// <returns><c>true</c> if successful, <c>false</c> otherwise</returns>
+		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
 		private bool StartIO(bool saveStatus)
 		{
 			bool success = false;
@@ -1075,18 +1086,18 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Stops the terminal's I/O instance
+		/// Stops the terminal's I/O instance.
 		/// </summary>
-		/// <returns><c>true</c> if successful, <c>false</c> otherwise</returns>
+		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
 		public virtual bool StopIO()
 		{
 			return (StopIO(true));
 		}
 
 		/// <summary>
-		/// Stops the terminal's I/O instance
+		/// Stops the terminal's I/O instance.
 		/// </summary>
-		/// <returns><c>true</c> if successful, <c>false</c> otherwise</returns>
+		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
 		private bool StopIO(bool saveStatus)
 		{
 			bool success = false;
@@ -1128,7 +1139,7 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Toggles RTS line if current flow control settings allow this
+		/// Toggles RTS line if current flow control settings allow this.
 		/// </summary>
 		public virtual void RequestToggleRts()
 		{
@@ -1141,7 +1152,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Toggles DTR line if current flow control settings allow this
+		/// Toggles DTR line if current flow control settings allow this.
 		/// </summary>
 		public virtual void RequestToggleDtr()
 		{
@@ -1320,7 +1331,7 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Sends file given by terminal settings
+		/// Sends file given by terminal settings.
 		/// </summary>
 		public virtual void SendFile()
 		{
@@ -1328,9 +1339,9 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Sends given file
+		/// Sends given file.
 		/// </summary>
-		/// <param name="command">File to be sent</param>
+		/// <param name="command">File to be sent.</param>
 		public virtual void SendFile(Command command)
 		{
 			if (!command.IsValidFilePath)
@@ -1364,7 +1375,7 @@ namespace YAT.Model
 							{
 								l.Add(s);
 							}
-							sr.Close();                   // close file before sending
+							sr.Close(); // Close file before sending.
 							lines = l.ToArray();
 						}
 					}
@@ -1380,7 +1391,7 @@ namespace YAT.Model
 					{
 						byte[] a = new byte[(int)fs.Length];
 						fs.Read(a, 0, (int)fs.Length);
-						fs.Close();                   // close file before sending
+						fs.Close(); // Close file before sending.
 						Send(a);
 					}
 				}
@@ -1409,8 +1420,8 @@ namespace YAT.Model
 		/// <summary>
 		/// Send requested predefined command.
 		/// </summary>
-		/// <param name="page">Page 1..max</param>
-		/// <param name="command">Command 1..max</param>
+		/// <param name="page">Page 1..max.</param>
+		/// <param name="command">Command 1..max.</param>
 		public virtual void SendPredefined(int page, int command)
 		{
 			Model.Types.Command c = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];

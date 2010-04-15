@@ -217,10 +217,16 @@
       </Rules>
       <AnalyzerSettings>
         <CollectionProperty Name="Hungarian">
+          <Value>io</Value>
           <Value>ip</Value>
           <Value>pc</Value>
+          <Value>rs</Value>
+          <Value>rx</Value>
           <Value>ts</Value>
+          <Value>tx</Value>
           <Value>x</Value>
+          <Value>y</Value>
+          <Value>z</Value>
         </CollectionProperty>
       </AnalyzerSettings>
     </Analyzer>

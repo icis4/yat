@@ -16,11 +16,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using System.Text;
 
 using MKY.Utilities.Text;
-using MKY.Utilities.Types;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -69,6 +68,7 @@ namespace YAT.Domain
 			End
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "Private element.")]
 		private class LineState
 		{
 			public LinePosition LinePosition;
@@ -93,6 +93,7 @@ namespace YAT.Domain
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "Private element.")]
 		private class BidirLineState
 		{
 			public bool IsFirstLine;
@@ -234,7 +235,7 @@ namespace YAT.Domain
 			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianess, (XEncoding)TextTerminalSettings.Encoding);
 
 			// Prepare EOL.
-			MemoryStream eolWriter = new MemoryStream();;
+			MemoryStream eolWriter = new MemoryStream();
 			foreach (Parser.Result result in p.Parse(eol, TextTerminalSettings.CharSubstitution, Parser.ParseMode.AllByteArrayResults))
 			{
 				if (result is Parser.ByteArrayResult)
@@ -322,6 +323,7 @@ namespace YAT.Domain
 				{
 					return (base.ByteToElement(b, d, r));
 				}
+
 				// Char/String
 				case Radix.Char:
 				case Radix.String:

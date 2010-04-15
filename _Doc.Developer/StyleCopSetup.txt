@@ -113,11 +113,16 @@ Temporarily disable the following rules during transition from non-StyleCop to S
 - C# > Documentation > Element Documentation > ElementReturnValueMustBeDocumented (SA1615)
 
 Add the following prefixes to the list of allowed Hungarian prefixes
-- ip
+- io (Input/Output)
+- ip (Internet Protocol)
 - pc
-- ts
-- x
-
+- rs (RS-232/422/485)
+- rx (Receive)
+- ts (Timespan/Timestamp)
+- tx (Transmit)
+- x  (X-Coordinate/Extended/Extension)
+- y  (Y-Coordinate)
+- z  (Z-Coordinate)
 
 In-Code Exceptions
 ------------------

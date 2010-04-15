@@ -15,10 +15,8 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.Serialization;
 using System.Drawing;
+using System.Xml.Serialization;
 
 namespace YAT.Model.Types
 {
@@ -33,8 +31,10 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		public const string NameDefault = "DejaVu Sans Mono";
+
 		/// <summary></summary>
 		public const float SizeDefault = 8.25f;
+
 		/// <summary></summary>
 		public const FontStyle StyleDefault = FontStyle.Regular;
 

@@ -30,6 +30,7 @@ using YAT.Utilities;
 
 namespace YAT.Gui.Forms
 {
+	/// <summary></summary>
 	public partial class WelcomeScreen : Form
 	{
 		#region Fields
@@ -54,17 +55,17 @@ namespace YAT.Gui.Forms
 		{
 			InitializeComponent();
 
-			const int margin = 8;
+			const int Margin = 8;
 			int width = Width;
 			int width2 = 0;
 
 			label_Name.Text = ApplicationInfo.ProductName;
-			width2 = label_Name.Left + label_Name.Width + margin;
+			width2 = label_Name.Left + label_Name.Width + Margin;
 			if (width < width2)
 				width = width2;
 
 			label_Version.Text = "Version " + Application.ProductVersion;
-			width2 = label_Version.Left + label_Version.Width + margin;
+			width2 = label_Version.Left + label_Version.Width + Margin;
 			if (width < width2)
 				width = width2;
 

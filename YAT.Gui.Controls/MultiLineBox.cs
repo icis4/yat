@@ -17,17 +17,16 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 
 using YAT.Gui.Utilities;
 using YAT.Model.Types;
 
 namespace YAT.Gui.Controls
 {
+	/// <summary></summary>
 	public partial class MultiLineBox : Form
 	{
 		#region Fields
@@ -186,7 +185,7 @@ namespace YAT.Gui.Controls
 
 		private void button_Cancel_Click(object sender, EventArgs e)
 		{
-			// do nothing
+			// Do nothing.
 		}
 
 		#endregion

@@ -23,10 +23,10 @@ namespace YAT.Utilities
 {
 	public static class ApplicationInfo
 	{
-		//public const string ProductNamePostFix = "";
-		//public const string ProductNamePostFix = " Beta 3";
+	////public const string ProductNamePostFix = "";
+	////public const string ProductNamePostFix = " Beta 3";
 		public const string ProductNamePostFix = " Beta 3 Candidate 2";
-		//public const string ProductNamePostFix = " Beta 3 Preliminary";
+	////public const string ProductNamePostFix = " Beta 3 Preliminary";
 
 		public static readonly string ProductName = Application.ProductName + ProductNamePostFix;
 	}

@@ -63,8 +63,8 @@ namespace YAT.Model.Test
 
 					// Verify transmission
 					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-										  terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-										  testSet);
+					                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
+					                      testSet);
 
 					// Create test set to verify clear
 					testSet = new Utilities.TestSet(new Types.Command(@""), 0, new int[] { 0 }, new int[] { 0 }); // Empty terminals expected
@@ -75,8 +75,8 @@ namespace YAT.Model.Test
 
 					// Verify clear
 					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-										  terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-										  testSet);
+					                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
+					                      testSet);
 				}
 			}
 		}
@@ -114,8 +114,8 @@ namespace YAT.Model.Test
 
 					// Verify transmission
 					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-										  terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-										  testSet);
+					                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
+					                      testSet);
 
 					// Send incomplete line command
 					terminalA.SendCommand(new Types.Command(@"B\!(NoEOL)"));
@@ -135,8 +135,8 @@ namespace YAT.Model.Test
 
 					// Verify clear
 					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
-										  terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
-										  testSet);
+					                      terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx),
+					                      testSet);
 				}
 			}
 		}

@@ -16,12 +16,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.IO;
 using System.Threading;
 
 using MKY.Utilities.Event;
-using MKY.Utilities.Settings;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -75,7 +72,7 @@ namespace YAT.Domain
 			/// <summary></summary>
 			public virtual void Stop()
 			{
-				this.timer = null; ;
+				this.timer = null;
 			}
 
 			private void timer_Timeout(object obj)
@@ -104,6 +101,7 @@ namespace YAT.Domain
 			End
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "Private element.")]
 		private class LineState
 		{
 			public LinePosition LinePosition;
@@ -130,6 +128,7 @@ namespace YAT.Domain
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "Private element.")]
 		private class BidirLineState
 		{
 			public bool IsFirstLine;
@@ -340,9 +339,11 @@ namespace YAT.Domain
 			lineState.Reset();
 		}
 
-		private void ExecuteTimedLineBreakOnReload(Settings.BinaryDisplaySettings displaySettings,
-			                                       LineState lineState, SerialDirection d, DateTime ts,
-												   DisplayElementCollection elements, List<DisplayLine> lines)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1115:ParameterMustFollowComma", Justification = "Too long for one line.")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too long for one line.")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Too long for one line.")]
+		private void ExecuteTimedLineBreakOnReload(Settings.BinaryDisplaySettings displaySettings, LineState lineState,
+		                                           SerialDirection d, DateTime ts, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
 			if (lineState.LineElements.Count > 0)
 			{

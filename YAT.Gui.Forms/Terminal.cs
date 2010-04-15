@@ -18,13 +18,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using System.IO;
 
 using MKY.Utilities.Event;
-using MKY.Utilities.Recent;
 using MKY.Utilities.Settings;
 using MKY.Utilities.Time;
 using MKY.Utilities.Windows.Forms;
@@ -35,8 +33,21 @@ using YAT.Settings.Terminal;
 
 namespace YAT.Gui.Forms
 {
+	/// <summary></summary>
 	public partial class Terminal : Form
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		// Status
+		private const string DefaultStatusText = "";
+		private const int TimedStatusInterval = 2000;
+		private const int RtsLuminescenceInterval = 150;
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -61,11 +72,6 @@ namespace YAT.Gui.Forms
 		private TerminalSettingsRoot settingsRoot;
 		private bool handlingTerminalSettingsIsSuspended = false;
 
-		// Status
-		private const string DefaultStatusText = "";
-		private const int TimedStatusInterval = 2000;
-		private const int RtsLuminescenceInterval = 150;
-
 		#endregion
 
 		#region Events
@@ -75,6 +81,7 @@ namespace YAT.Gui.Forms
 
 		/// <summary></summary>
 		public event EventHandler Changed;
+
 		/// <summary></summary>
 		public event EventHandler<Model.SavedEventArgs> Saved;
 
@@ -1977,6 +1984,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
 		private void SaveMonitor(Controls.Monitor monitor, string filePath)
 		{
 			SetFixedStatusText("Saving monitor...");
@@ -2032,6 +2040,7 @@ namespace YAT.Gui.Forms
 			PrintMonitor(monitor, new System.Drawing.Printing.PrinterSettings());
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
 		private void PrintMonitor(Controls.Monitor monitor, System.Drawing.Printing.PrinterSettings settings)
 		{
 			SetFixedStatusText("Printing monitor...");
@@ -2069,8 +2078,8 @@ namespace YAT.Gui.Forms
 		// Predefined Panel
 		//==========================================================================================
 
-		/// <param name="page">Page 1..max</param>
-		/// <param name="command">Command 1..max</param>
+		/// <param name="page">Page 1..max.</param>
+		/// <param name="command">Command 1..max.</param>
 		private void RequestPredefined(int page, int command)
 		{
 			List<Model.Types.PredefinedCommandPage> pages = this.settingsRoot.PredefinedCommand.Pages;
@@ -2099,8 +2108,8 @@ namespace YAT.Gui.Forms
 			ShowPredefinedCommandSettings(page, command);
 		}
 
-		/// <param name="page">Page 1..max</param>
-		/// <param name="command">Command 1..max</param>
+		/// <param name="page">Page 1..max.</param>
+		/// <param name="command">Command 1..max.</param>
 		private void ShowPredefinedCommandSettings(int page, int command)
 		{
 			PredefinedCommandSettings f = new PredefinedCommandSettings(this.settingsRoot.PredefinedCommand, page, command);

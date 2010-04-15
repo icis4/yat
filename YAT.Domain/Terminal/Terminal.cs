@@ -16,10 +16,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.IO;
 
-using MKY.Utilities;
 using MKY.Utilities.Event;
 using MKY.Utilities.Types;
 
@@ -64,27 +61,37 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		public event EventHandler IOChanged;
+
 		/// <summary></summary>
 		public event EventHandler IOControlChanged;
+
 		/// <summary></summary>
 		public event EventHandler<IORequestEventArgs> IORequest;
+
 		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
 		public event EventHandler<RawElementEventArgs> RawElementSent;
+
 		/// <summary></summary>
 		public event EventHandler<RawElementEventArgs> RawElementReceived;
+
 		/// <summary></summary>
 		public event EventHandler<DisplayElementsEventArgs> DisplayElementsSent;
+
 		/// <summary></summary>
 		public event EventHandler<DisplayElementsEventArgs> DisplayElementsReceived;
+
 		/// <summary></summary>
 		public event EventHandler<DisplayLinesEventArgs> DisplayLinesSent;
+
 		/// <summary></summary>
 		public event EventHandler<DisplayLinesEventArgs> DisplayLinesReceived;
+
 		/// <summary></summary>
 		public event EventHandler<RepositoryEventArgs> RepositoryCleared;
+
 		/// <summary></summary>
 		public event EventHandler<RepositoryEventArgs> RepositoryReloaded;
 

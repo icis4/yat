@@ -130,7 +130,7 @@ namespace MKY.IO.Usb
 		{
 			List<DeviceInfo> l = new List<DeviceInfo>();
 
-			foreach (string path in Utilities.Win32.DeviceManagement.GetDevicesFromGuid(classGuid))
+			foreach (string path in Win32.DeviceManagement.GetDevicesFromGuid(classGuid))
 			{
 				DeviceInfo device = GetDeviceInfoFromPath(path);
 				if (device != null)
@@ -153,7 +153,7 @@ namespace MKY.IO.Usb
 		public static bool GetVidAndPidFromPath(string path, out int vendorId, out int productId)
 		{
 			SafeFileHandle deviceHandle;
-			if (Utilities.Win32.Hid.CreateSharedQueryOnlyDeviceHandle(path, out deviceHandle))
+			if (Win32.Hid.CreateSharedQueryOnlyDeviceHandle(path, out deviceHandle))
 			{
 				try
 				{
@@ -174,10 +174,10 @@ namespace MKY.IO.Usb
 		private static bool GetVidAndPidFromHandle(SafeFileHandle deviceHandle, out int vendorId, out int productId)
 		{
 			// Set the size property of attributes to the number of bytes in the structure.
-			Utilities.Win32.Hid.Native.HIDD_ATTRIBUTES attributes = new Utilities.Win32.Hid.Native.HIDD_ATTRIBUTES();
+			Win32.Hid.Native.HIDD_ATTRIBUTES attributes = new Win32.Hid.Native.HIDD_ATTRIBUTES();
 			attributes.Size = Marshal.SizeOf(attributes);
 
-			if (Utilities.Win32.Hid.Native.HidD_GetAttributes(deviceHandle, ref attributes))
+			if (Win32.Hid.Native.HidD_GetAttributes(deviceHandle, ref attributes))
 			{
 				vendorId = attributes.VendorID;
 				productId = attributes.ProductID;
@@ -195,7 +195,7 @@ namespace MKY.IO.Usb
 		public static bool GetStringsFromPath(string path, out string manufacturer, out string product, out string serialNumber)
 		{
 			SafeFileHandle deviceHandle;
-			if (Utilities.Win32.Hid.CreateSharedQueryOnlyDeviceHandle(path, out deviceHandle))
+			if (Win32.Hid.CreateSharedQueryOnlyDeviceHandle(path, out deviceHandle))
 			{
 				try
 				{
@@ -216,9 +216,9 @@ namespace MKY.IO.Usb
 
 		private static bool GetStringsFromHandle(SafeFileHandle deviceHandle, out string manufacturer, out string product, out string serialNumber)
 		{
-			Utilities.Win32.Hid.GetManufacturerString(deviceHandle, out manufacturer);
-			Utilities.Win32.Hid.GetProductString(deviceHandle, out product);
-			Utilities.Win32.Hid.GetSerialNumberString(deviceHandle, out serialNumber);
+			Win32.Hid.GetManufacturerString(deviceHandle, out manufacturer);
+			Win32.Hid.GetProductString(deviceHandle, out product);
+			Win32.Hid.GetSerialNumberString(deviceHandle, out serialNumber);
 			return (true);
 		}
 
@@ -246,7 +246,7 @@ namespace MKY.IO.Usb
 		public static bool GetDeviceInfoFromPath(string path, out int vendorId, out int productId, out string manufacturer, out string product, out string serialNumber)
 		{
 			SafeFileHandle deviceHandle;
-			if (Utilities.Win32.Hid.CreateSharedQueryOnlyDeviceHandle(path, out deviceHandle))
+			if (Win32.Hid.CreateSharedQueryOnlyDeviceHandle(path, out deviceHandle))
 			{
 				try
 				{
@@ -387,12 +387,12 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		private static void RegisterStaticDeviceNotificationHandler()
 		{
-			//Utilities.Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationWindow.Handle, HidDevice.HidGuid, ref staticDeviceNotificationHandle);
+			//Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationWindow.Handle, HidDevice.HidGuid, ref staticDeviceNotificationHandle);
 		}
 
 		private static void UnregisterStaticDeviceNotificationHandler()
 		{
-			//Utilities.Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
+			//Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
 		}
 
 		private static void StaticDeviceNotificationHandler(ref Message m)
@@ -403,7 +403,7 @@ namespace MKY.IO.Usb
 				(de == DeviceEvent.Disconnected))
 			{
 				string devicePath;
-				if (Utilities.Win32.DeviceManagement.DeviceChangeMessageToDevicePath(m, out devicePath))
+				if (Win32.DeviceManagement.DeviceChangeMessageToDevicePath(m, out devicePath))
 				{
 					DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Any, devicePath);
 					switch (de)
@@ -424,15 +424,15 @@ namespace MKY.IO.Usb
 
 		internal static DeviceEvent MessageToDeviceEvent(ref Message m)
 		{
-			if (m.Msg == (int)Utilities.Win32.DeviceManagement.Native.WM_DEVICECHANGE)
+			if (m.Msg == (int)Win32.DeviceManagement.Native.WM_DEVICECHANGE)
 			{
-				Utilities.Win32.DeviceManagement.Native.DBT e = (Utilities.Win32.DeviceManagement.Native.DBT)m.WParam.ToInt32();
+				Win32.DeviceManagement.Native.DBT e = (Win32.DeviceManagement.Native.DBT)m.WParam.ToInt32();
 				switch (e)
 				{
-					case Utilities.Win32.DeviceManagement.Native.DBT.DEVICEARRIVAL:
+					case Win32.DeviceManagement.Native.DBT.DEVICEARRIVAL:
 						return (DeviceEvent.Connected);
 
-					case Utilities.Win32.DeviceManagement.Native.DBT.DEVICEREMOVECOMPLETE:
+					case Win32.DeviceManagement.Native.DBT.DEVICEREMOVECOMPLETE:
 						return (DeviceEvent.Disconnected);
 				}
 			}
@@ -517,7 +517,7 @@ namespace MKY.IO.Usb
 		private void Initialize()
 		{
 			SafeFileHandle deviceHandle;
-			if (Utilities.Win32.Hid.CreateSharedQueryOnlyDeviceHandle(SystemPath, out deviceHandle))
+			if (Win32.Hid.CreateSharedQueryOnlyDeviceHandle(SystemPath, out deviceHandle))
 			{
 				deviceHandle.Close();
 

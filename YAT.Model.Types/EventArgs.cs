@@ -25,6 +25,7 @@ namespace YAT.Model.Types
 	{
 		/// <summary></summary>
 		public readonly int Page;
+
 		/// <summary></summary>
 		public readonly int Command;
 
