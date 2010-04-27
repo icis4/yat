@@ -53,6 +53,7 @@ Important changes:
 - Methods and properties marked "virtual", unless there are reasons against
 - Null reference safe implementation of Equals()
 - Selection and settings controls now clear contents when disabled
+- Project references to system assemblies cleaned
 
 Fixed bugs:
 - <> (bug #2855869)

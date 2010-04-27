@@ -9,6 +9,11 @@ Sign all library/dll assemblies using the strong name tool:
 4. Move the .snk file to the "\Properties" directory of the project
 5. Project Properties > Signing > Sign
 
+Enforce CLS compliance
+[assembly: CLSCompliant(true)]
+
+Use FxCop
+
 
 Comments
 --------

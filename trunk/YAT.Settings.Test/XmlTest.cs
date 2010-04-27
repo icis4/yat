@@ -24,6 +24,8 @@ using NUnit.Framework;
 using MKY.Utilities.Diagnostics;
 using MKY.Utilities.Recent;
 
+using MKY.Test;
+
 using YAT.Model.Settings;
 using YAT.Model.Types;
 using YAT.Settings.Terminal;
@@ -77,14 +79,35 @@ namespace YAT.Settings.Test
 			filePath = MakeTempFilePath("ArrayEmpty");
 			string[] ae = new string[] { };
 			TestSerialization(typeof(string[]), ae, filePath);
-
-			filePath = MakeTempFilePath("ArrayOfArrays");
-			string[][] aa = new string[][]
+#if (FALSE)
+			// Doesn't work, not supported for serialization.
+			filePath = MakeTempFilePath("MultiArray");
+			string[,] ma = new string[,]
+					{
+						{ "A", "AA" },
+						{ "B", "BB" },
+					};
+			TestSerialization(typeof(string[,]), ma, filePath);
+#endif
+			filePath = MakeTempFilePath("ArrayOfArraysOnInit");
+			string[][] aai = new string[][]
 					{
 						new string[] { "A", "AA" },
-						new string[] { "B", "BB" }
+						new string[] { "B", "BB" },
 					};
-			TestSerialization(typeof(string[][]), aa, filePath);
+			TestSerialization(typeof(string[][]), aai, filePath);
+
+			filePath = MakeTempFilePath("ArrayOfArraysByCreate");
+			string[][] aac = (string[][])Array.CreateInstance(typeof(string[]), 2);
+			for (int i = 0; i < 2; i++)
+			{
+				aac[i] = new string[2];
+			}
+			aac[0][0] = "A";
+			aac[0][1] = "AA";
+			aac[1][0] = "B";
+			aac[1][1] = "BB";
+			TestSerialization(typeof(string[][]), aac, filePath);
 		}
 
 		#endregion
@@ -110,7 +133,7 @@ namespace YAT.Settings.Test
 			List<string> le = new List<string>();
 			TestSerialization(typeof(List<string>), le, filePath);
 #if (FALSE)
-			// doesn't work
+			// Doesn't work, not supported for serialization.
 			filePath = MakeTempFilePath("ListOfArrays");
 			List<string[]> la = new List<string[]>();
 			la.Add(new string[] { "A", "AA" });
@@ -118,13 +141,106 @@ namespace YAT.Settings.Test
 			Test_Serialization(typeof(List<string>), la, filePath);
 #endif
 #if (FALSE)
-			// doesn't work
+			// Doesn't work, not supported for serialization.
 			filePath = MakeTempFilePath("ListOfLists");
 			List<List<string>> ll = new List<List<string>>();
 			ll.Add(l);
 			ll.Add(l);
 			Test_Serialization(typeof(List<string>), ll, filePath);
 #endif
+		}
+
+		#endregion
+
+		#region Tests > Serialization > Dictionary
+		//------------------------------------------------------------------------------------------
+		// Tests > Serialization > Dictionary
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestDictionarySerialization()
+		{
+			int i = 0;
+			string filePath = "";
+#if (FALSE)
+			// Doesn't work, not supported for serialization.
+			filePath = MakeTempFilePath("Dictionary");
+			Dictionary<string, string> l = new Dictionary<string, string>();
+			l.Add("1", "A");
+			l.Add("2", "B");
+			TestSerialization(typeof(Dictionary<string, string>), l, filePath);
+#endif
+#if (FALSE)
+			// Doesn't work, not supported for serialization.
+			filePath = MakeTempFilePath("DictionaryEmpty");
+			Dictionary<string, string> le = new Dictionary<string, string>();
+			l.Add("1", "A");
+			l.Add("2", "B");
+			TestSerialization(typeof(Dictionary<string, string>), le, filePath);
+#endif
+			filePath = MakeTempFilePath("DictionaryToArrayOfArrays");
+			Dictionary<string, string> l = new Dictionary<string, string>();
+			l.Add("1", "A");
+			l.Add("2", "B");
+
+			string[][] aa = new string[2][]
+					{
+						new string[2],
+						new string[2],
+					};
+			i = 0;
+			foreach (string key in l.Keys)
+			{
+				aa[i][0] = key;
+				i++;
+			}
+			i = 0;
+			foreach (string value in l.Values)
+			{
+				aa[i][1] = value;
+				i++;
+			}
+
+			TestSerialization(typeof(string[][]), aa, filePath);
+		}
+
+		#endregion
+
+		#region Tests > Serialization > NamedStringDictionary
+		//------------------------------------------------------------------------------------------
+		// Tests > Serialization > NamedStringDictionary
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestNamedStringDictionarySerialization()
+		{
+			string filePath = MakeTempFilePath("NamedStringDictionaryToArrayOfArrays");
+			NamedStringDictionary nsd = new NamedStringDictionary();
+			nsd.Name = "Test";
+			nsd.Add("1", "A");
+			nsd.Add("2", "B");
+			TestSerialization(typeof(NamedStringDictionary), nsd, filePath);
+		}
+
+		#endregion
+
+		#region Tests > Serialization > SettingsCollection
+		//------------------------------------------------------------------------------------------
+		// Tests > Serialization > SettingsCollection
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestSettingsCollectionSerialization()
+		{
+			string filePath = MakeTempFilePath("SettingsCollectionToArrayOfArrays");
+			SettingsCollection sc = new SettingsCollection();
+			sc.CreateConfiguration("Test");
+			sc.Add("1", "A");
+			sc.Add("2", "B");
+			TestSerialization(typeof(SettingsCollection), sc, filePath);
 		}
 
 		#endregion
@@ -254,8 +370,12 @@ namespace YAT.Settings.Test
 
 		private static string MakeTempPath()
 		{
-			//return (Path.GetTempPath() + Path.DirectorySeparatorChar + "YAT");
-			return ("D:");
+			string path = Path.GetTempPath() + Path.DirectorySeparatorChar + "YAT";
+
+			if (!Directory.Exists(path))
+				Directory.CreateDirectory(path);
+
+			return (path);
 		}
 
 		private static string MakeTempFileName(string name)

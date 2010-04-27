@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("YAT")]
 [assembly: AssemblyProduct("YAT")]
-[assembly: AssemblyCopyright("Copyright © 2007-2008 Matthias Kläy. All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2007-2010 Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

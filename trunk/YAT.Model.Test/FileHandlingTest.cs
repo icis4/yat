@@ -837,8 +837,12 @@ namespace YAT.Model.Test
 
 		private static string MakeTempPath()
 		{
-			//return (Path.GetTempPath() + Path.DirectorySeparatorChar + "YAT");
-			return ("D:");
+			string path = Path.GetTempPath() + Path.DirectorySeparatorChar + "YAT";
+
+			if (!Directory.Exists(path))
+				Directory.CreateDirectory(path);
+
+			return (path);
 		}
 
 		private static string MakeTempFileName(string name, string extension)

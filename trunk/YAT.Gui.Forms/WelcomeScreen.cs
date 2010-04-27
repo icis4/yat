@@ -15,17 +15,9 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
-using MKY.Utilities.Settings;
-
 using YAT.Settings.Application;
-using YAT.Settings.Workspace;
 using YAT.Utilities;
 
 namespace YAT.Gui.Forms

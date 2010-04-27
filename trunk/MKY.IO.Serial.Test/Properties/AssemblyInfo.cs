@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MKY")]
 [assembly: AssemblyProduct("MKY.IO.Serial.Test")]
-[assembly: AssemblyCopyright("Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil. Copyright © 2003-2010 Matthias Kläy. All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2007-2010 Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

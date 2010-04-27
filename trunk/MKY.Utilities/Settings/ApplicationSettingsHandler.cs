@@ -329,8 +329,8 @@ namespace MKY.Utilities.Settings
 		/// or creates default settings if file not found or not readable.
 		/// </summary>
 		/// <returns>
-		/// Returns false if either settings could not be loaded from
-		/// its file path and have been set to defaults.
+		/// Returns false if either settings could not be loaded from its file path and have been
+		/// set to defaults.
 		/// </returns>
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be created.
@@ -348,7 +348,7 @@ namespace MKY.Utilities.Settings
 			if (!LoadRoamingUser())
 				this.allSettingsSuccessfullyLoaded = false;
 
-			// Immediately try to save settings to reflect current version
+			// Immediately try to save settings to reflect current version.
 			try
 			{
 				Save();
@@ -357,7 +357,7 @@ namespace MKY.Utilities.Settings
 			{
 			}
 
-			// Return load result
+			// Return load result.
 			return (this.allSettingsSuccessfullyLoaded);
 		}
 
@@ -435,10 +435,10 @@ namespace MKY.Utilities.Settings
 
 		private object LoadFromFile(Type type, string filePath)
 		{
-			// Try to open existing file of current version
-			if (File.Exists(filePath)) // first check for file to minimize exceptions thrown
+			// Try to open existing file of current version.
+			if (File.Exists(filePath)) // First check for file to minimize exceptions thrown.
 			{
-				// Try to open existing file with default deserialization
+				// Try to open existing file with default deserialization.
 				try
 				{
 					object settings = null;
@@ -453,7 +453,7 @@ namespace MKY.Utilities.Settings
 				{
 				}
 
-				// Try to open existing file with tolerant deserialization
+				// Try to open existing file with tolerant deserialization.
 				try
 				{
 					object settings = null;
@@ -469,7 +469,7 @@ namespace MKY.Utilities.Settings
 				}
 			}
 
-			// Find all valid directories of older versions
+			// Find all valid directories of older versions.
 			string productSettingsPath = Path.GetDirectoryName(Path.GetDirectoryName(filePath));
 			string[] allDirectories = Directory.GetDirectories(productSettingsPath);
 			List<string> oldDirectories = new List<string>();
@@ -487,12 +487,12 @@ namespace MKY.Utilities.Settings
 				}
 			}
 
-			// Try to open an existing file of an older version, start with most recent
+			// Try to open an existing file of an older version, start with most recent.
 			string fileName = Path.GetFileName(filePath);
 			oldDirectories.Sort();
 			for (int i = oldDirectories.Count - 1; i >= 0; i--)
 			{
-				// Try to open existing file with default deserialization
+				// Try to open existing file with default deserialization.
 				try
 				{
 					object settings = null;
@@ -507,7 +507,7 @@ namespace MKY.Utilities.Settings
 				{
 				}
 
-				// Try to open existing file with tolerant deserialization
+				// Try to open existing file with tolerant deserialization.
 				try
 				{
 					object settings = null;
@@ -523,7 +523,7 @@ namespace MKY.Utilities.Settings
 				}
 			}
 
-			// If nothing found, return <c>null</c>
+			// If nothing found, return <c>null</c>.
 			return (null);
 		}
 
@@ -538,7 +538,7 @@ namespace MKY.Utilities.Settings
 		{
 			Exception result = null;
 
-			// Try to save common settings
+			// Try to save common settings.
 			try
 			{
 				SaveCommon();
@@ -549,7 +549,7 @@ namespace MKY.Utilities.Settings
 					result = ex;
 			}
 
-			// Try to save local user settings
+			// Try to save local user settings.
 			try
 			{
 				SaveLocalUser();
@@ -560,7 +560,7 @@ namespace MKY.Utilities.Settings
 					result = ex;
 			}
 
-			// Try to save roaming user settings
+			// Try to save roaming user settings.
 			try
 			{
 				SaveRoamingUser();
@@ -571,7 +571,7 @@ namespace MKY.Utilities.Settings
 					result = ex;
 			}
 
-			// Throw exeption if either operation failed
+			// Throw exeption if either operation failed.
 			if (result != null)
 				throw (result);
 		}
