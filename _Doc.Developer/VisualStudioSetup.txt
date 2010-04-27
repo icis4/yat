@@ -50,7 +50,7 @@ Tools
   > External Tools
     > Add"
       > Title       = "NUnit"
-      > Command     = "<NUnitInstallPath>\bin\nunit.exe"
+      > Command     = "<NUnitInstallPath>\bin\<Platform>\nunit.exe"
       > Arguments   = "$(SolutionFileName)"
       > Initial Dir = "$(SolutionDir)"
     > Confirm "OK"

@@ -258,6 +258,8 @@ namespace MKY.Utilities.Test.IO
 
 		#endregion
 
+		#endregion
+
 		#region Private Methods
 		//==========================================================================================
 		// Private Methods
@@ -273,8 +275,6 @@ namespace MKY.Utilities.Test.IO
 			Console.WriteLine("Output path   = " + result);
 			Console.WriteLine("Expected path = " + expected);
 		}
-
-		#endregion
 
 		#endregion
 	}

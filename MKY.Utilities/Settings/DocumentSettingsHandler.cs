@@ -138,7 +138,7 @@ namespace MKY.Utilities.Settings
 				if (!System.IO.File.Exists(this.settingsFilePath))
 					return (false);
 
-				// return whether current settings file path is still the same as the last access
+				// Return whether current settings file path is still the same as the last access.
 				return (this.settingsFilePath == this.accessedSettingsFilePath);
 			}
 		}
@@ -195,15 +195,15 @@ namespace MKY.Utilities.Settings
 			this.settings = (TDocumentSettings)settings;
 			this.settings.ClearChanged();
 
-			// return load status
+			// Return load status.
 			return (loadSuccess);
 		}
 
 		private object LoadFromFile(Type type, string filePath)
 		{
-			if (File.Exists(filePath)) // first check for file to minimize exceptions thrown
+			if (File.Exists(filePath)) // First check for file to minimize exceptions thrown.
 			{
-				// Try to open existing file with default deserialization
+				// Try to open existing file with default deserialization.
 				try
 				{
 					object settings = null;
@@ -218,7 +218,7 @@ namespace MKY.Utilities.Settings
 				{
 				}
 
-				// Try to open existing file with tolerant & alternate-tolerant deserialization
+				// Try to open existing file with tolerant & alternate-tolerant deserialization.
 				try
 				{
 					object settings = null;
@@ -235,7 +235,7 @@ namespace MKY.Utilities.Settings
 				}
 			}
 
-			// If not successful, return <c>null</c>
+			// If not successful, return <c>null</c>.
 			return (null);
 		}
 
@@ -261,7 +261,7 @@ namespace MKY.Utilities.Settings
 					result = ex;
 			}
 
-			// throw exeption if either operation failed
+			// Throw exeption if either operation failed.
 			if (result != null)
 				throw (result);
 		}

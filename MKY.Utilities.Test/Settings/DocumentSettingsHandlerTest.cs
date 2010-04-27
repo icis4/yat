@@ -285,8 +285,12 @@ namespace MKY.Utilities.Test.Settings
 
 		private static string MakeTempPath()
 		{
-			//return (Path.GetTempPath() + Path.DirectorySeparatorChar + "MKY");
-			return ("D:");
+			string path = Path.GetTempPath() + Path.DirectorySeparatorChar + "MKY";
+
+			if (!Directory.Exists(path))
+				Directory.CreateDirectory(path);
+
+			return (path);
 		}
 
 		private static string MakeTempFileName(string name)

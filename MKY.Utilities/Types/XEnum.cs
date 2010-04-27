@@ -38,17 +38,18 @@ namespace MKY.Utilities.Types
 	/// Creating a concrete XEnum including implicit conversion operators
 	/// -------------------------------------------------------------------------------------------
 	/// 
+	/// <code>
 	/// public enum Mode
 	/// {
-	///	    Fast = 1,
-	///	    Normal = 2,
-	///	    Slow = 3
+	///     Fast = 1,
+	///     Normal = 2,
+	///     Slow = 3
 	/// }
 	///
 	/// public class XMode : XEnum
 	/// {
-	///	    // Default is "Mode.Normal"
-	///	    public XMode() : base(Mode.Normal)
+	///     // Default is "Mode.Normal"
+	///     public XMode() : base(Mode.Normal)
 	///     {
 	///     }
 	///
@@ -123,11 +124,13 @@ namespace MKY.Utilities.Types
 	///        return (Parse(mode));
 	///     }
 	/// }
+	/// </code>
 	///
 	/// -------------------------------------------
 	/// Adding XEnum design time support to a class
 	/// -------------------------------------------
 	/// 
+	/// <code>
 	/// public class XEnumClient
 	/// {
 	///     private Mode mode = Mode.Fast;         // Mode is a normal enum
@@ -138,6 +141,7 @@ namespace MKY.Utilities.Types
 	///         set { this.mode = value;  }
 	///     }
 	/// }
+	/// </code>
 	/// 
 	/// </example>
 	[Serializable]
