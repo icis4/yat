@@ -13,58 +13,156 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System.Collections.Generic;
+using System.Configuration;
 
-using NUnit.Framework;
+using MKY.Utilities;
+using MKY.Utilities.Configuration;
 
 namespace MKY.IO.Usb.Test
 {
-	/// <summary></summary>
-	public static class Settings
+	/// <summary>
+	/// Type representing the configuration settings section.
+	/// </summary>
+	public class SettingsSection : MergeableSettingsSection
 	{
-		private const string SettingRoot = "MKY.IO.Usb.Test.Settings";
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
 
-		private const string SerialHidDeviceAIsAvailableSetting = SettingRoot + ".SerialHidDeviceAIsAvailable";
-		private const string SerialHidDeviceBIsAvailableSetting = SettingRoot + ".SerialHidDeviceBIsAvailable";
+		private ConfigurationPropertyCollection properties;
 
-		private const string SerialHidDeviceASetting = SettingRoot + ".SerialHidDeviceA";
-		private const string SerialHidDeviceBSetting = SettingRoot + ".SerialHidDeviceB";
+		private ConfigurationProperty serialHidDeviceAIsAvailable = new ConfigurationProperty("SerialHidDeviceAIsAvailable", typeof(bool), false);
+		private ConfigurationProperty serialHidDeviceBIsAvailable = new ConfigurationProperty("SerialHidDeviceBIsAvailable", typeof(bool), false);
 
-		public static bool SerialHidDeviceAIsAvailable = false;
-		public static bool SerialHidDeviceBIsAvailable = false;
+		private ConfigurationProperty serialHidDeviceA = new ConfigurationProperty("SerialHidDeviceA", typeof(string), "VID:0ABC PID:1234");
+		private ConfigurationProperty serialHidDeviceB = new ConfigurationProperty("SerialHidDeviceB", typeof(string), "VID:0ABC PID:1234");
 
-		public static string SerialHidDeviceA = "VID:0ABC PID:1234";
-		public static string SerialHidDeviceB = "VID:0ABC PID:1234";
+		#endregion
 
-		static Settings()
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SettingsSection"/> class.
+		/// </summary>
+		public SettingsSection()
 		{
-			if (MKY.Test.SettingsModeProvider.Mode == MKY.Test.SettingsMode.CreateDefaultSolutionFile)
-				InitializeDefaults();
-			else
-				TryGetSettings();
+			this.properties = new ConfigurationPropertyCollection();
+
+			this.properties.Add(this.serialHidDeviceAIsAvailable);
+			this.properties.Add(this.serialHidDeviceBIsAvailable);
+
+			this.properties.Add(this.serialHidDeviceA);
+			this.properties.Add(this.serialHidDeviceB);
 		}
 
-		public static void ForceStaticInitialization()
+		#endregion
+
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		/// <summary></summary>
+		protected override ConfigurationPropertyCollection Properties
 		{
-			// Do nothing, call will force initialization of static fields and call of static constructor.
+			get { return (this.properties); }
 		}
 
-		private static void InitializeDefaults()
+		/// <summary></summary>
+		public virtual bool SerialHidDeviceAIsAvailable
 		{
-			MKY.Test.SettingsDefaults.AddSetting(SerialHidDeviceAIsAvailableSetting, SerialHidDeviceAIsAvailable);
-			MKY.Test.SettingsDefaults.AddSetting(SerialHidDeviceBIsAvailableSetting, SerialHidDeviceBIsAvailable);
-
-			MKY.Test.SettingsDefaults.AddSetting(SerialHidDeviceASetting, SerialHidDeviceA);
-			MKY.Test.SettingsDefaults.AddSetting(SerialHidDeviceBSetting, SerialHidDeviceB);
+			get { return (bool)this["SerialHidDeviceAIsAvailable"]; }
+			set
+			{
+				AssertNotReadOnly("SerialHidDeviceAIsAvailable");
+				this["SerialHidDeviceAIsAvailable"] = value;
+			}
 		}
 
-		private static void TryGetSettings()
+		/// <summary></summary>
+		public virtual bool SerialHidDeviceBIsAvailable
 		{
-			MKY.Test.SettingsProvider.TryGetSetting(SerialHidDeviceAIsAvailableSetting, ref SerialHidDeviceAIsAvailable);
-			MKY.Test.SettingsProvider.TryGetSetting(SerialHidDeviceBIsAvailableSetting, ref SerialHidDeviceBIsAvailable);
+			get { return (bool)this["SerialHidDeviceBIsAvailable"]; }
+			set
+			{
+				AssertNotReadOnly("SerialHidDeviceBIsAvailable");
+				this["SerialHidDeviceBIsAvailable"] = value;
+			}
+		}
 
-			MKY.Test.SettingsProvider.TryGetSetting(SerialHidDeviceASetting, ref SerialHidDeviceA);
-			MKY.Test.SettingsProvider.TryGetSetting(SerialHidDeviceBSetting, ref SerialHidDeviceB);
+		/// <summary></summary>
+		public virtual string SerialHidDeviceA
+		{
+			get { return (string)this["SerialHidDeviceA"]; }
+			set
+			{
+				AssertNotReadOnly("SerialHidDeviceA");
+				this["SerialHidDeviceA"] = value;
+			}
+		}
+
+		/// <summary></summary>
+		public virtual string SerialHidDeviceB
+		{
+			get { return (string)this["SerialHidDeviceB"]; }
+			set
+			{
+				AssertNotReadOnly("SerialHidDeviceB");
+				this["SerialHidDeviceB"] = value;
+			}
+		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		private void AssertNotReadOnly(string propertyName)
+		{
+			if (IsReadOnly())
+				throw (new ConfigurationErrorsException("The property " + propertyName + " is read only."));
+		}
+
+		#endregion
+	}
+
+	/// <summary></summary>
+	/// <remarks>
+	/// Separate class needed to create default settings. To create the defaults, these constants
+	/// are needed but the provider below must not be initialized.
+	/// </remarks>
+	public static class SettingsConstants
+	{
+		/// <summary></summary>
+		public static readonly string ConfigurationGroupName = typeof(SettingsConstants).Namespace + ".Settings";
+		/// <summary></summary>
+		public static readonly string ConfigurationsGroupName = ConfigurationGroupName + ".Configurations";
+		/// <summary></summary>
+		public static readonly string UserSettingsEnvironmentVariableName = "MKY_IO_USB_TEST_SETTINGS_FILE";
+	}
+
+	/// <summary></summary>
+	public static class SettingsProvider
+	{
+		private static readonly SettingsSection staticSettings = new SettingsSection();
+
+		static SettingsProvider()
+		{
+			SettingsSection settings;
+			if (Provider.TryOpenAndMergeConfigurations<SettingsSection>(SettingsConstants.ConfigurationGroupName, SettingsConstants.ConfigurationsGroupName, SettingsConstants.UserSettingsEnvironmentVariableName, out settings))
+				staticSettings = settings;
+		}
+
+		/// <summary></summary>
+		public static SettingsSection Settings
+		{
+			get { return (staticSettings); }
 		}
 	}
 }

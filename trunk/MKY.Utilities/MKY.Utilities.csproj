@@ -41,6 +41,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -49,6 +50,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\NamedStringDictionary.cs" />
+    <Compile Include="Collections\StringKeyValuePair.cs" />
+    <Compile Include="Configuration\MergeableConfigurationSection.cs" />
+    <Compile Include="Configuration\Provider.cs" />
+    <Compile Include="Configuration\Selector.cs" />
+    <Compile Include="Configuration\SelectionSection.cs" />
+    <Compile Include="XEnvironment.cs" />
     <Compile Include="Diagnostics\AnyWriter.cs" />
     <Compile Include="Diagnostics\AnyWriterWrapper.cs" />
     <Compile Include="Diagnostics\ConsoleWrapper.cs" />

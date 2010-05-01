@@ -40,7 +40,7 @@
     <DocumentationFile>bin\Debug\YAT.Test.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=2.5.3.9345, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
+    <Reference Include="nunit.framework, Version=2.5.5.10112, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core">
@@ -65,13 +65,13 @@
       <Project>{E909B6F9-F856-4ED5-8D8F-6E77BC02C24C}</Project>
       <Name>MKY.IO.Usb.Test</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MKY.Test\MKY.Test.csproj">
-      <Project>{3F3D9083-1CA1-46E7-A14D-06F08391FB9B}</Project>
-      <Name>MKY.Test</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MKY.Utilities.Test\MKY.Utilities.Test.csproj">
       <Project>{644F7C29-CCE6-4827-9EF2-8B7D34194101}</Project>
       <Name>MKY.Utilities.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MKY.Utilities\MKY.Utilities.csproj">
+      <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
+      <Name>MKY.Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\MKY.Windows.Forms.Test\MKY.Windows.Forms.Test.csproj">
       <Project>{4171BFD3-4E50-4752-977B-9B1F79C3EDFB}</Project>

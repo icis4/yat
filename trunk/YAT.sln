@@ -103,12 +103,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Win32", "MKY.Win32\MKY.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Win32.Test", "MKY.Win32.Test\MKY.Win32.Test.csproj", "{B5F4667B-5154-45C0-A0DE-411BBC292049}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Test", "MKY.Test\MKY.Test.csproj", "{3F3D9083-1CA1-46E7-A14D-06F08391FB9B}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Test", "_Test", "{CA89FA6B-B262-4974-8690-03E65F24A704}"
 	ProjectSection(SolutionItems) = preProject
-		Settings.MKY.Test = Settings.MKY.Test
-		YAT.config = YAT.config
+		YAT.sln.config = YAT.sln.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Doc.SourceForge", "_Doc.SourceForge", "{E8A8F664-6F72-4139-A7B1-BB950EEC20AC}"
+	ProjectSection(SolutionItems) = preProject
+		_Doc.SourceForge\Description.txt = _Doc.SourceForge\Description.txt
+		_Doc.SourceForge\HowToSetupSubversion.html = _Doc.SourceForge\HowToSetupSubversion.html
+		_Doc.SourceForge\RelatedTools.html = _Doc.SourceForge\RelatedTools.html
+		_Doc.SourceForge\ToolsAndVersions.html = _Doc.SourceForge\ToolsAndVersions.html
 	EndProjectSection
 EndProject
 Global
@@ -458,13 +463,6 @@ Global
 		{B5F4667B-5154-45C0-A0DE-411BBC292049}.Release with Redistributable|Any CPU.Build.0 = Release|Any CPU
 		{B5F4667B-5154-45C0-A0DE-411BBC292049}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5F4667B-5154-45C0-A0DE-411BBC292049}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3F3D9083-1CA1-46E7-A14D-06F08391FB9B}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
-		{3F3D9083-1CA1-46E7-A14D-06F08391FB9B}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
-		{3F3D9083-1CA1-46E7-A14D-06F08391FB9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3F3D9083-1CA1-46E7-A14D-06F08391FB9B}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
-		{3F3D9083-1CA1-46E7-A14D-06F08391FB9B}.Release Test|Any CPU.Build.0 = Release|Any CPU
-		{3F3D9083-1CA1-46E7-A14D-06F08391FB9B}.Release with Redistributable|Any CPU.ActiveCfg = Release|Any CPU
-		{3F3D9083-1CA1-46E7-A14D-06F08391FB9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
