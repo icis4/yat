@@ -13,34 +13,33 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-namespace MKY.Test
+using System;
+using System.Configuration;
+using System.IO;
+
+namespace MKY.Utilities.Configuration
 {
 	/// <summary></summary>
-	public enum SettingsMode
+	public class MergeableSettingsSection : ConfigurationSection
 	{
-		/// <summary></summary>
-		CreateDefaultSolutionFile,
-
-		/// <summary></summary>
-		LoadFromExistingFiles,
-	}
-
-	/// <summary>
-	/// This static class contains the mode how test settings should be handled.
-	/// Used to either create default settings or load settings from existing files.
-	/// </summary>
-	public static class SettingsModeProvider
-	{
-		static SettingsMode staticMode = SettingsMode.LoadFromExistingFiles;
-
 		/// <summary>
-		/// Gets or sets the settings mode.
+		/// Merges the settings with alternative settings.
 		/// </summary>
-		/// <value>The settings mode.</value>
-		public static SettingsMode Mode
+		/// <param name="settingsToBeMergedWith">The settings to be merged with.</param>
+		public virtual void MergeWith(MergeableSettingsSection settingsToBeMergedWith)
 		{
-			get { return (staticMode); }
-			set { staticMode = value;  }
+			foreach (ConfigurationProperty cpA in this.Properties)
+			{
+				foreach (ConfigurationProperty cpB in settingsToBeMergedWith.Properties)
+				{
+					if (cpA.Name == cpB.Name)
+					{
+						object value = settingsToBeMergedWith[cpB];
+						SetPropertyValue(cpA, value, true);
+						break;
+					}
+				}
+			}
 		}
 	}
 }

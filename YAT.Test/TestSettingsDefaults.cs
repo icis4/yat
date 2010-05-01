@@ -14,11 +14,9 @@
 //==================================================================================================
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
+using System.Configuration;
+
+using MKY.Utilities.Configuration;
 
 namespace YAT.Test
 {
@@ -31,32 +29,53 @@ namespace YAT.Test
 		[STAThread]
 		public static void Main(string[] args)
 		{
-			System.Configuration.ConfigurationManager
+			// Open and reset current configuration
+			Configuration c = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+			c.Sections.Clear();
+			c.SectionGroups.Clear();
+			c.AppSettings.Settings.Clear();
+			c.ConnectionStrings.ConnectionStrings.Clear();
 
-			/*
+			// Add default sections for each test assembly
 
-			// Configure test settings.
-			MKY.Test.SettingsModeProvider.Mode = MKY.Test.SettingsMode.CreateDefaultSolutionFile;
-			MKY.Test.SettingsDefaults.CreateConfiguration("Default");
+			// MKY.IO.Ports.Test
+			CreateAssemblySections
+				(
+				c,
+				MKY.IO.Ports.Test.SettingsConstants.ConfigurationGroupName,
+				MKY.IO.Ports.Test.SettingsConstants.ConfigurationsGroupName,
+				new MKY.IO.Ports.Test.SettingsSection()
+				);
 
-			// Force initialization of all test settings.
-			// MKY
-			MKY.IO.Ports.Test.Settings.ForceStaticInitialization();
-		////MKY.IO.Serial.Test.Settings.ForceStaticInitialization());
-			MKY.IO.Usb.Test.Settings.ForceStaticInitialization();
-		////MKY.Utilities.Test.Settings.ForceStaticInitialization();
-		////MKY.Windows.Forms.Test.Settings.ForceStaticInitialization();
+			// MKY.IO.Serial.Test
 
-			// YAT
-		////YAT.Controller.Test.Settings.ForceStaticInitialization();
-		////YAT.Domain.Test.Settings.ForceStaticInitialization();
-		////YAT.Model.Test.Settings.ForceStaticInitialization();
-		////YAT.Settings.Test.Settings.ForceStaticInitialization();
+			// MKY.IO.Usb.Test
+			CreateAssemblySections
+				(
+				c,
+				MKY.IO.Usb.Test.SettingsConstants.ConfigurationGroupName,
+				MKY.IO.Usb.Test.SettingsConstants.ConfigurationsGroupName,
+				new MKY.IO.Usb.Test.SettingsSection()
+				);
 
-			// Save default solution test settings.
-			MKY.Test.SettingsDefaults.SaveToSolutionFile();
-			
-			*/
+			// MKY.Utilities.Test
+			// MKY.Windows.Forms.Test
+
+			// YAT.Controller.Test
+			// YAT.Domain.Test
+			// YAT.Model.Test
+			// YAT.Settings.Test
+
+			c.Save(ConfigurationSaveMode.Full, true);
+		}
+
+		private static void CreateAssemblySections(Configuration c, string configurationGroupName, string configurationsGroupName, ConfigurationSection settingsSection)
+		{
+			c.SectionGroups.Add(configurationGroupName, new ConfigurationSectionGroup());
+			c.SectionGroups[configurationGroupName].Sections.Add(SelectionSection.SelectionSectionName, new SelectionSection());
+
+			c.SectionGroups.Add(configurationsGroupName, new ConfigurationSectionGroup());
+			c.SectionGroups[configurationsGroupName].Sections.Add("Default", settingsSection);
 		}
 	}
 }

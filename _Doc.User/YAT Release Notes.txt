@@ -44,10 +44,11 @@ YAT 2.0 Beta 3 Candidate 1 Version 1.99.2x :: 2010-0x-xx
 
 New:
 - Support for USB Ser/HID implemented (feature request #2825931)
+- NUnit test parametrization including optional user config added (feature request #2981764)
 
 Important changes:
 - <>(bug #<>)
-- Update to NUnit 2.5.3
+- Update to NUnit 2.5.5
 - Use of FxCop (feature request #2970221)
 - Use of StyleCop (feature request #2970222)
 - Methods and properties marked "virtual", unless there are reasons against

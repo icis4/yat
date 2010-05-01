@@ -13,14 +13,17 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System.Collections.Generic;
 using System.Configuration;
 
-using NUnit.Framework;
+using MKY.Utilities;
+using MKY.Utilities.Configuration;
 
 namespace MKY.IO.Ports.Test
 {
-	public class SettingsSection : ConfigurationSection
+	/// <summary>
+	/// Type representing the configuration settings section.
+	/// </summary>
+	public class SettingsSection : MergeableSettingsSection
 	{
 		#region Fields
 		//==========================================================================================
@@ -44,6 +47,9 @@ namespace MKY.IO.Ports.Test
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SettingsSection"/> class.
+		/// </summary>
 		public SettingsSection()
 		{
 			this.properties = new ConfigurationPropertyCollection();
@@ -64,12 +70,14 @@ namespace MKY.IO.Ports.Test
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected override ConfigurationPropertyCollection Properties
 		{
 			get { return (this.properties); }
 		}
 
-		public bool SerialPortAIsAvailable
+		/// <summary></summary>
+		public virtual bool SerialPortAIsAvailable
 		{
 			get { return (bool)this["SerialPortAIsAvailable"]; }
 			set
@@ -79,7 +87,8 @@ namespace MKY.IO.Ports.Test
 			}
 		}
 
-		public bool SerialPortBIsAvailable
+		/// <summary></summary>
+		public virtual bool SerialPortBIsAvailable
 		{
 			get { return (bool)this["SerialPortBIsAvailable"]; }
 			set
@@ -89,7 +98,8 @@ namespace MKY.IO.Ports.Test
 			}
 		}
 
-		public string SerialPortA
+		/// <summary></summary>
+		public virtual string SerialPortA
 		{
 			get { return (string)this["SerialPortA"]; }
 			set
@@ -99,7 +109,8 @@ namespace MKY.IO.Ports.Test
 			}
 		}
 
-		public string SerialPortB
+		/// <summary></summary>
+		public virtual string SerialPortB
 		{
 			get { return (string)this["SerialPortB"]; }
 			set
@@ -109,7 +120,8 @@ namespace MKY.IO.Ports.Test
 			}
 		}
 
-		public bool SerialPortsAreInterconnected
+		/// <summary></summary>
+		public virtual bool SerialPortsAreInterconnected
 		{
 			get { return (bool)this["SerialPortsAreInterconnected"]; }
 			set
@@ -136,59 +148,36 @@ namespace MKY.IO.Ports.Test
 	}
 
 	/// <summary></summary>
-	public static class Settings
+	/// <remarks>
+	/// Separate class needed to create default settings. To create the defaults, these constants
+	/// are needed but the provider below must not be initialized.
+	/// </remarks>
+	public static class SettingsConstants
 	{
-		private const string SettingRoot = "MKY.IO.Ports.Test.Settings";
+		/// <summary></summary>
+		public static readonly string ConfigurationGroupName = typeof(SettingsConstants).Namespace + ".Settings";
+		/// <summary></summary>
+		public static readonly string ConfigurationsGroupName = ConfigurationGroupName + ".Configurations";
+		/// <summary></summary>
+		public static readonly string UserSettingsEnvironmentVariableName = "MKY_IO_PORTS_TEST_SETTINGS_FILE";
+	}
 
-		private const string SerialPortAIsAvailableSetting = SettingRoot + ".SerialPortAIsAvailable";
-		private const string SerialPortBIsAvailableSetting = SettingRoot + ".SerialPortBIsAvailable";
+	/// <summary></summary>
+	public static class SettingsProvider
+	{
+		private static readonly SettingsSection staticSettings = new SettingsSection();
 
-		private const string SerialPortASetting = SettingRoot + ".SerialPortA";
-		private const string SerialPortBSetting = SettingRoot + ".SerialPortB";
-
-		private const string SerialPortsAreInterconnectedSetting = SettingRoot + ".SerialPortsAreInterconnected";
-
-		public static bool SerialPortAIsAvailable = false;
-		public static bool SerialPortBIsAvailable = false;
-
-		public static string SerialPortA = "COM1";
-		public static string SerialPortB = "COM2";
-
-		public static bool SerialPortsAreInterconnected = false;
-
-		static Settings()
+		static SettingsProvider()
 		{
-			if (MKY.Test.SettingsModeProvider.Mode == MKY.Test.SettingsMode.CreateDefaultSolutionFile)
-				InitializeDefaults();
-			else
-				TryGetSettings();
+			SettingsSection settings;
+			if (Provider.TryOpenAndMergeConfigurations<SettingsSection>(SettingsConstants.ConfigurationGroupName, SettingsConstants.ConfigurationsGroupName, SettingsConstants.UserSettingsEnvironmentVariableName, out settings))
+				staticSettings = settings;
 		}
 
-		public static void ForceStaticInitialization()
+		/// <summary></summary>
+		public static SettingsSection Settings
 		{
-			// Do nothing, call will force initialization of static fields and call of static constructor.
-		}
-
-		private static void InitializeDefaults()
-		{
-			MKY.Test.SettingsDefaults.AddSetting(SerialPortAIsAvailableSetting, SerialPortAIsAvailable);
-			MKY.Test.SettingsDefaults.AddSetting(SerialPortBIsAvailableSetting, SerialPortBIsAvailable);
-
-			MKY.Test.SettingsDefaults.AddSetting(SerialPortASetting, SerialPortA);
-			MKY.Test.SettingsDefaults.AddSetting(SerialPortBSetting, SerialPortB);
-
-			MKY.Test.SettingsDefaults.AddSetting(SerialPortsAreInterconnectedSetting, SerialPortsAreInterconnected);
-		}
-
-		private static void TryGetSettings()
-		{
-			MKY.Test.SettingsProvider.TryGetSetting(SerialPortAIsAvailableSetting, ref SerialPortAIsAvailable);
-			MKY.Test.SettingsProvider.TryGetSetting(SerialPortBIsAvailableSetting, ref SerialPortBIsAvailable);
-
-			MKY.Test.SettingsProvider.TryGetSetting(SerialPortASetting, ref SerialPortA);
-			MKY.Test.SettingsProvider.TryGetSetting(SerialPortBSetting, ref SerialPortB);
-
-			MKY.Test.SettingsProvider.TryGetSetting(SerialPortsAreInterconnectedSetting, ref SerialPortsAreInterconnected);
+			get { return (staticSettings); }
 		}
 	}
 }

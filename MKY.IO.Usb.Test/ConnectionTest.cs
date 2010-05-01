@@ -35,7 +35,7 @@ namespace MKY.IO.Usb.Test
 		[Test]
 		public virtual void TestConnectDisconnect()
 		{
-			if (!Settings.SerialHidDeviceAIsAvailable)
+			if (!SettingsProvider.Settings.SerialHidDeviceAIsAvailable)
 				Assert.Fail();
 		}
 

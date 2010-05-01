@@ -21,10 +21,9 @@ using System.Xml.Serialization;
 
 using NUnit.Framework;
 
+using MKY.Utilities.Collections;
 using MKY.Utilities.Diagnostics;
 using MKY.Utilities.Recent;
-
-using MKY.Test;
 
 using YAT.Model.Settings;
 using YAT.Model.Types;
@@ -222,25 +221,6 @@ namespace YAT.Settings.Test
 			nsd.Add("1", "A");
 			nsd.Add("2", "B");
 			TestSerialization(typeof(NamedStringDictionary), nsd, filePath);
-		}
-
-		#endregion
-
-		#region Tests > Serialization > SettingsCollection
-		//------------------------------------------------------------------------------------------
-		// Tests > Serialization > SettingsCollection
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[Test]
-		public virtual void TestSettingsCollectionSerialization()
-		{
-			string filePath = MakeTempFilePath("SettingsCollectionToArrayOfArrays");
-			SettingsCollection sc = new SettingsCollection();
-			sc.CreateConfiguration("Test");
-			sc.Add("1", "A");
-			sc.Add("2", "B");
-			TestSerialization(typeof(SettingsCollection), sc, filePath);
 		}
 
 		#endregion
