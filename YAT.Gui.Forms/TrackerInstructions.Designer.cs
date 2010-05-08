@@ -51,7 +51,9 @@ namespace YAT.Gui.Forms
 			// 
 			// groupBox_Instructions
 			// 
-			this.groupBox_Instructions.AutoSize = true;
+			this.groupBox_Instructions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Instructions.Controls.Add(this.linkLabel_Link);
 			this.groupBox_Instructions.Controls.Add(this.linkLabel_Instructions);
 			this.groupBox_Instructions.Controls.Add(this.linkLabel_SourceForgeRemark);
@@ -81,13 +83,12 @@ namespace YAT.Gui.Forms
 			this.linkLabel_Instructions.Name = "linkLabel_Instructions";
 			this.linkLabel_Instructions.Size = new System.Drawing.Size(265, 78);
 			this.linkLabel_Instructions.TabIndex = 3;
-			this.linkLabel_Instructions.Text = "1. Click on \"Submit New\"\r\n2. Select a \"Category\"\r\n3. Select a \"Group\", i.e. the Y" +
-				"AT version you are using\r\n4. Fill in \"Summary\"\r\n5. Fill in \"Detailed Description" +
-				"\"\r\n6. Click on \"SUBMIT\"";
+			this.linkLabel_Instructions.Text = "1. Choose \"Add New\"\r\n2. Select a \"Category\"\r\n3. Select a \"Group\", i.e. the YAT ve" +
+				"rsion you are using\r\n4. Fill in \"Summary\"\r\n5. Fill in \"Detailed Description\"\r\n6." +
+				" Choose \"Add\"";
 			// 
 			// linkLabel_SourceForgeRemark
 			// 
-			this.linkLabel_SourceForgeRemark.AutoSize = true;
 			this.linkLabel_SourceForgeRemark.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_SourceForgeRemark.Location = new System.Drawing.Point(6, 52);
 			this.linkLabel_SourceForgeRemark.Name = "linkLabel_SourceForgeRemark";
@@ -97,7 +98,6 @@ namespace YAT.Gui.Forms
 			// 
 			// linkLabel_Intro
 			// 
-			this.linkLabel_Intro.AutoSize = true;
 			this.linkLabel_Intro.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
 			this.linkLabel_Intro.Location = new System.Drawing.Point(6, 16);
 			this.linkLabel_Intro.Name = "linkLabel_Intro";
@@ -111,7 +111,6 @@ namespace YAT.Gui.Forms
 			this.AcceptButton = this.button_Close;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.AutoSize = true;
 			this.CancelButton = this.button_Close;
 			this.ClientSize = new System.Drawing.Size(369, 305);
 			this.Controls.Add(this.groupBox_Instructions);
@@ -126,7 +125,6 @@ namespace YAT.Gui.Forms
 			this.groupBox_Instructions.ResumeLayout(false);
 			this.groupBox_Instructions.PerformLayout();
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 

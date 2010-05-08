@@ -46,8 +46,15 @@ namespace MKY.Utilities.Diagnostics
 		/// </remarks>
 		public static void WriteException(IDiagnosticsWriter writer, object obj, Exception ex, string additionalMessage)
 		{
-			writer.Write("Exception in ");
-			writer.WriteLine(obj.GetType().FullName);
+			if (obj != null)
+			{
+				writer.Write("Exception in ");
+				writer.WriteLine(obj.GetType().FullName);
+			}
+			else
+			{
+				writer.WriteLine("Exception");
+			}
 
 			writer.Indent();
 			{
@@ -71,8 +78,15 @@ namespace MKY.Utilities.Diagnostics
 		/// </remarks>
 		public static void WriteStack(IDiagnosticsWriter writer, object obj, StackTrace st, string additionalMessage)
 		{
-			writer.Write("Stack trace in ");
-			writer.WriteLine(obj.GetType().FullName);
+			if (obj != null)
+			{
+				writer.Write("Stack trace in ");
+				writer.WriteLine(obj.GetType().FullName);
+			}
+			else
+			{
+				writer.WriteLine("Stack trace");
+			}
 
 			writer.Indent();
 			{
@@ -96,8 +110,15 @@ namespace MKY.Utilities.Diagnostics
 		/// </remarks>
 		public static void WriteWindowsFormsMessage(IDiagnosticsWriter writer, object obj, Message m, string additionalMessage)
 		{
-			writer.Write("Windows.Forms.Message in ");
-			writer.WriteLine(obj.GetType().FullName);
+			if (obj != null)
+			{
+				writer.Write("Windows.Forms.Message in ");
+				writer.WriteLine(obj.GetType().FullName);
+			}
+			else
+			{
+				writer.WriteLine("Windows.Forms.Message");
+			}
 
 			writer.Indent();
 			{
@@ -121,8 +142,15 @@ namespace MKY.Utilities.Diagnostics
 		/// </remarks>
 		public static void WriteFileStream(IDiagnosticsWriter writer, object obj, FileStream fs, string additionalMessage)
 		{
-			writer.Write("FileStream in ");
-			writer.WriteLine(obj.GetType().FullName);
+			if (obj != null)
+			{
+				writer.Write("FileStream in ");
+				writer.WriteLine(obj.GetType().FullName);
+			}
+			else
+			{
+				writer.WriteLine("FileStream");
+			}
 
 			writer.Indent();
 			{

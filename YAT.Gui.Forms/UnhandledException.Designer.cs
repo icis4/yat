@@ -43,16 +43,18 @@ namespace YAT.Gui.Forms
 			this.label_Stack = new System.Windows.Forms.Label();
 			this.textBox_Stack = new System.Windows.Forms.TextBox();
 			this.button_CopyToClipboard = new System.Windows.Forms.Button();
-			this.linkLabel_Explanation = new System.Windows.Forms.LinkLabel();
 			this.button_Instructions = new System.Windows.Forms.Button();
+			this.groupBox_Message = new System.Windows.Forms.GroupBox();
+			this.linkLabel_Explanation = new System.Windows.Forms.LinkLabel();
 			this.groupBox_Exception.SuspendLayout();
+			this.groupBox_Message.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// button_Close
 			// 
 			this.button_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Close.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_Close.Location = new System.Drawing.Point(507, 417);
+			this.button_Close.Location = new System.Drawing.Point(507, 432);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
 			this.button_Close.TabIndex = 4;
@@ -70,7 +72,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_Exception.Controls.Add(this.textBox_Type);
 			this.groupBox_Exception.Controls.Add(this.label_Stack);
 			this.groupBox_Exception.Controls.Add(this.textBox_Stack);
-			this.groupBox_Exception.Location = new System.Drawing.Point(12, 56);
+			this.groupBox_Exception.Location = new System.Drawing.Point(12, 71);
 			this.groupBox_Exception.Name = "groupBox_Exception";
 			this.groupBox_Exception.Size = new System.Drawing.Size(570, 346);
 			this.groupBox_Exception.TabIndex = 1;
@@ -175,7 +177,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.button_CopyToClipboard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.button_CopyToClipboard.Image = global::YAT.Gui.Forms.Properties.Resources.Image_CopyToClipboard_16x16;
-			this.button_CopyToClipboard.Location = new System.Drawing.Point(12, 417);
+			this.button_CopyToClipboard.Location = new System.Drawing.Point(12, 432);
 			this.button_CopyToClipboard.Name = "button_CopyToClipboard";
 			this.button_CopyToClipboard.Size = new System.Drawing.Size(176, 23);
 			this.button_CopyToClipboard.TabIndex = 2;
@@ -183,22 +185,10 @@ namespace YAT.Gui.Forms
 			this.button_CopyToClipboard.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this.button_CopyToClipboard.Click += new System.EventHandler(this.button_CopyToClipboard_Click);
 			// 
-			// linkLabel_Explanation
-			// 
-			this.linkLabel_Explanation.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-			this.linkLabel_Explanation.Location = new System.Drawing.Point(24, 16);
-			this.linkLabel_Explanation.Name = "linkLabel_Explanation";
-			this.linkLabel_Explanation.Size = new System.Drawing.Size(552, 30);
-			this.linkLabel_Explanation.TabIndex = 0;
-			this.linkLabel_Explanation.Text = "An unhandled exception occured in YAT. Please report this exception to YAT > Trac" +
-				"ker > Bugs on SourceForge.net to give us valuable feedback to continuously impro" +
-				"ve YAT.";
-			this.linkLabel_Explanation.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
-			// 
 			// button_Instructions
 			// 
 			this.button_Instructions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.button_Instructions.Location = new System.Drawing.Point(194, 417);
+			this.button_Instructions.Location = new System.Drawing.Point(194, 432);
 			this.button_Instructions.Name = "button_Instructions";
 			this.button_Instructions.Size = new System.Drawing.Size(176, 23);
 			this.button_Instructions.TabIndex = 3;
@@ -206,15 +196,42 @@ namespace YAT.Gui.Forms
 			this.button_Instructions.UseVisualStyleBackColor = true;
 			this.button_Instructions.Click += new System.EventHandler(this.button_Instructions_Click);
 			// 
+			// groupBox_Message
+			// 
+			this.groupBox_Message.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Message.Controls.Add(this.linkLabel_Explanation);
+			this.groupBox_Message.Location = new System.Drawing.Point(12, 12);
+			this.groupBox_Message.Name = "groupBox_Message";
+			this.groupBox_Message.Size = new System.Drawing.Size(564, 55);
+			this.groupBox_Message.TabIndex = 0;
+			this.groupBox_Message.TabStop = false;
+			// 
+			// linkLabel_Explanation
+			// 
+			this.linkLabel_Explanation.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.linkLabel_Explanation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.linkLabel_Explanation.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
+			this.linkLabel_Explanation.Location = new System.Drawing.Point(6, 16);
+			this.linkLabel_Explanation.Name = "linkLabel_Explanation";
+			this.linkLabel_Explanation.Size = new System.Drawing.Size(552, 36);
+			this.linkLabel_Explanation.TabIndex = 1;
+			this.linkLabel_Explanation.Text = "An unhandled exception occured in YAT. Please report this exception to YAT > Trac" +
+				"ker > Bugs on SourceForge.net to give valuable feedback to continuously improve " +
+				"YAT.";
+			// 
 			// UnhandledException
 			// 
 			this.AcceptButton = this.button_Close;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Close;
-			this.ClientSize = new System.Drawing.Size(594, 452);
+			this.ClientSize = new System.Drawing.Size(594, 467);
+			this.Controls.Add(this.groupBox_Message);
 			this.Controls.Add(this.button_Instructions);
-			this.Controls.Add(this.linkLabel_Explanation);
 			this.Controls.Add(this.button_CopyToClipboard);
 			this.Controls.Add(this.groupBox_Exception);
 			this.Controls.Add(this.button_Close);
@@ -228,6 +245,7 @@ namespace YAT.Gui.Forms
 			this.Load += new System.EventHandler(this.UnhandledException_Load);
 			this.groupBox_Exception.ResumeLayout(false);
 			this.groupBox_Exception.PerformLayout();
+			this.groupBox_Message.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -245,7 +263,8 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.TextBox textBox_Stack;
 		private System.Windows.Forms.TextBox textBox_Message;
 		private System.Windows.Forms.Button button_CopyToClipboard;
-		private System.Windows.Forms.LinkLabel linkLabel_Explanation;
 		private System.Windows.Forms.Button button_Instructions;
+		private System.Windows.Forms.GroupBox groupBox_Message;
+		private System.Windows.Forms.LinkLabel linkLabel_Explanation;
 	}
 }
