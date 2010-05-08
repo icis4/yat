@@ -15,6 +15,7 @@
 //==================================================================================================
 
 using System;
+using System.Text;
 using System.Windows.Forms;
 
 using YAT.Utilities;
@@ -35,64 +36,65 @@ namespace YAT.Gui.Forms
 		{
 			InitializeComponent();
 
-			string text = "";
-			string textLink = "";
-			int start = 0;
+			StringBuilder sb;
 
-			// form
-			text = ApplicationInfo.ProductName;
+			// Form.
+			sb = new StringBuilder();
+			sb.Append(ApplicationInfo.ProductName);
 			switch (tracker)
 			{
-				case Tracker.Support: text += " Support Request"; break;
-				case Tracker.Feature: text += " Feature Request"; break;
-				case Tracker.Bug:     text += " Bug Submission";  break;
+				case Tracker.Support: sb.Append(" Support Request"); break;
+				case Tracker.Feature: sb.Append(" Feature Request"); break;
+				case Tracker.Bug:     sb.Append(" Bug Submission");  break;
 			}
+			Text = sb.ToString();
 
-			// intro
+			// Intro.
+			sb = new StringBuilder();
 			switch (tracker)
 			{
-				case Tracker.Support: text = "Support for YAT can be requested online.";  break;
-				case Tracker.Feature: text = "Features for YAT can be requested online."; break;
-				case Tracker.Bug:     text = "Bugs for YAT can be submitted online.";     break;
+				case Tracker.Support: sb.Append("Support for YAT can be requested online.");  break;
+				case Tracker.Feature: sb.Append("Features for YAT can be requested online."); break;
+				case Tracker.Bug:     sb.Append("Bugs for YAT can be submitted online.");     break;
 			}
-			text += " Follow the link below and" + Environment.NewLine +
-				    "proceed according to the instructions.";
-			linkLabel_Intro.Text = text;
+			sb.Append(" Follow the link below and proceed according to the instructions.");
+			linkLabel_Intro.Text = sb.ToString();
 
-			// SourceForge remarks
-			text = "If you have a SourceForge.net account, log in to SourceForge before" + Environment.NewLine +
-				   "you proceed. You will then get email notifications about the progress" + Environment.NewLine;
+			// SourceForge remarks.
+			sb = new StringBuilder();
+			sb.Append("If you have a SourceForge.net account, log in to SourceForge before");
+			sb.Append(" you proceed. You will then get email notifications about the progress");
 			switch (tracker)
 			{
-				case Tracker.Support: text += "of the support request."; break;
-				case Tracker.Feature: text += "of the feature request."; break;
-				case Tracker.Bug:     text += "of the bug submission.";  break;
+				case Tracker.Support: sb.Append(" of the support request."); break;
+				case Tracker.Feature: sb.Append(" of the feature request."); break;
+				case Tracker.Bug:     sb.Append(" of the bug submission.");  break;
 			}
-			text += Environment.NewLine;
-			text += "If you don't have a SourceForge.net account, make sure to provide a" + Environment.NewLine +
-				    "valid email address.";
-			linkLabel_SourceForgeRemark.Text = text;
+			sb.AppendLine();
+			sb.Append("If you don't have a SourceForge.net account,");
+			sb.Append(" you may provide a valid email address to get the notifications.");
+			linkLabel_SourceForgeRemark.Text = sb.ToString();
 
-			// link
-			linkLabel_Link.Text = "";
+			// Link.
+			string link = "";
 			switch (tracker)
 			{
-				case Tracker.Support: textLink = "http://sourceforge.net/tracker/?group_id=193033&atid=943798"; break;
-				case Tracker.Feature: textLink = "http://sourceforge.net/tracker/?group_id=193033&atid=943800"; break;
-				case Tracker.Bug:     textLink = "http://sourceforge.net/tracker/?group_id=193033&atid=943797"; break;
+				case Tracker.Support: link = "http://sourceforge.net/tracker/?group_id=193033&atid=943798"; break;
+				case Tracker.Feature: link = "http://sourceforge.net/tracker/?group_id=193033&atid=943800"; break;
+				case Tracker.Bug:     link = "http://sourceforge.net/tracker/?group_id=193033&atid=943797"; break;
 			}
-			start = linkLabel_Link.Text.Length;
-			linkLabel_Link.Text += textLink;
-			linkLabel_Link.Links.Add(start, textLink.Length, textLink);
+			linkLabel_Link.Text = link;
+			linkLabel_Link.Links.Add(0, link.Length, link);
 
-			// instructions
-			text = @"1. Click on ""Submit New""" + Environment.NewLine +
-				   @"2. Select a ""Category""" + Environment.NewLine +
-				   @"3. Select a ""Group"", i.e. the YAT version you are using" + Environment.NewLine +
-				   @"4. Fill in ""Summary""" + Environment.NewLine +
-				   @"5. Fill in ""Detailed Description""" + Environment.NewLine +
-				   @"6. Click on ""SUBMIT""";
-			linkLabel_Instructions.Text = text;
+			// Instructions.
+			sb = new StringBuilder();
+			sb.AppendLine(@"1. Choose ""Add New""");
+			sb.AppendLine(@"2. Select a ""Category""");
+			sb.AppendLine(@"3. Select a ""Group"", i.e. the YAT version you are using");
+			sb.AppendLine(@"4. Fill in ""Summary""");
+			sb.AppendLine(@"5. Fill in ""Description""");
+			sb.AppendLine(@"6. Choose ""Add""");
+			linkLabel_Instructions.Text = sb.ToString();
 		}
 
 		private void button_Close_Click(object sender, EventArgs e)

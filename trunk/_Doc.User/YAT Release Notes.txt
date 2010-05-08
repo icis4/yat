@@ -57,7 +57,7 @@ Important changes:
 - Project references to system assemblies cleaned
 
 Fixed bugs:
-- <> (bug #2855869)
+- Unhandled exception dialog improved and fixed (feature request #2970243, bug #2970245)
 
 Limitations and known issues:
 - Serial port auto-reopen not yet implementable due to .NET deadlock issue in System.IO.SerialPort

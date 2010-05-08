@@ -16,8 +16,10 @@
 
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using MKY.Utilities.Diagnostics;
 using MKY.Utilities.Windows.Forms;
 
 namespace YAT.Gui.Forms
@@ -39,7 +41,7 @@ namespace YAT.Gui.Forms
 			linkLabel_Explanation.Text = "";
 			textBefore = "An unhandled exception occured in YAT. Please report this exception to YAT > Tracker > Bugs on ";
 			textLink =   "SourceForge.net";
-			textAfter =                 " to give us valuable feedback to continuously improve YAT.";
+			textAfter =                 " to give valuable feedback to continuously improve YAT.";
 			linkLabel_Explanation.Text += textBefore;
 			start = linkLabel_Explanation.Text.Length;
 			linkLabel_Explanation.Text += textLink;
@@ -66,28 +68,57 @@ namespace YAT.Gui.Forms
 		{
 			string link = e.Link.LinkData as string;
 			if ((link != null) && (link.StartsWith("http://")))
-			{
 				MKY.Utilities.Net.Browser.BrowseUrl(link);
-			}
 		}
 
 		private void button_CopyToClipboard_Click(object sender, EventArgs e)
 		{
 			StringWriter text = new StringWriter();
-			text.WriteLine("Unhandled exception occured in YAT");
-			text.WriteLine();
-			text.WriteLine("Type:");
-			text.WriteLine(this.exeption.GetType().ToString());
-			text.WriteLine();
-			text.WriteLine("Message:");
-			text.WriteLine(this.exeption.Message);
-			text.WriteLine();
-			text.WriteLine("Source:");
-			text.WriteLine(this.exeption.Source);
-			text.WriteLine();
-			text.WriteLine("Stack:");
-			text.WriteLine(this.exeption.StackTrace);
-			Clipboard.SetDataObject(text.ToString(), true);
+			try
+			{
+				AnyWriter.WriteException(text, null, this.exeption);
+			}
+			catch
+			{
+				text.Write("Error, unhandled exception data could not be retrieved.");
+			}
+
+			bool retry = false;
+			do
+			{
+				try
+				{
+					Clipboard.SetDataObject(text.ToString(), true);
+				}
+				catch (ExternalException)
+				{
+					DialogResult userInput = MessageBox.Show
+						(
+						this,
+						"Unhandled exception data could not be copied onto clipboard." + Environment.NewLine +
+						"Ensure that clipboard is not in use and try again.",
+						"Clipboard Error",
+						MessageBoxButtons.RetryCancel,
+						MessageBoxIcon.Error
+						);
+					retry = (userInput == DialogResult.Retry);
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show
+						(
+						this,
+						"Unhandled exception data could not be copied onto clipboard." + Environment.NewLine + Environment.NewLine +
+						"System message:" + Environment.NewLine +
+						ex.Message,
+						"Error",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+						);
+					retry = false;
+				}
+			}
+			while (retry);
 		}
 
 		private void button_Instructions_Click(object sender, EventArgs e)

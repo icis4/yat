@@ -14,6 +14,8 @@
 //==================================================================================================
 
 using System.Configuration;
+using System.Diagnostics;
+using System.Text;
 
 namespace MKY.Utilities.Configuration
 {
@@ -40,6 +42,14 @@ namespace MKY.Utilities.Configuration
 				T solutionSettings;
 				if (Selector.TryGetSelectedConfiguration<T>(solutionConfiguration, configurationGroupName, configurationsGroupName, out solutionSettings))
 				{
+					StringBuilder sb = new StringBuilder();
+					sb.Append("Solution test configuration of ");
+					sb.Append(configurationGroupName);
+					sb.Append(" successfully loaded from ");
+					sb.AppendLine();
+					sb.AppendLine(solutionConfiguration.FilePath);
+					Debug.Write(sb.ToString());
+
 					// Override/add user settings where applicable.
 					string userFilePath;
 					if (XEnvironment.TryGetFilePathFromEnvironmentVariableAndVerify(userSettingsEnvironmentVariableName, out userFilePath))
@@ -53,6 +63,13 @@ namespace MKY.Utilities.Configuration
 							if (Selector.TryGetSelectedConfiguration<T>(userConfiguration, configurationGroupName, configurationsGroupName, out userSettings))
 							{
 								solutionSettings.MergeWith(userSettings);
+
+								sb.Append("Test configuration of ");
+								sb.Append(configurationGroupName);
+								sb.Append(" successfully merged with user settings from ");
+								sb.AppendLine();
+								sb.AppendLine(userConfiguration.FilePath);
+								Debug.Write(sb.ToString());
 							}
 						}
 					}
