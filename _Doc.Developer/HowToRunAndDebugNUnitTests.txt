@@ -1,8 +1,36 @@
 
-1.	Ensure that environment is set up
-	---------------------------------
-	> COM1 and COM2 must be available
-		> If not available, use VSPE to create/connect missing ports
+0.	Precondition
+	------------
+	> Serial COM ports
+		> Install VSPE
+	> Network
+		> Install WinPcap
+			> All defaults
+		> Install OpenVPN
+			> Check "TAP Virtual Ethernet Adapter"
+			> Uncheck everything else
+		> Setup
+			> System > Network > Connections
+				> Rename connection to "TAP-Win32 Adapter"
+				> Right-click > Properties
+					> "Configure..."
+						> "Configure..." > Advanced
+							> Media Status = Always Connected
+				> Right-click > Properties
+					> IPv4 > Properties
+						> Set IP address to "10.0.0.1"
+						> Set net mask to "255.255.255.0"
+				> Right-click > Properties
+					> IPv6 > Properties
+						> Set IP address to "fd00::1"
+						> Set net prefix to "64"
+
+
+1.	Configure environment
+	---------------------
+	> Use physical or VSPE ports COM1 and COM2
+		> Alternatively, re-configure environment to other COM ports
+	> Use WinPcap and OpenVPN TAP adapter
 
 
 2.	Start NUnit from within Visual Studio

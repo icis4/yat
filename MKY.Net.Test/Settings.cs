@@ -18,7 +18,7 @@ using System.Configuration;
 using MKY.Utilities;
 using MKY.Utilities.Configuration;
 
-namespace MKY.IO.Ports.Test
+namespace MKY.Net.Test
 {
 	#region Settings
 	//==========================================================================================
@@ -37,13 +37,11 @@ namespace MKY.IO.Ports.Test
 
 		private ConfigurationPropertyCollection properties;
 
-		private ConfigurationProperty serialPortAIsAvailable = new ConfigurationProperty("SerialPortAIsAvailable", typeof(bool), false);
-		private ConfigurationProperty serialPortBIsAvailable = new ConfigurationProperty("SerialPortBIsAvailable", typeof(bool), false);
+		private ConfigurationProperty specificIPv4InterfaceIsAvailable = new ConfigurationProperty("SpecificIPv4InterfaceIsAvailable", typeof(bool), false);
+		private ConfigurationProperty specificIPv6InterfaceIsAvailable = new ConfigurationProperty("SpecificIPv6InterfaceIsAvailable", typeof(bool), false);
 
-		private ConfigurationProperty serialPortA = new ConfigurationProperty("SerialPortA", typeof(string), "COM1");
-		private ConfigurationProperty serialPortB = new ConfigurationProperty("SerialPortB", typeof(string), "COM2");
-
-		private ConfigurationProperty serialPortsAreInterconnected = new ConfigurationProperty("SerialPortsAreInterconnected", typeof(bool), false);
+		private ConfigurationProperty specificIPv4Interface = new ConfigurationProperty("SpecificIPv4Interface", typeof(string), "TAP-Win32 Adapter");
+		private ConfigurationProperty specificIPv6Interface = new ConfigurationProperty("SpecificIPv6Interface", typeof(string), "TAP-Win32 Adapter");
 
 		#endregion
 
@@ -59,13 +57,11 @@ namespace MKY.IO.Ports.Test
 		{
 			this.properties = new ConfigurationPropertyCollection();
 
-			this.properties.Add(this.serialPortAIsAvailable);
-			this.properties.Add(this.serialPortBIsAvailable);
+			this.properties.Add(this.specificIPv4InterfaceIsAvailable);
+			this.properties.Add(this.specificIPv6InterfaceIsAvailable);
 
-			this.properties.Add(this.serialPortA);
-			this.properties.Add(this.serialPortB);
-
-			this.properties.Add(this.serialPortsAreInterconnected);
+			this.properties.Add(this.specificIPv4Interface);
+			this.properties.Add(this.specificIPv6Interface);
 		}
 
 		#endregion
@@ -82,63 +78,46 @@ namespace MKY.IO.Ports.Test
 		}
 
 		/// <summary></summary>
-		public virtual bool SerialPortAIsAvailable
+		public virtual bool SpecificIPv4InterfaceIsAvailable
 		{
-			get { return (bool)this["SerialPortAIsAvailable"]; }
+			get { return (bool)this["SpecificIPv4InterfaceIsAvailable"]; }
 			set
 			{
-				AssertNotReadOnly("SerialPortAIsAvailable");
-				this["SerialPortAIsAvailable"] = value;
+				AssertNotReadOnly("SpecificIPv4InterfaceIsAvailable");
+				this["SpecificIPv4InterfaceIsAvailable"] = value;
 			}
 		}
 
 		/// <summary></summary>
-		public virtual bool SerialPortBIsAvailable
+		public virtual bool SpecificIPv6InterfaceIsAvailable
 		{
-			get { return (bool)this["SerialPortBIsAvailable"]; }
+			get { return (bool)this["SpecificIPv6InterfaceIsAvailable"]; }
 			set
 			{
-				AssertNotReadOnly("SerialPortBIsAvailable");
-				this["SerialPortBIsAvailable"] = value;
+				AssertNotReadOnly("SpecificIPv6InterfaceIsAvailable");
+				this["SpecificIPv6InterfaceIsAvailable"] = value;
 			}
 		}
 
 		/// <summary></summary>
-		public virtual string SerialPortA
+		public virtual string SpecificIPv4Interface
 		{
-			get { return (string)this["SerialPortA"]; }
+			get { return (string)this["SpecificIPv4Interface"]; }
 			set
 			{
-				AssertNotReadOnly("SerialPortA");
-				this["SerialPortA"] = value;
+				AssertNotReadOnly("SpecificIPv4Interface");
+				this["SpecificIPv4Interface"] = value;
 			}
 		}
 
 		/// <summary></summary>
-		public virtual string SerialPortB
+		public virtual string SpecificIPv6Interface
 		{
-			get { return (string)this["SerialPortB"]; }
+			get { return (string)this["SpecificIPv6Interface"]; }
 			set
 			{
-				AssertNotReadOnly("SerialPortB");
-				this["SerialPortB"] = value;
-			}
-		}
-
-		/// <summary></summary>
-		public virtual bool SerialPortsAreInterconnected
-		{
-			get
-			{
-				if (SerialPortAIsAvailable && SerialPortBIsAvailable)
-					return (bool)this["SerialPortsAreInterconnected"];
-				else
-					return (false);
-			}
-			set
-			{
-				AssertNotReadOnly("SerialPortsAreInterconnected");
-				this["SerialPortsAreInterconnected"] = value;
+				AssertNotReadOnly("SpecificIPv6Interface");
+				this["SpecificIPv6Interface"] = value;
 			}
 		}
 
@@ -177,7 +156,7 @@ namespace MKY.IO.Ports.Test
 		/// <summary></summary>
 		public static readonly string ConfigurationsGroupName = ConfigurationGroupName + ".Configurations";
 		/// <summary></summary>
-		public static readonly string UserSettingsEnvironmentVariableName = "MKY_IO_PORTS_TEST_SETTINGS_FILE";
+		public static readonly string UserSettingsEnvironmentVariableName = "MKY_NET_TEST_SETTINGS_FILE";
 	}
 
 	/// <summary></summary>
@@ -210,39 +189,51 @@ namespace MKY.IO.Ports.Test
 	public static class SettingsCategoryStrings
 	{
 		/// <summary></summary>
-		public static readonly string SerialPortAIsAvailable = "Serial port " + SettingsProvider.Settings.SerialPortA + " is available";
+		public static readonly string IPv4LoopbackIsAvailable = @"IPv4 loopback is available";
 		/// <summary></summary>
-		public static readonly string SerialPortBIsAvailable = "Serial port " + SettingsProvider.Settings.SerialPortB + " is available";
+		public static readonly string IPv6LoopbackIsAvailable = @"IPv6 loopback is available";
 		/// <summary></summary>
-		public static readonly string SerialPortsAreInterconnected = "Serial ports are interconnected";
+		public static readonly string SpecificIPv4InterfaceIsAvailable = @"Specific IPv4 interface """ + SettingsProvider.Settings.SpecificIPv4Interface + @""" is available";
+		/// <summary></summary>
+		public static readonly string SpecificIPv6InterfaceIsAvailable = @"Specific IPv6 interface """ + SettingsProvider.Settings.SpecificIPv6Interface + @""" is available";
 	}
 
 	/// <summary></summary>
-	public class SerialPortAIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public class IPv4LoopbackIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
-		public SerialPortAIsAvailableCategoryAttribute()
-			: base(SettingsCategoryStrings.SerialPortAIsAvailable)
+		public IPv4LoopbackIsAvailableCategoryAttribute()
+			: base(SettingsCategoryStrings.IPv4LoopbackIsAvailable)
 		{
 		}
 	}
 
 	/// <summary></summary>
-	public class SerialPortBIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public class IPv6LoopbackIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
-		public SerialPortBIsAvailableCategoryAttribute()
-			: base(SettingsCategoryStrings.SerialPortBIsAvailable)
+		public IPv6LoopbackIsAvailableCategoryAttribute()
+			: base(SettingsCategoryStrings.IPv6LoopbackIsAvailable)
 		{
 		}
 	}
 
 	/// <summary></summary>
-	public class SerialPortsAreInterconnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public class SpecificIPv4InterfaceIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
-		public SerialPortsAreInterconnectedCategoryAttribute()
-			: base(SettingsCategoryStrings.SerialPortsAreInterconnected)
+		public SpecificIPv4InterfaceIsAvailableCategoryAttribute()
+			: base(SettingsCategoryStrings.SpecificIPv4InterfaceIsAvailable)
+		{
+		}
+	}
+
+	/// <summary></summary>
+	public class SpecificIPv6InterfaceIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	{
+		/// <summary></summary>
+		public SpecificIPv6InterfaceIsAvailableCategoryAttribute()
+			: base(SettingsCategoryStrings.SpecificIPv6InterfaceIsAvailable)
 		{
 		}
 	}

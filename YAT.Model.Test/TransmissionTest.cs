@@ -15,6 +15,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -25,15 +26,29 @@ using YAT.Settings.Terminal;
 namespace YAT.Model.Test
 {
 	/// <summary></summary>
-	[TestFixture]
-	public class TransmissionTest
+	public enum TransmissionType
+	{
+		/// <summary></summary>
+		SerialPort,
+		/// <summary></summary>
+		TcpAutoSocketOnIPv4Loopback,
+		/// <summary></summary>
+		TcpAutoSocketOnIPv6Loopback,
+		/// <summary></summary>
+		TcpAutoSocketOnSpecificIPv4Interface,
+		/// <summary></summary>
+		TcpAutoSocketOnSpecificIPv6Interface,
+	}
+
+	/// <summary></summary>
+	public static class TransmissionTestData
 	{
 		#region Constants
 		//==========================================================================================
 		// Constants
 		//==========================================================================================
 
-		private readonly string[] TestCommandLines = new string[]
+		private static readonly string[] TestCommandLines = new string[]
 			{
 				@"1a2a3a4a5a6a7a8a9a0",
 				@"1b2b3b4b5b6b7b8b9b0",
@@ -47,18 +62,18 @@ namespace YAT.Model.Test
 				@"1j2j3j4j5j6j7j8j9j0",
 			};
 
-		private readonly Utilities.TestSet SingleLineCommand;
-		private readonly Utilities.TestSet DoubleLineCommand;
-		private readonly Utilities.TestSet TripleLineCommand;
-		private readonly Utilities.TestSet MultiLineCommand;
+		private static readonly Utilities.TestSet SingleLineCommand;
+		private static readonly Utilities.TestSet DoubleLineCommand;
+		private static readonly Utilities.TestSet TripleLineCommand;
+		private static readonly Utilities.TestSet MultiLineCommand;
 
-		private readonly Utilities.TestSet MultiEolCommand;
-		private readonly Utilities.TestSet MixedEolCommand;
+		private static readonly Utilities.TestSet MultiEolCommand;
+		private static readonly Utilities.TestSet MixedEolCommand;
 
-		private readonly Utilities.TestSet EolPartsCommand;
+		private static readonly Utilities.TestSet EolPartsCommand;
 
-		private readonly Utilities.TestSet SingleNoEolCommand;
-		private readonly Utilities.TestSet DoubleNoEolCommand;
+		private static readonly Utilities.TestSet SingleNoEolCommand;
+		private static readonly Utilities.TestSet DoubleNoEolCommand;
 
 		#endregion
 
@@ -68,168 +83,109 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <summary></summary>
-		public TransmissionTest()
+		static TransmissionTestData()
 		{
 			SingleLineCommand  = new Utilities.TestSet(new Types.Command(TestCommandLines[0]));
 			DoubleLineCommand  = new Utilities.TestSet(new Types.Command(new string[] { TestCommandLines[0], TestCommandLines[1] } ));
 			TripleLineCommand  = new Utilities.TestSet(new Types.Command(new string[] { TestCommandLines[0], TestCommandLines[1], TestCommandLines[2] }));
 			MultiLineCommand   = new Utilities.TestSet(new Types.Command(TestCommandLines));
 
-			MultiEolCommand    = new Utilities.TestSet(new Types.Command(@"A\!(Eol)B<CR><LF>C<CR><LF>D"), 4, new int[] { 2, 2, 2, 2 }, new int[] { 1, 1, 1, 1 }); // Eol results in one element since ShowEol is switched off
-			MixedEolCommand    = new Utilities.TestSet(new Types.Command(@"A\!(Eol)BC<CR><LF>D"),         3, new int[] { 2, 2, 2    }, new int[] { 1, 2, 1    }); // Eol results in one element since ShowEol is switched off
+			MultiEolCommand    = new Utilities.TestSet(new Types.Command(@"A\!(Eol)B<CR><LF>C<CR><LF>D"), 4, new int[] { 2, 2, 2, 2 }, new int[] { 1, 1, 1, 1 }); // Eol results in one element since ShowEol is switched off.
+			MixedEolCommand    = new Utilities.TestSet(new Types.Command(@"A\!(Eol)BC<CR><LF>D"),         3, new int[] { 2, 2, 2    }, new int[] { 1, 2, 1    }); // Eol results in one element since ShowEol is switched off.
 
 			EolPartsCommand    = new Utilities.TestSet(new Types.Command(@"A<CR><CR><LF>B<CR><LF><LF>C<CR><LF>D<CR>E<LF>F"), 4, new int[] { 3, 2, 3, 6 }, new int[] { 2, 1, 2, 5 });
 
-			SingleNoEolCommand = new Utilities.TestSet(new Types.Command(@"A\!(NoEol)"), 1, new int[] { 1 }, new int[] { 1 });                                 // There is always 1 line
-			DoubleNoEolCommand = new Utilities.TestSet(new Types.Command(new string[] { @"A\!(NoEol)", @"B\!(NoEol)" }), 1, new int[] { 1 }, new int[] { 2 }); // There is always 1 line
+			SingleNoEolCommand = new Utilities.TestSet(new Types.Command(@"A\!(NoEol)"), 1, new int[] { 1 }, new int[] { 1 });                                 // There is always 1 line.
+			DoubleNoEolCommand = new Utilities.TestSet(new Types.Command(new string[] { @"A\!(NoEol)", @"B\!(NoEol)" }), 1, new int[] { 1 }, new int[] { 2 }); // There is always 1 line.
 		}
 
 		#endregion
 
+		#region Test Cases
+		//==========================================================================================
+		// Test Cases
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static IEnumerable<KeyValuePair<TransmissionType, string>> TransmissionTypes
+		{
+			get
+			{
+				yield return (new KeyValuePair<TransmissionType, string>(TransmissionType.SerialPort,                           MKY.IO.Ports.Test.SettingsCategoryStrings.SerialPortsAreInterconnected));
+				yield return (new KeyValuePair<TransmissionType, string>(TransmissionType.TcpAutoSocketOnIPv4Loopback,          MKY.Net.Test.SettingsCategoryStrings.IPv4LoopbackIsAvailable));
+				yield return (new KeyValuePair<TransmissionType, string>(TransmissionType.TcpAutoSocketOnIPv6Loopback,          MKY.Net.Test.SettingsCategoryStrings.IPv6LoopbackIsAvailable));
+				yield return (new KeyValuePair<TransmissionType, string>(TransmissionType.TcpAutoSocketOnSpecificIPv4Interface, MKY.Net.Test.SettingsCategoryStrings.SpecificIPv4InterfaceIsAvailable));
+				yield return (new KeyValuePair<TransmissionType, string>(TransmissionType.TcpAutoSocketOnSpecificIPv6Interface, MKY.Net.Test.SettingsCategoryStrings.SpecificIPv6InterfaceIsAvailable));
+			}
+		}
+
+		/// <summary></summary>
+		public static IEnumerable TestCases
+		{
+			get
+			{
+				foreach (KeyValuePair<TransmissionType, string> kvp in TransmissionTypes)
+				{
+					yield return (new TestCaseData(kvp.Key, SingleLineCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_SingleLineTransmission"));
+
+					yield return (new TestCaseData(kvp.Key, DoubleLineCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_DoubleLineTransmission"));
+					yield return (new TestCaseData(kvp.Key, DoubleLineCommand, 2).SetCategory(kvp.Value).SetName(kvp.Key + "_DoubleLineDoubleTransmission"));
+
+					yield return (new TestCaseData(kvp.Key, TripleLineCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_TripleLineTransmission"));
+					yield return (new TestCaseData(kvp.Key, TripleLineCommand, 3).SetCategory(kvp.Value).SetName(kvp.Key + "_TripleLineTripleTransmission"));
+
+					yield return (new TestCaseData(kvp.Key, MultiLineCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_MultiLineTransmission"));
+					yield return (new TestCaseData(kvp.Key, MultiLineCommand, TestCommandLines.Length).SetCategory(kvp.Value).SetName(kvp.Key + "_MultiLineMultiTransmission"));
+
+					yield return (new TestCaseData(kvp.Key, MultiEolCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_MultiEolTransmission"));
+					yield return (new TestCaseData(kvp.Key, MixedEolCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_MixedEolTransmission"));
+					yield return (new TestCaseData(kvp.Key, EolPartsCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_EolPartsTransmission"));
+
+					yield return (new TestCaseData(kvp.Key, SingleNoEolCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_SingleNoEolTransmission"));
+					yield return (new TestCaseData(kvp.Key, DoubleNoEolCommand, 1).SetCategory(kvp.Value).SetName(kvp.Key + "_DoubleNoEolTransmission"));
+				}
+			}
+		}
+
+		#endregion
+	}
+
+	/// <summary></summary>
+	[TestFixture]
+	public class TransmissionTest
+	{
 		#region Tests
 		//==========================================================================================
 		// Tests
 		//==========================================================================================
 
-		#region Tests > SingleLineTransmissionTcp
-		//------------------------------------------------------------------------------------------
-		// Tests > SingleLineTransmissionTcp
-		//------------------------------------------------------------------------------------------
-
 		/// <summary></summary>
-		[Test]
-		public virtual void TestSingleLineTransmissionTcp()
+		[Test, TestCaseSource(typeof(TransmissionTestData), "TestCases")]
+		public void PerformCommandTransmission(TransmissionType transmissionType, Utilities.TestSet testSet, int transmissionCount)
 		{
-			PerformCommandTransmissionTcp(SingleLineCommand);
+			switch (transmissionType)
+			{
+				case TransmissionType.SerialPort:
+					PerformCommandTransmission(Utilities.GetStartedTextSerialPortASettings(), Utilities.GetStartedTextSerialPortBSettings(), testSet, transmissionCount);
+					break;
+
+				case TransmissionType.TcpAutoSocketOnIPv4Loopback:
+					PerformCommandTransmission(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings(), Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings(), testSet, transmissionCount);
+					break;
+
+				case TransmissionType.TcpAutoSocketOnIPv6Loopback:
+					PerformCommandTransmission(Utilities.GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings(), Utilities.GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings(), testSet, transmissionCount);
+					break;
+
+				case TransmissionType.TcpAutoSocketOnSpecificIPv4Interface:
+					PerformCommandTransmission(Utilities.GetStartedTextTcpAutoSocketOnSpecificIPv4InterfaceSettings(), Utilities.GetStartedTextTcpAutoSocketOnSpecificIPv4InterfaceSettings(), testSet, transmissionCount);
+					break;
+
+				case TransmissionType.TcpAutoSocketOnSpecificIPv6Interface:
+					PerformCommandTransmission(Utilities.GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettings(), Utilities.GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettings(), testSet, transmissionCount);
+					break;
+			}
 		}
-
-		#endregion
-
-		#region Tests > DoubleLineTransmissionTcp
-		//------------------------------------------------------------------------------------------
-		// Tests > DoubleLineTransmissionTcp
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[Test]
-		public virtual void TestDoubleLineTransmissionTcp()
-		{
-			PerformCommandTransmissionTcp(DoubleLineCommand);
-		}
-
-		/// <summary></summary>
-		[Test]
-		public virtual void TestDoubleLineDoubleTransmissionTcp()
-		{
-			PerformCommandTransmissionTcp(DoubleLineCommand, 2);
-		}
-
-		#endregion
-
-		#region Tests > TripleLineTransmissionTcp
-		//------------------------------------------------------------------------------------------
-		// Tests > TripleLineTransmissionTcp
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[Test]
-		public virtual void TestTripleLineTransmissionTcp()
-		{
-			PerformCommandTransmissionTcp(TripleLineCommand);
-		}
-
-		/// <summary></summary>
-		[Test]
-		public virtual void TestTripleLineTripleTransmissionTcp()
-		{
-			PerformCommandTransmissionTcp(TripleLineCommand, 3);
-		}
-
-		#endregion
-
-		#region Tests > MultiLineTransmissionTcp
-		//------------------------------------------------------------------------------------------
-		// Tests > MultiLineTransmissionTcp
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[Test]
-		public virtual void TestMultiLineTransmissionTcp()
-		{
-			PerformCommandTransmissionTcp(MultiLineCommand);
-		}
-
-		/// <summary></summary>
-		[Test]
-		public virtual void TestMultiLineMultiTransmissionTcp()
-		{
-			PerformCommandTransmissionTcp(MultiLineCommand, TestCommandLines.Length);
-		}
-
-		#endregion
-
-		#region Tests > MultiEolTransmissionTcp
-		//------------------------------------------------------------------------------------------
-		// Tests > MultiEolTransmissionTcp
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[Test]
-		public virtual void TestMultiEolTransmissionTcp()
-		{
-			PerformCommandTransmissionTcp(MultiEolCommand);
-		}
-
-		#endregion
-
-		#region Tests > MixedEolTransmissionTcp
-		//------------------------------------------------------------------------------------------
-		// Tests > MixedEolTransmissionTcp
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[Test]
-		public virtual void TestMixedEolTransmissionTcp()
-		{
-			PerformCommandTransmissionTcp(MixedEolCommand);
-		}
-
-		#endregion
-
-		#region Tests > EolPartsTransmissionTcp
-		//------------------------------------------------------------------------------------------
-		// Tests > EolPartsTransmissionTcp
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[Test]
-		public virtual void TestEolPartsTransmissionTcp()
-		{
-			PerformCommandTransmissionTcp(EolPartsCommand);
-		}
-
-		#endregion
-
-		#region Tests > NoEolTransmissionTcp
-		//------------------------------------------------------------------------------------------
-		// Tests > NoEolTransmissionTcp
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[Test]
-		public virtual void TestSingleNoEolTransmissionTcp()
-		{
-			PerformCommandTransmissionTcp(SingleNoEolCommand);
-		}
-
-		/// <summary></summary>
-		[Test]
-		public virtual void TestDoubleNoEolTransmissionTcp()
-		{
-			PerformCommandTransmissionTcp(DoubleNoEolCommand);
-		}
-
-		#endregion
 
 		#endregion
 
@@ -237,16 +193,6 @@ namespace YAT.Model.Test
 		//==========================================================================================
 		// Transmission
 		//==========================================================================================
-
-		private void PerformCommandTransmissionTcp(Utilities.TestSet testSet)
-		{
-			PerformCommandTransmissionTcp(testSet, 1);
-		}
-
-		private void PerformCommandTransmissionTcp(Utilities.TestSet testSet, int transmissionCount)
-		{
-			PerformCommandTransmission(Utilities.GetTextTcpSettings(), Utilities.GetTextTcpSettings(), testSet, transmissionCount);
-		}
 
 		private void PerformCommandTransmission(TerminalSettingsRoot settingsA, TerminalSettingsRoot settingsB, Utilities.TestSet testSet, int transmissionCount)
 		{

@@ -2457,11 +2457,11 @@ namespace YAT.Gui.Forms
 		{
 			switch (e.Request)
 			{
-				case Domain.IORequest.StartIO:
+				case Domain.IORequest.Start:
 					this.terminal.StartIO();
 					break;
 
-				case Domain.IORequest.StopIO:
+				case Domain.IORequest.Stop:
 					this.terminal.StopIO();
 					break;
 			}
@@ -2473,28 +2473,40 @@ namespace YAT.Gui.Forms
 			OnTerminalChanged(new EventArgs());
 
 			Domain.SerialPortErrorEventArgs serialPortErrorEventArgs = (e as Domain.SerialPortErrorEventArgs);
-			if (serialPortErrorEventArgs == null)
-			{
-				SetFixedStatusText("Terminal Error");
-				MessageBox.Show
-					(
-					this,
-					"Terminal error:" + Environment.NewLine + Environment.NewLine + e.Message,
-					"Terminal Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error
-					);
-			}
-			else
+			if (serialPortErrorEventArgs != null) // Handle known serial COM port issues.
 			{
 				SetTimedStatusText("Terminal Warning");
 				MessageBox.Show
 					(
 					this,
-					"Terminal warning:" + Environment.NewLine + Environment.NewLine + e.Message,
+					e.Message,
 					"Terminal Warning",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
+					);
+			}
+			else if (e.Severity == Domain.IOErrorSeverity.Acceptable) // Handle acceptable issues.
+			{
+				SetTimedStatusText("Terminal Warning");
+				MessageBox.Show
+					(
+					this,
+					e.Message,
+					"Terminal Warning",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning
+					);
+			}
+			else
+			{
+				SetFixedStatusText("Terminal Error");
+				MessageBox.Show
+					(
+					this,
+					e.Message,
+					"Terminal Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error
 					);
 			}
 		}

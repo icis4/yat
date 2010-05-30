@@ -54,6 +54,9 @@ namespace YAT.Test
 				suite.Add(typeof(MKY.IO.Usb.Test.ConnectionTest));
 				suite.Add(typeof(MKY.IO.Usb.Test.UsbDeviceIdTest));
 
+				// MKY.Net.Test
+				//suite.Add(typeof(MKY.IO.Net.<>));
+
 				// MKY.Utilities.Test
 				suite.Add(typeof(MKY.Utilities.Test.IO.XPathTest));
 				suite.Add(typeof(MKY.Utilities.Test.Settings.DocumentSettingsHandlerTest));

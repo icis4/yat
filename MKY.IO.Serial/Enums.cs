@@ -32,6 +32,14 @@ namespace MKY.IO.Serial
 		Open,
 		Close,
 	}
+
+	/// <summary></summary>
+	public enum IOErrorSeverity
+	{
+		Acceptable,
+		Severe,
+		Fatal,
+	}
 }
 
 //==================================================================================================

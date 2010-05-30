@@ -1,8 +1,8 @@
 ﻿//==================================================================================================
-// $URL$
-// $Author$
-// $Date$
-// $Revision$
+// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Ports.Test/Properties/AssemblyInfo.cs $
+// $Author: maettu_this $
+// $Date: 2010-04-27 20:05:33 +0200 (Di, 27 Apr 2010) $
+// $Revision: 294 $
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
@@ -10,7 +10,7 @@
 // Copyright © 2003-2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
-// YAT is licensed under the GNU LGPL.
+// This source code is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
@@ -22,12 +22,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("YAT.Gui.Utilities")]
-[assembly: AssemblyDescription("YAT GUI utilities")]
+[assembly: AssemblyTitle("MKY.Net.Test")]
+[assembly: AssemblyDescription("ALAZ System.Net extension test")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("YAT")]
-[assembly: AssemblyProduct("YAT")]
-[assembly: AssemblyCopyright("Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil. Copyright © 2003-2010 Matthias Kläy. All rights reserved.")]
+[assembly: AssemblyCompany("MKY")]
+[assembly: AssemblyProduct("MKY.Net.Test")]
+[assembly: AssemblyCopyright("Copyright © 2010 Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -37,7 +37,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("785b85f9-edd5-498f-92ed-e8129a7c492c")]
+[assembly: Guid("5a7d9e11-481d-4b8e-b0ca-5ce8900b3cd0")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -49,14 +49,14 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.99.*")]
-[assembly: AssemblyFileVersion("1.99.24.0")]
-[assembly: AssemblyInformationalVersion("1.99.24")]
+[assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyFileVersion("1.0.2.0")]
+[assembly: AssemblyInformationalVersion("1.0.2")]
 
 // CLS compliance
 [assembly: CLSCompliant(true)]
 
 //==================================================================================================
 // End of
-// $URL$
+// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Ports.Test/Properties/AssemblyInfo.cs $
 //==================================================================================================

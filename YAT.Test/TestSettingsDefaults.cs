@@ -58,6 +58,15 @@ namespace YAT.Test
 				new MKY.IO.Usb.Test.SettingsSection()
 				);
 
+			// MKY.Net.Test
+			CreateAssemblySections
+				(
+				c,
+				MKY.Net.Test.SettingsConstants.ConfigurationGroupName,
+				MKY.Net.Test.SettingsConstants.ConfigurationsGroupName,
+				new MKY.Net.Test.SettingsSection()
+				);
+
 			// MKY.Utilities.Test
 			// MKY.Windows.Forms.Test
 

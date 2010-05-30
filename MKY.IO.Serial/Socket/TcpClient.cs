@@ -349,6 +349,8 @@ namespace MKY.IO.Serial
 
 			if (IsStarted)
 				StopSocket();
+			else
+				Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(               " + ToShortEndPointString() + "): Stop() requested but state is " + this.state + ".");
 		}
 
 		/// <summary></summary>
@@ -456,10 +458,19 @@ namespace MKY.IO.Serial
 
 		private void StopSocket()
 		{
-			// \remind
-			// The ALAZ sockets by default stop synchronously. However, due to some other issues
-			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
-			this.socket.Stop();
+			if (this.state == SocketState.Connected)
+			{
+				SetStateAndNotify(SocketState.Disconnecting);
+
+				// \remind
+				// The ALAZ sockets by default stop synchronously. However, due to some other issues
+				//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
+				this.socket.Stop();
+			}
+			else
+			{
+				// Nothing to do.
+			}
 		}
 
 		#endregion
@@ -559,7 +570,10 @@ namespace MKY.IO.Serial
 					this.socketConnection = null;
 
 				SetStateAndNotify(SocketState.Error);
-				OnIOError(new IOErrorEventArgs(e.Exception.Message));
+				if (e.Exception is ALAZ.SystemEx.NetEx.SocketsEx.ReconnectAttemptException)
+					OnIOError(new IOErrorEventArgs(IOErrorSeverity.Acceptable, "Failed to connect to TCP server " + this.remoteIPAddress + ":" + this.remotePort));
+				else
+					OnIOError(new IOErrorEventArgs(e.Exception.Message));
 			}
 		}
 

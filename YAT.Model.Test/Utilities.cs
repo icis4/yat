@@ -21,6 +21,7 @@ using System.Threading;
 
 using NUnit.Framework;
 
+using MKY.Utilities.Net;
 using MKY.Utilities.Settings;
 using MKY.Utilities.Types;
 
@@ -28,20 +29,27 @@ using YAT.Settings.Terminal;
 
 namespace YAT.Model.Test
 {
-	internal static class Utilities
+	/// <summary></summary>
+	public static class Utilities
 	{
 		#region Types
 		//==========================================================================================
 		// Types
 		//==========================================================================================
 
-		internal struct TestSet
+		/// <summary></summary>
+		public struct TestSet
 		{
+			/// <summary></summary>
 			public readonly Model.Types.Command Command;
+			/// <summary></summary>
 			public readonly int ExpectedLineCount;
+			/// <summary></summary>
 			public readonly int[] ExpectedElementCounts;
+			/// <summary></summary>
 			public readonly int[] ExpectedDataCounts;
 
+			/// <summary></summary>
 			public TestSet(Model.Types.Command command)
 			{
 				Command = command;
@@ -56,6 +64,7 @@ namespace YAT.Model.Test
 				}
 			}
 
+			/// <summary></summary>
 			public TestSet(Model.Types.Command command, int expectedLineCount, int[] expectedElementCounts, int[] expectedDataCounts)
 			{
 				Command = command;
@@ -83,19 +92,96 @@ namespace YAT.Model.Test
 		// Settings
 		//==========================================================================================
 
-		internal static TerminalSettingsRoot GetTextTcpSettings()
+		internal static TerminalSettingsRoot GetStartedTextSerialPortSettings(MKY.IO.Ports.SerialPortId portId)
+		{
+			// Create settings
+			TerminalSettingsRoot settings = new TerminalSettingsRoot();
+			settings.TerminalType = Domain.TerminalType.Text;
+			settings.Terminal.IO.IOType = Domain.IOType.SerialPort;
+			settings.Terminal.IO.SerialPort.PortId = portId;
+			settings.TerminalIsStarted = true;
+			return (settings);
+		}
+
+		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextSerialPortSettingsHandler(MKY.IO.Ports.SerialPortId portId)
+		{
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextSerialPortSettings(portId)));
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextSerialPortASettings()
+		{
+			return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortA));
+		}
+
+		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextSerialPortASettingsHandler()
+		{
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextSerialPortASettings()));
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextSerialPortBSettings()
+		{
+			return (GetStartedTextSerialPortSettings(MKY.IO.Ports.Test.SettingsProvider.Settings.SerialPortB));
+		}
+
+		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextSerialPortBSettingsHandler()
+		{
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextSerialPortBSettings()));
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketSettings(XNetworkInterface networkInterface)
 		{
 			// Create settings
 			TerminalSettingsRoot settings = new TerminalSettingsRoot();
 			settings.TerminalType = Domain.TerminalType.Text;
 			settings.Terminal.IO.IOType = Domain.IOType.TcpAutoSocket;
+			settings.Terminal.IO.Socket.LocalInterface = networkInterface;
 			settings.TerminalIsStarted = true;
 			return (settings);
 		}
 
-		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetTextTcpSettingsHandler()
+		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketSettingsHandler(XNetworkInterface networkInterface)
 		{
-			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetTextTcpSettings()));
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextTcpAutoSocketSettings(networkInterface)));
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings()
+		{
+			return (GetStartedTextTcpAutoSocketSettings((XNetworkInterface)CommonNetworkInterface.IPv4Loopback));
+		}
+
+		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler()
+		{
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings()));
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings()
+		{
+			return (GetStartedTextTcpAutoSocketSettings((XNetworkInterface)CommonNetworkInterface.IPv6Loopback));
+		}
+
+		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketOnIPv6LoopbackSettingsHandler()
+		{
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings()));
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnSpecificIPv4InterfaceSettings()
+		{
+			return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.SettingsProvider.Settings.SpecificIPv4Interface));
+		}
+
+		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketOnSpecificIPv4InterfaceSettingsHandler()
+		{
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextTcpAutoSocketOnSpecificIPv4InterfaceSettings()));
+		}
+
+		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettings()
+		{
+			return (GetStartedTextTcpAutoSocketSettings(MKY.Net.Test.SettingsProvider.Settings.SpecificIPv6Interface));
+		}
+
+		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettingsHandler()
+		{
+			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextTcpAutoSocketOnSpecificIPv6InterfaceSettings()));
 		}
 
 		#endregion

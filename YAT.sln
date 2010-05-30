@@ -6,7 +6,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Doc.Developer", "_Doc.Deve
 		_Doc.Developer\HowToAddTestProject.txt = _Doc.Developer\HowToAddTestProject.txt
 		_Doc.Developer\HowToExportArgoUML.txt = _Doc.Developer\HowToExportArgoUML.txt
 		_Doc.Developer\HowToRunAndDebugNUnitTests.txt = _Doc.Developer\HowToRunAndDebugNUnitTests.txt
-		_Doc.Developer\HowToUpdateLibUsb.txt = _Doc.Developer\HowToUpdateLibUsb.txt
 		_Doc.Developer\NUnitSetup.txt = _Doc.Developer\NUnitSetup.txt
 		_Doc.Developer\StyleCopSetup.txt = _Doc.Developer\StyleCopSetup.txt
 		_Doc.Developer\SVNSetup.txt = _Doc.Developer\SVNSetup.txt
@@ -22,11 +21,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Scripts", "_Scripts", "{08FEFDFE-B7C8-4D17-9C8F-3B3108242FB4}"
 	ProjectSection(SolutionItems) = preProject
 		_Scripts\CleanAll-Options.bat = _Scripts\CleanAll-Options.bat
+		_Scripts\CleanAll-SCM.bat = _Scripts\CleanAll-SCM.bat
 		_Scripts\CleanAll-Setup.bat = _Scripts\CleanAll-Setup.bat
-		_Scripts\CleanAll-SVN.bat = _Scripts\CleanAll-SVN.bat
 		_Scripts\CleanAll-Temp.bat = _Scripts\CleanAll-Temp.bat
 		_Scripts\CleanAll.bat = _Scripts\CleanAll.bat
 		_Scripts\CleanDir.bat = _Scripts\CleanDir.bat
+		_Scripts\CleanFiles.bat = _Scripts\CleanFiles.bat
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT", "YAT\YAT.csproj", "{E87405A5-8FB0-4CE0-9946-3A08205B5DE0}"
@@ -115,6 +115,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Doc.SourceForge", "_Doc.So
 		_Doc.SourceForge\RelatedTools.html = _Doc.SourceForge\RelatedTools.html
 		_Doc.SourceForge\ToolsAndVersions.html = _Doc.SourceForge\ToolsAndVersions.html
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Net.Test", "MKY.Net.Test\MKY.Net.Test.csproj", "{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -463,6 +465,16 @@ Global
 		{B5F4667B-5154-45C0-A0DE-411BBC292049}.Release with Redistributable|Any CPU.Build.0 = Release|Any CPU
 		{B5F4667B-5154-45C0-A0DE-411BBC292049}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5F4667B-5154-45C0-A0DE-411BBC292049}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
+		{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
+		{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}.Release Test|Any CPU.Build.0 = Release|Any CPU
+		{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}.Release with Redistributable|Any CPU.ActiveCfg = Release|Any CPU
+		{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}.Release with Redistributable|Any CPU.Build.0 = Release|Any CPU
+		{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

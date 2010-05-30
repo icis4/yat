@@ -114,7 +114,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual MKY.IO.Serial.SocketHostType HostType
+		public virtual SocketHostType HostType
 		{
 			set
 			{
@@ -168,7 +168,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual string LocalInterface
+		public virtual XNetworkInterface LocalInterface
 		{
 			get { return (this.localInterface); }
 			set
@@ -280,7 +280,7 @@ namespace YAT.Gui.Controls
 					(host.ToString() == comboBox_RemoteHost.Text))
 				{
 					RemoteHost = host;
-					this.resolvedRemoteIPAddress = host.IPAddress;
+					this.resolvedRemoteIPAddress = RemoteHost.IPAddress;
 				}
 				else
 				{
@@ -363,8 +363,8 @@ namespace YAT.Gui.Controls
 		{
 			if (!this.isSettingControls)
 			{
-				this.localInterface = comboBox_LocalInterface.SelectedItem as XNetworkInterface;
-				this.resolvedLocalIPAddress = this.localInterface.IPAddress;
+				LocalInterface = comboBox_LocalInterface.SelectedItem as XNetworkInterface;
+				this.resolvedLocalIPAddress = LocalInterface.IPAddress;
 			}
 		}
 
@@ -503,10 +503,17 @@ namespace YAT.Gui.Controls
 			}
 
 			// Local interface.
-			if (Enabled && (this.hostType != SocketHostType.Unknown))
-				comboBox_LocalInterface.Text = this.localInterface;
+			if (!DesignMode && Enabled && (this.hostType != SocketHostType.Unknown) && (comboBox_LocalInterface.Items.Count > 0))
+			{
+				if (this.localInterface != null)
+					comboBox_LocalInterface.SelectedItem = this.localInterface;
+				else
+					comboBox_LocalInterface.SelectedItem = (XNetworkInterface)CommonNetworkInterface.Any;
+			}
 			else
+			{
 				comboBox_LocalInterface.SelectedIndex = -1;
+			}
 
 			// Local port label.
 			if (Enabled && (this.hostType == SocketHostType.Udp))
@@ -516,11 +523,20 @@ namespace YAT.Gui.Controls
 
 			// Local port.
 			if (Enabled && ((this.hostType == SocketHostType.TcpServer) || (this.hostType == SocketHostType.TcpAutoSocket)))
+			{
+				textBox_LocalPort.Enabled = true;
 				textBox_LocalPort.Text = this.localTcpPort.ToString();
+			}
 			else if (Enabled && (this.hostType == SocketHostType.Udp))
+			{
+				textBox_LocalPort.Enabled = true;
 				textBox_LocalPort.Text = this.localUdpPort.ToString();
+			}
 			else
+			{
+				textBox_LocalPort.Enabled = false;
 				textBox_LocalPort.Text = "";
+			}
 
 			this.isSettingControls = false;
 		}
