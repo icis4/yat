@@ -44,11 +44,12 @@ YAT 2.0 Beta 3 Candidate 1 Version 1.99.2x :: 2010-0x-xx
 
 New:
 - Support for USB Ser/HID implemented (feature request #2825931)
-- NUnit test parametrization including optional user config added (feature request #2981764)
+- Test config including optional user config added (feature request #2981764)
 
 Important changes:
-- <>(bug #<>)
+- Test environment to ensure that TCP/IP works on multiple network interfaces added (bug #2970215)
 - Update to NUnit 2.5.5
+- Use of parametrized NUnit test cases
 - Use of FxCop (feature request #2970221)
 - Use of StyleCop (feature request #2970222)
 - Methods and properties marked "virtual", unless there are reasons against
@@ -57,6 +58,7 @@ Important changes:
 - Project references to system assemblies cleaned
 
 Fixed bugs:
+- TCP/IP open/close issues fixed (bug #2684769, bug #2684813, bug #2966417)
 - Unhandled exception dialog improved and fixed (feature request #2970243, bug #2970245)
 
 Limitations and known issues:
@@ -70,7 +72,7 @@ Limitations and known issues:
 - More advanced text line send and receive options not yet implemented
   (feature requests #1808508 and #1808509)
 - Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
-- Multiply simultaneous instances of YAT are limited in the use of default workspaces and terminals
+- Multiple simultaneous instances of YAT are limited in the use of default workspaces and terminals
   (feature request #2842713)
 
 
@@ -134,7 +136,7 @@ Limitations and known issues:
 - More advanced text line send and receive options not yet implemented
   (feature requests #1808508 and #1808509)
 - Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
-- Multiply simultaneous instances of YAT are limited in the use of default workspaces and terminals
+- Multiple simultaneous instances of YAT are limited in the use of default workspaces and terminals
   (feature request #2842713)
 
 

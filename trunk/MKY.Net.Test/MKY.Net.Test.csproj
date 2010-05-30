@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{CAEC3FFA-F303-4CCB-A42A-36F45AA00BD2}</ProjectGuid>
+    <ProjectGuid>{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MKY.IO.Serial.Test</RootNamespace>
-    <AssemblyName>MKY.IO.Serial.Test</AssemblyName>
+    <RootNamespace>MKY.Net.Test</RootNamespace>
+    <AssemblyName>MKY.Net.Test</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -21,8 +21,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\MKY.Net.Test.XML</DocumentationFile>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\Debug\MKY.IO.Serial.Test.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,12 +31,13 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\MKY.Net.Test.XML</DocumentationFile>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\Release\MKY.IO.Serial.Test.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=2.5.5.10112, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -44,33 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerialPort\SerialPortSettingsTest.cs" />
-    <Compile Include="Socket\TcpConnectionTest.cs" />
-    <Compile Include="Socket\SocketSettingsTest.cs" />
-    <Compile Include="Socket\Utilities.cs" />
-    <Compile Include="Usb\UsbHidPortSettings.cs" />
+    <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ALAZ\Source\ALAZ.SystemEx.NetEx\ALAZ.SystemEx.NetEx.csproj">
-      <Project>{25162422-3B32-4FB3-8A99-6BCFBE30D9AE}</Project>
-      <Name>ALAZ.SystemEx.NetEx</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ALAZ\Source\ALAZ.SystemEx\ALAZ.SystemEx.csproj">
-      <Project>{FA1EF4FC-2FC7-4B29-9EAB-2872593C89E2}</Project>
-      <Name>ALAZ.SystemEx</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MKY.IO.Ports\MKY.IO.Ports.csproj">
-      <Project>{D8940035-D30A-48A3-AC28-E8A4B8910CB9}</Project>
-      <Name>MKY.IO.Ports</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MKY.IO.Serial\MKY.IO.Serial.csproj">
-      <Project>{E3A19532-D12A-4A90-B7F3-637A0A8FA6BD}</Project>
-      <Name>MKY.IO.Serial</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MKY.IO.Usb\MKY.IO.Usb.csproj">
-      <Project>{1B657329-940D-4AA1-9768-431288B555E2}</Project>
-      <Name>MKY.IO.Usb</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MKY.Utilities\MKY.Utilities.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY.Utilities</Name>

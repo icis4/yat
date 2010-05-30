@@ -27,10 +27,23 @@ namespace YAT.Domain
 	public enum IORequest
 	{
 		/// <summary></summary>
-		StartIO = MKY.IO.Serial.IORequest.Open,
+		Start = MKY.IO.Serial.IORequest.Open,
 
 		/// <summary></summary>
-		StopIO = MKY.IO.Serial.IORequest.Close,
+		Stop = MKY.IO.Serial.IORequest.Close,
+	}
+
+	/// <summary></summary>
+	public enum IOErrorSeverity
+	{
+		/// <summary></summary>
+		Acceptable = MKY.IO.Serial.IOErrorSeverity.Acceptable,
+
+		/// <summary></summary>
+		Severe = MKY.IO.Serial.IOErrorSeverity.Severe,
+
+		/// <summary></summary>
+		Fatal = MKY.IO.Serial.IOErrorSeverity.Fatal,
 	}
 }
 

@@ -106,7 +106,55 @@ namespace MKY.Utilities.Net
 
 		#endregion
 
-		#region ToString
+		#region Object Members
+		//------------------------------------------------------------------------------------------
+		// Object Members
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (obj is XNetworkInterface)
+				return (Equals((XNetworkInterface)obj));
+
+			return (false);
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public bool Equals(XNetworkInterface value)
+		{
+			// Ensure that object.operator!=() is called.
+			if ((object)value != null)
+			{
+				if ((CommonNetworkInterface)UnderlyingEnum == CommonNetworkInterface.Other)
+				{
+					return
+						(
+						(this.otherAddress == value.otherAddress) &&
+						(this.otherDescription == value.otherDescription)
+						);
+				}
+				else
+				{
+					return (base.Equals(value));
+				}
+			}
+
+			return (false);
+		}
+
+		/// <summary>
+		/// Returns the hash code for this instance.
+		/// </summary>
+		/// <returns>A 32-bit signed integer hash code.</returns>
+		public override int GetHashCode()
+		{
+			return (base.GetHashCode());
+		}
 
 		/// <summary></summary>
 		public override string ToString()
@@ -237,6 +285,32 @@ namespace MKY.Utilities.Net
 		public static implicit operator XNetworkInterface(string networkInterface)
 		{
 			return (Parse(networkInterface));
+		}
+
+		#endregion
+
+		#region Comparison Operators
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(XNetworkInterface lhs, XNetworkInterface rhs)
+		{
+			if (ReferenceEquals(lhs, rhs))
+				return (true);
+
+			if ((object)lhs != null)
+				return (lhs.Equals(rhs));
+
+			return (false);
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(XNetworkInterface lhs, XNetworkInterface rhs)
+		{
+			return (!(lhs == rhs));
 		}
 
 		#endregion

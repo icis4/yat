@@ -94,8 +94,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
-		[Test]
-		[Category("Support for COM1 required")]
+		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_12_TerminalSettingsCase01()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
@@ -112,8 +111,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>02_COM2_Open_Binary_115200.</summary>
-		[Test]
-		[Category("Support for COM2 required")]
+		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_12_TerminalSettingsCase02()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
@@ -154,8 +152,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
-		[Test]
-		[Category("Support for COM1 required")]
+		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_13_TerminalSettingsCase01()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
@@ -172,8 +169,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>02_COM2_Open_Binary_115200.</summary>
-		[Test]
-		[Category("Support for COM2 required")]
+		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_13_TerminalSettingsCase02()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
@@ -238,8 +234,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
-		[Test]
-		[Category("Support for COM1 required")]
+		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_17_TerminalSettingsCase01()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
@@ -256,8 +251,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>02_COM2_Open_Binary_115200.</summary>
-		[Test]
-		[Category("Support for COM2 required")]
+		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_17_TerminalSettingsCase02()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
@@ -322,8 +316,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
-		[Test]
-		[Category("Support for COM1 required")]
+		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_18_TerminalSettingsCase01()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
@@ -340,8 +333,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>02_COM2_Open_Binary_115200.</summary>
-		[Test]
-		[Category("Support for COM2 required")]
+		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_18_TerminalSettingsCase02()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
@@ -406,8 +398,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
-		[Test]
-		[Category("Support for COM1 required")]
+		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_19_TerminalSettingsCase01()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
@@ -424,8 +415,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>02_COM2_Open_Binary_115200.</summary>
-		[Test]
-		[Category("Support for COM2 required")]
+		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_19_TerminalSettingsCase02()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
@@ -490,8 +480,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
-		[Test]
-		[Category("Support for COM1 required")]
+		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_20_TerminalSettingsCase01()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
@@ -508,8 +497,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>02_COM2_Open_Binary_115200.</summary>
-		[Test]
-		[Category("Support for COM2 required")]
+		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_20_TerminalSettingsCase02()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
@@ -574,8 +562,7 @@ namespace YAT.Settings.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
-		[Test]
-		[Category("Support for COM1 required")]
+		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
 		public virtual void Test_V1_99_22_TerminalSettingsCase01()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
@@ -592,8 +579,7 @@ namespace YAT.Settings.Test
 		}
 
 		/// <summary>02_COM2_Open_Binary_115200.</summary>
-		[Test]
-		[Category("Support for COM2 required")]
+		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
 		public virtual void Test_V1_99_22_TerminalSettingsCase02()
 		{
 			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath

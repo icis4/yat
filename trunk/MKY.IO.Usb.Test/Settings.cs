@@ -20,6 +20,11 @@ using MKY.Utilities.Configuration;
 
 namespace MKY.IO.Usb.Test
 {
+	#region Settings
+	//==========================================================================================
+	// Settings
+	//==========================================================================================
+
 	/// <summary>
 	/// Type representing the configuration settings section.
 	/// </summary>
@@ -132,6 +137,13 @@ namespace MKY.IO.Usb.Test
 		#endregion
 	}
 
+	#endregion
+
+	#region Provider
+	//==========================================================================================
+	// Provider
+	//==========================================================================================
+
 	/// <summary></summary>
 	/// <remarks>
 	/// Separate class needed to create default settings. To create the defaults, these constants
@@ -165,6 +177,44 @@ namespace MKY.IO.Usb.Test
 			get { return (staticSettings); }
 		}
 	}
+
+	#endregion
+
+	#region Categories
+	//==========================================================================================
+	// Categories
+	//==========================================================================================
+
+	/// <summary></summary>
+	public static class SettingsCategoryStrings
+	{
+		/// <summary></summary>
+		public static readonly string SerialHidDeviceAIsAvailable = "USB Ser/HID " + SettingsProvider.Settings.SerialHidDeviceA + " is available";
+		/// <summary></summary>
+		public static readonly string SerialHidDeviceBIsAvailable = "USB Ser/HID " + SettingsProvider.Settings.SerialHidDeviceB + " is available";
+	}
+
+	/// <summary></summary>
+	public class SerialHidDeviceAIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	{
+		/// <summary></summary>
+		public SerialHidDeviceAIsAvailableCategoryAttribute()
+			: base(SettingsCategoryStrings.SerialHidDeviceAIsAvailable)
+		{
+		}
+	}
+
+	/// <summary></summary>
+	public class SerialHidDeviceBIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	{
+		/// <summary></summary>
+		public SerialHidDeviceBIsAvailableCategoryAttribute()
+			: base(SettingsCategoryStrings.SerialHidDeviceBIsAvailable)
+		{
+		}
+	}
+
+	#endregion
 }
 
 //==================================================================================================

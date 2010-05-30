@@ -40,6 +40,7 @@
   <ItemGroup>
     <Reference Include="nunit.framework, Version=2.5.5.10112, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -55,6 +56,10 @@
     <ProjectReference Include="..\ALAZ\Source\ALAZ.SystemEx\ALAZ.SystemEx.csproj">
       <Project>{FA1EF4FC-2FC7-4B29-9EAB-2872593C89E2}</Project>
       <Name>ALAZ.SystemEx</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MKY.IO.Ports.Test\MKY.IO.Ports.Test.csproj">
+      <Project>{82461541-B351-4913-9747-EAFEE2322768}</Project>
+      <Name>MKY.IO.Ports.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\MKY.IO.Ports\MKY.IO.Ports.csproj">
       <Project>{D8940035-D30A-48A3-AC28-E8A4B8910CB9}</Project>

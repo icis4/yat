@@ -206,7 +206,7 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(workspace, "Workspace not created");
 				Assert.AreEqual(0, workspace.TerminalCount, "Workspace doesn't contain 0 terminals");
 
-				success = workspace.CreateNewTerminal(Utilities.GetTextTcpSettingsHandler());
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, "Terminal could not be created");
 				Assert.AreEqual(1, workspace.TerminalCount, "Workspace doesn't contain 1 terminal");
 
@@ -299,14 +299,14 @@ namespace YAT.Model.Test
 				VerifyFiles(workspace, true, terminal1, true, false);
 				StringAssert.AreEqualIgnoringCase(this.normalTerminal1FilePath, terminal1.SettingsFilePath, "Terminal 1 is not stored at user terminal 1 location");
 
-				success = workspace.CreateNewTerminal(Utilities.GetTextTcpSettingsHandler());
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, "Terminal 2 could not be created");
 				Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals");
 
 				Terminal terminal2 = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal2, "Terminal 2 could not be created");
 
-				Assert.IsTrue(workspace.CreateNewTerminal(Utilities.GetTextTcpSettingsHandler()), "Terminal 3 could not be created");
+				Assert.IsTrue(workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler()), "Terminal 3 could not be created");
 				Assert.AreEqual(3, workspace.TerminalCount, "Workspace doesn't contain 3 terminals");
 
 				Terminal terminal3 = workspace.ActiveTerminal;
@@ -502,7 +502,7 @@ namespace YAT.Model.Test
 					new bool[]     { false,     false     }  // auto
 					);
 
-				success = workspace.CreateNewTerminal(Utilities.GetTextTcpSettingsHandler());
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, "Terminal 3 could not be created");
 				Assert.AreEqual(3, workspace.TerminalCount, "Workspace doesn't contain 3 terminals");
 
@@ -610,14 +610,14 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(workspace, "Workspace not created");
 				Assert.AreEqual(0, workspace.TerminalCount, "Workspace doesn't contain 0 terminals");
 
-				success = workspace.CreateNewTerminal(Utilities.GetTextTcpSettingsHandler());
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, "Terminal 1 could not be created");
 				Terminal terminal1 = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal1, "Terminal 1 could not be created");
 				success = terminal1.SaveAs(this.normalTerminal1FilePath);
 				Assert.IsTrue(success, "Terminal 1 could not be saved as");
 
-				success = workspace.CreateNewTerminal(Utilities.GetTextTcpSettingsHandler());
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, "Terminal 2 could not be created");
 				Terminal terminal2 = workspace.ActiveTerminal;
 				Assert.IsNotNull(terminal2, "Terminal 2 could not be created");
@@ -680,7 +680,7 @@ namespace YAT.Model.Test
 
 				VerifyFiles(workspace, false, terminal1, true, false);
 
-				success = workspace.CreateNewTerminal(Utilities.GetTextTcpSettingsHandler());
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 				Assert.IsTrue(success, "Terminal 2 could not be created");
 				Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals");
 
@@ -871,7 +871,7 @@ namespace YAT.Model.Test
 			main = new Main();
 			main.Start();              // Creates empty workspace
 			workspace = main.Workspace;
-			workspace.CreateNewTerminal(Utilities.GetTextTcpSettingsHandler());
+			workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
 			terminal = workspace.ActiveTerminal;
 		}
 

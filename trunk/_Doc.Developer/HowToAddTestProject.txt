@@ -10,6 +10,7 @@
 	Modify assembly name if needed
 	Modify default namespace if needed
 	Select all configurations
+	Enable Build > XML documentation file
 	Tick Build > Advanced > Check for under/overflow
 
 5.	Open "AssemblyInfo"
@@ -31,3 +32,5 @@
 9.	Add tests according to the NUnit documentation
 
 10.	Add project and tests to YAT.Test test suite
+
+11.	Add project and tests to YAT.TestSettingsDefaults

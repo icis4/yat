@@ -22,6 +22,8 @@ using System.Windows.Forms;
 using MKY.Utilities.Diagnostics;
 using MKY.Utilities.Windows.Forms;
 
+using YAT.Utilities;
+
 namespace YAT.Gui.Forms
 {
 	/// <summary></summary>
@@ -76,6 +78,12 @@ namespace YAT.Gui.Forms
 			StringWriter text = new StringWriter();
 			try
 			{
+				text.Write(ApplicationInfo.ProductName);
+				text.Write(" Version ");
+				text.Write(Application.ProductVersion);
+				text.WriteLine();
+				text.WriteLine();
+
 				AnyWriter.WriteException(text, null, this.exeption);
 			}
 			catch

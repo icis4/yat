@@ -40,7 +40,6 @@ namespace MKY.IO.Serial
 			Reset,
 			Listening,
 			Accepted,
-			Stopping,
 			Error,
 		}
 
@@ -308,6 +307,8 @@ namespace MKY.IO.Serial
 
 			if (IsStarted)
 				StopSocket();
+			else
+				System.Diagnostics.Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "                  ): Stop() requested but state is " + this.state + ".");
 		}
 
 		/// <summary></summary>
@@ -410,11 +411,13 @@ namespace MKY.IO.Serial
 				);
 
 			this.socket.AddListener("YAT TCP Server Listener", new System.Net.IPEndPoint(System.Net.IPAddress.Any, this.localPort));
-			this.socket.Start(); // The ALAZ socket will be started asynchronously
+			this.socket.Start(); // The ALAZ socket will be started asynchronously.
 		}
 
 		private void StopSocket()
 		{
+			SetStateAndNotify(SocketState.Reset);
+
 			// \remind
 			// The ALAZ sockets by default stop synchronously. However, due to some other issues
 			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
@@ -447,7 +450,7 @@ namespace MKY.IO.Serial
 
 			SetStateAndNotify(SocketState.Accepted);
 
-			// Immediately begin receiving data
+			// Immediately begin receiving data.
 			e.Connection.BeginReceive();
 		}
 
@@ -466,7 +469,7 @@ namespace MKY.IO.Serial
 			}
 			OnDataReceived(new EventArgs());
 
-			// Continue receiving data
+			// Continue receiving data.
 			e.Connection.BeginReceive();
 		}
 
@@ -478,7 +481,7 @@ namespace MKY.IO.Serial
 		/// </param>
 		public virtual void OnSent(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
-			// Nothing to do
+			// Nothing to do.
 		}
 
 		/// <summary>
@@ -489,6 +492,8 @@ namespace MKY.IO.Serial
 		/// </param>
 		public virtual void OnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
+			Debug.WriteLine("SERVER :: OnDisconnected");
+
 			bool isConnected = false;
 			lock (this.socketConnections)
 			{
@@ -508,6 +513,8 @@ namespace MKY.IO.Serial
 		/// </param>
 		public virtual void OnException(ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs e)
 		{
+			Debug.WriteLine("SERVER :: OnException");
+
 			DisposeSocket();
 
 			SetStateAndNotify(SocketState.Error);

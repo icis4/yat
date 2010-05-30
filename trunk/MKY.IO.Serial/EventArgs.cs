@@ -37,11 +37,21 @@ namespace MKY.IO.Serial
 	public class IOErrorEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		public readonly IOErrorSeverity Severity;
+
+		/// <summary></summary>
 		public readonly string Message;
 
 		/// <summary></summary>
 		public IOErrorEventArgs(string message)
+			: this(IOErrorSeverity.Severe, message)
 		{
+		}
+
+		/// <summary></summary>
+		public IOErrorEventArgs(IOErrorSeverity severity, string message)
+		{
+			Severity = severity;
 			Message = message;
 		}
 	}

@@ -1,0 +1,29 @@
+Dear Andre Luis,
+
+I came across another issue when shutting down a pair of an ALAZ client connected to an ALAZ server within the same application. I ran into a deadlock while shutting down the open connection. It happens in ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Active.get(). Is there a need to lock the field when reading its status? The situation is as follows:
+Thread A) at ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginReadCallbackAsyncP trying to call connection.BeginDisconnect()
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Active.get() Line 286
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.FireOnException(ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection connection =
+          {ALAZ.SystemEx.NetEx.SocketsEx.ClientSocketConnection}, System.Exception ex = {Cannot evaluate expression because the current thread is in a sleep, wait, or join}) Line 551
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginDisconnect(ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection connection =
+          {ALAZ.SystemEx.NetEx.SocketsEx.ClientSocketConnection}) Line 1453
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.BeginDisconnect() Line 558
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginReadCallbackAsyncP(object state = {System.Net.Sockets.SocketAsyncEventArgs}) Line 1161
+Thread B) at ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginReadCallbackAsyncP trying to get the connection state
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Active.get() Line 286
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginReadCallbackAsyncP(object state = {System.Net.Sockets.SocketAsyncEventArgs}) Line 1146
+The Main Thread at ALAZ.SystemEx.NetEx.SocketsEx.SocketServer.Stop()
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Active.get() Line 286
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginDisconnect(ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection connection =
+          {ALAZ.SystemEx.NetEx.SocketsEx.ServerSocketConnection}) Line 1435
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.BeginDisconnect() Line 558
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.StopConnections() Line 340
+     > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.SocketServer.Stop() Line 207
+
+I removed the lock, and the issue mentioned above got solved. However, I then ran into the next issue:
+
+Best regards,
+Matthias
+
+maettu_this@users.sourceforge.net
+matthias.klaey@my-mail.ch

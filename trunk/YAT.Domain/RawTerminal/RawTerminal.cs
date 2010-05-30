@@ -498,7 +498,7 @@ namespace YAT.Domain
 		{
 			SerialPortIOErrorEventArgs serialPortErrorEventArgs = (e as SerialPortIOErrorEventArgs);
 			if (serialPortErrorEventArgs == null)
-				OnIOError(new IOErrorEventArgs(e.Message));
+				OnIOError(new IOErrorEventArgs((IOErrorSeverity)e.Severity, e.Message));
 			else
 				OnIOError(new SerialPortErrorEventArgs(serialPortErrorEventArgs.Message, serialPortErrorEventArgs.SerialPortError));
 		}
