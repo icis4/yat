@@ -282,6 +282,27 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
+		public virtual bool IsStopped
+		{
+			get
+			{
+				AssertNotDisposed();
+				switch (this.state)
+				{
+					case State.Reset:
+					case State.Error:
+					{
+						return (true);
+					}
+					default:
+					{
+						return (false);
+					}
+				}
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool IsStarted
 		{
 			get

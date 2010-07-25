@@ -239,6 +239,16 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
+		public virtual bool IsStopped
+		{
+			get
+			{
+				// Currently, Start/Stop is implemented mutual exclusively for this TCP AutoSocket.
+				return (!IsStarted);
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool IsStarted
 		{
 			get
@@ -449,9 +459,9 @@ namespace MKY.IO.Serial
 
 		#endregion
 
-		#region Simple Socket Methods
+		#region Socket Methods
 		//==========================================================================================
-		// Simple Socket Methods
+		// Socket Methods
 		//==========================================================================================
 
 		private void StopSockets()

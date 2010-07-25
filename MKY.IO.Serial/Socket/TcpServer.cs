@@ -40,6 +40,7 @@ namespace MKY.IO.Serial
 			Reset,
 			Listening,
 			Accepted,
+			Stopping,
 			Error,
 		}
 
@@ -143,7 +144,7 @@ namespace MKY.IO.Serial
 			{
 				if (disposing)
 				{
-					DisposeSocket();
+					DisposeSocketAndSocketConnections();
 				}
 				this.isDisposed = true;
 
@@ -196,6 +197,27 @@ namespace MKY.IO.Serial
 			{
 				AssertNotDisposed();
 				return (this.localPort);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool IsStopped
+		{
+			get
+			{
+				AssertNotDisposed();
+				switch (this.state)
+				{
+					case SocketState.Reset:
+					case SocketState.Error:
+					{
+						return (true);
+					}
+					default:
+					{
+						return (false);
+					}
+				}
 			}
 		}
 
@@ -367,24 +389,6 @@ namespace MKY.IO.Serial
 
 		#endregion
 
-		#region Simple Socket Methods
-		//==========================================================================================
-		// Simple Socket Methods
-		//==========================================================================================
-
-		private void DisposeSocket()
-		{
-			if (this.socket != null)
-			{
-				this.socket.Stop();
-				this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose()
-				this.socket = null;
-				this.socketConnections.Clear();
-			}
-		}
-
-		#endregion
-
 		#region Socket Methods
 		//==========================================================================================
 		// Socket Methods
@@ -392,9 +396,6 @@ namespace MKY.IO.Serial
 
 		private void StartSocket()
 		{
-			if (this.socket != null)
-				DisposeSocket();
-
 			SetStateAndNotify(SocketState.Listening);
 
 			this.socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketServer
@@ -416,18 +417,33 @@ namespace MKY.IO.Serial
 
 		private void StopSocket()
 		{
-			SetStateAndNotify(SocketState.Reset);
+			SetStateAndNotify(SocketState.Stopping);
 
 			// \remind
 			// The ALAZ sockets by default stop synchronously. However, due to some other issues
 			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
 			this.socket.Stop();
+
+			// \remind
+			// See above
+			//SetStateAndNotify(SocketState.Reset);
 		}
 
 		private void RestartSocket()
 		{
 			Stop();
 			Start();
+		}
+
+		private void DisposeSocketAndSocketConnections()
+		{
+			if (this.socket != null)
+			{
+				this.socket.Stop();
+				this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose()
+				this.socket = null;
+				this.socketConnections.Clear();
+			}
 		}
 
 		#endregion
@@ -492,8 +508,6 @@ namespace MKY.IO.Serial
 		/// </param>
 		public virtual void OnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
-			Debug.WriteLine("SERVER :: OnDisconnected");
-
 			bool isConnected = false;
 			lock (this.socketConnections)
 			{
@@ -502,7 +516,14 @@ namespace MKY.IO.Serial
 			}
 
 			if (!isConnected)
-				SetStateAndNotify(SocketState.Listening);
+			{
+				switch (this.state)
+				{
+					case SocketState.Accepted: SetStateAndNotify(SocketState.Listening); break;
+					case SocketState.Stopping: SetStateAndNotify(SocketState.Reset);     break;
+					// No state change in all other cases
+				}
+			}
 		}
 
 		/// <summary>
@@ -513,9 +534,7 @@ namespace MKY.IO.Serial
 		/// </param>
 		public virtual void OnException(ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs e)
 		{
-			Debug.WriteLine("SERVER :: OnException");
-
-			DisposeSocket();
+			DisposeSocketAndSocketConnections();
 
 			SetStateAndNotify(SocketState.Error);
 			OnIOError(new IOErrorEventArgs(e.Exception.Message));

@@ -203,6 +203,16 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		public virtual bool IsStopped
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (this.rawTerminal.IsStopped);
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool IsStarted
 		{
 			get
