@@ -311,6 +311,16 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		public virtual bool IsStopped
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (this.terminal.IsStopped);
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool IsStarted
 		{
 			get

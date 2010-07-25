@@ -444,6 +444,10 @@ namespace YAT.Gui.Forms
 
 			bool childIsReady = (ActiveMdiChild != null);
 
+			bool terminalIsStopped = false;
+			if (childIsReady)
+				terminalIsStopped = ((Gui.Forms.Terminal)ActiveMdiChild).IsStopped;
+
 			bool terminalIsStarted = false;
 			if (childIsReady)
 				terminalIsStarted = ((Gui.Forms.Terminal)ActiveMdiChild).IsStarted;
@@ -462,7 +466,7 @@ namespace YAT.Gui.Forms
 			}
 
 			toolStripButton_MainTool_File_Save.Enabled      = childIsReady;
-			toolStripButton_MainTool_Terminal_Start.Enabled = childIsReady && !terminalIsStarted;
+			toolStripButton_MainTool_Terminal_Start.Enabled = childIsReady && terminalIsStopped;
 			toolStripButton_MainTool_Terminal_Stop.Enabled  = childIsReady && terminalIsStarted;
 
 			toolStripButton_MainTool_Terminal_Radix_String.Enabled = childIsReady && radixIsReady;
@@ -1100,7 +1104,7 @@ namespace YAT.Gui.Forms
 
 				DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>(f.TerminalSettingsResult);
 
-				// check whether workspace is ready, otherwise empty workspace needs to be creaeted first
+				// Check whether workspace is ready, otherwise empty workspace needs to be creaeted first.
 				if (this.workspace != null)
 					this.workspace.CreateNewTerminal(sh);
 				else
@@ -1127,7 +1131,7 @@ namespace YAT.Gui.Forms
 				ApplicationSettings.LocalUser.Paths.TerminalFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
-				// check whether workspace is ready, otherwise empty workspace needs to be creaeted first
+				// Check whether workspace is ready, otherwise empty workspace needs to be creaeted first.
 				if (this.workspace != null)
 					this.workspace.OpenTerminalFromFile(ofd.FileName);
 				else

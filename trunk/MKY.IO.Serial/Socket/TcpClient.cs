@@ -73,7 +73,6 @@ namespace MKY.IO.Serial
 
 		private ALAZ.SystemEx.NetEx.SocketsEx.SocketClient socket;
 		private ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection socketConnection;
-		private object socketConnectionSyncObj = new object();
 
 		private Queue<byte> receiveQueue = new Queue<byte>();
 
@@ -152,7 +151,7 @@ namespace MKY.IO.Serial
 				if (disposing)
 				{
 					StopAndDisposeReconnectTimer();
-					DisposeSocket();
+					DisposeSocketAndSocketConnection();
 				}
 				this.isDisposed = true;
 
@@ -219,6 +218,27 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
+		public virtual bool IsStopped
+		{
+			get
+			{
+				AssertNotDisposed();
+				switch (this.state)
+				{
+					case SocketState.Disconnected:
+					case SocketState.Error:
+					{
+						return (true);
+					}
+					default:
+					{
+						return (false);
+					}
+				}
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool IsStarted
 		{
 			get
@@ -226,7 +246,6 @@ namespace MKY.IO.Serial
 				AssertNotDisposed();
 				switch (this.state)
 				{
-					case SocketState.Connecting:
 					case SocketState.Connected:
 					case SocketState.WaitingForReconnect:
 					{
@@ -409,24 +428,6 @@ namespace MKY.IO.Serial
 
 		#endregion
 
-		#region Simple Socket Methods
-		//==========================================================================================
-		// Simple Socket Methods
-		//==========================================================================================
-
-		private void DisposeSocket()
-		{
-			if (this.socket != null)
-			{
-				this.socket.Stop();
-				this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose()
-				this.socket = null;
-				this.socketConnection = null;
-			}
-		}
-
-		#endregion
-
 		#region Socket Methods
 		//==========================================================================================
 		// Socket Methods
@@ -434,9 +435,6 @@ namespace MKY.IO.Serial
 
 		private void StartSocket()
 		{
-			if (this.socket != null)
-				DisposeSocket();
-
 			SetStateAndNotify(SocketState.Connecting);
 
 			this.socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketClient
@@ -473,6 +471,17 @@ namespace MKY.IO.Serial
 			}
 		}
 
+		private void DisposeSocketAndSocketConnection()
+		{
+			if (this.socket != null)
+			{
+				this.socket.Stop();
+				this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose()
+				this.socket = null;
+				this.socketConnection = null;
+			}
+		}
+
 		#endregion
 
 		#region ISocketService Members
@@ -488,12 +497,11 @@ namespace MKY.IO.Serial
 		/// </param>
 		public virtual void OnConnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
-			lock (this.socketConnectionSyncObj)
-				this.socketConnection = e.Connection;
+			this.socketConnection = e.Connection;
 
 			SetStateAndNotify(SocketState.Connected);
 
-			// Immediately begin receiving data
+			// Immediately begin receiving data.
 			e.Connection.BeginReceive();
 		}
 
@@ -535,8 +543,8 @@ namespace MKY.IO.Serial
 		/// </param>
 		public virtual void OnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
-			lock (this.socketConnectionSyncObj)
-				this.socketConnection = null;
+			// Dispose ALAZ socket in any case. A new socket will be created if needed.
+			DisposeSocketAndSocketConnection();
 
 			if (AutoReconnectEnabledAndAllowed)
 			{
@@ -557,6 +565,9 @@ namespace MKY.IO.Serial
 		/// </param>
 		public virtual void OnException(ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs e)
 		{
+			// Dispose ALAZ socket in any case. A new socket will be created if needed.
+			DisposeSocketAndSocketConnection();
+
 			if (AutoReconnectEnabledAndAllowed)
 			{
 				SetStateAndNotify(SocketState.WaitingForReconnect);
@@ -564,11 +575,6 @@ namespace MKY.IO.Serial
 			}
 			else
 			{
-				DisposeSocket();
-
-				lock (this.socketConnectionSyncObj)
-					this.socketConnection = null;
-
 				SetStateAndNotify(SocketState.Error);
 				if (e.Exception is ALAZ.SystemEx.NetEx.SocketsEx.ReconnectAttemptException)
 					OnIOError(new IOErrorEventArgs(IOErrorSeverity.Acceptable, "Failed to connect to TCP server " + this.remoteIPAddress + ":" + this.remotePort));

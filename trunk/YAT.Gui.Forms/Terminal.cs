@@ -153,6 +153,17 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		public virtual bool IsStopped
+		{
+			get
+			{
+				if (this.terminal != null)
+					return (this.terminal.IsStopped);
+				else
+					return (true);
+			}
+		}
+
 		public virtual bool IsStarted
 		{
 			get
@@ -1570,7 +1581,7 @@ namespace YAT.Gui.Forms
 
 		private void ViewRearrange()
 		{
-			// simply set defaults, settings event handler will then call LayoutTerminal()
+			// Simply set defaults, settings event handler will then call LayoutTerminal().
 			this.settingsRoot.Layout.SetDefaults();
 		}
 
@@ -1579,7 +1590,7 @@ namespace YAT.Gui.Forms
 			this.isSettingControls = true;
 			SuspendLayout();
 
-			// splitContainer_Predefined
+			// splitContainer_Predefined.
 			if (this.settingsRoot.Layout.PredefinedPanelIsVisible)
 			{
 				splitContainer_Predefined.Panel2Collapsed = false;
@@ -1590,18 +1601,18 @@ namespace YAT.Gui.Forms
 				splitContainer_Predefined.Panel2Collapsed = true;
 			}
 
-			// splitContainer_TxMonitor and splitContainer_RxMonitor
-			// one of the panels MUST be visible, if none is visible, then bidir is shown anyway
+			// splitContainer_TxMonitor and splitContainer_RxMonitor.
+			// One of the panels MUST be visible, if none is visible, then bidir is shown anyway.
 			bool txIsVisible = this.settingsRoot.Layout.TxMonitorPanelIsVisible;
 			bool bidirIsVisible = this.settingsRoot.Layout.BidirMonitorPanelIsVisible || (!this.settingsRoot.Layout.TxMonitorPanelIsVisible && !this.settingsRoot.Layout.RxMonitorPanelIsVisible);
 			bool rxIsVisible = this.settingsRoot.Layout.RxMonitorPanelIsVisible;
 
-			// orientation
+			// Orientation.
 			Orientation orientation = this.settingsRoot.Layout.MonitorOrientation;
 			splitContainer_TxMonitor.Orientation = orientation;
 			splitContainer_RxMonitor.Orientation = orientation;
 
-			// Tx split contains Tx and BiDir&Rx
+			// Tx split contains Tx and BiDir&Rx.
 			if (txIsVisible)
 			{
 				splitContainer_TxMonitor.Panel1Collapsed = false;
@@ -1623,7 +1634,7 @@ namespace YAT.Gui.Forms
 			}
 			splitContainer_TxMonitor.Panel2Collapsed = !(bidirIsVisible || rxIsVisible);
 
-			// Rx split contains BiDir and Rx
+			// Rx split contains BiDir and Rx.
 			if (bidirIsVisible)
 			{
 				splitContainer_RxMonitor.Panel1Collapsed = false;
@@ -1645,7 +1656,7 @@ namespace YAT.Gui.Forms
 			}
 			splitContainer_RxMonitor.Panel2Collapsed = !rxIsVisible;
 
-			// splitContainer_Terminal and splitContainer_SendCommand
+			// splitContainer_Terminal and splitContainer_SendCommand.
 			if (this.settingsRoot.Layout.SendCommandPanelIsVisible || this.settingsRoot.Layout.SendFilePanelIsVisible)
 			{
 				splitContainer_Terminal.Panel2Collapsed = false;
@@ -1659,7 +1670,7 @@ namespace YAT.Gui.Forms
 				panel_Predefined.Padding = new System.Windows.Forms.Padding(1, 3, 3, 3);
 			}
 
-			// set send panel size depending on one or two sub-panels
+			// Set send panel size depending on one or two sub-panels.
 			if (this.settingsRoot.Layout.SendCommandPanelIsVisible && this.settingsRoot.Layout.SendFilePanelIsVisible)
 			{
 				int height = 97;

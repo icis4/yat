@@ -71,6 +71,14 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary>
+		/// Gets a value indicating whether the I/O provider has been stopped.
+		/// </summary>
+		/// <returns>
+		/// <c>true</c> if the I/O provider has been stopped; otherwise, <c>false</c>.
+		/// </returns>
+		bool IsStopped { get; }
+
+		/// <summary>
 		/// Gets a value indicating whether the I/O provider has been started.
 		/// </summary>
 		/// <returns>

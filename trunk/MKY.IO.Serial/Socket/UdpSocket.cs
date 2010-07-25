@@ -137,7 +137,7 @@ namespace MKY.IO.Serial
 			{
 				if (disposing)
 				{
-					DisposeSocket();
+					DisposeSocketAndSocketConnection();
 				}
 				this.isDisposed = true;
 
@@ -200,6 +200,27 @@ namespace MKY.IO.Serial
 			{
 				AssertNotDisposed();
 				return (this.localPort);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool IsStopped
+		{
+			get
+			{
+				AssertNotDisposed();
+				switch (this.state)
+				{
+					case SocketState.Closed:
+					case SocketState.Error:
+					{
+						return (true);
+					}
+					default:
+					{
+						return (false);
+					}
+				}
 			}
 		}
 
@@ -359,24 +380,6 @@ namespace MKY.IO.Serial
 
 		#endregion
 
-		#region Simple Socket Methods
-		//==========================================================================================
-		// Simple Socket Methods
-		//==========================================================================================
-
-		private void DisposeSocket()
-		{
-			if (this.socket != null)
-			{
-				this.socket.Stop();
-				this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose()
-				this.socket = null;
-				this.socketConnection = null;
-			}
-		}
-
-		#endregion
-
 		#region Socket Methods
 		//==========================================================================================
 		// Socket Methods
@@ -384,9 +387,6 @@ namespace MKY.IO.Serial
 
 		private void StartSocket()
 		{
-			if (this.socket != null)
-				DisposeSocket();
-
 			SetStateAndNotify(SocketState.Opening);
 
 			this.socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketClient
@@ -430,6 +430,17 @@ namespace MKY.IO.Serial
 		{
 			Stop();
 			Start();
+		}
+
+		private void DisposeSocketAndSocketConnection()
+		{
+			if (this.socket != null)
+			{
+				this.socket.Stop();
+				this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose()
+				this.socket = null;
+				this.socketConnection = null;
+			}
 		}
 
 		#endregion
@@ -509,10 +520,7 @@ namespace MKY.IO.Serial
 		/// </param>
 		public virtual void OnException(ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs e)
 		{
-			DisposeSocket();
-
-			lock (this.socketConnectionSyncObj)
-				this.socketConnection = null;
+			DisposeSocketAndSocketConnection();
 
 			SetStateAndNotify(SocketState.Error);
 			OnIOError(new IOErrorEventArgs(e.Exception.Message));
