@@ -124,10 +124,11 @@ Add the following prefixes to the list of allowed Hungarian prefixes
 - y  (Y-Coordinate)
 - z  (Z-Coordinate)
 
-In-Code Exceptions
-------------------
+
+In-Code Suppressions
+--------------------
 
 If really needed, suppress rules in-code using the following attribute:
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1600:ElementsMustBeDocumented", Justification = "\fill-in")]
 
-Hmm, this actually doesn't seem to work :-(
+Such suppressions only work when CODE_ANALYSIS is defined as a conditional compilation symbol in each project, for all build configurations.
