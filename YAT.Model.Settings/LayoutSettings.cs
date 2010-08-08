@@ -257,37 +257,42 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is LayoutSettings)
-				return (Equals((LayoutSettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			LayoutSettings casted = obj as LayoutSettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(LayoutSettings value)
+		public bool Equals(LayoutSettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					(this.txMonitorPanelIsVisible    == value.txMonitorPanelIsVisible) &&
-					(this.bidirMonitorPanelIsVisible == value.bidirMonitorPanelIsVisible) &&
-					(this.rxMonitorPanelIsVisible    == value.rxMonitorPanelIsVisible) &&
-					(this.monitorOrientation         == value.monitorOrientation) &&
-					(this.txMonitorSplitterRatio     == value.txMonitorSplitterRatio) &&
-					(this.rxMonitorSplitterRatio     == value.rxMonitorSplitterRatio) &&
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
 
-					(this.predefinedPanelIsVisible   == value.predefinedPanelIsVisible) &&
-					(this.predefinedSplitterRatio    == value.predefinedSplitterRatio) &&
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
 
-					(this.sendCommandPanelIsVisible  == value.sendCommandPanelIsVisible) &&
-					(this.sendFilePanelIsVisible     == value.sendFilePanelIsVisible)
-					);
-			}
-			return (false);
+				(this.txMonitorPanelIsVisible    == casted.txMonitorPanelIsVisible) &&
+				(this.bidirMonitorPanelIsVisible == casted.bidirMonitorPanelIsVisible) &&
+				(this.rxMonitorPanelIsVisible    == casted.rxMonitorPanelIsVisible) &&
+				(this.monitorOrientation         == casted.monitorOrientation) &&
+				(this.txMonitorSplitterRatio     == casted.txMonitorSplitterRatio) &&
+				(this.rxMonitorSplitterRatio     == casted.rxMonitorSplitterRatio) &&
+
+				(this.predefinedPanelIsVisible   == casted.predefinedPanelIsVisible) &&
+				(this.predefinedSplitterRatio    == casted.predefinedSplitterRatio) &&
+
+				(this.sendCommandPanelIsVisible  == casted.sendCommandPanelIsVisible) &&
+				(this.sendFilePanelIsVisible     == casted.sendFilePanelIsVisible)
+			);
 		}
 
 		/// <summary></summary>

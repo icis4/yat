@@ -119,7 +119,7 @@
   </resheader>
   <data name="linkLabel_HHD.Text" xml:space="preserve">
     <value>YAT is a terminal (a connection endpoint). If you're looking for a tool to monitor serial data between an application
-and a device, or between two devices, check out HHD Serial Monitor. It's worth the bucks.</value>
+and a device, or between two devices, check out HHD Monitoring Studio. It's worth the bucks.</value>
   </data>
   <data name="label_Separator1.Text" xml:space="preserve">
     <value>                                                                                                                                                                                                                                               </value>

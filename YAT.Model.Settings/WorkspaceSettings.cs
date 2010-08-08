@@ -92,22 +92,30 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is WorkspaceSettings)
-				return (Equals((WorkspaceSettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			WorkspaceSettings casted = obj as WorkspaceSettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(WorkspaceSettings value)
+		public bool Equals(WorkspaceSettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-				return (this.terminalSettings == value.terminalSettings);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
 
-			return (false);
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				(this.terminalSettings == casted.terminalSettings)
+			);
 		}
 
 		/// <summary></summary>

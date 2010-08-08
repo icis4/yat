@@ -230,33 +230,38 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is TextTerminalSettings)
-				return (Equals((TextTerminalSettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			TextTerminalSettings casted = obj as TextTerminalSettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(TextTerminalSettings value)
+		public bool Equals(TextTerminalSettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					(this.separateTxRxEol  == value.separateTxRxEol) &&
-					(this.txEol            == value.txEol) &&
-					(this.rxEol            == value.rxEol) &&
-					(this.encoding         == value.encoding) &&
-					(this.showEol          == value.showEol) &&
-					(this.lineSendDelay    == value.lineSendDelay) &&
-					(this.waitForResponse  == value.waitForResponse) &&
-					(this.charSubstitution == value.charSubstitution)
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+
+				(this.separateTxRxEol  == casted.separateTxRxEol) &&
+				(this.txEol            == casted.txEol) &&
+				(this.rxEol            == casted.rxEol) &&
+				(this.encoding         == casted.encoding) &&
+				(this.showEol          == casted.showEol) &&
+				(this.lineSendDelay    == casted.lineSendDelay) &&
+				(this.waitForResponse  == casted.waitForResponse) &&
+				(this.charSubstitution == casted.charSubstitution)
+			);
 		}
 
 		/// <summary></summary>

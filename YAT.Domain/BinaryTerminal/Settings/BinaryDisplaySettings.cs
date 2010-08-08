@@ -126,28 +126,33 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is BinaryDisplaySettings)
-				return (Equals((BinaryDisplaySettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			BinaryDisplaySettings casted = obj as BinaryDisplaySettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(BinaryDisplaySettings value)
+		public bool Equals(BinaryDisplaySettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					(this.lengthLineBreak   == value.lengthLineBreak) &&
-					(this.sequenceLineBreak == value.sequenceLineBreak) &&
-					(this.timedLineBreak    == value.timedLineBreak)
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+
+				(this.lengthLineBreak   == casted.lengthLineBreak) &&
+				(this.sequenceLineBreak == casted.sequenceLineBreak) &&
+				(this.timedLineBreak    == casted.timedLineBreak)
+			);
 		}
 
 		/// <summary></summary>

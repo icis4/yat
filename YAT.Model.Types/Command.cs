@@ -201,7 +201,7 @@ namespace YAT.Model.Types
 					this.description = value;
 				}
 				else if ((value != null) &&
-						 (value != "")) // ensure that XML deserialization keeps command undefined
+						 (value.Length > 0)) // ensure that XML deserialization keeps command undefined
 				{
 					this.isDefined = true;
 					this.description = value;
@@ -229,7 +229,7 @@ namespace YAT.Model.Types
 				else if ((value != null) &&
 						 (value.Length >= 1) &&
 						 (value[0] != null) &&
-						 (value[0] != "")) // ensure that XML deserialization keeps command undefined
+						 (value[0].Length > 0)) // ensure that XML deserialization keeps command undefined
 				{
 					this.isDefined = true;
 					this.commandLines = value;
@@ -290,7 +290,7 @@ namespace YAT.Model.Types
 					this.filePath = value;
 				}
 				else if ((value != null) &&
-						 (value != "")) // ensure that XML deserialization keeps command undefined
+						 (value.Length > 0)) // ensure that XML deserialization keeps command undefined
 				{
 					this.isDefined = true;
 					this.filePath = value;
@@ -484,31 +484,34 @@ namespace YAT.Model.Types
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is Command)
-				return (Equals((Command)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			Command casted = obj as Command;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(Command value)
+		public bool Equals(Command casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					(this.isDefined    == value.isDefined) &&
-					(this.description  == value.description) &&
-					XArray.ValuesEqual(this.commandLines, value.commandLines) &&
-					(this.defaultRadix == value.defaultRadix) &&
-					(this.isFilePath   == value.isFilePath) &&
-					(this.filePath     == value.filePath)
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				(this.isDefined    == casted.isDefined) &&
+				(this.description  == casted.description) &&
+				XArray.ValuesEqual(this.commandLines, casted.commandLines) &&
+				(this.defaultRadix == casted.defaultRadix) &&
+				(this.isFilePath   == casted.isFilePath) &&
+				(this.filePath     == casted.filePath)
+			);
 		}
 
 		/// <summary></summary>

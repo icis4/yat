@@ -70,7 +70,7 @@ namespace YAT.Gui.Forms
 		{
 			string link = e.Link.LinkData as string;
 			if ((link != null) && (link.StartsWith("http://")))
-				MKY.Utilities.Net.Browser.BrowseUrl(link);
+				MKY.Utilities.Net.Browser.BrowseUri(link);
 		}
 
 		private void button_CopyToClipboard_Click(object sender, EventArgs e)

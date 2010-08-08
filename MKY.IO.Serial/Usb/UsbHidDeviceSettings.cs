@@ -117,27 +117,32 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is UsbHidDeviceSettings)
-				return (Equals((UsbHidDeviceSettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			UsbHidDeviceSettings casted = obj as UsbHidDeviceSettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(UsbHidDeviceSettings value)
+		public bool Equals(UsbHidDeviceSettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					(this.deviceInfo == value.deviceInfo) &&
-					(this.autoReopen == value.autoReopen)
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+
+				(this.deviceInfo == casted.deviceInfo) &&
+				(this.autoReopen == casted.autoReopen)
+			);
 		}
 
 		/// <summary></summary>

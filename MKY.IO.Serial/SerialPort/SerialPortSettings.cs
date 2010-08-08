@@ -229,32 +229,37 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is SerialPortSettings)
-				return (Equals((SerialPortSettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			SerialPortSettings casted = obj as SerialPortSettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(SerialPortSettings value)
+		public bool Equals(SerialPortSettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return 
-					(
-					(this.portId                 == value.portId) &&
-					(this.communication          == value.communication) &&
-					(this.autoReopen             == value.autoReopen) &&
-					(this.replaceParityErrors    == value.replaceParityErrors) &&
-					(this.parityErrorReplacement == value.parityErrorReplacement) &&
-					(this.rtsEnabled             == value.rtsEnabled) &&
-					(this.dtrEnabled             == value.dtrEnabled)
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+
+				(this.portId                 == casted.portId) &&
+				(this.communication          == casted.communication) &&
+				(this.autoReopen             == casted.autoReopen) &&
+				(this.replaceParityErrors    == casted.replaceParityErrors) &&
+				(this.parityErrorReplacement == casted.parityErrorReplacement) &&
+				(this.rtsEnabled             == casted.rtsEnabled) &&
+				(this.dtrEnabled             == casted.dtrEnabled)
+			);
 		}
 
 		/// <summary></summary>

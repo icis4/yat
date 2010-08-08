@@ -127,38 +127,43 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is WindowSettings)
-				return (Equals((WindowSettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			WindowSettings casted = obj as WindowSettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(WindowSettings value)
+		public bool Equals(WindowSettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				if (this.state == FormWindowState.Normal)
-				{   // Normal
-					return
-						(
-						(this.state    == value.state) &&
-						(this.location == value.location) &&
-						(this.size     == value.size)
-						);
-				}
-				else
-				{   // Maximized or Minimized
-					return
-						(
-						(this.state    == value.state)
-						);
-				}
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			if (this.state == FormWindowState.Normal)
+			{   // Normal
+				return
+				(
+					base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+					(this.state == casted.state) &&
+					(this.location == casted.location) &&
+					(this.size     == casted.size)
+				);
 			}
-			return (false);
+			else
+			{   // Maximized or Minimized
+				return
+				(
+					base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+					(this.state == casted.state)
+				);
+			}
 		}
 
 		/// <summary></summary>

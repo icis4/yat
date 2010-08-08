@@ -165,30 +165,35 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is SerialCommunicationSettings)
-				return (Equals((SerialCommunicationSettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			SerialCommunicationSettings casted = obj as SerialCommunicationSettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(SerialCommunicationSettings value)
+		public bool Equals(SerialCommunicationSettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					(this.baudRate    == value.baudRate) &&
-					(this.dataBits    == value.dataBits) &&
-					(this.parity      == value.parity) &&
-					(this.stopBits    == value.stopBits) &&
-					(this.flowControl == value.flowControl)
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+
+				(this.baudRate    == casted.baudRate) &&
+				(this.dataBits    == casted.dataBits) &&
+				(this.parity      == casted.parity) &&
+				(this.stopBits    == casted.stopBits) &&
+				(this.flowControl == casted.flowControl)
+			);
 		}
 
 		/// <summary></summary>

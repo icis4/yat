@@ -169,7 +169,7 @@ namespace MKY.Utilities.Diagnostics
 
 		private static void WriteMessage(IDiagnosticsWriter writer, string message)
 		{
-			if ((message != null) && (message != ""))
+			if ((message != null) && (message.Length > 0))
 			{
 				writer.WriteLine("Message:");
 				writer.Indent();
@@ -222,7 +222,7 @@ namespace MKY.Utilities.Diagnostics
 
 		private static void WriteSource(IDiagnosticsWriter writer, string source)
 		{
-			if ((source != null) && (source != ""))
+			if ((source != null) && (source.Length > 0))
 			{
 				writer.Write("Source: ");
 				writer.WriteLine(source);
@@ -231,7 +231,7 @@ namespace MKY.Utilities.Diagnostics
 
 		private static void WriteStack(IDiagnosticsWriter writer, string stackTrace)
 		{
-			if ((stackTrace != null) && (stackTrace != ""))
+			if ((stackTrace != null) && (stackTrace.Length > 0))
 			{
 				writer.WriteLine("Stack:");
 

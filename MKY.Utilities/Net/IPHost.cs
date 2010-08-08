@@ -31,7 +31,7 @@ namespace MKY.Utilities.Net
 	#pragma warning disable 1591
 
 	/// <summary></summary>
-	public enum CommonIPHost
+	public enum IPHostType
 	{
 		Localhost,
 		IPv4Localhost,
@@ -59,23 +59,25 @@ namespace MKY.Utilities.Net
 
 		private IPAddress otherAddress = IPAddress.None;
 
-		/// <summary>Default is <see cref="CommonIPHost.Localhost"/>.</summary>
+		/// <summary>Default is <see cref="IPHostType.Localhost"/>.</summary>
 		public XIPHost()
-			: base(CommonIPHost.Localhost)
+			: base(IPHostType.Localhost)
 		{
 		}
 
 		/// <summary></summary>
-		public XIPHost(CommonIPHost host)
-			: base(host)
+		public XIPHost(IPHostType hostType)
+			: base(hostType)
 		{
 		}
 
 		/// <summary></summary>
 		public XIPHost(IPAddress address)
-			: base(CommonIPHost.Other)
 		{
-			this.otherAddress = address;
+			if      (address == IPAddress.Loopback)     { SetUnderlyingEnum(IPHostType.Localhost);     this.otherAddress = IPAddress.None; }
+			else if (address == IPAddress.Loopback)     { SetUnderlyingEnum(IPHostType.IPv4Localhost); this.otherAddress = IPAddress.None; }
+			else if (address == IPAddress.IPv6Loopback) { SetUnderlyingEnum(IPHostType.IPv6Localhost); this.otherAddress = IPAddress.None; }
+			else                                        { SetUnderlyingEnum(IPHostType.Other);         this.otherAddress = address;        }
 		}
 
 		#region Properties
@@ -85,12 +87,12 @@ namespace MKY.Utilities.Net
 		{
 			get
 			{
-				switch ((CommonIPHost)UnderlyingEnum)
+				switch ((IPHostType)UnderlyingEnum)
 				{
-					case CommonIPHost.Localhost:     return (IPAddress.Loopback);
-					case CommonIPHost.IPv4Localhost: return (IPAddress.Loopback);
-					case CommonIPHost.IPv6Localhost: return (IPAddress.IPv6Loopback);
-					case CommonIPHost.Other:         return (this.otherAddress);
+					case IPHostType.Localhost:     return (IPAddress.Loopback);
+					case IPHostType.IPv4Localhost: return (IPAddress.Loopback);
+					case IPHostType.IPv6Localhost: return (IPAddress.IPv6Loopback);
+					case IPHostType.Other:         return (this.otherAddress);
 				}
 				throw (new NotImplementedException(UnderlyingEnum.ToString()));
 			}
@@ -103,12 +105,12 @@ namespace MKY.Utilities.Net
 		/// <summary></summary>
 		public override string ToString()
 		{
-			switch ((CommonIPHost)UnderlyingEnum)
+			switch ((IPHostType)UnderlyingEnum)
 			{
-				case CommonIPHost.Localhost:     return (Localhost_stringNice);
-				case CommonIPHost.IPv4Localhost: return (IPv4Localhost_string);
-				case CommonIPHost.IPv6Localhost: return (IPv6Localhost_string);
-				case CommonIPHost.Other:         return (this.otherAddress.ToString());
+				case IPHostType.Localhost:     return (Localhost_string);
+				case IPHostType.IPv4Localhost: return (IPv4Localhost_string);
+				case IPHostType.IPv6Localhost: return (IPv6Localhost_string);
+				case IPHostType.Other:         return (this.otherAddress.ToString());
 			}
 			throw (new NotImplementedException(UnderlyingEnum.ToString()));
 		}
@@ -121,9 +123,9 @@ namespace MKY.Utilities.Net
 		public static XIPHost[] GetItems()
 		{
 			List<XIPHost> a = new List<XIPHost>();
-			a.Add(new XIPHost(CommonIPHost.Localhost));
-			a.Add(new XIPHost(CommonIPHost.IPv4Localhost));
-			a.Add(new XIPHost(CommonIPHost.IPv6Localhost));
+			a.Add(new XIPHost(IPHostType.Localhost));
+			a.Add(new XIPHost(IPHostType.IPv4Localhost));
+			a.Add(new XIPHost(IPHostType.IPv6Localhost));
 			return (a.ToArray());
 		}
 
@@ -150,17 +152,17 @@ namespace MKY.Utilities.Net
 			if     ((string.Compare(host, Localhost_string, true) == 0) ||
 				    (string.Compare(host, Localhost_stringNice, true) == 0))
 			{
-				result = new XIPHost(CommonIPHost.Localhost);
+				result = new XIPHost(IPHostType.Localhost);
 				return (true);
 			}
 			else if (string.Compare(host, IPv4Localhost_string, true) == 0)
 			{
-				result = new XIPHost(CommonIPHost.IPv4Localhost);
+				result = new XIPHost(IPHostType.IPv4Localhost);
 				return (true);
 			}
 			else if (string.Compare(host, IPv6Localhost_string, true) == 0)
 			{
-				result = new XIPHost(CommonIPHost.IPv6Localhost);
+				result = new XIPHost(IPHostType.IPv6Localhost);
 				return (true);
 			}
 			else if (IPAddress.TryParse(host, out address))
@@ -179,9 +181,9 @@ namespace MKY.Utilities.Net
 		public static XIPHost ParseFromIPAddress(IPAddress address)
 		{
 			if (address == IPAddress.Loopback)
-				return (new XIPHost(CommonIPHost.Localhost));
+				return (new XIPHost(IPHostType.Localhost));
 			else if (address == IPAddress.IPv6Loopback)
-				return (new XIPHost(CommonIPHost.IPv6Localhost));
+				return (new XIPHost(IPHostType.IPv6Localhost));
 			else
 				return (new XIPHost(address));
 		}
@@ -191,15 +193,15 @@ namespace MKY.Utilities.Net
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator CommonIPHost(XIPHost host)
+		public static implicit operator IPHostType(XIPHost host)
 		{
-			return ((CommonIPHost)host.UnderlyingEnum);
+			return ((IPHostType)host.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XIPHost(CommonIPHost host)
+		public static implicit operator XIPHost(IPHostType hostType)
 		{
-			return (new XIPHost(host));
+			return (new XIPHost(hostType));
 		}
 
 		/// <summary></summary>

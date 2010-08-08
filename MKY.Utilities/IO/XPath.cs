@@ -448,7 +448,7 @@ namespace MKY.Utilities.IO
 						pathInfoParent = pathInfoParent.Parent;
 
 						// ".." or "..\"
-						if ((s == "") ||
+						if ((s.Length == 0) ||
 							(s == Path.DirectorySeparatorChar.ToString()))
 						{
 							return (pathInfoParent.FullName);
@@ -472,7 +472,7 @@ namespace MKY.Utilities.IO
 					s = s.Remove(0, 1);
 
 					// "." or ".\"
-					if ((s == "") ||
+					if ((s.Length == 0) ||
 						(s == Path.DirectorySeparatorChar.ToString()))
 					{
 						return (dirPathA);

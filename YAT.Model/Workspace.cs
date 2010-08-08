@@ -789,8 +789,7 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Opens terminals according to workspace settings and returns number of successfully
-		/// opened terminals.
+		/// Opens terminals according to workspace settings and returns number of successfully opened terminals.
 		/// </summary>
 		public virtual int OpenTerminals()
 		{
@@ -829,7 +828,7 @@ namespace YAT.Model
 				}
 			}
 
-			// On success, clear changed flag since all terminals got openend
+			// On success, clear changed flag since all terminals got openend.
 			if (openedTerminalCount == requestedTerminalCount)
 				this.settingsRoot.ClearChanged();
 
@@ -849,10 +848,10 @@ namespace YAT.Model
 			OnFixedStatusTextRequest("Opening terminal...");
 			try
 			{
-				// Combine absolute workspace path with terminal path if that one is relative
+				// Combine absolute workspace path with terminal path if that one is relative.
 				absoluteFilePath = XPath.CombineFilePaths(this.settingsHandler.SettingsFilePath, filePath);
 
-				// Check whether terminal is already contained in workspace
+				// Check whether terminal is already contained in workspace.
 				foreach (Terminal t in this.terminals)
 				{
 					if (absoluteFilePath == t.SettingsFilePath)
@@ -870,16 +869,16 @@ namespace YAT.Model
 					}
 				}
 
-				// Load settings
+				// Load settings.
 				DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
 				sh.SettingsFilePath = absoluteFilePath;
 				sh.Load();
 
-				// Replace window settings with those saved in workspace
+				// Replace window settings with those saved in workspace.
 				if (windowSettings != null)
 					sh.Settings.Window = windowSettings;
 
-				// Create terminal
+				// Create terminal.
 				Terminal terminal = new Terminal(sh, guid);
 				AddToWorkspace(terminal);
 
@@ -927,7 +926,7 @@ namespace YAT.Model
 
 			tsi.Guid = terminal.Guid;
 			tsi.FilePath = filePath;
-			tsi.Window = new WindowSettings(terminal.WindowSettings); // Clone window settings
+			tsi.Window = new WindowSettings(terminal.WindowSettings); // Clone window settings.
 
 			return (tsi);
 		}
@@ -936,26 +935,26 @@ namespace YAT.Model
 		{
 			AttachTerminalEventHandlers(terminal);
 
-			// Add terminal to terminal list
+			// Add terminal to terminal list.
 			this.terminals.Add(terminal);
 			this.activeTerminal = terminal;
 
-			// Add terminal settings for new terminals
-			// Replace terminal settings if workspace settings have been loaded from file prior
+			// Add terminal settings for new terminals.
+			// Replace terminal settings if workspace settings have been loaded from file prior.
 			this.settingsRoot.TerminalSettings.AddOrReplaceGuidItem(CreateTerminalSettingsItem(terminal));
 			this.settingsRoot.SetChanged();
 
-			// Fire terminal added event
+			// Fire terminal added event.
 			OnTerminalAdded(new TerminalEventArgs(terminal));
 		}
 
 		private void ReplaceInWorkspace(Terminal terminal)
 		{
-			// Replace terminal in terminal list
+			// Replace terminal in terminal list.
 			this.terminals.ReplaceGuidItem(terminal);
 			this.activeTerminal = terminal;
 
-			// Replace terminal in workspace settings if the settings have indeed changed
+			// Replace terminal in workspace settings if the settings have indeed changed.
 			TerminalSettingsItem tsiNew = CreateTerminalSettingsItem(terminal);
 			TerminalSettingsItem tsiOld = this.settingsRoot.TerminalSettings.GetGuidItem(terminal.Guid);
 			if ((tsiOld == null) || (tsiNew != tsiOld))
@@ -969,15 +968,15 @@ namespace YAT.Model
 		{
 			DetachTerminalEventHandlers(terminal);
 
-			// Remove terminal from terminal list
+			// Remove terminal from terminal list.
 			this.terminals.RemoveGuid(terminal.Guid);
 			this.activeTerminal = null;
 
-			// Remove terminal from workspace settings
+			// Remove terminal from workspace settings.
 			this.settingsRoot.TerminalSettings.RemoveGuid(terminal.Guid);
 			this.settingsRoot.SetChanged();
 
-			// Fire terminal added event
+			// Fire terminal added event.
 			OnTerminalRemoved(new TerminalEventArgs(terminal));
 		}
 

@@ -249,34 +249,39 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is FormatSettings)
-				return (Equals((FormatSettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			FormatSettings casted = obj as FormatSettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(FormatSettings value)
+		public bool Equals(FormatSettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					(this.font              == value.font) &&
-					(this.txDataFormat      == value.txDataFormat) &&
-					(this.txControlFormat   == value.txControlFormat) &&
-					(this.rxDataFormat      == value.rxDataFormat) &&
-					(this.rxControlFormat   == value.rxControlFormat) &&
-					(this.timeStampFormat   == value.timeStampFormat) &&
-					(this.lengthFormat      == value.lengthFormat) &&
-					(this.whiteSpacesFormat == value.whiteSpacesFormat) &&
-					(this.errorFormat       == value.errorFormat)
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+
+				(this.font              == casted.font) &&
+				(this.txDataFormat      == casted.txDataFormat) &&
+				(this.txControlFormat   == casted.txControlFormat) &&
+				(this.rxDataFormat      == casted.rxDataFormat) &&
+				(this.rxControlFormat   == casted.rxControlFormat) &&
+				(this.timeStampFormat   == casted.timeStampFormat) &&
+				(this.lengthFormat      == casted.lengthFormat) &&
+				(this.whiteSpacesFormat == casted.whiteSpacesFormat) &&
+				(this.errorFormat       == casted.errorFormat)
+			);
 		}
 
 		/// <summary></summary>

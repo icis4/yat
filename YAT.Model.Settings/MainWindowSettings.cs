@@ -144,29 +144,34 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is MainWindowSettings)
-				return (Equals((MainWindowSettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			MainWindowSettings casted = obj as MainWindowSettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(MainWindowSettings value)
+		public bool Equals(MainWindowSettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					(this.startPosition == value.startPosition) &&
-					(this.windowState   == value.windowState) &&
-					(this.location      == value.location) &&
-					(this.size          == value.size)
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+
+				(this.startPosition == casted.startPosition) &&
+				(this.windowState   == casted.windowState) &&
+				(this.location      == casted.location) &&
+				(this.size          == casted.size)
+			);
 		}
 
 		/// <summary></summary>

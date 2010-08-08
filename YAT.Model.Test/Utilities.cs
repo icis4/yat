@@ -128,7 +128,7 @@ namespace YAT.Model.Test
 			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextSerialPortBSettings()));
 		}
 
-		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketSettings(XNetworkInterface networkInterface)
+		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketSettings(IPNetworkInterface networkInterface)
 		{
 			// Create settings
 			TerminalSettingsRoot settings = new TerminalSettingsRoot();
@@ -139,14 +139,14 @@ namespace YAT.Model.Test
 			return (settings);
 		}
 
-		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketSettingsHandler(XNetworkInterface networkInterface)
+		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketSettingsHandler(IPNetworkInterface networkInterface)
 		{
 			return (new DocumentSettingsHandler<TerminalSettingsRoot>(GetStartedTextTcpAutoSocketSettings(networkInterface)));
 		}
 
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv4LoopbackSettings()
 		{
-			return (GetStartedTextTcpAutoSocketSettings((XNetworkInterface)CommonNetworkInterface.IPv4Loopback));
+			return (GetStartedTextTcpAutoSocketSettings((IPNetworkInterface)IPNetworkInterfaceType.IPv4Loopback));
 		}
 
 		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler()
@@ -156,7 +156,7 @@ namespace YAT.Model.Test
 
 		internal static TerminalSettingsRoot GetStartedTextTcpAutoSocketOnIPv6LoopbackSettings()
 		{
-			return (GetStartedTextTcpAutoSocketSettings((XNetworkInterface)CommonNetworkInterface.IPv6Loopback));
+			return (GetStartedTextTcpAutoSocketSettings((IPNetworkInterface)IPNetworkInterfaceType.IPv6Loopback));
 		}
 
 		internal static DocumentSettingsHandler<TerminalSettingsRoot> GetStartedTextTcpAutoSocketOnIPv6LoopbackSettingsHandler()

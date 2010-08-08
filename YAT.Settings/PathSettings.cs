@@ -153,30 +153,35 @@ namespace YAT.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is PathSettings)
-				return (Equals((PathSettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			PathSettings casted = obj as PathSettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(PathSettings value)
+		public bool Equals(PathSettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					(this.terminalFilesPath  == value.terminalFilesPath) &&
-					(this.workspaceFilesPath == value.workspaceFilesPath) &&
-					(this.sendFilesPath      == value.sendFilesPath) &&
-					(this.logFilesPath       == value.logFilesPath) &&
-					(this.monitorFilesPath   == value.monitorFilesPath)
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+
+				(this.terminalFilesPath  == casted.terminalFilesPath) &&
+				(this.workspaceFilesPath == casted.workspaceFilesPath) &&
+				(this.sendFilesPath      == casted.sendFilesPath) &&
+				(this.logFilesPath       == casted.logFilesPath) &&
+				(this.monitorFilesPath   == casted.monitorFilesPath)
+			);
 		}
 
 		public override int GetHashCode()

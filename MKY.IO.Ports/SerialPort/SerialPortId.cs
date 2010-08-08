@@ -296,7 +296,7 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				if (this.inUseText == "")
+				if (this.inUseText.Length == 0)
 					return (DefaultInUseText);
 				else
 					return (this.inUseText);
@@ -316,7 +316,7 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				if (this.separator == "")
+				if (this.separator.Length == 0)
 					return (DefaultSeparator);
 				else
 					return (this.separator);
@@ -361,22 +361,27 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is SerialPortId)
-				return (Equals((SerialPortId)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			SerialPortId casted = obj as SerialPortId;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(SerialPortId value)
+		public bool Equals(SerialPortId casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-				return (this.name == value.name);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
 
-			return (false);
+			// Only field 'name' is relevant. Other properties are for convenience only.
+			return (this.name == casted.name);
 		}
 
 		/// <summary></summary>
@@ -398,7 +403,7 @@ namespace MKY.IO.Ports
 
 			sb.Append(Name);                     // "COM10"
 
-			if (appendDescription && (Description != null) && (Description != ""))
+			if (appendDescription && (Description != null) && (Description.Length > 0))
 			{
 				sb.Append(Separator);            // "COM10 - "
 				sb.Append(Description);          // "COM10 - Serial On USB Port"

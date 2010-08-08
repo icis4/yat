@@ -145,29 +145,34 @@ namespace YAT.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is GeneralSettings)
-				return (Equals((GeneralSettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			GeneralSettings casted = obj as GeneralSettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(GeneralSettings value)
+		public bool Equals(GeneralSettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					this.autoOpenWorkspace.        Equals(value.autoOpenWorkspace) &&
-					this.autoSaveWorkspace.        Equals(value.autoSaveWorkspace) &&
-					this.useRelativePaths.         Equals(value.useRelativePaths) &&
-					this.detectSerialPortsInUse.   Equals(value.detectSerialPortsInUse)
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+
+				this.autoOpenWorkspace      == casted.autoOpenWorkspace &&
+				this.autoSaveWorkspace      == casted.autoSaveWorkspace &&
+				this.useRelativePaths       == casted.useRelativePaths &&
+				this.detectSerialPortsInUse == casted.detectSerialPortsInUse
+			);
 		}
 
 		public override int GetHashCode()

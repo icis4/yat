@@ -71,7 +71,7 @@ namespace YAT.Gui.Forms
 						textBox_ReleaseNotes.Text = sr.ReadToEnd();
 				}
 			}
-			if (textBox_ReleaseNotes.Text == "")
+			if (textBox_ReleaseNotes.Text.Length == 0)
 			{
 				textBox_ReleaseNotes.Text = "Couldn't read release notes from" + Environment.NewLine + filePath;
 			}

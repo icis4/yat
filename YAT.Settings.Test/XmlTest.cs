@@ -360,7 +360,7 @@ namespace YAT.Settings.Test
 
 		private static string MakeTempFileName(string name)
 		{
-			return ("YAT-Test-" + name + ".xml");
+			return (typeof(XmlTest).FullName + "-" + name + ".xml");
 		}
 
 		private static string MakeTempFilePath(string name)
@@ -370,7 +370,7 @@ namespace YAT.Settings.Test
 
 		private static void TestSerialization(Type type, object obj, string filePath)
 		{
-			// Save
+			// Save.
 			try
 			{
 				using (StreamWriter sw = new StreamWriter(filePath))
@@ -383,11 +383,11 @@ namespace YAT.Settings.Test
 			{
 				XConsole.WriteException(typeof(XmlTest), ex);
 
-				// Attention: The following call throws an exception, code below it won't be executed
+				// Attention: The following call throws an exception, code below it won't be executed.
 				Assert.Fail("XML serialize error: " + ex.Message);
 			}
 
-			// Load
+			// Load.
 			try
 			{
 				using (StreamReader sr = new StreamReader(filePath))
@@ -400,7 +400,7 @@ namespace YAT.Settings.Test
 			{
 				XConsole.WriteException(typeof(XmlTest), ex);
 
-				// Attention: The following call throws an exception, code below it won't be executed
+				// Attention: The following call throws an exception, code below it won't be executed.
 				Assert.Fail("XML deserialize error: " + ex.Message);
 			}
 		}

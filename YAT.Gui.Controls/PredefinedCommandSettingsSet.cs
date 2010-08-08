@@ -404,7 +404,7 @@ namespace YAT.Gui.Controls
 
 		private void SetDescription(string description)
 		{
-			if (description != "")
+			if (description.Length > 0)
 				this.command.Description = description;
 			else
 				this.command.ClearDescription();

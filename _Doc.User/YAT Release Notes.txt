@@ -53,13 +53,13 @@ Important changes:
 - Use of FxCop (feature request #2970221)
 - Use of StyleCop (feature request #2970222)
 - Methods and properties marked "virtual", unless there are reasons against
-- Null reference safe implementation of Equals()
+- Null reference safe and more efficient implementation of Equals()
 - Selection and settings controls now clear contents when disabled
 - Project references to system assemblies cleaned
 
 Fixed bugs:
 - TCP/IP open/close issues fixed (bug #2684769, bug #2966417)
-- Program freeze issue when opening from a file fixed (bug #2684813)
+- TCP/IP remote host and program freeze issue when opening from a file fixed (bug #2684813)
 - Unhandled exception dialog improved and fixed (feature request #2970243, bug #2970245)
 
 Limitations and known issues:

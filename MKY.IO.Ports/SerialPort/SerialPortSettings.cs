@@ -144,30 +144,33 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is SerialPortSettings)
-				return (Equals((SerialPortSettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			SerialPortSettings casted = obj as SerialPortSettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(SerialPortSettings value)
+		public bool Equals(SerialPortSettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					(this.baudRate  == value.baudRate) &&
-					(this.dataBits  == value.dataBits) &&
-					(this.parity    == value.parity) &&
-					(this.stopBits  == value.stopBits) &&
-					(this.handshake == value.handshake)
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				(this.baudRate  == casted.baudRate) &&
+				(this.dataBits  == casted.dataBits) &&
+				(this.parity    == casted.parity) &&
+				(this.stopBits  == casted.stopBits) &&
+				(this.handshake == casted.handshake)
+			);
 		}
 
 		/// <summary>
@@ -256,22 +259,6 @@ namespace MKY.IO.Ports
 			  ((XHandshake)this.handshake).ToShortString()
 			  );
 		}
-
-		#region Comparision Methods
-
-		/// <summary></summary>
-		public static new bool Equals(object objA, object objB)
-		{
-			if (ReferenceEquals(objA, objB)) return (true);
-			if (objA is SerialPortSettings)
-			{
-				SerialPortSettings casted = (SerialPortSettings)objA;
-				return (casted.Equals(objB));
-			}
-			return (false);
-		}
-
-		#endregion
 
 		#region Comparision Operators
 

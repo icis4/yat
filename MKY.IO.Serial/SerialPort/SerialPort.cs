@@ -1023,7 +1023,7 @@ namespace MKY.IO.Serial
 		{
 			if (this.port != null)
 				return (this.port.PortId);
-			else if ((this.portName != null) && (this.portName != ""))
+			else if ((this.portName != null) && (this.portName.Length > 0))
 				return (this.portName);
 			else
 				return ("<Undefined>");

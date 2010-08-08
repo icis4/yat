@@ -121,27 +121,32 @@ namespace YAT.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is AutoWorkspaceSettings)
-				return (Equals((AutoWorkspaceSettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			AutoWorkspaceSettings casted = obj as AutoWorkspaceSettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(AutoWorkspaceSettings value)
+		public bool Equals(AutoWorkspaceSettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					(this.filePath     == value.filePath) &&
-					(this.filePathUser == value.filePathUser)
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+
+				(this.filePath     == casted.filePath) &&
+				(this.filePathUser == casted.filePathUser)
+			);
 		}
 
 		public override int GetHashCode()

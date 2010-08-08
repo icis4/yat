@@ -214,29 +214,33 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is IOSettings)
-				return (Equals((IOSettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			IOSettings casted = obj as IOSettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(IOSettings value)
+		public bool Equals(IOSettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return 
-					(
-					(this.ioType                       == value.ioType) &&
-					(this.serialParityErrorReplacement == value.serialParityErrorReplacement) &&
-					(this.endianess                    == value.endianess) &&
-					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+
+				(this.ioType                       == casted.ioType) &&
+				(this.serialParityErrorReplacement == casted.serialParityErrorReplacement) &&
+				(this.endianess                    == casted.endianess)
+			);
 		}
 
 		/// <summary></summary>

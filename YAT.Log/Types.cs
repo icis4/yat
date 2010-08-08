@@ -89,27 +89,30 @@ namespace YAT.Log
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is FileNameSeparator)
-				return (Equals((FileNameSeparator)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			FileNameSeparator casted = obj as FileNameSeparator;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(FileNameSeparator value)
+		public bool Equals(FileNameSeparator casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					(Separator   == value.Separator) &&
-					(Description == value.Description)
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				(this.Separator   == casted.Separator) &&
+				(this.Description == casted.Description)
+			);
 		}
 
 		/// <summary></summary>

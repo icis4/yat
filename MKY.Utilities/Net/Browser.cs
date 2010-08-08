@@ -24,12 +24,21 @@ namespace MKY.Utilities.Net
 	public static class Browser
 	{
 		/// <summary>
-		/// Opens the system default browser and browses url.
+		/// Opens the system default browser and browses uri.
 		/// </summary>
-		/// <param name="url">URL to browse.</param>
-		public static void BrowseUrl(string url)
+		/// <param name="uri">URI to browse.</param>
+		public static void BrowseUri(string uri)
 		{
-			System.Diagnostics.Process.Start(url);
+			System.Diagnostics.Process.Start(uri);
+		}
+
+		/// <summary>
+		/// Opens the system default browser and browses uri.
+		/// </summary>
+		/// <param name="uri">URI to browse.</param>
+		public static void BrowseUri(Uri uri)
+		{
+			BrowseUri(uri.AbsoluteUri);
 		}
 	}
 }

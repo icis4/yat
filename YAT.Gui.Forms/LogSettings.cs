@@ -388,7 +388,7 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls = true;
 
-			if (this.settings_Form.RootPath != "")
+			if (this.settings_Form.RootPath.Length > 0)
 				pathLabel_Root.Text = this.settings_Form.RootPath + Path.DirectorySeparatorChar + this.settings_Form.RootFileName;
 			else
 				pathLabel_Root.Text = "<Set a root file...>";
@@ -444,7 +444,7 @@ namespace YAT.Gui.Forms
 			ofd.FileName = this.settings_Form.RootFileName;
 			ofd.CheckPathExists = false;
 			ofd.CheckFileExists = false;
-			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName != ""))
+			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName.Length > 0))
 			{
 				Refresh();
 

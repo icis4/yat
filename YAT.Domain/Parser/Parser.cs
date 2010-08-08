@@ -134,7 +134,7 @@ namespace YAT.Domain.Parser
 			private bool TryWriteContiguous(Parser parser, ref FormatException formatException)
 			{
 				string contiguousString = this.contiguous.ToString();
-				if (contiguousString != "")
+				if (contiguousString.Length > 0)
 				{
 					if (!parser.IsKeywordParser)
 					{
@@ -366,7 +366,8 @@ namespace YAT.Domain.Parser
 				string[] tokens = parseString.Split(' ');
 				foreach (string t in tokens)
 				{
-					if (t == "") continue;
+					if (t.Length == 0)
+						continue;
 
 					byte code;
 					if (Ascii.TryParse(t, out code))
@@ -873,7 +874,7 @@ namespace YAT.Domain.Parser
 				string[] tokens = parseString.Split(' ');
 				foreach (string token in tokens)
 				{
-					if (token != "")
+					if (token.Length > 0)
 					{
 						byte[] b;
 						if (TryParseContiguousRadixToken(token, parseRadix, out b, ref formatException))
@@ -905,7 +906,8 @@ namespace YAT.Domain.Parser
 			string[] tokens = parseString.Split(' ');
 			foreach (string t in tokens)
 			{
-				if (t == "") continue;
+				if (t.Length == 0)
+					continue;
 
 				try
 				{
