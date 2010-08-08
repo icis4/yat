@@ -12,6 +12,10 @@ Sign all library/dll assemblies using the strong name tool:
 Enforce CLS compliance
 [assembly: CLSCompliant(true)]
 
+Define CODE_ANALYSIS
+
+Use StyleCop
+
 Use FxCop
 
 
