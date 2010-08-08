@@ -716,43 +716,48 @@ namespace YAT.Log.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is LogSettings)
-				return (Equals((LogSettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			LogSettings casted = obj as LogSettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(LogSettings value)
+		public bool Equals(LogSettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					(this.rootPath              == value.rootPath) &&
-					(this.rootFileName          == value.rootFileName) &&
-					(this.rawLogTx              == value.rawLogTx) &&
-					(this.rawLogBidir           == value.rawLogBidir) &&
-					(this.rawLogRx              == value.rawLogRx) &&
-					(this.rawExtension          == value.rawExtension) &&
-					(this.neatLogTx             == value.neatLogTx) &&
-					(this.neatLogBidir          == value.neatLogBidir) &&
-					(this.neatLogRx             == value.neatLogRx) &&
-					(this.neatExtension         == value.neatExtension) &&
-					(this.writeMode             == value.writeMode) &&
-					(this.subdirectoriesFormat  == value.subdirectoriesFormat) &&
-					(this.subdirectoriesChannel == value.subdirectoriesChannel) &&
-					(this.nameFormat            == value.nameFormat) &&
-					(this.nameChannel           == value.nameChannel) &&
-					(this.nameDate              == value.nameDate) &&
-					(this.nameTime              == value.nameTime) &&
-					(this.nameSeparator         == value.nameSeparator)
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+
+				(this.rootPath              == casted.rootPath) &&
+				(this.rootFileName          == casted.rootFileName) &&
+				(this.rawLogTx              == casted.rawLogTx) &&
+				(this.rawLogBidir           == casted.rawLogBidir) &&
+				(this.rawLogRx              == casted.rawLogRx) &&
+				(this.rawExtension          == casted.rawExtension) &&
+				(this.neatLogTx             == casted.neatLogTx) &&
+				(this.neatLogBidir          == casted.neatLogBidir) &&
+				(this.neatLogRx             == casted.neatLogRx) &&
+				(this.neatExtension         == casted.neatExtension) &&
+				(this.writeMode             == casted.writeMode) &&
+				(this.subdirectoriesFormat  == casted.subdirectoriesFormat) &&
+				(this.subdirectoriesChannel == casted.subdirectoriesChannel) &&
+				(this.nameFormat            == casted.nameFormat) &&
+				(this.nameChannel           == casted.nameChannel) &&
+				(this.nameDate              == casted.nameDate) &&
+				(this.nameTime              == casted.nameTime) &&
+				(this.nameSeparator         == casted.nameSeparator)
+			);
 		}
 
 		/// <summary></summary>

@@ -114,27 +114,32 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is SendSettings)
-				return (Equals((SendSettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			SendSettings casted = obj as SendSettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(SendSettings value)
+		public bool Equals(SendSettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					(this.keepCommand    == value.keepCommand) &&
-					(this.copyPredefined == value.copyPredefined)
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+
+				(this.keepCommand    == casted.keepCommand) &&
+				(this.copyPredefined == casted.copyPredefined)
+			);
 		}
 
 		/// <summary></summary>

@@ -42,7 +42,7 @@ namespace MKY.Utilities.Settings
 	/// IEquatable is not implemented because this abstract class cannot check
 	/// for value equality.
 	/// </remarks>
-	public abstract class Settings
+	public abstract class Settings : IEquatable<Settings>
 	{
 		private SettingsType settingsType = SettingsType.Explicit;
 
@@ -185,36 +185,40 @@ namespace MKY.Utilities.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		/// <remarks>
-		/// IEquatable and "public bool Equals(Settings value)"  is not implemented
-		/// because this abstract class cannot check for value equality.
-		/// </remarks>
 		public override bool Equals(object obj)
 		{
-			if (obj is Settings)
-			{
-				Settings value = (Settings)obj;
-
-				// Ensure that object.operator!=() is called.
-				if ((object)value != null)
-				{
-					if (this.GetType() == value.GetType())
-					{
-						// compare all nodes, settings values have already been compared by inheriting class
-						if (this.nodes.Count == value.nodes.Count)
-						{
-							for (int i = 0; i < this.nodes.Count; i++)
-							{
-								if (this.nodes[i] != value.nodes[i])
-									return (false);
-							}
-							return (true);
-						}
-					}
-				}
+			if (obj == null)
 				return (false);
-			}
 
+			Settings casted = obj as Settings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public bool Equals(Settings casted)
+		{
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			if (this.GetType() == casted.GetType())
+			{
+				// Compare all nodes, settings values have already been compared by inheriting class.
+				if (this.nodes.Count == casted.nodes.Count)
+				{
+					for (int i = 0; i < this.nodes.Count; i++)
+					{
+						if (this.nodes[i] != casted.nodes[i])
+							return (false);
+					}
+					return (true);
+				}
+			}
 			return (false);
 		}
 

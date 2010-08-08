@@ -22,19 +22,19 @@ using System.Net.NetworkInformation;
 namespace MKY.Utilities.Net
 {
 	/// <summary>
-	/// List containing network interfaces.
+	/// List containing IP network interfaces.
 	/// </summary>
 	[Serializable]
-	public class NetworkInterfaceCollection : List<XNetworkInterface>
+	public class IPNetworkInterfaceCollection : List<IPNetworkInterface>
 	{
 		/// <summary></summary>
-		public NetworkInterfaceCollection()
+		public IPNetworkInterfaceCollection()
 			: base()
 		{
 		}
 
 		/// <summary></summary>
-		public NetworkInterfaceCollection(IEnumerable<XNetworkInterface> rhs)
+		public IPNetworkInterfaceCollection(IEnumerable<IPNetworkInterface> rhs)
 			: base(rhs)
 		{
 		}
@@ -47,7 +47,7 @@ namespace MKY.Utilities.Net
 			Clear();
 
 			// Add common interfaces such as <Any> to the collection
-			AddRange(XNetworkInterface.GetItems());
+			AddRange(IPNetworkInterface.GetItems());
 
 			// Add interfaces of current machine to the collection
 			NetworkInterface[] nis = NetworkInterface.GetAllNetworkInterfaces();
@@ -67,11 +67,11 @@ namespace MKY.Utilities.Net
 							}
 						}
 
-						if (description != "")
+						if (description.Length > 0)
 							break;
 					}
 				}
-				Add(new XNetworkInterface(address, description));
+				Add(new IPNetworkInterface(address, description));
 			}
 		}
 	}

@@ -22,7 +22,7 @@ using MKY.Utilities.Types;
 
 namespace MKY.Utilities.Net
 {
-	#region Enum CommonNetworkInterface
+	#region Enum IPNetworkInterfaceType
 
 	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
 	// warnings for each undocumented member below. Documenting each member makes little sense
@@ -31,7 +31,7 @@ namespace MKY.Utilities.Net
 	#pragma warning disable 1591
 
 	/// <summary></summary>
-	public enum CommonNetworkInterface
+	public enum IPNetworkInterfaceType
 	{
 		Any,
 		IPv4Any,
@@ -46,9 +46,9 @@ namespace MKY.Utilities.Net
 	#endregion
 
 	/// <summary>
-	/// Extended enum XNetworkInterface.
+	/// Extended enum IPNetworkInterface.
 	/// </summary>
-	public class XNetworkInterface : XEnum
+	public class IPNetworkInterface : XEnum
 	{
 		#region String Definitions
 
@@ -64,23 +64,28 @@ namespace MKY.Utilities.Net
 		private IPAddress otherAddress = IPAddress.None;
 		private string otherDescription = "";
 
-		/// <summary>Default is <see cref="CommonNetworkInterface.Any"/>.</summary>
-		public XNetworkInterface()
-			: base(CommonNetworkInterface.Any)
+		/// <summary>Default is <see cref="IPNetworkInterfaceType.Any"/>.</summary>
+		public IPNetworkInterface()
+			: base(IPNetworkInterfaceType.Any)
 		{
 		}
 
 		/// <summary></summary>
-		public XNetworkInterface(CommonNetworkInterface networkInterface)
+		public IPNetworkInterface(IPNetworkInterfaceType networkInterface)
 			: base(networkInterface)
 		{
 		}
 
 		/// <summary></summary>
-		public XNetworkInterface(IPAddress address, string description)
-			: base(CommonNetworkInterface.Other)
+		public IPNetworkInterface(IPAddress address, string description)
 		{
-			this.otherAddress = address;
+			if      (address == IPAddress.Any)          { SetUnderlyingEnum(IPNetworkInterfaceType.Any);          this.otherAddress = IPAddress.None; }
+			else if (address == IPAddress.Any)          { SetUnderlyingEnum(IPNetworkInterfaceType.IPv4Any);      this.otherAddress = IPAddress.None; }
+			else if (address == IPAddress.Loopback)     { SetUnderlyingEnum(IPNetworkInterfaceType.IPv4Loopback); this.otherAddress = IPAddress.None; }
+			else if (address == IPAddress.IPv6Any)      { SetUnderlyingEnum(IPNetworkInterfaceType.IPv6Any);      this.otherAddress = IPAddress.None; }
+			else if (address == IPAddress.IPv6Loopback) { SetUnderlyingEnum(IPNetworkInterfaceType.IPv6Loopback); this.otherAddress = IPAddress.None; }
+			else                                        { SetUnderlyingEnum(IPNetworkInterfaceType.Other);        this.otherAddress = address;        }
+
 			this.otherDescription = description;
 		}
 
@@ -91,14 +96,14 @@ namespace MKY.Utilities.Net
 		{
 			get
 			{
-				switch ((CommonNetworkInterface)UnderlyingEnum)
+				switch ((IPNetworkInterfaceType)UnderlyingEnum)
 				{
-					case CommonNetworkInterface.Any:          return (IPAddress.Any);
-					case CommonNetworkInterface.IPv4Any:      return (IPAddress.Any);
-					case CommonNetworkInterface.IPv4Loopback: return (IPAddress.Loopback);
-					case CommonNetworkInterface.IPv6Any:      return (IPAddress.IPv6Any);
-					case CommonNetworkInterface.IPv6Loopback: return (IPAddress.IPv6Loopback);
-					case CommonNetworkInterface.Other:        return (this.otherAddress);
+					case IPNetworkInterfaceType.Any:          return (IPAddress.Any);
+					case IPNetworkInterfaceType.IPv4Any:      return (IPAddress.Any);
+					case IPNetworkInterfaceType.IPv4Loopback: return (IPAddress.Loopback);
+					case IPNetworkInterfaceType.IPv6Any:      return (IPAddress.IPv6Any);
+					case IPNetworkInterfaceType.IPv6Loopback: return (IPAddress.IPv6Loopback);
+					case IPNetworkInterfaceType.Other:        return (this.otherAddress);
 				}
 				throw (new NotImplementedException(UnderlyingEnum.ToString()));
 			}
@@ -116,35 +121,39 @@ namespace MKY.Utilities.Net
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is XNetworkInterface)
-				return (Equals((XNetworkInterface)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			IPNetworkInterface casted = obj as IPNetworkInterface;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(XNetworkInterface value)
+		public bool Equals(IPNetworkInterface casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				if ((CommonNetworkInterface)UnderlyingEnum == CommonNetworkInterface.Other)
-				{
-					return
-						(
-						(this.otherAddress == value.otherAddress) &&
-						(this.otherDescription == value.otherDescription)
-						);
-				}
-				else
-				{
-					return (base.Equals(value));
-				}
-			}
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
 
-			return (false);
+			if ((IPNetworkInterfaceType)UnderlyingEnum == IPNetworkInterfaceType.Other)
+			{
+				return
+				(
+					base.Equals((XEnum)casted) &&
+
+					(this.otherAddress     == casted.otherAddress) &&
+					(this.otherDescription == casted.otherDescription)
+				);
+			}
+			else
+			{
+				return (base.Equals((XEnum)casted));
+			}
 		}
 
 		/// <summary>
@@ -159,16 +168,16 @@ namespace MKY.Utilities.Net
 		/// <summary></summary>
 		public override string ToString()
 		{
-			switch ((CommonNetworkInterface)UnderlyingEnum)
+			switch ((IPNetworkInterfaceType)UnderlyingEnum)
 			{
-				case CommonNetworkInterface.Any:          return (Any_stringNice);
-				case CommonNetworkInterface.IPv4Any:      return (IPv4Any_string      + " (" + IPAddress.Any + ")");
-				case CommonNetworkInterface.IPv4Loopback: return (IPv4Loopback_string + " (" + IPAddress.Loopback + ")");
-				case CommonNetworkInterface.IPv6Any:      return (IPv6Any_string      + " (" + IPAddress.IPv6Any + ")");
-				case CommonNetworkInterface.IPv6Loopback: return (IPv6Loopback_string + " (" + IPAddress.IPv6Loopback + ")");
-				case CommonNetworkInterface.Other:
+				case IPNetworkInterfaceType.Any:          return (Any_stringNice);
+				case IPNetworkInterfaceType.IPv4Any:      return (IPv4Any_string      + " (" + IPAddress.Any + ")");
+				case IPNetworkInterfaceType.IPv4Loopback: return (IPv4Loopback_string + " (" + IPAddress.Loopback + ")");
+				case IPNetworkInterfaceType.IPv6Any:      return (IPv6Any_string      + " (" + IPAddress.IPv6Any + ")");
+				case IPNetworkInterfaceType.IPv6Loopback: return (IPv6Loopback_string + " (" + IPAddress.IPv6Loopback + ")");
+				case IPNetworkInterfaceType.Other:
 				{
-					if (this.otherDescription != "")
+					if (this.otherDescription.Length > 0)
 					{
 						if (this.otherAddress != IPAddress.None)
 							return (this.otherDescription + " (" + this.otherAddress + ")");
@@ -180,7 +189,7 @@ namespace MKY.Utilities.Net
 						if (this.otherAddress != IPAddress.None)
 							return (this.otherAddress.ToString());
 						else
-							throw (new ArgumentOutOfRangeException("address and description", "IP address and interface description or both undefined"));
+							throw (new InvalidOperationException("IP address and interface description or both are undefined"));
 					}
 				}
 			}
@@ -192,14 +201,14 @@ namespace MKY.Utilities.Net
 		#region GetItems
 
 		/// <summary></summary>
-		public static XNetworkInterface[] GetItems()
+		public static IPNetworkInterface[] GetItems()
 		{
-			List<XNetworkInterface> a = new List<XNetworkInterface>();
-			a.Add(new XNetworkInterface(CommonNetworkInterface.Any));
-			a.Add(new XNetworkInterface(CommonNetworkInterface.IPv4Any));
-			a.Add(new XNetworkInterface(CommonNetworkInterface.IPv4Loopback));
-			a.Add(new XNetworkInterface(CommonNetworkInterface.IPv6Any));
-			a.Add(new XNetworkInterface(CommonNetworkInterface.IPv6Loopback));
+			List<IPNetworkInterface> a = new List<IPNetworkInterface>();
+			a.Add(new IPNetworkInterface(IPNetworkInterfaceType.Any));
+			a.Add(new IPNetworkInterface(IPNetworkInterfaceType.IPv4Any));
+			a.Add(new IPNetworkInterface(IPNetworkInterfaceType.IPv4Loopback));
+			a.Add(new IPNetworkInterface(IPNetworkInterfaceType.IPv6Any));
+			a.Add(new IPNetworkInterface(IPNetworkInterfaceType.IPv6Loopback));
 			return (a.ToArray());
 		}
 
@@ -208,9 +217,9 @@ namespace MKY.Utilities.Net
 		#region Parse
 
 		/// <summary></summary>
-		public static XNetworkInterface Parse(string networkInterface)
+		public static IPNetworkInterface Parse(string networkInterface)
 		{
-			XNetworkInterface result;
+			IPNetworkInterface result;
 
 			if (TryParse(networkInterface, out result))
 				return (result);
@@ -219,41 +228,41 @@ namespace MKY.Utilities.Net
 		}
 
 		/// <summary></summary>
-		public static bool TryParse(string networkInterface, out XNetworkInterface result)
+		public static bool TryParse(string networkInterface, out IPNetworkInterface result)
 		{
 			if     ((string.Compare(networkInterface, Any_string, true) == 0) ||
 					(string.Compare(networkInterface, Any_stringNice, true) == 0))
 			{
-				result = new XNetworkInterface(CommonNetworkInterface.Any);
+				result = new IPNetworkInterface(IPNetworkInterfaceType.Any);
 				return (true);
 			}
 			else if (networkInterface.Contains(IPv4Any_string))
 			{
-				result = new XNetworkInterface(CommonNetworkInterface.IPv4Any);
+				result = new IPNetworkInterface(IPNetworkInterfaceType.IPv4Any);
 				return (true);
 			}
 			else if (networkInterface.Contains(IPv4Loopback_string))
 			{
-				result = new XNetworkInterface(CommonNetworkInterface.IPv4Loopback);
+				result = new IPNetworkInterface(IPNetworkInterfaceType.IPv4Loopback);
 				return (true);
 			}
 			else if (networkInterface.Contains(IPv6Any_string))
 			{
-				result = new XNetworkInterface(CommonNetworkInterface.IPv6Any);
+				result = new IPNetworkInterface(IPNetworkInterfaceType.IPv6Any);
 				return (true);
 			}
 			else if (networkInterface.Contains(IPv6Loopback_string))
 			{
-				result = new XNetworkInterface(CommonNetworkInterface.IPv6Loopback);
+				result = new IPNetworkInterface(IPNetworkInterfaceType.IPv6Loopback);
 				return (true);
 			}
 			else
 			{
 				IPAddress address;
 				if (IPAddress.TryParse(networkInterface, out address))
-					result = new XNetworkInterface(address, "");
+					result = new IPNetworkInterface(address, "");
 				else
-					result = new XNetworkInterface(IPAddress.None, networkInterface);
+					result = new IPNetworkInterface(IPAddress.None, networkInterface);
 
 				return (true);
 			}
@@ -264,25 +273,25 @@ namespace MKY.Utilities.Net
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator CommonNetworkInterface(XNetworkInterface networkInterface)
+		public static implicit operator IPNetworkInterfaceType(IPNetworkInterface networkInterface)
 		{
-			return ((CommonNetworkInterface)networkInterface.UnderlyingEnum);
+			return ((IPNetworkInterfaceType)networkInterface.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XNetworkInterface(CommonNetworkInterface networkInterface)
+		public static implicit operator IPNetworkInterface(IPNetworkInterfaceType networkInterface)
 		{
-			return (new XNetworkInterface(networkInterface));
+			return (new IPNetworkInterface(networkInterface));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(XNetworkInterface networkInterface)
+		public static implicit operator string(IPNetworkInterface networkInterface)
 		{
 			return (networkInterface.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XNetworkInterface(string networkInterface)
+		public static implicit operator IPNetworkInterface(string networkInterface)
 		{
 			return (Parse(networkInterface));
 		}
@@ -294,7 +303,7 @@ namespace MKY.Utilities.Net
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(XNetworkInterface lhs, XNetworkInterface rhs)
+		public static bool operator ==(IPNetworkInterface lhs, IPNetworkInterface rhs)
 		{
 			if (ReferenceEquals(lhs, rhs))
 				return (true);
@@ -308,7 +317,7 @@ namespace MKY.Utilities.Net
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(XNetworkInterface lhs, XNetworkInterface rhs)
+		public static bool operator !=(IPNetworkInterface lhs, IPNetworkInterface rhs)
 		{
 			return (!(lhs == rhs));
 		}

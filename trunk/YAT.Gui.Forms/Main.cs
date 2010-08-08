@@ -937,7 +937,7 @@ namespace YAT.Gui.Forms
 			ofd.Filter = ExtensionSettings.WorkspaceFilesFilter;
 			ofd.DefaultExt = ExtensionSettings.WorkspaceFile;
 			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath;
-			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName != ""))
+			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName.Length > 0))
 			{
 				Refresh();
 
@@ -1124,7 +1124,7 @@ namespace YAT.Gui.Forms
 			ofd.Filter = ExtensionSettings.TerminalFilesFilter;
 			ofd.DefaultExt = ExtensionSettings.TerminalFile;
 			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.TerminalFilesPath;
-			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName != ""))
+			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName.Length > 0))
 			{
 				Refresh();
 

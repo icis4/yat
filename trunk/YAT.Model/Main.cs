@@ -230,7 +230,7 @@ namespace YAT.Model
 			bool otherInstanceIsAlreadyRunning = OtherInstanceIsAlreadyRunning();
 			bool success = false;
 
-			if ((this.requestedFilePath != null) && (this.requestedFilePath != ""))
+			if ((this.requestedFilePath != null) && (this.requestedFilePath.Length > 0))
 			{
 				success = OpenFromFile(this.requestedFilePath);
 

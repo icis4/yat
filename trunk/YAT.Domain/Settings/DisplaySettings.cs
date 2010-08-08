@@ -317,36 +317,41 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is DisplaySettings)
-				return (Equals((DisplaySettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			DisplaySettings casted = obj as DisplaySettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(DisplaySettings value)
+		public bool Equals(DisplaySettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					(this.separateTxRxRadix         == value.separateTxRxRadix) &&
-					(this.txRadix                   == value.txRadix) &&
-					(this.rxRadix                   == value.rxRadix) &&
-					(this.showRadix                 == value.showRadix) &&
-					(this.showTimeStamp             == value.showTimeStamp) &&
-					(this.showLength                == value.showLength) &&
-					(this.showConnectTime           == value.showConnectTime) &&
-					(this.showCounters              == value.showCounters) &&
-					(this.txMaxLineCount            == value.txMaxLineCount) &&
-					(this.rxMaxLineCount            == value.rxMaxLineCount) &&
-					(this.directionLineBreakEnabled == value.directionLineBreakEnabled)
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+
+				(this.separateTxRxRadix         == casted.separateTxRxRadix) &&
+				(this.txRadix                   == casted.txRadix) &&
+				(this.rxRadix                   == casted.rxRadix) &&
+				(this.showRadix                 == casted.showRadix) &&
+				(this.showTimeStamp             == casted.showTimeStamp) &&
+				(this.showLength                == casted.showLength) &&
+				(this.showConnectTime           == casted.showConnectTime) &&
+				(this.showCounters              == casted.showCounters) &&
+				(this.txMaxLineCount            == casted.txMaxLineCount) &&
+				(this.rxMaxLineCount            == casted.rxMaxLineCount) &&
+				(this.directionLineBreakEnabled == casted.directionLineBreakEnabled)
+			);
 		}
 
 		/// <summary></summary>

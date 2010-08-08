@@ -366,28 +366,32 @@ namespace YAT.Settings.Terminal
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is TerminalSettingsRoot)
-				return (Equals((TerminalSettingsRoot)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			TerminalSettingsRoot casted = obj as TerminalSettingsRoot;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(TerminalSettingsRoot value)
+		public bool Equals(TerminalSettingsRoot casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+
+				(this.productVersion == casted.productVersion)
 				// Do not compare AutoSaved.
-				return
-					(
-					(this.productVersion == value.productVersion) &&
-					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
-					);
-			}
-			return (false);
+			);
 		}
 
 		public override int GetHashCode()

@@ -240,13 +240,13 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		public virtual bool TryValidate()
 		{
-			if      (this.path != "")
+			if      (this.path.Length > 0)
 			{
 				return (Device.GetDeviceInfoFromPath(this.path, out this.vendorId, out this.productId, out this.manufacturer, out this.product, out this.serialNumber));
 			}
 			else if ((this.vendorId != 0) && (this.productId != 0))
 			{
-				if (this.serialNumber != "")
+				if (this.serialNumber.Length > 0)
 					return (Device.GetDeviceInfoFromVidAndPidAndSerial(this.vendorId, this.productId, this.serialNumber, out this.path, out this.manufacturer, out this.product));
 				else
 					return (Device.GetDeviceInfoFromVidAndPid(this.vendorId, this.productId, out this.path, out this.manufacturer, out this.product, out this.serialNumber));
@@ -269,22 +269,26 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is DeviceInfo)
-				return (Equals((DeviceInfo)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			DeviceInfo casted = obj as DeviceInfo;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(DeviceInfo value)
+		public bool Equals(DeviceInfo casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-				return (this.path == value.path);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
 
-			return (false);
+			return (this.path == casted.path);
 		}
 
 		/// <summary></summary>
@@ -304,7 +308,7 @@ namespace MKY.IO.Usb
 		{
 			StringBuilder sb = new StringBuilder();
 
-			if (Manufacturer != "")
+			if (Manufacturer.Length > 0)
 			{
 				sb.Append(Manufacturer);         // "Company"
 			}
@@ -319,7 +323,7 @@ namespace MKY.IO.Usb
 				sb.Append(")");
 			}
 
-			if (Product != "")
+			if (Product.Length > 0)
 			{
 				if (sb.Length > 0)
 					sb.Append(" ");              // "Company (VID:0ABC) "
@@ -337,7 +341,7 @@ namespace MKY.IO.Usb
 				sb.Append(")");
 			}
 
-			if (SerialNumber != "")
+			if (SerialNumber.Length > 0)
 			{
 				if (sb.Length > 0)
 					sb.Append(" ");              // "Company (VID:0ABC) Product (PID:1234) "
@@ -353,7 +357,7 @@ namespace MKY.IO.Usb
 		{
 			StringBuilder sb = new StringBuilder();
 
-			if (Product != "")
+			if (Product.Length > 0)
 			{
 				sb.Append(Product);              // "Product"
 			}

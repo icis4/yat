@@ -153,7 +153,7 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				XNetworkInterface localInterface = socketSelection.LocalInterface;
+				IPNetworkInterface localInterface = socketSelection.LocalInterface;
 				this.newTerminalSettings_Form.SocketLocalInterface = localInterface;
 				SetControls();
 			}

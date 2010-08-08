@@ -301,12 +301,12 @@ namespace MKY.Utilities.Xml
 								if (inputNavigator.MoveToFirstChild())
 								{
 									// check whether this node ends here
-									if (inputNavigator.LocalName == "")
+									if (inputNavigator.LocalName.Length == 0)
 									{
 										// in case both nods end here, copy the value
 										if (outputNavigator.MoveToFirstChild())
 										{
-											if (outputNavigator.LocalName == "")
+											if (outputNavigator.LocalName.Length == 0)
 												CopyTolerantly(inputNavigator.Clone(), outputNavigator.Clone());
 										}
 									}

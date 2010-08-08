@@ -35,7 +35,7 @@ namespace YAT.Model.Settings
 		private XIPHost socketRemoteHost;
 		private int socketRemotePort;
 
-		private XNetworkInterface socketLocalInterface;
+		private IPNetworkInterface socketLocalInterface;
 		private int socketLocalTcpPort;
 		private int socketLocalUdpPort;
 
@@ -187,7 +187,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("SocketLocalInterface")]
-		public virtual XNetworkInterface SocketLocalInterface
+		public virtual IPNetworkInterface SocketLocalInterface
 		{
 			get { return (this.socketLocalInterface); }
 			set
@@ -306,35 +306,40 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is NewTerminalSettings)
-				return (Equals((NewTerminalSettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			NewTerminalSettings casted = obj as NewTerminalSettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(NewTerminalSettings value)
+		public bool Equals(NewTerminalSettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					(this.terminalType         == value.terminalType) &&
-					(this.ioType               == value.ioType) &&
-					(this.serialPortId         == value.serialPortId) &&
-					(this.socketRemoteHost     == value.socketRemoteHost) &&
-					(this.socketRemotePort     == value.socketRemotePort) &&
-					(this.socketLocalInterface == value.socketLocalInterface) &&
-					(this.socketLocalTcpPort   == value.socketLocalTcpPort) &&
-					(this.socketLocalUdpPort   == value.socketLocalUdpPort) &&
-					(this.usbHidDeviceInfo     == value.usbHidDeviceInfo) &&
-					(this.startTerminal        == value.startTerminal)
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+
+				(this.terminalType == casted.terminalType) &&
+				(this.ioType               == casted.ioType) &&
+				(this.serialPortId         == casted.serialPortId) &&
+				(this.socketRemoteHost     == casted.socketRemoteHost) &&
+				(this.socketRemotePort     == casted.socketRemotePort) &&
+				(this.socketLocalInterface == casted.socketLocalInterface) &&
+				(this.socketLocalTcpPort   == casted.socketLocalTcpPort) &&
+				(this.socketLocalUdpPort   == casted.socketLocalUdpPort) &&
+				(this.usbHidDeviceInfo     == casted.usbHidDeviceInfo) &&
+				(this.startTerminal        == casted.startTerminal)
+			);
 		}
 
 		/// <summary></summary>

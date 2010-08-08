@@ -749,7 +749,7 @@ namespace MKY.IO.Ports
 
 		private void DebugWrite(string message, bool writeStack)
 		{
-			if (DebugWrite_portName == "")
+			if (DebugWrite_portName.Length == 0)
 				DebugWrite_portName = PortName;
 
 			System.Diagnostics.Debug.WriteLine(DebugWrite_portName + " " + Environment.TickCount + " " + message);

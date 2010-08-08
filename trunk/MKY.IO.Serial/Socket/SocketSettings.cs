@@ -20,6 +20,7 @@ using System.Net;
 using System.Text;
 using System.Xml.Serialization;
 
+using MKY.Utilities.Diagnostics;
 using MKY.Utilities.Net;
 
 // The MKY.IO.Serial namespace combines various serial interface infrastructure. This code is
@@ -37,13 +38,13 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		public static readonly XIPHost DefaultRemoteHost = new XIPHost(CommonIPHost.Localhost);
+		public static readonly XIPHost DefaultRemoteHost = new XIPHost(IPHostType.Localhost);
 
 		/// <summary></summary>
 		public static readonly IPAddress DefaultResolvedRemoteIPAddress = IPAddress.Loopback;
 
 		/// <summary></summary>
-		public static readonly XNetworkInterface DefaultLocalInterface = new XNetworkInterface(CommonNetworkInterface.Any);
+		public static readonly IPNetworkInterface DefaultLocalInterface = new IPNetworkInterface(IPNetworkInterfaceType.Any);
 
 		/// <summary></summary>
 		public static readonly IPAddress DefaultResolvedLocalIPAddress = IPAddress.Any;
@@ -180,6 +181,45 @@ namespace MKY.IO.Serial
 				{
 					this.remoteHost = value;
 					SetChanged();
+
+					// Immediately try to resolve the corresponding remote IP address.
+					XIPHost ipHost;
+					if (XIPHost.TryParse(this.remoteHost, out ipHost))
+					{
+						switch ((IPHostType)ipHost)
+						{
+							case IPHostType.Localhost:
+							case IPHostType.IPv4Localhost:
+							case IPHostType.IPv6Localhost:
+							{
+								this.resolvedRemoteIPAddress = ipHost.IPAddress;
+								break;
+							}
+
+							case IPHostType.Other:
+							{
+								try
+								{
+									IPAddress[] ipAddresses = System.Net.Dns.GetHostAddresses(this.remoteHost);
+									this.resolvedRemoteIPAddress = ipAddresses[0];
+								}
+								catch (Exception ex)
+								{
+									XDebug.WriteException(this, ex);
+								}
+								break;
+							}
+
+							default:
+							{
+								throw (new ArgumentOutOfRangeException("IP Host Type", (IPHostType)ipHost, "Unknown IP host type"));
+							}
+						}
+					}
+					else
+					{
+						this.resolvedRemoteIPAddress = IPAddress.None;
+					}
 				}
 			}
 		}
@@ -218,6 +258,47 @@ namespace MKY.IO.Serial
 				{
 					this.localInterface = value;
 					SetChanged();
+
+					// Immediately try to resolve the corresponding local IP address.
+					IPNetworkInterface networkInterface;
+					if (IPNetworkInterface.TryParse(this.localInterface, out networkInterface))
+					{
+						switch ((IPNetworkInterfaceType)networkInterface)
+						{
+							case IPNetworkInterfaceType.Any:
+							case IPNetworkInterfaceType.IPv4Any:
+							case IPNetworkInterfaceType.IPv4Loopback:
+							case IPNetworkInterfaceType.IPv6Any:
+							case IPNetworkInterfaceType.IPv6Loopback:
+							{
+								this.resolvedLocalIPAddress = networkInterface.IPAddress;
+								break;
+							}
+
+							case IPNetworkInterfaceType.Other:
+							{
+								try
+								{
+									IPAddress[] ipAddresses = System.Net.Dns.GetHostAddresses(this.localInterface);
+									this.resolvedLocalIPAddress = ipAddresses[0];
+								}
+								catch (Exception ex)
+								{
+									XDebug.WriteException(this, ex);
+								}
+								break;
+							}
+
+							default:
+							{
+								throw (new ArgumentOutOfRangeException("IP Network Interface", (IPNetworkInterfaceType)networkInterface, "Unknown network interface type"));
+							}
+						}
+					}
+					else
+					{
+						this.resolvedLocalIPAddress = IPAddress.None;
+					}
 				}
 			}
 		}
@@ -314,40 +395,6 @@ namespace MKY.IO.Serial
 
 		#endregion
 
-		#region Methods
-		//==========================================================================================
-		// Methods
-		//==========================================================================================
-
-		/// <summary>
-		/// Tries to resolve the IP address from <see cref="RemoteHost"/> and
-		/// stores it in <see cref="ResolvedRemoteIPAddress"/>.
-		/// </summary>
-		/// <returns>
-		/// <c>true</c> if successfully resolved; <c>false</c> otherwise.
-		/// </returns>
-		public virtual bool TryResolveIPAddresses()
-		{
-			try
-			{
-				IPAddress[] ipAddresses;
-
-				ipAddresses = System.Net.Dns.GetHostAddresses(this.remoteHost);
-				this.resolvedRemoteIPAddress = ipAddresses[0];
-
-				ipAddresses = System.Net.Dns.GetHostAddresses(this.localInterface);
-				this.resolvedLocalIPAddress = ipAddresses[0];
-
-				return (true);
-			}
-			catch
-			{
-				return (false);
-			}
-		}
-
-		#endregion
-
 		#region Object Members
 		//==========================================================================================
 		// Object Members
@@ -358,32 +405,37 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is SocketSettings)
-				return (Equals((SocketSettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			SocketSettings casted = obj as SocketSettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(SocketSettings value)
+		public bool Equals(SocketSettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					(this.hostType               == value.hostType) &&
-					(this.remoteHost             == value.remoteHost) &&
-					(this.remotePort             == value.remotePort) &&
-					(this.localInterface         == value.localInterface) &&
-					(this.localTcpPort           == value.localTcpPort) &&
-					(this.localUdpPort           == value.localUdpPort) &&
-					(this.tcpClientAutoReconnect == value.tcpClientAutoReconnect)
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+
+				(this.hostType               == casted.hostType) &&
+				(this.remoteHost             == casted.remoteHost) &&
+				(this.remotePort             == casted.remotePort) &&
+				(this.localInterface         == casted.localInterface) &&
+				(this.localTcpPort           == casted.localTcpPort) &&
+				(this.localUdpPort           == casted.localUdpPort) &&
+				(this.tcpClientAutoReconnect == casted.tcpClientAutoReconnect)
+			);
 		}
 
 		/// <summary></summary>

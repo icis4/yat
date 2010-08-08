@@ -41,7 +41,7 @@ namespace YAT.Gui.Controls
 		private static readonly IPAddress DefaultResolvedRemoteIPAddress = MKY.IO.Serial.SocketSettings.DefaultResolvedRemoteIPAddress;
 		private const int DefaultRemotePort                              = MKY.IO.Serial.SocketSettings.DefaultRemotePort;
 
-		private static readonly XNetworkInterface DefaultLocalInterface  = MKY.IO.Serial.SocketSettings.DefaultLocalInterface;
+		private static readonly IPNetworkInterface DefaultLocalInterface  = MKY.IO.Serial.SocketSettings.DefaultLocalInterface;
 		private static readonly IPAddress DefaultResolvedLocalIPAddress  = MKY.IO.Serial.SocketSettings.DefaultResolvedLocalIPAddress;
 		private const int DefaultLocalTcpPort                            = MKY.IO.Serial.SocketSettings.DefaultLocalTcpPort;
 		private const int DefaultLocalUdpPort                            = MKY.IO.Serial.SocketSettings.DefaultLocalUdpPort;
@@ -61,7 +61,7 @@ namespace YAT.Gui.Controls
 		private IPAddress resolvedRemoteIPAddress = DefaultResolvedRemoteIPAddress;
 		private int remotePort                    = DefaultRemotePort;
 
-		private XNetworkInterface localInterface  = DefaultLocalInterface;
+		private IPNetworkInterface localInterface  = DefaultLocalInterface;
 		private IPAddress resolvedLocalIPAddress  = DefaultResolvedLocalIPAddress;
 		private int localTcpPort                  = DefaultLocalTcpPort;
 		private int localUdpPort                  = DefaultLocalUdpPort;
@@ -168,7 +168,7 @@ namespace YAT.Gui.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual XNetworkInterface LocalInterface
+		public virtual IPNetworkInterface LocalInterface
 		{
 			get { return (this.localInterface); }
 			set
@@ -363,7 +363,7 @@ namespace YAT.Gui.Controls
 		{
 			if (!this.isSettingControls)
 			{
-				LocalInterface = comboBox_LocalInterface.SelectedItem as XNetworkInterface;
+				LocalInterface = comboBox_LocalInterface.SelectedItem as IPNetworkInterface;
 				this.resolvedLocalIPAddress = LocalInterface.IPAddress;
 			}
 		}
@@ -432,9 +432,9 @@ namespace YAT.Gui.Controls
 			{
 				this.isSettingControls = true;
 
-				XNetworkInterface old = comboBox_LocalInterface.SelectedItem as XNetworkInterface;
+				IPNetworkInterface old = comboBox_LocalInterface.SelectedItem as IPNetworkInterface;
 
-				NetworkInterfaceCollection localInterfaces = new NetworkInterfaceCollection();
+				IPNetworkInterfaceCollection localInterfaces = new IPNetworkInterfaceCollection();
 				localInterfaces.FillWithAvailableInterfaces();
 
 				comboBox_LocalInterface.Items.Clear();
@@ -450,7 +450,7 @@ namespace YAT.Gui.Controls
 						comboBox_LocalInterface.SelectedIndex = 0;
 
 					// Set property instead of member to ensure that changed event is fired.
-					LocalInterface = comboBox_LocalInterface.SelectedItem as XNetworkInterface;
+					LocalInterface = comboBox_LocalInterface.SelectedItem as IPNetworkInterface;
 				}
 				else
 				{
@@ -508,7 +508,7 @@ namespace YAT.Gui.Controls
 				if (this.localInterface != null)
 					comboBox_LocalInterface.SelectedItem = this.localInterface;
 				else
-					comboBox_LocalInterface.SelectedItem = (XNetworkInterface)CommonNetworkInterface.Any;
+					comboBox_LocalInterface.SelectedItem = (IPNetworkInterface)IPNetworkInterfaceType.Any;
 			}
 			else
 			{

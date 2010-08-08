@@ -122,25 +122,27 @@ namespace MKY.Utilities.Recent
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is RecentItem<T>)
-				return (Equals((RecentItem<T>)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			RecentItem<T> casted = obj as RecentItem<T>;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(RecentItem<T> value)
+		public bool Equals(RecentItem<T> casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				// Do not compare time stamp.
-				return ((this.item != null) && (this.item.Equals(value.item)));
-			}
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
 
-			return (false);
+			// Do not compare time stamp.
+			return ((this.item != null) && (this.item.Equals(casted.item)));
 		}
 
 		/// <summary>

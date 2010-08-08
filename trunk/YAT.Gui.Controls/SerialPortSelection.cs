@@ -216,7 +216,7 @@ namespace YAT.Gui.Controls
 				{
 					PortId = id;
 				}
-				else if (comboBox_Port.Text == "")
+				else if (comboBox_Port.Text.Length == 0)
 				{
 					PortId = null;
 				}

@@ -87,8 +87,8 @@ namespace YAT.Gui.Forms
 			linkLabel_HHD.Text = "";
 			textBefore = "YAT is a terminal (a connection endpoint). If you're looking for a tool to monitor serial data between an application" + Environment.NewLine +
 						 "and a device, or between two devices, check out ";
-			textLink =                                                   "HHD Serial Monitor";
-			textAfter =                                                                    ". It's worth the bucks.";
+			textLink =                                                   "HHD Monitoring Studio";
+			textAfter =                                                                       ". It's worth the bucks.";
 			linkLabel_HHD.Text += textBefore;
 			start = linkLabel_HHD.Text.Length;
 			linkLabel_HHD.Text += textLink;
@@ -211,9 +211,7 @@ namespace YAT.Gui.Forms
 		{
 			string link = e.Link.LinkData as string;
 			if ((link != null) && (link.StartsWith("http://")))
-			{
-				MKY.Utilities.Net.Browser.BrowseUrl(link);
-			}
+				MKY.Utilities.Net.Browser.BrowseUri(link);
 		}
 
 		#endregion

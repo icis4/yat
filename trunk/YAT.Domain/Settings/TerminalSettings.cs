@@ -274,27 +274,30 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is TerminalSettings)
-				return (Equals((TerminalSettings)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			TerminalSettings casted = obj as TerminalSettings;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(TerminalSettings value)
+		public bool Equals(TerminalSettings casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					(this.terminalType == value.terminalType) &&
-					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				(this.terminalType == casted.terminalType)
+			);
 		}
 
 		/// <summary></summary>

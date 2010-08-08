@@ -124,31 +124,36 @@ namespace YAT.Model.Types
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is PredefinedCommandPage)
-				return (Equals((PredefinedCommandPage)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			PredefinedCommandPage casted = obj as PredefinedCommandPage;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(PredefinedCommandPage value)
+		public bool Equals(PredefinedCommandPage casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				if (this.pageName != value.pageName)
-					return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
 
-				for (int i = 0; i < this.commands.Count; i++)
-				{
-					if (this.commands[i] != value.commands[i])
-						return (false);
-				}
-				return (true);
+			// Compare page name, i.e. header of page.
+			if (this.pageName != casted.pageName)
+				return (false);
+
+			// Compare commands, i.e. contents of page.
+			for (int i = 0; i < this.commands.Count; i++)
+			{
+				if (this.commands[i] != casted.commands[i])
+					return (false);
 			}
-			return (false);
+			return (true);
 		}
 
 		/// <summary>

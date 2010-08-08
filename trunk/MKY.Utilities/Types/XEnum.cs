@@ -150,14 +150,37 @@ namespace MKY.Utilities.Types
 		/// <summary>
 		/// Underlying enum.
 		/// </summary>
-		protected readonly Enum UnderlyingEnum;
+		private Enum underlyingEnum;
+
+		/// <summary>
+		/// Constructor that allows to specify the underlying enum within the constructor of the deriving class.
+		/// </summary>
+		protected XEnum()
+		{
+		}
 
 		/// <summary>
 		/// XEnum requires an underlying enum to be constructed.
 		/// </summary>
 		protected XEnum(Enum underlyingEnum)
 		{
-			UnderlyingEnum = underlyingEnum;
+			SetUnderlyingEnum(underlyingEnum);
+		}
+
+		/// <summary>
+		/// Underlying enum.
+		/// </summary>
+		protected Enum UnderlyingEnum
+		{
+			get { return (this.underlyingEnum); }
+		}
+
+		/// <summary>
+		/// Sets the underlying enum.
+		/// </summary>
+		protected void SetUnderlyingEnum(Enum underlyingEnum)
+		{
+			this.underlyingEnum = underlyingEnum;
 		}
 
 		#region Object Members
@@ -170,25 +193,27 @@ namespace MKY.Utilities.Types
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is XEnum)
-				return (Equals((XEnum)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			XEnum casted = obj as XEnum;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(XEnum value)
+		public bool Equals(XEnum casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				// Attention, Enum doesn't override operators == and !=, use Equals().
-				return ((UnderlyingEnum != null) && (UnderlyingEnum.Equals(value.UnderlyingEnum)));
-			}
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
 
-			return (false);
+			// Attention, Enum doesn't override operators == and !=, use Equals().
+			return ((UnderlyingEnum != null) && (UnderlyingEnum.Equals(casted.UnderlyingEnum)));
 		}
 
 		/// <summary>

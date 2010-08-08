@@ -147,27 +147,30 @@ namespace YAT.Model.Types
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is TextFormat)
-				return (Equals((TextFormat)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			TextFormat casted = obj as TextFormat;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(TextFormat value)
+		public bool Equals(TextFormat casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					(this.fontStyle == value.fontStyle) &&
-					(this.color     == value.color)
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				(this.fontStyle == casted.fontStyle) &&
+				(this.color     == casted.color)
+			);
 		}
 
 		/// <summary></summary>

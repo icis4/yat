@@ -38,6 +38,8 @@ namespace YAT.Model.Test
 		TcpAutoSocketOnSpecificIPv4Interface,
 		/// <summary></summary>
 		TcpAutoSocketOnSpecificIPv6Interface,
+
+		// USB Ser/HID not possible since YAT only implements the host side.
 	}
 
 	/// <summary></summary>
@@ -107,7 +109,7 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <summary></summary>
-		public static IEnumerable<KeyValuePair<TransmissionType, string>> TransmissionTypes
+		private static IEnumerable<KeyValuePair<TransmissionType, string>> TransmissionTypes
 		{
 			get
 			{
@@ -161,7 +163,7 @@ namespace YAT.Model.Test
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(TransmissionTestData), "TestCases")]
-		public void PerformCommandTransmission(TransmissionType transmissionType, Utilities.TestSet testSet, int transmissionCount)
+		public virtual void PerformCommandTransmission(TransmissionType transmissionType, Utilities.TestSet testSet, int transmissionCount)
 		{
 			switch (transmissionType)
 			{

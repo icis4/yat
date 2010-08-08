@@ -82,7 +82,7 @@ namespace YAT.Model.Settings
 				}
 				
 				// Create GUID from file path
-				if ((this.guid == Guid.Empty) && (this.filePath != ""))
+				if ((this.guid == Guid.Empty) && (this.filePath.Length > 0))
 					this.guid = XGuid.CreateGuidFromFilePath(this.filePath, YAT.Settings.GeneralSettings.AutoSaveTerminalFileNamePrefix);
 			}
 		}
@@ -132,28 +132,32 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj is TerminalSettingsItem)
-				return (Equals((TerminalSettingsItem)obj));
+			if (obj == null)
+				return (false);
 
-			return (false);
+			TerminalSettingsItem casted = obj as TerminalSettingsItem;
+			if (casted == null)
+				return (false);
+
+			return (Equals(casted));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(TerminalSettingsItem value)
+		public bool Equals(TerminalSettingsItem casted)
 		{
-			// Ensure that object.operator!=() is called.
-			if ((object)value != null)
-			{
-				return
-					(
-					(this.filePath == value.filePath) &&
-					(this.guid     == value.guid) &&
-					base.Equals((MKY.Utilities.Settings.Settings)value) // Compare all settings nodes.
-					);
-			}
-			return (false);
+			// Ensure that object.operator==() is called.
+			if ((object)casted == null)
+				return (false);
+
+			return
+			(
+				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+
+				(this.filePath == casted.filePath) &&
+				(this.guid     == casted.guid)
+			);
 		}
 
 		/// <summary></summary>

@@ -101,9 +101,9 @@ namespace MKY.Utilities.Settings
 			{
 				if (this.settingsFilePath == null)
 					return (false);
-				if (this.settingsFilePath == "")
+				if (this.settingsFilePath.Length == 0)
 					return (false);
-				if (System.IO.Path.GetFullPath(this.settingsFilePath) == "")
+				if (System.IO.Path.GetFullPath(this.settingsFilePath).Length == 0)
 					return (false);
 				return (true);
 			}
@@ -118,7 +118,7 @@ namespace MKY.Utilities.Settings
 			{
 				if (this.settingsFilePath == null)
 					return (false);
-				if (this.settingsFilePath == "")
+				if (this.settingsFilePath.Length == 0)
 					return (false);
 				return (System.IO.File.Exists(this.settingsFilePath));
 			}
@@ -133,7 +133,7 @@ namespace MKY.Utilities.Settings
 			{
 				if (this.settingsFilePath == null)
 					return (false);
-				if (this.settingsFilePath == "")
+				if (this.settingsFilePath.Length == 0)
 					return (false);
 				if (!System.IO.File.Exists(this.settingsFilePath))
 					return (false);
