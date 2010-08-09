@@ -12,6 +12,9 @@
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
+// ------------------------------------------------------------------------------------------------
+// Visit YAT at http://sourceforge.net/projects/y-a-terminal.
+// Contact YAT by mailto:maettu_this@users.sourceforge.net.
 //==================================================================================================
 
 using System;
@@ -216,21 +219,21 @@ namespace YAT.Controller
 
 		public MainResult Run(bool runWithView)
 		{
-			// Show command line help in case of error
+			// Show command line help in case of error.
 			if (this.commandLineError)
 			{
 				WriteHelp();
 				return (MainResult.CommandLineArgsError);
 			}
 
-			// Show command line help if requested
+			// Show command line help if requested.
 			if (this.commandLineHelpIsRequested)
 			{
 				WriteHelp();
 				return (MainResult.OK);
 			}
 
-			// Create model and view and run application
+			// Create model and view and run application.
 			MainResult mainResult;
 			using (Model.Main model = new Model.Main(this.requestedFilePath))
 			{
@@ -238,14 +241,14 @@ namespace YAT.Controller
 				{
 					using (Gui.Forms.Main view = new Gui.Forms.Main(model))
 					{
-						// Start the Win32 message loop on the current thread and the main form
-						// \attention This call does not return until the application exits
+						// Start the Win32 message loop on the current thread and the main form.
+						// \attention This call does not return until the application exits.
 						Application.Run(view);
 					}
 
 					mainResult = MainResult.OK;
 				}
-				else // Non-view application for automated test usage
+				else // Non-view application for automated test usage.
 				{
 					if (model.Start())
 					{
@@ -259,7 +262,7 @@ namespace YAT.Controller
 						mainResult = MainResult.ApplicationStartError;
 					}
 				}
-			} // Dispose of model and view to ensure immediate release of resources
+			} // Dispose of model and view to ensure immediate release of resources.
 
 			return (mainResult);
 		}

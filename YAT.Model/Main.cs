@@ -12,6 +12,9 @@
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
+// ------------------------------------------------------------------------------------------------
+// Visit YAT at http://sourceforge.net/projects/y-a-terminal.
+// Contact YAT by mailto:maettu_this@users.sourceforge.net.
 //==================================================================================================
 
 using System;
@@ -552,7 +555,7 @@ namespace YAT.Model
 			AssertNotDisposed();
 
 			// -------------------------------------------------------------------------------------
-			// check whether workspace is already opened
+			// Check whether workspace is already opened.
 			// -------------------------------------------------------------------------------------
 
 			if (this.workspace != null)
@@ -572,7 +575,7 @@ namespace YAT.Model
 				}
 			}
 
-			// close workspace, only one workspace can exist within application
+			// Close workspace, only one workspace can exist within application.
 			if (this.workspace != null)
 			{
 				if (!this.workspace.Close())
@@ -580,7 +583,7 @@ namespace YAT.Model
 			}
 
 			// -------------------------------------------------------------------------------------
-			// open the workspace itself
+			// Open the workspace itself.
 			// -------------------------------------------------------------------------------------
 
 			OnFixedStatusTextRequest("Opening workspace...");
@@ -593,10 +596,10 @@ namespace YAT.Model
 				ApplicationSettings.LocalUser.AutoWorkspace.SetFilePathAndUser(filePath, Guid);
 				ApplicationSettings.Save();
 
-				// try to retrieve GUID from file path (in case of auto saved workspace files)
+				// Try to retrieve GUID from file path (in case of auto saved workspace files).
 				Guid guid = XGuid.CreateGuidFromFilePath(filePath, GeneralSettings.AutoSaveWorkspaceFileNamePrefix);
 
-				// Create workspace
+				// Create workspace.
 				this.workspace = new Workspace(sh, guid);
 				AttachWorkspaceEventHandlers();
 
@@ -623,7 +626,7 @@ namespace YAT.Model
 			}
 
 			// -------------------------------------------------------------------------------------
-			// open workspace terminals
+			// Open workspace terminals.
 			// -------------------------------------------------------------------------------------
 
 			int terminalCount = this.workspace.OpenTerminals();

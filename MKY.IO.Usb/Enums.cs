@@ -11,6 +11,9 @@
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
+// ------------------------------------------------------------------------------------------------
+// Visit YAT at http://sourceforge.net/projects/y-a-terminal.
+// Contact YAT by mailto:maettu_this@users.sourceforge.net.
 //==================================================================================================
 
 // Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid

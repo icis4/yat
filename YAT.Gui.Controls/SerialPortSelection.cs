@@ -12,6 +12,9 @@
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
+// ------------------------------------------------------------------------------------------------
+// Visit YAT at http://sourceforge.net/projects/y-a-terminal.
+// Contact YAT by mailto:maettu_this@users.sourceforge.net.
 //==================================================================================================
 
 using System;
@@ -156,6 +159,18 @@ namespace YAT.Gui.Controls
 		public bool IsValid
 		{
 			get { return (this.portId != null); }
+		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
+
+		public virtual void RefreshSerialPortList()
+		{
+			SetSerialPortList();
 		}
 
 		#endregion
@@ -311,7 +326,7 @@ namespace YAT.Gui.Controls
 					MessageBox.Show
 						(
 						this,
-						"No serial COM ports available, check serial COM port system settings.",
+						"No serial COM ports available, check the serial COM ports of your system.",
 						"No COM Ports",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Warning

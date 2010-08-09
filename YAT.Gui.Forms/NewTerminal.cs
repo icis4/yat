@@ -12,6 +12,9 @@
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
+// ------------------------------------------------------------------------------------------------
+// Visit YAT at http://sourceforge.net/projects/y-a-terminal.
+// Contact YAT by mailto:maettu_this@users.sourceforge.net.
 //==================================================================================================
 
 using System;
@@ -264,6 +267,8 @@ namespace YAT.Gui.Forms
 		// Private Methods
 		//==========================================================================================
 
+		private Domain.IOType SetControls_ioTypeOld = Domain.IOType.SerialPort;
+
 		private void SetControls()
 		{
 			this.isSettingControls = true;
@@ -310,6 +315,12 @@ namespace YAT.Gui.Forms
 			checkBox_StartTerminal.Checked = this.newTerminalSettings_Form.StartTerminal;
 
 			button_OK.Enabled = isValid;
+
+			// Trigger refresh of COM ports if selection of I/O type has changed
+			if ((ioType == Domain.IOType.SerialPort) && (this.SetControls_ioTypeOld != Domain.IOType.SerialPort))
+				serialPortSelection.RefreshSerialPortList();
+
+			this.SetControls_ioTypeOld = ioType;
 
 			this.isSettingControls = false;
 		}

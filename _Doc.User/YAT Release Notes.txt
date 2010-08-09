@@ -47,6 +47,7 @@ New:
 - Test config including optional user config added (feature request #2981764)
 
 Important changes:
+- Serial COM port list gets refreshed when changing the I/O port type
 - Test environment to ensure that TCP/IP works on multiple network interfaces added (bug #2970215)
 - Update to NUnit 2.5.5
 - Use of parametrized NUnit test cases
@@ -56,10 +57,13 @@ Important changes:
 - Null reference safe and more efficient implementation of Equals()
 - Selection and settings controls now clear contents when disabled
 - Project references to system assemblies cleaned
+- Website and contact information added to all source headers (feature request #2998593)
 
 Fixed bugs:
 - TCP/IP open/close issues fixed (bug #2684769, bug #2966417)
 - TCP/IP remote host and program freeze issue when opening from a file fixed (bug #2684813)
+- Exception in case of no COM ports fixed (bug #3041642)
+- Exception when closing terminal using 'File > Close' fixed (bugs #2684813 and #2970241)
 - Unhandled exception dialog improved and fixed (feature request #2970243, bug #2970245)
 
 Limitations and known issues:

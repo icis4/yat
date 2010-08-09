@@ -12,6 +12,9 @@
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
+// ------------------------------------------------------------------------------------------------
+// Visit YAT at http://sourceforge.net/projects/y-a-terminal.
+// Contact YAT by mailto:maettu_this@users.sourceforge.net.
 //==================================================================================================
 
 using System;
@@ -238,13 +241,18 @@ namespace MKY.IO.Ports
 			get { return (this.name); }
 			set
 			{
-				this.name = value;
+				if (value != this.name)
+				{
+					this.name = value;
 
-				SerialPortId id;
-				if (TryParseStandardPortName(value, out id))
-					this.standardPortNumber = id.StandardPortNumber;
-				else
-					this.standardPortNumber = 0;
+					SerialPortId id;
+					if (TryParseStandardPortName(value, out id))
+						this.standardPortNumber = id.StandardPortNumber;
+					else
+						this.standardPortNumber = 0;
+
+					GetDescriptionFromSystem();
+				}
 			}
 		}
 
@@ -329,9 +337,9 @@ namespace MKY.IO.Ports
 
 		#endregion
 
-		#region Methods
+		#region Private Methods
 		//==========================================================================================
-		// Methods
+		// Private Methods
 		//==========================================================================================
 
 		/// <summary>
@@ -339,15 +347,15 @@ namespace MKY.IO.Ports
 		/// that is associated with the serial port.
 		/// </summary>
 		/// <remarks>
-		/// Query is never done automatically because it takes quite some time.
+		/// Query takes quite some time.
 		/// </remarks>
-		public virtual void GetDescriptionFromSystem()
+		private void GetDescriptionFromSystem()
 		{
 			Dictionary<string, string> descriptions = SerialPortSearcher.GetDescriptionsFromSystem();
 
 			if (descriptions.ContainsKey(this.name))
 			{
-				Description = descriptions[this.name];
+				this.description = descriptions[this.name];
 				this.hasDescriptonFromSystem = true;
 			}
 		}
