@@ -79,8 +79,13 @@ namespace MKY.IO.Serial
 		public SerialPortSettings(SerialPortSettings rhs)
 			: base(rhs)
 		{
-			PortId                  = new SerialPortId(rhs.PortId);
-			Communication           = new SerialCommunicationSettings(rhs.Communication);
+			// Attention: Port ID can be null (if no COM ports are available on system).
+			if (rhs.PortId != null)
+				PortId = new SerialPortId(rhs.PortId);
+			else
+				PortId = null;
+
+			Communication               = new SerialCommunicationSettings(rhs.Communication);
 			this.autoReopen             = rhs.autoReopen;
 			this.replaceParityErrors    = rhs.replaceParityErrors;
 			this.parityErrorReplacement = rhs.parityErrorReplacement;

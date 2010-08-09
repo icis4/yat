@@ -61,7 +61,7 @@ namespace MKY.IO.Serial
 		public UsbHidDeviceSettings(UsbHidDeviceSettings rhs)
 			: base(rhs)
 		{
-			// Attention: USB device info can be null.
+			// Attention: USB device info can be null (if no USB devices are available on system).
 			if (rhs.DeviceInfo != null)
 				DeviceInfo = new DeviceInfo(rhs.DeviceInfo);
 			else
