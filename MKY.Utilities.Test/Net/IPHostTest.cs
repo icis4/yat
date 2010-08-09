@@ -19,17 +19,14 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Xml.Serialization;
 
 using NUnit.Framework;
 
-using MKY.Utilities.Collections;
 using MKY.Utilities.Diagnostics;
 using MKY.Utilities.Net;
-using MKY.Utilities.Recent;
 
 namespace MKY.Utilities.Test.Net
 {
@@ -115,7 +112,7 @@ namespace MKY.Utilities.Test.Net
 		{
 			Assert.AreEqual(ipHostType, (IPHostType)ipHost);
 		}
-		
+
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
 		public virtual void TestHostEqualsAddress(XIPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)

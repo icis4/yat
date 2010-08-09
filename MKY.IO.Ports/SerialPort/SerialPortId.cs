@@ -154,38 +154,15 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		public SerialPortId(int standardPortNumber)
+		public SerialPortId(string name)
 		{
-			if (IsStandardPortNumber(standardPortNumber))
-			{
-				this.name = StandardPortNumberToString(standardPortNumber);
-				this.standardPortNumber = standardPortNumber;
-			}
-			else
-			{
-				throw (new ArgumentOutOfRangeException
-					(
-					"standardPortNumber",
-					standardPortNumber,
-					"Standard port numbers are " + FirstStandardPortNumber + " to " + LastStandardPortNumber
-					));
-			}
+			Name = name;
 		}
 
 		/// <summary></summary>
-		public SerialPortId(string portName)
+		public SerialPortId(int standardPortNumber)
 		{
-			SerialPortId id;
-			if (TryParseStandardPortName(portName, out id))
-			{
-				this.name = id.Name;
-				this.standardPortNumber = id.StandardPortNumber;
-			}
-			else
-			{
-				this.name = portName;
-				this.standardPortNumber = 0;
-			}
+			StandardPortNumber = standardPortNumber;
 		}
 
 		/// <summary></summary>
@@ -211,6 +188,34 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 
 		/// <summary>
+		/// Port name (e.g. "COM1").
+		/// </summary>
+		[XmlElement("Name")]
+		public virtual string Name
+		{
+			get { return (this.name); }
+			set
+			{
+				if (value != this.name)
+				{
+					SerialPortId id;
+					if (TryParseStandardPortName(value, out id))
+					{
+						this.standardPortNumber = id.StandardPortNumber;
+						this.name = id.Name;
+					}
+					else
+					{
+						this.standardPortNumber = 0;
+						this.name = value;
+					}
+
+					GetDescriptionFromSystem();
+				}
+			}
+		}
+
+		/// <summary>
 		/// Port number (e.g. 1).
 		/// </summary>
 		[XmlIgnore]
@@ -226,32 +231,12 @@ namespace MKY.IO.Ports
 				}
 				else
 				{
-					this.name = value.ToString();
-					this.standardPortNumber = 0;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Port name (e.g. "COM1").
-		/// </summary>
-		[XmlElement("Name")]
-		public virtual string Name
-		{
-			get { return (this.name); }
-			set
-			{
-				if (value != this.name)
-				{
-					this.name = value;
-
-					SerialPortId id;
-					if (TryParseStandardPortName(value, out id))
-						this.standardPortNumber = id.StandardPortNumber;
-					else
-						this.standardPortNumber = 0;
-
-					GetDescriptionFromSystem();
+					throw (new ArgumentOutOfRangeException
+					(
+						"value",
+						value,
+						"Standard port numbers are " + FirstStandardPortNumber + " to " + LastStandardPortNumber
+					));
 				}
 			}
 		}
