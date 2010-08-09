@@ -12,6 +12,9 @@
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
+// ------------------------------------------------------------------------------------------------
+// Visit YAT at http://sourceforge.net/projects/y-a-terminal.
+// Contact YAT by mailto:maettu_this@users.sourceforge.net.
 //==================================================================================================
 
 using System;
@@ -58,7 +61,12 @@ namespace MKY.IO.Serial
 		public UsbHidDeviceSettings(UsbHidDeviceSettings rhs)
 			: base(rhs)
 		{
-			DeviceInfo  = new DeviceInfo(rhs.DeviceInfo);
+			// Attention: USB device info can be null.
+			if (rhs.DeviceInfo != null)
+				DeviceInfo = new DeviceInfo(rhs.DeviceInfo);
+			else
+				DeviceInfo = null;
+
 			this.autoReopen = rhs.autoReopen;
 
 			ClearChanged();
