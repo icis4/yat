@@ -308,7 +308,14 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
 					if (creators.Length > 0)
 					{
-						FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
+						try
+						{
+							FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
+						}
+						catch (Exception ex)
+						{
+							MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
+						}
 					}
 
 				}

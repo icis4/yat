@@ -20,7 +20,11 @@ The Main Thread at ALAZ.SystemEx.NetEx.SocketsEx.SocketServer.Stop()
      > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.StopConnections() Line 340
      > ALAZ.SystemEx.NetEx.dll!ALAZ.SystemEx.NetEx.SocketsEx.SocketServer.Stop() Line 207
 
-I removed the lock, and the issue mentioned above got solved. However, I then ran into the next issue:
+I removed the lock, and the issue mentioned above got solved.
+
+
+Also, there seems to be a null reference issue in ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.StopCreators() on line 311 (FWaitCreatorsDisposing.WaitOne). I added a try-catch around the statement.
+
 
 Best regards,
 Matthias
