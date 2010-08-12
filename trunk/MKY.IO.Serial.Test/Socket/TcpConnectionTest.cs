@@ -73,6 +73,13 @@ namespace MKY.IO.Serial.Test.Socket
 			Utilities.WaitForStop(server, "TCP server could not be stopped");
 		}
 
+		#endregion
+
+		#region Tests > ServerShutdown()
+		//------------------------------------------------------------------------------------------
+		// Tests > ServerShutdown()
+		//------------------------------------------------------------------------------------------
+
 		/// <summary></summary>
 		[Test]
 		public virtual void TestServerShutdown()
@@ -92,6 +99,37 @@ namespace MKY.IO.Serial.Test.Socket
 			Utilities.WaitForStop(server, "TCP server could not be stopped");
 			StopClient(client);
 			Utilities.WaitForStop(client, "TCP client could not be stopped");
+		}
+
+		#endregion
+
+		#region Tests > ConsecutiveShutdowns()
+		//------------------------------------------------------------------------------------------
+		// Tests > ConsecutiveShutdowns()
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		/// <remarks>
+		/// A cycle takes around 5 seconds. 10 cycles around a minute.
+		/// </remarks>
+		[Test, Repeat(10)]
+		public virtual void TestConsecutiveShutdowns()
+		{
+			TestClientShutdown();
+			TestServerShutdown();
+			TestServerShutdown();
+			TestClientShutdown();
+			TestClientShutdown();
+			TestServerShutdown();
+			TestServerShutdown();
+			TestClientShutdown();
+		}
+
+		/// <summary></summary>
+		[Test, Repeat(10), Category("Endurance")]
+		public virtual void TestConsecutiveShutdownsEndurance()
+		{
+			TestConsecutiveShutdowns();
 		}
 
 		#endregion
@@ -140,7 +178,7 @@ namespace MKY.IO.Serial.Test.Socket
 
 		private void StartServer(out int serverPort, out TcpServer server)
 		{
-			// Create server and initiate asych start
+			// Create server and initiate asych start.
 			serverPort = AvailableLocalTcpPort;
 			server = new TcpServer(IPAddress.Loopback, serverPort);
 			if (!server.Start())
@@ -149,7 +187,7 @@ namespace MKY.IO.Serial.Test.Socket
 
 		private void StartClientAndConnect(out TcpClient client, int serverPort)
 		{
-			// Create client and initiate asych start
+			// Create client and initiate asych start.
 			client = new TcpClient(IPAddress.Loopback, serverPort);
 			if (!client.Start())
 				Assert.Fail("TCP client could not be started");
@@ -157,13 +195,13 @@ namespace MKY.IO.Serial.Test.Socket
 
 		private void StopServer(TcpServer server)
 		{
-			// Initiate async stop
+			// Initiate async stop.
 			server.Stop();
 		}
 
 		private void StopClient(TcpClient client)
 		{
-			// Initiate async stop
+			// Initiate async stop.
 			client.Stop();
 		}
 

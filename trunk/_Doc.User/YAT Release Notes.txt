@@ -45,10 +45,11 @@ YAT 2.0 Beta 3 Candidate 1 Version 1.99.2x :: 2010-0x-xx
 New:
 - Support for USB Ser/HID implemented (feature request #2825931)
 - Test config including optional user config added (feature request #2981764)
+- Test environment to ensure that TCP/IP works on multiple network interfaces added (bug #2970215)
+- Endurance tests added
 
 Important changes:
 - Serial COM port list gets refreshed when changing the I/O port type
-- Test environment to ensure that TCP/IP works on multiple network interfaces added (bug #2970215)
 - Update to NUnit 2.5.5
 - Use of parametrized NUnit test cases
 - Use of FxCop (feature request #2970221)
