@@ -11,7 +11,7 @@ The approach of merging these libraries into MKY.IO.Usb was choosen due to:
 - None of the libraries provided all the features required for USB Ser/HID for YAT
 - Need for a compact though complete library for USB Ser/HID for YAT
 
-An alternative would have been to make use of a windows/.NET port of 'libusb'. Such approach is shown in 'libusb.NET'/'libusb.NET.Test' in SVN revision 276. 'libusb.NET' uses the 'winbows_backend' port of 'libusb'. 'libusb.NET' is based on 'SharpUSBLib' by Mike Krüger.
+An alternative would have been to make use of a Windows/.NET port of 'libusb'. Such approach is shown in 'libusb.NET'/'libusb.NET.Test' in SVN revision 276. 'libusb.NET' uses the 'winbows_backend' port of 'libusb'. 'libusb.NET' is based on 'SharpUSBLib' by Mike Krüger.
 
 However, experience has shown that this 'libusb' based approach isn't feasible:
 - The API of 'libusb' isn't a good match for a C#.NET based project
