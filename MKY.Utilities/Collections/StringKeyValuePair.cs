@@ -1,4 +1,8 @@
 //==================================================================================================
+// YAT - Yet Another Terminal.
+// Visit YAT at http://sourceforge.net/projects/y-a-terminal.
+// Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
+// ------------------------------------------------------------------------------------------------
 // $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.Test/SettingsCollection.cs $
 // $Author: maettu_this $
 // $Date: 2010-04-27 20:05:33 +0200 (Di, 27 Apr 2010) $
@@ -11,9 +15,6 @@
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
-// ------------------------------------------------------------------------------------------------
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal.
-// Contact YAT by mailto:maettu_this@users.sourceforge.net.
 //==================================================================================================
 
 using System;

@@ -1,4 +1,8 @@
 ﻿//==================================================================================================
+// YAT - Yet Another Terminal.
+// Visit YAT at http://sourceforge.net/projects/y-a-terminal.
+// Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
+// ------------------------------------------------------------------------------------------------
 // $URL$
 // $Author$
 // $Date$
@@ -12,9 +16,6 @@
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
-// ------------------------------------------------------------------------------------------------
-// Visit YAT at http://sourceforge.net/projects/y-a-terminal.
-// Contact YAT by mailto:maettu_this@users.sourceforge.net.
 //==================================================================================================
 
 using System;
