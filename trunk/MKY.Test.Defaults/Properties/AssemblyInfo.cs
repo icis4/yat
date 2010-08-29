@@ -1,4 +1,8 @@
 ﻿//==================================================================================================
+// YAT - Yet Another Terminal.
+// Visit YAT at http://sourceforge.net/projects/y-a-terminal.
+// Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
+// ------------------------------------------------------------------------------------------------
 // $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Usb/Properties/AssemblyInfo.cs $
 // $Author: maettu_this $
 // $Date: 2010-03-07 22:14:49 +0100 (So, 07 Mrz 2010) $
