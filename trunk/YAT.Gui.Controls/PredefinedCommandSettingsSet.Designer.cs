@@ -60,7 +60,7 @@ namespace YAT.Gui.Controls
 			this.checkBox_IsFile.Location = new System.Drawing.Point(3, 3);
 			this.checkBox_IsFile.Name = "checkBox_IsFile";
 			this.checkBox_IsFile.Size = new System.Drawing.Size(15, 14);
-			this.checkBox_IsFile.TabIndex = 5;
+			this.checkBox_IsFile.TabIndex = 0;
 			this.toolTip.SetToolTip(this.checkBox_IsFile, "Tick to set file, untick to set command");
 			this.checkBox_IsFile.CheckedChanged += new System.EventHandler(this.checkBox_IsFile_CheckedChanged);
 			// 
@@ -90,7 +90,7 @@ namespace YAT.Gui.Controls
 			this.textBox_Description.Location = new System.Drawing.Point(371, 0);
 			this.textBox_Description.Name = "textBox_Description";
 			this.textBox_Description.Size = new System.Drawing.Size(120, 20);
-			this.textBox_Description.TabIndex = 0;
+			this.textBox_Description.TabIndex = 5;
 			this.toolTip.SetToolTip(this.textBox_Description, "Command Description");
 			this.textBox_Description.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_Description_Validating);
 			// 

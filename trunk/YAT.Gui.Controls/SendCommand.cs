@@ -241,10 +241,12 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <remarks>
+		/// Do not modify <see cref="this.isValidated"/>. Command may already have been validated.
+		/// </remarks>
 		private void SendCommand_Enter(object sender, EventArgs e)
 		{
 			this.focusState = FocusState.Inactive;
-			this.isValidated = false;
 		}
 
 		/// <remarks>
@@ -275,7 +277,7 @@ namespace YAT.Gui.Controls
 
 		private void comboBox_Command_Enter(object sender, EventArgs e)
 		{
-			// Clear "<Enter a command...>" if needed
+			// Clear "<Enter a command...>" if needed.
 			if ((this.focusState == FocusState.Inactive) && !this.command.IsSingleLineCommand)
 			{
 				this.isSettingControls = true;
@@ -368,7 +370,7 @@ namespace YAT.Gui.Controls
 		{
 			if (!this.isSettingControls)
 			{
-				this.isValidated = true; // Commands in history have already been validated
+				this.isValidated = true; // Commands in history have already been validated.
 				SetCommand((Command)((RecentItem<Command>)comboBox_Command.SelectedItem));
 			}
 		}
@@ -464,27 +466,31 @@ namespace YAT.Gui.Controls
 			OnCommandChanged(new EventArgs());
 		}
 
+		/// <remarks>
+		/// Almost duplicated code in <see cref="YAT.Gui.Controls.PredefinedCommandSettingsSet.ShowMultiLineCommandBox"/>.
+		/// </remarks>
 		private void ShowMultiLineCommandBox(Control requestingControl)
 		{
-			// indicate multi line command
+			// Indicate multi line command.
 			this.isSettingControls = true;
 			comboBox_Command.Text      = Command.MultiLineCommandText;
 			comboBox_Command.ForeColor = SystemColors.ControlText;
 			comboBox_Command.Font      = SystemFonts.DefaultFont;
 			this.isSettingControls = false;
 
-			// calculate startup location
+			// Calculate startup location.
 			Rectangle area = requestingControl.RectangleToScreen(requestingControl.DisplayRectangle);
 			Point formStartupLocation = new Point();
 			formStartupLocation.X = area.X + area.Width;
 			formStartupLocation.Y = area.Y + area.Height;
 
-			// show multi line box
+			// Show multi line box.
 			MultiLineBox f = new MultiLineBox(this.command, formStartupLocation);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
 				this.command = f.CommandResult;
+				this.isValidated = true; // Command has been validated by multi line box.
 
 				SetControls();
 				button_SendCommand.Select();
@@ -494,7 +500,7 @@ namespace YAT.Gui.Controls
 			else
 			{
 				SetControls();
-				comboBox_Command.Select();
+				button_SendCommand.Select();
 			}
 		}
 
@@ -506,8 +512,8 @@ namespace YAT.Gui.Controls
 			}
 			else
 			{
-				// notifying the send state is needed when command is automatically
-				//   modified (e.g. cleared) after send
+				// Notifying the send state is needed when command is automatically
+				//   modified (e.g. cleared) after send.
 				this.sendIsRequested = true;
 				OnSendCommandRequest(new EventArgs());
 				this.sendIsRequested = false;

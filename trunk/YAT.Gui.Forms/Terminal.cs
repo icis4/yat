@@ -1978,7 +1978,7 @@ namespace YAT.Gui.Forms
 
 		private void ShowSaveMonitorDialog(Controls.Monitor monitor)
 		{
-			SetFixedStatusText("Saving monitor as...");
+			SetFixedStatusText("Saving data as...");
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Title = "Save As";
 			sfd.Filter = ExtensionSettings.TextFilesFilter;
@@ -2002,7 +2002,7 @@ namespace YAT.Gui.Forms
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
 		private void SaveMonitor(Controls.Monitor monitor, string filePath)
 		{
-			SetFixedStatusText("Saving monitor...");
+			SetFixedStatusText("Saving data...");
 			try
 			{
 				if (ExtensionSettings.IsXmlFile(System.IO.Path.GetExtension(filePath)))
@@ -2012,31 +2012,31 @@ namespace YAT.Gui.Forms
 				else
 					Model.Utilities.RtfWriter.LinesToRtfFile(monitor.SelectedLines, filePath, this.settingsRoot.Format, RichTextBoxStreamType.PlainText);
 
-				SetTimedStatusText("Monitor saved");
+				SetTimedStatusText("Data saved");
 			}
 			catch (System.IO.IOException e)
 			{
-				SetFixedStatusText("Error saving monitor!");
+				SetFixedStatusText("Error saving data!");
 
 				MessageBox.Show
 					(
 					this,
-					"Unable to save file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
+					"Unable to save data to file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
 					e.Message,
 					"File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
 					);
 
-				SetTimedStatusText("Monitor not saved!");
+				SetTimedStatusText("Data not saved!");
 			}
 		}
 
 		private void CopyMonitorToClipboard(Controls.Monitor monitor)
 		{
-			SetFixedStatusText("Copying monitor...");
+			SetFixedStatusText("Copying data to clipboard...");
 			Model.Utilities.RtfWriter.LinesToClipboard(monitor.SelectedLines, this.settingsRoot.Format);
-			SetTimedStatusText("Monitor copied");
+			SetTimedStatusText("Data copied to clipboard");
 		}
 
 		private void ShowPrintMonitorDialog(Controls.Monitor monitor)
@@ -2058,29 +2058,29 @@ namespace YAT.Gui.Forms
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
 		private void PrintMonitor(Controls.Monitor monitor, System.Drawing.Printing.PrinterSettings settings)
 		{
-			SetFixedStatusText("Printing monitor...");
+			SetFixedStatusText("Printing data...");
 
 			try
 			{
 				Model.Utilities.RtfPrinter printer = new Model.Utilities.RtfPrinter(settings);
 				printer.Print(Model.Utilities.RtfWriter.LinesToRichTextBox(monitor.SelectedLines, this.settingsRoot.Format));
-				SetTimedStatusText("Monitor printed");
+				SetTimedStatusText("Data printed");
 			}
 			catch (Exception e)
 			{
-				SetFixedStatusText("Error printing monitor!");
+				SetFixedStatusText("Error printing data!");
 
 				MessageBox.Show
 					(
 					this,
-					"Unable to print monitor." + Environment.NewLine + Environment.NewLine +
+					"Unable to print data." + Environment.NewLine + Environment.NewLine +
 					e.Message,
 					"Print Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
 					);
 
-				SetTimedStatusText("Monitor not printed!");
+				SetTimedStatusText("Data not printed!");
 			}
 		}
 

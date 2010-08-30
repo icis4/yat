@@ -1302,12 +1302,12 @@ namespace YAT.Model
 			SendCommand(this.settingsRoot.SendCommand.Command);
 			this.settingsRoot.SendCommand.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
 				(
-				new RecentItem<Command>(new Command(this.settingsRoot.SendCommand.Command))
+					new RecentItem<Command>(new Command(this.settingsRoot.SendCommand.Command))
 				);
 
-			// Clear command if desired
+			// Clear command if desired.
 			if (!this.settingsRoot.Send.KeepCommand)
-				this.settingsRoot.SendCommand.Command = new Command(); // set command to ""
+				this.settingsRoot.SendCommand.Command = new Command(); // Set command to "".
 		}
 
 		/// <summary>
