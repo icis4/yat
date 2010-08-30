@@ -49,7 +49,7 @@ New:
 - Support for USB Ser/HID implemented (feature request #2825931)
 - Test config including optional user config added (feature request #2981764)
 - Test environment to ensure that TCP/IP works on multiple network interfaces added (bug #2970215)
-- Endurance tests added
+- TCP/IP endurance and stress tests added
 
 Important changes:
 - Serial COM port list gets refreshed when changing the I/O port type
@@ -69,6 +69,8 @@ Fixed bugs:
 - Exception in case of no COM ports fixed (bug #3041642)
 - Exception when closing terminal using 'File > Close' fixed (bugs #2684813 and #2970241)
 - Unhandled exception dialog improved and fixed (feature request #2970243, bug #2970245)
+- Multi-line command issue fixed (bug #2831453)
+- Tab order in predefined command dialog fixed (bug #2914863)
 
 Limitations and known issues:
 - Serial port auto-reopen not yet implementable due to .NET deadlock issue in System.IO.SerialPort

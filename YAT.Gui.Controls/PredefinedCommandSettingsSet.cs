@@ -189,15 +189,26 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		private void textBox_Description_Validating(object sender, CancelEventArgs e)
+		private void checkBox_IsFile_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				SetDescription(textBox_Description.Text);
+			{
+				if (checkBox_IsFile.Checked && !this.command.IsValidFilePath)
+				{
+					ShowOpenFileDialog();
+				}
+				else
+				{
+					this.command.IsFilePath = checkBox_IsFile.Checked;
+					SetControls();
+					OnCommandChanged(new EventArgs());
+				}
+			}
 		}
 
 		private void textBox_Command_Enter(object sender, EventArgs e)
 		{
-			// Clear "<Enter a command...>" if needed
+			// Clear "<Enter a command...>" if needed.
 			if ((this.focusState == FocusState.Inactive) && !this.command.IsSingleLineCommand)
 				ClearCommand();
 
@@ -272,23 +283,6 @@ namespace YAT.Gui.Controls
 			ShowOpenFileDialog();
 		}
 
-		private void checkBox_IsFile_CheckedChanged(object sender, EventArgs e)
-		{
-			if (!this.isSettingControls)
-			{
-				if (checkBox_IsFile.Checked && !this.command.IsValidFilePath)
-				{
-					ShowOpenFileDialog();
-				}
-				else
-				{
-					this.command.IsFilePath = checkBox_IsFile.Checked;
-					SetControls();
-					OnCommandChanged(new EventArgs());
-				}
-			}
-		}
-
 		private void button_SetMultiLineCommand_Click(object sender, EventArgs e)
 		{
 			ShowMultiLineCommandBox(button_SetMultiLineCommand);
@@ -297,6 +291,12 @@ namespace YAT.Gui.Controls
 		private void button_SetFile_Click(object sender, EventArgs e)
 		{
 			ShowOpenFileDialog();
+		}
+
+		private void textBox_Description_Validating(object sender, CancelEventArgs e)
+		{
+			if (!this.isSettingControls)
+				SetDescription(textBox_Description.Text);
 		}
 
 		private void button_Delete_Click(object sender, EventArgs e)
@@ -435,37 +435,41 @@ namespace YAT.Gui.Controls
 			this.isSettingControls = false;
 		}
 
+		/// <remarks>
+		/// Almost duplicated code in <see cref="YAT.Gui.Controls.SendCommand.ShowMultiLineCommandBox"/>.
+		/// </remarks>
 		private void ShowMultiLineCommandBox(Control requestingControl)
 		{
-			// indicate multi line command
+			// Indicate multi line command.
 			this.isSettingControls = true;
 			textBox_Command.Text      = Command.MultiLineCommandText;
 			textBox_Command.ForeColor = SystemColors.ControlText;
 			textBox_Command.Font      = SystemFonts.DefaultFont;
 			this.isSettingControls = false;
 
-			// calculate startup location
+			// Calculate startup location.
 			Rectangle area = requestingControl.RectangleToScreen(requestingControl.DisplayRectangle);
 			Point formStartupLocation = new Point();
 			formStartupLocation.X = area.X + area.Width;
 			formStartupLocation.Y = area.Y + area.Height;
 
-			// show multi line box
+			// Show multi line box.
 			MultiLineBox f = new MultiLineBox(this.command, formStartupLocation);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
 				this.command = f.CommandResult;
+				this.isValidated = true; // Command has been validated by multi line box.
 
 				SetControls();
-				Parent.SelectNextControl(this, true, true, true, false);
+				textBox_Description.Select();
 
 				OnCommandChanged(new EventArgs());
 			}
 			else
 			{
 				SetControls();
-				textBox_Command.Select();
+				textBox_Description.Select();
 			}
 		}
 
@@ -503,8 +507,12 @@ namespace YAT.Gui.Controls
 				this.command.IsFilePath = true;
 				this.command.FilePath = ofd.FileName;
 				OnCommandChanged(new EventArgs());
-				SetControls();
 			}
+
+			// Set controls in any case:
+			//   OK => Command needs to be refreshed.
+			//   C  => Checkbox needs to be refreshed.
+			SetControls();
 		}
 
 		#endregion
