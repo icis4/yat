@@ -10,7 +10,7 @@
     <RootNamespace>MKY.Utilities</RootNamespace>
     <AssemblyName>MKY.Utilities</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Properties\MKY.Utilities.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Properties\MKY.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -114,6 +114,7 @@
     <Compile Include="Xml\TolerantXmlSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\MKY.snk" />
     <None Include="Properties\MKY.Utilities.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -10,7 +10,7 @@
     <RootNamespace>MKY.IO.Serial</RootNamespace>
     <AssemblyName>MKY.IO.Serial</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Properties\MKY.IO.Serial.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Properties\MKY.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\MKY.IO.Serial.snk" />
+    <None Include="Properties\MKY.snk" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ALAZ\Source\ALAZ.SystemEx.NetEx\ALAZ.SystemEx.NetEx.csproj">

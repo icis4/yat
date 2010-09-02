@@ -74,6 +74,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		//==========================================================================================
 
 		/// <summary></summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown")]
 		[TearDown]
 		public virtual void TearDown()
 		{

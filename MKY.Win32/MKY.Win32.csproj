@@ -13,7 +13,7 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Properties\MKY.Win32.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Properties\MKY.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -63,6 +63,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\MKY.snk" />
     <None Include="Properties\MKY.Win32.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
