@@ -24,7 +24,9 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+
 using Microsoft.Win32.SafeHandles;
 
 #endregion
@@ -53,9 +55,9 @@ namespace MKY.Win32
 		/// <summary>
 		/// Class encapsulating native Win32 types, constants and functions.
 		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
 		public static class Native
 		{
 			#region Types
@@ -72,6 +74,8 @@ namespace MKY.Win32
 			/// <summary>
 			/// Encapsulates Win32 GENERIC_ file access flags into a C# flag enum.
 			/// </summary>
+			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
 			[Flags]
 			[CLSCompliant(false)]
 			public enum Access : uint
@@ -89,6 +93,7 @@ namespace MKY.Win32
 			/// <summary>
 			/// Encapsulates Win32 FILE_SHARE_ file share mode flags into a C# flag enum.
 			/// </summary>
+			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
 			[Flags]
 			[CLSCompliant(false)]
 			public enum ShareMode : uint
@@ -118,6 +123,7 @@ namespace MKY.Win32
 			/// <summary>
 			/// Encapsulates Win32 FILE_ATTRIBUTE_ and FILE_FLAG_ values into a C# flag enum.
 			/// </summary>
+			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
 			[Flags]
 			[CLSCompliant(false)]
 			public enum AttributesAndFlags : uint

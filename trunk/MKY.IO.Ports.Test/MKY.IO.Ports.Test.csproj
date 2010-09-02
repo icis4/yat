@@ -65,7 +65,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\MKY.IO.Ports.Test.snk" />
     <None Include="Properties\MKY.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

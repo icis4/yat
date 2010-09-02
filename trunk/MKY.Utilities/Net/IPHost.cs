@@ -153,18 +153,18 @@ namespace MKY.Utilities.Net
 		{
 			IPAddress address;
 
-			if     ((string.Compare(host, Localhost_string, true) == 0) ||
-				    (string.Compare(host, Localhost_stringNice, true) == 0))
+			if     ((string.Compare(host, Localhost_string, StringComparison.OrdinalIgnoreCase) == 0) ||
+			        (string.Compare(host, Localhost_stringNice, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				result = new XIPHost(IPHostType.Localhost);
 				return (true);
 			}
-			else if (string.Compare(host, IPv4Localhost_string, true) == 0)
+			else if (string.Compare(host, IPv4Localhost_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XIPHost(IPHostType.IPv4Localhost);
 				return (true);
 			}
-			else if (string.Compare(host, IPv6Localhost_string, true) == 0)
+			else if (string.Compare(host, IPv6Localhost_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XIPHost(IPHostType.IPv6Localhost);
 				return (true);

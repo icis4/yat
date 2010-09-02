@@ -141,20 +141,20 @@ namespace YAT.Model.Types
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(PredefinedCommandPage casted)
+		public bool Equals(PredefinedCommandPage other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			// Compare page name, i.e. header of page.
-			if (this.pageName != casted.pageName)
+			if (this.pageName != other.pageName)
 				return (false);
 
 			// Compare commands, i.e. contents of page.
 			for (int i = 0; i < this.commands.Count; i++)
 			{
-				if (this.commands[i] != casted.commands[i])
+				if (this.commands[i] != other.commands[i])
 					return (false);
 			}
 			return (true);

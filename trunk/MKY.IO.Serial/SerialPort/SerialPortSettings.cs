@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -196,6 +197,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts")]
 		[XmlElement("RtsEnabled")]
 		public virtual bool RtsEnabled
 		{
@@ -211,6 +213,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr")]
 		[XmlElement("DtrEnabled")]
 		public virtual bool DtrEnabled
 		{
@@ -247,23 +250,23 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(SerialPortSettings casted)
+		public bool Equals(SerialPortSettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
 
-				(this.portId                 == casted.portId) &&
-				(this.communication          == casted.communication) &&
-				(this.autoReopen             == casted.autoReopen) &&
-				(this.replaceParityErrors    == casted.replaceParityErrors) &&
-				(this.parityErrorReplacement == casted.parityErrorReplacement) &&
-				(this.rtsEnabled             == casted.rtsEnabled) &&
-				(this.dtrEnabled             == casted.dtrEnabled)
+				(this.portId                 == other.portId) &&
+				(this.communication          == other.communication) &&
+				(this.autoReopen             == other.autoReopen) &&
+				(this.replaceParityErrors    == other.replaceParityErrors) &&
+				(this.parityErrorReplacement == other.parityErrorReplacement) &&
+				(this.rtsEnabled             == other.rtsEnabled) &&
+				(this.dtrEnabled             == other.dtrEnabled)
 			);
 		}
 

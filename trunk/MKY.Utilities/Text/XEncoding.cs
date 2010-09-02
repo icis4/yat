@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 using MKY.Utilities.Types;
@@ -34,9 +35,9 @@ namespace MKY.Utilities.Text
 	/// <remarks>
 	/// Enum value corresponds to code page.
 	/// </remarks>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1630:DocumentationTextMustContainWhitespace", Justification = "Text is given by the MSDN.")]
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1631:DocumentationMustMeetCharacterPercentage", Justification = "Text is given by the MSDN.")]
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1632:DocumentationTextMustMeetMinimumCharacterLength", Justification = "Text is given by the MSDN.")]
+	[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1630:DocumentationTextMustContainWhitespace", Justification = "Text is given by the MSDN.")]
+	[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1631:DocumentationMustMeetCharacterPercentage", Justification = "Text is given by the MSDN.")]
+	[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1632:DocumentationTextMustMeetMinimumCharacterLength", Justification = "Text is given by the MSDN.")]
 	public enum SupportedEncoding
 	{
 		//------------------------------------------------------------------------------------------
@@ -869,7 +870,7 @@ namespace MKY.Utilities.Text
 		{
 			foreach (XEncodingInfo info in infos)
 			{
-				if (string.Compare(encoding, info.BetterDisplayName, true) == 0)
+				if (string.Compare(encoding, info.BetterDisplayName, StringComparison.OrdinalIgnoreCase) == 0)
 				{
 					result = new XEncoding(info.SupportedEncoding);
 					return (true);
@@ -878,13 +879,13 @@ namespace MKY.Utilities.Text
 
 			foreach (EncodingInfo info in Encoding.GetEncodings())
 			{
-				if (string.Compare(encoding, info.Name, true) == 0)
+				if (string.Compare(encoding, info.Name, StringComparison.OrdinalIgnoreCase) == 0)
 				{
 					result = new XEncoding((SupportedEncoding)info.CodePage);
 					return (true);
 				}
 
-				if (string.Compare(encoding, info.DisplayName, true) == 0)
+				if (string.Compare(encoding, info.DisplayName, StringComparison.OrdinalIgnoreCase) == 0)
 				{
 					result = new XEncoding((SupportedEncoding)info.CodePage);
 					return (true);

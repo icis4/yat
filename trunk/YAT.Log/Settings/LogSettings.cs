@@ -733,34 +733,34 @@ namespace YAT.Log.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(LogSettings casted)
+		public bool Equals(LogSettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
 
-				(this.rootPath              == casted.rootPath) &&
-				(this.rootFileName          == casted.rootFileName) &&
-				(this.rawLogTx              == casted.rawLogTx) &&
-				(this.rawLogBidir           == casted.rawLogBidir) &&
-				(this.rawLogRx              == casted.rawLogRx) &&
-				(this.rawExtension          == casted.rawExtension) &&
-				(this.neatLogTx             == casted.neatLogTx) &&
-				(this.neatLogBidir          == casted.neatLogBidir) &&
-				(this.neatLogRx             == casted.neatLogRx) &&
-				(this.neatExtension         == casted.neatExtension) &&
-				(this.writeMode             == casted.writeMode) &&
-				(this.subdirectoriesFormat  == casted.subdirectoriesFormat) &&
-				(this.subdirectoriesChannel == casted.subdirectoriesChannel) &&
-				(this.nameFormat            == casted.nameFormat) &&
-				(this.nameChannel           == casted.nameChannel) &&
-				(this.nameDate              == casted.nameDate) &&
-				(this.nameTime              == casted.nameTime) &&
-				(this.nameSeparator         == casted.nameSeparator)
+				(this.rootPath              == other.rootPath) &&
+				(this.rootFileName          == other.rootFileName) &&
+				(this.rawLogTx              == other.rawLogTx) &&
+				(this.rawLogBidir           == other.rawLogBidir) &&
+				(this.rawLogRx              == other.rawLogRx) &&
+				(this.rawExtension          == other.rawExtension) &&
+				(this.neatLogTx             == other.neatLogTx) &&
+				(this.neatLogBidir          == other.neatLogBidir) &&
+				(this.neatLogRx             == other.neatLogRx) &&
+				(this.neatExtension         == other.neatExtension) &&
+				(this.writeMode             == other.writeMode) &&
+				(this.subdirectoriesFormat  == other.subdirectoriesFormat) &&
+				(this.subdirectoriesChannel == other.subdirectoriesChannel) &&
+				(this.nameFormat            == other.nameFormat) &&
+				(this.nameChannel           == other.nameChannel) &&
+				(this.nameDate              == other.nameDate) &&
+				(this.nameTime              == other.nameTime) &&
+				(this.nameSeparator         == other.nameSeparator)
 			);
 		}
 

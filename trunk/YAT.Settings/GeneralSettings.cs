@@ -162,20 +162,20 @@ namespace YAT.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(GeneralSettings casted)
+		public bool Equals(GeneralSettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
 
-				this.autoOpenWorkspace      == casted.autoOpenWorkspace &&
-				this.autoSaveWorkspace      == casted.autoSaveWorkspace &&
-				this.useRelativePaths       == casted.useRelativePaths &&
-				this.detectSerialPortsInUse == casted.detectSerialPortsInUse
+				this.autoOpenWorkspace      == other.autoOpenWorkspace &&
+				this.autoSaveWorkspace      == other.autoSaveWorkspace &&
+				this.useRelativePaths       == other.useRelativePaths &&
+				this.detectSerialPortsInUse == other.detectSerialPortsInUse
 			);
 		}
 

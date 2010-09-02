@@ -17,7 +17,9 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 
 using MKY.Utilities;
 using MKY.Utilities.Configuration;
@@ -168,6 +170,7 @@ namespace MKY.Net.Test
 	{
 		private static readonly SettingsSection staticSettings = new SettingsSection();
 
+		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
 		static SettingsProvider()
 		{
 			SettingsSection settings;
@@ -203,7 +206,8 @@ namespace MKY.Net.Test
 	}
 
 	/// <summary></summary>
-	public class IPv4LoopbackIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
+	sealed public class IPv4LoopbackIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
 		public IPv4LoopbackIsAvailableCategoryAttribute()
@@ -213,7 +217,8 @@ namespace MKY.Net.Test
 	}
 
 	/// <summary></summary>
-	public class IPv6LoopbackIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
+	sealed public class IPv6LoopbackIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
 		public IPv6LoopbackIsAvailableCategoryAttribute()
@@ -223,7 +228,8 @@ namespace MKY.Net.Test
 	}
 
 	/// <summary></summary>
-	public class SpecificIPv4InterfaceIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
+	sealed public class SpecificIPv4InterfaceIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
 		public SpecificIPv4InterfaceIsAvailableCategoryAttribute()
@@ -233,7 +239,8 @@ namespace MKY.Net.Test
 	}
 
 	/// <summary></summary>
-	public class SpecificIPv6InterfaceIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
+	sealed public class SpecificIPv6InterfaceIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
 		public SpecificIPv6InterfaceIsAvailableCategoryAttribute()

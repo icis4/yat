@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
 using System.Xml.Serialization;
@@ -88,7 +89,7 @@ namespace MKY.Utilities.Test.Net
 		//==========================================================================================
 
 		/// <summary></summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown")]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown")]
 		[TearDown]
 		public virtual void TearDown()
 		{

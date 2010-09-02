@@ -266,25 +266,25 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(FormatSettings casted)
+		public bool Equals(FormatSettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
 
-				(this.font              == casted.font) &&
-				(this.txDataFormat      == casted.txDataFormat) &&
-				(this.txControlFormat   == casted.txControlFormat) &&
-				(this.rxDataFormat      == casted.rxDataFormat) &&
-				(this.rxControlFormat   == casted.rxControlFormat) &&
-				(this.timeStampFormat   == casted.timeStampFormat) &&
-				(this.lengthFormat      == casted.lengthFormat) &&
-				(this.whiteSpacesFormat == casted.whiteSpacesFormat) &&
-				(this.errorFormat       == casted.errorFormat)
+				(this.font              == other.font) &&
+				(this.txDataFormat      == other.txDataFormat) &&
+				(this.txControlFormat   == other.txControlFormat) &&
+				(this.rxDataFormat      == other.rxDataFormat) &&
+				(this.rxControlFormat   == other.rxControlFormat) &&
+				(this.timeStampFormat   == other.timeStampFormat) &&
+				(this.lengthFormat      == other.lengthFormat) &&
+				(this.whiteSpacesFormat == other.whiteSpacesFormat) &&
+				(this.errorFormat       == other.errorFormat)
 			);
 		}
 

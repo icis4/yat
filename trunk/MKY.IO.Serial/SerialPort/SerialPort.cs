@@ -36,6 +36,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
 
@@ -120,6 +121,7 @@ namespace MKY.IO.Serial
 	/// - try GC.Collect(Forced) => no exceptions on GC, exception gets fired afterwards
 	/// ============================================================================================
 	/// </remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces")]
 	public class SerialPort : IIOProvider, IDisposable
 	{
 		#region Types
@@ -577,6 +579,7 @@ namespace MKY.IO.Serial
 			}
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private void CloseAndDisposePort()
 		{
 			if (this.port != null)
@@ -781,6 +784,7 @@ namespace MKY.IO.Serial
 			}
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private void port_PinChangedAsync(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
 			// If pin has changed, but access to port throws exception, port has been shut down,
@@ -866,6 +870,7 @@ namespace MKY.IO.Serial
 		private bool aliveTimer_BreakState = false;
 #endif
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private void aliveTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			if (!IsDisposed && IsStarted)
@@ -937,6 +942,7 @@ namespace MKY.IO.Serial
 			}
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private void reopenTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			if (AutoReopenEnabledAndAllowed)

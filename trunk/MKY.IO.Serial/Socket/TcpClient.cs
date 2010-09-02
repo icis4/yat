@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
 
@@ -56,7 +57,7 @@ namespace MKY.IO.Serial
 		// Static Fields
 		//==========================================================================================
 
-		private static int staticInstanceCounter = 0;
+		private static int staticInstanceCounter;
 
 		#endregion
 
@@ -65,7 +66,7 @@ namespace MKY.IO.Serial
 		// Fields
 		//==========================================================================================
 
-		private int instanceId = 0;
+		private int instanceId;
 		private bool isDisposed;
 
 		private System.Net.IPAddress remoteIPAddress;
@@ -252,26 +253,6 @@ namespace MKY.IO.Serial
 				{
 					case SocketState.Connected:
 					case SocketState.WaitingForReconnect:
-					{
-						return (true);
-					}
-					default:
-					{
-						return (false);
-					}
-				}
-			}
-		}
-
-		private bool IsConnectedOrConnecting
-		{
-			get
-			{
-				AssertNotDisposed();
-				switch (this.state)
-				{
-					case SocketState.Connecting:
-					case SocketState.Connected:
 					{
 						return (true);
 					}
@@ -615,6 +596,7 @@ namespace MKY.IO.Serial
 			}
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private void reconnectTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			if (AutoReconnectEnabledAndAllowed)
@@ -687,6 +669,10 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
+		/// <remarks>
+		/// Named accoring to .NET <see cref="System.Net.IPEndPoint"/>.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint")]
 		public virtual string ToShortEndPointString()
 		{
 			return (this.remoteIPAddress + ":" + this.remotePort);

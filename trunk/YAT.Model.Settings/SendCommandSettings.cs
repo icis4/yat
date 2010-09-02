@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -131,18 +132,18 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(SendCommandSettings casted)
+		public bool Equals(SendCommandSettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
 
-				(this.command == casted.command) &&
-				(this.recentsCommands == casted.recentsCommands)
+				(this.command == other.command) &&
+				(this.recentsCommands == other.recentsCommands)
 			);
 		}
 
@@ -185,13 +186,13 @@ namespace YAT.Model.Settings
 		// Comparision ;-)
 		//------------------------------------------------------------------------------------------
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "This is the easter egg!")]
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1203:ConstantsMustAppearBeforeFields", Justification = "This is the easter egg!")]
 		private const string EasterEggCommand = @"\easteregg";
 
 		/// <summary></summary>
 		public static bool IsEasterEggCommand(string command)
 		{
-			return (string.Compare(command, EasterEggCommand, true) == 0);
+			return (string.Compare(command, EasterEggCommand, StringComparison.OrdinalIgnoreCase) == 0);
 		}
 
 		/// <summary></summary>

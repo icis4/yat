@@ -125,22 +125,22 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public static bool TryParse(string type, out XSocketHostType result)
 		{
-			if (string.Compare(type, TcpClient_string, true) == 0)
+			if      (string.Compare(type, TcpClient_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XSocketHostType(SocketHostType.TcpClient);
 				return (true);
 			}
-			else if (string.Compare(type, TcpServer_string, true) == 0)
+			else if (string.Compare(type, TcpServer_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XSocketHostType(SocketHostType.TcpServer);
 				return (true);
 			}
-			else if (string.Compare(type, TcpAutoSocket_string, true) == 0)
+			else if (string.Compare(type, TcpAutoSocket_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XSocketHostType(SocketHostType.TcpAutoSocket);
 				return (true);
 			}
-			else if (string.Compare(type, Udp_string, true) == 0)
+			else if (string.Compare(type, Udp_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XSocketHostType(SocketHostType.Udp);
 				return (true);

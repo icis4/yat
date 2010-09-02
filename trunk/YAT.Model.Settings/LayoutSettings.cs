@@ -274,28 +274,28 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(LayoutSettings casted)
+		public bool Equals(LayoutSettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
 
-				(this.txMonitorPanelIsVisible    == casted.txMonitorPanelIsVisible) &&
-				(this.bidirMonitorPanelIsVisible == casted.bidirMonitorPanelIsVisible) &&
-				(this.rxMonitorPanelIsVisible    == casted.rxMonitorPanelIsVisible) &&
-				(this.monitorOrientation         == casted.monitorOrientation) &&
-				(this.txMonitorSplitterRatio     == casted.txMonitorSplitterRatio) &&
-				(this.rxMonitorSplitterRatio     == casted.rxMonitorSplitterRatio) &&
+				(this.txMonitorPanelIsVisible    == other.txMonitorPanelIsVisible) &&
+				(this.bidirMonitorPanelIsVisible == other.bidirMonitorPanelIsVisible) &&
+				(this.rxMonitorPanelIsVisible    == other.rxMonitorPanelIsVisible) &&
+				(this.monitorOrientation         == other.monitorOrientation) &&
+				(this.txMonitorSplitterRatio     == other.txMonitorSplitterRatio) &&
+				(this.rxMonitorSplitterRatio     == other.rxMonitorSplitterRatio) &&
 
-				(this.predefinedPanelIsVisible   == casted.predefinedPanelIsVisible) &&
-				(this.predefinedSplitterRatio    == casted.predefinedSplitterRatio) &&
+				(this.predefinedPanelIsVisible   == other.predefinedPanelIsVisible) &&
+				(this.predefinedSplitterRatio    == other.predefinedSplitterRatio) &&
 
-				(this.sendCommandPanelIsVisible  == casted.sendCommandPanelIsVisible) &&
-				(this.sendFilePanelIsVisible     == casted.sendFilePanelIsVisible)
+				(this.sendCommandPanelIsVisible  == other.sendCommandPanelIsVisible) &&
+				(this.sendFilePanelIsVisible     == other.sendFilePanelIsVisible)
 			);
 		}
 

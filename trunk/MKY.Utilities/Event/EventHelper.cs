@@ -43,6 +43,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 
@@ -64,6 +65,7 @@ namespace MKY.Utilities.Event
 		public class UnhandledExceptionEventArgs : EventArgs
 		{
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 			public readonly Exception UnhandledException;
 
 			/// <summary></summary>

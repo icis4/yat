@@ -139,18 +139,18 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(UsbHidDeviceSettings casted)
+		public bool Equals(UsbHidDeviceSettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
 
-				(this.deviceInfo == casted.deviceInfo) &&
-				(this.autoReopen == casted.autoReopen)
+				(this.deviceInfo == other.deviceInfo) &&
+				(this.autoReopen == other.autoReopen)
 			);
 		}
 

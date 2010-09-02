@@ -139,14 +139,14 @@ namespace MKY.Utilities.Recent
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(RecentItem<T> casted)
+		public bool Equals(RecentItem<T> other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			// Do not compare time stamp.
-			return ((this.item != null) && (this.item.Equals(casted.item)));
+			return ((this.item != null) && (this.item.Equals(other.item)));
 		}
 
 		/// <summary>

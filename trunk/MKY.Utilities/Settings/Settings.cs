@@ -204,20 +204,20 @@ namespace MKY.Utilities.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(Settings casted)
+		public bool Equals(Settings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
-			if (this.GetType() == casted.GetType())
+			if (this.GetType() == other.GetType())
 			{
 				// Compare all nodes, settings values have already been compared by inheriting class.
-				if (this.nodes.Count == casted.nodes.Count)
+				if (this.nodes.Count == other.nodes.Count)
 				{
 					for (int i = 0; i < this.nodes.Count; i++)
 					{
-						if (this.nodes[i] != casted.nodes[i])
+						if (this.nodes[i] != other.nodes[i])
 							return (false);
 					}
 					return (true);

@@ -134,32 +134,32 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public static bool TryParse(string type, out XIOType result)
 		{
-			if      (string.Compare(type, SerialPort_string, true) == 0)
+			if      (string.Compare(type, SerialPort_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XIOType(IOType.SerialPort);
 				return (true);
 			}
-			else if (string.Compare(type, TcpClient_string, true) == 0)
+			else if (string.Compare(type, TcpClient_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XIOType(IOType.TcpClient);
 				return (true);
 			}
-			else if (string.Compare(type, TcpServer_string, true) == 0)
+			else if (string.Compare(type, TcpServer_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XIOType(IOType.TcpServer);
 				return (true);
 			}
-			else if (string.Compare(type, TcpAutoSocket_string, true) == 0)
+			else if (string.Compare(type, TcpAutoSocket_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XIOType(IOType.TcpAutoSocket);
 				return (true);
 			}
-			else if (string.Compare(type, Udp_string, true) == 0)
+			else if (string.Compare(type, Udp_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XIOType(IOType.Udp);
 				return (true);
 			}
-			else if (string.Compare(type, UsbHid_string, true) == 0)
+			else if (string.Compare(type, UsbHid_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XIOType(IOType.UsbHid);
 				return (true);

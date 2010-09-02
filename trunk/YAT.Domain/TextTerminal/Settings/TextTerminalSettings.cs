@@ -247,24 +247,24 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(TextTerminalSettings casted)
+		public bool Equals(TextTerminalSettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
 
-				(this.separateTxRxEol  == casted.separateTxRxEol) &&
-				(this.txEol            == casted.txEol) &&
-				(this.rxEol            == casted.rxEol) &&
-				(this.encoding         == casted.encoding) &&
-				(this.showEol          == casted.showEol) &&
-				(this.lineSendDelay    == casted.lineSendDelay) &&
-				(this.waitForResponse  == casted.waitForResponse) &&
-				(this.charSubstitution == casted.charSubstitution)
+				(this.separateTxRxEol  == other.separateTxRxEol) &&
+				(this.txEol            == other.txEol) &&
+				(this.rxEol            == other.rxEol) &&
+				(this.encoding         == other.encoding) &&
+				(this.showEol          == other.showEol) &&
+				(this.lineSendDelay    == other.lineSendDelay) &&
+				(this.waitForResponse  == other.waitForResponse) &&
+				(this.charSubstitution == other.charSubstitution)
 			);
 		}
 

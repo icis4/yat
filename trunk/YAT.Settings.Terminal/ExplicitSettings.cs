@@ -196,13 +196,13 @@ namespace YAT.Settings.Terminal
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(ExplicitSettings casted)
+		public bool Equals(ExplicitSettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
-			return (base.Equals((MKY.Utilities.Settings.Settings)casted)); // Compare all settings nodes.
+			return (base.Equals((MKY.Utilities.Settings.Settings)other)); // Compare all settings nodes.
 		}
 
 		public override int GetHashCode()

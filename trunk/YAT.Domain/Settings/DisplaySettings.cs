@@ -334,27 +334,27 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(DisplaySettings casted)
+		public bool Equals(DisplaySettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
 
-				(this.separateTxRxRadix         == casted.separateTxRxRadix) &&
-				(this.txRadix                   == casted.txRadix) &&
-				(this.rxRadix                   == casted.rxRadix) &&
-				(this.showRadix                 == casted.showRadix) &&
-				(this.showTimeStamp             == casted.showTimeStamp) &&
-				(this.showLength                == casted.showLength) &&
-				(this.showConnectTime           == casted.showConnectTime) &&
-				(this.showCounters              == casted.showCounters) &&
-				(this.txMaxLineCount            == casted.txMaxLineCount) &&
-				(this.rxMaxLineCount            == casted.rxMaxLineCount) &&
-				(this.directionLineBreakEnabled == casted.directionLineBreakEnabled)
+				(this.separateTxRxRadix         == other.separateTxRxRadix) &&
+				(this.txRadix                   == other.txRadix) &&
+				(this.rxRadix                   == other.rxRadix) &&
+				(this.showRadix                 == other.showRadix) &&
+				(this.showTimeStamp             == other.showTimeStamp) &&
+				(this.showLength                == other.showLength) &&
+				(this.showConnectTime           == other.showConnectTime) &&
+				(this.showCounters              == other.showCounters) &&
+				(this.txMaxLineCount            == other.txMaxLineCount) &&
+				(this.rxMaxLineCount            == other.rxMaxLineCount) &&
+				(this.directionLineBreakEnabled == other.directionLineBreakEnabled)
 			);
 		}
 

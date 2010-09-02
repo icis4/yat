@@ -78,7 +78,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\MKY.IO.Ports.snk" />
     <None Include="MKY.IO.Ports.cd" />
     <None Include="Properties\MKY.snk" />
   </ItemGroup>

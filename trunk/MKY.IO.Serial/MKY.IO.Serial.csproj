@@ -67,7 +67,6 @@
     <Compile Include="Usb\UsbHidDeviceSettings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\MKY.IO.Serial.snk" />
     <None Include="Properties\MKY.snk" />
   </ItemGroup>
   <ItemGroup>

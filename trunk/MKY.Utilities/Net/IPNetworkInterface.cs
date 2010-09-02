@@ -138,25 +138,25 @@ namespace MKY.Utilities.Net
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(IPNetworkInterface casted)
+		public bool Equals(IPNetworkInterface other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			if ((IPNetworkInterfaceType)UnderlyingEnum == IPNetworkInterfaceType.Other)
 			{
 				return
 				(
-					base.Equals((XEnum)casted) &&
+					base.Equals((XEnum)other) &&
 
-					(this.otherAddress     == casted.otherAddress) &&
-					(this.otherDescription == casted.otherDescription)
+					(this.otherAddress     == other.otherAddress) &&
+					(this.otherDescription == other.otherDescription)
 				);
 			}
 			else
 			{
-				return (base.Equals((XEnum)casted));
+				return (base.Equals((XEnum)other));
 			}
 		}
 
@@ -234,8 +234,8 @@ namespace MKY.Utilities.Net
 		/// <summary></summary>
 		public static bool TryParse(string networkInterface, out IPNetworkInterface result)
 		{
-			if     ((string.Compare(networkInterface, Any_string, true) == 0) ||
-					(string.Compare(networkInterface, Any_stringNice, true) == 0))
+			if     ((string.Compare(networkInterface, Any_string, StringComparison.OrdinalIgnoreCase) == 0) ||
+			        (string.Compare(networkInterface, Any_stringNice, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				result = new IPNetworkInterface(IPNetworkInterfaceType.Any);
 				return (true);

@@ -323,26 +323,26 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(NewTerminalSettings casted)
+		public bool Equals(NewTerminalSettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
 
-				(this.terminalType == casted.terminalType) &&
-				(this.ioType               == casted.ioType) &&
-				(this.serialPortId         == casted.serialPortId) &&
-				(this.socketRemoteHost     == casted.socketRemoteHost) &&
-				(this.socketRemotePort     == casted.socketRemotePort) &&
-				(this.socketLocalInterface == casted.socketLocalInterface) &&
-				(this.socketLocalTcpPort   == casted.socketLocalTcpPort) &&
-				(this.socketLocalUdpPort   == casted.socketLocalUdpPort) &&
-				(this.usbHidDeviceInfo     == casted.usbHidDeviceInfo) &&
-				(this.startTerminal        == casted.startTerminal)
+				(this.terminalType == other.terminalType) &&
+				(this.ioType               == other.ioType) &&
+				(this.serialPortId         == other.serialPortId) &&
+				(this.socketRemoteHost     == other.socketRemoteHost) &&
+				(this.socketRemotePort     == other.socketRemotePort) &&
+				(this.socketLocalInterface == other.socketLocalInterface) &&
+				(this.socketLocalTcpPort   == other.socketLocalTcpPort) &&
+				(this.socketLocalUdpPort   == other.socketLocalUdpPort) &&
+				(this.usbHidDeviceInfo     == other.usbHidDeviceInfo) &&
+				(this.startTerminal        == other.startTerminal)
 			);
 		}
 

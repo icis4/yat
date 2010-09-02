@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -368,14 +369,14 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(SerialPortId casted)
+		public bool Equals(SerialPortId other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			// Only field 'name' is relevant. Other properties are for convenience only.
-			return (this.name == casted.name);
+			return (this.name == other.name);
 		}
 
 		/// <summary></summary>
@@ -735,6 +736,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public override bool IsValid(ITypeDescriptorContext context, object value)
 		{
 			if (value is int)

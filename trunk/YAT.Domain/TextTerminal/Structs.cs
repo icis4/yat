@@ -29,6 +29,7 @@ using System.Xml.Serialization;
 namespace YAT.Domain
 {
 	/// <summary></summary>
+	[Serializable]
 	public struct TextLineSendDelay
 	{
 		/// <summary></summary>
@@ -94,6 +95,7 @@ namespace YAT.Domain
 	}
 
 	/// <summary></summary>
+	[Serializable]
 	public struct WaitForResponse
 	{
 		/// <summary></summary>
