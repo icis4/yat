@@ -26,6 +26,23 @@ I removed the lock, and the issue mentioned above got solved.
 Also, there seems to be a null reference issue in ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.StopCreators() on line 311 (FWaitCreatorsDisposing.WaitOne). I added a try-catch around the statement.
 
 
+Another issue I found in SocketListener.BeginAcceptCallback on line #229 AcceptAsync(e2):
+
+An unhandled System.ObjectDisposedException was thrown while executing this test : The SafeHandle has been closed.
+
+at System.Net.Sockets.Socket.AcceptAsync(SocketAsyncEventArgs e)
+at ALAZ.SystemEx.NetEx.SocketsEx.SocketListener.BeginAcceptCallback(Object state) in D:\Sandboxes\YAT\_Trunk\ALAZ\Source\ALAZ.SystemEx.NetEx\SocketsEx\SocketListener.cs:Zeile 229.
+at System.Threading._ThreadPoolWaitCallback.WaitCallback_Context(Object state)
+at System.Threading.ExecutionContext.runTryCode(Object userData)
+at System.Runtime.CompilerServices.RuntimeHelpers.ExecuteCodeWithGuaranteedCleanup(TryCode code, CleanupCode backoutCode, Object userData)
+at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+at System.Threading._ThreadPoolWaitCallback.PerformWaitCallbackInternal(_ThreadPoolWaitCallback tpWaitCallBack)
+at System.Threading._ThreadPoolWaitCallback.PerformWaitCallback(Object state)
+
+This issue occured while performing endurance tests using YAT AutoSockets.
+
+
 Best regards,
 Matthias
 

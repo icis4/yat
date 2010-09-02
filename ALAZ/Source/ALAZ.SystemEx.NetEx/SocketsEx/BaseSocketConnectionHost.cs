@@ -312,7 +312,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 						{
 							FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
 						}
-						catch (Exception ex)
+						catch (NullReferenceException ex)
 						{
 							MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
 						}
