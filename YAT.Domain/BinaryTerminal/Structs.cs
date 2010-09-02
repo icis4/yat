@@ -29,6 +29,7 @@ using System.Xml.Serialization;
 namespace YAT.Domain
 {
 	/// <summary></summary>
+	[Serializable]
 	public struct BinaryLengthLineBreak
 	{
 		/// <summary></summary>
@@ -89,6 +90,7 @@ namespace YAT.Domain
 	}
 
 	/// <summary></summary>
+	[Serializable]
 	public struct BinarySequenceLineBreak
 	{
 		/// <summary></summary>
@@ -149,6 +151,7 @@ namespace YAT.Domain
 	}
 
 	/// <summary></summary>
+	[Serializable]
 	public struct BinaryTimedLineBreak
 	{
 		/// <summary></summary>

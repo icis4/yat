@@ -20,6 +20,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Windows.Forms;
 
@@ -270,7 +271,7 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Emphasize line breaks.")]
 		private void comboBox_RemoteHost_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -324,7 +325,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Table-style coding.")]
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Table-style coding.")]
 		private void textBox_RemotePort_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -377,7 +378,7 @@ namespace YAT.Gui.Controls
 			SetLocalInterfaceList();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Table-style coding.")]
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Table-style coding.")]
 		private void textBox_LocalPort_Validating(object sender, CancelEventArgs e)
 		{
 			if (!this.isSettingControls)

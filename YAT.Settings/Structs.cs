@@ -25,6 +25,7 @@ using System.Xml.Serialization;
 
 namespace YAT.Settings
 {
+	[Serializable]
 	public struct SaveInfo
 	{
 		[XmlElement("TimeStamp")]

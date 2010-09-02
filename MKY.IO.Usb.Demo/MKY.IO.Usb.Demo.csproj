@@ -73,7 +73,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\MKY.IO.Usb.Demo.snk" />
     <None Include="Properties\MKY.snk" />
   </ItemGroup>
   <ItemGroup>

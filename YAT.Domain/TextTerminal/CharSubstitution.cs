@@ -117,17 +117,17 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public static bool TryParse(string substitution, out XCharSubstitution result)
 		{
-			if      (string.Compare(substitution, None_string, true) == 0)
+			if      (string.Compare(substitution, None_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XCharSubstitution(CharSubstitution.None);
 				return (true);
 			}
-			else if (string.Compare(substitution, ToUpper_string, true) == 0)
+			else if (string.Compare(substitution, ToUpper_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XCharSubstitution(CharSubstitution.ToUpper);
 				return (true);
 			}
-			else if (string.Compare(substitution, ToLower_string, true) == 0)
+			else if (string.Compare(substitution, ToLower_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XCharSubstitution(CharSubstitution.ToLower);
 				return (true);

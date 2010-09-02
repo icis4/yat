@@ -286,13 +286,13 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(DeviceInfo casted)
+		public bool Equals(DeviceInfo other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
-			return (this.path == casted.path);
+			return (this.path == other.path);
 		}
 
 		/// <summary></summary>

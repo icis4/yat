@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
@@ -31,6 +32,7 @@ namespace YAT.Domain
 	public class IORequestEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly IORequest Request;
 
 		/// <summary></summary>
@@ -47,6 +49,7 @@ namespace YAT.Domain
 		public readonly IOErrorSeverity Severity;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly string Message;
 
 		/// <summary></summary>
@@ -67,6 +70,7 @@ namespace YAT.Domain
 	public class SerialPortErrorEventArgs : IOErrorEventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly System.IO.Ports.SerialError SerialPortError;
 
 		/// <summary></summary>
@@ -81,6 +85,7 @@ namespace YAT.Domain
 	public class RawElementEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly RawElement Element;
 
 		/// <summary></summary>
@@ -94,6 +99,7 @@ namespace YAT.Domain
 	public class DisplayElementsEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly DisplayElementCollection Elements;
 
 		/// <summary></summary>
@@ -107,6 +113,7 @@ namespace YAT.Domain
 	public class DisplayLinesEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly List<DisplayLine> Lines;
 
 		/// <summary></summary>
@@ -120,6 +127,7 @@ namespace YAT.Domain
 	public class RepositoryEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly RepositoryType Repository;
 
 		/// <summary></summary>

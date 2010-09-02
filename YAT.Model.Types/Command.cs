@@ -501,20 +501,20 @@ namespace YAT.Model.Types
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(Command casted)
+		public bool Equals(Command other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				(this.isDefined    == casted.isDefined) &&
-				(this.description  == casted.description) &&
-				XArray.ValuesEqual(this.commandLines, casted.commandLines) &&
-				(this.defaultRadix == casted.defaultRadix) &&
-				(this.isFilePath   == casted.isFilePath) &&
-				(this.filePath     == casted.filePath)
+				(this.isDefined    == other.isDefined) &&
+				(this.description  == other.description) &&
+				XArray.ValuesEqual(this.commandLines, other.commandLines) &&
+				(this.defaultRadix == other.defaultRadix) &&
+				(this.isFilePath   == other.isFilePath) &&
+				(this.filePath     == other.filePath)
 			);
 		}
 

@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Text;
 using System.Xml.Serialization;
@@ -175,6 +176,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		[XmlElement("RemoteHost")]
 		public virtual string RemoteHost
 		{
@@ -252,6 +254,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		[XmlElement("LocalInterface")]
 		public virtual string LocalInterface
 		{
@@ -422,23 +425,23 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(SocketSettings casted)
+		public bool Equals(SocketSettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
 
-				(this.hostType               == casted.hostType) &&
-				(this.remoteHost             == casted.remoteHost) &&
-				(this.remotePort             == casted.remotePort) &&
-				(this.localInterface         == casted.localInterface) &&
-				(this.localTcpPort           == casted.localTcpPort) &&
-				(this.localUdpPort           == casted.localUdpPort) &&
-				(this.tcpClientAutoReconnect == casted.tcpClientAutoReconnect)
+				(this.hostType               == other.hostType) &&
+				(this.remoteHost             == other.remoteHost) &&
+				(this.remotePort             == other.remotePort) &&
+				(this.localInterface         == other.localInterface) &&
+				(this.localTcpPort           == other.localTcpPort) &&
+				(this.localUdpPort           == other.localUdpPort) &&
+				(this.tcpClientAutoReconnect == other.tcpClientAutoReconnect)
 			);
 		}
 

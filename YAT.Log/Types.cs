@@ -106,16 +106,16 @@ namespace YAT.Log
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(FileNameSeparator casted)
+		public bool Equals(FileNameSeparator other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				(this.Separator   == casted.Separator) &&
-				(this.Description == casted.Description)
+				(this.Separator   == other.Separator) &&
+				(this.Description == other.Description)
 			);
 		}
 

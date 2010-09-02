@@ -108,16 +108,16 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(SendFileSettings casted)
+		public bool Equals(SendFileSettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
-				(this.command == casted.command)
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				(this.command == other.command)
 			);
 		}
 

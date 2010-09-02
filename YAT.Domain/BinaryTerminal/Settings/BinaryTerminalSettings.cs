@@ -183,16 +183,16 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(BinaryTerminalSettings casted)
+		public bool Equals(BinaryTerminalSettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
-				(this.separateTxRxDisplay == casted.separateTxRxDisplay)
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				(this.separateTxRxDisplay == other.separateTxRxDisplay)
 			);
 		}
 

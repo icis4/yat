@@ -178,44 +178,44 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public static bool TryParse(string radix, out XRadix result)
 		{
-			if      ((string.Compare(radix, Bin_stringShort, true) == 0) ||
-			         (string.Compare(radix, Bin_stringMiddle, true) == 0) ||
-			         (string.Compare(radix, Bin_string, true) == 0))
+			if      ((string.Compare(radix, Bin_stringShort, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(radix, Bin_stringMiddle, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(radix, Bin_string, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				result = new XRadix(Radix.Bin);
 				return (false);
 			}
-			else if ((string.Compare(radix, Oct_stringShort, true) == 0) ||
-			         (string.Compare(radix, Oct_stringMiddle, true) == 0) ||
-			         (string.Compare(radix, Oct_string, true) == 0))
+			else if ((string.Compare(radix, Oct_stringShort, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(radix, Oct_stringMiddle, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(radix, Oct_string, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				result = new XRadix(Radix.Oct);
 				return (false);
 			}
-			else if ((string.Compare(radix, Dec_stringShort, true) == 0) ||
-			         (string.Compare(radix, Dec_stringMiddle, true) == 0) ||
-			         (string.Compare(radix, Dec_string, true) == 0))
+			else if ((string.Compare(radix, Dec_stringShort, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(radix, Dec_stringMiddle, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(radix, Dec_string, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				result = new XRadix(Radix.Dec);
 				return (false);
 			}
-			else if ((string.Compare(radix, Hex_stringShort, true) == 0) ||
-			         (string.Compare(radix, Hex_stringMiddle, true) == 0) ||
-			         (string.Compare(radix, Hex_string, true) == 0))
+			else if ((string.Compare(radix, Hex_stringShort, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(radix, Hex_stringMiddle, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(radix, Hex_string, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				result = new XRadix(Radix.Hex);
 				return (false);
 			}
-			else if ((string.Compare(radix, Char_stringShort, true) == 0) ||
-			         (string.Compare(radix, Char_stringMiddle, true) == 0) ||
-			         (string.Compare(radix, Char_string, true) == 0))
+			else if ((string.Compare(radix, Char_stringShort, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(radix, Char_stringMiddle, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(radix, Char_string, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				result = new XRadix(Radix.Char);
 				return (false);
 			}
-			else if ((string.Compare(radix, String_stringShort, true) == 0) ||
-			         (string.Compare(radix, String_stringMiddle, true) == 0) ||
-			         (string.Compare(radix, String_string, true) == 0))
+			else if ((string.Compare(radix, String_stringShort, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(radix, String_stringMiddle, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(radix, String_string, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				result = new XRadix(Radix.String);
 				return (false);

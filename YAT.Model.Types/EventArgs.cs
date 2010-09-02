@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace YAT.Model.Types
@@ -28,9 +29,11 @@ namespace YAT.Model.Types
 	public class PredefinedCommandEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly int Page;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly int Command;
 
 		/// <summary></summary>

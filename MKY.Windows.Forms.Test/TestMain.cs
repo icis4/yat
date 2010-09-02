@@ -26,8 +26,18 @@ namespace MKY.Windows.Forms.Test
 	/// <summary>
 	/// Test application for <see cref="MKY.Windows.Forms"/>.
 	/// </summary>
-	public class TestMain
+	/// <remarks>
+	/// Sealed to prevent FxCop "CA1052:StaticHolderTypesShouldBeSealeds".
+	/// </remarks>
+	sealed public class TestMain
 	{
+		/// <remarks>
+		/// Prevent FxCop "CA1053:StaticHolderTypesShouldNotHaveConstructors".
+		/// </remarks>
+		private TestMain()
+		{
+		}
+
 		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>

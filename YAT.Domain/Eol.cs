@@ -170,44 +170,44 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public static bool TryParse(string eol, out XEol result)
 		{
-			if      ((string.Compare(eol, None_string, true) == 0) ||
-					 (string.Compare(eol, None_stringSequence, true) == 0))
+			if      ((string.Compare(eol, None_string, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(eol, None_stringSequence, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				result = new XEol(Eol.None);
 				return (true);
 			}
-			else if ((string.Compare(eol, Cr_string, true) == 0) ||
-					 (string.Compare(eol, Cr_stringNative, true) == 0))
+			else if ((string.Compare(eol, Cr_string, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(eol, Cr_stringNative, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				result = new XEol(Eol.Cr);
 				return (true);
 			}
-			else if ((string.Compare(eol, Lf_string, true) == 0) ||
-					 (string.Compare(eol, Lf_stringNative, true) == 0))
+			else if ((string.Compare(eol, Lf_string, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(eol, Lf_stringNative, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				result = new XEol(Eol.Lf);
 				return (true);
 			}
-			else if ((string.Compare(eol, CrLf_string, true) == 0) ||
-					 (string.Compare(eol, CrLf_stringNative, true) == 0))
+			else if ((string.Compare(eol, CrLf_string, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(eol, CrLf_stringNative, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				result = new XEol(Eol.CrLf);
 				return (true);
 			}
-			else if ((string.Compare(eol, LfCr_string, true) == 0) ||
-					 (string.Compare(eol, LfCr_stringNative, true) == 0))
+			else if ((string.Compare(eol, LfCr_string, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(eol, LfCr_stringNative, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				result = new XEol(Eol.LfCr);
 				return (true);
 			}
-			else if ((string.Compare(eol, Tab_string, true) == 0) ||
-					 (string.Compare(eol, Tab_stringNative, true) == 0))
+			else if ((string.Compare(eol, Tab_string, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(eol, Tab_stringNative, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				result = new XEol(Eol.Tab);
 				return (true);
 			}
-			else if ((string.Compare(eol, Nul_string, true) == 0) ||
-				     (string.Compare(eol, Nul_stringNative, true) == 0))
+			else if ((string.Compare(eol, Nul_string, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(eol, Nul_stringNative, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				result = new XEol(Eol.Nul);
 				return (true);

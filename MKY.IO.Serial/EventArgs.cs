@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace MKY.IO.Serial
@@ -28,6 +29,7 @@ namespace MKY.IO.Serial
 	public class IORequestEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly IORequest Request;
 
 		/// <summary></summary>
@@ -41,9 +43,11 @@ namespace MKY.IO.Serial
 	public class IOErrorEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly IOErrorSeverity Severity;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly string Message;
 
 		/// <summary></summary>
@@ -64,6 +68,7 @@ namespace MKY.IO.Serial
 	public class SerialPortIOErrorEventArgs : IOErrorEventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly System.IO.Ports.SerialError SerialPortError;
 
 		/// <summary></summary>

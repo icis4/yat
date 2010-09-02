@@ -182,21 +182,21 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(SerialCommunicationSettings casted)
+		public bool Equals(SerialCommunicationSettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
 
-				(this.baudRate    == casted.baudRate) &&
-				(this.dataBits    == casted.dataBits) &&
-				(this.parity      == casted.parity) &&
-				(this.stopBits    == casted.stopBits) &&
-				(this.flowControl == casted.flowControl)
+				(this.baudRate    == other.baudRate) &&
+				(this.dataBits    == other.dataBits) &&
+				(this.parity      == other.parity) &&
+				(this.stopBits    == other.stopBits) &&
+				(this.flowControl == other.flowControl)
 			);
 		}
 

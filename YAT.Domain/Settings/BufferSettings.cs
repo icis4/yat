@@ -135,18 +135,18 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(BufferSettings casted)
+		public bool Equals(BufferSettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
 
-				(this.txBufferSize == casted.txBufferSize) &&
-				(this.rxBufferSize == casted.rxBufferSize)
+				(this.txBufferSize == other.txBufferSize) &&
+				(this.rxBufferSize == other.rxBufferSize)
 			);
 		}
 

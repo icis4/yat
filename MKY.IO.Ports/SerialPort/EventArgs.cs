@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace MKY.IO.Ports
@@ -29,6 +30,7 @@ namespace MKY.IO.Ports
 	public class SerialDataReceivedEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly System.IO.Ports.SerialData EventType = System.IO.Ports.SerialData.Chars;
 
 		/// <summary></summary>
@@ -49,6 +51,7 @@ namespace MKY.IO.Ports
 	public class SerialErrorReceivedEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly System.IO.Ports.SerialError EventType = System.IO.Ports.SerialError.Frame;
 
 		/// <summary></summary>
@@ -69,6 +72,7 @@ namespace MKY.IO.Ports
 	public class SerialPinChangedEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly MKY.IO.Ports.SerialPinChange EventType = MKY.IO.Ports.SerialPinChange.Unknown;
 
 		/// <summary></summary>

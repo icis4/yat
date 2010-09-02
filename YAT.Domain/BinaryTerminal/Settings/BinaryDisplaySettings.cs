@@ -143,19 +143,19 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(BinaryDisplaySettings casted)
+		public bool Equals(BinaryDisplaySettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
 
-				(this.lengthLineBreak   == casted.lengthLineBreak) &&
-				(this.sequenceLineBreak == casted.sequenceLineBreak) &&
-				(this.timedLineBreak    == casted.timedLineBreak)
+				(this.lengthLineBreak   == other.lengthLineBreak) &&
+				(this.sequenceLineBreak == other.sequenceLineBreak) &&
+				(this.timedLineBreak    == other.timedLineBreak)
 			);
 		}
 

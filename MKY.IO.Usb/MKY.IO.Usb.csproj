@@ -62,7 +62,6 @@
     <Compile Include="DeviceInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\MKY.IO.Usb.snk" />
     <None Include="Properties\MKY.snk" />
   </ItemGroup>
   <ItemGroup>

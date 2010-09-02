@@ -231,19 +231,19 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(IOSettings casted)
+		public bool Equals(IOSettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
 
-				(this.ioType                       == casted.ioType) &&
-				(this.serialParityErrorReplacement == casted.serialParityErrorReplacement) &&
-				(this.endianess                    == casted.endianess)
+				(this.ioType                       == other.ioType) &&
+				(this.serialParityErrorReplacement == other.serialParityErrorReplacement) &&
+				(this.endianess                    == other.endianess)
 			);
 		}
 

@@ -81,7 +81,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\MKY.snk" />
-    <None Include="Properties\MKY.Windows.Forms.snk" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Chronometer.resx">

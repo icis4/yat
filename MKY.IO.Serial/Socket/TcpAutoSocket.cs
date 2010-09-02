@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
 
@@ -77,7 +78,7 @@ namespace MKY.IO.Serial
 		// Static Fields
 		//==========================================================================================
 
-		private static int staticInstanceCounter = 0;
+		private static int staticInstanceCounter;
 		private static Random staticRandom = new Random();
 
 		#endregion
@@ -87,7 +88,7 @@ namespace MKY.IO.Serial
 		// Fields
 		//==========================================================================================
 
-		private int instanceId = 0;
+		private int instanceId;
 		private bool isDisposed;
 
 		private System.Net.IPAddress remoteIPAddress;
@@ -501,7 +502,10 @@ namespace MKY.IO.Serial
 			StartConnecting();
 		}
 
-		// Try to start as client
+		/// <summary>
+		/// Try to start as client.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private void StartConnecting()
 		{
 			int delay = staticRandom.Next(MinConnectDelay, MaxConnectDelay);
@@ -525,7 +529,10 @@ namespace MKY.IO.Serial
 			}
 		}
 
-		// try to start as server
+		/// <summary>
+		/// Try to start as server.
+		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private void StartListening()
 		{
 			int delay = staticRandom.Next(MinListenDelay, MaxListenDelay);
@@ -625,7 +632,7 @@ namespace MKY.IO.Serial
 
 		private void CreateClient(System.Net.IPAddress remoteIPAddress, int remotePort)
 		{
-			this.client = new TcpClient(this.remoteIPAddress, this.remotePort);
+			this.client = new TcpClient(remoteIPAddress, remotePort);
 
 			this.client.IOChanged    += new EventHandler(this.client_IOChanged);
 			this.client.IOError      += new EventHandler<IOErrorEventArgs>(this.client_IOError);
@@ -730,7 +737,7 @@ namespace MKY.IO.Serial
 
 		private void CreateServer(System.Net.IPAddress localIPAddress, int localPort)
 		{
-			this.server = new TcpServer(this.localIPAddress, this.localPort);
+			this.server = new TcpServer(localIPAddress, localPort);
 
 			this.server.IOChanged    += new EventHandler(this.server_IOChanged);
 			this.server.IOError      += new EventHandler<IOErrorEventArgs>(this.server_IOError);
@@ -870,6 +877,10 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
+		/// <remarks>
+		/// Named accoring to .NET <see cref="System.Net.IPEndPoint"/>.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint")]
 		public virtual string ToShortEndPointString()
 		{
 			return ("Server:" + this.localPort + " / " + this.remoteIPAddress + ":" + this.remotePort);

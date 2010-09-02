@@ -94,12 +94,12 @@ namespace MKY.Utilities.Windows.Forms
 		/// <summary></summary>
 		public static bool TryParse(string orientation, out XOrientation result)
 		{
-			if (string.Compare(orientation, Horizontal_string, true) == 0)
+			if      (string.Compare(orientation, Horizontal_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XOrientation(Orientation.Horizontal);
 				return (true);
 			}
-			else if (string.Compare(orientation, Vertical_string, true) == 0)
+			else if (string.Compare(orientation, Vertical_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XOrientation(Orientation.Vertical);
 				return (true);

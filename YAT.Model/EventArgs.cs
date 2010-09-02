@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Windows.Forms;
 
@@ -29,6 +30,7 @@ namespace YAT.Model
 	public class WorkspaceEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly Workspace Workspace;
 
 		/// <summary></summary>
@@ -42,6 +44,7 @@ namespace YAT.Model
 	public class TerminalEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly Terminal Terminal;
 
 		/// <summary></summary>
@@ -55,9 +58,11 @@ namespace YAT.Model
 	public class SavedEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly string FilePath;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly bool IsAutoSave;
 
 		/// <summary></summary>
@@ -79,6 +84,7 @@ namespace YAT.Model
 	public class ClosedEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly bool IsParentClose;
 
 		/// <summary></summary>
@@ -98,6 +104,7 @@ namespace YAT.Model
 	public class StatusTextEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly string Text;
 
 		/// <summary></summary>
@@ -111,21 +118,27 @@ namespace YAT.Model
 	public class MessageInputEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly string Text = "";
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly string Caption = "";
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly MessageBoxButtons Buttons = MessageBoxButtons.OK;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly MessageBoxIcon Icon = MessageBoxIcon.Information;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly MessageBoxDefaultButton DefaultButton = MessageBoxDefaultButton.Button1;
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public DialogResult Result;
 
 		/// <summary></summary>
@@ -152,6 +165,7 @@ namespace YAT.Model
 	public class DialogEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public DialogResult Result;
 
 		/// <summary></summary>

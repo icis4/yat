@@ -118,17 +118,17 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public static bool TryParse(string keyword, out XKeyword result)
 		{
-			if      (string.Compare(keyword, Delay_string, true) == 0)
+			if      (string.Compare(keyword, Delay_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XKeyword(Keyword.Delay);
 				return (true);
 			}
-			else if (string.Compare(keyword, Eol_string, true) == 0)
+			else if (string.Compare(keyword, Eol_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XKeyword(Keyword.Eol);
 				return (true);
 			}
-			else if (string.Compare(keyword, NoEol_string, true) == 0)
+			else if (string.Compare(keyword, NoEol_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XKeyword(Keyword.NoEol);
 				return (true);

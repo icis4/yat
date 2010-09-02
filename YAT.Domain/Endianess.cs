@@ -112,12 +112,12 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public static bool TryParse(string endianess, out XEndianess result)
 		{
-			if      (string.Compare(endianess, BigEndian_string, true) == 0)
+			if      (string.Compare(endianess, BigEndian_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XEndianess(Endianess.BigEndian);
 				return (true);
 			}
-			else if (string.Compare(endianess, LittleEndian_string, true) == 0)
+			else if (string.Compare(endianess, LittleEndian_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new XEndianess(Endianess.LittleEndian);
 				return (true);

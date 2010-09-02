@@ -131,18 +131,18 @@ namespace YAT.Domain.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(SendSettings casted)
+		public bool Equals(SendSettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
 
-				(this.keepCommand    == casted.keepCommand) &&
-				(this.copyPredefined == casted.copyPredefined)
+				(this.keepCommand    == other.keepCommand) &&
+				(this.copyPredefined == other.copyPredefined)
 			);
 		}
 

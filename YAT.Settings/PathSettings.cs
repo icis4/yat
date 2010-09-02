@@ -170,21 +170,21 @@ namespace YAT.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(PathSettings casted)
+		public bool Equals(PathSettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
 
-				(this.terminalFilesPath  == casted.terminalFilesPath) &&
-				(this.workspaceFilesPath == casted.workspaceFilesPath) &&
-				(this.sendFilesPath      == casted.sendFilesPath) &&
-				(this.logFilesPath       == casted.logFilesPath) &&
-				(this.monitorFilesPath   == casted.monitorFilesPath)
+				(this.terminalFilesPath  == other.terminalFilesPath) &&
+				(this.workspaceFilesPath == other.workspaceFilesPath) &&
+				(this.sendFilesPath      == other.sendFilesPath) &&
+				(this.logFilesPath       == other.logFilesPath) &&
+				(this.monitorFilesPath   == other.monitorFilesPath)
 			);
 		}
 

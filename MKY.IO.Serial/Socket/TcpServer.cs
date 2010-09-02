@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
 
@@ -65,7 +66,7 @@ namespace MKY.IO.Serial
 		// Static Fields
 		//==========================================================================================
 
-		private static int staticInstanceCounter = 0;
+		private static int staticInstanceCounter;
 
 		#endregion
 
@@ -74,7 +75,7 @@ namespace MKY.IO.Serial
 		// Fields
 		//==========================================================================================
 
-		private int instanceId = 0;
+		private int instanceId;
 		private bool isDisposed;
 
 		private System.Net.IPAddress localIPAddress;
@@ -433,12 +434,6 @@ namespace MKY.IO.Serial
 			//SetStateAndNotify(SocketState.Reset);
 		}
 
-		private void RestartSocket()
-		{
-			Stop();
-			Start();
-		}
-
 		private void DisposeSocketAndSocketConnections()
 		{
 			if (this.socket != null)
@@ -597,6 +592,10 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
+		/// <remarks>
+		/// Named accoring to .NET <see cref="System.Net.IPEndPoint"/>.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint")]
 		public virtual string ToShortEndPointString()
 		{
 			return ("Server:" + this.localPort);

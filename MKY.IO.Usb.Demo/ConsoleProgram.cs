@@ -22,8 +22,18 @@ using System;
 namespace MKY.IO.Usb.Demo
 {
 	/// <summary></summary>
-	public class ConsoleProgram
+	/// <remarks>
+	/// Sealed to prevent FxCop "CA1052:StaticHolderTypesShouldBeSealeds".
+	/// </remarks>
+	sealed public class ConsoleProgram
 	{
+		/// <remarks>
+		/// Prevent FxCop "CA1053:StaticHolderTypesShouldNotHaveConstructors".
+		/// </remarks>
+		private ConsoleProgram()
+		{
+		}
+
 		/// <summary></summary>
 		[STAThread]
 		public static void Main(string[] args)

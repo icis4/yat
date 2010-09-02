@@ -122,32 +122,32 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static bool TryParse(string parity, out XParity result)
 		{
-			if      ((string.Compare(parity, Even_string, true) == 0) ||
-			         (string.Compare(parity, Even_stringShort, true) == 0))
+			if      ((string.Compare(parity, Even_string, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(parity, Even_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				result = new XParity(Parity.Even);
 				return (true);
 			}
-			else if ((string.Compare(parity, Odd_string, true) == 0) ||
-			         (string.Compare(parity, Odd_stringShort, true) == 0))
+			else if ((string.Compare(parity, Odd_string, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(parity, Odd_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				result = new XParity(Parity.Odd);
 				return (true);
 			}
-			else if ((string.Compare(parity, None_string, true) == 0) ||
-			         (string.Compare(parity, None_stringShort, true) == 0))
+			else if ((string.Compare(parity, None_string, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(parity, None_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				result = new XParity(Parity.None);
 				return (true);
 			}
-			else if ((string.Compare(parity, Mark_string, true) == 0) ||
-			         (string.Compare(parity, Mark_stringShort, true) == 0))
+			else if ((string.Compare(parity, Mark_string, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(parity, Mark_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				result = new XParity(Parity.Mark);
 				return (true);
 			}
-			else if ((string.Compare(parity, Space_string, true) == 0) ||
-			         (string.Compare(parity, Space_stringShort, true) == 0))
+			else if ((string.Compare(parity, Space_string, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(parity, Space_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				result = new XParity(Parity.Space);
 				return (true);

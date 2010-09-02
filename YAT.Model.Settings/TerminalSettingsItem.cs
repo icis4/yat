@@ -149,18 +149,18 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(TerminalSettingsItem casted)
+		public bool Equals(TerminalSettingsItem other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
 
-				(this.filePath == casted.filePath) &&
-				(this.guid     == casted.guid)
+				(this.filePath == other.filePath) &&
+				(this.guid     == other.guid)
 			);
 		}
 

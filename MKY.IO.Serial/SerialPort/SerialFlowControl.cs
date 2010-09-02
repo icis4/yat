@@ -127,13 +127,13 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public static new XSerialFlowControl Parse(string flowControl)
 		{
-			if      ((string.Compare(flowControl, Manual_string, true) == 0) ||
-					 (string.Compare(flowControl, Manual_stringShort, true) == 0))
+			if      ((string.Compare(flowControl, Manual_string, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(flowControl, Manual_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				return (new XSerialFlowControl(SerialFlowControl.Manual));
 			}
-			else if ((string.Compare(flowControl, RS485_string, true) == 0) ||
-					 (string.Compare(flowControl, RS485_stringShort, true) == 0))
+			else if ((string.Compare(flowControl, RS485_string, StringComparison.OrdinalIgnoreCase) == 0) ||
+			         (string.Compare(flowControl, RS485_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
 			{
 				return (new XSerialFlowControl(SerialFlowControl.RS485));
 			}

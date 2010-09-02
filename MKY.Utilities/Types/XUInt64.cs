@@ -19,6 +19,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace MKY.Utilities.Types
@@ -31,7 +32,7 @@ namespace MKY.Utilities.Types
 		/// <summary>
 		/// Converts value into binary string (e.g. "0000000000000000000000000000000000000000000000000000000000010100").
 		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1631:DocumentationTextMustMeetCharacterPercentage", Justification = "Sorry, 64 bits are that long...")]
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1631:DocumentationTextMustMeetCharacterPercentage", Justification = "Sorry, 64 bits are that long...")]
 		[CLSCompliant(false)]
 		public static string ConvertToBinaryString(ulong value)
 		{
@@ -41,7 +42,7 @@ namespace MKY.Utilities.Types
 		/// <summary>
 		/// Converts value into binary string (e.g. "0000000000000000000000000000000000000000000000000000000000010100").
 		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1631:DocumentationTextMustMeetCharacterPercentage", Justification = "Sorry, 64 bits are that long...")]
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1631:DocumentationTextMustMeetCharacterPercentage", Justification = "Sorry, 64 bits are that long...")]
 		[CLSCompliant(false)]
 		public static string ConvertToBinaryString(ulong value, ulong max)
 		{

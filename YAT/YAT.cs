@@ -34,9 +34,17 @@ namespace YAT
 	/// <remarks>
 	/// This class is separated into its own .exe project for those who want to use YAT components
 	/// within their own application context.
+	/// Sealed to prevent FxCop "CA1052:StaticHolderTypesShouldBeSealeds".
 	/// </remarks>
-	public class YAT
+	sealed public class YAT
 	{
+		/// <remarks>
+		/// Prevent FxCop "CA1053:StaticHolderTypesShouldNotHaveConstructors".
+		/// </remarks>
+		private YAT()
+		{
+		}
+
 		/// <summary>
 		/// Displays welcome screen and starts YAT.
 		/// </summary>

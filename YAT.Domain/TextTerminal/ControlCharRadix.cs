@@ -106,14 +106,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public static new XControlCharRadix Parse(string radix)
 		{
-			if (string.Compare(radix, AsciiMnemonic_string, true) == 0)
-			{
+			if (string.Compare(radix, AsciiMnemonic_string, StringComparison.OrdinalIgnoreCase) == 0)
 				return (new XControlCharRadix(ControlCharRadix.AsciiMnemonic));
-			}
 			else
-			{
 				return ((XControlCharRadix)XRadix.Parse(radix));
-			}
 		}
 
 		#endregion

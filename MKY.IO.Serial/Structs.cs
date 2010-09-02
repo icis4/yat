@@ -26,6 +26,7 @@ using System.Xml.Serialization;
 namespace MKY.IO.Serial
 {
 	/// <summary></summary>
+	[Serializable]
 	public struct AutoRetry
 	{
 		/// <summary></summary>

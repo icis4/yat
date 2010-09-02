@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using MKY.Utilities.Types;
 
@@ -34,6 +35,7 @@ namespace MKY.IO.Ports
 	#pragma warning disable 1591
 
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
 	public enum DataBits
 	{
 		Four  = 4,

@@ -323,7 +323,7 @@ namespace YAT.Controller
 				// Check for help args.
 				foreach (string helpArg in HelpArg)
 				{
-					if (string.Compare(arg, helpArg, true) == 0)
+					if (string.Compare(arg, helpArg, StringComparison.OrdinalIgnoreCase) == 0)
 					{
 						this.commandLineHelpIsRequested = true;
 						argsParsed++;
@@ -364,7 +364,7 @@ namespace YAT.Controller
 			{
 				foreach (string recentArg in RecentArg)
 				{
-					if (string.Compare(arg, recentArg, true) == 0)
+					if (string.Compare(arg, recentArg, StringComparison.OrdinalIgnoreCase) == 0)
 					{
 						ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll();
 						bool recentsReady = (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count > 0);

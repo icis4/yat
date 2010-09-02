@@ -17,7 +17,9 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 
 using MKY.Utilities;
 using MKY.Utilities.Configuration;
@@ -86,6 +88,7 @@ namespace MKY.IO.Ports.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs")]
 		public virtual bool SerialPortAIsAvailable
 		{
 			get { return (bool)this["SerialPortAIsAvailable"]; }
@@ -97,6 +100,7 @@ namespace MKY.IO.Ports.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs")]
 		public virtual bool SerialPortBIsAvailable
 		{
 			get { return (bool)this["SerialPortBIsAvailable"]; }
@@ -189,6 +193,7 @@ namespace MKY.IO.Ports.Test
 	{
 		private static readonly SettingsSection staticSettings = new SettingsSection();
 
+		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
 		static SettingsProvider()
 		{
 			SettingsSection settings;
@@ -214,15 +219,21 @@ namespace MKY.IO.Ports.Test
 	public static class SettingsCategoryStrings
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs")]
 		public static readonly string SerialPortAIsAvailable = "Serial port " + SettingsProvider.Settings.SerialPortA + " is available";
+
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs")]
 		public static readonly string SerialPortBIsAvailable = "Serial port " + SettingsProvider.Settings.SerialPortB + " is available";
+
 		/// <summary></summary>
 		public static readonly string SerialPortsAreInterconnected = "Serial ports are interconnected";
 	}
 
 	/// <summary></summary>
-	public class SerialPortAIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs")]
+	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
+	sealed public class SerialPortAIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
 		public SerialPortAIsAvailableCategoryAttribute()
@@ -232,7 +243,9 @@ namespace MKY.IO.Ports.Test
 	}
 
 	/// <summary></summary>
-	public class SerialPortBIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs")]
+	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
+	sealed public class SerialPortBIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
 		public SerialPortBIsAvailableCategoryAttribute()
@@ -242,7 +255,8 @@ namespace MKY.IO.Ports.Test
 	}
 
 	/// <summary></summary>
-	public class SerialPortsAreInterconnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
+	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
+	sealed public class SerialPortsAreInterconnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
 		public SerialPortsAreInterconnectedCategoryAttribute()

@@ -210,14 +210,14 @@ namespace MKY.Utilities.Types
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(XEnum casted)
+		public bool Equals(XEnum other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			// Attention, Enum doesn't override operators == and !=, use Equals().
-			return ((UnderlyingEnum != null) && (UnderlyingEnum.Equals(casted.UnderlyingEnum)));
+			return ((UnderlyingEnum != null) && (UnderlyingEnum.Equals(other.UnderlyingEnum)));
 		}
 
 		/// <summary>

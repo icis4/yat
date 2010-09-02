@@ -19,6 +19,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace MKY.Utilities.Time
@@ -72,6 +73,7 @@ namespace MKY.Utilities.Time
 	public class TimeSpanEventArgs : EventArgs
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
 		public readonly TimeSpan TimeSpan;
 
 		/// <summary></summary>

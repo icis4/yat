@@ -161,20 +161,20 @@ namespace YAT.Model.Settings
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(MainWindowSettings casted)
+		public bool Equals(MainWindowSettings other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)casted) && // Compare all settings nodes.
+				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
 
-				(this.startPosition == casted.startPosition) &&
-				(this.windowState   == casted.windowState) &&
-				(this.location      == casted.location) &&
-				(this.size          == casted.size)
+				(this.startPosition == other.startPosition) &&
+				(this.windowState   == other.windowState) &&
+				(this.location      == other.location) &&
+				(this.size          == other.size)
 			);
 		}
 

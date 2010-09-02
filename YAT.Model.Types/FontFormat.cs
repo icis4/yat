@@ -158,17 +158,17 @@ namespace YAT.Model.Types
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(FontFormat casted)
+		public bool Equals(FontFormat other)
 		{
 			// Ensure that object.operator==() is called.
-			if ((object)casted == null)
+			if ((object)other == null)
 				return (false);
 
 			return
 			(
-				(this.name  == casted.name) &&
-				(this.size  == casted.size) &&
-				(this.style == casted.style)
+				(this.name  == other.name) &&
+				(this.size  == other.size) &&
+				(this.style == other.style)
 			);
 		}
 
