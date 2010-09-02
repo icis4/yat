@@ -18,6 +18,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Threading;
+
 using NUnit.Framework;
 
 namespace MKY.IO.Serial.Test.Socket
@@ -26,6 +28,15 @@ namespace MKY.IO.Serial.Test.Socket
 	[TestFixture]
 	public class SimpleTcpConnectionTest
 	{
+		#region Private Constants
+		//==========================================================================================
+		// Private Constants
+		//==========================================================================================
+
+		private const int AutoSocketDelay = 1500;
+
+		#endregion
+
 		#region Tests
 		//==========================================================================================
 		// Tests
@@ -158,6 +169,7 @@ namespace MKY.IO.Serial.Test.Socket
 
 			Utilities.StartAutoSocketAsServer(out autoSocket, out serverPort);
 			Utilities.WaitForStart(autoSocket, "TCP auto socket could not be started");
+			Thread.Sleep(AutoSocketDelay); // Wait a while to let AutoSocket become a server.
 			Utilities.StartClientAndConnect(out client, serverPort);
 			Utilities.WaitForStart(client, "TCP client could not be started");
 			Utilities.WaitForConnect(client, autoSocket, "TCP client could not be connected to server");
@@ -186,6 +198,7 @@ namespace MKY.IO.Serial.Test.Socket
 
 			Utilities.StartAutoSocketAsServer(out autoSocket, out serverPort);
 			Utilities.WaitForStart(autoSocket, "TCP auto socket could not be started");
+			Thread.Sleep(AutoSocketDelay); // Wait a while to let AutoSocket become a server.
 			Utilities.StartClientAndConnect(out client, serverPort);
 			Utilities.WaitForStart(client, "TCP client could not be started");
 			Utilities.WaitForConnect(client, autoSocket, "TCP client could not be connected to server");

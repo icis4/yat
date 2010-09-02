@@ -63,10 +63,24 @@ namespace MKY.IO.Serial.Test.Socket
 		}
 
 		/// <summary></summary>
-		[Test, Repeat(10), Category("Endurance")]
-		public virtual void TestConsecutiveConnectAndShutdownEndurance()
+		[Test, Repeat(10), Category("Endurance 10 Minutes")]
+		public virtual void TestConsecutiveServerClientConnectAndShutdownEndurance10Minutes()
 		{
 			TestConsecutiveServerClientConnectAndShutdown();
+		}
+
+		/// <summary></summary>
+		[Test, Repeat(6), Category("Endurance 60 Minutes")]
+		public virtual void TestConsecutiveServerClientConnectAndShutdownEndurance60Minutes()
+		{
+			TestConsecutiveServerClientConnectAndShutdownEndurance10Minutes();
+		}
+
+		/// <summary></summary>
+		[Test, Repeat(int.MaxValue), Category("Endurance Forever")]
+		public virtual void TestConsecutiveServerClientConnectAndShutdownEnduranceForever()
+		{
+			TestConsecutiveServerClientConnectAndShutdownEndurance60Minutes();
 		}
 
 		#endregion
@@ -78,7 +92,7 @@ namespace MKY.IO.Serial.Test.Socket
 
 		/// <summary></summary>
 		/// <remarks>
-		/// A cycle takes around 5 seconds. 10 cycles around a minute.
+		/// A cycle takes around 15 seconds. 10 cycles around 3 minutes.
 		/// </remarks>
 		[Test, Repeat(10)]
 		public virtual void TestConsecutiveAutoSocketAutoSocketConnectAndShutdown()
@@ -95,10 +109,24 @@ namespace MKY.IO.Serial.Test.Socket
 		}
 
 		/// <summary></summary>
-		[Test, Repeat(10), Category("Endurance")]
-		public virtual void TestConsecutiveAutoSocketAutoSocketConnectAndShutdownEndurance()
+		[Test, Repeat(3), Category("Endurance 10 Minutes")]
+		public virtual void TestConsecutiveAutoSocketAutoSocketConnectAndShutdownEndurance10Minutes()
 		{
 			TestConsecutiveAutoSocketAutoSocketConnectAndShutdown();
+		}
+
+		/// <summary></summary>
+		[Test, Repeat(6), Category("Endurance 60 Minutes")]
+		public virtual void TestConsecutiveAutoSocketAutoSocketConnectAndShutdownEndurance60Minutes()
+		{
+			TestConsecutiveAutoSocketAutoSocketConnectAndShutdownEndurance10Minutes();
+		}
+
+		/// <summary></summary>
+		[Test, Repeat(int.MaxValue), Category("Endurance Forever")]
+		public virtual void TestConsecutiveAutoSocketAutoSocketConnectAndShutdownEnduranceForever()
+		{
+			TestConsecutiveAutoSocketAutoSocketConnectAndShutdownEndurance60Minutes();
 		}
 
 		#endregion

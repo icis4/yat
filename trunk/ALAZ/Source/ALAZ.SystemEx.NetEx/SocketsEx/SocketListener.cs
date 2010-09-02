@@ -226,9 +226,16 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 				e2.UserToken = listener;
 				e2.Completed += new EventHandler<SocketAsyncEventArgs>(BeginAcceptCallbackAsync);
 
-				if (!listener.Socket.AcceptAsync(e2))
+				try
 				{
-					BeginAcceptCallbackAsync(this, e2);
+					if (!listener.Socket.AcceptAsync(e2))
+					{
+						BeginAcceptCallbackAsync(this, e2);
+					}
+				}
+				catch (ObjectDisposedException ex)
+				{
+					MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
 				}
 
 			}
