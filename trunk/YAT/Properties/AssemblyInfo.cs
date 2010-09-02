@@ -40,7 +40,7 @@ using System.Runtime.InteropServices;
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
-// The following GUID is for the ID of the typelib if this project is exposed to COM
+// The following GUID is for the ID of the typelib if this project is exposed to COM.
 [assembly: Guid("9353b606-c83f-4659-996b-8b9e61c306df")]
 
 // Version information for an assembly consists of the following four values:
@@ -56,8 +56,11 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.99.24.0")]
 [assembly: AssemblyInformationalVersion("1.99.24")]
 
-// CLS compliance
+// CLS compliance.
 [assembly: CLSCompliant(true)]
+
+// Assembly-level FxCop suppressions.
+[module: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "YAT")]
 
 //==================================================================================================
 // End of

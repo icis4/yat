@@ -10,7 +10,7 @@
     <RootNamespace>MKY.Windows.Forms</RootNamespace>
     <AssemblyName>MKY.Windows.Forms</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Properties\MKY.Windows.Forms.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Properties\MKY.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -80,6 +80,7 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\MKY.snk" />
     <None Include="Properties\MKY.Windows.Forms.snk" />
   </ItemGroup>
   <ItemGroup>

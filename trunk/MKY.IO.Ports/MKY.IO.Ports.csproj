@@ -10,7 +10,7 @@
     <RootNamespace>MKY.IO.Ports</RootNamespace>
     <AssemblyName>MKY.IO.Ports</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Properties\MKY.IO.Ports.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Properties\MKY.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -80,6 +80,7 @@
   <ItemGroup>
     <None Include="Properties\MKY.IO.Ports.snk" />
     <None Include="MKY.IO.Ports.cd" />
+    <None Include="Properties\MKY.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

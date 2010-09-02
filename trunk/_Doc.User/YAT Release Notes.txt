@@ -61,6 +61,7 @@ Important changes:
 - Null reference safe and more efficient implementation of Equals()
 - Selection and settings controls now clear contents when disabled
 - Project references to system assemblies cleaned
+- Test and demo projects also signed with a strong name key
 - Website and contact information added to all source headers (feature request #2998593)
 
 Fixed bugs:
