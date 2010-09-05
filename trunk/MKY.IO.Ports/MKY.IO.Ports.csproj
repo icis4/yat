@@ -49,6 +49,9 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\MKY\MKY.Version.cs">
+      <Link>MKY.Version.cs</Link>
+    </Compile>
     <Compile Include="SerialPort\EventArgs.cs" />
     <Compile Include="SerialPort\ISerialPort.cs" />
     <Compile Include="SerialPort\ISerialPortDotNet.cs" />
