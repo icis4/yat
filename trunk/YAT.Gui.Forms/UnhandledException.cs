@@ -19,6 +19,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -31,6 +32,7 @@ using YAT.Utilities;
 namespace YAT.Gui.Forms
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "Form indeed deals with exceptions.")]
 	public partial class UnhandledException : System.Windows.Forms.Form
 	{
 		private Exception exeption;
@@ -77,6 +79,7 @@ namespace YAT.Gui.Forms
 				MKY.Utilities.Net.Browser.BrowseUri(link);
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation always succeeds.")]
 		private void button_CopyToClipboard_Click(object sender, EventArgs e)
 		{
 			StringWriter text = new StringWriter();

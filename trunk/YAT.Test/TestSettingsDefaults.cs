@@ -27,11 +27,11 @@ namespace YAT.Test
 	/// <summary>
 	/// Creates the defaults of the test settings in the solution directory.
 	/// </summary>
-	public class TestSettingsDefaults
+	public static class TestSettingsDefaults
 	{
 		/// <summary></summary>
 		[STAThread]
-		public static void Main(string[] args)
+		public static void Main()
 		{
 			// Open and reset current configuration
 			Configuration c = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);

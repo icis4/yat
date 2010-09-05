@@ -19,6 +19,7 @@
 //==================================================================================================
 
 using System;
+using System.Threading;
 using System.Windows.Forms;
 
 using YAT.Settings.Application;
@@ -34,11 +35,17 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		// settings
-		private System.Timers.Timer settingsTimer = new System.Timers.Timer();
+		/// <summary>
+		/// Timer to trigger loading of the application settings.
+		/// </summary>
+		/// <remarks>
+		/// In order to load settings in parallel to changing the opacity of the form, this is a
+		/// standard system timer, not a <see cref="System.Windows.Forms.Timer"/>.
+		/// </remarks>
+		private System.Timers.Timer applicationSettingsTimer = new System.Timers.Timer();
 
-		private bool applicationSettingsLoaded = false;
-		private bool applicationSettingsReady = false;
+		private bool finishedLoading;
+		private ReaderWriterLockSlim finishedLoadingLock = new ReaderWriterLockSlim();
 
 		#endregion
 
@@ -65,15 +72,15 @@ namespace YAT.Gui.Forms
 			if (width < width2)
 				width = width2;
 
-			label_Status.Text  = "Loading settings...";
-
 			if (Width < width)
 				Width = width;
 
-			this.settingsTimer.Interval = 100;
-			this.settingsTimer.AutoReset = false;
-			this.settingsTimer.Elapsed += new System.Timers.ElapsedEventHandler(this.applicationSettingsTimer_Elapsed);
-			this.settingsTimer.Start();
+			label_Status.Text = "Loading settings...";
+
+			this.applicationSettingsTimer.Interval = 100;
+			this.applicationSettingsTimer.AutoReset = false;
+			this.applicationSettingsTimer.Elapsed += new System.Timers.ElapsedEventHandler(this.applicationSettingsTimer_Elapsed);
+			this.applicationSettingsTimer.Start();
 		}
 
 		#endregion
@@ -85,45 +92,47 @@ namespace YAT.Gui.Forms
 
 		private void WelcomeScreen_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			timer_Opacity.Dispose();
-			this.settingsTimer.Dispose();
+			this.applicationSettingsTimer.Dispose();
 		}
 
 		private void timer_Opacity_Tick(object sender, EventArgs e)
 		{
-			// - close welcome screen immediately if application settings successfully loaded
-			// - close welcome screen after opacity transition if application settings
-			//   could not be loaded successfully
-			if (!this.applicationSettingsLoaded && (Opacity < 1.00))
+			bool finishedLoading;
+
+			this.finishedLoadingLock.EnterReadLock();
+			finishedLoading = this.finishedLoading;
+			this.finishedLoadingLock.ExitReadLock();
+
+			// Close welcome screen immediately if application settings have successfully been loaded.
+			// Close welcome screen after opacity transition if application settings could not be loaded successfully.
+			if (finishedLoading)
 			{
-				// opacity starts at 0.25 (25%)
-				// 25% opacity increase per second in 1% steps
-				// => 40ms ticks
+				timer_Opacity.Stop();
+				Close();
+			}
+			else if (Opacity < 1.00)
+			{
+				// Opacity starts at 0.25 (25%).
+				// 25% opacity increase per second in 1% steps.
+				//   => 40ms ticks
 				Opacity += 0.01;
 				Refresh();
 			}
-			else if (this.applicationSettingsReady)
-			{
-				timer_Opacity.Stop();
-
-				DialogResult = DialogResult.OK;
-				Close();
-			}
 		}
 
+		/// <summary>
+		/// Loads the application settings on a concurrent thread.
+		/// </summary>
 		private void applicationSettingsTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			try
-			{
-				this.applicationSettingsLoaded = ApplicationSettings.Load();
-			}
-			catch
-			{
-			}
-			finally
-			{
-				this.applicationSettingsReady = true;
-			}
+			// Always success:
+			// Either settings have been loaded or settings have been set to defaults.
+			ApplicationSettings.Load();
+			DialogResult = DialogResult.OK;
+
+			this.finishedLoadingLock.EnterWriteLock();
+			this.finishedLoading = true;
+			this.finishedLoadingLock.ExitWriteLock();
 		}
 
 		#endregion

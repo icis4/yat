@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -41,6 +42,7 @@ using YAT.Model.Utilities;
 namespace YAT.Model
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public class Terminal : IDisposable, IGuidProvider
 	{
 		#region Constants
@@ -622,6 +624,7 @@ namespace YAT.Model
 			return (SaveToFile(doAutoSave, ""));
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
 		private bool SaveToFile(bool doAutoSave, string autoSaveFilePathToDelete)
 		{
 			// -------------------------------------------------------------------------------------
@@ -676,9 +679,7 @@ namespace YAT.Model
 					if (File.Exists(autoSaveFilePathToDelete))
 						File.Delete(autoSaveFilePathToDelete);
 				}
-				catch
-				{
-				}
+				catch { }
 			}
 			catch (System.Xml.XmlException ex)
 			{
@@ -1057,6 +1058,7 @@ namespace YAT.Model
 		/// Starts the terminal's I/O instance.
 		/// </summary>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
 		private bool StartIO(bool saveStatus)
 		{
 			bool success = false;
@@ -1112,6 +1114,7 @@ namespace YAT.Model
 		/// Stops the terminal's I/O instance.
 		/// </summary>
 		/// <returns><c>true</c> if successful, <c>false</c> otherwise.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
 		private bool StopIO(bool saveStatus)
 		{
 			bool success = false;
@@ -1356,6 +1359,7 @@ namespace YAT.Model
 		/// Sends given file.
 		/// </summary>
 		/// <param name="command">File to be sent.</param>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
 		public virtual void SendFile(Command command)
 		{
 			if (!command.IsValidFilePath)

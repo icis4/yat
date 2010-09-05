@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Text;
+using System.Security.Permissions;
 using System.Windows.Forms;
 
 using MKY.Utilities.Event;
@@ -491,6 +492,7 @@ namespace YAT.Gui.Controls
 		// Control Special Keys
 		//==========================================================================================
 
+		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			if      (keyData == (Keys.Control | Keys.A)) // Ctrl-A = Select All

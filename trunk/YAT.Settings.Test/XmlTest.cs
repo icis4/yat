@@ -374,6 +374,7 @@ namespace YAT.Settings.Test
 			return (MakeTempPath() + Path.DirectorySeparatorChar + MakeTempFileName(name));
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Enusre that really all exceptions get caught.")]
 		private static void TestSerialization(Type type, object obj, string filePath)
 		{
 			// Save.

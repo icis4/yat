@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Windows.Forms;
 
@@ -36,6 +37,7 @@ namespace YAT
 	/// within their own application context.
 	/// Sealed to prevent FxCop "CA1052:StaticHolderTypesShouldBeSealeds".
 	/// </remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	sealed public class YAT
 	{
 		/// <remarks>
@@ -116,7 +118,7 @@ namespace YAT
 				EventHelper.UnhandledException -= new EventHandler<EventHelper.UnhandledExceptionEventArgs>(EventHelper_UnhandledException);
 			}
 		#endif
-			return (Controller.MainResult.OK);
+			return (Controller.MainResult.Success);
 		}
 
 		#if (!DEBUG)

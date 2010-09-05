@@ -35,7 +35,7 @@ namespace YAT.Controller
 	/// </summary>
 	public enum MainResult
 	{
-		OK = 0,
+		Success = 0,
 		CommandLineArgsError = -1,
 		ApplicationSettingsError = -2,
 		ApplicationStartError = -3,

@@ -18,6 +18,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
+
 using NUnit.Framework;
 
 using MKY.Utilities.Settings;
@@ -63,10 +65,11 @@ namespace YAT.Settings.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SetUp", Justification = "Naming according to NUnit.")]
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
-			// prevent auto-save of workspace settings
+			// Prevent auto-save of workspace settings.
 			this.autoSaveWorkspaceToRestore = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
 			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = false;
 		}
@@ -79,6 +82,7 @@ namespace YAT.Settings.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{

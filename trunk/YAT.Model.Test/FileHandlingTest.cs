@@ -55,10 +55,11 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SetUp", Justification = "Naming according to NUnit.")]
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
-			// allow modification of auto save setting
+			// Allow modification of auto save setting.
 			this.autoOpenWorkspaceToRestore = ApplicationSettings.LocalUser.General.AutoOpenWorkspace;
 			this.autoSaveWorkspaceToRestore = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
 			this.workspaceFilePathToRestore = ApplicationSettings.LocalUser.AutoWorkspace.FilePath;
@@ -72,6 +73,7 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{

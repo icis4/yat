@@ -19,12 +19,10 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 using NUnit.Framework;
-
-using YAT.Domain;
 
 namespace YAT.Domain.Test.TextTerminal
 {
@@ -76,6 +74,7 @@ namespace YAT.Domain.Test.TextTerminal
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		[Test]
 		public virtual void TestSubstitutionParser()
 		{
@@ -94,8 +93,8 @@ namespace YAT.Domain.Test.TextTerminal
 				}
 				catch (Exception ex)
 				{
-					// catch assertion exceptions to ensure that all test sets are run in any case
-					//   but keep first exception to signal NUnit that test has failed
+					// Catch assertion exceptions to ensure that all test sets are run in any case
+					//   but keep first exception to signal NUnit that test has failed.
 					if (exceptionToNUnit == null)
 						exceptionToNUnit = ex;
 
@@ -107,19 +106,19 @@ namespace YAT.Domain.Test.TextTerminal
 					Console.WriteLine("Expected output bytes =");
 					foreach (byte b in ts.OutputBytes)
 					{
-						Console.Write("0x" + b.ToString("X2") + ", ");
+						Console.Write("0x" + b.ToString("X2", CultureInfo.InvariantCulture) + ", ");
 					}
 					Console.WriteLine();
 					Console.WriteLine("Actual output bytes =");
 					foreach (byte b in outputBytes)
 					{
-						Console.Write("0x" + b.ToString("X2") + ", ");
+						Console.Write("0x" + b.ToString("X2", CultureInfo.InvariantCulture) + ", ");
 					}
 					Console.WriteLine();
 				}
 			}
 
-			// re-throw first exception to signal NUnit that test has failed
+			// Re-throw first exception to signal NUnit that test has failed.
 			if (exceptionToNUnit != null)
 				throw (exceptionToNUnit);
 		}

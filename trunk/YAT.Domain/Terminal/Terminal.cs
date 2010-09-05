@@ -38,6 +38,7 @@ namespace YAT.Domain
 	/// implement the method pattern. Terminal provides general processing and formatting functions,
 	/// its specializations add additional functionality.
 	/// </remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public class Terminal : IDisposable
 	{
 		#region Fields
@@ -55,7 +56,7 @@ namespace YAT.Domain
 		private DisplayRepository bidirRepository;
 		private DisplayRepository rxRepository;
 
-		private bool eventsSuspendedForReload = false;
+		private bool eventsSuspendedForReload;
 
 		#endregion
 

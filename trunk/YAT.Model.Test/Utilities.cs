@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
 
@@ -34,6 +35,7 @@ using YAT.Settings.Terminal;
 namespace YAT.Model.Test
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public static class Utilities
 	{
 		#region Types

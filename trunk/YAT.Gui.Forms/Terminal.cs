@@ -39,6 +39,7 @@ using YAT.Settings.Terminal;
 namespace YAT.Gui.Forms
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public partial class Terminal : Form
 	{
 		#region Constants
@@ -2061,27 +2062,29 @@ namespace YAT.Gui.Forms
 		{
 			SetFixedStatusText("Printing data...");
 
-			try
+			using (Model.Utilities.RtfPrinter printer = new Model.Utilities.RtfPrinter(settings))
 			{
-				Model.Utilities.RtfPrinter printer = new Model.Utilities.RtfPrinter(settings);
-				printer.Print(Model.Utilities.RtfWriter.LinesToRichTextBox(monitor.SelectedLines, this.settingsRoot.Format));
-				SetTimedStatusText("Data printed");
-			}
-			catch (Exception e)
-			{
-				SetFixedStatusText("Error printing data!");
+				try
+				{
+					printer.Print(Model.Utilities.RtfWriter.LinesToRichTextBox(monitor.SelectedLines, this.settingsRoot.Format));
+					SetTimedStatusText("Data printed");
+				}
+				catch (System.Drawing.Printing.InvalidPrinterException ex)
+				{
+					SetFixedStatusText("Error printing data!");
 
-				MessageBox.Show
-					(
-					this,
-					"Unable to print data." + Environment.NewLine + Environment.NewLine +
-					e.Message,
-					"Print Error",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning
-					);
+					MessageBox.Show
+						(
+						this,
+						"Unable to print data." + Environment.NewLine + Environment.NewLine +
+						ex.Message,
+						"Print Error",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+						);
 
-				SetTimedStatusText("Data not printed!");
+					SetTimedStatusText("Data not printed!");
+				}
 			}
 		}
 

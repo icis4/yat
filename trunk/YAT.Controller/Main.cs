@@ -32,8 +32,8 @@ namespace YAT.Controller
 	/// Application controller main class of YAT.
 	/// </summary>
 	/// <remarks>
-	/// This class is separated into its own .exe project for those who want to use YAT
-	/// components within their own context.
+	/// This class is separated into its own project for those who want to use YAT components within
+	/// their own context.
 	/// </remarks>
 	public class Main : IDisposable
 	{
@@ -117,9 +117,9 @@ namespace YAT.Controller
 
 		private bool isDisposed;
 
-		// command line
-		private bool commandLineError = false;
-		private bool commandLineHelpIsRequested = false;
+		// Command line.
+		private bool commandLineError;
+		private bool commandLineHelpIsRequested;
 
 		private string requestedFilePath = "";
 
@@ -231,7 +231,7 @@ namespace YAT.Controller
 			if (this.commandLineHelpIsRequested)
 			{
 				WriteHelp();
-				return (MainResult.OK);
+				return (MainResult.Success);
 			}
 
 			// Create model and view and run application.
@@ -247,14 +247,14 @@ namespace YAT.Controller
 						Application.Run(view);
 					}
 
-					mainResult = MainResult.OK;
+					mainResult = MainResult.Success;
 				}
 				else // Non-view application for automated test usage.
 				{
 					if (model.Start())
 					{
 						if (model.Exit())
-							mainResult = MainResult.OK;
+							mainResult = MainResult.Success;
 						else
 							mainResult = MainResult.ApplicationExitError;
 					}
@@ -291,7 +291,7 @@ namespace YAT.Controller
 		}
 
 		// Write help text onto console.
-		private void WriteHelp()
+		private static void WriteHelp()
 		{
 			foreach (string line in Title)
 				Console.WriteLine(line);
@@ -380,7 +380,7 @@ namespace YAT.Controller
 		}
 
 		// Check whether parsed command line args are consistent.
-		private bool CheckParsedArgsForConsistency()
+		private static bool CheckParsedArgsForConsistency()
 		{
 			// Nothing to check yet, always return <c>true</c>.
 			return (true);
