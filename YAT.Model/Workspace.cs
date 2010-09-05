@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows.Forms;
 
@@ -40,6 +41,7 @@ using YAT.Utilities;
 namespace YAT.Model
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public class Workspace : IDisposable, IGuidProvider
 	{
 		#region Fields
@@ -457,6 +459,7 @@ namespace YAT.Model
 			return (SaveToFile(doAutoSave, ""));
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
 		private bool SaveToFile(bool doAutoSave, string autoSaveFilePathToDelete)
 		{
 			// -------------------------------------------------------------------------------------
@@ -520,9 +523,7 @@ namespace YAT.Model
 					if (File.Exists(autoSaveFilePathToDelete))
 						File.Delete(autoSaveFilePathToDelete);
 				}
-				catch
-				{
-				}
+				catch { }
 			}
 			catch (System.Xml.XmlException ex)
 			{

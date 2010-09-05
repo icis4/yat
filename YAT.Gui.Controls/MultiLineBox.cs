@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Security.Permissions;
 using System.Windows.Forms;
 
 using YAT.Gui.Utilities;
@@ -81,6 +82,7 @@ namespace YAT.Gui.Controls
 		// Form Special Keys
 		//==========================================================================================
 
+		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			if (keyData == (Keys.Control | Keys.Enter))

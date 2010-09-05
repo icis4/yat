@@ -34,6 +34,7 @@ namespace YAT.Domain
 	/// <summary>
 	/// Text protocol terminal.
 	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public class TextTerminal : Terminal
 	{
 		#region Help

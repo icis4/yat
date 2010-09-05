@@ -288,24 +288,24 @@ namespace YAT.Gui.Forms
 				{
 					Refresh();
 
-					// check chosen font
+					// Check chosen font.
 					try
 					{
 						f = new Font(fd.Font.Name, fd.Font.Size, FontStyle.Regular);
 						fontOK = true;
 					}
-					catch
+					catch (ArgumentException)
 					{
-						cancel =
-							MessageBox.Show
+						DialogResult result = MessageBox.Show
 							(
 								this,
 								@"Font """ + fd.Font.Name + @""" does not support regular style. Choose a different font.",
 								@"Font not supported",
 								MessageBoxButtons.OKCancel,
 								MessageBoxIcon.Exclamation
-							)
-							!= DialogResult.OK;
+							);
+
+						cancel = (result != DialogResult.OK);
 					}
 				}
 			}

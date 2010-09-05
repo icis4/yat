@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Security.Permissions;
 using System.Windows.Forms;
 
 using MKY.Utilities.Types;
@@ -123,6 +124,7 @@ namespace YAT.Gui.Forms
 				return (base.IsInputKey(keyData));
 		}
 
+		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			if (keyData == Keys.F1)

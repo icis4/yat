@@ -19,12 +19,14 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Xml.Serialization;
 
 namespace YAT.Model.Types
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Justification = "Only used to hold font settings.")]
 	[Serializable]
 	public class FontFormat : IEquatable<FontFormat>
 	{

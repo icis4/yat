@@ -46,8 +46,10 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public class LineBreakTimer
+		public class LineBreakTimer : IDisposable
 		{
+			private bool isDisposed;
+
 			private int timeout;
 			private Timer timer;
 
@@ -60,9 +62,58 @@ namespace YAT.Domain
 				this.timeout = timeout;
 			}
 
+			#region Disposal
+			//--------------------------------------------------------------------------------------
+			// Disposal
+			//--------------------------------------------------------------------------------------
+
+			/// <summary></summary>
+			public void Dispose()
+			{
+				Dispose(true);
+				GC.SuppressFinalize(this);
+			}
+
+			/// <summary></summary>
+			protected virtual void Dispose(bool disposing)
+			{
+				if (!this.isDisposed)
+				{
+					if (disposing)
+					{
+						if (this.timer != null)
+							this.timer.Dispose();
+					}
+					this.isDisposed = true;
+				}
+			}
+
+			/// <summary></summary>
+			~LineBreakTimer()
+			{
+				Dispose(false);
+			}
+
+			/// <summary></summary>
+			protected bool IsDisposed
+			{
+				get { return (this.isDisposed); }
+			}
+
+			/// <summary></summary>
+			protected void AssertNotDisposed()
+			{
+				if (this.isDisposed)
+					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+			}
+
+			#endregion
+
 			/// <summary></summary>
 			public virtual void Start()
 			{
+				AssertNotDisposed();
+
 				TimerCallback timerDelegate = new TimerCallback(this.timer_Timeout);
 				this.timer = new Timer(timerDelegate, null, this.timeout, System.Threading.Timeout.Infinite);
 			}
@@ -70,6 +121,8 @@ namespace YAT.Domain
 			/// <summary></summary>
 			public virtual void Restart()
 			{
+				AssertNotDisposed();
+
 				Stop();
 				Start();
 			}
@@ -78,6 +131,7 @@ namespace YAT.Domain
 			[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "Stop is a common term to start/stop something.")]
 			public virtual void Stop()
 			{
+				AssertNotDisposed();
 				this.timer = null;
 			}
 
@@ -89,6 +143,7 @@ namespace YAT.Domain
 			/// <summary></summary>
 			protected virtual void OnTimeout(EventArgs e)
 			{
+				AssertNotDisposed();
 				EventHelper.FireSync(Timeout, this, e);
 			}
 		}
@@ -107,9 +162,11 @@ namespace YAT.Domain
 			End
 		}
 
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "Private element.")]
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "Private class.")]
 		private class LineState
 		{
+			private bool isDisposed;
+
 			public LinePosition LinePosition;
 			public DisplayLine LineElements;
 			public EolQueue SequenceBreak;
@@ -125,8 +182,57 @@ namespace YAT.Domain
 				LineBreakTimer = lineBreakTimer;
 			}
 
+			#region Disposal
+			//--------------------------------------------------------------------------------------
+			// Disposal
+			//--------------------------------------------------------------------------------------
+
+			/// <summary></summary>
+			public void Dispose()
+			{
+				Dispose(true);
+				GC.SuppressFinalize(this);
+			}
+
+			/// <summary></summary>
+			protected virtual void Dispose(bool disposing)
+			{
+				if (!this.isDisposed)
+				{
+					if (disposing)
+					{
+						if (this.LineBreakTimer != null)
+							this.LineBreakTimer.Dispose();
+					}
+					this.isDisposed = true;
+				}
+			}
+
+			/// <summary></summary>
+			~LineState()
+			{
+				Dispose(false);
+			}
+
+			/// <summary></summary>
+			protected bool IsDisposed
+			{
+				get { return (this.isDisposed); }
+			}
+
+			/// <summary></summary>
+			protected void AssertNotDisposed()
+			{
+				if (this.isDisposed)
+					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+			}
+
+			#endregion
+
 			public virtual void Reset()
 			{
+				AssertNotDisposed();
+
 				LinePosition = BinaryTerminal.LinePosition.Begin;
 				LineElements.Clear();
 				SequenceBreak.Reset();
@@ -134,7 +240,7 @@ namespace YAT.Domain
 			}
 		}
 
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "Private element.")]
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "Private class.")]
 		private class BidirLineState
 		{
 			public bool IsFirstLine;
@@ -222,7 +328,11 @@ namespace YAT.Domain
 		{
 			if (disposing)
 			{
-				// Nothing to do (yet).
+				if (this.txLineState != null)
+					this.txLineState.Dispose();
+
+				if (this.rxLineState != null)
+					this.rxLineState.Dispose();
 			}
 			base.Dispose(disposing);
 		}

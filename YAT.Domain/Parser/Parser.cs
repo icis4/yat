@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -29,7 +30,8 @@ using MKY.Utilities.Types;
 namespace YAT.Domain.Parser
 {
 	/// <summary></summary>
-	public class Parser
+	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
+	public class Parser : IDisposable
 	{
 		#region Help
 		//==========================================================================================
@@ -73,8 +75,10 @@ namespace YAT.Domain.Parser
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected abstract class ParserState
+		protected abstract class ParserState : IDisposable
 		{
+			private bool isDisposed;
+
 			/// <summary></summary>
 			public abstract bool TryParse(Parser parser, int parseChar, ref FormatException formatException);
 
@@ -83,6 +87,52 @@ namespace YAT.Domain.Parser
 			{
 				parser.State = state;
 			}
+
+			#region Disposal
+			//--------------------------------------------------------------------------------------
+			// Disposal
+			//--------------------------------------------------------------------------------------
+
+			/// <summary></summary>
+			public void Dispose()
+			{
+				Dispose(true);
+				GC.SuppressFinalize(this);
+			}
+
+			/// <summary></summary>
+			protected virtual void Dispose(bool disposing)
+			{
+				if (!this.isDisposed)
+				{
+					if (disposing)
+					{
+						// Nothing to do in base class.
+					}
+					this.isDisposed = true;
+				}
+			}
+
+			/// <summary></summary>
+			~ParserState()
+			{
+				Dispose(false);
+			}
+
+			/// <summary></summary>
+			protected bool IsDisposed
+			{
+				get { return (this.isDisposed); }
+			}
+
+			/// <summary></summary>
+			protected void AssertNotDisposed()
+			{
+				if (this.isDisposed)
+					throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+			}
+
+			#endregion
 		}
 
 		/// <summary>
@@ -98,9 +148,29 @@ namespace YAT.Domain.Parser
 				this.contiguous = new StringWriter();
 			}
 
+			#region Disposal
+			//--------------------------------------------------------------------------------------
+			// Disposal
+			//--------------------------------------------------------------------------------------
+
+			/// <summary></summary>
+			protected override void Dispose(bool disposing)
+			{
+				if (disposing)
+				{
+					if (this.contiguous != null)
+						this.contiguous.Dispose();
+				}
+				base.Dispose(disposing);
+			}
+
+			#endregion
+
 			/// <summary></summary>
 			public override bool TryParse(Parser parser, int parseChar, ref FormatException formatException)
 			{
+				AssertNotDisposed();
+
 				if ((parseChar < 0) ||                   // end of parse string
 					(parseChar == ')' && !parser.IsTopLevel))
 				{
@@ -331,9 +401,29 @@ namespace YAT.Domain.Parser
 				this.mnemonic = new StringWriter();
 			}
 
+			#region Disposal
+			//--------------------------------------------------------------------------------------
+			// Disposal
+			//--------------------------------------------------------------------------------------
+
+			/// <summary></summary>
+			protected override void Dispose(bool disposing)
+			{
+				if (disposing)
+				{
+					if (this.mnemonic != null)
+						this.mnemonic.Dispose();
+				}
+				base.Dispose(disposing);
+			}
+
+			#endregion
+
 			/// <summary></summary>
 			public override bool TryParse(Parser parser, int parseChar, ref FormatException formatException)
 			{
+				AssertNotDisposed();
+
 				if ((parseChar < 0) || (parseChar == '>'))
 				{
 					byte[] a;
@@ -415,21 +505,23 @@ namespace YAT.Domain.Parser
 		// Fields
 		//==========================================================================================
 
+		private bool isDisposed;
+
 		private Endianess endianess = Endianess.BigEndian;
 		private Encoding encoding = Encoding.Default;
 		private Radix defaultRadix = Radix.String;
 		private ParseMode parseMode = ParseMode.All;
 
-		private StringReader reader = null;
-		private MemoryStream byteArrayWriter = null;
-		private List<Result> resultList = null;
-		private ParserState state = null;
+		private StringReader reader;
+		private MemoryStream byteArrayWriter;
+		private List<Result> resultList;
+		private ParserState state;
 
-		private Parser parentParser = null;
-		private Parser nestedChildParser = null;
-		private bool isKeywordParser = false;
+		private Parser parentParser;
+		private Parser nestedChildParser;
+		private bool isKeywordParser;
 
-		private bool hasFinished = false;
+		private bool hasFinished;
 
 		#endregion
 
@@ -489,6 +581,62 @@ namespace YAT.Domain.Parser
 			InitializeNestedParse(parserState, parent);
 		}
 
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary></summary>
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!this.isDisposed)
+			{
+				if (disposing)
+				{
+					if (this.reader != null)
+						this.reader.Dispose();
+
+					if (this.byteArrayWriter != null)
+						this.byteArrayWriter.Dispose();
+
+					if (this.state != null)
+						this.state.Dispose();
+
+					if (this.nestedChildParser != null)
+						this.nestedChildParser.Dispose();
+				}
+				this.isDisposed = true;
+			}
+		}
+
+		/// <summary></summary>
+		~Parser()
+		{
+			Dispose(false);
+		}
+
+		/// <summary></summary>
+		protected bool IsDisposed
+		{
+			get { return (this.isDisposed); }
+		}
+
+		/// <summary></summary>
+		protected void AssertNotDisposed()
+		{
+			if (this.isDisposed)
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+		}
+
+		#endregion
+
 		#endregion
 
 		#region Factory
@@ -499,6 +647,8 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		protected virtual Parser GetParser(ParserState parserState, Parser parent)
 		{
+			AssertNotDisposed();
+
 			Parser child = new Parser(parserState, parent);
 			return (child);
 		}
@@ -594,6 +744,8 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual byte[] Parse(string s)
 		{
+			// AssertNotDisposed() is called below.
+
 			string parsed;
 			return (Parse(s, out parsed));
 		}
@@ -601,6 +753,8 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual byte[] Parse(string s, out string parsed)
 		{
+			// AssertNotDisposed() is called below.
+
 			Result[] resultResult = Parse(s, ParseMode.AllByteArrayResults, out parsed);
 			MemoryStream byteResult = new MemoryStream();
 			foreach (Result r in resultResult)
@@ -617,6 +771,8 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual Result[] Parse(string s, ParseMode mode)
 		{
+			// AssertNotDisposed() is called below.
+
 			string parsed;
 			return (Parse(s, mode, out parsed));
 		}
@@ -624,6 +780,8 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual Result[] Parse(string s, ParseMode mode, out string parsed)
 		{
+			// AssertNotDisposed() is called below.
+
 			Result[] result;
 			FormatException formatException = new FormatException("");
 			if (!TryParse(s, mode, out result, out parsed, ref formatException))
@@ -634,6 +792,8 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual bool TryParse(string s, out byte[] result)
 		{
+			// AssertNotDisposed() is called below.
+
 			string parsed;
 			return (TryParse(s, out result, out parsed));
 		}
@@ -641,6 +801,8 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual bool TryParse(string s, out byte[] result, out string parsed)
 		{
+			// AssertNotDisposed() is called below.
+
 			Result[] resultResult;
 			bool tryResult = TryParse(s, ParseMode.AllByteArrayResults, out resultResult, out parsed);
 
@@ -661,12 +823,16 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual bool TryParse(string s)
 		{
+			// AssertNotDisposed() is called below.
+
 			return (TryParse(s, ParseMode.All));
 		}
 
 		/// <summary></summary>
 		public virtual bool TryParse(string s, ParseMode mode)
 		{
+			// AssertNotDisposed() is called below.
+
 			string parsed;
 			return (TryParse(s, mode, out parsed));
 		}
@@ -674,6 +840,8 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual bool TryParse(string s, ParseMode mode, out Result[] result)
 		{
+			// AssertNotDisposed() is called below.
+
 			string parsed;
 			return (TryParse(s, mode, out result, out parsed));
 		}
@@ -681,6 +849,8 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual bool TryParse(string s, ParseMode mode, out string parsed)
 		{
+			// AssertNotDisposed() is called below.
+
 			Result[] result;
 			return (TryParse(s, mode, out result, out parsed));
 		}
@@ -688,6 +858,8 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual bool TryParse(string s, ParseMode mode, out string parsed, ref FormatException formatException)
 		{
+			// AssertNotDisposed() is called below.
+
 			Result[] result;
 			return (TryParse(s, mode, out result, out parsed, ref formatException));
 		}
@@ -695,6 +867,8 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual bool TryParse(string s, ParseMode mode, out Result[] result, out string parsed)
 		{
+			// AssertNotDisposed() is called below.
+
 			FormatException formatException = new FormatException("");
 			return (TryParse(s, mode, out result, out parsed, ref formatException));
 		}
@@ -702,6 +876,8 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public virtual bool TryParse(string s, ParseMode mode, out Result[] result, out string parsed, ref FormatException formatException)
 		{
+			AssertNotDisposed();
+
 			InitializeTopLevelParse(s, mode);
 
 			while (!HasFinished)
@@ -734,6 +910,8 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		protected virtual void EndByteArray()
 		{
+			AssertNotDisposed();
+
 			if (this.byteArrayWriter.Length > 0)
 			{
 				this.resultList.Add(new ByteArrayResult(this.byteArrayWriter.ToArray()));
@@ -744,6 +922,8 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		protected virtual bool TryParseContiguousRadixToken(string token, Radix parseRadix, out byte[] result, ref FormatException formatException)
 		{
+			AssertNotDisposed();
+
 			// String
 			if (parseRadix == Radix.String)
 			{
@@ -917,7 +1097,7 @@ namespace YAT.Domain.Parser
 				{
 					resultList.Add(new KeywordResult((XKeyword)t));
 				}
-				catch
+				catch (ArgumentException)
 				{
 					result = new Result[] { };
 					formatException = new FormatException(@"""" + t + @""" is no keyword");

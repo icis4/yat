@@ -503,7 +503,7 @@ namespace YAT.Domain
 				this.text      += de.text;
 				this.dataCount += de.dataCount;
 			}
-			catch (Exception ex)
+			catch (ArgumentException ex)
 			{
 				MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
 				System.Diagnostics.Debug.WriteLine(de.ToString());

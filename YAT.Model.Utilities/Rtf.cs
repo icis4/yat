@@ -149,11 +149,18 @@ namespace YAT.Model.Utilities
 	/// <summary>
 	/// Static utility class providing RTF printer functionality for YAT.
 	/// </summary>
-	public class RtfPrinter
+	public class RtfPrinter : IDisposable
 	{
+		private bool isDisposed;
+
 		private PrintDocument pd;
 		private RichTextBox rtb;
 		private StringReader reader;
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
 
 		/// <summary></summary>
 		public RtfPrinter(PrinterSettings settings)
@@ -163,7 +170,65 @@ namespace YAT.Model.Utilities
 			this.pd.PrinterSettings = settings;
 		}
 
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
 		/// <summary></summary>
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary></summary>
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!this.isDisposed)
+			{
+				if (disposing)
+				{
+					if (this.pd != null)
+						this.pd.Dispose();
+
+					if (this.rtb != null)
+						this.rtb.Dispose();
+
+					if (this.reader != null)
+						this.reader.Dispose();
+				}
+				this.isDisposed = true;
+			}
+		}
+
+		/// <summary></summary>
+		~RtfPrinter()
+		{
+			Dispose(false);
+		}
+
+		/// <summary></summary>
+		protected bool IsDisposed
+		{
+			get { return (this.isDisposed); }
+		}
+
+		/// <summary></summary>
+		protected void AssertNotDisposed()
+		{
+			if (this.isDisposed)
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+		}
+
+		#endregion
+
+		#endregion
+
+		/// <summary></summary>
+		/// <exception cref="System.Drawing.Printing.InvalidPrinterException">
+		/// The printer named in the System.Drawing.Printing.PrinterSettings.PrinterName property does not exist.
+		/// </exception>
 		public virtual void Print(RichTextBox rtb)
 		{
 			this.rtb = rtb;
@@ -174,7 +239,7 @@ namespace YAT.Model.Utilities
 			}
 			finally
 			{
-				this.reader.Close();
+				this.reader.Close(); // \fixme Does this really work? Stream is closed even though it is accessed by pd_PrintPage()...
 			}
 		}
 
@@ -186,7 +251,7 @@ namespace YAT.Model.Utilities
 
 			// Print each line of the file.
 			string line = null;
-			while (lineCount < linesPerPage && ((line = this.reader.ReadLine()) != null))
+			while ((lineCount < linesPerPage) && ((line = this.reader.ReadLine()) != null))
 			{
 				float yPos = 0;
 				yPos = e.MarginBounds.Top + (lineCount * this.rtb.Font.GetHeight(e.Graphics));

@@ -32,6 +32,9 @@ namespace YAT.Domain
 	public enum ControlCharRadix
 	{
 		/// <summary></summary>
+		None = Radix.None,
+
+		/// <summary></summary>
 		Bin = Radix.Bin,
 
 		/// <summary></summary>

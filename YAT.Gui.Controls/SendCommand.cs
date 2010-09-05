@@ -21,6 +21,7 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Security.Permissions;
 using System.Windows.Forms;
 
 using MKY.Utilities.Event;
@@ -193,6 +194,7 @@ namespace YAT.Gui.Controls
 		// Control Special Keys
 		//==========================================================================================
 
+		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			if ((this.focusState != FocusState.Inactive) && (keyData == Keys.Enter))

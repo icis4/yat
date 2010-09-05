@@ -29,7 +29,7 @@ namespace YAT.Test
 	/// <summary>
 	/// The YAT test suite.
 	/// </summary>
-	public class TestAll
+	public static class TestAll
 	{
 		#region Suite
 		//==========================================================================================

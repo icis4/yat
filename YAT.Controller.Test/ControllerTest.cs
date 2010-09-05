@@ -18,10 +18,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
+using System.Diagnostics.CodeAnalysis;
 
 using NUnit.Framework;
 
@@ -33,6 +30,83 @@ namespace YAT.Controller.Test
 	[TestFixture]
 	public class ControllerTest
 	{
+		#region Private Static Properties
+		//==========================================================================================
+		// Private Static Properties
+		//==========================================================================================
+
+		private static string[] EmptyArgs
+		{
+			get
+			{
+				return
+				(
+					new string[]
+					{
+					}
+				);
+			}
+		}
+
+		private static string[] TerminalArgs
+		{
+			get
+			{
+				return
+				(
+					new string[]
+					{
+						Settings.Test.SettingsFilesProvider.FilePaths_Current.TerminalFilePaths[Settings.Test.TerminalSettingsTestCases.T_03_COM1_Closed_Predefined],
+					}
+				);
+			}
+		}
+
+		private static string[] WorkspaceArgs
+		{
+			get
+			{
+				return
+				(
+					new string[]
+					{
+						Settings.Test.SettingsFilesProvider.FilePaths_Current.WorkspaceFilePaths[Settings.Test.WorkspaceSettingsTestCases.W_04_Matthias],
+					}
+				);
+			}
+		}
+
+		#endregion
+
+		#region Private Static Methods
+		//==========================================================================================
+		// Private Static Methods
+		//==========================================================================================
+
+		private static void RunAndVerifyApplication(Controller.Main main)
+		{
+			RunAndVerifyApplication(main, MainResult.Success);
+		}
+
+		private static void RunAndVerifyApplication(Controller.Main main, MainResult expectedMainResult)
+		{
+			MainResult mainResult = main.Run();
+			Assert.AreEqual(expectedMainResult, mainResult);
+		}
+
+		private static void RunAndVerifyApplicationWithoutView(Controller.Main main)
+		{
+			RunAndVerifyApplicationWithoutView(main, MainResult.Success);
+		}
+
+		private static void RunAndVerifyApplicationWithoutView(Controller.Main main, MainResult expectedMainResult)
+		{
+			MainResult mainResult = main.Run(false);
+			Assert.AreEqual(expectedMainResult, mainResult);
+		}
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -48,10 +122,11 @@ namespace YAT.Controller.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SetUp", Justification = "Naming according to NUnit.")]
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
-			// prevent auto-save of workspace settings
+			// Prevent auto-save of workspace settings.
 			this.autoSaveWorkspaceToRestore = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
 			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = false;
 		}
@@ -64,6 +139,7 @@ namespace YAT.Controller.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
 		[TestFixtureTearDown]
 		public virtual void TestFixtureTearDown()
 		{
@@ -237,83 +313,6 @@ namespace YAT.Controller.Test
 		}
 
 		#endregion
-
-		#endregion
-
-		#region Private Properties
-		//==========================================================================================
-		// Private Properties
-		//==========================================================================================
-
-		private string[] EmptyArgs
-		{
-			get
-			{
-				return
-				(
-					new string[]
-					{
-					}
-				);
-			}
-		}
-
-		private string[] TerminalArgs
-		{
-			get
-			{
-				return
-				(
-					new string[]
-					{
-						Settings.Test.SettingsFilesProvider.FilePaths_Current.TerminalFilePaths[Settings.Test.TerminalSettingsTestCases.T_03_COM1_Closed_Predefined],
-					}
-				);
-			}
-		}
-
-		private string[] WorkspaceArgs
-		{
-			get
-			{
-				return
-				(
-					new string[]
-					{
-						Settings.Test.SettingsFilesProvider.FilePaths_Current.WorkspaceFilePaths[Settings.Test.WorkspaceSettingsTestCases.W_04_Matthias],
-					}
-				);
-			}
-		}
-
-		#endregion
-
-		#region Private Methods
-		//==========================================================================================
-		// Private Methods
-		//==========================================================================================
-
-		private void RunAndVerifyApplication(Controller.Main main)
-		{
-			RunAndVerifyApplication(main, MainResult.OK);
-		}
-
-		private void RunAndVerifyApplication(Controller.Main main, MainResult expectedMainResult)
-		{
-			MainResult mainResult = main.Run();
-			Assert.AreEqual(expectedMainResult, mainResult);
-		}
-
-		private void RunAndVerifyApplicationWithoutView(Controller.Main main)
-		{
-			RunAndVerifyApplicationWithoutView(main, MainResult.OK);
-		}
-
-		private void RunAndVerifyApplicationWithoutView(Controller.Main main, MainResult expectedMainResult)
-		{
-			MainResult mainResult = main.Run(false);
-			Assert.AreEqual(expectedMainResult, mainResult);
-		}
 
 		#endregion
 	}

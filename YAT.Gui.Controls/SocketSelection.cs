@@ -307,7 +307,7 @@ namespace YAT.Gui.Controls
 							this.resolvedRemoteIPAddress = ipAddresses[0];
 							RemoteHost = new XIPHost(this.resolvedRemoteIPAddress);
 						}
-						catch (Exception ex)
+						catch (ArgumentException ex)
 						{
 							MessageBox.Show
 								(

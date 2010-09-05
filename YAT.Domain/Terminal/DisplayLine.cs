@@ -133,7 +133,7 @@ namespace YAT.Domain
 				foreach (DisplayElement item in collection)
 					Add(item);
 			}
-			catch (Exception ex)
+			catch (InvalidOperationException ex)
 			{
 				MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
 				System.Diagnostics.Debug.WriteLine(collection.ToString());

@@ -19,14 +19,11 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Text;
 
 using NUnit.Framework;
-
-using MKY.Utilities.Diagnostics;
-
-using YAT.Domain;
 
 namespace YAT.Domain.Test.Parser
 {
@@ -52,33 +49,6 @@ namespace YAT.Domain.Test.Parser
 				Endianess = Endianess.LittleEndian;
 				Encoding = Encoding.Default;
 				DefaultRadix = Radix.String;
-				InputString = inputString;
-				OutputBytes = outputBytes;
-			}
-
-			public TestSet(Endianess endianess, string inputString, byte[] outputBytes)
-			{
-				Endianess = endianess;
-				Encoding = Encoding.Default;
-				DefaultRadix = Radix.String;
-				InputString = inputString;
-				OutputBytes = outputBytes;
-			}
-
-			public TestSet(Encoding encoding, string inputString, byte[] outputBytes)
-			{
-				Endianess = Endianess.LittleEndian;
-				Encoding = encoding;
-				DefaultRadix = Radix.String;
-				InputString = inputString;
-				OutputBytes = outputBytes;
-			}
-
-			public TestSet(Radix defaultRadix, string inputString, byte[] outputBytes)
-			{
-				Endianess = Endianess.LittleEndian;
-				Encoding = Encoding.Default;
-				DefaultRadix = defaultRadix;
 				InputString = inputString;
 				OutputBytes = outputBytes;
 			}
@@ -167,6 +137,7 @@ namespace YAT.Domain.Test.Parser
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		[Test]
 		public virtual void TestParser()
 		{
@@ -187,8 +158,8 @@ namespace YAT.Domain.Test.Parser
 					}
 					catch (Exception ex)
 					{
-						// catch assertion exceptions to ensure that all test sets are run in any case
-						//   but keep first exception to signal NUnit that test has failed
+						// Catch assertion exceptions to ensure that all test sets are run in any case
+						//   but keep first exception to signal NUnit that test has failed.
 						if (exceptionToNUnit == null)
 							exceptionToNUnit = ex;
 
@@ -200,20 +171,20 @@ namespace YAT.Domain.Test.Parser
 						Console.WriteLine("Expected output bytes =");
 						foreach (byte b in ts.OutputBytes)
 						{
-							Console.Write("0x" + b.ToString("X2") + ", ");
+							Console.Write("0x" + b.ToString("X2", CultureInfo.InvariantCulture) + ", ");
 						}
 						Console.WriteLine();
 						Console.WriteLine("Actual output bytes =");
 						foreach (byte b in outputBytes)
 						{
-							Console.Write("0x" + b.ToString("X2") + ", ");
+							Console.Write("0x" + b.ToString("X2", CultureInfo.InvariantCulture) + ", ");
 						}
 						Console.WriteLine();
 					}
 				}
 			}
 
-			// re-throw first exception to signal NUnit that test has failed
+			// Re-throw first exception to signal NUnit that test has failed.
 			if (exceptionToNUnit != null)
 				throw (exceptionToNUnit);
 		}

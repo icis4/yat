@@ -19,6 +19,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Collections.Generic;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
@@ -35,6 +36,7 @@ namespace YAT.Domain
 	/// was optimized. This implementation is far more performant if properties are regularly
 	/// read.
 	/// </remarks>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "This class indeed implements a queue, but not using inheritance.")]
 	public class EolQueue
 	{
 		#region Types
@@ -153,13 +155,13 @@ namespace YAT.Domain
 
 		private void Evaluate()
 		{
-			if (this.eol.Length <= 0)       // Empty EOL => Inactive
+			if (this.eol.Length <= 0)       // Empty EOL => Inactive.
 			{
 				this.state = State.Inactive;
 				return;
 			}
 			
-			if (this.queue.Count <= 0)     // Empty queue => Armed
+			if (this.queue.Count <= 0)     // Empty queue => Armed.
 			{
 				this.state = State.Armed;
 				return;
@@ -198,7 +200,7 @@ namespace YAT.Domain
 				}
 				this.state = evaluatedState;
 			}
-			catch (Exception ex)
+			catch (InvalidOperationException ex)
 			{
 				MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
 				System.Diagnostics.Debug.WriteLine("Queue.Count = " + this.queue.Count);

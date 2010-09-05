@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows.Forms;
 
@@ -240,11 +241,11 @@ namespace YAT.Model
 
 				if (success)
 				{
-					// Reset workspace file path
+					// Reset workspace file path.
 					ApplicationSettings.LocalUser.AutoWorkspace.ResetFilePathAndUser();
 					ApplicationSettings.Save();
 
-					// Clean up all default workspaces/terminals since they're not needed anymore
+					// Clean up all default workspaces/terminals since they're not needed anymore.
 					if (!otherInstanceIsAlreadyRunning)
 						CleanupLocalUserDirectory();
 				}
@@ -252,7 +253,7 @@ namespace YAT.Model
 
 			if (!success && ApplicationSettings.LocalUser.General.AutoOpenWorkspace)
 			{
-				// Make sure that auto workspace is not already in use by another instance of YAT
+				// Make sure that auto workspace is not already in use by another instance of YAT.
 				if (ApplicationSettings.LocalUser.AutoWorkspace.FilePathUser == Guid.Empty)
 				{
 					string filePath = ApplicationSettings.LocalUser.AutoWorkspace.FilePath;
@@ -261,21 +262,21 @@ namespace YAT.Model
 				}
 			}
 
-			// Clean up the default directory
+			// Clean up the default directory.
 			if (!otherInstanceIsAlreadyRunning)
 				CleanupLocalUserDirectory();
 
-			// If no success so far, create a new empty workspace
+			// If no success so far, create a new empty workspace.
 			if (!success)
 			{
-				// Reset workspace file path
+				// Reset workspace file path.
 				ApplicationSettings.LocalUser.AutoWorkspace.ResetFilePathAndUser();
 				ApplicationSettings.Save();
 
 				success = CreateNewWorkspace();
 			}
 
-			// Update number of running instances
+			// Update number of running instances.
 			if (success)
 				staticInstancesRunning++;
 
@@ -286,17 +287,17 @@ namespace YAT.Model
 		{
 			List<Process> processes = new List<Process>();
 
-			// Get all processes named "YAT" (also "NUnit" while testing)
+			// Get all processes named "YAT" (also "NUnit" while testing).
 			processes.AddRange(Process.GetProcessesByName(Application.ProductName));
 
-			// Also get all debug processes named "YAT.vshost"
+			// Also get all debug processes named "YAT.vshost".
 			processes.AddRange(Process.GetProcessesByName(Application.ProductName + ".vshost"));
 
 			// Remove current instance
 			Process currentProcess = Process.GetCurrentProcess();
 			foreach (Process p in processes)
 			{
-				// Comparision must happen through process ID
+				// Comparision must happen through process ID.
 				if (p.Id == currentProcess.Id)
 				{
 					processes.Remove(p);
@@ -304,13 +305,14 @@ namespace YAT.Model
 				}
 			}
 
-			// Consider multiple processes as well as multiple instances within this process
+			// Consider multiple processes as well as multiple instances within this process.
 			return ((processes.Count > 0) || (staticInstancesRunning > 0));
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
 		private void CleanupLocalUserDirectory()
 		{
-			// Get all file paths in default directory
+			// Get all file paths in default directory.
 			List<string> localUserDirectoryFilePaths = new List<string>();
 			try
 			{
@@ -319,29 +321,31 @@ namespace YAT.Model
 			}
 			catch
 			{
-				// Don't care about exceptions
+				// Don't care about exceptions.
 			}
 
-			// Ensure to leave application settings untouched
+			// Ensure to leave application settings untouched.
 			localUserDirectoryFilePaths.Remove(ApplicationSettings.LocalUserSettingsFilePath);
 
-			// Get all active file paths
+			// Get all active file paths.
 			List<string> activeFilePaths = new List<string>();
 			if (this.workspace != null)
 			{
-				// Add workspace settings file
+				// Add workspace settings file.
 				if (this.workspace.SettingsFileExists)
 					activeFilePaths.Add(this.workspace.SettingsFilePath);
 
-				// Add terminal settings files
+				// Add terminal settings files.
 				activeFilePaths.AddRange(this.workspace.TerminalSettingsFilePaths);
 			}
 
-			// Ensure to leave all active settings untouched
+			// Ensure to leave all active settings untouched.
 			foreach (string afp in activeFilePaths)
+			{
 				localUserDirectoryFilePaths.Remove(afp);
+			}
 
-			// Delete all obsolete file paths in default directory
+			// Delete all obsolete file paths in default directory.
 			foreach (string ddfp in localUserDirectoryFilePaths)
 			{
 				try
@@ -350,7 +354,7 @@ namespace YAT.Model
 				}
 				catch
 				{
-					// Don't care about exceptions
+					// Don't care about exceptions.
 				}
 			}
 		}

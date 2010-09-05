@@ -26,18 +26,8 @@ namespace MKY.Test.Defaults
 	/// <summary>
 	/// Creates the defaults of the test settings in the solution directory.
 	/// </summary>
-	/// <remarks>
-	/// Sealed to prevent FxCop "CA1052:StaticHolderTypesShouldBeSealeds".
-	/// </remarks>
-	sealed public class ConsoleProgram
+	public static class ConsoleProgram
 	{
-		/// <remarks>
-		/// Prevent FxCop "CA1053:StaticHolderTypesShouldNotHaveConstructors".
-		/// </remarks>
-		private ConsoleProgram()
-		{
-		}
-
 		/// <summary></summary>
 		[STAThread]
 		public static void Main()
