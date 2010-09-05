@@ -260,15 +260,18 @@ namespace YAT.Gui.Forms
 
 				this.mdiParent = MdiParent;
 
-				// immediately set terminal controls so the terminal "looks" nice from the very start
+				// Immediately set terminal controls so the terminal "looks" nice from the very start.
 				SetTerminalControls();
 
-				// select send command control to enable immediate user input
-				SelectSendCommandInput();
-
-				// then start terminal
+				// Then start terminal.
 				this.terminal.Start();
 			}
+		}
+
+		private void Terminal_Activated(object sender, EventArgs e)
+		{
+			// Select send command control to enable immediate user input.
+			SelectSendCommandInput();
 		}
 
 		private void Terminal_LocationChanged(object sender, EventArgs e)
@@ -292,7 +295,7 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void Terminal_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			// Prevent multiple calls to Close()
+			// Prevent multiple calls to Close().
 			if (!this.isClosingFromModel)
 			{
 				this.isClosingFromForm = true;
@@ -1125,7 +1128,7 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls = true;
 
-			// pages
+			// Pages.
 			List<Model.Types.PredefinedCommandPage> pages = this.settingsRoot.PredefinedCommand.Pages;
 
 			if ((pages != null) && (pages.Count > 0))
@@ -1139,7 +1142,7 @@ namespace YAT.Gui.Forms
 				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled = false;
 			}
 
-			// commands
+			// Commands.
 			List<Model.Types.Command> commands = null;
 			if ((pages != null) && (pages.Count > 0))
 				commands = this.settingsRoot.PredefinedCommand.Pages[predefined.SelectedPage - 1].Commands;
@@ -1712,7 +1715,7 @@ namespace YAT.Gui.Forms
 
 		private void SetPredefinedControls()
 		{
-			contextMenuStrip_Predefined_SetMenuItems(); // ensure that shortcuts are activated
+			contextMenuStrip_Predefined_SetMenuItems(); // Ensure that shortcuts are activated.
 
 			predefined.TerminalIsOpen = this.terminal.IsOpen;
 		}
@@ -2097,6 +2100,11 @@ namespace YAT.Gui.Forms
 		// Predefined Panel
 		//==========================================================================================
 
+		private void SelectPredefined()
+		{
+			predefined.Select();
+		}
+
 		/// <param name="page">Page 1..max.</param>
 		/// <param name="command">Command 1..max.</param>
 		private void RequestPredefined(int page, int command)
@@ -2123,7 +2131,7 @@ namespace YAT.Gui.Forms
 				}
 			}
 
-			// if command is not defined, show settings dialog
+			// If command is not defined, show settings dialog.
 			ShowPredefinedCommandSettings(page, command);
 		}
 
@@ -2819,22 +2827,22 @@ namespace YAT.Gui.Forms
 
 		private void SetTerminalControls()
 		{
-			// terminal menu
+			// Terminal menu.
 			toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems();
 
-			// terminal panel
+			// Terminal panel.
 			SetTerminalCaption();
 			SetIOStatus();
 			SetIOControlControls();
 			SetMonitorIOStatus();
 
-			// send
+			// Send.
 			SetSendControls();
 
-			// predefined
+			// Predefined.
 			SetPredefinedControls();
 
-			// preset
+			// Preset.
 			SetPresetControls();
 		}
 

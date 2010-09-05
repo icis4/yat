@@ -159,6 +159,11 @@ namespace YAT.Gui.Forms
 			if (ActiveMdiChild != null)
 			{
 				this.workspace.ActivateTerminal(((Terminal)ActiveMdiChild).UnderlyingTerminal);
+
+				// Activate the MDI child, to ensure that shortcuts effect the correct terminal.
+				// Fixes bug #2996684.
+				ActiveMdiChild.BringToFront();
+
 				SetTimedStatus(Status.ChildActivated);
 			}
 			SetChildControls();
@@ -166,7 +171,7 @@ namespace YAT.Gui.Forms
 
 		private void Main_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			// prevent multiple calls to Close()
+			// Prevent multiple calls to Close().
 			if (!this.isClosingFromModel)
 			{
 				this.isClosingFromForm = true;

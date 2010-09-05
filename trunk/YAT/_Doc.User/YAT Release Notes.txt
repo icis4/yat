@@ -75,6 +75,10 @@ Fixed bugs:
 - Tab order in predefined command dialog fixed (bug #2914863)
 
 Limitations and known issues:
+- MDI limitations of .NET
+   > Issues with frame (bugs #1808492 and #1808493)
+   > Issues with window list (bugs #1808494 and #2846917)
+   > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684)
 - Serial port auto-reopen not yet implementable due to .NET deadlock issue in System.IO.SerialPort
   (feature request #1960299)
 - Support for serial ports which are named other than COM isn't supported by .NET
