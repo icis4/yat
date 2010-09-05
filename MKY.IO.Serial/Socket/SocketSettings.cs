@@ -176,7 +176,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		[XmlElement("RemoteHost")]
 		public virtual string RemoteHost
 		{
@@ -218,7 +218,7 @@ namespace MKY.IO.Serial
 
 							default:
 							{
-								throw (new ArgumentOutOfRangeException("IP Host Type", (IPHostType)ipHost, "Unknown IP host type"));
+								throw (new ArgumentOutOfRangeException("value", (IPHostType)ipHost, "Unknown IP host type"));
 							}
 						}
 					}
@@ -254,7 +254,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		[XmlElement("LocalInterface")]
 		public virtual string LocalInterface
 		{
@@ -298,7 +298,7 @@ namespace MKY.IO.Serial
 
 							default:
 							{
-								throw (new ArgumentOutOfRangeException("IP Network Interface", (IPNetworkInterfaceType)networkInterface, "Unknown network interface type"));
+								throw (new ArgumentOutOfRangeException("value", (IPNetworkInterfaceType)networkInterface, "Unknown network interface type"));
 							}
 						}
 					}

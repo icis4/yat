@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml.Serialization;
@@ -336,9 +337,7 @@ namespace MKY.Utilities.Settings
 		/// Returns false if either settings could not be loaded from its file path and have been
 		/// set to defaults.
 		/// </returns>
-		/// <exception cref="Exception">
-		/// Thrown if settings could not be created.
-		/// </exception>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public virtual bool Load()
 		{
 			this.allSettingsSuccessfullyLoaded = true;
@@ -357,9 +356,7 @@ namespace MKY.Utilities.Settings
 			{
 				Save();
 			}
-			catch
-			{
-			}
+			catch { }
 
 			// Return load result.
 			return (this.allSettingsSuccessfullyLoaded);
@@ -437,6 +434,7 @@ namespace MKY.Utilities.Settings
 			return (result);
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private object LoadFromFile(Type type, string filePath)
 		{
 			// Try to open existing file of current version.
@@ -453,9 +451,7 @@ namespace MKY.Utilities.Settings
 					}
 					return (settings);
 				}
-				catch
-				{
-				}
+				catch { }
 
 				// Try to open existing file with tolerant deserialization.
 				try
@@ -468,9 +464,7 @@ namespace MKY.Utilities.Settings
 					}
 					return (settings);
 				}
-				catch
-				{
-				}
+				catch { }
 			}
 
 			// Find all valid directories of older versions.
@@ -486,9 +480,7 @@ namespace MKY.Utilities.Settings
 					if (version < currentVersion)
 						oldDirectories.Add(directory);
 				}
-				catch
-				{
-				}
+				catch { }
 			}
 
 			// Try to open an existing file of an older version, start with most recent.
@@ -507,9 +499,7 @@ namespace MKY.Utilities.Settings
 					}
 					return (settings);
 				}
-				catch
-				{
-				}
+				catch { }
 
 				// Try to open existing file with tolerant deserialization.
 				try
@@ -522,9 +512,7 @@ namespace MKY.Utilities.Settings
 					}
 					return (settings);
 				}
-				catch
-				{
-				}
+				catch { }
 			}
 
 			// If nothing found, return <c>null</c>.
@@ -538,6 +526,7 @@ namespace MKY.Utilities.Settings
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public virtual void Save()
 		{
 			Exception result = null;
@@ -616,6 +605,7 @@ namespace MKY.Utilities.Settings
 				SaveToFile(typeof(TRoamingUserSettings), this.roamingUserSettingsFilePath, this.roamingUserSettings);
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void SaveToFile(Type type, string filePath, object settings)
 		{
 			string backup = filePath + IO.XFile.BackupFileExtension;

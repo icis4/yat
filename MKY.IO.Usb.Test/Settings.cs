@@ -17,7 +17,9 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 
 using MKY.Utilities;
 using MKY.Utilities.Configuration;
@@ -39,7 +41,7 @@ namespace MKY.IO.Usb.Test
 		// Fields
 		//==========================================================================================
 
-		private ConfigurationPropertyCollection properties;
+		private ConfigurationPropertyCollection properties = new ConfigurationPropertyCollection();
 
 		private ConfigurationProperty serialHidDeviceAIsAvailable = new ConfigurationProperty("SerialHidDeviceAIsAvailable", typeof(bool), false);
 		private ConfigurationProperty serialHidDeviceBIsAvailable = new ConfigurationProperty("SerialHidDeviceBIsAvailable", typeof(bool), false);
@@ -59,8 +61,6 @@ namespace MKY.IO.Usb.Test
 		/// </summary>
 		public SettingsSection()
 		{
-			this.properties = new ConfigurationPropertyCollection();
-
 			this.properties.Add(this.serialHidDeviceAIsAvailable);
 			this.properties.Add(this.serialHidDeviceBIsAvailable);
 
@@ -82,6 +82,7 @@ namespace MKY.IO.Usb.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "DeviceA and DeviceB")]
 		public virtual bool SerialHidDeviceAIsAvailable
 		{
 			get { return (bool)this["SerialHidDeviceAIsAvailable"]; }
@@ -93,6 +94,7 @@ namespace MKY.IO.Usb.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "DeviceA and DeviceB")]
 		public virtual bool SerialHidDeviceBIsAvailable
 		{
 			get { return (bool)this["SerialHidDeviceBIsAvailable"]; }
@@ -168,6 +170,7 @@ namespace MKY.IO.Usb.Test
 	{
 		private static readonly SettingsSection staticSettings = new SettingsSection();
 
+		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Settings need to be read during creation.")]
 		static SettingsProvider()
 		{
 			SettingsSection settings;
@@ -193,13 +196,17 @@ namespace MKY.IO.Usb.Test
 	public static class SettingsCategoryStrings
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "DeviceA and DeviceB")]
 		public static readonly string SerialHidDeviceAIsAvailable = "USB Ser/HID " + SettingsProvider.Settings.SerialHidDeviceA + " is available";
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "DeviceA and DeviceB")]
 		public static readonly string SerialHidDeviceBIsAvailable = "USB Ser/HID " + SettingsProvider.Settings.SerialHidDeviceB + " is available";
 	}
 
 	/// <summary></summary>
-	public class SerialHidDeviceAIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "DeviceA and DeviceB")]
+	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
+	sealed public class SerialHidDeviceAIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
 		public SerialHidDeviceAIsAvailableCategoryAttribute()
@@ -209,7 +216,9 @@ namespace MKY.IO.Usb.Test
 	}
 
 	/// <summary></summary>
-	public class SerialHidDeviceBIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "DeviceA and DeviceB")]
+	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
+	sealed public class SerialHidDeviceBIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
 		public SerialHidDeviceBIsAvailableCategoryAttribute()

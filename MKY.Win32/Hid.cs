@@ -55,19 +55,15 @@ namespace MKY.Win32
 		// Native
 		//==========================================================================================
 
-		/// <summary>
-		/// Class encapsulating native Win32 types, constants and functions.
-		/// </summary>
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
-		public static class Native
-		{
-			#region Types
-			//==========================================================================================
-			// Types
-			//==========================================================================================
+		#region Native > Types
+		//------------------------------------------------------------------------------------------
+		// Native > Types
+		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		public static class NativeTypes
+		{
 			// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
 			// warnings for each undocumented member below. Documenting each member makes little sense
 			// since they pretty much tell their purpose and documentation tags between the members
@@ -90,6 +86,7 @@ namespace MKY.Win32
 			// HIDD_CONFIGURATION is reserved for internal system use
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Not performance critical.")]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct HIDP_CAPS
 			{
@@ -125,6 +122,7 @@ namespace MKY.Win32
 			/// <summary>
 			/// The HIDP_REPORT_TYPE enumeration type is used to specify a HID report type.
 			/// </summary>
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by Win32.")]
 			[CLSCompliant(false)]
 			public enum HIDP_STATUS : uint
 			{
@@ -175,22 +173,22 @@ namespace MKY.Win32
 			}
 
 			#pragma warning restore 1591
+		}
 
-			#endregion
+		#endregion
 
-			#region Constants
-			//==========================================================================================
-			// Constants
-			//==========================================================================================
+		#region Native > External Functions
+		//------------------------------------------------------------------------------------------
+		// Native > External Functions
+		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
+		public static class NativeMethods
+		{
 			private const string HID_DLL = "hid.dll";
-
-			#endregion
-
-			#region External Functions
-			//==========================================================================================
-			// External Functions
-			//==========================================================================================
 
 			/// <summary>
 			/// Removes any Input reports waiting in the buffer.
@@ -200,6 +198,7 @@ namespace MKY.Win32
 			/// </remarks>
 			/// <param name="HidDeviceObject">A handle to the device.</param>
 			/// <returns>True on success, false on failure.</returns>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern bool HidD_FlushQueue([In] SafeFileHandle HidDeviceObject);
 
@@ -208,12 +207,14 @@ namespace MKY.Win32
 			/// </summary>
 			/// <param name="PreparsedData">A pointer to the PreparsedData structure returned by HidD_GetPreparsedData.</param>
 			/// <returns>True on success, false on failure.</returns>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern bool HidD_FreePreparsedData([In] IntPtr PreparsedData);
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			public static extern bool HidD_GetAttributes([In] SafeFileHandle HidDeviceObject, [In, Out] ref HIDD_ATTRIBUTES Attributes);
+			public static extern bool HidD_GetAttributes([In] SafeFileHandle HidDeviceObject, [In, Out] ref NativeTypes.HIDD_ATTRIBUTES Attributes);
 
 			// HidD_GetConfiguration() is reserved for internal system use
 
@@ -234,6 +235,7 @@ namespace MKY.Win32
 			/// <remarks>
 			/// Public via <see cref="GetHidGuid()"/>.
 			/// </remarks>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern void HidD_GetHidGuid([In, Out] ref System.Guid HidGuid);
 
@@ -299,6 +301,7 @@ namespace MKY.Win32
 			/// </remarks>
 			/// <param name="HidDeviceObject">A handle to a device and an integer to hold the number of buffers.</param>
 			/// <param name="NumberBuffers">True on success, false on failure.</param>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[CLSCompliant(false)]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern bool HidD_GetNumInputBuffers([In] SafeFileHandle HidDeviceObject, [Out] out UInt32 NumberBuffers);
@@ -319,6 +322,7 @@ namespace MKY.Win32
 			/// <param name="HidDeviceObject">A handle returned by CreateFile.</param>
 			/// <param name="PreparsedData">A pointer to a buffer.</param>
 			/// <returns>True on success, false on failure.</returns>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern bool HidD_GetPreparsedData([In] SafeFileHandle HidDeviceObject, [Out] out IntPtr PreparsedData);
 
@@ -380,6 +384,7 @@ namespace MKY.Win32
 			/// <param name="HidDeviceObject">A handle to an HID.</param>
 			/// <param name="NumberBuffers">An integer to hold the number of buffers.</param>
 			/// <returns>True on success, false on failure.</returns>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[CLSCompliant(false)]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern bool HidD_SetNumInputBuffers([In] SafeFileHandle HidDeviceObject, [In] UInt32 NumberBuffers);
@@ -410,8 +415,9 @@ namespace MKY.Win32
 			/// <param name="PreparsedData">A pointer returned by HidD_GetPreparsedData.</param>
 			/// <param name="Capabilities">A pointer to a HIDP_CAPS structure.</param>
 			/// <returns>True on success, false on failure.</returns>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			public static extern Int32 HidP_GetCaps([In] IntPtr PreparsedData, [In, Out] ref HIDP_CAPS Capabilities);
+			public static extern Int32 HidP_GetCaps([In] IntPtr PreparsedData, [In, Out] ref NativeTypes.HIDP_CAPS Capabilities);
 
 			/// <summary>
 			/// Retrieves a buffer containing an array of HidP_ValueCaps structures. Each structure
@@ -422,17 +428,17 @@ namespace MKY.Win32
 			/// <param name="PreparsedData"> A pointer to the PreparsedData structure returned by HidD_GetPreparsedData.</param>
 			/// <returns>True on success, false on failure.</returns>
 			[CLSCompliant(false)]
-			public static HIDP_STATUS HidP_GetValueCaps(HIDP_REPORT_TYPE ReportType, ref HIDP_VALUE_CAPS ValueCaps, IntPtr PreparsedData)
+			public static NativeTypes.HIDP_STATUS HidP_GetValueCaps(NativeTypes.HIDP_REPORT_TYPE ReportType, ref NativeTypes.HIDP_VALUE_CAPS ValueCaps, IntPtr PreparsedData)
 			{
-				UInt32 ValueCapsLength = (UInt32)Marshal.SizeOf(typeof(HIDP_VALUE_CAPS));
+				UInt32 ValueCapsLength = (UInt32)Marshal.SizeOf(typeof(NativeTypes.HIDP_VALUE_CAPS));
 				return (HidP_GetValueCaps(ReportType, ref ValueCaps, ref ValueCapsLength, PreparsedData));
 			}
 
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			private static extern HIDP_STATUS HidP_GetValueCaps([In] HIDP_REPORT_TYPE ReportType, [In, Out] ref HIDP_VALUE_CAPS ValueCaps, [In] ref UInt32 ValueCapsLength, [In] IntPtr PreparsedData);
-
-			#endregion
+			private static extern NativeTypes.HIDP_STATUS HidP_GetValueCaps([In] NativeTypes.HIDP_REPORT_TYPE ReportType, [In, Out] ref NativeTypes.HIDP_VALUE_CAPS ValueCaps, [In] ref UInt32 ValueCapsLength, [In] IntPtr PreparsedData);
 		}
+
+		#endregion
 
 		#endregion
 
@@ -475,7 +481,7 @@ namespace MKY.Win32
 		public static System.Guid GetHidGuid()
 		{
 			System.Guid hidGuid = new System.Guid();
-			Native.HidD_GetHidGuid(ref hidGuid);
+			NativeMethods.HidD_GetHidGuid(ref hidGuid);
 			return (hidGuid);
 		}
 
@@ -484,14 +490,14 @@ namespace MKY.Win32
 		/// </summary>
 		public static bool CreateSharedQueryOnlyDeviceHandle(string systemPath, out SafeFileHandle deviceHandle)
 		{
-			SafeFileHandle h = FileIO.Native.CreateFile
+			SafeFileHandle h = FileIO.NativeMethods.CreateFile
 				(
 				systemPath,
-				FileIO.Native.Access.QUERY_ONLY,
-				FileIO.Native.ShareMode.SHARE_READ_WRITE,
+				FileIO.NativeTypes.Access.QUERY_ONLY,
+				FileIO.NativeTypes.ShareMode.SHARE_READ_WRITE,
 				IntPtr.Zero,
-				FileIO.Native.CreationDisposition.OPEN_EXISTING,
-				FileIO.Native.AttributesAndFlags.NONE,
+				FileIO.NativeTypes.CreationDisposition.OPEN_EXISTING,
+				FileIO.NativeTypes.AttributesAndFlags.NONE,
 				IntPtr.Zero
 				);
 
@@ -514,14 +520,14 @@ namespace MKY.Win32
 		/// </summary>
 		public static bool CreateSharedReadWriteHandle(string systemPath, out SafeFileHandle readHandle)
 		{
-			SafeFileHandle h = FileIO.Native.CreateFile
+			SafeFileHandle h = FileIO.NativeMethods.CreateFile
 				(
 				systemPath,
-				FileIO.Native.Access.GENERIC_READ_WRITE,
-				FileIO.Native.ShareMode.SHARE_READ_WRITE,
+				FileIO.NativeTypes.Access.GENERIC_READ_WRITE,
+				FileIO.NativeTypes.ShareMode.SHARE_READ_WRITE,
 				IntPtr.Zero,
-				FileIO.Native.CreationDisposition.OPEN_EXISTING,
-				FileIO.Native.AttributesAndFlags.FLAG_OVERLAPPED,
+				FileIO.NativeTypes.CreationDisposition.OPEN_EXISTING,
+				FileIO.NativeTypes.AttributesAndFlags.FLAG_OVERLAPPED,
 				IntPtr.Zero
 				);
 
@@ -542,19 +548,19 @@ namespace MKY.Win32
 		/// <summary></summary>
 		public static bool GetManufacturerString(SafeFileHandle deviceHandle, out string manufacturer)
 		{
-			return (GetString(deviceHandle, Native.HidD_GetManufacturerString, out manufacturer));
+			return (GetString(deviceHandle, NativeMethods.HidD_GetManufacturerString, out manufacturer));
 		}
 
 		/// <summary></summary>
 		public static bool GetProductString(SafeFileHandle deviceHandle, out string product)
 		{
-			return (GetString(deviceHandle, Native.HidD_GetProductString, out product));
+			return (GetString(deviceHandle, NativeMethods.HidD_GetProductString, out product));
 		}
 
 		/// <summary></summary>
 		public static bool GetSerialNumberString(SafeFileHandle deviceHandle, out string serialNumber)
 		{
-			return (GetString(deviceHandle, Native.HidD_GetSerialNumberString, out serialNumber));
+			return (GetString(deviceHandle, NativeMethods.HidD_GetSerialNumberString, out serialNumber));
 		}
 
 		/// <summary>
@@ -576,32 +582,25 @@ namespace MKY.Win32
 		{
 			if (!deviceHandle.IsInvalid)
 			{
-				try
+				// Retrieve language IDs at index 0.
+				string languageString;
+				if (NativeMethods.HidD_GetIndexedString(deviceHandle, (int)StringDescriptorIndex.LanguageIds, out languageString))
 				{
-					// Retrieve language IDs at index 0
-					string languageString;
-					if (Native.HidD_GetIndexedString(deviceHandle, (int)StringDescriptorIndex.LanguageIds, out languageString))
+					// Retrieve content string.
+					string contentString;
+					if (method(deviceHandle, out contentString)) // GetManufacturerString() or GetProductString() or GetSerialNumberString().
 					{
-						// Retrieve content string
-						string contentString;
-						if (method(deviceHandle, out contentString)) // GetManufacturerString() or GetProductString() or GetSerialNumberString()
+						if (contentString != languageString) // Looks like a proper invariant string.
 						{
-							if (contentString != languageString) // Looks like a proper invariant string
-							{
-								hidString = contentString;
-								return (true);
-							}
-							else // contentString == languageString means that content isn't available and index 0 has be retrieved
-							{
-								hidString = "";
-								return (true);
-							}
+							hidString = contentString;
+							return (true);
+						}
+						else // contentString == languageString means that content isn't available and index 0 has be retrieved.
+						{
+							hidString = "";
+							return (true);
 						}
 					}
-				}
-				catch (Exception ex)
-				{
-					XDebug.WriteException(typeof(Hid), ex);
 				}
 			}
 			hidString = "";
@@ -622,28 +621,20 @@ namespace MKY.Win32
 		/// <returns>True on success, false on failure.</returns>
 		public static bool GetNumberOfInputBuffers(SafeFileHandle deviceHandle, out int numberOfInputBuffers)
 		{
-			try
+			bool success = false;
+			if (!Version.IsWindows98Standard())
 			{
-				bool success = false;
-				if (!Version.IsWindows98Standard())
-				{
-					UInt32 numberBuffers;
-					success = Native.HidD_GetNumInputBuffers(deviceHandle, out numberBuffers);
-					numberOfInputBuffers = (int)numberBuffers;
-				}
-				else
-				{
-					// Under Windows 98 Standard Edition, the number of buffers is fixed at 2.
-					numberOfInputBuffers = 2;
-					success = true;
-				}
-				return (success);
+				UInt32 numberBuffers;
+				success = NativeMethods.HidD_GetNumInputBuffers(deviceHandle, out numberBuffers);
+				numberOfInputBuffers = (int)numberBuffers;
 			}
-			catch (Exception ex)
+			else
 			{
-				XDebug.WriteException(typeof(Hid), ex);
-				throw;
+				// Under Windows 98 Standard Edition, the number of buffers is fixed at 2.
+				numberOfInputBuffers = 2;
+				success = true;
 			}
+			return (success);
 		}
 
 		/// <summary>
@@ -660,18 +651,10 @@ namespace MKY.Win32
 		/// <returns>True on success. False on failure.</returns>
 		public static bool SetNumberOfInputBuffers(SafeFileHandle deviceHandle, int numberOfInputBuffers)
 		{
-			try
-			{
-				if (!Version.IsWindows98Standard())
-					return (Native.HidD_SetNumInputBuffers(deviceHandle, (UInt32)numberOfInputBuffers));
-				else
-					return (false); // Not supported under Windows 98 Standard Edition.
-			}
-			catch (Exception ex)
-			{
-				XDebug.WriteException(typeof(Hid), ex);
-				throw;
-			}
+			if (!Version.IsWindows98Standard())
+				return (NativeMethods.HidD_SetNumInputBuffers(deviceHandle, (UInt32)numberOfInputBuffers));
+			else
+				return (false); // Not supported under Windows 98 Standard Edition.
 		}
 
 		/// <summary>
@@ -686,18 +669,10 @@ namespace MKY.Win32
 		/// <returns>True on success, false on failure.</returns>
 		public static bool GetInputReport(SafeFileHandle deviceHandle, byte[] reportBuffer)
 		{
-			try
-			{
-				if (!Version.IsWindowsXpOrLater())
-					return (Native.HidD_GetInputReport(deviceHandle, reportBuffer));
-				else
-					return (false); // Not supported before Windows XP.
-			}
-			catch (Exception ex)
-			{
-				XDebug.WriteException(typeof(Hid), ex);
-				throw;
-			}
+			if (!Version.IsWindowsXpOrLater())
+				return (NativeMethods.HidD_GetInputReport(deviceHandle, reportBuffer));
+			else
+				return (false); // Not supported before Windows XP.
 		}
 
 		/// <summary>
@@ -712,18 +687,10 @@ namespace MKY.Win32
 		/// <returns>True on success, false on failure.</returns>
 		public static bool SetOutputReport(SafeFileHandle deviceHandle, byte[] reportBuffer)
 		{
-			try
-			{
-				if (!Version.IsWindowsXpOrLater())
-					return (Native.HidD_SetOutputReport(deviceHandle, reportBuffer));
-				else
-					return (false); // Not supported before Windows XP.
-			}
-			catch (Exception ex)
-			{
-				XDebug.WriteException(typeof(Hid), ex);
-				throw;
-			}
+			if (!Version.IsWindowsXpOrLater())
+				return (NativeMethods.HidD_SetOutputReport(deviceHandle, reportBuffer));
+			else
+				return (false); // Not supported before Windows XP.
 		}
 
 		/// <summary>
@@ -733,16 +700,8 @@ namespace MKY.Win32
 		/// <returns> True on success, false on failure.</returns>
 		public static bool FlushQueue(SafeFileHandle deviceHandle)
 		{
-			try
-			{
-				bool success = Native.HidD_FlushQueue(deviceHandle);
-				return (success);
-			}
-			catch (Exception ex)
-			{
-				XDebug.WriteException(typeof(Hid), ex);
-				throw;
-			}
+			bool success = NativeMethods.HidD_FlushQueue(deviceHandle);
+			return (success);
 		}
 
 		/// <summary>
@@ -750,58 +709,42 @@ namespace MKY.Win32
 		/// </summary>
 		/// <param name="deviceHandle">A handle to a device.</param>
 		/// <returns>An HIDP_CAPS structure.</returns>
-		public static Native.HIDP_CAPS GetDeviceCapabilities(SafeFileHandle deviceHandle)
+		public static NativeTypes.HIDP_CAPS GetDeviceCapabilities(SafeFileHandle deviceHandle)
 		{
-			Native.HIDP_CAPS capabilities = new Native.HIDP_CAPS();
+			NativeTypes.HIDP_CAPS capabilities = new NativeTypes.HIDP_CAPS();
 			IntPtr pPreparsedData = new IntPtr();
 			bool success = false;
 
-			try
+			success = NativeMethods.HidD_GetPreparsedData(deviceHandle, out pPreparsedData);
+			Int32 result = NativeMethods.HidP_GetCaps(pPreparsedData, ref capabilities);
+			if ((result != 0))
 			{
-				success = Native.HidD_GetPreparsedData(deviceHandle, out pPreparsedData);
-				Int32 result = Native.HidP_GetCaps(pPreparsedData, ref capabilities);
-				if ((result != 0))
-				{
-					System.Diagnostics.Debug.WriteLine("USB device capabilities:");
-					System.Diagnostics.Debug.Indent();
-					System.Diagnostics.Debug.WriteLine("Usage (hex):                     " + capabilities.Usage.ToString("X2"));
-					System.Diagnostics.Debug.WriteLine("Usage Page (hex):                " + capabilities.UsagePage.ToString("X2"));
-					System.Diagnostics.Debug.WriteLine("Input Report byte Length:        " + capabilities.InputReportByteLength);
-					System.Diagnostics.Debug.WriteLine("Output Report byte Length:       " + capabilities.OutputReportByteLength);
-					System.Diagnostics.Debug.WriteLine("Feature Report byte Length:      " + capabilities.FeatureReportByteLength);
-					System.Diagnostics.Debug.WriteLine("Number of Link Collection Nodes: " + capabilities.NumberLinkCollectionNodes);
-					System.Diagnostics.Debug.WriteLine("Number of Input Button Caps:     " + capabilities.NumberInputButtonCaps);
-					System.Diagnostics.Debug.WriteLine("Number of Input Value Caps:      " + capabilities.NumberInputValueCaps);
-					System.Diagnostics.Debug.WriteLine("Number of Input Data Indices:    " + capabilities.NumberInputDataIndices);
-					System.Diagnostics.Debug.WriteLine("Number of Output Button Caps:    " + capabilities.NumberOutputButtonCaps);
-					System.Diagnostics.Debug.WriteLine("Number of Output Value Caps:     " + capabilities.NumberOutputValueCaps);
-					System.Diagnostics.Debug.WriteLine("Number of Output Data Indices:   " + capabilities.NumberOutputDataIndices);
-					System.Diagnostics.Debug.WriteLine("Number of Feature Button Caps:   " + capabilities.NumberFeatureButtonCaps);
-					System.Diagnostics.Debug.WriteLine("Number of Feature Value Caps:    " + capabilities.NumberFeatureValueCaps);
-					System.Diagnostics.Debug.WriteLine("Number of Feature Data Indices:  " + capabilities.NumberFeatureDataIndices);
-					System.Diagnostics.Debug.Unindent();
+				System.Diagnostics.Debug.WriteLine("USB device capabilities:");
+				System.Diagnostics.Debug.Indent();
+				System.Diagnostics.Debug.WriteLine("Usage (hex):                     " + capabilities.Usage.ToString("X2"));
+				System.Diagnostics.Debug.WriteLine("Usage Page (hex):                " + capabilities.UsagePage.ToString("X2"));
+				System.Diagnostics.Debug.WriteLine("Input Report byte Length:        " + capabilities.InputReportByteLength);
+				System.Diagnostics.Debug.WriteLine("Output Report byte Length:       " + capabilities.OutputReportByteLength);
+				System.Diagnostics.Debug.WriteLine("Feature Report byte Length:      " + capabilities.FeatureReportByteLength);
+				System.Diagnostics.Debug.WriteLine("Number of Link Collection Nodes: " + capabilities.NumberLinkCollectionNodes);
+				System.Diagnostics.Debug.WriteLine("Number of Input Button Caps:     " + capabilities.NumberInputButtonCaps);
+				System.Diagnostics.Debug.WriteLine("Number of Input Value Caps:      " + capabilities.NumberInputValueCaps);
+				System.Diagnostics.Debug.WriteLine("Number of Input Data Indices:    " + capabilities.NumberInputDataIndices);
+				System.Diagnostics.Debug.WriteLine("Number of Output Button Caps:    " + capabilities.NumberOutputButtonCaps);
+				System.Diagnostics.Debug.WriteLine("Number of Output Value Caps:     " + capabilities.NumberOutputValueCaps);
+				System.Diagnostics.Debug.WriteLine("Number of Output Data Indices:   " + capabilities.NumberOutputDataIndices);
+				System.Diagnostics.Debug.WriteLine("Number of Feature Button Caps:   " + capabilities.NumberFeatureButtonCaps);
+				System.Diagnostics.Debug.WriteLine("Number of Feature Value Caps:    " + capabilities.NumberFeatureValueCaps);
+				System.Diagnostics.Debug.WriteLine("Number of Feature Data Indices:  " + capabilities.NumberFeatureDataIndices);
+				System.Diagnostics.Debug.Unindent();
 
-					// \remind 2010-03-21 / mky
-					// The following two lines demonstrate how the devices value capabilities can be retrieved.
-					// However, due to some reaseon HidP_GetValueCaps() overwrites 'deviceHandle'. Before
-					// making use of the following lines, ensure that 'deviceHandle' isn't overwritten anymore.
-					//
-					//HIDP_VALUE_CAPS valueCaps = new HIDP_VALUE_CAPS();
-					//HidP_GetValueCaps(HIDP_REPORT_TYPE.HidP_Input, ref valueCaps, preparsedData);
-				}
-			}
-			catch (Exception ex)
-			{
-				XDebug.WriteException(typeof(Hid), ex);
-				throw;
-			}
-			finally
-			{
-				if (pPreparsedData != IntPtr.Zero)
-				{
-					success = Native.HidD_FreePreparsedData(pPreparsedData);
-					pPreparsedData = IntPtr.Zero;
-				}
+				// \remind 2010-03-21 / mky
+				// The following two lines demonstrate how the devices value capabilities can be retrieved.
+				// However, due to some reaseon HidP_GetValueCaps() overwrites 'deviceHandle'. Before
+				// making use of the following lines, ensure that 'deviceHandle' isn't overwritten anymore.
+				//
+				//HIDP_VALUE_CAPS valueCaps = new HIDP_VALUE_CAPS();
+				//HidP_GetValueCaps(HIDP_REPORT_TYPE.HidP_Input, ref valueCaps, preparsedData);
 			}
 
 			return (capabilities);

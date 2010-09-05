@@ -20,7 +20,7 @@
 
 using NUnit.Framework;
 
-namespace MKY.IO.Serial.Test.USB
+namespace MKY.IO.Serial.Test.Usb
 {
 	/// <summary></summary>
 	[TestFixture]

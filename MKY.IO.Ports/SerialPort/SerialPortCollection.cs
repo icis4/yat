@@ -142,7 +142,7 @@ namespace MKY.IO.Ports
 		/// tried to be opened. Set the <see cref="PortChangedAndCancelEventArgs.Cancel"/>
 		/// property to <c>true</c> to cancel port scanning.
 		/// </param>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public virtual void MarkPortsInUse(EventHandler<PortChangedAndCancelEventArgs> portChangedCallback)
 		{
 			foreach (SerialPortId portId in this)

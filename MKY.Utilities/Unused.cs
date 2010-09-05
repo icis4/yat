@@ -22,14 +22,43 @@ using System;
 namespace MKY.Utilities
 {
 	/// <summary></summary>
-	public static class Unused
+	public static class UnusedEvent
 	{
 		/// <summary>
-		/// Utility method that can be applied to unused objects to prevent compiler warnings.
+		/// Utility method that can be applied to unused events to prevent compiler warnings.
 		/// </summary>
-		public static void PreventCompilerWarning(object obj)
+		public static void PreventCompilerWarning(EventHandler handler)
 		{
-			if ((bool)obj)
+			if (handler != null)
+				return;
+
+			// else return too...
+		}
+
+		/// <summary>
+		/// Utility method that can be applied to unused events to prevent compiler warnings.
+		/// </summary>
+		public static void PreventCompilerWarning<T>(EventHandler<T> handler) where T : EventArgs
+		{
+			if (handler != null)
+				return;
+
+			// else return too...
+		}
+	}
+
+	/// <summary></summary>
+	public static class UnusedArg
+	{
+		/// <summary>
+		/// Utility method that can be applied to unused arguments to prevent code analysis warnings (e.g. FxCop).
+		/// </summary>
+		/// <remarks>
+		/// Prevent FxCop "CA1801:ReviewUnusedParameters".
+		/// </remarks>
+		public static void PreventAnalysisWarning(object obj)
+		{
+			if (obj != null)
 				return;
 
 			// else return too...

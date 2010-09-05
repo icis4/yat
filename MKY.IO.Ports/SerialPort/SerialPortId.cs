@@ -736,7 +736,7 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public override bool IsValid(ITypeDescriptorContext context, object value)
 		{
 			if (value is int)

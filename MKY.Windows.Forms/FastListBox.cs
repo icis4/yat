@@ -19,11 +19,9 @@
 //==================================================================================================
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace MKY.Windows.Forms
@@ -40,7 +38,7 @@ namespace MKY.Windows.Forms
 		// Fields
 		//==========================================================================================
 
-		private bool normal_UserPaint = false;
+		private bool normal_UserPaint;
 
 		#endregion
 
@@ -94,6 +92,7 @@ namespace MKY.Windows.Forms
 		/// If draw mode is <see cref="System.Windows.Forms.DrawMode.Normal"/>,
 		/// only ListBox.OnDrawItem() is called.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration", MessageId = "0#", Justification = "Inconsequent naming in .NET.")]
 		protected override void OnPaintBackground(PaintEventArgs e)
 		{
 			base.OnPaintBackground(e);

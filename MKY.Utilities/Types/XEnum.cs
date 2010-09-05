@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace MKY.Utilities.Types
@@ -148,6 +149,7 @@ namespace MKY.Utilities.Types
 	/// </code>
 	/// 
 	/// </example>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "Class actually implements an enum, but not using inheritance.")]
 	[Serializable]
 	public abstract class XEnum : IEquatable<XEnum>, IComparable, ICloneable
 	{

@@ -75,6 +75,7 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "Stop is a common term to start/stop something.")]
 			public virtual void Stop()
 			{
 				this.timer = null;

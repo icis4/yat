@@ -264,7 +264,7 @@ namespace MKY.IO.Usb
 			{
 				try
 				{
-					Win32.Hid.Native.HIDP_CAPS caps = Win32.Hid.GetDeviceCapabilities(deviceHandle);
+					Win32.Hid.NativeTypes.HIDP_CAPS caps = Win32.Hid.GetDeviceCapabilities(deviceHandle);
 
 					this.usagePage = (XHidUsagePage)caps.UsagePage;
 					this.usage     = (XHidUsage)caps.Usage;

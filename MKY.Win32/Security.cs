@@ -41,19 +41,14 @@ namespace MKY.Win32
 		// Native
 		//==========================================================================================
 
-		/// <summary>
-		/// Class encapsulating native Win32 types, constants and functions.
-		/// </summary>
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
-		public static class Native
-		{
-			#region Types
-			//==========================================================================================
-			// Types
-			//==========================================================================================
+		#region Native > Types
+		//------------------------------------------------------------------------------------------
+		// Native > Types
+		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
+		public static class NativeTypes
+		{
 			/// <summary></summary>
 			public enum SECURITY_IMPERSONATION_LEVEL
 			{
@@ -90,29 +85,26 @@ namespace MKY.Win32
 				/// </remarks>
 				SecurityDelegation = 3,
 			}
+		}
 
-			#endregion
+		#endregion
 
-			#region Constants
-			//==========================================================================================
-			// Constants
-			//==========================================================================================
+		#region Native > External Functions
+		//------------------------------------------------------------------------------------------
+		// Native > External Functions
+		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
+		public static class NativeMethods
+		{
 			private const string ADVANCED_DLL = "advapi32.dll";
-
-			#endregion
-
-			#region External Functions
-			//==========================================================================================
-			// External Functions
-			//==========================================================================================
 
 			/// <summary></summary>
 			[DllImport(ADVANCED_DLL, SetLastError = true)]
-			public static extern bool ImpersonateSelf([In] SECURITY_IMPERSONATION_LEVEL ImpersonationLevel);
-
-			#endregion
+			private static extern bool ImpersonateSelf([In] NativeTypes.SECURITY_IMPERSONATION_LEVEL ImpersonationLevel);
 		}
+
+		#endregion
 
 		#endregion
 	}

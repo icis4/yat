@@ -43,38 +43,30 @@ namespace MKY.Win32
 		// Native
 		//==========================================================================================
 
-		/// <summary>
-		/// Class encapsulating native Win32 types, constants and functions.
-		/// </summary>
+		#region Native > External Functions
+		//------------------------------------------------------------------------------------------
+		// Native > External Functions
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
-		public static class Native
+		public static class NativeMethods
 		{
-			#region Constants
-			//==========================================================================================
-			// Constants
-			//==========================================================================================
-
 			private const string KERNEL_DLL = "kernel32.dll";
-
-			#endregion
-
-			#region External Functions
-			//==========================================================================================
-			// External Functions
-			//==========================================================================================
 
 			/// <summary>
 			/// Closes an open object handle.
 			/// </summary>
 			/// <param name="hObject">A valid handle to an open object.</param>
 			/// <returns>True on success, false on failure.</returns>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern bool CloseHandle([In] SafeFileHandle hObject);
-
-			#endregion
 		}
+
+		#endregion
 
 		#endregion
 	}

@@ -73,7 +73,7 @@ namespace MKY.Utilities.Time
 	public class TimeSpanEventArgs : EventArgs
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
 		public readonly TimeSpan TimeSpan;
 
 		/// <summary></summary>

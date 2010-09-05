@@ -21,6 +21,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -61,9 +62,12 @@ using System.Runtime.InteropServices;
 // CLS compliance.
 [assembly: CLSCompliant(true)]
 
+// Resources.
+[assembly: NeutralResourcesLanguageAttribute("en")]
+
 // Assembly-level FxCop suppressions.
-[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "YAT")]
-[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "YAT.Gui.Controls", MessageId = "YAT")]
+[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "YAT", Justification = "YAT is a name.")]
+[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "YAT.Gui.Controls", MessageId = "YAT", Justification = "YAT is a name.")]
 
 //==================================================================================================
 // End of

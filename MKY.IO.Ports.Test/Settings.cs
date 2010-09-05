@@ -41,7 +41,7 @@ namespace MKY.IO.Ports.Test
 		// Fields
 		//==========================================================================================
 
-		private ConfigurationPropertyCollection properties;
+		private ConfigurationPropertyCollection properties = new ConfigurationPropertyCollection();
 
 		private ConfigurationProperty serialPortAIsAvailable = new ConfigurationProperty("SerialPortAIsAvailable", typeof(bool), false);
 		private ConfigurationProperty serialPortBIsAvailable = new ConfigurationProperty("SerialPortBIsAvailable", typeof(bool), false);
@@ -63,8 +63,6 @@ namespace MKY.IO.Ports.Test
 		/// </summary>
 		public SettingsSection()
 		{
-			this.properties = new ConfigurationPropertyCollection();
-
 			this.properties.Add(this.serialPortAIsAvailable);
 			this.properties.Add(this.serialPortBIsAvailable);
 
@@ -88,7 +86,7 @@ namespace MKY.IO.Ports.Test
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "PortA and PortB")]
 		public virtual bool SerialPortAIsAvailable
 		{
 			get { return (bool)this["SerialPortAIsAvailable"]; }
@@ -100,7 +98,7 @@ namespace MKY.IO.Ports.Test
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "PortA and PortB")]
 		public virtual bool SerialPortBIsAvailable
 		{
 			get { return (bool)this["SerialPortBIsAvailable"]; }
@@ -193,7 +191,7 @@ namespace MKY.IO.Ports.Test
 	{
 		private static readonly SettingsSection staticSettings = new SettingsSection();
 
-		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
+		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Settings need to be read during creation.")]
 		static SettingsProvider()
 		{
 			SettingsSection settings;
@@ -219,11 +217,11 @@ namespace MKY.IO.Ports.Test
 	public static class SettingsCategoryStrings
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "PortA and PortB")]
 		public static readonly string SerialPortAIsAvailable = "Serial port " + SettingsProvider.Settings.SerialPortA + " is available";
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "PortA and PortB")]
 		public static readonly string SerialPortBIsAvailable = "Serial port " + SettingsProvider.Settings.SerialPortB + " is available";
 
 		/// <summary></summary>
@@ -231,7 +229,7 @@ namespace MKY.IO.Ports.Test
 	}
 
 	/// <summary></summary>
-	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs")]
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "PortA and PortB")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	sealed public class SerialPortAIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
@@ -243,7 +241,7 @@ namespace MKY.IO.Ports.Test
 	}
 
 	/// <summary></summary>
-	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs")]
+	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "PortA and PortB")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	sealed public class SerialPortBIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{

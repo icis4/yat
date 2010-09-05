@@ -75,7 +75,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown")]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
 		[TearDown]
 		public virtual void TearDown()
 		{
@@ -128,7 +128,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		[Test, TestCaseSource(typeof(SerialPortIdTestData), "TestCases")]
 		public virtual void TestSerialization(int standardPortNumber, string portName, string[] portDescriptions)
 		{

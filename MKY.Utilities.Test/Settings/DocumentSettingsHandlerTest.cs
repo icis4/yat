@@ -141,7 +141,7 @@ namespace MKY.Utilities.Test.Settings
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown")]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
 		[TearDown]
 		public virtual void TearDown()
 		{
@@ -309,6 +309,7 @@ namespace MKY.Utilities.Test.Settings
 			return (MakeTempPath() + Path.DirectorySeparatorChar + MakeTempFileName(name));
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private static void SerializeTestObject(Type type, object obj, string filePath)
 		{
 			try
@@ -328,6 +329,7 @@ namespace MKY.Utilities.Test.Settings
 			}
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private static void DeserializeTestObject(Type type, out object obj, string filePath)
 		{
 			try

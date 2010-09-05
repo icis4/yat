@@ -30,7 +30,7 @@ namespace MKY.IO.Ports
 	public class SerialDataReceivedEventArgs : EventArgs
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
 		public readonly System.IO.Ports.SerialData EventType = System.IO.Ports.SerialData.Chars;
 
 		/// <summary></summary>
@@ -51,7 +51,7 @@ namespace MKY.IO.Ports
 	public class SerialErrorReceivedEventArgs : EventArgs
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
 		public readonly System.IO.Ports.SerialError EventType = System.IO.Ports.SerialError.Frame;
 
 		/// <summary></summary>
@@ -72,7 +72,7 @@ namespace MKY.IO.Ports
 	public class SerialPinChangedEventArgs : EventArgs
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
 		public readonly MKY.IO.Ports.SerialPinChange EventType = MKY.IO.Ports.SerialPinChange.Unknown;
 
 		/// <summary></summary>

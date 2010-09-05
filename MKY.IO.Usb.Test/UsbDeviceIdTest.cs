@@ -17,6 +17,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Diagnostics.CodeAnalysis;
+
 using NUnit.Framework;
 
 namespace MKY.IO.Usb.Test
@@ -80,6 +82,7 @@ namespace MKY.IO.Usb.Test
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		[Test]
 		public virtual void TestConstructorAndParse()
 		{
@@ -105,15 +108,11 @@ namespace MKY.IO.Usb.Test
 					try
 					{
 						id = new DeviceInfo(ts.VendorId, ts.ProductId);
-						Assert.Fail
-							(
-							"Invalid ID pair " + ts.VendorId + "/" + ts.ProductId +
-							" wasn't properly handled"
-							);
+						Assert.Fail("Invalid ID pair " + ts.VendorId + "/" + ts.ProductId + " wasn't properly handled");
 					}
 					catch
 					{
-						// Invalid input must throw an exception
+						// Invalid input must throw an exception.
 					}
 
 					foreach (string description in ts.Descriptions)
@@ -121,15 +120,11 @@ namespace MKY.IO.Usb.Test
 						try
 						{
 							id = DeviceInfo.Parse(description);
-							Assert.Fail
-								(
-								"Invalid descripton " + description +
-								" wasn't properly handled"
-								);
+							Assert.Fail("Invalid descripton " + description + " wasn't properly handled");
 						}
 						catch
 						{
-							// Invalid input must throw an exception
+							// Invalid input must throw an exception.
 						}
 					}
 				}

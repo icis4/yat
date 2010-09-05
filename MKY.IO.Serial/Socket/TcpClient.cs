@@ -347,6 +347,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "Stop is a common term to start/stop something.")]
 		public virtual void Stop()
 		{
 			AssertNotDisposed();
@@ -596,7 +597,7 @@ namespace MKY.IO.Serial
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void reconnectTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			if (AutoReconnectEnabledAndAllowed)
@@ -632,7 +633,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-			Utilities.Unused.PreventCompilerWarning(IOControlChanged);
+			Utilities.UnusedEvent.PreventCompilerWarning(IOControlChanged);
 			throw (new NotSupportedException("Event not in use"));
 		}
 
@@ -651,7 +652,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected virtual void OnIORequest(IORequestEventArgs e)
 		{
-			Utilities.Unused.PreventCompilerWarning(IORequest);
+			Utilities.UnusedEvent.PreventCompilerWarning<IORequestEventArgs>(IORequest);
 			throw (new NotSupportedException("Event not in use"));
 		}
 
@@ -672,7 +673,7 @@ namespace MKY.IO.Serial
 		/// <remarks>
 		/// Named accoring to .NET <see cref="System.Net.IPEndPoint"/>.
 		/// </remarks>
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint")]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
 		public virtual string ToShortEndPointString()
 		{
 			return (this.remoteIPAddress + ":" + this.remotePort);

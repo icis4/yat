@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace MKY.Utilities.Recent
@@ -44,6 +45,7 @@ namespace MKY.Utilities.Recent
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Why not?")]
 		public RecentItemCollection(IEnumerable<RecentItem<T>> collection)
 			: base(collection)
 		{
