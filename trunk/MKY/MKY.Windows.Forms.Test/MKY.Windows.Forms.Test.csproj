@@ -45,6 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\MKY.Version.cs">
+      <Link>Properties\MKY.Version.cs</Link>
+    </Compile>
     <Compile Include="FastListBoxTest.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\YAT.Version.cs">
+      <Link>Properties\YAT.Version.cs</Link>
+    </Compile>
     <Compile Include="LocalUserSettingsRoot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ApplicationSettings.cs" />
@@ -54,7 +57,7 @@
     <None Include="Properties\YAT.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MKY.Utilities\MKY.Utilities.csproj">
+    <ProjectReference Include="..\..\MKY\MKY.Utilities\MKY.Utilities.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY.Utilities</Name>
     </ProjectReference>
