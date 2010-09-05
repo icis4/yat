@@ -84,6 +84,7 @@ namespace MKY.Net.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 		public virtual bool SpecificIPv4InterfaceIsAvailable
 		{
 			get { return (bool)this["SpecificIPv4InterfaceIsAvailable"]; }
@@ -95,6 +96,7 @@ namespace MKY.Net.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 		public virtual bool SpecificIPv6InterfaceIsAvailable
 		{
 			get { return (bool)this["SpecificIPv6InterfaceIsAvailable"]; }
@@ -106,6 +108,7 @@ namespace MKY.Net.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 		public virtual string SpecificIPv4Interface
 		{
 			get { return (string)this["SpecificIPv4Interface"]; }
@@ -117,6 +120,7 @@ namespace MKY.Net.Test
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 		public virtual string SpecificIPv6Interface
 		{
 			get { return (string)this["SpecificIPv6Interface"]; }
@@ -170,7 +174,7 @@ namespace MKY.Net.Test
 	{
 		private static readonly SettingsSection staticSettings = new SettingsSection();
 
-		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
+		[SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "Settings need to be read during creation.")]
 		static SettingsProvider()
 		{
 			SettingsSection settings;
@@ -196,16 +200,21 @@ namespace MKY.Net.Test
 	public static class SettingsCategoryStrings
 	{
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 		public static readonly string IPv4LoopbackIsAvailable = @"IPv4 loopback is available";
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 		public static readonly string IPv6LoopbackIsAvailable = @"IPv6 loopback is available";
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 		public static readonly string SpecificIPv4InterfaceIsAvailable = @"Specific IPv4 interface """ + SettingsProvider.Settings.SpecificIPv4Interface + @""" is available";
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 		public static readonly string SpecificIPv6InterfaceIsAvailable = @"Specific IPv6 interface """ + SettingsProvider.Settings.SpecificIPv6Interface + @""" is available";
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	sealed public class IPv4LoopbackIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
@@ -217,6 +226,7 @@ namespace MKY.Net.Test
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	sealed public class IPv6LoopbackIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
@@ -228,6 +238,7 @@ namespace MKY.Net.Test
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	sealed public class SpecificIPv4InterfaceIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
@@ -239,6 +250,7 @@ namespace MKY.Net.Test
 	}
 
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	sealed public class SpecificIPv6InterfaceIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{

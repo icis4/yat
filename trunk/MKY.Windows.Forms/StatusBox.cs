@@ -20,6 +20,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
 namespace MKY.Windows.Forms
@@ -96,6 +97,7 @@ namespace MKY.Windows.Forms
 		/// <returns>
 		/// One of the System.Windows.Forms.DialogResult values.
 		/// </returns>
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Setting is required to be received, modified and returned.")]
 		public static DialogResult Show(IWin32Window owner, string status1, string caption, string status2, string settingText, ref bool setting)
 		{
 			DialogResult dialogResult = DialogResult.OK;
@@ -114,7 +116,7 @@ namespace MKY.Windows.Forms
 				{
 					dialogResult = staticStatusBox.ShowDialog(owner);
 				}
-				setting = staticStatusBox.GetSetting();
+				setting = staticStatusBox.Setting;
 			}
 
 			staticStatusBox = null;
@@ -228,6 +230,19 @@ namespace MKY.Windows.Forms
 
 		#endregion
 
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		/// <summary></summary>
+		public virtual bool Setting
+		{
+			get { return (checkBox_Setting.Checked); }
+		}
+
+		#endregion
+
 		#region Methods
 		//==========================================================================================
 		// Methods
@@ -243,12 +258,6 @@ namespace MKY.Windows.Forms
 		public virtual void SetStatus2(string value)
 		{
 			label_Status2.Text = value;
-		}
-
-		/// <summary></summary>
-		public virtual bool GetSetting()
-		{
-			return (checkBox_Setting.Checked);
 		}
 
 		/// <summary></summary>

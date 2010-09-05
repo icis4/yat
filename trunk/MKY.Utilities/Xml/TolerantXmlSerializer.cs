@@ -34,6 +34,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -359,6 +360,7 @@ namespace MKY.Utilities.Xml
 		/// <summary>
 		/// Tries to copy the value if both navigators are pointing to an element with a compatible type.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private bool TryToCopyValue(XPathNavigator inputNavigator, XPathNavigator outputNavigator)
 		{
 			// Navigate to parents to set typed value
@@ -386,6 +388,7 @@ namespace MKY.Utilities.Xml
 		/// </summary>
 		/// <remarks>
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private bool TryToCopyNode(XPathNavigator inputNavigator, XPathNavigator outputNavigator)
 		{
 			try

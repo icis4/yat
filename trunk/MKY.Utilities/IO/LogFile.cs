@@ -19,6 +19,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace MKY.Utilities.IO
@@ -26,10 +27,17 @@ namespace MKY.Utilities.IO
 	/// <summary>
 	/// Thread-safe log file.
 	/// </summary>
-	public class LogFile
+	public class LogFile : IDisposable
 	{
+		private bool isDisposed;
+
 		private string filePath;
 		private StreamWriter writer;
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
 
 		/// <summary>
 		/// Starts Logfile.
@@ -42,12 +50,65 @@ namespace MKY.Utilities.IO
 			this.writer = new System.IO.StreamWriter(this.filePath, append);
 		}
 
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary></summary>
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!this.isDisposed)
+			{
+				if (disposing)
+				{
+					if (this.writer != null)
+						this.writer.Dispose();
+				}
+				this.isDisposed = true;
+			}
+		}
+
+		/// <summary></summary>
+		~LogFile()
+		{
+			Dispose(false);
+		}
+
+		/// <summary></summary>
+		protected bool IsDisposed
+		{
+			get { return (this.isDisposed); }
+		}
+
+		/// <summary></summary>
+		protected void AssertNotDisposed()
+		{
+			if (this.isDisposed)
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+		}
+
+		#endregion
+
+		#endregion
+
 		/// <summary>
 		/// Returns complete path of log file.
 		/// </summary>
 		public string FilePath
 		{
-			get { return (this.filePath); }
+			get
+			{
+				AssertNotDisposed();
+				return (this.filePath);
+			}
 		}
 
 		/// <summary>
@@ -55,14 +116,21 @@ namespace MKY.Utilities.IO
 		/// </summary>
 		public Stream UnderlyingStream
 		{
-			get { return (this.writer.BaseStream); }
+			get
+			{
+				AssertNotDisposed();
+				return (this.writer.BaseStream);
+			}
 		}
 
 		/// <summary>
 		/// Writes a line into log file and adds a timestamp.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public virtual void WriteLine(string line)
 		{
+			AssertNotDisposed();
+
 			DateTime now = DateTime.Now;
 			try
 			{
@@ -80,8 +148,11 @@ namespace MKY.Utilities.IO
 		/// <summary>
 		/// Closes log file.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public virtual void Close()
 		{
+			AssertNotDisposed();
+
 			try
 			{
 				lock (this.writer)

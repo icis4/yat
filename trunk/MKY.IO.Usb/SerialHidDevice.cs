@@ -417,6 +417,7 @@ namespace MKY.IO.Usb
 		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "This field strictly belows to the method below and is therefore prefixed with the method's name.")]
 		private object AsyncReadCompletedSyncObj = new object();
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void AsyncReadCompleted(IAsyncResult result)
 		{
 			if (!IsDisposed && IsOpen) // Ensure not to perform any operations during closing anymore.
@@ -488,6 +489,7 @@ namespace MKY.IO.Usb
 			}
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void Write(byte[] data)
 		{
 			try

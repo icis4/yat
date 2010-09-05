@@ -19,6 +19,8 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Security.Permissions;
 using System.Windows.Forms;
 
 namespace MKY.Utilities.Windows.Forms
@@ -74,6 +76,8 @@ namespace MKY.Utilities.Windows.Forms
 		/// <param name="m">
 		/// A System.Windows.Forms.Message that is associated with the current Windows message.
 		/// </param>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override void WndProc(ref Message m)
 		{
 			try

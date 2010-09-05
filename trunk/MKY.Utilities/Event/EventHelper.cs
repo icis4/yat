@@ -65,7 +65,7 @@ namespace MKY.Utilities.Event
 		public class UnhandledExceptionEventArgs : EventArgs
 		{
 			/// <summary></summary>
-			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
+			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
 			public readonly Exception UnhandledException;
 
 			/// <summary></summary>
@@ -106,6 +106,7 @@ namespace MKY.Utilities.Event
 		/// the event is invoked on that thread. Otherwise, the event is
 		/// invoked on the current thread.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public static void FireSync(Delegate eventDelegate, params object[] args)
 		{
 			if (eventDelegate == null)
@@ -152,6 +153,7 @@ namespace MKY.Utilities.Event
 		/// the event is invoked on that thread. Otherwise, the event is invoked on the current thread.
 		/// </summary>
 		/// <typeparam name="TEventArgs">The type of the EventArgs of the requested event.</typeparam>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public static void FireSync<TEventArgs>(Delegate eventDelegate, params object[] args)
 			where TEventArgs : EventArgs
 		{
@@ -266,6 +268,7 @@ namespace MKY.Utilities.Event
 		// Safe Invoke Synchronized To ISynchronizeInvoke
 		//==========================================================================================
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		[OneWay]
 		private static void InvokeSynchronized(ISynchronizeInvoke sinkTarget, Delegate sink, object[] args)
 		{
@@ -291,6 +294,7 @@ namespace MKY.Utilities.Event
 		// Safe Invoke On Current Thread
 		//==========================================================================================
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		[OneWay]
 		private static void InvokeOnCurrentThread(Delegate sink, object[] args)
 		{

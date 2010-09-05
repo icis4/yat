@@ -25,6 +25,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using MKY.Utilities.Types;
 
@@ -68,6 +69,7 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// Descriptor types.
 	/// </summary>
+	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by USB.")]
 	public enum DescriptorType
 	{
 		Device    = 0x01,
@@ -84,6 +86,7 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// Descriptor sizes per descriptor type.
 	/// </summary>
+	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by USB.")]
 	public enum DescriptorTypeSize
 	{
 		Device        = 18,
@@ -111,6 +114,7 @@ namespace MKY.IO.Usb
 		Out = 0x00,
 	}
 
+	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by USB.")]
 	public enum TransferType
 	{
 		Control     = 0,
@@ -167,6 +171,7 @@ namespace MKY.IO.Usb
 		Implicit = 2,
 	}
 
+	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by USB.")]
 	public enum TransferFlags
 	{
 		ShortNotOk   = 1 << 0,

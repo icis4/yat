@@ -178,10 +178,10 @@ namespace MKY.IO.Usb
 		private static bool GetVidAndPidFromHandle(SafeFileHandle deviceHandle, out int vendorId, out int productId)
 		{
 			// Set the size property of attributes to the number of bytes in the structure.
-			Win32.Hid.Native.HIDD_ATTRIBUTES attributes = new Win32.Hid.Native.HIDD_ATTRIBUTES();
+			Win32.Hid.NativeTypes.HIDD_ATTRIBUTES attributes = new Win32.Hid.NativeTypes.HIDD_ATTRIBUTES();
 			attributes.Size = Marshal.SizeOf(attributes);
 
-			if (Win32.Hid.Native.HidD_GetAttributes(deviceHandle, ref attributes))
+			if (Win32.Hid.NativeMethods.HidD_GetAttributes(deviceHandle, ref attributes))
 			{
 				vendorId = attributes.VendorID;
 				productId = attributes.ProductID;
@@ -428,15 +428,15 @@ namespace MKY.IO.Usb
 
 		internal static DeviceEvent MessageToDeviceEvent(ref Message m)
 		{
-			if (m.Msg == (int)Win32.DeviceManagement.Native.WM_DEVICECHANGE)
+			if (m.Msg == (int)Win32.DeviceManagement.NativeConstants.WM_DEVICECHANGE)
 			{
-				Win32.DeviceManagement.Native.DBT e = (Win32.DeviceManagement.Native.DBT)m.WParam.ToInt32();
+				Win32.DeviceManagement.NativeTypes.DBT e = (Win32.DeviceManagement.NativeTypes.DBT)m.WParam.ToInt32();
 				switch (e)
 				{
-					case Win32.DeviceManagement.Native.DBT.DEVICEARRIVAL:
+					case Win32.DeviceManagement.NativeTypes.DBT.DEVICEARRIVAL:
 						return (DeviceEvent.Connected);
 
-					case Win32.DeviceManagement.Native.DBT.DEVICEREMOVECOMPLETE:
+					case Win32.DeviceManagement.NativeTypes.DBT.DEVICEREMOVECOMPLETE:
 						return (DeviceEvent.Disconnected);
 				}
 			}

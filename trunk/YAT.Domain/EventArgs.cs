@@ -32,7 +32,7 @@ namespace YAT.Domain
 	public class IORequestEventArgs : EventArgs
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
 		public readonly IORequest Request;
 
 		/// <summary></summary>
@@ -49,7 +49,7 @@ namespace YAT.Domain
 		public readonly IOErrorSeverity Severity;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
 		public readonly string Message;
 
 		/// <summary></summary>
@@ -70,7 +70,7 @@ namespace YAT.Domain
 	public class SerialPortErrorEventArgs : IOErrorEventArgs
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
 		public readonly System.IO.Ports.SerialError SerialPortError;
 
 		/// <summary></summary>
@@ -85,7 +85,7 @@ namespace YAT.Domain
 	public class RawElementEventArgs : EventArgs
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
 		public readonly RawElement Element;
 
 		/// <summary></summary>
@@ -99,7 +99,7 @@ namespace YAT.Domain
 	public class DisplayElementsEventArgs : EventArgs
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
 		public readonly DisplayElementCollection Elements;
 
 		/// <summary></summary>
@@ -113,7 +113,7 @@ namespace YAT.Domain
 	public class DisplayLinesEventArgs : EventArgs
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
 		public readonly List<DisplayLine> Lines;
 
 		/// <summary></summary>
@@ -127,7 +127,7 @@ namespace YAT.Domain
 	public class RepositoryEventArgs : EventArgs
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
 		public readonly RepositoryType Repository;
 
 		/// <summary></summary>

@@ -25,6 +25,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using System.Runtime.InteropServices;
 
 using Microsoft.Win32.SafeHandles;
@@ -52,19 +53,15 @@ namespace MKY.Win32
 		// Native
 		//==========================================================================================
 
-		/// <summary>
-		/// Class encapsulating native Win32 types, constants and functions.
-		/// </summary>
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
-		public static class Native
-		{
-			#region Types
-			//==========================================================================================
-			// Types
-			//==========================================================================================
+		#region Native > Types
+		//------------------------------------------------------------------------------------------
+		// Native > Types
+		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		public static class NativeTypes
+		{
 			// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
 			// warnings for each undocumented member below. Documenting each member makes little sense
 			// since they pretty much tell their purpose and documentation tags between the members
@@ -74,8 +71,8 @@ namespace MKY.Win32
 			/// <summary>
 			/// Encapsulates Win32 GENERIC_ file access flags into a C# flag enum.
 			/// </summary>
-			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
+			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Type given by Win32.")]
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by Win32.")]
 			[Flags]
 			[CLSCompliant(false)]
 			public enum Access : uint
@@ -93,7 +90,8 @@ namespace MKY.Win32
 			/// <summary>
 			/// Encapsulates Win32 FILE_SHARE_ file share mode flags into a C# flag enum.
 			/// </summary>
-			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
+			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Type given by Win32.")]
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by Win32.")]
 			[Flags]
 			[CLSCompliant(false)]
 			public enum ShareMode : uint
@@ -110,6 +108,7 @@ namespace MKY.Win32
 			/// <summary>
 			/// Replicates Win32 creation disposition selectors into a C# enum.
 			/// </summary>
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by Win32.")]
 			public enum CreationDisposition
 			{
 				CREATE_NEW        = System.IO.FileMode.CreateNew,
@@ -123,7 +122,7 @@ namespace MKY.Win32
 			/// <summary>
 			/// Encapsulates Win32 FILE_ATTRIBUTE_ and FILE_FLAG_ values into a C# flag enum.
 			/// </summary>
-			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
+			[SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32", Justification = "Type given by Win32.")]
 			[Flags]
 			[CLSCompliant(false)]
 			public enum AttributesAndFlags : uint
@@ -169,28 +168,29 @@ namespace MKY.Win32
 			}
 
 			#pragma warning restore 1591
+		}
+		
+		#endregion
 
-			#endregion
+		#region Native > External Functions
+		//------------------------------------------------------------------------------------------
+		// Native > External Functions
+		//------------------------------------------------------------------------------------------
 
-			#region Constants
-			//==========================================================================================
-			// Constants
-			//==========================================================================================
-
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
+		public static class NativeMethods
+		{
 			private const string KERNEL_DLL = "kernel32.dll";
-
-			#endregion
-
-			#region External Functions
-			//==========================================================================================
-			// External Functions
-			//==========================================================================================
 
 			/// <summary>
 			/// Cancels a call to ReadFile.
 			/// </summary>
 			/// <param name="hFile">The device handle.</param>
 			/// <returns>True on success, false on failure.</returns>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern bool CancelIo([In] SafeFileHandle hFile);
 
@@ -203,13 +203,15 @@ namespace MKY.Win32
 			/// <param name="bInitialState">Initial state = False (Not signaled.)</param>
 			/// <param name="lpName">An event object name (optional).</param>
 			/// <returns>A handle to the event object.</returns>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern IntPtr CreateEvent([In] IntPtr SecurityAttributes, [In] bool bManualReset, [In] bool bInitialState, [In] string lpName);
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[CLSCompliant(false)]
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			public static extern SafeFileHandle CreateFile([In] string lpFileName, [In] Access dwDesiredAccess, [In] ShareMode dwShareMode, [In] IntPtr lpSecurityAttributes, [In] CreationDisposition dwCreationDisposition, [In] AttributesAndFlags dwFlagsAndAttributes, [In] IntPtr hTemplateFile);
+			public static extern SafeFileHandle CreateFile([In] string lpFileName, [In] NativeTypes.Access dwDesiredAccess, [In] NativeTypes.ShareMode dwShareMode, [In] IntPtr lpSecurityAttributes, [In] NativeTypes.CreationDisposition dwCreationDisposition, [In] NativeTypes.AttributesAndFlags dwFlagsAndAttributes, [In] IntPtr hTemplateFile);
 
 			/// <summary>
 			/// Gets the result of an overlapped operation.
@@ -246,16 +248,16 @@ namespace MKY.Win32
 			/// <param name="lpNumberOfBytesRead">A pointer to a variable that will hold the number of bytes read.</param>
 			/// <param name="lpOverlapped">An overlapped structure whose hEvent member is set to an event object.</param>
 			/// <returns>The report in ReadBuffer.</returns>
-			public static bool ReadFile(SafeFileHandle hFile, IntPtr lpBuffer, int nNumberOfBytesToRead, out int lpNumberOfBytesRead, IntPtr lpOverlapped)
+			public static bool ReadFile(SafeFileHandle hFile, IntPtr lpBuffer, int nNumberOfBytesToRead, out int lpNumberOfBytesRead, ref NativeOverlapped lpOverlapped)
 			{
 				UInt32 bytesRead;
-				bool success = ReadFile(hFile, lpBuffer, (UInt32)nNumberOfBytesToRead, out bytesRead, lpOverlapped);
+				bool success = ReadFile(hFile, lpBuffer, (UInt32)nNumberOfBytesToRead, out bytesRead, ref lpOverlapped);
 				lpNumberOfBytesRead = (int)bytesRead;
 				return (success);
 			}
 
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			private static extern bool ReadFile([In] SafeFileHandle hFile, [Out] IntPtr lpBuffer, [In] UInt32 nNumberOfBytesToRead, [Out] out UInt32 lpNumberOfBytesRead, [In] IntPtr lpOverlapped);
+			private static extern bool ReadFile([In] SafeFileHandle hFile, [Out] IntPtr lpBuffer, [In] UInt32 nNumberOfBytesToRead, [Out] out UInt32 lpNumberOfBytesRead, [In] ref NativeOverlapped lpOverlapped);
 
 			/// <summary>
 			/// Waits for at least one report or a timeout.
@@ -264,6 +266,7 @@ namespace MKY.Win32
 			/// <param name="hHandle">An event object created with CreateEvent.</param>
 			/// <param name="dwMilliseconds">A timeout value in milliseconds.</param>
 			/// <returns>A result code.</returns>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[CLSCompliant(false)]
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern UInt32 WaitForSingleObject([In] IntPtr hHandle, [In] UInt32 dwMilliseconds);
@@ -276,19 +279,19 @@ namespace MKY.Win32
 			/// <param name="lpNumberOfBytesWritten">An integer to hold the number of bytes written.</param>
 			/// <param name="lpOverlapped">An overlapped structure whose hEvent member is set to an event object.</param>
 			/// <returns>True on success, false on failure.</returns>
-			public static bool WriteFile(SafeFileHandle hFile, byte[] lpBuffer, out int lpNumberOfBytesWritten, IntPtr lpOverlapped)
+			public static bool WriteFile(SafeFileHandle hFile, byte[] lpBuffer, out int lpNumberOfBytesWritten, ref NativeOverlapped lpOverlapped)
 			{
 				UInt32 bytesWritten;
-				bool success = WriteFile(hFile, lpBuffer, (UInt32)lpBuffer.Length, out bytesWritten, lpOverlapped);
+				bool success = WriteFile(hFile, lpBuffer, (UInt32)lpBuffer.Length, out bytesWritten, ref lpOverlapped);
 				lpNumberOfBytesWritten = (int)bytesWritten;
 				return (success);
 			}
 
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			private static extern bool WriteFile([In] SafeFileHandle hFile, [In] byte[] lpBuffer, [In] UInt32 nNumberOfBytesToWrite, [Out] out UInt32 lpNumberOfBytesWritten, [In] IntPtr lpOverlapped);
-
-			#endregion
+			private static extern bool WriteFile([In] SafeFileHandle hFile, [In] byte[] lpBuffer, [In] UInt32 nNumberOfBytesToWrite, [Out] out UInt32 lpNumberOfBytesWritten, [In] ref NativeOverlapped lpOverlapped);
 		}
+
+		#endregion
 
 		#endregion
 	}

@@ -35,7 +35,7 @@ namespace MKY.IO.Ports
 	#pragma warning disable 1591
 
 	/// <summary></summary>
-	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
+	[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "There is no setting with 0 data bits.")]
 	public enum DataBits
 	{
 		Four  = 4,

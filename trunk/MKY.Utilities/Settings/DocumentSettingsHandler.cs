@@ -19,6 +19,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -203,6 +204,7 @@ namespace MKY.Utilities.Settings
 			return (loadSuccess);
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private object LoadFromFile(Type type, string filePath)
 		{
 			if (File.Exists(filePath)) // First check for file to minimize exceptions thrown.
@@ -218,9 +220,7 @@ namespace MKY.Utilities.Settings
 					}
 					return (settings);
 				}
-				catch
-				{
-				}
+				catch { }
 
 				// Try to open existing file with tolerant & alternate-tolerant deserialization.
 				try
@@ -249,6 +249,7 @@ namespace MKY.Utilities.Settings
 		/// <exception cref="Exception">
 		/// Thrown if settings could not be saved.
 		/// </exception>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public virtual void Save()
 		{
 			Exception result = null;
@@ -270,6 +271,7 @@ namespace MKY.Utilities.Settings
 				throw (result);
 		}
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void SaveToFile(Type type, string filePath, object settings)
 		{
 			string backup = filePath + ".bak";
@@ -319,7 +321,8 @@ namespace MKY.Utilities.Settings
 		/// <returns>
 		/// Returns <c>true</c> if file successfully saved.
 		/// </returns>
-		public virtual bool Delete()
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		public virtual bool TryDelete()
 		{
 			try
 			{

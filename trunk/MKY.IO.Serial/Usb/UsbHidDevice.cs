@@ -304,6 +304,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "Stop is a common term to start/stop something.")]
 		public virtual void Stop()
 		{
 			// AssertNotDisposed() is called by IsStarted
@@ -397,7 +398,7 @@ namespace MKY.IO.Serial
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void CloseAndDisposeDevice()
 		{
 			if (this.device != null)
@@ -425,7 +426,7 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private bool TryCreateAndOpenDevice()
 		{
 			try
@@ -525,7 +526,7 @@ namespace MKY.IO.Serial
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void reopenTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			if (AutoReopenEnabledAndAllowed)
@@ -561,7 +562,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-			Utilities.Unused.PreventCompilerWarning(IOControlChanged);
+			Utilities.UnusedEvent.PreventCompilerWarning(IOControlChanged);
 			throw (new NotSupportedException("Event not in use"));
 		}
 
@@ -580,7 +581,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected virtual void OnIORequest(IORequestEventArgs e)
 		{
-			Utilities.Unused.PreventCompilerWarning(IORequest);
+			Utilities.UnusedEvent.PreventCompilerWarning<IORequestEventArgs>(IORequest);
 			throw (new NotSupportedException("Event not in use"));
 		}
 

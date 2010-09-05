@@ -20,6 +20,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 using MKY.Utilities.Event;
 
@@ -164,6 +165,7 @@ namespace MKY.Utilities.Time
 		}
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "Stop is a common term to start/stop something.")]
 		public virtual void Stop()
 		{
 			AssertNotDisposed();

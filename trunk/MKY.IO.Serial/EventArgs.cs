@@ -29,7 +29,7 @@ namespace MKY.IO.Serial
 	public class IORequestEventArgs : EventArgs
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
 		public readonly IORequest Request;
 
 		/// <summary></summary>
@@ -43,11 +43,11 @@ namespace MKY.IO.Serial
 	public class IOErrorEventArgs : EventArgs
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
 		public readonly IOErrorSeverity Severity;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
 		public readonly string Message;
 
 		/// <summary></summary>
@@ -68,7 +68,7 @@ namespace MKY.IO.Serial
 	public class SerialPortIOErrorEventArgs : IOErrorEventArgs
 	{
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
 		public readonly System.IO.Ports.SerialError SerialPortError;
 
 		/// <summary></summary>

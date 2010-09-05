@@ -55,19 +55,15 @@ namespace MKY.Win32
 		// Native
 		//==========================================================================================
 
-		/// <summary>
-		/// Class encapsulating native Win32 types, constants and functions.
-		/// </summary>
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
-		public static class Native
-		{
-			#region Types
-			//==========================================================================================
-			// Types
-			//==========================================================================================
+		#region Native > Types
+		//------------------------------------------------------------------------------------------
+		// Native > Types
+		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		public static class NativeTypes
+		{
 			// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
 			// warnings for each undocumented member below. Documenting each member makes little sense
 			// since they pretty much tell their purpose and documentation tags between the members
@@ -90,6 +86,7 @@ namespace MKY.Win32
 			}
 
 			/// <remarks>dbt.h</remarks>
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by Win32.")]
 			[CLSCompliant(false)]
 			public enum DBT : uint
 			{
@@ -98,6 +95,7 @@ namespace MKY.Win32
 			}
 
 			/// <remarks>dbt.h</remarks>
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by Win32.")]
 			[CLSCompliant(false)]
 			public enum DBT_DEVTYP : uint
 			{
@@ -105,6 +103,7 @@ namespace MKY.Win32
 				HANDLE          = 0x00000006,
 			}
 
+			[SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Values given by Win32.")]
 			[Flags]
 			[CLSCompliant(false)]
 			public enum DEVICE_NOTIFY : uint
@@ -121,11 +120,11 @@ namespace MKY.Win32
 			/// </summary>
 			/// <remarks>
 			/// Must be a class because <see cref="Marshal.PtrToStructure(IntPtr, object)"/> and
-			/// <see cref="RegisterDeviceNotification"/> require a reference type.
+			/// <see cref="NativeMethods.RegisterDeviceNotification"/> require a reference type.
 			/// </remarks>
+			[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "See remarks above.")]
 			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
-			[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "See remarks above.")]
 			public class DEV_BROADCAST_DEVICEINTERFACE
 			{
 				public UInt32      dbcc_size;
@@ -139,9 +138,9 @@ namespace MKY.Win32
 			/// <remarks>
 			/// Must be a class because <see cref="Marshal.PtrToStructure(IntPtr, object)"/> requires a reference type.
 			/// </remarks>
+			[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "See remarks above.")]
 			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
-			[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "See remarks above.")]
 			public class DEV_BROADCAST_HDR
 			{
 				public UInt32     dbch_size;
@@ -156,6 +155,8 @@ namespace MKY.Win32
 				public UInt32 cbSize;
 				public System.Guid InterfaceClassGuid;
 				public UInt32 Flags;
+
+				[SuppressMessage("Microsoft.Security", "CA2111:PointersShouldNotBeVisible", Justification = "Structure given by Win32.")]
 				public IntPtr Reserved;
 			}
 
@@ -167,6 +168,7 @@ namespace MKY.Win32
 				public string DevicePath;
 			}
 
+			[SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Not performance critical.")]
 			[CLSCompliant(false)]
 			[StructLayout(LayoutKind.Sequential)]
 			public struct SP_DEVINFO_DATA
@@ -179,26 +181,39 @@ namespace MKY.Win32
 
 			#pragma warning restore 1591
 
-			#endregion
+		}
+	
+		#endregion
 
-			#region Constants
-			//==========================================================================================
-			// Constants
-			//==========================================================================================
+		#region Native > Constants
+		//------------------------------------------------------------------------------------------
+		// Native > Constants
+		//------------------------------------------------------------------------------------------
 
-			private const string SETUP_DLL = "setupapi.dll";
-			private const string USER_DLL = "user32.dll";
-
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		public static class NativeConstants
+		{
 			/// <remarks>dbt.h</remarks>
 			[CLSCompliant(false)]
 			public const UInt32 WM_DEVICECHANGE = 0x00000219;
+		}
 
-			#endregion
+		#endregion
 
-			#region External Functions
-			//==========================================================================================
-			// External Functions
-			//==========================================================================================
+		#region Native > External Functions
+		//------------------------------------------------------------------------------------------
+		// Native > External Functions
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
+		public static class NativeMethods
+		{
+			private const string SETUP_DLL = "setupapi.dll";
+			private const string USER_DLL = "user32.dll";
 
 			/// <summary>
 			/// Request to receive notification messages when a device in an interface class is attached
@@ -209,11 +224,13 @@ namespace MKY.Win32
 			/// the type of device to send notifications for.</param>
 			/// <param name="Flags">DEVICE_NOTIFY_WINDOW_HANDLE indicates the handle is a window handle.</param>
 			/// <returns>Device notification handle or NULL on failure.</returns>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[CLSCompliant(false)]
-			public static extern IntPtr RegisterDeviceNotification([In] IntPtr hRecipient, [In] DEV_BROADCAST_DEVICEINTERFACE NotificationFilter, [In] DEVICE_NOTIFY Flags);
+			public static extern IntPtr RegisterDeviceNotification([In] IntPtr hRecipient, [In] NativeTypes.DEV_BROADCAST_DEVICEINTERFACE NotificationFilter, [In] NativeTypes.DEVICE_NOTIFY Flags);
 
 			/// <summary></summary>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[CLSCompliant(false)]
 			public static extern Int32 SetupDiCreateDeviceInfoList([In] ref System.Guid ClassGuid, [In] Int32 hwndParent);
@@ -222,6 +239,7 @@ namespace MKY.Win32
 			/// Frees the memory reserved for the DeviceInfoSet returned by SetupDiGetClassDevs.
 			/// </summary>
 			/// <returns>True on success.</returns>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern Int32 SetupDiDestroyDeviceInfoList([In] IntPtr DeviceInfoSet);
 
@@ -236,9 +254,10 @@ namespace MKY.Win32
 			/// <param name="MemberIndex">Index to specify a device in a device information set.</param>
 			/// <param name="DeviceInterfaceData">Pointer to a handle to a SP_DEVICE_INTERFACE_DATA structure for a device.</param>
 			/// <returns>True on success.</returns>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[CLSCompliant(false)]
-			public static extern bool SetupDiEnumDeviceInterfaces([In] IntPtr DeviceInfoSet, [In] IntPtr DeviceInfoData, [In] ref System.Guid InterfaceClassGuid, [In] Int32 MemberIndex, [In, Out] ref SP_DEVICE_INTERFACE_DATA DeviceInterfaceData);
+			public static extern bool SetupDiEnumDeviceInterfaces([In] IntPtr DeviceInfoSet, [In] IntPtr DeviceInfoData, [In] ref System.Guid InterfaceClassGuid, [In] Int32 MemberIndex, [In, Out] ref NativeTypes.SP_DEVICE_INTERFACE_DATA DeviceInterfaceData);
 
 			/// <summary>
 			/// Retrieves a device information set for a specified group of devices.
@@ -250,9 +269,10 @@ namespace MKY.Win32
 			/// <param name="Flags">Flags to limit the returned information to currently present devices
 			/// and devices that expose interfaces in the class specified by the GUID.</param>
 			/// <returns>Handle to a device information set for the devices.</returns>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[CLSCompliant(false)]
-			public static extern IntPtr SetupDiGetClassDevs([In] ref System.Guid ClassGuid, [In] IntPtr Enumerator, [In] IntPtr hwndParent, [In] DIGCF Flags);
+			public static extern IntPtr SetupDiGetClassDevs([In] ref System.Guid ClassGuid, [In] IntPtr Enumerator, [In] IntPtr hwndParent, [In] NativeTypes.DIGCF Flags);
 
 			/// <summary>
 			/// Retrieves an SP_DEVICE_INTERFACE_DETAIL_DATA structure containing information about a device.
@@ -268,21 +288,24 @@ namespace MKY.Win32
 			/// SP_DEVICE_INTERFACE_DETAIL_DATA structure.</param>
 			/// <param name="DeviceInfoData">Returned pointer to an SP_DEVINFO_DATA structure to receive information about the device.</param>
 			/// <returns>True on success.</returns>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[CLSCompliant(false)]
-			public static extern bool SetupDiGetDeviceInterfaceDetail([In] IntPtr DeviceInfoSet, [In] ref SP_DEVICE_INTERFACE_DATA DeviceInterfaceData, [Out] IntPtr DeviceInterfaceDetailData, [In] Int32 DeviceInterfaceDetailDataSize, [Out] out Int32 RequiredSize, [Out] IntPtr DeviceInfoData);
+			public static extern bool SetupDiGetDeviceInterfaceDetail([In] IntPtr DeviceInfoSet, [In] ref NativeTypes.SP_DEVICE_INTERFACE_DATA DeviceInterfaceData, [Out] IntPtr DeviceInterfaceDetailData, [In] Int32 DeviceInterfaceDetailDataSize, [Out] out Int32 RequiredSize, [Out] IntPtr DeviceInfoData);
 
 			/// <summary>
 			/// Stop receiving notification messages.
 			/// </summary>
 			/// <param name="Handle">Handle returned previously by RegisterDeviceNotification.</param>
 			/// <returns>True on success.</returns>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern bool UnregisterDeviceNotification([In] IntPtr Handle);
 
-			#endregion
 		}
 
+		#endregion
+	
 		#endregion
 
 		#region Static Methods
@@ -303,12 +326,12 @@ namespace MKY.Win32
 			IntPtr pDeviceInfoSet = new IntPtr();
 			bool lastDevice = false;
 			int memberIndex = 0;
-			Native.SP_DEVICE_INTERFACE_DATA deviceInterfaceData = new Native.SP_DEVICE_INTERFACE_DATA();
+			NativeTypes.SP_DEVICE_INTERFACE_DATA deviceInterfaceData = new NativeTypes.SP_DEVICE_INTERFACE_DATA();
 			List<string> devicePaths = new List<string>();
 
 			try
 			{
-				pDeviceInfoSet = Native.SetupDiGetClassDevs(ref classGuid, IntPtr.Zero, IntPtr.Zero, Native.DIGCF.PRESENT | Native.DIGCF.DEVICEINTERFACE);
+				pDeviceInfoSet = NativeMethods.SetupDiGetClassDevs(ref classGuid, IntPtr.Zero, IntPtr.Zero, NativeTypes.DIGCF.PRESENT | NativeTypes.DIGCF.DEVICEINTERFACE);
 
 				// The cbSize element of the deviceInterfaceData structure must be set to the structure's size in bytes. 
 				// The size is 28 bytes for 32-bit code and 32 bits for 64-bit code.
@@ -317,10 +340,10 @@ namespace MKY.Win32
 				do
 				{
 					// Begin with 0 and increment through the device information set until no more devices are available.
-					if (Native.SetupDiEnumDeviceInterfaces(pDeviceInfoSet, IntPtr.Zero, ref classGuid, memberIndex, ref deviceInterfaceData))
+					if (NativeMethods.SetupDiEnumDeviceInterfaces(pDeviceInfoSet, IntPtr.Zero, ref classGuid, memberIndex, ref deviceInterfaceData))
 					{
 						// A device is present. Retrieve the size of the data buffer. Don't care about the return value, it will be false.
-						Native.SetupDiGetDeviceInterfaceDetail(pDeviceInfoSet, ref deviceInterfaceData, IntPtr.Zero, 0, out bufferSize, IntPtr.Zero);
+						NativeMethods.SetupDiGetDeviceInterfaceDetail(pDeviceInfoSet, ref deviceInterfaceData, IntPtr.Zero, 0, out bufferSize, IntPtr.Zero);
 
 						// Allocate memory for the SP_DEVICE_INTERFACE_DETAIL_DATA structure using the returned buffer size.
 						pDetailDataBuffer = Marshal.AllocHGlobal(bufferSize);
@@ -330,7 +353,7 @@ namespace MKY.Win32
 
 						// Call SetupDiGetDeviceInterfaceDetail again.
 						// This time, pass a pointer to DetailDataBuffer and the returned required buffer size.
-						if (Native.SetupDiGetDeviceInterfaceDetail(pDeviceInfoSet, ref deviceInterfaceData, pDetailDataBuffer, bufferSize, out bufferSize, IntPtr.Zero))
+						if (NativeMethods.SetupDiGetDeviceInterfaceDetail(pDeviceInfoSet, ref deviceInterfaceData, pDetailDataBuffer, bufferSize, out bufferSize, IntPtr.Zero))
 						{
 							// Skip over cbsize (4 bytes) to get the address of the devicePathName.
 							IntPtr pDevicePathName = new IntPtr(pDetailDataBuffer.ToInt32() + 4);
@@ -360,7 +383,7 @@ namespace MKY.Win32
 				}
 
 				if (pDeviceInfoSet != IntPtr.Zero)
-					Native.SetupDiDestroyDeviceInfoList(pDeviceInfoSet);
+					NativeMethods.SetupDiDestroyDeviceInfoList(pDeviceInfoSet);
 			}
 
 			return (devicePaths.ToArray());
@@ -380,19 +403,19 @@ namespace MKY.Win32
 			try
 			{
 				// A DEV_BROADCAST_DEVICEINTERFACE header holds information about the request.
-				Native.DEV_BROADCAST_DEVICEINTERFACE devBroadcastDeviceInterface = new Native.DEV_BROADCAST_DEVICEINTERFACE();
+				NativeTypes.DEV_BROADCAST_DEVICEINTERFACE devBroadcastDeviceInterface = new NativeTypes.DEV_BROADCAST_DEVICEINTERFACE();
 
 				// Set the parameters in the DEV_BROADCAST_DEVICEINTERFACE structure. Set the size.
 				devBroadcastDeviceInterface.dbcc_size = (UInt32)Marshal.SizeOf(devBroadcastDeviceInterface);
 
 				// Request to receive notifications about a class of devices.
-				devBroadcastDeviceInterface.dbcc_devicetype = Native.DBT_DEVTYP.DEVICEINTERFACE;
+				devBroadcastDeviceInterface.dbcc_devicetype = NativeTypes.DBT_DEVTYP.DEVICEINTERFACE;
 				devBroadcastDeviceInterface.dbcc_reserved = 0;
 
 				// Specify the interface class to receive notifications about.
 				devBroadcastDeviceInterface.dbcc_classguid = classGuid;
 
-				deviceNotificationHandle = Native.RegisterDeviceNotification(windowHandle, devBroadcastDeviceInterface, Native.DEVICE_NOTIFY.WINDOW_HANDLE);
+				deviceNotificationHandle = NativeMethods.RegisterDeviceNotification(windowHandle, devBroadcastDeviceInterface, NativeTypes.DEVICE_NOTIFY.WINDOW_HANDLE);
 
 				return (deviceNotificationHandle != IntPtr.Zero);
 			}
@@ -408,17 +431,15 @@ namespace MKY.Win32
 		/// is attached or removed.
 		/// </summary>
 		/// <param name="deviceNotificationHandle">Handle returned previously by RegisterDeviceNotification.</param>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public static void UnregisterDeviceNotificationHandle(IntPtr deviceNotificationHandle)
 		{
 			try
 			{
-				Native.UnregisterDeviceNotification(deviceNotificationHandle);
-
+				NativeMethods.UnregisterDeviceNotification(deviceNotificationHandle);
 				// Ignore failures.
 			}
-			catch
-			{
-			}
+			catch { }
 		}
 
 		/// <summary>
@@ -439,13 +460,13 @@ namespace MKY.Win32
 		{
 			try
 			{
-				Native.DEV_BROADCAST_DEVICEINTERFACE devBroadcastDeviceInterface = new Native.DEV_BROADCAST_DEVICEINTERFACE();
-				Native.DEV_BROADCAST_HDR devBroadcastHeader = new Native.DEV_BROADCAST_HDR();
+				NativeTypes.DEV_BROADCAST_DEVICEINTERFACE devBroadcastDeviceInterface = new NativeTypes.DEV_BROADCAST_DEVICEINTERFACE();
+				NativeTypes.DEV_BROADCAST_HDR devBroadcastHeader = new NativeTypes.DEV_BROADCAST_HDR();
 
 				// The LParam parameter of Message is a pointer to a DEV_BROADCAST_HDR structure.
 				Marshal.PtrToStructure(deviceChangeMessage.LParam, devBroadcastHeader);
 
-				if ((devBroadcastHeader.dbch_devicetype == Native.DBT_DEVTYP.DEVICEINTERFACE))
+				if ((devBroadcastHeader.dbch_devicetype == NativeTypes.DBT_DEVTYP.DEVICEINTERFACE))
 				{
 					// The dbch_devicetype parameter indicates that the event applies to a device
 					// interface. So the structure in LParam is actually a DEV_BROADCAST_INTERFACE
@@ -469,7 +490,7 @@ namespace MKY.Win32
 					return (true);
 				}
 			}
-			catch { }
+			catch (ArgumentException) { }
 
 			devicePath = "";
 			return (false);

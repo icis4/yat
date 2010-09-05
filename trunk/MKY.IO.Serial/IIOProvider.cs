@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace MKY.IO.Serial
@@ -157,6 +158,7 @@ namespace MKY.IO.Serial
 		/// <remarks>
 		/// For serial ports, the port is closed.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "Stop is a common term to start/stop something.")]
 		void Stop();
 
 		/// <summary>

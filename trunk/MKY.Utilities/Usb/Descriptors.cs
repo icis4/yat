@@ -71,7 +71,10 @@ namespace MKY.Utilities.Usb
 				{
 					ci = CultureInfo.GetCultureInfo(culture);
 				}
-				catch
+				catch (ArgumentNullException)
+				{
+				}
+				catch (ArgumentException)
 				{
 				}
 

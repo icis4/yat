@@ -28,13 +28,18 @@ namespace MKY.Win32
 	/// </summary>
 	public static class Constants
 	{
-		/// <summary>
-		/// Class encapsulating native Win32 types, constants and functions.
-		/// </summary>
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1121:UseBuiltInTypeAlias", Justification = "Using explicit types to emphasize the type declared by the native element.")]
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Using exact native parameter names.")]
-		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Using exact native parameter names.")]
-		public static class Native
+		#region Native
+		//==========================================================================================
+		// Native
+		//==========================================================================================
+
+		#region Native > Constants
+		//------------------------------------------------------------------------------------------
+		// Native > Constants
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public static class NativeConstants
 		{
 			/// <summary></summary>
 			public const int WAIT_TIMEOUT = 0x0102;
@@ -42,6 +47,10 @@ namespace MKY.Win32
 			/// <summary></summary>
 			public const int WAIT_OBJECT_0 = 0;
 		}
+
+		#endregion
+
+		#endregion
 	}
 }
 

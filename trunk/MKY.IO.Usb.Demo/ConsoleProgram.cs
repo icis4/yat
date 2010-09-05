@@ -36,7 +36,7 @@ namespace MKY.IO.Usb.Demo
 
 		/// <summary></summary>
 		[STAThread]
-		public static void Main(string[] args)
+		public static void Main()
 		{
 			DeviceCollection devices = new DeviceCollection(DeviceClass.Hid);
 			devices.FillWithAvailableDevices();

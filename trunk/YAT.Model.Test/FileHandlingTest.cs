@@ -88,7 +88,7 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown")]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
 		[TearDown]
 		public virtual void TearDown()
 		{

@@ -20,6 +20,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
 namespace MKY.Windows.Forms
@@ -160,6 +161,7 @@ namespace MKY.Windows.Forms
 		/// <returns>
 		/// One of the System.Windows.Forms.DialogResult values.
 		/// </returns>
+		[SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#", Justification = "Text that is input needs to be returned in addition to the dialog result.")]
 		public static DialogResult Show(IWin32Window owner, string text, string caption, string initialInputText, out string inputText)
 		{
 			TextInputBox tib = new TextInputBox(text, caption, initialInputText);

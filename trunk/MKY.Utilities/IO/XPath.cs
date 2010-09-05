@@ -516,21 +516,21 @@ namespace MKY.Utilities.IO
 		{
 			try
 			{
-				// DirectoryInfo throws if path contains invalid characters
+				// DirectoryInfo throws if path contains invalid characters.
 				pathInfo = new DirectoryInfo(path);
 			}
-			catch (Exception ex)
+			catch (ArgumentException ex)
 			{
 				MKY.Utilities.Diagnostics.XDebug.WriteException(typeof(XPath), ex);
 				pathInfo = null;
 			}
 
-			// Get directory and file name
+			// Get directory and file name.
 			if (pathInfo != null)
 			{
 				DirectoryInfo temp = new DirectoryInfo(path);
 
-				// Make sure parent directory and directory name is properly returned
+				// Make sure parent directory and directory name is properly returned.
 				if (temp.Parent != null)
 					dirPath = Path.Combine(temp.Parent.FullName, temp.Name);
 				else
@@ -553,15 +553,16 @@ namespace MKY.Utilities.IO
 		{
 			try
 			{
-				// DirectoryInfo throws if path contains invalid characters
+				// DirectoryInfo throws if path contains invalid characters.
 				pathInfo = new DirectoryInfo(path);
 			}
-			catch
+			catch (ArgumentException ex)
 			{
+				MKY.Utilities.Diagnostics.XDebug.WriteException(typeof(XPath), ex);
 				pathInfo = null;
 			}
 
-			// Get directory and file name
+			// Get directory and file name.
 			if (pathInfo != null)
 			{
 				dirPath = Path.GetDirectoryName(path);

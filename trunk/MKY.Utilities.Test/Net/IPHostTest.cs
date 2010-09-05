@@ -89,7 +89,7 @@ namespace MKY.Utilities.Test.Net
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown")]
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
 		[TearDown]
 		public virtual void TearDown()
 		{
@@ -145,6 +145,7 @@ namespace MKY.Utilities.Test.Net
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
 		public virtual void TestSerialization(XIPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
 		{

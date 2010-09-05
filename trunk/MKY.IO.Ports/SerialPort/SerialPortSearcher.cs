@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Management;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -45,6 +46,7 @@ namespace MKY.IO.Ports
 		/// <remarks>
 		/// Query is never done automatically because it takes quite some time.
 		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public static Dictionary<string, string> GetDescriptionsFromSystem()
 		{
 			Dictionary<string, string> descriptions = new Dictionary<string, string>();

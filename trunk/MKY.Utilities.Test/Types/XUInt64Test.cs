@@ -19,6 +19,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 using NUnit.Framework;
@@ -168,6 +169,7 @@ namespace MKY.Utilities.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		[Test]
 		public virtual void TestToByteArray()
 		{
@@ -186,8 +188,8 @@ namespace MKY.Utilities.Test.Types
 					}
 					catch (Exception ex)
 					{
-						// catch assertion exceptions to ensure that all test sets are run in any case
-						//   but keep first exception to signal NUnit that test has failed
+						// Catch assertion exceptions to ensure that all test sets are run in any case
+						//   but keep first exception to signal NUnit that test has failed.
 						if (exceptionToNUnit == null)
 							exceptionToNUnit = ex;
 
@@ -212,7 +214,7 @@ namespace MKY.Utilities.Test.Types
 				}
 			}
 
-			// re-throw first exception to signal NUnit that test has failed
+			// Re-throw first exception to signal NUnit that test has failed.
 			if (exceptionToNUnit != null)
 				throw (exceptionToNUnit);
 		}

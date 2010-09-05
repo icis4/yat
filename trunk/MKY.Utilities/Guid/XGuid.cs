@@ -19,6 +19,7 @@
 //==================================================================================================
 
 using System.IO;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MKY.Utilities.Guid
 {
@@ -46,33 +47,32 @@ namespace MKY.Utilities.Guid
 		/// <summary>
 		/// Creates and returns GUID from terminal file path if possible, new GUID otherwise.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		public static System.Guid CreateGuidFromFilePath(string filePath, string prefix, string postfix)
 		{
-			// file path may look like ".\Terminal-dcf25dde-947a-4470-8567-b0dde2459933.yat"
+			// File path may look like ".\Terminal-dcf25dde-947a-4470-8567-b0dde2459933.yat".
 			//                             Length: ^1     ^8   ^13  ^18  ^23          ^36
 			string fileName = Path.GetFileNameWithoutExtension(filePath);
 
-			// do some basic checks to minimize probablity of exception below
+			// Do some basic checks to minimize probablity of exception below.
 			bool tryCreate = true;
-			if (tryCreate && (fileName.Length < (prefix.Length + 32))) // GUID string contains at least 32 chars
+			if (tryCreate && (fileName.Length < (prefix.Length + 32))) // GUID string contains at least 32 chars.
 				tryCreate = false;
 			if (tryCreate && (string.Compare(fileName.Substring(0, prefix.Length), prefix) != 0))
 				tryCreate = false;
 
 			if (tryCreate)
 			{
-				// retrieve GUID string and try to create GUID from it
+				// Retrieve GUID string and try to create GUID from it.
 				string guidString = fileName.Substring(prefix.Length);
 				try
 				{
 					return (new System.Guid(guidString));
 				}
-				catch
-				{
-				}
+				catch { }
 			}
 
-			// Create new GUID
+			// Create new GUID.
 			return (System.Guid.NewGuid());
 		}
 	}

@@ -766,7 +766,7 @@ namespace YAT.Model
 				{
 					if (this.settingsRoot.AutoSaved) // Existing auto file (w2a/b, t2)
 					{
-						this.settingsHandler.Delete();
+						this.settingsHandler.TryDelete();
 						success = true; // Don't care if auto file not successfully deleted
 					}
 

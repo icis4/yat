@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace MKY.Utilities.Collections
@@ -26,6 +27,7 @@ namespace MKY.Utilities.Collections
 	/// <summary>
 	/// A collection containing one or more sets of test settings.
 	/// </summary>
+	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "Class actually implements a dictionary, but not using inheritance.")]
 	[Serializable]
 	public class NamedStringDictionary
 	{

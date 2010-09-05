@@ -19,8 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Reflection;
 
 namespace MKY.Test.Defaults
@@ -42,7 +40,7 @@ namespace MKY.Test.Defaults
 
 		/// <summary></summary>
 		[STAThread]
-		public static void Main(string[] args)
+		public static void Main()
 		{
 			//List<MemberInfo> mi = SettingAttribute.Settings;
 		}

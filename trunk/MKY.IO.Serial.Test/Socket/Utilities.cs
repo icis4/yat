@@ -19,6 +19,7 @@
 //==================================================================================================
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading;
@@ -28,6 +29,7 @@ using NUnit.Framework;
 namespace MKY.IO.Serial.Test.Socket
 {
 	/// <summary></summary>
+	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public static class Utilities
 	{
 		#region Private Constants
