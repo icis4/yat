@@ -49,6 +49,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\YAT.Version.cs">
+      <Link>Properties\YAT.Version.cs</Link>
+    </Compile>
     <Compile Include="FormatSettings.cs" />
     <Compile Include="LayoutSettings.cs" />
     <Compile Include="MainWindowSettings.cs" />
@@ -67,19 +70,19 @@
     <None Include="Properties\YAT.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MKY.IO.Ports\MKY.IO.Ports.csproj">
+    <ProjectReference Include="..\..\MKY\MKY.IO.Ports\MKY.IO.Ports.csproj">
       <Project>{D8940035-D30A-48A3-AC28-E8A4B8910CB9}</Project>
       <Name>MKY.IO.Ports</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MKY.IO.Serial\MKY.IO.Serial.csproj">
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial\MKY.IO.Serial.csproj">
       <Project>{E3A19532-D12A-4A90-B7F3-637A0A8FA6BD}</Project>
       <Name>MKY.IO.Serial</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MKY.IO.Usb\MKY.IO.Usb.csproj">
+    <ProjectReference Include="..\..\MKY\MKY.IO.Usb\MKY.IO.Usb.csproj">
       <Project>{1B657329-940D-4AA1-9768-431288B555E2}</Project>
       <Name>MKY.IO.Usb</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MKY.Utilities\MKY.Utilities.csproj">
+    <ProjectReference Include="..\..\MKY\MKY.Utilities\MKY.Utilities.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY.Utilities</Name>
     </ProjectReference>

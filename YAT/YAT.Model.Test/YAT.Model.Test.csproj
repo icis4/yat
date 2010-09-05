@@ -50,6 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\YAT.Version.cs">
+      <Link>Properties\YAT.Version.cs</Link>
+    </Compile>
     <Compile Include="FileHandlingTest.cs" />
     <Compile Include="StressTest.cs" />
     <Compile Include="TransmissionTest.cs" />
@@ -58,27 +61,27 @@
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ALAZ\Source\ALAZ.SystemEx\ALAZ.SystemEx.csproj">
+    <ProjectReference Include="..\..\ALAZ\Source\ALAZ.SystemEx\ALAZ.SystemEx.csproj">
       <Project>{FA1EF4FC-2FC7-4B29-9EAB-2872593C89E2}</Project>
       <Name>ALAZ.SystemEx</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MKY.IO.Ports.Test\MKY.IO.Ports.Test.csproj">
+    <ProjectReference Include="..\..\MKY\MKY.IO.Ports.Test\MKY.IO.Ports.Test.csproj">
       <Project>{82461541-B351-4913-9747-EAFEE2322768}</Project>
       <Name>MKY.IO.Ports.Test</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MKY.IO.Ports\MKY.IO.Ports.csproj">
+    <ProjectReference Include="..\..\MKY\MKY.IO.Ports\MKY.IO.Ports.csproj">
       <Project>{D8940035-D30A-48A3-AC28-E8A4B8910CB9}</Project>
       <Name>MKY.IO.Ports</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MKY.IO.Serial\MKY.IO.Serial.csproj">
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial\MKY.IO.Serial.csproj">
       <Project>{E3A19532-D12A-4A90-B7F3-637A0A8FA6BD}</Project>
       <Name>MKY.IO.Serial</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MKY.Net.Test\MKY.Net.Test.csproj">
+    <ProjectReference Include="..\..\MKY\MKY.Net.Test\MKY.Net.Test.csproj">
       <Project>{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}</Project>
       <Name>MKY.Net.Test</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MKY.Utilities\MKY.Utilities.csproj">
+    <ProjectReference Include="..\..\MKY\MKY.Utilities\MKY.Utilities.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY.Utilities</Name>
     </ProjectReference>

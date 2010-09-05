@@ -50,36 +50,39 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\YAT.Version.cs">
+      <Link>Properties\YAT.Version.cs</Link>
+    </Compile>
     <Compile Include="TestSettingsDefaults.cs" />
     <Compile Include="TestAll.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MKY.IO.Ports.Test\MKY.IO.Ports.Test.csproj">
+    <ProjectReference Include="..\..\MKY\MKY.IO.Ports.Test\MKY.IO.Ports.Test.csproj">
       <Project>{82461541-B351-4913-9747-EAFEE2322768}</Project>
       <Name>MKY.IO.Ports.Test</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MKY.IO.Serial.Test\MKY.IO.Serial.Test.csproj">
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial.Test\MKY.IO.Serial.Test.csproj">
       <Project>{CAEC3FFA-F303-4CCB-A42A-36F45AA00BD2}</Project>
       <Name>MKY.IO.Serial.Test</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MKY.IO.Usb.Test\MKY.IO.Usb.Test.csproj">
+    <ProjectReference Include="..\..\MKY\MKY.IO.Usb.Test\MKY.IO.Usb.Test.csproj">
       <Project>{E909B6F9-F856-4ED5-8D8F-6E77BC02C24C}</Project>
       <Name>MKY.IO.Usb.Test</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MKY.Net.Test\MKY.Net.Test.csproj">
+    <ProjectReference Include="..\..\MKY\MKY.Net.Test\MKY.Net.Test.csproj">
       <Project>{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}</Project>
       <Name>MKY.Net.Test</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MKY.Utilities.Test\MKY.Utilities.Test.csproj">
+    <ProjectReference Include="..\..\MKY\MKY.Utilities.Test\MKY.Utilities.Test.csproj">
       <Project>{644F7C29-CCE6-4827-9EF2-8B7D34194101}</Project>
       <Name>MKY.Utilities.Test</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MKY.Utilities\MKY.Utilities.csproj">
+    <ProjectReference Include="..\..\MKY\MKY.Utilities\MKY.Utilities.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
       <Name>MKY.Utilities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MKY.Windows.Forms.Test\MKY.Windows.Forms.Test.csproj">
+    <ProjectReference Include="..\..\MKY\MKY.Windows.Forms.Test\MKY.Windows.Forms.Test.csproj">
       <Project>{4171BFD3-4E50-4752-977B-9B1F79C3EDFB}</Project>
       <Name>MKY.Windows.Forms.Test</Name>
     </ProjectReference>

@@ -50,6 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\MKY.Version.cs">
+      <Link>Properties\MKY.Version.cs</Link>
+    </Compile>
     <Compile Include="Collections\NamedStringDictionary.cs" />
     <Compile Include="Collections\StringKeyValuePair.cs" />
     <Compile Include="Configuration\MergeableConfigurationSection.cs" />

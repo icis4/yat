@@ -45,6 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\MKY.Version.cs">
+      <Link>Properties\MKY.Version.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerialPort\SerialPortSettingsTest.cs" />
     <Compile Include="Socket\ConsecutiveTcpConnectionTest.cs" />
@@ -55,11 +58,11 @@
     <Compile Include="Usb\UsbHidPortSettings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ALAZ\Source\ALAZ.SystemEx.NetEx\ALAZ.SystemEx.NetEx.csproj">
+    <ProjectReference Include="..\..\ALAZ\Source\ALAZ.SystemEx.NetEx\ALAZ.SystemEx.NetEx.csproj">
       <Project>{25162422-3B32-4FB3-8A99-6BCFBE30D9AE}</Project>
       <Name>ALAZ.SystemEx.NetEx</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ALAZ\Source\ALAZ.SystemEx\ALAZ.SystemEx.csproj">
+    <ProjectReference Include="..\..\ALAZ\Source\ALAZ.SystemEx\ALAZ.SystemEx.csproj">
       <Project>{FA1EF4FC-2FC7-4B29-9EAB-2872593C89E2}</Project>
       <Name>ALAZ.SystemEx</Name>
     </ProjectReference>

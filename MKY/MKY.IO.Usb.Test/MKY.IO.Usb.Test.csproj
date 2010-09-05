@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\MKY.Version.cs">
+      <Link>Properties\MKY.Version.cs</Link>
+    </Compile>
     <Compile Include="ConnectionTest.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

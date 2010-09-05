@@ -50,6 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\MKY.Version.cs">
+      <Link>Properties\MKY.Version.cs</Link>
+    </Compile>
     <Compile Include="IO\XPathTest.cs" />
     <Compile Include="Net\IPHostTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
