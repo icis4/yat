@@ -121,6 +121,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Net.Test", "MKY.Net.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Test.Defaults", "MKY.Test.Defaults\MKY.Test.Defaults.csproj", "{F23C81B1-0AC0-4E7D-89D9-9D724041F5D5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY", "MKY\MKY.csproj", "{23EB19C3-EE7C-48EE-B1D0-895ECE2B8647}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -481,6 +483,16 @@ Global
 		{F23C81B1-0AC0-4E7D-89D9-9D724041F5D5}.Release with Redistributable|Any CPU.ActiveCfg = Release|Any CPU
 		{F23C81B1-0AC0-4E7D-89D9-9D724041F5D5}.Release with Redistributable|Any CPU.Build.0 = Release|Any CPU
 		{F23C81B1-0AC0-4E7D-89D9-9D724041F5D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23EB19C3-EE7C-48EE-B1D0-895ECE2B8647}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{23EB19C3-EE7C-48EE-B1D0-895ECE2B8647}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
+		{23EB19C3-EE7C-48EE-B1D0-895ECE2B8647}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23EB19C3-EE7C-48EE-B1D0-895ECE2B8647}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23EB19C3-EE7C-48EE-B1D0-895ECE2B8647}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
+		{23EB19C3-EE7C-48EE-B1D0-895ECE2B8647}.Release Test|Any CPU.Build.0 = Release|Any CPU
+		{23EB19C3-EE7C-48EE-B1D0-895ECE2B8647}.Release with Redistributable|Any CPU.ActiveCfg = Release|Any CPU
+		{23EB19C3-EE7C-48EE-B1D0-895ECE2B8647}.Release with Redistributable|Any CPU.Build.0 = Release|Any CPU
+		{23EB19C3-EE7C-48EE-B1D0-895ECE2B8647}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23EB19C3-EE7C-48EE-B1D0-895ECE2B8647}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -79,6 +79,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="YAT.cs" />
+    <Compile Include="YAT.Version.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MKY.Utilities\MKY.Utilities.csproj">
