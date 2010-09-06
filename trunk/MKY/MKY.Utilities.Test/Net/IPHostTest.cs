@@ -3,10 +3,10 @@
 // Visit YAT at http://sourceforge.net/projects/y-a-terminal.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.Utilities.Test/IO/XPathTest.cs $
-// $Author: maettu_this $
-// $Date: 2010-04-27 20:05:33 +0200 (Di, 27 Apr 2010) $
-// $Revision: 294 $
+// $URL$
+// $Author$
+// $Date$
+// $Revision$
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
@@ -93,8 +93,7 @@ namespace MKY.Utilities.Test.Net
 		[TearDown]
 		public virtual void TearDown()
 		{
-			foreach (string filePath in Directory.GetFiles(MakeTempPath(), MakeTempFileName("*")))
-				File.Delete(filePath);
+			XPath.CleanTempPath(this);
 		}
 
 		#endregion
@@ -149,7 +148,7 @@ namespace MKY.Utilities.Test.Net
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
 		public virtual void TestSerialization(XIPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
 		{
-			string filePath = MakeTempFilePath();
+			string filePath = XPath.MakeTempFilePath(this, ".xml");
 			XIPHost ipHostDeserialized = null;
 
 			// Serialize to file.
@@ -202,50 +201,10 @@ namespace MKY.Utilities.Test.Net
 		#endregion
 
 		#endregion
-
-		#region Private Methods
-		//==========================================================================================
-		// Private Methods
-		//==========================================================================================
-
-		private static string MakeTempPath()
-		{
-			string path = Path.GetTempPath() + Path.DirectorySeparatorChar + "MKY";
-
-			if (!Directory.Exists(path))
-				Directory.CreateDirectory(path);
-
-			return (path);
-		}
-
-		private static string MakeTempFileName()
-		{
-			return (MakeTempFileName(""));
-		}
-
-		private static string MakeTempFileName(string name)
-		{
-			if ((name != null) && (name.Length > 0))
-				return (typeof(IPHostTest).FullName + "-" + name + ".xml");
-			else
-				return (typeof(IPHostTest).FullName + ".xml");
-		}
-
-		private static string MakeTempFilePath()
-		{
-			return (MakeTempFilePath(""));
-		}
-
-		private static string MakeTempFilePath(string name)
-		{
-			return (MakeTempPath() + Path.DirectorySeparatorChar + MakeTempFileName(name));
-		}
-
-		#endregion
 	}
 }
 
 //==================================================================================================
 // End of
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.Utilities.Test/IO/XPathTest.cs $
+// $URL$
 //==================================================================================================

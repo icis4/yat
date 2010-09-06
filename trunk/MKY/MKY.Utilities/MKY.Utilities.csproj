@@ -59,6 +59,7 @@
     <Compile Include="Configuration\Provider.cs" />
     <Compile Include="Configuration\Selector.cs" />
     <Compile Include="Configuration\SelectionSection.cs" />
+    <Compile Include="Test\XPath.cs" />
     <Compile Include="XEnvironment.cs" />
     <Compile Include="Diagnostics\AnyWriter.cs" />
     <Compile Include="Diagnostics\AnyWriterWrapper.cs" />

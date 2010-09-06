@@ -53,11 +53,10 @@ namespace MKY.IO.Ports
 
 			try
 			{
-				// Use a tool like "WMI Explorer" to browse through the WMI entries.
+				// If there is a need to manually browse through the WMI entries,
+				//   use a tool like the "WMI Explorer".
 
-				ManagementObjectSearcher searcher;
-
-				searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PnPEntity");
+				ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PnPEntity");
 				foreach (ManagementObject obj in searcher.Get())
 				{
 					try

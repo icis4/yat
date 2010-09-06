@@ -45,40 +45,50 @@ namespace YAT.Controller
 		private static readonly string[] Title =
 		{
 			ApplicationInfo.ProductName + " - Version " + Application.ProductVersion,
-			"YAT - Yet Another Terminal",
-			"RS-232/422/423/485 TCP/UDP terminal to operate and debug serial connections",
+			"YAT - Yet Another Terminal.",
+			"Operate and debug serial communications.",
+			"Supports RS-232/422/423/485 as well as TCP-Client/Server/AutoSocket, UDP and USB Ser/HID",
 			"Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.",
 			"Copyright © 2003-2010 Matthias Kläy.",
 		};
 
 		private static readonly string[] FileOptions =
 		{
-			"Usage:    ",
+			"Usage:         ",
 			"  YAT[.exe] [<WorkspaceSettings>.yaw|<TerminalSettings>.yat]",
-			"          ",
+			"               ",
 			"Usage examples:",
 			"  YAT MyWorkspace.yaw",
-			"          Start YAT and open given workspace settings",
+			"          Start YAT and open given workspace settings.",
 			"  YAT MyTerminal.yat",
-			"          Start YAT and open given terminal settings",
+			"          Start YAT and open given terminal settings.",
 		};
 
 		private static readonly string[] AdvancedOptions =
 		{
-			"Advanced usage:    ",
-			"  YAT[.exe] [/r]",
-			"          ",
-			"  /r      ",
-			"  -r      Open most recent file according to file list",
-			"          ",
+			"Advanced usage:",
+			"  YAT[.exe] [/r] [/t[n] file]",
+			"               ",
+			"  /r           ",
+			"  -r           Open most recent file according to file list.",
+			"               ",
+			"  /t[n] file   ",
+			"  -t[n] file   Automatically transmit the given file on terminal n.",
+			"               ",
 			"Advanced usage examples:",
-			"  YAT /r  Start YAT and open most recent file",
+			"  YAT /r       Start YAT and open most recent file.",
 		};
 
 		private static readonly string[] RecentArg =
 		{
 			"/r",
 			"-r",
+		};
+
+		private static readonly string[] TransmitArg =
+		{
+			"/t",
+			"-t",
 		};
 
 		private static readonly string[] Help =
@@ -121,7 +131,8 @@ namespace YAT.Controller
 		private bool commandLineError;
 		private bool commandLineHelpIsRequested;
 
-		private string requestedFilePath = "";
+		// Command line options.
+		private Model.CommandLineOptions commandLineOptions = new Model.CommandLineOptions();
 
 		#endregion
 
@@ -130,9 +141,13 @@ namespace YAT.Controller
 		// Object Lifetime
 		//==========================================================================================
 
+		public Main()
+		{
+		}
+
 		public Main(string[] commandLineArgs)
 		{
-			// parse command line args if there are
+			// Parse command line args if there are any.
 			if (commandLineArgs.Length > 0)
 				this.commandLineError = (!ParseCommandLineArgs(commandLineArgs));
 		}
@@ -203,7 +218,17 @@ namespace YAT.Controller
 
 		public virtual string RequestedFilePath
 		{
-			get { return (this.requestedFilePath); }
+			get { return (this.commandLineOptions.RequestedFilePath); }
+		}
+
+		public virtual int RequestedTerminalId
+		{
+			get { return (this.commandLineOptions.RequestedTerminalId); }
+		}
+
+		public virtual string RequestedTransmitFilePath
+		{
+			get { return (this.commandLineOptions.RequestedTransmitFilePath); }
 		}
 
 		#endregion
@@ -236,7 +261,7 @@ namespace YAT.Controller
 
 			// Create model and view and run application.
 			MainResult mainResult;
-			using (Model.Main model = new Model.Main(this.requestedFilePath))
+			using (Model.Main model = new Model.Main(this.commandLineOptions))
 			{
 				if (runWithView)
 				{
@@ -280,9 +305,10 @@ namespace YAT.Controller
 			int argsParsed = 0;
 			int argsParsedTotal = 0;
 
-			if ((argsParsed = ParseArgsForHelp(commandLineArgs)) < 0)   return (false); else argsParsedTotal += argsParsed;
-			if ((argsParsed = ParseArgsForFile(commandLineArgs)) < 0)   return (false); else argsParsedTotal += argsParsed;
-			if ((argsParsed = ParseArgsForRecent(commandLineArgs)) < 0) return (false); else argsParsedTotal += argsParsed;
+			if ((argsParsed = ParseArgsForHelp(commandLineArgs)) < 0)     return (false); else argsParsedTotal += argsParsed;
+			if ((argsParsed = ParseArgsForFile(commandLineArgs)) < 0)     return (false); else argsParsedTotal += argsParsed;
+			if ((argsParsed = ParseArgsForRecent(commandLineArgs)) < 0)   return (false); else argsParsedTotal += argsParsed;
+			if ((argsParsed = ParseArgsForTransmit(commandLineArgs)) < 0) return (false); else argsParsedTotal += argsParsed;
 
 			if (argsParsedTotal != commandLineArgs.Length)
 				return (false);
@@ -342,14 +368,16 @@ namespace YAT.Controller
 				// Check for workspace file args.
 				if (ExtensionSettings.IsWorkspaceFile(Path.GetExtension(arg)))
 				{
-					this.requestedFilePath = arg;
+					// Trim optional quotes around file path.
+					this.commandLineOptions.RequestedFilePath = arg.Trim('"');
 					argsParsed++;
 				}
 
 				// Check for terminal file args.
 				if (ExtensionSettings.IsTerminalFile(Path.GetExtension(arg)))
 				{
-					this.requestedFilePath = arg;
+					// Trim optional quotes around file path.
+					this.commandLineOptions.RequestedFilePath = arg.Trim('"');
 					argsParsed++;
 				}
 			}
@@ -370,9 +398,39 @@ namespace YAT.Controller
 						bool recentsReady = (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count > 0);
 						if (recentsReady)
 						{
-							this.requestedFilePath = ApplicationSettings.LocalUser.RecentFiles.FilePaths[0].Item;
+							this.commandLineOptions.RequestedFilePath = ApplicationSettings.LocalUser.RecentFiles.FilePaths[0].Item;
 							argsParsed++;
 						}
+					}
+				}
+			}
+			return (argsParsed);
+		}
+
+		// Parse args for transmit.
+		private int ParseArgsForTransmit(string[] commandLineArgs)
+		{
+			int argsParsed = 0;
+			foreach (string arg in commandLineArgs)
+			{
+				foreach (string transmitArg in TransmitArg)
+				{
+					if ((arg.Length >= 2) && (string.Compare(arg.Substring(0, 2), transmitArg, StringComparison.OrdinalIgnoreCase) == 0))
+					{
+						int terminalId;
+						if ((arg.Length) >= 3 && (int.TryParse(arg.Substring(2, 1), out terminalId)))
+							this.commandLineOptions.RequestedTerminalId = terminalId;
+
+						string[] subargs = arg.Split(' ');
+						if (subargs.Length >= 2)
+						{
+							// Trim optional quotes around file path.
+							string filePath = subargs[1].Trim('"');
+							if (File.Exists(filePath))
+								this.commandLineOptions.RequestedTransmitFilePath = filePath;
+						}
+
+						argsParsed++;
 					}
 				}
 			}

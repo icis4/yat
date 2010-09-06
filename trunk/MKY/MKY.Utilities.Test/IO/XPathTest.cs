@@ -136,7 +136,7 @@ namespace MKY.Utilities.Test.IO
 				int testSet  = i / TestCasesPerTestSet;
 				int testCase = i % TestCasesPerTestSet;
 
-				// A compared to B results in A relative
+				// A compared to B results in A relative.
 				path1    = TestPaths[i, 0];
 				path2    = TestPaths[i, 1];
 				expected = TestPaths[i, 2];
@@ -146,10 +146,10 @@ namespace MKY.Utilities.Test.IO
 				{
 					switch (testCase)
 					{
-						case 0:  pcResult = XPath.CompareDirectoryPaths       (path1, path2); break;
-						case 1:  pcResult = XPath.CompareDirectoryAndFilePaths(path1, path2); break;
-						case 2:  pcResult = XPath.CompareFileAndDirectoryPaths(path1, path2); break;
-						default: pcResult = XPath.CompareFilePaths            (path1, path2); break;
+						case 0:  pcResult = Utilities.IO.XPath.CompareDirectoryPaths       (path1, path2); break;
+						case 1:  pcResult = Utilities.IO.XPath.CompareDirectoryAndFilePaths(path1, path2); break;
+						case 2:  pcResult = Utilities.IO.XPath.CompareFileAndDirectoryPaths(path1, path2); break;
+						default: pcResult = Utilities.IO.XPath.CompareFilePaths            (path1, path2); break;
 					}
 					Assert.AreEqual(expected, pcResult.RelativePath);
 				}
@@ -160,7 +160,7 @@ namespace MKY.Utilities.Test.IO
 					throw (ex);
 				}
 
-				// B compared to A results in B relative
+				// B compared to A results in B relative.
 				path1    = TestPaths[i, 1];
 				path2    = TestPaths[i, 0];
 				expected = TestPaths[i, 3];
@@ -170,10 +170,10 @@ namespace MKY.Utilities.Test.IO
 				{
 					switch (testCase)
 					{
-						case 0:  pcResult = XPath.CompareDirectoryPaths       (path1, path2); break;
-						case 1:  pcResult = XPath.CompareFileAndDirectoryPaths(path1, path2); break;
-						case 2:  pcResult = XPath.CompareDirectoryAndFilePaths(path1, path2); break;
-						default: pcResult = XPath.CompareFilePaths            (path1, path2); break;
+						case 0:  pcResult = Utilities.IO.XPath.CompareDirectoryPaths       (path1, path2); break;
+						case 1:  pcResult = Utilities.IO.XPath.CompareFileAndDirectoryPaths(path1, path2); break;
+						case 2:  pcResult = Utilities.IO.XPath.CompareDirectoryAndFilePaths(path1, path2); break;
+						default: pcResult = Utilities.IO.XPath.CompareFilePaths            (path1, path2); break;
 					}
 					Assert.AreEqual(expected, pcResult.RelativePath);
 				}
@@ -210,7 +210,7 @@ namespace MKY.Utilities.Test.IO
 				//if ((testSet == 6) && (testCase == 0))
 				//	System.Diagnostics.Debugger.Break();
 
-				// A combined with A relative results in B
+				// A combined with A relative results in B.
 				path1    = TestPaths[i, 0];
 				path2    = TestPaths[i, 2];
 				expected = TestPaths[i, 1];
@@ -220,10 +220,10 @@ namespace MKY.Utilities.Test.IO
 				{
 					switch (testCase)
 					{
-						case 0:  result = XPath.CombineDirectoryPaths       (path1, path2); break;
-						case 1:  result = XPath.CombineDirectoryAndFilePaths(path1, path2); break;
-						case 2:  result = XPath.CombineFileAndDirectoryPaths(path1, path2); break;
-						default: result = XPath.CombineFilePaths            (path1, path2); break;
+						case 0:  result = Utilities.IO.XPath.CombineDirectoryPaths       (path1, path2); break;
+						case 1:  result = Utilities.IO.XPath.CombineDirectoryAndFilePaths(path1, path2); break;
+						case 2:  result = Utilities.IO.XPath.CombineFileAndDirectoryPaths(path1, path2); break;
+						default: result = Utilities.IO.XPath.CombineFilePaths            (path1, path2); break;
 					}
 					Assert.AreEqual(expected, result);
 				}
@@ -234,7 +234,7 @@ namespace MKY.Utilities.Test.IO
 					throw (ex);
 				}
 
-				// B combined with B relative results in A
+				// B combined with B relative results in A.
 				path1    = TestPaths[i, 1];
 				path2    = TestPaths[i, 3];
 				expected = TestPaths[i, 0];
@@ -244,10 +244,10 @@ namespace MKY.Utilities.Test.IO
 				{
 					switch (testCase)
 					{
-						case 0:  result = XPath.CombineDirectoryPaths       (path1, path2); break;
-						case 1:  result = XPath.CombineFileAndDirectoryPaths(path1, path2); break;
-						case 2:  result = XPath.CombineDirectoryAndFilePaths(path1, path2); break;
-						default: result = XPath.CombineFilePaths            (path1, path2); break;
+						case 0:  result = Utilities.IO.XPath.CombineDirectoryPaths       (path1, path2); break;
+						case 1:  result = Utilities.IO.XPath.CombineFileAndDirectoryPaths(path1, path2); break;
+						case 2:  result = Utilities.IO.XPath.CombineDirectoryAndFilePaths(path1, path2); break;
+						default: result = Utilities.IO.XPath.CombineFilePaths            (path1, path2); break;
 					}
 					Assert.AreEqual(expected, result);
 				}

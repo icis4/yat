@@ -122,7 +122,7 @@ namespace YAT.Gui.Forms
 			{
 				this.isStartingUp = false;
 
-				// Start YAT according to main settings
+				// Start YAT according to main settings.
 				if (!this.main.Start())
 				{
 					MessageBox.Show
@@ -136,9 +136,25 @@ namespace YAT.Gui.Forms
 					Close();
 				}
 
-				// If workspace is empty, display new terminal dialog
+				// If workspace is empty, display new terminal dialog.
 				if (this.workspace.TerminalCount == 0)
 					ShowNewTerminalDialog();
+
+				// Automatically transmit data if desired.
+				// Used for GUI testing.
+				if ((this.main.CommandLineOptions != null) &&
+					(this.main.CommandLineOptions.RequestedTransmitFilePath != null) &&
+					(this.main.CommandLineOptions.RequestedTransmitFilePath.Length > 0))
+				{
+					string filePath = this.main.CommandLineOptions.RequestedTransmitFilePath;
+					int id = this.main.CommandLineOptions.RequestedTerminalId;
+
+					if (this.workspace.Terminals.Length > id)
+					{
+						this.workspace.Terminals[id].SendFile(new Model.Types.Command("", true, filePath));
+						Close();
+					}
+				}
 			}
 		}
 

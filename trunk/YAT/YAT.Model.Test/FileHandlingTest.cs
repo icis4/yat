@@ -24,6 +24,8 @@ using System.IO;
 
 using NUnit.Framework;
 
+using MKY.Utilities.Test;
+
 using YAT.Settings.Application;
 
 namespace YAT.Model.Test
@@ -42,10 +44,10 @@ namespace YAT.Model.Test
 		private bool autoSaveWorkspaceToRestore;
 		private string workspaceFilePathToRestore;
 
-		private string normalWorkspaceFilePath = MakeTempFilePath("NormalWorkspace", YAT.Settings.ExtensionSettings.WorkspaceFile);
-		private string normalTerminal1FilePath = MakeTempFilePath("NormalTerminal1", YAT.Settings.ExtensionSettings.TerminalFile);
-		private string normalTerminal2FilePath = MakeTempFilePath("NormalTerminal2", YAT.Settings.ExtensionSettings.TerminalFile);
-		private string normalTerminal3FilePath = MakeTempFilePath("NormalTerminal3", YAT.Settings.ExtensionSettings.TerminalFile);
+		private string normalWorkspaceFilePath = XPath.MakeTempFilePath(typeof(FileHandlingTest), "NormalWorkspace", YAT.Settings.ExtensionSettings.WorkspaceFile);
+		private string normalTerminal1FilePath = XPath.MakeTempFilePath(typeof(FileHandlingTest), "NormalTerminal1", YAT.Settings.ExtensionSettings.TerminalFile);
+		private string normalTerminal2FilePath = XPath.MakeTempFilePath(typeof(FileHandlingTest), "NormalTerminal2", YAT.Settings.ExtensionSettings.TerminalFile);
+		private string normalTerminal3FilePath = XPath.MakeTempFilePath(typeof(FileHandlingTest), "NormalTerminal3", YAT.Settings.ExtensionSettings.TerminalFile);
 
 		#endregion
 
@@ -94,8 +96,7 @@ namespace YAT.Model.Test
 		[TearDown]
 		public virtual void TearDown()
 		{
-			foreach (string filePath in Directory.GetFiles(MakeTempPath(), MakeTempFileName("*", ".*")))
-				File.Delete(filePath);
+			XPath.CleanTempPath(this);
 		}
 
 		#endregion
@@ -837,33 +838,6 @@ namespace YAT.Model.Test
 		//==========================================================================================
 		// Private Methods
 		//==========================================================================================
-
-		#region Private Methods > Temp Path
-		//------------------------------------------------------------------------------------------
-		// Private Methods > Temp Path
-		//------------------------------------------------------------------------------------------
-
-		private static string MakeTempPath()
-		{
-			string path = Path.GetTempPath() + Path.DirectorySeparatorChar + "YAT";
-
-			if (!Directory.Exists(path))
-				Directory.CreateDirectory(path);
-
-			return (path);
-		}
-
-		private static string MakeTempFileName(string name, string extension)
-		{
-			return ("YAT-Test-" + name + extension);
-		}
-
-		private static string MakeTempFilePath(string name, string extension)
-		{
-			return (MakeTempPath() + Path.DirectorySeparatorChar + MakeTempFileName(name, extension));
-		}
-
-		#endregion
 
 		#region Private Methods > Prepare
 		//------------------------------------------------------------------------------------------

@@ -19,6 +19,7 @@
 //==================================================================================================
 
 using System;
+using System.Text;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
@@ -206,7 +207,10 @@ namespace YAT.Gui.Utilities
 			}
 			else
 			{
-				throw (new NotImplementedException("Unknown DisplayElement"));
+				StringBuilder sb = new StringBuilder();
+				sb.AppendLine("Unknown DisplayElement:");
+				sb.Append(element.ToString());
+				throw (new NotImplementedException(sb.ToString()));
 			}
 		}
 
