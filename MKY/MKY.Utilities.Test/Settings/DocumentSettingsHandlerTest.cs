@@ -145,8 +145,7 @@ namespace MKY.Utilities.Test.Settings
 		[TearDown]
 		public virtual void TearDown()
 		{
-			foreach (string filePath in Directory.GetFiles(MakeTempPath(), MakeTempFileName("*")))
-				File.Delete(filePath);
+			XPath.CleanTempPath(this);
 		}
 
 		#endregion
@@ -167,7 +166,7 @@ namespace MKY.Utilities.Test.Settings
 		{
 			foreach (TestSet ts in this.testSets)
 			{
-				string filePath = MakeTempFilePath(ts.FileName);
+				string filePath = XPath.MakeTempFilePath(this, ts.FileName, ".xml");
 
 				object objToSerialize = ts.TypeToSerialize.GetConstructor(new System.Type[] { }).Invoke(new object[] { });
 				SerializeTestObject(ts.TypeToSerialize, objToSerialize, filePath);
@@ -288,26 +287,6 @@ namespace MKY.Utilities.Test.Settings
 		//==========================================================================================
 		// Private Methods
 		//==========================================================================================
-
-		private static string MakeTempPath()
-		{
-			string path = Path.GetTempPath() + Path.DirectorySeparatorChar + "MKY";
-
-			if (!Directory.Exists(path))
-				Directory.CreateDirectory(path);
-
-			return (path);
-		}
-
-		private static string MakeTempFileName(string name)
-		{
-			return ("MKY-Test-" + name + ".xml");
-		}
-
-		private static string MakeTempFilePath(string name)
-		{
-			return (MakeTempPath() + Path.DirectorySeparatorChar + MakeTempFileName(name));
-		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private static void SerializeTestObject(Type type, object obj, string filePath)

@@ -1860,6 +1860,7 @@ namespace YAT.Gui.Forms
 			// monitor_Tx
 			// 
 			this.monitor_Tx.ConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_Tx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Tx.ContextMenuStrip = this.contextMenuStrip_Monitor;
 			this.monitor_Tx.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.monitor_Tx.Location = new System.Drawing.Point(3, 0);
@@ -1905,6 +1906,7 @@ namespace YAT.Gui.Forms
 			// monitor_Bidir
 			// 
 			this.monitor_Bidir.ConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_Bidir.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Bidir.ContextMenuStrip = this.contextMenuStrip_Monitor;
 			this.monitor_Bidir.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.monitor_Bidir.Location = new System.Drawing.Point(3, 0);
@@ -1929,6 +1931,7 @@ namespace YAT.Gui.Forms
 			// monitor_Rx
 			// 
 			this.monitor_Rx.ConnectTime = System.TimeSpan.Parse("00:00:00");
+			this.monitor_Rx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Rx.ContextMenuStrip = this.contextMenuStrip_Monitor;
 			this.monitor_Rx.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.monitor_Rx.Location = new System.Drawing.Point(3, 0);

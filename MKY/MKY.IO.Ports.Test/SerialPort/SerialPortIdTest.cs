@@ -29,6 +29,7 @@ using NUnit.Framework;
 
 using MKY.IO.Ports;
 using MKY.Utilities.Diagnostics;
+using MKY.Utilities.Test;
 
 namespace MKY.IO.Ports.Test.SerialPort
 {
@@ -79,8 +80,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		[TearDown]
 		public virtual void TearDown()
 		{
-			foreach (string filePath in Directory.GetFiles(MakeTempPath(), MakeTempFileName("*")))
-				File.Delete(filePath);
+			XPath.CleanTempPath(this);
 		}
 
 		#endregion
@@ -132,7 +132,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		[Test, TestCaseSource(typeof(SerialPortIdTestData), "TestCases")]
 		public virtual void TestSerialization(int standardPortNumber, string portName, string[] portDescriptions)
 		{
-			string filePath = MakeTempFilePath();
+			string filePath = XPath.MakeTempFilePath(this, ".xml");
 			SerialPortId id = new SerialPortId(portName);
 			SerialPortId idDeserialized = null;
 
@@ -176,46 +176,6 @@ namespace MKY.IO.Ports.Test.SerialPort
 		}
 
 		#endregion
-
-		#endregion
-
-		#region Private Methods
-		//==========================================================================================
-		// Private Methods
-		//==========================================================================================
-
-		private static string MakeTempPath()
-		{
-			string path = Path.GetTempPath() + Path.DirectorySeparatorChar + "MKY";
-
-			if (!Directory.Exists(path))
-				Directory.CreateDirectory(path);
-
-			return (path);
-		}
-
-		private static string MakeTempFileName()
-		{
-			return (MakeTempFileName(""));
-		}
-
-		private static string MakeTempFileName(string name)
-		{
-			if ((name != null) && (name.Length > 0))
-				return (typeof(SerialPortId).FullName + "-" + name + ".xml");
-			else
-				return (typeof(SerialPortId).FullName + ".xml");
-		}
-
-		private static string MakeTempFilePath()
-		{
-			return (MakeTempFilePath(""));
-		}
-
-		private static string MakeTempFilePath(string name)
-		{
-			return (MakeTempPath() + Path.DirectorySeparatorChar + MakeTempFileName(name));
-		}
 
 		#endregion
 	}

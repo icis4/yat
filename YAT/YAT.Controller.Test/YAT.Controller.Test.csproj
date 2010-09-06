@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\YAT.Version.cs">
-      <Link>YAT.Version.cs</Link>
+      <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="ControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

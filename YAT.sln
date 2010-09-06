@@ -119,7 +119,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Win32.Test", "MKY\MKY.W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Net.Test", "MKY\MKY.Net.Test\MKY.Net.Test.csproj", "{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Test.Defaults", "MKY\MKY.Test.Defaults\MKY.Test.Defaults.csproj", "{F23C81B1-0AC0-4E7D-89D9-9D724041F5D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Gui.Test", "YAT\YAT.Gui.Test\YAT.Gui.Test.csproj", "{B1FA3C03-5924-47FF-90AD-D5D38027DF0C}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -473,14 +473,16 @@ Global
 		{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}.Release with Redistributable|Any CPU.ActiveCfg = Release|Any CPU
 		{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}.Release with Redistributable|Any CPU.Build.0 = Release|Any CPU
 		{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F23C81B1-0AC0-4E7D-89D9-9D724041F5D5}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
-		{F23C81B1-0AC0-4E7D-89D9-9D724041F5D5}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
-		{F23C81B1-0AC0-4E7D-89D9-9D724041F5D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F23C81B1-0AC0-4E7D-89D9-9D724041F5D5}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
-		{F23C81B1-0AC0-4E7D-89D9-9D724041F5D5}.Release Test|Any CPU.Build.0 = Release|Any CPU
-		{F23C81B1-0AC0-4E7D-89D9-9D724041F5D5}.Release with Redistributable|Any CPU.ActiveCfg = Release|Any CPU
-		{F23C81B1-0AC0-4E7D-89D9-9D724041F5D5}.Release with Redistributable|Any CPU.Build.0 = Release|Any CPU
-		{F23C81B1-0AC0-4E7D-89D9-9D724041F5D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1FA3C03-5924-47FF-90AD-D5D38027DF0C}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1FA3C03-5924-47FF-90AD-D5D38027DF0C}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
+		{B1FA3C03-5924-47FF-90AD-D5D38027DF0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1FA3C03-5924-47FF-90AD-D5D38027DF0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1FA3C03-5924-47FF-90AD-D5D38027DF0C}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
+		{B1FA3C03-5924-47FF-90AD-D5D38027DF0C}.Release Test|Any CPU.Build.0 = Release|Any CPU
+		{B1FA3C03-5924-47FF-90AD-D5D38027DF0C}.Release with Redistributable|Any CPU.ActiveCfg = Release|Any CPU
+		{B1FA3C03-5924-47FF-90AD-D5D38027DF0C}.Release with Redistributable|Any CPU.Build.0 = Release|Any CPU
+		{B1FA3C03-5924-47FF-90AD-D5D38027DF0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1FA3C03-5924-47FF-90AD-D5D38027DF0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

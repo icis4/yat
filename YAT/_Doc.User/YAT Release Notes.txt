@@ -47,13 +47,15 @@ YAT 2.0 Beta 3 Candidate 1 Version 1.99.2x :: 2010-0x-xx
 
 New:
 - Support for USB Ser/HID implemented (feature request #2825931)
+- Separate connect and total connect time, connect time is restarted on open (bug #2869585)
 - Test config including optional user config added (feature request #2981764)
 - Test environment to ensure that TCP/IP works on multiple network interfaces added (bug #2970215)
 - TCP/IP endurance and stress tests added
+- GUI endurance and stress tests added
 
 Important changes:
 - Serial COM port list gets refreshed when changing the I/O port type
-- Update to NUnit 2.5.5
+- Update to NUnit 2.5.7
 - Use of parametrized NUnit test cases
 - Use of FxCop (feature request #2970221)
 - Use of StyleCop (feature request #2970222)
@@ -62,6 +64,7 @@ Important changes:
 - Selection and settings controls now clear contents when disabled
 - Project references to system assemblies cleaned
 - Test and demo projects also signed with a strong name key
+- Version information moved to a single file, added links to that file to projects
 - Website and contact information added to all source headers (feature request #2998593)
 
 Fixed bugs:

@@ -657,7 +657,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime_Click(object sender, EventArgs e)
 		{
-			this.terminal.RestartIOConnectTime();
+			this.terminal.RestartConnectTime();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters_Click(object sender, EventArgs e)
@@ -889,7 +889,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_MonitorContextMenu_RestartConnectTime_Click(object sender, EventArgs e)
 		{
-			this.terminal.RestartIOConnectTime();
+			this.terminal.RestartConnectTime();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowCounters_Click(object sender, EventArgs e)
@@ -2452,9 +2452,14 @@ namespace YAT.Gui.Forms
 
 		private void terminal_IOConnectTimeChanged(object sender, TimeSpanEventArgs e)
 		{
-			monitor_Tx.ConnectTime    = e.TimeSpan;
-			monitor_Bidir.ConnectTime = e.TimeSpan;
-			monitor_Rx.ConnectTime    = e.TimeSpan;
+			monitor_Tx.ConnectTime         = this.terminal.ConnectTime;
+			monitor_Tx.TotalConnectTime    = this.terminal.TotalConnectTime;
+
+			monitor_Bidir.ConnectTime      = this.terminal.ConnectTime;
+			monitor_Bidir.TotalConnectTime = this.terminal.TotalConnectTime;
+
+			monitor_Rx.ConnectTime         = this.terminal.ConnectTime;
+			monitor_Rx.TotalConnectTime    = this.terminal.TotalConnectTime;
 		}
 
 		private void terminal_IOCountChanged(object sender, EventArgs e)

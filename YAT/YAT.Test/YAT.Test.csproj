@@ -54,7 +54,6 @@
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
     <Compile Include="TestSettingsDefaults.cs" />
-    <Compile Include="TestAll.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

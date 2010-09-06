@@ -115,6 +115,7 @@ namespace YAT.Gui.Controls
 		// Time status
 		private bool showTimeStatus = ShowTimeStatusDefault;
 		private TimeSpan connectTime;
+		private TimeSpan totalConnectTime;
 
 		// Count status
 		private bool showCountStatus = ShowCountStatusDefault;
@@ -237,7 +238,7 @@ namespace YAT.Gui.Controls
 		}
 
 		[Category("Monitor")]
-		[Description("The connect time status.")]
+		[Description("The connect time.")]
 		[DefaultValue(0)]
 		public virtual TimeSpan ConnectTime
 		{
@@ -247,6 +248,22 @@ namespace YAT.Gui.Controls
 				if (value != this.connectTime)
 				{
 					this.connectTime = value;
+					SetTimeStatusControls();
+				}
+			}
+		}
+
+		[Category("Monitor")]
+		[Description("The total connect time.")]
+		[DefaultValue(0)]
+		public virtual TimeSpan TotalConnectTime
+		{
+			get { return (this.totalConnectTime); }
+			set
+			{
+				if (value != this.totalConnectTime)
+				{
+					this.totalConnectTime = value;
 					SetTimeStatusControls();
 				}
 			}
@@ -424,6 +441,7 @@ namespace YAT.Gui.Controls
 		public virtual void ResetTimeStatus()
 		{
 			this.connectTime = TimeSpan.Zero;
+			this.totalConnectTime = TimeSpan.Zero;
 
 			SetTimeStatusControls();
 		}
@@ -753,7 +771,13 @@ namespace YAT.Gui.Controls
 
 		private void SetTimeStatusControls()
 		{
-			label_TimeStatus.Text = XTimeSpan.FormatTimeSpan(this.connectTime);
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append(XTimeSpan.FormatTimeSpan(this.connectTime));
+			sb.Append(Environment.NewLine);
+			sb.Append(XTimeSpan.FormatTimeSpan(this.totalConnectTime));
+
+			label_TimeStatus.Text = sb.ToString();
 			label_TimeStatus.Visible = this.showTimeStatus;
 		}
 

@@ -77,20 +77,21 @@ namespace YAT.Model
 		private Guid guid;
 		private string userName;
 
-		// settings
+		// Settings.
 		private DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler;
 		private TerminalSettingsRoot settingsRoot;
 
-		// terminal
+		// Terminal.
 		private Domain.Terminal terminal;
 
-		// logs
+		// Logs.
 		private Log.Logs log;
 
-		// time status
-		private Chronometer ioConnectChrono;
+		// Time status.
+		private Chronometer connectChrono;
+		private Chronometer totalConnectChrono;
 
-		// count status
+		// Count status.
 		private int txByteCount;
 		private int rxByteCount;
 		private int txLineCount;
@@ -190,30 +191,33 @@ namespace YAT.Model
 			else
 				this.guid = Guid.NewGuid();
 
-			// link and attach to settings
+			// Link and attach to settings.
 			this.settingsHandler = settingsHandler;
 			this.settingsRoot = this.settingsHandler.Settings;
 			this.settingsRoot.ClearChanged();
 			AttachSettingsEventHandlers();
 
-			// set user name
+			// Set user name.
 			staticTerminalIdCounter++;
 			if (!this.settingsHandler.SettingsFilePathIsValid || this.settingsRoot.AutoSaved)
 				this.userName = TerminalText + staticTerminalIdCounter.ToString();
 			else
 				UserNameFromFile = this.settingsHandler.SettingsFilePath;
 
-			// Create underlying terminal
+			// Create underlying terminal.
 			this.terminal = Domain.TerminalFactory.CreateTerminal(this.settingsRoot.Terminal);
 			AttachTerminalEventHandlers();
 
-			// Create log
+			// Create log.
 			this.log = new Log.Logs(this.settingsRoot.Log);
 
-			// Create chrono
-			this.ioConnectChrono = new Chronometer();
-			this.ioConnectChrono.Interval = 1000;
-			this.ioConnectChrono.TimeSpanChanged += new EventHandler<TimeSpanEventArgs>(this.ioConnectChrono_TimeSpanChanged);
+			// Create chronos.
+			this.connectChrono = new Chronometer();
+			this.connectChrono.Interval = 1000;
+			this.connectChrono.TimeSpanChanged += new EventHandler<TimeSpanEventArgs>(this.totalConnectChrono_TimeSpanChanged);
+			this.totalConnectChrono = new Chronometer();
+			this.totalConnectChrono.Interval = 1000;
+			this.totalConnectChrono.TimeSpanChanged += new EventHandler<TimeSpanEventArgs>(this.connectChrono_TimeSpanChanged);
 		}
 
 		#region Disposal
@@ -240,10 +244,15 @@ namespace YAT.Model
 					DetachSettingsEventHandlers();
 
 					// Then, dispose of objects
-					if (this.ioConnectChrono != null)
+					if (this.connectChrono != null)
 					{
-						this.ioConnectChrono.Dispose();
-						this.ioConnectChrono = null;
+						this.connectChrono.Dispose();
+						this.connectChrono = null;
+					}
+					if (this.totalConnectChrono != null)
+					{
+						this.totalConnectChrono.Dispose();
+						this.totalConnectChrono = null;
 					}
 					if (this.log != null)
 					{
@@ -910,9 +919,15 @@ namespace YAT.Model
 			OnIOChanged(e);
 
 			if      ( this.terminal.IsConnected && !this.terminal_IOChanged_isConnected)
-				this.ioConnectChrono.Start();
+			{
+				this.connectChrono.Restart();
+				this.totalConnectChrono.Start();
+			}
 			else if (!this.terminal.IsConnected &&  this.terminal_IOChanged_isConnected)
-				this.ioConnectChrono.Stop();
+			{
+				this.connectChrono.Stop();
+				this.totalConnectChrono.Stop();
+			}
 
 			this.terminal_IOChanged_isConnected = this.terminal.IsConnected;
 		}
@@ -1523,23 +1538,39 @@ namespace YAT.Model
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public virtual TimeSpan IOConnectTime
+		public virtual TimeSpan ConnectTime
 		{
 			get
 			{
 				AssertNotDisposed();
-				return (this.ioConnectChrono.TimeSpan);
+				return (this.connectChrono.TimeSpan);
 			}
 		}
 
 		/// <summary></summary>
-		public virtual void RestartIOConnectTime()
+		public virtual TimeSpan TotalConnectTime
 		{
-			AssertNotDisposed();
-			this.ioConnectChrono.Restart();
+			get
+			{
+				AssertNotDisposed();
+				return (this.totalConnectChrono.TimeSpan);
+			}
 		}
 
-		private void ioConnectChrono_TimeSpanChanged(object sender, TimeSpanEventArgs e)
+		/// <summary></summary>
+		public virtual void RestartConnectTime()
+		{
+			AssertNotDisposed();
+			connectChrono.Restart();
+			totalConnectChrono.Restart();
+		}
+
+		private void connectChrono_TimeSpanChanged(object sender, TimeSpanEventArgs e)
+		{
+			// Don't fire event. Events are fired by total connect chrono anyway.
+		}
+
+		private void totalConnectChrono_TimeSpanChanged(object sender, TimeSpanEventArgs e)
 		{
 			OnIOConnectTimeChanged(e);
 		}

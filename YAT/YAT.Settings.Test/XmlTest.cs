@@ -29,6 +29,7 @@ using NUnit.Framework;
 using MKY.Utilities.Collections;
 using MKY.Utilities.Diagnostics;
 using MKY.Utilities.Recent;
+using MKY.Utilities.Test;
 
 using YAT.Model.Settings;
 using YAT.Model.Types;
@@ -40,6 +41,15 @@ namespace YAT.Settings.Test
 	[TestFixture]
 	public class XmlTest
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		const string FileExtension = ".xml";
+
+		#endregion
+
 		#region Tear Down
 		//==========================================================================================
 		// Tear Down
@@ -50,8 +60,7 @@ namespace YAT.Settings.Test
 		[TearDown]
 		public virtual void TearDown()
 		{
-			foreach (string filePath in Directory.GetFiles(MakeTempPath(), MakeTempFileName("*")))
-				File.Delete(filePath);
+			XPath.CleanTempPath(this);
 		}
 
 		#endregion
@@ -77,16 +86,16 @@ namespace YAT.Settings.Test
 		{
 			string filePath = "";
 
-			filePath = MakeTempFilePath("Array");
+			filePath = XPath.MakeTempFilePath(this, "Array", FileExtension);
 			string[] a = new string[] { "A", "B" };
 			TestSerialization(typeof(string[]), a, filePath);
 
-			filePath = MakeTempFilePath("ArrayEmpty");
+			filePath = XPath.MakeTempFilePath(this, "ArrayEmpty", FileExtension);
 			string[] ae = new string[] { };
 			TestSerialization(typeof(string[]), ae, filePath);
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
-			filePath = MakeTempFilePath("MultiArray");
+			filePath = XPath.MakeTempFilePath(this, "MultiArray");
 			string[,] ma = new string[,]
 					{
 						{ "A", "AA" },
@@ -94,7 +103,7 @@ namespace YAT.Settings.Test
 					};
 			TestSerialization(typeof(string[,]), ma, filePath);
 #endif
-			filePath = MakeTempFilePath("ArrayOfArraysOnInit");
+			filePath = XPath.MakeTempFilePath(this, "ArrayOfArraysOnInit", FileExtension);
 			string[][] aai = new string[][]
 					{
 						new string[] { "A", "AA" },
@@ -102,7 +111,7 @@ namespace YAT.Settings.Test
 					};
 			TestSerialization(typeof(string[][]), aai, filePath);
 
-			filePath = MakeTempFilePath("ArrayOfArraysByCreate");
+			filePath = XPath.MakeTempFilePath(this, "ArrayOfArraysByCreate", FileExtension);
 			string[][] aac = (string[][])Array.CreateInstance(typeof(string[]), 2);
 			for (int i = 0; i < 2; i++)
 			{
@@ -128,18 +137,18 @@ namespace YAT.Settings.Test
 		{
 			string filePath = "";
 
-			filePath = MakeTempFilePath("List");
+			filePath = XPath.MakeTempFilePath(this, "List", FileExtension);
 			List<string> l = new List<string>();
 			l.Add("A");
 			l.Add("B");
 			TestSerialization(typeof(List<string>), l, filePath);
 
-			filePath = MakeTempFilePath("ListEmpty");
+			filePath = XPath.MakeTempFilePath(this, "ListEmpty", FileExtension);
 			List<string> le = new List<string>();
 			TestSerialization(typeof(List<string>), le, filePath);
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
-			filePath = MakeTempFilePath("ListOfArrays");
+			filePath = XPath.MakeTempFilePath(this, "ListOfArrays");
 			List<string[]> la = new List<string[]>();
 			la.Add(new string[] { "A", "AA" });
 			la.Add(new string[] { "B", "BB" });
@@ -147,7 +156,7 @@ namespace YAT.Settings.Test
 #endif
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
-			filePath = MakeTempFilePath("ListOfLists");
+			filePath = XPath.MakeTempFilePath(this, "ListOfLists");
 			List<List<string>> ll = new List<List<string>>();
 			ll.Add(l);
 			ll.Add(l);
@@ -170,7 +179,7 @@ namespace YAT.Settings.Test
 			string filePath = "";
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
-			filePath = MakeTempFilePath("Dictionary");
+			filePath = XPath.MakeTempFilePath(this, "Dictionary");
 			Dictionary<string, string> l = new Dictionary<string, string>();
 			l.Add("1", "A");
 			l.Add("2", "B");
@@ -178,13 +187,13 @@ namespace YAT.Settings.Test
 #endif
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
-			filePath = MakeTempFilePath("DictionaryEmpty");
+			filePath = XPath.MakeTempFilePath(this, "DictionaryEmpty");
 			Dictionary<string, string> le = new Dictionary<string, string>();
 			l.Add("1", "A");
 			l.Add("2", "B");
 			TestSerialization(typeof(Dictionary<string, string>), le, filePath);
 #endif
-			filePath = MakeTempFilePath("DictionaryToArrayOfArrays");
+			filePath = XPath.MakeTempFilePath(this, "DictionaryToArrayOfArrays", FileExtension);
 			Dictionary<string, string> l = new Dictionary<string, string>();
 			l.Add("1", "A");
 			l.Add("2", "B");
@@ -221,7 +230,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void TestNamedStringDictionarySerialization()
 		{
-			string filePath = MakeTempFilePath("NamedStringDictionaryToArrayOfArrays");
+			string filePath = XPath.MakeTempFilePath(this, "NamedStringDictionaryToArrayOfArrays", FileExtension);
 			NamedStringDictionary nsd = new NamedStringDictionary();
 			nsd.Name = "Test";
 			nsd.Add("1", "A");
@@ -242,11 +251,11 @@ namespace YAT.Settings.Test
 		{
 			string filePath = "";
 
-			filePath = MakeTempFilePath("EmptyArrayOfCommands");
+			filePath = XPath.MakeTempFilePath(this, "EmptyArrayOfCommands", FileExtension);
 			Command[] a = new Command[] { };
 			TestSerialization(typeof(Command[]), a, filePath);
 
-			filePath = MakeTempFilePath("EmptyListOfCommands");
+			filePath = XPath.MakeTempFilePath(this, "EmptyListOfCommands", FileExtension);
 			List<Command> l = new List<Command>();
 			TestSerialization(typeof(List<Command>), l, filePath);
 		}
@@ -264,7 +273,7 @@ namespace YAT.Settings.Test
 		{
 			string filePath = "";
 
-			filePath = MakeTempFilePath("RecentItem");
+			filePath = XPath.MakeTempFilePath(this, "RecentItem", FileExtension);
 			RecentItem<string> ri = new RecentItem<string>("RI");
 			TestSerialization(typeof(RecentItem<string>), ri, filePath);
 
@@ -272,7 +281,7 @@ namespace YAT.Settings.Test
 			ric.Add(ri);
 			ric.Add(ri);
 
-			filePath = MakeTempFilePath("RecentFileSettings");
+			filePath = XPath.MakeTempFilePath(this, "RecentFileSettings", FileExtension);
 			RecentFileSettings rfs = new RecentFileSettings();
 			rfs.FilePaths = ric;
 			TestSerialization(typeof(RecentFileSettings), rfs, filePath);
@@ -291,7 +300,7 @@ namespace YAT.Settings.Test
 		{
 			string filePath = "";
 
-			filePath = MakeTempFilePath("PredefinedCommandPage");
+			filePath = XPath.MakeTempFilePath(this, "PredefinedCommandPage", FileExtension);
 			PredefinedCommandPage pcp = new PredefinedCommandPage();
 			pcp.Commands.Add(new Command("Hello", "World"));
 			pcp.Commands.Add(new Command("Hallo", "Wält"));
@@ -301,7 +310,7 @@ namespace YAT.Settings.Test
 			c.Add(pcp);
 			c.Add(pcp);
 
-			filePath = MakeTempFilePath("PredefinedCommandSettings");
+			filePath = XPath.MakeTempFilePath(this, "PredefinedCommandSettings", FileExtension);
 			PredefinedCommandSettings pcs = new PredefinedCommandSettings();
 			pcs.Pages = c;
 			TestSerialization(typeof(PredefinedCommandSettings), pcs, filePath);
@@ -320,7 +329,7 @@ namespace YAT.Settings.Test
 		{
 			string filePath = "";
 
-			filePath = MakeTempFilePath("ExplicitSettings");
+			filePath = XPath.MakeTempFilePath(this, "ExplicitSettings", FileExtension);
 			ExplicitSettings s = new ExplicitSettings();
 			TestSerialization(typeof(ExplicitSettings), s, filePath);
 		}
@@ -338,7 +347,7 @@ namespace YAT.Settings.Test
 		{
 			string filePath = "";
 
-			filePath = MakeTempFilePath("ImplicitSettings");
+			filePath = XPath.MakeTempFilePath(this, "ImplicitSettings", FileExtension);
 			ImplicitSettings s = new ImplicitSettings();
 			TestSerialization(typeof(ImplicitSettings), s, filePath);
 		}
@@ -353,26 +362,6 @@ namespace YAT.Settings.Test
 		//==========================================================================================
 		// Private Methods
 		//==========================================================================================
-
-		private static string MakeTempPath()
-		{
-			string path = Path.GetTempPath() + Path.DirectorySeparatorChar + "YAT";
-
-			if (!Directory.Exists(path))
-				Directory.CreateDirectory(path);
-
-			return (path);
-		}
-
-		private static string MakeTempFileName(string name)
-		{
-			return (typeof(XmlTest).FullName + "-" + name + ".xml");
-		}
-
-		private static string MakeTempFilePath(string name)
-		{
-			return (MakeTempPath() + Path.DirectorySeparatorChar + MakeTempFileName(name));
-		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Enusre that really all exceptions get caught.")]
 		private static void TestSerialization(Type type, object obj, string filePath)

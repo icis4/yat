@@ -66,7 +66,7 @@ namespace YAT.Model
 
 		private Guid guid;
 
-		private string requestedFilePath = "";
+		private CommandLineOptions commandLineOptions;
 
 		private Workspace workspace;
 
@@ -104,15 +104,23 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public Main()
-			: this("")
 		{
+			this.guid = Guid.NewGuid();
 		}
 
 		/// <summary></summary>
 		public Main(string requestedFilePath)
 		{
 			this.guid = Guid.NewGuid();
-			this.requestedFilePath = requestedFilePath;
+			this.commandLineOptions = new CommandLineOptions();
+			this.commandLineOptions.RequestedFilePath = requestedFilePath;
+		}
+
+		/// <summary></summary>
+		public Main(CommandLineOptions commandLineOptions)
+		{
+			this.guid = Guid.NewGuid();
+			this.commandLineOptions = commandLineOptions;
 		}
 
 		#region Disposal
@@ -187,6 +195,16 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		public virtual CommandLineOptions CommandLineOptions
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (this.commandLineOptions);
+			}
+		}
+
+		/// <summary></summary>
 		public virtual string UserName
 		{
 			get
@@ -235,9 +253,11 @@ namespace YAT.Model
 			bool otherInstanceIsAlreadyRunning = OtherInstanceIsAlreadyRunning();
 			bool success = false;
 
-			if ((this.requestedFilePath != null) && (this.requestedFilePath.Length > 0))
+			if ((this.commandLineOptions != null) &&
+				(this.commandLineOptions.RequestedFilePath != null) &&
+				(this.commandLineOptions.RequestedFilePath.Length > 0))
 			{
-				success = OpenFromFile(this.requestedFilePath);
+				success = OpenFromFile(this.commandLineOptions.RequestedFilePath);
 
 				if (success)
 				{

@@ -86,9 +86,9 @@ namespace YAT.Gui.Controls
 			this.label_TimeStatus.Name = "label_TimeStatus";
 			this.label_TimeStatus.Size = new System.Drawing.Size(136, 30);
 			this.label_TimeStatus.TabIndex = 0;
-			this.label_TimeStatus.Text = "hh:mm:ss";
+			this.label_TimeStatus.Text = "hh:mm:ss\r\nhh:mm:ss";
 			this.label_TimeStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.toolTip.SetToolTip(this.label_TimeStatus, "Connect time (hh:mm:ss)");
+			this.toolTip.SetToolTip(this.label_TimeStatus, "Connect time (hh:mm:ss)\r\nTotal connect time (hh:mm:ss)");
 			// 
 			// label_CountStatus
 			// 

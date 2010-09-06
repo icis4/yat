@@ -19,6 +19,7 @@
 //==================================================================================================
 
 using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Xml.Serialization;
@@ -530,13 +531,17 @@ namespace YAT.Domain
 		/// </summary>
 		public virtual string ToString(string indent)
 		{
-			return (indent + "- Type: "      + GetType().Name + Environment.NewLine +
-					indent + "- Direction: " + this.direction     + Environment.NewLine +
-					indent + "- Origin: "    + this.origin        + Environment.NewLine +
-					indent + "- Text: "      + this.text          + Environment.NewLine +
-					indent + "- DataCount: " + this.dataCount     + Environment.NewLine +
-					indent + "- IsData: "    + this.isData        + Environment.NewLine +
-					indent + "- IsEol: "     + this.isEol         + Environment.NewLine);
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append(indent); sb.Append("- Type:      "); sb.AppendLine(GetType().Name);
+			sb.Append(indent); sb.Append("- Direction: "); sb.AppendLine(this.direction.ToString());
+			sb.Append(indent); sb.Append("- Origin:    "); sb.AppendLine(this.origin.ToString());
+			sb.Append(indent); sb.Append("- Text:      "); sb.AppendLine(this.text);
+			sb.Append(indent); sb.Append("- DataCount: "); sb.AppendLine(this.dataCount.ToString());
+			sb.Append(indent); sb.Append("- IsData:    "); sb.AppendLine(this.isData.ToString());
+			sb.Append(indent); sb.Append("- IsEol:     "); sb.AppendLine(this.isEol.ToString());
+
+			return (sb.ToString());
 		}
 
 		#endregion
