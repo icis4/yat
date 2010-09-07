@@ -30,8 +30,8 @@ namespace MKY.Utilities.Test
 		/// <summary></summary>
 		public static string MakeTempPath(object testObject)
 		{
-			// Results in e.g. D:\Temp\MKY.Utilities.Test\
-			string path = Path.GetTempPath() + Path.DirectorySeparatorChar + testObject.GetType().Namespace;
+			// Results in e.g. D:\Temp\MKY.Utilities.Test
+			string path = Path.GetTempPath() + testObject.GetType().Namespace;
 
 			if (!Directory.Exists(path))
 				Directory.CreateDirectory(path);
@@ -44,7 +44,7 @@ namespace MKY.Utilities.Test
 		{
 			string path = MakeTempPath(testObject);
 
-			if (!Directory.Exists(path))
+			if (Directory.Exists(path))
 				Directory.Delete(path, true);
 		}
 
@@ -74,7 +74,7 @@ namespace MKY.Utilities.Test
 		/// <summary></summary>
 		public static string MakeTempFilePath(object testObject, string name, string extension)
 		{
-			return (MakeTempPath(testObject) + Path.DirectorySeparatorChar + MakeTempFileName(name, extension));
+			return (MakeTempPath(testObject) + Path.DirectorySeparatorChar + MakeTempFileName(testObject, name, extension));
 		}
 	}
 }

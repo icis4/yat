@@ -73,6 +73,7 @@ Fixed bugs:
 - Exception with TCP/IP AutoSocket fixed (bug# 2869792)
 - Exception in case of no COM ports fixed (bug #3041642)
 - Exception when closing terminal using 'File > Close' fixed (bugs #2684813, #2854547, #2970241)
+- Rare exception while drawing fixed (bug #2981762)
 - Unhandled exception dialog improved and fixed (feature request #2970243, bug #2970245)
 - Multi-line command issue fixed (bug #2831453)
 - Tab order in predefined command dialog fixed (bug #2914863)
