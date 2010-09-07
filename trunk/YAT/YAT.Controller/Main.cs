@@ -365,20 +365,25 @@ namespace YAT.Controller
 			int argsParsed = 0;
 			foreach (string arg in commandLineArgs)
 			{
-				// Check for workspace file args.
-				if (ExtensionSettings.IsWorkspaceFile(Path.GetExtension(arg)))
+				// Check for file args.
+				string filePath = arg.Trim('"');
+				if (File.Exists(filePath))
 				{
-					// Trim optional quotes around file path.
-					this.commandLineOptions.RequestedFilePath = arg.Trim('"');
-					argsParsed++;
-				}
+					// Check for workspace file args.
+					if (ExtensionSettings.IsWorkspaceFile(Path.GetExtension(filePath)))
+					{
+						// Trim optional quotes around file path.
+						this.commandLineOptions.RequestedFilePath = filePath;
+						argsParsed++;
+					}
 
-				// Check for terminal file args.
-				if (ExtensionSettings.IsTerminalFile(Path.GetExtension(arg)))
-				{
-					// Trim optional quotes around file path.
-					this.commandLineOptions.RequestedFilePath = arg.Trim('"');
-					argsParsed++;
+					// Check for terminal file args.
+					if (ExtensionSettings.IsTerminalFile(Path.GetExtension(filePath)))
+					{
+						// Trim optional quotes around file path.
+						this.commandLineOptions.RequestedFilePath = filePath;
+						argsParsed++;
+					}
 				}
 			}
 			return (argsParsed);
