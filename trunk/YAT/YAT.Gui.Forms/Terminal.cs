@@ -956,9 +956,9 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_RadixContextMenu_Dec.Visible    = !separateTxRx;
 			toolStripMenuItem_RadixContextMenu_Hex.Visible    = !separateTxRx;
 
-			toolStripSeparator_RadixContextMenu_1.Visible = !separateTxRx;
-			toolStripSeparator_RadixContextMenu_2.Visible = !separateTxRx;
-			toolStripSeparator_RadixContextMenu_3.Visible = separateTxRx;
+			toolStripMenuItem_RadixContextMenu_Separator_1.Visible = !separateTxRx;
+			toolStripMenuItem_RadixContextMenu_Separator_2.Visible = !separateTxRx;
+			toolStripMenuItem_RadixContextMenu_Separator_3.Visible = separateTxRx;
 
 			toolStripMenuItem_RadixContextMenu_SeparateTxRx.Checked = separateTxRx;
 
@@ -1101,23 +1101,39 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Predefined Context Menu
 		//------------------------------------------------------------------------------------------
 
-		private List<ToolStripMenuItem> menuItems_predefined;
+		private List<ToolStripMenuItem> menuItems_Predefined_Commands;
+		private List<ToolStripMenuItem> menuItems_Predefined_Pages;
+		private const int menuItems_Predefined_MaxPages = 12;
 
 		private void contextMenuStrip_Predefined_Initialize()
 		{
-			this.menuItems_predefined = new List<ToolStripMenuItem>(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage);
-			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_1);
-			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_2);
-			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_3);
-			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_4);
-			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_5);
-			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_6);
-			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_7);
-			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_8);
-			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_9);
-			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_10);
-			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_11);
-			this.menuItems_predefined.Add(toolStripMenuItem_PredefinedContextMenu_Command_12);
+			this.menuItems_Predefined_Commands = new List<ToolStripMenuItem>(Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage);
+			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_1);
+			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_2);
+			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_3);
+			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_4);
+			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_5);
+			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_6);
+			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_7);
+			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_8);
+			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_9);
+			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_10);
+			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_11);
+			this.menuItems_Predefined_Commands.Add(toolStripMenuItem_PredefinedContextMenu_Command_12);
+
+			this.menuItems_Predefined_Pages = new List<ToolStripMenuItem>(menuItems_Predefined_MaxPages);
+			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_1);
+			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_2);
+			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_3);
+			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_4);
+			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_5);
+			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_6);
+			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_7);
+			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_8);
+			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_9);
+			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_10);
+			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_11);
+			this.menuItems_Predefined_Pages.Add(toolStripMenuItem_PredefinedContextMenu_Page_12);
 		}
 
 		/// <remarks>
@@ -1131,7 +1147,11 @@ namespace YAT.Gui.Forms
 			// Pages.
 			List<Model.Types.PredefinedCommandPage> pages = this.settingsRoot.PredefinedCommand.Pages;
 
-			if ((pages != null) && (pages.Count > 0))
+			int pageCount = 0;
+			if (pages != null)
+				pageCount = pages.Count;
+
+			if (pageCount > 0)
 			{
 				toolStripMenuItem_PredefinedContextMenu_Page_Previous.Enabled = (predefined.SelectedPage > pages.Count);
 				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled = (predefined.SelectedPage < pages.Count);
@@ -1142,9 +1162,22 @@ namespace YAT.Gui.Forms
 				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled = false;
 			}
 
+			for (int i = 0; i < pageCount; i++)
+			{
+				this.menuItems_Predefined_Pages[i].Text      = XMenu.PrependIndex(i + 1, pages[i].PageName);
+				this.menuItems_Predefined_Pages[i].Visible   = true;
+				this.menuItems_Predefined_Pages[i].Enabled   = this.terminal.IsOpen;
+			}
+			for (int i = pageCount; i < menuItems_Predefined_MaxPages; i++)
+			{
+				this.menuItems_Predefined_Pages[i].Text      = XMenu.PrependIndex(i + 1, "<Undefined>");
+				this.menuItems_Predefined_Pages[i].Visible   = false;
+				this.menuItems_Predefined_Pages[i].Enabled   = false;
+			}
+
 			// Commands.
 			List<Model.Types.Command> commands = null;
-			if ((pages != null) && (pages.Count > 0))
+			if (pageCount > 0)
 				commands = this.settingsRoot.PredefinedCommand.Pages[predefined.SelectedPage - 1].Commands;
 
 			int commandCount = 0;
@@ -1158,25 +1191,25 @@ namespace YAT.Gui.Forms
 
 				if (isDefined)
 				{
-					this.menuItems_predefined[i].Text      = commands[i].Description;
-					this.menuItems_predefined[i].ForeColor = SystemColors.ControlText;
-					this.menuItems_predefined[i].Font      = SystemFonts.DefaultFont;
-					this.menuItems_predefined[i].Enabled   = isValid;
+					this.menuItems_Predefined_Commands[i].Text      = XMenu.PrependIndex(i + 1, commands[i].Description);
+					this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.ControlText;
+					this.menuItems_Predefined_Commands[i].Font      = SystemFonts.DefaultFont;
+					this.menuItems_Predefined_Commands[i].Enabled   = isValid;
 				}
 				else
 				{
-					this.menuItems_predefined[i].Text      = Model.Types.Command.DefineCommandText;
-					this.menuItems_predefined[i].ForeColor = SystemColors.GrayText;
-					this.menuItems_predefined[i].Font      = Utilities.Drawing.ItalicDefaultFont;
-					this.menuItems_predefined[i].Enabled   = true;
+					this.menuItems_Predefined_Commands[i].Text      = XMenu.PrependIndex(i + 1, Model.Types.Command.DefineCommandText);
+					this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.GrayText;
+					this.menuItems_Predefined_Commands[i].Font      = Utilities.Drawing.ItalicDefaultFont;
+					this.menuItems_Predefined_Commands[i].Enabled   = true;
 				}
 			}
 			for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage; i++)
 			{
-				this.menuItems_predefined[i].Text      = Model.Types.Command.DefineCommandText;
-				this.menuItems_predefined[i].ForeColor = SystemColors.GrayText;
-				this.menuItems_predefined[i].Font      = Utilities.Drawing.ItalicDefaultFont;
-				this.menuItems_predefined[i].Enabled   = true;
+				this.menuItems_Predefined_Commands[i].Text      = XMenu.PrependIndex(i + 1, Model.Types.Command.DefineCommandText);
+				this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.GrayText;
+				this.menuItems_Predefined_Commands[i].Font      = Utilities.Drawing.ItalicDefaultFont;
+				this.menuItems_Predefined_Commands[i].Enabled   = true;
 			}
 
 			this.isSettingControls = false;
@@ -1198,7 +1231,7 @@ namespace YAT.Gui.Forms
 				contextMenuStrip_Predefined_SelectedCommand = id;
 				contextMenuStrip_Predefined_CopyToSendCommand = c;
 
-				toolStripSeparator_PredefinedContextMenu_3.Visible = true;
+				toolStripMenuItem_PredefinedContextMenu_Separator_3.Visible = true;
 
 				ToolStripMenuItem mi = toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand;
 				mi.Visible = true;
@@ -1225,7 +1258,7 @@ namespace YAT.Gui.Forms
 			}
 			else
 			{
-				toolStripSeparator_PredefinedContextMenu_3.Visible = false;
+				toolStripMenuItem_PredefinedContextMenu_Separator_3.Visible = false;
 
 				toolStripMenuItem_PredefinedContextMenu_CopyToSendCommand.Visible = false;
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand.Visible = false;
@@ -1237,7 +1270,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_PredefinedContextMenu_Command_Click(object sender, EventArgs e)
 		{
-			RequestPredefined(predefined.SelectedPage, int.Parse((string)(((ToolStripMenuItem)sender).Tag)));
+			SendPredefined(predefined.SelectedPage, int.Parse((string)(((ToolStripMenuItem)sender).Tag)));
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Page_Next_Click(object sender, EventArgs e)
@@ -1248,6 +1281,11 @@ namespace YAT.Gui.Forms
 		private void toolStripMenuItem_PredefinedContextMenu_Page_Previous_Click(object sender, EventArgs e)
 		{
 			predefined.PreviousPage();
+		}
+
+		private void toolStripMenuItem_PredefinedContextMenu_Page_Click(object sender, EventArgs e)
+		{
+			predefined.SelectedPage = int.Parse((string)(((ToolStripMenuItem)sender).Tag));
 		}
 
 		private void toolStripMenuItem_PredefinedContextMenu_Define_Click(object sender, EventArgs e)
@@ -2100,39 +2138,20 @@ namespace YAT.Gui.Forms
 		// Predefined Panel
 		//==========================================================================================
 
-		private void SelectPredefined()
+		private void SelectPredefinedPanel()
 		{
 			predefined.Select();
 		}
 
 		/// <param name="page">Page 1..max.</param>
 		/// <param name="command">Command 1..max.</param>
-		private void RequestPredefined(int page, int command)
+		private void SendPredefined(int page, int command)
 		{
-			List<Model.Types.PredefinedCommandPage> pages = this.settingsRoot.PredefinedCommand.Pages;
-			if (page <= pages.Count)
+			if (!this.terminal.SendPredefined(page, command))
 			{
-				bool isDefined = false;
-				if (page > 0)
-				{
-					List<Model.Types.Command> commands = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands;
-					isDefined =
-						(
-						(commands != null) &&
-						(commands.Count >= command) &&
-						(commands[command - 1] != null) &&
-						(commands[command - 1].IsDefined)
-						);
-				}
-				if (isDefined)
-				{
-					this.terminal.SendPredefined(page, command);
-					return;
-				}
+				// If command is not valid, show settings dialog.
+				ShowPredefinedCommandSettings(page, command);
 			}
-
-			// If command is not defined, show settings dialog.
-			ShowPredefinedCommandSettings(page, command);
 		}
 
 		/// <param name="page">Page 1..max.</param>
