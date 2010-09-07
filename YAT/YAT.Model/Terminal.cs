@@ -1455,23 +1455,48 @@ namespace YAT.Model
 		/// </summary>
 		/// <param name="page">Page 1..max.</param>
 		/// <param name="command">Command 1..max.</param>
-		public virtual void SendPredefined(int page, int command)
+		public virtual bool SendPredefined(int page, int command)
 		{
-			Model.Types.Command c = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
+			// Verify page index.
+			List<Model.Types.PredefinedCommandPage> pages = this.settingsRoot.PredefinedCommand.Pages;
+			if ((page < 1) && (page > pages.Count))
+				return (false);
 
+			// Verify command index.
+			List<Model.Types.Command> commands = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands;
+			bool isDefined =
+				(
+					(commands != null) &&
+					(commands.Count >= command) &&
+					(commands[command - 1] != null) &&
+					(commands[command - 1].IsDefined)
+				);
+			if (!isDefined)
+				return (false);
+
+			// Verify command.
+			Model.Types.Command c = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
 			if (c.IsValidCommand)
 			{
 				SendCommand(c);
 
 				if (this.settingsRoot.Send.CopyPredefined)
-					this.settingsRoot.SendCommand.Command = new Command(c); // copy command if desired
+					this.settingsRoot.SendCommand.Command = new Command(c); // Copy command if desired.
+
+				return (true);
 			}
 			else if (c.IsValidFilePath)
 			{
 				SendFile(c);
 
 				if (this.settingsRoot.Send.CopyPredefined)
-					this.settingsRoot.SendFile.Command = new Command(c); // copy command if desired
+					this.settingsRoot.SendFile.Command = new Command(c); // Copy command if desired.
+
+				return (true);
+			}
+			else
+			{
+				return (true);
 			}
 		}
 
