@@ -25,6 +25,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -721,8 +722,8 @@ namespace MKY.Win32
 			{
 				System.Diagnostics.Debug.WriteLine("USB device capabilities:");
 				System.Diagnostics.Debug.Indent();
-				System.Diagnostics.Debug.WriteLine("Usage (hex):                     " + capabilities.Usage.ToString("X2"));
-				System.Diagnostics.Debug.WriteLine("Usage Page (hex):                " + capabilities.UsagePage.ToString("X2"));
+				System.Diagnostics.Debug.WriteLine("Usage (hex):                     " + capabilities.Usage.ToString("X2", CultureInfo.InvariantCulture));
+				System.Diagnostics.Debug.WriteLine("Usage Page (hex):                " + capabilities.UsagePage.ToString("X2", CultureInfo.InvariantCulture));
 				System.Diagnostics.Debug.WriteLine("Input Report byte Length:        " + capabilities.InputReportByteLength);
 				System.Diagnostics.Debug.WriteLine("Output Report byte Length:       " + capabilities.OutputReportByteLength);
 				System.Diagnostics.Debug.WriteLine("Feature Report byte Length:      " + capabilities.FeatureReportByteLength);

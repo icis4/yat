@@ -57,6 +57,8 @@
     <Compile Include="Configuration\Selector.cs" />
     <Compile Include="Configuration\SelectionSection.cs" />
     <Compile Include="Test\XPath.cs" />
+    <Compile Include="Text\Ascii.cs" />
+    <Compile Include="Text\Escape.cs" />
     <Compile Include="Windows.Forms\XMenu.cs" />
     <Compile Include="XEnvironment.cs" />
     <Compile Include="Diagnostics\AnyWriter.cs" />
@@ -98,7 +100,6 @@
     </Compile>
     <Compile Include="Time\XTimeSpan.cs" />
     <Compile Include="Types\XArray.cs" />
-    <Compile Include="Types\XAscii.cs" />
     <Compile Include="Types\XByte.cs" />
     <Compile Include="Types\XDecimal.cs" />
     <Compile Include="Types\XDouble.cs" />

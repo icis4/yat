@@ -18,6 +18,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Globalization;
+
 using NUnit.Framework;
 
 using MKY.Utilities.Types;
@@ -93,8 +95,8 @@ namespace MKY.Utilities.Test.Types
 
 				Assert.AreEqual(ts.BinString, XByte.ConvertToBinaryString(data));
 				Assert.AreEqual(ts.OctString, XByte.ConvertToOctalString(data));
-				Assert.AreEqual(ts.DecString, data.ToString("D3"));
-				Assert.AreEqual(ts.HexString, data.ToString("X2"));
+				Assert.AreEqual(ts.DecString, data.ToString("D3", CultureInfo.InvariantCulture));
+				Assert.AreEqual(ts.HexString, data.ToString("X2", CultureInfo.InvariantCulture));
 			}
 		}
 

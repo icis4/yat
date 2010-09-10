@@ -21,8 +21,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 using MKY.Utilities.Event;
+using MKY.Utilities.Text;
 using MKY.Utilities.Types;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
@@ -426,7 +428,7 @@ namespace YAT.Domain
 							else
 								text = "Received";
 							text += " ASCII control char";
-							text += " <" + b.ToString("X2") + "h>";
+							text += " <" + b.ToString("X2", CultureInfo.InvariantCulture) + "h>";
 							text += " cannot be displayed in current settings";
 						}
 					}
@@ -507,16 +509,16 @@ namespace YAT.Domain
 				case Radix.Dec:
 				{
 					if (this.terminalSettings.Display.ShowRadix)
-						return (b.ToString("D3") + "d");
+						return (b.ToString("D3", CultureInfo.InvariantCulture) + "d");
 					else
-						return (b.ToString("D3"));
+						return (b.ToString("D3", CultureInfo.InvariantCulture));
 				}
 				case Radix.Hex:
 				{
 					if (this.terminalSettings.Display.ShowRadix)
-						return (b.ToString("X2") + "h");
+						return (b.ToString("X2", CultureInfo.InvariantCulture) + "h");
 					else
-						return (b.ToString("X2"));
+						return (b.ToString("X2", CultureInfo.InvariantCulture));
 				}
 				default: throw (new NotImplementedException("Invalid radix"));
 			}
