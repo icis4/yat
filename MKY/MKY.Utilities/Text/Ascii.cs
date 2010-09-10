@@ -19,10 +19,9 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Globalization;
 
-namespace MKY.Utilities.Types
+namespace MKY.Utilities.Text
 {
 	/// <summary>
 	/// Ascii code conversions. Source: http://www.asciitable.com.
@@ -58,9 +57,9 @@ namespace MKY.Utilities.Types
 				case 0x0E: return ("SO");
 				case 0x0F: return ("SI");
 				case 0x10: return ("DLE");
-				case 0x11: return ("DC1");
+				case 0x11: return ("DC1/XON");
 				case 0x12: return ("DC2");
-				case 0x13: return ("DC3");
+				case 0x13: return ("DC3/XOFF");
 				case 0x14: return ("DC4");
 				case 0x15: return ("NAK");
 				case 0x16: return ("SYN");
@@ -74,7 +73,52 @@ namespace MKY.Utilities.Types
 				case 0x1E: return ("RS");
 				case 0x1F: return ("US");
 				case 0x7F: return ("DEL");
-				default: throw (new ArgumentOutOfRangeException("code", code, "Code hex(" + code.ToString("X2") + ") is no ascii control code."));
+				default: throw (new ArgumentOutOfRangeException("code", code, "Code hex(" + code.ToString("X2", CultureInfo.InvariantCulture) + ") is no ascii control code."));
+			}
+		}
+
+		/// <summary>
+		/// Converts an ascii code into according description.
+		/// </summary>
+		/// <exception cref="ArgumentOutOfRangeException">Thrown if code out of range 0x00 to 0x1F, 0x7F</exception>
+		public static string ConvertToDescription(byte code)
+		{
+			switch (code)
+			{
+				case 0x00: return ("Null");
+				case 0x01: return ("Start of heading");
+				case 0x02: return ("Start of text");
+				case 0x03: return ("End Of text");
+				case 0x04: return ("End of transmission");
+				case 0x05: return ("Enquiry");
+				case 0x06: return ("Acknowledge");
+				case 0x07: return ("Bell");
+				case 0x08: return ("Backspace");
+				case 0x09: return ("Horizontal tabulator");
+				case 0x0A: return ("Line feed / New line");
+				case 0x0B: return ("Vertical tabulator");
+				case 0x0C: return ("Form feed / New page");
+				case 0x0D: return ("Carriage return");
+				case 0x0E: return ("Shift out");
+				case 0x0F: return ("Shift in");
+				case 0x10: return ("Date link escape");
+				case 0x11: return ("Device control 1 / XOn");
+				case 0x12: return ("Device control 2");
+				case 0x13: return ("Device control 3 / XOff");
+				case 0x14: return ("Device control 4");
+				case 0x15: return ("Negative acknowledge");
+				case 0x16: return ("Synchronous idle");
+				case 0x17: return ("End of transmission block");
+				case 0x18: return ("Cancel");
+				case 0x19: return ("End of medium");
+				case 0x1A: return ("Substitute");
+				case 0x1B: return ("Escape");
+				case 0x1C: return ("File separator");
+				case 0x1D: return ("Group separator");
+				case 0x1E: return ("Record separator");
+				case 0x1F: return ("Unit separator");
+				case 0x7F: return ("Delete");
+				default: throw (new ArgumentOutOfRangeException("code", code, "Code hex(" + code.ToString("X2", CultureInfo.InvariantCulture) + ") is no ascii control code."));
 			}
 		}
 
@@ -88,7 +132,7 @@ namespace MKY.Utilities.Types
 			if (!TryParse(mnemonic, out result))
 				return (result);
 			else
-				throw (new FormatException("Mnemonic " + mnemonic + " is no ascii control mnemonic"));
+				throw (new FormatException(@"Mnemonic """ + mnemonic + @""" is no ascii control mnemonic"));
 		}
 
 		/// <summary>
@@ -115,9 +159,9 @@ namespace MKY.Utilities.Types
 				case "SO":  result = 0x0E; return (true);
 				case "SI":  result = 0x0F; return (true);
 				case "DLE": result = 0x10; return (true);
-				case "DC1": result = 0x11; return (true);
+				case "DC1": result = 0x11; return (true); case "XON":  result = 0x11; return (true);
 				case "DC2": result = 0x12; return (true);
-				case "DC3": result = 0x13; return (true);
+				case "DC3": result = 0x13; return (true); case "XOFF": result = 0x13; return (true);
 				case "DC4": result = 0x14; return (true);
 				case "NAK": result = 0x15; return (true);
 				case "SYN": result = 0x16; return (true);

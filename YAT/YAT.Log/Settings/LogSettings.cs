@@ -20,6 +20,7 @@
 
 using System;
 using System.IO;
+using System.Globalization;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -215,16 +216,16 @@ namespace YAT.Log.Settings
 			if (this.nameDate)
 			{
 				postFix.Append(this.nameSeparator.Separator);
-				postFix.Append(now.Year.ToString("D4"));
-				postFix.Append(now.Month.ToString("D2"));
-				postFix.Append(now.Day.ToString("D2"));
+				postFix.Append(now.Year.ToString ("D4", CultureInfo.InvariantCulture));
+				postFix.Append(now.Month.ToString("D2", CultureInfo.InvariantCulture));
+				postFix.Append(now.Day.ToString  ("D2", CultureInfo.InvariantCulture));
 			}
 			if (this.nameTime)
 			{
 				postFix.Append(this.nameSeparator.Separator);
-				postFix.Append(now.Hour.ToString("D2"));
-				postFix.Append(now.Minute.ToString("D2"));
-				postFix.Append(now.Second.ToString("D2"));
+				postFix.Append(now.Hour.ToString  ("D2", CultureInfo.InvariantCulture));
+				postFix.Append(now.Minute.ToString("D2", CultureInfo.InvariantCulture));
+				postFix.Append(now.Second.ToString("D2", CultureInfo.InvariantCulture));
 			}
 			return (postFix.ToString());
 		}

@@ -49,6 +49,7 @@ New:
 - Support for USB Ser/HID implemented (feature request #2825931)
 - Separate connect and total connect time, connect time is restarted on open (bug #2869585)
 - List of first 12 predefined command pages added to menu, with shortcuts (feature request #2914892)
+- ASCII table added to help (feature request #1923555)
 - Test config including optional user config added (feature request #2981764)
 - Test environment to ensure that TCP/IP works on multiple network interfaces added (bug #2970215)
 - TCP/IP endurance and stress tests added

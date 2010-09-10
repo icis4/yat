@@ -201,13 +201,13 @@ namespace MKY.Utilities.Test.Types
 						Console.WriteLine("Expected bytes =");
 						foreach (byte b in ts.ByteArray)
 						{
-							Console.Write("0x" + b.ToString("X2") + ", ");
+							Console.Write("0x" + b.ToString("X2", CultureInfo.InvariantCulture) + ", ");
 						}
 						Console.WriteLine();
 						Console.WriteLine("Actual converted bytes =");
 						foreach (byte b in convertedByteArray)
 						{
-							Console.Write("0x" + b.ToString("X2") + ", ");
+							Console.Write("0x" + b.ToString("X2", CultureInfo.InvariantCulture) + ", ");
 						}
 						Console.WriteLine();
 					}

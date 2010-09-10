@@ -20,6 +20,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Text;
 
 namespace MKY.Utilities.Time
@@ -46,11 +47,11 @@ namespace MKY.Utilities.Time
 
 			if (hundredths)
 			{
-				sb.Insert(0, (timeSpan.Milliseconds / 10).ToString("D2"));
+				sb.Insert(0, (timeSpan.Milliseconds / 10).ToString("D2", CultureInfo.InvariantCulture));
 				sb.Insert(0, ".");
 			}
 
-			sb.Insert(0, timeSpan.Seconds.ToString("D2"));
+			sb.Insert(0, timeSpan.Seconds.ToString("D2", CultureInfo.InvariantCulture));
 			sb.Insert(0, ":");
 			sb.Insert(0, timeSpan.Minutes.ToString());
 			if (timeSpan.TotalHours >= 1)
