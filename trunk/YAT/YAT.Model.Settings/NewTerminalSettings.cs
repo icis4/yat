@@ -89,13 +89,17 @@ namespace YAT.Model.Settings
 
 		/// <remarks>
 		/// Set fields through properties to ensure correct setting of changed flag.
+		/// 
+		/// Attention: Do not use <see cref="MKY.IO.Ports.SerialPortId.FirstAvailablePort"/>
+		/// for the default port. <see cref="MKY.IO.Ports.SerialPortId.FirstStandardPort"/>
+		/// is way more performant and good enough for most use cases.
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
 			TerminalType         = Domain.TerminalType.Text;
 			IOType               = Domain.IOType.SerialPort;
 
-			SerialPortId         = MKY.IO.Ports.SerialPortId.DefaultPort;
+			SerialPortId         = MKY.IO.Ports.SerialPortId.FirstStandardPort;
 
 			SocketRemoteHost     = MKY.IO.Serial.SocketSettings.DefaultRemoteHost;
 			SocketRemotePort     = MKY.IO.Serial.SocketSettings.DefaultPort;

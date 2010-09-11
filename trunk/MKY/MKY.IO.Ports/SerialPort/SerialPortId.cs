@@ -55,12 +55,23 @@ namespace MKY.IO.Ports
 		public const int MaxStandardPortNumber = 65536;
 
 		/// <summary>
-		/// First port name as string.
+		/// First standard port name as string.
 		/// </summary>
 		/// <remarks>
 		/// Can be used as default string on attributes such as <see cref="System.ComponentModel.DefaultValueAttribute"/>.
 		/// </remarks>
 		public const string FirstStandardPortName = "COM1";
+
+		/// <summary>
+		/// First standard port.
+		/// </summary>
+		/// <remarks>
+		/// This static object can be used as default port. Using <see cref="FirstAvailablePort"/>
+		/// below is way less performant since it needs to search for available ports. Searching
+		/// for available ports takes quite some time, especially if checking whether the ports
+		/// are in use.
+		/// </remarks>
+		public static readonly SerialPortId FirstStandardPort = new SerialPortId(FirstStandardPortNumber);
 
 		/// <summary></summary>
 		public const string DefaultInUseText = "(in use)";
@@ -126,10 +137,10 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 
 		/// <summary>
-		/// Returns default port on system. Default is the first port available, usually "COM1".
+		/// Returns the first port available, usually "COM1".
 		/// Returns <c>null</c> if no ports are available.
 		/// </summary>
-		public static SerialPortId DefaultPort
+		public static SerialPortId FirstAvailablePort
 		{
 			get
 			{
