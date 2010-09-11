@@ -57,6 +57,7 @@ New:
 
 Important changes:
 - Serial COM port list gets refreshed when changing the I/O port type
+- Performance on startup partly improved (feature request #2968216)
 - Update to NUnit 2.5.7
 - Use of parametrized NUnit test cases
 - Use of FxCop (feature request #2970221)

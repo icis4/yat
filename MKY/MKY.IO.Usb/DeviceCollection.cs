@@ -61,8 +61,10 @@ namespace MKY.IO.Usb
 		public virtual void FillWithAvailableDevices()
 		{
 			Clear();
+
 			foreach (DeviceInfo di in Device.GetDevicesFromGuid(this.classGuid))
 				Add(di);
+
 			Sort();
 		}
 	}

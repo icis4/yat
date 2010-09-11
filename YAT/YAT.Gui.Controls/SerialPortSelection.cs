@@ -98,7 +98,12 @@ namespace YAT.Gui.Controls
 
 		private bool isSettingControls = false;
 
-		private SerialPortId portId = SerialPortId.DefaultPort;
+		/// <remarks>
+		/// Attention: Do not use <see cref="MKY.IO.Ports.SerialPortId.FirstAvailablePort"/>
+		/// for the default port. <see cref="MKY.IO.Ports.SerialPortId.FirstStandardPort"/>
+		/// is way more performant and good enough for most use cases.
+		/// </remarks>
+		private SerialPortId portId = SerialPortId.FirstStandardPort;
 
 		private MarkPortsInUseThread markPortsInUseThread;
 
