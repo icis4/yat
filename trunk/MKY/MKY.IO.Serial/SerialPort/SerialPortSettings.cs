@@ -99,10 +99,16 @@ namespace MKY.IO.Serial
 
 		/// <remarks>
 		/// Set fields through properties to ensure correct setting of changed flag.
+		/// 
+		/// Attention: Do not use <see cref="MKY.IO.Ports.SerialPortId.FirstAvailablePort"/>
+		/// for the default port. <see cref="MKY.IO.Ports.SerialPortId.FirstStandardPort"/>
+		/// is way more performant and good enough for most use cases.
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			PortId                 = SerialPortId.DefaultPort;
+			// Attention: See remarks above.
+			PortId                 = SerialPortId.FirstStandardPort;
+
 			AutoReopen             = AutoReopenDefault;
 			ReplaceParityErrors    = ReplaceParityErrorsDefault;
 			ParityErrorReplacement = ParityErrorReplacementDefault;
@@ -197,7 +203,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "Abbreviation RTS is given by RS-232.")]
 		[XmlElement("RtsEnabled")]
 		public virtual bool RtsEnabled
 		{
@@ -213,7 +219,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "Abbreviation DTR is given by RS-232.")]
 		[XmlElement("DtrEnabled")]
 		public virtual bool DtrEnabled
 		{
