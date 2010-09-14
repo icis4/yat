@@ -215,7 +215,7 @@ namespace YAT.Model.Test
 					for (int i = 0; i < transmissionCount; i++)
 					{
 						// Send test command
-						terminalA.SendCommand(testSet.Command);
+						terminalA.SendText(testSet.Command);
 						Utilities.WaitForTransmission(terminalA, terminalB);
 
 						// Verify transmission

@@ -121,6 +121,12 @@ namespace YAT.Gui.Controls
 			set { sendCommand.Command = value;  }
 		}
 
+		public virtual bool SendCommandImmediately
+		{
+			get { return (sendCommand.SendImmediately); }
+			set { sendCommand.SendImmediately = value;  }
+		}
+
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual RecentItemCollection<Command> RecentCommands

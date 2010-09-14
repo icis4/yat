@@ -1031,9 +1031,9 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public virtual string ToShortPortString()
 		{
-			if (this.port != null)
+			if      (this.port != null)
 				return (this.port.PortId);
-			else if ((this.portName != null) && (this.portName.Length > 0))
+			else if (!string.IsNullOrEmpty(this.portName))
 				return (this.portName);
 			else
 				return ("<Undefined>");

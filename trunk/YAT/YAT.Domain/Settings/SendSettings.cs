@@ -35,8 +35,12 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public const bool CopyPredefinedDefault = false;
 
+		/// <summary></summary>
+		public const bool SendImmediatelyDefault = false;
+
 		private bool keepCommand;
 		private bool copyPredefined;
+		private bool sendImmediately;
 
 		/// <summary></summary>
 		public SendSettings()
@@ -60,8 +64,10 @@ namespace YAT.Domain.Settings
 		public SendSettings(SendSettings rhs)
 			: base(rhs)
 		{
-			this.keepCommand = rhs.keepCommand;
-			this.copyPredefined = rhs.copyPredefined;
+			this.keepCommand     = rhs.keepCommand;
+			this.copyPredefined  = rhs.copyPredefined;
+			this.sendImmediately = rhs.sendImmediately;
+
 			ClearChanged();
 		}
 
@@ -70,8 +76,9 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			KeepCommand = KeepCommandDefault;
-			CopyPredefined = CopyPredefinedDefault;
+			KeepCommand     = KeepCommandDefault;
+			CopyPredefined  = CopyPredefinedDefault;
+			SendImmediately = SendImmediatelyDefault;
 		}
 
 		#region Properties
@@ -109,6 +116,21 @@ namespace YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("SendImmediately")]
+		public virtual bool SendImmediately
+		{
+			get { return (this.sendImmediately); }
+			set
+			{
+				if (value != this.sendImmediately)
+				{
+					this.sendImmediately = value;
+					SetChanged();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members
@@ -141,8 +163,9 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
 
-				(this.keepCommand    == other.keepCommand) &&
-				(this.copyPredefined == other.copyPredefined)
+				(this.keepCommand     == other.keepCommand) &&
+				(this.copyPredefined  == other.copyPredefined) &&
+				(this.sendImmediately == other.sendImmediately)
 			);
 		}
 

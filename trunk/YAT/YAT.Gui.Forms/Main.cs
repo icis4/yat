@@ -143,9 +143,7 @@ namespace YAT.Gui.Forms
 
 				// Automatically trigger transmit data if desired.
 				// Used for GUI testing.
-				if ((this.main.CommandLineOptions != null) &&
-					(this.main.CommandLineOptions.RequestedTransmitFilePath != null) &&
-					(this.main.CommandLineOptions.RequestedTransmitFilePath.Length > 0))
+				if ((this.main.CommandLineOptions != null) && !string.IsNullOrEmpty(this.main.CommandLineOptions.RequestedTransmitFilePath))
 				{
 					Trace.WriteLine("Triggering automatic transmission for testing purposes");
 					timer_TestTransmit.Start();
@@ -803,9 +801,7 @@ namespace YAT.Gui.Forms
 
 			// Automatically transmit data if desired.
 			// Used for GUI testing.
-			if ((this.main.CommandLineOptions != null) &&
-				(this.main.CommandLineOptions.RequestedTransmitFilePath != null) &&
-				(this.main.CommandLineOptions.RequestedTransmitFilePath.Length > 0))
+			if ((this.main.CommandLineOptions != null) && !string.IsNullOrEmpty(this.main.CommandLineOptions.RequestedTransmitFilePath))
 			{
 				string filePath = this.main.CommandLineOptions.RequestedTransmitFilePath;
 				int id = this.main.CommandLineOptions.RequestedTerminalId;

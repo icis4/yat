@@ -97,7 +97,7 @@ namespace MKY.Utilities.Xml
 			if (inputNode != null)
 			{
 				string localName = GetLocalNameAlternateTolerant(GetXmlPath(inputNode), inputNavigator.Name, this.alternates);
-				if ((localName != null) && (localName.Length > 0))
+				if (!string.IsNullOrEmpty(localName))
 				{
 					if (outputNavigator.MoveToAttribute(localName, inputNavigator.NamespaceURI))
 						return (true);
@@ -125,7 +125,7 @@ namespace MKY.Utilities.Xml
 			if (inputNode != null)
 			{
 				string localName = GetLocalNameAlternateTolerant(GetXmlPath(inputNode), inputNavigator.Name, this.alternates);
-				if ((localName != null) && (localName.Length > 0))
+				if (!string.IsNullOrEmpty(localName))
 				{
 					if (outputNavigator.MoveToChild(localName, inputNavigator.NamespaceURI))
 						return (true);

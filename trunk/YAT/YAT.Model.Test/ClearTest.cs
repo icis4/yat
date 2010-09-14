@@ -62,7 +62,7 @@ namespace YAT.Model.Test
 					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 2 }, new int[] { 1 }); // EOL results in one more element
 
 					// Send test command
-					terminalA.SendCommand(testSet.Command);
+					terminalA.SendText(testSet.Command);
 					Utilities.WaitForTransmission(terminalA, terminalB);
 
 					// Verify transmission
@@ -113,7 +113,7 @@ namespace YAT.Model.Test
 					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 2 }, new int[] { 1 }); // EOL results in one more element
 
 					// Send test command
-					terminalA.SendCommand(testSet.Command);
+					terminalA.SendText(testSet.Command);
 					Utilities.WaitForTransmission(terminalA, terminalB);
 
 					// Verify transmission
@@ -122,7 +122,7 @@ namespace YAT.Model.Test
 					                      testSet);
 
 					// Send incomplete line command
-					terminalA.SendCommand(new Types.Command(@"B\!(NoEOL)"));
+					terminalA.SendText(new Types.Command(@"B\!(NoEOL)"));
 					Utilities.WaitForTransmission(terminalA, terminalB);
 
 					// Verify incomplete line

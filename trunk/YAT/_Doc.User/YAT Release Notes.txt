@@ -47,6 +47,7 @@ YAT 2.0 Beta 3 Candidate 1 Version 1.99.2x :: 2010-0x-xx
 
 New:
 - Support for USB Ser/HID implemented (feature request #2825931)
+- Optional simple terminal/direct mode added to "Send Command" (feature request #1808496)
 - Separate connect and total connect time, connect time is restarted on open (bug #2869585)
 - List of first 12 predefined command pages added to menu, with shortcuts (feature request #2914892)
 - ASCII table added to help (feature request #1923555)
@@ -95,6 +96,7 @@ Limitations and known issues:
 - UTF-16/32 testing pending (bug #1931537)
 - More advanced text line send and receive options not yet implemented
   (feature requests #1808508 and #1808509)
+- Terminal/direct mode does not yet support special formats and commands (feature request #1808496)
 - Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
 - Multiple simultaneous instances of YAT are limited in the use of default workspaces and terminals
   (feature request #2842713)

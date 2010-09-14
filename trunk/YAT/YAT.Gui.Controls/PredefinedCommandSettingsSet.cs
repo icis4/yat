@@ -209,7 +209,7 @@ namespace YAT.Gui.Controls
 		private void textBox_Command_Enter(object sender, EventArgs e)
 		{
 			// Clear "<Enter a command...>" if needed.
-			if ((this.focusState == FocusState.Inactive) && !this.command.IsSingleLineCommand)
+			if ((this.focusState == FocusState.Inactive) && !this.command.IsSingleLineText)
 				ClearCommand();
 
 			this.focusState = FocusState.HasFocus;
@@ -320,13 +320,13 @@ namespace YAT.Gui.Controls
 			// description
 			textBox_Description.Text = this.command.Description;
 
-			if (this.command.IsCommand)
+			if (this.command.IsText)
 			{
 				// command
 				textBox_Command.Visible = true;
 				if (this.focusState == FocusState.Inactive)
 				{
-					textBox_Command.Text      = this.command.SingleLineCommand;
+					textBox_Command.Text      = this.command.SingleLineText;
 					textBox_Command.ForeColor = SystemColors.ControlText;
 					textBox_Command.Font      = SystemFonts.DefaultFont;
 				}
@@ -420,7 +420,7 @@ namespace YAT.Gui.Controls
 		private void SetSingleLineCommand(string commandLine)
 		{
 			this.command.IsFilePath = false;
-			this.command.SingleLineCommand = commandLine;
+			this.command.SingleLineText = commandLine;
 
 			SetControls();
 			OnCommandChanged(new EventArgs());

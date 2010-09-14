@@ -238,22 +238,26 @@ namespace YAT.Domain
 
 		private void Send(string s, string eol)
 		{
+			bool sendEol = (eol != null);
+			byte[] eolByteArray = new byte[] { };
 			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianess, (XEncoding)TextTerminalSettings.Encoding);
 
 			// Prepare EOL.
-			MemoryStream eolWriter = new MemoryStream();
-			foreach (Parser.Result result in p.Parse(eol, TextTerminalSettings.CharSubstitution, Parser.ParseMode.AllByteArrayResults))
+			if (sendEol)
 			{
-				if (result is Parser.ByteArrayResult)
+				MemoryStream eolWriter = new MemoryStream();
+				foreach (Parser.Result result in p.Parse(eol, TextTerminalSettings.CharSubstitution, Parser.ParseMode.AllByteArrayResults))
 				{
-					byte[] a = ((Parser.ByteArrayResult)result).ByteArray;
-					eolWriter.Write(a, 0, a.Length);
+					if (result is Parser.ByteArrayResult)
+					{
+						byte[] a = ((Parser.ByteArrayResult)result).ByteArray;
+						eolWriter.Write(a, 0, a.Length);
+					}
 				}
+				eolByteArray = eolWriter.ToArray();
 			}
-			byte[] eolByteArray = eolWriter.ToArray();
 
 			// Parse string and execute keywords.
-			bool sendEol = (eol != null);
 			foreach (Parser.Result result in p.Parse(s, TextTerminalSettings.CharSubstitution, Parser.ParseMode.All))
 			{
 				if (result is Parser.ByteArrayResult)

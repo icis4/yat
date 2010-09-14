@@ -84,9 +84,9 @@ namespace YAT.Gui.Controls
 			command1.Description = "<1 lines...> []";
 			command1.FilePath = "";
 			command1.IsFilePath = false;
-			command1.MultiLineCommand = new string[] {
+			command1.MultiLineText = new string[] {
 		"<1 lines...> []"};
-			command1.SingleLineCommand = "<1 lines...> []";
+			command1.SingleLineText = "<1 lines...> []";
 			this.sendCommand.Command = command1;
 			this.sendCommand.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.sendCommand.Location = new System.Drawing.Point(3, 13);
@@ -117,9 +117,9 @@ namespace YAT.Gui.Controls
 			command2.Description = "<1 lines...> []";
 			command2.FilePath = "";
 			command2.IsFilePath = false;
-			command2.MultiLineCommand = new string[] {
+			command2.MultiLineText = new string[] {
 		"<1 lines...> []"};
-			command2.SingleLineCommand = "<1 lines...> []";
+			command2.SingleLineText = "<1 lines...> []";
 			this.sendFile.FileCommand = command2;
 			this.sendFile.Location = new System.Drawing.Point(3, 13);
 			this.sendFile.Name = "sendFile";

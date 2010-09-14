@@ -253,9 +253,7 @@ namespace YAT.Model
 			bool otherInstanceIsAlreadyRunning = OtherInstanceIsAlreadyRunning();
 			bool success = false;
 
-			if ((this.commandLineOptions != null) &&
-				(this.commandLineOptions.RequestedFilePath != null) &&
-				(this.commandLineOptions.RequestedFilePath.Length > 0))
+			if ((this.commandLineOptions != null) && !string.IsNullOrEmpty(this.commandLineOptions.RequestedFilePath))
 			{
 				success = OpenFromFile(this.commandLineOptions.RequestedFilePath);
 
