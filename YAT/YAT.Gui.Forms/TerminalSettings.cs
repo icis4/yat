@@ -406,8 +406,9 @@ namespace YAT.Gui.Forms
 
 				this.settings_Form.IO.Endianess = f.SettingsResult.IO.Endianess;
 
-				this.settings_Form.Send.KeepCommand = f.SettingsResult.Send.KeepCommand;
-				this.settings_Form.Send.CopyPredefined = f.SettingsResult.Send.CopyPredefined;
+				this.settings_Form.Send.KeepCommand     = f.SettingsResult.Send.KeepCommand;
+				this.settings_Form.Send.CopyPredefined  = f.SettingsResult.Send.CopyPredefined;
+				this.settings_Form.Send.SendImmediately = f.SettingsResult.Send.SendImmediately;
 
 				this.settings_Form.IO.SerialPort.ReplaceParityErrors = f.SettingsResult.IO.SerialPort.ReplaceParityErrors;
 				this.settings_Form.IO.SerialPort.ParityErrorReplacement = f.SettingsResult.IO.SerialPort.ParityErrorReplacement;

@@ -244,6 +244,15 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		private void checkBox_SendImmediately_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				this.settings_Form.Send.SendImmediately = checkBox_SendImmediately.Checked;
+				SetControls();
+			}
+		}
+
 		private void checkBox_ReplaceParityError_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)

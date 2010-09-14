@@ -456,11 +456,12 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls = true;
 
-			toolStripMenuItem_TerminalMenu_Send_Command.Enabled = this.settingsRoot.SendCommand.Command.IsValidCommand;
+			toolStripMenuItem_TerminalMenu_Send_Command.Enabled = this.settingsRoot.SendCommand.Command.IsValidText;
 			toolStripMenuItem_TerminalMenu_Send_File.Enabled    = this.settingsRoot.SendFile.Command.IsValidFilePath;
 
 			toolStripMenuItem_TerminalMenu_Send_KeepCommand.Checked    = this.settingsRoot.Send.KeepCommand;
 			toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked = this.settingsRoot.Send.CopyPredefined;
+			toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked = this.settingsRoot.Send.SendImmediately;
 
 			this.isSettingControls = false;
 		}
@@ -472,7 +473,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_Send_Command_Click(object sender, EventArgs e)
 		{
-			this.terminal.SendCommand();
+			this.terminal.SendText();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_File_Click(object sender, EventArgs e)
@@ -488,6 +489,11 @@ namespace YAT.Gui.Forms
 		private void toolStripMenuItem_TerminalMenu_Send_CopyPredefined_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Send.CopyPredefined = !this.settingsRoot.Send.CopyPredefined;
+		}
+
+		private void toolStripMenuItem_TerminalMenu_Send_SendImmediately_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Send.SendImmediately = !this.settingsRoot.Send.SendImmediately;
 		}
 
 		#endregion
@@ -1237,8 +1243,8 @@ namespace YAT.Gui.Forms
 				mi.Visible = true;
 				if (c != null)
 				{
-					mi.Enabled = (c.IsCommand || c.IsFilePath);
-					if (c.IsCommand)
+					mi.Enabled = (c.IsText || c.IsFilePath);
+					if (c.IsText)
 						mi.Text = "Copy to Send Command";
 					else if (c.IsFilePath)
 						mi.Text = "Copy to Send File";
@@ -1252,7 +1258,7 @@ namespace YAT.Gui.Forms
 				}
 
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand.Visible = true;
-				toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand.Enabled = ((id != 0) && (this.settingsRoot.SendCommand.Command.IsCommand));
+				toolStripMenuItem_PredefinedContextMenu_CopyFromSendCommand.Enabled = ((id != 0) && (this.settingsRoot.SendCommand.Command.IsText));
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Visible = true;
 				toolStripMenuItem_PredefinedContextMenu_CopyFromSendFile.Enabled = ((id != 0) && (this.settingsRoot.SendFile.Command.IsFilePath));
 			}
@@ -1301,7 +1307,7 @@ namespace YAT.Gui.Forms
 			Model.Types.Command c = contextMenuStrip_Predefined_CopyToSendCommand;
 			if (c != null)
 			{
-				if (c.IsCommand)
+				if (c.IsText)
 					this.settingsRoot.SendCommand.Command = c;
 				else if (c.IsFilePath)
 					this.settingsRoot.SendFile.Command = c;
@@ -1338,7 +1344,7 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls = true;
 
-			toolStripMenuItem_SendContextMenu_SendCommand.Enabled = this.settingsRoot.SendCommand.Command.IsValidCommand;
+			toolStripMenuItem_SendContextMenu_SendCommand.Enabled = this.settingsRoot.SendCommand.Command.IsValidText;
 			toolStripMenuItem_SendContextMenu_SendFile.Enabled = this.settingsRoot.SendCommand.Command.IsValidFilePath;
 
 			toolStripMenuItem_SendContextMenu_Panels_SendCommand.Checked = this.settingsRoot.Layout.SendCommandPanelIsVisible;
@@ -1346,6 +1352,7 @@ namespace YAT.Gui.Forms
 
 			toolStripMenuItem_SendContextMenu_KeepCommand.Checked = this.settingsRoot.Send.KeepCommand;
 			toolStripMenuItem_SendContextMenu_CopyPredefined.Checked = this.settingsRoot.Send.CopyPredefined;
+			toolStripMenuItem_SendContextMenu_SendImmediately.Checked = this.settingsRoot.Send.SendImmediately;
 
 			this.isSettingControls = false;
 		}
@@ -1357,7 +1364,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_SendContextMenu_SendCommand_Click(object sender, EventArgs e)
 		{
-			this.terminal.SendCommand();
+			this.terminal.SendText();
 		}
 
 		private void toolStripMenuItem_SendContextMenu_SendFile_Click(object sender, EventArgs e)
@@ -1383,6 +1390,11 @@ namespace YAT.Gui.Forms
 		private void toolStripMenuItem_SendContextMenu_CopyPredefined_Click(object sender, EventArgs e)
 		{
 			this.settingsRoot.Send.CopyPredefined = !this.settingsRoot.Send.CopyPredefined;
+		}
+
+		private void toolStripMenuItem_SendContextMenu_SendImmediately_Click(object sender, EventArgs e)
+		{
+			this.settingsRoot.Send.SendImmediately = !this.settingsRoot.Send.SendImmediately;
 		}
 
 		#endregion
@@ -1518,7 +1530,7 @@ namespace YAT.Gui.Forms
 
 		private void send_SendCommandRequest(object sender, EventArgs e)
 		{
-			this.terminal.SendCommand();
+			this.terminal.SendText();
 		}
 
 		private void send_FileCommandChanged(object sender, EventArgs e)
@@ -1755,7 +1767,9 @@ namespace YAT.Gui.Forms
 		{
 			contextMenuStrip_Predefined_SetMenuItems(); // Ensure that shortcuts are activated.
 
+			this.isSettingControls = true;
 			predefined.TerminalIsOpen = this.terminal.IsOpen;
+			this.isSettingControls = false;
 		}
 
 		private void SetPresetControls()
@@ -1768,7 +1782,12 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_Send_SetMenuItems();
 			contextMenuStrip_Send_SetMenuItems();
 
+			this.isSettingControls = true;
+			send.Command = this.settingsRoot.SendCommand.Command;
+			send.SendCommandImmediately = this.settingsRoot.Send.SendImmediately;
+			send.RecentCommands = this.settingsRoot.SendCommand.RecentCommands;
 			send.TerminalIsOpen = this.terminal.IsOpen;
+			this.isSettingControls = false;
 		}
 
 		#endregion
@@ -2275,11 +2294,6 @@ namespace YAT.Gui.Forms
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendCommand))
 			{
 				// SendCommandSettings changed
-				this.isSettingControls = true;
-				send.Command = this.settingsRoot.SendCommand.Command;
-				send.RecentCommands = this.settingsRoot.SendCommand.RecentCommands;
-				this.isSettingControls = false;
-
 				SetSendControls();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendFile))
@@ -2343,7 +2357,7 @@ namespace YAT.Gui.Forms
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Send))
 			{
 				// SendSettings changed
-				// nothing to do
+				SetSendControls();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.TextTerminal))
 			{

@@ -168,7 +168,7 @@ namespace YAT.Gui.Controls
 				}
 				if (isValid)
 				{
-					this.command_Form.MultiLineCommand = multiLineCommand.ToArray();
+					this.command_Form.MultiLineText = multiLineCommand.ToArray();
 					SetControls();
 				}
 				else
@@ -205,17 +205,17 @@ namespace YAT.Gui.Controls
 		{
 			this.isSettingControls = true;
 
-			if (this.command_Form.IsSingleLineCommand)
+			if (this.command_Form.IsSingleLineText)
 			{
-				textBox_Command.Text = this.command_Form.SingleLineCommand;
+				textBox_Command.Text = this.command_Form.SingleLineText;
 			}
 			else
 			{
 				string text = "";
-				for (int i = 0; i < this.command_Form.MultiLineCommand.Length; i++)
+				for (int i = 0; i < this.command_Form.MultiLineText.Length; i++)
 				{
-					text += this.command_Form.MultiLineCommand[i];
-					if (i < (this.command_Form.MultiLineCommand.Length - 1))
+					text += this.command_Form.MultiLineText[i];
+					if (i < (this.command_Form.MultiLineText.Length - 1))
 						text += Environment.NewLine;
 				}
 				textBox_Command.Text = text;

@@ -21,6 +21,7 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Globalization;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
@@ -75,7 +76,7 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private bool isSettingControls;
 
 		private Command command = new Command();
 		private RecentItemCollection<Command> recents;
@@ -83,8 +84,11 @@ namespace YAT.Gui.Controls
 		private float splitterRatio = SplitterRatioDefault;
 
 		private FocusState focusState = FocusState.Inactive;
-		private bool isValidated = false;
-		private bool sendIsRequested = false;
+		private bool isValidated;
+		private bool sendIsRequested;
+
+		private bool sendImmediately;
+		private string partialCommandLine;
 
 		#endregion
 
@@ -137,6 +141,16 @@ namespace YAT.Gui.Controls
 					this.command = new Command();
 
 				OnCommandChanged(new EventArgs());
+				SetControls();
+			}
+		}
+
+		public virtual bool SendImmediately
+		{
+			get { return (this.sendImmediately); }
+			set
+			{
+				this.sendImmediately = value;
 				SetControls();
 			}
 		}
@@ -201,18 +215,20 @@ namespace YAT.Gui.Controls
 			{
 				if (button_SendCommand.Enabled)
 				{
-					if (this.isValidated)
+					if (this.sendImmediately)
 					{
-						RequestSendCommand();
+						CreatePartialEolCommand();
+						RequestSendPartialEolCommand();
 					}
 					else
 					{
-						if (ValidateChildren())
-							RequestSendCommand();
+						RequestSendCompleteCommand();
 					}
+
+					return (true);
 				}
-				return (true);
 			}
+
 			return (base.ProcessCmdKey(ref msg, keyData));
 		}
 
@@ -280,7 +296,7 @@ namespace YAT.Gui.Controls
 		private void comboBox_Command_Enter(object sender, EventArgs e)
 		{
 			// Clear "<Enter a command...>" if needed.
-			if ((this.focusState == FocusState.Inactive) && !this.command.IsSingleLineCommand)
+			if ((this.focusState == FocusState.Inactive) && !this.command.IsSingleLineText)
 			{
 				this.isSettingControls = true;
 				comboBox_Command.Text      = "";
@@ -311,10 +327,23 @@ namespace YAT.Gui.Controls
 				this.focusState = FocusState.IsLeaving;
 		}
 
+		private void comboBox_Command_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			if (this.sendImmediately)
+			{
+				this.isValidated = true;
+				CreatePartialCommand(e.KeyChar.ToString(CultureInfo.InvariantCulture));
+				RequestSendPartialCommand();
+			}
+		}
+
 		private void comboBox_Command_TextChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.isValidated = false;
+			{
+				if (!this.sendImmediately)
+					this.isValidated = false;
+			}
 		}
 
 		/// <remarks>
@@ -384,15 +413,7 @@ namespace YAT.Gui.Controls
 
 		private void button_SendCommand_Click(object sender, EventArgs e)
 		{
-			if (this.isValidated)
-			{
-				RequestSendCommand();
-			}
-			else
-			{
-				if (ValidateChildren())
-					RequestSendCommand();
-			}
+			RequestSendCompleteCommand();
 		}
 
 		#endregion
@@ -410,9 +431,9 @@ namespace YAT.Gui.Controls
 
 			if (this.focusState == FocusState.Inactive)
 			{
-				if (this.command.IsCommand)
+				if (this.command.IsText)
 				{
-					comboBox_Command.Text      = this.command.SingleLineCommand;
+					comboBox_Command.Text      = this.command.SingleLineText;
 					comboBox_Command.ForeColor = SystemColors.ControlText;
 					comboBox_Command.Font      = SystemFonts.DefaultFont;
 				}
@@ -424,15 +445,21 @@ namespace YAT.Gui.Controls
 				}
 			}
 			else if (this.sendIsRequested)
-			{   // Needed when command is modified (e.g. cleared) after send
-				if (this.command.IsCommand)
-					comboBox_Command.Text  = this.command.SingleLineCommand;
+			{   // Needed when command is modified (e.g. cleared) after send.
+				if (this.command.IsText)
+					comboBox_Command.Text  = this.command.SingleLineText;
 				else
 					comboBox_Command.Text  = "";
 
 				comboBox_Command.ForeColor = SystemColors.ControlText;
 				comboBox_Command.Font      = SystemFonts.DefaultFont;
 			}
+
+			if (this.sendImmediately)
+				button_SendCommand.Text = "Send EOL (F3)";
+			else
+				button_SendCommand.Text = "Send Command (F3)";
+
 			button_SendCommand.Enabled = this.terminalIsOpen;
 
 			this.isSettingControls = false;
@@ -466,6 +493,32 @@ namespace YAT.Gui.Controls
 
 			SetControls();
 			OnCommandChanged(new EventArgs());
+		}
+
+		private void CreatePartialCommand(string partialCommand)
+		{
+			this.command = new Command(partialCommand, true);
+
+			if (this.partialCommandLine == null)
+				this.partialCommandLine = partialCommand;
+			else
+				this.partialCommandLine += partialCommand;
+
+			SetControls();
+			OnCommandChanged(new EventArgs());
+		}
+
+		private void CreatePartialEolCommand()
+		{
+			this.command = new Command(true, this.partialCommandLine);
+
+			SetControls();
+			OnCommandChanged(new EventArgs());
+		}
+
+		private void ResetPartialCommand()
+		{
+			this.partialCommandLine = null;
 		}
 
 		/// <remarks>
@@ -504,6 +557,32 @@ namespace YAT.Gui.Controls
 				SetControls();
 				button_SendCommand.Select();
 			}
+		}
+
+		private void RequestSendCompleteCommand()
+		{
+			ResetPartialCommand();
+
+			if (this.isValidated)
+			{
+				RequestSendCommand();
+			}
+			else
+			{
+				if (ValidateChildren())
+					RequestSendCommand();
+			}
+		}
+
+		private void RequestSendPartialCommand()
+		{
+			RequestSendCommand();
+		}
+
+		private void RequestSendPartialEolCommand()
+		{
+			ResetPartialCommand();
+			RequestSendCommand();
 		}
 
 		private void RequestSendCommand()

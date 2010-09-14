@@ -138,6 +138,7 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_SendContextMenu_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_SendContextMenu_KeepCommand = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_SendContextMenu_CopyPredefined = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_SendContextMenu_SendImmediately = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip_Terminal = new System.Windows.Forms.MenuStrip();
 			this.toolStripMenuItem_TerminalMenu_File = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_File_Close = new System.Windows.Forms.ToolStripMenuItem();
@@ -236,6 +237,7 @@ namespace YAT.Gui.Forms
 			this.send = new YAT.Gui.Controls.Send();
 			this.timer_RtsLuminescence = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Monitor.SuspendLayout();
 			this.contextMenuStrip_Radix.SuspendLayout();
 			this.contextMenuStrip_Predefined.SuspendLayout();
@@ -1116,9 +1118,10 @@ namespace YAT.Gui.Forms
             this.toolStripMenuItem_SendContextMenu_Panels,
             this.toolStripMenuItem_SendContextMenu_Separator_2,
             this.toolStripMenuItem_SendContextMenu_KeepCommand,
-            this.toolStripMenuItem_SendContextMenu_CopyPredefined});
+            this.toolStripMenuItem_SendContextMenu_CopyPredefined,
+            this.toolStripMenuItem_SendContextMenu_SendImmediately});
 			this.contextMenuStrip_Send.Name = "contextMenuStrip_Send";
-			this.contextMenuStrip_Send.Size = new System.Drawing.Size(342, 126);
+			this.contextMenuStrip_Send.Size = new System.Drawing.Size(342, 148);
 			this.contextMenuStrip_Send.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Send_Opening);
 			// 
 			// toolStripMenuItem_SendContextMenu_SendCommand
@@ -1191,6 +1194,15 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Size = new System.Drawing.Size(341, 22);
 			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Text = "Copy Predefined To Send Command";
 			this.toolStripMenuItem_SendContextMenu_CopyPredefined.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_CopyPredefined_Click);
+			// 
+			// toolStripMenuItem_SendContextMenu_SendImmediately
+			// 
+			this.toolStripMenuItem_SendContextMenu_SendImmediately.Name = "toolStripMenuItem_SendContextMenu_SendImmediately";
+			this.toolStripMenuItem_SendContextMenu_SendImmediately.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+						| System.Windows.Forms.Keys.I)));
+			this.toolStripMenuItem_SendContextMenu_SendImmediately.Size = new System.Drawing.Size(341, 22);
+			this.toolStripMenuItem_SendContextMenu_SendImmediately.Text = "Send Each Character Immediately";
+			this.toolStripMenuItem_SendContextMenu_SendImmediately.Click += new System.EventHandler(this.toolStripMenuItem_SendContextMenu_SendImmediately_Click);
 			// 
 			// menuStrip_Terminal
 			// 
@@ -1451,7 +1463,8 @@ namespace YAT.Gui.Forms
             this.toolStripMenuItem_TerminalMenu_Send_Predefined,
             this.toolStripMenuItem_TerminalMenu_Send_Separator_2,
             this.toolStripMenuItem_TerminalMenu_Send_KeepCommand,
-            this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined});
+            this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined,
+            this.toolStripMenuItem_TerminalMenu_Send_SendImmediately});
 			this.toolStripMenuItem_TerminalMenu_Send.MergeAction = System.Windows.Forms.MergeAction.Insert;
 			this.toolStripMenuItem_TerminalMenu_Send.MergeIndex = 2;
 			this.toolStripMenuItem_TerminalMenu_Send.Name = "toolStripMenuItem_TerminalMenu_Send";
@@ -2168,6 +2181,15 @@ namespace YAT.Gui.Forms
 			// 
 			this.timer_RtsLuminescence.Tick += new System.EventHandler(this.timer_RtsLuminescence_Tick);
 			// 
+			// toolStripMenuItem_TerminalMenu_Send_SendImmediately
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.Name = "toolStripMenuItem_TerminalMenu_Send_SendImmediately";
+			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+						| System.Windows.Forms.Keys.I)));
+			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.Size = new System.Drawing.Size(341, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.Text = "Send Each Character &Immediately";
+			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_SendImmediately_Click);
+			// 
 			// Terminal
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2427,6 +2449,8 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Page_10;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Page_11;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Page_12;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_SendContextMenu_SendImmediately;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_Send_SendImmediately;
 	}
 
 	#region Copied Designer Code For Backup

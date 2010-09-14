@@ -1232,15 +1232,38 @@ namespace YAT.Model
 
 		private void SendLine(string s)
 		{
-			OnFixedStatusTextRequest(@"Sending """ + s + @"""...");
+			Send(s, true);
+		}
+
+
+		private void Send(string s)
+		{
+			Send(s, false);
+		}
+
+		private void Send(string s, bool isLine)
+		{
+			string sent;
+			if (!string.IsNullOrEmpty(s))
+				sent = @"""" + s + @"""";
+			else if (isLine)
+				sent = "EOL";
+			else
+				sent = "<Nothing>";
+
+			OnFixedStatusTextRequest("Sending " + sent + "...");
 			try
 			{
-				this.terminal.SendLine(s);
-				OnTimedStatusTextRequest(@"""" + s + @""" sent");
+				if (isLine)
+					this.terminal.SendLine(s);
+				else
+					this.terminal.Send(s);
+
+				OnTimedStatusTextRequest(sent + " sent");
 			}
 			catch (System.IO.IOException ex)
 			{
-				OnFixedStatusTextRequest(@"Error sending """ + s + @"""!");
+				OnFixedStatusTextRequest("Error sending " + sent + "!");
 
 				string text;
 				string title;
@@ -1257,7 +1280,7 @@ namespace YAT.Model
 			}
 			catch (Domain.Parser.FormatException ex)
 			{
-				OnFixedStatusTextRequest(@"Error sending """ + s + @"""!");
+				OnFixedStatusTextRequest("Error sending " + sent + "!");
 				OnMessageInputRequest
 					(
 					"Bad data format:" + Environment.NewLine + Environment.NewLine + ex.Message,
@@ -1265,6 +1288,7 @@ namespace YAT.Model
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
 					);
+
 				OnTimedStatusTextRequest("Data not sent!");
 			}
 		}
@@ -1307,51 +1331,71 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Send Command
+		#region Terminal > Send Text
 		//------------------------------------------------------------------------------------------
-		// Terminal > Send Command
+		// Terminal > Send Text
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Sends command given by terminal settings.
+		/// Sends text command given by terminal settings.
 		/// </summary>
-		public virtual void SendCommand()
+		public virtual void SendText()
 		{
-			SendCommand(this.settingsRoot.SendCommand.Command);
-			this.settingsRoot.SendCommand.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
-				(
-					new RecentItem<Command>(new Command(this.settingsRoot.SendCommand.Command))
-				);
+			Command command = this.settingsRoot.SendCommand.Command;
+			if (command.IsValidText)
+			{
+				SendText(command);
 
-			// Clear command if desired.
-			if (!this.settingsRoot.Send.KeepCommand)
-				this.settingsRoot.SendCommand.Command = new Command(); // Set command to "".
+				// Copy line commands into history.
+				if (command.IsSingleLineText || command.IsMultiLineText || command.IsPartialEolText)
+				{
+					// Clone to a normal single line command.
+					Command clone;
+					if (command.IsPartialEolText)
+						clone = new Command(command.Description, command.PartialText, command.DefaultRadix);
+					else
+						clone = new Command(command);
+
+					// Put clone into history.
+					this.settingsRoot.SendCommand.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
+						(
+							new RecentItem<Command>(clone)
+						);
+				}
+
+				// Clear command if desired.
+				if (!this.settingsRoot.Send.KeepCommand)
+					this.settingsRoot.SendCommand.Command = new Command(); // Set command to "".
+			}
 		}
 
 		/// <summary>
-		/// Sends given command.
+		/// Sends given text command.
 		/// </summary>
-		/// <param name="command">Command to be sent.</param>
-		public virtual void SendCommand(Command command)
+		/// <param name="command">Text command to be sent.</param>
+		public virtual void SendText(Command command)
 		{
-			if (command.IsValidCommand)
+			if (command.IsValidText)
 			{
-				if (command.IsSingleLineCommand)
+				if (command.IsSingleLineText)
 				{
-					if (SendCommandSettings.IsEasterEggCommand(command.SingleLineCommand))
+					if (SendCommandSettings.IsEasterEggCommand(command.SingleLineText))
 						SendLine(SendCommandSettings.EasterEggCommandText);
 					else
-						SendLine(command.SingleLineCommand);
+						SendLine(command.SingleLineText);
 				}
-				else
+				else if (command.IsMultiLineText)
 				{
-					foreach (string line in command.MultiLineCommand)
+					foreach (string line in command.MultiLineText)
 						SendLine(line);
 				}
-			}
-			else
-			{
-				SendLine("");
+				else if (command.IsPartialText)
+				{
+					if (!command.IsPartialEolText)
+						Send(command.PartialText);
+					else
+						SendLine(""); // Simply add EOL to finalize a partial line.
+				}
 			}
 		}
 
@@ -1476,9 +1520,9 @@ namespace YAT.Model
 
 			// Verify command.
 			Model.Types.Command c = this.settingsRoot.PredefinedCommand.Pages[page - 1].Commands[command - 1];
-			if (c.IsValidCommand)
+			if (c.IsValidText)
 			{
-				SendCommand(c);
+				SendText(c);
 
 				if (this.settingsRoot.Send.CopyPredefined)
 					this.settingsRoot.SendCommand.Command = new Command(c); // Copy command if desired.

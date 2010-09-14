@@ -78,6 +78,7 @@ namespace YAT.Gui.Controls
 			this.comboBox_Command.SelectedIndexChanged += new System.EventHandler(this.comboBox_Command_SelectedIndexChanged);
 			this.comboBox_Command.Leave += new System.EventHandler(this.comboBox_Command_Leave);
 			this.comboBox_Command.Enter += new System.EventHandler(this.comboBox_Command_Enter);
+			this.comboBox_Command.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.comboBox_Command_KeyPress);
 			this.comboBox_Command.DropDown += new System.EventHandler(this.comboBox_Command_DropDown);
 			this.comboBox_Command.TextChanged += new System.EventHandler(this.comboBox_Command_TextChanged);
 			// 

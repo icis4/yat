@@ -64,6 +64,8 @@ namespace YAT.Model.Types
 		private string       description;
 		private string[]     commandLines;
 		private Domain.Radix defaultRadix;
+		private bool         isPartial;
+		private bool         isPartialEol;
 		private bool         isFilePath;
 		private string       filePath;
 
@@ -83,56 +85,70 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public Command(string commandLine)
 		{
-			Initialize(true, "", false, new string[] { commandLine }, Domain.Radix.String, "");
+			Initialize(true, "", new string[] { commandLine }, Domain.Radix.String, false, false, false, "");
+		}
+
+		/// <summary></summary>
+		public Command(string commandLine, bool isPartial)
+		{
+			Initialize(true, "", new string[] { commandLine }, Domain.Radix.String, isPartial, false, false, "");
+		}
+
+		/// <summary></summary>
+		public Command(bool isPartialEol, string completeCommandLine)
+		{
+			Initialize(true, "", new string[] { completeCommandLine }, Domain.Radix.String, true, isPartialEol, false, "");
 		}
 
 		/// <summary></summary>
 		public Command(string description, string commandLine)
 		{
-			Initialize(true, description, false, new string[] { commandLine }, Domain.Radix.String, "");
+			Initialize(true, description, new string[] { commandLine }, Domain.Radix.String, false, false, false, "");
 		}
 
 		/// <summary></summary>
 		public Command(string[] commandLines)
 		{
-			Initialize(true, "", false, commandLines, Domain.Radix.String, "");
+			Initialize(true, "", commandLines, Domain.Radix.String, false, false, false, "");
 		}
 
 		/// <summary></summary>
 		public Command(string description, string[] commandLines)
 		{
-			Initialize(true, description, false, commandLines, Domain.Radix.String, "");
+			Initialize(true, description, commandLines, Domain.Radix.String, false, false, false, "");
 		}
 
 		/// <summary></summary>
 		public Command(string description, string commandLine, Domain.Radix defaultRadix)
 		{
-			Initialize(true, description, false, new string[] { commandLine }, defaultRadix, "");
+			Initialize(true, description, new string[] { commandLine }, defaultRadix, false, false, false, "");
 		}
 
 		/// <summary></summary>
 		public Command(string description, string[] commandLines, Domain.Radix defaultRadix)
 		{
-			Initialize(true, description, false, commandLines, defaultRadix, "");
+			Initialize(true, description, commandLines, defaultRadix, false, false, false, "");
 		}
 
 		/// <summary></summary>
 		public Command(string description, bool isFilePath, string filePath)
 		{
-			Initialize(true, description, isFilePath, new string[] { "" }, Domain.Radix.String, filePath);
+			Initialize(true, description, new string[] { "" }, Domain.Radix.String, false, false, isFilePath, filePath);
 		}
 
 		private void Initialize()
 		{
-			Initialize(false, "", false, new string[] { "" }, Domain.Radix.String, "");
+			Initialize(false, "", new string[] { "" }, Domain.Radix.String, false, false, false, "");
 		}
 
-		private void Initialize(bool isDefined, string description, bool isFilePath, string[] commandLines, Domain.Radix defaultRadix, string filePath)
+		private void Initialize(bool isDefined, string description, string[] commandLines, Domain.Radix defaultRadix, bool isPartial, bool isPartialEol, bool isFilePath, string filePath)
 		{
 			this.isDefined    = isDefined;
 			this.description  = description;
 			this.commandLines = commandLines;
 			this.defaultRadix = defaultRadix;
+			this.isPartial    = isPartial;
+			this.isPartialEol = isPartialEol;
 			this.isFilePath   = isFilePath;
 			this.filePath     = filePath;
 		}
@@ -146,6 +162,8 @@ namespace YAT.Model.Types
 				this.description  = rhs.description;
 				this.commandLines = rhs.commandLines;
 				this.defaultRadix = rhs.defaultRadix;
+				this.isPartial    = rhs.isPartial;
+				this.isPartialEol = rhs.isPartialEol;
 				this.isFilePath   = rhs.isFilePath;
 				this.filePath     = rhs.filePath;
 			}
@@ -186,8 +204,8 @@ namespace YAT.Model.Types
 				{
 					if (!string.IsNullOrEmpty(this.description))
 						return (this.description);
-					else if (IsCommand)
-						return (SingleLineCommand);
+					else if (IsText)
+						return (SingleLineText);
 					else if (IsFilePath)
 						return (System.IO.Path.GetFileNameWithoutExtension(FilePath));
 					else
@@ -250,17 +268,56 @@ namespace YAT.Model.Types
 		}
 
 		/// <summary></summary>
+		[XmlElement("IsPartialText")]
+		public virtual bool IsPartialText
+		{
+			get
+			{
+				return (IsDefined && this.isPartial);
+			}
+			set
+			{
+				if (IsDefined)
+				{
+					this.isPartial = value;
+				}
+				else if (value) // Ensure that XML deserialization keeps command undefined.
+				{
+					this.isDefined = true;
+					this.isPartial = value;
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("IsPartialEolText")]
+		public virtual bool IsPartialEolText
+		{
+			get
+			{
+				return (IsDefined && this.isPartialEol);
+			}
+			set
+			{
+				if (IsDefined)
+				{
+					this.isPartialEol = value;
+				}
+				else if (value) // Ensure that XML deserialization keeps command undefined.
+				{
+					this.isDefined = true;
+					this.isPartialEol = value;
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("IsFilePath")]
 		public virtual bool IsFilePath
 		{
 			get
 			{
-				return
-					(
-					IsDefined &&
-					this.isFilePath &&
-					!string.IsNullOrEmpty(this.filePath)
-					);
+				return (IsDefined && this.isFilePath && !string.IsNullOrEmpty(this.filePath));
 			}
 			set
 			{
@@ -268,7 +325,7 @@ namespace YAT.Model.Types
 				{
 					this.isFilePath = value;
 				}
-				else if (value != false) // ensure that XML deserialization keeps command undefined
+				else if (value) // Ensure that XML deserialization keeps command undefined.
 				{
 					this.isDefined = true;
 					this.isFilePath = value;
@@ -294,7 +351,7 @@ namespace YAT.Model.Types
 					this.filePath = value;
 				}
 				else if ((value != null) &&
-						 (value.Length > 0)) // ensure that XML deserialization keeps command undefined
+						 (value.Length > 0)) // Ensure that XML deserialization keeps command undefined.
 				{
 					this.isDefined = true;
 					this.filePath = value;
@@ -311,7 +368,7 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public virtual bool IsCommand
+		public virtual bool IsText
 		{
 			get
 			{
@@ -328,11 +385,11 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public virtual bool IsSingleLineCommand
+		public virtual bool IsSingleLineText
 		{
 			get
 			{
-				if (IsCommand)
+				if (IsText && !IsPartialText)
 					return ((this.commandLines.Length == 1));
 				else
 					return (false);
@@ -341,11 +398,11 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public virtual bool IsMultiLineCommand
+		public virtual bool IsMultiLineText
 		{
 			get
 			{
-				if (IsCommand)
+				if (IsText && !IsPartialText)
 					return ((this.commandLines.Length > 1));
 				else
 					return (false);
@@ -354,11 +411,11 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public virtual bool IsValidCommand
+		public virtual bool IsValidText
 		{
 			get
 			{
-				if (!IsCommand)
+				if (!IsText)
 					return (false);
 
 				Domain.Parser.Parser p = new Domain.Parser.Parser(this.defaultRadix);
@@ -373,24 +430,28 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public virtual string SingleLineCommand
+		public virtual string SingleLineText
 		{
 			get
 			{
-				if (IsSingleLineCommand)
+				if      (IsSingleLineText)
 				{
 					return (this.commandLines[0]);
 				}
-				else if (IsMultiLineCommand)
+				else if (IsPartialText)
+				{
+					return (this.commandLines[0]);
+				}
+				else if (IsMultiLineText)
 				{
 					StringBuilder sb = new StringBuilder();
 					sb.Append("<");
-					sb.Append(MultiLineCommand.Length.ToString());
+					sb.Append(MultiLineText.Length.ToString());
 					sb.Append(" lines...>");
-					for (int i = 0; i < MultiLineCommand.Length; i++)
+					for (int i = 0; i < MultiLineText.Length; i++)
 					{
 						sb.Append(" [");
-						sb.Append(MultiLineCommand[i]);
+						sb.Append(MultiLineText[i]);
 						sb.Append("]");
 					}
 					return (sb.ToString());
@@ -408,14 +469,30 @@ namespace YAT.Model.Types
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public virtual string[] MultiLineCommand
+		public virtual string PartialText
 		{
 			get
 			{
-				if (IsMultiLineCommand)
+				return (SingleLineText);
+			}
+			set
+			{
+				CommandLines = new string[] { value };
+			}
+		}
+
+		/// <summary></summary>
+		[XmlIgnore]
+		public virtual string[] MultiLineText
+		{
+			get
+			{
+				if      (IsSingleLineText)
+					return (new string[] { SingleLineText });
+				else if (IsPartialText)
+					return (new string[] { SingleLineText });
+				else if (IsMultiLineText)
 					return (this.commandLines);
-				else if (IsSingleLineCommand)
-					return (new string[] { SingleLineCommand });
 				else
 					return (new string[] { "" });
 			}
@@ -444,8 +521,8 @@ namespace YAT.Model.Types
 		{
 			get
 			{
-				if (IsCommand)
-					return (IsValidCommand);
+				if (IsText)
+					return (IsValidText);
 				else
 					return (IsValidFilePath);
 			}

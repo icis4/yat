@@ -40,9 +40,14 @@ namespace YAT.Gui.Forms
 			this.label_ParityReplacementExample = new System.Windows.Forms.Label();
 			this.textBox_ParityReplacement = new System.Windows.Forms.TextBox();
 			this.groupBox_SendCommandSettings = new System.Windows.Forms.GroupBox();
+			this.label_SendImmediately = new System.Windows.Forms.Label();
+			this.checkBox_SendImmediately = new System.Windows.Forms.CheckBox();
 			this.checkBox_CopyPredefined = new System.Windows.Forms.CheckBox();
 			this.checkBox_KeepCommand = new System.Windows.Forms.CheckBox();
 			this.groupBox_DisplaySettings = new System.Windows.Forms.GroupBox();
+			this.groupBox_Display_Tab = new System.Windows.Forms.GroupBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.checkBox_ReplaceTab = new System.Windows.Forms.CheckBox();
 			this.groupBox_Display_Space = new System.Windows.Forms.GroupBox();
 			this.label_SpaceReplacementChar = new System.Windows.Forms.Label();
 			this.checkBox_ReplaceSpace = new System.Windows.Forms.CheckBox();
@@ -64,17 +69,14 @@ namespace YAT.Gui.Forms
 			this.label_MaxLineCountUnit = new System.Windows.Forms.Label();
 			this.textBox_MaxLineCount = new System.Windows.Forms.TextBox();
 			this.label_MaxLineCount = new System.Windows.Forms.Label();
-			this.groupBox_Display_Tab = new System.Windows.Forms.GroupBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.checkBox_ReplaceTab = new System.Windows.Forms.CheckBox();
 			this.groupBox_Settings.SuspendLayout();
 			this.groupBox_CommunicationSettings.SuspendLayout();
 			this.groupBox_ReceiveSettings.SuspendLayout();
 			this.groupBox_SendCommandSettings.SuspendLayout();
 			this.groupBox_DisplaySettings.SuspendLayout();
+			this.groupBox_Display_Tab.SuspendLayout();
 			this.groupBox_Display_Space.SuspendLayout();
 			this.groupBox_Display_ControlChars.SuspendLayout();
-			this.groupBox_Display_Tab.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// button_Defaults
@@ -160,7 +162,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_ReceiveSettings.Controls.Add(this.checkBox_ReplaceParityError);
 			this.groupBox_ReceiveSettings.Controls.Add(this.label_ParityReplacementExample);
 			this.groupBox_ReceiveSettings.Controls.Add(this.textBox_ParityReplacement);
-			this.groupBox_ReceiveSettings.Location = new System.Drawing.Point(275, 144);
+			this.groupBox_ReceiveSettings.Location = new System.Drawing.Point(275, 177);
 			this.groupBox_ReceiveSettings.Name = "groupBox_ReceiveSettings";
 			this.groupBox_ReceiveSettings.Size = new System.Drawing.Size(263, 63);
 			this.groupBox_ReceiveSettings.TabIndex = 3;
@@ -197,14 +199,36 @@ namespace YAT.Gui.Forms
 			// 
 			// groupBox_SendCommandSettings
 			// 
+			this.groupBox_SendCommandSettings.Controls.Add(this.label_SendImmediately);
+			this.groupBox_SendCommandSettings.Controls.Add(this.checkBox_SendImmediately);
 			this.groupBox_SendCommandSettings.Controls.Add(this.checkBox_CopyPredefined);
 			this.groupBox_SendCommandSettings.Controls.Add(this.checkBox_KeepCommand);
 			this.groupBox_SendCommandSettings.Location = new System.Drawing.Point(275, 67);
 			this.groupBox_SendCommandSettings.Name = "groupBox_SendCommandSettings";
-			this.groupBox_SendCommandSettings.Size = new System.Drawing.Size(263, 71);
+			this.groupBox_SendCommandSettings.Size = new System.Drawing.Size(263, 104);
 			this.groupBox_SendCommandSettings.TabIndex = 2;
 			this.groupBox_SendCommandSettings.TabStop = false;
 			this.groupBox_SendCommandSettings.Text = "Send Command Settings";
+			// 
+			// label_SendImmediately
+			// 
+			this.label_SendImmediately.AutoSize = true;
+			this.label_SendImmediately.Location = new System.Drawing.Point(29, 82);
+			this.label_SendImmediately.Name = "label_SendImmediately";
+			this.label_SendImmediately.Size = new System.Drawing.Size(164, 13);
+			this.label_SendImmediately.TabIndex = 3;
+			this.label_SendImmediately.Text = "(Emulates a terminal/direct mode)";
+			// 
+			// checkBox_SendImmediately
+			// 
+			this.checkBox_SendImmediately.AutoSize = true;
+			this.checkBox_SendImmediately.Location = new System.Drawing.Point(12, 67);
+			this.checkBox_SendImmediately.Name = "checkBox_SendImmediately";
+			this.checkBox_SendImmediately.Size = new System.Drawing.Size(222, 17);
+			this.checkBox_SendImmediately.TabIndex = 2;
+			this.checkBox_SendImmediately.Text = "Send each entered character &immediately";
+			this.checkBox_SendImmediately.UseVisualStyleBackColor = true;
+			this.checkBox_SendImmediately.CheckedChanged += new System.EventHandler(this.checkBox_SendImmediately_CheckedChanged);
 			// 
 			// checkBox_CopyPredefined
 			// 
@@ -255,6 +279,41 @@ namespace YAT.Gui.Forms
 			this.groupBox_DisplaySettings.TabIndex = 0;
 			this.groupBox_DisplaySettings.TabStop = false;
 			this.groupBox_DisplaySettings.Text = "Display Settings";
+			// 
+			// groupBox_Display_Tab
+			// 
+			this.groupBox_Display_Tab.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Display_Tab.Controls.Add(this.label1);
+			this.groupBox_Display_Tab.Controls.Add(this.checkBox_ReplaceTab);
+			this.groupBox_Display_Tab.Location = new System.Drawing.Point(6, 290);
+			this.groupBox_Display_Tab.Name = "groupBox_Display_Tab";
+			this.groupBox_Display_Tab.Size = new System.Drawing.Size(251, 46);
+			this.groupBox_Display_Tab.TabIndex = 15;
+			this.groupBox_Display_Tab.TabStop = false;
+			this.groupBox_Display_Tab.Text = "Tab";
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.label1.Font = new System.Drawing.Font("DejaVu Sans Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label1.Location = new System.Drawing.Point(122, 21);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(44, 15);
+			this.label1.TabIndex = 1;
+			this.label1.Text = "<TAB>";
+			// 
+			// checkBox_ReplaceTab
+			// 
+			this.checkBox_ReplaceTab.AutoSize = true;
+			this.checkBox_ReplaceTab.Location = new System.Drawing.Point(6, 19);
+			this.checkBox_ReplaceTab.Name = "checkBox_ReplaceTab";
+			this.checkBox_ReplaceTab.Size = new System.Drawing.Size(118, 17);
+			this.checkBox_ReplaceTab.TabIndex = 0;
+			this.checkBox_ReplaceTab.Text = "Replace real &tab by";
+			this.checkBox_ReplaceTab.UseVisualStyleBackColor = true;
+			this.checkBox_ReplaceTab.CheckedChanged += new System.EventHandler(this.checkBox_ReplaceTab_CheckedChanged);
 			// 
 			// groupBox_Display_Space
 			// 
@@ -476,41 +535,6 @@ namespace YAT.Gui.Forms
 			this.label_MaxLineCount.Text = "Display &maximal";
 			this.label_MaxLineCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// groupBox_Display_Tab
-			// 
-			this.groupBox_Display_Tab.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Display_Tab.Controls.Add(this.label1);
-			this.groupBox_Display_Tab.Controls.Add(this.checkBox_ReplaceTab);
-			this.groupBox_Display_Tab.Location = new System.Drawing.Point(6, 290);
-			this.groupBox_Display_Tab.Name = "groupBox_Display_Tab";
-			this.groupBox_Display_Tab.Size = new System.Drawing.Size(251, 46);
-			this.groupBox_Display_Tab.TabIndex = 15;
-			this.groupBox_Display_Tab.TabStop = false;
-			this.groupBox_Display_Tab.Text = "Tab";
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.label1.Font = new System.Drawing.Font("DejaVu Sans Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label1.Location = new System.Drawing.Point(122, 21);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(44, 15);
-			this.label1.TabIndex = 1;
-			this.label1.Text = "<TAB>";
-			// 
-			// checkBox_ReplaceTab
-			// 
-			this.checkBox_ReplaceTab.AutoSize = true;
-			this.checkBox_ReplaceTab.Location = new System.Drawing.Point(6, 19);
-			this.checkBox_ReplaceTab.Name = "checkBox_ReplaceTab";
-			this.checkBox_ReplaceTab.Size = new System.Drawing.Size(118, 17);
-			this.checkBox_ReplaceTab.TabIndex = 0;
-			this.checkBox_ReplaceTab.Text = "Replace real &tab by";
-			this.checkBox_ReplaceTab.UseVisualStyleBackColor = true;
-			this.checkBox_ReplaceTab.CheckedChanged += new System.EventHandler(this.checkBox_ReplaceTab_CheckedChanged);
-			// 
 			// AdvancedTerminalSettings
 			// 
 			this.AcceptButton = this.button_OK;
@@ -539,12 +563,12 @@ namespace YAT.Gui.Forms
 			this.groupBox_SendCommandSettings.PerformLayout();
 			this.groupBox_DisplaySettings.ResumeLayout(false);
 			this.groupBox_DisplaySettings.PerformLayout();
+			this.groupBox_Display_Tab.ResumeLayout(false);
+			this.groupBox_Display_Tab.PerformLayout();
 			this.groupBox_Display_Space.ResumeLayout(false);
 			this.groupBox_Display_Space.PerformLayout();
 			this.groupBox_Display_ControlChars.ResumeLayout(false);
 			this.groupBox_Display_ControlChars.PerformLayout();
-			this.groupBox_Display_Tab.ResumeLayout(false);
-			this.groupBox_Display_Tab.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -590,5 +614,7 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.GroupBox groupBox_Display_Tab;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.CheckBox checkBox_ReplaceTab;
+		private System.Windows.Forms.CheckBox checkBox_SendImmediately;
+		private System.Windows.Forms.Label label_SendImmediately;
 	}
 }
