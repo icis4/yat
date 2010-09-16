@@ -308,6 +308,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 
 					if (creators.Length > 0)
 					{
+						// BEGIN MKY 2010-05-14
 						try
 						{
 							FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
@@ -316,6 +317,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 						{
 							MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
 						}
+						// END MKY
 					}
 
 				}
