@@ -1,7 +1,7 @@
 /* ====================================================================
  * Copyright (c) 2009 Andre Luis Azevedo (az.andrel@yahoo.com.br)
  * All rights reserved.
- *
+ *                       
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -43,41 +43,41 @@ using ALAZ.SystemEx.RunTimeEx.InteropServicesEx;
 
 namespace ALAZ.SystemEx.ThreadingEx
 {
-	
-	public class ThreadEx
-	{
+    
+    public class ThreadEx
+    {
 
-		#region LoopSleep
+        #region LoopSleep
 
-		public static void LoopSleep(ref int loopIndex)
-		{
+        public static void LoopSleep(ref int loopIndex)
+        {
 
-			if ((Environment.ProcessorCount == 1) || (++loopIndex % (Environment.ProcessorCount * 50)) == 0)
-			{
-				//----- Single-core!
-				//----- Switch to another running thread!
-				Thread.Sleep(5);
-			}
-			else
-			{
-				//----- Multi-core / HT!
-				//----- Loop n iterations!
-				Thread.SpinWait(20);
-			}
+            if ((Environment.ProcessorCount == 1) || (++loopIndex % (Environment.ProcessorCount * 50)) == 0)
+            {
+                //----- Single-core!
+                //----- Switch to another running thread!
+                Thread.Sleep(5);
+            }
+            else
+            {
+                //----- Multi-core / HT!
+                //----- Loop n iterations!
+                Thread.SpinWait(20);
+            }
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region SleepEx
+        #region SleepEx
 
-		public static void SleepEx(int milliseconds)
-		{
-			Thread.Sleep(milliseconds <= 0 ? 1 : milliseconds);
-		}
+        public static void SleepEx(int milliseconds)
+        {
+            Thread.Sleep(milliseconds <= 0 ? 1 : milliseconds);
+        }
 
-		#endregion
+        #endregion
 
-	}
-	
+    }
+    
 }

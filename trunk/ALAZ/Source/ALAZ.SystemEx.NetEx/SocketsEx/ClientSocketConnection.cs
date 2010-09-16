@@ -1,7 +1,7 @@
 /* ====================================================================
  * Copyright (c) 2009 Andre Luis Azevedo (az.andrel@yahoo.com.br)
  * All rights reserved.
- *
+ *                       
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -43,55 +43,55 @@ using System.Net.Sockets;
 namespace ALAZ.SystemEx.NetEx.SocketsEx
 {
 
-	/// <summary>
-	/// Client socket connection implementation.
-	/// </summary>
-	internal class ClientSocketConnection : BaseSocketConnection, IClientSocketConnection
-	{
+    /// <summary>
+    /// Client socket connection implementation.
+    /// </summary>
+    internal class ClientSocketConnection : BaseSocketConnection, IClientSocketConnection
+    {
 
-		#region Constructor
+        #region Constructor
 
-		internal ClientSocketConnection(BaseSocketConnectionHost host, BaseSocketConnectionCreator creator, Socket socket)
-		  : base(host, creator, socket)
-		{
+        internal ClientSocketConnection(BaseSocketConnectionHost host, BaseSocketConnectionCreator creator, Socket socket)
+          : base(host, creator, socket)
+        {
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region ISocketConnection Members
+        #region ISocketConnection Members
 
-		public override IClientSocketConnection AsClientConnection()
-		{
-			return (this as IClientSocketConnection);
-		}
+        public override IClientSocketConnection AsClientConnection()
+        {
+            return (this as IClientSocketConnection);
+        }
 
-		public override IServerSocketConnection AsServerConnection()
-		{
-			return null;
-		}
+        public override IServerSocketConnection AsServerConnection()
+        {
+            return null;
+        }
 
-		#endregion
+        #endregion
 
-		#region IClientSocketConnection Members
+        #region IClientSocketConnection Members
 
-		public ProxyInfo ProxyInfo
-		{
+        public ProxyInfo ProxyInfo
+        {
+          
+          get
+          {
+            return ((SocketConnector)Creator).ProxyInfo;
+          }
 
-			get
-			{
-				return ((SocketConnector)Creator).ProxyInfo;
-			}
+        }
 
-		}
+        public void BeginReconnect()
+        {
+            BaseHost.BeginReconnect(this);
+        }
 
-		public void BeginReconnect()
-		{
-			BaseHost.BeginReconnect(this);
-		}
+        #endregion
 
-		#endregion
-
-	}
+    }
 
 }

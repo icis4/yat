@@ -1,7 +1,7 @@
 /* ====================================================================
  * Copyright (c) 2009 Andre Luis Azevedo (az.andrel@yahoo.com.br)
  * All rights reserved.
- *
+ *                       
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -42,52 +42,52 @@ using System;
 namespace ALAZ.SystemEx.NetEx.SocketsEx
 {
 
-	internal class MessageBuffer
-	{
+    internal class MessageBuffer
+    {
 
-		#region Fields
+        #region Fields
 
-		private byte[] FBuffer;
-		private int FCount;
-		private bool FSentByServer;
-		
-		#endregion
+        private byte[] FBuffer;
+        private int FCount;
+        private bool FSentByServer;
+        
+        #endregion
 
-		#region Constructor
+        #region Constructor
 
-		public MessageBuffer(byte[] buffer, int count, bool sentByServer)
-		{
+        public MessageBuffer(byte[] buffer, int count, bool sentByServer)
+        {
 
-			FBuffer = buffer;
-			FCount = count;
-			FSentByServer = sentByServer;
+            FBuffer = buffer;
+            FCount = count;
+            FSentByServer = sentByServer;
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		public byte[] Buffer
-		{
-			get { return FBuffer; }
-			set { FBuffer = value; }
-		}
+        public byte[] Buffer
+        {
+            get { return FBuffer; }
+            set { FBuffer = value; }
+        }
 
-		public int Count
-		{
-			get { return FCount; }
-			set { FCount = value; }
-		}
+        public int Count
+        {
+            get { return FCount; }
+            set { FCount = value; }
+        }
 
-		public bool SentByServer
-		{
-			get { return FSentByServer; }
-			set { FSentByServer = value; }
-		}
+        public bool SentByServer
+        {
+            get { return FSentByServer; }
+            set { FSentByServer = value; }
+        }
 
-		#endregion
+        #endregion
 
-	}
+    }
 
 }
