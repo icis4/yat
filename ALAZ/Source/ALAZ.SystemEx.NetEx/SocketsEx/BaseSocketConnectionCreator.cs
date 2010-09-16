@@ -1,7 +1,7 @@
 /* ====================================================================
  * Copyright (c) 2009 Andre Luis Azevedo (az.andrel@yahoo.com.br)
  * All rights reserved.
- *
+ *                       
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -51,123 +51,123 @@ using System.Text;
 namespace ALAZ.SystemEx.NetEx.SocketsEx
 {
 
-	/// <summary>
-	/// Connection creator using in BaseSocketConnectionHost.
-	/// </summary>
-	public abstract class BaseSocketConnectionCreator : BaseDisposable, IBaseSocketConnectionCreator
-	{
+    /// <summary>
+    /// Connection creator using in BaseSocketConnectionHost.
+    /// </summary>
+    public abstract class BaseSocketConnectionCreator : BaseDisposable, IBaseSocketConnectionCreator
+    {
 
-		#region Fields
+        #region Fields
 
-		//----- Local endpoint of creator!
-		private IPEndPoint FLocalEndPoint;
+        //----- Local endpoint of creator!
+        private IPEndPoint FLocalEndPoint;
 
-		//----- Host!
-		private BaseSocketConnectionHost FHost;
-		private string FName;
+        //----- Host!
+        private BaseSocketConnectionHost FHost;
+        private string FName;
 
-		private EncryptType FEncryptType;
-		private CompressionType FCompressionType;
+        private EncryptType FEncryptType;
+        private CompressionType FCompressionType;
 
-		private ICryptoService FCryptoService;
+        private ICryptoService FCryptoService;
 
-		#endregion
+        #endregion
 
-		#region Constructor
+        #region Constructor
 
-		public BaseSocketConnectionCreator(BaseSocketConnectionHost host, string name, IPEndPoint localEndPoint, EncryptType encryptType, CompressionType compressionType, ICryptoService cryptoService)
-		{
+        public BaseSocketConnectionCreator(BaseSocketConnectionHost host, string name, IPEndPoint localEndPoint, EncryptType encryptType, CompressionType compressionType, ICryptoService cryptoService)
+        {
 
-			FHost = host;
-			FName = name;
-			FLocalEndPoint = localEndPoint;
-			FCompressionType = compressionType;
-			FEncryptType = encryptType;
+            FHost = host;
+            FName = name;
+            FLocalEndPoint = localEndPoint;
+            FCompressionType = compressionType;
+            FEncryptType = encryptType;
 
-			FCryptoService = cryptoService;
+            FCryptoService = cryptoService;
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region Destructor
+        #region Destructor
 
-		protected override void Free(bool canAccessFinalizable)
-		{
+        protected override void Free(bool canAccessFinalizable)
+        {
 
-			FLocalEndPoint = null;
-			FCryptoService = null;
-			FHost = null;
+            FLocalEndPoint = null;
+            FCryptoService = null;
+            FHost = null;
 
-			base.Free(canAccessFinalizable);
+            base.Free(canAccessFinalizable);
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region Methods
+        #region Methods
 
-		#region ValidateServerCertificateCallback
+        #region ValidateServerCertificateCallback
 
-		internal bool ValidateServerCertificateCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
-		{
+        internal bool ValidateServerCertificateCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
 
-			bool acceptCertificate = false;
-			FCryptoService.OnSSLClientValidateServerCertificate(certificate, chain, sslPolicyErrors, out acceptCertificate);
-			
-			return acceptCertificate;
+            bool acceptCertificate = false;
+            FCryptoService.OnSSLClientValidateServerCertificate(certificate, chain, sslPolicyErrors, out acceptCertificate);
+            
+            return acceptCertificate;
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region Abstract Methods
+        #region Abstract Methods
 
-		public abstract void Start();
-		public abstract void Stop();
+        public abstract void Start();
+        public abstract void Stop();
 
-		#endregion
+        #endregion
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		internal BaseSocketConnectionHost Host
-		{
-			get { return FHost; }
-		}
+        internal BaseSocketConnectionHost Host
+        {
+            get { return FHost; }
+        }
 
-		public string Name
-		{
-		  get { return FName; }
-		}
+        public string Name
+        {
+          get { return FName; }
+        }
 
-		public ICryptoService CryptoService
-		{
-			get { return FCryptoService; }
-			set { FCryptoService = value; } 
-		}
+        public ICryptoService CryptoService
+        {
+            get { return FCryptoService; }
+            set { FCryptoService = value; } 
+        }
 
-		public EncryptType EncryptType
-		{
-			get { return FEncryptType; }
-			set { FEncryptType = value; }
-		}
+        public EncryptType EncryptType
+        {
+            get { return FEncryptType; }
+            set { FEncryptType = value; }
+        }
 
-		internal IPEndPoint InternalLocalEndPoint
-		{
-			get { return FLocalEndPoint; }
-			set { FLocalEndPoint = value; }
-		}
+        internal IPEndPoint InternalLocalEndPoint
+        {
+            get { return FLocalEndPoint; }
+            set { FLocalEndPoint = value; }
+        }
 
-		public CompressionType CompressionType
-		{
-			get { return FCompressionType; }
-			set { FCompressionType = value; }
-		}
+        public CompressionType CompressionType
+        {
+            get { return FCompressionType; }
+            set { FCompressionType = value; }
+        }
 
-		#endregion
+        #endregion
 
-	}
+    }
 
 }

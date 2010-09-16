@@ -1,7 +1,7 @@
 /* ====================================================================
  * Copyright (c) 2009 Andre Luis Azevedo (az.andrel@yahoo.com.br)
  * All rights reserved.
- *
+ *                       
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -49,244 +49,248 @@ using ALAZ.SystemEx.ThreadingEx;
 namespace ALAZ.SystemEx.NetEx.SocketsEx
 {
 
-	/// <summary>
-	/// Server socket connector.
-	/// </summary>
-	public class SocketListener : BaseSocketConnectionCreator
-	{
+    /// <summary>
+    /// Server socket connector.
+    /// </summary>
+    public class SocketListener : BaseSocketConnectionCreator
+    {
 
-		#region Fields
+        #region Fields
 
-		private Socket FSocket;
-		private byte FBackLog;
-		private byte FAcceptThreads;
+        private Socket FSocket;
+        private byte FBackLog;
+        private byte FAcceptThreads;
 
-		#endregion
+        #endregion
 
-		#region Constructor
+        #region Constructor
 
-		/// <summary>
-		/// Base SocketListener creator.
-		/// </summary>
-		/// <param name="host">
-		/// Host.
-		/// </param>
-		/// <param name="localEndPoint">
-		/// Local endpoint to be used.
-		/// </param>
-		/// <param name="encryptType">
-		/// Encryption to be used.
-		/// </param>
-		/// <param name="compressionType">
-		/// Compression to be used.
-		/// </param>
-		/// <param name="cryptoService">
-		/// CryptoService. if null, will not be used.
-		/// </param>
-		/// <param name="backLog">
-		/// Socket backlog queue number.
-		/// </param>
-		/// <param name="acceptThreads">
-		/// Number of accept events to be used.
-		/// </param>
-		public SocketListener(BaseSocketConnectionHost host, string name, IPEndPoint localEndPoint, EncryptType encryptType, CompressionType compressionType, ICryptoService cryptoService, byte backLog, byte acceptThreads)
-			: base(host, name, localEndPoint, encryptType, compressionType, cryptoService)
-		{
+        /// <summary>
+        /// Base SocketListener creator.
+        /// </summary>
+        /// <param name="host">
+        /// Host.
+        /// </param>
+        /// <param name="localEndPoint">
+        /// Local endpoint to be used.
+        /// </param>
+        /// <param name="encryptType">
+        /// Encryption to be used.
+        /// </param>
+        /// <param name="compressionType">
+        /// Compression to be used.
+        /// </param>
+        /// <param name="cryptoService">
+        /// CryptoService. if null, will not be used.
+        /// </param>
+        /// <param name="backLog">
+        /// Socket backlog queue number.
+        /// </param>
+        /// <param name="acceptThreads">
+        /// Number of accept events to be used.
+        /// </param>
+        public SocketListener(BaseSocketConnectionHost host, string name, IPEndPoint localEndPoint, EncryptType encryptType, CompressionType compressionType, ICryptoService cryptoService, byte backLog, byte acceptThreads)
+            : base(host, name, localEndPoint, encryptType, compressionType, cryptoService)
+        {
 
-			FBackLog = backLog;
-			FAcceptThreads = acceptThreads;
+            FBackLog = backLog;
+            FAcceptThreads = acceptThreads;
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region Destructor
+        #region Destructor
 
-		protected override void Free(bool canAccessFinalizable)
-		{
+        protected override void Free(bool canAccessFinalizable)
+        {
 
-			if (FSocket != null)
-			{
-				FSocket.Close();
-				FSocket = null;
-			}
+            if (FSocket != null)
+            {
+                FSocket.Close();
+                FSocket = null;
+            }
 
-			base.Free(canAccessFinalizable);
-		}
+            base.Free(canAccessFinalizable);
+        }
 
-		#endregion
+        #endregion
 
-		#region Methods
+        #region Methods
 
-		#region Start
+        #region Start
 
-		public override void Start()
-		{
+        public override void Start()
+        {
 
-			if (!Disposed)
-			{
+            if (!Disposed)
+            {
 
-				FSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-				FSocket.Bind(LocalEndPoint);
-				FSocket.Listen(FBackLog * FAcceptThreads);
+                FSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                FSocket.Bind(LocalEndPoint);
+                FSocket.Listen(FBackLog * FAcceptThreads);
 
-				//----- Begin accept new connections!
-				int loopCount = 0;
-				SocketAsyncEventArgs e = null;
+                //----- Begin accept new connections!
+                int loopCount = 0;
+                SocketAsyncEventArgs e = null;
 
-				for (int i = 1; i <= FAcceptThreads; i++)
-				{
-					e = new SocketAsyncEventArgs();
-					e.UserToken = this;
-					e.Completed += new EventHandler<SocketAsyncEventArgs>(BeginAcceptCallbackAsync);
+                for (int i = 1; i <= FAcceptThreads; i++)
+                {
+                    e = new SocketAsyncEventArgs();
+                    e.UserToken = this;
+                    e.Completed += new EventHandler<SocketAsyncEventArgs>(BeginAcceptCallbackAsync);
 
-					if (!FSocket.AcceptAsync(e))
-					{
-						BeginAcceptCallbackAsync(this, e);
-					};
+                    if (!FSocket.AcceptAsync(e))
+                    {
+                        BeginAcceptCallbackAsync(this, e);
+                    };
 
-					ThreadEx.LoopSleep(ref loopCount);
+                    ThreadEx.LoopSleep(ref loopCount);
 
-				}
+                }
 
-			}
+            }
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region BeginAcceptCallbackAsync
+        #region BeginAcceptCallbackAsync
 
-		internal void BeginAcceptCallbackAsync(object sender, SocketAsyncEventArgs e)
-		{
-			ThreadPool.QueueUserWorkItem(new WaitCallback(BeginAcceptCallback), e);
-		}
+        internal void BeginAcceptCallbackAsync(object sender, SocketAsyncEventArgs e)
+        {
+            ThreadPool.QueueUserWorkItem(new WaitCallback(BeginAcceptCallback), e);
+        }
 
-		/// <summary>
-		/// Accept callback!
-		/// </summary>
-		internal void BeginAcceptCallback(object state)
-		{
+        /// <summary>
+        /// Accept callback!
+        /// </summary>
+        internal void BeginAcceptCallback(object state)
+        {
 
-			SocketAsyncEventArgs e = (SocketAsyncEventArgs)state;
+            SocketAsyncEventArgs e = (SocketAsyncEventArgs)state;
 
-			if (!Disposed)
-			{
-				
-				SocketListener listener = null;
-				Socket acceptedSocket = null;
-				BaseSocketConnection connection = null;
+            if (!Disposed)
+            {
+                
+                SocketListener listener = null;
+                Socket acceptedSocket = null;
+                BaseSocketConnection connection = null;
 
-				listener = (SocketListener)e.UserToken;
+                listener = (SocketListener)e.UserToken;
 
-				if (e.SocketError == SocketError.Success)
-				{
+                if (e.SocketError == SocketError.Success)
+                {
 
-					try
-					{
+                    try
+                    {
 
-						//----- Get accepted socket!
-						acceptedSocket = e.AcceptSocket;
+                        //----- Get accepted socket!
+                        acceptedSocket = e.AcceptSocket;
 
-						//----- Adjust buffer size!
-						acceptedSocket.ReceiveBufferSize = Host.SocketBufferSize;
-						acceptedSocket.SendBufferSize = Host.SocketBufferSize;
+                        //----- Adjust buffer size!
+                        acceptedSocket.ReceiveBufferSize = Host.SocketBufferSize;
+                        acceptedSocket.SendBufferSize = Host.SocketBufferSize;
 
-						connection = new ServerSocketConnection(Host, listener, acceptedSocket);
+                        connection = new ServerSocketConnection(Host, listener, acceptedSocket);
 
-						//----- Initialize!
-						Host.AddSocketConnection(connection);
-						connection.Active = true;
+                        //----- Initialize!
+                        Host.AddSocketConnection(connection);
+                        connection.Active = true;
 
-						Host.InitializeConnection(connection);
+                        Host.InitializeConnection(connection);
 
-					}
-					catch
-					{
+                    }
+                    catch
+                    {
 
-						if (connection != null)
-						{
+                        if (connection != null)
+                        {
 
-							if (Host != null)
-							{
-								Host.DisposeConnection(connection);
-								Host.RemoveSocketConnection(connection);
-							}
+                            if (Host != null)
+                            {
+                                Host.DisposeConnection(connection);
+                                Host.RemoveSocketConnection(connection);
+                            }
 
-							connection = null;
+                            connection = null;
 
-						}
+                        }
 
-					}
+                    }
 
-				}
+                }
 
-				//---- Continue to accept!
-				SocketAsyncEventArgs e2 = new SocketAsyncEventArgs();
-				e2.UserToken = listener;
-				e2.Completed += new EventHandler<SocketAsyncEventArgs>(BeginAcceptCallbackAsync);
+                //---- Continue to accept!
+                SocketAsyncEventArgs e2 = new SocketAsyncEventArgs();
+                e2.UserToken = listener;
+                e2.Completed += new EventHandler<SocketAsyncEventArgs>(BeginAcceptCallbackAsync);
 
-				// BEGIN MKY 2010-05-14
-				try
-				{
-					if (!listener.Socket.AcceptAsync(e2))
-					{
-						BeginAcceptCallbackAsync(this, e2);
-					}
-				}
-				catch (ObjectDisposedException ex)
-				{
-					MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
-				}
-				// END MKY
+                // ----- \remind BEGIN -----
 
-			}
+                // 2010-05-14 / Matthias Klaey
+                // Handling exceptions.
 
-			e.UserToken = null;
-			e.Dispose();
-			e = null;
+                try
+                {
+                    if (!listener.Socket.AcceptAsync(e2))
+                    {
+                        BeginAcceptCallbackAsync(this, e2);
+                    }
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
+                }
+                // ----- \remind  END  -----
 
-		}
+            }
 
-		#endregion
+            e.UserToken = null;
+            e.Dispose();
+            e = null;
 
-		#region Stop
+        }
 
-		public override void Stop()
-		{
-			Dispose();
-		}
+        #endregion
 
-		#endregion
+        #region Stop
 
-		#endregion
+        public override void Stop()
+        {
+            Dispose();
+        }
 
-		#region Properties
+        #endregion
 
-		public IPEndPoint LocalEndPoint
-		{
-			get { return InternalLocalEndPoint; }
-		}
-		
-		public byte BackLog
-		{
-			get { return FBackLog; }
-			set { FBackLog = value; }
-		}
+        #endregion
 
-		public byte AcceptThreads
-		{
-			get { return FAcceptThreads; }
-			set { FAcceptThreads = value; }
-		}
+        #region Properties
 
-		internal Socket Socket
-		{
-			get { return FSocket; }
-		}
+        public IPEndPoint LocalEndPoint
+        {
+            get { return InternalLocalEndPoint; }
+        }
+        
+        public byte BackLog
+        {
+            get { return FBackLog; }
+            set { FBackLog = value; }
+        }
 
-		#endregion
+        public byte AcceptThreads
+        {
+            get { return FAcceptThreads; }
+            set { FAcceptThreads = value; }
+        }
 
-	}
+        internal Socket Socket
+        {
+            get { return FSocket; }
+        }
+
+        #endregion
+
+    }
 
 }

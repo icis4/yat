@@ -1,7 +1,7 @@
 /* ====================================================================
  * Copyright (c) 2009 Andre Luis Azevedo (az.andrel@yahoo.com.br)
  * All rights reserved.
- *
+ *                       
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -46,349 +46,344 @@ using System.Text;
 namespace ALAZ.SystemEx.NetEx.SocketsEx
 {
 
-	/// <summary>
-	/// Client socket creator.
-	/// </summary>
-	public class SocketConnector : BaseSocketConnectionCreator
-	{
-
-		#region Fields
-
-		private Socket FSocket;
-		private IPEndPoint FRemoteEndPoint;
-		private ProtocolType FProtocolType;
+    /// <summary>
+    /// Client socket creator.
+    /// </summary>
+    public class SocketConnector : BaseSocketConnectionCreator
+    {
 
-		private Timer FReconnectTimer;
-		private int FReconnectAttempts;
-		private int FReconnectAttemptInterval;
-		private int FReconnectAttempted;
+        #region Fields
 
-		private ProxyInfo FProxyInfo;
+        private Socket FSocket;
+        private IPEndPoint FRemoteEndPoint;
 
-		#endregion
+        private Timer FReconnectTimer;
+        private int FReconnectAttempts;
+        private int FReconnectAttemptInterval;
+        private int FReconnectAttempted;
 
-		#region Constructor
+        private ProxyInfo FProxyInfo;
 
-		/// <summary>
-		/// Base SocketConnector creator.
-		/// </summary>
-		/// <param name="host">
-		/// Host.
-		/// </param>
-		/// <param name="remoteEndPoint">
-		/// The remote endpoint to connect.
-		/// </param>
-		/// <param name="encryptType">
-		/// Encrypt type.
-		/// </param>
-		/// <param name="compressionType">
-		/// Compression type.
-		/// </param>
-		/// <param name="cryptoService">
-		/// CryptoService. if null, will not be used.
-		/// </param>
-		/// <param name="localEndPoint">
-		/// Local endpoint. if null, will be any address/port.
-		/// </param>
-		/// <param name="protocolType">
-		/// Protocol type, TCP or UDP.
-		/// </param>
-		public SocketConnector(BaseSocketConnectionHost host, string name, IPEndPoint remoteEndPoint, ProxyInfo proxyData, EncryptType encryptType, CompressionType compressionType, ICryptoService cryptoService, int reconnectAttempts, int reconnectAttemptInterval, IPEndPoint localEndPoint, ProtocolType protocolType)
-			: base(host, name, localEndPoint, encryptType, compressionType, cryptoService)
-		{
+        #endregion
 
-			FReconnectTimer = new Timer(new TimerCallback(ReconnectConnectionTimerCallBack));
-			FRemoteEndPoint = remoteEndPoint;
-			FProtocolType = protocolType;
+        #region Constructor
 
-			FReconnectAttempts = reconnectAttempts;
-			FReconnectAttemptInterval = reconnectAttemptInterval;
+        /// <summary>
+        /// Base SocketConnector creator.
+        /// </summary>
+        /// <param name="host">
+        /// Host.
+        /// </param>
+        /// <param name="remoteEndPoint">
+        /// The remote endpoint to connect.
+        /// </param>
+        /// <param name="encryptType">
+        /// Encrypt type.
+        /// </param>
+        /// <param name="compressionType">
+        /// Compression type.
+        /// </param>
+        /// <param name="cryptoService">
+        /// CryptoService. if null, will not be used.
+        /// </param>
+        /// <param name="localEndPoint">
+        /// Local endpoint. if null, will be any address/port.
+        /// </param>
+        public SocketConnector(BaseSocketConnectionHost host, string name, IPEndPoint remoteEndPoint, ProxyInfo proxyData, EncryptType encryptType, CompressionType compressionType, ICryptoService cryptoService, int reconnectAttempts, int reconnectAttemptInterval, IPEndPoint localEndPoint)
+            : base(host, name, localEndPoint, encryptType, compressionType, cryptoService)
+        {
 
-			FReconnectAttempted = 0;
+            FReconnectTimer = new Timer(new TimerCallback(ReconnectConnectionTimerCallBack));
+            FRemoteEndPoint = remoteEndPoint;
 
-			FProxyInfo = proxyData;
+            FReconnectAttempts = reconnectAttempts;
+            FReconnectAttemptInterval = reconnectAttemptInterval;
 
-		}
+            FReconnectAttempted = 0;
 
-		#endregion
+            FProxyInfo = proxyData;
 
-		#region Destructor
+        }
 
-		protected override void Free(bool canAccessFinalizable)
-		{
+        #endregion
 
-			if (FReconnectTimer != null)
-			{
-				FReconnectTimer.Dispose();
-				FReconnectTimer = null;
-			}
+        #region Destructor
 
-			if (FSocket != null)
-			{
-				FSocket.Close();
-				FSocket = null;
-			}
-			
-			FRemoteEndPoint = null;
-			FProxyInfo = null;
+        protected override void Free(bool canAccessFinalizable)
+        {
 
-			base.Free(canAccessFinalizable);
+            if (FReconnectTimer != null)
+            {
+                FReconnectTimer.Dispose();
+                FReconnectTimer = null;
+            }
 
-		}
+            if (FSocket != null)
+            {
+                FSocket.Close();
+                FSocket = null;
+            }
+            
+            FRemoteEndPoint = null;
+            FProxyInfo = null;
 
-		#endregion
+            base.Free(canAccessFinalizable);
 
-		#region Methods
+        }
 
-		#region Start
+        #endregion
 
-		public override void Start()
-		{
+        #region Methods
 
-			if (!Disposed)
-			{
-				BeginConnect();
-			}
+        #region Start
 
-		}
+        public override void Start()
+        {
 
-		#endregion
+            if (!Disposed)
+            {
+                BeginConnect();
+            }
 
-		#region Stop
+        }
 
-		public override void Stop()
-		{
-			Dispose();
-		}
+        #endregion
 
-		#endregion
+        #region Stop
 
-		#region BeginConnect
+        public override void Stop()
+        {
+            Dispose();
+        }
 
-		/// <summary>
-		/// Begin the connection with host.
-		/// </summary>
-		internal void BeginConnect()
-		{
+        #endregion
 
-			if (!Disposed)
-			{
+        #region BeginConnect
 
-				//----- Create Socket!
-				FSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, FProtocolType);
-				FSocket.Bind(InternalLocalEndPoint);
-				FSocket.ReceiveBufferSize = Host.SocketBufferSize;
-				FSocket.SendBufferSize = Host.SocketBufferSize;
+        /// <summary>
+        /// Begin the connection with host.
+        /// </summary>
+        internal void BeginConnect()
+        {
 
-				FReconnectTimer.Change(Timeout.Infinite, Timeout.Infinite);
+            if (!Disposed)
+            {
 
-				SocketAsyncEventArgs e = new SocketAsyncEventArgs();
-				e.Completed += new EventHandler<SocketAsyncEventArgs>(BeginConnectCallbackAsync);
-				e.UserToken = this;
+                //----- Create Socket!
+                FSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                FSocket.Bind(InternalLocalEndPoint);
+                FSocket.ReceiveBufferSize = Host.SocketBufferSize;
+                FSocket.SendBufferSize = Host.SocketBufferSize;
 
-				if (FProxyInfo == null)
-				{
-					e.RemoteEndPoint = FRemoteEndPoint;
-				}
-				else
-				{
+                FReconnectTimer.Change(Timeout.Infinite, Timeout.Infinite);
 
-					FProxyInfo.Completed = false;
-					FProxyInfo.SOCKS5Phase = SOCKS5Phase.spIdle;
+                SocketAsyncEventArgs e = new SocketAsyncEventArgs();
+                e.Completed += new EventHandler<SocketAsyncEventArgs>(BeginConnectCallbackAsync);
+                e.UserToken = this;
 
-					e.RemoteEndPoint = FProxyInfo.ProxyEndPoint;
+                if (FProxyInfo == null)
+                {
+                    e.RemoteEndPoint = FRemoteEndPoint;
+                }
+                else
+                {
 
-				}
+                    FProxyInfo.Completed = false;
+                    FProxyInfo.SOCKS5Phase = SOCKS5Phase.spIdle;
 
-				if (!FSocket.ConnectAsync(e))
-				{
-					BeginConnectCallbackAsync(this, e);
-				}
+                    e.RemoteEndPoint = FProxyInfo.ProxyEndPoint;
 
-			}
+                }
 
-		}
+                if (!FSocket.ConnectAsync(e))
+                {
+                    BeginConnectCallbackAsync(this, e);
+                }
 
-		#endregion
+            }
 
-		#region BeginAcceptCallbackAsync
+        }
 
-		/// <summary>
-		/// Connect callback!
-		/// </summary>
-		/// <param name="ar"></param>
-		internal void BeginConnectCallbackAsync(object sender, SocketAsyncEventArgs e)
-		{
+        #endregion
 
-			if (!Disposed)
-			{
+        #region BeginAcceptCallbackAsync
 
-				BaseSocketConnection connection = null;
-				SocketConnector connector = null;
-				Exception exception = null;
+        /// <summary>
+        /// Connect callback!
+        /// </summary>
+        /// <param name="ar"></param>
+        internal void BeginConnectCallbackAsync(object sender, SocketAsyncEventArgs e)
+        {
 
-				if (e.SocketError == SocketError.Success)
-				{
+            if (!Disposed)
+            {
 
-					try
-					{
+                BaseSocketConnection connection = null;
+                SocketConnector connector = null;
+                Exception exception = null;
 
-						connector = (SocketConnector)e.UserToken;
+                if (e.SocketError == SocketError.Success)
+                {
 
-						connection = new ClientSocketConnection(Host, connector, connector.Socket);
+                    try
+                    {
 
-						//----- Adjust buffer size!
-						connector.Socket.ReceiveBufferSize = Host.SocketBufferSize;
-						connector.Socket.SendBufferSize = Host.SocketBufferSize;
+                        connector = (SocketConnector)e.UserToken;
 
-						//----- Initialize!
-						Host.AddSocketConnection(connection);
-						connection.Active = true;
+                        connection = new ClientSocketConnection(Host, connector, connector.Socket);
 
-						Host.InitializeConnection(connection);
+                        //----- Adjust buffer size!
+                        connector.Socket.ReceiveBufferSize = Host.SocketBufferSize;
+                        connector.Socket.SendBufferSize = Host.SocketBufferSize;
 
-					}
-					catch (Exception ex)
-					{
-						
-						exception = ex;
+                        //----- Initialize!
+                        Host.AddSocketConnection(connection);
+                        connection.Active = true;
 
-						if (connection != null)
-						{
+                        Host.InitializeConnection(connection);
 
-							Host.DisposeConnection(connection);
-							Host.RemoveSocketConnection(connection);
+                    }
+                    catch (Exception ex)
+                    {
+                        
+                        exception = ex;
 
-							connection = null;
+                        if (connection != null)
+                        {
 
-						}
+                            Host.DisposeConnection(connection);
+                            Host.RemoveSocketConnection(connection);
 
-					}
+                            connection = null;
 
-				}
-				else
-				{
-					exception = new SocketException((int)e.SocketError);
-				}
+                        }
 
-				if (exception != null)
-				{
-					FReconnectAttempted++;
-					ReconnectConnection(false, exception);
-				}
+                    }
 
-			}
+                }
+                else
+                {
+                    exception = new SocketException((int)e.SocketError);
+                }
 
-			e.UserToken = null;
-			e.Dispose();
-			e = null;
+                if (exception != null)
+                {
+                    FReconnectAttempted++;
+                    ReconnectConnection(false, exception);
+                }
 
-		}
+            }
 
-		#endregion
+            e.UserToken = null;
+            e.Dispose();
+            e = null;
 
-		#region ReconnectConnection
+        }
 
-		internal void ReconnectConnection(bool resetAttempts, Exception ex)
-		{
+        #endregion
 
-			if (!Disposed)
-			{
+        #region ReconnectConnection
 
-				if (resetAttempts)
-				{
+        internal void ReconnectConnection(bool resetAttempts, Exception ex)
+        {
 
-					//----- Reset counter and start new connect!
-					FReconnectAttempted = 0;
-					FReconnectTimer.Change(FReconnectAttemptInterval, FReconnectAttemptInterval);
+          if (!Disposed)
+          {
 
-				}
-				else
-				{
+              if (resetAttempts)
+              {
+                  
+                  //----- Reset counter and start new connect!
+                  FReconnectAttempted = 0;
+                  FReconnectTimer.Change(FReconnectAttemptInterval, FReconnectAttemptInterval);
 
-					//----- Check attempt count!
-					if (FReconnectAttempts > 0)
-					{
+              }
+              else
+              {
 
-						if (FReconnectAttempted < FReconnectAttempts)
-						{
-							Host.FireOnException(null, new ReconnectAttemptException("Reconnect attempt", this, ex, FReconnectAttempted, false));
-							FReconnectTimer.Change(FReconnectAttemptInterval, FReconnectAttemptInterval);
-						}
-						else
-						{
-							Host.FireOnException(null, new ReconnectAttemptException("Reconnect attempt", this, ex, FReconnectAttempted, true));
-						}
+                  //----- Check attempt count!
+                  if (FReconnectAttempts > 0)
+                  {
 
-					}
-					else
-					{
-						Host.FireOnException(null, new ReconnectAttemptException("Reconnect attempt", this, ex, FReconnectAttempted, true));
-					}
+                      if (FReconnectAttempted < FReconnectAttempts)
+                      {
+                          Host.FireOnException(null, new ReconnectAttemptException("Reconnect attempt", this, ex, FReconnectAttempted, false));
+                          FReconnectTimer.Change(FReconnectAttemptInterval, FReconnectAttemptInterval);
+                      }
+                      else
+                      {
+                          Host.FireOnException(null, new ReconnectAttemptException("Reconnect attempt", this, ex, FReconnectAttempted, true));
+                      }
 
-				}
+                  }
+                  else
+                  {
+                      Host.FireOnException(null, new ReconnectAttemptException("Reconnect attempt", this, ex, FReconnectAttempted, true));
+                  }
+              
+              }
 
-			}
+          }
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region ReconnectConnectionTimerCallBack
+        #region ReconnectConnectionTimerCallBack
 
-		private void ReconnectConnectionTimerCallBack(Object stateInfo)
-		{
+        private void ReconnectConnectionTimerCallBack(Object stateInfo)
+        {
 
-			if (!Disposed)
-			{
-				FReconnectTimer.Change(Timeout.Infinite, Timeout.Infinite);
-				BeginConnect();
-			}
+            if (!Disposed)
+            {
+                FReconnectTimer.Change(Timeout.Infinite, Timeout.Infinite);
+                BeginConnect();
+            }
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		public int ReconnectAttempts
-		{
-			get { return FReconnectAttempts; }
-			set { FReconnectAttempts = value; }
-		}
+        public int ReconnectAttempts
+        {
+            get { return FReconnectAttempts; }
+            set { FReconnectAttempts = value; }
+        }
 
-		public int ReconnectAttemptInterval
-		{
-			get { return FReconnectAttemptInterval; }
-			set { FReconnectAttemptInterval = value; }
-		}
+        public int ReconnectAttemptInterval
+        {
+            get { return FReconnectAttemptInterval; }
+            set { FReconnectAttemptInterval = value; }
+        }
 
-		public IPEndPoint LocalEndPoint
-		{
-			get { return InternalLocalEndPoint; }
-			set { InternalLocalEndPoint = value; }
-		}
+        public IPEndPoint LocalEndPoint
+        {
+            get { return InternalLocalEndPoint; }
+            set { InternalLocalEndPoint = value; }
+        }
 
-		public IPEndPoint RemoteEndPoint
-		{
-			get { return FRemoteEndPoint; }
-		}
-		
-		public  ProxyInfo ProxyInfo
-		{
-			get { return FProxyInfo; }
-			set { FProxyInfo = value; } 
-		}
+        public IPEndPoint RemoteEndPoint
+        {
+            get { return FRemoteEndPoint; }
+        }
+        
+        public  ProxyInfo ProxyInfo
+        {
+            get { return FProxyInfo; }
+            set { FProxyInfo = value; } 
+        }
 
-		internal Socket Socket
-		{
-			get { return FSocket; }
-		}
+        internal Socket Socket
+        {
+            get { return FSocket; }
+        }
 
-		#endregion
+        #endregion
 
-	}
+    }
 
 }
