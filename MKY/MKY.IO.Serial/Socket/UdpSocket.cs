@@ -421,7 +421,7 @@ namespace MKY.IO.Serial
 				new System.Net.IPEndPoint(System.Net.IPAddress.Any, this.localPort)
 				);
 
-			this.socket.Start(); // The ALAZ socket will be started asynchronously
+			this.socket.Start(); // The ALAZ socket will be started asynchronously.
 		}
 
 		private void StopSocket()
@@ -437,7 +437,7 @@ namespace MKY.IO.Serial
 			if (this.socket != null)
 			{
 				this.socket.Stop();
-				this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose()
+				this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose().
 				this.socket = null;
 				this.socketConnection = null;
 			}
@@ -463,7 +463,7 @@ namespace MKY.IO.Serial
 
 			SetStateAndNotify(SocketState.Opened);
 
-			// Immediately begin receiving data
+			// Immediately begin receiving data.
 			e.Connection.BeginReceive();
 		}
 
@@ -482,7 +482,7 @@ namespace MKY.IO.Serial
 			}
 			OnDataReceived(new EventArgs());
 
-			// Continue receiving data
+			// Continue receiving data.
 			e.Connection.BeginReceive();
 		}
 
@@ -494,7 +494,7 @@ namespace MKY.IO.Serial
 		/// </param>
 		public virtual void OnSent(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
-			// Nothing to do
+			// Nothing to do.
 		}
 
 		/// <summary>
@@ -505,7 +505,7 @@ namespace MKY.IO.Serial
 		/// </param>
 		public virtual void OnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
 		{
-			// Normal disconnect
+			// Normal disconnect.
 			lock (this.socketConnectionSyncObj)
 				this.socketConnection = null;
 
