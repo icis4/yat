@@ -102,11 +102,11 @@ namespace YAT.Model.Settings
 			SerialPortId         = MKY.IO.Ports.SerialPortId.FirstStandardPort;
 
 			SocketRemoteHost     = MKY.IO.Serial.SocketSettings.DefaultRemoteHost;
-			SocketRemotePort     = MKY.IO.Serial.SocketSettings.DefaultPort;
+			SocketRemotePort     = MKY.IO.Serial.SocketSettings.DefaultRemotePort;
 
 			SocketLocalInterface = MKY.IO.Serial.SocketSettings.DefaultLocalInterface;
-			SocketLocalTcpPort   = MKY.IO.Serial.SocketSettings.DefaultPort;
-			SocketLocalUdpPort   = MKY.IO.Serial.SocketSettings.DefaultPort + 1;
+			SocketLocalTcpPort   = MKY.IO.Serial.SocketSettings.DefaultLocalTcpPort;
+			SocketLocalUdpPort   = MKY.IO.Serial.SocketSettings.DefaultLocalUdpPort;
 
 			UsbHidDeviceInfo     = null;
 

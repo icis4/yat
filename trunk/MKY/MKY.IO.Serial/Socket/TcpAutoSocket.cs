@@ -879,7 +879,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		/// <remarks>
-		/// Named accoring to .NET <see cref="System.Net.IPEndPoint"/>.
+		/// Named according to .NET <see cref="System.Net.IPEndPoint"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
 		public virtual string ToShortEndPointString()

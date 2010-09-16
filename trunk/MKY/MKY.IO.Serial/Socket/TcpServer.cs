@@ -497,7 +497,7 @@ namespace MKY.IO.Serial
 		/// </param>
 		public virtual void OnSent(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
 		{
-			// Nothing to do.
+			OnDataSent(new EventArgs());
 		}
 
 		/// <summary>
@@ -594,7 +594,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		/// <remarks>
-		/// Named accoring to .NET <see cref="System.Net.IPEndPoint"/>.
+		/// Named according to .NET <see cref="System.Net.IPEndPoint"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
 		public virtual string ToShortEndPointString()

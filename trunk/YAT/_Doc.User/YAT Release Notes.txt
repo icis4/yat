@@ -42,7 +42,7 @@ You can also download .NET under "http://www.microsoft.com/net/"
 2. History of changes in YAT
 ====================================================================================================
 
-YAT 2.0 Beta 3 Candidate 1 Version 1.99.2x :: 2010-0x-xx
+YAT 2.0 Beta 3 Candidate 1 Version 1.99.2x :: 2010-10-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -54,19 +54,21 @@ New:
 - Test config including optional user config added (feature request #2981764)
 - Test environment to ensure that TCP/IP works on multiple network interfaces added (bug #2970215)
 - TCP/IP endurance and stress tests added
-- GUI endurance and stress tests added
+- UDP/IP endurance tests added
+- GUI stress test added
 
 Important changes:
-- Serial COM port list gets refreshed when changing the I/O port type
 - Performance on startup partly improved (feature request #2968216)
+- Serial COM port list gets refreshed when changing the I/O port type
 - Update to NUnit 2.5.7
 - Use of parametrized NUnit test cases
 - Use of FxCop (feature request #2970221)
 - Use of StyleCop (feature request #2970222)
-- Methods and properties marked "virtual", unless there are reasons against
+- Methods and properties marked 'virtual', unless there are reasons against
 - Null reference safe and more efficient implementation of Equals()
 - Selection and settings controls now clear contents when disabled
 - Project references to system assemblies cleaned
+- Using directives cleaned
 - Test and demo projects also signed with a strong name key
 - Version information moved to a single file, added links to that file to projects
 - Website and contact information added to all source headers (feature request #2998593)
@@ -74,10 +76,15 @@ Important changes:
 Fixed bugs:
 - TCP/IP open/close issues fixed (bugs #2684769, #2869622, #2966417)
 - TCP/IP remote host and program freeze issue when opening from a file fixed (bug #2684813)
+- TCP/IP data send event now occurs (bug #2884756)
+- UDP/IP implementation changed from ALAZ.SystemEx.NetEx to System.Net.Sockets
+- UDP/IP default local port fixed
+- UDP/IP connect issue fixed (bug #2120432)
 - Exception with TCP/IP AutoSocket fixed (bug# 2869792)
 - Exception in case of no COM ports fixed (bug #3041642)
 - Exception when closing terminal using 'File > Close' fixed (bugs #2684813, #2854547, #2970241)
 - Rare exception while drawing fixed (bug #2981762)
+- Layout/anchor issue of description text field in predefined dialog fixed (bug #2987575)
 - Unhandled exception dialog improved and fixed (feature request #2970243, bug #2970245)
 - Multi-line command issue fixed (bug #2831453)
 - Tab order in predefined command dialog fixed (bug #2914863)

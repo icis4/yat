@@ -143,12 +143,12 @@ namespace MKY.IO.Serial
 
 			RemoteHost              = DefaultRemoteHost;
 			ResolvedRemoteIPAddress = DefaultResolvedRemoteIPAddress;
-			RemotePort              = DefaultPort;
+			RemotePort              = DefaultRemotePort;
 
 			LocalInterface          = DefaultLocalInterface;
 			ResolvedLocalIPAddress  = DefaultResolvedLocalIPAddress;
-			LocalTcpPort            = DefaultPort;
-			LocalUdpPort            = DefaultPort + 1;
+			LocalTcpPort            = DefaultLocalTcpPort;
+			LocalUdpPort            = DefaultLocalUdpPort;
 
 			TcpClientAutoReconnect  = new AutoRetry(false, 500);
 		}

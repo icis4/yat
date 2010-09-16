@@ -32,64 +32,55 @@ namespace MKY.IO.Serial.Test.Socket
 {
 	/// <summary></summary>
 	[TestFixture]
-	public class TcpConnectionStressTest
+	public class ConsecutiveUdpConnectionTest
 	{
 		#region Tests
 		//==========================================================================================
 		// Tests
 		//==========================================================================================
 
-		#region Tests > StressAutoSocket()
+		#region Tests > ConsecutiveConnectAndShutdown()
 		//------------------------------------------------------------------------------------------
-		// Tests > StressAutoSocket()
+		// Tests > ConsecutiveConnectAndShutdown()
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, Category("Stress")]
-		public virtual void StressAutoSocket()
+		/// <remarks>
+		/// A cycle takes around 5 seconds. 10 cycles around a minute.
+		/// </remarks>
+		[Test, Repeat(10)]
+		public virtual void TestConsecutiveConnectAndShutdown()
 		{
-			List<int> serverPorts = new List<int>();
-			List<TcpAutoSocket> serverSockets = new List<TcpAutoSocket>();
-			List<TcpAutoSocket> clientSockets = new List<TcpAutoSocket>();
+			SimpleUdpConnectionTest t = new SimpleUdpConnectionTest();
+			t.TestConnectAndShutdown();
+			t.TestConnectAndShutdown();
+			t.TestConnectAndShutdown();
+			t.TestConnectAndShutdown();
+			t.TestConnectAndShutdown();
+			t.TestConnectAndShutdown();
+			t.TestConnectAndShutdown();
+			t.TestConnectAndShutdown();
+		}
 
-			// Create a large number of auto sockets.
-			for (int i = 0; i < 100; i++)
-			{
-				int p;
-				TcpAutoSocket s;
-				Utilities.StartTcpAutoSocketAsServer(out s, out p);
-				Utilities.WaitForStart(s, "TCP auto socket " + i + " could not be started as server");
-				serverSockets.Add(s);
-				serverPorts.Add(p);
-			}
+		/// <summary></summary>
+		[Test, Repeat(10), Category("Endurance 10 Minutes")]
+		public virtual void TestConsecutiveConnectAndShutdownEndurance10Minutes()
+		{
+			TestConsecutiveConnectAndShutdown();
+		}
 
-			// Randomly connect another large numer of auto sockets to the existing sockets.
-			Random r = new Random();
-			for (int i = 0; i < 500; i++)
-			{
-				int j = r.Next(99);
-				int p = serverPorts[j];
-				TcpAutoSocket s = serverSockets[j];
-				TcpAutoSocket c;
-				Utilities.StartTcpAutoSocketAsClient(out c, p);
-				Utilities.WaitForStart(c, "TCP auto socket " + i + " could not be started as client");
-				Utilities.WaitForConnect(c, s, "TCP auto socket " + i + " could not be connected to auto socket " + s);
-				clientSockets.Add(c);
-			}
+		/// <summary></summary>
+		[Test, Repeat(6), Category("Endurance 60 Minutes")]
+		public virtual void TestConsecutiveConnectAndShutdownEndurance60Minutes()
+		{
+			TestConsecutiveConnectAndShutdownEndurance10Minutes();
+		}
 
-			// Shutdown all client sockets.
-			foreach (TcpAutoSocket c in clientSockets)
-			{
-				Utilities.StopTcpAutoSocket(c);
-				Utilities.WaitForStop(c, "TCP auto socket as client could not be stopped");
-			}
-
-			// Shutdown all server sockets.
-			foreach (TcpAutoSocket s in serverSockets)
-			{
-				Utilities.StopTcpAutoSocket(s);
-				Utilities.WaitForStop(s, "TCP auto socket as client could not be stopped");
-			}
+		/// <summary></summary>
+		[Test, Repeat(int.MaxValue), Category("Endurance Forever")]
+		public virtual void TestConsecutiveConnectAndShutdownEnduranceForever()
+		{
+			TestConsecutiveConnectAndShutdownEndurance60Minutes();
 		}
 
 		#endregion

@@ -89,21 +89,27 @@ namespace YAT.Gui.Forms
 
 			// HHD.
 			linkLabel_HHD.Text = "";
-			textBefore = "YAT is a terminal (a connection endpoint). If you're looking for a tool to monitor serial data between an application" + Environment.NewLine +
-						 "and a device, or between two devices, check out ";
-			textLink =                                                   "HHD Monitoring Studio";
-			textAfter =                                                                       ". It's worth the bucks.";
+			textBefore = "YAT is a terminal (a connection endpoint). If you're looking for a tool to monitor serial data between an application and a" + Environment.NewLine +
+						 "device, or between two devices, check out ";
+			textLink =                                             "HHD Monitoring Studio";
+			textAfter =                                                                 ". It's worth the bucks. Or";
 			linkLabel_HHD.Text += textBefore;
 			start = linkLabel_HHD.Text.Length;
 			linkLabel_HHD.Text += textLink;
 			linkLabel_HHD.Links.Add(start, textLink.Length, "http://www.hhdsoftware.com/");
+			linkLabel_HHD.Text += textAfter;
+			textLink =                                                                                            "download the free edition";
+			textAfter =                                                                                                                    ".";
+			start = linkLabel_HHD.Text.Length;
+			linkLabel_HHD.Text += textLink;
+			linkLabel_HHD.Links.Add(start, textLink.Length, "http://www.serial-port-monitor.com/");
 			linkLabel_HHD.Text += textAfter;
 
 			// VSPE.
 			linkLabel_VSPE.Text = "";
 			textBefore = "If you're also looking for a tool to create and manage additional virtual COM ports, check out"  + Environment.NewLine;
 			textLink =   "Eterlogic Virtual Serial Ports Emulator";
-			textAfter =                                          ".";
+			textAfter =                                          ". Supports virtual connected ports, mapping to TCP/IP, port sharing,...";
 			linkLabel_VSPE.Text += textBefore;
 			start = linkLabel_VSPE.Text.Length;
 			linkLabel_VSPE.Text += textLink;

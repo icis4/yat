@@ -233,7 +233,7 @@ namespace YAT.Domain
 				case SocketHostType.TcpServer:     return (IOType.TcpServer);
 				case SocketHostType.TcpAutoSocket: return (IOType.TcpAutoSocket);
 				case SocketHostType.Udp:           return (IOType.Udp);
-				default:                                 return (IOType.Unknown);
+				default:                           return (IOType.Unknown);
 			}
 		}
 

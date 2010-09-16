@@ -86,7 +86,7 @@ namespace MKY.Utilities.Test.Types
 
 		private readonly TestSet[][] testSets =
 		{
-			// automatic boundary
+			// Automatic boundary
 			new TestSet[]
 			{
 				new TestSet(                    0, 0, byte.MaxValue,   false, true,                                                         "00000000",                    "000",                  "000",               "00", new byte[] { 0x00 } ),
@@ -108,7 +108,7 @@ namespace MKY.Utilities.Test.Types
 				new TestSet( 18446744073709551615, 0, ulong.MaxValue,  false, true, "1111111111111111111111111111111111111111111111111111111111111111", "1777777777777777777777", "18446744073709551615", "FFFFFFFFFFFFFFFF", new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF } ),
 			},
 
-			// fixed 8 byte boundary
+			// Fixed 8 byte boundary.
 			new TestSet[]
 			{
 				new TestSet(                    0, 8, ulong.MaxValue,  false, true, "0000000000000000000000000000000000000000000000000000000000000000", "0000000000000000000000", "00000000000000000000", "0000000000000000", new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } ),

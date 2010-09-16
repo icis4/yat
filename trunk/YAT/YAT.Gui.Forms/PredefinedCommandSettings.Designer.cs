@@ -107,6 +107,7 @@ namespace YAT.Gui.Forms
 			// 
 			// button_ClearPage
 			// 
+			this.button_ClearPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_ClearPage.Location = new System.Drawing.Point(536, 354);
 			this.button_ClearPage.Name = "button_ClearPage";
 			this.button_ClearPage.Size = new System.Drawing.Size(75, 23);
@@ -415,6 +416,7 @@ namespace YAT.Gui.Forms
 			// 
 			// label_ExampleBinary_Description
 			// 
+			this.label_ExampleBinary_Description.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_ExampleBinary_Description.AutoSize = true;
 			this.label_ExampleBinary_Description.Location = new System.Drawing.Point(402, 368);
 			this.label_ExampleBinary_Description.Name = "label_ExampleBinary_Description";
@@ -424,6 +426,7 @@ namespace YAT.Gui.Forms
 			// 
 			// label_ExampleBinary_Data
 			// 
+			this.label_ExampleBinary_Data.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_ExampleBinary_Data.AutoSize = true;
 			this.label_ExampleBinary_Data.Location = new System.Drawing.Point(67, 368);
 			this.label_ExampleBinary_Data.Name = "label_ExampleBinary_Data";
@@ -442,6 +445,7 @@ namespace YAT.Gui.Forms
 			// 
 			// label_Delete
 			// 
+			this.label_Delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Delete.AutoSize = true;
 			this.label_Delete.Location = new System.Drawing.Point(583, 16);
 			this.label_Delete.Name = "label_Delete";
@@ -452,6 +456,7 @@ namespace YAT.Gui.Forms
 			// 
 			// label_Shortcut
 			// 
+			this.label_Shortcut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Shortcut.AutoSize = true;
 			this.label_Shortcut.Location = new System.Drawing.Point(527, 16);
 			this.label_Shortcut.Name = "label_Shortcut";
@@ -472,6 +477,7 @@ namespace YAT.Gui.Forms
 			// 
 			// label_Description
 			// 
+			this.label_Description.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_Description.AutoSize = true;
 			this.label_Description.Location = new System.Drawing.Point(402, 16);
 			this.label_Description.Name = "label_Description";
@@ -482,6 +488,7 @@ namespace YAT.Gui.Forms
 			// 
 			// label_ExampleText_Description
 			// 
+			this.label_ExampleText_Description.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.label_ExampleText_Description.AutoSize = true;
 			this.label_ExampleText_Description.Location = new System.Drawing.Point(402, 350);
 			this.label_ExampleText_Description.Name = "label_ExampleText_Description";
@@ -491,6 +498,7 @@ namespace YAT.Gui.Forms
 			// 
 			// label_ExampleText_Data
 			// 
+			this.label_ExampleText_Data.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_ExampleText_Data.AutoSize = true;
 			this.label_ExampleText_Data.Location = new System.Drawing.Point(67, 350);
 			this.label_ExampleText_Data.Name = "label_ExampleText_Data";
@@ -500,6 +508,7 @@ namespace YAT.Gui.Forms
 			// 
 			// label_Example
 			// 
+			this.label_Example.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label_Example.AutoSize = true;
 			this.label_Example.Location = new System.Drawing.Point(6, 359);
 			this.label_Example.Name = "label_Example";

@@ -18,78 +18,46 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.NetworkInformation;
 using System.Threading;
 
 using NUnit.Framework;
-
-using MKY.IO.Serial;
 
 namespace MKY.IO.Serial.Test.Socket
 {
 	/// <summary></summary>
 	[TestFixture]
-	public class TcpConnectionStressTest
+	public class SimpleUdpConnectionTest
 	{
 		#region Tests
 		//==========================================================================================
 		// Tests
 		//==========================================================================================
 
-		#region Tests > StressAutoSocket()
+		#region Tests > ConnectAndShutdown()
 		//------------------------------------------------------------------------------------------
-		// Tests > StressAutoSocket()
+		// Tests > ConnectAndShutdown()
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, Category("Stress")]
-		public virtual void StressAutoSocket()
+		[Test]
+		public virtual void TestConnectAndShutdown()
 		{
-			List<int> serverPorts = new List<int>();
-			List<TcpAutoSocket> serverSockets = new List<TcpAutoSocket>();
-			List<TcpAutoSocket> clientSockets = new List<TcpAutoSocket>();
+			int portA;
+			int portB;
+			Utilities.GetAvailableLocalUdpPorts(out portA, out portB);
 
-			// Create a large number of auto sockets.
-			for (int i = 0; i < 100; i++)
-			{
-				int p;
-				TcpAutoSocket s;
-				Utilities.StartTcpAutoSocketAsServer(out s, out p);
-				Utilities.WaitForStart(s, "TCP auto socket " + i + " could not be started as server");
-				serverSockets.Add(s);
-				serverPorts.Add(p);
-			}
+			UdpSocket socketA;
+			UdpSocket socketB;
 
-			// Randomly connect another large numer of auto sockets to the existing sockets.
-			Random r = new Random();
-			for (int i = 0; i < 500; i++)
-			{
-				int j = r.Next(99);
-				int p = serverPorts[j];
-				TcpAutoSocket s = serverSockets[j];
-				TcpAutoSocket c;
-				Utilities.StartTcpAutoSocketAsClient(out c, p);
-				Utilities.WaitForStart(c, "TCP auto socket " + i + " could not be started as client");
-				Utilities.WaitForConnect(c, s, "TCP auto socket " + i + " could not be connected to auto socket " + s);
-				clientSockets.Add(c);
-			}
+			Utilities.StartUdpSocket(out socketA, portB, portA);
+			Utilities.WaitForStart(socketA, "UDP socket A could not be started");
+			Utilities.StartUdpSocket(out socketB, portA, portB);
+			Utilities.WaitForStart(socketB, "UDP socket B could not be started");
 
-			// Shutdown all client sockets.
-			foreach (TcpAutoSocket c in clientSockets)
-			{
-				Utilities.StopTcpAutoSocket(c);
-				Utilities.WaitForStop(c, "TCP auto socket as client could not be stopped");
-			}
-
-			// Shutdown all server sockets.
-			foreach (TcpAutoSocket s in serverSockets)
-			{
-				Utilities.StopTcpAutoSocket(s);
-				Utilities.WaitForStop(s, "TCP auto socket as client could not be stopped");
-			}
+			Utilities.StopUdpSocket(socketB);
+			Utilities.WaitForStop(socketB, "UDP socket B could not be stopped");
+			Utilities.StopUdpSocket(socketA);
+			Utilities.WaitForStop(socketA, "UDP socket A could not be stopped");
 		}
 
 		#endregion
