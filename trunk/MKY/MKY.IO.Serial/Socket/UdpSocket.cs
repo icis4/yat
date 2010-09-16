@@ -33,7 +33,7 @@ using MKY.Utilities.Event;
 namespace MKY.IO.Serial
 {
 	/// <summary></summary>
-	public class UdpSocket : IIOProvider, IDisposable, ALAZ.SystemEx.NetEx.SocketsEx.ISocketService
+	public class UdpSocket : IIOProvider, IDisposable
 	{
 		#region Types
 		//==========================================================================================
@@ -47,6 +47,18 @@ namespace MKY.IO.Serial
 			Closing,
 			Closed,
 			Error,
+		}
+
+		private class AsyncReceiveState
+		{
+			public readonly System.Net.IPEndPoint EndPoint;
+			public readonly System.Net.Sockets.UdpClient Socket;
+
+			public AsyncReceiveState(System.Net.IPEndPoint EndPoint, System.Net.Sockets.UdpClient Socket)
+			{
+				this.EndPoint = EndPoint;
+				this.Socket = Socket;
+			}
 		}
 
 		#endregion
@@ -75,9 +87,8 @@ namespace MKY.IO.Serial
 		private SocketState state = SocketState.Closed;
 		private object stateSyncObj = new object();
 
-		private ALAZ.SystemEx.NetEx.SocketsEx.SocketClient socket;
-		private ALAZ.SystemEx.NetEx.SocketsEx.ISocketConnection socketConnection;
-		private object socketConnectionSyncObj = new object();
+		private System.Net.IPEndPoint endPoint;
+		private System.Net.Sockets.UdpClient socket;
 
 		private Queue<byte> receiveQueue = new Queue<byte>();
 
@@ -142,7 +153,7 @@ namespace MKY.IO.Serial
 			{
 				if (disposing)
 				{
-					DisposeSocketAndSocketConnection();
+					CloseAndDisposeSocket();
 				}
 				this.isDisposed = true;
 
@@ -359,8 +370,8 @@ namespace MKY.IO.Serial
 
 			if (IsStarted)
 			{
-				if (this.socketConnection != null)
-					this.socketConnection.BeginSend(data);
+				this.socket.Send(data, data.Length);
+				OnDataSent(new EventArgs());
 			}
 		}
 
@@ -395,135 +406,83 @@ namespace MKY.IO.Serial
 		{
 			SetStateAndNotify(SocketState.Opening);
 
-			this.socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketClient
-				(
-				System.Net.Sockets.ProtocolType.Udp,
-				ALAZ.SystemEx.NetEx.SocketsEx.CallbackThreadType.ctWorkerThread,
-				(ALAZ.SystemEx.NetEx.SocketsEx.ISocketService)this,
-				ALAZ.SystemEx.NetEx.SocketsEx.DelimiterType.dtNone,
-				null,
-				SocketDefaults.SocketBufferSize,
-				SocketDefaults.MessageBufferSize,
-				Timeout.Infinite,
-				Timeout.Infinite
-				);
-
-			this.socket.AddConnector
-				(
-				"YAT UDP Socket",
-				new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort),
-				null,
-				ALAZ.SystemEx.NetEx.SocketsEx.EncryptType.etNone,
-				ALAZ.SystemEx.NetEx.SocketsEx.CompressionType.ctNone,
-				null,
-				0,
-				0,
-				new System.Net.IPEndPoint(System.Net.IPAddress.Any, this.localPort)
-				);
-
-			this.socket.Start(); // The ALAZ socket will be started asynchronously.
-		}
-
-		private void StopSocket()
-		{
-			// \remind
-			// The ALAZ sockets by default stop synchronously. However, due to some other issues
-			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
-			this.socket.Stop();
-		}
-
-		private void DisposeSocketAndSocketConnection()
-		{
-			if (this.socket != null)
-			{
-				this.socket.Stop();
-				this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose().
-				this.socket = null;
-				this.socketConnection = null;
-			}
-		}
-
-		#endregion
-
-		#region ISocketService Members
-		//==========================================================================================
-		// ISocketService Members
-		//==========================================================================================
-
-		/// <summary>
-		/// Fired when connected.
-		/// </summary>
-		/// <param name="e">
-		/// Information about the connection.
-		/// </param>
-		public virtual void OnConnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
-		{
-			lock (this.socketConnectionSyncObj)
-				this.socketConnection = e.Connection;
+			this.endPoint = new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort);
+			this.socket = new System.Net.Sockets.UdpClient(this.localPort);
+			this.socket.Connect(this.endPoint);
 
 			SetStateAndNotify(SocketState.Opened);
 
 			// Immediately begin receiving data.
-			e.Connection.BeginReceive();
+			BeginReceive();
 		}
 
-		/// <summary>
-		/// Fired when data arrives.
-		/// </summary>
-		/// <param name="e">
-		/// Information about the Message.
-		/// </param>
-		public virtual void OnReceived(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
+		private void StopSocket()
 		{
-			lock (this.receiveQueue)
-			{
-				foreach (byte b in e.Buffer)
-					this.receiveQueue.Enqueue(b);
-			}
-			OnDataReceived(new EventArgs());
-
-			// Continue receiving data.
-			e.Connection.BeginReceive();
-		}
-
-		/// <summary>
-		/// Fired when data is sent.
-		/// </summary>
-		/// <param name="e">
-		/// Information about the Message.
-		/// </param>
-		public virtual void OnSent(ALAZ.SystemEx.NetEx.SocketsEx.MessageEventArgs e)
-		{
-			// Nothing to do.
-		}
-
-		/// <summary>
-		/// Fired when disconnected.
-		/// </summary>
-		/// <param name="e">
-		/// Information about the connection.
-		/// </param>
-		public virtual void OnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e)
-		{
-			// Normal disconnect.
-			lock (this.socketConnectionSyncObj)
-				this.socketConnection = null;
-
+			SetStateAndNotify(SocketState.Closing);
+			CloseAndDisposeSocket();
 			SetStateAndNotify(SocketState.Closed);
 		}
 
-		/// <summary>
-		/// Fired when exception occurs.
-		/// </summary>
-		/// <param name="e">
-		/// Information about the exception and connection.
-		/// </param>
-		public virtual void OnException(ALAZ.SystemEx.NetEx.SocketsEx.ExceptionEventArgs e)
+		private void CloseAndDisposeSocket()
 		{
-			DisposeSocketAndSocketConnection();
+			this.socket.Close();
+			this.socket = null;
+		}
 
+		private void SocketError()
+		{
+			CloseAndDisposeSocket();
 			SetStateAndNotify(SocketState.Error);
-			OnIOError(new IOErrorEventArgs(e.Exception.Message));
+		}
+
+		#endregion
+
+		#region Async Receive
+		//==========================================================================================
+		// Async Receive
+		//==========================================================================================
+
+		private void BeginReceive()
+		{
+			AsyncReceiveState state = new AsyncReceiveState(this.endPoint, this.socket);
+			this.socket.BeginReceive(new AsyncCallback(ReceiveCallback), state);
+		}
+
+		private void ReceiveCallback(IAsyncResult ar)
+		{
+			AsyncReceiveState state = (AsyncReceiveState)(ar.AsyncState);
+			System.Net.IPEndPoint endPoint = state.EndPoint;
+			System.Net.Sockets.UdpClient socket = state.Socket;
+
+			// Ensure that async receive is discarded after close/dispose.
+			if (!isDisposed && (socket != null) && (this.state == SocketState.Opened))
+			{
+				byte[] buffer;
+				try
+				{
+					buffer = socket.EndReceive(ar, ref endPoint);
+				}
+				catch (System.Net.Sockets.SocketException ex)
+				{
+					buffer = null;
+					SocketError();
+					OnIOError(new IOErrorEventArgs(IOErrorSeverity.Severe, ex.Message));
+				}
+
+				if (buffer != null)
+				{
+					lock (this.receiveQueue)
+					{
+						foreach (byte b in buffer)
+							this.receiveQueue.Enqueue(b);
+					}
+
+					OnDataReceived(new EventArgs());
+
+					// Continue receiving data.
+					BeginReceive();
+				}
+			}
 		}
 
 		#endregion
@@ -580,12 +539,12 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		/// <remarks>
-		/// Named accoring to .NET <see cref="System.Net.IPEndPoint"/>.
+		/// Named according to .NET <see cref="System.Net.IPEndPoint"/>.
 		/// </remarks>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "EndPoint", Justification = "Naming according to System.Net.EndPoint.")]
 		public virtual string ToShortEndPointString()
 		{
-			return ("Server:" + this.localPort + " / " + this.remoteIPAddress + ":" + this.remotePort);
+			return ("Receive:" + this.localPort + " / " + this.remoteIPAddress + ":" + this.remotePort);
 		}
 
 		#endregion
