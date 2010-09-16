@@ -1,4 +1,14 @@
 
+General
+-------
+
+FxCop exists in 2 different versions:
+> Stand-alone
+> Embedded into Visual Studio as "Code Analysis"
+
+The second option is only available in the more sophisticated (and more expensive) versions of Visual Studio.
+
+
 In-Code Suppressions
 --------------------
 

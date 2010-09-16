@@ -53,6 +53,7 @@
     <Compile Include="Net\IPHostTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\DocumentSettingsHandlerTest.cs" />
+    <Compile Include="Types\XArrayTest.cs" />
     <Compile Include="Types\XByteTest.cs" />
     <Compile Include="Types\XInt32Test.cs" />
     <Compile Include="Types\XUInt64Test.cs" />

@@ -55,16 +55,16 @@ namespace MKY.IO.Serial.Test.Socket
 			TcpServer server;
 			TcpClient client;
 
-			Utilities.StartServer(out server, out serverPort);
+			Utilities.StartTcpServer(out server, out serverPort);
 			Utilities.WaitForStart(server, "TCP server could not be started");
-			Utilities.StartClientAndConnect(out client, serverPort);
+			Utilities.StartTcpClient(out client, serverPort);
 			Utilities.WaitForStart(client, "TCP client could not be started");
 			Utilities.WaitForConnect(client, server, "TCP client could not be connected to server");
 
-			Utilities.StopClient(client);
+			Utilities.StopTcpClient(client);
 			Utilities.WaitForDisconnect(server, client, "TCP server is not disconnected");
 			Utilities.WaitForStop(client, "TCP client could not be stopped");
-			Utilities.StopServer(server);
+			Utilities.StopTcpServer(server);
 			Utilities.WaitForStop(server, "TCP server could not be stopped");
 		}
 
@@ -83,16 +83,16 @@ namespace MKY.IO.Serial.Test.Socket
 			TcpServer server;
 			TcpClient client;
 
-			Utilities.StartServer(out server, out serverPort);
+			Utilities.StartTcpServer(out server, out serverPort);
 			Utilities.WaitForStart(server, "TCP server could not be started");
-			Utilities.StartClientAndConnect(out client, serverPort);
+			Utilities.StartTcpClient(out client, serverPort);
 			Utilities.WaitForStart(client, "TCP client could not be started");
 			Utilities.WaitForConnect(client, server, "TCP client could not be connected to server");
 
-			Utilities.StopServer(server);
+			Utilities.StopTcpServer(server);
 			Utilities.WaitForDisconnect(client, server, "TCP client is not disconnected");
 			Utilities.WaitForStop(server, "TCP server could not be stopped");
-			Utilities.StopClient(client);
+			Utilities.StopTcpClient(client);
 			Utilities.WaitForStop(client, "TCP client could not be stopped");
 		}
 
@@ -111,16 +111,16 @@ namespace MKY.IO.Serial.Test.Socket
 			TcpServer server;
 			TcpAutoSocket autoSocket;
 
-			Utilities.StartServer(out server, out serverPort);
+			Utilities.StartTcpServer(out server, out serverPort);
 			Utilities.WaitForStart(server, "TCP server could not be started");
-			Utilities.StartAutoSocketAsClient(out autoSocket, serverPort);
+			Utilities.StartTcpAutoSocketAsClient(out autoSocket, serverPort);
 			Utilities.WaitForStart(autoSocket, "TCP auto socket could not be started");
 			Utilities.WaitForConnect(autoSocket, server, "TCP auto socket could not be connected to server");
 
-			Utilities.StopAutoSocket(autoSocket);
+			Utilities.StopTcpAutoSocket(autoSocket);
 			Utilities.WaitForDisconnect(server, autoSocket, "TCP server is not disconnected");
 			Utilities.WaitForStop(autoSocket, "TCP auto socket could not be stopped");
-			Utilities.StopServer(server);
+			Utilities.StopTcpServer(server);
 			Utilities.WaitForStop(server, "TCP server could not be stopped");
 		}
 
@@ -139,16 +139,16 @@ namespace MKY.IO.Serial.Test.Socket
 			TcpServer server;
 			TcpAutoSocket autoSocket;
 
-			Utilities.StartServer(out server, out serverPort);
+			Utilities.StartTcpServer(out server, out serverPort);
 			Utilities.WaitForStart(server, "TCP server could not be started");
-			Utilities.StartAutoSocketAsClient(out autoSocket, serverPort);
+			Utilities.StartTcpAutoSocketAsClient(out autoSocket, serverPort);
 			Utilities.WaitForStart(autoSocket, "TCP auto socket could not be started");
 			Utilities.WaitForConnect(autoSocket, server, "TCP auto socket could not be connected to server");
 
-			Utilities.StopServer(server);
+			Utilities.StopTcpServer(server);
 			Utilities.WaitForDisconnect(autoSocket, server, "TCP auto socket is not disconnected");
 			Utilities.WaitForStop(server, "TCP server could not be stopped");
-			Utilities.StopAutoSocket(autoSocket);
+			Utilities.StopTcpAutoSocket(autoSocket);
 			Utilities.WaitForStop(autoSocket, "TCP auto socket could not be stopped");
 		}
 
@@ -167,17 +167,17 @@ namespace MKY.IO.Serial.Test.Socket
 			TcpAutoSocket autoSocket;
 			TcpClient client;
 
-			Utilities.StartAutoSocketAsServer(out autoSocket, out serverPort);
+			Utilities.StartTcpAutoSocketAsServer(out autoSocket, out serverPort);
 			Utilities.WaitForStart(autoSocket, "TCP auto socket could not be started");
 			Thread.Sleep(AutoSocketDelay); // Wait a while to let AutoSocket become a server.
-			Utilities.StartClientAndConnect(out client, serverPort);
+			Utilities.StartTcpClient(out client, serverPort);
 			Utilities.WaitForStart(client, "TCP client could not be started");
 			Utilities.WaitForConnect(client, autoSocket, "TCP client could not be connected to server");
 
-			Utilities.StopClient(client);
+			Utilities.StopTcpClient(client);
 			Utilities.WaitForDisconnect(autoSocket, client, "TCP auto socket is not disconnected");
 			Utilities.WaitForStop(client, "TCP client could not be stopped");
-			Utilities.StopAutoSocket(autoSocket);
+			Utilities.StopTcpAutoSocket(autoSocket);
 			Utilities.WaitForStop(autoSocket, "TCP auto socket could not be stopped");
 		}
 
@@ -196,17 +196,17 @@ namespace MKY.IO.Serial.Test.Socket
 			TcpAutoSocket autoSocket;
 			TcpClient client;
 
-			Utilities.StartAutoSocketAsServer(out autoSocket, out serverPort);
+			Utilities.StartTcpAutoSocketAsServer(out autoSocket, out serverPort);
 			Utilities.WaitForStart(autoSocket, "TCP auto socket could not be started");
 			Thread.Sleep(AutoSocketDelay); // Wait a while to let AutoSocket become a server.
-			Utilities.StartClientAndConnect(out client, serverPort);
+			Utilities.StartTcpClient(out client, serverPort);
 			Utilities.WaitForStart(client, "TCP client could not be started");
 			Utilities.WaitForConnect(client, autoSocket, "TCP client could not be connected to server");
 
-			Utilities.StopAutoSocket(autoSocket);
+			Utilities.StopTcpAutoSocket(autoSocket);
 			Utilities.WaitForDisconnect(client, autoSocket, "TCP client is not disconnected");
 			Utilities.WaitForStop(autoSocket, "TCP auto socket could not be stopped");
-			Utilities.StopClient(client);
+			Utilities.StopTcpClient(client);
 			Utilities.WaitForStop(client, "TCP client could not be stopped");
 		}
 
@@ -225,16 +225,16 @@ namespace MKY.IO.Serial.Test.Socket
 			TcpAutoSocket autoSocketA;
 			TcpAutoSocket autoSocketB;
 
-			Utilities.StartAutoSocketAsServer(out autoSocketA, out serverPort);
+			Utilities.StartTcpAutoSocketAsServer(out autoSocketA, out serverPort);
 			Utilities.WaitForStart(autoSocketA, "TCP auto socket A could not be started");
-			Utilities.StartAutoSocketAsClient(out autoSocketB, serverPort);
+			Utilities.StartTcpAutoSocketAsClient(out autoSocketB, serverPort);
 			Utilities.WaitForStart(autoSocketB, "TCP auto socket B could not be started");
 			Utilities.WaitForConnect(autoSocketB, autoSocketA, "TCP auto socket B could not be connected to auto socket A");
 
-			Utilities.StopAutoSocket(autoSocketB);
+			Utilities.StopTcpAutoSocket(autoSocketB);
 			Utilities.WaitForDisconnect(autoSocketA, autoSocketB, "TCP auto socket A is not disconnected");
 			Utilities.WaitForStop(autoSocketB, "TCP auto socket B could not be stopped");
-			Utilities.StopAutoSocket(autoSocketA);
+			Utilities.StopTcpAutoSocket(autoSocketA);
 			Utilities.WaitForStop(autoSocketA, "TCP auto socket A could not be stopped");
 		}
 
@@ -253,16 +253,16 @@ namespace MKY.IO.Serial.Test.Socket
 			TcpAutoSocket autoSocketA;
 			TcpAutoSocket autoSocketB;
 
-			Utilities.StartAutoSocketAsServer(out autoSocketA, out serverPort);
+			Utilities.StartTcpAutoSocketAsServer(out autoSocketA, out serverPort);
 			Utilities.WaitForStart(autoSocketA, "TCP auto socket A could not be started");
-			Utilities.StartAutoSocketAsClient(out autoSocketB, serverPort);
+			Utilities.StartTcpAutoSocketAsClient(out autoSocketB, serverPort);
 			Utilities.WaitForStart(autoSocketB, "TCP auto socket B could not be started");
 			Utilities.WaitForConnect(autoSocketB, autoSocketA, "TCP auto socket B could not be connected to auto socket A");
 
-			Utilities.StopAutoSocket(autoSocketA);
+			Utilities.StopTcpAutoSocket(autoSocketA);
 			Utilities.WaitForDisconnect(autoSocketB, autoSocketA, "TCP auto socket B is not disconnected");
 			Utilities.WaitForStop(autoSocketA, "TCP auto socket A could not be stopped");
-			Utilities.StopAutoSocket(autoSocketB);
+			Utilities.StopTcpAutoSocket(autoSocketB);
 			Utilities.WaitForStop(autoSocketB, "TCP auto socket B could not be stopped");
 		}
 

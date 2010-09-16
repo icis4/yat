@@ -118,8 +118,8 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="linkLabel_HHD.Text" xml:space="preserve">
-    <value>YAT is a terminal (a connection endpoint). If you're looking for a tool to monitor serial data between an application
-and a device, or between two devices, check out HHD Monitoring Studio. It's worth the bucks.</value>
+    <value>YAT is a terminal (a connection endpoint). If you're looking for a tool to monitor serial data between an application and a
+device, or between two devices, check out HHD Monitoring Studio. It's worth the bucks. Or download the free edition.</value>
   </data>
   <data name="label_Separator1.Text" xml:space="preserve">
     <value>                                                                                                                                                                                                                                               </value>
@@ -147,5 +147,9 @@ HSR and Mettler-Toledo. YAT was initially developed as XTerm232 due to the lack 
    &gt; Terminal font DejaVu
    &gt;  Microsoft StyleCop
    &gt;  Microsoft FxCop</value>
+  </data>
+  <data name="linkLabel_VSPE.Text" xml:space="preserve">
+    <value>If you're also looking for a tool to create and manage additional virtual COM ports, check out
+Eterlogic Virtual Serial Ports Emulator.  Supports virtual connected ports, mapping to TCP/IP, port sharing,...</value>
   </data>
 </root>

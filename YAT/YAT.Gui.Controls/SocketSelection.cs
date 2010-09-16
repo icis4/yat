@@ -66,7 +66,7 @@ namespace YAT.Gui.Controls
 		private IPAddress resolvedRemoteIPAddress = DefaultResolvedRemoteIPAddress;
 		private int remotePort                    = DefaultRemotePort;
 
-		private IPNetworkInterface localInterface  = DefaultLocalInterface;
+		private IPNetworkInterface localInterface = DefaultLocalInterface;
 		private IPAddress resolvedLocalIPAddress  = DefaultResolvedLocalIPAddress;
 		private int localTcpPort                  = DefaultLocalTcpPort;
 		private int localUdpPort                  = DefaultLocalUdpPort;

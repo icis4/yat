@@ -87,6 +87,7 @@ namespace YAT.Gui.Controls
 			// 
 			// textBox_Description
 			// 
+			this.textBox_Description.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBox_Description.Location = new System.Drawing.Point(371, 0);
 			this.textBox_Description.Name = "textBox_Description";
 			this.textBox_Description.Size = new System.Drawing.Size(120, 20);

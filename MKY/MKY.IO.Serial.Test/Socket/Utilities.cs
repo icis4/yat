@@ -42,12 +42,12 @@ namespace MKY.IO.Serial.Test.Socket
 
 		#endregion
 
-		#region Private Properties
+		#region Available Ports
 		//==========================================================================================
-		// Private Properties
+		// Available Ports
 		//==========================================================================================
 
-		static private int AvailableLocalTcpPort
+		static internal int AvailableLocalTcpPort
 		{
 			get
 			{
@@ -55,7 +55,7 @@ namespace MKY.IO.Serial.Test.Socket
 				IPEndPoint[] listeners = properties.GetActiveTcpListeners();
 
 				int port;
-				for (port = 10000; port <= 65535; port++)
+				for (port = 10000; port <= IPEndPoint.MaxPort; port++)
 				{
 					bool found = false;
 					foreach (IPEndPoint ep in listeners)
@@ -71,8 +71,46 @@ namespace MKY.IO.Serial.Test.Socket
 						return (port);
 				}
 
-				throw (new OverflowException("No local TCP port available within range of 10000 through 65535"));
+				throw (new OverflowException("No local TCP port available within range of 10000 through " + IPEndPoint.MaxPort));
 			}
+		}
+
+		static internal void GetAvailableLocalUdpPorts(out int portA, out int portB)
+		{
+			portA = 0;
+			portB = 0;
+
+			IPGlobalProperties properties = IPGlobalProperties.GetIPGlobalProperties();
+			IPEndPoint[] listeners = properties.GetActiveUdpListeners();
+
+			int port;
+			for (port = 10000; port <= IPEndPoint.MaxPort; port++)
+			{
+				bool found = false;
+				foreach (IPEndPoint ep in listeners)
+				{
+					if (ep.Port == port)
+					{
+						found = true;
+						break;
+					}
+				}
+
+				if (!found)
+				{
+					if (portA == 0)
+					{
+						portA = port;
+					}
+					else if (portB == 0)
+					{
+						portB = port;
+						return;
+					}
+				}
+			}
+
+			throw (new OverflowException("No local UDP ports available within range of 10000 through " + IPEndPoint.MaxPort));
 		}
 
 		#endregion
@@ -82,7 +120,7 @@ namespace MKY.IO.Serial.Test.Socket
 		// Start/Stop
 		//==========================================================================================
 
-		internal static void StartServer(out TcpServer server, out int localPort)
+		internal static void StartTcpServer(out TcpServer server, out int localPort)
 		{
 			// Create server and initiate asych start.
 			localPort = AvailableLocalTcpPort;
@@ -91,7 +129,7 @@ namespace MKY.IO.Serial.Test.Socket
 				Assert.Fail("TCP server could not be started");
 		}
 
-		internal static void StartClientAndConnect(out TcpClient client, int remotePort)
+		internal static void StartTcpClient(out TcpClient client, int remotePort)
 		{
 			// Create client and initiate asych start.
 			client = new TcpClient(IPAddress.Loopback, remotePort);
@@ -99,7 +137,7 @@ namespace MKY.IO.Serial.Test.Socket
 				Assert.Fail("TCP client could not be started");
 		}
 
-		internal static void StartAutoSocketAsServer(out TcpAutoSocket autoSocket, out int localPort)
+		internal static void StartTcpAutoSocketAsServer(out TcpAutoSocket autoSocket, out int localPort)
 		{
 			// Create auto socket and initiate asych start.
 			localPort = AvailableLocalTcpPort;
@@ -108,7 +146,7 @@ namespace MKY.IO.Serial.Test.Socket
 				Assert.Fail("TCP auto socket could not be started");
 		}
 
-		internal static void StartAutoSocketAsClient(out TcpAutoSocket autoSocket, int remotePort)
+		internal static void StartTcpAutoSocketAsClient(out TcpAutoSocket autoSocket, int remotePort)
 		{
 			// Create auto socket and initiate asych start.
 			autoSocket = new TcpAutoSocket(IPAddress.Loopback, remotePort, IPAddress.Any, remotePort);
@@ -116,22 +154,36 @@ namespace MKY.IO.Serial.Test.Socket
 				Assert.Fail("TCP auto socket could not be started");
 		}
 
-		internal static void StopServer(TcpServer server)
+		internal static void StartUdpSocket(out UdpSocket socket, int remotePort, int localPort)
+		{
+			// Create socket and initiate asych start.
+			socket = new UdpSocket(IPAddress.Loopback, remotePort, localPort);
+			if (!socket.Start())
+				Assert.Fail("UDP socket could not be started");
+		}
+
+		internal static void StopTcpServer(TcpServer server)
 		{
 			// Initiate async stop.
 			server.Stop();
 		}
 
-		internal static void StopClient(TcpClient client)
+		internal static void StopTcpClient(TcpClient client)
 		{
 			// Initiate async stop.
 			client.Stop();
 		}
 
-		internal static void StopAutoSocket(TcpAutoSocket autoSocket)
+		internal static void StopTcpAutoSocket(TcpAutoSocket autoSocket)
 		{
 			// Initiate async stop.
 			autoSocket.Stop();
+		}
+
+		internal static void StopUdpSocket(UdpSocket socket)
+		{
+			// Initiate async stop.
+			socket.Stop();
 		}
 
 		#endregion

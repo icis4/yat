@@ -145,6 +145,15 @@ Inherited class
 Also see "Implementing Finalize and Dispose to Clean Up Unmanaged Resources" in the MSDN.
 
 
+Equals
+------
+> Implementing operator==
+  > Value types: Yes
+  > Reference types: No
+> Use == when comparing base types
+> Serach for "Implementing Equals" in the MSDN
+
+
 Variables
 ---------
 - Do not re-initialize fields with default value of respective type
