@@ -226,6 +226,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 				e2.UserToken = listener;
 				e2.Completed += new EventHandler<SocketAsyncEventArgs>(BeginAcceptCallbackAsync);
 
+				// BEGIN MKY 2010-05-14
 				try
 				{
 					if (!listener.Socket.AcceptAsync(e2))
@@ -237,6 +238,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 				{
 					MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
 				}
+				// END MKY
 
 			}
 
