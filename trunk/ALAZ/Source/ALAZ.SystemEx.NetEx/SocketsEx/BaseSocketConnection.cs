@@ -283,9 +283,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
 					return false;
 				}
 
-				// BEGIN MKY 2010-05-14
 				lock (FSyncActive)
-				// END MKY
 				{
 					return FActive;
 				}
