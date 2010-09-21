@@ -23,6 +23,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
+using System.Threading;
+using System.Windows.Forms;
 
 using MKY.Utilities.Text;
 
@@ -120,6 +122,52 @@ namespace YAT.Domain
 
 		#endregion
 
+		#region Line Send Delay
+		//==========================================================================================
+		// Line Send Delay
+		//==========================================================================================
+
+		[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1401:FieldsMustBePrivate", Justification = "Private element.")]
+		private class LineSendDelayState
+		{
+			public int LineCount;
+
+			public LineSendDelayState()
+			{
+				Reset();
+			}
+
+			public virtual void Reset()
+			{
+				LineCount = 0;
+			}
+		}
+
+		private class LineSendDelayThread
+		{
+			private int delayMs;
+			private bool isDelaying;
+
+			public LineSendDelayThread(int delayMs)
+			{
+				this.delayMs = delayMs;
+			}
+
+			public virtual bool IsDelaying
+			{
+				get { return (this.isDelaying); }
+			}
+
+			public virtual void Delay()
+			{
+				this.isDelaying = true;
+				Thread.Sleep(this.delayMs);
+				this.isDelaying = false;
+			}
+		}
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -129,6 +177,8 @@ namespace YAT.Domain
 		private LineState rxLineState;
 
 		private BidirLineState bidirLineState;
+
+		private LineSendDelayState lineSendDelayState;
 
 		#endregion
 
@@ -217,6 +267,24 @@ namespace YAT.Domain
 		// Methods
 		//==========================================================================================
 
+		#region Methods > Open
+		//------------------------------------------------------------------------------------------
+		// Methods > Open
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public override bool Start()
+		{
+			bool success = base.Start();
+
+			if (success)
+				this.lineSendDelayState.Reset();
+
+			return (success);
+		}
+
+		#endregion
+
 		#region Methods > Send
 		//------------------------------------------------------------------------------------------
 		// Methods > Send
@@ -288,6 +356,26 @@ namespace YAT.Domain
 			{
 				Send(eolByteArray);
 			}
+
+			// Busy wait if desired.
+			if (TerminalSettings.TextTerminal.LineSendDelay.Enabled)
+			{
+				this.lineSendDelayState.LineCount++;
+
+				if (this.lineSendDelayState.LineCount >= TerminalSettings.TextTerminal.LineSendDelay.LineInterval)
+				{
+					LineSendDelayThread lsdt = new LineSendDelayThread(TerminalSettings.TextTerminal.LineSendDelay.Delay);
+					Thread t = new Thread(new ThreadStart(lsdt.Delay));
+					t.Start();
+
+					while (lsdt.IsDelaying)
+						Application.DoEvents();
+
+					t.Join();
+
+					this.lineSendDelayState.Reset();
+				}
+			}
 		}
 
 		#endregion
@@ -318,6 +406,8 @@ namespace YAT.Domain
 			this.rxLineState = new LineState(new EolQueue(rxEol));
 
 			this.bidirLineState = new BidirLineState(true, SerialDirection.Tx);
+
+			this.lineSendDelayState = new LineSendDelayState();
 		}
 
 		/// <summary></summary>

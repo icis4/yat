@@ -43,8 +43,10 @@ This issue occured while performing endurance tests using YAT AutoSockets.
 
 UDP
 
-AI have removed all UDP stuff and used System.Net.Sockets.UdpClient directly
+I have removed all UDP stuff and used System.Net.Sockets.UdpClient directly
 
+
+By the way, are you still developing ALAZ? Or has this project, as so many others, come to a dead-end?
 
 
 Best regards,

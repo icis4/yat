@@ -46,6 +46,7 @@ YAT 2.0 Beta 3 Candidate 1 Version 1.99.2x :: 2010-10-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
+- Text terminals: Line send delay added (feature request #1808508, bug #1963002)
 - Support for USB Ser/HID implemented (feature request #2825931)
 - Optional simple terminal/direct mode added to "Send Command" (feature request #1808496)
 - Separate connect and total connect time, connect time is restarted on open (bug #2869585)
@@ -94,6 +95,7 @@ Limitations and known issues:
    > Issues with frame (bugs #1808492 and #1808493)
    > Issues with window list (bugs #1808494 and #2846917)
    > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684)
+- Response of multi-line commands or files is delayed (bug #3072919)
 - Serial port auto-reopen not yet implementable due to .NET deadlock issue in System.IO.SerialPort
   (feature request #1960299)
 - Support for serial ports which are named other than COM isn't supported by .NET

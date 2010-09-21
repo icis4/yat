@@ -425,7 +425,6 @@ namespace MKY.IO.Serial
 
 			this.socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketClient
 				(
-				System.Net.Sockets.ProtocolType.Tcp,
 				ALAZ.SystemEx.NetEx.SocketsEx.CallbackThreadType.ctWorkerThread,
 				(ALAZ.SystemEx.NetEx.SocketsEx.ISocketService)this,
 				ALAZ.SystemEx.NetEx.SocketsEx.DelimiterType.dtNone,
