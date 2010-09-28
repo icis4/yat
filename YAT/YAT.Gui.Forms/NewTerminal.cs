@@ -47,6 +47,7 @@ namespace YAT.Gui.Forms
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public NewTerminal(Model.Settings.NewTerminalSettings newTerminalSettings)
 		{
 			InitializeComponent();
@@ -62,11 +63,13 @@ namespace YAT.Gui.Forms
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Model.Settings.NewTerminalSettings NewTerminalSettingsResult
 		{
 			get { return (this.newTerminalSettings); }
 		}
 
+		/// <summary></summary>
 		public Settings.Terminal.TerminalSettingsRoot TerminalSettingsResult
 		{
 			get { return (this.terminalSettings); }
@@ -228,7 +231,7 @@ namespace YAT.Gui.Forms
 
 			this.terminalSettings.TerminalIsStarted                          = this.newTerminalSettings.StartTerminal;
 
-			switch (this.newTerminalSettings.TerminalType)
+			switch (this.terminalSettings.TerminalType)
 			{
 				case Domain.TerminalType.Binary:
 					this.terminalSettings.Display.TxRadix = Domain.Radix.Hex;
@@ -250,7 +253,7 @@ namespace YAT.Gui.Forms
 
 		private void button_Help_Click(object sender, EventArgs e)
 		{
-			// \fixme Replace MessageBox with a real help
+			// \fixme Replace MessageBox with a real help.
 			MessageBox.Show
 				(
 				this,

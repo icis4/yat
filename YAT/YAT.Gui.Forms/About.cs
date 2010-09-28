@@ -28,6 +28,7 @@ namespace YAT.Gui.Forms
 	/// <summary></summary>
 	public partial class About : System.Windows.Forms.Form
 	{
+		/// <summary></summary>
 		public About()
 		{
 			InitializeComponent();

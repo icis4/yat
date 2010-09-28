@@ -114,6 +114,7 @@ namespace YAT.Gui.Controls
 		// Events
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the PortId property is changed.")]
 		public event EventHandler PortIdChanged;
@@ -125,6 +126,7 @@ namespace YAT.Gui.Controls
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public SerialPortSelection()
 		{
 			InitializeComponent();
@@ -137,6 +139,7 @@ namespace YAT.Gui.Controls
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Serial Port")]
 		[Description("Serial port ID.")]
 		[DefaultValue(SerialPortId.FirstStandardPortNumber)]
@@ -174,6 +177,7 @@ namespace YAT.Gui.Controls
 		// Methods
 		//==========================================================================================
 
+		/// <summary></summary>
 		public virtual void RefreshSerialPortList()
 		{
 			SetSerialPortList();
@@ -369,6 +373,7 @@ namespace YAT.Gui.Controls
 		// Event Invoking
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected virtual void OnPortIdChanged(EventArgs e)
 		{
 			EventHelper.FireSync(PortIdChanged, this, e);

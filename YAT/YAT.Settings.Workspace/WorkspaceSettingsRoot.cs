@@ -30,6 +30,7 @@ using YAT.Model.Settings;
 
 namespace YAT.Settings.Workspace
 {
+	/// <summary></summary>
 	[Serializable]
 	[XmlRoot("Settings")]
 	public class WorkspaceSettingsRoot : MKY.Utilities.Settings.Settings, IEquatable<WorkspaceSettingsRoot>
@@ -38,6 +39,7 @@ namespace YAT.Settings.Workspace
 		private bool autoSaved = false;
 		private WorkspaceSettings workspace;
 
+		/// <summary></summary>
 		public WorkspaceSettingsRoot()
 			: base(MKY.Utilities.Settings.SettingsType.Explicit)
 		{
@@ -45,6 +47,7 @@ namespace YAT.Settings.Workspace
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public WorkspaceSettingsRoot(WorkspaceSettingsRoot rhs)
 			: base(rhs)
 		{
@@ -65,6 +68,7 @@ namespace YAT.Settings.Workspace
 			set { } // Do nothing.
 		}
 
+		/// <summary></summary>
 		[XmlElement("Warning")]
 		public virtual string Warning
 		{
@@ -72,6 +76,7 @@ namespace YAT.Settings.Workspace
 			set { } // Do nothing.
 		}
 
+		/// <summary></summary>
 		[XmlElement("Saved")]
 		public virtual SaveInfo Saved
 		{
@@ -79,6 +84,7 @@ namespace YAT.Settings.Workspace
 			set { } // Do nothing.
 		}
 
+		/// <summary></summary>
 		[XmlElement("ProductVersion")]
 		public virtual string ProductVersion
 		{
@@ -86,6 +92,7 @@ namespace YAT.Settings.Workspace
 			set { } // Do nothing.
 		}
 
+		/// <summary></summary>
 		[XmlElement("AutoSaved")]
 		public virtual bool AutoSaved
 		{
@@ -101,6 +108,7 @@ namespace YAT.Settings.Workspace
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Workspace")]
 		public virtual WorkspaceSettings Workspace
 		{
@@ -173,6 +181,7 @@ namespace YAT.Settings.Workspace
 			);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

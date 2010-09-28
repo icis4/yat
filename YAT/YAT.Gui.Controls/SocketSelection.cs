@@ -78,22 +78,27 @@ namespace YAT.Gui.Controls
 		// Events
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the RemoteHost property is changed.")]
 		public event EventHandler RemoteHostChanged;
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the RemotePort property is changed.")]
 		public event EventHandler RemotePortChanged;
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the LocalInterface property is changed.")]
 		public event EventHandler LocalInterfaceChanged;
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the LocalTcpPort property is changed.")]
 		public event EventHandler LocalTcpPortChanged;
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the LocalUdpPort property is changed.")]
 		public event EventHandler LocalUdpPortChanged;
@@ -105,6 +110,7 @@ namespace YAT.Gui.Controls
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public SocketSelection()
 		{
 			InitializeComponent();
@@ -117,6 +123,7 @@ namespace YAT.Gui.Controls
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual SocketHostType HostType
@@ -131,6 +138,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual XIPHost RemoteHost
@@ -147,6 +155,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual IPAddress ResolvedRemoteIPAddress
@@ -154,6 +163,7 @@ namespace YAT.Gui.Controls
 			get { return (this.resolvedRemoteIPAddress); }
 		}
 
+		/// <summary></summary>
 		[Category("Socket")]
 		[Description("The remote TCP or UDP port.")]
 		[DefaultValue(DefaultRemotePort)]
@@ -171,6 +181,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual IPNetworkInterface LocalInterface
@@ -187,6 +198,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual IPAddress ResolvedLocalIPAddress
@@ -194,6 +206,7 @@ namespace YAT.Gui.Controls
 			get { return (this.resolvedLocalIPAddress); }
 		}
 
+		/// <summary></summary>
 		[Category("Socket")]
 		[Description("The local TCP port.")]
 		[DefaultValue(DefaultLocalTcpPort)]
@@ -211,6 +224,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Socket")]
 		[Description("The local UDP port.")]
 		[DefaultValue(DefaultLocalUdpPort)]
@@ -553,26 +567,31 @@ namespace YAT.Gui.Controls
 		// Event Invoking
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected virtual void OnRemoteHostChanged(EventArgs e)
 		{
 			EventHelper.FireSync(RemoteHostChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnRemotePortChanged(EventArgs e)
 		{
 			EventHelper.FireSync(RemotePortChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnLocalInterfaceChanged(EventArgs e)
 		{
 			EventHelper.FireSync(LocalInterfaceChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnLocalTcpPortChanged(EventArgs e)
 		{
 			EventHelper.FireSync(LocalTcpPortChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnLocalUdpPortChanged(EventArgs e)
 		{
 			EventHelper.FireSync(LocalUdpPortChanged, this, e);

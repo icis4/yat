@@ -25,6 +25,7 @@ using System.Xml.Serialization;
 
 namespace YAT.Settings.Terminal
 {
+	/// <summary></summary>
 	[Serializable]
 	public class ExplicitSettings : MKY.Utilities.Settings.Settings, IEquatable<ExplicitSettings>
 	{
@@ -34,6 +35,7 @@ namespace YAT.Settings.Terminal
 		private Domain.Settings.CharReplaceSettings charReplace;
 		private Log.Settings.LogSettings log;
 
+		/// <summary></summary>
 		public ExplicitSettings()
 			: base(MKY.Utilities.Settings.SettingsType.Explicit)
 		{
@@ -74,6 +76,7 @@ namespace YAT.Settings.Terminal
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		[XmlElement("Terminal")]
 		public Domain.Settings.TerminalSettings Terminal
 		{
@@ -94,6 +97,7 @@ namespace YAT.Settings.Terminal
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("PredefinedCommand")]
 		public Model.Settings.PredefinedCommandSettings PredefinedCommand
 		{
@@ -114,6 +118,7 @@ namespace YAT.Settings.Terminal
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Format")]
 		public Model.Settings.FormatSettings Format
 		{
@@ -134,6 +139,7 @@ namespace YAT.Settings.Terminal
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("CharReplace")]
 		public Domain.Settings.CharReplaceSettings CharReplace
 		{
@@ -154,6 +160,7 @@ namespace YAT.Settings.Terminal
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Log")]
 		public Log.Settings.LogSettings Log
 		{
@@ -205,6 +212,7 @@ namespace YAT.Settings.Terminal
 			return (base.Equals((MKY.Utilities.Settings.Settings)other)); // Compare all settings nodes.
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

@@ -58,6 +58,7 @@ namespace YAT.Gui.Controls
 		// Events
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the TcpClientAutoReconnect property is changed.")]
 		public event EventHandler TcpClientAutoReconnectChanged;
@@ -69,6 +70,7 @@ namespace YAT.Gui.Controls
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public SocketSettings()
 		{
 			InitializeComponent();
@@ -82,6 +84,7 @@ namespace YAT.Gui.Controls
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public SocketHostType HostType
@@ -96,6 +99,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Socket")]
 		[Description("Sets TCP client auto reconnect.")]
 		public AutoRetry TcpClientAutoReconnect
@@ -232,6 +236,7 @@ namespace YAT.Gui.Controls
 		// Event Invoking
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected virtual void OnTcpClientAutoReconnectChanged(EventArgs e)
 		{
 			EventHelper.FireSync(TcpClientAutoReconnectChanged, this, e);

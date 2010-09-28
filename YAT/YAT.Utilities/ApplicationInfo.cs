@@ -22,13 +22,22 @@ using System.Windows.Forms;
 
 namespace YAT.Utilities
 {
+	/// <summary></summary>
 	public static class ApplicationInfo
 	{
+	/////// <summary></summary>
 	////public const string ProductNamePostFix = "";
+
+	/////// <summary></summary>
 	////public const string ProductNamePostFix = " Beta 3";
+
+		/// <summary></summary>
 		public const string ProductNamePostFix = " Beta 3 Candidate 2";
+
+	/////// <summary></summary>
 	////public const string ProductNamePostFix = " Beta 3 Preliminary";
 
+		/// <summary></summary>
 		public static readonly string ProductName = Application.ProductName + ProductNamePostFix;
 	}
 }

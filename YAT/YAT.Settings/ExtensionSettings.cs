@@ -42,6 +42,7 @@ namespace YAT.Settings
 			set { terminalFile = value; }
 		}
 
+		/// <summary></summary>
 		public static bool IsTerminalFile(string extension)
 		{
 			if (extension == TerminalFile)
@@ -50,6 +51,7 @@ namespace YAT.Settings
 				return (false);
 		}
 
+		/// <summary></summary>
 		public static string TerminalFilesFilter
 		{
 			get { return ("Terminal Files (*" + TerminalFile + ")|*" + TerminalFile); }
@@ -65,6 +67,7 @@ namespace YAT.Settings
 			set { workspaceFile = value; }
 		}
 
+		/// <summary></summary>
 		public static bool IsWorkspaceFile(string extension)
 		{
 			if (extension == WorkspaceFile)
@@ -73,11 +76,13 @@ namespace YAT.Settings
 				return (false);
 		}
 
+		/// <summary></summary>
 		public static string WorkspaceFilesFilter
 		{
 			get { return ("Workspace Files (*" + WorkspaceFile + ")|*" + WorkspaceFile); }
 		}
 
+		/// <summary></summary>
 		public static string TextFilesFilter
 		{
 			get
@@ -92,6 +97,7 @@ namespace YAT.Settings
 			}
 		}
 
+		/// <summary></summary>
 		public static string[] TextFilesWithDot
 		{
 			get
@@ -106,21 +112,25 @@ namespace YAT.Settings
 			}
 		}
 
+		/// <summary></summary>
 		public static string TextFilesDefault
 		{
 			get { return (".txt"); }
 		}
 
+		/// <summary></summary>
 		public static string LogFilesDefault
 		{
 			get { return (".log"); }
 		}
 
+		/// <summary></summary>
 		public static string MonitorFilesDefault
 		{
 			get { return (".rtf"); }
 		}
 
+		/// <summary></summary>
 		public static bool IsTextFile(string extension)
 		{
 			switch (extension)
@@ -135,6 +145,7 @@ namespace YAT.Settings
 			}
 		}
 
+		/// <summary></summary>
 		public static bool IsRtfFile(string extension)
 		{
 			switch (extension)
@@ -147,6 +158,7 @@ namespace YAT.Settings
 			}
 		}
 
+		/// <summary></summary>
 		public static bool IsXmlFile(string extension)
 		{
 			switch (extension)
@@ -159,6 +171,7 @@ namespace YAT.Settings
 			}
 		}
 
+		/// <summary></summary>
 		public static string BinaryFilesFilter
 		{
 			get
@@ -169,6 +182,7 @@ namespace YAT.Settings
 			}
 		}
 
+		/// <summary></summary>
 		public static string[] BinaryFilesWithDot
 		{
 			get
@@ -181,16 +195,19 @@ namespace YAT.Settings
 			}
 		}
 
+		/// <summary></summary>
 		public static string BinaryFilesDefault
 		{
 			get { return (".dat"); }
 		}
 
+		/// <summary></summary>
 		public static string ExecutableFiles
 		{
 			get { return (".exe"); }
 		}
 
+		/// <summary></summary>
 		public static bool IsExecutableFile(string extension)
 		{
 			if (extension == ExecutableFiles)
@@ -199,6 +216,7 @@ namespace YAT.Settings
 				return (false);
 		}
 
+		/// <summary></summary>
 		public static string AllFilesFilter
 		{
 			get { return ("All Files (*.*)|*.*"); }

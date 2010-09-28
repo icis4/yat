@@ -25,6 +25,7 @@ using System.Xml.Serialization;
 
 namespace YAT.Settings.Terminal
 {
+	/// <summary></summary>
 	[Serializable]
 	public class ImplicitSettings : MKY.Utilities.Settings.Settings, IEquatable<ImplicitSettings>
 	{
@@ -37,6 +38,7 @@ namespace YAT.Settings.Terminal
 		private Model.Settings.WindowSettings window;
 		private Model.Settings.LayoutSettings layout;
 
+		/// <summary></summary>
 		public ImplicitSettings()
 			: base(MKY.Utilities.Settings.SettingsType.Implicit)
 		{
@@ -83,6 +85,7 @@ namespace YAT.Settings.Terminal
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		[XmlElement("TerminalIsStarted")]
 		public virtual bool TerminalIsStarted
 		{
@@ -97,6 +100,7 @@ namespace YAT.Settings.Terminal
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("LogIsStarted")]
 		public virtual bool LogIsStarted
 		{
@@ -111,6 +115,7 @@ namespace YAT.Settings.Terminal
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("SendCommand")]
 		public virtual Model.Settings.SendCommandSettings SendCommand
 		{
@@ -131,6 +136,7 @@ namespace YAT.Settings.Terminal
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("SendFile")]
 		public virtual Model.Settings.SendFileSettings SendFile
 		{
@@ -151,6 +157,7 @@ namespace YAT.Settings.Terminal
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Predefined")]
 		public virtual Model.Settings.PredefinedSettings Predefined
 		{
@@ -171,6 +178,7 @@ namespace YAT.Settings.Terminal
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Window")]
 		public virtual Model.Settings.WindowSettings Window
 		{
@@ -191,6 +199,7 @@ namespace YAT.Settings.Terminal
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Layout")]
 		public virtual Model.Settings.LayoutSettings Layout
 		{
@@ -248,6 +257,7 @@ namespace YAT.Settings.Terminal
 			);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

@@ -61,18 +61,22 @@ namespace YAT.Gui.Controls
 		// Events
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the Command property is changed.")]
 		public event EventHandler CommandChanged;
 
+		/// <summary></summary>
 		[Category("Action")]
 		[Description("Event raised when sending the command is requested.")]
 		public event EventHandler SendCommandRequest;
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the FileCommand property is changed.")]
 		public event EventHandler FileCommandChanged;
 
+		/// <summary></summary>
 		[Category("Action")]
 		[Description("Event raised when sending the file is requested.")]
 		public event EventHandler SendFileCommandRequest;
@@ -84,6 +88,7 @@ namespace YAT.Gui.Controls
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Send()
 		{
 			InitializeComponent();
@@ -97,6 +102,7 @@ namespace YAT.Gui.Controls
 		// Methods
 		//==========================================================================================
 
+		/// <summary></summary>
 		public virtual void SelectSendCommandInput()
 		{
 			sendCommand.Select();
@@ -121,12 +127,14 @@ namespace YAT.Gui.Controls
 			set { sendCommand.Command = value;  }
 		}
 
+		/// <summary></summary>
 		public virtual bool SendCommandImmediately
 		{
 			get { return (sendCommand.SendImmediately); }
 			set { sendCommand.SendImmediately = value;  }
 		}
 
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual RecentItemCollection<Command> RecentCommands
@@ -145,6 +153,7 @@ namespace YAT.Gui.Controls
 			set	{ sendFile.FileCommand = value;  }
 		}
 
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Domain.TerminalType TerminalType
@@ -156,6 +165,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual bool TerminalIsOpen
@@ -167,6 +177,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[DefaultValue(true)]
 		public virtual bool CommandPanelIsVisible
 		{
@@ -174,6 +185,7 @@ namespace YAT.Gui.Controls
 			set { splitContainer_Send.Panel1Collapsed = !value;  }
 		}
 
+		/// <summary></summary>
 		[DefaultValue(true)]
 		public virtual bool FilePanelIsVisible
 		{
@@ -181,6 +193,7 @@ namespace YAT.Gui.Controls
 			set { splitContainer_Send.Panel2Collapsed = !value;  }
 		}
 
+		/// <summary></summary>
 		[DefaultValue(SplitterRatioDefault)]
 		public virtual float SplitterRatio
 		{
@@ -257,21 +270,25 @@ namespace YAT.Gui.Controls
 		// Event Invoking
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected virtual void OnCommandChanged(EventArgs e)
 		{
 			EventHelper.FireSync(CommandChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnSendCommandRequest(EventArgs e)
 		{
 			EventHelper.FireSync(SendCommandRequest, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnFileCommandChanged(EventArgs e)
 		{
 			EventHelper.FireSync(FileCommandChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnSendFileCommandRequest(EventArgs e)
 		{
 			EventHelper.FireSync(SendFileCommandRequest, this, e);

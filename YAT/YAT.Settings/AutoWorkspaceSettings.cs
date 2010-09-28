@@ -23,18 +23,21 @@ using System.Xml.Serialization;
 
 namespace YAT.Settings
 {
+	/// <summary></summary>
 	[Serializable]
 	public class AutoWorkspaceSettings : MKY.Utilities.Settings.Settings, IEquatable<AutoWorkspaceSettings>
 	{
 		private string filePath;
 		private Guid filePathUser;
 
+		/// <summary></summary>
 		public AutoWorkspaceSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public AutoWorkspaceSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -68,6 +71,7 @@ namespace YAT.Settings
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		[XmlElement("FilePath")]
 		public virtual string FilePath
 		{
@@ -82,6 +86,7 @@ namespace YAT.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("FilePathUser")]
 		public virtual Guid FilePathUser
 		{
@@ -153,6 +158,7 @@ namespace YAT.Settings
 			);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

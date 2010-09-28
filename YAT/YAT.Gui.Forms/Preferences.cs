@@ -43,6 +43,7 @@ namespace YAT.Gui.Forms
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Preferences(Settings.GeneralSettings settings)
 		{
 			InitializeComponent();
@@ -59,6 +60,7 @@ namespace YAT.Gui.Forms
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Settings.GeneralSettings SettingsResult
 		{
 			get { return (this.settings); }

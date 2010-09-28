@@ -66,10 +66,12 @@ namespace YAT.Gui.Controls
 		// Events
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the FileCommand property is changed.")]
 		public event EventHandler FileCommandChanged;
 
+		/// <summary></summary>
 		[Category("Action")]
 		[Description("Event raised when sending the file is requested.")]
 		public event EventHandler SendFileCommandRequest;
@@ -81,6 +83,7 @@ namespace YAT.Gui.Controls
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public SendFile()
 		{
 			InitializeComponent();
@@ -114,6 +117,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Domain.TerminalType TerminalType
@@ -125,6 +129,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual bool TerminalIsOpen
@@ -136,6 +141,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[DefaultValue(SplitterRatioDefault)]
 		public virtual float SplitterRatio
 		{
@@ -287,11 +293,13 @@ namespace YAT.Gui.Controls
 		// Event Invoking
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected virtual void OnFileCommandChanged(EventArgs e)
 		{
 			EventHelper.FireSync(FileCommandChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnSendFileCommandRequest(EventArgs e)
 		{
 			EventHelper.FireSync(SendFileCommandRequest, this, e);

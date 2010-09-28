@@ -97,10 +97,12 @@ namespace YAT.Gui.Controls
 		// Events
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the Command property is changed.")]
 		public event EventHandler CommandChanged;
 
+		/// <summary></summary>
 		[Category("Action")]
 		[Description("Event raised when sending the command is requested.")]
 		public event EventHandler SendCommandRequest;
@@ -112,6 +114,7 @@ namespace YAT.Gui.Controls
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public SendCommand()
 		{
 			InitializeComponent();
@@ -145,6 +148,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		public virtual bool SendImmediately
 		{
 			get { return (this.sendImmediately); }
@@ -155,6 +159,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual RecentItemCollection<Command> RecentCommands
@@ -167,6 +172,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual bool TerminalIsOpen
@@ -178,6 +184,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[DefaultValue(SplitterRatioDefault)]
 		public virtual float SplitterRatio
 		{
@@ -196,6 +203,7 @@ namespace YAT.Gui.Controls
 		// Methods
 		//==========================================================================================
 
+		/// <summary></summary>
 		public virtual void SelectInput()
 		{
 			comboBox_Command.Select();
@@ -208,6 +216,7 @@ namespace YAT.Gui.Controls
 		// Control Special Keys
 		//==========================================================================================
 
+		/// <summary></summary>
 		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
@@ -260,7 +269,7 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <remarks>
-		/// Do not modify <see cref="this.isValidated"/>. Command may already have been validated.
+		/// Do not modify <see cref="isValidated"/>. Command may already have been validated.
 		/// </remarks>
 		private void SendCommand_Enter(object sender, EventArgs e)
 		{
@@ -608,11 +617,13 @@ namespace YAT.Gui.Controls
 		// Event Invoking
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected virtual void OnCommandChanged(EventArgs e)
 		{
 			EventHelper.FireSync(CommandChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnSendCommandRequest(EventArgs e)
 		{
 			EventHelper.FireSync(SendCommandRequest, this, e);

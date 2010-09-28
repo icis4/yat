@@ -43,6 +43,7 @@ namespace YAT.Gui.Forms
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public BinaryTerminalSettings(Domain.Settings.BinaryTerminalSettings settings)
 		{
 			InitializeComponent();
@@ -59,6 +60,7 @@ namespace YAT.Gui.Forms
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Domain.Settings.BinaryTerminalSettings SettingsResult
 		{
 			get { return (this.settings); }

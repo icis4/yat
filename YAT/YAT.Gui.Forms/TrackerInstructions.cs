@@ -29,13 +29,18 @@ namespace YAT.Gui.Forms
 	/// <summary></summary>
 	public partial class TrackerInstructions : Form
 	{
+		/// <summary></summary>
 		public enum Tracker
 		{
+			/// <summary></summary>
 			Support,
+			/// <summary></summary>
 			Feature,
+			/// <summary></summary>
 			Bug
 		}
 
+		/// <summary></summary>
 		public TrackerInstructions(Tracker tracker)
 		{
 			InitializeComponent();

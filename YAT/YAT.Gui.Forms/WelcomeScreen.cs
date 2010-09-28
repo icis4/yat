@@ -54,6 +54,7 @@ namespace YAT.Gui.Forms
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public WelcomeScreen()
 		{
 			InitializeComponent();

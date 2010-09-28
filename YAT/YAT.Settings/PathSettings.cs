@@ -25,6 +25,7 @@ using System.Xml.Serialization;
 
 namespace YAT.Settings
 {
+	/// <summary></summary>
 	[Serializable]
 	public class PathSettings : MKY.Utilities.Settings.Settings, IEquatable<PathSettings>
 	{
@@ -34,12 +35,14 @@ namespace YAT.Settings
 		private string logFilesPath;
 		private string monitorFilesPath;
 
+		/// <summary></summary>
 		public PathSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public PathSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -78,6 +81,7 @@ namespace YAT.Settings
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		[XmlElement("TerminalFilesPath")]
 		public virtual string TerminalFilesPath
 		{
@@ -92,6 +96,7 @@ namespace YAT.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("WorkspaceFilesPath")]
 		public virtual string WorkspaceFilesPath
 		{
@@ -106,6 +111,7 @@ namespace YAT.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("SendFilesPath")]
 		public virtual string SendFilesPath
 		{
@@ -120,6 +126,7 @@ namespace YAT.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("LogFilesPath")]
 		public virtual string LogFilesPath
 		{
@@ -134,6 +141,7 @@ namespace YAT.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("MonitorFilesPath")]
 		public virtual string MonitorFilesPath
 		{
@@ -188,6 +196,7 @@ namespace YAT.Settings
 			);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

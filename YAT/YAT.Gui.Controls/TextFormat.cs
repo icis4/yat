@@ -61,6 +61,7 @@ namespace YAT.Gui.Controls
 		// Events
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when any of the text format properties is changed.")]
 		public event EventHandler FormatChanged;
@@ -72,6 +73,7 @@ namespace YAT.Gui.Controls
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public TextFormat()
 		{
 			InitializeComponent();
@@ -84,6 +86,7 @@ namespace YAT.Gui.Controls
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Format")]
 		[Description("The font.")]
 		public Font FormatFont
@@ -97,6 +100,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public Font FormatFontWithoutStyle
@@ -109,6 +113,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Format")]
 		[Description("The font style.")]
 		[DefaultValue(Model.Types.FontFormat.StyleDefault)]
@@ -124,6 +129,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Format")]
 		[Description("Bold.")]
 		[DefaultValue(BoldDefault)]
@@ -143,6 +149,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Format")]
 		[Description("Italic.")]
 		[DefaultValue(ItalicDefault)]
@@ -162,6 +169,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Format")]
 		[Description("Underline.")]
 		[DefaultValue(UnderlineDefault)]
@@ -181,6 +189,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Format")]
 		[Description("Strikeout.")]
 		[DefaultValue(StrikeoutDefault)]
@@ -200,6 +209,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Format")]
 		[Description("The color.")]
 		public Color FormatColor
@@ -274,6 +284,7 @@ namespace YAT.Gui.Controls
 		// Event Invoking
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected virtual void OnFormatChanged(EventArgs e)
 		{
 			EventHelper.FireSync(FormatChanged, this, e);

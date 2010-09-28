@@ -51,6 +51,7 @@ namespace YAT.Gui.Forms
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public LogSettings(Log.Settings.LogSettings settings)
 		{
 			InitializeComponent();
@@ -67,6 +68,7 @@ namespace YAT.Gui.Forms
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Log.Settings.LogSettings SettingsResult
 		{
 			get { return (this.settings); }

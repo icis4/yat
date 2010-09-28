@@ -46,6 +46,7 @@ namespace YAT.Gui.Forms
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public AdvancedTerminalSettings(Domain.Settings.TerminalSettings settings)
 		{
 			InitializeComponent();
@@ -62,6 +63,7 @@ namespace YAT.Gui.Forms
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Domain.Settings.TerminalSettings SettingsResult
 		{
 			get { return (this.settings); }

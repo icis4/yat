@@ -24,6 +24,7 @@ using System.Xml.Serialization;
 
 namespace YAT.Settings
 {
+	/// <summary></summary>
 	[Serializable]
 	public class GeneralSettings : MKY.Utilities.Settings.Settings, IEquatable<GeneralSettings>
 	{
@@ -41,12 +42,14 @@ namespace YAT.Settings
 		private bool useRelativePaths;
 		private bool detectSerialPortsInUse;
 
+		/// <summary></summary>
 		public GeneralSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public GeneralSettings(MKY.Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
@@ -84,6 +87,7 @@ namespace YAT.Settings
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		[XmlElement("AutoOpenWorkspace")]
 		public virtual bool AutoOpenWorkspace
 		{
@@ -98,6 +102,7 @@ namespace YAT.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("AutoSaveWorkspace")]
 		public virtual bool AutoSaveWorkspace
 		{
@@ -112,6 +117,7 @@ namespace YAT.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("UseRelativePaths")]
 		public virtual bool UseRelativePaths
 		{
@@ -126,6 +132,7 @@ namespace YAT.Settings
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("DetectSerialPortsInUse")]
 		public virtual bool DetectSerialPortsInUse
 		{
@@ -179,6 +186,7 @@ namespace YAT.Settings
 			);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

@@ -407,11 +407,11 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void Start()
 		{
-			// begin logging (in case opening of terminal needs to be logged)
+			// Begin logging (in case opening of terminal needs to be logged).
 			if (this.settingsRoot.LogIsStarted)
 				BeginLog();
 
-			// then open terminal
+			// Then open terminal.
 			if (this.settingsRoot.TerminalIsStarted)
 				StartIO();
 		}
@@ -421,16 +421,16 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SetSettings(Domain.Settings.TerminalSettings settings)
 		{
-			// Settings have changed, recreate terminal with new settings
+			// Settings have changed, recreate terminal with new settings.
 			if (this.terminal.IsStarted)
 			{
-				// Terminal is open, re-open it with the new settings
+				// Terminal is open, re-open it with the new settings.
 				if (StopIO(false))
 				{
-					DetachTerminalEventHandlers();    // Detach to suspend events
+					DetachTerminalEventHandlers();    // Detach to suspend events.
 					this.settingsRoot.Terminal = settings;
 					this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Terminal, this.terminal);
-					AttachTerminalEventHandlers();    // Attach and resume events
+					AttachTerminalEventHandlers();    // Attach and resume events.
 					this.terminal.ReloadRepositories();
 
 					StartIO(false);
@@ -444,11 +444,11 @@ namespace YAT.Model
 			}
 			else
 			{
-				// Terminal is closed, simply set the new settings
-				DetachTerminalEventHandlers();        // Detach to suspend events
+				// Terminal is closed, simply set the new settings.
+				DetachTerminalEventHandlers();        // Detach to suspend events.
 				this.settingsRoot.Terminal = settings;
 				this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Terminal, this.terminal);
-				AttachTerminalEventHandlers();        // Attach and resume events
+				AttachTerminalEventHandlers();        // Attach and resume events.
 				this.terminal.ReloadRepositories();
 
 				OnTimedStatusTextRequest("Terminal settings applied.");

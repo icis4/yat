@@ -258,8 +258,7 @@ namespace MKY.Utilities.IO
 		/// </summary>
 		public static XPathCompareResult DoCompareDirectoryPaths(string pathA, string pathB)
 		{
-			// do not check for reference equality because complete result
-			// needs to be retrieved anyway
+			// Do not check for reference equality because complete result needs to be retrieved anyway.
 
 			DirectoryInfo pathInfoA = null;
 			DirectoryInfo pathInfoB = null;
@@ -274,11 +273,11 @@ namespace MKY.Utilities.IO
 
 			if ((dirInfoA != null) && (dirInfoB != null))
 			{
-				// check whether both directories share the same root
+				// Check whether both directories share the same root.
 				if (dirInfoA.Root.FullName != dirInfoB.Root.FullName)
 					return (new XPathCompareResult(false));
 
-				// get common directory, make sure only directory part is used
+				// Get common directory, make sure only directory part is used.
 				List<string> dirInfosA = new List<string>();
 				List<string> dirInfosB = new List<string>();
 
@@ -296,11 +295,11 @@ namespace MKY.Utilities.IO
 					tempDirInfoB = tempDirInfoB.Parent;
 				}
 
-				// reverse lists
+				// Reverse lists.
 				dirInfosA.Reverse();
 				dirInfosB.Reverse();
 
-				// get common directory, make sure only directory part is used
+				// Get common directory, make sure only directory part is used.
 				int i = 0;
 				while ((dirInfosA.Count > i) && (dirInfosB.Count > i) &&
 					   (dirInfosA[i] == dirInfosB[i]))
@@ -316,11 +315,11 @@ namespace MKY.Utilities.IO
 
 				DirectoryInfo commonDI = new DirectoryInfo(commonPath);
 
-				// check whether both paths are equal
+				// Check whether both paths are equal.
 				if (dirPathA == dirPathB)
-					return (new XPathCompareResult(commonPath, commonDirectoryCount, 0, 0, "."));
+					return (new XPathCompareResult(commonPath, commonDirectoryCount, 0, true, 0, "."));
 
-				// check whether one of the two is the others subdirectory
+				// Check whether one of the two is the others subdirectory.
 				DirectoryInfo di = commonDI;
 				StringBuilder relativePath = new StringBuilder();
 				if (commonPath == dirPathA)
@@ -331,8 +330,8 @@ namespace MKY.Utilities.IO
 					{
 						nearRelativeDirectoryCount++;
 
-						if (relativePath.Length > 0)       // Actually, stepping in is
-						{                                  //   done by stepping out
+						if (relativePath.Length > 0)       // Actually, stepping in is done by stepping out.
+						{
 							relativePath.Insert(0, Path.DirectorySeparatorChar);
 							relativePath.Insert(0, di.Name);
 						}
@@ -343,7 +342,7 @@ namespace MKY.Utilities.IO
 
 						di = di.Parent;
 					}
-					return (new XPathCompareResult(commonPath, commonDirectoryCount, nearRelativeDirectoryCount, nearRelativeDirectoryCount, relativePath.ToString()));
+					return (new XPathCompareResult(commonPath, commonDirectoryCount, nearRelativeDirectoryCount, true, nearRelativeDirectoryCount, relativePath.ToString()));
 				}
 				if (commonPath == dirPathB)
 				{
@@ -362,13 +361,13 @@ namespace MKY.Utilities.IO
 							relativePath.Append("..");
 						}
 					}
-					return (new XPathCompareResult(commonPath, commonDirectoryCount, nearRelativeDirectoryCount, nearRelativeDirectoryCount, relativePath.ToString()));
+					return (new XPathCompareResult(commonPath, commonDirectoryCount, nearRelativeDirectoryCount, true, nearRelativeDirectoryCount, relativePath.ToString()));
 				}
 
-				// in case of far relation, first step out to common path, then step into path B
+				// In case of far relation, first step out to common path, then step into path B.
 				int farRelativeDirectoryCount = 0;
 				di = dirInfoA;
-				while ((di != null) && (di.FullName != commonPath)) // step out to common path
+				while ((di != null) && (di.FullName != commonPath)) // Step out to common path.
 				{
 					di = di.Parent;
 					if (di != null)
@@ -383,12 +382,12 @@ namespace MKY.Utilities.IO
 				}
 				int commonPartIndex = relativePath.Length;
 				di = dirInfoB;
-				while ((di != null) && (di.FullName != commonPath)) // step into path B
+				while ((di != null) && (di.FullName != commonPath)) // Step into path B
 				{
 					farRelativeDirectoryCount++;
 
-					if (relativePath.Length > commonPartIndex) // actually, stepping in is
-					{                                          //   done by stepping out
+					if (relativePath.Length > commonPartIndex) // Actually, stepping in is done by stepping out.
+					{
 						relativePath.Insert(commonPartIndex, Path.DirectorySeparatorChar);
 						relativePath.Insert(commonPartIndex + 1, di.Name);
 					}
@@ -434,31 +433,31 @@ namespace MKY.Utilities.IO
 				string dirPathResult = "";
 				DirectoryInfo dirInfoResult = null;
 
-				// Trim leading '\'
+				// Trim leading '\'.
 				string s = pathB.TrimStart(Path.DirectorySeparatorChar);
 
-				// Check whether relative path points to any parent directory
+				// Check whether relative path points to any parent directory.
 				if ((s.Length >= 2) && (s.Substring(0, 2) == ".."))
 				{
 					DirectoryInfo pathInfoParent = pathInfoA;
 
 					do
 					{
-						// Detect invalidly long relative paths
+						// Detect invalidly long relative paths.
 						if ((s.Length >= 3) && (s.Substring(0, 3) == "..."))
 							break;
 
 						s = s.Remove(0, 2);
 						pathInfoParent = pathInfoParent.Parent;
 
-						// ".." or "..\"
+						// ".." or "..\".
 						if ((s.Length == 0) ||
 							(s == Path.DirectorySeparatorChar.ToString()))
 						{
 							return (pathInfoParent.FullName);
 						}
 
-						// "..\<.. or Path>"
+						// "..\<.. or Path>".
 						if ((s.Length >= 1) && (s.Substring(0, 1) == Path.DirectorySeparatorChar.ToString()))
 							s = s.Remove(0, 1);
 						else
@@ -470,19 +469,19 @@ namespace MKY.Utilities.IO
 						DoPrepareDirectoryPath(Path.Combine(pathInfoParent.FullName, s), out pathInfoResult, out dirPathResult, out dirInfoResult);
 				}
 
-				// Check whether relative path points to current directory
+				// Check whether relative path points to current directory.
 				else if ((s.Length >= 1) && (s.Substring(0, 1) == "."))
 				{
 					s = s.Remove(0, 1);
 
-					// "." or ".\"
+					// "." or ".\".
 					if ((s.Length == 0) ||
 						(s == Path.DirectorySeparatorChar.ToString()))
 					{
 						return (dirPathA);
 					}
 
-					// ".\<Path>"
+					// ".\<Path>".
 					if (s.Substring(0, 1) == Path.DirectorySeparatorChar.ToString())
 					{
 						string combined = dirPathA + s.Substring(1);
@@ -490,7 +489,7 @@ namespace MKY.Utilities.IO
 					}
 				}
 
-				// Use System.IO.Path.Combine() for the easy cases
+				// Use System.IO.Path.Combine() for the easy cases.
 				else
 				{
 					string combined = Path.Combine(dirPathA, pathB);
@@ -501,7 +500,7 @@ namespace MKY.Utilities.IO
 					return (dirPathResult);
 			}
 
-			// In case the second path was invalid, return the the first if possible
+			// In case the second path was invalid, return the the first if possible.
 			if (pathInfoA != null)
 				return (dirPathA);
 			else
@@ -634,19 +633,19 @@ namespace MKY.Utilities.IO
 
 		/// <summary>Creates a directory info compare result structure.</summary>
 		public XPathCompareResult(string commonPath, int commonDirectoryCount, int relativeDirectoryCount, string relativePath)
-			: this (commonPath, commonDirectoryCount, relativeDirectoryCount, 0, relativePath)
+			: this (commonPath, commonDirectoryCount, relativeDirectoryCount, false, 0, relativePath)
 		{
 		}
 
 		/// <summary>Creates a directory info compare result structure.</summary>
-		public XPathCompareResult(string commonPath, int commonDirectoryCount, int relativeDirectoryCount, int nearRelativeDirectoryCount, string relativePath)
+		public XPathCompareResult(string commonPath, int commonDirectoryCount, int relativeDirectoryCount, bool areNearRelative, int nearRelativeDirectoryCount, string relativePath)
 		{
 			HaveCommon = true;
 			CommonPath = commonPath;
 			CommonDirectoryCount = commonDirectoryCount;
 			AreRelative = true;
 			RelativeDirectoryCount = relativeDirectoryCount;
-			AreNearRelative = true;
+			AreNearRelative = areNearRelative;
 			NearRelativeDirectoryCount = nearRelativeDirectoryCount;
 			RelativePath = relativePath;
 		}

@@ -26,6 +26,7 @@ using System.Windows.Forms;
 
 namespace YAT.Gui.Utilities
 {
+	/// <summary></summary>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1115:ParameterMustFollowComma", Justification = "Too long for one line.")]
 	[SuppressMessage("Microsoft.StyleCop.CSharp.DocumentationRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Too long for one line.")]
@@ -65,6 +66,7 @@ namespace YAT.Gui.Utilities
 			stringFormat.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
 		}
 
+		/// <summary></summary>
 		public static Font ItalicDefaultFont
 		{
 			get
@@ -80,6 +82,7 @@ namespace YAT.Gui.Utilities
 			}
 		}
 
+		/// <summary></summary>
 		public static SizeF MeasureItem(Domain.DisplayLine line, Model.Settings.FormatSettings formatSettings,
 										Graphics graphics, RectangleF bounds)
 		{
@@ -93,6 +96,7 @@ namespace YAT.Gui.Utilities
 			return (new SizeF(width, size.Height));
 		}
 
+		/// <summary></summary>
 		public static SizeF MeasureItem(Domain.DisplayElement element, Model.Settings.FormatSettings formatSettings,
 										Graphics graphics, RectangleF bounds)
 		{
@@ -103,6 +107,7 @@ namespace YAT.Gui.Utilities
 			return (graphics.MeasureString(element.Text, font, bounds.Size, stringFormat));
 		}
 
+		/// <summary></summary>
 		public static SizeF DrawItem(Domain.DisplayLine line, Model.Settings.FormatSettings formatSettings,
 									 Graphics graphics, RectangleF bounds, DrawItemState state)
 		{
@@ -120,6 +125,7 @@ namespace YAT.Gui.Utilities
 			return (new SizeF(x - bounds.X, bounds.Height));
 		}
 
+		/// <summary></summary>
 		public static SizeF DrawItem(Domain.DisplayElement element, Model.Settings.FormatSettings formatSettings,
 									 Graphics graphics, RectangleF bounds, DrawItemState state)
 		{
