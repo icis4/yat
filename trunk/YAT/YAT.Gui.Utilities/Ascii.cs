@@ -33,6 +33,7 @@ namespace YAT.Gui.Utilities
 		private const string Escape = "Esc";
 		private const string Description = "Description";
 
+		/// <summary></summary>
 		public AsciiTable()
 		{
 			DataTable t = new DataTable("ASCII");;

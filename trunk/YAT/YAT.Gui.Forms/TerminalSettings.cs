@@ -44,6 +44,7 @@ namespace YAT.Gui.Forms
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public TerminalSettings(Domain.Settings.TerminalSettings settings)
 		{
 			InitializeComponent();
@@ -59,6 +60,7 @@ namespace YAT.Gui.Forms
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Domain.Settings.TerminalSettings SettingsResult
 		{
 			get { return (this.settings); }
@@ -99,7 +101,22 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				this.settings_Form.TerminalType = terminalSelection.TerminalType;
+				Domain.TerminalType tt = terminalSelection.TerminalType;
+				this.settings_Form.TerminalType = tt;
+				switch (tt)
+				{
+					case Domain.TerminalType.Binary:
+						this.settings_Form.Display.TxRadix = Domain.Radix.Hex;
+						this.settings_Form.Display.RxRadix = Domain.Radix.Hex;
+						break;
+
+					case Domain.TerminalType.Text:
+					default:
+						this.settings_Form.Display.TxRadix = Domain.Radix.String;
+						this.settings_Form.Display.RxRadix = Domain.Radix.String;
+						break;
+				}
+
 				SetControls();
 			}
 		}

@@ -42,6 +42,7 @@ namespace YAT.Gui.Forms
 			@".." + Path.DirectorySeparatorChar +
 			@"Doc.User" + Path.DirectorySeparatorChar + ReleaseNotesFileName;
 
+		/// <summary></summary>
 		public ReleaseNotes()
 		{
 			InitializeComponent();

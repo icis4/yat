@@ -68,6 +68,8 @@ Important changes:
 - Methods and properties marked 'virtual', unless there are reasons against
 - Null reference safe and more efficient implementation of Equals()
 - Selection and settings controls now clear contents when disabled
+- Radix (string/hex) automatically changes when switching the terminal type (text/binary)
+- Coupling of Tx and Rx radix improved
 - Project references to system assemblies cleaned
 - Using directives cleaned
 - Test and demo projects also signed with a strong name key
@@ -85,6 +87,7 @@ Fixed bugs:
 - Exception in case of no COM ports fixed (bug #3041642)
 - Exception when closing terminal using 'File > Close' fixed (bugs #2684813, #2854547, #2970241)
 - Rare exception while drawing fixed (bug #2981762)
+- Unhandled exception on binary terminal fixed (bug #2891996)
 - Layout/anchor issue of description text field in predefined dialog fixed (bug #2987575)
 - Unhandled exception dialog improved and fixed (feature request #2970243, bug #2970245)
 - Multi-line command issue fixed (bug #2831453)

@@ -37,6 +37,7 @@ namespace YAT.Gui.Forms
 	{
 		private Exception exeption;
 
+		/// <summary></summary>
 		public UnhandledException(Exception exeption)
 		{
 			InitializeComponent();

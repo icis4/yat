@@ -25,6 +25,7 @@ using System.Xml.Serialization;
 
 namespace YAT.Settings.Terminal
 {
+	/// <summary></summary>
 	[Serializable]
 	[XmlRoot("Settings")]
 	public class TerminalSettingsRoot : MKY.Utilities.Settings.Settings, MKY.Utilities.Xml.IAlternateXmlElementProvider, IEquatable<TerminalSettingsRoot>
@@ -51,6 +52,7 @@ namespace YAT.Settings.Terminal
 		private ExplicitSettings explicit_;
 		private ImplicitSettings implicit_;
 
+		/// <summary></summary>
 		public TerminalSettingsRoot()
 			: base(MKY.Utilities.Settings.SettingsType.Explicit)
 		{
@@ -59,6 +61,7 @@ namespace YAT.Settings.Terminal
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public TerminalSettingsRoot(TerminalSettingsRoot rhs)
 			: base(rhs)
 		{
@@ -80,6 +83,7 @@ namespace YAT.Settings.Terminal
 			set { } // Do nothing.
 		}
 
+		/// <summary></summary>
 		[XmlElement("Warning")]
 		public virtual string Warning
 		{
@@ -87,6 +91,7 @@ namespace YAT.Settings.Terminal
 			set { } // Do nothing.
 		}
 
+		/// <summary></summary>
 		[XmlElement("ProductVersion")]
 		public virtual string ProductVersion
 		{
@@ -94,6 +99,7 @@ namespace YAT.Settings.Terminal
 			set { } // Do nothing.
 		}
 
+		/// <summary></summary>
 		[XmlElement("Saved")]
 		public virtual SaveInfo Saved
 		{
@@ -101,6 +107,7 @@ namespace YAT.Settings.Terminal
 			set { } // Do nothing.
 		}
 
+		/// <summary></summary>
 		[XmlElement("AutoSaved")]
 		public virtual bool AutoSaved
 		{
@@ -116,6 +123,7 @@ namespace YAT.Settings.Terminal
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Explicit")]
 		public virtual ExplicitSettings Explicit
 		{
@@ -136,6 +144,7 @@ namespace YAT.Settings.Terminal
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Implicit")]
 		public virtual ImplicitSettings Implicit
 		{
@@ -156,6 +165,7 @@ namespace YAT.Settings.Terminal
 			}
 		}
 
+		/// <summary></summary>
 		[XmlIgnore]
 		public virtual MKY.Utilities.Xml.AlternateXmlElement[] AlternateXmlElements
 		{
@@ -398,6 +408,7 @@ namespace YAT.Settings.Terminal
 			);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

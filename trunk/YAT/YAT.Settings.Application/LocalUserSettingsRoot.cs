@@ -25,6 +25,7 @@ using System.Xml.Serialization;
 
 namespace YAT.Settings.Application
 {
+	/// <summary></summary>
 	[Serializable]
 	[XmlRoot("LocalUserSettings")]
 	public class LocalUserSettingsRoot : MKY.Utilities.Settings.Settings, IEquatable<LocalUserSettingsRoot>
@@ -37,6 +38,7 @@ namespace YAT.Settings.Application
 		private Model.Settings.NewTerminalSettings newTerminal;
 		private Model.Settings.RecentFileSettings recentFiles;
 
+		/// <summary></summary>
 		public LocalUserSettingsRoot()
 			: base(MKY.Utilities.Settings.SettingsType.Explicit)
 		{
@@ -50,6 +52,7 @@ namespace YAT.Settings.Application
 			ClearChanged();
 		}
 
+		/// <summary></summary>
 		public LocalUserSettingsRoot(LocalUserSettingsRoot rhs)
 			: base(rhs)
 		{
@@ -68,6 +71,7 @@ namespace YAT.Settings.Application
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		[XmlElement("FileType")]
 		public virtual string FileType
 		{
@@ -75,6 +79,7 @@ namespace YAT.Settings.Application
 			set { } // Do nothing.
 		}
 
+		/// <summary></summary>
 		[XmlElement("Warning")]
 		public virtual string Warning
 		{
@@ -82,6 +87,7 @@ namespace YAT.Settings.Application
 			set { } // Do nothing.
 		}
 
+		/// <summary></summary>
 		[XmlElement("Saved")]
 		public virtual SaveInfo Saved
 		{
@@ -89,6 +95,7 @@ namespace YAT.Settings.Application
 			set { } // Do nothing.
 		}
 
+		/// <summary></summary>
 		[XmlElement("ProductVersion")]
 		public virtual string ProductVersion
 		{
@@ -96,6 +103,7 @@ namespace YAT.Settings.Application
 			set { } // Do nothing.
 		}
 
+		/// <summary></summary>
 		[XmlElement("General")]
 		public virtual Settings.GeneralSettings General
 		{
@@ -116,6 +124,7 @@ namespace YAT.Settings.Application
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("Paths")]
 		public virtual Settings.PathSettings Paths
 		{
@@ -136,6 +145,7 @@ namespace YAT.Settings.Application
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("AutoWorkspace")]
 		public virtual Settings.AutoWorkspaceSettings AutoWorkspace
 		{
@@ -156,6 +166,7 @@ namespace YAT.Settings.Application
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("MainWindow")]
 		public virtual Model.Settings.MainWindowSettings MainWindow
 		{
@@ -176,6 +187,7 @@ namespace YAT.Settings.Application
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("NewTerminal")]
 		public virtual Model.Settings.NewTerminalSettings NewTerminal
 		{
@@ -196,6 +208,7 @@ namespace YAT.Settings.Application
 			}
 		}
 
+		/// <summary></summary>
 		[XmlElement("RecentFiles")]
 		public virtual Model.Settings.RecentFileSettings RecentFiles
 		{
@@ -251,6 +264,7 @@ namespace YAT.Settings.Application
 			);
 		}
 
+		/// <summary></summary>
 		public override int GetHashCode()
 		{
 			return (base.GetHashCode());

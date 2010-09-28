@@ -51,6 +51,7 @@ namespace YAT.Gui.Controls
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public MultiLineBox(Command command, Point startupLocation)
 		{
 			InitializeComponent();
@@ -70,6 +71,7 @@ namespace YAT.Gui.Controls
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Command CommandResult
 		{
 			get { return (this.command); }
@@ -82,6 +84,7 @@ namespace YAT.Gui.Controls
 		// Form Special Keys
 		//==========================================================================================
 
+		/// <summary></summary>
 		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{

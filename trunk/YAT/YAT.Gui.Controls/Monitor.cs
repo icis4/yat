@@ -39,10 +39,14 @@ namespace YAT.Gui.Controls
 	// MonitorActivityState Enum
 	//==================================================================================================
 
+	/// <summary></summary>
 	public enum MonitorActivityState
 	{
+		/// <summary></summary>
 		Inactive,
+		/// <summary></summary>
 		Active,
+		/// <summary></summary>
 		Pending,
 	}
 
@@ -131,10 +135,12 @@ namespace YAT.Gui.Controls
 		// Events
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Action")]
 		[Description("Event raised when copying is requested.")]
 		public event EventHandler CopyRequest;
 
+		/// <summary></summary>
 		[Category("Action")]
 		[Description("Event raised when printing is requested.")]
 		public event EventHandler PrintRequest;
@@ -146,6 +152,7 @@ namespace YAT.Gui.Controls
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Monitor()
 		{
 			InitializeComponent();
@@ -159,6 +166,7 @@ namespace YAT.Gui.Controls
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Monitor")]
 		[Description("The repository type.")]
 		[DefaultValue(RepositoryTypeDefault)]
@@ -175,6 +183,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Monitor")]
 		[Description("The activity state.")]
 		[DefaultValue(ActivityStateDefault)]
@@ -191,6 +200,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Monitor")]
 		[Description("The maxmimal number of lines to display.")]
 		[DefaultValue(MaxLineCountDefault)]
@@ -207,6 +217,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Model.Settings.FormatSettings FormatSettings
@@ -221,6 +232,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Monitor")]
 		[Description("Show the time status.")]
 		[DefaultValue(ShowTimeStatusDefault)]
@@ -237,6 +249,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Monitor")]
 		[Description("The connect time.")]
 		[DefaultValue(0)]
@@ -253,6 +266,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Monitor")]
 		[Description("The total connect time.")]
 		[DefaultValue(0)]
@@ -269,6 +283,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Monitor")]
 		[Description("Show the count status.")]
 		[DefaultValue(ShowCountStatusDefault)]
@@ -285,6 +300,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Monitor")]
 		[Description("The Tx byte count status.")]
 		[DefaultValue(0)]
@@ -301,6 +317,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Monitor")]
 		[Description("The Tx line count status.")]
 		[DefaultValue(0)]
@@ -317,6 +334,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Monitor")]
 		[Description("The Rx byte count status.")]
 		[DefaultValue(0)]
@@ -333,6 +351,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Monitor")]
 		[Description("The Rx line count status.")]
 		[DefaultValue(0)]
@@ -356,6 +375,7 @@ namespace YAT.Gui.Controls
 		// Methods
 		//==========================================================================================
 
+		/// <summary></summary>
 		public virtual void AddElement(Domain.DisplayElement element)
 		{
 			FastListBox flb = fastListBox_Monitor;
@@ -367,6 +387,7 @@ namespace YAT.Gui.Controls
 			flb.EndUpdate();
 		}
 
+		/// <summary></summary>
 		public virtual void AddElements(List<Domain.DisplayElement> elements)
 		{
 			FastListBox flb = fastListBox_Monitor;
@@ -379,6 +400,7 @@ namespace YAT.Gui.Controls
 			flb.EndUpdate();
 		}
 
+		/// <summary></summary>
 		public virtual void AddLine(Domain.DisplayLine line)
 		{
 			FastListBox flb = fastListBox_Monitor;
@@ -391,6 +413,7 @@ namespace YAT.Gui.Controls
 			flb.Refresh();
 		}
 
+		/// <summary></summary>
 		public virtual void AddLines(List<Domain.DisplayLine> lines)
 		{
 			FastListBox flb = fastListBox_Monitor;
@@ -404,11 +427,13 @@ namespace YAT.Gui.Controls
 			flb.EndUpdate();
 		}
 
+		/// <summary></summary>
 		public virtual void Clear()
 		{
 			ClearListBox();
 		}
 
+		/// <summary></summary>
 		public virtual void Reload()
 		{
 			FastListBox flb = fastListBox_Monitor;
@@ -426,18 +451,21 @@ namespace YAT.Gui.Controls
 			AddLines(lines);
 		}
 
+		/// <summary></summary>
 		public virtual void Reload(List<Domain.DisplayElement> elements)
 		{
 			Clear();
 			AddElements(elements);
 		}
 
+		/// <summary></summary>
 		public virtual void Reload(List<Domain.DisplayLine> lines)
 		{
 			Clear();
 			AddLines(lines);
 		}
 
+		/// <summary></summary>
 		public virtual void ResetTimeStatus()
 		{
 			this.connectTime = TimeSpan.Zero;
@@ -446,6 +474,7 @@ namespace YAT.Gui.Controls
 			SetTimeStatusControls();
 		}
 
+		/// <summary></summary>
 		public virtual void ResetCountStatus()
 		{
 			this.txByteCountStatus = 0;
@@ -456,6 +485,7 @@ namespace YAT.Gui.Controls
 			SetCountStatusControls();
 		}
 
+		/// <summary></summary>
 		public virtual void SelectAll()
 		{
 			FastListBox flb = fastListBox_Monitor;
@@ -467,6 +497,7 @@ namespace YAT.Gui.Controls
 			flb.EndUpdate();
 		}
 
+		/// <summary></summary>
 		public virtual void SelectNone()
 		{
 			FastListBox flb = fastListBox_Monitor;
@@ -477,11 +508,13 @@ namespace YAT.Gui.Controls
 			flb.EndUpdate();
 		}
 
+		/// <summary></summary>
 		public virtual int SelectedLineCount
 		{
 			get { return (fastListBox_Monitor.SelectedItems.Count); }
 		}
 
+		/// <summary></summary>
 		public virtual List<YAT.Domain.DisplayLine> SelectedLines
 		{
 			get
@@ -510,6 +543,7 @@ namespace YAT.Gui.Controls
 		// Control Special Keys
 		//==========================================================================================
 
+		/// <summary></summary>
 		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
@@ -625,7 +659,7 @@ namespace YAT.Gui.Controls
 		/// ListBox
 		/// -------
 		///
-		/// Whether we like it or not, <see cref="System.Windows.Forms.ListBox.OnDrawItem()"/> calls
+		/// Whether we like it or not, <see cref="System.Windows.Forms.ListBox.OnDrawItem"/> calls
 		/// this method pretty often. Actually it's called twice each time a new line is added. In
 		/// addition, another call is needed for the next still empty line. Thus:
 		/// 1st line received => 3 calls to DrawItem() at index 0 | 0 | 1
@@ -883,11 +917,13 @@ namespace YAT.Gui.Controls
 		// Event Invoking
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected virtual void OnCopyRequest(EventArgs e)
 		{
 			EventHelper.FireSync(CopyRequest, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnPrintRequest(EventArgs e)
 		{
 			EventHelper.FireSync(PrintRequest, this, e);

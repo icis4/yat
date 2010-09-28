@@ -145,6 +145,7 @@ namespace YAT.Gui.Forms
 			this.comboBox_RxEol.Name = "comboBox_RxEol";
 			this.comboBox_RxEol.Size = new System.Drawing.Size(153, 21);
 			this.comboBox_RxEol.TabIndex = 4;
+			this.comboBox_RxEol.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_RxEol_Validating);
 			this.comboBox_RxEol.SelectedIndexChanged += new System.EventHandler(this.comboBox_RxEol_SelectedIndexChanged);
 			// 
 			// label_RxEol
@@ -163,6 +164,7 @@ namespace YAT.Gui.Forms
 			this.comboBox_TxEol.Name = "comboBox_TxEol";
 			this.comboBox_TxEol.Size = new System.Drawing.Size(153, 21);
 			this.comboBox_TxEol.TabIndex = 1;
+			this.comboBox_TxEol.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_TxEol_Validating);
 			this.comboBox_TxEol.SelectedIndexChanged += new System.EventHandler(this.comboBox_TxEol_SelectedIndexChanged);
 			// 
 			// label_TxEol

@@ -48,6 +48,7 @@ namespace YAT.Gui.Forms
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public TextTerminalSettings(Domain.Settings.TextTerminalSettings settings)
 		{
 			InitializeComponent();
@@ -64,6 +65,7 @@ namespace YAT.Gui.Forms
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Domain.Settings.TextTerminalSettings SettingsResult
 		{
 			get { return (this.settings); }
@@ -126,6 +128,9 @@ namespace YAT.Gui.Forms
 				else
 					this.settings_Form.TxEol = comboBox_TxEol.Text;
 
+				if (!this.settings_Form.SeparateTxRxEol)
+					this.settings_Form.RxEol = this.settings_Form.TxEol;
+
 				SetControls();
 			}
 		}
@@ -138,16 +143,29 @@ namespace YAT.Gui.Forms
 			if (Domain.XEol.TryParse(eolString, out eol))
 			{
 				this.settings_Form.TxEol = eol.ToSequenceString();
+
+				if (!this.settings_Form.SeparateTxRxEol)
+					this.settings_Form.RxEol = this.settings_Form.TxEol;
 			}
 			else
 			{
+				string description;
+				if (!this.settings_Form.SeparateTxRxEol)
+					description = "Tx EOL";
+				else
+					description = "EOL";
+
 				int invalidTextStart;
 				int invalidTextLength;
-				if (Validation.ValidateSequence(this, "EOL", eolString, out invalidTextStart, out invalidTextLength))
+				if (Validation.ValidateSequence(this, description, eolString, out invalidTextStart, out invalidTextLength))
 				{
 					if (!this.isSettingControls)
 					{
 						this.settings_Form.TxEol = eolString;
+
+						if (!this.settings_Form.SeparateTxRxEol)
+							this.settings_Form.RxEol = this.settings_Form.TxEol;
+
 						SetControls();
 					}
 				}
@@ -187,7 +205,7 @@ namespace YAT.Gui.Forms
 			{
 				int invalidTextStart;
 				int invalidTextLength;
-				if (Validation.ValidateSequence(this, "EOL", eolString, out invalidTextStart, out invalidTextLength))
+				if (Validation.ValidateSequence(this, "Rx EOL", eolString, out invalidTextStart, out invalidTextLength))
 				{
 					if (!this.isSettingControls)
 					{
@@ -385,10 +403,10 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls = true;
 
-			// encoding
+			// Encoding.
 			comboBox_Encoding.SelectedItem = (XEncoding)this.settings_Form.Encoding;
 
-			// EOL
+			// EOL.
 			bool separateEol = this.settings_Form.SeparateTxRxEol;
 			if (!separateEol)
 				label_TxEol.Text = "E&OL sequence:";
@@ -408,10 +426,10 @@ namespace YAT.Gui.Forms
 			else
 				comboBox_RxEol.Text = this.settings_Form.RxEol;
 
-			// display
+			// Display.
 			checkBox_ShowEol.Checked = this.settings_Form.ShowEol;
 
-			// transmit
+			// Transmit.
 			bool delayEnabled = this.settings_Form.LineSendDelay.Enabled;
 			checkBox_Delay.Checked = delayEnabled;
 			textBox_Delay.Enabled = delayEnabled;

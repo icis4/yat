@@ -85,11 +85,13 @@ namespace YAT.Gui.Forms
 		//     7. Dock "menuStrip_Main" to top
 		// - (In source code, proceed according to the MenuStrip class example in the MSDN)
 
+		/// <summary></summary>
 		public Main()
 			: this(new Model.Main())
 		{
 		}
 
+		/// <summary></summary>
 		public Main(Model.Main main)
 		{
 			InitializeComponent();
@@ -1223,11 +1225,13 @@ namespace YAT.Gui.Forms
 		// MDI Parent > Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public Model.Main UnderlyingMain
 		{
 			get { return (this.main); }
 		}
 
+		/// <summary></summary>
 		public Model.Workspace UnderlyingWorkspace
 		{
 			get { return (this.workspace); }

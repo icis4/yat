@@ -25,15 +25,19 @@ using System.Xml.Serialization;
 
 namespace YAT.Settings
 {
+	/// <summary></summary>
 	[Serializable]
 	public struct SaveInfo
 	{
+		/// <summary></summary>
 		[XmlElement("TimeStamp")]
 		public DateTime TimeStamp;
 
+		/// <summary></summary>
 		[XmlElement("UserName")]
 		public string UserName;
 
+		/// <summary></summary>
 		public SaveInfo(DateTime timeStamp, string userName)
 		{
 			TimeStamp = timeStamp;

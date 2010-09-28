@@ -26,6 +26,7 @@ using MKY.Utilities.Settings;
 
 namespace YAT.Settings.Application
 {
+	/// <summary></summary>
 	public static class ApplicationSettings
 	{
 		//------------------------------------------------------------------------------------------
@@ -53,21 +54,25 @@ namespace YAT.Settings.Application
 				settingsHandler.SaveLocalUser();
 		}
 
+		/// <summary></summary>
 		public static LocalUserSettingsRoot LocalUser
 		{
 			get { return (settingsHandler.LocalUserSettings); }
 		}
 
+		/// <summary></summary>
 		public static bool LocalUserSettingsSuccessfullyLoaded
 		{
 			get { return (settingsHandler.LocalUserSettingsSuccessfullyLoaded); }
 		}
 
+		/// <summary></summary>
 		public static string LocalUserSettingsFilePath
 		{
 			get { return (settingsHandler.LocalUserSettingsFilePath); }
 		}
 
+		/// <summary></summary>
 		public static bool SettingsSuccessfullyLoaded
 		{
 			get { return (settingsHandler.LocalUserSettingsSuccessfullyLoaded); }

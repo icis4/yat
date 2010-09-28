@@ -141,10 +141,12 @@ namespace YAT.Controller
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Main()
 		{
 		}
 
+		/// <summary></summary>
 		public Main(string[] commandLineArgs)
 		{
 			// Parse command line args if there are any.
@@ -206,26 +208,31 @@ namespace YAT.Controller
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		public virtual bool CommandLineError
 		{
 			get { return (this.commandLineError); }
 		}
 
+		/// <summary></summary>
 		public virtual bool CommandLineHelpIsRequested
 		{
 			get { return (this.commandLineHelpIsRequested); }
 		}
 
+		/// <summary></summary>
 		public virtual string RequestedFilePath
 		{
 			get { return (this.commandLineOptions.RequestedFilePath); }
 		}
 
+		/// <summary></summary>
 		public virtual int RequestedTerminalId
 		{
 			get { return (this.commandLineOptions.RequestedTerminalId); }
 		}
 
+		/// <summary></summary>
 		public virtual string RequestedTransmitFilePath
 		{
 			get { return (this.commandLineOptions.RequestedTransmitFilePath); }
@@ -238,11 +245,13 @@ namespace YAT.Controller
 		// Methods
 		//==========================================================================================
 
+		/// <summary></summary>
 		public MainResult Run()
 		{
 			return (Run(true));
 		}
 
+		/// <summary></summary>
 		public MainResult Run(bool runWithView)
 		{
 			// Show command line help in case of error.

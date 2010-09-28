@@ -62,10 +62,12 @@ namespace YAT.Gui.Controls
 		// Events
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Action")]
 		[Description("Event raised when sending a command is requested.")]
 		public event EventHandler<PredefinedCommandEventArgs> SendCommandRequest;
 
+		/// <summary></summary>
 		[Category("Action")]
 		[Description("Event raised when defining a command is requested.")]
 		public event EventHandler<PredefinedCommandEventArgs> DefineCommandRequest;
@@ -77,6 +79,7 @@ namespace YAT.Gui.Controls
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public PredefinedCommandPageButtons()
 		{
 			InitializeComponent();
@@ -91,6 +94,7 @@ namespace YAT.Gui.Controls
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual List<Command> Commands
@@ -102,6 +106,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual bool TerminalIsOpen
@@ -279,11 +284,13 @@ namespace YAT.Gui.Controls
 		// Event Invoking
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected virtual void OnSendCommandRequest(PredefinedCommandEventArgs e)
 		{
 			EventHelper.FireSync<PredefinedCommandEventArgs>(SendCommandRequest, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnDefineCommandRequest(PredefinedCommandEventArgs e)
 		{
 			EventHelper.FireSync<PredefinedCommandEventArgs>(DefineCommandRequest, this, e);

@@ -65,26 +65,32 @@ namespace YAT.Gui.Controls
 		// Events
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the BaudRate property is changed.")]
 		public event EventHandler BaudRateChanged;
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the DataBits property is changed.")]
 		public event EventHandler DataBitsChanged;
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the Parity property is changed.")]
 		public event EventHandler ParityChanged;
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the StopBits property is changed.")]
 		public event EventHandler StopBitsChanged;
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the FlowControl property is changed.")]
 		public event EventHandler FlowControlChanged;
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the AutoReopen property is changed.")]
 		public event EventHandler AutoReopenChanged;
@@ -95,7 +101,8 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 		// Object Lifetime
 		//==========================================================================================
-	
+
+		/// <summary></summary>
 		public SerialPortSettings()
 		{
 			InitializeComponent();
@@ -111,6 +118,7 @@ namespace YAT.Gui.Controls
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Serial Port")]
 		[Description("The baud rate.")]
 		[DefaultValue(BaudRateDefault)]
@@ -128,6 +136,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Serial Port")]
 		[Description("The number of data bits.")]
 		[DefaultValue(DataBitsDefault)]
@@ -145,6 +154,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Serial Port")]
 		[Description("The partiy type.")]
 		[DefaultValue(ParityDefault)]
@@ -162,6 +172,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Serial Port")]
 		[Description("The number of stop bits.")]
 		[DefaultValue(StopBitsDefault)]
@@ -179,6 +190,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Serial Port")]
 		[Description("The flow control type.")]
 		[DefaultValue(FlowControlDefault)]
@@ -196,6 +208,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Serial Port")]
 		[Description("Auto reopen optione.")]
 		public virtual MKY.IO.Serial.AutoRetry AutoReopen
@@ -431,31 +444,37 @@ namespace YAT.Gui.Controls
 		// Event Invoking
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected virtual void OnBaudRateChanged(EventArgs e)
 		{
 			EventHelper.FireSync(BaudRateChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnDataBitsChanged(EventArgs e)
 		{
 			EventHelper.FireSync(DataBitsChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnParityChanged(EventArgs e)
 		{
 			EventHelper.FireSync(ParityChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnStopBitsChanged(EventArgs e)
 		{
 			EventHelper.FireSync(StopBitsChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnFlowControlChanged(EventArgs e)
 		{
 			EventHelper.FireSync(FlowControlChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnAutoReopenChanged(EventArgs e)
 		{
 			EventHelper.FireSync(AutoReopenChanged, this, e);

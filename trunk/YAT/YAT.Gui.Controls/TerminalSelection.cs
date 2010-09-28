@@ -36,7 +36,7 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		// \fixme Replace this help text with a real help
+		/// <remarks>\fixme Replace this help text with a real help.</remarks>
 		public static readonly string NewTerminalHelpText =
 			"Text vs. Binary:" + Environment.NewLine +
 			Environment.NewLine +
@@ -97,10 +97,12 @@ namespace YAT.Gui.Controls
 		// Events
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the TerminalType property is changed.")]
 		public event EventHandler TerminalTypeChanged;
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the IOType property is changed.")]
 		public event EventHandler IOTypeChanged;
@@ -112,6 +114,7 @@ namespace YAT.Gui.Controls
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public TerminalSelection()
 		{
 			InitializeComponent();
@@ -129,6 +132,7 @@ namespace YAT.Gui.Controls
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Terminal")]
 		[Description("The terminal type.")]
 		[DefaultValue(TerminalTypeDefault)]
@@ -146,6 +150,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Category("Terminal")]
 		[Description("The port type.")]
 		[DefaultValue(IOTypeDefault)]
@@ -247,11 +252,13 @@ namespace YAT.Gui.Controls
 		// Event Invoking
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected virtual void OnTerminalTypeChanged(EventArgs e)
 		{
 			EventHelper.FireSync(TerminalTypeChanged, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnIOTypeChanged(EventArgs e)
 		{
 			EventHelper.FireSync(IOTypeChanged, this, e);

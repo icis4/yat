@@ -38,14 +38,18 @@ namespace YAT.Gui.Forms
 
 		private struct StartupControl
 		{
+			/// <summary></summary>
 			public bool Startup;
 
-			/// <param name="RequestedPage">Page 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
+			/// <summary></summary>
 			public int RequestedPage;
 
-			/// <param name="RequestedCommand">Command 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
+			/// <summary></summary>
 			public int RequestedCommand;
 
+			/// <param name="startup">Startup control.</param>
+			/// <param name="requestedPage">Page 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
+			/// <param name="requestedCommand">Command 1..<see cref="Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage"/>.</param>
 			public StartupControl(bool startup, int requestedPage, int requestedCommand)
 			{
 				Startup = startup;
@@ -99,11 +103,13 @@ namespace YAT.Gui.Forms
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Model.Settings.PredefinedCommandSettings SettingsResult
 		{
 			get { return (this.settings); }
 		}
 
+		/// <summary></summary>
 		public int SelectedPage
 		{
 			get { return (this.selectedPage); }
@@ -116,6 +122,7 @@ namespace YAT.Gui.Forms
 		// Form Special Keys
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected override bool IsInputKey(Keys keyData)
 		{
 			if (keyData == Keys.F1)
@@ -124,6 +131,7 @@ namespace YAT.Gui.Forms
 				return (base.IsInputKey(keyData));
 		}
 
+		/// <summary></summary>
 		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{

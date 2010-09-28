@@ -51,6 +51,7 @@ namespace YAT.Gui.Forms
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public FormatSettings(Model.Settings.FormatSettings formatSettings)
 		{
 			InitializeComponent();
@@ -69,6 +70,7 @@ namespace YAT.Gui.Forms
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		public Model.Settings.FormatSettings FormatSettingsResult
 		{
 			get { return (this.formatSettings); }

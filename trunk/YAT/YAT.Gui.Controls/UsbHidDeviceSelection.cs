@@ -48,6 +48,7 @@ namespace YAT.Gui.Controls
 		// Events
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the DeviceInfo property is changed.")]
 		public event EventHandler DeviceInfoChanged;
@@ -59,6 +60,7 @@ namespace YAT.Gui.Controls
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public UsbHidDeviceSelection()
 		{
 			InitializeComponent();
@@ -71,6 +73,7 @@ namespace YAT.Gui.Controls
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("USB Device")]
 		[Description("USB device info.")]
 		public DeviceInfo DeviceInfo
@@ -242,6 +245,7 @@ namespace YAT.Gui.Controls
 		// Event Invoking
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected virtual void OnDeviceInfoChanged(EventArgs e)
 		{
 			EventHelper.FireSync(DeviceInfoChanged, this, e);

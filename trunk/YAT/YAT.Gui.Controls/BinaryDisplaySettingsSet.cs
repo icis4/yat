@@ -48,6 +48,7 @@ namespace YAT.Gui.Controls
 		// Events
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when any of the settings properties is changed.")]
 		public event EventHandler SettingsChanged;
@@ -59,6 +60,7 @@ namespace YAT.Gui.Controls
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public BinaryDisplaySettingsSet()
 		{
 			InitializeComponent();
@@ -72,6 +74,7 @@ namespace YAT.Gui.Controls
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		public BinaryDisplaySettings Settings
 		{
 			get { return (this.settings); }
@@ -251,6 +254,7 @@ namespace YAT.Gui.Controls
 		// Event Invoking
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected virtual void OnSettingsChanged(EventArgs e)
 		{
 			EventHelper.FireSync(SettingsChanged, this, e);

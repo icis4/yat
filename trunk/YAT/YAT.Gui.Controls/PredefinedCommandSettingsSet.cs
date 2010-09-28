@@ -89,6 +89,7 @@ namespace YAT.Gui.Controls
 		// Events
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when any of the commands properties have changed.")]
 		public event EventHandler CommandChanged;
@@ -100,6 +101,7 @@ namespace YAT.Gui.Controls
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public PredefinedCommandSettingsSet()
 		{
 			InitializeComponent();
@@ -133,6 +135,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
+		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Domain.TerminalType TerminalType
@@ -140,6 +143,7 @@ namespace YAT.Gui.Controls
 			set { this.terminalType = value; }
 		}
 
+		/// <summary></summary>
 		[Category("Command")]
 		[Description("The command shortcut.")]
 		[DefaultValue(ShortcutStringDefault)]
@@ -522,6 +526,7 @@ namespace YAT.Gui.Controls
 		// Event Invoking
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected virtual void OnCommandChanged(EventArgs e)
 		{
 			EventHelper.FireSync(CommandChanged, this, e);

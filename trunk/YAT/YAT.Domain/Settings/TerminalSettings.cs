@@ -33,14 +33,14 @@ namespace YAT.Domain.Settings
 	{
 		private TerminalType terminalType;
 
-		// type independent settings
+		// Type independent settings.
 		private IOSettings io;
 		private BufferSettings buffer;
 		private DisplaySettings display;
 		private CharReplaceSettings charReplace;
 		private SendSettings send;
 
-		// type dependent settings
+		// Type dependent settings.
 		private TextTerminalSettings textTerminal;
 		private BinaryTerminalSettings binaryTerminal;
 

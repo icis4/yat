@@ -104,11 +104,13 @@ namespace YAT.Gui.Forms
 		//     2. Place "statusStrip_Terminal" and dock it to bottom
 		//     3. Place "splitContainer_Terminal" and dock it to fill
 
+		/// <summary></summary>
 		public Terminal()
 			: this(new Model.Terminal())
 		{
 		}
 
+		/// <summary></summary>
 		public Terminal(Model.Terminal terminal)
 		{
 			InitializeComponent();
@@ -148,6 +150,7 @@ namespace YAT.Gui.Forms
 		// MDI Parent > Properties
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public virtual string UserName
 		{
 			get
@@ -159,6 +162,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		/// <summary></summary>
 		public virtual bool IsStopped
 		{
 			get
@@ -170,6 +174,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		/// <summary></summary>
 		public virtual bool IsStarted
 		{
 			get
@@ -181,6 +186,7 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		/// <summary></summary>
 		public virtual Model.Terminal UnderlyingTerminal
 		{
 			get { return (this.terminal); }
@@ -193,51 +199,61 @@ namespace YAT.Gui.Forms
 		// MDI Parent > Methods
 		//------------------------------------------------------------------------------------------
 
+		/// <summary></summary>
 		public virtual bool RequestSaveFile()
 		{
 			return (this.terminal.Save());
 		}
 
+		/// <summary></summary>
 		public virtual bool RequestCloseFile()
 		{
 			return (this.terminal.Close());
 		}
 
+		/// <summary></summary>
 		public virtual bool RequestStartTerminal()
 		{
 			return (this.terminal.StartIO());
 		}
 
+		/// <summary></summary>
 		public virtual bool RequestStopTerminal()
 		{
 			return (this.terminal.StopIO());
 		}
 
+		/// <summary></summary>
 		public virtual void RequestRadix(Domain.Radix radix)
 		{
 			this.settingsRoot.Display.TxRadix = radix;
 		}
 
+		/// <summary></summary>
 		public virtual void RequestClear()
 		{
 			this.terminal.ClearRepositories();
 		}
 
+		/// <summary></summary>
 		public virtual void RequestSaveToFile()
 		{
 			ShowSaveMonitorDialog(GetMonitor(this.monitorSelection));
 		}
 
+		/// <summary></summary>
 		public virtual void RequestCopyToClipboard()
 		{
 			CopyMonitorToClipboard(GetMonitor(this.monitorSelection));
 		}
 
+		/// <summary></summary>
 		public virtual void RequestPrint()
 		{
 			ShowPrintMonitorDialog(GetMonitor(this.monitorSelection));
 		}
 
+		/// <summary></summary>
 		public virtual void RequestEditTerminalSettings()
 		{
 			ShowTerminalSettings();
@@ -2693,7 +2709,9 @@ namespace YAT.Gui.Forms
 		{
 			SetFixedStatusText("Terminal Settings...");
 
-			Gui.Forms.TerminalSettings f = new Gui.Forms.TerminalSettings(this.settingsRoot.Terminal);
+			// Clone settings to ensure that settings result is a different object than the original settings.
+			Domain.Settings.TerminalSettings clone = new Domain.Settings.TerminalSettings(this.settingsRoot.Terminal);
+			Gui.Forms.TerminalSettings f = new Gui.Forms.TerminalSettings(clone);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
@@ -3171,11 +3189,13 @@ namespace YAT.Gui.Forms
 		// Event Invoking
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected virtual void OnTerminalChanged(EventArgs e)
 		{
 			EventHelper.FireSync(Changed, this, e);
 		}
 
+		/// <summary></summary>
 		protected virtual void OnTerminalSaved(Model.SavedEventArgs e)
 		{
 			EventHelper.FireSync<Model.SavedEventArgs>(Saved, this, e);

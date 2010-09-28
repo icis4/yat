@@ -48,6 +48,7 @@ namespace YAT.Gui.Controls
 		// Events
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Property Changed")]
 		[Description("Event raised when the AutoReopen property is changed.")]
 		public event EventHandler AutoReopenChanged;
@@ -59,6 +60,7 @@ namespace YAT.Gui.Controls
 		// Object Lifetime
 		//==========================================================================================
 
+		/// <summary></summary>
 		public UsbHidDeviceSettings()
 		{
 			InitializeComponent();
@@ -72,6 +74,7 @@ namespace YAT.Gui.Controls
 		// Properties
 		//==========================================================================================
 
+		/// <summary></summary>
 		[Category("Socket")]
 		[Description("Sets auto reopen.")]
 		public AutoRetry AutoReopen
@@ -199,6 +202,7 @@ namespace YAT.Gui.Controls
 		// Event Invoking
 		//==========================================================================================
 
+		/// <summary></summary>
 		protected virtual void OnAutoReopenChanged(EventArgs e)
 		{
 			EventHelper.FireSync(AutoReopenChanged, this, e);

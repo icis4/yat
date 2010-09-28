@@ -25,13 +25,16 @@ using System.Windows.Forms;
 
 namespace YAT.Gui.Utilities
 {
+	/// <summary></summary>
 	public static class Validation
 	{
+		/// <summary></summary>
 		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate)
 		{
 			return (ValidateSequence(owner, description, textToValidate, Domain.Parser.ParseMode.All));
 		}
 
+		/// <summary></summary>
 		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, out int invalidTextStart, out int invalidTextLength)
 		{
 			string parsedText;
@@ -49,17 +52,20 @@ namespace YAT.Gui.Utilities
 			}
 		}
 
+		/// <summary></summary>
 		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, out string parsedText)
 		{
 			return (ValidateSequence(owner, description, textToValidate, Domain.Parser.ParseMode.All, out parsedText));
 		}
 
+		/// <summary></summary>
 		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, Domain.Parser.ParseMode parseMode)
 		{
 			string parsedText;
 			return (ValidateSequence(owner, description, textToValidate, parseMode, out parsedText));
 		}
 
+		/// <summary></summary>
 		public static bool ValidateSequence(IWin32Window owner, string description, string textToValidate, Domain.Parser.ParseMode parseMode, out string parsedText)
 		{
 			Domain.Parser.Parser p = new Domain.Parser.Parser();
