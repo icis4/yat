@@ -54,13 +54,28 @@ namespace YAT.Domain
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (base.Equals(obj));
+			if (ReferenceEquals(obj, null))
+				return (false);
+
+			if (GetType() != obj.GetType())
+				return (false);
+
+			BinaryLengthLineBreak other = (BinaryLengthLineBreak)obj;
+			return
+			(
+				(Enabled == other.Enabled) &&
+				(LineLength == other.LineLength)
+			);
 		}
 
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				Enabled.GetHashCode() ^
+				LineLength.GetHashCode()
+			);
 		}
 
 		#endregion
@@ -72,8 +87,12 @@ namespace YAT.Domain
 		/// </summary>
 		public static bool operator ==(BinaryLengthLineBreak lhs, BinaryLengthLineBreak rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
+			// Value type implementation of operator ==.
+			// See MKY.Utilities.Test.EqualityTest for details.
+
+			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
 
 			return (lhs.Equals(rhs));
 		}
@@ -115,13 +134,28 @@ namespace YAT.Domain
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (base.Equals(obj));
+			if (ReferenceEquals(obj, null))
+				return (false);
+
+			if (GetType() != obj.GetType())
+				return (false);
+
+			BinarySequenceLineBreak other = (BinarySequenceLineBreak)obj;
+			return
+			(
+				(Enabled == other.Enabled) &&
+				(Sequence == other.Sequence)
+			);
 		}
 
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				Enabled.GetHashCode() ^
+				Sequence.GetHashCode()
+			);
 		}
 
 		#endregion
@@ -133,8 +167,12 @@ namespace YAT.Domain
 		/// </summary>
 		public static bool operator ==(BinarySequenceLineBreak lhs, BinarySequenceLineBreak rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
+			// Value type implementation of operator ==.
+			// See MKY.Utilities.Test.EqualityTest for details.
+
+			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
 
 			return (lhs.Equals(rhs));
 		}
@@ -176,13 +214,28 @@ namespace YAT.Domain
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (base.Equals(obj));
+			if (ReferenceEquals(obj, null))
+				return (false);
+
+			if (GetType() != obj.GetType())
+				return (false);
+
+			BinaryTimedLineBreak other = (BinaryTimedLineBreak)obj;
+			return
+			(
+				(Enabled == other.Enabled) &&
+				(Timeout == other.Timeout)
+			);
 		}
 
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				Enabled.GetHashCode() ^
+				Timeout.GetHashCode()
+			);
 		}
 
 		#endregion
@@ -194,8 +247,12 @@ namespace YAT.Domain
 		/// </summary>
 		public static bool operator ==(BinaryTimedLineBreak lhs, BinaryTimedLineBreak rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
+			// Value type implementation of operator ==.
+			// See MKY.Utilities.Test.EqualityTest for details.
+
+			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
 
 			return (lhs.Equals(rhs));
 		}

@@ -67,6 +67,67 @@ namespace MKY.Utilities.Collections
 			get { return (this.value); }
 			set { this.value = value;  }
 		}
+
+
+		#region Object Members
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(obj, null))
+				return (false);
+
+			if (GetType() != obj.GetType())
+				return (false);
+
+			StringKeyValuePair other = (StringKeyValuePair)obj;
+			return
+			(
+				(this.key   == other.key) &&
+				(this.value == other.value)
+			);
+		}
+
+		/// <summary></summary>
+		public override int GetHashCode()
+		{
+			return
+			(
+				this.key  .GetHashCode() ^
+				this.value.GetHashCode()
+			);
+		}
+
+		#endregion
+
+		#region Comparison Operators
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(StringKeyValuePair lhs, StringKeyValuePair rhs)
+		{
+			// Value type implementation of operator ==.
+			// See MKY.Utilities.Test.EqualityTest for details.
+
+			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			return (lhs.Equals(rhs));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(StringKeyValuePair lhs, StringKeyValuePair rhs)
+		{
+			return (!(lhs == rhs));
+		}
+
+		#endregion
 	}
 }
 

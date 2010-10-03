@@ -565,14 +565,7 @@ namespace YAT.Model.Types
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
-				return (false);
-
-			Command casted = obj as Command;
-			if (casted == null)
-				return (false);
-
-			return (Equals(casted));
+			return (Equals(obj as Command));
 		}
 
 		/// <summary>
@@ -580,8 +573,10 @@ namespace YAT.Model.Types
 		/// </summary>
 		public bool Equals(Command other)
 		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
+			if (ReferenceEquals(other, null))
+				return (false);
+
+			if (GetType() != other.GetType())
 				return (false);
 
 			return
@@ -598,7 +593,15 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				this.isDefined   .GetHashCode() ^
+				this.description .GetHashCode() ^
+				this.commandLines.GetHashCode() ^
+				this.defaultRadix.GetHashCode() ^
+				this.isFilePath  .GetHashCode() ^
+				this.filePath    .GetHashCode()
+			);
 		}
 
 		#endregion
@@ -611,12 +614,11 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public virtual int CompareTo(object obj)
 		{
-			if (obj is Command)
-			{
-				Command c = (Command)obj;
-				return (this.description.CompareTo(c.description));
-			}
-			throw (new ArgumentException("Object is not a Command entry"));
+			Command other = obj as Command;
+			if (other != null)
+				return (this.description.CompareTo(other.description));
+			else
+				throw (new ArgumentException("Object is not a Command entry"));
 		}
 
 		#endregion
@@ -650,13 +652,17 @@ namespace YAT.Model.Types
 		/// </summary>
 		public static bool operator ==(Command lhs, Command rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
+			// Base reference type implementation of operator ==.
+			// See MKY.Utilities.Test.EqualityTest for details.
 
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
+			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
 
-			return (false);
+			// Ensure that object.Equals() is called.
+			// Thus, ensure that potential <Derived>.Equals() is called.
+			object obj = (object)lhs;
+			return (obj.Equals(rhs));
 		}
 
 		/// <summary>

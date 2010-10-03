@@ -33,7 +33,7 @@ namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SerialPortSettings : MKY.Utilities.Settings.Settings, IEquatable<SerialPortSettings>
+	public class SerialPortSettings : Utilities.Settings.Settings
 	{
 		/// <summary></summary>
 		public static readonly AutoRetry AutoReopenDefault = new AutoRetry(true, 2000);
@@ -61,7 +61,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public SerialPortSettings(MKY.Utilities.Settings.SettingsType settingsType)
+		public SerialPortSettings(Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -87,12 +87,12 @@ namespace MKY.IO.Serial
 			else
 				PortId = null;
 
-			Communication               = new SerialCommunicationSettings(rhs.Communication);
-			this.autoReopen             = rhs.autoReopen;
-			this.replaceParityErrors    = rhs.replaceParityErrors;
-			this.parityErrorReplacement = rhs.parityErrorReplacement;
-			this.rtsEnabled             = rhs.RtsEnabled;
-			this.dtrEnabled             = rhs.DtrEnabled;
+			Communication          = new SerialCommunicationSettings(rhs.Communication);
+			AutoReopen             = rhs.autoReopen;
+			ReplaceParityErrors    = rhs.replaceParityErrors;
+			ParityErrorReplacement = rhs.parityErrorReplacement;
+			RtsEnabled             = rhs.RtsEnabled;
+			DtrEnabled             = rhs.DtrEnabled;
 
 			ClearChanged();
 		}
@@ -143,7 +143,12 @@ namespace MKY.IO.Serial
 			get { return (this.communication); }
 			set
 			{
-				if (this.communication == null)
+				if (value == null)
+				{
+					this.communication = value;
+					DetachNode(this.communication);
+				}
+				else if (this.communication == null)
 				{
 					this.communication = value;
 					AttachNode(this.communication);
@@ -243,28 +248,16 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			SerialPortSettings casted = obj as SerialPortSettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(SerialPortSettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			SerialPortSettings other = (SerialPortSettings)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
 				(this.portId                 == other.portId) &&
 				(this.communication          == other.communication) &&
@@ -279,34 +272,30 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			int portIdHashCode = 0;
+			if (this.portId != null)
+				portIdHashCode = this.portId.GetHashCode();
+
+			return
+			(
+				base.GetHashCode() ^
+
+				portIdHashCode             .GetHashCode() ^
+				this.communication         .GetHashCode() ^
+				this.autoReopen            .GetHashCode() ^
+				this.replaceParityErrors   .GetHashCode() ^
+				this.parityErrorReplacement.GetHashCode() ^
+				this.rtsEnabled            .GetHashCode() ^
+				this.dtrEnabled            .GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(SerialPortSettings lhs, SerialPortSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(SerialPortSettings lhs, SerialPortSettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

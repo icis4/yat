@@ -33,7 +33,7 @@ namespace YAT.Settings.Workspace
 	/// <summary></summary>
 	[Serializable]
 	[XmlRoot("Settings")]
-	public class WorkspaceSettingsRoot : MKY.Utilities.Settings.Settings, IEquatable<WorkspaceSettingsRoot>
+	public class WorkspaceSettingsRoot : MKY.Utilities.Settings.Settings
 	{
 		private string productVersion = System.Windows.Forms.Application.ProductVersion;
 		private bool autoSaved = false;
@@ -115,7 +115,12 @@ namespace YAT.Settings.Workspace
 			get { return (this.workspace); }
 			set
 			{
-				if (this.workspace == null)
+				if (value == null)
+				{
+					this.workspace = value;
+					DetachNode(this.workspace);
+				}
+				else if (this.workspace == null)
 				{
 					this.workspace = value;
 					AttachNode(this.workspace);
@@ -153,28 +158,16 @@ namespace YAT.Settings.Workspace
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			WorkspaceSettingsRoot casted = obj as WorkspaceSettingsRoot;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(WorkspaceSettingsRoot other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			WorkspaceSettingsRoot other = (WorkspaceSettingsRoot)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
 				(this.productVersion == other.productVersion)
 				// Do not compare AutoSaved.
@@ -184,34 +177,20 @@ namespace YAT.Settings.Workspace
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+
+				this.productVersion.GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(WorkspaceSettingsRoot lhs, WorkspaceSettingsRoot rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(WorkspaceSettingsRoot lhs, WorkspaceSettingsRoot rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

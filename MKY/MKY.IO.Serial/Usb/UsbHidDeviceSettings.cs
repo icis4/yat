@@ -32,7 +32,7 @@ namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	[Serializable]
-	public class UsbHidDeviceSettings : MKY.Utilities.Settings.Settings, IEquatable<UsbHidDeviceSettings>
+	public class UsbHidDeviceSettings : Utilities.Settings.Settings
 	{
 		/// <summary></summary>
 		public static readonly AutoRetry AutoReopenDefault = new AutoRetry(true, 2000);
@@ -48,7 +48,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public UsbHidDeviceSettings(MKY.Utilities.Settings.SettingsType settingsType)
+		public UsbHidDeviceSettings(Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -68,7 +68,7 @@ namespace MKY.IO.Serial
 			else
 				DeviceInfo = null;
 
-			this.autoReopen = rhs.autoReopen;
+			AutoReopen = rhs.autoReopen;
 
 			ClearChanged();
 		}
@@ -126,28 +126,16 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			UsbHidDeviceSettings casted = obj as UsbHidDeviceSettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(UsbHidDeviceSettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			UsbHidDeviceSettings other = (UsbHidDeviceSettings)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
 				(this.deviceInfo == other.deviceInfo) &&
 				(this.autoReopen == other.autoReopen)
@@ -157,34 +145,25 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			int deviceInfoHashCode = 0;
+			if (this.deviceInfo != null)
+				deviceInfoHashCode = this.deviceInfo.GetHashCode();
+
+			return
+			(
+				base.GetHashCode() ^
+
+				deviceInfoHashCode ^
+				this.autoReopen.GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(UsbHidDeviceSettings lhs, UsbHidDeviceSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(UsbHidDeviceSettings lhs, UsbHidDeviceSettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

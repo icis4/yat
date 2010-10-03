@@ -25,7 +25,7 @@ namespace YAT.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class AutoWorkspaceSettings : MKY.Utilities.Settings.Settings, IEquatable<AutoWorkspaceSettings>
+	public class AutoWorkspaceSettings : MKY.Utilities.Settings.Settings
 	{
 		private string filePath;
 		private Guid filePathUser;
@@ -51,8 +51,8 @@ namespace YAT.Settings
 		public AutoWorkspaceSettings(AutoWorkspaceSettings rhs)
 			: base(rhs)
 		{
-			this.filePath     = rhs.FilePath;
-			this.filePathUser = rhs.FilePathUser;
+			FilePath     = rhs.FilePath;
+			FilePathUser = rhs.FilePathUser;
 
 			ClearChanged();
 		}
@@ -130,28 +130,16 @@ namespace YAT.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			AutoWorkspaceSettings casted = obj as AutoWorkspaceSettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(AutoWorkspaceSettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			AutoWorkspaceSettings other = (AutoWorkspaceSettings)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
 				(this.filePath     == other.filePath) &&
 				(this.filePathUser == other.filePathUser)
@@ -161,34 +149,21 @@ namespace YAT.Settings
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+
+				this.filePath    .GetHashCode() ^
+				this.filePathUser.GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(AutoWorkspaceSettings lhs, AutoWorkspaceSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(AutoWorkspaceSettings lhs, AutoWorkspaceSettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

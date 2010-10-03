@@ -273,14 +273,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
-				return (false);
-
-			DeviceInfo casted = obj as DeviceInfo;
-			if (casted == null)
-				return (false);
-
-			return (Equals(casted));
+			return (Equals(obj as DeviceInfo));
 		}
 
 		/// <summary>
@@ -288,8 +281,10 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public bool Equals(DeviceInfo other)
 		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
+			if (ReferenceEquals(other, null))
+				return (false);
+
+			if (GetType() != other.GetType())
 				return (false);
 
 			return (this.path == other.path);
@@ -298,7 +293,7 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return (this.path.GetHashCode());
 		}
 
 		/// <summary></summary>
@@ -425,18 +420,20 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public virtual int CompareTo(object obj)
 		{
-			if (obj == null) return (1);
-			if (obj is DeviceInfo)
+			DeviceInfo other = obj as DeviceInfo;
+			if (other != null)
 			{
-				DeviceInfo id = (DeviceInfo)obj;
-				if      (VendorId != id.VendorId)
-					return (VendorId.CompareTo(id.VendorId));
-				else if (ProductId != id.ProductId)
-					return (ProductId.CompareTo(id.ProductId));
+				if      (VendorId != other.VendorId)
+					return (VendorId.CompareTo(other.VendorId));
+				else if (ProductId != other.ProductId)
+					return (ProductId.CompareTo(other.ProductId));
 				else
-					return (SerialNumber.CompareTo(id.SerialNumber));
+					return (SerialNumber.CompareTo(other.SerialNumber));
 			}
-			throw (new ArgumentException("Object is not a UsbDeviceId entry"));
+			else
+			{
+				throw (new ArgumentException("Object is not a UsbDeviceId entry"));
+			}
 		}
 
 		#endregion
@@ -467,13 +464,17 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public static bool operator ==(DeviceInfo lhs, DeviceInfo rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
+			// Base reference type implementation of operator ==.
+			// See MKY.Utilities.Test.EqualityTest for details.
 
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
+			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			// Ensure that object.Equals() is called.
+			// Thus, ensure that potential <Derived>.Equals() is called.
+			object obj = (object)lhs;
+			return (obj.Equals(rhs));
 		}
 
 		/// <summary>

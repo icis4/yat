@@ -27,7 +27,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class TerminalSettingsItem : MKY.Utilities.Settings.Settings, IEquatable<TerminalSettingsItem>, IGuidProvider
+	public class TerminalSettingsItem : MKY.Utilities.Settings.Settings, IGuidProvider
 	{
 		private string filePath;
 		private Guid guid;
@@ -50,8 +50,8 @@ namespace YAT.Model.Settings
 		public TerminalSettingsItem(TerminalSettingsItem rhs)
 			: base(rhs)
 		{
-			this.filePath = rhs.FilePath;
-			this.guid = rhs.Guid;
+			FilePath = rhs.FilePath;
+			Guid = rhs.Guid;
 
 			Window = new WindowSettings(rhs.Window);
 
@@ -113,7 +113,12 @@ namespace YAT.Model.Settings
 			get { return (this.window); }
 			set
 			{
-				if (this.window == null)
+				if (value == null)
+				{
+					this.window = value;
+					DetachNode(this.window);
+				}
+				else if (this.window == null)
 				{
 					this.window = value;
 					AttachNode(this.window);
@@ -136,28 +141,16 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			TerminalSettingsItem casted = obj as TerminalSettingsItem;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(TerminalSettingsItem other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			TerminalSettingsItem other = (TerminalSettingsItem)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
 				(this.filePath == other.filePath) &&
 				(this.guid     == other.guid)
@@ -167,34 +160,21 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+
+				this.filePath.GetHashCode() ^
+				this.guid    .GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(TerminalSettingsItem lhs, TerminalSettingsItem rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(TerminalSettingsItem lhs, TerminalSettingsItem rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

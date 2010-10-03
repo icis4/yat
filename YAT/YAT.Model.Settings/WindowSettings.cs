@@ -27,7 +27,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class WindowSettings : MKY.Utilities.Settings.Settings, IEquatable<WindowSettings>
+	public class WindowSettings : MKY.Utilities.Settings.Settings
 	{
 		private FormWindowState state;
 		private Point location;
@@ -54,9 +54,10 @@ namespace YAT.Model.Settings
 		public WindowSettings(WindowSettings rhs)
 			: base(rhs)
 		{
-			this.state    = rhs.State;
-			this.location = rhs.Location;
-			this.size     = rhs.Size;
+			State    = rhs.State;
+			Location = rhs.Location;
+			Size     = rhs.Size;
+
 			ClearChanged();
 		}
 
@@ -131,31 +132,20 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			WindowSettings casted = obj as WindowSettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(WindowSettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			WindowSettings other = (WindowSettings)obj;
 			if (this.state == FormWindowState.Normal)
 			{   // Normal
 				return
 				(
-					base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
-					(this.state == other.state) &&
+					base.Equals(other) && // Compare all settings nodes.
+
+					(this.state    == other.state) &&
 					(this.location == other.location) &&
 					(this.size     == other.size)
 				);
@@ -164,7 +154,7 @@ namespace YAT.Model.Settings
 			{   // Maximized or Minimized
 				return
 				(
-					base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+					base.Equals(other) && // Compare all settings nodes.
 					(this.state == other.state)
 				);
 			}
@@ -173,34 +163,19 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+				this.state.GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(WindowSettings lhs, WindowSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(WindowSettings lhs, WindowSettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

@@ -51,13 +51,28 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (base.Equals(obj));
+			if (ReferenceEquals(obj, null))
+				return (false);
+
+			if (GetType() != obj.GetType())
+				return (false);
+
+			AutoRetry other = (AutoRetry)obj;
+			return
+			(
+				(Enabled == other.Enabled) &&
+				(Interval == other.Interval)
+			);
 		}
 
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				Enabled.GetHashCode() ^
+				Interval.GetHashCode()
+			);
 		}
 
 		#endregion
@@ -69,8 +84,12 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public static bool operator ==(AutoRetry lhs, AutoRetry rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
+			// Value type implementation of operator ==.
+			// See MKY.Utilities.Test.EqualityTest for details.
+
+			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
 
 			return (lhs.Equals(rhs));
 		}

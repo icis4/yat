@@ -148,14 +148,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
-				return (false);
-
-			SerialPortSettings casted = obj as SerialPortSettings;
-			if (casted == null)
-				return (false);
-
-			return (Equals(casted));
+			return (Equals(obj as SerialPortSettings));
 		}
 
 		/// <summary>
@@ -163,8 +156,10 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public bool Equals(SerialPortSettings other)
 		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
+			if (ReferenceEquals(other, null))
+				return (false);
+
+			if (GetType() != other.GetType())
 				return (false);
 
 			return
@@ -182,7 +177,14 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				this.baudRate .GetHashCode() ^
+				this.dataBits .GetHashCode() ^
+				this.parity   .GetHashCode() ^
+				this.stopBits .GetHashCode() ^
+				this.handshake.GetHashCode()
+			);
 		}
 
 		/// <summary></summary>
@@ -190,10 +192,10 @@ namespace MKY.IO.Ports
 		{
 			return
 				(
-				((XBaudRate)this.baudRate) + ", " +
-				((XDataBits)this.dataBits) + ", " +
-				((XParity)this.parity)     + ", " +
-				((XStopBits)this.stopBits) + ", " +
+				((XBaudRate) this.baudRate) + ", " +
+				((XDataBits) this.dataBits) + ", " +
+				((XParity)   this.parity)   + ", " +
+				((XStopBits) this.stopBits) + ", " +
 				((XHandshake)this.handshake).ToShortString()
 				);
 		}
@@ -242,11 +244,11 @@ namespace MKY.IO.Ports
 		public virtual string ToShortString()
 		{
 			return
-			  (
-			  ((XBaudRate)this.baudRate).ToString() + ", " +
-			  ((XDataBits)this.dataBits).ToString() + ", " +
-			  ((XParity)this.parity).ToShortString()
-			  );
+			(
+				((XBaudRate)this.baudRate).ToString() + ", " +
+				((XDataBits)this.dataBits).ToString() + ", " +
+				((XParity)this.parity).ToShortString()
+			);
 		}
 
 		/// <summary>
@@ -255,13 +257,13 @@ namespace MKY.IO.Ports
 		public virtual string ToLongString()
 		{
 			return
-			  (
-			  ((XBaudRate)this.baudRate).ToString() + ", " +
-			  ((XDataBits)this.dataBits).ToString() + ", " +
-			  ((XParity)this.parity).ToShortString() + ", " +
-			  ((XStopBits)this.stopBits).ToString() + ", " +
-			  ((XHandshake)this.handshake).ToShortString()
-			  );
+			(
+				((XBaudRate)this.baudRate).ToString() + ", " +
+				((XDataBits)this.dataBits).ToString() + ", " +
+				((XParity)this.parity).ToShortString() + ", " +
+				((XStopBits)this.stopBits).ToString() + ", " +
+				((XHandshake)this.handshake).ToShortString()
+			);
 		}
 
 		#region Comparision Operators
@@ -269,13 +271,17 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static bool operator ==(SerialPortSettings lhs, SerialPortSettings rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
+			// Base reference type implementation of operator ==.
+			// See MKY.Utilities.Test.EqualityTest for details.
 
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
+			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
 
-			return (false);
+			// Ensure that object.Equals() is called.
+			// Thus, ensure that potential <Derived>.Equals() is called.
+			object obj = (object)lhs;
+			return (obj.Equals(rhs));
 		}
 
 		/// <summary></summary>

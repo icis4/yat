@@ -59,13 +59,30 @@ namespace YAT.Domain
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (base.Equals(obj));
+			if (ReferenceEquals(obj, null))
+				return (false);
+
+			if (GetType() != obj.GetType())
+				return (false);
+
+			TextLineSendDelay other = (TextLineSendDelay)obj;
+			return
+			(
+				(Enabled == other.Enabled) &&
+				(Delay == other.Delay) &&
+				(LineInterval == other.LineInterval)
+			);
 		}
 
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				Enabled.GetHashCode() ^
+				Delay.GetHashCode() ^
+				LineInterval.GetHashCode()
+			);
 		}
 
 		#endregion
@@ -77,8 +94,12 @@ namespace YAT.Domain
 		/// </summary>
 		public static bool operator ==(TextLineSendDelay lhs, TextLineSendDelay rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
+			// Value type implementation of operator ==.
+			// See MKY.Utilities.Test.EqualityTest for details.
+
+			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
 
 			return (lhs.Equals(rhs));
 		}
@@ -120,13 +141,28 @@ namespace YAT.Domain
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (base.Equals(obj));
+			if (ReferenceEquals(obj, null))
+				return (false);
+
+			if (GetType() != obj.GetType())
+				return (false);
+
+			WaitForResponse other = (WaitForResponse)obj;
+			return
+			(
+				(Enabled == other.Enabled) &&
+				(Timeout == other.Timeout)
+			);
 		}
 
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				Enabled.GetHashCode() ^
+				Timeout.GetHashCode()
+			);
 		}
 
 		#endregion
@@ -138,8 +174,12 @@ namespace YAT.Domain
 		/// </summary>
 		public static bool operator ==(WaitForResponse lhs, WaitForResponse rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
+			// Value type implementation of operator ==.
+			// See MKY.Utilities.Test.EqualityTest for details.
+
+			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
 
 			return (lhs.Equals(rhs));
 		}

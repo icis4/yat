@@ -28,7 +28,7 @@ using MKY.Utilities.Text;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	public class TextTerminalSettings : MKY.Utilities.Settings.Settings, IEquatable<TextTerminalSettings>
+	public class TextTerminalSettings : MKY.Utilities.Settings.Settings
 	{
 		/// <summary></summary>
 		public static readonly string DefaultEol = (string)XEol.Parse(Environment.NewLine);
@@ -67,14 +67,14 @@ namespace YAT.Domain.Settings
 		public TextTerminalSettings(TextTerminalSettings rhs)
 			: base(rhs)
 		{
-			this.separateTxRxEol     = rhs.SeparateTxRxEol;
-			this.txEol               = rhs.TxEol;
-			this.rxEol               = rhs.RxEol;
-			this.encoding            = rhs.Encoding;
-			this.showEol             = rhs.ShowEol;
-			this.lineSendDelay       = rhs.LineSendDelay;
-			this.waitForResponse     = rhs.WaitForResponse;
-			this.charSubstitution    = rhs.CharSubstitution;
+			SeparateTxRxEol     = rhs.SeparateTxRxEol;
+			TxEol               = rhs.TxEol;
+			RxEol               = rhs.RxEol;
+			Encoding            = rhs.Encoding;
+			ShowEol             = rhs.ShowEol;
+			LineSendDelay       = rhs.LineSendDelay;
+			WaitForResponse     = rhs.WaitForResponse;
+			CharSubstitution    = rhs.CharSubstitution;
 
 			ClearChanged();
 		}
@@ -234,28 +234,16 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			TextTerminalSettings casted = obj as TextTerminalSettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(TextTerminalSettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			TextTerminalSettings other = (TextTerminalSettings)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
 				(this.separateTxRxEol  == other.separateTxRxEol) &&
 				(this.txEol            == other.txEol) &&
@@ -271,34 +259,27 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+
+				this.separateTxRxEol .GetHashCode() ^
+				this.txEol           .GetHashCode() ^
+				this.rxEol           .GetHashCode() ^
+				this.encoding        .GetHashCode() ^
+				this.showEol         .GetHashCode() ^
+				this.lineSendDelay   .GetHashCode() ^
+				this.waitForResponse .GetHashCode() ^
+				this.charSubstitution.GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(TextTerminalSettings lhs, TextTerminalSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(TextTerminalSettings lhs, TextTerminalSettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

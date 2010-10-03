@@ -29,7 +29,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class NewTerminalSettings : MKY.Utilities.Settings.Settings, IEquatable<NewTerminalSettings>
+	public class NewTerminalSettings : MKY.Utilities.Settings.Settings
 	{
 		private Domain.TerminalType terminalType;
 		private Domain.IOType ioType;
@@ -68,21 +68,21 @@ namespace YAT.Model.Settings
 		public NewTerminalSettings(NewTerminalSettings rhs)
 			: base(rhs)
 		{
-			this.terminalType         = rhs.TerminalType;
-			this.ioType               = rhs.IOType;
+			TerminalType         = rhs.TerminalType;
+			IOType               = rhs.IOType;
 
-			this.serialPortId         = rhs.SerialPortId;
+			SerialPortId         = rhs.SerialPortId;
 
-			this.socketRemoteHost     = rhs.SocketRemoteHost;
-			this.socketRemotePort     = rhs.SocketRemotePort;
+			SocketRemoteHost     = rhs.SocketRemoteHost;
+			SocketRemotePort     = rhs.SocketRemotePort;
 
-			this.socketLocalInterface = rhs.SocketLocalInterface;
-			this.socketLocalTcpPort   = rhs.SocketLocalTcpPort;
-			this.socketLocalUdpPort   = rhs.SocketLocalUdpPort;
+			SocketLocalInterface = rhs.SocketLocalInterface;
+			SocketLocalTcpPort   = rhs.SocketLocalTcpPort;
+			SocketLocalUdpPort   = rhs.SocketLocalUdpPort;
 
-			this.usbHidDeviceInfo     = rhs.UsbHidDeviceInfo;
+			UsbHidDeviceInfo     = rhs.UsbHidDeviceInfo;
 
-			this.startTerminal        = rhs.StartTerminal;
+			StartTerminal        = rhs.StartTerminal;
 
 			ClearChanged();
 		}
@@ -314,30 +314,18 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			NewTerminalSettings casted = obj as NewTerminalSettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(NewTerminalSettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			NewTerminalSettings other = (NewTerminalSettings)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
-				(this.terminalType == other.terminalType) &&
+				(this.terminalType         == other.terminalType) &&
 				(this.ioType               == other.ioType) &&
 				(this.serialPortId         == other.serialPortId) &&
 				(this.socketRemoteHost     == other.socketRemoteHost) &&
@@ -353,34 +341,37 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			int serialPortIdHashCode = 0;
+			if (this.serialPortId != null)
+				serialPortIdHashCode = this.serialPortId.GetHashCode();
+
+			int usbHidDeviceInfoHashCode = 0;
+			if (this.usbHidDeviceInfo != null)
+				usbHidDeviceInfoHashCode = this.usbHidDeviceInfo.GetHashCode();
+
+			return
+			(
+				base.GetHashCode() ^
+
+				this.terminalType        .GetHashCode() ^
+				this.ioType              .GetHashCode() ^
+				serialPortIdHashCode     .GetHashCode() ^
+				this.socketRemoteHost    .GetHashCode() ^
+				this.socketRemotePort    .GetHashCode() ^
+				this.socketLocalInterface.GetHashCode() ^
+				this.socketLocalTcpPort  .GetHashCode() ^
+				this.socketLocalUdpPort  .GetHashCode() ^
+				usbHidDeviceInfoHashCode .GetHashCode() ^
+				this.startTerminal       .GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(NewTerminalSettings lhs, NewTerminalSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(NewTerminalSettings lhs, NewTerminalSettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

@@ -27,7 +27,7 @@ namespace YAT.Settings.Terminal
 {
 	/// <summary></summary>
 	[Serializable]
-	public class ImplicitSettings : MKY.Utilities.Settings.Settings, IEquatable<ImplicitSettings>
+	public class ImplicitSettings : MKY.Utilities.Settings.Settings
 	{
 		private bool terminalIsStarted;
 		private bool logIsStarted;
@@ -59,8 +59,8 @@ namespace YAT.Settings.Terminal
 		public ImplicitSettings(ImplicitSettings rhs)
 			: base(rhs)
 		{
-			this.terminalIsStarted = rhs.TerminalIsStarted;
-			this.logIsStarted      = rhs.LogIsStarted;
+			TerminalIsStarted = rhs.TerminalIsStarted;
+			LogIsStarted      = rhs.LogIsStarted;
 
 			SendCommand = new Model.Settings.SendCommandSettings(rhs.SendCommand);
 			SendFile    = new Model.Settings.SendFileSettings(rhs.SendFile);
@@ -122,7 +122,12 @@ namespace YAT.Settings.Terminal
 			get { return (this.sendCommand); }
 			set
 			{
-				if (this.sendCommand == null)
+				if (value == null)
+				{
+					this.sendCommand = value;
+					DetachNode(this.sendCommand);
+				}
+				else if (this.sendCommand == null)
 				{
 					this.sendCommand = value;
 					AttachNode(this.sendCommand);
@@ -143,7 +148,12 @@ namespace YAT.Settings.Terminal
 			get { return (this.sendFile); }
 			set
 			{
-				if (this.sendFile == null)
+				if (value == null)
+				{
+					this.sendFile = value;
+					DetachNode(this.sendFile);
+				}
+				else if (this.sendFile == null)
 				{
 					this.sendFile = value;
 					AttachNode(this.sendFile);
@@ -164,7 +174,12 @@ namespace YAT.Settings.Terminal
 			get { return (this.predefined); }
 			set
 			{
-				if (this.predefined == null)
+				if (value == null)
+				{
+					this.predefined = value;
+					DetachNode(this.predefined);
+				}
+				else if (this.predefined == null)
 				{
 					this.predefined = value;
 					AttachNode(this.predefined);
@@ -185,7 +200,12 @@ namespace YAT.Settings.Terminal
 			get { return (this.window); }
 			set
 			{
-				if (this.window == null)
+				if (value == null)
+				{
+					this.window = value;
+					DetachNode(this.window);
+				}
+				else if (this.window == null)
 				{
 					this.window = value;
 					AttachNode(this.window);
@@ -206,7 +226,12 @@ namespace YAT.Settings.Terminal
 			get { return (this.layout); }
 			set
 			{
-				if (this.layout == null)
+				if (value == null)
+				{
+					this.layout = value;
+					DetachNode(this.layout);
+				}
+				else if (this.layout == null)
 				{
 					this.layout = value;
 					AttachNode(this.layout);
@@ -229,28 +254,16 @@ namespace YAT.Settings.Terminal
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			ImplicitSettings casted = obj as ImplicitSettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(ImplicitSettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			ImplicitSettings other = (ImplicitSettings)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
 				(this.terminalIsStarted == other.terminalIsStarted) &&
 				(this.logIsStarted      == other.logIsStarted)
@@ -260,34 +273,21 @@ namespace YAT.Settings.Terminal
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+
+				this.terminalIsStarted.GetHashCode() ^
+				this.logIsStarted     .GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(ImplicitSettings lhs, ImplicitSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(ImplicitSettings lhs, ImplicitSettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

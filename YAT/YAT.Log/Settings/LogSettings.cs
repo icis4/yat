@@ -31,7 +31,7 @@ namespace YAT.Log.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class LogSettings : MKY.Utilities.Settings.Settings, IEquatable<LogSettings>
+	public class LogSettings : MKY.Utilities.Settings.Settings
 	{
 		#region Fields
 		//==========================================================================================
@@ -721,28 +721,16 @@ namespace YAT.Log.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			LogSettings casted = obj as LogSettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(LogSettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			LogSettings other = (LogSettings)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
 				(this.rootPath              == other.rootPath) &&
 				(this.rootFileName          == other.rootFileName) &&
@@ -768,34 +756,37 @@ namespace YAT.Log.Settings
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+
+				this.rootPath             .GetHashCode() ^
+				this.rootFileName         .GetHashCode() ^
+				this.rawLogTx             .GetHashCode() ^
+				this.rawLogBidir          .GetHashCode() ^
+				this.rawLogRx             .GetHashCode() ^
+				this.rawExtension         .GetHashCode() ^
+				this.neatLogTx            .GetHashCode() ^
+				this.neatLogBidir         .GetHashCode() ^
+				this.neatLogRx            .GetHashCode() ^
+				this.neatExtension        .GetHashCode() ^
+				this.writeMode            .GetHashCode() ^
+				this.subdirectoriesFormat .GetHashCode() ^
+				this.subdirectoriesChannel.GetHashCode() ^
+				this.nameFormat           .GetHashCode() ^
+				this.nameChannel          .GetHashCode() ^
+				this.nameDate             .GetHashCode() ^
+				this.nameTime             .GetHashCode() ^
+				this.nameSeparator        .GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(LogSettings lhs, LogSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(LogSettings lhs, LogSettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

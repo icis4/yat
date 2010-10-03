@@ -28,7 +28,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class FormatSettings : MKY.Utilities.Settings.Settings, IEquatable<FormatSettings>
+	public class FormatSettings : MKY.Utilities.Settings.Settings
 	{
 		private FontFormat font;
 		private TextFormat txDataFormat;
@@ -253,28 +253,16 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			FormatSettings casted = obj as FormatSettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(FormatSettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			FormatSettings other = (FormatSettings)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
 				(this.font              == other.font) &&
 				(this.txDataFormat      == other.txDataFormat) &&
@@ -291,34 +279,28 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+
+				this.font             .GetHashCode() ^
+				this.txDataFormat     .GetHashCode() ^
+				this.txControlFormat  .GetHashCode() ^
+				this.rxDataFormat     .GetHashCode() ^
+				this.rxControlFormat  .GetHashCode() ^
+				this.timeStampFormat  .GetHashCode() ^
+				this.lengthFormat     .GetHashCode() ^
+				this.whiteSpacesFormat.GetHashCode() ^
+				this.errorFormat      .GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(FormatSettings lhs, FormatSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(FormatSettings lhs, FormatSettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

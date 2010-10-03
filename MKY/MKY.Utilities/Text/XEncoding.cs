@@ -658,7 +658,7 @@ namespace MKY.Utilities.Text
 		/// </summary>
 		public override int GetHashCode()
 		{
-			return (CodePage);
+			return (base.GetHashCode());
 		}
 
 		#endregion

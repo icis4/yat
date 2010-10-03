@@ -649,6 +649,79 @@ namespace MKY.Utilities.IO
 			NearRelativeDirectoryCount = nearRelativeDirectoryCount;
 			RelativePath = relativePath;
 		}
+
+
+		#region Object Members
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(obj, null))
+				return (false);
+
+			if (GetType() != obj.GetType())
+				return (false);
+
+			XPathCompareResult other = (XPathCompareResult)obj;
+			return
+			(
+				(HaveCommon                 == other.HaveCommon) &&
+				(CommonPath                 == other.CommonPath) &&
+				(CommonDirectoryCount       == other.CommonDirectoryCount) &&
+				(AreRelative                == other.AreRelative) &&
+				(RelativeDirectoryCount     == other.RelativeDirectoryCount) &&
+				(AreNearRelative            == other.AreNearRelative) &&
+				(NearRelativeDirectoryCount == other.NearRelativeDirectoryCount) &&
+				(RelativePath               == other.RelativePath)
+			);
+		}
+
+		/// <summary></summary>
+		public override int GetHashCode()
+		{
+			return
+			(
+				HaveCommon                .GetHashCode() ^
+				CommonPath                .GetHashCode() ^
+				CommonDirectoryCount      .GetHashCode() ^
+				AreRelative               .GetHashCode() ^
+				RelativeDirectoryCount    .GetHashCode() ^
+				AreNearRelative           .GetHashCode() ^
+				NearRelativeDirectoryCount.GetHashCode() ^
+				RelativePath              .GetHashCode()
+			);
+		}
+
+		#endregion
+
+		#region Comparison Operators
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(XPathCompareResult lhs, XPathCompareResult rhs)
+		{
+			// Value type implementation of operator ==.
+			// See MKY.Utilities.Test.EqualityTest for details.
+
+			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			return (lhs.Equals(rhs));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(XPathCompareResult lhs, XPathCompareResult rhs)
+		{
+			return (!(lhs == rhs));
+		}
+
+		#endregion
 	}
 
 	#endregion

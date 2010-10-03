@@ -93,14 +93,7 @@ namespace YAT.Log
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
-				return (false);
-
-			FileNameSeparator casted = obj as FileNameSeparator;
-			if (casted == null)
-				return (false);
-
-			return (Equals(casted));
+			return (Equals(obj as FileNameSeparator));
 		}
 
 		/// <summary>
@@ -108,8 +101,10 @@ namespace YAT.Log
 		/// </summary>
 		public bool Equals(FileNameSeparator other)
 		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
+			if (ReferenceEquals(other, null))
+				return (false);
+
+			if (GetType() != other.GetType())
 				return (false);
 
 			return
@@ -122,7 +117,11 @@ namespace YAT.Log
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				this.Separator  .GetHashCode() ^
+				this.Description.GetHashCode()
+			);
 		}
 
 		/// <summary></summary>
@@ -238,13 +237,17 @@ namespace YAT.Log
 		/// </summary>
 		public static bool operator ==(FileNameSeparator lhs, FileNameSeparator rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
+			// Base reference type implementation of operator ==.
+			// See MKY.Utilities.Test.EqualityTest for details.
 
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
+			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			// Ensure that object.Equals() is called.
+			// Thus, ensure that potential <Derived>.Equals() is called.
+			object obj = (object)lhs;
+			return (obj.Equals(rhs));
 		}
 
 		/// <summary>

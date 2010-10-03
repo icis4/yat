@@ -125,30 +125,18 @@ namespace MKY.Utilities.Net
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			IPNetworkInterface casted = obj as IPNetworkInterface;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(IPNetworkInterface other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			IPNetworkInterface other = (IPNetworkInterface)obj;
 			if ((IPNetworkInterfaceType)UnderlyingEnum == IPNetworkInterfaceType.Other)
 			{
 				return
 				(
-					base.Equals((XEnum)other) &&
+					base.Equals(other) &&
 
 					(this.otherAddress     == other.otherAddress) &&
 					(this.otherDescription == other.otherDescription)
@@ -156,7 +144,7 @@ namespace MKY.Utilities.Net
 			}
 			else
 			{
-				return (base.Equals((XEnum)other));
+				return (base.Equals(other));
 			}
 		}
 
@@ -166,7 +154,20 @@ namespace MKY.Utilities.Net
 		/// <returns>A 32-bit signed integer hash code.</returns>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			if ((IPNetworkInterfaceType)UnderlyingEnum == IPNetworkInterfaceType.Other)
+			{
+				return
+				(
+					base.GetHashCode() ^
+
+					this.otherAddress    .GetHashCode() ^
+					this.otherDescription.GetHashCode()
+				);
+			}
+			else
+			{
+				return (base.GetHashCode());
+			}
 		}
 
 		/// <summary></summary>
@@ -304,27 +305,8 @@ namespace MKY.Utilities.Net
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(IPNetworkInterface lhs, IPNetworkInterface rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(IPNetworkInterface lhs, IPNetworkInterface rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

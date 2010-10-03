@@ -29,7 +29,7 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class TerminalSettings : MKY.Utilities.Settings.Settings, IEquatable<TerminalSettings>
+	public class TerminalSettings : MKY.Utilities.Settings.Settings
 	{
 		private TerminalType terminalType;
 
@@ -80,7 +80,7 @@ namespace YAT.Domain.Settings
 		public TerminalSettings(TerminalSettings rhs)
 			: base(rhs)
 		{
-			this.terminalType = rhs.TerminalType;
+			TerminalType = rhs.TerminalType;
 
 			IO = new IOSettings(rhs.IO);
 			Buffer = new BufferSettings(rhs.Buffer);
@@ -129,7 +129,12 @@ namespace YAT.Domain.Settings
 			get { return (this.io); }
 			set
 			{
-				if (this.io == null)
+				if (value == null)
+				{
+					this.io = value;
+					DetachNode(this.io);
+				}
+				else if (this.io == null)
 				{
 					this.io = value;
 					AttachNode(this.io);
@@ -150,7 +155,12 @@ namespace YAT.Domain.Settings
 			get { return (this.buffer); }
 			set
 			{
-				if (this.buffer == null)
+				if (value == null)
+				{
+					this.buffer = value;
+					DetachNode(this.buffer);
+				}
+				else if (this.buffer == null)
 				{
 					this.buffer = value;
 					AttachNode(this.buffer);
@@ -171,7 +181,12 @@ namespace YAT.Domain.Settings
 			get { return (this.display); }
 			set
 			{
-				if (this.display == null)
+				if (value == null)
+				{
+					this.display = value;
+					DetachNode(this.display);
+				}
+				else if (this.display == null)
 				{
 					this.display = value;
 					AttachNode(this.display);
@@ -192,7 +207,12 @@ namespace YAT.Domain.Settings
 			get { return (this.charReplace); }
 			set
 			{
-				if (this.charReplace == null)
+				if (value == null)
+				{
+					this.charReplace = value;
+					DetachNode(this.charReplace);
+				}
+				else if (this.charReplace == null)
 				{
 					this.charReplace = value;
 					AttachNode(this.charReplace);
@@ -213,7 +233,12 @@ namespace YAT.Domain.Settings
 			get { return (this.send); }
 			set
 			{
-				if (this.send == null)
+				if (value == null)
+				{
+					this.send = value;
+					DetachNode(this.send);
+				}
+				else if (this.send == null)
 				{
 					this.send = value;
 					AttachNode(this.send);
@@ -234,7 +259,12 @@ namespace YAT.Domain.Settings
 			get { return (this.textTerminal); }
 			set
 			{
-				if (this.textTerminal == null)
+				if (value == null)
+				{
+					this.textTerminal = value;
+					DetachNode(this.textTerminal);
+				}
+				else if (this.textTerminal == null)
 				{
 					this.textTerminal = value;
 					AttachNode(this.textTerminal);
@@ -278,28 +308,16 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			TerminalSettings casted = obj as TerminalSettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(TerminalSettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			TerminalSettings other = (TerminalSettings)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 				(this.terminalType == other.terminalType)
 			);
 		}
@@ -307,34 +325,19 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+				this.terminalType.GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(TerminalSettings lhs, TerminalSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(TerminalSettings lhs, TerminalSettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

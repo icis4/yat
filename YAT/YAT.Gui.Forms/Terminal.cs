@@ -2250,17 +2250,17 @@ namespace YAT.Gui.Forms
 			SetTerminalCaption();
 			if (e.Inner == null)
 			{
-				// SettingsRoot changed
-				// Nothing to do, no need to care about ProductVersion
+				// SettingsRoot changed.
+				// Nothing to do, no need to care about ProductVersion.
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Explicit))
 			{
-				// ExplicitSettings changed
+				// ExplicitSettings changed.
 				HandleExplicitSettings(e.Inner);
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Implicit))
 			{
-				// ImplicitSettings changed
+				// ImplicitSettings changed.
 				HandleImplicitSettings(e.Inner);
 			}
 			OnTerminalChanged(new EventArgs());
@@ -2270,17 +2270,17 @@ namespace YAT.Gui.Forms
 		{
 			if (e.Inner == null)
 			{
-				// ExplicitSettings changed
+				// ExplicitSettings changed.
 				// Nothing to do
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Terminal))
 			{
-				// TerminalSettings changed
+				// TerminalSettings changed.
 				HandleTerminalSettings(e.Inner);
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.PredefinedCommand))
 			{
-				// PredefinedCommandSettings changed
+				// PredefinedCommandSettings changed.
 				this.isSettingControls = true;
 				predefined.Pages = this.settingsRoot.PredefinedCommand.Pages;
 				this.isSettingControls = false;
@@ -2289,12 +2289,12 @@ namespace YAT.Gui.Forms
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Format))
 			{
-				// FormatSettings changed
+				// FormatSettings changed.
 				ReformatMonitors();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Log))
 			{
-				// LogSettings changed
+				// LogSettings changed.
 				SetLogControls();
 			}
 		}
@@ -2303,18 +2303,18 @@ namespace YAT.Gui.Forms
 		{
 			if (e.Inner == null)
 			{
-				// ImplicitSettings changed
+				// ImplicitSettings changed.
 				SetTerminalControls();
 				SetLogControls();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendCommand))
 			{
-				// SendCommandSettings changed
+				// SendCommandSettings changed.
 				SetSendControls();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendFile))
 			{
-				// SendFileSettings changed
+				// SendFileSettings changed.
 				this.isSettingControls = true;
 				send.FileCommand = this.settingsRoot.SendFile.Command;
 				this.isSettingControls = false;
@@ -2323,19 +2323,19 @@ namespace YAT.Gui.Forms
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Predefined))
 			{
-				// PredefinedSettings changed
+				// PredefinedSettings changed.
 				this.isSettingControls = true;
 				predefined.SelectedPage = this.settingsRoot.Predefined.SelectedPage;
 				this.isSettingControls = false;
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Window))
 			{
-				// WindowSettings changed
-				// Nothing to do, windows settings are only saved
+				// WindowSettings changed.
+				// Nothing to do, windows settings are only saved.
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Layout))
 			{
-				// LayoutSettings changed
+				// LayoutSettings changed.
 				LayoutTerminal();
 				SetLayoutControls();
 			}
@@ -2348,42 +2348,42 @@ namespace YAT.Gui.Forms
 
 			if (e.Inner == null)
 			{
-				// TerminalSettings changed
+				// TerminalSettings changed.
 				SetIOStatus();
 				SetIOControlControls();
 				SetMonitorIOStatus();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.IO))
 			{
-				// IOSettings changed
+				// IOSettings changed.
 				SetIOStatus();
 				SetIOControlControls();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Buffer))
 			{
-				// BufferSettings changed
+				// BufferSettings changed.
 				ReloadMonitors();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Display))
 			{
-				// DisplaySettings changed
+				// DisplaySettings changed.
 				SetMonitorContents();
 				SetDisplayControls();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Send))
 			{
-				// SendSettings changed
+				// SendSettings changed.
 				SetSendControls();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.TextTerminal))
 			{
-				// TextTerminalSettings changed
+				// TextTerminalSettings changed.
 				if (this.settingsRoot.TerminalType == Domain.TerminalType.Text)
 					ReloadMonitors();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.BinaryTerminal))
 			{
-				// BinaryTerminalSettings changed
+				// BinaryTerminalSettings changed.
 				if (this.settingsRoot.TerminalType == Domain.TerminalType.Binary)
 					ReloadMonitors();
 			}

@@ -26,7 +26,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class LayoutSettings : MKY.Utilities.Settings.Settings, IEquatable<LayoutSettings>
+	public class LayoutSettings : MKY.Utilities.Settings.Settings
 	{
 		private bool txMonitorPanelIsVisible;
 		private bool bidirMonitorPanelIsVisible;
@@ -62,18 +62,18 @@ namespace YAT.Model.Settings
 		public LayoutSettings(LayoutSettings rhs)
 			: base(rhs)
 		{
-			this.txMonitorPanelIsVisible    = rhs.TxMonitorPanelIsVisible;
-			this.bidirMonitorPanelIsVisible = rhs.BidirMonitorPanelIsVisible;
-			this.rxMonitorPanelIsVisible    = rhs.RxMonitorPanelIsVisible;
-			this.monitorOrientation         = rhs.MonitorOrientation;
-			this.txMonitorSplitterRatio     = rhs.TxMonitorSplitterRatio;
-			this.rxMonitorSplitterRatio     = rhs.RxMonitorSplitterRatio;
+			TxMonitorPanelIsVisible    = rhs.TxMonitorPanelIsVisible;
+			BidirMonitorPanelIsVisible = rhs.BidirMonitorPanelIsVisible;
+			RxMonitorPanelIsVisible    = rhs.RxMonitorPanelIsVisible;
+			MonitorOrientation         = rhs.MonitorOrientation;
+			TxMonitorSplitterRatio     = rhs.TxMonitorSplitterRatio;
+			RxMonitorSplitterRatio     = rhs.RxMonitorSplitterRatio;
 
-			this.predefinedPanelIsVisible = rhs.PredefinedPanelIsVisible;
-			this.predefinedSplitterRatio  = rhs.PredefinedSplitterRatio;
+			PredefinedPanelIsVisible   = rhs.PredefinedPanelIsVisible;
+			PredefinedSplitterRatio    = rhs.PredefinedSplitterRatio;
 
-			this.sendCommandPanelIsVisible = rhs.SendCommandPanelIsVisible;
-			this.sendFilePanelIsVisible = rhs.SendFilePanelIsVisible;
+			SendCommandPanelIsVisible  = rhs.SendCommandPanelIsVisible;
+			SendFilePanelIsVisible     = rhs.SendFilePanelIsVisible;
 
 			ClearChanged();
 		}
@@ -83,18 +83,18 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			TxMonitorPanelIsVisible = false;
+			TxMonitorPanelIsVisible    = false;
 			BidirMonitorPanelIsVisible = true;
-			RxMonitorPanelIsVisible = false;
-			MonitorOrientation = Orientation.Vertical;
-			TxMonitorSplitterRatio = (float)1 / 3;
-			RxMonitorSplitterRatio = (float)1 / 2;
+			RxMonitorPanelIsVisible    = false;
+			MonitorOrientation         = Orientation.Vertical;
+			TxMonitorSplitterRatio     = (float)1 / 3;
+			RxMonitorSplitterRatio     = (float)1 / 2;
 
-			PredefinedPanelIsVisible = true;
-			PredefinedSplitterRatio = (float)3 / 4;
+			PredefinedPanelIsVisible   = true;
+			PredefinedSplitterRatio    = (float)3 / 4;
 
-			SendCommandPanelIsVisible = true;
-			SendFilePanelIsVisible = true;
+			SendCommandPanelIsVisible  = true;
+			SendFilePanelIsVisible     = true;
 		}
 
 		#region Properties
@@ -261,28 +261,16 @@ namespace YAT.Model.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			LayoutSettings casted = obj as LayoutSettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(LayoutSettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			LayoutSettings other = (LayoutSettings)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
 				(this.txMonitorPanelIsVisible    == other.txMonitorPanelIsVisible) &&
 				(this.bidirMonitorPanelIsVisible == other.bidirMonitorPanelIsVisible) &&
@@ -302,34 +290,31 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+
+				this.txMonitorPanelIsVisible   .GetHashCode() ^
+				this.bidirMonitorPanelIsVisible.GetHashCode() ^
+				this.rxMonitorPanelIsVisible   .GetHashCode() ^
+				this.monitorOrientation        .GetHashCode() ^
+				this.txMonitorSplitterRatio    .GetHashCode() ^
+				this.rxMonitorSplitterRatio    .GetHashCode() ^
+
+				this.predefinedPanelIsVisible  .GetHashCode() ^
+				this.predefinedSplitterRatio   .GetHashCode() ^
+
+				this.sendCommandPanelIsVisible .GetHashCode() ^
+				this.sendFilePanelIsVisible    .GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(LayoutSettings lhs, LayoutSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(LayoutSettings lhs, LayoutSettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

@@ -126,14 +126,7 @@ namespace MKY.Utilities.Recent
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
-				return (false);
-
-			RecentItem<T> casted = obj as RecentItem<T>;
-			if (casted == null)
-				return (false);
-
-			return (Equals(casted));
+			return (Equals(obj as RecentItem<T>));
 		}
 
 		/// <summary>
@@ -141,8 +134,10 @@ namespace MKY.Utilities.Recent
 		/// </summary>
 		public bool Equals(RecentItem<T> other)
 		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
+			if (ReferenceEquals(other, null))
+				return (false);
+
+			if (GetType() != other.GetType())
 				return (false);
 
 			// Do not compare time stamp.
@@ -171,13 +166,11 @@ namespace MKY.Utilities.Recent
 		/// </summary>
 		public virtual int CompareTo(object obj)
 		{
-			if (obj == null) return (1);
-			if (obj is RecentItem<T>)
-			{
-				RecentItem<T> ri = (RecentItem<T>)obj;
-				return (-(this.timeStamp.CompareTo(ri.timeStamp))); // sort inverse
-			}
-			throw (new ArgumentException("Object is not a RecentItem"));
+			RecentItem<T> other = obj as RecentItem<T>;
+			if (other != null)
+				return (-(this.timeStamp.CompareTo(other.timeStamp))); // Sort inverse.
+			else
+				throw (new ArgumentException("Object is not a RecentItem"));
 		}
 
 		#endregion
@@ -205,13 +198,17 @@ namespace MKY.Utilities.Recent
 		/// </summary>
 		public static bool operator ==(RecentItem<T> lhs, RecentItem<T> rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
+			// Base reference type implementation of operator ==.
+			// See MKY.Utilities.Test.EqualityTest for details.
 
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
+			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
 
-			return (false);
+			// Ensure that object.Equals() is called.
+			// Thus, ensure that potential <Derived>.Equals() is called.
+			object obj = (object)lhs;
+			return (obj.Equals(rhs));
 		}
 
 		/// <summary>

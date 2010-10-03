@@ -27,7 +27,7 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class DisplaySettings : MKY.Utilities.Settings.Settings, IEquatable<DisplaySettings>
+	public class DisplaySettings : MKY.Utilities.Settings.Settings
 	{
 		/// <summary></summary>
 		public const bool SeparateTxRxRadixDefault = false;
@@ -90,17 +90,17 @@ namespace YAT.Domain.Settings
 		public DisplaySettings(DisplaySettings rhs)
 			: base(rhs)
 		{
-			this.separateTxRxRadix  = rhs.SeparateTxRxRadix;
-			this.txRadix            = rhs.TxRadix;
-			this.rxRadix            = rhs.RxRadix;
-			this.showRadix          = rhs.ShowRadix;
-			this.showTimeStamp      = rhs.ShowTimeStamp;
-			this.showLength         = rhs.ShowLength;
-			this.showConnectTime    = rhs.ShowConnectTime;
-			this.showCounters       = rhs.ShowCounters;
-			this.txMaxLineCount     = rhs.TxMaxLineCount;
-			this.rxMaxLineCount     = rhs.RxMaxLineCount;
-			this.directionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
+			SeparateTxRxRadix = rhs.SeparateTxRxRadix;
+			TxRadix           = rhs.TxRadix;
+			RxRadix           = rhs.RxRadix;
+			ShowRadix         = rhs.ShowRadix;
+			ShowTimeStamp     = rhs.ShowTimeStamp;
+			ShowLength        = rhs.ShowLength;
+			ShowConnectTime   = rhs.ShowConnectTime;
+			ShowCounters      = rhs.ShowCounters;
+			TxMaxLineCount    = rhs.TxMaxLineCount;
+			RxMaxLineCount    = rhs.RxMaxLineCount;
+			DirectionLineBreakEnabled = rhs.DirectionLineBreakEnabled;
 
 			ClearChanged();
 		}
@@ -110,16 +110,16 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			SeparateTxRxRadix  = SeparateTxRxRadixDefault;
-			TxRadix            = RadixDefault;
-			RxRadix            = RadixDefault;
-			ShowRadix          = ShowRadixDefault;
-			ShowTimeStamp      = ShowTimeStampDefault;
-			ShowLength         = ShowLengthDefault;
-			ShowConnectTime    = ShowConnectTimeDefault;
-			ShowCounters       = ShowCountersDefault;
-			TxMaxLineCount     = MaxLineCountDefault;
-			RxMaxLineCount     = MaxLineCountDefault;
+			SeparateTxRxRadix = SeparateTxRxRadixDefault;
+			TxRadix           = RadixDefault;
+			RxRadix           = RadixDefault;
+			ShowRadix         = ShowRadixDefault;
+			ShowTimeStamp     = ShowTimeStampDefault;
+			ShowLength        = ShowLengthDefault;
+			ShowConnectTime   = ShowConnectTimeDefault;
+			ShowCounters      = ShowCountersDefault;
+			TxMaxLineCount    = MaxLineCountDefault;
+			RxMaxLineCount    = MaxLineCountDefault;
 			DirectionLineBreakEnabled = DirectionLineBreakEnabledDefault;
 		}
 
@@ -321,28 +321,16 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			DisplaySettings casted = obj as DisplaySettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(DisplaySettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			DisplaySettings other = (DisplaySettings)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
 				(this.separateTxRxRadix         == other.separateTxRxRadix) &&
 				(this.txRadix                   == other.txRadix) &&
@@ -361,34 +349,30 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+
+				this.separateTxRxRadix        .GetHashCode() ^
+				this.txRadix                  .GetHashCode() ^
+				this.rxRadix                  .GetHashCode() ^
+				this.showRadix                .GetHashCode() ^
+				this.showTimeStamp            .GetHashCode() ^
+				this.showLength               .GetHashCode() ^
+				this.showConnectTime          .GetHashCode() ^
+				this.showCounters             .GetHashCode() ^
+				this.txMaxLineCount           .GetHashCode() ^
+				this.rxMaxLineCount           .GetHashCode() ^
+				this.directionLineBreakEnabled.GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(DisplaySettings lhs, DisplaySettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(DisplaySettings lhs, DisplaySettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

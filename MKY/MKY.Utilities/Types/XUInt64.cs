@@ -255,8 +255,8 @@ namespace MKY.Utilities.Types
 		/// <param name="result">
 		/// When this method returns, contains the 64-bit unsigned value value equivalent
 		/// to the number contained in parseString, if the conversion succeeded, or zero if the
-		/// conversion failed. The conversion fails if the parseString parameter is null, is not
-		/// of the correct format, or represents a number less than System.Int32.MinValue
+		/// conversion failed. The conversion fails if the parseString parameter is <c>null</c>,
+		/// is not of the correct format, or represents a number less than System.Int32.MinValue
 		/// or greater than System.Int32.MaxValue. This parameter is passed uninitialized.
 		/// </param>
 		/// <returns>The corresponding integer value.</returns>
@@ -274,8 +274,8 @@ namespace MKY.Utilities.Types
 		/// <param name="result">
 		/// When this method returns, contains the 64-bit unsigned value equivalent
 		/// to the number contained in parseString, if the conversion succeeded, or zero if the
-		/// conversion failed. The conversion fails if the parseString parameter is null, is not
-		/// of the correct format, or represents a number less than System.Int32.MinValue
+		/// conversion failed. The conversion fails if the parseString parameter is <c>null</c>,
+		/// is not of the correct format, or represents a number less than System.Int32.MinValue
 		/// or greater than System.Int32.MaxValue. This parameter is passed uninitialized.
 		/// </param>
 		/// <returns>The corresponding integer value.</returns>
@@ -294,8 +294,8 @@ namespace MKY.Utilities.Types
 		/// <param name="result">
 		/// When this method returns, contains the 64-bit unsigned value equivalent
 		/// to the number contained in parseString, if the conversion succeeded, or zero if the
-		/// conversion failed. The conversion fails if the parseString parameter is null, is not
-		/// of the correct format, or represents a number less than System.Decimal.MinValue
+		/// conversion failed. The conversion fails if the parseString parameter is <c>null</c>,
+		/// is not of the correct format, or represents a number less than System.Decimal.MinValue
 		/// or greater than System.Decimal.MaxValue. This parameter is passed uninitialized.
 		/// </param>
 		/// <returns>The corresponding integer value.</returns>

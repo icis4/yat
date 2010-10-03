@@ -128,14 +128,7 @@ namespace YAT.Model.Types
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
-				return (false);
-
-			PredefinedCommandPage casted = obj as PredefinedCommandPage;
-			if (casted == null)
-				return (false);
-
-			return (Equals(casted));
+			return (Equals(obj as PredefinedCommandPage));
 		}
 
 		/// <summary>
@@ -143,8 +136,10 @@ namespace YAT.Model.Types
 		/// </summary>
 		public bool Equals(PredefinedCommandPage other)
 		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
+			if (ReferenceEquals(other, null))
+				return (false);
+
+			if (GetType() != other.GetType())
 				return (false);
 
 			// Compare page name, i.e. header of page.
@@ -166,7 +161,11 @@ namespace YAT.Model.Types
 		/// <returns>A 32-bit signed integer hash code.</returns>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			int hashCode = 0;
+			foreach (Command c in this.commands)
+				hashCode ^= c.GetHashCode();
+
+			return (hashCode);
 		}
 
 		#endregion
@@ -182,13 +181,11 @@ namespace YAT.Model.Types
 		/// </summary>
 		public virtual int CompareTo(object obj)
 		{
-			if (obj == null) return (1);
-			if (obj is PredefinedCommandPage)
-			{
-				PredefinedCommandPage p = (PredefinedCommandPage)obj;
-				return (this.pageName.CompareTo(p.pageName));
-			}
-			throw (new ArgumentException("Object is not a PredefinedCommandPage"));
+			PredefinedCommandPage other = obj as PredefinedCommandPage;
+			if (other != null)
+				return (this.pageName.CompareTo(other.pageName));
+			else
+				throw (new ArgumentException("Object is not a PredefinedCommandPage"));
 		}
 
 		#endregion
@@ -216,13 +213,17 @@ namespace YAT.Model.Types
 		/// </summary>
 		public static bool operator ==(PredefinedCommandPage lhs, PredefinedCommandPage rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
+			// Base reference type implementation of operator ==.
+			// See MKY.Utilities.Test.EqualityTest for details.
 
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
+			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
 
-			return (false);
+			// Ensure that object.Equals() is called.
+			// Thus, ensure that potential <Derived>.Equals() is called.
+			object obj = (object)lhs;
+			return (obj.Equals(rhs));
 		}
 
 		/// <summary>

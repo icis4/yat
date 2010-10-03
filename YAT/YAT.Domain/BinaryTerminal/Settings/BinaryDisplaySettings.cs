@@ -26,7 +26,7 @@ using System.Xml.Serialization;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	public class BinaryDisplaySettings : MKY.Utilities.Settings.Settings, IEquatable<BinaryDisplaySettings>
+	public class BinaryDisplaySettings : MKY.Utilities.Settings.Settings
 	{
 		private BinaryLengthLineBreak lengthLineBreak;
 		private BinarySequenceLineBreak sequenceLineBreak;
@@ -54,9 +54,9 @@ namespace YAT.Domain.Settings
 		public BinaryDisplaySettings(BinaryDisplaySettings rhs)
 			: base(rhs)
 		{
-			this.lengthLineBreak   = rhs.LengthLineBreak;
-			this.sequenceLineBreak = rhs.SequenceLineBreak;
-			this.timedLineBreak    = rhs.TimedLineBreak;
+			LengthLineBreak   = rhs.LengthLineBreak;
+			SequenceLineBreak = rhs.SequenceLineBreak;
+			TimedLineBreak    = rhs.TimedLineBreak;
 			ClearChanged();
 		}
 
@@ -130,28 +130,16 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			BinaryDisplaySettings casted = obj as BinaryDisplaySettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(BinaryDisplaySettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			BinaryDisplaySettings other = (BinaryDisplaySettings)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
 				(this.lengthLineBreak   == other.lengthLineBreak) &&
 				(this.sequenceLineBreak == other.sequenceLineBreak) &&
@@ -162,34 +150,22 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+
+				this.lengthLineBreak  .GetHashCode() ^
+				this.sequenceLineBreak.GetHashCode() ^
+				this.timedLineBreak   .GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(BinaryDisplaySettings lhs, BinaryDisplaySettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(BinaryDisplaySettings lhs, BinaryDisplaySettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

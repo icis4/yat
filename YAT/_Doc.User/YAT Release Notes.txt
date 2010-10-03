@@ -67,6 +67,8 @@ Important changes:
 - Use of StyleCop (feature request #2970222)
 - Methods and properties marked 'virtual', unless there are reasons against
 - Null reference safe and more efficient implementation of Equals()
+- GetHashCode() implementation according the .NET guidelines
+- CompareTo() implementation according the .NET guidelines
 - Selection and settings controls now clear contents when disabled
 - Radix (string/hex) automatically changes when switching the terminal type (text/binary)
 - Coupling of Tx and Rx radix improved

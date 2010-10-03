@@ -66,7 +66,7 @@ namespace MKY.Utilities.Test.Settings
 
 		/// <summary></summary>
 		[Serializable]
-		public class TestTreeChildLevel2 : Utilities.Settings.Settings, IEquatable<TestTreeChildLevel2>
+		public class TestTreeChildLevel2 : Utilities.Settings.Settings
 		{
 			/// <summary></summary>
 			public int SimpleValue = SimpleValueEqual;
@@ -96,28 +96,16 @@ namespace MKY.Utilities.Test.Settings
 			/// </summary>
 			public override bool Equals(object obj)
 			{
-				if (obj == null)
+				if (ReferenceEquals(obj, null))
 					return (false);
 
-				TestTreeChildLevel2 casted = obj as TestTreeChildLevel2;
-				if (casted == null)
+				if (GetType() != obj.GetType())
 					return (false);
 
-				return (Equals(casted));
-			}
-
-			/// <summary>
-			/// Determines whether this instance and the specified object have value equality.
-			/// </summary>
-			public bool Equals(TestTreeChildLevel2 other)
-			{
-				// Ensure that object.operator==() is called.
-				if ((object)other == null)
-					return (false);
-
+				TestTreeChildLevel2 other = (TestTreeChildLevel2)obj;
 				return
 				(
-					base.Equals((Utilities.Settings.Settings)other) && // Compare all settings nodes.
+					base.Equals(other) && // Compare all settings nodes.
 					(this.SimpleValue == other.SimpleValue)
 				);
 			}
@@ -125,41 +113,26 @@ namespace MKY.Utilities.Test.Settings
 			/// <summary></summary>
 			public override int GetHashCode()
 			{
-				return (base.GetHashCode());
+				return
+				(
+					base.GetHashCode() ^
+					this.SimpleValue.GetHashCode()
+				);
 			}
 
 			#endregion
 
 			#region Comparison Operators
 
-			/// <summary>
-			/// Determines whether the two specified objects have reference or value equality.
-			/// </summary>
-			public static bool operator ==(TestTreeChildLevel2 lhs, TestTreeChildLevel2 rhs)
-			{
-				if (ReferenceEquals(lhs, rhs))
-					return (true);
-
-				if ((object)lhs != null)
-					return (lhs.Equals(rhs));
-
-				return (false);
-			}
-
-			/// <summary>
-			/// Determines whether the two specified objects have reference and value inequality.
-			/// </summary>
-			public static bool operator !=(TestTreeChildLevel2 lhs, TestTreeChildLevel2 rhs)
-			{
-				return (!(lhs == rhs));
-			}
+			// Use of base reference type implementation of operators ==/!=.
+			// See MKY.Utilities.Test.EqualityTest for details.
 
 			#endregion
 		}
 
 		/// <summary></summary>
 		[Serializable]
-		public class TestTreeChildLevel1 : Utilities.Settings.Settings, IEquatable<TestTreeChildLevel1>
+		public class TestTreeChildLevel1 : Utilities.Settings.Settings
 		{
 			/// <summary></summary>
 			public int SimpleValue = SimpleValueEqual;
@@ -198,7 +171,12 @@ namespace MKY.Utilities.Test.Settings
 				get { return (this.childLevel2A); }
 				set
 				{
-					if (this.childLevel2A == null)
+					if (value == null)
+					{
+						this.childLevel2A = value;
+						DetachNode(this.childLevel2A);
+					}
+					else if (this.childLevel2A == null)
 					{
 						this.childLevel2A = value;
 						AttachNode(this.childLevel2A);
@@ -219,7 +197,12 @@ namespace MKY.Utilities.Test.Settings
 				get { return (this.childLevel2B); }
 				set
 				{
-					if (this.childLevel2B == null)
+					if (value == null)
+					{
+						this.childLevel2B = value;
+						DetachNode(this.childLevel2B);
+					}
+					else if (this.childLevel2B == null)
 					{
 						this.childLevel2B = value;
 						AttachNode(this.childLevel2B);
@@ -253,28 +236,16 @@ namespace MKY.Utilities.Test.Settings
 			/// </summary>
 			public override bool Equals(object obj)
 			{
-				if (obj == null)
+				if (ReferenceEquals(obj, null))
 					return (false);
 
-				TestTreeChildLevel1 casted = obj as TestTreeChildLevel1;
-				if (casted == null)
+				if (GetType() != obj.GetType())
 					return (false);
 
-				return (Equals(casted));
-			}
-
-			/// <summary>
-			/// Determines whether this instance and the specified object have value equality.
-			/// </summary>
-			public bool Equals(TestTreeChildLevel1 other)
-			{
-				// Ensure that object.operator==() is called.
-				if ((object)other == null)
-					return (false);
-
+				TestTreeChildLevel1 other = (TestTreeChildLevel1)obj;
 				return
 				(
-					base.Equals((Utilities.Settings.Settings)other) && // Compare all settings nodes.
+					base.Equals(other) && // Compare all settings nodes.
 					(this.SimpleValue == other.SimpleValue)
 				);
 			}
@@ -282,34 +253,19 @@ namespace MKY.Utilities.Test.Settings
 			/// <summary></summary>
 			public override int GetHashCode()
 			{
-				return (base.GetHashCode());
+				return
+				(
+					base.GetHashCode() ^
+					this.SimpleValue.GetHashCode()
+				);
 			}
 
 			#endregion
 
 			#region Comparison Operators
 
-			/// <summary>
-			/// Determines whether the two specified objects have reference or value equality.
-			/// </summary>
-			public static bool operator ==(TestTreeChildLevel1 lhs, TestTreeChildLevel1 rhs)
-			{
-				if (ReferenceEquals(lhs, rhs))
-					return (true);
-
-				if ((object)lhs != null)
-					return (lhs.Equals(rhs));
-
-				return (false);
-			}
-
-			/// <summary>
-			/// Determines whether the two specified objects have reference and value inequality.
-			/// </summary>
-			public static bool operator !=(TestTreeChildLevel1 lhs, TestTreeChildLevel1 rhs)
-			{
-				return (!(lhs == rhs));
-			}
+			// Use of base reference type implementation of operators ==/!=.
+			// See MKY.Utilities.Test.EqualityTest for details.
 
 			#endregion
 		}
@@ -317,7 +273,7 @@ namespace MKY.Utilities.Test.Settings
 		/// <summary></summary>
 		[Serializable]
 		[XmlRoot("TestTreeRoot")]
-		public class TestTreeRoot : Utilities.Settings.Settings, IEquatable<TestTreeRoot>
+		public class TestTreeRoot : Utilities.Settings.Settings
 		{
 			/// <summary></summary>
 			public int SimpleValue = SimpleValueEqual;
@@ -351,7 +307,12 @@ namespace MKY.Utilities.Test.Settings
 				get { return (this.childLevel1); }
 				set
 				{
-					if (this.childLevel1 == null)
+					if (value == null)
+					{
+						this.childLevel1 = value;
+						DetachNode(this.childLevel1);
+					}
+					else if (this.childLevel1 == null)
 					{
 						this.childLevel1 = value;
 						AttachNode(this.childLevel1);
@@ -384,28 +345,16 @@ namespace MKY.Utilities.Test.Settings
 			/// </summary>
 			public override bool Equals(object obj)
 			{
-				if (obj == null)
+				if (ReferenceEquals(obj, null))
 					return (false);
 
-				TestTreeRoot casted = obj as TestTreeRoot;
-				if (casted == null)
+				if (GetType() != obj.GetType())
 					return (false);
 
-				return (Equals(casted));
-			}
-
-			/// <summary>
-			/// Determines whether this instance and the specified object have value equality.
-			/// </summary>
-			public bool Equals(TestTreeRoot other)
-			{
-				// Ensure that object.operator==() is called.
-				if ((object)other == null)
-					return (false);
-
+				TestTreeRoot other = (TestTreeRoot)obj;
 				return
 				(
-					base.Equals((Utilities.Settings.Settings)other) && // Compare all settings nodes.
+					base.Equals(other) && // Compare all settings nodes.
 					(this.SimpleValue == other.SimpleValue)
 				);
 			}
@@ -413,7 +362,11 @@ namespace MKY.Utilities.Test.Settings
 			/// <summary></summary>
 			public override int GetHashCode()
 			{
-				return (base.GetHashCode());
+				return
+				(
+					base.GetHashCode() ^
+					this.SimpleValue.GetHashCode()
+				);
 			}
 
 			#endregion
@@ -425,13 +378,17 @@ namespace MKY.Utilities.Test.Settings
 			/// </summary>
 			public static bool operator ==(TestTreeRoot lhs, TestTreeRoot rhs)
 			{
-				if (ReferenceEquals(lhs, rhs))
-					return (true);
+				// Base reference type implementation of operator ==.
+				// See MKY.Utilities.Test.EqualityTest for details.
 
-				if ((object)lhs != null)
-					return (lhs.Equals(rhs));
+				if (ReferenceEquals(lhs, rhs)) return (true);
+				if (ReferenceEquals(lhs, null)) return (false);
+				if (ReferenceEquals(rhs, null)) return (false);
 
-				return (false);
+				// Ensure that object.Equals() is called.
+				// Thus, ensure that potential <Derived>.Equals() is called.
+				object obj = (object)lhs;
+				return (obj.Equals(rhs));
 			}
 
 			/// <summary>
@@ -443,24 +400,6 @@ namespace MKY.Utilities.Test.Settings
 			}
 
 			#endregion
-		}
-
-		#endregion
-
-		#region Test Cases
-		//==========================================================================================
-		// Test Cases
-		//==========================================================================================
-
-		/// <summary></summary>
-		public static IEnumerable TestCases
-		{
-			get
-			{
-				yield return (new TestCaseData(TestCase.Level2, new TestTreeChildLevel2(), new TestTreeChildLevel2(), new TestTreeChildLevel2(SimpleValueNotEqual)).SetName("Level2"));
-				yield return (new TestCaseData(TestCase.Level1, new TestTreeChildLevel1(), new TestTreeChildLevel1(), new TestTreeChildLevel1(SimpleValueNotEqual)).SetName("Level1"));
-				yield return (new TestCaseData(TestCase.Root,   new TestTreeRoot(),        new TestTreeRoot(),        new TestTreeRoot(SimpleValueNotEqual))       .SetName("Root"));
-			}
 		}
 
 		#endregion
@@ -566,7 +505,7 @@ namespace MKY.Utilities.Test.Settings
 
 	/// <summary></summary>
 	[TestFixture]
-	public class DocumentSettingsHandlerTest
+	public class SettingsTest
 	{
 		#region Tear Down
 		//==========================================================================================
@@ -587,6 +526,184 @@ namespace MKY.Utilities.Test.Settings
 		//==========================================================================================
 		// Test
 		//==========================================================================================
+
+		#region Tests > SettingsTree
+		//------------------------------------------------------------------------------------------
+		// Tests > SettingsTree
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestSettingsTreeLevel2()
+		{
+			Utilities.Settings.Settings settingsToCompareAgainst = new SettingsTreeTestData.TestTreeChildLevel2();
+			Utilities.Settings.Settings settingsEqual            = new SettingsTreeTestData.TestTreeChildLevel2();
+			Utilities.Settings.Settings settingsNotEqual         = new SettingsTreeTestData.TestTreeChildLevel2(SettingsTreeTestData.SimpleValueNotEqual);
+
+			VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, -1);
+
+			VerifyLevel2(settingsToCompareAgainst, settingsEqual, settingsNotEqual,
+			             (SettingsTreeTestData.TestTreeChildLevel2)settingsToCompareAgainst, (SettingsTreeTestData.TestTreeChildLevel2)settingsEqual, (SettingsTreeTestData.TestTreeChildLevel2)settingsNotEqual);
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestSettingsTreeLevel1()
+		{
+			Utilities.Settings.Settings settingsToCompareAgainst = new SettingsTreeTestData.TestTreeChildLevel1();
+			Utilities.Settings.Settings settingsEqual            = new SettingsTreeTestData.TestTreeChildLevel1();
+			Utilities.Settings.Settings settingsNotEqual         = new SettingsTreeTestData.TestTreeChildLevel1(SettingsTreeTestData.SimpleValueNotEqual);
+
+			VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, -1);
+
+			VerifyLevel1(settingsToCompareAgainst, settingsEqual, settingsNotEqual,
+			             (SettingsTreeTestData.TestTreeChildLevel1)settingsToCompareAgainst, (SettingsTreeTestData.TestTreeChildLevel1)settingsEqual, (SettingsTreeTestData.TestTreeChildLevel1)settingsNotEqual);
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestSettingsTreeRoot()
+		{
+			Utilities.Settings.Settings settingsToCompareAgainst = new SettingsTreeTestData.TestTreeRoot();
+			Utilities.Settings.Settings settingsEqual            = new SettingsTreeTestData.TestTreeRoot();
+			Utilities.Settings.Settings settingsNotEqual         = new SettingsTreeTestData.TestTreeRoot(SettingsTreeTestData.SimpleValueNotEqual);
+
+			VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, -1);
+
+			VerifyRoot(settingsToCompareAgainst, settingsEqual, settingsNotEqual,
+			           (SettingsTreeTestData.TestTreeRoot)settingsToCompareAgainst, (SettingsTreeTestData.TestTreeRoot)settingsEqual, (SettingsTreeTestData.TestTreeRoot)settingsNotEqual);
+		}
+
+		private void VerifyRoot(Utilities.Settings.Settings settingsToCompareAgainst, Utilities.Settings.Settings settingsEqual, Utilities.Settings.Settings settingsNotEqual,
+		                        SettingsTreeTestData.TestTreeRoot castedToCompareAgainst, SettingsTreeTestData.TestTreeRoot castedEqual, SettingsTreeTestData.TestTreeRoot castedNotEqual)
+		{
+			VerifySimpleValue(castedToCompareAgainst.SimpleValue, castedEqual.SimpleValue, castedNotEqual.SimpleValue);
+
+			Assert.AreEqual   (settingsToCompareAgainst, settingsEqual);
+			Assert.AreNotEqual(settingsToCompareAgainst, settingsNotEqual);
+
+			VerifyLevel1(settingsToCompareAgainst, settingsEqual, settingsNotEqual,
+			             castedToCompareAgainst.ChildLevel1, castedEqual.ChildLevel1, castedNotEqual.ChildLevel1);
+
+			// Modify simple value and verify base again.
+
+			castedEqual.SimpleValue    = SettingsTreeTestData.SimpleValueNotEqual;
+			castedNotEqual.SimpleValue = SettingsTreeTestData.SimpleValueEqual;
+
+			VerifyBase(settingsToCompareAgainst, null, settingsEqual, 0);
+			VerifyBase(settingsToCompareAgainst, null, settingsNotEqual, 0);
+
+			// Undo modifications and verify base again.
+
+			castedEqual.SimpleValue    = SettingsTreeTestData.SimpleValueEqual;
+			castedNotEqual.SimpleValue = SettingsTreeTestData.SimpleValueNotEqual;
+
+			VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, 0);
+		}
+
+		private void VerifyLevel1(Utilities.Settings.Settings settingsToCompareAgainst, Utilities.Settings.Settings settingsEqual, Utilities.Settings.Settings settingsNotEqual,
+		                          SettingsTreeTestData.TestTreeChildLevel1 castedToCompareAgainst, SettingsTreeTestData.TestTreeChildLevel1 castedEqual, SettingsTreeTestData.TestTreeChildLevel1 castedNotEqual)
+		{
+			VerifySimpleValue(castedToCompareAgainst.SimpleValue, castedEqual.SimpleValue, castedNotEqual.SimpleValue);
+
+			Assert.AreEqual   (settingsToCompareAgainst, settingsEqual);
+			Assert.AreNotEqual(settingsToCompareAgainst, settingsNotEqual);
+
+			VerifyLevel2(settingsToCompareAgainst, settingsEqual, settingsNotEqual,
+			             castedToCompareAgainst.ChildLevel2A, castedEqual.ChildLevel2A, castedNotEqual.ChildLevel2A);
+			VerifyLevel2(settingsToCompareAgainst, settingsEqual, settingsNotEqual,
+			             castedToCompareAgainst.ChildLevel2B, castedEqual.ChildLevel2B, castedNotEqual.ChildLevel2B);
+
+			// Modify simple value and verify base again.
+
+			castedEqual.SimpleValue    = SettingsTreeTestData.SimpleValueNotEqual;
+			castedNotEqual.SimpleValue = SettingsTreeTestData.SimpleValueEqual;
+
+			VerifyBase(settingsToCompareAgainst, null, settingsEqual, 1);
+			VerifyBase(settingsToCompareAgainst, null, settingsNotEqual, 1);
+
+			// Undo modifications and verify base again.
+
+			castedEqual.SimpleValue    = SettingsTreeTestData.SimpleValueEqual;
+			castedNotEqual.SimpleValue = SettingsTreeTestData.SimpleValueNotEqual;
+
+			VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, 1);
+
+			// Replace child nodes and verify base again.
+			{
+				SettingsTreeTestData.TestTreeChildLevel2 replacementEqual    = new SettingsTreeTestData.TestTreeChildLevel2(SettingsTreeTestData.SimpleValueEqual);
+				SettingsTreeTestData.TestTreeChildLevel2 replacementNotEqual = new SettingsTreeTestData.TestTreeChildLevel2(SettingsTreeTestData.SimpleValueNotEqual);
+
+				castedEqual.ChildLevel2B    = replacementNotEqual;
+				castedNotEqual.ChildLevel2B = replacementEqual;
+
+				VerifyBase(settingsToCompareAgainst, null, settingsEqual, 1);
+				VerifyBase(settingsToCompareAgainst, null, settingsNotEqual, 1);
+			}
+
+			// Undo modifications and verify base again.
+			{
+				SettingsTreeTestData.TestTreeChildLevel2 replacementEqual    = new SettingsTreeTestData.TestTreeChildLevel2(SettingsTreeTestData.SimpleValueEqual);
+				SettingsTreeTestData.TestTreeChildLevel2 replacementNotEqual = new SettingsTreeTestData.TestTreeChildLevel2(SettingsTreeTestData.SimpleValueNotEqual);
+
+				castedEqual.ChildLevel2B    = replacementEqual;
+				castedNotEqual.ChildLevel2B = replacementNotEqual;
+
+				VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, 1);
+			}
+		}
+
+		private void VerifyLevel2(Utilities.Settings.Settings settingsToCompareAgainst, Utilities.Settings.Settings settingsEqual, Utilities.Settings.Settings settingsNotEqual,
+		                          SettingsTreeTestData.TestTreeChildLevel2 castedToCompareAgainst, SettingsTreeTestData.TestTreeChildLevel2 castedEqual, SettingsTreeTestData.TestTreeChildLevel2 castedNotEqual)
+		{
+			VerifySimpleValue(castedToCompareAgainst.SimpleValue, castedEqual.SimpleValue, castedNotEqual.SimpleValue);
+
+			Assert.AreEqual   (settingsToCompareAgainst, settingsEqual);
+			Assert.AreNotEqual(settingsToCompareAgainst, settingsNotEqual);
+
+			// Modify simple value and verify base again.
+
+			castedEqual.SimpleValue    = SettingsTreeTestData.SimpleValueNotEqual;
+			castedNotEqual.SimpleValue = SettingsTreeTestData.SimpleValueEqual;
+
+			if (settingsToCompareAgainst.GetType() == castedToCompareAgainst.GetType())
+			{
+				VerifyBase(settingsToCompareAgainst, settingsNotEqual, settingsEqual, 2); // Equal and not-equal are swapped.
+			}
+			else
+			{
+				VerifyBase(settingsToCompareAgainst, null, settingsEqual, 2);    // Level 2 simple value has been swapped,
+				VerifyBase(settingsToCompareAgainst, null, settingsNotEqual, 2); //   but level 1 / root values have not.
+			}
+
+			// Undo modifications and verify base again.
+
+			castedEqual.SimpleValue    = SettingsTreeTestData.SimpleValueEqual;
+			castedNotEqual.SimpleValue = SettingsTreeTestData.SimpleValueNotEqual;
+
+			VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, 2);
+		}
+
+		private void VerifySimpleValue(int castedToCompareAgainst, int castedEqual, int castedNotEqual)
+		{
+			Assert.AreEqual   (castedToCompareAgainst, castedEqual);
+			Assert.AreNotEqual(castedToCompareAgainst, castedNotEqual);
+		}
+
+		private void VerifyBase(Utilities.Settings.Settings settingsToCompareAgainst, Utilities.Settings.Settings settingsEqual, Utilities.Settings.Settings settingsNotEqual, int level)
+		{
+			string messagePostfix = "";
+			if (level >= 0)
+				messagePostfix = " (after modifying level " + level + ")";
+
+			if (settingsEqual != null)
+				Assert.AreEqual   (settingsToCompareAgainst, settingsEqual,    "Comparing base for equality failed"     + messagePostfix);
+
+			if (settingsNotEqual != null)
+				Assert.AreNotEqual(settingsToCompareAgainst, settingsNotEqual, "Comparing base for non-equality failed" + messagePostfix);
+		}
+
+		#endregion
 
 		#region Tests > SettingsEvolution
 		//------------------------------------------------------------------------------------------
@@ -705,111 +822,6 @@ namespace MKY.Utilities.Test.Settings
 
 		#endregion
 
-		#region Tests > SettingsTree
-		//------------------------------------------------------------------------------------------
-		// Tests > SettingsTree
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[Test, TestCaseSource(typeof(SettingsTreeTestData), "TestCases")]
-		public virtual void TestSettingsTree(SettingsTreeTestData.TestCase testCase, Utilities.Settings.Settings settingsToCompareAgainst, Utilities.Settings.Settings settingsEqual, Utilities.Settings.Settings settingsNotEqual)
-		{
-			VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, -1);
-
-			switch (testCase)
-			{
-				case SettingsTreeTestData.TestCase.Level2:
-					VerifyLevel2(settingsToCompareAgainst, settingsEqual, settingsNotEqual,
-					             (SettingsTreeTestData.TestTreeChildLevel2)settingsToCompareAgainst, (SettingsTreeTestData.TestTreeChildLevel2)settingsEqual, (SettingsTreeTestData.TestTreeChildLevel2)settingsNotEqual);
-					break;
-
-				case SettingsTreeTestData.TestCase.Level1:
-					VerifyLevel1(settingsToCompareAgainst, settingsEqual, settingsNotEqual,
-					             (SettingsTreeTestData.TestTreeChildLevel1)settingsToCompareAgainst, (SettingsTreeTestData.TestTreeChildLevel1)settingsEqual, (SettingsTreeTestData.TestTreeChildLevel1)settingsNotEqual);
-					break;
-
-				case SettingsTreeTestData.TestCase.Root:
-				default:
-					VerifyRoot(settingsToCompareAgainst, settingsEqual, settingsNotEqual,
-					           (SettingsTreeTestData.TestTreeRoot)settingsToCompareAgainst, (SettingsTreeTestData.TestTreeRoot)settingsEqual, (SettingsTreeTestData.TestTreeRoot)settingsNotEqual);
-					break;
-			}
-		}
-
-		private void VerifyRoot(Utilities.Settings.Settings settingsToCompareAgainst, Utilities.Settings.Settings settingsEqual, Utilities.Settings.Settings settingsNotEqual,
-		                        SettingsTreeTestData.TestTreeRoot castedToCompareAgainst, SettingsTreeTestData.TestTreeRoot castedEqual, SettingsTreeTestData.TestTreeRoot castedNotEqual)
-		{
-			VerifySimpleValue(castedToCompareAgainst.SimpleValue, castedEqual.SimpleValue, castedNotEqual.SimpleValue);
-
-			Assert.AreEqual(settingsToCompareAgainst, settingsEqual);
-			Assert.AreNotEqual(settingsToCompareAgainst, settingsNotEqual);
-
-			VerifyLevel1(settingsToCompareAgainst, settingsEqual, settingsNotEqual,
-			             castedToCompareAgainst.ChildLevel1, castedEqual.ChildLevel1, castedNotEqual.ChildLevel1);
-
-			// Modify simple value and verify base again.
-
-			castedEqual.SimpleValue = SettingsTreeTestData.SimpleValueNotEqual;
-			castedNotEqual.SimpleValue = SettingsTreeTestData.SimpleValueEqual;
-
-			VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, 0);
-		}
-
-		private void VerifyLevel1(Utilities.Settings.Settings settingsToCompareAgainst, Utilities.Settings.Settings settingsEqual, Utilities.Settings.Settings settingsNotEqual,
-		                          SettingsTreeTestData.TestTreeChildLevel1 castedToCompareAgainst, SettingsTreeTestData.TestTreeChildLevel1 castedEqual, SettingsTreeTestData.TestTreeChildLevel1 castedNotEqual)
-		{
-			VerifySimpleValue(castedToCompareAgainst.SimpleValue, castedEqual.SimpleValue, castedNotEqual.SimpleValue);
-
-			Assert.AreEqual(settingsToCompareAgainst, settingsEqual);
-			Assert.AreNotEqual(settingsToCompareAgainst, settingsNotEqual);
-
-			VerifyLevel2(settingsToCompareAgainst, settingsEqual, settingsNotEqual,
-			             castedToCompareAgainst.ChildLevel2A, castedEqual.ChildLevel2A, castedNotEqual.ChildLevel2A);
-			VerifyLevel2(settingsToCompareAgainst, settingsEqual, settingsNotEqual,
-			             castedToCompareAgainst.ChildLevel2B, castedEqual.ChildLevel2B, castedNotEqual.ChildLevel2B);
-
-			// Modify simple value and verify base again.
-
-			castedEqual.SimpleValue = SettingsTreeTestData.SimpleValueNotEqual;
-			castedNotEqual.SimpleValue = SettingsTreeTestData.SimpleValueEqual;
-
-			VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, 1);
-		}
-
-		private void VerifyLevel2(Utilities.Settings.Settings settingsToCompareAgainst, Utilities.Settings.Settings settingsEqual, Utilities.Settings.Settings settingsNotEqual,
-		                          SettingsTreeTestData.TestTreeChildLevel2 castedToCompareAgainst, SettingsTreeTestData.TestTreeChildLevel2 castedEqual, SettingsTreeTestData.TestTreeChildLevel2 castedNotEqual)
-		{
-			VerifySimpleValue(castedToCompareAgainst.SimpleValue, castedEqual.SimpleValue, castedNotEqual.SimpleValue);
-
-			Assert.AreEqual(settingsToCompareAgainst, settingsEqual);
-			Assert.AreNotEqual(settingsToCompareAgainst, settingsNotEqual);
-
-			// Modify simple value and verify base again.
-
-			castedEqual.SimpleValue = SettingsTreeTestData.SimpleValueNotEqual;
-			castedNotEqual.SimpleValue = SettingsTreeTestData.SimpleValueEqual;
-
-			VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, 2);
-		}
-
-		private void VerifySimpleValue(int castedToCompareAgainst, int castedEqual, int castedNotEqual)
-		{
-			Assert.AreEqual(castedToCompareAgainst, castedEqual);
-			Assert.AreNotEqual(castedToCompareAgainst, castedNotEqual);
-		}
-
-		private void VerifyBase(Utilities.Settings.Settings settingsToCompareAgainst, Utilities.Settings.Settings settingsEqual, Utilities.Settings.Settings settingsNotEqual, int level)
-		{
-			string messagePostfix = "";
-			if (level >= 0)
-				messagePostfix = "(after modifying level " + level + ")";
-
-			Assert.AreEqual   (settingsToCompareAgainst, settingsEqual,    "Comparing base for equality failed"     + messagePostfix);
-			Assert.AreNotEqual(settingsToCompareAgainst, settingsNotEqual, "Comparing base for non-equality failed" + messagePostfix);
-		}
-
-		#endregion
-
 		#endregion
 
 		#region Private Methods
@@ -830,7 +842,7 @@ namespace MKY.Utilities.Test.Settings
 			}
 			catch (Exception ex)
 			{
-				XConsole.WriteException(typeof(DocumentSettingsHandlerTest), ex);
+				XConsole.WriteException(typeof(SettingsTest), ex);
 
 				// Attention: The following call throws an exception, code below it won't be executed
 				Assert.Fail("XML serialize error: " + ex.Message);
@@ -851,7 +863,7 @@ namespace MKY.Utilities.Test.Settings
 			catch (Exception ex)
 			{
 				obj = null;
-				XConsole.WriteException(typeof(DocumentSettingsHandlerTest), ex);
+				XConsole.WriteException(typeof(SettingsTest), ex);
 
 				// Attention: The following call throws an exception, code below it won't be executed
 				Assert.Fail("XML deserialize error: " + ex.Message);

@@ -26,7 +26,7 @@ namespace YAT.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class GeneralSettings : MKY.Utilities.Settings.Settings, IEquatable<GeneralSettings>
+	public class GeneralSettings : MKY.Utilities.Settings.Settings
 	{
 		/// <summary></summary>
 		public static readonly string AutoSaveRoot = Application.LocalUserAppDataPath;
@@ -63,10 +63,10 @@ namespace YAT.Settings
 		public GeneralSettings(GeneralSettings rhs)
 			: base(rhs)
 		{
-			this.autoOpenWorkspace      = rhs.AutoOpenWorkspace;
-			this.autoSaveWorkspace      = rhs.AutoSaveWorkspace;
-			this.useRelativePaths       = rhs.UseRelativePaths;
-			this.detectSerialPortsInUse = rhs.DetectSerialPortsInUse;
+			AutoOpenWorkspace      = rhs.AutoOpenWorkspace;
+			AutoSaveWorkspace      = rhs.AutoSaveWorkspace;
+			UseRelativePaths       = rhs.UseRelativePaths;
+			DetectSerialPortsInUse = rhs.DetectSerialPortsInUse;
 
 			ClearChanged();
 		}
@@ -156,67 +156,44 @@ namespace YAT.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			GeneralSettings casted = obj as GeneralSettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(GeneralSettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			GeneralSettings other = (GeneralSettings)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
-				this.autoOpenWorkspace      == other.autoOpenWorkspace &&
-				this.autoSaveWorkspace      == other.autoSaveWorkspace &&
-				this.useRelativePaths       == other.useRelativePaths &&
-				this.detectSerialPortsInUse == other.detectSerialPortsInUse
+				(this.autoOpenWorkspace      == other.autoOpenWorkspace) &&
+				(this.autoSaveWorkspace      == other.autoSaveWorkspace) &&
+				(this.useRelativePaths       == other.useRelativePaths) &&
+				(this.detectSerialPortsInUse == other.detectSerialPortsInUse)
 			);
 		}
 
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+
+				this.autoOpenWorkspace     .GetHashCode() ^
+				this.autoSaveWorkspace     .GetHashCode() ^
+				this.useRelativePaths      .GetHashCode() ^
+				this.detectSerialPortsInUse.GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(GeneralSettings lhs, GeneralSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(GeneralSettings lhs, GeneralSettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}
