@@ -27,7 +27,7 @@ namespace YAT.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class PathSettings : MKY.Utilities.Settings.Settings, IEquatable<PathSettings>
+	public class PathSettings : MKY.Utilities.Settings.Settings
 	{
 		private string terminalFilesPath;
 		private string workspaceFilesPath;
@@ -56,11 +56,12 @@ namespace YAT.Settings
 		public PathSettings(PathSettings rhs)
 			: base(rhs)
 		{
-			this.terminalFilesPath  = rhs.TerminalFilesPath;
-			this.workspaceFilesPath = rhs.WorkspaceFilesPath;
-			this.sendFilesPath      = rhs.SendFilesPath;
-			this.logFilesPath       = rhs.LogFilesPath;
-			this.monitorFilesPath   = rhs.MonitorFilesPath;
+			TerminalFilesPath  = rhs.TerminalFilesPath;
+			WorkspaceFilesPath = rhs.WorkspaceFilesPath;
+			SendFilesPath      = rhs.SendFilesPath;
+			LogFilesPath       = rhs.LogFilesPath;
+			MonitorFilesPath   = rhs.MonitorFilesPath;
+
 			ClearChanged();
 		}
 
@@ -165,28 +166,16 @@ namespace YAT.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			PathSettings casted = obj as PathSettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(PathSettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			PathSettings other = (PathSettings)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
 				(this.terminalFilesPath  == other.terminalFilesPath) &&
 				(this.workspaceFilesPath == other.workspaceFilesPath) &&
@@ -199,34 +188,24 @@ namespace YAT.Settings
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+
+				this.terminalFilesPath .GetHashCode() ^
+				this.workspaceFilesPath.GetHashCode() ^
+				this.sendFilesPath     .GetHashCode() ^
+				this.logFilesPath      .GetHashCode() ^
+				this.monitorFilesPath  .GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(PathSettings lhs, PathSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(PathSettings lhs, PathSettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

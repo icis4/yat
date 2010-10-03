@@ -28,7 +28,7 @@ namespace YAT.Settings.Terminal
 	/// <summary></summary>
 	[Serializable]
 	[XmlRoot("Settings")]
-	public class TerminalSettingsRoot : MKY.Utilities.Settings.Settings, MKY.Utilities.Xml.IAlternateXmlElementProvider, IEquatable<TerminalSettingsRoot>
+	public class TerminalSettingsRoot : MKY.Utilities.Settings.Settings, MKY.Utilities.Xml.IAlternateXmlElementProvider
 	{
 		/// <summary>
 		/// Alternate XML elements for backward compatibility with old settings.
@@ -130,7 +130,12 @@ namespace YAT.Settings.Terminal
 			get { return (this.explicit_); }
 			set
 			{
-				if (this.explicit_ == null)
+				if (value == null)
+				{
+					this.explicit_ = value;
+					DetachNode(this.explicit_);
+				}
+				else if (this.explicit_ == null)
 				{
 					this.explicit_ = value;
 					AttachNode(this.explicit_);
@@ -151,7 +156,12 @@ namespace YAT.Settings.Terminal
 			get { return (this.implicit_); }
 			set
 			{
-				if (this.implicit_ == null)
+				if (value == null)
+				{
+					this.implicit_ = value;
+					DetachNode(this.implicit_);
+				}
+				else if (this.implicit_ == null)
 				{
 					this.implicit_ = value;
 					AttachNode(this.implicit_);
@@ -380,28 +390,16 @@ namespace YAT.Settings.Terminal
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			TerminalSettingsRoot casted = obj as TerminalSettingsRoot;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(TerminalSettingsRoot other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			TerminalSettingsRoot other = (TerminalSettingsRoot)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
 				(this.productVersion == other.productVersion)
 				// Do not compare AutoSaved.
@@ -411,34 +409,20 @@ namespace YAT.Settings.Terminal
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+
+				this.productVersion.GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(TerminalSettingsRoot lhs, TerminalSettingsRoot rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(TerminalSettingsRoot lhs, TerminalSettingsRoot rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

@@ -35,7 +35,7 @@ namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SocketSettings : MKY.Utilities.Settings.Settings, IEquatable<SocketSettings>
+	public class SocketSettings : Utilities.Settings.Settings
 	{
 		#region Constants
 		//==========================================================================================
@@ -104,7 +104,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public SocketSettings(MKY.Utilities.Settings.SettingsType settingsType)
+		public SocketSettings(Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -118,18 +118,18 @@ namespace MKY.IO.Serial
 		public SocketSettings(SocketSettings rhs)
 			: base(rhs)
 		{
-			this.hostType                = rhs.HostType;
+			HostType                = rhs.HostType;
 
-			this.remoteHost              = rhs.RemoteHost;
-			this.resolvedRemoteIPAddress = rhs.ResolvedRemoteIPAddress;
-			this.remotePort              = rhs.RemotePort;
+			RemoteHost              = rhs.RemoteHost;
+			ResolvedRemoteIPAddress = rhs.ResolvedRemoteIPAddress;
+			RemotePort              = rhs.RemotePort;
 
-			this.localInterface          = rhs.LocalInterface;
-			this.resolvedLocalIPAddress  = rhs.ResolvedLocalIPAddress;
-			this.localTcpPort            = rhs.LocalTcpPort;
-			this.localUdpPort            = rhs.LocalUdpPort;
+			LocalInterface          = rhs.LocalInterface;
+			ResolvedLocalIPAddress  = rhs.ResolvedLocalIPAddress;
+			LocalTcpPort            = rhs.LocalTcpPort;
+			LocalUdpPort            = rhs.LocalUdpPort;
 
-			this.tcpClientAutoReconnect  = rhs.TcpClientAutoReconnect;
+			TcpClientAutoReconnect  = rhs.TcpClientAutoReconnect;
 
 			ClearChanged();
 		}
@@ -412,28 +412,16 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			SocketSettings casted = obj as SocketSettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(SocketSettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			SocketSettings other = (SocketSettings)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
 				(this.hostType               == other.hostType) &&
 				(this.remoteHost             == other.remoteHost) &&
@@ -448,14 +436,25 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+
+				this.hostType              .GetHashCode() ^
+				this.remoteHost            .GetHashCode() ^
+				this.remotePort            .GetHashCode() ^
+				this.localInterface        .GetHashCode() ^
+				this.localTcpPort          .GetHashCode() ^
+				this.localUdpPort          .GetHashCode() ^
+				this.tcpClientAutoReconnect.GetHashCode()
+			);
 		}
 
 		/// <summary></summary>
 		public override string ToString()
 		{
 			return
-				(
+			(
 				((XSocketHostType)this.hostType) + ", " +
 				this.remoteHost                  + ", " +
 				this.remotePort                  + ", " +
@@ -463,37 +462,15 @@ namespace MKY.IO.Serial
 				this.localTcpPort                + ", " +
 				this.localUdpPort                + ", " +
 				this.tcpClientAutoReconnect
-				);
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
-		//==========================================================================================
-		// Comparison Operators
-		//==========================================================================================
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(SocketSettings lhs, SocketSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(SocketSettings lhs, SocketSettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

@@ -27,7 +27,7 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class BufferSettings : MKY.Utilities.Settings.Settings, IEquatable<BufferSettings>
+	public class BufferSettings : MKY.Utilities.Settings.Settings
 	{
 		/// <summary></summary>
 		public const int BufferSizeDefault = 65536;
@@ -57,8 +57,9 @@ namespace YAT.Domain.Settings
 		public BufferSettings(BufferSettings rhs)
 			: base(rhs)
 		{
-			this.txBufferSize = rhs.TxBufferSize;
-			this.rxBufferSize = rhs.RxBufferSize;
+			TxBufferSize = rhs.TxBufferSize;
+			RxBufferSize = rhs.RxBufferSize;
+
 			ClearChanged();
 		}
 
@@ -122,28 +123,16 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			BufferSettings casted = obj as BufferSettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(BufferSettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			BufferSettings other = (BufferSettings)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
 				(this.txBufferSize == other.txBufferSize) &&
 				(this.rxBufferSize == other.rxBufferSize)
@@ -153,34 +142,21 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+
+				this.txBufferSize.GetHashCode() ^
+				this.rxBufferSize.GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(BufferSettings lhs, BufferSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(BufferSettings lhs, BufferSettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

@@ -24,7 +24,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -367,14 +366,7 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
-				return (false);
-
-			SerialPortId casted = obj as SerialPortId;
-			if (casted == null)
-				return (false);
-
-			return (Equals(casted));
+			return (Equals(obj as SerialPortId));
 		}
 
 		/// <summary>
@@ -382,8 +374,10 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public bool Equals(SerialPortId other)
 		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
+			if (ReferenceEquals(other, null))
+				return (false);
+
+			if (GetType() != other.GetType())
 				return (false);
 
 			// Only field 'name' is relevant. Other properties are for convenience only.
@@ -393,7 +387,7 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return (this.name.GetHashCode());
 		}
 
 		/// <summary></summary>
@@ -547,16 +541,18 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public virtual int CompareTo(object obj)
 		{
-			if (obj == null) return (1);
-			if (obj is SerialPortId)
+			SerialPortId other = obj as SerialPortId;
+			if (other != null)
 			{
-				SerialPortId id = (SerialPortId)obj;
-				if (IsStandardPort && id.IsStandardPort)
-					return (StandardPortNumber.CompareTo(id.StandardPortNumber));
+				if (IsStandardPort && other.IsStandardPort)
+					return (StandardPortNumber.CompareTo(other.StandardPortNumber));
 				else
-					return (Name.CompareTo(id.Name));
+					return (Name.CompareTo(other.Name));
 			}
-			throw (new ArgumentException("Object is not a SerialPortId entry"));
+			else
+			{
+				throw (new ArgumentException("Object is not a SerialPortId entry"));
+			}
 		}
 
 		#endregion
@@ -587,13 +583,17 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public static bool operator ==(SerialPortId lhs, SerialPortId rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
+			// Base reference type implementation of operator ==.
+			// See MKY.Utilities.Test.EqualityTest for details.
 
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
+			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			// Ensure that object.Equals() is called.
+			// Thus, ensure that potential <Derived>.Equals() is called.
+			object obj = (object)lhs;
+			return (obj.Equals(rhs));
 		}
 
 		/// <summary>

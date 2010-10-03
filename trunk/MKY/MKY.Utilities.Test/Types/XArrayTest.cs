@@ -62,30 +62,20 @@ namespace MKY.Utilities.Test.Types
 			/// <summary></summary>
 			public override bool Equals(object obj)
 			{
-				if (obj == null)
+				if (ReferenceEquals(obj, null))
 					return (false);
 
-				SimpleType casted = obj as SimpleType;
-				if (casted == null)
+				if (GetType() != obj.GetType())
 					return (false);
 
-				return (Equals(casted));
-			}
-
-			/// <summary></summary>
-			public bool Equals(SimpleType other)
-			{
-				// Ensure that object.operator==() is called.
-				if ((object)other == null)
-					return (false);
-
+				SimpleType other = (SimpleType)obj;
 				return ((this.A == other.A) && (this.B == other.B));
 			}
 
 			/// <summary></summary>
 			public override int GetHashCode()
 			{
-				return (base.GetHashCode());
+				return (A.GetHashCode() ^ B.GetHashCode());
 			}
 		}
 

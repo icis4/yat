@@ -28,7 +28,7 @@ namespace YAT.Settings.Application
 	/// <summary></summary>
 	[Serializable]
 	[XmlRoot("LocalUserSettings")]
-	public class LocalUserSettingsRoot : MKY.Utilities.Settings.Settings, IEquatable<LocalUserSettingsRoot>
+	public class LocalUserSettingsRoot : MKY.Utilities.Settings.Settings
 	{
 		private string productVersion = System.Windows.Forms.Application.ProductVersion;
 		private Settings.GeneralSettings general;
@@ -110,7 +110,12 @@ namespace YAT.Settings.Application
 			get { return (this.general); }
 			set
 			{
-				if (this.general == null)
+				if (value == null)
+				{
+					this.general = value;
+					DetachNode(this.general);
+				}
+				else if (this.general == null)
 				{
 					this.general = value;
 					AttachNode(this.general);
@@ -131,7 +136,12 @@ namespace YAT.Settings.Application
 			get { return (this.paths); }
 			set
 			{
-				if (this.paths == null)
+				if (value == null)
+				{
+					this.paths = value;
+					DetachNode(this.paths);
+				}
+				else if (this.paths == null)
 				{
 					this.paths = value;
 					AttachNode(this.paths);
@@ -152,7 +162,12 @@ namespace YAT.Settings.Application
 			get { return (this.autoAutoWorkspace); }
 			set
 			{
-				if (this.autoAutoWorkspace == null)
+				if (value == null)
+				{
+					this.autoAutoWorkspace = value;
+					DetachNode(this.autoAutoWorkspace);
+				}
+				else if (this.autoAutoWorkspace == null)
 				{
 					this.autoAutoWorkspace = value;
 					AttachNode(this.autoAutoWorkspace);
@@ -173,7 +188,12 @@ namespace YAT.Settings.Application
 			get { return (this.mainWindow); }
 			set
 			{
-				if (this.mainWindow == null)
+				if (value == null)
+				{
+					this.mainWindow = value;
+					DetachNode(this.mainWindow);
+				}
+				else if (this.mainWindow == null)
 				{
 					this.mainWindow = value;
 					AttachNode(this.mainWindow);
@@ -194,7 +214,12 @@ namespace YAT.Settings.Application
 			get { return (this.newTerminal); }
 			set
 			{
-				if (this.newTerminal == null)
+				if (value == null)
+				{
+					this.newTerminal = value;
+					DetachNode(this.newTerminal);
+				}
+				else if (this.newTerminal == null)
 				{
 					this.newTerminal = value;
 					AttachNode(this.newTerminal);
@@ -238,28 +263,16 @@ namespace YAT.Settings.Application
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			LocalUserSettingsRoot casted = obj as LocalUserSettingsRoot;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(LocalUserSettingsRoot other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			LocalUserSettingsRoot other = (LocalUserSettingsRoot)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 				(this.productVersion == other.productVersion)
 			);
 		}
@@ -267,34 +280,19 @@ namespace YAT.Settings.Application
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+				this.productVersion.GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(LocalUserSettingsRoot lhs, LocalUserSettingsRoot rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(LocalUserSettingsRoot lhs, LocalUserSettingsRoot rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}	

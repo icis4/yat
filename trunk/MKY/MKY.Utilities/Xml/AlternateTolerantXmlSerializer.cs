@@ -44,6 +44,68 @@ namespace MKY.Utilities.Xml
 			LocalName = localName;
 			AlternateLocalNames = alternateLocalNames;
 		}
+
+		#region Object Members
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(obj, null))
+				return (false);
+
+			if (GetType() != obj.GetType())
+				return (false);
+
+			AlternateXmlElement other = (AlternateXmlElement)obj;
+			return
+			(
+				(XmlPath             == other.XmlPath) &&
+				(LocalName           == other.LocalName) &&
+				(AlternateLocalNames == other.AlternateLocalNames)
+			);
+		}
+
+		/// <summary></summary>
+		public override int GetHashCode()
+		{
+			return
+			(
+				XmlPath            .GetHashCode() ^
+				LocalName          .GetHashCode() ^
+				AlternateLocalNames.GetHashCode()
+			);
+		}
+
+		#endregion
+
+		#region Comparison Operators
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference or value equality.
+		/// </summary>
+		public static bool operator ==(AlternateXmlElement lhs, AlternateXmlElement rhs)
+		{
+			// Value type implementation of operator ==.
+			// See MKY.Utilities.Test.EqualityTest for details.
+
+			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			return (lhs.Equals(rhs));
+		}
+
+		/// <summary>
+		/// Determines whether the two specified objects have reference and value inequality.
+		/// </summary>
+		public static bool operator !=(AlternateXmlElement lhs, AlternateXmlElement rhs)
+		{
+			return (!(lhs == rhs));
+		}
+
+		#endregion
 	}
 
 	/// <summary>

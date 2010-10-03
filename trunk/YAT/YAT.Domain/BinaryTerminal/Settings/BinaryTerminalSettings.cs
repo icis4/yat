@@ -26,7 +26,7 @@ using System.Xml.Serialization;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	public class BinaryTerminalSettings : MKY.Utilities.Settings.Settings, IEquatable<BinaryTerminalSettings>
+	public class BinaryTerminalSettings : MKY.Utilities.Settings.Settings
 	{
 		#region Fields
 		//==========================================================================================
@@ -74,9 +74,10 @@ namespace YAT.Domain.Settings
 		public BinaryTerminalSettings(BinaryTerminalSettings rhs)
 			: base(rhs)
 		{
-			this.separateTxRxDisplay = rhs.SeparateTxRxDisplay;
+			SeparateTxRxDisplay = rhs.SeparateTxRxDisplay;
 			TxDisplay = new BinaryDisplaySettings(rhs.TxDisplay);
 			RxDisplay = new BinaryDisplaySettings(rhs.RxDisplay);
+
 			ClearChanged();
 		}
 
@@ -117,7 +118,12 @@ namespace YAT.Domain.Settings
 			get { return (this.txDisplay); }
 			set
 			{
-				if (this.txDisplay == null)
+				if (value == null)
+				{
+					this.txDisplay = value;
+					DetachNode(this.txDisplay);
+				}
+				else if (this.txDisplay == null)
 				{
 					this.txDisplay = value;
 					AttachNode(this.txDisplay);
@@ -144,7 +150,12 @@ namespace YAT.Domain.Settings
 			}
 			set
 			{
-				if (this.rxDisplay == null)
+				if (value == null)
+				{
+					this.rxDisplay = value;
+					DetachNode(this.rxDisplay);
+				}
+				else if (this.rxDisplay == null)
 				{
 					this.rxDisplay = value;
 					AttachNode(this.rxDisplay);
@@ -170,28 +181,16 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			BinaryTerminalSettings casted = obj as BinaryTerminalSettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(BinaryTerminalSettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			BinaryTerminalSettings other = (BinaryTerminalSettings)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 				(this.separateTxRxDisplay == other.separateTxRxDisplay)
 			);
 		}
@@ -199,37 +198,19 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+				this.separateTxRxDisplay.GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
-		//==========================================================================================
-		// Comparison Operators
-		//==========================================================================================
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(BinaryTerminalSettings lhs, BinaryTerminalSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(BinaryTerminalSettings lhs, BinaryTerminalSettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

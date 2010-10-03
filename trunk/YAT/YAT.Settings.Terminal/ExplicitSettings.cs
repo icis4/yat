@@ -27,7 +27,7 @@ namespace YAT.Settings.Terminal
 {
 	/// <summary></summary>
 	[Serializable]
-	public class ExplicitSettings : MKY.Utilities.Settings.Settings, IEquatable<ExplicitSettings>
+	public class ExplicitSettings : MKY.Utilities.Settings.Settings
 	{
 		private Domain.Settings.TerminalSettings terminal;
 		private Model.Settings.PredefinedCommandSettings predefinedCommand;
@@ -41,10 +41,11 @@ namespace YAT.Settings.Terminal
 		{
 			SetMyDefaults();
 
-			Terminal = new Domain.Settings.TerminalSettings(SettingsType);
+			Terminal          = new Domain.Settings.TerminalSettings(SettingsType);
 			PredefinedCommand = new Model.Settings.PredefinedCommandSettings(SettingsType);
-			Format = new Model.Settings.FormatSettings(SettingsType);
-			Log = new Log.Settings.LogSettings(SettingsType);
+			Format            = new Model.Settings.FormatSettings(SettingsType);
+			CharReplace       = new Domain.Settings.CharReplaceSettings(SettingsType);
+			Log               = new Log.Settings.LogSettings(SettingsType);
 
 			ClearChanged();
 		}
@@ -55,10 +56,11 @@ namespace YAT.Settings.Terminal
 		public ExplicitSettings(ExplicitSettings rhs)
 			: base(rhs)
 		{
-			Terminal = new Domain.Settings.TerminalSettings(rhs.Terminal);
+			Terminal          = new Domain.Settings.TerminalSettings(rhs.Terminal);
 			PredefinedCommand = new Model.Settings.PredefinedCommandSettings(rhs.PredefinedCommand);
-			Format = new Model.Settings.FormatSettings(rhs.Format);
-			Log = new Log.Settings.LogSettings(rhs.Log);
+			Format            = new Model.Settings.FormatSettings(rhs.Format);
+			CharReplace       = new Domain.Settings.CharReplaceSettings(rhs.CharReplace);
+			Log               = new Log.Settings.LogSettings(rhs.Log);
 
 			ClearChanged();
 		}
@@ -68,7 +70,7 @@ namespace YAT.Settings.Terminal
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			// Nothing to do
+			// Nothing to do.
 		}
 
 		#region Properties
@@ -83,7 +85,12 @@ namespace YAT.Settings.Terminal
 			get { return (this.terminal); }
 			set
 			{
-				if (this.terminal == null)
+				if (value == null)
+				{
+					this.terminal = value;
+					DetachNode(this.terminal);
+				}
+				else if (this.terminal == null)
 				{
 					this.terminal = value;
 					AttachNode(this.terminal);
@@ -104,7 +111,12 @@ namespace YAT.Settings.Terminal
 			get { return (this.predefinedCommand); }
 			set
 			{
-				if (this.predefinedCommand == null)
+				if (value == null)
+				{
+					this.predefinedCommand = value;
+					DetachNode(this.predefinedCommand);
+				}
+				else if (this.predefinedCommand == null)
 				{
 					this.predefinedCommand = value;
 					AttachNode(this.predefinedCommand);
@@ -125,7 +137,12 @@ namespace YAT.Settings.Terminal
 			get { return (this.format); }
 			set
 			{
-				if (this.format == null)
+				if (value == null)
+				{
+					this.format = value;
+					DetachNode(this.format);
+				}
+				else if (this.format == null)
 				{
 					this.format = value;
 					AttachNode(this.format);
@@ -146,7 +163,12 @@ namespace YAT.Settings.Terminal
 			get { return (this.charReplace); }
 			set
 			{
-				if (this.charReplace == null)
+				if (value == null)
+				{
+					this.charReplace = value;
+					DetachNode(this.charReplace);
+				}
+				else if (this.charReplace == null)
 				{
 					this.charReplace = value;
 					AttachNode(this.charReplace);
@@ -167,7 +189,12 @@ namespace YAT.Settings.Terminal
 			get { return (this.log); }
 			set
 			{
-				if (this.log == null)
+				if (value == null)
+				{
+					this.log = value;
+					DetachNode(this.log);
+				}
+				else if (this.log == null)
 				{
 					this.log = value;
 					AttachNode(this.log);
@@ -190,26 +217,14 @@ namespace YAT.Settings.Terminal
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			ExplicitSettings casted = obj as ExplicitSettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(ExplicitSettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
-			return (base.Equals((MKY.Utilities.Settings.Settings)other)); // Compare all settings nodes.
+			ExplicitSettings other = (ExplicitSettings)obj;
+			return (base.Equals(other)); // Compare all settings nodes.
 		}
 
 		/// <summary></summary>
@@ -222,27 +237,8 @@ namespace YAT.Settings.Terminal
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(ExplicitSettings lhs, ExplicitSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(ExplicitSettings lhs, ExplicitSettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

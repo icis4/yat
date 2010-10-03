@@ -199,14 +199,7 @@ namespace MKY.Utilities.Types
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
-				return (false);
-
-			XEnum casted = obj as XEnum;
-			if (casted == null)
-				return (false);
-
-			return (Equals(casted));
+			return (Equals(obj as XEnum));
 		}
 
 		/// <summary>
@@ -214,11 +207,12 @@ namespace MKY.Utilities.Types
 		/// </summary>
 		public bool Equals(XEnum other)
 		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
+			if (ReferenceEquals(other, null))
 				return (false);
 
-			// Attention, Enum doesn't override operators == and !=, use Equals().
+			if (GetType() != other.GetType())
+				return (false);
+
 			return ((UnderlyingEnum != null) && (UnderlyingEnum.Equals(other.UnderlyingEnum)));
 		}
 
@@ -262,13 +256,11 @@ namespace MKY.Utilities.Types
 		/// </summary>
 		public virtual int CompareTo(object obj)
 		{
-			if (obj == null) return (1);
-			if (obj is XEnum)
-			{
-				XEnum xe = (XEnum)obj;
-				return (UnderlyingEnum.CompareTo(xe.UnderlyingEnum));
-			}
-			throw (new ArgumentException("Object is not a XEnum"));
+			XEnum other = obj as XEnum;
+			if (other != null)
+				return (UnderlyingEnum.CompareTo(other.UnderlyingEnum));
+			else
+				throw (new ArgumentException("Object is not a XEnum"));
 		}
 
 		#endregion
@@ -325,11 +317,11 @@ namespace MKY.Utilities.Types
 		/// </param>
 		/// <returns>
 		/// A string containing the name of the enumerated constant in xe whose
-		/// value is value, or a null reference (Nothing in Visual Basic) if no
-		/// such constant is found.
+		/// value is value, or a <c>null</c> reference (Nothing in Visual Basic)
+		/// if no such constant is found.
 		/// </returns>
 		/// <exception cref="ArgumentNullException">
-		/// ex or value is a null reference (Nothing in Visual Basic).
+		/// ex or value is a <c>null</c> reference (Nothing in Visual Basic).
 		/// </exception>
 		/// <exception cref="ArgumentException">
 		/// value is not of type ex.
@@ -349,7 +341,7 @@ namespace MKY.Utilities.Types
 		/// of the array are sorted by the values of the enumerated constants.
 		/// </returns>
 		/// <exception cref="ArgumentNullException">
-		/// ex or value is a null reference (Nothing in Visual Basic).
+		/// ex or value is a <c>null</c> reference (Nothing in Visual Basic).
 		/// </exception>
 		public static string[] GetNames(System.Type xEnumType)
 		{
@@ -366,7 +358,7 @@ namespace MKY.Utilities.Types
 		/// the array are sorted by the values of the enumeration constants.
 		/// </returns>
 		/// <exception cref="ArgumentNullException">
-		/// ex or value is a null reference (Nothing in Visual Basic).
+		/// ex or value is a <c>null</c> reference (Nothing in Visual Basic).
 		/// </exception>
 		public static Array GetValues(System.Type xEnumType)
 		{
@@ -383,7 +375,7 @@ namespace MKY.Utilities.Types
 		/// the array are sorted by the values of the enumeration constants.
 		/// </returns>
 		/// <exception cref="ArgumentNullException">
-		/// ex or value is a null reference (Nothing in Visual Basic).
+		/// ex or value is a <c>null</c> reference (Nothing in Visual Basic).
 		/// </exception>
 		public static Enum[] GetItems(System.Type xEnumType)
 		{
@@ -410,7 +402,7 @@ namespace MKY.Utilities.Types
 		/// otherwise, <c>false</c>.
 		/// </returns>
 		/// <exception cref="ArgumentNullException">
-		/// ex or value is a null reference (Nothing in Visual Basic).
+		/// ex or value is a <c>null</c> reference (Nothing in Visual Basic).
 		/// </exception>
 		/// <exception cref="ArgumentException">
 		/// The type of value is not an XEnum.
@@ -431,7 +423,7 @@ namespace MKY.Utilities.Types
 		/// <param name="xEnumType">The Type of the XEnum.</param>
 		/// <param name="value">A string containing the name or value to convert.</param>
 		/// <exception cref="ArgumentNullException">
-		/// xEnumType or value is a null reference (Nothing in Visual Basic).
+		/// xEnumType or value is a <c>null</c> reference (Nothing in Visual Basic).
 		/// </exception>
 		/// <exception cref="ArgumentException">
 		/// value is either an empty string or only contains white space.
@@ -455,7 +447,7 @@ namespace MKY.Utilities.Types
 		/// <param name="ignoreCase">If true, ignore case; otherwise, regard case.</param>
 		/// <returns>An XEnum whose value is represented by value.</returns>
 		/// <exception cref="ArgumentNullException">
-		/// xEnumType or value is a null reference (Nothing in Visual Basic).
+		/// xEnumType or value is a <c>null</c> reference (Nothing in Visual Basic).
 		/// </exception>
 		/// <exception cref="ArgumentException">
 		/// value is either an empty string or only contains white space.
@@ -488,7 +480,7 @@ namespace MKY.Utilities.Types
 		/// <param name="format">The output format to use.</param>
 		/// <returns>A string representation of value.</returns>
 		/// <exception cref="ArgumentNullException">
-		/// ex or value is a null reference (Nothing in Visual Basic).
+		/// ex or value is a <c>null</c> reference (Nothing in Visual Basic).
 		/// </exception>
 		/// <exception cref="ArgumentException">
 		/// The value is from an enumeration that differs in type from enumType.
@@ -530,13 +522,17 @@ namespace MKY.Utilities.Types
 		/// </summary>
 		public static bool operator ==(XEnum lhs, XEnum rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
+			// Base reference type implementation of operator ==.
+			// See MKY.Utilities.Test.EqualityTest for details.
 
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
+			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			// Ensure that object.Equals() is called.
+			// Thus, ensure that potential <Derived>.Equals() is called.
+			object obj = (object)lhs;
+			return (obj.Equals(rhs));
 		}
 
 		/// <summary>

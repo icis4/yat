@@ -147,14 +147,7 @@ namespace YAT.Model.Types
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
-				return (false);
-
-			FontFormat casted = obj as FontFormat;
-			if (casted == null)
-				return (false);
-
-			return (Equals(casted));
+			return (Equals(obj as FontFormat));
 		}
 
 		/// <summary>
@@ -162,8 +155,10 @@ namespace YAT.Model.Types
 		/// </summary>
 		public bool Equals(FontFormat other)
 		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
+			if (ReferenceEquals(other, null))
+				return (false);
+
+			if (GetType() != other.GetType())
 				return (false);
 
 			return
@@ -177,7 +172,12 @@ namespace YAT.Model.Types
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				this.name .GetHashCode() ^
+				this.size .GetHashCode() ^
+				this.style.GetHashCode()
+			);
 		}
 
 		#endregion
@@ -189,13 +189,17 @@ namespace YAT.Model.Types
 		/// </summary>
 		public static bool operator ==(FontFormat lhs, FontFormat rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
+			// Base reference type implementation of operator ==.
+			// See MKY.Utilities.Test.EqualityTest for details.
 
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
+			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			// Ensure that object.Equals() is called.
+			// Thus, ensure that potential <Derived>.Equals() is called.
+			object obj = (object)lhs;
+			return (obj.Equals(rhs));
 		}
 
 		/// <summary>

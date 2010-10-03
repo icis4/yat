@@ -30,7 +30,7 @@ namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SerialCommunicationSettings : MKY.Utilities.Settings.Settings, IEquatable<SerialCommunicationSettings>
+	public class SerialCommunicationSettings : Utilities.Settings.Settings
 	{
 		private int baudRate;
 		private MKY.IO.Ports.DataBits dataBits;
@@ -46,7 +46,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public SerialCommunicationSettings(MKY.Utilities.Settings.SettingsType settingsType)
+		public SerialCommunicationSettings(Utilities.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -60,11 +60,12 @@ namespace MKY.IO.Serial
 		public SerialCommunicationSettings(SerialCommunicationSettings rhs)
 			: base(rhs)
 		{
-			this.baudRate    = rhs.BaudRate;
-			this.dataBits    = rhs.DataBits;
-			this.parity      = rhs.Parity;
-			this.stopBits    = rhs.StopBits;
-			this.flowControl = rhs.FlowControl;
+			BaudRate    = rhs.BaudRate;
+			DataBits    = rhs.DataBits;
+			Parity      = rhs.Parity;
+			StopBits    = rhs.StopBits;
+			FlowControl = rhs.FlowControl;
+
 			ClearChanged();
 		}
 
@@ -169,28 +170,16 @@ namespace MKY.IO.Serial
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			SerialCommunicationSettings casted = obj as SerialCommunicationSettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(SerialCommunicationSettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			SerialCommunicationSettings other = (SerialCommunicationSettings)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
 				(this.baudRate    == other.baudRate) &&
 				(this.dataBits    == other.dataBits) &&
@@ -203,20 +192,29 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+
+				this.baudRate   .GetHashCode() ^
+				this.dataBits   .GetHashCode() ^
+				this.parity     .GetHashCode() ^
+				this.stopBits   .GetHashCode() ^
+				this.flowControl.GetHashCode()
+			);
 		}
 
 		/// <summary></summary>
 		public override string ToString()
 		{
 			return
-				(
+			(
 				this.baudRate                           + ", " +
 				((MKY.IO.Ports.XDataBits)this.dataBits) + ", " +
-				((MKY.IO.Ports.XParity)this.parity)     + ", " +
+				((MKY.IO.Ports.XParity)  this.parity)   + ", " +
 				((MKY.IO.Ports.XStopBits)this.stopBits) + ", " +
 				((XSerialFlowControl)this.flowControl).ToShortString()
-				);
+			);
 		}
 
 		#endregion
@@ -225,49 +223,30 @@ namespace MKY.IO.Serial
 		public virtual string ToShortString()
 		{
 			return
-				(
+			(
 				this.baudRate                           + ", " +
 				((MKY.IO.Ports.XDataBits)this.dataBits) + ", " +
 				((MKY.IO.Ports.XParity)this.parity).ToShortString()
-				);
+			);
 		}
 
 		/// <summary></summary>
 		public virtual string ToLongString()
 		{
 			return
-				(
+			(
 				this.baudRate                           + ", " +
 				((MKY.IO.Ports.XDataBits)this.dataBits) + ", " +
 				((MKY.IO.Ports.XParity)this.parity)     + ", " +
 				((MKY.IO.Ports.XStopBits)this.stopBits) + ", " +
 				((XSerialFlowControl)this.flowControl)
-				);
+			);
 		}
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(SerialCommunicationSettings lhs, SerialCommunicationSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(SerialCommunicationSettings lhs, SerialCommunicationSettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

@@ -423,7 +423,7 @@ namespace YAT.Domain
 
 		private void ApplyIOSettings()
 		{
-			// Nothing to do
+			// Nothing to do.
 		}
 
 		#endregion

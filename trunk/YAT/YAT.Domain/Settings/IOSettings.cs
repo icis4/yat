@@ -27,7 +27,7 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class IOSettings : MKY.Utilities.Settings.Settings, IEquatable<IOSettings>
+	public class IOSettings : MKY.Utilities.Settings.Settings
 	{
 		/// <summary></summary>
 		public const Domain.IOType IOTypeDefault = Domain.IOType.SerialPort;
@@ -76,12 +76,12 @@ namespace YAT.Domain.Settings
 		public IOSettings(IOSettings rhs)
 			: base(rhs)
 		{
-			this.ioType      = rhs.IOType;
-			SerialPort   = new MKY.IO.Serial.SerialPortSettings(rhs.SerialPort);
-			this.serialParityErrorReplacement = rhs.SerialParityErrorReplacement;
-			Socket       = new MKY.IO.Serial.SocketSettings(rhs.Socket);
-			UsbHidDevice = new MKY.IO.Serial.UsbHidDeviceSettings(rhs.UsbHidDevice);
-			this.endianess   = rhs.Endianess;
+			IOType                       = rhs.IOType;
+			SerialPort                   = new MKY.IO.Serial.SerialPortSettings(rhs.SerialPort);
+			SerialParityErrorReplacement = rhs.SerialParityErrorReplacement;
+			Socket                       = new MKY.IO.Serial.SocketSettings(rhs.Socket);
+			UsbHidDevice                 = new MKY.IO.Serial.UsbHidDeviceSettings(rhs.UsbHidDevice);
+			Endianess                    = rhs.Endianess;
 
 			ClearChanged();
 		}
@@ -91,9 +91,9 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			IOType = IOTypeDefault;
+			IOType                       = IOTypeDefault;
 			SerialParityErrorReplacement = SerialParityErrorReplacementDefault;
-			Endianess = EndianessDefault;
+			Endianess                    = EndianessDefault;
 		}
 
 		#region Properties
@@ -127,7 +127,12 @@ namespace YAT.Domain.Settings
 			get { return (this.serialPort); }
 			set
 			{
-				if (this.serialPort == null)
+				if (value == null)
+				{
+					this.serialPort = value;
+					DetachNode(this.serialPort);
+				}
+				else if (this.serialPort == null)
 				{
 					this.serialPort = value;
 					AttachNode(this.serialPort);
@@ -163,7 +168,12 @@ namespace YAT.Domain.Settings
 			get { return (this.socket); }
 			set
 			{
-				if (this.socket == null)
+				if (value == null)
+				{
+					this.socket = value;
+					DetachNode(this.socket);
+				}
+				else if (this.socket == null)
 				{
 					this.socket = value;
 					AttachNode(this.socket);
@@ -184,7 +194,12 @@ namespace YAT.Domain.Settings
 			get { return (this.usbHidDevice); }
 			set
 			{
-				if (this.usbHidDevice == null)
+				if (value == null)
+				{
+					this.usbHidDevice = value;
+					DetachNode(this.usbHidDevice);
+				}
+				else if (this.usbHidDevice == null)
 				{
 					this.usbHidDevice = value;
 					AttachNode(this.usbHidDevice);
@@ -222,28 +237,16 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			IOSettings casted = obj as IOSettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(IOSettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			IOSettings other = (IOSettings)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
 				(this.ioType                       == other.ioType) &&
 				(this.serialParityErrorReplacement == other.serialParityErrorReplacement) &&
@@ -254,34 +257,22 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+
+				this.ioType                      .GetHashCode() ^
+				this.serialParityErrorReplacement.GetHashCode() ^
+				this.endianess                   .GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(IOSettings lhs, IOSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(IOSettings lhs, IOSettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

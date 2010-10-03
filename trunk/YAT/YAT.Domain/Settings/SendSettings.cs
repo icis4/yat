@@ -27,7 +27,7 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SendSettings : MKY.Utilities.Settings.Settings, IEquatable<SendSettings>
+	public class SendSettings : MKY.Utilities.Settings.Settings
 	{
 		/// <summary></summary>
 		public const bool KeepCommandDefault = true;
@@ -64,9 +64,9 @@ namespace YAT.Domain.Settings
 		public SendSettings(SendSettings rhs)
 			: base(rhs)
 		{
-			this.keepCommand     = rhs.keepCommand;
-			this.copyPredefined  = rhs.copyPredefined;
-			this.sendImmediately = rhs.sendImmediately;
+			KeepCommand     = rhs.keepCommand;
+			CopyPredefined  = rhs.copyPredefined;
+			SendImmediately = rhs.sendImmediately;
 
 			ClearChanged();
 		}
@@ -140,28 +140,16 @@ namespace YAT.Domain.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 				return (false);
 
-			SendSettings casted = obj as SendSettings;
-			if (casted == null)
+			if (GetType() != obj.GetType())
 				return (false);
 
-			return (Equals(casted));
-		}
-
-		/// <summary>
-		/// Determines whether this instance and the specified object have value equality.
-		/// </summary>
-		public bool Equals(SendSettings other)
-		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
-				return (false);
-
+			SendSettings other = (SendSettings)obj;
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals(other) && // Compare all settings nodes.
 
 				(this.keepCommand     == other.keepCommand) &&
 				(this.copyPredefined  == other.copyPredefined) &&
@@ -172,34 +160,22 @@ namespace YAT.Domain.Settings
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			return
+			(
+				base.GetHashCode() ^
+
+				this.keepCommand    .GetHashCode() ^
+				this.copyPredefined .GetHashCode() ^
+				this.sendImmediately.GetHashCode()
+			);
 		}
 
 		#endregion
 
 		#region Comparison Operators
 
-		/// <summary>
-		/// Determines whether the two specified objects have reference or value equality.
-		/// </summary>
-		public static bool operator ==(SendSettings lhs, SendSettings rhs)
-		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
-
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
-		}
-
-		/// <summary>
-		/// Determines whether the two specified objects have reference and value inequality.
-		/// </summary>
-		public static bool operator !=(SendSettings lhs, SendSettings rhs)
-		{
-			return (!(lhs == rhs));
-		}
+		// Use of base reference type implementation of operators ==/!=.
+		// See MKY.Utilities.Test.EqualityTest for details.
 
 		#endregion
 	}

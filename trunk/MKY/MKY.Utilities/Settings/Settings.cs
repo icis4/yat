@@ -42,10 +42,6 @@ namespace MKY.Utilities.Settings
 	}
 
 	/// <summary></summary>
-	/// <remarks>
-	/// IEquatable is not implemented because this abstract class cannot check
-	/// for value equality.
-	/// </remarks>
 	public abstract class Settings : IEquatable<Settings>
 	{
 		private SettingsType settingsType = SettingsType.Explicit;
@@ -80,30 +76,54 @@ namespace MKY.Utilities.Settings
 		/// <summary></summary>
 		protected virtual void AttachNode(Settings node)
 		{
-			SuspendChangeEvent();
+			if (node != null)
+			{
+				SuspendChangeEvent();
 
-			node.SuspendChangeEvent();
-			node.SetChanged();
-			node.Changed += new EventHandler<SettingsEventArgs>(this.node_Changed);
-			this.nodes.Add(node);
+				node.SuspendChangeEvent();
+				node.SetChanged();
+				node.Changed += new EventHandler<SettingsEventArgs>(this.node_Changed);
+				this.nodes.Add(node);
 
-			ResumeChangeEvent();
+				ResumeChangeEvent();
+			}
 		}
 
 		/// <summary></summary>
 		protected virtual void ReplaceNode(Settings nodeOld, Settings nodeNew)
 		{
-			SuspendChangeEvent();
+			if ((nodeOld != null) && (nodeNew != null))
+			{
+				if (this.nodes.Contains(nodeOld))
+				{
+					SuspendChangeEvent();
 
-			nodeOld.Changed -= new EventHandler<SettingsEventArgs>(this.node_Changed);
-			this.nodes.Remove(nodeOld);
+					nodeOld.Changed -= new EventHandler<SettingsEventArgs>(this.node_Changed);
+					int index = this.nodes.IndexOf(nodeOld);
+					this.nodes.RemoveAt(index);
 
-			nodeNew.SuspendChangeEvent();
-			nodeNew.SetChanged();
-			nodeNew.Changed += new EventHandler<SettingsEventArgs>(this.node_Changed);
-			this.nodes.Add(nodeNew);
+					nodeNew.SuspendChangeEvent();
+					nodeNew.SetChanged();
+					nodeNew.Changed += new EventHandler<SettingsEventArgs>(this.node_Changed);
+					this.nodes.Insert(index, nodeNew);
 
-			ResumeChangeEvent();
+					ResumeChangeEvent();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void DetachNode(Settings node)
+		{
+			if (node != null)
+			{
+				SuspendChangeEvent();
+
+				node.Changed -= new EventHandler<SettingsEventArgs>(this.node_Changed);
+				this.nodes.Remove(node);
+
+				ResumeChangeEvent();
+			}
 		}
 
 		/// <summary></summary>
@@ -191,14 +211,7 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
-				return (false);
-
-			Settings casted = obj as Settings;
-			if (casted == null)
-				return (false);
-
-			return (Equals(casted));
+			return (Equals(obj as Settings));
 		}
 
 		/// <summary>
@@ -206,13 +219,15 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public bool Equals(Settings other)
 		{
-			// Ensure that object.operator==() is called.
-			if ((object)other == null)
+			if (ReferenceEquals(other, null))
+				return (false);
+
+			if (GetType() != other.GetType())
 				return (false);
 
 			if (this.GetType() == other.GetType())
 			{
-				// Compare all nodes, settings values have already been compared by inheriting class.
+				// Compare all nodes, settings values are compared by inheriting class.
 				if (this.nodes.Count == other.nodes.Count)
 				{
 					for (int i = 0; i < this.nodes.Count; i++)
@@ -229,7 +244,11 @@ namespace MKY.Utilities.Settings
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (base.GetHashCode());
+			int hashCode = 0;
+			foreach (Settings node in this.nodes)
+				hashCode ^= node.GetHashCode();
+
+			return (hashCode);
 		}
 
 		#endregion
@@ -319,13 +338,17 @@ namespace MKY.Utilities.Settings
 		/// </summary>
 		public static bool operator ==(Settings lhs, Settings rhs)
 		{
-			if (ReferenceEquals(lhs, rhs))
-				return (true);
+			// Base reference type implementation of operator ==.
+			// See MKY.Utilities.Test.EqualityTest for details.
 
-			if ((object)lhs != null)
-				return (lhs.Equals(rhs));
-			
-			return (false);
+			if (ReferenceEquals(lhs, rhs)) return (true);
+			if (ReferenceEquals(lhs, null)) return (false);
+			if (ReferenceEquals(rhs, null)) return (false);
+
+			// Ensure that object.Equals() is called.
+			// Thus, ensure that potential <Derived>.Equals() is called.
+			object obj = (object)lhs;
+			return (obj.Equals(rhs));
 		}
 
 		/// <summary>

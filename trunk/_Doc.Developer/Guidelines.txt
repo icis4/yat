@@ -145,13 +145,12 @@ Inherited class
 Also see "Implementing Finalize and Dispose to Clean Up Unmanaged Resources" in the MSDN.
 
 
-Equals
-------
-> Implementing operator==
-  > Value types: Yes
-  > Reference types: No
-> Use == when comparing base types
-> Serach for "Implementing Equals" in the MSDN
+Equality
+--------
+> Always implement operators ==/!= on value types
+> Always implement IEquatable
+> Implement operators ==/!= on base types
+> See MKY.Utilities.Test.EqualityTest
 
 
 Variables

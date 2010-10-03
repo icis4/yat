@@ -76,14 +76,12 @@ namespace MKY.IO.Ports
 		/// The communications port. The default is COM1.
 		/// </value>
 		/// <exception cref="System.ArgumentNullException">
-		/// The <see cref="System.IO.Ports.SerialPort.PortName"/> property was set
-		/// to null.
+		/// The <see cref="System.IO.Ports.SerialPort.PortName"/> property was set to <c>null</c>.
 		/// </exception>
 		/// <exception cref="System.ArgumentException">
-		/// The <see cref="System.IO.Ports.SerialPort.PortName"/> property was set
-		/// to a value with a length of zero. -or- The
-		/// <see cref="System.IO.Ports.SerialPort.PortName"/> property was
-		/// set to a value that starts with "\\". -or- The port name was not valid.
+		/// The <see cref="System.IO.Ports.SerialPort.PortName"/> property was set to a value with
+		/// a length of zero. -or- The <see cref="System.IO.Ports.SerialPort.PortName"/> property
+		/// was set to a value that starts with "\\". -or- The port name was not valid.
 		/// </exception>
 		/// <exception cref="System.InvalidOperationException">
 		/// The specified port is open.
@@ -312,7 +310,7 @@ namespace MKY.IO.Ports
 		/// <see cref="System.Environment.NewLine"/>.
 		/// </value>
 		/// <exception cref="System.ArgumentNullException">
-		/// The <see cref="System.IO.Ports.SerialPort.IsOpen"/> value passed is null.
+		/// The <see cref="System.IO.Ports.SerialPort.IsOpen"/> value passed is <c>null</c>.
 		/// </exception>
 		/// <exception cref="System.ArgumentException">
 		/// The <see cref="System.IO.Ports.SerialPort.IsOpen"/> value passed is an
@@ -329,7 +327,7 @@ namespace MKY.IO.Ports
 		/// <see cref="System.Text.ASCIIEncoding"/>.
 		/// </value>
 		/// <exception cref="System.ArgumentNullException">
-		/// The <see cref="System.IO.Ports.SerialPort.Encoding"/> property was set to null.
+		/// The <see cref="System.IO.Ports.SerialPort.Encoding"/> property was set to <c>null</c>.
 		/// </exception>
 		/// <exception cref="System.ArgumentException">
 		/// The <see cref="System.IO.Ports.SerialPort.Encoding"/> property was set to
@@ -573,7 +571,7 @@ namespace MKY.IO.Ports
 		/// buffer being passed. Either offset or count is less than zero.
 		/// </exception>
 		/// <exception cref="System.ArgumentNullException">
-		/// The buffer passed is null.
+		/// The buffer passed is <c>null</c>.
 		/// </exception>
 		/// <exception cref="System.InvalidOperationException">
 		/// The specified port is not open.
@@ -601,7 +599,7 @@ namespace MKY.IO.Ports
 		/// being passed. Either offset or count is less than zero.
 		/// </exception>
 		/// <exception cref="System.ArgumentNullException">
-		/// The buffer passed is null.
+		/// The buffer passed is <c>null</c>.
 		/// </exception>
 		/// <exception cref="System.InvalidOperationException">
 		/// The specified port is not open.
@@ -673,7 +671,7 @@ namespace MKY.IO.Ports
 		/// <param name="value">A value that indicates where the read operation stops.</param>
 		/// <returns>The contents of the input buffer up to the specified value.</returns>
 		/// <exception cref="System.ArgumentNullException">
-		/// The value parameter is null.
+		/// The value parameter is <c>null</c>.
 		/// </exception>
 		/// <exception cref="System.TimeoutException">
 		/// The operation did not complete before the time-out period ended.
@@ -694,7 +692,7 @@ namespace MKY.IO.Ports
 		/// The operation did not complete before the time-out period ended.
 		/// </exception>
 		/// <exception cref="System.ArgumentNullException">
-		/// str is null.
+		/// str is <c>null</c>.
 		/// </exception>
 		/// <exception cref="System.InvalidOperationException">
 		/// The specified port is not open.
@@ -719,7 +717,7 @@ namespace MKY.IO.Ports
 		/// buffer being passed. Either offset or count is less than zero.
 		/// </exception>
 		/// <exception cref="System.ArgumentNullException">
-		/// The buffer passed is null.
+		/// The buffer passed is <c>null</c>.
 		/// </exception>
 		/// <exception cref="System.InvalidOperationException">
 		/// The specified port is not open.
@@ -744,7 +742,7 @@ namespace MKY.IO.Ports
 		/// buffer being passed. Either offset or count is less than zero.
 		/// </exception>
 		/// <exception cref="System.ArgumentNullException">
-		/// The buffer passed is null.
+		/// The buffer passed is <c>null</c>.
 		/// </exception>
 		/// <exception cref="System.InvalidOperationException">
 		/// The specified port is not open.
@@ -761,7 +759,7 @@ namespace MKY.IO.Ports
 		/// method could not write to the stream.
 		/// </exception>
 		/// <exception cref="System.ArgumentNullException">
-		/// The str parameter is null.
+		/// The str parameter is <c>null</c>.
 		/// </exception>
 		/// <exception cref="System.InvalidOperationException">
 		/// The specified port is not open.

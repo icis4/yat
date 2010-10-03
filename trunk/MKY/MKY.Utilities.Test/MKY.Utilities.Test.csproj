@@ -52,11 +52,12 @@
     <Compile Include="IO\XPathTest.cs" />
     <Compile Include="Net\IPHostTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings\DocumentSettingsHandlerTest.cs" />
+    <Compile Include="Settings\SettingsTest.cs" />
     <Compile Include="Types\XArrayTest.cs" />
     <Compile Include="Types\XByteTest.cs" />
     <Compile Include="Types\XInt32Test.cs" />
     <Compile Include="Types\XUInt64Test.cs" />
+    <Compile Include="EqualityTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MKY.Utilities\MKY.Utilities.csproj">
