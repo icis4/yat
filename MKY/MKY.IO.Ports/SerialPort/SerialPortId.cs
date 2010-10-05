@@ -103,10 +103,10 @@ namespace MKY.IO.Ports
 		private string name = FirstStandardPortName;
 		private int standardPortNumber = FirstStandardPortNumber;
 
-		private string description = "";
-		private bool hasDescriptonFromSystem = false;
+		private string description;
+		private bool hasDescriptonFromSystem;
 
-		private bool isInUse = false;
+		private bool isInUse;
 		private string inUseText = "";
 
 		private string separator = DefaultSeparator;
@@ -301,7 +301,7 @@ namespace MKY.IO.Ports
 		{
 			get
 			{
-				if (this.inUseText.Length == 0)
+				if (string.IsNullOrEmpty(this.inUseText))
 					return (DefaultInUseText);
 				else
 					return (this.inUseText);
@@ -387,7 +387,10 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (this.name.GetHashCode());
+			if (this.name != null)
+				return (this.name.GetHashCode());
+			else
+				return (base.GetHashCode());
 		}
 
 		/// <summary></summary>
