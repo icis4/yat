@@ -293,7 +293,10 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		public override int GetHashCode()
 		{
-			return (this.path.GetHashCode());
+			if (this.path != null)
+				return (this.path.GetHashCode());
+			else
+				return (base.GetHashCode());
 		}
 
 		/// <summary></summary>
