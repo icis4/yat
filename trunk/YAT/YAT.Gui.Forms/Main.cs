@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Forms;
 
 using MKY.Utilities.IO;
@@ -837,14 +838,33 @@ namespace YAT.Gui.Forms
 			{
 				SuspendLayout();
 
-				StartPosition = ApplicationSettings.LocalUser.MainWindow.StartPosition;
-				WindowState = ApplicationSettings.LocalUser.MainWindow.WindowState;
+				// Retrieve saved settings
+				FormWindowState windowState = ApplicationSettings.LocalUser.MainWindow.WindowState;
+				FormStartPosition startPosition = ApplicationSettings.LocalUser.MainWindow.StartPosition;
 
-				if ((StartPosition == FormStartPosition.Manual) && (WindowState == FormWindowState.Normal))
-					Location = ApplicationSettings.LocalUser.MainWindow.Location;
+				// Retrieve current bounds to ensure that main form is displayed within the visible bounds.
+				Rectangle screenBounds = Screen.GetBounds(this);
+				Point location = ApplicationSettings.LocalUser.MainWindow.Location;
+				Size size = ApplicationSettings.LocalUser.MainWindow.Size;
+				Rectangle bounds = new Rectangle(location, size);
 
-				if (WindowState == FormWindowState.Normal)
-					Size = ApplicationSettings.LocalUser.MainWindow.Size;
+				// Keep settings if within bounds.
+				// Adjust start position if out of bounds.
+				// Must be adjusted regardless of the window state since the state may be changed by the user.
+				if (screenBounds.Contains(bounds))
+				{
+					// Set saved settings.
+					WindowState = windowState;
+					StartPosition = startPosition;
+					Location = location;
+					Size = size;
+				}
+				else
+				{
+					// Let the operating system adjust the bounds.
+					WindowState = windowState;
+					StartPosition = FormStartPosition.WindowsDefaultBounds;
+				}
 
 				ResumeLayout();
 			}

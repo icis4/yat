@@ -85,13 +85,15 @@ Fixed bugs:
 - UDP/IP implementation changed from ALAZ.SystemEx.NetEx to System.Net.Sockets
 - UDP/IP default local port fixed
 - UDP/IP connect issue fixed (bug #2120432)
+- Window startup position is adjusted if saved position is out of bounds, e.g. if window was
+  saved on a secondary display that is not connected anymore (bugs #2856250 and #2906622)
+- Layout/anchor issue of description text field in predefined dialog fixed (bug #2987575)
 - Exception with TCP/IP AutoSocket fixed (bug# 2869792)
 - Exception in case of no COM ports fixed (bug #3041642)
 - Exception when closing terminal using 'File > Close' fixed (bugs #2684813, #2854547, #2970241)
 - Exception when changing settings fixed (bug #2869538)
 - Rare exception while drawing fixed (bug #2981762)
 - Unhandled exception on binary terminal fixed (bug #2891996)
-- Layout/anchor issue of description text field in predefined dialog fixed (bug #2987575)
 - Unhandled exception dialog improved and fixed (feature request #2970243, bug #2970245)
 - Multi-line command issue fixed (bug #2831453)
 - Tab order in predefined command dialog fixed (bug #2914863)
