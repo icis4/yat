@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MKY.System.Types
+namespace MKY.Types
 {
 	/// <summary>
 	/// Byte/byte utility methods.

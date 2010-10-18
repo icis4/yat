@@ -25,7 +25,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
 
-using MKY.System.Event;
+using MKY.Event;
 
 // The MKY.IO.Serial namespace combines various serial interface infrastructure. This code is
 // intentionally placed into the MKY.IO.Serial namespace even though the file is located in

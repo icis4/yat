@@ -23,7 +23,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
-namespace MKY.System.Diagnostics
+namespace MKY.Diagnostics
 {
 	/// <summary>
 	/// A collection of methods to write the state of certain objects to a given diagnostics writer.
@@ -44,9 +44,9 @@ namespace MKY.System.Diagnostics
 		/// <see cref="System.Diagnostics.Debug"/> and 
 		/// <see cref="System.Diagnostics.Trace"/> and
 		/// <see cref="System.Console"/> available in
-		/// <see cref="MKY.System.Diagnostics.XDebug"/> and
-		/// <see cref="MKY.System.Diagnostics.XTrace"/> and
-		/// <see cref="MKY.System.Diagnostics.XConsole"/>.
+		/// <see cref="MKY.Diagnostics.XDebug"/> and
+		/// <see cref="MKY.Diagnostics.XTrace"/> and
+		/// <see cref="MKY.Diagnostics.XConsole"/>.
 		/// </remarks>
 		public static void WriteException(IDiagnosticsWriter writer, object obj, Exception ex, string additionalMessage)
 		{
@@ -76,9 +76,9 @@ namespace MKY.System.Diagnostics
 		/// <see cref="System.Diagnostics.Debug"/> and 
 		/// <see cref="System.Diagnostics.Trace"/> and
 		/// <see cref="System.Console"/> available in
-		/// <see cref="MKY.System.Diagnostics.XDebug"/> and
-		/// <see cref="MKY.System.Diagnostics.XTrace"/> and
-		/// <see cref="MKY.System.Diagnostics.XConsole"/>.
+		/// <see cref="MKY.Diagnostics.XDebug"/> and
+		/// <see cref="MKY.Diagnostics.XTrace"/> and
+		/// <see cref="MKY.Diagnostics.XConsole"/>.
 		/// </remarks>
 		public static void WriteStack(IDiagnosticsWriter writer, object obj, StackTrace st, string additionalMessage)
 		{
@@ -108,9 +108,9 @@ namespace MKY.System.Diagnostics
 		/// <see cref="System.Diagnostics.Debug"/> and 
 		/// <see cref="System.Diagnostics.Trace"/> and
 		/// <see cref="System.Console"/> available in
-		/// <see cref="MKY.System.Diagnostics.XDebug"/> and
-		/// <see cref="MKY.System.Diagnostics.XTrace"/> and
-		/// <see cref="MKY.System.Diagnostics.XConsole"/>.
+		/// <see cref="MKY.Diagnostics.XDebug"/> and
+		/// <see cref="MKY.Diagnostics.XTrace"/> and
+		/// <see cref="MKY.Diagnostics.XConsole"/>.
 		/// </remarks>
 		public static void WriteWindowsFormsMessage(IDiagnosticsWriter writer, object obj, Message m, string additionalMessage)
 		{
@@ -140,9 +140,9 @@ namespace MKY.System.Diagnostics
 		/// <see cref="System.Diagnostics.Debug"/> and 
 		/// <see cref="System.Diagnostics.Trace"/> and
 		/// <see cref="System.Console"/> available in
-		/// <see cref="MKY.System.Diagnostics.XDebug"/> and
-		/// <see cref="MKY.System.Diagnostics.XTrace"/> and
-		/// <see cref="MKY.System.Diagnostics.XConsole"/>.
+		/// <see cref="MKY.Diagnostics.XDebug"/> and
+		/// <see cref="MKY.Diagnostics.XTrace"/> and
+		/// <see cref="MKY.Diagnostics.XConsole"/>.
 		/// </remarks>
 		public static void WriteFileStream(IDiagnosticsWriter writer, object obj, FileStream fs, string additionalMessage)
 		{

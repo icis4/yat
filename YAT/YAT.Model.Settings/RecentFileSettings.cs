@@ -23,13 +23,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-using MKY.System.Recent;
+using MKY.Recent;
 
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class RecentFileSettings : MKY.System.Settings.Settings
+	public class RecentFileSettings : MKY.Settings.Settings
 	{
 		/// <summary></summary>
 		public const int MaxFilePaths = 8;
@@ -45,7 +45,7 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		public RecentFileSettings(MKY.System.Settings.SettingsType settingsType)
+		public RecentFileSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -139,7 +139,7 @@ namespace YAT.Model.Settings
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.System.Test.EqualityTest for details.
+		// See MKY.Test.EqualityTest for details.
 
 		#endregion
 	}

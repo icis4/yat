@@ -31,7 +31,7 @@ namespace YAT.Log.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class LogSettings : MKY.System.Settings.Settings
+	public class LogSettings : MKY.Settings.Settings
 	{
 		#region Fields
 		//==========================================================================================
@@ -83,7 +83,7 @@ namespace YAT.Log.Settings
 		}
 
 		/// <summary></summary>
-		public LogSettings(MKY.System.Settings.SettingsType settingsType)
+		public LogSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -786,7 +786,7 @@ namespace YAT.Log.Settings
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.System.Test.EqualityTest for details.
+		// See MKY.Test.EqualityTest for details.
 
 		#endregion
 	}

@@ -28,7 +28,7 @@ namespace YAT.Settings.Application
 	/// <summary></summary>
 	[Serializable]
 	[XmlRoot("LocalUserSettings")]
-	public class LocalUserSettingsRoot : MKY.System.Settings.Settings
+	public class LocalUserSettingsRoot : MKY.Settings.Settings
 	{
 		private string productVersion = System.Windows.Forms.Application.ProductVersion;
 		private Settings.GeneralSettings general;
@@ -40,7 +40,7 @@ namespace YAT.Settings.Application
 
 		/// <summary></summary>
 		public LocalUserSettingsRoot()
-			: base(MKY.System.Settings.SettingsType.Explicit)
+			: base(MKY.Settings.SettingsType.Explicit)
 		{
 			General       = new Settings.GeneralSettings();
 			Paths         = new Settings.PathSettings();
@@ -292,7 +292,7 @@ namespace YAT.Settings.Application
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.System.Test.EqualityTest for details.
+		// See MKY.Test.EqualityTest for details.
 
 		#endregion
 	}	

@@ -25,11 +25,11 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-using MKY.System.Event;
-using MKY.System.Guid;
-using MKY.System.Recent;
-using MKY.System.Settings;
-using MKY.System.Time;
+using MKY.Event;
+using MKY.Guid;
+using MKY.Recent;
+using MKY.Settings;
+using MKY.Time;
 
 using YAT.Settings;
 using YAT.Settings.Application;

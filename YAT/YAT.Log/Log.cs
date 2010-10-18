@@ -24,7 +24,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
 
-using MKY.System.IO;
+using MKY.IO;
 
 namespace YAT.Log
 {

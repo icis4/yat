@@ -24,9 +24,9 @@ using System.Globalization;
 
 using NUnit.Framework;
 
-using MKY.System.Types;
+using MKY.Types;
 
-namespace MKY.System.Test.Types
+namespace MKY.Test.Types
 {
 	/// <summary></summary>
 	[TestFixture]

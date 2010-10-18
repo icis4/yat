@@ -29,7 +29,7 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class TerminalSettings : MKY.System.Settings.Settings
+	public class TerminalSettings : MKY.Settings.Settings
 	{
 		private TerminalType terminalType;
 
@@ -53,7 +53,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		public TerminalSettings(MKY.System.Settings.SettingsType settingsType)
+		public TerminalSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -337,7 +337,7 @@ namespace YAT.Domain.Settings
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.System.Test.EqualityTest for details.
+		// See MKY.Test.EqualityTest for details.
 
 		#endregion
 	}

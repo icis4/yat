@@ -51,9 +51,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MKY\MKY.System\MKY.System.csproj">
+    <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
-      <Name>MKY.System</Name>
+      <Name>MKY</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Controller\YAT.Controller.csproj">
       <Project>{D639409C-0B93-494B-9A01-4FE79686FAD6}</Project>

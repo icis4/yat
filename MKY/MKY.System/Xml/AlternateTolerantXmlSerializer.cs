@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Xml.XPath;
 
-namespace MKY.System.Xml
+namespace MKY.Xml
 {
 	/// <summary></summary>
 	public struct AlternateXmlElement
@@ -88,7 +88,7 @@ namespace MKY.System.Xml
 		public static bool operator ==(AlternateXmlElement lhs, AlternateXmlElement rhs)
 		{
 			// Value type implementation of operator ==.
-			// See MKY.System.Test.EqualityTest for details.
+			// See MKY.Test.EqualityTest for details.
 
 			if (ReferenceEquals(lhs, rhs)) return (true);
 			if (ReferenceEquals(lhs, null)) return (false);

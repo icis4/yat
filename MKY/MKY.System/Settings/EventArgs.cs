@@ -21,7 +21,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace MKY.System.Settings
+namespace MKY.Settings
 {
 	/// <summary></summary>
 	public class SettingsEventArgs : EventArgs

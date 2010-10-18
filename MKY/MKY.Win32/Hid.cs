@@ -31,7 +31,7 @@ using System.Text;
 
 using Microsoft.Win32.SafeHandles;
 
-using MKY.System.Diagnostics;
+using MKY.Diagnostics;
 
 #endregion
 
@@ -243,7 +243,7 @@ namespace MKY.Win32
 			/// <summary></summary>
 			public static bool HidD_GetIndexedString(SafeFileHandle HidDeviceObject, int StringIndex, out string IndexedString)
 			{
-				StringBuilder s = new StringBuilder(Utilities.Usb.Descriptors.MaximumStringDescriptorCharLength);
+				StringBuilder s = new StringBuilder(Usb.Descriptors.MaximumStringDescriptorCharLength);
 				if (HidD_GetIndexedString(HidDeviceObject, (UInt32)StringIndex, s, (UInt32)s.Capacity))
 				{
 					IndexedString = s.ToString();
@@ -277,7 +277,7 @@ namespace MKY.Win32
 			/// <summary></summary>
 			public static bool HidD_GetManufacturerString(SafeFileHandle HidDeviceObject, out string Manufacturer)
 			{
-				StringBuilder s = new StringBuilder(Utilities.Usb.Descriptors.MaximumStringDescriptorCharLength);
+				StringBuilder s = new StringBuilder(Usb.Descriptors.MaximumStringDescriptorCharLength);
 				if (HidD_GetManufacturerString(HidDeviceObject, s, (UInt32)s.Capacity))
 				{
 					Manufacturer = s.ToString();
@@ -330,7 +330,7 @@ namespace MKY.Win32
 			/// <summary></summary>
 			public static bool HidD_GetProductString(SafeFileHandle HidDeviceObject, out string Product)
 			{
-				StringBuilder s = new StringBuilder(Utilities.Usb.Descriptors.MaximumStringDescriptorCharLength);
+				StringBuilder s = new StringBuilder(Usb.Descriptors.MaximumStringDescriptorCharLength);
 				if (HidD_GetProductString(HidDeviceObject, s, (UInt32)s.Capacity))
 				{
 					Product = s.ToString();
@@ -346,7 +346,7 @@ namespace MKY.Win32
 			/// <summary></summary>
 			public static bool HidD_GetSerialNumberString(SafeFileHandle HidDeviceObject, out string SerialNumber)
 			{
-				StringBuilder s = new StringBuilder(Utilities.Usb.Descriptors.MaximumStringDescriptorCharLength);
+				StringBuilder s = new StringBuilder(Usb.Descriptors.MaximumStringDescriptorCharLength);
 				if (HidD_GetSerialNumberString(HidDeviceObject, s, (UInt32)s.Capacity))
 				{
 					SerialNumber = s.ToString();

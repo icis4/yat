@@ -26,7 +26,7 @@ using System.Xml.Serialization;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	public class BinaryDisplaySettings : MKY.System.Settings.Settings
+	public class BinaryDisplaySettings : MKY.Settings.Settings
 	{
 		private BinaryLengthLineBreak lengthLineBreak;
 		private BinarySequenceLineBreak sequenceLineBreak;
@@ -40,7 +40,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		public BinaryDisplaySettings(MKY.System.Settings.SettingsType settingsType)
+		public BinaryDisplaySettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -165,7 +165,7 @@ namespace YAT.Domain.Settings
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.System.Test.EqualityTest for details.
+		// See MKY.Test.EqualityTest for details.
 
 		#endregion
 	}

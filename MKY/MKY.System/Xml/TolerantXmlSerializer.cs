@@ -44,7 +44,7 @@ using System.Xml.XPath;
 
 #endregion
 
-namespace MKY.System.Xml
+namespace MKY.Xml
 {
 	/// <summary>
 	/// Provides methods to treat XML serialization more tolerantly than <see cref="XmlSerializer"/>.

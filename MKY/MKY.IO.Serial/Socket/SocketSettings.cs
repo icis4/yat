@@ -25,8 +25,8 @@ using System.Net;
 using System.Text;
 using System.Xml.Serialization;
 
-using MKY.System.Diagnostics;
-using MKY.System.Net;
+using MKY.Diagnostics;
+using MKY.Net;
 
 // The MKY.IO.Serial namespace combines various serial interface infrastructure. This code is
 // intentionally placed into the MKY.IO.Serial namespace even though the file is located in
@@ -35,7 +35,7 @@ namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SocketSettings : Utilities.Settings.Settings
+	public class SocketSettings : MKY.Settings.Settings
 	{
 		#region Constants
 		//==========================================================================================
@@ -104,7 +104,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public SocketSettings(Utilities.Settings.SettingsType settingsType)
+		public SocketSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -470,7 +470,7 @@ namespace MKY.IO.Serial
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.System.Test.EqualityTest for details.
+		// See MKY.Test.EqualityTest for details.
 
 		#endregion
 	}

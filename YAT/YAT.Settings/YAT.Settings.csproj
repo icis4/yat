@@ -56,9 +56,9 @@
     <Compile Include="AutoWorkspaceSettings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MKY\MKY.System\MKY.System.csproj">
+    <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
-      <Name>MKY.System</Name>
+      <Name>MKY</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

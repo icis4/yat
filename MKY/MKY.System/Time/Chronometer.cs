@@ -22,9 +22,9 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 
-using MKY.System.Event;
+using MKY.Event;
 
-namespace MKY.System.Time
+namespace MKY.Time
 {
 	/// <summary></summary>
 	public class Chronometer : IDisposable

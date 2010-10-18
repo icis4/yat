@@ -7,8 +7,8 @@
     <ProjectGuid>{644F7C29-CCE6-4827-9EF2-8B7D34194101}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MKY.System.Test</RootNamespace>
-    <AssemblyName>MKY.System.Test</AssemblyName>
+    <RootNamespace>MKY.Test</RootNamespace>
+    <AssemblyName>MKY.Test</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -27,7 +27,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\Debug\MKY.System.Test.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\MKY.Test.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -37,7 +37,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\Release\MKY.System.Test.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\MKY.Test.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=2.5.7.10213, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
@@ -60,9 +60,9 @@
     <Compile Include="EqualityTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MKY.System\MKY.System.csproj">
+    <ProjectReference Include="..\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
-      <Name>MKY.System</Name>
+      <Name>MKY</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

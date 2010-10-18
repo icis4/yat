@@ -22,7 +22,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
-namespace MKY.System.IO
+namespace MKY.IO
 {
 	/// <summary>
 	/// Thread-safe log file.

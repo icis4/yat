@@ -21,7 +21,7 @@
 using System;
 using System.Globalization;
 
-namespace MKY.System.Text
+namespace MKY.Text
 {
 	/// <summary>
 	/// Escape code conversions.

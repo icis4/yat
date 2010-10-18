@@ -24,7 +24,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Xml.Serialization;
 
-using MKY.System.Recent;
+using MKY.Recent;
 
 using YAT.Model.Types;
 
@@ -32,7 +32,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SendCommandSettings : MKY.System.Settings.Settings
+	public class SendCommandSettings : MKY.Settings.Settings
 	{
 		/// <summary></summary>
 		public const int MaxRecentCommands = 24;
@@ -48,7 +48,7 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		public SendCommandSettings(MKY.System.Settings.SettingsType settingsType)
+		public SendCommandSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -152,7 +152,7 @@ namespace YAT.Model.Settings
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.System.Test.EqualityTest for details.
+		// See MKY.Test.EqualityTest for details.
 
 		#endregion
 

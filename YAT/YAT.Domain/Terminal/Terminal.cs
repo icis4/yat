@@ -23,9 +23,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
-using MKY.System.Event;
-using MKY.System.Text;
-using MKY.System.Types;
+using MKY.Event;
+using MKY.Text;
+using MKY.Types;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -795,12 +795,12 @@ namespace YAT.Domain
 				DetachTerminalSettings();
 
 			this.terminalSettings = terminalSettings;
-			this.terminalSettings.Changed += new EventHandler<MKY.System.Settings.SettingsEventArgs>(this.terminalSettings_Changed);
+			this.terminalSettings.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(this.terminalSettings_Changed);
 		}
 
 		private void DetachTerminalSettings()
 		{
-			this.terminalSettings.Changed -= new EventHandler<MKY.System.Settings.SettingsEventArgs>(this.terminalSettings_Changed);
+			this.terminalSettings.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(this.terminalSettings_Changed);
 			this.terminalSettings = null;
 		}
 
@@ -837,7 +837,7 @@ namespace YAT.Domain
 		// Settings Events
 		//==========================================================================================
 		
-		private void terminalSettings_Changed(object sender, MKY.System.Settings.SettingsEventArgs e)
+		private void terminalSettings_Changed(object sender, MKY.Settings.SettingsEventArgs e)
 		{
 			if (e.Inner == null)
 			{

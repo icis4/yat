@@ -22,8 +22,8 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-using MKY.System.Event;
-using MKY.System.Recent;
+using MKY.Event;
+using MKY.Recent;
 
 using YAT.Model.Types;
 

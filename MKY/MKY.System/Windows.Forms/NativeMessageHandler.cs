@@ -23,7 +23,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
-namespace MKY.System.Windows.Forms
+namespace MKY.Windows.Forms
 {
 	/// <summary>
 	/// Native message handler delegate.

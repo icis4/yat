@@ -25,7 +25,7 @@ namespace YAT.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class AutoWorkspaceSettings : MKY.System.Settings.Settings
+	public class AutoWorkspaceSettings : MKY.Settings.Settings
 	{
 		private string filePath;
 		private Guid filePathUser;
@@ -38,7 +38,7 @@ namespace YAT.Settings
 		}
 
 		/// <summary></summary>
-		public AutoWorkspaceSettings(MKY.System.Settings.SettingsType settingsType)
+		public AutoWorkspaceSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -163,7 +163,7 @@ namespace YAT.Settings
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.System.Test.EqualityTest for details.
+		// See MKY.Test.EqualityTest for details.
 
 		#endregion
 	}

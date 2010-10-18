@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MKY.System.Guid
+namespace MKY.Guid
 {
 	/// <summary>
 	/// List with additional methods to handle items providing a <see cref="Guid"/>.

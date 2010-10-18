@@ -893,7 +893,7 @@ namespace YAT.Gui.Forms
 			// 
 			// chronometer_Main
 			// 
-			this.chronometer_Main.TimeSpanChanged += new System.EventHandler<MKY.System.Time.TimeSpanEventArgs>(this.chronometer_Main_TimeSpanChanged);
+			this.chronometer_Main.TimeSpanChanged += new System.EventHandler<MKY.Time.TimeSpanEventArgs>(this.chronometer_Main_TimeSpanChanged);
 			// 
 			// timer_TestTransmit
 			// 

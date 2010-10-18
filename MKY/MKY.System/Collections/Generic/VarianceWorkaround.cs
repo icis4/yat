@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MKY.System.Generic
+namespace MKY.Collections.Generic
 {
 	/// <summary>
 	/// Variance workaround, allows casts of generics (e.g. List of device to List of object)

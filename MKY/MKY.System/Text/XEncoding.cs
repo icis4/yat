@@ -23,9 +23,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
-using MKY.System.Types;
+using MKY.Types;
 
-namespace MKY.System.Text
+namespace MKY.Text
 {
 	#region Enum SupportedEncoding
 

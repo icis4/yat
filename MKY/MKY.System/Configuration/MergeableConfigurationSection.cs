@@ -21,7 +21,7 @@ using System;
 using System.Configuration;
 using System.IO;
 
-namespace MKY.System.Configuration
+namespace MKY.Configuration
 {
 	/// <summary></summary>
 	public class MergeableSettingsSection : ConfigurationSection

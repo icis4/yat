@@ -24,8 +24,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Windows.Forms;
 
-using MKY.System;
-using MKY.System.Event;
+using MKY;
+using MKY.Event;
 
 namespace YAT
 {

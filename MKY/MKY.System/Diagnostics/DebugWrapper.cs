@@ -20,7 +20,7 @@
 
 using System.Diagnostics;
 
-namespace MKY.System.Diagnostics
+namespace MKY.Diagnostics
 {
 	/// <summary>
 	/// Wraps part of the interface of <see cref="System.Diagnostics.Debug"/> to the common

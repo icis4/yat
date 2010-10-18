@@ -20,7 +20,7 @@
 
 using System;
 
-namespace MKY.System.Net
+namespace MKY.Net
 {
 	/// <summary>
 	/// Browser utility methods.

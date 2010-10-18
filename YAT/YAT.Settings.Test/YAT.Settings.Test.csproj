@@ -70,9 +70,9 @@
       <Project>{E3A19532-D12A-4A90-B7F3-637A0A8FA6BD}</Project>
       <Name>MKY.IO.Serial</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MKY\MKY.System\MKY.System.csproj">
+    <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
-      <Name>MKY.System</Name>
+      <Name>MKY</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Domain\YAT.Domain.csproj">
       <Project>{1C44A8C0-7805-4172-8746-2DB750803FFF}</Project>

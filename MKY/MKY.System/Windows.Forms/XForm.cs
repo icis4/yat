@@ -22,7 +22,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace MKY.System.Windows.Forms
+namespace MKY.Windows.Forms
 {
 	/// <summary>
 	/// System.Windows.Forms utility methods.

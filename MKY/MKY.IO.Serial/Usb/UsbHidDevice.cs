@@ -30,7 +30,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
 
-using MKY.System.Event;
+using MKY.Event;
 
 #endregion
 
@@ -562,7 +562,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
-			Utilities.UnusedEvent.PreventCompilerWarning(IOControlChanged);
+			UnusedEvent.PreventCompilerWarning(IOControlChanged);
 			throw (new NotSupportedException("Event not in use"));
 		}
 
@@ -581,7 +581,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected virtual void OnIORequest(IORequestEventArgs e)
 		{
-			Utilities.UnusedEvent.PreventCompilerWarning<IORequestEventArgs>(IORequest);
+			UnusedEvent.PreventCompilerWarning<IORequestEventArgs>(IORequest);
 			throw (new NotSupportedException("Event not in use"));
 		}
 

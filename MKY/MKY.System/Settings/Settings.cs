@@ -21,9 +21,9 @@
 using System;
 using System.Collections.Generic;
 
-using MKY.System.Event;
+using MKY.Event;
 
-namespace MKY.System.Settings
+namespace MKY.Settings
 {
 	/// <summary></summary>
 	public enum SettingsType
@@ -339,7 +339,7 @@ namespace MKY.System.Settings
 		public static bool operator ==(Settings lhs, Settings rhs)
 		{
 			// Base reference type implementation of operator ==.
-			// See MKY.System.Test.EqualityTest for details.
+			// See MKY.Test.EqualityTest for details.
 
 			if (ReferenceEquals(lhs, rhs)) return (true);
 			if (ReferenceEquals(lhs, null)) return (false);

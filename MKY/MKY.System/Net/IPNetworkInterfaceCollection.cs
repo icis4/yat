@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.NetworkInformation;
 
-namespace MKY.System.Net
+namespace MKY.Net
 {
 	/// <summary>
 	/// List containing IP network interfaces.

@@ -20,7 +20,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace MKY.System.Collections
+namespace MKY.Collections
 {
 	/// <summary>
 	/// Serializable string key/value-pair.
@@ -110,7 +110,7 @@ namespace MKY.System.Collections
 		public static bool operator ==(StringKeyValuePair lhs, StringKeyValuePair rhs)
 		{
 			// Value type implementation of operator ==.
-			// See MKY.System.Test.EqualityTest for details.
+			// See MKY.Test.EqualityTest for details.
 
 			if (ReferenceEquals(lhs, rhs)) return (true);
 			if (ReferenceEquals(lhs, null)) return (false);

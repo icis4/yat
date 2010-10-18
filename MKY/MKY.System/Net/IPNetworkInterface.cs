@@ -22,9 +22,9 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 
-using MKY.System.Types;
+using MKY.Types;
 
-namespace MKY.System.Net
+namespace MKY.Net
 {
 	#region Enum IPNetworkInterfaceType
 
@@ -306,7 +306,7 @@ namespace MKY.System.Net
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.System.Test.EqualityTest for details.
+		// See MKY.Test.EqualityTest for details.
 
 		#endregion
 	}

@@ -21,7 +21,7 @@
 using System.IO;
 using System.Text;
 
-namespace MKY.System.Diagnostics
+namespace MKY.Diagnostics
 {
 	/// <summary>
 	/// Wraps part of the interface of a <see cref="System.IO.TextWriter"/> to the common

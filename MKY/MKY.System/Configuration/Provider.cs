@@ -21,7 +21,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Text;
 
-namespace MKY.System.Configuration
+namespace MKY.Configuration
 {
 	/// <summary>
 	/// Utilities to provide configuration settings.

@@ -21,7 +21,7 @@
 using System.IO;
 using System.Diagnostics.CodeAnalysis;
 
-namespace MKY.System.Guid
+namespace MKY.Guid
 {
 	/// <summary>
 	/// Some GUID utilities.

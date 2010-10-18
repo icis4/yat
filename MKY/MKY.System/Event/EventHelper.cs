@@ -49,7 +49,7 @@ using System.Text;
 
 #endregion
 
-namespace MKY.System.Event
+namespace MKY.Event
 {
 	/// <summary>
 	/// Events helper methods to defensivly publish events.

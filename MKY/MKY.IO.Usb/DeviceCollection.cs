@@ -29,7 +29,7 @@ namespace MKY.IO.Usb
 	public class DeviceCollection : List<DeviceInfo>
 	{
 		private DeviceClass deviceClass = DeviceClass.Any;
-		private Guid classGuid = Guid.Empty;
+		private System.Guid classGuid = System.Guid.Empty;
 
 		/// <summary></summary>
 		public DeviceCollection()

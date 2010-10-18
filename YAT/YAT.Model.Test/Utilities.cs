@@ -26,9 +26,9 @@ using System.Threading;
 
 using NUnit.Framework;
 
-using MKY.System.Net;
-using MKY.System.Settings;
-using MKY.System.Types;
+using MKY.Net;
+using MKY.Settings;
+using MKY.Types;
 
 using YAT.Settings.Terminal;
 

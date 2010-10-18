@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MKY.System.Diagnostics
+namespace MKY.Diagnostics
 {
 	/// <summary>
 	/// Wraps part of the interface of <see cref="System.Console"/> to the common
