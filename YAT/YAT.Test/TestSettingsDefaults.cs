@@ -20,7 +20,7 @@
 using System;
 using System.Configuration;
 
-using MKY.Utilities.Configuration;
+using MKY.System.Configuration;
 
 namespace YAT.Test
 {
@@ -71,7 +71,7 @@ namespace YAT.Test
 				new MKY.Net.Test.SettingsSection()
 				);
 
-			// MKY.Utilities.Test
+			// MKY.System.Test
 			// MKY.Windows.Forms.Test
 
 			// YAT.Controller.Test

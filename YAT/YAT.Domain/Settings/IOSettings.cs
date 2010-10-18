@@ -27,7 +27,7 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class IOSettings : MKY.Utilities.Settings.Settings
+	public class IOSettings : MKY.System.Settings.Settings
 	{
 		/// <summary></summary>
 		public const Domain.IOType IOTypeDefault = Domain.IOType.SerialPort;
@@ -54,7 +54,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		public IOSettings(MKY.Utilities.Settings.SettingsType settingsType)
+		public IOSettings(MKY.System.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -272,7 +272,7 @@ namespace YAT.Domain.Settings
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Utilities.Test.EqualityTest for details.
+		// See MKY.System.Test.EqualityTest for details.
 
 		#endregion
 	}

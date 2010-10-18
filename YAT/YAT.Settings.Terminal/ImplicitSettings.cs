@@ -27,7 +27,7 @@ namespace YAT.Settings.Terminal
 {
 	/// <summary></summary>
 	[Serializable]
-	public class ImplicitSettings : MKY.Utilities.Settings.Settings
+	public class ImplicitSettings : MKY.System.Settings.Settings
 	{
 		private bool terminalIsStarted;
 		private bool logIsStarted;
@@ -40,7 +40,7 @@ namespace YAT.Settings.Terminal
 
 		/// <summary></summary>
 		public ImplicitSettings()
-			: base(MKY.Utilities.Settings.SettingsType.Implicit)
+			: base(MKY.System.Settings.SettingsType.Implicit)
 		{
 			SetMyDefaults();
 
@@ -287,7 +287,7 @@ namespace YAT.Settings.Terminal
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Utilities.Test.EqualityTest for details.
+		// See MKY.System.Test.EqualityTest for details.
 
 		#endregion
 	}

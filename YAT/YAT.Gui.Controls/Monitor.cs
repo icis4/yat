@@ -26,8 +26,8 @@ using System.Text;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
-using MKY.Utilities.Event;
-using MKY.Utilities.Time;
+using MKY.System.Event;
+using MKY.System.Time;
 using MKY.Windows.Forms;
 
 using YAT.Gui.Utilities;

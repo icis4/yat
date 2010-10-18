@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
-using MKY.Utilities.Types;
+using MKY.System.Types;
 using MKY.Windows.Forms;
 
 namespace YAT.Gui.Forms

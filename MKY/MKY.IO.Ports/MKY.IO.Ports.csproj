@@ -55,7 +55,6 @@
     <Compile Include="SerialPort\SerialPinChange.cs" />
     <Compile Include="SerialPort\SerialPortControlPins.cs" />
     <Compile Include="SerialPort\SerialPortDotNet.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="SerialPort\SerialPortDotNet.designer.cs">
       <DependentUpon>SerialPortDotNet.cs</DependentUpon>

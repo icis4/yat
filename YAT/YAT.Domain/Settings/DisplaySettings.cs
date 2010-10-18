@@ -27,7 +27,7 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class DisplaySettings : MKY.Utilities.Settings.Settings
+	public class DisplaySettings : MKY.System.Settings.Settings
 	{
 		/// <summary></summary>
 		public const bool SeparateTxRxRadixDefault = false;
@@ -76,7 +76,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		public DisplaySettings(MKY.Utilities.Settings.SettingsType settingsType)
+		public DisplaySettings(MKY.System.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -372,7 +372,7 @@ namespace YAT.Domain.Settings
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Utilities.Test.EqualityTest for details.
+		// See MKY.System.Test.EqualityTest for details.
 
 		#endregion
 	}

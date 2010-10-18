@@ -25,8 +25,8 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 
-using MKY.Utilities.Text;
-using MKY.Utilities.Types;
+using MKY.System.Text;
+using MKY.System.Types;
 
 namespace YAT.Domain.Parser
 {

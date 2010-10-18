@@ -25,9 +25,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows.Forms;
 
-using MKY.Utilities.Event;
-using MKY.Utilities.Guid;
-using MKY.Utilities.Settings;
+using MKY.System.Event;
+using MKY.System.Guid;
+using MKY.System.Settings;
 
 using YAT.Settings;
 using YAT.Settings.Application;

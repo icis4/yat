@@ -23,7 +23,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 
 using MKY.IO.Usb;
-using MKY.Utilities.Event;
+using MKY.System.Event;
 
 namespace YAT.Gui.Controls
 {

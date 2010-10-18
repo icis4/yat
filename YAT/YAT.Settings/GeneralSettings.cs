@@ -26,7 +26,7 @@ namespace YAT.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class GeneralSettings : MKY.Utilities.Settings.Settings
+	public class GeneralSettings : MKY.System.Settings.Settings
 	{
 		/// <summary></summary>
 		public static readonly string AutoSaveRoot = Application.LocalUserAppDataPath;
@@ -50,7 +50,7 @@ namespace YAT.Settings
 		}
 
 		/// <summary></summary>
-		public GeneralSettings(MKY.Utilities.Settings.SettingsType settingsType)
+		public GeneralSettings(MKY.System.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -193,7 +193,7 @@ namespace YAT.Settings
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Utilities.Test.EqualityTest for details.
+		// See MKY.System.Test.EqualityTest for details.
 
 		#endregion
 	}

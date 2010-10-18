@@ -23,13 +23,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-using MKY.Utilities.Net;
+using MKY.System.Net;
 
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class NewTerminalSettings : MKY.Utilities.Settings.Settings
+	public class NewTerminalSettings : MKY.System.Settings.Settings
 	{
 		private Domain.TerminalType terminalType;
 		private Domain.IOType ioType;
@@ -55,7 +55,7 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		public NewTerminalSettings(MKY.Utilities.Settings.SettingsType settingsType)
+		public NewTerminalSettings(MKY.System.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -371,7 +371,7 @@ namespace YAT.Model.Settings
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Utilities.Test.EqualityTest for details.
+		// See MKY.System.Test.EqualityTest for details.
 
 		#endregion
 	}

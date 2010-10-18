@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
-using MKY.Utilities.Event;
+using MKY.System.Event;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -689,12 +689,12 @@ namespace YAT.Domain
 				DetachBinaryTerminalSettings();
 
 			TerminalSettings.BinaryTerminal = binaryTerminalSettings;
-			BinaryTerminalSettings.Changed += new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(BinaryTerminalSettings_Changed);
+			BinaryTerminalSettings.Changed += new EventHandler<MKY.System.Settings.SettingsEventArgs>(BinaryTerminalSettings_Changed);
 		}
 
 		private void DetachBinaryTerminalSettings()
 		{
-			BinaryTerminalSettings.Changed -= new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(BinaryTerminalSettings_Changed);
+			BinaryTerminalSettings.Changed -= new EventHandler<MKY.System.Settings.SettingsEventArgs>(BinaryTerminalSettings_Changed);
 		}
 
 		private void ApplyBinaryTerminalSettings()
@@ -709,7 +709,7 @@ namespace YAT.Domain
 		// Settings Events
 		//==========================================================================================
 
-		private void BinaryTerminalSettings_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
+		private void BinaryTerminalSettings_Changed(object sender, MKY.System.Settings.SettingsEventArgs e)
 		{
 			ApplyBinaryTerminalSettings();
 		}

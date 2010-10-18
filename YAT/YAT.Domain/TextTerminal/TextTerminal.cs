@@ -26,7 +26,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-using MKY.Utilities.Text;
+using MKY.System.Text;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -765,12 +765,12 @@ namespace YAT.Domain
 				DetachTextTerminalSettings();
 
 			TerminalSettings.TextTerminal = textTerminalSettings;
-			TerminalSettings.TextTerminal.Changed += new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(TextTerminalSettings_Changed);
+			TerminalSettings.TextTerminal.Changed += new EventHandler<MKY.System.Settings.SettingsEventArgs>(TextTerminalSettings_Changed);
 		}
 
 		private void DetachTextTerminalSettings()
 		{
-			TerminalSettings.TextTerminal.Changed -= new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(TextTerminalSettings_Changed);
+			TerminalSettings.TextTerminal.Changed -= new EventHandler<MKY.System.Settings.SettingsEventArgs>(TextTerminalSettings_Changed);
 		}
 
 		private void ApplyTextTerminalSettings()
@@ -785,7 +785,7 @@ namespace YAT.Domain
 		// Settings Events
 		//==========================================================================================
 
-		private void TextTerminalSettings_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
+		private void TextTerminalSettings_Changed(object sender, MKY.System.Settings.SettingsEventArgs e)
 		{
 			ApplyTextTerminalSettings();
 		}

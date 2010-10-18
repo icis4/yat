@@ -95,7 +95,7 @@ namespace YAT.Domain
 		public static bool operator ==(TextLineSendDelay lhs, TextLineSendDelay rhs)
 		{
 			// Value type implementation of operator ==.
-			// See MKY.Utilities.Test.EqualityTest for details.
+			// See MKY.System.Test.EqualityTest for details.
 
 			if (ReferenceEquals(lhs, rhs)) return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -175,7 +175,7 @@ namespace YAT.Domain
 		public static bool operator ==(WaitForResponse lhs, WaitForResponse rhs)
 		{
 			// Value type implementation of operator ==.
-			// See MKY.Utilities.Test.EqualityTest for details.
+			// See MKY.System.Test.EqualityTest for details.
 
 			if (ReferenceEquals(lhs, rhs)) return (true);
 			if (ReferenceEquals(lhs, null)) return (false);

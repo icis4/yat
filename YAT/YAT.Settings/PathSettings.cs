@@ -27,7 +27,7 @@ namespace YAT.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class PathSettings : MKY.Utilities.Settings.Settings
+	public class PathSettings : MKY.System.Settings.Settings
 	{
 		private string terminalFilesPath;
 		private string workspaceFilesPath;
@@ -43,7 +43,7 @@ namespace YAT.Settings
 		}
 
 		/// <summary></summary>
-		public PathSettings(MKY.Utilities.Settings.SettingsType settingsType)
+		public PathSettings(MKY.System.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -205,7 +205,7 @@ namespace YAT.Settings
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Utilities.Test.EqualityTest for details.
+		// See MKY.System.Test.EqualityTest for details.
 
 		#endregion
 	}

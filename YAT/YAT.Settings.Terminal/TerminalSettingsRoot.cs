@@ -28,7 +28,7 @@ namespace YAT.Settings.Terminal
 	/// <summary></summary>
 	[Serializable]
 	[XmlRoot("Settings")]
-	public class TerminalSettingsRoot : MKY.Utilities.Settings.Settings, MKY.Utilities.Xml.IAlternateXmlElementProvider
+	public class TerminalSettingsRoot : MKY.System.Settings.Settings, MKY.System.Xml.IAlternateXmlElementProvider
 	{
 		/// <summary>
 		/// Alternate XML elements for backward compatibility with old settings.
@@ -40,11 +40,11 @@ namespace YAT.Settings.Terminal
 		/// XML path wouldn't need to be considered, i.e. name changes in the path could be handled.
 		/// That is not the case currently.
 		/// </remarks>
-		private static readonly MKY.Utilities.Xml.AlternateXmlElement[] alternateXmlElements =
+		private static readonly MKY.System.Xml.AlternateXmlElement[] alternateXmlElements =
 			{
-				new MKY.Utilities.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "SerialPort", "Communication" }, "FlowControl",       new string[] { "Handshake" } ),
-				new MKY.Utilities.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "TerminalIsStarted", new string[] { "TerminalIsOpen" } ),
-				new MKY.Utilities.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "LogIsStarted",      new string[] { "LogIsOpen" } ),
+				new MKY.System.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Explicit", "Terminal", "IO", "SerialPort", "Communication" }, "FlowControl",       new string[] { "Handshake" } ),
+				new MKY.System.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "TerminalIsStarted", new string[] { "TerminalIsOpen" } ),
+				new MKY.System.Xml.AlternateXmlElement(new string[] { "#document", "Settings", "Implicit"                                                  }, "LogIsStarted",      new string[] { "LogIsOpen" } ),
 			};
 
 		private string productVersion = System.Windows.Forms.Application.ProductVersion;
@@ -54,7 +54,7 @@ namespace YAT.Settings.Terminal
 
 		/// <summary></summary>
 		public TerminalSettingsRoot()
-			: base(MKY.Utilities.Settings.SettingsType.Explicit)
+			: base(MKY.System.Settings.SettingsType.Explicit)
 		{
 			Explicit = new ExplicitSettings();
 			Implicit = new ImplicitSettings();
@@ -177,7 +177,7 @@ namespace YAT.Settings.Terminal
 
 		/// <summary></summary>
 		[XmlIgnore]
-		public virtual MKY.Utilities.Xml.AlternateXmlElement[] AlternateXmlElements
+		public virtual MKY.System.Xml.AlternateXmlElement[] AlternateXmlElements
 		{
 			get { return (alternateXmlElements); }
 		}
@@ -422,7 +422,7 @@ namespace YAT.Settings.Terminal
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Utilities.Test.EqualityTest for details.
+		// See MKY.System.Test.EqualityTest for details.
 
 		#endregion
 	}

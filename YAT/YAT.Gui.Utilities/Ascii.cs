@@ -83,9 +83,9 @@ namespace YAT.Gui.Utilities
 				r = t.NewRow();
 				r[Dec] = i.ToString();
 				r[Hex] = i.ToString("X2", CultureInfo.InvariantCulture);
-				r[Mnemonic] = MKY.Utilities.Text.Ascii.ConvertToMnemonic(i);
-				r[Escape] = MKY.Utilities.Text.Escape.ConvertToEscapeSequence(i);
-				r[Description] = MKY.Utilities.Text.Ascii.ConvertToDescription(i);
+				r[Mnemonic] = MKY.System.Text.Ascii.ConvertToMnemonic(i);
+				r[Escape] = MKY.System.Text.Escape.ConvertToEscapeSequence(i);
+				r[Description] = MKY.System.Text.Ascii.ConvertToDescription(i);
 				t.Rows.Add(r);
 			}
 			for (byte i = 0x7F; i < 0x7F; i++)
@@ -93,9 +93,9 @@ namespace YAT.Gui.Utilities
 				r = t.NewRow();
 				r[Dec] = i.ToString();
 				r[Hex] = i.ToString("X2", CultureInfo.InvariantCulture);
-				r[Mnemonic] = MKY.Utilities.Text.Ascii.ConvertToMnemonic(i);
-				r[Escape] = MKY.Utilities.Text.Escape.ConvertToEscapeSequence(i);
-				r[Description] = MKY.Utilities.Text.Ascii.ConvertToDescription(i);
+				r[Mnemonic] = MKY.System.Text.Ascii.ConvertToMnemonic(i);
+				r[Escape] = MKY.System.Text.Escape.ConvertToEscapeSequence(i);
+				r[Description] = MKY.System.Text.Ascii.ConvertToDescription(i);
 				t.Rows.Add(r);
 			}
 		}

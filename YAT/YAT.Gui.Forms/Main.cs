@@ -25,10 +25,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
-using MKY.Utilities.IO;
-using MKY.Utilities.Settings;
-using MKY.Utilities.Time;
-using MKY.Utilities.Windows.Forms;
+using MKY.System.IO;
+using MKY.System.Settings;
+using MKY.System.Time;
+using MKY.System.Windows.Forms;
 
 using YAT.Settings;
 using YAT.Settings.Application;

@@ -24,7 +24,7 @@ using System.IO;
 
 using NUnit.Framework;
 
-using MKY.Utilities.Test;
+using MKY.System.Test;
 
 using YAT.Settings.Application;
 

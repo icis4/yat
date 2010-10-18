@@ -37,15 +37,6 @@ namespace MKY.Win32
 	/// <summary>
 	/// Encapsulates parts of the Win32 API relating to file I/O.
 	/// </summary>
-	/// <remarks>
-	/// This class is partly based on GenericHid of Jan Axelson's Lakeview Research. Visit GenericHid
-	/// on http://www.lvr.com/hidpage.htm for details.
-	/// MKY.Utilities.Win32 needs to modify the structure and contents of GenericHid due to the
-	/// following reasons:
-	/// - Suboptimal structure of the original GenericHid project
-	/// - Missing features required for YAT
-	/// - Potential reuse of this class for other services directly using the Win32 API
-	/// </remarks>
 	public static class FileIO
 	{
 		#region Native
