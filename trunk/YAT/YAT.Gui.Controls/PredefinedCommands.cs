@@ -23,8 +23,8 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
-using MKY.Utilities.Event;
-using MKY.Utilities.Types;
+using MKY.System.Event;
+using MKY.System.Types;
 
 using YAT.Model.Types;
 

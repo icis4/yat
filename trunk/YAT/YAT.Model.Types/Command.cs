@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-using MKY.Utilities.Types;
+using MKY.System.Types;
 
 namespace YAT.Model.Types
 {
@@ -653,7 +653,7 @@ namespace YAT.Model.Types
 		public static bool operator ==(Command lhs, Command rhs)
 		{
 			// Base reference type implementation of operator ==.
-			// See MKY.Utilities.Test.EqualityTest for details.
+			// See MKY.System.Test.EqualityTest for details.
 
 			if (ReferenceEquals(lhs, rhs)) return (true);
 			if (ReferenceEquals(lhs, null)) return (false);

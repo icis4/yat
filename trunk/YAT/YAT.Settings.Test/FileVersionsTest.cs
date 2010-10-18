@@ -22,7 +22,7 @@ using System.Diagnostics.CodeAnalysis;
 
 using NUnit.Framework;
 
-using MKY.Utilities.Settings;
+using MKY.System.Settings;
 
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;

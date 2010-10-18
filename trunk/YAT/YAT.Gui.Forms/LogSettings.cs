@@ -24,7 +24,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows.Forms;
 
-using MKY.Utilities.Types;
+using MKY.System.Types;
 
 using YAT.Settings;
 using YAT.Settings.Application;

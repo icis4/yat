@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using MKY.IO.Serial;
-using MKY.Utilities.Event;
+using MKY.System.Event;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -387,12 +387,12 @@ namespace YAT.Domain
 				DetachBufferSettings();
 
 			this.bufferSettings = bufferSettings;
-			this.bufferSettings.Changed += new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(this.bufferSettings_Changed);
+			this.bufferSettings.Changed += new EventHandler<MKY.System.Settings.SettingsEventArgs>(this.bufferSettings_Changed);
 		}
 
 		private void DetachBufferSettings()
 		{
-			this.bufferSettings.Changed -= new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(this.bufferSettings_Changed);
+			this.bufferSettings.Changed -= new EventHandler<MKY.System.Settings.SettingsEventArgs>(this.bufferSettings_Changed);
 			this.bufferSettings = null;
 		}
 
@@ -412,12 +412,12 @@ namespace YAT.Domain
 				DetachIOSettings();
 
 			this.ioSettings = ioSettings;
-			this.ioSettings.Changed += new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(this.ioSettings_Changed);
+			this.ioSettings.Changed += new EventHandler<MKY.System.Settings.SettingsEventArgs>(this.ioSettings_Changed);
 		}
 
 		private void DetachIOSettings()
 		{
-			this.ioSettings.Changed -= new EventHandler<MKY.Utilities.Settings.SettingsEventArgs>(this.ioSettings_Changed);
+			this.ioSettings.Changed -= new EventHandler<MKY.System.Settings.SettingsEventArgs>(this.ioSettings_Changed);
 			this.ioSettings = null;
 		}
 
@@ -433,12 +433,12 @@ namespace YAT.Domain
 		// Settings Events
 		//==========================================================================================
 
-		private void bufferSettings_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
+		private void bufferSettings_Changed(object sender, MKY.System.Settings.SettingsEventArgs e)
 		{
 			ApplyBufferSettings();
 		}
 
-		private void ioSettings_Changed(object sender, MKY.Utilities.Settings.SettingsEventArgs e)
+		private void ioSettings_Changed(object sender, MKY.System.Settings.SettingsEventArgs e)
 		{
 			ApplyIOSettings();
 		}

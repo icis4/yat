@@ -23,26 +23,26 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-using MKY.Utilities.Guid;
+using MKY.System.Guid;
 
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class WorkspaceSettings : MKY.Utilities.Settings.Settings
+	public class WorkspaceSettings : MKY.System.Settings.Settings
 	{
 		private GuidList<TerminalSettingsItem> terminalSettings;
 
 		/// <summary></summary>
 		public WorkspaceSettings()
-			: base(MKY.Utilities.Settings.SettingsType.Explicit)
+			: base(MKY.System.Settings.SettingsType.Explicit)
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
 		/// <summary></summary>
-		public WorkspaceSettings(MKY.Utilities.Settings.SettingsType settingsType)
+		public WorkspaceSettings(MKY.System.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -125,7 +125,7 @@ namespace YAT.Model.Settings
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Utilities.Test.EqualityTest for details.
+		// See MKY.System.Test.EqualityTest for details.
 
 		#endregion
 	}

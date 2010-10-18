@@ -33,7 +33,7 @@ namespace MKY.System.Diagnostics
 	/// </remarks>
 	/// <remarks>
 	/// There also are <see cref="System.Diagnostics.Trace"/> variants of these methods available
-	/// in <see cref="MKY.Utilities.Diagnostics.XTrace"/>.
+	/// in <see cref="XTrace"/>.
 	/// Unfortunately, the Debug and Trace objects do not provide access to their underlying
 	/// output writers. Therefore, the two implementations use writer wrappers.
 	/// </remarks>

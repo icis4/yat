@@ -24,8 +24,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-using MKY.Utilities.Diagnostics;
-using MKY.Utilities.Windows.Forms;
+using MKY.System.Diagnostics;
+using MKY.System.Windows.Forms;
 
 using YAT.Utilities;
 
@@ -77,7 +77,7 @@ namespace YAT.Gui.Forms
 		{
 			string link = e.Link.LinkData as string;
 			if ((link != null) && (link.StartsWith("http://")))
-				MKY.Utilities.Net.Browser.BrowseUri(link);
+				MKY.System.Net.Browser.BrowseUri(link);
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation always succeeds.")]

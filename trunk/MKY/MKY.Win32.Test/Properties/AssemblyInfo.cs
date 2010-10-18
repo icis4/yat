@@ -3,7 +3,7 @@
 // Visit YAT at http://sourceforge.net/projects/y-a-terminal.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.Utilities.Test/Properties/AssemblyInfo.cs $
+// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.System.Test/Properties/AssemblyInfo.cs $
 // $Author: maettu_this $
 // $Date: 2010-02-23 00:18:29 +0100 (Di, 23 Feb 2010) $
 // $Revision: 254 $
@@ -54,5 +54,5 @@ using System.Runtime.InteropServices;
 
 //==================================================================================================
 // End of
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.Utilities.Test/Properties/AssemblyInfo.cs $
+// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.System.Test/Properties/AssemblyInfo.cs $
 //==================================================================================================

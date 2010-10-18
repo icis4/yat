@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-using MKY.Utilities.Guid;
+using MKY.System.Guid;
 
 using YAT.Settings;
 using YAT.Model.Settings;
@@ -33,7 +33,7 @@ namespace YAT.Settings.Workspace
 	/// <summary></summary>
 	[Serializable]
 	[XmlRoot("Settings")]
-	public class WorkspaceSettingsRoot : MKY.Utilities.Settings.Settings
+	public class WorkspaceSettingsRoot : MKY.System.Settings.Settings
 	{
 		private string productVersion = System.Windows.Forms.Application.ProductVersion;
 		private bool autoSaved = false;
@@ -41,7 +41,7 @@ namespace YAT.Settings.Workspace
 
 		/// <summary></summary>
 		public WorkspaceSettingsRoot()
-			: base(MKY.Utilities.Settings.SettingsType.Explicit)
+			: base(MKY.System.Settings.SettingsType.Explicit)
 		{
 			Workspace = new WorkspaceSettings();
 			ClearChanged();
@@ -190,7 +190,7 @@ namespace YAT.Settings.Workspace
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Utilities.Test.EqualityTest for details.
+		// See MKY.System.Test.EqualityTest for details.
 
 		#endregion
 	}

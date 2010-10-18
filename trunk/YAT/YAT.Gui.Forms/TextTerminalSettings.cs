@@ -22,7 +22,7 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-using MKY.Utilities.Text;
+using MKY.System.Text;
 
 using YAT.Gui.Utilities;
 

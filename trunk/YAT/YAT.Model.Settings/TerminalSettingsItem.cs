@@ -21,13 +21,13 @@
 using System;
 using System.Xml.Serialization;
 
-using MKY.Utilities.Guid;
+using MKY.System.Guid;
 
 namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class TerminalSettingsItem : MKY.Utilities.Settings.Settings, IGuidProvider
+	public class TerminalSettingsItem : MKY.System.Settings.Settings, IGuidProvider
 	{
 		private string filePath;
 		private Guid guid;
@@ -35,7 +35,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		public TerminalSettingsItem()
-			: base(MKY.Utilities.Settings.SettingsType.Implicit)
+			: base(MKY.System.Settings.SettingsType.Implicit)
 		{
 			SetMyDefaults();
 
@@ -174,7 +174,7 @@ namespace YAT.Model.Settings
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Utilities.Test.EqualityTest for details.
+		// See MKY.System.Test.EqualityTest for details.
 
 		#endregion
 	}

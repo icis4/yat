@@ -135,7 +135,7 @@ namespace YAT.Domain
 			}
 			catch (InvalidOperationException ex)
 			{
-				MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
+				MKY.System.Diagnostics.XDebug.WriteException(this, ex);
 				System.Diagnostics.Debug.WriteLine(collection.ToString());
 			}
 		}

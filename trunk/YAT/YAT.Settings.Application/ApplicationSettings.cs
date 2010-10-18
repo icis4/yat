@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using MKY.Utilities.Settings;
+using MKY.System.Settings;
 
 namespace YAT.Settings.Application
 {

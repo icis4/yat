@@ -23,12 +23,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-using MKY.Utilities.Text;
+using MKY.System.Text;
 
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	public class TextTerminalSettings : MKY.Utilities.Settings.Settings
+	public class TextTerminalSettings : MKY.System.Settings.Settings
 	{
 		/// <summary></summary>
 		public static readonly string DefaultEol = (string)XEol.Parse(Environment.NewLine);
@@ -53,7 +53,7 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		public TextTerminalSettings(MKY.Utilities.Settings.SettingsType settingsType)
+		public TextTerminalSettings(MKY.System.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -279,7 +279,7 @@ namespace YAT.Domain.Settings
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Utilities.Test.EqualityTest for details.
+		// See MKY.System.Test.EqualityTest for details.
 
 		#endregion
 	}

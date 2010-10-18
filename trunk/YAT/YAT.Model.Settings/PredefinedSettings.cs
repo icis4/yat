@@ -27,7 +27,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class PredefinedSettings : MKY.Utilities.Settings.Settings
+	public class PredefinedSettings : MKY.System.Settings.Settings
 	{
 		private int selectedPage;
 
@@ -39,7 +39,7 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		public PredefinedSettings(MKY.Utilities.Settings.SettingsType settingsType)
+		public PredefinedSettings(MKY.System.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -122,7 +122,7 @@ namespace YAT.Model.Settings
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Utilities.Test.EqualityTest for details.
+		// See MKY.System.Test.EqualityTest for details.
 
 		#endregion
 	}

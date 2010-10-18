@@ -26,7 +26,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class LayoutSettings : MKY.Utilities.Settings.Settings
+	public class LayoutSettings : MKY.System.Settings.Settings
 	{
 		private bool txMonitorPanelIsVisible;
 		private bool bidirMonitorPanelIsVisible;
@@ -49,7 +49,7 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		public LayoutSettings(MKY.Utilities.Settings.SettingsType settingsType)
+		public LayoutSettings(MKY.System.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -314,7 +314,7 @@ namespace YAT.Model.Settings
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Utilities.Test.EqualityTest for details.
+		// See MKY.System.Test.EqualityTest for details.
 
 		#endregion
 	}
