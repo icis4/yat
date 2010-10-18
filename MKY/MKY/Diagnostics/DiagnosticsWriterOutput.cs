@@ -44,9 +44,9 @@ namespace MKY.Diagnostics
 		/// <see cref="System.Diagnostics.Debug"/> and 
 		/// <see cref="System.Diagnostics.Trace"/> and
 		/// <see cref="System.Console"/> available in
-		/// <see cref="MKY.Diagnostics.XDebug"/> and
-		/// <see cref="MKY.Diagnostics.XTrace"/> and
-		/// <see cref="MKY.Diagnostics.XConsole"/>.
+		/// <see cref="MKY.Diagnostics.DebugEx"/> and
+		/// <see cref="MKY.Diagnostics.TraceEx"/> and
+		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
 		public static void WriteException(IDiagnosticsWriter writer, object obj, Exception ex, string additionalMessage)
 		{
@@ -76,9 +76,9 @@ namespace MKY.Diagnostics
 		/// <see cref="System.Diagnostics.Debug"/> and 
 		/// <see cref="System.Diagnostics.Trace"/> and
 		/// <see cref="System.Console"/> available in
-		/// <see cref="MKY.Diagnostics.XDebug"/> and
-		/// <see cref="MKY.Diagnostics.XTrace"/> and
-		/// <see cref="MKY.Diagnostics.XConsole"/>.
+		/// <see cref="MKY.Diagnostics.DebugEx"/> and
+		/// <see cref="MKY.Diagnostics.TraceEx"/> and
+		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
 		public static void WriteStack(IDiagnosticsWriter writer, object obj, StackTrace st, string additionalMessage)
 		{
@@ -108,9 +108,9 @@ namespace MKY.Diagnostics
 		/// <see cref="System.Diagnostics.Debug"/> and 
 		/// <see cref="System.Diagnostics.Trace"/> and
 		/// <see cref="System.Console"/> available in
-		/// <see cref="MKY.Diagnostics.XDebug"/> and
-		/// <see cref="MKY.Diagnostics.XTrace"/> and
-		/// <see cref="MKY.Diagnostics.XConsole"/>.
+		/// <see cref="MKY.Diagnostics.DebugEx"/> and
+		/// <see cref="MKY.Diagnostics.TraceEx"/> and
+		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
 		public static void WriteWindowsFormsMessage(IDiagnosticsWriter writer, object obj, Message m, string additionalMessage)
 		{
@@ -140,9 +140,9 @@ namespace MKY.Diagnostics
 		/// <see cref="System.Diagnostics.Debug"/> and 
 		/// <see cref="System.Diagnostics.Trace"/> and
 		/// <see cref="System.Console"/> available in
-		/// <see cref="MKY.Diagnostics.XDebug"/> and
-		/// <see cref="MKY.Diagnostics.XTrace"/> and
-		/// <see cref="MKY.Diagnostics.XConsole"/>.
+		/// <see cref="MKY.Diagnostics.DebugEx"/> and
+		/// <see cref="MKY.Diagnostics.TraceEx"/> and
+		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
 		public static void WriteFileStream(IDiagnosticsWriter writer, object obj, FileStream fs, string additionalMessage)
 		{

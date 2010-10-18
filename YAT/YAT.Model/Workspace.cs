@@ -24,8 +24,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows.Forms;
 
-using MKY.Event;
 using MKY.Guid;
+using MKY.Event;
 using MKY.IO;
 using MKY.Settings;
 
@@ -854,7 +854,7 @@ namespace YAT.Model
 			try
 			{
 				// Combine absolute workspace path with terminal path if that one is relative.
-				absoluteFilePath = XPath.CombineFilePaths(this.settingsHandler.SettingsFilePath, filePath);
+				absoluteFilePath = PathEx.CombineFilePaths(this.settingsHandler.SettingsFilePath, filePath);
 
 				// Check whether terminal is already contained in workspace.
 				foreach (Terminal t in this.terminals)
@@ -924,7 +924,7 @@ namespace YAT.Model
 			string filePath = terminal.SettingsFilePath;
 			if (ApplicationSettings.LocalUser.General.UseRelativePaths)
 			{
-				XPathCompareResult pcr = XPath.CompareFilePaths(this.settingsHandler.SettingsFilePath, terminal.SettingsFilePath);
+				PathCompareResult pcr = PathEx.CompareFilePaths(this.settingsHandler.SettingsFilePath, terminal.SettingsFilePath);
 				if (pcr.AreRelative)
 					filePath = pcr.RelativePath;
 			}

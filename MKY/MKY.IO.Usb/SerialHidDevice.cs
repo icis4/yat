@@ -464,7 +464,7 @@ namespace MKY.IO.Usb
 				}
 				catch (Exception ex)
 				{
-					XDebug.WriteException(this, ex);
+					DebugEx.WriteException(this, ex);
 					OnError(new ErrorEventArgs("Error while reading an input report from the USB HID device" + Environment.NewLine + ToString()));
 				}
 			}
@@ -505,7 +505,7 @@ namespace MKY.IO.Usb
 			}
 			catch (Exception ex)
 			{
-				XDebug.WriteException(this, ex);
+				DebugEx.WriteException(this, ex);
 				OnError(new ErrorEventArgs("Error while writing an output report to the USB HID device" + Environment.NewLine + ToString()));
 			}
 		}

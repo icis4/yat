@@ -517,7 +517,7 @@ namespace MKY.Test.Settings
 		[TearDown]
 		public virtual void TearDown()
 		{
-			XPath.CleanTempPath(this);
+			Temp.CleanTempPath(this);
 		}
 
 		#endregion
@@ -714,7 +714,7 @@ namespace MKY.Test.Settings
 		[Test, TestCaseSource(typeof(SettingsEvolutionTestData), "TestCases")]
 		public virtual void TestSettingsEvolution(int testCase, string fileName, Type typeToSerialize, Type typeToDeserialize)
 		{
-			string filePath = XPath.MakeTempFilePath(this, fileName, ".xml");
+			string filePath = Temp.MakeTempFilePath(this, fileName, ".xml");
 
 			object objToSerialize = typeToSerialize.GetConstructor(new System.Type[] { }).Invoke(new object[] { });
 			SerializeTestObject(typeToSerialize, objToSerialize, filePath);
@@ -842,7 +842,7 @@ namespace MKY.Test.Settings
 			}
 			catch (Exception ex)
 			{
-				XConsole.WriteException(typeof(SettingsTest), ex);
+				ConsoleEx.WriteException(typeof(SettingsTest), ex);
 
 				// Attention: The following call throws an exception, code below it won't be executed
 				Assert.Fail("XML serialize error: " + ex.Message);
@@ -863,7 +863,7 @@ namespace MKY.Test.Settings
 			catch (Exception ex)
 			{
 				obj = null;
-				XConsole.WriteException(typeof(SettingsTest), ex);
+				ConsoleEx.WriteException(typeof(SettingsTest), ex);
 
 				// Attention: The following call throws an exception, code below it won't be executed
 				Assert.Fail("XML deserialize error: " + ex.Message);

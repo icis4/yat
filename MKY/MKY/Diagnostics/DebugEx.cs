@@ -33,11 +33,11 @@ namespace MKY.Diagnostics
 	/// </remarks>
 	/// <remarks>
 	/// There also are <see cref="System.Diagnostics.Trace"/> variants of these methods available
-	/// in <see cref="XTrace"/>.
+	/// in <see cref="TraceEx"/>.
 	/// Unfortunately, the Debug and Trace objects do not provide access to their underlying
 	/// output writers. Therefore, the two implementations use writer wrappers.
 	/// </remarks>
-	public static class XDebug
+	public static class DebugEx
 	{
 		#if (DEBUG)
 			private static DebugWrapper debugWrapper = new DebugWrapper();

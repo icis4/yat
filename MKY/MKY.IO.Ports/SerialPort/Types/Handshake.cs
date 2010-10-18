@@ -27,12 +27,12 @@ using MKY.Types;
 namespace MKY.IO.Ports
 {
 	/// <summary>
-	/// Extended enum XHandshake.
+	/// Extended enum HandshakeEx.
 	/// </summary>
 	/// <remarks>
-	/// I think flow control would be the better identifier, no clue why .NET uses the term handshake.
+	/// I think flow control would be the better term, no clue why .NET uses handshake.
 	/// </remarks>
-	public class XHandshake : XEnum
+	public class HandshakeEx : EnumEx
 	{
 		#region String Definitions
 
@@ -48,13 +48,13 @@ namespace MKY.IO.Ports
 		#endregion
 
 		/// <summary>Default is <see cref="Handshake.None"/>.</summary>
-		public XHandshake()
+		public HandshakeEx()
 			: base(Handshake.None)
 		{
 		}
 
 		/// <summary></summary>
-		protected XHandshake(Handshake handshake)
+		protected HandshakeEx(Handshake handshake)
 			: base(handshake)
 		{
 		}
@@ -92,13 +92,13 @@ namespace MKY.IO.Ports
 		#region GetItems
 
 		/// <summary></summary>
-		public static XHandshake[] GetItems()
+		public static HandshakeEx[] GetItems()
 		{
-			List<XHandshake> a = new List<XHandshake>();
-			a.Add(new XHandshake(Handshake.None));
-			a.Add(new XHandshake(Handshake.RequestToSend));
-			a.Add(new XHandshake(Handshake.XOnXOff));
-			a.Add(new XHandshake(Handshake.RequestToSendXOnXOff));
+			List<HandshakeEx> a = new List<HandshakeEx>();
+			a.Add(new HandshakeEx(Handshake.None));
+			a.Add(new HandshakeEx(Handshake.RequestToSend));
+			a.Add(new HandshakeEx(Handshake.XOnXOff));
+			a.Add(new HandshakeEx(Handshake.RequestToSendXOnXOff));
 			return (a.ToArray());
 		}
 
@@ -107,9 +107,9 @@ namespace MKY.IO.Ports
 		#region Parse
 
 		/// <summary></summary>
-		public static XHandshake Parse(string handshake)
+		public static HandshakeEx Parse(string handshake)
 		{
-			XHandshake result;
+			HandshakeEx result;
 
 			if (TryParse(handshake, out result))
 				return (result);
@@ -118,30 +118,30 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		public static bool TryParse(string handshake, out XHandshake result)
+		public static bool TryParse(string handshake, out HandshakeEx result)
 		{
 			if      ((string.Compare(handshake, None_string, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(handshake, None_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XHandshake(Handshake.None);
+				result = new HandshakeEx(Handshake.None);
 				return (true);
 			}
 			else if ((string.Compare(handshake, RtsCts_string, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(handshake, RtsCts_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XHandshake(Handshake.RequestToSend);
+				result = new HandshakeEx(Handshake.RequestToSend);
 				return (true);
 			}
 			else if ((string.Compare(handshake, XOnXOff_string, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(handshake, XOnXOff_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XHandshake(Handshake.XOnXOff);
+				result = new HandshakeEx(Handshake.XOnXOff);
 				return (true);
 			}
 			else if ((string.Compare(handshake, RtsCtsXOnXOff_string, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(handshake, RtsCtsXOnXOff_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XHandshake(Handshake.RequestToSendXOnXOff);
+				result = new HandshakeEx(Handshake.RequestToSendXOnXOff);
 				return (true);
 			}
 			else
@@ -156,37 +156,37 @@ namespace MKY.IO.Ports
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator Handshake(XHandshake handshake)
+		public static implicit operator Handshake(HandshakeEx handshake)
 		{
 			return ((Handshake)handshake.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XHandshake(Handshake handshake)
+		public static implicit operator HandshakeEx(Handshake handshake)
 		{
-			return (new XHandshake(handshake));
+			return (new HandshakeEx(handshake));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(XHandshake handshake)
+		public static implicit operator int(HandshakeEx handshake)
 		{
 			return (handshake.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XHandshake(int handshake)
+		public static implicit operator HandshakeEx(int handshake)
 		{
-			return (new XHandshake((Handshake)handshake));
+			return (new HandshakeEx((Handshake)handshake));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(XHandshake handshake)
+		public static implicit operator string(HandshakeEx handshake)
 		{
 			return (handshake.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XHandshake(string handshake)
+		public static implicit operator HandshakeEx(string handshake)
 		{
 			return (Parse(handshake));
 		}

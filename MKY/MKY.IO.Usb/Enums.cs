@@ -238,7 +238,7 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// Extended enum XHidUsagePage.
 	/// </summary>
-	public class XHidUsagePage : XEnum
+	public class XHidUsagePage : EnumEx
 	{
 		/// <summary>Default is <see cref="HidUsagePage.Unknown"/>.</summary>
 		public XHidUsagePage()
@@ -356,7 +356,7 @@ namespace MKY.IO.Usb
 	/// <summary>
 	/// Extended enum XHidUsage.
 	/// </summary>
-	public class XHidUsage : XEnum
+	public class XHidUsage : EnumEx
 	{
 		/// <summary>Default is <see cref="HidUsage.Unknown"/>.</summary>
 		public XHidUsage()

@@ -18,33 +18,45 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Drawing;
-using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Globalization;
 
-namespace MKY.Windows.Forms
+namespace MKY.Globalization
 {
 	/// <summary>
-	/// System.Windows.Forms utility methods.
+	/// Some CultureInfo utilities.
 	/// </summary>
-	/// <remarks>
-	/// This class is intentionally not placed into <c>MKY.Windows.Forms</c> since it's a
-	/// pure utility containing no visual contents.
-	/// </remarks>
-	public static class XForm
+	public static class CultureInfoEx
 	{
 		/// <summary>
-		/// Manual <see cref="FormStartPosition.CenterParent"/> because automatic doesn't work
-		/// if not shown as dialog.
+		/// Returns the most appropriate culture info from a collection of culture infos.
 		/// </summary>
-		/// <param name="parent">Parent form.</param>
-		/// <param name="child">Child form to be placed to the center of the parent.</param>
-		/// <returns>Center parent location.</returns>
-		public static Point CalculateManualCenterParentLocation(Form parent, Form child)
+		public static CultureInfo GetMostAppropriateCultureInfo(IEnumerable<CultureInfo> cultureInfos)
 		{
-			int left = parent.Left + (parent.Width  / 2) - (child.Width  / 2);
-			int top  = parent.Top  + (parent.Height / 2) - (child.Height / 2);
-			return (new Point(left, top));
+			CultureInfo ci;
+			List<CultureInfo> l = new List<CultureInfo>(cultureInfos);
+
+			// Verify that list contains items
+			if (l.Count <= 0)
+				return (null);
+
+			// 1st prio: The culture of the user interface
+			ci = CultureInfo.CurrentUICulture;
+			if (l.Contains(ci))
+				return (ci);
+
+			// 2nd prio: The current culture
+			ci = CultureInfo.CurrentCulture;
+			if (l.Contains(ci))
+				return (ci);
+
+			// 3rd prio: English (United States)
+			ci = CultureInfo.GetCultureInfo("en-US");
+			if (l.Contains(ci))
+				return (ci);
+
+			// 4th prio: The first entry in the list
+			return (l[0]);
 		}
 	}
 }

@@ -223,7 +223,7 @@ namespace MKY.Xml
 			foreach (AlternateXmlElement element in alternates)
 			{
 				// compare XML path
-				if (Types.XArray.ValuesEqual(element.XmlPath, standardXmlPath))
+				if (Types.ArrayEx.ValuesEqual(element.XmlPath, standardXmlPath))
 				{
 					// compare alternates to given local name
 					foreach (string alternateLocalName in element.AlternateLocalNames)

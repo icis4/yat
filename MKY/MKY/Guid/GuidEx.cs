@@ -26,7 +26,7 @@ namespace MKY.Guid
 	/// <summary>
 	/// Some GUID utilities.
 	/// </summary>
-	public static class XGuid
+	public static class GuidEx
 	{
 		/// <summary>
 		/// Creates and returns GUID from terminal file path if possible, new GUID otherwise.

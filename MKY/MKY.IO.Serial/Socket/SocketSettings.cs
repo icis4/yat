@@ -43,7 +43,7 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		public static readonly XIPHost DefaultRemoteHost = new XIPHost(IPHostType.Localhost);
+		public static readonly IPHost DefaultRemoteHost = new IPHost(IPHostType.Localhost);
 
 		/// <summary></summary>
 		public static readonly IPAddress DefaultResolvedRemoteIPAddress = IPAddress.Loopback;
@@ -189,8 +189,8 @@ namespace MKY.IO.Serial
 					SetChanged();
 
 					// Immediately try to resolve the corresponding remote IP address.
-					XIPHost ipHost;
-					if (XIPHost.TryParse(this.remoteHost, out ipHost))
+					IPHost ipHost;
+					if (IPHost.TryParse(this.remoteHost, out ipHost))
 					{
 						switch ((IPHostType)ipHost)
 						{
@@ -211,7 +211,7 @@ namespace MKY.IO.Serial
 								}
 								catch (Exception ex)
 								{
-									XDebug.WriteException(this, ex);
+									DebugEx.WriteException(this, ex);
 								}
 								break;
 							}
@@ -291,7 +291,7 @@ namespace MKY.IO.Serial
 								}
 								catch (Exception ex)
 								{
-									XDebug.WriteException(this, ex);
+									DebugEx.WriteException(this, ex);
 								}
 								break;
 							}

@@ -50,18 +50,18 @@ namespace MKY.IO.Ports
 	#endregion
 
 	/// <summary>
-	/// Extended enum XDataBits.
+	/// Extended enum DataBitsEx.
 	/// </summary>
-	public class XDataBits : XEnum
+	public class DataBitsEx : EnumEx
 	{
 		/// <summary>Default is <see cref="DataBits.Eight"/>.</summary>
-		public XDataBits()
+		public DataBitsEx()
 			: base(DataBits.Eight)
 		{
 		}
 
 		/// <summary></summary>
-		protected XDataBits(DataBits bits)
+		protected DataBitsEx(DataBits bits)
 			: base(bits)
 		{
 		}
@@ -79,14 +79,14 @@ namespace MKY.IO.Ports
 		#region GetItems
 
 		/// <summary></summary>
-		public static XDataBits[] GetItems()
+		public static DataBitsEx[] GetItems()
 		{
-			List<XDataBits> a = new List<XDataBits>();
-			a.Add(new XDataBits(DataBits.Four));
-			a.Add(new XDataBits(DataBits.Five));
-			a.Add(new XDataBits(DataBits.Six));
-			a.Add(new XDataBits(DataBits.Seven));
-			a.Add(new XDataBits(DataBits.Eight));
+			List<DataBitsEx> a = new List<DataBitsEx>();
+			a.Add(new DataBitsEx(DataBits.Four));
+			a.Add(new DataBitsEx(DataBits.Five));
+			a.Add(new DataBitsEx(DataBits.Six));
+			a.Add(new DataBitsEx(DataBits.Seven));
+			a.Add(new DataBitsEx(DataBits.Eight));
 			return (a.ToArray());
 		}
 
@@ -95,19 +95,19 @@ namespace MKY.IO.Ports
 		#region Parse
 
 		/// <summary></summary>
-		public static XDataBits Parse(string bits)
+		public static DataBitsEx Parse(string bits)
 		{
-			return ((XDataBits)int.Parse(bits));
+			return ((DataBitsEx)int.Parse(bits));
 		}
 
 		/// <summary></summary>
-		public static bool TryParse(string bits, out XDataBits result)
+		public static bool TryParse(string bits, out DataBitsEx result)
 		{
 			int intResult;
 
 			if (int.TryParse(bits, out intResult))
 			{
-				result = (XDataBits)intResult;
+				result = (DataBitsEx)intResult;
 				return (true);
 			}
 			else
@@ -122,41 +122,41 @@ namespace MKY.IO.Ports
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator DataBits(XDataBits bits)
+		public static implicit operator DataBits(DataBitsEx bits)
 		{
 			return ((DataBits)bits.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XDataBits(DataBits bits)
+		public static implicit operator DataBitsEx(DataBits bits)
 		{
-			return (new XDataBits(bits));
+			return (new DataBitsEx(bits));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(XDataBits bits)
+		public static implicit operator int(DataBitsEx bits)
 		{
 			return (bits.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XDataBits(int bits)
+		public static implicit operator DataBitsEx(int bits)
 		{
-			if      (bits >= (int)DataBits.Eight) return (new XDataBits(DataBits.Eight));
-			else if (bits >= (int)DataBits.Seven) return (new XDataBits(DataBits.Seven));
-			else if (bits >= (int)DataBits.Six)   return (new XDataBits(DataBits.Six));
-			else if (bits >= (int)DataBits.Five)  return (new XDataBits(DataBits.Five));
-			else                                  return (new XDataBits(DataBits.Four));
+			if      (bits >= (int)DataBits.Eight) return (new DataBitsEx(DataBits.Eight));
+			else if (bits >= (int)DataBits.Seven) return (new DataBitsEx(DataBits.Seven));
+			else if (bits >= (int)DataBits.Six)   return (new DataBitsEx(DataBits.Six));
+			else if (bits >= (int)DataBits.Five)  return (new DataBitsEx(DataBits.Five));
+			else                                  return (new DataBitsEx(DataBits.Four));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(XDataBits bits)
+		public static implicit operator string(DataBitsEx bits)
 		{
 			return (bits.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XDataBits(string bits)
+		public static implicit operator DataBitsEx(string bits)
 		{
 			return (Parse(bits));
 		}

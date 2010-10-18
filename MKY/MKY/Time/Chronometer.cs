@@ -211,7 +211,7 @@ namespace MKY.Time
 		public override string ToString()
 		{
 			AssertNotDisposed();
-			return (XTimeSpan.FormatTimeSpan(TimeSpan, true));
+			return (TimeSpanEx.FormatTimeSpan(TimeSpan, true));
 		}
 
 		#endregion

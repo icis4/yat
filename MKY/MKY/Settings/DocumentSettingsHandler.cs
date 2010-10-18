@@ -235,7 +235,7 @@ namespace MKY.Settings
 				}
 				catch (Exception ex)
 				{
-					XDebug.WriteException(this, ex);
+					DebugEx.WriteException(this, ex);
 				}
 			}
 

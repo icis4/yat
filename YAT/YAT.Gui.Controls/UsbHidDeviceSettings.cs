@@ -22,8 +22,8 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-using MKY.IO.Serial;
 using MKY.Event;
+using MKY.IO.Serial;
 
 namespace YAT.Gui.Controls
 {

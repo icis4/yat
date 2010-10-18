@@ -28,7 +28,7 @@ namespace MKY.IO
 	/// <summary>
 	/// Utility methods for <see cref="System.IO.Path"/>.
 	/// </summary>
-	public static class XPath
+	public static class PathEx
 	{
 		#region LimitPath Method
 
@@ -44,25 +44,25 @@ namespace MKY.IO
 
 			if (path.IndexOf(Path.VolumeSeparatorChar) < 0)
 			{                                          // Local path ?
-				limitedPath = Types.XString.Left(path, 3) + "..." +
-							  Types.XString.Right(path, Math.Max(length - 6, 0));
+				limitedPath = Types.StringEx.Left(path, 3) + "..." +
+							  Types.StringEx.Right(path, Math.Max(length - 6, 0));
 			}
 			else                                       // Network path !
 			{
 				int separatorPosition = path.Substring(4).IndexOf(Path.DirectorySeparatorChar);
 				if ((separatorPosition >= 0) && (separatorPosition < length - 4))
 				{
-					limitedPath = Types.XString.Left(path, separatorPosition) + "..." +
-								  Types.XString.Right(path, Math.Max(length - 4 - separatorPosition, 0));
+					limitedPath = Types.StringEx.Left(path, separatorPosition) + "..." +
+								  Types.StringEx.Right(path, Math.Max(length - 4 - separatorPosition, 0));
 				}
 				else
 				{
-					limitedPath = Types.XString.Left(path, 5) + "..." +
-								  Types.XString.Right(path, Math.Max(length - 8, 0));
+					limitedPath = Types.StringEx.Left(path, 5) + "..." +
+								  Types.StringEx.Right(path, Math.Max(length - 8, 0));
 				}
 			}
 
-			return (Types.XString.Right(limitedPath, length));
+			return (Types.StringEx.Right(limitedPath, length));
 		}
 
 		#endregion
@@ -77,13 +77,13 @@ namespace MKY.IO
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// </remarks>
-		public static XPathCompareResult CompareDirectoryPaths(string directoryPath1, string directoryPath2)
+		public static PathCompareResult CompareDirectoryPaths(string directoryPath1, string directoryPath2)
 		{
 			if (!Path.IsPathRooted(directoryPath1))
-				return (new XPathCompareResult(false));
+				return (new PathCompareResult(false));
 
 			if (!Path.IsPathRooted(directoryPath2))
-				return (new XPathCompareResult(false, directoryPath2));
+				return (new PathCompareResult(false, directoryPath2));
 
 			return (DoCompareDirectoryPaths(directoryPath1, directoryPath2));
 		}
@@ -96,16 +96,16 @@ namespace MKY.IO
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// </remarks>
-		public static XPathCompareResult CompareDirectoryAndFilePaths(string directoryPath, string filePath)
+		public static PathCompareResult CompareDirectoryAndFilePaths(string directoryPath, string filePath)
 		{
 			if (!Path.IsPathRooted(directoryPath))
-				return (new XPathCompareResult(false));
+				return (new PathCompareResult(false));
 
 			if (!Path.IsPathRooted(filePath))
-				return (new XPathCompareResult(false, filePath));
+				return (new PathCompareResult(false, filePath));
 
 			string fileName = Path.GetFileName(filePath);
-			XPathCompareResult pcr = DoCompareDirectoryPaths(directoryPath, Path.GetDirectoryName(filePath));
+			PathCompareResult pcr = DoCompareDirectoryPaths(directoryPath, Path.GetDirectoryName(filePath));
 			pcr.RelativePath += (Path.DirectorySeparatorChar + fileName);
 			return (pcr);
 		}
@@ -118,13 +118,13 @@ namespace MKY.IO
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// </remarks>
-		public static XPathCompareResult CompareFileAndDirectoryPaths(string filePath, string directoryPath)
+		public static PathCompareResult CompareFileAndDirectoryPaths(string filePath, string directoryPath)
 		{
 			if (!Path.IsPathRooted(filePath))
-				return (new XPathCompareResult(false));
+				return (new PathCompareResult(false));
 
 			if (!Path.IsPathRooted(directoryPath))
-				return (new XPathCompareResult(false, directoryPath));
+				return (new PathCompareResult(false, directoryPath));
 
 			return (DoCompareDirectoryPaths(Path.GetDirectoryName(filePath), directoryPath));
 		}
@@ -137,16 +137,16 @@ namespace MKY.IO
 		/// Why is this functionality not already provided by <see cref="System.IO.Path"/>?
 		/// Seems that the Microsoft guys were a bit lazy ;-)
 		/// </remarks>
-		public static XPathCompareResult CompareFilePaths(string filePath1, string filePath2)
+		public static PathCompareResult CompareFilePaths(string filePath1, string filePath2)
 		{
 			if (!Path.IsPathRooted(filePath1))
-				return (new XPathCompareResult(false));
+				return (new PathCompareResult(false));
 
 			if (!Path.IsPathRooted(filePath2))
-				return (new XPathCompareResult(false, filePath2));
+				return (new PathCompareResult(false, filePath2));
 
 			string fileName2 = Path.GetFileName(filePath2);
-			XPathCompareResult pcr = DoCompareDirectoryPaths(Path.GetDirectoryName(filePath1), Path.GetDirectoryName(filePath2));
+			PathCompareResult pcr = DoCompareDirectoryPaths(Path.GetDirectoryName(filePath1), Path.GetDirectoryName(filePath2));
 			pcr.RelativePath += (Path.DirectorySeparatorChar + fileName2);
 			return (pcr);
 		}
@@ -256,7 +256,7 @@ namespace MKY.IO
 		/// <summary>
 		/// Returns relation between the two absolute directory paths.
 		/// </summary>
-		public static XPathCompareResult DoCompareDirectoryPaths(string pathA, string pathB)
+		public static PathCompareResult DoCompareDirectoryPaths(string pathA, string pathB)
 		{
 			// Do not check for reference equality because complete result needs to be retrieved anyway.
 
@@ -275,7 +275,7 @@ namespace MKY.IO
 			{
 				// Check whether both directories share the same root.
 				if (dirInfoA.Root.FullName != dirInfoB.Root.FullName)
-					return (new XPathCompareResult(false));
+					return (new PathCompareResult(false));
 
 				// Get common directory, make sure only directory part is used.
 				List<string> dirInfosA = new List<string>();
@@ -317,7 +317,7 @@ namespace MKY.IO
 
 				// Check whether both paths are equal.
 				if (dirPathA == dirPathB)
-					return (new XPathCompareResult(commonPath, commonDirectoryCount, 0, true, 0, "."));
+					return (new PathCompareResult(commonPath, commonDirectoryCount, 0, true, 0, "."));
 
 				// Check whether one of the two is the others subdirectory.
 				DirectoryInfo di = commonDI;
@@ -342,7 +342,7 @@ namespace MKY.IO
 
 						di = di.Parent;
 					}
-					return (new XPathCompareResult(commonPath, commonDirectoryCount, nearRelativeDirectoryCount, true, nearRelativeDirectoryCount, relativePath.ToString()));
+					return (new PathCompareResult(commonPath, commonDirectoryCount, nearRelativeDirectoryCount, true, nearRelativeDirectoryCount, relativePath.ToString()));
 				}
 				if (commonPath == dirPathB)
 				{
@@ -361,7 +361,7 @@ namespace MKY.IO
 							relativePath.Append("..");
 						}
 					}
-					return (new XPathCompareResult(commonPath, commonDirectoryCount, nearRelativeDirectoryCount, true, nearRelativeDirectoryCount, relativePath.ToString()));
+					return (new PathCompareResult(commonPath, commonDirectoryCount, nearRelativeDirectoryCount, true, nearRelativeDirectoryCount, relativePath.ToString()));
 				}
 
 				// In case of far relation, first step out to common path, then step into path B.
@@ -403,10 +403,10 @@ namespace MKY.IO
 
 					di = di.Parent;
 				}
-				return (new XPathCompareResult(commonPath, commonDirectoryCount, farRelativeDirectoryCount, relativePath.ToString()));
+				return (new PathCompareResult(commonPath, commonDirectoryCount, farRelativeDirectoryCount, relativePath.ToString()));
 			}
 
-			return (new XPathCompareResult(false));
+			return (new PathCompareResult(false));
 		}
 
 		#endregion
@@ -520,7 +520,7 @@ namespace MKY.IO
 			}
 			catch (ArgumentException ex)
 			{
-				Diagnostics.XDebug.WriteException(typeof(XPath), ex);
+				Diagnostics.DebugEx.WriteException(typeof(PathEx), ex);
 				pathInfo = null;
 			}
 
@@ -557,7 +557,7 @@ namespace MKY.IO
 			}
 			catch (ArgumentException ex)
 			{
-				Diagnostics.XDebug.WriteException(typeof(XPath), ex);
+				Diagnostics.DebugEx.WriteException(typeof(PathEx), ex);
 				pathInfo = null;
 			}
 
@@ -581,12 +581,12 @@ namespace MKY.IO
 		#endregion
 	}
 
-	#region XPathCompareResult Struct
+	#region PathCompareResult Struct
 
 	/// <summary>
 	/// Structure to hold the complete result of a directory comparison.
 	/// </summary>
-	public struct XPathCompareResult
+	public struct PathCompareResult
 	{
 		/// <summary>True if directories share a common path, i.e. also a common root.</summary>
 		public bool HaveCommon;
@@ -613,13 +613,13 @@ namespace MKY.IO
 		public string RelativePath;
 
 		/// <summary>Creates a directory info compare result structure.</summary>
-		public XPathCompareResult(bool haveCommon)
+		public PathCompareResult(bool haveCommon)
 			: this (haveCommon, "")
 		{
 		}
 
 		/// <summary>Creates a directory info compare result structure.</summary>
-		public XPathCompareResult(bool haveCommon, string relativePath)
+		public PathCompareResult(bool haveCommon, string relativePath)
 		{
 			HaveCommon = haveCommon;
 			CommonPath = null;
@@ -632,13 +632,13 @@ namespace MKY.IO
 		}
 
 		/// <summary>Creates a directory info compare result structure.</summary>
-		public XPathCompareResult(string commonPath, int commonDirectoryCount, int relativeDirectoryCount, string relativePath)
+		public PathCompareResult(string commonPath, int commonDirectoryCount, int relativeDirectoryCount, string relativePath)
 			: this (commonPath, commonDirectoryCount, relativeDirectoryCount, false, 0, relativePath)
 		{
 		}
 
 		/// <summary>Creates a directory info compare result structure.</summary>
-		public XPathCompareResult(string commonPath, int commonDirectoryCount, int relativeDirectoryCount, bool areNearRelative, int nearRelativeDirectoryCount, string relativePath)
+		public PathCompareResult(string commonPath, int commonDirectoryCount, int relativeDirectoryCount, bool areNearRelative, int nearRelativeDirectoryCount, string relativePath)
 		{
 			HaveCommon = true;
 			CommonPath = commonPath;
@@ -664,7 +664,7 @@ namespace MKY.IO
 			if (GetType() != obj.GetType())
 				return (false);
 
-			XPathCompareResult other = (XPathCompareResult)obj;
+			PathCompareResult other = (PathCompareResult)obj;
 			return
 			(
 				(HaveCommon                 == other.HaveCommon) &&
@@ -701,7 +701,7 @@ namespace MKY.IO
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(XPathCompareResult lhs, XPathCompareResult rhs)
+		public static bool operator ==(PathCompareResult lhs, PathCompareResult rhs)
 		{
 			// Value type implementation of operator ==.
 			// See MKY.Test.EqualityTest for details.
@@ -716,7 +716,7 @@ namespace MKY.IO
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(XPathCompareResult lhs, XPathCompareResult rhs)
+		public static bool operator !=(PathCompareResult lhs, PathCompareResult rhs)
 		{
 			return (!(lhs == rhs));
 		}

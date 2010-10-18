@@ -18,45 +18,61 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Collections.Generic;
-using System.Globalization;
+using System.Text;
 
-namespace MKY.Globalization
+namespace MKY.Types
 {
 	/// <summary>
-	/// Some CultureInfo utilities.
+	/// String utility methods.
 	/// </summary>
-	public static class XCultureInfo
+	public static class StringEx
 	{
 		/// <summary>
-		/// Returns the most appropriate culture info from a collection of culture infos.
+		/// Truncates "truncateString" to the "length" leftmost characters.
 		/// </summary>
-		public static CultureInfo GetMostAppropriateCultureInfo(IEnumerable<CultureInfo> cultureInfos)
+		public static string Left(string truncateString, int length)
 		{
-			CultureInfo ci;
-			List<CultureInfo> l = new List<CultureInfo>(cultureInfos);
+			if (length >= truncateString.Length)
+				return (truncateString);
+			else
+				return (truncateString.Substring(0, length));
+		}
 
-			// Verify that list contains items
-			if (l.Count <= 0)
-				return (null);
+		/// <summary>
+		/// Truncates "truncateString" from "begin" to "end".
+		/// </summary>
+		public static string Mid(string truncateString, int begin, int end)
+		{
+			if (begin >= end)
+				return ("");
+			else
+				return (truncateString.Substring(begin, end - begin + 1));
+		}
 
-			// 1st prio: The culture of the user interface
-			ci = CultureInfo.CurrentUICulture;
-			if (l.Contains(ci))
-				return (ci);
+		/// <summary>
+		/// Truncates "truncateString" to the "length" rightmost characters.
+		/// </summary>
+		public static string Right(string truncateString, int length)
+		{
+			if (length >= truncateString.Length)
+				return (truncateString);
+			else
+				return (truncateString.Substring(truncateString.Length - length, length));
+		}
 
-			// 2nd prio: The current culture
-			ci = CultureInfo.CurrentCulture;
-			if (l.Contains(ci))
-				return (ci);
-
-			// 3rd prio: English (United States)
-			ci = CultureInfo.GetCultureInfo("en-US");
-			if (l.Contains(ci))
-				return (ci);
-
-			// 4th prio: The first entry in the list
-			return (l[0]);
+		/// <summary>
+		/// Returns whether "str" contains any of the "searchChars".
+		/// </summary>
+		public static bool Contains(string str, char[] searchChars)
+		{
+			foreach (char c in searchChars)
+			{
+				if (str.Contains(c.ToString()))
+					return (true);
+			}
+			return (false);
 		}
 	}
 }

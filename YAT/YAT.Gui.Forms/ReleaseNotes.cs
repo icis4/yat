@@ -53,7 +53,7 @@ namespace YAT.Gui.Forms
 			{
 				case "Debug":
 				case "Release":
-					filePath = XPath.CombineDirectoryAndFilePaths(Application.StartupPath, ReleaseNotesDevelopmentRelativeFilePath);
+					filePath = PathEx.CombineDirectoryAndFilePaths(Application.StartupPath, ReleaseNotesDevelopmentRelativeFilePath);
 					break;
 
 				default:

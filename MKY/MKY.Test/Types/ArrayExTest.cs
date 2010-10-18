@@ -149,7 +149,7 @@ namespace MKY.Test.Types
 
 	/// <summary></summary>
 	[TestFixture]
-	public class XArrayTest
+	public class ArrayExTest
 	{
 		#region Tests
 		//==========================================================================================
@@ -165,7 +165,7 @@ namespace MKY.Test.Types
 		[Test, TestCaseSource(typeof(XArrayTestData), "TestCases")]
 		public virtual void TestValuesEqual(Array objA, Array objB, bool equals)
 		{
-			Assert.AreEqual(XArray.ValuesEqual(objA, objB), equals);
+			Assert.AreEqual(ArrayEx.ValuesEqual(objA, objB), equals);
 		}
 
 		#endregion

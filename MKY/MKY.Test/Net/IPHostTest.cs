@@ -62,17 +62,17 @@ namespace MKY.Test.Net
 		{
 			get
 			{
-				yield return (new TestCaseData(new XIPHost(IPHostType.Localhost),		IPHostType.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("Localhost_HostType"));
-				yield return (new TestCaseData(new XIPHost(IPHostType.IPv4Localhost),	IPHostType.IPv4Localhost,	IPAddress.Loopback,		IPv4LocalhostString)	.SetName("IPv4Localhost_HostType"));
-				yield return (new TestCaseData(new XIPHost(IPHostType.IPv6Localhost),	IPHostType.IPv6Localhost,	IPAddress.IPv6Loopback,	IPv6LocalhostString)	.SetName("IPv6Localhost_HostType"));
-				yield return (new TestCaseData(new XIPHost(SomeIPv4Address),			IPHostType.Other,			SomeIPv4Address,		SomeIPv4AddressString)	.SetName("SomeIPv4Address_HostType"));
-				yield return (new TestCaseData(new XIPHost(SomeIPv6Address),			IPHostType.Other,			SomeIPv6Address,		SomeIPv6AddressString)	.SetName("SomeIPv6Address_HostType"));
+				yield return (new TestCaseData(new IPHost(IPHostType.Localhost),		IPHostType.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("Localhost_HostType"));
+				yield return (new TestCaseData(new IPHost(IPHostType.IPv4Localhost),	IPHostType.IPv4Localhost,	IPAddress.Loopback,		IPv4LocalhostString)	.SetName("IPv4Localhost_HostType"));
+				yield return (new TestCaseData(new IPHost(IPHostType.IPv6Localhost),	IPHostType.IPv6Localhost,	IPAddress.IPv6Loopback,	IPv6LocalhostString)	.SetName("IPv6Localhost_HostType"));
+				yield return (new TestCaseData(new IPHost(SomeIPv4Address),			IPHostType.Other,			SomeIPv4Address,		SomeIPv4AddressString)	.SetName("SomeIPv4Address_HostType"));
+				yield return (new TestCaseData(new IPHost(SomeIPv6Address),			IPHostType.Other,			SomeIPv6Address,		SomeIPv6AddressString)	.SetName("SomeIPv6Address_HostType"));
 
-				yield return (new TestCaseData(new XIPHost(IPAddress.Loopback),			IPHostType.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("Localhost_HostAddress"));
-				yield return (new TestCaseData(new XIPHost(IPAddress.Loopback),			IPHostType.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("IPv4Localhost_HostAddress"));
-				yield return (new TestCaseData(new XIPHost(IPAddress.IPv6Loopback),		IPHostType.IPv6Localhost,	IPAddress.IPv6Loopback,	IPv6LocalhostString)	.SetName("IPv6Localhost_HostAddress"));
-				yield return (new TestCaseData(new XIPHost(SomeIPv4Address),			IPHostType.Other,			SomeIPv4Address,		SomeIPv4AddressString)	.SetName("SomeIPv4Address_HostAddress"));
-				yield return (new TestCaseData(new XIPHost(SomeIPv6Address),			IPHostType.Other,			SomeIPv6Address,		SomeIPv6AddressString)	.SetName("SomeIPv6Address_HostAddress"));
+				yield return (new TestCaseData(new IPHost(IPAddress.Loopback),			IPHostType.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("Localhost_HostAddress"));
+				yield return (new TestCaseData(new IPHost(IPAddress.Loopback),			IPHostType.Localhost,		IPAddress.Loopback,		LocalhostString)		.SetName("IPv4Localhost_HostAddress"));
+				yield return (new TestCaseData(new IPHost(IPAddress.IPv6Loopback),		IPHostType.IPv6Localhost,	IPAddress.IPv6Loopback,	IPv6LocalhostString)	.SetName("IPv6Localhost_HostAddress"));
+				yield return (new TestCaseData(new IPHost(SomeIPv4Address),			IPHostType.Other,			SomeIPv4Address,		SomeIPv4AddressString)	.SetName("SomeIPv4Address_HostAddress"));
+				yield return (new TestCaseData(new IPHost(SomeIPv6Address),			IPHostType.Other,			SomeIPv6Address,		SomeIPv6AddressString)	.SetName("SomeIPv6Address_HostAddress"));
 			}
 		}
 
@@ -93,7 +93,7 @@ namespace MKY.Test.Net
 		[TearDown]
 		public virtual void TearDown()
 		{
-			XPath.CleanTempPath(this);
+			Temp.CleanTempPath(this);
 		}
 
 		#endregion
@@ -110,28 +110,28 @@ namespace MKY.Test.Net
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
-		public virtual void TestHostEqualsHostType(XIPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
+		public virtual void TestHostEqualsHostType(IPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
 		{
 			Assert.AreEqual(ipHostType, (IPHostType)ipHost);
 		}
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
-		public virtual void TestHostEqualsAddress(XIPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
+		public virtual void TestHostEqualsAddress(IPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
 		{
 			Assert.AreEqual(ipAddress, (IPAddress)ipHost);
 		}
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
-		public virtual void TestHostAddressEqualsAddress(XIPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
+		public virtual void TestHostAddressEqualsAddress(IPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
 		{
 			Assert.AreEqual(ipAddress, ipHost.IPAddress);
 		}
 
 		/// <summary></summary>
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
-		public virtual void TestHostEqualsHostString(XIPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
+		public virtual void TestHostEqualsHostString(IPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
 		{
 			Assert.AreEqual(hostString, (string)ipHost);
 		}
@@ -146,23 +146,23 @@ namespace MKY.Test.Net
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
-		public virtual void TestSerialization(XIPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
+		public virtual void TestSerialization(IPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
 		{
-			string filePath = XPath.MakeTempFilePath(this, ".xml");
-			XIPHost ipHostDeserialized = null;
+			string filePath = Temp.MakeTempFilePath(this, ".xml");
+			IPHost ipHostDeserialized = null;
 
 			// Serialize to file.
 			try
 			{
 				using (StreamWriter sw = new StreamWriter(filePath))
 				{
-					XmlSerializer serializer = new XmlSerializer(typeof(XIPHost));
+					XmlSerializer serializer = new XmlSerializer(typeof(IPHost));
 					serializer.Serialize(sw, ipHost);
 				}
 			}
 			catch (Exception ex)
 			{
-				XConsole.WriteException(typeof(IPHostTest), ex);
+				ConsoleEx.WriteException(typeof(IPHostTest), ex);
 
 				// Attention: The following call throws an exception, code below it won't be executed.
 				Assert.Fail("XML serialize error: " + ex.Message);
@@ -177,13 +177,13 @@ namespace MKY.Test.Net
 				{
 					using (StreamReader sr = new StreamReader(filePath))
 					{
-						XmlSerializer serializer = new XmlSerializer(typeof(XIPHost));
-						ipHostDeserialized = (XIPHost)serializer.Deserialize(sr);
+						XmlSerializer serializer = new XmlSerializer(typeof(IPHost));
+						ipHostDeserialized = (IPHost)serializer.Deserialize(sr);
 					}
 				}
 				catch (Exception ex)
 				{
-					XConsole.WriteException(typeof(IPHostTest), ex);
+					ConsoleEx.WriteException(typeof(IPHostTest), ex);
 
 					// Attention: The following call throws an exception, code below it won't be executed.
 					Assert.Fail("XML deserialize error: " + ex.Message);

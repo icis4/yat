@@ -27,7 +27,7 @@ namespace MKY.Types
 	/// <summary>
 	/// UInt64/ulong utility methods.
 	/// </summary>
-	public class XUInt64
+	public class UInt64Ex
 	{
 		/// <summary>
 		/// Converts value into binary string (e.g. "0000000000000000000000000000000000000000000000000000000000010100").

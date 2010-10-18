@@ -573,7 +573,7 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls = true;
 
-			toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.AddRange(XOrientation.GetItems());
+			toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.AddRange(OrientationEx.GetItems());
 
 			this.isSettingControls = false;
 		}
@@ -597,7 +597,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_View_Panels_Bidir.Enabled = (this.settingsRoot.Layout.TxMonitorPanelIsVisible || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
 			toolStripMenuItem_TerminalMenu_View_Panels_Rx.Enabled    = (this.settingsRoot.Layout.TxMonitorPanelIsVisible || this.settingsRoot.Layout.BidirMonitorPanelIsVisible);
 
-			toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem = (XOrientation)this.settingsRoot.Layout.MonitorOrientation;
+			toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem = (OrientationEx)this.settingsRoot.Layout.MonitorOrientation;
 
 			toolStripMenuItem_TerminalMenu_View_Panels_SendCommand.Checked = this.settingsRoot.Layout.SendCommandPanelIsVisible;
 			toolStripMenuItem_TerminalMenu_View_Panels_SendFile.Checked    = this.settingsRoot.Layout.SendFilePanelIsVisible;
@@ -649,7 +649,7 @@ namespace YAT.Gui.Forms
 		private void toolStripComboBox_TerminalMenu_View_Panels_Orientation_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				SetMonitorOrientation((XOrientation)toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem);
+				SetMonitorOrientation((OrientationEx)toolStripComboBox_TerminalMenu_View_Panels_Orientation.SelectedItem);
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_Panels_Predefined_Click(object sender, EventArgs e)
@@ -776,7 +776,7 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls = true;
 
-			toolStripComboBox_MonitorContextMenu_Panels_Orientation.Items.AddRange(XOrientation.GetItems());
+			toolStripComboBox_MonitorContextMenu_Panels_Orientation.Items.AddRange(OrientationEx.GetItems());
 
 			this.isSettingControls = false;
 		}
@@ -807,7 +807,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_MonitorContextMenu_Panels_Bidir.Enabled = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.RxMonitorPanelIsVisible);
 			toolStripMenuItem_MonitorContextMenu_Panels_Rx.Enabled    = (this.settingsRoot.Layout.TxMonitorPanelIsVisible    || this.settingsRoot.Layout.BidirMonitorPanelIsVisible);
 
-			toolStripComboBox_MonitorContextMenu_Panels_Orientation.SelectedItem = (XOrientation)this.settingsRoot.Layout.MonitorOrientation;
+			toolStripComboBox_MonitorContextMenu_Panels_Orientation.SelectedItem = (OrientationEx)this.settingsRoot.Layout.MonitorOrientation;
 
 			// Hide "Hide" item if only this monitor is visible
 			bool hideIsAllowed = false;
@@ -866,7 +866,7 @@ namespace YAT.Gui.Forms
 		private void toolStripComboBox_MonitorContextMenu_Panels_Orientation_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				SetMonitorOrientation((XOrientation)toolStripComboBox_MonitorContextMenu_Panels_Orientation.SelectedItem);
+				SetMonitorOrientation((OrientationEx)toolStripComboBox_MonitorContextMenu_Panels_Orientation.SelectedItem);
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Hide_Click(object sender, EventArgs e)
@@ -1186,13 +1186,13 @@ namespace YAT.Gui.Forms
 
 			for (int i = 0; i < pageCount; i++)
 			{
-				this.menuItems_Predefined_Pages[i].Text      = XMenu.PrependIndex(i + 1, pages[i].PageName);
+				this.menuItems_Predefined_Pages[i].Text      = MenuEx.PrependIndex(i + 1, pages[i].PageName);
 				this.menuItems_Predefined_Pages[i].Visible   = true;
 				this.menuItems_Predefined_Pages[i].Enabled   = this.terminal.IsOpen;
 			}
 			for (int i = pageCount; i < menuItems_Predefined_MaxPages; i++)
 			{
-				this.menuItems_Predefined_Pages[i].Text      = XMenu.PrependIndex(i + 1, "<Undefined>");
+				this.menuItems_Predefined_Pages[i].Text      = MenuEx.PrependIndex(i + 1, "<Undefined>");
 				this.menuItems_Predefined_Pages[i].Visible   = false;
 				this.menuItems_Predefined_Pages[i].Enabled   = false;
 			}
@@ -1213,14 +1213,14 @@ namespace YAT.Gui.Forms
 
 				if (isDefined)
 				{
-					this.menuItems_Predefined_Commands[i].Text      = XMenu.PrependIndex(i + 1, commands[i].Description);
+					this.menuItems_Predefined_Commands[i].Text      = MenuEx.PrependIndex(i + 1, commands[i].Description);
 					this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.ControlText;
 					this.menuItems_Predefined_Commands[i].Font      = SystemFonts.DefaultFont;
 					this.menuItems_Predefined_Commands[i].Enabled   = isValid;
 				}
 				else
 				{
-					this.menuItems_Predefined_Commands[i].Text      = XMenu.PrependIndex(i + 1, Model.Types.Command.DefineCommandText);
+					this.menuItems_Predefined_Commands[i].Text      = MenuEx.PrependIndex(i + 1, Model.Types.Command.DefineCommandText);
 					this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.GrayText;
 					this.menuItems_Predefined_Commands[i].Font      = Utilities.Drawing.ItalicDefaultFont;
 					this.menuItems_Predefined_Commands[i].Enabled   = true;
@@ -1228,7 +1228,7 @@ namespace YAT.Gui.Forms
 			}
 			for (int i = commandCount; i < Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage; i++)
 			{
-				this.menuItems_Predefined_Commands[i].Text      = XMenu.PrependIndex(i + 1, Model.Types.Command.DefineCommandText);
+				this.menuItems_Predefined_Commands[i].Text      = MenuEx.PrependIndex(i + 1, Model.Types.Command.DefineCommandText);
 				this.menuItems_Predefined_Commands[i].ForeColor = SystemColors.GrayText;
 				this.menuItems_Predefined_Commands[i].Font      = Utilities.Drawing.ItalicDefaultFont;
 				this.menuItems_Predefined_Commands[i].Enabled   = true;
@@ -1837,7 +1837,7 @@ namespace YAT.Gui.Forms
 			{
 				case 1: // "2400, 7, Even, 1, None"
 				{
-					settings.BaudRate    = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud002400;
+					settings.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud002400;
 					settings.DataBits    = MKY.IO.Ports.DataBits.Seven;
 					settings.Parity      = System.IO.Ports.Parity.Even;
 					settings.StopBits    = System.IO.Ports.StopBits.One;
@@ -1846,7 +1846,7 @@ namespace YAT.Gui.Forms
 				}
 				case 2: // "2400, 7, Even, 1, XOn/XOff"
 				{
-					settings.BaudRate    = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud002400;
+					settings.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud002400;
 					settings.DataBits    = MKY.IO.Ports.DataBits.Seven;
 					settings.Parity      = System.IO.Ports.Parity.Even;
 					settings.StopBits    = System.IO.Ports.StopBits.One;
@@ -1855,7 +1855,7 @@ namespace YAT.Gui.Forms
 				}
 				case 3: // "9600, 8, None, 1, None"
 				{
-					settings.BaudRate    = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud009600;
+					settings.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud009600;
 					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
 					settings.Parity      = System.IO.Ports.Parity.None;
 					settings.StopBits    = System.IO.Ports.StopBits.One;
@@ -1864,7 +1864,7 @@ namespace YAT.Gui.Forms
 				}
 				case 4: // "9600, 8, None, 1, XOn/XOff"
 				{
-					settings.BaudRate    = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud009600;
+					settings.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud009600;
 					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
 					settings.Parity      = System.IO.Ports.Parity.None;
 					settings.StopBits    = System.IO.Ports.StopBits.One;
@@ -1873,7 +1873,7 @@ namespace YAT.Gui.Forms
 				}
 				case 5: // "19200, 8, None, 1, None"
 				{
-					settings.BaudRate    = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud019200;
+					settings.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud019200;
 					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
 					settings.Parity      = System.IO.Ports.Parity.None;
 					settings.StopBits    = System.IO.Ports.StopBits.One;
@@ -1882,7 +1882,7 @@ namespace YAT.Gui.Forms
 				}
 				case 6: // "19200, 8, None, 1, XOn/XOff"
 				{
-					settings.BaudRate    = (MKY.IO.Ports.XBaudRate)MKY.IO.Ports.BaudRate.Baud019200;
+					settings.BaudRate    = (MKY.IO.Ports.BaudRateEx)MKY.IO.Ports.BaudRate.Baud019200;
 					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
 					settings.Parity      = System.IO.Ports.Parity.None;
 					settings.StopBits    = System.IO.Ports.StopBits.One;

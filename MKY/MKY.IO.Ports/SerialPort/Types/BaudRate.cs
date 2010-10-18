@@ -65,26 +65,26 @@ namespace MKY.IO.Ports
 	#endregion
 
 	/// <summary>
-	/// Extended enum XBaudRate.
+	/// Extended enum BaudRateEx.
 	/// </summary>
-	public class XBaudRate : XEnum
+	public class BaudRateEx : EnumEx
 	{
 		private int userDefinedBaudRate = 0;
 
 		/// <summary>Default is <see cref="BaudRate.Baud009600"/>.</summary>
-		public XBaudRate()
+		public BaudRateEx()
 			: base(BaudRate.Baud009600)
 		{
 		}
 
 		/// <summary></summary>
-		protected XBaudRate(BaudRate baudRate)
+		protected BaudRateEx(BaudRate baudRate)
 			: base(baudRate)
 		{
 		}
 
 		/// <summary></summary>
-		protected XBaudRate(int baudRate)
+		protected BaudRateEx(int baudRate)
 			: base(BaudRate.UserDefined)
 		{
 			this.userDefinedBaudRate = baudRate;
@@ -103,30 +103,30 @@ namespace MKY.IO.Ports
 		#region GetItems
 
 		/// <summary></summary>
-		public static XBaudRate[] GetItems()
+		public static BaudRateEx[] GetItems()
 		{
-			List<XBaudRate> a = new List<XBaudRate>();
-			a.Add(new XBaudRate(BaudRate.Baud000075));
-			a.Add(new XBaudRate(BaudRate.Baud000110));
-			a.Add(new XBaudRate(BaudRate.Baud000134));
-			a.Add(new XBaudRate(BaudRate.Baud000150));
-			a.Add(new XBaudRate(BaudRate.Baud000300));
-			a.Add(new XBaudRate(BaudRate.Baud000600));
-			a.Add(new XBaudRate(BaudRate.Baud001200));
-			a.Add(new XBaudRate(BaudRate.Baud001800));
-			a.Add(new XBaudRate(BaudRate.Baud002400));
-			a.Add(new XBaudRate(BaudRate.Baud004800));
-			a.Add(new XBaudRate(BaudRate.Baud007200));
-			a.Add(new XBaudRate(BaudRate.Baud009600));
-			a.Add(new XBaudRate(BaudRate.Baud014400));
-			a.Add(new XBaudRate(BaudRate.Baud019200));
-			a.Add(new XBaudRate(BaudRate.Baud038400));
-			a.Add(new XBaudRate(BaudRate.Baud057600));
-			a.Add(new XBaudRate(BaudRate.Baud115200));
-			a.Add(new XBaudRate(BaudRate.Baud128000));
-			a.Add(new XBaudRate(BaudRate.Baud230400));
-			a.Add(new XBaudRate(BaudRate.Baud460800));
-			a.Add(new XBaudRate(BaudRate.Baud921600));
+			List<BaudRateEx> a = new List<BaudRateEx>();
+			a.Add(new BaudRateEx(BaudRate.Baud000075));
+			a.Add(new BaudRateEx(BaudRate.Baud000110));
+			a.Add(new BaudRateEx(BaudRate.Baud000134));
+			a.Add(new BaudRateEx(BaudRate.Baud000150));
+			a.Add(new BaudRateEx(BaudRate.Baud000300));
+			a.Add(new BaudRateEx(BaudRate.Baud000600));
+			a.Add(new BaudRateEx(BaudRate.Baud001200));
+			a.Add(new BaudRateEx(BaudRate.Baud001800));
+			a.Add(new BaudRateEx(BaudRate.Baud002400));
+			a.Add(new BaudRateEx(BaudRate.Baud004800));
+			a.Add(new BaudRateEx(BaudRate.Baud007200));
+			a.Add(new BaudRateEx(BaudRate.Baud009600));
+			a.Add(new BaudRateEx(BaudRate.Baud014400));
+			a.Add(new BaudRateEx(BaudRate.Baud019200));
+			a.Add(new BaudRateEx(BaudRate.Baud038400));
+			a.Add(new BaudRateEx(BaudRate.Baud057600));
+			a.Add(new BaudRateEx(BaudRate.Baud115200));
+			a.Add(new BaudRateEx(BaudRate.Baud128000));
+			a.Add(new BaudRateEx(BaudRate.Baud230400));
+			a.Add(new BaudRateEx(BaudRate.Baud460800));
+			a.Add(new BaudRateEx(BaudRate.Baud921600));
 			return (a.ToArray());
 		}
 
@@ -135,19 +135,19 @@ namespace MKY.IO.Ports
 		#region Parse
 
 		/// <summary></summary>
-		public static XBaudRate Parse(string baudRate)
+		public static BaudRateEx Parse(string baudRate)
 		{
-			return ((XBaudRate)int.Parse(baudRate));
+			return ((BaudRateEx)int.Parse(baudRate));
 		}
 
 		/// <summary></summary>
-		public static bool TryParse(string baudRate, out XBaudRate result)
+		public static bool TryParse(string baudRate, out BaudRateEx result)
 		{
 			int intResult;
 
 			if (int.TryParse(baudRate, out intResult))
 			{
-				result = (XBaudRate)intResult;
+				result = (BaudRateEx)intResult;
 				return (true);
 			}
 			else
@@ -162,19 +162,19 @@ namespace MKY.IO.Ports
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator BaudRate(XBaudRate baudRate)
+		public static implicit operator BaudRate(BaudRateEx baudRate)
 		{
 			return ((BaudRate)baudRate.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XBaudRate(BaudRate baudRate)
+		public static implicit operator BaudRateEx(BaudRate baudRate)
 		{
-			return (new XBaudRate(baudRate));
+			return (new BaudRateEx(baudRate));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(XBaudRate baudRate)
+		public static implicit operator int(BaudRateEx baudRate)
 		{
 			if (baudRate == BaudRate.UserDefined)
 				return (baudRate.userDefinedBaudRate);
@@ -183,39 +183,39 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		public static implicit operator XBaudRate(int baudRate)
+		public static implicit operator BaudRateEx(int baudRate)
 		{
-			if      (baudRate == (int)BaudRate.Baud921600) return (new XBaudRate(BaudRate.Baud921600));
-			else if (baudRate == (int)BaudRate.Baud460800) return (new XBaudRate(BaudRate.Baud460800));
-			else if (baudRate == (int)BaudRate.Baud230400) return (new XBaudRate(BaudRate.Baud230400));
-			else if (baudRate == (int)BaudRate.Baud128000) return (new XBaudRate(BaudRate.Baud128000));
-			else if (baudRate == (int)BaudRate.Baud115200) return (new XBaudRate(BaudRate.Baud115200));
-			else if (baudRate == (int)BaudRate.Baud057600) return (new XBaudRate(BaudRate.Baud057600));
-			else if (baudRate == (int)BaudRate.Baud038400) return (new XBaudRate(BaudRate.Baud038400));
-			else if (baudRate == (int)BaudRate.Baud019200) return (new XBaudRate(BaudRate.Baud019200));
-			else if (baudRate == (int)BaudRate.Baud014400) return (new XBaudRate(BaudRate.Baud014400));
-			else if (baudRate == (int)BaudRate.Baud009600) return (new XBaudRate(BaudRate.Baud009600));
-			else if (baudRate == (int)BaudRate.Baud007200) return (new XBaudRate(BaudRate.Baud007200));
-			else if (baudRate == (int)BaudRate.Baud004800) return (new XBaudRate(BaudRate.Baud004800));
-			else if (baudRate == (int)BaudRate.Baud002400) return (new XBaudRate(BaudRate.Baud002400));
-			else if (baudRate == (int)BaudRate.Baud001200) return (new XBaudRate(BaudRate.Baud001200));
-			else if (baudRate == (int)BaudRate.Baud000600) return (new XBaudRate(BaudRate.Baud000600));
-			else if (baudRate == (int)BaudRate.Baud000300) return (new XBaudRate(BaudRate.Baud000300));
-			else if (baudRate == (int)BaudRate.Baud000150) return (new XBaudRate(BaudRate.Baud000150));
-			else if (baudRate == (int)BaudRate.Baud000134) return (new XBaudRate(BaudRate.Baud000134));
-			else if (baudRate == (int)BaudRate.Baud000110) return (new XBaudRate(BaudRate.Baud000110));
-			else if (baudRate == (int)BaudRate.Baud000075) return (new XBaudRate(BaudRate.Baud000075));
-			else return (new XBaudRate(baudRate));
+			if      (baudRate == (int)BaudRate.Baud921600) return (new BaudRateEx(BaudRate.Baud921600));
+			else if (baudRate == (int)BaudRate.Baud460800) return (new BaudRateEx(BaudRate.Baud460800));
+			else if (baudRate == (int)BaudRate.Baud230400) return (new BaudRateEx(BaudRate.Baud230400));
+			else if (baudRate == (int)BaudRate.Baud128000) return (new BaudRateEx(BaudRate.Baud128000));
+			else if (baudRate == (int)BaudRate.Baud115200) return (new BaudRateEx(BaudRate.Baud115200));
+			else if (baudRate == (int)BaudRate.Baud057600) return (new BaudRateEx(BaudRate.Baud057600));
+			else if (baudRate == (int)BaudRate.Baud038400) return (new BaudRateEx(BaudRate.Baud038400));
+			else if (baudRate == (int)BaudRate.Baud019200) return (new BaudRateEx(BaudRate.Baud019200));
+			else if (baudRate == (int)BaudRate.Baud014400) return (new BaudRateEx(BaudRate.Baud014400));
+			else if (baudRate == (int)BaudRate.Baud009600) return (new BaudRateEx(BaudRate.Baud009600));
+			else if (baudRate == (int)BaudRate.Baud007200) return (new BaudRateEx(BaudRate.Baud007200));
+			else if (baudRate == (int)BaudRate.Baud004800) return (new BaudRateEx(BaudRate.Baud004800));
+			else if (baudRate == (int)BaudRate.Baud002400) return (new BaudRateEx(BaudRate.Baud002400));
+			else if (baudRate == (int)BaudRate.Baud001200) return (new BaudRateEx(BaudRate.Baud001200));
+			else if (baudRate == (int)BaudRate.Baud000600) return (new BaudRateEx(BaudRate.Baud000600));
+			else if (baudRate == (int)BaudRate.Baud000300) return (new BaudRateEx(BaudRate.Baud000300));
+			else if (baudRate == (int)BaudRate.Baud000150) return (new BaudRateEx(BaudRate.Baud000150));
+			else if (baudRate == (int)BaudRate.Baud000134) return (new BaudRateEx(BaudRate.Baud000134));
+			else if (baudRate == (int)BaudRate.Baud000110) return (new BaudRateEx(BaudRate.Baud000110));
+			else if (baudRate == (int)BaudRate.Baud000075) return (new BaudRateEx(BaudRate.Baud000075));
+			else return (new BaudRateEx(baudRate));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(XBaudRate baudRate)
+		public static implicit operator string(BaudRateEx baudRate)
 		{
 			return (baudRate.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XBaudRate(string baudRate)
+		public static implicit operator BaudRateEx(string baudRate)
 		{
 			return (Parse(baudRate));
 		}

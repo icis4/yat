@@ -27,7 +27,6 @@ using System.Windows.Forms;
 using MKY.Event;
 
 using YAT.Model.Types;
-
 using YAT.Settings;
 using YAT.Settings.Application;
 

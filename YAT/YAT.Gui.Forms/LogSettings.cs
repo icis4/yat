@@ -479,7 +479,7 @@ namespace YAT.Gui.Forms
 			invalid.Write(Path.AltDirectorySeparatorChar);
 			invalid.Write(Path.PathSeparator);
 
-			if (XString.Contains(filenameChars, invalid.ToString().ToCharArray()))
+			if (StringEx.Contains(filenameChars, invalid.ToString().ToCharArray()))
 			{
 				StringWriter invalidPrintable = new StringWriter();
 				foreach (char c in invalid.ToString().ToCharArray())

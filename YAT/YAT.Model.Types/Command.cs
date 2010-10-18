@@ -583,7 +583,7 @@ namespace YAT.Model.Types
 			(
 				(this.isDefined    == other.isDefined) &&
 				(this.description  == other.description) &&
-				XArray.ValuesEqual(this.commandLines, other.commandLines) &&
+				ArrayEx.ValuesEqual(this.commandLines, other.commandLines) &&
 				(this.defaultRadix == other.defaultRadix) &&
 				(this.isFilePath   == other.isFilePath) &&
 				(this.filePath     == other.filePath)

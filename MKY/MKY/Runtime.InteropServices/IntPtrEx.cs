@@ -19,27 +19,17 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Runtime.InteropServices;
 
-namespace MKY.Types
+namespace MKY.Win32
 {
 	/// <summary>
-	/// Decimal utility methods.
+	/// Extends <see cref=" IntPtr"/>.
 	/// </summary>
-	public static class XDecimal
+	public static class IntPtrEx
 	{
-		/// <summary>
-		/// Limits "value" to the boundaries specified.
-		/// </summary>
-		public static decimal LimitToBounds(decimal value, decimal lower, decimal upper)
-		{
-			if (value < lower)
-				return (lower);
-			if (value > upper)
-				return (upper);
-			return (value);
-		}
+		/// <summary></summary>
+		public static readonly IntPtr Invalid = new IntPtr(-1);
 	}
 }
 

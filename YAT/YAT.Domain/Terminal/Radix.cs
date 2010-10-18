@@ -59,7 +59,7 @@ namespace YAT.Domain
 	#endregion
 
 	/// <summary></summary>
-	public class XRadix : XEnum
+	public class XRadix : EnumEx
 	{
 		#region String Definitions
 

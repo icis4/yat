@@ -26,7 +26,7 @@ namespace MKY.Test
 	/// <summary>
 	/// Utility methods to deal with temporary files during testing.
 	/// </summary>
-	public static class XPath
+	public static class Temp
 	{
 		/// <summary></summary>
 		public static string MakeTempPath(object testObject)

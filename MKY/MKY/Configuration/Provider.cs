@@ -56,7 +56,7 @@ namespace MKY.Configuration
 
 					// Override/add user settings where applicable.
 					string userFilePath;
-					if (XEnvironment.TryGetFilePathFromEnvironmentVariableAndVerify(userSettingsEnvironmentVariableName, out userFilePath))
+					if (EnvironmentEx.TryGetFilePathFromEnvironmentVariableAndVerify(userSettingsEnvironmentVariableName, out userFilePath))
 					{
 						ExeConfigurationFileMap ecfm = new ExeConfigurationFileMap();
 						ecfm.ExeConfigFilename = userFilePath;

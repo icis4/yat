@@ -19,30 +19,32 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Drawing;
+using System.Windows.Forms;
 
-namespace MKY.Types
+namespace MKY.Windows.Forms
 {
 	/// <summary>
-	/// Byte/byte utility methods.
+	/// System.Windows.Forms utility methods.
 	/// </summary>
-	public class XByte
+	/// <remarks>
+	/// This class is intentionally not placed into <c>MKY.Windows.Forms</c> since it's a
+	/// pure utility containing no visual contents.
+	/// </remarks>
+	public static class FormEx
 	{
 		/// <summary>
-		/// Converts value into binary string (e.g. "00010100").
+		/// Manual <see cref="FormStartPosition.CenterParent"/> because automatic doesn't work
+		/// if not shown as dialog.
 		/// </summary>
-		public static string ConvertToBinaryString(byte value)
+		/// <param name="parent">Parent form.</param>
+		/// <param name="child">Child form to be placed to the center of the parent.</param>
+		/// <returns>Center parent location.</returns>
+		public static Point CalculateManualCenterParentLocation(Form parent, Form child)
 		{
-			return (XUInt64.ConvertToNumericBaseString(2, value, byte.MaxValue));
-		}
-
-		/// <summary>
-		/// Converts value into octal string (e.g. "024").
-		/// </summary>
-		public static string ConvertToOctalString(byte value)
-		{
-			return (XUInt64.ConvertToNumericBaseString(8, value, byte.MaxValue));
+			int left = parent.Left + (parent.Width  / 2) - (child.Width  / 2);
+			int top  = parent.Top  + (parent.Height / 2) - (child.Height / 2);
+			return (new Point(left, top));
 		}
 	}
 }

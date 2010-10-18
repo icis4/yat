@@ -506,7 +506,7 @@ namespace YAT.Domain
 			}
 			catch (ArgumentException ex)
 			{
-				MKY.Diagnostics.XDebug.WriteException(this, ex);
+				MKY.Diagnostics.DebugEx.WriteException(this, ex);
 				System.Diagnostics.Debug.WriteLine(de.ToString());
 			}
 		}

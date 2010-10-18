@@ -608,7 +608,7 @@ namespace MKY.Settings
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void SaveToFile(Type type, string filePath, object settings)
 		{
-			string backup = filePath + IO.XFile.BackupFileExtension;
+			string backup = filePath + IO.FileEx.BackupFileExtension;
 
 			try
 			{

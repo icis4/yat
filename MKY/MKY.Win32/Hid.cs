@@ -510,7 +510,7 @@ namespace MKY.Win32
 
 			System.Diagnostics.Debug.WriteLine("Couldn't create shared USB device query handle.");
 			System.Diagnostics.Debug.WriteLine(Debug.GetLastError());
-			XDebug.WriteStack(typeof(Hid));
+			DebugEx.WriteStack(typeof(Hid));
 
 			deviceHandle = null;
 			return (false);
@@ -540,7 +540,7 @@ namespace MKY.Win32
 
 			System.Diagnostics.Debug.WriteLine("Couldn't create shared USB device read/write handle.");
 			System.Diagnostics.Debug.WriteLine(Debug.GetLastError());
-			XDebug.WriteStack(typeof(Hid));
+			DebugEx.WriteStack(typeof(Hid));
 
 			readHandle = null;
 			return (false);

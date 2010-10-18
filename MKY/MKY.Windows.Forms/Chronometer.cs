@@ -158,7 +158,7 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		public override string ToString()
 		{
-			return (XTimeSpan.FormatTimeSpan(TimeSpan, true));
+			return (TimeSpanEx.FormatTimeSpan(TimeSpan, true));
 		}
 
 		#endregion

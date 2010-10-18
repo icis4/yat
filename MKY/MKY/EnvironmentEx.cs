@@ -24,7 +24,7 @@ using System.IO;
 namespace MKY
 {
 	/// <summary></summary>
-	public static class XEnvironment
+	public static class EnvironmentEx
 	{
 		/// <summary>
 		/// Tries the get value from environment variable.

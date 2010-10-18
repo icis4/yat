@@ -308,7 +308,7 @@ namespace YAT.Domain
 		{
 			bool sendEol = (eol != null);
 			byte[] eolByteArray = new byte[] { };
-			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianess, (XEncoding)TextTerminalSettings.Encoding);
+			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianess, (EncodingEx)TextTerminalSettings.Encoding);
 
 			// Prepare EOL.
 			if (sendEol)
@@ -389,7 +389,7 @@ namespace YAT.Domain
 		{
 			this.rxDecodingStream = new List<byte>();
 
-			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianess, (XEncoding)TextTerminalSettings.Encoding);
+			Parser.SubstitutionParser p = new Parser.SubstitutionParser(TerminalSettings.IO.Endianess, (EncodingEx)TextTerminalSettings.Encoding);
 			byte[] txEol;
 			if (!p.TryParse(TextTerminalSettings.TxEol, TextTerminalSettings.CharSubstitution, out txEol))
 			{
@@ -433,7 +433,7 @@ namespace YAT.Domain
 					byte[] decodingArray = this.rxDecodingStream.ToArray();
 
 					// Get encoding and retrieve char count
-					Encoding e = (XEncoding)TextTerminalSettings.Encoding;
+					Encoding e = (EncodingEx)TextTerminalSettings.Encoding;
 					int charCount = e.GetCharCount(decodingArray);
 
 					// If decoding array can be decoded into something useful, decode it

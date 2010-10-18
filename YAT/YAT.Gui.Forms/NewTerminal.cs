@@ -140,7 +140,7 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				XIPHost host = socketSelection.RemoteHost;
+				IPHost host = socketSelection.RemoteHost;
 				this.newTerminalSettings_Form.SocketRemoteHost = host;
 				SetControls();
 			}

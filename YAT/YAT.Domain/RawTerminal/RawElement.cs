@@ -103,7 +103,7 @@ namespace YAT.Domain
 			}
 			return (indent + "- Data: " + data + Environment.NewLine +
 					indent + "- Direction: " + this.direction + Environment.NewLine +
-					indent + "- TimeStamp: " + this.timestamp.ToLongTimeString() + "." + XString.Left(this.timestamp.Millisecond.ToString("D3"), 2) + Environment.NewLine);
+					indent + "- TimeStamp: " + this.timestamp.ToLongTimeString() + "." + StringEx.Left(this.timestamp.Millisecond.ToString("D3"), 2) + Environment.NewLine);
 		}
 	}
 }

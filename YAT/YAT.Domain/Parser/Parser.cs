@@ -888,7 +888,7 @@ namespace YAT.Domain.Parser
 					EndByteArray();
 
 					// Return part of string that could be parsed
-					parsed = XString.Left(s, s.Length - this.reader.ReadToEnd().Length - 1);
+					parsed = StringEx.Left(s, s.Length - this.reader.ReadToEnd().Length - 1);
 					result = this.resultList.ToArray();
 					return (false);
 				}
@@ -962,8 +962,8 @@ namespace YAT.Domain.Parser
 			bool success;
 			switch (parseRadix)
 			{
-				case Radix.Bin: success = XUInt64.TryParseBinary(tokenValue, out value); break;
-				case Radix.Oct: success = XUInt64.TryParseOctal (tokenValue, out value); break;
+				case Radix.Bin: success = UInt64Ex.TryParseBinary(tokenValue, out value); break;
+				case Radix.Oct: success = UInt64Ex.TryParseOctal (tokenValue, out value); break;
 				case Radix.Dec: success = ulong.TryParse        (tokenValue, out value); break;
 				case Radix.Hex: success = ulong.TryParse        (tokenValue, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out value); break;
 				default: throw (new NotImplementedException(@"Unknown radix """ + parseRadix + @""""));
@@ -971,7 +971,7 @@ namespace YAT.Domain.Parser
 			if (success)
 			{
 				bool useBigEndian = (this.endianess == Endianess.BigEndian);
-				result = XUInt64.ConvertToByteArray(value, negative, useBigEndian);
+				result = UInt64Ex.ConvertToByteArray(value, negative, useBigEndian);
 				return (true);
 			}
 

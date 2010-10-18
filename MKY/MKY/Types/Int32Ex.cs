@@ -25,54 +25,24 @@ using System.Text;
 namespace MKY.Types
 {
 	/// <summary>
-	/// String utility methods.
+	/// Int32/int utility methods.
 	/// </summary>
-	public static class XString
+	/// <remarks>
+	/// Possible extensions:
+	/// - ParseInside: get integer values inside strings (e.g. "COM5 (Device123B)" returns {5;123})
+	/// </remarks>
+	public class Int32Ex
 	{
 		/// <summary>
-		/// Truncates "truncateString" to the "length" leftmost characters.
+		/// Limits "value" to the boundaries specified.
 		/// </summary>
-		public static string Left(string truncateString, int length)
+		public static int LimitToBounds(int value, int lower, int upper)
 		{
-			if (length >= truncateString.Length)
-				return (truncateString);
-			else
-				return (truncateString.Substring(0, length));
-		}
-
-		/// <summary>
-		/// Truncates "truncateString" from "begin" to "end".
-		/// </summary>
-		public static string Mid(string truncateString, int begin, int end)
-		{
-			if (begin >= end)
-				return ("");
-			else
-				return (truncateString.Substring(begin, end - begin + 1));
-		}
-
-		/// <summary>
-		/// Truncates "truncateString" to the "length" rightmost characters.
-		/// </summary>
-		public static string Right(string truncateString, int length)
-		{
-			if (length >= truncateString.Length)
-				return (truncateString);
-			else
-				return (truncateString.Substring(truncateString.Length - length, length));
-		}
-
-		/// <summary>
-		/// Returns whether "str" contains any of the "searchChars".
-		/// </summary>
-		public static bool Contains(string str, char[] searchChars)
-		{
-			foreach (char c in searchChars)
-			{
-				if (str.Contains(c.ToString()))
-					return (true);
-			}
-			return (false);
+			if (value < lower)
+				return (lower);
+			if (value > upper)
+				return (upper);
+			return (value);
 		}
 	}
 }

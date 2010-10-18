@@ -49,7 +49,7 @@ namespace YAT.Domain
 	/// <summary>
 	/// Extended enum XCharSubstitution.
 	/// </summary>
-	public class XCharSubstitution : XEnum
+	public class XCharSubstitution : EnumEx
 	{
 		#region String Definitions
 

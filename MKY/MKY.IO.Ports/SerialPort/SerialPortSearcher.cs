@@ -86,7 +86,7 @@ namespace MKY.IO.Ports
 					}
 					catch (Exception ex)
 					{
-						XDebug.WriteException(typeof(SerialPortSearcher), ex);
+						DebugEx.WriteException(typeof(SerialPortSearcher), ex);
 					}
 				}
 
@@ -114,13 +114,13 @@ namespace MKY.IO.Ports
 					}
 					catch (Exception ex)
 					{
-						XDebug.WriteException(typeof(SerialPortSearcher), ex);
+						DebugEx.WriteException(typeof(SerialPortSearcher), ex);
 					}
 				}
 			}
 			catch (Exception ex)
 			{
-				XDebug.WriteException(typeof(SerialPortSearcher), ex);
+				DebugEx.WriteException(typeof(SerialPortSearcher), ex);
 			}
 
 			return (descriptions);
