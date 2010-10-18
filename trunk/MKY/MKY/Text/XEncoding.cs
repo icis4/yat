@@ -30,7 +30,7 @@ namespace MKY.Text
 	#region Enum SupportedEncoding
 
 	/// <summary>
-	/// Encodings that are supported by YAT.
+	/// Encodings that are supported by .NET.
 	/// </summary>
 	/// <remarks>
 	/// Enum value corresponds to code page.

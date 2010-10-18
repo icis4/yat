@@ -22,6 +22,7 @@
   <TargetFrameworkVersion>3.5</TargetFrameworkVersion>
  </ProjectOptions>
  <Targets>
+  <Target Name="$(ProjectDir)/MKY/bin/Debug/MKY.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Ports.Test/bin/Debug/MKY.IO.Ports.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Ports/bin/Debug/MKY.IO.Ports.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Serial.Test/bin/Debug/MKY.IO.Serial.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
@@ -30,8 +31,7 @@
   <Target Name="$(ProjectDir)/MKY.IO.Usb.Test/bin/Debug/MKY.IO.Usb.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Usb/bin/Debug/MKY.IO.Usb.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.Net.Test/bin/Debug/MKY.Net.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/MKY.System.Test/bin/Debug/MKY.System.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/MKY.System/bin/Debug/MKY.System.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/MKY.Test/bin/Debug/MKY.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.Win32.Test/bin/Debug/MKY.Win32.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.Win32/bin/Debug/MKY.Win32.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.Windows.Forms.Test/bin/Debug/MKY.Windows.Forms.Test.exe" Analyze="True" AnalyzeAllChildren="True" />
