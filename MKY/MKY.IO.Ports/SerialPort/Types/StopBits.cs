@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 
-using MKY.Utilities.Types;
+using MKY.System.Types;
 
 namespace MKY.IO.Ports
 {

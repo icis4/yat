@@ -261,9 +261,9 @@
       <Project>{1B657329-940D-4AA1-9768-431288B555E2}</Project>
       <Name>MKY.IO.Usb</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MKY\MKY.Utilities\MKY.Utilities.csproj">
+    <ProjectReference Include="..\..\MKY\MKY.System\MKY.System.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
-      <Name>MKY.Utilities</Name>
+      <Name>MKY.System</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\MKY\MKY.Windows.Forms\MKY.Windows.Forms.csproj">
       <Project>{CB2E6173-CB9F-4FB4-8948-30D04D4BAE50}</Project>

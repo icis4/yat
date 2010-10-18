@@ -25,8 +25,8 @@ using System.Net;
 using System.Text;
 using System.Xml.Serialization;
 
-using MKY.Utilities.Diagnostics;
-using MKY.Utilities.Net;
+using MKY.System.Diagnostics;
+using MKY.System.Net;
 
 // The MKY.IO.Serial namespace combines various serial interface infrastructure. This code is
 // intentionally placed into the MKY.IO.Serial namespace even though the file is located in
@@ -470,7 +470,7 @@ namespace MKY.IO.Serial
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.Utilities.Test.EqualityTest for details.
+		// See MKY.System.Test.EqualityTest for details.
 
 		#endregion
 	}

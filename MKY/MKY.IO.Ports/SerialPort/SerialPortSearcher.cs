@@ -25,7 +25,7 @@ using System.Management;
 using System.Text;
 using System.Text.RegularExpressions;
 
-using MKY.Utilities.Diagnostics;
+using MKY.System.Diagnostics;
 
 namespace MKY.IO.Ports
 {

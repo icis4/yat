@@ -31,7 +31,7 @@ using System.Text;
 
 using Microsoft.Win32.SafeHandles;
 
-using MKY.Utilities.Diagnostics;
+using MKY.System.Diagnostics;
 
 #endregion
 
@@ -41,10 +41,10 @@ namespace MKY.Win32
 	/// Encapsulates parts of the Win32 API for HID communications.
 	/// </summary>
 	/// <remarks>
-	/// This class is partly based on GenericHid of Jan Axelson's Lakeview Research. Visit GenericHid
-	/// on http://www.lvr.com/hidpage.htm for details.
-	/// MKY.Utilities.Win32 needs to modify the structure and contents of GenericHid due to the
-	/// following reasons:
+	/// This class is partly based on GenericHid of Jan Axelson's Lakeview Research.
+	/// Visit GenericHid on http://www.lvr.com/hidpage.htm for details.
+	/// <see cref="MKY.Win32.Hid"/> needs to modify the structure and contents of
+	/// GenericHid due to the following reasons:
 	/// - Suboptimal structure of the original GenericHid project
 	/// - Missing features required for YAT
 	/// - Potential reuse of this class for other services directly using the Win32 API

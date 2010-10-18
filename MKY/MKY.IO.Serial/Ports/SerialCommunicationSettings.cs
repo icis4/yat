@@ -30,7 +30,7 @@ namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SerialCommunicationSettings : MKY.Utilities.Settings.Settings, IEquatable<SerialCommunicationSettings>
+	public class SerialCommunicationSettings : System.Settings.Settings, IEquatable<SerialCommunicationSettings>
 	{
 		private int baudRate;
 		private MKY.IO.Ports.DataBits dataBits;
@@ -46,7 +46,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public SerialCommunicationSettings(MKY.Utilities.Settings.SettingsType settingsType)
+		public SerialCommunicationSettings(System.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -190,7 +190,7 @@ namespace MKY.IO.Serial
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals((System.Settings.Settings)other) && // Compare all settings nodes.
 
 				(this.baudRate    == other.baudRate) &&
 				(this.dataBits    == other.dataBits) &&

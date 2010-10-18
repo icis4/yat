@@ -72,6 +72,8 @@ Important changes:
 - Selection and settings controls now clear contents when disabled
 - Radix (string/hex) automatically changes when switching the terminal type (text/binary)
 - Coupling of Tx and Rx radix improved
+- MKY.Utilities renamed to MKY.System for consistency with the .NET System namespace
+- XArray, XByte,... renamed to ArrayEx, ByteEx
 - Project references to system assemblies cleaned
 - Using directives cleaned
 - Test and demo projects also signed with a strong name key

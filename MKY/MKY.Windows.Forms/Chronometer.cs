@@ -25,8 +25,8 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
-using MKY.Utilities.Event;
-using MKY.Utilities.Time;
+using MKY.System.Event;
+using MKY.System.Time;
 
 namespace MKY.Windows.Forms
 {

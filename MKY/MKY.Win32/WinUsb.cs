@@ -32,7 +32,7 @@ using System.Text;
 
 using Microsoft.Win32.SafeHandles;
 
-using MKY.Utilities.Diagnostics;
+using MKY.System.Diagnostics;
 
 #endregion
 

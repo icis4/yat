@@ -75,9 +75,9 @@
     <Compile Include="SocketsEx\SocketsExTypes.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\MKY\MKY.Utilities\MKY.Utilities.csproj">
+    <ProjectReference Include="..\..\..\MKY\MKY.System\MKY.System.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
-      <Name>MKY.Utilities</Name>
+      <Name>MKY.System</Name>
     </ProjectReference>
     <ProjectReference Include="..\ALAZ.SystemEx\ALAZ.SystemEx.csproj">
       <Project>{FA1EF4FC-2FC7-4B29-9EAB-2872593C89E2}</Project>
