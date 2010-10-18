@@ -21,7 +21,6 @@ using System;
 using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 
-using MKY;
 using MKY.Configuration;
 
 namespace MKY.IO.Usb.Test

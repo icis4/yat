@@ -235,7 +235,7 @@ namespace YAT.Log
 
 				if (this.writeMode == LogFileWriteMode.Create)
 				{
-					this.file = XFile.MakeUniqueFileName(this.file, this.separator.Separator);
+					this.file = FileEx.MakeUniqueFileName(this.file, this.separator.Separator);
 					this.fileStream = File.Open(this.file, FileMode.Create, FileAccess.Write, FileShare.Read);
 				}
 				else if (this.writeMode == LogFileWriteMode.Append)

@@ -25,24 +25,24 @@ using System.Text;
 namespace MKY.Types
 {
 	/// <summary>
-	/// Int32/int utility methods.
+	/// Byte/byte utility methods.
 	/// </summary>
-	/// <remarks>
-	/// Possible extensions:
-	/// - ParseInside: get integer values inside strings (e.g. "COM5 (Device123B)" returns {5;123})
-	/// </remarks>
-	public class XInt32
+	public class ByteEx
 	{
 		/// <summary>
-		/// Limits "value" to the boundaries specified.
+		/// Converts value into binary string (e.g. "00010100").
 		/// </summary>
-		public static int LimitToBounds(int value, int lower, int upper)
+		public static string ConvertToBinaryString(byte value)
 		{
-			if (value < lower)
-				return (lower);
-			if (value > upper)
-				return (upper);
-			return (value);
+			return (UInt64Ex.ConvertToNumericBaseString(2, value, byte.MaxValue));
+		}
+
+		/// <summary>
+		/// Converts value into octal string (e.g. "024").
+		/// </summary>
+		public static string ConvertToOctalString(byte value)
+		{
+			return (UInt64Ex.ConvertToNumericBaseString(8, value, byte.MaxValue));
 		}
 	}
 }

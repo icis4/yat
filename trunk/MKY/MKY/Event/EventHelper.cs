@@ -324,7 +324,7 @@ namespace MKY.Event
 
 		private static void WriteExceptionToDebugOutput(Exception ex, Delegate sink)
 		{
-			Diagnostics.XDebug.WriteException(typeof(EventHelper), ex);
+			Diagnostics.DebugEx.WriteException(typeof(EventHelper), ex);
 			Debug.Indent();
 			{
 				StringBuilder sb = new StringBuilder();

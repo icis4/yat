@@ -28,7 +28,7 @@ namespace MKY.Test.Types
 {
 	/// <summary></summary>
 	[TestFixture]
-	public class XByteTest
+	public class ByteExTest
 	{
 		#region Types
 		//==========================================================================================
@@ -93,8 +93,8 @@ namespace MKY.Test.Types
 			{
 				byte data = ts.Data;
 
-				Assert.AreEqual(ts.BinString, XByte.ConvertToBinaryString(data));
-				Assert.AreEqual(ts.OctString, XByte.ConvertToOctalString(data));
+				Assert.AreEqual(ts.BinString, ByteEx.ConvertToBinaryString(data));
+				Assert.AreEqual(ts.OctString, ByteEx.ConvertToOctalString(data));
 				Assert.AreEqual(ts.DecString, data.ToString("D3", CultureInfo.InvariantCulture));
 				Assert.AreEqual(ts.HexString, data.ToString("X2", CultureInfo.InvariantCulture));
 			}

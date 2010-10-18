@@ -18,18 +18,46 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Runtime.InteropServices;
+using System.Text;
 
-namespace MKY.Win32
+namespace MKY.Windows.Forms
 {
 	/// <summary>
-	/// Extends <see cref=" IntPtr"/>.
+	/// System.Windows.Forms utility methods.
 	/// </summary>
-	public static class XIntPtr
+	/// <remarks>
+	/// This class is intentionally not placed into <c>MKY.Windows.Forms</c> since it's a
+	/// pure utility containing no visual contents.
+	/// </remarks>
+	public static class MenuEx
 	{
-		/// <summary></summary>
-		public static readonly IntPtr Invalid = new IntPtr(-1);
+		/// <summary>
+		/// Convert a menu index into a prependable string, e.g. "1: ".
+		/// Indecies 1 through 10 will be accessible via ALT + nummeric key using the ampersand.
+		/// </summary>
+		public static string PrependIndex(int i, string text)
+		{
+			StringBuilder sb = new StringBuilder();
+
+			if ((i >= 1) && (i <= 9))
+			{
+				sb.Append("&");
+				sb.Append(i);
+			}
+			else if (i == 10)
+			{
+				sb.Append("1&0");
+			}
+			else
+			{
+				sb.Append(i);
+			}
+			sb.Append(": ");
+			sb.Append(text);
+
+			return (sb.ToString());
+		}
+
 	}
 }
 

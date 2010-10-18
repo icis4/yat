@@ -504,8 +504,8 @@ namespace MKY.IO.Serial
 				this.port.PortId = this.settings.PortId;
 
 				SerialCommunicationSettings s = this.settings.Communication;
-				this.port.BaudRate = (MKY.IO.Ports.XBaudRate)s.BaudRate;
-				this.port.DataBits = (MKY.IO.Ports.XDataBits)s.DataBits;
+				this.port.BaudRate = (MKY.IO.Ports.BaudRateEx)s.BaudRate;
+				this.port.DataBits = (MKY.IO.Ports.DataBitsEx)s.DataBits;
 				this.port.Parity = s.Parity;
 				this.port.StopBits = s.StopBits;
 				this.port.Handshake = (XSerialFlowControl)s.FlowControl;

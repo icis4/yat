@@ -160,7 +160,7 @@ namespace YAT.Gui.Forms
 				int pageCount = this.settings_Form.Pages.Count;
 				if (pageCount > 0)
 				{
-					this.selectedPage = XInt32.LimitToBounds(this.startupControl.RequestedPage, 1, pageCount);
+					this.selectedPage = Int32Ex.LimitToBounds(this.startupControl.RequestedPage, 1, pageCount);
 				}
 				else
 				{
@@ -171,7 +171,7 @@ namespace YAT.Gui.Forms
 				// Initially set controls and validate its contents where needed
 				SetControls();
 
-				int selectedCommand = XInt32.LimitToBounds(this.startupControl.RequestedCommand, 1, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage);
+				int selectedCommand = Int32Ex.LimitToBounds(this.startupControl.RequestedCommand, 1, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage);
 				this.predefinedCommandSettingsSetLabels[selectedCommand - 1].Select();
 			}
 		}
@@ -486,7 +486,7 @@ namespace YAT.Gui.Forms
 				 == DialogResult.Yes)
 			{
 				this.settings_Form.Pages.RemoveAt(SelectedPageIndex);
-				this.selectedPage = XInt32.LimitToBounds(this.selectedPage, 1, this.settings_Form.Pages.Count);
+				this.selectedPage = Int32Ex.LimitToBounds(this.selectedPage, 1, this.settings_Form.Pages.Count);
 				SetControls();
 			}
 		}

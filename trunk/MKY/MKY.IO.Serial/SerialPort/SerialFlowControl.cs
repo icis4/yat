@@ -56,7 +56,7 @@ namespace MKY.IO.Serial
 
 	/// <summary></summary>
 	[Serializable]
-	public class XSerialFlowControl : MKY.IO.Ports.XHandshake
+	public class XSerialFlowControl : MKY.IO.Ports.HandshakeEx
 	{
 		#region String Definitions
 
@@ -139,7 +139,7 @@ namespace MKY.IO.Serial
 			}
 			else
 			{
-				return ((XSerialFlowControl)MKY.IO.Ports.XHandshake.Parse(flowControl));
+				return ((XSerialFlowControl)MKY.IO.Ports.HandshakeEx.Parse(flowControl));
 			}
 		}
 

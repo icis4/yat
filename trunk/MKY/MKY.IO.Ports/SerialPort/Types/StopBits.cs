@@ -27,9 +27,9 @@ using MKY.Types;
 namespace MKY.IO.Ports
 {
 	/// <summary>
-	/// Extended enum XStopBits.
+	/// Extended enum StopBitsEx.
 	/// </summary>
-	public class XStopBits : XEnum
+	public class StopBitsEx : EnumEx
 	{
 		#region Double Definitions
 
@@ -41,13 +41,13 @@ namespace MKY.IO.Ports
 		#endregion
 
 		/// <summary>Default is <see cref="StopBits.One"/>.</summary>
-		public XStopBits()
+		public StopBitsEx()
 			: base(StopBits.One)
 		{
 		}
 
 		/// <summary></summary>
-		protected XStopBits(StopBits bits)
+		protected StopBitsEx(StopBits bits)
 			: base(bits)
 		{
 		}
@@ -72,13 +72,13 @@ namespace MKY.IO.Ports
 		#region GetItems
 
 		/// <summary></summary>
-		public static XStopBits[] GetItems()
+		public static StopBitsEx[] GetItems()
 		{
-			List<XStopBits> a = new List<XStopBits>();
-			a.Add(new XStopBits(StopBits.None));
-			a.Add(new XStopBits(StopBits.One));
-			a.Add(new XStopBits(StopBits.OnePointFive));
-			a.Add(new XStopBits(StopBits.Two));
+			List<StopBitsEx> a = new List<StopBitsEx>();
+			a.Add(new StopBitsEx(StopBits.None));
+			a.Add(new StopBitsEx(StopBits.One));
+			a.Add(new StopBitsEx(StopBits.OnePointFive));
+			a.Add(new StopBitsEx(StopBits.Two));
 			return (a.ToArray());
 		}
 
@@ -87,19 +87,19 @@ namespace MKY.IO.Ports
 		#region Parse
 
 		/// <summary></summary>
-		public static XStopBits Parse(string bits)
+		public static StopBitsEx Parse(string bits)
 		{
-			return ((XStopBits)(double.Parse(bits)));
+			return ((StopBitsEx)(double.Parse(bits)));
 		}
 
 		/// <summary></summary>
-		public static bool TryParse(string bits, out XStopBits result)
+		public static bool TryParse(string bits, out StopBitsEx result)
 		{
 			double doubleResult;
 
 			if (double.TryParse(bits, out doubleResult))
 			{
-				result = (XStopBits)doubleResult;
+				result = (StopBitsEx)doubleResult;
 				return (true);
 			}
 			else
@@ -114,19 +114,19 @@ namespace MKY.IO.Ports
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator StopBits(XStopBits bits)
+		public static implicit operator StopBits(StopBitsEx bits)
 		{
 			return ((StopBits)bits.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XStopBits(StopBits bits)
+		public static implicit operator StopBitsEx(StopBits bits)
 		{
-			return (new XStopBits(bits));
+			return (new StopBitsEx(bits));
 		}
 
 		/// <summary></summary>
-		public static implicit operator double(XStopBits bits)
+		public static implicit operator double(StopBitsEx bits)
 		{
 			switch ((StopBits)bits.UnderlyingEnum)
 			{
@@ -139,22 +139,22 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		public static implicit operator XStopBits(double bits)
+		public static implicit operator StopBitsEx(double bits)
 		{
-			if      (bits >= Two_double)          return (new XStopBits(StopBits.Two));
-			else if (bits >= OnePointFive_double) return (new XStopBits(StopBits.OnePointFive));
-			else if (bits >= One_double)          return (new XStopBits(StopBits.One));
-			else                                  return (new XStopBits(StopBits.None));
+			if      (bits >= Two_double)          return (new StopBitsEx(StopBits.Two));
+			else if (bits >= OnePointFive_double) return (new StopBitsEx(StopBits.OnePointFive));
+			else if (bits >= One_double)          return (new StopBitsEx(StopBits.One));
+			else                                  return (new StopBitsEx(StopBits.None));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(XStopBits bits)
+		public static implicit operator string(StopBitsEx bits)
 		{
 			return (bits.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XStopBits(string bits)
+		public static implicit operator StopBitsEx(string bits)
 		{
 			return (Parse(bits));
 		}

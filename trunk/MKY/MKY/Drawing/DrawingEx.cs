@@ -26,7 +26,7 @@ namespace MKY.Drawing
 	/// <summary>
 	/// Drawing utility methods.
 	/// </summary>
-	public static class XDrawing
+	public static class DrawingEx
 	{
 		/// <summary>
 		/// Converts a <see cref="ContentAlignment"/> enum to a <see cref="TextFormatFlags"/> enum.

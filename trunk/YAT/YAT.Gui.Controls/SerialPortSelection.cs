@@ -23,8 +23,8 @@ using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
 
-using MKY.IO.Ports;
 using MKY.Event;
+using MKY.IO.Ports;
 using MKY.Windows.Forms;
 
 using YAT.Settings.Application;

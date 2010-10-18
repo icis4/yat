@@ -192,11 +192,11 @@ namespace MKY.IO.Ports
 		{
 			return
 				(
-				((XBaudRate) this.baudRate) + ", " +
-				((XDataBits) this.dataBits) + ", " +
-				((XParity)   this.parity)   + ", " +
-				((XStopBits) this.stopBits) + ", " +
-				((XHandshake)this.handshake).ToShortString()
+				((BaudRateEx) this.baudRate) + ", " +
+				((DataBitsEx) this.dataBits) + ", " +
+				((ParityEx)   this.parity)   + ", " +
+				((StopBitsEx) this.stopBits) + ", " +
+				((HandshakeEx)this.handshake).ToShortString()
 				);
 		}
 
@@ -209,11 +209,11 @@ namespace MKY.IO.Ports
 
 			string delimiters = "/,;";
 			string[] sa = s.Split(delimiters.ToCharArray());
-			ps.baudRate  = XBaudRate.Parse(sa[0]);
-			ps.dataBits  = XDataBits.Parse(sa[1]);
-			ps.parity    = XParity.Parse(sa[2]);
-			ps.stopBits  = XStopBits.Parse(sa[3]);
-			ps.handshake = XHandshake.Parse(sa[4]);
+			ps.baudRate  = BaudRateEx.Parse(sa[0]);
+			ps.dataBits  = DataBitsEx.Parse(sa[1]);
+			ps.parity    = ParityEx.Parse(sa[2]);
+			ps.stopBits  = StopBitsEx.Parse(sa[3]);
+			ps.handshake = HandshakeEx.Parse(sa[4]);
 
 			return (ps);
 		}
@@ -245,9 +245,9 @@ namespace MKY.IO.Ports
 		{
 			return
 			(
-				((XBaudRate)this.baudRate).ToString() + ", " +
-				((XDataBits)this.dataBits).ToString() + ", " +
-				((XParity)this.parity).ToShortString()
+				((BaudRateEx)this.baudRate).ToString() + ", " +
+				((DataBitsEx)this.dataBits).ToString() + ", " +
+				((ParityEx)this.parity).ToShortString()
 			);
 		}
 
@@ -258,11 +258,11 @@ namespace MKY.IO.Ports
 		{
 			return
 			(
-				((XBaudRate)this.baudRate).ToString() + ", " +
-				((XDataBits)this.dataBits).ToString() + ", " +
-				((XParity)this.parity).ToShortString() + ", " +
-				((XStopBits)this.stopBits).ToString() + ", " +
-				((XHandshake)this.handshake).ToShortString()
+				((BaudRateEx)this.baudRate).ToString() + ", " +
+				((DataBitsEx)this.dataBits).ToString() + ", " +
+				((ParityEx)this.parity).ToShortString() + ", " +
+				((StopBitsEx)this.stopBits).ToString() + ", " +
+				((HandshakeEx)this.handshake).ToShortString()
 			);
 		}
 

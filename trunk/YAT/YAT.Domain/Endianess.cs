@@ -46,7 +46,7 @@ namespace YAT.Domain
 	/// <summary>
 	/// Extended enum XEndianess.
 	/// </summary>
-	public class XEndianess : XEnum
+	public class XEndianess : EnumEx
 	{
 		#region String Definitions
 

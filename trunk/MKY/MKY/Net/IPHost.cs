@@ -50,7 +50,7 @@ namespace MKY.Net
 	/// <summary>
 	/// Extended enum XIPHost.
 	/// </summary>
-	public class XIPHost : XEnum
+	public class IPHost : EnumEx
 	{
 		#region String Definitions
 
@@ -64,19 +64,19 @@ namespace MKY.Net
 		private IPAddress otherAddress = IPAddress.None;
 
 		/// <summary>Default is <see cref="IPHostType.Localhost"/>.</summary>
-		public XIPHost()
+		public IPHost()
 			: base(IPHostType.Localhost)
 		{
 		}
 
 		/// <summary></summary>
-		public XIPHost(IPHostType hostType)
+		public IPHost(IPHostType hostType)
 			: base(hostType)
 		{
 		}
 
 		/// <summary></summary>
-		public XIPHost(IPAddress address)
+		public IPHost(IPAddress address)
 		{
 			if      (address == IPAddress.Loopback)     { SetUnderlyingEnum(IPHostType.Localhost);     this.otherAddress = IPAddress.None; }
 			else if (address == IPAddress.Loopback)     { SetUnderlyingEnum(IPHostType.IPv4Localhost); this.otherAddress = IPAddress.None; }
@@ -124,12 +124,12 @@ namespace MKY.Net
 		#region GetItems
 
 		/// <summary></summary>
-		public static XIPHost[] GetItems()
+		public static IPHost[] GetItems()
 		{
-			List<XIPHost> a = new List<XIPHost>();
-			a.Add(new XIPHost(IPHostType.Localhost));
-			a.Add(new XIPHost(IPHostType.IPv4Localhost));
-			a.Add(new XIPHost(IPHostType.IPv6Localhost));
+			List<IPHost> a = new List<IPHost>();
+			a.Add(new IPHost(IPHostType.Localhost));
+			a.Add(new IPHost(IPHostType.IPv4Localhost));
+			a.Add(new IPHost(IPHostType.IPv6Localhost));
 			return (a.ToArray());
 		}
 
@@ -138,9 +138,9 @@ namespace MKY.Net
 		#region Parse
 
 		/// <summary></summary>
-		public static XIPHost Parse(string host)
+		public static IPHost Parse(string host)
 		{
-			XIPHost result;
+			IPHost result;
 
 			if (TryParse(host, out result))
 				return (result);
@@ -149,29 +149,29 @@ namespace MKY.Net
 		}
 
 		/// <summary></summary>
-		public static bool TryParse(string host, out XIPHost result)
+		public static bool TryParse(string host, out IPHost result)
 		{
 			IPAddress address;
 
 			if     ((string.Compare(host, Localhost_string, StringComparison.OrdinalIgnoreCase) == 0) ||
 			        (string.Compare(host, Localhost_stringNice, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XIPHost(IPHostType.Localhost);
+				result = new IPHost(IPHostType.Localhost);
 				return (true);
 			}
 			else if (string.Compare(host, IPv4Localhost_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XIPHost(IPHostType.IPv4Localhost);
+				result = new IPHost(IPHostType.IPv4Localhost);
 				return (true);
 			}
 			else if (string.Compare(host, IPv6Localhost_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XIPHost(IPHostType.IPv6Localhost);
+				result = new IPHost(IPHostType.IPv6Localhost);
 				return (true);
 			}
 			else if (IPAddress.TryParse(host, out address))
 			{
-				result = new XIPHost(address);
+				result = new IPHost(address);
 				return (true);
 			}
 			else
@@ -182,14 +182,14 @@ namespace MKY.Net
 		}
 
 		/// <summary></summary>
-		public static XIPHost ParseFromIPAddress(IPAddress address)
+		public static IPHost ParseFromIPAddress(IPAddress address)
 		{
 			if (address == IPAddress.Loopback)
-				return (new XIPHost(IPHostType.Localhost));
+				return (new IPHost(IPHostType.Localhost));
 			else if (address == IPAddress.IPv6Loopback)
-				return (new XIPHost(IPHostType.IPv6Localhost));
+				return (new IPHost(IPHostType.IPv6Localhost));
 			else
-				return (new XIPHost(address));
+				return (new IPHost(address));
 		}
 
 		#endregion
@@ -197,37 +197,37 @@ namespace MKY.Net
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator IPHostType(XIPHost host)
+		public static implicit operator IPHostType(IPHost host)
 		{
 			return ((IPHostType)host.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XIPHost(IPHostType hostType)
+		public static implicit operator IPHost(IPHostType hostType)
 		{
-			return (new XIPHost(hostType));
+			return (new IPHost(hostType));
 		}
 
 		/// <summary></summary>
-		public static implicit operator IPAddress(XIPHost address)
+		public static implicit operator IPAddress(IPHost address)
 		{
 			return (address.IPAddress);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XIPHost(IPAddress address)
+		public static implicit operator IPHost(IPAddress address)
 		{
 			return (ParseFromIPAddress(address));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(XIPHost host)
+		public static implicit operator string(IPHost host)
 		{
 			return (host.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XIPHost(string host)
+		public static implicit operator IPHost(string host)
 		{
 			return (Parse(host));
 		}

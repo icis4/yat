@@ -52,7 +52,7 @@ namespace MKY.Net
 	/// <summary>
 	/// Extended enum IPNetworkInterface.
 	/// </summary>
-	public class IPNetworkInterface : XEnum
+	public class IPNetworkInterface : EnumEx
 	{
 		#region String Definitions
 

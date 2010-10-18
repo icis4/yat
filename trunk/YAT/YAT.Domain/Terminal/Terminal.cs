@@ -495,16 +495,16 @@ namespace YAT.Domain
 				case Radix.Bin:
 				{
 					if (this.terminalSettings.Display.ShowRadix)
-						return (XByte.ConvertToBinaryString(b) + "b");
+						return (ByteEx.ConvertToBinaryString(b) + "b");
 					else
-						return (XByte.ConvertToBinaryString(b));
+						return (ByteEx.ConvertToBinaryString(b));
 				}
 				case Radix.Oct:
 				{
 					if (this.terminalSettings.Display.ShowRadix)
-						return (XByte.ConvertToOctalString(b) + "o");
+						return (ByteEx.ConvertToOctalString(b) + "o");
 					else
-						return (XByte.ConvertToOctalString(b));
+						return (ByteEx.ConvertToOctalString(b));
 				}
 				case Radix.Dec:
 				{

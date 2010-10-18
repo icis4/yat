@@ -34,7 +34,7 @@ namespace YAT.Domain.Settings
 		public static readonly string DefaultEol = (string)XEol.Parse(Environment.NewLine);
 
 		/// <summary></summary>
-		public static readonly int DefaultEncoding = (XEncoding)(System.Text.Encoding.Default);
+		public static readonly int DefaultEncoding = (EncodingEx)(System.Text.Encoding.Default);
 
 		private bool              separateTxRxEol;
 		private string            txEol;

@@ -80,7 +80,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		[TearDown]
 		public virtual void TearDown()
 		{
-			MKY.Test.XPath.CleanTempPath(this);
+			Temp.CleanTempPath(this);
 		}
 
 		#endregion
@@ -132,7 +132,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		[Test, TestCaseSource(typeof(SerialPortIdTestData), "TestCases")]
 		public virtual void TestSerialization(int standardPortNumber, string portName, string[] portDescriptions)
 		{
-			string filePath = MKY.Test.XPath.MakeTempFilePath(this, ".xml");
+			string filePath = Temp.MakeTempFilePath(this, ".xml");
 			SerialPortId id = new SerialPortId(portName);
 			SerialPortId idDeserialized = null;
 
@@ -147,7 +147,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			}
 			catch (Exception ex)
 			{
-				XConsole.WriteException(typeof(SerialPortIdTest), ex);
+				ConsoleEx.WriteException(typeof(SerialPortIdTest), ex);
 
 				// Attention: The following call throws an exception, code below it won't be executed.
 				Assert.Fail("XML serialize error: " + ex.Message);
@@ -164,7 +164,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			}
 			catch (Exception ex)
 			{
-				XConsole.WriteException(typeof(SerialPortIdTest), ex);
+				ConsoleEx.WriteException(typeof(SerialPortIdTest), ex);
 
 				// Attention: The following call throws an exception, code below it won't be executed.
 				Assert.Fail("XML deserialize error: " + ex.Message);

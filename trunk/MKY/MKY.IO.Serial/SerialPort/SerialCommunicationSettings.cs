@@ -210,9 +210,9 @@ namespace MKY.IO.Serial
 			return
 			(
 				this.baudRate                           + ", " +
-				((MKY.IO.Ports.XDataBits)this.dataBits) + ", " +
-				((MKY.IO.Ports.XParity)  this.parity)   + ", " +
-				((MKY.IO.Ports.XStopBits)this.stopBits) + ", " +
+				((MKY.IO.Ports.DataBitsEx)this.dataBits) + ", " +
+				((MKY.IO.Ports.ParityEx)  this.parity)   + ", " +
+				((MKY.IO.Ports.StopBitsEx)this.stopBits) + ", " +
 				((XSerialFlowControl)this.flowControl).ToShortString()
 			);
 		}
@@ -225,8 +225,8 @@ namespace MKY.IO.Serial
 			return
 			(
 				this.baudRate                           + ", " +
-				((MKY.IO.Ports.XDataBits)this.dataBits) + ", " +
-				((MKY.IO.Ports.XParity)this.parity).ToShortString()
+				((MKY.IO.Ports.DataBitsEx)this.dataBits) + ", " +
+				((MKY.IO.Ports.ParityEx)this.parity).ToShortString()
 			);
 		}
 
@@ -236,9 +236,9 @@ namespace MKY.IO.Serial
 			return
 			(
 				this.baudRate                           + ", " +
-				((MKY.IO.Ports.XDataBits)this.dataBits) + ", " +
-				((MKY.IO.Ports.XParity)this.parity)     + ", " +
-				((MKY.IO.Ports.XStopBits)this.stopBits) + ", " +
+				((MKY.IO.Ports.DataBitsEx)this.dataBits) + ", " +
+				((MKY.IO.Ports.ParityEx)this.parity)     + ", " +
+				((MKY.IO.Ports.StopBitsEx)this.stopBits) + ", " +
 				((XSerialFlowControl)this.flowControl)
 			);
 		}

@@ -266,8 +266,8 @@ namespace YAT.Model.Test
 					}
 					else
 					{
-						string strA = XArray.ElementsToString(lineA.ToArray());
-						string strB = XArray.ElementsToString(lineB.ToArray());
+						string strA = ArrayEx.ElementsToString(lineA.ToArray());
+						string strB = ArrayEx.ElementsToString(lineB.ToArray());
 
 						Console.Write
 							(
@@ -294,9 +294,9 @@ namespace YAT.Model.Test
 				StringBuilder sbB = new StringBuilder();
 
 				foreach (Domain.DisplayLine lineA in linesA)
-					sbA.Append(XArray.ElementsToString(lineA.ToArray()));
+					sbA.Append(ArrayEx.ElementsToString(lineA.ToArray()));
 				foreach (Domain.DisplayLine lineB in linesB)
-					sbB.Append(XArray.ElementsToString(lineB.ToArray()));
+					sbB.Append(ArrayEx.ElementsToString(lineB.ToArray()));
 
 				Console.Write
 					(

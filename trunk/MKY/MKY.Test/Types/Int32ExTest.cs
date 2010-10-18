@@ -26,7 +26,7 @@ namespace MKY.Test.Types
 {
 	/// <summary></summary>
 	[TestFixture]
-	public class XInt32Test
+	public class Int32ExTest
 	{
 		#region Types
 		//==========================================================================================
@@ -108,7 +108,7 @@ namespace MKY.Test.Types
 		{
 			foreach (TestSet ts in this.testSets)
 			{
-				int limited = XInt32.LimitToBounds(ts.Value, ts.Min, ts.Max);
+				int limited = Int32Ex.LimitToBounds(ts.Value, ts.Min, ts.Max);
 
 				if (ts.ValueMinimized)
 					Assert.AreEqual(ts.Min, limited);

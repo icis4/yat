@@ -36,7 +36,7 @@ namespace YAT.Model.Settings
 
 		private MKY.IO.Ports.SerialPortId serialPortId;
 
-		private XIPHost socketRemoteHost;
+		private IPHost socketRemoteHost;
 		private int socketRemotePort;
 
 		private IPNetworkInterface socketLocalInterface;
@@ -165,7 +165,7 @@ namespace YAT.Model.Settings
 
 		/// <summary></summary>
 		[XmlElement("SocketRemoteHost")]
-		public virtual XIPHost SocketRemoteHost
+		public virtual IPHost SocketRemoteHost
 		{
 			get { return (this.socketRemoteHost); }
 			set

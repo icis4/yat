@@ -105,7 +105,7 @@ namespace YAT.Gui.Forms
 		private void comboBox_Encoding_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Encoding = (XEncoding)comboBox_Encoding.SelectedItem;
+				this.settings_Form.Encoding = (EncodingEx)comboBox_Encoding.SelectedItem;
 		}
 
 		private void checkBox_SeparateTxRxEol_CheckedChanged(object sender, EventArgs e)
@@ -394,7 +394,7 @@ namespace YAT.Gui.Forms
 			comboBox_RxEol.Items.AddRange(Domain.XEol.GetItems());
 
 			comboBox_Encoding.Items.Clear();
-			comboBox_Encoding.Items.AddRange(XEncoding.GetItems());
+			comboBox_Encoding.Items.AddRange(EncodingEx.GetItems());
 
 			this.isSettingControls = false;
 		}
@@ -404,7 +404,7 @@ namespace YAT.Gui.Forms
 			this.isSettingControls = true;
 
 			// Encoding.
-			comboBox_Encoding.SelectedItem = (XEncoding)this.settings_Form.Encoding;
+			comboBox_Encoding.SelectedItem = (EncodingEx)this.settings_Form.Encoding;
 
 			// EOL.
 			bool separateEol = this.settings_Form.SeparateTxRxEol;

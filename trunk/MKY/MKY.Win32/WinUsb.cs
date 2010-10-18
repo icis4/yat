@@ -179,7 +179,7 @@ namespace MKY.Win32
 			}
 			catch (Exception ex)
 			{
-				XDebug.WriteException(typeof(WinUsb), ex);
+				DebugEx.WriteException(typeof(WinUsb), ex);
 				throw;
 			}
 		}
@@ -208,7 +208,7 @@ namespace MKY.Win32
 			}
 			catch (Exception ex)
 			{
-				XDebug.WriteException(typeof(WinUsb), ex);
+				DebugEx.WriteException(typeof(WinUsb), ex);
 				throw;
 			}
 		}
@@ -240,7 +240,7 @@ namespace MKY.Win32
 			}
 			catch (Exception ex)
 			{
-				XDebug.WriteException(typeof(WinUsb), ex);
+				DebugEx.WriteException(typeof(WinUsb), ex);
 				throw;
 			}
 		}

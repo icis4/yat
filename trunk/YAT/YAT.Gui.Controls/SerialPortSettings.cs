@@ -268,7 +268,7 @@ namespace YAT.Gui.Controls
 		private void comboBox_BaudRate_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				BaudRate = (MKY.IO.Ports.XBaudRate)comboBox_BaudRate.SelectedItem;
+				BaudRate = (MKY.IO.Ports.BaudRateEx)comboBox_BaudRate.SelectedItem;
 		}
 
 		private void comboBox_BaudRate_Validating(object sender, CancelEventArgs e)
@@ -282,7 +282,7 @@ namespace YAT.Gui.Controls
 				int intBaudRate;
 				if (int.TryParse(comboBox_BaudRate.Text, out intBaudRate) && (intBaudRate > 0))
 				{
-					BaudRate = (MKY.IO.Ports.XBaudRate)intBaudRate;
+					BaudRate = (MKY.IO.Ports.BaudRateEx)intBaudRate;
 				}
 				else
 				{
@@ -302,19 +302,19 @@ namespace YAT.Gui.Controls
 		private void comboBox_DataBits_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				DataBits = (MKY.IO.Ports.XDataBits)comboBox_DataBits.SelectedItem;
+				DataBits = (MKY.IO.Ports.DataBitsEx)comboBox_DataBits.SelectedItem;
 		}
 
 		private void comboBox_Parity_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				Parity = (MKY.IO.Ports.XParity)comboBox_Parity.SelectedItem;
+				Parity = (MKY.IO.Ports.ParityEx)comboBox_Parity.SelectedItem;
 		}
 
 		private void comboBox_StopBits_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				StopBits = (MKY.IO.Ports.XStopBits)comboBox_StopBits.SelectedItem;
+				StopBits = (MKY.IO.Ports.StopBitsEx)comboBox_StopBits.SelectedItem;
 		}
 
 		private void comboBox_FlowControl_SelectedIndexChanged(object sender, EventArgs e)
@@ -370,10 +370,10 @@ namespace YAT.Gui.Controls
 		{
 			this.isSettingControls = true;
 
-			comboBox_BaudRate.Items.AddRange(MKY.IO.Ports.XBaudRate.GetItems());
-			comboBox_DataBits.Items.AddRange(MKY.IO.Ports.XDataBits.GetItems());
-			comboBox_Parity.Items.AddRange(MKY.IO.Ports.XParity.GetItems());
-			comboBox_StopBits.Items.AddRange(MKY.IO.Ports.XStopBits.GetItems());
+			comboBox_BaudRate.Items.AddRange(MKY.IO.Ports.BaudRateEx.GetItems());
+			comboBox_DataBits.Items.AddRange(MKY.IO.Ports.DataBitsEx.GetItems());
+			comboBox_Parity.Items.AddRange(MKY.IO.Ports.ParityEx.GetItems());
+			comboBox_StopBits.Items.AddRange(MKY.IO.Ports.StopBitsEx.GetItems());
 			comboBox_FlowControl.Items.AddRange(MKY.IO.Serial.XSerialFlowControl.GetItems());
 
 			this.isSettingControls = false;
@@ -383,7 +383,7 @@ namespace YAT.Gui.Controls
 		{
 			this.isSettingControls = true;
 
-			MKY.IO.Ports.XBaudRate baudRate = (MKY.IO.Ports.XBaudRate)this.baudRate;
+			MKY.IO.Ports.BaudRateEx baudRate = (MKY.IO.Ports.BaudRateEx)this.baudRate;
 			if (Enabled && (baudRate != MKY.IO.Ports.BaudRate.UserDefined))
 				comboBox_BaudRate.SelectedItem = baudRate;
 			else if (Enabled)
@@ -393,9 +393,9 @@ namespace YAT.Gui.Controls
 
 			if (Enabled)
 			{
-				comboBox_DataBits.SelectedItem    = (MKY.IO.Ports.XDataBits)this.dataBits;
-				comboBox_Parity.SelectedItem      = (MKY.IO.Ports.XParity)this.parity;
-				comboBox_StopBits.SelectedItem    = (MKY.IO.Ports.XStopBits)this.stopBits;
+				comboBox_DataBits.SelectedItem    = (MKY.IO.Ports.DataBitsEx)this.dataBits;
+				comboBox_Parity.SelectedItem      = (MKY.IO.Ports.ParityEx)this.parity;
+				comboBox_StopBits.SelectedItem    = (MKY.IO.Ports.StopBitsEx)this.stopBits;
 				comboBox_FlowControl.SelectedItem = (MKY.IO.Serial.XSerialFlowControl)this.flowControl;
 			}
 			else

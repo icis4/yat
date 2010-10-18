@@ -26,21 +26,21 @@ using System.Reflection;
 namespace MKY.Types
 {
 	/// <summary>
-	/// Extended enumeration type which offers more features that a normal enum. <see cref="XEnum"/>
-	/// uses an underlying enum to distinguish objects. Provide an enum, derive from <see cref="XEnum"/>,
-	/// define new name/value methods if necessary and implement the conversion methods to get a
-	/// fully functional <see cref="XEnum"/>.
+	/// Extended enumeration type which offers more features that a normal enum.
+	/// <see cref="EnumEx"/> uses an underlying enum to distinguish objects. Provide an enum,
+	/// derive from <see cref="EnumEx"/>, define new name/value methods if necessary and implement
+	/// the conversion methods to get a fully functional <see cref="EnumEx"/>.
 	/// </summary>
 	/// <remarks>
-	/// Using a normal enum in a client class has the big advantage that code designers and features
-	/// like IntelliSense can use their built-in enum support.
-	/// <see cref="XEnum"/> based types are not serializable due to the fact that <see cref="Enum"/>
-	/// isn't serializable.
+	/// Using a normal enum in a client class has the big advantage that code designers and
+	/// features like IntelliSense can use their built-in enum support.
+	/// <see cref="EnumEx"/> based types are not serializable due to the fact that
+	/// <see cref="Enum"/> isn't serializable.
 	/// </remarks>
 	/// <example>
 	/// 
 	/// -------------------------------------------------------------------------------------------
-	/// Creating a concrete XEnum including implicit conversion operators
+	/// Creating a concrete EnumEx including implicit conversion operators
 	/// -------------------------------------------------------------------------------------------
 	/// 
 	/// <code>
@@ -51,14 +51,14 @@ namespace MKY.Types
 	///     Slow = 3
 	/// }
 	///
-	/// public class XMode : XEnum
+	/// public class ModeEx : EnumEx
 	/// {
 	///     // Default is "Mode.Normal"
-	///     public XMode() : base(Mode.Normal)
+	///     public ModeEx() : base(Mode.Normal)
 	///     {
 	///     }
 	///
-	///     protected XMode(Mode mode) : base(mode)
+	///     protected ModeEx(Mode mode) : base(mode)
 	///     {
 	///     }
 	///
@@ -67,27 +67,27 @@ namespace MKY.Types
 	///         return (UnderlyingEnum.GetHashCode().ToString());
 	///     }
 	///
-	///     public static XMode[] GetItems()
+	///     public static ModeEx[] GetItems()
 	///     {
-	///         List[XMode] a = new List[XMode](); // [] must be replaced be angle brackets
-	///         a.Add(new XMode(Mode.Fast));
-	///         a.Add(new XMode(Mode.Normal));
-	///         a.Add(new XMode(Mode.Slow));
+	///         List[ModeEx] a = new List[ModeEx](); // [] must be replaced be angle brackets
+	///         a.Add(new ModeEx(Mode.Fast));
+	///         a.Add(new ModeEx(Mode.Normal));
+	///         a.Add(new ModeEx(Mode.Slow));
 	///         return (a.ToArray());
 	///     }
 	///
-	///     public static XMode Parse(string mode)
+	///     public static ModeEx Parse(string mode)
 	///     {
-	///         return ((XMode)int.Parse(mode));
+	///         return ((ModeEx)int.Parse(mode));
 	///     }
 	///
-	///     public static bool TryParse(string mode, out XMode result)
+	///     public static bool TryParse(string mode, out ModeEx result)
 	///     {
 	///         int intResult;
 	///
 	///         if (int.TryParse(mode, out intResult))
 	///         {
-	///             result = (XMode)intResult;
+	///             result = (ModeEx)intResult;
 	///             return (true);
 	///         }
 	///         else
@@ -97,34 +97,34 @@ namespace MKY.Types
 	///         }
 	///     }
 	///
-	///     public static implicit operator Mode(XMode mode)
+	///     public static implicit operator Mode(ModeEx mode)
 	///     {
 	///         return ((Mode)mode.UnderlyingEnum);
 	///     }
 	///
-	///     public static implicit operator XMode(Mode mode)
+	///     public static implicit operator ModeEx(Mode mode)
 	///     {
-	///         return (new XMode(mode));
+	///         return (new ModeEx(mode));
 	///     }
 	///
-	///     public static implicit operator int(XMode mode)
+	///     public static implicit operator int(ModeEx mode)
 	///     {
 	///         return (mode.GetHashCode());
 	///     }
 	///
-	///     public static implicit operator XMode(int mode)
+	///     public static implicit operator ModeEx(int mode)
 	///     {
-	///         if      (mode >= (int)Mode.Slow)   return (new XMode(Mode.Slow));
-	///         else if (mode >= (int)Mode.Normal) return (new XMode(Mode.Normal));
-	///         else                               return (new XMode(Mode.Fast));
+	///         if      (mode >= (int)Mode.Slow)   return (new ModeEx(Mode.Slow));
+	///         else if (mode >= (int)Mode.Normal) return (new ModeEx(Mode.Normal));
+	///         else                               return (new ModeEx(Mode.Fast));
 	///     }
 	///
-	///     public static implicit operator string(XMode mode)
+	///     public static implicit operator string(ModeEx mode)
 	///     {
 	///         return (mode.ToString());
 	///     }
 	///
-	///     public static implicit operator XMode(string mode)
+	///     public static implicit operator ModeEx(string mode)
 	///     {
 	///        return (Parse(mode));
 	///     }
@@ -132,11 +132,11 @@ namespace MKY.Types
 	/// </code>
 	///
 	/// -------------------------------------------
-	/// Adding XEnum design time support to a class
+	/// Adding ModeEx design time support to a class
 	/// -------------------------------------------
 	/// 
 	/// <code>
-	/// public class XEnumClient
+	/// public class EnumExClient
 	/// {
 	///     private Mode mode = Mode.Fast;         // Mode is a normal enum
 	///     ...
@@ -151,7 +151,7 @@ namespace MKY.Types
 	/// </example>
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "Class actually implements an enum, but not using inheritance.")]
 	[Serializable]
-	public abstract class XEnum : IEquatable<XEnum>, IComparable, ICloneable
+	public abstract class EnumEx : IEquatable<EnumEx>, IComparable, ICloneable
 	{
 		/// <summary>
 		/// Underlying enum.
@@ -161,14 +161,14 @@ namespace MKY.Types
 		/// <summary>
 		/// Constructor that allows to specify the underlying enum within the constructor of the deriving class.
 		/// </summary>
-		protected XEnum()
+		protected EnumEx()
 		{
 		}
 
 		/// <summary>
 		/// XEnum requires an underlying enum to be constructed.
 		/// </summary>
-		protected XEnum(Enum underlyingEnum)
+		protected EnumEx(Enum underlyingEnum)
 		{
 			SetUnderlyingEnum(underlyingEnum);
 		}
@@ -199,13 +199,13 @@ namespace MKY.Types
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as XEnum));
+			return (Equals(obj as EnumEx));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(XEnum other)
+		public bool Equals(EnumEx other)
 		{
 			if (ReferenceEquals(other, null))
 				return (false);
@@ -256,7 +256,7 @@ namespace MKY.Types
 		/// </summary>
 		public virtual int CompareTo(object obj)
 		{
-			XEnum other = obj as XEnum;
+			EnumEx other = obj as EnumEx;
 			if (other != null)
 				return (UnderlyingEnum.CompareTo(other.UnderlyingEnum));
 			else
@@ -281,7 +281,7 @@ namespace MKY.Types
 
 			Enum[] ea = new Enum[1];
 			ea[0] = UnderlyingEnum;
-			return ((XEnum)ci.Invoke(ea));
+			return ((EnumEx)ci.Invoke(ea));
 		}
 
 		#endregion
@@ -433,7 +433,7 @@ namespace MKY.Types
 		/// value is a name, but not one of the named constants defined for the
 		/// enumeration.
 		/// </exception>
-		public static XEnum Parse(System.Type xEnumType, string value)
+		public static EnumEx Parse(System.Type xEnumType, string value)
 		{
 			return (Parse(xEnumType, value, true));
 		}
@@ -457,7 +457,7 @@ namespace MKY.Types
 		/// value is a name, but not one of the named constants defined for the
 		/// enumeration.
 		/// </exception>
-		public static XEnum Parse(System.Type xEnumType, string value, bool ignoreCase)
+		public static EnumEx Parse(System.Type xEnumType, string value, bool ignoreCase)
 		{
 			System.Type underlyingEnumType = XEnumTypeToUnderlyingEnumType(xEnumType);
 			Enum underlyingEnum = (Enum)Enum.Parse(underlyingEnumType, value, ignoreCase);
@@ -468,7 +468,7 @@ namespace MKY.Types
 
 			Enum[] ea = new Enum[1];
 			ea[0] = underlyingEnum;
-			return ((XEnum)ci.Invoke(ea));
+			return ((EnumEx)ci.Invoke(ea));
 		}
 
 		/// <summary>
@@ -505,9 +505,9 @@ namespace MKY.Types
 		public static int Compare(object objA, object objB)
 		{
 			if (ReferenceEquals(objA, objB)) return (0);
-			if (objA is XEnum)
+			if (objA is EnumEx)
 			{
-				XEnum casted = (XEnum)objA;
+				EnumEx casted = (EnumEx)objA;
 				return (casted.CompareTo(objB));
 			}
 			return (-1);
@@ -520,7 +520,7 @@ namespace MKY.Types
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(XEnum lhs, XEnum rhs)
+		public static bool operator ==(EnumEx lhs, EnumEx rhs)
 		{
 			// Base reference type implementation of operator ==.
 			// See MKY.Test.EqualityTest for details.
@@ -538,31 +538,31 @@ namespace MKY.Types
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(XEnum lhs, XEnum rhs)
+		public static bool operator !=(EnumEx lhs, EnumEx rhs)
 		{
 			return (!(lhs == rhs));
 		}
 
 		/// <summary></summary>
-		public static bool operator <(XEnum lhs, XEnum rhs)
+		public static bool operator <(EnumEx lhs, EnumEx rhs)
 		{
 			return (Compare(lhs, rhs) < 0);
 		}
 
 		/// <summary></summary>
-		public static bool operator >(XEnum lhs, XEnum rhs)
+		public static bool operator >(EnumEx lhs, EnumEx rhs)
 		{
 			return (Compare(lhs, rhs) > 0);
 		}
 
 		/// <summary></summary>
-		public static bool operator <=(XEnum lhs, XEnum rhs)
+		public static bool operator <=(EnumEx lhs, EnumEx rhs)
 		{
 			return (Compare(lhs, rhs) <= 0);
 		}
 
 		/// <summary></summary>
-		public static bool operator >=(XEnum lhs, XEnum rhs)
+		public static bool operator >=(EnumEx lhs, EnumEx rhs)
 		{
 			return (Compare(lhs, rhs) >= 0);
 		}

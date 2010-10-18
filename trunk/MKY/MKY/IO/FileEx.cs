@@ -26,7 +26,7 @@ namespace MKY.IO
 	/// <summary>
 	/// Utility methods for <see cref="System.IO.File"/>.
 	/// </summary>
-	public static class XFile
+	public static class FileEx
 	{
 		/// <summary>
 		/// Default extension for backup files.

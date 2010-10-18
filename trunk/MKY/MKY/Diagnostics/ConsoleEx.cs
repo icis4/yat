@@ -26,28 +26,16 @@ using System.Windows.Forms;
 namespace MKY.Diagnostics
 {
 	/// <summary>
-	/// Provides static methods to write diagnostics output to <see cref="System.Diagnostics.Trace"/>.
+	/// Provides static methods to write diagnostics output to <see cref="System.Console"/>.
 	/// </summary>
-	/// <remarks>
-	/// Implementation gets optimized on non-trace by not creating the trace wrapper.
-	/// </remarks>
-	/// <remarks>
-	/// There also are <see cref="System.Diagnostics.Debug"/> variants of these methods available
-	/// in <see cref="XDebug"/>.
-	/// Unfortunately, the Debug and Trace objects do not provide access to their underlying
-	/// output writers. Therefore, the two implementations use writer wrappers.
-	/// </remarks>
-	public static class XTrace
+	public static class ConsoleEx
 	{
-		#if (TRACE)
-			private static TraceWrapper traceWrapper = new TraceWrapper();
-		#endif
+		private static ConsoleWrapper consoleWrapper = new ConsoleWrapper();
 
 		/// <summary>
 		/// Writes source, type, message and stack of the given exception and its inner exceptions
-		/// to <see cref="System.Diagnostics.Trace"/>.
+		/// to <see cref="System.Console"/>.
 		/// </summary>
-		[Conditional("TRACE")]
 		public static void WriteException(object obj, Exception ex)
 		{
 			WriteException(obj, ex, "");
@@ -55,83 +43,67 @@ namespace MKY.Diagnostics
 
 		/// <summary>
 		/// Writes source, type, message and stack of the given exception and its inner exceptions
-		/// to <see cref="System.Diagnostics.Trace"/>.
+		/// to <see cref="System.Console"/>.
 		/// </summary>
-		[Conditional("TRACE")]
 		public static void WriteException(object obj, Exception ex, string additionalMessage)
 		{
-		#if (TRACE)
-			DiagnosticsWriterOutput.WriteException(traceWrapper, obj, ex, additionalMessage);
-		#endif
+			DiagnosticsWriterOutput.WriteException(consoleWrapper, obj, ex, additionalMessage);
 		}
 
 		/// <summary>
-		/// Writes a <see cref="StackTrace"/> to <see cref="System.Diagnostics.Trace"/>.
+		/// Writes a <see cref="StackTrace"/> to <see cref="System.Console"/>.
 		/// </summary>
-		[Conditional("TRACE")]
 		public static void WriteStack(object obj)
 		{
 			WriteStack(obj, new StackTrace(), "");
 		}
 
 		/// <summary>
-		/// Writes a <see cref="StackTrace"/> to <see cref="System.Diagnostics.Trace"/>.
+		/// Writes a <see cref="StackTrace"/> to <see cref="System.Console"/>.
 		/// </summary>
-		[Conditional("TRACE")]
 		public static void WriteStack(object obj, StackTrace st)
 		{
 			WriteStack(obj, st, "");
 		}
 
 		/// <summary>
-		/// Writes a <see cref="StackTrace"/> to <see cref="System.Diagnostics.Trace"/>.
+		/// Writes a <see cref="StackTrace"/> to <see cref="System.Console"/>.
 		/// </summary>
-		[Conditional("TRACE")]
 		public static void WriteStack(object obj, StackTrace st, string additionalMessage)
 		{
-		#if (TRACE)
-			DiagnosticsWriterOutput.WriteStack(traceWrapper, obj, st, additionalMessage);
-		#endif
+			DiagnosticsWriterOutput.WriteStack(consoleWrapper, obj, st, additionalMessage);
 		}
 
 		/// <summary>
-		/// Writes the properties of a <see cref="Message"/> to <see cref="System.Diagnostics.Trace"/>.
+		/// Writes the properties of a <see cref="Message"/> to <see cref="System.Console"/>.
 		/// </summary>
-		[Conditional("TRACE")]
 		public static void WriteWindowsFormsMessage(object obj, Message m)
 		{
 			WriteWindowsFormsMessage(obj, m, "");
 		}
 
 		/// <summary>
-		/// Writes the properties of a <see cref="Message"/> to <see cref="System.Diagnostics.Trace"/>.
+		/// Writes the properties of a <see cref="Message"/> to <see cref="System.Console"/>.
 		/// </summary>
-		[Conditional("TRACE")]
 		public static void WriteWindowsFormsMessage(object obj, Message m, string additionalMessage)
 		{
-		#if (TRACE)
-			DiagnosticsWriterOutput.WriteWindowsFormsMessage(traceWrapper, obj, m, additionalMessage);
-		#endif
+			DiagnosticsWriterOutput.WriteWindowsFormsMessage(consoleWrapper, obj, m, additionalMessage);
 		}
 
 		/// <summary>
-		/// Writes the properties of a <see cref="FileStream"/> to <see cref="System.Diagnostics.Trace"/>.
+		/// Writes the properties of a <see cref="FileStream"/> to <see cref="System.Console"/>.
 		/// </summary>
-		[Conditional("TRACE")]
 		public static void WriteFileStream(object obj, FileStream fs)
 		{
 			WriteFileStream(obj, fs, "");
 		}
 
 		/// <summary>
-		/// Writes the properties of a <see cref="FileStream"/> to <see cref="System.Diagnostics.Trace"/>.
+		/// Writes the properties of a <see cref="FileStream"/> to <see cref="System.Console"/>.
 		/// </summary>
-		[Conditional("TRACE")]
 		public static void WriteFileStream(object obj, FileStream fs, string additionalMessage)
 		{
-		#if (TRACE)
-			DiagnosticsWriterOutput.WriteFileStream(traceWrapper, obj, fs, additionalMessage);
-		#endif
+			DiagnosticsWriterOutput.WriteFileStream(consoleWrapper, obj, fs, additionalMessage);
 		}
 	}
 }

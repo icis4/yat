@@ -50,7 +50,7 @@ namespace YAT.Domain.Parser
 	/// <summary>
 	/// Extended enum XKeyword.
 	/// </summary>
-	public class XKeyword : XEnum
+	public class XKeyword : EnumEx
 	{
 		#region String Definitions
 

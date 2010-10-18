@@ -30,7 +30,7 @@ namespace MKY.Test.Types
 {
 	/// <summary></summary>
 	[TestFixture]
-	public class XUInt64Test
+	public class UInt64ExTest
 	{
 		#region Types
 		//==========================================================================================
@@ -153,8 +153,8 @@ namespace MKY.Test.Types
 				{
 					ulong data = ts.Data;
 
-					Assert.AreEqual(ts.BinString, XUInt64.ConvertToBinaryString(data, ts.Max));
-					Assert.AreEqual(ts.OctString, XUInt64.ConvertToOctalString(data, ts.Max));
+					Assert.AreEqual(ts.BinString, UInt64Ex.ConvertToBinaryString(data, ts.Max));
+					Assert.AreEqual(ts.OctString, UInt64Ex.ConvertToOctalString(data, ts.Max));
 					Assert.AreEqual(ts.DecString, data.ToString(ts.DecFormat));
 					Assert.AreEqual(ts.HexString, data.ToString(ts.HexFormat));
 				}
@@ -183,7 +183,7 @@ namespace MKY.Test.Types
 
 					try
 					{
-						convertedByteArray = XUInt64.ConvertToByteArray(ts.Data, ts.Boundary, ts.ExpandNegative, ts.UseBigEndian);
+						convertedByteArray = UInt64Ex.ConvertToByteArray(ts.Data, ts.Boundary, ts.ExpandNegative, ts.UseBigEndian);
 						Assert.AreEqual(ts.ByteArray, convertedByteArray);
 					}
 					catch (Exception ex)
@@ -236,9 +236,9 @@ namespace MKY.Test.Types
 				{
 					ulong data = 0;
 
-					if (!XUInt64.TryParseBinary(ts.BinString, out data))
+					if (!UInt64Ex.TryParseBinary(ts.BinString, out data))
 						Assert.Fail("Failed to parse binary string"      + ts.BinString);
-					if (!XUInt64.TryParseOctal (ts.OctString, out data))
+					if (!UInt64Ex.TryParseOctal (ts.OctString, out data))
 						Assert.Fail("Failed to parse octal string"       + ts.OctString);
 					if (!UInt64.TryParse       (ts.DecString, out data))
 						Assert.Fail("Failed to parse decimal string"     + ts.DecString);

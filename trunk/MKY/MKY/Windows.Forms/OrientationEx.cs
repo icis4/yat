@@ -29,7 +29,7 @@ namespace MKY.Windows.Forms
 	/// <summary>
 	/// Extended enum XOrientation which extends <see cref="Orientation"/>.
 	/// </summary>
-	public class XOrientation : XEnum
+	public class OrientationEx : EnumEx
 	{
 		#region String Definitions
 
@@ -39,13 +39,13 @@ namespace MKY.Windows.Forms
 		#endregion
 
 		/// <summary>Default is <see cref="Orientation.Horizontal"/>.</summary>
-		public XOrientation()
+		public OrientationEx()
 			: base(Orientation.Horizontal)
 		{
 		}
 
 		/// <summary></summary>
-		protected XOrientation(Orientation orientation)
+		protected OrientationEx(Orientation orientation)
 			: base(orientation)
 		{
 		}
@@ -68,11 +68,11 @@ namespace MKY.Windows.Forms
 		#region GetItems
 
 		/// <summary></summary>
-		public static XOrientation[] GetItems()
+		public static OrientationEx[] GetItems()
 		{
-			List<XOrientation> a = new List<XOrientation>();
-			a.Add(new XOrientation(Orientation.Horizontal));
-			a.Add(new XOrientation(Orientation.Vertical));
+			List<OrientationEx> a = new List<OrientationEx>();
+			a.Add(new OrientationEx(Orientation.Horizontal));
+			a.Add(new OrientationEx(Orientation.Vertical));
 			return (a.ToArray());
 		}
 
@@ -81,9 +81,9 @@ namespace MKY.Windows.Forms
 		#region Parse
 
 		/// <summary></summary>
-		public static XOrientation Parse(string orientation)
+		public static OrientationEx Parse(string orientation)
 		{
-			XOrientation result;
+			OrientationEx result;
 
 			if (TryParse(orientation, out result))
 				return (result);
@@ -92,16 +92,16 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary></summary>
-		public static bool TryParse(string orientation, out XOrientation result)
+		public static bool TryParse(string orientation, out OrientationEx result)
 		{
 			if      (string.Compare(orientation, Horizontal_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XOrientation(Orientation.Horizontal);
+				result = new OrientationEx(Orientation.Horizontal);
 				return (true);
 			}
 			else if (string.Compare(orientation, Vertical_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XOrientation(Orientation.Vertical);
+				result = new OrientationEx(Orientation.Vertical);
 				return (true);
 			}
 			else
@@ -116,37 +116,37 @@ namespace MKY.Windows.Forms
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator Orientation(XOrientation orientation)
+		public static implicit operator Orientation(OrientationEx orientation)
 		{
 			return ((Orientation)orientation.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XOrientation(Orientation orientation)
+		public static implicit operator OrientationEx(Orientation orientation)
 		{
-			return (new XOrientation(orientation));
+			return (new OrientationEx(orientation));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(XOrientation orientation)
+		public static implicit operator int(OrientationEx orientation)
 		{
 			return (orientation.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XOrientation(int orientation)
+		public static implicit operator OrientationEx(int orientation)
 		{
-			return (new XOrientation((Orientation)orientation));
+			return (new OrientationEx((Orientation)orientation));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(XOrientation orientation)
+		public static implicit operator string(OrientationEx orientation)
 		{
 			return (orientation.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XOrientation(string orientation)
+		public static implicit operator OrientationEx(string orientation)
 		{
 			return (Parse(orientation));
 		}

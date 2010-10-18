@@ -44,10 +44,10 @@ namespace YAT.Model.Test
 		private bool autoSaveWorkspaceToRestore;
 		private string workspaceFilePathToRestore;
 
-		private string normalWorkspaceFilePath = XPath.MakeTempFilePath(typeof(FileHandlingTest), "NormalWorkspace", YAT.Settings.ExtensionSettings.WorkspaceFile);
-		private string normalTerminal1FilePath = XPath.MakeTempFilePath(typeof(FileHandlingTest), "NormalTerminal1", YAT.Settings.ExtensionSettings.TerminalFile);
-		private string normalTerminal2FilePath = XPath.MakeTempFilePath(typeof(FileHandlingTest), "NormalTerminal2", YAT.Settings.ExtensionSettings.TerminalFile);
-		private string normalTerminal3FilePath = XPath.MakeTempFilePath(typeof(FileHandlingTest), "NormalTerminal3", YAT.Settings.ExtensionSettings.TerminalFile);
+		private string normalWorkspaceFilePath = Temp.MakeTempFilePath(typeof(FileHandlingTest), "NormalWorkspace", YAT.Settings.ExtensionSettings.WorkspaceFile);
+		private string normalTerminal1FilePath = Temp.MakeTempFilePath(typeof(FileHandlingTest), "NormalTerminal1", YAT.Settings.ExtensionSettings.TerminalFile);
+		private string normalTerminal2FilePath = Temp.MakeTempFilePath(typeof(FileHandlingTest), "NormalTerminal2", YAT.Settings.ExtensionSettings.TerminalFile);
+		private string normalTerminal3FilePath = Temp.MakeTempFilePath(typeof(FileHandlingTest), "NormalTerminal3", YAT.Settings.ExtensionSettings.TerminalFile);
 
 		#endregion
 
@@ -96,7 +96,7 @@ namespace YAT.Model.Test
 		[TearDown]
 		public virtual void TearDown()
 		{
-			XPath.CleanTempPath(this);
+			Temp.CleanTempPath(this);
 		}
 
 		#endregion

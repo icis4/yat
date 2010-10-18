@@ -408,7 +408,7 @@ namespace YAT.Gui.Forms
 		{
 			Gui.Forms.Help f = new Gui.Forms.Help();
 			f.StartPosition = FormStartPosition.Manual;
-			f.Location = XForm.CalculateManualCenterParentLocation(this, f);
+			f.Location = FormEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
 		}
 
@@ -416,7 +416,7 @@ namespace YAT.Gui.Forms
 		{
 			Gui.Forms.ReleaseNotes f = new Gui.Forms.ReleaseNotes();
 			f.StartPosition = FormStartPosition.Manual;
-			f.Location = XForm.CalculateManualCenterParentLocation(this, f);
+			f.Location = FormEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
 		}
 
@@ -424,7 +424,7 @@ namespace YAT.Gui.Forms
 		{
 			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerInstructions.Tracker.Support);
 			f.StartPosition = FormStartPosition.Manual;
-			f.Location = XForm.CalculateManualCenterParentLocation(this, f);
+			f.Location = FormEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
 		}
 
@@ -432,7 +432,7 @@ namespace YAT.Gui.Forms
 		{
 			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerInstructions.Tracker.Feature);
 			f.StartPosition = FormStartPosition.Manual;
-			f.Location = XForm.CalculateManualCenterParentLocation(this, f);
+			f.Location = FormEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
 		}
 
@@ -440,7 +440,7 @@ namespace YAT.Gui.Forms
 		{
 			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerInstructions.Tracker.Bug);
 			f.StartPosition = FormStartPosition.Manual;
-			f.Location = XForm.CalculateManualCenterParentLocation(this, f);
+			f.Location = FormEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
 		}
 
@@ -690,7 +690,7 @@ namespace YAT.Gui.Forms
 			for (int i = 0; i < ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count; i++)
 			{
 				string prefix = string.Format("{0}: ", i + 1);
-				string file = XPath.LimitPath(ApplicationSettings.LocalUser.RecentFiles.FilePaths[i].Item, 60);
+				string file = PathEx.LimitPath(ApplicationSettings.LocalUser.RecentFiles.FilePaths[i].Item, 60);
 				if (ApplicationSettings.LocalUser.RecentFiles.FilePaths[i] != null)
 				{
 					this.menuItems_recents[i].Text = "&" + prefix + file;
@@ -770,7 +770,7 @@ namespace YAT.Gui.Forms
 
 		private void chronometer_Main_TimeSpanChanged(object sender, TimeSpanEventArgs e)
 		{
-			toolStripStatusLabel_MainStatus_Chrono.Text = XTimeSpan.FormatTimeSpan(e.TimeSpan, true);
+			toolStripStatusLabel_MainStatus_Chrono.Text = TimeSpanEx.FormatTimeSpan(e.TimeSpan, true);
 		}
 
 		#endregion

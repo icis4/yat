@@ -364,11 +364,11 @@ namespace MKY.IO.Ports
 				AssertNotDisposed();
 
 				SerialPortSettings settings = new SerialPortSettings();
-				settings.BaudRate  = (XBaudRate)base.BaudRate;
-				settings.DataBits  = (XDataBits)base.DataBits;
-				settings.Parity    = (XParity)base.Parity;
-				settings.StopBits  = (XStopBits)base.StopBits;
-				settings.Handshake = (XHandshake)base.Handshake;
+				settings.BaudRate  = (BaudRateEx)base.BaudRate;
+				settings.DataBits  = (DataBitsEx)base.DataBits;
+				settings.Parity    = (ParityEx)base.Parity;
+				settings.StopBits  = (StopBitsEx)base.StopBits;
+				settings.Handshake = (HandshakeEx)base.Handshake;
 
 				return (settings);
 			}
@@ -376,11 +376,11 @@ namespace MKY.IO.Ports
 			{
 				AssertNotDisposed();
 
-				base.BaudRate  = (XBaudRate)value.BaudRate;
-				base.DataBits  = (XDataBits)value.DataBits;
-				base.Parity    = (XParity)value.Parity;
-				base.StopBits  = (XStopBits)value.StopBits;
-				base.Handshake = (XHandshake)value.Handshake;
+				base.BaudRate  = (BaudRateEx)value.BaudRate;
+				base.DataBits  = (DataBitsEx)value.DataBits;
+				base.Parity    = (ParityEx)value.Parity;
+				base.StopBits  = (StopBitsEx)value.StopBits;
+				base.Handshake = (HandshakeEx)value.Handshake;
 
 				OnPortSettingsChanged(new EventArgs());
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.RtsChanged));

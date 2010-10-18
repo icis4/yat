@@ -61,7 +61,7 @@ namespace YAT.Domain
 	/// CRLF: Windows, DOS, OS/2, CP/M
 	/// CR:   Mac OS up to version 9, Apple II
 	/// </remarks>
-	public class XEol : XEnum
+	public class XEol : EnumEx
 	{
 		#region String Definitions
 

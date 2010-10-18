@@ -27,9 +27,9 @@ using MKY.Types;
 namespace MKY.IO.Ports
 {
 	/// <summary>
-	/// Extended enum XParity.
+	/// Extended enum ParityEx.
 	/// </summary>
-	public class XParity : XEnum
+	public class ParityEx : EnumEx
 	{
 		#region String Definitions
 
@@ -47,13 +47,13 @@ namespace MKY.IO.Ports
 		#endregion
 
 		/// <summary>Default is <see cref="Parity.None"/>.</summary>
-		public XParity()
+		public ParityEx()
 			: base(Parity.None)
 		{
 		}
 
 		/// <summary></summary>
-		protected XParity(Parity parity)
+		protected ParityEx(Parity parity)
 			: base(parity)
 		{
 		}
@@ -93,14 +93,14 @@ namespace MKY.IO.Ports
 		#region GetItems
 
 		/// <summary></summary>
-		public static XParity[] GetItems()
+		public static ParityEx[] GetItems()
 		{
-			List<XParity> a = new List<XParity>();
-			a.Add(new XParity(Parity.Even));
-			a.Add(new XParity(Parity.Odd));
-			a.Add(new XParity(Parity.None));
-			a.Add(new XParity(Parity.Mark));
-			a.Add(new XParity(Parity.Space));
+			List<ParityEx> a = new List<ParityEx>();
+			a.Add(new ParityEx(Parity.Even));
+			a.Add(new ParityEx(Parity.Odd));
+			a.Add(new ParityEx(Parity.None));
+			a.Add(new ParityEx(Parity.Mark));
+			a.Add(new ParityEx(Parity.Space));
 			return (a.ToArray());
 		}
 
@@ -109,9 +109,9 @@ namespace MKY.IO.Ports
 		#region Parse
 
 		/// <summary></summary>
-		public static XParity Parse(string parity)
+		public static ParityEx Parse(string parity)
 		{
-			XParity result;
+			ParityEx result;
 
 			if (TryParse(parity, out result))
 				return (result);
@@ -120,36 +120,36 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary></summary>
-		public static bool TryParse(string parity, out XParity result)
+		public static bool TryParse(string parity, out ParityEx result)
 		{
 			if      ((string.Compare(parity, Even_string, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(parity, Even_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XParity(Parity.Even);
+				result = new ParityEx(Parity.Even);
 				return (true);
 			}
 			else if ((string.Compare(parity, Odd_string, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(parity, Odd_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XParity(Parity.Odd);
+				result = new ParityEx(Parity.Odd);
 				return (true);
 			}
 			else if ((string.Compare(parity, None_string, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(parity, None_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XParity(Parity.None);
+				result = new ParityEx(Parity.None);
 				return (true);
 			}
 			else if ((string.Compare(parity, Mark_string, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(parity, Mark_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XParity(Parity.Mark);
+				result = new ParityEx(Parity.Mark);
 				return (true);
 			}
 			else if ((string.Compare(parity, Space_string, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(parity, Space_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XParity(Parity.Space);
+				result = new ParityEx(Parity.Space);
 				return (true);
 			}
 			else
@@ -164,37 +164,37 @@ namespace MKY.IO.Ports
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator Parity(XParity parity)
+		public static implicit operator Parity(ParityEx parity)
 		{
 			return ((Parity)parity.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XParity(Parity parity)
+		public static implicit operator ParityEx(Parity parity)
 		{
-			return (new XParity(parity));
+			return (new ParityEx(parity));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(XParity parity)
+		public static implicit operator int(ParityEx parity)
 		{
 			return (parity.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XParity(int parity)
+		public static implicit operator ParityEx(int parity)
 		{
-			return (new XParity((Parity)parity));
+			return (new ParityEx((Parity)parity));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(XParity parity)
+		public static implicit operator string(ParityEx parity)
 		{
 			return (parity.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XParity(string parity)
+		public static implicit operator ParityEx(string parity)
 		{
 			return (Parse(parity));
 		}

@@ -28,7 +28,7 @@ namespace MKY.Time
 	/// <summary>
 	/// DateTime utility methods.
 	/// </summary>
-	public static class XTimeSpan
+	public static class TimeSpanEx
 	{
 		/// <summary>
 		/// Returns time span formatted with "d:hh:mm:ss".

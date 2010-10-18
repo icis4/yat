@@ -439,7 +439,7 @@ namespace YAT.Gui.Controls
 			FastListBox flb = fastListBox_Monitor;
 
 			// Retrieve lines from list box
-			List<Domain.DisplayLine> lines = new List<YAT.Domain.DisplayLine>();
+			List<Domain.DisplayLine> lines = new List<Domain.DisplayLine>();
 			foreach (object item in flb.Items)
 			{
 				Domain.DisplayLine line = item as Domain.DisplayLine;
@@ -515,7 +515,7 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
-		public virtual List<YAT.Domain.DisplayLine> SelectedLines
+		public virtual List<Domain.DisplayLine> SelectedLines
 		{
 			get
 			{
@@ -807,9 +807,9 @@ namespace YAT.Gui.Controls
 		{
 			StringBuilder sb = new StringBuilder();
 
-			sb.Append(XTimeSpan.FormatTimeSpan(this.connectTime));
+			sb.Append(TimeSpanEx.FormatTimeSpan(this.connectTime));
 			sb.Append(Environment.NewLine);
-			sb.Append(XTimeSpan.FormatTimeSpan(this.totalConnectTime));
+			sb.Append(TimeSpanEx.FormatTimeSpan(this.totalConnectTime));
 
 			label_TimeStatus.Text = sb.ToString();
 			label_TimeStatus.Visible = this.showTimeStatus;

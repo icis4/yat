@@ -114,7 +114,7 @@ namespace MKY.Test.IO
 
 	/// <summary></summary>
 	[TestFixture]
-	public class XPathTest
+	public class PathExTest
 	{
 		#region Tests
 		//==========================================================================================
@@ -133,25 +133,25 @@ namespace MKY.Test.IO
 			// Test set is given as additional argument to ease searching for errornous test cases.
 			UnusedArg.PreventAnalysisWarning(testSet);
 
-			XPathCompareResult result;
+			PathCompareResult result;
 
 			// A compared to B results in A relative.
 			switch (testCase)
 			{
-				case 0:  result = MKY.IO.XPath.CompareDirectoryPaths       (pathA, pathB); break;
-				case 1:  result = MKY.IO.XPath.CompareDirectoryAndFilePaths(pathA, pathB); break; // DIR vs FILE.
-				case 2:  result = MKY.IO.XPath.CompareFileAndDirectoryPaths(pathA, pathB); break; // FILE vs DIR.
-				default: result = MKY.IO.XPath.CompareFilePaths            (pathA, pathB); break;
+				case 0:  result = PathEx.CompareDirectoryPaths       (pathA, pathB); break;
+				case 1:  result = PathEx.CompareDirectoryAndFilePaths(pathA, pathB); break; // DIR vs FILE.
+				case 2:  result = PathEx.CompareFileAndDirectoryPaths(pathA, pathB); break; // FILE vs DIR.
+				default: result = PathEx.CompareFilePaths            (pathA, pathB); break;
 			}
 			Assert.AreEqual(expectedA, result.RelativePath, "A compared to B doesn't result in A relative");
 
 			// B compared to A results in B relative.
 			switch (testCase)
 			{
-				case 0:  result = MKY.IO.XPath.CompareDirectoryPaths       (pathB, pathA); break;
-				case 1:  result = MKY.IO.XPath.CompareFileAndDirectoryPaths(pathB, pathA); break; // FILE vs DIR.
-				case 2:  result = MKY.IO.XPath.CompareDirectoryAndFilePaths(pathB, pathA); break; // DIR vs FILE.
-				default: result = MKY.IO.XPath.CompareFilePaths            (pathB, pathA); break;
+				case 0:  result = PathEx.CompareDirectoryPaths       (pathB, pathA); break;
+				case 1:  result = PathEx.CompareFileAndDirectoryPaths(pathB, pathA); break; // FILE vs DIR.
+				case 2:  result = PathEx.CompareDirectoryAndFilePaths(pathB, pathA); break; // DIR vs FILE.
+				default: result = PathEx.CompareFilePaths            (pathB, pathA); break;
 			}
 			Assert.AreEqual(expectedB, result.RelativePath, "B compared to A doesn't result in B relative");
 		}
@@ -175,20 +175,20 @@ namespace MKY.Test.IO
 			// A combined with A relative results in B.
 			switch (testCase)
 			{
-				case 0:  result = MKY.IO.XPath.CombineDirectoryPaths       (pathA, expectedA); break;
-				case 1:  result = MKY.IO.XPath.CombineDirectoryAndFilePaths(pathA, expectedA); break; // DIR vs FILE.
-				case 2:  result = MKY.IO.XPath.CombineFileAndDirectoryPaths(pathA, expectedA); break; // FILE vs DIR.
-				default: result = MKY.IO.XPath.CombineFilePaths            (pathA, expectedA); break;
+				case 0:  result = PathEx.CombineDirectoryPaths       (pathA, expectedA); break;
+				case 1:  result = PathEx.CombineDirectoryAndFilePaths(pathA, expectedA); break; // DIR vs FILE.
+				case 2:  result = PathEx.CombineFileAndDirectoryPaths(pathA, expectedA); break; // FILE vs DIR.
+				default: result = PathEx.CombineFilePaths            (pathA, expectedA); break;
 			}
 			Assert.AreEqual(pathB, result, "A combined with A relative doesn't result in B");
 
 			// B combined with B relative results in A.
 			switch (testCase)
 			{
-				case 0:  result = MKY.IO.XPath.CombineDirectoryPaths       (pathB, expectedB); break;
-				case 1:  result = MKY.IO.XPath.CombineFileAndDirectoryPaths(pathB, expectedB); break; // FILE vs DIR.
-				case 2:  result = MKY.IO.XPath.CombineDirectoryAndFilePaths(pathB, expectedB); break; // DIR vs FILE.
-				default: result = MKY.IO.XPath.CombineFilePaths            (pathB, expectedB); break;
+				case 0:  result = PathEx.CombineDirectoryPaths       (pathB, expectedB); break;
+				case 1:  result = PathEx.CombineFileAndDirectoryPaths(pathB, expectedB); break; // FILE vs DIR.
+				case 2:  result = PathEx.CombineDirectoryAndFilePaths(pathB, expectedB); break; // DIR vs FILE.
+				default: result = PathEx.CombineFilePaths            (pathB, expectedB); break;
 			}
 			Assert.AreEqual(pathA, result, "B combined with B relative doesn't result in A");
 		}

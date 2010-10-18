@@ -25,8 +25,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows.Forms;
 
-using MKY.Event;
 using MKY.Guid;
+using MKY.Event;
 using MKY.Settings;
 
 using YAT.Settings;
@@ -620,7 +620,7 @@ namespace YAT.Model
 				ApplicationSettings.Save();
 
 				// Try to retrieve GUID from file path (in case of auto saved workspace files).
-				Guid guid = XGuid.CreateGuidFromFilePath(filePath, GeneralSettings.AutoSaveWorkspaceFileNamePrefix);
+				Guid guid = GuidEx.CreateGuidFromFilePath(filePath, GeneralSettings.AutoSaveWorkspaceFileNamePrefix);
 
 				// Create workspace.
 				this.workspace = new Workspace(sh, guid);

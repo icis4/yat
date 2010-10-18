@@ -24,8 +24,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Windows.Forms;
 
-using MKY.IO.Serial;
 using MKY.Event;
+using MKY.IO.Serial;
 using MKY.Net;
 
 namespace YAT.Gui.Controls
@@ -42,7 +42,7 @@ namespace YAT.Gui.Controls
 
 		private const SocketHostType DefaultHostType                     = SocketHostType.TcpAutoSocket;
 
-		private static readonly XIPHost DefaultRemoteHost                = MKY.IO.Serial.SocketSettings.DefaultRemoteHost;
+		private static readonly IPHost DefaultRemoteHost                = MKY.IO.Serial.SocketSettings.DefaultRemoteHost;
 		private static readonly IPAddress DefaultResolvedRemoteIPAddress = MKY.IO.Serial.SocketSettings.DefaultResolvedRemoteIPAddress;
 		private const int DefaultRemotePort                              = MKY.IO.Serial.SocketSettings.DefaultRemotePort;
 
@@ -62,7 +62,7 @@ namespace YAT.Gui.Controls
 
 		private SocketHostType hostType = DefaultHostType;
 
-		private XIPHost remoteHost                = DefaultRemoteHost;
+		private IPHost remoteHost                = DefaultRemoteHost;
 		private IPAddress resolvedRemoteIPAddress = DefaultResolvedRemoteIPAddress;
 		private int remotePort                    = DefaultRemotePort;
 
@@ -141,7 +141,7 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual XIPHost RemoteHost
+		public virtual IPHost RemoteHost
 		{
 			get { return (this.remoteHost); }
 			set
@@ -294,7 +294,7 @@ namespace YAT.Gui.Controls
 				// Do not assume that the selected item maches the actual text in the box
 				//   because SelectedItem is also set if text has changed in the meantime.
 
-				XIPHost host = comboBox_RemoteHost.SelectedItem as XIPHost;
+				IPHost host = comboBox_RemoteHost.SelectedItem as IPHost;
 				if ((host != null) && (host.IPAddress != IPAddress.None) &&
 					(host.ToString() == comboBox_RemoteHost.Text))
 				{
@@ -310,7 +310,7 @@ namespace YAT.Gui.Controls
 					if (IPAddress.TryParse(nameOrAddress, out ipAddress))
 					{
 						this.resolvedRemoteIPAddress = ipAddress;
-						RemoteHost = new XIPHost(this.resolvedRemoteIPAddress);
+						RemoteHost = new IPHost(this.resolvedRemoteIPAddress);
 					}
 					else
 					{
@@ -319,7 +319,7 @@ namespace YAT.Gui.Controls
 							IPAddress[] ipAddresses;
 							ipAddresses = Dns.GetHostAddresses(nameOrAddress);
 							this.resolvedRemoteIPAddress = ipAddresses[0];
-							RemoteHost = new XIPHost(this.resolvedRemoteIPAddress);
+							RemoteHost = new IPHost(this.resolvedRemoteIPAddress);
 						}
 						catch (ArgumentException ex)
 						{
@@ -440,7 +440,7 @@ namespace YAT.Gui.Controls
 
 			// Remote host.
 			comboBox_RemoteHost.Items.Clear();
-			comboBox_RemoteHost.Items.AddRange(XIPHost.GetItems());
+			comboBox_RemoteHost.Items.AddRange(IPHost.GetItems());
 
 			this.isSettingControls = false;
 		}
