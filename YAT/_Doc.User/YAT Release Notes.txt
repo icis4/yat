@@ -91,6 +91,7 @@ Fixed bugs:
   saved on a secondary display that is not connected anymore (bugs #2856250 and #2906622)
 - Layout/anchor issue of description text field in predefined dialog fixed (bug #2987575)
 - Exception with TCP/IP AutoSocket fixed (bug# 2869792)
+- Exception when switching from COM port to TCP/IP AutoSocket fixed (bug #2981797)
 - Exception in case of no COM ports fixed (bug #3041642)
 - Exception when closing terminal using 'File > Close' fixed (bugs #2684813, #2854547, #2970241)
 - Exception when changing settings fixed (bug #2869538)
