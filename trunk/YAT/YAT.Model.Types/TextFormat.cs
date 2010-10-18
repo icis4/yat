@@ -192,7 +192,7 @@ namespace YAT.Model.Types
 		public static bool operator ==(TextFormat lhs, TextFormat rhs)
 		{
 			// Base reference type implementation of operator ==.
-			// See MKY.System.Test.EqualityTest for details.
+			// See MKY.Test.EqualityTest for details.
 
 			if (ReferenceEquals(lhs, rhs)) return (true);
 			if (ReferenceEquals(lhs, null)) return (false);

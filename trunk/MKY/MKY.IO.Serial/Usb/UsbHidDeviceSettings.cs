@@ -32,7 +32,7 @@ namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	[Serializable]
-	public class UsbHidDeviceSettings : Utilities.Settings.Settings
+	public class UsbHidDeviceSettings : MKY.Settings.Settings
 	{
 		/// <summary></summary>
 		public static readonly AutoRetry AutoReopenDefault = new AutoRetry(true, 2000);
@@ -48,7 +48,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public UsbHidDeviceSettings(Utilities.Settings.SettingsType settingsType)
+		public UsbHidDeviceSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -163,7 +163,7 @@ namespace MKY.IO.Serial
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.System.Test.EqualityTest for details.
+		// See MKY.Test.EqualityTest for details.
 
 		#endregion
 	}

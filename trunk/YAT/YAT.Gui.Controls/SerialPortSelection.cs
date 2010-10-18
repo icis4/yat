@@ -24,7 +24,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 using MKY.IO.Ports;
-using MKY.System.Event;
+using MKY.Event;
 using MKY.Windows.Forms;
 
 using YAT.Settings.Application;

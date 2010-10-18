@@ -31,9 +31,9 @@ using System.Windows.Forms;
 
 using Microsoft.Win32.SafeHandles;
 
-using MKY.System.Diagnostics;
-using MKY.System.Event;
-using MKY.System.Windows.Forms;
+using MKY.Diagnostics;
+using MKY.Event;
+using MKY.Windows.Forms;
 
 #endregion
 
@@ -52,7 +52,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Returns the GUID associated with USB HID.
 		/// </summary>
-		public static readonly Guid HidGuid = Win32.Hid.GetHidGuid();
+		public static readonly System.Guid HidGuid = Win32.Hid.GetHidGuid();
 
 		#endregion
 

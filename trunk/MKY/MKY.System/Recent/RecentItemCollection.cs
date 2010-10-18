@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
-namespace MKY.System.Recent
+namespace MKY.Recent
 {
 	/// <summary>
 	/// Collection for recent items like recent files, provides methods to handle the recent items.

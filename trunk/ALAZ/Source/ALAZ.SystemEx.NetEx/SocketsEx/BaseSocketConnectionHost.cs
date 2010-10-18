@@ -317,7 +317,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                         }
                         catch (NullReferenceException ex)
                         {
-                            MKY.System.Diagnostics.XDebug.WriteException(this, ex);
+                            MKY.Diagnostics.XDebug.WriteException(this, ex);
                         }
                         // ----- \remind  END  -----
                     }

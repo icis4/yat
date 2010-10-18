@@ -21,7 +21,7 @@
 using System;
 using System.IO;
 
-namespace MKY.System.IO
+namespace MKY.IO
 {
 	/// <summary>
 	/// Utility methods for <see cref="System.IO.File"/>.

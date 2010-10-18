@@ -468,7 +468,7 @@ namespace MKY.IO.Usb
 		public static bool operator ==(DeviceInfo lhs, DeviceInfo rhs)
 		{
 			// Base reference type implementation of operator ==.
-			// See MKY.System.Test.EqualityTest for details.
+			// See MKY.Test.EqualityTest for details.
 
 			if (ReferenceEquals(lhs, rhs)) return (true);
 			if (ReferenceEquals(lhs, null)) return (false);

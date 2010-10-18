@@ -19,7 +19,7 @@
 
 using System.Configuration;
 
-namespace MKY.System.Configuration
+namespace MKY.Configuration
 {
 	/// <summary>
 	/// Generic section to handle selection of multiple configurations with a configuration file.

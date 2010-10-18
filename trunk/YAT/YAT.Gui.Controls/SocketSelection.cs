@@ -25,8 +25,8 @@ using System.Net;
 using System.Windows.Forms;
 
 using MKY.IO.Serial;
-using MKY.System.Event;
-using MKY.System.Net;
+using MKY.Event;
+using MKY.Net;
 
 namespace YAT.Gui.Controls
 {

@@ -27,7 +27,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class MainWindowSettings : MKY.System.Settings.Settings
+	public class MainWindowSettings : MKY.Settings.Settings
 	{
 		private FormStartPosition startPosition;
 		private FormWindowState windowState;
@@ -42,7 +42,7 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		public MainWindowSettings(MKY.System.Settings.SettingsType settingsType)
+		public MainWindowSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -185,7 +185,7 @@ namespace YAT.Model.Settings
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.System.Test.EqualityTest for details.
+		// See MKY.Test.EqualityTest for details.
 
 		#endregion
 	}

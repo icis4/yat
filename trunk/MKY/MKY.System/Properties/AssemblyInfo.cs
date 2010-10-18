@@ -27,11 +27,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MKY.System")]
+[assembly: AssemblyTitle("MKY")]
 [assembly: AssemblyDescription("System")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MKY")]
-[assembly: AssemblyProduct("MKY.System")]
+[assembly: AssemblyProduct("MKY")]
 [assembly: AssemblyCopyright("Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil. Copyright © 2003-2010 Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -51,7 +51,7 @@ using System.Runtime.InteropServices;
 
 // Assembly-level FxCop suppressions.
 [assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "MKY", Justification = "MKY is a name.")]
-[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "MKY.System", MessageId = "MKY", Justification = "MKY is a name.")]
+[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "MKY", MessageId = "MKY", Justification = "MKY is a name.")]
 
 //==================================================================================================
 // End of

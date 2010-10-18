@@ -22,9 +22,9 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-using MKY.System.Types;
+using MKY.Types;
 
-namespace MKY.System.Windows.Forms
+namespace MKY.Windows.Forms
 {
 	/// <summary>
 	/// Extended enum XOrientation which extends <see cref="Orientation"/>.

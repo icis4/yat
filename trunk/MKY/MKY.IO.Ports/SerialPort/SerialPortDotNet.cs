@@ -38,7 +38,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
 
-using MKY.System.Event;
+using MKY.Event;
 
 #endregion
 
@@ -759,7 +759,7 @@ namespace MKY.IO.Ports
 			System.Diagnostics.Debug.WriteLine(DebugWrite_portName + " " + Environment.TickCount + " " + message);
 
 			if (writeStack)
-				MKY.System.Diagnostics.XDebug.WriteStack(this, "");
+				MKY.Diagnostics.XDebug.WriteStack(this, "");
 		}
 
 #endif // DEBUG && DEBUG_OPEN_CLOSE

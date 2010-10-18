@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-namespace MKY.System.Collections
+namespace MKY.Collections
 {
 	/// <summary>
 	/// A collection containing one or more sets of test settings.

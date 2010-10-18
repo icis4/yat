@@ -88,7 +88,7 @@ namespace YAT.Domain
 		public static bool operator ==(BinaryLengthLineBreak lhs, BinaryLengthLineBreak rhs)
 		{
 			// Value type implementation of operator ==.
-			// See MKY.System.Test.EqualityTest for details.
+			// See MKY.Test.EqualityTest for details.
 
 			if (ReferenceEquals(lhs, rhs)) return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -168,7 +168,7 @@ namespace YAT.Domain
 		public static bool operator ==(BinarySequenceLineBreak lhs, BinarySequenceLineBreak rhs)
 		{
 			// Value type implementation of operator ==.
-			// See MKY.System.Test.EqualityTest for details.
+			// See MKY.Test.EqualityTest for details.
 
 			if (ReferenceEquals(lhs, rhs)) return (true);
 			if (ReferenceEquals(lhs, null)) return (false);
@@ -248,7 +248,7 @@ namespace YAT.Domain
 		public static bool operator ==(BinaryTimedLineBreak lhs, BinaryTimedLineBreak rhs)
 		{
 			// Value type implementation of operator ==.
-			// See MKY.System.Test.EqualityTest for details.
+			// See MKY.Test.EqualityTest for details.
 
 			if (ReferenceEquals(lhs, rhs)) return (true);
 			if (ReferenceEquals(lhs, null)) return (false);

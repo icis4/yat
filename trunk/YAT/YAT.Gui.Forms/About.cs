@@ -229,7 +229,7 @@ namespace YAT.Gui.Forms
 		{
 			string link = e.Link.LinkData as string;
 			if ((link != null) && (link.StartsWith("http://")))
-				MKY.System.Net.Browser.BrowseUri(link);
+				MKY.Net.Browser.BrowseUri(link);
 		}
 
 		#endregion

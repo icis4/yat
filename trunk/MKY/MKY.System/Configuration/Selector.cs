@@ -19,7 +19,7 @@
 
 using System.Configuration;
 
-namespace MKY.System.Configuration
+namespace MKY.Configuration
 {
 	/// <summary>
 	/// Utilities to select and return a particular configuration among a set of configurations.

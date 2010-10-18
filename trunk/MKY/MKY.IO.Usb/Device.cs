@@ -32,8 +32,8 @@ using System.Windows.Forms;
 
 using Microsoft.Win32.SafeHandles;
 
-using MKY.System.Event;
-using MKY.System.Windows.Forms;
+using MKY.Event;
+using MKY.Windows.Forms;
 
 #endregion
 
@@ -91,12 +91,12 @@ namespace MKY.IO.Usb
 		/// Returns the GUID for the given device class.
 		/// </summary>
 		/// <param name="deviceClass">USB device class.</param>
-		public static Guid GetGuidFromDeviceClass(DeviceClass deviceClass)
+		public static System.Guid GetGuidFromDeviceClass(DeviceClass deviceClass)
 		{
 			switch (deviceClass)
 			{
 				case DeviceClass.Hid: return (SerialHidDevice.HidGuid);
-				default:              return (Guid.Empty);
+				default:              return (System.Guid.Empty);
 			}
 		}
 
@@ -130,7 +130,7 @@ namespace MKY.IO.Usb
 		/// \todo This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
 		/// </remarks>
 		/// <param name="classGuid">GUID of a class of devices.</param>
-		public static DeviceInfo[] GetDevicesFromGuid(Guid classGuid)
+		public static DeviceInfo[] GetDevicesFromGuid(System.Guid classGuid)
 		{
 			List<DeviceInfo> l = new List<DeviceInfo>();
 
@@ -488,7 +488,7 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Device(Guid classGuid, string path)
+		public Device(System.Guid classGuid, string path)
 		{
 			int vendorId, productId;
 			string manufacturer, product, serialNumber;
@@ -498,21 +498,21 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
-		public Device(Guid classGuid, int vendorId, int productId)
+		public Device(System.Guid classGuid, int vendorId, int productId)
 		{
 			this.deviceInfo = new DeviceInfo(vendorId, productId);
 			Initialize();
 		}
 
 		/// <summary></summary>
-		public Device(Guid classGuid, int vendorId, int productId, string serialNumber)
+		public Device(System.Guid classGuid, int vendorId, int productId, string serialNumber)
 		{
 			this.deviceInfo = new DeviceInfo(vendorId, productId, serialNumber);
 			Initialize();
 		}
 
 		/// <summary></summary>
-		public Device(Guid classGuid, DeviceInfo deviceInfo)
+		public Device(System.Guid classGuid, DeviceInfo deviceInfo)
 		{
 			this.deviceInfo = new DeviceInfo(deviceInfo);
 			Initialize();

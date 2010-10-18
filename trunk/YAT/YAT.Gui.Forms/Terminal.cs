@@ -27,10 +27,10 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-using MKY.System.Event;
-using MKY.System.Settings;
-using MKY.System.Time;
-using MKY.System.Windows.Forms;
+using MKY.Event;
+using MKY.Settings;
+using MKY.Time;
+using MKY.Windows.Forms;
 
 using YAT.Settings;
 using YAT.Settings.Application;

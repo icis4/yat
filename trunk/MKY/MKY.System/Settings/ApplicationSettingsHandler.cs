@@ -25,9 +25,9 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
-using MKY.System.Xml;
+using MKY.Xml;
 
-namespace MKY.System.Settings
+namespace MKY.Settings
 {
 	/// <summary>
 	/// Generic class to handle standard application settings. It covers common, local user

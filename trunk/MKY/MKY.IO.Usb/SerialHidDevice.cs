@@ -33,9 +33,9 @@ using System.Windows.Forms;
 
 using Microsoft.Win32.SafeHandles;
 
-using MKY.System.Diagnostics;
-using MKY.System.Event;
-using MKY.System.Windows.Forms;
+using MKY.Diagnostics;
+using MKY.Event;
+using MKY.Windows.Forms;
 
 #endregion
 

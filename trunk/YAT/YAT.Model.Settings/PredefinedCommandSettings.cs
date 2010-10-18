@@ -29,7 +29,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class PredefinedCommandSettings : MKY.System.Settings.Settings
+	public class PredefinedCommandSettings : MKY.Settings.Settings
 	{
 		/// <summary></summary>
 		public const int MaxCommandsPerPage = 12;
@@ -45,7 +45,7 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		public PredefinedCommandSettings(MKY.System.Settings.SettingsType settingsType)
+		public PredefinedCommandSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -163,7 +163,7 @@ namespace YAT.Model.Settings
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.System.Test.EqualityTest for details.
+		// See MKY.Test.EqualityTest for details.
 
 		#endregion
 	}

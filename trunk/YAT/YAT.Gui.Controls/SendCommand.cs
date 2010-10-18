@@ -25,8 +25,8 @@ using System.Globalization;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
-using MKY.System.Event;
-using MKY.System.Recent;
+using MKY.Event;
+using MKY.Recent;
 
 using YAT.Gui.Utilities;
 using YAT.Model.Settings;

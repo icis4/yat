@@ -23,7 +23,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-using MKY.System.IO;
+using MKY.IO;
 
 using YAT.Utilities;
 

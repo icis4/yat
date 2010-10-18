@@ -23,7 +23,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MKY.System.Types
+namespace MKY.Types
 {
 	/// <summary>
 	/// Array utility methods.

@@ -23,10 +23,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Xml.Serialization;
 
-using MKY.System.Diagnostics;
-using MKY.System.Xml;
+using MKY.Diagnostics;
+using MKY.Xml;
 
-namespace MKY.System.Settings
+namespace MKY.Settings
 {
 	/// <summary>
 	/// Generic class to handle any kind of document settings, e.g. MDI application settings.

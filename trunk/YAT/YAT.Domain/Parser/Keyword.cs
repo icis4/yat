@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using MKY.System.Types;
+using MKY.Types;
 
 namespace YAT.Domain.Parser
 {

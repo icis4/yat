@@ -30,7 +30,7 @@ namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SerialCommunicationSettings : Utilities.Settings.Settings
+	public class SerialCommunicationSettings : MKY.Settings.Settings
 	{
 		private int baudRate;
 		private MKY.IO.Ports.DataBits dataBits;
@@ -46,7 +46,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public SerialCommunicationSettings(Utilities.Settings.SettingsType settingsType)
+		public SerialCommunicationSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -246,7 +246,7 @@ namespace MKY.IO.Serial
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.System.Test.EqualityTest for details.
+		// See MKY.Test.EqualityTest for details.
 
 		#endregion
 	}

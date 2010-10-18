@@ -21,7 +21,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace MKY.System.Globalization
+namespace MKY.Globalization
 {
 	/// <summary>
 	/// Some CultureInfo utilities.

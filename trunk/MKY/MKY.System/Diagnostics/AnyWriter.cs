@@ -23,7 +23,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
-namespace MKY.System.Diagnostics
+namespace MKY.Diagnostics
 {
 	/// <summary>
 	/// Provides static methods to write diagnostics output to any <see cref="TextWriter"/>.

@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MKY.System.Xml
+namespace MKY.Xml
 {
 	/// <summary>
 	/// Interface for XML contents that have alternate XML elements, e.g. when an XML element

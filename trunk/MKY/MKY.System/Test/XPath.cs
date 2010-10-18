@@ -21,7 +21,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace MKY.System.Test
+namespace MKY.Test
 {
 	/// <summary>
 	/// Utility methods to deal with temporary files during testing.
@@ -36,7 +36,7 @@ namespace MKY.System.Test
 
 		private static string MakeTempPath(object testObject, bool outputPathToDebugConsole)
 		{
-			// Results in e.g. "D:\Temp\MKY.System.Test".
+			// Results in e.g. "D:\Temp\MKY.Test".
 			string path = Path.GetTempPath() + testObject.GetType().Namespace;
 
 			if (outputPathToDebugConsole)

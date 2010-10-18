@@ -26,10 +26,10 @@ using System.Xml.Serialization;
 
 using NUnit.Framework;
 
-using MKY.System.Collections;
-using MKY.System.Diagnostics;
-using MKY.System.Recent;
-using MKY.System.Test;
+using MKY.Collections;
+using MKY.Diagnostics;
+using MKY.Recent;
+using MKY.Test;
 
 using YAT.Model.Settings;
 using YAT.Model.Types;

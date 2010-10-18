@@ -21,7 +21,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace MKY.System.Win32
+namespace MKY.Win32
 {
 	/// <summary>
 	/// Extends <see cref=" IntPtr"/>.

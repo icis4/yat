@@ -27,10 +27,10 @@ using System.Xml.Serialization;
 
 using NUnit.Framework;
 
-using MKY.System.Diagnostics;
-using MKY.System.Net;
+using MKY.Diagnostics;
+using MKY.Net;
 
-namespace MKY.System.Test.Net
+namespace MKY.Test.Net
 {
 	/// <summary></summary>
 	public static class IPHostTestData

@@ -33,7 +33,7 @@ namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SerialPortSettings : Utilities.Settings.Settings
+	public class SerialPortSettings : MKY.Settings.Settings
 	{
 		/// <summary></summary>
 		public static readonly AutoRetry AutoReopenDefault = new AutoRetry(true, 2000);
@@ -61,7 +61,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public SerialPortSettings(Utilities.Settings.SettingsType settingsType)
+		public SerialPortSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -295,7 +295,7 @@ namespace MKY.IO.Serial
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.System.Test.EqualityTest for details.
+		// See MKY.Test.EqualityTest for details.
 
 		#endregion
 	}

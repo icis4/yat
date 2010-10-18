@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace MKY.System.Recent
+namespace MKY.Recent
 {
 	/// <summary>
 	/// Item for collections like recent files, encapsulates an item with a time stamp.
@@ -199,7 +199,7 @@ namespace MKY.System.Recent
 		public static bool operator ==(RecentItem<T> lhs, RecentItem<T> rhs)
 		{
 			// Base reference type implementation of operator ==.
-			// See MKY.System.Test.EqualityTest for details.
+			// See MKY.Test.EqualityTest for details.
 
 			if (ReferenceEquals(lhs, rhs)) return (true);
 			if (ReferenceEquals(lhs, null)) return (false);

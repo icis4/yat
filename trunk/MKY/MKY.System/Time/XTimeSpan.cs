@@ -23,7 +23,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
-namespace MKY.System.Time
+namespace MKY.Time
 {
 	/// <summary>
 	/// DateTime utility methods.

@@ -70,13 +70,13 @@
       <Project>{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}</Project>
       <Name>MKY.Net.Test</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MKY\MKY.System.Test\MKY.System.Test.csproj">
+    <ProjectReference Include="..\..\MKY\MKY.Test\MKY.Test.csproj">
       <Project>{644F7C29-CCE6-4827-9EF2-8B7D34194101}</Project>
-      <Name>MKY.System.Test</Name>
+      <Name>MKY.Test</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\MKY\MKY.System\MKY.System.csproj">
+    <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
-      <Name>MKY.System</Name>
+      <Name>MKY</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\MKY\MKY.Windows.Forms.Test\MKY.Windows.Forms.Test.csproj">
       <Project>{4171BFD3-4E50-4752-977B-9B1F79C3EDFB}</Project>

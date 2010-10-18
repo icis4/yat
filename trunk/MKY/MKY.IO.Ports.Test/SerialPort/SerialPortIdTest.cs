@@ -28,8 +28,8 @@ using System.Xml.Serialization;
 using NUnit.Framework;
 
 using MKY.IO.Ports;
-using MKY.System.Diagnostics;
-using MKY.System.Test;
+using MKY.Diagnostics;
+using MKY.Test;
 
 namespace MKY.IO.Ports.Test.SerialPort
 {
@@ -80,7 +80,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		[TearDown]
 		public virtual void TearDown()
 		{
-			XPath.CleanTempPath(this);
+			MKY.Test.XPath.CleanTempPath(this);
 		}
 
 		#endregion
@@ -132,7 +132,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 		[Test, TestCaseSource(typeof(SerialPortIdTestData), "TestCases")]
 		public virtual void TestSerialization(int standardPortNumber, string portName, string[] portDescriptions)
 		{
-			string filePath = XPath.MakeTempFilePath(this, ".xml");
+			string filePath = MKY.Test.XPath.MakeTempFilePath(this, ".xml");
 			SerialPortId id = new SerialPortId(portName);
 			SerialPortId idDeserialized = null;
 

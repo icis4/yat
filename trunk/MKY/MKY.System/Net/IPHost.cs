@@ -22,9 +22,9 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 
-using MKY.System.Types;
+using MKY.Types;
 
-namespace MKY.System.Net
+namespace MKY.Net
 {
 	#region Enum CommonIPHost
 

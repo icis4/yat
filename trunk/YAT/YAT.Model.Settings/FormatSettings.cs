@@ -28,7 +28,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class FormatSettings : MKY.System.Settings.Settings
+	public class FormatSettings : MKY.Settings.Settings
 	{
 		private FontFormat font;
 		private TextFormat txDataFormat;
@@ -48,7 +48,7 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		public FormatSettings(MKY.System.Settings.SettingsType settingsType)
+		public FormatSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -300,7 +300,7 @@ namespace YAT.Model.Settings
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.System.Test.EqualityTest for details.
+		// See MKY.Test.EqualityTest for details.
 
 		#endregion
 	}

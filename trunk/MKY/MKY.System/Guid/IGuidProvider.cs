@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MKY.System.Guid
+namespace MKY.Guid
 {
 	/// <summary>
 	/// Interface that can be implemented by types providing a <see cref="Guid"/>.

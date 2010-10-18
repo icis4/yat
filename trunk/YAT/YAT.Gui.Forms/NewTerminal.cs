@@ -21,7 +21,7 @@
 using System;
 using System.Windows.Forms;
 
-using MKY.System.Net;
+using MKY.Net;
 
 namespace YAT.Gui.Forms
 {

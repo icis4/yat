@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
-namespace MKY.System.Types
+namespace MKY.Types
 {
 	/// <summary>
 	/// Extended enumeration type which offers more features that a normal enum. <see cref="XEnum"/>
@@ -523,7 +523,7 @@ namespace MKY.System.Types
 		public static bool operator ==(XEnum lhs, XEnum rhs)
 		{
 			// Base reference type implementation of operator ==.
-			// See MKY.System.Test.EqualityTest for details.
+			// See MKY.Test.EqualityTest for details.
 
 			if (ReferenceEquals(lhs, rhs)) return (true);
 			if (ReferenceEquals(lhs, null)) return (false);

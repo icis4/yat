@@ -32,7 +32,7 @@ using System.Text;
 
 using Microsoft.Win32.SafeHandles;
 
-using MKY.System.Diagnostics;
+using MKY.Diagnostics;
 
 #endregion
 
@@ -225,7 +225,7 @@ namespace MKY.Win32
 			{
 				if (Version.IsWindowsVistaOrLater())
 				{
-					StringBuilder s = new StringBuilder(Utilities.Usb.Descriptors.MaximumStringDescriptorCharLength);
+					StringBuilder s = new StringBuilder(Usb.Descriptors.MaximumStringDescriptorCharLength);
 					UInt32 l;
 					if (NativeMethods.WinUsb_GetDescriptor(interfaceHandle, DescriptorType.String, (byte)index, (UInt16)languageId, s, (UInt32)s.Capacity, out l))
 					{

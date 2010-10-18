@@ -28,7 +28,7 @@ using System.Globalization;
 
 #endregion
 
-namespace MKY.System.Usb
+namespace MKY.Usb
 {
 	/// <summary>
 	/// Encapsulates USB items.

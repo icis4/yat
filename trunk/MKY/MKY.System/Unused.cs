@@ -19,7 +19,7 @@
 
 using System;
 
-namespace MKY.System
+namespace MKY
 {
 	/// <summary></summary>
 	public static class UnusedEvent

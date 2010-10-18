@@ -23,7 +23,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 
 using MKY.IO.Serial;
-using MKY.System.Event;
+using MKY.Event;
 
 namespace YAT.Gui.Controls
 {

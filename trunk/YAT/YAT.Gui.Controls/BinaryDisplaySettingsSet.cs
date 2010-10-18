@@ -22,7 +22,7 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-using MKY.System.Event;
+using MKY.Event;
 
 using YAT.Domain.Settings;
 using YAT.Gui.Utilities;

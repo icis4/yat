@@ -21,7 +21,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace MKY.System.Drawing
+namespace MKY.Drawing
 {
 	/// <summary>
 	/// Drawing utility methods.

@@ -21,7 +21,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 
-namespace MKY.System
+namespace MKY
 {
 	/// <summary></summary>
 	public static class XEnvironment

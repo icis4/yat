@@ -24,10 +24,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows.Forms;
 
-using MKY.System.Event;
-using MKY.System.Guid;
-using MKY.System.IO;
-using MKY.System.Settings;
+using MKY.Event;
+using MKY.Guid;
+using MKY.IO;
+using MKY.Settings;
 
 using YAT.Settings;
 using YAT.Settings.Application;

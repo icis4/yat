@@ -27,7 +27,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-using MKY.System.Types;
+using MKY.Types;
 
 namespace MKY.IO.Usb
 {

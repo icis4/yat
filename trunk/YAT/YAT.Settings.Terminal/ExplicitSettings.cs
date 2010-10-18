@@ -27,7 +27,7 @@ namespace YAT.Settings.Terminal
 {
 	/// <summary></summary>
 	[Serializable]
-	public class ExplicitSettings : MKY.System.Settings.Settings
+	public class ExplicitSettings : MKY.Settings.Settings
 	{
 		private Domain.Settings.TerminalSettings terminal;
 		private Model.Settings.PredefinedCommandSettings predefinedCommand;
@@ -37,7 +37,7 @@ namespace YAT.Settings.Terminal
 
 		/// <summary></summary>
 		public ExplicitSettings()
-			: base(MKY.System.Settings.SettingsType.Explicit)
+			: base(MKY.Settings.SettingsType.Explicit)
 		{
 			SetMyDefaults();
 
@@ -238,7 +238,7 @@ namespace YAT.Settings.Terminal
 		#region Comparison Operators
 
 		// Use of base reference type implementation of operators ==/!=.
-		// See MKY.System.Test.EqualityTest for details.
+		// See MKY.Test.EqualityTest for details.
 
 		#endregion
 	}
