@@ -272,7 +272,7 @@ namespace MKY.IO.Ports
 		public static bool operator ==(SerialPortSettings lhs, SerialPortSettings rhs)
 		{
 			// Base reference type implementation of operator ==.
-			// See MKY.Utilities.Test.EqualityTest for details.
+			// See MKY.System.Test.EqualityTest for details.
 
 			if (ReferenceEquals(lhs, rhs)) return (true);
 			if (ReferenceEquals(lhs, null)) return (false);

@@ -22,7 +22,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
-using MKY.Utilities.Drawing;
+using MKY.System.Drawing;
 
 namespace MKY.Windows.Forms
 {

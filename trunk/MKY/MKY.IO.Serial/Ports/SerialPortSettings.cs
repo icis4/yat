@@ -33,7 +33,7 @@ namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SerialPortSettings : MKY.Utilities.Settings.Settings, IEquatable<SerialPortSettings>
+	public class SerialPortSettings : System.Settings.Settings, IEquatable<SerialPortSettings>
 	{
 		/// <summary></summary>
 		public static readonly AutoRetry AutoReopenDefault = new AutoRetry(true, 2000);
@@ -61,7 +61,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public SerialPortSettings(MKY.Utilities.Settings.SettingsType settingsType)
+		public SerialPortSettings(System.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -258,7 +258,7 @@ namespace MKY.IO.Serial
 
 			return
 			(
-				base.Equals((MKY.Utilities.Settings.Settings)other) && // Compare all settings nodes.
+				base.Equals((System.Settings.Settings)other) && // Compare all settings nodes.
 
 				(this.portId                 == other.portId) &&
 				(this.communication          == other.communication) &&

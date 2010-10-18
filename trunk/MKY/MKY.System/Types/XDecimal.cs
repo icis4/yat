@@ -1,43 +1,49 @@
-ï»¿//==================================================================================================
+//==================================================================================================
 // YAT - Yet Another Terminal.
 // Visit YAT at http://sourceforge.net/projects/y-a-terminal.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/YAT/YAT.cs $
-// $Author: maettu_this $
-// $Date: 2010-04-11 19:35:51 +0200 (So, 11 Apr 2010) $
-// $Revision: 285 $
+// $URL$
+// $Author$
+// $Date$
+// $Revision$
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
-// Copyright Â© 2010 Matthias KlÃ¤y.
+// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
+// Copyright © 2003-2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
-// YAT is licensed under the GNU LGPL.
+// This source code is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Text;
 
-namespace MKY.Test.Defaults
+namespace MKY.System.Types
 {
 	/// <summary>
-	/// Creates the defaults of the test settings in the solution directory.
+	/// Decimal utility methods.
 	/// </summary>
-	public static class ConsoleProgram
+	public static class XDecimal
 	{
-		/// <summary></summary>
-		[STAThread]
-		public static void Main()
+		/// <summary>
+		/// Limits "value" to the boundaries specified.
+		/// </summary>
+		public static decimal LimitToBounds(decimal value, decimal lower, decimal upper)
 		{
-			//List<MemberInfo> mi = SettingAttribute.Settings;
+			if (value < lower)
+				return (lower);
+			if (value > upper)
+				return (upper);
+			return (value);
 		}
 	}
 }
 
 //==================================================================================================
 // End of
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/YAT/YAT.cs $
+// $URL$
 //==================================================================================================

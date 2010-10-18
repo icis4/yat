@@ -3,14 +3,15 @@
 // Visit YAT at http://sourceforge.net/projects/y-a-terminal.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Usb/Properties/AssemblyInfo.cs $
-// $Author: maettu_this $
-// $Date: 2010-03-07 22:14:49 +0100 (So, 07 Mrz 2010) $
-// $Revision: 266 $
+// $URL$
+// $Author$
+// $Date$
+// $Revision$
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2010 Matthias Kläy.
+// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
+// Copyright © 2003-2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -26,12 +27,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MKY.Test.Defaults")]
-[assembly: AssemblyDescription("MKY.Test default settings")]
+[assembly: AssemblyTitle("MKY.System")]
+[assembly: AssemblyDescription("System")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MKY")]
-[assembly: AssemblyProduct("MKY.Test.Defaults")]
-[assembly: AssemblyCopyright("Copyright © 2010 Matthias Kläy. All rights reserved.")]
+[assembly: AssemblyProduct("MKY.System")]
+[assembly: AssemblyCopyright("Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil. Copyright © 2003-2010 Matthias Kläy. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -41,7 +42,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM.
-[assembly: Guid("a208d362-0dc5-4ebc-86ad-b4f5f4255499")]
+[assembly: Guid("e352407e-68f9-41d0-8306-d3ba2779dd8d")]
 
 // Assembly versions are defined by linked-in MKY.Version.cs.
 
@@ -50,9 +51,9 @@ using System.Runtime.InteropServices;
 
 // Assembly-level FxCop suppressions.
 [assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "MKY", Justification = "MKY is a name.")]
-[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "MKY.Test.Defaults", MessageId = "MKY", Justification = "MKY is a name.")]
+[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "namespace", Target = "MKY.System", MessageId = "MKY", Justification = "MKY is a name.")]
 
 //==================================================================================================
 // End of
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY.IO.Usb/Properties/AssemblyInfo.cs $
+// $URL$
 //==================================================================================================

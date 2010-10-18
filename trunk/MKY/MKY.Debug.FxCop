@@ -30,9 +30,8 @@
   <Target Name="$(ProjectDir)/MKY.IO.Usb.Test/bin/Debug/MKY.IO.Usb.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Usb/bin/Debug/MKY.IO.Usb.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.Net.Test/bin/Debug/MKY.Net.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/MKY.Test.Defaults/bin/Debug/MKY.Test.Defaults.exe" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/MKY.Utilities.Test/bin/Debug/MKY.Utilities.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
-  <Target Name="$(ProjectDir)/MKY.Utilities/bin/Debug/MKY.Utilities.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/MKY.System.Test/bin/Debug/MKY.System.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/MKY.System/bin/Debug/MKY.System.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.Win32.Test/bin/Debug/MKY.Win32.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.Win32/bin/Debug/MKY.Win32.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.Windows.Forms.Test/bin/Debug/MKY.Windows.Forms.Test.exe" Analyze="True" AnalyzeAllChildren="True" />

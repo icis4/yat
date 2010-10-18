@@ -21,8 +21,8 @@ using System;
 using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 
-using MKY.Utilities;
-using MKY.Utilities.Configuration;
+using MKY.System;
+using MKY.System.Configuration;
 
 namespace MKY.Net.Test
 {

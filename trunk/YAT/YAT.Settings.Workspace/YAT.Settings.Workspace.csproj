@@ -55,9 +55,9 @@
     <None Include="Properties\YAT.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MKY\MKY.Utilities\MKY.Utilities.csproj">
+    <ProjectReference Include="..\..\MKY\MKY.System\MKY.System.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
-      <Name>MKY.Utilities</Name>
+      <Name>MKY.System</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Model.Settings\YAT.Model.Settings.csproj">
       <Project>{E9FF1D5E-84E0-4ADB-94EC-662903931295}</Project>

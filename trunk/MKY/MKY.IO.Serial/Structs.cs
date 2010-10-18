@@ -85,7 +85,7 @@ namespace MKY.IO.Serial
 		public static bool operator ==(AutoRetry lhs, AutoRetry rhs)
 		{
 			// Value type implementation of operator ==.
-			// See MKY.Utilities.Test.EqualityTest for details.
+			// See MKY.System.Test.EqualityTest for details.
 
 			if (ReferenceEquals(lhs, rhs)) return (true);
 			if (ReferenceEquals(lhs, null)) return (false);

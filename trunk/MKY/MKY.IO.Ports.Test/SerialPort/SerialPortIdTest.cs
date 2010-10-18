@@ -28,8 +28,8 @@ using System.Xml.Serialization;
 using NUnit.Framework;
 
 using MKY.IO.Ports;
-using MKY.Utilities.Diagnostics;
-using MKY.Utilities.Test;
+using MKY.System.Diagnostics;
+using MKY.System.Test;
 
 namespace MKY.IO.Ports.Test.SerialPort
 {
