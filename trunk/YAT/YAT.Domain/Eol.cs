@@ -54,14 +54,14 @@ namespace YAT.Domain
 	#endregion
 
 	/// <summary>
-	/// Extended enum XEol.
+	/// Extended enum EolEx.
 	/// </summary>
 	/// <remarks>
 	/// LF:   Unix, Linux, Mac OS from version X, AmigaOS, BSD
 	/// CRLF: Windows, DOS, OS/2, CP/M
 	/// CR:   Mac OS up to version 9, Apple II
 	/// </remarks>
-	public class XEol : EnumEx
+	public class EolEx : EnumEx
 	{
 		#region String Definitions
 
@@ -89,13 +89,13 @@ namespace YAT.Domain
 		#endregion
 
 		/// <summary>Default is <see cref="Eol.CrLf"/>.</summary>
-		public XEol()
+		public EolEx()
 			: base(Eol.CrLf)
 		{
 		}
 
 		/// <summary></summary>
-		protected XEol(Eol type)
+		protected EolEx(Eol type)
 			: base(type)
 		{
 		}
@@ -139,16 +139,16 @@ namespace YAT.Domain
 		#region GetItems
 
 		/// <summary></summary>
-		public static XEol[] GetItems()
+		public static EolEx[] GetItems()
 		{
-			List<XEol> a = new List<XEol>();
-			a.Add(new XEol(Eol.None));
-			a.Add(new XEol(Eol.Cr));
-			a.Add(new XEol(Eol.Lf));
-			a.Add(new XEol(Eol.CrLf));
-			a.Add(new XEol(Eol.LfCr));
-			a.Add(new XEol(Eol.Tab));
-			a.Add(new XEol(Eol.Nul));
+			List<EolEx> a = new List<EolEx>();
+			a.Add(new EolEx(Eol.None));
+			a.Add(new EolEx(Eol.Cr));
+			a.Add(new EolEx(Eol.Lf));
+			a.Add(new EolEx(Eol.CrLf));
+			a.Add(new EolEx(Eol.LfCr));
+			a.Add(new EolEx(Eol.Tab));
+			a.Add(new EolEx(Eol.Nul));
 			return (a.ToArray());
 		}
 
@@ -157,9 +157,9 @@ namespace YAT.Domain
 		#region Parse
 
 		/// <summary></summary>
-		public static XEol Parse(string eol)
+		public static EolEx Parse(string eol)
 		{
-			XEol result;
+			EolEx result;
 
 			if (TryParse(eol, out result))
 				return (result);
@@ -168,48 +168,48 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public static bool TryParse(string eol, out XEol result)
+		public static bool TryParse(string eol, out EolEx result)
 		{
 			if      ((string.Compare(eol, None_string, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(eol, None_stringSequence, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XEol(Eol.None);
+				result = new EolEx(Eol.None);
 				return (true);
 			}
 			else if ((string.Compare(eol, Cr_string, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(eol, Cr_stringNative, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XEol(Eol.Cr);
+				result = new EolEx(Eol.Cr);
 				return (true);
 			}
 			else if ((string.Compare(eol, Lf_string, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(eol, Lf_stringNative, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XEol(Eol.Lf);
+				result = new EolEx(Eol.Lf);
 				return (true);
 			}
 			else if ((string.Compare(eol, CrLf_string, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(eol, CrLf_stringNative, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XEol(Eol.CrLf);
+				result = new EolEx(Eol.CrLf);
 				return (true);
 			}
 			else if ((string.Compare(eol, LfCr_string, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(eol, LfCr_stringNative, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XEol(Eol.LfCr);
+				result = new EolEx(Eol.LfCr);
 				return (true);
 			}
 			else if ((string.Compare(eol, Tab_string, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(eol, Tab_stringNative, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XEol(Eol.Tab);
+				result = new EolEx(Eol.Tab);
 				return (true);
 			}
 			else if ((string.Compare(eol, Nul_string, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(eol, Nul_stringNative, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XEol(Eol.Nul);
+				result = new EolEx(Eol.Nul);
 				return (true);
 			}
 			else
@@ -224,37 +224,37 @@ namespace YAT.Domain
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator Eol(XEol eol)
+		public static implicit operator Eol(EolEx eol)
 		{
 			return ((Eol)eol.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XEol(Eol eol)
+		public static implicit operator EolEx(Eol eol)
 		{
-			return (new XEol(eol));
+			return (new EolEx(eol));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(XEol eol)
+		public static implicit operator int(EolEx eol)
 		{
 			return (eol.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XEol(int eol)
+		public static implicit operator EolEx(int eol)
 		{
-			return (new XEol((Eol)eol));
+			return (new EolEx((Eol)eol));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(XEol eol)
+		public static implicit operator string(EolEx eol)
 		{
 			return (eol.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XEol(string eol)
+		public static implicit operator EolEx(string eol)
 		{
 			return (Parse(eol));
 		}

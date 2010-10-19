@@ -48,7 +48,7 @@ namespace MKY.Net
 	#endregion
 
 	/// <summary>
-	/// Extended enum XIPHost.
+	/// Extended enum IPHost.
 	/// </summary>
 	public class IPHost : EnumEx
 	{

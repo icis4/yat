@@ -44,9 +44,9 @@ namespace YAT.Domain
 	#endregion
 
 	/// <summary>
-	/// Extended enum XEndianess.
+	/// Extended enum EndianessEx.
 	/// </summary>
-	public class XEndianess : EnumEx
+	public class EndianessEx : EnumEx
 	{
 		#region String Definitions
 
@@ -57,13 +57,13 @@ namespace YAT.Domain
 		#endregion
 
 		/// <summary>Default is <see cref="Endianess.BigEndian"/>.</summary>
-		public XEndianess()
+		public EndianessEx()
 			: base(Endianess.BigEndian)
 		{
 		}
 
 		/// <summary></summary>
-		protected XEndianess(Endianess endianess)
+		protected EndianessEx(Endianess endianess)
 			: base(endianess)
 		{
 		}
@@ -86,11 +86,11 @@ namespace YAT.Domain
 		#region GetItems
 
 		/// <summary></summary>
-		public static XEndianess[] GetItems()
+		public static EndianessEx[] GetItems()
 		{
-			List<XEndianess> a = new List<XEndianess>();
-			a.Add(new XEndianess(Endianess.BigEndian));
-			a.Add(new XEndianess(Endianess.LittleEndian));
+			List<EndianessEx> a = new List<EndianessEx>();
+			a.Add(new EndianessEx(Endianess.BigEndian));
+			a.Add(new EndianessEx(Endianess.LittleEndian));
 			return (a.ToArray());
 		}
 
@@ -99,9 +99,9 @@ namespace YAT.Domain
 		#region Parse
 
 		/// <summary></summary>
-		public static XEndianess Parse(string endianess)
+		public static EndianessEx Parse(string endianess)
 		{
-			XEndianess result;
+			EndianessEx result;
 
 			if (TryParse(endianess, out result))
 				return (result);
@@ -110,16 +110,16 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public static bool TryParse(string endianess, out XEndianess result)
+		public static bool TryParse(string endianess, out EndianessEx result)
 		{
 			if      (string.Compare(endianess, BigEndian_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XEndianess(Endianess.BigEndian);
+				result = new EndianessEx(Endianess.BigEndian);
 				return (true);
 			}
 			else if (string.Compare(endianess, LittleEndian_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XEndianess(Endianess.LittleEndian);
+				result = new EndianessEx(Endianess.LittleEndian);
 				return (true);
 			}
 			else
@@ -134,37 +134,37 @@ namespace YAT.Domain
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator Endianess(XEndianess endianess)
+		public static implicit operator Endianess(EndianessEx endianess)
 		{
 			return ((Endianess)endianess.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XEndianess(Endianess endianess)
+		public static implicit operator EndianessEx(Endianess endianess)
 		{
-			return (new XEndianess(endianess));
+			return (new EndianessEx(endianess));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(XEndianess endianess)
+		public static implicit operator int(EndianessEx endianess)
 		{
 			return (endianess.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XEndianess(int endianess)
+		public static implicit operator EndianessEx(int endianess)
 		{
-			return (new XEndianess((Endianess)endianess));
+			return (new EndianessEx((Endianess)endianess));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(XEndianess endianess)
+		public static implicit operator string(EndianessEx endianess)
 		{
 			return (endianess.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XEndianess(string endianess)
+		public static implicit operator EndianessEx(string endianess)
 		{
 			return (Parse(endianess));
 		}

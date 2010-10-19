@@ -51,9 +51,9 @@ namespace MKY.IO.Serial
 	#endregion
 
 	/// <summary>
-	/// Extended enum XSocketHostType.
+	/// Extended enum SocketHostTypeEx.
 	/// </summary>
-	public class XSocketHostType : EnumEx
+	public class SocketHostTypeEx : EnumEx
 	{
 		#region String Definitions
 
@@ -66,13 +66,13 @@ namespace MKY.IO.Serial
 		#endregion
 
 		/// <summary>Default is <see cref="SocketHostType.TcpAutoSocket"/>.</summary>
-		public XSocketHostType()
+		public SocketHostTypeEx()
 			: base(SocketHostType.TcpAutoSocket)
 		{
 		}
 
 		/// <summary></summary>
-		protected XSocketHostType(SocketHostType type)
+		protected SocketHostTypeEx(SocketHostType type)
 			: base(type)
 		{
 		}
@@ -97,13 +97,13 @@ namespace MKY.IO.Serial
 		#region GetItems
 
 		/// <summary></summary>
-		public static XSocketHostType[] GetItems()
+		public static SocketHostTypeEx[] GetItems()
 		{
-			List<XSocketHostType> a = new List<XSocketHostType>();
-			a.Add(new XSocketHostType(SocketHostType.TcpClient));
-			a.Add(new XSocketHostType(SocketHostType.TcpServer));
-			a.Add(new XSocketHostType(SocketHostType.TcpAutoSocket));
-			a.Add(new XSocketHostType(SocketHostType.Udp));
+			List<SocketHostTypeEx> a = new List<SocketHostTypeEx>();
+			a.Add(new SocketHostTypeEx(SocketHostType.TcpClient));
+			a.Add(new SocketHostTypeEx(SocketHostType.TcpServer));
+			a.Add(new SocketHostTypeEx(SocketHostType.TcpAutoSocket));
+			a.Add(new SocketHostTypeEx(SocketHostType.Udp));
 			return (a.ToArray());
 		}
 
@@ -112,9 +112,9 @@ namespace MKY.IO.Serial
 		#region Parse
 
 		/// <summary></summary>
-		public static XSocketHostType Parse(string type)
+		public static SocketHostTypeEx Parse(string type)
 		{
-			XSocketHostType result;
+			SocketHostTypeEx result;
 
 			if (TryParse(type, out result))
 				return (result);
@@ -123,26 +123,26 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public static bool TryParse(string type, out XSocketHostType result)
+		public static bool TryParse(string type, out SocketHostTypeEx result)
 		{
 			if      (string.Compare(type, TcpClient_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XSocketHostType(SocketHostType.TcpClient);
+				result = new SocketHostTypeEx(SocketHostType.TcpClient);
 				return (true);
 			}
 			else if (string.Compare(type, TcpServer_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XSocketHostType(SocketHostType.TcpServer);
+				result = new SocketHostTypeEx(SocketHostType.TcpServer);
 				return (true);
 			}
 			else if (string.Compare(type, TcpAutoSocket_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XSocketHostType(SocketHostType.TcpAutoSocket);
+				result = new SocketHostTypeEx(SocketHostType.TcpAutoSocket);
 				return (true);
 			}
 			else if (string.Compare(type, Udp_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XSocketHostType(SocketHostType.Udp);
+				result = new SocketHostTypeEx(SocketHostType.Udp);
 				return (true);
 			}
 			else
@@ -157,37 +157,37 @@ namespace MKY.IO.Serial
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator SocketHostType(XSocketHostType type)
+		public static implicit operator SocketHostType(SocketHostTypeEx type)
 		{
 			return ((SocketHostType)type.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XSocketHostType(SocketHostType type)
+		public static implicit operator SocketHostTypeEx(SocketHostType type)
 		{
-			return (new XSocketHostType(type));
+			return (new SocketHostTypeEx(type));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(XSocketHostType type)
+		public static implicit operator int(SocketHostTypeEx type)
 		{
 			return (type.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XSocketHostType(int type)
+		public static implicit operator SocketHostTypeEx(int type)
 		{
-			return (new XSocketHostType((SocketHostType)type));
+			return (new SocketHostTypeEx((SocketHostType)type));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(XSocketHostType type)
+		public static implicit operator string(SocketHostTypeEx type)
 		{
 			return (type.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XSocketHostType(string type)
+		public static implicit operator SocketHostTypeEx(string type)
 		{
 			return (Parse(type));
 		}

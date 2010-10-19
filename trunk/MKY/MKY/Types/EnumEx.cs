@@ -166,7 +166,7 @@ namespace MKY.Types
 		}
 
 		/// <summary>
-		/// XEnum requires an underlying enum to be constructed.
+		/// EnumEx requires an underlying enum to be constructed.
 		/// </summary>
 		protected EnumEx(Enum underlyingEnum)
 		{
@@ -260,7 +260,7 @@ namespace MKY.Types
 			if (other != null)
 				return (UnderlyingEnum.CompareTo(other.UnderlyingEnum));
 			else
-				throw (new ArgumentException("Object is not a XEnum"));
+				throw (new ArgumentException("Object is not a EnumEx"));
 		}
 
 		#endregion
@@ -271,7 +271,7 @@ namespace MKY.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
-		/// Creates a deep copy of the XEnum and returns it.
+		/// Creates a deep copy of the EnumEx and returns it.
 		/// </summary>
 		public virtual object Clone()
 		{
@@ -291,9 +291,9 @@ namespace MKY.Types
 		// Static Methods
 		//------------------------------------------------------------------------------------------
 
-		private static System.Type XEnumTypeToUnderlyingEnumType(System.Type xEnumType)
+		private static System.Type EnumExTypeToUnderlyingEnumType(System.Type enumExType)
 		{
-			System.Type[] ta = xEnumType.GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic);
+			System.Type[] ta = enumExType.GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic);
 
 			if (ta.Length < 1)
 				throw (new TypeLoadException("No nested types found"));
@@ -308,9 +308,9 @@ namespace MKY.Types
 
 		/// <summary>
 		/// Retrieves the name of the underlying enum constant in the specified
-		/// XEnummeration that has the specified value.
+		/// enummeration that has the specified value.
 		/// </summary>
-		/// <param name="xEnumType">The Type of the XEnum.</param>
+		/// <param name="enumExType">The Type of the EnumEx.</param>
 		/// <param name="value">
 		/// The value of a particular enumerated constant in terms of its
 		/// underlying enum.
@@ -326,60 +326,59 @@ namespace MKY.Types
 		/// <exception cref="ArgumentException">
 		/// value is not of type ex.
 		/// </exception>
-		public static string GetName(System.Type xEnumType, object value)
+		public static string GetName(System.Type enumExType, object value)
 		{
-			return (Enum.GetName(XEnumTypeToUnderlyingEnumType(xEnumType), value));
+			return (Enum.GetName(EnumExTypeToUnderlyingEnumType(enumExType), value));
 		}
 
 		/// <summary>
 		/// Retrieves an array of the underlying enum names of the constants in
-		/// the specified XEnummeration.
+		/// the specified enummeration.
 		/// </summary>
-		/// <param name="xEnumType">The Type of the XEnum.</param>
+		/// <param name="enumExType">The Type of the EnumEx.</param>
 		/// <returns>
-		/// A string array of the names of the constants in enumType. The elements
+		/// A string array of the names of the constants in enum type. The elements
 		/// of the array are sorted by the values of the enumerated constants.
 		/// </returns>
 		/// <exception cref="ArgumentNullException">
 		/// ex or value is a <c>null</c> reference (Nothing in Visual Basic).
 		/// </exception>
-		public static string[] GetNames(System.Type xEnumType)
+		public static string[] GetNames(System.Type enumExType)
 		{
-			return (Enum.GetNames(XEnumTypeToUnderlyingEnumType(xEnumType)));
+			return (Enum.GetNames(EnumExTypeToUnderlyingEnumType(enumExType)));
 		}
 
 		/// <summary>
 		/// Retrieves an array of the underlying enum values of the constants in
-		/// the specified XEnummeration.
+		/// the specified enummeration.
 		/// </summary>
-		/// <param name="xEnumType">The Type of the XEnum.</param>
+		/// <param name="enumExType">The Type of the EnumEx.</param>
 		/// <returns>
-		/// An Array of the values of the constants in enumType. The elements of
+		/// An Array of the values of the constants in enum type. The elements of
 		/// the array are sorted by the values of the enumeration constants.
 		/// </returns>
 		/// <exception cref="ArgumentNullException">
 		/// ex or value is a <c>null</c> reference (Nothing in Visual Basic).
 		/// </exception>
-		public static Array GetValues(System.Type xEnumType)
+		public static Array GetValues(System.Type enumExType)
 		{
-			return (Enum.GetValues(XEnumTypeToUnderlyingEnumType(xEnumType)));
+			return (Enum.GetValues(EnumExTypeToUnderlyingEnumType(enumExType)));
 		}
 
 		/// <summary>
-		/// Retrieves an array of the underlying enums in the specified
-		/// XEnummeration.
+		/// Retrieves an array of the underlying enums in the specified enummeration.
 		/// </summary>
-		/// <param name="xEnumType">The Type of the XEnum.</param>
+		/// <param name="enumExType">The Type of the EnumEx.</param>
 		/// <returns>
-		/// An Array of the values of the constants in enumType. The elements of
+		/// An Array of the values of the constants in enum type. The elements of
 		/// the array are sorted by the values of the enumeration constants.
 		/// </returns>
 		/// <exception cref="ArgumentNullException">
 		/// ex or value is a <c>null</c> reference (Nothing in Visual Basic).
 		/// </exception>
-		public static Enum[] GetItems(System.Type xEnumType)
+		public static Enum[] GetItems(System.Type enumExType)
 		{
-			System.Type underlyingEnumType = XEnumTypeToUnderlyingEnumType(xEnumType);
+			System.Type underlyingEnumType = EnumExTypeToUnderlyingEnumType(enumExType);
 
 			List<Enum> items = new List<Enum>();
 			FieldInfo[] fis = underlyingEnumType.GetFields(BindingFlags.Public | BindingFlags.Static);
@@ -395,7 +394,7 @@ namespace MKY.Types
 		/// Returns an indication whether an underlying constant with a specified
 		/// value exists in the specified enumeration.
 		/// </summary>
-		/// <param name="xEnumType">The Type of the XEnum.</param>
+		/// <param name="enumExType">The Type of the EnumEx.</param>
 		/// <param name="value">The value or name of a constant in ex.</param>
 		/// <returns>
 		/// <c>true</c> if a constant in enumType has a value equal to value;
@@ -405,25 +404,25 @@ namespace MKY.Types
 		/// ex or value is a <c>null</c> reference (Nothing in Visual Basic).
 		/// </exception>
 		/// <exception cref="ArgumentException">
-		/// The type of value is not an XEnum.
+		/// The type of value is not an EnumEx.
 		/// 
 		/// -or-
 		/// 
-		/// The type of value is not an underlying type of XEnum.
+		/// The type of value is not an underlying type of EnumEx.
 		/// </exception>
-		public static bool IsDefined(System.Type xEnumType, object value)
+		public static bool IsDefined(System.Type enumExType, object value)
 		{
-			return (Enum.IsDefined(XEnumTypeToUnderlyingEnumType(xEnumType), value));
+			return (Enum.IsDefined(EnumExTypeToUnderlyingEnumType(enumExType), value));
 		}
 
 		/// <summary>
 		/// Converts the string representation of the name or numeric value of one
 		/// or more enumerated constants to an equivalent enumerated object.
 		/// </summary>
-		/// <param name="xEnumType">The Type of the XEnum.</param>
+		/// <param name="enumExType">The Type of the EnumEx.</param>
 		/// <param name="value">A string containing the name or value to convert.</param>
 		/// <exception cref="ArgumentNullException">
-		/// xEnumType or value is a <c>null</c> reference (Nothing in Visual Basic).
+		/// enumExType or value is a <c>null</c> reference (Nothing in Visual Basic).
 		/// </exception>
 		/// <exception cref="ArgumentException">
 		/// value is either an empty string or only contains white space.
@@ -433,21 +432,21 @@ namespace MKY.Types
 		/// value is a name, but not one of the named constants defined for the
 		/// enumeration.
 		/// </exception>
-		public static EnumEx Parse(System.Type xEnumType, string value)
+		public static EnumEx Parse(System.Type enumExType, string value)
 		{
-			return (Parse(xEnumType, value, true));
+			return (Parse(enumExType, value, true));
 		}
 
 		/// <summary>
 		/// Converts the string representation of the name or numeric value of one
 		/// or more enumerated constants to an equivalent enumerated object.
 		/// </summary>
-		/// <param name="xEnumType">The Type of the XEnum.</param>
+		/// <param name="enumExType">The Type of the EnumEx.</param>
 		/// <param name="value">A string containing the name or value to convert.</param>
 		/// <param name="ignoreCase">If true, ignore case; otherwise, regard case.</param>
-		/// <returns>An XEnum whose value is represented by value.</returns>
+		/// <returns>An EnumEx whose value is represented by value.</returns>
 		/// <exception cref="ArgumentNullException">
-		/// xEnumType or value is a <c>null</c> reference (Nothing in Visual Basic).
+		/// enumExType or value is a <c>null</c> reference (Nothing in Visual Basic).
 		/// </exception>
 		/// <exception cref="ArgumentException">
 		/// value is either an empty string or only contains white space.
@@ -457,14 +456,14 @@ namespace MKY.Types
 		/// value is a name, but not one of the named constants defined for the
 		/// enumeration.
 		/// </exception>
-		public static EnumEx Parse(System.Type xEnumType, string value, bool ignoreCase)
+		public static EnumEx Parse(System.Type enumExType, string value, bool ignoreCase)
 		{
-			System.Type underlyingEnumType = XEnumTypeToUnderlyingEnumType(xEnumType);
+			System.Type underlyingEnumType = EnumExTypeToUnderlyingEnumType(enumExType);
 			Enum underlyingEnum = (Enum)Enum.Parse(underlyingEnumType, value, ignoreCase);
 
 			System.Type[] ta = new System.Type[1];
 			ta[0] = underlyingEnumType;
-			ConstructorInfo ci = xEnumType.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, ta, null);
+			ConstructorInfo ci = enumExType.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, ta, null);
 
 			Enum[] ea = new Enum[1];
 			ea[0] = underlyingEnum;
@@ -475,7 +474,7 @@ namespace MKY.Types
 		/// Converts the specified value of a specified enumerated type to its
 		/// equivalent string representation according to the specified format.
 		/// </summary>
-		/// <param name="xEnumType">The Type of the XEnum.</param>
+		/// <param name="enumExType">The Type of the EnumEx.</param>
 		/// <param name="value">The value to convert.</param>
 		/// <param name="format">The output format to use.</param>
 		/// <returns>A string representation of value.</returns>
@@ -483,18 +482,18 @@ namespace MKY.Types
 		/// ex or value is a <c>null</c> reference (Nothing in Visual Basic).
 		/// </exception>
 		/// <exception cref="ArgumentException">
-		/// The value is from an enumeration that differs in type from enumType.
+		/// The value is from an enumeration that differs in type from enum type.
 		/// s
 		/// -or-
 		/// s
-		/// The type of value is not an underlying type of enumType.
+		/// The type of value is not an underlying type of enum type.
 		/// </exception>
 		/// <exception cref="FormatException">
 		/// The format parameter contains an invalid value.
 		/// </exception>
-		public static string Format(System.Type xEnumType, object value, string format)
+		public static string Format(System.Type enumExType, object value, string format)
 		{
-			return (Enum.Format(XEnumTypeToUnderlyingEnumType(xEnumType), value, format));
+			return (Enum.Format(EnumExTypeToUnderlyingEnumType(enumExType), value, format));
 		}
 
 		#endregion

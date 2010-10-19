@@ -60,7 +60,7 @@ namespace YAT.Domain
 
 	/// <summary></summary>
 	[Serializable]
-	public class XControlCharRadix : XRadix
+	public class ControlCharRadixEx : RadixEx
 	{
 		#region String Definitions
 
@@ -69,7 +69,7 @@ namespace YAT.Domain
 		#endregion
 
 		/// <summary></summary>
-		protected XControlCharRadix(ControlCharRadix radix)
+		protected ControlCharRadixEx(ControlCharRadix radix)
 			: base((Radix)radix)
 		{
 		}
@@ -91,14 +91,14 @@ namespace YAT.Domain
 		#region GetItems
 
 		/// <summary></summary>
-		public static new XControlCharRadix[] GetItems()
+		public static new ControlCharRadixEx[] GetItems()
 		{
-			List<XControlCharRadix> items = new List<XControlCharRadix>();
-			foreach (XRadix radix in XRadix.GetItems())
+			List<ControlCharRadixEx> items = new List<ControlCharRadixEx>();
+			foreach (RadixEx radix in RadixEx.GetItems())
 			{
-				items.Add((XControlCharRadix)((Radix)radix));
+				items.Add((ControlCharRadixEx)((Radix)radix));
 			}
-			items.Add(new XControlCharRadix(ControlCharRadix.AsciiMnemonic));
+			items.Add(new ControlCharRadixEx(ControlCharRadix.AsciiMnemonic));
 			return (items.ToArray());
 		}
 
@@ -107,12 +107,12 @@ namespace YAT.Domain
 		#region Parse
 
 		/// <summary></summary>
-		public static new XControlCharRadix Parse(string radix)
+		public static new ControlCharRadixEx Parse(string radix)
 		{
 			if (string.Compare(radix, AsciiMnemonic_string, StringComparison.OrdinalIgnoreCase) == 0)
-				return (new XControlCharRadix(ControlCharRadix.AsciiMnemonic));
+				return (new ControlCharRadixEx(ControlCharRadix.AsciiMnemonic));
 			else
-				return ((XControlCharRadix)XRadix.Parse(radix));
+				return ((ControlCharRadixEx)RadixEx.Parse(radix));
 		}
 
 		#endregion
@@ -120,27 +120,27 @@ namespace YAT.Domain
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator ControlCharRadix(XControlCharRadix radix)
+		public static implicit operator ControlCharRadix(ControlCharRadixEx radix)
 		{
 			return ((ControlCharRadix)radix.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XControlCharRadix(ControlCharRadix radix)
+		public static implicit operator ControlCharRadixEx(ControlCharRadix radix)
 		{
-			return (new XControlCharRadix(radix));
+			return (new ControlCharRadixEx(radix));
 		}
 
 		/// <summary></summary>
-		public static explicit operator Radix(XControlCharRadix radix)
+		public static explicit operator Radix(ControlCharRadixEx radix)
 		{
 			return ((Radix)radix.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XControlCharRadix(Radix radix)
+		public static implicit operator ControlCharRadixEx(Radix radix)
 		{
-			return (new XControlCharRadix((ControlCharRadix)radix));
+			return (new ControlCharRadixEx((ControlCharRadix)radix));
 		}
 
 		#endregion

@@ -83,8 +83,8 @@ namespace YAT.Gui.Utilities
 				r = t.NewRow();
 				r[Dec] = i.ToString();
 				r[Hex] = i.ToString("X2", CultureInfo.InvariantCulture);
-				r[Mnemonic] = MKY.Text.Ascii.ConvertToMnemonic(i);
-				r[Escape] = MKY.Text.Escape.ConvertToEscapeSequence(i);
+				r[Mnemonic]    = MKY.Text.Ascii.ConvertToMnemonic(i);
+				r[Escape]      = MKY.Text.Escape.ConvertToEscapeSequence(i);
 				r[Description] = MKY.Text.Ascii.ConvertToDescription(i);
 				t.Rows.Add(r);
 			}
@@ -93,8 +93,8 @@ namespace YAT.Gui.Utilities
 				r = t.NewRow();
 				r[Dec] = i.ToString();
 				r[Hex] = i.ToString("X2", CultureInfo.InvariantCulture);
-				r[Mnemonic] = MKY.Text.Ascii.ConvertToMnemonic(i);
-				r[Escape] = MKY.Text.Escape.ConvertToEscapeSequence(i);
+				r[Mnemonic]    = MKY.Text.Ascii.ConvertToMnemonic(i);
+				r[Escape]      = MKY.Text.Escape.ConvertToEscapeSequence(i);
 				r[Description] = MKY.Text.Ascii.ConvertToDescription(i);
 				t.Rows.Add(r);
 			}

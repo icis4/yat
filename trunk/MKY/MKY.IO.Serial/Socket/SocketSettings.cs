@@ -455,7 +455,7 @@ namespace MKY.IO.Serial
 		{
 			return
 			(
-				((XSocketHostType)this.hostType) + ", " +
+				((SocketHostTypeEx)this.hostType) + ", " +
 				this.remoteHost                  + ", " +
 				this.remotePort                  + ", " +
 				this.localInterface              + ", " +

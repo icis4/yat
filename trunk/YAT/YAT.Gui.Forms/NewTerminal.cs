@@ -303,7 +303,7 @@ namespace YAT.Gui.Forms
 			// Set socket control before serial port control since that might need to refresh the
 			//   serial port list first (which takes time, which looks ulgy).
 			socketSelection.Enabled        = !isSerialPort && !isUsbHid;
-			socketSelection.HostType       = (Domain.XIOType)ioType;
+			socketSelection.HostType       = (Domain.IOTypeEx)ioType;
 			socketSelection.RemoteHost     = this.newTerminalSettings_Form.SocketRemoteHost;
 			socketSelection.RemotePort     = this.newTerminalSettings_Form.SocketRemotePort;
 			socketSelection.LocalInterface = this.newTerminalSettings_Form.SocketLocalInterface;

@@ -406,7 +406,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public virtual bool Start()
 		{
-			// AssertNotDisposed() is called by IsStarted
+			// AssertNotDisposed() is called by IsStarted.
 
 			if (!IsStarted)
 				CreateAndOpenPort();
@@ -417,7 +417,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public virtual void Stop()
 		{
-			// AssertNotDisposed() is called by IsStarted
+			// AssertNotDisposed() is called by IsStarted.
 
 			if (IsStarted)
 			{
@@ -439,8 +439,8 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public virtual int Receive(out byte[] data)
 		{
-			// AssertNotDisposed() is called by IsOpen
-			// OnDataReceived has been fired before
+			// AssertNotDisposed() is called by IsOpen.
+			// OnDataReceived has been fired before.
 
 			int bytesReceived = 0;
 			if (IsOpen)
@@ -463,7 +463,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public virtual void Send(byte[] data)
 		{
-			// AssertNotDisposed() is called by IsOpen
+			// AssertNotDisposed() is called by IsOpen.
 
 			if (IsOpen)
 			{
@@ -508,7 +508,7 @@ namespace MKY.IO.Serial
 				this.port.DataBits = (MKY.IO.Ports.DataBitsEx)s.DataBits;
 				this.port.Parity = s.Parity;
 				this.port.StopBits = s.StopBits;
-				this.port.Handshake = (XSerialFlowControl)s.FlowControl;
+				this.port.Handshake = (SerialFlowControlEx)s.FlowControl;
 
 				// Parity replace
 				this.port.ParityReplace = this.settings.ParityErrorReplacement;

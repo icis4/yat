@@ -44,9 +44,9 @@ namespace YAT.Domain
 	#endregion
 
 	/// <summary>
-	/// Extended enum XTerminalType.
+	/// Extended enum TerminalTypeEx.
 	/// </summary>
-	public class XTerminalType : EnumEx
+	public class TerminalTypeEx : EnumEx
 	{
 		#region String Definitions
 
@@ -56,13 +56,13 @@ namespace YAT.Domain
 		#endregion
 
 		/// <summary>Default is <see cref="TerminalType.Text"/>.</summary>
-		public XTerminalType()
+		public TerminalTypeEx()
 			: base(TerminalType.Text)
 		{
 		}
 
 		/// <summary></summary>
-		protected XTerminalType(TerminalType type)
+		protected TerminalTypeEx(TerminalType type)
 			: base(type)
 		{
 		}
@@ -85,11 +85,11 @@ namespace YAT.Domain
 		#region GetItems
 
 		/// <summary></summary>
-		public static XTerminalType[] GetItems()
+		public static TerminalTypeEx[] GetItems()
 		{
-			List<XTerminalType> a = new List<XTerminalType>();
-			a.Add(new XTerminalType(TerminalType.Text));
-			a.Add(new XTerminalType(TerminalType.Binary));
+			List<TerminalTypeEx> a = new List<TerminalTypeEx>();
+			a.Add(new TerminalTypeEx(TerminalType.Text));
+			a.Add(new TerminalTypeEx(TerminalType.Binary));
 			return (a.ToArray());
 		}
 
@@ -98,9 +98,9 @@ namespace YAT.Domain
 		#region Parse
 
 		/// <summary></summary>
-		public static XTerminalType Parse(string type)
+		public static TerminalTypeEx Parse(string type)
 		{
-			XTerminalType result;
+			TerminalTypeEx result;
 
 			if (TryParse(type, out result))
 				return (result);
@@ -109,16 +109,16 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public static bool TryParse(string type, out XTerminalType result)
+		public static bool TryParse(string type, out TerminalTypeEx result)
 		{
 			if (string.Compare(type, Text_string, true) == 0)
 			{
-				result = new XTerminalType(TerminalType.Text);
+				result = new TerminalTypeEx(TerminalType.Text);
 				return (true);
 			}
 			else if (string.Compare(type, Binary_string, true) == 0)
 			{
-				result = new XTerminalType(TerminalType.Binary);
+				result = new TerminalTypeEx(TerminalType.Binary);
 				return (true);
 			}
 			else
@@ -133,37 +133,37 @@ namespace YAT.Domain
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator TerminalType(XTerminalType type)
+		public static implicit operator TerminalType(TerminalTypeEx type)
 		{
 			return ((TerminalType)type.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XTerminalType(TerminalType type)
+		public static implicit operator TerminalTypeEx(TerminalType type)
 		{
-			return (new XTerminalType(type));
+			return (new TerminalTypeEx(type));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(XTerminalType type)
+		public static implicit operator int(TerminalTypeEx type)
 		{
 			return (type.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XTerminalType(int type)
+		public static implicit operator TerminalTypeEx(int type)
 		{
-			return (new XTerminalType((TerminalType)type));
+			return (new TerminalTypeEx((TerminalType)type));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(XTerminalType type)
+		public static implicit operator string(TerminalTypeEx type)
 		{
 			return (type.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XTerminalType(string type)
+		public static implicit operator TerminalTypeEx(string type)
 		{
 			return (Parse(type));
 		}

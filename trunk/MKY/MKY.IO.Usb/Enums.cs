@@ -236,18 +236,18 @@ namespace MKY.IO.Usb
 	#region HidUsagePage XEnum
 
 	/// <summary>
-	/// Extended enum XHidUsagePage.
+	/// Extended enum HidUsagePageEx.
 	/// </summary>
-	public class XHidUsagePage : EnumEx
+	public class HidUsagePageEx : EnumEx
 	{
 		/// <summary>Default is <see cref="HidUsagePage.Unknown"/>.</summary>
-		public XHidUsagePage()
+		public HidUsagePageEx()
 			: base(HidUsagePage.Unknown)
 		{
 		}
 
 		/// <summary></summary>
-		protected XHidUsagePage(HidUsagePage page)
+		protected HidUsagePageEx(HidUsagePage page)
 			: base(page)
 		{
 		}
@@ -265,19 +265,19 @@ namespace MKY.IO.Usb
 		#region Parse
 
 		/// <summary></summary>
-		public static XHidUsagePage Parse(string page)
+		public static HidUsagePageEx Parse(string page)
 		{
-			return ((XHidUsagePage)int.Parse(page));
+			return ((HidUsagePageEx)int.Parse(page));
 		}
 
 		/// <summary></summary>
-		public static bool TryParse(string page, out XHidUsagePage result)
+		public static bool TryParse(string page, out HidUsagePageEx result)
 		{
 			int intResult;
 
 			if (int.TryParse(page, out intResult))
 			{
-				result = (XHidUsagePage)intResult;
+				result = (HidUsagePageEx)intResult;
 				return (true);
 			}
 			else
@@ -292,37 +292,37 @@ namespace MKY.IO.Usb
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator HidUsagePage(XHidUsagePage page)
+		public static implicit operator HidUsagePage(HidUsagePageEx page)
 		{
 			return ((HidUsagePage)page.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XHidUsagePage(HidUsagePage page)
+		public static implicit operator HidUsagePageEx(HidUsagePage page)
 		{
-			return (new XHidUsagePage(page));
+			return (new HidUsagePageEx(page));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(XHidUsagePage page)
+		public static implicit operator int(HidUsagePageEx page)
 		{
 			return (page.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XHidUsagePage(int page)
+		public static implicit operator HidUsagePageEx(int page)
 		{
-			return (new XHidUsagePage((HidUsagePage)page));
+			return (new HidUsagePageEx((HidUsagePage)page));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(XHidUsagePage page)
+		public static implicit operator string(HidUsagePageEx page)
 		{
 			return (page.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XHidUsagePage(string page)
+		public static implicit operator HidUsagePageEx(string page)
 		{
 			return (Parse(page));
 		}
@@ -354,18 +354,18 @@ namespace MKY.IO.Usb
 	#region HidUsage XEnum
 
 	/// <summary>
-	/// Extended enum XHidUsage.
+	/// Extended enum HidUsageEx.
 	/// </summary>
-	public class XHidUsage : EnumEx
+	public class HidUsageEx : EnumEx
 	{
 		/// <summary>Default is <see cref="HidUsage.Unknown"/>.</summary>
-		public XHidUsage()
+		public HidUsageEx()
 			: base(HidUsage.Unknown)
 		{
 		}
 
 		/// <summary></summary>
-		protected XHidUsage(HidUsage usage)
+		protected HidUsageEx(HidUsage usage)
 			: base(usage)
 		{
 		}
@@ -383,19 +383,19 @@ namespace MKY.IO.Usb
 		#region Parse
 
 		/// <summary></summary>
-		public static XHidUsage Parse(string usage)
+		public static HidUsageEx Parse(string usage)
 		{
-			return ((XHidUsage)int.Parse(usage));
+			return ((HidUsageEx)int.Parse(usage));
 		}
 
 		/// <summary></summary>
-		public static bool TryParse(string usage, out XHidUsage result)
+		public static bool TryParse(string usage, out HidUsageEx result)
 		{
 			int intResult;
 
 			if (int.TryParse(usage, out intResult))
 			{
-				result = (XHidUsage)intResult;
+				result = (HidUsageEx)intResult;
 				return (true);
 			}
 			else
@@ -410,37 +410,37 @@ namespace MKY.IO.Usb
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator HidUsage(XHidUsage usage)
+		public static implicit operator HidUsage(HidUsageEx usage)
 		{
 			return ((HidUsage)usage.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XHidUsage(HidUsage usage)
+		public static implicit operator HidUsageEx(HidUsage usage)
 		{
-			return (new XHidUsage(usage));
+			return (new HidUsageEx(usage));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(XHidUsage usage)
+		public static implicit operator int(HidUsageEx usage)
 		{
 			return (usage.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XHidUsage(int usage)
+		public static implicit operator HidUsageEx(int usage)
 		{
-			return (new XHidUsage((HidUsage)usage));
+			return (new HidUsageEx((HidUsage)usage));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(XHidUsage usage)
+		public static implicit operator string(HidUsageEx usage)
 		{
 			return (usage.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XHidUsage(string usage)
+		public static implicit operator HidUsageEx(string usage)
 		{
 			return (Parse(usage));
 		}

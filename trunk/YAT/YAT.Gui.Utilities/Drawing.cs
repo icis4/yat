@@ -54,16 +54,25 @@ namespace YAT.Gui.Utilities
 		private static DrawingElements error       = new DrawingElements();
 
 		/// <summary>String format used for drawing.</summary>
-		private static StringFormat stringFormat = new StringFormat();
+		private static StringFormat drawingStringFormat;
+
+		/// <summary>String format used for drawing.</summary>
+		private static StringFormat virtualStringFormat;
 
 		static Drawing()
 		{
 			// Use GenericTypographic format to be able to measure characters indiviually,
-			//   i.e. without a small margin before and after the character
-			stringFormat = StringFormat.GenericTypographic;
+			//   i.e. without a small margin before and after the character.
+			// Additionally enable trailing spaces to be able to correctly measure single spaces.
+			// Also enable drawing of text that exceeds the layout rectangle.
+			drawingStringFormat = new StringFormat(StringFormat.GenericTypographic);
+			drawingStringFormat.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
+			drawingStringFormat.Trimming = StringTrimming.EllipsisCharacter;
 
-			// Additionally enable trailing spaces to be able to correctly measure single spaces
-			stringFormat.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
+			// Do not trim to measure the size actually requested.
+			virtualStringFormat = new StringFormat(StringFormat.GenericTypographic);
+			virtualStringFormat.FormatFlags |= StringFormatFlags.MeasureTrailingSpaces;
+			virtualStringFormat.Trimming = StringTrimming.None;
 		}
 
 		/// <summary></summary>
@@ -71,7 +80,7 @@ namespace YAT.Gui.Utilities
 		{
 			get
 			{
-				// Recreate font if system font has changed
+				// Recreate font if system font has changed.
 				if ((italicDefaultFont.Name != SystemFonts.DefaultFont.Name) ||
 					(italicDefaultFont.Size != SystemFonts.DefaultFont.Size))
 				{
@@ -83,65 +92,46 @@ namespace YAT.Gui.Utilities
 		}
 
 		/// <summary></summary>
-		public static SizeF MeasureItem(Domain.DisplayLine line, Model.Settings.FormatSettings formatSettings,
-										Graphics graphics, RectangleF bounds)
+		public static void DrawAndMeasureItem(Domain.DisplayLine line, Model.Settings.FormatSettings formatSettings,
+		                                      Graphics graphics, RectangleF bounds, DrawItemState state,
+		                                      out SizeF requestedSize, out SizeF drawnSize)
 		{
-			SizeF size = new SizeF(0, 0);
-			float width = 0.0f;
+			float requestedWidth = 0;
+			float drawnWidth = 0;
 			foreach (Domain.DisplayElement de in line)
 			{
-				size = MeasureItem(de, formatSettings, graphics, bounds);
-				width += (float)size.Width;
+				SizeF requestedElementSize;
+				SizeF drawnElementSize;
+				DrawAndMeasureItem(de, formatSettings, graphics,
+				                   new RectangleF(bounds.X + drawnWidth, bounds.Y, bounds.Width - drawnWidth, bounds.Height),
+				                   state, out requestedElementSize, out drawnElementSize);
+				requestedWidth += requestedElementSize.Width;
+				drawnWidth     += drawnElementSize.Width;
 			}
-			return (new SizeF(width, size.Height));
+			requestedSize = new SizeF(requestedWidth, bounds.Height);
+			drawnSize     = new SizeF(drawnWidth, bounds.Height);
 		}
 
 		/// <summary></summary>
-		public static SizeF MeasureItem(Domain.DisplayElement element, Model.Settings.FormatSettings formatSettings,
-										Graphics graphics, RectangleF bounds)
+		public static void DrawAndMeasureItem(Domain.DisplayElement element, Model.Settings.FormatSettings formatSettings,
+		                                      Graphics graphics, RectangleF bounds, DrawItemState state,
+		                                      out SizeF requestedSize, out SizeF drawnSize)
 		{
 			Font font;
 			Brush brush;
 			SetDrawingItems(element, formatSettings, graphics, out font, out brush);
 
-			return (graphics.MeasureString(element.Text, font, bounds.Size, stringFormat));
-		}
-
-		/// <summary></summary>
-		public static SizeF DrawItem(Domain.DisplayLine line, Model.Settings.FormatSettings formatSettings,
-									 Graphics graphics, RectangleF bounds, DrawItemState state)
-		{
-			SizeF size = new SizeF(0, 0);
-			float x = bounds.X;
-			float width = bounds.Width;
-			foreach (Domain.DisplayElement de in line)
-			{
-				size = DrawItem(de, formatSettings, graphics,
-								new RectangleF(x, bounds.Y, width, bounds.Height),
-								state);
-				x += size.Width;
-				width -= size.Width;
-			}
-			return (new SizeF(x - bounds.X, bounds.Height));
-		}
-
-		/// <summary></summary>
-		public static SizeF DrawItem(Domain.DisplayElement element, Model.Settings.FormatSettings formatSettings,
-									 Graphics graphics, RectangleF bounds, DrawItemState state)
-		{
-			Font font;
-			Brush brush;
-			SetDrawingItems(element, formatSettings, graphics, out font, out brush);
-
-			// select the highlight brush if the item is selected
+			// Select the highlight brush if the item is selected.
 			if ((state & DrawItemState.Selected) == DrawItemState.Selected)
 				brush = SystemBrushes.HighlightText;
 
-			// perform the painting
-			graphics.DrawString(element.Text, font, brush, bounds, stringFormat);
+			// Perform drawing.
+			graphics.DrawString(element.Text, font, brush, bounds, drawingStringFormat);
 
-			// measure consumed rectangle
-			return (graphics.MeasureString(element.Text, font, bounds.Size, stringFormat));
+			// Measure consumed rectangle:
+			// Requested virtual and effectively drawn.
+			requestedSize = graphics.MeasureString(element.Text, font, int.MaxValue, virtualStringFormat);
+			drawnSize     = graphics.MeasureString(element.Text, font, bounds.Size, drawingStringFormat);
 		}
 
 		private static void SetDrawingItems(Domain.DisplayElement element, Model.Settings.FormatSettings settings,
@@ -195,9 +185,9 @@ namespace YAT.Gui.Utilities
 				brush = SetBrush(ref lineLength.Brush, fontColor);
 			}
 			else if ((element is Domain.DisplayElement.LeftMargin) ||
-					 (element is Domain.DisplayElement.Space) ||
-					 (element is Domain.DisplayElement.RightMargin) ||
-					 (element is Domain.DisplayElement.LineBreak))
+			         (element is Domain.DisplayElement.Space) ||
+			         (element is Domain.DisplayElement.RightMargin) ||
+			         (element is Domain.DisplayElement.LineBreak))
 			{
 				fontStyle = settings.WhiteSpacesFormat.FontStyle;
 				fontColor = settings.WhiteSpacesFormat.Color;
@@ -222,21 +212,21 @@ namespace YAT.Gui.Utilities
 
 		private static Font SetFont(ref Font cachedFont, string fontName, float fontSize, FontStyle fontStyle, Graphics graphics)
 		{
-			// Create the font
+			// Create the font.
 			if (cachedFont == null)
 			{
 				cachedFont = new Font(fontName, fontSize, fontStyle);
 				SetTabStops(cachedFont, graphics);
 			}
 			else if ((cachedFont.Name  != fontName) ||
-					 (cachedFont.Size  != fontSize) ||
-					 (cachedFont.Style != fontStyle))
+			         (cachedFont.Size  != fontSize) ||
+			         (cachedFont.Style != fontStyle))
 			{
-				// The font has changed, dispose of the cached font and create a new one
+				// The font has changed, dispose of the cached font and create a new one.
 				cachedFont.Dispose();
 				cachedFont = new Font(fontName, fontSize, fontStyle);
 
-				// Also set tab stops accordingly
+				// Also set tab stops accordingly.
 				SetTabStops(cachedFont, graphics);
 			}
 			return (cachedFont);
@@ -244,28 +234,31 @@ namespace YAT.Gui.Utilities
 
 		private static void SetTabStops(Font font, Graphics graphics)
 		{
-			// Calculate tabs, currently fixed to 8 characters
+			// Calculate tabs, currently fixed to 8 characters.
 
 			// \remind 2009-08-29 / mky
 			// This is a somewhat strange calculation, however, don't know to do it better.
 
 			SizeF size = graphics.MeasureString(" ", font);
 			float[] tabStops = new float[256];
+			
 			for (int i = 0; i < 256; i++)
 				tabStops[i] = size.Width * 14.5f;
-			stringFormat.SetTabStops(0, tabStops);
+
+			drawingStringFormat.SetTabStops(0, tabStops);
+			virtualStringFormat.SetTabStops(0, tabStops);
 		}
 
 		private static SolidBrush SetBrush(ref SolidBrush cachedBrush, Color color)
 		{
-			// Create the brush using the font color
+			// Create the brush using the font color.
 			if (cachedBrush == null)
 			{
 				cachedBrush = new SolidBrush(color);
 			}
 			else if (cachedBrush.Color.ToArgb() != color.ToArgb())
 			{
-				// The font color has changed, dispose of the cached brush and create a new one
+				// The font color has changed, dispose of the cached brush and create a new one.
 				cachedBrush.Dispose();
 				cachedBrush = new SolidBrush(color);
 			}

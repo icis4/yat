@@ -27,7 +27,7 @@ using MKY.IO;
 namespace MKY.Test.IO
 {
 	/// <summary></summary>
-	public static class XPathTestData
+	public static class PathExTestData
 	{
 		#region Test Cases
 		//==========================================================================================
@@ -127,7 +127,7 @@ namespace MKY.Test.IO
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(XPathTestData), "TestCases")]
+		[Test, TestCaseSource(typeof(PathExTestData), "TestCases")]
 		public virtual void TestCompare(int testSet, int testCase, string pathA, string pathB, string expectedA, string expectedB)
 		{
 			// Test set is given as additional argument to ease searching for errornous test cases.
@@ -164,7 +164,7 @@ namespace MKY.Test.IO
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(XPathTestData), "TestCases")]
+		[Test, TestCaseSource(typeof(PathExTestData), "TestCases")]
 		public virtual void TestCombine(int testSet, int testCase, string pathA, string pathB, string expectedA, string expectedB)
 		{
 			// Test set is given as additional argument to ease searching for errornous test cases.

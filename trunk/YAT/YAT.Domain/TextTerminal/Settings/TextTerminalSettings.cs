@@ -31,7 +31,7 @@ namespace YAT.Domain.Settings
 	public class TextTerminalSettings : MKY.Settings.Settings
 	{
 		/// <summary></summary>
-		public static readonly string DefaultEol = (string)XEol.Parse(Environment.NewLine);
+		public static readonly string DefaultEol = (string)EolEx.Parse(Environment.NewLine);
 
 		/// <summary></summary>
 		public static readonly int DefaultEncoding = (EncodingEx)(System.Text.Encoding.Default);

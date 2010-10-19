@@ -27,7 +27,7 @@ using MKY.Types;
 namespace MKY.Windows.Forms
 {
 	/// <summary>
-	/// Extended enum XOrientation which extends <see cref="Orientation"/>.
+	/// Extended enum OrientationEx which extends <see cref="Orientation"/>.
 	/// </summary>
 	public class OrientationEx : EnumEx
 	{

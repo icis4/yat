@@ -320,7 +320,7 @@ namespace YAT.Gui.Controls
 		private void comboBox_FlowControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				FlowControl = (MKY.IO.Serial.XSerialFlowControl)comboBox_FlowControl.SelectedItem;
+				FlowControl = (MKY.IO.Serial.SerialFlowControlEx)comboBox_FlowControl.SelectedItem;
 		}
 
 		private void checkBox_AutoReopen_CheckedChanged(object sender, EventArgs e)
@@ -374,7 +374,7 @@ namespace YAT.Gui.Controls
 			comboBox_DataBits.Items.AddRange(MKY.IO.Ports.DataBitsEx.GetItems());
 			comboBox_Parity.Items.AddRange(MKY.IO.Ports.ParityEx.GetItems());
 			comboBox_StopBits.Items.AddRange(MKY.IO.Ports.StopBitsEx.GetItems());
-			comboBox_FlowControl.Items.AddRange(MKY.IO.Serial.XSerialFlowControl.GetItems());
+			comboBox_FlowControl.Items.AddRange(MKY.IO.Serial.SerialFlowControlEx.GetItems());
 
 			this.isSettingControls = false;
 		}
@@ -396,7 +396,7 @@ namespace YAT.Gui.Controls
 				comboBox_DataBits.SelectedItem    = (MKY.IO.Ports.DataBitsEx)this.dataBits;
 				comboBox_Parity.SelectedItem      = (MKY.IO.Ports.ParityEx)this.parity;
 				comboBox_StopBits.SelectedItem    = (MKY.IO.Ports.StopBitsEx)this.stopBits;
-				comboBox_FlowControl.SelectedItem = (MKY.IO.Serial.XSerialFlowControl)this.flowControl;
+				comboBox_FlowControl.SelectedItem = (MKY.IO.Serial.SerialFlowControlEx)this.flowControl;
 			}
 			else
 			{

@@ -112,13 +112,13 @@ namespace YAT.Gui.Forms
 		private void comboBox_TxRadix_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Display.TxRadix = (Domain.XRadix)comboBox_TxRadix.SelectedItem;
+				this.settings_Form.Display.TxRadix = (Domain.RadixEx)comboBox_TxRadix.SelectedItem;
 		}
 
 		private void comboBox_RxRadix_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Display.RxRadix = (Domain.XRadix)comboBox_RxRadix.SelectedItem;
+				this.settings_Form.Display.RxRadix = (Domain.RadixEx)comboBox_RxRadix.SelectedItem;
 		}
 
 		private void checkBox_ShowRadix_CheckedChanged(object sender, EventArgs e)
@@ -207,7 +207,7 @@ namespace YAT.Gui.Forms
 		private void comboBox_ControlCharacterRadix_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.CharReplace.ControlCharRadix = (Domain.XControlCharRadix)comboBox_ControlCharacterRadix.SelectedItem;
+				this.settings_Form.CharReplace.ControlCharRadix = (Domain.ControlCharRadixEx)comboBox_ControlCharacterRadix.SelectedItem;
 		}
 
 		private void checkBox_ReplaceTab_CheckedChanged(object sender, EventArgs e)
@@ -225,7 +225,7 @@ namespace YAT.Gui.Forms
 		private void comboBox_Endianess_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.IO.Endianess = (Domain.XEndianess)comboBox_Endianess.SelectedItem;
+				this.settings_Form.IO.Endianess = (Domain.EndianessEx)comboBox_Endianess.SelectedItem;
 		}
 
 		private void checkBox_KeepCommand_CheckedChanged(object sender, EventArgs e)
@@ -340,12 +340,12 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls = true;
 
-			comboBox_TxRadix.Items.AddRange(Domain.XRadix.GetItems());
-			comboBox_RxRadix.Items.AddRange(Domain.XRadix.GetItems());
-			comboBox_Endianess.Items.AddRange(Domain.XEndianess.GetItems());
+			comboBox_TxRadix.Items.AddRange(Domain.RadixEx.GetItems());
+			comboBox_RxRadix.Items.AddRange(Domain.RadixEx.GetItems());
+			comboBox_Endianess.Items.AddRange(Domain.EndianessEx.GetItems());
 
 			comboBox_ControlCharacterRadix.Items.Clear();
-			comboBox_ControlCharacterRadix.Items.AddRange(Domain.XControlCharRadix.GetItems());
+			comboBox_ControlCharacterRadix.Items.AddRange(Domain.ControlCharRadixEx.GetItems());
 
 			this.isSettingControls = false;
 		}
@@ -361,11 +361,11 @@ namespace YAT.Gui.Forms
 			else
 				label_TxRadix.Text = "&Tx Radix:";
 
-			comboBox_TxRadix.SelectedItem      = (Domain.XRadix)this.settings_Form.Display.TxRadix;
+			comboBox_TxRadix.SelectedItem      = (Domain.RadixEx)this.settings_Form.Display.TxRadix;
 			checkBox_SeparateTxRxRadix.Checked = separateRadix;
 			label_RxRadix.Enabled              = separateRadix;
 			comboBox_RxRadix.Enabled           = separateRadix;
-			comboBox_RxRadix.SelectedItem      = (Domain.XRadix)this.settings_Form.Display.RxRadix;
+			comboBox_RxRadix.SelectedItem      = (Domain.RadixEx)this.settings_Form.Display.RxRadix;
 
 			// Display
 			checkBox_ShowRadix.Checked       = this.settings_Form.Display.ShowRadix;
@@ -381,12 +381,12 @@ namespace YAT.Gui.Forms
 			bool replaceControlChars                    = this.settings_Form.CharReplace.ReplaceControlChars;
 			checkBox_ReplaceControlCharacters.Checked   = replaceControlChars;
 			comboBox_ControlCharacterRadix.Enabled      = replaceControlChars;
-			comboBox_ControlCharacterRadix.SelectedItem = (Domain.XControlCharRadix)this.settings_Form.CharReplace.ControlCharRadix;
+			comboBox_ControlCharacterRadix.SelectedItem = (Domain.ControlCharRadixEx)this.settings_Form.CharReplace.ControlCharRadix;
 			checkBox_ReplaceTab.Checked                 = this.settings_Form.CharReplace.ReplaceTab;
 			checkBox_ReplaceSpace.Checked               = this.settings_Form.CharReplace.ReplaceSpace;
 
 			// Communication
-			comboBox_Endianess.SelectedItem = (Domain.XEndianess)this.settings_Form.IO.Endianess;
+			comboBox_Endianess.SelectedItem = (Domain.EndianessEx)this.settings_Form.IO.Endianess;
 
 			// Send
 			checkBox_KeepCommand.Checked = this.settings_Form.Send.KeepCommand;

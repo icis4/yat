@@ -48,9 +48,9 @@ namespace YAT.Domain.Parser
 	#endregion
 
 	/// <summary>
-	/// Extended enum XKeyword.
+	/// Extended enum KeywordEx.
 	/// </summary>
-	public class XKeyword : EnumEx
+	public class KeywordEx : EnumEx
 	{
 		#region String Definitions
 
@@ -61,13 +61,13 @@ namespace YAT.Domain.Parser
 		#endregion
 
 		/// <summary>Default is <see cref="Keyword.None"/>.</summary>
-		public XKeyword()
+		public KeywordEx()
 			: base(Keyword.None)
 		{
 		}
 
 		/// <summary></summary>
-		protected XKeyword(Keyword keyword)
+		protected KeywordEx(Keyword keyword)
 			: base(keyword)
 		{
 		}
@@ -91,12 +91,12 @@ namespace YAT.Domain.Parser
 		#region GetItems
 
 		/// <summary></summary>
-		public static XKeyword[] GetItems()
+		public static KeywordEx[] GetItems()
 		{
-			List<XKeyword> a = new List<XKeyword>();
-			a.Add(new XKeyword(Keyword.Delay));
-			a.Add(new XKeyword(Keyword.Eol));
-			a.Add(new XKeyword(Keyword.NoEol));
+			List<KeywordEx> a = new List<KeywordEx>();
+			a.Add(new KeywordEx(Keyword.Delay));
+			a.Add(new KeywordEx(Keyword.Eol));
+			a.Add(new KeywordEx(Keyword.NoEol));
 			return (a.ToArray());
 		}
 
@@ -105,9 +105,9 @@ namespace YAT.Domain.Parser
 		#region Parse
 
 		/// <summary></summary>
-		public static XKeyword Parse(string keyword)
+		public static KeywordEx Parse(string keyword)
 		{
-			XKeyword result;
+			KeywordEx result;
 
 			if (TryParse(keyword, out result))
 				return (result);
@@ -116,21 +116,21 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
-		public static bool TryParse(string keyword, out XKeyword result)
+		public static bool TryParse(string keyword, out KeywordEx result)
 		{
 			if      (string.Compare(keyword, Delay_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XKeyword(Keyword.Delay);
+				result = new KeywordEx(Keyword.Delay);
 				return (true);
 			}
 			else if (string.Compare(keyword, Eol_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XKeyword(Keyword.Eol);
+				result = new KeywordEx(Keyword.Eol);
 				return (true);
 			}
 			else if (string.Compare(keyword, NoEol_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XKeyword(Keyword.NoEol);
+				result = new KeywordEx(Keyword.NoEol);
 				return (true);
 			}
 			else
@@ -145,37 +145,37 @@ namespace YAT.Domain.Parser
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator Keyword(XKeyword keyword)
+		public static implicit operator Keyword(KeywordEx keyword)
 		{
 			return ((Keyword)keyword.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XKeyword(Keyword keyword)
+		public static implicit operator KeywordEx(Keyword keyword)
 		{
-			return (new XKeyword(keyword));
+			return (new KeywordEx(keyword));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(XKeyword keyword)
+		public static implicit operator int(KeywordEx keyword)
 		{
 			return (keyword.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XKeyword(int keyword)
+		public static implicit operator KeywordEx(int keyword)
 		{
-			return (new XKeyword((Keyword)keyword));
+			return (new KeywordEx((Keyword)keyword));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(XKeyword keyword)
+		public static implicit operator string(KeywordEx keyword)
 		{
 			return (keyword.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XKeyword(string keyword)
+		public static implicit operator KeywordEx(string keyword)
 		{
 			return (Parse(keyword));
 		}

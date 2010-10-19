@@ -87,8 +87,8 @@ namespace MKY.Windows.Forms
 		//==========================================================================================
 
 		/// <remarks>
-		/// Is only called if draw mode is <see cref="System.Windows.Forms.DrawMode.OwnerDrawFixed"/> or
-		/// <see cref="System.Windows.Forms.DrawMode.OwnerDrawVariable"/>.
+		/// Is only called if draw mode is <see cref="System.Windows.Forms.DrawMode.OwnerDrawFixed"/>
+		/// or <see cref="System.Windows.Forms.DrawMode.OwnerDrawVariable"/>.
 		/// If draw mode is <see cref="System.Windows.Forms.DrawMode.Normal"/>,
 		/// only ListBox.OnDrawItem() is called.
 		/// </remarks>
@@ -99,8 +99,8 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <remarks>
-		/// Is only called if draw mode is <see cref="System.Windows.Forms.DrawMode.OwnerDrawFixed"/> or
-		/// <see cref="System.Windows.Forms.DrawMode.OwnerDrawVariable"/>.
+		/// Is only called if draw mode is <see cref="System.Windows.Forms.DrawMode.OwnerDrawFixed"/>
+		/// or <see cref="System.Windows.Forms.DrawMode.OwnerDrawVariable"/>.
 		/// If draw mode is <see cref="System.Windows.Forms.DrawMode.Normal"/>,
 		/// only ListBox.OnDrawItem() is called.
 		/// </remarks>
@@ -120,13 +120,13 @@ namespace MKY.Windows.Forms
 				// ...and a text position of...
 				//    ABCDEFGHIJ
 				// ...thus the beginning of the text (x) is a negative value left of the visible rectangle...
-				//   (x)
+				//    (x)
 				int offset = i - TopIndex;
 				Rectangle ir = GetItemRectangle(i);
-				int x = DisplayRectangle.Width - ir.Width; // (x)
+				int x = DisplayRectangle.Width - ir.Width; // (x).
 				Rectangle bounds = new Rectangle(x, offset * ItemHeight, ir.Width, ItemHeight);
 
-				// Set normal/selected state
+				// Set normal/selected state.
 				DrawItemState state = DrawItemState.Default;
 				foreach (int index in SelectedIndices)
 				{
@@ -137,7 +137,7 @@ namespace MKY.Windows.Forms
 					}
 				}
 
-				// Request drawing of item
+				// Request drawing of item.
 				OnDrawItem(new DrawItemEventArgs(e.Graphics, Font, bounds, i, state));
 			}
 		}
