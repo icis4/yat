@@ -54,9 +54,9 @@ namespace YAT.Domain
 	#endregion
 
 	/// <summary>
-	/// Extended enum XIOType.
+	/// Extended enum IOTypeEx.
 	/// </summary>
-	public class XIOType : EnumEx
+	public class IOTypeEx : EnumEx
 	{
 		#region String Definitions
 
@@ -71,13 +71,13 @@ namespace YAT.Domain
 		#endregion
 
 		/// <summary>Default is <see cref="IOType.SerialPort"/>.</summary>
-		public XIOType()
+		public IOTypeEx()
 			: base(IOType.SerialPort)
 		{
 		}
 
 		/// <summary></summary>
-		protected XIOType(IOType type)
+		protected IOTypeEx(IOType type)
 			: base(type)
 		{
 		}
@@ -104,15 +104,15 @@ namespace YAT.Domain
 		#region GetItems
 
 		/// <summary></summary>
-		public static XIOType[] GetItems()
+		public static IOTypeEx[] GetItems()
 		{
-			List<XIOType> a = new List<XIOType>();
-			a.Add(new XIOType(IOType.SerialPort));
-			a.Add(new XIOType(IOType.TcpClient));
-			a.Add(new XIOType(IOType.TcpServer));
-			a.Add(new XIOType(IOType.TcpAutoSocket));
-			a.Add(new XIOType(IOType.Udp));
-			a.Add(new XIOType(IOType.UsbHid));
+			List<IOTypeEx> a = new List<IOTypeEx>();
+			a.Add(new IOTypeEx(IOType.SerialPort));
+			a.Add(new IOTypeEx(IOType.TcpClient));
+			a.Add(new IOTypeEx(IOType.TcpServer));
+			a.Add(new IOTypeEx(IOType.TcpAutoSocket));
+			a.Add(new IOTypeEx(IOType.Udp));
+			a.Add(new IOTypeEx(IOType.UsbHid));
 			return (a.ToArray());
 		}
 
@@ -121,9 +121,9 @@ namespace YAT.Domain
 		#region Parse
 
 		/// <summary></summary>
-		public static XIOType Parse(string type)
+		public static IOTypeEx Parse(string type)
 		{
-			XIOType result;
+			IOTypeEx result;
 
 			if (TryParse(type, out result))
 				return (result);
@@ -132,36 +132,36 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public static bool TryParse(string type, out XIOType result)
+		public static bool TryParse(string type, out IOTypeEx result)
 		{
 			if      (string.Compare(type, SerialPort_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XIOType(IOType.SerialPort);
+				result = new IOTypeEx(IOType.SerialPort);
 				return (true);
 			}
 			else if (string.Compare(type, TcpClient_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XIOType(IOType.TcpClient);
+				result = new IOTypeEx(IOType.TcpClient);
 				return (true);
 			}
 			else if (string.Compare(type, TcpServer_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XIOType(IOType.TcpServer);
+				result = new IOTypeEx(IOType.TcpServer);
 				return (true);
 			}
 			else if (string.Compare(type, TcpAutoSocket_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XIOType(IOType.TcpAutoSocket);
+				result = new IOTypeEx(IOType.TcpAutoSocket);
 				return (true);
 			}
 			else if (string.Compare(type, Udp_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XIOType(IOType.Udp);
+				result = new IOTypeEx(IOType.Udp);
 				return (true);
 			}
 			else if (string.Compare(type, UsbHid_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XIOType(IOType.UsbHid);
+				result = new IOTypeEx(IOType.UsbHid);
 				return (true);
 			}
 			else
@@ -176,43 +176,43 @@ namespace YAT.Domain
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator IOType(XIOType type)
+		public static implicit operator IOType(IOTypeEx type)
 		{
 			return ((IOType)type.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XIOType(IOType type)
+		public static implicit operator IOTypeEx(IOType type)
 		{
-			return (new XIOType(type));
+			return (new IOTypeEx(type));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(XIOType type)
+		public static implicit operator int(IOTypeEx type)
 		{
 			return (type.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XIOType(int type)
+		public static implicit operator IOTypeEx(int type)
 		{
-			return (new XIOType((IOType)type));
+			return (new IOTypeEx((IOType)type));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(XIOType type)
+		public static implicit operator string(IOTypeEx type)
 		{
 			return (type.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XIOType(string type)
+		public static implicit operator IOTypeEx(string type)
 		{
 			return (Parse(type));
 		}
 
 		/// <summary></summary>
-		public static implicit operator SocketHostType(XIOType type)
+		public static implicit operator SocketHostType(IOTypeEx type)
 		{
 			switch ((IOType)type)
 			{
@@ -225,7 +225,7 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public static implicit operator XIOType(SocketHostType type)
+		public static implicit operator IOTypeEx(SocketHostType type)
 		{
 			switch (type)
 			{

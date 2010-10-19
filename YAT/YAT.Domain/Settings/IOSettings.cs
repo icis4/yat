@@ -115,7 +115,7 @@ namespace YAT.Domain.Settings
 
 					// Always set socket settings host type as well.
 					if (this.socket != null)
-						this.socket.HostType = (Domain.XIOType)value;
+						this.socket.HostType = (Domain.IOTypeEx)value;
 				}
 			}
 		}

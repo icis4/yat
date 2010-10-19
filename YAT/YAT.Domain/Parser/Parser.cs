@@ -65,8 +65,8 @@ namespace YAT.Domain.Parser
 		public static readonly string KeywordHelp =
 			@"In addition, the following keyword is supported:" + Environment.NewLine +
 			Environment.NewLine +
-			@"Delay ""Send something\!(" + (XKeyword)Keyword.Delay + @"(10s))Send delayed by 10 seconds""" + Environment.NewLine +
-			@"Delay ""Send something\!(" + (XKeyword)Keyword.Delay + @"(500ms))Send delayed by 500 milliseconds""";
+			@"Delay ""Send something\!(" + (KeywordEx)Keyword.Delay + @"(10s))Send delayed by 10 seconds""" + Environment.NewLine +
+			@"Delay ""Send something\!(" + (KeywordEx)Keyword.Delay + @"(500ms))Send delayed by 500 milliseconds""";
 
 		#endregion
 
@@ -1096,7 +1096,7 @@ namespace YAT.Domain.Parser
 
 				try
 				{
-					resultList.Add(new KeywordResult((XKeyword)t));
+					resultList.Add(new KeywordResult((KeywordEx)t));
 				}
 				catch (ArgumentException)
 				{

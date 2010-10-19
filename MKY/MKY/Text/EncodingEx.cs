@@ -513,13 +513,13 @@ namespace MKY.Text
 	/// </summary>
 	public class EncodingEx : EnumEx
 	{
-		private struct XEncodingInfo
+		private struct EncodingInfoEx
 		{
 			public SupportedEncoding SupportedEncoding;
 			public string BetterDisplayName;
 			public Encoding Encoding;
 
-			public XEncodingInfo(SupportedEncoding supportedEncoding, string betterDisplayName, Encoding encoding)
+			public EncodingInfoEx(SupportedEncoding supportedEncoding, string betterDisplayName, Encoding encoding)
 			{
 				SupportedEncoding = supportedEncoding;
 				BetterDisplayName = betterDisplayName;
@@ -527,18 +527,18 @@ namespace MKY.Text
 			}
 		}
 
-		private static XEncodingInfo[] infos;
+		private static EncodingInfoEx[] infos;
 
 		static EncodingEx()
 		{
-			List<XEncodingInfo> l = new List<XEncodingInfo>();
-			l.Add(new XEncodingInfo(SupportedEncoding.ASCII,   "ASCII",                     Encoding.ASCII));
-			l.Add(new XEncodingInfo(SupportedEncoding.UTF7,    "Unicode UTF-7",             Encoding.UTF7));
-			l.Add(new XEncodingInfo(SupportedEncoding.UTF8,    "Unicode UTF-8",             Encoding.UTF8));
-			l.Add(new XEncodingInfo(SupportedEncoding.UTF16,   "Unicode UTF-16",            Encoding.Unicode));
-			l.Add(new XEncodingInfo(SupportedEncoding.UTF16BE, "Unicode UTF-16 Big Endian", Encoding.BigEndianUnicode));
-			l.Add(new XEncodingInfo(SupportedEncoding.UTF32,   "Unicode UTF-32",            Encoding.UTF32));
-			l.Add(new XEncodingInfo(SupportedEncoding.UTF32BE, "Unicode UTF-32 Big Endian", new UTF32Encoding(true, false)));
+			List<EncodingInfoEx> l = new List<EncodingInfoEx>();
+			l.Add(new EncodingInfoEx(SupportedEncoding.ASCII,   "ASCII",                     Encoding.ASCII));
+			l.Add(new EncodingInfoEx(SupportedEncoding.UTF7,    "Unicode UTF-7",             Encoding.UTF7));
+			l.Add(new EncodingInfoEx(SupportedEncoding.UTF8,    "Unicode UTF-8",             Encoding.UTF8));
+			l.Add(new EncodingInfoEx(SupportedEncoding.UTF16,   "Unicode UTF-16",            Encoding.Unicode));
+			l.Add(new EncodingInfoEx(SupportedEncoding.UTF16BE, "Unicode UTF-16 Big Endian", Encoding.BigEndianUnicode));
+			l.Add(new EncodingInfoEx(SupportedEncoding.UTF32,   "Unicode UTF-32",            Encoding.UTF32));
+			l.Add(new EncodingInfoEx(SupportedEncoding.UTF32BE, "Unicode UTF-32 Big Endian", new UTF32Encoding(true, false)));
 			infos = l.ToArray(); 
 		}
 
@@ -592,7 +592,7 @@ namespace MKY.Text
 		{
 			get
 			{
-				foreach (XEncodingInfo info in infos)
+				foreach (EncodingInfoEx info in infos)
 				{
 					if ((SupportedEncoding)UnderlyingEnum == info.SupportedEncoding)
 						return (info.BetterDisplayName);
@@ -616,7 +616,7 @@ namespace MKY.Text
 				return (Encoding.Default);
 
 			// cached encodings
-			foreach (XEncodingInfo info in infos)
+			foreach (EncodingInfoEx info in infos)
 			{
 				if ((SupportedEncoding)UnderlyingEnum == info.SupportedEncoding)
 				{
@@ -869,7 +869,7 @@ namespace MKY.Text
 		/// <summary></summary>
 		public static bool TryParse(string encoding, out EncodingEx result)
 		{
-			foreach (XEncodingInfo info in infos)
+			foreach (EncodingInfoEx info in infos)
 			{
 				if (string.Compare(encoding, info.BetterDisplayName, StringComparison.OrdinalIgnoreCase) == 0)
 				{

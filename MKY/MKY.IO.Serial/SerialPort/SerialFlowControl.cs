@@ -56,7 +56,7 @@ namespace MKY.IO.Serial
 
 	/// <summary></summary>
 	[Serializable]
-	public class XSerialFlowControl : MKY.IO.Ports.HandshakeEx
+	public class SerialFlowControlEx : MKY.IO.Ports.HandshakeEx
 	{
 		#region String Definitions
 
@@ -68,13 +68,13 @@ namespace MKY.IO.Serial
 		#endregion
 
 		/// <summary>Default is <see cref="SerialFlowControl.None"/>.</summary>
-		public XSerialFlowControl()
+		public SerialFlowControlEx()
 			: base((System.IO.Ports.Handshake)SerialFlowControl.None)
 		{
 		}
 
 		/// <summary></summary>
-		protected XSerialFlowControl(SerialFlowControl flowControl)
+		protected SerialFlowControlEx(SerialFlowControl flowControl)
 			: base((System.IO.Ports.Handshake)flowControl)
 		{
 		}
@@ -108,15 +108,15 @@ namespace MKY.IO.Serial
 		#region GetItems
 
 		/// <summary></summary>
-		public static new XSerialFlowControl[] GetItems()
+		public static new SerialFlowControlEx[] GetItems()
 		{
-			List<XSerialFlowControl> a = new List<XSerialFlowControl>();
-			a.Add(new XSerialFlowControl(SerialFlowControl.None));
-			a.Add(new XSerialFlowControl(SerialFlowControl.RequestToSend));
-			a.Add(new XSerialFlowControl(SerialFlowControl.XOnXOff));
-			a.Add(new XSerialFlowControl(SerialFlowControl.RequestToSendXOnXOff));
-			a.Add(new XSerialFlowControl(SerialFlowControl.Manual));
-			a.Add(new XSerialFlowControl(SerialFlowControl.RS485));
+			List<SerialFlowControlEx> a = new List<SerialFlowControlEx>();
+			a.Add(new SerialFlowControlEx(SerialFlowControl.None));
+			a.Add(new SerialFlowControlEx(SerialFlowControl.RequestToSend));
+			a.Add(new SerialFlowControlEx(SerialFlowControl.XOnXOff));
+			a.Add(new SerialFlowControlEx(SerialFlowControl.RequestToSendXOnXOff));
+			a.Add(new SerialFlowControlEx(SerialFlowControl.Manual));
+			a.Add(new SerialFlowControlEx(SerialFlowControl.RS485));
 			return (a.ToArray());
 		}
 
@@ -125,21 +125,21 @@ namespace MKY.IO.Serial
 		#region Parse
 
 		/// <summary></summary>
-		public static new XSerialFlowControl Parse(string flowControl)
+		public static new SerialFlowControlEx Parse(string flowControl)
 		{
 			if      ((string.Compare(flowControl, Manual_string, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(flowControl, Manual_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				return (new XSerialFlowControl(SerialFlowControl.Manual));
+				return (new SerialFlowControlEx(SerialFlowControl.Manual));
 			}
 			else if ((string.Compare(flowControl, RS485_string, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(flowControl, RS485_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				return (new XSerialFlowControl(SerialFlowControl.RS485));
+				return (new SerialFlowControlEx(SerialFlowControl.RS485));
 			}
 			else
 			{
-				return ((XSerialFlowControl)MKY.IO.Ports.HandshakeEx.Parse(flowControl));
+				return ((SerialFlowControlEx)MKY.IO.Ports.HandshakeEx.Parse(flowControl));
 			}
 		}
 
@@ -148,43 +148,43 @@ namespace MKY.IO.Serial
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator SerialFlowControl(XSerialFlowControl flowControl)
+		public static implicit operator SerialFlowControl(SerialFlowControlEx flowControl)
 		{
 			return ((SerialFlowControl)flowControl.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XSerialFlowControl(SerialFlowControl flowControl)
+		public static implicit operator SerialFlowControlEx(SerialFlowControl flowControl)
 		{
-			return (new XSerialFlowControl(flowControl));
+			return (new SerialFlowControlEx(flowControl));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(XSerialFlowControl flowControl)
+		public static implicit operator int(SerialFlowControlEx flowControl)
 		{
 			return (flowControl.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XSerialFlowControl(int flowControl)
+		public static implicit operator SerialFlowControlEx(int flowControl)
 		{
-			return (new XSerialFlowControl((SerialFlowControl)flowControl));
+			return (new SerialFlowControlEx((SerialFlowControl)flowControl));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(XSerialFlowControl flowControl)
+		public static implicit operator string(SerialFlowControlEx flowControl)
 		{
 			return (flowControl.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XSerialFlowControl(string flowControl)
+		public static implicit operator SerialFlowControlEx(string flowControl)
 		{
 			return (Parse(flowControl));
 		}
 
 		/// <summary></summary>
-		public static implicit operator System.IO.Ports.Handshake(XSerialFlowControl flowControl)
+		public static implicit operator System.IO.Ports.Handshake(SerialFlowControlEx flowControl)
 		{
 			switch ((SerialFlowControl)flowControl.UnderlyingEnum)
 			{
@@ -202,9 +202,9 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public static implicit operator XSerialFlowControl(System.IO.Ports.Handshake flowControl)
+		public static implicit operator SerialFlowControlEx(System.IO.Ports.Handshake flowControl)
 		{
-			return (new XSerialFlowControl((SerialFlowControl)flowControl));
+			return (new SerialFlowControlEx((SerialFlowControl)flowControl));
 		}
 
 		#endregion

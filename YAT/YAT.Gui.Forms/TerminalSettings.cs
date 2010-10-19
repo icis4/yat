@@ -127,7 +127,7 @@ namespace YAT.Gui.Forms
 			{
 				Domain.IOType ioType = terminalSelection.IOType;
 				this.settings_Form.IO.IOType = ioType;
-				this.settings_Form.IO.Socket.HostType = (Domain.XIOType)ioType;
+				this.settings_Form.IO.Socket.HostType = (Domain.IOTypeEx)ioType;
 				SetControls();
 			}
 		}
@@ -324,7 +324,7 @@ namespace YAT.Gui.Forms
 			// Set socket control before serial port control since that might need to refresh the
 			//   serial port list first (which takes time, which looks ulgy)
 			socketSelection.Visible        = !isSerialPort && !isUsbHid;
-			socketSelection.HostType       = (Domain.XIOType)ioType;
+			socketSelection.HostType       = (Domain.IOTypeEx)ioType;
 			socketSelection.RemoteHost     = this.settings_Form.IO.Socket.RemoteHost;
 			socketSelection.RemotePort     = this.settings_Form.IO.Socket.RemotePort;
 			socketSelection.LocalInterface = this.settings_Form.IO.Socket.LocalInterface;
@@ -332,7 +332,7 @@ namespace YAT.Gui.Forms
 			socketSelection.LocalUdpPort   = this.settings_Form.IO.Socket.LocalUdpPort;
 
 			socketSettings.Visible         = !isSerialPort && !isUsbHid;
-			socketSettings.HostType        = (Domain.XIOType)ioType;
+			socketSettings.HostType        = (Domain.IOTypeEx)ioType;
 			socketSettings.TcpClientAutoReconnect = this.settings_Form.IO.Socket.TcpClientAutoReconnect;
 
 			serialPortSelection.Visible    = isSerialPort;

@@ -168,7 +168,7 @@ namespace MKY.Test.Net
 				Assert.Fail("XML serialize error: " + ex.Message);
 			}
 
-			// Serialization for this XEnum cannot work. Therefore, only default case results in success.
+			// Serialization for this EnumEx cannot work. Therefore, only default case results in success.
 			// Anyway, tests are done to ensure that serialization doesn't throw exceptions.
 			if (ipHostType == IPHostType.Localhost)
 			{

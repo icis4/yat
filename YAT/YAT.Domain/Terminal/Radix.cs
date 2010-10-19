@@ -59,7 +59,7 @@ namespace YAT.Domain
 	#endregion
 
 	/// <summary></summary>
-	public class XRadix : EnumEx
+	public class RadixEx : EnumEx
 	{
 		#region String Definitions
 
@@ -85,13 +85,13 @@ namespace YAT.Domain
 		#endregion
 
 		/// <summary>Default is <see cref="Radix.String"/>.</summary>
-		public XRadix()
+		public RadixEx()
 			: base(Radix.String)
 		{
 		}
 
 		/// <summary></summary>
-		protected XRadix(Radix radix)
+		protected RadixEx(Radix radix)
 			: base(radix)
 		{
 		}
@@ -148,15 +148,15 @@ namespace YAT.Domain
 		#region GetItems
 
 		/// <summary></summary>
-		public static XRadix[] GetItems()
+		public static RadixEx[] GetItems()
 		{
-			List<XRadix> a = new List<XRadix>();
-			a.Add(new XRadix(Radix.Bin));
-			a.Add(new XRadix(Radix.Oct));
-			a.Add(new XRadix(Radix.Dec));
-			a.Add(new XRadix(Radix.Hex));
-			a.Add(new XRadix(Radix.Char));
-			a.Add(new XRadix(Radix.String));
+			List<RadixEx> a = new List<RadixEx>();
+			a.Add(new RadixEx(Radix.Bin));
+			a.Add(new RadixEx(Radix.Oct));
+			a.Add(new RadixEx(Radix.Dec));
+			a.Add(new RadixEx(Radix.Hex));
+			a.Add(new RadixEx(Radix.Char));
+			a.Add(new RadixEx(Radix.String));
 			return (a.ToArray());
 		}
 
@@ -165,9 +165,9 @@ namespace YAT.Domain
 		#region Parse
 
 		/// <summary></summary>
-		public static XRadix Parse(string radix)
+		public static RadixEx Parse(string radix)
 		{
-			XRadix result;
+			RadixEx result;
 
 			if (TryParse(radix, out result))
 				return (result);
@@ -176,48 +176,48 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public static bool TryParse(string radix, out XRadix result)
+		public static bool TryParse(string radix, out RadixEx result)
 		{
 			if      ((string.Compare(radix, Bin_stringShort, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(radix, Bin_stringMiddle, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(radix, Bin_string, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XRadix(Radix.Bin);
+				result = new RadixEx(Radix.Bin);
 				return (false);
 			}
 			else if ((string.Compare(radix, Oct_stringShort, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(radix, Oct_stringMiddle, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(radix, Oct_string, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XRadix(Radix.Oct);
+				result = new RadixEx(Radix.Oct);
 				return (false);
 			}
 			else if ((string.Compare(radix, Dec_stringShort, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(radix, Dec_stringMiddle, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(radix, Dec_string, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XRadix(Radix.Dec);
+				result = new RadixEx(Radix.Dec);
 				return (false);
 			}
 			else if ((string.Compare(radix, Hex_stringShort, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(radix, Hex_stringMiddle, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(radix, Hex_string, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XRadix(Radix.Hex);
+				result = new RadixEx(Radix.Hex);
 				return (false);
 			}
 			else if ((string.Compare(radix, Char_stringShort, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(radix, Char_stringMiddle, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(radix, Char_string, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XRadix(Radix.Char);
+				result = new RadixEx(Radix.Char);
 				return (false);
 			}
 			else if ((string.Compare(radix, String_stringShort, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(radix, String_stringMiddle, StringComparison.OrdinalIgnoreCase) == 0) ||
 			         (string.Compare(radix, String_string, StringComparison.OrdinalIgnoreCase) == 0))
 			{
-				result = new XRadix(Radix.String);
+				result = new RadixEx(Radix.String);
 				return (false);
 			}
 			else
@@ -232,37 +232,37 @@ namespace YAT.Domain
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator Radix(XRadix radix)
+		public static implicit operator Radix(RadixEx radix)
 		{
 			return ((Radix)radix.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XRadix(Radix radix)
+		public static implicit operator RadixEx(Radix radix)
 		{
-			return (new XRadix(radix));
+			return (new RadixEx(radix));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(XRadix radix)
+		public static implicit operator int(RadixEx radix)
 		{
 			return (radix.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XRadix(int radix)
+		public static implicit operator RadixEx(int radix)
 		{
-			return (new XRadix((Radix)radix));
+			return (new RadixEx((Radix)radix));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(XRadix radix)
+		public static implicit operator string(RadixEx radix)
 		{
 			return (radix.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XRadix(string radix)
+		public static implicit operator RadixEx(string radix)
 		{
 			return (Parse(radix));
 		}

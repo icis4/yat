@@ -47,9 +47,9 @@ namespace YAT.Domain
 	#endregion
 
 	/// <summary>
-	/// Extended enum XCharSubstitution.
+	/// Extended enum CharSubstitutionEx.
 	/// </summary>
-	public class XCharSubstitution : EnumEx
+	public class CharSubstitutionEx : EnumEx
 	{
 		#region String Definitions
 
@@ -60,13 +60,13 @@ namespace YAT.Domain
 		#endregion
 
 		/// <summary>Default is <see cref="CharSubstitution.None"/>.</summary>
-		public XCharSubstitution()
+		public CharSubstitutionEx()
 			: base(CharSubstitution.None)
 		{
 		}
 
 		/// <summary></summary>
-		protected XCharSubstitution(CharSubstitution substitution)
+		protected CharSubstitutionEx(CharSubstitution substitution)
 			: base(substitution)
 		{
 		}
@@ -90,12 +90,12 @@ namespace YAT.Domain
 		#region GetItems
 
 		/// <summary></summary>
-		public static XCharSubstitution[] GetItems()
+		public static CharSubstitutionEx[] GetItems()
 		{
-			List<XCharSubstitution> a = new List<XCharSubstitution>();
-			a.Add(new XCharSubstitution(CharSubstitution.None));
-			a.Add(new XCharSubstitution(CharSubstitution.ToUpper));
-			a.Add(new XCharSubstitution(CharSubstitution.ToLower));
+			List<CharSubstitutionEx> a = new List<CharSubstitutionEx>();
+			a.Add(new CharSubstitutionEx(CharSubstitution.None));
+			a.Add(new CharSubstitutionEx(CharSubstitution.ToUpper));
+			a.Add(new CharSubstitutionEx(CharSubstitution.ToLower));
 			return (a.ToArray());
 		}
 
@@ -104,9 +104,9 @@ namespace YAT.Domain
 		#region Parse
 
 		/// <summary></summary>
-		public static XCharSubstitution Parse(string substitution)
+		public static CharSubstitutionEx Parse(string substitution)
 		{
-			XCharSubstitution result;
+			CharSubstitutionEx result;
 
 			if (TryParse(substitution, out result))
 				return (result);
@@ -115,21 +115,21 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public static bool TryParse(string substitution, out XCharSubstitution result)
+		public static bool TryParse(string substitution, out CharSubstitutionEx result)
 		{
 			if      (string.Compare(substitution, None_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XCharSubstitution(CharSubstitution.None);
+				result = new CharSubstitutionEx(CharSubstitution.None);
 				return (true);
 			}
 			else if (string.Compare(substitution, ToUpper_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XCharSubstitution(CharSubstitution.ToUpper);
+				result = new CharSubstitutionEx(CharSubstitution.ToUpper);
 				return (true);
 			}
 			else if (string.Compare(substitution, ToLower_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new XCharSubstitution(CharSubstitution.ToLower);
+				result = new CharSubstitutionEx(CharSubstitution.ToLower);
 				return (true);
 			}
 			else
@@ -144,37 +144,37 @@ namespace YAT.Domain
 		#region Conversion Operators
 
 		/// <summary></summary>
-		public static implicit operator CharSubstitution(XCharSubstitution substitution)
+		public static implicit operator CharSubstitution(CharSubstitutionEx substitution)
 		{
 			return ((CharSubstitution)substitution.UnderlyingEnum);
 		}
 
 		/// <summary></summary>
-		public static implicit operator XCharSubstitution(CharSubstitution substitution)
+		public static implicit operator CharSubstitutionEx(CharSubstitution substitution)
 		{
-			return (new XCharSubstitution(substitution));
+			return (new CharSubstitutionEx(substitution));
 		}
 
 		/// <summary></summary>
-		public static implicit operator int(XCharSubstitution substitution)
+		public static implicit operator int(CharSubstitutionEx substitution)
 		{
 			return (substitution.GetHashCode());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XCharSubstitution(int substitution)
+		public static implicit operator CharSubstitutionEx(int substitution)
 		{
-			return (new XCharSubstitution((CharSubstitution)substitution));
+			return (new CharSubstitutionEx((CharSubstitution)substitution));
 		}
 
 		/// <summary></summary>
-		public static implicit operator string(XCharSubstitution substitution)
+		public static implicit operator string(CharSubstitutionEx substitution)
 		{
 			return (substitution.ToString());
 		}
 
 		/// <summary></summary>
-		public static implicit operator XCharSubstitution(string substitution)
+		public static implicit operator CharSubstitutionEx(string substitution)
 		{
 			return (Parse(substitution));
 		}

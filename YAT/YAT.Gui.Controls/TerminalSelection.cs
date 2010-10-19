@@ -119,8 +119,8 @@ namespace YAT.Gui.Controls
 		{
 			InitializeComponent();
 
-			comboBox_TerminalType.Items.AddRange(Domain.XTerminalType.GetItems());
-			comboBox_IOType.Items.AddRange(Domain.XIOType.GetItems());
+			comboBox_TerminalType.Items.AddRange(Domain.TerminalTypeEx.GetItems());
+			comboBox_IOType.Items.AddRange(Domain.IOTypeEx.GetItems());
 
 			SetControls();
 		}
@@ -211,13 +211,13 @@ namespace YAT.Gui.Controls
 		private void comboBox_TerminalType_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				TerminalType = (Domain.XTerminalType)comboBox_TerminalType.SelectedItem;
+				TerminalType = (Domain.TerminalTypeEx)comboBox_TerminalType.SelectedItem;
 		}
 
 		private void comboBox_IOType_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				IOType = (Domain.XIOType)comboBox_IOType.SelectedItem;
+				IOType = (Domain.IOTypeEx)comboBox_IOType.SelectedItem;
 		}
 
 		#endregion
@@ -233,8 +233,8 @@ namespace YAT.Gui.Controls
 
 			if (Enabled)
 			{
-				comboBox_TerminalType.SelectedItem = (Domain.XTerminalType)this.terminalType;
-				comboBox_IOType.SelectedItem       = (Domain.XIOType)this.ioType;
+				comboBox_TerminalType.SelectedItem = (Domain.TerminalTypeEx)this.terminalType;
+				comboBox_IOType.SelectedItem       = (Domain.IOTypeEx)this.ioType;
 			}
 			else
 			{

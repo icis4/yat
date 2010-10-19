@@ -87,6 +87,7 @@ Fixed bugs:
 - UDP/IP implementation changed from ALAZ.SystemEx.NetEx to System.Net.Sockets
 - UDP/IP default local port fixed
 - UDP/IP connect issue fixed (bug #2120432)
+- Monitor contents are displayed even if they exceed the visible width (bugs #2865562 and #2981796)
 - Window startup position is adjusted if saved position is out of bounds, e.g. if window was
   saved on a secondary display that is not connected anymore (bugs #2856250 and #2906622)
 - Layout/anchor issue of description text field in predefined dialog fixed (bug #2987575)
@@ -106,6 +107,7 @@ Limitations and known issues:
    > Issues with frame (bugs #1808492 and #1808493)
    > Issues with window list (bugs #1808494 and #2846917)
    > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684)
+- Monitor contents are not displayed properly when scrolling using the scroll bar (bug #2865562)
 - Response of multi-line commands or files is delayed (bug #3072919)
 - Serial port auto-reopen not yet implementable due to .NET deadlock issue in System.IO.SerialPort
   (feature request #1960299)

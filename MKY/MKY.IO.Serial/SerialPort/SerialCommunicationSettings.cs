@@ -213,7 +213,7 @@ namespace MKY.IO.Serial
 				((MKY.IO.Ports.DataBitsEx)this.dataBits) + ", " +
 				((MKY.IO.Ports.ParityEx)  this.parity)   + ", " +
 				((MKY.IO.Ports.StopBitsEx)this.stopBits) + ", " +
-				((XSerialFlowControl)this.flowControl).ToShortString()
+				((SerialFlowControlEx)this.flowControl).ToShortString()
 			);
 		}
 
@@ -239,7 +239,7 @@ namespace MKY.IO.Serial
 				((MKY.IO.Ports.DataBitsEx)this.dataBits) + ", " +
 				((MKY.IO.Ports.ParityEx)this.parity)     + ", " +
 				((MKY.IO.Ports.StopBitsEx)this.stopBits) + ", " +
-				((XSerialFlowControl)this.flowControl)
+				((SerialFlowControlEx)this.flowControl)
 			);
 		}
 

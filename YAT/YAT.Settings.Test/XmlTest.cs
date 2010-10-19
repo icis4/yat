@@ -95,7 +95,7 @@ namespace YAT.Settings.Test
 			TestSerialization(typeof(string[]), ae, filePath);
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
-			filePath = XPath.MakeTempFilePath(this, "MultiArray");
+			filePath = Temp.MakeTempFilePath(this, "MultiArray");
 			string[,] ma = new string[,]
 					{
 						{ "A", "AA" },
@@ -148,7 +148,7 @@ namespace YAT.Settings.Test
 			TestSerialization(typeof(List<string>), le, filePath);
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
-			filePath = XPath.MakeTempFilePath(this, "ListOfArrays");
+			filePath = Temp.MakeTempFilePath(this, "ListOfArrays");
 			List<string[]> la = new List<string[]>();
 			la.Add(new string[] { "A", "AA" });
 			la.Add(new string[] { "B", "BB" });
@@ -156,7 +156,7 @@ namespace YAT.Settings.Test
 #endif
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
-			filePath = XPath.MakeTempFilePath(this, "ListOfLists");
+			filePath = Temp.MakeTempFilePath(this, "ListOfLists");
 			List<List<string>> ll = new List<List<string>>();
 			ll.Add(l);
 			ll.Add(l);
@@ -179,7 +179,7 @@ namespace YAT.Settings.Test
 			string filePath = "";
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
-			filePath = XPath.MakeTempFilePath(this, "Dictionary");
+			filePath = Temp.MakeTempFilePath(this, "Dictionary");
 			Dictionary<string, string> l = new Dictionary<string, string>();
 			l.Add("1", "A");
 			l.Add("2", "B");
@@ -187,7 +187,7 @@ namespace YAT.Settings.Test
 #endif
 #if (FALSE)
 			// Doesn't work, not supported for serialization.
-			filePath = XPath.MakeTempFilePath(this, "DictionaryEmpty");
+			filePath = Temp.MakeTempFilePath(this, "DictionaryEmpty");
 			Dictionary<string, string> le = new Dictionary<string, string>();
 			l.Add("1", "A");
 			l.Add("2", "B");

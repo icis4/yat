@@ -497,7 +497,7 @@ namespace YAT.Gui.Controls
 				}
 				default:
 				{
-					throw (new NotImplementedException("Terminal type \"" + (Domain.XTerminalType)this.terminalType + "\" unknown"));
+					throw (new NotImplementedException("Terminal type \"" + (Domain.TerminalTypeEx)this.terminalType + "\" unknown"));
 				}
 			}
 			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.SendFilesPath;

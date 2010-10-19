@@ -1463,7 +1463,7 @@ namespace YAT.Gui.Forms
 
 		private void monitor_Tx_Enter(object sender, EventArgs e)
 		{
-			// Remember which monitor has been actived last
+			// Remember which monitor has been actived last.
 			this.monitorSelection = Domain.RepositoryType.Tx;
 		}
 
@@ -1479,7 +1479,7 @@ namespace YAT.Gui.Forms
 
 		private void monitor_Bidir_Enter(object sender, EventArgs e)
 		{
-			// Remember which monitor has been actived last
+			// Remember which monitor has been actived last.
 			this.monitorSelection = Domain.RepositoryType.Bidir;
 		}
 
@@ -1495,7 +1495,7 @@ namespace YAT.Gui.Forms
 
 		private void monitor_Rx_Enter(object sender, EventArgs e)
 		{
-			// Remember which monitor has been actived last
+			// Remember which monitor has been actived last.
 			this.monitorSelection = Domain.RepositoryType.Rx;
 		}
 

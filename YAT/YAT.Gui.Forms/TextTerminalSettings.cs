@@ -121,7 +121,7 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				Domain.XEol eol = comboBox_TxEol.SelectedItem as Domain.XEol;
+				Domain.EolEx eol = comboBox_TxEol.SelectedItem as Domain.EolEx;
 
 				if (eol != null)
 					this.settings_Form.TxEol = eol.ToSequenceString();
@@ -137,10 +137,10 @@ namespace YAT.Gui.Forms
 
 		private void comboBox_TxEol_Validating(object sender, CancelEventArgs e)
 		{
-			Domain.XEol eol;
+			Domain.EolEx eol;
 			string eolString = comboBox_TxEol.Text;
 
-			if (Domain.XEol.TryParse(eolString, out eol))
+			if (Domain.EolEx.TryParse(eolString, out eol))
 			{
 				this.settings_Form.TxEol = eol.ToSequenceString();
 
@@ -181,7 +181,7 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				Domain.XEol eol = comboBox_RxEol.SelectedItem as Domain.XEol;
+				Domain.EolEx eol = comboBox_RxEol.SelectedItem as Domain.EolEx;
 
 				if (eol != null)
 					this.settings_Form.RxEol = eol.ToSequenceString();
@@ -194,10 +194,10 @@ namespace YAT.Gui.Forms
 
 		private void comboBox_RxEol_Validating(object sender, CancelEventArgs e)
 		{
-			Domain.XEol eol;
+			Domain.EolEx eol;
 			string eolString = comboBox_RxEol.Text;
 
-			if (Domain.XEol.TryParse(eolString, out eol))
+			if (Domain.EolEx.TryParse(eolString, out eol))
 			{
 				this.settings_Form.RxEol = eol.ToSequenceString();
 			}
@@ -388,10 +388,10 @@ namespace YAT.Gui.Forms
 			this.isSettingControls = true;
 
 			comboBox_TxEol.Items.Clear();
-			comboBox_TxEol.Items.AddRange(Domain.XEol.GetItems());
+			comboBox_TxEol.Items.AddRange(Domain.EolEx.GetItems());
 
 			comboBox_RxEol.Items.Clear();
-			comboBox_RxEol.Items.AddRange(Domain.XEol.GetItems());
+			comboBox_RxEol.Items.AddRange(Domain.EolEx.GetItems());
 
 			comboBox_Encoding.Items.Clear();
 			comboBox_Encoding.Items.AddRange(EncodingEx.GetItems());
@@ -416,12 +416,12 @@ namespace YAT.Gui.Forms
 			label_RxEol.Enabled = separateEol;
 			comboBox_RxEol.Enabled = separateEol;
 
-			Domain.XEol eol;
-			if (Domain.XEol.TryParse(this.settings_Form.TxEol, out eol))
+			Domain.EolEx eol;
+			if (Domain.EolEx.TryParse(this.settings_Form.TxEol, out eol))
 				comboBox_TxEol.SelectedItem = eol;
 			else
 				comboBox_TxEol.Text = this.settings_Form.TxEol;
-			if (Domain.XEol.TryParse(this.settings_Form.RxEol, out eol))
+			if (Domain.EolEx.TryParse(this.settings_Form.RxEol, out eol))
 				comboBox_RxEol.SelectedItem = eol;
 			else
 				comboBox_RxEol.Text = this.settings_Form.RxEol;

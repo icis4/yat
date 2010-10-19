@@ -668,12 +668,12 @@ namespace YAT.Gui.Controls
 		/// ...
 		/// Nth line received => 2*N + 1               at index 0 | 1 | 2...N | 0 | 1 | 2...N | N+1
 		/// 
-		/// Each call takes a 0..2ms. For 25 lines this results in something like:
-		/// 51 x 2ms = 100ms per update!
+		/// Each call takes a 0..2 ms. For 25 lines this results in something like:
+		/// 51 x 2 ms = 100 ms per update!
 		/// At least scrolling is handled properly, i.e. as soon as the listbox starts to scroll,
 		/// the number of calls doesn't increase anymore.
 		/// 
-		/// Example measurements for SIR @ 18 upd/s:
+		/// Example measurements for SIR @ 18 samples per second:
 		/// 1.99.20 => 30% CPU usage
 		/// 1.99.22 with owner drawn and delayed scrolling => 25% CPU usage
 		/// 1.99.22 with owner drawn without DrawItem() => 10% CPU usage
@@ -698,19 +698,22 @@ namespace YAT.Gui.Controls
 				if (e.Index >= 0)
 				{
 					FastListBox flb = fastListBox_Monitor;
+					SizeF requestedSize;
+					SizeF drawnSize;
 
 					e.DrawBackground();
-					SizeF size = Drawing.DrawItem(flb.Items[e.Index] as Domain.DisplayLine, this.formatSettings, e.Graphics, e.Bounds, e.State);
+					Drawing.DrawAndMeasureItem(flb.Items[e.Index] as Domain.DisplayLine, this.formatSettings,
+					                           e.Graphics, e.Bounds, e.State, out requestedSize, out drawnSize);
 					e.DrawFocusRectangle();
 
-					int width  = (int)Math.Ceiling(size.Width);
-					int height = (int)Math.Ceiling(size.Height);
+					int requestedWidth  = (int)Math.Ceiling(requestedSize.Width);
+					int requestedHeight = (int)Math.Ceiling(requestedSize.Height);
 
-					if ((width > 0) && (width > flb.HorizontalExtent))
-						flb.HorizontalExtent = width;
+					if ((requestedWidth > 0) && (requestedWidth > flb.HorizontalExtent))
+						flb.HorizontalExtent = requestedWidth;
 
-					if ((height > 0) && (height != flb.ItemHeight))
-						flb.ItemHeight = height;
+					if ((requestedHeight > 0) && (requestedHeight != flb.ItemHeight))
+						flb.ItemHeight = requestedHeight;
 				}
 			}
 		}
