@@ -48,8 +48,8 @@ namespace MKY.IO.Serial.Test.Socket
 		/// <remarks>
 		/// A cycle takes around 5 seconds. 10 cycles around a minute.
 		/// </remarks>
-		[Test, Repeat(10)]
-		public virtual void TestConsecutiveConnectAndShutdown()
+		[Test, Repeat(10), Category("Endurance"), Category("Takes 1 Minute")]
+		public virtual void TestConsecutiveConnectAndShutdownEndurance01Minute()
 		{
 			SimpleUdpConnectionTest t = new SimpleUdpConnectionTest();
 			t.TestConnectAndShutdown();
@@ -63,21 +63,21 @@ namespace MKY.IO.Serial.Test.Socket
 		}
 
 		/// <summary></summary>
-		[Test, Repeat(10), Category("Endurance 10 Minutes")]
+		[Test, Repeat(10), Category("Endurance"), Category("Takes 10 Minutes")]
 		public virtual void TestConsecutiveConnectAndShutdownEndurance10Minutes()
 		{
-			TestConsecutiveConnectAndShutdown();
+			TestConsecutiveConnectAndShutdownEndurance01Minute();
 		}
 
 		/// <summary></summary>
-		[Test, Repeat(6), Category("Endurance 60 Minutes")]
+		[Test, Repeat(6), Category("Endurance"), Category("Takes 60 Minutes")]
 		public virtual void TestConsecutiveConnectAndShutdownEndurance60Minutes()
 		{
 			TestConsecutiveConnectAndShutdownEndurance10Minutes();
 		}
 
 		/// <summary></summary>
-		[Test, Repeat(int.MaxValue), Category("Endurance Forever")]
+		[Test, Repeat(int.MaxValue), Category("Endurance"), Category("Takes Forever")]
 		public virtual void TestConsecutiveConnectAndShutdownEnduranceForever()
 		{
 			TestConsecutiveConnectAndShutdownEndurance60Minutes();

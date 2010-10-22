@@ -18,7 +18,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
@@ -27,42 +27,30 @@ using NUnit.Framework;
 namespace YAT.Domain.Test.TextTerminal
 {
 	/// <summary></summary>
-	[TestFixture]
-	public class SubstitutionParserTest
+	public static class SubstitutionParserTestData
 	{
-		#region Types
+		#region Test Cases
 		//==========================================================================================
-		// Types
+		// Test Cases
 		//==========================================================================================
 
-		private struct TestSet
+		/// <summary></summary>
+		public static IEnumerable TestCases
 		{
-			public CharSubstitution Substitution;
-			public string InputString;
-			public byte[] OutputBytes;
-
-			public TestSet(CharSubstitution substitution, string inputString, byte[] outputBytes)
+			get
 			{
-				Substitution = substitution;
-				InputString = inputString;
-				OutputBytes = outputBytes;
+				// ToUpper.
+				yield return (new TestCaseData(CharSubstitution.ToUpper, @"\c(A)\c(b)CdEfGhIiKlMnOpQrStUvWxYz<Cr><Lf>", new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x49, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x0D, 0x0A } ).SetName("ToUpper"));
 			}
 		}
 
 		#endregion
+	}
 
-		#region Fields
-		//==========================================================================================
-		// Fields
-		//==========================================================================================
-
-		private readonly TestSet[] testSets =
-		{
-			new TestSet(CharSubstitution.ToUpper, @"\c(A)\c(b)CdEfGhIiKlMnOpQrStUvWxYz<Cr><Lf>",	new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x49, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x0D, 0x0A } ),
-		};
-
-		#endregion
-
+	/// <summary></summary>
+	[TestFixture]
+	public class SubstitutionParserTest
+	{
 		#region Tests
 		//==========================================================================================
 		// Test
@@ -74,53 +62,12 @@ namespace YAT.Domain.Test.TextTerminal
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		[Test]
-		public virtual void TestSubstitutionParser()
+		[Test, TestCaseSource(typeof(SubstitutionParserTestData), "TestCases")]
+		public virtual void TestSubstitutionParser(CharSubstitution substitution, string inputString, byte[] expectedBytes)
 		{
-			Exception exceptionToNUnit = null;
-
-			foreach (TestSet ts in this.testSets)
-			{
-				Domain.Parser.SubstitutionParser parser;
-				byte[] outputBytes = new byte[] { };
-
-				try
-				{
-					parser = new Domain.Parser.SubstitutionParser();
-					outputBytes = parser.Parse(ts.InputString, ts.Substitution);
-					Assert.AreEqual(ts.OutputBytes, outputBytes);
-				}
-				catch (Exception ex)
-				{
-					// Catch assertion exceptions to ensure that all test sets are run in any case
-					//   but keep first exception to signal NUnit that test has failed.
-					if (exceptionToNUnit == null)
-						exceptionToNUnit = ex;
-
-					Console.WriteLine("Invalid parser output bytes:");
-					Console.WriteLine();
-					Console.WriteLine("Input string =");
-					Console.WriteLine(@"""" + ts.InputString + @"""");
-					Console.WriteLine();
-					Console.WriteLine("Expected output bytes =");
-					foreach (byte b in ts.OutputBytes)
-					{
-						Console.Write("0x" + b.ToString("X2", CultureInfo.InvariantCulture) + ", ");
-					}
-					Console.WriteLine();
-					Console.WriteLine("Actual output bytes =");
-					foreach (byte b in outputBytes)
-					{
-						Console.Write("0x" + b.ToString("X2", CultureInfo.InvariantCulture) + ", ");
-					}
-					Console.WriteLine();
-				}
-			}
-
-			// Re-throw first exception to signal NUnit that test has failed.
-			if (exceptionToNUnit != null)
-				throw (exceptionToNUnit);
+			Domain.Parser.SubstitutionParser parser = new Domain.Parser.SubstitutionParser();
+			byte[] actualBytes = parser.Parse(inputString, substitution);
+			Assert.AreEqual(expectedBytes, actualBytes);
 		}
 
 		#endregion

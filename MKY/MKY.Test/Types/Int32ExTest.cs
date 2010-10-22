@@ -18,6 +18,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Collections;
+
 using NUnit.Framework;
 
 using MKY.Types;
@@ -25,77 +27,65 @@ using MKY.Types;
 namespace MKY.Test.Types
 {
 	/// <summary></summary>
-	[TestFixture]
-	public class Int32ExTest
+	public static class Int32ExTestData
 	{
-		#region Types
+		#region Test Cases
 		//==========================================================================================
-		// Types
+		// Test Cases
 		//==========================================================================================
 
-		private struct TestSet
+		/// <summary></summary>
+		public static IEnumerable TestCases
 		{
-			public readonly int Min;
-			public readonly int Max;
-			public readonly int Value;
-			public readonly bool ValueMinimized;
-			public readonly bool ValueMaximized;
-
-			public TestSet(int min, int max, int value, bool valueMinimized, bool valueMaximized)
+			get
 			{
-				Min = min;
-				Max = max;
-				Value = value;
-				ValueMinimized = valueMinimized;
-				ValueMaximized = valueMaximized;
+				yield return (new TestCaseData( 0,  0, -1,  true,  true));
+				yield return (new TestCaseData( 0,  0,  0,  true,  true));
+				yield return (new TestCaseData( 0,  0,  1,  true,  true));
+
+				yield return (new TestCaseData( 0,  1, -1,  true, false));
+				yield return (new TestCaseData( 0,  1,  0,  true, false));
+				yield return (new TestCaseData( 0,  1,  1, false,  true));
+				yield return (new TestCaseData( 0,  1,  2, false,  true));
+
+				yield return (new TestCaseData(-1,  0, -2,  true, false));
+				yield return (new TestCaseData(-1,  0, -1,  true, false));
+				yield return (new TestCaseData(-1,  0,  0, false,  true));
+				yield return (new TestCaseData(-1,  0,  1, false,  true));
+
+				yield return (new TestCaseData(-1,  1, -2,  true, false));
+				yield return (new TestCaseData(-1,  1, -1,  true, false));
+				yield return (new TestCaseData(-1,  1,  0, false, false));
+				yield return (new TestCaseData(-1,  1,  1, false,  true));
+				yield return (new TestCaseData(-1,  1,  2, false,  true));
+
+				yield return (new TestCaseData(int.MinValue, int.MaxValue,            0, false, false));
+				yield return (new TestCaseData(int.MinValue, int.MaxValue, int.MinValue,  true, false));
+				yield return (new TestCaseData(int.MinValue, int.MaxValue, int.MaxValue, false,  true));
+
+				yield return (new TestCaseData(int.MinValue, int.MaxValue, int.MinValue + 1, false, false));
+				yield return (new TestCaseData(int.MinValue, int.MaxValue, int.MaxValue - 1, false, false));
+
+				yield return (new TestCaseData(int.MinValue + 1, int.MaxValue - 1, int.MinValue    ,  true, false));
+				yield return (new TestCaseData(int.MinValue + 1, int.MaxValue - 1, int.MinValue + 1,  true, false));
+				yield return (new TestCaseData(int.MinValue + 1, int.MaxValue - 1, int.MinValue + 2, false, false));
+				yield return (new TestCaseData(int.MinValue + 1, int.MaxValue - 1, int.MaxValue - 2, false, false));
+				yield return (new TestCaseData(int.MinValue + 1, int.MaxValue - 1, int.MaxValue - 1, false,  true));
+				yield return (new TestCaseData(int.MinValue + 1, int.MaxValue - 1, int.MaxValue    , false,  true));
 			}
 		}
 
 		#endregion
+	}
 
-		#region Fields
+	/// <summary></summary>
+	[TestFixture]
+	public class Int32ExTest
+	{
+		#region Tests
 		//==========================================================================================
-		// Fields
+		// Test
 		//==========================================================================================
-
-		private readonly TestSet[] testSets =
-		{
-			new TestSet(  0,  0, -1,  true,  true ),
-			new TestSet(  0,  0,  0,  true,  true ),
-			new TestSet(  0,  0,  1,  true,  true ),
-
-			new TestSet(  0,  1, -1,  true, false ),
-			new TestSet(  0,  1,  0,  true, false ),
-			new TestSet(  0,  1,  1, false,  true ),
-			new TestSet(  0,  1,  2, false,  true ),
-
-			new TestSet( -1,  0, -2,  true, false ),
-			new TestSet( -1,  0, -1,  true, false ),
-			new TestSet( -1,  0,  0, false,  true ),
-			new TestSet( -1,  0,  1, false,  true ),
-
-			new TestSet( -1,  1, -2,  true, false ),
-			new TestSet( -1,  1, -1,  true, false ),
-			new TestSet( -1,  1,  0, false, false ),
-			new TestSet( -1,  1,  1, false,  true ),
-			new TestSet( -1,  1,  2, false,  true ),
-
-			new TestSet( int.MinValue, int.MaxValue,            0, false, false ),
-			new TestSet( int.MinValue, int.MaxValue, int.MinValue,  true, false ),
-			new TestSet( int.MinValue, int.MaxValue, int.MaxValue, false,  true ),
-
-			new TestSet( int.MinValue, int.MaxValue, int.MinValue + 1, false, false ),
-			new TestSet( int.MinValue, int.MaxValue, int.MaxValue - 1, false, false ),
-
-			new TestSet( int.MinValue + 1, int.MaxValue - 1, int.MinValue    ,  true, false ),
-			new TestSet( int.MinValue + 1, int.MaxValue - 1, int.MinValue + 1,  true, false ),
-			new TestSet( int.MinValue + 1, int.MaxValue - 1, int.MinValue + 2, false, false ),
-			new TestSet( int.MinValue + 1, int.MaxValue - 1, int.MaxValue - 2, false, false ),
-			new TestSet( int.MinValue + 1, int.MaxValue - 1, int.MaxValue - 1, false,  true ),
-			new TestSet( int.MinValue + 1, int.MaxValue - 1, int.MaxValue    , false,  true ),
-		};
-
-		#endregion
 
 		#region Tests > LimitToBounds()
 		//------------------------------------------------------------------------------------------
@@ -103,20 +93,19 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test]
-		public virtual void TestLimitToBounds()
+		[Test, TestCaseSource(typeof(Int32ExTestData), "TestCases")]
+		public virtual void TestLimitToBounds(int min, int max, int value, bool valueMinimized, bool valueMaximized)
 		{
-			foreach (TestSet ts in this.testSets)
-			{
-				int limited = Int32Ex.LimitToBounds(ts.Value, ts.Min, ts.Max);
+			int limited = Int32Ex.LimitToBounds(value, min, max);
 
-				if (ts.ValueMinimized)
-					Assert.AreEqual(ts.Min, limited);
+			if (valueMinimized)
+				Assert.AreEqual(min, limited);
 
-				if (ts.ValueMaximized)
-					Assert.AreEqual(ts.Max, limited);
-			}
+			if (valueMaximized)
+				Assert.AreEqual(max, limited);
 		}
+
+		#endregion
 
 		#endregion
 	}
