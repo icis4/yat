@@ -45,7 +45,7 @@ namespace MKY.IO.Serial.Test.Socket
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, Category("Stress")]
+		[Test, Category("Stress"), Category("Takes 1 Minute")]
 		public virtual void StressAutoSocket()
 		{
 			List<int> serverPorts = new List<int>();

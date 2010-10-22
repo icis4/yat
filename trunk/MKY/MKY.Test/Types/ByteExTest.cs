@@ -18,6 +18,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Collections;
 using System.Globalization;
 
 using NUnit.Framework;
@@ -27,54 +28,35 @@ using MKY.Types;
 namespace MKY.Test.Types
 {
 	/// <summary></summary>
-	[TestFixture]
-	public class ByteExTest
+	public static class ByteExTestData
 	{
-		#region Types
+		#region Test Cases
 		//==========================================================================================
-		// Types
+		// Test Cases
 		//==========================================================================================
 
-		private struct TestSet
+		/// <summary></summary>
+		public static IEnumerable TestCases
 		{
-			public readonly byte Data;
-
-			public readonly string BinString;
-			public readonly string OctString;
-			public readonly string DecString;
-			public readonly string HexString;
-
-			public TestSet(byte data, string binString, string octString, string decString, string hexString)
+			get
 			{
-				Data = data;
-
-				BinString = binString;
-				OctString = octString;
-				DecString = decString;
-				HexString = hexString;
+				yield return (new TestCaseData((byte)  0, "00000000", "000", "000", "00").SetName(  "0"));
+				yield return (new TestCaseData((byte)  1, "00000001", "001", "001", "01").SetName(  "1"));
+				yield return (new TestCaseData((byte)127, "01111111", "177", "127", "7F").SetName("127"));
+				yield return (new TestCaseData((byte)128, "10000000", "200", "128", "80").SetName("128"));
+				yield return (new TestCaseData((byte)129, "10000001", "201", "129", "81").SetName("129"));
+				yield return (new TestCaseData((byte)254, "11111110", "376", "254", "FE").SetName("254"));
+				yield return (new TestCaseData((byte)255, "11111111", "377", "255", "FF").SetName("255"));
 			}
 		}
 
 		#endregion
+	}
 
-		#region Fields
-		//==========================================================================================
-		// Fields
-		//==========================================================================================
-
-		private readonly TestSet[] testSets =
-		{
-			new TestSet(	  0, "00000000", "000", "000", "00" ),
-			new TestSet(	  1, "00000001", "001", "001", "01" ),
-			new TestSet(	127, "01111111", "177", "127", "7F" ),
-			new TestSet(	128, "10000000", "200", "128", "80" ),
-			new TestSet(	129, "10000001", "201", "129", "81" ),
-			new TestSet(	254, "11111110", "376", "254", "FE" ),
-			new TestSet(	255, "11111111", "377", "255", "FF" ),
-		};
-
-		#endregion
-
+	/// <summary></summary>
+	[TestFixture]
+	public class ByteExTest
+	{
 		#region Tests
 		//==========================================================================================
 		// Test
@@ -86,18 +68,13 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test]
-		public virtual void TestToString()
+		[Test, TestCaseSource(typeof(ByteExTestData), "TestCases")]
+		public virtual void TestToString(byte data, string binString, string octString, string decString, string hexString)
 		{
-			foreach (TestSet ts in this.testSets)
-			{
-				byte data = ts.Data;
-
-				Assert.AreEqual(ts.BinString, ByteEx.ConvertToBinaryString(data));
-				Assert.AreEqual(ts.OctString, ByteEx.ConvertToOctalString(data));
-				Assert.AreEqual(ts.DecString, data.ToString("D3", CultureInfo.InvariantCulture));
-				Assert.AreEqual(ts.HexString, data.ToString("X2", CultureInfo.InvariantCulture));
-			}
+			Assert.AreEqual(binString, ByteEx.ConvertToBinaryString(data));
+			Assert.AreEqual(octString, ByteEx.ConvertToOctalString(data));
+			Assert.AreEqual(decString, data.ToString("D3", CultureInfo.InvariantCulture));
+			Assert.AreEqual(hexString, data.ToString("X2", CultureInfo.InvariantCulture));
 		}
 
 		#endregion

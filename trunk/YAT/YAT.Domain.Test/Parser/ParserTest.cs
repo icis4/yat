@@ -18,9 +18,8 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Text;
 
 using NUnit.Framework;
@@ -28,118 +27,82 @@ using NUnit.Framework;
 namespace YAT.Domain.Test.Parser
 {
 	/// <summary></summary>
-	[TestFixture]
-	public class ParserTest
+	public static class ParserTestData
 	{
-		#region Types
+		#region Test Cases
 		//==========================================================================================
-		// Types
+		// Test Cases
 		//==========================================================================================
 
-		private struct TestSet
+		/// <summary></summary>
+		public static IEnumerable TestCases
 		{
-			public readonly Endianess Endianess;
-			public readonly Encoding Encoding;
-			public readonly Radix DefaultRadix;
-			public readonly string InputString;
-			public readonly byte[] OutputBytes;
-
-			public TestSet(string inputString, byte[] outputBytes)
+			get
 			{
-				Endianess = Endianess.LittleEndian;
-				Encoding = Encoding.Default;
-				DefaultRadix = Radix.String;
-				InputString = inputString;
-				OutputBytes = outputBytes;
+				// Mixed.
+				yield return (new TestCaseData(@"Hello \s(Hello \d(10) Hello) Hello", new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x0A, 0x20, 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x48, 0x65, 0x6C, 0x6C, 0x6F } ).SetName("Mixed"));
+
+				// Empty.
+				yield return (new TestCaseData("", new byte[] { }).SetName("Empty"));
+
+				// Whitespace.
+				yield return (new TestCaseData("\0",   new byte[] { 0x00 } ).SetName("Whitespace Null"));
+				yield return (new TestCaseData("\a",   new byte[] { 0x07 } ).SetName("Whitespace Bell"));
+				yield return (new TestCaseData("\b",   new byte[] { 0x08 } ).SetName("Whitespace Backspace"));
+				yield return (new TestCaseData("	", new byte[] { 0x09 } ).SetName("Whitespace Tab"));
+
+				// ASCII.
+				yield return (new TestCaseData("<BEL>",     new byte[] { 0x07 } ).SetName("ASCII <BEL>"));
+				yield return (new TestCaseData("<BS>",      new byte[] { 0x08 } ).SetName("ASCII <BS>"));
+				yield return (new TestCaseData("<TAB>",     new byte[] { 0x09 } ).SetName("ASCII <TAB>"));
+				yield return (new TestCaseData("<CR>",      new byte[] { 0x0D } ).SetName("ASCII <CR>"));
+				yield return (new TestCaseData("<LF>",      new byte[] { 0x0A } ).SetName("ASCII <LF>"));
+				yield return (new TestCaseData("<CR><LF>",  new byte[] { 0x0D, 0x0A } ).SetName("ASCII <CR><LF>"));
+				yield return (new TestCaseData("<CR LF>",   new byte[] { 0x0D, 0x0A } ).SetName("ASCII <CR LF>"));
+				yield return (new TestCaseData("<CR> <LF>", new byte[] { 0x0D, 0x20, 0x0A } ).SetName("ASCII <CR> <LF>"));
+				yield return (new TestCaseData("Empty <>",  new byte[] { 0x45, 0x6D, 0x70, 0x74, 0x79, 0x20 } ).SetName("ASCII Empty <>"));
+				yield return (new TestCaseData("<XOn>",     new byte[] { 0x11 } ).SetName("ASCII <XOn>"));
+				yield return (new TestCaseData("<XOff>",    new byte[] { 0x13 } ).SetName("ASCII <XOff>"));
+
+				// Parenthesis and co.
+				yield return (new TestCaseData(@"Hello \(round\) and \<angle\> brackets", new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x28, 0x72, 0x6F, 0x75, 0x6E, 0x64, 0x29, 0x20, 0x61, 0x6E, 0x64, 0x20, 0x3C, 0x61, 0x6E, 0x67, 0x6C, 0x65, 0x3E, 0x20, 0x62, 0x72, 0x61, 0x63, 0x6B, 0x65, 0x74, 0x73 } ).SetName("Parenthesis and co."));
+
+				// Backslashes
+				yield return (new TestCaseData(@"Hello \\back\\ slashes", new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x5C, 0x62, 0x61, 0x63, 0x6B, 0x5C, 0x20, 0x73, 0x6C, 0x61, 0x73, 0x68, 0x65, 0x73 } ).SetName("Backslashes"));
+
+				// Char.
+				yield return (new TestCaseData(@"Single char \c(9)",						new byte[] { 0x53, 0x69, 0x6E, 0x67, 0x6C, 0x65, 0x20, 0x63, 0x68, 0x61, 0x72, 0x20, 0x39 } ).SetName("Char single '9'"));
+				yield return (new TestCaseData(@"Single char \c(.)",						new byte[] { 0x53, 0x69, 0x6E, 0x67, 0x6C, 0x65, 0x20, 0x63, 0x68, 0x61, 0x72, 0x20, 0x2E } ).SetName("Char single '.'"));
+				yield return (new TestCaseData(@"Hello \c(()round\c()) brackets",			new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x28, 0x72, 0x6F, 0x75, 0x6E, 0x64, 0x29, 0x20, 0x62, 0x72, 0x61, 0x63, 0x6B, 0x65, 0x74, 0x73 } ).SetName("Char round brackets 1"));
+				yield return (new TestCaseData(@"\c(H)\c(e)llo \c(()round\c()) brackets",	new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x28, 0x72, 0x6F, 0x75, 0x6E, 0x64, 0x29, 0x20, 0x62, 0x72, 0x61, 0x63, 0x6B, 0x65, 0x74, 0x73 } ).SetName("Char round brackets 2"));
+				yield return (new TestCaseData(@"Empty \c()",								new byte[] { 0x45, 0x6D, 0x70, 0x74, 0x79, 0x20 } ).SetName("Char empty"));
+
+				// Hex.
+				yield return (new TestCaseData(@"\h()",								new byte[] { } ).SetName("Hex empty"));
+				yield return (new TestCaseData(@"\h(00)",							new byte[] { 0x00 } ).SetName("Hex 00"));
+				yield return (new TestCaseData(@"\h(01)",							new byte[] { 0x01 } ).SetName("Hex 01"));
+				yield return (new TestCaseData(@"\h(20)",							new byte[] { 0x20 } ).SetName("Hex 20"));
+				yield return (new TestCaseData(@"\h(7F)",							new byte[] { 0x7F } ).SetName("Hex 7F"));
+				yield return (new TestCaseData(@"\h(80)",							new byte[] { 0x80 } ).SetName("Hex 80"));
+				yield return (new TestCaseData(@"\h(81)",							new byte[] { 0x81 } ).SetName("Hex 81"));
+				yield return (new TestCaseData(@"\h(AA)",							new byte[] { 0xAA } ).SetName("Hex AA"));
+				yield return (new TestCaseData(@"\h(FE)",							new byte[] { 0xFE } ).SetName("Hex FE"));
+				yield return (new TestCaseData(@"\h(FF)",							new byte[] { 0xFF } ).SetName("Hex FF"));
+				yield return (new TestCaseData(@"\h(00 01 20 7F 80 81 AA FE FF)",	new byte[] { 0x00, 0x01, 0x20, 0x7F, 0x80, 0x81, 0xAA, 0xFE, 0xFF } ).SetName("Hex sequence 1"));
+				yield return (new TestCaseData(@"\h(00 00)",						new byte[] { 0x00, 0x00 } ).SetName("Hex 00 00"));
+				yield return (new TestCaseData(@"\h(FF FF)",						new byte[] { 0xFF, 0xFF } ).SetName("Hex FF FF"));
+				yield return (new TestCaseData(@"\h(23 5D 24 81 20 A5)",			new byte[] { 0x23, 0x5D, 0x24, 0x81, 0x20, 0xA5 } ).SetName("Hex sequence 2"));
+				yield return (new TestCaseData(@"\h(00 \h(FF) 00)",					new byte[] { 0x00, 0xFF, 0x00 } ).SetName("Hex nested"));
 			}
 		}
 
 		#endregion
+	}
 
-		#region Fields
-		//==========================================================================================
-		// Fields
-		//==========================================================================================
-
-		private readonly TestSet[][] testSets =
-		{
-			// Mixed.
-			new TestSet[]
-			{
-				new TestSet(@"Hello \s(Hello \d(10) Hello) Hello",	new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x0A, 0x20, 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x48, 0x65, 0x6C, 0x6C, 0x6F } ),
-			},
-
-			// Empty.
-			new TestSet[]
-			{
-				new TestSet("",				new byte[] { } ),
-			},
-
-			// Whitespace.
-			new TestSet[]
-			{
-				new TestSet("\0",			new byte[] { 0x00 } ),
-				new TestSet("\a",			new byte[] { 0x08 } ),
-				new TestSet("\b",			new byte[] { 0x08 } ),
-				new TestSet("	",			new byte[] { 0x09 } ),
-			},
-
-			// ASCII.
-			new TestSet[]
-			{
-				new TestSet("<BEL>",		new byte[] { 0x07 } ),
-				new TestSet("<BS>",			new byte[] { 0x08 } ),
-				new TestSet("<TAB>",		new byte[] { 0x09 } ),
-				new TestSet("<CR>",			new byte[] { 0x0D } ),
-				new TestSet("<LF>",			new byte[] { 0x0A } ),
-				new TestSet("<CR><LF>",		new byte[] { 0x0D, 0x0A } ),
-				new TestSet("<CR LF>",		new byte[] { 0x0D, 0x0A } ),
-				new TestSet("<CR> <LF>",	new byte[] { 0x0D, 0x20, 0x0A } ),
-				new TestSet("Empty <>",		new byte[] { 0x45, 0x6D, 0x70, 0x74, 0x79, 0x20 } ),
-				new TestSet("<XOn>",		new byte[] { 0x11 } ),
-				new TestSet("<XOff>",		new byte[] { 0x13 } ),
-			},
-
-			// Parenthesis and co.
-			new TestSet[]
-			{
-				new TestSet(@"Hello \(round\) and \<angle\> brackets",	new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x28, 0x72, 0x6F, 0x75, 0x6E, 0x64, 0x29, 0x20, 0x61, 0x6E, 0x64, 0x20, 0x3C, 0x61, 0x6E, 0x67, 0x6C, 0x65, 0x3E, 0x20, 0x62, 0x72, 0x61, 0x63, 0x6B, 0x65, 0x74, 0x73 } ),
-				new TestSet(@"Hello \\back\\ slashes",					new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x5C, 0x62, 0x61, 0x63, 0x6B, 0x5C, 0x20, 0x73, 0x6C, 0x61, 0x73, 0x68, 0x65, 0x73 } ),
-			},
-
-			// Char.
-			new TestSet[]
-			{
-				new TestSet(@"Single char \c(9)",						new byte[] { 0x53, 0x69, 0x6E, 0x67, 0x6C, 0x65, 0x20, 0x63, 0x68, 0x61, 0x72, 0x20, 0x39 } ),
-				new TestSet(@"Single char \c(.)",						new byte[] { 0x53, 0x69, 0x6E, 0x67, 0x6C, 0x65, 0x20, 0x63, 0x68, 0x61, 0x72, 0x20, 0x2E } ),
-				new TestSet(@"Hello \c(()round\c()) brackets",			new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x28, 0x72, 0x6F, 0x75, 0x6E, 0x64, 0x29, 0x20, 0x62, 0x72, 0x61, 0x63, 0x6B, 0x65, 0x74, 0x73 } ),
-				new TestSet(@"\c(H)\c(e)llo \c(()round\c()) brackets",	new byte[] { 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x28, 0x72, 0x6F, 0x75, 0x6E, 0x64, 0x29, 0x20, 0x62, 0x72, 0x61, 0x63, 0x6B, 0x65, 0x74, 0x73 } ),
-				new TestSet(@"Empty \c()",								new byte[] { 0x45, 0x6D, 0x70, 0x74, 0x79, 0x20 } ),
-			},
-
-			// Hex.
-			new TestSet[]
-			{
-				new TestSet(@"\h()",							new byte[] { } ),
-				new TestSet(@"\h(00)",							new byte[] { 0x00 } ),
-				new TestSet(@"\h(01)",							new byte[] { 0x01 } ),
-				new TestSet(@"\h(20)",							new byte[] { 0x20 } ),
-				new TestSet(@"\h(7F)",							new byte[] { 0x7F } ),
-				new TestSet(@"\h(80)",							new byte[] { 0x80 } ),
-				new TestSet(@"\h(81)",							new byte[] { 0x81 } ),
-				new TestSet(@"\h(AA)",							new byte[] { 0xAA } ),
-				new TestSet(@"\h(FE)",							new byte[] { 0xFE } ),
-				new TestSet(@"\h(FF)",							new byte[] { 0xFF } ),
-				new TestSet(@"\h(00 01 20 7F 80 81 AA FE FF)",	new byte[] { 0x00, 0x01, 0x20, 0x7F, 0x80, 0x81, 0xAA, 0xFE, 0xFF } ),
-				new TestSet(@"\h(00 00)",						new byte[] { 0x00, 0x00 } ),
-				new TestSet(@"\h(FF FF)",						new byte[] { 0xFF, 0xFF } ),
-				new TestSet(@"\h(23 5D 24 81 20 A5)",			new byte[] { 0x23, 0x5D, 0x24, 0x81, 0x20, 0xA5 } ),
-				new TestSet(@"\h(00 \h(FF) 00)",				new byte[] { 0x00, 0xFF, 0x00 } ),
-			},
-		};
-
-		#endregion
-
+	/// <summary></summary>
+	[TestFixture]
+	public class ParserTest
+	{
 		#region Tests
 		//==========================================================================================
 		// Test
@@ -151,56 +114,12 @@ namespace YAT.Domain.Test.Parser
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		[Test]
-		public virtual void TestParser()
+		[Test, TestCaseSource(typeof(ParserTestData), "TestCases")]
+		public virtual void TestParser(string inputString, byte[] expectedBytes)
 		{
-			Exception exceptionToNUnit = null;
-
-			foreach (TestSet[] tsArray in this.testSets)
-			{
-				foreach (TestSet ts in tsArray)
-				{
-					Domain.Parser.Parser parser;
-					byte[] outputBytes = new byte[] { };
-
-					try
-					{
-						parser = new Domain.Parser.Parser(ts.Encoding);
-						outputBytes = parser.Parse(ts.InputString);
-						Assert.AreEqual(ts.OutputBytes, outputBytes);
-					}
-					catch (Exception ex)
-					{
-						// Catch assertion exceptions to ensure that all test sets are run in any case
-						//   but keep first exception to signal NUnit that test has failed.
-						if (exceptionToNUnit == null)
-							exceptionToNUnit = ex;
-
-						Console.WriteLine("Invalid parser output bytes:");
-						Console.WriteLine();
-						Console.WriteLine("Input string =");
-						Console.WriteLine(@"""" + ts.InputString + @"""");
-						Console.WriteLine();
-						Console.WriteLine("Expected output bytes =");
-						foreach (byte b in ts.OutputBytes)
-						{
-							Console.Write("0x" + b.ToString("X2", CultureInfo.InvariantCulture) + ", ");
-						}
-						Console.WriteLine();
-						Console.WriteLine("Actual output bytes =");
-						foreach (byte b in outputBytes)
-						{
-							Console.Write("0x" + b.ToString("X2", CultureInfo.InvariantCulture) + ", ");
-						}
-						Console.WriteLine();
-					}
-				}
-			}
-
-			// Re-throw first exception to signal NUnit that test has failed.
-			if (exceptionToNUnit != null)
-				throw (exceptionToNUnit);
+			Domain.Parser.Parser parser = new Domain.Parser.Parser();
+			byte[] actualBytes = parser.Parse(inputString);
+			Assert.AreEqual(expectedBytes, actualBytes);
 		}
 
 		#endregion

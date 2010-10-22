@@ -22,12 +22,10 @@ using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Net;
 using System.Xml.Serialization;
 
 using NUnit.Framework;
 
-using MKY.IO.Ports;
 using MKY.Diagnostics;
 using MKY.Test;
 

@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections;
-using System.Globalization;
 
 using NUnit.Framework;
 
@@ -29,7 +28,7 @@ using MKY.Types;
 namespace MKY.Test.Types
 {
 	/// <summary></summary>
-	public static class XArrayTestData
+	public static class ArrayExTestData
 	{
 		#region Types
 		//==========================================================================================
@@ -162,7 +161,7 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(XArrayTestData), "TestCases")]
+		[Test, TestCaseSource(typeof(ArrayExTestData), "TestCases")]
 		public virtual void TestValuesEqual(Array objA, Array objB, bool equals)
 		{
 			Assert.AreEqual(ArrayEx.ValuesEqual(objA, objB), equals);
