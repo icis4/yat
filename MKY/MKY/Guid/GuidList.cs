@@ -20,9 +20,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace MKY.Guid
+// This code is intentionally placed into the MKY namespace even though the file is located in
+// MKY.Guid for consistency with the Sytem.Guid class.
+namespace MKY
 {
 	/// <summary>
 	/// List with additional methods to handle items providing a <see cref="Guid"/>.
@@ -62,7 +63,7 @@ namespace MKY.Guid
 		//==========================================================================================
 
 		/// <summary>
-		/// Add or replaces the item that has the same <see cref="System.Guid"/> as item.
+		/// Add or replaces the item that has the same <see cref="Guid"/> as item.
 		/// </summary>
 		public virtual void AddOrReplaceGuidItem(T item)
 		{
@@ -72,7 +73,7 @@ namespace MKY.Guid
 		}
 
 		/// <summary>
-		/// Replaces the item that has the same <see cref="System.Guid"/> as item.
+		/// Replaces the item that has the same <see cref="Guid"/> as item.
 		/// </summary>
 		public virtual bool ReplaceGuidItem(T item)
 		{
@@ -89,10 +90,10 @@ namespace MKY.Guid
 		}
 
 		/// <summary>
-		/// Returns first item within the list that has the specified <see cref="System.Guid"/>,
+		/// Returns first item within the list that has the specified <see cref="Guid"/>,
 		/// <c>null</c> otherwise.
 		/// </summary>
-		public virtual T GetGuidItem(System.Guid guid)
+		public virtual T GetGuidItem(Guid guid)
 		{
 			foreach (T item in this)
 			{
@@ -103,9 +104,9 @@ namespace MKY.Guid
 		}
 
 		/// <summary>
-		/// Removes all items that have the specified <see cref="System.Guid"/>.
+		/// Removes all items that have the specified <see cref="Guid"/>.
 		/// </summary>
-		public virtual void RemoveGuid(System.Guid guid)
+		public virtual void RemoveGuid(Guid guid)
 		{
 			GuidList<T> obsoleteItems = new GuidList<T>();
 

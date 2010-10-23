@@ -18,6 +18,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -103,9 +104,9 @@ namespace YAT.Gui.Test
 		[Category("Stress")]
 		public virtual void TestTransmissionDisplay()
 		{
-			string workspaceSettingsFilePath = Temp.MakeTempFilePath(this, System.Guid.NewGuid().ToString(), ExtensionSettings.WorkspaceFile);
-			string terminalSettings1FilePath = Temp.MakeTempFilePath(this, System.Guid.NewGuid().ToString(), ExtensionSettings.TerminalFile);
-			string terminalSettings2FilePath = Temp.MakeTempFilePath(this, System.Guid.NewGuid().ToString(), ExtensionSettings.TerminalFile);
+			string workspaceSettingsFilePath = Temp.MakeTempFilePath(this, Guid.NewGuid().ToString(), ExtensionSettings.WorkspaceFile);
+			string terminalSettings1FilePath = Temp.MakeTempFilePath(this, Guid.NewGuid().ToString(), ExtensionSettings.TerminalFile);
+			string terminalSettings2FilePath = Temp.MakeTempFilePath(this, Guid.NewGuid().ToString(), ExtensionSettings.TerminalFile);
 
 			DocumentSettingsHandler<WorkspaceSettingsRoot> workspaceSettings = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
 			DocumentSettingsHandler<TerminalSettingsRoot> terminalSettings1 = new DocumentSettingsHandler<TerminalSettingsRoot>();
@@ -141,7 +142,7 @@ namespace YAT.Gui.Test
 			Trace.WriteLine(workspaceSettingsFilePath);
 			Trace.Unindent();
 
-			string transmitFilePath = Temp.MakeTempFilePath(this, System.Guid.NewGuid().ToString(), ".txt");
+			string transmitFilePath = Temp.MakeTempFilePath(this, Guid.NewGuid().ToString(), ".txt");
 			using (StreamWriter transmitFile = new StreamWriter(transmitFilePath))
 			{
 				transmitFile.WriteLine("");

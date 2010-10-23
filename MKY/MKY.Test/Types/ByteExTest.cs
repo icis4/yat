@@ -40,13 +40,13 @@ namespace MKY.Test.Types
 		{
 			get
 			{
-				yield return (new TestCaseData((byte)  0, "00000000", "000", "000", "00").SetName(  "0"));
-				yield return (new TestCaseData((byte)  1, "00000001", "001", "001", "01").SetName(  "1"));
-				yield return (new TestCaseData((byte)127, "01111111", "177", "127", "7F").SetName("127"));
-				yield return (new TestCaseData((byte)128, "10000000", "200", "128", "80").SetName("128"));
-				yield return (new TestCaseData((byte)129, "10000001", "201", "129", "81").SetName("129"));
-				yield return (new TestCaseData((byte)254, "11111110", "376", "254", "FE").SetName("254"));
-				yield return (new TestCaseData((byte)255, "11111111", "377", "255", "FF").SetName("255"));
+				yield return (new TestCaseData((byte)  0, "00000000", "000", "000", "00"));
+				yield return (new TestCaseData((byte)  1, "00000001", "001", "001", "01"));
+				yield return (new TestCaseData((byte)127, "01111111", "177", "127", "7F"));
+				yield return (new TestCaseData((byte)128, "10000000", "200", "128", "80"));
+				yield return (new TestCaseData((byte)129, "10000001", "201", "129", "81"));
+				yield return (new TestCaseData((byte)254, "11111110", "376", "254", "FE"));
+				yield return (new TestCaseData((byte)255, "11111111", "377", "255", "FF"));
 			}
 		}
 

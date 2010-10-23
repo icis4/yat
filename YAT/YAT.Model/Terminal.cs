@@ -25,8 +25,8 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY;
 using MKY.Event;
-using MKY.Guid;
 using MKY.Recent;
 using MKY.Settings;
 using MKY.Time;

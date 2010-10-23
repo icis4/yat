@@ -21,7 +21,7 @@
 using System;
 using System.Xml.Serialization;
 
-using MKY.Guid;
+using MKY;
 
 namespace YAT.Model.Settings
 {

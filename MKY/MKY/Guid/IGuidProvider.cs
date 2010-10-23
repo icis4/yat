@@ -19,10 +19,10 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace MKY.Guid
+// This code is intentionally placed into the MKY namespace even though the file is located in
+// MKY.Guid for consistency with the Sytem.Guid class.
+namespace MKY
 {
 	/// <summary>
 	/// Interface that can be implemented by types providing a <see cref="Guid"/>.
@@ -32,7 +32,7 @@ namespace MKY.Guid
 		/// <summary>
 		/// Returns the <see cref="Guid"/> of the providing object.
 		/// </summary>
-		System.Guid Guid { get; }
+		Guid Guid { get; }
 	}
 }
 

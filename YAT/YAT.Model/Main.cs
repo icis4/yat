@@ -25,7 +25,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows.Forms;
 
-using MKY.Guid;
+using MKY;
 using MKY.Event;
 using MKY.Settings;
 

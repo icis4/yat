@@ -130,7 +130,7 @@ namespace MKY.Win32
 				public UInt32      dbcc_size;
 				public DBT_DEVTYP  dbcc_devicetype;
 				public UInt32      dbcc_reserved;
-				public System.Guid dbcc_classguid;
+				public Guid dbcc_classguid;
 				[MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
 				public char[]      dbcc_name;
 			}
@@ -153,7 +153,7 @@ namespace MKY.Win32
 			public struct SP_DEVICE_INTERFACE_DATA
 			{
 				public UInt32 cbSize;
-				public System.Guid InterfaceClassGuid;
+				public Guid InterfaceClassGuid;
 				public UInt32 Flags;
 
 				[SuppressMessage("Microsoft.Security", "CA2111:PointersShouldNotBeVisible", Justification = "Structure given by Win32.")]
@@ -174,7 +174,7 @@ namespace MKY.Win32
 			public struct SP_DEVINFO_DATA
 			{
 				public UInt32 cbSize;
-				public System.Guid ClassGuid;
+				public Guid ClassGuid;
 				public UInt32 DevInst;
 				public UInt32 Reserved;
 			}
@@ -233,7 +233,7 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[CLSCompliant(false)]
-			public static extern Int32 SetupDiCreateDeviceInfoList([In] ref System.Guid ClassGuid, [In] Int32 hwndParent);
+			public static extern Int32 SetupDiCreateDeviceInfoList([In] ref Guid ClassGuid, [In] Int32 hwndParent);
 
 			/// <summary>
 			/// Frees the memory reserved for the DeviceInfoSet returned by SetupDiGetClassDevs.
@@ -257,7 +257,7 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[CLSCompliant(false)]
-			public static extern bool SetupDiEnumDeviceInterfaces([In] IntPtr DeviceInfoSet, [In] IntPtr DeviceInfoData, [In] ref System.Guid InterfaceClassGuid, [In] Int32 MemberIndex, [In, Out] ref NativeTypes.SP_DEVICE_INTERFACE_DATA DeviceInterfaceData);
+			public static extern bool SetupDiEnumDeviceInterfaces([In] IntPtr DeviceInfoSet, [In] IntPtr DeviceInfoData, [In] ref Guid InterfaceClassGuid, [In] Int32 MemberIndex, [In, Out] ref NativeTypes.SP_DEVICE_INTERFACE_DATA DeviceInterfaceData);
 
 			/// <summary>
 			/// Retrieves a device information set for a specified group of devices.
@@ -272,7 +272,7 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(SETUP_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			[CLSCompliant(false)]
-			public static extern IntPtr SetupDiGetClassDevs([In] ref System.Guid ClassGuid, [In] IntPtr Enumerator, [In] IntPtr hwndParent, [In] NativeTypes.DIGCF Flags);
+			public static extern IntPtr SetupDiGetClassDevs([In] ref Guid ClassGuid, [In] IntPtr Enumerator, [In] IntPtr hwndParent, [In] NativeTypes.DIGCF Flags);
 
 			/// <summary>
 			/// Retrieves an SP_DEVICE_INTERFACE_DETAIL_DATA structure containing information about a device.
@@ -319,7 +319,7 @@ namespace MKY.Win32
 		/// </summary>
 		/// <param name="classGuid">An interface class GUID.</param>
 		/// <returns>An array containing the path names of the devices currently available on the system.</returns>
-		public static string[] GetDevicesFromGuid(System.Guid classGuid)
+		public static string[] GetDevicesFromGuid(Guid classGuid)
 		{
 			int bufferSize = 0;
 			IntPtr pDetailDataBuffer = IntPtr.Zero;
@@ -396,7 +396,7 @@ namespace MKY.Win32
 		/// <param name="classGuid">Device interface GUID.</param>
 		/// <param name="deviceNotificationHandle">Returned device notification handle.</param>
 		/// <returns>True on success.</returns>
-		public static bool RegisterDeviceNotificationHandle(IntPtr windowHandle, System.Guid classGuid, out IntPtr deviceNotificationHandle)
+		public static bool RegisterDeviceNotificationHandle(IntPtr windowHandle, Guid classGuid, out IntPtr deviceNotificationHandle)
 		{
 			deviceNotificationHandle = IntPtr.Zero;
 

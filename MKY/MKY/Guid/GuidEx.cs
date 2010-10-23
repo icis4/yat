@@ -18,10 +18,13 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System;
 using System.IO;
 using System.Diagnostics.CodeAnalysis;
 
-namespace MKY.Guid
+// This code is intentionally placed into the MKY namespace even though the file is located in
+// MKY.Guid for consistency with the Sytem.Guid class.
+namespace MKY
 {
 	/// <summary>
 	/// Some GUID utilities.
@@ -31,7 +34,7 @@ namespace MKY.Guid
 		/// <summary>
 		/// Creates and returns GUID from terminal file path if possible, new GUID otherwise.
 		/// </summary>
-		public static System.Guid CreateGuidFromFilePath(string filePath)
+		public static Guid CreateGuidFromFilePath(string filePath)
 		{
 			return (CreateGuidFromFilePath(filePath, "", ""));
 		}
@@ -39,7 +42,7 @@ namespace MKY.Guid
 		/// <summary>
 		/// Creates and returns GUID from terminal file path if possible, new GUID otherwise.
 		/// </summary>
-		public static System.Guid CreateGuidFromFilePath(string filePath, string prefix)
+		public static Guid CreateGuidFromFilePath(string filePath, string prefix)
 		{
 			return (CreateGuidFromFilePath(filePath, prefix, ""));
 		}
@@ -48,7 +51,7 @@ namespace MKY.Guid
 		/// Creates and returns GUID from terminal file path if possible, new GUID otherwise.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		public static System.Guid CreateGuidFromFilePath(string filePath, string prefix, string postfix)
+		public static Guid CreateGuidFromFilePath(string filePath, string prefix, string postfix)
 		{
 			// File path may look like ".\Terminal-dcf25dde-947a-4470-8567-b0dde2459933.yat".
 			//                             Length: ^1     ^8   ^13  ^18  ^23          ^36
@@ -67,13 +70,13 @@ namespace MKY.Guid
 				string guidString = fileName.Substring(prefix.Length);
 				try
 				{
-					return (new System.Guid(guidString));
+					return (new Guid(guidString));
 				}
 				catch { }
 			}
 
 			// Create new GUID.
-			return (System.Guid.NewGuid());
+			return (Guid.NewGuid());
 		}
 	}
 }

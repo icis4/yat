@@ -52,7 +52,7 @@ namespace MKY.IO.Usb
 		/// <summary>
 		/// Returns the GUID associated with USB HID.
 		/// </summary>
-		public static readonly System.Guid HidGuid = Win32.Hid.GetHidGuid();
+		public static readonly Guid HidGuid = Win32.Hid.GetHidGuid();
 
 		#endregion
 
