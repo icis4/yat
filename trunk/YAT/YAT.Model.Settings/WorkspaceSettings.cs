@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-using MKY.Guid;
+using MKY;
 
 namespace YAT.Model.Settings
 {

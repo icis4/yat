@@ -238,7 +238,7 @@ namespace MKY.Win32
 			/// </remarks>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(HID_DLL, CharSet = CharSet.Auto, SetLastError = true)]
-			public static extern void HidD_GetHidGuid([In, Out] ref System.Guid HidGuid);
+			public static extern void HidD_GetHidGuid([In, Out] ref Guid HidGuid);
 
 			/// <summary></summary>
 			public static bool HidD_GetIndexedString(SafeFileHandle HidDeviceObject, int StringIndex, out string IndexedString)
@@ -479,9 +479,9 @@ namespace MKY.Win32
 		/// <summary>
 		/// Returns the GUID associated with USB HID.
 		/// </summary>
-		public static System.Guid GetHidGuid()
+		public static Guid GetHidGuid()
 		{
-			System.Guid hidGuid = new System.Guid();
+			Guid hidGuid = new Guid();
 			NativeMethods.HidD_GetHidGuid(ref hidGuid);
 			return (hidGuid);
 		}

@@ -24,7 +24,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows.Forms;
 
-using MKY.Guid;
+using MKY;
 using MKY.Event;
 using MKY.IO;
 using MKY.Settings;
@@ -53,11 +53,11 @@ namespace YAT.Model
 
 		private Guid guid;
 
-		// settings
+		// Settings.
 		private DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler;
 		private WorkspaceSettingsRoot settingsRoot;
 
-		// terminal list
+		// Terminal list.
 		private GuidList<Terminal> terminals = new GuidList<Terminal>();
 		private Terminal activeTerminal = null;
 

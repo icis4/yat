@@ -17,6 +17,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
 using NUnit.Framework;
@@ -24,53 +25,38 @@ using NUnit.Framework;
 namespace MKY.IO.Usb.Test
 {
 	/// <summary></summary>
-	[TestFixture]
-	public class UsbDeviceIdTest
+	public static class UsbDeviceIdTestData
 	{
-		#region Types
+		#region Test Cases
 		//==========================================================================================
-		// Types
+		// Test Cases
 		//==========================================================================================
 
-		private struct TestSet
+		/// <summary></summary>
+		public static IEnumerable TestCases
 		{
-			public readonly bool IsValid;
-			public readonly int VendorId;
-			public readonly int ProductId;
-			public readonly string[] Descriptions;
-
-			public TestSet(bool isValid, int vendorId, int productId, string[] descriptions)
+			get
 			{
-				IsValid      = isValid;
-				VendorId     = vendorId;
-				ProductId    = productId;
-				Descriptions = descriptions;
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, new string[] { "VID:0ABC PID:1234", "vid:0ABC pid:1234"} ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, new string[] { "VID_0ABC PID_1234", "vid_0ABC pid_1234"} ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, new string[] { "VID_0ABC&PID_1234", "vid_0ABC&pid_1234"} ));
+				yield return (new TestCaseData( true,  0x0ABC,  0x1234, new string[] { "Company (VID:0ABC) Product (PID:1234) Generic USB Hub" } ));
+				yield return (new TestCaseData(false,  0x0000,  0x0000, new string[] { " VID:0000  PID:0000" } ));
+				yield return (new TestCaseData(false,  0x0000,  0x0001, new string[] { " VID:0000  PID:0001" } ));
+				yield return (new TestCaseData(false,  0x0001,  0x0000, new string[] { " VID:0001  PID:0000" } ));
+				yield return (new TestCaseData(false,  0x0001, 0x10000, new string[] { " VID:0001 PID:10000" } ));
+				yield return (new TestCaseData(false, 0x10000,  0x0001, new string[] { "VID:10000  PID:0001" } ));
+				yield return (new TestCaseData(false, 0x10000, 0x10000, new string[] { "VID:10000 PID:10000" } ));
 			}
 		}
 
 		#endregion
+	}
 
-		#region Fields
-		//==========================================================================================
-		// Fields
-		//==========================================================================================
-
-		private readonly TestSet[] testSets =
-		{
-			new TestSet(true,   0x0ABC,  0x1234, new string[] { "VID:0ABC PID:1234", "vid:0ABC pid:1234"} ),
-			new TestSet(true,   0x0ABC,  0x1234, new string[] { "VID_0ABC PID_1234", "vid_0ABC pid_1234"} ),
-			new TestSet(true,   0x0ABC,  0x1234, new string[] { "VID_0ABC&PID_1234", "vid_0ABC&pid_1234"} ),
-			new TestSet(true,   0x0ABC,  0x1234, new string[] { "Company (VID:0ABC) Product (PID:1234) Generic USB Hub"} ),
-			new TestSet(false,  0x0000,  0x0000, new string[] { " VID:0000  PID:0000" } ),
-			new TestSet(false,  0x0000,  0x0001, new string[] { " VID:0000  PID:0001" } ),
-			new TestSet(false,  0x0001,  0x0000, new string[] { " VID:0001  PID:0000" } ),
-			new TestSet(false,  0x0001, 0x10000, new string[] { " VID:0001 PID:10000" } ),
-			new TestSet(false, 0x10000,  0x0001, new string[] { "VID:10000  PID:0001" } ),
-			new TestSet(false, 0x10000, 0x10000, new string[] { "VID:10000 PID:10000" } ),
-		};
-
-		#endregion
-
+	/// <summary></summary>
+	[TestFixture]
+	public class UsbDeviceIdTest
+	{
 		#region Tests
 		//==========================================================================================
 		// Tests
@@ -83,49 +69,44 @@ namespace MKY.IO.Usb.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		[Test]
-		public virtual void TestConstructorAndParse()
+		[Test, TestCaseSource(typeof(UsbDeviceIdTestData), "TestCases")]
+		public virtual void TestConstructorAndParse(bool isValid, int vendorId, int productId, string[] descriptions)
 		{
-			DeviceInfo id;
-
-			foreach (TestSet ts in this.testSets)
+			if (isValid)
 			{
-				if (ts.IsValid)
-				{
-					id = new DeviceInfo(ts.VendorId, ts.ProductId);
-					Assert.AreEqual(ts.VendorId,  id.VendorId);
-					Assert.AreEqual(ts.ProductId, id.ProductId);
+				DeviceInfo id = new DeviceInfo(vendorId, productId);
+				Assert.AreEqual(vendorId,  id.VendorId);
+				Assert.AreEqual(productId, id.ProductId);
 
-					foreach (string description in ts.Descriptions)
-					{
-						id = DeviceInfo.Parse(description);
-						Assert.AreEqual(ts.VendorId,  id.VendorId);
-						Assert.AreEqual(ts.ProductId, id.ProductId);
-					}
+				foreach (string description in descriptions)
+				{
+					id = DeviceInfo.Parse(description);
+					Assert.AreEqual(vendorId,  id.VendorId);
+					Assert.AreEqual(productId, id.ProductId);
 				}
-				else
+			}
+			else
+			{
+				try
+				{
+					DeviceInfo id = new DeviceInfo(vendorId, productId);
+					Assert.Fail("Invalid ID pair " + vendorId + "/" + productId + " wasn't properly handled");
+				}
+				catch
+				{
+					// Invalid input must throw an exception.
+				}
+
+				foreach (string description in descriptions)
 				{
 					try
 					{
-						id = new DeviceInfo(ts.VendorId, ts.ProductId);
-						Assert.Fail("Invalid ID pair " + ts.VendorId + "/" + ts.ProductId + " wasn't properly handled");
+						DeviceInfo id = DeviceInfo.Parse(description);
+						Assert.Fail("Invalid descripton " + description + " wasn't properly handled");
 					}
 					catch
 					{
 						// Invalid input must throw an exception.
-					}
-
-					foreach (string description in ts.Descriptions)
-					{
-						try
-						{
-							id = DeviceInfo.Parse(description);
-							Assert.Fail("Invalid descripton " + description + " wasn't properly handled");
-						}
-						catch
-						{
-							// Invalid input must throw an exception.
-						}
 					}
 				}
 			}
