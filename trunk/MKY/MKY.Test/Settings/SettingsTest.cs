@@ -27,6 +27,7 @@ using System.Xml.Serialization;
 using NUnit.Framework;
 
 using MKY.Diagnostics;
+using MKY.IO;
 
 namespace MKY.Test.Settings
 {

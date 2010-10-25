@@ -103,7 +103,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
-      <Name>MKY</Name>
+      <Name>MKY %28MKY\MKY%29</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

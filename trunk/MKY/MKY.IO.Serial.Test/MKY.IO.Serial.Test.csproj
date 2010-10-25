@@ -65,6 +65,10 @@
       <Project>{FA1EF4FC-2FC7-4B29-9EAB-2872593C89E2}</Project>
       <Name>ALAZ.SystemEx</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\NUnit\NUnit\NUnit.csproj">
+      <Project>{F7BFF679-5389-434C-81E4-7EE8530DF954}</Project>
+      <Name>NUnit %28NUnit\NUnit%29</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MKY.IO.Ports\MKY.IO.Ports.csproj">
       <Project>{D8940035-D30A-48A3-AC28-E8A4B8910CB9}</Project>
       <Name>MKY.IO.Ports</Name>
@@ -79,7 +83,7 @@
     </ProjectReference>
     <ProjectReference Include="..\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
-      <Name>MKY</Name>
+      <Name>MKY %28MKY\MKY%29</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

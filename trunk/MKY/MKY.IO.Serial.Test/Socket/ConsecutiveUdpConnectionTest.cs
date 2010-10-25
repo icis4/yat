@@ -24,6 +24,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading;
 
+using NUnit;
 using NUnit.Framework;
 
 using MKY.IO.Serial;
@@ -48,7 +49,9 @@ namespace MKY.IO.Serial.Test.Socket
 		/// <remarks>
 		/// A cycle takes around 5 seconds. 10 cycles around a minute.
 		/// </remarks>
-		[Test, Repeat(10), Category("Endurance"), Category("Takes 1 Minute")]
+		[Test]
+		[Repeat(10)]
+		[EnduranceCategory, MinuteDurationCategory(1)]
 		public virtual void TestConsecutiveConnectAndShutdownEndurance01Minute()
 		{
 			SimpleUdpConnectionTest t = new SimpleUdpConnectionTest();
@@ -63,21 +66,27 @@ namespace MKY.IO.Serial.Test.Socket
 		}
 
 		/// <summary></summary>
-		[Test, Repeat(10), Category("Endurance"), Category("Takes 10 Minutes")]
+		[Test]
+		[Repeat(10)]
+		[EnduranceCategory, MinuteDurationCategory(10)]
 		public virtual void TestConsecutiveConnectAndShutdownEndurance10Minutes()
 		{
 			TestConsecutiveConnectAndShutdownEndurance01Minute();
 		}
 
 		/// <summary></summary>
-		[Test, Repeat(6), Category("Endurance"), Category("Takes 60 Minutes")]
+		[Test]
+		[Repeat(6)]
+		[EnduranceCategory, MinuteDurationCategory(60)]
 		public virtual void TestConsecutiveConnectAndShutdownEndurance60Minutes()
 		{
 			TestConsecutiveConnectAndShutdownEndurance10Minutes();
 		}
 
 		/// <summary></summary>
-		[Test, Repeat(int.MaxValue), Category("Endurance"), Category("Takes Forever")]
+		[Test]
+		[Repeat(int.MaxValue)]
+		[EnduranceCategory, InfiniteDurationCategory]
 		public virtual void TestConsecutiveConnectAndShutdownEnduranceForever()
 		{
 			TestConsecutiveConnectAndShutdownEndurance60Minutes();

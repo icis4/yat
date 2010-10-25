@@ -24,6 +24,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading;
 
+using NUnit;
 using NUnit.Framework;
 
 using MKY.IO.Serial;
@@ -48,7 +49,9 @@ namespace MKY.IO.Serial.Test.Socket
 		/// <remarks>
 		/// A cycle takes around 5 seconds. 10 cycles around a minute.
 		/// </remarks>
-		[Test, Repeat(10), Category("Endurance"), Category("Takes 1 Minute")]
+		[Test]
+		[Repeat(10)]
+		[EnduranceCategory, MinuteDurationCategory(1)]
 		public virtual void TestConsecutiveServerClientConnectAndShutdownEndurance01Minute()
 		{
 			SimpleTcpConnectionTest t = new SimpleTcpConnectionTest();
@@ -63,21 +66,27 @@ namespace MKY.IO.Serial.Test.Socket
 		}
 
 		/// <summary></summary>
-		[Test, Repeat(10), Category("Endurance"), Category("Takes 10 Minutes")]
+		[Test]
+		[Repeat(10)]
+		[EnduranceCategory, MinuteDurationCategory(10)]
 		public virtual void TestConsecutiveServerClientConnectAndShutdownEndurance10Minutes()
 		{
 			TestConsecutiveServerClientConnectAndShutdownEndurance01Minute();
 		}
 
 		/// <summary></summary>
-		[Test, Repeat(6), Category("Endurance"), Category("Takes 60 Minutes")]
+		[Test]
+		[Repeat(6)]
+		[EnduranceCategory, MinuteDurationCategory(60)]
 		public virtual void TestConsecutiveServerClientConnectAndShutdownEndurance60Minutes()
 		{
 			TestConsecutiveServerClientConnectAndShutdownEndurance10Minutes();
 		}
 
 		/// <summary></summary>
-		[Test, Repeat(int.MaxValue), Category("Endurance"), Category("Takes Forever")]
+		[Test]
+		[Repeat(int.MaxValue)]
+		[EnduranceCategory, InfiniteDurationCategory]
 		public virtual void TestConsecutiveServerClientConnectAndShutdownEnduranceForever()
 		{
 			TestConsecutiveServerClientConnectAndShutdownEndurance60Minutes();
@@ -94,7 +103,9 @@ namespace MKY.IO.Serial.Test.Socket
 		/// <remarks>
 		/// A cycle takes around 15 seconds. 10 cycles around 3 minutes.
 		/// </remarks>
-		[Test, Repeat(10), Category("Endurance"), Category("Takes 1 Minute")]
+		[Test]
+		[Repeat(10)]
+		[EnduranceCategory, MinuteDurationCategory(1)]
 		public virtual void TestConsecutiveAutoSocketAutoSocketConnectAndShutdownEndurance01Minute()
 		{
 			SimpleTcpConnectionTest t = new SimpleTcpConnectionTest();
@@ -109,21 +120,27 @@ namespace MKY.IO.Serial.Test.Socket
 		}
 
 		/// <summary></summary>
-		[Test, Repeat(3), Category("Endurance"), Category("Takes 10 Minutes")]
+		[Test]
+		[Repeat(3)]
+		[EnduranceCategory, MinuteDurationCategory(10)]
 		public virtual void TestConsecutiveAutoSocketAutoSocketConnectAndShutdownEndurance10Minutes()
 		{
 			TestConsecutiveAutoSocketAutoSocketConnectAndShutdownEndurance01Minute();
 		}
 
 		/// <summary></summary>
-		[Test, Repeat(6), Category("Endurance"), Category("Takes 60 Minutes")]
+		[Test]
+		[Repeat(6)]
+		[EnduranceCategory, MinuteDurationCategory(60)]
 		public virtual void TestConsecutiveAutoSocketAutoSocketConnectAndShutdownEndurance60Minutes()
 		{
 			TestConsecutiveAutoSocketAutoSocketConnectAndShutdownEndurance10Minutes();
 		}
 
 		/// <summary></summary>
-		[Test, Repeat(int.MaxValue), Category("Endurance"), Category("Takes Forever")]
+		[Test]
+		[Repeat(int.MaxValue)]
+		[EnduranceCategory, InfiniteDurationCategory]
 		public virtual void TestConsecutiveAutoSocketAutoSocketConnectAndShutdownEnduranceForever()
 		{
 			TestConsecutiveAutoSocketAutoSocketConnectAndShutdownEndurance60Minutes();

@@ -57,6 +57,7 @@ New:
 - TCP/IP endurance and stress tests added
 - UDP/IP endurance tests added
 - GUI stress test added
+- Predefined NUnit test categories added
 
 Important changes:
 - Performance on startup partly improved (feature request #2968216)
@@ -88,9 +89,13 @@ Fixed bugs:
 - UDP/IP default local port fixed
 - UDP/IP connect issue fixed (bug #2120432)
 - Monitor contents are displayed even if they exceed the visible width (bugs #2865562 and #2981796)
+- Binary terminals: 0x00 no more breaks line if sequence line break is disabled (bug #3050551)
+- Multi-line command issue fixed (bug #2831453)
+- Layout/anchor issue of description text field in predefined dialog fixed (bug #2987575)
+- Tab order in predefined command dialog fixed (bug #2914863)
 - Window startup position is adjusted if saved position is out of bounds, e.g. if window was
   saved on a secondary display that is not connected anymore (bugs #2856250 and #2906622)
-- Layout/anchor issue of description text field in predefined dialog fixed (bug #2987575)
+- Inconsistency when reading EOL sequence fixed (bug #2869497)
 - Exception with TCP/IP AutoSocket fixed (bug# 2869792)
 - Exception when switching from COM port to TCP/IP AutoSocket fixed (bug #2981797)
 - Exception in case of no COM ports fixed (bug #3041642)
@@ -99,8 +104,6 @@ Fixed bugs:
 - Rare exception while drawing fixed (bug #2981762)
 - Unhandled exception on binary terminal fixed (bug #2891996)
 - Unhandled exception dialog improved and fixed (feature request #2970243, bug #2970245)
-- Multi-line command issue fixed (bug #2831453)
-- Tab order in predefined command dialog fixed (bug #2914863)
 
 Limitations and known issues:
 - MDI limitations of .NET

@@ -59,7 +59,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
-      <Name>MKY</Name>
+      <Name>MKY %28MKY\MKY%29</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Gui.Forms\YAT.Gui.Forms.csproj">
       <Project>{A1060959-580E-4493-BA51-4A3A7CDE1E88}</Project>

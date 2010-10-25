@@ -24,6 +24,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Threading;
 
+using NUnit;
 using NUnit.Framework;
 
 using MKY.IO.Serial;
@@ -45,7 +46,8 @@ namespace MKY.IO.Serial.Test.Socket
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, Category("Stress"), Category("Takes 1 Minute")]
+		[Test]
+		[StressCategory, MinuteDurationCategory(1)]
 		public virtual void StressAutoSocket()
 		{
 			List<int> serverPorts = new List<int>();

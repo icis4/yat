@@ -27,7 +27,7 @@ using System.Xml.Serialization;
 using NUnit.Framework;
 
 using MKY.Diagnostics;
-using MKY.Test;
+using MKY.IO;
 
 namespace MKY.IO.Ports.Test.SerialPort
 {

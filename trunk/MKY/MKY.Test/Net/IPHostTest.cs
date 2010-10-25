@@ -28,6 +28,7 @@ using System.Xml.Serialization;
 using NUnit.Framework;
 
 using MKY.Diagnostics;
+using MKY.IO;
 using MKY.Net;
 
 namespace MKY.Test.Net
