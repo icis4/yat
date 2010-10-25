@@ -20,6 +20,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
+using NUnit;
 using NUnit.Framework;
 
 using YAT.Settings.Application;
@@ -267,7 +268,7 @@ namespace YAT.Controller.Test
 
 		/// <summary></summary>
 		[Test]
-		[Category("Interactive")]
+		[InteractiveCategory]
 		public virtual void TestEmptyCommandLineRunInteractive()
 		{
 			using (Controller.Main main = new Main(EmptyArgs))
@@ -285,7 +286,7 @@ namespace YAT.Controller.Test
 
 		/// <summary></summary>
 		[Test]
-		[Category("Interactive")]
+		[InteractiveCategory]
 		public virtual void TestTerminalCommandLineArgRunInteractive()
 		{
 			using (Controller.Main main = new Main(TerminalArgs))
@@ -303,7 +304,7 @@ namespace YAT.Controller.Test
 
 		/// <summary></summary>
 		[Test]
-		[Category("Interactive")]
+		[InteractiveCategory]
 		public virtual void TestWorkspaceCommandLineArgRunInteractive()
 		{
 			using (Controller.Main main = new Main(WorkspaceArgs))

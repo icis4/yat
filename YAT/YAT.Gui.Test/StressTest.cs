@@ -23,10 +23,11 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
+using NUnit;
 using NUnit.Framework;
 
 using MKY.Settings;
-using MKY.Test;
+using MKY.IO;
 
 using YAT.Controller;
 using YAT.Domain;
@@ -101,7 +102,7 @@ namespace YAT.Gui.Test
 		/// Test takes about 3 minutes.
 		/// </remarks>
 		[Test]
-		[Category("Stress")]
+		[StressCategory]
 		public virtual void TestTransmissionDisplay()
 		{
 			string workspaceSettingsFilePath = Temp.MakeTempFilePath(this, Guid.NewGuid().ToString(), ExtensionSettings.WorkspaceFile);

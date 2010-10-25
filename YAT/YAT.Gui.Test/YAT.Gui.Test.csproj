@@ -53,7 +53,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
       <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
-      <Name>MKY</Name>
+      <Name>MKY %28MKY\MKY%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NUnit\NUnit\NUnit.csproj">
+      <Project>{F7BFF679-5389-434C-81E4-7EE8530DF954}</Project>
+      <Name>NUnit %28NUnit\NUnit%29</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Controller\YAT.Controller.csproj">
       <Project>{D639409C-0B93-494B-9A01-4FE79686FAD6}</Project>

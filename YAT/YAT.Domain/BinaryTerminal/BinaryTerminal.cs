@@ -379,7 +379,7 @@ namespace YAT.Domain
 			Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianess);
 			LineBreakTimer t;
 
-			// tx
+			// Tx.
 			byte[] txSequenceBreak;
 			if (!p.TryParse(BinaryTerminalSettings.TxDisplay.SequenceLineBreak.Sequence, out txSequenceBreak))
 				txSequenceBreak = null;
@@ -389,7 +389,7 @@ namespace YAT.Domain
 
 			this.txLineState = new LineState(new EolQueue(txSequenceBreak), DateTime.Now, t);
 
-			// rx
+			// Rx.
 			byte[] rxSequenceBreak;
 			if (!p.TryParse(BinaryTerminalSettings.RxDisplay.SequenceLineBreak.Sequence, out rxSequenceBreak))
 				rxSequenceBreak = null;
@@ -410,7 +410,7 @@ namespace YAT.Domain
 				lp.Add(new DisplayElement.TimeStamp(ts));
 				lp.Add(new DisplayElement.LeftMargin());
 
-				// Attention: Clone elements because they are needed again below
+				// Attention: Clone elements because they are needed again below.
 				lineState.LineElements.AddRange(lp.Clone());
 				elements.AddRange(lp);
 			}
@@ -441,11 +441,11 @@ namespace YAT.Domain
 			}
 			lp.Add(new DisplayElement.LineBreak(d));
 
-			// Return elements
+			// Return elements.
 			elements.AddRange(lp);
 
-			// Return line
-			// Attention: Clone elements because they've also needed above
+			// Return line.
+			// Attention: Clone elements because they've also needed above.
 			lineState.LineElements.AddRange(lp);
 
 			DisplayLine line = new DisplayLine();
@@ -470,7 +470,7 @@ namespace YAT.Domain
 			lineState.TimeStamp = ts;
 		}
 
-		private void ExecuteLengthLineBreak(Settings.BinaryDisplaySettings displaySettings, LineState lineState)
+		private void EvaluateLengthLineBreak(Settings.BinaryDisplaySettings displaySettings, LineState lineState)
 		{
 			int lineLength = 0;
 			foreach (DisplayElement de in lineState.LineElements)
@@ -478,17 +478,23 @@ namespace YAT.Domain
 				if (de.IsData)
 					lineLength++;
 			}
+
 			if (lineLength >= displaySettings.LengthLineBreak.LineLength)
-			{
 				lineState.LinePosition = LinePosition.End;
-			}
+		}
+
+		private void EvaluateSequenceLineBreak(LineState lineState, byte b)
+		{
+			lineState.SequenceBreak.Enqueue(b);
+			if (lineState.SequenceBreak.IsCompleteMatch)
+				lineState.LinePosition = LinePosition.End;
 		}
 
 		private void ExecuteData(SerialDirection d, LineState lineState, byte b, DisplayElementCollection elements)
 		{
 			DisplayLinePart lp = new DisplayLinePart();
 
-			// add space if necessary
+			// Add space if necessary.
 			if (ElementsAreSeparate(d))
 			{
 				int lineLength = 0;
@@ -503,17 +509,12 @@ namespace YAT.Domain
 				}
 			}
 
-			// add data
+			// Add data.
 			lp.Add(ByteToElement(b, d));
 
-			// return data
+			// Return data.
 			lineState.LineElements.AddRange(lp);
 			elements.AddRange(lp);
-
-			// evaluate binary sequence break
-			lineState.SequenceBreak.Enqueue(b);
-			if (lineState.SequenceBreak.IsCompleteMatch)
-				lineState.LinePosition = LinePosition.End;
 		}
 
 		/// <summary></summary>
@@ -533,11 +534,11 @@ namespace YAT.Domain
 
 			foreach (byte b in re.Data)
 			{
-				// in case of reload, timed line breaks are executed here
+				// In case of reload, timed line breaks are executed here.
 				if (Reload && displaySettings.TimedLineBreak.Enabled)
 					ExecuteTimedLineBreakOnReload(displaySettings, lineState, re.Direction, re.TimeStamp, elements, lines);
 
-				// line begin
+				// Line begin.
 				if (lineState.LinePosition == LinePosition.Begin)
 				{
 					ExecuteLineBegin(displaySettings, lineState, re.TimeStamp, elements);
@@ -548,14 +549,18 @@ namespace YAT.Domain
 						lineState.LineBreakTimer.Restart();
 				}
 
-				// data
+				// Data.
 				ExecuteData(re.Direction, lineState, b, elements);
 
-				// length line breaks
+				// Evaluate length line breaks.
 				if (displaySettings.LengthLineBreak.Enabled)
-					ExecuteLengthLineBreak(displaySettings, lineState);
+					EvaluateLengthLineBreak(displaySettings, lineState);
 
-				// line end and length
+				// Evaluate binary sequence break.
+				if (displaySettings.SequenceLineBreak.Enabled)
+					EvaluateSequenceLineBreak(lineState, b);
+
+				// Line end and length.
 				if (lineState.LinePosition == LinePosition.End)
 					ExecuteLineEnd(lineState, re.Direction, elements, lines);
 			}
@@ -616,10 +621,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected override void ProcessAndSignalRawElement(RawElement re)
 		{
-			// check whether direction has changed
+			// Check whether direction has changed.
 			ProcessAndSignalDirectionLineBreak(re.Direction);
 
-			// process the raw element
+			// Process the raw element.
 			base.ProcessAndSignalRawElement(re);
 		}
 

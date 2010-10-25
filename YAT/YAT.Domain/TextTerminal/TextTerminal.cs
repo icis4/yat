@@ -347,6 +347,10 @@ namespace YAT.Domain
 						case Parser.Keyword.NoEol:
 							sendEol = false;
 							break;
+
+						default:
+							// \fixme
+							break;
 					}
 				}
 			}
@@ -415,7 +419,7 @@ namespace YAT.Domain
 		{
 			switch (r)
 			{
-				// Bin/Oct/Dec/Hex
+				// Bin/Oct/Dec/Hex.
 				case Radix.Bin:
 				case Radix.Oct:
 				case Radix.Dec:
@@ -424,36 +428,36 @@ namespace YAT.Domain
 					return (base.ByteToElement(b, d, r));
 				}
 
-				// Char/String
+				// Char/String.
 				case Radix.Char:
 				case Radix.String:
 				{
-					// Add byte to ElementState
+					// Add byte to ElementState.
 					this.rxDecodingStream.Add(b);
 					byte[] decodingArray = this.rxDecodingStream.ToArray();
 
-					// Get encoding and retrieve char count
+					// Get encoding and retrieve char count.
 					Encoding e = (EncodingEx)TextTerminalSettings.Encoding;
 					int charCount = e.GetCharCount(decodingArray);
 
-					// If decoding array can be decoded into something useful, decode it
+					// If decoding array can be decoded into something useful, decode it.
 					if (charCount == 1)
 					{
-						// Char count must be 1, otherwise something went wrong
+						// Char count must be 1, otherwise something went wrong.
 						char[] chars = new char[charCount];
 						if (e.GetDecoder().GetChars(decodingArray, 0, decodingArray.Length, chars, 0, true) == 1)
 						{
-							// Ensure that 'unknown' character 0xFFFD is not decoded yet
+							// Ensure that 'unknown' character 0xFFFD is not decoded yet.
 							int code = (int)chars[0];
 							if (code != 0xFFFD)
 							{
 								this.rxDecodingStream.Clear();
 
-								if ((code < 0x20) || (code == 0x7F)) // Control chars
+								if ((code < 0x20) || (code == 0x7F)) // Control chars.
 								{
 									return (base.ByteToElement(b, d, r));
 								}
-								else if (b == 0x20) // Space
+								else if (b == 0x20) // Space.
 								{
 									return (base.ByteToElement(b, d, r));
 								}
@@ -469,17 +473,17 @@ namespace YAT.Domain
 							}
 							else
 							{
-								// 'unknown' character 0xFFFD, do not reset stream
+								// 'unknown' character 0xFFFD, do not reset stream.
 							}
 						}
 					}
 					else
 					{
-						// Nothing useful to decode into, reset stream
+						// Nothing useful to decode into, reset stream.
 						this.rxDecodingStream.Clear();
 					}
 
-					// Nothing to decode (yet)
+					// Nothing to decode (yet).
 					return (new DisplayElement.NoData());
 				}
 				default: throw (new NotImplementedException("Unknown Radix"));
@@ -495,7 +499,7 @@ namespace YAT.Domain
 				lp.Add(new DisplayElement.TimeStamp(ts));
 				lp.Add(new DisplayElement.LeftMargin());
 
-				// Attention: Clone elements because they are needed again below
+				// Attention: Clone elements because they are needed again below.
 				lineState.LineElements.AddRange(lp.Clone());
 				elements.AddRange(lp);
 			}
@@ -506,7 +510,7 @@ namespace YAT.Domain
 		{
 			DisplayLinePart lp = new DisplayLinePart();
 
-			// Add space if necessary
+			// Add space if necessary.
 			if (ElementsAreSeparate(d))
 			{
 				int lineLength = 0;
@@ -521,17 +525,17 @@ namespace YAT.Domain
 				}
 			}
 
-			// Process data
+			// Process data.
 			DisplayElement de = ByteToElement(b, d);
 
-			// Evaluate EOL, i.e. check whether EOL is about to start or has already started
+			// Evaluate EOL, i.e. check whether EOL is about to start or has already started.
 			lineState.Eol.Enqueue(b);
 			if (lineState.Eol.IsCompleteMatch)
 			{
 				if (de.IsData)
 					lineState.EolElements.Add(de);
 
-				// Retrieve EOL elements, marking them as EOL
+				// Retrieve EOL elements, marking them as EOL.
 				foreach (DisplayElement item in lineState.EolElements)
 				{
 					item.IsEol = true;
@@ -542,33 +546,33 @@ namespace YAT.Domain
 			}
 			else if (lineState.Eol.IsPartlyMatch)
 			{
-				// Keep EOL elements but delay them until EOL is complete
+				// Keep EOL elements but delay them until EOL is complete.
 				if (de.IsData)
 					lineState.EolElements.Add(de);
 			}
 			else
 			{
-				// Retrieve potential EOL elements on incomplete EOL
+				// Retrieve potential EOL elements on incomplete EOL.
 				if (lineState.EolElements.Count > 0)
 				{
 					lp.AddRange(lineState.EolElements);
 					lineState.EolElements.Clear();
 				}
 
-				// Add non-EOL data
+				// Add non-EOL data.
 				if (de.IsData)
 					lp.Add(de);
 			}
 
-			// Return data
-			// Attention: Clone elements because they are needed again below
+			// Return data.
+			// Attention: Clone elements because they are needed again below.
 			lineState.LineElements.AddRange(lp.Clone());
 			elements.AddRange(lp);
 		}
 
 		private void ExecuteLineEnd(LineState lineState, SerialDirection d, DisplayElementCollection elements, List<DisplayLine> lines)
 		{
-			// Process EOL
+			// Process EOL.
 			int eolLength = lineState.Eol.Eol.Length;
 			DisplayLine line = new DisplayLine();
 
@@ -576,26 +580,26 @@ namespace YAT.Domain
 			{
 				line.AddRange(lineState.LineElements);
 			}
-			else // Remove EOL
+			else // Remove EOL.
 			{
 				int eolAndWhiteCount = 0;
 				DisplayElement[] des = lineState.LineElements.ToArray();
 
-				// Traverse elements reverse and count EOL and white spaces to be removed
+				// Traverse elements reverse and count EOL and white spaces to be removed.
 				for (int i = (des.Length - 1); i >= 0; i--)
 				{
-					// Detect last non-EOL data element
+					// Detect last non-EOL data element.
 					if (des[i].IsData && !des[i].IsEol)
 						break;
 
 					eolAndWhiteCount++;
 				}
 
-				// Now traverse elements forward and add elements to line
+				// Now traverse elements forward and add elements to line.
 				for (int i = 0; i < (des.Length - eolAndWhiteCount); i++)
 					line.Add(des[i]);
 
-				// Finally, remove EOL and white spaces from elements
+				// Finally, remove EOL and white spaces from elements.
 				if (elements.Count >= eolAndWhiteCount)
 					elements.RemoveAtEnd(eolAndWhiteCount);
 			}
@@ -612,7 +616,7 @@ namespace YAT.Domain
 				System.Diagnostics.Debugger.Break();
 #endif
 
-			// Process line length
+			// Process line length.
 			DisplayLinePart lp = new DisplayLinePart();
 			if (TerminalSettings.Display.ShowLength)
 			{
@@ -621,15 +625,15 @@ namespace YAT.Domain
 			}
 			lp.Add(new DisplayElement.LineBreak(d));
 
-			// Add line end to elements and return them
+			// Add line end to elements and return them.
 			elements.AddRange(lp);
 
-			// Also add line end to line and return it
-			// Attention: Clone elements because they've also needed above
+			// Also add line end to line and return it.
+			// Attention: Clone elements because they've also needed above.
 			line.AddRange(lp.Clone());
 			lines.Add(line);
 
-			// Reset line state
+			// Reset line state.
 			lineState.Reset();
 		}
 
@@ -644,14 +648,14 @@ namespace YAT.Domain
 
 			foreach (byte b in re.Data)
 			{
-				// Line begin and time stamp
+				// Line begin and time stamp.
 				if (lineState.LinePosition == LinePosition.Begin)
 					ExecuteLineBegin(lineState, re.TimeStamp, elements);
 
-				// Data
+				// Data.
 				ExecuteData(lineState, re.Direction, b, elements);
 
-				// Line end and length
+				// Line end and length.
 				if (lineState.LinePosition == LinePosition.End)
 					ExecuteLineEnd(lineState, re.Direction, elements, lines);
 			}
@@ -667,7 +671,7 @@ namespace YAT.Domain
 				}
 				else
 				{
-					LineState lineState; // Attention: Direction changed => Use opposite state
+					LineState lineState; // Attention: Direction changed => Use opposite state.
 					if (d == SerialDirection.Tx)
 						lineState = this.rxLineState;
 					else
@@ -692,10 +696,10 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected override void ProcessAndSignalRawElement(RawElement re)
 		{
-			// Check whether direction has changed
+			// Check whether direction has changed.
 			ProcessAndSignalDirectionLineBreak(re.Direction);
 
-			// Process the raw element
+			// Process the raw element.
 			base.ProcessAndSignalRawElement(re);
 		}
 

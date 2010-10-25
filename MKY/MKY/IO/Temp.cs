@@ -21,7 +21,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace MKY.Test
+namespace MKY.IO
 {
 	/// <summary>
 	/// Utility methods to deal with temporary files during testing.

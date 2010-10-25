@@ -355,7 +355,16 @@ namespace YAT.Domain
 				}
 				else if (result is Parser.KeywordResult)
 				{
-					// \fixme
+					switch (((Parser.KeywordResult)result).Keyword)
+					{
+						case Parser.Keyword.Delay:
+							// \fixme
+							break;
+
+						default:
+							// \fixme
+							break;
+					}
 				}
 			}
 		}
@@ -363,7 +372,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual void SendLine(string line)
 		{
-			// Simply send line as string
+			// Simply send line as string.
 			Send(line);
 		}
 
