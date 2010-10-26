@@ -24,6 +24,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Xml.Serialization;
 
+using MKY.Collections.Generic;
+
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
 // YAT.Domain\RawTerminal for better separation of the implementation files.
@@ -70,14 +72,14 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public TxData(byte original, string data)
-				: base(SerialDirection.Tx, original, data)
+			public TxData(byte origin, string data)
+				: base(SerialDirection.Tx, origin, data)
 			{
 			}
 
 			/// <summary></summary>
-			public TxData(byte[] original, string data, int dataCount)
-				: base(SerialDirection.Tx, original, data, dataCount)
+			public TxData(byte[] origin, string data, int dataCount)
+				: base(SerialDirection.Tx, origin, data, dataCount)
 			{
 			}
 		}
@@ -92,14 +94,14 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public TxControl(byte original, string control)
-				: base(SerialDirection.Tx, original, control)
+			public TxControl(byte origin, string control)
+				: base(SerialDirection.Tx, origin, control)
 			{
 			}
 
 			/// <summary></summary>
-			public TxControl(byte[] original, string control, int controlCount)
-				: base(SerialDirection.Tx, original, control, controlCount)
+			public TxControl(byte[] origin, string control, int controlCount)
+				: base(SerialDirection.Tx, origin, control, controlCount)
 			{
 			}
 		}
@@ -114,14 +116,14 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public RxData(byte original, string data)
-				: base(SerialDirection.Rx, original, data)
+			public RxData(byte origin, string data)
+				: base(SerialDirection.Rx, origin, data)
 			{
 			}
 
 			/// <summary></summary>
-			public RxData(byte[] original, string data, int dataCount)
-				: base(SerialDirection.Rx, original, data, dataCount)
+			public RxData(byte[] origin, string data, int dataCount)
+				: base(SerialDirection.Rx, origin, data, dataCount)
 			{
 			}
 		}
@@ -136,14 +138,14 @@ namespace YAT.Domain
 			}
 
 			/// <summary></summary>
-			public RxControl(byte original, string control)
-				: base(SerialDirection.Rx, original, control)
+			public RxControl(byte origin, string control)
+				: base(SerialDirection.Rx, origin, control)
 			{
 			}
 
 			/// <summary></summary>
-			public RxControl(byte[] original, string control, int controlCount)
-				: base(SerialDirection.Rx, original, control, controlCount)
+			public RxControl(byte[] origin, string control, int controlCount)
+				: base(SerialDirection.Rx, origin, control, controlCount)
 			{
 			}
 		}
@@ -280,7 +282,7 @@ namespace YAT.Domain
 		//==========================================================================================
 
 		private SerialDirection direction;
-		private List<byte> origin;
+		private List<Pair<byte[], string>> origin;
 		private string text;
 		private int dataCount;
 		private bool isData;
@@ -296,46 +298,46 @@ namespace YAT.Domain
 		/// <summary></summary>
 		private DisplayElement()
 		{
-			Initialize(SerialDirection.None, new List<byte>(), "", 0, false, false);
+			Initialize(SerialDirection.None, new List<Pair<byte[], string>>(), "", 0, false, false);
 		}
 
 		/// <summary></summary>
 		private DisplayElement(string text)
 		{
-			Initialize(SerialDirection.None, new List<byte>(), text, 0, false, false);
+			Initialize(SerialDirection.None, new List<Pair<byte[], string>>(), text, 0, false, false);
 		}
 
 		/// <summary></summary>
 		private DisplayElement(SerialDirection direction, string text)
 		{
-			Initialize(direction, new List<byte>(), text, 0, false, false);
+			Initialize(direction, new List<Pair<byte[], string>>(), text, 0, false, false);
 		}
 
 		/// <summary></summary>
 		private DisplayElement(SerialDirection direction, byte origin, string text)
 		{
-			List<byte> l = new List<byte>();
-			l.Add(origin);
+			List<Pair<byte[], string>> l = new List<Pair<byte[], string>>();
+			l.Add(new Pair<byte[], string>(new byte[] { origin }, text));
 			Initialize(direction, l, text, 1, true, false);
 		}
 
 		/// <summary></summary>
 		private DisplayElement(SerialDirection direction, byte[] origin, string text, int dataCount)
 		{
-			List<byte> l = new List<byte>();
-			l.AddRange(origin);
+			List<Pair<byte[], string>> l = new List<Pair<byte[], string>>();
+			l.Add(new Pair<byte[], string>(origin, text));
 			Initialize(direction, l, text, dataCount, true, false);
 		}
 
 		/// <summary></summary>
 		private DisplayElement(SerialDirection direction, byte[] origin, string text, int dataCount, bool isEol)
 		{
-			List<byte> l = new List<byte>();
-			l.AddRange(origin);
+			List<Pair<byte[], string>> l = new List<Pair<byte[], string>>();
+			l.Add(new Pair<byte[], string>(origin, text));
 			Initialize(direction, l, text, dataCount, true, isEol);
 		}
 
-		private void Initialize(SerialDirection direction, List<byte> origin, string text, int dataCount, bool isData, bool isEol)
+		private void Initialize(SerialDirection direction, List<Pair<byte[], string>> origin, string text, int dataCount, bool isData, bool isEol)
 		{
 			this.direction = direction;
 			this.origin = origin;
@@ -362,7 +364,7 @@ namespace YAT.Domain
 
 		/// <summary></summary>
 		[XmlAttribute("Origin")]
-		public virtual List<byte> Origin
+		public virtual List<Pair<byte[], string>> Origin
 		{
 			get { return (this.origin); }
 			set { this.origin = value; }
@@ -416,6 +418,30 @@ namespace YAT.Domain
 
 		#endregion
 
+		#region Static  Methods
+		//==========================================================================================
+		// Static Methods
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static DisplayElement Recreate(DisplayElement baseElement, Pair<byte[], string> origin)
+		{
+			DisplayElement clone = baseElement.Clone(); // Ensure to recreate the proper type.
+
+			// Keep direction, isData and isEol.
+
+			// Replace rest based on given origin.
+			List<Pair<byte[], string>> l = new List<Pair<byte[], string>>();
+			l.Add(origin);
+			clone.origin = l;
+			clone.text = origin.Value2;
+			clone.dataCount = 1;
+
+			return (clone);
+		}
+
+		#endregion
+
 		#region Methods
 		//==========================================================================================
 		// Methods
@@ -424,7 +450,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public virtual DisplayElement Clone()
 		{
-			// Ensure to use the proper constructor
+			// Ensure to use the proper constructor.
 
 			// Attention: For performance reasons, reflection as shown below is not used
 			//ConstructorInfo ci = this.GetType().GetConstructor(Type.EmptyTypes);

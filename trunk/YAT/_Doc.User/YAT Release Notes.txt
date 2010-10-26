@@ -62,6 +62,7 @@ New:
 Important changes:
 - Performance on startup partly improved (feature request #2968216)
 - Serial COM port list gets refreshed when changing the I/O port type
+- Serial COM port list shows additional dialog if retrieving of ports takes more than 500 ms
 - Update to NUnit 2.5.7
 - Use of parametrized NUnit test cases
 - Use of FxCop (feature request #2970221)
@@ -95,6 +96,7 @@ Fixed bugs:
 - Tab order in predefined command dialog fixed (bug #2914863)
 - Window startup position is adjusted if saved position is out of bounds, e.g. if window was
   saved on a secondary display that is not connected anymore (bugs #2856250 and #2906622)
+- Partial EOL sequences work again (bug #2847375)
 - Inconsistency when reading EOL sequence fixed (bug #2869497)
 - Exception with TCP/IP AutoSocket fixed (bug# 2869792)
 - Exception when switching from COM port to TCP/IP AutoSocket fixed (bug #2981797)

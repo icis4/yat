@@ -34,6 +34,7 @@ namespace YAT.Gui.Controls
 			this.label_Port = new System.Windows.Forms.Label();
 			this.timer_ShowScanDialog = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.timer_ShowFillDialog = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
 			// 
 			// button_RefreshPorts
@@ -73,6 +74,11 @@ namespace YAT.Gui.Controls
 			this.timer_ShowScanDialog.Interval = 500;
 			this.timer_ShowScanDialog.Tick += new System.EventHandler(this.timer_ShowScanDialog_Tick);
 			// 
+			// timer_ShowFillDialog
+			// 
+			this.timer_ShowFillDialog.Interval = 500;
+			this.timer_ShowFillDialog.Tick += new System.EventHandler(this.timer_ShowFillDialog_Tick);
+			// 
 			// SerialPortSelection
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -96,5 +102,6 @@ namespace YAT.Gui.Controls
 		private System.Windows.Forms.Label label_Port;
 		private System.Windows.Forms.Timer timer_ShowScanDialog;
 		private System.Windows.Forms.ToolTip toolTip;
+		private System.Windows.Forms.Timer timer_ShowFillDialog;
 	}
 }

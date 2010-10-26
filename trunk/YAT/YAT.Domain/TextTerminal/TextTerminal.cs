@@ -26,6 +26,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
+using MKY.Collections.Generic;
 using MKY.Text;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
@@ -535,12 +536,46 @@ namespace YAT.Domain
 				if (de.IsData)
 					lineState.EolElements.Add(de);
 
-				// Retrieve EOL elements, marking them as EOL.
-				foreach (DisplayElement item in lineState.EolElements)
+				// Normal case, EOL consists of a single sequence of control characters.
+				if ((lineState.EolElements.Count == 1) && (lineState.EolElements[0].OriginCount == lineState.Eol.Eol.Length))
 				{
+					// Mark element as EOL.
+					DisplayElement item = lineState.EolElements[0];
 					item.IsEol = true;
 					lp.Add(item);
 				}
+				else
+				{
+					// Ensure that only as many elements as EOL contains are marked as EOL.
+					// Note that sequence mighty look like <CR><CR><LF>, only the last two are EOL!
+					
+					// Unfold the elements into single elements for easier processing.
+					List<DisplayElement> l = new List<DisplayElement>();
+					foreach (DisplayElement item in lineState.EolElements)
+					{
+						foreach (Pair<byte[], string> origin in item.Origin)
+							l.Add(DisplayElement.Recreate(item, origin));
+					}
+
+					// Count data.
+					int dataCount = 0;
+					foreach (DisplayElement item in l)
+						dataCount += item.DataCount;
+
+					// Mark only true EOL element as EOL.
+					int firstEolIndex = dataCount - lineState.Eol.Eol.Length;
+					int currentIndex = 0;
+					foreach (DisplayElement item in l)
+					{
+						currentIndex += item.DataCount;
+
+						if (currentIndex > firstEolIndex)
+							item.IsEol = true;
+
+						lp.Add(item);
+					}
+				}
+
 				lineState.EolElements.Clear();
 				lineState.LinePosition = LinePosition.End;
 			}
