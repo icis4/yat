@@ -60,6 +60,28 @@ namespace MKY.Windows.Forms
 		/// <param name="caption">
 		/// The text to display in the title bar of the status box.
 		/// </param>
+		/// <returns>
+		/// One of the System.Windows.Forms.DialogResult values.
+		/// </returns>
+		public static DialogResult Show(IWin32Window owner, string status1, string caption)
+		{
+			bool setting = false;
+			return (Show(owner, status1, caption, "", "", ref setting, false));
+		}
+
+		/// <summary>
+		/// Displays a status box in front of the specified object and with the specified
+		/// status and caption and returns the result.
+		/// </summary>
+		/// <param name="owner">
+		/// An implementation of System.Windows.Forms.IWin32Window that will own the modal dialog box.
+		/// </param>
+		/// <param name="status1">
+		/// The text to display in the first line of status box.
+		/// </param>
+		/// <param name="caption">
+		/// The text to display in the title bar of the status box.
+		/// </param>
 		/// <param name="status2">
 		/// The text to display in the second line of status box.
 		/// </param>
@@ -69,7 +91,7 @@ namespace MKY.Windows.Forms
 		public static DialogResult Show(IWin32Window owner, string status1, string caption, string status2)
 		{
 			bool setting = false;
-			return (Show(owner, status1, caption, status2, "", ref setting));
+			return (Show(owner, status1, caption, status2, "", ref setting, false));
 		}
 
 		/// <summary>
@@ -100,8 +122,14 @@ namespace MKY.Windows.Forms
 		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Setting is required to be received, modified and returned.")]
 		public static DialogResult Show(IWin32Window owner, string status1, string caption, string status2, string settingText, ref bool setting)
 		{
+			return (Show(owner, status1, caption, status2, "", ref setting, true));
+		}
+
+		[SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference", MessageId = "5#", Justification = "Setting is required to be received, modified and returned.")]
+		private static DialogResult Show(IWin32Window owner, string status1, string caption, string status2, string settingText, ref bool setting, bool showCancel)
+		{
 			DialogResult dialogResult = DialogResult.OK;
-			staticStatusBox = new StatusBox(status1, caption, status2, settingText, setting);
+			staticStatusBox = new StatusBox(status1, caption, status2, settingText, setting, showCancel);
 
 			ISynchronizeInvoke sinkTarget = owner as ISynchronizeInvoke;
 			if (sinkTarget != null)
@@ -211,7 +239,7 @@ namespace MKY.Windows.Forms
 		}
 
 		/// <summary></summary>
-		protected StatusBox(string status1, string caption, string status2, string settingText, bool setting)
+		protected StatusBox(string status1, string caption, string status2, string settingText, bool setting, bool showCancel)
 		{
 			InitializeComponent();
 
@@ -226,6 +254,8 @@ namespace MKY.Windows.Forms
 				checkBox_Setting.Checked = setting;
 				Height = 154;
 			}
+
+			button_Cancel.Visible = showCancel;
 		}
 
 		#endregion

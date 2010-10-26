@@ -41,21 +41,50 @@ namespace YAT.Gui.Controls
 		// Types
 		//==========================================================================================
 
+		private class FillPortsThread
+		{
+			private SerialPortCollection ports;
+			private bool isFilling = true;
+
+			public FillPortsThread(SerialPortCollection ports)
+			{
+				this.ports = ports;
+			}
+
+			public virtual SerialPortCollection Ports
+			{
+				get { return (this.ports); }
+			}
+
+			public virtual bool IsFilling
+			{
+				get { return (this.isFilling); }
+			}
+
+			public virtual void FillWithAvailablePorts()
+			{
+				this.ports.FillWithAvailablePorts(true);
+				this.isFilling = false;
+
+				StatusBox.AcceptAndClose();
+			}
+		}
+
 		private class MarkPortsInUseThread
 		{
-			private SerialPortCollection portList;
+			private SerialPortCollection ports;
 			private bool isScanning = true;
 			private string status2 = "";
 			private bool cancelScanning = false;
 
-			public MarkPortsInUseThread(SerialPortCollection portList)
+			public MarkPortsInUseThread(SerialPortCollection ports)
 			{
-				this.portList = portList;
+				this.ports = ports;
 			}
 
-			public virtual SerialPortCollection PortList
+			public virtual SerialPortCollection Ports
 			{
-				get { return (this.portList); }
+				get { return (this.ports); }
 			}
 
 			public virtual bool IsScanning
@@ -70,7 +99,7 @@ namespace YAT.Gui.Controls
 
 			public virtual void MarkPortsInUse()
 			{
-				this.portList.MarkPortsInUse(portList_MarkPortsInUseCallback);
+				this.ports.MarkPortsInUse(ports_MarkPortsInUseCallback);
 				this.isScanning = false;
 
 				StatusBox.AcceptAndClose();
@@ -81,7 +110,7 @@ namespace YAT.Gui.Controls
 				this.cancelScanning = true;
 			}
 
-			private void portList_MarkPortsInUseCallback(object sender, SerialPortCollection.PortChangedAndCancelEventArgs e)
+			private void ports_MarkPortsInUseCallback(object sender, SerialPortCollection.PortChangedAndCancelEventArgs e)
 			{
 				this.status2 = "Scanning " + e.Port + "...";
 				StatusBox.UpdateStatus2(this.status2);
@@ -105,6 +134,7 @@ namespace YAT.Gui.Controls
 		/// </remarks>
 		private SerialPortId portId = SerialPortId.FirstStandardPort;
 
+		private FillPortsThread fillPortsThread;
 		private MarkPortsInUseThread markPortsInUseThread;
 
 		#endregion
@@ -265,6 +295,13 @@ namespace YAT.Gui.Controls
 			SetSerialPortList();
 		}
 
+		private void timer_ShowFillDialog_Tick(object sender, EventArgs e)
+		{
+			timer_ShowFillDialog.Stop();
+
+			StatusBox.Show(this, "Retrieving ports...", "Serial Ports");
+		}
+
 		private void timer_ShowScanDialog_Tick(object sender, EventArgs e)
 		{
 			timer_ShowScanDialog.Stop();
@@ -293,9 +330,26 @@ namespace YAT.Gui.Controls
 				this.isSettingControls = true;
 
 				SerialPortId old = comboBox_Port.SelectedItem as SerialPortId;
-
 				SerialPortCollection ports = new SerialPortCollection();
-				ports.FillWithAvailablePorts(true);
+
+				// Fill list with available ports.
+				{
+					// Install timer which shows a dialog if filling takes more than 500ms.
+					timer_ShowFillDialog.Start();
+
+					// Start scanning on different thread.
+					this.fillPortsThread = new FillPortsThread(ports);
+					Thread t = new Thread(new ThreadStart(this.fillPortsThread.FillWithAvailablePorts));
+					t.Start();
+
+					while (this.fillPortsThread.IsFilling)
+						Application.DoEvents();
+
+					t.Join();
+
+					// Cleanup.
+					timer_ShowFillDialog.Stop();
+				}
 
 				if (ApplicationSettings.LocalUser.General.DetectSerialPortsInUse)
 				{
