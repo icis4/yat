@@ -240,7 +240,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                 }
                 catch (ObjectDisposedException ex)
                 {
-                    MKY.Diagnostics.DebugEx.WriteException(this, ex);
+                    MKY.Diagnostics.DebugEx.WriteException(this.GetType(), ex);
                 }
                 // ----- \remind  END  -----
 

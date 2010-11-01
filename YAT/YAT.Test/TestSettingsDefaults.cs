@@ -33,14 +33,14 @@ namespace YAT.Test
 		[STAThread]
 		public static void Main()
 		{
-			// Open and reset current configuration
+			// Open and reset current configuration.
 			Configuration c = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 			c.Sections.Clear();
 			c.SectionGroups.Clear();
 			c.AppSettings.Settings.Clear();
 			c.ConnectionStrings.ConnectionStrings.Clear();
 
-			// Add default sections for each test assembly
+			// Add default sections for each test assembly.
 
 			// MKY.IO.Ports.Test
 			CreateAssemblySections

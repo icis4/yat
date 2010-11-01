@@ -36,74 +36,74 @@ namespace MKY.Diagnostics
 		/// Writes source, type, message and stack of the given exception and its inner exceptions
 		/// to <see cref="System.Console"/>.
 		/// </summary>
-		public static void WriteException(object obj, Exception ex)
+		public static void WriteException(Type type, Exception ex)
 		{
-			WriteException(obj, ex, "");
+			WriteException(type, ex, "");
 		}
 
 		/// <summary>
 		/// Writes source, type, message and stack of the given exception and its inner exceptions
 		/// to <see cref="System.Console"/>.
 		/// </summary>
-		public static void WriteException(object obj, Exception ex, string additionalMessage)
+		public static void WriteException(Type type, Exception ex, string additionalMessage)
 		{
-			DiagnosticsWriterOutput.WriteException(consoleWrapper, obj, ex, additionalMessage);
+			DiagnosticsWriterOutput.WriteException(consoleWrapper, type, ex, additionalMessage);
 		}
 
 		/// <summary>
 		/// Writes a <see cref="StackTrace"/> to <see cref="System.Console"/>.
 		/// </summary>
-		public static void WriteStack(object obj)
+		public static void WriteStack(Type type)
 		{
-			WriteStack(obj, new StackTrace(), "");
+			WriteStack(type, new StackTrace(), "");
 		}
 
 		/// <summary>
 		/// Writes a <see cref="StackTrace"/> to <see cref="System.Console"/>.
 		/// </summary>
-		public static void WriteStack(object obj, StackTrace st)
+		public static void WriteStack(Type type, StackTrace st)
 		{
-			WriteStack(obj, st, "");
+			WriteStack(type, st, "");
 		}
 
 		/// <summary>
 		/// Writes a <see cref="StackTrace"/> to <see cref="System.Console"/>.
 		/// </summary>
-		public static void WriteStack(object obj, StackTrace st, string additionalMessage)
+		public static void WriteStack(Type type, StackTrace st, string additionalMessage)
 		{
-			DiagnosticsWriterOutput.WriteStack(consoleWrapper, obj, st, additionalMessage);
+			DiagnosticsWriterOutput.WriteStack(consoleWrapper, type, st, additionalMessage);
 		}
 
 		/// <summary>
 		/// Writes the properties of a <see cref="Message"/> to <see cref="System.Console"/>.
 		/// </summary>
-		public static void WriteWindowsFormsMessage(object obj, Message m)
+		public static void WriteWindowsFormsMessage(Type type, Message m)
 		{
-			WriteWindowsFormsMessage(obj, m, "");
+			WriteWindowsFormsMessage(type, m, "");
 		}
 
 		/// <summary>
 		/// Writes the properties of a <see cref="Message"/> to <see cref="System.Console"/>.
 		/// </summary>
-		public static void WriteWindowsFormsMessage(object obj, Message m, string additionalMessage)
+		public static void WriteWindowsFormsMessage(Type type, Message m, string additionalMessage)
 		{
-			DiagnosticsWriterOutput.WriteWindowsFormsMessage(consoleWrapper, obj, m, additionalMessage);
+			DiagnosticsWriterOutput.WriteWindowsFormsMessage(consoleWrapper, type, m, additionalMessage);
 		}
 
 		/// <summary>
 		/// Writes the properties of a <see cref="FileStream"/> to <see cref="System.Console"/>.
 		/// </summary>
-		public static void WriteFileStream(object obj, FileStream fs)
+		public static void WriteFileStream(Type type, FileStream fs)
 		{
-			WriteFileStream(obj, fs, "");
+			WriteFileStream(type, fs, "");
 		}
 
 		/// <summary>
 		/// Writes the properties of a <see cref="FileStream"/> to <see cref="System.Console"/>.
 		/// </summary>
-		public static void WriteFileStream(object obj, FileStream fs, string additionalMessage)
+		public static void WriteFileStream(Type type, FileStream fs, string additionalMessage)
 		{
-			DiagnosticsWriterOutput.WriteFileStream(consoleWrapper, obj, fs, additionalMessage);
+			DiagnosticsWriterOutput.WriteFileStream(consoleWrapper, type, fs, additionalMessage);
 		}
 	}
 }

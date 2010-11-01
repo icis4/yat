@@ -532,7 +532,7 @@ namespace MKY.IO.Ports
 			if (!IsOpen)
 			{
 				OnOpening(new EventArgs());
-			#if (DEBUG && DEBUG_OPEN_CLOSE)
+#if (DEBUG && DEBUG_OPEN_CLOSE)
 				try
 				{
 					DebugWrite("Trying base.Open()", true);
@@ -545,9 +545,9 @@ namespace MKY.IO.Ports
 					DebugWrite(ex.Message);
 					throw (ex);
 				}
-			#else
+#else
 				base.Open();
-			#endif
+#endif
 
 				// Immediately send XOn if software flow control enabled to ensure that
 				//   device gets put into XOn if it was XOff before
@@ -609,7 +609,7 @@ namespace MKY.IO.Ports
 			if (IsOpen)
 			{
 				OnClosing(new EventArgs());
-			#if (DEBUG && DEBUG_OPEN_CLOSE)
+#if (DEBUG && DEBUG_OPEN_CLOSE)
 				try
 				{
 					DebugWrite("Trying base.Close()", true);
@@ -622,9 +622,9 @@ namespace MKY.IO.Ports
 					DebugWrite(ex.Message);
 					throw (ex);
 				}
-			#else
+#else
 				base.Close();
-			#endif
+#endif
 				OnClosed(new EventArgs());
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.RtsChanged));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.DtrChanged));

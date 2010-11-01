@@ -36,81 +36,81 @@ namespace MKY.Diagnostics
 		/// Writes source, type, message and stack of the given exception and its inner exceptions
 		/// to the given <see cref="TextWriter"/>.
 		/// </summary>
-		public static void WriteException(TextWriter writer, object obj, Exception ex)
+		public static void WriteException(TextWriter writer, Type type, Exception ex)
 		{
-			WriteException(writer, obj, ex, "");
+			WriteException(writer, type, ex, "");
 		}
 
 		/// <summary>
 		/// Writes source, type, message and stack of the given exception and its inner exceptions
 		/// to the given <see cref="TextWriter"/>.
 		/// </summary>
-		public static void WriteException(TextWriter writer, object obj, Exception ex, string additionalMessage)
+		public static void WriteException(TextWriter writer, Type type, Exception ex, string additionalMessage)
 		{
 			anyWriterWrapper.SetWriter(writer);
-			DiagnosticsWriterOutput.WriteException(anyWriterWrapper, obj, ex, additionalMessage);
+			DiagnosticsWriterOutput.WriteException(anyWriterWrapper, type, ex, additionalMessage);
 			anyWriterWrapper.SetWriter(null);
 		}
 
 		/// <summary>
 		/// Writes a <see cref="StackTrace"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
-		public static void WriteStack(TextWriter writer, object obj)
+		public static void WriteStack(TextWriter writer, Type type)
 		{
-			WriteStack(writer, obj, new StackTrace(), "");
+			WriteStack(writer, type, new StackTrace(), "");
 		}
 
 		/// <summary>
 		/// Writes a <see cref="StackTrace"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
-		public static void WriteStack(TextWriter writer, object obj, StackTrace st)
+		public static void WriteStack(TextWriter writer, Type type, StackTrace st)
 		{
-			WriteStack(writer, obj, st, "");
+			WriteStack(writer, type, st, "");
 		}
 
 		/// <summary>
 		/// Writes a <see cref="StackTrace"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
-		public static void WriteStack(TextWriter writer, object obj, StackTrace st, string additionalMessage)
+		public static void WriteStack(TextWriter writer, Type type, StackTrace st, string additionalMessage)
 		{
 			anyWriterWrapper.SetWriter(writer);
-			DiagnosticsWriterOutput.WriteStack(anyWriterWrapper, obj, st, additionalMessage);
+			DiagnosticsWriterOutput.WriteStack(anyWriterWrapper, type, st, additionalMessage);
 			anyWriterWrapper.SetWriter(null);
 		}
 
 		/// <summary>
 		/// Writes the properties of a <see cref="Message"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
-		public static void WriteWindowsFormsMessage(TextWriter writer, object obj, Message m)
+		public static void WriteWindowsFormsMessage(TextWriter writer, Type type, Message m)
 		{
-			WriteWindowsFormsMessage(writer, obj, m, "");
+			WriteWindowsFormsMessage(writer, type, m, "");
 		}
 
 		/// <summary>
 		/// Writes the properties of a <see cref="Message"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
-		public static void WriteWindowsFormsMessage(TextWriter writer, object obj, Message m, string additionalMessage)
+		public static void WriteWindowsFormsMessage(TextWriter writer, Type type, Message m, string additionalMessage)
 		{
 			anyWriterWrapper.SetWriter(writer);
-			DiagnosticsWriterOutput.WriteWindowsFormsMessage(anyWriterWrapper, obj, m, additionalMessage);
+			DiagnosticsWriterOutput.WriteWindowsFormsMessage(anyWriterWrapper, type, m, additionalMessage);
 			anyWriterWrapper.SetWriter(null);
 		}
 
 		/// <summary>
 		/// Writes the properties of a <see cref="FileStream"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
-		public static void WriteFileStream(TextWriter writer, object obj, FileStream fs)
+		public static void WriteFileStream(TextWriter writer, Type type, FileStream fs)
 		{
-			WriteFileStream(writer, obj, fs, "");
+			WriteFileStream(writer, type, fs, "");
 		}
 
 		/// <summary>
 		/// Writes the properties of a <see cref="FileStream"/> to the given <see cref="TextWriter"/>.
 		/// </summary>
-		public static void WriteFileStream(TextWriter writer, object obj, FileStream fs, string additionalMessage)
+		public static void WriteFileStream(TextWriter writer, Type type, FileStream fs, string additionalMessage)
 		{
 			anyWriterWrapper.SetWriter(writer);
-			DiagnosticsWriterOutput.WriteFileStream(anyWriterWrapper, obj, fs, additionalMessage);
+			DiagnosticsWriterOutput.WriteFileStream(anyWriterWrapper, type, fs, additionalMessage);
 			anyWriterWrapper.SetWriter(null);
 		}
 	}

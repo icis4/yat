@@ -103,6 +103,7 @@ namespace YAT.Gui.Test
 		/// </remarks>
 		[Test]
 		[StressCategory]
+		[InteractiveCategory]
 		public virtual void TestTransmissionDisplay()
 		{
 			string workspaceSettingsFilePath = Temp.MakeTempFilePath(this.GetType(), Guid.NewGuid().ToString(), ExtensionSettings.WorkspaceFile);

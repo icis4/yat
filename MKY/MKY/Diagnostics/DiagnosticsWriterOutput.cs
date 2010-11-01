@@ -48,12 +48,12 @@ namespace MKY.Diagnostics
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
 		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
-		public static void WriteException(IDiagnosticsWriter writer, object obj, Exception ex, string additionalMessage)
+		public static void WriteException(IDiagnosticsWriter writer, Type type, Exception ex, string additionalMessage)
 		{
-			if (obj != null)
+			if (type != null)
 			{
 				writer.Write("Exception in ");
-				writer.WriteLine(obj.GetType().FullName);
+				writer.WriteLine(type.FullName);
 			}
 			else
 			{
@@ -80,12 +80,12 @@ namespace MKY.Diagnostics
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
 		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
-		public static void WriteStack(IDiagnosticsWriter writer, object obj, StackTrace st, string additionalMessage)
+		public static void WriteStack(IDiagnosticsWriter writer, Type type, StackTrace st, string additionalMessage)
 		{
-			if (obj != null)
+			if (type != null)
 			{
 				writer.Write("Stack trace in ");
-				writer.WriteLine(obj.GetType().FullName);
+				writer.WriteLine(type.FullName);
 			}
 			else
 			{
@@ -112,12 +112,12 @@ namespace MKY.Diagnostics
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
 		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
-		public static void WriteWindowsFormsMessage(IDiagnosticsWriter writer, object obj, Message m, string additionalMessage)
+		public static void WriteWindowsFormsMessage(IDiagnosticsWriter writer, Type type, Message m, string additionalMessage)
 		{
-			if (obj != null)
+			if (type != null)
 			{
 				writer.Write("Windows.Forms.Message in ");
-				writer.WriteLine(obj.GetType().FullName);
+				writer.WriteLine(type.FullName);
 			}
 			else
 			{
@@ -144,12 +144,12 @@ namespace MKY.Diagnostics
 		/// <see cref="MKY.Diagnostics.TraceEx"/> and
 		/// <see cref="MKY.Diagnostics.ConsoleEx"/>.
 		/// </remarks>
-		public static void WriteFileStream(IDiagnosticsWriter writer, object obj, FileStream fs, string additionalMessage)
+		public static void WriteFileStream(IDiagnosticsWriter writer, Type type, FileStream fs, string additionalMessage)
 		{
-			if (obj != null)
+			if (type != null)
 			{
 				writer.Write("FileStream in ");
-				writer.WriteLine(obj.GetType().FullName);
+				writer.WriteLine(type.FullName);
 			}
 			else
 			{

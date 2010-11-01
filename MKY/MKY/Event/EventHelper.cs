@@ -82,7 +82,7 @@ namespace MKY.Event
 		// Static Events
 		//==========================================================================================
 
-	#if (!DEBUG)
+#if (!DEBUG)
 
 		/// <summary>
 		/// Event on unhandled exceptions. An application can install an event handler that handles
@@ -90,7 +90,7 @@ namespace MKY.Event
 		/// </summary>
 		public static event EventHandler<UnhandledExceptionEventArgs> UnhandledException;
 
-	#endif
+#endif
 
 		#endregion
 
@@ -123,7 +123,7 @@ namespace MKY.Event
 				}
 				else
 				{
-				#if (DEBUG_HANDLE_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen
+#if (DEBUG_HANDLE_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen
 					EventHandler castedSink = (EventHandler)sink;
 					object sender = args[0];
 					EventArgs eventArgs = (EventArgs)args[1];
@@ -135,14 +135,14 @@ namespace MKY.Event
 					{
 						WriteExceptionToDebugOutput(ex, sink);
 					}
-				#elif (DEBUG_BREAK_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen
+#elif (DEBUG_BREAK_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen
 					EventHandler castedSink = (EventHandler)sink;
 					object sender = args[0];
 					EventArgs eventArgs = (EventArgs)args[1];
 					castedSink(sender, eventArgs);
-				#else // NON-DEBUG: Invoke event the safe way
+#else // NON-DEBUG: Invoke event the safe way
 					InvokeOnCurrentThread(sink, args);
-				#endif
+#endif
 				}
 			}
 		}
@@ -244,13 +244,13 @@ namespace MKY.Event
 			if (eventDelegate == null)
 				return;
 
-			// invoke event in a safe way for DEBUG and NON-DEBUG
+			// Invoke event in a safe way for DEBUG and NON-DEBUG.
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{
 				ISynchronizeInvoke sinkTarget = sink.Target as ISynchronizeInvoke;
-				if (sinkTarget != null)          // no need to check for InvokeRequired,
-				{                                //   async always requires invoke
+				if (sinkTarget != null)          // No need to check for InvokeRequired,
+				{                                //   async always requires invoke.
 					sinkTarget.BeginInvoke(sink, args);
 				}
 				else
@@ -278,9 +278,9 @@ namespace MKY.Event
 			}
 			catch (Exception ex)
 			{
-			#if (DEBUG) // Output as much data as possible for debugging support
+			#if (DEBUG) // Output as much data as possible for debugging support.
 				WriteExceptionToDebugOutput(ex, sink);
-			#else // NON-DEBUG: Forward or discard exception
+			#else // NON-DEBUG: Forward or discard exception.
 				UnhandledExceptionEventArgs e = new UnhandledExceptionEventArgs(ex);
 				FireSync<UnhandledExceptionEventArgs>(UnhandledException, typeof(EventHelper), e);
 			#endif
@@ -304,9 +304,9 @@ namespace MKY.Event
 			}
 			catch (Exception ex)
 			{
-			#if (DEBUG) // output as much data as possible for debugging support
+			#if (DEBUG) // output as much data as possible for debugging support.
 				WriteExceptionToDebugOutput(ex, sink);
-			#else // NON-DEBUG, forward or discard exception
+			#else // NON-DEBUG, forward or discard exception.
 				UnhandledExceptionEventArgs e = new UnhandledExceptionEventArgs(ex);
 				FireSync<UnhandledExceptionEventArgs>(UnhandledException, typeof(EventHelper), e);
 			#endif
@@ -320,7 +320,7 @@ namespace MKY.Event
 		// Debug Output
 		//==========================================================================================
 
-	#if (DEBUG)
+#if (DEBUG)
 
 		private static void WriteExceptionToDebugOutput(Exception ex, Delegate sink)
 		{
@@ -338,7 +338,7 @@ namespace MKY.Event
 			Debug.Unindent();
 		}
 
-	#endif
+#endif // DEBUG
 
 		#endregion
 	}

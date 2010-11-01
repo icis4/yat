@@ -24,6 +24,16 @@ namespace MKY.Configuration
 	/// <summary>
 	/// Utilities to select and return a particular configuration among a set of configurations.
 	/// </summary>
+	/// <remarks>
+	/// Debugging this configuration infrastructure may be a bit trickier than normal debugging.
+	/// E.g. if the configuration is used to parametrize NUnit test cases, the follow steps need to be taken:
+	/// 1. Build the solution
+	/// 2. Start NUnit
+	/// 3. 'Debug > Attach' Visual Studio to NUnit
+	/// 4. Set a breakpoint a the desired location below
+	/// 5. Reload the project in NUnit
+	///    => Breakpoint is hit
+	/// </remarks>
 	public static class Selector
 	{
 		/// <summary>

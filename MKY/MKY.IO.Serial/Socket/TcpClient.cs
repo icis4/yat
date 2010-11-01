@@ -25,6 +25,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
 
+using MKY.Diagnostics;
 using MKY.Event;
 
 // The MKY.IO.Serial namespace combines various serial interface infrastructure. This code is
@@ -460,10 +461,17 @@ namespace MKY.IO.Serial
 		{
 			if (this.socket != null)
 			{
-				this.socket.Stop();
-				this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose()
-				this.socket = null;
-				this.socketConnection = null;
+				try
+				{
+					this.socket.Stop();
+					this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose()
+					this.socket = null;
+					this.socketConnection = null;
+				}
+				catch (Exception ex)
+				{
+					DebugEx.WriteException(this.GetType(), ex);
+				}
 			}
 		}
 
