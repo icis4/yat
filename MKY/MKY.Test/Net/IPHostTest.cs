@@ -94,7 +94,7 @@ namespace MKY.Test.Net
 		[TearDown]
 		public virtual void TearDown()
 		{
-			Temp.CleanTempPath(this);
+			Temp.CleanTempPath(this.GetType());
 		}
 
 		#endregion
@@ -149,7 +149,7 @@ namespace MKY.Test.Net
 		[Test, TestCaseSource(typeof(IPHostTestData), "TestCases")]
 		public virtual void TestSerialization(IPHost ipHost, IPHostType ipHostType, IPAddress ipAddress, string hostString)
 		{
-			string filePath = Temp.MakeTempFilePath(this, ".xml");
+			string filePath = Temp.MakeTempFilePath(this.GetType(), ".xml");
 			IPHost ipHostDeserialized = null;
 
 			// Serialize to file.
