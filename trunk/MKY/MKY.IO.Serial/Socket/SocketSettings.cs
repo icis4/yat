@@ -211,7 +211,8 @@ namespace MKY.IO.Serial
 								}
 								catch (Exception ex)
 								{
-									DebugEx.WriteException(this, ex);
+									DebugEx.WriteException(this.GetType(), ex);
+									throw (ex);
 								}
 								break;
 							}
@@ -291,7 +292,8 @@ namespace MKY.IO.Serial
 								}
 								catch (Exception ex)
 								{
-									DebugEx.WriteException(this, ex);
+									DebugEx.WriteException(this.GetType(), ex);
+									throw (ex);
 								}
 								break;
 							}

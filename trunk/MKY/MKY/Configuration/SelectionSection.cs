@@ -26,31 +26,11 @@ namespace MKY.Configuration
 	/// </summary>
 	public class SelectionSection : ConfigurationSection
 	{
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
 		/// <summary></summary>
 		public const string SelectionSectionName = "Selection";
 
-		#endregion
-
-		#region Fields
-		//==========================================================================================
-		// Fields
-		//==========================================================================================
-
 		private ConfigurationPropertyCollection properties;
-
 		private ConfigurationProperty selectedConfigurationName = new ConfigurationProperty("SelectedConfigurationName", typeof(string), "");
-
-		#endregion
-
-		#region Object Lifetime
-		//==========================================================================================
-		// Object Lifetime
-		//==========================================================================================
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SelectionSection"/> class.
@@ -61,13 +41,6 @@ namespace MKY.Configuration
 
 			this.properties.Add(this.selectedConfigurationName);
 		}
-
-		#endregion
-
-		#region Properties
-		//==========================================================================================
-		// Properties
-		//==========================================================================================
 
 		/// <summary>
 		/// Gets the collection of properties.
@@ -94,20 +67,11 @@ namespace MKY.Configuration
 			}
 		}
 
-		#endregion
-
-		#region Methods
-		//==========================================================================================
-		// Methods
-		//==========================================================================================
-
 		private void AssertNotReadOnly(string propertyName)
 		{
 			if (IsReadOnly())
 				throw (new ConfigurationErrorsException("The property " + propertyName + " is read only."));
 		}
-
-		#endregion
 	}
 }
 

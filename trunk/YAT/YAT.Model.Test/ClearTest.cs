@@ -63,7 +63,7 @@ namespace YAT.Model.Test
 
 					// Send test command
 					terminalA.SendText(testSet.Command);
-					Utilities.WaitForTransmission(terminalA, terminalB);
+					Utilities.WaitForTransmission(terminalA, terminalB, testSet);
 
 					// Verify transmission
 					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
@@ -114,7 +114,7 @@ namespace YAT.Model.Test
 
 					// Send test command
 					terminalA.SendText(testSet.Command);
-					Utilities.WaitForTransmission(terminalA, terminalB);
+					Utilities.WaitForTransmission(terminalA, terminalB, testSet);
 
 					// Verify transmission
 					Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),
@@ -123,7 +123,7 @@ namespace YAT.Model.Test
 
 					// Send incomplete line command
 					terminalA.SendText(new Types.Command(@"B\!(NoEOL)"));
-					Utilities.WaitForTransmission(terminalA, terminalB);
+					Utilities.WaitForTransmission(terminalA, terminalB, testSet);
 
 					// Verify incomplete line
 					lines = terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx);

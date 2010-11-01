@@ -201,7 +201,7 @@ namespace YAT.Model.Test
 		{
 			int timeout = 0;
 			do                         // Initially wait to allow async send,
-			{                          //   therefore, use do-while
+			{                          //   therefore, use do-while.
 				Thread.Sleep(Interval);
 				timeout += Interval;
 
@@ -211,20 +211,22 @@ namespace YAT.Model.Test
 			while (!terminalA.IsConnected && !terminalB.IsConnected);
 		}
 
-		internal static void WaitForTransmission(Model.Terminal terminalA, Model.Terminal terminalB)
+		internal static void WaitForTransmission(Model.Terminal terminalA, Model.Terminal terminalB, TestSet testSet)
 		{
 			int timeout = 0;
 			do                         // Initially wait to allow async send,
-			{                          //   therefore, use do-while
+			{                          //   therefore, use do-while.
 				Thread.Sleep(Interval);
 				timeout += Interval;
 
 				if (timeout >= Timeout)
 					Assert.Fail("Transmission timeout. Try to re-run test case.");
 			}
-			while (terminalB.RxByteCount != terminalA.TxByteCount);
+			while ((terminalB.RxByteCount != terminalA.TxByteCount) &&
+			       (terminalB.RxLineCount != terminalA.TxLineCount) &&
+			       (terminalB.RxLineCount != testSet.ExpectedLineCount));
 
-			// Wait to allow Eol to be sent (Eol is sent a bit later than line contents)
+			// Wait to allow Eol to be sent (Eol is sent a bit later than line contents).
 			Thread.Sleep(WaitEol);
 		}
 

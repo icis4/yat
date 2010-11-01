@@ -87,7 +87,7 @@ namespace MKY.Windows.Forms
 			}
 			catch (Exception ex)
 			{
-				Diagnostics.DebugEx.WriteException(this, ex);
+				Diagnostics.DebugEx.WriteException(this.GetType(), ex);
 			}
 		}
 	}

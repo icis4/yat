@@ -214,7 +214,7 @@ namespace YAT.Model.Test
 					{
 						// Send test command
 						terminalA.SendText(testSet.Command);
-						Utilities.WaitForTransmission(terminalA, terminalB);
+						Utilities.WaitForTransmission(terminalA, terminalB, testSet);
 
 						// Verify transmission
 						Utilities.VerifyLines(terminalA.RepositoryToDisplayLines(Domain.RepositoryType.Tx),

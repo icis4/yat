@@ -30,15 +30,15 @@ namespace MKY.IO
 	public static class Temp
 	{
 		/// <summary></summary>
-		public static string MakeTempPath(Type testType)
+		public static string MakeTempPath(Type type)
 		{
-			return (MakeTempPath(testType, true));
+			return (MakeTempPath(type, true));
 		}
 
-		private static string MakeTempPath(Type testType, bool outputPathToDebugConsole)
+		private static string MakeTempPath(Type type, bool outputPathToDebugConsole)
 		{
 			// Results in e.g. "D:\Temp\MKY.Test".
-			string path = Path.GetTempPath() + testType.Namespace;
+			string path = Path.GetTempPath() + type.Namespace;
 
 			if (outputPathToDebugConsole)
 				Debug.WriteLine(@"Temporary path is      """ + path + @"""");
@@ -50,14 +50,14 @@ namespace MKY.IO
 		}
 
 		/// <summary></summary>
-		public static void CleanTempPath(Type testType)
+		public static void CleanTempPath(Type type)
 		{
-			CleanTempPath(testType, true);
+			CleanTempPath(type, true);
 		}
 
-		private static void CleanTempPath(Type testType, bool outputPathToDebugConsole)
+		private static void CleanTempPath(Type type, bool outputPathToDebugConsole)
 		{
-			string path = MakeTempPath(testType, false);
+			string path = MakeTempPath(type, false);
 
 			if (Directory.Exists(path))
 				Directory.Delete(path, true);
@@ -67,26 +67,34 @@ namespace MKY.IO
 		}
 
 		/// <summary></summary>
-		public static string MakeTempFileName(Type testType, string extension)
+		public static string MakeTempFileName(Type type, string extension)
 		{
-			return (MakeTempFileName(testType, "", extension));
+			return (MakeTempFileName(type, "", extension));
 		}
 
 		/// <summary></summary>
-		public static string MakeTempFileName(Type testType, string name, string extension)
+		public static string MakeTempFileName(Type type, string name, string extension)
 		{
-			return (MakeTempFileName(testType, name, extension, true));
+			return (MakeTempFileName(type, name, "", extension, true));
 		}
 
-		private static string MakeTempFileName(Type testType, string name, string extension, bool outputFileNameToDebugConsole)
+		/// <summary></summary>
+		public static string MakeTempFileName(Type type, string name, string postfix, string extension)
 		{
-			string testTypeFullName = testType.FullName;
-			string fileName;
+			return (MakeTempFileName(type, name, postfix, extension, true));
+		}
+
+		private static string MakeTempFileName(Type type, string name, string postfix, string extension, bool outputFileNameToDebugConsole)
+		{
+			string fileName = type.FullName;
 
 			if ((name != null) && (name.Length > 0))
-				fileName = testTypeFullName + "-" + name + extension;
-			else
-				fileName = testTypeFullName + extension;
+				fileName += "-" + name;
+
+			if ((postfix != null) && (postfix.Length > 0))
+				fileName += "-" + postfix;
+
+			fileName += extension;
 
 			if (outputFileNameToDebugConsole)
 				Debug.WriteLine(@"Temporary file name is """ + fileName + @"""");
@@ -95,20 +103,34 @@ namespace MKY.IO
 		}
 
 		/// <summary></summary>
-		public static string MakeTempFilePath(Type testType, string extension)
+		public static string MakeTempFilePath(Type type, string extension)
 		{
-			return (MakeTempFilePath(testType, "", extension));
+			return (MakeTempFilePath(type, "", extension));
 		}
 
 		/// <summary></summary>
-		public static string MakeTempFilePath(Type testType, string name, string extension)
+		public static string MakeTempFilePath(Type type, string name, string extension)
 		{
-			return (MakeTempFilePath(testType, name, extension, true));
+			return (MakeTempFilePath(type, name, extension, true));
 		}
 
-		private static string MakeTempFilePath(Type testType, string name, string extension, bool outputFilePathToDebugConsole)
+		private static string MakeTempFilePath(Type type, string name, string extension, bool outputFilePathToDebugConsole)
 		{
-			string filePath = MakeTempPath(testType, false) + Path.DirectorySeparatorChar + MakeTempFileName(testType, name, extension, false);
+			string filePath = MakeTempPath(type, false) + Path.DirectorySeparatorChar + MakeTempFileName(type, name, "", extension, false);
+			if (File.Exists(filePath))
+			{
+				const int Max = 9999;
+				int i = 0;
+				for (i = 0; i <= Max; i++)
+				{
+					filePath = MakeTempPath(type, false) + Path.DirectorySeparatorChar + MakeTempFileName(type, name, i.ToString(), extension, false);
+					if (!File.Exists(filePath))
+						break;
+				}
+
+				if (i >= Max)
+					throw (new FileNotFoundException("Failed to create temporary file name"));
+			}
 
 			if (outputFilePathToDebugConsole)
 				Debug.WriteLine(@"Temporary file path is """ + filePath + @"""");

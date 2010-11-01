@@ -50,15 +50,15 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Tear Down
+		#region Tear Down Fixture
 		//==========================================================================================
-		// Tear Down
+		// Tear Down Fixture
 		//==========================================================================================
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "TearDown", Justification = "Naming according to NUnit.")]
-		[TearDown]
-		public virtual void TearDown()
+		[TestFixtureTearDown]
+		public virtual void TestFixtureTearDown()
 		{
 			Temp.CleanTempPath(this.GetType());
 		}

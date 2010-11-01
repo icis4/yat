@@ -44,18 +44,17 @@ Write
 at column 0 to keep code structure clear of disabled block.
 
 Use
-		#if (!DEBUG)
-			try
-			{
-		#endif
-to enable or disable blocks of code depending on configuration switches.
-Write preprocessor statements one level out of normal code structure to clearly show that these
-statements do not belong to the normal code. Still, don't use
 #if (!DEBUG)
 			try
 			{
 #endif
-because it adds agitation to the code structure.
+to enable or disable blocks of code depending on configuration switches or write preprocessor
+statements one level out of normal code structure to clearly show that these statements
+		#if (!DEBUG)
+			try
+			{
+		#endif
+do not belong to the normal code. Decided on version a) or b) such that readability is optimal.
 
 
 Classes
