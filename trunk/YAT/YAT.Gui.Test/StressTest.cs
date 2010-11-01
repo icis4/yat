@@ -80,7 +80,7 @@ namespace YAT.Gui.Test
 		public virtual void TestFixtureTearDown()
 		{
 			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = this.autoSaveWorkspaceToRestore;
-			Temp.CleanTempPath(this);
+			Temp.CleanTempPath(this.GetType());
 		}
 
 		#endregion
@@ -105,9 +105,9 @@ namespace YAT.Gui.Test
 		[StressCategory]
 		public virtual void TestTransmissionDisplay()
 		{
-			string workspaceSettingsFilePath = Temp.MakeTempFilePath(this, Guid.NewGuid().ToString(), ExtensionSettings.WorkspaceFile);
-			string terminalSettings1FilePath = Temp.MakeTempFilePath(this, Guid.NewGuid().ToString(), ExtensionSettings.TerminalFile);
-			string terminalSettings2FilePath = Temp.MakeTempFilePath(this, Guid.NewGuid().ToString(), ExtensionSettings.TerminalFile);
+			string workspaceSettingsFilePath = Temp.MakeTempFilePath(this.GetType(), Guid.NewGuid().ToString(), ExtensionSettings.WorkspaceFile);
+			string terminalSettings1FilePath = Temp.MakeTempFilePath(this.GetType(), Guid.NewGuid().ToString(), ExtensionSettings.TerminalFile);
+			string terminalSettings2FilePath = Temp.MakeTempFilePath(this.GetType(), Guid.NewGuid().ToString(), ExtensionSettings.TerminalFile);
 
 			DocumentSettingsHandler<WorkspaceSettingsRoot> workspaceSettings = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
 			DocumentSettingsHandler<TerminalSettingsRoot> terminalSettings1 = new DocumentSettingsHandler<TerminalSettingsRoot>();
@@ -143,7 +143,7 @@ namespace YAT.Gui.Test
 			Trace.WriteLine(workspaceSettingsFilePath);
 			Trace.Unindent();
 
-			string transmitFilePath = Temp.MakeTempFilePath(this, Guid.NewGuid().ToString(), ".txt");
+			string transmitFilePath = Temp.MakeTempFilePath(this.GetType(), Guid.NewGuid().ToString(), ".txt");
 			using (StreamWriter transmitFile = new StreamWriter(transmitFilePath))
 			{
 				transmitFile.WriteLine("");

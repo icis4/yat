@@ -60,7 +60,7 @@ namespace YAT.Settings.Test
 		[TearDown]
 		public virtual void TearDown()
 		{
-			Temp.CleanTempPath(this);
+			Temp.CleanTempPath(this.GetType());
 		}
 
 		#endregion
@@ -86,11 +86,11 @@ namespace YAT.Settings.Test
 		{
 			string filePath = "";
 
-			filePath = Temp.MakeTempFilePath(this, "Array", FileExtension);
+			filePath = Temp.MakeTempFilePath(this.GetType(), "Array", FileExtension);
 			string[] a = new string[] { "A", "B" };
 			TestSerialization(typeof(string[]), a, filePath);
 
-			filePath = Temp.MakeTempFilePath(this, "ArrayEmpty", FileExtension);
+			filePath = Temp.MakeTempFilePath(this.GetType(), "ArrayEmpty", FileExtension);
 			string[] ae = new string[] { };
 			TestSerialization(typeof(string[]), ae, filePath);
 #if (FALSE)
@@ -103,7 +103,7 @@ namespace YAT.Settings.Test
 					};
 			TestSerialization(typeof(string[,]), ma, filePath);
 #endif
-			filePath = Temp.MakeTempFilePath(this, "ArrayOfArraysOnInit", FileExtension);
+			filePath = Temp.MakeTempFilePath(this.GetType(), "ArrayOfArraysOnInit", FileExtension);
 			string[][] aai = new string[][]
 					{
 						new string[] { "A", "AA" },
@@ -111,7 +111,7 @@ namespace YAT.Settings.Test
 					};
 			TestSerialization(typeof(string[][]), aai, filePath);
 
-			filePath = Temp.MakeTempFilePath(this, "ArrayOfArraysByCreate", FileExtension);
+			filePath = Temp.MakeTempFilePath(this.GetType(), "ArrayOfArraysByCreate", FileExtension);
 			string[][] aac = (string[][])Array.CreateInstance(typeof(string[]), 2);
 			for (int i = 0; i < 2; i++)
 			{
@@ -137,13 +137,13 @@ namespace YAT.Settings.Test
 		{
 			string filePath = "";
 
-			filePath = Temp.MakeTempFilePath(this, "List", FileExtension);
+			filePath = Temp.MakeTempFilePath(this.GetType(), "List", FileExtension);
 			List<string> l = new List<string>();
 			l.Add("A");
 			l.Add("B");
 			TestSerialization(typeof(List<string>), l, filePath);
 
-			filePath = Temp.MakeTempFilePath(this, "ListEmpty", FileExtension);
+			filePath = Temp.MakeTempFilePath(this.GetType(), "ListEmpty", FileExtension);
 			List<string> le = new List<string>();
 			TestSerialization(typeof(List<string>), le, filePath);
 #if (FALSE)
@@ -193,7 +193,7 @@ namespace YAT.Settings.Test
 			l.Add("2", "B");
 			TestSerialization(typeof(Dictionary<string, string>), le, filePath);
 #endif
-			filePath = Temp.MakeTempFilePath(this, "DictionaryToArrayOfArrays", FileExtension);
+			filePath = Temp.MakeTempFilePath(this.GetType(), "DictionaryToArrayOfArrays", FileExtension);
 			Dictionary<string, string> l = new Dictionary<string, string>();
 			l.Add("1", "A");
 			l.Add("2", "B");
@@ -230,7 +230,7 @@ namespace YAT.Settings.Test
 		[Test]
 		public virtual void TestNamedStringDictionarySerialization()
 		{
-			string filePath = Temp.MakeTempFilePath(this, "NamedStringDictionaryToArrayOfArrays", FileExtension);
+			string filePath = Temp.MakeTempFilePath(this.GetType(), "NamedStringDictionaryToArrayOfArrays", FileExtension);
 			NamedStringDictionary nsd = new NamedStringDictionary();
 			nsd.Name = "Test";
 			nsd.Add("1", "A");
@@ -251,11 +251,11 @@ namespace YAT.Settings.Test
 		{
 			string filePath = "";
 
-			filePath = Temp.MakeTempFilePath(this, "EmptyArrayOfCommands", FileExtension);
+			filePath = Temp.MakeTempFilePath(this.GetType(), "EmptyArrayOfCommands", FileExtension);
 			Command[] a = new Command[] { };
 			TestSerialization(typeof(Command[]), a, filePath);
 
-			filePath = Temp.MakeTempFilePath(this, "EmptyListOfCommands", FileExtension);
+			filePath = Temp.MakeTempFilePath(this.GetType(), "EmptyListOfCommands", FileExtension);
 			List<Command> l = new List<Command>();
 			TestSerialization(typeof(List<Command>), l, filePath);
 		}
@@ -273,7 +273,7 @@ namespace YAT.Settings.Test
 		{
 			string filePath = "";
 
-			filePath = Temp.MakeTempFilePath(this, "RecentItem", FileExtension);
+			filePath = Temp.MakeTempFilePath(this.GetType(), "RecentItem", FileExtension);
 			RecentItem<string> ri = new RecentItem<string>("RI");
 			TestSerialization(typeof(RecentItem<string>), ri, filePath);
 
@@ -281,7 +281,7 @@ namespace YAT.Settings.Test
 			ric.Add(ri);
 			ric.Add(ri);
 
-			filePath = Temp.MakeTempFilePath(this, "RecentFileSettings", FileExtension);
+			filePath = Temp.MakeTempFilePath(this.GetType(), "RecentFileSettings", FileExtension);
 			RecentFileSettings rfs = new RecentFileSettings();
 			rfs.FilePaths = ric;
 			TestSerialization(typeof(RecentFileSettings), rfs, filePath);
@@ -300,7 +300,7 @@ namespace YAT.Settings.Test
 		{
 			string filePath = "";
 
-			filePath = Temp.MakeTempFilePath(this, "PredefinedCommandPage", FileExtension);
+			filePath = Temp.MakeTempFilePath(this.GetType(), "PredefinedCommandPage", FileExtension);
 			PredefinedCommandPage pcp = new PredefinedCommandPage();
 			pcp.Commands.Add(new Command("Hello", "World"));
 			pcp.Commands.Add(new Command("Hallo", "Wält"));
@@ -310,7 +310,7 @@ namespace YAT.Settings.Test
 			c.Add(pcp);
 			c.Add(pcp);
 
-			filePath = Temp.MakeTempFilePath(this, "PredefinedCommandSettings", FileExtension);
+			filePath = Temp.MakeTempFilePath(this.GetType(), "PredefinedCommandSettings", FileExtension);
 			PredefinedCommandSettings pcs = new PredefinedCommandSettings();
 			pcs.Pages = c;
 			TestSerialization(typeof(PredefinedCommandSettings), pcs, filePath);
@@ -329,7 +329,7 @@ namespace YAT.Settings.Test
 		{
 			string filePath = "";
 
-			filePath = Temp.MakeTempFilePath(this, "ExplicitSettings", FileExtension);
+			filePath = Temp.MakeTempFilePath(this.GetType(), "ExplicitSettings", FileExtension);
 			ExplicitSettings s = new ExplicitSettings();
 			TestSerialization(typeof(ExplicitSettings), s, filePath);
 		}
@@ -347,7 +347,7 @@ namespace YAT.Settings.Test
 		{
 			string filePath = "";
 
-			filePath = Temp.MakeTempFilePath(this, "ImplicitSettings", FileExtension);
+			filePath = Temp.MakeTempFilePath(this.GetType(), "ImplicitSettings", FileExtension);
 			ImplicitSettings s = new ImplicitSettings();
 			TestSerialization(typeof(ImplicitSettings), s, filePath);
 		}

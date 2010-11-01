@@ -518,7 +518,7 @@ namespace MKY.Test.Settings
 		[TearDown]
 		public virtual void TearDown()
 		{
-			Temp.CleanTempPath(this);
+			Temp.CleanTempPath(this.GetType());
 		}
 
 		#endregion
@@ -715,7 +715,7 @@ namespace MKY.Test.Settings
 		[Test, TestCaseSource(typeof(SettingsEvolutionTestData), "TestCases")]
 		public virtual void TestSettingsEvolution(int testCase, string fileName, Type typeToSerialize, Type typeToDeserialize)
 		{
-			string filePath = Temp.MakeTempFilePath(this, fileName, ".xml");
+			string filePath = Temp.MakeTempFilePath(this.GetType(), fileName, ".xml");
 
 			object objToSerialize = typeToSerialize.GetConstructor(new System.Type[] { }).Invoke(new object[] { });
 			SerializeTestObject(typeToSerialize, objToSerialize, filePath);

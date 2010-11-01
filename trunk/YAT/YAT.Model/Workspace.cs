@@ -552,7 +552,9 @@ namespace YAT.Model
 		// Close
 		//==========================================================================================
 
-		/// <summary>Closes the workspace and prompts if the settings have changed.</summary>
+		/// <summary>
+		/// Closes the workspace and prompts if the settings have changed.
+		/// </summary>
 		public virtual bool Close()
 		{
 			return (Close(false));
@@ -588,13 +590,13 @@ namespace YAT.Model
 		{
 			bool tryAutoSave = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
 
-			// Don't try to auto save if there is no existing file (w1)
+			// Don't try to auto save if there is no existing file (w1).
 			if (!isMainClose && !this.settingsHandler.SettingsFileExists)
 				tryAutoSave = false;
 
 			OnFixedStatusTextRequest("Closing workspace...");
 
-			// First, close all contained terminals signaling them a workspace close
+			// First, close all contained terminals signaling them a workspace close.
 			if (!CloseAllTerminals(true, tryAutoSave))
 			{
 				OnTimedStatusTextRequest("Workspace not closed");
@@ -603,30 +605,30 @@ namespace YAT.Model
 
 			bool success = false;
 
-			// Try to auto save if desired
+			// Try to auto save if desired.
 			if (tryAutoSave)
 				success = TryAutoSave();
 
-			// No success on auto save or auto save not desired
+			// No success on auto save or auto save not desired.
 			if (!success)
 			{
-				// No file (m1, m3, w1, w3)
+				// No file (m1, m3, w1, w3).
 				if (!this.settingsHandler.SettingsFileExists)
 				{
-					success = true; // Consider it successful if there was no file to save
+					success = true; // Consider it successful if there was no file to save.
 				}
 				else // Existing file
 				{
-					if (this.settingsRoot.AutoSaved) // Existing auto file (m2a/b, w2)
+					if (this.settingsRoot.AutoSaved) // Existing auto file (m2a/b, w2).
 					{
 						this.settingsHandler.TryDelete();
-						success = true; // Don't care if auto file not successfully deleted
+						success = true; // Don't care if auto file not successfully deleted.
 					}
 
-					// Existing normal file (m4a/b, w4a/b) will be handled below
+					// Existing normal file (m4a/b, w4a/b) will be handled below.
 				}
 
-				// Normal (m4a/b, w4a/b)
+				// Normal (m4a/b, w4a/b).
 				if (!success && this.settingsRoot.ExplicitHaveChanged)
 				{
 					DialogResult dr = OnMessageInputRequest
@@ -648,15 +650,15 @@ namespace YAT.Model
 							return (false);
 					}
 				}
-				else // Else means settings have not changed
+				else // Else means settings have not changed.
 				{
-					success = true; // Consider it successful if there was nothing to save
+					success = true; // Consider it successful if there was nothing to save.
 				}
-			} // End of if no success on auto save or auto save disabled
+			} // End of if no success on auto save or auto save disabled.
 
 			if (success)
 			{
-				// Status text request must be before closed event, closed event may close the view
+				// Status text request must be before closed event, closed event may close the view.
 				OnTimedStatusTextRequest("Workspace successfully closed");
 				OnClosed(new ClosedEventArgs(isMainClose));
 			}

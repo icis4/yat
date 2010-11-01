@@ -86,6 +86,21 @@ namespace YAT.Model.Test
 
 		#endregion
 
+		#region Set Up
+		//==========================================================================================
+		// Set Up
+		//==========================================================================================
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "SetUp", Justification = "Naming according to NUnit.")]
+		[SetUp]
+		public virtual void SetUp()
+		{
+			Temp.MakeTempPath(this.GetType());
+		}
+
+		#endregion
+
 		#region Tear Down
 		//==========================================================================================
 		// Tear Down
@@ -96,7 +111,7 @@ namespace YAT.Model.Test
 		[TearDown]
 		public virtual void TearDown()
 		{
-			Temp.CleanTempPath(this);
+			Temp.CleanTempPath(this.GetType());
 		}
 
 		#endregion
