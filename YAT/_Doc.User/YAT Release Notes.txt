@@ -42,17 +42,21 @@ You can also download .NET under "http://www.microsoft.com/net/"
 2. History of changes in YAT
 ====================================================================================================
 
-YAT 2.0 Beta 3 Candidate 1 Version 1.99.2x :: 2010-10-xx
+YAT 2.0 Beta 3 Candidate 2 Version 1.99.2x :: 2010-11-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
-- Text terminals: Line send delay added (feature request #1808508, bug #1963002)
 - Support for USB Ser/HID implemented (feature request #2825931)
-- Optional simple terminal/direct mode added to "Send Command" (feature request #1808496)
 - Separate connect and total connect time, connect time is restarted on open (bug #2869585)
+- Optional simple terminal/direct mode added to "Send Command" (feature request #1808496)
 - List of first 12 predefined command pages added to menu, with shortcuts (feature request #2914892)
+- Text terminals: Line send delay added (feature request #1808508, bug #1963002)
 - ASCII table added to help (feature request #1923555)
+- User defineable terminal name added (related to feature request #3091859)
+- Different methods to retrieve terminal added to workspace (feature request #3091859)
+- Terminal IDs and indecies are shown in the main status bar (related to feature request #3091859)
 - Test config including optional user config added (feature request #2981764)
+- Physical entities used for testing such as COM ports are configurable (feature request #2838447)
 - Test environment to ensure that TCP/IP works on multiple network interfaces added (bug #2970215)
 - TCP/IP endurance and stress tests added
 - UDP/IP endurance tests added

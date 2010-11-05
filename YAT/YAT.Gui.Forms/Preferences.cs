@@ -33,8 +33,8 @@ namespace YAT.Gui.Forms
 
 		private bool isSettingControls = false;
 
-		private Settings.GeneralSettings settings;
-		private Settings.GeneralSettings settings_Form;
+		private Settings.Application.LocalUserSettingsRoot settings;
+		private Settings.Application.LocalUserSettingsRoot settings_Form;
 
 		#endregion
 
@@ -44,12 +44,12 @@ namespace YAT.Gui.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Preferences(Settings.GeneralSettings settings)
+		public Preferences(Settings.Application.LocalUserSettingsRoot settings)
 		{
 			InitializeComponent();
 
 			this.settings = settings;
-			this.settings_Form = new Settings.GeneralSettings(settings);
+			this.settings_Form = new Settings.Application.LocalUserSettingsRoot(settings);
 			InitializeControls();
 		}
 
@@ -61,7 +61,7 @@ namespace YAT.Gui.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Settings.GeneralSettings SettingsResult
+		public Settings.Application.LocalUserSettingsRoot SettingsResult
 		{
 			get { return (this.settings); }
 		}
@@ -97,11 +97,29 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers
 		//==========================================================================================
 
+		private void checkBox_ShowTerminalInfo_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				this.settings_Form.MainWindow.ShowTerminalInfo = checkBox_ShowTerminalInfo.Checked;
+				SetControls();
+			}
+		}
+
+		private void checkBox_ShowChrono_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				this.settings_Form.MainWindow.ShowChrono = checkBox_ShowChrono.Checked;
+				SetControls();
+			}
+		}
+
 		private void checkBox_AutoOpenWorkspace_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
 			{
-				this.settings_Form.AutoOpenWorkspace = checkBox_AutoOpenWorkspace.Checked;
+				this.settings_Form.General.AutoOpenWorkspace = checkBox_AutoOpenWorkspace.Checked;
 				SetControls();
 			}
 		}
@@ -110,7 +128,7 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				this.settings_Form.AutoSaveWorkspace = checkBox_AutoSaveWorkspace.Checked;
+				this.settings_Form.General.AutoSaveWorkspace = checkBox_AutoSaveWorkspace.Checked;
 				SetControls();
 			}
 		}
@@ -119,7 +137,7 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				this.settings_Form.UseRelativePaths = checkBox_UseRelativePaths.Checked;
+				this.settings_Form.General.UseRelativePaths = checkBox_UseRelativePaths.Checked;
 				SetControls();
 			}
 		}
@@ -128,7 +146,7 @@ namespace YAT.Gui.Forms
 		{
 			if (!this.isSettingControls)
 			{
-				this.settings_Form.DetectSerialPortsInUse = checkBox_DetectSerialPortsInUse.Checked;
+				this.settings_Form.General.DetectSerialPortsInUse = checkBox_DetectSerialPortsInUse.Checked;
 				SetControls();
 			}
 		}
@@ -145,8 +163,17 @@ namespace YAT.Gui.Forms
 
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
-			this.settings_Form.SetDefaults();
-			SetControls();
+			if (MessageBox.Show
+				(
+				this,
+				"Reset all settings to default values?", "Defaults?",
+				MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3
+				)
+				== DialogResult.Yes)
+			{
+				this.settings_Form.SetDefaults();
+				SetControls();
+			}
 		}
 
 		#endregion
@@ -169,11 +196,14 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls = true;
 
-			checkBox_AutoOpenWorkspace.Checked = this.settings_Form.AutoOpenWorkspace;
-			checkBox_AutoSaveWorkspace.Checked = this.settings_Form.AutoSaveWorkspace;
-			checkBox_UseRelativePaths.Checked  = this.settings_Form.UseRelativePaths;
+			checkBox_ShowTerminalInfo.Checked = this.settings_Form.MainWindow.ShowTerminalInfo;
+			checkBox_ShowChrono.Checked       = this.settings_Form.MainWindow.ShowChrono;
 
-			checkBox_DetectSerialPortsInUse.Checked = this.settings_Form.DetectSerialPortsInUse;
+			checkBox_AutoOpenWorkspace.Checked = this.settings_Form.General.AutoOpenWorkspace;
+			checkBox_AutoSaveWorkspace.Checked = this.settings_Form.General.AutoSaveWorkspace;
+			checkBox_UseRelativePaths.Checked  = this.settings_Form.General.UseRelativePaths;
+
+			checkBox_DetectSerialPortsInUse.Checked = this.settings_Form.General.DetectSerialPortsInUse;
 
 			this.isSettingControls = false;
 		}

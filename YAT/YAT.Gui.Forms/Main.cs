@@ -57,15 +57,18 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		// Startup
+		// Startup.
 		private bool isStartingUp = true;
-		//// Not needed yet: private bool isSettingControls = false;
+		private bool isSettingControls = false;
 		private bool isClosingFromForm = false;
 		private bool isClosingFromModel = false;
 
-		// Model
+		// Model.
 		private Model.Main main;
 		private Model.Workspace workspace;
+
+		// Settings.
+		private LocalUserSettingsRoot settingsRoot;
 
 		#endregion
 
@@ -104,6 +107,10 @@ namespace YAT.Gui.Forms
 			AttachMainEventHandlers();
 
 			Text = this.main.UserName;
+
+			// Link and attach to terminal settings.
+			this.settingsRoot = ApplicationSettings.LocalUser;
+			AttachSettingsEventHandlers();
 
 			ApplyWindowSettingsAccordingToStartup();
 
@@ -177,6 +184,11 @@ namespace YAT.Gui.Forms
 				ActiveMdiChild.BringToFront();
 
 				SetTimedStatus(Status.ChildActivated);
+				SetTerminalText(this.workspace.ActiveTerminalStatusText);
+			}
+			else
+			{
+				SetTerminalText("");
 			}
 			SetChildControls();
 		}
@@ -198,6 +210,9 @@ namespace YAT.Gui.Forms
 
 			DetachMainEventHandlers();
 			this.main = null;
+
+			DetachSettingsEventHandlers();
+			this.settingsRoot = null;
 		}
 
 		#endregion
@@ -223,13 +238,13 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void toolStripMenuItem_MainMenu_File_SetChildMenuItems()
 		{
-			// Not needed yet: isSettingControls = true;
+			this.isSettingControls = true;
 
 			bool childIsReady = (ActiveMdiChild != null);
 			toolStripMenuItem_MainMenu_File_CloseAll.Enabled = childIsReady;
 			toolStripMenuItem_MainMenu_File_SaveAll.Enabled = childIsReady;
 
-			// Not needed yet: isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		/// <remarks>
@@ -240,12 +255,12 @@ namespace YAT.Gui.Forms
 		{
 			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll();
 
-			// Not needed yet: isSettingControls = true;
+			this.isSettingControls = true;
 
 			bool recentsAreReady = (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count > 0);
 			toolStripMenuItem_MainMenu_File_Recent.Enabled = recentsAreReady;
 
-			// Not needed yet: isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void toolStripMenuItem_MainMenu_File_DropDownOpening(object sender, EventArgs e)
@@ -285,7 +300,7 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void toolStripMenuItem_MainMenu_File_Workspace_SetMenuItems()
 		{
-			// Not needed yet: isSettingControls = true;
+			this.isSettingControls = true;
 
 			bool workspaceIsReady = (this.workspace != null);
 			toolStripMenuItem_MainMenu_File_Workspace_New.Enabled = !workspaceIsReady;
@@ -293,7 +308,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_MainMenu_File_Workspace_Save.Enabled = workspaceIsReady;
 			toolStripMenuItem_MainMenu_File_Workspace_SaveAs.Enabled = workspaceIsReady;
 
-			// Not needed yet: isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void toolStripMenuItem_MainMenu_File_Workspace_DropDownOpening(object sender, EventArgs e)
@@ -461,7 +476,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripButton_MainTool_SetControls()
 		{
-			// Not needed yet: isSettingControls = true;
+			this.isSettingControls = true;
 
 			bool childIsReady = (ActiveMdiChild != null);
 
@@ -510,7 +525,7 @@ namespace YAT.Gui.Forms
 			toolStripButton_MainTool_Terminal_Print.Enabled           = childIsReady;
 			toolStripButton_MainTool_Terminal_Settings.Enabled        = childIsReady;
 
-			// Not needed yet: isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void toolStripButton_MainTool_File_New_Click(object sender, EventArgs e)
@@ -618,7 +633,7 @@ namespace YAT.Gui.Forms
 
 		private void contextMenuStrip_Main_Opening(object sender, CancelEventArgs e)
 		{
-			// prevent context menu being displayed within the child window
+			// Prevent context menu being displayed within the child window.
 			if (ActiveMdiChild != null)
 			{
 				e.Cancel = true;
@@ -678,7 +693,7 @@ namespace YAT.Gui.Forms
 		{
 			// Not needed yet: isSettingControls = true;
 
-			// hide all
+			// Hide all.
 			for (int i = 0; i < Model.Settings.RecentFileSettings.MaxFilePaths; i++)
 			{
 				string prefix = string.Format("{0}: ", i + 1);
@@ -686,7 +701,7 @@ namespace YAT.Gui.Forms
 				this.menuItems_recents[i].Visible = false;
 			}
 
-			// show valid
+			// Show valid.
 			for (int i = 0; i < ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count; i++)
 			{
 				string prefix = string.Format("{0}: ", i + 1);
@@ -732,7 +747,7 @@ namespace YAT.Gui.Forms
 
 		private void contextMenuStrip_FileRecent_Opening(object sender, CancelEventArgs e)
 		{
-			// no need to validate again, is already done on opening of parent menu
+			// No need to validate again, is already done on opening of parent menu
 			// ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll();
 
 			contextMenuStrip_FileRecent_SetRecentMenuItems();
@@ -741,6 +756,42 @@ namespace YAT.Gui.Forms
 		private void toolStripMenuItem_FileRecentContextMenu_Click(object sender, EventArgs e)
 		{
 			this.main.OpenRecent(int.Parse((string)(((ToolStripMenuItem)sender).Tag)));
+		}
+
+		#endregion
+
+		#region Controls Event Handlers > Status Context Menu
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Status Context Menu
+		//------------------------------------------------------------------------------------------
+
+		private void contextMenuStrip_Status_Opening(object sender, CancelEventArgs e)
+		{
+			toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Checked = ApplicationSettings.LocalUser.MainWindow.ShowTerminalInfo;
+			toolStripMenuItem_StatusContextMenu_ShowChrono.Checked       = ApplicationSettings.LocalUser.MainWindow.ShowChrono;
+		}
+
+		private void toolStripMenuItem_StatusContextMenu_ShowTerminalInfo_Click(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				ApplicationSettings.LocalUser.MainWindow.ShowTerminalInfo = !ApplicationSettings.LocalUser.MainWindow.ShowTerminalInfo;
+				ApplicationSettings.Save();
+			}
+		}
+
+		private void toolStripMenuItem_StatusContextMenu_ShowChrono_Click(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				ApplicationSettings.LocalUser.MainWindow.ShowChrono = !ApplicationSettings.LocalUser.MainWindow.ShowChrono;
+				ApplicationSettings.Save();
+			}
+		}
+
+		private void toolStripMenuItem_StatusContextMenu_Preferences_Click(object sender, EventArgs e)
+		{
+			ShowPreferences();
 		}
 
 		#endregion
@@ -838,7 +889,7 @@ namespace YAT.Gui.Forms
 			{
 				SuspendLayout();
 
-				// Retrieve saved settings
+				// Retrieve saved settings.
 				FormWindowState savedWindowState = ApplicationSettings.LocalUser.MainWindow.WindowState;
 				FormStartPosition savedStartPosition = ApplicationSettings.LocalUser.MainWindow.StartPosition;
 
@@ -902,15 +953,54 @@ namespace YAT.Gui.Forms
 
 		private void ShowPreferences()
 		{
-			Gui.Forms.Preferences f = new Gui.Forms.Preferences(ApplicationSettings.LocalUser.General);
+			Gui.Forms.Preferences f = new Gui.Forms.Preferences(ApplicationSettings.LocalUser);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
 
-				ApplicationSettings.LocalUser.General = f.SettingsResult;
+				ApplicationSettings.LocalUser.MainWindow = f.SettingsResult.MainWindow;
+				ApplicationSettings.LocalUser.General    = f.SettingsResult.General;
 				ApplicationSettings.Save();
 			}
 		}
+
+		#endregion
+
+		#region Settings
+		//==========================================================================================
+		// Settings
+		//==========================================================================================
+
+		#region Settings > Lifetime
+		//------------------------------------------------------------------------------------------
+		// Settings > Lifetime
+		//------------------------------------------------------------------------------------------
+
+		private void AttachSettingsEventHandlers()
+		{
+			if (this.settingsRoot != null)
+				this.settingsRoot.Changed += new EventHandler<SettingsEventArgs>(this.settingsRoot_Changed);
+		}
+
+		private void DetachSettingsEventHandlers()
+		{
+			if (this.settingsRoot != null)
+				this.settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(this.settingsRoot_Changed);
+		}
+
+		#endregion
+
+		#region Settings > Event Handlers
+		//------------------------------------------------------------------------------------------
+		// Settings > Event Handlers
+		//------------------------------------------------------------------------------------------
+
+		private void settingsRoot_Changed(object sender, SettingsEventArgs e)
+		{
+			SetMainControls();
+		}
+
+		#endregion
 
 		#endregion
 
@@ -1275,25 +1365,38 @@ namespace YAT.Gui.Forms
 
 		private void SetControls()
 		{
+			SetMainControls();
 			SetChildControls();
 			SetRecentControls();
 			SetWorkspaceControls();
+		}
+
+		private void SetMainControls()
+		{
+			this.isSettingControls = true;
+			toolStripStatusLabel_MainStatus_TerminalInfo.Visible = ApplicationSettings.LocalUser.MainWindow.ShowTerminalInfo;
+			toolStripStatusLabel_MainStatus_Chrono.Visible       = ApplicationSettings.LocalUser.MainWindow.ShowChrono;
+			this.isSettingControls = false;
 		}
 
 		private void SetChildControls()
 		{
 			toolStripButton_MainTool_SetControls();
 
+			this.isSettingControls = true;
 			toolStripMenuItem_MainMenu_File_SetChildMenuItems();
 			toolStripMenuItem_MainMenu_Window_SetChildMenuItems();
+			this.isSettingControls = false;
 		}
 
 		private void SetRecentControls()
 		{
 			toolStripMenuItem_MainMenu_File_SetRecentMenuItems();
 
+			this.isSettingControls = true;
 			contextMenuStrip_Main_SetRecentMenuItems();
 			contextMenuStrip_FileRecent_SetRecentMenuItems();
+			this.isSettingControls = false;
 		}
 
 		private void SetWorkspaceControls()
@@ -1407,6 +1510,11 @@ namespace YAT.Gui.Forms
 		{
 			timer_Status.Enabled = false;
 			ResetStatusText();
+		}
+
+		private void SetTerminalText(string text)
+		{
+			toolStripStatusLabel_MainStatus_TerminalInfo.Text = text;
 		}
 
 		#endregion

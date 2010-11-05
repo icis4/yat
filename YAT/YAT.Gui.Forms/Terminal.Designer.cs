@@ -173,6 +173,7 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_Send_KeepCommand = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log_Begin = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_Log_End = new System.Windows.Forms.ToolStripMenuItem();
@@ -237,7 +238,6 @@ namespace YAT.Gui.Forms
 			this.send = new YAT.Gui.Controls.Send();
 			this.timer_RtsLuminescence = new System.Windows.Forms.Timer(this.components);
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Monitor.SuspendLayout();
 			this.contextMenuStrip_Radix.SuspendLayout();
 			this.contextMenuStrip_Predefined.SuspendLayout();
@@ -747,6 +747,7 @@ namespace YAT.Gui.Forms
             this.toolStripMenuItem_PredefinedContextMenu_Separator_4,
             this.toolStripMenuItem_PredefinedContextMenu_Hide});
 			this.contextMenuStrip_Predefined.Name = "contextMenuStrip_PredefinedCommands";
+			this.contextMenuStrip_Predefined.OwnerItem = this.toolStripMenuItem_TerminalMenu_Send_Predefined;
 			this.contextMenuStrip_Predefined.Size = new System.Drawing.Size(221, 424);
 			this.contextMenuStrip_Predefined.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Predefined_Opening);
 			// 
@@ -1516,6 +1517,15 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Text = "Copy &Predefined To Send Command";
 			this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_CopyPredefined_Click);
 			// 
+			// toolStripMenuItem_TerminalMenu_Send_SendImmediately
+			// 
+			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.Name = "toolStripMenuItem_TerminalMenu_Send_SendImmediately";
+			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+						| System.Windows.Forms.Keys.I)));
+			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.Size = new System.Drawing.Size(341, 22);
+			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.Text = "Send Each Character &Immediately";
+			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_SendImmediately_Click);
+			// 
 			// toolStripMenuItem_TerminalMenu_Log
 			// 
 			this.toolStripMenuItem_TerminalMenu_Log.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1824,7 +1834,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.toolStripStatusLabel_TerminalStatus_Status.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripStatusLabel_TerminalStatus_Status.Name = "toolStripStatusLabel_TerminalStatus_Status";
-			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(383, 19);
+			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(352, 19);
 			this.toolStripStatusLabel_TerminalStatus_Status.Spring = true;
 			this.toolStripStatusLabel_TerminalStatus_Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -2170,6 +2180,7 @@ namespace YAT.Gui.Forms
 			this.send.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.send.Location = new System.Drawing.Point(3, 0);
 			this.send.Name = "send";
+			this.send.SendCommandImmediately = false;
 			this.send.Size = new System.Drawing.Size(706, 94);
 			this.send.TabIndex = 0;
 			this.send.SendFileCommandRequest += new System.EventHandler(this.send_SendFileCommandRequest);
@@ -2180,15 +2191,6 @@ namespace YAT.Gui.Forms
 			// timer_RtsLuminescence
 			// 
 			this.timer_RtsLuminescence.Tick += new System.EventHandler(this.timer_RtsLuminescence_Tick);
-			// 
-			// toolStripMenuItem_TerminalMenu_Send_SendImmediately
-			// 
-			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.Name = "toolStripMenuItem_TerminalMenu_Send_SendImmediately";
-			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-						| System.Windows.Forms.Keys.I)));
-			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.Size = new System.Drawing.Size(341, 22);
-			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.Text = "Send Each Character &Immediately";
-			this.toolStripMenuItem_TerminalMenu_Send_SendImmediately.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_Send_SendImmediately_Click);
 			// 
 			// Terminal
 			// 

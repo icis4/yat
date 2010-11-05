@@ -69,6 +69,9 @@ namespace YAT.Gui.Forms
 			this.label_MaxLineCountUnit = new System.Windows.Forms.Label();
 			this.textBox_MaxLineCount = new System.Windows.Forms.TextBox();
 			this.label_MaxLineCount = new System.Windows.Forms.Label();
+			this.groupBox_User = new System.Windows.Forms.GroupBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.textBox_UserName = new System.Windows.Forms.TextBox();
 			this.groupBox_Settings.SuspendLayout();
 			this.groupBox_CommunicationSettings.SuspendLayout();
 			this.groupBox_ReceiveSettings.SuspendLayout();
@@ -77,6 +80,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_Display_Tab.SuspendLayout();
 			this.groupBox_Display_Space.SuspendLayout();
 			this.groupBox_Display_ControlChars.SuspendLayout();
+			this.groupBox_User.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// button_Defaults
@@ -116,6 +120,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Settings.Controls.Add(this.groupBox_User);
 			this.groupBox_Settings.Controls.Add(this.groupBox_CommunicationSettings);
 			this.groupBox_Settings.Controls.Add(this.groupBox_ReceiveSettings);
 			this.groupBox_Settings.Controls.Add(this.groupBox_SendCommandSettings);
@@ -535,6 +540,34 @@ namespace YAT.Gui.Forms
 			this.label_MaxLineCount.Text = "Display &maximal";
 			this.label_MaxLineCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// groupBox_User
+			// 
+			this.groupBox_User.Controls.Add(this.textBox_UserName);
+			this.groupBox_User.Controls.Add(this.label2);
+			this.groupBox_User.Location = new System.Drawing.Point(275, 246);
+			this.groupBox_User.Name = "groupBox_User";
+			this.groupBox_User.Size = new System.Drawing.Size(262, 51);
+			this.groupBox_User.TabIndex = 4;
+			this.groupBox_User.TabStop = false;
+			this.groupBox_User.Text = "User";
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(9, 21);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(79, 13);
+			this.label2.TabIndex = 0;
+			this.label2.Text = "Terminal &name:";
+			// 
+			// textBox_UserName
+			// 
+			this.textBox_UserName.Location = new System.Drawing.Point(94, 18);
+			this.textBox_UserName.Name = "textBox_UserName";
+			this.textBox_UserName.Size = new System.Drawing.Size(157, 20);
+			this.textBox_UserName.TabIndex = 1;
+			this.textBox_UserName.TextChanged += new System.EventHandler(this.textBox_UserName_TextChanged);
+			// 
 			// AdvancedTerminalSettings
 			// 
 			this.AcceptButton = this.button_OK;
@@ -569,6 +602,8 @@ namespace YAT.Gui.Forms
 			this.groupBox_Display_Space.PerformLayout();
 			this.groupBox_Display_ControlChars.ResumeLayout(false);
 			this.groupBox_Display_ControlChars.PerformLayout();
+			this.groupBox_User.ResumeLayout(false);
+			this.groupBox_User.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -616,5 +651,8 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.CheckBox checkBox_ReplaceTab;
 		private System.Windows.Forms.CheckBox checkBox_SendImmediately;
 		private System.Windows.Forms.Label label_SendImmediately;
+		private System.Windows.Forms.GroupBox groupBox_User;
+		private System.Windows.Forms.TextBox textBox_UserName;
+		private System.Windows.Forms.Label label2;
 	}
 }

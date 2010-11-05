@@ -66,10 +66,10 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public SerialPortSettings(BaudRate baudRate, DataBits dataBits, Parity parity, StopBits stopBits, Handshake handshake)
 		{
-			BaudRate = baudRate;
-			DataBits = dataBits;
-			Parity = parity;
-			StopBits = stopBits;
+			BaudRate  = baudRate;
+			DataBits  = dataBits;
+			Parity    = parity;
+			StopBits  = stopBits;
 			Handshake = handshake;
 		}
 
@@ -78,10 +78,10 @@ namespace MKY.IO.Ports
 		/// </summary>
 		public SerialPortSettings(SerialPortSettings rhs)
 		{
-			BaudRate = rhs.BaudRate;
-			DataBits = rhs.DataBits;
-			Parity = rhs.Parity;
-			StopBits = rhs.StopBits;
+			BaudRate  = rhs.BaudRate;
+			DataBits  = rhs.DataBits;
+			Parity    = rhs.Parity;
+			StopBits  = rhs.StopBits;
 			Handshake = rhs.Handshake;
 		}
 
@@ -90,10 +90,10 @@ namespace MKY.IO.Ports
 		/// </summary>
 		protected void SetDefaults()
 		{
-			BaudRate = BaudRate.Baud009600;
-			DataBits = DataBits.Eight;
-			Parity = Parity.None;
-			StopBits = StopBits.One;
+			BaudRate  = BaudRate.Baud009600;
+			DataBits  = DataBits.Eight;
+			Parity    = Parity.None;
+			StopBits  = StopBits.One;
 			Handshake = Handshake.None;
 		}
 

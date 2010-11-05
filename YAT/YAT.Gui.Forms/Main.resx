@@ -132,6 +132,9 @@
   <metadata name="statusStrip_Main.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>550, 5</value>
   </metadata>
+  <metadata name="contextMenuStrip_Status.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>602, 42</value>
+  </metadata>
   <metadata name="toolStrip_Main.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>684, 5</value>
   </metadata>

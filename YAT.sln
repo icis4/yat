@@ -39,6 +39,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Scripts", "_Scripts", "{08
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_TestSettings", "_TestSettings", "{CA89FA6B-B262-4974-8690-03E65F24A704}"
+	ProjectSection(SolutionItems) = preProject
+		..\_TestSettings\MKY.IO.Ports.Test.Settings.config = ..\_TestSettings\MKY.IO.Ports.Test.Settings.config
+		..\_TestSettings\MKY.IO.Usb.Test.Settings.config = ..\_TestSettings\MKY.IO.Usb.Test.Settings.config
+		..\_TestSettings\MKY.Net.Test.Settings.config = ..\_TestSettings\MKY.Net.Test.Settings.config
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ALAZ", "ALAZ", "{1AFE4E73-E215-4331-9E03-F33F61E3F442}"
 EndProject

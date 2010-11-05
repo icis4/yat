@@ -34,6 +34,9 @@ namespace YAT.Model.Settings
 		private Point location;
 		private Size size;
 
+		private bool showTerminalInfo;
+		private bool showChrono;
+
 		/// <summary></summary>
 		public MainWindowSettings()
 		{
@@ -60,6 +63,9 @@ namespace YAT.Model.Settings
 			Location      = rhs.Location;
 			Size          = rhs.Size;
 
+			ShowTerminalInfo = rhs.ShowTerminalInfo;
+			ShowChrono       = rhs.ShowChrono;
+
 			ClearChanged();
 		}
 
@@ -72,6 +78,9 @@ namespace YAT.Model.Settings
 			WindowState = FormWindowState.Normal;
 			Location = new Point(0, 0);
 			Size = new Size(800, 600);
+
+			ShowTerminalInfo = false;
+			ShowChrono       = true;
 		}
 
 		#region Properties
@@ -139,6 +148,36 @@ namespace YAT.Model.Settings
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("ShowTerminalInfo")]
+		public bool ShowTerminalInfo
+		{
+			get { return (this.showTerminalInfo); }
+			set
+			{
+				if (value != this.showTerminalInfo)
+				{
+					this.showTerminalInfo = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("ShowChrono")]
+		public bool ShowChrono
+		{
+			get { return (this.showChrono); }
+			set
+			{
+				if (value != this.showChrono)
+				{
+					this.showChrono = value;
+					SetChanged();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members
@@ -162,7 +201,10 @@ namespace YAT.Model.Settings
 				(this.startPosition == other.startPosition) &&
 				(this.windowState   == other.windowState) &&
 				(this.location      == other.location) &&
-				(this.size          == other.size)
+				(this.size          == other.size) &&
+
+				(this.showTerminalInfo == other.showTerminalInfo) &&
+				(this.showChrono       == other.showChrono)
 			);
 		}
 
@@ -176,7 +218,10 @@ namespace YAT.Model.Settings
 				this.startPosition.GetHashCode() ^
 				this.windowState  .GetHashCode() ^
 				this.location     .GetHashCode() ^
-				this.size         .GetHashCode()
+				this.size         .GetHashCode() ^
+
+				this.showTerminalInfo.GetHashCode() ^
+				this.showChrono      .GetHashCode()
 			);
 		}
 
