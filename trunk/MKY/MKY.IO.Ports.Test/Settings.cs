@@ -230,7 +230,7 @@ namespace MKY.IO.Ports.Test
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "AIs", Justification = "PortA and PortB")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	sealed public class SerialPortAIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public class SerialPortAIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
 		public SerialPortAIsAvailableCategoryAttribute()
@@ -242,7 +242,7 @@ namespace MKY.IO.Ports.Test
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "BIs", Justification = "PortA and PortB")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	sealed public class SerialPortBIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public class SerialPortBIsAvailableCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
 		public SerialPortBIsAvailableCategoryAttribute()
@@ -253,7 +253,7 @@ namespace MKY.IO.Ports.Test
 
 	/// <summary></summary>
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	sealed public class SerialPortsAreInterconnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
+	public class SerialPortsAreInterconnectedCategoryAttribute : NUnit.Framework.CategoryAttribute
 	{
 		/// <summary></summary>
 		public SerialPortsAreInterconnectedCategoryAttribute()
