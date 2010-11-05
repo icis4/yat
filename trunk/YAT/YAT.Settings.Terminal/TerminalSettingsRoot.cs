@@ -191,6 +191,14 @@ namespace YAT.Settings.Terminal
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
+		public virtual string UserName
+		{
+			get { return (this.explicit_.UserName); }
+			set { this.explicit_.UserName = value;  }
+		}
+
+		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
+		[XmlIgnore]
 		public virtual bool TerminalIsStarted
 		{
 			get { return (this.implicit_.TerminalIsStarted); }

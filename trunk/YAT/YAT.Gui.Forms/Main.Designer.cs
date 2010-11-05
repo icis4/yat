@@ -46,9 +46,9 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_FileRecentContextMenu_6 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_FileRecentContextMenu_7 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_FileRecentContextMenu_8 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MainMenu_File_Recent = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainContextMenu_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainContextMenu_File_Exit = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_MainMenu_File_Recent = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip_Main = new System.Windows.Forms.MenuStrip();
 			this.toolStripMenuItem_MainMenu_File = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MainMenu_File_New = new System.Windows.Forms.ToolStripMenuItem();
@@ -88,7 +88,13 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_MainMenu_Help_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MainMenu_Help_About = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip_Main = new System.Windows.Forms.StatusStrip();
+			this.contextMenuStrip_Status = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_StatusContextMenu_ShowChrono = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_StatusContextMenu_Separator_1 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem_StatusContextMenu_Preferences = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripStatusLabel_MainStatus_Status = new System.Windows.Forms.ToolStripStatusLabel();
+			this.toolStripStatusLabel_MainStatus_TerminalInfo = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel_MainStatus_Chrono = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStrip_Main = new System.Windows.Forms.ToolStrip();
 			this.toolStripButton_MainTool_File_New = new System.Windows.Forms.ToolStripButton();
@@ -122,6 +128,7 @@ namespace YAT.Gui.Forms
 			this.contextMenuStrip_FileRecent.SuspendLayout();
 			this.menuStrip_Main.SuspendLayout();
 			this.statusStrip_Main.SuspendLayout();
+			this.contextMenuStrip_Status.SuspendLayout();
 			this.toolStrip_Main.SuspendLayout();
 			this.toolStripPanel_Top.SuspendLayout();
 			this.SuspendLayout();
@@ -167,7 +174,7 @@ namespace YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_MainContextMenu_Separator_1
 			// 
-			this.toolStripMenuItem_MainContextMenu_Separator_1.Name = "toolStripSeparator_MainContextMenu_1";
+			this.toolStripMenuItem_MainContextMenu_Separator_1.Name = "toolStripMenuItem_MainContextMenu_Separator_1";
 			this.toolStripMenuItem_MainContextMenu_Separator_1.Size = new System.Drawing.Size(170, 6);
 			// 
 			// toolStripMenuItem_MainContextMenu_File_Recent
@@ -190,7 +197,7 @@ namespace YAT.Gui.Forms
             this.toolStripMenuItem_FileRecentContextMenu_7,
             this.toolStripMenuItem_FileRecentContextMenu_8});
 			this.contextMenuStrip_FileRecent.Name = "contextMenuStrip_FileRecent";
-			this.contextMenuStrip_FileRecent.OwnerItem = this.toolStripMenuItem_MainMenu_File_Recent;
+			this.contextMenuStrip_FileRecent.OwnerItem = this.toolStripMenuItem_MainContextMenu_File_Recent;
 			this.contextMenuStrip_FileRecent.Size = new System.Drawing.Size(87, 180);
 			this.contextMenuStrip_FileRecent.Paint += new System.Windows.Forms.PaintEventHandler(this.contextMenuStrip_FileRecent_Paint);
 			this.contextMenuStrip_FileRecent.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_FileRecent_Opening);
@@ -275,9 +282,17 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_FileRecentContextMenu_8.Visible = false;
 			this.toolStripMenuItem_FileRecentContextMenu_8.Click += new System.EventHandler(this.toolStripMenuItem_FileRecentContextMenu_Click);
 			// 
+			// toolStripMenuItem_MainMenu_File_Recent
+			// 
+			this.toolStripMenuItem_MainMenu_File_Recent.DropDown = this.contextMenuStrip_FileRecent;
+			this.toolStripMenuItem_MainMenu_File_Recent.Enabled = false;
+			this.toolStripMenuItem_MainMenu_File_Recent.Name = "toolStripMenuItem_MainMenu_File_Recent";
+			this.toolStripMenuItem_MainMenu_File_Recent.Size = new System.Drawing.Size(155, 22);
+			this.toolStripMenuItem_MainMenu_File_Recent.Text = "&Recent";
+			// 
 			// toolStripMenuItem_MainContextMenu_Separator_2
 			// 
-			this.toolStripMenuItem_MainContextMenu_Separator_2.Name = "toolStripSeparator_MainContextMenu_2";
+			this.toolStripMenuItem_MainContextMenu_Separator_2.Name = "toolStripMenuItem_MainContextMenu_Separator_2";
 			this.toolStripMenuItem_MainContextMenu_Separator_2.Size = new System.Drawing.Size(170, 6);
 			// 
 			// toolStripMenuItem_MainContextMenu_File_Exit
@@ -286,14 +301,6 @@ namespace YAT.Gui.Forms
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Size = new System.Drawing.Size(173, 22);
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Text = "Exit";
 			this.toolStripMenuItem_MainContextMenu_File_Exit.Click += new System.EventHandler(this.toolStripMenuItem_MainContextMenu_File_Exit_Click);
-			// 
-			// toolStripMenuItem_MainMenu_File_Recent
-			// 
-			this.toolStripMenuItem_MainMenu_File_Recent.DropDown = this.contextMenuStrip_FileRecent;
-			this.toolStripMenuItem_MainMenu_File_Recent.Enabled = false;
-			this.toolStripMenuItem_MainMenu_File_Recent.Name = "toolStripMenuItem_MainMenu_File_Recent";
-			this.toolStripMenuItem_MainMenu_File_Recent.Size = new System.Drawing.Size(155, 22);
-			this.toolStripMenuItem_MainMenu_File_Recent.Text = "&Recent";
 			// 
 			// menuStrip_Main
 			// 
@@ -515,7 +522,7 @@ namespace YAT.Gui.Forms
 			// 
 			// toolStripMenuItem_MainMenu_Window_Separator_1
 			// 
-			this.toolStripMenuItem_MainMenu_Window_Separator_1.Name = "toolStripSeparator_MainMenu_Window_1";
+			this.toolStripMenuItem_MainMenu_Window_Separator_1.Name = "toolStripMenuItem_MainMenu_Window_Separator_1";
 			this.toolStripMenuItem_MainMenu_Window_Separator_1.Size = new System.Drawing.Size(148, 6);
 			// 
 			// toolStripMenuItem_MainMenu_Window_ArrangeIcons
@@ -603,13 +610,54 @@ namespace YAT.Gui.Forms
 			// 
 			// statusStrip_Main
 			// 
+			this.statusStrip_Main.ContextMenuStrip = this.contextMenuStrip_Status;
 			this.statusStrip_Main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel_MainStatus_Status,
+            this.toolStripStatusLabel_MainStatus_TerminalInfo,
             this.toolStripStatusLabel_MainStatus_Chrono});
 			this.statusStrip_Main.Location = new System.Drawing.Point(0, 549);
 			this.statusStrip_Main.Name = "statusStrip_Main";
 			this.statusStrip_Main.Size = new System.Drawing.Size(792, 24);
 			this.statusStrip_Main.TabIndex = 1;
+			// 
+			// contextMenuStrip_Status
+			// 
+			this.contextMenuStrip_Status.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo,
+            this.toolStripMenuItem_StatusContextMenu_ShowChrono,
+            this.toolStripMenuItem_StatusContextMenu_Separator_1,
+            this.toolStripMenuItem_StatusContextMenu_Preferences});
+			this.contextMenuStrip_Status.Name = "contextMenuStrip_Status";
+			this.contextMenuStrip_Status.Size = new System.Drawing.Size(242, 98);
+			this.contextMenuStrip_Status.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Status_Opening);
+			// 
+			// toolStripMenuItem_StatusContextMenu_ShowTerminalInfo
+			// 
+			this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Name = "toolStripMenuItem_StatusContextMenu_ShowTerminalInfo";
+			this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Size = new System.Drawing.Size(241, 22);
+			this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Text = "Show Terminal IDs and Indecies";
+			this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Click += new System.EventHandler(this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo_Click);
+			// 
+			// toolStripMenuItem_StatusContextMenu_ShowChrono
+			// 
+			this.toolStripMenuItem_StatusContextMenu_ShowChrono.Checked = true;
+			this.toolStripMenuItem_StatusContextMenu_ShowChrono.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.toolStripMenuItem_StatusContextMenu_ShowChrono.Name = "toolStripMenuItem_StatusContextMenu_ShowChrono";
+			this.toolStripMenuItem_StatusContextMenu_ShowChrono.Size = new System.Drawing.Size(241, 22);
+			this.toolStripMenuItem_StatusContextMenu_ShowChrono.Text = "Show Stopwatch";
+			this.toolStripMenuItem_StatusContextMenu_ShowChrono.Click += new System.EventHandler(this.toolStripMenuItem_StatusContextMenu_ShowChrono_Click);
+			// 
+			// toolStripMenuItem_StatusContextMenu_Separator_1
+			// 
+			this.toolStripMenuItem_StatusContextMenu_Separator_1.Name = "toolStripMenuItem_StatusContextMenu_Separator_1";
+			this.toolStripMenuItem_StatusContextMenu_Separator_1.Size = new System.Drawing.Size(238, 6);
+			// 
+			// toolStripMenuItem_StatusContextMenu_Preferences
+			// 
+			this.toolStripMenuItem_StatusContextMenu_Preferences.Name = "toolStripMenuItem_StatusContextMenu_Preferences";
+			this.toolStripMenuItem_StatusContextMenu_Preferences.Size = new System.Drawing.Size(241, 22);
+			this.toolStripMenuItem_StatusContextMenu_Preferences.Text = "Preferences...";
+			this.toolStripMenuItem_StatusContextMenu_Preferences.Click += new System.EventHandler(this.toolStripMenuItem_StatusContextMenu_Preferences_Click);
 			// 
 			// toolStripStatusLabel_MainStatus_Status
 			// 
@@ -618,6 +666,15 @@ namespace YAT.Gui.Forms
 			this.toolStripStatusLabel_MainStatus_Status.Size = new System.Drawing.Size(730, 19);
 			this.toolStripStatusLabel_MainStatus_Status.Spring = true;
 			this.toolStripStatusLabel_MainStatus_Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripStatusLabel_MainStatus_Status.ToolTipText = "Program Status";
+			// 
+			// toolStripStatusLabel_MainStatus_TerminalInfo
+			// 
+			this.toolStripStatusLabel_MainStatus_TerminalInfo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripStatusLabel_MainStatus_TerminalInfo.Name = "toolStripStatusLabel_MainStatus_TerminalInfo";
+			this.toolStripStatusLabel_MainStatus_TerminalInfo.Size = new System.Drawing.Size(0, 19);
+			this.toolStripStatusLabel_MainStatus_TerminalInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripStatusLabel_MainStatus_TerminalInfo.ToolTipText = "Active Terminal (Auto Name / Sequencial ID / Dynamic Index / Fixed Index)";
 			// 
 			// toolStripStatusLabel_MainStatus_Chrono
 			// 
@@ -928,6 +985,7 @@ namespace YAT.Gui.Forms
 			this.menuStrip_Main.PerformLayout();
 			this.statusStrip_Main.ResumeLayout(false);
 			this.statusStrip_Main.PerformLayout();
+			this.contextMenuStrip_Status.ResumeLayout(false);
 			this.toolStrip_Main.ResumeLayout(false);
 			this.toolStrip_Main.PerformLayout();
 			this.toolStripPanel_Top.ResumeLayout(false);
@@ -1027,5 +1085,11 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_Char;
 		private System.Windows.Forms.ToolStripButton toolStripButton_MainTool_Terminal_Radix_String;
 		private System.Windows.Forms.Timer timer_TestTransmit;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_MainStatus_TerminalInfo;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStrip_Status;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_StatusContextMenu_ShowTerminalInfo;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_StatusContextMenu_ShowChrono;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_StatusContextMenu_Separator_1;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_StatusContextMenu_Preferences;
 	}
 }

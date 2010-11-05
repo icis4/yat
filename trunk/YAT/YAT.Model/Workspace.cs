@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 using MKY;
@@ -60,6 +61,7 @@ namespace YAT.Model
 		// Terminal list.
 		private GuidList<Terminal> terminals = new GuidList<Terminal>();
 		private Terminal activeTerminal = null;
+		private Dictionary<int, Terminal> fixedIndecies = new Dictionary<int, Terminal>();
 
 		#endregion
 
@@ -220,7 +222,7 @@ namespace YAT.Model
 				AssertNotDisposed();
 
 				if (this.activeTerminal != null)
-					return (this.activeTerminal.UserName);
+					return (this.activeTerminal.AutoName);
 				else
 					return (ApplicationInfo.ProductName);
 			}
@@ -279,6 +281,69 @@ namespace YAT.Model
 			{
 				AssertNotDisposed();
 				return (this.activeTerminal);
+			}
+		}
+
+		/// <summary>
+		/// Returns the one based sequencial ID of the active terminal.
+		/// </summary>
+		public virtual int ActiveTerminalSequencialId
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (this.activeTerminal.SequencialId);
+			}
+		}
+
+		/// <summary>
+		/// Returns the dynamic one based index of the active terminal.
+		/// </summary>
+		public virtual int ActiveTerminalDynamicIndex
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (this.terminals.IndexOf(this.activeTerminal) + 1);
+			}
+		}
+
+		/// <summary>
+		/// Returns the fixed one based index of the active terminal.
+		/// </summary>
+		public virtual int ActiveTerminalFixedIndex
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (GetFixedIndex(this.activeTerminal));
+			}
+		}
+
+		/// <summary>
+		/// Returns a text containing information about the active terminal.
+		/// </summary>
+		public virtual string ActiveTerminalStatusText
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (ActiveTerminal != null)
+				{
+					StringBuilder sb = new StringBuilder(ActiveTerminal.AutoName);
+					sb.Append("/Seq#");
+					sb.Append(ActiveTerminalSequencialId);
+					sb.Append("/Dyn#");
+					sb.Append(ActiveTerminalDynamicIndex);
+					sb.Append("/Fix#");
+					sb.Append(ActiveTerminalFixedIndex);
+					return (sb.ToString());
+				}
+				else
+				{
+					return ("");
+				}
 			}
 		}
 
@@ -945,6 +1010,7 @@ namespace YAT.Model
 			// Add terminal to terminal list.
 			this.terminals.Add(terminal);
 			this.activeTerminal = terminal;
+			AddToFixedIndecies(terminal);
 
 			// Add terminal settings for new terminals.
 			// Replace terminal settings if workspace settings have been loaded from file prior.
@@ -960,6 +1026,7 @@ namespace YAT.Model
 			// Replace terminal in terminal list.
 			this.terminals.ReplaceGuidItem(terminal);
 			this.activeTerminal = terminal;
+			// Keep constand index.
 
 			// Replace terminal in workspace settings if the settings have indeed changed.
 			TerminalSettingsItem tsiNew = CreateTerminalSettingsItem(terminal);
@@ -978,6 +1045,7 @@ namespace YAT.Model
 			// Remove terminal from terminal list.
 			this.terminals.RemoveGuid(terminal.Guid);
 			this.activeTerminal = null;
+			RemoveFromFixedIndecies(terminal);
 
 			// Remove terminal from workspace settings.
 			this.settingsRoot.TerminalSettings.RemoveGuid(terminal.Guid);
@@ -985,6 +1053,113 @@ namespace YAT.Model
 
 			// Fire terminal added event.
 			OnTerminalRemoved(new TerminalEventArgs(terminal));
+		}
+
+		private void AddToFixedIndecies(Terminal terminal)
+		{
+			for (int i = 1; i <= int.MaxValue; i++)
+			{
+				if (!this.fixedIndecies.ContainsKey(i))
+				{
+					this.fixedIndecies.Add(i, terminal);
+					return;
+				}
+			}
+			throw (new OverflowException("Constant index of terminals exceeded"));
+		}
+
+		private void RemoveFromFixedIndecies(Terminal terminal)
+		{
+			this.fixedIndecies.Remove(GetFixedIndex(terminal));
+		}
+
+		private int GetFixedIndex(Terminal terminal)
+		{
+			foreach (KeyValuePair<int, Terminal> kvp in this.fixedIndecies)
+			{
+				if (kvp.Value == terminal)
+					return (kvp.Key);
+			}
+			throw (new ArgumentOutOfRangeException("Terminal not found in index table"));
+		}
+
+		/// <summary>
+		/// Returns the terminal with the given GUID. If no terminal with this GUID exists,
+		/// <c>null</c> is returned.
+		/// </summary>
+		public virtual Terminal GetTerminalByGUID(Guid guid)
+		{
+			foreach (Terminal t in this.terminals)
+			{
+				if (t.Guid == guid)
+					return (t);
+			}
+			return (null);
+		}
+
+		/// <summary>
+		/// Returns the terminal with the given sequencial ID. The sequencial ID relates to the
+		/// number indicated in the terminal name, e.g. "Terminal1" or "Terminal2". The sequenical
+		/// ID starts at 1 and is unique throughout the execution of the program. If no terminal
+		/// with this ID exists, <c>null</c> is returned.
+		/// </summary>
+		public virtual Terminal GetTerminalBySequencialId(int id)
+		{
+			foreach (Terminal t in this.terminals)
+			{
+				if (t.SequencialId == id)
+					return (t);
+			}
+			return (null);
+		}
+
+		/// <summary>
+		/// Returns the terminal with the given dynamic index. The dynamic index represents
+		/// the order in which the terminals were created. If a terminal is closed, the dynamic
+		/// index of all latter terminals is adjusted. If no terminal with this index exists,
+		/// <c>null</c> is returned.
+		/// </summary>
+		/// <remarks>
+		/// The index must be in the range of 1...NumberOfTerminals.
+		/// </remarks>
+		public virtual Terminal GetTerminalByDynamicIndex(int index)
+		{
+			if (index <= (this.terminals.Count))
+				return (this.terminals[index - 1]);
+			else
+				return (null);
+		}
+
+		/// <summary>
+		/// Returns the terminal with the given fixed index. The fixed index represents the
+		/// order in which the terminals initially were created but doesn't change throughout the
+		/// execution of the program. If a terminal is closed, the corresponding index becomes
+		/// available and will be used for the next terminal that is opened, i.e. a new terminal
+		/// always gets the lowest available fixed index. If no terminal with this index exists,
+		/// <c>null</c> is returned.
+		/// </summary>
+		public virtual Terminal GetTerminalByFixedIndex(int index)
+		{
+			Terminal t;
+			if (this.fixedIndecies.TryGetValue(index, out t))
+				return (t);
+			else
+				return (null);
+		}
+
+		/// <summary>
+		/// Returns the terminal with the given user name. The user name can freely be chosen in
+		/// the terminal settings. There are no restrictions on the name. If no terminal with this
+		/// name exists, <c>null</c> is returned.
+		/// </summary>
+		public virtual Terminal GetTerminalByUserName(string userName)
+		{
+			foreach (Terminal t in this.terminals)
+			{
+				if (t.SettingsRoot.UserName == userName)
+					return (t);
+			}
+			return (null);
 		}
 
 		#endregion

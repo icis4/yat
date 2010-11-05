@@ -63,7 +63,7 @@ namespace YAT.Model
 		/// Static counter to number terminals. Counter is incremented before first use, first
 		/// terminal therefore is "Terminal1".
 		/// </summary>
-		private static int staticTerminalIdCounter = 0;
+		private static int staticSequenciallIdCounter = 0;
 
 		#endregion
 
@@ -75,7 +75,8 @@ namespace YAT.Model
 		private bool isDisposed;
 
 		private Guid guid;
-		private string userName;
+		private int sequencialId;
+		private string autoName;
 
 		// Settings.
 		private DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler;
@@ -197,12 +198,12 @@ namespace YAT.Model
 			this.settingsRoot.ClearChanged();
 			AttachSettingsEventHandlers();
 
-			// Set user name.
-			staticTerminalIdCounter++;
+			// Set ID and user name.
+			this.sequencialId = ++staticSequenciallIdCounter;
 			if (!this.settingsHandler.SettingsFilePathIsValid || this.settingsRoot.AutoSaved)
-				this.userName = TerminalText + staticTerminalIdCounter.ToString();
+				this.autoName = TerminalText + this.sequencialId.ToString();
 			else
-				UserNameFromFile = this.settingsHandler.SettingsFilePath;
+				AutoNameFromFile = this.settingsHandler.SettingsFilePath;
 
 			// Create underlying terminal.
 			this.terminal = Domain.TerminalFactory.CreateTerminal(this.settingsRoot.Terminal);
@@ -308,20 +309,30 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual string UserName
+		public virtual int SequencialId
 		{
 			get
 			{
 				AssertNotDisposed();
-				return (this.userName);
+				return (this.sequencialId);
 			}
 		}
 
-		private string UserNameFromFile
+		/// <summary></summary>
+		public virtual string AutoName
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (this.autoName);
+			}
+		}
+
+		private string AutoNameFromFile
 		{
 			set
 			{
-				this.userName = Path.GetFileNameWithoutExtension(value);
+				this.autoName = Path.GetFileNameWithoutExtension(value);
 			}
 		}
 
@@ -419,7 +430,7 @@ namespace YAT.Model
 		/// <summary>
 		/// Sets terminal settings.
 		/// </summary>
-		public virtual void SetSettings(Domain.Settings.TerminalSettings settings)
+		public virtual void SetSettings(ExplicitSettings settings)
 		{
 			// Settings have changed, recreate terminal with new settings.
 			if (this.terminal.IsStarted)
@@ -428,8 +439,8 @@ namespace YAT.Model
 				if (StopIO(false))
 				{
 					DetachTerminalEventHandlers();    // Detach to suspend events.
-					this.settingsRoot.Terminal = settings;
-					this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Terminal, this.terminal);
+					this.settingsRoot.Explicit = settings;
+					this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, this.terminal);
 					AttachTerminalEventHandlers();    // Attach and resume events.
 					this.terminal.ReloadRepositories();
 
@@ -446,8 +457,8 @@ namespace YAT.Model
 			{
 				// Terminal is closed, simply set the new settings.
 				DetachTerminalEventHandlers();        // Detach to suspend events.
-				this.settingsRoot.Terminal = settings;
-				this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Terminal, this.terminal);
+				this.settingsRoot.Explicit = settings;
+				this.terminal = Domain.TerminalFactory.RecreateTerminal(this.settingsRoot.Explicit.Terminal, this.terminal);
 				AttachTerminalEventHandlers();        // Attach and resume events.
 				this.terminal.ReloadRepositories();
 
@@ -668,7 +679,7 @@ namespace YAT.Model
 				this.settingsHandler.Save();
 
 				if (!doAutoSave)
-					UserNameFromFile = this.settingsHandler.SettingsFilePath;
+					AutoNameFromFile = this.settingsHandler.SettingsFilePath;
 
 				success = true;
 				OnSaved(new SavedEventArgs(this.settingsHandler.SettingsFilePath, doAutoSave));
@@ -789,7 +800,7 @@ namespace YAT.Model
 					DialogResult dr = OnMessageInputRequest
 						(
 						"Save terminal?",
-						UserName,
+						AutoName,
 						MessageBoxButtons.YesNoCancel,
 						MessageBoxIcon.Question
 						);

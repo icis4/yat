@@ -361,8 +361,17 @@ namespace YAT.Gui.Forms
 
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
-			this.settings_Form.SetDefaults();
-			SetControls();
+			if (MessageBox.Show
+				(
+				this,
+				"Reset all settings to default values?", "Defaults?",
+				MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3
+				)
+				== DialogResult.Yes)
+			{
+				this.settings_Form.SetDefaults();
+				SetControls();
+			}
 		}
 
 		#endregion

@@ -119,18 +119,18 @@ namespace YAT.Gui.Forms
 
 			InitializeControls();
 
-			// Link and attach to terminal model
+			// Link and attach to terminal model.
 			this.terminal = terminal;
 			AttachTerminalEventHandlers();
 
-			// Link and attach to terminal settings
+			// Link and attach to terminal settings.
 			this.settingsRoot = this.terminal.SettingsRoot;
 			AttachSettingsEventHandlers();
 
 			ApplyWindowSettings();
 			LayoutTerminal();
 
-			// Force settings changed event to set all controls
+			// Force settings changed event to set all controls.
 			// For improved performance, manually suspend/resume handler for terminal settings
 			SuspendHandlingTerminalSettings();
 			this.settingsRoot.ClearChanged();
@@ -151,12 +151,12 @@ namespace YAT.Gui.Forms
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public virtual string UserName
+		public virtual string AutoName
 		{
 			get
 			{
 				if (this.terminal != null)
-					return (this.terminal.UserName);
+					return (this.terminal.AutoName);
 				else
 					return ("");
 			}
@@ -2674,11 +2674,11 @@ namespace YAT.Gui.Forms
 			SetFixedStatusText("Saving terminal as...");
 
 			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.Title = "Save " + UserName + " As";
+			sfd.Title = "Save " + AutoName + " As";
 			sfd.Filter = ExtensionSettings.TerminalFilesFilter;
 			sfd.DefaultExt = ExtensionSettings.TerminalFile;
 			sfd.InitialDirectory = ApplicationSettings.LocalUser.Paths.TerminalFilesPath;
-			sfd.FileName = UserName + "." + sfd.DefaultExt;
+			sfd.FileName = AutoName + "." + sfd.DefaultExt;
 
 			DialogResult dr = sfd.ShowDialog(this);
 			if ((dr == DialogResult.OK) && (sfd.FileName.Length > 0))
@@ -2710,13 +2710,13 @@ namespace YAT.Gui.Forms
 			SetFixedStatusText("Terminal Settings...");
 
 			// Clone settings to ensure that settings result is a different object than the original settings.
-			Domain.Settings.TerminalSettings clone = new Domain.Settings.TerminalSettings(this.settingsRoot.Terminal);
+			Settings.Terminal.ExplicitSettings clone = new Settings.Terminal.ExplicitSettings(this.settingsRoot.Explicit);
 			Gui.Forms.TerminalSettings f = new Gui.Forms.TerminalSettings(clone);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
 
-				Domain.Settings.TerminalSettings s = f.SettingsResult;
+				Settings.Terminal.ExplicitSettings s = f.SettingsResult;
 				if (s.HaveChanged)
 				{
 					SuspendHandlingTerminalSettings();
@@ -2756,12 +2756,19 @@ namespace YAT.Gui.Forms
 				isConnected = this.terminal.IsConnected;
 			}
 
-			StringBuilder sb = new StringBuilder(UserName);
+			StringBuilder sb = new StringBuilder(AutoName);
 
 			if (this.settingsRoot != null)
 			{
 				if (this.settingsRoot.ExplicitHaveChanged)
 					sb.Append("*");
+
+				string userName = this.settingsRoot.UserName;
+				if (!string.IsNullOrEmpty(userName))
+				{
+					sb.Append(" - ");
+					sb.Append(userName);
+				}
 
 				switch (this.settingsRoot.IOType)
 				{

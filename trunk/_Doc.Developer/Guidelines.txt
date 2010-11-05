@@ -28,6 +28,8 @@ Use special tags
 \remind
 \attention
 
+Use <c>null</c>
+
 
 Preprocessor statements
 -----------------------

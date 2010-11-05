@@ -29,10 +29,14 @@ namespace YAT.Settings.Terminal
 	[Serializable]
 	public class ExplicitSettings : MKY.Settings.Settings
 	{
+		/// <summary></summary>
+		public const string UserNameDefault = "";
+
+		private string userName;
+
 		private Domain.Settings.TerminalSettings terminal;
 		private Model.Settings.PredefinedCommandSettings predefinedCommand;
 		private Model.Settings.FormatSettings format;
-		private Domain.Settings.CharReplaceSettings charReplace;
 		private Log.Settings.LogSettings log;
 
 		/// <summary></summary>
@@ -44,7 +48,6 @@ namespace YAT.Settings.Terminal
 			Terminal          = new Domain.Settings.TerminalSettings(SettingsType);
 			PredefinedCommand = new Model.Settings.PredefinedCommandSettings(SettingsType);
 			Format            = new Model.Settings.FormatSettings(SettingsType);
-			CharReplace       = new Domain.Settings.CharReplaceSettings(SettingsType);
 			Log               = new Log.Settings.LogSettings(SettingsType);
 
 			ClearChanged();
@@ -56,10 +59,11 @@ namespace YAT.Settings.Terminal
 		public ExplicitSettings(ExplicitSettings rhs)
 			: base(rhs)
 		{
+			UserName          = rhs.UserName;
+
 			Terminal          = new Domain.Settings.TerminalSettings(rhs.Terminal);
 			PredefinedCommand = new Model.Settings.PredefinedCommandSettings(rhs.PredefinedCommand);
 			Format            = new Model.Settings.FormatSettings(rhs.Format);
-			CharReplace       = new Domain.Settings.CharReplaceSettings(rhs.CharReplace);
 			Log               = new Log.Settings.LogSettings(rhs.Log);
 
 			ClearChanged();
@@ -70,13 +74,28 @@ namespace YAT.Settings.Terminal
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			// Nothing to do.
+			UserName = "";
 		}
 
 		#region Properties
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
+
+		/// <summary></summary>
+		[XmlElement("UserName")]
+		public virtual string UserName
+		{
+			get { return (this.userName); }
+			set
+			{
+				if (value != this.userName)
+				{
+					this.userName = value;
+					SetChanged();
+				}
+			}
+		}
 
 		/// <summary></summary>
 		[XmlElement("Terminal")]
@@ -157,32 +176,6 @@ namespace YAT.Settings.Terminal
 		}
 
 		/// <summary></summary>
-		[XmlElement("CharReplace")]
-		public Domain.Settings.CharReplaceSettings CharReplace
-		{
-			get { return (this.charReplace); }
-			set
-			{
-				if (value == null)
-				{
-					this.charReplace = value;
-					DetachNode(this.charReplace);
-				}
-				else if (this.charReplace == null)
-				{
-					this.charReplace = value;
-					AttachNode(this.charReplace);
-				}
-				else if (value != this.charReplace)
-				{
-					Domain.Settings.CharReplaceSettings old = this.charReplace;
-					this.charReplace = value;
-					ReplaceNode(old, this.charReplace);
-				}
-			}
-		}
-
-		/// <summary></summary>
 		[XmlElement("Log")]
 		public Log.Settings.LogSettings Log
 		{
@@ -224,7 +217,12 @@ namespace YAT.Settings.Terminal
 				return (false);
 
 			ExplicitSettings other = (ExplicitSettings)obj;
-			return (base.Equals(other)); // Compare all settings nodes.
+			return
+			(
+				base.Equals(other) && // Compare all settings nodes.
+
+				(this.userName == other.userName)
+			);
 		}
 
 		/// <summary></summary>

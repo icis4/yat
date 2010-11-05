@@ -34,8 +34,8 @@ namespace YAT.Gui.Forms
 
 		private bool isSettingControls = false;
 
-		private Domain.Settings.TerminalSettings settings;
-		private Domain.Settings.TerminalSettings settings_Form;
+		private Settings.Terminal.ExplicitSettings settings;
+		private Settings.Terminal.ExplicitSettings settings_Form;
 
 		#endregion
 
@@ -45,12 +45,12 @@ namespace YAT.Gui.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public TerminalSettings(Domain.Settings.TerminalSettings settings)
+		public TerminalSettings(Settings.Terminal.ExplicitSettings settings)
 		{
 			InitializeComponent();
 
 			this.settings = settings;
-			this.settings_Form = new Domain.Settings.TerminalSettings(settings);
+			this.settings_Form = new Settings.Terminal.ExplicitSettings(settings);
 		}
 
 		#endregion
@@ -61,7 +61,7 @@ namespace YAT.Gui.Forms
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Domain.Settings.TerminalSettings SettingsResult
+		public Settings.Terminal.ExplicitSettings SettingsResult
 		{
 			get { return (this.settings); }
 		}
@@ -102,18 +102,18 @@ namespace YAT.Gui.Forms
 			if (!this.isSettingControls)
 			{
 				Domain.TerminalType tt = terminalSelection.TerminalType;
-				this.settings_Form.TerminalType = tt;
+				this.settings_Form.Terminal.TerminalType = tt;
 				switch (tt)
 				{
 					case Domain.TerminalType.Binary:
-						this.settings_Form.Display.TxRadix = Domain.Radix.Hex;
-						this.settings_Form.Display.RxRadix = Domain.Radix.Hex;
+						this.settings_Form.Terminal.Display.TxRadix = Domain.Radix.Hex;
+						this.settings_Form.Terminal.Display.RxRadix = Domain.Radix.Hex;
 						break;
 
 					case Domain.TerminalType.Text:
 					default:
-						this.settings_Form.Display.TxRadix = Domain.Radix.String;
-						this.settings_Form.Display.RxRadix = Domain.Radix.String;
+						this.settings_Form.Terminal.Display.TxRadix = Domain.Radix.String;
+						this.settings_Form.Terminal.Display.RxRadix = Domain.Radix.String;
 						break;
 				}
 
@@ -126,8 +126,8 @@ namespace YAT.Gui.Forms
 			if (!this.isSettingControls)
 			{
 				Domain.IOType ioType = terminalSelection.IOType;
-				this.settings_Form.IO.IOType = ioType;
-				this.settings_Form.IO.Socket.HostType = (Domain.IOTypeEx)ioType;
+				this.settings_Form.Terminal.IO.IOType = ioType;
+				this.settings_Form.Terminal.IO.Socket.HostType = (Domain.IOTypeEx)ioType;
 				SetControls();
 			}
 		}
@@ -140,97 +140,97 @@ namespace YAT.Gui.Forms
 		private void serialPortSelection_PortIdChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.IO.SerialPort.PortId = serialPortSelection.PortId;
+				this.settings_Form.Terminal.IO.SerialPort.PortId = serialPortSelection.PortId;
 		}
 
 		private void serialPortSettings_BaudRateChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.IO.SerialPort.Communication.BaudRate = serialPortSettings.BaudRate;
+				this.settings_Form.Terminal.IO.SerialPort.Communication.BaudRate = serialPortSettings.BaudRate;
 		}
 
 		private void serialPortSettings_DataBitsChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.IO.SerialPort.Communication.DataBits = serialPortSettings.DataBits;
+				this.settings_Form.Terminal.IO.SerialPort.Communication.DataBits = serialPortSettings.DataBits;
 		}
 
 		private void serialPortSettings_ParityChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.IO.SerialPort.Communication.Parity = serialPortSettings.Parity;
+				this.settings_Form.Terminal.IO.SerialPort.Communication.Parity = serialPortSettings.Parity;
 		}
 
 		private void serialPortSettings_StopBitsChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.IO.SerialPort.Communication.StopBits = serialPortSettings.StopBits;
+				this.settings_Form.Terminal.IO.SerialPort.Communication.StopBits = serialPortSettings.StopBits;
 		}
 
 		private void serialPortSettings_FlowControlChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.IO.SerialPort.Communication.FlowControl = serialPortSettings.FlowControl;
+				this.settings_Form.Terminal.IO.SerialPort.Communication.FlowControl = serialPortSettings.FlowControl;
 		}
 
 		private void serialPortSettings_AutoReopenChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.IO.SerialPort.AutoReopen = serialPortSettings.AutoReopen;
+				this.settings_Form.Terminal.IO.SerialPort.AutoReopen = serialPortSettings.AutoReopen;
 		}
 
 		private void socketSelection_RemoteHostChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
 			{
-				this.settings_Form.IO.Socket.RemoteHost = socketSelection.RemoteHost;
-				this.settings_Form.IO.Socket.ResolvedRemoteIPAddress = socketSelection.ResolvedRemoteIPAddress;
+				this.settings_Form.Terminal.IO.Socket.RemoteHost = socketSelection.RemoteHost;
+				this.settings_Form.Terminal.IO.Socket.ResolvedRemoteIPAddress = socketSelection.ResolvedRemoteIPAddress;
 			}
 		}
 
 		private void socketSelection_RemotePortChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.IO.Socket.RemotePort = socketSelection.RemotePort;
+				this.settings_Form.Terminal.IO.Socket.RemotePort = socketSelection.RemotePort;
 		}
 
 		private void socketSelection_LocalInterfaceChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
 			{
-				this.settings_Form.IO.Socket.LocalInterface = socketSelection.LocalInterface;
-				this.settings_Form.IO.Socket.ResolvedLocalIPAddress = socketSelection.ResolvedLocalIPAddress;
+				this.settings_Form.Terminal.IO.Socket.LocalInterface = socketSelection.LocalInterface;
+				this.settings_Form.Terminal.IO.Socket.ResolvedLocalIPAddress = socketSelection.ResolvedLocalIPAddress;
 			}
 		}
 
 		private void socketSelection_LocalTcpPortChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.IO.Socket.LocalTcpPort = socketSelection.LocalTcpPort;
+				this.settings_Form.Terminal.IO.Socket.LocalTcpPort = socketSelection.LocalTcpPort;
 		}
 
 		private void socketSelection_LocalUdpPortChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.IO.Socket.LocalUdpPort = socketSelection.LocalUdpPort;
+				this.settings_Form.Terminal.IO.Socket.LocalUdpPort = socketSelection.LocalUdpPort;
 		}
 
 		private void socketSettings_TcpClientAutoReconnectChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.IO.Socket.TcpClientAutoReconnect = socketSettings.TcpClientAutoReconnect;
+				this.settings_Form.Terminal.IO.Socket.TcpClientAutoReconnect = socketSettings.TcpClientAutoReconnect;
 		}
 
 		private void usbHidPortSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.IO.UsbHidDevice.DeviceInfo = usbHidPortSelection.DeviceInfo;
+				this.settings_Form.Terminal.IO.UsbHidDevice.DeviceInfo = usbHidPortSelection.DeviceInfo;
 		}
 
 		private void usbHidPortSettings_AutoReopenChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.IO.UsbHidDevice.AutoReopen = usbHidPortSettings.AutoReopen;
+				this.settings_Form.Terminal.IO.UsbHidDevice.AutoReopen = usbHidPortSettings.AutoReopen;
 		}
 
 		private void button_AdvancedSettings_Click(object sender, EventArgs e)
@@ -252,7 +252,7 @@ namespace YAT.Gui.Forms
 		private void button_Defaults_Click(object sender, EventArgs e)
 		{
 			string text;
-			switch (this.settings_Form.TerminalType)
+			switch (this.settings_Form.Terminal.TerminalType)
 			{
 				case Domain.TerminalType.Text:   text = "Text";   break;
 				case Domain.TerminalType.Binary: text = "Binary"; break;
@@ -266,9 +266,7 @@ namespace YAT.Gui.Forms
 				"Reset all settings to default values?" + Environment.NewLine +
 				text + " settings will also be reset!",
 				"Defaults?",
-				MessageBoxButtons.YesNo,
-				MessageBoxIcon.Question,
-				MessageBoxDefaultButton.Button2
+				MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3
 				)
 				== DialogResult.Yes)
 			{
@@ -279,7 +277,7 @@ namespace YAT.Gui.Forms
 
 		private void button_Help_Click(object sender, EventArgs e)
 		{
-			// \fixme Replace MessageBox with a real help
+			// \fixme Replace MessageBox with a real help.
 			MessageBox.Show
 				(
 				this,
@@ -303,13 +301,13 @@ namespace YAT.Gui.Forms
 		{
 			this.isSettingControls = true;
 
-			terminalSelection.TerminalType = this.settings_Form.TerminalType;
+			terminalSelection.TerminalType = this.settings_Form.Terminal.TerminalType;
 
-			Domain.IOType ioType = this.settings_Form.IO.IOType;
+			Domain.IOType ioType = this.settings_Form.Terminal.IO.IOType;
 			terminalSelection.IOType = ioType;
 
 			string text = "&";
-			switch (this.settings_Form.TerminalType)
+			switch (this.settings_Form.Terminal.TerminalType)
 			{
 				case Domain.TerminalType.Text:   text += "Text";   break;
 				case Domain.TerminalType.Binary: text += "Binary"; break;
@@ -325,32 +323,32 @@ namespace YAT.Gui.Forms
 			//   serial port list first (which takes time, which looks ulgy)
 			socketSelection.Visible        = !isSerialPort && !isUsbHid;
 			socketSelection.HostType       = (Domain.IOTypeEx)ioType;
-			socketSelection.RemoteHost     = this.settings_Form.IO.Socket.RemoteHost;
-			socketSelection.RemotePort     = this.settings_Form.IO.Socket.RemotePort;
-			socketSelection.LocalInterface = this.settings_Form.IO.Socket.LocalInterface;
-			socketSelection.LocalTcpPort   = this.settings_Form.IO.Socket.LocalTcpPort;
-			socketSelection.LocalUdpPort   = this.settings_Form.IO.Socket.LocalUdpPort;
+			socketSelection.RemoteHost     = this.settings_Form.Terminal.IO.Socket.RemoteHost;
+			socketSelection.RemotePort     = this.settings_Form.Terminal.IO.Socket.RemotePort;
+			socketSelection.LocalInterface = this.settings_Form.Terminal.IO.Socket.LocalInterface;
+			socketSelection.LocalTcpPort   = this.settings_Form.Terminal.IO.Socket.LocalTcpPort;
+			socketSelection.LocalUdpPort   = this.settings_Form.Terminal.IO.Socket.LocalUdpPort;
 
 			socketSettings.Visible         = !isSerialPort && !isUsbHid;
 			socketSettings.HostType        = (Domain.IOTypeEx)ioType;
-			socketSettings.TcpClientAutoReconnect = this.settings_Form.IO.Socket.TcpClientAutoReconnect;
+			socketSettings.TcpClientAutoReconnect = this.settings_Form.Terminal.IO.Socket.TcpClientAutoReconnect;
 
 			serialPortSelection.Visible    = isSerialPort;
-			serialPortSelection.PortId     = this.settings_Form.IO.SerialPort.PortId;
+			serialPortSelection.PortId     = this.settings_Form.Terminal.IO.SerialPort.PortId;
 
 			serialPortSettings.Visible     = isSerialPort;
-			serialPortSettings.BaudRate    = this.settings_Form.IO.SerialPort.Communication.BaudRate;
-			serialPortSettings.DataBits    = this.settings_Form.IO.SerialPort.Communication.DataBits;
-			serialPortSettings.Parity      = this.settings_Form.IO.SerialPort.Communication.Parity;
-			serialPortSettings.StopBits    = this.settings_Form.IO.SerialPort.Communication.StopBits;
-			serialPortSettings.FlowControl = this.settings_Form.IO.SerialPort.Communication.FlowControl;
-			serialPortSettings.AutoReopen  = this.settings_Form.IO.SerialPort.AutoReopen;
+			serialPortSettings.BaudRate    = this.settings_Form.Terminal.IO.SerialPort.Communication.BaudRate;
+			serialPortSettings.DataBits    = this.settings_Form.Terminal.IO.SerialPort.Communication.DataBits;
+			serialPortSettings.Parity      = this.settings_Form.Terminal.IO.SerialPort.Communication.Parity;
+			serialPortSettings.StopBits    = this.settings_Form.Terminal.IO.SerialPort.Communication.StopBits;
+			serialPortSettings.FlowControl = this.settings_Form.Terminal.IO.SerialPort.Communication.FlowControl;
+			serialPortSettings.AutoReopen  = this.settings_Form.Terminal.IO.SerialPort.AutoReopen;
 
 			usbHidPortSelection.Visible    = isUsbHid;
-			usbHidPortSelection.DeviceInfo = this.settings_Form.IO.UsbHidDevice.DeviceInfo;
+			usbHidPortSelection.DeviceInfo = this.settings_Form.Terminal.IO.UsbHidDevice.DeviceInfo;
 
 			usbHidPortSettings.Visible     = isUsbHid;
-			usbHidPortSettings.AutoReopen  = this.settings_Form.IO.UsbHidDevice.AutoReopen;
+			usbHidPortSettings.AutoReopen  = this.settings_Form.Terminal.IO.UsbHidDevice.AutoReopen;
 
 			// Trigger refresh of COM ports if selection of I/O type has changed
 			if ((ioType == Domain.IOType.SerialPort) && (this.SetControls_ioTypeOld != Domain.IOType.SerialPort))
@@ -363,25 +361,25 @@ namespace YAT.Gui.Forms
 
 		private void ShowTextOrBinarySettings()
 		{
-			switch (this.settings_Form.TerminalType)
+			switch (this.settings_Form.Terminal.TerminalType)
 			{
 				case Domain.TerminalType.Text:
 				{
-					Gui.Forms.TextTerminalSettings f = new Gui.Forms.TextTerminalSettings(this.settings_Form.TextTerminal);
+					Gui.Forms.TextTerminalSettings f = new Gui.Forms.TextTerminalSettings(this.settings_Form.Terminal.TextTerminal);
 					if (f.ShowDialog(this) == DialogResult.OK)
 					{
 						Refresh();
-						this.settings_Form.TextTerminal = f.SettingsResult;
+						this.settings_Form.Terminal.TextTerminal = f.SettingsResult;
 					}
 					break;
 				}
 				case Domain.TerminalType.Binary:
 				{
-					Gui.Forms.BinaryTerminalSettings f = new Gui.Forms.BinaryTerminalSettings(this.settings_Form.BinaryTerminal);
+					Gui.Forms.BinaryTerminalSettings f = new Gui.Forms.BinaryTerminalSettings(this.settings_Form.Terminal.BinaryTerminal);
 					if (f.ShowDialog(this) == DialogResult.OK)
 					{
 						Refresh();
-						this.settings_Form.BinaryTerminal = f.SettingsResult;
+						this.settings_Form.Terminal.BinaryTerminal = f.SettingsResult;
 					}
 					break;
 				}
@@ -403,33 +401,35 @@ namespace YAT.Gui.Forms
 			{
 				Refresh();
 
-				this.settings_Form.Display.SeparateTxRxRadix = f.SettingsResult.Display.SeparateTxRxRadix;
-				this.settings_Form.Display.TxRadix           = f.SettingsResult.Display.TxRadix;
-				this.settings_Form.Display.RxRadix           = f.SettingsResult.Display.RxRadix;
+				this.settings_Form.Terminal.Display.SeparateTxRxRadix = f.SettingsResult.Terminal.Display.SeparateTxRxRadix;
+				this.settings_Form.Terminal.Display.TxRadix           = f.SettingsResult.Terminal.Display.TxRadix;
+				this.settings_Form.Terminal.Display.RxRadix           = f.SettingsResult.Terminal.Display.RxRadix;
 
-				this.settings_Form.Display.ShowRadix       = f.SettingsResult.Display.ShowRadix;
-				this.settings_Form.Display.ShowTimeStamp   = f.SettingsResult.Display.ShowTimeStamp;
-				this.settings_Form.Display.ShowLength      = f.SettingsResult.Display.ShowLength;
-				this.settings_Form.Display.ShowConnectTime = f.SettingsResult.Display.ShowConnectTime;
-				this.settings_Form.Display.ShowCounters    = f.SettingsResult.Display.ShowCounters;
+				this.settings_Form.Terminal.Display.ShowRadix       = f.SettingsResult.Terminal.Display.ShowRadix;
+				this.settings_Form.Terminal.Display.ShowTimeStamp   = f.SettingsResult.Terminal.Display.ShowTimeStamp;
+				this.settings_Form.Terminal.Display.ShowLength      = f.SettingsResult.Terminal.Display.ShowLength;
+				this.settings_Form.Terminal.Display.ShowConnectTime = f.SettingsResult.Terminal.Display.ShowConnectTime;
+				this.settings_Form.Terminal.Display.ShowCounters    = f.SettingsResult.Terminal.Display.ShowCounters;
 
-				this.settings_Form.Display.DirectionLineBreakEnabled = f.SettingsResult.Display.DirectionLineBreakEnabled;
-				this.settings_Form.Display.TxMaxLineCount            = f.SettingsResult.Display.TxMaxLineCount;
-				this.settings_Form.Display.RxMaxLineCount            = f.SettingsResult.Display.RxMaxLineCount;
+				this.settings_Form.Terminal.Display.DirectionLineBreakEnabled = f.SettingsResult.Terminal.Display.DirectionLineBreakEnabled;
+				this.settings_Form.Terminal.Display.TxMaxLineCount            = f.SettingsResult.Terminal.Display.TxMaxLineCount;
+				this.settings_Form.Terminal.Display.RxMaxLineCount            = f.SettingsResult.Terminal.Display.RxMaxLineCount;
 
-				this.settings_Form.CharReplace.ReplaceControlChars = f.SettingsResult.CharReplace.ReplaceControlChars;
-				this.settings_Form.CharReplace.ControlCharRadix    = f.SettingsResult.CharReplace.ControlCharRadix;
-				this.settings_Form.CharReplace.ReplaceSpace        = f.SettingsResult.CharReplace.ReplaceSpace;
+				this.settings_Form.Terminal.CharReplace.ReplaceControlChars = f.SettingsResult.Terminal.CharReplace.ReplaceControlChars;
+				this.settings_Form.Terminal.CharReplace.ControlCharRadix    = f.SettingsResult.Terminal.CharReplace.ControlCharRadix;
+				this.settings_Form.Terminal.CharReplace.ReplaceSpace        = f.SettingsResult.Terminal.CharReplace.ReplaceSpace;
 
-				this.settings_Form.IO.Endianess = f.SettingsResult.IO.Endianess;
+				this.settings_Form.Terminal.IO.Endianess = f.SettingsResult.Terminal.IO.Endianess;
 
-				this.settings_Form.Send.KeepCommand     = f.SettingsResult.Send.KeepCommand;
-				this.settings_Form.Send.CopyPredefined  = f.SettingsResult.Send.CopyPredefined;
-				this.settings_Form.Send.SendImmediately = f.SettingsResult.Send.SendImmediately;
+				this.settings_Form.Terminal.Send.KeepCommand     = f.SettingsResult.Terminal.Send.KeepCommand;
+				this.settings_Form.Terminal.Send.CopyPredefined  = f.SettingsResult.Terminal.Send.CopyPredefined;
+				this.settings_Form.Terminal.Send.SendImmediately = f.SettingsResult.Terminal.Send.SendImmediately;
 
-				this.settings_Form.IO.SerialPort.ReplaceParityErrors = f.SettingsResult.IO.SerialPort.ReplaceParityErrors;
-				this.settings_Form.IO.SerialPort.ParityErrorReplacement = f.SettingsResult.IO.SerialPort.ParityErrorReplacement;
-				this.settings_Form.IO.SerialParityErrorReplacement = f.SettingsResult.IO.SerialParityErrorReplacement;
+				this.settings_Form.Terminal.IO.SerialPort.ReplaceParityErrors    = f.SettingsResult.Terminal.IO.SerialPort.ReplaceParityErrors;
+				this.settings_Form.Terminal.IO.SerialPort.ParityErrorReplacement = f.SettingsResult.Terminal.IO.SerialPort.ParityErrorReplacement;
+				this.settings_Form.Terminal.IO.SerialParityErrorReplacement      = f.SettingsResult.Terminal.IO.SerialParityErrorReplacement;
+
+				this.settings_Form.UserName = f.SettingsResult.UserName;
 			}
 		}
 

@@ -32,15 +32,19 @@ namespace YAT.Gui.Forms
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_Preferences = new System.Windows.Forms.GroupBox();
-			this.groupBox_Workspace = new System.Windows.Forms.GroupBox();
-			this.checkBox_AutoSaveWorkspace = new System.Windows.Forms.CheckBox();
-			this.checkBox_AutoOpenWorkspace = new System.Windows.Forms.CheckBox();
-			this.checkBox_UseRelativePaths = new System.Windows.Forms.CheckBox();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.checkBox_ShowChrono = new System.Windows.Forms.CheckBox();
+			this.checkBox_ShowTerminalInfo = new System.Windows.Forms.CheckBox();
 			this.groupBox_Port = new System.Windows.Forms.GroupBox();
 			this.checkBox_DetectSerialPortsInUse = new System.Windows.Forms.CheckBox();
+			this.groupBox_Workspace = new System.Windows.Forms.GroupBox();
+			this.checkBox_UseRelativePaths = new System.Windows.Forms.CheckBox();
+			this.checkBox_AutoSaveWorkspace = new System.Windows.Forms.CheckBox();
+			this.checkBox_AutoOpenWorkspace = new System.Windows.Forms.CheckBox();
 			this.groupBox_Preferences.SuspendLayout();
-			this.groupBox_Workspace.SuspendLayout();
+			this.groupBox1.SuspendLayout();
 			this.groupBox_Port.SuspendLayout();
+			this.groupBox_Workspace.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// button_Defaults
@@ -80,28 +84,95 @@ namespace YAT.Gui.Forms
 			this.groupBox_Preferences.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Preferences.Controls.Add(this.groupBox1);
 			this.groupBox_Preferences.Controls.Add(this.groupBox_Port);
 			this.groupBox_Preferences.Controls.Add(this.groupBox_Workspace);
 			this.groupBox_Preferences.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Preferences.Name = "groupBox_Preferences";
-			this.groupBox_Preferences.Size = new System.Drawing.Size(305, 170);
+			this.groupBox_Preferences.Size = new System.Drawing.Size(305, 248);
 			this.groupBox_Preferences.TabIndex = 0;
 			this.groupBox_Preferences.TabStop = false;
 			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.checkBox_ShowChrono);
+			this.groupBox1.Controls.Add(this.checkBox_ShowTerminalInfo);
+			this.groupBox1.Location = new System.Drawing.Point(6, 14);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(292, 70);
+			this.groupBox1.TabIndex = 0;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Main";
+			// 
+			// checkBox_ShowChrono
+			// 
+			this.checkBox_ShowChrono.AutoSize = true;
+			this.checkBox_ShowChrono.Location = new System.Drawing.Point(12, 42);
+			this.checkBox_ShowChrono.Name = "checkBox_ShowChrono";
+			this.checkBox_ShowChrono.Size = new System.Drawing.Size(149, 17);
+			this.checkBox_ShowChrono.TabIndex = 1;
+			this.checkBox_ShowChrono.Text = "Show &chrono in status bar";
+			this.checkBox_ShowChrono.UseVisualStyleBackColor = true;
+			this.checkBox_ShowChrono.CheckedChanged += new System.EventHandler(this.checkBox_ShowChrono_CheckedChanged);
+			// 
+			// checkBox_ShowTerminalInfo
+			// 
+			this.checkBox_ShowTerminalInfo.AutoSize = true;
+			this.checkBox_ShowTerminalInfo.Location = new System.Drawing.Point(12, 19);
+			this.checkBox_ShowTerminalInfo.Name = "checkBox_ShowTerminalInfo";
+			this.checkBox_ShowTerminalInfo.Size = new System.Drawing.Size(234, 17);
+			this.checkBox_ShowTerminalInfo.TabIndex = 0;
+			this.checkBox_ShowTerminalInfo.Text = "Show &terminal IDs and indecies in status bar";
+			this.checkBox_ShowTerminalInfo.UseVisualStyleBackColor = true;
+			this.checkBox_ShowTerminalInfo.CheckedChanged += new System.EventHandler(this.checkBox_ShowTerminalInfo_CheckedChanged);
+			// 
+			// groupBox_Port
+			// 
+			this.groupBox_Port.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Port.Controls.Add(this.checkBox_DetectSerialPortsInUse);
+			this.groupBox_Port.Location = new System.Drawing.Point(6, 192);
+			this.groupBox_Port.Name = "groupBox_Port";
+			this.groupBox_Port.Size = new System.Drawing.Size(293, 49);
+			this.groupBox_Port.TabIndex = 2;
+			this.groupBox_Port.TabStop = false;
+			this.groupBox_Port.Text = "Port";
+			// 
+			// checkBox_DetectSerialPortsInUse
+			// 
+			this.checkBox_DetectSerialPortsInUse.AutoSize = true;
+			this.checkBox_DetectSerialPortsInUse.Location = new System.Drawing.Point(12, 19);
+			this.checkBox_DetectSerialPortsInUse.Name = "checkBox_DetectSerialPortsInUse";
+			this.checkBox_DetectSerialPortsInUse.Size = new System.Drawing.Size(269, 17);
+			this.checkBox_DetectSerialPortsInUse.TabIndex = 0;
+			this.checkBox_DetectSerialPortsInUse.Text = "When listing serial ports, &detect ports that are in use";
+			this.checkBox_DetectSerialPortsInUse.UseVisualStyleBackColor = true;
+			this.checkBox_DetectSerialPortsInUse.CheckedChanged += new System.EventHandler(this.checkBox_DetectSerialPortsInUse_CheckedChanged);
+			// 
 			// groupBox_Workspace
 			// 
-			this.groupBox_Workspace.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
+			this.groupBox_Workspace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_Workspace.Controls.Add(this.checkBox_UseRelativePaths);
 			this.groupBox_Workspace.Controls.Add(this.checkBox_AutoSaveWorkspace);
 			this.groupBox_Workspace.Controls.Add(this.checkBox_AutoOpenWorkspace);
-			this.groupBox_Workspace.Location = new System.Drawing.Point(6, 12);
+			this.groupBox_Workspace.Location = new System.Drawing.Point(6, 90);
 			this.groupBox_Workspace.Name = "groupBox_Workspace";
 			this.groupBox_Workspace.Size = new System.Drawing.Size(293, 96);
-			this.groupBox_Workspace.TabIndex = 0;
+			this.groupBox_Workspace.TabIndex = 1;
 			this.groupBox_Workspace.TabStop = false;
 			this.groupBox_Workspace.Text = "Workspace";
+			// 
+			// checkBox_UseRelativePaths
+			// 
+			this.checkBox_UseRelativePaths.AutoSize = true;
+			this.checkBox_UseRelativePaths.Location = new System.Drawing.Point(12, 65);
+			this.checkBox_UseRelativePaths.Name = "checkBox_UseRelativePaths";
+			this.checkBox_UseRelativePaths.Size = new System.Drawing.Size(229, 17);
+			this.checkBox_UseRelativePaths.TabIndex = 2;
+			this.checkBox_UseRelativePaths.Text = "Use &relative paths when saving workspace";
+			this.checkBox_UseRelativePaths.UseVisualStyleBackColor = true;
+			this.checkBox_UseRelativePaths.CheckedChanged += new System.EventHandler(this.checkBox_UseRelativePaths_CheckedChanged);
 			// 
 			// checkBox_AutoSaveWorkspace
 			// 
@@ -125,47 +196,13 @@ namespace YAT.Gui.Forms
 			this.checkBox_AutoOpenWorkspace.UseVisualStyleBackColor = true;
 			this.checkBox_AutoOpenWorkspace.CheckedChanged += new System.EventHandler(this.checkBox_AutoOpenWorkspace_CheckedChanged);
 			// 
-			// checkBox_UseRelativePaths
-			// 
-			this.checkBox_UseRelativePaths.AutoSize = true;
-			this.checkBox_UseRelativePaths.Location = new System.Drawing.Point(12, 65);
-			this.checkBox_UseRelativePaths.Name = "checkBox_UseRelativePaths";
-			this.checkBox_UseRelativePaths.Size = new System.Drawing.Size(229, 17);
-			this.checkBox_UseRelativePaths.TabIndex = 2;
-			this.checkBox_UseRelativePaths.Text = "Use &relative paths when saving workspace";
-			this.checkBox_UseRelativePaths.UseVisualStyleBackColor = true;
-			this.checkBox_UseRelativePaths.CheckedChanged += new System.EventHandler(this.checkBox_UseRelativePaths_CheckedChanged);
-			// 
-			// groupBox_Port
-			// 
-			this.groupBox_Port.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Port.Controls.Add(this.checkBox_DetectSerialPortsInUse);
-			this.groupBox_Port.Location = new System.Drawing.Point(6, 114);
-			this.groupBox_Port.Name = "groupBox_Port";
-			this.groupBox_Port.Size = new System.Drawing.Size(293, 49);
-			this.groupBox_Port.TabIndex = 1;
-			this.groupBox_Port.TabStop = false;
-			this.groupBox_Port.Text = "Port";
-			// 
-			// checkBox_DetectSerialPortsInUse
-			// 
-			this.checkBox_DetectSerialPortsInUse.AutoSize = true;
-			this.checkBox_DetectSerialPortsInUse.Location = new System.Drawing.Point(12, 19);
-			this.checkBox_DetectSerialPortsInUse.Name = "checkBox_DetectSerialPortsInUse";
-			this.checkBox_DetectSerialPortsInUse.Size = new System.Drawing.Size(269, 17);
-			this.checkBox_DetectSerialPortsInUse.TabIndex = 0;
-			this.checkBox_DetectSerialPortsInUse.Text = "When listing serial ports, &detect ports that are in use";
-			this.checkBox_DetectSerialPortsInUse.UseVisualStyleBackColor = true;
-			this.checkBox_DetectSerialPortsInUse.CheckedChanged += new System.EventHandler(this.checkBox_DetectSerialPortsInUse_CheckedChanged);
-			// 
 			// Preferences
 			// 
 			this.AcceptButton = this.button_OK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Cancel;
-			this.ClientSize = new System.Drawing.Size(418, 194);
+			this.ClientSize = new System.Drawing.Size(418, 272);
 			this.Controls.Add(this.groupBox_Preferences);
 			this.Controls.Add(this.button_Defaults);
 			this.Controls.Add(this.button_Cancel);
@@ -179,10 +216,12 @@ namespace YAT.Gui.Forms
 			this.Text = "Preferences";
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.Preferences_Paint);
 			this.groupBox_Preferences.ResumeLayout(false);
-			this.groupBox_Workspace.ResumeLayout(false);
-			this.groupBox_Workspace.PerformLayout();
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
 			this.groupBox_Port.ResumeLayout(false);
 			this.groupBox_Port.PerformLayout();
+			this.groupBox_Workspace.ResumeLayout(false);
+			this.groupBox_Workspace.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -199,5 +238,8 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.GroupBox groupBox_Port;
 		private System.Windows.Forms.CheckBox checkBox_DetectSerialPortsInUse;
 		private System.Windows.Forms.CheckBox checkBox_UseRelativePaths;
+		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.CheckBox checkBox_ShowChrono;
+		private System.Windows.Forms.CheckBox checkBox_ShowTerminalInfo;
 	}
 }
