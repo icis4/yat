@@ -47,7 +47,7 @@ namespace NUnit
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "NUnit", Justification = "NUnit is a name")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	sealed public class InteractiveCategoryAttribute : CategoryAttribute
+	public class InteractiveCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
 		public InteractiveCategoryAttribute()
@@ -59,7 +59,7 @@ namespace NUnit
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "NUnit", Justification = "NUnit is a name")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	sealed public class EnduranceCategoryAttribute : CategoryAttribute
+	public class EnduranceCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
 		public EnduranceCategoryAttribute()
@@ -71,7 +71,7 @@ namespace NUnit
 	/// <summary></summary>
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "NUnit", Justification = "NUnit is a name")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	sealed public class StressCategoryAttribute : CategoryAttribute
+	public class StressCategoryAttribute : CategoryAttribute
 	{
 		/// <summary></summary>
 		public StressCategoryAttribute()
@@ -107,7 +107,7 @@ namespace NUnit
 	[CLSCompliant(false)]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "NUnit", Justification = "NUnit is a name")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	sealed public class MinuteDurationCategoryAttribute : DurationCategoryAttribute
+	public class MinuteDurationCategoryAttribute : DurationCategoryAttribute
 	{
 		/// <summary></summary>
 		public MinuteDurationCategoryAttribute(int minutes)
@@ -120,7 +120,7 @@ namespace NUnit
 	[CLSCompliant(false)]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "NUnit", Justification = "NUnit is a name")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	sealed public class SecondDurationCategoryAttribute : DurationCategoryAttribute
+	public class SecondDurationCategoryAttribute : DurationCategoryAttribute
 	{
 		/// <summary></summary>
 		public SecondDurationCategoryAttribute(int seconds)
@@ -133,7 +133,7 @@ namespace NUnit
 	[CLSCompliant(false)]
 	[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "NUnit", Justification = "NUnit is a name")]
 	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-	sealed public class InfiniteDurationCategoryAttribute : DurationCategoryAttribute
+	public class InfiniteDurationCategoryAttribute : DurationCategoryAttribute
 	{
 		/// <summary></summary>
 		public InfiniteDurationCategoryAttribute()
