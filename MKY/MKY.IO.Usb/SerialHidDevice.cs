@@ -259,8 +259,14 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				AssertNotDisposed();
-				
+				// \attention
+				// Do not call AssertNotDisposed() since IsOpen is used by AsyncReadCompleted()
+				// to detect devices that are just being closed or have already been closed.
+
+				// \attention
+				// CloseStream() intentionally sets this.stream to null to ensure that this
+				// property also works during closing.
+
 				if (this.stream != null)
 					return ((this.stream.CanRead) && (this.stream.CanWrite));
 
@@ -518,8 +524,14 @@ namespace MKY.IO.Usb
 
 			if (this.stream != null)
 			{
-				this.stream.Close();
+				// \attention
+				// Set this.stream to null before initiating Close() to ensure that the IsOpen
+				// property returns false during closing. AsyncReadCompleted() will be called
+				// when Close() is initiated. AsyncReadCompleted() will check IsOpen.
+
+				FileStream fs = this.stream;
 				this.stream = null;
+				fs.Close();
 			}
 
 			if (wasOpen)

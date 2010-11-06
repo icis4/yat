@@ -25,7 +25,7 @@ using NUnit.Framework;
 namespace MKY.IO.Usb.Test
 {
 	/// <summary></summary>
-	public static class UsbDeviceIdTestData
+	public static class UsbDeviceInfoTestData
 	{
 		#region Test Cases
 		//==========================================================================================
@@ -55,7 +55,7 @@ namespace MKY.IO.Usb.Test
 
 	/// <summary></summary>
 	[TestFixture]
-	public class UsbDeviceIdTest
+	public class UsbDeviceInfoTest
 	{
 		#region Tests
 		//==========================================================================================
@@ -69,27 +69,34 @@ namespace MKY.IO.Usb.Test
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		[Test, TestCaseSource(typeof(UsbDeviceIdTestData), "TestCases")]
+		[Test, TestCaseSource(typeof(UsbDeviceInfoTestData), "TestCases")]
 		public virtual void TestConstructorAndParse(bool isValid, int vendorId, int productId, string[] descriptions)
 		{
 			if (isValid)
 			{
-				DeviceInfo id = new DeviceInfo(vendorId, productId);
-				Assert.AreEqual(vendorId,  id.VendorId);
-				Assert.AreEqual(productId, id.ProductId);
+				DeviceInfo di = new DeviceInfo(vendorId, productId);
+				Assert.AreEqual(vendorId,  di.VendorId);
+				Assert.AreEqual(productId, di.ProductId);
 
 				foreach (string description in descriptions)
 				{
-					id = DeviceInfo.Parse(description);
-					Assert.AreEqual(vendorId,  id.VendorId);
-					Assert.AreEqual(productId, id.ProductId);
+					di = DeviceInfo.Parse(description);
+					Assert.AreEqual(vendorId,  di.VendorId);
+					Assert.AreEqual(productId, di.ProductId);
 				}
+
+				// Ensure that ToString() also works if only parts of the info is available
+				string s;
+				s = di.ToString();
+				Assert.IsNotNullOrEmpty(s, "ToString() resulted in invalid string");
+				s = di.ToShortString();
+				Assert.IsNotNullOrEmpty(s, "ToShortString() resulted in invalid string");
 			}
 			else
 			{
 				try
 				{
-					DeviceInfo id = new DeviceInfo(vendorId, productId);
+					DeviceInfo di = new DeviceInfo(vendorId, productId);
 					Assert.Fail("Invalid ID pair " + vendorId + "/" + productId + " wasn't properly handled");
 				}
 				catch
@@ -101,7 +108,7 @@ namespace MKY.IO.Usb.Test
 				{
 					try
 					{
-						DeviceInfo id = DeviceInfo.Parse(description);
+						DeviceInfo di = DeviceInfo.Parse(description);
 						Assert.Fail("Invalid descripton " + description + " wasn't properly handled");
 					}
 					catch

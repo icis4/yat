@@ -186,12 +186,12 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void usbHidDeviceSelection_DeviceInfoChanged(object sender, EventArgs e)
+		private void usbSerialHidDeviceSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
 			{
-				MKY.IO.Usb.DeviceInfo di = usbHidDeviceSelection.DeviceInfo;
-				this.newTerminalSettings_Form.UsbHidDeviceInfo = di;
+				MKY.IO.Usb.DeviceInfo di = usbSerialHidDeviceSelection.DeviceInfo;
+				this.newTerminalSettings_Form.UsbSerialHidDeviceInfo = di;
 				SetControls();
 			}
 		}
@@ -227,7 +227,7 @@ namespace YAT.Gui.Forms
 			this.terminalSettings.Terminal.IO.Socket.LocalTcpPort            = this.newTerminalSettings.SocketLocalTcpPort;
 			this.terminalSettings.Terminal.IO.Socket.LocalUdpPort            = this.newTerminalSettings.SocketLocalUdpPort;
 
-			this.terminalSettings.Terminal.IO.UsbHidDevice.DeviceInfo        = this.newTerminalSettings.UsbHidDeviceInfo;
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.DeviceInfo        = this.newTerminalSettings.UsbSerialHidDeviceInfo;
 
 			this.terminalSettings.TerminalIsStarted                          = this.newTerminalSettings.StartTerminal;
 
@@ -273,6 +273,10 @@ namespace YAT.Gui.Forms
 
 		private Domain.IOType SetControls_ioTypeOld = Domain.IOType.SerialPort;
 
+		/// <remarks>
+		/// This functionality is partly duplicated in <see cref="TerminalSettings.SetControls"/>.
+		/// Changes here must also be applied there.
+		/// </remarks>
 		private void SetControls()
 		{
 			this.isSettingControls = true;
@@ -282,27 +286,12 @@ namespace YAT.Gui.Forms
 			Domain.IOType ioType = this.newTerminalSettings_Form.IOType;
 			terminalSelection.IOType = ioType;
 
-			bool isSerialPort = false;
-			bool isUsbHid = false;
-			
-			bool isValid = true;
-
-			switch (ioType)
-			{
-				case Domain.IOType.SerialPort:
-					isSerialPort = true;
-					isValid = serialPortSelection.IsValid;
-					break;
-
-				case Domain.IOType.UsbHid:
-					isUsbHid = true;
-					isValid = usbHidDeviceSelection.IsValid;
-					break;
-			}
+			bool isSerialPort   = (ioType == Domain.IOType.SerialPort);
+			bool isUsbSerialHid = (ioType == Domain.IOType.UsbSerialHid);
 
 			// Set socket control before serial port control since that might need to refresh the
 			//   serial port list first (which takes time, which looks ulgy).
-			socketSelection.Enabled        = !isSerialPort && !isUsbHid;
+			socketSelection.Enabled        = !isSerialPort && !isUsbSerialHid;
 			socketSelection.HostType       = (Domain.IOTypeEx)ioType;
 			socketSelection.RemoteHost     = this.newTerminalSettings_Form.SocketRemoteHost;
 			socketSelection.RemotePort     = this.newTerminalSettings_Form.SocketRemotePort;
@@ -313,18 +302,27 @@ namespace YAT.Gui.Forms
 			serialPortSelection.Enabled    = isSerialPort;
 			serialPortSelection.PortId     = this.newTerminalSettings_Form.SerialPortId;
 
-			usbHidDeviceSelection.Enabled    = isUsbHid;
-			usbHidDeviceSelection.DeviceInfo = this.newTerminalSettings_Form.UsbHidDeviceInfo;
+			usbSerialHidDeviceSelection.Enabled    = isUsbSerialHid;
+			usbSerialHidDeviceSelection.DeviceInfo = this.newTerminalSettings_Form.UsbSerialHidDeviceInfo;
 
 			checkBox_StartTerminal.Checked = this.newTerminalSettings_Form.StartTerminal;
 
-			button_OK.Enabled = isValid;
-
-			// Trigger refresh of COM ports if selection of I/O type has changed
-			if ((ioType == Domain.IOType.SerialPort) && (this.SetControls_ioTypeOld != Domain.IOType.SerialPort))
+			// Trigger refresh of ports/devices if selection of I/O type has changed.
+			if      ((ioType == Domain.IOType.SerialPort)   && (this.SetControls_ioTypeOld != Domain.IOType.SerialPort))
 				serialPortSelection.RefreshSerialPortList();
+			else if ((ioType == Domain.IOType.UsbSerialHid) && (this.SetControls_ioTypeOld != Domain.IOType.UsbSerialHid))
+				usbSerialHidDeviceSelection.RefreshDeviceList();
 
 			this.SetControls_ioTypeOld = ioType;
+
+			// Finally, enable OK button if port/device is valid.
+			bool isValid = true;
+			switch (ioType)
+			{
+				case Domain.IOType.SerialPort:   isValid = serialPortSelection.IsValid;         break;
+				case Domain.IOType.UsbSerialHid: isValid = usbSerialHidDeviceSelection.IsValid; break;
+			}
+			button_OK.Enabled = isValid;
 
 			this.isSettingControls = false;
 		}

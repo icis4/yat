@@ -40,7 +40,7 @@ using MKY.Event;
 namespace MKY.IO.Serial
 {
 	/// <summary></summary>
-	public class UsbHidDevice : IIOProvider, IDisposable
+	public class UsbSerialHidDevice : IIOProvider, IDisposable
 	{
 		#region Types
 		//==========================================================================================
@@ -69,7 +69,7 @@ namespace MKY.IO.Serial
 		private State state = State.Reset;
 		private object stateSyncObj = new object();
 
-		private UsbHidDeviceSettings settings;
+		private UsbSerialHidDeviceSettings settings;
 		private Usb.SerialHidDevice device;
 		private object deviceSyncObj = new object();
 
@@ -108,7 +108,7 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		public UsbHidDevice(UsbHidDeviceSettings settings)
+		public UsbSerialHidDevice(UsbSerialHidDeviceSettings settings)
 		{
 			this.settings = settings;
 		}
@@ -140,7 +140,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		~UsbHidDevice()
+		~UsbSerialHidDevice()
 		{
 			Dispose(false);
 		}
@@ -168,7 +168,7 @@ namespace MKY.IO.Serial
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual UsbHidDeviceSettings Settings
+		public virtual UsbSerialHidDeviceSettings Settings
 		{
 			get
 			{
@@ -183,6 +183,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
+
 				switch (this.state)
 				{
 					case State.Reset:
@@ -204,6 +205,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
+
 				switch (this.state)
 				{
 					case State.Connected:
@@ -307,17 +309,17 @@ namespace MKY.IO.Serial
 		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "Stop is a common term to start/stop something.")]
 		public virtual void Stop()
 		{
-			// AssertNotDisposed() is called by IsStarted
+			// AssertNotDisposed() is called by IsStarted.
 
 			if (IsStarted)
-				CloseAndDisposeDevice();
+				ResetDevice();
 		}
 
 		/// <summary></summary>
 		public virtual int Receive(out byte[] data)
 		{
-			// AssertNotDisposed() is called by IsOpen
-			// OnDataReceived has been fired before
+			// AssertNotDisposed() is called by IsOpen.
+			// OnDataReceived has been fired before.
 
 			int bytesReceived = 0;
 			if (IsOpen)
@@ -335,7 +337,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public virtual void Send(byte[] data)
 		{
-			// AssertNotDisposed() is called by IsOpen
+			// AssertNotDisposed() is called by IsOpen.
 
 			if (IsOpen)
 			{
@@ -343,7 +345,7 @@ namespace MKY.IO.Serial
 					this.device.Send(data);
 			}
 
-			// OnDataSent will be fired by Usb.HidDevice
+			// OnDataSent will be fired by Usb.HidDevice.
 		}
 
 		#endregion

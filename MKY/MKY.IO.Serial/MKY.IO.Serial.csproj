@@ -66,8 +66,8 @@
     <Compile Include="Socket\SocketHostType.cs" />
     <Compile Include="Socket\UdpSocket.cs" />
     <Compile Include="Structs.cs" />
-    <Compile Include="Usb\UsbHidDevice.cs" />
-    <Compile Include="Usb\UsbHidDeviceSettings.cs" />
+    <Compile Include="Usb\UsbSerialHidDevice.cs" />
+    <Compile Include="Usb\UsbSerialHidDeviceSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\MKY.snk" />

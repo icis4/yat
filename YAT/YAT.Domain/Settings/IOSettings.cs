@@ -42,7 +42,7 @@ namespace YAT.Domain.Settings
 		private MKY.IO.Serial.SerialPortSettings serialPort;
 		private string serialParityErrorReplacement;
 		private MKY.IO.Serial.SocketSettings socket;
-		private MKY.IO.Serial.UsbHidDeviceSettings usbHidDevice;
+		private MKY.IO.Serial.UsbSerialHidDeviceSettings usbSerialHidDevice;
 		private Endianess endianess;
 
 		/// <summary></summary>
@@ -66,7 +66,7 @@ namespace YAT.Domain.Settings
 		{
 			SerialPort   = new MKY.IO.Serial.SerialPortSettings(SettingsType);
 			Socket       = new MKY.IO.Serial.SocketSettings(SettingsType);
-			UsbHidDevice = new MKY.IO.Serial.UsbHidDeviceSettings(SettingsType);
+			UsbSerialHidDevice = new MKY.IO.Serial.UsbSerialHidDeviceSettings(SettingsType);
 		}
 
 		/// <summary></summary>
@@ -80,7 +80,7 @@ namespace YAT.Domain.Settings
 			SerialPort                   = new MKY.IO.Serial.SerialPortSettings(rhs.SerialPort);
 			SerialParityErrorReplacement = rhs.SerialParityErrorReplacement;
 			Socket                       = new MKY.IO.Serial.SocketSettings(rhs.Socket);
-			UsbHidDevice                 = new MKY.IO.Serial.UsbHidDeviceSettings(rhs.UsbHidDevice);
+			UsbSerialHidDevice                 = new MKY.IO.Serial.UsbSerialHidDeviceSettings(rhs.UsbSerialHidDevice);
 			Endianess                    = rhs.Endianess;
 
 			ClearChanged();
@@ -188,27 +188,27 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("UsbHidDevice")]
-		public virtual MKY.IO.Serial.UsbHidDeviceSettings UsbHidDevice
+		[XmlElement("UsbSerialHidDevice")]
+		public virtual MKY.IO.Serial.UsbSerialHidDeviceSettings UsbSerialHidDevice
 		{
-			get { return (this.usbHidDevice); }
+			get { return (this.usbSerialHidDevice); }
 			set
 			{
 				if (value == null)
 				{
-					this.usbHidDevice = value;
-					DetachNode(this.usbHidDevice);
+					this.usbSerialHidDevice = value;
+					DetachNode(this.usbSerialHidDevice);
 				}
-				else if (this.usbHidDevice == null)
+				else if (this.usbSerialHidDevice == null)
 				{
-					this.usbHidDevice = value;
-					AttachNode(this.usbHidDevice);
+					this.usbSerialHidDevice = value;
+					AttachNode(this.usbSerialHidDevice);
 				}
-				else if (value != this.usbHidDevice)
+				else if (value != this.usbSerialHidDevice)
 				{
-					MKY.IO.Serial.UsbHidDeviceSettings old = this.usbHidDevice;
-					this.usbHidDevice = value;
-					ReplaceNode(old, this.usbHidDevice);
+					MKY.IO.Serial.UsbSerialHidDeviceSettings old = this.usbSerialHidDevice;
+					this.usbSerialHidDevice = value;
+					ReplaceNode(old, this.usbSerialHidDevice);
 				}
 			}
 		}

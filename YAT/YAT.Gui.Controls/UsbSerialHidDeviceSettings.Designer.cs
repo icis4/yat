@@ -1,6 +1,6 @@
 namespace YAT.Gui.Controls
 {
-	partial class UsbHidDeviceSettings
+	partial class UsbSerialHidDeviceSettings
 	{
 		/// <summary> 
 		/// Required designer variable.
@@ -75,7 +75,7 @@ namespace YAT.Gui.Controls
 			this.label_AutoReopenInterval.Text = "device every";
 			this.label_AutoReopenInterval.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// UsbHidDeviceSettings
+			// UsbSerialHidDeviceSettings
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -83,10 +83,10 @@ namespace YAT.Gui.Controls
 			this.Controls.Add(this.label_AutoReopenIntervalUnit);
 			this.Controls.Add(this.textBox_AutoReopenInterval);
 			this.Controls.Add(this.checkBox_AutoReopen);
-			this.Name = "UsbHidDeviceSettings";
+			this.Name = "UsbSerialHidDeviceSettings";
 			this.Size = new System.Drawing.Size(260, 42);
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.UsbHidPortSettings_Paint);
-			this.EnabledChanged += new System.EventHandler(this.UsbHidDeviceSettings_EnabledChanged);
+			this.Paint += new System.Windows.Forms.PaintEventHandler(this.UsbSerialHidPortSettings_Paint);
+			this.EnabledChanged += new System.EventHandler(this.UsbSerialHidDeviceSettings_EnabledChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

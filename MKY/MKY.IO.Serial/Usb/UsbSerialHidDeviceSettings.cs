@@ -32,7 +32,7 @@ namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	[Serializable]
-	public class UsbHidDeviceSettings : MKY.Settings.Settings
+	public class UsbSerialHidDeviceSettings : MKY.Settings.Settings
 	{
 		/// <summary></summary>
 		public static readonly AutoRetry AutoReopenDefault = new AutoRetry(true, 2000);
@@ -41,14 +41,14 @@ namespace MKY.IO.Serial
 		private AutoRetry autoReopen;
 
 		/// <summary></summary>
-		public UsbHidDeviceSettings()
+		public UsbSerialHidDeviceSettings()
 		{
 			SetMyDefaults();
 			ClearChanged();
 		}
 
 		/// <summary></summary>
-		public UsbHidDeviceSettings(MKY.Settings.SettingsType settingsType)
+		public UsbSerialHidDeviceSettings(MKY.Settings.SettingsType settingsType)
 			: base(settingsType)
 		{
 			SetMyDefaults();
@@ -59,7 +59,7 @@ namespace MKY.IO.Serial
 		/// <remarks>
 		/// Directly set value-type fields to improve performance, changed flag will be cleared anyway.
 		/// </remarks>
-		public UsbHidDeviceSettings(UsbHidDeviceSettings rhs)
+		public UsbSerialHidDeviceSettings(UsbSerialHidDeviceSettings rhs)
 			: base(rhs)
 		{
 			// Attention: USB device info can be null (if no USB devices are available on system).
@@ -132,7 +132,7 @@ namespace MKY.IO.Serial
 			if (GetType() != obj.GetType())
 				return (false);
 
-			UsbHidDeviceSettings other = (UsbHidDeviceSettings)obj;
+			UsbSerialHidDeviceSettings other = (UsbSerialHidDeviceSettings)obj;
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.

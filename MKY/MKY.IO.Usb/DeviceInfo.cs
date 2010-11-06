@@ -109,7 +109,6 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		public DeviceInfo(int vendorId, int productId)
-			: this(vendorId, productId, "")
 		{
 			string systemPath, manufacturer, product, serialNumber;
 			Device.GetDeviceInfoFromVidAndPid(vendorId, productId, out systemPath, out manufacturer, out product, out serialNumber);
@@ -310,7 +309,7 @@ namespace MKY.IO.Usb
 		{
 			StringBuilder sb = new StringBuilder();
 
-			if (Manufacturer.Length > 0)
+			if (!string.IsNullOrEmpty(Manufacturer))
 			{
 				sb.Append(Manufacturer);         // "Company"
 			}
@@ -325,7 +324,7 @@ namespace MKY.IO.Usb
 				sb.Append(")");
 			}
 
-			if (Product.Length > 0)
+			if (!string.IsNullOrEmpty(Product))
 			{
 				if (sb.Length > 0)
 					sb.Append(" ");              // "Company (VID:0ABC) "
@@ -343,7 +342,7 @@ namespace MKY.IO.Usb
 				sb.Append(")");
 			}
 
-			if (SerialNumber.Length > 0)
+			if (!string.IsNullOrEmpty(SerialNumber))
 			{
 				if (sb.Length > 0)
 					sb.Append(" ");              // "Company (VID:0ABC) Product (PID:1234) "
@@ -359,7 +358,7 @@ namespace MKY.IO.Usb
 		{
 			StringBuilder sb = new StringBuilder();
 
-			if (Product.Length > 0)
+			if (!string.IsNullOrEmpty(Product))
 			{
 				sb.Append(Product);              // "Product"
 			}

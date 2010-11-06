@@ -960,11 +960,11 @@ namespace YAT.Model
 
 		private void terminal_RawElementSent(object sender, Domain.RawElementEventArgs e)
 		{
-			// Count
+			// Count.
 			this.txByteCount += e.Element.Data.Length;
 			OnIOCountChanged(new EventArgs());
 
-			// Log
+			// Log.
 			if (this.log.IsStarted)
 			{
 				this.log.WriteBytes(e.Element.Data, Log.LogStreams.RawTx);
@@ -974,11 +974,11 @@ namespace YAT.Model
 
 		private void terminal_RawElementReceived(object sender, Domain.RawElementEventArgs e)
 		{
-			// Count
+			// Count.
 			this.rxByteCount += e.Element.Data.Length;
 			OnIOCountChanged(new EventArgs());
 
-			// Log
+			// Log.
 			if (this.log.IsStarted)
 			{
 				this.log.WriteBytes(e.Element.Data, Log.LogStreams.RawBidir);
@@ -988,10 +988,10 @@ namespace YAT.Model
 
 		private void terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			// Display
+			// Display.
 			OnDisplayElementsSent(e);
 
-			// Log
+			// Log.
 			foreach (Domain.DisplayElement de in e.Elements)
 			{
 				if (this.log.IsStarted)
@@ -1012,10 +1012,10 @@ namespace YAT.Model
 
 		private void terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			// Display
+			// Display.
 			OnDisplayElementsReceived(e);
 
-			// Log
+			// Log.
 			foreach (Domain.DisplayElement de in e.Elements)
 			{
 				if (this.log.IsStarted)
@@ -1036,21 +1036,21 @@ namespace YAT.Model
 
 		private void terminal_DisplayLinesSent(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			// Count
+			// Count.
 			this.txLineCount += e.Lines.Count;
 			OnIOCountChanged(new EventArgs());
 
-			// Display
+			// Display.
 			OnDisplayLinesSent(e);
 		}
 
 		private void terminal_DisplayLinesReceived(object sender, Domain.DisplayLinesEventArgs e)
 		{
-			// Count
+			// Count.
 			this.rxLineCount += e.Lines.Count;
 			OnIOCountChanged(new EventArgs());
 
-			// Display
+			// Display.
 			OnDisplayLinesReceived(e);
 		}
 
@@ -1325,7 +1325,7 @@ namespace YAT.Model
 					titleBuilder.Append("Socket");
 					break;
 
-				case Domain.IOType.UsbHid:
+				case Domain.IOType.UsbSerialHid:
 					textBuilder.Append("device");
 					titleBuilder.Append("Device");
 					break;

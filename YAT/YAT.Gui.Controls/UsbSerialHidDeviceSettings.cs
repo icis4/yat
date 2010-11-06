@@ -23,14 +23,14 @@ using System.ComponentModel;
 using System.Windows.Forms;
 
 using MKY.Event;
-using MKY.IO.Usb;
+using MKY.IO.Serial;
 
 namespace YAT.Gui.Controls
 {
 	/// <summary></summary>
 	[DesignerCategory("Windows Forms")]
-	[DefaultEvent("DeviceInfoChanged")]
-	public partial class UsbHidDeviceSelection : UserControl
+	[DefaultEvent("AutoReopenChanged")]
+	public partial class UsbSerialHidDeviceSettings : UserControl
 	{
 		#region Fields
 		//==========================================================================================
@@ -39,7 +39,7 @@ namespace YAT.Gui.Controls
 
 		private bool isSettingControls = false;
 
-		private DeviceInfo deviceInfo = null;
+		private AutoRetry autoReopen = MKY.IO.Serial.UsbSerialHidDeviceSettings.AutoReopenDefault;
 
 		#endregion
 
@@ -50,8 +50,8 @@ namespace YAT.Gui.Controls
 
 		/// <summary></summary>
 		[Category("Property Changed")]
-		[Description("Event raised when the DeviceInfo property is changed.")]
-		public event EventHandler DeviceInfoChanged;
+		[Description("Event raised when the AutoReopen property is changed.")]
+		public event EventHandler AutoReopenChanged;
 
 		#endregion
 
@@ -61,9 +61,10 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		public UsbHidDeviceSelection()
+		public UsbSerialHidDeviceSettings()
 		{
 			InitializeComponent();
+			SetControls();
 		}
 
 		#endregion
@@ -74,33 +75,20 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		[Category("USB Device")]
-		[Description("USB device info.")]
-		public DeviceInfo DeviceInfo
+		[Category("Socket")]
+		[Description("Sets auto reopen.")]
+		public AutoRetry AutoReopen
 		{
-			get { return (this.deviceInfo); }
+			get { return (this.autoReopen); }
 			set
 			{
-				// Don't accept to set the device to null/nothing. Master is the device list. If
-				// devices are available, there is always a device selected.
-				if (value != null)
+				if (value != this.autoReopen)
 				{
-					if (value != this.deviceInfo)
-					{
-						this.deviceInfo = value;
-						SetControls();
-						OnDeviceInfoChanged(new EventArgs());
-					}
+					this.autoReopen = value;
+					SetControls();
+					OnAutoReopenChanged(new EventArgs());
 				}
 			}
-		}
-
-		/// <summary>
-		/// Indicates whether the device selection is a valid device.
-		/// </summary>
-		public bool IsValid
-		{
-			get { return (this.deviceInfo != null); }
 		}
 
 		#endregion
@@ -116,36 +104,21 @@ namespace YAT.Gui.Controls
 		private bool isStartingUp = true;
 
 		/// <summary>
-		/// Only set device list and controls once as soon as this control is enabled. This saves
-		/// some time on startup since scanning for the ports takes quite some time.
-		/// </summary>
-		private bool deviceListIsInitialized = false;
-
-		/// <summary>
 		/// Initially set controls and validate its contents where needed.
 		/// </summary>
-		private void UsbHidPortSelection_Paint(object sender, PaintEventArgs e)
+		private void UsbSerialHidPortSettings_Paint(object sender, PaintEventArgs e)
 		{
 			if (this.isStartingUp)
 			{
 				this.isStartingUp = false;
 				SetControls();
 			}
-
-			// Ensure that device list is set as soon as this control gets enabled.
-			// Could also be implemented in a EnabledChanged event handler. However, it's easier
-			// to implement this here so it also done on initial Paint event.
-			if (Enabled && !this.deviceListIsInitialized)
-			{
-				this.deviceListIsInitialized = true;
-				SetDeviceList();
-			}
 		}
 
 		/// <summary>
 		/// Ensure that all controls are cleared when control gets disabled.
 		/// </summary>
-		private void UsbHidDeviceSelection_EnabledChanged(object sender, EventArgs e)
+		private void UsbSerialHidDeviceSettings_EnabledChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
 				SetControls();
@@ -158,15 +131,40 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		private void comboBox_Device_SelectedIndexChanged(object sender, EventArgs e)
+		private void checkBox_AutoReopen_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				DeviceInfo = comboBox_Device.SelectedItem as DeviceInfo;
+			{
+				MKY.IO.Serial.AutoRetry ar = this.autoReopen;
+				ar.Enabled = checkBox_AutoReopen.Checked;
+				AutoReopen = ar;
+			}
 		}
 
-		private void button_RefreshPorts_Click(object sender, EventArgs e)
+		private void textBox_AutoReopenInterval_Validating(object sender, CancelEventArgs e)
 		{
-			SetDeviceList();
+			if (!this.isSettingControls)
+			{
+				int interval;
+				if (int.TryParse(textBox_AutoReopenInterval.Text, out interval) && (interval >= 100))
+				{
+					MKY.IO.Serial.AutoRetry ar = this.autoReopen;
+					ar.Interval = interval;
+					AutoReopen = ar;
+				}
+				else
+				{
+					MessageBox.Show
+						(
+						this,
+						"Reopen interval must be at least 100 ms!",
+						"Invalid Input",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Error
+						);
+					e.Cancel = true;
+				}
+			}
 		}
 
 		#endregion
@@ -176,63 +174,22 @@ namespace YAT.Gui.Controls
 		// Private Methods
 		//==========================================================================================
 
-		private void SetDeviceList()
-		{
-			// Only scan for ports if control is enabled. This saves some time.
-			if (Enabled && !DesignMode)
-			{
-				this.isSettingControls = true;
-
-				DeviceInfo old = comboBox_Device.SelectedItem as DeviceInfo;
-
-				SerialHidDeviceCollection devices = new SerialHidDeviceCollection();
-				devices.FillWithAvailableDevices();
-
-				comboBox_Device.Items.Clear();
-				comboBox_Device.Items.AddRange(devices.ToArray());
-
-				if (comboBox_Device.Items.Count > 0)
-				{
-					if ((this.deviceInfo != null) && (devices.Contains(this.deviceInfo)))
-						comboBox_Device.SelectedItem = this.deviceInfo;
-					else if ((old != null) && (devices.Contains(old)))
-						comboBox_Device.SelectedItem = old;
-					else
-						comboBox_Device.SelectedIndex = 0;
-
-					// Set property instead of member to ensure that changed event is fired.
-					DeviceInfo = comboBox_Device.SelectedItem as DeviceInfo;
-				}
-				else
-				{
-					MessageBox.Show
-						(
-						this,
-						"No Ser/HID capable USB devices available.",
-						"No USB Ser/HID Devices",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning
-						);
-				}
-
-				this.isSettingControls = false;
-			}
-		}
-
 		private void SetControls()
 		{
 			this.isSettingControls = true;
 
-			if (!DesignMode && Enabled && (comboBox_Device.Items.Count > 0))
+			if (Enabled)
 			{
-				if (this.deviceInfo != null)
-					comboBox_Device.SelectedItem = this.deviceInfo;
-				else
-					comboBox_Device.SelectedIndex = 0;
+				bool autoReopenEnabled = this.autoReopen.Enabled;
+				checkBox_AutoReopen.Checked = autoReopenEnabled;
+				textBox_AutoReopenInterval.Enabled = autoReopenEnabled;
+				textBox_AutoReopenInterval.Text = this.autoReopen.Interval.ToString();
 			}
 			else
 			{
-				comboBox_Device.SelectedIndex = -1;
+				checkBox_AutoReopen.Checked = false;
+				textBox_AutoReopenInterval.Enabled = false;
+				textBox_AutoReopenInterval.Text = "";
 			}
 
 			this.isSettingControls = false;
@@ -246,9 +203,9 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnDeviceInfoChanged(EventArgs e)
+		protected virtual void OnAutoReopenChanged(EventArgs e)
 		{
-			EventHelper.FireSync(DeviceInfoChanged, this, e);
+			EventHelper.FireSync(AutoReopenChanged, this, e);
 		}
 
 		#endregion

@@ -43,7 +43,7 @@ namespace YAT.Model.Settings
 		private int socketLocalTcpPort;
 		private int socketLocalUdpPort;
 
-		private MKY.IO.Usb.DeviceInfo usbHidDeviceInfo;
+		private MKY.IO.Usb.DeviceInfo usbSerialHidDeviceInfo;
 
 		private bool startTerminal;
 
@@ -80,7 +80,7 @@ namespace YAT.Model.Settings
 			SocketLocalTcpPort   = rhs.SocketLocalTcpPort;
 			SocketLocalUdpPort   = rhs.SocketLocalUdpPort;
 
-			UsbHidDeviceInfo     = rhs.UsbHidDeviceInfo;
+			UsbSerialHidDeviceInfo     = rhs.UsbSerialHidDeviceInfo;
 
 			StartTerminal        = rhs.StartTerminal;
 
@@ -108,7 +108,7 @@ namespace YAT.Model.Settings
 			SocketLocalTcpPort   = MKY.IO.Serial.SocketSettings.DefaultLocalTcpPort;
 			SocketLocalUdpPort   = MKY.IO.Serial.SocketSettings.DefaultLocalUdpPort;
 
-			UsbHidDeviceInfo     = null;
+			UsbSerialHidDeviceInfo     = null;
 
 			StartTerminal        = true;
 		}
@@ -276,15 +276,15 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("UsbHidDeviceInfo")]
-		public virtual MKY.IO.Usb.DeviceInfo UsbHidDeviceInfo
+		[XmlElement("UsbSerialHidDeviceInfo")]
+		public virtual MKY.IO.Usb.DeviceInfo UsbSerialHidDeviceInfo
 		{
-			get { return (this.usbHidDeviceInfo); }
+			get { return (this.usbSerialHidDeviceInfo); }
 			set
 			{
-				if (value != this.usbHidDeviceInfo)
+				if (value != this.usbSerialHidDeviceInfo)
 				{
-					this.usbHidDeviceInfo = value;
+					this.usbSerialHidDeviceInfo = value;
 					SetChanged();
 				}
 			}
@@ -333,7 +333,7 @@ namespace YAT.Model.Settings
 				(this.socketLocalInterface == other.socketLocalInterface) &&
 				(this.socketLocalTcpPort   == other.socketLocalTcpPort) &&
 				(this.socketLocalUdpPort   == other.socketLocalUdpPort) &&
-				(this.usbHidDeviceInfo     == other.usbHidDeviceInfo) &&
+				(this.usbSerialHidDeviceInfo     == other.usbSerialHidDeviceInfo) &&
 				(this.startTerminal        == other.startTerminal)
 			);
 		}
@@ -345,9 +345,9 @@ namespace YAT.Model.Settings
 			if (this.serialPortId != null)
 				serialPortIdHashCode = this.serialPortId.GetHashCode();
 
-			int usbHidDeviceInfoHashCode = 0;
-			if (this.usbHidDeviceInfo != null)
-				usbHidDeviceInfoHashCode = this.usbHidDeviceInfo.GetHashCode();
+			int usbSerialHidDeviceInfoHashCode = 0;
+			if (this.usbSerialHidDeviceInfo != null)
+				usbSerialHidDeviceInfoHashCode = this.usbSerialHidDeviceInfo.GetHashCode();
 
 			return
 			(
@@ -361,7 +361,7 @@ namespace YAT.Model.Settings
 				this.socketLocalInterface.GetHashCode() ^
 				this.socketLocalTcpPort  .GetHashCode() ^
 				this.socketLocalUdpPort  .GetHashCode() ^
-				usbHidDeviceInfoHashCode .GetHashCode() ^
+				usbSerialHidDeviceInfoHashCode .GetHashCode() ^
 				this.startTerminal       .GetHashCode()
 			);
 		}

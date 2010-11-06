@@ -134,23 +134,23 @@ namespace YAT.Gui.Forms
 			linkLabel_Environment.Links.Add(start, textLink.Length, "http://www.codeproject.com/cs/internet/AsyncSocketServerandClien.asp");
 			linkLabel_Environment.Text += textAfter + Environment.NewLine;
 
-			textBefore = "   > USB HID library based on ";
-			textLink =                                 "GenericHid";
+			textBefore = "   > USB Ser/HID library based on ";
+			textLink =                                     "GenericHid";
 			linkLabel_Environment.Text += textBefore;
 			start = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
 			linkLabel_Environment.Links.Add(start, textLink.Length, "http://www.lvr.com/hidpage.htm");
 
-			textBefore =                                         "/";
-			textLink =                                            "UsbLibrary";
+			textBefore =                                             "/";
+			textLink =                                                "UsbLibrary";
 			linkLabel_Environment.Text += textBefore;
 			start = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
 			linkLabel_Environment.Links.Add(start, textLink.Length, "http://www.codeproject.com/KB/cs/USB_HID.aspx?msg=2816038");
 
-			textBefore =                                                    "/";
-			textLink =                                                       "UsbHid";
-			textAfter =                                                            " by Matthias Kläy";
+			textBefore =                                                        "/";
+			textLink =                                                           "UsbHid";
+			textAfter =                                                                " by Matthias Kläy";
 			linkLabel_Environment.Text += textBefore;
 			start = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
