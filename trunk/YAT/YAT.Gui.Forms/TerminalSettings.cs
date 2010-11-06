@@ -221,16 +221,16 @@ namespace YAT.Gui.Forms
 				this.settings_Form.Terminal.IO.Socket.TcpClientAutoReconnect = socketSettings.TcpClientAutoReconnect;
 		}
 
-		private void usbHidPortSelection_DeviceInfoChanged(object sender, EventArgs e)
+		private void usbSerialHidDeviceSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.UsbHidDevice.DeviceInfo = usbHidPortSelection.DeviceInfo;
+				this.settings_Form.Terminal.IO.UsbSerialHidDevice.DeviceInfo = usbSerialHidDeviceSelection.DeviceInfo;
 		}
 
-		private void usbHidPortSettings_AutoReopenChanged(object sender, EventArgs e)
+		private void usbSerialHidDeviceSettings_AutoReopenChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.UsbHidDevice.AutoReopen = usbHidPortSettings.AutoReopen;
+				this.settings_Form.Terminal.IO.UsbSerialHidDevice.AutoReopen = usbSerialHidDeviceSettings.AutoReopen;
 		}
 
 		private void button_AdvancedSettings_Click(object sender, EventArgs e)
@@ -297,17 +297,19 @@ namespace YAT.Gui.Forms
 
 		private Domain.IOType SetControls_ioTypeOld = Domain.IOType.SerialPort;
 
+		/// <remarks>
+		/// This functionality is partly duplicated in <see cref="NewTerminal.SetControls"/>.
+		/// Changes here must also be applied there.
+		/// </remarks>
 		private void SetControls()
 		{
 			this.isSettingControls = true;
 
-			terminalSelection.TerminalType = this.settings_Form.Terminal.TerminalType;
-
-			Domain.IOType ioType = this.settings_Form.Terminal.IO.IOType;
-			terminalSelection.IOType = ioType;
+			Domain.TerminalType terminalType = this.settings_Form.Terminal.TerminalType;
+			terminalSelection.TerminalType = terminalType;
 
 			string text = "&";
-			switch (this.settings_Form.Terminal.TerminalType)
+			switch (terminalType)
 			{
 				case Domain.TerminalType.Text:   text += "Text";   break;
 				case Domain.TerminalType.Binary: text += "Binary"; break;
@@ -316,12 +318,15 @@ namespace YAT.Gui.Forms
 			text += " Settings...";
 			button_TextOrBinarySettings.Text = text;
 
-			bool isSerialPort = (ioType == Domain.IOType.SerialPort);
-			bool isUsbHid     = (ioType == Domain.IOType.UsbHid);
+			Domain.IOType ioType = this.settings_Form.Terminal.IO.IOType;
+			terminalSelection.IOType = ioType;
+
+			bool isSerialPort   = (ioType == Domain.IOType.SerialPort);
+			bool isUsbSerialHid = (ioType == Domain.IOType.UsbSerialHid);
 
 			// Set socket control before serial port control since that might need to refresh the
 			//   serial port list first (which takes time, which looks ulgy)
-			socketSelection.Visible        = !isSerialPort && !isUsbHid;
+			socketSelection.Visible        = !isSerialPort && !isUsbSerialHid;
 			socketSelection.HostType       = (Domain.IOTypeEx)ioType;
 			socketSelection.RemoteHost     = this.settings_Form.Terminal.IO.Socket.RemoteHost;
 			socketSelection.RemotePort     = this.settings_Form.Terminal.IO.Socket.RemotePort;
@@ -329,7 +334,7 @@ namespace YAT.Gui.Forms
 			socketSelection.LocalTcpPort   = this.settings_Form.Terminal.IO.Socket.LocalTcpPort;
 			socketSelection.LocalUdpPort   = this.settings_Form.Terminal.IO.Socket.LocalUdpPort;
 
-			socketSettings.Visible         = !isSerialPort && !isUsbHid;
+			socketSettings.Visible         = !isSerialPort && !isUsbSerialHid;
 			socketSettings.HostType        = (Domain.IOTypeEx)ioType;
 			socketSettings.TcpClientAutoReconnect = this.settings_Form.Terminal.IO.Socket.TcpClientAutoReconnect;
 
@@ -344,15 +349,17 @@ namespace YAT.Gui.Forms
 			serialPortSettings.FlowControl = this.settings_Form.Terminal.IO.SerialPort.Communication.FlowControl;
 			serialPortSettings.AutoReopen  = this.settings_Form.Terminal.IO.SerialPort.AutoReopen;
 
-			usbHidPortSelection.Visible    = isUsbHid;
-			usbHidPortSelection.DeviceInfo = this.settings_Form.Terminal.IO.UsbHidDevice.DeviceInfo;
+			usbSerialHidDeviceSelection.Visible    = isUsbSerialHid;
+			usbSerialHidDeviceSelection.DeviceInfo = this.settings_Form.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
 
-			usbHidPortSettings.Visible     = isUsbHid;
-			usbHidPortSettings.AutoReopen  = this.settings_Form.Terminal.IO.UsbHidDevice.AutoReopen;
+			usbSerialHidDeviceSettings.Visible     = isUsbSerialHid;
+			usbSerialHidDeviceSettings.AutoReopen  = this.settings_Form.Terminal.IO.UsbSerialHidDevice.AutoReopen;
 
-			// Trigger refresh of COM ports if selection of I/O type has changed
-			if ((ioType == Domain.IOType.SerialPort) && (this.SetControls_ioTypeOld != Domain.IOType.SerialPort))
+			// Trigger refresh of ports/devices if selection of I/O type has changed.
+			if      ((ioType == Domain.IOType.SerialPort)   && (this.SetControls_ioTypeOld != Domain.IOType.SerialPort))
 				serialPortSelection.RefreshSerialPortList();
+			else if ((ioType == Domain.IOType.UsbSerialHid) && (this.SetControls_ioTypeOld != Domain.IOType.UsbSerialHid))
+				usbSerialHidDeviceSelection.RefreshDeviceList();
 
 			this.SetControls_ioTypeOld = ioType;
 

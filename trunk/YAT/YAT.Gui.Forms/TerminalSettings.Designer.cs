@@ -39,8 +39,8 @@ namespace YAT.Gui.Forms
 			this.button_TextOrBinarySettings = new System.Windows.Forms.Button();
 			this.terminalSelection = new YAT.Gui.Controls.TerminalSelection();
 			this.groupBox_PortSettings = new System.Windows.Forms.GroupBox();
-			this.usbHidPortSettings = new YAT.Gui.Controls.UsbHidDeviceSettings();
-			this.usbHidPortSelection = new YAT.Gui.Controls.UsbHidDeviceSelection();
+			this.usbSerialHidDeviceSettings = new YAT.Gui.Controls.UsbSerialHidDeviceSettings();
+			this.usbSerialHidDeviceSelection = new YAT.Gui.Controls.UsbSerialHidDeviceSelection();
 			this.socketSettings = new YAT.Gui.Controls.SocketSettings();
 			this.serialPortSelection = new YAT.Gui.Controls.SerialPortSelection();
 			this.serialPortSettings = new YAT.Gui.Controls.SerialPortSettings();
@@ -126,8 +126,8 @@ namespace YAT.Gui.Forms
 			this.groupBox_PortSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_PortSettings.Controls.Add(this.usbHidPortSettings);
-			this.groupBox_PortSettings.Controls.Add(this.usbHidPortSelection);
+			this.groupBox_PortSettings.Controls.Add(this.usbSerialHidDeviceSettings);
+			this.groupBox_PortSettings.Controls.Add(this.usbSerialHidDeviceSelection);
 			this.groupBox_PortSettings.Controls.Add(this.socketSettings);
 			this.groupBox_PortSettings.Controls.Add(this.serialPortSelection);
 			this.groupBox_PortSettings.Controls.Add(this.serialPortSettings);
@@ -139,24 +139,24 @@ namespace YAT.Gui.Forms
 			this.groupBox_PortSettings.TabStop = false;
 			this.groupBox_PortSettings.Text = "Port &Settings";
 			// 
-			// usbHidPortSettings
+			// usbSerialHidDeviceSettings
 			// 
-			this.usbHidPortSettings.Location = new System.Drawing.Point(6, 71);
-			this.usbHidPortSettings.Name = "usbHidPortSettings";
-			this.usbHidPortSettings.Size = new System.Drawing.Size(260, 42);
-			this.usbHidPortSettings.TabIndex = 3;
-			this.usbHidPortSettings.AutoReopenChanged += new System.EventHandler(this.usbHidPortSettings_AutoReopenChanged);
+			this.usbSerialHidDeviceSettings.Location = new System.Drawing.Point(6, 71);
+			this.usbSerialHidDeviceSettings.Name = "usbSerialHidDeviceSettings";
+			this.usbSerialHidDeviceSettings.Size = new System.Drawing.Size(260, 42);
+			this.usbSerialHidDeviceSettings.TabIndex = 3;
+			this.usbSerialHidDeviceSettings.AutoReopenChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_AutoReopenChanged);
 			// 
-			// usbHidPortSelection
+			// usbSerialHidDeviceSelection
 			// 
-			this.usbHidPortSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			this.usbSerialHidDeviceSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.usbHidPortSelection.DeviceInfo = null;
-			this.usbHidPortSelection.Location = new System.Drawing.Point(6, 20);
-			this.usbHidPortSelection.Name = "usbHidPortSelection";
-			this.usbHidPortSelection.Size = new System.Drawing.Size(285, 45);
-			this.usbHidPortSelection.TabIndex = 4;
-			this.usbHidPortSelection.DeviceInfoChanged += new System.EventHandler(this.usbHidPortSelection_DeviceInfoChanged);
+			this.usbSerialHidDeviceSelection.DeviceInfo = null;
+			this.usbSerialHidDeviceSelection.Location = new System.Drawing.Point(6, 20);
+			this.usbSerialHidDeviceSelection.Name = "usbSerialHidDeviceSelection";
+			this.usbSerialHidDeviceSelection.Size = new System.Drawing.Size(285, 45);
+			this.usbSerialHidDeviceSelection.TabIndex = 4;
+			this.usbSerialHidDeviceSelection.DeviceInfoChanged += new System.EventHandler(this.usbSerialHidDeviceSelection_DeviceInfoChanged);
 			// 
 			// socketSettings
 			// 
@@ -282,7 +282,7 @@ namespace YAT.Gui.Forms
 		private YAT.Gui.Controls.SerialPortSelection serialPortSelection;
 		private YAT.Gui.Controls.SocketSettings socketSettings;
 		private System.Windows.Forms.Button button_Help;
-		private YAT.Gui.Controls.UsbHidDeviceSelection usbHidPortSelection;
-		private YAT.Gui.Controls.UsbHidDeviceSettings usbHidPortSettings;
+		private YAT.Gui.Controls.UsbSerialHidDeviceSelection usbSerialHidDeviceSelection;
+		private YAT.Gui.Controls.UsbSerialHidDeviceSettings usbSerialHidDeviceSettings;
 	}
 }

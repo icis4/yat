@@ -46,7 +46,7 @@ namespace YAT.Domain
 		TcpServer,
 		TcpAutoSocket,
 		Udp,
-		UsbHid,
+		UsbSerialHid,
 	}
 
 	#pragma warning restore 1591
@@ -66,7 +66,7 @@ namespace YAT.Domain
 		private const string TcpServer_string = "TCP/IP Server";
 		private const string TcpAutoSocket_string = "TCP/IP AutoSocket";
 		private const string Udp_string = "UDP/IP Socket";
-		private const string UsbHid_string = "USB Ser/HID";
+		private const string UsbSerialHid_string = "USB Ser/HID";
 
 		#endregion
 
@@ -94,7 +94,7 @@ namespace YAT.Domain
 				case IOType.TcpServer:     return (TcpServer_string);
 				case IOType.TcpAutoSocket: return (TcpAutoSocket_string);
 				case IOType.Udp:           return (Udp_string);
-				case IOType.UsbHid:        return (UsbHid_string);
+				case IOType.UsbSerialHid:        return (UsbSerialHid_string);
 				default:                   return (Unknown_string);
 			}
 		}
@@ -112,7 +112,7 @@ namespace YAT.Domain
 			a.Add(new IOTypeEx(IOType.TcpServer));
 			a.Add(new IOTypeEx(IOType.TcpAutoSocket));
 			a.Add(new IOTypeEx(IOType.Udp));
-			a.Add(new IOTypeEx(IOType.UsbHid));
+			a.Add(new IOTypeEx(IOType.UsbSerialHid));
 			return (a.ToArray());
 		}
 
@@ -159,9 +159,9 @@ namespace YAT.Domain
 				result = new IOTypeEx(IOType.Udp);
 				return (true);
 			}
-			else if (string.Compare(type, UsbHid_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (string.Compare(type, UsbSerialHid_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				result = new IOTypeEx(IOType.UsbHid);
+				result = new IOTypeEx(IOType.UsbSerialHid);
 				return (true);
 			}
 			else

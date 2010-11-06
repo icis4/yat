@@ -24,7 +24,7 @@ namespace MKY.IO.Serial.Test.Usb
 {
 	/// <summary></summary>
 	[TestFixture]
-	public class UsbHidPortSettingsTest
+	public class UsbSerialHidPortSettingsTest
 	{
 		#region Tests
 		//==========================================================================================

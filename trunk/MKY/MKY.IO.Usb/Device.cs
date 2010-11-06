@@ -304,9 +304,6 @@ namespace MKY.IO.Usb
 		/// <param name="serialNumber">Retrieved serial number, or "" if no valable device found.</param>
 		public static bool GetDeviceInfoFromVidAndPid(int vendorId, int productId, out string path, out string manufacturer, out string product, out string serialNumber)
 		{
-			DeviceCollection devices = new DeviceCollection();
-			devices.FillWithAvailableDevices();
-
 			foreach (DeviceInfo device in GetDevicesFromClass(DeviceClass.Hid))
 			{
 				if ((device.VendorId == vendorId) && (device.ProductId == productId))
@@ -354,9 +351,6 @@ namespace MKY.IO.Usb
 		/// <param name="product">Retrieved product, or "" if no valable device found.</param>
 		public static bool GetDeviceInfoFromVidAndPidAndSerial(int vendorId, int productId, string serialNumber, out string path, out string manufacturer, out string product)
 		{
-			DeviceCollection devices = new DeviceCollection();
-			devices.FillWithAvailableDevices();
-
 			foreach (DeviceInfo device in GetDevicesFromClass(DeviceClass.Hid))
 			{
 				if ((device.VendorId == vendorId) && (device.ProductId == productId) && (device.SerialNumber == serialNumber))

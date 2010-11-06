@@ -80,9 +80,9 @@ namespace YAT.Domain
 						));
 				}
 
-				case Domain.IOType.UsbHid:
+				case Domain.IOType.UsbSerialHid:
 				{
-					return (new UsbHidDevice(settings.UsbHidDevice));
+					return (new UsbSerialHidDevice(settings.UsbSerialHidDevice));
 				}
 
 				default: throw (new NotImplementedException("Unknown IO type"));

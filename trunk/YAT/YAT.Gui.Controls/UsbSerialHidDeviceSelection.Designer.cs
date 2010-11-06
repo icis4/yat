@@ -1,6 +1,6 @@
 namespace YAT.Gui.Controls
 {
-	partial class UsbHidDeviceSelection
+	partial class UsbSerialHidDeviceSelection
 	{
 		/// <summary> 
 		/// Required designer variable.
@@ -68,17 +68,17 @@ namespace YAT.Gui.Controls
 			this.label_Device.TabIndex = 0;
 			this.label_Device.Text = "USB Ser/HID Device:";
 			// 
-			// UsbHidDeviceSelection
+			// UsbSerialHidDeviceSelection
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.button_RefreshPorts);
 			this.Controls.Add(this.comboBox_Device);
 			this.Controls.Add(this.label_Device);
-			this.Name = "UsbHidDeviceSelection";
+			this.Name = "UsbSerialHidDeviceSelection";
 			this.Size = new System.Drawing.Size(285, 46);
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.UsbHidPortSelection_Paint);
-			this.EnabledChanged += new System.EventHandler(this.UsbHidDeviceSelection_EnabledChanged);
+			this.Paint += new System.Windows.Forms.PaintEventHandler(this.UsbSerialHidPortSelection_Paint);
+			this.EnabledChanged += new System.EventHandler(this.UsbSerialHidDeviceSelection_EnabledChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

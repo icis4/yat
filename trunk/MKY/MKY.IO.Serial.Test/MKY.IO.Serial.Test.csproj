@@ -54,7 +54,7 @@
     <Compile Include="Socket\SimpleTcpConnectionTest.cs" />
     <Compile Include="Socket\SocketSettingsTest.cs" />
     <Compile Include="Socket\Utilities.cs" />
-    <Compile Include="Usb\UsbHidPortSettings.cs" />
+    <Compile Include="Usb\UsbSerialHidPortSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ALAZ\Source\ALAZ.SystemEx.NetEx\ALAZ.SystemEx.NetEx.csproj">

@@ -2865,9 +2865,9 @@ namespace YAT.Gui.Forms
 						break;
 					}
 
-					case Domain.IOType.UsbHid:
+					case Domain.IOType.UsbSerialHid:
 					{
-						MKY.IO.Serial.UsbHidDeviceSettings s = this.settingsRoot.IO.UsbHidDevice;
+						MKY.IO.Serial.UsbSerialHidDeviceSettings s = this.settingsRoot.IO.UsbSerialHidDevice;
 						sb.Append(" - ");
 						sb.Append(s.DeviceInfo.ToString());
 						sb.Append(" - ");
@@ -3029,12 +3029,12 @@ namespace YAT.Gui.Forms
 						break;
 					}
 
-					case Domain.IOType.UsbHid:
+					case Domain.IOType.UsbSerialHid:
 					{
-						MKY.IO.Serial.UsbHidDeviceSettings s = this.settingsRoot.IO.UsbHidDevice;
-						sb.Append("USB HID device ");
+						MKY.IO.Serial.UsbSerialHidDeviceSettings s = this.settingsRoot.IO.UsbSerialHidDevice;
+						sb.Append(@"USB HID device """);
 						sb.Append(s.DeviceInfo.ToString());
-						sb.Append(" is ");
+						sb.Append(@""" is ");
 						if (isConnected)
 						{
 							sb.Append("connected and ");

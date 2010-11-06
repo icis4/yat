@@ -55,17 +55,17 @@
     <Compile Include="BinaryDisplaySettingsSet.Designer.cs">
       <DependentUpon>BinaryDisplaySettingsSet.cs</DependentUpon>
     </Compile>
-    <Compile Include="UsbHidDeviceSettings.cs">
+    <Compile Include="UsbSerialHidDeviceSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UsbHidDeviceSettings.Designer.cs">
-      <DependentUpon>UsbHidDeviceSettings.cs</DependentUpon>
+    <Compile Include="UsbSerialHidDeviceSettings.Designer.cs">
+      <DependentUpon>UsbSerialHidDeviceSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="UsbHidDeviceSelection.cs">
+    <Compile Include="UsbSerialHidDeviceSelection.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UsbHidDeviceSelection.Designer.cs">
-      <DependentUpon>UsbHidDeviceSelection.cs</DependentUpon>
+    <Compile Include="UsbSerialHidDeviceSelection.Designer.cs">
+      <DependentUpon>UsbSerialHidDeviceSelection.cs</DependentUpon>
     </Compile>
     <Compile Include="Send.cs">
       <SubType>UserControl</SubType>
@@ -167,12 +167,12 @@
       <SubType>Designer</SubType>
       <DependentUpon>BinaryDisplaySettingsSet.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UsbHidDeviceSettings.resx">
-      <DependentUpon>UsbHidDeviceSettings.cs</DependentUpon>
+    <EmbeddedResource Include="UsbSerialHidDeviceSettings.resx">
+      <DependentUpon>UsbSerialHidDeviceSettings.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="UsbHidDeviceSelection.resx">
-      <DependentUpon>UsbHidDeviceSelection.cs</DependentUpon>
+    <EmbeddedResource Include="UsbSerialHidDeviceSelection.resx">
+      <DependentUpon>UsbSerialHidDeviceSelection.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Send.resx">
