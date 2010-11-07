@@ -136,8 +136,11 @@ namespace YAT.Gui.Forms
 			if (MessageBox.Show
 				(
 				this,
-				"Reset all settings to default values?", "Defaults?",
-				MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3
+				"Reset all settings to default values?",
+				"Defaults?",
+				MessageBoxButtons.YesNoCancel,
+				MessageBoxIcon.Question,
+				MessageBoxDefaultButton.Button3
 				)
 				== DialogResult.Yes)
 			{
@@ -311,7 +314,7 @@ namespace YAT.Gui.Forms
 							(
 								this,
 								@"Font """ + fd.Font.Name + @""" does not support regular style. Choose a different font.",
-								@"Font not supported",
+								@"Font Not Supported",
 								MessageBoxButtons.OKCancel,
 								MessageBoxIcon.Exclamation
 							);

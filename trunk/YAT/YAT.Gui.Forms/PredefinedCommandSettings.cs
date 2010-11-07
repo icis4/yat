@@ -475,15 +475,15 @@ namespace YAT.Gui.Forms
 		private void DeletePage()
 		{
 			if (MessageBox.Show
-				 (
-				 this,
-				 @"Delete page """ + this.settings_Form.Pages[SelectedPageIndex].PageName + @"""?",
-				 @"Delete?",
-				 MessageBoxButtons.YesNoCancel,
-				 MessageBoxIcon.Question,
-				 MessageBoxDefaultButton.Button2
-				 )
-				 == DialogResult.Yes)
+				(
+				this,
+				@"Delete page """ + this.settings_Form.Pages[SelectedPageIndex].PageName + @"""?",
+				@"Delete?",
+				MessageBoxButtons.YesNoCancel,
+				MessageBoxIcon.Question,
+				MessageBoxDefaultButton.Button2
+				)
+				== DialogResult.Yes)
 			{
 				this.settings_Form.Pages.RemoveAt(SelectedPageIndex);
 				this.selectedPage = Int32Ex.LimitToBounds(this.selectedPage, 1, this.settings_Form.Pages.Count);
@@ -512,15 +512,15 @@ namespace YAT.Gui.Forms
 		private void DeletePages()
 		{
 			if (MessageBox.Show
-				 (
-				 this,
-				 "Delete all pages?",
-				 "Delete All?",
-				 MessageBoxButtons.YesNoCancel,
-				 MessageBoxIcon.Question,
-				 MessageBoxDefaultButton.Button2
-				 )
-				 == DialogResult.Yes)
+				(
+				this,
+				"Delete all pages?",
+				"Delete All?",
+				MessageBoxButtons.YesNoCancel,
+				MessageBoxIcon.Question,
+				MessageBoxDefaultButton.Button2
+				)
+				== DialogResult.Yes)
 			{
 				this.settings_Form.CreateDefaultPage();
 				this.selectedPage = 1;
@@ -546,15 +546,15 @@ namespace YAT.Gui.Forms
 		private void ClearPage()
 		{
 			if (MessageBox.Show
-				 (
-				 this,
-				 @"Clear all commands of page """ + this.settings_Form.Pages[SelectedPageIndex].PageName + @"""?",
-				 @"Clear?",
-				 MessageBoxButtons.YesNoCancel,
-				 MessageBoxIcon.Question,
-				 MessageBoxDefaultButton.Button2
-				 )
-				 == DialogResult.Yes)
+				(
+				this,
+				@"Clear all commands of page """ + this.settings_Form.Pages[SelectedPageIndex].PageName + @"""?",
+				@"Clear?",
+				MessageBoxButtons.YesNoCancel,
+				MessageBoxIcon.Question,
+				MessageBoxDefaultButton.Button2
+				)
+				== DialogResult.Yes)
 			{
 				this.settings_Form.Pages[SelectedPageIndex].Commands.Clear();
 				SetControls();

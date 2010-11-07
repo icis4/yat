@@ -125,7 +125,7 @@ namespace YAT.Gui.Forms
 						(
 						this,
 						"Unhandled exception data could not be copied onto clipboard." + Environment.NewLine + Environment.NewLine +
-						"System message:" + Environment.NewLine +
+						"System error message:" + Environment.NewLine +
 						ex.Message,
 						"Error",
 						MessageBoxButtons.OK,

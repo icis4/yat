@@ -326,7 +326,8 @@ namespace YAT.Gui.Controls
 							MessageBox.Show
 								(
 								this,
-								"Remote host name or address is invalid:" + Environment.NewLine + Environment.NewLine +
+								"Remote host name or address is invalid!" + Environment.NewLine + Environment.NewLine +
+								"System error message:" + Environment.NewLine +
 								ex.Message,
 								"Invalid Input",
 								MessageBoxButtons.OK,
@@ -477,7 +478,7 @@ namespace YAT.Gui.Controls
 						(
 						this,
 						"No local network interfaces available, check network system settings.",
-						"No interfaces",
+						"No Interfaces",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Warning
 						);

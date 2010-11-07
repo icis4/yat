@@ -266,7 +266,9 @@ namespace YAT.Gui.Forms
 				"Reset all settings to default values?" + Environment.NewLine +
 				text + " settings will also be reset!",
 				"Defaults?",
-				MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3
+				MessageBoxButtons.YesNoCancel,
+				MessageBoxIcon.Question,
+				MessageBoxDefaultButton.Button3
 				)
 				== DialogResult.Yes)
 			{
