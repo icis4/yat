@@ -64,9 +64,15 @@ New:
 - Predefined NUnit test categories added
 
 Important changes:
-- Performance on startup partly improved (feature request #2968216)
+- Performance on startup improved (feature request #2968216)
 - Serial COM port list gets refreshed when changing the I/O port type
 - Serial COM port list shows additional dialog if retrieving of ports takes more than 500 ms
+- Selection and settings controls now clear contents when disabled
+- Radix (string/hex) automatically changes when switching the terminal type (text/binary)
+- Coupling of Tx and Rx radix improved
+- Output of system error messages improved (feature request #3103502)
+- MKY.Utilities renamed to MKY for consistency with the .NET System namespace
+- XArray, XByte,... renamed to ArrayEx, ByteEx
 - Update to NUnit 2.5.7
 - Use of parametrized NUnit test cases
 - Use of FxCop (feature request #2970221)
@@ -75,11 +81,6 @@ Important changes:
 - Null reference safe and more efficient implementation of Equals()
 - GetHashCode() implementation according the .NET guidelines
 - CompareTo() implementation according the .NET guidelines
-- Selection and settings controls now clear contents when disabled
-- Radix (string/hex) automatically changes when switching the terminal type (text/binary)
-- Coupling of Tx and Rx radix improved
-- MKY.Utilities renamed to MKY for consistency with the .NET System namespace
-- XArray, XByte,... renamed to ArrayEx, ByteEx
 - Project references to system assemblies cleaned
 - Using directives cleaned
 - Test and demo projects also signed with a strong name key

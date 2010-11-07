@@ -709,7 +709,7 @@ namespace YAT.Model
 					OnMessageInputRequest
 						(
 						"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
-						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
+						"XML error message: " + ex.Message + Environment.NewLine +
 						"File error message: " + ex.InnerException.Message,
 						"File Error",
 						MessageBoxButtons.OK,
@@ -1113,8 +1113,10 @@ namespace YAT.Model
 
 				OnMessageInputRequest
 					(
-					"Unable to start terminal:" + Environment.NewLine + Environment.NewLine +
+					"Unable to start terminal!" + Environment.NewLine + Environment.NewLine +
+					"System error message:" + Environment.NewLine +
 					ex.Message + Environment.NewLine + Environment.NewLine +
+					"YAT hint:" + Environment.NewLine +
 					ioText + " could be in use by another process.",
 					"Terminal Error",
 					MessageBoxButtons.OK,
@@ -1231,7 +1233,9 @@ namespace YAT.Model
 				PrepareSendMessageInputRequest(out text, out title);
 				OnMessageInputRequest
 					(
-					text + Environment.NewLine + Environment.NewLine + ex.Message,
+					text + Environment.NewLine + Environment.NewLine +
+					"System error message:" + Environment.NewLine +
+					ex.Message,
 					title,
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
@@ -1281,7 +1285,9 @@ namespace YAT.Model
 				PrepareSendMessageInputRequest(out text, out title);
 				OnMessageInputRequest
 					(
-					text + Environment.NewLine + Environment.NewLine + ex.Message,
+					text + Environment.NewLine + Environment.NewLine +
+					"System error message:" + Environment.NewLine +
+					ex.Message,
 					title,
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
@@ -1294,7 +1300,8 @@ namespace YAT.Model
 				OnFixedStatusTextRequest("Error sending " + sent + "!");
 				OnMessageInputRequest
 					(
-					"Bad data format:" + Environment.NewLine + Environment.NewLine + ex.Message,
+					"Bad data format:" + Environment.NewLine +
+					ex.Message,
 					"Format Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
@@ -1484,13 +1491,14 @@ namespace YAT.Model
 					}
 				}
 			}
-			catch (Exception e)
+			catch (Exception ex)
 			{
 				OnMessageInputRequest
 					(
 					"Error while accessing file" + Environment.NewLine +
 					filePath + Environment.NewLine + Environment.NewLine +
-					e.Message,
+					"System error message:" + Environment.NewLine +
+					ex.Message,
 					"File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
@@ -1721,7 +1729,9 @@ namespace YAT.Model
 				OnMessageInputRequest
 					(
 					"Unable to begin log." + Environment.NewLine + Environment.NewLine +
+					"System message:" + Environment.NewLine +
 					ex.Message + Environment.NewLine + Environment.NewLine +
+					"YAT hint:" + Environment.NewLine +
 					"Log file may be in use by another process.",
 					"Log File Error",
 					MessageBoxButtons.OK,
@@ -1742,7 +1752,9 @@ namespace YAT.Model
 				OnMessageInputRequest
 					(
 					"Unable to clear log." + Environment.NewLine + Environment.NewLine +
+					"System message:" + Environment.NewLine +
 					ex.Message + Environment.NewLine + Environment.NewLine +
+					"YAT hint:" + Environment.NewLine +
 					"Log file may be in use by another process.",
 					"Log File Error",
 					MessageBoxButtons.OK,
@@ -1772,6 +1784,7 @@ namespace YAT.Model
 				OnMessageInputRequest
 					(
 					"Unable to end log." + Environment.NewLine + Environment.NewLine +
+					"System message:" + Environment.NewLine +
 					ex.Message,
 					"Log File Error",
 					MessageBoxButtons.OK,

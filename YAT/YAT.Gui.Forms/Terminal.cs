@@ -2100,6 +2100,7 @@ namespace YAT.Gui.Forms
 					(
 					this,
 					"Unable to save data to file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
+					"System error message:" + Environment.NewLine +
 					e.Message,
 					"File Error",
 					MessageBoxButtons.OK,
@@ -2153,6 +2154,7 @@ namespace YAT.Gui.Forms
 						(
 						this,
 						"Unable to print data." + Environment.NewLine + Environment.NewLine +
+						"System error message:" + Environment.NewLine +
 						ex.Message,
 						"Print Error",
 						MessageBoxButtons.OK,

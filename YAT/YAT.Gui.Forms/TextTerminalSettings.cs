@@ -375,8 +375,11 @@ namespace YAT.Gui.Forms
 			if (MessageBox.Show
 				(
 				this,
-				"Reset all settings to default values?", "Defaults?",
-				MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3
+				"Reset all settings to default values?",
+				"Defaults?",
+				MessageBoxButtons.YesNoCancel,
+				MessageBoxIcon.Question,
+				MessageBoxDefaultButton.Button3
 				)
 				== DialogResult.Yes)
 			{

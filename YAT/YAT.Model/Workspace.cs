@@ -598,7 +598,7 @@ namespace YAT.Model
 					OnMessageInputRequest
 						(
 						"Unable to save file" + Environment.NewLine + this.settingsHandler.SettingsFilePath + Environment.NewLine + Environment.NewLine +
-						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
+						"XML error message: " + ex.Message + Environment.NewLine +
 						"File error message: " + ex.InnerException.Message,
 						"File Error",
 						MessageBoxButtons.OK,
@@ -886,7 +886,7 @@ namespace YAT.Model
 					DialogResult result = OnMessageInputRequest
 						(
 						"Unable to open terminal" + Environment.NewLine + item.FilePath + Environment.NewLine + Environment.NewLine +
-						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
+						"XML error message: " + ex.Message + Environment.NewLine +
 						"File error message: " + ex.InnerException.Message + Environment.NewLine + Environment.NewLine +
 						"Continue loading workspace?",
 						"Terminal File Error",
@@ -968,7 +968,7 @@ namespace YAT.Model
 					OnMessageInputRequest
 						(
 						"Unable to open file" + Environment.NewLine + absoluteFilePath + Environment.NewLine + Environment.NewLine +
-						"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
+						"XML error message: " + ex.Message + Environment.NewLine +
 						"File error message: " + ex.InnerException.Message,
 						"Invalid Terminal File",
 						MessageBoxButtons.OK,

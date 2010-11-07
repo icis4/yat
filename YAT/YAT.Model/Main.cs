@@ -638,7 +638,7 @@ namespace YAT.Model
 				OnMessageInputRequest
 					(
 					"Unable to open file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
-					"XML error message: " + ex.Message + Environment.NewLine + Environment.NewLine +
+					"XML error message: " + ex.Message + Environment.NewLine +
 					"File error message: " + ex.InnerException.Message,
 					"Invalid Workspace File",
 					MessageBoxButtons.OK,
