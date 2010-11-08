@@ -410,10 +410,12 @@ namespace YAT.Gui.Forms
 			{
 				Refresh();
 
+				// Radix.
 				this.settings_Form.Terminal.Display.SeparateTxRxRadix = f.SettingsResult.Terminal.Display.SeparateTxRxRadix;
 				this.settings_Form.Terminal.Display.TxRadix           = f.SettingsResult.Terminal.Display.TxRadix;
 				this.settings_Form.Terminal.Display.RxRadix           = f.SettingsResult.Terminal.Display.RxRadix;
 
+				// Display.
 				this.settings_Form.Terminal.Display.ShowRadix       = f.SettingsResult.Terminal.Display.ShowRadix;
 				this.settings_Form.Terminal.Display.ShowTimeStamp   = f.SettingsResult.Terminal.Display.ShowTimeStamp;
 				this.settings_Form.Terminal.Display.ShowLength      = f.SettingsResult.Terminal.Display.ShowLength;
@@ -424,19 +426,25 @@ namespace YAT.Gui.Forms
 				this.settings_Form.Terminal.Display.TxMaxLineCount            = f.SettingsResult.Terminal.Display.TxMaxLineCount;
 				this.settings_Form.Terminal.Display.RxMaxLineCount            = f.SettingsResult.Terminal.Display.RxMaxLineCount;
 
+				// Char replace.
 				this.settings_Form.Terminal.CharReplace.ReplaceControlChars = f.SettingsResult.Terminal.CharReplace.ReplaceControlChars;
 				this.settings_Form.Terminal.CharReplace.ControlCharRadix    = f.SettingsResult.Terminal.CharReplace.ControlCharRadix;
 				this.settings_Form.Terminal.CharReplace.ReplaceSpace        = f.SettingsResult.Terminal.CharReplace.ReplaceSpace;
 
+				// Communication.
 				this.settings_Form.Terminal.IO.Endianess = f.SettingsResult.Terminal.IO.Endianess;
 
+				// Send.
 				this.settings_Form.Terminal.Send.KeepCommand     = f.SettingsResult.Terminal.Send.KeepCommand;
 				this.settings_Form.Terminal.Send.CopyPredefined  = f.SettingsResult.Terminal.Send.CopyPredefined;
 				this.settings_Form.Terminal.Send.SendImmediately = f.SettingsResult.Terminal.Send.SendImmediately;
+				this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 
+				// Receive.
 				this.settings_Form.Terminal.IO.SerialPort.ReplaceParityErrors    = f.SettingsResult.Terminal.IO.SerialPort.ReplaceParityErrors;
 				this.settings_Form.Terminal.IO.SerialPort.ParityErrorReplacement = f.SettingsResult.Terminal.IO.SerialPort.ParityErrorReplacement;
 				this.settings_Form.Terminal.IO.SerialParityErrorReplacement      = f.SettingsResult.Terminal.IO.SerialParityErrorReplacement;
+				this.settings_Form.Terminal.IO.SerialPort.DetectInputBreak       = f.SettingsResult.Terminal.IO.SerialPort.DetectInputBreak;
 
 				this.settings_Form.UserName = f.SettingsResult.UserName;
 			}

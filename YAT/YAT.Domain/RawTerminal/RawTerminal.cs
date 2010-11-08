@@ -219,6 +219,16 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		public virtual bool IsOpen
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (this.io.IsOpen);
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool IsConnected
 		{
 			get
@@ -229,12 +239,12 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual bool IsOpen
+		public virtual bool IsReady
 		{
 			get
 			{
 				AssertNotDisposed();
-				return (this.io.IsOpen);
+				return (this.io.IsReady);
 			}
 		}
 
@@ -514,7 +524,7 @@ namespace YAT.Domain
 		{
 			SerialPortIOErrorEventArgs serialPortErrorEventArgs = (e as SerialPortIOErrorEventArgs);
 			if (serialPortErrorEventArgs == null)
-				OnIOError(new IOErrorEventArgs((IOErrorSeverity)e.Severity, e.Message));
+				OnIOError(new IOErrorEventArgs((IOErrorSeverity)e.Severity, (IODirection)e.Direction, e.Message));
 			else
 				OnIOError(new SerialPortErrorEventArgs(serialPortErrorEventArgs.Message, serialPortErrorEventArgs.SerialPortError));
 		}

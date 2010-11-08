@@ -44,6 +44,12 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public const byte ParityErrorReplacementDefault = 0x00;
 
+		/// <summary></summary>
+		public const bool NoSendOnOutputBreakDefault = true;
+
+		/// <summary></summary>
+		public const bool DetectInputBreakDefault = true;
+
 		private SerialPortId portId;
 		private SerialCommunicationSettings communication;
 		private AutoRetry autoReopen;
@@ -51,6 +57,8 @@ namespace MKY.IO.Serial
 		private byte parityErrorReplacement;
 		private bool rtsEnabled;
 		private bool dtrEnabled;
+		private bool noSendOnOutputBreak;
+		private bool detectInputBreak;
 
 		/// <summary></summary>
 		public SerialPortSettings()
@@ -93,6 +101,8 @@ namespace MKY.IO.Serial
 			ParityErrorReplacement = rhs.parityErrorReplacement;
 			RtsEnabled             = rhs.RtsEnabled;
 			DtrEnabled             = rhs.DtrEnabled;
+			NoSendOnOutputBreak    = rhs.NoSendOnOutputBreak;
+			DetectInputBreak       = rhs.DetectInputBreak;
 
 			ClearChanged();
 		}
@@ -114,6 +124,8 @@ namespace MKY.IO.Serial
 			ParityErrorReplacement = ParityErrorReplacementDefault;
 			RtsEnabled             = true;
 			DtrEnabled             = true;
+			NoSendOnOutputBreak    = NoSendOnOutputBreakDefault;
+			DetectInputBreak       = DetectInputBreakDefault;
 		}
 
 		#region Properties
@@ -239,6 +251,36 @@ namespace MKY.IO.Serial
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("NoSendOnOutputBreak")]
+		public virtual bool NoSendOnOutputBreak
+		{
+			get { return (this.noSendOnOutputBreak); }
+			set
+			{
+				if (value != this.noSendOnOutputBreak)
+				{
+					this.noSendOnOutputBreak = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("DetectInputBreak")]
+		public virtual bool DetectInputBreak
+		{
+			get { return (this.detectInputBreak); }
+			set
+			{
+				if (value != this.detectInputBreak)
+				{
+					this.detectInputBreak = value;
+					SetChanged();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members
@@ -265,7 +307,9 @@ namespace MKY.IO.Serial
 				(this.replaceParityErrors    == other.replaceParityErrors) &&
 				(this.parityErrorReplacement == other.parityErrorReplacement) &&
 				(this.rtsEnabled             == other.rtsEnabled) &&
-				(this.dtrEnabled             == other.dtrEnabled)
+				(this.dtrEnabled             == other.dtrEnabled) &&
+				(this.noSendOnOutputBreak    == other.noSendOnOutputBreak) &&
+				(this.detectInputBreak       == other.detectInputBreak)
 			);
 		}
 
@@ -286,7 +330,9 @@ namespace MKY.IO.Serial
 				this.replaceParityErrors   .GetHashCode() ^
 				this.parityErrorReplacement.GetHashCode() ^
 				this.rtsEnabled            .GetHashCode() ^
-				this.dtrEnabled            .GetHashCode()
+				this.dtrEnabled            .GetHashCode() ^
+				this.noSendOnOutputBreak   .GetHashCode() ^
+				this.detectInputBreak      .GetHashCode()
 			);
 		}
 

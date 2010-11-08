@@ -329,18 +329,15 @@ namespace YAT.Domain
 			// Parse string and execute keywords.
 			foreach (Parser.Result result in p.Parse(s, TextTerminalSettings.CharSubstitution, Parser.ParseMode.All))
 			{
-				if (result is Parser.ByteArrayResult)
+				if      (result is Parser.ByteArrayResult)
 				{
 					Send(((Parser.ByteArrayResult)result).ByteArray);
 				}
 				else if (result is Parser.KeywordResult)
 				{
-					switch (((Parser.KeywordResult)result).Keyword)
+					Parser.KeywordResult keywordResult = (Parser.KeywordResult)result;
+					switch (keywordResult.Keyword)
 					{
-						case Parser.Keyword.Delay:
-							// \fixme
-							break;
-
 						case Parser.Keyword.Eol:
 							Send(eolByteArray);
 							break;
@@ -350,7 +347,7 @@ namespace YAT.Domain
 							break;
 
 						default:
-							// \fixme
+							base.ProcessKeywords(keywordResult);
 							break;
 					}
 				}

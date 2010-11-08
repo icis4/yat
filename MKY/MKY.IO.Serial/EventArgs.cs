@@ -48,6 +48,10 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
+		public readonly IODirection Direction;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
 		public readonly string Message;
 
 		/// <summary></summary>
@@ -58,8 +62,15 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		public IOErrorEventArgs(IOErrorSeverity severity, string message)
+			: this(severity, IODirection.Any, message)
+		{
+		}
+
+		/// <summary></summary>
+		public IOErrorEventArgs(IOErrorSeverity severity, IODirection direction, string message)
 		{
 			Severity = severity;
+			Direction = direction;
 			Message = message;
 		}
 	}

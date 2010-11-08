@@ -41,7 +41,7 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const bool TerminalIsOpenDefault = false;
+		private const bool TerminalIsReadyDefault = false;
 
 		#endregion
 
@@ -53,7 +53,7 @@ namespace YAT.Gui.Controls
 		private List<Button> buttons_commands;
 
 		private List<Command> commands;
-		private bool terminalIsOpen = TerminalIsOpenDefault;
+		private bool terminalIsReady = TerminalIsReadyDefault;
 
 		#endregion
 
@@ -109,11 +109,11 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual bool TerminalIsOpen
+		public virtual bool TerminalIsReady
 		{
 			set
 			{
-				this.terminalIsOpen = value;
+				this.terminalIsReady = value;
 				SetControls();
 			}
 		}
@@ -225,7 +225,7 @@ namespace YAT.Gui.Controls
 			for (int i = 0; i < commandCount; i++)
 			{
 				bool isDefined = ((this.commands[i] != null) && this.commands[i].IsDefined);
-				bool isValid = (isDefined && this.terminalIsOpen && this.commands[i].IsValid);
+				bool isValid = (isDefined && this.terminalIsReady && this.commands[i].IsValid);
 
 				if (isDefined)
 				{

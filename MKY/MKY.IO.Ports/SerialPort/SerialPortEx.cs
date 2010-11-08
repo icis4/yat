@@ -49,8 +49,17 @@ namespace MKY.IO.Ports
 	/// </summary>
 	[System.Drawing.ToolboxBitmap(typeof(System.IO.Ports.SerialPort))]
 	[DefaultProperty("PortName")]
-	public partial class SerialPortDotNet : System.IO.Ports.SerialPort, ISerialPort
+	public partial class SerialPortEx : System.IO.Ports.SerialPort, ISerialPort
 	{
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
+		private bool inputBreak;
+
+		#endregion
+
 		#region Events
 		//==========================================================================================
 		// Events
@@ -137,14 +146,14 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 
 		/// <summary></summary>
-		public SerialPortDotNet()
+		public SerialPortEx()
 		{
 			InitializeComponent();
 			Initialize();
 		}
 
 		/// <summary></summary>
-		public SerialPortDotNet(IContainer container)
+		public SerialPortEx(IContainer container)
 		{
 			container.Add(this);
 			InitializeComponent();
@@ -335,8 +344,8 @@ namespace MKY.IO.Ports
 				{
 					base.Handshake = value;
 					OnPortSettingsChanged(new EventArgs());
-					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.RtsChanged));
-					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.DtrChanged));
+					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rts));
+					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 				}
 			}
 		}
@@ -364,10 +373,10 @@ namespace MKY.IO.Ports
 				AssertNotDisposed();
 
 				SerialPortSettings settings = new SerialPortSettings();
-				settings.BaudRate  = (BaudRateEx)base.BaudRate;
-				settings.DataBits  = (DataBitsEx)base.DataBits;
-				settings.Parity    = (ParityEx)base.Parity;
-				settings.StopBits  = (StopBitsEx)base.StopBits;
+				settings.BaudRate  = (BaudRateEx) base.BaudRate;
+				settings.DataBits  = (DataBitsEx) base.DataBits;
+				settings.Parity    = (ParityEx)   base.Parity;
+				settings.StopBits  = (StopBitsEx) base.StopBits;
 				settings.Handshake = (HandshakeEx)base.Handshake;
 
 				return (settings);
@@ -376,15 +385,15 @@ namespace MKY.IO.Ports
 			{
 				AssertNotDisposed();
 
-				base.BaudRate  = (BaudRateEx)value.BaudRate;
-				base.DataBits  = (DataBitsEx)value.DataBits;
-				base.Parity    = (ParityEx)value.Parity;
-				base.StopBits  = (StopBitsEx)value.StopBits;
+				base.BaudRate  = (BaudRateEx) value.BaudRate;
+				base.DataBits  = (DataBitsEx) value.DataBits;
+				base.Parity    = (ParityEx)   value.Parity;
+				base.StopBits  = (StopBitsEx) value.StopBits;
 				base.Handshake = (HandshakeEx)value.Handshake;
 
 				OnPortSettingsChanged(new EventArgs());
-				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.RtsChanged));
-				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.DtrChanged));
+				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rts));
+				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 			}
 		}
 
@@ -416,7 +425,7 @@ namespace MKY.IO.Ports
 					if (value != base.RtsEnable)
 					{
 						base.RtsEnable = value;
-						OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.RtsChanged));
+						OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rts));
 					}
 				}
 			}
@@ -452,7 +461,7 @@ namespace MKY.IO.Ports
 				if (value != base.DtrEnable)
 				{
 					base.DtrEnable = value;
-					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.DtrChanged));
+					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
 				}
 			}
 		}
@@ -488,6 +497,48 @@ namespace MKY.IO.Ports
 				pins.Cd  = CDHolding;
 
 				return (pins);
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the output break state.
+		/// </summary>
+		public virtual bool OutputBreak
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (base.BreakState);
+			}
+			set
+			{
+				AssertNotDisposed();
+				if (value != base.BreakState)
+				{
+					base.BreakState = value;
+					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.OutputBreak));
+				}
+			}
+		}
+
+		/// <summary>
+		/// Toggles the output break state.
+		/// </summary>
+		public virtual void ToggleOutputBreak()
+		{
+			AssertNotDisposed();
+			this.OutputBreak = !this.OutputBreak;
+		}
+
+		/// <summary>
+		/// Gets the input break state.
+		/// </summary>
+		public virtual bool InputBreak
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (this.inputBreak);
 			}
 		}
 
@@ -559,8 +610,9 @@ namespace MKY.IO.Ports
 				}
 
 				OnOpened(new EventArgs());
-				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.RtsChanged));
-				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.DtrChanged));
+				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rts));
+				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
+				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.OutputBreak));
 
 				// Immediately check whether there is already data pending
 				if (BytesToRead > 0)
@@ -626,16 +678,17 @@ namespace MKY.IO.Ports
 				base.Close();
 #endif
 				OnClosed(new EventArgs());
-				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.RtsChanged));
-				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.DtrChanged));
+				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rts));
+				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
+				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.OutputBreak));
 			}
 		}
 
 		#endregion
 
-		#region SerialPort Event Handling
+		#region Base Event Handling
 		//==========================================================================================
-		// SerialPort Event Handling
+		// Base Event Handling
 		//==========================================================================================
 
 		private void base_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
@@ -650,6 +703,7 @@ namespace MKY.IO.Ports
 
 		private void base_PinChanged(object sender, System.IO.Ports.SerialPinChangedEventArgs e)
 		{
+			this.inputBreak = (e.EventType == System.IO.Ports.SerialPinChange.Break);
 			OnPinChanged(new SerialPinChangedEventArgs((SerialPinChange)e.EventType));
 		}
 

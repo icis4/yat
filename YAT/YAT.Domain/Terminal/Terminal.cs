@@ -251,6 +251,16 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
+		public virtual bool IsReady
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (this.rawTerminal.IsReady);
+			}
+		}
+
+		/// <summary></summary>
 		public virtual MKY.IO.Serial.IIOProvider UnderlyingIOProvider
 		{
 			get
@@ -349,22 +359,13 @@ namespace YAT.Domain
 			Parser.Parser p = new Parser.Parser(TerminalSettings.IO.Endianess);
 			foreach (Parser.Result result in p.Parse(s, Parser.ParseMode.All))
 			{
-				if (result is Parser.ByteArrayResult)
+				if      (result is Parser.ByteArrayResult)
 				{
 					this.rawTerminal.Send(((Parser.ByteArrayResult)result).ByteArray);
 				}
 				else if (result is Parser.KeywordResult)
 				{
-					switch (((Parser.KeywordResult)result).Keyword)
-					{
-						case Parser.Keyword.Delay:
-							// \fixme
-							break;
-
-						default:
-							// \fixme
-							break;
-					}
+					ProcessKeywords((Parser.KeywordResult)result);
 				}
 			}
 		}
@@ -374,6 +375,73 @@ namespace YAT.Domain
 		{
 			// Simply send line as string.
 			Send(line);
+		}
+
+		/// <summary></summary>
+		protected virtual void ProcessKeywords(Parser.KeywordResult result)
+		{
+			switch (((Parser.KeywordResult)result).Keyword)
+			{
+				case Parser.Keyword.Clear:
+				{
+					this.ClearRepositories();
+					break;
+				}
+
+				case Parser.Keyword.Delay:
+				{
+					OnIOError(new IOErrorEventArgs(IOErrorSeverity.Severe, @"\!(Delay(<TimeSpan>)) is not yet implemented, tracked as feature request #3105478"));
+					break;
+				}
+
+				case Parser.Keyword.OutputBreakOn:
+				{
+					if (this.terminalSettings.IO.IOType == IOType.SerialPort)
+					{
+						MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
+						port.OutputBreak = true;
+					}
+					else
+					{
+						OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("Break is only supported on serial COM ports"));
+					}
+					break;
+				}
+
+				case Parser.Keyword.OutputBreakOff:
+				{
+					if (this.terminalSettings.IO.IOType == IOType.SerialPort)
+					{
+						MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
+						port.OutputBreak = false;
+					}
+					else
+					{
+						OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("Break is only supported on serial COM ports"));
+					}
+					break;
+				}
+
+				case Parser.Keyword.OutputBreakToggle:
+				{
+					if (this.terminalSettings.IO.IOType == IOType.SerialPort)
+					{
+						MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)this.UnderlyingIOInstance;
+						port.ToggleOutputBreak();
+					}
+					else
+					{
+						OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("Break is only supported on serial COM ports"));
+					}
+					break;
+				}
+
+				default:
+				{
+					// \fixme
+					break;
+				}
+			}
 		}
 
 		#endregion
@@ -407,7 +475,7 @@ namespace YAT.Domain
 				case Radix.Dec:
 				case Radix.Hex:
 				{
-					if ((b < 0x20) || (b == 0x7F)) // Control chars
+					if ((b < 0x20) || (b == 0x7F)) // Control chars.
 					{
 						if (replaceToAscii)
 							text = ByteToAsciiString(b);
@@ -423,7 +491,7 @@ namespace YAT.Domain
 				case Radix.Char:
 				case Radix.String:
 				{
-					if ((b < 0x20) || (b == 0x7F)) // Control chars
+					if ((b < 0x20) || (b == 0x7F)) // Control chars.
 					{
 						if (replaceToAscii)
 						{
@@ -431,7 +499,7 @@ namespace YAT.Domain
 						}
 						else
 						{
-							error = true; // Signal error
+							error = true; // Signal error.
 							if (d == SerialDirection.Tx)
 								text = "Sent";
 							else
@@ -441,7 +509,7 @@ namespace YAT.Domain
 							text += " cannot be displayed in current settings";
 						}
 					}
-					else if (b == 0x20) // Space
+					else if (b == 0x20) // Space.
 					{
 						if (TerminalSettings.CharReplace.ReplaceSpace)
 							text = "␣";
@@ -459,14 +527,14 @@ namespace YAT.Domain
 
 			if (!error)
 			{
-				if ((b == 0x09) && !this.terminalSettings.CharReplace.ReplaceTab) // Tab
+				if ((b == 0x09) && !this.terminalSettings.CharReplace.ReplaceTab) // Tab.
 				{
 					if (d == SerialDirection.Tx)
 						return (new DisplayElement.TxData(b, text));
 					else
 						return (new DisplayElement.RxData(b, text));
 				}
-				else if ((b < 0x20) || (b == 0x7F)) // Control chars
+				else if ((b < 0x20) || (b == 0x7F)) // Control chars.
 				{
 					if (d == SerialDirection.Tx)
 						return (new DisplayElement.TxControl(b, text));
@@ -574,20 +642,20 @@ namespace YAT.Domain
 		{
 			DisplayLine dl = new DisplayLine();
 
-			// Line begin and time stamp
+			// Line begin and time stamp.
 			if (this.terminalSettings.Display.ShowTimeStamp)
 			{
 				dl.Add(new DisplayElement.TimeStamp(re.Direction, re.TimeStamp));
 				dl.Add(new DisplayElement.LeftMargin());
 			}
 
-			// Data
+			// Data.
 			foreach (byte b in re.Data)
 			{
 				dl.Add(ByteToElement(b, re.Direction));
 			}
 
-			// Line length and end
+			// Line length and end.
 			if (this.terminalSettings.Display.ShowLength)
 			{
 				dl.Add(new DisplayElement.RightMargin());
@@ -595,8 +663,8 @@ namespace YAT.Domain
 			}
 			dl.Add(new DisplayElement.LineBreak(re.Direction));
 
-			// Return elements
-			// Attention: Clone elements because they are needed again below
+			// Return elements.
+			// \attention: Clone elements because they are needed again below.
 			elements.AddRange(dl.Clone());
 			lines.Add(dl);
 		}
@@ -604,8 +672,8 @@ namespace YAT.Domain
 		/// <summary></summary>
 		protected virtual void ProcessAndSignalRawElement(RawElement re)
 		{
-			// Collection of elements processed, extends over one or multiple lines, depending on
-			// the number of bytes in raw element
+			// Collection of elements processed, extends over one or multiple lines,
+			// depending on the number of bytes in raw element.
 			DisplayElementCollection elements = new DisplayElementCollection();
 			List<DisplayLine> lines = new List<DisplayLine>();
 
@@ -919,22 +987,30 @@ namespace YAT.Domain
 		private void rawTerminal_IOError(object sender, IOErrorEventArgs e)
 		{
 			SerialPortErrorEventArgs serialPortErrorEventArgs = (e as SerialPortErrorEventArgs);
-			if (serialPortErrorEventArgs == null)
+			if (serialPortErrorEventArgs != null)
 			{
-				OnIOError(e);
+				// Handle serial port errors whenever possible.
+				switch (serialPortErrorEventArgs.SerialPortError)
+				{
+					case System.IO.Ports.SerialError.Frame:    OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("FRAMING ERROR"));   break;
+					case System.IO.Ports.SerialError.Overrun:  OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("BUFFER OVERRUN"));  break;
+					case System.IO.Ports.SerialError.RXOver:   OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("BUFFER OVERFLOW")); break;
+					case System.IO.Ports.SerialError.RXParity: OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("PARITY ERROR"));    break;
+					case System.IO.Ports.SerialError.TXFull:   OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Error("BUFFER FULL"));     break;
+					default:                                   OnIOError(e); break;
+				}
+			}
+			else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Input))
+			{
+				OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error(e.Message));
+			}
+			else if ((e.Severity == IOErrorSeverity.Acceptable) && (e.Direction == IODirection.Output))
+			{
+				OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Error(e.Message));
 			}
 			else
 			{
-				// handle serial port errors whenever possible
-				switch (serialPortErrorEventArgs.SerialPortError)
-				{
-					case System.IO.Ports.SerialError.Frame:    OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("<FRAMING ERROR>"));   break;
-					case System.IO.Ports.SerialError.Overrun:  OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("<BUFFER OVERRUN>"));  break;
-					case System.IO.Ports.SerialError.RXOver:   OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("<BUFFER OVERFLOW>")); break;
-					case System.IO.Ports.SerialError.RXParity: OnDisplayElementProcessed(SerialDirection.Rx, new DisplayElement.Error("<PARITY ERROR>"));    break;
-					case System.IO.Ports.SerialError.TXFull:   OnDisplayElementProcessed(SerialDirection.Tx, new DisplayElement.Error("<BUFFER FULL>"));     break;
-					default:                                   OnIOError(e); break;
-				}
+				OnIOError(e);
 			}
 		}
 

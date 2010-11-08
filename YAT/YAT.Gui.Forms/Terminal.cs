@@ -1571,11 +1571,15 @@ namespace YAT.Gui.Forms
 		private void toolStripStatusLabel_TerminalStatus_Initialize()
 		{
 			this.statusLabels_ioControl = new List<ToolStripStatusLabel>();
+
 			this.statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_RTS);
 			this.statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_CTS);
 			this.statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DTR);
 			this.statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DSR);
 			this.statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DCD);
+
+			this.statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_OutputBreak);
+			this.statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_InputBreak);
 		}
 
 		private void toolStripStatusLabel_TerminalStatus_IOStatus_Click(object sender, EventArgs e)
@@ -1591,6 +1595,11 @@ namespace YAT.Gui.Forms
 		private void toolStripStatusLabel_TerminalStatus_DTR_Click(object sender, EventArgs e)
 		{
 			this.terminal.RequestToggleDtr();
+		}
+
+		private void toolStripStatusLabel_TerminalStatus_OutputBreak_Click(object sender, EventArgs e)
+		{
+			this.terminal.RequestToggleOutputBreak();
 		}
 
 		#endregion
@@ -1784,7 +1793,7 @@ namespace YAT.Gui.Forms
 			contextMenuStrip_Predefined_SetMenuItems(); // Ensure that shortcuts are activated.
 
 			this.isSettingControls = true;
-			predefined.TerminalIsOpen = this.terminal.IsOpen;
+			predefined.TerminalIsReady = this.terminal.IsReady;
 			this.isSettingControls = false;
 		}
 
@@ -1802,7 +1811,7 @@ namespace YAT.Gui.Forms
 			send.Command = this.settingsRoot.SendCommand.Command;
 			send.SendCommandImmediately = this.settingsRoot.Send.SendImmediately;
 			send.RecentCommands = this.settingsRoot.SendCommand.RecentCommands;
-			send.TerminalIsOpen = this.terminal.IsOpen;
+			send.TerminalIsReady = this.terminal.IsReady;
 			this.isSettingControls = false;
 		}
 
@@ -2555,20 +2564,7 @@ namespace YAT.Gui.Forms
 			SetTerminalControls();
 			OnTerminalChanged(new EventArgs());
 
-			Domain.SerialPortErrorEventArgs serialPortErrorEventArgs = (e as Domain.SerialPortErrorEventArgs);
-			if (serialPortErrorEventArgs != null) // Handle known serial COM port issues.
-			{
-				SetTimedStatusText("Terminal Warning");
-				MessageBox.Show
-					(
-					this,
-					e.Message,
-					"Terminal Warning",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Warning
-					);
-			}
-			else if (e.Severity == Domain.IOErrorSeverity.Acceptable) // Handle acceptable issues.
+			if (e.Severity == Domain.IOErrorSeverity.Acceptable) // Handle acceptable issues.
 			{
 				SetTimedStatusText("Terminal Warning");
 				MessageBox.Show
@@ -2596,14 +2592,14 @@ namespace YAT.Gui.Forms
 
 		private void terminal_DisplayElementsSent(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			// Display elements immediately
+			// Display elements immediately.
 			monitor_Tx.AddElements(e.Elements);
 			monitor_Bidir.AddElements(e.Elements);
 		}
 
 		private void terminal_DisplayElementsReceived(object sender, Domain.DisplayElementsEventArgs e)
 		{
-			// Display elements immediately
+			// Display elements immediately.
 			monitor_Bidir.AddElements(e.Elements);
 			monitor_Rx.AddElements(e.Elements);
 		}
@@ -2656,7 +2652,7 @@ namespace YAT.Gui.Forms
 
 		private void terminal_Closed(object sender, Model.ClosedEventArgs e)
 		{
-			// Prevent multiple calls to Close()
+			// Prevent multiple calls to Close().
 			if (!this.isClosingFromForm)
 			{
 				this.isClosingFromModel = true;
@@ -2780,7 +2776,16 @@ namespace YAT.Gui.Forms
 						sb.Append(" - ");
 						sb.Append(s.PortId.ToString(true, false));
 						sb.Append(" - ");
-						sb.Append(isOpen ? "Open" : "Closed");
+						if (isOpen)
+						{
+							sb.Append("Open");
+							sb.Append(" - ");
+							sb.Append(isConnected ? "Connected" : "Disconnected");
+						}
+						else
+						{
+							sb.Append("Closed");
+						}
 						break;
 					}
 
@@ -2916,7 +2921,6 @@ namespace YAT.Gui.Forms
 			bool isStarted    = this.terminal.IsStarted;
 			bool isOpen       = this.terminal.IsOpen;
 			bool isConnected  = this.terminal.IsConnected;
-			bool isSerialPort = false;
 
 			StringBuilder sb = new StringBuilder();
 
@@ -2929,13 +2933,19 @@ namespace YAT.Gui.Forms
 				{
 					case Domain.IOType.SerialPort:
 					{
-						isSerialPort = true;
-
 						MKY.IO.Serial.SerialPortSettings s = this.settingsRoot.IO.SerialPort;
 						sb.Append("Serial port ");
 						sb.Append(s.PortId.ToString(true, false));
 						sb.Append(" (" + s.Communication + ") is ");
-						sb.Append(isOpen ? "open" : "closed");
+						if (isOpen)
+						{
+							sb.Append("open and ");
+							sb.Append(isConnected ? "connected" : "disconnected");
+						}
+						else
+						{
+							sb.Append("closed");
+						}
 						break;
 					}
 
@@ -3057,8 +3067,6 @@ namespace YAT.Gui.Forms
 				}
 			}
 
-			// \fixme break state detection doesn't work, otherwise, connection state could always be enabled
-			toolStripStatusLabel_TerminalStatus_ConnectionState.Visible = !isSerialPort;
 			toolStripStatusLabel_TerminalStatus_ConnectionState.Enabled = isOpen;
 			toolStripStatusLabel_TerminalStatus_ConnectionState.Image = (isConnected ? on : off);
 
@@ -3081,7 +3089,7 @@ namespace YAT.Gui.Forms
 				foreach (ToolStripStatusLabel sl in this.statusLabels_ioControl)
 					sl.Enabled = isOpen;
 
-				Image on = Properties.Resources.Image_On_12x12;
+				Image on  = Properties.Resources.Image_On_12x12;
 				Image off = Properties.Resources.Image_Off_12x12;
 
 				if (isOpen)
@@ -3092,7 +3100,6 @@ namespace YAT.Gui.Forms
 						pins = port.ControlPins;
 
 					bool rs485FlowControl = (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.RS485);
-
 					if (rs485FlowControl)
 					{
 						if (pins.Rts)
@@ -3106,7 +3113,10 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_CTS.Image = (pins.Cts ? on : off);
 					toolStripStatusLabel_TerminalStatus_DTR.Image = (pins.Dtr ? on : off);
 					toolStripStatusLabel_TerminalStatus_DSR.Image = (pins.Dsr ? on : off);
-					toolStripStatusLabel_TerminalStatus_DCD.Image = (pins.Cd ? on : off);
+					toolStripStatusLabel_TerminalStatus_DCD.Image = (pins.Cd  ? on : off);
+
+					toolStripStatusLabel_TerminalStatus_OutputBreak.Image = (!port.OutputBreak ? on : off);
+					toolStripStatusLabel_TerminalStatus_InputBreak.Image  = (!port.InputBreak  ? on : off);
 
 					bool manualFlowControl = (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual);
 
@@ -3115,6 +3125,9 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_DTR.ForeColor = (manualFlowControl ? SystemColors.ControlText : SystemColors.GrayText);
 					toolStripStatusLabel_TerminalStatus_DSR.ForeColor = SystemColors.GrayText;
 					toolStripStatusLabel_TerminalStatus_DCD.ForeColor = SystemColors.GrayText;
+
+					toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor = SystemColors.ControlText;
+					toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor  = SystemColors.GrayText;
 				}
 				else
 				{

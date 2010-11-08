@@ -49,6 +49,19 @@ namespace YAT.Domain
 		/// <summary></summary>
 		Fatal = MKY.IO.Serial.IOErrorSeverity.Fatal,
 	}
+
+	/// <summary></summary>
+	public enum IODirection
+	{
+		/// <summary></summary>
+		Any = MKY.IO.Serial.IODirection.Any,
+
+		/// <summary></summary>
+		Input = MKY.IO.Serial.IODirection.Input,
+
+		/// <summary></summary>
+		Output = MKY.IO.Serial.IODirection.Output,
+	}
 }
 
 //==================================================================================================

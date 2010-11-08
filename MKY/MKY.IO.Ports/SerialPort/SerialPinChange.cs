@@ -41,37 +41,42 @@ namespace MKY.IO.Ports
 		/// The Ready to Send (RTS) signal changed state. This signal is used to indicate
 		/// whether data can be received over the serial port.
 		/// </summary>
-		RtsChanged = 2,
+		Rts = 2,
 
 		/// <summary>
 		/// The Clear to Send (CTS) signal changed state. This signal is used to indicate
 		/// whether data can be sent over the serial port.
 		/// </summary>
-		CtsChanged = System.IO.Ports.SerialPinChange.CtsChanged,
+		Cts = System.IO.Ports.SerialPinChange.CtsChanged,
 
 		/// <summary>
 		/// The Data Terminal Ready (DTR) signal changed state. This signal is used to indicate
 		/// whether this serial port host is ready to operate.
 		/// </summary>
-		DtrChanged = 4,
+		Dtr = 4,
 
 		/// <summary>
 		/// The Data Set Ready (DSR) signal changed state. This signal is used to indicate
 		/// whether the device on the serial port is ready to operate.
 		/// </summary>
-		DsrChanged = System.IO.Ports.SerialPinChange.DsrChanged,
+		Dsr = System.IO.Ports.SerialPinChange.DsrChanged,
 
 		/// <summary>
 		/// The Carrier Detect (CD) signal changed state. This signal is used to indicate
 		/// whether a modem is connected to a working phone line and a data carrier signal
 		/// is detected.
 		/// </summary>
-		CDChanged = System.IO.Ports.SerialPinChange.CDChanged,
+		CD = System.IO.Ports.SerialPinChange.CDChanged,
 
 		/// <summary>
 		/// A break was detected on input.
 		/// </summary>
-		Break = System.IO.Ports.SerialPinChange.Break,
+		InputBreak = System.IO.Ports.SerialPinChange.Break,
+
+		/// <summary>
+		/// A break was set on output.
+		/// </summary>
+		OutputBreak = 128,
 
 		/// <summary>
 		/// A ring indicator was detected.

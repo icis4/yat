@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace MKY.IO.Ports
 {
-	partial class SerialPortDotNet
+	partial class SerialPortEx
 	{
 		/// <summary>
 		/// Required designer variable.

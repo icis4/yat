@@ -66,7 +66,7 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const bool TerminalIsOpenDefault = false;
+		private const bool TerminalIsReadyDefault = false;
 		private const float SplitterRatioDefault = (float)0.75;
 
 		#endregion
@@ -80,7 +80,7 @@ namespace YAT.Gui.Controls
 
 		private Command command = new Command();
 		private RecentItemCollection<Command> recents;
-		private bool terminalIsOpen = TerminalIsOpenDefault;
+		private bool terminalIsReady = TerminalIsReadyDefault;
 		private float splitterRatio = SplitterRatioDefault;
 
 		private FocusState focusState = FocusState.Inactive;
@@ -175,11 +175,11 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual bool TerminalIsOpen
+		public virtual bool TerminalIsReady
 		{
 			set
 			{
-				this.terminalIsOpen = value;
+				this.terminalIsReady = value;
 				SetControls();
 			}
 		}
@@ -469,7 +469,7 @@ namespace YAT.Gui.Controls
 			else
 				button_SendCommand.Text = "Send Command (F3)";
 
-			button_SendCommand.Enabled = this.terminalIsOpen;
+			button_SendCommand.Enabled = this.terminalIsReady;
 
 			this.isSettingControls = false;
 		}

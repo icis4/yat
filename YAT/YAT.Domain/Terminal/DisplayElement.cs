@@ -263,13 +263,13 @@ namespace YAT.Domain
 
 			/// <summary></summary>
 			public Error(string message)
-				: base(message)
+				: base('<' + message + '>')
 			{
 			}
 
 			/// <summary></summary>
 			public Error(SerialDirection direction, string message)
-				: base(direction, message)
+				: base(direction, '<' + message + '>')
 			{
 			}
 		}
