@@ -112,7 +112,7 @@ namespace MKY.IO.Serial
 		/// Gets a value indicating whether the underlying I/O instance is open.
 		/// </summary>
 		/// <remarks>
-		/// For TCP sockets, this property indicates that the the underlying I/O instance is
+		/// For TCP sockets, this property indicates that the underlying I/O instance is
 		/// connected to a remote resource.
 		/// </remarks>
 		/// <returns>
@@ -120,6 +120,20 @@ namespace MKY.IO.Serial
 		/// otherwise, <c>false</c>.
 		/// </returns>
 		bool IsOpen { get; }
+
+		/// <summary>
+		/// Gets a value indicating whether the underlying I/O instance is ready to send and
+		/// receive data.
+		/// </summary>
+		/// <remarks>
+		/// This property has been added since the meaning of <see cref="IsConnected"/> and
+		/// <see cref="IsOpen"/> differ depending on the underlying I/O instance.
+		/// </remarks>
+		/// <returns>
+		/// <c>true</c> if the underlying I/O instance is ready to send and receive data as of
+		/// the most recent operation; otherwise, <c>false</c>.
+		/// </returns>
+		bool IsReady { get; }
 
 		/// <summary>
 		/// Gets the amount of data received from the remote resource that is available to read.

@@ -37,7 +37,7 @@ namespace MKY.IO.Ports
 		//------------------------------------------------------------------------------------------
 		// Must be mapped because System.IO.Ports.Serial<EventType>EventArgs do
 		// not provide any constructor and can therefore not be created from an
-		// adapter like MKY.IO.Ports.SerialPortCharon
+		// adapter like MKY.IO.Ports.SerialPortEx
 		//==========================================================================================
 
 		/// <summary>

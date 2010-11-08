@@ -32,14 +32,19 @@ namespace YAT.Gui.Forms
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.button_OK = new System.Windows.Forms.Button();
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
+			this.groupBox_User = new System.Windows.Forms.GroupBox();
+			this.textBox_UserName = new System.Windows.Forms.TextBox();
+			this.label2 = new System.Windows.Forms.Label();
 			this.groupBox_CommunicationSettings = new System.Windows.Forms.GroupBox();
 			this.comboBox_Endianess = new System.Windows.Forms.ComboBox();
 			this.label_Endianess = new System.Windows.Forms.Label();
 			this.groupBox_ReceiveSettings = new System.Windows.Forms.GroupBox();
+			this.checkBox_DetectInputBreak = new System.Windows.Forms.CheckBox();
 			this.checkBox_ReplaceParityError = new System.Windows.Forms.CheckBox();
 			this.label_ParityReplacementExample = new System.Windows.Forms.Label();
 			this.textBox_ParityReplacement = new System.Windows.Forms.TextBox();
-			this.groupBox_SendCommandSettings = new System.Windows.Forms.GroupBox();
+			this.groupBox_SendSettings = new System.Windows.Forms.GroupBox();
+			this.checkBox_NoSendOnOutputBreak = new System.Windows.Forms.CheckBox();
 			this.label_SendImmediately = new System.Windows.Forms.Label();
 			this.checkBox_SendImmediately = new System.Windows.Forms.CheckBox();
 			this.checkBox_CopyPredefined = new System.Windows.Forms.CheckBox();
@@ -69,18 +74,15 @@ namespace YAT.Gui.Forms
 			this.label_MaxLineCountUnit = new System.Windows.Forms.Label();
 			this.textBox_MaxLineCount = new System.Windows.Forms.TextBox();
 			this.label_MaxLineCount = new System.Windows.Forms.Label();
-			this.groupBox_User = new System.Windows.Forms.GroupBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.textBox_UserName = new System.Windows.Forms.TextBox();
 			this.groupBox_Settings.SuspendLayout();
+			this.groupBox_User.SuspendLayout();
 			this.groupBox_CommunicationSettings.SuspendLayout();
 			this.groupBox_ReceiveSettings.SuspendLayout();
-			this.groupBox_SendCommandSettings.SuspendLayout();
+			this.groupBox_SendSettings.SuspendLayout();
 			this.groupBox_DisplaySettings.SuspendLayout();
 			this.groupBox_Display_Tab.SuspendLayout();
 			this.groupBox_Display_Space.SuspendLayout();
 			this.groupBox_Display_ControlChars.SuspendLayout();
-			this.groupBox_User.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// button_Defaults
@@ -123,13 +125,41 @@ namespace YAT.Gui.Forms
 			this.groupBox_Settings.Controls.Add(this.groupBox_User);
 			this.groupBox_Settings.Controls.Add(this.groupBox_CommunicationSettings);
 			this.groupBox_Settings.Controls.Add(this.groupBox_ReceiveSettings);
-			this.groupBox_Settings.Controls.Add(this.groupBox_SendCommandSettings);
+			this.groupBox_Settings.Controls.Add(this.groupBox_SendSettings);
 			this.groupBox_Settings.Controls.Add(this.groupBox_DisplaySettings);
 			this.groupBox_Settings.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_Settings.Name = "groupBox_Settings";
 			this.groupBox_Settings.Size = new System.Drawing.Size(544, 413);
 			this.groupBox_Settings.TabIndex = 0;
 			this.groupBox_Settings.TabStop = false;
+			// 
+			// groupBox_User
+			// 
+			this.groupBox_User.Controls.Add(this.textBox_UserName);
+			this.groupBox_User.Controls.Add(this.label2);
+			this.groupBox_User.Location = new System.Drawing.Point(275, 292);
+			this.groupBox_User.Name = "groupBox_User";
+			this.groupBox_User.Size = new System.Drawing.Size(263, 51);
+			this.groupBox_User.TabIndex = 4;
+			this.groupBox_User.TabStop = false;
+			this.groupBox_User.Text = "User";
+			// 
+			// textBox_UserName
+			// 
+			this.textBox_UserName.Location = new System.Drawing.Point(94, 18);
+			this.textBox_UserName.Name = "textBox_UserName";
+			this.textBox_UserName.Size = new System.Drawing.Size(157, 20);
+			this.textBox_UserName.TabIndex = 1;
+			this.textBox_UserName.TextChanged += new System.EventHandler(this.textBox_UserName_TextChanged);
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(9, 21);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(79, 13);
+			this.label2.TabIndex = 0;
+			this.label2.Text = "Terminal &name:";
 			// 
 			// groupBox_CommunicationSettings
 			// 
@@ -164,15 +194,27 @@ namespace YAT.Gui.Forms
 			// 
 			// groupBox_ReceiveSettings
 			// 
+			this.groupBox_ReceiveSettings.Controls.Add(this.checkBox_DetectInputBreak);
 			this.groupBox_ReceiveSettings.Controls.Add(this.checkBox_ReplaceParityError);
 			this.groupBox_ReceiveSettings.Controls.Add(this.label_ParityReplacementExample);
 			this.groupBox_ReceiveSettings.Controls.Add(this.textBox_ParityReplacement);
-			this.groupBox_ReceiveSettings.Location = new System.Drawing.Point(275, 177);
+			this.groupBox_ReceiveSettings.Location = new System.Drawing.Point(275, 200);
 			this.groupBox_ReceiveSettings.Name = "groupBox_ReceiveSettings";
-			this.groupBox_ReceiveSettings.Size = new System.Drawing.Size(263, 63);
+			this.groupBox_ReceiveSettings.Size = new System.Drawing.Size(263, 86);
 			this.groupBox_ReceiveSettings.TabIndex = 3;
 			this.groupBox_ReceiveSettings.TabStop = false;
 			this.groupBox_ReceiveSettings.Text = "Receive Settings";
+			// 
+			// checkBox_DetectInputBreak
+			// 
+			this.checkBox_DetectInputBreak.AutoSize = true;
+			this.checkBox_DetectInputBreak.Location = new System.Drawing.Point(12, 59);
+			this.checkBox_DetectInputBreak.Name = "checkBox_DetectInputBreak";
+			this.checkBox_DetectInputBreak.Size = new System.Drawing.Size(166, 17);
+			this.checkBox_DetectInputBreak.TabIndex = 3;
+			this.checkBox_DetectInputBreak.Text = "&Detect input break state (IBS)";
+			this.checkBox_DetectInputBreak.UseVisualStyleBackColor = true;
+			this.checkBox_DetectInputBreak.CheckedChanged += new System.EventHandler(this.checkBox_DetectInputBreak_CheckedChanged);
 			// 
 			// checkBox_ReplaceParityError
 			// 
@@ -202,18 +244,30 @@ namespace YAT.Gui.Forms
 			this.textBox_ParityReplacement.TabIndex = 1;
 			this.textBox_ParityReplacement.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_ParityReplacement_Validating);
 			// 
-			// groupBox_SendCommandSettings
+			// groupBox_SendSettings
 			// 
-			this.groupBox_SendCommandSettings.Controls.Add(this.label_SendImmediately);
-			this.groupBox_SendCommandSettings.Controls.Add(this.checkBox_SendImmediately);
-			this.groupBox_SendCommandSettings.Controls.Add(this.checkBox_CopyPredefined);
-			this.groupBox_SendCommandSettings.Controls.Add(this.checkBox_KeepCommand);
-			this.groupBox_SendCommandSettings.Location = new System.Drawing.Point(275, 67);
-			this.groupBox_SendCommandSettings.Name = "groupBox_SendCommandSettings";
-			this.groupBox_SendCommandSettings.Size = new System.Drawing.Size(263, 104);
-			this.groupBox_SendCommandSettings.TabIndex = 2;
-			this.groupBox_SendCommandSettings.TabStop = false;
-			this.groupBox_SendCommandSettings.Text = "Send Command Settings";
+			this.groupBox_SendSettings.Controls.Add(this.checkBox_NoSendOnOutputBreak);
+			this.groupBox_SendSettings.Controls.Add(this.label_SendImmediately);
+			this.groupBox_SendSettings.Controls.Add(this.checkBox_SendImmediately);
+			this.groupBox_SendSettings.Controls.Add(this.checkBox_CopyPredefined);
+			this.groupBox_SendSettings.Controls.Add(this.checkBox_KeepCommand);
+			this.groupBox_SendSettings.Location = new System.Drawing.Point(275, 67);
+			this.groupBox_SendSettings.Name = "groupBox_SendSettings";
+			this.groupBox_SendSettings.Size = new System.Drawing.Size(263, 127);
+			this.groupBox_SendSettings.TabIndex = 2;
+			this.groupBox_SendSettings.TabStop = false;
+			this.groupBox_SendSettings.Text = "Send Settings";
+			// 
+			// checkBox_NoSendOnOutputBreak
+			// 
+			this.checkBox_NoSendOnOutputBreak.AutoSize = true;
+			this.checkBox_NoSendOnOutputBreak.Location = new System.Drawing.Point(12, 101);
+			this.checkBox_NoSendOnOutputBreak.Name = "checkBox_NoSendOnOutputBreak";
+			this.checkBox_NoSendOnOutputBreak.Size = new System.Drawing.Size(240, 17);
+			this.checkBox_NoSendOnOutputBreak.TabIndex = 4;
+			this.checkBox_NoSendOnOutputBreak.Text = "No send on o&utput break state (OBS) allowed";
+			this.checkBox_NoSendOnOutputBreak.UseVisualStyleBackColor = true;
+			this.checkBox_NoSendOnOutputBreak.CheckedChanged += new System.EventHandler(this.checkBox_NoSendOnOutputBreak_CheckedChanged);
 			// 
 			// label_SendImmediately
 			// 
@@ -540,34 +594,6 @@ namespace YAT.Gui.Forms
 			this.label_MaxLineCount.Text = "Display &maximal";
 			this.label_MaxLineCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// groupBox_User
-			// 
-			this.groupBox_User.Controls.Add(this.textBox_UserName);
-			this.groupBox_User.Controls.Add(this.label2);
-			this.groupBox_User.Location = new System.Drawing.Point(275, 246);
-			this.groupBox_User.Name = "groupBox_User";
-			this.groupBox_User.Size = new System.Drawing.Size(262, 51);
-			this.groupBox_User.TabIndex = 4;
-			this.groupBox_User.TabStop = false;
-			this.groupBox_User.Text = "User";
-			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(9, 21);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(79, 13);
-			this.label2.TabIndex = 0;
-			this.label2.Text = "Terminal &name:";
-			// 
-			// textBox_UserName
-			// 
-			this.textBox_UserName.Location = new System.Drawing.Point(94, 18);
-			this.textBox_UserName.Name = "textBox_UserName";
-			this.textBox_UserName.Size = new System.Drawing.Size(157, 20);
-			this.textBox_UserName.TabIndex = 1;
-			this.textBox_UserName.TextChanged += new System.EventHandler(this.textBox_UserName_TextChanged);
-			// 
 			// AdvancedTerminalSettings
 			// 
 			this.AcceptButton = this.button_OK;
@@ -588,12 +614,14 @@ namespace YAT.Gui.Forms
 			this.Text = "Advanced Terminal Settings";
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.ExtendendTerminalSettings_Paint);
 			this.groupBox_Settings.ResumeLayout(false);
+			this.groupBox_User.ResumeLayout(false);
+			this.groupBox_User.PerformLayout();
 			this.groupBox_CommunicationSettings.ResumeLayout(false);
 			this.groupBox_CommunicationSettings.PerformLayout();
 			this.groupBox_ReceiveSettings.ResumeLayout(false);
 			this.groupBox_ReceiveSettings.PerformLayout();
-			this.groupBox_SendCommandSettings.ResumeLayout(false);
-			this.groupBox_SendCommandSettings.PerformLayout();
+			this.groupBox_SendSettings.ResumeLayout(false);
+			this.groupBox_SendSettings.PerformLayout();
 			this.groupBox_DisplaySettings.ResumeLayout(false);
 			this.groupBox_DisplaySettings.PerformLayout();
 			this.groupBox_Display_Tab.ResumeLayout(false);
@@ -602,8 +630,6 @@ namespace YAT.Gui.Forms
 			this.groupBox_Display_Space.PerformLayout();
 			this.groupBox_Display_ControlChars.ResumeLayout(false);
 			this.groupBox_Display_ControlChars.PerformLayout();
-			this.groupBox_User.ResumeLayout(false);
-			this.groupBox_User.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -614,7 +640,7 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.Button button_Cancel;
 		private System.Windows.Forms.Button button_OK;
 		private System.Windows.Forms.GroupBox groupBox_Settings;
-		private System.Windows.Forms.GroupBox groupBox_SendCommandSettings;
+		private System.Windows.Forms.GroupBox groupBox_SendSettings;
 		private System.Windows.Forms.GroupBox groupBox_DisplaySettings;
 		private System.Windows.Forms.GroupBox groupBox_ReceiveSettings;
 		private System.Windows.Forms.TextBox textBox_ParityReplacement;
@@ -654,5 +680,7 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.GroupBox groupBox_User;
 		private System.Windows.Forms.TextBox textBox_UserName;
 		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.CheckBox checkBox_DetectInputBreak;
+		private System.Windows.Forms.CheckBox checkBox_NoSendOnOutputBreak;
 	}
 }

@@ -38,9 +38,13 @@ namespace YAT.Domain.Parser
 	public enum Keyword
 	{
 		None,
+		Clear,
 		Delay,
 		Eol,
 		NoEol,
+		OutputBreakOn,
+		OutputBreakOff,
+		OutputBreakToggle,
 	}
 
 	#pragma warning restore 1591
@@ -54,9 +58,13 @@ namespace YAT.Domain.Parser
 	{
 		#region String Definitions
 
+		private const string Clear_string = "Clear";
 		private const string Delay_string = "Delay";
 		private const string Eol_string = "EOL";
 		private const string NoEol_string = "NoEOL";
+		private const string OutputBreakOn_string = "OutputBreakOn";
+		private const string OutputBreakOff_string = "OutputBreakOff";
+		private const string OutputBreakToggle_string = "OutputBreakToggle";
 
 		#endregion
 
@@ -79,9 +87,15 @@ namespace YAT.Domain.Parser
 		{
 			switch ((Keyword)UnderlyingEnum)
 			{
+				case Keyword.Clear: return (Clear_string);
 				case Keyword.Delay: return (Delay_string);
+
 				case Keyword.Eol:   return (Eol_string);
 				case Keyword.NoEol: return (NoEol_string);
+
+				case Keyword.OutputBreakOn:     return (OutputBreakOn_string);
+				case Keyword.OutputBreakOff:    return (OutputBreakOff_string);
+				case Keyword.OutputBreakToggle: return (OutputBreakToggle_string);
 			}
 			throw (new NotImplementedException(UnderlyingEnum.ToString()));
 		}
@@ -94,9 +108,13 @@ namespace YAT.Domain.Parser
 		public static KeywordEx[] GetItems()
 		{
 			List<KeywordEx> a = new List<KeywordEx>();
+			a.Add(new KeywordEx(Keyword.Clear));
 			a.Add(new KeywordEx(Keyword.Delay));
 			a.Add(new KeywordEx(Keyword.Eol));
 			a.Add(new KeywordEx(Keyword.NoEol));
+			a.Add(new KeywordEx(Keyword.OutputBreakOn));
+			a.Add(new KeywordEx(Keyword.OutputBreakOff));
+			a.Add(new KeywordEx(Keyword.OutputBreakToggle));
 			return (a.ToArray());
 		}
 
@@ -118,7 +136,12 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public static bool TryParse(string keyword, out KeywordEx result)
 		{
-			if      (string.Compare(keyword, Delay_string, StringComparison.OrdinalIgnoreCase) == 0)
+			if      (string.Compare(keyword, Clear_string, StringComparison.OrdinalIgnoreCase) == 0)
+			{
+				result = new KeywordEx(Keyword.Clear);
+				return (true);
+			}
+			else if (string.Compare(keyword, Delay_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new KeywordEx(Keyword.Delay);
 				return (true);
@@ -131,6 +154,21 @@ namespace YAT.Domain.Parser
 			else if (string.Compare(keyword, NoEol_string, StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				result = new KeywordEx(Keyword.NoEol);
+				return (true);
+			}
+			else if (string.Compare(keyword, OutputBreakOn_string, StringComparison.OrdinalIgnoreCase) == 0)
+			{
+				result = new KeywordEx(Keyword.OutputBreakOn);
+				return (true);
+			}
+			else if (string.Compare(keyword, OutputBreakOff_string, StringComparison.OrdinalIgnoreCase) == 0)
+			{
+				result = new KeywordEx(Keyword.OutputBreakOff);
+				return (true);
+			}
+			else if (string.Compare(keyword, OutputBreakToggle_string, StringComparison.OrdinalIgnoreCase) == 0)
+			{
+				result = new KeywordEx(Keyword.OutputBreakToggle);
 				return (true);
 			}
 			else

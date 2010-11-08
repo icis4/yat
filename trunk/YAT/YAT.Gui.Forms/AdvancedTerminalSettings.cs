@@ -255,6 +255,15 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		private void checkBox_NoSendOnOutputBreak_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak = checkBox_NoSendOnOutputBreak.Checked;
+				SetControls();
+			}
+		}
+
 		private void checkBox_ReplaceParityError_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -310,6 +319,15 @@ namespace YAT.Gui.Forms
 			{
 				textBox_ParityReplacement.Select(invalidTextStart, invalidTextLength);
 				e.Cancel = true;
+			}
+		}
+
+		private void checkBox_DetectInputBreak_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+			{
+				this.settings_Form.Terminal.IO.SerialPort.DetectInputBreak = checkBox_DetectInputBreak.Checked;
+				SetControls();
 			}
 		}
 
@@ -409,6 +427,9 @@ namespace YAT.Gui.Forms
 			// Send.
 			checkBox_KeepCommand.Checked    = this.settings_Form.Terminal.Send.KeepCommand;
 			checkBox_CopyPredefined.Checked = this.settings_Form.Terminal.Send.CopyPredefined;
+			checkBox_SendImmediately.Checked = this.settings_Form.Terminal.Send.SendImmediately;
+			checkBox_NoSendOnOutputBreak.Enabled = (this.settings_Form.Terminal.IO.IOType == Domain.IOType.SerialPort);
+			checkBox_NoSendOnOutputBreak.Checked = this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 
 			// Receive.
 			groupBox_ReceiveSettings.Enabled    = (this.settings_Form.Terminal.IO.IOType == Domain.IOType.SerialPort);
@@ -416,6 +437,7 @@ namespace YAT.Gui.Forms
 			checkBox_ReplaceParityError.Checked = replaceParityErrors;
 			textBox_ParityReplacement.Enabled   = replaceParityErrors;
 			textBox_ParityReplacement.Text      = this.settings_Form.Terminal.IO.SerialParityErrorReplacement;
+			checkBox_DetectInputBreak.Checked   = this.settings_Form.Terminal.IO.SerialPort.DetectInputBreak;
 
 			// User.
 			textBox_UserName.Text = this.settings_Form.UserName;
@@ -429,11 +451,13 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void SetDefaults()
 		{
+			// Radix.
 			this.settings_Form.Terminal.Display.SeparateTxRxRadix = Domain.Settings.DisplaySettings.SeparateTxRxRadixDefault;
 			this.settings_Form.Terminal.Display.TxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
 			this.settings_Form.Terminal.Display.RxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
 
-			this.settings_Form.Terminal.Display.ShowRadix       = Domain.Settings.DisplaySettings.ShowRadixDefault;
+			// Display.
+			this.settings_Form.Terminal.Display.ShowRadix = Domain.Settings.DisplaySettings.ShowRadixDefault;
 			this.settings_Form.Terminal.Display.ShowTimeStamp   = Domain.Settings.DisplaySettings.ShowTimeStampDefault;
 			this.settings_Form.Terminal.Display.ShowLength      = Domain.Settings.DisplaySettings.ShowLengthDefault;
 			this.settings_Form.Terminal.Display.ShowConnectTime = Domain.Settings.DisplaySettings.ShowConnectTimeDefault;
@@ -443,20 +467,28 @@ namespace YAT.Gui.Forms
 			this.settings_Form.Terminal.Display.TxMaxLineCount            = Domain.Settings.DisplaySettings.MaxLineCountDefault;
 			this.settings_Form.Terminal.Display.RxMaxLineCount            = Domain.Settings.DisplaySettings.MaxLineCountDefault;
 
+			// Char replace.
 			this.settings_Form.Terminal.CharReplace.ReplaceControlChars = Domain.Settings.CharReplaceSettings.ReplaceControlCharsDefault;
 			this.settings_Form.Terminal.CharReplace.ControlCharRadix    = Domain.Settings.CharReplaceSettings.ControlCharRadixDefault;
 			this.settings_Form.Terminal.CharReplace.ReplaceTab          = Domain.Settings.CharReplaceSettings.ReplaceTabDefault;
 			this.settings_Form.Terminal.CharReplace.ReplaceSpace        = Domain.Settings.CharReplaceSettings.ReplaceSpaceDefault;
 
+			// Communication.
 			this.settings_Form.Terminal.IO.Endianess = Domain.Settings.IOSettings.EndianessDefault;
 
-			this.settings_Form.Terminal.Send.KeepCommand    = Domain.Settings.SendSettings.KeepCommandDefault;
-			this.settings_Form.Terminal.Send.CopyPredefined = Domain.Settings.SendSettings.CopyPredefinedDefault;
+			// Send.
+			this.settings_Form.Terminal.Send.KeepCommand = Domain.Settings.SendSettings.KeepCommandDefault;
+			this.settings_Form.Terminal.Send.CopyPredefined  = Domain.Settings.SendSettings.CopyPredefinedDefault;
+			this.settings_Form.Terminal.Send.SendImmediately = Domain.Settings.SendSettings.SendImmediatelyDefault;
+			this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak = MKY.IO.Serial.SerialPortSettings.NoSendOnOutputBreakDefault;
 
-			this.settings_Form.Terminal.IO.SerialPort.ReplaceParityErrors    = MKY.IO.Serial.SerialPortSettings.ReplaceParityErrorsDefault;
+			// Receive.
+			this.settings_Form.Terminal.IO.SerialPort.ReplaceParityErrors = MKY.IO.Serial.SerialPortSettings.ReplaceParityErrorsDefault;
 			this.settings_Form.Terminal.IO.SerialPort.ParityErrorReplacement = MKY.IO.Serial.SerialPortSettings.ParityErrorReplacementDefault;
 			this.settings_Form.Terminal.IO.SerialParityErrorReplacement      = Domain.Settings.IOSettings.SerialParityErrorReplacementDefault;
+			this.settings_Form.Terminal.IO.SerialPort.DetectInputBreak       = MKY.IO.Serial.SerialPortSettings.DetectInputBreakDefault;
 
+			// User.
 			this.settings_Form.UserName = Settings.Terminal.ExplicitSettings.UserNameDefault;
 		}
 

@@ -85,6 +85,21 @@ namespace MKY.IO.Ports
 		SerialPortControlPins ControlPins { get; }
 
 		/// <summary>
+		/// Gets or sets the output break state.
+		/// </summary>
+		bool OutputBreak { get; set; }
+
+		/// <summary>
+		/// Toggles the output break state.
+		/// </summary>
+		void ToggleOutputBreak();
+
+		/// <summary>
+		/// Gets the input break state.
+		/// </summary>
+		bool InputBreak { get; }
+
+		/// <summary>
 		/// Waits for unwritten data to be sent.
 		/// </summary>
 		void Flush();

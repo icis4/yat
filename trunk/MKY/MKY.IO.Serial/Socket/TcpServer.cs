@@ -284,6 +284,12 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
+		public virtual bool IsReady
+		{
+			get { return (IsConnected); }
+		}
+
+		/// <summary></summary>
 		public virtual int BytesAvailable
 		{
 			get

@@ -63,10 +63,17 @@ namespace YAT.Domain.Parser
 
 		/// <summary></summary>
 		public static readonly string KeywordHelp =
-			@"In addition, the following keyword is supported:" + Environment.NewLine +
+			@"In addition, the following keywords are supported:" + Environment.NewLine +
+			Environment.NewLine +
+			@"Clear the monitors ""Send something\!(" + (KeywordEx)Keyword.Clear + @"""" + Environment.NewLine +
 			Environment.NewLine +
 			@"Delay ""Send something\!(" + (KeywordEx)Keyword.Delay + @"(10s))Send delayed by 10 seconds""" + Environment.NewLine +
-			@"Delay ""Send something\!(" + (KeywordEx)Keyword.Delay + @"(500ms))Send delayed by 500 milliseconds""";
+			@"Delay ""Send something\!(" + (KeywordEx)Keyword.Delay + @"(500ms))Send delayed by 500 milliseconds""" + Environment.NewLine +
+			Environment.NewLine +
+			@"Output break state on ""\!(" + (KeywordEx)Keyword.OutputBreakOn + @"""" + Environment.NewLine +
+			@"Output break state off ""\!(" + (KeywordEx)Keyword.OutputBreakOff + @"""" + Environment.NewLine +
+			@"Output break state toggle ""\!(" + (KeywordEx)Keyword.OutputBreakToggle + @"""" + Environment.NewLine +
+			@"Output break state only applies to serial COM ports";
 
 		#endregion
 

@@ -377,6 +377,16 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
+		public virtual bool IsReady
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (this.terminal.IsReady);
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool LogIsStarted
 		{
 			get
@@ -1117,7 +1127,7 @@ namespace YAT.Model
 					"System error message:" + Environment.NewLine +
 					ex.Message + Environment.NewLine + Environment.NewLine +
 					"YAT hint:" + Environment.NewLine +
-					ioText + " could be in use by another process.",
+					ioText + " could already be in use.",
 					"Terminal Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
@@ -1207,6 +1217,15 @@ namespace YAT.Model
 				port.ToggleDtr();
 				this.settingsRoot.Terminal.IO.SerialPort.DtrEnabled = port.DtrEnable;
 			}
+		}
+
+		/// <summary>
+		/// Toggles the output break state.
+		/// </summary>
+		public virtual void RequestToggleOutputBreak()
+		{
+			MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)this.terminal.UnderlyingIOInstance;
+			port.ToggleOutputBreak();
 		}
 
 		#endregion
@@ -1732,7 +1751,7 @@ namespace YAT.Model
 					"System message:" + Environment.NewLine +
 					ex.Message + Environment.NewLine + Environment.NewLine +
 					"YAT hint:" + Environment.NewLine +
-					"Log file may be in use by another process.",
+					"Log file could already be in use.",
 					"Log File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning
@@ -1755,7 +1774,7 @@ namespace YAT.Model
 					"System message:" + Environment.NewLine +
 					ex.Message + Environment.NewLine + Environment.NewLine +
 					"YAT hint:" + Environment.NewLine +
-					"Log file may be in use by another process.",
+					"Log file could already be in use.",
 					"Log File Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning

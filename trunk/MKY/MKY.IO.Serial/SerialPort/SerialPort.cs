@@ -343,20 +343,6 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public virtual bool IsConnected
-		{
-			get
-			{
-				AssertNotDisposed();
-
-				if (this.port != null)
-					return (this.port.IsOpen && !this.port.BreakState);
-				else
-					return (false);
-			}
-		}
-
-		/// <summary></summary>
 		public virtual bool IsOpen
 		{
 			get
@@ -367,6 +353,40 @@ namespace MKY.IO.Serial
 					return (this.port.IsOpen);
 				else
 					return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool IsConnected
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (this.port != null)
+					return (this.port.IsOpen && !this.port.OutputBreak && !this.port.InputBreak);
+				else
+					return (false);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual bool IsReady
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (this.port != null)
+				{
+					bool outputBreak = (this.settings.NoSendOnOutputBreak && this.port.OutputBreak);
+					bool inputBreak  = (this.settings.DetectInputBreak    && this.port.InputBreak);
+					return (this.port.IsOpen && !outputBreak && !inputBreak);
+				}
+				else
+				{
+					return (false);
+				}
 			}
 		}
 
@@ -467,18 +487,25 @@ namespace MKY.IO.Serial
 
 			if (IsOpen)
 			{
-				lock (this.portSyncObj)
+				if (!this.port.OutputBreak)
 				{
-					if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
-						this.port.RtsEnable = true;
+					lock (this.portSyncObj)
+					{
+						if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
+							this.port.RtsEnable = true;
 
-					this.port.Write(data, 0, data.Length);
+						this.port.Write(data, 0, data.Length);
 
-					if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
-						this.port.RtsEnable = false;
+						if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
+							this.port.RtsEnable = false;
+					}
+
+					OnDataSent(new EventArgs());
 				}
-
-				OnDataSent(new EventArgs());
+				else
+				{
+					OnIOError(new IOErrorEventArgs(IOErrorSeverity.Acceptable, IODirection.Output, "No data can be sent while port is in output break state"));
+				}
 			}
 		}
 
@@ -563,7 +590,7 @@ namespace MKY.IO.Serial
 
 			lock (this.portSyncObj)
 			{
-				this.port = new Ports.SerialPortDotNet();
+				this.port = new Ports.SerialPortEx();
 				this.port.DataReceived  += new Ports.SerialDataReceivedEventHandler (this.port_DataReceived);
 				this.port.PinChanged    += new Ports.SerialPinChangedEventHandler   (this.port_PinChanged);
 				this.port.ErrorReceived += new Ports.SerialErrorReceivedEventHandler(this.port_ErrorReceived);
@@ -788,14 +815,34 @@ namespace MKY.IO.Serial
 		private void port_PinChangedAsync(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
 			// If pin has changed, but access to port throws exception, port has been shut down,
-			//   e.g. USB to serial converter disconnected
+			//   e.g. USB to serial converter disconnected.
 			try
 			{
-				// Force access to port to check whether it's still alive
+				System.Diagnostics.Debug.Write("port_PinChangedAsync: ");
+				System.Diagnostics.Debug.WriteLine(e.EventType);
+
+				// Force access to port to check whether it's still alive.
 				bool cts = this.port.CtsHolding;
 
-				if (this.state == State.Opened) // Ensure not to forward any events during closing anymore
+				if (this.state == State.Opened) // Ensure not to forward any events during closing anymore.
+				{
+					switch (e.EventType)
+					{
+						case MKY.IO.Ports.SerialPinChange.InputBreak:
+							if (this.settings.DetectInputBreak)
+								OnIOChanged(new EventArgs());
+							break;
+
+						case MKY.IO.Ports.SerialPinChange.OutputBreak:
+							OnIOChanged(new EventArgs());
+							break;
+
+						default:
+							// Do not fire general event, I/O control event is fired below.
+							break;
+					}
 					OnIOControlChanged(new EventArgs());
+				}
 			}
 			catch
 			{

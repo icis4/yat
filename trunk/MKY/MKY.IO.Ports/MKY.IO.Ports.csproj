@@ -54,11 +54,11 @@
     <Compile Include="SerialPort\ISerialPortDotNet.cs" />
     <Compile Include="SerialPort\SerialPinChange.cs" />
     <Compile Include="SerialPort\SerialPortControlPins.cs" />
-    <Compile Include="SerialPort\SerialPortDotNet.cs">
+    <Compile Include="SerialPort\SerialPortEx.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="SerialPort\SerialPortDotNet.designer.cs">
-      <DependentUpon>SerialPortDotNet.cs</DependentUpon>
+    <Compile Include="SerialPort\SerialPortEx.designer.cs">
+      <DependentUpon>SerialPortEx.cs</DependentUpon>
     </Compile>
     <Compile Include="SerialPort\SerialPortId.cs" />
     <Compile Include="SerialPort\SerialPortCollection.cs" />

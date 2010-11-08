@@ -44,6 +44,14 @@ namespace MKY.IO.Serial
 		Severe,
 		Fatal,
 	}
+
+	/// <summary></summary>
+	public enum IODirection
+	{
+		Any,
+		Input,
+		Output,
+	}
 }
 
 //==================================================================================================

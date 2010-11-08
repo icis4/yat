@@ -41,7 +41,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		private const int SelectedPageDefault = 1;
-		private const bool TerminalIsOpenDefault = false;
+		private const bool TerminalIsReadyDefault = false;
 
 		#endregion
 
@@ -53,7 +53,7 @@ namespace YAT.Gui.Controls
 		private bool isSettingControls = false;
 		private PredefinedCommandPageCollection pages;
 		private int selectedPage = SelectedPageDefault;
-		private bool terminalIsOpen = TerminalIsOpenDefault;
+		private bool terminalIsReady = TerminalIsReadyDefault;
 
 		#endregion
 
@@ -144,11 +144,11 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual bool TerminalIsOpen
+		public virtual bool TerminalIsReady
 		{
 			set
 			{
-				this.terminalIsOpen = value;
+				this.terminalIsReady = value;
 				SetControls();
 			}
 		}
@@ -248,7 +248,7 @@ namespace YAT.Gui.Controls
 		{
 			this.isSettingControls = true;
 
-			pageButtons.TerminalIsOpen = this.terminalIsOpen;
+			pageButtons.TerminalIsReady = this.terminalIsReady;
 
 			if ((this.pages != null) && (this.pages.Count > 0) && (this.selectedPage >= 1) && (this.selectedPage <= this.pages.Count))
 			{
