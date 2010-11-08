@@ -221,8 +221,6 @@ namespace MKY.IO.Ports
 						this.standardPortNumber = 0;
 						this.name = value;
 					}
-
-					GetDescriptionFromSystem();
 				}
 			}
 		}
@@ -332,29 +330,35 @@ namespace MKY.IO.Ports
 			}
 		}
 
-		#endregion
-
-		#region Private Methods
-		//==========================================================================================
-		// Private Methods
-		//==========================================================================================
-
 		/// <summary>
 		/// Queries WMI (Windows Management Instrumentation) trying to retrieve the description
 		/// that is associated with the serial port.
 		/// </summary>
 		/// <remarks>
-		/// Query takes quite some time.
+		/// Query is never done automatically because it takes quite some time.
 		/// </remarks>
-		private void GetDescriptionFromSystem()
+		public virtual void GetDescriptionFromSystem()
 		{
 			Dictionary<string, string> descriptions = SerialPortSearcher.GetDescriptionsFromSystem();
 
 			if (descriptions.ContainsKey(this.name))
-			{
-				this.description = descriptions[this.name];
-				this.hasDescriptonFromSystem = true;
-			}
+				SetDescriptionFromSystem(descriptions[this.name]);
+		}
+
+		/// <summary>
+		/// Set the description which was retrieved from the system.
+		/// </summary>
+		/// <remarks>
+		/// Can be used to set the descriptions of multiple ID with a single call to
+		/// <see cref="SerialPortSearcher.GetDescriptionsFromSystem()"/>. A single call is much
+		/// faster than calling <see cref="SerialPortSearcher.GetDescriptionsFromSystem()"/> for
+		/// each ID.
+		/// </remarks>
+		/// <param name="description">The description to set.</param>
+		public virtual void SetDescriptionFromSystem(string description)
+		{
+			this.description = description;
+			this.hasDescriptonFromSystem = true;
 		}
 
 		#endregion

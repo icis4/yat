@@ -112,7 +112,7 @@ namespace MKY.IO.Ports
 			foreach (SerialPortId portId in this)
 			{
 				if (descriptions.ContainsKey(portId.Name))
-					portId.Description = descriptions[portId.Name];
+					portId.SetDescriptionFromSystem(descriptions[portId.Name]);
 			}
 		}
 
