@@ -818,9 +818,6 @@ namespace MKY.IO.Serial
 			//   e.g. USB to serial converter disconnected.
 			try
 			{
-				System.Diagnostics.Debug.Write("port_PinChangedAsync: ");
-				System.Diagnostics.Debug.WriteLine(e.EventType);
-
 				// Force access to port to check whether it's still alive.
 				bool cts = this.port.CtsHolding;
 

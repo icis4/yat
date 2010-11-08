@@ -311,7 +311,7 @@ namespace YAT.Model
 			// Also get all debug processes named "YAT.vshost".
 			processes.AddRange(Process.GetProcessesByName(Application.ProductName + ".vshost"));
 
-			// Remove current instance
+			// Remove current instance.
 			Process currentProcess = Process.GetCurrentProcess();
 			foreach (Process p in processes)
 			{
