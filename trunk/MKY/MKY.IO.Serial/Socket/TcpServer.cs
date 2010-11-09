@@ -445,7 +445,7 @@ namespace MKY.IO.Serial
 			if (this.socket != null)
 			{
 				this.socket.Stop();
-				this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose()
+				this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose().
 				this.socket = null;
 				this.socketConnections.Clear();
 			}
@@ -526,7 +526,7 @@ namespace MKY.IO.Serial
 				{
 					case SocketState.Accepted: SetStateAndNotify(SocketState.Listening); break;
 					case SocketState.Stopping: SetStateAndNotify(SocketState.Reset);     break;
-					// No state change in all other cases
+					default: break; // No state change in all other cases.
 				}
 			}
 		}

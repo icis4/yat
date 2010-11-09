@@ -463,6 +463,9 @@ namespace MKY.IO.Serial
 			}
 		}
 
+		/// <summary>
+		/// try-catch needed because ALAZ doesn't seem to properly shut-down in certain cases.
+		/// </summary>
 		private void DisposeSocketAndSocketConnection()
 		{
 			if (this.socket != null)
@@ -470,14 +473,23 @@ namespace MKY.IO.Serial
 				try
 				{
 					this.socket.Stop();
-					this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose()
-					this.socket = null;
-					this.socketConnection = null;
 				}
 				catch (Exception ex)
 				{
 					DebugEx.WriteException(this.GetType(), ex);
 				}
+
+				try
+				{
+					this.socket.Dispose(); // Attention: ALAZ sockets don't properly stop on Dispose().
+				}
+				catch (Exception ex)
+				{
+					DebugEx.WriteException(this.GetType(), ex);
+				}
+
+				this.socket = null;
+				this.socketConnection = null;
 			}
 		}
 

@@ -28,6 +28,7 @@
   <Target Name="$(ProjectDir)/YAT.Domain/bin/Debug/YAT.Domain.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Gui.Controls/bin/Debug/YAT.Gui.Controls.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Gui.Forms/bin/Debug/YAT.Gui.Forms.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/YAT.Gui.Test/bin/Debug/YAT.Gui.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Gui.Utilities/bin/Debug/YAT.Gui.Utilities.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Log/bin/Debug/YAT.Log.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/YAT.Model.Settings/bin/Debug/YAT.Model.Settings.dll" Analyze="True" AnalyzeAllChildren="True" />

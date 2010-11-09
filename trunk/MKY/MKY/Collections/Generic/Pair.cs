@@ -65,7 +65,6 @@ namespace MKY.Collections.Generic
 			set { this.value2 = value; }
 		}
 
-
 		#region Object Members
 
 		/// <summary>

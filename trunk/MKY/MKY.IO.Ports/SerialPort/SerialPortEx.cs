@@ -51,6 +51,20 @@ namespace MKY.IO.Ports
 	[DefaultProperty("PortName")]
 	public partial class SerialPortEx : System.IO.Ports.SerialPort, ISerialPort
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private const int BaudRateDefault = 9600;
+		private const int DataBitsDefault = 8;
+		private const System.IO.Ports.Parity ParityDefault       = System.IO.Ports.Parity.None;
+		private const System.IO.Ports.StopBits StopBitsDefault   = System.IO.Ports.StopBits.One;
+		private const System.IO.Ports.Handshake HandshakeDefault = System.IO.Ports.Handshake.None;
+		private const string PortSettingsDefault = "9600, 8, None, 1, None";
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -123,20 +137,6 @@ namespace MKY.IO.Ports
 		/// Fired after connection successfully closed.
 		/// </summary>
 		public event EventHandler Closed;
-
-		#endregion
-
-		#region Constants
-		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private const int BaudRateDefault = 9600;
-		private const int DataBitsDefault = 8;
-		private const System.IO.Ports.Parity ParityDefault = System.IO.Ports.Parity.None;
-		private const System.IO.Ports.StopBits StopBitsDefault = System.IO.Ports.StopBits.One;
-		private const System.IO.Ports.Handshake HandshakeDefault = System.IO.Ports.Handshake.None;
-		private const string PortSettingsDefault = "9600, 8, None, 1, None";
 
 		#endregion
 
@@ -508,14 +508,14 @@ namespace MKY.IO.Ports
 			get
 			{
 				AssertNotDisposed();
-				return (base.BreakState);
+				return (this.BreakState);
 			}
 			set
 			{
 				AssertNotDisposed();
-				if (value != base.BreakState)
+				if (value != this.BreakState)
 				{
-					base.BreakState = value;
+					this.BreakState = value;
 					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.OutputBreak));
 				}
 			}

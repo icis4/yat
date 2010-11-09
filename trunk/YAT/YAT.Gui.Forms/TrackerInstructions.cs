@@ -34,8 +34,10 @@ namespace YAT.Gui.Forms
 		{
 			/// <summary></summary>
 			Support,
+
 			/// <summary></summary>
 			Feature,
+
 			/// <summary></summary>
 			Bug
 		}

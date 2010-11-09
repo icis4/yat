@@ -47,7 +47,7 @@ namespace MKY.IO.Serial.Test.Socket
 		// Available Ports
 		//==========================================================================================
 
-		static internal int AvailableLocalTcpPort
+		internal static int AvailableLocalTcpPort
 		{
 			get
 			{
@@ -75,7 +75,7 @@ namespace MKY.IO.Serial.Test.Socket
 			}
 		}
 
-		static internal void GetAvailableLocalUdpPorts(out int portA, out int portB)
+		internal static void GetAvailableLocalUdpPorts(out int portA, out int portB)
 		{
 			portA = 0;
 			portB = 0;

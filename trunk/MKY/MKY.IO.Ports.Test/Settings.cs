@@ -179,8 +179,10 @@ namespace MKY.IO.Ports.Test
 	{
 		/// <summary></summary>
 		public static readonly string ConfigurationGroupName = typeof(SettingsConstants).Namespace + ".Settings";
+
 		/// <summary></summary>
 		public static readonly string ConfigurationsGroupName = ConfigurationGroupName + ".Configurations";
+
 		/// <summary></summary>
 		public static readonly string UserSettingsEnvironmentVariableName = "MKY_IO_PORTS_TEST_SETTINGS_FILE";
 	}

@@ -54,10 +54,10 @@ namespace MKY.IO.Serial
 			public readonly System.Net.IPEndPoint EndPoint;
 			public readonly System.Net.Sockets.UdpClient Socket;
 
-			public AsyncReceiveState(System.Net.IPEndPoint EndPoint, System.Net.Sockets.UdpClient Socket)
+			public AsyncReceiveState(System.Net.IPEndPoint endPoint, System.Net.Sockets.UdpClient socket)
 			{
-				this.EndPoint = EndPoint;
-				this.Socket = Socket;
+				this.EndPoint = endPoint;
+				this.Socket = socket;
 			}
 		}
 

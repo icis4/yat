@@ -22,7 +22,6 @@
   <TargetFrameworkVersion>3.5</TargetFrameworkVersion>
  </ProjectOptions>
  <Targets>
-  <Target Name="$(ProjectDir)/MKY/bin/Debug/MKY.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Ports.Test/bin/Debug/MKY.IO.Ports.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Ports/bin/Debug/MKY.IO.Ports.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.IO.Serial.Test/bin/Debug/MKY.IO.Serial.Test.dll" Analyze="True" AnalyzeAllChildren="True" />
@@ -36,6 +35,7 @@
   <Target Name="$(ProjectDir)/MKY.Win32/bin/Debug/MKY.Win32.dll" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.Windows.Forms.Test/bin/Debug/MKY.Windows.Forms.Test.exe" Analyze="True" AnalyzeAllChildren="True" />
   <Target Name="$(ProjectDir)/MKY.Windows.Forms/bin/Debug/MKY.Windows.Forms.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/MKY/bin/Debug/MKY.dll" Analyze="True" AnalyzeAllChildren="True" />
  </Targets>
  <Rules>
   <RuleFiles>
