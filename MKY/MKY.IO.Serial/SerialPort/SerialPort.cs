@@ -121,7 +121,7 @@ namespace MKY.IO.Serial
 	/// - try GC.Collect(Forced) => no exceptions on GC, exception gets fired afterwards
 	/// ============================================================================================
 	/// </remarks>
-	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces")]
+	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Different root namespace.")]
 	public class SerialPort : IIOProvider, IDisposable
 	{
 		#region Types
@@ -606,7 +606,7 @@ namespace MKY.IO.Serial
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void CloseAndDisposePort()
 		{
 			if (this.port != null)
@@ -811,7 +811,7 @@ namespace MKY.IO.Serial
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void port_PinChangedAsync(object sender, MKY.IO.Ports.SerialPinChangedEventArgs e)
 		{
 			// If pin has changed, but access to port throws exception, port has been shut down,
@@ -914,7 +914,7 @@ namespace MKY.IO.Serial
 		private bool aliveTimer_BreakState = false;
 #endif
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void aliveTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			if (!IsDisposed && IsStarted)
@@ -986,7 +986,7 @@ namespace MKY.IO.Serial
 			}
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void reopenTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			if (AutoReopenEnabledAndAllowed)

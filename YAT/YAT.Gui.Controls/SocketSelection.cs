@@ -351,7 +351,7 @@ namespace YAT.Gui.Controls
 				{
 					RemotePort = port;
 
-					// Also set local port to same number
+					// Also set local port to same number.
 					if ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket) || (this.hostType == SocketHostType.Udp))
 					{
 						LocalTcpPort = port;

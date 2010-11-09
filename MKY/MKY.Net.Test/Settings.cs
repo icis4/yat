@@ -162,8 +162,10 @@ namespace MKY.Net.Test
 	{
 		/// <summary></summary>
 		public static readonly string ConfigurationGroupName = typeof(SettingsConstants).Namespace + ".Settings";
+
 		/// <summary></summary>
 		public static readonly string ConfigurationsGroupName = ConfigurationGroupName + ".Configurations";
+
 		/// <summary></summary>
 		public static readonly string UserSettingsEnvironmentVariableName = "MKY_NET_TEST_SETTINGS_FILE";
 	}

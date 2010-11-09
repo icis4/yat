@@ -21,7 +21,7 @@ Note:	The whole release process takes about 4 hours
 	[ ] Set product version in "YAT.Setup"
 
 
-3.	Update and add settings archive                                                     0:10 / 0:10
+3.	Update and add settings archive                                                     0:30 / 0:45
 	-----------------------------------------------------------------------------------------------
 	[ ] Clone settings set to "_Settings\<New Version>"
 	[ ] Run YAT, open settings, modify settings, save upgraded settings
@@ -31,33 +31,43 @@ Note:	The whole release process takes about 4 hours
 	[ ] Add new settings to "YAT.Settings.Test.FileVersionsTest"
 
 
-4a)	Run coding style checks                                                             0:10 / 0:10
+4a)	Run coding style checks                                                             0:15 / 1:00
 	-----------------------------------------------------------------------------------------------
 	[ ] Use StyleCop
+		> "Visual Studio > Tools > Run StyleCop (Rescan All)"
+
+	Note: Rescan takes less than a minute, but expect some time to fix errors/warnings/messages
 
 
-4b)	Run assembly checks                                                                 0:10 / 0:10
+4b)	Run assembly checks                                                                 0:30 / 1:30
 	-----------------------------------------------------------------------------------------------
 	[ ] Use FxCop
+		> Open and verify "\MKY\MKY.Debug.FxCop"
+		> Open and verify "\YAT\YAT.Debug.FxCop"
+
+	Note: Rescan takes less than a minute, but expect some time to fix errors/warnings/messages
 
 
-4c)	Run automated tests                                                                 0:10 / 0:10
+4c)	Run automated tests                                                                 0:30 / 2:00
 	-----------------------------------------------------------------------------------------------
 	[ ] Use NUnit
+		> "Visual Studio > Tools > NUnit"
+
+	Note: Run without 10'/60'/infinite takes around 15 minutes, and expect some re-runs
 
 
-5.	Run manual tests                                                                    0:10 / 0:10
+5.	Run manual tests                                                                    0:30 / 2:30
 	-----------------------------------------------------------------------------------------------
-	[ ] According to manual test cases
+	[ ] According to manual test cases in "\YAT\_Doc.Project\5 - Test\YAT - Test.ods"
 
 
-6.	Write release notes                                                                 0:10 / 0:10
+6.	Write release notes                                                                 0:10 / 2:40
 	-----------------------------------------------------------------------------------------------
 	[ ] Add them cumulatively to "\_Doc.User\YAT Release Notes.txt"
 	[ ] Add the cumulative release notes to the release package directory
 
 
-7.	Build YAT                                                                           0:10 / 0:10
+7.	Build YAT                                                                           0:20 / 3:00
 	-----------------------------------------------------------------------------------------------
 	[ ] Check "YAT.Setup" prerequisites for "Release"
 	[ ] Check "YAT.Setup" prerequisites for "Release with Redistributable"

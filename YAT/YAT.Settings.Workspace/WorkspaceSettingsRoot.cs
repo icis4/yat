@@ -25,8 +25,8 @@ using System.Xml.Serialization;
 
 using MKY;
 
-using YAT.Settings;
 using YAT.Model.Settings;
+using YAT.Settings;
 
 namespace YAT.Settings.Workspace
 {
@@ -168,8 +168,8 @@ namespace YAT.Settings.Workspace
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
-
 				(this.productVersion == other.productVersion)
+
 				// Do not compare AutoSaved.
 			);
 		}
