@@ -2,8 +2,8 @@
 Note:	The whole release process takes about 4 hours
 
 
-1.	Set versions if not already done
-	--------------------------------
+1.	Set versions if not already done                                                    0:10 / 0:10
+	-----------------------------------------------------------------------------------------------
 	[ ] Set product name post fix in
 		"YAT.Utilities.ApplicationInfo.ProductNamePostFix" and
 	[ ] Set product versions in all YAT assembly infos
@@ -15,122 +15,122 @@ Note:	The whole release process takes about 4 hours
 		           e.g. replace "1.0.1 by "1.0.2
 
 
-2.	Set installation version if not already done
-	--------------------------------------------
+2.	Set installation version if not already done                                        0:05 / 0:15
+	-----------------------------------------------------------------------------------------------
 	[ ] Set product title in "YAT.Setup"
 	[ ] Set product version in "YAT.Setup"
 
 
-3.	Update and add settings archive
-	-------------------------------
-	[ ] Add new settings set to "_Settings"
-		> Run YAT, open settings, modify settings, save upgraded settings to new directory
-	[ ] Run YAT and save settings
+3.	Update and add settings archive                                                     0:10 / 0:10
+	-----------------------------------------------------------------------------------------------
+	[ ] Clone settings set to "_Settings\<New Version>"
+	[ ] Run YAT, open settings, modify settings, save upgraded settings
+	[ ] Copy latest settings set to "_Settings\<New Version>"
 	[ ] Diff and verify the new settings
 	[ ] Add new settings to "YAT.Settings.Test.SettingsFilesProvider"
 	[ ] Add new settings to "YAT.Settings.Test.FileVersionsTest"
 
 
-4a)	Run coding style checks
-	-----------------------
+4a)	Run coding style checks                                                             0:10 / 0:10
+	-----------------------------------------------------------------------------------------------
 	[ ] Use StyleCop
 
 
-4b)	Run assembly checks
-	-------------------
+4b)	Run assembly checks                                                                 0:10 / 0:10
+	-----------------------------------------------------------------------------------------------
 	[ ] Use FxCop
 
 
-4c)	Run automated tests
-	-------------------
+4c)	Run automated tests                                                                 0:10 / 0:10
+	-----------------------------------------------------------------------------------------------
 	[ ] Use NUnit
 
 
-5.	Run manual tests
-	----------------
+5.	Run manual tests                                                                    0:10 / 0:10
+	-----------------------------------------------------------------------------------------------
 	[ ] According to manual test cases
 
 
-6.	Write release notes
-	-------------------
+6.	Write release notes                                                                 0:10 / 0:10
+	-----------------------------------------------------------------------------------------------
 	[ ] Add them cumulatively to "\_Doc.User\YAT Release Notes.txt"
 	[ ] Add the cumulative release notes to the release package directory
 
 
-7.	Build YAT
-	---------
+7.	Build YAT                                                                           0:10 / 0:10
+	-----------------------------------------------------------------------------------------------
 	[ ] Check "YAT.Setup" prerequisites for "Release"
 	[ ] Check "YAT.Setup" prerequisites for "Release with Redistributable"
 	[ ] Build "Release" configuration
 	[ ] Build "Release with Redistributable" configuration
 
 
-8.	Close Visual Studio
-	-------------------
+8.	Close Visual Studio                                                                 0:10 / 0:10
+	-----------------------------------------------------------------------------------------------
 	[ ] Needed to ensure that YAT doesn't detect already running "YAT.vshost.exe" on startup
 
 
-9.	Install YAT
-	-----------
+9.	Install YAT                                                                         0:10 / 0:10
+	-----------------------------------------------------------------------------------------------
 
 
-10.	Run manual after-installation tests
-	-----------------------------------
+10.	Run manual after-installation tests                                                 0:10 / 0:10
+	-----------------------------------------------------------------------------------------------
 	[ ] According to manual after-installation test cases
 
 
-11.	Close feature requests and bugs that are covered by release
-	-----------------------------------------------------------
+11.	Close feature requests and bugs that are covered by release                         0:10 / 0:10
+	-----------------------------------------------------------------------------------------------
 
 
-12.	Commit and tag YAT
-	------------------
+12.	Commit and tag YAT                                                                  0:10 / 0:10
+	-----------------------------------------------------------------------------------------------
 	[ ] Commit any modifications to the subversion repository
 	[ ] Tag/checkpoint the project
 		> e.g. "/tags/yat-1-99-18-beta-2-candidate-2"
 		> e.g. "YAT 2.0 Beta 2 Candidate 2 Version 1.99.18"
 
 
-13.	Immediately increment product name and versions
-	-----------------------------------------------
+13.	Immediately increment product name and versions                                     0:10 / 0:10
+	-----------------------------------------------------------------------------------------------
 	[ ] Commit modifications to the subversion repository according to 1. and 2.
 
 
-14.	Pack YAT
-	--------
+14.	Pack YAT                                                                            0:10 / 0:10
+	-----------------------------------------------------------------------------------------------
 	[ ] Add a new directory to the offline archive "\YAT\Releases and Checkpoints"
 	[ ] Update "\Distribution\Release" and "\Distribution\Release With Redistributable"
 	[ ] Update the two according .zip files
 
 
-15.	Upload YAT
-	----------
+15.	Upload YAT                                                                          0:10 / 0:10
+	-----------------------------------------------------------------------------------------------
 	[ ] According to "HowToUploadDistributionToSourcForge.txt"
 
 
-16.	Send e-mail to the YAT mailing list
-	-----------------------------------
+16.	Send e-mail to the YAT mailing list                                                 0:10 / 0:10
+	-----------------------------------------------------------------------------------------------
 	[ ] "y-a-terminal-users@lists.sourceforge.net"
 	[ ] Send as text and HTML formatted
 	[ ] Save e-mail in offline archive "\Distribution"
 
 
-17.	Recreate YAT working copy
-	-------------------------
+17.	Recreate YAT working copy                                                           0:10 / 0:10
+	-----------------------------------------------------------------------------------------------
 	[ ] Remove existing backups "_Trunk_Old"
 	[ ] Rename the existing working copy to "_Trunk_Old"
 	[ ] Create a new folder "_Trunk"
 	[ ] Check the head revision out into "_Trunk"
 
 
-18.	Archive YAT
-	-----------
+18.	Archive YAT                                                                         0:10 / 0:10
+	-----------------------------------------------------------------------------------------------
 	[ ] Copy the working copy to "\YAT\Releases and Checkpoints\Working Copy"
 	[ ] Clean the copy using "\_Scripts\CleanAll.bat"
 	[ ] Pack the copy into a properly named zip file
 
 
-19.	Verify YAT working copy
-	-----------------------
+19.	Verify YAT working copy                                                             0:10 / 0:10
+	-----------------------------------------------------------------------------------------------
 	[ ] Open the YAT solution and verify that it still properly builds and runs
 		> To be done after archiving to keep temporaries at a minimum

@@ -363,8 +363,8 @@ namespace MKY.IO.Serial
 			{
 				AssertNotDisposed();
 
-				if (this.port != null)
-					return (this.port.IsOpen && !this.port.OutputBreak && !this.port.InputBreak);
+				if (IsOpen)
+					return (!this.port.OutputBreak && !this.port.InputBreak);
 				else
 					return (false);
 			}
@@ -377,11 +377,11 @@ namespace MKY.IO.Serial
 			{
 				AssertNotDisposed();
 
-				if (this.port != null)
+				if (IsOpen)
 				{
 					bool outputBreak = (this.settings.NoSendOnOutputBreak && this.port.OutputBreak);
 					bool inputBreak  = (this.settings.DetectInputBreak    && this.port.InputBreak);
-					return (this.port.IsOpen && !outputBreak && !inputBreak);
+					return (!outputBreak && !inputBreak);
 				}
 				else
 				{
@@ -871,12 +871,12 @@ namespace MKY.IO.Serial
 			string message;
 			switch (e.EventType)
 			{
-				case System.IO.Ports.SerialError.Frame:    message = "Serial port framing error!";            break;
-				case System.IO.Ports.SerialError.Overrun:  message = "Serial port character buffer overrun!"; break;
-				case System.IO.Ports.SerialError.RXOver:   message = "Serial port input buffer overflow!";    break;
-				case System.IO.Ports.SerialError.RXParity: message = "Serial port parity error!";             break;
-				case System.IO.Ports.SerialError.TXFull:   message = "Serial port output buffer full!";       break;
-				default:                                   message = "Unknown serial port error!";            break;
+				case System.IO.Ports.SerialError.Frame:    message = "Serial port input framing error!";            break;
+				case System.IO.Ports.SerialError.Overrun:  message = "Serial port input character buffer overrun!"; break;
+				case System.IO.Ports.SerialError.RXOver:   message = "Serial port input buffer overflow!";          break;
+				case System.IO.Ports.SerialError.RXParity: message = "Serial port input parity error!";             break;
+				case System.IO.Ports.SerialError.TXFull:   message = "Serial port output buffer full!";             break;
+				default:                                   message = "Unknown serial port error!";                  break;
 			}
 			OnIOError(new SerialPortIOErrorEventArgs(message, e.EventType));
 		}
