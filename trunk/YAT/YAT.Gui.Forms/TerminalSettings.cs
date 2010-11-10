@@ -444,7 +444,7 @@ namespace YAT.Gui.Forms
 				this.settings_Form.Terminal.IO.SerialPort.ReplaceParityErrors    = f.SettingsResult.Terminal.IO.SerialPort.ReplaceParityErrors;
 				this.settings_Form.Terminal.IO.SerialPort.ParityErrorReplacement = f.SettingsResult.Terminal.IO.SerialPort.ParityErrorReplacement;
 				this.settings_Form.Terminal.IO.SerialParityErrorReplacement      = f.SettingsResult.Terminal.IO.SerialParityErrorReplacement;
-				this.settings_Form.Terminal.IO.SerialPort.DetectInputBreak       = f.SettingsResult.Terminal.IO.SerialPort.DetectInputBreak;
+				this.settings_Form.Terminal.IO.SerialPort.NoSendOnInputBreak       = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
 				this.settings_Form.UserName = f.SettingsResult.UserName;
 			}

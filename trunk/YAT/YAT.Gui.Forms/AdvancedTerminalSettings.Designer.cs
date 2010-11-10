@@ -39,7 +39,7 @@ namespace YAT.Gui.Forms
 			this.comboBox_Endianess = new System.Windows.Forms.ComboBox();
 			this.label_Endianess = new System.Windows.Forms.Label();
 			this.groupBox_ReceiveSettings = new System.Windows.Forms.GroupBox();
-			this.checkBox_DetectInputBreak = new System.Windows.Forms.CheckBox();
+			this.checkBox_NoSendOnInputBreak = new System.Windows.Forms.CheckBox();
 			this.checkBox_ReplaceParityError = new System.Windows.Forms.CheckBox();
 			this.label_ParityReplacementExample = new System.Windows.Forms.Label();
 			this.textBox_ParityReplacement = new System.Windows.Forms.TextBox();
@@ -194,7 +194,7 @@ namespace YAT.Gui.Forms
 			// 
 			// groupBox_ReceiveSettings
 			// 
-			this.groupBox_ReceiveSettings.Controls.Add(this.checkBox_DetectInputBreak);
+			this.groupBox_ReceiveSettings.Controls.Add(this.checkBox_NoSendOnInputBreak);
 			this.groupBox_ReceiveSettings.Controls.Add(this.checkBox_ReplaceParityError);
 			this.groupBox_ReceiveSettings.Controls.Add(this.label_ParityReplacementExample);
 			this.groupBox_ReceiveSettings.Controls.Add(this.textBox_ParityReplacement);
@@ -205,16 +205,16 @@ namespace YAT.Gui.Forms
 			this.groupBox_ReceiveSettings.TabStop = false;
 			this.groupBox_ReceiveSettings.Text = "Receive Settings";
 			// 
-			// checkBox_DetectInputBreak
+			// checkBox_NoSendOnInputBreak
 			// 
-			this.checkBox_DetectInputBreak.AutoSize = true;
-			this.checkBox_DetectInputBreak.Location = new System.Drawing.Point(12, 59);
-			this.checkBox_DetectInputBreak.Name = "checkBox_DetectInputBreak";
-			this.checkBox_DetectInputBreak.Size = new System.Drawing.Size(166, 17);
-			this.checkBox_DetectInputBreak.TabIndex = 3;
-			this.checkBox_DetectInputBreak.Text = "&Detect input break state (IBS)";
-			this.checkBox_DetectInputBreak.UseVisualStyleBackColor = true;
-			this.checkBox_DetectInputBreak.CheckedChanged += new System.EventHandler(this.checkBox_DetectInputBreak_CheckedChanged);
+			this.checkBox_NoSendOnInputBreak.AutoSize = true;
+			this.checkBox_NoSendOnInputBreak.Location = new System.Drawing.Point(12, 59);
+			this.checkBox_NoSendOnInputBreak.Name = "checkBox_NoSendOnInputBreak";
+			this.checkBox_NoSendOnInputBreak.Size = new System.Drawing.Size(212, 17);
+			this.checkBox_NoSendOnInputBreak.TabIndex = 3;
+			this.checkBox_NoSendOnInputBreak.Text = "No send w&hile in input break state (IBS)";
+			this.checkBox_NoSendOnInputBreak.UseVisualStyleBackColor = true;
+			this.checkBox_NoSendOnInputBreak.CheckedChanged += new System.EventHandler(this.checkBox_NoSendOnInputBreak_CheckedChanged);
 			// 
 			// checkBox_ReplaceParityError
 			// 
@@ -263,9 +263,9 @@ namespace YAT.Gui.Forms
 			this.checkBox_NoSendOnOutputBreak.AutoSize = true;
 			this.checkBox_NoSendOnOutputBreak.Location = new System.Drawing.Point(12, 101);
 			this.checkBox_NoSendOnOutputBreak.Name = "checkBox_NoSendOnOutputBreak";
-			this.checkBox_NoSendOnOutputBreak.Size = new System.Drawing.Size(240, 17);
+			this.checkBox_NoSendOnOutputBreak.Size = new System.Drawing.Size(224, 17);
 			this.checkBox_NoSendOnOutputBreak.TabIndex = 4;
-			this.checkBox_NoSendOnOutputBreak.Text = "No send on o&utput break state (OBS) allowed";
+			this.checkBox_NoSendOnOutputBreak.Text = "No send while in o&utput break state (OBS)";
 			this.checkBox_NoSendOnOutputBreak.UseVisualStyleBackColor = true;
 			this.checkBox_NoSendOnOutputBreak.CheckedChanged += new System.EventHandler(this.checkBox_NoSendOnOutputBreak_CheckedChanged);
 			// 
@@ -680,7 +680,7 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.GroupBox groupBox_User;
 		private System.Windows.Forms.TextBox textBox_UserName;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.CheckBox checkBox_DetectInputBreak;
+		private System.Windows.Forms.CheckBox checkBox_NoSendOnInputBreak;
 		private System.Windows.Forms.CheckBox checkBox_NoSendOnOutputBreak;
 	}
 }

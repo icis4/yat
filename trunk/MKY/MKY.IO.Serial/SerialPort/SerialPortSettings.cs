@@ -48,7 +48,7 @@ namespace MKY.IO.Serial
 		public const bool NoSendOnOutputBreakDefault = true;
 
 		/// <summary></summary>
-		public const bool DetectInputBreakDefault = true;
+		public const bool NoSendOnInputBreakDefault = false;
 
 		private SerialPortId portId;
 		private SerialCommunicationSettings communication;
@@ -58,7 +58,7 @@ namespace MKY.IO.Serial
 		private bool rtsEnabled;
 		private bool dtrEnabled;
 		private bool noSendOnOutputBreak;
-		private bool detectInputBreak;
+		private bool noSendOnInputBreak;
 
 		/// <summary></summary>
 		public SerialPortSettings()
@@ -102,7 +102,7 @@ namespace MKY.IO.Serial
 			RtsEnabled             = rhs.RtsEnabled;
 			DtrEnabled             = rhs.DtrEnabled;
 			NoSendOnOutputBreak    = rhs.NoSendOnOutputBreak;
-			DetectInputBreak       = rhs.DetectInputBreak;
+			NoSendOnInputBreak       = rhs.NoSendOnInputBreak;
 
 			ClearChanged();
 		}
@@ -125,7 +125,7 @@ namespace MKY.IO.Serial
 			RtsEnabled             = true;
 			DtrEnabled             = true;
 			NoSendOnOutputBreak    = NoSendOnOutputBreakDefault;
-			DetectInputBreak       = DetectInputBreakDefault;
+			NoSendOnInputBreak       = NoSendOnInputBreakDefault;
 		}
 
 		#region Properties
@@ -267,15 +267,15 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		[XmlElement("DetectInputBreak")]
-		public virtual bool DetectInputBreak
+		[XmlElement("NoSendOnInputBreak")]
+		public virtual bool NoSendOnInputBreak
 		{
-			get { return (this.detectInputBreak); }
+			get { return (this.noSendOnInputBreak); }
 			set
 			{
-				if (value != this.detectInputBreak)
+				if (value != this.noSendOnInputBreak)
 				{
-					this.detectInputBreak = value;
+					this.noSendOnInputBreak = value;
 					SetChanged();
 				}
 			}
@@ -309,7 +309,7 @@ namespace MKY.IO.Serial
 				(this.rtsEnabled             == other.rtsEnabled) &&
 				(this.dtrEnabled             == other.dtrEnabled) &&
 				(this.noSendOnOutputBreak    == other.noSendOnOutputBreak) &&
-				(this.detectInputBreak       == other.detectInputBreak)
+				(this.noSendOnInputBreak       == other.noSendOnInputBreak)
 			);
 		}
 
@@ -332,7 +332,7 @@ namespace MKY.IO.Serial
 				this.rtsEnabled            .GetHashCode() ^
 				this.dtrEnabled            .GetHashCode() ^
 				this.noSendOnOutputBreak   .GetHashCode() ^
-				this.detectInputBreak      .GetHashCode()
+				this.noSendOnInputBreak      .GetHashCode()
 			);
 		}
 

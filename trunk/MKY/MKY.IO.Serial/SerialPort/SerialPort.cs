@@ -380,7 +380,7 @@ namespace MKY.IO.Serial
 				if (IsOpen)
 				{
 					bool outputBreak = (this.settings.NoSendOnOutputBreak && this.port.OutputBreak);
-					bool inputBreak  = (this.settings.DetectInputBreak    && this.port.InputBreak);
+					bool inputBreak  = (this.settings.NoSendOnInputBreak  && this.port.InputBreak);
 					return (!outputBreak && !inputBreak);
 				}
 				else
@@ -826,7 +826,7 @@ namespace MKY.IO.Serial
 					switch (e.EventType)
 					{
 						case MKY.IO.Ports.SerialPinChange.InputBreak:
-							if (this.settings.DetectInputBreak)
+							if (this.settings.NoSendOnInputBreak)
 								OnIOChanged(new EventArgs());
 							break;
 
