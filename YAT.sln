@@ -503,13 +503,10 @@ Global
 		{F7BFF679-5389-434C-81E4-7EE8530DF954}.Debug Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{F7BFF679-5389-434C-81E4-7EE8530DF954}.Debug Test|Any CPU.Build.0 = Debug|Any CPU
 		{F7BFF679-5389-434C-81E4-7EE8530DF954}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F7BFF679-5389-434C-81E4-7EE8530DF954}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7BFF679-5389-434C-81E4-7EE8530DF954}.Release Test|Any CPU.ActiveCfg = Release|Any CPU
 		{F7BFF679-5389-434C-81E4-7EE8530DF954}.Release Test|Any CPU.Build.0 = Release|Any CPU
 		{F7BFF679-5389-434C-81E4-7EE8530DF954}.Release with Redistributable|Any CPU.ActiveCfg = Release|Any CPU
-		{F7BFF679-5389-434C-81E4-7EE8530DF954}.Release with Redistributable|Any CPU.Build.0 = Release|Any CPU
 		{F7BFF679-5389-434C-81E4-7EE8530DF954}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F7BFF679-5389-434C-81E4-7EE8530DF954}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

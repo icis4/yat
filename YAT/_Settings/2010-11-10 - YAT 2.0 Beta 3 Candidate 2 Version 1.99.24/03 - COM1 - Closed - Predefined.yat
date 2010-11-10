@@ -34,7 +34,7 @@
           <RtsEnabled>true</RtsEnabled>
           <DtrEnabled>true</DtrEnabled>
           <NoSendOnOutputBreak>true</NoSendOnOutputBreak>
-          <DetectInputBreak>true</DetectInputBreak>
+          <NoSendOnInputBreak>false</NoSendOnInputBreak>
         </SerialPort>
         <SerialParityErrorReplacement>\h(00)</SerialParityErrorReplacement>
         <Socket>

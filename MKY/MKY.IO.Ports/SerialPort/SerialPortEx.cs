@@ -37,6 +37,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
+using System.Threading;
 
 using MKY.Event;
 
@@ -71,6 +72,8 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 
 		private bool inputBreak;
+		private bool inputBreakSignal;
+		private object inputBreakSyncObj = new object();
 
 		#endregion
 
@@ -538,7 +541,9 @@ namespace MKY.IO.Ports
 			get
 			{
 				AssertNotDisposed();
-				return (this.inputBreak);
+				
+				lock (this.inputBreakSyncObj)
+					return (this.inputBreak);
 			}
 		}
 
@@ -693,18 +698,43 @@ namespace MKY.IO.Ports
 
 		private void base_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
 		{
+			// Improve performance by only locking if input break is active.
+			if (this.inputBreak)
+			{
+				lock (this.inputBreakSyncObj)
+				{
+					if (this.inputBreakSignal)
+					{
+						// Signal input break once and then restore signal.
+						this.inputBreakSignal = false;
+					}
+					else
+					{
+						// Restore input break if data has been received successfully.
+						this.inputBreak = false;
+					}
+				}
+				OnPinChanged(new SerialPinChangedEventArgs((SerialPinChange)e.EventType));
+			}
 			OnDataReceived(new SerialDataReceivedEventArgs(e.EventType));
+		}
+
+		private void base_PinChanged(object sender, System.IO.Ports.SerialPinChangedEventArgs e)
+		{
+			if (e.EventType == System.IO.Ports.SerialPinChange.Break)
+			{
+				lock (this.inputBreakSyncObj)
+				{
+					this.inputBreak = true;
+					this.inputBreakSignal = true;
+				}
+			}
+			OnPinChanged(new SerialPinChangedEventArgs((SerialPinChange)e.EventType));
 		}
 
 		private void base_ErrorReceived(object sender, System.IO.Ports.SerialErrorReceivedEventArgs e)
 		{
 			OnErrorReceived(new SerialErrorReceivedEventArgs(e.EventType));
-		}
-
-		private void base_PinChanged(object sender, System.IO.Ports.SerialPinChangedEventArgs e)
-		{
-			this.inputBreak = (e.EventType == System.IO.Ports.SerialPinChange.Break);
-			OnPinChanged(new SerialPinChangedEventArgs((SerialPinChange)e.EventType));
 		}
 
 		#endregion

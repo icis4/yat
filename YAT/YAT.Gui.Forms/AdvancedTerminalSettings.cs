@@ -322,11 +322,11 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void checkBox_DetectInputBreak_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_NoSendOnInputBreak_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
 			{
-				this.settings_Form.Terminal.IO.SerialPort.DetectInputBreak = checkBox_DetectInputBreak.Checked;
+				this.settings_Form.Terminal.IO.SerialPort.NoSendOnInputBreak = checkBox_NoSendOnInputBreak.Checked;
 				SetControls();
 			}
 		}
@@ -437,7 +437,7 @@ namespace YAT.Gui.Forms
 			checkBox_ReplaceParityError.Checked = replaceParityErrors;
 			textBox_ParityReplacement.Enabled   = replaceParityErrors;
 			textBox_ParityReplacement.Text      = this.settings_Form.Terminal.IO.SerialParityErrorReplacement;
-			checkBox_DetectInputBreak.Checked   = this.settings_Form.Terminal.IO.SerialPort.DetectInputBreak;
+			checkBox_NoSendOnInputBreak.Checked   = this.settings_Form.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
 			// User.
 			textBox_UserName.Text = this.settings_Form.UserName;
@@ -486,7 +486,7 @@ namespace YAT.Gui.Forms
 			this.settings_Form.Terminal.IO.SerialPort.ReplaceParityErrors = MKY.IO.Serial.SerialPortSettings.ReplaceParityErrorsDefault;
 			this.settings_Form.Terminal.IO.SerialPort.ParityErrorReplacement = MKY.IO.Serial.SerialPortSettings.ParityErrorReplacementDefault;
 			this.settings_Form.Terminal.IO.SerialParityErrorReplacement      = Domain.Settings.IOSettings.SerialParityErrorReplacementDefault;
-			this.settings_Form.Terminal.IO.SerialPort.DetectInputBreak       = MKY.IO.Serial.SerialPortSettings.DetectInputBreakDefault;
+			this.settings_Form.Terminal.IO.SerialPort.NoSendOnInputBreak       = MKY.IO.Serial.SerialPortSettings.NoSendOnInputBreakDefault;
 
 			// User.
 			this.settings_Form.UserName = Settings.Terminal.ExplicitSettings.UserNameDefault;
