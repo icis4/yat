@@ -28,6 +28,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using MKY.Event;
+using MKY.Diagnostics;
 using MKY.Settings;
 using MKY.Time;
 using MKY.Windows.Forms;
@@ -1566,20 +1567,21 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers > Status
 		//------------------------------------------------------------------------------------------
 
-		private List<ToolStripStatusLabel> statusLabels_ioControl;
+		private List<ToolStripStatusLabel> statusLabels_ioControlSerialPort;
 
 		private void toolStripStatusLabel_TerminalStatus_Initialize()
 		{
-			this.statusLabels_ioControl = new List<ToolStripStatusLabel>();
+			this.statusLabels_ioControlSerialPort = new List<ToolStripStatusLabel>();
 
-			this.statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_RTS);
-			this.statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_CTS);
-			this.statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DTR);
-			this.statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DSR);
-			this.statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_DCD);
-
-			this.statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_OutputBreak);
-			this.statusLabels_ioControl.Add(toolStripStatusLabel_TerminalStatus_InputBreak);
+			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_Separator1);
+			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_RTS);
+			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_CTS);
+			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_DTR);
+			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_DSR);
+			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_DCD);
+			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_Separator2);
+			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_OutputBreak);
+			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_InputBreak);
 		}
 
 		private void toolStripStatusLabel_TerminalStatus_IOStatus_Click(object sender, EventArgs e)
@@ -1793,7 +1795,7 @@ namespace YAT.Gui.Forms
 			contextMenuStrip_Predefined_SetMenuItems(); // Ensure that shortcuts are activated.
 
 			this.isSettingControls = true;
-			predefined.TerminalIsReady = this.terminal.IsReady;
+			predefined.TerminalIsReadyToSend = this.terminal.IsReadyToSend;
 			this.isSettingControls = false;
 		}
 
@@ -1811,7 +1813,7 @@ namespace YAT.Gui.Forms
 			send.Command = this.settingsRoot.SendCommand.Command;
 			send.SendCommandImmediately = this.settingsRoot.Send.SendImmediately;
 			send.RecentCommands = this.settingsRoot.SendCommand.RecentCommands;
-			send.TerminalIsReady = this.terminal.IsReady;
+			send.TerminalIsReadyToSend = this.terminal.IsReadyToSend;
 			this.isSettingControls = false;
 		}
 
@@ -3077,7 +3079,7 @@ namespace YAT.Gui.Forms
 		{
 			bool isSerialPort = (this.settingsRoot.IOType == Domain.IOType.SerialPort);
 
-			foreach (ToolStripStatusLabel sl in this.statusLabels_ioControl)
+			foreach (ToolStripStatusLabel sl in this.statusLabels_ioControlSerialPort)
 				sl.Visible = isSerialPort;
 
 			if (isSerialPort)
@@ -3086,7 +3088,7 @@ namespace YAT.Gui.Forms
 				bool isOpen       = this.terminal.IsOpen;
 				bool isConnected  = this.terminal.IsConnected;
 
-				foreach (ToolStripStatusLabel sl in this.statusLabels_ioControl)
+				foreach (ToolStripStatusLabel sl in this.statusLabels_ioControlSerialPort)
 					sl.Enabled = isOpen;
 
 				Image on  = Properties.Resources.Image_On_12x12;
@@ -3131,10 +3133,10 @@ namespace YAT.Gui.Forms
 				}
 				else
 				{
-					foreach (ToolStripStatusLabel sl in this.statusLabels_ioControl)
+					foreach (ToolStripStatusLabel sl in this.statusLabels_ioControlSerialPort)
 						sl.Image = off;
 
-					foreach (ToolStripStatusLabel sl in this.statusLabels_ioControl)
+					foreach (ToolStripStatusLabel sl in this.statusLabels_ioControlSerialPort)
 						sl.ForeColor = SystemColors.ControlText;
 				}
 			}

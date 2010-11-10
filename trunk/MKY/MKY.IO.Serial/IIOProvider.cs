@@ -133,7 +133,7 @@ namespace MKY.IO.Serial
 		/// <c>true</c> if the underlying I/O instance is ready to send and receive data as of
 		/// the most recent operation; otherwise, <c>false</c>.
 		/// </returns>
-		bool IsReady { get; }
+		bool IsReadyToSend { get; }
 
 		/// <summary>
 		/// Gets the amount of data received from the remote resource that is available to read.

@@ -40,7 +40,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		private const Domain.TerminalType TerminalTypeDefault = Domain.TerminalType.Text;
-		private const bool TerminalIsReadyDefault = false;
+		private const bool TerminalIsReadyToSendDefault = false;
 		private const float SplitterRatioDefault = (float)0.75;
 
 		#endregion
@@ -51,7 +51,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
-		private bool terminalIsReady = TerminalIsReadyDefault;
+		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
 		private float splitterRatio = SplitterRatioDefault;
 
 		#endregion
@@ -168,11 +168,11 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual bool TerminalIsReady
+		public virtual bool TerminalIsReadyToSend
 		{
 			set
 			{
-				this.terminalIsReady = value;
+				this.terminalIsReadyToSend = value;
 				SetControls();
 			}
 		}
@@ -255,11 +255,11 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			sendCommand.TerminalIsReady = this.terminalIsReady;
+			sendCommand.TerminalIsReady = this.terminalIsReadyToSend;
 			sendCommand.SplitterRatio = this.splitterRatio;
 
 			sendFile.TerminalType = this.terminalType;
-			sendFile.TerminalIsReady = this.terminalIsReady;
+			sendFile.TerminalIsReady = this.terminalIsReadyToSend;
 			sendFile.SplitterRatio = this.splitterRatio;
 		}
 

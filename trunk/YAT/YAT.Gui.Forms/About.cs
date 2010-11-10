@@ -93,14 +93,14 @@ namespace YAT.Gui.Forms
 			textBefore = "YAT is a terminal (a connection endpoint). If you're looking for a tool to monitor serial data between an application and a" + Environment.NewLine +
 						 "device, or between two devices, check out ";
 			textLink =                                             "HHD Monitoring Studio";
-			textAfter =                                                                 ". It's worth the bucks. Or";
+			textAfter =                                                                 ". It's worth the bucks. Or ";
 			linkLabel_HHD.Text += textBefore;
 			start = linkLabel_HHD.Text.Length;
 			linkLabel_HHD.Text += textLink;
 			linkLabel_HHD.Links.Add(start, textLink.Length, "http://www.hhdsoftware.com/");
 			linkLabel_HHD.Text += textAfter;
-			textLink =                                                                                            "download the free edition";
-			textAfter =                                                                                                                    ".";
+			textLink =                                                                                             "download the free edition";
+			textAfter =                                                                                                                     ".";
 			start = linkLabel_HHD.Text.Length;
 			linkLabel_HHD.Text += textLink;
 			linkLabel_HHD.Links.Add(start, textLink.Length, "http://www.serial-port-monitor.com/");
@@ -206,7 +206,7 @@ namespace YAT.Gui.Forms
 			linkLabel_Home.Text += textAfter;
 
 			// Author.
-			linkLabel_Author.Text = "2009, Matthias Kläy";
+			linkLabel_Author.Text = "2010, Matthias Kläy";
 
 			// License.
 			linkLabel_License.Text = "";

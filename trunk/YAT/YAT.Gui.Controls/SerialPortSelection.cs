@@ -211,6 +211,7 @@ namespace YAT.Gui.Controls
 		public virtual void RefreshSerialPortList()
 		{
 			SetSerialPortList();
+			SetControls();
 		}
 
 		#endregion
@@ -292,7 +293,7 @@ namespace YAT.Gui.Controls
 
 		private void button_RefreshPorts_Click(object sender, EventArgs e)
 		{
-			SetSerialPortList();
+			RefreshSerialPortList();
 		}
 
 		private void timer_ShowFillDialog_Tick(object sender, EventArgs e)
@@ -405,16 +406,28 @@ namespace YAT.Gui.Controls
 		{
 			this.isSettingControls = true;
 
-			if (!DesignMode && Enabled && (comboBox_Port.Items.Count > 0))
+			if (!DesignMode && Enabled)
 			{
-				if (this.portId != null)
-					comboBox_Port.SelectedItem = this.portId;
+				if (comboBox_Port.Items.Count > 0)
+				{
+					if (this.portId != null)
+						comboBox_Port.SelectedItem = this.portId;
+					else
+						comboBox_Port.SelectedIndex = 0;
+				}
 				else
-					comboBox_Port.SelectedIndex = 0;
+				{
+					comboBox_Port.SelectedIndex = -1;
+					if (this.portId != null)
+						comboBox_Port.Text = this.portId;
+					else
+						comboBox_Port.Text = "";
+				}
 			}
 			else
 			{
 				comboBox_Port.SelectedIndex = -1;
+				comboBox_Port.Text = "";
 			}
 
 			this.isSettingControls = false;

@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
@@ -213,12 +214,7 @@ namespace YAT.Model
 			this.log = new Log.Logs(this.settingsRoot.Log);
 
 			// Create chronos.
-			this.connectChrono = new Chronometer();
-			this.connectChrono.Interval = 1000;
-			this.connectChrono.TimeSpanChanged += new EventHandler<TimeSpanEventArgs>(this.totalConnectChrono_TimeSpanChanged);
-			this.totalConnectChrono = new Chronometer();
-			this.totalConnectChrono.Interval = 1000;
-			this.totalConnectChrono.TimeSpanChanged += new EventHandler<TimeSpanEventArgs>(this.connectChrono_TimeSpanChanged);
+			InitializeChronos();
 		}
 
 		#region Disposal
@@ -245,16 +241,7 @@ namespace YAT.Model
 					DetachSettingsEventHandlers();
 
 					// Then, dispose of objects
-					if (this.connectChrono != null)
-					{
-						this.connectChrono.Dispose();
-						this.connectChrono = null;
-					}
-					if (this.totalConnectChrono != null)
-					{
-						this.totalConnectChrono.Dispose();
-						this.totalConnectChrono = null;
-					}
+					DisposeChronos();
 					if (this.log != null)
 					{
 						this.log.Dispose();
@@ -377,12 +364,12 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual bool IsReady
+		public virtual bool IsReadyToSend
 		{
 			get
 			{
 				AssertNotDisposed();
-				return (this.terminal.IsReady);
+				return (this.terminal.IsReadyToSend);
 			}
 		}
 
@@ -773,7 +760,7 @@ namespace YAT.Model
 		/// </remarks>
 		public virtual bool Close(bool isWorkspaceClose, bool tryAutoSave)
 		{
-			// Don't try to auto save if there is no existing file (w1)
+			// Don't try to auto save if there is no existing file (w1).
 			if (!isWorkspaceClose && !this.settingsHandler.SettingsFileExists)
 				tryAutoSave = false;
 
@@ -781,30 +768,30 @@ namespace YAT.Model
 
 			bool success = false;
 
-			// Try to auto save if desired
+			// Try to auto save if desired.
 			if (tryAutoSave)
 				success = TryAutoSave();
 
-			// No success on auto save or auto save not desired
+			// No success on auto save or auto save not desired.
 			if (!success)
 			{
-				// No file (w1, w3, t1, t3)
+				// No file (w1, w3, t1, t3).
 				if (!this.settingsHandler.SettingsFileExists)
 				{
 					success = true; // Consider it successful if there was no file to save
 				}
-				else // Existing file
+				else // Existing file.
 				{
-					if (this.settingsRoot.AutoSaved) // Existing auto file (w2a/b, t2)
+					if (this.settingsRoot.AutoSaved) // Existing auto file (w2a/b, t2).
 					{
 						this.settingsHandler.TryDelete();
-						success = true; // Don't care if auto file not successfully deleted
+						success = true; // Don't care if auto file not successfully deleted.
 					}
 
-					// Existing normal file (w4a/b, t4a/b) will be handled below
+					// Existing normal file (w4a/b, t4a/b) will be handled below.
 				}
 
-				// Normal (w4a/b, t4a/b)
+				// Normal (w4a/b, t4a/b).
 				if (!success && this.settingsRoot.ExplicitHaveChanged)
 				{
 					DialogResult dr = OnMessageInputRequest
@@ -826,23 +813,26 @@ namespace YAT.Model
 							return (false);
 					}
 				}
-				else // Else means settings have not changed
+				else // Else means settings have not changed.
 				{
-					success = true; // Consider it successful if there was nothing to save
+					success = true; // Consider it successful if there was nothing to save.
 				}
-			} // End of if no success on auto save or auto save disabled
+			} // End of if no success on auto save or auto save disabled.
 
-			// Next, close underlying terminal
+			// Next, close underlying terminal.
 			if (this.terminal.IsStarted)
 				success = StopIO(false);
 
-			// Last, close log
+			// Then, close log.
 			if (this.log.IsStarted)
 				EndLog();
 
+			// Finally, ensure that chronos are stopped and do not fire events anymore.
+			StopChronos();
+
 			if (success)
 			{
-				// Status text request must be before closed event, closed event may close the view
+				// Status text request must be before closed event, closed event may close the view.
 				OnTimedStatusTextRequest("Terminal successfully closed");
 				OnClosed(new ClosedEventArgs(isWorkspaceClose));
 			}
@@ -1644,6 +1634,38 @@ namespace YAT.Model
 		// Terminal > Time Status
 		//------------------------------------------------------------------------------------------
 
+		private void InitializeChronos()
+		{
+			this.connectChrono = new Chronometer();
+			this.connectChrono.Interval = 1000;
+			this.connectChrono.TimeSpanChanged += new EventHandler<TimeSpanEventArgs>(this.totalConnectChrono_TimeSpanChanged);
+			this.totalConnectChrono = new Chronometer();
+			this.totalConnectChrono.Interval = 1000;
+			this.totalConnectChrono.TimeSpanChanged += new EventHandler<TimeSpanEventArgs>(this.connectChrono_TimeSpanChanged);
+		}
+
+		private void StopChronos()
+		{
+			this.connectChrono.Stop();
+			this.totalConnectChrono.Stop();
+		}
+
+		private void DisposeChronos()
+		{
+			if (this.connectChrono != null)
+			{
+				this.connectChrono.TimeSpanChanged -= new EventHandler<TimeSpanEventArgs>(this.totalConnectChrono_TimeSpanChanged);
+				this.connectChrono.Dispose();
+				this.connectChrono = null;
+			}
+			if (this.totalConnectChrono != null)
+			{
+				this.totalConnectChrono.TimeSpanChanged -= new EventHandler<TimeSpanEventArgs>(this.connectChrono_TimeSpanChanged);
+				this.totalConnectChrono.Dispose();
+				this.totalConnectChrono = null;
+			}
+		}
+
 		/// <summary></summary>
 		public virtual TimeSpan ConnectTime
 		{
@@ -1668,8 +1690,8 @@ namespace YAT.Model
 		public virtual void RestartConnectTime()
 		{
 			AssertNotDisposed();
-			connectChrono.Restart();
-			totalConnectChrono.Restart();
+			this.connectChrono.Restart();
+			this.totalConnectChrono.Restart();
 		}
 
 		private void connectChrono_TimeSpanChanged(object sender, TimeSpanEventArgs e)
@@ -1679,7 +1701,9 @@ namespace YAT.Model
 
 		private void totalConnectChrono_TimeSpanChanged(object sender, TimeSpanEventArgs e)
 		{
-			OnIOConnectTimeChanged(e);
+			// Ensure not to fire events during shutdown anymore.
+			if (!this.isDisposed)
+				OnIOConnectTimeChanged(e);
 		}
 
 		#endregion

@@ -29,7 +29,7 @@
 	// - Comment out to break exceptions
 	#define DEBUG_HANDLE_EXCEPTIONS
 
-	#if (!DEBUG_HANDLE_EXCEPTIONS) // Break exceptions is mutual exclusive against handle exceptions
+	#if (!DEBUG_HANDLE_EXCEPTIONS) // Break exceptions is mutual exclusive against handle exceptions.
 		#define DEBUG_BREAK_EXCEPTIONS
 	#endif
 
@@ -123,7 +123,7 @@ namespace MKY.Event
 				}
 				else
 				{
-#if (DEBUG_HANDLE_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen
+				#if (DEBUG_HANDLE_EXCEPTIONS) // Invoke event savely to ensure that program execution continues.
 					EventHandler castedSink = (EventHandler)sink;
 					object sender = args[0];
 					EventArgs eventArgs = (EventArgs)args[1];
@@ -135,14 +135,14 @@ namespace MKY.Event
 					{
 						WriteExceptionToDebugOutput(ex, sink);
 					}
-#elif (DEBUG_BREAK_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen
+				#elif (DEBUG_BREAK_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen.
 					EventHandler castedSink = (EventHandler)sink;
 					object sender = args[0];
 					EventArgs eventArgs = (EventArgs)args[1];
 					castedSink(sender, eventArgs);
-#else // NON-DEBUG: Invoke event the safe way
+				#else // NON-DEBUG: Invoke event the safe way
 					InvokeOnCurrentThread(sink, args);
-#endif
+				#endif
 				}
 			}
 		}
@@ -160,7 +160,7 @@ namespace MKY.Event
 			if (eventDelegate == null)
 				return;
 
-			// Invoke event in a safe way
+			// Invoke event in a safe way.
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{
@@ -171,7 +171,7 @@ namespace MKY.Event
 				}
 				else
 				{
-				#if (DEBUG_HANDLE_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen
+				#if (DEBUG_HANDLE_EXCEPTIONS) // Invoke event savely to ensure that program execution continues.
 					EventHandler<TEventArgs> castedSink = (EventHandler<TEventArgs>)sink;
 					object sender = args[0];
 					TEventArgs eventArgs = (TEventArgs)args[1];
@@ -183,12 +183,12 @@ namespace MKY.Event
 					{
 						WriteExceptionToDebugOutput(ex, sink);
 					}
-				#elif (DEBUG_BREAK_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen
+				#elif (DEBUG_BREAK_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen.
 					EventHandler<TEventArgs> castedSink = (EventHandler<TEventArgs>)sink;
 					object sender = args[0];
 					TEventArgs eventArgs = (TEventArgs)args[1];
 					castedSink(sender, eventArgs);
-				#else // NON-DEBUG: Invoke event the safe way
+				#else // NON-DEBUG: Invoke event the safe way.
 					InvokeOnCurrentThread(sink, args);
 				#endif
 				}
@@ -211,7 +211,7 @@ namespace MKY.Event
 			if (eventDelegate == null)
 				return;
 
-			// Events of type "event MyEventHandler MyEvent" are always fired the non-debug way
+			// Events of type "event MyEventHandler MyEvent" are always fired the non-debug way.
 			Delegate[] sinks = eventDelegate.GetInvocationList();
 			foreach (Delegate sink in sinks)
 			{
@@ -272,19 +272,28 @@ namespace MKY.Event
 		[OneWay]
 		private static void InvokeSynchronized(ISynchronizeInvoke sinkTarget, Delegate sink, object[] args)
 		{
+		#if (DEBUG_HANDLE_EXCEPTIONS) // Invoke event savely to ensure that program execution continues.
 			try
 			{
 				sinkTarget.Invoke(sink, args);
 			}
 			catch (Exception ex)
 			{
-			#if (DEBUG) // Output as much data as possible for debugging support.
 				WriteExceptionToDebugOutput(ex, sink);
-			#else // NON-DEBUG: Forward or discard exception.
+			}
+		#elif (DEBUG_BREAK_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen.
+			sinkTarget.Invoke(sink, args);
+		#else // NON-DEBUG: Forward or discard exception.
+			try
+			{
+				sinkTarget.Invoke(sink, args);
+			}
+			catch (Exception ex)
+			{
 				UnhandledExceptionEventArgs e = new UnhandledExceptionEventArgs(ex);
 				FireSync<UnhandledExceptionEventArgs>(UnhandledException, typeof(EventHelper), e);
-			#endif
 			}
+		#endif
 		}
 
 		#endregion
@@ -298,19 +307,28 @@ namespace MKY.Event
 		[OneWay]
 		private static void InvokeOnCurrentThread(Delegate sink, object[] args)
 		{
+		#if (DEBUG_HANDLE_EXCEPTIONS) // Invoke event savely to ensure that program execution continues.
 			try
 			{
 				sink.DynamicInvoke(args);
 			}
 			catch (Exception ex)
 			{
-			#if (DEBUG) // output as much data as possible for debugging support.
 				WriteExceptionToDebugOutput(ex, sink);
-			#else // NON-DEBUG, forward or discard exception.
+			}
+		#elif (DEBUG_BREAK_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen.
+			sink.DynamicInvoke(args);
+		#else // NON-DEBUG: Forward or discard exception.
+			try
+			{
+				sink.DynamicInvoke(args);
+			}
+			catch (Exception ex)
+			{
 				UnhandledExceptionEventArgs e = new UnhandledExceptionEventArgs(ex);
 				FireSync<UnhandledExceptionEventArgs>(UnhandledException, typeof(EventHelper), e);
-			#endif
 			}
+		#endif
 		}
 
 		#endregion

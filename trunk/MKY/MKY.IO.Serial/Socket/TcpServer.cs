@@ -284,7 +284,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		public virtual bool IsReady
+		public virtual bool IsReadyToSend
 		{
 			get { return (IsConnected); }
 		}
