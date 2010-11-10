@@ -493,14 +493,27 @@ namespace YAT.Gui.Controls
 			this.isSettingControls = true;
 
 			// Remote host address.
-			if (Enabled && ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket) || (this.hostType == SocketHostType.Udp)))
+			if (!DesignMode && Enabled && ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket) || (this.hostType == SocketHostType.Udp)))
 			{
-				comboBox_RemoteHost.Enabled = true;
-				comboBox_RemoteHost.Text = this.remoteHost;
+				if (comboBox_RemoteHost.Items.Count > 0)
+				{
+					if (this.remoteHost != null)
+						comboBox_RemoteHost.SelectedItem = this.remoteHost;
+					else
+						comboBox_RemoteHost.SelectedIndex = 0;
+				}
+				else
+				{
+					comboBox_RemoteHost.SelectedIndex = -1;
+					if (this.remoteHost != null)
+						comboBox_RemoteHost.Text = this.remoteHost;
+					else
+						comboBox_RemoteHost.Text = "";
+				}
 			}
 			else
 			{
-				comboBox_RemoteHost.Enabled = false;
+				comboBox_RemoteHost.SelectedIndex = -1;
 				comboBox_RemoteHost.Text = "";
 			}
 
@@ -511,7 +524,7 @@ namespace YAT.Gui.Controls
 				label_RemotePort.Text = "Remote TCP port:";
 
 			// Remote port.
-			if (Enabled && ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket) || (this.hostType == SocketHostType.Udp)))
+			if (!DesignMode && Enabled && ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket) || (this.hostType == SocketHostType.Udp)))
 			{
 				textBox_RemotePort.Enabled = true;
 				textBox_RemotePort.Text = this.remotePort.ToString();

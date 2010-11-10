@@ -223,7 +223,9 @@ namespace MKY.Time
 
 		private void timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
-			OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
+			// Ensure not to forward events during closing anymore.
+			if (!this.isDisposed && (this.timer != null) && this.timer.Enabled)
+				OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
 		}
 
 		#endregion

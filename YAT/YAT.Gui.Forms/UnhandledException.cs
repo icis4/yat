@@ -42,19 +42,15 @@ namespace YAT.Gui.Forms
 		{
 			InitializeComponent();
 
-			string textBefore = "";
-			string textLink = "";
-			string textAfter = "";
-			int start = 0;
 
 			linkLabel_Explanation.Text = "";
-			textBefore = "An unhandled exception occured in YAT. Please report this exception to YAT > Tracker > Bugs on ";
+			textBefore = "An unhandled exception occured in YAT. Report this exception to YAT > Tracker > Bugs on ";
 			textLink =   "SourceForge.net";
-			textAfter =                 " to give valuable feedback to continuously improve YAT.";
+			textAfter =                 " to give valuable feedback to continuously improve YAT. See below for instructions.";
 			linkLabel_Explanation.Text += textBefore;
 			start = linkLabel_Explanation.Text.Length;
 			linkLabel_Explanation.Text += textLink;
-			linkLabel_Explanation.Links.Add(start, textLink.Length, "http://sourceforge.net/projects/y-a-terminal/");
+			linkLabel_Explanation.Links.Add(start, textLink.Length, "http://sourceforge.net/tracker/?group_id=193033&atid=943797");
 			linkLabel_Explanation.Text += textAfter;
 
 			this.exeption = exeption;
@@ -124,7 +120,8 @@ namespace YAT.Gui.Forms
 					MessageBox.Show
 						(
 						this,
-						"Unhandled exception data could not be copied onto clipboard." + Environment.NewLine + Environment.NewLine +
+						"Unhandled exception data could not be copied onto clipboard." + Environment.NewLine +
+						"Copy the information above manually to the bug description and add the system error message below." + Environment.NewLine + Environment.NewLine +
 						"System error message:" + Environment.NewLine +
 						ex.Message,
 						"Error",

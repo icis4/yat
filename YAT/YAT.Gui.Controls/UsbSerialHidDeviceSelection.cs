@@ -114,6 +114,7 @@ namespace YAT.Gui.Controls
 		public virtual void RefreshDeviceList()
 		{
 			SetDeviceList();
+			SetControls();
 		}
 
 		#endregion
@@ -179,7 +180,7 @@ namespace YAT.Gui.Controls
 
 		private void button_RefreshPorts_Click(object sender, EventArgs e)
 		{
-			SetDeviceList();
+			RefreshDeviceList();
 		}
 
 		#endregion
@@ -236,16 +237,28 @@ namespace YAT.Gui.Controls
 		{
 			this.isSettingControls = true;
 
-			if (!DesignMode && Enabled && (comboBox_Device.Items.Count > 0))
+			if (!DesignMode && Enabled)
 			{
-				if (this.deviceInfo != null)
-					comboBox_Device.SelectedItem = this.deviceInfo;
+				if (comboBox_Device.Items.Count > 0)
+				{
+					if (this.deviceInfo != null)
+						comboBox_Device.SelectedItem = this.deviceInfo;
+					else
+						comboBox_Device.SelectedIndex = 0;
+				}
 				else
-					comboBox_Device.SelectedIndex = 0;
+				{
+					comboBox_Device.SelectedIndex = -1;
+					if (this.deviceInfo != null)
+						comboBox_Device.Text = this.deviceInfo;
+					else
+						comboBox_Device.Text = "";
+				}
 			}
 			else
 			{
 				comboBox_Device.SelectedIndex = -1;
+				comboBox_Device.Text = "";
 			}
 
 			this.isSettingControls = false;

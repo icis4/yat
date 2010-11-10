@@ -43,6 +43,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\ALAZ.Version.cs">
+      <Link>Properties\ALAZ.Version.cs</Link>
+    </Compile>
     <Compile Include="BaseDisposable.cs" />
     <Compile Include="BaseFinalizable.cs" />
     <Compile Include="RunTimeEx\InteropServicesEx\MarshalEx.cs" />

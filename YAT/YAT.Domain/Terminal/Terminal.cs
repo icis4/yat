@@ -251,12 +251,12 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual bool IsReady
+		public virtual bool IsReadyToSend
 		{
 			get
 			{
 				AssertNotDisposed();
-				return (this.rawTerminal.IsReady);
+				return (this.rawTerminal.IsReadyToSend);
 			}
 		}
 

@@ -57,6 +57,7 @@
     <Compile Include="Configuration\Provider.cs" />
     <Compile Include="Configuration\Selector.cs" />
     <Compile Include="Configuration\SelectionSection.cs" />
+    <Compile Include="IDisposableEx.cs" />
     <Compile Include="Event\EventHelper.cs" />
     <Compile Include="IO\Temp.cs" />
     <Compile Include="Text\Ascii.cs" />

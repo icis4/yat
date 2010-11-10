@@ -50,7 +50,7 @@ namespace MKY.IO.Ports
 	/// </summary>
 	[System.Drawing.ToolboxBitmap(typeof(System.IO.Ports.SerialPort))]
 	[DefaultProperty("PortName")]
-	public partial class SerialPortEx : System.IO.Ports.SerialPort, ISerialPort
+	public partial class SerialPortEx : System.IO.Ports.SerialPort, ISerialPort, IDisposableEx
 	{
 		#region Constants
 		//==========================================================================================

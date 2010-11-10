@@ -49,7 +49,7 @@ namespace MKY.IO.Ports
 		#endregion
 
 		/// <summary>
-		/// Returns whether object has already been disposed.
+		/// Returns whether the object has already been disposed.
 		/// </summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
