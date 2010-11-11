@@ -1,0 +1,88 @@
+
+@@ -306,20 +306,7 @@
+ 
+                     if (creators.Length > 0)
+                     {
+-                        // ----- \remind BEGIN -----
+-
+-                        // 2010-05-14 / Matthias Klaey
+-                        // Handling exceptions.
+-
+-                        try
+-                        {
+-                            FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
+-                        }
+-                        catch (NullReferenceException ex)
+-                        {
+-                            MKY.Utilities.Diagnostics.XDebug.WriteException(this, ex);
+-                        }
+-                        // ----- \remind  END  -----
++                        FWaitCreatorsDisposing.WaitOne(Timeout.Infinite, false);
+                     }
+ 
+                 }
+@@ -352,22 +339,11 @@
+                         ThreadEx.LoopSleep(ref loopSleep);
+                     }
+ 
+-                    // ----- \remind BEGIN -----
++                    if (connections.Length > 0)
++                    {
++                        FWaitConnectionsDisposing.WaitOne(Timeout.Infinite, false);
++                    }
+ 
+-                    // 2007-03-22 / Matthias Klaey
+-                    // Why wait on thread here? Start() is non-blocking!
+-                    // If Stop() is called from a GUI thread and the GUI is attached to
+-                    //   the Disconnected event, a dead-lock happens:
+-                    //   - The GUI thread is blocked here
+-                    //   - FireOnDisconnected is blocked when trying to synchronize
+-                    //     Invoke() onto the GUI thread
+-
+-                    //if (connections.Length > 0)
+-                    //{
+-                    //    FWaitConnectionsDisposing.WaitOne(Timeout.Infinite, false);
+-                    //}
+-
+-                    // ----- \remind  END  -----
+                 }
+ 
+             }
+@@ -1576,8 +1552,8 @@
+             {
+ 
+                 switch (connection.EventProcessing)
+-                {
+-                    
++	            {
++		            
+                     case EventProcessing.epNone:
+ 
+                         if (InitializeConnectionProxy(connection))
+@@ -1622,7 +1598,7 @@
+ 
+                         break;
+     
+-                }
++	            }
+ 
+             }
+ 
+@@ -1813,16 +1789,8 @@
+             {
+ 
+                 connection.Active = false;
++                connection.Socket.Shutdown(SocketShutdown.Send);
+ 
+-                // ----- \remind BEGIN -----
+-
+-                // 2009-08-22 / Matthias Klaey
+-                // Commented-out because of ObjectDisposedException when stopping.
+-
+-                //connection.Socket.Shutdown(SocketShutdown.Send);
+-
+-                // ----- \remind  END  -----
+-
+                 lock (connection.WriteQueue)
+                 {
+ 

@@ -1,0 +1,56 @@
+
+Editor
+------
+
+Edit
+  > Advanced
+    > View White Space
+
+Options
+  > Text Editor
+    > All Languages
+      > General
+        > Diplay > Line numers = true
+      > C#
+        > Tabs > Keep tabs
+
+
+StyleCop
+--------
+
+Place StyleCop settings into solution folder and inherit settings in each project whenever applicable.
+
+
+CodeRush Xpress
+---------------
+
+1. Close Visual Studio
+2. Registry
+    > HKEY_LOCAL_MACHINE\SOFTWARE\Developer Express\CodeRush for VS\<Version>
+      > Create or edit entry "HideMenu"
+        > Type  = REG_DWORD
+        > Value = 0
+3. Restart Visual Studio
+4. Setup CodeRush Xpress
+    > CTRL + SHIFT + ALT + O
+      > Core > Features
+        > Disable Smart Copy
+        > Disable Smart Cut
+      > Editor > Clipboard
+        > Disable Smart Cut(Copy)
+
+For a list of features of CodeRush Xpress, see
+http://community.devexpress.com/blogs/markmiller/archive/2009/06/25/coderush-xpress-for-c-and-visual-basic-2008.aspx
+
+
+NUnit as external tool
+----------------------
+
+Tools
+  > External Tools
+    > Add"
+      > Title       = "NUnit"
+      > Command     = "<NUnitInstallPath>\bin\<Platform>\nunit.exe"
+      > Arguments   = "$(SolutionFileName)"
+      > Initial Dir = "$(SolutionDir)"
+    > Confirm "OK"
