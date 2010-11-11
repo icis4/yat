@@ -238,7 +238,10 @@ namespace MKY.Time
 		/// <summary></summary>
 		protected virtual void OnTimeSpanChanged(TimeSpanEventArgs e)
 		{
+			System.Diagnostics.Debug.WriteLine("!!! Chrono.OnTimeSpanChanged()");
+			EventHelper.SuspendUnhandledException();
 			EventHelper.FireSync<TimeSpanEventArgs>(TimeSpanChanged, this, e);
+			EventHelper.ResumeUnhandledException();
 		}
 
 		#endregion

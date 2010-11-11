@@ -1,5 +1,5 @@
 
-Note:	The whole release process takes about 4 hours
+Note:	The whole release process takes about 6 hours
 
 
 1.	Set versions if not already done                                                    0:10 / 0:10
@@ -63,7 +63,7 @@ Note:	The whole release process takes about 4 hours
 	[ ] Use NUnit on 'Release Test'
 		> "Visual Studio > Tools > NUnit"
 
-	Note: Run without 10'/60'/infinite takes around 15 minutes, and expect some re-runs
+	Note: Run without 1'/10'/60'/infinite takes around 10 minutes, and expect some re-runs
 
 
 5.	Run manual tests                                                                    0:30 / 2:30
@@ -93,25 +93,26 @@ Note:	The whole release process takes about 4 hours
 	[ ] Build "Release with Redistributable" configuration
 
 
-9.	Close Visual Studio                                                                 0:10 / 0:10
+9.	Close Visual Studio                                                                 0:00 / 3:00
 	-----------------------------------------------------------------------------------------------
 	[ ] Needed to ensure that YAT doesn't detect already running "YAT.vshost.exe" on startup
 
 
-10.	Install YAT                                                                         0:10 / 0:10
+10.	Install YAT                                                                         0:10 / 3:10
 	-----------------------------------------------------------------------------------------------
 
 
-11.	Run manual after-installation tests                                                 0:10 / 0:10
+11.	Run manual after-installation tests                                                 0:20 / 3:30
 	-----------------------------------------------------------------------------------------------
 	[ ] According to manual after-installation test cases
 
 
-12.	Close feature requests and bugs that are covered by release                         0:10 / 0:10
+12.	Close feature requests and bugs that are covered by release                         0:00 / 3:30
 	-----------------------------------------------------------------------------------------------
+	[ ] Ensure that items have been closed
 
 
-13.	Commit and tag YAT                                                                  0:10 / 0:10
+13.	Commit and tag YAT                                                                  0:15 / 3:45
 	-----------------------------------------------------------------------------------------------
 	[ ] Commit any modifications to the subversion repository
 	[ ] Tag/checkpoint the project
@@ -119,31 +120,31 @@ Note:	The whole release process takes about 4 hours
 		> e.g. "YAT 2.0 Beta 2 Candidate 2 Version 1.99.18"
 
 
-14.	Immediately increment product name and versions                                     0:10 / 0:10
+14.	Immediately increment product name and versions                                     0:15 / 4:00
 	-----------------------------------------------------------------------------------------------
 	[ ] Commit modifications to the subversion repository according to 1. and 2.
 
 
-15.	Pack YAT                                                                            0:10 / 0:10
+15.	Pack YAT                                                                            0:15 / 4:15
 	-----------------------------------------------------------------------------------------------
 	[ ] Add a new directory to the offline archive "\YAT\Releases and Checkpoints"
 	[ ] Update "\Distribution\Release" and "\Distribution\Release With Redistributable"
 	[ ] Update the two according .zip files
 
 
-16.	Upload YAT                                                                          0:10 / 0:10
+16.	Upload YAT                                                                          0:45 / 5:00
 	-----------------------------------------------------------------------------------------------
 	[ ] According to "HowToUploadDistributionToSourcForge.txt"
 
 
-17.	Send e-mail to the YAT mailing list                                                 0:10 / 0:10
+17.	Send e-mail to the YAT mailing list                                                 0:15 / 5:15
 	-----------------------------------------------------------------------------------------------
 	[ ] "y-a-terminal-users@lists.sourceforge.net"
 	[ ] Send as text and HTML formatted
 	[ ] Save e-mail in offline archive "\Distribution"
 
 
-18.	Recreate YAT working copy                                                           0:10 / 0:10
+18.	Recreate YAT working copy                                                           0:15 / 5:30
 	-----------------------------------------------------------------------------------------------
 	[ ] Remove existing backups "_Trunk_Old"
 	[ ] Rename the existing working copy to "_Trunk_Old"
@@ -151,14 +152,14 @@ Note:	The whole release process takes about 4 hours
 	[ ] Check the head revision out into "_Trunk"
 
 
-19.	Archive YAT                                                                         0:10 / 0:10
+19.	Archive YAT                                                                         0:15 / 5:45
 	-----------------------------------------------------------------------------------------------
 	[ ] Copy the working copy to "\YAT\Releases and Checkpoints\Working Copy"
 	[ ] Clean the copy using "\_Scripts\CleanAll.bat"
 	[ ] Pack the copy into a properly named zip file
 
 
-20.	Verify YAT working copy                                                             0:10 / 0:10
+20.	Verify YAT working copy                                                             0:15 / 6:00
 	-----------------------------------------------------------------------------------------------
 	[ ] Open the YAT solution and verify that it still properly builds and runs
 		> To be done after archiving to keep temporaries at a minimum

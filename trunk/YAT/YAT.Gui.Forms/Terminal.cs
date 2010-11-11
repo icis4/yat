@@ -1810,10 +1810,12 @@ namespace YAT.Gui.Forms
 			contextMenuStrip_Send_SetMenuItems();
 
 			this.isSettingControls = true;
-			send.Command = this.settingsRoot.SendCommand.Command;
 			send.SendCommandImmediately = this.settingsRoot.Send.SendImmediately;
-			send.RecentCommands = this.settingsRoot.SendCommand.RecentCommands;
-			send.TerminalIsReadyToSend = this.terminal.IsReadyToSend;
+			send.Command                = this.settingsRoot.SendCommand.Command;
+			send.RecentCommands         = this.settingsRoot.SendCommand.RecentCommands;
+			send.FileCommand            = this.settingsRoot.SendFile.Command;
+			send.RecentFileCommands     = this.settingsRoot.SendFile.RecentCommands;
+			send.TerminalIsReadyToSend  = this.terminal.IsReadyToSend;
 			this.isSettingControls = false;
 		}
 
@@ -2328,10 +2330,6 @@ namespace YAT.Gui.Forms
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.SendFile))
 			{
 				// SendFileSettings changed.
-				this.isSettingControls = true;
-				send.FileCommand = this.settingsRoot.SendFile.Command;
-				this.isSettingControls = false;
-
 				SetSendControls();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Predefined))
@@ -2491,6 +2489,8 @@ namespace YAT.Gui.Forms
 
 				this.terminal.Saved  -= new EventHandler<Model.SavedEventArgs>(this.terminal_Saved);
 				this.terminal.Closed -= new EventHandler<Model.ClosedEventArgs>(this.terminal_Closed);
+
+				System.Diagnostics.Debug.WriteLine("!!! Gui.Terminal.DetachTerminalEventHandlers()");
 			}
 		}
 

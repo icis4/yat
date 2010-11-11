@@ -25,6 +25,7 @@ using System.IO;
 using System.Windows.Forms;
 
 using MKY.Event;
+using MKY.Recent;
 
 using YAT.Model.Types;
 using YAT.Settings;
@@ -43,7 +44,7 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		private const Domain.TerminalType TerminalTypeDefault = Domain.TerminalType.Text;
-		private const bool TerminalIsReadyDefault = false;
+		private const bool TerminalIsReadyToSendDefault = false;
 		private const float SplitterRatioDefault = (float)0.75;
 
 		#endregion
@@ -53,9 +54,12 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
+		private bool isSettingControls;
+
 		private Command fileCommand = new Command();
+		private RecentItemCollection<Command> recents;
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
-		private bool terminalIsReady = TerminalIsReadyDefault;
+		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
 		private float splitterRatio = SplitterRatioDefault;
 
 		#endregion
@@ -119,6 +123,18 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual RecentItemCollection<Command> RecentCommands
+		{
+			set
+			{
+				this.recents = value;
+				SetControls();
+			}
+		}
+
+		/// <summary></summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual Domain.TerminalType TerminalType
 		{
 			set
@@ -131,11 +147,11 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual bool TerminalIsReady
+		public virtual bool TerminalIsReadyToSend
 		{
 			set
 			{
-				this.terminalIsReady = value;
+				this.terminalIsReadyToSend = value;
 				SetControls();
 			}
 		}
@@ -159,9 +175,19 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		private void pathLabel_FilePath_Click(object sender, EventArgs e)
+		private void pathComboBox_FilePath_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			ShowOpenFileDialog();
+			if (!this.isSettingControls)
+			{
+				try
+				{
+					Command c = (Command)((RecentItem<Command>)pathComboBox_FilePath.SelectedItem);
+					SetFileCommand(c);
+				}
+				catch
+				{
+				}
+			}
 		}
 
 		private void button_SetFile_Click(object sender, EventArgs e)
@@ -183,25 +209,58 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
+			this.isSettingControls = true;
+
 			splitContainer.SplitterDistance = (int)(this.splitterRatio * splitContainer.Width);
+
+			pathComboBox_FilePath.Items.Clear();
+
+			if ((this.recents != null) && (this.recents.Count > 0))
+				pathComboBox_FilePath.Items.AddRange(this.recents.ToArray());
+			else
+				pathComboBox_FilePath.Items.Add(Command.UndefinedFilePathText);
 
 			if (this.fileCommand.IsFilePath)
 			{
-				pathLabel_FilePath.Text      = this.fileCommand.FilePath;
-				pathLabel_FilePath.ForeColor = SystemColors.ControlText;
-				pathLabel_FilePath.Font      = SystemFonts.DefaultFont;
+				pathComboBox_FilePath.ForeColor = SystemColors.ControlText;
+				pathComboBox_FilePath.Font      = SystemFonts.DefaultFont;
+
+				int index = 0;
+				for (int i = 0; i < pathComboBox_FilePath.Items.Count; i++)
+				{
+					RecentItem<Command> r = pathComboBox_FilePath.Items[i] as RecentItem<Command>;
+					if ((r != null) && (r.Item == this.fileCommand))
+					{
+						index = i;
+						break;
+					}
+				}
+				pathComboBox_FilePath.SelectedIndex = index;
 			}
 			else
 			{
-				pathLabel_FilePath.Text      = Command.UndefinedFilePathText;
-				pathLabel_FilePath.ForeColor = SystemColors.GrayText;
-				pathLabel_FilePath.Font      = Utilities.Drawing.ItalicDefaultFont;
+				pathComboBox_FilePath.ForeColor     = SystemColors.GrayText;
+				pathComboBox_FilePath.Font          = Utilities.Drawing.ItalicDefaultFont;
+				pathComboBox_FilePath.SelectedIndex = 0; // Results in Command.UndefinedFilePathText.
 			}
 
 			if (this.fileCommand.IsValidFilePath)
-				button_SendFile.Enabled = this.terminalIsReady;
+				button_SendFile.Enabled = this.terminalIsReadyToSend;
 			else
 				button_SendFile.Enabled = false;
+
+			this.isSettingControls = false;
+		}
+
+		private void SetFileCommand(Command fileCommand)
+		{
+			this.fileCommand = fileCommand;
+
+			if (!this.recents.Contains(fileCommand))
+				this.recents.Add(fileCommand);
+
+			SetControls();
+			OnFileCommandChanged(new EventArgs());
 		}
 
 		private bool ShowOpenFileDialog()
@@ -212,36 +271,35 @@ namespace YAT.Gui.Controls
 			{
 				case Domain.TerminalType.Binary:
 				{
-					ofd.Filter = ExtensionSettings.BinaryFilesFilter;
+					ofd.Filter     = ExtensionSettings.BinaryFilesFilter;
 					ofd.DefaultExt = ExtensionSettings.BinaryFilesDefault;
 					break;
 				}
-				default: // includes Domain.TerminalType.Text:
+				default: // Includes Domain.TerminalType.Text:
 				{
-					ofd.Filter = ExtensionSettings.TextFilesFilter;
+					ofd.Filter     = ExtensionSettings.TextFilesFilter;
 					ofd.DefaultExt = ExtensionSettings.TextFilesDefault;
 					break;
 				}
 			}
 			ofd.InitialDirectory = ApplicationSettings.LocalUser.Paths.SendFilesPath;
-			if ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName.Length > 0))
+			bool success = ((ofd.ShowDialog(this) == DialogResult.OK) && (ofd.FileName.Length > 0));
+			if (success)
 			{
 				Refresh();
 
 				ApplicationSettings.LocalUser.Paths.SendFilesPath = Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
-				this.fileCommand.IsFilePath = true;
-				this.fileCommand.FilePath = ofd.FileName;
-
-				SetControls();
-				button_SendFile.Select();
-
-				OnFileCommandChanged(new EventArgs());
-
-				return (true);
+				SetFileCommand(new Command(ofd.FileName, true, ofd.FileName));
 			}
-			return (false);
+			else
+			{
+				SetControls();
+			}
+
+			button_SendFile.Select();
+			return (success);
 		}
 
 		private void RequestSendCommand()

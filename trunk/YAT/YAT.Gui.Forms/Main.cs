@@ -893,15 +893,24 @@ namespace YAT.Gui.Forms
 				FormWindowState savedWindowState = ApplicationSettings.LocalUser.MainWindow.WindowState;
 				FormStartPosition savedStartPosition = ApplicationSettings.LocalUser.MainWindow.StartPosition;
 
-				// Retrieve current bounds to ensure that main form is displayed within the visible bounds.
-				Rectangle screenBounds = Screen.GetBounds(this);
 				Point savedLocation = ApplicationSettings.LocalUser.MainWindow.Location;
 				Size savedSize = ApplicationSettings.LocalUser.MainWindow.Size;
 				Rectangle savedBounds = new Rectangle(savedLocation, savedSize);
 
+				bool contains = false;
+				foreach (Screen screen in Screen.AllScreens)
+				{
+					// Retrieve current bounds to ensure that main form is displayed within the visible bounds.
+					if (screen.Bounds.Contains(savedBounds))
+					{
+						contains = true;
+						break;
+					}
+				}
+
 				// Keep settings if within bounds. Adjust start position if out of bounds.
 				// Must be adjusted regardless of the window state since the state may be changed by the user.
-				if (screenBounds.Contains(savedBounds))
+				if (contains)
 				{
 					// Set saved settings.
 					WindowState = savedWindowState;

@@ -55,6 +55,12 @@
     <Compile Include="Chronometer.Designer.cs">
       <DependentUpon>Chronometer.cs</DependentUpon>
     </Compile>
+    <Compile Include="PathComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PathComboBox.Designer.cs">
+      <DependentUpon>PathComboBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="FastListBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -85,6 +91,10 @@
   <ItemGroup>
     <EmbeddedResource Include="Chronometer.resx">
       <DependentUpon>Chronometer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PathComboBox.resx">
+      <DependentUpon>PathComboBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PathLabel.resx">

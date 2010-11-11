@@ -42,39 +42,21 @@ namespace YAT.Gui.Forms
 		{
 			InitializeComponent();
 
-
-			linkLabel_Explanation.Text = "";
-			textBefore = "An unhandled exception occured in YAT. Report this exception to YAT > Tracker > Bugs on ";
-			textLink =   "SourceForge.net";
-			textAfter =                 " to give valuable feedback to continuously improve YAT. See below for instructions.";
-			linkLabel_Explanation.Text += textBefore;
-			start = linkLabel_Explanation.Text.Length;
-			linkLabel_Explanation.Text += textLink;
-			linkLabel_Explanation.Links.Add(start, textLink.Length, "http://sourceforge.net/tracker/?group_id=193033&atid=943797");
-			linkLabel_Explanation.Text += textAfter;
-
 			this.exeption = exeption;
 		}
 
 		private void UnhandledException_Load(object sender, EventArgs e)
 		{
-			textBox_Type.Text = this.exeption.GetType().ToString();
+			textBox_Type.Text    = this.exeption.GetType().ToString();
 			textBox_Message.Text = this.exeption.Message;
-			textBox_Source.Text = this.exeption.Source;
-			textBox_Stack.Text = this.exeption.StackTrace;
+			textBox_Source.Text  = this.exeption.Source;
+			textBox_Stack.Text   = this.exeption.StackTrace;
 		}
 
 		#region Controls Event Handlers
 		//------------------------------------------------------------------------------------------
 		// Controls Event Handlers
 		//------------------------------------------------------------------------------------------
-
-		private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-		{
-			string link = e.Link.LinkData as string;
-			if ((link != null) && (link.StartsWith("http://")))
-				MKY.Net.Browser.BrowseUri(link);
-		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation always succeeds.")]
 		private void button_CopyToClipboard_Click(object sender, EventArgs e)

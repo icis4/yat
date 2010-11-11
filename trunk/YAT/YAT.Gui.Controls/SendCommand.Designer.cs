@@ -72,7 +72,7 @@ namespace YAT.Gui.Controls
 			this.comboBox_Command.Name = "comboBox_Command";
 			this.comboBox_Command.Size = new System.Drawing.Size(319, 21);
 			this.comboBox_Command.TabIndex = 1;
-			this.toolTip.SetToolTip(this.comboBox_Command, "Enter Command, click arrow for recent commands, press <...> to enter multi line c" +
+			this.toolTip.SetToolTip(this.comboBox_Command, "Enter command, click arrow for recent commands, press <...> to enter multi line c" +
 					"ommand");
 			this.comboBox_Command.Validating += new System.ComponentModel.CancelEventHandler(this.comboBox_Command_Validating);
 			this.comboBox_Command.SelectedIndexChanged += new System.EventHandler(this.comboBox_Command_SelectedIndexChanged);
