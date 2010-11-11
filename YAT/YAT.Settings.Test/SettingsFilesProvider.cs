@@ -210,7 +210,7 @@ namespace YAT.Settings.Test
 			FilePaths_V1_99_22.AddWorkspaceFileName(WorkspaceSettingsTestCases.W_04_Matthias, "04 - Matthias.yaw");
 
 			// V1.99.24
-			FilePaths_V1_99_24 = new SettingsFilePaths("2010-11-10 - YAT 2.0 Beta 3 Candidate 2 Version 1.99.24");
+			FilePaths_V1_99_24 = new SettingsFilePaths("2010-11-11 - YAT 2.0 Beta 3 Candidate 2 Version 1.99.24");
 
 			FilePaths_V1_99_24.AddTerminalFileName(TerminalSettingsTestCases.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
 			FilePaths_V1_99_24.AddTerminalFileName(TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");

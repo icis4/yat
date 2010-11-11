@@ -23,6 +23,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
+using MKY.Recent;
+
 using YAT.Model.Types;
 
 namespace YAT.Model.Settings
@@ -31,7 +33,11 @@ namespace YAT.Model.Settings
 	[Serializable]
 	public class SendFileSettings : MKY.Settings.Settings
 	{
+		/// <summary></summary>
+		public const int MaxRecentCommands = 24;
+
 		private Command command;
+		private RecentItemCollection<Command> recentsCommands;
 
 		/// <summary></summary>
 		public SendFileSettings()
@@ -55,6 +61,7 @@ namespace YAT.Model.Settings
 			: base(rhs)
 		{
 			Command = new Command(rhs.Command);
+			RecentCommands = new RecentItemCollection<Command>(rhs.RecentCommands);
 			ClearChanged();
 		}
 
@@ -64,6 +71,7 @@ namespace YAT.Model.Settings
 		protected override void SetMyDefaults()
 		{
 			Command = new Command();
+			RecentCommands = new RecentItemCollection<Command>(MaxRecentCommands);
 		}
 
 		#region Properties
@@ -81,6 +89,21 @@ namespace YAT.Model.Settings
 				if (value != this.command)
 				{
 					this.command = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("RecentCommands")]
+		public RecentItemCollection<Command> RecentCommands
+		{
+			get { return (this.recentsCommands); }
+			set
+			{
+				if (value != this.recentsCommands)
+				{
+					this.recentsCommands = value;
 					SetChanged();
 				}
 			}
@@ -105,7 +128,9 @@ namespace YAT.Model.Settings
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
-				(this.command == other.command)
+
+				(this.command == other.command) &&
+				(this.recentsCommands == other.recentsCommands)
 			);
 		}
 
@@ -115,7 +140,9 @@ namespace YAT.Model.Settings
 			return
 			(
 				base.GetHashCode() ^
-				this.command.GetHashCode()
+
+				this.command        .GetHashCode() ^
+				this.recentsCommands.GetHashCode()
 			);
 		}
 

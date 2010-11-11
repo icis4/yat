@@ -66,7 +66,7 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		private const bool TerminalIsReadyDefault = false;
+		private const bool TerminalIsReadyToSendDefault = false;
 		private const float SplitterRatioDefault = (float)0.75;
 
 		#endregion
@@ -80,7 +80,7 @@ namespace YAT.Gui.Controls
 
 		private Command command = new Command();
 		private RecentItemCollection<Command> recents;
-		private bool terminalIsReady = TerminalIsReadyDefault;
+		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
 		private float splitterRatio = SplitterRatioDefault;
 
 		private FocusState focusState = FocusState.Inactive;
@@ -175,11 +175,11 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public virtual bool TerminalIsReady
+		public virtual bool TerminalIsReadyToSend
 		{
 			set
 			{
-				this.terminalIsReady = value;
+				this.terminalIsReadyToSend = value;
 				SetControls();
 			}
 		}
@@ -469,7 +469,7 @@ namespace YAT.Gui.Controls
 			else
 				button_SendCommand.Text = "Send Command (F3)";
 
-			button_SendCommand.Enabled = this.terminalIsReady;
+			button_SendCommand.Enabled = this.terminalIsReadyToSend;
 
 			this.isSettingControls = false;
 		}
@@ -553,19 +553,15 @@ namespace YAT.Gui.Controls
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
 				Refresh();
-				this.command = f.CommandResult;
 				this.isValidated = true; // Command has been validated by multi line box.
-
-				SetControls();
-				button_SendCommand.Select();
-
-				OnCommandChanged(new EventArgs());
+				SetCommand(f.CommandResult);
 			}
 			else
 			{
 				SetControls();
-				button_SendCommand.Select();
 			}
+
+			button_SendCommand.Select();
 		}
 
 		private void RequestSendCompleteCommand()

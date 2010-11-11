@@ -41,7 +41,7 @@ and install it manually.
 2. History of changes in YAT
 ====================================================================================================
 
-YAT 2.0 Beta 3 Candidate 2 Version 1.99.24 :: 2010-11-10
+YAT 2.0 Beta 3 Candidate 2 Version 1.99.24 :: 2010-11-11
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -52,6 +52,7 @@ New:
 - Optional simple terminal/direct mode added to "Send Command" (feature request #1808496)
 - Keyword \!(Clear) added (feature request #2998594)
 - List of first 12 predefined command pages added to menu, with shortcuts (feature request #2914892)
+- Recent history added to "Send File" (feature request #2869575)
 - Text terminals: Line send delay added (feature request #1808508, bug #1963002)
 - ASCII table added to help (feature request #1923555)
 - User defineable terminal name added (related to feature request #3091859)
@@ -459,19 +460,15 @@ XTerm232 1.0.0 :: 2003-10-14
 
 YAT 2.1 Beta 1 :: Not planned yet
 ----------------------------------------------------------------------------------------------------
-- Logging refactoring
-- Support for XML logging
-- Initial support for scripting
+- Logging refactoring including support for XML logging
+- Scripting/Plug-In Interface
    > Inputs/requirements are highly appreciated
-
-YAT 2.1 :: Not planned yet
-----------------------------------------------------------------------------------------------------
-- Plug-In/Scripting Interface
-   > e.g. File Transfer:
-     OnDataReceived() and SendNextLine()
-     => enables reception of multi-line commands
 - RS-232 AutoSense mode
-- Optional user settings (.yau)
+- Flexibilization of the GUI
+   > Dock/tabbed
+- Refactoring of settings
+   > Optional user settings (.yau)
+   > Settings grid
 
 
 ====================================================================================================

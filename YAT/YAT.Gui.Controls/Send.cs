@@ -139,7 +139,7 @@ namespace YAT.Gui.Controls
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public virtual RecentItemCollection<Command> RecentCommands
 		{
-			set { sendCommand.RecentCommands = value;  }
+			set { sendCommand.RecentCommands = value; }
 		}
 
 		/// <summary>
@@ -151,6 +151,14 @@ namespace YAT.Gui.Controls
 		{
 			get { return (sendFile.FileCommand); }
 			set	{ sendFile.FileCommand = value;  }
+		}
+
+		/// <summary></summary>
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public virtual RecentItemCollection<Command> RecentFileCommands
+		{
+			set { sendFile.RecentCommands = value; }
 		}
 
 		/// <summary></summary>
@@ -255,11 +263,11 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			sendCommand.TerminalIsReady = this.terminalIsReadyToSend;
+			sendCommand.TerminalIsReadyToSend = this.terminalIsReadyToSend;
 			sendCommand.SplitterRatio = this.splitterRatio;
 
 			sendFile.TerminalType = this.terminalType;
-			sendFile.TerminalIsReady = this.terminalIsReadyToSend;
+			sendFile.TerminalIsReadyToSend = this.terminalIsReadyToSend;
 			sendFile.SplitterRatio = this.splitterRatio;
 		}
 

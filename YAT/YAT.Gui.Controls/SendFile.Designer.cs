@@ -30,27 +30,14 @@ namespace YAT.Gui.Controls
 		{
 			this.components = new System.ComponentModel.Container();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.pathLabel_FilePath = new MKY.Windows.Forms.PathLabel();
 			this.button_SetFile = new System.Windows.Forms.Button();
 			this.button_SendFile = new System.Windows.Forms.Button();
 			this.splitContainer = new System.Windows.Forms.SplitContainer();
+			this.pathComboBox_FilePath = new MKY.Windows.Forms.PathComboBox();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
 			this.splitContainer.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// pathLabel_FilePath
-			// 
-			this.pathLabel_FilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.pathLabel_FilePath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.pathLabel_FilePath.Location = new System.Drawing.Point(3, 3);
-			this.pathLabel_FilePath.Name = "pathLabel_FilePath";
-			this.pathLabel_FilePath.Size = new System.Drawing.Size(319, 21);
-			this.pathLabel_FilePath.TabIndex = 1;
-			this.pathLabel_FilePath.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolTip.SetToolTip(this.pathLabel_FilePath, "File Path, click or press <...> to choose file");
-			this.pathLabel_FilePath.Click += new System.EventHandler(this.pathLabel_FilePath_Click);
 			// 
 			// button_SetFile
 			// 
@@ -85,8 +72,8 @@ namespace YAT.Gui.Controls
 			// 
 			// splitContainer.Panel1
 			// 
+			this.splitContainer.Panel1.Controls.Add(this.pathComboBox_FilePath);
 			this.splitContainer.Panel1.Controls.Add(this.button_SetFile);
-			this.splitContainer.Panel1.Controls.Add(this.pathLabel_FilePath);
 			// 
 			// splitContainer.Panel2
 			// 
@@ -95,6 +82,19 @@ namespace YAT.Gui.Controls
 			this.splitContainer.SplitterDistance = 356;
 			this.splitContainer.SplitterWidth = 1;
 			this.splitContainer.TabIndex = 3;
+			// 
+			// pathComboBox_FilePath
+			// 
+			this.pathComboBox_FilePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.pathComboBox_FilePath.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.pathComboBox_FilePath.FormattingEnabled = true;
+			this.pathComboBox_FilePath.Location = new System.Drawing.Point(3, 3);
+			this.pathComboBox_FilePath.Name = "pathComboBox_FilePath";
+			this.pathComboBox_FilePath.Size = new System.Drawing.Size(319, 21);
+			this.pathComboBox_FilePath.TabIndex = 1;
+			this.toolTip.SetToolTip(this.pathComboBox_FilePath, "File path, click arrow for recent files, click or press <...> to choose file");
+			this.pathComboBox_FilePath.SelectedIndexChanged += new System.EventHandler(this.pathComboBox_FilePath_SelectedIndexChanged);
 			// 
 			// SendFile
 			// 
@@ -114,8 +114,8 @@ namespace YAT.Gui.Controls
 
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.SplitContainer splitContainer;
-		private MKY.Windows.Forms.PathLabel pathLabel_FilePath;
 		private System.Windows.Forms.Button button_SetFile;
 		private System.Windows.Forms.Button button_SendFile;
+		private MKY.Windows.Forms.PathComboBox pathComboBox_FilePath;
 	}
 }

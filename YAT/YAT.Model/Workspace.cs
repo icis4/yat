@@ -653,6 +653,8 @@ namespace YAT.Model
 		/// </remarks>
 		public virtual bool Close(bool isMainClose)
 		{
+			System.Diagnostics.Debug.WriteLine("!!! Model.Workspace.Close()");
+
 			bool tryAutoSave = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
 
 			// Don't try to auto save if there is no existing file (w1).

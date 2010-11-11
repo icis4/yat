@@ -46,6 +46,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
+using System.Threading;
 
 #endregion
 
@@ -91,6 +92,46 @@ namespace MKY.Event
 		public static event EventHandler<UnhandledExceptionEventArgs> UnhandledException;
 
 #endif
+
+		#endregion
+
+		#region Static Properties
+		//==========================================================================================
+		// Static Properties
+		//==========================================================================================
+
+#if (!DEBUG)
+
+		/// <summary>
+		/// Semaphore to temporarily suspend the unhandled exceptions event.
+		/// </summary>
+		private static int SuspendUnhandledExceptionEventSemapore;
+
+#endif
+
+		/// <remarks>
+		/// \fixme
+		/// Not an optimal solution. Added to fix an issue with asynchronous timers in
+		/// <see cref="MKY.Time.Chronometer"/>. Should be replaced by a real solution.
+		/// </remarks>
+		public static void SuspendUnhandledException()
+		{
+#if (!DEBUG)
+			Interlocked.Increment(ref SuspendUnhandledExceptionEventSemapore);
+#endif
+		}
+
+		/// <remarks>
+		/// \fixme
+		/// Not an optimal solution. Added to fix an issue with asynchronous timers in
+		/// <see cref="MKY.Time.Chronometer"/>. Should be replaced by a real solution.
+		/// </remarks>
+		public static void ResumeUnhandledException()
+		{
+#if (!DEBUG)
+			Interlocked.Decrement(ref SuspendUnhandledExceptionEventSemapore);
+#endif
+		}
 
 		#endregion
 
@@ -290,8 +331,11 @@ namespace MKY.Event
 			}
 			catch (Exception ex)
 			{
-				UnhandledExceptionEventArgs e = new UnhandledExceptionEventArgs(ex);
-				FireSync<UnhandledExceptionEventArgs>(UnhandledException, typeof(EventHelper), e);
+				if (SuspendUnhandledExceptionEventSemapore <= 0)
+				{
+					UnhandledExceptionEventArgs e = new UnhandledExceptionEventArgs(ex);
+					FireSync<UnhandledExceptionEventArgs>(UnhandledException, typeof(EventHelper), e);
+				}
 			}
 		#endif
 		}
@@ -325,8 +369,11 @@ namespace MKY.Event
 			}
 			catch (Exception ex)
 			{
-				UnhandledExceptionEventArgs e = new UnhandledExceptionEventArgs(ex);
-				FireSync<UnhandledExceptionEventArgs>(UnhandledException, typeof(EventHelper), e);
+				if (SuspendUnhandledExceptionEventSemapore <= 0)
+				{
+					UnhandledExceptionEventArgs e = new UnhandledExceptionEventArgs(ex);
+					FireSync<UnhandledExceptionEventArgs>(UnhandledException, typeof(EventHelper), e);
+				}
 			}
 		#endif
 		}

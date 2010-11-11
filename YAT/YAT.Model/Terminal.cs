@@ -1368,20 +1368,20 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendText()
 		{
-			Command command = this.settingsRoot.SendCommand.Command;
-			if (command.IsValidText)
+			Command c = this.settingsRoot.SendCommand.Command;
+			if (c.IsValidText)
 			{
-				SendText(command);
+				SendText(c);
 
 				// Copy line commands into history.
-				if (command.IsSingleLineText || command.IsMultiLineText || command.IsPartialEolText)
+				if (c.IsSingleLineText || c.IsMultiLineText || c.IsPartialEolText)
 				{
 					// Clone to a normal single line command.
 					Command clone;
-					if (command.IsPartialEolText)
-						clone = new Command(command.Description, command.PartialText, command.DefaultRadix);
+					if (c.IsPartialEolText)
+						clone = new Command(c.Description, c.PartialText, c.DefaultRadix);
 					else
-						clone = new Command(command);
+						clone = new Command(c);
 
 					// Put clone into history.
 					this.settingsRoot.SendCommand.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
@@ -1399,27 +1399,27 @@ namespace YAT.Model
 		/// <summary>
 		/// Sends given text command.
 		/// </summary>
-		/// <param name="command">Text command to be sent.</param>
-		public virtual void SendText(Command command)
+		/// <param name="c">Text command to be sent.</param>
+		public virtual void SendText(Command c)
 		{
-			if (command.IsValidText)
+			if (c.IsValidText)
 			{
-				if (command.IsSingleLineText)
+				if (c.IsSingleLineText)
 				{
-					if (SendCommandSettings.IsEasterEggCommand(command.SingleLineText))
+					if (SendCommandSettings.IsEasterEggCommand(c.SingleLineText))
 						SendLine(SendCommandSettings.EasterEggCommandText);
 					else
-						SendLine(command.SingleLineText);
+						SendLine(c.SingleLineText);
 				}
-				else if (command.IsMultiLineText)
+				else if (c.IsMultiLineText)
 				{
-					foreach (string line in command.MultiLineText)
+					foreach (string line in c.MultiLineText)
 						SendLine(line);
 				}
-				else if (command.IsPartialText)
+				else if (c.IsPartialText)
 				{
-					if (!command.IsPartialEolText)
-						Send(command.PartialText);
+					if (!c.IsPartialEolText)
+						Send(c.PartialText);
 					else
 						SendLine(""); // Simply add EOL to finalize a partial line.
 				}
@@ -1438,20 +1438,31 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void SendFile()
 		{
-			SendFile(this.settingsRoot.SendFile.Command);
+			Command c = this.settingsRoot.SendFile.Command;
+			if (c.IsFilePath)
+			{
+				SendFile(c);
+
+				// Put clone into history.
+				Command clone = new Command(c);
+				this.settingsRoot.SendFile.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
+					(
+						new RecentItem<Command>(clone)
+					);
+			}
 		}
 
 		/// <summary>
 		/// Sends given file.
 		/// </summary>
-		/// <param name="command">File to be sent.</param>
+		/// <param name="c">File to be sent.</param>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that really all exceptions get caught.")]
-		public virtual void SendFile(Command command)
+		public virtual void SendFile(Command c)
 		{
-			if (!command.IsValidFilePath)
+			if (!c.IsValidFilePath)
 				return;
 
-			string filePath = command.FilePath;
+			string filePath = c.FilePath;
 
 			try
 			{
@@ -1460,17 +1471,17 @@ namespace YAT.Model
 					string[] lines;
 					if (ExtensionSettings.IsXmlFile(System.IO.Path.GetExtension(filePath)))
 					{
-						// xml
+						// XML.
 						lines = XmlReader.LinesFromXmlFile(filePath);
 					}
 					else if (ExtensionSettings.IsRtfFile(System.IO.Path.GetExtension(filePath)))
 					{
-						// rtf
+						// RTF.
 						lines = RtfReader.LinesFromRtfFile(filePath);
 					}
 					else
 					{
-						// text
+						// Text.
 						using (StreamReader sr = new StreamReader(filePath))
 						{
 							string s;
@@ -1646,6 +1657,7 @@ namespace YAT.Model
 
 		private void StopChronos()
 		{
+			System.Diagnostics.Debug.WriteLine("!!! Model.Terminal.StopChronos()");
 			this.connectChrono.Stop();
 			this.totalConnectChrono.Stop();
 		}
