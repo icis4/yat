@@ -1,9 +1,12 @@
 
+0.	Log in as y-a-terminal
+	----------------------
+
+
 1.	Prepare upload to SourceForge
 	-----------------------------
 	[ ] Open File Manager
 	[ ] Add release folder (e.g. "Version 1.99.17 - YAT 2.0 Beta 2 Candidate 1")
-	[ ] Select folder as active upload folder
 	
 	HowTo: 
 	<https://sourceforge.net/apps/trac/sourceforge/wiki/Release%20files%20for%20download>
@@ -13,9 +16,10 @@
 	-----------
 	[ ] Upload release notes
 	[ ] Tick release notes as such
-	[ ] Upload distribution .zip
-	[ ] Tick platform
-	[ ] Link release to release notes
+	[ ] Link folder to release notes
+	[ ] Upload distribution .zip's (normal + with .NET)
+	[ ] Link files to release notes
+	[ ] Tick default platform download on normal distribution
 
 
 3.	Check release and release notes
