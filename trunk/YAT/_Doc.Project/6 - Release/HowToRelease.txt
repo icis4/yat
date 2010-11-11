@@ -6,13 +6,10 @@ Note:	The whole release process takes about 6 hours
 	-----------------------------------------------------------------------------------------------
 	[ ] Set product name post fix in
 		"YAT.Utilities.ApplicationInfo.ProductNamePostFix" and
-	[ ] Set product versions in all YAT assembly infos
-		Attention: Ensure to replace version number including leading quote
-		           to keep SettingsFilesProvider and FileVersionsTest untouched
-		           e.g. replace "1.99.18 by "1.99.19
-	[ ] Set product versions in all MKY assembly infos
-		Attention: Ensure to replace version number including leading quote
-		           e.g. replace "1.0.1 by "1.0.2
+	[ ] Increment product version in ALAZ.Version
+	[ ] Increment product version in MKY.Version
+	[ ] Increment product version in NUnit.Version
+	[ ] Increment product version in YAT.Version
 
 
 2.	Set installation version if not already done                                        0:05 / 0:15
@@ -116,25 +113,26 @@ Note:	The whole release process takes about 6 hours
 	-----------------------------------------------------------------------------------------------
 	[ ] Commit any modifications to the subversion repository
 	[ ] Tag/checkpoint the project
-		> e.g. "/tags/yat-1-99-18-beta-2-candidate-2"
-		> e.g. "YAT 2.0 Beta 2 Candidate 2 Version 1.99.18"
+		> SVN > Repo Browser
+			> e.g. "/tags/yat-1-99-18-beta-2-candidate-2"
+			> e.g. "YAT 2.0 Beta 2 Candidate 2 Version 1.99.18"
 
 
-14.	Immediately increment product name and versions                                     0:15 / 4:00
-	-----------------------------------------------------------------------------------------------
-	[ ] Commit modifications to the subversion repository according to 1. and 2.
-
-
-15.	Pack YAT                                                                            0:15 / 4:15
+14.	Pack YAT                                                                            0:15 / 4:15
 	-----------------------------------------------------------------------------------------------
 	[ ] Add a new directory to the offline archive "\YAT\Releases and Checkpoints"
 	[ ] Update "\Distribution\Release" and "\Distribution\Release With Redistributable"
 	[ ] Update the two according .zip files
 
 
-16.	Upload YAT                                                                          0:45 / 5:00
+15.	Upload YAT                                                                          0:45 / 5:00
 	-----------------------------------------------------------------------------------------------
 	[ ] According to "HowToUploadDistributionToSourcForge.txt"
+
+
+16.	Immediately increment product name and versions                                     0:15 / 4:00
+	-----------------------------------------------------------------------------------------------
+	[ ] Commit modifications to the subversion repository according to 1. and 2.
 
 
 17.	Send e-mail to the YAT mailing list                                                 0:15 / 5:15
@@ -163,3 +161,6 @@ Note:	The whole release process takes about 6 hours
 	-----------------------------------------------------------------------------------------------
 	[ ] Open the YAT solution and verify that it still properly builds and runs
 		> To be done after archiving to keep temporaries at a minimum
+
+21.	Backup PC                                                                           0:30 / 6:30
+	-----------------------------------------------------------------------------------------------
