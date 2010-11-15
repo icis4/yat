@@ -17,7 +17,11 @@
 	[ ] Upload release notes
 	[ ] Tick release notes as such
 	[ ] Link folder to release notes
-	[ ] Upload distribution .zip's (normal + with .NET)
+	[ ] Upload normal distribution .zip using web interface
+	[ ] Upload .NET distribution .zip using FileZilla/SFTP (bigger than 20 MB)
+		> From "<Offline Repository>\Releases and Checkpoints\<Release>\Distribution\"
+		> To "/home/pfs/project/y/y-/y-a-terminal/YAT 2.0/<Release>"
+		> Also see "FileZilla Upload.png"
 	[ ] Link files to release notes
 	[ ] Tick default platform download on normal distribution
 
