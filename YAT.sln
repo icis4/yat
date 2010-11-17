@@ -59,6 +59,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MKY", "MKY", "{41ACF768-829
 		MKY\MKY.Version.cs = MKY\MKY.Version.cs
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY", "MKY\MKY\MKY.csproj", "{F489B948-95CF-49FE-B9AA-A51654F5688B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Test", "MKY\MKY.Test\MKY.Test.csproj", "{644F7C29-CCE6-4827-9EF2-8B7D34194101}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Ports", "MKY\MKY.IO.Ports\MKY.IO.Ports.csproj", "{D8940035-D30A-48A3-AC28-E8A4B8910CB9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Ports.Test", "MKY\MKY.IO.Ports.Test\MKY.IO.Ports.Test.csproj", "{82461541-B351-4913-9747-EAFEE2322768}"
@@ -75,10 +79,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.IO.Usb.Test", "MKY\MKY.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Net.Test", "MKY\MKY.Net.Test\MKY.Net.Test.csproj", "{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY", "MKY\MKY\MKY.csproj", "{F489B948-95CF-49FE-B9AA-A51654F5688B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Test", "MKY\MKY.Test\MKY.Test.csproj", "{644F7C29-CCE6-4827-9EF2-8B7D34194101}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Win32", "MKY\MKY.Win32\MKY.Win32.csproj", "{877BAA28-C2A6-41EC-BEDE-27B396FA8E20}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Win32.Test", "MKY\MKY.Win32.Test\MKY.Win32.Test.csproj", "{B5F4667B-5154-45C0-A0DE-411BBC292049}"
@@ -87,9 +87,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Windows.Forms", "MKY\MK
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MKY.Windows.Forms.Test", "MKY\MKY.Windows.Forms.Test\MKY.Windows.Forms.Test.csproj", "{4171BFD3-4E50-4752-977B-9B1F79C3EDFB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NUnit", "NUnit", "{3772E0E6-CACC-4C35-9026-60E65764BE41}"
+	ProjectSection(SolutionItems) = preProject
+		NUnit\NUnit.Version.cs = NUnit\NUnit.Version.cs
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnit", "NUnit\NUnit\NUnit.csproj", "{F7BFF679-5389-434C-81E4-7EE8530DF954}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "YAT", "YAT", "{3A9BAAD8-3A80-4D3A-92C0-E6E33B5307C0}"
 	ProjectSection(SolutionItems) = preProject
 		YAT\YAT.Version.cs = YAT\YAT.Version.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Doc.Project", "_Doc.Project", "{554310BE-A8B8-4E36-A38F-5974739CEC6C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6 - Release", "6 - Release", "{3A3C9EBD-9F6E-424C-ABEF-2B26CEC477F5}"
+	ProjectSection(SolutionItems) = preProject
+		YAT\_Doc.Project\6 - Release\HowToRelease.txt = YAT\_Doc.Project\6 - Release\HowToRelease.txt
+		YAT\_Doc.Project\6 - Release\HowToUploadDistributionToSourcForge.txt = YAT\_Doc.Project\6 - Release\HowToUploadDistributionToSourcForge.txt
+		YAT\_Doc.Project\6 - Release\MailingTemplates.txt = YAT\_Doc.Project\6 - Release\MailingTemplates.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT", "YAT\YAT\YAT.csproj", "{E87405A5-8FB0-4CE0-9946-3A08205B5DE0}"
@@ -137,22 +153,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAT.Utilities", "YAT\YAT.Utilities\YAT.Utilities.csproj", "{5E374FF3-3CE6-4FD2-B41C-679329FF05A5}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "YAT.Setup", "YAT\YAT.Setup\YAT.Setup.vdproj", "{F46DFE27-1F74-4558-AD39-E7EA74822483}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NUnit", "NUnit", "{3772E0E6-CACC-4C35-9026-60E65764BE41}"
-	ProjectSection(SolutionItems) = preProject
-		NUnit\NUnit.Version.cs = NUnit\NUnit.Version.cs
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnit", "NUnit\NUnit\NUnit.csproj", "{F7BFF679-5389-434C-81E4-7EE8530DF954}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Doc.Project", "_Doc.Project", "{554310BE-A8B8-4E36-A38F-5974739CEC6C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6 - Release", "6 - Release", "{3A3C9EBD-9F6E-424C-ABEF-2B26CEC477F5}"
-	ProjectSection(SolutionItems) = preProject
-		YAT\_Doc.Project\6 - Release\HowToRelease.txt = YAT\_Doc.Project\6 - Release\HowToRelease.txt
-		YAT\_Doc.Project\6 - Release\HowToUploadDistributionToSourcForge.txt = YAT\_Doc.Project\6 - Release\HowToUploadDistributionToSourcForge.txt
-		YAT\_Doc.Project\6 - Release\MailingTemplates.txt = YAT\_Doc.Project\6 - Release\MailingTemplates.txt
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution

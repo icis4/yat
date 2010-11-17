@@ -2489,8 +2489,6 @@ namespace YAT.Gui.Forms
 
 				this.terminal.Saved  -= new EventHandler<Model.SavedEventArgs>(this.terminal_Saved);
 				this.terminal.Closed -= new EventHandler<Model.ClosedEventArgs>(this.terminal_Closed);
-
-				System.Diagnostics.Debug.WriteLine("!!! Gui.Terminal.DetachTerminalEventHandlers()");
 			}
 		}
 
