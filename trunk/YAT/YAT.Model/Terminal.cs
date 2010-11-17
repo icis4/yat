@@ -1657,7 +1657,6 @@ namespace YAT.Model
 
 		private void StopChronos()
 		{
-			System.Diagnostics.Debug.WriteLine("!!! Model.Terminal.StopChronos()");
 			this.connectChrono.Stop();
 			this.totalConnectChrono.Stop();
 		}
