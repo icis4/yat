@@ -88,28 +88,28 @@ namespace MKY.Test
 
 				// Test implementation to get details about the calling sequence:
 
-				Debug.Indent();
-				Debug.WriteLine("ValueTypeWithOperators.Equals<object>()");
+				Trace.Indent();
+				Trace.WriteLine("ValueTypeWithOperators.Equals<object>()");
 
 				if (ReferenceEquals(obj, null))
 				{
-					Debug.WriteLine("Results in False since other is null");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since other is null");
+					Trace.Unindent();
 					return (false);
 				}
 
 				if (GetType() != obj.GetType())
 				{
-					Debug.WriteLine("Results in False since types don't match");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since types don't match");
+					Trace.Unindent();
 					return (false);
 				}
 
 				ValueTypeWithOperators other = (ValueTypeWithOperators)obj;
 				bool result = (this.A == other.A);
 
-				Debug.WriteLine("Results in " + result);
-				Debug.Unindent();
+				Trace.WriteLine("Results in " + result);
+				Trace.Unindent();
 				return (result);
 
 			#else
@@ -147,34 +147,34 @@ namespace MKY.Test
 
 				// Test implementation to get details about the calling sequence:
 
-				Debug.Indent();
-				Debug.WriteLine("ValueTypeWithOperators.operator ==()");
+				Trace.Indent();
+				Trace.WriteLine("ValueTypeWithOperators.operator ==()");
 
 				if (ReferenceEquals(lhs, rhs))
 				{
-					Debug.WriteLine("Results in True within ReferenceEquals()");
-					Debug.Unindent();
+					Trace.WriteLine("Results in True within ReferenceEquals()");
+					Trace.Unindent();
 					return (true);
 				}
 
 				if (ReferenceEquals(lhs, null))
 				{
-					Debug.WriteLine("Results in False since lhs is null");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since lhs is null");
+					Trace.Unindent();
 					return (false);
 				}
 
 				if (ReferenceEquals(rhs, null))
 				{
-					Debug.WriteLine("Results in False since rhs is null");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since rhs is null");
+					Trace.Unindent();
 					return (false);
 				}
 
 				bool result = lhs.Equals(rhs);
 
-				Debug.WriteLine("Results in " + result + " within Equals()");
-				Debug.Unindent();
+				Trace.WriteLine("Results in " + result + " within Equals()");
+				Trace.Unindent();
 				return (result);
 
 			#else
@@ -234,28 +234,28 @@ namespace MKY.Test
 
 				// Test implementation to get details about the calling sequence:
 
-				Debug.Indent();
-				Debug.WriteLine("ValueTypeWithoutOperators.Equals<object>()");
+				Trace.Indent();
+				Trace.WriteLine("ValueTypeWithoutOperators.Equals<object>()");
 
 				if (ReferenceEquals(obj, null))
 				{
-					Debug.WriteLine("Results in False since other is null");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since other is null");
+					Trace.Unindent();
 					return (false);
 				}
 
 				if (GetType() != obj.GetType())
 				{
-					Debug.WriteLine("Results in False since types don't match");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since types don't match");
+					Trace.Unindent();
 					return (false);
 				}
 
 				ValueTypeWithoutOperators other = (ValueTypeWithoutOperators)obj;
 				bool result = (this.A == other.A);
 
-				Debug.WriteLine("Results in " + result);
-				Debug.Unindent();
+				Trace.WriteLine("Results in " + result);
+				Trace.Unindent();
 				return (result);
 
 			#else
@@ -317,28 +317,28 @@ namespace MKY.Test
 
 				// Test implementation to get details about the calling sequence:
 
-				Debug.Indent();
-				Debug.WriteLine("BaseReferenceTypeNotIEquatableWithoutOperators.Equals<object>()");
+				Trace.Indent();
+				Trace.WriteLine("BaseReferenceTypeNotIEquatableWithoutOperators.Equals<object>()");
 
 				if (ReferenceEquals(obj, null))
 				{
-					Debug.WriteLine("Results in False since other is null");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since other is null");
+					Trace.Unindent();
 					return (false);
 				}
 
 				if (GetType() != obj.GetType())
 				{
-					Debug.WriteLine("Results in False since types don't match");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since types don't match");
+					Trace.Unindent();
 					return (false);
 				}
 
 				BaseReferenceTypeNotIEquatableWithoutOperators other = (BaseReferenceTypeNotIEquatableWithoutOperators)obj;
 				bool result = (this.A == other.A);
 
-				Debug.WriteLine("Results in " + result);
-				Debug.Unindent();
+				Trace.WriteLine("Results in " + result);
+				Trace.Unindent();
 				return (result);
 
 			#else
@@ -398,21 +398,21 @@ namespace MKY.Test
 
 				// Test implementation to get details about the calling sequence:
 
-				Debug.Indent();
-				Debug.WriteLine("DerivedReferenceTypeNotIEquatableWithoutOperators.Equals<object>()");
+				Trace.Indent();
+				Trace.WriteLine("DerivedReferenceTypeNotIEquatableWithoutOperators.Equals<object>()");
 
 				if (!base.Equals(obj))
 				{
-					Debug.WriteLine("Results in False within base.Equals()");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False within base.Equals()");
+					Trace.Unindent();
 					return (false);
 				}
 
 				DerivedReferenceTypeNotIEquatableWithoutOperators other = obj as DerivedReferenceTypeNotIEquatableWithoutOperators;
 				bool result = (this.B == other.B);
 
-				Debug.WriteLine("Results in " + result);
-				Debug.Unindent();
+				Trace.WriteLine("Results in " + result);
+				Trace.Unindent();
 				return (result);
 
 			#else
@@ -470,27 +470,27 @@ namespace MKY.Test
 
 				// Test implementation to get details about the calling sequence:
 
-				Debug.Indent();
-				Debug.WriteLine("BaseReferenceTypeIEquatableWithoutOperators.Equals<BaseReferenceTypeIEquatableWithoutOperators>()");
+				Trace.Indent();
+				Trace.WriteLine("BaseReferenceTypeIEquatableWithoutOperators.Equals<BaseReferenceTypeIEquatableWithoutOperators>()");
 
 				if (ReferenceEquals(other, null))
 				{
-					Debug.WriteLine("Results in False since other is null");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since other is null");
+					Trace.Unindent();
 					return (false);
 				}
 
 				if (GetType() != other.GetType())
 				{
-					Debug.WriteLine("Results in False since types don't match");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since types don't match");
+					Trace.Unindent();
 					return (false);
 				}
 
 				bool result = (this.A == other.A);
 
-				Debug.WriteLine("Results in " + result);
-				Debug.Unindent();
+				Trace.WriteLine("Results in " + result);
+				Trace.Unindent();
 				return (result);
 
 			#else
@@ -555,13 +555,13 @@ namespace MKY.Test
 
 				// Test implementation to get details about the calling sequence:
 
-				Debug.Indent();
-				Debug.WriteLine("DerivedReferenceTypeIEquatableWithoutOperators.Equals<DerivedReferenceTypeIEquatableWithoutOperators>()");
+				Trace.Indent();
+				Trace.WriteLine("DerivedReferenceTypeIEquatableWithoutOperators.Equals<DerivedReferenceTypeIEquatableWithoutOperators>()");
 
 				bool result = (base.Equals(other) && (this.B == other.B));
 
-				Debug.WriteLine("Results in " + result);
-				Debug.Unindent();
+				Trace.WriteLine("Results in " + result);
+				Trace.Unindent();
 				return (result);
 
 			#else
@@ -609,28 +609,28 @@ namespace MKY.Test
 
 				// Test implementation to get details about the calling sequence:
 
-				Debug.Indent();
-				Debug.WriteLine("BaseReferenceTypeNotIEquatableWithOperators.Equals<object>()");
+				Trace.Indent();
+				Trace.WriteLine("BaseReferenceTypeNotIEquatableWithOperators.Equals<object>()");
 
 				if (ReferenceEquals(obj, null))
 				{
-					Debug.WriteLine("Results in False since other is null");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since other is null");
+					Trace.Unindent();
 					return (false);
 				}
 
 				if (GetType() != obj.GetType())
 				{
-					Debug.WriteLine("Results in False since types don't match");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since types don't match");
+					Trace.Unindent();
 					return (false);
 				}
 
 				BaseReferenceTypeNotIEquatableWithOperators other = (BaseReferenceTypeNotIEquatableWithOperators)obj;
 				bool result = (this.A == other.A);
 
-				Debug.WriteLine("Results in " + result);
-				Debug.Unindent();
+				Trace.WriteLine("Results in " + result);
+				Trace.Unindent();
 				return (result);
 
 			#else
@@ -668,34 +668,34 @@ namespace MKY.Test
 
 				// Test implementation to get details about the calling sequence:
 
-				Debug.Indent();
-				Debug.WriteLine("BaseReferenceTypeNotIEquatableWithOperators.operator ==()");
+				Trace.Indent();
+				Trace.WriteLine("BaseReferenceTypeNotIEquatableWithOperators.operator ==()");
 
 				if (ReferenceEquals(lhs, rhs))
 				{
-					Debug.WriteLine("Results in True within ReferenceEquals()");
-					Debug.Unindent();
+					Trace.WriteLine("Results in True within ReferenceEquals()");
+					Trace.Unindent();
 					return (true);
 				}
 
 				if (ReferenceEquals(lhs, null))
 				{
-					Debug.WriteLine("Results in False since lhs is null");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since lhs is null");
+					Trace.Unindent();
 					return (false);
 				}
 
 				if (ReferenceEquals(rhs, null))
 				{
-					Debug.WriteLine("Results in False since rhs is null");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since rhs is null");
+					Trace.Unindent();
 					return (false);
 				}
 
 				bool result = lhs.Equals(rhs);
 
-				Debug.WriteLine("Results in " + result + " within Equals()");
-				Debug.Unindent();
+				Trace.WriteLine("Results in " + result + " within Equals()");
+				Trace.Unindent();
 				return (result);
 
 
@@ -755,21 +755,21 @@ namespace MKY.Test
 
 				// Test implementation to get details about the calling sequence:
 
-				Debug.Indent();
-				Debug.WriteLine("DerivedReferenceTypeNotIEquatableWithOperators.Equals<object>()");
+				Trace.Indent();
+				Trace.WriteLine("DerivedReferenceTypeNotIEquatableWithOperators.Equals<object>()");
 
 				if (!base.Equals(obj))
 				{
-					Debug.WriteLine("Results in False within base.Equals()");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False within base.Equals()");
+					Trace.Unindent();
 					return (false);
 				}
 
 				DerivedReferenceTypeNotIEquatableWithOperators other = obj as DerivedReferenceTypeNotIEquatableWithOperators;
 				bool result = (this.B == other.B);
 
-				Debug.WriteLine("Results in " + result);
-				Debug.Unindent();
+				Trace.WriteLine("Results in " + result);
+				Trace.Unindent();
 				return (result);
 
 			#else
@@ -804,34 +804,34 @@ namespace MKY.Test
 
 				// Test implementation to get details about the calling sequence:
 
-				Debug.Indent();
-				Debug.WriteLine("DerivedReferenceTypeNotIEquatableWithOperators.operator ==()");
+				Trace.Indent();
+				Trace.WriteLine("DerivedReferenceTypeNotIEquatableWithOperators.operator ==()");
 
 				if (ReferenceEquals(lhs, rhs))
 				{
-					Debug.WriteLine("Results in True within ReferenceEquals()");
-					Debug.Unindent();
+					Trace.WriteLine("Results in True within ReferenceEquals()");
+					Trace.Unindent();
 					return (true);
 				}
 
 				if (ReferenceEquals(lhs, null))
 				{
-					Debug.WriteLine("Results in False since lhs is null");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since lhs is null");
+					Trace.Unindent();
 					return (false);
 				}
 
 				if (ReferenceEquals(rhs, null))
 				{
-					Debug.WriteLine("Results in False since rhs is null");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since rhs is null");
+					Trace.Unindent();
 					return (false);
 				}
 
 				bool result = lhs.Equals(rhs);
 
-				Debug.WriteLine("Results in " + result + " within Equals()");
-				Debug.Unindent();
+				Trace.WriteLine("Results in " + result + " within Equals()");
+				Trace.Unindent();
 				return (result);
 
 			#else
@@ -890,21 +890,21 @@ namespace MKY.Test
 
 				// Test implementation to get details about the calling sequence:
 
-				Debug.Indent();
-				Debug.WriteLine("DerivedReferenceTypeNotIEquatableWithoutOperators.Equals<object>()");
+				Trace.Indent();
+				Trace.WriteLine("DerivedReferenceTypeNotIEquatableWithoutOperators.Equals<object>()");
 
 				if (!base.Equals(obj))
 				{
-					Debug.WriteLine("Results in False within base.Equals()");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False within base.Equals()");
+					Trace.Unindent();
 					return (false);
 				}
 
 				DerivedReferenceTypeNotIEquatableWithDerivedOperators other = obj as DerivedReferenceTypeNotIEquatableWithDerivedOperators;
 				bool result = (this.B == other.B);
 
-				Debug.WriteLine("Results in " + result);
-				Debug.Unindent();
+				Trace.WriteLine("Results in " + result);
+				Trace.Unindent();
 				return (result);
 
 			#else
@@ -956,28 +956,28 @@ namespace MKY.Test
 
 				// Test implementation to get details about the calling sequence:
 
-				Debug.Indent();
-				Debug.WriteLine("BaseReferenceTypeNotIEquatableWithBaseOperators.Equals<object>()");
+				Trace.Indent();
+				Trace.WriteLine("BaseReferenceTypeNotIEquatableWithBaseOperators.Equals<object>()");
 
 				if (ReferenceEquals(obj, null))
 				{
-					Debug.WriteLine("Results in False since other is null");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since other is null");
+					Trace.Unindent();
 					return (false);
 				}
 
 				if (GetType() != obj.GetType())
 				{
-					Debug.WriteLine("Results in False since types don't match");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since types don't match");
+					Trace.Unindent();
 					return (false);
 				}
 
 				BaseReferenceTypeNotIEquatableWithBaseOperators other = (BaseReferenceTypeNotIEquatableWithBaseOperators)obj;
 				bool result = (this.A == other.A);
 
-				Debug.WriteLine("Results in " + result);
-				Debug.Unindent();
+				Trace.WriteLine("Results in " + result);
+				Trace.Unindent();
 				return (result);
 
 			#else
@@ -1015,27 +1015,27 @@ namespace MKY.Test
 
 				// Test implementation to get details about the calling sequence:
 
-				Debug.Indent();
-				Debug.WriteLine("BaseReferenceTypeNotIEquatableWithBaseOperators.operator ==()");
+				Trace.Indent();
+				Trace.WriteLine("BaseReferenceTypeNotIEquatableWithBaseOperators.operator ==()");
 
 				if (ReferenceEquals(lhs, rhs))
 				{
-					Debug.WriteLine("Results in True within ReferenceEquals()");
-					Debug.Unindent();
+					Trace.WriteLine("Results in True within ReferenceEquals()");
+					Trace.Unindent();
 					return (true);
 				}
 
 				if (ReferenceEquals(lhs, null))
 				{
-					Debug.WriteLine("Results in False since lhs is null");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since lhs is null");
+					Trace.Unindent();
 					return (false);
 				}
 
 				if (ReferenceEquals(rhs, null))
 				{
-					Debug.WriteLine("Results in False since rhs is null");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since rhs is null");
+					Trace.Unindent();
 					return (false);
 				}
 
@@ -1043,8 +1043,8 @@ namespace MKY.Test
 				// Thus, ensure that potential <Derived>.Equals() is called.
 				object obj = (object)lhs;
 				bool result = obj.Equals(rhs);
-				Debug.WriteLine("Results in " + result + " within Equals()");
-				Debug.Unindent();
+				Trace.WriteLine("Results in " + result + " within Equals()");
+				Trace.Unindent();
 				return (result);
 
 			#else
@@ -1109,21 +1109,21 @@ namespace MKY.Test
 
 				// Test implementation to get details about the calling sequence:
 
-				Debug.Indent();
-				Debug.WriteLine("DerivedReferenceTypeNotIEquatableWithBaseOperators.Equals<object>()");
+				Trace.Indent();
+				Trace.WriteLine("DerivedReferenceTypeNotIEquatableWithBaseOperators.Equals<object>()");
 
 				if (!base.Equals(obj))
 				{
-					Debug.WriteLine("Results in False within base.Equals()");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False within base.Equals()");
+					Trace.Unindent();
 					return (false);
 				}
 
 				DerivedReferenceTypeNotIEquatableWithBaseOperators other = obj as DerivedReferenceTypeNotIEquatableWithBaseOperators;
 				bool result = (this.B == other.B);
 
-				Debug.WriteLine("Results in " + result);
-				Debug.Unindent();
+				Trace.WriteLine("Results in " + result);
+				Trace.Unindent();
 				return (result);
 
 			#else
@@ -1181,27 +1181,27 @@ namespace MKY.Test
 
 				// Test implementation to get details about the calling sequence:
 
-				Debug.Indent();
-				Debug.WriteLine("BaseReferenceTypeIEquatableWithBaseOperators.Equals<BaseReferenceTypeIEquatableWithBaseOperators>()");
+				Trace.Indent();
+				Trace.WriteLine("BaseReferenceTypeIEquatableWithBaseOperators.Equals<BaseReferenceTypeIEquatableWithBaseOperators>()");
 
 				if (ReferenceEquals(other, null))
 				{
-					Debug.WriteLine("Results in False since other is null");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since other is null");
+					Trace.Unindent();
 					return (false);
 				}
 
 				if (GetType() != other.GetType())
 				{
-					Debug.WriteLine("Results in False since types don't match");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since types don't match");
+					Trace.Unindent();
 					return (false);
 				}
 
 				bool result = (this.A == other.A);
 
-				Debug.WriteLine("Results in " + result);
-				Debug.Unindent();
+				Trace.WriteLine("Results in " + result);
+				Trace.Unindent();
 				return (result);
 
 			#else
@@ -1238,27 +1238,27 @@ namespace MKY.Test
 
 				// Test implementation to get details about the calling sequence:
 
-				Debug.Indent();
-				Debug.WriteLine("BaseReferenceTypeIEquatableWithBaseOperators.operator ==()");
+				Trace.Indent();
+				Trace.WriteLine("BaseReferenceTypeIEquatableWithBaseOperators.operator ==()");
 
 				if (ReferenceEquals(lhs, rhs))
 				{
-					Debug.WriteLine("Results in True within ReferenceEquals()");
-					Debug.Unindent();
+					Trace.WriteLine("Results in True within ReferenceEquals()");
+					Trace.Unindent();
 					return (true);
 				}
 
 				if (ReferenceEquals(lhs, null))
 				{
-					Debug.WriteLine("Results in False since lhs is null");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since lhs is null");
+					Trace.Unindent();
 					return (false);
 				}
 
 				if (ReferenceEquals(rhs, null))
 				{
-					Debug.WriteLine("Results in False since rhs is null");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since rhs is null");
+					Trace.Unindent();
 					return (false);
 				}
 
@@ -1266,8 +1266,8 @@ namespace MKY.Test
 				// Thus, ensure that potential <Derived>.Equals() is called.
 				object obj = (object)lhs;
 				bool result = obj.Equals(rhs);
-				Debug.WriteLine("Results in " + result + " within Equals()");
-				Debug.Unindent();
+				Trace.WriteLine("Results in " + result + " within Equals()");
+				Trace.Unindent();
 				return (result);
 
 			#else
@@ -1332,28 +1332,28 @@ namespace MKY.Test
 
 				// Test implementation to get details about the calling sequence:
 
-				Debug.Indent();
-				Debug.WriteLine("DerivedReferenceTypeDerivedIEquatableWithBaseOperators.Equals<DerivedReferenceTypeDerivedIEquatableWithBaseOperators>()");
+				Trace.Indent();
+				Trace.WriteLine("DerivedReferenceTypeDerivedIEquatableWithBaseOperators.Equals<DerivedReferenceTypeDerivedIEquatableWithBaseOperators>()");
 
 				if (ReferenceEquals(obj, null))
 				{
-					Debug.WriteLine("Results in False since other is null");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since other is null");
+					Trace.Unindent();
 					return (false);
 				}
 
 				if (GetType() != obj.GetType())
 				{
-					Debug.WriteLine("Results in False since types don't match");
-					Debug.Unindent();
+					Trace.WriteLine("Results in False since types don't match");
+					Trace.Unindent();
 					return (false);
 				}
 
 				DerivedReferenceTypeDerivedIEquatableWithBaseOperators other = (DerivedReferenceTypeDerivedIEquatableWithBaseOperators)obj;
 				bool result = (base.Equals(other) && (this.B == other.B));
 
-				Debug.WriteLine("Results in " + result);
-				Debug.Unindent();
+				Trace.WriteLine("Results in " + result);
+				Trace.Unindent();
 				return (result);
 
 			#else
@@ -1453,80 +1453,80 @@ namespace MKY.Test
 		[Test]
 		public virtual void DisplaySequenceOfEqualityOfOwnReferenceType()
 		{
-			Debug.Indent();
-			Debug.WriteLine("");
-			Debug.WriteLine("Base without operators");
+			Trace.Indent();
+			Trace.WriteLine("");
+			Trace.WriteLine("Base without operators");
 			{
 				EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators a = new EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators(1);
 				EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators b = new EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators(1);
 				bool result = (a == b);
-				Debug.WriteLine("a == b of base reference type without operators results in " + result);
+				Trace.WriteLine("a == b of base reference type without operators results in " + result);
 			}
-			Debug.WriteLine("");
-			Debug.WriteLine("Derived without operators");
+			Trace.WriteLine("");
+			Trace.WriteLine("Derived without operators");
 			{
 				EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators a = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators(1, 2);
 				EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators b = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators(1, 2);
 				bool result = (a == b);
-				Debug.WriteLine("a == b of derived reference type without operators results in " + result);
+				Trace.WriteLine("a == b of derived reference type without operators results in " + result);
 			}
-			Debug.WriteLine("");
-			Debug.WriteLine("Base IEquatable without operators");
+			Trace.WriteLine("");
+			Trace.WriteLine("Base IEquatable without operators");
 			{
 				EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators a = new EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators(1);
 				EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators b = new EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators(1);
 				bool result = (a == b);
-				Debug.WriteLine("a == b of base reference type IEquatable without operators results in " + result);
+				Trace.WriteLine("a == b of base reference type IEquatable without operators results in " + result);
 			}
-			Debug.WriteLine("");
-			Debug.WriteLine("Derived IEquatable without operators");
+			Trace.WriteLine("");
+			Trace.WriteLine("Derived IEquatable without operators");
 			{
 				EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators a = new EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators(1, 2);
 				EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators b = new EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators(1, 2);
 				bool result = (a == b);
-				Debug.WriteLine("a == b of derived reference type IEquatable without operators results in " + result);
+				Trace.WriteLine("a == b of derived reference type IEquatable without operators results in " + result);
 			}
-			Debug.WriteLine("");
-			Debug.WriteLine("Base with operators");
+			Trace.WriteLine("");
+			Trace.WriteLine("Base with operators");
 			{
 				EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators a = new EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators(1);
 				EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators b = new EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators(1);
 				bool result = (a == b);
-				Debug.WriteLine("a == b of base reference type with operators results in " + result);
+				Trace.WriteLine("a == b of base reference type with operators results in " + result);
 			}
-			Debug.WriteLine("");
-			Debug.WriteLine("Derived with operators");
+			Trace.WriteLine("");
+			Trace.WriteLine("Derived with operators");
 			{
 				EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators a = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators(1, 2);
 				EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators b = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators(1, 2);
 				bool result = (a == b);
-				Debug.WriteLine("a == b of derived reference type with operators results in " + result);
+				Trace.WriteLine("a == b of derived reference type with operators results in " + result);
 			}
-			Debug.WriteLine("");
-			Debug.WriteLine("Derived without operators");
+			Trace.WriteLine("");
+			Trace.WriteLine("Derived without operators");
 			{
 				EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators a = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators(1, 2, 3);
 				EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators b = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators(1, 2, 3);
 				bool result = (a == b);
-				Debug.WriteLine("a == b of derived reference type without operators results in " + result);
+				Trace.WriteLine("a == b of derived reference type without operators results in " + result);
 			}
-			Debug.WriteLine("");
-			Debug.WriteLine("Base with base operators");
+			Trace.WriteLine("");
+			Trace.WriteLine("Base with base operators");
 			{
 				EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators a = new EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators(1);
 				EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators b = new EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators(1);
 				bool result = (a == b);
-				Debug.WriteLine("a == b of base reference type with base operators results in " + result);
+				Trace.WriteLine("a == b of base reference type with base operators results in " + result);
 			}
-			Debug.WriteLine("");
-			Debug.WriteLine("Derived with base operators");
+			Trace.WriteLine("");
+			Trace.WriteLine("Derived with base operators");
 			{
 				EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators a = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators(1, 2);
 				EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators b = new EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators(1, 2);
 				bool result = (a == b);
-				Debug.WriteLine("a == b of derived reference type with base operators results in " + result);
+				Trace.WriteLine("a == b of derived reference type with base operators results in " + result);
 			}
-			Debug.Unindent();
+			Trace.Unindent();
 		}
 
 		#endregion
@@ -1837,51 +1837,51 @@ namespace MKY.Test
 
 		public static void TestEquals<T>(T objToCompareAgainst, T objEqual, T objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestEquals<" + typeof(T).FullName + ">");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestEquals<" + typeof(T).FullName + ">");
+			Trace.Indent();
 
 			try
 			{
 				// Reference equal.
 
-				Debug.WriteLine("Reference equal using Equals()");
-				Debug.Indent();
+				Trace.WriteLine("Reference equal using Equals()");
+				Trace.Indent();
 
 				if (!objToCompareAgainst.Equals(objToCompareAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using Equals()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				// Value equal.
 
-				Debug.WriteLine("Value equal using Equals()");
-				Debug.Indent();
+				Trace.WriteLine("Value equal using Equals()");
+				Trace.Indent();
 
 				if (!objToCompareAgainst.Equals(objEqual))
 					Assert.Fail("Value equal objects are not considered equal using Equals()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				// Value not equal.
 
-				Debug.WriteLine("Value not equal using Equals()");
-				Debug.Indent();
+				Trace.WriteLine("Value not equal using Equals()");
+				Trace.Indent();
 
 				if (objToCompareAgainst.Equals(objNotEqual))
 					Assert.Fail("Value not equal objects are considered equal using Equals()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
@@ -1894,9 +1894,9 @@ namespace MKY.Test
 
 		public static void TestOperatorsForReferenceEqualityOfValueType(ValueType objToCompareAgainst, ValueType objEqual, ValueType objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForReferenceEqualityOfValueType");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForReferenceEqualityOfValueType");
+			Trace.Indent();
 
 			try
 			{
@@ -1904,32 +1904,32 @@ namespace MKY.Test
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
-				Debug.WriteLine("Reference equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Reference equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objToCompareAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Reference equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Reference equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objToCompareAgainst)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				#pragma warning restore 1718
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
@@ -1937,9 +1937,9 @@ namespace MKY.Test
 
 		public static void TestOperatorsForReferenceEqualityOfDateTime(DateTime objToCompareAgainst, DateTime objEqual, DateTime objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForReferenceEqualityOfDateTime");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForReferenceEqualityOfDateTime");
+			Trace.Indent();
 
 			try
 			{
@@ -1947,94 +1947,94 @@ namespace MKY.Test
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
-				Debug.WriteLine("Reference equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Reference equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objToCompareAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Reference equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Reference equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objToCompareAgainst)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				#pragma warning restore 1718
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForValueEqualityOfDateTime(DateTime objToCompareAgainst, DateTime objEqual, DateTime objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForValueEqualityOfDateTime");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForValueEqualityOfDateTime");
+			Trace.Indent();
 
 			try
 			{
 				// Value equal.
 
-				Debug.WriteLine("Value equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objEqual))
 					Assert.Fail("Value equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objEqual)
 					Assert.Fail("Value equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				// Value not equal.
 
-				Debug.WriteLine("Value not equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value not equal using operator ==()");
+				Trace.Indent();
 
 				if (objToCompareAgainst == objNotEqual)
 					Assert.Fail("Value not equal objects are considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value not equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value not equal using operator !=()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst != objNotEqual))
 					Assert.Fail("Value not equal objects are considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForReferenceEqualityOfValueTypeWithOperators(EqualityTestData.ValueTypeWithOperators objToCompareAgainst, EqualityTestData.ValueTypeWithOperators objEqual, EqualityTestData.ValueTypeWithOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForReferenceEqualityOfValueTypeWithOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForReferenceEqualityOfValueTypeWithOperators");
+			Trace.Indent();
 
 			try
 			{
@@ -2042,86 +2042,86 @@ namespace MKY.Test
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
-				Debug.WriteLine("Reference equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Reference equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objToCompareAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Reference equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Reference equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objToCompareAgainst)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				#pragma warning restore 1718
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForValueEqualityOfValueTypeWithOperators(EqualityTestData.ValueTypeWithOperators objToCompareAgainst, EqualityTestData.ValueTypeWithOperators objEqual, EqualityTestData.ValueTypeWithOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForValueEqualityOfValueTypeWithOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForValueEqualityOfValueTypeWithOperators");
+			Trace.Indent();
 
 			try
 			{
 				// Value equal.
 
-				Debug.WriteLine("Value equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objEqual))
 					Assert.Fail("Value equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objEqual)
 					Assert.Fail("Value equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				// Value not equal.
 
-				Debug.WriteLine("Value not equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value not equal using operator ==()");
+				Trace.Indent();
 
 				if (objToCompareAgainst == objNotEqual)
 					Assert.Fail("Value not equal objects are considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value not equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value not equal using operator !=()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst != objNotEqual))
 					Assert.Fail("Value not equal objects are considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
@@ -2134,9 +2134,9 @@ namespace MKY.Test
 
 		public static void TestOperatorsForReferenceEqualityOfObject(object objToCompareAgainst, object objEqual, object objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForReferenceEqualityOfObject");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForReferenceEqualityOfObject");
+			Trace.Indent();
 
 			try
 			{
@@ -2144,32 +2144,32 @@ namespace MKY.Test
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
-				Debug.WriteLine("Reference equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Reference equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objToCompareAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Reference equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Reference equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objToCompareAgainst)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				#pragma warning restore 1718
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
@@ -2177,9 +2177,9 @@ namespace MKY.Test
 
 		public static void TestOperatorsForReferenceEqualityOfVersion(Version objToCompareAgainst, Version objEqual, Version objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForReferenceEqualityOfVersion");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForReferenceEqualityOfVersion");
+			Trace.Indent();
 
 			try
 			{
@@ -2187,94 +2187,94 @@ namespace MKY.Test
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
-				Debug.WriteLine("Reference equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Reference equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objToCompareAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Reference equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Reference equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objToCompareAgainst)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				#pragma warning restore 1718
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForValueEqualityOfVersion(Version objToCompareAgainst, Version objEqual, Version objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForValueEqualityOfVersion");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForValueEqualityOfVersion");
+			Trace.Indent();
 
 			try
 			{
 				// Value equal.
 
-				Debug.WriteLine("Value equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objEqual))
 					Assert.Fail("Value equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objEqual)
 					Assert.Fail("Value equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				// Value not equal.
 
-				Debug.WriteLine("Value not equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value not equal using operator ==()");
+				Trace.Indent();
 
 				if (objToCompareAgainst == objNotEqual)
 					Assert.Fail("Value not equal objects are considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value not equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value not equal using operator !=()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst != objNotEqual))
 					Assert.Fail("Value not equal objects are considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithoutOperators(EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objEqual, EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithoutOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithoutOperators");
+			Trace.Indent();
 
 			try
 			{
@@ -2282,94 +2282,94 @@ namespace MKY.Test
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
-				Debug.WriteLine("Reference equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Reference equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objToCompareAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Reference equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Reference equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objToCompareAgainst)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				#pragma warning restore 1718
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithoutOperators(EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objEqual, EqualityTestData.BaseReferenceTypeNotIEquatableWithoutOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithoutOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithoutOperators");
+			Trace.Indent();
 
 			try
 			{
 				// Value equal.
 
-				Debug.WriteLine("Value equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objEqual))
 					Assert.Fail("Value equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objEqual)
 					Assert.Fail("Value equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				// Value not equal.
 
-				Debug.WriteLine("Value not equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value not equal using operator ==()");
+				Trace.Indent();
 
 				if (objToCompareAgainst == objNotEqual)
 					Assert.Fail("Value not equal objects are considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value not equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value not equal using operator !=()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst != objNotEqual))
 					Assert.Fail("Value not equal objects are considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators");
+			Trace.Indent();
 
 			try
 			{
@@ -2377,94 +2377,94 @@ namespace MKY.Test
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
-				Debug.WriteLine("Reference equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Reference equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objToCompareAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Reference equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Reference equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objToCompareAgainst)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				#pragma warning restore 1718
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithoutOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators");
+			Trace.Indent();
 
 			try
 			{
 				// Value equal.
 
-				Debug.WriteLine("Value equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objEqual))
 					Assert.Fail("Value equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objEqual)
 					Assert.Fail("Value equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				// Value not equal.
 
-				Debug.WriteLine("Value not equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value not equal using operator ==()");
+				Trace.Indent();
 
 				if (objToCompareAgainst == objNotEqual)
 					Assert.Fail("Value not equal objects are considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value not equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value not equal using operator !=()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst != objNotEqual))
 					Assert.Fail("Value not equal objects are considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeIEquatableWithoutOperators(EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objEqual, EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForReferenceEqualityOfBaseReferenceTypeIEquatableWithoutOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForReferenceEqualityOfBaseReferenceTypeIEquatableWithoutOperators");
+			Trace.Indent();
 
 			try
 			{
@@ -2472,94 +2472,94 @@ namespace MKY.Test
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
-				Debug.WriteLine("Reference equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Reference equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objToCompareAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Reference equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Reference equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objToCompareAgainst)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				#pragma warning restore 1718
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForValueEqualityOfBaseReferenceTypeIEquatableWithoutOperators(EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objEqual, EqualityTestData.BaseReferenceTypeIEquatableWithoutOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForValueEqualityOfBaseReferenceTypeIEquatableWithoutOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForValueEqualityOfBaseReferenceTypeIEquatableWithoutOperators");
+			Trace.Indent();
 
 			try
 			{
 				// Value equal.
 
-				Debug.WriteLine("Value equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objEqual))
 					Assert.Fail("Value equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objEqual)
 					Assert.Fail("Value equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				// Value not equal.
 
-				Debug.WriteLine("Value not equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value not equal using operator ==()");
+				Trace.Indent();
 
 				if (objToCompareAgainst == objNotEqual)
 					Assert.Fail("Value not equal objects are considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value not equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value not equal using operator !=()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst != objNotEqual))
 					Assert.Fail("Value not equal objects are considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeIEquatableWithoutOperators(EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objEqual, EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForReferenceEqualityOfDerivedReferenceTypeIEquatableWithoutOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForReferenceEqualityOfDerivedReferenceTypeIEquatableWithoutOperators");
+			Trace.Indent();
 
 			try
 			{
@@ -2567,94 +2567,94 @@ namespace MKY.Test
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
-				Debug.WriteLine("Reference equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Reference equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objToCompareAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Reference equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Reference equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objToCompareAgainst)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				#pragma warning restore 1718
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForValueEqualityOfDerivedReferenceTypeIEquatableWithoutOperators(EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objEqual, EqualityTestData.DerivedReferenceTypeIEquatableWithoutOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForValueEqualityOfDerivedReferenceTypeIEquatableWithoutOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForValueEqualityOfDerivedReferenceTypeIEquatableWithoutOperators");
+			Trace.Indent();
 
 			try
 			{
 				// Value equal.
 
-				Debug.WriteLine("Value equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objEqual))
 					Assert.Fail("Value equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objEqual)
 					Assert.Fail("Value equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				// Value not equal.
 
-				Debug.WriteLine("Value not equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value not equal using operator ==()");
+				Trace.Indent();
 
 				if (objToCompareAgainst == objNotEqual)
 					Assert.Fail("Value not equal objects are considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value not equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value not equal using operator !=()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst != objNotEqual))
 					Assert.Fail("Value not equal objects are considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithOperators(EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objEqual, EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithOperators");
+			Trace.Indent();
 
 			try
 			{
@@ -2662,94 +2662,94 @@ namespace MKY.Test
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
-				Debug.WriteLine("Reference equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Reference equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objToCompareAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Reference equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Reference equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objToCompareAgainst)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				#pragma warning restore 1718
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithOperators(EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objEqual, EqualityTestData.BaseReferenceTypeNotIEquatableWithOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithOperators");
+			Trace.Indent();
 
 			try
 			{
 				// Value equal.
 
-				Debug.WriteLine("Value equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objEqual))
 					Assert.Fail("Value equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objEqual)
 					Assert.Fail("Value equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				// Value not equal.
 
-				Debug.WriteLine("Value not equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value not equal using operator ==()");
+				Trace.Indent();
 
 				if (objToCompareAgainst == objNotEqual)
 					Assert.Fail("Value not equal objects are considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value not equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value not equal using operator !=()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst != objNotEqual))
 					Assert.Fail("Value not equal objects are considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithOperators");
+			Trace.Indent();
 
 			try
 			{
@@ -2757,94 +2757,94 @@ namespace MKY.Test
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
-				Debug.WriteLine("Reference equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Reference equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objToCompareAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Reference equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Reference equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objToCompareAgainst)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				#pragma warning restore 1718
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithOperators");
+			Trace.Indent();
 
 			try
 			{
 				// Value equal.
 
-				Debug.WriteLine("Value equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objEqual))
 					Assert.Fail("Value equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objEqual)
 					Assert.Fail("Value equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				// Value not equal.
 
-				Debug.WriteLine("Value not equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value not equal using operator ==()");
+				Trace.Indent();
 
 				if (objToCompareAgainst == objNotEqual)
 					Assert.Fail("Value not equal objects are considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value not equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value not equal using operator !=()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst != objNotEqual))
 					Assert.Fail("Value not equal objects are considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators");
+			Trace.Indent();
 
 			try
 			{
@@ -2852,94 +2852,94 @@ namespace MKY.Test
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
-				Debug.WriteLine("Reference equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Reference equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objToCompareAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Reference equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Reference equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objToCompareAgainst)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				#pragma warning restore 1718
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithDerivedOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithoutOperators");
+			Trace.Indent();
 
 			try
 			{
 				// Value equal.
 
-				Debug.WriteLine("Value equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objEqual))
 					Assert.Fail("Value equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objEqual)
 					Assert.Fail("Value equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				// Value not equal.
 
-				Debug.WriteLine("Value not equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value not equal using operator ==()");
+				Trace.Indent();
 
 				if (objToCompareAgainst == objNotEqual)
 					Assert.Fail("Value not equal objects are considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value not equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value not equal using operator !=()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst != objNotEqual))
 					Assert.Fail("Value not equal objects are considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithBaseOperators(EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objEqual, EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithBaseOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForReferenceEqualityOfBaseReferenceTypeNotIEquatableWithBaseOperators");
+			Trace.Indent();
 
 			try
 			{
@@ -2947,94 +2947,94 @@ namespace MKY.Test
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
-				Debug.WriteLine("Reference equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Reference equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objToCompareAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Reference equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Reference equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objToCompareAgainst)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				#pragma warning restore 1718
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithBaseOperators(EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objEqual, EqualityTestData.BaseReferenceTypeNotIEquatableWithBaseOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithBaseOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForValueEqualityOfBaseReferenceTypeNotIEquatableWithBaseOperators");
+			Trace.Indent();
 
 			try
 			{
 				// Value equal.
 
-				Debug.WriteLine("Value equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objEqual))
 					Assert.Fail("Value equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objEqual)
 					Assert.Fail("Value equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				// Value not equal.
 
-				Debug.WriteLine("Value not equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value not equal using operator ==()");
+				Trace.Indent();
 
 				if (objToCompareAgainst == objNotEqual)
 					Assert.Fail("Value not equal objects are considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value not equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value not equal using operator !=()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst != objNotEqual))
 					Assert.Fail("Value not equal objects are considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithBaseOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithBaseOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForReferenceEqualityOfDerivedReferenceTypeNotIEquatableWithBaseOperators");
+			Trace.Indent();
 
 			try
 			{
@@ -3042,94 +3042,94 @@ namespace MKY.Test
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
-				Debug.WriteLine("Reference equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Reference equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objToCompareAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Reference equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Reference equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objToCompareAgainst)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				#pragma warning restore 1718
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithBaseOperators(EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objEqual, EqualityTestData.DerivedReferenceTypeNotIEquatableWithBaseOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithBaseOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForValueEqualityOfDerivedReferenceTypeNotIEquatableWithBaseOperators");
+			Trace.Indent();
 
 			try
 			{
 				// Value equal.
 
-				Debug.WriteLine("Value equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objEqual))
 					Assert.Fail("Value equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objEqual)
 					Assert.Fail("Value equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				// Value not equal.
 
-				Debug.WriteLine("Value not equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value not equal using operator ==()");
+				Trace.Indent();
 
 				if (objToCompareAgainst == objNotEqual)
 					Assert.Fail("Value not equal objects are considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value not equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value not equal using operator !=()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst != objNotEqual))
 					Assert.Fail("Value not equal objects are considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForReferenceEqualityOfBaseReferenceTypeIEquatableWithBaseOperators(EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objEqual, EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForReferenceEqualityOfBaseReferenceTypeIEquatableWithBaseOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForReferenceEqualityOfBaseReferenceTypeIEquatableWithBaseOperators");
+			Trace.Indent();
 
 			try
 			{
@@ -3137,94 +3137,94 @@ namespace MKY.Test
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
-				Debug.WriteLine("Reference equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Reference equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objToCompareAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Reference equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Reference equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objToCompareAgainst)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				#pragma warning restore 1718
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForValueEqualityOfBaseReferenceTypeIEquatableWithBaseOperators(EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objEqual, EqualityTestData.BaseReferenceTypeIEquatableWithBaseOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForValueEqualityOfBaseReferenceTypeIEquatableWithBaseOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForValueEqualityOfBaseReferenceTypeIEquatableWithBaseOperators");
+			Trace.Indent();
 
 			try
 			{
 				// Value equal.
 
-				Debug.WriteLine("Value equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objEqual))
 					Assert.Fail("Value equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objEqual)
 					Assert.Fail("Value equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				// Value not equal.
 
-				Debug.WriteLine("Value not equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value not equal using operator ==()");
+				Trace.Indent();
 
 				if (objToCompareAgainst == objNotEqual)
 					Assert.Fail("Value not equal objects are considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value not equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value not equal using operator !=()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst != objNotEqual))
 					Assert.Fail("Value not equal objects are considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForReferenceEqualityOfDerivedReferenceTypeDerivedIEquatableWithBaseOperators(EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objEqual, EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForReferenceEqualityOfDerivedReferenceTypeDerivedIEquatableWithBaseOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForReferenceEqualityOfDerivedReferenceTypeDerivedIEquatableWithBaseOperators");
+			Trace.Indent();
 
 			try
 			{
@@ -3232,86 +3232,86 @@ namespace MKY.Test
 
 				#pragma warning disable 1718 // Disable "Comparison made to same variable; did you mean to compare something else?"
 
-				Debug.WriteLine("Reference equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Reference equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objToCompareAgainst))
 					Assert.Fail("Reference equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Reference equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Reference equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objToCompareAgainst)
 					Assert.Fail("Reference equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				#pragma warning restore 1718
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 
 		public static void TestOperatorsForValueEqualityOfDerivedReferenceTypeDerivedIEquatableWithBaseOperators(EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objToCompareAgainst, EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objEqual, EqualityTestData.DerivedReferenceTypeDerivedIEquatableWithBaseOperators objNotEqual)
 		{
-			Debug.Indent();
-			Debug.WriteLine("TestOperatorsForValueEqualityOfDerivedReferenceTypeDerivedIEquatableWithBaseOperators");
-			Debug.Indent();
+			Trace.Indent();
+			Trace.WriteLine("TestOperatorsForValueEqualityOfDerivedReferenceTypeDerivedIEquatableWithBaseOperators");
+			Trace.Indent();
 
 			try
 			{
 				// Value equal.
 
-				Debug.WriteLine("Value equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value equal using operator ==()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst == objEqual))
 					Assert.Fail("Value equal objects are not considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value equal using operator !=()");
+				Trace.Indent();
 
 				if (objToCompareAgainst != objEqual)
 					Assert.Fail("Value equal objects are not considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 
 				// Value not equal.
 
-				Debug.WriteLine("Value not equal using operator ==()");
-				Debug.Indent();
+				Trace.WriteLine("Value not equal using operator ==()");
+				Trace.Indent();
 
 				if (objToCompareAgainst == objNotEqual)
 					Assert.Fail("Value not equal objects are considered equal using operator ==()");
 
-				Debug.Unindent();
-				Debug.WriteLine("Value not equal using operator !=()");
-				Debug.Indent();
+				Trace.Unindent();
+				Trace.WriteLine("Value not equal using operator !=()");
+				Trace.Indent();
 
 				if (!(objToCompareAgainst != objNotEqual))
 					Assert.Fail("Value not equal objects are considered not equal using operator !=()");
 
-				Debug.Unindent();
+				Trace.Unindent();
 			}
 			catch (AssertionException ex)
 			{
-				Debug.Unindent();
+				Trace.Unindent();
 				throw (ex);
 			}
 			finally
 			{
-				Debug.Unindent();
-				Debug.Unindent();
+				Trace.Unindent();
+				Trace.Unindent();
 			}
 		}
 

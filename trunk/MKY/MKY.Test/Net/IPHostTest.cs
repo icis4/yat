@@ -163,7 +163,7 @@ namespace MKY.Test.Net
 			}
 			catch (Exception ex)
 			{
-				ConsoleEx.WriteException(typeof(IPHostTest), ex);
+				TraceEx.WriteException(typeof(IPHostTest), ex);
 
 				// Attention: The following call throws an exception, code below it won't be executed.
 				Assert.Fail("XML serialize error: " + ex.Message);
@@ -184,7 +184,7 @@ namespace MKY.Test.Net
 				}
 				catch (Exception ex)
 				{
-					ConsoleEx.WriteException(typeof(IPHostTest), ex);
+					TraceEx.WriteException(typeof(IPHostTest), ex);
 
 					// Attention: The following call throws an exception, code below it won't be executed.
 					Assert.Fail("XML deserialize error: " + ex.Message);

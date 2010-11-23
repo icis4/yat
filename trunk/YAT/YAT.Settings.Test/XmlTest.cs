@@ -377,7 +377,7 @@ namespace YAT.Settings.Test
 			}
 			catch (Exception ex)
 			{
-				ConsoleEx.WriteException(typeof(XmlTest), ex);
+				TraceEx.WriteException(typeof(XmlTest), ex);
 
 				// Attention: The following call throws an exception, code below it won't be executed.
 				Assert.Fail("XML serialize error: " + ex.Message);
@@ -394,7 +394,7 @@ namespace YAT.Settings.Test
 			}
 			catch (Exception ex)
 			{
-				ConsoleEx.WriteException(typeof(XmlTest), ex);
+				TraceEx.WriteException(typeof(XmlTest), ex);
 
 				// Attention: The following call throws an exception, code below it won't be executed.
 				Assert.Fail("XML deserialize error: " + ex.Message);

@@ -143,6 +143,9 @@ namespace YAT
 		/// <returns>
 		/// The application's exit code according to <see cref="Controller.MainResult"/>.
 		/// </returns>
+		/// <remarks>
+		/// Application must be a command line application. Otherwise, no console is available.
+		/// </remarks>
 		[STAThread]
 		private static int Main(string[] commandLineArgs)
 		{
@@ -150,7 +153,7 @@ namespace YAT
 			Controller.MainResult result = yat.Run(commandLineArgs);
 			return ((int)result);
 		}
-	}
+	} 
 }
 
 //==================================================================================================

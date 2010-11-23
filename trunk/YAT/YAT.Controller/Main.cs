@@ -44,12 +44,14 @@ namespace YAT.Controller
 
 		private static readonly string[] Title =
 		{
-			ApplicationInfo.ProductName + " - Version " + Application.ProductVersion,
 			"YAT - Yet Another Terminal.",
 			"Operate and debug serial communications.",
-			"Supports RS-232/422/423/485 as well as TCP-Client/Server/AutoSocket, UDP and USB Ser/HID",
+			"Supports RS-232/422/423/485...",
+			"...as well as TCP-Client/Server/AutoSocket, UDP and USB Ser/HID",
 			"Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.",
 			"Copyright © 2003-2010 Matthias Kläy.",
+			"",
+			ApplicationInfo.ProductName + " - Version " + Application.ProductVersion,
 		};
 
 		private static readonly string[] FileOptions =
@@ -59,9 +61,9 @@ namespace YAT.Controller
 			"               ",
 			"Usage examples:",
 			"  YAT MyWorkspace.yaw",
-			"          Start YAT and open given workspace settings.",
+			"               Start YAT and open given workspace settings.",
 			"  YAT MyTerminal.yat",
-			"          Start YAT and open given terminal settings.",
+			"               Start YAT and open given terminal settings.",
 		};
 
 		private static readonly string[] AdvancedOptions =
@@ -74,6 +76,11 @@ namespace YAT.Controller
 			"               ",
 			"  /t[n] file   ",
 			"  -t[n] file   Automatically transmit the given file on terminal n.",
+			"               ",
+			"  /?           ",
+			"  -?           ",
+			"  -h           ",
+			"  --help       Display this help text",
 			"               ",
 			"Advanced usage examples:",
 			"  YAT /r       Start YAT and open most recent file.",
@@ -91,14 +98,6 @@ namespace YAT.Controller
 			"-t",
 		};
 
-		private static readonly string[] Help =
-		{
-			"  /?      ",
-			"  -?      ",
-			"  -h      ",
-			"  --help  Display this help text",
-		};
-
 		private static readonly string[] HelpArg =
 		{
 			"/?",
@@ -110,12 +109,12 @@ namespace YAT.Controller
 		private static readonly string[] Return =
 		{
 			"Return codes:",
-			"   0      Successful exit",
-			"  -1      Command line argument error",
-			"  -2      Application settings error",
-			"  -3      Application start error",
-			"  -4      Application exit error",
-			"  -5      Unhandled exception",
+			"   0           Successful exit",
+			"  -1           Command line argument error",
+			"  -2           Application settings error",
+			"  -3           Application start error",
+			"  -4           Application exit error",
+			"  -5           Unhandled exception",
 		};
 
 		#endregion
@@ -251,7 +250,14 @@ namespace YAT.Controller
 			return (Run(true));
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Application must be a command line application. Otherwise, no console is available.
+		/// 
+		/// Alternative solution which unfortunately doesn't work that well:
+		/// MKY.Win32.Console.Attach();
+		/// ...
+		/// MKY.Win32.Console.Detach();
+		/// </remarks>
 		public MainResult Run(bool runWithView)
 		{
 			// Show command line help in case of error.
@@ -328,6 +334,8 @@ namespace YAT.Controller
 		// Write help text onto console.
 		private static void WriteHelp()
 		{
+			Console.WriteLine();
+
 			foreach (string line in Title)
 				Console.WriteLine(line);
 			Console.WriteLine();
@@ -337,10 +345,6 @@ namespace YAT.Controller
 			Console.WriteLine();
 
 			foreach (string line in AdvancedOptions)
-				Console.WriteLine(line);
-			Console.WriteLine();
-
-			foreach (string line in Help)
 				Console.WriteLine(line);
 			Console.WriteLine();
 
