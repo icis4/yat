@@ -36,6 +36,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
@@ -570,7 +571,7 @@ namespace MKY.IO.Serial
 			lock (this.stateSyncObj)
 				this.state = state;
 #if (DEBUG)
-			System.Diagnostics.Debug.WriteLine(GetType() + " (" + ToShortPortString() + ")(" + this.state + "): State has changed from " + oldState + " to " + this.state + ".");
+			Debug.WriteLine(GetType() + " (" + ToShortPortString() + ")(" + this.state + "): State has changed from " + oldState + " to " + this.state + ".");
 #endif
 			OnIOChanged(new EventArgs());
 			OnIOControlChanged(new EventArgs());

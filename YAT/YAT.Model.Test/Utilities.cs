@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
@@ -271,7 +272,7 @@ namespace YAT.Model.Test
 						string strA = ArrayEx.ElementsToString(lineA.ToArray());
 						string strB = ArrayEx.ElementsToString(lineB.ToArray());
 
-						Console.Write
+						Trace.Write
 							(
 							"A:" + Environment.NewLine + strA + Environment.NewLine +
 							"B:" + Environment.NewLine + strB + Environment.NewLine
@@ -285,7 +286,7 @@ namespace YAT.Model.Test
 							"B = " + lineB.Count + @" elements, " +
 							"Expected = " + expectedDataCount + " data, " +
 							"A = " + lineA.DataCount + @" data, " +
-							"B = " + lineB.DataCount + @" data. See ""Console.Out"" for details."
+							"B = " + lineB.DataCount + @" data. See ""Output"" for details."
 							);
 					}
 				}
@@ -300,7 +301,7 @@ namespace YAT.Model.Test
 				foreach (Domain.DisplayLine lineB in linesB)
 					sbB.Append(ArrayEx.ElementsToString(lineB.ToArray()));
 
-				Console.Write
+				Trace.Write
 					(
 					"A:" + Environment.NewLine + sbA + Environment.NewLine +
 					"B:" + Environment.NewLine + sbB + Environment.NewLine
@@ -311,7 +312,7 @@ namespace YAT.Model.Test
 					"Line count mismatch: " +
 					"Expected = " + expectedLineCount + " lines, " +
 					"A = " + linesA.Count + @" lines, " +
-					"B = " + linesB.Count + @" lines. See ""Console.Out"" for details."
+					"B = " + linesB.Count + @" lines. See ""Output"" for details."
 					);
 			}
 		}

@@ -840,7 +840,7 @@ namespace MKY.IO.Ports
 			if (DebugWrite_portName.Length == 0)
 				DebugWrite_portName = PortName;
 
-			System.Diagnostics.Debug.WriteLine(DebugWrite_portName + " " + Environment.TickCount + " " + message);
+			Debug.WriteLine(DebugWrite_portName + " " + Environment.TickCount + " " + message);
 
 			if (writeStack)
 				MKY.Diagnostics.XDebug.WriteStack(this, "");

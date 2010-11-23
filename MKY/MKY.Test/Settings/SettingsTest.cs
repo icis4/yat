@@ -843,7 +843,7 @@ namespace MKY.Test.Settings
 			}
 			catch (Exception ex)
 			{
-				ConsoleEx.WriteException(typeof(SettingsTest), ex);
+				TraceEx.WriteException(typeof(SettingsTest), ex);
 
 				// Attention: The following call throws an exception, code below it won't be executed
 				Assert.Fail("XML serialize error: " + ex.Message);
@@ -864,7 +864,7 @@ namespace MKY.Test.Settings
 			catch (Exception ex)
 			{
 				obj = null;
-				ConsoleEx.WriteException(typeof(SettingsTest), ex);
+				TraceEx.WriteException(typeof(SettingsTest), ex);
 
 				// Attention: The following call throws an exception, code below it won't be executed
 				Assert.Fail("XML deserialize error: " + ex.Message);

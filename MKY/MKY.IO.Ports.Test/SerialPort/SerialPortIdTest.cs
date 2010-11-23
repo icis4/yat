@@ -145,7 +145,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			}
 			catch (Exception ex)
 			{
-				ConsoleEx.WriteException(typeof(SerialPortIdTest), ex);
+				TraceEx.WriteException(typeof(SerialPortIdTest), ex);
 
 				// Attention: The following call throws an exception, code below it won't be executed.
 				Assert.Fail("XML serialize error: " + ex.Message);
@@ -162,7 +162,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			}
 			catch (Exception ex)
 			{
-				ConsoleEx.WriteException(typeof(SerialPortIdTest), ex);
+				TraceEx.WriteException(typeof(SerialPortIdTest), ex);
 
 				// Attention: The following call throws an exception, code below it won't be executed.
 				Assert.Fail("XML deserialize error: " + ex.Message);

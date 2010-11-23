@@ -328,7 +328,7 @@ namespace MKY.IO.Serial
 			}
 			else
 			{
-				System.Diagnostics.Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "                  ): Start() requested but state is " + this.state + ".");
+				Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "                  ): Start() requested but state is " + this.state + ".");
 				return (false);
 			}
 		}
@@ -342,7 +342,7 @@ namespace MKY.IO.Serial
 			if (IsStarted)
 				StopSocket();
 			else
-				System.Diagnostics.Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "                  ): Stop() requested but state is " + this.state + ".");
+				Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(" + ToShortEndPointString() + "                  ): Stop() requested but state is " + this.state + ".");
 		}
 
 		/// <summary></summary>

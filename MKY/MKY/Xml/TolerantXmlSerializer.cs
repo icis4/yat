@@ -213,13 +213,13 @@ namespace MKY.Xml
 		/// </summary>
 		private object CreateObjectTreeFromDocument(XmlDocument document)
 		{
-			// Save the resulting document into a string
-			// Unlike file serialization, this string serialization will be UTF-16 encoded
+			// Save the resulting document into a string.
+			// Unlike file serialization, this string serialization will be UTF-16 encoded.
 			StringBuilder sb = new StringBuilder();
 			XmlWriter writer = XmlWriter.Create(sb);
 			document.Save(writer);
 
-			// Deserialize that string into an object tree
+			// Deserialize that string into an object tree.
 			StringReader sr = new StringReader(sb.ToString());
 			XmlSerializer serializer = new XmlSerializer(this.type);
 			return (serializer.Deserialize(sr));
@@ -230,15 +230,15 @@ namespace MKY.Xml
 		/// </summary>
 		private void CopyDocumentTolerantly(XmlDocument inputDocument, XmlDocument outputDocument)
 		{
-			// Retrieve and reset navigator
+			// Retrieve and reset navigator.
 			XPathNavigator inputNavigator = inputDocument.CreateNavigator();
 			inputNavigator.MoveToRoot();
 
-			// Retrieve and reset navigator
+			// Retrieve and reset navigator.
 			XPathNavigator outputNavigator = outputDocument.CreateNavigator();
 			outputNavigator.MoveToRoot();
 
-			// Copy recursivly
+			// Copy recursivly.
 			CopyTolerantly(inputNavigator, outputNavigator);
 		}
 
@@ -261,14 +261,14 @@ namespace MKY.Xml
 				{
 					case XPathNodeType.Attribute:
 					{
-						// attributes are handled by TryToCopyValue()
+						// Attributes are handled by TryToCopyValue().
 						throw (new InvalidOperationException("Programm execution must never get here"));
 					}
 
 					case XPathNodeType.Root:
 					case XPathNodeType.Element:
 					{
-						// process attributes of the element
+						// Process attributes of the element.
 						if (inputNavigator.HasAttributes)
 						{
 							if (outputNavigator.HasAttributes)
@@ -277,14 +277,14 @@ namespace MKY.Xml
 								{
 									do
 									{
-										// clone output navigator to keep current node level
+										// Clone output navigator to keep current node level.
 										XPathNavigator outputNavigatorClone = outputNavigator.Clone();
 
-										// in case of an attribute with the same name, try to copy
+										// In case of an attribute with the same name, try to copy.
 										if (TryToMatchAttribute(inputNavigator, ref outputNavigatorClone))
 										{
 											if (TryToCopyValue(inputNavigator, outputNavigatorClone))
-												break; // immediately break on successful copy
+												break; // Immediately break on successful copy.
 										}
 									}
 									while (inputNavigator.MoveToNextAttribute());
@@ -298,17 +298,17 @@ namespace MKY.Xml
 							}
 						}
 
-						// process children of the element
+						// Process children of the element.
 						if (inputNavigator.HasChildren)
 						{
 							if (outputNavigator.HasChildren)
 							{
 								if (inputNavigator.MoveToFirstChild())
 								{
-									// check whether this node ends here
+									// Check whether this node ends here.
 									if (inputNavigator.LocalName.Length == 0)
 									{
-										// in case both nods end here, copy the value
+										// In case both nods end here, copy the value.
 										if (outputNavigator.MoveToFirstChild())
 										{
 											if (outputNavigator.LocalName.Length == 0)
@@ -319,10 +319,10 @@ namespace MKY.Xml
 									{
 										do
 										{
-											// clone output navigator to keep current node level
+											// Clone output navigator to keep current node level.
 											XPathNavigator outputNavigatorClone = outputNavigator.Clone();
 
-											// in case of a child with the same name, recurse
+											// In case of a child with the same name, recurse.
 											if (TryToMatchChild(inputNavigator, ref outputNavigatorClone))
 												CopyTolerantly(inputNavigator.Clone(), outputNavigatorClone);
 										}
@@ -339,16 +339,16 @@ namespace MKY.Xml
 						}
 
 						break;
-					} // Root || Element
+					} // Root || Element.
 
 					case XPathNodeType.Namespace:
 					case XPathNodeType.ProcessingInstruction:
 					{
-						// don't care
+						// Don't care.
 						break;
 					}
 
-					default: // covers comments, text and white spaces
+					default: // Covers comments, text and white spaces.
 					{
 						TryToCopyValue(inputNavigator, outputNavigator);
 						break;
@@ -363,7 +363,7 @@ namespace MKY.Xml
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private bool TryToCopyValue(XPathNavigator inputNavigator, XPathNavigator outputNavigator)
 		{
-			// Navigate to parents to set typed value
+			// Navigate to parents to set typed value.
 			XPathNavigator outputParentNavigator;
 			outputParentNavigator = outputNavigator.Clone();
 			outputParentNavigator.MoveToParent();
@@ -426,7 +426,7 @@ namespace MKY.Xml
 				{
 					schema.Write(sw);
 				}
-				Console.WriteLine
+				Trace.WriteLine
 				(
 					"For development purposes, schema written to" + Environment.NewLine +
 					@"""" + filePath + @""""
@@ -444,7 +444,7 @@ namespace MKY.Xml
 			{
 				document.Save(sw);
 			}
-			Console.WriteLine
+			Trace.WriteLine
 			(
 				"For development purposes, document written to" + Environment.NewLine +
 				@"""" + filePath + @""""

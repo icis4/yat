@@ -158,6 +158,22 @@ namespace MKY.Win32
 				public Int32 bInheritHandle;
 			}
 
+			[CLSCompliant(false)]
+			[StructLayout(LayoutKind.Sequential)]
+			public struct BY_HANDLE_FILE_INFORMATION
+			{
+				public UInt32 FileAttributes;
+				public System.Runtime.InteropServices.ComTypes.FILETIME CreationTime;
+				public System.Runtime.InteropServices.ComTypes.FILETIME LastAccessTime;
+				public System.Runtime.InteropServices.ComTypes.FILETIME LastWriteTime;
+				public UInt32 VolumeSerialNumber;
+				public UInt32 FileSizeHigh;
+				public UInt32 FileSizeLow;
+				public UInt32 NumberOfLinks;
+				public UInt32 FileIndexHigh;
+				public UInt32 FileIndexLow;
+			}
+
 			#pragma warning restore 1591
 		}
 		
@@ -203,6 +219,12 @@ namespace MKY.Win32
 			[CLSCompliant(false)]
 			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern SafeFileHandle CreateFile([In] string lpFileName, [In] NativeTypes.Access dwDesiredAccess, [In] NativeTypes.ShareMode dwShareMode, [In] IntPtr lpSecurityAttributes, [In] NativeTypes.CreationDisposition dwCreationDisposition, [In] NativeTypes.AttributesAndFlags dwFlagsAndAttributes, [In] IntPtr hTemplateFile);
+
+			/// <summary></summary>
+			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
+			[CLSCompliant(false)]
+			[DllImport(KERNEL_DLL, CharSet = CharSet.Auto, SetLastError = true)]
+			public static extern bool GetFileInformationByHandle([In] SafeFileHandle hFile, [Out] out NativeTypes.BY_HANDLE_FILE_INFORMATION lpFileInformation);
 
 			/// <summary>
 			/// Gets the result of an overlapped operation.
