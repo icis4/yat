@@ -48,10 +48,12 @@ New:
 - <>
 
 Important changes:
+- Conceptual issue in YAT main in respect to unhandled exceptions fixed (bug #3106928)
+- Conceptual issue in YAT controller in respect to command line arguments fixed (bug #3111525)
 - Use of Debug/Trace/Console standardized within NUnit tests (bug #3111522)
 
 Fixed bugs:
-- Application type changed to console, console help is properly output again (bug #3111525)
+- Console info and options are properly output again (bug #3111525)
 
 Limitations and known issues:
 - MDI limitations of .NET

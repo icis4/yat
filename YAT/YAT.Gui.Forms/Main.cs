@@ -26,6 +26,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using MKY.IO;
+using MKY.Event;
 using MKY.Settings;
 using MKY.Time;
 using MKY.Windows.Forms;
@@ -1034,7 +1035,8 @@ namespace YAT.Gui.Forms
 				this.main.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(this.main_TimedStatusTextRequest);
 				this.main.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(this.main_MessageInputRequest);
 
-				this.main.Exited += new EventHandler(this.main_Exited);
+				this.main.Exited             += new EventHandler(this.main_Exited);
+				this.main.UnhandledException += new EventHandler<EventHelper.UnhandledExceptionEventArgs>(main_UnhandledException);
 			}
 		}
 
@@ -1049,7 +1051,8 @@ namespace YAT.Gui.Forms
 				this.main.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(this.main_TimedStatusTextRequest);
 				this.main.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(this.main_MessageInputRequest);
 
-				this.main.Exited -= new EventHandler(this.main_Exited);
+				this.main.Exited             -= new EventHandler(this.main_Exited);
+				this.main.UnhandledException -= new EventHandler<EventHelper.UnhandledExceptionEventArgs>(main_UnhandledException);
 			}
 		}
 
@@ -1095,11 +1098,25 @@ namespace YAT.Gui.Forms
 
 		private void main_Exited(object sender, EventArgs e)
 		{
-			// prevent multiple calls to Close()
+			// Prevent multiple calls to Close().
 			if (!this.isClosingFromForm)
 			{
 				this.isClosingFromModel = true;
 				Close();
+			}
+		}
+
+		private void main_UnhandledException(object sender, MKY.Event.EventHelper.UnhandledExceptionEventArgs e)
+		{
+			if (MessageBox.Show("An unhandled exception occured in " + Application.ProductName + "." + Environment.NewLine +
+								"Show detailed information?",
+								Application.ProductName,
+								MessageBoxButtons.YesNoCancel,
+								MessageBoxIcon.Stop,
+								MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+			{
+				Gui.Forms.UnhandledException f = new Gui.Forms.UnhandledException(e.UnhandledException);
+				f.ShowDialog(this);
 			}
 		}
 

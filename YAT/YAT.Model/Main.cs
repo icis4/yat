@@ -95,6 +95,9 @@ namespace YAT.Model
 		/// <summary></summary>
 		public event EventHandler Exited;
 
+		/// <summary></summary>
+		public event EventHandler<EventHelper.UnhandledExceptionEventArgs> UnhandledException;
+
 		#endregion
 
 		#region Object Lifetime
@@ -105,22 +108,28 @@ namespace YAT.Model
 		/// <summary></summary>
 		public Main()
 		{
-			this.guid = Guid.NewGuid();
+			Initialize();
 		}
 
 		/// <summary></summary>
 		public Main(string requestedFilePath)
 		{
-			this.guid = Guid.NewGuid();
 			this.commandLineOptions = new CommandLineOptions();
 			this.commandLineOptions.RequestedFilePath = requestedFilePath;
+			Initialize();
 		}
 
 		/// <summary></summary>
 		public Main(CommandLineOptions commandLineOptions)
 		{
-			this.guid = Guid.NewGuid();
 			this.commandLineOptions = commandLineOptions;
+			Initialize();
+		}
+
+		private void Initialize()
+		{
+			this.guid = Guid.NewGuid();
+			AttachEventHelperEventHandlers();
 		}
 
 		#region Disposal
@@ -151,6 +160,9 @@ namespace YAT.Model
 						this.workspace.Dispose();
 						this.workspace = null;
 					}
+
+					// Finally, detach the event helper.
+					DetachEventHelperEventHandlers();
 				}
 				this.isDisposed = true;
 			}
@@ -679,6 +691,54 @@ namespace YAT.Model
 
 		#endregion
 
+		#region EventHelper
+		//==========================================================================================
+		// EventHelper
+		//==========================================================================================
+
+		#region EventHelper > Lifetime
+		//------------------------------------------------------------------------------------------
+		// EventHelper > Lifetime
+		//------------------------------------------------------------------------------------------
+
+		private void AttachEventHelperEventHandlers()
+		{
+#if (!DEBUG)
+			EventHelper.UnhandledException += new EventHandler<EventHelper.UnhandledExceptionEventArgs>(EventHelper_UnhandledException);
+#endif
+		}
+
+		private void DetachEventHelperEventHandlers()
+		{
+#if (!DEBUG)
+			EventHelper.UnhandledException -= new EventHandler<EventHelper.UnhandledExceptionEventArgs>(EventHelper_UnhandledException);
+#endif
+		}
+
+		#endregion
+
+		#region EventHelper > Event Handlers
+		//------------------------------------------------------------------------------------------
+		// EventHelper > Event Handlers
+		//------------------------------------------------------------------------------------------
+
+#if (!DEBUG)
+		/// <remarks>
+		/// If built as release, unhandled exceptions are caught here and shown to the user in an
+		/// exception dialog. The user can then choose to send in the exception as feedback.
+		/// In case of debug, unhandled exceptions are intentionally not handled here. Instead,
+		/// they are handled by the development environment.
+		/// </remarks>
+		private void EventHelper_UnhandledException(object sender, EventHelper.UnhandledExceptionEventArgs e)
+		{
+			OnUnhandledException(e);
+		}
+#endif
+
+		#endregion
+
+		#endregion
+
 		#region Event Invoking
 		//==========================================================================================
 		// Event Invoking
@@ -720,6 +780,12 @@ namespace YAT.Model
 		protected virtual void OnExited(EventArgs e)
 		{
 			EventHelper.FireSync(Exited, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnUnhandledException(EventHelper.UnhandledExceptionEventArgs e)
+		{
+			EventHelper.FireSync<EventHelper.UnhandledExceptionEventArgs>(UnhandledException, this, e);
 		}
 
 		#endregion
