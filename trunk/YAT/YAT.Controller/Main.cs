@@ -22,6 +22,8 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
+using MKY.Event;
+
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Utilities;
@@ -250,47 +252,102 @@ namespace YAT.Controller
 			return (Run(true));
 		}
 
-		/// <remarks>
-		/// Application must be a command line application. Otherwise, no console is available.
-		/// 
-		/// Alternative solution which unfortunately doesn't work that well:
-		/// MKY.Win32.Console.Attach();
-		/// ...
-		/// MKY.Win32.Console.Detach();
-		/// </remarks>
+		/// <summary></summary>
 		public MainResult Run(bool runWithView)
 		{
-			// Show command line help in case of error.
-			if (this.commandLineError)
-			{
-				WriteHelp();
-				return (MainResult.CommandLineArgsError);
-			}
+			MainResult mainResult = MainResult.Success;
 
-			// Show command line help if requested.
-			if (this.commandLineHelpIsRequested)
+			// Handle command line arguments that result in a command line output.
+			if (this.commandLineHelpIsRequested || this.commandLineError)
 			{
-				WriteHelp();
-				return (MainResult.Success);
+				MKY.Win32.Console.Attach();
+
+				if (this.commandLineHelpIsRequested) // Show command line help if requested.
+				{
+					WriteHelp();
+					mainResult = MainResult.Success;
+				}
+				else // includes this.commandLineError // Show command line help in case of error.
+				{
+					WriteHelp();
+					mainResult = MainResult.CommandLineArgsError;
+				}
+
+				MKY.Win32.Console.Detach();
+				return (mainResult);
 			}
 
 			// Create model and view and run application.
-			MainResult mainResult;
 			using (Model.Main model = new Model.Main(this.commandLineOptions))
 			{
 				if (runWithView)
 				{
-					using (Gui.Forms.Main view = new Gui.Forms.Main(model))
+					Application.EnableVisualStyles();
+					Application.SetCompatibleTextRenderingDefault(false);
+#if (!DEBUG)
+					try
 					{
-						// Start the Win32 message loop on the current thread and the main form.
-						// \attention This call does not return until the application exits.
-						Application.Run(view);
+#endif
+					Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
+					if (welcomeScreen.ShowDialog() != DialogResult.OK)
+						return (Controller.MainResult.ApplicationSettingsError);
+#if (!DEBUG)
 					}
-
-					mainResult = MainResult.Success;
+					catch (Exception ex)
+					{
+						if (MessageBox.Show("An unhandled exception occured while loading " + Application.ProductName + "." + Environment.NewLine +
+											"Show detailed information?",
+											Application.ProductName,
+											MessageBoxButtons.YesNoCancel,
+											MessageBoxIcon.Stop,
+											MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+						{
+							Gui.Forms.UnhandledException f = new Gui.Forms.UnhandledException(ex);
+							f.ShowDialog();
+						}
+						mainResult = MainResult.UnhandledException;
+					}
+#endif
+#if (!DEBUG)
+					try
+					{
+#endif
+					// If everything is fine so far, start main application including view.
+					if (mainResult == MainResult.Success)
+					{
+						using (Gui.Forms.Main view = new Gui.Forms.Main(model))
+						{
+							// Start the Win32 message loop on the current thread and the main form.
+							// \attention This call does not return until the application exits.
+							Application.Run(view);
+						}
+					}
+#if (!DEBUG)
+					}
+					catch (Exception ex)
+					{
+						if (MessageBox.Show("An unhandled exception occured while running " + Application.ProductName + "." + Environment.NewLine +
+											"Show detailed information?",
+											Application.ProductName,
+											MessageBoxButtons.YesNoCancel,
+											MessageBoxIcon.Stop,
+											MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+						{
+							Gui.Forms.UnhandledException f = new Gui.Forms.UnhandledException(ex);
+							f.ShowDialog();
+						}
+						mainResult = MainResult.UnhandledException;
+					}
+#endif
 				}
 				else // Non-view application for automated test usage.
 				{
+					MKY.Win32.Console.Attach();
+#if (!DEBUG)
+					model.UnhandledException += new EventHandler<EventHelper.UnhandledExceptionEventArgs>(model_UnhandledException);
+					try
+					{
+#endif
 					if (model.Start())
 					{
 						if (model.Exit())
@@ -302,11 +359,28 @@ namespace YAT.Controller
 					{
 						mainResult = MainResult.ApplicationStartError;
 					}
+#if (!DEBUG)
+					}
+					catch (Exception ex)
+					{
+						MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), ex);
+						mainResult = MainResult.UnhandledException;
+					}
+					model.UnhandledException -= new EventHandler<EventHelper.UnhandledExceptionEventArgs>(model_UnhandledException);
+#endif
+					MKY.Win32.Console.Detach();
 				}
-			} // Dispose of model and view to ensure immediate release of resources.
+			} // Dispose of model to ensure immediate release of resources.
 
 			return (mainResult);
 		}
+
+#if (!DEBUG)
+		private void model_UnhandledException(object sender, EventHelper.UnhandledExceptionEventArgs e)
+		{
+			MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), e.UnhandledException);
+		}
+#endif
 
 		#endregion
 
@@ -334,6 +408,7 @@ namespace YAT.Controller
 		// Write help text onto console.
 		private static void WriteHelp()
 		{
+			Console.WriteLine();
 			Console.WriteLine();
 
 			foreach (string line in Title)

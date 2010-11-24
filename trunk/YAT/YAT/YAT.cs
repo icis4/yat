@@ -47,96 +47,6 @@ namespace YAT
 		}
 
 		/// <summary>
-		/// Displays welcome screen and starts YAT.
-		/// </summary>
-		/// <param name="commandLineArgs">An array containing the command line arguments.</param>
-		/// <returns>
-		/// The application's exit code according to <see cref="Controller.MainResult"/>.
-		/// </returns>
-		/// <remarks>
-		/// If built as release, unhandled exceptions are caught here and shown to the user in an
-		/// exception dialog. The user can then choose to send in the exception as feedback.
-		/// In case of debug, unhandled exceptions are intentionally not handled here. Instead,
-		/// they are handled by the development environment.
-		/// </remarks>
-		public Controller.MainResult Run(string[] commandLineArgs)
-		{
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-		#if (!DEBUG)
-			EventHelper.UnhandledException += new EventHandler<EventHelper.UnhandledExceptionEventArgs>(EventHelper_UnhandledException);
-		#endif
-		#if (!DEBUG)
-			try
-			{
-		#endif
-				Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
-				if (welcomeScreen.ShowDialog() != DialogResult.OK)
-					return (Controller.MainResult.ApplicationSettingsError);
-		#if (!DEBUG)
-			}
-			catch (Exception ex)
-			{
-				if (MessageBox.Show("An unhandled exception occured while loading " + Application.ProductName + "." + Environment.NewLine +
-									"Show detailed information?",
-									Application.ProductName,
-									MessageBoxButtons.YesNoCancel,
-									MessageBoxIcon.Stop,
-									MessageBoxDefaultButton.Button2) == DialogResult.Yes)
-				{
-					Gui.Forms.UnhandledException f = new Gui.Forms.UnhandledException(ex);
-					f.ShowDialog();
-				}
-				return (Controller.MainResult.UnhandledException);
-			}
-		#endif
-		#if (!DEBUG)
-			try
-			{
-		#endif
-				Controller.Main main = new Controller.Main(commandLineArgs);
-				main.Run();
-		#if (!DEBUG)
-			}
-			catch (Exception ex)
-			{
-				if (MessageBox.Show("An unhandled exception occured in " + Application.ProductName + "." + Environment.NewLine +
-									"Show detailed information?",
-									Application.ProductName,
-									MessageBoxButtons.YesNoCancel,
-									MessageBoxIcon.Stop,
-									MessageBoxDefaultButton.Button2) == DialogResult.Yes)
-				{
-					Gui.Forms.UnhandledException f = new Gui.Forms.UnhandledException(ex);
-					f.ShowDialog();
-				}
-				return (Controller.MainResult.UnhandledException);
-			}
-			finally
-			{
-				EventHelper.UnhandledException -= new EventHandler<EventHelper.UnhandledExceptionEventArgs>(EventHelper_UnhandledException);
-			}
-		#endif
-			return (Controller.MainResult.Success);
-		}
-
-		#if (!DEBUG)
-		private void EventHelper_UnhandledException(object sender, EventHelper.UnhandledExceptionEventArgs e)
-		{
-			if (MessageBox.Show("An unhandled exception occured in " + Application.ProductName + "." + Environment.NewLine +
-								"Show detailed information?",
-								Application.ProductName,
-								MessageBoxButtons.YesNoCancel,
-								MessageBoxIcon.Stop,
-								MessageBoxDefaultButton.Button2) == DialogResult.Yes)
-			{
-				Gui.Forms.UnhandledException f = new Gui.Forms.UnhandledException(e.UnhandledException);
-				f.ShowDialog();
-			}
-		}
-		#endif
-
-		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>
 		/// <param name="commandLineArgs">An array containing the command line arguments.</param>
@@ -149,11 +59,11 @@ namespace YAT
 		[STAThread]
 		private static int Main(string[] commandLineArgs)
 		{
-			YAT yat = new YAT();
-			Controller.MainResult result = yat.Run(commandLineArgs);
+			Controller.Main main = new Controller.Main(commandLineArgs);
+			Controller.MainResult result = main.Run();
 			return ((int)result);
 		}
-	} 
+	}
 }
 
 //==================================================================================================
