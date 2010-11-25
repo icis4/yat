@@ -522,7 +522,7 @@ namespace YAT.Domain
 					}
 					break;
 				}
-				default: throw (new NotImplementedException("Invalid radix"));
+				default: throw (new ArgumentOutOfRangeException("r", r, "Invalid radix"));
 			}
 
 			if (!error)
@@ -597,7 +597,7 @@ namespace YAT.Domain
 					else
 						return (b.ToString("X2", CultureInfo.InvariantCulture));
 				}
-				default: throw (new NotImplementedException("Invalid radix"));
+				default: throw (new ArgumentOutOfRangeException("r", r, "Invalid radix"));
 			}
 		}
 
@@ -621,7 +621,7 @@ namespace YAT.Domain
 				case Radix.Hex:    return (true);
 				case Radix.Char:   return (true);
 				case Radix.String: return (false);
-				default: throw (new NotImplementedException("Unknown Radix"));
+				default: throw (new ArgumentOutOfRangeException("r", r, "Invalid radix"));
 			}
 		}
 
@@ -718,7 +718,7 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			// clear display repository
+			// Clear display repository.
 			ClearMyRepository(RepositoryType.Tx);
 			ClearMyRepository(RepositoryType.Bidir);
 			ClearMyRepository(RepositoryType.Rx);
@@ -726,7 +726,7 @@ namespace YAT.Domain
 			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Bidir));
 			OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Rx));
 
-			// reload display repository
+			// Reload display repository.
 			SuspendEventsForReload();
 			foreach (RawElement re in this.rawTerminal.RepositoryToElements(RepositoryType.Bidir))
 			{
@@ -746,7 +746,7 @@ namespace YAT.Domain
 				case RepositoryType.Tx:    this.txRepository.Clear();    break;
 				case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
 				case RepositoryType.Rx:    this.rxRepository.Clear();    break;
-				default: throw (new NotImplementedException("Unknown RepositoryType"));
+				default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
 			}
 		}
 
@@ -760,7 +760,7 @@ namespace YAT.Domain
 				case RepositoryType.Tx:    return (this.txRepository.DataCount);
 				case RepositoryType.Bidir: return (this.bidirRepository.DataCount);
 				case RepositoryType.Rx:    return (this.rxRepository.DataCount);
-				default: throw (new NotImplementedException("Unknown RepositoryType"));
+				default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
 			}
 		}
 
@@ -774,7 +774,7 @@ namespace YAT.Domain
 				case RepositoryType.Tx:    return (this.txRepository.Count);
 				case RepositoryType.Bidir: return (this.bidirRepository.Count);
 				case RepositoryType.Rx:    return (this.rxRepository.Count);
-				default: throw (new NotImplementedException("Unknown RepositoryType"));
+				default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
 			}
 		}
 
@@ -788,7 +788,7 @@ namespace YAT.Domain
 				case RepositoryType.Tx:    return (this.txRepository.ToLines());
 				case RepositoryType.Bidir: return (this.bidirRepository.ToLines());
 				case RepositoryType.Rx:    return (this.rxRepository.ToLines());
-				default: throw (new NotImplementedException("Unknown RepositoryType"));
+				default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
 			}
 		}
 
@@ -802,7 +802,7 @@ namespace YAT.Domain
 				case RepositoryType.Tx:    return (this.txRepository.ToString());
 				case RepositoryType.Bidir: return (this.bidirRepository.ToString());
 				case RepositoryType.Rx:    return (this.rxRepository.ToString());
-				default: throw (new NotImplementedException("Unknown RepositoryType"));
+				default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
 			}
 		}
 
@@ -850,7 +850,7 @@ namespace YAT.Domain
 				case RepositoryType.Tx:    return (this.txRepository.ToString(indent));
 				case RepositoryType.Bidir: return (this.bidirRepository.ToString(indent));
 				case RepositoryType.Rx:    return (this.rxRepository.ToString(indent));
-				default: throw (new NotImplementedException("Unknown RepositoryType"));
+				default: throw (new ArgumentOutOfRangeException("repository", repository, "Invalid repository type"));
 			}
 		}
 

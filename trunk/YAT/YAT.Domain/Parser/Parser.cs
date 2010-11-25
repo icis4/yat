@@ -932,14 +932,14 @@ namespace YAT.Domain.Parser
 		{
 			AssertNotDisposed();
 
-			// String
+			// String.
 			if (parseRadix == Radix.String)
 			{
 				result = this.encoding.GetBytes(token);
 				return (true);
 			}
 
-			// Char
+			// Char.
 			if (parseRadix == Radix.Char)
 			{
 				char c;
@@ -956,7 +956,7 @@ namespace YAT.Domain.Parser
 				}
 			}
 
-			// Bin/Oct/Dec/Hex
+			// Bin/Oct/Dec/Hex.
 			bool negative = false;
 			string tokenValue = token;
 			if (token.Substring(0, 1) == "-")
@@ -973,7 +973,7 @@ namespace YAT.Domain.Parser
 				case Radix.Oct: success = UInt64Ex.TryParseOctal (tokenValue, out value); break;
 				case Radix.Dec: success = ulong.TryParse        (tokenValue, out value); break;
 				case Radix.Hex: success = ulong.TryParse        (tokenValue, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out value); break;
-				default: throw (new NotImplementedException(@"Unknown radix """ + parseRadix + @""""));
+				default: throw (new ArgumentOutOfRangeException("parseRadix", parseRadix, @"Unknown radix """ + parseRadix + @""""));
 			}
 			if (success)
 			{
@@ -982,7 +982,7 @@ namespace YAT.Domain.Parser
 				return (true);
 			}
 
-			// FormatException
+			// FormatException.
 			string readable = "";
 			switch (parseRadix)
 			{
@@ -990,7 +990,7 @@ namespace YAT.Domain.Parser
 				case Radix.Oct: readable = "octal value";       break;
 				case Radix.Dec: readable = "decimal value";     break;
 				case Radix.Hex: readable = "hexadecimal value"; break;
-				default: throw (new NotImplementedException(@"Unknown radix """ + parseRadix + @""""));
+				default: throw (new ArgumentOutOfRangeException("parseRadix", parseRadix, @"Unknown radix """ + parseRadix + @""""));
 			}
 			formatException = new FormatException(@"Substring """ + token + @""" contains no valid " + readable);
 			result = new byte[] { };

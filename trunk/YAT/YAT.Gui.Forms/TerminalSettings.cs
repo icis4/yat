@@ -256,7 +256,7 @@ namespace YAT.Gui.Forms
 			{
 				case Domain.TerminalType.Text:   text = "Text";   break;
 				case Domain.TerminalType.Binary: text = "Binary"; break;
-				default: throw (new NotImplementedException("Unknown terminal type"));
+				default: throw (new NotImplementedException("Invalid terminal type"));
 			}
 			text += " and extended";
 
@@ -315,7 +315,7 @@ namespace YAT.Gui.Forms
 			{
 				case Domain.TerminalType.Text:   text += "Text";   break;
 				case Domain.TerminalType.Binary: text += "Binary"; break;
-				default: throw (new NotImplementedException("Unknown terminal type"));
+				default: throw (new NotImplementedException("Invalid terminal type"));
 			}
 			text += " Settings...";
 			button_TextOrBinarySettings.Text = text;
@@ -394,7 +394,7 @@ namespace YAT.Gui.Forms
 				}
 				default:
 				{
-					throw (new NotImplementedException("Unknown terminal type"));
+					throw (new NotImplementedException("Invalid terminal type"));
 				}
 			}
 		}

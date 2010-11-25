@@ -927,7 +927,11 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_MonitorContextMenu_Clear_Click(object sender, EventArgs e)
 		{
-			ClearMonitor(GetMonitorType(contextMenuStrip_Monitor.SourceControl));
+			Domain.RepositoryType repositoryType = GetMonitorType(contextMenuStrip_Monitor.SourceControl);
+			if (repositoryType != Domain.RepositoryType.None)
+				ClearMonitor(repositoryType);
+			else
+				throw (new InvalidOperationException("Invalid context menu source control received from " + sender.ToString()));
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_SelectAll_Click(object sender, EventArgs e)
@@ -2012,7 +2016,7 @@ namespace YAT.Gui.Forms
 			monitor_Bidir.MaxLineCount = this.settingsRoot.Display.BidirMaxLineCount;
 			monitor_Rx.MaxLineCount    = this.settingsRoot.Display.RxMaxLineCount;
 
-			// reload from repositories
+			// Reload from repositories.
 			ReloadMonitors();
 		}
 
@@ -2042,7 +2046,17 @@ namespace YAT.Gui.Forms
 
 		private void ClearMonitor(Domain.RepositoryType repositoryType)
 		{
-			this.terminal.ClearRepository(repositoryType);
+			switch (repositoryType)
+			{
+				case Domain.RepositoryType.Tx:
+				case Domain.RepositoryType.Bidir:
+				case Domain.RepositoryType.Rx:
+					this.terminal.ClearRepository(repositoryType);
+					break;
+
+				default:
+					throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Invalid repository type"));
+			}
 		}
 
 		private void ClearAllMonitors()
@@ -2874,9 +2888,9 @@ namespace YAT.Gui.Forms
 
 					case Domain.IOType.UsbSerialHid:
 					{
-						MKY.IO.Serial.UsbSerialHidDeviceSettings s = this.settingsRoot.IO.UsbSerialHidDevice;
+						MKY.IO.Usb.DeviceInfo di = ((MKY.IO.Serial.UsbSerialHidDevice)(this.terminal.UnderlyingIOProvider)).DeviceInfo;
 						sb.Append(" - ");
-						sb.Append(s.DeviceInfo.ToString());
+						sb.Append(di.ToString());
 						sb.Append(" - ");
 						if (isConnected)
 						{
@@ -3043,9 +3057,9 @@ namespace YAT.Gui.Forms
 
 					case Domain.IOType.UsbSerialHid:
 					{
-						MKY.IO.Serial.UsbSerialHidDeviceSettings s = this.settingsRoot.IO.UsbSerialHidDevice;
+						MKY.IO.Usb.DeviceInfo di = ((MKY.IO.Serial.UsbSerialHidDevice)(this.terminal.UnderlyingIOProvider)).DeviceInfo;
 						sb.Append(@"USB HID device """);
-						sb.Append(s.DeviceInfo.ToString());
+						sb.Append(di.ToString());
 						sb.Append(@""" is ");
 						if (isConnected)
 						{

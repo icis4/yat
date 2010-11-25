@@ -512,6 +512,9 @@ namespace MKY.IO.Usb
 			Initialize();
 		}
 
+		/// <remarks>
+		/// Constructor above creates device info and therefore also sets system path.
+		/// </remarks>
 		private void Initialize()
 		{
 			SafeFileHandle deviceHandle;

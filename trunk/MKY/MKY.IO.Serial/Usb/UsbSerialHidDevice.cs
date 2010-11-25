@@ -179,6 +179,20 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
+		public virtual Usb.DeviceInfo DeviceInfo
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				if (this.device != null)
+					return (this.device.Info);
+				else
+					return (this.settings.DeviceInfo);
+			}
+		}
+
+		/// <summary></summary>
 		public virtual bool IsStopped
 		{
 			get
@@ -389,7 +403,10 @@ namespace MKY.IO.Serial
 
 			lock (this.deviceSyncObj)
 			{
-				this.device = new Usb.SerialHidDevice(this.settings.DeviceInfo);
+				// Ensure to create device info from VID/PID/SNR since system path is not saved.
+				Usb.DeviceInfo di = this.settings.DeviceInfo;
+				this.device = new Usb.SerialHidDevice(di.VendorId, di.ProductId, di.SerialNumber);
+
 				this.device.Connected    += new EventHandler(this.device_Connected);
 				this.device.Disconnected += new EventHandler(this.device_Disconnected);
 				this.device.DataReceived += new EventHandler(this.device_DataReceived);

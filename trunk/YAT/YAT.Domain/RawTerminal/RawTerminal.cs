@@ -316,32 +316,56 @@ namespace YAT.Domain
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		public virtual List<RawElement> RepositoryToElements(RepositoryType repository)
+		public virtual List<RawElement> RepositoryToElements(RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
-			
-			switch (repository)
+
+			switch (repositoryType)
 			{
 				case RepositoryType.Tx:    return (this.txRepository.ToElements());
 				case RepositoryType.Bidir: return (this.bidirRepository.ToElements());
 				case RepositoryType.Rx:    return (this.rxRepository.ToElements());
-				default: throw (new NotImplementedException("Unknown RepositoryType"));
+				default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
 			}
 		}
 
-		/// <summary></summary>
-		public virtual void ClearRepository(RepositoryType repository)
+		/// <remarks>
+		/// \todo
+		/// Currently, all respositories are cleared in any case. That is because repositories are
+		/// always reloaded from bidir. Without clearing all, contents reappear after a change to
+		/// the settings, e.g. switching radix. Issue is described in bug #3111508.
+		/// </remarks>
+		public virtual void ClearRepository(RepositoryType repositoryType)
 		{
 			AssertNotDisposed();
-			
-			switch (repository)
+
+			/*switch (repositoryType)
 			{
 				case RepositoryType.Tx:    this.txRepository.Clear();    break;
 				case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
 				case RepositoryType.Rx:    this.rxRepository.Clear();    break;
-				default: throw (new NotImplementedException("Unknown RepositoryType"));
+				default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
 			}
-			OnRepositoryCleared(new RepositoryEventArgs(repository));
+			OnRepositoryCleared(new RepositoryEventArgs(repositoryType));*/
+
+			switch (repositoryType)
+			{
+				case RepositoryType.Tx:
+				case RepositoryType.Bidir:
+				case RepositoryType.Rx:
+				{
+					this.txRepository.Clear();
+					this.bidirRepository.Clear();
+					this.rxRepository.Clear();
+
+					OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Tx));
+					OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Bidir));
+					OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Rx));
+
+					break;
+				}
+				default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
+			}
 		}
 
 		//------------------------------------------------------------------------------------------
@@ -368,16 +392,16 @@ namespace YAT.Domain
 		}
 
 		/// <summary></summary>
-		public virtual string RepositoryToString(RepositoryType repository, string indent)
+		public virtual string RepositoryToString(RepositoryType repositoryType, string indent)
 		{
 			AssertNotDisposed();
-			
-			switch (repository)
+
+			switch (repositoryType)
 			{
 				case RepositoryType.Tx:    return (this.txRepository.ToString(indent));
 				case RepositoryType.Bidir: return (this.bidirRepository.ToString(indent));
 				case RepositoryType.Rx:    return (this.rxRepository.ToString(indent));
-				default: throw (new NotImplementedException("Unknown RepositoryType"));
+				default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
 			}
 		}
 

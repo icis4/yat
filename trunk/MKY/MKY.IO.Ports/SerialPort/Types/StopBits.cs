@@ -135,7 +135,7 @@ namespace MKY.IO.Ports
 				case StopBits.OnePointFive: return (OnePointFive_double);
 				case StopBits.Two:          return (Two_double);
 			}
-			throw (new NotImplementedException(bits.UnderlyingEnum.ToString()));
+			throw (new ArgumentOutOfRangeException("bits", bits, "Invalid bits value"));
 		}
 
 		/// <summary></summary>
