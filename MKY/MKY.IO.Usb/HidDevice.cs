@@ -182,14 +182,26 @@ namespace MKY.IO.Usb
 					switch (de)
 					{
 						case DeviceEvent.Connected:
-							Debug.WriteLine("USB HID device " + devicePath + " connected.");
-							EventHelper.FireAsync(DeviceConnected, typeof(SerialHidDevice), e);
+						{
+							Debug.WriteLine("USB HID device connected:");
+							Debug.Indent();
+							Debug.WriteLine("Path = " + devicePath);
+							Debug.Unindent();
+
+							EventHelper.FireAsync(DeviceConnected, typeof(HidDevice), e);
 							break;
+						}
 
 						case DeviceEvent.Disconnected:
-							Debug.WriteLine("USB HID device " + devicePath + " disconnected.");
-							EventHelper.FireAsync(DeviceDisconnected, typeof(SerialHidDevice), e);
+						{
+							Debug.WriteLine("USB HID device disconnected:");
+							Debug.Indent();
+							Debug.WriteLine("Path = " + devicePath);
+							Debug.Unindent();
+
+							EventHelper.FireAsync(DeviceDisconnected, typeof(HidDevice), e);
 							break;
+						}
 					}
 				}
 			}
@@ -257,6 +269,9 @@ namespace MKY.IO.Usb
 			Initialize();
 		}
 
+		/// <remarks>
+		/// Base constructor creates device info and therefore also sets system path.
+		/// </remarks>
 		private void Initialize()
 		{
 			SafeFileHandle deviceHandle;

@@ -26,6 +26,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -130,9 +131,9 @@ namespace MKY.Win32
 				public UInt32      dbcc_size;
 				public DBT_DEVTYP  dbcc_devicetype;
 				public UInt32      dbcc_reserved;
-				public Guid dbcc_classguid;
+				public Guid        dbcc_classguid;
 				[MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
-				public char[]      dbcc_name;
+				public Byte[]      dbcc_name;
 			}
 
 			/// <remarks>
@@ -476,21 +477,27 @@ namespace MKY.Win32
 					// the strucutre that are not part of dbch_name and dividing by 2 because there
 					// are 2 bytes per character.
 					int stringSize = System.Convert.ToInt32((devBroadcastHeader.dbch_size - 32) / 2);
-
-					// The dbcc_name parameter of devBroadcastDeviceInterface contains the device
-					// name. Trim dbcc_name to match the size of the String.
-					devBroadcastDeviceInterface.dbcc_name = new char[stringSize + 1];
+					int byteCount = stringSize * 2;
 
 					// Marshal data from the unmanaged block pointed to by m.LParam to the managed
 					// object devBroadcastDeviceInterface.
 					Marshal.PtrToStructure(deviceChangeMessage.LParam, devBroadcastDeviceInterface);
 
-					// Store the device name in a String.
-					devicePath = new string(devBroadcastDeviceInterface.dbcc_name, 0, stringSize);
+					// Decode and store the device name bytes in a string.
+					Encoding e = Encoding.Unicode;
+					byte[] bytes = devBroadcastDeviceInterface.dbcc_name;
+					int charCount = e.GetCharCount(bytes, 0, byteCount);
+					char[] chars = new char[charCount];
+					e.GetDecoder().GetChars(bytes, 0, byteCount, chars, 0, true);
+					devicePath = new string(chars);
+
 					return (true);
 				}
 			}
-			catch (ArgumentException) { }
+			catch (ArgumentException ex)
+			{
+				Diagnostics.DebugEx.WriteException(typeof(DeviceManagement), ex);
+			}
 
 			devicePath = "";
 			return (false);

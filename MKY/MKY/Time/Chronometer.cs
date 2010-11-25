@@ -21,6 +21,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 
 using MKY.Event;
 
@@ -40,6 +41,8 @@ namespace MKY.Time
 
 		private TimeSpan accumulatedTimeSpan = TimeSpan.Zero;
 		private DateTime startTimeStamp = DateTime.Now;
+
+		private object timer_Elapsed_SynchObj = new object();
 
 		#endregion
 
@@ -225,7 +228,21 @@ namespace MKY.Time
 		{
 			// Ensure not to forward events during closing anymore.
 			if (!this.isDisposed && (this.timer != null) && this.timer.Enabled)
-				OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
+			{
+				// Ensure that only one timer elapsed event thread is active at the same time.
+				// Without this exclusivity, two receive threads could create a race condition.
+				if (Monitor.TryEnter(timer_Elapsed_SynchObj))
+				{
+					try
+					{
+						OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
+					}
+					finally
+					{
+						Monitor.Exit(timer_Elapsed_SynchObj);
+					}
+				}
+			}
 		}
 
 		#endregion

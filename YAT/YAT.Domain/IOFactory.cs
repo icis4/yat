@@ -85,7 +85,10 @@ namespace YAT.Domain
 					return (new UsbSerialHidDevice(settings.UsbSerialHidDevice));
 				}
 
-				default: throw (new NotImplementedException("Unknown IO type"));
+				default:
+				{
+					throw (new ArgumentOutOfRangeException("settings", settings, "Unknown IO type"));
+				}
 			}
 		}
 	}

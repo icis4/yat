@@ -48,7 +48,7 @@ namespace YAT.Domain
 			{
 				case TerminalType.Text:   return (new TextTerminal(settings, terminal));
 				case TerminalType.Binary: return (new BinaryTerminal(settings, terminal));
-				default: throw (new NotImplementedException("Unknown terminal type"));
+				default: throw (new ArgumentOutOfRangeException("settings", settings, "Invalid terminal type"));
 			}
 		}
 	}

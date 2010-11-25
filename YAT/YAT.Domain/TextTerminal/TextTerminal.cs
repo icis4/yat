@@ -484,7 +484,11 @@ namespace YAT.Domain
 					// Nothing to decode (yet).
 					return (new DisplayElement.NoData());
 				}
-				default: throw (new NotImplementedException("Unknown Radix"));
+
+				default:
+				{
+					throw (new ArgumentOutOfRangeException("r", r, "Invalid radix"));
+				}
 			}
 		}
 
