@@ -23,6 +23,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
+using MKY;
+
 namespace YAT.Settings.Terminal
 {
 	/// <summary></summary>
@@ -220,8 +222,7 @@ namespace YAT.Settings.Terminal
 			return
 			(
 				base.Equals(other) && // Compare all settings nodes.
-
-				(this.userName == other.userName)
+				StringEx.EqualsOrdinal(this.userName, other.userName)
 			);
 		}
 

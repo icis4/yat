@@ -23,8 +23,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
-using MKY.Types;
-
 namespace MKY.Text
 {
 	#region Enum SupportedEncoding
@@ -871,7 +869,7 @@ namespace MKY.Text
 		{
 			foreach (EncodingInfoEx info in infos)
 			{
-				if (string.Compare(encoding, info.BetterDisplayName, StringComparison.OrdinalIgnoreCase) == 0)
+				if (StringEx.EqualsOrdinalIgnoreCase(encoding, info.BetterDisplayName))
 				{
 					result = new EncodingEx(info.SupportedEncoding);
 					return (true);
@@ -880,13 +878,13 @@ namespace MKY.Text
 
 			foreach (EncodingInfo info in Encoding.GetEncodings())
 			{
-				if (string.Compare(encoding, info.Name, StringComparison.OrdinalIgnoreCase) == 0)
+				if (StringEx.EqualsOrdinalIgnoreCase(encoding, info.Name))
 				{
 					result = new EncodingEx((SupportedEncoding)info.CodePage);
 					return (true);
 				}
 
-				if (string.Compare(encoding, info.DisplayName, StringComparison.OrdinalIgnoreCase) == 0)
+				if (StringEx.EqualsOrdinalIgnoreCase(encoding, info.DisplayName))
 				{
 					result = new EncodingEx((SupportedEncoding)info.CodePage);
 					return (true);

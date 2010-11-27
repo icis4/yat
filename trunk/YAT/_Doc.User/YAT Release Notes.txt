@@ -45,19 +45,20 @@ YAT 2.0 Beta 3 Candidate 3 Version 1.99.25 :: 2010-11-28
 ----------------------------------------------------------------------------------------------------
 
 New:
-- <>
+- USB Ser/HID device connect/disconnect detection
 
 Important changes:
-- USB Ser/HID device connect/disconnect system events implemented
 - Conceptual issue in YAT main in respect to unhandled exceptions fixed (bug #3106928)
 - Conceptual issue in YAT controller in respect to command line arguments fixed (bug #3111525)
+- String comparisons improved, more selective use of different means of comparison
 - Use of Debug/Trace/Console standardized within NUnit tests (bug #3111522)
 - More specific exception types used, e.g. ArgumentOutOfRange instead of NotImplemented
+- MKY.Types moved to the MKY namespace for consistency with the .NET System namespace
 
 Fixed bugs:
 - Issue with saved USB Ser/HID device IDs fixed (bug #3116770)
 - Minor user interface issues fixed (bug #3111508)
-- Console info and options are properly output again (bug #3111525)
+- Command line info and options are properly output again (bug #3111525)
 
 Limitations and known issues:
 - MDI limitations of .NET

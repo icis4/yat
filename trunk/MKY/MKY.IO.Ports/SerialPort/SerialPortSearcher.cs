@@ -63,8 +63,7 @@ namespace MKY.IO.Ports
 					{
 						// Check all objects with given GUID.
 						// Results in all LPT and COM ports except modems.
-						if ((obj["ClassGuid"] != null) &&
-							(obj["ClassGuid"].ToString() == "{4D36E978-E325-11CE-BFC1-08002BE10318}"))
+						if ((obj["ClassGuid"] != null) && (StringEx.EqualsOrdinalIgnoreCase(obj["ClassGuid"].ToString(), "{4D36E978-E325-11CE-BFC1-08002BE10318}")))
 						{
 							if ((obj["Caption"] != null) && (obj["Description"] != null))
 							{

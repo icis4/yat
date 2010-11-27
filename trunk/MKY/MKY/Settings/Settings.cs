@@ -82,7 +82,7 @@ namespace MKY.Settings
 
 				node.SuspendChangeEvent();
 				node.SetChanged();
-				node.Changed += new EventHandler<SettingsEventArgs>(this.node_Changed);
+				node.Changed += new EventHandler<SettingsEventArgs>(node_Changed);
 				this.nodes.Add(node);
 
 				ResumeChangeEvent();
@@ -98,13 +98,13 @@ namespace MKY.Settings
 				{
 					SuspendChangeEvent();
 
-					nodeOld.Changed -= new EventHandler<SettingsEventArgs>(this.node_Changed);
+					nodeOld.Changed -= new EventHandler<SettingsEventArgs>(node_Changed);
 					int index = this.nodes.IndexOf(nodeOld);
 					this.nodes.RemoveAt(index);
 
 					nodeNew.SuspendChangeEvent();
 					nodeNew.SetChanged();
-					nodeNew.Changed += new EventHandler<SettingsEventArgs>(this.node_Changed);
+					nodeNew.Changed += new EventHandler<SettingsEventArgs>(node_Changed);
 					this.nodes.Insert(index, nodeNew);
 
 					ResumeChangeEvent();
@@ -119,7 +119,7 @@ namespace MKY.Settings
 			{
 				SuspendChangeEvent();
 
-				node.Changed -= new EventHandler<SettingsEventArgs>(this.node_Changed);
+				node.Changed -= new EventHandler<SettingsEventArgs>(node_Changed);
 				this.nodes.Remove(node);
 
 				ResumeChangeEvent();

@@ -35,7 +35,6 @@ using MKY.Time;
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
-
 using YAT.Model.Types;
 using YAT.Model.Settings;
 using YAT.Model.Utilities;
@@ -487,13 +486,13 @@ namespace YAT.Model
 		private void AttachSettingsEventHandlers()
 		{
 			if (this.settingsRoot != null)
-				this.settingsRoot.Changed += new EventHandler<SettingsEventArgs>(this.settingsRoot_Changed);
+				this.settingsRoot.Changed += new EventHandler<SettingsEventArgs>(settingsRoot_Changed);
 		}
 
 		private void DetachSettingsEventHandlers()
 		{
 			if (this.settingsRoot != null)
-				this.settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(this.settingsRoot_Changed);
+				this.settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(settingsRoot_Changed);
 		}
 
 		#endregion
@@ -876,19 +875,19 @@ namespace YAT.Model
 		{
 			if (this.terminal != null)
 			{
-				this.terminal.IOChanged        += new EventHandler(this.terminal_IOChanged);
-				this.terminal.IOControlChanged += new EventHandler(this.terminal_IOControlChanged);
-				this.terminal.IORequest        += new EventHandler<Domain.IORequestEventArgs>(this.terminal_IORequest);
-				this.terminal.IOError          += new EventHandler<Domain.IOErrorEventArgs>(this.terminal_IOError);
+				this.terminal.IOChanged        += new EventHandler(terminal_IOChanged);
+				this.terminal.IOControlChanged += new EventHandler(terminal_IOControlChanged);
+				this.terminal.IORequest        += new EventHandler<Domain.IORequestEventArgs>(terminal_IORequest);
+				this.terminal.IOError          += new EventHandler<Domain.IOErrorEventArgs>(terminal_IOError);
 
-				this.terminal.RawElementSent          += new EventHandler<Domain.RawElementEventArgs>(this.terminal_RawElementSent);
-				this.terminal.RawElementReceived      += new EventHandler<Domain.RawElementEventArgs>(this.terminal_RawElementReceived);
-				this.terminal.DisplayElementsSent     += new EventHandler<Domain.DisplayElementsEventArgs>(this.terminal_DisplayElementsSent);
-				this.terminal.DisplayElementsReceived += new EventHandler<Domain.DisplayElementsEventArgs>(this.terminal_DisplayElementsReceived);
-				this.terminal.DisplayLinesSent        += new EventHandler<Domain.DisplayLinesEventArgs>(this.terminal_DisplayLinesSent);
-				this.terminal.DisplayLinesReceived    += new EventHandler<Domain.DisplayLinesEventArgs>(this.terminal_DisplayLinesReceived);
-				this.terminal.RepositoryCleared       += new EventHandler<Domain.RepositoryEventArgs>(this.terminal_RepositoryCleared);
-				this.terminal.RepositoryReloaded      += new EventHandler<Domain.RepositoryEventArgs>(this.terminal_RepositoryReloaded);
+				this.terminal.RawElementSent          += new EventHandler<Domain.RawElementEventArgs>(terminal_RawElementSent);
+				this.terminal.RawElementReceived      += new EventHandler<Domain.RawElementEventArgs>(terminal_RawElementReceived);
+				this.terminal.DisplayElementsSent     += new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsSent);
+				this.terminal.DisplayElementsReceived += new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsReceived);
+				this.terminal.DisplayLinesSent        += new EventHandler<Domain.DisplayLinesEventArgs>(terminal_DisplayLinesSent);
+				this.terminal.DisplayLinesReceived    += new EventHandler<Domain.DisplayLinesEventArgs>(terminal_DisplayLinesReceived);
+				this.terminal.RepositoryCleared       += new EventHandler<Domain.RepositoryEventArgs>(terminal_RepositoryCleared);
+				this.terminal.RepositoryReloaded      += new EventHandler<Domain.RepositoryEventArgs>(terminal_RepositoryReloaded);
 			}
 		}
 
@@ -896,19 +895,19 @@ namespace YAT.Model
 		{
 			if (this.terminal != null)
 			{
-				this.terminal.IOChanged        -= new EventHandler(this.terminal_IOChanged);
-				this.terminal.IOControlChanged -= new EventHandler(this.terminal_IOControlChanged);
-				this.terminal.IORequest        -= new EventHandler<Domain.IORequestEventArgs>(this.terminal_IORequest);
-				this.terminal.IOError          -= new EventHandler<Domain.IOErrorEventArgs>(this.terminal_IOError);
+				this.terminal.IOChanged        -= new EventHandler(terminal_IOChanged);
+				this.terminal.IOControlChanged -= new EventHandler(terminal_IOControlChanged);
+				this.terminal.IORequest        -= new EventHandler<Domain.IORequestEventArgs>(terminal_IORequest);
+				this.terminal.IOError          -= new EventHandler<Domain.IOErrorEventArgs>(terminal_IOError);
 
-				this.terminal.RawElementSent          -= new EventHandler<Domain.RawElementEventArgs>(this.terminal_RawElementSent);
-				this.terminal.RawElementReceived      -= new EventHandler<Domain.RawElementEventArgs>(this.terminal_RawElementReceived);
-				this.terminal.DisplayElementsSent     -= new EventHandler<Domain.DisplayElementsEventArgs>(this.terminal_DisplayElementsSent);
-				this.terminal.DisplayElementsReceived -= new EventHandler<Domain.DisplayElementsEventArgs>(this.terminal_DisplayElementsReceived);
-				this.terminal.DisplayLinesSent        -= new EventHandler<Domain.DisplayLinesEventArgs>(this.terminal_DisplayLinesSent);
-				this.terminal.DisplayLinesReceived    -= new EventHandler<Domain.DisplayLinesEventArgs>(this.terminal_DisplayLinesReceived);
-				this.terminal.RepositoryCleared       -= new EventHandler<Domain.RepositoryEventArgs>(this.terminal_RepositoryCleared);
-				this.terminal.RepositoryReloaded      -= new EventHandler<Domain.RepositoryEventArgs>(this.terminal_RepositoryReloaded);
+				this.terminal.RawElementSent          -= new EventHandler<Domain.RawElementEventArgs>(terminal_RawElementSent);
+				this.terminal.RawElementReceived      -= new EventHandler<Domain.RawElementEventArgs>(terminal_RawElementReceived);
+				this.terminal.DisplayElementsSent     -= new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsSent);
+				this.terminal.DisplayElementsReceived -= new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsReceived);
+				this.terminal.DisplayLinesSent        -= new EventHandler<Domain.DisplayLinesEventArgs>(terminal_DisplayLinesSent);
+				this.terminal.DisplayLinesReceived    -= new EventHandler<Domain.DisplayLinesEventArgs>(terminal_DisplayLinesReceived);
+				this.terminal.RepositoryCleared       -= new EventHandler<Domain.RepositoryEventArgs>(terminal_RepositoryCleared);
+				this.terminal.RepositoryReloaded      -= new EventHandler<Domain.RepositoryEventArgs>(terminal_RepositoryReloaded);
 			}
 		}
 
@@ -1649,10 +1648,10 @@ namespace YAT.Model
 		{
 			this.connectChrono = new Chronometer();
 			this.connectChrono.Interval = 1000;
-			this.connectChrono.TimeSpanChanged += new EventHandler<TimeSpanEventArgs>(this.totalConnectChrono_TimeSpanChanged);
+			this.connectChrono.TimeSpanChanged += new EventHandler<TimeSpanEventArgs>(totalConnectChrono_TimeSpanChanged);
 			this.totalConnectChrono = new Chronometer();
 			this.totalConnectChrono.Interval = 1000;
-			this.totalConnectChrono.TimeSpanChanged += new EventHandler<TimeSpanEventArgs>(this.connectChrono_TimeSpanChanged);
+			this.totalConnectChrono.TimeSpanChanged += new EventHandler<TimeSpanEventArgs>(connectChrono_TimeSpanChanged);
 		}
 
 		private void StopChronos()
@@ -1665,13 +1664,13 @@ namespace YAT.Model
 		{
 			if (this.connectChrono != null)
 			{
-				this.connectChrono.TimeSpanChanged -= new EventHandler<TimeSpanEventArgs>(this.totalConnectChrono_TimeSpanChanged);
+				this.connectChrono.TimeSpanChanged -= new EventHandler<TimeSpanEventArgs>(totalConnectChrono_TimeSpanChanged);
 				this.connectChrono.Dispose();
 				this.connectChrono = null;
 			}
 			if (this.totalConnectChrono != null)
 			{
-				this.totalConnectChrono.TimeSpanChanged -= new EventHandler<TimeSpanEventArgs>(this.connectChrono_TimeSpanChanged);
+				this.totalConnectChrono.TimeSpanChanged -= new EventHandler<TimeSpanEventArgs>(connectChrono_TimeSpanChanged);
 				this.totalConnectChrono.Dispose();
 				this.totalConnectChrono = null;
 			}

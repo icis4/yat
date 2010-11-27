@@ -23,6 +23,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
+using MKY;
+
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
 // YAT.Domain\BinaryTerminal for better separation of the implementation files.
@@ -144,7 +146,7 @@ namespace YAT.Domain
 			return
 			(
 				(Enabled == other.Enabled) &&
-				(Sequence == other.Sequence)
+				(StringEx.EqualsOrdinalIgnoreCase(Sequence, other.Sequence))
 			);
 		}
 

@@ -27,6 +27,29 @@ namespace MKY
 	public static class EnvironmentEx
 	{
 		/// <summary>
+		/// Returns <c>true</c> if operating system is Win32 or Win64 or compatible.
+		/// </summary>
+		/// <returns></returns>
+		public static bool IsWindows()
+		{
+			switch (Environment.OSVersion.Platform)
+			{
+				case PlatformID.Win32S:
+				case PlatformID.Win32Windows:
+				case PlatformID.Win32NT:
+					return (true);
+
+				case PlatformID.WinCE:
+				case PlatformID.Unix:
+				case PlatformID.Xbox:
+				case PlatformID.MacOSX:
+				default:
+					return (false);
+
+			}
+		}
+
+		/// <summary>
 		/// Tries the get value from environment variable.
 		/// </summary>
 		/// <param name="environmentVariableName">Name of the environment variable.</param>

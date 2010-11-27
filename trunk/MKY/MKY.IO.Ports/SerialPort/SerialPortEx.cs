@@ -366,7 +366,7 @@ namespace MKY.IO.Ports
 		/// Communications port settings.
 		/// </summary>
 		[Category("Port")]
-		[Description(@"Port settings. Default settings are """ + PortSettingsDefault + @""".")]
+		[Description("Port settings. Default settings are '" + PortSettingsDefault + "'.")]
 		[DefaultValue(PortSettingsDefault)]
 		[TypeConverter(typeof(IO.Ports.SerialPortSettingsConverter))]
 		public virtual SerialPortSettings PortSettings

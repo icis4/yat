@@ -384,8 +384,16 @@ namespace MKY.IO.Ports
 			if (GetType() != other.GetType())
 				return (false);
 
+			return (Equals(other.name));
+		}
+
+		/// <summary>
+		/// Determines whether this instance and the specified object have value equality.
+		/// </summary>
+		public bool Equals(string other)
+		{
 			// Only field 'name' is relevant. Other properties are for convenience only.
-			return (this.name == other.name);
+			return (StringEx.EqualsOrdinalIgnoreCase(this.name, other));
 		}
 
 		/// <summary></summary>

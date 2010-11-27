@@ -24,6 +24,7 @@ using System.IO;
 using System.Xml.Serialization;
 
 using MKY.Diagnostics;
+using MKY.IO;
 using MKY.Xml;
 
 namespace MKY.Settings
@@ -104,12 +105,12 @@ namespace MKY.Settings
 		{
 			get
 			{
-				if (this.settingsFilePath == null)
+				if (string.IsNullOrEmpty(this.settingsFilePath))
 					return (false);
-				if (this.settingsFilePath.Length == 0)
+
+				if (Path.GetFullPath(this.settingsFilePath).Length == 0)
 					return (false);
-				if (System.IO.Path.GetFullPath(this.settingsFilePath).Length == 0)
-					return (false);
+				
 				return (true);
 			}
 		}
@@ -121,11 +122,10 @@ namespace MKY.Settings
 		{
 			get
 			{
-				if (this.settingsFilePath == null)
+				if (string.IsNullOrEmpty(this.settingsFilePath))
 					return (false);
-				if (this.settingsFilePath.Length == 0)
-					return (false);
-				return (System.IO.File.Exists(this.settingsFilePath));
+
+				return (File.Exists(this.settingsFilePath));
 			}
 		}
 
@@ -136,15 +136,14 @@ namespace MKY.Settings
 		{
 			get
 			{
-				if (this.settingsFilePath == null)
+				if (string.IsNullOrEmpty(this.settingsFilePath))
 					return (false);
-				if (this.settingsFilePath.Length == 0)
-					return (false);
-				if (!System.IO.File.Exists(this.settingsFilePath))
+
+				if (!File.Exists(this.settingsFilePath))
 					return (false);
 
 				// Return whether current settings file path is still the same as the last access.
-				return (this.settingsFilePath == this.accessedSettingsFilePath);
+				return (PathEx.Equals(this.settingsFilePath, this.accessedSettingsFilePath));
 			}
 		}
 

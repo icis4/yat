@@ -23,8 +23,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-using MKY;
-
 using YAT.Model.Settings;
 using YAT.Settings;
 
@@ -143,7 +141,7 @@ namespace YAT.Settings.Workspace
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
 		[XmlIgnore]
-		public GuidList<TerminalSettingsItem> TerminalSettings
+		public MKY.GuidList<TerminalSettingsItem> TerminalSettings
 		{
 			get { return (this.workspace.TerminalSettings); }
 			set { this.workspace.TerminalSettings = value; }

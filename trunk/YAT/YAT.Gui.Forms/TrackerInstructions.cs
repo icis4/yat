@@ -99,12 +99,12 @@ namespace YAT.Gui.Forms
 
 			// Instructions.
 			sb = new StringBuilder();
-			sb.AppendLine(@"1. Choose ""Add New""");
-			sb.AppendLine(@"2. Select a ""Category""");
-			sb.AppendLine(@"3. Select a ""Group"", i.e. the YAT version you are using");
-			sb.AppendLine(@"4. Fill in ""Summary""");
-			sb.AppendLine(@"5. Fill in ""Description""");
-			sb.AppendLine(@"6. Choose ""Add""");
+			sb.AppendLine("1. Choose 'Add New'");
+			sb.AppendLine("2. Select a 'Category'");
+			sb.AppendLine("3. Select a 'Group', i.e. the YAT version you are using");
+			sb.AppendLine("4. Fill in 'Summary'");
+			sb.AppendLine("5. Fill in 'Description'");
+			sb.AppendLine("6. Choose 'Add'");
 			linkLabel_Instructions.Text = sb.ToString();
 		}
 

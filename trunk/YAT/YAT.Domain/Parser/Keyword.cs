@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using MKY.Types;
+using MKY;
 
 namespace YAT.Domain.Parser
 {
@@ -54,7 +54,7 @@ namespace YAT.Domain.Parser
 	/// <summary>
 	/// Extended enum KeywordEx.
 	/// </summary>
-	public class KeywordEx : EnumEx
+	public class KeywordEx : MKY.EnumEx
 	{
 		#region String Definitions
 
@@ -136,37 +136,37 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		public static bool TryParse(string keyword, out KeywordEx result)
 		{
-			if      (string.Compare(keyword, Clear_string, StringComparison.OrdinalIgnoreCase) == 0)
+			if      (StringEx.EqualsOrdinalIgnoreCase(keyword, Clear_string))
 			{
 				result = new KeywordEx(Keyword.Clear);
 				return (true);
 			}
-			else if (string.Compare(keyword, Delay_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(keyword, Delay_string))
 			{
 				result = new KeywordEx(Keyword.Delay);
 				return (true);
 			}
-			else if (string.Compare(keyword, Eol_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(keyword, Eol_string))
 			{
 				result = new KeywordEx(Keyword.Eol);
 				return (true);
 			}
-			else if (string.Compare(keyword, NoEol_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(keyword, NoEol_string))
 			{
 				result = new KeywordEx(Keyword.NoEol);
 				return (true);
 			}
-			else if (string.Compare(keyword, OutputBreakOn_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(keyword, OutputBreakOn_string))
 			{
 				result = new KeywordEx(Keyword.OutputBreakOn);
 				return (true);
 			}
-			else if (string.Compare(keyword, OutputBreakOff_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(keyword, OutputBreakOff_string))
 			{
 				result = new KeywordEx(Keyword.OutputBreakOff);
 				return (true);
 			}
-			else if (string.Compare(keyword, OutputBreakToggle_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(keyword, OutputBreakToggle_string))
 			{
 				result = new KeywordEx(Keyword.OutputBreakToggle);
 				return (true);

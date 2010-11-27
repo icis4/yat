@@ -35,10 +35,10 @@ namespace MKY.IO.Serial
 	public class UsbSerialHidDeviceSettings : MKY.Settings.Settings
 	{
 		/// <summary></summary>
-		public static readonly AutoRetry AutoReopenDefault = new AutoRetry(true, 2000);
+		public const bool AutoOpenDefault = true;
 
 		private DeviceInfo deviceInfo;
-		private AutoRetry autoReopen;
+		private bool autoOpen;
 
 		/// <summary></summary>
 		public UsbSerialHidDeviceSettings()
@@ -68,7 +68,7 @@ namespace MKY.IO.Serial
 			else
 				DeviceInfo = null;
 
-			AutoReopen = rhs.autoReopen;
+			AutoOpen = rhs.autoOpen;
 
 			ClearChanged();
 		}
@@ -79,7 +79,7 @@ namespace MKY.IO.Serial
 		protected override void SetMyDefaults()
 		{
 			DeviceInfo = null;
-			AutoReopen = AutoReopenDefault;
+			AutoOpen = AutoOpenDefault;
 		}
 
 		#region Properties
@@ -103,15 +103,15 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		[XmlElement("AutoReopen")]
-		public AutoRetry AutoReopen
+		[XmlElement("AutoOpen")]
+		public bool AutoOpen
 		{
-			get { return (this.autoReopen); }
+			get { return (this.autoOpen); }
 			set
 			{
-				if (value != this.autoReopen)
+				if (value != this.autoOpen)
 				{
-					this.autoReopen = value;
+					this.autoOpen = value;
 					SetChanged();
 				}
 			}
@@ -138,7 +138,7 @@ namespace MKY.IO.Serial
 				base.Equals(other) && // Compare all settings nodes.
 
 				(this.deviceInfo == other.deviceInfo) &&
-				(this.autoReopen == other.autoReopen)
+				(this.autoOpen == other.autoOpen)
 			);
 		}
 
@@ -154,7 +154,7 @@ namespace MKY.IO.Serial
 				base.GetHashCode() ^
 
 				deviceInfoHashCode ^
-				this.autoReopen.GetHashCode()
+				this.autoOpen.GetHashCode()
 			);
 		}
 

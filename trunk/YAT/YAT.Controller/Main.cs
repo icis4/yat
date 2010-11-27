@@ -22,6 +22,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
+using MKY;
 using MKY.Event;
 
 using YAT.Settings;
@@ -437,7 +438,7 @@ namespace YAT.Controller
 				// Check for help args.
 				foreach (string helpArg in HelpArg)
 				{
-					if (string.Compare(arg, helpArg, StringComparison.OrdinalIgnoreCase) == 0)
+					if (StringEx.EqualsOrdinalIgnoreCase(arg, helpArg))
 					{
 						this.commandLineHelpIsRequested = true;
 						argsParsed++;
@@ -485,7 +486,7 @@ namespace YAT.Controller
 			{
 				foreach (string recentArg in RecentArg)
 				{
-					if (string.Compare(arg, recentArg, StringComparison.OrdinalIgnoreCase) == 0)
+					if (StringEx.EqualsOrdinalIgnoreCase(arg, recentArg))
 					{
 						ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll();
 						bool recentsReady = (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count > 0);
@@ -508,7 +509,7 @@ namespace YAT.Controller
 			{
 				foreach (string transmitArg in TransmitArg)
 				{
-					if ((arg.Length >= 2) && (string.Compare(arg.Substring(0, 2), transmitArg, StringComparison.OrdinalIgnoreCase) == 0))
+					if ((arg.Length >= 2) && (StringEx.EqualsOrdinalIgnoreCase(arg.Substring(0, 2), transmitArg)))
 					{
 						int terminalId;
 						if ((arg.Length) >= 3 && (int.TryParse(arg.Substring(2, 1), out terminalId)))

@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using MKY.Types;
+using MKY;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -46,7 +46,7 @@ namespace YAT.Domain
 	/// <summary>
 	/// Extended enum TerminalTypeEx.
 	/// </summary>
-	public class TerminalTypeEx : EnumEx
+	public class TerminalTypeEx : MKY.EnumEx
 	{
 		#region String Definitions
 
@@ -111,12 +111,12 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public static bool TryParse(string type, out TerminalTypeEx result)
 		{
-			if (string.Compare(type, Text_string, true) == 0)
+			if      (StringEx.EqualsOrdinalIgnoreCase(type, Text_string))
 			{
 				result = new TerminalTypeEx(TerminalType.Text);
 				return (true);
 			}
-			else if (string.Compare(type, Binary_string, true) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(type, Binary_string))
 			{
 				result = new TerminalTypeEx(TerminalType.Binary);
 				return (true);

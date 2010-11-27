@@ -61,9 +61,9 @@ namespace MKY.Xml
 			AlternateXmlElement other = (AlternateXmlElement)obj;
 			return
 			(
-				(XmlPath             == other.XmlPath) &&
-				(LocalName           == other.LocalName) &&
-				(AlternateLocalNames == other.AlternateLocalNames)
+				(StringEx.EqualsOrdinalIgnoreCase(XmlPath,             other.XmlPath)) &&
+				(StringEx.EqualsOrdinalIgnoreCase(LocalName,           other.LocalName)) &&
+				(StringEx.EqualsOrdinalIgnoreCase(AlternateLocalNames, other.AlternateLocalNames))
 			);
 		}
 
@@ -222,13 +222,13 @@ namespace MKY.Xml
 		{
 			foreach (AlternateXmlElement element in alternates)
 			{
-				// compare XML path
-				if (Types.ArrayEx.ValuesEqual(element.XmlPath, standardXmlPath))
+				// Compare XML path.
+				if (ArrayEx.ValuesEqual(element.XmlPath, standardXmlPath))
 				{
-					// compare alternates to given local name
+					// Compare alternates to given local name.
 					foreach (string alternateLocalName in element.AlternateLocalNames)
 					{
-						if (alternateLocalName == localName)
+						if (StringEx.EqualsOrdinalIgnoreCase(alternateLocalName, localName))
 							return (element.LocalName);
 					}
 				}

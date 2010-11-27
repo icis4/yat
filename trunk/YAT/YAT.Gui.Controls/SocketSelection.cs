@@ -24,6 +24,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Windows.Forms;
 
+using MKY;
 using MKY.Event;
 using MKY.IO.Serial;
 using MKY.Net;
@@ -295,8 +296,7 @@ namespace YAT.Gui.Controls
 				//   because SelectedItem is also set if text has changed in the meantime.
 
 				IPHost host = comboBox_RemoteHost.SelectedItem as IPHost;
-				if ((host != null) && (host.IPAddress != IPAddress.None) &&
-					(host.ToString() == comboBox_RemoteHost.Text))
+				if ((host != null) && (host.IPAddress != IPAddress.None) && StringEx.EqualsOrdinalIgnoreCase(host.ToString(), comboBox_RemoteHost.Text))
 				{
 					RemoteHost = host;
 					this.resolvedRemoteIPAddress = RemoteHost.IPAddress;

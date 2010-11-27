@@ -22,8 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 
-using MKY.Types;
-
 namespace MKY.Net
 {
 	#region Enum CommonIPHost
@@ -153,18 +151,18 @@ namespace MKY.Net
 		{
 			IPAddress address;
 
-			if     ((string.Compare(host, Localhost_string, StringComparison.OrdinalIgnoreCase) == 0) ||
-			        (string.Compare(host, Localhost_stringNice, StringComparison.OrdinalIgnoreCase) == 0))
+			if      (StringEx.EqualsOrdinalIgnoreCase(host, Localhost_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(host, Localhost_stringNice))
 			{
 				result = new IPHost(IPHostType.Localhost);
 				return (true);
 			}
-			else if (string.Compare(host, IPv4Localhost_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(host, IPv4Localhost_string))
 			{
 				result = new IPHost(IPHostType.IPv4Localhost);
 				return (true);
 			}
-			else if (string.Compare(host, IPv6Localhost_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(host, IPv6Localhost_string))
 			{
 				result = new IPHost(IPHostType.IPv6Localhost);
 				return (true);

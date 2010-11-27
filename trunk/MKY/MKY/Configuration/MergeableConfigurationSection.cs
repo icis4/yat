@@ -36,7 +36,7 @@ namespace MKY.Configuration
 			{
 				foreach (ConfigurationProperty cpB in settingsToBeMergedWith.Properties)
 				{
-					if (cpA.Name == cpB.Name)
+					if (StringEx.EqualsOrdinalIgnoreCase(cpA.Name, cpB.Name))
 					{
 						object value = settingsToBeMergedWith[cpB];
 						SetPropertyValue(cpA, value, true);

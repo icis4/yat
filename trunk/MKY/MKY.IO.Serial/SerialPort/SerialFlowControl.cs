@@ -22,8 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using MKY.Types;
-
 // The MKY.IO.Serial namespace combines various serial interface infrastructure. This code is
 // intentionally placed into the MKY.IO.Serial namespace even though the file is located in
 // MKY.IO.Serial\SerialPort for better separation of the implementation files.
@@ -127,13 +125,13 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public static new SerialFlowControlEx Parse(string flowControl)
 		{
-			if      ((string.Compare(flowControl, Manual_string, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(flowControl, Manual_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
+			if      (StringEx.EqualsOrdinalIgnoreCase(flowControl, Manual_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(flowControl, Manual_stringShort))
 			{
 				return (new SerialFlowControlEx(SerialFlowControl.Manual));
 			}
-			else if ((string.Compare(flowControl, RS485_string, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(flowControl, RS485_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
+			else if (StringEx.EqualsOrdinalIgnoreCase(flowControl, RS485_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(flowControl, RS485_stringShort))
 			{
 				return (new SerialFlowControlEx(SerialFlowControl.RS485));
 			}

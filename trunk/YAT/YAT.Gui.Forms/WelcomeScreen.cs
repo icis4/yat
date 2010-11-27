@@ -80,7 +80,7 @@ namespace YAT.Gui.Forms
 
 			this.applicationSettingsTimer.Interval = 100;
 			this.applicationSettingsTimer.AutoReset = false;
-			this.applicationSettingsTimer.Elapsed += new System.Timers.ElapsedEventHandler(this.applicationSettingsTimer_Elapsed);
+			this.applicationSettingsTimer.Elapsed += new System.Timers.ElapsedEventHandler(applicationSettingsTimer_Elapsed);
 			this.applicationSettingsTimer.Start();
 		}
 

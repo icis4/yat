@@ -23,9 +23,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
+using MKY;
 using MKY.Event;
 using MKY.Text;
-using MKY.Types;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -872,12 +872,12 @@ namespace YAT.Domain
 				DetachTerminalSettings();
 
 			this.terminalSettings = terminalSettings;
-			this.terminalSettings.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(this.terminalSettings_Changed);
+			this.terminalSettings.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(terminalSettings_Changed);
 		}
 
 		private void DetachTerminalSettings()
 		{
-			this.terminalSettings.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(this.terminalSettings_Changed);
+			this.terminalSettings.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(terminalSettings_Changed);
 			this.terminalSettings = null;
 		}
 
@@ -952,14 +952,14 @@ namespace YAT.Domain
 		{
 			this.rawTerminal = rawTerminal;
 
-			this.rawTerminal.IOChanged          += new EventHandler(this.rawTerminal_IOChanged);
-			this.rawTerminal.IOControlChanged   += new EventHandler(this.rawTerminal_IOControlChanged);
-			this.rawTerminal.IORequest          += new EventHandler<IORequestEventArgs>(this.rawTerminal_IORequest);
-			this.rawTerminal.IOError            += new EventHandler<IOErrorEventArgs>(this.rawTerminal_IOError);
+			this.rawTerminal.IOChanged          += new EventHandler(rawTerminal_IOChanged);
+			this.rawTerminal.IOControlChanged   += new EventHandler(rawTerminal_IOControlChanged);
+			this.rawTerminal.IORequest          += new EventHandler<IORequestEventArgs>(rawTerminal_IORequest);
+			this.rawTerminal.IOError            += new EventHandler<IOErrorEventArgs>(rawTerminal_IOError);
 
-			this.rawTerminal.RawElementSent     += new EventHandler<RawElementEventArgs>(this.rawTerminal_RawElementSent);
-			this.rawTerminal.RawElementReceived += new EventHandler<RawElementEventArgs>(this.rawTerminal_RawElementReceived);
-			this.rawTerminal.RepositoryCleared  += new EventHandler<RepositoryEventArgs>(this.rawTerminal_RepositoryCleared);
+			this.rawTerminal.RawElementSent     += new EventHandler<RawElementEventArgs>(rawTerminal_RawElementSent);
+			this.rawTerminal.RawElementReceived += new EventHandler<RawElementEventArgs>(rawTerminal_RawElementReceived);
+			this.rawTerminal.RepositoryCleared  += new EventHandler<RepositoryEventArgs>(rawTerminal_RepositoryCleared);
 		}
 
 		#endregion

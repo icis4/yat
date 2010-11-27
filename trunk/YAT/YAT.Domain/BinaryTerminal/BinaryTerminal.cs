@@ -299,11 +299,11 @@ namespace YAT.Domain
 
 				this.txLineState = casted.txLineState;
 				this.txLineState.LineBreakTimer = new LineBreakTimer(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
-				this.txLineState.LineBreakTimer.Timeout += new EventHandler(this.txTimer_Timeout);
+				this.txLineState.LineBreakTimer.Timeout += new EventHandler(txTimer_Timeout);
 
 				this.rxLineState = casted.rxLineState;
 				this.rxLineState.LineBreakTimer = new LineBreakTimer(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
-				this.rxLineState.LineBreakTimer.Timeout += new EventHandler(this.rxTimer_Timeout);
+				this.rxLineState.LineBreakTimer.Timeout += new EventHandler(rxTimer_Timeout);
 
 				this.bidirLineState = new BidirLineState(casted.bidirLineState);
 			}
@@ -385,7 +385,7 @@ namespace YAT.Domain
 				txSequenceBreak = null;
 
 			t = new LineBreakTimer(BinaryTerminalSettings.TxDisplay.TimedLineBreak.Timeout);
-			t.Timeout += new EventHandler(this.txTimer_Timeout);
+			t.Timeout += new EventHandler(txTimer_Timeout);
 
 			this.txLineState = new LineState(new EolQueue(txSequenceBreak), DateTime.Now, t);
 
@@ -395,7 +395,7 @@ namespace YAT.Domain
 				rxSequenceBreak = null;
 
 			t = new LineBreakTimer(BinaryTerminalSettings.RxDisplay.TimedLineBreak.Timeout);
-			t.Timeout += new EventHandler(this.rxTimer_Timeout);
+			t.Timeout += new EventHandler(rxTimer_Timeout);
 			this.rxLineState = new LineState(new EolQueue(rxSequenceBreak), DateTime.Now, t);
 
 			this.bidirLineState = new BidirLineState(true, SerialDirection.Tx);

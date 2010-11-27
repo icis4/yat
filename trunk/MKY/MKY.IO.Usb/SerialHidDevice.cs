@@ -59,26 +59,6 @@ namespace MKY.IO.Usb
 
 		#endregion
 
-		#region Static Lifetime
-		//==========================================================================================
-		// Static Lifetime
-		//==========================================================================================
-
-		static SerialHidDevice()
-		{
-			RegisterStaticDeviceNotificationHandler();
-		}
-
-		// \todo 2010-03-21 / mky
-		// Properly unregister without relying on garbage collection
-		//
-		//static ~SerialHidDevice()
-		//{
-		//	UnregisterStaticDeviceNotificationHandler();
-		//}
-
-		#endregion
-
 		#region Static Methods
 		//==========================================================================================
 		// Static Methods
@@ -108,18 +88,61 @@ namespace MKY.IO.Usb
 		//------------------------------------------------------------------------------------------
 
 		private static NativeMessageHandler staticDeviceNotificationWindow = new NativeMessageHandler(StaticDeviceNotificationHandler);
+		private static int    staticDeviceNotificationCounter = 0;
 		private static IntPtr staticDeviceNotificationHandle = IntPtr.Zero;
+		private static object staticDeviceNotificationSyncObj = new object();
 
-		private static void RegisterStaticDeviceNotificationHandler()
+		/// <remarks>
+		/// \attention This function also exists in the other USB classes. Changes here must also be applied there.
+		/// </remarks>
+		public static new void RegisterStaticDeviceNotificationHandler()
 		{
-			Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationWindow.Handle, HidGuid, out staticDeviceNotificationHandle);
+			lock (staticDeviceNotificationSyncObj)
+			{
+				// The first call to this method registers the notification.
+				if (staticDeviceNotificationCounter == 0)
+				{
+					if (staticDeviceNotificationHandle == IntPtr.Zero)
+						Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationWindow.Handle, HidDevice.HidGuid, out staticDeviceNotificationHandle);
+					else
+						throw (new InvalidOperationException("Invalid state within USB Ser/HID Device object"));
+				}
+
+				// Keep track of the register/unregister requests.
+				staticDeviceNotificationCounter++;
+			}
 		}
 
-		private static void UnregisterStaticDeviceNotificationHandler()
+		/// <remarks>
+		/// \attention This function also exists in the other USB classes. Changes here must also be applied there.
+		/// </remarks>
+		public static new void UnregisterStaticDeviceNotificationHandler()
 		{
-			Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
+			lock (staticDeviceNotificationSyncObj)
+			{
+				// Keep track of the register/unregister requests.
+				staticDeviceNotificationCounter--;
+
+				// The last call to this method unregisters the notification.
+				if (staticDeviceNotificationCounter == 0)
+				{
+					if (staticDeviceNotificationHandle != IntPtr.Zero)
+						Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
+					else
+						throw (new InvalidOperationException("Invalid state within USB Ser/HID Device object"));
+
+					staticDeviceNotificationHandle = IntPtr.Zero;
+				}
+
+				// Ensure that decrement never results in negative values.
+				if (staticDeviceNotificationCounter < 0)
+					staticDeviceNotificationCounter = 0;
+			}
 		}
 
+		/// <remarks>
+		/// \attention This function also exists in the other USB classes. Changes here must also be applied there.
+		/// </remarks>
 		private static void StaticDeviceNotificationHandler(ref Message m)
 		{
 			DeviceEvent de = MessageToDeviceEvent(ref m);
@@ -130,14 +153,15 @@ namespace MKY.IO.Usb
 				string devicePath;
 				if (Win32.DeviceManagement.DeviceChangeMessageToDevicePath(m, out devicePath))
 				{
-					DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Hid, devicePath);
+					DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Hid, new DeviceInfo(devicePath));
 					switch (de)
 					{
 						case DeviceEvent.Connected:
 						{
-							Debug.WriteLine("USB HID device connected:");
+							Debug.WriteLine("USB Ser/HID device connected:");
 							Debug.Indent();
 							Debug.WriteLine("Path = " + devicePath);
+							Debug.WriteLine("Info = " + e.DeviceInfo);
 							Debug.Unindent();
 
 							EventHelper.FireAsync(DeviceConnected, typeof(SerialHidDevice), e);
@@ -146,9 +170,10 @@ namespace MKY.IO.Usb
 
 						case DeviceEvent.Disconnected:
 						{
-							Debug.WriteLine("USB HID device disconnected:");
+							Debug.WriteLine("USB Ser/HID device disconnected:");
 							Debug.Indent();
 							Debug.WriteLine("Path = " + devicePath);
+							Debug.WriteLine("Info = " + e.DeviceInfo);
 							Debug.Unindent();
 
 							EventHelper.FireAsync(DeviceDisconnected, typeof(SerialHidDevice), e);
@@ -163,10 +188,33 @@ namespace MKY.IO.Usb
 
 		#endregion
 
+		#region Types
+		//==========================================================================================
+		// Types
+		//==========================================================================================
+
+		private enum State
+		{
+			Reset,
+			Started,
+			ConnectedAndClosed,
+			ConnectedAndOpened,
+			DisconnectedAndWaitingForReopen,
+			DisconnectedAndClosed,
+			Error,
+		}
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
 		//==========================================================================================
+
+		private State state = State.Reset;
+		private object stateSyncObj = new object();
+
+		private bool autoOpen;
 
 		/// <summary>
 		/// It just a single stream object, but it contains the basically independent input and
@@ -175,7 +223,7 @@ namespace MKY.IO.Usb
 		private FileStream stream;
 
 		/// <summary>
-		/// Async receiving.
+		/// Queue for async receiving.
 		/// </summary>
 		private Queue<byte> receiveQueue = new Queue<byte>();
 
@@ -214,27 +262,56 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
-		public SerialHidDevice(string systemPath)
-			: base(systemPath)
+		public SerialHidDevice(string path)
+			: base(path)
 		{
+			Initialize();
 		}
 
 		/// <summary></summary>
 		public SerialHidDevice(int vendorId, int productId)
 			: base(vendorId, productId)
 		{
+			Initialize();
 		}
 
 		/// <summary></summary>
 		public SerialHidDevice(int vendorId, int productId, string serialNumber)
 			: base(vendorId, productId, serialNumber)
 		{
+			Initialize();
 		}
 
 		/// <summary></summary>
 		public SerialHidDevice(DeviceInfo deviceInfo)
 			: base(deviceInfo)
 		{
+			Initialize();
+		}
+
+		/// <remarks>
+		/// Base constructor creates device info and therefore also sets system path.
+		/// </remarks>
+		private void Initialize()
+		{
+			// Only attach handlers if this is an instance of the USB Ser/HID device class.
+			// If this instance is of a derived class, handlers must be attached there.
+			if (this is SerialHidDevice)
+				RegisterAndAttachStaticDeviceEventHandlers();
+		}
+
+		private void RegisterAndAttachStaticDeviceEventHandlers()
+		{
+			RegisterStaticDeviceNotificationHandler();
+			DeviceConnected    += new EventHandler<DeviceEventArgs>(Device_DeviceConnected);
+			DeviceDisconnected += new EventHandler<DeviceEventArgs>(Device_DeviceDisconnected);
+		}
+
+		private void DetachAndUnregisterStaticDeviceEventHandlers()
+		{
+			DeviceConnected    -= new EventHandler<DeviceEventArgs>(Device_DeviceConnected);
+			DeviceDisconnected -= new EventHandler<DeviceEventArgs>(Device_DeviceDisconnected);
+			UnregisterStaticDeviceNotificationHandler();
 		}
 
 		#region Disposal
@@ -247,7 +324,7 @@ namespace MKY.IO.Usb
 		{
 			if (disposing)
 			{
-				// Nothing to do (yet).
+				DetachAndUnregisterStaticDeviceEventHandlers();
 			}
 			base.Dispose(disposing);
 		}
@@ -260,6 +337,55 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
+
+		/// <summary>
+		/// Indicates whether the device automatically tries to open.
+		/// </summary>
+		/// <returns>
+		/// <c>true</c> if the device automatically tries to open; otherwise, <c>false</c>.
+		/// </returns>
+		public virtual bool AutoOpen
+		{
+			get
+			{
+				AssertNotDisposed();
+				return (this.autoOpen);
+			}
+			set
+			{
+				AssertNotDisposed();
+				this.autoOpen = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether the device has been started.
+		/// </summary>
+		/// <returns>
+		/// <c>true</c> if the device has been started; otherwise, <c>false</c>.
+		/// </returns>
+		public virtual bool IsStarted
+		{
+			get
+			{
+				// \attention
+				// Do not call AssertNotDisposed() since IsOpen is used by AsyncReadCompleted()
+				// to detect devices that are just being closed or have already been closed.
+
+				switch (this.state)
+				{
+					case State.Started:
+					case State.ConnectedAndClosed:
+					case State.ConnectedAndOpened:
+					case State.DisconnectedAndWaitingForReopen:
+					case State.DisconnectedAndClosed:
+						return (true);
+
+					default:
+						return (false);
+				}
+			}
+		}
 
 		/// <summary>
 		/// Indicates whether the serial communication port to the device is open.
@@ -279,7 +405,7 @@ namespace MKY.IO.Usb
 				// CloseStream() intentionally sets this.stream to null to ensure that this
 				// property also works during closing.
 
-				if (this.stream != null)
+				if (IsStarted && (this.stream != null))
 					return ((this.stream.CanRead) && (this.stream.CanWrite));
 
 				return (false);
@@ -320,36 +446,76 @@ namespace MKY.IO.Usb
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
+		/// Starts the device.
+		/// </summary>
+		public virtual bool Start()
+		{
+			AssertNotDisposed();
+
+			SetState(State.Started);
+			return (Open());
+		}
+
+		/// <summary>
+		/// Stops the device.
+		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "Stop is a common term to start/stop something.")]
+		public virtual void Stop()
+		{
+			AssertNotDisposed();
+
+			Close();
+			SetState(State.Reset);
+		}
+
+		/// <summary>
 		/// Opens the serial communication to the device.
 		/// </summary>
 		public virtual bool Open()
 		{
-			// The file may already exist and be ready.
+			AssertNotDisposed();
+
+			// The stream may already exist and be ready.
 			if (IsOpen)
 				return (true);
 
-			// Create a new file and begin to read data from the device.
+			// Create a new stream and begin to read data from the device.
 			if (CreateStream())
 			{
-				BeginAsyncRead();
+				SetState(State.ConnectedAndOpened);
 				OnOpened(new EventArgs());
 				return (true);
 			}
 			else
 			{
 				StringBuilder sb = new StringBuilder();
-				sb.AppendLine("Couldn't open serial communication to USB HID device");
+				sb.AppendLine("Couldn't open serial communication to USB Ser/HID device");
 				sb.AppendLine(ToString());
 				throw (new UsbException(sb.ToString()));
 			}
 		}
 
 		/// <summary>
-		/// Closes the serial communication port to the device.
+		/// Closes the serial communication to the device.
 		/// </summary>
 		public virtual void Close()
 		{
+			AssertNotDisposed();
+
+			// The stream may already be closed.
+			if (!IsOpen)
+				return;
+
 			CloseStream();
+
+			if (IsConnected)
+				SetState(State.ConnectedAndClosed);
+			else if (AutoOpen)
+				SetState(State.DisconnectedAndWaitingForReopen);
+			else
+				SetState(State.DisconnectedAndClosed);
+
+			OnClosed(new EventArgs());
 		}
 
 		/// <summary>
@@ -361,8 +527,9 @@ namespace MKY.IO.Usb
 		/// <returns>The number of bytes received.</returns>
 		public virtual int Receive(out byte[] data)
 		{
-			// AssertNotDisposed() is called by IsOpen
-			// OnDataReceived has been fired before
+			AssertNotDisposed();
+
+			// OnDataReceived has been fired before.
 
 			int bytesReceived = 0;
 			if (IsOpen)
@@ -390,6 +557,10 @@ namespace MKY.IO.Usb
 		/// </param>
 		public virtual void Send(byte[] data)
 		{
+			AssertNotDisposed();
+
+			// OnDataSent is fired by Write.
+
 			if (IsOpen)
 				Write(data);
 		}
@@ -404,13 +575,17 @@ namespace MKY.IO.Usb
 		private bool CreateStream()
 		{
 			SafeFileHandle readWriteHandle;
-			if (!Win32.Hid.CreateSharedReadWriteHandle(SystemPath, out readWriteHandle))
+			if (!Win32.Hid.CreateSharedReadWriteHandle(Path, out readWriteHandle))
 				return (false);
 
 			if (!Win32.Hid.FlushQueue(readWriteHandle))
 				return (false);
 
 			this.stream = new FileStream(readWriteHandle, FileAccess.Read | FileAccess.Write, InputReportLength, true);
+
+			// Immediately start reading.
+			BeginAsyncRead();
+
 			return (true);
 		}
 
@@ -444,9 +619,10 @@ namespace MKY.IO.Usb
 				{
 					// Immediately read data on this thread.
 
-					// Retrieve the read data and finalize read. In case of an exception
-					// during the read, the call of EndRead() throws it.
-					byte[] inputReportBuffer = (byte[])result.AsyncState; 
+					// Retrieve the read data and finalize read. In case of an exception during
+					// the read, the call of EndRead() throws it. If this happens, e.g. due to
+					// disconnect, exception is caught further down and stream is closed.
+					byte[] inputReportBuffer = (byte[])result.AsyncState;
 					this.stream.EndRead(result);
 
 					// Convert the input report into usable data.
@@ -462,7 +638,7 @@ namespace MKY.IO.Usb
 							this.receiveQueue.Enqueue(b);
 					}
 
-					// Ensure that only one data received event thread is active at the same time.
+					// Ensure that only one data received event thread is active at a time.
 					// Without this exclusivity, two receive threads could create a race condition.
 					if (Monitor.TryEnter(AsyncReadCompletedSyncObj))
 					{
@@ -480,17 +656,22 @@ namespace MKY.IO.Usb
 					// Trigger the next async read.
 					BeginAsyncRead();
 				}
+				catch (IOException)
+				{
+					Debug.WriteLine(GetType() + " '" + ToString() + "': Disconnect detected while reading from device");
+					OnDisconnected(new EventArgs()); // Includes Close().
+				}
 				catch (Exception ex)
 				{
-					DebugEx.WriteException(this.GetType(), ex);
-					OnError(new ErrorEventArgs("Error while reading an input report from the USB HID device" + Environment.NewLine + ToString()));
+					DebugEx.WriteException(this.GetType(), ex); // Includes Close().
+					OnError(new ErrorEventArgs("Error while reading an input report from the USB Ser/HID device" + Environment.NewLine + ToString()));
 				}
 			}
 		}
 
 		private void AsyncReadCompletedAsync()
 		{
-			// Ensure that only one data received event thread is active at the same time.
+			// Ensure that only one data received event thread is active at a time.
 			// Without this exclusivity, two receive threads could create a race condition.
 			Monitor.Enter(AsyncReadCompletedSyncObj);
 			try
@@ -520,20 +701,18 @@ namespace MKY.IO.Usb
 
 				foreach (byte[] report in output.Reports)
 					this.stream.Write(report, 0, report.Length);
+
+				OnDataSent(new EventArgs());
 			}
 			catch (Exception ex)
 			{
-				DebugEx.WriteException(this.GetType(), ex);
-				OnError(new ErrorEventArgs("Error while writing an output report to the USB HID device" + Environment.NewLine + ToString()));
+				DebugEx.WriteException(this.GetType(), ex); // Includes Close().
+				OnError(new ErrorEventArgs("Error while writing an output report to the USB Ser/HID device" + Environment.NewLine + ToString()));
 			}
 		}
 
 		private void CloseStream()
 		{
-			bool wasOpen = false;
-			if (IsOpen)
-				wasOpen = true;
-
 			if (this.stream != null)
 			{
 				// \attention
@@ -545,12 +724,52 @@ namespace MKY.IO.Usb
 				this.stream = null;
 				fs.Close();
 			}
-
-			if (wasOpen)
-				OnClosed(new EventArgs());
 		}
 
 		#endregion
+
+		#region Methods > State Methods
+		//------------------------------------------------------------------------------------------
+		// Methods > State Methods
+		//------------------------------------------------------------------------------------------
+
+		private void SetState(State state)
+		{
+#if (DEBUG)
+			State oldState = this.state;
+#endif
+			lock (this.stateSyncObj)
+				this.state = state;
+#if (DEBUG)
+			Debug.WriteLine(GetType() + " '" + ToString() + "': State has changed from " + oldState + " to " + this.state + ".");
+#endif
+		}
+
+		#endregion
+
+		#endregion
+
+		#region Event Handling
+		//==========================================================================================
+		// Event Handling
+		//==========================================================================================
+
+		private void Device_DeviceConnected(object sender, DeviceEventArgs e)
+		{
+			if (Info == e.DeviceInfo)
+			{
+				OnConnected(new EventArgs());
+
+				if (AutoOpen)
+					Open();
+			}
+		}
+
+		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
+		{
+			if (Info == e.DeviceInfo)
+				OnDisconnected(new EventArgs()); // Includes Close().
+		}
 
 		#endregion
 
@@ -568,14 +787,14 @@ namespace MKY.IO.Usb
 		/// <summary></summary>
 		protected override void OnDisconnected(EventArgs e)
 		{
-			CloseStream();
+			Close();
 			base.OnDisconnected(e);
 		}
 
 		/// <summary></summary>
 		protected override void OnError(ErrorEventArgs e)
 		{
-			CloseStream();
+			Close();
 			base.OnError(e);
 		}
 

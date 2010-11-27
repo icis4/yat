@@ -19,16 +19,72 @@
 //==================================================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace MKY.Types
+// This code is intentionally placed into the MKY namespace even though the file is located in
+// MKY.Types for consistency with the Sytem namespace.
+namespace MKY
 {
 	/// <summary>
 	/// String utility methods.
 	/// </summary>
 	public static class StringEx
 	{
+		/// <summary>
+		/// Compares two specified <see cref="System.String"/> objects ignoring culture.
+		/// </summary>
+		public static bool EqualsOrdinal(string strA, string strB)
+		{
+			return (string.Compare(strA, strB, StringComparison.Ordinal) == 0);
+		}
+
+		/// <summary>
+		/// Compares two specified string arrays ignoring culture.
+		/// </summary>
+		public static bool EqualsOrdinal(string[] strA, string[] strB)
+		{
+			if (strA.Length == strB.Length)
+			{
+				for (int i = 0; i < strA.Length; i++)
+				{
+					if (EqualsOrdinal(strA[i], strB[i]))
+						return (false);
+				}
+				return (true);
+			}
+			else
+			{
+				return (false);
+			}
+		}
+
+		/// <summary>
+		/// Compares two specified <see cref="System.String"/> objects ignoring culture and case.
+		/// </summary>
+		public static bool EqualsOrdinalIgnoreCase(string strA, string strB)
+		{
+			return (string.Compare(strA, strB, StringComparison.OrdinalIgnoreCase) == 0);
+		}
+
+		/// <summary>
+		/// Compares two specified string arrays ignoring culture and case.
+		/// </summary>
+		public static bool EqualsOrdinalIgnoreCase(string[] strA, string[] strB)
+		{
+			if (strA.Length == strB.Length)
+			{
+				for (int i = 0; i < strA.Length; i++)
+				{
+					if (EqualsOrdinalIgnoreCase(strA[i], strB[i]))
+						return (false);
+				}
+				return (true);
+			}
+			else
+			{
+				return (false);
+			}
+		}
+
 		/// <summary>
 		/// Truncates "truncateString" to the "length" leftmost characters.
 		/// </summary>

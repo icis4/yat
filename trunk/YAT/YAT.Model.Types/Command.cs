@@ -23,7 +23,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
-using MKY.Types;
+using MKY;
+using MKY.IO;
 
 namespace YAT.Model.Types
 {
@@ -586,7 +587,7 @@ namespace YAT.Model.Types
 				ArrayEx.ValuesEqual(this.commandLines, other.commandLines) &&
 				(this.defaultRadix == other.defaultRadix) &&
 				(this.isFilePath   == other.isFilePath) &&
-				(this.filePath     == other.filePath)
+				PathEx.Equals(this.filePath, other.filePath)
 			);
 		}
 

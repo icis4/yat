@@ -44,25 +44,50 @@ namespace MKY.IO
 
 			if (path.IndexOf(Path.VolumeSeparatorChar) < 0)
 			{                                          // Local path ?
-				limitedPath = Types.StringEx.Left(path, 3) + "..." +
-							  Types.StringEx.Right(path, Math.Max(length - 6, 0));
+				limitedPath = StringEx.Left(path, 3) + "..." +
+				              StringEx.Right(path, Math.Max(length - 6, 0));
 			}
 			else                                       // Network path !
 			{
 				int separatorPosition = path.Substring(4).IndexOf(Path.DirectorySeparatorChar);
 				if ((separatorPosition >= 0) && (separatorPosition < length - 4))
 				{
-					limitedPath = Types.StringEx.Left(path, separatorPosition) + "..." +
-								  Types.StringEx.Right(path, Math.Max(length - 4 - separatorPosition, 0));
+					limitedPath = StringEx.Left(path, separatorPosition) + "..." +
+					              StringEx.Right(path, Math.Max(length - 4 - separatorPosition, 0));
 				}
 				else
 				{
-					limitedPath = Types.StringEx.Left(path, 5) + "..." +
-								  Types.StringEx.Right(path, Math.Max(length - 8, 0));
+					limitedPath = StringEx.Left(path, 5) + "..." +
+					              StringEx.Right(path, Math.Max(length - 8, 0));
 				}
 			}
 
-			return (Types.StringEx.Right(limitedPath, length));
+			return (StringEx.Right(limitedPath, length));
+		}
+
+		#endregion
+
+		#region Equals Methods
+
+		/// <summary>
+		/// Compares two specified path string dependent on the operating systems policies.
+		/// </summary>
+		public static bool Equals(string pathA, string pathB)
+		{
+			switch (Environment.OSVersion.Platform)
+			{
+				case PlatformID.Win32S:
+				case PlatformID.Win32Windows:
+				case PlatformID.Win32NT:
+				case PlatformID.WinCE:
+				case PlatformID.Xbox:
+					return (string.Compare(pathA, pathB, StringComparison.OrdinalIgnoreCase) == 0);
+
+				case PlatformID.Unix:
+				case PlatformID.MacOSX:
+				default:
+					return (string.Compare(pathA, pathB, StringComparison.Ordinal) == 0);
+			}
 		}
 
 		#endregion
@@ -302,7 +327,7 @@ namespace MKY.IO
 				// Get common directory, make sure only directory part is used.
 				int i = 0;
 				while ((dirInfosA.Count > i) && (dirInfosB.Count > i) &&
-					   (dirInfosA[i] == dirInfosB[i]))
+				       (StringEx.EqualsOrdinalIgnoreCase(dirInfosA[i], dirInfosB[i])))
 				{
 					i++;
 				}
@@ -316,13 +341,13 @@ namespace MKY.IO
 				DirectoryInfo commonDI = new DirectoryInfo(commonPath);
 
 				// Check whether both paths are equal.
-				if (dirPathA == dirPathB)
+				if (PathEx.Equals(dirPathA, dirPathB))
 					return (new PathCompareResult(commonPath, commonDirectoryCount, 0, true, 0, "."));
 
 				// Check whether one of the two is the others subdirectory.
 				DirectoryInfo di = commonDI;
 				StringBuilder relativePath = new StringBuilder();
-				if (commonPath == dirPathA)
+				if (PathEx.Equals(commonPath, dirPathA))
 				{
 					int nearRelativeDirectoryCount = 0;
 					di = dirInfoB;
@@ -344,7 +369,7 @@ namespace MKY.IO
 					}
 					return (new PathCompareResult(commonPath, commonDirectoryCount, nearRelativeDirectoryCount, true, nearRelativeDirectoryCount, relativePath.ToString()));
 				}
-				if (commonPath == dirPathB)
+				if (PathEx.Equals(commonPath, dirPathB))
 				{
 					int nearRelativeDirectoryCount = 0;
 					di = dirInfoA;
@@ -437,52 +462,50 @@ namespace MKY.IO
 				string s = pathB.TrimStart(Path.DirectorySeparatorChar);
 
 				// Check whether relative path points to any parent directory.
-				if ((s.Length >= 2) && (s.Substring(0, 2) == ".."))
+				if ((s.Length >= 2) && (StringEx.EqualsOrdinalIgnoreCase(s.Substring(0, 2), "..")))
 				{
 					DirectoryInfo pathInfoParent = pathInfoA;
 
 					do
 					{
 						// Detect invalidly long relative paths.
-						if ((s.Length >= 3) && (s.Substring(0, 3) == "..."))
+						if ((s.Length >= 3) && (StringEx.EqualsOrdinalIgnoreCase(s.Substring(0, 3), "...")))
 							break;
 
 						s = s.Remove(0, 2);
 						pathInfoParent = pathInfoParent.Parent;
 
 						// ".." or "..\".
-						if ((s.Length == 0) ||
-							(s == Path.DirectorySeparatorChar.ToString()))
+						if ((s.Length == 0) || (PathEx.Equals(s, Path.DirectorySeparatorChar.ToString())))
 						{
 							return (pathInfoParent.FullName);
 						}
 
 						// "..\<.. or Path>".
-						if ((s.Length >= 1) && (s.Substring(0, 1) == Path.DirectorySeparatorChar.ToString()))
+						if ((s.Length >= 1) && (PathEx.Equals(s.Substring(0, 1), Path.DirectorySeparatorChar.ToString())))
 							s = s.Remove(0, 1);
 						else
 							break;
 					}
-					while ((s.Length >= 2) && (s.Substring(0, 2) == ".."));
+					while ((s.Length >= 2) && (PathEx.Equals(s.Substring(0, 2), "..")));
 
 					if (pathInfoParent != null)
 						DoPrepareDirectoryPath(Path.Combine(pathInfoParent.FullName, s), out pathInfoResult, out dirPathResult, out dirInfoResult);
 				}
 
 				// Check whether relative path points to current directory.
-				else if ((s.Length >= 1) && (s.Substring(0, 1) == "."))
+				else if ((s.Length >= 1) && (PathEx.Equals(s.Substring(0, 1), ".")))
 				{
 					s = s.Remove(0, 1);
 
 					// "." or ".\".
-					if ((s.Length == 0) ||
-						(s == Path.DirectorySeparatorChar.ToString()))
+					if ((s.Length == 0) || (PathEx.Equals(s, Path.DirectorySeparatorChar.ToString())))
 					{
 						return (dirPathA);
 					}
 
 					// ".\<Path>".
-					if (s.Substring(0, 1) == Path.DirectorySeparatorChar.ToString())
+					if (PathEx.Equals(s.Substring(0, 1), Path.DirectorySeparatorChar.ToString()))
 					{
 						string combined = dirPathA + s.Substring(1);
 						DoPrepareDirectoryPath(combined, out pathInfoResult, out dirPathResult, out dirInfoResult);
@@ -668,13 +691,13 @@ namespace MKY.IO
 			return
 			(
 				(HaveCommon                 == other.HaveCommon) &&
-				(CommonPath                 == other.CommonPath) &&
+				PathEx.Equals(CommonPath,      other.CommonPath) &&
 				(CommonDirectoryCount       == other.CommonDirectoryCount) &&
 				(AreRelative                == other.AreRelative) &&
 				(RelativeDirectoryCount     == other.RelativeDirectoryCount) &&
 				(AreNearRelative            == other.AreNearRelative) &&
 				(NearRelativeDirectoryCount == other.NearRelativeDirectoryCount) &&
-				(RelativePath               == other.RelativePath)
+				PathEx.Equals(RelativePath,    other.RelativePath)
 			);
 		}
 

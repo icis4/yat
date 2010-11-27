@@ -23,6 +23,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Xml.Serialization;
 
+using MKY;
+
 namespace YAT.Model.Types
 {
 	/// <summary></summary>
@@ -163,7 +165,7 @@ namespace YAT.Model.Types
 
 			return
 			(
-				(this.name  == other.name) &&
+				StringEx.EqualsOrdinalIgnoreCase(this.name, other.name) &&
 				(this.size  == other.size) &&
 				(this.style == other.style)
 			);

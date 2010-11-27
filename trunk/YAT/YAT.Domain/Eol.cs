@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using MKY.Types;
+using MKY;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -61,7 +61,7 @@ namespace YAT.Domain
 	/// CRLF: Windows, DOS, OS/2, CP/M
 	/// CR:   Mac OS up to version 9, Apple II
 	/// </remarks>
-	public class EolEx : EnumEx
+	public class EolEx : MKY.EnumEx
 	{
 		#region String Definitions
 
@@ -170,44 +170,44 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public static bool TryParse(string eol, out EolEx result)
 		{
-			if      ((string.Compare(eol, None_string, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(eol, None_stringSequence, StringComparison.OrdinalIgnoreCase) == 0))
+			if      (StringEx.EqualsOrdinalIgnoreCase(eol, None_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(eol, None_stringSequence))
 			{
 				result = new EolEx(Eol.None);
 				return (true);
 			}
-			else if ((string.Compare(eol, Cr_string, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(eol, Cr_stringNative, StringComparison.OrdinalIgnoreCase) == 0))
+			else if (StringEx.EqualsOrdinalIgnoreCase(eol, Cr_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(eol, Cr_stringNative))
 			{
 				result = new EolEx(Eol.Cr);
 				return (true);
 			}
-			else if ((string.Compare(eol, Lf_string, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(eol, Lf_stringNative, StringComparison.OrdinalIgnoreCase) == 0))
+			else if (StringEx.EqualsOrdinalIgnoreCase(eol, Lf_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(eol, Lf_stringNative))
 			{
 				result = new EolEx(Eol.Lf);
 				return (true);
 			}
-			else if ((string.Compare(eol, CrLf_string, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(eol, CrLf_stringNative, StringComparison.OrdinalIgnoreCase) == 0))
+			else if (StringEx.EqualsOrdinalIgnoreCase(eol, CrLf_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(eol, CrLf_stringNative))
 			{
 				result = new EolEx(Eol.CrLf);
 				return (true);
 			}
-			else if ((string.Compare(eol, LfCr_string, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(eol, LfCr_stringNative, StringComparison.OrdinalIgnoreCase) == 0))
+			else if (StringEx.EqualsOrdinalIgnoreCase(eol, LfCr_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(eol, LfCr_stringNative))
 			{
 				result = new EolEx(Eol.LfCr);
 				return (true);
 			}
-			else if ((string.Compare(eol, Tab_string, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(eol, Tab_stringNative, StringComparison.OrdinalIgnoreCase) == 0))
+			else if (StringEx.EqualsOrdinalIgnoreCase(eol, Tab_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(eol, Tab_stringNative))
 			{
 				result = new EolEx(Eol.Tab);
 				return (true);
 			}
-			else if ((string.Compare(eol, Nul_string, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(eol, Nul_stringNative, StringComparison.OrdinalIgnoreCase) == 0))
+			else if (StringEx.EqualsOrdinalIgnoreCase(eol, Nul_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(eol, Nul_stringNative))
 			{
 				result = new EolEx(Eol.Nul);
 				return (true);

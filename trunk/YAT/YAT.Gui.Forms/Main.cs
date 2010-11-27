@@ -989,13 +989,13 @@ namespace YAT.Gui.Forms
 		private void AttachSettingsEventHandlers()
 		{
 			if (this.settingsRoot != null)
-				this.settingsRoot.Changed += new EventHandler<SettingsEventArgs>(this.settingsRoot_Changed);
+				this.settingsRoot.Changed += new EventHandler<SettingsEventArgs>(settingsRoot_Changed);
 		}
 
 		private void DetachSettingsEventHandlers()
 		{
 			if (this.settingsRoot != null)
-				this.settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(this.settingsRoot_Changed);
+				this.settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(settingsRoot_Changed);
 		}
 
 		#endregion
@@ -1028,14 +1028,14 @@ namespace YAT.Gui.Forms
 		{
 			if (this.main != null)
 			{
-				this.main.WorkspaceOpened += new EventHandler<Model.WorkspaceEventArgs>(this.main_WorkspaceOpened);
-				this.main.WorkspaceClosed += new EventHandler(this.main_WorkspaceClosed);
+				this.main.WorkspaceOpened += new EventHandler<Model.WorkspaceEventArgs>(main_WorkspaceOpened);
+				this.main.WorkspaceClosed += new EventHandler(main_WorkspaceClosed);
 
-				this.main.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(this.main_FixedStatusTextRequest);
-				this.main.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(this.main_TimedStatusTextRequest);
-				this.main.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(this.main_MessageInputRequest);
+				this.main.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(main_FixedStatusTextRequest);
+				this.main.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(main_TimedStatusTextRequest);
+				this.main.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(main_MessageInputRequest);
 
-				this.main.Exited             += new EventHandler(this.main_Exited);
+				this.main.Exited             += new EventHandler(main_Exited);
 				this.main.UnhandledException += new EventHandler<EventHelper.UnhandledExceptionEventArgs>(main_UnhandledException);
 			}
 		}
@@ -1044,14 +1044,14 @@ namespace YAT.Gui.Forms
 		{
 			if (this.main != null)
 			{
-				this.main.WorkspaceOpened -= new EventHandler<Model.WorkspaceEventArgs>(this.main_WorkspaceOpened);
-				this.main.WorkspaceClosed -= new EventHandler(this.main_WorkspaceClosed);
+				this.main.WorkspaceOpened -= new EventHandler<Model.WorkspaceEventArgs>(main_WorkspaceOpened);
+				this.main.WorkspaceClosed -= new EventHandler(main_WorkspaceClosed);
 
-				this.main.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(this.main_FixedStatusTextRequest);
-				this.main.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(this.main_TimedStatusTextRequest);
-				this.main.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(this.main_MessageInputRequest);
+				this.main.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(main_FixedStatusTextRequest);
+				this.main.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(main_TimedStatusTextRequest);
+				this.main.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(main_MessageInputRequest);
 
-				this.main.Exited             -= new EventHandler(this.main_Exited);
+				this.main.Exited             -= new EventHandler(main_Exited);
 				this.main.UnhandledException -= new EventHandler<EventHelper.UnhandledExceptionEventArgs>(main_UnhandledException);
 			}
 		}
@@ -1196,16 +1196,16 @@ namespace YAT.Gui.Forms
 		{
 			if (this.workspace != null)
 			{
-				this.workspace.TerminalAdded   += new EventHandler<Model.TerminalEventArgs>(this.workspace_TerminalAdded);
-				this.workspace.TerminalRemoved += new EventHandler<Model.TerminalEventArgs>(this.workspace_TerminalRemoved);
+				this.workspace.TerminalAdded   += new EventHandler<Model.TerminalEventArgs>(workspace_TerminalAdded);
+				this.workspace.TerminalRemoved += new EventHandler<Model.TerminalEventArgs>(workspace_TerminalRemoved);
 
-				this.workspace.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(this.workspace_TimedStatusTextRequest);
-				this.workspace.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(this.workspace_FixedStatusTextRequest);
-				this.workspace.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(this.workspace_MessageInputRequest);
+				this.workspace.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(workspace_TimedStatusTextRequest);
+				this.workspace.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(workspace_FixedStatusTextRequest);
+				this.workspace.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(workspace_MessageInputRequest);
 
-				this.workspace.SaveAsFileDialogRequest += new EventHandler<Model.DialogEventArgs>(this.workspace_SaveAsFileDialogRequest);
+				this.workspace.SaveAsFileDialogRequest += new EventHandler<Model.DialogEventArgs>(workspace_SaveAsFileDialogRequest);
 				
-				this.workspace.Closed += new EventHandler<Model.ClosedEventArgs>(this.workspace_Closed);
+				this.workspace.Closed += new EventHandler<Model.ClosedEventArgs>(workspace_Closed);
 			}
 		}
 
@@ -1213,16 +1213,16 @@ namespace YAT.Gui.Forms
 		{
 			if (this.workspace != null)
 			{
-				this.workspace.TerminalAdded   -= new EventHandler<Model.TerminalEventArgs>(this.workspace_TerminalAdded);
-				this.workspace.TerminalRemoved -= new EventHandler<Model.TerminalEventArgs>(this.workspace_TerminalRemoved);
+				this.workspace.TerminalAdded   -= new EventHandler<Model.TerminalEventArgs>(workspace_TerminalAdded);
+				this.workspace.TerminalRemoved -= new EventHandler<Model.TerminalEventArgs>(workspace_TerminalRemoved);
 
-				this.workspace.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(this.workspace_TimedStatusTextRequest);
-				this.workspace.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(this.workspace_FixedStatusTextRequest);
-				this.workspace.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(this.workspace_MessageInputRequest);
+				this.workspace.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(workspace_TimedStatusTextRequest);
+				this.workspace.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(workspace_FixedStatusTextRequest);
+				this.workspace.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(workspace_MessageInputRequest);
 
-				this.workspace.SaveAsFileDialogRequest -= new EventHandler<Model.DialogEventArgs>(this.workspace_SaveAsFileDialogRequest);
+				this.workspace.SaveAsFileDialogRequest -= new EventHandler<Model.DialogEventArgs>(workspace_SaveAsFileDialogRequest);
 
-				this.workspace.Closed -= new EventHandler<Model.ClosedEventArgs>(this.workspace_Closed);
+				this.workspace.Closed -= new EventHandler<Model.ClosedEventArgs>(workspace_Closed);
 			}
 		}
 

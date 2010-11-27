@@ -487,13 +487,13 @@ namespace MKY.Win32
 		}
 
 		/// <summary>
-		/// Creates a device handle of the HID device at the given system path.
+		/// Creates a device handle of the HID device at the given device path.
 		/// </summary>
-		public static bool CreateSharedQueryOnlyDeviceHandle(string systemPath, out SafeFileHandle deviceHandle)
+		public static bool CreateSharedQueryOnlyDeviceHandle(string devicePath, out SafeFileHandle deviceHandle)
 		{
 			SafeFileHandle h = FileIO.NativeMethods.CreateFile
 				(
-				systemPath,
+				devicePath,
 				FileIO.NativeTypes.Access.QUERY_ONLY,
 				FileIO.NativeTypes.ShareMode.SHARE_READ_WRITE,
 				IntPtr.Zero,
@@ -508,9 +508,11 @@ namespace MKY.Win32
 				return (true);
 			}
 
-			System.Diagnostics.Debug.WriteLine("Couldn't create shared USB device query handle.");
-			System.Diagnostics.Debug.WriteLine(Debug.GetLastError());
-			DebugEx.WriteStack(typeof(Hid));
+			System.Diagnostics.Debug.WriteLine("Couldn't create shared USB device query handle:");
+			System.Diagnostics.Debug.Indent();
+			System.Diagnostics.Debug.WriteLine("Path = " + devicePath);
+			System.Diagnostics.Debug.WriteLine("System error message = " + Debug.GetLastError());
+			System.Diagnostics.Debug.Unindent();
 
 			deviceHandle = null;
 			return (false);
@@ -519,11 +521,11 @@ namespace MKY.Win32
 		/// <summary>
 		/// Creates a device handle of the HID device at the given system path.
 		/// </summary>
-		public static bool CreateSharedReadWriteHandle(string systemPath, out SafeFileHandle readHandle)
+		public static bool CreateSharedReadWriteHandle(string devicePath, out SafeFileHandle readHandle)
 		{
 			SafeFileHandle h = FileIO.NativeMethods.CreateFile
 				(
-				systemPath,
+				devicePath,
 				FileIO.NativeTypes.Access.GENERIC_READ_WRITE,
 				FileIO.NativeTypes.ShareMode.SHARE_READ_WRITE,
 				IntPtr.Zero,
@@ -539,7 +541,10 @@ namespace MKY.Win32
 			}
 
 			System.Diagnostics.Debug.WriteLine("Couldn't create shared USB device read/write handle.");
-			System.Diagnostics.Debug.WriteLine(Debug.GetLastError());
+			System.Diagnostics.Debug.Indent();
+			System.Diagnostics.Debug.WriteLine("Path = " + devicePath);
+			System.Diagnostics.Debug.WriteLine("System error message = " + Debug.GetLastError());
+			System.Diagnostics.Debug.Unindent();
 			DebugEx.WriteStack(typeof(Hid));
 
 			readHandle = null;

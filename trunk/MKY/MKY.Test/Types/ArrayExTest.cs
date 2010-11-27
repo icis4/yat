@@ -23,8 +23,6 @@ using System.Collections;
 
 using NUnit.Framework;
 
-using MKY.Types;
-
 namespace MKY.Test.Types
 {
 	/// <summary></summary>

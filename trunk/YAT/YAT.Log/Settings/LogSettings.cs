@@ -24,6 +24,8 @@ using System.Globalization;
 using System.Text;
 using System.Xml.Serialization;
 
+using MKY.IO;
+
 using YAT.Settings;
 using YAT.Settings.Application;
 
@@ -166,7 +168,7 @@ namespace YAT.Log.Settings
 			{
 				case LogFormat.Raw:  return ("Raw");
 				case LogFormat.Neat: return ("Neat");
-				default: throw (new ArgumentException(@"LogFormat """ + type + @""" unknown"));
+				default: throw (new ArgumentException("LogFormat '" + type + "' unknown"));
 			}
 		}
 
@@ -177,7 +179,7 @@ namespace YAT.Log.Settings
 				case LogStreamType.Tx:    return ("Tx");
 				case LogStreamType.Bidir: return ("BiDir");
 				case LogStreamType.Rx:    return ("Rx");
-				default: throw (new ArgumentException(@"LogChannel """ + type + @""" unknown"));
+				default: throw (new ArgumentException("LogChannel '" + type + "' unknown"));
 			}
 		}
 
@@ -732,8 +734,8 @@ namespace YAT.Log.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.rootPath              == other.rootPath) &&
-				(this.rootFileName          == other.rootFileName) &&
+				PathEx.Equals(this.rootPath,     other.rootPath) &&
+				PathEx.Equals(this.rootFileName, other.rootFileName) &&
 				(this.rawLogTx              == other.rawLogTx) &&
 				(this.rawLogBidir           == other.rawLogBidir) &&
 				(this.rawLogRx              == other.rawLogRx) &&

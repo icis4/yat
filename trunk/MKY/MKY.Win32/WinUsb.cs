@@ -109,11 +109,11 @@ namespace MKY.Win32
 		/// <summary>
 		/// Retrieves the device handle of the HID device at the given system path.
 		/// </summary>
-		public static bool GetUsbHandle(string systemPath, out SafeFileHandle usbHandle)
+		public static bool GetUsbHandle(string devicePath, out SafeFileHandle usbHandle)
 		{
 			SafeFileHandle h = FileIO.NativeMethods.CreateFile
 				(
-				systemPath,
+				devicePath,
 				FileIO.NativeTypes.Access.GENERIC_READ_WRITE,
 				FileIO.NativeTypes.ShareMode.SHARE_READ_WRITE,
 				IntPtr.Zero,

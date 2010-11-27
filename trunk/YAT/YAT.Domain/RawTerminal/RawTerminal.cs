@@ -421,12 +421,12 @@ namespace YAT.Domain
 				DetachBufferSettings();
 
 			this.bufferSettings = bufferSettings;
-			this.bufferSettings.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(this.bufferSettings_Changed);
+			this.bufferSettings.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(bufferSettings_Changed);
 		}
 
 		private void DetachBufferSettings()
 		{
-			this.bufferSettings.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(this.bufferSettings_Changed);
+			this.bufferSettings.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(bufferSettings_Changed);
 			this.bufferSettings = null;
 		}
 
@@ -446,12 +446,12 @@ namespace YAT.Domain
 				DetachIOSettings();
 
 			this.ioSettings = ioSettings;
-			this.ioSettings.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(this.ioSettings_Changed);
+			this.ioSettings.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(ioSettings_Changed);
 		}
 
 		private void DetachIOSettings()
 		{
-			this.ioSettings.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(this.ioSettings_Changed);
+			this.ioSettings.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(ioSettings_Changed);
 			this.ioSettings = null;
 		}
 
@@ -493,20 +493,20 @@ namespace YAT.Domain
 				DetachIO();
 
 			this.io = io;
-			this.io.IOChanged        += new EventHandler(this.io_IOChanged);
-			this.io.IOControlChanged += new EventHandler(this.io_IOControlChanged);
-			this.io.DataReceived     += new EventHandler(this.io_DataReceived);
-			this.io.IORequest        += new EventHandler<MKY.IO.Serial.IORequestEventArgs>(this.io_IORequest);
-			this.io.IOError          += new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(this.io_IOError);
+			this.io.IOChanged        += new EventHandler(io_IOChanged);
+			this.io.IOControlChanged += new EventHandler(io_IOControlChanged);
+			this.io.DataReceived     += new EventHandler(io_DataReceived);
+			this.io.IORequest        += new EventHandler<MKY.IO.Serial.IORequestEventArgs>(io_IORequest);
+			this.io.IOError          += new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(io_IOError);
 		}
 
 		private void DetachIO()
 		{
-			this.io.IOChanged        -= new EventHandler(this.io_IOChanged);
-			this.io.IOControlChanged -= new EventHandler(this.io_IOControlChanged);
-			this.io.DataReceived     -= new EventHandler(this.io_DataReceived);
-			this.io.IORequest        -= new EventHandler<MKY.IO.Serial.IORequestEventArgs>(this.io_IORequest);
-			this.io.IOError          -= new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(this.io_IOError);
+			this.io.IOChanged        -= new EventHandler(io_IOChanged);
+			this.io.IOControlChanged -= new EventHandler(io_IOControlChanged);
+			this.io.DataReceived     -= new EventHandler(io_DataReceived);
+			this.io.IORequest        -= new EventHandler<MKY.IO.Serial.IORequestEventArgs>(io_IORequest);
+			this.io.IOError          -= new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(io_IOError);
 			this.io = null;
 		}
 

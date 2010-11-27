@@ -69,7 +69,7 @@ namespace MKY.Time
 			this.timer = new System.Timers.Timer();
 			this.timer.AutoReset = true;
 			this.timer.Interval = 1000;
-			this.timer.Elapsed += new System.Timers.ElapsedEventHandler(this.timer_Elapsed);
+			this.timer.Elapsed += new System.Timers.ElapsedEventHandler(timer_Elapsed);
 		}
 
 		#region Disposal
@@ -229,7 +229,7 @@ namespace MKY.Time
 			// Ensure not to forward events during closing anymore.
 			if (!this.isDisposed && (this.timer != null) && this.timer.Enabled)
 			{
-				// Ensure that only one timer elapsed event thread is active at the same time.
+				// Ensure that only one timer elapsed event thread is active at a time.
 				// Without this exclusivity, two receive threads could create a race condition.
 				if (Monitor.TryEnter(timer_Elapsed_SynchObj))
 				{

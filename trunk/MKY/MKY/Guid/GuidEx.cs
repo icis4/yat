@@ -23,7 +23,7 @@ using System.IO;
 using System.Diagnostics.CodeAnalysis;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
-// MKY.Guid for consistency with the Sytem.Guid class.
+// MKY.Guid for consistency with the Sytem namespace.
 namespace MKY
 {
 	/// <summary>
@@ -61,7 +61,7 @@ namespace MKY
 			bool tryCreate = true;
 			if (tryCreate && (fileName.Length < (prefix.Length + 32))) // GUID string contains at least 32 chars.
 				tryCreate = false;
-			if (tryCreate && (string.Compare(fileName.Substring(0, prefix.Length), prefix) != 0))
+			if (tryCreate && (StringEx.EqualsOrdinalIgnoreCase(fileName.Substring(0, prefix.Length), prefix)))
 				tryCreate = false;
 
 			if (tryCreate)
