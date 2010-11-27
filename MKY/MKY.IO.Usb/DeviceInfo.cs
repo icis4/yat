@@ -108,35 +108,44 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary></summary>
+		public DeviceInfo(string path)
+		{
+			int vendorId, productId;
+			string manufacturer, product, serialNumber;
+			Device.GetDeviceInfoFromPath(path, out vendorId, out productId, out manufacturer, out product, out serialNumber);
+			Initialize(path, vendorId, productId, manufacturer, product, serialNumber);
+		}
+
+		/// <summary></summary>
 		public DeviceInfo(int vendorId, int productId)
 		{
-			string systemPath, manufacturer, product, serialNumber;
-			Device.GetDeviceInfoFromVidAndPid(vendorId, productId, out systemPath, out manufacturer, out product, out serialNumber);
-			Initialize(systemPath, vendorId, productId, manufacturer, product, serialNumber);
+			string path, manufacturer, product, serialNumber;
+			Device.GetDeviceInfoFromVidAndPid(vendorId, productId, out path, out manufacturer, out product, out serialNumber);
+			Initialize(path, vendorId, productId, manufacturer, product, serialNumber);
 		}
 
 		/// <summary></summary>
 		public DeviceInfo(int vendorId, int productId, string serialNumber)
 		{
-			string systemPath, manufacturer, product;
-			Device.GetDeviceInfoFromVidAndPidAndSerial(vendorId, productId, serialNumber, out systemPath, out manufacturer, out product);
-			Initialize(systemPath, vendorId, productId, manufacturer, product, serialNumber);
+			string path, manufacturer, product;
+			Device.GetDeviceInfoFromVidAndPidAndSerial(vendorId, productId, serialNumber, out path, out manufacturer, out product);
+			Initialize(path, vendorId, productId, manufacturer, product, serialNumber);
 		}
 
 		/// <summary></summary>
-		public DeviceInfo(string systemPath, int vendorId, int productId, string manufacturer, string product, string serialNumber)
+		public DeviceInfo(string path, int vendorId, int productId, string manufacturer, string product, string serialNumber)
 		{
-			Initialize(systemPath, vendorId, productId, manufacturer, product, serialNumber);
+			Initialize(path, vendorId, productId, manufacturer, product, serialNumber);
 		}
 
-		private void Initialize(string systemPath, int vendorId, int productId, string manufacturer, string product, string serialNumber)
+		private void Initialize(string path, int vendorId, int productId, string manufacturer, string product, string serialNumber)
 		{
 			if ((vendorId  < FirstVendorId)  || (vendorId  > LastVendorId))
 				throw (new ArgumentOutOfRangeException("vendorId",  vendorId,  "Invalid vendor ID"));
 			if ((productId < FirstProductId) || (productId > LastProductId))
 				throw (new ArgumentOutOfRangeException("productId", productId, "Invalid product ID"));
 
-			this.path = systemPath;
+			this.path = path;
 
 			this.vendorId  = vendorId;
 			this.productId = productId;
@@ -286,7 +295,15 @@ namespace MKY.IO.Usb
 			if (GetType() != other.GetType())
 				return (false);
 
-			return (this.path == other.path);
+			if (PathEx.Equals(this.path, other.path))
+				return (true);
+
+			return
+				(
+				(VendorId     == other.VendorId) &&
+				(ProductId    == other.ProductId) &&
+				(SerialNumber == other.SerialNumber)
+				);
 		}
 
 		/// <summary></summary>
@@ -367,6 +384,19 @@ namespace MKY.IO.Usb
 				sb.Append("(PID:");
 				sb.Append(ProductIdString);      // "(PID:1234)"
 				sb.Append(")");
+			}
+
+			return (sb.ToString());
+		}
+
+		/// <summary></summary>
+		public virtual string ToLongString()
+		{
+			StringBuilder sb = new StringBuilder(ToString());
+			if (!string.IsNullOrEmpty(Path))
+			{
+				sb.Append(" at ");
+				sb.Append(Path);
 			}
 
 			return (sb.ToString());

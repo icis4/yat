@@ -132,7 +132,7 @@ namespace MKY.Text
 			if (!TryParse(mnemonic, out result))
 				return (result);
 			else
-				throw (new FormatException(@"Mnemonic """ + mnemonic + @""" is no ascii control mnemonic"));
+				throw (new FormatException("Mnemonic '" + mnemonic + "' is no ascii control mnemonic"));
 		}
 
 		/// <summary>

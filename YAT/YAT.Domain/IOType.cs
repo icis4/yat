@@ -21,8 +21,8 @@
 using System;
 using System.Collections.Generic;
 
+using MKY;
 using MKY.IO.Serial;
-using MKY.Types;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -56,7 +56,7 @@ namespace YAT.Domain
 	/// <summary>
 	/// Extended enum IOTypeEx.
 	/// </summary>
-	public class IOTypeEx : EnumEx
+	public class IOTypeEx : MKY.EnumEx
 	{
 		#region String Definitions
 
@@ -134,32 +134,32 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public static bool TryParse(string type, out IOTypeEx result)
 		{
-			if      (string.Compare(type, SerialPort_string, StringComparison.OrdinalIgnoreCase) == 0)
+			if      (StringEx.EqualsOrdinalIgnoreCase(type, SerialPort_string))
 			{
 				result = new IOTypeEx(IOType.SerialPort);
 				return (true);
 			}
-			else if (string.Compare(type, TcpClient_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(type, TcpClient_string))
 			{
 				result = new IOTypeEx(IOType.TcpClient);
 				return (true);
 			}
-			else if (string.Compare(type, TcpServer_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(type, TcpServer_string))
 			{
 				result = new IOTypeEx(IOType.TcpServer);
 				return (true);
 			}
-			else if (string.Compare(type, TcpAutoSocket_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(type, TcpAutoSocket_string))
 			{
 				result = new IOTypeEx(IOType.TcpAutoSocket);
 				return (true);
 			}
-			else if (string.Compare(type, Udp_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(type, Udp_string))
 			{
 				result = new IOTypeEx(IOType.Udp);
 				return (true);
 			}
-			else if (string.Compare(type, UsbSerialHid_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(type, UsbSerialHid_string))
 			{
 				result = new IOTypeEx(IOType.UsbSerialHid);
 				return (true);

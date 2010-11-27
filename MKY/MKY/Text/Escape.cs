@@ -70,7 +70,7 @@ namespace MKY.Text
 			if (!TryParse(escape, out result))
 				return (result);
 			else
-				throw (new FormatException(@"""" + escape + @""" is no valid escape sequence"));
+				throw (new FormatException("'" + escape + "' is no valid escape sequence"));
 		}
 
 		/// <summary>

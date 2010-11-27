@@ -64,6 +64,12 @@ Classes
 Use static classes instead of Singletons
 
 
+Static Classes
+--------------
+Use e.g. 'public static' instead of 'static public'
+Use e.g. 'public static new' instead of something else
+
+
 Inheritance
 -----------
 - Implement IEquatable

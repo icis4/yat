@@ -21,6 +21,8 @@
 using System;
 using System.Xml.Serialization;
 
+using MKY.IO;
+
 namespace YAT.Settings
 {
 	/// <summary></summary>
@@ -141,7 +143,7 @@ namespace YAT.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.filePath     == other.filePath) &&
+				PathEx.Equals(this.filePath, other.filePath) &&
 				(this.filePathUser == other.filePathUser)
 			);
 		}

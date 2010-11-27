@@ -362,13 +362,13 @@ namespace YAT.Model
 		private void AttachSettingsEventHandlers()
 		{
 			if (this.settingsRoot != null)
-				this.settingsRoot.Changed += new EventHandler<SettingsEventArgs>(this.settingsRoot_Changed);
+				this.settingsRoot.Changed += new EventHandler<SettingsEventArgs>(settingsRoot_Changed);
 		}
 
 		private void DetachSettingsEventHandlers()
 		{
 			if (this.settingsRoot != null)
-				this.settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(this.settingsRoot_Changed);
+				this.settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(settingsRoot_Changed);
 		}
 
 		#endregion
@@ -926,7 +926,7 @@ namespace YAT.Model
 				// Check whether terminal is already contained in workspace.
 				foreach (Terminal t in this.terminals)
 				{
-					if (absoluteFilePath == t.SettingsFilePath)
+					if (PathEx.Equals(absoluteFilePath, t.SettingsFilePath))
 					{
 						OnFixedStatusTextRequest("Terminal is already open.");
 						OnMessageInputRequest
@@ -1157,6 +1157,11 @@ namespace YAT.Model
 			foreach (Terminal t in this.terminals)
 			{
 				if (t.SettingsRoot.UserName == userName)
+					return (t);
+			}
+			foreach (Terminal t in this.terminals)
+			{
+				if (StringEx.EqualsOrdinalIgnoreCase(t.SettingsRoot.UserName, userName))
 					return (t);
 			}
 			return (null);

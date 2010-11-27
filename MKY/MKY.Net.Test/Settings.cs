@@ -202,16 +202,16 @@ namespace MKY.Net.Test
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
-		public static readonly string IPv4LoopbackIsAvailable = @"IPv4 loopback is available";
+		public static readonly string IPv4LoopbackIsAvailable = "IPv4 loopback is available";
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
-		public static readonly string IPv6LoopbackIsAvailable = @"IPv6 loopback is available";
+		public static readonly string IPv6LoopbackIsAvailable = "IPv6 loopback is available";
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
-		public static readonly string SpecificIPv4InterfaceIsAvailable = @"Specific IPv4 interface """ + SettingsProvider.Settings.SpecificIPv4Interface + @""" is available";
+		public static readonly string SpecificIPv4InterfaceIsAvailable = "Specific IPv4 interface '" + SettingsProvider.Settings.SpecificIPv4Interface + "' is available";
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Pv", Justification = "IP, IPv4, IPv6 are well-known terms.")]
-		public static readonly string SpecificIPv6InterfaceIsAvailable = @"Specific IPv6 interface """ + SettingsProvider.Settings.SpecificIPv6Interface + @""" is available";
+		public static readonly string SpecificIPv6InterfaceIsAvailable = "Specific IPv6 interface '" + SettingsProvider.Settings.SpecificIPv6Interface + "' is available";
 	}
 
 	/// <summary></summary>

@@ -22,8 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 
-using MKY.Types;
-
 namespace MKY.IO.Ports
 {
 	/// <summary>
@@ -120,26 +118,26 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static bool TryParse(string handshake, out HandshakeEx result)
 		{
-			if      ((string.Compare(handshake, None_string, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(handshake, None_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
+			if      (StringEx.EqualsOrdinalIgnoreCase(handshake, None_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(handshake, None_stringShort))
 			{
 				result = new HandshakeEx(Handshake.None);
 				return (true);
 			}
-			else if ((string.Compare(handshake, RtsCts_string, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(handshake, RtsCts_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
+			else if (StringEx.EqualsOrdinalIgnoreCase(handshake, RtsCts_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(handshake, RtsCts_stringShort))
 			{
 				result = new HandshakeEx(Handshake.RequestToSend);
 				return (true);
 			}
-			else if ((string.Compare(handshake, XOnXOff_string, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(handshake, XOnXOff_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
+			else if (StringEx.EqualsOrdinalIgnoreCase(handshake, XOnXOff_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(handshake, XOnXOff_stringShort))
 			{
 				result = new HandshakeEx(Handshake.XOnXOff);
 				return (true);
 			}
-			else if ((string.Compare(handshake, RtsCtsXOnXOff_string, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(handshake, RtsCtsXOnXOff_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
+			else if (StringEx.EqualsOrdinalIgnoreCase(handshake, RtsCtsXOnXOff_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(handshake, RtsCtsXOnXOff_stringShort))
 			{
 				result = new HandshakeEx(Handshake.RequestToSendXOnXOff);
 				return (true);

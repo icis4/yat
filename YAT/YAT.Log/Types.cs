@@ -21,6 +21,8 @@
 using System;
 using System.Collections.Generic;
 
+using MKY;
+
 namespace YAT.Log
 {
 	/// <summary></summary>
@@ -109,8 +111,8 @@ namespace YAT.Log
 
 			return
 			(
-				(this.Separator   == other.Separator) &&
-				(this.Description == other.Description)
+				StringEx.EqualsOrdinalIgnoreCase(this.Separator,   other.Separator) &&
+				StringEx.EqualsOrdinalIgnoreCase(this.Description, other.Description)
 			);
 		}
 

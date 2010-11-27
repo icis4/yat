@@ -31,6 +31,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 using MKY.Diagnostics;
+using MKY.IO;
 
 #endregion
 
@@ -522,7 +523,7 @@ namespace MKY.Win32
 			string devicePathFromMessage;
 
 			if (DeviceChangeMessageToDevicePath(deviceChangeMessage, out devicePathFromMessage))
-				return (string.Compare(devicePathFromMessage, devicePath, true) == 0);
+				return (PathEx.Equals(devicePathFromMessage, devicePath));
 
 			return (false);
 		}

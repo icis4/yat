@@ -24,6 +24,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Xml.Serialization;
 
+using MKY;
 using MKY.Recent;
 
 using YAT.Model.Types;
@@ -167,7 +168,7 @@ namespace YAT.Model.Settings
 		/// <summary></summary>
 		public static bool IsEasterEggCommand(string command)
 		{
-			return (string.Compare(command, EasterEggCommand, StringComparison.OrdinalIgnoreCase) == 0);
+			return (StringEx.EqualsOrdinalIgnoreCase(command, EasterEggCommand));
 		}
 
 		/// <summary></summary>

@@ -22,6 +22,7 @@ using System;
 using System.Xml.Serialization;
 
 using MKY;
+using MKY.IO;
 
 namespace YAT.Model.Settings
 {
@@ -152,7 +153,7 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.filePath == other.filePath) &&
+				PathEx.Equals(this.filePath, other.filePath) &&
 				(this.guid     == other.guid)
 			);
 		}

@@ -571,7 +571,7 @@ namespace MKY.IO.Serial
 			lock (this.stateSyncObj)
 				this.state = state;
 #if (DEBUG)
-			Debug.WriteLine(GetType() + " (" + ToShortPortString() + ")(" + this.state + "): State has changed from " + oldState + " to " + this.state + ".");
+			Debug.WriteLine(GetType() + " '" + ToShortPortString() + "': State has changed from " + oldState + " to " + this.state + ".");
 #endif
 			OnIOChanged(new EventArgs());
 			OnIOControlChanged(new EventArgs());
@@ -592,9 +592,9 @@ namespace MKY.IO.Serial
 			lock (this.portSyncObj)
 			{
 				this.port = new Ports.SerialPortEx();
-				this.port.DataReceived  += new Ports.SerialDataReceivedEventHandler (this.port_DataReceived);
-				this.port.PinChanged    += new Ports.SerialPinChangedEventHandler   (this.port_PinChanged);
-				this.port.ErrorReceived += new Ports.SerialErrorReceivedEventHandler(this.port_ErrorReceived);
+				this.port.DataReceived  += new Ports.SerialDataReceivedEventHandler (port_DataReceived);
+				this.port.PinChanged    += new Ports.SerialPinChangedEventHandler   (port_PinChanged);
+				this.port.ErrorReceived += new Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
 			}
 		}
 
@@ -761,7 +761,7 @@ namespace MKY.IO.Serial
 						this.receiveQueue.Enqueue(b);
 				}
 
-				// Ensure that only one data received event thread is active at the same time.
+				// Ensure that only one data received event thread is active at a time.
 				// Without this exclusivity, two receive threads could create a race condition.
 				if (Monitor.TryEnter(this.port_DataReceivedSyncObj))
 				{
@@ -780,7 +780,7 @@ namespace MKY.IO.Serial
 
 		private void port_DataReceivedAsync(object sender, MKY.IO.Ports.SerialDataReceivedEventArgs e)
 		{
-			// Ensure that only one data received event thread is active at the same time.
+			// Ensure that only one data received event thread is active at a time.
 			// Without this exclusivity, two receive threads could create a race condition.
 			Monitor.Enter(this.port_DataReceivedSyncObj);
 			try

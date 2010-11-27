@@ -32,6 +32,7 @@ namespace YAT.Gui.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TerminalSettings));
 			this.button_OK = new System.Windows.Forms.Button();
 			this.button_Cancel = new System.Windows.Forms.Button();
 			this.groupBox_Settings = new System.Windows.Forms.GroupBox();
@@ -141,11 +142,13 @@ namespace YAT.Gui.Forms
 			// 
 			// usbSerialHidDeviceSettings
 			// 
-			this.usbSerialHidDeviceSettings.Location = new System.Drawing.Point(6, 71);
+			this.usbSerialHidDeviceSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.usbSerialHidDeviceSettings.Location = new System.Drawing.Point(9, 71);
 			this.usbSerialHidDeviceSettings.Name = "usbSerialHidDeviceSettings";
-			this.usbSerialHidDeviceSettings.Size = new System.Drawing.Size(260, 42);
+			this.usbSerialHidDeviceSettings.Size = new System.Drawing.Size(257, 22);
 			this.usbSerialHidDeviceSettings.TabIndex = 3;
-			this.usbSerialHidDeviceSettings.AutoReopenChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_AutoReopenChanged);
+			this.usbSerialHidDeviceSettings.AutoOpenChanged += new System.EventHandler(this.usbSerialHidDeviceSettings_AutoOpenChanged);
 			// 
 			// usbSerialHidDeviceSelection
 			// 
@@ -160,10 +163,11 @@ namespace YAT.Gui.Forms
 			// 
 			// socketSettings
 			// 
-			this.socketSettings.Location = new System.Drawing.Point(6, 146);
+			this.socketSettings.Location = new System.Drawing.Point(9, 146);
 			this.socketSettings.Name = "socketSettings";
-			this.socketSettings.Size = new System.Drawing.Size(260, 42);
+			this.socketSettings.Size = new System.Drawing.Size(257, 42);
 			this.socketSettings.TabIndex = 3;
+			this.socketSettings.TcpClientAutoReconnect = ((MKY.IO.Serial.AutoRetry)(resources.GetObject("socketSettings.TcpClientAutoReconnect")));
 			this.socketSettings.TcpClientAutoReconnectChanged += new System.EventHandler(this.socketSettings_TcpClientAutoReconnectChanged);
 			// 
 			// serialPortSelection
@@ -181,9 +185,10 @@ namespace YAT.Gui.Forms
 			// 
 			this.serialPortSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.serialPortSettings.Location = new System.Drawing.Point(6, 64);
+			this.serialPortSettings.AutoReopen = ((MKY.IO.Serial.AutoRetry)(resources.GetObject("serialPortSettings.AutoReopen")));
+			this.serialPortSettings.Location = new System.Drawing.Point(9, 64);
 			this.serialPortSettings.Name = "serialPortSettings";
-			this.serialPortSettings.Size = new System.Drawing.Size(260, 232);
+			this.serialPortSettings.Size = new System.Drawing.Size(257, 232);
 			this.serialPortSettings.TabIndex = 1;
 			this.serialPortSettings.ParityChanged += new System.EventHandler(this.serialPortSettings_ParityChanged);
 			this.serialPortSettings.BaudRateChanged += new System.EventHandler(this.serialPortSettings_BaudRateChanged);
@@ -209,7 +214,7 @@ namespace YAT.Gui.Forms
 			// menuItem_Port
 			// 
 			this.menuItem_Port.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-			this.menuItem_Port_Search});
+            this.menuItem_Port_Search});
 			// 
 			// menuItem_Port_Search
 			// 

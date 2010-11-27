@@ -22,6 +22,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using MKY.IO;
+
 namespace YAT.Settings
 {
 	/// <summary>
@@ -45,7 +47,7 @@ namespace YAT.Settings
 		/// <summary></summary>
 		public static bool IsTerminalFile(string extension)
 		{
-			if (extension == TerminalFile)
+			if (PathEx.Equals(extension, TerminalFile))
 				return (true);
 			else
 				return (false);
@@ -70,7 +72,7 @@ namespace YAT.Settings
 		/// <summary></summary>
 		public static bool IsWorkspaceFile(string extension)
 		{
-			if (extension == WorkspaceFile)
+			if (PathEx.Equals(extension, WorkspaceFile))
 				return (true);
 			else
 				return (false);
@@ -210,7 +212,7 @@ namespace YAT.Settings
 		/// <summary></summary>
 		public static bool IsExecutableFile(string extension)
 		{
-			if (extension == ExecutableFiles)
+			if (PathEx.Equals(extension, ExecutableFiles))
 				return (true);
 			else
 				return (false);

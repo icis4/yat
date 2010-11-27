@@ -32,6 +32,15 @@ namespace YAT.Gui.Controls
 	[DefaultEvent("AutoReopenChanged")]
 	public partial class UsbSerialHidDeviceSettings : UserControl
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private const bool AutoOpenDefault = MKY.IO.Serial.UsbSerialHidDeviceSettings.AutoOpenDefault;
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -39,7 +48,7 @@ namespace YAT.Gui.Controls
 
 		private bool isSettingControls = false;
 
-		private AutoRetry autoReopen = MKY.IO.Serial.UsbSerialHidDeviceSettings.AutoReopenDefault;
+		private bool autoOpen = AutoOpenDefault;
 
 		#endregion
 
@@ -50,8 +59,8 @@ namespace YAT.Gui.Controls
 
 		/// <summary></summary>
 		[Category("Property Changed")]
-		[Description("Event raised when the AutoReopen property is changed.")]
-		public event EventHandler AutoReopenChanged;
+		[Description("Event raised when the AutoOpen property is changed.")]
+		public event EventHandler AutoOpenChanged;
 
 		#endregion
 
@@ -76,17 +85,18 @@ namespace YAT.Gui.Controls
 
 		/// <summary></summary>
 		[Category("Socket")]
-		[Description("Sets auto reopen.")]
-		public AutoRetry AutoReopen
+		[Description("Sets auto open.")]
+		[DefaultValue(AutoOpenDefault)]
+		public bool AutoOpen
 		{
-			get { return (this.autoReopen); }
+			get { return (this.autoOpen); }
 			set
 			{
-				if (value != this.autoReopen)
+				if (value != this.autoOpen)
 				{
-					this.autoReopen = value;
+					this.autoOpen = value;
 					SetControls();
-					OnAutoReopenChanged(new EventArgs());
+					OnAutoOpenChanged(new EventArgs());
 				}
 			}
 		}
@@ -131,40 +141,10 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		private void checkBox_AutoReopen_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_AutoOpen_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-			{
-				MKY.IO.Serial.AutoRetry ar = this.autoReopen;
-				ar.Enabled = checkBox_AutoReopen.Checked;
-				AutoReopen = ar;
-			}
-		}
-
-		private void textBox_AutoReopenInterval_Validating(object sender, CancelEventArgs e)
-		{
-			if (!this.isSettingControls)
-			{
-				int interval;
-				if (int.TryParse(textBox_AutoReopenInterval.Text, out interval) && (interval >= 100))
-				{
-					MKY.IO.Serial.AutoRetry ar = this.autoReopen;
-					ar.Interval = interval;
-					AutoReopen = ar;
-				}
-				else
-				{
-					MessageBox.Show
-						(
-						this,
-						"Reopen interval must be at least 100 ms!",
-						"Invalid Input",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-						);
-					e.Cancel = true;
-				}
-			}
+				AutoOpen = checkBox_AutoOpen.Checked;
 		}
 
 		#endregion
@@ -179,18 +159,9 @@ namespace YAT.Gui.Controls
 			this.isSettingControls = true;
 
 			if (Enabled)
-			{
-				bool autoReopenEnabled = this.autoReopen.Enabled;
-				checkBox_AutoReopen.Checked = autoReopenEnabled;
-				textBox_AutoReopenInterval.Enabled = autoReopenEnabled;
-				textBox_AutoReopenInterval.Text = this.autoReopen.Interval.ToString();
-			}
+				checkBox_AutoOpen.Checked = this.autoOpen;
 			else
-			{
-				checkBox_AutoReopen.Checked = false;
-				textBox_AutoReopenInterval.Enabled = false;
-				textBox_AutoReopenInterval.Text = "";
-			}
+				checkBox_AutoOpen.Checked = false;
 
 			this.isSettingControls = false;
 		}
@@ -203,9 +174,9 @@ namespace YAT.Gui.Controls
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnAutoReopenChanged(EventArgs e)
+		protected virtual void OnAutoOpenChanged(EventArgs e)
 		{
-			EventHelper.FireSync(AutoReopenChanged, this, e);
+			EventHelper.FireSync(AutoOpenChanged, this, e);
 		}
 
 		#endregion

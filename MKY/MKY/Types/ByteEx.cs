@@ -22,7 +22,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MKY.Types
+// This code is intentionally placed into the MKY namespace even though the file is located in
+// MKY.Types for consistency with the Sytem namespace.
+namespace MKY
 {
 	/// <summary>
 	/// Byte/byte utility methods.

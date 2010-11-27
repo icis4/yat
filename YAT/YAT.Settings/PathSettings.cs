@@ -23,6 +23,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
+using MKY.IO;
+
 namespace YAT.Settings
 {
 	/// <summary></summary>
@@ -177,11 +179,11 @@ namespace YAT.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.terminalFilesPath  == other.terminalFilesPath) &&
-				(this.workspaceFilesPath == other.workspaceFilesPath) &&
-				(this.sendFilesPath      == other.sendFilesPath) &&
-				(this.logFilesPath       == other.logFilesPath) &&
-				(this.monitorFilesPath   == other.monitorFilesPath)
+				PathEx.Equals(this.terminalFilesPath,  other.terminalFilesPath) &&
+				PathEx.Equals(this.workspaceFilesPath, other.workspaceFilesPath) &&
+				PathEx.Equals(this.sendFilesPath,      other.sendFilesPath) &&
+				PathEx.Equals(this.logFilesPath,       other.logFilesPath) &&
+				PathEx.Equals(this.monitorFilesPath,   other.monitorFilesPath)
 			);
 		}
 

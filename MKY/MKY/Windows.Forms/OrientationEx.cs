@@ -22,8 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-using MKY.Types;
-
 namespace MKY.Windows.Forms
 {
 	/// <summary>
@@ -94,12 +92,12 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		public static bool TryParse(string orientation, out OrientationEx result)
 		{
-			if      (string.Compare(orientation, Horizontal_string, StringComparison.OrdinalIgnoreCase) == 0)
+			if      (StringEx.EqualsOrdinalIgnoreCase(orientation, Horizontal_string))
 			{
 				result = new OrientationEx(Orientation.Horizontal);
 				return (true);
 			}
-			else if (string.Compare(orientation, Vertical_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(orientation, Vertical_string))
 			{
 				result = new OrientationEx(Orientation.Vertical);
 				return (true);

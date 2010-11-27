@@ -23,6 +23,7 @@ using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
 
+using MKY;
 using MKY.Event;
 using MKY.IO.Ports;
 using MKY.Windows.Forms;
@@ -264,7 +265,7 @@ namespace YAT.Gui.Controls
 				//   because SelectedItem is also set if text has changed in the meantime.
 
 				SerialPortId id = comboBox_Port.SelectedItem as SerialPortId;
-				if ((id != null) && (id.ToString() == comboBox_Port.Text))
+				if ((id != null) && id.Equals(comboBox_Port.Text))
 				{
 					PortId = id;
 				}

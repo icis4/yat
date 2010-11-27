@@ -27,13 +27,13 @@ using System.Windows.Forms;
 
 using MKY;
 using MKY.Event;
+using MKY.IO;
 using MKY.Settings;
 
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
-
 using YAT.Utilities;
 
 namespace YAT.Model
@@ -460,8 +460,8 @@ namespace YAT.Model
 		{
 			if (this.workspace != null)
 			{
-				this.workspace.Saved  += new EventHandler<SavedEventArgs> (this.workspace_Saved);
-				this.workspace.Closed += new EventHandler<ClosedEventArgs>(this.workspace_Closed);
+				this.workspace.Saved  += new EventHandler<SavedEventArgs> (workspace_Saved);
+				this.workspace.Closed += new EventHandler<ClosedEventArgs>(workspace_Closed);
 			}
 		}
 
@@ -469,8 +469,8 @@ namespace YAT.Model
 		{
 			if (this.workspace != null)
 			{
-				this.workspace.Saved  -= new EventHandler<SavedEventArgs> (this.workspace_Saved);
-				this.workspace.Closed -= new EventHandler<ClosedEventArgs>(this.workspace_Closed);
+				this.workspace.Saved  -= new EventHandler<SavedEventArgs> (workspace_Saved);
+				this.workspace.Closed -= new EventHandler<ClosedEventArgs>(workspace_Closed);
 			}
 		}
 
@@ -595,7 +595,7 @@ namespace YAT.Model
 
 			if (this.workspace != null)
 			{
-				if (filePath == this.workspace.SettingsFilePath)
+				if (PathEx.Equals(filePath, this.workspace.SettingsFilePath))
 				{
 					OnFixedStatusTextRequest("Workspace is already open.");
 					OnMessageInputRequest

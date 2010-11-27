@@ -25,8 +25,8 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 
+using MKY;
 using MKY.Text;
-using MKY.Types;
 
 namespace YAT.Domain.Parser
 {
@@ -959,7 +959,7 @@ namespace YAT.Domain.Parser
 			// Bin/Oct/Dec/Hex.
 			bool negative = false;
 			string tokenValue = token;
-			if (token.Substring(0, 1) == "-")
+			if (StringEx.EqualsOrdinalIgnoreCase(token.Substring(0, 1), "-"))
 			{
 				negative = true;
 				tokenValue = token.Substring(1);

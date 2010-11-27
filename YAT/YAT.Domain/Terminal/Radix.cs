@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using MKY.Types;
+using MKY;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -59,7 +59,7 @@ namespace YAT.Domain
 	#endregion
 
 	/// <summary></summary>
-	public class RadixEx : EnumEx
+	public class RadixEx : MKY.EnumEx
 	{
 		#region String Definitions
 
@@ -178,44 +178,44 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public static bool TryParse(string radix, out RadixEx result)
 		{
-			if      ((string.Compare(radix, Bin_stringShort, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(radix, Bin_stringMiddle, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(radix, Bin_string, StringComparison.OrdinalIgnoreCase) == 0))
+			if      (StringEx.EqualsOrdinalIgnoreCase(radix, Bin_stringShort) ||
+			         StringEx.EqualsOrdinalIgnoreCase(radix, Bin_stringMiddle) ||
+			         StringEx.EqualsOrdinalIgnoreCase(radix, Bin_string))
 			{
 				result = new RadixEx(Radix.Bin);
 				return (false);
 			}
-			else if ((string.Compare(radix, Oct_stringShort, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(radix, Oct_stringMiddle, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(radix, Oct_string, StringComparison.OrdinalIgnoreCase) == 0))
+			else if (StringEx.EqualsOrdinalIgnoreCase(radix, Oct_stringShort) ||
+			         StringEx.EqualsOrdinalIgnoreCase(radix, Oct_stringMiddle) ||
+			         StringEx.EqualsOrdinalIgnoreCase(radix, Oct_string))
 			{
 				result = new RadixEx(Radix.Oct);
 				return (false);
 			}
-			else if ((string.Compare(radix, Dec_stringShort, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(radix, Dec_stringMiddle, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(radix, Dec_string, StringComparison.OrdinalIgnoreCase) == 0))
+			else if (StringEx.EqualsOrdinalIgnoreCase(radix, Dec_stringShort) ||
+			         StringEx.EqualsOrdinalIgnoreCase(radix, Dec_stringMiddle) ||
+			         StringEx.EqualsOrdinalIgnoreCase(radix, Dec_string))
 			{
 				result = new RadixEx(Radix.Dec);
 				return (false);
 			}
-			else if ((string.Compare(radix, Hex_stringShort, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(radix, Hex_stringMiddle, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(radix, Hex_string, StringComparison.OrdinalIgnoreCase) == 0))
+			else if (StringEx.EqualsOrdinalIgnoreCase(radix, Hex_stringShort) ||
+			         StringEx.EqualsOrdinalIgnoreCase(radix, Hex_stringMiddle) ||
+			         StringEx.EqualsOrdinalIgnoreCase(radix, Hex_string))
 			{
 				result = new RadixEx(Radix.Hex);
 				return (false);
 			}
-			else if ((string.Compare(radix, Char_stringShort, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(radix, Char_stringMiddle, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(radix, Char_string, StringComparison.OrdinalIgnoreCase) == 0))
+			else if (StringEx.EqualsOrdinalIgnoreCase(radix, Char_stringShort) ||
+			         StringEx.EqualsOrdinalIgnoreCase(radix, Char_stringMiddle) ||
+			         StringEx.EqualsOrdinalIgnoreCase(radix, Char_string))
 			{
 				result = new RadixEx(Radix.Char);
 				return (false);
 			}
-			else if ((string.Compare(radix, String_stringShort, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(radix, String_stringMiddle, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(radix, String_string, StringComparison.OrdinalIgnoreCase) == 0))
+			else if (StringEx.EqualsOrdinalIgnoreCase(radix, String_stringShort) ||
+			         StringEx.EqualsOrdinalIgnoreCase(radix, String_stringMiddle) ||
+			         StringEx.EqualsOrdinalIgnoreCase(radix, String_string))
 			{
 				result = new RadixEx(Radix.String);
 				return (false);

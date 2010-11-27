@@ -43,23 +43,6 @@ namespace MKY.IO.Serial
 	/// <summary></summary>
 	public class UsbSerialHidDevice : IIOProvider, IDisposable
 	{
-		#region Types
-		//==========================================================================================
-		// Types
-		//==========================================================================================
-
-		private enum State
-		{
-			Reset,
-			Connected,
-			Disconnected,
-			Opened,
-			WaitingForReopen,
-			Error,
-		}
-
-		#endregion
-
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -67,14 +50,9 @@ namespace MKY.IO.Serial
 
 		private bool isDisposed;
 
-		private State state = State.Reset;
-		private object stateSyncObj = new object();
-
 		private UsbSerialHidDeviceSettings settings;
 		private Usb.SerialHidDevice device;
 		private object deviceSyncObj = new object();
-
-		private System.Timers.Timer reopenTimer;
 
 		#endregion
 
@@ -133,8 +111,7 @@ namespace MKY.IO.Serial
 			{
 				if (disposing)
 				{
-					StopAndDisposeReopenTimer();
-					CloseAndDisposeDevice();
+					StopAndDisposeDevice();
 				}
 				this.isDisposed = true;
 			}
@@ -187,8 +164,10 @@ namespace MKY.IO.Serial
 
 				if (this.device != null)
 					return (this.device.Info);
-				else
+				else if (this.settings != null)
 					return (this.settings.DeviceInfo);
+				else
+					return (null);
 			}
 		}
 
@@ -197,20 +176,7 @@ namespace MKY.IO.Serial
 		{
 			get
 			{
-				AssertNotDisposed();
-
-				switch (this.state)
-				{
-					case State.Reset:
-					case State.Error:
-					{
-						return (true);
-					}
-					default:
-					{
-						return (false);
-					}
-				}
+				return (!IsStarted);
 			}
 		}
 
@@ -220,21 +186,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-
-				switch (this.state)
-				{
-					case State.Connected:
-					case State.Disconnected:
-					case State.Opened:
-					case State.WaitingForReopen:
-					{
-						return (true);
-					}
-					default:
-					{
-						return (false);
-					}
-				}
+				return (this.device != null);
 			}
 		}
 
@@ -286,18 +238,6 @@ namespace MKY.IO.Serial
 			}
 		}
 
-		private bool AutoReopenEnabledAndAllowed
-		{
-			get
-			{
-				return
-					(
-						!IsDisposed && IsStarted && !IsOpen &&
-						this.settings.AutoReopen.Enabled
-					);
-			}
-		}
-
 		/// <summary></summary>
 		public virtual object UnderlyingIOInstance
 		{
@@ -321,7 +261,7 @@ namespace MKY.IO.Serial
 			// AssertNotDisposed() is called by IsStarted
 
 			if (!IsStarted)
-				return (TryCreateAndOpenDevice());
+				return (TryCreateAndStartDevice());
 
 			return (true);
 		}
@@ -333,115 +273,25 @@ namespace MKY.IO.Serial
 			// AssertNotDisposed() is called by IsStarted.
 
 			if (IsStarted)
-				ResetDevice();
+				StopAndDisposeDevice();
 		}
 
 		/// <summary></summary>
 		public virtual int Receive(out byte[] data)
 		{
-			// AssertNotDisposed() is called by IsOpen.
-			// OnDataReceived has been fired before.
+			// OnDataReceived has been fired by device before.
 
-			int bytesReceived = 0;
-			if (IsOpen)
-			{
-				lock (this.deviceSyncObj)
-					bytesReceived = this.device.Receive(out data);
-			}
-			else
-			{
-				data = new byte[] { };
-			}
-			return (bytesReceived);
+			AssertNotDisposed();
+			return (this.device.Receive(out data));
 		}
 
 		/// <summary></summary>
 		public virtual void Send(byte[] data)
 		{
-			// AssertNotDisposed() is called by IsOpen.
+			AssertNotDisposed();
+			this.device.Send(data);
 
-			if (IsOpen)
-			{
-				lock (this.deviceSyncObj)
-					this.device.Send(data);
-			}
-
-			// OnDataSent will be fired by Usb.HidDevice.
-		}
-
-		#endregion
-
-		#region State Methods
-		//==========================================================================================
-		// State Methods
-		//==========================================================================================
-
-		private void SetStateAndNotify(State state)
-		{
-#if (DEBUG)
-			State oldState = this.state;
-#endif
-			lock (this.stateSyncObj)
-				this.state = state;
-#if (DEBUG)
-			Debug.WriteLine(GetType() + " (" + ToShortString() + ")(" + this.state + "): State has changed from " + oldState + " to " + this.state + ".");
-#endif
-			OnIOChanged(new EventArgs());
-		}
-
-		#endregion
-
-		#region Simple Device Methods
-		//==========================================================================================
-		// Simple Device Methods
-		//==========================================================================================
-
-		private void CreateDevice()
-		{
-			if (this.device != null)
-				CloseAndDisposeDevice();
-
-			lock (this.deviceSyncObj)
-			{
-				// Ensure to create device info from VID/PID/SNR since system path is not saved.
-				Usb.DeviceInfo di = this.settings.DeviceInfo;
-				this.device = new Usb.SerialHidDevice(di.VendorId, di.ProductId, di.SerialNumber);
-
-				this.device.Connected    += new EventHandler(this.device_Connected);
-				this.device.Disconnected += new EventHandler(this.device_Disconnected);
-				this.device.DataReceived += new EventHandler(this.device_DataReceived);
-				this.device.DataSent     += new EventHandler(this.device_DataSent);
-				this.device.Error        += new EventHandler<Usb.ErrorEventArgs>(this.device_Error);
-			}
-		}
-
-		private void OpenDevice()
-		{
-			if (!this.device.IsOpen)
-			{
-				lock (this.deviceSyncObj)
-					this.device.Open();
-			}
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		private void CloseAndDisposeDevice()
-		{
-			if (this.device != null)
-			{
-				try
-				{
-					lock (this.deviceSyncObj)
-					{
-						if (this.device.IsOpen)
-							this.device.Close();
-
-						this.device.Dispose();
-						this.device = null;
-					}
-				}
-				catch { }
-			}
+			// OnDataSent will be fired by device.
 		}
 
 		#endregion
@@ -453,60 +303,92 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		private bool TryCreateAndOpenDevice()
+		private bool TryCreateAndStartDevice()
 		{
 			try
 			{
 				CreateDevice();
-				if (IsConnected)
-				{
-					SetStateAndNotify(State.Connected);
-
-					OpenDevice();
-					if (IsOpen)
-					{
-						SetStateAndNotify(State.Opened);
-					}
-				}
-				return (true);
+				return (StartDevice());
 			}
 			catch
 			{
-				CloseAndDisposeDevice();
+				StopAndDisposeDevice();
 				return (false);
 			}
 		}
 
-		/// <summary></summary>
-		private void ResetDevice()
+		private void CreateDevice()
 		{
-			StopAndDisposeReopenTimer();
-			CloseAndDisposeDevice();
-			SetStateAndNotify(State.Reset);
+			if (this.device != null)
+				StopAndDisposeDevice();
+
+			lock (this.deviceSyncObj)
+			{
+				// Ensure to create device info from VID/PID/SNR since system path is not saved.
+				Usb.DeviceInfo di = this.settings.DeviceInfo;
+				this.device = new Usb.SerialHidDevice(di.VendorId, di.ProductId, di.SerialNumber);
+				this.device.AutoOpen = this.settings.AutoOpen;
+
+				this.device.Connected    += new EventHandler(device_Connected);
+				this.device.Disconnected += new EventHandler(device_Disconnected);
+				this.device.Opened       += new EventHandler(device_Opened);
+				this.device.Closed       += new EventHandler(device_Closed);
+				this.device.DataReceived += new EventHandler(device_DataReceived);
+				this.device.DataSent     += new EventHandler(device_DataSent);
+				this.device.Error        += new EventHandler<Usb.ErrorEventArgs>(device_Error);
+			}
 		}
 
-		/// <summary></summary>
-		private void ResetDeviceAndStartReopenTimer()
+		private bool StartDevice()
 		{
-			ResetDevice();
-			StartReopenTimer();
+			if (this.device != null)
+				return (this.device.Start());
+			else
+				return (false);
+		}
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
+		private void StopAndDisposeDevice()
+		{
+			if (this.device != null)
+			{
+				try
+				{
+					lock (this.deviceSyncObj)
+					{
+						this.device.Dispose();
+						this.device = null;
+					}
+				}
+				catch { }
+			}
 		}
 
 		#endregion
 
-		#region Port Events
+		#region Device Events
 		//==========================================================================================
-		// Port Events
+		// Device Events
 		//==========================================================================================
 
 		private void device_Connected(object sender, EventArgs e)
 		{
-			SetStateAndNotify(State.Connected);
+			OnIOChanged(e);
 		}
 
 		private void device_Disconnected(object sender, EventArgs e)
 		{
-			SetStateAndNotify(State.Disconnected);
+			OnIOChanged(e);
+		}
+
+		private void device_Opened(object sender, EventArgs e)
+		{
+			OnIOChanged(e);
+		}
+
+		private void device_Closed(object sender, EventArgs e)
+		{
+			OnIOChanged(e);
 		}
 
 		private void device_DataReceived(object sender, EventArgs e)
@@ -526,54 +408,6 @@ namespace MKY.IO.Serial
 
 		#endregion
 
-		#region Reopen Timer
-		//==========================================================================================
-		// Reopen Timer
-		//==========================================================================================
-
-		private void StartReopenTimer()
-		{
-			if (this.reopenTimer == null)
-			{
-				this.reopenTimer = new System.Timers.Timer(this.settings.AutoReopen.Interval);
-				this.reopenTimer.AutoReset = false;
-				this.reopenTimer.Elapsed += new System.Timers.ElapsedEventHandler(this.reopenTimer_Elapsed);
-			}
-			this.reopenTimer.Start();
-		}
-
-		private void StopAndDisposeReopenTimer()
-		{
-			if (this.reopenTimer != null)
-			{
-				this.reopenTimer.Stop();
-				this.reopenTimer.Dispose();
-				this.reopenTimer = null;
-			}
-		}
-
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		private void reopenTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-		{
-			if (AutoReopenEnabledAndAllowed)
-			{
-				try
-				{
-					TryCreateAndOpenDevice();
-				}
-				catch
-				{
-					StartReopenTimer();
-				}
-			}
-			else
-			{
-				StopAndDisposeReopenTimer();
-			}
-		}
-
-		#endregion
-
 		#region Event Invoking
 		//==========================================================================================
 		// Event Invoking
@@ -589,7 +423,7 @@ namespace MKY.IO.Serial
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			UnusedEvent.PreventCompilerWarning(IOControlChanged);
-			throw (new NotSupportedException("Event not in use"));
+			throw (new NotSupportedException("Event 'IOControlChanged' is not in use for USB Ser/HID devices"));
 		}
 
 		/// <summary></summary>
@@ -608,7 +442,7 @@ namespace MKY.IO.Serial
 		protected virtual void OnIORequest(IORequestEventArgs e)
 		{
 			UnusedEvent.PreventCompilerWarning<IORequestEventArgs>(IORequest);
-			throw (new NotSupportedException("Event not in use"));
+			throw (new NotSupportedException("Event 'IORequest' is not in use for USB Ser/HID devices"));
 		}
 
 		/// <summary></summary>
@@ -627,19 +461,19 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public override string ToString()
 		{
-			if (this.device != null)
-				return (this.device.ToString());
+			if (DeviceInfo != null)
+				return (DeviceInfo.ToString());
 			else
-				return ("<Undefined>");
+				return (base.ToString());
 		}
 
 		/// <summary></summary>
 		public virtual string ToShortString()
 		{
-			if (this.device != null)
-				return (this.device.ToShortString());
+			if (DeviceInfo != null)
+				return (DeviceInfo.ToShortString());
 			else
-				return ("<Undefined>");
+				return (base.ToString());
 		}
 
 		#endregion

@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using MKY.Types;
+using MKY;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -46,7 +46,7 @@ namespace YAT.Domain
 	/// <summary>
 	/// Extended enum EndianessEx.
 	/// </summary>
-	public class EndianessEx : EnumEx
+	public class EndianessEx : MKY.EnumEx
 	{
 		#region String Definitions
 
@@ -112,12 +112,12 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public static bool TryParse(string endianess, out EndianessEx result)
 		{
-			if      (string.Compare(endianess, BigEndian_string, StringComparison.OrdinalIgnoreCase) == 0)
+			if      (StringEx.EqualsOrdinalIgnoreCase(endianess, BigEndian_string))
 			{
 				result = new EndianessEx(Endianess.BigEndian);
 				return (true);
 			}
-			else if (string.Compare(endianess, LittleEndian_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(endianess, LittleEndian_string))
 			{
 				result = new EndianessEx(Endianess.LittleEndian);
 				return (true);

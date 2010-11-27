@@ -313,8 +313,8 @@ namespace YAT.Gui.Forms
 						DialogResult result = MessageBox.Show
 							(
 								this,
-								@"Font """ + fd.Font.Name + @""" does not support regular style. Choose a different font.",
-								@"Font Not Supported",
+								"Font '" + fd.Font.Name + "' does not support regular style. Choose a different font.",
+								"Font Not Supported",
 								MessageBoxButtons.OKCancel,
 								MessageBoxIcon.Exclamation
 							);

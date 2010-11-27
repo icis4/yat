@@ -25,13 +25,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Runtime.ConstrainedExecution;
 using System.Windows.Forms;
 
 using Microsoft.Win32.SafeHandles;
 
-using MKY.Diagnostics;
 using MKY.Event;
 using MKY.Windows.Forms;
 
@@ -66,26 +63,6 @@ namespace MKY.IO.Usb
 
 		/// <summary></summary>
 		public static new event EventHandler<DeviceEventArgs> DeviceDisconnected;
-
-		#endregion
-
-		#region Static Lifetime
-		//==========================================================================================
-		// Static Lifetime
-		//==========================================================================================
-
-		static HidDevice()
-		{
-			RegisterStaticDeviceNotificationHandler();
-		}
-
-		// \todo 2010-03-21 / mky
-		// Properly unregister without relying on garbage collection
-		//
-		//static ~HidDevice()
-		//{
-		//	UnregisterStaticDeviceNotificationHandler();
-		//}
 
 		#endregion
 
@@ -156,18 +133,61 @@ namespace MKY.IO.Usb
 		//------------------------------------------------------------------------------------------
 
 		private static NativeMessageHandler staticDeviceNotificationWindow = new NativeMessageHandler(StaticDeviceNotificationHandler);
+		private static int    staticDeviceNotificationCounter = 0;
 		private static IntPtr staticDeviceNotificationHandle = IntPtr.Zero;
+		private static object staticDeviceNotificationSyncObj = new object();
 
-		private static void RegisterStaticDeviceNotificationHandler()
+		/// <remarks>
+		/// \attention This function also exists in the other USB classes. Changes here must also be applied there.
+		/// </remarks>
+		public static new void RegisterStaticDeviceNotificationHandler()
 		{
-			Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationWindow.Handle, HidGuid, out staticDeviceNotificationHandle);
+			lock (staticDeviceNotificationSyncObj)
+			{
+				// The first call to this method registers the notification.
+				if (staticDeviceNotificationCounter == 0)
+				{
+					if (staticDeviceNotificationHandle == IntPtr.Zero)
+						Win32.DeviceManagement.RegisterDeviceNotificationHandle(staticDeviceNotificationWindow.Handle, HidGuid, out staticDeviceNotificationHandle);
+					else
+						throw (new InvalidOperationException("Invalid state within USB HID Device object"));
+				}
+
+				// Keep track of the register/unregister requests.
+				staticDeviceNotificationCounter++;
+			}
 		}
 
-		private static void UnregisterStaticDeviceNotificationHandler()
+		/// <remarks>
+		/// \attention This function also exists in the other USB classes. Changes here must also be applied there.
+		/// </remarks>
+		public static new void UnregisterStaticDeviceNotificationHandler()
 		{
-			Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
+			lock (staticDeviceNotificationSyncObj)
+			{
+				// Keep track of the register/unregister requests.
+				staticDeviceNotificationCounter--;
+
+				// The last call to this method unregisters the notification.
+				if (staticDeviceNotificationCounter == 0)
+				{
+					if (staticDeviceNotificationHandle != IntPtr.Zero)
+						Win32.DeviceManagement.UnregisterDeviceNotificationHandle(staticDeviceNotificationHandle);
+					else
+						throw (new InvalidOperationException("Invalid state within USB HID Device object"));
+
+					staticDeviceNotificationHandle = IntPtr.Zero;
+				}
+
+				// Ensure that decrement never results in negative values.
+				if (staticDeviceNotificationCounter < 0)
+					staticDeviceNotificationCounter = 0;
+			}
 		}
 
+		/// <remarks>
+		/// \attention This function also exists in the other USB classes. Changes here must also be applied there.
+		/// </remarks>
 		private static void StaticDeviceNotificationHandler(ref Message m)
 		{
 			DeviceEvent de = MessageToDeviceEvent(ref m);
@@ -178,7 +198,7 @@ namespace MKY.IO.Usb
 				string devicePath;
 				if (Win32.DeviceManagement.DeviceChangeMessageToDevicePath(m, out devicePath))
 				{
-					DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Hid, devicePath);
+					DeviceEventArgs e = new DeviceEventArgs(DeviceClass.Hid, new DeviceInfo(devicePath));
 					switch (de)
 					{
 						case DeviceEvent.Connected:
@@ -186,6 +206,7 @@ namespace MKY.IO.Usb
 							Debug.WriteLine("USB HID device connected:");
 							Debug.Indent();
 							Debug.WriteLine("Path = " + devicePath);
+							Debug.WriteLine("Info = " + e.DeviceInfo);
 							Debug.Unindent();
 
 							EventHelper.FireAsync(DeviceConnected, typeof(HidDevice), e);
@@ -197,6 +218,7 @@ namespace MKY.IO.Usb
 							Debug.WriteLine("USB HID device disconnected:");
 							Debug.Indent();
 							Debug.WriteLine("Path = " + devicePath);
+							Debug.WriteLine("Info = " + e.DeviceInfo);
 							Debug.Unindent();
 
 							EventHelper.FireAsync(DeviceDisconnected, typeof(HidDevice), e);
@@ -242,8 +264,8 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary></summary>
-		public HidDevice(string systemPath)
-			: base(HidGuid, systemPath)
+		public HidDevice(string path)
+			: base(HidGuid, path)
 		{
 			Initialize();
 		}
@@ -275,7 +297,7 @@ namespace MKY.IO.Usb
 		private void Initialize()
 		{
 			SafeFileHandle deviceHandle;
-			if (Win32.Hid.CreateSharedQueryOnlyDeviceHandle(SystemPath, out deviceHandle))
+			if (Win32.Hid.CreateSharedQueryOnlyDeviceHandle(Path, out deviceHandle))
 			{
 				try
 				{
@@ -303,7 +325,26 @@ namespace MKY.IO.Usb
 				{
 					deviceHandle.Close();
 				}
+
+				// Only attach handlers if this is an instance of the USB HID device class.
+				// If this instance is e.g. an Ser/HID device, handlers must be attached there.
+				if (this is HidDevice)
+					RegisterAndAttachStaticDeviceEventHandlers();
 			}
+		}
+
+		private void RegisterAndAttachStaticDeviceEventHandlers()
+		{
+			RegisterStaticDeviceNotificationHandler();
+			DeviceConnected    += new EventHandler<DeviceEventArgs>(Device_DeviceConnected);
+			DeviceDisconnected += new EventHandler<DeviceEventArgs>(Device_DeviceDisconnected);
+		}
+
+		private void DetachAndUnregisterStaticDeviceEventHandlers()
+		{
+			DeviceConnected    -= new EventHandler<DeviceEventArgs>(Device_DeviceConnected);
+			DeviceDisconnected -= new EventHandler<DeviceEventArgs>(Device_DeviceDisconnected);
+			UnregisterStaticDeviceNotificationHandler();
 		}
 
 		#region Disposal
@@ -316,7 +357,7 @@ namespace MKY.IO.Usb
 		{
 			if (disposing)
 			{
-				// Nothing to do (yet).
+				DetachAndUnregisterStaticDeviceEventHandlers();
 			}
 			base.Dispose(disposing);
 		}
@@ -418,6 +459,25 @@ namespace MKY.IO.Usb
 		public virtual int FeatureDataIndices
 		{
 			get { return (this.featureDataIndices); }
+		}
+
+		#endregion
+
+		#region Event Handling
+		//==========================================================================================
+		// Event Handling
+		//==========================================================================================
+
+		private void Device_DeviceConnected(object sender, DeviceEventArgs e)
+		{
+			if (Info == e.DeviceInfo)
+				OnConnected(new EventArgs());
+		}
+
+		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
+		{
+			if (Info == e.DeviceInfo)
+				OnDisconnected(new EventArgs());
 		}
 
 		#endregion

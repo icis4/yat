@@ -426,9 +426,9 @@ namespace MKY.IO.Serial
 				base.Equals(other) && // Compare all settings nodes.
 
 				(this.hostType               == other.hostType) &&
-				(this.remoteHost             == other.remoteHost) &&
+				StringEx.EqualsOrdinalIgnoreCase(this.remoteHost, other.remoteHost) &&
 				(this.remotePort             == other.remotePort) &&
-				(this.localInterface         == other.localInterface) &&
+				StringEx.EqualsOrdinalIgnoreCase(this.localInterface, other.localInterface) &&
 				(this.localTcpPort           == other.localTcpPort) &&
 				(this.localUdpPort           == other.localUdpPort) &&
 				(this.tcpClientAutoReconnect == other.tcpClientAutoReconnect)

@@ -608,7 +608,7 @@ namespace MKY.IO.Serial
 
 			this.reconnectTimer = new System.Timers.Timer(this.autoReconnect.Interval);
 			this.reconnectTimer.AutoReset = false;
-			this.reconnectTimer.Elapsed += new System.Timers.ElapsedEventHandler(this.reconnectTimer_Elapsed);
+			this.reconnectTimer.Elapsed += new System.Timers.ElapsedEventHandler(reconnectTimer_Elapsed);
 			this.reconnectTimer.Start();
 		}
 

@@ -22,8 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 
-using MKY.Types;
-
 namespace MKY.IO.Ports
 {
 	/// <summary>
@@ -122,32 +120,32 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static bool TryParse(string parity, out ParityEx result)
 		{
-			if      ((string.Compare(parity, Even_string, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(parity, Even_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
+			if      (StringEx.EqualsOrdinalIgnoreCase(parity, Even_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(parity, Even_stringShort))
 			{
 				result = new ParityEx(Parity.Even);
 				return (true);
 			}
-			else if ((string.Compare(parity, Odd_string, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(parity, Odd_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
+			else if (StringEx.EqualsOrdinalIgnoreCase(parity, Odd_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(parity, Odd_stringShort))
 			{
 				result = new ParityEx(Parity.Odd);
 				return (true);
 			}
-			else if ((string.Compare(parity, None_string, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(parity, None_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
+			else if (StringEx.EqualsOrdinalIgnoreCase(parity, None_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(parity, None_stringShort))
 			{
 				result = new ParityEx(Parity.None);
 				return (true);
 			}
-			else if ((string.Compare(parity, Mark_string, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(parity, Mark_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
+			else if (StringEx.EqualsOrdinalIgnoreCase(parity, Mark_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(parity, Mark_stringShort))
 			{
 				result = new ParityEx(Parity.Mark);
 				return (true);
 			}
-			else if ((string.Compare(parity, Space_string, StringComparison.OrdinalIgnoreCase) == 0) ||
-			         (string.Compare(parity, Space_stringShort, StringComparison.OrdinalIgnoreCase) == 0))
+			else if (StringEx.EqualsOrdinalIgnoreCase(parity, Space_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(parity, Space_stringShort))
 			{
 				result = new ParityEx(Parity.Space);
 				return (true);

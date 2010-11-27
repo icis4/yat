@@ -23,7 +23,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
-namespace MKY.Types
+// This code is intentionally placed into the MKY namespace even though the file is located in
+// MKY.Types for consistency with the Sytem namespace.
+namespace MKY
 {
 	/// <summary>
 	/// Extended enumeration type which offers more features that a normal enum.
@@ -51,7 +53,7 @@ namespace MKY.Types
 	///     Slow = 3
 	/// }
 	///
-	/// public class ModeEx : EnumEx
+	/// public class ModeEx : MKY.EnumEx
 	/// {
 	///     // Default is "Mode.Normal"
 	///     public ModeEx() : base(Mode.Normal)

@@ -166,7 +166,7 @@ namespace YAT.Model.Utilities
 		public RtfPrinter(PrinterSettings settings)
 		{
 			this.pd = new PrintDocument();
-			this.pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);
+			this.pd.PrintPage += new PrintPageEventHandler(pd_PrintPage);
 			this.pd.PrinterSettings = settings;
 		}
 

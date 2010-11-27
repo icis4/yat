@@ -20,12 +20,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace MKY.IO.Usb
 {
 	/// <summary>
-	/// Interface for serial communication, e.g. VSer/CDC or Ser/HID.
+	/// Interface for serial communication, e.g. Ser/CDC or Ser/HID.
 	/// </summary>
 	public interface ISerial
 	{
@@ -62,6 +63,22 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <summary>
+		/// Indicates whether the device automatically tries to reconnect.
+		/// </summary>
+		/// <returns>
+		/// <c>true</c> if the device automatically tries to reconnect; otherwise, <c>false</c>.
+		/// </returns>
+		bool AutoOpen { get; set; }
+
+		/// <summary>
+		/// Gets a value indicating whether the device has been started.
+		/// </summary>
+		/// <returns>
+		/// <c>true</c> if the device has been started; otherwise, <c>false</c>.
+		/// </returns>
+		bool IsStarted { get; }
+
+		/// <summary>
 		/// Indicates whether the serial communication port to the device is open.
 		/// </summary>
 		/// <returns>
@@ -83,6 +100,17 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 		// Methods
 		//==========================================================================================
+
+		/// <summary>
+		/// Starts the device.
+		/// </summary>
+		bool Start();
+
+		/// <summary>
+		/// Stops the device.
+		/// </summary>
+		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "Stop is a common term to start/stop something.")]
+		void Stop();
 
 		/// <summary>
 		/// Opens the serial communication port to the device.

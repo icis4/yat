@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
-using MKY.Types;
+using MKY;
 using MKY.Windows.Forms;
 
 namespace YAT.Gui.Forms
@@ -477,8 +477,8 @@ namespace YAT.Gui.Forms
 			if (MessageBox.Show
 				(
 				this,
-				@"Delete page """ + this.settings_Form.Pages[SelectedPageIndex].PageName + @"""?",
-				@"Delete?",
+				"Delete page '" + this.settings_Form.Pages[SelectedPageIndex].PageName + "'?",
+				"Delete?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,
 				MessageBoxDefaultButton.Button2
@@ -548,8 +548,8 @@ namespace YAT.Gui.Forms
 			if (MessageBox.Show
 				(
 				this,
-				@"Clear all commands of page """ + this.settings_Form.Pages[SelectedPageIndex].PageName + @"""?",
-				@"Clear?",
+				"Clear all commands of page '" + this.settings_Form.Pages[SelectedPageIndex].PageName + "'?",
+				"Clear?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,
 				MessageBoxDefaultButton.Button2

@@ -22,8 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 
-using MKY.Types;
-
 namespace MKY.Net
 {
 	#region Enum IPNetworkInterfaceType
@@ -139,7 +137,7 @@ namespace MKY.Net
 					base.Equals(other) &&
 
 					(this.otherAddress     == other.otherAddress) &&
-					(this.otherDescription == other.otherDescription)
+					StringEx.EqualsOrdinalIgnoreCase(this.otherDescription, other.otherDescription)
 				);
 			}
 			else
@@ -235,8 +233,8 @@ namespace MKY.Net
 		/// <summary></summary>
 		public static bool TryParse(string networkInterface, out IPNetworkInterface result)
 		{
-			if     ((string.Compare(networkInterface, Any_string, StringComparison.OrdinalIgnoreCase) == 0) ||
-			        (string.Compare(networkInterface, Any_stringNice, StringComparison.OrdinalIgnoreCase) == 0))
+			if      (StringEx.EqualsOrdinalIgnoreCase(networkInterface, Any_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(networkInterface, Any_stringNice))
 			{
 				result = new IPNetworkInterface(IPNetworkInterfaceType.Any);
 				return (true);

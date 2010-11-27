@@ -227,10 +227,10 @@ namespace YAT.Gui.Forms
 				this.settings_Form.Terminal.IO.UsbSerialHidDevice.DeviceInfo = usbSerialHidDeviceSelection.DeviceInfo;
 		}
 
-		private void usbSerialHidDeviceSettings_AutoReopenChanged(object sender, EventArgs e)
+		private void usbSerialHidDeviceSettings_AutoOpenChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.UsbSerialHidDevice.AutoReopen = usbSerialHidDeviceSettings.AutoReopen;
+				this.settings_Form.Terminal.IO.UsbSerialHidDevice.AutoOpen = usbSerialHidDeviceSettings.AutoOpen;
 		}
 
 		private void button_AdvancedSettings_Click(object sender, EventArgs e)
@@ -355,7 +355,7 @@ namespace YAT.Gui.Forms
 			usbSerialHidDeviceSelection.DeviceInfo = this.settings_Form.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
 
 			usbSerialHidDeviceSettings.Visible     = isUsbSerialHid;
-			usbSerialHidDeviceSettings.AutoReopen  = this.settings_Form.Terminal.IO.UsbSerialHidDevice.AutoReopen;
+			usbSerialHidDeviceSettings.AutoOpen  = this.settings_Form.Terminal.IO.UsbSerialHidDevice.AutoOpen;
 
 			// Trigger refresh of ports/devices if selection of I/O type has changed.
 			if      ((ioType == Domain.IOType.SerialPort)   && (this.SetControls_ioTypeOld != Domain.IOType.SerialPort))

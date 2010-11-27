@@ -21,8 +21,6 @@
 using System;
 using System.Collections.Generic;
 
-using MKY.Types;
-
 // The MKY.IO.Serial namespace combines various serial interface infrastructure. This code is
 // intentionally placed into the MKY.IO.Serial namespace even though the file is located in
 // MKY.IO.Serial\Socket for better separation of the implementation files.
@@ -125,22 +123,22 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public static bool TryParse(string type, out SocketHostTypeEx result)
 		{
-			if      (string.Compare(type, TcpClient_string, StringComparison.OrdinalIgnoreCase) == 0)
+			if      (StringEx.EqualsOrdinalIgnoreCase(type, TcpClient_string))
 			{
 				result = new SocketHostTypeEx(SocketHostType.TcpClient);
 				return (true);
 			}
-			else if (string.Compare(type, TcpServer_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(type, TcpServer_string))
 			{
 				result = new SocketHostTypeEx(SocketHostType.TcpServer);
 				return (true);
 			}
-			else if (string.Compare(type, TcpAutoSocket_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(type, TcpAutoSocket_string))
 			{
 				result = new SocketHostTypeEx(SocketHostType.TcpAutoSocket);
 				return (true);
 			}
-			else if (string.Compare(type, Udp_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(type, Udp_string))
 			{
 				result = new SocketHostTypeEx(SocketHostType.Udp);
 				return (true);

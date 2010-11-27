@@ -42,13 +42,13 @@ namespace MKY.IO.Usb
 		public readonly DeviceClass DeviceClass;
 
 		/// <summary></summary>
-		public readonly string DevicePath;
+		public readonly DeviceInfo DeviceInfo;
 
 		/// <summary></summary>
-		public DeviceEventArgs(DeviceClass deviceClass, string devicePath)
+		public DeviceEventArgs(DeviceClass deviceClass, DeviceInfo deviceInfo)
 		{
 			DeviceClass = deviceClass;
-			DevicePath = devicePath;
+			DeviceInfo = deviceInfo;
 		}
 	}
 }

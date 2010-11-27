@@ -2258,13 +2258,13 @@ namespace YAT.Gui.Forms
 		private void AttachSettingsEventHandlers()
 		{
 			if (this.settingsRoot != null)
-				this.settingsRoot.Changed += new EventHandler<SettingsEventArgs>(this.settingsRoot_Changed);
+				this.settingsRoot.Changed += new EventHandler<SettingsEventArgs>(settingsRoot_Changed);
 		}
 
 		private void DetachSettingsEventHandlers()
 		{
 			if (this.settingsRoot != null)
-				this.settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(this.settingsRoot_Changed);
+				this.settingsRoot.Changed -= new EventHandler<SettingsEventArgs>(settingsRoot_Changed);
 		}
 
 		#endregion
@@ -2454,27 +2454,27 @@ namespace YAT.Gui.Forms
 		{
 			if (this.terminal != null)
 			{
-				this.terminal.IOChanged            += new EventHandler(this.terminal_IOChanged);
-				this.terminal.IOControlChanged     += new EventHandler(this.terminal_IOControlChanged);
-				this.terminal.IOConnectTimeChanged += new EventHandler<TimeSpanEventArgs>(this.terminal_IOConnectTimeChanged);
-				this.terminal.IOCountChanged       += new EventHandler(this.terminal_IOCountChanged);
-				this.terminal.IORequest            += new EventHandler<Domain.IORequestEventArgs>(this.terminal_IORequest);
-				this.terminal.IOError              += new EventHandler<Domain.IOErrorEventArgs>(this.terminal_IOError);
+				this.terminal.IOChanged            += new EventHandler(terminal_IOChanged);
+				this.terminal.IOControlChanged     += new EventHandler(terminal_IOControlChanged);
+				this.terminal.IOConnectTimeChanged += new EventHandler<TimeSpanEventArgs>(terminal_IOConnectTimeChanged);
+				this.terminal.IOCountChanged       += new EventHandler(terminal_IOCountChanged);
+				this.terminal.IORequest            += new EventHandler<Domain.IORequestEventArgs>(terminal_IORequest);
+				this.terminal.IOError              += new EventHandler<Domain.IOErrorEventArgs>(terminal_IOError);
 
-				this.terminal.DisplayElementsSent     += new EventHandler<Domain.DisplayElementsEventArgs>(this.terminal_DisplayElementsSent);
-				this.terminal.DisplayElementsReceived += new EventHandler<Domain.DisplayElementsEventArgs>(this.terminal_DisplayElementsReceived);
+				this.terminal.DisplayElementsSent     += new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsSent);
+				this.terminal.DisplayElementsReceived += new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsReceived);
 
-				this.terminal.RepositoryCleared  += new EventHandler<Domain.RepositoryEventArgs>(this.terminal_RepositoryCleared);
-				this.terminal.RepositoryReloaded += new EventHandler<Domain.RepositoryEventArgs>(this.terminal_RepositoryReloaded);
+				this.terminal.RepositoryCleared  += new EventHandler<Domain.RepositoryEventArgs>(terminal_RepositoryCleared);
+				this.terminal.RepositoryReloaded += new EventHandler<Domain.RepositoryEventArgs>(terminal_RepositoryReloaded);
 
-				this.terminal.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(this.terminal_TimedStatusTextRequest);
-				this.terminal.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(this.terminal_FixedStatusTextRequest);
-				this.terminal.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(this.terminal_MessageInputRequest);
+				this.terminal.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(terminal_TimedStatusTextRequest);
+				this.terminal.FixedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(terminal_FixedStatusTextRequest);
+				this.terminal.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(terminal_MessageInputRequest);
 
-				this.terminal.SaveAsFileDialogRequest += new EventHandler<Model.DialogEventArgs>(this.terminal_SaveAsFileDialogRequest);
+				this.terminal.SaveAsFileDialogRequest += new EventHandler<Model.DialogEventArgs>(terminal_SaveAsFileDialogRequest);
 
-				this.terminal.Saved  += new EventHandler<Model.SavedEventArgs>(this.terminal_Saved);
-				this.terminal.Closed += new EventHandler<Model.ClosedEventArgs>(this.terminal_Closed);
+				this.terminal.Saved  += new EventHandler<Model.SavedEventArgs>(terminal_Saved);
+				this.terminal.Closed += new EventHandler<Model.ClosedEventArgs>(terminal_Closed);
 			}
 		}
 
@@ -2482,27 +2482,27 @@ namespace YAT.Gui.Forms
 		{
 			if (this.terminal != null)
 			{
-				this.terminal.IOChanged            -= new EventHandler(this.terminal_IOChanged);
-				this.terminal.IOControlChanged     -= new EventHandler(this.terminal_IOControlChanged);
-				this.terminal.IOConnectTimeChanged -= new EventHandler<TimeSpanEventArgs>(this.terminal_IOConnectTimeChanged);
-				this.terminal.IOCountChanged       -= new EventHandler(this.terminal_IOCountChanged);
-				this.terminal.IORequest            -= new EventHandler<Domain.IORequestEventArgs>(this.terminal_IORequest);
-				this.terminal.IOError              -= new EventHandler<Domain.IOErrorEventArgs>(this.terminal_IOError);
+				this.terminal.IOChanged            -= new EventHandler(terminal_IOChanged);
+				this.terminal.IOControlChanged     -= new EventHandler(terminal_IOControlChanged);
+				this.terminal.IOConnectTimeChanged -= new EventHandler<TimeSpanEventArgs>(terminal_IOConnectTimeChanged);
+				this.terminal.IOCountChanged       -= new EventHandler(terminal_IOCountChanged);
+				this.terminal.IORequest            -= new EventHandler<Domain.IORequestEventArgs>(terminal_IORequest);
+				this.terminal.IOError              -= new EventHandler<Domain.IOErrorEventArgs>(terminal_IOError);
 
-				this.terminal.DisplayElementsSent     -= new EventHandler<Domain.DisplayElementsEventArgs>(this.terminal_DisplayElementsSent);
-				this.terminal.DisplayElementsReceived -= new EventHandler<Domain.DisplayElementsEventArgs>(this.terminal_DisplayElementsReceived);
+				this.terminal.DisplayElementsSent     -= new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsSent);
+				this.terminal.DisplayElementsReceived -= new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsReceived);
 
-				this.terminal.RepositoryCleared  -= new EventHandler<Domain.RepositoryEventArgs>(this.terminal_RepositoryCleared);
-				this.terminal.RepositoryReloaded -= new EventHandler<Domain.RepositoryEventArgs>(this.terminal_RepositoryReloaded);
+				this.terminal.RepositoryCleared  -= new EventHandler<Domain.RepositoryEventArgs>(terminal_RepositoryCleared);
+				this.terminal.RepositoryReloaded -= new EventHandler<Domain.RepositoryEventArgs>(terminal_RepositoryReloaded);
 
-				this.terminal.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(this.terminal_TimedStatusTextRequest);
-				this.terminal.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(this.terminal_FixedStatusTextRequest);
-				this.terminal.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(this.terminal_MessageInputRequest);
+				this.terminal.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(terminal_TimedStatusTextRequest);
+				this.terminal.FixedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(terminal_FixedStatusTextRequest);
+				this.terminal.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(terminal_MessageInputRequest);
 
-				this.terminal.SaveAsFileDialogRequest -= new EventHandler<Model.DialogEventArgs>(this.terminal_SaveAsFileDialogRequest);
+				this.terminal.SaveAsFileDialogRequest -= new EventHandler<Model.DialogEventArgs>(terminal_SaveAsFileDialogRequest);
 
-				this.terminal.Saved  -= new EventHandler<Model.SavedEventArgs>(this.terminal_Saved);
-				this.terminal.Closed -= new EventHandler<Model.ClosedEventArgs>(this.terminal_Closed);
+				this.terminal.Saved  -= new EventHandler<Model.SavedEventArgs>(terminal_Saved);
+				this.terminal.Closed -= new EventHandler<Model.ClosedEventArgs>(terminal_Closed);
 			}
 		}
 
@@ -2892,15 +2892,16 @@ namespace YAT.Gui.Forms
 						sb.Append(" - ");
 						sb.Append(di.ToString());
 						sb.Append(" - ");
-						if (isConnected)
+						if (isStarted)
 						{
-							sb.Append("Connected");
-							sb.Append(" - ");
-							sb.Append(isOpen ? "Open" : "Closed");
+							if (isConnected)
+								sb.Append("Connected - Open");
+							else
+								sb.Append("Disconnected - Waiting for reconnect");
 						}
 						else
 						{
-							sb.Append("Disconnected");
+							sb.Append("Closed");
 						}
 						break;
 					}
@@ -3058,17 +3059,19 @@ namespace YAT.Gui.Forms
 					case Domain.IOType.UsbSerialHid:
 					{
 						MKY.IO.Usb.DeviceInfo di = ((MKY.IO.Serial.UsbSerialHidDevice)(this.terminal.UnderlyingIOProvider)).DeviceInfo;
-						sb.Append(@"USB HID device """);
+						sb.Append("USB HID device '");
 						sb.Append(di.ToString());
-						sb.Append(@""" is ");
-						if (isConnected)
+						sb.Append("' is ");
+						if (isStarted)
 						{
-							sb.Append("connected and ");
-							sb.Append(isOpen ? "open" : "closed");
+							if (isConnected)
+								sb.Append("connected and open");
+							else
+								sb.Append("disconnected and waiting for reconnect");
 						}
 						else
 						{
-							sb.Append("disconnected");
+							sb.Append("closed");
 						}
 						break;
 					}

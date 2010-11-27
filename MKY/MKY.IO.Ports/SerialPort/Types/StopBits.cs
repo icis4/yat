@@ -22,8 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 
-using MKY.Types;
-
 namespace MKY.IO.Ports
 {
 	/// <summary>

@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using MKY.Types;
+using MKY;
 
 // The YAT.Domain namespace contains all raw/neutral/binary/text terminal infrastructure. This code
 // is intentionally placed into the YAT.Domain namespace even though the file is located in the
@@ -49,7 +49,7 @@ namespace YAT.Domain
 	/// <summary>
 	/// Extended enum CharSubstitutionEx.
 	/// </summary>
-	public class CharSubstitutionEx : EnumEx
+	public class CharSubstitutionEx : MKY.EnumEx
 	{
 		#region String Definitions
 
@@ -117,17 +117,17 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public static bool TryParse(string substitution, out CharSubstitutionEx result)
 		{
-			if      (string.Compare(substitution, None_string, StringComparison.OrdinalIgnoreCase) == 0)
+			if      (StringEx.EqualsOrdinalIgnoreCase(substitution, None_string))
 			{
 				result = new CharSubstitutionEx(CharSubstitution.None);
 				return (true);
 			}
-			else if (string.Compare(substitution, ToUpper_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(substitution, ToUpper_string))
 			{
 				result = new CharSubstitutionEx(CharSubstitution.ToUpper);
 				return (true);
 			}
-			else if (string.Compare(substitution, ToLower_string, StringComparison.OrdinalIgnoreCase) == 0)
+			else if (StringEx.EqualsOrdinalIgnoreCase(substitution, ToLower_string))
 			{
 				result = new CharSubstitutionEx(CharSubstitution.ToLower);
 				return (true);

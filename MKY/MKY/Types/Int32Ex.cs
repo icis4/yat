@@ -18,11 +18,9 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MKY.Types
+// This code is intentionally placed into the MKY namespace even though the file is located in
+// MKY.Types for consistency with the Sytem namespace.
+namespace MKY
 {
 	/// <summary>
 	/// Int32/int utility methods.
@@ -40,8 +38,10 @@ namespace MKY.Types
 		{
 			if (value < lower)
 				return (lower);
+
 			if (value > upper)
 				return (upper);
+
 			return (value);
 		}
 	}
