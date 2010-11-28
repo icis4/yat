@@ -96,9 +96,9 @@ namespace YAT.Settings.Test
 		// Tests
 		//==========================================================================================
 
-		#region Tests > YAT 2.0 Beta 1 Version 1.99.12 > Terminal
+		#region Tests > YAT 2.0 Beta 1 Version 1.99.12
 		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Beta 1 Version 1.99.12 > Terminal
+		// Tests > YAT 2.0 Beta 1 Version 1.99.12
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
@@ -154,9 +154,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Tests > YAT 2.0 Beta 2 Preliminary Version 1.99.13 > Terminal
+		#region Tests > YAT 2.0 Beta 2 Preliminary Version 1.99.13
 		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Beta 2 Preliminary Version 1.99.13 > Terminal
+		// Tests > YAT 2.0 Beta 2 Preliminary Version 1.99.13
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
@@ -210,13 +210,6 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		#endregion
-
-		#region Tests > YAT 2.0 Beta 2 Preliminary Version 1.99.13 > Workspace
-		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Beta 2 Preliminary Version 1.99.13 > Workspace
-		//------------------------------------------------------------------------------------------
-
 		/// <summary></summary>
 		[Test]
 		public virtual void Test_V1_99_13_WorkspaceSettingsCase04()
@@ -236,9 +229,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.17 > Terminal
+		#region Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.17
 		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.17 > Terminal
+		// Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.17
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
@@ -292,13 +285,6 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		#endregion
-
-		#region Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.17 > Workspace
-		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Beta 2 Candidate 1 Version 1.99.17 > Workspace
-		//------------------------------------------------------------------------------------------
-
 		/// <summary></summary>
 		[Test]
 		public virtual void Test_V1_99_17_WorkspaceSettingsCase04()
@@ -318,9 +304,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Tests > YAT 2.0 Beta 2 Candidate 2 Version 1.99.18 > Terminal
+		#region Tests > YAT 2.0 Beta 2 Candidate 2 Version 1.99.18
 		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Beta 2 Candidate 2 Version 1.99.18 > Terminal
+		// Tests > YAT 2.0 Beta 2 Candidate 2 Version 1.99.18
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
@@ -374,13 +360,6 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		#endregion
-
-		#region Tests > YAT 2.0 Beta 2 Candidate 2 Version 1.99.18 > Workspace
-		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Beta 2 Candidate 2 Version 1.99.18 > Workspace
-		//------------------------------------------------------------------------------------------
-
 		/// <summary></summary>
 		[Test]
 		public virtual void Test_V1_99_18_WorkspaceSettingsCase04()
@@ -400,9 +379,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Tests > YAT 2.0 Beta 2 Candidate 3 Version 1.99.19 > Terminal
+		#region Tests > YAT 2.0 Beta 2 Candidate 3 Version 1.99.19
 		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Beta 2 Candidate 3 Version 1.99.19 > Terminal
+		// Tests > YAT 2.0 Beta 2 Candidate 3 Version 1.99.19
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
@@ -456,13 +435,6 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		#endregion
-
-		#region Tests > YAT 2.0 Beta 2 Candidate 3 Version 1.99.19 > Workspace
-		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Beta 2 Candidate 3 Version 1.99.19 > Workspace
-		//------------------------------------------------------------------------------------------
-
 		/// <summary></summary>
 		[Test]
 		public virtual void Test_V1_99_19_WorkspaceSettingsCase04()
@@ -482,9 +454,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Tests > YAT 2.0 Beta 2 Candidate 4 Version 1.99.20 > Terminal
+		#region Tests > YAT 2.0 Beta 2 Candidate 4 Version 1.99.20
 		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Beta 2 Candidate 4 Version 1.99.20 > Terminal
+		// Tests > YAT 2.0 Beta 2 Candidate 4 Version 1.99.20
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
@@ -538,13 +510,6 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		#endregion
-
-		#region Tests > YAT 2.0 Beta 2 Candidate 4 Version 1.99.20 > Workspace
-		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Beta 2 Candidate 4 Version 1.99.20 > Workspace
-		//------------------------------------------------------------------------------------------
-
 		/// <summary></summary>
 		[Test]
 		public virtual void Test_V1_99_20_WorkspaceSettingsCase04()
@@ -564,9 +529,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.22 > Terminal
+		#region Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.22
 		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.22 > Terminal
+		// Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.22
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
@@ -620,13 +585,6 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		#endregion
-
-		#region Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.22 > Workspace
-		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.22 > Workspace
-		//------------------------------------------------------------------------------------------
-
 		/// <summary></summary>
 		[Test]
 		public virtual void Test_V1_99_22_WorkspaceSettingsCase04()
@@ -646,9 +604,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.24 > Terminal
+		#region Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.24
 		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.24 > Terminal
+		// Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.24
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
@@ -702,13 +660,6 @@ namespace YAT.Settings.Test
 			}
 		}
 
-		#endregion
-
-		#region Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.24 > Workspace
-		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.24 > Workspace
-		//------------------------------------------------------------------------------------------
-
 		/// <summary></summary>
 		[Test]
 		public virtual void Test_V1_99_24_WorkspaceSettingsCase04()
@@ -723,6 +674,149 @@ namespace YAT.Settings.Test
 			{
 				workspace.OpenTerminals();
 				VerifySettingsCase04(workspace);
+			}
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void Test_V1_99_24_TerminalSettingsCase05()
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_24.TerminalFilePaths[TerminalSettingsTestCases.T_05_COM1_Open_Recent]
+				);
+
+			// Create terminal from settings and check whether settings are correctly set.
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				terminal.Start();
+				VerifySettingsCase05(terminal);
+			}
+		}
+
+		#endregion
+
+		#region Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.25
+		//------------------------------------------------------------------------------------------
+		// Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.25
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>01_COM1_Open_Default.</summary>
+		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
+		public virtual void Test_V1_99_25_TerminalSettingsCase01()
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
+				);
+
+			// Create terminal from settings and check whether settings are correctly set.
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				terminal.Start();
+				VerifySettingsCase01(terminal);
+			}
+		}
+
+		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
+		public virtual void Test_V1_99_25_TerminalSettingsCase02()
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
+				);
+
+			// Create terminal from settings and check whether settings are correctly set.
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				terminal.Start();
+				VerifySettingsCase02(terminal);
+			}
+		}
+
+		/// <summary>03_COM1_Closed_Predefined.</summary>
+		[Test]
+		public virtual void Test_V1_99_25_TerminalSettingsCase03()
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
+				);
+
+			// Create terminal from settings and check whether settings are correctly set.
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				terminal.Start();
+				VerifySettingsCase03(terminal);
+			}
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void Test_V1_99_25_WorkspaceSettingsCase04()
+		{
+			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_25.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
+				);
+
+			// Create workspace from settings and check whether settings are correctly set.
+			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
+			{
+				workspace.OpenTerminals();
+				VerifySettingsCase04(workspace);
+			}
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void Test_V1_99_25_TerminalSettingsCase05()
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCases.T_05_COM1_Open_Recent]
+				);
+
+			// Create terminal from settings and check whether settings are correctly set.
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				terminal.Start();
+				VerifySettingsCase05(terminal);
+			}
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void Test_V1_99_25_WorkspaceSettingsCase06()
+		{
+			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_25.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_06_Matthias]
+				);
+
+			// Create workspace from settings and check whether settings are correctly set.
+			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
+			{
+				workspace.OpenTerminals();
+				VerifySettingsCase06(workspace);
+			}
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void Test_V1_99_25_TerminalSettingsCase07()
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_25.TerminalFilePaths[TerminalSettingsTestCases.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]
+				);
+
+			// Create terminal from settings and check whether settings are correctly set.
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				terminal.Start();
+				VerifySettingsCase07(terminal);
 			}
 		}
 
@@ -865,6 +959,51 @@ namespace YAT.Settings.Test
 		private void VerifySettingsCase04(Model.Workspace workspace)
 		{
 			Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals");
+		}
+
+		#endregion
+
+		#region Settings Case Verifications > 05 :: Terminal :: COM1 / Open / Recent
+		//------------------------------------------------------------------------------------------
+		// Settings Case Verifications > 05 :: Terminal :: COM1 / Open / Recent
+		//------------------------------------------------------------------------------------------
+
+		private void VerifySettingsCase05(Model.Terminal terminal)
+		{
+			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1");
+
+			// \todo
+			// Add tests that verify that terminals are interconnected.
+		}
+
+		#endregion
+
+		#region Settings Case Verifications > 06 :: Workspace :: 2 TCP AutoSocket Terminals
+		//------------------------------------------------------------------------------------------
+		// Settings Case Verifications > 06 :: Workspace :: 2 TCP AutoSocket Terminals
+		//------------------------------------------------------------------------------------------
+
+		private void VerifySettingsCase06(Model.Workspace workspace)
+		{
+			Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals");
+
+			// \todo
+			// Add tests that verify that terminals are interconnected.
+		}
+
+		#endregion
+
+		#region Settings Case Verifications > 07 :: Terminal :: USB Ser/HID (VID0EB8) (PID2200) MK.8 / Closed
+		//------------------------------------------------------------------------------------------
+		// Settings Case Verifications > 07 :: Terminal :: USB Ser/HID (VID0EB8) (PID2200) MK.8 / Closed
+		//------------------------------------------------------------------------------------------
+
+		private void VerifySettingsCase07(Model.Terminal terminal)
+		{
+			Assert.AreEqual(Domain.IOType.UsbSerialHid, terminal.SettingsRoot.IOType, "Terminal isn't USB Ser/HID");
+
+			// \todo
+			// Add tests that verify that USB device info is correct.
 		}
 
 		#endregion

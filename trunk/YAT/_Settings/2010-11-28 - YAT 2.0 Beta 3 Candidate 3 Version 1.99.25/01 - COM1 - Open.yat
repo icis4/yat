@@ -2,9 +2,9 @@
 <Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <FileType>YAT Terminal Settings</FileType>
   <Warning>Modifying this file may cause undefined behaviour!</Warning>
-  <ProductVersion>1.99.24</ProductVersion>
+  <ProductVersion>1.99.25</ProductVersion>
   <Saved>
-    <TimeStamp>2010-11-09T18:09:41.521018+01:00</TimeStamp>
+    <TimeStamp>2010-11-28T13:22:06.8375955+01:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
@@ -50,10 +50,7 @@
           </TcpClientAutoReconnect>
         </Socket>
         <UsbSerialHidDevice>
-          <AutoReopen>
-            <Enabled>true</Enabled>
-            <Interval>2000</Interval>
-          </AutoReopen>
+          <AutoOpen>true</AutoOpen>
         </UsbSerialHidDevice>
         <Endianess>BigEndian</Endianess>
       </IO>
