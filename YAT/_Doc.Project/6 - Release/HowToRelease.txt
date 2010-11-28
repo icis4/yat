@@ -4,8 +4,7 @@ Note:	The whole release process takes about 6 hours
 
 1.	Set versions if not already done                                                    0:10 / 0:10
 	-----------------------------------------------------------------------------------------------
-	[ ] Set product name post fix in
-		"YAT.Utilities.ApplicationInfo.ProductNamePostFix" and
+	[ ] Set product name post fix in "YAT.Utilities.ApplicationInfo"
 	[ ] Increment product version in ALAZ.Version
 	[ ] Increment product version in MKY.Version
 	[ ] Increment product version in NUnit.Version
@@ -150,32 +149,30 @@ Note:	The whole release process takes about 6 hours
 	[ ] Commit any modifications during the release process to the subversion repository
 
 
-18.	Recreate YAT working copy                                                           0:15 / 5:15
+18.	Recreate YAT working copy                                                           0:30 / 5:30
 	-----------------------------------------------------------------------------------------------
-	[ ] Remove existing backups "_Trunk_Old"
-	[ ] Rename the existing working copy to "_Trunk_Old"
+	[ ] Remove existing backups "_Trunk_<VersionOld>"
+	[ ] Rename the existing working copy to "_Trunk_<VersionNew>"
 	[ ] Create a new folder "_Trunk"
 	[ ] Check the head revision out into "_Trunk"
 
 
-19.	Archive YAT                                                                         0:15 / 5:30
+19.	Archive YAT                                                                         0:15 / 5:45
 	-----------------------------------------------------------------------------------------------
-	[ ] Copy the working copy to offline archive "\YAT\Releases and Checkpoints\Working Copy"
-	[ ] Clean the copy using "\_Scripts\CleanAll.bat"
+	[ ] Export the new working copy to offline archive "\YAT\Releases and Checkpoints\Working Copy"
+		> SVN > Export...
 	[ ] Pack the copy into a properly named zip file
 
 
-20.	Verify YAT working copy                                                             0:15 / 5:45
+20.	Update and verify YAT working copy                                                  0:15 / 6:00
 	-----------------------------------------------------------------------------------------------
-	[ ] Open the YAT solution and verify that it still properly builds and runs
+	[ ] Open the YAT solution
+	[ ] Increment product name and versions according to 1. and 2.
+	[ ] Verify that the solution still properly builds and runs
+	[ ] Commit modifications to the subversion repository
 
 
-21.	Immediately increment product name and versions                                     0:15 / 6:00
-	-----------------------------------------------------------------------------------------------
-	[ ] Commit modifications to the subversion repository according to 1. and 2.
-
-
-22.	Backup PC                                                                           0:30 / 6:30
+21.	Backup PC                                                                           0:30 / 6:30
 	-----------------------------------------------------------------------------------------------
 	[ ] Offline archive
 	[ ] Sandboxes

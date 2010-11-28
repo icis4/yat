@@ -32,7 +32,7 @@ namespace YAT.Utilities
 	////public const string ProductNamePostFix = " Beta 3";
 
 		/// <summary></summary>
-		public const string ProductNamePostFix = " Beta 3 Candidate 3";
+		public const string ProductNamePostFix = " Beta 3 Candidate 4";
 
 	/////// <summary></summary>
 	////public const string ProductNamePostFix = " Beta 3 Preliminary";
