@@ -6,7 +6,7 @@
 1.	Prepare upload to SourceForge
 	-----------------------------
 	[ ] Open File Manager
-	[ ] Add release folder (e.g. "Version 1.99.17 - YAT 2.0 Beta 2 Candidate 1")
+	[ ] Add release folder (e.g. "Version 1.99.25 - YAT 2.0 Beta 3 Candidate 3")
 	
 	HowTo: 
 	<https://sourceforge.net/apps/trac/sourceforge/wiki/Release%20files%20for%20download>
@@ -17,13 +17,17 @@
 	[ ] Upload release notes
 	[ ] Tick release notes as such
 	[ ] Link folder to release notes
+		> The latest release notes is the last entry in the listbox
 	[ ] Upload normal distribution .zip using web interface
+		> Takes approx. 2 minutes (for 6 MB)
+	[ ] Link file to release notes
+	[ ] Tick default platform download on normal distribution
 	[ ] Upload .NET distribution .zip using FileZilla/SFTP (bigger than 20 MB)
 		> From "<Offline Repository>\Releases and Checkpoints\<Release>\Distribution\"
 		> To "/home/pfs/project/y/y-/y-a-terminal/YAT 2.0/<Release>"
+		> Takes approx. 60 minutes (for 200 MB)
 		> Also see "FileZilla Upload.png"
-	[ ] Link files to release notes
-	[ ] Tick default platform download on normal distribution
+	[ ] Link file to release notes
 
 
 3.	Check release and release notes
@@ -35,7 +39,7 @@
 
 4.	Submit news
 	-----------
-	e.g. "Candidate 1 for Beta 3 has been released. See the release notes for details on new features, important changes, fixed bugs and known limitations."
+	e.g. "Candidate 3 for Beta 3 has been released. See the release notes for details on new features, important changes, fixed bugs and known limitations."
 	
 	HowTo:
 	<https://sourceforge.net/apps/trac/sourceforge/wiki/News>
