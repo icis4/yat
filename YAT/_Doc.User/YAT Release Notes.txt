@@ -52,6 +52,7 @@ Important changes:
 - Conceptual issue in YAT controller in respect to command line arguments fixed (bug #3111525)
 - String comparisons improved, more selective use of different means of comparison
 - Use of Debug/Trace/Console standardized within NUnit tests (bug #3111522)
+- Recent file handling test cases created in YAT.Model.Test (bug #3107531)
 - More specific exception types used, e.g. ArgumentOutOfRange instead of NotImplemented
 - MKY.Types moved to the MKY namespace for consistency with the .NET System namespace
 
@@ -60,6 +61,7 @@ Fixed bugs:
 - Exception on exit after reduction of the window size fixed (bug #2997101)
 - Some minor user interface issues fixed (bug #3111508)
 - Issue with saved USB Ser/HID device IDs fixed (bug #3116770)
+- Open of recent terminal doesn't close workspace anymore (bug #3107531)
 - Command line info and options are properly output again (bug #3111525)
 
 Limitations and known issues:

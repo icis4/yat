@@ -137,7 +137,7 @@ namespace YAT.Model.Test
 			Workspace workspace;
 			Terminal terminal;
 
-			PrepareInitialAutoSave(out main, out workspace, out terminal);
+			PrepareInitialTerminal(out main, out workspace, out terminal);
 			main.Exit();
 			VerifyFiles(workspace, true, terminal, true);
 		}
@@ -153,7 +153,7 @@ namespace YAT.Model.Test
 			Workspace workspace;
 			Terminal terminal;
 
-			PrepareInitialAutoSave(out main, out workspace, out terminal);
+			PrepareInitialTerminal(out main, out workspace, out terminal);
 			workspace.Close();
 			VerifyFiles(workspace, false, terminal, false);
 			main.Exit();
@@ -171,7 +171,7 @@ namespace YAT.Model.Test
 			Workspace workspace;
 			Terminal terminal;
 
-			PrepareInitialAutoSave(out main, out workspace, out terminal);
+			PrepareInitialTerminal(out main, out workspace, out terminal);
 			terminal.Close();
 			VerifyFiles(workspace, false, terminal, false);
 			main.Exit();
@@ -189,7 +189,7 @@ namespace YAT.Model.Test
 			Workspace workspace;
 			Terminal terminal;
 
-			PrepareInitialAutoSave(out main, out workspace, out terminal);
+			PrepareInitialTerminal(out main, out workspace, out terminal);
 			terminal.Close();
 			VerifyFiles(workspace, false, terminal, false);
 			workspace.Close();
@@ -350,8 +350,8 @@ namespace YAT.Model.Test
 					workspace,
 					true,
 					new Terminal[] { terminal1, terminal2, terminal3 },
-					new bool[]     { true,      true,      true      }, // exists
-					new bool[]     { false,     true,      true      }  // auto
+					new bool[]     { true,      true,      true      }, // Exists.
+					new bool[]     { false,     true,      true      }  // Auto.
 					);
 			}
 			#endregion
@@ -383,8 +383,8 @@ namespace YAT.Model.Test
 					workspace,
 					true,
 					new Terminal[] { terminal1, terminal2, terminal3 },
-					new bool[]     { true,      true,      true      }, // exists
-					new bool[]     { false,     true,      true      }  // auto
+					new bool[]     { true,      true,      true      }, // Exists.
+					new bool[]     { false,     true,      true      }  // Auto.
 					);
 
 				string autoTerminal3FilePath = terminal3.SettingsFilePath;
@@ -402,8 +402,8 @@ namespace YAT.Model.Test
 					workspace,
 					true,
 					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // exists
-					new bool[]     { false,     true      }  // auto
+					new bool[]     { true,      true      }, // Exists.
+					new bool[]     { false,     true      }  // Auto.
 					);
 			}
 			#endregion
@@ -433,8 +433,8 @@ namespace YAT.Model.Test
 					workspace,
 					true,
 					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // exists
-					new bool[]     { false,     true      }  // auto
+					new bool[]     { true,      true      }, // Exists.
+					new bool[]     { false,     true      }  // Auto.
 					);
 
 				success = workspace.Save();
@@ -450,8 +450,8 @@ namespace YAT.Model.Test
 					workspace,
 					true,
 					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // exists
-					new bool[]     { false,     true      }  // auto
+					new bool[]     { true,      true      }, // Exists.
+					new bool[]     { false,     true      }  // Auto.
 					);
 			}
 			#endregion
@@ -482,8 +482,8 @@ namespace YAT.Model.Test
 					workspace,
 					true,
 					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // exists
-					new bool[]     { false,     true      }  // auto
+					new bool[]     { true,      true      }, // Exists.
+					new bool[]     { false,     true      }  // Auto.
 					);
 
 				// install callback handler that sets the normal file path for terminal 2
@@ -507,8 +507,8 @@ namespace YAT.Model.Test
 					true,
 					false,
 					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // exists
-					new bool[]     { false,     false     }  // auto
+					new bool[]     { true,      true      }, // Exists.
+					new bool[]     { false,     false     }  // Auto.
 					);
 			}
 			#endregion
@@ -539,8 +539,8 @@ namespace YAT.Model.Test
 					true,
 					false,
 					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // exists
-					new bool[]     { false,     false     }  // auto
+					new bool[]     { true,      true      }, // Exists.
+					new bool[]     { false,     false     }  // Auto.
 					);
 
 				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
@@ -563,8 +563,8 @@ namespace YAT.Model.Test
 					true,
 					false,
 					new Terminal[] { terminal1, terminal2, terminal3 },
-					new bool[]     { true,      true,      true      }, // exists
-					new bool[]     { false,     false,     false     }  // auto
+					new bool[]     { true,      true,      true      }, // Exists.
+					new bool[]     { false,     false,     false     }  // Auto.
 					);
 			}
 			#endregion
@@ -597,8 +597,8 @@ namespace YAT.Model.Test
 					true,
 					false,
 					new Terminal[] { terminal1, terminal2, terminal3 },
-					new bool[]     { true,      true,      true      }, // exists
-					new bool[]     { false,     false,     false     }  // auto
+					new bool[]     { true,      true,      true      }, // Exists.
+					new bool[]     { false,     false,     false     }  // Auto.
 					);
 
 				success = terminal3.Close();
@@ -615,8 +615,8 @@ namespace YAT.Model.Test
 					true,
 					false,
 					new Terminal[] { terminal1, terminal2, terminal3 },
-					new bool[]     { true,      true,      true      }, // exists
-					new bool[]     { false,     false,     false     }  // auto
+					new bool[]     { true,      true,      true      }, // Exists.
+					new bool[]     { false,     false,     false     }  // Auto.
 					);
 			}
 			#endregion
@@ -680,8 +680,8 @@ namespace YAT.Model.Test
 					workspace,
 					true,
 					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // exists
-					new bool[]     { false,     false     }  // auto
+					new bool[]     { true,      true      }, // Exists.
+					new bool[]     { false,     false     }  // Auto.
 					);
 			}
 			#endregion
@@ -746,8 +746,8 @@ namespace YAT.Model.Test
 					workspace,
 					true,
 					new Terminal[] { terminal1, terminal2 },
-					new bool[]     { true,      true      }, // exists
-					new bool[]     { false,     true      }  // auto
+					new bool[]     { true,      true      }, // Exists.
+					new bool[]     { false,     true      }  // Auto.
 					);
 			}
 			#endregion
@@ -878,6 +878,143 @@ namespace YAT.Model.Test
 
 		#endregion
 
+		#region Tests > TestRecentInCaseOfAutoSave
+		//------------------------------------------------------------------------------------------
+		// Tests > TestRecentInCaseOfAutoSave
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Condition: No files existing.
+		/// Expected:  File saved as.
+		/// </summary>
+		[Test]
+		public virtual void TestRecentInCaseOfAutoSave()
+		{
+			bool success = false;
+			string uc = "";
+
+			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = true;
+			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = true;
+			ApplicationSettings.LocalUser.RecentFiles.FilePaths.Clear();
+
+			#region Use case 1
+			// - Initial start
+			// - Create new terminal
+			//   => Auto workspace with 1 auto terminal
+			//   => Recent must still be empty
+			using (Main main = new Main())
+			{
+				uc = "UC1: ";
+				success = main.Start();
+				Assert.IsTrue(success, uc + "Main could not be started");
+
+				Workspace workspace = main.Workspace;
+				Assert.IsNotNull(workspace, uc + "Workspace not created");
+				Assert.AreEqual(0, workspace.TerminalCount, uc + "Workspace doesn't contain 0 terminals");
+
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				Assert.IsTrue(success, uc + "Terminal could not be created");
+				Assert.AreEqual(1, workspace.TerminalCount, uc + "Workspace doesn't contain 1 terminal");
+
+				Terminal terminal = workspace.ActiveTerminal;
+				Assert.IsNotNull(terminal, uc + "Terminal could not be created");
+
+				success = main.Exit();
+				Assert.IsTrue(success, uc + "Main could not be exited");
+
+				VerifyFiles(uc, workspace, true, terminal, true);
+
+				Assert.AreEqual(0, ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count, uc + "Recent file list is not empty");
+			}
+			#endregion
+		}
+
+		#endregion
+
+		#region Tests > TestRecentInCaseOfManualSave
+		//------------------------------------------------------------------------------------------
+		// Tests > TestRecentInCaseOfManualSave
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Condition: No files existing.
+		/// Expected:  File saved as.
+		/// </summary>
+		[Test]
+		public virtual void TestRecentInCaseOfManualSave()
+		{
+			bool success = false;
+			string uc = "";
+
+			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = false;
+			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = false;
+			ApplicationSettings.LocalUser.RecentFiles.FilePaths.Clear();
+
+			#region Use case 1
+			// - Initial start
+			// - Create new terminal
+			// - Save terminal as
+			//   => Recent contains the terminal
+			using (Main main = new Main())
+			{
+				uc = "UC1: ";
+				success = main.Start();
+				Assert.IsTrue(success, uc + "Main could not be started");
+
+				Workspace workspace = main.Workspace;
+				Assert.IsNotNull(workspace, uc + "Workspace not created");
+				Assert.AreEqual(0, workspace.TerminalCount, uc + "Workspace doesn't contain 0 terminals");
+
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				Assert.IsTrue(success, uc + "Terminal 1 could not be created");
+				Terminal terminal = workspace.ActiveTerminal;
+				Assert.IsNotNull(terminal, uc + "Terminal 1 could not be created");
+				success = terminal.SaveAs(this.normalTerminal1FilePath);
+				Assert.IsTrue(success, uc + "Terminal 1 could not be saved as");
+
+				VerifyFiles(uc, workspace, false, terminal, true, false);
+
+				success = main.Exit();
+				Assert.IsTrue(success, uc + "Main could not be exited");
+
+				VerifyFiles(uc, workspace, false, terminal, true, false);
+
+				Assert.AreEqual(1, ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count, uc + "Wrong number of recent file entries");
+			}
+			#endregion
+
+			#region Use case 2
+			// - Start and request recent terminal
+			//   => New workspace with recent terminal
+			using (Main main = new Main())
+			{
+				uc = "UC2: ";
+				success = main.Start();
+				Assert.IsTrue(success, uc + "Main could not be started");
+
+				Workspace workspace = main.Workspace;
+				Assert.IsNotNull(workspace, uc + "Workspace not created");
+				Assert.AreEqual(0, workspace.TerminalCount, uc + "Workspace doesn't contain 0 terminals");
+
+				success = main.OpenRecent(1);
+				Assert.IsTrue(success, uc + "Recent terminal could not be opened");
+				Terminal terminal = workspace.ActiveTerminal;
+				Assert.IsNotNull(terminal, uc + "Recent terminal could not be opened");
+
+				VerifyFiles(uc, workspace, false, terminal, true, false);
+
+				success = main.Exit();
+				Assert.IsTrue(success, uc + "Main could not be exited");
+
+				VerifyFiles(uc, workspace, false, terminal, true, false);
+
+				Assert.AreEqual(1, ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count, uc + "Wrong number of recent file entries");
+			}
+			#endregion
+		}
+
+		#endregion
+
 		#endregion
 
 		#region Private Methods
@@ -890,7 +1027,7 @@ namespace YAT.Model.Test
 		// Private Methods > Prepare
 		//------------------------------------------------------------------------------------------
 
-		private void PrepareInitialAutoSave(out Main main, out Workspace workspace, out Terminal terminal)
+		private void PrepareInitialTerminal(out Main main, out Workspace workspace, out Terminal terminal)
 		{
 			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = false;
 			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = true;
