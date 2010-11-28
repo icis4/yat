@@ -117,8 +117,10 @@ Note:	The whole release process takes about 6 hours
 	[ ] Commit any modifications to the subversion repository
 	[ ] Tag/checkpoint the project
 		> SVN > Repo Browser
-			> e.g. "/tags/yat-1-99-18-beta-2-candidate-2"
-			> e.g. "YAT 2.0 Beta 2 Candidate 2 Version 1.99.18"
+			> Select 'trunk'
+				> Copy to...
+					> New name e.g. "/tags/yat-1-99-18-beta-2-candidate-2"
+					> Message  e.g. "YAT 2.0 Beta 2 Candidate 2 Version 1.99.18"
 
 
 14.	Pack YAT                                                                            0:15 / 4:00
