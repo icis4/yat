@@ -508,7 +508,7 @@ namespace MKY.Win32
 				return (true);
 			}
 
-			System.Diagnostics.Debug.WriteLine("Couldn't create shared USB device query handle:");
+			System.Diagnostics.Debug.WriteLine("USB HID couldn't create shared device query handle:");
 			System.Diagnostics.Debug.Indent();
 			System.Diagnostics.Debug.WriteLine("Path = " + devicePath);
 			System.Diagnostics.Debug.WriteLine("System error message = " + Debug.GetLastError());
@@ -540,12 +540,11 @@ namespace MKY.Win32
 				return (true);
 			}
 
-			System.Diagnostics.Debug.WriteLine("Couldn't create shared USB device read/write handle.");
+			System.Diagnostics.Debug.WriteLine("USB HID couldn't create shared device read/write handle.");
 			System.Diagnostics.Debug.Indent();
 			System.Diagnostics.Debug.WriteLine("Path = " + devicePath);
 			System.Diagnostics.Debug.WriteLine("System error message = " + Debug.GetLastError());
 			System.Diagnostics.Debug.Unindent();
-			DebugEx.WriteStack(typeof(Hid));
 
 			readHandle = null;
 			return (false);

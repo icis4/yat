@@ -551,19 +551,42 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		private void Initialize()
 		{
+			GetDeviceConnect();
+
+			// Only attach handlers if this is an instance of the general USB device class.
+			// If this instance is e.g. an HID device, handlers must be attached there.
+			if (this.GetType() == typeof(Device))
+				RegisterAndAttachStaticDeviceEventHandlers();
+		}
+
+		/// <summary>
+		/// Used to reinitialize the device in case of a reconnect.
+		/// </summary>
+		protected virtual void Reinitialize()
+		{
+			GetDeviceConnect();
+		}
+
+		/// <summary>
+		/// Used to reinitialize the device in case of a reconnect.
+		/// </summary>
+		protected void Reinitialize(DeviceInfo deviceInfo)
+		{
+			this.deviceInfo = new DeviceInfo(deviceInfo);
+			Reinitialize();
+		}
+
+		private void GetDeviceConnect()
+		{
 			SafeFileHandle deviceHandle;
-			if (Win32.Hid.CreateSharedQueryOnlyDeviceHandle(Path, out deviceHandle))
+			if (!string.IsNullOrEmpty(Path) &&
+				Win32.Hid.CreateSharedQueryOnlyDeviceHandle(Path, out deviceHandle))
 			{
 				deviceHandle.Close();
 
 				// Getting a handle means that the device is connected to the computer.
 				this.isConnected = true;
 			}
-
-			// Only attach handlers if this is an instance of the general USB device class.
-			// If this instance is e.g. an HID device, handlers must be attached there.
-			if (this is Device)
-				RegisterAndAttachStaticDeviceEventHandlers();
 		}
 
 		private void RegisterAndAttachStaticDeviceEventHandlers()
@@ -722,12 +745,23 @@ namespace MKY.IO.Usb
 		// Event Handling
 		//==========================================================================================
 
+		/// <remarks>
+		/// \attention This function similarily exists in the other USB classes. Changes here may also be applied there.
+		/// </remarks>
 		private void Device_DeviceConnected(object sender, DeviceEventArgs e)
 		{
 			if (Info == e.DeviceInfo)
+			{
+				// Force reinitialize with new device info.
+				Reinitialize(e.DeviceInfo);
+
 				OnConnected(new EventArgs());
+			}
 		}
 
+		/// <remarks>
+		/// \attention This function similarily exists in the other USB classes. Changes here may also be applied there.
+		/// </remarks>
 		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
 		{
 			if (Info == e.DeviceInfo)

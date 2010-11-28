@@ -296,7 +296,7 @@ namespace MKY.IO.Usb
 		{
 			// Only attach handlers if this is an instance of the USB Ser/HID device class.
 			// If this instance is of a derived class, handlers must be attached there.
-			if (this is SerialHidDevice)
+			if (this.GetType() == typeof(SerialHidDevice))
 				RegisterAndAttachStaticDeviceEventHandlers();
 		}
 
@@ -453,7 +453,11 @@ namespace MKY.IO.Usb
 			AssertNotDisposed();
 
 			SetState(State.Started);
-			return (Open());
+			Open();
+
+			// Return true even if device has not been openend. After all, this is the Start()
+			// method and it must successfully return even if device is not yet open.
+			return (true);
 		}
 
 		/// <summary>
@@ -488,10 +492,7 @@ namespace MKY.IO.Usb
 			}
 			else
 			{
-				StringBuilder sb = new StringBuilder();
-				sb.AppendLine("Couldn't open serial communication to USB Ser/HID device");
-				sb.AppendLine(ToString());
-				throw (new UsbException(sb.ToString()));
+				return (false);
 			}
 		}
 
@@ -754,10 +755,16 @@ namespace MKY.IO.Usb
 		// Event Handling
 		//==========================================================================================
 
+		/// <remarks>
+		/// \attention This function similarily exists in the other USB classes. Changes here may also be applied there.
+		/// </remarks>
 		private void Device_DeviceConnected(object sender, DeviceEventArgs e)
 		{
 			if (Info == e.DeviceInfo)
 			{
+				// Force reinitialize with new device info.
+				Reinitialize(e.DeviceInfo);
+
 				OnConnected(new EventArgs());
 
 				if (AutoOpen)
@@ -765,6 +772,9 @@ namespace MKY.IO.Usb
 			}
 		}
 
+		/// <remarks>
+		/// \attention This function similarily exists in the other USB classes. Changes here may also be applied there.
+		/// </remarks>
 		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
 		{
 			if (Info == e.DeviceInfo)

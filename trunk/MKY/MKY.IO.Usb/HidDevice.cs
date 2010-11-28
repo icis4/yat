@@ -296,8 +296,28 @@ namespace MKY.IO.Usb
 		/// </remarks>
 		private void Initialize()
 		{
+			GetDeviceCapabilities();
+
+			// Only attach handlers if this is an instance of the USB HID device class.
+			// If this instance is e.g. an Ser/HID device, handlers must be attached there.
+			if (this.GetType() == typeof(HidDevice))
+				RegisterAndAttachStaticDeviceEventHandlers();
+		}
+
+		/// <summary>
+		/// Used to reinitialize the device in case of a reconnect.
+		/// </summary>
+		protected override void Reinitialize()
+		{
+			base.Reinitialize();
+			GetDeviceCapabilities();
+		}
+
+		private void GetDeviceCapabilities()
+		{
 			SafeFileHandle deviceHandle;
-			if (Win32.Hid.CreateSharedQueryOnlyDeviceHandle(Path, out deviceHandle))
+			if (!string.IsNullOrEmpty(Path) &&
+				Win32.Hid.CreateSharedQueryOnlyDeviceHandle(Path, out deviceHandle))
 			{
 				try
 				{
@@ -325,11 +345,6 @@ namespace MKY.IO.Usb
 				{
 					deviceHandle.Close();
 				}
-
-				// Only attach handlers if this is an instance of the USB HID device class.
-				// If this instance is e.g. an Ser/HID device, handlers must be attached there.
-				if (this is HidDevice)
-					RegisterAndAttachStaticDeviceEventHandlers();
 			}
 		}
 
@@ -468,12 +483,23 @@ namespace MKY.IO.Usb
 		// Event Handling
 		//==========================================================================================
 
+		/// <remarks>
+		/// \attention This function similarily exists in the other USB classes. Changes here may also be applied there.
+		/// </remarks>
 		private void Device_DeviceConnected(object sender, DeviceEventArgs e)
 		{
 			if (Info == e.DeviceInfo)
+			{
+				// Force reinitialize with new device info.
+				Reinitialize(e.DeviceInfo);
+
 				OnConnected(new EventArgs());
+			}
 		}
 
+		/// <remarks>
+		/// \attention This function similarily exists in the other USB classes. Changes here may also be applied there.
+		/// </remarks>
 		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
 		{
 			if (Info == e.DeviceInfo)
