@@ -56,8 +56,10 @@ Important changes:
 - MKY.Types moved to the MKY namespace for consistency with the .NET System namespace
 
 Fixed bugs:
+- User interface exception in case of more than 12 predefined command pages fixed (bug #3112679)
+- Exception on exit after reduction of the window size fixed (bug #2997101)
+- Some minor user interface issues fixed (bug #3111508)
 - Issue with saved USB Ser/HID device IDs fixed (bug #3116770)
-- Minor user interface issues fixed (bug #3111508)
 - Command line info and options are properly output again (bug #3111525)
 
 Limitations and known issues:

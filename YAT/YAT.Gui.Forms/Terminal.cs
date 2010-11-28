@@ -43,6 +43,20 @@ namespace YAT.Gui.Forms
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public partial class Terminal : Form
 	{
+		#region Types
+		//==========================================================================================
+		// Types
+		//==========================================================================================
+
+		private enum ClosingState
+		{
+			None,               // Normal operation of the form
+			IsClosingFromForm,  // Closing has been initiated by a form event
+			IsClosingFromModel, // Closing has been initiated by a model event
+		}
+
+		#endregion
+
 		#region Constants
 		//==========================================================================================
 		// Constants
@@ -63,8 +77,7 @@ namespace YAT.Gui.Forms
 		// Startup/update/closing
 		private bool isStartingUp = true;
 		private bool isSettingControls = false;
-		private bool isClosingFromForm = false;
-		private bool isClosingFromModel = false;
+		private ClosingState closingState = ClosingState.None;
 
 		// MDI
 		private Form mdiParent;
@@ -137,6 +150,28 @@ namespace YAT.Gui.Forms
 			this.settingsRoot.ClearChanged();
 			this.settingsRoot.ForceChangeEvent();
 			ResumeHandlingTerminalSettings();
+		}
+
+		#endregion
+
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		private bool IsClosing
+		{
+			get { return (this.closingState != ClosingState.None); }
+		}
+
+		private bool IsClosingFromForm
+		{
+			get { return (this.closingState == ClosingState.IsClosingFromForm); }
+		}
+
+		private bool IsClosingFromModel
+		{
+			get { return (this.closingState == ClosingState.IsClosingFromModel); }
 		}
 
 		#endregion
@@ -293,13 +328,13 @@ namespace YAT.Gui.Forms
 
 		private void Terminal_LocationChanged(object sender, EventArgs e)
 		{
-			if (!this.isStartingUp && !this.isClosingFromForm && !this.isClosingFromModel)
+			if (!this.isStartingUp && !IsClosing)
 				SaveWindowSettings();
 		}
 
 		private void Terminal_SizeChanged(object sender, EventArgs e)
 		{
-			if (!this.isStartingUp && !this.isClosingFromForm && !this.isClosingFromModel)
+			if (!this.isStartingUp && !IsClosing)
 				SaveWindowSettings();
 		}
 
@@ -313,9 +348,9 @@ namespace YAT.Gui.Forms
 		private void Terminal_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			// Prevent multiple calls to Close().
-			if (!this.isClosingFromModel)
+			if (!IsClosingFromModel)
 			{
-				this.isClosingFromForm = true;
+				this.closingState = ClosingState.IsClosingFromForm;
 
 				if (e.CloseReason == CloseReason.UserClosing)
 				{
@@ -330,7 +365,7 @@ namespace YAT.Gui.Forms
 				}
 
 				if (e.Cancel)
-					this.isClosingFromForm = false;
+					this.closingState = ClosingState.None;
 			}
 		}
 
@@ -1189,7 +1224,7 @@ namespace YAT.Gui.Forms
 				toolStripMenuItem_PredefinedContextMenu_Page_Next.Enabled = false;
 			}
 
-			for (int i = 0; i < pageCount; i++)
+			for (int i = 0; i < Math.Min(pageCount, menuItems_Predefined_MaxPages); i++)
 			{
 				this.menuItems_Predefined_Pages[i].Text      = MenuEx.PrependIndex(i + 1, pages[i].PageName);
 				this.menuItems_Predefined_Pages[i].Visible   = true;
@@ -1211,7 +1246,7 @@ namespace YAT.Gui.Forms
 			if (commands != null)
 				commandCount = commands.Count;
 
-			for (int i = 0; i < commandCount; i++)
+			for (int i = 0; i < Math.Min(commandCount, Model.Settings.PredefinedCommandSettings.MaxCommandsPerPage); i++)
 			{
 				bool isDefined = ((commands[i] != null) && commands[i].IsDefined);
 				bool isValid = (isDefined && this.terminal.IsOpen && commands[i].IsValid);
@@ -1427,7 +1462,7 @@ namespace YAT.Gui.Forms
 
 		private void splitContainer_TxMonitor_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!this.isStartingUp && !this.isSettingControls)
+			if (!this.isStartingUp && !this.isSettingControls && !IsClosing)
 			{
 				int widthOrHeight = 0;
 				if (this.settingsRoot.Layout.MonitorOrientation == Orientation.Vertical)
@@ -1441,7 +1476,7 @@ namespace YAT.Gui.Forms
 
 		private void splitContainer_RxMonitor_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!this.isStartingUp && !this.isSettingControls)
+			if (!this.isStartingUp && !this.isSettingControls && !IsClosing)
 			{
 				int widthOrHeight = 0;
 				if (this.settingsRoot.Layout.MonitorOrientation == Orientation.Vertical)
@@ -1455,7 +1490,7 @@ namespace YAT.Gui.Forms
 
 		private void splitContainer_Predefined_SplitterMoved(object sender, SplitterEventArgs e)
 		{
-			if (!this.isStartingUp && !this.isSettingControls)
+			if (!this.isStartingUp && !this.isSettingControls && !IsClosing)
 				this.settingsRoot.Layout.PredefinedSplitterRatio = (float)splitContainer_Predefined.SplitterDistance / splitContainer_Predefined.Width;
 		}
 
@@ -2667,9 +2702,9 @@ namespace YAT.Gui.Forms
 		private void terminal_Closed(object sender, Model.ClosedEventArgs e)
 		{
 			// Prevent multiple calls to Close().
-			if (!this.isClosingFromForm)
+			if (!IsClosingFromForm)
 			{
-				this.isClosingFromModel = true;
+				this.closingState = ClosingState.IsClosingFromModel;
 				Close();
 			}
 		}
