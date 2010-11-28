@@ -2933,9 +2933,10 @@ namespace YAT.Gui.Forms
 
 		private void SetIOStatus()
 		{
-			bool isStarted    = this.terminal.IsStarted;
-			bool isOpen       = this.terminal.IsOpen;
-			bool isConnected  = this.terminal.IsConnected;
+			bool isStarted     = this.terminal.IsStarted;
+			bool isOpen        = this.terminal.IsOpen;
+			bool isConnected   = this.terminal.IsConnected;
+			bool isReadyToSend = this.terminal.IsReadyToSend;
 
 			StringBuilder sb = new StringBuilder();
 
@@ -3084,8 +3085,8 @@ namespace YAT.Gui.Forms
 				}
 			}
 
-			toolStripStatusLabel_TerminalStatus_ConnectionState.Enabled = isOpen;
-			toolStripStatusLabel_TerminalStatus_ConnectionState.Image = (isConnected ? on : off);
+			toolStripStatusLabel_TerminalStatus_ConnectionState.Enabled = isStarted;
+			toolStripStatusLabel_TerminalStatus_ConnectionState.Image = (isReadyToSend ? on : off);
 
 			toolStripStatusLabel_TerminalStatus_IOStatus.Text = sb.ToString();
 		}

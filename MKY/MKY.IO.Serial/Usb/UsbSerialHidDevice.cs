@@ -342,9 +342,15 @@ namespace MKY.IO.Serial
 		private bool StartDevice()
 		{
 			if (this.device != null)
-				return (this.device.Start());
+			{
+				bool success = this.device.Start();
+				OnIOChanged(new EventArgs());
+				return (success);
+			}
 			else
+			{
 				return (false);
+			}
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
@@ -359,6 +365,7 @@ namespace MKY.IO.Serial
 						this.device.Dispose();
 						this.device = null;
 					}
+					OnIOChanged(new EventArgs());
 				}
 				catch { }
 			}
