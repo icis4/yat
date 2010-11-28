@@ -1,0 +1,41 @@
+
+0.	Log in as y-a-terminal
+	----------------------
+
+
+1.	Prepare upload to SourceForge
+	-----------------------------
+	[ ] Open File Manager
+	[ ] Add release folder (e.g. "Version 1.99.17 - YAT 2.0 Beta 2 Candidate 1")
+	
+	HowTo: 
+	<https://sourceforge.net/apps/trac/sourceforge/wiki/Release%20files%20for%20download>
+
+
+2.	Add release
+	-----------
+	[ ] Upload release notes
+	[ ] Tick release notes as such
+	[ ] Link folder to release notes
+	[ ] Upload normal distribution .zip using web interface
+	[ ] Upload .NET distribution .zip using FileZilla/SFTP (bigger than 20 MB)
+		> From "<Offline Repository>\Releases and Checkpoints\<Release>\Distribution\"
+		> To "/home/pfs/project/y/y-/y-a-terminal/YAT 2.0/<Release>"
+		> Also see "FileZilla Upload.png"
+	[ ] Link files to release notes
+	[ ] Tick default platform download on normal distribution
+
+
+3.	Check release and release notes
+	-------------------------------
+	[ ] Reload YAT web page
+	[ ] Download release and verify contents of .zip
+	[ ] Browse release notes
+
+
+4.	Submit news
+	-----------
+	e.g. "Candidate 1 for Beta 3 has been released. See the release notes for details on new features, important changes, fixed bugs and known limitations."
+	
+	HowTo:
+	<https://sourceforge.net/apps/trac/sourceforge/wiki/News>

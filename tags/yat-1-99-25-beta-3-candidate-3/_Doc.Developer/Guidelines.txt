@@ -1,0 +1,179 @@
+
+Assemblies
+----------
+
+Sign all library/dll assemblies using the strong name tool:
+1. Open the Visual Studio command prompt with administrator rights
+2. Go to "C:\"
+3. Enter "sn -k <FileName>.snk"
+4. Move the .snk file to the "\Properties" directory of the project
+5. Project Properties > Signing > Sign
+
+Enforce CLS compliance
+[assembly: CLSCompliant(true)]
+
+Define CODE_ANALYSIS
+
+Use StyleCop
+
+Use FxCop
+
+
+Comments
+--------
+
+Use special tags
+\todo
+\fixme
+\remind
+\attention
+
+Use <c>null</c>
+
+
+Preprocessor statements
+-----------------------
+
+Use
+#if (FALSE)
+to permanently disable blocks of code.
+FALSE is never defined in C#, #if (FALSE) clearly states that block isn't in use.
+
+Write
+#if (FALSE)
+			<Block>
+#endif
+at column 0 to keep code structure clear of disabled block.
+
+Use
+#if (!DEBUG)
+			try
+			{
+#endif
+to enable or disable blocks of code depending on configuration switches or write preprocessor
+statements one level out of normal code structure to clearly show that these statements
+		#if (!DEBUG)
+			try
+			{
+		#endif
+do not belong to the normal code. Decided on version a) or b) such that readability is optimal.
+
+
+Classes
+-------
+Use static classes instead of Singletons
+
+
+Static Classes
+--------------
+Use e.g. 'public static' instead of 'static public'
+Use e.g. 'public static new' instead of something else
+
+
+Inheritance
+-----------
+- Implement IEquatable
+- Implement ICloneable (Problem: return type is object)
+- Implement TryParse() and Parse()
+- Use and TryParse() instead of Parse()
+
+
+Dispose
+-------
+
+Base class
+
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary></summary>
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!this.isDisposed)
+			{
+				if (disposing)
+				{
+					// Dispose of unmanaged resources.
+				}
+				this.isDisposed = true;
+			}
+		}
+
+		/// <summary></summary>
+		~Device()
+		{
+			Dispose(false);
+		}
+
+		/// <summary></summary>
+		protected bool IsDisposed
+		{
+			get { return (this.isDisposed); }
+		}
+
+		/// <summary></summary>
+		protected void AssertNotDisposed()
+		{
+			if (this.isDisposed)
+				throw (new ObjectDisposedException(GetType().ToString(), "Object has already been disposed"));
+		}
+
+		#endregion
+
+
+Inherited class
+
+		#region Disposal
+		//------------------------------------------------------------------------------------------
+		// Disposal
+		//------------------------------------------------------------------------------------------
+
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				// Dispose of unmanaged resources.
+			}
+			base.Dispose(disposing);
+		}
+
+		#endregion
+
+
+Also see "Implementing Finalize and Dispose to Clean Up Unmanaged Resources" in the MSDN.
+
+
+Equality
+--------
+> Always implement operators ==/!= on value types
+> Always implement IEquatable
+> Implement operators ==/!= on base types
+> See MKY.Utilities.Test.EqualityTest
+
+
+Variables
+---------
+- Do not re-initialize fields with default value of respective type
+- Always initialize local variables
+
+
+Useful .NET classes
+-------------------
+- Console.Title/.ForegroundColor/.ResetColor
+- System.Media.SystemSounds
+- DefaultFontValue
+
+
+Known issues
+------------
+- Die ReadLine() Methode der .NET Komponente funktioniert nicht zuverlässig mit USB-RS232 Konvertern
+- "Excel sample [.NET Framework]"

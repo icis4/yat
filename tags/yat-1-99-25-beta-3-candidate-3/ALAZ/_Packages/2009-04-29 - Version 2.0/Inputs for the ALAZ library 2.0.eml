@@ -1,0 +1,314 @@
+X-Mozilla-Keys:                                                                                 
+Message-ID: <4AA6C990.3070908@bluewin.ch>
+Date: Tue, 08 Sep 2009 23:16:00 +0200
+From: =?ISO-8859-15?Q?Matthias_Kl=E4y?= <matthias_klaey@bluewin.ch>
+Reply-To: m.klaey@switzerland.org
+User-Agent: Thunderbird 2.0.0.23 (Windows/20090812)
+MIME-Version: 1.0
+To: az.andrel@yahoo.com.br
+Subject: Inputs for the ALAZ library 2.0
+Content-Type: multipart/alternative;
+ boundary="------------020009040403040109050805"
+
+This is a multi-part message in MIME format.
+--------------020009040403040109050805
+Content-Type: text/plain; charset=ISO-8859-15; format=flowed
+Content-Transfer-Encoding: 8bit
+
+Dear Andre Luis
+
+I am using your excellent socket extension in another open source 
+project called "YAT - Yet Another Terminal" 
+(https://sourceforge.net/projects/y-a-terminal/). YAT features an 
+RS-232/422/423/485 terminal optimized for communication with embedded 
+systems. In addition it also supports TCP client/server/AutoSocket and 
+UDP connections for PC based embedded systems simulations, AutoSocket 
+being an automatic client/server detection mechanism.
+
+So far I've been using ALAZ 1.4/1.5 on .NET 2.0, recently I have updated 
+YAT to ALAZ 2.0 and .NET 3.5. Of course it didn't build right from 
+start. But then I realized that back in 2007 I made significant 
+modifications to ALAZ:
+- Adding support for UDP (HostType.htUdp)
+- Improving stability by adding exception handling at several places
+- Changing SocketsEx\BaseSocketConnectionHost.StopConnections() from 
+blocking to non-blocking
+- Some other modification which in retrospect where rather silly
+
+I was glad to see that you have improved the exception handling in ALAZ 
+2.0. So I didn't need to redo these modifications. But I had to redo the 
+support for UDP. Isn't a big thing, still, I am wondering whether you 
+could consider to add UDP support to the original ALAZ library for 
+future versions. In retrospect, I should have given you this input 
+already in 2007, my fault. Better later than never ;-)
+
+_UDP_
+In order to support UDP, I made modifications at the following locations:
+- \SocketsEx\SocketConnector
+    > private ProtocolType FProtocolType;
+    > Constructor taking the protocol type as additional argument
+    > BeginConnect() taking the protocol type into account
+- \SocketsEx\SocketClient
+    > using System.Net.Sockets;
+    > Another constructor taking the protocol type as additional argument
+- \SocketsEx\SocketServer
+    > using System.Net.Sockets;
+    > Another constructor taking the protocol type as additional argument
+- \SocketsEx\SocketClientSync
+    > private ProtocolType FProtocolType;
+    > Constructor taking the protocol type as additional argument
+    > Connect() taking the protocol type into account
+- \SocketsEx\BaseSocketConnectionHost
+    > private ProtocolType FProtocolType;
+    > public ProtocolType ProtocolType { get; }
+    > Constructor: Protocol type as additional argument
+
+_SocketsEx\BaseSocketConnectionHost.StopConnections()_
+I am not exactly getting why this method is blocking and therefore makes 
+Stop() blocking. The Start() method isn't blocking.
+If Stop() is called from a GUI thread and the GUI is attached to the 
+Disconnected event, a dead-lock happens:
+- The GUI thread is blocked here
+- FireOnDisconnected is blocked when trying to synchronize Invoke() onto 
+the GUI thread
+
+However, I am then getting an ObjectDisposedException in 
+CloseConnection() on connection.Socket.Shutdown(SocketShutdown.Send) 
+when stopping:
+/System.ObjectDisposedException was unhandled
+  Message="Cannot access disposed object \"System.Net.Sockets.Socket\"."
+  Source="System"
+  ObjectName="System.Net.Sockets.Socket"
+  StackTrace:
+       at System.Net.Sockets.Socket.Shutdown(SocketShutdown how)
+       at 
+ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.CloseConnection(BaseSocketConnection 
+connection) in \SocketsEx\BaseSocketConnectionHost.cs:Line 1805.
+       at 
+ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginDisconnectCallbackAsync(Object 
+sender, SocketAsyncEventArgs e) in 
+\SocketsEx\BaseSocketConnectionHost.cs:Line1489.
+       at 
+System.Net.Sockets.SocketAsyncEventArgs.OnCompleted(SocketAsyncEventArgs e)
+       at 
+System.Net.Sockets.SocketAsyncEventArgs.ExecutionCallback(Object ignored)
+       at System.Threading.ExecutionContext.runTryCode(Object userData)
+       at 
+System.Runtime.CompilerServices.RuntimeHelpers.ExecuteCodeWithGuaranteedCleanup(TryCode 
+code, CleanupCode backoutCode, Object userData)
+       at System.Threading.ExecutionContext.RunInternal(ExecutionContext 
+executionContext, ContextCallback callback, Object state)
+       at System.Threading.ExecutionContext.Run(ExecutionContext 
+executionContext, ContextCallback callback, Object state)
+       at 
+System.Net.Sockets.SocketAsyncEventArgs.FinishOperationSuccess(SocketError 
+socketError, Int32 bytesTransferred, SocketFlags flags)
+       at 
+System.Net.Sockets.SocketAsyncEventArgs.CompletionPortCallback(UInt32 
+errorCode, UInt32 numBytes, NativeOverlapped* nativeOverlapped)
+       at 
+System.Threading._IOCompletionCallback.PerformIOCompletionCallback(UInt32 
+errorCode, UInt32 numBytes, NativeOverlapped* pOVERLAP)
+/I simply commented-out the 
+connection.Socket.Shutdown(SocketShutdown.Send) call and it works in my 
+case (but probably not in other cases, also see below).
+
+_Disposal_
+Probably due to the modifications mentioned above, tt seems that TCP 
+server sockets don't properly shut down when Dispose() is called. As I 
+understand the purpose of Dispose(), a call to this method must always 
+be possible and it must immediately release all resources the object 
+holds. In case of TCP server this seems not the case.
+
+_Distribution
+_There are a few files in your distribution which I think shouldn't be 
+in there. I had to remove/untick them before checking them into my SVN.
+- *.user
+- \Code\Demos\Echo\EchoConsoleServer\Service References
+- \Code\Demos\Echo\EchoFormServer\*.tmp
+- \Code\Source\ALAZ.SystemEx\bin\
+- \Code\Source\ALAZ.SystemEx.NetEx\bin\
+
+_Some other inputs_
+- ALAZ AssemblyInfo.cs should have [assembly: CLSCompliant(true)] enabled
+    > Allows libraries/programs to be CLS compliant
+- The "ALAZLibSN.snk" should be within "\Properties"
+- The "ALAZLibSN.snk" should be available in both projects
+- The "ALAZLibSN.snk" should be referenced/enabled in both projects
+- How about adding a static class diagram to the Visual Studio project?
+- How about providing BaseSocketConnectionHost/SocketClient/SocketServer 
+constructors that use ctWorkerThread by default?
+- How about using System.Threading.Timeout.Infinite to emphasize 
+infinite timeout values?
+- How about providing default constants for 1024 * 2 and 1024 * 16?
+
+Best regards & thanks again for the ALAZ library
+Matthias
+
+-- 
+ 
+Matthias Kläy :: m.klaey@switzerland.org
+ 
+
+
+--------------020009040403040109050805
+Content-Type: text/html; charset=ISO-8859-15
+Content-Transfer-Encoding: 8bit
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+</head>
+<body bgcolor="#ffffff" text="#000000">
+Dear Andre Luis<br>
+<br>
+I am using your excellent socket extension in another open source
+project called "YAT - Yet Another Terminal"
+(<a class="moz-txt-link-freetext" href="https://sourceforge.net/projects/y-a-terminal/">https://sourceforge.net/projects/y-a-terminal/</a>). YAT features an
+RS-232/422/423/485 terminal optimized for communication with embedded
+systems. In addition it also supports TCP client/server/AutoSocket and
+UDP connections for PC based embedded systems simulations, AutoSocket
+being an automatic client/server detection
+mechanism.<br>
+<br>
+So far I've been using ALAZ 1.4/1.5 on .NET 2.0, recently I have
+updated YAT
+to
+ALAZ 2.0 and .NET 3.5. Of course it didn't build right from start. But
+then
+I realized that back in 2007 I made significant modifications to ALAZ:<br>
+- Adding support for UDP (HostType.htUdp)<br>
+- Improving stability by adding exception handling at several places<br>
+- Changing SocketsEx\BaseSocketConnectionHost.StopConnections() from
+blocking to non-blocking<br>
+- Some other modification which in retrospect where rather silly<br>
+<br>
+I was glad to see that you have improved the exception handling in ALAZ
+2.0.
+So I didn't need to redo these modifications. But I had to redo the
+support for UDP. Isn't a big thing, still, I am wondering whether you
+could consider to add UDP support to the original ALAZ library for
+future versions. In retrospect, I should have given you this input
+already in 2007, my fault. Better later than never ;-)<br>
+<br>
+<u>UDP</u><br>
+In order to support UDP, I made modifications at the following
+locations:<br>
+- \SocketsEx\SocketConnector<br>
+    &gt; private ProtocolType FProtocolType;<br>
+    &gt; Constructor taking the protocol type as additional argument<br>
+    &gt; BeginConnect() taking the protocol type into account<br>
+- \SocketsEx\SocketClient<br>
+    &gt; using System.Net.Sockets;<br>
+    &gt; Another constructor taking the protocol type as additional
+argument<br>
+- \SocketsEx\SocketServer<br>
+    &gt; using System.Net.Sockets;<br>
+    &gt; Another constructor taking the protocol type as additional
+argument<br>
+- \SocketsEx\SocketClientSync<br>
+    &gt; private ProtocolType FProtocolType;<br>
+    &gt; Constructor taking the protocol type as additional argument<br>
+    &gt; Connect() taking the protocol type into account<br>
+- \SocketsEx\BaseSocketConnectionHost<br>
+    &gt; private ProtocolType FProtocolType;<br>
+    &gt; public ProtocolType ProtocolType { get; }<br>
+    &gt; Constructor: Protocol type as additional argument<br>
+<br>
+<u>SocketsEx\BaseSocketConnectionHost.StopConnections()</u><br>
+I am not exactly getting why this method is blocking and therefore
+makes Stop() blocking. The Start() method isn't blocking.<br>
+If Stop() is called from a GUI thread and the GUI is attached to the
+Disconnected event, a dead-lock happens:<br>
+- The GUI thread is blocked here<br>
+- FireOnDisconnected is blocked when trying to synchronize Invoke()
+onto the GUI thread<br>
+<br>
+However, I am then getting an ObjectDisposedException in
+CloseConnection() on connection.Socket.Shutdown(SocketShutdown.Send)
+when stopping:<br>
+<i>System.ObjectDisposedException was unhandled<br>
+  Message="Cannot access disposed object \"System.Net.Sockets.Socket\"."<br>
+  Source="System"<br>
+  ObjectName="System.Net.Sockets.Socket"<br>
+  StackTrace:<br>
+       at System.Net.Sockets.Socket.Shutdown(SocketShutdown how)<br>
+       at
+ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.CloseConnection(BaseSocketConnection
+connection) in \SocketsEx\BaseSocketConnectionHost.cs:Line 1805.<br>
+       at
+ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginDisconnectCallbackAsync(Object
+sender, SocketAsyncEventArgs e) in
+\SocketsEx\BaseSocketConnectionHost.cs:Line1489.<br>
+       at
+System.Net.Sockets.SocketAsyncEventArgs.OnCompleted(SocketAsyncEventArgs
+e)<br>
+       at
+System.Net.Sockets.SocketAsyncEventArgs.ExecutionCallback(Object
+ignored)<br>
+       at System.Threading.ExecutionContext.runTryCode(Object userData)<br>
+       at
+System.Runtime.CompilerServices.RuntimeHelpers.ExecuteCodeWithGuaranteedCleanup(TryCode
+code, CleanupCode backoutCode, Object userData)<br>
+       at
+System.Threading.ExecutionContext.RunInternal(ExecutionContext
+executionContext, ContextCallback callback, Object state)<br>
+       at System.Threading.ExecutionContext.Run(ExecutionContext
+executionContext, ContextCallback callback, Object state)<br>
+       at
+System.Net.Sockets.SocketAsyncEventArgs.FinishOperationSuccess(SocketError
+socketError, Int32 bytesTransferred, SocketFlags flags)<br>
+       at
+System.Net.Sockets.SocketAsyncEventArgs.CompletionPortCallback(UInt32
+errorCode, UInt32 numBytes, NativeOverlapped* nativeOverlapped)<br>
+       at
+System.Threading._IOCompletionCallback.PerformIOCompletionCallback(UInt32
+errorCode, UInt32 numBytes, NativeOverlapped* pOVERLAP)<br>
+</i>I simply commented-out the
+connection.Socket.Shutdown(SocketShutdown.Send) call and it works in my
+case (but probably not in other cases, also see below).<br>
+<br>
+<u>Disposal</u><br>
+Probably due to the modifications mentioned above, tt seems that TCP
+server sockets don't properly shut down when Dispose() is called. As I
+understand the purpose of Dispose(), a call to this method must always
+be possible and it must immediately release all resources the object
+holds. In case of TCP server this seems not the case.<br>
+<br>
+<u>Distribution<br>
+</u>There are a few files in your distribution which I think shouldn't
+be in there. I had to remove/untick them before checking them into my
+SVN.<br>
+- *.user<br>
+- \Code\Demos\Echo\EchoConsoleServer\Service References<br>
+- \Code\Demos\Echo\EchoFormServer\*.tmp<br>
+- \Code\Source\ALAZ.SystemEx\bin\<br>
+- \Code\Source\ALAZ.SystemEx.NetEx\bin\<br>
+<br>
+<u>Some other inputs</u><br>
+- ALAZ AssemblyInfo.cs should have [assembly: CLSCompliant(true)]
+enabled<br>
+    &gt; Allows libraries/programs to be CLS compliant<br>
+- The "ALAZLibSN.snk" should be within "\Properties"<br>
+- The "ALAZLibSN.snk" should be available in both projects<br>
+- The "ALAZLibSN.snk" should be referenced/enabled in both projects<br>
+- How about adding a static class diagram to the Visual Studio project?<br>
+- How about providing
+BaseSocketConnectionHost/SocketClient/SocketServer constructors that
+use ctWorkerThread by default?<br>
+- How about using System.Threading.Timeout.Infinite to emphasize
+infinite timeout values?<br>
+- How about providing default constants for 1024 * 2 and 1024 * 16?<br>
+<br>
+Best regards &amp; thanks again for the ALAZ library<br>
+Matthias<br>
+<pre class="moz-signature" cols="72">-- 
+ 
+Matthias Kläy :: <a class="moz-txt-link-abbreviated"
+ href="mailto:m.klaey@switzerland.org">m.klaey@switzerland.org</a>
+ </pre>
+</body>
+</html>
+
+--------------020009040403040109050805--
+
