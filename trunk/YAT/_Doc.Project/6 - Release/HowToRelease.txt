@@ -151,8 +151,8 @@ Note:	The whole release process takes about 6 hours
 
 18.	Recreate YAT working copy                                                           0:30 / 5:30
 	-----------------------------------------------------------------------------------------------
-	[ ] Remove existing backups "_Trunk_<VersionOld>"
-	[ ] Rename the existing working copy to "_Trunk_<VersionNew>"
+	[ ] Remove existing backups "_Trunk_<Old Date>"
+	[ ] Rename the existing working copy to "_Trunk_<New Date>"
 	[ ] Create a new folder "_Trunk"
 	[ ] Check the head revision out into "_Trunk"
 
