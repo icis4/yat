@@ -4,7 +4,7 @@
   <Warning>Modifying this file may cause undefined behaviour!</Warning>
   <ProductVersion>1.99.25</ProductVersion>
   <Saved>
-    <TimeStamp>2010-11-28T13:23:24.6050435+01:00</TimeStamp>
+    <TimeStamp>2010-11-28T13:38:09.1336357+01:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>
@@ -13,10 +13,10 @@
     <Terminal>
       <TerminalType>Text</TerminalType>
       <IO>
-        <IOType>SerialPort</IOType>
+        <IOType>TcpAutoSocket</IOType>
         <SerialPort>
           <PortId>
-            <Name>COM1</Name>
+            <Name>COM2</Name>
           </PortId>
           <Communication>
             <BaudRate>9600</BaudRate>
@@ -39,7 +39,7 @@
         <SerialParityErrorReplacement>\h(00)</SerialParityErrorReplacement>
         <Socket>
           <HostType>TcpAutoSocket</HostType>
-          <RemoteHost>&lt;Localhost&gt;</RemoteHost>
+          <RemoteHost>localhost</RemoteHost>
           <RemotePort>10000</RemotePort>
           <LocalInterface>&lt;Any&gt;</LocalInterface>
           <LocalTcpPort>10000</LocalTcpPort>
@@ -50,6 +50,11 @@
           </TcpClientAutoReconnect>
         </Socket>
         <UsbSerialHidDevice>
+          <DeviceInfo>
+            <VendorId>3768</VendorId>
+            <ProductId>8704</ProductId>
+            <SerialNumber>MK.8</SerialNumber>
+          </DeviceInfo>
           <AutoOpen>true</AutoOpen>
         </UsbSerialHidDevice>
         <Endianess>BigEndian</Endianess>
@@ -131,94 +136,7 @@
         </RxDisplay>
       </BinaryTerminal>
     </Terminal>
-    <PredefinedCommand>
-      <Pages>
-        <PageName>First Page</PageName>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>1A</Description>
-          <CommandLines>1A</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsPartialText>false</IsPartialText>
-          <IsPartialEolText>false</IsPartialEolText>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>1B</Description>
-          <CommandLines>1B</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsPartialText>false</IsPartialText>
-          <IsPartialEolText>false</IsPartialEolText>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>1C</Description>
-          <CommandLines>1C</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsPartialText>false</IsPartialText>
-          <IsPartialEolText>false</IsPartialEolText>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>1D</Description>
-          <CommandLines>1D</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsPartialText>false</IsPartialText>
-          <IsPartialEolText>false</IsPartialEolText>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-      </Pages>
-      <Pages>
-        <PageName>Second Page</PageName>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>2A</Description>
-          <CommandLines>2A</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsPartialText>false</IsPartialText>
-          <IsPartialEolText>false</IsPartialEolText>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>2B</Description>
-          <CommandLines>2B</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsPartialText>false</IsPartialText>
-          <IsPartialEolText>false</IsPartialEolText>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>2C</Description>
-          <CommandLines>2C</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsPartialText>false</IsPartialText>
-          <IsPartialEolText>false</IsPartialEolText>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-        <Commands>
-          <IsDefined>true</IsDefined>
-          <Description>2D</Description>
-          <CommandLines>2D</CommandLines>
-          <DefaultRadix>String</DefaultRadix>
-          <IsPartialText>false</IsPartialText>
-          <IsPartialEolText>false</IsPartialEolText>
-          <IsFilePath>false</IsFilePath>
-          <FilePath />
-        </Commands>
-      </Pages>
-    </PredefinedCommand>
+    <PredefinedCommand />
     <Format>
       <Font>
         <Name>DejaVu Sans Mono</Name>
@@ -259,7 +177,7 @@
       </ErrorFormat>
     </Format>
     <Log>
-      <RootPath>C:\Dokumente und Einstellungen\Matthias\Eigene Dateien</RootPath>
+      <RootPath>C:\Users\Matthias\Documents</RootPath>
       <RootFileName>YAT-Log</RootFileName>
       <RawLogTx>false</RawLogTx>
       <RawLogBidir>false</RawLogBidir>
@@ -280,11 +198,11 @@
     </Log>
   </Explicit>
   <Implicit>
-    <TerminalIsStarted>false</TerminalIsStarted>
+    <TerminalIsStarted>true</TerminalIsStarted>
     <LogIsStarted>false</LogIsStarted>
     <SendCommand>
       <Command>
-        <IsDefined>true</IsDefined>
+        <IsDefined>false</IsDefined>
         <Description />
         <CommandLines />
         <DefaultRadix>String</DefaultRadix>
@@ -310,14 +228,14 @@
       <SelectedPage>1</SelectedPage>
     </Predefined>
     <Window>
-      <State>Maximized</State>
+      <State>Normal</State>
       <Location>
-        <X>0</X>
+        <X>598</X>
         <Y>0</Y>
       </Location>
       <Size>
-        <Width>800</Width>
-        <Height>600</Height>
+        <Width>598</Width>
+        <Height>590</Height>
       </Size>
     </Window>
     <Layout>
@@ -328,7 +246,7 @@
       <TxMonitorSplitterRatio>0.333333343</TxMonitorSplitterRatio>
       <RxMonitorSplitterRatio>0.5</RxMonitorSplitterRatio>
       <PredefinedPanelIsVisible>true</PredefinedPanelIsVisible>
-      <PredefinedSplitterRatio>0.75</PredefinedSplitterRatio>
+      <PredefinedSplitterRatio>0.7491409</PredefinedSplitterRatio>
       <SendCommandPanelIsVisible>true</SendCommandPanelIsVisible>
       <SendFilePanelIsVisible>true</SendFilePanelIsVisible>
     </Layout>

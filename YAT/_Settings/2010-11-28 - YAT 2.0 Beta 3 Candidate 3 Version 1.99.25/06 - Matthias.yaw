@@ -2,29 +2,29 @@
 <Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <FileType>YAT Workspace Settings</FileType>
   <Warning>Modifying this file may cause undefined behaviour!</Warning>
-  <ProductVersion>1.99.25</ProductVersion>
   <Saved>
-    <TimeStamp>2010-11-28T13:24:32.7039385+01:00</TimeStamp>
+    <TimeStamp>2010-11-28T14:30:19.1046598+01:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
+  <ProductVersion>1.99.25</ProductVersion>
   <AutoSaved>false</AutoSaved>
   <Workspace>
     <TerminalSettings>
-      <FilePath>.\04 - COM2 - Open.yat</FilePath>
+      <FilePath>.\06 - TCP AutoSocket 1 - Connected.yat</FilePath>
       <Window>
         <State>Normal</State>
         <Location>
-          <X>394</X>
+          <X>598</X>
           <Y>0</Y>
         </Location>
         <Size>
-          <Width>394</Width>
-          <Height>496</Height>
+          <Width>598</Width>
+          <Height>590</Height>
         </Size>
       </Window>
     </TerminalSettings>
     <TerminalSettings>
-      <FilePath>.\04 - COM1 - Open.yat</FilePath>
+      <FilePath>.\06 - TCP AutoSocket 2 - Connected.yat</FilePath>
       <Window>
         <State>Normal</State>
         <Location>
@@ -32,8 +32,8 @@
           <Y>0</Y>
         </Location>
         <Size>
-          <Width>394</Width>
-          <Height>496</Height>
+          <Width>598</Width>
+          <Height>590</Height>
         </Size>
       </Window>
     </TerminalSettings>
