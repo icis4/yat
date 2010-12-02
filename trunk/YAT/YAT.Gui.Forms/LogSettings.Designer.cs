@@ -313,7 +313,7 @@ namespace YAT.Gui.Forms
 			this.groupBox_Raw.Size = new System.Drawing.Size(500, 100);
 			this.groupBox_Raw.TabIndex = 4;
 			this.groupBox_Raw.TabStop = false;
-			this.groupBox_Raw.Text = "&Raw Log Outputs (Bytes as transimitted over serial interface)";
+			this.groupBox_Raw.Text = "&Raw Log Outputs (Bytes as transmitted over serial interface)";
 			// 
 			// pathLabel_Raw_Rx
 			// 
