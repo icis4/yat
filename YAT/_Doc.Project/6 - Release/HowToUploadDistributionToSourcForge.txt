@@ -1,9 +1,9 @@
 
-0.	Log in as y-a-terminal
-	----------------------
+1.	Log in as 'y-a-terminal'
+	------------------------
 
 
-1.	Prepare upload to SourceForge
+2.	Prepare upload to SourceForge
 	-----------------------------
 	[ ] Open File Manager
 	[ ] Add release folder (e.g. "Version 1.99.25 - YAT 2.0 Beta 3 Candidate 3")
@@ -12,34 +12,36 @@
 	<https://sourceforge.net/apps/trac/sourceforge/wiki/Release%20files%20for%20download>
 
 
-2.	Add release
+3.	Add release
 	-----------
 	[ ] Upload release notes
 	[ ] Tick release notes as such
 	[ ] Link folder to release notes
-		> The latest release notes is the last entry in the listbox
+		> The latest release notes is the topmost entry in the listbox
 	[ ] Upload normal distribution .zip using web interface
 		> Takes approx. 2 minutes (for 6 MB)
-	[ ] Link file to release notes
+		> File doesn't need to be linked to release notes
 	[ ] Tick default platform download on normal distribution
 	[ ] Upload .NET distribution .zip using FileZilla/SFTP (bigger than 20 MB)
 		> From "<Offline Repository>\Releases and Checkpoints\<Release>\Distribution\"
 		> To "/home/pfs/project/y/y-/y-a-terminal/YAT 2.0/<Release>"
-		> Takes approx. 60 minutes (for 200 MB)
 		> Also see "FileZilla Upload.png"
-	[ ] Link file to release notes
+		> Takes approx. 60 minutes (for 200 MB)
+		> File doesn't need to be linked to release notes
 
 
-3.	Check release and release notes
+4.	Check release and release notes
 	-------------------------------
 	[ ] Reload YAT web page
 	[ ] Download release and verify contents of .zip
 	[ ] Browse release notes
 
 
-4.	Submit news
+5.	Submit news
 	-----------
-	e.g. "Candidate 3 for Beta 3 has been released. See the release notes for details on new features, important changes, fixed bugs and known limitations."
+	e.g.
+	> "YAT 2.0 Beta 3 Candidate 3 Version 1.99.25"
+	> "Candidate 3 for Beta 3 has been released. This release fixes a few issues that are crucial to tasks ongoing at projects of YAT users. See the release notes for details on new features, important changes, fixed bugs and known limitations."
 	
 	HowTo:
 	<https://sourceforge.net/apps/trac/sourceforge/wiki/News>
