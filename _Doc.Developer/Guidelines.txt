@@ -1,4 +1,4 @@
-
+﻿
 Assemblies
 ----------
 
@@ -175,5 +175,5 @@ Useful .NET classes
 
 Known issues
 ------------
-- Die ReadLine() Methode der .NET Komponente funktioniert nicht zuverl�ssig mit USB-RS232 Konvertern
+- Die ReadLine() Methode der .NET Komponente funktioniert nicht zuverlässig mit USB-RS232 Konvertern
 - "Excel sample [.NET Framework]"

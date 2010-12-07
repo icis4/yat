@@ -1,4 +1,4 @@
-namespace YAT.Gui.Controls
+﻿namespace YAT.Gui.Controls
 {
 	partial class PredefinedCommandPageButtons
 	{

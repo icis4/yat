@@ -41,6 +41,41 @@ and install it manually.
 2. History of changes in YAT
 ====================================================================================================
 
+YAT 2.0 Beta 3 Candidate 4 Version 1.99.26 :: 2011-0x-xx
+----------------------------------------------------------------------------------------------------
+
+New:
+- <>
+
+Important changes:
+- Update to DejaVu 2.32
+- All source code and text files converted to UTF-8
+
+Fixed bugs:
+- <>
+
+Limitations and known issues:
+- MDI limitations of .NET
+   > Issues with frame (bugs #1808492 and #1808493)
+   > Issues with window list (bugs #1808494 and #2846917)
+   > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684)
+- Long monitor contents are not displayed properly when scrolling using scroll bar (bug #2865562)
+- Response of multi-line commands or files is delayed (bug #3072919)
+- Serial port auto-reopen not yet implementable due to .NET deadlock issue in System.IO.SerialPort
+  (feature request #1960299)
+- Support for serial ports which are named other than COM isn't supported by .NET
+  (feature request #2848228)
+- USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
+  of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
+- UTF-16/32 testing pending (bug #1931537)
+- Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)
+- Text terminals: Wait for answer line not yet implemented (feature request #1808509)
+- Terminal/direct mode does not yet support special formats and commands (feature request #1808496)
+- Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
+- Multiple simultaneous instances of YAT are limited in the use of default workspaces and terminals
+  (feature request #2842713)
+
+
 YAT 2.0 Beta 3 Candidate 3 Version 1.99.25 :: 2010-11-28
 ----------------------------------------------------------------------------------------------------
 

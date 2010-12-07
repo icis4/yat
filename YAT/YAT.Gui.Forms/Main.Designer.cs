@@ -1,4 +1,4 @@
-namespace YAT.Gui.Forms
+﻿namespace YAT.Gui.Forms
 {
 	partial class Main
 	{

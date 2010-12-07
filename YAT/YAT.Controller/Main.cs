@@ -1,4 +1,4 @@
-//==================================================================================================
+ï»¿//==================================================================================================
 // YAT - Yet Another Terminal.
 // Visit YAT at http://sourceforge.net/projects/y-a-terminal.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
@@ -10,8 +10,8 @@
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2010 Matthias Kläy.
+// Copyright Â© 2003-2004 HSR Hochschule fÃ¼r Technik Rapperswil.
+// Copyright Â© 2003-2010 Matthias KlÃ¤y.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
@@ -51,8 +51,8 @@ namespace YAT.Controller
 			"Operate and debug serial communications.",
 			"Supports RS-232/422/423/485...",
 			"...as well as TCP-Client/Server/AutoSocket, UDP and USB Ser/HID",
-			"Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.",
-			"Copyright © 2003-2010 Matthias Kläy.",
+			"Copyright Â© 2003-2004 HSR Hochschule fÃ¼r Technik Rapperswil.",
+			"Copyright Â© 2003-2010 Matthias KlÃ¤y.",
 			"",
 			ApplicationInfo.ProductName + " - Version " + Application.ProductVersion,
 		};

@@ -1,4 +1,4 @@
-//==================================================================================================
+Ôªø//==================================================================================================
 // YAT - Yet Another Terminal.
 // Visit YAT at http://sourceforge.net/projects/y-a-terminal.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
@@ -10,8 +10,8 @@
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2003-2004 HSR Hochschule f¸r Technik Rapperswil.
-// Copyright © 2003-2010 Matthias Kl‰y.
+// Copyright ¬© 2003-2004 HSR Hochschule f√ºr Technik Rapperswil.
+// Copyright ¬© 2003-2010 Matthias Kl√§y.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
@@ -52,10 +52,10 @@ namespace YAT.Gui.Forms
 
 			// Copyright.
 			linkLabel_Copyright.Text = "";
-			textBefore = "Copyright © 2003-2004 ";
-			textLink =                         "HSR Hochschule f¸r Technik Rapperswil";
+			textBefore = "Copyright ¬© 2003-2004 ";
+			textLink =                         "HSR Hochschule f√ºr Technik Rapperswil";
 			textAfter =                                                             "." + Environment.NewLine +
-			             "Copyright © 2003-2010 Matthias Kl‰y.";
+			             "Copyright ¬© 2003-2010 Matthias Kl√§y.";
 			linkLabel_Copyright.Text += textBefore;
 			start = linkLabel_Copyright.Text.Length;
 			linkLabel_Copyright.Text += textLink;
@@ -123,7 +123,7 @@ namespace YAT.Gui.Forms
 						 "   > Microsoft Visual Studio 2008" + Environment.NewLine +
 						 "   > AnkhSVN" + Environment.NewLine +
 						 "   > NUnit" + Environment.NewLine +
-						 "   > System.IO.Ports serial port extension by Matthias Kl‰y" + Environment.NewLine +
+						 "   > System.IO.Ports serial port extension by Matthias Kl√§y" + Environment.NewLine +
 
 						 "   > System.Net.Sockets socket extension ";
 			textLink =                                            "ALAZ";
@@ -150,7 +150,7 @@ namespace YAT.Gui.Forms
 
 			textBefore =                                                        "/";
 			textLink =                                                           "UsbHid";
-			textAfter =                                                                " by Matthias Kl‰y";
+			textAfter =                                                                " by Matthias Kl√§y";
 			linkLabel_Environment.Text += textBefore;
 			start = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
@@ -206,7 +206,7 @@ namespace YAT.Gui.Forms
 			linkLabel_Home.Text += textAfter;
 
 			// Author.
-			linkLabel_Author.Text = "2010, Matthias Kl‰y";
+			linkLabel_Author.Text = "2010, Matthias Kl√§y";
 
 			// License.
 			linkLabel_License.Text = "";

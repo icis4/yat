@@ -1,4 +1,4 @@
-//==================================================================================================
+﻿//==================================================================================================
 // YAT - Yet Another Terminal.
 // Visit YAT at http://sourceforge.net/projects/y-a-terminal.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
@@ -10,8 +10,8 @@
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
-// Copyright � 2003-2004 HSR Hochschule f�r Technik Rapperswil.
-// Copyright � 2003-2010 Matthias Kl�y.
+// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
+// Copyright © 2003-2010 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
@@ -100,6 +100,44 @@ namespace YAT.Domain.Test.Parser
 		}
 
 		#endregion
+
+		#region Test Cases Encoding
+		//==========================================================================================
+		// Test Cases Encoding
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static IEnumerable TestCasesEncoding
+		{
+			get
+			{
+				// ASCII.
+				yield return (new TestCaseData(Encoding.ASCII, "abc", new byte[] { 0x61, 0x62, 0x63 }));
+
+				// UTF-8.
+				yield return (new TestCaseData(Encoding.UTF8, "abc", new byte[] { 0x61, 0x62, 0x63 }));
+				yield return (new TestCaseData(Encoding.UTF8, "äöü", new byte[] { 0xC3, 0xA4, 0xC3, 0xB6, 0xC3, 0xBC }));
+				yield return (new TestCaseData(Encoding.UTF8, "ÄÖÜ", new byte[] { 0xC3, 0x84, 0xC3, 0x96, 0xC3, 0x9C }));
+				yield return (new TestCaseData(Encoding.UTF8, "$£€", new byte[] { 0x24, 0xC2, 0xA3, 0xE2, 0x82, 0xAC }));
+				yield return (new TestCaseData(Encoding.UTF8, "čěř", new byte[] { 0xC4, 0x8D, 0xC4, 0x9B, 0xC5, 0x99 }));
+
+				// UTF-16 (little endian).
+				yield return (new TestCaseData(Encoding.Unicode, "abc", new byte[] { 0x00, 0x61, 0x00, 0xB6, 0x00, 0x63 }));
+				yield return (new TestCaseData(Encoding.Unicode, "äöü", new byte[] { 0x00, 0xE4, 0x00, 0xF6, 0x00, 0xFC }));
+				yield return (new TestCaseData(Encoding.Unicode, "ÄÖÜ", new byte[] { 0x00, 0xC4, 0x00, 0xD6, 0x00, 0xDC }));
+				yield return (new TestCaseData(Encoding.Unicode, "$£€", new byte[] { 0x00, 0x24, 0x00, 0xA3, 0x20, 0xAC }));
+				yield return (new TestCaseData(Encoding.Unicode, "čěř", new byte[] { 0x01, 0x0D, 0x01, 0x1B, 0x01, 0x59 }));
+
+				// UTF-32 (little endian).
+				yield return (new TestCaseData(Encoding.UTF32, "abc", new byte[] { 0x00, 0x00, 0x00, 0x61, 0x00, 0x00, 0x00, 0x62, 0x00, 0x00, 0x00, 0x63 }));
+				yield return (new TestCaseData(Encoding.UTF32, "äöü", new byte[] { 0x00, 0x00, 0x00, 0xE4, 0x00, 0x00, 0x00, 0xF6, 0x00, 0x00, 0x00, 0xFC }));
+				yield return (new TestCaseData(Encoding.UTF32, "ÄÖÜ", new byte[] { 0x00, 0x00, 0x00, 0xC4, 0x00, 0x00, 0x00, 0xD6, 0x00, 0x00, 0x00, 0xDC }));
+				yield return (new TestCaseData(Encoding.UTF32, "$£€", new byte[] { 0x00, 0x00, 0x00, 0x24, 0x00, 0x00, 0x00, 0xA3, 0x00, 0x00, 0x20, 0xAC }));
+				yield return (new TestCaseData(Encoding.UTF32, "čěř", new byte[] { 0x00, 0x00, 0x01, 0x0D, 0x00, 0x00, 0x01, 0x1B, 0x00, 0x00, 0x01, 0x59 }));
+			}
+		}
+
+		#endregion
 	}
 
 	/// <summary></summary>
@@ -121,6 +159,22 @@ namespace YAT.Domain.Test.Parser
 		public virtual void TestParser(string inputString, byte[] expectedBytes)
 		{
 			Domain.Parser.Parser parser = new Domain.Parser.Parser();
+			byte[] actualBytes = parser.Parse(inputString);
+			Assert.AreEqual(expectedBytes, actualBytes);
+		}
+
+		#endregion
+
+		#region Tests > Encoding
+		//------------------------------------------------------------------------------------------
+		// Tests > Encoding
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(ParserTestData), "TestCasesEncoding")]
+		public virtual void TestParserEncoding(Encoding encoding, string inputString, byte[] expectedBytes)
+		{
+			Domain.Parser.Parser parser = new Domain.Parser.Parser(encoding);
 			byte[] actualBytes = parser.Parse(inputString);
 			Assert.AreEqual(expectedBytes, actualBytes);
 		}

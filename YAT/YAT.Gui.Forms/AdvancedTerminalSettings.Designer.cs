@@ -1,4 +1,4 @@
-namespace YAT.Gui.Forms
+﻿namespace YAT.Gui.Forms
 {
 	partial class AdvancedTerminalSettings
 	{
@@ -396,7 +396,7 @@ namespace YAT.Gui.Forms
 			this.label_SpaceReplacementChar.Name = "label_SpaceReplacementChar";
 			this.label_SpaceReplacementChar.Size = new System.Drawing.Size(16, 15);
 			this.label_SpaceReplacementChar.TabIndex = 1;
-			this.label_SpaceReplacementChar.Text = "␣";
+			this.label_SpaceReplacementChar.Text = "â£";
 			// 
 			// checkBox_ReplaceSpace
 			// 

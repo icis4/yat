@@ -1,4 +1,4 @@
-@ECHO OFF
+﻿@ECHO OFF
 
 CALL CleanAll-Options.bat
 CALL CleanAll-Setup.bat
