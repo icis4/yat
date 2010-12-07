@@ -139,9 +139,9 @@ HSR and Mettler-Toledo. YAT was initially developed as XTerm232 due to the lack 
    &gt; Microsoft Visual Studio &lt;VERSION&gt;
    &gt; AnkhSVN
    &gt; NUnit
-   &gt; System.IO.Ports serial port extension by Matthias KlÃ¤y
+   &gt; System.IO.Ports serial port extension by Matthias Kläy
    &gt; System.Net.Sockets socket extension ALAZ by Andre Luis Azevedo
-   &gt; USB HID library based on GenericHid/UsbLibrary/UsbHid by Matthias KlÃ¤y
+   &gt; USB HID library based on GenericHid/UsbLibrary/UsbHid by Matthias Kläy
    &gt; YAT icons from Nuvola by David Vignoni edited in GIMP
    &gt; Toolbar icons from free common set by glyfx
    &gt; Terminal font DejaVu
