@@ -1,4 +1,4 @@
-//==================================================================================================
+ï»¿//==================================================================================================
 // YAT - Yet Another Terminal.
 // Visit YAT at http://sourceforge.net/projects/y-a-terminal.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
@@ -10,8 +10,8 @@
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2010 Matthias Kläy.
+// Copyright Â© 2003-2004 HSR Hochschule fÃ¼r Technik Rapperswil.
+// Copyright Â© 2003-2010 Matthias KlÃ¤y.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -248,7 +248,7 @@ namespace MKY.Win32
 			Handle.NativeMethods.DuplicateHandle(hProcess, hStdOut, hProcess, out hStdOutDup, 0, true, Handle.NativeTypes.Options.DUPLICATE_SAME_ACCESS);
 			Handle.NativeMethods.DuplicateHandle(hProcess, hStdErr, hProcess, out hStdErrDup, 0, true, Handle.NativeTypes.Options.DUPLICATE_SAME_ACCESS);
 
-			// Attach to console window – this may modify the standard handles.
+			// Attach to console window â€“ this may modify the standard handles.
 			NativeMethods.AttachConsoleToParentProcess();
 
 			// Adjust the standard handles.

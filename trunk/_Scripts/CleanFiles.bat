@@ -1,4 +1,4 @@
-@ECHO OFF
+﻿@ECHO OFF
 
 IF %1=="" GOTO NoPath
 IF %2=="" GOTO NoDirectory

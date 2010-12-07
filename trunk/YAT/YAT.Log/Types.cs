@@ -1,4 +1,4 @@
-//==================================================================================================
+ï»¿//==================================================================================================
 // YAT - Yet Another Terminal.
 // Visit YAT at http://sourceforge.net/projects/y-a-terminal.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
@@ -10,8 +10,8 @@
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2010 Matthias Kläy.
+// Copyright Â© 2003-2004 HSR Hochschule fÃ¼r Technik Rapperswil.
+// Copyright Â© 2003-2010 Matthias KlÃ¤y.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
@@ -142,10 +142,10 @@ namespace YAT.Log
 		public const string DashWithSpacesToString = "Dash with spaces ( - )";
 
 		/// <summary></summary>
-		public const string BallToString = "Ball (°)";
+		public const string BallToString = "Ball (Â°)";
 
 		/// <summary></summary>
-		public const string BallWithSpacesToString = "Ball with spaces ( ° )";
+		public const string BallWithSpacesToString = "Ball with spaces ( Â° )";
 
 		/// <summary></summary>
 		public const string NoneToString = "None";
@@ -160,10 +160,10 @@ namespace YAT.Log
 		public static readonly FileNameSeparator DashWithSpaces = new FileNameSeparator(" - ", DashWithSpacesToString);
 
 		/// <summary></summary>
-		public static readonly FileNameSeparator Ball = new FileNameSeparator("°", BallToString);
+		public static readonly FileNameSeparator Ball = new FileNameSeparator("Â°", BallToString);
 
 		/// <summary></summary>
-		public static readonly FileNameSeparator BallWithSpaces = new FileNameSeparator(" ° ", BallWithSpacesToString);
+		public static readonly FileNameSeparator BallWithSpaces = new FileNameSeparator(" Â° ", BallWithSpacesToString);
 
 		/// <summary></summary>
 		public static readonly FileNameSeparator None = new FileNameSeparator("", NoneToString);

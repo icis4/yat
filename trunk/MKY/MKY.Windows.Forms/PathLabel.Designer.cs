@@ -1,4 +1,4 @@
-namespace MKY.Windows.Forms
+﻿namespace MKY.Windows.Forms
 {
 	partial class PathLabel
 	{

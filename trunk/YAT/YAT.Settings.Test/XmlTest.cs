@@ -1,4 +1,4 @@
-//==================================================================================================
+ï»¿//==================================================================================================
 // YAT - Yet Another Terminal.
 // Visit YAT at http://sourceforge.net/projects/y-a-terminal.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
@@ -10,8 +10,8 @@
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2010 Matthias Kläy.
+// Copyright Â© 2003-2004 HSR Hochschule fÃ¼r Technik Rapperswil.
+// Copyright Â© 2003-2010 Matthias KlÃ¤y.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
@@ -303,7 +303,7 @@ namespace YAT.Settings.Test
 			filePath = Temp.MakeTempFilePath(this.GetType(), "PredefinedCommandPage", FileExtension);
 			PredefinedCommandPage pcp = new PredefinedCommandPage();
 			pcp.Commands.Add(new Command("Hello", "World"));
-			pcp.Commands.Add(new Command("Hallo", "Wält"));
+			pcp.Commands.Add(new Command("Hallo", "WÃ¤lt"));
 			TestSerialization(typeof(PredefinedCommandPage), pcp, filePath);
 
 			PredefinedCommandPageCollection c = new PredefinedCommandPageCollection();

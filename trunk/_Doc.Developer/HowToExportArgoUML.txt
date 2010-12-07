@@ -1,4 +1,4 @@
-
+﻿
 In ArgoUML
 ----------
 1. Zoom out to 300%
@@ -14,4 +14,4 @@ In CorelDraw or other .svg capable graphics tool
 
 ---
 
-2007-11-27, Matthias Kl�y
+2007-11-27, Matthias Kläy

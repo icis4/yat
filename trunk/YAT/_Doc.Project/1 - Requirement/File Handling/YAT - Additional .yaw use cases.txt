@@ -1,4 +1,4 @@
-
+﻿
 - Same user starts multiple instances of YAT
   > Application settings are the same for all instances
   > Default workspace is different for each instance (\LocalUser\..\Workspace-GUID.yaw)
