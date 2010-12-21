@@ -39,7 +39,7 @@
 			// 
 			this.button_Close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button_Close.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button_Close.Location = new System.Drawing.Point(545, 418);
+			this.button_Close.Location = new System.Drawing.Point(677, 418);
 			this.button_Close.Name = "button_Close";
 			this.button_Close.Size = new System.Drawing.Size(75, 23);
 			this.button_Close.TabIndex = 1;
@@ -54,7 +54,7 @@
 			this.groupBox_ReleaseNotes.Controls.Add(this.textBox_ReleaseNotes);
 			this.groupBox_ReleaseNotes.Location = new System.Drawing.Point(12, 12);
 			this.groupBox_ReleaseNotes.Name = "groupBox_ReleaseNotes";
-			this.groupBox_ReleaseNotes.Size = new System.Drawing.Size(608, 393);
+			this.groupBox_ReleaseNotes.Size = new System.Drawing.Size(740, 393);
 			this.groupBox_ReleaseNotes.TabIndex = 0;
 			this.groupBox_ReleaseNotes.TabStop = false;
 			this.groupBox_ReleaseNotes.Text = "&Release Notes";
@@ -70,9 +70,10 @@
 			this.textBox_ReleaseNotes.Name = "textBox_ReleaseNotes";
 			this.textBox_ReleaseNotes.ReadOnly = true;
 			this.textBox_ReleaseNotes.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.textBox_ReleaseNotes.Size = new System.Drawing.Size(596, 368);
+			this.textBox_ReleaseNotes.Size = new System.Drawing.Size(728, 368);
 			this.textBox_ReleaseNotes.TabIndex = 0;
-			this.textBox_ReleaseNotes.Text = "<RELEASE NOTES>";
+			this.textBox_ReleaseNotes.Text = "<RELEASE NOTES>\r\n0123456789012345678901234567890123456789012345678901234567890123" +
+				"456789012345678901234567890123456789";
 			this.textBox_ReleaseNotes.WordWrap = false;
 			// 
 			// ReleaseNotes
@@ -81,7 +82,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Close;
-			this.ClientSize = new System.Drawing.Size(632, 453);
+			this.ClientSize = new System.Drawing.Size(764, 453);
 			this.Controls.Add(this.groupBox_ReleaseNotes);
 			this.Controls.Add(this.button_Close);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

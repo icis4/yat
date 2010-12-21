@@ -19,6 +19,7 @@
 //==================================================================================================
 
 using System.Collections;
+using System.Collections.Generic;
 
 using NUnit.Framework;
 
@@ -34,13 +35,40 @@ namespace MKY.Test.IO
 	/// </summary>
 	public static class PathExTestData
 	{
-		#region Test Cases
+		#region Test Case Data Set
 		//==========================================================================================
-		// Test Cases
+		// Test Case Data Set
+		//==========================================================================================
+
+		private class TestCaseDataSet
+		{
+			public int TestSet;
+			public int TestCase;
+			public string PathA;
+			public string PathB;
+			public string ResultA;
+			public string ResultB;
+
+			public TestCaseDataSet(int testSet, int testCase, string pathA, string pathB, string resultA, string resultB)
+			{
+				TestSet = testSet;
+				TestCase = testCase;
+				PathA = pathA;
+				PathB = pathB;
+				ResultA = resultA;
+				ResultB = resultB;
+			}
+		}
+
+		#endregion
+
+		#region Test Cases Base
+		//==========================================================================================
+		// Test Cases Base
 		//==========================================================================================
 
 		/// <summary></summary>
-		public static IEnumerable TestCases
+		private static IEnumerable<TestCaseDataSet> TestCasesBase
 		{
 			get
 			{
@@ -49,68 +77,154 @@ namespace MKY.Test.IO
 				//								TS	TC	PATH A								PATH B								RESULT A	\todo See below			RESULT B
 
 				// TS0: Local very-near relation
-				yield return (new TestCaseData(0,	0,	@"X:\MyDir",						@"X:\MyDir",						@".",								@"."						));
-				yield return (new TestCaseData(0,	1,	@"X:\MyDir",						@"X:\MyDir\MyFile2.abc",			@".\MyFile2.abc",					@"."						));
-				yield return (new TestCaseData(0,	2,	@"X:\MyDir\MyFile1.abc",			@"X:\MyDir",						@".",								@".\MyFile1.abc"			));
-				yield return (new TestCaseData(0,	3,	@"X:\MyDir\MyFile1.abc",			@"X:\MyDir\MyFile2.abc",			@".\MyFile2.abc",					@".\MyFile1.abc"			));
+				yield return (new TestCaseDataSet(0,	0,	@"X:\MyDir",						@"X:\MyDir",						@".",								@"."						));
+				yield return (new TestCaseDataSet(0,	1,	@"X:\MyDir",						@"X:\MyDir\MyFile2.abc",			@".\MyFile2.abc",					@"."						));
+				yield return (new TestCaseDataSet(0,	2,	@"X:\MyDir\MyFile1.abc",			@"X:\MyDir",						@".",								@".\MyFile1.abc"			));
+				yield return (new TestCaseDataSet(0,	3,	@"X:\MyDir\MyFile1.abc",			@"X:\MyDir\MyFile2.abc",			@".\MyFile2.abc",					@".\MyFile1.abc"			));
 
 				// TS1: Local near relation
-				yield return (new TestCaseData(1,	0,	@"X:\MyDir",						@"X:\MyDir\MySubDir",				/*@".\*/@"MySubDir",						@".."						));
-				yield return (new TestCaseData(1,	1,	@"X:\MyDir",						@"X:\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MySubDir\MyFile2.abc",			@".."						));
-				yield return (new TestCaseData(1,	2,	@"X:\MyDir\MyFile1.abc",			@"X:\MyDir\MySubDir",				/*@".\*/@"MySubDir",						@"..\MyFile1.abc"			));
-				yield return (new TestCaseData(1,	3,	@"X:\MyDir\MyFile1.abc",			@"X:\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MySubDir\MyFile2.abc",			@"..\MyFile1.abc"			));
+				yield return (new TestCaseDataSet(1,	0,	@"X:\MyDir",						@"X:\MyDir\MySubDir",				/*@".\*/@"MySubDir",						@".."						));
+				yield return (new TestCaseDataSet(1,	1,	@"X:\MyDir",						@"X:\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MySubDir\MyFile2.abc",			@".."						));
+				yield return (new TestCaseDataSet(1,	2,	@"X:\MyDir\MyFile1.abc",			@"X:\MyDir\MySubDir",				/*@".\*/@"MySubDir",						@"..\MyFile1.abc"			));
+				yield return (new TestCaseDataSet(1,	3,	@"X:\MyDir\MyFile1.abc",			@"X:\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MySubDir\MyFile2.abc",			@"..\MyFile1.abc"			));
 
 				// TS2: Local far relation
-				yield return (new TestCaseData(2,	0,	@"X:\MyDir\MySubDir1",				@"X:\MyDir\MySubDir2",				@"..\MySubDir2",					@"..\MySubDir1"				));
-				yield return (new TestCaseData(2,	1,	@"X:\MyDir\MySubDir1",				@"X:\MyDir\MySubDir2\MyFile2.abc",	@"..\MySubDir2\MyFile2.abc",		@"..\MySubDir1"				));
-				yield return (new TestCaseData(2,	2,	@"X:\MyDir\MySubDir1\MyFile1.abc",	@"X:\MyDir\MySubDir2",				@"..\MySubDir2",					@"..\MySubDir1\MyFile1.abc"	));
-				yield return (new TestCaseData(2,	3,	@"X:\MyDir\MySubDir1\MyFile1.abc",	@"X:\MyDir\MySubDir2\MyFile2.abc",	@"..\MySubDir2\MyFile2.abc",		@"..\MySubDir1\MyFile1.abc"	));
+				yield return (new TestCaseDataSet(2,	0,	@"X:\MyDir\MySubDir1",				@"X:\MyDir\MySubDir2",				@"..\MySubDir2",					@"..\MySubDir1"				));
+				yield return (new TestCaseDataSet(2,	1,	@"X:\MyDir\MySubDir1",				@"X:\MyDir\MySubDir2\MyFile2.abc",	@"..\MySubDir2\MyFile2.abc",		@"..\MySubDir1"				));
+				yield return (new TestCaseDataSet(2,	2,	@"X:\MyDir\MySubDir1\MyFile1.abc",	@"X:\MyDir\MySubDir2",				@"..\MySubDir2",					@"..\MySubDir1\MyFile1.abc"	));
+				yield return (new TestCaseDataSet(2,	3,	@"X:\MyDir\MySubDir1\MyFile1.abc",	@"X:\MyDir\MySubDir2\MyFile2.abc",	@"..\MySubDir2\MyFile2.abc",		@"..\MySubDir1\MyFile1.abc"	));
 
 				// TS3: Local root relation
-				yield return (new TestCaseData(3,	0,	@"X:\",								@"X:\MyDir\MySubDir",				/*@".\*/@"MyDir\MySubDir",				@"..\.."					));
-				yield return (new TestCaseData(3,	1,	@"X:\",								@"X:\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MyDir\MySubDir\MyFile2.abc",	@"..\.."					));
-				yield return (new TestCaseData(3,	2,	@"X:\MyFile1.abc",					@"X:\MyDir\MySubDir",				/*@".\*/@"MyDir\MySubDir",				@"..\..\MyFile1.abc"		));
-				yield return (new TestCaseData(3,	3,	@"X:\MyFile1.abc",					@"X:\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MyDir\MySubDir\MyFile2.abc",	@"..\..\MyFile1.abc"		));
+				yield return (new TestCaseDataSet(3,	0,	@"X:\",								@"X:\MyDir\MySubDir",				/*@".\*/@"MyDir\MySubDir",				@"..\.."					));
+				yield return (new TestCaseDataSet(3,	1,	@"X:\",								@"X:\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MyDir\MySubDir\MyFile2.abc",	@"..\.."					));
+				yield return (new TestCaseDataSet(3,	2,	@"X:\MyFile1.abc",					@"X:\MyDir\MySubDir",				/*@".\*/@"MyDir\MySubDir",				@"..\..\MyFile1.abc"		));
+				yield return (new TestCaseDataSet(3,	3,	@"X:\MyFile1.abc",					@"X:\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MyDir\MySubDir\MyFile2.abc",	@"..\..\MyFile1.abc"		));
 
 				// TS4: Local root far relation
-				yield return (new TestCaseData(4,	0,	@"X:\MyDir1",						@"X:\MyDir2",						@"..\MyDir2",						@"..\MyDir1"				));
-				yield return (new TestCaseData(4,	1,	@"X:\MyDir1",						@"X:\MyDir2\MyFile2.abc",			@"..\MyDir2\MyFile2.abc",			@"..\MyDir1"				));
-				yield return (new TestCaseData(4,	2,	@"X:\MyDir1\MyFile1.abc",			@"X:\MyDir2",						@"..\MyDir2",						@"..\MyDir1\MyFile1.abc"	));
-				yield return (new TestCaseData(4,	3,	@"X:\MyDir1\MyFile1.abc",			@"X:\MyDir2\MyFile2.abc",			@"..\MyDir2\MyFile2.abc",			@"..\MyDir1\MyFile1.abc"	));
+				yield return (new TestCaseDataSet(4,	0,	@"X:\MyDir1",						@"X:\MyDir2",						@"..\MyDir2",						@"..\MyDir1"				));
+				yield return (new TestCaseDataSet(4,	1,	@"X:\MyDir1",						@"X:\MyDir2\MyFile2.abc",			@"..\MyDir2\MyFile2.abc",			@"..\MyDir1"				));
+				yield return (new TestCaseDataSet(4,	2,	@"X:\MyDir1\MyFile1.abc",			@"X:\MyDir2",						@"..\MyDir2",						@"..\MyDir1\MyFile1.abc"	));
+				yield return (new TestCaseDataSet(4,	3,	@"X:\MyDir1\MyFile1.abc",			@"X:\MyDir2\MyFile2.abc",			@"..\MyDir2\MyFile2.abc",			@"..\MyDir1\MyFile1.abc"	));
 
 				// ---- Network ----
 
 				//								TS	TC	PATH A												PATH B												RESULT A							RESULT B
 
 				// TS5: Network very-near relation
-				yield return (new TestCaseData(5,	0,	@"\\MyServer\MyShare\MyDir",						@"\\MyServer\MyShare\MyDir",						@".",								@"."						));
-				yield return (new TestCaseData(5,	1,	@"\\MyServer\MyShare\MyDir",						@"\\MyServer\MyShare\MyDir\MyFile2.abc",			@".\MyFile2.abc",					@"."						));
-				yield return (new TestCaseData(5,	2,	@"\\MyServer\MyShare\MyDir\MyFile1.abc",			@"\\MyServer\MyShare\MyDir",						@".",								@".\MyFile1.abc"			));
-				yield return (new TestCaseData(5,	3,	@"\\MyServer\MyShare\MyDir\MyFile1.abc",			@"\\MyServer\MyShare\MyDir\MyFile2.abc",			@".\MyFile2.abc",					@".\MyFile1.abc"			));
+				yield return (new TestCaseDataSet(5,	0,	@"\\MyServer\MyShare\MyDir",						@"\\MyServer\MyShare\MyDir",						@".",								@"."						));
+				yield return (new TestCaseDataSet(5,	1,	@"\\MyServer\MyShare\MyDir",						@"\\MyServer\MyShare\MyDir\MyFile2.abc",			@".\MyFile2.abc",					@"."						));
+				yield return (new TestCaseDataSet(5,	2,	@"\\MyServer\MyShare\MyDir\MyFile1.abc",			@"\\MyServer\MyShare\MyDir",						@".",								@".\MyFile1.abc"			));
+				yield return (new TestCaseDataSet(5,	3,	@"\\MyServer\MyShare\MyDir\MyFile1.abc",			@"\\MyServer\MyShare\MyDir\MyFile2.abc",			@".\MyFile2.abc",					@".\MyFile1.abc"			));
 
 				// TS6: Network near relation
-				yield return (new TestCaseData(6,	0,	@"\\MyServer\MyShare\MyDir",						@"\\MyServer\MyShare\MyDir\MySubDir",				/*@".\*/@"MySubDir",						@".."						));
-				yield return (new TestCaseData(6,	1,	@"\\MyServer\MyShare\MyDir",						@"\\MyServer\MyShare\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MySubDir\MyFile2.abc",			@".."						));
-				yield return (new TestCaseData(6,	2,	@"\\MyServer\MyShare\MyDir\MyFile1.abc",			@"\\MyServer\MyShare\MyDir\MySubDir",				/*@".\*/@"MySubDir",						@"..\MyFile1.abc"			));
-				yield return (new TestCaseData(6,	3,	@"\\MyServer\MyShare\MyDir\MyFile1.abc",			@"\\MyServer\MyShare\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MySubDir\MyFile2.abc",			@"..\MyFile1.abc"			));
+				yield return (new TestCaseDataSet(6,	0,	@"\\MyServer\MyShare\MyDir",						@"\\MyServer\MyShare\MyDir\MySubDir",				/*@".\*/@"MySubDir",						@".."						));
+				yield return (new TestCaseDataSet(6,	1,	@"\\MyServer\MyShare\MyDir",						@"\\MyServer\MyShare\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MySubDir\MyFile2.abc",			@".."						));
+				yield return (new TestCaseDataSet(6,	2,	@"\\MyServer\MyShare\MyDir\MyFile1.abc",			@"\\MyServer\MyShare\MyDir\MySubDir",				/*@".\*/@"MySubDir",						@"..\MyFile1.abc"			));
+				yield return (new TestCaseDataSet(6,	3,	@"\\MyServer\MyShare\MyDir\MyFile1.abc",			@"\\MyServer\MyShare\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MySubDir\MyFile2.abc",			@"..\MyFile1.abc"			));
 
 				// TS7: Network far relation
-				yield return (new TestCaseData(7,	0,	@"\\MyServer\MyShare\MyDir\MySubDir1",				@"\\MyServer\MyShare\MyDir\MySubDir2",				@"..\MySubDir2",					@"..\MySubDir1"				));
-				yield return (new TestCaseData(7,	1,	@"\\MyServer\MyShare\MyDir\MySubDir1",				@"\\MyServer\MyShare\MyDir\MySubDir2\MyFile2.abc",	@"..\MySubDir2\MyFile2.abc",		@"..\MySubDir1"				));
-				yield return (new TestCaseData(7,	2,	@"\\MyServer\MyShare\MyDir\MySubDir1\MyFile1.abc",	@"\\MyServer\MyShare\MyDir\MySubDir2",				@"..\MySubDir2",					@"..\MySubDir1\MyFile1.abc"	));
-				yield return (new TestCaseData(7,	3,	@"\\MyServer\MyShare\MyDir\MySubDir1\MyFile1.abc",	@"\\MyServer\MyShare\MyDir\MySubDir2\MyFile2.abc",	@"..\MySubDir2\MyFile2.abc",		@"..\MySubDir1\MyFile1.abc"	));
+				yield return (new TestCaseDataSet(7,	0,	@"\\MyServer\MyShare\MyDir\MySubDir1",				@"\\MyServer\MyShare\MyDir\MySubDir2",				@"..\MySubDir2",					@"..\MySubDir1"				));
+				yield return (new TestCaseDataSet(7,	1,	@"\\MyServer\MyShare\MyDir\MySubDir1",				@"\\MyServer\MyShare\MyDir\MySubDir2\MyFile2.abc",	@"..\MySubDir2\MyFile2.abc",		@"..\MySubDir1"				));
+				yield return (new TestCaseDataSet(7,	2,	@"\\MyServer\MyShare\MyDir\MySubDir1\MyFile1.abc",	@"\\MyServer\MyShare\MyDir\MySubDir2",				@"..\MySubDir2",					@"..\MySubDir1\MyFile1.abc"	));
+				yield return (new TestCaseDataSet(7,	3,	@"\\MyServer\MyShare\MyDir\MySubDir1\MyFile1.abc",	@"\\MyServer\MyShare\MyDir\MySubDir2\MyFile2.abc",	@"..\MySubDir2\MyFile2.abc",		@"..\MySubDir1\MyFile1.abc"	));
 
 				// TS8: Network root relation
-				yield return (new TestCaseData(8,	0,	@"\\MyServer\MyShare",								@"\\MyServer\MyShare\MyDir\MySubDir",				/*@".\*/@"MyDir\MySubDir",				@"..\.."					));
-				yield return (new TestCaseData(8,	1,	@"\\MyServer\MyShare",								@"\\MyServer\MyShare\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MyDir\MySubDir\MyFile2.abc",	@"..\.."					));
-				yield return (new TestCaseData(8,	2,	@"\\MyServer\MyShare\MyFile1.abc",					@"\\MyServer\MyShare\MyDir\MySubDir",				/*@".\*/@"MyDir\MySubDir",				@"..\..\MyFile1.abc"		));
-				yield return (new TestCaseData(8,	3,	@"\\MyServer\MyShare\MyFile1.abc",					@"\\MyServer\MyShare\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MyDir\MySubDir\MyFile2.abc",	@"..\..\MyFile1.abc"		));
+				yield return (new TestCaseDataSet(8,	0,	@"\\MyServer\MyShare",								@"\\MyServer\MyShare\MyDir\MySubDir",				/*@".\*/@"MyDir\MySubDir",				@"..\.."					));
+				yield return (new TestCaseDataSet(8,	1,	@"\\MyServer\MyShare",								@"\\MyServer\MyShare\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MyDir\MySubDir\MyFile2.abc",	@"..\.."					));
+				yield return (new TestCaseDataSet(8,	2,	@"\\MyServer\MyShare\MyFile1.abc",					@"\\MyServer\MyShare\MyDir\MySubDir",				/*@".\*/@"MyDir\MySubDir",				@"..\..\MyFile1.abc"		));
+				yield return (new TestCaseDataSet(8,	3,	@"\\MyServer\MyShare\MyFile1.abc",					@"\\MyServer\MyShare\MyDir\MySubDir\MyFile2.abc",	/*@".\*/@"MyDir\MySubDir\MyFile2.abc",	@"..\..\MyFile1.abc"		));
 
 				// TS9: Network root far relation
-				yield return (new TestCaseData(9,	0,	@"\\MyServer\MyShare\MyDir1",						@"\\MyServer\MyShare\MyDir2",						@"..\MyDir2",						@"..\MyDir1"				));
-				yield return (new TestCaseData(9,	1,	@"\\MyServer\MyShare\MyDir1",						@"\\MyServer\MyShare\MyDir2\MyFile2.abc",			@"..\MyDir2\MyFile2.abc",			@"..\MyDir1"				));
-				yield return (new TestCaseData(9,	2,	@"\\MyServer\MyShare\MyDir1\MyFile1.abc",			@"\\MyServer\MyShare\MyDir2",						@"..\MyDir2",						@"..\MyDir1\MyFile1.abc"	));
-				yield return (new TestCaseData(9,	3,	@"\\MyServer\MyShare\MyDir1\MyFile1.abc",			@"\\MyServer\MyShare\MyDir2\MyFile2.abc",			@"..\MyDir2\MyFile2.abc",			@"..\MyDir1\MyFile1.abc"	));
+				yield return (new TestCaseDataSet(9,	0,	@"\\MyServer\MyShare\MyDir1",						@"\\MyServer\MyShare\MyDir2",						@"..\MyDir2",						@"..\MyDir1"				));
+				yield return (new TestCaseDataSet(9,	1,	@"\\MyServer\MyShare\MyDir1",						@"\\MyServer\MyShare\MyDir2\MyFile2.abc",			@"..\MyDir2\MyFile2.abc",			@"..\MyDir1"				));
+				yield return (new TestCaseDataSet(9,	2,	@"\\MyServer\MyShare\MyDir1\MyFile1.abc",			@"\\MyServer\MyShare\MyDir2",						@"..\MyDir2",						@"..\MyDir1\MyFile1.abc"	));
+				yield return (new TestCaseDataSet(9,	3,	@"\\MyServer\MyShare\MyDir1\MyFile1.abc",			@"\\MyServer\MyShare\MyDir2\MyFile2.abc",			@"..\MyDir2\MyFile2.abc",			@"..\MyDir1\MyFile1.abc"	));
+			}
+		}
+
+		#endregion
+
+		#region Test Cases Extension
+		//==========================================================================================
+		// Test Cases Extension
+		//==========================================================================================
+
+		/// <summary></summary>
+		private static IEnumerable<TestCaseDataSet> TestCasesWithTrailingSeparator
+		{
+			get
+			{
+				foreach (TestCaseDataSet s in TestCasesBase)
+				{
+					// Create normal test case
+					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.PathA, s.PathB, s.ResultA, s.ResultB));
+
+					// Create extended test case(s) that add a trailing '\' to the given input path(s).
+					char dsc = System.IO.Path.DirectorySeparatorChar;
+					switch (s.TestCase)
+					{
+						case 0:  yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.PathA + dsc, s.PathB,       s.ResultA, s.ResultB));
+						         yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.PathA,       s.PathB + dsc, s.ResultA, s.ResultB));
+						         yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.PathA + dsc, s.PathB + dsc, s.ResultA, s.ResultB)); break;
+
+						case 1:  yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.PathA + dsc, s.PathB,       s.ResultA, s.ResultB)); break;
+
+						case 2:  yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.PathA,       s.PathB + dsc, s.ResultA, s.ResultB)); break;
+
+						default: break;
+					}
+				}
+			}
+		}
+
+		/// <summary></summary>
+		private static IEnumerable<TestCaseDataSet> TestCasesWithTrailingSeparatorAndAltDirectorySeparatorChar
+		{
+			get
+			{
+				foreach (TestCaseDataSet s in TestCasesWithTrailingSeparator)
+				{
+					// Using '\'.
+					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.PathA, s.PathB, s.ResultA, s.ResultB));
+
+					// Using '/', in different combinations.
+					string altA = s.PathA.Replace(System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar);
+					string altB = s.PathB.Replace(System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar);
+					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, altA,    s.PathB, s.ResultA, s.ResultB));
+					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.PathA, altB,    s.ResultA, s.ResultB));
+					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, altA,    altB,    s.ResultA, s.ResultB));
+				}
+			}
+		}
+
+		#endregion
+
+		#region Test Cases
+		//==========================================================================================
+		// Test Cases
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static IEnumerable TestCasesCompare
+		{
+			get
+			{
+				foreach (TestCaseDataSet s in TestCasesWithTrailingSeparatorAndAltDirectorySeparatorChar)
+				{
+					yield return (new TestCaseData(s.TestSet, s.TestCase, s.PathA, s.PathB, s.ResultA, s.ResultB));
+				}
+			}
+		}
+
+		/// <summary></summary>
+		public static IEnumerable TestCasesCombine
+		{
+			get
+			{
+				foreach (TestCaseDataSet s in TestCasesWithTrailingSeparatorAndAltDirectorySeparatorChar)
+				{
+					yield return (new TestCaseData(s.TestSet, s.TestCase, s.PathA, s.PathB, s.ResultA, s.ResultB));
+				}
 			}
 		}
 
@@ -132,44 +246,8 @@ namespace MKY.Test.IO
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(PathExTestData), "TestCases")]
+		[Test, TestCaseSource(typeof(PathExTestData), "TestCasesCompare")]
 		public virtual void TestCompare(int testSet, int testCase, string pathA, string pathB, string expectedA, string expectedB)
-		{
-			// Run normal test case.
-			TestCompare_DoCallSet(testSet, testCase, pathA, pathB, expectedA, expectedB);
-
-			// \todo
-			// Improve PathEx such that these tests pass.
-			//TestCompare_RunExtended(testSet, testCase, pathA, pathB, expectedA, expectedB);
-		}
-
-		private void TestCompare_RunExtended(int testSet, int testCase, string pathA, string pathB, string expectedA, string expectedB)
-		{
-			// Run extended test case(s) that add an additional '\' to the given input path(s).
-			switch (testCase)
-			{
-				case 0:  TestCompare_DoCallSet(testSet, testCase, pathA + "\\", pathB,        expectedA, expectedB);
-				         TestCompare_DoCallSet(testSet, testCase, pathA,        pathB + "\\", expectedA, expectedB);
-				         TestCompare_DoCallSet(testSet, testCase, pathA + "\\", pathB + "\\", expectedA, expectedB); break;
-
-				case 1:  TestCompare_DoCallSet(testSet, testCase, pathA + "\\", pathB,        expectedA, expectedB); break;
-
-				case 2:  TestCompare_DoCallSet(testSet, testCase, pathA,        pathB + "\\", expectedA, expectedB); break;
-
-				default: break;
-			}
-		}
-
-		private void TestCompare_DoCallSet(int testSet, int testCase, string pathA, string pathB, string expectedA, string expectedB)
-		{
-			// Using '\'.
-			TestCompare_DoCalls(testSet, testCase, pathA, pathB, expectedA, expectedB);
-
-			// Using '/'.
-			TestCompare_DoCalls(testSet, testCase, pathA.Replace('\\', '/'), pathB.Replace('\\', '/'), expectedA, expectedB);
-		}
-
-		private void TestCompare_DoCalls(int testSet, int testCase, string pathA, string pathB, string expectedA, string expectedB)
 		{
 			// Test set is given as additional argument for potential special treatment of test cases.
 			UnusedArg.PreventAnalysisWarning(testSet);
@@ -205,7 +283,7 @@ namespace MKY.Test.IO
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(PathExTestData), "TestCases")]
+		[Test, TestCaseSource(typeof(PathExTestData), "TestCasesCombine")]
 		public virtual void TestCombine(int testSet, int testCase, string pathA, string pathB, string expectedA, string expectedB)
 		{
 			// Run normal test case.
@@ -276,11 +354,8 @@ namespace MKY.Test.IO
 			// Using '\'.
 			TestCombine_DoCallsA(testSet, testCase, pathA, pathB, expectedA);
 
-			// \todo
-			// Improve PathEx such that these tests pass.
-
 			// Using '/'.
-			//TestCombine_DoCallsA(testSet, testCase, pathA.Replace('\\', '/'), pathB, expectedA.Replace('\\', '/'));
+			TestCombine_DoCallsA(testSet, testCase, pathA.Replace('\\', '/'), pathB, expectedA.Replace('\\', '/'));
 		}
 
 		private void TestCombine_DoCallSetB(int testSet, int testCase, string pathA, string pathB, string expectedB)
@@ -288,11 +363,8 @@ namespace MKY.Test.IO
 			// Using '\'.
 			TestCombine_DoCallsB(testSet, testCase, pathA, pathB, expectedB);
 
-			// \todo
-			// Improve PathEx such that these tests pass.
-
 			// Using '/'.
-			//TestCombine_DoCallsB(testSet, testCase, pathA, pathB.Replace('\\', '/'), expectedB.Replace('\\', '/'));
+			TestCombine_DoCallsB(testSet, testCase, pathA, pathB.Replace('\\', '/'), expectedB.Replace('\\', '/'));
 		}
 
 		private void TestCombine_DoCallsA(int testSet, int testCase, string pathA, string pathB, string expectedA)

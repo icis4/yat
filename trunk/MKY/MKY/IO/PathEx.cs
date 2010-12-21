@@ -67,7 +67,7 @@ namespace MKY.IO
 
 		#endregion
 
-		#region Equals Methods
+		#region Equals Method
 
 		/// <summary>
 		/// Compares two specified path string dependent on the operating systems policies.
@@ -88,6 +88,19 @@ namespace MKY.IO
 				default:
 					return (string.Compare(pathA, pathB, StringComparison.Ordinal) == 0);
 			}
+		}
+
+		#endregion
+
+		#region ConvertPathToPlatform Method
+
+		/// <summary>
+		/// Convert non-platform separators according to platform.
+		/// </summary>
+		private static void ConvertToPlatform(ref string path)
+		{
+			// e.g. replace '/' by '\'
+			path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
 		}
 
 		#endregion
@@ -218,13 +231,8 @@ namespace MKY.IO
 			string fileName = Path.GetFileName(filePath);
 			string absolutePath = DoCombineDirectoryPaths(directoryPath, Path.GetDirectoryName(filePath));
 
-			//string root = Path.GetPathRoot(absolutePath);
 			string combined = Path.Combine(absolutePath, fileName);
 			return (combined);
-			/*if (absolutePath != Path.GetPathRoot(absolutePath))
-				return (absolutePath + Path.DirectorySeparatorChar + fileName);
-			else
-				return (absolutePath + fileName);*/
 		}
 
 		/// <summary>
@@ -267,11 +275,6 @@ namespace MKY.IO
 
 			string combined = Path.Combine(absolutePath, fileName2);
 			return (combined);
-
-			/*if (absolutePath != Path.GetPathRoot(absolutePath))
-				return (absolutePath + Path.DirectorySeparatorChar + fileName2);
-			else
-				return (absolutePath + fileName2);*/
 		}
 
 		#endregion
@@ -285,6 +288,11 @@ namespace MKY.IO
 		{
 			// Do not check for reference equality because complete result needs to be retrieved anyway.
 
+			// Convert paths to platform if needed.
+			ConvertToPlatform(ref pathA);
+			ConvertToPlatform(ref pathB);
+
+			// Create infos.
 			DirectoryInfo pathInfoA = null;
 			DirectoryInfo pathInfoB = null;
 
@@ -444,6 +452,11 @@ namespace MKY.IO
 		/// </summary>
 		public static string DoCombineDirectoryPaths(string pathA, string pathB)
 		{
+			// Convert paths to platform if needed.
+			ConvertToPlatform(ref pathA);
+			ConvertToPlatform(ref pathB);
+
+			// Create infos.
 			DirectoryInfo pathInfoA = null;
 
 			string dirPathA = "";
