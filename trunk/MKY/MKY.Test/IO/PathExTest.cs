@@ -44,19 +44,19 @@ namespace MKY.Test.IO
 		{
 			public int TestSet;
 			public int TestCase;
-			public string PathA;
-			public string PathB;
-			public string ResultA;
-			public string ResultB;
+			public string AbsoluteA;
+			public string AbsoluteB;
+			public string RelativeA;
+			public string RelativeB;
 
-			public TestCaseDataSet(int testSet, int testCase, string pathA, string pathB, string resultA, string resultB)
+			public TestCaseDataSet(int testSet, int testCase, string absoluteA, string absoluteB, string relativeA, string relativeB)
 			{
 				TestSet = testSet;
 				TestCase = testCase;
-				PathA = pathA;
-				PathB = pathB;
-				ResultA = resultA;
-				ResultB = resultB;
+				AbsoluteA = absoluteA;
+				AbsoluteB = absoluteB;
+				RelativeA = relativeA;
+				RelativeB = relativeB;
 			}
 		}
 
@@ -74,7 +74,7 @@ namespace MKY.Test.IO
 			{
 				// ---- Local ----
 
-				//								TS	TC	PATH A								PATH B								RESULT A	\todo See below			RESULT B
+				//									TS	TC	AbsoluteA							AbsoluteB							RelativeA	\todo See below			RelativeB
 
 				// TS0: Local very-near relation
 				yield return (new TestCaseDataSet(0,	0,	@"X:\MyDir",						@"X:\MyDir",						@".",								@"."						));
@@ -108,7 +108,7 @@ namespace MKY.Test.IO
 
 				// ---- Network ----
 
-				//								TS	TC	PATH A												PATH B												RESULT A							RESULT B
+				//									TS	TC	AbsoluteA											AbsoluteB											RelativeA							RelativeB
 
 				// TS5: Network very-near relation
 				yield return (new TestCaseDataSet(5,	0,	@"\\MyServer\MyShare\MyDir",						@"\\MyServer\MyShare\MyDir",						@".",								@"."						));
@@ -144,32 +144,70 @@ namespace MKY.Test.IO
 
 		#endregion
 
-		#region Test Cases Extension
+		#region Test Cases Extended With Trailing Separator
 		//==========================================================================================
-		// Test Cases Extension
+		// Test Cases Extended With Trailing Separator
 		//==========================================================================================
 
-		/// <summary></summary>
-		private static IEnumerable<TestCaseDataSet> TestCasesWithTrailingSeparator
+			// \todo
+			// Improve PathEx such that these tests pass.
+			/*
+			// Run extended test case(s) that remove the '.\' at the beginning of the given input path(s).
+			switch (testSet)
+			{
+				case 0:
+				case 5:
+				{
+					switch (testCase)
+					{
+						case 1:  TestCombine_RunExtended(testSet, testCase, absoluteA, absoluteB, relativeA.Remove(0, 2), relativeB             ); break;
+
+						case 2:  TestCombine_RunExtended(testSet, testCase, absoluteA, absoluteB, relativeA,              relativeB.Remove(0, 2)); break;
+
+						case 3:  TestCombine_RunExtended(testSet, testCase, absoluteA, absoluteB, relativeA.Remove(0, 2), relativeB             );
+						         TestCombine_RunExtended(testSet, testCase, absoluteA, absoluteB, relativeA,              relativeB.Remove(0, 2));
+						         TestCombine_RunExtended(testSet, testCase, absoluteA, absoluteB, relativeA.Remove(0, 2), relativeB.Remove(0, 2)); break;
+
+						default: break;
+					}
+					break;
+				}
+
+				case 1:
+				case 3:
+				case 6:
+				case 8:
+				{
+					TestCombine_RunExtended(testSet, testCase, absoluteA, absoluteB, relativeA.Remove(0, 2), relativeB);
+					break;
+				}
+
+				default: break;
+			}*/
+
+		/// <summary>
+		/// AbsoluteA combined with RelativeA results in AbsoluteB.
+		/// </summary>
+		private static IEnumerable<TestCaseDataSet> TestCasesCombineAWithTrailingSeparator
 		{
 			get
 			{
 				foreach (TestCaseDataSet s in TestCasesBase)
 				{
-					// Create normal test case
-					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.PathA, s.PathB, s.ResultA, s.ResultB));
+					// Create normal test case.
+					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA, s.AbsoluteB, s.RelativeA, null));
 
 					// Create extended test case(s) that add a trailing '\' to the given input path(s).
 					char dsc = System.IO.Path.DirectorySeparatorChar;
 					switch (s.TestCase)
 					{
-						case 0:  yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.PathA + dsc, s.PathB,       s.ResultA, s.ResultB));
-						         yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.PathA,       s.PathB + dsc, s.ResultA, s.ResultB));
-						         yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.PathA + dsc, s.PathB + dsc, s.ResultA, s.ResultB)); break;
+						case 0:  yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA + dsc, s.AbsoluteB, s.RelativeA,       null));
+						         yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA,       s.AbsoluteB, s.RelativeA + dsc, null));
+						         yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA + dsc, s.AbsoluteB, s.RelativeA + dsc, null)); break;
 
-						case 1:  yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.PathA + dsc, s.PathB,       s.ResultA, s.ResultB)); break;
+						case 1:  yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA + dsc, s.AbsoluteB, s.RelativeA,       null)); break;
 
-						case 2:  yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.PathA,       s.PathB + dsc, s.ResultA, s.ResultB)); break;
+						case 2:  yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA,       s.AbsoluteB, s.RelativeA + dsc, null)); break;
 
 						default: break;
 					}
@@ -177,22 +215,137 @@ namespace MKY.Test.IO
 			}
 		}
 
-		/// <summary></summary>
-		private static IEnumerable<TestCaseDataSet> TestCasesWithTrailingSeparatorAndAltDirectorySeparatorChar
+		/// <summary>
+		/// AbsoluteB combined with RelativeB results in AbsoluteA.
+		/// </summary>
+		private static IEnumerable<TestCaseDataSet> TestCasesCombineBWithTrailingSeparator
 		{
 			get
 			{
-				foreach (TestCaseDataSet s in TestCasesWithTrailingSeparator)
+				foreach (TestCaseDataSet s in TestCasesBase)
+				{
+					// Create normal test case.
+					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA, s.AbsoluteB, null, s.RelativeB));
+
+					// Create extended test case(s) that add a trailing '\' to the given input path(s).
+					char dsc = System.IO.Path.DirectorySeparatorChar;
+					switch (s.TestCase)
+					{
+						case 0:  yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA, s.AbsoluteB + dsc, null, s.RelativeB + dsc));
+						         yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA, s.AbsoluteB,       null, s.RelativeB + dsc));
+						         yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA, s.AbsoluteB + dsc, null, s.RelativeB      )); break;
+
+						case 1:  yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA, s.AbsoluteB,       null, s.RelativeB + dsc)); break;
+
+						case 2:  yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA, s.AbsoluteB + dsc, null, s.RelativeB      )); break;
+
+						default: break;
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// AbsoluteA combined with AbsoluteB results in RelativeA.
+		/// AbsoluteB combined with AbsoluteA results in RelativeB.
+		/// </summary>
+		private static IEnumerable<TestCaseDataSet> TestCasesCompareWithTrailingSeparator
+		{
+			get
+			{
+				foreach (TestCaseDataSet s in TestCasesBase)
+				{
+					// Create normal test case.
+					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA, s.AbsoluteB, s.RelativeA, s.RelativeB));
+
+					// Create extended test case(s) that add a trailing '\' to the given input path(s).
+					char dsc = System.IO.Path.DirectorySeparatorChar;
+					switch (s.TestCase)
+					{
+						case 0:  yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA + dsc, s.AbsoluteB,       s.RelativeA, s.RelativeB));
+						         yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA,       s.AbsoluteB + dsc, s.RelativeA, s.RelativeB));
+						         yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA + dsc, s.AbsoluteB + dsc, s.RelativeA, s.RelativeB)); break;
+
+						case 1:  yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA + dsc, s.AbsoluteB,       s.RelativeA, s.RelativeB)); break;
+
+						case 2:  yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA,       s.AbsoluteB + dsc, s.RelativeA, s.RelativeB)); break;
+
+						default: break;
+					}
+				}
+			}
+		}
+
+		#endregion
+
+		#region Test Cases Extended With Trailing Separator And Alternative Separator
+		//==========================================================================================
+		// Test Cases Extended With Trailing Separator And Alternative Separator
+		//==========================================================================================
+
+		/// <summary>
+		/// AbsoluteA combined with RelativeA results in AbsoluteB.
+		/// </summary>
+		private static IEnumerable<TestCaseDataSet> TestCasesCombineAWithTrailingSeparatorAndAlternativeSeparator
+		{
+			get
+			{
+				foreach (TestCaseDataSet s in TestCasesCombineAWithTrailingSeparator)
 				{
 					// Using '\'.
-					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.PathA, s.PathB, s.ResultA, s.ResultB));
+					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA, s.AbsoluteB, s.RelativeA, null));
 
 					// Using '/', in different combinations.
-					string altA = s.PathA.Replace(System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar);
-					string altB = s.PathB.Replace(System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar);
-					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, altA,    s.PathB, s.ResultA, s.ResultB));
-					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.PathA, altB,    s.ResultA, s.ResultB));
-					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, altA,    altB,    s.ResultA, s.ResultB));
+					string replaceAA = s.AbsoluteA.Replace(System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar);
+					string replaceRA = s.RelativeA.Replace(System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar);
+					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, replaceAA,   s.AbsoluteB, s.RelativeA, null));
+					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA, s.AbsoluteB, replaceRA,   null));
+					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, replaceAA,   s.AbsoluteB, replaceRA,   null));
+				}
+			}
+		}
+
+		/// <summary>
+		/// AbsoluteB combined with RelativeB results in AbsoluteA.
+		/// </summary>
+		private static IEnumerable<TestCaseDataSet> TestCasesCombineBWithTrailingSeparatorAndAlternativeSeparator
+		{
+			get
+			{
+				foreach (TestCaseDataSet s in TestCasesCombineBWithTrailingSeparator)
+				{
+					// Using '\'.
+					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA, s.AbsoluteB, null, s.RelativeB));
+
+					// Using '/', in different combinations.
+					string replaceAB = s.AbsoluteB.Replace(System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar);
+					string replaceRB = s.RelativeB.Replace(System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar);
+					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA, replaceAB,   null, s.RelativeB));
+					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA, s.AbsoluteB, null, replaceRB  ));
+					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA, replaceAB,   null, replaceRB  ));
+				}
+			}
+		}
+
+		/// <summary>
+		/// AbsoluteA combined with AbsoluteB results in RelativeA.
+		/// AbsoluteB combined with AbsoluteA results in RelativeB.
+		/// </summary>
+		private static IEnumerable<TestCaseDataSet> TestCasesCompareWithTrailingSeparatorAndAlternativeSeparator
+		{
+			get
+			{
+				foreach (TestCaseDataSet s in TestCasesCompareWithTrailingSeparator)
+				{
+					// Using '\'.
+					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA, s.AbsoluteB, s.RelativeA, s.RelativeB));
+
+					// Using '/', in different combinations.
+					string replaceA = s.AbsoluteA.Replace(System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar);
+					string replaceB = s.AbsoluteB.Replace(System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar);
+					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, replaceA,    s.AbsoluteB, s.RelativeA, s.RelativeB));
+					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, s.AbsoluteA, replaceB,    s.RelativeA, s.RelativeB));
+					yield return (new TestCaseDataSet(s.TestSet, s.TestCase, replaceA,    replaceB,    s.RelativeA, s.RelativeB));
 				}
 			}
 		}
@@ -204,26 +357,45 @@ namespace MKY.Test.IO
 		// Test Cases
 		//==========================================================================================
 
-		/// <summary></summary>
-		public static IEnumerable TestCasesCompare
+		/// <summary>
+		/// AbsoluteA combined with RelativeA results in AbsoluteB.
+		/// </summary>
+		public static IEnumerable TestCasesCombineA
 		{
 			get
 			{
-				foreach (TestCaseDataSet s in TestCasesWithTrailingSeparatorAndAltDirectorySeparatorChar)
+				foreach (TestCaseDataSet s in TestCasesCombineAWithTrailingSeparatorAndAlternativeSeparator)
 				{
-					yield return (new TestCaseData(s.TestSet, s.TestCase, s.PathA, s.PathB, s.ResultA, s.ResultB));
+					yield return (new TestCaseData(s.TestSet, s.TestCase, s.AbsoluteA, s.AbsoluteB, s.RelativeA, null));
 				}
 			}
 		}
 
-		/// <summary></summary>
-		public static IEnumerable TestCasesCombine
+		/// <summary>
+		/// AbsoluteB combined with RelativeB results in AbsoluteA.
+		/// </summary>
+		public static IEnumerable TestCasesCombineB
 		{
 			get
 			{
-				foreach (TestCaseDataSet s in TestCasesWithTrailingSeparatorAndAltDirectorySeparatorChar)
+				foreach (TestCaseDataSet s in TestCasesCombineBWithTrailingSeparatorAndAlternativeSeparator)
 				{
-					yield return (new TestCaseData(s.TestSet, s.TestCase, s.PathA, s.PathB, s.ResultA, s.ResultB));
+					yield return (new TestCaseData(s.TestSet, s.TestCase, s.AbsoluteA, s.AbsoluteB, null, s.RelativeB));
+				}
+			}
+		}
+
+		/// <summary>
+		/// AbsoluteA combined with AbsoluteB results in RelativeA.
+		/// AbsoluteB combined with AbsoluteA results in RelativeB.
+		/// </summary>
+		public static IEnumerable TestCasesCompare
+		{
+			get
+			{
+				foreach (TestCaseDataSet s in TestCasesCompareWithTrailingSeparatorAndAlternativeSeparator)
+				{
+					yield return (new TestCaseData(s.TestSet, s.TestCase, s.AbsoluteA, s.AbsoluteB, s.RelativeA, s.RelativeB));
 				}
 			}
 		}
@@ -240,134 +412,14 @@ namespace MKY.Test.IO
 		// Tests
 		//==========================================================================================
 
-		#region Tests > Compare()
-		//------------------------------------------------------------------------------------------
-		// Tests > Compare()
-		//------------------------------------------------------------------------------------------
-
-		/// <summary></summary>
-		[Test, TestCaseSource(typeof(PathExTestData), "TestCasesCompare")]
-		public virtual void TestCompare(int testSet, int testCase, string pathA, string pathB, string expectedA, string expectedB)
-		{
-			// Test set is given as additional argument for potential special treatment of test cases.
-			UnusedArg.PreventAnalysisWarning(testSet);
-
-			PathCompareResult result;
-
-			// A compared to B results in A relative.
-			switch (testCase)
-			{
-				case 0:  result = PathEx.CompareDirectoryPaths       (pathA, pathB); break;
-				case 1:  result = PathEx.CompareDirectoryAndFilePaths(pathA, pathB); break; // DIR vs FILE.
-				case 2:  result = PathEx.CompareFileAndDirectoryPaths(pathA, pathB); break; // FILE vs DIR.
-				default: result = PathEx.CompareFilePaths            (pathA, pathB); break;
-			}
-			Assert.AreEqual(expectedA, result.RelativePath, "A compared to B doesn't result in A relative");
-
-			// B compared to A results in B relative.
-			switch (testCase)
-			{
-				case 0:  result = PathEx.CompareDirectoryPaths       (pathB, pathA); break;
-				case 1:  result = PathEx.CompareFileAndDirectoryPaths(pathB, pathA); break; // FILE vs DIR.
-				case 2:  result = PathEx.CompareDirectoryAndFilePaths(pathB, pathA); break; // DIR vs FILE.
-				default: result = PathEx.CompareFilePaths            (pathB, pathA); break;
-			}
-			Assert.AreEqual(expectedB, result.RelativePath, "B compared to A doesn't result in B relative");
-		}
-
-		#endregion
-
 		#region Tests > Combine()
 		//------------------------------------------------------------------------------------------
 		// Tests > Combine()
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(PathExTestData), "TestCasesCombine")]
-		public virtual void TestCombine(int testSet, int testCase, string pathA, string pathB, string expectedA, string expectedB)
-		{
-			// Run normal test case.
-			TestCombine_DoCallSetA(testSet, testCase, pathA, pathB, expectedA);
-			TestCombine_DoCallSetB(testSet, testCase, pathA, pathB, expectedB);
-
-			// \todo
-			// Improve PathEx such that these tests pass.
-			/*
-			// Run extended test case(s) that remove the '.\' at the beginning of the given input path(s).
-			switch (testSet)
-			{
-				case 0:
-				case 5:
-				{
-					switch (testCase)
-					{
-						case 1:  TestCombine_RunExtended(testSet, testCase, pathA, pathB, expectedA.Remove(0, 2), expectedB             ); break;
-
-						case 2:  TestCombine_RunExtended(testSet, testCase, pathA, pathB, expectedA,              expectedB.Remove(0, 2)); break;
-
-						case 3:  TestCombine_RunExtended(testSet, testCase, pathA, pathB, expectedA.Remove(0, 2), expectedB             );
-						         TestCombine_RunExtended(testSet, testCase, pathA, pathB, expectedA,              expectedB.Remove(0, 2));
-						         TestCombine_RunExtended(testSet, testCase, pathA, pathB, expectedA.Remove(0, 2), expectedB.Remove(0, 2)); break;
-
-						default: break;
-					}
-					break;
-				}
-
-				case 1:
-				case 3:
-				case 6:
-				case 8:
-				{
-					TestCombine_RunExtended(testSet, testCase, pathA, pathB, expectedA.Remove(0, 2), expectedB);
-					break;
-				}
-
-				default: break;
-			}*/
-		}
-
-		private void TestCombine_RunExtended(int testSet, int testCase, string pathA, string pathB, string expectedA, string expectedB)
-		{
-			// Run extended test case(s) that add an additional '\' to the given input path(s).
-			switch (testCase)
-			{
-				case 0:  TestCombine_DoCallSetA(testSet, testCase, pathA + "\\", pathB,        expectedA       );
-				         TestCombine_DoCallSetA(testSet, testCase, pathA,        pathB,        expectedA + "\\");
-				         TestCombine_DoCallSetA(testSet, testCase, pathA + "\\", pathB,        expectedA + "\\");
-				         TestCombine_DoCallSetB(testSet, testCase, pathA,        pathB + "\\", expectedB + "\\");
-				         TestCombine_DoCallSetB(testSet, testCase, pathA,        pathB,        expectedB + "\\");
-				         TestCombine_DoCallSetB(testSet, testCase, pathA,        pathB + "\\", expectedB       ); break;
-
-				case 1:  TestCombine_DoCallSetA(testSet, testCase, pathA + "\\", pathB,        expectedA       );
-				         TestCombine_DoCallSetB(testSet, testCase, pathA,        pathB,        expectedB + "\\"); break;
-
-				case 2:  TestCombine_DoCallSetA(testSet, testCase, pathA,        pathB,        expectedA + "\\");
-				         TestCombine_DoCallSetB(testSet, testCase, pathA,        pathB + "\\", expectedB       ); break;
-
-				default: break;
-			}
-		}
-
-		private void TestCombine_DoCallSetA(int testSet, int testCase, string pathA, string pathB, string expectedA)
-		{
-			// Using '\'.
-			TestCombine_DoCallsA(testSet, testCase, pathA, pathB, expectedA);
-
-			// Using '/'.
-			TestCombine_DoCallsA(testSet, testCase, pathA.Replace('\\', '/'), pathB, expectedA.Replace('\\', '/'));
-		}
-
-		private void TestCombine_DoCallSetB(int testSet, int testCase, string pathA, string pathB, string expectedB)
-		{
-			// Using '\'.
-			TestCombine_DoCallsB(testSet, testCase, pathA, pathB, expectedB);
-
-			// Using '/'.
-			TestCombine_DoCallsB(testSet, testCase, pathA, pathB.Replace('\\', '/'), expectedB.Replace('\\', '/'));
-		}
-
-		private void TestCombine_DoCallsA(int testSet, int testCase, string pathA, string pathB, string expectedA)
+		[Test, TestCaseSource(typeof(PathExTestData), "TestCasesCombineA")]
+		public virtual void TestCombineA(int testSet, int testCase, string absoluteA, string absoluteB, string relativeA, string relativeB)
 		{
 			// Test set is given as additional argument to ease searching for errornous test cases.
 			UnusedArg.PreventAnalysisWarning(testSet);
@@ -377,15 +429,17 @@ namespace MKY.Test.IO
 			// A combined with A relative results in B.
 			switch (testCase)
 			{
-				case 0:  result = PathEx.CombineDirectoryPaths       (pathA, expectedA); break;
-				case 1:  result = PathEx.CombineDirectoryAndFilePaths(pathA, expectedA); break; // DIR vs FILE.
-				case 2:  result = PathEx.CombineFileAndDirectoryPaths(pathA, expectedA); break; // FILE vs DIR.
-				default: result = PathEx.CombineFilePaths            (pathA, expectedA); break;
+				case 0:  result = PathEx.CombineDirectoryPaths       (absoluteA, relativeA); break;
+				case 1:  result = PathEx.CombineDirectoryAndFilePaths(absoluteA, relativeA); break; // DIR vs FILE.
+				case 2:  result = PathEx.CombineFileAndDirectoryPaths(absoluteA, relativeA); break; // FILE vs DIR.
+				default: result = PathEx.CombineFilePaths            (absoluteA, relativeA); break;
 			}
-			Assert.AreEqual(pathB, result, "A combined with A relative doesn't result in B");
+			Assert.AreEqual(absoluteB, result, "A absolute combined with A relative doesn't result in B absolute");
 		}
 
-		private void TestCombine_DoCallsB(int testSet, int testCase, string pathA, string pathB, string expectedB)
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(PathExTestData), "TestCasesCombineB")]
+		public virtual void TestCombineB(int testSet, int testCase, string absoluteA, string absoluteB, string relativeA, string relativeB)
 		{
 			// Test set is given as additional argument to ease searching for errornous test cases.
 			UnusedArg.PreventAnalysisWarning(testSet);
@@ -395,12 +449,49 @@ namespace MKY.Test.IO
 			// B combined with B relative results in A.
 			switch (testCase)
 			{
-				case 0:  result = PathEx.CombineDirectoryPaths       (pathB, expectedB); break;
-				case 1:  result = PathEx.CombineFileAndDirectoryPaths(pathB, expectedB); break; // FILE vs DIR.
-				case 2:  result = PathEx.CombineDirectoryAndFilePaths(pathB, expectedB); break; // DIR vs FILE.
-				default: result = PathEx.CombineFilePaths            (pathB, expectedB); break;
+				case 0:  result = PathEx.CombineDirectoryPaths       (absoluteB, relativeB); break;
+				case 1:  result = PathEx.CombineFileAndDirectoryPaths(absoluteB, relativeB); break; // FILE vs DIR.
+				case 2:  result = PathEx.CombineDirectoryAndFilePaths(absoluteB, relativeB); break; // DIR vs FILE.
+				default: result = PathEx.CombineFilePaths            (absoluteB, relativeB); break;
 			}
-			Assert.AreEqual(pathA, result, "B combined with B relative doesn't result in A");
+			Assert.AreEqual(absoluteA, result, "B absolute combined with B relative doesn't result in A absolute");
+		}
+
+		#endregion
+
+		#region Tests > Compare()
+		//------------------------------------------------------------------------------------------
+		// Tests > Compare()
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(PathExTestData), "TestCasesCompare")]
+		public virtual void TestCompare(int testSet, int testCase, string absoluteA, string absoluteB, string relativeA, string relativeB)
+		{
+			// Test set is given as additional argument for potential special treatment of test cases.
+			UnusedArg.PreventAnalysisWarning(testSet);
+
+			PathCompareResult result;
+
+			// A compared to B results in A relative.
+			switch (testCase)
+			{
+				case 0:  result = PathEx.CompareDirectoryPaths       (absoluteA, absoluteB); break;
+				case 1:  result = PathEx.CompareDirectoryAndFilePaths(absoluteA, absoluteB); break; // DIR vs FILE.
+				case 2:  result = PathEx.CompareFileAndDirectoryPaths(absoluteA, absoluteB); break; // FILE vs DIR.
+				default: result = PathEx.CompareFilePaths            (absoluteA, absoluteB); break;
+			}
+			Assert.AreEqual(relativeA, result.RelativePath, "A absolute compared to B absolute doesn't result in A relative");
+
+			// B compared to A results in B relative.
+			switch (testCase)
+			{
+				case 0:  result = PathEx.CompareDirectoryPaths       (absoluteB, absoluteA); break;
+				case 1:  result = PathEx.CompareFileAndDirectoryPaths(absoluteB, absoluteA); break; // FILE vs DIR.
+				case 2:  result = PathEx.CompareDirectoryAndFilePaths(absoluteB, absoluteA); break; // DIR vs FILE.
+				default: result = PathEx.CompareFilePaths            (absoluteB, absoluteA); break;
+			}
+			Assert.AreEqual(relativeB, result.RelativePath, "B absolute compared to A absolute doesn't result in B relative");
 		}
 
 		#endregion
