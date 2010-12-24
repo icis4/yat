@@ -97,10 +97,10 @@ namespace MKY.IO
 		/// <summary>
 		/// Convert non-platform separators according to platform.
 		/// </summary>
-		private static void ConvertToPlatform(ref string path)
+		private static string ConvertToPlatform(string path)
 		{
 			// e.g. replace '/' by '\'
-			path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+			return (path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar));
 		}
 
 		#endregion
@@ -289,8 +289,8 @@ namespace MKY.IO
 			// Do not check for reference equality because complete result needs to be retrieved anyway.
 
 			// Convert paths to platform if needed.
-			ConvertToPlatform(ref pathA);
-			ConvertToPlatform(ref pathB);
+			pathA = ConvertToPlatform(pathA);
+			pathB = ConvertToPlatform(pathB);
 
 			// Create infos.
 			DirectoryInfo pathInfoA = null;
@@ -453,8 +453,8 @@ namespace MKY.IO
 		public static string DoCombineDirectoryPaths(string pathA, string pathB)
 		{
 			// Convert paths to platform if needed.
-			ConvertToPlatform(ref pathA);
-			ConvertToPlatform(ref pathB);
+			pathA = ConvertToPlatform(pathA);
+			pathB = ConvertToPlatform(pathB);
 
 			// Create infos.
 			DirectoryInfo pathInfoA = null;
