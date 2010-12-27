@@ -1481,7 +1481,7 @@ namespace YAT.Model
 					else
 					{
 						// Text.
-						using (StreamReader sr = new StreamReader(filePath))
+						using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
 						{
 							string s;
 							List<string> l = new List<string>();

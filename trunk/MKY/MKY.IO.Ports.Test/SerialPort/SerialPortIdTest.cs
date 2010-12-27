@@ -22,6 +22,7 @@ using System;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Text;
 using System.Xml.Serialization;
 
 using NUnit.Framework;
@@ -137,7 +138,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			// Serialize to file.
 			try
 			{
-				using (StreamWriter sw = new StreamWriter(filePath))
+				using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
 				{
 					XmlSerializer serializer = new XmlSerializer(typeof(SerialPortId));
 					serializer.Serialize(sw, id);
@@ -154,7 +155,7 @@ namespace MKY.IO.Ports.Test.SerialPort
 			// Deserialize from file.
 			try
 			{
-				using (StreamReader sr = new StreamReader(filePath))
+				using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
 				{
 					XmlSerializer serializer = new XmlSerializer(typeof(SerialPortId));
 					idDeserialized = (SerialPortId)serializer.Deserialize(sr);

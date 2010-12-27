@@ -422,7 +422,7 @@ namespace MKY.Xml
 			foreach (XmlSchema schema in schemas.Schemas())
 			{
 				string filePath = Path.GetTempPath() + Path.DirectorySeparatorChar + "YAT" + Path.DirectorySeparatorChar + GetType() + "." + label + "-" + i + ".xsd";
-				using (StreamWriter sw = new StreamWriter(filePath))
+				using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
 				{
 					schema.Write(sw);
 				}
@@ -434,13 +434,13 @@ namespace MKY.Xml
 				i++;
 			}
 		}
-	#endif
+#endif
 
-	#if (WRITE_DOCUMENTS_TO_FILES)
+#if (WRITE_DOCUMENTS_TO_FILES)
 		private void WriteDocumentToFile(XmlDocument document, string label)
 		{
 			string filePath = Path.GetTempPath() + Path.DirectorySeparatorChar + "YAT" + Path.DirectorySeparatorChar + GetType() + "." + label + ".xml";
-			using (StreamWriter sw = new StreamWriter(filePath))
+			using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
 			{
 				document.Save(sw);
 			}
@@ -450,7 +450,7 @@ namespace MKY.Xml
 				@"""" + filePath + @""""
 			);
 		}
-	#endif
+#endif
 
 		#endregion
 	}

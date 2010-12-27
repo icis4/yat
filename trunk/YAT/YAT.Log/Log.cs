@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Text;
 using System.Threading;
 
 using MKY.IO;
@@ -412,7 +413,7 @@ namespace YAT.Log
 			/// <summary></summary>
 			protected override void OpenWriter(FileStream stream)
 			{
-				this.writer = new StreamWriter(stream);
+				this.writer = new StreamWriter(stream, Encoding.UTF8);
 			}
 
 			/// <summary></summary>
