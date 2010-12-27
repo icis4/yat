@@ -23,6 +23,7 @@ using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Xml.Serialization;
 
 using NUnit.Framework;
@@ -155,7 +156,7 @@ namespace MKY.Test.Net
 			// Serialize to file.
 			try
 			{
-				using (StreamWriter sw = new StreamWriter(filePath))
+				using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
 				{
 					XmlSerializer serializer = new XmlSerializer(typeof(IPHost));
 					serializer.Serialize(sw, ipHost);
@@ -176,7 +177,7 @@ namespace MKY.Test.Net
 				// Deserialize from file.
 				try
 				{
-					using (StreamReader sr = new StreamReader(filePath))
+					using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
 					{
 						XmlSerializer serializer = new XmlSerializer(typeof(IPHost));
 						ipHostDeserialized = (IPHost)serializer.Deserialize(sr);

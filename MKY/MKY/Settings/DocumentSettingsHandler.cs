@@ -21,6 +21,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Text;
 using System.Xml.Serialization;
 
 using MKY.Diagnostics;
@@ -212,7 +213,7 @@ namespace MKY.Settings
 				try
 				{
 					object settings = null;
-					using (StreamReader sr = new StreamReader(filePath))
+					using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
 					{
 						XmlSerializer serializer = new XmlSerializer(type);
 						settings = serializer.Deserialize(sr);
@@ -225,7 +226,7 @@ namespace MKY.Settings
 				try
 				{
 					object settings = null;
-					using (StreamReader sr = new StreamReader(filePath))
+					using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
 					{
 						AlternateTolerantXmlSerializer serializer = new AlternateTolerantXmlSerializer(type, this.alternateXmlElements);
 						settings = serializer.Deserialize(sr);
@@ -286,7 +287,7 @@ namespace MKY.Settings
 
 			try
 			{
-				using (StreamWriter sw = new StreamWriter(filePath))
+				using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
 				{
 					XmlSerializer serializer = new XmlSerializer(type);
 					serializer.Serialize(sw, settings);

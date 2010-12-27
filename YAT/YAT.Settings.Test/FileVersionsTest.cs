@@ -822,6 +822,8 @@ namespace YAT.Settings.Test
 
 		#endregion
 
+		// ADD TC 08
+
 		#endregion
 
 		#region Set Up Settings
@@ -1004,6 +1006,44 @@ namespace YAT.Settings.Test
 
 			// \todo
 			// Add tests that verify that USB device info is correct.
+		}
+
+		#endregion
+
+		#region Settings Case Verifications > 08 :: Workspace :: 2 TCP AutoSocket Terminals with Unicode Predefined
+		//------------------------------------------------------------------------------------------
+		// Settings Case Verifications > 08 :: Workspace :: 2 TCP AutoSocket Terminals with Unicode Predefined
+		//------------------------------------------------------------------------------------------
+
+		private void VerifySettingsCase06(Model.Workspace workspace)
+		{
+			Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals");
+
+			// \todo
+			// Add tests that verify that terminals are interconnected.
+			// Retrieve terminals 1 and 2.
+			Model.Terminal terminal = null;
+		
+			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1");
+			Assert.IsFalse(terminal.IsOpen, "Terminal is not closed on COM1");
+
+			Assert.AreEqual(2, terminal.SettingsRoot.PredefinedCommand.Pages.Count, "Predefined commands do not contain 2 pages");
+
+			Model.Types.PredefinedCommandPage page;
+			Model.Types.Command command;
+
+			page = terminal.SettingsRoot.PredefinedCommand.Pages[0];
+			Assert.AreEqual("Page 1", page.PageName, "First predefined command pages has wrong name");
+			Assert.AreEqual(2, page.Commands.Count, "First predefined command page doesn't contain 2 commands");
+			command = page.Commands[0];
+			Assert.AreEqual("äöü", command.Description);
+			Assert.AreEqual("äöü", command.CommandLines[0]);
+			command = page.Commands[1];
+			Assert.AreEqual("ÄÖÜ", command.Description);
+			Assert.AreEqual("ÄÖÜ", command.CommandLines[0]);
+
+			// \todo
+			// Add tests that verify that recent contains the two commands.
 		}
 
 		#endregion

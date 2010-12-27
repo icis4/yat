@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
@@ -444,7 +445,7 @@ namespace MKY.Settings
 				try
 				{
 					object settings = null;
-					using (StreamReader sr = new StreamReader(filePath))
+					using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
 					{
 						XmlSerializer serializer = new XmlSerializer(type);
 						settings = serializer.Deserialize(sr);
@@ -457,7 +458,7 @@ namespace MKY.Settings
 				try
 				{
 					object settings = null;
-					using (StreamReader sr = new StreamReader(filePath))
+					using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
 					{
 						TolerantXmlSerializer serializer = new TolerantXmlSerializer(type);
 						settings = serializer.Deserialize(sr);
@@ -492,7 +493,7 @@ namespace MKY.Settings
 				try
 				{
 					object settings = null;
-					using (StreamReader sr = new StreamReader((string)oldDirectories[i] + Path.DirectorySeparatorChar + fileName))
+					using (StreamReader sr = new StreamReader((string)oldDirectories[i] + Path.DirectorySeparatorChar + fileName, Encoding.UTF8, true))
 					{
 						XmlSerializer serializer = new XmlSerializer(type);
 						settings = serializer.Deserialize(sr);
@@ -505,7 +506,7 @@ namespace MKY.Settings
 				try
 				{
 					object settings = null;
-					using (StreamReader sr = new StreamReader(filePath))
+					using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8, true))
 					{
 						TolerantXmlSerializer serializer = new TolerantXmlSerializer(type);
 						settings = serializer.Deserialize(sr);
@@ -621,7 +622,7 @@ namespace MKY.Settings
 
 			try
 			{
-				using (StreamWriter sw = new StreamWriter(filePath))
+				using (StreamWriter sw = new StreamWriter(filePath, false, Encoding.UTF8))
 				{
 					XmlSerializer serializer = new XmlSerializer(type);
 					serializer.Serialize(sw, settings);

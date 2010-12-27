@@ -21,6 +21,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Text;
 
 namespace MKY.IO
 {
@@ -47,7 +48,7 @@ namespace MKY.IO
 		public LogFile(string filePath, bool append)
 		{
 			this.filePath = filePath;
-			this.writer = new System.IO.StreamWriter(this.filePath, append);
+			this.writer = new StreamWriter(this.filePath, append, Encoding.UTF8);
 		}
 
 		#region Disposal

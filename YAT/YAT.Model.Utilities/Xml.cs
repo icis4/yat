@@ -64,10 +64,10 @@ namespace YAT.Model.Utilities
 		/// <summary></summary>
 		public static void LinesToXmlFile(List<Domain.DisplayLine> lines, string xmlFilePath)
 		{
-			using (FileStream fs = new FileStream(xmlFilePath, FileMode.Create))
+			using (StreamWriter sw = new StreamWriter(xmlFilePath, false, Encoding.UTF8))
 			{
 				XmlSerializer serializer = new XmlSerializer(typeof(List<Domain.DisplayLine>));
-				serializer.Serialize(fs, lines);
+				serializer.Serialize(sw, lines);
 			}
 		}
 	}
