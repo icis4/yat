@@ -28,6 +28,11 @@ namespace YAT.Gui.Forms
 	/// <summary></summary>
 	public partial class About : System.Windows.Forms.Form
 	{
+		private System.Threading.Timer timer_ExecuteManualTest3;
+		private object timer_ExecuteManualTest3SyncObj = new object();
+
+		private event EventHandler ExecuteManualTest3Event;
+
 		/// <summary></summary>
 		public About()
 		{
@@ -230,6 +235,108 @@ namespace YAT.Gui.Forms
 			string link = e.Link.LinkData as string;
 			if ((link != null) && (link.StartsWith("http://")))
 				MKY.Net.Browser.BrowseUri(link);
+		}
+
+		#endregion
+
+		#region Controls Event Handlers > Manual Testing
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Manual Testing
+		//------------------------------------------------------------------------------------------
+
+		private void label_ExecuteManualTest1_Click(object sender, EventArgs e)
+		{
+			if (MessageBox.Show
+				(
+				this,
+				"Immediately throw exception to test that unhandled synchronous exceptions are handled properly?",
+				"Execute manual test?",
+				MessageBoxButtons.YesNoCancel,
+				MessageBoxIcon.Question,
+				MessageBoxDefaultButton.Button2
+				)
+				== DialogResult.Yes)
+			{
+				throw (new Exception("Unhandled synchronous exception test :: Outer exception", new Exception("Inner exception")));
+			}
+		}
+
+		private void label_ExecuteManualTest2_Click(object sender, EventArgs e)
+		{
+			if (MessageBox.Show
+				(
+				this,
+				"Start Windows.Forms timer throwing an exception to test that unhandled asynchronous synchronized exceptions are handled properly?",
+				"Execute manual test?",
+				MessageBoxButtons.YesNoCancel,
+				MessageBoxIcon.Question,
+				MessageBoxDefaultButton.Button2
+				)
+				== DialogResult.Yes)
+			{
+				timer_ExecuteManualTest2.Start();
+			}
+		}
+
+		private void timer_ExecuteManualTest2_Tick(object sender, EventArgs e)
+		{
+			timer_ExecuteManualTest2.Stop();
+			throw (new Exception("Unhandled asynchronous synchronized exception test :: Outer exception", new Exception("Inner exception")));
+		}
+
+		/// <summary>
+		/// Test case 3: Unhandled asynchronous non-synchronized exceptions.
+		/// 
+		/// Test case 3 doesn't work on a System.Threading timer callback directly.
+		/// Such execptions are not dispatched back onto main thread. Therefore, use
+		/// EventHelper for this test case.
+		/// </summary>
+		private void label_ExecuteManualTest3_Click(object sender, EventArgs e)
+		{
+			if (MessageBox.Show
+				(
+				this,
+				"Start System.Threading timer throwing an exception to test that unhandled asynchronous non-synchronized exceptions are handled properly?",
+				"Execute manual test?",
+				MessageBoxButtons.YesNoCancel,
+				MessageBoxIcon.Question,
+				MessageBoxDefaultButton.Button2
+				)
+				== DialogResult.Yes)
+			{
+				lock (this.timer_ExecuteManualTest3SyncObj)
+				{
+					this.timer_ExecuteManualTest3 = new System.Threading.Timer(new System.Threading.TimerCallback(timer_ExecuteManualTest3_Timeout), null, 100, System.Threading.Timeout.Infinite);
+				}
+			}
+		}
+
+		private void timer_ExecuteManualTest3_Timeout(object obj)
+		{
+			lock (this.timer_ExecuteManualTest3SyncObj)
+			{
+				this.timer_ExecuteManualTest3.Dispose();
+				this.timer_ExecuteManualTest3 = null;
+			}
+
+			// Create event sink that acts as exception source.
+			ExecuteManualTest3Class exceptionSource = new ExecuteManualTest3Class();
+			ExecuteManualTest3Event += new EventHandler(exceptionSource.Execute);
+
+			// Fire event synchronously.
+			MKY.Event.EventHelper.FireSync(ExecuteManualTest3Event, this, new EventArgs());
+		}
+
+		private class ExecuteManualTest3Class
+		{
+			public ExecuteManualTest3Class()
+			{
+			}
+
+			public void Execute(object sender, EventArgs e)
+			{
+				throw (new Exception("Unhandled asynchronous non-synchronized exception test :: Outer exception", new Exception("Inner exception")));
+			}
 		}
 
 		#endregion

@@ -297,8 +297,7 @@ namespace YAT.Log
 			/// <summary></summary>
 			protected virtual void StartFlushTimer()
 			{
-				TimerCallback timerDelegate = new TimerCallback(this.flushTimer_Timeout);
-				this.flushTimer = new Timer(timerDelegate, null, FlushTimeout, System.Threading.Timeout.Infinite);
+				this.flushTimer = new Timer(new TimerCallback(flushTimer_Timeout), null, FlushTimeout, Timeout.Infinite);
 			}
 
 			/// <summary></summary>
@@ -311,12 +310,14 @@ namespace YAT.Log
 			/// <summary></summary>
 			protected virtual void StopFlushTimer()
 			{
+				this.flushTimer.Dispose();
 				this.flushTimer = null;
 			}
 
 			/// <summary></summary>
 			private void flushTimer_Timeout(object obj)
 			{
+				StopFlushTimer();
 				Flush();
 			}
 
