@@ -32,6 +32,7 @@ namespace YAT.Gui.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(About));
 			this.button_Close = new System.Windows.Forms.Button();
 			this.linkLabel_HHD = new System.Windows.Forms.LinkLabel();
@@ -50,6 +51,10 @@ namespace YAT.Gui.Forms
 			this.pictureBox_License = new System.Windows.Forms.PictureBox();
 			this.linkLabel_License = new System.Windows.Forms.LinkLabel();
 			this.linkLabel_VSPE = new System.Windows.Forms.LinkLabel();
+			this.label_ExecuteManualTest1 = new System.Windows.Forms.Label();
+			this.label_ExecuteManualTest2 = new System.Windows.Forms.Label();
+			this.label_ExecuteManualTest3 = new System.Windows.Forms.Label();
+			this.timer_ExecuteManualTest2 = new System.Windows.Forms.Timer(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_Product)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_License)).BeginInit();
 			this.SuspendLayout();
@@ -245,6 +250,37 @@ namespace YAT.Gui.Forms
 			this.linkLabel_VSPE.Text = resources.GetString("linkLabel_VSPE.Text");
 			this.linkLabel_VSPE.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
+			// label_ExecuteManualTest1
+			// 
+			this.label_ExecuteManualTest1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_ExecuteManualTest1.Location = new System.Drawing.Point(605, 61);
+			this.label_ExecuteManualTest1.Name = "label_ExecuteManualTest1";
+			this.label_ExecuteManualTest1.Size = new System.Drawing.Size(16, 16);
+			this.label_ExecuteManualTest1.TabIndex = 101;
+			this.label_ExecuteManualTest1.Click += new System.EventHandler(this.label_ExecuteManualTest1_Click);
+			// 
+			// label_ExecuteManualTest2
+			// 
+			this.label_ExecuteManualTest2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_ExecuteManualTest2.Location = new System.Drawing.Point(605, 135);
+			this.label_ExecuteManualTest2.Name = "label_ExecuteManualTest2";
+			this.label_ExecuteManualTest2.Size = new System.Drawing.Size(16, 16);
+			this.label_ExecuteManualTest2.TabIndex = 102;
+			this.label_ExecuteManualTest2.Click += new System.EventHandler(this.label_ExecuteManualTest2_Click);
+			// 
+			// label_ExecuteManualTest3
+			// 
+			this.label_ExecuteManualTest3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label_ExecuteManualTest3.Location = new System.Drawing.Point(605, 222);
+			this.label_ExecuteManualTest3.Name = "label_ExecuteManualTest3";
+			this.label_ExecuteManualTest3.Size = new System.Drawing.Size(16, 16);
+			this.label_ExecuteManualTest3.TabIndex = 103;
+			this.label_ExecuteManualTest3.Click += new System.EventHandler(this.label_ExecuteManualTest3_Click);
+			// 
+			// timer_ExecuteManualTest2
+			// 
+			this.timer_ExecuteManualTest2.Tick += new System.EventHandler(this.timer_ExecuteManualTest2_Tick);
+			// 
 			// About
 			// 
 			this.AcceptButton = this.button_Close;
@@ -252,6 +288,9 @@ namespace YAT.Gui.Forms
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button_Close;
 			this.ClientSize = new System.Drawing.Size(618, 462);
+			this.Controls.Add(this.label_ExecuteManualTest3);
+			this.Controls.Add(this.label_ExecuteManualTest2);
+			this.Controls.Add(this.label_ExecuteManualTest1);
 			this.Controls.Add(this.linkLabel_License);
 			this.Controls.Add(this.pictureBox_License);
 			this.Controls.Add(this.linkLabel_Trademark);
@@ -302,5 +341,9 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.PictureBox pictureBox_License;
 		private System.Windows.Forms.LinkLabel linkLabel_License;
 		private System.Windows.Forms.LinkLabel linkLabel_VSPE;
+		private System.Windows.Forms.Label label_ExecuteManualTest1;
+		private System.Windows.Forms.Label label_ExecuteManualTest2;
+		private System.Windows.Forms.Label label_ExecuteManualTest3;
+		private System.Windows.Forms.Timer timer_ExecuteManualTest2;
 	}
 }

@@ -822,7 +822,7 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		// ADD TC 08
+		// 1.99.xx => ADD TC 08
 
 		#endregion
 
@@ -1015,7 +1015,7 @@ namespace YAT.Settings.Test
 		// Settings Case Verifications > 08 :: Workspace :: 2 TCP AutoSocket Terminals with Unicode Predefined
 		//------------------------------------------------------------------------------------------
 
-		private void VerifySettingsCase06(Model.Workspace workspace)
+		private void VerifySettingsCase08(Model.Workspace workspace)
 		{
 			Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals");
 

@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
 
 using MKY.Event;
 
@@ -51,7 +50,7 @@ namespace YAT.Domain
 			private bool isDisposed;
 
 			private int timeout;
-			private Timer timer;
+			private System.Threading.Timer timer;
 
 			/// <summary></summary>
 			public event EventHandler Timeout;
@@ -114,14 +113,13 @@ namespace YAT.Domain
 			{
 				AssertNotDisposed();
 
-				TimerCallback timerDelegate = new TimerCallback(this.timer_Timeout);
-				this.timer = new Timer(timerDelegate, null, this.timeout, System.Threading.Timeout.Infinite);
+				this.timer = new System.Threading.Timer(new System.Threading.TimerCallback(timer_Timeout), null, this.timeout, System.Threading.Timeout.Infinite);
 			}
 
 			/// <summary></summary>
 			public virtual void Restart()
 			{
-				AssertNotDisposed();
+				// AssertNotDisposed() is called by methods below.
 
 				Stop();
 				Start();
@@ -132,11 +130,14 @@ namespace YAT.Domain
 			public virtual void Stop()
 			{
 				AssertNotDisposed();
+
+				this.timer.Dispose();
 				this.timer = null;
 			}
 
 			private void timer_Timeout(object obj)
 			{
+				Stop();
 				OnTimeout(new EventArgs());
 			}
 
