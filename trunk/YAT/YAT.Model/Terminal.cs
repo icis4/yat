@@ -402,6 +402,309 @@ namespace YAT.Model
 			}
 		}
 
+
+		/// <summary></summary>
+		public virtual string Caption
+		{
+			get
+			{
+				StringBuilder sb = new StringBuilder(AutoName);
+
+				if (this.settingsRoot != null)
+				{
+					if (this.settingsRoot.ExplicitHaveChanged)
+						sb.Append("*");
+
+					string userName = this.settingsRoot.UserName;
+					if (!string.IsNullOrEmpty(userName))
+					{
+						sb.Append(" - ");
+						sb.Append(userName);
+					}
+
+					switch (this.settingsRoot.IOType)
+					{
+						case Domain.IOType.SerialPort:
+						{
+							MKY.IO.Serial.SerialPortSettings s = this.settingsRoot.IO.SerialPort;
+							sb.Append(" - ");
+							sb.Append(s.PortId.ToString(true, false));
+							sb.Append(" - ");
+							if (IsOpen)
+							{
+								sb.Append("Open");
+								sb.Append(" - ");
+								sb.Append(IsConnected ? "Connected" : "Disconnected");
+							}
+							else
+							{
+								sb.Append("Closed");
+							}
+							break;
+						}
+
+						case Domain.IOType.TcpClient:
+						{
+							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+							sb.Append(" - ");
+							sb.Append(s.ResolvedRemoteIPAddress.ToString());
+							sb.Append(":");
+							sb.Append(s.RemotePort.ToString());
+							sb.Append(" - ");
+							sb.Append(IsConnected ? "Connected" : "Disconnected");
+							break;
+						}
+
+						case Domain.IOType.TcpServer:
+						{
+							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+							sb.Append(" - ");
+							sb.Append("Server:");
+							sb.Append(s.LocalPort.ToString());
+							sb.Append(" - ");
+							if (IsStarted)
+								sb.Append(IsConnected ? "Connected" : "Listening");
+							else
+								sb.Append("Closed");
+							break;
+						}
+
+						case Domain.IOType.TcpAutoSocket:
+						{
+							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+							bool isClient = ((MKY.IO.Serial.TcpAutoSocket)(this.terminal.UnderlyingIOProvider)).IsClient;
+							bool isServer = ((MKY.IO.Serial.TcpAutoSocket)(this.terminal.UnderlyingIOProvider)).IsServer;
+							if (IsStarted)
+							{
+								if (isClient)
+								{
+									sb.Append(" - ");
+									sb.Append(s.ResolvedRemoteIPAddress.ToString());
+									sb.Append(":");
+									sb.Append(s.RemotePort.ToString());
+									sb.Append(" - ");
+									sb.Append(IsConnected ? "Connected" : "Disconnected");
+								}
+								else if (isServer)
+								{
+									sb.Append(" - ");
+									sb.Append("Server:");
+									sb.Append(s.LocalPort.ToString());
+									sb.Append(" - ");
+									sb.Append(IsConnected ? "Connected" : "Listening");
+								}
+								else
+								{
+									sb.Append(" - ");
+									sb.Append("Starting on port ");
+									sb.Append(s.RemotePort.ToString());
+								}
+							}
+							else
+							{
+								sb.Append(" - ");
+								sb.Append("AutoSocket:");
+								sb.Append(s.RemotePort.ToString());
+								sb.Append(" - ");
+								sb.Append("Disconnected");
+							}
+							break;
+						}
+
+						case Domain.IOType.Udp:
+						{
+							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+							sb.Append(" - ");
+							sb.Append(s.ResolvedRemoteIPAddress.ToString());
+							sb.Append(":");
+							sb.Append(s.RemotePort.ToString());
+							sb.Append(" - ");
+							sb.Append("Receive:");
+							sb.Append(s.LocalPort.ToString());
+							sb.Append(" - ");
+							sb.Append(IsOpen ? "Open" : "Closed");
+							break;
+						}
+
+						case Domain.IOType.UsbSerialHid:
+						{
+							MKY.IO.Usb.DeviceInfo di = ((MKY.IO.Serial.UsbSerialHidDevice)(this.terminal.UnderlyingIOProvider)).DeviceInfo;
+							sb.Append(" - ");
+							sb.Append(di.ToString());
+							sb.Append(" - ");
+							if (IsStarted)
+							{
+								if (IsConnected)
+									sb.Append("Connected - Open");
+								else
+									sb.Append("Disconnected - Waiting for reconnect");
+							}
+							else
+							{
+								sb.Append("Closed");
+							}
+							break;
+						}
+					}
+				}
+
+				return (sb.ToString());
+			}
+		}
+
+		/// <summary></summary>
+		public virtual string IOStatusText
+		{
+			get
+			{
+				StringBuilder sb = new StringBuilder();
+
+				if (this.settingsRoot != null)
+				{
+					switch (this.settingsRoot.IOType)
+					{
+						case Domain.IOType.SerialPort:
+						{
+							MKY.IO.Serial.SerialPortSettings s = this.settingsRoot.IO.SerialPort;
+							sb.Append("Serial port ");
+							sb.Append(s.PortId.ToString(true, false));
+							sb.Append(" (" + s.Communication + ") is ");
+							if (IsOpen)
+							{
+								sb.Append("open and ");
+								sb.Append(IsConnected ? "connected" : "disconnected");
+							}
+							else
+							{
+								sb.Append("closed");
+							}
+							break;
+						}
+
+						case Domain.IOType.TcpClient:
+						{
+							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+							sb.Append("TCP client is ");
+							sb.Append(IsConnected ? "connected to " : "disconnected from ");
+							sb.Append(s.ResolvedRemoteIPAddress.ToString());
+							sb.Append(" on remote port ");
+							sb.Append(s.RemotePort.ToString());
+							break;
+						}
+
+						case Domain.IOType.TcpServer:
+						{
+							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+							sb.Append("TCP server is ");
+							if (IsStarted)
+							{
+								if (IsConnected)
+								{
+									MKY.IO.Serial.TcpServer server = (MKY.IO.Serial.TcpServer)this.terminal.UnderlyingIOProvider;
+									int count = server.ConnectedClientCount;
+
+									sb.Append("connected to ");
+									sb.Append(count.ToString());
+									if (count == 1)
+										sb.Append(" client");
+									else
+										sb.Append(" clients");
+								}
+								else
+								{
+									sb.Append("listening");
+								}
+							}
+							else
+							{
+								sb.Append("closed");
+							}
+							sb.Append(" on local port ");
+							sb.Append(s.LocalPort.ToString());
+							break;
+						}
+
+						case Domain.IOType.TcpAutoSocket:
+						{
+							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+							bool isClient = ((MKY.IO.Serial.TcpAutoSocket)(this.terminal.UnderlyingIOProvider)).IsClient;
+							bool isServer = ((MKY.IO.Serial.TcpAutoSocket)(this.terminal.UnderlyingIOProvider)).IsServer;
+							sb.Append("TCP auto socket is ");
+							if (IsStarted)
+							{
+								if (isClient)
+								{
+									sb.Append("connected to ");
+									sb.Append(s.ResolvedRemoteIPAddress.ToString());
+									sb.Append(" on remote port ");
+									sb.Append(s.RemotePort.ToString());
+								}
+								else if (isServer)
+								{
+									sb.Append(IsConnected ? "connected" : "listening");
+									sb.Append(" on local port ");
+									sb.Append(s.LocalPort.ToString());
+								}
+								else
+								{
+									sb.Append("starting on port ");
+									sb.Append(s.RemotePort.ToString());
+								}
+							}
+							else
+							{
+								sb.Append("closed on port ");
+								sb.Append(s.RemotePort.ToString());
+							}
+							break;
+						}
+
+						case Domain.IOType.Udp:
+						{
+							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
+							sb.Append("UDP socket is ");
+							sb.Append(IsOpen ? "open" : "closed");
+							sb.Append(" for sending to ");
+							sb.Append(s.ResolvedRemoteIPAddress.ToString());
+							sb.Append(" on remote port ");
+							sb.Append(s.RemotePort.ToString());
+							sb.Append(" and receiving on local port ");
+							sb.Append(s.LocalPort.ToString());
+							break;
+						}
+
+						case Domain.IOType.UsbSerialHid:
+						{
+							MKY.IO.Usb.DeviceInfo di = ((MKY.IO.Serial.UsbSerialHidDevice)(this.terminal.UnderlyingIOProvider)).DeviceInfo;
+							sb.Append("USB HID device '");
+							sb.Append(di.ToString());
+							sb.Append("' is ");
+							if (IsStarted)
+							{
+								if (IsConnected)
+									sb.Append("connected and open");
+								else
+									sb.Append("disconnected and waiting for reconnect");
+							}
+							else
+							{
+								sb.Append("closed");
+							}
+							break;
+						}
+
+						default:
+						{
+							// Do nothing.
+							break;
+						}
+					}
+				}
+
+				return (sb.ToString());
+			}
+		}
+
 		#endregion
 
 		#region General Methods

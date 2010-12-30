@@ -333,7 +333,7 @@ namespace YAT.Gui.Forms
 			{
 			}
 
-			public void Execute(object sender, EventArgs e)
+			public virtual void Execute(object sender, EventArgs e)
 			{
 				throw (new Exception("Unhandled asynchronous non-synchronized exception test :: Outer exception", new Exception("Inner exception")));
 			}
