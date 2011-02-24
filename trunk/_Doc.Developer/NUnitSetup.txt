@@ -1,6 +1,15 @@
 ﻿
+NUnit
+-----
+
 Tools
   > Settings
     > IDE Support
       > Visual Studio
         > Enable = true
+
+
+YAT test suite
+--------------
+
+Three-tier based settings environment as described in 'MKY.Configuration.Provider'

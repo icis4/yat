@@ -24,7 +24,62 @@ using System.Text;
 namespace MKY.Configuration
 {
 	/// <summary>
-	/// Utilities to provide configuration settings.
+	/// For software testing on computers it may be necessary to configure a test case to a given
+	/// test environment. For example, a certain test may not be ran on a machine that misses a
+	/// certain hardware. Or, a test may need to be configured to access a certain file that is
+	/// located at a local path.
+	/// This class in conjunction with <see cref="MergeableSettingsSection"/>, <see cref="SelectionSection"/>
+	/// as well as <see cref="Selector"/> provides the infrastructure that is needed to implement
+	/// test cases as described above. Basically, this infrastructure features a way to retrieve
+	/// settings from a three-tier settings environment:
+	/// (1) Each setting must be hard-coded in a class that derives from <see cref="MergeableSettingsSection"/>.
+	///     This class must contain hard-coded default values for each setting.
+	/// (2) The default settings can be overriden by solution specific defaults in a file
+	///     'SolutionName'.config in the solution's root directory. These solution specific defaults
+	///     are to be checked in into the source code control system and are the same for all developers.
+	/// (3) The settings may be overriden again by machine specific configuration files
+	///     'TestProject'.config that can be located anywhere on the local file system. The location
+	///     of each file is resolved via a system variable 'TEST_PROJECT'_SETTINGS_FILE.
+	/// 
+	/// Example:
+	/// 'MKY.IO.Ports.Test.SettingsSection' implements settings to select the serial COM ports used
+	/// in certain test cases. Each setting is implemented as a <see cref="ConfigurationProperty"/>
+	/// and consists of the name, the data type and the default value (1).
+	/// 'YAT.config' contains a 'MKY.IO.Ports.Test.Settings' configuration group that defines the
+	/// typical values used for YAT testing (2).
+	/// 'MKY.IO.Ports.Test.Settings.config' located at a certain machine defines which serial COM
+	/// ports are available on that machine (3).
+	/// 
+	/// Whenever the test suite, e.g. NUnit based, loads the test cases, the configurations are read
+	/// and the test cases configured accordingly. The settings providers may also implement logic
+	/// that verifies whether the settings really make sense on the current machine.
+	/// 
+	/// In addition to the mechanism described above, the settings may contain multiple values
+	/// for each setting. Each set of values is collected in a <see cref="ConfigurationSectionGroup"/>.
+	/// The desired set can be selected using a <see cref="SelectionSection"/>. It is also possible
+	/// that one tier, e.g. (2), defines multiple sets and the next tier selects, e.g. (3), simply
+	/// selects out of the sets defined by (2).
+	/// 
+	/// Example:
+	/// 'YAT.config' first announces the selector section:
+	///     sectionGroup name="MKY.IO.Ports.Test.Settings" type="System.Configuration.ConfigurationSectionGroup"
+	///         section name="Selection" type="MKY.Configuration.SelectionSection, MKY"
+	/// Then it lists the available sets of values in a section group:
+	///     sectionGroup name="MKY.IO.Ports.Test.Settings.Configurations" type="System.Configuration.ConfigurationSectionGroup"
+	///         section name="NoDevices" type="MKY.IO.Ports.Test.SettingsSection, MKY.IO.Ports.Test"
+	///         section name="UsingPhysicalDevices" type="MKY.IO.Ports.Test.SettingsSection, MKY.IO.Ports.Test"
+	///         section name="UsingVSPE" type="MKY.IO.Ports.Test.SettingsSection, MKY.IO.Ports.Test"
+	/// Finally, the values for each section:
+	///     MKY.IO.Ports.Test.Settings
+	///         Selection SelectedConfigurationName="NoDevices"
+	///     MKY.IO.Ports.Test.Settings.Configurations
+	///         NoDevices SerialPortAIsAvailable="false" SerialPortBIsAvailable="false" SerialPortA="COM1" SerialPortB="COM2" SerialPortsAreInterconnected="false"
+	///         UsingPhysicalDevices SerialPortAIsAvailable="true" SerialPortBIsAvailable="true" SerialPortA="COM1" SerialPortB="COM2" SerialPortsAreInterconnected="true"
+	///         UsingVSPE SerialPortAIsAvailable="true" SerialPortBIsAvailable="true" SerialPortA="COM1" SerialPortB="COM2" SerialPortsAreInterconnected="true"
+	/// These solution defaults may then be partly or completely overridden by the machine specific
+	/// configuration file 'MKY.IO.Ports.Test.Settings.config':
+	///     MKY.IO.Ports.Test.Settings
+	///         Selection SelectedConfigurationName="UsingPhysicalDevices"
 	/// </summary>
 	/// <remarks>
 	/// Debugging this configuration infrastructure may be a bit trickier than normal debugging.
