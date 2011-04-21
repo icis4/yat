@@ -148,6 +148,8 @@ namespace MKY.IO.Serial
 
 		private const int AliveInterval = 500;
 
+		private const string Undefined = "<Undefined>";
+
 		#endregion
 
 		#region Fields
@@ -1076,12 +1078,12 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public virtual string ToShortPortString()
 		{
-			if      (this.port != null)
+			if (this.port != null)
 				return (this.port.PortId);
 			else if (!string.IsNullOrEmpty(this.portName))
 				return (this.portName);
 			else
-				return ("<Undefined>");
+				return (Undefined);
 		}
 
 		#endregion

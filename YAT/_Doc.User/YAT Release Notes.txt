@@ -41,7 +41,7 @@ and install it manually.
 2. History of changes in YAT
 ====================================================================================================
 
-YAT 2.0 Beta 3 Candidate 4 Version 1.99.26 :: 2011-0x-xx
+YAT 2.0 Beta 3 Candidate 4 Version 1.99.26 :: 2011-04-2x
 ----------------------------------------------------------------------------------------------------
 
 New:
@@ -55,7 +55,7 @@ Important changes:
 - HowTo on optional user test config and settings templates added (related to #2838447/#2981764)
 
 Fixed bugs:
-- <>
+- Exception when switching terminal type to USB Ser/HID fixed (bug #3290317)
 
 Limitations and known issues:
 - MDI limitations of .NET
@@ -415,7 +415,7 @@ Important changes:
 Limitations and known issues:
 - ".yat" files of older versions cannot be handled yet
 - Workspace references terminal files with absolute paths
-- 2 parallel terminals sometime crash
+- 2 parallel terminals sometimes crash
 
 
 YAT 2.0 Beta 1 Version 1.99.12 :: 2007-04-15
@@ -442,7 +442,7 @@ YAT 2.0 Alpha 3 Version 1.99.8 :: 2007-02-25
 ----------------------------------------------------------------------------------------------------
 
 New:
-- Ctrl-C kopiert den selektierten Monitor-Inhalt in die Zwischenablage
+- Ctrl-C copies selected monitor contents onto clipboard
 - Save and send from YAT XML files
 - Procedure commands "\!(NoEOL)" and "\!(EOL)" added
 - Chronometer added to status bar

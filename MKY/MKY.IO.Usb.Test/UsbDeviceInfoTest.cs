@@ -91,6 +91,8 @@ namespace MKY.IO.Usb.Test
 				Assert.IsNotNullOrEmpty(s, "ToString() resulted in invalid string");
 				s = di.ToShortString();
 				Assert.IsNotNullOrEmpty(s, "ToShortString() resulted in invalid string");
+				s = di.ToLongString();
+				Assert.IsNotNullOrEmpty(s, "ToLongString() resulted in invalid string");
 			}
 			else
 			{
