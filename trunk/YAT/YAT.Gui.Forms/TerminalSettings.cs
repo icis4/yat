@@ -139,98 +139,79 @@ namespace YAT.Gui.Forms
 
 		private void serialPortSelection_PortIdChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.SerialPort.PortId = serialPortSelection.PortId;
+			this.settings_Form.Terminal.IO.SerialPort.PortId = serialPortSelection.PortId;
 		}
 
 		private void serialPortSettings_BaudRateChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.SerialPort.Communication.BaudRate = serialPortSettings.BaudRate;
+			this.settings_Form.Terminal.IO.SerialPort.Communication.BaudRate = serialPortSettings.BaudRate;
 		}
 
 		private void serialPortSettings_DataBitsChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.SerialPort.Communication.DataBits = serialPortSettings.DataBits;
+			this.settings_Form.Terminal.IO.SerialPort.Communication.DataBits = serialPortSettings.DataBits;
 		}
 
 		private void serialPortSettings_ParityChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.SerialPort.Communication.Parity = serialPortSettings.Parity;
+			this.settings_Form.Terminal.IO.SerialPort.Communication.Parity = serialPortSettings.Parity;
 		}
 
 		private void serialPortSettings_StopBitsChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.SerialPort.Communication.StopBits = serialPortSettings.StopBits;
+			this.settings_Form.Terminal.IO.SerialPort.Communication.StopBits = serialPortSettings.StopBits;
 		}
 
 		private void serialPortSettings_FlowControlChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.SerialPort.Communication.FlowControl = serialPortSettings.FlowControl;
+			this.settings_Form.Terminal.IO.SerialPort.Communication.FlowControl = serialPortSettings.FlowControl;
 		}
 
 		private void serialPortSettings_AutoReopenChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.SerialPort.AutoReopen = serialPortSettings.AutoReopen;
+			this.settings_Form.Terminal.IO.SerialPort.AutoReopen = serialPortSettings.AutoReopen;
 		}
 
 		private void socketSelection_RemoteHostChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				this.settings_Form.Terminal.IO.Socket.RemoteHost = socketSelection.RemoteHost;
-				this.settings_Form.Terminal.IO.Socket.ResolvedRemoteIPAddress = socketSelection.ResolvedRemoteIPAddress;
-			}
+			this.settings_Form.Terminal.IO.Socket.RemoteHost = socketSelection.RemoteHost;
+			this.settings_Form.Terminal.IO.Socket.ResolvedRemoteIPAddress = socketSelection.ResolvedRemoteIPAddress;
 		}
 
 		private void socketSelection_RemotePortChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.Socket.RemotePort = socketSelection.RemotePort;
+			this.settings_Form.Terminal.IO.Socket.RemotePort = socketSelection.RemotePort;
 		}
 
 		private void socketSelection_LocalInterfaceChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				this.settings_Form.Terminal.IO.Socket.LocalInterface = socketSelection.LocalInterface;
-				this.settings_Form.Terminal.IO.Socket.ResolvedLocalIPAddress = socketSelection.ResolvedLocalIPAddress;
-			}
+			this.settings_Form.Terminal.IO.Socket.LocalInterface = socketSelection.LocalInterface;
+			this.settings_Form.Terminal.IO.Socket.ResolvedLocalIPAddress = socketSelection.ResolvedLocalIPAddress;
 		}
 
 		private void socketSelection_LocalTcpPortChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.Socket.LocalTcpPort = socketSelection.LocalTcpPort;
+			this.settings_Form.Terminal.IO.Socket.LocalTcpPort = socketSelection.LocalTcpPort;
 		}
 
 		private void socketSelection_LocalUdpPortChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.Socket.LocalUdpPort = socketSelection.LocalUdpPort;
+			this.settings_Form.Terminal.IO.Socket.LocalUdpPort = socketSelection.LocalUdpPort;
 		}
 
 		private void socketSettings_TcpClientAutoReconnectChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.Socket.TcpClientAutoReconnect = socketSettings.TcpClientAutoReconnect;
+			this.settings_Form.Terminal.IO.Socket.TcpClientAutoReconnect = socketSettings.TcpClientAutoReconnect;
 		}
 
 		private void usbSerialHidDeviceSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.UsbSerialHidDevice.DeviceInfo = usbSerialHidDeviceSelection.DeviceInfo;
+			this.settings_Form.Terminal.IO.UsbSerialHidDevice.DeviceInfo = usbSerialHidDeviceSelection.DeviceInfo;
 		}
 
 		private void usbSerialHidDeviceSettings_AutoOpenChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-				this.settings_Form.Terminal.IO.UsbSerialHidDevice.AutoOpen = usbSerialHidDeviceSettings.AutoOpen;
+			this.settings_Form.Terminal.IO.UsbSerialHidDevice.AutoOpen = usbSerialHidDeviceSettings.AutoOpen;
 		}
 
 		private void button_AdvancedSettings_Click(object sender, EventArgs e)

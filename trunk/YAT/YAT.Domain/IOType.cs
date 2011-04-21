@@ -60,13 +60,13 @@ namespace YAT.Domain
 	{
 		#region String Definitions
 
-		private const string Unknown_string = "Unknown";
-		private const string SerialPort_string = "Serial Port (COM)";
-		private const string TcpClient_string = "TCP/IP Client";
-		private const string TcpServer_string = "TCP/IP Server";
+		private const string Unknown_string       = "Unknown";
+		private const string SerialPort_string    = "Serial Port (COM)";
+		private const string TcpClient_string     = "TCP/IP Client";
+		private const string TcpServer_string     = "TCP/IP Server";
 		private const string TcpAutoSocket_string = "TCP/IP AutoSocket";
-		private const string Udp_string = "UDP/IP Socket";
-		private const string UsbSerialHid_string = "USB Ser/HID";
+		private const string Udp_string           = "UDP/IP Socket";
+		private const string UsbSerialHid_string  = "USB Ser/HID";
 
 		#endregion
 
@@ -94,7 +94,7 @@ namespace YAT.Domain
 				case IOType.TcpServer:     return (TcpServer_string);
 				case IOType.TcpAutoSocket: return (TcpAutoSocket_string);
 				case IOType.Udp:           return (Udp_string);
-				case IOType.UsbSerialHid:        return (UsbSerialHid_string);
+				case IOType.UsbSerialHid:  return (UsbSerialHid_string);
 				default:                   return (Unknown_string);
 			}
 		}

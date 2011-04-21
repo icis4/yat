@@ -63,10 +63,10 @@ namespace MKY.IO.Ports
 		{
 			switch ((Parity)UnderlyingEnum)
 			{
-				case Parity.Even: return (Even_string);
-				case Parity.Odd: return (Odd_string);
-				case Parity.None: return (None_string);
-				case Parity.Mark: return (Mark_string);
+				case Parity.Even:  return (Even_string);
+				case Parity.Odd:   return (Odd_string);
+				case Parity.None:  return (None_string);
+				case Parity.Mark:  return (Mark_string);
 				case Parity.Space: return (Space_string);
 			}
 			throw (new NotImplementedException(UnderlyingEnum.ToString()));
