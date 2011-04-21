@@ -43,6 +43,15 @@ namespace MKY.IO.Serial
 	/// <summary></summary>
 	public class UsbSerialHidDevice : IIOProvider, IDisposable
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		private const string Undefined = "<Undefined>";
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -168,6 +177,19 @@ namespace MKY.IO.Serial
 					return (this.settings.DeviceInfo);
 				else
 					return (null);
+			}
+		}
+
+		/// <summary></summary>
+		public virtual string DeviceInfoString
+		{
+			get
+			{
+				Usb.DeviceInfo di = DeviceInfo;
+				if (di != null)
+					return (di.ToString());
+				else
+					return (Undefined);
 			}
 		}
 
@@ -468,8 +490,9 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public override string ToString()
 		{
-			if (DeviceInfo != null)
-				return (DeviceInfo.ToString());
+			Usb.DeviceInfo di = DeviceInfo;
+			if (di != null)
+				return (di.ToString());
 			else
 				return (base.ToString());
 		}
@@ -477,8 +500,9 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public virtual string ToShortString()
 		{
-			if (DeviceInfo != null)
-				return (DeviceInfo.ToShortString());
+			Usb.DeviceInfo di = DeviceInfo;
+			if (di != null)
+				return (di.ToShortString());
 			else
 				return (base.ToString());
 		}

@@ -472,10 +472,18 @@ namespace YAT.Model
 						case Domain.IOType.TcpAutoSocket:
 						{
 							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
-							bool isClient = ((MKY.IO.Serial.TcpAutoSocket)(this.terminal.UnderlyingIOProvider)).IsClient;
-							bool isServer = ((MKY.IO.Serial.TcpAutoSocket)(this.terminal.UnderlyingIOProvider)).IsServer;
 							if (IsStarted)
 							{
+								bool isClient = false;
+								bool isServer = false;
+
+								MKY.IO.Serial.TcpAutoSocket socket = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.TcpAutoSocket;
+								if (socket != null)
+								{
+									isClient = socket.IsClient;
+									isServer = socket.IsServer;
+								}
+
 								if (isClient)
 								{
 									sb.Append(" - ");
@@ -528,20 +536,23 @@ namespace YAT.Model
 
 						case Domain.IOType.UsbSerialHid:
 						{
-							MKY.IO.Usb.DeviceInfo di = ((MKY.IO.Serial.UsbSerialHidDevice)(this.terminal.UnderlyingIOProvider)).DeviceInfo;
-							sb.Append(" - ");
-							sb.Append(di.ToString());
-							sb.Append(" - ");
-							if (IsStarted)
+							MKY.IO.Serial.UsbSerialHidDevice device = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.UsbSerialHidDevice;
+							if (device != null)
 							{
-								if (IsConnected)
-									sb.Append("Connected - Open");
+								sb.Append(" - ");
+								sb.Append(device.DeviceInfoString);
+								sb.Append(" - ");
+								if (IsStarted)
+								{
+									if (IsConnected)
+										sb.Append("Connected - Open");
+									else
+										sb.Append("Disconnected - Waiting for reconnect");
+								}
 								else
-									sb.Append("Disconnected - Waiting for reconnect");
-							}
-							else
-							{
-								sb.Append("Closed");
+								{
+									sb.Append("Closed");
+								}
 							}
 							break;
 						}
@@ -594,14 +605,18 @@ namespace YAT.Model
 
 						case Domain.IOType.TcpServer:
 						{
-							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
 							sb.Append("TCP server is ");
+
+							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
 							if (IsStarted)
 							{
 								if (IsConnected)
 								{
-									MKY.IO.Serial.TcpServer server = (MKY.IO.Serial.TcpServer)this.terminal.UnderlyingIOProvider;
-									int count = server.ConnectedClientCount;
+									int count = 0;
+
+									MKY.IO.Serial.TcpServer server = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.TcpServer;
+									if (server != null)
+										count = server.ConnectedClientCount;
 
 									sb.Append("connected to ");
 									sb.Append(count.ToString());
@@ -626,12 +641,21 @@ namespace YAT.Model
 
 						case Domain.IOType.TcpAutoSocket:
 						{
-							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
-							bool isClient = ((MKY.IO.Serial.TcpAutoSocket)(this.terminal.UnderlyingIOProvider)).IsClient;
-							bool isServer = ((MKY.IO.Serial.TcpAutoSocket)(this.terminal.UnderlyingIOProvider)).IsServer;
 							sb.Append("TCP auto socket is ");
+
+							MKY.IO.Serial.SocketSettings s = this.settingsRoot.IO.Socket;
 							if (IsStarted)
 							{
+								bool isClient = false;
+								bool isServer = false;
+
+								MKY.IO.Serial.TcpAutoSocket socket = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.TcpAutoSocket;
+								if (socket != null)
+								{
+									isClient = socket.IsClient;
+									isServer = socket.IsServer;
+								}
+
 								if (isClient)
 								{
 									sb.Append("connected to ");
@@ -675,20 +699,23 @@ namespace YAT.Model
 
 						case Domain.IOType.UsbSerialHid:
 						{
-							MKY.IO.Usb.DeviceInfo di = ((MKY.IO.Serial.UsbSerialHidDevice)(this.terminal.UnderlyingIOProvider)).DeviceInfo;
-							sb.Append("USB HID device '");
-							sb.Append(di.ToString());
-							sb.Append("' is ");
-							if (IsStarted)
+							MKY.IO.Serial.UsbSerialHidDevice device = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.UsbSerialHidDevice;
+							if (device != null)
 							{
-								if (IsConnected)
-									sb.Append("connected and open");
+								sb.Append("USB HID device '");
+								sb.Append(device.DeviceInfoString);
+								sb.Append("' is ");
+								if (IsStarted)
+								{
+									if (IsConnected)
+										sb.Append("connected and open");
+									else
+										sb.Append("disconnected and waiting for reconnect");
+								}
 								else
-									sb.Append("disconnected and waiting for reconnect");
-							}
-							else
-							{
-								sb.Append("closed");
+								{
+									sb.Append("closed");
+								}
 							}
 							break;
 						}

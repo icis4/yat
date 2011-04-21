@@ -676,6 +676,15 @@ namespace MKY.IO.Usb
 			get { return (this.deviceInfo); }
 		}
 
+		/// <summary>
+		/// Returns the complete device info. To read a specific device property, use the property
+		/// members below.
+		/// </summary>
+		public virtual string InfoString
+		{
+			get { return (this.deviceInfo.ToString()); }
+		}
+
 		/// <summary></summary>
 		public virtual int VendorId
 		{
