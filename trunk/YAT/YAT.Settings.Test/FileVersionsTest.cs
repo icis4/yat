@@ -867,12 +867,12 @@ namespace YAT.Settings.Test
 
 		private void VerifySettingsCase01(Model.Terminal terminal)
 		{
-			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1");
+			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1!");
 
 			if (this.serialPorts.Contains(1))
-				Assert.IsTrue(terminal.IsOpen, "Terminal is not open on COM1");
+				Assert.IsTrue(terminal.IsOpen, "Terminal is not open on COM1!");
 			else
-				Assert.Ignore("COM1 isn't supported on this machine");
+				Assert.Ignore("COM1 isn't supported on this machine.");
 		}
 
 		#endregion
@@ -889,16 +889,16 @@ namespace YAT.Settings.Test
 
 		private void VerifySettingsCase02(Model.Terminal terminal, bool ignoreBaudRate)
 		{
-			Assert.AreEqual(Domain.TerminalType.Binary, terminal.SettingsRoot.TerminalType, "Terminal isn't binary");
-			Assert.AreEqual(2, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM2");
+			Assert.AreEqual(Domain.TerminalType.Binary, terminal.SettingsRoot.TerminalType, "Terminal isn't binary!");
+			Assert.AreEqual(2, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM2!");
 
 			if (!ignoreBaudRate)
-				Assert.AreEqual(115200, terminal.SettingsRoot.IO.SerialPort.Communication.BaudRate, "Serial port baud rate isn't set to 115200");
+				Assert.AreEqual(115200, terminal.SettingsRoot.IO.SerialPort.Communication.BaudRate, "Serial port baud rate isn't set to 115200!");
 
 			if (this.serialPorts.Contains(2))
-				Assert.IsTrue(terminal.IsOpen, "Terminal is not open on COM2");
+				Assert.IsTrue(terminal.IsOpen, "Terminal is not open on COM2!");
 			else
-				Assert.Ignore("COM2 isn't supported on this machine");
+				Assert.Ignore("COM2 isn't supported on this machine.");
 		}
 
 		#endregion
@@ -910,17 +910,17 @@ namespace YAT.Settings.Test
 
 		private void VerifySettingsCase03(Model.Terminal terminal)
 		{
-			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1");
-			Assert.IsFalse(terminal.IsOpen, "Terminal is not closed on COM1");
+			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1!");
+			Assert.IsFalse(terminal.IsOpen, "Terminal is not closed on COM1!");
 
-			Assert.AreEqual(2, terminal.SettingsRoot.PredefinedCommand.Pages.Count, "Predefined commands do not contain 2 pages");
+			Assert.AreEqual(2, terminal.SettingsRoot.PredefinedCommand.Pages.Count, "Predefined commands do not contain 2 pages!");
 
 			Model.Types.PredefinedCommandPage page;
 			Model.Types.Command command;
 
 			page = terminal.SettingsRoot.PredefinedCommand.Pages[0];
-			Assert.AreEqual("First Page", page.PageName, "First predefined command pages has wrong name");
-			Assert.AreEqual(4, page.Commands.Count, "First predefined command page doesn't contain 4 commands");
+			Assert.AreEqual("First Page", page.PageName, "First predefined command pages has wrong name!");
+			Assert.AreEqual(4, page.Commands.Count, "First predefined command page doesn't contain 4 commands!");
 			command = page.Commands[0];
 			Assert.AreEqual("1A", command.Description);
 			Assert.AreEqual("1A", command.CommandLines[0]);
@@ -935,8 +935,8 @@ namespace YAT.Settings.Test
 			Assert.AreEqual("1D", command.CommandLines[0]);
 
 			page = terminal.SettingsRoot.PredefinedCommand.Pages[1];
-			Assert.AreEqual("Second Page", page.PageName, "Second predefined command pages has wrong name");
-			Assert.AreEqual(4, page.Commands.Count, "Second predefined command page doesn't contain 4 commands");
+			Assert.AreEqual("Second Page", page.PageName, "Second predefined command pages has wrong name!");
+			Assert.AreEqual(4, page.Commands.Count, "Second predefined command page doesn't contain 4 commands!");
 			command = page.Commands[0];
 			Assert.AreEqual("2A", command.Description);
 			Assert.AreEqual("2A", command.CommandLines[0]);
@@ -960,7 +960,7 @@ namespace YAT.Settings.Test
 
 		private void VerifySettingsCase04(Model.Workspace workspace)
 		{
-			Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals");
+			Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals!");
 		}
 
 		#endregion
@@ -972,7 +972,7 @@ namespace YAT.Settings.Test
 
 		private void VerifySettingsCase05(Model.Terminal terminal)
 		{
-			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1");
+			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1!");
 
 			// \todo
 			// Add tests that verify that terminals are interconnected.
@@ -987,7 +987,7 @@ namespace YAT.Settings.Test
 
 		private void VerifySettingsCase06(Model.Workspace workspace)
 		{
-			Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals");
+			Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals!");
 
 			// \todo
 			// Add tests that verify that terminals are interconnected.
@@ -1002,7 +1002,7 @@ namespace YAT.Settings.Test
 
 		private void VerifySettingsCase07(Model.Terminal terminal)
 		{
-			Assert.AreEqual(Domain.IOType.UsbSerialHid, terminal.SettingsRoot.IOType, "Terminal isn't USB Ser/HID");
+			Assert.AreEqual(Domain.IOType.UsbSerialHid, terminal.SettingsRoot.IOType, "Terminal isn't USB Ser/HID!");
 
 			// \todo
 			// Add tests that verify that USB device info is correct.
@@ -1017,24 +1017,24 @@ namespace YAT.Settings.Test
 
 		private void VerifySettingsCase08(Model.Workspace workspace)
 		{
-			Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals");
+			Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals!");
 
 			// \todo
 			// Add tests that verify that terminals are interconnected.
 			// Retrieve terminals 1 and 2.
 			Model.Terminal terminal = null;
 		
-			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1");
-			Assert.IsFalse(terminal.IsOpen, "Terminal is not closed on COM1");
+			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1!");
+			Assert.IsFalse(terminal.IsOpen, "Terminal is not closed on COM1!");
 
-			Assert.AreEqual(2, terminal.SettingsRoot.PredefinedCommand.Pages.Count, "Predefined commands do not contain 2 pages");
+			Assert.AreEqual(2, terminal.SettingsRoot.PredefinedCommand.Pages.Count, "Predefined commands do not contain 2 pages!");
 
 			Model.Types.PredefinedCommandPage page;
 			Model.Types.Command command;
 
 			page = terminal.SettingsRoot.PredefinedCommand.Pages[0];
-			Assert.AreEqual("Page 1", page.PageName, "First predefined command pages has wrong name");
-			Assert.AreEqual(2, page.Commands.Count, "First predefined command page doesn't contain 2 commands");
+			Assert.AreEqual("Page 1", page.PageName, "First predefined command pages has wrong name!");
+			Assert.AreEqual(2, page.Commands.Count, "First predefined command page doesn't contain 2 commands!");
 			command = page.Commands[0];
 			Assert.AreEqual("äöü", command.Description);
 			Assert.AreEqual("äöü", command.CommandLines[0]);

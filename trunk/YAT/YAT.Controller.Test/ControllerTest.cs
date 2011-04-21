@@ -185,7 +185,7 @@ namespace YAT.Controller.Test
 			{
 				Assert.IsFalse(main.CommandLineError);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
-				StringAssert.AreEqualIgnoringCase(TerminalArgs[0], main.RequestedFilePath, "Invalid requested terminal settings file path");
+				StringAssert.AreEqualIgnoringCase(TerminalArgs[0], main.RequestedFilePath, "Invalid requested terminal settings file path!");
 			}
 		}
 
@@ -204,7 +204,7 @@ namespace YAT.Controller.Test
 			{
 				Assert.IsFalse(main.CommandLineError);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
-				StringAssert.AreEqualIgnoringCase(WorkspaceArgs[0], main.RequestedFilePath, "Invalid requested workspace settings file path");
+				StringAssert.AreEqualIgnoringCase(WorkspaceArgs[0], main.RequestedFilePath, "Invalid requested workspace settings file path!");
 			}
 		}
 

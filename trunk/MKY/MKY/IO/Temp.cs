@@ -41,7 +41,7 @@ namespace MKY.IO
 			string path = Path.GetTempPath() + type.Namespace;
 
 			if (outputPathToDebug)
-				Debug.WriteLine(@"Temporary path is      """ + path + @"""");
+				Debug.WriteLine(@"Temporary path is      """ + path + @""".");
 
 			if (!Directory.Exists(path))
 				Directory.CreateDirectory(path);
@@ -63,7 +63,7 @@ namespace MKY.IO
 				Directory.Delete(path, true);
 
 			if (outputPathToDebug)
-				Debug.WriteLine(@"Temporary path         """ + path + @""" cleaned");
+				Debug.WriteLine(@"Temporary path         """ + path + @""" cleaned.");
 		}
 
 		/// <summary></summary>
@@ -97,7 +97,7 @@ namespace MKY.IO
 			fileName += extension;
 
 			if (outputFileNameToDebug)
-				Debug.WriteLine(@"Temporary file name is """ + fileName + @"""");
+				Debug.WriteLine(@"Temporary file name is """ + fileName + @""".");
 
 			return (fileName);
 		}
@@ -133,7 +133,7 @@ namespace MKY.IO
 			}
 
 			if (outputFilePathToDebug)
-				Debug.WriteLine(@"Temporary file path is """ + filePath + @"""");
+				Debug.WriteLine(@"Temporary file path is """ + filePath + @""".");
 
 			return (filePath);
 		}

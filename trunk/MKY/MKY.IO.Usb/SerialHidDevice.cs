@@ -659,7 +659,7 @@ namespace MKY.IO.Usb
 				}
 				catch (IOException)
 				{
-					Debug.WriteLine(GetType() + " '" + ToString() + "': Disconnect detected while reading from device");
+					Debug.WriteLine(GetType() + " '" + ToString() + "': Disconnect detected while reading from device.");
 					OnDisconnected(new EventArgs()); // Includes Close().
 				}
 				catch (Exception ex)

@@ -88,18 +88,18 @@ namespace MKY.IO.Usb.Test
 				// Ensure that ToString() also works if only parts of the info is available
 				string s;
 				s = di.ToString();
-				Assert.IsNotNullOrEmpty(s, "ToString() resulted in invalid string");
+				Assert.IsNotNullOrEmpty(s, "ToString() resulted in invalid string!");
 				s = di.ToShortString();
-				Assert.IsNotNullOrEmpty(s, "ToShortString() resulted in invalid string");
+				Assert.IsNotNullOrEmpty(s, "ToShortString() resulted in invalid string!");
 				s = di.ToLongString();
-				Assert.IsNotNullOrEmpty(s, "ToLongString() resulted in invalid string");
+				Assert.IsNotNullOrEmpty(s, "ToLongString() resulted in invalid string!");
 			}
 			else
 			{
 				try
 				{
 					DeviceInfo di = new DeviceInfo(vendorId, productId);
-					Assert.Fail("Invalid ID pair " + vendorId + "/" + productId + " wasn't properly handled");
+					Assert.Fail("Invalid ID pair " + vendorId + "/" + productId + " wasn't properly handled!");
 				}
 				catch
 				{
@@ -111,7 +111,7 @@ namespace MKY.IO.Usb.Test
 					try
 					{
 						DeviceInfo di = DeviceInfo.Parse(description);
-						Assert.Fail("Invalid descripton " + description + " wasn't properly handled");
+						Assert.Fail("Invalid descripton " + description + " wasn't properly handled!");
 					}
 					catch
 					{

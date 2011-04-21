@@ -60,7 +60,7 @@ namespace MKY.IO.Serial.Test.Socket
 				int p;
 				TcpAutoSocket s;
 				Utilities.StartTcpAutoSocketAsServer(out s, out p);
-				Utilities.WaitForStart(s, "TCP auto socket " + i + " could not be started as server");
+				Utilities.WaitForStart(s, "TCP auto socket " + i + " could not be started as server!");
 				serverSockets.Add(s);
 				serverPorts.Add(p);
 			}
@@ -74,7 +74,7 @@ namespace MKY.IO.Serial.Test.Socket
 				TcpAutoSocket s = serverSockets[j];
 				TcpAutoSocket c;
 				Utilities.StartTcpAutoSocketAsClient(out c, p);
-				Utilities.WaitForStart(c, "TCP auto socket " + i + " could not be started as client");
+				Utilities.WaitForStart(c, "TCP auto socket " + i + " could not be started as client!");
 				Utilities.WaitForConnect(c, s, "TCP auto socket " + i + " could not be connected to auto socket " + s);
 				clientSockets.Add(c);
 			}
@@ -83,14 +83,14 @@ namespace MKY.IO.Serial.Test.Socket
 			foreach (TcpAutoSocket c in clientSockets)
 			{
 				Utilities.StopTcpAutoSocket(c);
-				Utilities.WaitForStop(c, "TCP auto socket as client could not be stopped");
+				Utilities.WaitForStop(c, "TCP auto socket as client could not be stopped!");
 			}
 
 			// Shutdown all server sockets.
 			foreach (TcpAutoSocket s in serverSockets)
 			{
 				Utilities.StopTcpAutoSocket(s);
-				Utilities.WaitForStop(s, "TCP auto socket as client could not be stopped");
+				Utilities.WaitForStop(s, "TCP auto socket as client could not be stopped!");
 			}
 		}
 

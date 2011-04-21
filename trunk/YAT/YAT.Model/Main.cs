@@ -436,7 +436,7 @@ namespace YAT.Model
 			if (success)
 				OnFixedStatusTextRequest("Exiting " + Application.ProductName + "...");
 			else
-				OnTimedStatusTextRequest("Exit cancelled");
+				OnTimedStatusTextRequest("Exit cancelled.");
 
 			if (success)
 				OnExited(new EventArgs());
@@ -530,7 +530,7 @@ namespace YAT.Model
 			AttachWorkspaceEventHandlers();
 			OnWorkspaceOpened(new WorkspaceEventArgs(this.workspace));
 
-			OnTimedStatusTextRequest("New workspace created");
+			OnTimedStatusTextRequest("New workspace created.");
 			return (true);
 		}
 
@@ -646,7 +646,7 @@ namespace YAT.Model
 					SetRecent(filePath);
 
 				OnWorkspaceOpened(new WorkspaceEventArgs(this.workspace));
-				OnTimedStatusTextRequest("Workspace opened");
+				OnTimedStatusTextRequest("Workspace opened.");
 			}
 			catch (System.Xml.XmlException ex)
 			{
@@ -671,11 +671,11 @@ namespace YAT.Model
 			int terminalCount = this.workspace.OpenTerminals();
 
 			if (terminalCount == 1)
-				OnTimedStatusTextRequest("Workspace terminal opened");
+				OnTimedStatusTextRequest("Workspace terminal opened.");
 			else if (terminalCount > 1)
-				OnTimedStatusTextRequest("Workspace terminals opened");
+				OnTimedStatusTextRequest("Workspace terminals opened.");
 			else
-				OnTimedStatusTextRequest("Workspace contains no terminal to open");
+				OnTimedStatusTextRequest("Workspace contains no terminal to open.");
 
 			return (true);
 		}

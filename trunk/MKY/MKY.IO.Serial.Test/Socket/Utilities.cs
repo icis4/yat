@@ -126,7 +126,7 @@ namespace MKY.IO.Serial.Test.Socket
 			localPort = AvailableLocalTcpPort;
 			server = new TcpServer(IPAddress.Loopback, localPort);
 			if (!server.Start())
-				Assert.Fail("TCP server could not be started");
+				Assert.Fail("TCP server could not be started!");
 		}
 
 		internal static void StartTcpClient(out TcpClient client, int remotePort)
@@ -134,7 +134,7 @@ namespace MKY.IO.Serial.Test.Socket
 			// Create client and initiate asych start.
 			client = new TcpClient(IPAddress.Loopback, remotePort);
 			if (!client.Start())
-				Assert.Fail("TCP client could not be started");
+				Assert.Fail("TCP client could not be started!");
 		}
 
 		internal static void StartTcpAutoSocketAsServer(out TcpAutoSocket autoSocket, out int localPort)
@@ -143,7 +143,7 @@ namespace MKY.IO.Serial.Test.Socket
 			localPort = AvailableLocalTcpPort;
 			autoSocket = new TcpAutoSocket(IPAddress.Loopback, localPort, IPAddress.Any, localPort);
 			if (!autoSocket.Start())
-				Assert.Fail("TCP auto socket could not be started");
+				Assert.Fail("TCP auto socket could not be started!");
 		}
 
 		internal static void StartTcpAutoSocketAsClient(out TcpAutoSocket autoSocket, int remotePort)
@@ -151,7 +151,7 @@ namespace MKY.IO.Serial.Test.Socket
 			// Create auto socket and initiate asych start.
 			autoSocket = new TcpAutoSocket(IPAddress.Loopback, remotePort, IPAddress.Any, remotePort);
 			if (!autoSocket.Start())
-				Assert.Fail("TCP auto socket could not be started");
+				Assert.Fail("TCP auto socket could not be started!");
 		}
 
 		internal static void StartUdpSocket(out UdpSocket socket, int remotePort, int localPort)
@@ -159,7 +159,7 @@ namespace MKY.IO.Serial.Test.Socket
 			// Create socket and initiate asych start.
 			socket = new UdpSocket(IPAddress.Loopback, remotePort, localPort);
 			if (!socket.Start())
-				Assert.Fail("UDP socket could not be started");
+				Assert.Fail("UDP socket could not be started!");
 		}
 
 		internal static void StopTcpServer(TcpServer server)

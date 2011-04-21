@@ -770,9 +770,10 @@ namespace YAT.Model
 					AttachTerminalEventHandlers();    // Attach and resume events.
 					this.terminal.ReloadRepositories();
 
-					StartIO(false);
-
-					OnTimedStatusTextRequest("Terminal settings applied.");
+					if (StartIO(false))
+						OnTimedStatusTextRequest("Terminal settings applied.");
+					else
+						OnFixedStatusTextRequest("Terminal settings applied but terminal could not be started anymore.");
 				}
 				else
 				{
@@ -1013,7 +1014,7 @@ namespace YAT.Model
 				if (!doAutoSave)
 				{
 					SetRecent(this.settingsHandler.SettingsFilePath);
-					OnTimedStatusTextRequest("Terminal saved");
+					OnTimedStatusTextRequest("Terminal saved.");
 				}
 
 				// ---------------------------------------------------------------------------------
@@ -1138,7 +1139,7 @@ namespace YAT.Model
 
 						case DialogResult.Cancel:
 						default:
-							OnTimedStatusTextRequest("Terminal not closed");
+							OnTimedStatusTextRequest("Terminal not closed.");
 							return (false);
 					}
 				}
@@ -1162,12 +1163,12 @@ namespace YAT.Model
 			if (success)
 			{
 				// Status text request must be before closed event, closed event may close the view.
-				OnTimedStatusTextRequest("Terminal successfully closed");
+				OnTimedStatusTextRequest("Terminal successfully closed.");
 				OnClosed(new ClosedEventArgs(isWorkspaceClose));
 			}
 			else
 			{
-				OnTimedStatusTextRequest("Terminal not closed");
+				OnFixedStatusTextRequest("Terminal not closed!");
 			}
 			return (success);
 		}
@@ -1426,8 +1427,12 @@ namespace YAT.Model
 					if (saveStatus)
 						this.settingsRoot.TerminalIsStarted = this.terminal.IsStarted;
 
-					OnTimedStatusTextRequest("Terminal started");
+					OnTimedStatusTextRequest("Terminal started.");
 					success = true;
+				}
+				else
+				{
+					OnFixedStatusTextRequest("Terminal could not be started!");
 				}
 			}
 			catch (Exception ex)
@@ -1484,7 +1489,7 @@ namespace YAT.Model
 				if (saveStatus)
 					this.settingsRoot.TerminalIsStarted = this.terminal.IsStarted;
 
-				OnTimedStatusTextRequest("Terminal stopped");
+				OnTimedStatusTextRequest("Terminal stopped.");
 				success = true;
 			}
 			catch (Exception ex)
@@ -1560,7 +1565,7 @@ namespace YAT.Model
 			try
 			{
 				this.terminal.Send(b);
-				OnTimedStatusTextRequest(b.Length + " bytes sent");
+				OnTimedStatusTextRequest(b.Length + " bytes sent.");
 			}
 			catch (System.IO.IOException ex)
 			{
@@ -1612,7 +1617,7 @@ namespace YAT.Model
 				else
 					this.terminal.Send(s);
 
-				OnTimedStatusTextRequest(sent + " sent");
+				OnTimedStatusTextRequest(sent + " sent.");
 			}
 			catch (System.IO.IOException ex)
 			{
@@ -1679,7 +1684,7 @@ namespace YAT.Model
 					throw (new NotImplementedException("I/O type " + this.settingsRoot.IOType + "misses implementation"));
 			}
 			textBuilder.Append(":");
-			titleBuilder.Append(" Error");
+			titleBuilder.Append(" Error!");
 
 			text = textBuilder.ToString();
 			title = titleBuilder.ToString();

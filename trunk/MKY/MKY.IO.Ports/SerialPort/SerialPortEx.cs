@@ -591,13 +591,13 @@ namespace MKY.IO.Ports
 #if (DEBUG && DEBUG_OPEN_CLOSE)
 				try
 				{
-					DebugWrite("Trying base.Open()", true);
+					DebugWrite("Trying base.Open()...", true);
 					base.Open();
-					DebugWrite("base.Open() OK");
+					DebugWrite("...OK.");
 				}
 				catch (Exception ex)
 				{
-					DebugWrite("base.Open() exception");
+					DebugWrite("...exception!");
 					DebugWrite(ex.Message);
 					throw (ex);
 				}
@@ -669,13 +669,13 @@ namespace MKY.IO.Ports
 #if (DEBUG && DEBUG_OPEN_CLOSE)
 				try
 				{
-					DebugWrite("Trying base.Close()", true);
+					DebugWrite("Trying base.Close()...", true);
 					base.Close();
-					DebugWrite("base.Close() OK");
+					DebugWrite("...OK.");
 				}
 				catch (Exception ex)
 				{
-					DebugWrite("base.Close() exception");
+					DebugWrite("...exception!");
 					DebugWrite(ex.Message);
 					throw (ex);
 				}
