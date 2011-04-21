@@ -85,7 +85,7 @@ namespace YAT.Gui.Utilities
 					sb.Append(Environment.NewLine);
 					sb.Append(@"Only """);
 					sb.Append(         parsedText);
-					sb.Append(                 @""" is valid");
+					sb.Append(                 @""" is valid.");
 				}
 				if (formatException.Message.Length > 0)
 				{

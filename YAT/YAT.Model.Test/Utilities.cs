@@ -207,7 +207,7 @@ namespace YAT.Model.Test
 				timeout += Interval;
 
 				if (timeout >= Timeout)
-					Assert.Fail("Connect timeout");
+					Assert.Fail("Connect timeout!");
 			}
 			while (!terminalA.IsConnected && !terminalB.IsConnected);
 		}
@@ -221,7 +221,7 @@ namespace YAT.Model.Test
 				timeout += Interval;
 
 				if (timeout >= Timeout)
-					Assert.Fail("Transmission timeout. Try to re-run test case.");
+					Assert.Fail("Transmission timeout! Try to re-run test case.");
 			}
 			while ((terminalB.RxByteCount != terminalA.TxByteCount) &&
 			       (terminalB.RxLineCount != terminalA.TxLineCount) &&

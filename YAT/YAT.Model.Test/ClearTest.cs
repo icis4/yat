@@ -128,7 +128,7 @@ namespace YAT.Model.Test
 					// Verify incomplete line
 					lines = terminalB.RepositoryToDisplayLines(Domain.RepositoryType.Rx);
 					if (lines.Count != 2)
-						Assert.Fail("Incomplete line not received");
+						Assert.Fail("Incomplete line not received!");
 
 					// Create test set to verify clear
 					testSet = new Utilities.TestSet(new Types.Command(@""), 0, new int[] { 0 }, new int[] { 0 }); // Empty terminals expected

@@ -576,7 +576,7 @@ namespace YAT.Model
 				if (!doAutoSave)
 				{
 					SetRecent(this.settingsHandler.SettingsFilePath);
-					OnTimedStatusTextRequest("Workspace saved");
+					OnTimedStatusTextRequest("Workspace saved.");
 				}
 
 				// ---------------------------------------------------------------------------------
@@ -664,7 +664,7 @@ namespace YAT.Model
 			// First, close all contained terminals signaling them a workspace close.
 			if (!CloseAllTerminals(true, tryAutoSave))
 			{
-				OnTimedStatusTextRequest("Workspace not closed");
+				OnTimedStatusTextRequest("Workspace not closed.");
 				return (false);
 			}
 
@@ -711,7 +711,7 @@ namespace YAT.Model
 
 						case DialogResult.Cancel:
 						default:
-							OnTimedStatusTextRequest("Workspace not closed");
+							OnTimedStatusTextRequest("Workspace not closed.");
 							return (false);
 					}
 				}
@@ -724,12 +724,12 @@ namespace YAT.Model
 			if (success)
 			{
 				// Status text request must be before closed event, closed event may close the view.
-				OnTimedStatusTextRequest("Workspace successfully closed");
+				OnTimedStatusTextRequest("Workspace successfully closed.");
 				OnClosed(new ClosedEventArgs(isMainClose));
 			}
 			else
 			{
-				OnTimedStatusTextRequest("Workspace not closed");
+				OnFixedStatusTextRequest("Workspace not closed!");
 			}
 			return (success);
 		}
@@ -856,7 +856,7 @@ namespace YAT.Model
 			Terminal terminal = new Terminal(settingsHandler);
 			AddToWorkspace(terminal);
 
-			OnTimedStatusTextRequest("New terminal created");
+			OnTimedStatusTextRequest("New terminal created.");
 			return (true);
 		}
 
@@ -957,7 +957,7 @@ namespace YAT.Model
 				if (!sh.Settings.AutoSaved)
 					SetRecent(absoluteFilePath);
 
-				OnTimedStatusTextRequest("Terminal opened");
+				OnTimedStatusTextRequest("Terminal opened.");
 				return (true);
 			}
 			catch (System.Xml.XmlException ex)

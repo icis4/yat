@@ -392,7 +392,7 @@ namespace YAT.Domain.Parser
 				}
 				else
 				{
-					formatException = new FormatException(@"Missing opening parenthesis ""(""");
+					formatException = new FormatException(@"Missing opening parenthesis ""(""!");
 					return (false);
 				}
 			}
@@ -481,7 +481,7 @@ namespace YAT.Domain.Parser
 					else
 					{
 						result = new byte[] { };
-						formatException = new FormatException(@"""" + t + @""" is no ascii mnemonic");
+						formatException = new FormatException(@"""" + t + @""" is no ascii mnemonic!");
 						return (false);
 					}
 				}
@@ -950,7 +950,7 @@ namespace YAT.Domain.Parser
 				}
 				else
 				{
-					formatException = new FormatException(@"Substring """ + token + @""" does not contain a valid single character");
+					formatException = new FormatException(@"Substring """ + token + @""" does not contain a valid single character!");
 					result = new byte[] { };
 					return (false);
 				}
@@ -1108,7 +1108,7 @@ namespace YAT.Domain.Parser
 				catch (ArgumentException)
 				{
 					result = new Result[] { };
-					formatException = new FormatException(@"""" + t + @""" is no keyword");
+					formatException = new FormatException(@"""" + t + @""" is no keyword!");
 					return (false);
 				}
 			}

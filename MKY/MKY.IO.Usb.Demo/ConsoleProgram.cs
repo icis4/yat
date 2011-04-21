@@ -42,7 +42,7 @@ namespace MKY.IO.Usb.Demo
 			}
 			Console.WriteLine();
 
-			Console.WriteLine("Press <Enter> to exit");
+			Console.WriteLine("Press <Enter> to exit.");
 			Console.ReadLine();
 		}
 	}
