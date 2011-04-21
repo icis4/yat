@@ -78,15 +78,15 @@ namespace YAT.Domain.Settings
 		public TerminalSettings(TerminalSettings rhs)
 			: base(rhs)
 		{
-			TerminalType = rhs.TerminalType;
+			TerminalType   = rhs.TerminalType;
 
-			IO = new IOSettings(rhs.IO);
-			Buffer = new BufferSettings(rhs.Buffer);
-			Display = new DisplaySettings(rhs.Display);
-			CharReplace = new CharReplaceSettings(rhs.CharReplace);
-			Send = new SendSettings(rhs.Send);
+			IO             = new IOSettings(rhs.IO);
+			Buffer         = new BufferSettings(rhs.Buffer);
+			Display        = new DisplaySettings(rhs.Display);
+			CharReplace    = new CharReplaceSettings(rhs.CharReplace);
+			Send           = new SendSettings(rhs.Send);
 
-			TextTerminal = new TextTerminalSettings(rhs.TextTerminal);
+			TextTerminal   = new TextTerminalSettings(rhs.TextTerminal);
 			BinaryTerminal = new BinaryTerminalSettings(rhs.BinaryTerminal);
 
 			ClearChanged();

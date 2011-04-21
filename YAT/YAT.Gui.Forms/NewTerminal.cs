@@ -128,81 +128,42 @@ namespace YAT.Gui.Forms
 
 		private void serialPortSelection_PortIdChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				MKY.IO.Ports.SerialPortId serialPortId = serialPortSelection.PortId;
-				this.newTerminalSettings_Form.SerialPortId = serialPortId;
-				SetControls();
-			}
+			this.newTerminalSettings_Form.SerialPortId = serialPortSelection.PortId;
 		}
 
 		private void socketSelection_RemoteHostChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				IPHost host = socketSelection.RemoteHost;
-				this.newTerminalSettings_Form.SocketRemoteHost = host;
-				SetControls();
-			}
+			this.newTerminalSettings_Form.SocketRemoteHost = socketSelection.RemoteHost;
 		}
 
 		private void socketSelection_RemotePortChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				int port = socketSelection.RemotePort;
-				this.newTerminalSettings_Form.SocketRemotePort = port;
-				SetControls();
-			}
+			this.newTerminalSettings_Form.SocketRemotePort = socketSelection.RemotePort;
 		}
 
 		private void socketSelection_LocalInterfaceChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				IPNetworkInterface localInterface = socketSelection.LocalInterface;
-				this.newTerminalSettings_Form.SocketLocalInterface = localInterface;
-				SetControls();
-			}
+			this.newTerminalSettings_Form.SocketLocalInterface = socketSelection.LocalInterface;
 		}
 
 		private void socketSelection_LocalTcpPortChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				int port = socketSelection.LocalTcpPort;
-				this.newTerminalSettings_Form.SocketLocalTcpPort = port;
-				SetControls();
-			}
+			this.newTerminalSettings_Form.SocketLocalTcpPort = socketSelection.LocalTcpPort;
 		}
 
 		private void socketSelection_LocalUdpPortChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				int port = socketSelection.LocalUdpPort;
-				this.newTerminalSettings_Form.SocketLocalUdpPort = port;
-				SetControls();
-			}
+			this.newTerminalSettings_Form.SocketLocalUdpPort = socketSelection.LocalUdpPort;
 		}
 
 		private void usbSerialHidDeviceSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				MKY.IO.Usb.DeviceInfo di = usbSerialHidDeviceSelection.DeviceInfo;
-				this.newTerminalSettings_Form.UsbSerialHidDeviceInfo = di;
-				SetControls();
-			}
+			this.newTerminalSettings_Form.UsbSerialHidDeviceInfo = usbSerialHidDeviceSelection.DeviceInfo;
 		}
 
 		private void checkBox_StartTerminal_CheckedChanged(object sender, EventArgs e)
 		{
-			if (!this.isSettingControls)
-			{
-				bool start = checkBox_StartTerminal.Checked;
-				this.newTerminalSettings_Form.StartTerminal = start;
-			}
+			this.newTerminalSettings_Form.StartTerminal = checkBox_StartTerminal.Checked;
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)

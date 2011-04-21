@@ -329,8 +329,10 @@ namespace MKY.IO.Serial
 		{
 			try
 			{
-				CreateDevice();
-				return (StartDevice());
+				if (CreateDevice())
+					return (StartDevice());
+				else
+					return (false);
 			}
 			catch
 			{
@@ -339,25 +341,33 @@ namespace MKY.IO.Serial
 			}
 		}
 
-		private void CreateDevice()
+		private bool CreateDevice()
 		{
 			if (this.device != null)
 				StopAndDisposeDevice();
 
-			lock (this.deviceSyncObj)
+			Usb.DeviceInfo di = this.settings.DeviceInfo;
+			if (di != null)
 			{
-				// Ensure to create device info from VID/PID/SNR since system path is not saved.
-				Usb.DeviceInfo di = this.settings.DeviceInfo;
-				this.device = new Usb.SerialHidDevice(di.VendorId, di.ProductId, di.SerialNumber);
-				this.device.AutoOpen = this.settings.AutoOpen;
+				lock (this.deviceSyncObj)
+				{
+					// Ensure to create device info from VID/PID/SNR since system path is not saved.
+					this.device = new Usb.SerialHidDevice(di.VendorId, di.ProductId, di.SerialNumber);
+					this.device.AutoOpen = this.settings.AutoOpen;
 
-				this.device.Connected    += new EventHandler(device_Connected);
-				this.device.Disconnected += new EventHandler(device_Disconnected);
-				this.device.Opened       += new EventHandler(device_Opened);
-				this.device.Closed       += new EventHandler(device_Closed);
-				this.device.DataReceived += new EventHandler(device_DataReceived);
-				this.device.DataSent     += new EventHandler(device_DataSent);
-				this.device.Error        += new EventHandler<Usb.ErrorEventArgs>(device_Error);
+					this.device.Connected    += new EventHandler(device_Connected);
+					this.device.Disconnected += new EventHandler(device_Disconnected);
+					this.device.Opened       += new EventHandler(device_Opened);
+					this.device.Closed       += new EventHandler(device_Closed);
+					this.device.DataReceived += new EventHandler(device_DataReceived);
+					this.device.DataSent     += new EventHandler(device_DataSent);
+					this.device.Error        += new EventHandler<Usb.ErrorEventArgs>(device_Error);
+				}
+				return (true);
+			}
+			else
+			{
+				return (false);
 			}
 		}
 

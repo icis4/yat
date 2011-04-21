@@ -86,7 +86,7 @@ namespace MKY.IO.Serial
 			{
 				case SerialFlowControl.Manual: return (Manual_string);
 				case SerialFlowControl.RS485:  return (RS485_string);
-				default:                 return (base.ToString());
+				default:                       return (base.ToString());
 			}
 		}
 
