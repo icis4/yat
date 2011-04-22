@@ -11,7 +11,7 @@
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2010 Matthias Kläy.
+// Copyright © 2003-2011 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
@@ -46,7 +46,7 @@ namespace YAT.Gui.Forms
 
 			// Form.
 			text = "About ";
-			text += ApplicationInfo.ProductName;
+			text += Application.ProductName;
 			text += " - Yet Another Terminal";
 			Text = text;
 
@@ -60,7 +60,7 @@ namespace YAT.Gui.Forms
 			textBefore = "Copyright © 2003-2004 ";
 			textLink =                         "HSR Hochschule für Technik Rapperswil";
 			textAfter =                                                             "." + Environment.NewLine +
-			             "Copyright © 2003-2010 Matthias Kläy.";
+			             "Copyright © 2003-2011 Matthias Kläy.";
 			linkLabel_Copyright.Text += textBefore;
 			start = linkLabel_Copyright.Text.Length;
 			linkLabel_Copyright.Text += textLink;
@@ -249,8 +249,9 @@ namespace YAT.Gui.Forms
 			if (MessageBox.Show
 				(
 				this,
-				"Immediately throw exception to test that unhandled synchronous exceptions are handled properly?",
-				"Execute manual test?",
+				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
+				"Immediately throw an exception to test that unhandled synchronous exceptions are handled properly?",
+				"Execute manual 'Release' test?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,
 				MessageBoxDefaultButton.Button2
@@ -266,8 +267,9 @@ namespace YAT.Gui.Forms
 			if (MessageBox.Show
 				(
 				this,
+				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
 				"Start Windows.Forms timer throwing an exception to test that unhandled asynchronous synchronized exceptions are handled properly?",
-				"Execute manual test?",
+				"Execute manual 'Release' test?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,
 				MessageBoxDefaultButton.Button2
@@ -289,15 +291,16 @@ namespace YAT.Gui.Forms
 		/// 
 		/// Test case 3 doesn't work on a System.Threading timer callback directly.
 		/// Such execptions are not dispatched back onto main thread. Therefore, use
-		/// EventHelper for this test case.
+		/// EventHelper and a separate exception class for this test case.
 		/// </summary>
 		private void label_ExecuteManualTest3_Click(object sender, EventArgs e)
 		{
 			if (MessageBox.Show
 				(
 				this,
+				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
 				"Start System.Threading timer throwing an exception to test that unhandled asynchronous non-synchronized exceptions are handled properly?",
-				"Execute manual test?",
+				"Execute manual 'Release' test?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,
 				MessageBoxDefaultButton.Button2

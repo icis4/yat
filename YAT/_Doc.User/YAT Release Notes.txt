@@ -10,7 +10,7 @@
                      Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
  --------------------------------------------------------------------------------------------------
                     Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-                                Copyright © 2003-2010 Matthias Kläy.
+                                Copyright © 2003-2011 Matthias Kläy.
                                         All rights reserved.
 ****************************************************************************************************
 
@@ -50,10 +50,11 @@ New:
 Important changes:
 - Update to DejaVu 2.32
 - Handling of non-platform file system paths improved (related to feature request #2982052)
+- Shortcut to 'Terminal > Select None' has changed to Ctrl+Shift+N (bug #3220852)
+- On unhandled exceptions the user now has a choice on how to proceed (feature request #3176816)
+- Links to SourceForge trackers now contain filter and sort (feature request #3160872)
 - .yat/.yaw/.xml files are preambled with UTF-8 byte order mark (BOM) (feature request #3144111)
 - All source code and text files converted to UTF-8, including byte order mark (BOM)
-- Shortcut to 'Terminal > Select None' has changed to Ctrl+Shift+N (bug #3220852)
-- Links to SourceForge trackers now contain filter and sort (feature request #3160872)
 - HowTo on optional user test config and settings templates added (related to #2838447/#2981764)
 
 Fixed bugs:
@@ -570,7 +571,7 @@ YAT 2.1 Beta 1 :: Not planned yet
 ====================================================================================================
 
 Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-Copyright © 2003-2010 Matthias Kläy.
+Copyright © 2003-2011 Matthias Kläy.
 All rights reserved.
 
 YAT is licensed under the GNU LGPL.
