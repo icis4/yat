@@ -86,16 +86,34 @@ namespace YAT.Gui.Forms
 			sb.Append(" you may provide a valid email address to get the notifications.");
 			linkLabel_SourceForgeRemark.Text = sb.ToString();
 
-			// Link.
-			string link = "";
+			// Links.
+			string filteredAndSortedLink = "";
+			string plainLink = "";
 			switch (tracker)
 			{
-				case Tracker.Support: link = "http://sourceforge.net/tracker/?group_id=193033&atid=943798"; break;
-				case Tracker.Feature: link = "http://sourceforge.net/tracker/?group_id=193033&atid=943800"; break;
-				case Tracker.Bug:     link = "http://sourceforge.net/tracker/?group_id=193033&atid=943797"; break;
+				case Tracker.Support:
+				{
+					filteredAndSortedLink = "http://sourceforge.net/tracker/?words=tracker_browse&sort=priority&sortdir=desc&offset=0&group_id=193033&atid=943798&assignee=&status=1&category=&artgroup=&keyword=&submitter=&artifact_id=";
+					plainLink             = "http://sourceforge.net/tracker/?group_id=193033&atid=943798";
+					break;
+				}
+				case Tracker.Feature:
+				{
+					filteredAndSortedLink = "http://sourceforge.net/tracker/?words=tracker_browse&sort=priority&sortdir=desc&offset=0&group_id=193033&atid=943800&assignee=&status=1&category=&artgroup=&keyword=&submitter=&artifact_id=";
+					plainLink             = "http://sourceforge.net/tracker/?group_id=193033&atid=943800";
+					break;
+				}
+				case Tracker.Bug:
+				{
+					filteredAndSortedLink = "http://sourceforge.net/tracker/?words=tracker_browse&sort=priority&sortdir=desc&offset=0&group_id=193033&atid=943797&assignee=&status=1&category=&artgroup=&keyword=&submitter=&artifact_id=";
+					plainLink             = "http://sourceforge.net/tracker/?group_id=193033&atid=943797";
+					break;
+				}
 			}
-			linkLabel_Link.Text = link;
-			linkLabel_Link.Links.Add(0, link.Length, link);
+			linkLabel_FilteredAndSortedLink.Text = filteredAndSortedLink;
+			linkLabel_FilteredAndSortedLink.Links.Add(0, filteredAndSortedLink.Length, filteredAndSortedLink);
+			linkLabel_PlainLink.Text = plainLink;
+			linkLabel_PlainLink.Links.Add(0, plainLink.Length, plainLink);
 
 			// Instructions.
 			sb = new StringBuilder();

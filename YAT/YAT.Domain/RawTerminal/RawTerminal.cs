@@ -44,9 +44,13 @@ namespace YAT.Domain
 		private bool isDisposed;
 
 		private Settings.BufferSettings bufferSettings;
+
 		private RawRepository txRepository;
 		private RawRepository bidirRepository;
 		private RawRepository rxRepository;
+		private object repositorySyncObj = new object();
+
+		private object sendSyncObj = new object();
 
 		private Settings.IOSettings ioSettings;
 		private IIOProvider io;
@@ -298,17 +302,27 @@ namespace YAT.Domain
 		// Send
 		//------------------------------------------------------------------------------------------
 
-		/// <summary></summary>
+		/// <remarks>
+		/// This method is implemented thread-safe to prevent race conditions when multiple threads
+		/// attempt to send data to this terminal. Note that the 'Sent' event is within the lock,
+		/// i.e. an event handler will not be able to call <see cref="Send"/> a again.
+		/// </remarks>
 		public virtual void Send(byte[] data)
 		{
 			AssertNotDisposed();
-			
-			this.io.Send(data);
 
-			RawElement re = new RawElement(data, SerialDirection.Tx);
-			this.txRepository.Enqueue(re);
-			this.bidirRepository.Enqueue(re);
-			OnRawElementSent(new RawElementEventArgs(re));
+			lock (sendSyncObj)
+			{
+				this.io.Send(data);
+
+				RawElement re = new RawElement(data, SerialDirection.Tx);
+				lock (repositorySyncObj)
+				{
+					this.txRepository.Enqueue(re);
+					this.bidirRepository.Enqueue(re);
+				}
+				OnRawElementSent(new RawElementEventArgs(re));
+			}
 		}
 
 		//------------------------------------------------------------------------------------------
@@ -320,13 +334,18 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			switch (repositoryType)
+			List<RawElement> l = null;
+			lock (repositorySyncObj)
 			{
-				case RepositoryType.Tx:    return (this.txRepository.ToElements());
-				case RepositoryType.Bidir: return (this.bidirRepository.ToElements());
-				case RepositoryType.Rx:    return (this.rxRepository.ToElements());
-				default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
+				switch (repositoryType)
+				{
+					case RepositoryType.Tx:    l = this.txRepository.ToElements();    break;
+					case RepositoryType.Bidir: l = this.bidirRepository.ToElements(); break;
+					case RepositoryType.Rx:    l = this.rxRepository.ToElements();    break;
+					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
+				}
 			}
+			return (l);
 		}
 
 		/// <remarks>
@@ -339,33 +358,36 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			/*switch (repositoryType)
+			lock (repositorySyncObj)
 			{
-				case RepositoryType.Tx:    this.txRepository.Clear();    break;
-				case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
-				case RepositoryType.Rx:    this.rxRepository.Clear();    break;
-				default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
-			}
-			OnRepositoryCleared(new RepositoryEventArgs(repositoryType));*/
-
-			switch (repositoryType)
-			{
-				case RepositoryType.Tx:
-				case RepositoryType.Bidir:
-				case RepositoryType.Rx:
+				/*switch (repositoryType)
 				{
-					this.txRepository.Clear();
-					this.bidirRepository.Clear();
-					this.rxRepository.Clear();
-
-					OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Tx));
-					OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Bidir));
-					OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Rx));
-
-					break;
+					case RepositoryType.Tx:    this.txRepository.Clear();    break;
+					case RepositoryType.Bidir: this.bidirRepository.Clear(); break;
+					case RepositoryType.Rx:    this.rxRepository.Clear();    break;
+					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
 				}
-				default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
-			}
+				OnRepositoryCleared(new RepositoryEventArgs(repositoryType));*/
+
+				switch (repositoryType)
+				{
+					case RepositoryType.Tx:
+					case RepositoryType.Bidir:
+					case RepositoryType.Rx:
+					{
+						this.txRepository.Clear();
+						this.bidirRepository.Clear();
+						this.rxRepository.Clear();
+
+						OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Tx));
+						OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Bidir));
+						OnRepositoryCleared(new RepositoryEventArgs(RepositoryType.Rx));
+
+						break;
+					}
+					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
+				}
+			} // lock (repositorySyncObj)
 		}
 
 		//------------------------------------------------------------------------------------------
@@ -385,10 +407,15 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			return (indent + "- IOSettings: " + this.ioSettings + Environment.NewLine +
-					indent + "- TxRepository: " + Environment.NewLine + this.txRepository.ToString(indent + "- ") +
+			string s = null;
+			lock (repositorySyncObj)
+			{
+				s = indent + "- IOSettings: " + this.ioSettings + Environment.NewLine +
+					indent + "- TxRepository: "    + Environment.NewLine + this.txRepository.ToString(indent + "- ") +
 					indent + "- BidirRepository: " + Environment.NewLine + this.bidirRepository.ToString(indent + "- ") +
-					indent + "- RxRepository: " + Environment.NewLine + this.rxRepository.ToString(indent + "- "));
+					indent + "- RxRepository: "    + Environment.NewLine + this.rxRepository.ToString(indent + "- ");
+			}
+			return (s);
 		}
 
 		/// <summary></summary>
@@ -396,13 +423,18 @@ namespace YAT.Domain
 		{
 			AssertNotDisposed();
 
-			switch (repositoryType)
+			string s = null;
+			lock (repositorySyncObj)
 			{
-				case RepositoryType.Tx:    return (this.txRepository.ToString(indent));
-				case RepositoryType.Bidir: return (this.bidirRepository.ToString(indent));
-				case RepositoryType.Rx:    return (this.rxRepository.ToString(indent));
-				default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
+				switch (repositoryType)
+				{
+					case RepositoryType.Tx:    s = this.txRepository.ToString(indent);    break;
+					case RepositoryType.Bidir: s = this.bidirRepository.ToString(indent); break;
+					case RepositoryType.Rx:    s = this.rxRepository.ToString(indent);    break;
+					default: throw (new ArgumentOutOfRangeException("repositoryType", repositoryType, "Unknown repository type"));
+				}
 			}
+			return (s);
 		}
 
 		#endregion
@@ -432,9 +464,12 @@ namespace YAT.Domain
 
 		private void ApplyBufferSettings()
 		{
-			this.txRepository.Capacity    = this.bufferSettings.TxBufferSize;
-			this.bidirRepository.Capacity = this.bufferSettings.BidirBufferSize;
-			this.rxRepository.Capacity    = this.bufferSettings.RxBufferSize;
+			lock (this.repositorySyncObj)
+			{
+				this.txRepository.Capacity    = this.bufferSettings.TxBufferSize;
+				this.bidirRepository.Capacity = this.bufferSettings.BidirBufferSize;
+				this.rxRepository.Capacity    = this.bufferSettings.RxBufferSize;
+			}
 		}
 
 		private void AttachIOSettings(Settings.IOSettings ioSettings)
