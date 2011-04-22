@@ -66,9 +66,10 @@ namespace YAT.Domain.Parser
 			@"In addition, the following keywords are supported:" + Environment.NewLine +
 			Environment.NewLine +
 			@"Clear the monitors ""Send something\!(" + (KeywordEx)Keyword.Clear + @"""" + Environment.NewLine +
-			Environment.NewLine +
-			@"Delay ""Send something\!(" + (KeywordEx)Keyword.Delay + @"(10s))Send delayed by 10 seconds""" + Environment.NewLine +
-			@"Delay ""Send something\!(" + (KeywordEx)Keyword.Delay + @"(500ms))Send delayed by 500 milliseconds""" + Environment.NewLine +
+		// \todo MKY 2011-04-22: Uncomment again once Deley() has been implemented.
+		//	Environment.NewLine +
+		//	@"Delay ""Send something\!(" + (KeywordEx)Keyword.Delay + @"(10s))Send delayed by 10 seconds""" + Environment.NewLine +
+		//	@"Delay ""Send something\!(" + (KeywordEx)Keyword.Delay + @"(500ms))Send delayed by 500 milliseconds""" + Environment.NewLine +
 			Environment.NewLine +
 			@"Output break state on ""\!(" + (KeywordEx)Keyword.OutputBreakOn + @"""" + Environment.NewLine +
 			@"Output break state off ""\!(" + (KeywordEx)Keyword.OutputBreakOff + @"""" + Environment.NewLine +

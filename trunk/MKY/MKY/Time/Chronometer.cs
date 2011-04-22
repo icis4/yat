@@ -42,7 +42,7 @@ namespace MKY.Time
 		private TimeSpan accumulatedTimeSpan = TimeSpan.Zero;
 		private DateTime startTimeStamp = DateTime.Now;
 
-		private object timer_Elapsed_SynchObj = new object();
+		private object timer_Elapsed_SyncObj = new object();
 
 		#endregion
 
@@ -231,7 +231,7 @@ namespace MKY.Time
 			{
 				// Ensure that only one timer elapsed event thread is active at a time.
 				// Without this exclusivity, two receive threads could create a race condition.
-				if (Monitor.TryEnter(timer_Elapsed_SynchObj))
+				if (Monitor.TryEnter(timer_Elapsed_SyncObj))
 				{
 					try
 					{
@@ -239,7 +239,7 @@ namespace MKY.Time
 					}
 					finally
 					{
-						Monitor.Exit(timer_Elapsed_SynchObj);
+						Monitor.Exit(timer_Elapsed_SyncObj);
 					}
 				}
 			}

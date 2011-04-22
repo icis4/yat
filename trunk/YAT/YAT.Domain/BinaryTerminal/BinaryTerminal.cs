@@ -131,7 +131,9 @@ namespace YAT.Domain
 			{
 				AssertNotDisposed();
 
-				this.timer.Dispose();
+				if (this.timer != null)
+					this.timer.Dispose();
+
 				this.timer = null;
 			}
 
@@ -536,7 +538,7 @@ namespace YAT.Domain
 			foreach (byte b in re.Data)
 			{
 				// In case of reload, timed line breaks are executed here.
-				if (Reload && displaySettings.TimedLineBreak.Enabled)
+				if (IsReloading && displaySettings.TimedLineBreak.Enabled)
 					ExecuteTimedLineBreakOnReload(displaySettings, lineState, re.Direction, re.TimeStamp, elements, lines);
 
 				// Line begin.

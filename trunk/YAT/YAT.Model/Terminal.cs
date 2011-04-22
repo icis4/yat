@@ -1707,23 +1707,6 @@ namespace YAT.Model
 			{
 				SendText(c);
 
-				// Copy line commands into history.
-				if (c.IsSingleLineText || c.IsMultiLineText || c.IsPartialEolText)
-				{
-					// Clone to a normal single line command.
-					Command clone;
-					if (c.IsPartialEolText)
-						clone = new Command(c.Description, c.PartialText, c.DefaultRadix);
-					else
-						clone = new Command(c);
-
-					// Put clone into history.
-					this.settingsRoot.SendCommand.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
-						(
-							new RecentItem<Command>(clone)
-						);
-				}
-
 				// Clear command if desired.
 				if (!this.settingsRoot.Send.KeepCommand)
 					this.settingsRoot.SendCommand.Command = new Command(); // Set command to "".
@@ -1757,6 +1740,23 @@ namespace YAT.Model
 					else
 						SendLine(""); // Simply add EOL to finalize a partial line.
 				}
+
+				// Copy line commands into history.
+				if (c.IsSingleLineText || c.IsMultiLineText || c.IsPartialEolText)
+				{
+					// Clone to a normal single line command.
+					Command clone;
+					if (c.IsPartialEolText)
+						clone = new Command(c.Description, c.PartialText, c.DefaultRadix);
+					else
+						clone = new Command(c);
+
+					// Put clone into history.
+					this.settingsRoot.SendCommand.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
+						(
+							new RecentItem<Command>(clone)
+						);
+				}
 			}
 		}
 
@@ -1776,13 +1776,6 @@ namespace YAT.Model
 			if (c.IsFilePath)
 			{
 				SendFile(c);
-
-				// Put clone into history.
-				Command clone = new Command(c);
-				this.settingsRoot.SendFile.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
-					(
-						new RecentItem<Command>(clone)
-					);
 			}
 		}
 
@@ -1844,6 +1837,13 @@ namespace YAT.Model
 						Send(a);
 					}
 				}
+
+				// Put file into history.
+				Command clone = new Command(c);
+				this.settingsRoot.SendFile.RecentCommands.ReplaceOrInsertAtBeginAndRemoveMostRecentIfNecessary
+					(
+						new RecentItem<Command>(clone)
+					);
 			}
 			catch (Exception ex)
 			{

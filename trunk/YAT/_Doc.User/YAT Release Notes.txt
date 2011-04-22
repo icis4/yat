@@ -52,10 +52,21 @@ Important changes:
 - Handling of non-platform file system paths improved (related to feature request #2982052)
 - .yat/.yaw/.xml files are preambled with UTF-8 byte order mark (BOM) (feature request #3144111)
 - All source code and text files converted to UTF-8, including byte order mark (BOM)
+- Shortcut to 'Terminal > Select None' has changed to Ctrl+Shift+N (bug #3220852)
+- Links to SourceForge trackers now contain filter and sort (feature request #3160872)
 - HowTo on optional user test config and settings templates added (related to #2838447/#2981764)
 
 Fixed bugs:
+- Predefined commands are also put into list of recent commands (bug #3146622)
+- Local interface again is properly set when switching from COM port to TCP/IP socket (bug #3176815)
 - Exception when switching terminal type to USB Ser/HID fixed (bug #3290317)
+- Exception when closing/reopening terminals quickly (e.g. out of a script) fixed (bug #3137047)
+- Exception on clearing monitors fixed by improving thread-safety on raw and display repositories
+- Exception on receiving fixed by improving thread-safety on raw and display repositories
+  (bugs #3105773, #3156928, #3165821 and #3284519)
+- Exception that only occurs in 'Release' probably fixed too (bugs #3176812 and #3187520)
+- Exception on send also fixed by improving thread-safety on send operations
+  (bugs #2872830 and #3177728)
 
 Limitations and known issues:
 - MDI limitations of .NET

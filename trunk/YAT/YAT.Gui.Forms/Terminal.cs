@@ -2853,9 +2853,16 @@ namespace YAT.Gui.Forms
 				if (isOpen)
 				{
 					MKY.IO.Ports.SerialPortControlPins pins = new MKY.IO.Ports.SerialPortControlPins();
+					bool outputBreak = false;
+					bool inputBreak = false;
+
 					MKY.IO.Ports.ISerialPort port = this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
 					if (port != null)
+					{
 						pins = port.ControlPins;
+						outputBreak = port.OutputBreak;
+						inputBreak  = port.InputBreak;
+					}
 
 					bool rs485FlowControl = (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.RS485);
 					if (rs485FlowControl)
@@ -2873,8 +2880,8 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_DSR.Image = (pins.Dsr ? on : off);
 					toolStripStatusLabel_TerminalStatus_DCD.Image = (pins.Cd  ? on : off);
 
-					toolStripStatusLabel_TerminalStatus_OutputBreak.Image = (!port.OutputBreak ? on : off);
-					toolStripStatusLabel_TerminalStatus_InputBreak.Image  = (!port.InputBreak  ? on : off);
+					toolStripStatusLabel_TerminalStatus_OutputBreak.Image = (!outputBreak ? on : off);
+					toolStripStatusLabel_TerminalStatus_InputBreak.Image  = (!inputBreak  ? on : off);
 
 					bool manualFlowControl = (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual);
 
