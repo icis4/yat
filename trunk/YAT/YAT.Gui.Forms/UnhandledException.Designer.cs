@@ -240,7 +240,7 @@ namespace YAT.Gui.Forms
 			this.Name = "UnhandledException";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Unhandled Exception";
+			this.Text = "YAT Unhandled Exception";
 			this.Load += new System.EventHandler(this.UnhandledException_Load);
 			this.groupBox_Exception.ResumeLayout(false);
 			this.groupBox_Exception.PerformLayout();

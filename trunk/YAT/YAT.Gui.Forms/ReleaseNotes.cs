@@ -11,7 +11,7 @@
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2010 Matthias Kläy.
+// Copyright © 2003-2011 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
@@ -62,7 +62,7 @@ namespace YAT.Gui.Forms
 			}
 
 			// Set form title
-			string text = ApplicationInfo.ProductName;
+			string text = Application.ProductName;
 			text += " Release Notes";
 			Text = text;
 

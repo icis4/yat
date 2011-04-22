@@ -11,7 +11,7 @@
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2010 Matthias Kläy.
+// Copyright © 2003-2011 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
@@ -52,7 +52,7 @@ namespace YAT.Controller
 			"Supports RS-232/422/423/485...",
 			"...as well as TCP-Client/Server/AutoSocket, UDP and USB Ser/HID",
 			"Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.",
-			"Copyright © 2003-2010 Matthias Kläy.",
+			"Copyright © 2003-2011 Matthias Kläy.",
 			"",
 			ApplicationInfo.ProductName + " - Version " + Application.ProductVersion,
 		};
@@ -289,16 +289,16 @@ namespace YAT.Controller
 					try
 					{
 #endif
-					Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
-					if (welcomeScreen.ShowDialog() != DialogResult.OK)
-						return (Controller.MainResult.ApplicationSettingsError);
+						Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
+						if (welcomeScreen.ShowDialog() != DialogResult.OK)
+							return (Controller.MainResult.ApplicationSettingsError);
 #if (!DEBUG)
 					}
 					catch (Exception ex)
 					{
 						if (MessageBox.Show("An unhandled exception occured while loading " + Application.ProductName + "." + Environment.NewLine +
 											"Show detailed information?",
-											Application.ProductName,
+											ApplicationInfo.ProductName,
 											MessageBoxButtons.YesNoCancel,
 											MessageBoxIcon.Stop,
 											MessageBoxDefaultButton.Button2) == DialogResult.Yes)
@@ -313,23 +313,23 @@ namespace YAT.Controller
 					try
 					{
 #endif
-					// If everything is fine so far, start main application including view.
-					if (mainResult == MainResult.Success)
-					{
-						using (Gui.Forms.Main view = new Gui.Forms.Main(model))
+						// If everything is fine so far, start main application including view.
+						if (mainResult == MainResult.Success)
 						{
-							// Start the Win32 message loop on the current thread and the main form.
-							// \attention This call does not return until the application exits.
-							Application.Run(view);
+							using (Gui.Forms.Main view = new Gui.Forms.Main(model))
+							{
+								// Start the Win32 message loop on the current thread and the main form.
+								// \attention This call does not return until the application exits.
+								Application.Run(view);
+							}
 						}
-					}
 #if (!DEBUG)
 					}
 					catch (Exception ex)
 					{
 						if (MessageBox.Show("An unhandled exception occured while running " + Application.ProductName + "." + Environment.NewLine +
 											"Show detailed information?",
-											Application.ProductName,
+											ApplicationInfo.ProductName,
 											MessageBoxButtons.YesNoCancel,
 											MessageBoxIcon.Stop,
 											MessageBoxDefaultButton.Button2) == DialogResult.Yes)
@@ -349,17 +349,17 @@ namespace YAT.Controller
 					try
 					{
 #endif
-					if (model.Start())
-					{
-						if (model.Exit())
-							mainResult = MainResult.Success;
+						if (model.Start())
+						{
+							if (model.Exit())
+								mainResult = MainResult.Success;
+							else
+								mainResult = MainResult.ApplicationExitError;
+						}
 						else
-							mainResult = MainResult.ApplicationExitError;
-					}
-					else
-					{
-						mainResult = MainResult.ApplicationStartError;
-					}
+						{
+							mainResult = MainResult.ApplicationStartError;
+						}
 #if (!DEBUG)
 					}
 					catch (Exception ex)

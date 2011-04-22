@@ -3,14 +3,14 @@
 // Visit YAT at http://sourceforge.net/projects/y-a-terminal.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/YAT/YAT.cs $
-// $Author: maettu_this $
-// $Date: 2010-04-11 19:35:51 +0200 (So, 11 Apr 2010) $
-// $Revision: 285 $
+// $URL$
+// $Author$
+// $Date$
+// $Revision$
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2010 Matthias Kläy.
+// Copyright © 2010-2011 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
@@ -95,5 +95,5 @@ namespace YAT.Test
 
 //==================================================================================================
 // End of
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/YAT/YAT.cs $
+// $URL$
 //==================================================================================================

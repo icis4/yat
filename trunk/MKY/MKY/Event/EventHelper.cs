@@ -11,7 +11,7 @@
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2010 Matthias Kläy.
+// Copyright © 2003-2011 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // This source code is licensed under the GNU LGPL.
@@ -105,7 +105,7 @@ namespace MKY.Event
 		/// <summary>
 		/// Semaphore to temporarily suspend the unhandled exceptions event.
 		/// </summary>
-		private static int SuspendUnhandledExceptionEventSemapore;
+		private static int SuspendUnhandledExceptionEventSemaphore;
 
 #endif
 
@@ -117,7 +117,7 @@ namespace MKY.Event
 		public static void SuspendUnhandledException()
 		{
 #if (!DEBUG)
-			Interlocked.Increment(ref SuspendUnhandledExceptionEventSemapore);
+			Interlocked.Increment(ref SuspendUnhandledExceptionEventSemaphore);
 #endif
 		}
 
@@ -129,7 +129,7 @@ namespace MKY.Event
 		public static void ResumeUnhandledException()
 		{
 #if (!DEBUG)
-			Interlocked.Decrement(ref SuspendUnhandledExceptionEventSemapore);
+			Interlocked.Decrement(ref SuspendUnhandledExceptionEventSemaphore);
 #endif
 		}
 
@@ -331,7 +331,7 @@ namespace MKY.Event
 			}
 			catch (Exception ex)
 			{
-				if (SuspendUnhandledExceptionEventSemapore <= 0)
+				if (SuspendUnhandledExceptionEventSemaphore <= 0)
 				{
 					UnhandledExceptionEventArgs e = new UnhandledExceptionEventArgs(ex);
 					FireSync<UnhandledExceptionEventArgs>(UnhandledException, typeof(EventHelper), e);
@@ -369,7 +369,7 @@ namespace MKY.Event
 			}
 			catch (Exception ex)
 			{
-				if (SuspendUnhandledExceptionEventSemapore <= 0)
+				if (SuspendUnhandledExceptionEventSemaphore <= 0)
 				{
 					UnhandledExceptionEventArgs e = new UnhandledExceptionEventArgs(ex);
 					FireSync<UnhandledExceptionEventArgs>(UnhandledException, typeof(EventHelper), e);

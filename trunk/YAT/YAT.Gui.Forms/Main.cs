@@ -11,7 +11,7 @@
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2010 Matthias Kläy.
+// Copyright © 2003-2011 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
 // YAT is licensed under the GNU LGPL.
@@ -1106,17 +1106,36 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		private bool main_UnhandledException_HandleExceptions = true;
+
 		private void main_UnhandledException(object sender, MKY.Event.EventHelper.UnhandledExceptionEventArgs e)
 		{
-			if (MessageBox.Show("An unhandled exception occured in " + Application.ProductName + "." + Environment.NewLine +
-								"Show detailed information?",
-								Application.ProductName,
-								MessageBoxButtons.YesNoCancel,
-								MessageBoxIcon.Stop,
-								MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+			if (main_UnhandledException_HandleExceptions)
 			{
-				Gui.Forms.UnhandledException f = new Gui.Forms.UnhandledException(e.UnhandledException);
-				f.ShowDialog(this);
+				string productName = Application.ProductName;
+
+				if (MessageBox.Show("An unhandled exception occured in " + productName + "." + Environment.NewLine + Environment.NewLine +
+									"Show detailed information?",
+									productName,
+									MessageBoxButtons.YesNo,
+									MessageBoxIcon.Exclamation) == DialogResult.Yes)
+				{
+					Gui.Forms.UnhandledException f = new Gui.Forms.UnhandledException(e.UnhandledException);
+					f.ShowDialog(this);
+				}
+
+				switch (MessageBox.Show("After an unhandled exception you are advised to exit and restart " + productName + "." + Environment.NewLine + Environment.NewLine +
+										"Select abort to exit " + productName + " now." + Environment.NewLine +
+										"Or would you like to continue/retry anyway?" + Environment.NewLine +
+										"Or would you like to continue/retry but ignore any additional unhandled exceptions?",
+										productName,
+										MessageBoxButtons.AbortRetryIgnore,
+										MessageBoxIcon.Exclamation))
+				{
+					case DialogResult.Retry:                                                             break; // Nothing to do.
+					case DialogResult.Ignore: main_UnhandledException_HandleExceptions = false;          break; // Intentionally ignore further exceptions.
+					default:                  main_UnhandledException_HandleExceptions = false; Close(); break; // Don't care about any exceptions anymore.
+				}
 			}
 		}
 
