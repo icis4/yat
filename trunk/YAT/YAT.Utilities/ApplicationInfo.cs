@@ -26,19 +26,25 @@ namespace YAT.Utilities
 	public static class ApplicationInfo
 	{
 	/////// <summary></summary>
-	////public const string ProductNamePostFix = "";
+	////public const string ProductBuildName = "";
 
 	/////// <summary></summary>
-	////public const string ProductNamePostFix = " Beta 3";
+	////public const string ProductBuildName = " Beta 3";
 
 		/// <summary></summary>
-		public const string ProductNamePostFix = " Beta 3 Candidate 4";
+		public const string ProductBuildName = " Beta 3 Candidate 4";
 
 	/////// <summary></summary>
-	////public const string ProductNamePostFix = " Beta 3 Preliminary";
+	////public const string ProductBuildName = " Beta 3 Preliminary";
 
 		/// <summary></summary>
-		public static readonly string ProductName = Application.ProductName + ProductNamePostFix;
+		public static readonly string ProductNameAndBuildName = Application.ProductName + ProductBuildName;
+	
+		/// <summary></summary>
+		public static readonly string ProductNameAndBuildNameAndVersion = ProductNameAndBuildName + " - Version " + Application.ProductVersion;
+
+		/// <summary></summary>
+		public static readonly string ProductNameLong = Application.ProductName + " - Yet Another Terminal";
 	}
 }
 
