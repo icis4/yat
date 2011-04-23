@@ -19,6 +19,7 @@
 //==================================================================================================
 
 using System;
+using System.Text;
 using System.Windows.Forms;
 
 using YAT.Utilities;
@@ -38,33 +39,27 @@ namespace YAT.Gui.Forms
 		{
 			InitializeComponent();
 
-			string text = "";
 			string textBefore = "";
 			string textLink = "";
 			string textAfter = "";
-			int start = 0;
+			int linkStart = 0;
 
 			// Form.
-			text = "About ";
-			text += Application.ProductName;
-			text += " - Yet Another Terminal";
-			Text = text;
+			Text = ApplicationInfo.ProductNameLong;
 
 			// Title.
-			text = ApplicationInfo.ProductName;
-			text += " - Version " + Application.ProductVersion;
-			linkLabel_Title.Text = text;
+			linkLabel_Title.Text = ApplicationInfo.ProductNameAndBuildNameAndVersion;
 
 			// Copyright.
 			linkLabel_Copyright.Text = "";
 			textBefore = "Copyright © 2003-2004 ";
-			textLink =                         "HSR Hochschule für Technik Rapperswil";
-			textAfter =                                                             "." + Environment.NewLine +
+			textLink   =                       "HSR Hochschule für Technik Rapperswil";
+			textAfter  =                                                            "." + Environment.NewLine +
 			             "Copyright © 2003-2011 Matthias Kläy.";
 			linkLabel_Copyright.Text += textBefore;
-			start = linkLabel_Copyright.Text.Length;
+			linkStart = linkLabel_Copyright.Text.Length;
 			linkLabel_Copyright.Text += textLink;
-			linkLabel_Copyright.Links.Add(start, textLink.Length, "http://www.hsr.ch/");
+			linkLabel_Copyright.Links.Add(linkStart, textLink.Length, "http://www.hsr.ch/");
 			linkLabel_Copyright.Text += textAfter;
 
 			// Trademark.
@@ -73,21 +68,21 @@ namespace YAT.Gui.Forms
 			// Description.
 			linkLabel_Description.Text = "";
 			textBefore = "YAT is a by-product of the ";
-			textLink =                              "Swiss federal KTI/CTI";
-			textAfter =                                                 @" project 6542.1 FHS-ET ""BBP - Balance Based Pipetting"" between" + Environment.NewLine;
+			textLink   =                            "Swiss federal KTI/CTI";
+			textAfter  =                                                @" project 6542.1 FHS-ET ""BBP - Balance Based Pipetting"" between" + Environment.NewLine;
 			linkLabel_Description.Text += textBefore;
-			start = linkLabel_Description.Text.Length;
+			linkStart = linkLabel_Description.Text.Length;
 			linkLabel_Description.Text += textLink;
-			linkLabel_Description.Links.Add(start, textLink.Length, "http://www.bbt.admin.ch/kti/");
+			linkLabel_Description.Links.Add(linkStart, textLink.Length, "http://www.bbt.admin.ch/kti/");
 			linkLabel_Description.Text += textAfter;
 
 			textBefore = "HSR and ";
-			textLink =           "Mettler-Toledo";
-			textAfter =                        ". YAT was initially developed as XTerm232 due to the lack of a good RS-232 terminal.";
+			textLink   =         "Mettler-Toledo";
+			textAfter  =                       ". YAT was initially developed as XTerm232 due to the lack of a good RS-232 terminal.";
 			linkLabel_Description.Text += textBefore;
-			start = linkLabel_Description.Text.Length;
+			linkStart = linkLabel_Description.Text.Length;
 			linkLabel_Description.Text += textLink;
-			linkLabel_Description.Links.Add(start, textLink.Length, "http://www.mt.com/");
+			linkLabel_Description.Links.Add(linkStart, textLink.Length, "http://www.mt.com/");
 			linkLabel_Description.Text += textAfter;
 
 			// Platform.
@@ -97,29 +92,29 @@ namespace YAT.Gui.Forms
 			linkLabel_HHD.Text = "";
 			textBefore = "YAT is a terminal (a connection endpoint). If you're looking for a tool to monitor serial data between an application and a" + Environment.NewLine +
 						 "device, or between two devices, check out ";
-			textLink =                                             "HHD Monitoring Studio";
-			textAfter =                                                                 ". It's worth the bucks. Or ";
+			textLink   =                                           "HHD Monitoring Studio";
+			textAfter  =                                                                ". It's worth the bucks. Or ";
 			linkLabel_HHD.Text += textBefore;
-			start = linkLabel_HHD.Text.Length;
+			linkStart = linkLabel_HHD.Text.Length;
 			linkLabel_HHD.Text += textLink;
-			linkLabel_HHD.Links.Add(start, textLink.Length, "http://www.hhdsoftware.com/");
+			linkLabel_HHD.Links.Add(linkStart, textLink.Length, "http://www.hhdsoftware.com/");
 			linkLabel_HHD.Text += textAfter;
 			textLink =                                                                                             "download the free edition";
 			textAfter =                                                                                                                     ".";
-			start = linkLabel_HHD.Text.Length;
+			linkStart = linkLabel_HHD.Text.Length;
 			linkLabel_HHD.Text += textLink;
-			linkLabel_HHD.Links.Add(start, textLink.Length, "http://www.serial-port-monitor.com/");
+			linkLabel_HHD.Links.Add(linkStart, textLink.Length, "http://www.serial-port-monitor.com/");
 			linkLabel_HHD.Text += textAfter;
 
 			// VSPE.
 			linkLabel_VSPE.Text = "";
 			textBefore = "If you're also looking for a tool to create and manage additional virtual COM ports, check out"  + Environment.NewLine;
-			textLink =   "Eterlogic Virtual Serial Ports Emulator";
-			textAfter =                                          ". Supports virtual connected ports, mapping to TCP/IP, port sharing,...";
+			textLink   = "Eterlogic Virtual Serial Ports Emulator";
+			textAfter  =                                         ". Supports virtual connected ports, mapping to TCP/IP, port sharing,...";
 			linkLabel_VSPE.Text += textBefore;
-			start = linkLabel_VSPE.Text.Length;
+			linkStart = linkLabel_VSPE.Text.Length;
 			linkLabel_VSPE.Text += textLink;
-			linkLabel_VSPE.Links.Add(start, textLink.Length, "http://www.eterlogic.com/Products.VSPE.html");
+			linkLabel_VSPE.Links.Add(linkStart, textLink.Length, "http://www.eterlogic.com/Products.VSPE.html");
 			linkLabel_VSPE.Text += textAfter;
 
 			// Environment.
@@ -131,68 +126,68 @@ namespace YAT.Gui.Forms
 						 "   > System.IO.Ports serial port extension by Matthias Kläy" + Environment.NewLine +
 
 						 "   > System.Net.Sockets socket extension ";
-			textLink =                                            "ALAZ";
-			textAfter =                                               " by Andre Luis Azevedo";
+			textLink   =                                          "ALAZ";
+			textAfter  =                                              " by Andre Luis Azevedo";
 			linkLabel_Environment.Text += textBefore;
-			start = linkLabel_Environment.Text.Length;
+			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(start, textLink.Length, "http://www.codeproject.com/cs/internet/AsyncSocketServerandClien.asp");
+			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.codeproject.com/cs/internet/AsyncSocketServerandClien.asp");
 			linkLabel_Environment.Text += textAfter + Environment.NewLine;
 
 			textBefore = "   > USB Ser/HID library based on ";
-			textLink =                                     "GenericHid";
+			textLink   =                                   "GenericHid";
 			linkLabel_Environment.Text += textBefore;
-			start = linkLabel_Environment.Text.Length;
+			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(start, textLink.Length, "http://www.lvr.com/hidpage.htm");
+			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.lvr.com/hidpage.htm");
 
 			textBefore =                                             "/";
-			textLink =                                                "UsbLibrary";
+			textLink   =                                              "UsbLibrary";
 			linkLabel_Environment.Text += textBefore;
-			start = linkLabel_Environment.Text.Length;
+			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(start, textLink.Length, "http://www.codeproject.com/KB/cs/USB_HID.aspx?msg=2816038");
+			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.codeproject.com/KB/cs/USB_HID.aspx?msg=2816038");
 
 			textBefore =                                                        "/";
-			textLink =                                                           "UsbHid";
-			textAfter =                                                                " by Matthias Kläy";
+			textLink   =                                                         "UsbHid";
+			textAfter  =                                                               " by Matthias Kläy";
 			linkLabel_Environment.Text += textBefore;
-			start = linkLabel_Environment.Text.Length;
+			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(start, textLink.Length, "http://www.florian-leitner.de/index.php/category/usb-hid-library/");
+			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.florian-leitner.de/index.php/category/usb-hid-library/");
 			linkLabel_Environment.Text += textAfter + Environment.NewLine;
 
 			textBefore = "   > YAT icons based on ";
-			textLink =                           "Nuvola";
-			textAfter =                                " by David Vignoni";
+			textLink   =                         "Nuvola";
+			textAfter  =                               " by David Vignoni";
 			linkLabel_Environment.Text += textBefore;
-			start = linkLabel_Environment.Text.Length;
+			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(start, textLink.Length, "http://icon-king.com/?p=15");
+			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://icon-king.com/?p=15");
 			linkLabel_Environment.Text += textAfter;
 
 			textBefore =                                                " edited in ";
-			textLink =                                                             "GIMP";
+			textLink   =                                                           "GIMP";
 			linkLabel_Environment.Text += textBefore;
-			start = linkLabel_Environment.Text.Length;
+			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(start, textLink.Length, "http://www.gimp.org/");
+			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.gimp.org/");
 			linkLabel_Environment.Text += Environment.NewLine;
 
 			textBefore = "   > Toolbar icons from free common set by ";
-			textLink =                                              "glyfx";
+			textLink   =                                            "glyfx";
 			linkLabel_Environment.Text += textBefore;
-			start = linkLabel_Environment.Text.Length;
+			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(start, textLink.Length, "http://www.glyfx.com/");
+			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://www.glyfx.com/");
 			linkLabel_Environment.Text += Environment.NewLine;
 
 			textBefore = "   > Terminal font ";
-			textLink = "DejaVu";
+			textLink   =                    "DejaVu";
 			linkLabel_Environment.Text += textBefore;
-			start = linkLabel_Environment.Text.Length;
+			linkStart = linkLabel_Environment.Text.Length;
 			linkLabel_Environment.Text += textLink;
-			linkLabel_Environment.Links.Add(start, textLink.Length, "http://dejavu.sourceforge.net/");
+			linkLabel_Environment.Links.Add(linkStart, textLink.Length, "http://dejavu.sourceforge.net/");
 			linkLabel_Environment.Text += Environment.NewLine;
 
 			textBefore = "   > Microsoft StyleCop" + Environment.NewLine +
@@ -202,12 +197,12 @@ namespace YAT.Gui.Forms
 			// Home.
 			linkLabel_Home.Text = "";
 			textBefore = "Visit YAT on ";
-			textLink =                "SourceForge.net";
-			textAfter =                              ". Tell us if you like it or why you don't.";
+			textLink   =              "SourceForge.net";
+			textAfter  =                             ". Tell us if you like it or why you don't.";
 			linkLabel_Home.Text += textBefore;
-			start = linkLabel_Home.Text.Length;
+			linkStart = linkLabel_Home.Text.Length;
 			linkLabel_Home.Text += textLink;
-			linkLabel_Home.Links.Add(start, textLink.Length, "http://sourceforge.net/projects/y-a-terminal/");
+			linkLabel_Home.Links.Add(linkStart, textLink.Length, "http://sourceforge.net/projects/y-a-terminal/");
 			linkLabel_Home.Text += textAfter;
 
 			// Author.
@@ -216,12 +211,12 @@ namespace YAT.Gui.Forms
 			// License.
 			linkLabel_License.Text = "";
 			textBefore = "YAT is licensed under the ";
-			textLink =                             "GNU LGPL";
-			textAfter =                                    ".";
+			textLink   =                           "GNU LGPL";
+			textAfter  =                                   ".";
 			linkLabel_License.Text += textBefore;
-			start = linkLabel_License.Text.Length;
+			linkStart = linkLabel_License.Text.Length;
 			linkLabel_License.Text += textLink;
-			linkLabel_License.Links.Add(start, textLink.Length, "http://www.gnu.org/licenses/lgpl.html");
+			linkLabel_License.Links.Add(linkStart, textLink.Length, "http://www.gnu.org/licenses/lgpl.html");
 			linkLabel_License.Text += textAfter;
 		}
 

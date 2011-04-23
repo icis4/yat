@@ -63,7 +63,7 @@ namespace YAT.Gui.Forms
 			int width = Width;
 			int width2 = 0;
 
-			label_Name.Text = ApplicationInfo.ProductName;
+			label_Name.Text = ApplicationInfo.ProductNameAndBuildName;
 			width2 = label_Name.Left + label_Name.Width + Margin;
 			if (width < width2)
 				width = width2;

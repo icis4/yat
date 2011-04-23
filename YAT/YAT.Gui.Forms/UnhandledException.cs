@@ -21,6 +21,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -36,19 +37,30 @@ namespace YAT.Gui.Forms
 	public partial class UnhandledException : System.Windows.Forms.Form
 	{
 		private Exception exeption;
+		private bool isAsynchronous;
+		private string originMessage;
 
 		/// <summary></summary>
-		public UnhandledException(Exception exeption)
+		public UnhandledException(Exception exeption, string originMessage, bool isAsynchronous)
 		{
 			InitializeComponent();
 
 			// Set form title
-			string text = Application.ProductName;
-			text += " Unhandled Exception";
-			Text = text;
+			StringBuilder sb = new StringBuilder(Application.ProductName);
+			sb.Append(" Unhandled");
 
-			// Set active exception.
+			if (isAsynchronous)
+				sb.Append(" Asynchronous");
+			else
+				sb.Append(" Synchronous");
+
+			sb.Append(" Exception");
+			Text = sb.ToString();
+
+			// Set exception information.
 			this.exeption = exeption;
+			this.isAsynchronous = isAsynchronous;
+			this.originMessage = originMessage;
 		}
 
 		private void UnhandledException_Load(object sender, EventArgs e)
@@ -70,10 +82,9 @@ namespace YAT.Gui.Forms
 			StringWriter text = new StringWriter();
 			try
 			{
-				text.Write(ApplicationInfo.ProductName);
-				text.Write(" Version ");
-				text.Write(Application.ProductVersion);
+				text.WriteLine(this.originMessage);
 				text.WriteLine();
+				text.WriteLine(ApplicationInfo.ProductNameAndBuildNameAndVersion);
 				text.WriteLine();
 
 				AnyWriter.WriteException(text, null, this.exeption);

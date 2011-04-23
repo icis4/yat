@@ -47,14 +47,22 @@ namespace YAT.Controller
 
 		private static readonly string[] Title =
 		{
-			"YAT - Yet Another Terminal.",
+			ApplicationInfo.ProductNameLong + ".",
 			"Operate and debug serial communications.",
 			"Supports RS-232/422/423/485...",
 			"...as well as TCP-Client/Server/AutoSocket, UDP and USB Ser/HID",
+			"",
+			"Visit YAT at http://sourceforge.net/projects/y-a-terminal.",
+			"Contact YAT by mailto:y-a-terminal@users.sourceforge.net.",
+			"",
 			"Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.",
 			"Copyright © 2003-2011 Matthias Kläy.",
+			"All rights reserved.",
 			"",
-			ApplicationInfo.ProductName + " - Version " + Application.ProductVersion,
+			"YAT is licensed under the GNU LGPL.",
+			"See http://www.gnu.org/licenses/lgpl.html for license details.",
+			"",
+			ApplicationInfo.ProductNameAndBuildNameAndVersion,
 		};
 
 		private static readonly string[] FileOptions =
@@ -296,16 +304,10 @@ namespace YAT.Controller
 					}
 					catch (Exception ex)
 					{
-						if (MessageBox.Show("An unhandled exception occured while loading " + Application.ProductName + "." + Environment.NewLine +
-											"Show detailed information?",
-											ApplicationInfo.ProductName,
-											MessageBoxButtons.YesNoCancel,
-											MessageBoxIcon.Stop,
-											MessageBoxDefaultButton.Button2) == DialogResult.Yes)
-						{
-							Gui.Forms.UnhandledException f = new Gui.Forms.UnhandledException(ex);
-							f.ShowDialog();
-						}
+						string message = "An unhandled synchronous exception occured while loading " + Application.ProductName + ".";
+						if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
+							Application.Restart();
+
 						mainResult = MainResult.UnhandledException;
 					}
 #endif
@@ -327,16 +329,10 @@ namespace YAT.Controller
 					}
 					catch (Exception ex)
 					{
-						if (MessageBox.Show("An unhandled exception occured while running " + Application.ProductName + "." + Environment.NewLine +
-											"Show detailed information?",
-											ApplicationInfo.ProductName,
-											MessageBoxButtons.YesNoCancel,
-											MessageBoxIcon.Stop,
-											MessageBoxDefaultButton.Button2) == DialogResult.Yes)
-						{
-							Gui.Forms.UnhandledException f = new Gui.Forms.UnhandledException(ex);
-							f.ShowDialog();
-						}
+						string message = "An unhandled synchronous exception occured while running " + Application.ProductName + ".";
+						if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
+							Application.Restart();
+
 						mainResult = MainResult.UnhandledException;
 					}
 #endif
