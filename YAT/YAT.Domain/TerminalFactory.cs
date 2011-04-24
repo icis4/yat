@@ -35,7 +35,7 @@ namespace YAT.Domain
 		{
 			switch (settings.TerminalType)
 			{
-				case TerminalType.Text:   return (new TextTerminal(settings));
+				case TerminalType.Text:   return (new TextTerminal  (settings));
 				case TerminalType.Binary: return (new BinaryTerminal(settings));
 				default: throw (new TypeLoadException("Unknown terminal type"));
 			}
@@ -46,7 +46,7 @@ namespace YAT.Domain
 		{
 			switch (settings.TerminalType)
 			{
-				case TerminalType.Text:   return (new TextTerminal(settings, terminal));
+				case TerminalType.Text:   return (new TextTerminal  (settings, terminal));
 				case TerminalType.Binary: return (new BinaryTerminal(settings, terminal));
 				default: throw (new ArgumentOutOfRangeException("settings", settings, "Invalid terminal type"));
 			}

@@ -248,37 +248,26 @@ namespace MKY.IO.Serial
 		{
 			get
 			{
-				// Currently, Start/Stop is implemented mutual exclusively for this TCP AutoSocket.
-				return (!IsStarted);
+				AssertNotDisposed();
+				switch (this.state)
+				{
+					case SocketState.Reset:
+					case SocketState.Error:
+						{
+							return (true);
+						}
+					default:
+						{
+							return (false);
+						}
+				}
 			}
 		}
 
 		/// <summary></summary>
 		public virtual bool IsStarted
 		{
-			get
-			{
-				AssertNotDisposed();
-				switch (this.state)
-				{
-					case SocketState.Starting:
-					case SocketState.Connecting:
-					case SocketState.ConnectingFailed:
-					case SocketState.Connected:
-					case SocketState.StartingListening:
-					case SocketState.Listening:
-					case SocketState.ListeningFailed:
-					case SocketState.Accepted:
-					case SocketState.Restarting:
-					{
-						return (true);
-					}
-					default:
-					{
-						return (false);
-					}
-				}
-			}
+			get { return (!IsStopped); }
 		}
 
 		/// <summary></summary>
@@ -314,7 +303,11 @@ namespace MKY.IO.Serial
 			get { return (IsConnected); }
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The <see cref="IsClient"/> and <see cref="IsServer"/> properties only return <c>true</c>
+		/// if it is defined whether the AutoSocket indeed behaves as client or server. If it is not
+		/// yet defined, both flags are set <c>false</c>.
+		/// </remarks>
 		public virtual bool IsClient
 		{
 			get
@@ -334,7 +327,11 @@ namespace MKY.IO.Serial
 			}
 		}
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The <see cref="IsClient"/> and <see cref="IsServer"/> properties only return <c>true</c>
+		/// if it is defined whether the AutoSocket indeed behaves as client or server. If it is not
+		/// yet defined, both flags are set <c>false</c>.
+		/// </remarks>
 		public virtual bool IsServer
 		{
 			get
