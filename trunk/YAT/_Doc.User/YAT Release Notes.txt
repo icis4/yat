@@ -63,7 +63,7 @@ Important changes:
 - All source code and text files converted to UTF-8, including byte order mark (BOM)
 - HowTo on optional user test config and settings templates added (related to #2838447/#2981764)
 - Use of \todo, \fixme,... tags unified in source code
-- Transmission testing improved such that it can deal with the \!(Clear) command
+- Transmission test infrastructure improved such that it can deal with the \!(Clear) command
 
 Fixed bugs:
 - Predefined commands are also put into list of recent commands (bug #3146622)
