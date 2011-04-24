@@ -629,7 +629,7 @@ namespace YAT.Model
 		/// Closes the workspace and tries to auto save if desired.
 		/// </summary>
 		/// <remarks>
-		/// \attention
+		/// \attention:
 		/// This method is needed for MDI applications. In case of MDI parent/application closing,
 		/// Close() of the workspace is called. Without taking care of this, the workspace would
 		/// be removed as the active workspace from the local user settings. Therefore, the

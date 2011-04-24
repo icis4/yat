@@ -82,7 +82,7 @@ namespace MKY.IO.Usb
 		/// Returns an array of all USB devices of the given class currently available on the system.
 		/// </summary>
 		/// <remarks>
-		/// \todo This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
+		/// \todo: This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
 		/// </remarks>
 		public static DeviceInfo[] GetDevices()
 		{
@@ -93,7 +93,7 @@ namespace MKY.IO.Usb
 		/// Returns an array of all USB devices of the given class currently available on the system.
 		/// </summary>
 		/// <remarks>
-		/// \todo This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
+		/// \todo: This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
 		/// </remarks>
 		/// <param name="deviceClass">USB device class.</param>
 		public static DeviceInfo[] GetDevicesFromClass(DeviceClass deviceClass)
@@ -105,7 +105,7 @@ namespace MKY.IO.Usb
 		/// Returns an array of all USB devices of the given class currently available on the system.
 		/// </summary>
 		/// <remarks>
-		/// \todo This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
+		/// \todo: This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
 		/// </remarks>
 		/// <param name="classGuid">GUID of a class of devices.</param>
 		public static DeviceInfo[] GetDevicesFromGuid(Guid classGuid)
@@ -223,7 +223,7 @@ namespace MKY.IO.Usb
 		/// Returns the information of the device with the given path.
 		/// </summary>
 		/// <remarks>
-		/// \todo This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
+		/// \todo: This method currently only works for HID devices. Find a HID independent way to retrieve VID/PID.
 		/// </remarks>
 		public static bool GetDeviceInfoFromPath(string path, out int vendorId, out int productId, out string manufacturer, out string product, out string serialNumber)
 		{
@@ -361,9 +361,10 @@ namespace MKY.IO.Usb
 		private static object staticDeviceNotificationSyncObj = new object();
 
 		/// <remarks>
-		/// \todo Don't know how the GUID for any USB device class. So only HID devices are detected.
+		/// \todo: Don't know how the GUID for any USB device class. So only HID devices are detected.
 		/// 
-		/// \attention This function also exists in the other USB classes. Changes here must also be applied there.
+		/// \attention:
+		/// This function also exists in the other USB classes. Changes here must also be applied there.
 		/// </remarks>
 		public static void RegisterStaticDeviceNotificationHandler()
 		{
@@ -384,7 +385,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// \attention This function also exists in the other USB classes. Changes here must also be applied there.
+		/// \attention:
+		/// This function also exists in the other USB classes. Changes here must also be applied there.
 		/// </remarks>
 		public static void UnregisterStaticDeviceNotificationHandler()
 		{
@@ -411,7 +413,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// \attention This function also exists in the other USB classes. Changes here must also be applied there.
+		/// \attention:
+		/// This function also exists in the other USB classes. Changes here must also be applied there.
 		/// </remarks>
 		private static void StaticDeviceNotificationHandler(ref Message m)
 		{
@@ -755,7 +758,8 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <remarks>
-		/// \attention This function similarily exists in the other USB classes. Changes here may also be applied there.
+		/// \attention:
+		/// This function similarily exists in the other USB classes. Changes here may also be applied there.
 		/// </remarks>
 		private void Device_DeviceConnected(object sender, DeviceEventArgs e)
 		{
@@ -769,7 +773,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// \attention This function similarily exists in the other USB classes. Changes here may also be applied there.
+		/// \attention:
+		/// This function similarily exists in the other USB classes. Changes here may also be applied there.
 		/// </remarks>
 		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
 		{

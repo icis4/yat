@@ -452,7 +452,7 @@ namespace MKY.IO.Serial
 			{
 				SetStateAndNotify(SocketState.Disconnecting);
 
-				// \remind
+				// \remind:
 				// The ALAZ sockets by default stop synchronously. However, due to some other issues
 				//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
 				this.socket.Stop();

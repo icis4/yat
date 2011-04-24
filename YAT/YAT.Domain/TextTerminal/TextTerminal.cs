@@ -641,7 +641,7 @@ namespace YAT.Domain
 			}
 
 #if (FALSE)
-			// \remind
+			// \remind:
 			// Break debugger on SIR responses that are mixed up (more than 16 chars without EOL)
 			// Used to debug an issue that is possibly related to #2455804
 			//

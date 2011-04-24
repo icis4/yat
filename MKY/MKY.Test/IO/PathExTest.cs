@@ -28,7 +28,7 @@ using MKY.IO;
 namespace MKY.Test.IO
 {
 	/// <summary>
-	/// \todo
+	/// \todo:
 	/// Improve PathEx such that it passes tests for '\' as well as '/'.
 	/// Ensure that test vectors potentially run on Windows and Unixoids.
 	/// I.e. use of DirectorySeparatorChar must be checked.
@@ -74,7 +74,7 @@ namespace MKY.Test.IO
 			{
 				// ---- Local ----
 
-				//									TS	TC	AbsoluteA							AbsoluteB							RelativeA	\todo See below			RelativeB
+				//									TS	TC	AbsoluteA							AbsoluteB							RelativeA	\todo: See below		RelativeB
 
 				// TS0: Local very-near relation
 				yield return (new TestCaseDataSet(0,	0,	@"X:\MyDir",						@"X:\MyDir",						@".",								@"."						));
@@ -149,7 +149,7 @@ namespace MKY.Test.IO
 		// Test Cases Extended With Trailing Separator
 		//==========================================================================================
 
-			// \todo
+			// \todo:
 			// Improve PathEx such that these tests pass.
 			/*
 			// Run extended test case(s) that remove the '.\' at the beginning of the given input path(s).

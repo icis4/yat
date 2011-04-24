@@ -59,7 +59,7 @@ namespace YAT.Model.Test
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					// Create test set to verify transmission
-					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 2 }, new int[] { 1 }); // EOL results in one more element
+					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 2 }, new int[] { 1 }, true); // EOL results in one more element
 
 					// Send test command
 					terminalA.SendText(testSet.Command);
@@ -71,7 +71,7 @@ namespace YAT.Model.Test
 					                      testSet);
 
 					// Create test set to verify clear
-					testSet = new Utilities.TestSet(new Types.Command(@""), 0, new int[] { 0 }, new int[] { 0 }); // Empty terminals expected
+					testSet = new Utilities.TestSet(new Types.Command(@""), 0, new int[] { 0 }, new int[] { 0 }, true); // Empty terminals expected
 
 					// Clear data
 					terminalA.ClearRepositories();
@@ -110,7 +110,7 @@ namespace YAT.Model.Test
 					Utilities.WaitForConnection(terminalA, terminalB);
 
 					// Create test set to verify transmission
-					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 2 }, new int[] { 1 }); // EOL results in one more element
+					testSet = new Utilities.TestSet(new Types.Command(@"A"), 1, new int[] { 2 }, new int[] { 1 }, true); // EOL results in one more element
 
 					// Send test command
 					terminalA.SendText(testSet.Command);
@@ -131,7 +131,7 @@ namespace YAT.Model.Test
 						Assert.Fail("Incomplete line not received!");
 
 					// Create test set to verify clear
-					testSet = new Utilities.TestSet(new Types.Command(@""), 0, new int[] { 0 }, new int[] { 0 }); // Empty terminals expected
+					testSet = new Utilities.TestSet(new Types.Command(@""), 0, new int[] { 0 }, new int[] { 0 }, true); // Empty terminals expected
 
 					// clear data
 					terminalA.ClearRepositories();

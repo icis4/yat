@@ -641,7 +641,9 @@ namespace YAT.Domain
 			dl.Add(new DisplayElement.LineBreak(re.Direction));
 
 			// Return elements.
-			// \attention: Clone elements because they are needed again below.
+			//
+			// \attention:
+			// Clone elements because they are needed again below.
 			elements.AddRange(dl.Clone());
 			lines.Add(dl);
 		}

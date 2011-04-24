@@ -260,7 +260,7 @@ namespace YAT.Gui.Forms
 
 		private void button_Help_Click(object sender, EventArgs e)
 		{
-			// \fixme Replace MessageBox with a real help.
+			// \fixme: Replace MessageBox with a real help.
 			MessageBox.Show
 				(
 				this,

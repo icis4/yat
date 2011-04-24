@@ -236,7 +236,7 @@ namespace YAT.Gui.Utilities
 		{
 			// Calculate tabs, currently fixed to 8 characters.
 
-			// \remind 2009-08-29 / mky
+			// \remind (2009-08-29 / mky):
 			// This is a somewhat strange calculation, however, don't know to do it better.
 
 			SizeF size = graphics.MeasureString(" ", font);
