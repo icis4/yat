@@ -462,25 +462,23 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
+		/// <remarks>
+		/// Typically, 'OnDataReceived' has been fired before this method is called. However, this
+		/// method can also be called after the port got closed to retrieve the remaining data.
+		/// </remarks>
 		public virtual int Receive(out byte[] data)
 		{
-			// AssertNotDisposed() is called by IsOpen.
-			// OnDataReceived has been fired before.
+			AssertNotDisposed();
 
+			// Don't care whether the port actually is open. It shall also be possible to retrieve
+			// remaining data after the port got closed.
 			int bytesReceived = 0;
-			if (IsOpen)
+			lock (this.receiveQueue)
 			{
-				lock (this.receiveQueue)
-				{
-					bytesReceived = this.receiveQueue.Count;
-					data = new byte[bytesReceived];
-					for (int i = 0; i < bytesReceived; i++)
-						data[i] = this.receiveQueue.Dequeue();
-				}
-			}
-			else
-			{
-				data = new byte[] { };
+				bytesReceived = this.receiveQueue.Count;
+				data = new byte[bytesReceived];
+				for (int i = 0; i < bytesReceived; i++)
+					data[i] = this.receiveQueue.Dequeue();
 			}
 			return (bytesReceived);
 		}
@@ -789,17 +787,45 @@ namespace MKY.IO.Serial
 			Monitor.Enter(this.port_DataReceivedSyncObj);
 			try
 			{
-				// Fire events until there is no more data available. Must be done to ensure
-				// that events are fired even for data that was enqueued above while the sync
-				// obj was busy.
+				// Fire events until there is no more data. Must be done to ensure that events
+				// are fired even for data that was enqueued above while the sync obj was busy.
+				// In addition, wait for the minimal time possible to allow other threads to
+				// execute and to prevent that 'OnDataReceived' events are fired consecutively.
+				//
+				// Measurements 2011-04-24 on an Intel Core 2 Duo running Win7 at 2.4 GHz and 3 GB of RAM:
+				// > 0.0% CPU load in idle
+				// > Up to an short-term-average of 20% CPU load while sending a large chuck of text (\YAT\_SendFiles\Stress-2-Large.txt, 106 kB)
+				// This is an acceptable CPU load.
+				//
 				while (BytesAvailable > 0)
+				{
 					OnDataReceived(new EventArgs());
+					Thread.Sleep(0);
+				}
 			}
 			finally
 			{
 				Monitor.Exit(this.port_DataReceivedSyncObj);
 			}
 		}
+
+		// Additional information to the 'DataReceived' event
+		// --------------------------------------------------
+		// An improvement suggested by Marco Stroppel on 2011-02-17 doesn't work in case of YAT. Suggestion:
+		// 
+		//   The while(BytesAvailable > 0) fires endless events, because I did not call the Receive() method.
+		//   That was, because I receive only the data when the other port to write the data is opened. So the
+		//   BytesAvailable got never zero. My idea was (not knowing if this is good) to do something like:
+		//   
+		//   while(BytesAvailable > LastTimeBytesAvailable)
+		//   {
+		//       LastTimeBytesAvailable = BytesAvailable;
+		//       OnDataReceived(new EventArgs());
+		//   }
+		// 
+		// This suggestions doesn't work because YAT shall show every single byte as soon as it get's received.
+		// If 3 bytes are received while 5 bytes are taken out of the receive queue, no more event gets fired.
+		// Thus, the 3 bytes do not get shown until new data arrives. This is not acceptable.
 
 		/// <summary>
 		/// Asynchronously invoke incoming events to prevent potential dead-locks if close/dispose
