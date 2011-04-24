@@ -239,7 +239,7 @@ namespace YAT.Model.Utilities
 			}
 			finally
 			{
-				this.reader.Close(); // \fixme Does this really work? Stream is closed even though it is accessed by pd_PrintPage()...
+				this.reader.Close(); // \fixme: Does this really work? Stream is closed even though it is accessed by pd_PrintPage()...
 			}
 		}
 

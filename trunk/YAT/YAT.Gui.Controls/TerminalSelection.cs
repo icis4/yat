@@ -36,7 +36,7 @@ namespace YAT.Gui.Controls
 		// Constants
 		//==========================================================================================
 
-		/// <remarks>\fixme Replace this help text with a real help.</remarks>
+		/// <remarks>\fixme: Replace this help text with a real help.</remarks>
 		public static readonly string NewTerminalHelpText =
 			"Text vs. Binary:" + Environment.NewLine +
 			Environment.NewLine +

@@ -974,7 +974,7 @@ namespace YAT.Settings.Test
 		{
 			Assert.AreEqual(1, terminal.SettingsRoot.IO.SerialPort.PortId, "Serial port isn't set to COM1!");
 
-			// \todo
+			// \todo:
 			// Add tests that verify that terminals are interconnected.
 		}
 
@@ -989,7 +989,7 @@ namespace YAT.Settings.Test
 		{
 			Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals!");
 
-			// \todo
+			// \todo:
 			// Add tests that verify that terminals are interconnected.
 		}
 
@@ -1004,7 +1004,7 @@ namespace YAT.Settings.Test
 		{
 			Assert.AreEqual(Domain.IOType.UsbSerialHid, terminal.SettingsRoot.IOType, "Terminal isn't USB Ser/HID!");
 
-			// \todo
+			// \todo:
 			// Add tests that verify that USB device info is correct.
 		}
 
@@ -1019,7 +1019,7 @@ namespace YAT.Settings.Test
 		{
 			Assert.AreEqual(2, workspace.TerminalCount, "Workspace doesn't contain 2 terminals!");
 
-			// \todo
+			// \todo:
 			// Add tests that verify that terminals are interconnected.
 			// Retrieve terminals 1 and 2.
 			Model.Terminal terminal = null;
@@ -1042,7 +1042,7 @@ namespace YAT.Settings.Test
 			Assert.AreEqual("ÄÖÜ", command.Description);
 			Assert.AreEqual("ÄÖÜ", command.CommandLines[0]);
 
-			// \todo
+			// \todo:
 			// Add tests that verify that recent contains the two commands.
 		}
 

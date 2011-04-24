@@ -275,7 +275,7 @@ namespace YAT.Gui.Controls
 		{
 			if (!this.isSettingControls)
 			{
-				// \attention
+				// \attention:
 				// Do not assume that the selected item maches the actual text in the box
 				//   because SelectedItem is also set if text has changed in the meantime.
 
@@ -406,7 +406,8 @@ namespace YAT.Gui.Controls
 				comboBox_FlowControl.SelectedIndex = -1;
 			}
 
-			// \fixme Auto-reopen doesn't work because of deadlock issue mentioned in SerialPort.
+			// \fixme:
+			// Auto-reopen doesn't work because of deadlock issue mentioned in SerialPort.
 			if (Enabled)
 			{
 				checkBox_AutoReopen.Visible = false;

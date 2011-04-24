@@ -126,7 +126,7 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public new void AddRange(IEnumerable<DisplayElement> collection)
 		{
-			// \fixme 2010-04-01 / mky
+			// \fixme (2010-04-01 / mky):
 			// Weird InvalidOperationException when receiving large chunks of data.
 			try
 			{

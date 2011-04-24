@@ -25,7 +25,9 @@
 // Choose whether SerialPort should automatically detect and handle live disconnects/reconnects:
 // - Uncomment to enable
 // - Comment out to disable
-// \fixme Auto-reopen doesn't work because of deadlock issue mentioned below.
+//
+// \fixme:
+// Auto-reopen doesn't work because of deadlock issue mentioned below.
 //#define DETECT_BREAKS_AND_TRY_AUTO_REOPEN
 
 #region Using
@@ -913,7 +915,8 @@ namespace MKY.IO.Serial
 		}
 
 #if (FALSE)
-		// \fixme break state detection doesn't work
+		// \fixme:
+		// Break state detection doesn't work.
 		private bool aliveTimer_BreakState = false;
 #endif
 
@@ -935,7 +938,8 @@ namespace MKY.IO.Serial
 					#endif
 					}
 #if (FALSE)
-					// \fixme break state detection doesn't work
+					// \fixme
+					// Break state detection doesn't work.
 					else
 					{
 						// detect break state changes

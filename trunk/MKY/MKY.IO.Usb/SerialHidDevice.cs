@@ -74,7 +74,7 @@ namespace MKY.IO.Usb
 		/// </summary>
 		public static new DeviceInfo[] GetDevices()
 		{
-			// \fixme 2010-04-02 mky
+			// \fixme (2010-04-02 / mky):
 			// Ser/HID should be Generic/Undefined
 			//return (HidDevice.GetDevices(HidUsagePage.GenericDesktopControls, HidUsage.Undefined));
 			return (HidDevice.GetDevices());
@@ -93,7 +93,8 @@ namespace MKY.IO.Usb
 		private static object staticDeviceNotificationSyncObj = new object();
 
 		/// <remarks>
-		/// \attention This function also exists in the other USB classes. Changes here must also be applied there.
+		/// \attention:
+		/// This function also exists in the other USB classes. Changes here must also be applied there.
 		/// </remarks>
 		public static new void RegisterStaticDeviceNotificationHandler()
 		{
@@ -114,7 +115,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// \attention This function also exists in the other USB classes. Changes here must also be applied there.
+		/// \attention:
+		/// This function also exists in the other USB classes. Changes here must also be applied there.
 		/// </remarks>
 		public static new void UnregisterStaticDeviceNotificationHandler()
 		{
@@ -141,7 +143,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// \attention This function also exists in the other USB classes. Changes here must also be applied there.
+		/// \attention:
+		/// This function also exists in the other USB classes. Changes here must also be applied there.
 		/// </remarks>
 		private static void StaticDeviceNotificationHandler(ref Message m)
 		{
@@ -368,7 +371,7 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// \attention
+				// \attention:
 				// Do not call AssertNotDisposed() since IsOpen is used by AsyncReadCompleted()
 				// to detect devices that are just being closed or have already been closed.
 
@@ -397,11 +400,11 @@ namespace MKY.IO.Usb
 		{
 			get
 			{
-				// \attention
+				// \attention:
 				// Do not call AssertNotDisposed() since IsOpen is used by AsyncReadCompleted()
 				// to detect devices that are just being closed or have already been closed.
 
-				// \attention
+				// \attention:
 				// CloseStream() intentionally sets this.stream to null to ensure that this
 				// property also works during closing.
 
@@ -716,7 +719,7 @@ namespace MKY.IO.Usb
 		{
 			if (this.stream != null)
 			{
-				// \attention
+				// \attention:
 				// Set this.stream to null before initiating Close() to ensure that the IsOpen
 				// property returns false during closing. AsyncReadCompleted() will be called
 				// when Close() is initiated. AsyncReadCompleted() will check IsOpen.
@@ -756,7 +759,8 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <remarks>
-		/// \attention This function similarily exists in the other USB classes. Changes here may also be applied there.
+		/// \attention:
+		/// This function similarily exists in the other USB classes. Changes here may also be applied there.
 		/// </remarks>
 		private void Device_DeviceConnected(object sender, DeviceEventArgs e)
 		{
@@ -773,7 +777,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// \attention This function similarily exists in the other USB classes. Changes here may also be applied there.
+		/// \attention:
+		/// This function similarily exists in the other USB classes. Changes here may also be applied there.
 		/// </remarks>
 		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
 		{

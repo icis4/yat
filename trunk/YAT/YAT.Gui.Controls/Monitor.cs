@@ -614,7 +614,8 @@ namespace YAT.Gui.Controls
 					}
 				}
 #if (FALSE)
-				// \fixme Don't know how to alter image opacity yet
+				// \fixme:
+				// Don't know how to alter image opacity yet.
 				pictureBox_Monitor.Image.Opacity = this.imageOpacity
 #endif
 				if (this.imageOpacity >= ((MaxImageOpacity - MinImageOpacity) / 2))

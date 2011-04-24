@@ -522,7 +522,7 @@ namespace YAT.Domain
 			if (this.isEol != de.isEol)
 				throw (new InvalidOperationException("Cannot append because EOL doesn't match"));
 
-			// \fixme 2010-04-01 / mky
+			// \fixme (2010-04-01 / mky):
 			// Weird ArgumentException when receiving large chunks of data.
 			try
 			{

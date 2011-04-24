@@ -23,10 +23,10 @@ Comments
 --------
 
 Use special tags
-\todo
-\fixme
-\remind
-\attention
+\todo        :   \todo: <Description>        or   \todo (<Date> / <Author>): <Description>)
+\fixme       :   \fixme: <Description>       or   \fixme (<Date> / <Author>): <Description>)
+\remind      :   \remind: <Description>      or   \remind (<Date> / <Author>): <Description>)
+\attention   :   \attention: <Description>   or   \attention (<Date> / <Author>): <Description>)
 
 Use <c>null</c>
 

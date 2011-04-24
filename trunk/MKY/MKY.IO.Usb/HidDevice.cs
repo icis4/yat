@@ -138,7 +138,8 @@ namespace MKY.IO.Usb
 		private static object staticDeviceNotificationSyncObj = new object();
 
 		/// <remarks>
-		/// \attention This function also exists in the other USB classes. Changes here must also be applied there.
+		/// \attention:
+		/// This function also exists in the other USB classes. Changes here must also be applied there.
 		/// </remarks>
 		public static new void RegisterStaticDeviceNotificationHandler()
 		{
@@ -159,7 +160,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// \attention This function also exists in the other USB classes. Changes here must also be applied there.
+		/// \attention:
+		/// This function also exists in the other USB classes. Changes here must also be applied there.
 		/// </remarks>
 		public static new void UnregisterStaticDeviceNotificationHandler()
 		{
@@ -186,7 +188,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// \attention This function also exists in the other USB classes. Changes here must also be applied there.
+		/// \attention:
+		/// This function also exists in the other USB classes. Changes here must also be applied there.
 		/// </remarks>
 		private static void StaticDeviceNotificationHandler(ref Message m)
 		{
@@ -484,7 +487,8 @@ namespace MKY.IO.Usb
 		//==========================================================================================
 
 		/// <remarks>
-		/// \attention This function similarily exists in the other USB classes. Changes here may also be applied there.
+		/// \attention:
+		/// This function similarily exists in the other USB classes. Changes here may also be applied there.
 		/// </remarks>
 		private void Device_DeviceConnected(object sender, DeviceEventArgs e)
 		{
@@ -498,7 +502,8 @@ namespace MKY.IO.Usb
 		}
 
 		/// <remarks>
-		/// \attention This function similarily exists in the other USB classes. Changes here may also be applied there.
+		/// \attention:
+		/// This function similarily exists in the other USB classes. Changes here may also be applied there.
 		/// </remarks>
 		private void Device_DeviceDisconnected(object sender, DeviceEventArgs e)
 		{

@@ -260,7 +260,7 @@ namespace YAT.Gui.Controls
 		{
 			if (!this.isSettingControls)
 			{
-				// \attention
+				// \attention:
 				// Do not assume that the selected item maches the actual text in the box
 				//   because SelectedItem is also set if text has changed in the meantime.
 

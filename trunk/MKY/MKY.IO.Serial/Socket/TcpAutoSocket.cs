@@ -478,7 +478,7 @@ namespace MKY.IO.Serial
 
 		private void StopSockets()
 		{
-			// \remind
+			// \remind:
 			// The ALAZ sockets by default stop synchronously. However, due to some other issues
 			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
 			if (this.client != null)
@@ -591,12 +591,12 @@ namespace MKY.IO.Serial
 		{
 			SetStateAndNotify(SocketState.Restarting);
 
-			// \remind
+			// \remind:
 			// The ALAZ sockets by default stop synchronously. However, due to some other issues
 			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
 			StopSockets();
 
-			// \remind
+			// \remind:
 			//DisposeSockets();
 
 			StartAutoSocket();
@@ -606,12 +606,12 @@ namespace MKY.IO.Serial
 		{
 			SetStateAndNotify(SocketState.Stopping);
 
-			// \remind
+			// \remind:
 			// The ALAZ sockets by default stop synchronously. However, due to some other issues
 			//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
 			StopSockets();
 
-			// \remind
+			// \remind:
 			//DisposeSockets();
 
 			SetStateAndNotify(SocketState.Reset);

@@ -349,7 +349,7 @@ namespace YAT.Domain
 		}
 
 		/// <remarks>
-		/// \todo
+		/// \todo:
 		/// Currently, all respositories are cleared in any case. That is because repositories are
 		/// always reloaded from bidir. Without clearing all, contents reappear after a change to
 		/// the settings, e.g. switching radix. Issue is described in bug #3111508.

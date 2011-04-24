@@ -45,6 +45,11 @@ namespace YAT.Model.Test
 		//==========================================================================================
 
 		/// <summary></summary>
+		/// <remarks>
+		/// \todo:
+		/// This test set class should be improved such that it can also handle expectations on the
+		/// sender side (i.e. terminal A). Rationale: Testing of \!(Clear) behaviour.
+		/// </remarks>
 		public struct TestSet
 		{
 			/// <summary></summary>
@@ -55,6 +60,8 @@ namespace YAT.Model.Test
 			public readonly int[] ExpectedElementCounts;
 			/// <summary></summary>
 			public readonly int[] ExpectedDataCounts;
+			/// <summary></summary>
+			public readonly bool ExpectedAlsoApplyToA;
 
 			/// <summary></summary>
 			public TestSet(Model.Types.Command command)
@@ -66,18 +73,21 @@ namespace YAT.Model.Test
 				ExpectedDataCounts = new int[ExpectedLineCount];
 				for (int i = 0; i < ExpectedLineCount; i++)
 				{
-					ExpectedElementCounts[i] = 2; // 1 data element + 1 Eol element
+					ExpectedElementCounts[i] = 2; // 1 data element + 1 Eol element.
 					ExpectedDataCounts[i]    = command.CommandLines[i].Length;
 				}
+
+				ExpectedAlsoApplyToA = false;
 			}
 
 			/// <summary></summary>
-			public TestSet(Model.Types.Command command, int expectedLineCount, int[] expectedElementCounts, int[] expectedDataCounts)
+			public TestSet(Model.Types.Command command, int expectedLineCount, int[] expectedElementCounts, int[] expectedDataCounts, bool expectedAlsoApplyToA)
 			{
 				Command = command;
-				ExpectedLineCount = expectedLineCount;
+				ExpectedLineCount     = expectedLineCount;
 				ExpectedElementCounts = expectedElementCounts;
-				ExpectedDataCounts = expectedDataCounts;
+				ExpectedDataCounts    = expectedDataCounts;
+				ExpectedAlsoApplyToA  = expectedAlsoApplyToA;
 			}
 		}
 
@@ -245,10 +255,19 @@ namespace YAT.Model.Test
 
 		internal static void VerifyLines(List<Domain.DisplayLine> linesA, List<Domain.DisplayLine> linesB, TestSet testSet, int cycle)
 		{
+			// Compare the expected line count at the receiver side.
 			int expectedLineCount = testSet.ExpectedLineCount * cycle;
+			bool expectedLineCountMatchB = linesB.Count == expectedLineCount;
 
-			if ((linesB.Count == linesA.Count) &&
-				(linesB.Count == expectedLineCount))
+			// If both sides are expected to show the same line count, compare the counts.
+			// Otherwise, ignore the comparision.
+			bool expectedLineCountMatchAB;
+			if (testSet.ExpectedAlsoApplyToA)
+				expectedLineCountMatchAB = (linesB.Count == linesA.Count);
+			else
+				expectedLineCountMatchAB = true;
+
+			if (expectedLineCountMatchAB && expectedLineCountMatchB)
 			{
 				for (int i = 0; i < linesA.Count; i++)
 				{

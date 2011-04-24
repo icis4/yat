@@ -321,7 +321,9 @@ namespace YAT.Controller
 							using (Gui.Forms.Main view = new Gui.Forms.Main(model))
 							{
 								// Start the Win32 message loop on the current thread and the main form.
-								// \attention This call does not return until the application exits.
+								//
+								// \attention:
+								// This call does not return until the application exits.
 								Application.Run(view);
 							}
 						}

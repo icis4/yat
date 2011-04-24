@@ -378,7 +378,7 @@ namespace YAT.Gui.Forms
 			// Not needed yet: isSettingControls = false;
 
 #if (FALSE)
-			// \fixme
+			// \fixme:
 			// I don't know how to fix bug #1808494 "MDI window list invisible if no MDI children".
 			// The following code doesn't fix it. Could it even be a .NET bug?
 			if (childIsReady)

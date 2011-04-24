@@ -110,7 +110,7 @@ namespace MKY.Event
 #endif
 
 		/// <remarks>
-		/// \fixme
+		/// \fixme:
 		/// Not an optimal solution. Added to fix an issue with asynchronous timers in
 		/// <see cref="MKY.Time.Chronometer"/>. Should be replaced by a real solution.
 		/// </remarks>
@@ -122,7 +122,7 @@ namespace MKY.Event
 		}
 
 		/// <remarks>
-		/// \fixme
+		/// \fixme:
 		/// Not an optimal solution. Added to fix an issue with asynchronous timers in
 		/// <see cref="MKY.Time.Chronometer"/>. Should be replaced by a real solution.
 		/// </remarks>
