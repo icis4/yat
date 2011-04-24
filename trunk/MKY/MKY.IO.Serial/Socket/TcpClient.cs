@@ -43,6 +43,12 @@ namespace MKY.IO.Serial
 
 		private enum SocketState
 		{
+			/// <summary>
+			/// The reset state is necessary to differentiate between not yet started or stopped
+			/// sockets vs started but disconnected sockets.
+			/// </summary>
+			Reset,
+
 			Connecting,
 			Connected,
 			Disconnecting,
@@ -74,7 +80,7 @@ namespace MKY.IO.Serial
 		private int remotePort;
 		private AutoRetry autoReconnect;
 
-		private SocketState state = SocketState.Disconnected;
+		private SocketState state = SocketState.Reset;
 		private object stateSyncObj = new object();
 
 		private ALAZ.SystemEx.NetEx.SocketsEx.SocketClient socket;
@@ -231,7 +237,7 @@ namespace MKY.IO.Serial
 				AssertNotDisposed();
 				switch (this.state)
 				{
-					case SocketState.Disconnected:
+					case SocketState.Reset:
 					case SocketState.Error:
 					{
 						return (true);
@@ -247,22 +253,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public virtual bool IsStarted
 		{
-			get
-			{
-				AssertNotDisposed();
-				switch (this.state)
-				{
-					case SocketState.Connected:
-					case SocketState.WaitingForReconnect:
-					{
-						return (true);
-					}
-					default:
-					{
-						return (false);
-					}
-				}
-			}
+			get { return (!IsStopped); }
 		}
 
 		/// <summary></summary>
@@ -557,14 +548,13 @@ namespace MKY.IO.Serial
 			// Dispose ALAZ socket in any case. A new socket will be created if needed.
 			DisposeSocketAndSocketConnection();
 
+			// Signal that socket got disconnected to ensure that auto reconnect is allowed.
+			SetStateAndNotify(SocketState.Disconnected);
+
 			if (AutoReconnectEnabledAndAllowed)
 			{
 				SetStateAndNotify(SocketState.WaitingForReconnect);
 				StartReconnectTimer();
-			}
-			else
-			{
-				SetStateAndNotify(SocketState.Disconnected);
 			}
 		}
 
@@ -578,6 +568,9 @@ namespace MKY.IO.Serial
 		{
 			// Dispose ALAZ socket in any case. A new socket will be created if needed.
 			DisposeSocketAndSocketConnection();
+
+			// Signal that socket got disconnected to ensure that auto reconnect is allowed.
+			SetStateAndNotify(SocketState.Disconnected);
 
 			if (AutoReconnectEnabledAndAllowed)
 			{

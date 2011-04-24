@@ -229,22 +229,7 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public virtual bool IsStarted
 		{
-			get
-			{
-				AssertNotDisposed();
-				switch (this.state)
-				{
-					case SocketState.Listening:
-					case SocketState.Accepted:
-					{
-						return (true);
-					}
-					default:
-					{
-						return (false);
-					}
-				}
-			}
+			get { return (!IsStopped); }
 		}
 
 		/// <summary></summary>

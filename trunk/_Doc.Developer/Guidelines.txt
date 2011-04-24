@@ -29,6 +29,8 @@ Use special tags
 \attention   :   \attention: <Description>   or   \attention (<Date> / <Author>): <Description>)
 
 Use <c>null</c>
+Use <c>true</c>
+Use <c>false</c>
 
 
 Preprocessor statements

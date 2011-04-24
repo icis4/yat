@@ -69,6 +69,8 @@ Fixed bugs:
 - Predefined commands are also put into list of recent commands (bug #3146622)
 - Local interface again is properly set when switching from COM port to TCP/IP socket (bug #3176815)
 - Exception when switching terminal type to USB Ser/HID fixed (bug #3290317)
+- TCP/IP client auto-reconnect fixed (bug #3285780)
+- TCP/IP servers can be closed and reopened again (bug #3137057)
 - Exception when closing/reopening terminals quickly (e.g. out of a script) fixed (bug #3137047)
 - Exception on clearing monitors fixed by improving thread-safety on raw and display repositories
 - Exception on receiving fixed by improving thread-safety on raw and display repositories
