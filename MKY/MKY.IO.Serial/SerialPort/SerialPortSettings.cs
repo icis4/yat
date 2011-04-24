@@ -35,8 +35,10 @@ namespace MKY.IO.Serial
 	[Serializable]
 	public class SerialPortSettings : MKY.Settings.Settings
 	{
-		/// <summary></summary>
-		public static readonly AutoRetry AutoReopenDefault = new AutoRetry(true, 2000);
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
 
 		/// <summary></summary>
 		public const bool ReplaceParityErrorsDefault = false;
@@ -50,6 +52,29 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public const bool NoSendOnInputBreakDefault = false;
 
+		#endregion
+
+		#region Static Properties
+		//==========================================================================================
+		// Static Properties
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static AutoRetry AutoReopenDefault
+		{
+			// Must be implemented as property that creates a new id object on each call to
+			// ensure that there aren't multiple clients referencing (and modifying) the same
+			// id object.
+			get { return (new AutoRetry(true, 2000)); }
+		}
+
+		#endregion
+
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
 		private SerialPortId portId;
 		private SerialCommunicationSettings communication;
 		private AutoRetry autoReopen;
@@ -59,6 +84,13 @@ namespace MKY.IO.Serial
 		private bool dtrEnabled;
 		private bool noSendOnOutputBreak;
 		private bool noSendOnInputBreak;
+
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
 
 		/// <summary></summary>
 		public SerialPortSettings()
@@ -127,6 +159,8 @@ namespace MKY.IO.Serial
 			NoSendOnOutputBreak    = NoSendOnOutputBreakDefault;
 			NoSendOnInputBreak       = NoSendOnInputBreakDefault;
 		}
+
+		#endregion
 
 		#region Properties
 		//==========================================================================================

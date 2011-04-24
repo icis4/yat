@@ -66,6 +66,21 @@ namespace MKY.IO.Usb
 
 		#endregion
 
+		#region Static Lifetime
+		//==========================================================================================
+		// Static Lifetime
+		//==========================================================================================
+
+		/// <summary></summary>
+		static DeviceInfo()
+		{
+			// "VID:0ABC / PID:1234" or "vid_0ABC & pid_1234"
+			VendorIdRegex  = new Regex(@"VID[^0-9a-fA-F](?<vendorId>[0-9a-fA-F]+)",  RegexOptions.IgnoreCase | RegexOptions.Compiled);
+			ProductIdRegex = new Regex(@"PID[^0-9a-fA-F](?<productId>[0-9a-fA-F]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+		}
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -79,21 +94,6 @@ namespace MKY.IO.Usb
 		private string manufacturer;
 		private string product;
 		private string serialNumber;
-
-		#endregion
-
-		#region Static Lifetime
-		//==========================================================================================
-		// Static Lifetime
-		//==========================================================================================
-
-		/// <summary></summary>
-		static DeviceInfo()
-		{
-			// "VID:0ABC / PID:1234" or "vid_0ABC & pid_1234"
-			VendorIdRegex  = new Regex(@"VID[^0-9a-fA-F](?<vendorId>[0-9a-fA-F]+)",  RegexOptions.IgnoreCase | RegexOptions.Compiled);
-			ProductIdRegex = new Regex(@"PID[^0-9a-fA-F](?<productId>[0-9a-fA-F]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-		}
 
 		#endregion
 
