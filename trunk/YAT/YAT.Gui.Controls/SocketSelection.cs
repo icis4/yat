@@ -43,11 +43,11 @@ namespace YAT.Gui.Controls
 
 		private const SocketHostType DefaultHostType                     = SocketHostType.TcpAutoSocket;
 
-		private static readonly IPHost DefaultRemoteHost                = MKY.IO.Serial.SocketSettings.DefaultRemoteHost;
+		private static readonly IPHost DefaultRemoteHost                 = MKY.IO.Serial.SocketSettings.DefaultRemoteHost;
 		private static readonly IPAddress DefaultResolvedRemoteIPAddress = MKY.IO.Serial.SocketSettings.DefaultResolvedRemoteIPAddress;
 		private const int DefaultRemotePort                              = MKY.IO.Serial.SocketSettings.DefaultRemotePort;
 
-		private static readonly IPNetworkInterface DefaultLocalInterface  = MKY.IO.Serial.SocketSettings.DefaultLocalInterface;
+		private static readonly IPNetworkInterface DefaultLocalInterface = MKY.IO.Serial.SocketSettings.DefaultLocalInterface;
 		private static readonly IPAddress DefaultResolvedLocalIPAddress  = MKY.IO.Serial.SocketSettings.DefaultResolvedLocalIPAddress;
 		private const int DefaultLocalTcpPort                            = MKY.IO.Serial.SocketSettings.DefaultLocalTcpPort;
 		private const int DefaultLocalUdpPort                            = MKY.IO.Serial.SocketSettings.DefaultLocalUdpPort;

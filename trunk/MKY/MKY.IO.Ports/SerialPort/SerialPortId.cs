@@ -61,17 +61,6 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		public const string FirstStandardPortName = "COM1";
 
-		/// <summary>
-		/// First standard port.
-		/// </summary>
-		/// <remarks>
-		/// This static object can be used as default port. Using <see cref="FirstAvailablePort"/>
-		/// below is way less performant since it needs to search for available ports. Searching
-		/// for available ports takes quite some time, especially if checking whether the ports
-		/// are in use.
-		/// </remarks>
-		public static readonly SerialPortId FirstStandardPort = new SerialPortId(FirstStandardPortNumber);
-
 		/// <summary></summary>
 		public const string DefaultInUseText = "(in use)";
 
@@ -92,24 +81,6 @@ namespace MKY.IO.Ports
 
 		/// <summary></summary>
 		public static readonly Regex UserPortNameRegex;
-
-		#endregion
-
-		#region Fields
-		//==========================================================================================
-		// Fields
-		//==========================================================================================
-
-		private string name = FirstStandardPortName;
-		private int standardPortNumber = FirstStandardPortNumber;
-
-		private string description;
-		private bool hasDescriptonFromSystem;
-
-		private bool isInUse;
-		private string inUseText = "";
-
-		private string separator = DefaultSeparator;
 
 		#endregion
 
@@ -136,6 +107,23 @@ namespace MKY.IO.Ports
 		//==========================================================================================
 
 		/// <summary>
+		/// First standard port.
+		/// </summary>
+		/// <remarks>
+		/// This property can be used as default port. Using <see cref="FirstAvailablePort"/>
+		/// below is way less performant since it needs to search for available ports. Searching
+		/// for available ports takes quite some time, especially if checking whether the ports
+		/// are in use.
+		/// </remarks>
+		public static SerialPortId FirstStandardPort
+		{
+			// Must be implemented as property that creates a new id object on each call to
+			// ensure that there aren't multiple clients referencing (and modifying) the same
+			// id object.
+			get { return (new SerialPortId(FirstStandardPortNumber)); }
+		}
+
+		/// <summary>
 		/// Returns the first port available, usually "COM1".
 		/// Returns <c>null</c> if no ports are available.
 		/// </summary>
@@ -152,6 +140,24 @@ namespace MKY.IO.Ports
 					return (null);
 			}
 		}
+
+		#endregion
+
+		#region Fields
+		//==========================================================================================
+		// Fields
+		//==========================================================================================
+
+		private string name = FirstStandardPortName;
+		private int standardPortNumber = FirstStandardPortNumber;
+
+		private string description;
+		private bool hasDescriptonFromSystem;
+
+		private bool isInUse;
+		private string inUseText = "";
+
+		private string separator = DefaultSeparator;
 
 		#endregion
 

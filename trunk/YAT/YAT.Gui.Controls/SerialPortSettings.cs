@@ -56,7 +56,7 @@ namespace YAT.Gui.Controls
 		private System.IO.Ports.Parity          parity      = ParityDefault;
 		private System.IO.Ports.StopBits        stopBits    = StopBitsDefault;
 		private MKY.IO.Serial.SerialFlowControl flowControl = FlowControlDefault;
-		private MKY.IO.Serial.AutoRetry         autoReopen = MKY.IO.Serial.SerialPortSettings.AutoReopenDefault;
+		private MKY.IO.Serial.AutoRetry         autoReopen  = MKY.IO.Serial.SerialPortSettings.AutoReopenDefault;
 
 		#endregion
 
