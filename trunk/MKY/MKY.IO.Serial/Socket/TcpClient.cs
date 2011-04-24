@@ -351,9 +351,14 @@ namespace MKY.IO.Serial
 			AssertNotDisposed();
 
 			if (IsStarted)
+			{
+				StopAndDisposeReconnectTimer();
 				StopSocket();
+			}
 			else
+			{
 				Debug.WriteLine(GetType() + "     (" + this.instanceId + ")(               " + ToShortEndPointString() + "): Stop() requested but state is " + this.state + ".");
+			}
 		}
 
 		/// <summary></summary>
@@ -445,13 +450,17 @@ namespace MKY.IO.Serial
 
 				// \remind:
 				// The ALAZ sockets by default stop synchronously. However, due to some other issues
-				//   the ALAZ sockets had to be modified. The modified version stops asynchronously.
+				// the ALAZ sockets had to be modified. The modified version stops asynchronously.
+				// Thus, care has to be taken here and in the 'OnException' event. That event will
+				// fire at least once after this method has been called.
 				this.socket.Stop();
 			}
 			else
 			{
 				// Nothing to do.
 			}
+
+			SetStateAndNotify(SocketState.Reset);
 		}
 
 		/// <summary>
@@ -561,6 +570,10 @@ namespace MKY.IO.Serial
 		/// <summary>
 		/// Fired when exception occurs.
 		/// </summary>
+		/// <remarks>
+		/// \attention:
+		/// This event is also fired on reconnect attempts of autor-reconnect!
+		/// </remarks>
 		/// <param name="e">
 		/// Information about the exception and connection.
 		/// </param>
@@ -569,21 +582,29 @@ namespace MKY.IO.Serial
 			// Dispose ALAZ socket in any case. A new socket will be created if needed.
 			DisposeSocketAndSocketConnection();
 
-			// Signal that socket got disconnected to ensure that auto reconnect is allowed.
-			SetStateAndNotify(SocketState.Disconnected);
+			// \attention:
+			// Ensure that exceptions are only handled if socket is still active. This is important
+			// especially in case of Stop() because stopping will be done asynchronously and an
+			// 'OnException' event will be fired after stopping has finished. Then, this event
+			// handler must not signal any state anymore, nor does it need to try to reconnect.
+			if (IsStarted)
+			{
+				// Signal that socket got disconnected to ensure that auto reconnect is allowed.
+				SetStateAndNotify(SocketState.Disconnected);
 
-			if (AutoReconnectEnabledAndAllowed)
-			{
-				SetStateAndNotify(SocketState.WaitingForReconnect);
-				StartReconnectTimer();
-			}
-			else
-			{
-				SetStateAndNotify(SocketState.Error);
-				if (e.Exception is ALAZ.SystemEx.NetEx.SocketsEx.ReconnectAttemptException)
-					OnIOError(new IOErrorEventArgs(IOErrorSeverity.Acceptable, "Failed to connect to TCP server " + this.remoteIPAddress + ":" + this.remotePort));
+				if (AutoReconnectEnabledAndAllowed)
+				{
+					SetStateAndNotify(SocketState.WaitingForReconnect);
+					StartReconnectTimer();
+				}
 				else
-					OnIOError(new IOErrorEventArgs(e.Exception.Message));
+				{
+					SetStateAndNotify(SocketState.Error);
+					if (e.Exception is ALAZ.SystemEx.NetEx.SocketsEx.ReconnectAttemptException)
+						OnIOError(new IOErrorEventArgs(IOErrorSeverity.Acceptable, "Failed to connect to TCP server " + this.remoteIPAddress + ":" + this.remotePort));
+					else
+						OnIOError(new IOErrorEventArgs(e.Exception.Message));
+				}
 			}
 		}
 
