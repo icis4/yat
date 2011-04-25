@@ -79,7 +79,8 @@ Note:	The whole release process takes about 6 hours
 	[ ] Add a new directory to the offline archive "\YAT\Releases and Checkpoints"
 	[ ] Check and update year of "!-ReadMe.txt" in the release package directories
 	[ ] Add the cumulative release notes to the release package directories
-	[ ] Zip the distribution packages with new version names and numbers
+
+	Note: The distribution packages will be packed further below
 
 
 8.	Build YAT                                                                           0:20 / 3:00
@@ -121,6 +122,8 @@ Note:	The whole release process takes about 6 hours
 				> Copy to...
 					> New name e.g. "<...>/tags/yat-1-99-25-beta-3-candidate-3"
 					> Message  e.g. "YAT 2.0 Beta 3 Candidate 3 Version 1.99.25"
+			> Select 'tags'
+				> Check tag
 
 
 14.	Pack YAT                                                                            0:15 / 4:00
