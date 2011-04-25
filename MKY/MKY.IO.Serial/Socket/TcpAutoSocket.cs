@@ -781,13 +781,13 @@ namespace MKY.IO.Serial
 
 		private void client_DataReceived(object sender, EventArgs e)
 		{
-			if (IsClient)
+			if (!IsDisposed && IsClient)
 				OnDataReceived(e);
 		}
 
 		private void client_DataSent(object sender, EventArgs e)
 		{
-			if (IsClient)
+			if (!IsDisposed && IsClient)
 				OnDataSent(e);
 		}
 
@@ -883,13 +883,13 @@ namespace MKY.IO.Serial
 
 		private void server_DataReceived(object sender, EventArgs e)
 		{
-			if (IsServer)
+			if (!IsDisposed && IsServer)
 				OnDataReceived(e);
 		}
 
 		private void server_DataSent(object sender, EventArgs e)
 		{
-			if (IsServer)
+			if (!IsDisposed && IsServer)
 				OnDataSent(e);
 		}
 

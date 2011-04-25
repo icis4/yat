@@ -576,7 +576,7 @@ namespace MKY.IO.Serial
 			// \attention:
 			// The same code is needed in 'OnException' below. Changes here may also have to be
 			// applied there.
-			if (IsStarted)
+			if (!IsDisposed && IsStarted)
 			{
 				// Signal that socket got disconnected to ensure that auto reconnect is allowed.
 				SetStateSynchronizedAndNotify(SocketState.Disconnected);
@@ -613,7 +613,7 @@ namespace MKY.IO.Serial
 			// \attention:
 			// The same code is needed in 'OnDisconnected' above. Changes here may also have to be
 			// applied there.
-			if (IsStarted)
+			if (!IsDisposed && IsStarted)
 			{
 				// Signal that socket got disconnected to ensure that auto reconnect is allowed.
 				SetStateSynchronizedAndNotify(SocketState.Disconnected);

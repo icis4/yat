@@ -240,7 +240,7 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                 }
                 catch (ObjectDisposedException ex)
                 {
-                    MKY.Diagnostics.DebugEx.WriteException(this.GetType(), ex);
+                    MKY.Diagnostics.DebugEx.WriteException(this.GetType(), ex, "This exception is intentionally output for debugging purposes only");
                 }
                 // ----- \remind  END  -----
 

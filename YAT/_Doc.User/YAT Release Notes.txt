@@ -56,6 +56,7 @@ Important changes:
    > There should no longer be undesired multiple exceptions
 - Links to SourceForge trackers now contain filter and sort (feature request #3160872)
 - Application information and dialog and message texts unified
+- Some Unicode UTF-8/16/32 testing added (bug #1931537)
 - .yat/.yaw/.xml files are preambled with UTF-8 byte order mark (BOM) (feature request #3144111)
 - All source code and text files converted to UTF-8, including byte order mark (BOM)
 - HowTo on optional user test config and settings templates added (related to #2838447/#2981764)
@@ -91,7 +92,6 @@ Limitations and known issues:
   (feature request #2848228)
 - USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
   of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
-- UTF-16/32 testing pending (bug #1931537)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)
 - Text terminals: Wait for answer line not yet implemented (feature request #1808509)
 - Terminal/direct mode does not yet support special formats and commands (feature request #1808496)

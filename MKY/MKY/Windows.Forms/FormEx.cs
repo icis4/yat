@@ -27,11 +27,7 @@ namespace MKY.Windows.Forms
 	/// <summary>
 	/// System.Windows.Forms utility methods.
 	/// </summary>
-	/// <remarks>
-	/// This class is intentionally not placed into <c>MKY.Windows.Forms</c> since it's a
-	/// pure utility containing no visual contents.
-	/// </remarks>
-	public static class FormEx
+	public static class ControlEx
 	{
 		/// <summary>
 		/// Manual <see cref="FormStartPosition.CenterParent"/> because automatic doesn't work
@@ -40,7 +36,7 @@ namespace MKY.Windows.Forms
 		/// <param name="parent">Parent form.</param>
 		/// <param name="child">Child form to be placed to the center of the parent.</param>
 		/// <returns>Center parent location.</returns>
-		public static Point CalculateManualCenterParentLocation(Form parent, Form child)
+		public static Point CalculateManualCenterParentLocation(Control parent, Control child)
 		{
 			int left = parent.Left + (parent.Width  / 2) - (child.Width  / 2);
 			int top  = parent.Top  + (parent.Height / 2) - (child.Height / 2);
