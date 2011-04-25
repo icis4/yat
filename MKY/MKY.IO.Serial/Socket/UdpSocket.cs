@@ -388,7 +388,17 @@ namespace MKY.IO.Serial
 		// State Methods
 		//==========================================================================================
 
-		private void SetStateAndNotify(SocketState state)
+		private SocketState GetStateSynchronized()
+		{
+			SocketState state;
+
+			lock (this.stateSyncObj)
+				state = this.state;
+
+			return (state);
+		}
+
+		private void SetStateSynchronizedAndNotify(SocketState state)
 		{
 #if (DEBUG)
 			SocketState oldState = this.state;
@@ -410,13 +420,13 @@ namespace MKY.IO.Serial
 
 		private void StartSocket()
 		{
-			SetStateAndNotify(SocketState.Opening);
+			SetStateSynchronizedAndNotify(SocketState.Opening);
 
 			this.endPoint = new System.Net.IPEndPoint(this.remoteIPAddress, this.remotePort);
 			this.socket = new System.Net.Sockets.UdpClient(this.localPort);
 			this.socket.Connect(this.endPoint);
 
-			SetStateAndNotify(SocketState.Opened);
+			SetStateSynchronizedAndNotify(SocketState.Opened);
 
 			// Immediately begin receiving data.
 			BeginReceive();
@@ -424,9 +434,9 @@ namespace MKY.IO.Serial
 
 		private void StopSocket()
 		{
-			SetStateAndNotify(SocketState.Closing);
+			SetStateSynchronizedAndNotify(SocketState.Closing);
 			CloseAndDisposeSocket();
-			SetStateAndNotify(SocketState.Closed);
+			SetStateSynchronizedAndNotify(SocketState.Closed);
 		}
 
 		private void CloseAndDisposeSocket()
@@ -438,7 +448,7 @@ namespace MKY.IO.Serial
 		private void SocketError()
 		{
 			CloseAndDisposeSocket();
-			SetStateAndNotify(SocketState.Error);
+			SetStateSynchronizedAndNotify(SocketState.Error);
 		}
 
 		#endregion

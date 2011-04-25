@@ -131,7 +131,7 @@
         </RxDisplay>
       </BinaryTerminal>
     </Terminal>
-    <PredefinedCommand>
+    <PredefinedCommand />
     <Format>
       <Font>
         <Name>DejaVu Sans Mono</Name>

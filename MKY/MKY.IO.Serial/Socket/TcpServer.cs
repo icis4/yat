@@ -214,6 +214,7 @@ namespace MKY.IO.Serial
 				switch (this.state)
 				{
 					case SocketState.Reset:
+					case SocketState.Stopping:
 					case SocketState.Error:
 					{
 						return (true);
@@ -371,7 +372,17 @@ namespace MKY.IO.Serial
 		// State Methods
 		//==========================================================================================
 
-		private void SetStateAndNotify(SocketState state)
+		private SocketState GetStateSynchronized()
+		{
+			SocketState state;
+
+			lock (this.stateSyncObj)
+				state = this.state;
+
+			return (state);
+		}
+
+		private void SetStateSynchronizedAndNotify(SocketState state)
 		{
 #if (DEBUG)
 			SocketState oldState = this.state;
@@ -393,7 +404,7 @@ namespace MKY.IO.Serial
 
 		private void StartSocket()
 		{
-			SetStateAndNotify(SocketState.Listening);
+			SetStateSynchronizedAndNotify(SocketState.Listening);
 
 			this.socket = new ALAZ.SystemEx.NetEx.SocketsEx.SocketServer
 				(
@@ -413,7 +424,7 @@ namespace MKY.IO.Serial
 
 		private void StopSocket()
 		{
-			SetStateAndNotify(SocketState.Stopping);
+			SetStateSynchronizedAndNotify(SocketState.Stopping);
 
 			// \remind:
 			// The ALAZ sockets by default stop synchronously. However, due to some other issues
@@ -454,7 +465,7 @@ namespace MKY.IO.Serial
 			lock (this.socketConnections)
 				this.socketConnections.Add(e.Connection);
 
-			SetStateAndNotify(SocketState.Accepted);
+			SetStateSynchronizedAndNotify(SocketState.Accepted);
 
 			// Immediately begin receiving data.
 			e.Connection.BeginReceive();
@@ -507,10 +518,11 @@ namespace MKY.IO.Serial
 
 			if (!isConnected)
 			{
-				switch (this.state)
+				SocketState state = GetStateSynchronized();
+				switch (state)
 				{
-					case SocketState.Accepted: SetStateAndNotify(SocketState.Listening); break;
-					case SocketState.Stopping: SetStateAndNotify(SocketState.Reset);     break;
+					case SocketState.Accepted: SetStateSynchronizedAndNotify(SocketState.Listening); break;
+					case SocketState.Stopping: SetStateSynchronizedAndNotify(SocketState.Reset);     break;
 					default: break; // No state change in all other cases.
 				}
 			}
@@ -526,7 +538,7 @@ namespace MKY.IO.Serial
 		{
 			DisposeSocketAndSocketConnections();
 
-			SetStateAndNotify(SocketState.Error);
+			SetStateSynchronizedAndNotify(SocketState.Error);
 			OnIOError(new IOErrorEventArgs(e.Exception.Message));
 		}
 
