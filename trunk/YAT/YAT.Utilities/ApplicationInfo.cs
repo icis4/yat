@@ -26,13 +26,13 @@ namespace YAT.Utilities
 	public static class ApplicationInfo
 	{
 	/////// <summary></summary>
-	////public const string ProductBuildName = "";
+	////public const string ProductBuildName = " Final";
 
 	/////// <summary></summary>
 	////public const string ProductBuildName = " Beta 3";
 
 		/// <summary></summary>
-		public const string ProductBuildName = " Beta 3 Candidate 4";
+		public const string ProductBuildName = " Beta 3 Candidate 5";
 
 	/////// <summary></summary>
 	////public const string ProductBuildName = " Beta 3 Preliminary";
