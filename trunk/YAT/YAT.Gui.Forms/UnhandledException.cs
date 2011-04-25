@@ -137,7 +137,7 @@ namespace YAT.Gui.Forms
 		{
 			Gui.Forms.TrackerInstructions f = new Gui.Forms.TrackerInstructions(Gui.Forms.TrackerInstructions.Tracker.Bug);
 			f.StartPosition = FormStartPosition.Manual;
-			f.Location = FormEx.CalculateManualCenterParentLocation(this, f);
+			f.Location = ControlEx.CalculateManualCenterParentLocation(this, f);
 			f.Show(this);
 		}
 

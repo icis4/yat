@@ -77,9 +77,9 @@ Note:	The whole release process takes about 6 hours
 7.	Prepare package directory                                                           0:10 / 2:40
 	-----------------------------------------------------------------------------------------------
 	[ ] Add a new directory to the offline archive "\YAT\Releases and Checkpoints"
-	[ ] Update version names and numbers
 	[ ] Check and update year of "!-ReadMe.txt" in the release package directories
 	[ ] Add the cumulative release notes to the release package directories
+	[ ] Zip the distribution packages with new version names and numbers
 
 
 8.	Build YAT                                                                           0:20 / 3:00
@@ -106,14 +106,15 @@ Note:	The whole release process takes about 6 hours
 	[ ] According to manual after-installation test cases
 
 
-12.	Close feature requests and bugs that are covered by release                         0:00 / 3:30
+12.	Feature request and bug trackers                                                    0:00 / 3:30
 	-----------------------------------------------------------------------------------------------
-	[ ] Ensure that items have been closed
+	[ ] Ensure that items that are covered by this release have been closed
 
 
 13.	Commit and tag YAT                                                                  0:15 / 3:45
 	-----------------------------------------------------------------------------------------------
 	[ ] Commit any modifications to the subversion repository
+		> Message e.g. "YAT 2.0 Beta 3 Candidate 3 Version 1.99.25"
 	[ ] Tag/checkpoint the project
 		> SVN > Repo Browser
 			> Select 'trunk'

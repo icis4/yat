@@ -18,6 +18,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+using NUnit;
 using NUnit.Framework;
 
 namespace YAT.Model.Test
@@ -40,6 +41,7 @@ namespace YAT.Model.Test
 		/// Starts 100 terminals in parallel and lets them work on 100 data firing devices.
 		/// </summary>
 		[Test]
+		[StressCategory, MinuteDurationCategory(1)]
 		public virtual void HeavySimultaneousUsage()
 		{
 			// Nothing yet (waiting for PowerShell intro to build stress test script).
