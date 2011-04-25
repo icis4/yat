@@ -144,8 +144,8 @@ Note:	The whole release process takes about 6 hours
 	[ ] Send as "y-a-terminal@users.sourceforge.net"
 	[ ] Send to "y-a-terminal-users@lists.sourceforge.net"
 	[ ] Send as text and HTML formatted
-	[ ] Accept e-mail as moderator in mailman
 	[ ] Save e-mail in offline archive "\Distribution"
+	[ ] Accept e-mail as moderator in mailman if needed
 
 
 17.	Commit YAT                                                                          0:00 / 5:00
@@ -163,7 +163,7 @@ Note:	The whole release process takes about 6 hours
 
 19.	Archive YAT                                                                         0:15 / 5:45
 	-----------------------------------------------------------------------------------------------
-	[ ] Export the new working copy to offline archive "\YAT\Releases and Checkpoints\Working Copy"
+	[ ] Export the new working copy to offline archive "<Version>\Working Copy"
 		> SVN > Export...
 	[ ] Pack the copy into a properly named zip file
 
@@ -171,6 +171,8 @@ Note:	The whole release process takes about 6 hours
 20.	Update and verify YAT working copy                                                  0:15 / 6:00
 	-----------------------------------------------------------------------------------------------
 	[ ] Open the YAT solution
+	[ ] Fold all projects
+	[ ] Set 'YAT' as the active startup project
 	[ ] Increment product name and versions according to 1. and 2.
 	[ ] Verify that the solution still properly builds and runs
 	[ ] Commit modifications to the subversion repository
