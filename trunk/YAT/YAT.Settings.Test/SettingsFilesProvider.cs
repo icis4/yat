@@ -55,6 +55,7 @@ namespace YAT.Settings.Test
 	{
 		W_04_Matthias,
 		W_06_Matthias,
+		W_08_Matthias,
 	}
 
 	#pragma warning restore 1591
@@ -144,6 +145,9 @@ namespace YAT.Settings.Test
 		/// <summary></summary>
 		public static readonly SettingsFilePaths FilePaths_V1_99_25;
 
+		/// <summary></summary>
+		public static readonly SettingsFilePaths FilePaths_V1_99_26;
+
 		#endregion
 
 		#region Static Lifetime
@@ -229,6 +233,18 @@ namespace YAT.Settings.Test
 			FilePaths_V1_99_25.AddTerminalFileName(TerminalSettingsTestCases.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
 			FilePaths_V1_99_25.AddWorkspaceFileName(WorkspaceSettingsTestCases.W_06_Matthias, "06 - Matthias.yaw");
 			FilePaths_V1_99_25.AddTerminalFileName(TerminalSettingsTestCases.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed, "07 - USB SerHID (VID0EB8) (PID2200) MK.8 - Closed.yat");
+
+			// V1.99.26
+			FilePaths_V1_99_26 = new SettingsFilePaths("2011-04-25 - YAT 2.0 Beta 3 Candidate 4 Version 1.99.26");
+
+			FilePaths_V1_99_26.AddTerminalFileName(TerminalSettingsTestCases.T_01_COM1_Open_Default, "01 - COM1 - Open.yat");
+			FilePaths_V1_99_26.AddTerminalFileName(TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200, "02 - COM2 - Open - Binary - 115200.yat");
+			FilePaths_V1_99_26.AddTerminalFileName(TerminalSettingsTestCases.T_03_COM1_Closed_Predefined, "03 - COM1 - Closed - Predefined.yat");
+			FilePaths_V1_99_26.AddWorkspaceFileName(WorkspaceSettingsTestCases.W_04_Matthias, "04 - Matthias.yaw");
+			FilePaths_V1_99_26.AddTerminalFileName(TerminalSettingsTestCases.T_05_COM1_Open_Recent, "05 - COM1 - Open - Recent.yat");
+			FilePaths_V1_99_26.AddWorkspaceFileName(WorkspaceSettingsTestCases.W_06_Matthias, "06 - Matthias.yaw");
+			FilePaths_V1_99_26.AddTerminalFileName(TerminalSettingsTestCases.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed, "07 - USB SerHID (VID0EB8) (PID2200) MK.8 - Closed.yat");
+			FilePaths_V1_99_26.AddWorkspaceFileName(WorkspaceSettingsTestCases.W_08_Matthias, "08 - Matthias.yaw");
 		}
 
 		#endregion
@@ -241,7 +257,7 @@ namespace YAT.Settings.Test
 		/// <summary></summary>
 		public static SettingsFilePaths FilePaths_Current
 		{
-			get { return (FilePaths_V1_99_25); }
+			get { return (FilePaths_V1_99_26); }
 		}
 
 		#endregion

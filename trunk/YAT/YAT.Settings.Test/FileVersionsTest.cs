@@ -604,9 +604,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.24
+		#region Tests > YAT 2.0 Beta 3 Candidate 2 Version 1.99.24
 		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.24
+		// Tests > YAT 2.0 Beta 3 Candidate 2 Version 1.99.24
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
@@ -696,9 +696,9 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		#region Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.25
+		#region Tests > YAT 2.0 Beta 3 Candidate 3 Version 1.99.25
 		//------------------------------------------------------------------------------------------
-		// Tests > YAT 2.0 Beta 3 Candidate 1 Version 1.99.25
+		// Tests > YAT 2.0 Beta 3 Candidate 3 Version 1.99.25
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>01_COM1_Open_Default.</summary>
@@ -822,7 +822,149 @@ namespace YAT.Settings.Test
 
 		#endregion
 
-		// 1.99.xx => ADD TC 08
+		#region Tests > YAT 2.0 Beta 3 Candidate 4 Version 1.99.26
+		//------------------------------------------------------------------------------------------
+		// Tests > YAT 2.0 Beta 3 Candidate 4 Version 1.99.26
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>01_COM1_Open_Default.</summary>
+		[Test, MKY.IO.Ports.Test.SerialPortAIsAvailableCategory]
+		public virtual void Test_V1_99_26_TerminalSettingsCase01()
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCases.T_01_COM1_Open_Default]
+				);
+
+			// Create terminal from settings and check whether settings are correctly set.
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				terminal.Start();
+				VerifySettingsCase01(terminal);
+			}
+		}
+
+		/// <summary>02_COM2_Open_Binary_115200.</summary>
+		[Test, MKY.IO.Ports.Test.SerialPortBIsAvailableCategory]
+		public virtual void Test_V1_99_26_TerminalSettingsCase02()
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCases.T_02_COM2_Open_Binary_115200]
+				);
+
+			// Create terminal from settings and check whether settings are correctly set.
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				terminal.Start();
+				VerifySettingsCase02(terminal);
+			}
+		}
+
+		/// <summary>03_COM1_Closed_Predefined.</summary>
+		[Test]
+		public virtual void Test_V1_99_26_TerminalSettingsCase03()
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCases.T_03_COM1_Closed_Predefined]
+				);
+
+			// Create terminal from settings and check whether settings are correctly set.
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				terminal.Start();
+				VerifySettingsCase03(terminal);
+			}
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void Test_V1_99_26_WorkspaceSettingsCase04()
+		{
+			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_26.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_04_Matthias]
+				);
+
+			// Create workspace from settings and check whether settings are correctly set.
+			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
+			{
+				workspace.OpenTerminals();
+				VerifySettingsCase04(workspace);
+			}
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void Test_V1_99_26_TerminalSettingsCase05()
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCases.T_05_COM1_Open_Recent]
+				);
+
+			// Create terminal from settings and check whether settings are correctly set.
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				terminal.Start();
+				VerifySettingsCase05(terminal);
+			}
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void Test_V1_99_26_WorkspaceSettingsCase06()
+		{
+			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_26.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_06_Matthias]
+				);
+
+			// Create workspace from settings and check whether settings are correctly set.
+			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
+			{
+				workspace.OpenTerminals();
+				VerifySettingsCase06(workspace);
+			}
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void Test_V1_99_26_TerminalSettingsCase07()
+		{
+			DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler = SetupTerminalSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_26.TerminalFilePaths[TerminalSettingsTestCases.T_07_USB_SerHID_VID0EB8_PID2200_MK8_Closed]
+				);
+
+			// Create terminal from settings and check whether settings are correctly set.
+			using (Model.Terminal terminal = new Model.Terminal(settingsHandler))
+			{
+				terminal.Start();
+				VerifySettingsCase07(terminal);
+			}
+		}
+
+		/// <summary></summary>
+		[Test]
+		public virtual void Test_V1_99_26_WorkspaceSettingsCase08()
+		{
+			DocumentSettingsHandler<WorkspaceSettingsRoot> settingsHandler = SetupWorkspaceSettingsFromFilePath
+				(
+				SettingsFilesProvider.FilePaths_V1_99_26.WorkspaceFilePaths[WorkspaceSettingsTestCases.W_08_Matthias]
+				);
+
+			// Create workspace from settings and check whether settings are correctly set.
+			using (Model.Workspace workspace = new Model.Workspace(settingsHandler))
+			{
+				workspace.OpenTerminals();
+				VerifySettingsCase08(workspace);
+			}
+		}
+
+		#endregion
+
 
 		#endregion
 

@@ -20,11 +20,11 @@ Note:	The whole release process takes about 6 hours
 3.	Update and add settings archive                                                     0:30 / 0:45
 	-----------------------------------------------------------------------------------------------
 	[ ] Clone settings set to "_Settings\<New Version>"
-	[ ] Commit settings to prepare diff
-	[ ] Run YAT, open settings, modify settings, save upgraded settings
-	[ ] Diff and verify the new settings
 	[ ] Add new settings to "YAT.Settings.Test.SettingsFilesProvider"
 	[ ] Add new settings to "YAT.Settings.Test.FileVersionsTest"
+	[ ] Commit changes to prepare diff
+	[ ] Run YAT, open settings, modify settings, save upgraded settings
+	[ ] Diff and verify the new settings
 
 
 4.	Rebuild                                                                             0:15 / 1:00
