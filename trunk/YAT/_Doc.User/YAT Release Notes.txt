@@ -75,6 +75,7 @@ Fixed bugs:
 - Exception that only occurs in 'Release' probably fixed too (bugs #3176812 and #3187520)
 - Exception on send also fixed by improving thread-safety on send operations
   (bugs #2872830 and #3177728)
+- Handling of invalid Bluetooth ports on computer without other COM ports improved (bug #3172124)
 - Object reference issue with SerialPortId.FirstStandardPort fixed (bugs #3134313)
 
 Limitations and known issues:

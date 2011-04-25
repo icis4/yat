@@ -334,68 +334,86 @@ namespace YAT.Gui.Controls
 				SerialPortId old = comboBox_Port.SelectedItem as SerialPortId;
 				SerialPortCollection ports = new SerialPortCollection();
 
-				// Fill list with available ports.
+				// Exceptions should not but can happen:
+				// > In case of Bluetooth ports on certain computers.
+				try
 				{
-					// Install timer which shows a dialog if filling takes more than 500ms.
-					timer_ShowFillDialog.Start();
+					// Fill list with available ports.
+					{
+						// Install timer which shows a dialog if filling takes more than 500ms.
+						timer_ShowFillDialog.Start();
 
-					// Start scanning on different thread.
-					this.fillPortsThread = new FillPortsThread(ports);
-					Thread t = new Thread(new ThreadStart(this.fillPortsThread.FillWithAvailablePorts));
-					t.Start();
+						// Start scanning on different thread.
+						this.fillPortsThread = new FillPortsThread(ports);
+						Thread t = new Thread(new ThreadStart(this.fillPortsThread.FillWithAvailablePorts));
+						t.Start();
 
-					while (this.fillPortsThread.IsFilling)
-						Application.DoEvents();
+						while (this.fillPortsThread.IsFilling)
+							Application.DoEvents();
 
-					t.Join();
+						t.Join();
 
-					// Cleanup.
-					timer_ShowFillDialog.Stop();
-				}
+						// Cleanup.
+						timer_ShowFillDialog.Stop();
+					}
 
-				if (ApplicationSettings.LocalUser.General.DetectSerialPortsInUse)
-				{
-					// Install timer which shows a dialog if scanning takes more than 500ms.
-					timer_ShowScanDialog.Start();
+					if (ApplicationSettings.LocalUser.General.DetectSerialPortsInUse)
+					{
+						// Install timer which shows a dialog if scanning takes more than 500ms.
+						timer_ShowScanDialog.Start();
 
-					// Start scanning on different thread.
-					this.markPortsInUseThread = new MarkPortsInUseThread(ports);
-					Thread t = new Thread(new ThreadStart(this.markPortsInUseThread.MarkPortsInUse));
-					t.Start();
+						// Start scanning on different thread.
+						this.markPortsInUseThread = new MarkPortsInUseThread(ports);
+						Thread t = new Thread(new ThreadStart(this.markPortsInUseThread.MarkPortsInUse));
+						t.Start();
 
-					while (this.markPortsInUseThread.IsScanning)
-						Application.DoEvents();
+						while (this.markPortsInUseThread.IsScanning)
+							Application.DoEvents();
 
-					t.Join();
+						t.Join();
 
-					// Cleanup.
-					timer_ShowScanDialog.Stop();
-				}
+						// Cleanup.
+						timer_ShowScanDialog.Stop();
+					}
 
-				comboBox_Port.Items.Clear();
-				comboBox_Port.Items.AddRange(ports.ToArray());
+					comboBox_Port.Items.Clear();
+					comboBox_Port.Items.AddRange(ports.ToArray());
 
-				if (comboBox_Port.Items.Count > 0)
-				{
-					if ((this.portId != null) && (ports.Contains(this.portId)))
-						comboBox_Port.SelectedItem = this.portId;
-					else if ((old != null) && (ports.Contains(old)))
-						comboBox_Port.SelectedItem = old;
+					if (comboBox_Port.Items.Count > 0)
+					{
+						if ((this.portId != null) && (ports.Contains(this.portId)))
+							comboBox_Port.SelectedItem = this.portId;
+						else if ((old != null) && (ports.Contains(old)))
+							comboBox_Port.SelectedItem = old;
+						else
+							comboBox_Port.SelectedIndex = 0;
+
+						// Set property instead of member to ensure that changed event is fired.
+						PortId = comboBox_Port.SelectedItem as SerialPortId;
+					}
 					else
-						comboBox_Port.SelectedIndex = 0;
-
-					// Set property instead of member to ensure that changed event is fired.
-					PortId = comboBox_Port.SelectedItem as SerialPortId;
+					{
+						MessageBox.Show
+							(
+							this,
+							"There are no serial COM ports available." + Environment.NewLine +
+							"Check the serial COM ports of your system.",
+							"No serial COM Ports",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Warning
+							);
+					}
 				}
-				else
+				catch
 				{
 					MessageBox.Show
 						(
 						this,
-						"No serial COM ports available, check the serial COM ports of your system.",
-						"No COM Ports",
+						"There was an error while retrieving the serial COM ports!" + Environment.NewLine +
+						"Check the serial COM ports of your system.",
+						"Error with serial COM Ports",
 						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning
+						MessageBoxIcon.Error
 						);
 				}
 
