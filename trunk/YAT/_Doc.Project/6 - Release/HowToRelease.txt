@@ -23,7 +23,7 @@ Note:	The whole release process takes about 6 hours
 	[ ] Add new settings to "YAT.Settings.Test.SettingsFilesProvider"
 	[ ] Add new settings to "YAT.Settings.Test.FileVersionsTest"
 	[ ] Commit changes to prepare diff
-	[ ] Run YAT, open settings, modify settings, save upgraded settings
+	[ ] Run YAT, open settings, modify settings, undo changes, save upgraded but unchanged settings
 	[ ] Diff and verify the new settings
 
 

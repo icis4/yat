@@ -84,18 +84,18 @@ namespace YAT.Settings.Terminal
 		}
 
 		/// <summary></summary>
-		[XmlElement("Warning")]
-		public virtual string Warning
-		{
-			get { return ("Modifying this file may cause undefined behaviour!"); }
-			set { } // Do nothing.
-		}
-
-		/// <summary></summary>
 		[XmlElement("ProductVersion")]
 		public virtual string ProductVersion
 		{
 			get { return (this.productVersion); }
+			set { } // Do nothing.
+		}
+
+		/// <summary></summary>
+		[XmlElement("Warning")]
+		public virtual string Warning
+		{
+			get { return ("Modifying this file may cause undefined behaviour!"); }
 			set { } // Do nothing.
 		}
 

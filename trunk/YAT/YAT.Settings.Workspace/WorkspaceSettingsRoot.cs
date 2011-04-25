@@ -67,6 +67,14 @@ namespace YAT.Settings.Workspace
 		}
 
 		/// <summary></summary>
+		[XmlElement("ProductVersion")]
+		public virtual string ProductVersion
+		{
+			get { return (this.productVersion); }
+			set { } // Do nothing.
+		}
+
+		/// <summary></summary>
 		[XmlElement("Warning")]
 		public virtual string Warning
 		{
@@ -79,14 +87,6 @@ namespace YAT.Settings.Workspace
 		public virtual SaveInfo Saved
 		{
 			get { return (new SaveInfo(DateTime.Now, Environment.UserName)); }
-			set { } // Do nothing.
-		}
-
-		/// <summary></summary>
-		[XmlElement("ProductVersion")]
-		public virtual string ProductVersion
-		{
-			get { return (this.productVersion); }
 			set { } // Do nothing.
 		}
 

@@ -283,10 +283,17 @@ namespace ALAZ.SystemEx.NetEx.SocketsEx
                     return false;
                 }
 
-                lock (FSyncActive)
-                {
+                // ----- \remind BEGIN -----
+
+                // 2011-04-25 / Matthias Klaey
+                // Work-around to the issue described in the header of AutoSocket.
+
+                //lock (FSyncActive)
+                //{
                     return FActive;
-                }
+                //}
+
+                // ----- \remind  END  -----
             }
 
             set 

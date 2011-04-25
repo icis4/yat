@@ -67,7 +67,7 @@
 			this.label_Port.Name = "label_Port";
 			this.label_Port.Size = new System.Drawing.Size(56, 13);
 			this.label_Port.TabIndex = 0;
-			this.label_Port.Text = "COM Port:";
+			this.label_Port.Text = "Serial Port:";
 			// 
 			// timer_ShowScanDialog
 			// 

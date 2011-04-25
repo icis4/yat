@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <FileType>YAT Terminal Settings</FileType>
+  <ProductVersion>1.99.26</ProductVersion>
   <Warning>Modifying this file may cause undefined behaviour!</Warning>
-  <ProductVersion>1.99.25</ProductVersion>
   <Saved>
-    <TimeStamp>2010-11-28T13:22:53.9572906+01:00</TimeStamp>
+    <TimeStamp>2011-04-25T11:49:18.9478775+02:00</TimeStamp>
     <UserName>Matthias</UserName>
   </Saved>
   <AutoSaved>false</AutoSaved>

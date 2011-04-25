@@ -455,7 +455,7 @@ namespace MKY.IO.Usb
 		{
 			AssertNotDisposed();
 
-			SetState(State.Started);
+			SetStateSynchronized(State.Started);
 			Open();
 
 			// Return true even if device has not been openend. After all, this is the Start()
@@ -472,7 +472,7 @@ namespace MKY.IO.Usb
 			AssertNotDisposed();
 
 			Close();
-			SetState(State.Reset);
+			SetStateSynchronized(State.Reset);
 		}
 
 		/// <summary>
@@ -489,7 +489,7 @@ namespace MKY.IO.Usb
 			// Create a new stream and begin to read data from the device.
 			if (CreateStream())
 			{
-				SetState(State.ConnectedAndOpened);
+				SetStateSynchronized(State.ConnectedAndOpened);
 				OnOpened(new EventArgs());
 				return (true);
 			}
@@ -513,11 +513,11 @@ namespace MKY.IO.Usb
 			CloseStream();
 
 			if (IsConnected)
-				SetState(State.ConnectedAndClosed);
+				SetStateSynchronized(State.ConnectedAndClosed);
 			else if (AutoOpen)
-				SetState(State.DisconnectedAndWaitingForReopen);
+				SetStateSynchronized(State.DisconnectedAndWaitingForReopen);
 			else
-				SetState(State.DisconnectedAndClosed);
+				SetStateSynchronized(State.DisconnectedAndClosed);
 
 			OnClosed(new EventArgs());
 		}
@@ -737,7 +737,17 @@ namespace MKY.IO.Usb
 		// Methods > State Methods
 		//------------------------------------------------------------------------------------------
 
-		private void SetState(State state)
+		private State GetStateSynchronized()
+		{
+			State state;
+
+			lock (this.stateSyncObj)
+				state = this.state;
+
+			return (state);
+		}
+
+		private void SetStateSynchronized(State state)
 		{
 #if (DEBUG)
 			State oldState = this.state;

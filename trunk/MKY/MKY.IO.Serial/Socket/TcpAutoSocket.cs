@@ -33,6 +33,62 @@ using MKY.Event;
 namespace MKY.IO.Serial
 {
 	/// <summary></summary>
+	/// <remarks>
+	/// With YAT, AutoSockets created a deadlock on shutdown in case of two AutoSockets that
+	/// were interconnected with each other. Here is the situation:
+	/// 
+	/// a) The main thread requests stopping all terminals:
+	/// 
+	/// ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Active.get() Line 286
+	/// ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginDisconnect(ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection connection = {ALAZ.SystemEx.NetEx.SocketsEx.ServerSocketConnection}) Line 1446
+	/// ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.BeginDisconnect() Line 558
+	/// ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.StopConnections() Line 351
+	/// ALAZ.SystemEx.NetEx.SocketsEx.SocketServer.Stop() Line 206
+	/// MKY.IO.Serial.TcpServer.StopSocket() Line 432
+	/// MKY.IO.Serial.TcpServer.Stop() Line 329
+	/// MKY.IO.Serial.TcpAutoSocket.StopSockets() Line 494
+	/// MKY.IO.Serial.TcpAutoSocket.StopAutoSocket() Line 619
+	/// MKY.IO.Serial.TcpAutoSocket.Stop() Line 419
+	/// YAT.Domain.RawTerminal.Stop() Line 298
+	/// YAT.Domain.Terminal.Stop() Line 314
+	/// YAT.Model.Terminal.StopIO(bool saveStatus = false) Line 1488
+	/// YAT.Model.Terminal.Close(bool isWorkspaceClose = true, bool tryAutoSave = true) Line 1155
+	/// YAT.Model.Workspace.CloseAllTerminals(bool isWorkspaceClose = true, bool tryAutoSave = true) Line 1215
+	/// YAT.Model.Workspace.Close(bool isMainClose = false) Line 665
+	/// YAT.Model.Workspace.Close() Line 625
+	/// YAT.Gui.Forms.Main.toolStripMenuItem_MainMenu_File_Workspace_Close_Click(object sender = {System.Windows.Forms.ToolStripMenuItem}, System.EventArgs e = {System.EventArgs}) Line 332
+	/// YAT.Controller.Main.Run(bool runWithView = true) Line 327
+	/// YAT.Controller.Main.Run() Line 261
+	/// YAT.YAT.Main(string[] commandLineArgs = {string[0]}) Line 63
+	/// 
+	/// b) As a result, the first AutoSocket shuts down, the second changes from 'Accepted' to 'Listening' and tries to sychronize from the ALAZ socket event to the main thread:
+	/// 
+	/// MKY.Event.EventHelper.InvokeSynchronized(System.ComponentModel.ISynchronizeInvoke sinkTarget = {YAT.Gui.Forms.Terminal}, System.Delegate sink = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 319
+	/// MKY.Event.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 163
+	/// YAT.Model.Terminal.OnIOChanged(System.EventArgs e = {System.EventArgs}) Line 2195
+	/// YAT.Model.Terminal.terminal_IOChanged(object sender = {YAT.Domain.TextTerminal}, System.EventArgs e = {System.EventArgs}) Line 1261
+	/// MKY.Event.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 173
+	/// YAT.Domain.Terminal.OnIOChanged(System.EventArgs e = {System.EventArgs}) Line 1049
+	/// YAT.Domain.Terminal.rawTerminal_IOChanged(object sender = {YAT.Domain.RawTerminal}, System.EventArgs e = {System.EventArgs}) Line 978
+	/// MKY.Event.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 173
+	/// YAT.Domain.RawTerminal.OnIOChanged(System.EventArgs e = {System.EventArgs}) Line 601
+	/// YAT.Domain.RawTerminal.io_IOChanged(object sender = {MKY.IO.Serial.TcpAutoSocket}, System.EventArgs e = {System.EventArgs}) Line 557
+	/// MKY.Event.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 173
+	/// MKY.IO.Serial.TcpAutoSocket.OnIOChanged(System.EventArgs e = {System.EventArgs}) Line 854
+	/// MKY.IO.Serial.TcpAutoSocket.SetStateSynchronizedAndNotify(MKY.IO.Serial.TcpAutoSocket.SocketState state = Listening) Line 476
+	/// MKY.IO.Serial.TcpAutoSocket.server_IOChanged(object sender = {MKY.IO.Serial.TcpServer}, System.EventArgs e = {System.EventArgs}) Line 804
+	/// MKY.Event.EventHelper.FireSync(System.Delegate eventDelegate = {Method = Cannot evaluate expression because the current thread is in a sleep, wait, or join}, object[] args = {object[2]}) Line 173
+	/// MKY.IO.Serial.TcpServer.OnIOChanged(System.EventArgs e = {System.EventArgs}) Line 556
+	/// MKY.IO.Serial.TcpServer.SetStateSynchronizedAndNotify(MKY.IO.Serial.TcpServer.SocketState state = Listening) Line 395
+	/// MKY.IO.Serial.TcpServer.OnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs e = {ALAZ.SystemEx.NetEx.SocketsEx.ConnectionEventArgs}) Line 525
+	/// ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.FireOnDisconnected(ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection connection = {ALAZ.SystemEx.NetEx.SocketsEx.ServerSocketConnection}) Line 535
+	/// ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnectionHost.BeginDisconnectCallbackAsync(object sender = {System.Net.Sockets.Socket}, System.Net.Sockets.SocketAsyncEventArgs e = null) Line 1501
+	/// 
+	/// As a workaround to this issue, I removed the lock where the deadlock happens in
+	/// in ALAZ.SystemEx.NetEx.SocketsEx.BaseSocketConnection.Active.get() and reported this
+	/// issue back to Andre Luis Azevedo. But unfortunately he doesn't reply and ALAZ seems
+	/// to have come to a deadend. An alternative to ALAZ might need to be found in the future.
+	/// </remarks>
 	public class TcpAutoSocket : IIOProvider, IDisposable
 	{
 		#region Types
@@ -453,7 +509,17 @@ namespace MKY.IO.Serial
 		// State Methods
 		//==========================================================================================
 
-		private void SetStateAndNotify(SocketState state)
+		private SocketState GetStateSynchronized()
+		{
+			SocketState state;
+
+			lock (this.stateSyncObj)
+				state = this.state;
+
+			return (state);
+		}
+
+		private void SetStateSynchronizedAndNotify(SocketState state)
 		{
 #if (DEBUG)
 			SocketState oldState = this.state;
@@ -502,7 +568,7 @@ namespace MKY.IO.Serial
 			lock (this.startCycleCounterSyncObj)
 				this.startCycleCounter = 1;
 
-			SetStateAndNotify(SocketState.Starting);
+			SetStateSynchronizedAndNotify(SocketState.Starting);
 			StartConnecting();
 		}
 
@@ -518,7 +584,7 @@ namespace MKY.IO.Serial
 #endif
 			Thread.Sleep(delay);
 
-			SetStateAndNotify(SocketState.Connecting);
+			SetStateSynchronizedAndNotify(SocketState.Connecting);
 			CreateClient(this.remoteIPAddress, this.remotePort);
 			try
 			{
@@ -545,7 +611,7 @@ namespace MKY.IO.Serial
 #endif
 			Thread.Sleep(delay);
 
-			SetStateAndNotify(SocketState.StartingListening);
+			SetStateSynchronizedAndNotify(SocketState.StartingListening);
 			CreateServer(this.localIPAddress, this.localPort);
 			try
 			{
@@ -586,7 +652,7 @@ namespace MKY.IO.Serial
 
 		private void RestartAutoSocket()
 		{
-			SetStateAndNotify(SocketState.Restarting);
+			SetStateSynchronizedAndNotify(SocketState.Restarting);
 
 			// \remind:
 			// The ALAZ sockets by default stop synchronously. However, due to some other issues
@@ -601,7 +667,7 @@ namespace MKY.IO.Serial
 
 		private void StopAutoSocket()
 		{
-			SetStateAndNotify(SocketState.Stopping);
+			SetStateSynchronizedAndNotify(SocketState.Stopping);
 
 			// \remind:
 			// The ALAZ sockets by default stop synchronously. However, due to some other issues
@@ -611,14 +677,14 @@ namespace MKY.IO.Serial
 			// \remind:
 			//DisposeSockets();
 
-			SetStateAndNotify(SocketState.Reset);
+			SetStateSynchronizedAndNotify(SocketState.Reset);
 		}
 
 		private void AutoSocketError(string message)
 		{
 			DisposeSockets();
 
-			SetStateAndNotify(SocketState.Error);
+			SetStateSynchronizedAndNotify(SocketState.Error);
 			OnIOError(new IOErrorEventArgs(message));
 		}
 
@@ -673,7 +739,7 @@ namespace MKY.IO.Serial
 				{
 					if (this.client.IsConnected)          // If IO changed during startup,
 					{                                 //   check for connected and change state
-						SetStateAndNotify(SocketState.Connected);
+						SetStateSynchronizedAndNotify(SocketState.Connected);
 					}
 					break;
 				}
@@ -772,24 +838,25 @@ namespace MKY.IO.Serial
 
 		private void server_IOChanged(object sender, EventArgs e)
 		{
-			switch (this.state)
+			SocketState state = GetStateSynchronized();
+			switch (state)
 			{
 				case SocketState.StartingListening:
 				{
-					if (this.server.IsStarted)                        // If IO changed during startup,
-						SetStateAndNotify(SocketState.Listening); //   check for start and change state
+					if (this.server.IsStarted)                    // If IO changed during startup,
+						SetStateSynchronizedAndNotify(SocketState.Listening); //   check for start and change state
 					break;
 				}
 				case SocketState.Listening:
 				{
-					if (this.server.ConnectedClientCount > 0)         // If IO changed during listening,
-						SetStateAndNotify(SocketState.Accepted);  //   change state to accepted if
+					if (this.server.ConnectedClientCount > 0)     // If IO changed during listening,
+						SetStateSynchronizedAndNotify(SocketState.Accepted);  //   change state to accepted if
 					break;                                        //   clients are connected
 				}
 				case SocketState.Accepted:
 				{
-					if (this.server.ConnectedClientCount <= 0)        // If IO changed during accepted,
-						SetStateAndNotify(SocketState.Listening); //   change state to listening if
+					if (this.server.ConnectedClientCount <= 0)    // If IO changed during accepted,
+						SetStateSynchronizedAndNotify(SocketState.Listening); //   change state to listening if
 					break;                                        //   no clients are connected
 				}
 			}

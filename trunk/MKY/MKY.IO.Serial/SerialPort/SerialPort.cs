@@ -565,7 +565,17 @@ namespace MKY.IO.Serial
 		// State Methods
 		//==========================================================================================
 
-		private void SetStateAndNotify(State state)
+		private State GetStateSynchronized()
+		{
+			State state;
+
+			lock (this.stateSyncObj)
+				state = this.state;
+
+			return (state);
+		}
+
+		private void SetStateSynchronizedAndNotify(State state)
 		{
 #if (DEBUG)
 			State oldState = this.state;
@@ -685,7 +695,7 @@ namespace MKY.IO.Serial
 
 			OpenPort();
 			StartAliveTimer();
-			SetStateAndNotify(State.Opened);
+			SetStateSynchronizedAndNotify(State.Opened);
 		}
 
 	#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
@@ -714,7 +724,7 @@ namespace MKY.IO.Serial
 			StopAndDisposeAliveTimer();
 			StopAndDisposeReopenTimer();
 			CloseAndDisposePort();
-			SetStateAndNotify(State.Closed);
+			SetStateSynchronizedAndNotify(State.Closed);
 
 			StartReopenTimer();
 		}
@@ -725,7 +735,7 @@ namespace MKY.IO.Serial
 			StopAndDisposeAliveTimer();
 			StopAndDisposeReopenTimer();
 			CloseAndDisposePort();
-			SetStateAndNotify(State.Reset);
+			SetStateSynchronizedAndNotify(State.Reset);
 		}
 
 		#endregion
@@ -1036,7 +1046,7 @@ namespace MKY.IO.Serial
 				catch
 				{
 					CloseAndDisposePort();
-					SetStateAndNotify(State.Closed); // Re-open failed, cleanup and restart
+					SetStateSynchronizedAndNotify(State.Closed); // Re-open failed, cleanup and restart
 					StartReopenTimer();
 				}
 			}
