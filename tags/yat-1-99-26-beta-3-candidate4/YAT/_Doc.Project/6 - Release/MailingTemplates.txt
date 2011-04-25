@@ -1,0 +1,4 @@
+﻿Welcome to the YAT mailing list. To download YAT, visit <http://sourceforge.net/projects/y-a-terminal/> and go to "Download > Browse All Files".
+
+Grüess
+Matthias

@@ -1,0 +1,592 @@
+﻿
+****************************************************************************************************
+                                         YAT Release Notes.
+ --------------------------------------------------------------------------------------------------
+                                    YAT - Yet Another Terminal.
+                              Operate and debug serial communications.
+     Supports RS-232/422/423/485 as well as TCP-Client/Server/AutoSocket, UDP and USB Ser/HID.
+ --------------------------------------------------------------------------------------------------
+                     Visit YAT at http://sourceforge.net/projects/y-a-terminal.
+                     Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
+ --------------------------------------------------------------------------------------------------
+                    Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
+                                Copyright © 2003-2011 Matthias Kläy.
+                                        All rights reserved.
+ --------------------------------------------------------------------------------------------------
+                                YAT is licensed under the GNU LGPL.
+                   See http://www.gnu.org/licenses/lgpl.html for license details.
+****************************************************************************************************
+
+
+Contents
+========
+
+1. Installation
+2. History of changes in YAT
+3. History of changes in XTerm232
+4. Roadmap
+5. Legal
+
+
+====================================================================================================
+1. Installation
+====================================================================================================
+
+Simply run "Setup.exe". A wizard will guide you through the rest of the installation process.
+
+YAT uses the Microsoft .NET Framework. Setup checks, if .NET is already installed on your system.
+If not, it asks whether to download and install .NET.
+You can also download .NET under "http://www.microsoft.com/net/" (.NET Framework Redistributable)
+and install it manually.
+
+
+====================================================================================================
+2. History of changes in YAT
+====================================================================================================
+
+YAT 2.0 Beta 3 Candidate 4 Version 1.99.26 :: 2011-04-25
+----------------------------------------------------------------------------------------------------
+
+Important changes:
+- Update to DejaVu 2.32
+- Handling of non-platform file system paths improved (related to feature request #2982052)
+- Shortcut to 'Terminal > Select None' has changed to Ctrl+Shift+N (bug #3220852)
+- Handling of unhandled exceptions improved (feature request #3176816)
+   > The user now has a choice on how to proceed
+   > There should no longer be undesired multiple exceptions
+- Links to SourceForge trackers now contain filter and sort (feature request #3160872)
+- Application information and dialog and message texts unified
+- Some Unicode UTF-8/16/32 testing added (bug #1931537)
+- .yat/.yaw/.xml files are preambled with UTF-8 byte order mark (BOM) (feature request #3144111)
+- All source code and text files converted to UTF-8, including byte order mark (BOM)
+- HowTo on optional user test config and settings templates added (related to #2838447/#2981764)
+- Use of \todo, \fixme,... tags unified in source code
+- Transmission test infrastructure improved such that it can deal with the \!(Clear) command
+
+Fixed bugs:
+- Predefined commands are also put into list of recent commands (bug #3146622)
+- Local interface again is properly set when switching from COM port to TCP/IP socket (bug #3176815)
+- Exception when switching terminal type to USB Ser/HID fixed (bug #3290317)
+- TCP/IP client auto-reconnect fixed (bug #3285780)
+- TCP/IP servers can be closed and reopened again (bugs #3137057 and #3137122)
+- Exception when closing/reopening terminals quickly (e.g. out of a script) fixed (bug #3137047)
+- Exception on clearing monitors fixed by improving thread-safety on raw and display repositories
+- Exception on receiving fixed by improving thread-safety on raw and display repositories
+  (bugs #3105773, #3156928, #3165821 and #3284519)
+- Exception that only occurs in 'Release' probably fixed too (bugs #3176812 and #3187520)
+- Exception on send also fixed by improving thread-safety on send operations
+  (bugs #2872830 and #3177728)
+- Handling of invalid Bluetooth ports on computer without other COM ports improved (bug #3172124)
+- Object reference issue with SerialPortId.FirstStandardPort fixed (bugs #3134313)
+
+Limitations and known issues:
+- MDI limitations of .NET
+   > Issues with frame (bugs #1808492 and #1808493)
+   > Issues with window list (bugs #1808494 and #2846917)
+   > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684)
+- Long monitor contents are not displayed properly when scrolling using scroll bar (bug #2865562)
+- Response of multi-line commands or files is delayed (bug #3072919)
+- Serial port auto-reopen not yet implementable due to .NET deadlock issue in System.IO.SerialPort
+  (feature request #1960299)
+- Support for serial ports which are named other than COM isn't supported by .NET
+  (feature request #2848228)
+- USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
+  of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
+- Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)
+- Text terminals: Wait for answer line not yet implemented (feature request #1808509)
+- Terminal/direct mode does not yet support special formats and commands (feature request #1808496)
+- Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
+- Multiple simultaneous instances of YAT are limited in the use of default workspaces and terminals
+  (feature request #2842713)
+
+
+YAT 2.0 Beta 3 Candidate 3 Version 1.99.25 :: 2010-11-28
+----------------------------------------------------------------------------------------------------
+
+New:
+- USB Ser/HID device connect/disconnect detection
+
+Important changes:
+- Conceptual issue in YAT main in respect to unhandled exceptions fixed (bug #3106928)
+- Conceptual issue in YAT controller in respect to command line arguments fixed (bug #3111525)
+- String comparisons improved, more selective use of different means of comparison
+- Use of Debug/Trace/Console standardized within NUnit tests (bug #3111522)
+- Recent file handling test cases created in YAT.Model.Test (bug #3107531)
+- More specific exception types used, e.g. ArgumentOutOfRange instead of NotImplemented
+- MKY.Types moved to the MKY namespace for consistency with the .NET System namespace
+
+Fixed bugs:
+- User interface exception in case of more than 12 predefined command pages fixed (bug #3112679)
+- Exception on exit after reduction of the window size fixed (bug #2997101)
+- Some minor user interface issues fixed (bug #3111508)
+- Issue with saved USB Ser/HID device IDs fixed (bug #3116770)
+- Open of recent terminal doesn't close workspace anymore (bug #3107531)
+- Command line info and options are properly output again (bug #3111525)
+
+Limitations and known issues:
+- MDI limitations of .NET
+   > Issues with frame (bugs #1808492 and #1808493)
+   > Issues with window list (bugs #1808494 and #2846917)
+   > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684)
+- Long monitor contents are not displayed properly when scrolling using scroll bar (bug #2865562)
+- Response of multi-line commands or files is delayed (bug #3072919)
+- Serial port auto-reopen not yet implementable due to .NET deadlock issue in System.IO.SerialPort
+  (feature request #1960299)
+- Support for serial ports which are named other than COM isn't supported by .NET
+  (feature request #2848228)
+- USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
+  of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
+- UTF-16/32 testing pending (bug #1931537)
+- Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)
+- Text terminals: Wait for answer line not yet implemented (feature request #1808509)
+- Terminal/direct mode does not yet support special formats and commands (feature request #1808496)
+- Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
+- Multiple simultaneous instances of YAT are limited in the use of default workspaces and terminals
+  (feature request #2842713)
+
+
+YAT 2.0 Beta 3 Candidate 2 Version 1.99.24 :: 2010-11-11
+----------------------------------------------------------------------------------------------------
+
+New:
+- Support for USB Ser/HID implemented (feature request #2825931)
+- Handling of input and output break states added to serial COM ports (feature request #2932691)
+  Handling of break states may not be supported on certain hardware, e.g. USB/RS-232 converters
+- Separate connect and total connect time, connect time is restarted on open (bug #2869585)
+- Optional simple terminal/direct mode added to "Send Command" (feature request #1808496)
+- Keyword \!(Clear) added (feature request #2998594)
+- List of first 12 predefined command pages added to menu, with shortcuts (feature request #2914892)
+- Recent history added to "Send File" (feature request #2869575)
+- Text terminals: Line send delay added (feature request #1808508, bug #1963002)
+- ASCII table added to help (feature request #1923555)
+- User defineable terminal name added (related to feature request #3091859)
+- Different methods to retrieve terminal added to workspace (feature request #3091859)
+- Terminal IDs and indecies are shown in the main status bar (related to feature request #3091859)
+- Test config including optional user config added (feature request #2981764)
+- Physical entities used for testing such as COM ports are configurable (feature request #2838447)
+- Test environment to ensure that TCP/IP works on multiple network interfaces added (bug #2970215)
+- TCP/IP endurance and stress tests added
+- UDP/IP endurance tests added
+- GUI stress test added
+- Predefined NUnit test categories added
+
+Important changes:
+- Performance on startup improved (feature request #2968216)
+- Serial COM port list gets refreshed when changing the I/O port type
+- Serial COM port list shows additional dialog if retrieving of ports takes more than 500 ms
+- Selection and settings controls now clear contents when disabled
+- Radix (string/hex) automatically changes when switching the terminal type (text/binary)
+- Coupling of Tx and Rx radix improved
+- Output of system error messages improved (feature request #3103502)
+- MKY.Utilities renamed to MKY for consistency with the .NET System namespace
+- XArray, XByte,... renamed to ArrayEx, ByteEx
+- Update to NUnit 2.5.7
+- Use of parametrized NUnit test cases
+- Use of FxCop (feature request #2970221)
+- Use of StyleCop (feature request #2970222)
+- Methods and properties marked 'virtual', unless there are reasons against
+- Null reference safe and more efficient implementation of Equals()
+- GetHashCode() implementation according the .NET guidelines
+- CompareTo() implementation according the .NET guidelines
+- Project references to system assemblies cleaned
+- Using directives cleaned
+- Test and demo projects also signed with a strong name key
+- Version information moved to a single file, added links to that file to projects
+- Website and contact information added to all source headers (feature request #2998593)
+
+Fixed bugs:
+- TCP/IP open/close issues fixed (bugs #2684769, #2869622, #2966417)
+- TCP/IP remote host and program freeze issue when opening from a file fixed (bug #2684813)
+- TCP/IP data send event now occurs (bug #2884756)
+- UDP/IP implementation changed from ALAZ.SystemEx.NetEx to System.Net.Sockets
+- UDP/IP default local port fixed
+- UDP/IP connect issue fixed (bug #2120432)
+- Monitor contents are displayed even if they exceed the visible width (bugs #2865562 and #2981796)
+- Binary terminals: 0x00 no more breaks line if sequence line break is disabled (bug #3050551)
+- Multi-line command issue fixed (bug #2831453)
+- Layout/anchor issue of description text field in predefined dialog fixed (bug #2987575)
+- Tab order in predefined command dialog fixed (bug #2914863)
+- Window startup position is adjusted if saved position is out of bounds, e.g. if window was
+  saved on a secondary display that is not connected anymore (bugs #2856250 and #2906622)
+- Partial EOL sequences work again (bug #2847375)
+- Inconsistency when reading EOL sequence fixed (bug #2869497)
+- Exception with TCP/IP AutoSocket fixed (bug# 2869792)
+- Exception when switching from COM port to TCP/IP AutoSocket fixed (bug #2981797)
+- Exception in case of no COM ports fixed (bug #3041642)
+- Exception when closing terminal using 'File > Close' fixed (bugs #2684813, #2854547, #2970241)
+- Exception when changing settings fixed (bug #2869538)
+- Rare exception while drawing fixed (bug #2981762)
+- Unhandled exception on binary terminal fixed (bug #2891996)
+- Unhandled exception dialog improved and fixed (feature request #2970243, bug #2970245)
+
+Limitations and known issues:
+- MDI limitations of .NET
+   > Issues with frame (bugs #1808492 and #1808493)
+   > Issues with window list (bugs #1808494 and #2846917)
+   > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684)
+- Long monitor contents are not displayed properly when scrolling using scroll bar (bug #2865562)
+- Response of multi-line commands or files is delayed (bug #3072919)
+- Serial port auto-reopen not yet implementable due to .NET deadlock issue in System.IO.SerialPort
+  (feature request #1960299)
+- Support for serial ports which are named other than COM isn't supported by .NET
+  (feature request #2848228)
+- USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
+  of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
+- UTF-16/32 testing pending (bug #1931537)
+- Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)
+- Text terminals: Wait for answer line not yet implemented (feature request #1808509)
+- Terminal/direct mode does not yet support special formats and commands (feature request #1808496)
+- Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
+- Multiple simultaneous instances of YAT are limited in the use of default workspaces and terminals
+  (feature request #2842713)
+
+
+YAT 2.0 Beta 3 Candidate 1 Version 1.99.23 :: 2009-09-10
+----------------------------------------------------------------------------------------------------
+
+Fixed bugs:
+- Installer prerequisites fixed to .NET 3.5 (bug #2855869)
+
+
+YAT 2.0 Beta 3 Candidate 1 Version 1.99.22 :: 2009-09-08
+----------------------------------------------------------------------------------------------------
+
+New:
+- Select all/none items in monitor (feature request #2455810)
+- Optionally hide radix, e.g. "80" instead of "80h" (feature request #2085990)
+- Tabs are treated as tabs and not converted to <TAB> by default anymore (feature request #2813232)
+- Additional toolbar buttons to set radix added
+- Additional toolbar buttons to clear/save/copy monitor contents added
+
+Important changes:
+- Flickering eliminated by implementing a speed optimized list box (bug #2813227)
+- Empty command text is now grayed italics (feature request #2838453)
+- Handling of local user settings on multiple instances of YAT improved (feature request #2842692)
+- Update to .NET 3.5 SP1 (feature request #2813235)
+- Update to ALAZ 2.0 (feature request #2813236)
+- Update to DejaVu 2.29 (feature request #2813292)
+- Update to NUnit 2.5.2 (feature request #2813296)
+- Header and footer added to all source files (feature request #2136643)
+- SVN tags added to all source files (feature request #2813228)
+
+Fixed bugs:
+- Workspaces (.yaw) now properly work on network paths (bug #2234443)
+- RTS/CTS hardware flow control is fixed and thoroughly tested (bugs #1919399 and #1944332)
+- Command validation fixed (bug #1983796) and improved
+- Multi-line command issues fixed (bugs #2213644, #2816862 and #2831453)
+- Clearing predefined command description really clears it (bug #1945488)
+- On open, serial ports immediately check whether there is already data pending (bug #2848229)
+- TCP/IP remote IP address selection issue fixed (bug #2690191)
+- TCP/IP disconnect issue fixed (bug #2684769)
+- TCP/IP state issue fixed (bug #2694592)
+- TCP/IP AutoSocket connect/disconnect/reconnect issues fixed (bug #2767608)
+- Thread synchronization issue when closing while receiving fixed (bug #1931923)
+- Clearing monitors also clears incomplete lines (bug #1942335)
+- ShowEOL = false doesn't strip chars anymore (bug #1931582)
+- Log into .dat can now properly be started (bug #2455807)
+- Font can be changed in format settings dialog (bug #1937065)
+- Shortcuts are immediately active, no need to first open menu anymore (bug #1944023)
+- Menu > Send > File now gets properly enabled (bug #1995796)
+- Directly opened terminals don't automatically get saved anymore (bug #2821291)
+- Relative paths are no more added to recents
+- Log now logs EOL according to settings (bug #1995797)
+- Help, release notes and tracker instructions forms are shown at center of parent (bug #1938031)
+
+Limitations and known issues:
+- Serial port auto-reopen not yet implementable due to .NET deadlock issue in System.IO.SerialPort
+  (feature request #1960299)
+- Support for serial ports which are named other than COM isn't supported by .NET
+  (feature request #2848228)
+- UTF-16/32 testing pending (bug #1931537)
+- More advanced text line send and receive options not yet implemented
+  (feature requests #1808508 and #1808509)
+- Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
+- Multiple simultaneous instances of YAT are limited in the use of default workspaces and terminals
+  (feature request #2842713)
+
+
+YAT 2.0 Beta 2 Candidate 4 Version 1.99.20 :: 2008-07-18
+----------------------------------------------------------------------------------------------------
+
+Important changes:
+- Treatment of serial port communication errors improved (feature request #1953199)
+   > On less critical errors, red error message is shown in monitor, no message box is shown anymore
+- XOn/XOff software flow control has thoroughly been tested, it correctly worked before
+- Support for COM ports above 256 has been tested with local virtual port loopbacks
+- File handling of workspace and terminal files improved
+   > Automated workspace/terminal use case tests added
+- Initialization and update of menu items improved
+- Text: EOL processing improved
+- Name of non-YAT assembly projects adapted to assembly name
+- Separate non-YAT assembly encapsulating serial port and socket providers
+
+Fixed bugs:
+- RTS/CTS hardware flow control is fixed and thoroughly tested (bugs #1919399 and #1944332)
+- Thread synchronization issue when closing while receiving fixed (bug #1931923)
+- Command validation fixed (bug #1983796) and improved
+- Font can be changed in format settings dialog (bug #1937065)
+- Shortcuts are immediately active, no need to open menu first anymore (bug #1944023)
+- Menu > Send > File now gets properly enabled (bug #1995796)
+- Clearing monitors also clears incomplete lines (bug #1942335)
+- Clearing predefined command description really clears it (bug #1945488)
+- ShowEOL = false doesn't strip chars anymore (bug #1931582)
+- Log now logs EOL according to settings (bug #1995797)
+- Help, release notes and tracker instructions forms are shown center of parent (bug #1938031)
+
+Limitations and known issues:
+- Serial port auto-reopen not yet implementable due to .NET deadlock issue in System.IO.SerialPort
+  (feature request #1960299)
+- UTF-16/32 testing pending (bug #1931537)
+- More advanced text line send and receive options not yet implemented
+  (feature requests #1808508 and #1808509)
+- Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
+
+
+YAT 2.0 Beta 2 Candidate 3 Version 1.99.19 :: 2008-04-01
+----------------------------------------------------------------------------------------------------
+
+New:
+- Serial COM ports are now labelled, e.g. "COM2 - Serial On USB Port"
+- Monitors have two new features
+   > Connect time can be displayed
+   > Direction icon changes color depending on I/O state
+- Advanced setting "Copy predefined command" added
+   > By default, predefined commands are not copied to "Send Command" text box after send
+   > If "Copy predefined command" is enabled, command is copied after send
+- Copy options to/from predefined to send command/file added
+- Predefined commands can now be deleted/cleared
+
+Important changes:
+- Number of display lines can now be changed
+- Displaying bug for UTF-8 encoding fixed
+- Parser bug on "\\" fixed
+- Copy and save don't add extra line anymore
+- Format settings bug fixed
+- Displaying performance improved
+
+Limitations and known issues:
+- Thorough testing of RTS/CTS hardware flow control pending
+- Thorough testing of XOn/XOff software flow control pending
+- UTF-16/32 testing pending
+- More advanced text line send and receive options not yet implemented
+- Logging in XML not yet implemented, definition of schema pending
+
+
+YAT 2.0 Beta 2 Candidate 2 Version 1.99.18 :: 2008-03-17
+----------------------------------------------------------------------------------------------------
+
+New:
+- "DejaVu Sans Mono" as default font
+   > "View > Format > Font" to select "DejaVu Sans Mono" on existing files
+- Advanced setting "Keep command" added
+   > By default, command is kept in "Send Command" text box after send
+   > If "Keep command" is disabled, command is cleared after send
+- Radix for Tx and Rx can now optionally be set separately
+- Optional space replacement by open box character U+2423
+- Menu entries to request support, features and submit bugs added
+- Automated NUnit loop-back test for model (Main/Workspace/Terminal) added
+
+Important changes:
+- Mix-up of lines when receiving multiple lines fixed
+- Duplications when sending multi-line commands fixed
+- Line/byte counters fixed
+- Measuring and calculation of spacing improved for monitors
+- XOn/XOff improved
+
+Limitations and known issues:
+- Thorough testing of XOn/XOff software flow control pending
+- More advanced text line send and receive options not yet implemented
+
+
+YAT 2.0 Beta 2 Candidate 1 Version 1.99.17 :: 2008-02-11
+----------------------------------------------------------------------------------------------------
+
+New:
+- General settings in "File > Preferences"
+- Automatic testing using NUnit added
+
+Important changes:
+- Relation between workspace (.yaw) and terminals (.yat) massively improved
+   > Workspace references terminals using relative file paths
+   > By default, workspace and terminals are automatically managed
+   > When explicitly saved, workspace and terminals are treated in MDI manner
+- Settings saved in old terminal and workspace files can now always be retrieved correctly
+- Complete refactoring into proper MVC (model-view-controller) architecture
+- Terminal status improved
+- Little-endian/big-endian support for \h \d \o \b added
+
+Limitations and known issues:
+- Thorough testing of XOn/XOff software flow control pending
+- More advanced text line send and receive options not yet implemented
+
+
+YAT 2.0 Beta 2 Preliminary Version 1.99.13 :: 2007-08-30
+----------------------------------------------------------------------------------------------------
+
+New:
+- Workspace can be stored as ".yaw" file
+- Support for non-standard baud rates added
+- Little-endian/big-endian support added
+- Binary: Binary sequence line break implemented
+
+Important changes:
+- Layout and menu structure improved
+- Release notes moved to menu
+
+Limitations and known issues:
+- ".yat" files of older versions cannot be handled yet
+- Workspace references terminal files with absolute paths
+- 2 parallel terminals sometimes crash
+
+
+YAT 2.0 Beta 1 Version 1.99.12 :: 2007-04-15
+----------------------------------------------------------------------------------------------------
+
+New:
+- TCP/IP (Client/Server/AutoSocket) and UDP/IP support added
+- Baud rates above 115k added
+- Serial COM ports that are in use are marked "(in use)"
+
+Important changes:
+- Text: EOL sequence is disabled by default
+
+Limitations and known issues:
+- Text: "Wait for response" is prepared but not yet implemented
+- Text: "Send line delay" is prepared but not yet implemented
+- Binary: "Binary sequence line break" is prepared but not yet implemented
+- Procedure command "\!(Delay(500ms))" is prepared but not yet implemented
+- Direct Mode (as in traditional terminals) not yet implemented, requires serious refactorings...
+- YAT Workspace (.yaw) not yet implemented
+
+
+YAT 2.0 Alpha 3 Version 1.99.8 :: 2007-02-25
+----------------------------------------------------------------------------------------------------
+
+New:
+- Ctrl-C copies selected monitor contents onto clipboard
+- Save and send from YAT XML files
+- Procedure commands "\!(NoEOL)" and "\!(EOL)" added
+- Chronometer added to status bar
+
+Important changes:
+- 12 instead of 8 predefined commands per page
+- Predefined command dialog bugs fixed
+- Text: "EOL = None" fixed
+ 
+Limitations and known issues:
+- So far, only serial ports are supported, TCP/IP and UDP/IP are yet to be implemented
+- Already open serial COM ports are not marked as such
+- Text: EOL sequence is always shown
+- Procedure command "\!(Delay(500ms))" is prepared but not yet implemented
+- Direct Mode (as in traditional terminals) not yet implemented, requires serious refactorings...
+
+
+YAT 2.0 Alpha 2 Version 1.99.3 :: 2007-02-07
+----------------------------------------------------------------------------------------------------
+
+New:
+- Text: Unicode and other encoding support added (approx 150 encodings)
+- Byte/line counter added to monitors
+
+Limitations and known issues:
+- So far, only serial ports are supported, TCP/IP and UDP/IP are yet to be implemented
+- Already open serial COM ports are not marked as such
+- Text: EOL sequence is always shown
+
+
+YAT 2.0 Alpha 1 Version 1.99.0 :: 2007-01-23
+----------------------------------------------------------------------------------------------------
+
+New:
+- Unlimited number of predefined commands
+- Support for multi-line commands added
+- RS-485 support added
+- Manual flowcontrol added
+
+Important changes:
+- Renamed to YAT
+- Upgrade to .NET 2.0
+- Use of serial port component of .NET 2.0
+   > Serial port component "Charon.Communcations" removed
+- Application settings shifted from registry to local user directory
+- Terminal settings (.yat) refined
+- Visual appearance modernized
+- Displaying performance improved
+- Nuvola based icons
+- About dialog: Link labels instead of normal labels
+
+Limitations and known issues:
+- So far, only serial ports are supported, TCP/IP and UDP/IP are yet to be implemented
+- Text: EOL sequence is always shown
+
+
+====================================================================================================
+3. History of changes in XTerm232
+====================================================================================================
+
+XTerm232 1.0.2 :: 2003-10-31
+----------------------------------------------------------------------------------------------------
+- NewTerminal.Connect registry entry can be empty
+
+
+XTerm232 1.0.1 :: 2003-10-30
+----------------------------------------------------------------------------------------------------
+- Log Root: CheckPathExists = false / CheckFileExists = false
+- Readme: More precise information on .NET download
+- BufferSettings -> DisplaySettings
+- Click on PortStatus opens connection settings
+- PortStatus update
+- ConnectionSettings recreation
+- Owner drawn ListBoxes
+- Auto ListBox scroll
+- Log file creation/clear bugs fixed
+- FontSettings
+- Connect CheckBox on NewTerminal
+- WindowLayoutUpdateControl
+
+
+XTerm232 1.0.0 :: 2003-10-14
+----------------------------------------------------------------------------------------------------
+- Initial release
+- Bin/Oct/Dec/Hex/Char/String
+- COM 1..256
+- 75...115000 Baud
+- Predefined Commands/Direct Commands
+- Text/Binary
+- Log Raw/Neat
+- Send files
+- RichTextBoxes
+
+
+====================================================================================================
+4. Roadmap
+====================================================================================================
+
+YAT 2.1 Beta 1 :: Not planned yet
+----------------------------------------------------------------------------------------------------
+- Logging refactoring including support for XML logging
+- Scripting/Plug-In Interface
+   > Inputs/requirements are highly appreciated
+- RS-232 AutoSense mode
+- Flexibilization of the GUI
+   > Dock/tabbed
+- Refactoring of settings
+   > Optional user settings (.yau)
+   > Settings grid
+
+
+====================================================================================================
+5. Legal
+====================================================================================================
+
+Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
+Copyright © 2003-2011 Matthias Kläy.
+All rights reserved.
+
+YAT is licensed under the GNU LGPL.
+See http://www.gnu.org/licenses/lgpl.html for license details.
+
+
+****************************************************************************************************
+                                      End of YAT Release Notes.
+****************************************************************************************************

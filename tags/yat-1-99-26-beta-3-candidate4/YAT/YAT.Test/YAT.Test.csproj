@@ -1,0 +1,113 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1E91D8B1-CFE6-4914-BDCF-AA204773CECA}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>YAT.Test</RootNamespace>
+    <AssemblyName>YAT.Test</AssemblyName>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Properties\YAT.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <Optimize>true</Optimize>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>bin\Release\YAT.Test.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>bin\Debug\YAT.Test.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.5.7.10213, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\YAT.Version.cs">
+      <Link>Properties\YAT.Version.cs</Link>
+    </Compile>
+    <Compile Include="TestSettingsDefaults.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Ports.Test\MKY.IO.Ports.Test.csproj">
+      <Project>{82461541-B351-4913-9747-EAFEE2322768}</Project>
+      <Name>MKY.IO.Ports.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Serial.Test\MKY.IO.Serial.Test.csproj">
+      <Project>{CAEC3FFA-F303-4CCB-A42A-36F45AA00BD2}</Project>
+      <Name>MKY.IO.Serial.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Usb.Test\MKY.IO.Usb.Test.csproj">
+      <Project>{E909B6F9-F856-4ED5-8D8F-6E77BC02C24C}</Project>
+      <Name>MKY.IO.Usb.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.Net.Test\MKY.Net.Test.csproj">
+      <Project>{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}</Project>
+      <Name>MKY.Net.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.Test\MKY.Test.csproj">
+      <Project>{644F7C29-CCE6-4827-9EF2-8B7D34194101}</Project>
+      <Name>MKY.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY\MKY.csproj">
+      <Project>{F489B948-95CF-49FE-B9AA-A51654F5688B}</Project>
+      <Name>MKY %28MKY\MKY%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.Windows.Forms.Test\MKY.Windows.Forms.Test.csproj">
+      <Project>{4171BFD3-4E50-4752-977B-9B1F79C3EDFB}</Project>
+      <Name>MKY.Windows.Forms.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Controller.Test\YAT.Controller.Test.csproj">
+      <Project>{7585E865-B3AA-4D73-BAC0-D0C4B25D2CF0}</Project>
+      <Name>YAT.Controller.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Domain.Test\YAT.Domain.Test.csproj">
+      <Project>{7CA209C1-B1A8-43E0-BBFB-79EDA186CE62}</Project>
+      <Name>YAT.Domain.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Model.Test\YAT.Model.Test.csproj">
+      <Project>{AD1EB9BA-AD7F-406A-810C-FE0A0ED1E819}</Project>
+      <Name>YAT.Model.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Settings.Test\YAT.Settings.Test.csproj">
+      <Project>{306722B1-7554-46FD-A8BE-99185753CD51}</Project>
+      <Name>YAT.Settings.Test</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\YAT.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
