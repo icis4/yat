@@ -398,7 +398,7 @@ namespace YAT.Gui.Controls
 							this,
 							"There are no serial COM ports available." + Environment.NewLine +
 							"Check the serial COM ports of your system.",
-							"No serial COM Ports",
+							"No serial COM ports",
 							MessageBoxButtons.OK,
 							MessageBoxIcon.Warning
 							);
@@ -410,8 +410,9 @@ namespace YAT.Gui.Controls
 						(
 						this,
 						"There was an error while retrieving the serial COM ports!" + Environment.NewLine +
-						"Check the serial COM ports of your system.",
-						"Error with serial COM Ports",
+						"You should check the serial COM ports in the system settings." + Environment.NewLine + Environment.NewLine +
+						"If you cannot solve the issue, tell YAT not to detect ports that are in use. To do so, go to 'File > Preferences...' and disable 'detect ports that are in use'.",
+						"Error with serial COM ports",
 						MessageBoxButtons.OK,
 						MessageBoxIcon.Error
 						);
