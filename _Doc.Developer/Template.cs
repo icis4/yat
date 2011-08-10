@@ -45,7 +45,7 @@ using YAT/*.<TODO>*/;
 
 namespace YAT/*.<TODO>*/
 {
-	class TODO
+	public class TODO
 	{
 		#region Types
 		//==========================================================================================
