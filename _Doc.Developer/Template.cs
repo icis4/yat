@@ -37,15 +37,15 @@
 //==================================================================================================
 
 using System;
-using System.<>;
+using System/*.<TODO>*/;
 
-using YAT.<>;
+using YAT/*.<TODO>*/;
 
 #endregion
 
-namespace YAT.<...>
+namespace YAT/*.<TODO>*/
 {
-	class <...>
+	class TODO
 	{
 		#region Types
 		//==========================================================================================
