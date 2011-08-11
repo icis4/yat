@@ -75,8 +75,16 @@ namespace MKY
 		{
 			StringBuilder sb = new StringBuilder();
 
+			bool firstElement = true;
 			foreach (object obj in array)
+			{
+				if (firstElement)
+					firstElement = false;
+				else
+					sb.Append(", ");
+
 				sb.Append(obj.ToString());
+			}
 
 			return (sb.ToString());
 		}
