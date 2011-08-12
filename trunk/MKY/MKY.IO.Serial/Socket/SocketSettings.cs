@@ -202,44 +202,7 @@ namespace MKY.IO.Serial
 					SetChanged();
 
 					// Immediately try to resolve the corresponding remote IP address.
-					IPHost ipHost;
-					if (IPHost.TryParse(this.remoteHost, out ipHost))
-					{
-						switch ((IPHostType)ipHost)
-						{
-							case IPHostType.Localhost:
-							case IPHostType.IPv4Localhost:
-							case IPHostType.IPv6Localhost:
-							{
-								this.resolvedRemoteIPAddress = ipHost.IPAddress;
-								break;
-							}
-
-							case IPHostType.Other:
-							{
-								try
-								{
-									IPAddress[] ipAddresses = System.Net.Dns.GetHostAddresses(this.remoteHost);
-									this.resolvedRemoteIPAddress = ipAddresses[0];
-								}
-								catch (Exception ex)
-								{
-									DebugEx.WriteException(this.GetType(), ex);
-									throw (ex);
-								}
-								break;
-							}
-
-							default:
-							{
-								throw (new ArgumentOutOfRangeException("value", (IPHostType)ipHost, "Unknown IP host type"));
-							}
-						}
-					}
-					else
-					{
-						this.resolvedRemoteIPAddress = IPAddress.None;
-					}
+					this.resolvedRemoteIPAddress = IPResolver.ResolveRemoteHost(this.remoteHost);
 				}
 			}
 		}
@@ -281,46 +244,7 @@ namespace MKY.IO.Serial
 					SetChanged();
 
 					// Immediately try to resolve the corresponding local IP address.
-					IPNetworkInterface networkInterface;
-					if (IPNetworkInterface.TryParse(this.localInterface, out networkInterface))
-					{
-						switch ((IPNetworkInterfaceType)networkInterface)
-						{
-							case IPNetworkInterfaceType.Any:
-							case IPNetworkInterfaceType.IPv4Any:
-							case IPNetworkInterfaceType.IPv4Loopback:
-							case IPNetworkInterfaceType.IPv6Any:
-							case IPNetworkInterfaceType.IPv6Loopback:
-							{
-								this.resolvedLocalIPAddress = networkInterface.IPAddress;
-								break;
-							}
-
-							case IPNetworkInterfaceType.Other:
-							{
-								try
-								{
-									IPAddress[] ipAddresses = System.Net.Dns.GetHostAddresses(this.localInterface);
-									this.resolvedLocalIPAddress = ipAddresses[0];
-								}
-								catch (Exception ex)
-								{
-									DebugEx.WriteException(this.GetType(), ex);
-									throw (ex);
-								}
-								break;
-							}
-
-							default:
-							{
-								throw (new ArgumentOutOfRangeException("value", (IPNetworkInterfaceType)networkInterface, "Unknown network interface type"));
-							}
-						}
-					}
-					else
-					{
-						this.resolvedLocalIPAddress = IPAddress.None;
-					}
+					this.resolvedLocalIPAddress = IPResolver.ResolveLocalInterface(this.localInterface);
 				}
 			}
 		}
