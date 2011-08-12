@@ -672,13 +672,17 @@ namespace YAT.Model
 								}
 								else
 								{
-									sb.Append("starting on port ");
+									sb.Append("starting to connect to ");
+									sb.Append(s.ResolvedRemoteIPAddress.ToString());
+									sb.Append(" on remote port ");
 									sb.Append(s.RemotePort.ToString());
 								}
 							}
 							else
 							{
-								sb.Append("closed on port ");
+								sb.Append("disconnected from ");
+								sb.Append(s.ResolvedRemoteIPAddress.ToString());
+								sb.Append(" on remote port ");
 								sb.Append(s.RemotePort.ToString());
 							}
 							break;
