@@ -71,28 +71,28 @@ namespace MKY.Xml
 		{
 			this.type = type;
 
-			// Create an empty object tree of the type to be able to serialize it afterwards
+			// Create an empty object tree of the type to be able to serialize it afterwards.
 			object obj = this.type.GetConstructor(new System.Type[] { }).Invoke(new object[] { });
 
-			// Serialize the empty object tree into a string
-			// Unlike file serialization, this string serialization will be UTF-16 encoded
+			// Serialize the empty object tree into a string.
+			// Unlike file serialization, this string serialization will be UTF-16 encoded.
 			StringBuilder sb = new StringBuilder();
 			XmlWriter writer = XmlWriter.Create(sb);
 			XmlSerializer serializer = new XmlSerializer(type);
 			serializer.Serialize(writer, obj);
 
-			// Load that string into an XML document that serves as base for new documents
+			// Load that string into an XML document that serves as base for new documents.
 			this.defaultDocument = new XmlDocument();
 			this.defaultDocument.LoadXml(sb.ToString());
 
-			// Retrieve default schema
+			// Retrieve default schema.
 			XmlReflectionImporter reflectionImporter = new XmlReflectionImporter();
 			XmlTypeMapping typeMapping = reflectionImporter.ImportTypeMapping(type);
 			XmlSchemas schemas = new XmlSchemas();
 			XmlSchemaExporter schemaExporter = new XmlSchemaExporter(schemas);
 			schemaExporter.ExportTypeMapping(typeMapping);
 
-			// Set and compile default schema
+			// Set and compile default schema.
 			this.defaultDocument.Schemas.Add(schemas[0]);
 			this.defaultDocument.Schemas.Compile();
 			this.defaultDocument.Validate(null);
@@ -123,14 +123,14 @@ namespace MKY.Xml
 		/// </remarks>
 		public object Deserialize(TextReader reader)
 		{
-			// Read input stream
+			// Read input stream.
 			XmlDocument inputDocument = CreateDocumentFromInput(reader);
 
 		#if (WRITE_DOCUMENTS_TO_FILES)
 			WriteDocumentToFile(inputDocument, "InputDocument");
 		#endif
 
-			// Retrieve and activate schema within document
+			// Retrieve and activate schema within document.
 			inputDocument.Schemas = InferSchemaFromXml(inputDocument.OuterXml);
 			inputDocument.Validate(null);
 
@@ -138,7 +138,7 @@ namespace MKY.Xml
 			WriteSchemasToFiles(inputDocument.Schemas, "InputSchema");
 		#endif
 
-			// Create output document from default
+			// Create output document from default.
 			XmlDocument outputDocument = new XmlDocument();
 			outputDocument.LoadXml(this.defaultDocument.InnerXml);
 			outputDocument.Schemas = this.defaultDocument.Schemas;
@@ -148,14 +148,14 @@ namespace MKY.Xml
 			WriteSchemasToFiles(outputDocument.Schemas, "OutputSchema");
 		#endif
 
-			// Recursively traverse documents node-by-node and copy compatible nodes
+			// Recursively traverse documents node-by-node and copy compatible nodes.
 			CopyDocumentTolerantly(inputDocument, outputDocument);
 
 		#if (WRITE_DOCUMENTS_TO_FILES)
 			WriteDocumentToFile(outputDocument, "OutputDocument");
 		#endif
 
-			// Create object tree from output document
+			// Create object tree from output document.
 			return (CreateObjectTreeFromDocument(outputDocument));
 		}
 
