@@ -150,11 +150,11 @@ namespace MKY.Xml
 		/// </remarks>
 		protected override bool TryToMatchAttribute(XPathNavigator inputNavigator, ref XPathNavigator outputNavigator)
 		{
-			// try standard match
+			// Try standard match.
 			if (base.TryToMatchAttribute(inputNavigator, ref outputNavigator))
 				return (true);
 			
-			// no success, try alternate match
+			// No success, try alternate match.
 			XmlNode inputNode = inputNavigator.UnderlyingObject as XmlNode;
 			if (inputNode != null)
 			{
@@ -166,7 +166,7 @@ namespace MKY.Xml
 				}
 			}
 
-			// still no success
+			// Still no success.
 			return (false);
 		}
 
@@ -178,11 +178,11 @@ namespace MKY.Xml
 		/// </remarks>
 		protected override bool TryToMatchChild(XPathNavigator inputNavigator, ref XPathNavigator outputNavigator)
 		{
-			// try standard match
+			// Try standard match.
 			if (base.TryToMatchChild(inputNavigator, ref outputNavigator))
 				return (true);
 
-			// no success, try alternate match
+			// No success, try alternate match.
 			XmlNode inputNode = inputNavigator.UnderlyingObject as XmlNode;
 			if (inputNode != null)
 			{
@@ -194,7 +194,7 @@ namespace MKY.Xml
 				}
 			}
 
-			// still no success
+			// Still no success.
 			return (false);
 		}
 
