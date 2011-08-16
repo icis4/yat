@@ -29,7 +29,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class RecentFileSettings : MKY.Settings.Settings
+	public class RecentFileSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
 		public const int MaxFilePaths = 8;

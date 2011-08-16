@@ -27,7 +27,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class PredefinedSettings : MKY.Settings.Settings
+	public class PredefinedSettings : MKY.Settings.SettingsItem
 	{
 		private int selectedPage;
 

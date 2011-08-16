@@ -26,7 +26,7 @@ using System.Xml.Serialization;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	public class BinaryTerminalSettings : MKY.Settings.Settings
+	public class BinaryTerminalSettings : MKY.Settings.SettingsItem
 	{
 		#region Fields
 		//==========================================================================================

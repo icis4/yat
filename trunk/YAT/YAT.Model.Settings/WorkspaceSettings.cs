@@ -29,7 +29,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class WorkspaceSettings : MKY.Settings.Settings
+	public class WorkspaceSettings : MKY.Settings.SettingsItem
 	{
 		private GuidList<TerminalSettingsItem> terminalSettings;
 

@@ -28,7 +28,7 @@ using MKY.Text;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	public class TextTerminalSettings : MKY.Settings.Settings
+	public class TextTerminalSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
 		public static readonly string DefaultEol = (string)EolEx.Parse(Environment.NewLine);

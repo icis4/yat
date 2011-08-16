@@ -26,7 +26,7 @@ namespace YAT.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class GeneralSettings : MKY.Settings.Settings
+	public class GeneralSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
 		public static readonly string AutoSaveRoot = Application.LocalUserAppDataPath;

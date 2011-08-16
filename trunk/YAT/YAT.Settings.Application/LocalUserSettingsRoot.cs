@@ -28,7 +28,7 @@ namespace YAT.Settings.Application
 	/// <summary></summary>
 	[Serializable]
 	[XmlRoot("LocalUserSettings")]
-	public class LocalUserSettingsRoot : MKY.Settings.Settings
+	public class LocalUserSettingsRoot : MKY.Settings.SettingsItem
 	{
 		private string productVersion = System.Windows.Forms.Application.ProductVersion;
 		private Settings.GeneralSettings general;

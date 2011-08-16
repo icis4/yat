@@ -27,7 +27,7 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class CharReplaceSettings : MKY.Settings.Settings
+	public class CharReplaceSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
 		public const bool ReplaceControlCharsDefault = true;

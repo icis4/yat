@@ -29,7 +29,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class PredefinedCommandSettings : MKY.Settings.Settings
+	public class PredefinedCommandSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
 		public const int MaxCommandsPerPage = 12;

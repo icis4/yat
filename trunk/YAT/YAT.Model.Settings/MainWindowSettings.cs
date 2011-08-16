@@ -27,7 +27,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class MainWindowSettings : MKY.Settings.Settings
+	public class MainWindowSettings : MKY.Settings.SettingsItem
 	{
 		private FormStartPosition startPosition;
 		private FormWindowState windowState;

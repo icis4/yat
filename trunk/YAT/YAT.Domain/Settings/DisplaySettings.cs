@@ -27,7 +27,7 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class DisplaySettings : MKY.Settings.Settings
+	public class DisplaySettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
 		public const bool SeparateTxRxRadixDefault = false;

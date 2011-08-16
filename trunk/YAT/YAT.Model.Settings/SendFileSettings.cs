@@ -31,7 +31,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SendFileSettings : MKY.Settings.Settings
+	public class SendFileSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
 		public const int MaxRecentCommands = 24;

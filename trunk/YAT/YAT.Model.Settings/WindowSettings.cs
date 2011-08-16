@@ -27,7 +27,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class WindowSettings : MKY.Settings.Settings
+	public class WindowSettings : MKY.Settings.SettingsItem
 	{
 		private FormWindowState state;
 		private Point location;

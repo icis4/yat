@@ -29,7 +29,7 @@ namespace YAT.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class PathSettings : MKY.Settings.Settings
+	public class PathSettings : MKY.Settings.SettingsItem
 	{
 		private string terminalFilesPath;
 		private string workspaceFilesPath;

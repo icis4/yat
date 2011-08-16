@@ -29,7 +29,7 @@ namespace YAT.Settings.Terminal
 {
 	/// <summary></summary>
 	[Serializable]
-	public class ExplicitSettings : MKY.Settings.Settings
+	public class ExplicitSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
 		public const string UserNameDefault = "";

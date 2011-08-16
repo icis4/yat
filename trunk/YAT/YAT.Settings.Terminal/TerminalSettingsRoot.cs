@@ -28,7 +28,7 @@ namespace YAT.Settings.Terminal
 	/// <summary></summary>
 	[Serializable]
 	[XmlRoot("Settings")]
-	public class TerminalSettingsRoot : MKY.Settings.Settings, MKY.Xml.IAlternateXmlElementProvider
+	public class TerminalSettingsRoot : MKY.Settings.SettingsItem, MKY.Xml.IAlternateXmlElementProvider
 	{
 		/// <summary>
 		/// Alternate XML elements for backward compatibility with old settings.

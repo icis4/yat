@@ -28,7 +28,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class TerminalSettingsItem : MKY.Settings.Settings, IGuidProvider
+	public class TerminalSettingsItem : MKY.Settings.SettingsItem, IGuidProvider
 	{
 		private string filePath;
 		private Guid guid;
