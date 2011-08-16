@@ -33,7 +33,7 @@ namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SerialPortSettings : MKY.Settings.Settings
+	public class SerialPortSettings : MKY.Settings.SettingsItem
 	{
 		#region Constants
 		//==========================================================================================

@@ -32,7 +32,7 @@ namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	[Serializable]
-	public class UsbSerialHidDeviceSettings : MKY.Settings.Settings
+	public class UsbSerialHidDeviceSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
 		public const bool AutoOpenDefault = true;

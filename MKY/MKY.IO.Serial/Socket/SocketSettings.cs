@@ -35,7 +35,7 @@ namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SocketSettings : MKY.Settings.Settings
+	public class SocketSettings : MKY.Settings.SettingsItem
 	{
 		#region Constants
 		//==========================================================================================
