@@ -21,27 +21,27 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace MKY.Settings
+namespace MKY.Data
 {
 	/// <summary></summary>
-	public class SettingsEventArgs : EventArgs
+	public class DataEventArgs : EventArgs
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly SettingsItem Source;
+		public readonly DataItem Source;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly SettingsEventArgs Inner;
+		public readonly DataEventArgs Inner;
 
 		/// <summary></summary>
-		public SettingsEventArgs(SettingsItem source)
+		public DataEventArgs(DataItem source)
 		{
 			Source = source;
 		}
 
 		/// <summary></summary>
-		public SettingsEventArgs(SettingsItem source, SettingsEventArgs inner)
+		public DataEventArgs(DataItem source, DataEventArgs inner)
 		{
 			Source = source;
 			Inner = inner;
