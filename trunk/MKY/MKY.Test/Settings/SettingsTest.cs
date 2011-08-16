@@ -68,7 +68,7 @@ namespace MKY.Test.Settings
 
 		/// <summary></summary>
 		[Serializable]
-		public class TestTreeChildLevel2 : MKY.Settings.Settings
+		public class TestTreeChildLevel2 : MKY.Settings.SettingsItem
 		{
 			/// <summary></summary>
 			public int SimpleValue = SimpleValueEqual;
@@ -134,7 +134,7 @@ namespace MKY.Test.Settings
 
 		/// <summary></summary>
 		[Serializable]
-		public class TestTreeChildLevel1 : MKY.Settings.Settings
+		public class TestTreeChildLevel1 : MKY.Settings.SettingsItem
 		{
 			/// <summary></summary>
 			public int SimpleValue = SimpleValueEqual;
@@ -275,7 +275,7 @@ namespace MKY.Test.Settings
 		/// <summary></summary>
 		[Serializable]
 		[XmlRoot("TestTreeRoot")]
-		public class TestTreeRoot : MKY.Settings.Settings
+		public class TestTreeRoot : MKY.Settings.SettingsItem
 		{
 			/// <summary></summary>
 			public int SimpleValue = SimpleValueEqual;

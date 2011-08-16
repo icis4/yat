@@ -30,7 +30,7 @@ namespace MKY.IO.Serial
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SerialCommunicationSettings : MKY.Settings.Settings
+	public class SerialCommunicationSettings : MKY.Settings.SettingsItem
 	{
 		private int baudRate;
 		private MKY.IO.Ports.DataBits dataBits;
