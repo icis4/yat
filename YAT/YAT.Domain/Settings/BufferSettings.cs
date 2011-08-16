@@ -27,7 +27,7 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class BufferSettings : MKY.Settings.Settings
+	public class BufferSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
 		public const int BufferSizeDefault = 65536;

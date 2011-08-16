@@ -29,7 +29,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class NewTerminalSettings : MKY.Settings.Settings
+	public class NewTerminalSettings : MKY.Settings.SettingsItem
 	{
 		private Domain.TerminalType terminalType;
 		private Domain.IOType ioType;

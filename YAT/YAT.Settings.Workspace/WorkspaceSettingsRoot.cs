@@ -31,7 +31,7 @@ namespace YAT.Settings.Workspace
 	/// <summary></summary>
 	[Serializable]
 	[XmlRoot("Settings")]
-	public class WorkspaceSettingsRoot : MKY.Settings.Settings
+	public class WorkspaceSettingsRoot : MKY.Settings.SettingsItem
 	{
 		private string productVersion = System.Windows.Forms.Application.ProductVersion;
 		private bool autoSaved = false;

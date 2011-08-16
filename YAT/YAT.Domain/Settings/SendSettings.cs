@@ -27,7 +27,7 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class SendSettings : MKY.Settings.Settings
+	public class SendSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
 		public const bool KeepCommandDefault = true;

@@ -33,7 +33,7 @@ namespace YAT.Log.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class LogSettings : MKY.Settings.Settings
+	public class LogSettings : MKY.Settings.SettingsItem
 	{
 		#region Fields
 		//==========================================================================================

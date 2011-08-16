@@ -27,7 +27,7 @@ namespace YAT.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class AutoWorkspaceSettings : MKY.Settings.Settings
+	public class AutoWorkspaceSettings : MKY.Settings.SettingsItem
 	{
 		private string filePath;
 		private Guid filePathUser;

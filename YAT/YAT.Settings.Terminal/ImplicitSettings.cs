@@ -27,7 +27,7 @@ namespace YAT.Settings.Terminal
 {
 	/// <summary></summary>
 	[Serializable]
-	public class ImplicitSettings : MKY.Settings.Settings
+	public class ImplicitSettings : MKY.Settings.SettingsItem
 	{
 		private bool terminalIsStarted;
 		private bool logIsStarted;

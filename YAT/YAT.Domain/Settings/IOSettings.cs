@@ -27,7 +27,7 @@ namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class IOSettings : MKY.Settings.Settings
+	public class IOSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
 		public const Domain.IOType IOTypeDefault = Domain.IOType.SerialPort;

@@ -26,7 +26,7 @@ using System.Xml.Serialization;
 namespace YAT.Domain.Settings
 {
 	/// <summary></summary>
-	public class BinaryDisplaySettings : MKY.Settings.Settings
+	public class BinaryDisplaySettings : MKY.Settings.SettingsItem
 	{
 		private BinaryLengthLineBreak lengthLineBreak;
 		private BinarySequenceLineBreak sequenceLineBreak;

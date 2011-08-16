@@ -28,7 +28,7 @@ namespace YAT.Model.Settings
 {
 	/// <summary></summary>
 	[Serializable]
-	public class FormatSettings : MKY.Settings.Settings
+	public class FormatSettings : MKY.Settings.SettingsItem
 	{
 		private FontFormat font;
 		private TextFormat txDataFormat;
