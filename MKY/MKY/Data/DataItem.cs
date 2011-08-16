@@ -23,58 +23,37 @@ using System.Collections.Generic;
 
 using MKY.Event;
 
-namespace MKY.Settings
+namespace MKY.Data
 {
 	/// <summary></summary>
-	public enum SettingsType
+	public abstract class DataItem : IEquatable<DataItem>
 	{
-		/// <summary>
-		/// Explicit (normal) user settings, user gets notified as soon as setting changes.
-		/// E.g. communication settings or command definitions.
-		/// </summary>
-		Explicit,
-
-		/// <summary>
-		/// Implicit (hidden) user settings, user doesn't get notified when setting changes.
-		/// E.g. window or layout settings that are automatically saved.
-		/// </summary>
-		Implicit,
-	}
-
-	/// <summary></summary>
-	public abstract class Settings : IEquatable<Settings>
-	{
-		private SettingsType settingsType = SettingsType.Explicit;
-
-		private List<Settings> nodes;
+		private List<DataItem> nodes;
 		private bool haveChanged = false;
 		private int changeEventSuspendedCount = 0;
 
 		/// <summary></summary>
-		public event EventHandler<SettingsEventArgs> Changed;
+		public event EventHandler<DataEventArgs> Changed;
 
 		/// <summary></summary>
-		public Settings()
+		public DataItem()
 		{
-			this.nodes = new List<Settings>();
+			this.nodes = new List<DataItem>();
 		}
 
 		/// <summary></summary>
-		public Settings(SettingsType type)
+		public DataItem(DataItem settings)
 		{
-			this.settingsType = type;
-			this.nodes = new List<Settings>();
+			this.nodes = new List<DataItem>(); // Do not copy nodes.
 		}
 
-		/// <summary></summary>
-		public Settings(Settings settings)
-		{
-			this.settingsType = settings.settingsType;
-			this.nodes = new List<Settings>();         // do not copy nodes
-		}
+		#region Setup/Teardown Properties and Methods
+		//==========================================================================================
+		// Setup/Teardown Properties and Methods
+		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void AttachNode(Settings node)
+		protected virtual void AttachNode(DataItem node)
 		{
 			if (node != null)
 			{
@@ -82,7 +61,7 @@ namespace MKY.Settings
 
 				node.SuspendChangeEvent();
 				node.SetChanged();
-				node.Changed += new EventHandler<SettingsEventArgs>(node_Changed);
+				node.Changed += new EventHandler<DataEventArgs>(node_Changed);
 				this.nodes.Add(node);
 
 				ResumeChangeEvent();
@@ -90,7 +69,7 @@ namespace MKY.Settings
 		}
 
 		/// <summary></summary>
-		protected virtual void ReplaceNode(Settings nodeOld, Settings nodeNew)
+		protected virtual void ReplaceNode(DataItem nodeOld, DataItem nodeNew)
 		{
 			if ((nodeOld != null) && (nodeNew != null))
 			{
@@ -98,13 +77,13 @@ namespace MKY.Settings
 				{
 					SuspendChangeEvent();
 
-					nodeOld.Changed -= new EventHandler<SettingsEventArgs>(node_Changed);
+					nodeOld.Changed -= new EventHandler<DataEventArgs>(node_Changed);
 					int index = this.nodes.IndexOf(nodeOld);
 					this.nodes.RemoveAt(index);
 
 					nodeNew.SuspendChangeEvent();
 					nodeNew.SetChanged();
-					nodeNew.Changed += new EventHandler<SettingsEventArgs>(node_Changed);
+					nodeNew.Changed += new EventHandler<DataEventArgs>(node_Changed);
 					this.nodes.Insert(index, nodeNew);
 
 					ResumeChangeEvent();
@@ -113,24 +92,25 @@ namespace MKY.Settings
 		}
 
 		/// <summary></summary>
-		protected virtual void DetachNode(Settings node)
+		protected virtual void DetachNode(DataItem node)
 		{
 			if (node != null)
 			{
 				SuspendChangeEvent();
 
-				node.Changed -= new EventHandler<SettingsEventArgs>(node_Changed);
+				node.Changed -= new EventHandler<DataEventArgs>(node_Changed);
 				this.nodes.Remove(node);
 
 				ResumeChangeEvent();
 			}
 		}
 
-		/// <summary></summary>
-		public virtual SettingsType SettingsType
-		{
-			get { return (this.settingsType); }
-		}
+		#endregion
+
+		#region Changed Properties and Methods
+		//==========================================================================================
+		// Changed Properties and Methods
+		//==========================================================================================
 
 		/// <summary></summary>
 		public virtual bool HaveChanged
@@ -138,23 +118,8 @@ namespace MKY.Settings
 			get
 			{
 				bool hc = this.haveChanged;
-				foreach (Settings node in this.nodes)
+				foreach (DataItem node in this.nodes)
 					hc = hc || node.HaveChanged;
-				return (hc);
-			}
-		}
-
-		/// <summary></summary>
-		public virtual bool ExplicitHaveChanged
-		{
-			get
-			{
-				if (this.settingsType == SettingsType.Implicit)
-					return (false);
-
-				bool hc = this.haveChanged;
-				foreach (Settings node in this.nodes)
-					hc = hc || node.ExplicitHaveChanged;
 				return (hc);
 			}
 		}
@@ -164,7 +129,7 @@ namespace MKY.Settings
 		{
 			SuspendChangeEvent();
 
-			foreach (Settings node in this.nodes)
+			foreach (DataItem node in this.nodes)
 				node.SetChanged();
 
 			this.haveChanged = true;
@@ -177,7 +142,7 @@ namespace MKY.Settings
 		{
 			SuspendChangeEvent();
 
-			foreach (Settings node in this.nodes)
+			foreach (DataItem node in this.nodes)
 				node.ClearChanged();
 
 			this.haveChanged = false;
@@ -185,12 +150,19 @@ namespace MKY.Settings
 			ResumeChangeEvent();
 		}
 
+		#endregion
+
+		#region Defaults Methods
+		//==========================================================================================
+		// Defaults Methods
+		//==========================================================================================
+
 		/// <summary></summary>
 		public virtual void SetDefaults()
 		{
 			SuspendChangeEvent();
 
-			foreach (Settings node in this.nodes)
+			foreach (DataItem node in this.nodes)
 				node.SetDefaults();
 
 			SetMyDefaults();
@@ -204,6 +176,8 @@ namespace MKY.Settings
 			// Default implementation has nothing to do (yet).
 		}
 
+		#endregion
+
 		#region Object Members
 
 		/// <summary>
@@ -211,13 +185,13 @@ namespace MKY.Settings
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			return (Equals(obj as Settings));
+			return (Equals(obj as DataItem));
 		}
 
 		/// <summary>
 		/// Determines whether this instance and the specified object have value equality.
 		/// </summary>
-		public bool Equals(Settings other)
+		public bool Equals(DataItem other)
 		{
 			if (ReferenceEquals(other, null))
 				return (false);
@@ -245,7 +219,7 @@ namespace MKY.Settings
 		public override int GetHashCode()
 		{
 			int hashCode = 0;
-			foreach (Settings node in this.nodes)
+			foreach (DataItem node in this.nodes)
 				hashCode ^= node.GetHashCode();
 
 			return (hashCode);
@@ -257,9 +231,9 @@ namespace MKY.Settings
 		//------------------------------------------------------------------------------------------
 		// Node Events
 		//------------------------------------------------------------------------------------------
-		private void node_Changed(object sender, SettingsEventArgs e)
+		private void node_Changed(object sender, DataEventArgs e)
 		{
-			OnChanged(new SettingsEventArgs(this, e));
+			OnChanged(new DataEventArgs(this, e));
 		}
 
 		#endregion
@@ -270,10 +244,10 @@ namespace MKY.Settings
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		protected virtual void OnChanged(SettingsEventArgs e)
+		protected virtual void OnChanged(DataEventArgs e)
 		{
 			if (this.changeEventSuspendedCount == 0)
-				EventHelper.FireSync<SettingsEventArgs>(Changed, this, e);
+				EventHelper.FireSync<DataEventArgs>(Changed, this, e);
 		}
 
 		#endregion
@@ -288,7 +262,7 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual void SuspendChangeEvent()
 		{
-			foreach (Settings node in this.nodes)
+			foreach (DataItem node in this.nodes)
 				node.SuspendChangeEvent();
 
 			this.changeEventSuspendedCount++;
@@ -310,11 +284,11 @@ namespace MKY.Settings
 		{
 			this.changeEventSuspendedCount--;
 
-			foreach (Settings node in this.nodes)
+			foreach (DataItem node in this.nodes)
 				node.ResumeChangeEvent(forcePendingChangeEvent);
 
 			if (forcePendingChangeEvent && this.haveChanged)
-				OnChanged(new SettingsEventArgs(this));
+				OnChanged(new DataEventArgs(this));
 		}
 
 		/// <summary>
@@ -323,10 +297,10 @@ namespace MKY.Settings
 		/// </summary>
 		public virtual void ForceChangeEvent()
 		{
-			foreach (Settings node in this.nodes)
+			foreach (DataItem node in this.nodes)
 				node.ForceChangeEvent();
 
-			OnChanged(new SettingsEventArgs(this));
+			OnChanged(new DataEventArgs(this));
 		}
 
 		#endregion
@@ -336,7 +310,7 @@ namespace MKY.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(Settings lhs, Settings rhs)
+		public static bool operator ==(DataItem lhs, DataItem rhs)
 		{
 			// Base reference type implementation of operator ==.
 			// See MKY.Test.EqualityTest for details.
@@ -354,7 +328,7 @@ namespace MKY.Settings
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(Settings lhs, Settings rhs)
+		public static bool operator !=(DataItem lhs, DataItem rhs)
 		{
 			return (!(lhs == rhs));
 		}

@@ -35,7 +35,7 @@ namespace MKY.Settings
 	/// </summary>
 	/// <typeparam name="TDocumentSettings">The type of the settings.</typeparam>
 	public class DocumentSettingsHandler<TDocumentSettings>
-		where TDocumentSettings : Settings, new()
+		where TDocumentSettings : SettingsItem, new()
 	{
 		#region Fields
 		//==========================================================================================
