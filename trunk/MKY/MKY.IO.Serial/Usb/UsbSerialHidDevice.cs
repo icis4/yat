@@ -462,7 +462,7 @@ namespace MKY.IO.Serial
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			UnusedEvent.PreventCompilerWarning(IOControlChanged);
-			throw (new NotSupportedException("Event 'IOControlChanged' is not in use for USB Ser/HID devices"));
+			throw (new NotImplementedException("Event 'IOControlChanged' is not in use for USB Ser/HID devices"));
 		}
 
 		/// <summary></summary>
@@ -481,7 +481,7 @@ namespace MKY.IO.Serial
 		protected virtual void OnIORequest(IORequestEventArgs e)
 		{
 			UnusedEvent.PreventCompilerWarning<IORequestEventArgs>(IORequest);
-			throw (new NotSupportedException("Event 'IORequest' is not in use for USB Ser/HID devices"));
+			throw (new NotImplementedException("Event 'IORequest' is not in use for USB Ser/HID devices"));
 		}
 
 		/// <summary></summary>
