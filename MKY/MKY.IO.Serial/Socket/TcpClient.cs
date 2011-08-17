@@ -699,7 +699,7 @@ namespace MKY.IO.Serial
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			UnusedEvent.PreventCompilerWarning(IOControlChanged);
-			throw (new NotSupportedException("Event not in use"));
+			throw (new NotImplementedException("Event 'IOControlChanged' is not in use for TCP clients"));
 		}
 
 		/// <summary></summary>
@@ -717,8 +717,8 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		protected virtual void OnIORequest(IORequestEventArgs e)
 		{
-			UnusedEvent.PreventCompilerWarning<IORequestEventArgs>(IORequest);
-			throw (new NotSupportedException("Event not in use"));
+			UnusedEvent.PreventCompilerWarning(IORequest);
+			throw (new NotImplementedException("Event 'IORequest' is not in use for TCP clients"));
 		}
 
 		/// <summary></summary>
