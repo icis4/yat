@@ -32,6 +32,8 @@ Use <c>null</c>
 Use <c>true</c>
 Use <c>false</c>
 
+<see cref="T:Type`1"/>
+
 
 Preprocessor statements
 -----------------------

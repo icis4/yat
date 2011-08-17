@@ -41,12 +41,6 @@ namespace MKY.Data
 			this.nodes = new List<DataItem>();
 		}
 
-		/// <summary></summary>
-		public DataItem(DataItem settings)
-		{
-			this.nodes = new List<DataItem>(); // Do not copy nodes.
-		}
-
 		#region Setup/Teardown Properties and Methods
 		//==========================================================================================
 		// Setup/Teardown Properties and Methods
