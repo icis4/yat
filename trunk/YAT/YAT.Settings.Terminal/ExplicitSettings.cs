@@ -76,7 +76,7 @@ namespace YAT.Settings.Terminal
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			UserName = "";
+			UserName = UserNameDefault;
 		}
 
 		#region Properties
