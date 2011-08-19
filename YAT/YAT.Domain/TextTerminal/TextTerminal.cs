@@ -436,7 +436,7 @@ namespace YAT.Domain
 
 					// Get encoding and retrieve char count.
 					Encoding e = (EncodingEx)TextTerminalSettings.Encoding;
-					int charCount = e.GetCharCount(decodingArray);
+					int charCount = e.GetCharCount(decodingArray, 0, decodingArray.Length);
 
 					// If decoding array can be decoded into something useful, decode it.
 					if (charCount == 1)

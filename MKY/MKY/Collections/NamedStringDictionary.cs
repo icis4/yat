@@ -72,22 +72,22 @@ namespace MKY.Collections
 		{
 			get
 			{
-				List<StringKeyValuePair> l = new List<StringKeyValuePair>(dictionary.Count);
-				if (dictionary != null)
+				List<StringKeyValuePair> l = new List<StringKeyValuePair>(this.dictionary.Count);
+				if (this.dictionary != null)
 				{
-					foreach (KeyValuePair<string, string> kvp in dictionary)
+					foreach (KeyValuePair<string, string> kvp in this.dictionary)
 						l.Add(new StringKeyValuePair(kvp.Key, kvp.Value));
 				}
 				return (l);
 			}
 			set
 			{
-				dictionary.Clear();
+				this.dictionary.Clear();
 
 				if (value != null)
 				{
 					foreach (StringKeyValuePair kvp in value)
-						dictionary.Add(kvp.Key, kvp.Value);
+						this.dictionary.Add(kvp.Key, kvp.Value);
 				}
 			}
 		}
@@ -117,7 +117,7 @@ namespace MKY.Collections
 		/// </summary>
 		public void Clear()
 		{
-			dictionary.Clear();
+			this.dictionary.Clear();
 		}
 
 		/// <summary>
