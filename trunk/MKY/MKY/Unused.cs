@@ -64,6 +64,18 @@ namespace MKY
 			// else return too...
 		}
 	}
+
+	/// <summary></summary>
+	public static class UnusedField
+	{
+		/// <summary>
+		/// Utility method that can be applied to unused fields to prevent compiler warnings.
+		/// </summary>
+		public static void PreventCompilerWarning<T>(out T obj)
+		{
+			obj = default(T);
+		}
+	}
 }
 
 //==================================================================================================

@@ -42,6 +42,7 @@ namespace MKY.Settings
 	}
 
 	/// <summary></summary>
+	[Serializable]
 	public abstract class SettingsItem : IEquatable<SettingsItem>
 	{
 		private SettingsType settingsType = SettingsType.Explicit;

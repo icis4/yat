@@ -12,6 +12,7 @@
 	Select all configurations
 	Enable Build > XML documentation file
 	Tick Build > Advanced > Check for under/overflow
+	Sign the assembly
 
 5.	Open "AssemblyInfo"
 	Add "using System;"

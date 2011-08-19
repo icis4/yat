@@ -26,6 +26,7 @@ using MKY.Event;
 namespace MKY.Data
 {
 	/// <summary></summary>
+	[Serializable]
 	public abstract class DataItem : IEquatable<DataItem>
 	{
 		private List<DataItem> nodes;
