@@ -4,3 +4,4 @@ CALL CleanAll-Options.bat
 CALL CleanAll-Setup.bat
 CALL CleanAll-Temp.bat
 CALL CleanAll-SCM.bat
+CALL CleanAll-Analyzer.bat
