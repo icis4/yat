@@ -4,9 +4,9 @@
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY/MKY.IO.Serial/Socket/TcpAutoSocket.cs $
-// $Author: maettu_this $
-// $Date: 2011-04-25 17:54:48 +0200 (Mo, 25 Apr 2011) $
-// $Revision: 417 $
+// $Author: klaey-1 $
+// $Date: 2011/08/24 13:38:48MESZ $
+// $Revision: 1.1 $
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------
