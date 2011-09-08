@@ -4,9 +4,9 @@
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY/MKY.IO.Serial/Socket/UdpSocket.cs $
-// $Author: maettu_this $
-// $Date: 2011-04-25 13:56:30 +0200 (Mo, 25 Apr 2011) $
-// $Revision: 416 $
+// $Author: klaey-1 $
+// $Date: 2011/08/24 13:38:48MESZ $
+// $Revision: 1.1 $
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------

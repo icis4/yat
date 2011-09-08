@@ -70,6 +70,12 @@
     <Compile Include="PathLabel.Designer.cs">
       <DependentUpon>PathLabel.cs</DependentUpon>
     </Compile>
+    <Compile Include="PictureBoxEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PictureBoxEx.Designer.cs">
+      <DependentUpon>PictureBoxEx.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatusBox.cs">
       <SubType>Form</SubType>

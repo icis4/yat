@@ -4,9 +4,9 @@
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
 // $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY/MKY.IO.Serial/Socket/SocketDefaults.cs $
-// $Author: maettu_this $
-// $Date: 2011-04-23 01:49:13 +0200 (Sa, 23 Apr 2011) $
-// $Revision: 407 $
+// $Author: klaey-1 $
+// $Date: 2011/08/24 13:38:47MESZ $
+// $Revision: 1.1 $
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // ------------------------------------------------------------------------------------------------

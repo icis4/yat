@@ -33,6 +33,20 @@ namespace MKY
 	public static class ArrayEx
 	{
 		/// <summary>
+		/// Creates an array using <see cref="Array.CreateInstance(Type, int)"/> and initializes
+		/// the given number of array elements with the given initial value.
+		/// </summary>
+		public static Array CreateAndInitializeInstance<T>(int length, T initalValue)
+		{
+			T[] a = (T[])Array.CreateInstance(typeof(T), length);
+
+			for (int i = 0; i < length; i++)
+				a[i] = initalValue;
+
+			return (a);
+		}
+
+		/// <summary>
 		/// Determines whether the two arrays have value equality, i.e. all array elements have
 		/// value equality.
 		/// </summary>

@@ -30,6 +30,28 @@ namespace MKY
 		/// <summary>
 		/// Limits "value" to the boundaries specified.
 		/// </summary>
+		public static double LimitToLowerBounds(double value, double lower)
+		{
+			if (value < lower)
+				return (lower);
+
+			return (value);
+		}
+
+		/// <summary>
+		/// Limits "value" to the boundaries specified.
+		/// </summary>
+		public static double LimitToUpperBounds(double value, double upper)
+		{
+			if (value > upper)
+				return (upper);
+
+			return (value);
+		}
+
+		/// <summary>
+		/// Limits "value" to the boundaries specified.
+		/// </summary>
 		public static double LimitToBounds(double value, double lower, double upper)
 		{
 			if (value < lower)

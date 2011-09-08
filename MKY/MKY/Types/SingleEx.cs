@@ -3,9 +3,9 @@
 // Visit YAT at http://sourceforge.net/projects/y-a-terminal.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY/MKY.IO.Serial/Enums.cs $
+// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY/MKY/Types/DoubleEx.cs $
 // $Author: klaey-1 $
-// $Date: 2011/08/24 13:38:45MESZ $
+// $Date: 2011/08/24 13:38:39MESZ $
 // $Revision: 1.1 $
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
@@ -18,43 +18,54 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
-// warnings for each undocumented member below. Documenting each member makes little sense
-// since they pretty much tell their purpose and documentation tags between the members
-// makes the code less readable.
-#pragma warning disable 1591
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MKY.IO
+// This code is intentionally placed into the MKY namespace even though the file is located in
+// MKY.Types for consistency with the Sytem namespace.
+namespace MKY
 {
-	/// <summary></summary>
-	public enum IORequest
+	/// <summary>
+	/// Single utility methods.
+	/// </summary>
+	public static class SingleEx
 	{
-		Open,
-		Close,
-	}
+		/// <summary>
+		/// Limits "value" to the boundaries specified.
+		/// </summary>
+		public static float LimitToLowerBounds(float value, float lower)
+		{
+			if (value < lower)
+				return (lower);
 
-	/// <summary></summary>
-	public enum IOErrorSeverity
-	{
-		Acceptable,
-		Severe,
-		Fatal,
-	}
+			return (value);
+		}
 
-	/// <summary></summary>
-	public enum IODirection
-	{
-		Any,
-		Input,
-		Output,
+		/// <summary>
+		/// Limits "value" to the boundaries specified.
+		/// </summary>
+		public static float LimitToUpperBounds(float value, float upper)
+		{
+			if (value > upper)
+				return (upper);
+
+			return (value);
+		}
+
+		/// <summary>
+		/// Limits "value" to the boundaries specified.
+		/// </summary>
+		public static float LimitToBounds(float value, float lower, float upper)
+		{
+			if (value < lower)
+				return (lower);
+
+			if (value > upper)
+				return (upper);
+
+			return (value);
+		}
 	}
 }
 
 //==================================================================================================
 // End of
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY/MKY.IO.Serial/Enums.cs $
+// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY/MKY/Types/DoubleEx.cs $
 //==================================================================================================
