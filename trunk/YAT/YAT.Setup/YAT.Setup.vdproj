@@ -312,7 +312,7 @@
         {
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_00D87CCAC305445B90B0C5E721054E1C"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\status.txt"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\status.txt"
             "TargetName" = "8:status.txt"
             "Tag" = "8:"
             "Folder" = "8:_27A80D4B07014EA98AFADDEF9C9ADDA3"
@@ -352,7 +352,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0F84775FE5614180B01B1B342BCE14FF"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSansMono.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSansMono.ttf"
             "TargetName" = "8:DejaVuSansMono.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
@@ -372,7 +372,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1FF82390D1D8464C867A4E50E4706B2F"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSerif.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSerif.ttf"
             "TargetName" = "8:DejaVuSerif.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
@@ -392,7 +392,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_23036CE2213742AEA264759BEAFA617B"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSerifCondensed-BoldItalic.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSerifCondensed-BoldItalic.ttf"
             "TargetName" = "8:DejaVuSerifCondensed-BoldItalic.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
@@ -412,7 +412,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_267AF4B4DF0D4AF9A0CB444F6E117C47"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\README"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\README"
             "TargetName" = "8:README"
             "Tag" = "8:"
             "Folder" = "8:_27A80D4B07014EA98AFADDEF9C9ADDA3"
@@ -432,7 +432,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_294E03A83B8245EB861775A47DBD0D90"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSansCondensed-BoldOblique.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSansCondensed-BoldOblique.ttf"
             "TargetName" = "8:DejaVuSansCondensed-BoldOblique.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
@@ -452,7 +452,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_29BFA7D067D646B98C30082FAA56E9AF"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\NEWS"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\NEWS"
             "TargetName" = "8:NEWS"
             "Tag" = "8:"
             "Folder" = "8:_27A80D4B07014EA98AFADDEF9C9ADDA3"
@@ -472,7 +472,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3A5906ECF1EC4CAAABB8307211311B3A"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSansMono-BoldOblique.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSansMono-BoldOblique.ttf"
             "TargetName" = "8:DejaVuSansMono-BoldOblique.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
@@ -492,7 +492,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3B43A7B3260B43CDA8ACC7888299B92F"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSans-ExtraLight.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSans-ExtraLight.ttf"
             "TargetName" = "8:DejaVuSans-ExtraLight.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
@@ -512,7 +512,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5799679D694D4D768D2A6574F281FC54"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSerifCondensed.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSerifCondensed.ttf"
             "TargetName" = "8:DejaVuSerifCondensed.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
@@ -532,7 +532,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_67E9E076EC0740B284A0F6A9F35AEF78"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSansCondensed-Oblique.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSansCondensed-Oblique.ttf"
             "TargetName" = "8:DejaVuSansCondensed-Oblique.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
@@ -552,7 +552,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6A1BBB9CB64E4BB1A40CC4FB63CC0AE1"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\unicover.txt"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\unicover.txt"
             "TargetName" = "8:unicover.txt"
             "Tag" = "8:"
             "Folder" = "8:_27A80D4B07014EA98AFADDEF9C9ADDA3"
@@ -572,7 +572,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6E57D1FE09E64AD9986C668FE56860BD"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSerifCondensed-Italic.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSerifCondensed-Italic.ttf"
             "TargetName" = "8:DejaVuSerifCondensed-Italic.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
@@ -592,7 +592,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_77A6B25342F74B178FB0A01BA5F7C7E8"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSans-Oblique.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSans-Oblique.ttf"
             "TargetName" = "8:DejaVuSans-Oblique.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
@@ -612,7 +612,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7B2975051FC94006B8FCEE6936E63F28"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSans-Bold.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSans-Bold.ttf"
             "TargetName" = "8:DejaVuSans-Bold.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
@@ -632,7 +632,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_94642EDA2A364D6B8DA8BD2176F47346"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\BUGS"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\BUGS"
             "TargetName" = "8:BUGS"
             "Tag" = "8:"
             "Folder" = "8:_27A80D4B07014EA98AFADDEF9C9ADDA3"
@@ -652,7 +652,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_97964BA121B74854ACB2E3FC12C1B5A7"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSansCondensed-Bold.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSansCondensed-Bold.ttf"
             "TargetName" = "8:DejaVuSansCondensed-Bold.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
@@ -672,7 +672,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9B49533709B94DDDABF70FA71797AEBD"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSans.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSans.ttf"
             "TargetName" = "8:DejaVuSans.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
@@ -692,7 +692,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A0FE27E22EA249048AD98B5A64837FA6"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSansMono-Bold.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSansMono-Bold.ttf"
             "TargetName" = "8:DejaVuSansMono-Bold.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
@@ -712,7 +712,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A236F5EC9E0F40C38C86CFCF36C16029"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSans-BoldOblique.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSans-BoldOblique.ttf"
             "TargetName" = "8:DejaVuSans-BoldOblique.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
@@ -732,7 +732,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AB17C125156A4916AA2154800473DD57"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\LICENSE"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\LICENSE"
             "TargetName" = "8:LICENSE"
             "Tag" = "8:"
             "Folder" = "8:_27A80D4B07014EA98AFADDEF9C9ADDA3"
@@ -752,7 +752,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B08347304D57482698EB70179CE068A5"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSansMono-Oblique.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSansMono-Oblique.ttf"
             "TargetName" = "8:DejaVuSansMono-Oblique.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
@@ -772,7 +772,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B4DD0B64E7FB4CBEAA4C0BB2127D2417"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSerif-BoldItalic.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSerif-BoldItalic.ttf"
             "TargetName" = "8:DejaVuSerif-BoldItalic.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
@@ -792,7 +792,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C899D9093A7348759AC6A11A8A7F8C7A"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\langcover.txt"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\langcover.txt"
             "TargetName" = "8:langcover.txt"
             "Tag" = "8:"
             "Folder" = "8:_27A80D4B07014EA98AFADDEF9C9ADDA3"
@@ -812,7 +812,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D0010F5FD77A49FFBE10EF98652A9E4C"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\AUTHORS"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\AUTHORS"
             "TargetName" = "8:AUTHORS"
             "Tag" = "8:"
             "Folder" = "8:_27A80D4B07014EA98AFADDEF9C9ADDA3"
@@ -832,7 +832,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E51D5246AFBC4F3CBFA74197D4A0E5D3"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSansCondensed.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSansCondensed.ttf"
             "TargetName" = "8:DejaVuSansCondensed.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
@@ -852,7 +852,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ECA1D12DCC8D40529A48915DB2B18CE4"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSerif-Italic.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSerif-Italic.ttf"
             "TargetName" = "8:DejaVuSerif-Italic.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
@@ -872,7 +872,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F3E2A13B7EAA4E81B69DFDCFE537AB24"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSerifCondensed-Bold.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSerifCondensed-Bold.ttf"
             "TargetName" = "8:DejaVuSerifCondensed-Bold.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
@@ -892,7 +892,7 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F503240C20AC401C9DC757D75F7138E0"
             {
-            "SourcePath" = "8:..\\_Fonts\\DejaVu\\ttf\\DejaVuSerif-Bold.ttf"
+            "SourcePath" = "8:..\\!-Fonts\\DejaVu\\ttf\\DejaVuSerif-Bold.ttf"
             "TargetName" = "8:DejaVuSerif-Bold.ttf"
             "Tag" = "8:"
             "Folder" = "8:_75FE2B390D88474498B774F5E17E3CE2"
