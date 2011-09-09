@@ -3,11 +3,11 @@
 PUSHD ..
 
 ECHO Cleaning all \.svn directories...
-FOR /R %%I IN (.) DO CALL "_Scripts\CleanDir.bat" "%%I" ".svn"
+FOR /R %%I IN (.) DO CALL "!-Scripts\CleanDir.bat" "%%I" ".svn"
 ECHO ...successfully cleaned
 
 ECHO Cleaning all \.git directories...
-FOR /R %%I IN (.) DO CALL "_Scripts\CleanDir.bat" "%%I" ".git"
+FOR /R %%I IN (.) DO CALL "!-Scripts\CleanDir.bat" "%%I" ".git"
 ECHO ...successfully cleaned
 
 ECHO Cleaning Ankh.Load...

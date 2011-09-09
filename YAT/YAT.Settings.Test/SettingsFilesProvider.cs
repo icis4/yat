@@ -87,7 +87,7 @@ namespace YAT.Settings.Test
 				di = di.Parent;
 
 			// Set path to "<Root>\this.Settings\<directory>\".
-			FilePath = di.FullName + Path.DirectorySeparatorChar + "_Settings" + Path.DirectorySeparatorChar + directory + Path.DirectorySeparatorChar;
+			FilePath = di.FullName + Path.DirectorySeparatorChar + "!-Settings" + Path.DirectorySeparatorChar + directory + Path.DirectorySeparatorChar;
 
 			TerminalFilePaths  = new Dictionary<TerminalSettingsTestCases,  string>();
 			WorkspaceFilePaths = new Dictionary<WorkspaceSettingsTestCases, string>();
