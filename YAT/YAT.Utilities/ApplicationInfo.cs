@@ -29,13 +29,13 @@ namespace YAT.Utilities
 	////public const string ProductBuildName = " Final";
 
 	/////// <summary></summary>
-	////public const string ProductBuildName = " Beta 3";
+	////public const string ProductBuildName = " Beta 4";
 
 		/// <summary></summary>
-		public const string ProductBuildName = " Beta 3 Candidate 5";
+		public const string ProductBuildName = " Beta 4 Candidate 1";
 
 	/////// <summary></summary>
-	////public const string ProductBuildName = " Beta 3 Preliminary";
+	////public const string ProductBuildName = " Beta 4 Preliminary";
 
 		/// <summary></summary>
 		public static readonly string ProductNameAndBuildName = Application.ProductName + ProductBuildName;

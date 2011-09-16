@@ -18,6 +18,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -27,6 +32,8 @@ using System.Text;
 
 using MKY;
 using MKY.Text;
+
+#endregion
 
 namespace YAT.Domain.Parser
 {
@@ -56,6 +63,8 @@ namespace YAT.Domain.Parser
 			@"Formats can also be applied on each value, e.g. ""\d(79)\d(75)""" + Environment.NewLine +
 			@"Formats can be nested, e.g. ""\d(79 \h(4B) 79)""" + Environment.NewLine +
 			@"Three letter radix identifiers are also allowed, e.g. ""\hex"" instead of ""\h""" + Environment.NewLine +
+			Environment.NewLine +
+			@"In addition, C-style escape sequences are also supported, e.g. ""\r\n"" instead of ""<CR><LF>""" + Environment.NewLine +
 			Environment.NewLine +
 			@"Type \\ to send a backspace" + Environment.NewLine +
 			@"Type \< to send an opening angle bracket" + Environment.NewLine +
@@ -262,6 +271,7 @@ namespace YAT.Domain.Parser
 						ChangeState(parser, new OpeningState());
 						return (true);
 					}
+
 					case 'o':
 					case 'O':
 					{
@@ -269,6 +279,7 @@ namespace YAT.Domain.Parser
 						ChangeState(parser, new OpeningState());
 						return (true);
 					}
+
 					case 'd':
 					case 'D':
 					{
@@ -276,6 +287,7 @@ namespace YAT.Domain.Parser
 						ChangeState(parser, new OpeningState());
 						return (true);
 					}
+
 					case 'h':
 					case 'H':
 					{
@@ -283,6 +295,7 @@ namespace YAT.Domain.Parser
 						ChangeState(parser, new OpeningState());
 						return (true);
 					}
+
 					case 'c':
 					case 'C':
 					{
@@ -290,6 +303,7 @@ namespace YAT.Domain.Parser
 						ChangeState(parser, new OpeningState());
 						return (true);
 					}
+
 					case 's':
 					case 'S':
 					{
@@ -297,6 +311,7 @@ namespace YAT.Domain.Parser
 						ChangeState(parser, new OpeningState());
 						return (true);
 					}
+
 					case '!':
 					{
 						if ((parser.parseMode & ParseMode.Keywords) == ParseMode.Keywords)
@@ -314,6 +329,90 @@ namespace YAT.Domain.Parser
 							return (false);
 						}
 					}
+
+					case '0':
+					{
+						parser.ByteArrayWriter.WriteByte((byte)'\0');
+						parser.EndByteArray();
+						parser.HasFinished = true;
+						ChangeState(parser, null);
+						return (true);
+					}
+
+					case 'a':
+					case 'A':
+					{
+						parser.ByteArrayWriter.WriteByte((byte)'\a');
+						parser.EndByteArray();
+						parser.HasFinished = true;
+						ChangeState(parser, null);
+						return (true);
+					}
+
+				//	case 'b': \b is already used for binary values, e.g. \b(010110001).
+				//	case 'B': Therefore C-style \b backspace is not supported
+				//
+				// \todo
+				// Potentially the parser could handle both \b and \b(...) but that would require
+				// a slightly more advanced handling here. Could be done in a future version.
+
+					case 't':
+					case 'T':
+					{
+						parser.ByteArrayWriter.WriteByte((byte)'\t');
+						parser.EndByteArray();
+						parser.HasFinished = true;
+						ChangeState(parser, null);
+						return (true);
+					}
+
+					case 'v':
+					case 'V':
+					{
+						parser.ByteArrayWriter.WriteByte((byte)'\v');
+						parser.EndByteArray();
+						parser.HasFinished = true;
+						ChangeState(parser, null);
+						return (true);
+					}
+
+					case 'n':
+					case 'N':
+					{
+						parser.ByteArrayWriter.WriteByte((byte)'\n');
+						parser.EndByteArray();
+						parser.HasFinished = true;
+						ChangeState(parser, null);
+						return (true);
+					}
+
+					case 'r':
+					case 'R':
+					{
+						parser.ByteArrayWriter.WriteByte((byte)'\r');
+						parser.EndByteArray();
+						parser.HasFinished = true;
+						ChangeState(parser, null);
+						return (true);
+					}
+
+					case 'f':
+					case 'F':
+					{
+						parser.ByteArrayWriter.WriteByte((byte)'\f');
+						parser.EndByteArray();
+						parser.HasFinished = true;
+						ChangeState(parser, null);
+						return (true);
+					}
+
+				//	case 'x': \x makes little sense since it's already supported by \h(...).
+				//	case 'X': Therefore C-style \x hex notation is not supported (yet).
+				//
+				// \todo
+				// Potentially the parser could handle \x by calling the numeric parser but
+				// with a different criteria to close the numeric parser.
+
 					case '\\':                              // "\\" results in "\"
 					{
 						byte[] b = parser.Encoding.GetBytes(new char[] { '\\' });
@@ -323,6 +422,7 @@ namespace YAT.Domain.Parser
 						ChangeState(parser, null);
 						return (true);
 					}
+
 					case '<':                              // "\<" results in "<"
 					{
 						byte[] b = parser.Encoding.GetBytes(new char[] { '<' });
@@ -332,6 +432,7 @@ namespace YAT.Domain.Parser
 						ChangeState(parser, null);
 						return (true);
 					}
+
 					case '>':                              // "\>" results in ">"
 					{
 						byte[] b = parser.Encoding.GetBytes(new char[] { '>' });
@@ -341,6 +442,7 @@ namespace YAT.Domain.Parser
 						ChangeState(parser, null);
 						return (true);
 					}
+
 					case '(':                              // "\(" results in "("
 					{
 						byte[] b = parser.Encoding.GetBytes(new char[] { '(' });
@@ -350,6 +452,7 @@ namespace YAT.Domain.Parser
 						ChangeState(parser, null);
 						return (true);
 					}
+
 					case ')':                              // "\)" results in ")"
 					{
 						byte[] b = parser.Encoding.GetBytes(new char[] { ')' });
@@ -359,6 +462,7 @@ namespace YAT.Domain.Parser
 						ChangeState(parser, null);
 						return (true);
 					}
+
 					case -1:                               // end-of-stream
 					{
 						parser.EndByteArray();
@@ -366,6 +470,7 @@ namespace YAT.Domain.Parser
 						ChangeState(parser, null);
 						return (true);
 					}
+
 					default:
 					{
 						formatException = new FormatException

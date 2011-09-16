@@ -360,6 +360,31 @@ namespace YAT.Gui.Forms
 				this.settings_Form.CharSubstitution = Domain.CharSubstitution.ToLower;
 		}
 
+		private void checkBox_DoNotSendComments_CheckedChanged(object sender, EventArgs e)
+		{
+			//
+		}
+
+		private void button_AddCommentMarker_Click(object sender, EventArgs e)
+		{
+			//
+		}
+
+		private void button_DeleteCommentMarkers_Click(object sender, EventArgs e)
+		{
+			//
+		}
+
+		private void button_MoveCommentMarkerUp_Click(object sender, EventArgs e)
+		{
+			//
+		}
+
+		private void button_MoveCommentMarkerDown_Click(object sender, EventArgs e)
+		{
+			//
+		}
+
 		private void button_OK_Click(object sender, EventArgs e)
 		{
 			this.settings = this.settings_Form;
