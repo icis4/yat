@@ -538,9 +538,9 @@ namespace MKY.Test.Settings
 		[Test]
 		public virtual void TestSettingsTreeLevel2()
 		{
-			MKY.Settings.Settings settingsToCompareAgainst = new SettingsTreeTestData.TestTreeChildLevel2();
-			MKY.Settings.Settings settingsEqual = new SettingsTreeTestData.TestTreeChildLevel2();
-			MKY.Settings.Settings settingsNotEqual = new SettingsTreeTestData.TestTreeChildLevel2(SettingsTreeTestData.SimpleValueNotEqual);
+			MKY.Settings.SettingsItem settingsToCompareAgainst = new SettingsTreeTestData.TestTreeChildLevel2();
+			MKY.Settings.SettingsItem settingsEqual = new SettingsTreeTestData.TestTreeChildLevel2();
+			MKY.Settings.SettingsItem settingsNotEqual = new SettingsTreeTestData.TestTreeChildLevel2(SettingsTreeTestData.SimpleValueNotEqual);
 
 			VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, -1);
 
@@ -552,9 +552,9 @@ namespace MKY.Test.Settings
 		[Test]
 		public virtual void TestSettingsTreeLevel1()
 		{
-			MKY.Settings.Settings settingsToCompareAgainst = new SettingsTreeTestData.TestTreeChildLevel1();
-			MKY.Settings.Settings settingsEqual = new SettingsTreeTestData.TestTreeChildLevel1();
-			MKY.Settings.Settings settingsNotEqual = new SettingsTreeTestData.TestTreeChildLevel1(SettingsTreeTestData.SimpleValueNotEqual);
+			MKY.Settings.SettingsItem settingsToCompareAgainst = new SettingsTreeTestData.TestTreeChildLevel1();
+			MKY.Settings.SettingsItem settingsEqual = new SettingsTreeTestData.TestTreeChildLevel1();
+			MKY.Settings.SettingsItem settingsNotEqual = new SettingsTreeTestData.TestTreeChildLevel1(SettingsTreeTestData.SimpleValueNotEqual);
 
 			VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, -1);
 
@@ -566,9 +566,9 @@ namespace MKY.Test.Settings
 		[Test]
 		public virtual void TestSettingsTreeRoot()
 		{
-			MKY.Settings.Settings settingsToCompareAgainst = new SettingsTreeTestData.TestTreeRoot();
-			MKY.Settings.Settings settingsEqual = new SettingsTreeTestData.TestTreeRoot();
-			MKY.Settings.Settings settingsNotEqual = new SettingsTreeTestData.TestTreeRoot(SettingsTreeTestData.SimpleValueNotEqual);
+			MKY.Settings.SettingsItem settingsToCompareAgainst = new SettingsTreeTestData.TestTreeRoot();
+			MKY.Settings.SettingsItem settingsEqual = new SettingsTreeTestData.TestTreeRoot();
+			MKY.Settings.SettingsItem settingsNotEqual = new SettingsTreeTestData.TestTreeRoot(SettingsTreeTestData.SimpleValueNotEqual);
 
 			VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, -1);
 
@@ -576,7 +576,7 @@ namespace MKY.Test.Settings
 			           (SettingsTreeTestData.TestTreeRoot)settingsToCompareAgainst, (SettingsTreeTestData.TestTreeRoot)settingsEqual, (SettingsTreeTestData.TestTreeRoot)settingsNotEqual);
 		}
 
-		private void VerifyRoot(MKY.Settings.Settings settingsToCompareAgainst, MKY.Settings.Settings settingsEqual, MKY.Settings.Settings settingsNotEqual,
+		private void VerifyRoot(MKY.Settings.SettingsItem settingsToCompareAgainst, MKY.Settings.SettingsItem settingsEqual, MKY.Settings.SettingsItem settingsNotEqual,
 		                        SettingsTreeTestData.TestTreeRoot castedToCompareAgainst, SettingsTreeTestData.TestTreeRoot castedEqual, SettingsTreeTestData.TestTreeRoot castedNotEqual)
 		{
 			VerifySimpleValue(castedToCompareAgainst.SimpleValue, castedEqual.SimpleValue, castedNotEqual.SimpleValue);
@@ -603,7 +603,7 @@ namespace MKY.Test.Settings
 			VerifyBase(settingsToCompareAgainst, settingsEqual, settingsNotEqual, 0);
 		}
 
-		private void VerifyLevel1(MKY.Settings.Settings settingsToCompareAgainst, MKY.Settings.Settings settingsEqual, MKY.Settings.Settings settingsNotEqual,
+		private void VerifyLevel1(MKY.Settings.SettingsItem settingsToCompareAgainst, MKY.Settings.SettingsItem settingsEqual, MKY.Settings.SettingsItem settingsNotEqual,
 		                          SettingsTreeTestData.TestTreeChildLevel1 castedToCompareAgainst, SettingsTreeTestData.TestTreeChildLevel1 castedEqual, SettingsTreeTestData.TestTreeChildLevel1 castedNotEqual)
 		{
 			VerifySimpleValue(castedToCompareAgainst.SimpleValue, castedEqual.SimpleValue, castedNotEqual.SimpleValue);
@@ -655,7 +655,7 @@ namespace MKY.Test.Settings
 			}
 		}
 
-		private void VerifyLevel2(MKY.Settings.Settings settingsToCompareAgainst, MKY.Settings.Settings settingsEqual, MKY.Settings.Settings settingsNotEqual,
+		private void VerifyLevel2(MKY.Settings.SettingsItem settingsToCompareAgainst, MKY.Settings.SettingsItem settingsEqual, MKY.Settings.SettingsItem settingsNotEqual,
 		                          SettingsTreeTestData.TestTreeChildLevel2 castedToCompareAgainst, SettingsTreeTestData.TestTreeChildLevel2 castedEqual, SettingsTreeTestData.TestTreeChildLevel2 castedNotEqual)
 		{
 			VerifySimpleValue(castedToCompareAgainst.SimpleValue, castedEqual.SimpleValue, castedNotEqual.SimpleValue);
@@ -692,7 +692,7 @@ namespace MKY.Test.Settings
 			Assert.AreNotEqual(castedToCompareAgainst, castedNotEqual);
 		}
 
-		private void VerifyBase(MKY.Settings.Settings settingsToCompareAgainst, MKY.Settings.Settings settingsEqual, MKY.Settings.Settings settingsNotEqual, int level)
+		private void VerifyBase(MKY.Settings.SettingsItem settingsToCompareAgainst, MKY.Settings.SettingsItem settingsEqual, MKY.Settings.SettingsItem settingsNotEqual, int level)
 		{
 			string messagePostfix = "";
 			if (level >= 0)
