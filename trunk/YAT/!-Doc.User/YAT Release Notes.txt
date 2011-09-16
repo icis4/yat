@@ -53,7 +53,11 @@ New:
 - Text terminals: Comments can be chosen to be ignored while sending (feature request #2848298)
 
 Important changes:
-- _XY renamed to !-XY
+- Update to NUnit 2.5.10
+- MKY.Data added
+- MKY.Settings.Settings renamed to MKY.Settings.SettingsItem
+- MKY.IO and MKY.IO.Net added to prepare refactoring of MKY.Serial
+- _<Data|Doc|Test> renamed to !-<Data|Doc|Test>
 
 
 YAT 2.0 Beta 3 Candidate 4 Version 1.99.26 :: 2011-04-25
