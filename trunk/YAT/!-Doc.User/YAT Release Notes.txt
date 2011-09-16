@@ -45,8 +45,12 @@ and install it manually.
 ====================================================================================================
 
 
-YAT 2.0 Beta x Candidate x Version 1.99.27 :: 2011-0x-xx
+YAT 2.0 Beta 4 Candidate 1 Version 1.99.27 :: 2011-0x-xx
 ----------------------------------------------------------------------------------------------------
+
+New:
+- Support for C-style escape sequences (feature request #3044830)
+- Text terminals: Comments can be chosen to be ignored while sending (feature request #2848298)
 
 Important changes:
 - _XY renamed to !-XY

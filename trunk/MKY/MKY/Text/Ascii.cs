@@ -40,20 +40,20 @@ namespace MKY.Text
 		{
 			switch (code)
 			{
-				case 0x00: return ("NUL");
+				case 0x00: return ("NUL"); // \0
 				case 0x01: return ("SOH");
 				case 0x02: return ("STX");
 				case 0x03: return ("ETX");
 				case 0x04: return ("EOT");
 				case 0x05: return ("ENQ");
 				case 0x06: return ("ACK");
-				case 0x07: return ("BEL");
-				case 0x08: return ("BS");
-				case 0x09: return ("TAB");
-				case 0x0A: return ("LF");
-				case 0x0B: return ("VT");
-				case 0x0C: return ("FF");
-				case 0x0D: return ("CR");
+				case 0x07: return ("BEL"); // \a
+				case 0x08: return ("BS");  // \b
+				case 0x09: return ("TAB"); // \t
+				case 0x0A: return ("LF");  // \n
+				case 0x0B: return ("VT");  // \v
+				case 0x0C: return ("FF");  // \f
+				case 0x0D: return ("CR");  // \r
 				case 0x0E: return ("SO");
 				case 0x0F: return ("SI");
 				case 0x10: return ("DLE");
