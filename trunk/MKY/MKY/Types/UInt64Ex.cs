@@ -72,7 +72,7 @@ namespace MKY
 		/// <summary>
 		/// Converts value into a string with the given numeric base.
 		/// </summary>
-		/// <param name="numericBase">Numeric base (0 to 9).</param>
+		/// <param name="numericBase">Numeric base (e.g. 4 or 8).</param>
 		/// <param name="value">Value to be converted.</param>
 		/// <param name="max">Maximum value.</param>
 		[CLSCompliant(false)]
@@ -80,7 +80,7 @@ namespace MKY
 		{
 			StringWriter to = new StringWriter();
 
-			ulong remainder = value;   // cast to double to prevent overflow on ulong.MaxValue
+			ulong remainder = value; // Cast to double to prevent overflow on ulong.MaxValue.
 			double exactPower = Math.Log((double)max + 1, numericBase);
 			for (int power = (int)Math.Ceiling(exactPower) - 1; power >= 0; power--)
 			{
@@ -159,18 +159,18 @@ namespace MKY
 			else
 			{
 				if (value > 0)
-				{                            // cast to double to prevent overflow on ulong.MaxValue
+				{	// Cast to double to prevent overflow on ulong.MaxValue.
 					double base2Log = Math.Log((double)value + 1, 2);
 					double bitsSignificant = Math.Ceiling(base2Log);
 					bytesSignificant = (int)Math.Ceiling(bitsSignificant / 8);
 				}
 			}
 
-			// make sure there's a significant byte
+			// Make sure there's a significant byte.
 			if (bytesSignificant <= 0)
 				bytesSignificant = 1;
 
-			// limit range to UInt64
+			// Limit range to UInt64.
 			if (bytesSignificant > 8)
 				bytesSignificant = 8;
 
@@ -181,18 +181,18 @@ namespace MKY
 			}
 			else
 			{
-				// auto-adjust boundary
+				// Auto-adjust boundary.
 				if      (bytesNeeded > 4) bytesNeeded = 8;
 				else if (bytesNeeded > 2) bytesNeeded = 4;
 			}
 
-			// limit range to UInt64
+			// Limit range to UInt64.
 			if (bytesNeeded > 8)
 				bytesNeeded = 8;
 
 			byte[] result = new byte[bytesNeeded];
 
-			// for negative values, fill leading bytes with 0xFF
+			// For negative values, fill leading bytes with 0xFF.
 			if (expandNegative)
 			{
 				for (int i = bytesNeeded; i > bytesSignificant; i--)
@@ -201,7 +201,7 @@ namespace MKY
 
 			ulong l = 0;
 
-			// convert most significant byte
+			// Convert most significant byte.
 			if (bytesSignificant < 8)
 				l = value % (ulong)Math.Pow(2, bytesSignificant * 8);
 			else
@@ -209,7 +209,7 @@ namespace MKY
 
 			byte b = (byte)(l >> ((bytesSignificant - 1) * 8));
 
-			// for negative values, expand most significant byte
+			// For negative values, expand most significant byte.
 			if (expandNegative)
 			{
 				if (b < 0x01) b |= 0xFF;
@@ -222,10 +222,10 @@ namespace MKY
 				else if (b < 0x80) b |= 0x80;
 			}
 
-			// write most significant
+			// Write most significant.
 			result[bytesSignificant - 1] = b;
 
-			// convert and write remaining bytes
+			// Convert and write remaining bytes.
 			for (int i = (bytesSignificant - 1); i > 0; i--)
 			{
 				l = value % (ulong)Math.Pow(2, i * 8);
@@ -233,7 +233,7 @@ namespace MKY
 				result[i - 1] = b;
 			}
 
-			// swap endianess if needed
+			// Swap endianess if needed.
 			if (useBigEndian)
 			{
 				int i = 0;
@@ -291,7 +291,7 @@ namespace MKY
 		/// Parses a string containing a value in any numeric base. String must not
 		/// contain leading or trailing non-numeric characters.
 		/// </summary>
-		/// <param name="numericBase">Numeric base (0 to 9).</param>
+		/// <param name="numericBase">Numeric base (e.g. 4 or 8).</param>
 		/// <param name="parseString">String to be parsed.</param>
 		/// <param name="result">
 		/// When this method returns, contains the 64-bit unsigned value equivalent
