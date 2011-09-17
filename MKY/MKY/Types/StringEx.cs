@@ -19,6 +19,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 
 // This code is intentionally placed into the MKY namespace even though the file is located in
 // MKY.Types for consistency with the Sytem namespace.
@@ -129,6 +130,20 @@ namespace MKY
 					return (true);
 			}
 			return (false);
+		}
+
+		/// <summary>
+		/// Splits "str" into chunks of "desiredChunkSize".
+		/// </summary>
+		public static string[] Split(string str, int desiredChunkSize)
+		{
+			List<string> l = new List<string>();
+			for (int i = 0; i < str.Length; i += desiredChunkSize)
+			{
+				int effectiveChunkSize = Int32Ex.LimitToBounds(desiredChunkSize, 0, str.Length - i);
+				l.Add(str.Substring(i, effectiveChunkSize));
+			}
+			return (l.ToArray());
 		}
 	}
 }

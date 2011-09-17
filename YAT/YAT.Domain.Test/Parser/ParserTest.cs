@@ -51,10 +51,12 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData("\b",   new byte[] { 0x08 } ).SetName("Whitespace Backspace"));
 				yield return (new TestCaseData("	", new byte[] { 0x09 } ).SetName("Whitespace Tab"));
 
-				// C-style escape. \b and \x are not supported.
+				// C-style escape.
 				yield return (new TestCaseData("\\0",     new byte[] { 0x00 } ).SetName("C-stype <NUL>"));
 				yield return (new TestCaseData("\\a",     new byte[] { 0x07 } ).SetName("C-stype <BEL>"));
 				yield return (new TestCaseData("\\A",     new byte[] { 0x07 } ).SetName("C-stype capital <BEL>"));
+				yield return (new TestCaseData("\\b",     new byte[] { 0x08 } ).SetName("C-stype <BS>"));
+				yield return (new TestCaseData("\\bABC",  new byte[] { 0x08, 0x41, 0x42, 0x43 }).SetName("C-stype <BS> with following characters"));
 				yield return (new TestCaseData("\\t",     new byte[] { 0x09 } ).SetName("C-stype <TAB>"));
 				yield return (new TestCaseData("\\v",     new byte[] { 0x0B } ).SetName("C-stype <VT>"));
 				yield return (new TestCaseData("\\r",     new byte[] { 0x0D } ).SetName("C-stype <CR>"));
@@ -63,8 +65,15 @@ namespace YAT.Domain.Test.Parser
 				yield return (new TestCaseData("\\r \\n", new byte[] { 0x0D, 0x20, 0x0A }).SetName("C-style <CR> <LF>"));
 				yield return (new TestCaseData("\\f",     new byte[] { 0x0C } ).SetName("C-style <FF>"));
 				yield return (new TestCaseData("C-style\\r\\nis like\\tthis", new byte[] { 0x43, 0x2D, 0x73, 0x74, 0x79, 0x6C, 0x65, 0x0D, 0x0A, 0x69, 0x73, 0x20, 0x6C, 0x69, 0x6B, 0x65, 0x09, 0x74, 0x68, 0x69, 0x73 }).SetName("C-style string"));
+				yield return (new TestCaseData("\\01",    new byte[] {   01 }).SetName("C-style octal value"));
+				yield return (new TestCaseData("\\12",    new byte[] {   12 }).SetName("C-style decimal value"));
+				yield return (new TestCaseData("\\0x1A",  new byte[] { 0x1A }).SetName("C-style hexadecimal value 0x"));
+				yield return (new TestCaseData("\\x1A",   new byte[] { 0x1A }).SetName("C-style hexadecimal value x only"));
+				yield return (new TestCaseData("\\x1A2B", new byte[] { 0x1A, 0x2B }).SetName("C-style hexadecimal value x only 16 bits"));
+				yield return (new TestCaseData("\\x1A2",  new byte[] { 0x1A, 0x2  }).SetName("C-style hexadecimal value x only 16 bits odd"));
 
 				// ASCII.
+				yield return (new TestCaseData("<NUL>",     new byte[] { 0x00 } ).SetName("ASCII <NUL>"));
 				yield return (new TestCaseData("<BEL>",     new byte[] { 0x07 } ).SetName("ASCII <BEL>"));
 				yield return (new TestCaseData("<BS>",      new byte[] { 0x08 } ).SetName("ASCII <BS>"));
 				yield return (new TestCaseData("<TAB>",     new byte[] { 0x09 } ).SetName("ASCII <TAB>"));

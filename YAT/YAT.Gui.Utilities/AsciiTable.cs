@@ -27,8 +27,8 @@ namespace YAT.Gui.Utilities
 	/// <summary></summary>
 	public class AsciiTable : DataSet
 	{
-		private const string Dec = "D";
-		private const string Hex = "H";
+		private const string Dec = "Dec";
+		private const string Hex = "Hex";
 		private const string Mnemonic = "Mnemonic";
 		private const string Escape = "Esc";
 		private const string Description = "Description";
@@ -43,7 +43,7 @@ namespace YAT.Gui.Utilities
 
 			c = new DataColumn(Dec);
 			c.DataType = typeof(string);
-			c.MaxLength = 2;
+			c.MaxLength = 3;
 			c.DefaultValue = "";
 			c.ReadOnly = true;
 			t.Columns.Add(c);
@@ -78,7 +78,7 @@ namespace YAT.Gui.Utilities
 
 			Tables.Add(t);
 
-			for (byte i = 0; i < 0x19; i++)
+			for (byte i = 0; i <= 0x1F; i++)
 			{
 				r = t.NewRow();
 				r[Dec] = i.ToString();
@@ -88,7 +88,7 @@ namespace YAT.Gui.Utilities
 				r[Description] = MKY.Text.Ascii.ConvertToDescription(i);
 				t.Rows.Add(r);
 			}
-			for (byte i = 0x7F; i < 0x7F; i++)
+			for (byte i = 0x7F; i <= 0x7F; i++)
 			{
 				r = t.NewRow();
 				r[Dec] = i.ToString();

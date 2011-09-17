@@ -26,7 +26,7 @@ using YAT.Utilities;
 namespace YAT.Gui.Forms
 {
 	/// <summary></summary>
-	public partial class Help : System.Windows.Forms.Form
+	public partial class Help : Form
 	{
 		/// <summary>
 		/// \fixme:

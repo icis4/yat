@@ -64,7 +64,12 @@ namespace YAT.Domain.Parser
 			@"Formats can be nested, e.g. ""\d(79 \h(4B) 79)""" + Environment.NewLine +
 			@"Three letter radix identifiers are also allowed, e.g. ""\hex"" instead of ""\h""" + Environment.NewLine +
 			Environment.NewLine +
-			@"In addition, C-style escape sequences are also supported, e.g. ""\r\n"" instead of ""<CR><LF>""" + Environment.NewLine +
+			@"In addition, C-style escape sequences are supported:" + Environment.NewLine +
+			@"""\r\n"" instead of ""<CR><LF>""" + Environment.NewLine +
+			@"""\0"" instead of ""<NUL>"" or \d(0) or \h(0)" + Environment.NewLine +
+			@"""\01"" instead of \o(1)" + Environment.NewLine +
+			@"""\12"" instead of \d(12)" + Environment.NewLine +
+			@"""\0x1A"" or ""\x1A"" instead of \h(1A)" + Environment.NewLine +
 			Environment.NewLine +
 			@"Type \\ to send a backspace" + Environment.NewLine +
 			@"Type \< to send an opening angle bracket" + Environment.NewLine +
@@ -158,12 +163,12 @@ namespace YAT.Domain.Parser
 		/// </summary>
 		protected class DefaultState : ParserState
 		{
-			private StringWriter contiguous;
+			private StringWriter contiguousWriter;
 
 			/// <summary></summary>
 			public DefaultState()
 			{
-				this.contiguous = new StringWriter();
+				this.contiguousWriter = new StringWriter();
 			}
 
 			#region Disposal
@@ -176,8 +181,8 @@ namespace YAT.Domain.Parser
 			{
 				if (disposing)
 				{
-					if (this.contiguous != null)
-						this.contiguous.Dispose();
+					if (this.contiguousWriter != null)
+						this.contiguousWriter.Dispose();
 				}
 				base.Dispose(disposing);
 			}
@@ -189,7 +194,7 @@ namespace YAT.Domain.Parser
 			{
 				AssertNotDisposed();
 
-				if ((parseChar < 0) ||                   // end of parse string
+				if ((parseChar < 0) ||                   // End of parse string.
 					(parseChar == ')' && !parser.IsTopLevel))
 				{
 					if (!TryWriteContiguous(parser, ref formatException))
@@ -198,7 +203,7 @@ namespace YAT.Domain.Parser
 					parser.HasFinished = true;
 					ChangeState(parser, null);
 				}
-				else if (parseChar == '\\')              // escape sequence
+				else if (parseChar == '\\')              // Escape sequence.
 				{
 					if (!TryWriteContiguous(parser, ref formatException))
 						return (false);
@@ -207,7 +212,7 @@ namespace YAT.Domain.Parser
 					parser.NestedParser = parser.GetParser(new EscapeState(), parser);
 					ChangeState(parser, new NestedState());
 				}
-				else if (parseChar == '<')               // ascii mnemonic sequence
+				else if (parseChar == '<')               // ASCII mnemonic sequence.
 				{
 					if (!TryWriteContiguous(parser, ref formatException))
 						return (false);
@@ -216,16 +221,16 @@ namespace YAT.Domain.Parser
 					parser.NestedParser = parser.GetParser(new AsciiMnemonicState(), parser);
 					ChangeState(parser, new NestedState());
 				}
-				else                                     // write contiguous string
+				else                                     // Compose contiguous string.
 				{
-					this.contiguous.Write((char)parseChar);
+					this.contiguousWriter.Write((char)parseChar);
 				}
 				return (true);
 			}
 
 			private bool TryWriteContiguous(Parser parser, ref FormatException formatException)
 			{
-				string contiguousString = this.contiguous.ToString();
+				string contiguousString = this.contiguousWriter.ToString();
 				if (contiguousString.Length > 0)
 				{
 					if (!parser.IsKeywordParser)
@@ -267,9 +272,23 @@ namespace YAT.Domain.Parser
 					case 'b':
 					case 'B':
 					{
-						parser.SetDefaultRadix(Radix.Bin);
-						ChangeState(parser, new OpeningState());
-						return (true);
+						int nextChar = parser.Reader.Peek();
+						if (nextChar == '(')
+						{
+							// \b(...) is used for binary values, e.g. \b(010110001).
+							parser.SetDefaultRadix(Radix.Bin);
+							ChangeState(parser, new OpeningState());
+							return (true);
+						}
+						else
+						{
+							// Just \b is used for c-style backspace.
+							parser.ByteArrayWriter.WriteByte((byte)'\b');
+							parser.EndByteArray();
+							parser.HasFinished = true;
+							ChangeState(parser, null);
+							return (true);
+						}
 					}
 
 					case 'o':
@@ -330,16 +349,47 @@ namespace YAT.Domain.Parser
 						}
 					}
 
-					case '0':
+					case '0': // C-style <NUL>.
 					{
-						parser.ByteArrayWriter.WriteByte((byte)'\0');
-						parser.EndByteArray();
-						parser.HasFinished = true;
-						ChangeState(parser, null);
-						return (true);
+						int nextChar = parser.Reader.Peek();
+						switch (nextChar)
+						{
+							case '0': // \0<value> is used for c-style octal notation.
+							case '1':
+							case '2':
+							case '3':
+							case '4':
+							case '5':
+							case '6':
+							case '7':
+							{
+								parser.SetDefaultRadix(Radix.Oct);
+								ChangeState(parser, new NumericState());
+								return (true);
+							}
+
+							case 'x': // \0x is used for c-style hexadecimal notation.
+							case 'X':
+							{
+								parser.Reader.Read(); // Consume 'x' or 'X'.
+								parser.SetDefaultRadix(Radix.Hex);
+								ChangeState(parser, new NumericState());
+								return (true);
+							}
+
+							default:
+							{
+								// Just \0 is used for c-style <NUL>.
+								parser.ByteArrayWriter.WriteByte((byte)'\0');
+								parser.EndByteArray();
+								parser.HasFinished = true;
+								ChangeState(parser, null);
+								return (true);
+							}
+						}
 					}
 
-					case 'a':
+					case 'a': // C-style bell.
 					case 'A':
 					{
 						parser.ByteArrayWriter.WriteByte((byte)'\a');
@@ -349,14 +399,9 @@ namespace YAT.Domain.Parser
 						return (true);
 					}
 
-				//	case 'b': \b is already used for binary values, e.g. \b(010110001).
-				//	case 'B': Therefore C-style \b backspace is not supported
-				//
-				// \todo
-				// Potentially the parser could handle both \b and \b(...) but that would require
-				// a slightly more advanced handling here. Could be done in a future version.
+					// For case 'b' or 'B' (C-style backspace) see above.
 
-					case 't':
+					case 't': // C-style tab.
 					case 'T':
 					{
 						parser.ByteArrayWriter.WriteByte((byte)'\t');
@@ -366,7 +411,7 @@ namespace YAT.Domain.Parser
 						return (true);
 					}
 
-					case 'v':
+					case 'v': // C-style vertical tab.
 					case 'V':
 					{
 						parser.ByteArrayWriter.WriteByte((byte)'\v');
@@ -376,7 +421,7 @@ namespace YAT.Domain.Parser
 						return (true);
 					}
 
-					case 'n':
+					case 'n': // C-style <LF>.
 					case 'N':
 					{
 						parser.ByteArrayWriter.WriteByte((byte)'\n');
@@ -386,7 +431,7 @@ namespace YAT.Domain.Parser
 						return (true);
 					}
 
-					case 'r':
+					case 'r': // C-style <CR>.
 					case 'R':
 					{
 						parser.ByteArrayWriter.WriteByte((byte)'\r');
@@ -396,7 +441,7 @@ namespace YAT.Domain.Parser
 						return (true);
 					}
 
-					case 'f':
+					case 'f': // C-style <FF>.
 					case 'F':
 					{
 						parser.ByteArrayWriter.WriteByte((byte)'\f');
@@ -406,14 +451,30 @@ namespace YAT.Domain.Parser
 						return (true);
 					}
 
-				//	case 'x': \x makes little sense since it's already supported by \h(...).
-				//	case 'X': Therefore C-style \x hex notation is not supported (yet).
-				//
-				// \todo
-				// Potentially the parser could handle \x by calling the numeric parser but
-				// with a different criteria to close the numeric parser.
+					case 'x': // C-style hexadecimal value, e.g. \x1A.
+					case 'X':
+					{
+						parser.SetDefaultRadix(Radix.Hex);
+						ChangeState(parser, new NumericState());
+						return (true);
+					}
 
-					case '\\':                              // "\\" results in "\"
+					case '1': // C-style decimal value, e.g. \12.
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+					case '8':
+					case '9':
+					{
+						parser.SetDefaultRadix(Radix.Dec);
+						ChangeState(parser, new NumericState(parseChar));
+						return (true);
+					}
+
+					case '\\':                              // "\\" results in "\".
 					{
 						byte[] b = parser.Encoding.GetBytes(new char[] { '\\' });
 						parser.ByteArrayWriter.Write(b, 0, b.Length);
@@ -423,7 +484,7 @@ namespace YAT.Domain.Parser
 						return (true);
 					}
 
-					case '<':                              // "\<" results in "<"
+					case '<':                              // "\<" results in "<".
 					{
 						byte[] b = parser.Encoding.GetBytes(new char[] { '<' });
 						parser.ByteArrayWriter.Write(b, 0, b.Length);
@@ -433,7 +494,7 @@ namespace YAT.Domain.Parser
 						return (true);
 					}
 
-					case '>':                              // "\>" results in ">"
+					case '>':                              // "\>" results in ">".
 					{
 						byte[] b = parser.Encoding.GetBytes(new char[] { '>' });
 						parser.ByteArrayWriter.Write(b, 0, b.Length);
@@ -443,7 +504,7 @@ namespace YAT.Domain.Parser
 						return (true);
 					}
 
-					case '(':                              // "\(" results in "("
+					case '(':                              // "\(" results in "(".
 					{
 						byte[] b = parser.Encoding.GetBytes(new char[] { '(' });
 						parser.ByteArrayWriter.Write(b, 0, b.Length);
@@ -453,7 +514,7 @@ namespace YAT.Domain.Parser
 						return (true);
 					}
 
-					case ')':                              // "\)" results in ")"
+					case ')':                              // "\)" results in ")".
 					{
 						byte[] b = parser.Encoding.GetBytes(new char[] { ')' });
 						parser.ByteArrayWriter.Write(b, 0, b.Length);
@@ -463,7 +524,7 @@ namespace YAT.Domain.Parser
 						return (true);
 					}
 
-					case -1:                               // end-of-stream
+					case -1:                               // End-of-stream.
 					{
 						parser.EndByteArray();
 						parser.HasFinished = true;
@@ -507,12 +568,12 @@ namespace YAT.Domain.Parser
 		/// <summary></summary>
 		protected class AsciiMnemonicState : ParserState
 		{
-			private StringWriter mnemonic;
+			private StringWriter mnemonicWriter;
 
 			/// <summary></summary>
 			public AsciiMnemonicState()
 			{
-				this.mnemonic = new StringWriter();
+				this.mnemonicWriter = new StringWriter();
 			}
 
 			#region Disposal
@@ -525,8 +586,8 @@ namespace YAT.Domain.Parser
 			{
 				if (disposing)
 				{
-					if (this.mnemonic != null)
-						this.mnemonic.Dispose();
+					if (this.mnemonicWriter != null)
+						this.mnemonicWriter.Dispose();
 				}
 				base.Dispose(disposing);
 			}
@@ -538,11 +599,11 @@ namespace YAT.Domain.Parser
 			{
 				AssertNotDisposed();
 
-				if ((parseChar < 0) || (parseChar == '>'))
+				if ((parseChar < 0) || (parseChar == '>')) // Process finished mnemonic string.
 				{
 					byte[] a;
 
-					if (!TryParseAsciiMnemonic(parser, this.mnemonic.ToString(), out a, ref formatException))
+					if (!TryParseAsciiMnemonic(parser, this.mnemonicWriter.ToString(), out a, ref formatException))
 						return (false);
 
 					foreach (byte b in a)
@@ -553,9 +614,9 @@ namespace YAT.Domain.Parser
 					parser.HasFinished = true;
 					ChangeState(parser, null);
 				}
-				else                                     // write contiguous string
+				else                                       // Compose contiguous string.
 				{
-					this.mnemonic.Write((char)parseChar);
+					this.mnemonicWriter.Write((char)parseChar);
 				}
 				return (true);
 			}
@@ -597,6 +658,178 @@ namespace YAT.Domain.Parser
 		}
 
 		/// <summary></summary>
+		protected class NumericState : ParserState
+		{
+			private StringWriter numericWriter;
+
+			/// <summary></summary>
+			public NumericState()
+			{
+				this.numericWriter = new StringWriter();
+			}
+
+			/// <summary></summary>
+			public NumericState(int parseChar)
+				: this ()
+			{
+				this.numericWriter.Write((char)parseChar);
+			}
+
+			#region Disposal
+			//--------------------------------------------------------------------------------------
+			// Disposal
+			//--------------------------------------------------------------------------------------
+
+			/// <summary></summary>
+			protected override void Dispose(bool disposing)
+			{
+				if (disposing)
+				{
+					if (this.numericWriter != null)
+						this.numericWriter.Dispose();
+				}
+				base.Dispose(disposing);
+			}
+
+			#endregion
+
+			/// <summary></summary>
+			public override bool TryParse(Parser parser, int parseChar, ref FormatException formatException)
+			{
+				AssertNotDisposed();
+
+				switch (parser.Radix)
+				{
+					case Radix.Oct:
+					{
+						if ((parseChar >= '0') && (parseChar <= '7'))
+						{
+							this.numericWriter.Write((char)parseChar);
+							return (true);
+						}
+						break;
+					}
+
+					case Radix.Dec:
+					{
+						if ((parseChar >= '0') && (parseChar <= '9'))
+						{
+							this.numericWriter.Write((char)parseChar);
+							return (true);
+						}
+						break;
+					}
+
+					case Radix.Hex:
+					{
+						if (((parseChar >= '0') && (parseChar <= '9')) ||
+							((parseChar >= 'A') && (parseChar <= 'F')) ||
+							((parseChar >= 'a') && (parseChar <= 'f')))
+						{
+							this.numericWriter.Write((char)parseChar);
+							return (true);
+						}
+						break;
+					}
+
+					// No other numeric formats are handled by this parser so far.
+					// Only C-style \0<oct>, \<dec>, \0x<hex> and \x<hex>.
+					default:
+					{
+						// Also handled below.
+						break;
+					}
+				}
+
+				// No more valid character found, try to process numeric value.
+				byte[] a;
+
+				if (!TryParseNumericValue(parser, this.numericWriter.ToString(), out a, ref formatException))
+					return (false);
+
+				foreach (byte b in a)
+					parser.ByteArrayWriter.WriteByte(b);
+
+				parser.EndByteArray();
+
+				parser.HasFinished = true;
+				ChangeState(parser, null);
+				return (true);
+			}
+
+			/// <summary>
+			/// Parses "parseString" for ascii mnemonics.
+			/// </summary>
+			/// <param name="parser">Parser to retrieve settings.</param>
+			/// <param name="parseString">String to be parsed.</param>
+			/// <param name="result">Array containing the resulting bytes.</param>
+			/// <param name="formatException">Returned if invalid string format.</param>
+			/// <returns>Bytearray containing the values encoded in Encoding.Default.</returns>
+			public static bool TryParseNumericValue(Parser parser, string parseString, out byte[] result, ref FormatException formatException)
+			{
+				switch (parser.Radix)
+				{
+					case Radix.Oct:
+					{
+						UInt64 value;
+						if (UInt64Ex.TryParseOctal(parseString, out value))
+						{
+							result = UInt64Ex.ConvertToByteArray(value);
+							return (true);
+						}
+						else
+						{
+							formatException = new FormatException(@"""" + parseString + @""" is no valid octal value!");
+						}
+						break;
+					}
+
+					case Radix.Dec:
+					{
+						UInt64 value;
+						if (UInt64.TryParse(parseString, out value))
+						{
+							result = UInt64Ex.ConvertToByteArray(value);
+							return (true);
+						}
+						else
+						{
+							formatException = new FormatException(@"""" + parseString + @""" is no valid decimal value!");
+						}
+						break;
+					}
+
+					case Radix.Hex:
+					{
+						MemoryStream bytes = new MemoryStream();
+						string errorString = null;
+						foreach (string s in StringEx.Split(parseString, 2))
+						{
+							byte b;
+							if (byte.TryParse(s, NumberStyles.HexNumber, null, out b))
+								bytes.WriteByte(b);
+							else
+								errorString = s;
+						}
+						if (string.IsNullOrEmpty(errorString))
+						{
+							result = bytes.ToArray();
+							return (true);
+						}
+						else
+						{
+							formatException = new FormatException(@"Substring """ + errorString + @""" of """ + parseString + @""" is no valid hexadecimal value!");
+						}
+						break;
+					}
+				}
+
+				result = new byte[] { };
+				return (false);
+			}
+		}
+
+		/// <summary></summary>
 		protected class NestedState : ParserState
 		{
 			/// <summary></summary>
@@ -605,7 +838,7 @@ namespace YAT.Domain.Parser
 				if (!parser.NestedParser.State.TryParse(parser.NestedParser, parseChar, ref formatException))
 					return (false);
 
-				if (parser.NestedParser.HasFinished)     // regain parser "focus"
+				if (parser.NestedParser.HasFinished) // Regain parser "focus".
 					ChangeState(parser, new DefaultState());
 
 				return (true);

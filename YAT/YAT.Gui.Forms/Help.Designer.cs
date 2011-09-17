@@ -33,6 +33,8 @@ namespace YAT.Gui.Forms
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Help));
 			this.groupBox_ParserHelp = new System.Windows.Forms.GroupBox();
 			this.textBox_ParserKeyword = new System.Windows.Forms.TextBox();
@@ -79,6 +81,7 @@ namespace YAT.Gui.Forms
 			this.textBox_ParserKeyword.Multiline = true;
 			this.textBox_ParserKeyword.Name = "textBox_ParserKeyword";
 			this.textBox_ParserKeyword.ReadOnly = true;
+			this.textBox_ParserKeyword.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textBox_ParserKeyword.Size = new System.Drawing.Size(437, 60);
 			this.textBox_ParserKeyword.TabIndex = 2;
 			this.textBox_ParserKeyword.Text = "<PARSER KEYWORD HELP>";
@@ -92,6 +95,7 @@ namespace YAT.Gui.Forms
 			this.textBox_TextTerminalKeyword.Multiline = true;
 			this.textBox_TextTerminalKeyword.Name = "textBox_TextTerminalKeyword";
 			this.textBox_TextTerminalKeyword.ReadOnly = true;
+			this.textBox_TextTerminalKeyword.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textBox_TextTerminalKeyword.Size = new System.Drawing.Size(437, 86);
 			this.textBox_TextTerminalKeyword.TabIndex = 3;
 			this.textBox_TextTerminalKeyword.Text = "<TEXT TERMINAL KEYWORD HELP>";
@@ -104,6 +108,7 @@ namespace YAT.Gui.Forms
 			this.textBox_ParserFormat.Multiline = true;
 			this.textBox_ParserFormat.Name = "textBox_ParserFormat";
 			this.textBox_ParserFormat.ReadOnly = true;
+			this.textBox_ParserFormat.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textBox_ParserFormat.Size = new System.Drawing.Size(437, 255);
 			this.textBox_ParserFormat.TabIndex = 1;
 			this.textBox_ParserFormat.Text = "<PARSER FORMAT HELP>";
@@ -191,43 +196,52 @@ namespace YAT.Gui.Forms
 			// 
 			// D
 			// 
+			this.D.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
 			this.D.DataPropertyName = "D";
-			this.D.HeaderText = "D";
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+			this.D.DefaultCellStyle = dataGridViewCellStyle1;
+			this.D.HeaderText = "Dec";
 			this.D.Name = "D";
 			this.D.ReadOnly = true;
-			this.D.Width = 21;
+			this.D.Width = 52;
 			// 
 			// H
 			// 
+			this.H.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
 			this.H.DataPropertyName = "H";
-			this.H.HeaderText = "H";
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+			this.H.DefaultCellStyle = dataGridViewCellStyle2;
+			this.H.HeaderText = "Hex";
 			this.H.Name = "H";
 			this.H.ReadOnly = true;
-			this.H.Width = 22;
+			this.H.Width = 51;
 			// 
 			// Mnemonic
 			// 
+			this.Mnemonic.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
 			this.Mnemonic.DataPropertyName = "Mnemonic";
 			this.Mnemonic.HeaderText = "Mnemonic";
 			this.Mnemonic.Name = "Mnemonic";
 			this.Mnemonic.ReadOnly = true;
-			this.Mnemonic.Width = 61;
+			this.Mnemonic.Width = 81;
 			// 
 			// Esc
 			// 
+			this.Esc.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
 			this.Esc.DataPropertyName = "Esc";
 			this.Esc.HeaderText = "Esc";
 			this.Esc.Name = "Esc";
 			this.Esc.ReadOnly = true;
-			this.Esc.Width = 31;
+			this.Esc.Width = 50;
 			// 
 			// Description
 			// 
+			this.Description.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
 			this.Description.DataPropertyName = "Description";
 			this.Description.HeaderText = "Description";
 			this.Description.Name = "Description";
 			this.Description.ReadOnly = true;
-			this.Description.Width = 118;
+			this.Description.Width = 85;
 			// 
 			// Help
 			// 
