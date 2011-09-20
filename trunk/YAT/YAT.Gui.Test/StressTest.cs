@@ -134,7 +134,9 @@ namespace YAT.Gui.Test
 			TerminalSettingsItem terminalSettings2Item = new TerminalSettingsItem();
 
 			terminalSettings1Item.FilePath = terminalSettings1.SettingsFilePath;
+			terminalSettings1Item.FixedIndex = 1;
 			terminalSettings2Item.FilePath = terminalSettings2.SettingsFilePath;
+			terminalSettings2Item.FixedIndex = 2;
 
 			workspaceSettings.Settings.TerminalSettings.Add(terminalSettings1Item);
 			workspaceSettings.Settings.TerminalSettings.Add(terminalSettings2Item);

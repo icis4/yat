@@ -285,14 +285,14 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Returns the one based sequencial ID of the active terminal.
+		/// Returns the one based sequencial index of the active terminal.
 		/// </summary>
-		public virtual int ActiveTerminalSequencialId
+		public virtual int ActiveTerminalSequencialIndex
 		{
 			get
 			{
 				AssertNotDisposed();
-				return (this.activeTerminal.SequencialId);
+				return (this.activeTerminal.SequencialIndex);
 			}
 		}
 
@@ -304,7 +304,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (this.terminals.IndexOf(this.activeTerminal) + 1);
+				return (GetDynamicIndexByTerminal(this.activeTerminal));
 			}
 		}
 
@@ -316,7 +316,7 @@ namespace YAT.Model
 			get
 			{
 				AssertNotDisposed();
-				return (GetFixedIndex(this.activeTerminal));
+				return (GetFixedIndexByTerminal(this.activeTerminal));
 			}
 		}
 
@@ -333,7 +333,7 @@ namespace YAT.Model
 				{
 					StringBuilder sb = new StringBuilder(ActiveTerminal.AutoName);
 					sb.Append("/Seq#");
-					sb.Append(ActiveTerminalSequencialId);
+					sb.Append(ActiveTerminalSequencialIndex);
 					sb.Append("/Dyn#");
 					sb.Append(ActiveTerminalDynamicIndex);
 					sb.Append("/Fix#");
@@ -877,7 +877,7 @@ namespace YAT.Model
 			{
 				try
 				{
-					if (OpenTerminalFromFile(item.FilePath, item.Guid, item.Window, true))
+					if (OpenTerminalFromFile(item.FilePath, item.Guid, item.FixedIndex, item.Window, true))
 						openedTerminalCount++;
 				}
 				catch (System.Xml.XmlException ex)
@@ -910,10 +910,10 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool OpenTerminalFromFile(string filePath)
 		{
-			return (OpenTerminalFromFile(filePath, Guid.Empty, null, false));
+			return (OpenTerminalFromFile(filePath, Guid.Empty, TerminalSettingsItem.UndefinedFixedIndex, null, false));
 		}
 
-		private bool OpenTerminalFromFile(string filePath, Guid guid, Settings.WindowSettings windowSettings, bool suppressErrorHandling)
+		private bool OpenTerminalFromFile(string filePath, Guid guid, int fixedIndex, Settings.WindowSettings windowSettings, bool suppressErrorHandling)
 		{
 			string absoluteFilePath = filePath;
 
@@ -952,7 +952,7 @@ namespace YAT.Model
 
 				// Create terminal.
 				Terminal terminal = new Terminal(sh, guid);
-				AddToWorkspace(terminal);
+				AddToWorkspace(terminal, fixedIndex);
 
 				if (!sh.Settings.AutoSaved)
 					SetRecent(absoluteFilePath);
@@ -984,7 +984,7 @@ namespace YAT.Model
 			}
 		}
 
-		private TerminalSettingsItem CreateTerminalSettingsItem(Terminal terminal)
+		private TerminalSettingsItem CreateTerminalSettingsItem(Terminal terminal, int fixedIndex)
 		{
 			TerminalSettingsItem tsi = new TerminalSettingsItem();
 
@@ -998,6 +998,10 @@ namespace YAT.Model
 
 			tsi.Guid = terminal.Guid;
 			tsi.FilePath = filePath;
+
+			if (fixedIndex >= TerminalSettingsItem.UndefinedFixedIndex)
+				tsi.FixedIndex = fixedIndex;
+
 			tsi.Window = new WindowSettings(terminal.WindowSettings); // Clone window settings.
 
 			return (tsi);
@@ -1005,16 +1009,21 @@ namespace YAT.Model
 
 		private void AddToWorkspace(Terminal terminal)
 		{
+			AddToWorkspace(terminal, TerminalSettingsItem.UndefinedFixedIndex);
+		}
+
+		private void AddToWorkspace(Terminal terminal, int requestedFixedIndex)
+		{
 			AttachTerminalEventHandlers(terminal);
 
 			// Add terminal to terminal list.
 			this.terminals.Add(terminal);
 			this.activeTerminal = terminal;
-			AddToFixedIndecies(terminal);
+			int effectiveIndex = AddToFixedIndecies(terminal, requestedFixedIndex);
 
 			// Add terminal settings for new terminals.
 			// Replace terminal settings if workspace settings have been loaded from file prior.
-			this.settingsRoot.TerminalSettings.AddOrReplaceGuidItem(CreateTerminalSettingsItem(terminal));
+			this.settingsRoot.TerminalSettings.AddOrReplaceGuidItem(CreateTerminalSettingsItem(terminal, effectiveIndex));
 			this.settingsRoot.SetChanged();
 
 			// Fire terminal added event.
@@ -1026,10 +1035,10 @@ namespace YAT.Model
 			// Replace terminal in terminal list.
 			this.terminals.ReplaceGuidItem(terminal);
 			this.activeTerminal = terminal;
-			// Keep constand index.
+			// Keep index constant.
 
 			// Replace terminal in workspace settings if the settings have indeed changed.
-			TerminalSettingsItem tsiNew = CreateTerminalSettingsItem(terminal);
+			TerminalSettingsItem tsiNew = CreateTerminalSettingsItem(terminal, GetFixedIndexByTerminal(terminal));
 			TerminalSettingsItem tsiOld = this.settingsRoot.TerminalSettings.GetGuidItem(terminal.Guid);
 			if ((tsiOld == null) || (tsiNew != tsiOld))
 			{
@@ -1055,25 +1064,41 @@ namespace YAT.Model
 			OnTerminalRemoved(new TerminalEventArgs(terminal));
 		}
 
-		private void AddToFixedIndecies(Terminal terminal)
+		private int AddToFixedIndecies(Terminal terminal, int requestedFixedIndex)
 		{
-			for (int i = 1; i <= int.MaxValue; i++)
+			// First, try to lookup the requested fixed index if suitable.
+			if (requestedFixedIndex >= TerminalSettingsItem.FirstFixedIndex)
+			{
+				if (!this.fixedIndecies.ContainsKey(requestedFixedIndex))
+				{
+					this.fixedIndecies.Add(requestedFixedIndex, terminal);
+					return (requestedFixedIndex);
+				}
+			}
+
+			// As fallback, use the next available fixed index.
+			for (int i = TerminalSettingsItem.FirstFixedIndex; i <= int.MaxValue; i++)
 			{
 				if (!this.fixedIndecies.ContainsKey(i))
 				{
 					this.fixedIndecies.Add(i, terminal);
-					return;
+					return (i);
 				}
 			}
+
+			// If both fail, no good! It means that there are more than 2'000'000'000 terminals ;-)
 			throw (new OverflowException("Constant index of terminals exceeded"));
 		}
 
 		private void RemoveFromFixedIndecies(Terminal terminal)
 		{
-			this.fixedIndecies.Remove(GetFixedIndex(terminal));
+			this.fixedIndecies.Remove(GetFixedIndexByTerminal(terminal));
 		}
 
-		private int GetFixedIndex(Terminal terminal)
+		/// <summary>
+		/// Returns the fixed index of the given terminal.
+		/// </summary>
+		public virtual int GetFixedIndexByTerminal(Terminal terminal)
 		{
 			foreach (KeyValuePair<int, Terminal> kvp in this.fixedIndecies)
 			{
@@ -1081,6 +1106,18 @@ namespace YAT.Model
 					return (kvp.Key);
 			}
 			throw (new ArgumentOutOfRangeException("Terminal not found in index table"));
+		}
+
+		/// <summary>
+		/// Returns the dynamic index of the given terminal.
+		/// </summary>
+		public virtual int GetDynamicIndexByTerminal(Terminal terminal)
+		{
+			int index = this.terminals.IndexOf(this.activeTerminal);
+			if (index >= 0)
+				return (index + TerminalSettingsItem.FirstDynamicIndex);
+			else
+				return (TerminalSettingsItem.UndefinedDynamicIndex);
 		}
 
 		/// <summary>
@@ -1098,16 +1135,16 @@ namespace YAT.Model
 		}
 
 		/// <summary>
-		/// Returns the terminal with the given sequencial ID. The sequencial ID relates to the
+		/// Returns the terminal with the given sequencial index. The sequencial index relates to the
 		/// number indicated in the terminal name, e.g. "Terminal1" or "Terminal2". The sequenical
-		/// ID starts at 1 and is unique throughout the execution of the program. If no terminal
-		/// with this ID exists, <c>null</c> is returned.
+		/// index starts at 1 and is unique throughout the execution of the program. If no terminal
+		/// with this index exists, <c>null</c> is returned.
 		/// </summary>
-		public virtual Terminal GetTerminalBySequencialId(int id)
+		public virtual Terminal GetTerminalBySequencialIndex(int index)
 		{
 			foreach (Terminal t in this.terminals)
 			{
-				if (t.SequencialId == id)
+				if (t.SequencialIndex == index)
 					return (t);
 			}
 			return (null);
@@ -1229,6 +1266,12 @@ namespace YAT.Model
 		public virtual void ActivateTerminal(Terminal terminal)
 		{
 			this.activeTerminal = terminal;
+		}
+
+		/// <summary></summary>
+		public virtual void ActivateTerminalBySequentialIndex(int index)
+		{
+			ActivateTerminal(GetTerminalBySequencialIndex(index));
 		}
 
 		/// <summary></summary>

@@ -30,8 +30,31 @@ namespace YAT.Model.Settings
 	[Serializable]
 	public class TerminalSettingsItem : MKY.Settings.SettingsItem, IGuidProvider
 	{
+		/// <remarks>
+		/// Indecies are 1 (not 0) based for consistency with "Terminal1"...
+		/// Therefore, index 0 means undefined.
+		/// </remarks>
+		public const int UndefinedFixedIndex = 0;
+
+		/// <remarks>
+		/// Indecies are 1 (not 0) based for consistency with "Terminal1"...
+		/// </remarks>
+		public const int FirstFixedIndex = 1;
+
+		/// <remarks>
+		/// Indecies are 1 (not 0) based for consistency with "Terminal1"...
+		/// Therefore, index 0 means undefined.
+		/// </remarks>
+		public const int UndefinedDynamicIndex = 0;
+
+		/// <remarks>
+		/// Indecies are 1 (not 0) based for consistency with "Terminal1"...
+		/// </remarks>
+		public const int FirstDynamicIndex = 1;
+
 		private string filePath;
 		private Guid guid;
+		private int fixedIndex;
 		private WindowSettings window;
 
 		/// <summary></summary>
@@ -51,8 +74,9 @@ namespace YAT.Model.Settings
 		public TerminalSettingsItem(TerminalSettingsItem rhs)
 			: base(rhs)
 		{
-			FilePath = rhs.FilePath;
-			Guid = rhs.Guid;
+			FilePath   = rhs.FilePath;
+			Guid       = rhs.Guid;
+			FixedIndex = rhs.FixedIndex;
 
 			Window = new WindowSettings(rhs.Window);
 
@@ -66,6 +90,7 @@ namespace YAT.Model.Settings
 		{
 			FilePath = "";
 			Guid = Guid.Empty;
+			FixedIndex = UndefinedFixedIndex;
 		}
 
 		#region Properties
@@ -102,6 +127,21 @@ namespace YAT.Model.Settings
 				if (value != this.guid)
 				{
 					this.guid = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("FixedIndex")]
+		public virtual int FixedIndex
+		{
+			get { return (this.fixedIndex); }
+			set
+			{
+				if (value != this.fixedIndex)
+				{
+					this.fixedIndex = value;
 					SetChanged();
 				}
 			}
@@ -154,7 +194,8 @@ namespace YAT.Model.Settings
 				base.Equals(other) && // Compare all settings nodes.
 
 				PathEx.Equals(this.filePath, other.filePath) &&
-				(this.guid     == other.guid)
+				(this.guid       == other.guid) &&
+				(this.fixedIndex == other.fixedIndex)
 			);
 		}
 
@@ -165,8 +206,9 @@ namespace YAT.Model.Settings
 			(
 				base.GetHashCode() ^
 
-				this.filePath.GetHashCode() ^
-				this.guid    .GetHashCode()
+				this.filePath  .GetHashCode() ^
+				this.guid      .GetHashCode() ^
+				this.fixedIndex.GetHashCode()
 			);
 		}
 

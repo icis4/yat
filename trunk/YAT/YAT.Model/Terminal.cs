@@ -51,6 +51,17 @@ namespace YAT.Model
 		// Constants
 		//==========================================================================================
 
+		/// <remarks>
+		/// Indecies are 1 (not 0) based for consistency with "Terminal1"...
+		/// Therefore, index 0 means undefined.
+		/// </remarks>
+		public const int UndefinedSequencialIndex = 0;
+
+		/// <remarks>
+		/// Indecies are 1 (not 0) based for consistency with "Terminal1"...
+		/// </remarks>
+		public const int FirstSequencialIndex = 1;
+
 		private const string TerminalText = "Terminal";
 
 		#endregion
@@ -64,7 +75,7 @@ namespace YAT.Model
 		/// Static counter to number terminals. Counter is incremented before first use, first
 		/// terminal therefore is "Terminal1".
 		/// </summary>
-		private static int staticSequenciallIdCounter = 0;
+		private static int staticSequenciallIndexCounter = FirstSequencialIndex - 1;
 
 		#endregion
 
@@ -76,7 +87,7 @@ namespace YAT.Model
 		private bool isDisposed;
 
 		private Guid guid;
-		private int sequencialId;
+		private int sequencialIndex;
 		private string autoName;
 
 		// Settings.
@@ -200,9 +211,9 @@ namespace YAT.Model
 			AttachSettingsEventHandlers();
 
 			// Set ID and user name.
-			this.sequencialId = ++staticSequenciallIdCounter;
+			this.sequencialIndex = ++staticSequenciallIndexCounter;
 			if (!this.settingsHandler.SettingsFilePathIsValid || this.settingsRoot.AutoSaved)
-				this.autoName = TerminalText + this.sequencialId.ToString();
+				this.autoName = TerminalText + this.sequencialIndex.ToString();
 			else
 				AutoNameFromFile = this.settingsHandler.SettingsFilePath;
 
@@ -296,12 +307,12 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual int SequencialId
+		public virtual int SequencialIndex
 		{
 			get
 			{
 				AssertNotDisposed();
-				return (this.sequencialId);
+				return (this.sequencialIndex);
 			}
 		}
 
