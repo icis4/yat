@@ -26,6 +26,7 @@ using NUnit.Framework;
 
 using MKY.IO;
 
+using YAT.Model.Settings;
 using YAT.Settings.Application;
 
 namespace YAT.Model.Test
@@ -1009,6 +1010,170 @@ namespace YAT.Model.Test
 				VerifyFiles(uc, workspace, false, terminal, true, false);
 
 				Assert.AreEqual(1, ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count, uc + "Wrong number of recent file entries!");
+			}
+			#endregion
+		}
+
+		#endregion
+
+		#region Tests > TestRecentInCaseOfManualSave
+		//------------------------------------------------------------------------------------------
+		// Tests > TestRecentInCaseOfManualSave
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// This test verifies the 'FixedIndex' feature of a YAT workspace.
+		/// </summary>
+		[Test]
+		public virtual void TestFixedIndexFeatureOfWorkspace()
+		{
+			bool success = false;
+			string uc = "";
+
+			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = true;
+			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = true;
+			ApplicationSettings.LocalUser.AutoWorkspace.FilePath = "";
+
+			#region Use case 1
+			// - Initial start
+			// - Create new terminal
+			// - Save terminal as
+			// - Save workspace as
+			//   => Workspace must contain 1 terminal with fixed index 1
+			using (Main main = new Main())
+			{
+				uc = "UC1: ";
+				success = main.Start();
+				Assert.IsTrue(success, uc + "Main could not be started!");
+
+				Workspace workspace = main.Workspace;
+				Assert.IsNotNull(workspace, uc + "Workspace not created!");
+				Assert.AreEqual(0, workspace.TerminalCount, uc + "Workspace doesn't contain 0 terminals!");
+
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				Assert.IsTrue(success, uc + "Terminal 1 could not be created!");
+				Terminal terminal = workspace.ActiveTerminal;
+				Assert.IsNotNull(terminal, uc + "Terminal 1 could not be created!");
+				success = terminal.SaveAs(this.normalTerminal1FilePath);
+				Assert.IsTrue(success, uc + "Terminal 1 could not be saved as!");
+
+				success = workspace.SaveAs(this.normalWorkspaceFilePath);
+				Assert.IsTrue(success, uc + "Workspace could not be saved as!");
+				success = main.Exit();
+				Assert.IsTrue(success, uc + "Main could not be exited!");
+			}
+			#endregion
+
+			#region Use case 2
+			// - Subsequent start
+			//   => Workspace must contain 1 terminal with fixed index 1
+			//   => Attention: Sequencial index will be 2 since it is incremented application domain statically
+			// - Create 2 additional terminals
+			// - Save terminals as
+			// - Save workspace
+			//   => Workspace must contain 3 terminals with fixed indecies 1, 2 and 3
+			//   => Sequencial index will be 2, 3 and 4
+			using (Main main = new Main())
+			{
+				uc = "UC2: ";
+				success = main.Start();
+				Assert.IsTrue(success, uc + "Main could not be started!");
+
+				Workspace workspace = main.Workspace;
+				Assert.IsNotNull(workspace, uc + "Workspace not created!");
+				Assert.AreEqual(1, workspace.TerminalCount, uc + "Workspace doesn't contain 1 terminal!");
+
+				Assert.AreEqual(TerminalSettingsItem.FirstFixedIndex, workspace.ActiveTerminalFixedIndex, uc + "Fixed index of terminal 1 isn't " + TerminalSettingsItem.FirstFixedIndex + "!");
+				Assert.AreEqual(TerminalSettingsItem.FirstDynamicIndex, workspace.ActiveTerminalDynamicIndex, uc + "Dynamic index of terminal 1 isn't " + TerminalSettingsItem.FirstDynamicIndex + "!");
+				Assert.AreEqual(2, workspace.ActiveTerminalSequencialIndex, uc + "Sequencial index of terminal 1 isn't 2!");
+
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				Assert.IsTrue(success, uc + "Terminal 2 could not be created!");
+				Terminal terminal2 = workspace.ActiveTerminal;
+				Assert.IsNotNull(terminal2, uc + "Terminal 2 could not be created!");
+				success = terminal2.SaveAs(this.normalTerminal2FilePath);
+				Assert.IsTrue(success, uc + "Terminal 2 could not be saved as!");
+
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				Assert.IsTrue(success, uc + "Terminal 3 could not be created!");
+				Terminal terminal3 = workspace.ActiveTerminal;
+				Assert.IsNotNull(terminal3, uc + "Terminal 3 could not be created!");
+				success = terminal3.SaveAs(this.normalTerminal3FilePath);
+				Assert.IsTrue(success, uc + "Terminal 3 could not be saved as!");
+
+				success = workspace.Save();
+				Assert.IsTrue(success, uc + "Workspace could not be saved!");
+				success = main.Exit();
+				Assert.IsTrue(success, uc + "Main could not be exited!");
+			}
+			#endregion
+
+			#region Use case 3
+			// - Subsequent start
+			//   => Workspace must contain 3 terminals with fixed indecies 1, 2 and 3
+			//   => Attention: Sequencial index will be 5, 6 and 7 since it is incremented application domain statically
+			// - Close the second terminal
+			// - Save workspace
+			//   => Workspace must contain 2 terminals with fixed indecies 1 and 3
+			using (Main main = new Main())
+			{
+				uc = "UC3: ";
+				success = main.Start();
+				Assert.IsTrue(success, uc + "Main could not be started!");
+
+				Workspace workspace = main.Workspace;
+				Assert.IsNotNull(workspace, uc + "Workspace not created!");
+				Assert.AreEqual(3, workspace.TerminalCount, uc + "Workspace doesn't contain 3 terminals!");
+
+				int first = Terminal.FirstSequencialIndex;
+				int last  = Terminal.FirstSequencialIndex + workspace.TerminalCount - 1;
+				for (int i = first; i <= last; i++)
+				{
+					int k = 5 + i - 1;
+					workspace.ActivateTerminalBySequentialIndex(k);
+					Assert.AreEqual(i, workspace.ActiveTerminalFixedIndex, uc + "Fixed index of terminal " + i + " isn't " + i + "!");
+					Assert.AreEqual(i, workspace.ActiveTerminalDynamicIndex, uc + "Dynamic index of terminal " + i + " isn't " + i + "!");
+					Assert.AreEqual(k, workspace.ActiveTerminalSequencialIndex, uc + "Sequencial index of terminal " + i + " isn't " + k + "!");
+				}
+
+				workspace.ActivateTerminalBySequentialIndex(6);
+				success = workspace.CloseActiveTerminal();
+				Assert.IsTrue(success, uc + "Terminal 2 could not be closed!");
+				Assert.AreEqual(2, workspace.TerminalCount, uc + "Workspace doesn't contain 2 terminals!");
+
+				success = workspace.Save();
+				Assert.IsTrue(success, uc + "Workspace could not be saved!");
+				success = main.Exit();
+				Assert.IsTrue(success, uc + "Main could not be exited!");
+			}
+			#endregion
+
+			#region Use case 4
+			// - Subsequent start
+			//   => Workspace must contain 2 terminals with fixed indecies 1 and 3
+			//   => Attention: Sequencial index will be 8 and 9 since it is incremented application domain statically
+			using (Main main = new Main())
+			{
+				uc = "UC4: ";
+				success = main.Start();
+				Assert.IsTrue(success, uc + "Main could not be started!");
+
+				Workspace workspace = main.Workspace;
+				Assert.IsNotNull(workspace, uc + "Workspace not created!");
+				Assert.AreEqual(2, workspace.TerminalCount, uc + "Workspace doesn't contain 2 terminals!");
+
+				workspace.ActivateTerminalBySequentialIndex(8);
+				Assert.AreEqual(TerminalSettingsItem.FirstFixedIndex, workspace.ActiveTerminalFixedIndex, uc + "Fixed index of terminal 1 isn't " + TerminalSettingsItem.FirstFixedIndex + "!");
+				Assert.AreEqual(TerminalSettingsItem.FirstDynamicIndex, workspace.ActiveTerminalDynamicIndex, uc + "Dynamic index of terminal 1 isn't " + TerminalSettingsItem.FirstDynamicIndex + "!");
+				Assert.AreEqual(8, workspace.ActiveTerminalSequencialIndex, uc + "Sequencial index of terminal 1 isn't 8!");
+
+				workspace.ActivateTerminalBySequentialIndex(9);
+				Assert.AreEqual(3, workspace.ActiveTerminalFixedIndex, uc + "Fixed index of terminal 3 isn't 3!");
+				Assert.AreEqual(2, workspace.ActiveTerminalDynamicIndex, uc + "Dynamic index of terminal 3 isn't 2!");
+				Assert.AreEqual(9, workspace.ActiveTerminalSequencialIndex, uc + "Sequencial index of terminal 3 isn't 9!");
+
+				success = main.Exit();
+				Assert.IsTrue(success, uc + "Main could not be exited!");
 			}
 			#endregion
 		}
