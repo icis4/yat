@@ -52,13 +52,13 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <remarks>
-		/// Indecies are 1 (not 0) based for consistency with "Terminal1"...
+		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
 		/// Therefore, index 0 means undefined.
 		/// </remarks>
 		public const int UndefinedSequencialIndex = 0;
 
 		/// <remarks>
-		/// Indecies are 1 (not 0) based for consistency with "Terminal1"...
+		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
 		/// </remarks>
 		public const int FirstSequencialIndex = 1;
 

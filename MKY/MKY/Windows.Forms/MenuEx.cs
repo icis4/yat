@@ -33,7 +33,7 @@ namespace MKY.Windows.Forms
 	{
 		/// <summary>
 		/// Convert a menu index into a prependable string, e.g. "1: ".
-		/// Indecies 1 through 10 will be accessible via ALT + nummeric key using the ampersand.
+		/// Indices 1 through 10 will be accessible via ALT + nummeric key using the ampersand.
 		/// </summary>
 		public static string PrependIndex(int i, string text)
 		{

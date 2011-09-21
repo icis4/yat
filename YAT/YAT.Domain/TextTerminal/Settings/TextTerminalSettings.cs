@@ -44,6 +44,8 @@ namespace YAT.Domain.Settings
 		private TextLineSendDelay lineSendDelay;
 		private WaitForResponse   waitForResponse;
 		private CharSubstitution  charSubstitution;
+		private bool              skipComments;
+		private string[]          commentMarkers;
 
 		/// <summary></summary>
 		public TextTerminalSettings()
@@ -75,6 +77,8 @@ namespace YAT.Domain.Settings
 			LineSendDelay       = rhs.LineSendDelay;
 			WaitForResponse     = rhs.WaitForResponse;
 			CharSubstitution    = rhs.CharSubstitution;
+			SkipComments        = rhs.SkipComments;
+			CommentMarkers      = rhs.CommentMarkers;
 
 			ClearChanged();
 		}
@@ -92,6 +96,16 @@ namespace YAT.Domain.Settings
 			LineSendDelay    = new TextLineSendDelay(false, 500, 1);
 			WaitForResponse  = new WaitForResponse(false, 500);
 			CharSubstitution = CharSubstitution.None;
+			SkipComments     = false;
+
+			List<string> l = new List<string>();
+			l.Add("@");
+			l.Add("//");
+			l.Add("REM");
+			l.Add("REMARK");
+			l.Add("NOTE");
+			l.Add("COMMENT");
+			this.commentMarkers = l.ToArray();
 		}
 
 		#region Properties
@@ -225,6 +239,36 @@ namespace YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("SkipComments")]
+		public virtual bool SkipComments
+		{
+			get { return (this.skipComments); }
+			set
+			{
+				if (value != this.skipComments)
+				{
+					this.skipComments = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("CommentMarkers")]
+		public string[] CommentMarkers
+		{
+			get { return (this.commentMarkers); }
+			set
+			{
+				if (value != this.commentMarkers)
+				{
+					this.commentMarkers = (string[])value.Clone();
+					SetChanged();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members
@@ -252,7 +296,9 @@ namespace YAT.Domain.Settings
 				(this.showEol          == other.showEol) &&
 				(this.lineSendDelay    == other.lineSendDelay) &&
 				(this.waitForResponse  == other.waitForResponse) &&
-				(this.charSubstitution == other.charSubstitution)
+				(this.charSubstitution == other.charSubstitution) &&
+				(this.skipComments     == other.skipComments) &&
+				(this.commentMarkers   == other.commentMarkers)
 			);
 		}
 
@@ -270,7 +316,9 @@ namespace YAT.Domain.Settings
 				this.showEol         .GetHashCode() ^
 				this.lineSendDelay   .GetHashCode() ^
 				this.waitForResponse .GetHashCode() ^
-				this.charSubstitution.GetHashCode()
+				this.charSubstitution.GetHashCode() ^
+				this.skipComments    .GetHashCode() ^
+				this.commentMarkers  .GetHashCode()
 			);
 		}
 

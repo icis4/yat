@@ -579,7 +579,7 @@ namespace MKY.Win32
 		/// based driver.
 		/// Considerations
 		/// - How many languages are available? Retrieve language IDs at index 0.
-		/// - How are the indecies mapped to the languages? Device descriptor returns indecies for the strings.
+		/// - How are the indices mapped to the languages? Device descriptor returns indices for the strings.
 		/// - How can culture specific strings be accessed? There must be something like SetDescriptor()/GetDescriptor()
 		///   that takes an index and a text ID as argument.
 		/// </remarks>

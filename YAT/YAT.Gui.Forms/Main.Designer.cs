@@ -635,7 +635,7 @@
 			// 
 			this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Name = "toolStripMenuItem_StatusContextMenu_ShowTerminalInfo";
 			this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Size = new System.Drawing.Size(241, 22);
-			this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Text = "Show Terminal Indecies";
+			this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Text = "Show Terminal Indices";
 			this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo.Click += new System.EventHandler(this.toolStripMenuItem_StatusContextMenu_ShowTerminalInfo_Click);
 			// 
 			// toolStripMenuItem_StatusContextMenu_ShowChrono
