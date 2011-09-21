@@ -44,6 +44,10 @@ namespace YAT.Gui.Forms
 			this.label_TxEol = new System.Windows.Forms.Label();
 			this.comboBox_Encoding = new System.Windows.Forms.ComboBox();
 			this.groupBox_SendSettings = new System.Windows.Forms.GroupBox();
+			this.groupBox_Comments = new System.Windows.Forms.GroupBox();
+			this.stringListEdit_CommentMarkers = new MKY.Windows.Forms.StringListEdit();
+			this.label_CommentMarkers = new System.Windows.Forms.Label();
+			this.checkBox_SkipComments = new System.Windows.Forms.CheckBox();
 			this.groupBox_Substitute = new System.Windows.Forms.GroupBox();
 			this.radioButton_SubstituteToLower = new System.Windows.Forms.RadioButton();
 			this.radioButton_SubstituteToUpper = new System.Windows.Forms.RadioButton();
@@ -59,19 +63,11 @@ namespace YAT.Gui.Forms
 			this.checkBox_Delay = new System.Windows.Forms.CheckBox();
 			this.label_Encoding = new System.Windows.Forms.Label();
 			this.button_Defaults = new System.Windows.Forms.Button();
-			this.groupBox_Comments = new System.Windows.Forms.GroupBox();
-			this.checkBox_DoNotSendComments = new System.Windows.Forms.CheckBox();
-			this.label_CommentMarkers = new System.Windows.Forms.Label();
-			this.listBox_CommentMarkers = new System.Windows.Forms.ListBox();
-			this.button_AddCommentMarker = new System.Windows.Forms.Button();
-			this.button_DeleteCommentMarkers = new System.Windows.Forms.Button();
-			this.button_MoveCommentMarkerUp = new System.Windows.Forms.Button();
-			this.button_MoveCommentMarkerDown = new System.Windows.Forms.Button();
 			this.groupBox_Settings.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupBox_SendSettings.SuspendLayout();
-			this.groupBox_Substitute.SuspendLayout();
 			this.groupBox_Comments.SuspendLayout();
+			this.groupBox_Substitute.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// button_OK
@@ -217,6 +213,53 @@ namespace YAT.Gui.Forms
 			this.groupBox_SendSettings.TabIndex = 3;
 			this.groupBox_SendSettings.TabStop = false;
 			this.groupBox_SendSettings.Text = "Transmit Settings";
+			// 
+			// groupBox_Comments
+			// 
+			this.groupBox_Comments.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox_Comments.Controls.Add(this.stringListEdit_CommentMarkers);
+			this.groupBox_Comments.Controls.Add(this.label_CommentMarkers);
+			this.groupBox_Comments.Controls.Add(this.checkBox_SkipComments);
+			this.groupBox_Comments.Location = new System.Drawing.Point(6, 185);
+			this.groupBox_Comments.Name = "groupBox_Comments";
+			this.groupBox_Comments.Size = new System.Drawing.Size(259, 160);
+			this.groupBox_Comments.TabIndex = 10;
+			this.groupBox_Comments.TabStop = false;
+			this.groupBox_Comments.Text = "Comments";
+			// 
+			// stringListEdit_CommentMarkers
+			// 
+			this.stringListEdit_CommentMarkers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.stringListEdit_CommentMarkers.Location = new System.Drawing.Point(101, 38);
+			this.stringListEdit_CommentMarkers.MinimumSize = new System.Drawing.Size(152, 116);
+			this.stringListEdit_CommentMarkers.Name = "stringListEdit_CommentMarkers";
+			this.stringListEdit_CommentMarkers.Size = new System.Drawing.Size(152, 116);
+			this.stringListEdit_CommentMarkers.StringList = new string[0];
+			this.stringListEdit_CommentMarkers.TabIndex = 2;
+			this.stringListEdit_CommentMarkers.StringListChanged += new System.EventHandler(this.stringListEdit_CommentMarkers_StringListChanged);
+			// 
+			// label_CommentMarkers
+			// 
+			this.label_CommentMarkers.AutoSize = true;
+			this.label_CommentMarkers.Location = new System.Drawing.Point(7, 42);
+			this.label_CommentMarkers.Name = "label_CommentMarkers";
+			this.label_CommentMarkers.Size = new System.Drawing.Size(94, 13);
+			this.label_CommentMarkers.TabIndex = 1;
+			this.label_CommentMarkers.Text = "Comment &markers:";
+			// 
+			// checkBox_SkipComments
+			// 
+			this.checkBox_SkipComments.AutoSize = true;
+			this.checkBox_SkipComments.Location = new System.Drawing.Point(10, 19);
+			this.checkBox_SkipComments.Name = "checkBox_SkipComments";
+			this.checkBox_SkipComments.Size = new System.Drawing.Size(233, 17);
+			this.checkBox_SkipComments.TabIndex = 0;
+			this.checkBox_SkipComments.Text = "Do not send text that is marked as &comment";
+			this.checkBox_SkipComments.CheckedChanged += new System.EventHandler(this.checkBox_SkipComments_CheckedChanged);
 			// 
 			// groupBox_Substitute
 			// 
@@ -370,93 +413,6 @@ namespace YAT.Gui.Forms
 			this.button_Defaults.Text = "&Defaults...";
 			this.button_Defaults.Click += new System.EventHandler(this.button_Defaults_Click);
 			// 
-			// groupBox_Comments
-			// 
-			this.groupBox_Comments.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Comments.Controls.Add(this.button_MoveCommentMarkerDown);
-			this.groupBox_Comments.Controls.Add(this.button_MoveCommentMarkerUp);
-			this.groupBox_Comments.Controls.Add(this.button_DeleteCommentMarkers);
-			this.groupBox_Comments.Controls.Add(this.button_AddCommentMarker);
-			this.groupBox_Comments.Controls.Add(this.listBox_CommentMarkers);
-			this.groupBox_Comments.Controls.Add(this.label_CommentMarkers);
-			this.groupBox_Comments.Controls.Add(this.checkBox_DoNotSendComments);
-			this.groupBox_Comments.Location = new System.Drawing.Point(6, 185);
-			this.groupBox_Comments.Name = "groupBox_Comments";
-			this.groupBox_Comments.Size = new System.Drawing.Size(259, 160);
-			this.groupBox_Comments.TabIndex = 10;
-			this.groupBox_Comments.TabStop = false;
-			this.groupBox_Comments.Text = "Comments";
-			// 
-			// checkBox_DoNotSendComments
-			// 
-			this.checkBox_DoNotSendComments.AutoSize = true;
-			this.checkBox_DoNotSendComments.Location = new System.Drawing.Point(10, 19);
-			this.checkBox_DoNotSendComments.Name = "checkBox_DoNotSendComments";
-			this.checkBox_DoNotSendComments.Size = new System.Drawing.Size(233, 17);
-			this.checkBox_DoNotSendComments.TabIndex = 1;
-			this.checkBox_DoNotSendComments.Text = "Do not send text that is marked as &comment";
-			this.checkBox_DoNotSendComments.CheckedChanged += new System.EventHandler(this.checkBox_DoNotSendComments_CheckedChanged);
-			// 
-			// label_CommentMarkers
-			// 
-			this.label_CommentMarkers.AutoSize = true;
-			this.label_CommentMarkers.Enabled = false;
-			this.label_CommentMarkers.Location = new System.Drawing.Point(7, 42);
-			this.label_CommentMarkers.Name = "label_CommentMarkers";
-			this.label_CommentMarkers.Size = new System.Drawing.Size(94, 13);
-			this.label_CommentMarkers.TabIndex = 4;
-			this.label_CommentMarkers.Text = "Comment &markers:";
-			// 
-			// listBox_CommentMarkers
-			// 
-			this.listBox_CommentMarkers.FormattingEnabled = true;
-			this.listBox_CommentMarkers.Location = new System.Drawing.Point(107, 42);
-			this.listBox_CommentMarkers.Name = "listBox_CommentMarkers";
-			this.listBox_CommentMarkers.Size = new System.Drawing.Size(71, 108);
-			this.listBox_CommentMarkers.TabIndex = 6;
-			// 
-			// button_AddCommentMarker
-			// 
-			this.button_AddCommentMarker.Location = new System.Drawing.Point(184, 42);
-			this.button_AddCommentMarker.Name = "button_AddCommentMarker";
-			this.button_AddCommentMarker.Size = new System.Drawing.Size(69, 23);
-			this.button_AddCommentMarker.TabIndex = 7;
-			this.button_AddCommentMarker.Text = "Add...";
-			this.button_AddCommentMarker.UseVisualStyleBackColor = true;
-			this.button_AddCommentMarker.Click += new System.EventHandler(this.button_AddCommentMarker_Click);
-			// 
-			// button_DeleteCommentMarkers
-			// 
-			this.button_DeleteCommentMarkers.Location = new System.Drawing.Point(184, 71);
-			this.button_DeleteCommentMarkers.Name = "button_DeleteCommentMarkers";
-			this.button_DeleteCommentMarkers.Size = new System.Drawing.Size(69, 23);
-			this.button_DeleteCommentMarkers.TabIndex = 8;
-			this.button_DeleteCommentMarkers.Text = "Delete...";
-			this.button_DeleteCommentMarkers.UseVisualStyleBackColor = true;
-			this.button_DeleteCommentMarkers.Click += new System.EventHandler(this.button_DeleteCommentMarkers_Click);
-			// 
-			// button_MoveCommentMarkerUp
-			// 
-			this.button_MoveCommentMarkerUp.Location = new System.Drawing.Point(184, 100);
-			this.button_MoveCommentMarkerUp.Name = "button_MoveCommentMarkerUp";
-			this.button_MoveCommentMarkerUp.Size = new System.Drawing.Size(68, 23);
-			this.button_MoveCommentMarkerUp.TabIndex = 9;
-			this.button_MoveCommentMarkerUp.Text = "Up";
-			this.button_MoveCommentMarkerUp.UseVisualStyleBackColor = true;
-			this.button_MoveCommentMarkerUp.Click += new System.EventHandler(this.button_MoveCommentMarkerUp_Click);
-			// 
-			// button_MoveCommentMarkerDown
-			// 
-			this.button_MoveCommentMarkerDown.Location = new System.Drawing.Point(184, 129);
-			this.button_MoveCommentMarkerDown.Name = "button_MoveCommentMarkerDown";
-			this.button_MoveCommentMarkerDown.Size = new System.Drawing.Size(69, 23);
-			this.button_MoveCommentMarkerDown.TabIndex = 10;
-			this.button_MoveCommentMarkerDown.Text = "Down";
-			this.button_MoveCommentMarkerDown.UseVisualStyleBackColor = true;
-			this.button_MoveCommentMarkerDown.Click += new System.EventHandler(this.button_MoveCommentMarkerDown_Click);
-			// 
 			// TextTerminalSettings
 			// 
 			this.AcceptButton = this.button_OK;
@@ -482,10 +438,10 @@ namespace YAT.Gui.Forms
 			this.groupBox1.PerformLayout();
 			this.groupBox_SendSettings.ResumeLayout(false);
 			this.groupBox_SendSettings.PerformLayout();
-			this.groupBox_Substitute.ResumeLayout(false);
-			this.groupBox_Substitute.PerformLayout();
 			this.groupBox_Comments.ResumeLayout(false);
 			this.groupBox_Comments.PerformLayout();
+			this.groupBox_Substitute.ResumeLayout(false);
+			this.groupBox_Substitute.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -521,11 +477,7 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.Label label_TxEol;
 		private System.Windows.Forms.GroupBox groupBox_Comments;
 		private System.Windows.Forms.Label label_CommentMarkers;
-		private System.Windows.Forms.CheckBox checkBox_DoNotSendComments;
-		private System.Windows.Forms.ListBox listBox_CommentMarkers;
-		private System.Windows.Forms.Button button_AddCommentMarker;
-		private System.Windows.Forms.Button button_MoveCommentMarkerDown;
-		private System.Windows.Forms.Button button_MoveCommentMarkerUp;
-		private System.Windows.Forms.Button button_DeleteCommentMarkers;
+		private System.Windows.Forms.CheckBox checkBox_SkipComments;
+		private MKY.Windows.Forms.StringListEdit stringListEdit_CommentMarkers;
 	}
 }

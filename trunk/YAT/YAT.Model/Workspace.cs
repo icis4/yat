@@ -61,7 +61,7 @@ namespace YAT.Model
 		// Terminal list.
 		private GuidList<Terminal> terminals = new GuidList<Terminal>();
 		private Terminal activeTerminal = null;
-		private Dictionary<int, Terminal> fixedIndecies = new Dictionary<int, Terminal>();
+		private Dictionary<int, Terminal> fixedIndices = new Dictionary<int, Terminal>();
 
 		#endregion
 
@@ -1019,7 +1019,7 @@ namespace YAT.Model
 			// Add terminal to terminal list.
 			this.terminals.Add(terminal);
 			this.activeTerminal = terminal;
-			int effectiveIndex = AddToFixedIndecies(terminal, requestedFixedIndex);
+			int effectiveIndex = AddToFixedIndices(terminal, requestedFixedIndex);
 
 			// Add terminal settings for new terminals.
 			// Replace terminal settings if workspace settings have been loaded from file prior.
@@ -1054,7 +1054,7 @@ namespace YAT.Model
 			// Remove terminal from terminal list.
 			this.terminals.RemoveGuid(terminal.Guid);
 			this.activeTerminal = null;
-			RemoveFromFixedIndecies(terminal);
+			RemoveFromFixedIndices(terminal);
 
 			// Remove terminal from workspace settings.
 			this.settingsRoot.TerminalSettings.RemoveGuid(terminal.Guid);
@@ -1064,14 +1064,14 @@ namespace YAT.Model
 			OnTerminalRemoved(new TerminalEventArgs(terminal));
 		}
 
-		private int AddToFixedIndecies(Terminal terminal, int requestedFixedIndex)
+		private int AddToFixedIndices(Terminal terminal, int requestedFixedIndex)
 		{
 			// First, try to lookup the requested fixed index if suitable.
 			if (requestedFixedIndex >= TerminalSettingsItem.FirstFixedIndex)
 			{
-				if (!this.fixedIndecies.ContainsKey(requestedFixedIndex))
+				if (!this.fixedIndices.ContainsKey(requestedFixedIndex))
 				{
-					this.fixedIndecies.Add(requestedFixedIndex, terminal);
+					this.fixedIndices.Add(requestedFixedIndex, terminal);
 					return (requestedFixedIndex);
 				}
 			}
@@ -1079,9 +1079,9 @@ namespace YAT.Model
 			// As fallback, use the next available fixed index.
 			for (int i = TerminalSettingsItem.FirstFixedIndex; i <= int.MaxValue; i++)
 			{
-				if (!this.fixedIndecies.ContainsKey(i))
+				if (!this.fixedIndices.ContainsKey(i))
 				{
-					this.fixedIndecies.Add(i, terminal);
+					this.fixedIndices.Add(i, terminal);
 					return (i);
 				}
 			}
@@ -1090,9 +1090,9 @@ namespace YAT.Model
 			throw (new OverflowException("Constant index of terminals exceeded"));
 		}
 
-		private void RemoveFromFixedIndecies(Terminal terminal)
+		private void RemoveFromFixedIndices(Terminal terminal)
 		{
-			this.fixedIndecies.Remove(GetFixedIndexByTerminal(terminal));
+			this.fixedIndices.Remove(GetFixedIndexByTerminal(terminal));
 		}
 
 		/// <summary>
@@ -1100,7 +1100,7 @@ namespace YAT.Model
 		/// </summary>
 		public virtual int GetFixedIndexByTerminal(Terminal terminal)
 		{
-			foreach (KeyValuePair<int, Terminal> kvp in this.fixedIndecies)
+			foreach (KeyValuePair<int, Terminal> kvp in this.fixedIndices)
 			{
 				if (kvp.Value == terminal)
 					return (kvp.Key);
@@ -1178,7 +1178,7 @@ namespace YAT.Model
 		public virtual Terminal GetTerminalByFixedIndex(int index)
 		{
 			Terminal t;
-			if (this.fixedIndecies.TryGetValue(index, out t))
+			if (this.fixedIndices.TryGetValue(index, out t))
 				return (t);
 			else
 				return (null);

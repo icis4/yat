@@ -1071,7 +1071,7 @@ namespace YAT.Model.Test
 			// - Create 2 additional terminals
 			// - Save terminals as
 			// - Save workspace
-			//   => Workspace must contain 3 terminals with fixed indecies 1, 2 and 3
+			//   => Workspace must contain 3 terminals with fixed indices 1, 2 and 3
 			//   => Sequencial index will be 2, 3 and 4
 			using (Main main = new Main())
 			{
@@ -1110,11 +1110,11 @@ namespace YAT.Model.Test
 
 			#region Use case 3
 			// - Subsequent start
-			//   => Workspace must contain 3 terminals with fixed indecies 1, 2 and 3
+			//   => Workspace must contain 3 terminals with fixed indices 1, 2 and 3
 			//   => Attention: Sequencial index will be 5, 6 and 7 since it is incremented application domain statically
 			// - Close the second terminal
 			// - Save workspace
-			//   => Workspace must contain 2 terminals with fixed indecies 1 and 3
+			//   => Workspace must contain 2 terminals with fixed indices 1 and 3
 			using (Main main = new Main())
 			{
 				uc = "UC3: ";
@@ -1150,7 +1150,7 @@ namespace YAT.Model.Test
 
 			#region Use case 4
 			// - Subsequent start
-			//   => Workspace must contain 2 terminals with fixed indecies 1 and 3
+			//   => Workspace must contain 2 terminals with fixed indices 1 and 3
 			//   => Attention: Sequencial index will be 8 and 9 since it is incremented application domain statically
 			using (Main main = new Main())
 			{

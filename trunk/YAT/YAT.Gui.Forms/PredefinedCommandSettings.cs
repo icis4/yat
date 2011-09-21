@@ -320,7 +320,7 @@ namespace YAT.Gui.Forms
 			int pageCount = this.settings_Form.Pages.Count;
 			bool pageIsSelected = (this.selectedPage != 0);
 
-			// page list
+			// Page list.
 			if (pageCount > 0)
 			{
 				listBox_Pages.Enabled = true;
@@ -338,7 +338,7 @@ namespace YAT.Gui.Forms
 				listBox_Pages.Items.Clear();
 			}
 
-			// page list buttons
+			// Page list buttons.
 			button_NamePage.Enabled = pageIsSelected;
 			button_InsertPage.Enabled = pageIsSelected;
 			button_AddPage.Enabled = true;
@@ -348,7 +348,7 @@ namespace YAT.Gui.Forms
 			button_MovePageDown.Enabled = pageIsSelected && (this.selectedPage < pageCount);
 			button_DeletePages.Enabled = (pageCount > 0);
 
-			// selected page
+			// Selected page.
 			if (pageIsSelected)
 				groupBox_Page.Text = this.settings_Form.Pages[SelectedPageIndex].PageName;
 			else

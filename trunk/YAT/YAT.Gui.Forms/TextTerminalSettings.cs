@@ -23,6 +23,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 
 using MKY.Text;
+using MKY.Windows.Forms;
 
 using YAT.Gui.Utilities;
 
@@ -360,29 +361,19 @@ namespace YAT.Gui.Forms
 				this.settings_Form.CharSubstitution = Domain.CharSubstitution.ToLower;
 		}
 
-		private void checkBox_DoNotSendComments_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_SkipComments_CheckedChanged(object sender, EventArgs e)
 		{
-			//
+			if (!this.isSettingControls)
+			{
+				this.settings_Form.SkipComments = checkBox_SkipComments.Checked;
+				SetControls();
+			}
 		}
 
-		private void button_AddCommentMarker_Click(object sender, EventArgs e)
+		private void stringListEdit_CommentMarkers_StringListChanged(object sender, EventArgs e)
 		{
-			//
-		}
-
-		private void button_DeleteCommentMarkers_Click(object sender, EventArgs e)
-		{
-			//
-		}
-
-		private void button_MoveCommentMarkerUp_Click(object sender, EventArgs e)
-		{
-			//
-		}
-
-		private void button_MoveCommentMarkerDown_Click(object sender, EventArgs e)
-		{
-			//
+			if (!this.isSettingControls)
+				this.settings_Form.CommentMarkers = (string[])stringListEdit_CommentMarkers.StringList.Clone();
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
@@ -485,6 +476,9 @@ namespace YAT.Gui.Forms
 				case Domain.CharSubstitution.ToLower: radioButton_SubstituteToLower.Checked = true; break;
 				default:                              radioButton_SubstituteNone.Checked    = true; break;
 			}
+
+			stringListEdit_CommentMarkers.Enabled = this.settings_Form.SkipComments;
+			stringListEdit_CommentMarkers.StringList = (string[])this.settings_Form.CommentMarkers.Clone();
 
 			this.isSettingControls = false;
 		}

@@ -31,24 +31,24 @@ namespace YAT.Model.Settings
 	public class TerminalSettingsItem : MKY.Settings.SettingsItem, IGuidProvider
 	{
 		/// <remarks>
-		/// Indecies are 1 (not 0) based for consistency with "Terminal1"...
+		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
 		/// Therefore, index 0 means undefined.
 		/// </remarks>
 		public const int UndefinedFixedIndex = 0;
 
 		/// <remarks>
-		/// Indecies are 1 (not 0) based for consistency with "Terminal1"...
+		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
 		/// </remarks>
 		public const int FirstFixedIndex = 1;
 
 		/// <remarks>
-		/// Indecies are 1 (not 0) based for consistency with "Terminal1"...
+		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
 		/// Therefore, index 0 means undefined.
 		/// </remarks>
 		public const int UndefinedDynamicIndex = 0;
 
 		/// <remarks>
-		/// Indecies are 1 (not 0) based for consistency with "Terminal1"...
+		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
 		/// </remarks>
 		public const int FirstDynamicIndex = 1;
 
