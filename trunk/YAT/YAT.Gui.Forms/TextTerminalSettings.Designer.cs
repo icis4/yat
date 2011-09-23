@@ -45,9 +45,9 @@ namespace YAT.Gui.Forms
 			this.comboBox_Encoding = new System.Windows.Forms.ComboBox();
 			this.groupBox_SendSettings = new System.Windows.Forms.GroupBox();
 			this.groupBox_Comments = new System.Windows.Forms.GroupBox();
-			this.stringListEdit_CommentMarkers = new MKY.Windows.Forms.StringListEdit();
-			this.label_CommentMarkers = new System.Windows.Forms.Label();
-			this.checkBox_SkipComments = new System.Windows.Forms.CheckBox();
+			this.stringListEdit_EolCommentIndicators = new MKY.Windows.Forms.StringListEdit();
+			this.label_CommentIndicators = new System.Windows.Forms.Label();
+			this.checkBox_SkipEolComments = new System.Windows.Forms.CheckBox();
 			this.groupBox_Substitute = new System.Windows.Forms.GroupBox();
 			this.radioButton_SubstituteToLower = new System.Windows.Forms.RadioButton();
 			this.radioButton_SubstituteToUpper = new System.Windows.Forms.RadioButton();
@@ -219,9 +219,9 @@ namespace YAT.Gui.Forms
 			this.groupBox_Comments.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox_Comments.Controls.Add(this.stringListEdit_CommentMarkers);
-			this.groupBox_Comments.Controls.Add(this.label_CommentMarkers);
-			this.groupBox_Comments.Controls.Add(this.checkBox_SkipComments);
+			this.groupBox_Comments.Controls.Add(this.stringListEdit_EolCommentIndicators);
+			this.groupBox_Comments.Controls.Add(this.label_CommentIndicators);
+			this.groupBox_Comments.Controls.Add(this.checkBox_SkipEolComments);
 			this.groupBox_Comments.Location = new System.Drawing.Point(6, 185);
 			this.groupBox_Comments.Name = "groupBox_Comments";
 			this.groupBox_Comments.Size = new System.Drawing.Size(259, 160);
@@ -229,37 +229,37 @@ namespace YAT.Gui.Forms
 			this.groupBox_Comments.TabStop = false;
 			this.groupBox_Comments.Text = "Comments";
 			// 
-			// stringListEdit_CommentMarkers
+			// stringListEdit_EolCommentIndicators
 			// 
-			this.stringListEdit_CommentMarkers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			this.stringListEdit_EolCommentIndicators.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.stringListEdit_CommentMarkers.Location = new System.Drawing.Point(101, 38);
-			this.stringListEdit_CommentMarkers.MinimumSize = new System.Drawing.Size(152, 116);
-			this.stringListEdit_CommentMarkers.Name = "stringListEdit_CommentMarkers";
-			this.stringListEdit_CommentMarkers.Size = new System.Drawing.Size(152, 116);
-			this.stringListEdit_CommentMarkers.StringList = new string[0];
-			this.stringListEdit_CommentMarkers.TabIndex = 2;
-			this.stringListEdit_CommentMarkers.StringListChanged += new System.EventHandler(this.stringListEdit_CommentMarkers_StringListChanged);
+			this.stringListEdit_EolCommentIndicators.Location = new System.Drawing.Point(107, 38);
+			this.stringListEdit_EolCommentIndicators.MinimumSize = new System.Drawing.Size(132, 116);
+			this.stringListEdit_EolCommentIndicators.Name = "stringListEdit_EolCommentIndicators";
+			this.stringListEdit_EolCommentIndicators.Size = new System.Drawing.Size(146, 116);
+			this.stringListEdit_EolCommentIndicators.StringList = new string[0];
+			this.stringListEdit_EolCommentIndicators.TabIndex = 2;
+			this.stringListEdit_EolCommentIndicators.StringListChanged += new System.EventHandler(this.stringListEdit_EolCommentIndicators_StringListChanged);
 			// 
-			// label_CommentMarkers
+			// label_CommentIndicators
 			// 
-			this.label_CommentMarkers.AutoSize = true;
-			this.label_CommentMarkers.Location = new System.Drawing.Point(7, 42);
-			this.label_CommentMarkers.Name = "label_CommentMarkers";
-			this.label_CommentMarkers.Size = new System.Drawing.Size(94, 13);
-			this.label_CommentMarkers.TabIndex = 1;
-			this.label_CommentMarkers.Text = "Comment &markers:";
+			this.label_CommentIndicators.AutoSize = true;
+			this.label_CommentIndicators.Location = new System.Drawing.Point(7, 42);
+			this.label_CommentIndicators.Name = "label_CommentIndicators";
+			this.label_CommentIndicators.Size = new System.Drawing.Size(102, 13);
+			this.label_CommentIndicators.TabIndex = 1;
+			this.label_CommentIndicators.Text = "Comment &indicators:";
 			// 
-			// checkBox_SkipComments
+			// checkBox_SkipEolComments
 			// 
-			this.checkBox_SkipComments.AutoSize = true;
-			this.checkBox_SkipComments.Location = new System.Drawing.Point(10, 19);
-			this.checkBox_SkipComments.Name = "checkBox_SkipComments";
-			this.checkBox_SkipComments.Size = new System.Drawing.Size(233, 17);
-			this.checkBox_SkipComments.TabIndex = 0;
-			this.checkBox_SkipComments.Text = "Do not send text that is marked as &comment";
-			this.checkBox_SkipComments.CheckedChanged += new System.EventHandler(this.checkBox_SkipComments_CheckedChanged);
+			this.checkBox_SkipEolComments.AutoSize = true;
+			this.checkBox_SkipEolComments.Location = new System.Drawing.Point(10, 19);
+			this.checkBox_SkipEolComments.Name = "checkBox_SkipEolComments";
+			this.checkBox_SkipEolComments.Size = new System.Drawing.Size(233, 17);
+			this.checkBox_SkipEolComments.TabIndex = 0;
+			this.checkBox_SkipEolComments.Text = "Do not send text that is marked as &comment";
+			this.checkBox_SkipEolComments.CheckedChanged += new System.EventHandler(this.checkBox_SkipEolComments_CheckedChanged);
 			// 
 			// groupBox_Substitute
 			// 
@@ -476,8 +476,8 @@ namespace YAT.Gui.Forms
 		private System.Windows.Forms.ComboBox comboBox_TxEol;
 		private System.Windows.Forms.Label label_TxEol;
 		private System.Windows.Forms.GroupBox groupBox_Comments;
-		private System.Windows.Forms.Label label_CommentMarkers;
-		private System.Windows.Forms.CheckBox checkBox_SkipComments;
-		private MKY.Windows.Forms.StringListEdit stringListEdit_CommentMarkers;
+		private System.Windows.Forms.Label label_CommentIndicators;
+		private System.Windows.Forms.CheckBox checkBox_SkipEolComments;
+		private MKY.Windows.Forms.StringListEdit stringListEdit_EolCommentIndicators;
 	}
 }

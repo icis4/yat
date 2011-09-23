@@ -26,6 +26,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
+using MKY;
 using MKY.Collections.Generic;
 using MKY.Text;
 
@@ -324,6 +325,17 @@ namespace YAT.Domain
 					}
 				}
 				eolByteArray = eolWriter.ToArray();
+			}
+
+			// Check for comment markers.
+			if (TextTerminalSettings.SkipEolComments)
+			{
+				foreach (string marker in TextTerminalSettings.EolCommentIndicators)
+				{
+					int index = StringEx.IndexOfOutsideDoubleQuotes(s, marker, StringComparison.InvariantCultureIgnoreCase);
+					if (index >= 0)
+						s = StringEx.Left(s, index);
+				}
 			}
 
 			// Parse string and execute keywords.

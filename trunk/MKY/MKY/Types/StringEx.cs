@@ -122,14 +122,62 @@ namespace MKY
 		/// <summary>
 		/// Returns whether "str" contains any of the "searchChars".
 		/// </summary>
-		public static bool Contains(string str, char[] searchChars)
+		public static bool ContainsAny(string str, char[] searchChars)
 		{
-			foreach (char c in searchChars)
+			return (str.IndexOfAny(searchChars) >= 0);
+		}
+
+		/// <summary>
+		/// Reports the index of the first occurrence of the specified string in <see cref="str"/>.
+		/// Parameters specify the starting search position in the string, the number of characters
+		/// in the current string to search, and the type of search to use for the specified string.
+		/// </summary>
+		public static int IndexOfOutsideDoubleQuotes(string str, string searchString, StringComparison comparisonType)
+		{
+			return (IndexOfOutsideDoubleQuotes(str, searchString, 0, str.Length, comparisonType));
+		}
+
+		/// <summary>
+		/// Reports the index of the first occurrence of the specified string in <see cref="str"/>.
+		/// Parameters specify the starting search position in the string, the number of characters
+		/// in the current string to search, and the type of search to use for the specified string.
+		/// </summary>
+		/// <param name="str"></param>
+		/// <param name="searchString">The System.String object to seek.</param>
+		/// <param name="startIndex">The search starting position.</param>
+		/// <param name="count">The number of character positions to examine.</param>
+		/// <param name="comparisonType">One of the <see cref="StringComparison"/> values.</param>
+		/// <returns>
+		/// The zero-based index position of the value parameter if that string is found,
+		/// or -1 if it is not. If value is <see cref="String.Empty"/>, the return value is
+		/// startIndex.
+		/// </returns>
+		/// <exception cref="ArgumentNullException">searchString is null.</exception>
+		/// <exception cref="ArgumentOutOfRangeException">count or startIndex is negative.  -or- count plus startIndex specify a position that is not within this instance.</exception>
+		/// <exception cref="ArgumentException">comparisonType is not a valid <see cref="StringComparison"/> value.</exception>
+		public static int IndexOfOutsideDoubleQuotes(string str, string searchString, int startIndex, int count, StringComparison comparisonType)
+		{
+			string substring = str.Substring(startIndex, count); // Crop the string as desired.
+
+			string rep = substring.Replace(@"\""", @""""); // Replace \" by "" to ease processing below.
+
+			int offset = 0;
+			List<KeyValuePair<int, string>> l = new List<KeyValuePair<int, string>>();
+			foreach (string s in rep.Split('"')) // Split string into chunks between double quotes.
 			{
-				if (str.Contains(c.ToString()))
-					return (true);
+				l.Add(new KeyValuePair<int, string>(offset, s));
+				offset += s.Length; // Add the string length to the offset.
+				offset++;           // Correct the offset created by the dropped double quotes.
 			}
-			return (false);
+
+			for (int i = 0; i < l.Count; i += 2) // Check every second chunk for the first occurance of seachString.
+			{
+				int index = l[i].Value.IndexOf(searchString);
+				if (index >= 0)
+					return (startIndex + l[i].Key + index);
+			}
+
+			return (-1);
 		}
 
 		/// <summary>

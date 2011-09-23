@@ -55,6 +55,7 @@
     <Compile Include="Settings\SettingsTest.cs" />
     <Compile Include="Types\ArrayExTest.cs" />
     <Compile Include="Types\ByteExTest.cs" />
+    <Compile Include="Types\StringExTest.cs" />
     <Compile Include="Types\Int32ExTest.cs" />
     <Compile Include="Types\UInt64ExTest.cs" />
     <Compile Include="EqualityTest.cs" />
