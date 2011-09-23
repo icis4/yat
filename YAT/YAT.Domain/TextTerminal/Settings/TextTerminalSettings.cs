@@ -44,8 +44,8 @@ namespace YAT.Domain.Settings
 		private TextLineSendDelay lineSendDelay;
 		private WaitForResponse   waitForResponse;
 		private CharSubstitution  charSubstitution;
-		private bool              skipComments;
-		private string[]          commentMarkers;
+		private bool              skipEolComments;
+		private string[]          eolCommentIndicators;
 
 		/// <summary></summary>
 		public TextTerminalSettings()
@@ -69,16 +69,16 @@ namespace YAT.Domain.Settings
 		public TextTerminalSettings(TextTerminalSettings rhs)
 			: base(rhs)
 		{
-			SeparateTxRxEol     = rhs.SeparateTxRxEol;
-			TxEol               = rhs.TxEol;
-			RxEol               = rhs.RxEol;
-			Encoding            = rhs.Encoding;
-			ShowEol             = rhs.ShowEol;
-			LineSendDelay       = rhs.LineSendDelay;
-			WaitForResponse     = rhs.WaitForResponse;
-			CharSubstitution    = rhs.CharSubstitution;
-			SkipComments        = rhs.SkipComments;
-			CommentMarkers      = rhs.CommentMarkers;
+			SeparateTxRxEol      = rhs.SeparateTxRxEol;
+			TxEol                = rhs.TxEol;
+			RxEol                = rhs.RxEol;
+			Encoding             = rhs.Encoding;
+			ShowEol              = rhs.ShowEol;
+			LineSendDelay        = rhs.LineSendDelay;
+			WaitForResponse      = rhs.WaitForResponse;
+			CharSubstitution     = rhs.CharSubstitution;
+			SkipEolComments      = rhs.SkipEolComments;
+			EolCommentIndicators = rhs.EolCommentIndicators;
 
 			ClearChanged();
 		}
@@ -96,16 +96,12 @@ namespace YAT.Domain.Settings
 			LineSendDelay    = new TextLineSendDelay(false, 500, 1);
 			WaitForResponse  = new WaitForResponse(false, 500);
 			CharSubstitution = CharSubstitution.None;
-			SkipComments     = false;
+			SkipEolComments  = false;
 
 			List<string> l = new List<string>();
-			l.Add("@");
 			l.Add("//");
 			l.Add("REM");
-			l.Add("REMARK");
-			l.Add("NOTE");
-			l.Add("COMMENT");
-			this.commentMarkers = l.ToArray();
+			this.eolCommentIndicators = l.ToArray();
 		}
 
 		#region Properties
@@ -240,30 +236,30 @@ namespace YAT.Domain.Settings
 		}
 
 		/// <summary></summary>
-		[XmlElement("SkipComments")]
-		public virtual bool SkipComments
+		[XmlElement("SkipEolComments")]
+		public virtual bool SkipEolComments
 		{
-			get { return (this.skipComments); }
+			get { return (this.skipEolComments); }
 			set
 			{
-				if (value != this.skipComments)
+				if (value != this.skipEolComments)
 				{
-					this.skipComments = value;
+					this.skipEolComments = value;
 					SetChanged();
 				}
 			}
 		}
 
 		/// <summary></summary>
-		[XmlElement("CommentMarkers")]
-		public string[] CommentMarkers
+		[XmlElement("EolCommentIndicators")]
+		public string[] EolCommentIndicators
 		{
-			get { return (this.commentMarkers); }
+			get { return (this.eolCommentIndicators); }
 			set
 			{
-				if (value != this.commentMarkers)
+				if (value != this.eolCommentIndicators)
 				{
-					this.commentMarkers = (string[])value.Clone();
+					this.eolCommentIndicators = (string[])value.Clone();
 					SetChanged();
 				}
 			}
@@ -289,16 +285,16 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.separateTxRxEol  == other.separateTxRxEol) &&
-				(this.txEol            == other.txEol) &&
-				(this.rxEol            == other.rxEol) &&
-				(this.encoding         == other.encoding) &&
-				(this.showEol          == other.showEol) &&
-				(this.lineSendDelay    == other.lineSendDelay) &&
-				(this.waitForResponse  == other.waitForResponse) &&
-				(this.charSubstitution == other.charSubstitution) &&
-				(this.skipComments     == other.skipComments) &&
-				(this.commentMarkers   == other.commentMarkers)
+				(this.separateTxRxEol      == other.separateTxRxEol) &&
+				(this.txEol                == other.txEol) &&
+				(this.rxEol                == other.rxEol) &&
+				(this.encoding             == other.encoding) &&
+				(this.showEol              == other.showEol) &&
+				(this.lineSendDelay        == other.lineSendDelay) &&
+				(this.waitForResponse      == other.waitForResponse) &&
+				(this.charSubstitution     == other.charSubstitution) &&
+				(this.skipEolComments      == other.skipEolComments) &&
+				(this.eolCommentIndicators == other.eolCommentIndicators)
 			);
 		}
 
@@ -309,16 +305,16 @@ namespace YAT.Domain.Settings
 			(
 				base.GetHashCode() ^
 
-				this.separateTxRxEol .GetHashCode() ^
-				this.txEol           .GetHashCode() ^
-				this.rxEol           .GetHashCode() ^
-				this.encoding        .GetHashCode() ^
-				this.showEol         .GetHashCode() ^
-				this.lineSendDelay   .GetHashCode() ^
-				this.waitForResponse .GetHashCode() ^
-				this.charSubstitution.GetHashCode() ^
-				this.skipComments    .GetHashCode() ^
-				this.commentMarkers  .GetHashCode()
+				this.separateTxRxEol     .GetHashCode() ^
+				this.txEol               .GetHashCode() ^
+				this.rxEol               .GetHashCode() ^
+				this.encoding            .GetHashCode() ^
+				this.showEol             .GetHashCode() ^
+				this.lineSendDelay       .GetHashCode() ^
+				this.waitForResponse     .GetHashCode() ^
+				this.charSubstitution    .GetHashCode() ^
+				this.skipEolComments     .GetHashCode() ^
+				this.eolCommentIndicators.GetHashCode()
 			);
 		}
 

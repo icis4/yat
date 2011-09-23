@@ -361,19 +361,19 @@ namespace YAT.Gui.Forms
 				this.settings_Form.CharSubstitution = Domain.CharSubstitution.ToLower;
 		}
 
-		private void checkBox_SkipComments_CheckedChanged(object sender, EventArgs e)
+		private void checkBox_SkipEolComments_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
 			{
-				this.settings_Form.SkipComments = checkBox_SkipComments.Checked;
+				this.settings_Form.SkipEolComments = checkBox_SkipEolComments.Checked;
 				SetControls();
 			}
 		}
 
-		private void stringListEdit_CommentMarkers_StringListChanged(object sender, EventArgs e)
+		private void stringListEdit_EolCommentIndicators_StringListChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-				this.settings_Form.CommentMarkers = (string[])stringListEdit_CommentMarkers.StringList.Clone();
+				this.settings_Form.EolCommentIndicators = (string[])stringListEdit_EolCommentIndicators.StringList.Clone();
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
@@ -477,8 +477,8 @@ namespace YAT.Gui.Forms
 				default:                              radioButton_SubstituteNone.Checked    = true; break;
 			}
 
-			stringListEdit_CommentMarkers.Enabled = this.settings_Form.SkipComments;
-			stringListEdit_CommentMarkers.StringList = (string[])this.settings_Form.CommentMarkers.Clone();
+			stringListEdit_EolCommentIndicators.Enabled = this.settings_Form.SkipEolComments;
+			stringListEdit_EolCommentIndicators.StringList = (string[])this.settings_Form.EolCommentIndicators.Clone();
 
 			this.isSettingControls = false;
 		}
