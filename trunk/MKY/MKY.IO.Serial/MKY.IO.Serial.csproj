@@ -54,6 +54,7 @@
     <Compile Include="EventArgs.cs" />
     <Compile Include="IIOProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerialPort\IXOnXOffHandler.cs" />
     <Compile Include="SerialPort\SerialFlowControl.cs" />
     <Compile Include="SerialPort\SerialCommunicationSettings.cs" />
     <Compile Include="SerialPort\SerialPort.cs" />

@@ -414,6 +414,7 @@ namespace MKY.IO.Ports
 			{
 				AssertNotDisposed();
 
+				// Needed to prevent System.InvalidOperationException in case RTS is in use.
 				if (HandshakeIsNotUsingRequestToSend)
 					return (base.RtsEnable);
 				else
@@ -423,6 +424,7 @@ namespace MKY.IO.Ports
 			{
 				AssertNotDisposed();
 
+				// Needed to prevent System.InvalidOperationException in case RTS is in use.
 				if (HandshakeIsNotUsingRequestToSend)
 				{
 					if (value != base.RtsEnable)
@@ -504,6 +506,20 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
+		/// Gets the input break state.
+		/// </summary>
+		public virtual bool InputBreak
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				lock (this.inputBreakSyncObj)
+					return (this.inputBreak);
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the output break state.
 		/// </summary>
 		public virtual bool OutputBreak
@@ -511,14 +527,14 @@ namespace MKY.IO.Ports
 			get
 			{
 				AssertNotDisposed();
-				return (this.BreakState);
+				return (BreakState);
 			}
 			set
 			{
 				AssertNotDisposed();
-				if (value != this.BreakState)
+				if (value != BreakState)
 				{
-					this.BreakState = value;
+					BreakState = value;
 					OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.OutputBreak));
 				}
 			}
@@ -530,21 +546,7 @@ namespace MKY.IO.Ports
 		public virtual void ToggleOutputBreak()
 		{
 			AssertNotDisposed();
-			this.OutputBreak = !this.OutputBreak;
-		}
-
-		/// <summary>
-		/// Gets the input break state.
-		/// </summary>
-		public virtual bool InputBreak
-		{
-			get
-			{
-				AssertNotDisposed();
-				
-				lock (this.inputBreakSyncObj)
-					return (this.inputBreak);
-			}
+			OutputBreak = !OutputBreak;
 		}
 
 		#endregion
@@ -604,16 +606,6 @@ namespace MKY.IO.Ports
 #else
 				base.Open();
 #endif
-
-				// Immediately send XOn if software flow control enabled to ensure that
-				//   device gets put into XOn if it was XOff before
-				if ((Handshake == System.IO.Ports.Handshake.XOnXOff) ||
-					(Handshake == System.IO.Ports.Handshake.RequestToSendXOnXOff))
-				{
-					byte[] xOn = { SerialPortSettings.XOnByte };
-					Write(xOn, 0, 1);
-				}
-
 				OnOpened(new EventArgs());
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Rts));
 				OnPinChanged(new SerialPinChangedEventArgs(SerialPinChange.Dtr));
@@ -691,6 +683,43 @@ namespace MKY.IO.Ports
 
 		#endregion
 
+		#region Write
+		//==========================================================================================
+		// Write
+		//==========================================================================================
+
+		/// <summary>
+		/// Writes the specified byte to an output buffer at the specified offset.
+		/// </summary>
+		/// <param name="data">The byte to write the output to.</param>
+		/// <exception cref="System.TimeoutException">
+		/// The operation did not complete before the time-out period ended.
+		/// </exception>
+		/// <exception cref="System.InvalidOperationException">
+		/// The specified port is not open.
+		/// </exception>
+		public virtual void WriteByte(byte data)
+		{
+			Write(new byte[] { data }, 0, 1);
+		}
+
+		/// <summary>
+		/// Writes the specified character to an output buffer at the specified offset.
+		/// </summary>
+		/// <param name="data">The byte to write the output to.</param>
+		/// <exception cref="System.TimeoutException">
+		/// The operation did not complete before the time-out period ended.
+		/// </exception>
+		/// <exception cref="System.InvalidOperationException">
+		/// The specified port is not open.
+		/// </exception>
+		public virtual void WriteChar(char data)
+		{
+			Write(new char[] { data }, 0, 1);
+		}
+
+		#endregion
+
 		#region Base Event Handling
 		//==========================================================================================
 		// Base Event Handling
@@ -704,18 +733,13 @@ namespace MKY.IO.Ports
 				lock (this.inputBreakSyncObj)
 				{
 					if (this.inputBreakSignal)
-					{
-						// Signal input break once and then restore signal.
-						this.inputBreakSignal = false;
-					}
+						this.inputBreakSignal = false; // Signal input break once and then restore signal.
 					else
-					{
-						// Restore input break if data has been received successfully.
-						this.inputBreak = false;
-					}
+						this.inputBreak = false; // Restore input break if data has been received successfully.
 				}
 				OnPinChanged(new SerialPinChangedEventArgs((SerialPinChange)e.EventType));
 			}
+
 			OnDataReceived(new SerialDataReceivedEventArgs(e.EventType));
 		}
 
@@ -729,6 +753,7 @@ namespace MKY.IO.Ports
 					this.inputBreakSignal = true;
 				}
 			}
+
 			OnPinChanged(new SerialPinChangedEventArgs((SerialPinChange)e.EventType));
 		}
 

@@ -222,6 +222,9 @@
 			this.toolStripStatusLabel_TerminalStatus_DSR = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel_TerminalStatus_DCD = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel_TerminalStatus_Separator2 = new System.Windows.Forms.ToolStripStatusLabel();
+			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff = new System.Windows.Forms.ToolStripStatusLabel();
+			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff = new System.Windows.Forms.ToolStripStatusLabel();
+			this.toolStripStatusLabel_TerminalStatus_Separator3 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel_TerminalStatus_OutputBreak = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabel_TerminalStatus_InputBreak = new System.Windows.Forms.ToolStripStatusLabel();
 			this.splitContainer_Terminal = new System.Windows.Forms.SplitContainer();
@@ -1838,19 +1841,22 @@
             this.toolStripStatusLabel_TerminalStatus_DSR,
             this.toolStripStatusLabel_TerminalStatus_DCD,
             this.toolStripStatusLabel_TerminalStatus_Separator2,
+            this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff,
+            this.toolStripStatusLabel_TerminalStatus_InputXOnXOff,
+            this.toolStripStatusLabel_TerminalStatus_Separator3,
             this.toolStripStatusLabel_TerminalStatus_OutputBreak,
             this.toolStripStatusLabel_TerminalStatus_InputBreak});
-			this.statusStrip_Terminal.Location = new System.Drawing.Point(0, 489);
+			this.statusStrip_Terminal.Location = new System.Drawing.Point(0, 488);
 			this.statusStrip_Terminal.Name = "statusStrip_Terminal";
 			this.statusStrip_Terminal.ShowItemToolTips = true;
-			this.statusStrip_Terminal.Size = new System.Drawing.Size(712, 24);
+			this.statusStrip_Terminal.Size = new System.Drawing.Size(712, 25);
 			this.statusStrip_Terminal.TabIndex = 2;
 			// 
 			// toolStripStatusLabel_TerminalStatus_Status
 			// 
 			this.toolStripStatusLabel_TerminalStatus_Status.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripStatusLabel_TerminalStatus_Status.Name = "toolStripStatusLabel_TerminalStatus_Status";
-			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(291, 19);
+			this.toolStripStatusLabel_TerminalStatus_Status.Size = new System.Drawing.Size(172, 20);
 			this.toolStripStatusLabel_TerminalStatus_Status.Spring = true;
 			this.toolStripStatusLabel_TerminalStatus_Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
@@ -1858,7 +1864,7 @@
 			// 
 			this.toolStripStatusLabel_TerminalStatus_IOStatus.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripStatusLabel_TerminalStatus_IOStatus.Name = "toolStripStatusLabel_TerminalStatus_IOStatus";
-			this.toolStripStatusLabel_TerminalStatus_IOStatus.Size = new System.Drawing.Size(75, 19);
+			this.toolStripStatusLabel_TerminalStatus_IOStatus.Size = new System.Drawing.Size(75, 20);
 			this.toolStripStatusLabel_TerminalStatus_IOStatus.Text = "<I/O Status>";
 			this.toolStripStatusLabel_TerminalStatus_IOStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.toolStripStatusLabel_TerminalStatus_IOStatus.ToolTipText = "Terminal Settings and Status";
@@ -1873,7 +1879,7 @@
 			this.toolStripStatusLabel_TerminalStatus_ConnectionState.Image = global::YAT.Gui.Forms.Properties.Resources.Image_On_12x12;
 			this.toolStripStatusLabel_TerminalStatus_ConnectionState.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_ConnectionState.Name = "toolStripStatusLabel_TerminalStatus_ConnectionState";
-			this.toolStripStatusLabel_TerminalStatus_ConnectionState.Size = new System.Drawing.Size(16, 19);
+			this.toolStripStatusLabel_TerminalStatus_ConnectionState.Size = new System.Drawing.Size(16, 20);
 			this.toolStripStatusLabel_TerminalStatus_ConnectionState.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.toolStripStatusLabel_TerminalStatus_ConnectionState.ToolTipText = "Connection State";
 			// 
@@ -1885,7 +1891,7 @@
 						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_Separator1.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_TerminalStatus_Separator1.Name = "toolStripStatusLabel_TerminalStatus_Separator1";
-			this.toolStripStatusLabel_TerminalStatus_Separator1.Size = new System.Drawing.Size(4, 19);
+			this.toolStripStatusLabel_TerminalStatus_Separator1.Size = new System.Drawing.Size(4, 20);
 			// 
 			// toolStripStatusLabel_TerminalStatus_RTS
 			// 
@@ -1897,7 +1903,7 @@
 			this.toolStripStatusLabel_TerminalStatus_RTS.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_RTS.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_RTS.Name = "toolStripStatusLabel_TerminalStatus_RTS";
-			this.toolStripStatusLabel_TerminalStatus_RTS.Size = new System.Drawing.Size(43, 19);
+			this.toolStripStatusLabel_TerminalStatus_RTS.Size = new System.Drawing.Size(43, 20);
 			this.toolStripStatusLabel_TerminalStatus_RTS.Text = "RTS";
 			this.toolStripStatusLabel_TerminalStatus_RTS.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_RTS.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -1915,7 +1921,7 @@
 			this.toolStripStatusLabel_TerminalStatus_CTS.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_CTS.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_CTS.Name = "toolStripStatusLabel_TerminalStatus_CTS";
-			this.toolStripStatusLabel_TerminalStatus_CTS.Size = new System.Drawing.Size(44, 19);
+			this.toolStripStatusLabel_TerminalStatus_CTS.Size = new System.Drawing.Size(44, 20);
 			this.toolStripStatusLabel_TerminalStatus_CTS.Text = "CTS";
 			this.toolStripStatusLabel_TerminalStatus_CTS.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_CTS.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -1931,7 +1937,7 @@
 			this.toolStripStatusLabel_TerminalStatus_DTR.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_DTR.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_DTR.Name = "toolStripStatusLabel_TerminalStatus_DTR";
-			this.toolStripStatusLabel_TerminalStatus_DTR.Size = new System.Drawing.Size(45, 19);
+			this.toolStripStatusLabel_TerminalStatus_DTR.Size = new System.Drawing.Size(45, 20);
 			this.toolStripStatusLabel_TerminalStatus_DTR.Text = "DTR";
 			this.toolStripStatusLabel_TerminalStatus_DTR.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_DTR.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -1949,7 +1955,7 @@
 			this.toolStripStatusLabel_TerminalStatus_DSR.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_DSR.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_DSR.Name = "toolStripStatusLabel_TerminalStatus_DSR";
-			this.toolStripStatusLabel_TerminalStatus_DSR.Size = new System.Drawing.Size(44, 19);
+			this.toolStripStatusLabel_TerminalStatus_DSR.Size = new System.Drawing.Size(44, 20);
 			this.toolStripStatusLabel_TerminalStatus_DSR.Text = "DSR";
 			this.toolStripStatusLabel_TerminalStatus_DSR.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_DSR.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -1966,7 +1972,7 @@
 			this.toolStripStatusLabel_TerminalStatus_DCD.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_DCD.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_DCD.Name = "toolStripStatusLabel_TerminalStatus_DCD";
-			this.toolStripStatusLabel_TerminalStatus_DCD.Size = new System.Drawing.Size(47, 19);
+			this.toolStripStatusLabel_TerminalStatus_DCD.Size = new System.Drawing.Size(47, 20);
 			this.toolStripStatusLabel_TerminalStatus_DCD.Text = "DCD";
 			this.toolStripStatusLabel_TerminalStatus_DCD.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_DCD.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -1980,7 +1986,51 @@
 						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_Separator2.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
 			this.toolStripStatusLabel_TerminalStatus_Separator2.Name = "toolStripStatusLabel_TerminalStatus_Separator2";
-			this.toolStripStatusLabel_TerminalStatus_Separator2.Size = new System.Drawing.Size(4, 19);
+			this.toolStripStatusLabel_TerminalStatus_Separator2.Size = new System.Drawing.Size(4, 20);
+			// 
+			// toolStripStatusLabel_TerminalStatus_OutputXOnXOff
+			// 
+			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
+						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = global::YAT.Gui.Forms.Properties.Resources.Image_On_12x12;
+			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Name = "toolStripStatusLabel_TerminalStatus_OutputXOnXOff";
+			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Size = new System.Drawing.Size(45, 20);
+			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Text = "OXS";
+			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ToolTipText = "Output XOn/XOff State (Out)";
+			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Click += new System.EventHandler(this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff_Click);
+			// 
+			// toolStripStatusLabel_TerminalStatus_InputXOnXOff
+			// 
+			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
+						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image = global::YAT.Gui.Forms.Properties.Resources.Image_On_12x12;
+			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.Name = "toolStripStatusLabel_TerminalStatus_InputXOnXOff";
+			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.Size = new System.Drawing.Size(39, 20);
+			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.Text = "IXS";
+			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.ToolTipText = "Input XOn/XOff State (In)";
+			// 
+			// toolStripStatusLabel_TerminalStatus_Separator3
+			// 
+			this.toolStripStatusLabel_TerminalStatus_Separator3.AutoSize = false;
+			this.toolStripStatusLabel_TerminalStatus_Separator3.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top)
+						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
+						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+			this.toolStripStatusLabel_TerminalStatus_Separator3.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+			this.toolStripStatusLabel_TerminalStatus_Separator3.Name = "toolStripStatusLabel_TerminalStatus_Separator3";
+			this.toolStripStatusLabel_TerminalStatus_Separator3.Size = new System.Drawing.Size(4, 20);
 			// 
 			// toolStripStatusLabel_TerminalStatus_OutputBreak
 			// 
@@ -1992,7 +2042,7 @@
 			this.toolStripStatusLabel_TerminalStatus_OutputBreak.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_OutputBreak.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_OutputBreak.Name = "toolStripStatusLabel_TerminalStatus_OutputBreak";
-			this.toolStripStatusLabel_TerminalStatus_OutputBreak.Size = new System.Drawing.Size(45, 19);
+			this.toolStripStatusLabel_TerminalStatus_OutputBreak.Size = new System.Drawing.Size(45, 20);
 			this.toolStripStatusLabel_TerminalStatus_OutputBreak.Text = "OBS";
 			this.toolStripStatusLabel_TerminalStatus_OutputBreak.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_OutputBreak.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -2010,7 +2060,7 @@
 			this.toolStripStatusLabel_TerminalStatus_InputBreak.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_InputBreak.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel_TerminalStatus_InputBreak.Name = "toolStripStatusLabel_TerminalStatus_InputBreak";
-			this.toolStripStatusLabel_TerminalStatus_InputBreak.Size = new System.Drawing.Size(39, 19);
+			this.toolStripStatusLabel_TerminalStatus_InputBreak.Size = new System.Drawing.Size(39, 20);
 			this.toolStripStatusLabel_TerminalStatus_InputBreak.Text = "IBS";
 			this.toolStripStatusLabel_TerminalStatus_InputBreak.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_InputBreak.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -2021,7 +2071,7 @@
 			this.splitContainer_Terminal.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainer_Terminal.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
 			this.splitContainer_Terminal.IsSplitterFixed = true;
-			this.splitContainer_Terminal.Location = new System.Drawing.Point(0, 24);
+			this.splitContainer_Terminal.Location = new System.Drawing.Point(0, 0);
 			this.splitContainer_Terminal.Name = "splitContainer_Terminal";
 			this.splitContainer_Terminal.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
@@ -2033,8 +2083,8 @@
 			// 
 			this.splitContainer_Terminal.Panel2.Controls.Add(this.panel_Send);
 			this.splitContainer_Terminal.Panel2MinSize = 97;
-			this.splitContainer_Terminal.Size = new System.Drawing.Size(712, 465);
-			this.splitContainer_Terminal.SplitterDistance = 367;
+			this.splitContainer_Terminal.Size = new System.Drawing.Size(712, 488);
+			this.splitContainer_Terminal.SplitterDistance = 390;
 			this.splitContainer_Terminal.SplitterWidth = 1;
 			this.splitContainer_Terminal.TabIndex = 1;
 			this.splitContainer_Terminal.TabStop = false;
@@ -2054,7 +2104,7 @@
 			// 
 			this.splitContainer_Predefined.Panel2.Controls.Add(this.panel_Predefined);
 			this.splitContainer_Predefined.Panel2MinSize = 136;
-			this.splitContainer_Predefined.Size = new System.Drawing.Size(712, 367);
+			this.splitContainer_Predefined.Size = new System.Drawing.Size(712, 390);
 			this.splitContainer_Predefined.SplitterDistance = 536;
 			this.splitContainer_Predefined.TabIndex = 0;
 			this.splitContainer_Predefined.TabStop = false;
@@ -2067,7 +2117,7 @@
 			this.panel_Monitor.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor.Name = "panel_Monitor";
 			this.panel_Monitor.Padding = new System.Windows.Forms.Padding(3, 3, 1, 0);
-			this.panel_Monitor.Size = new System.Drawing.Size(536, 367);
+			this.panel_Monitor.Size = new System.Drawing.Size(536, 390);
 			this.panel_Monitor.TabIndex = 0;
 			// 
 			// groupBox_Monitor
@@ -2078,7 +2128,7 @@
 			this.groupBox_Monitor.Location = new System.Drawing.Point(3, 3);
 			this.groupBox_Monitor.Name = "groupBox_Monitor";
 			this.groupBox_Monitor.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.groupBox_Monitor.Size = new System.Drawing.Size(532, 364);
+			this.groupBox_Monitor.Size = new System.Drawing.Size(532, 387);
 			this.groupBox_Monitor.TabIndex = 0;
 			this.groupBox_Monitor.TabStop = false;
 			this.groupBox_Monitor.Text = "Monitor";
@@ -2098,7 +2148,7 @@
 			// 
 			this.splitContainer_TxMonitor.Panel2.Controls.Add(this.splitContainer_RxMonitor);
 			this.splitContainer_TxMonitor.Panel2MinSize = 100;
-			this.splitContainer_TxMonitor.Size = new System.Drawing.Size(526, 348);
+			this.splitContainer_TxMonitor.Size = new System.Drawing.Size(526, 371);
 			this.splitContainer_TxMonitor.SplitterDistance = 172;
 			this.splitContainer_TxMonitor.TabIndex = 0;
 			this.splitContainer_TxMonitor.TabStop = false;
@@ -2111,7 +2161,7 @@
 			this.panel_Monitor_Tx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Tx.Name = "panel_Monitor_Tx";
 			this.panel_Monitor_Tx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Tx.Size = new System.Drawing.Size(172, 348);
+			this.panel_Monitor_Tx.Size = new System.Drawing.Size(172, 371);
 			this.panel_Monitor_Tx.TabIndex = 0;
 			// 
 			// monitor_Tx
@@ -2122,7 +2172,7 @@
 			this.monitor_Tx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Tx.Name = "monitor_Tx";
 			this.monitor_Tx.RepositoryType = YAT.Domain.RepositoryType.Tx;
-			this.monitor_Tx.Size = new System.Drawing.Size(166, 345);
+			this.monitor_Tx.Size = new System.Drawing.Size(166, 368);
 			this.monitor_Tx.TabIndex = 0;
 			this.monitor_Tx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Tx.CopyRequest += new System.EventHandler(this.monitor_Tx_CopyRequest);
@@ -2144,7 +2194,7 @@
 			// 
 			this.splitContainer_RxMonitor.Panel2.Controls.Add(this.panel_Monitor_Rx);
 			this.splitContainer_RxMonitor.Panel2MinSize = 48;
-			this.splitContainer_RxMonitor.Size = new System.Drawing.Size(350, 348);
+			this.splitContainer_RxMonitor.Size = new System.Drawing.Size(350, 371);
 			this.splitContainer_RxMonitor.SplitterDistance = 175;
 			this.splitContainer_RxMonitor.TabIndex = 1;
 			this.splitContainer_RxMonitor.TabStop = false;
@@ -2157,7 +2207,7 @@
 			this.panel_Monitor_Bidir.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Bidir.Name = "panel_Monitor_Bidir";
 			this.panel_Monitor_Bidir.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(175, 348);
+			this.panel_Monitor_Bidir.Size = new System.Drawing.Size(175, 371);
 			this.panel_Monitor_Bidir.TabIndex = 0;
 			// 
 			// monitor_Bidir
@@ -2168,7 +2218,7 @@
 			this.monitor_Bidir.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Bidir.Name = "monitor_Bidir";
 			this.monitor_Bidir.RepositoryType = YAT.Domain.RepositoryType.Bidir;
-			this.monitor_Bidir.Size = new System.Drawing.Size(169, 345);
+			this.monitor_Bidir.Size = new System.Drawing.Size(169, 368);
 			this.monitor_Bidir.TabIndex = 0;
 			this.monitor_Bidir.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Bidir.CopyRequest += new System.EventHandler(this.monitor_Bidir_CopyRequest);
@@ -2182,7 +2232,7 @@
 			this.panel_Monitor_Rx.Location = new System.Drawing.Point(0, 0);
 			this.panel_Monitor_Rx.Name = "panel_Monitor_Rx";
 			this.panel_Monitor_Rx.Padding = new System.Windows.Forms.Padding(3, 0, 3, 3);
-			this.panel_Monitor_Rx.Size = new System.Drawing.Size(171, 348);
+			this.panel_Monitor_Rx.Size = new System.Drawing.Size(171, 371);
 			this.panel_Monitor_Rx.TabIndex = 0;
 			// 
 			// monitor_Rx
@@ -2193,7 +2243,7 @@
 			this.monitor_Rx.Location = new System.Drawing.Point(3, 0);
 			this.monitor_Rx.Name = "monitor_Rx";
 			this.monitor_Rx.RepositoryType = YAT.Domain.RepositoryType.Rx;
-			this.monitor_Rx.Size = new System.Drawing.Size(165, 345);
+			this.monitor_Rx.Size = new System.Drawing.Size(165, 368);
 			this.monitor_Rx.TabIndex = 0;
 			this.monitor_Rx.TotalConnectTime = System.TimeSpan.Parse("00:00:00");
 			this.monitor_Rx.CopyRequest += new System.EventHandler(this.monitor_Rx_CopyRequest);
@@ -2207,7 +2257,7 @@
 			this.panel_Predefined.Location = new System.Drawing.Point(0, 0);
 			this.panel_Predefined.Name = "panel_Predefined";
 			this.panel_Predefined.Padding = new System.Windows.Forms.Padding(1, 3, 3, 0);
-			this.panel_Predefined.Size = new System.Drawing.Size(172, 367);
+			this.panel_Predefined.Size = new System.Drawing.Size(172, 390);
 			this.panel_Predefined.TabIndex = 0;
 			// 
 			// groupBox_Predefined
@@ -2218,7 +2268,7 @@
 			this.groupBox_Predefined.Location = new System.Drawing.Point(1, 3);
 			this.groupBox_Predefined.Name = "groupBox_Predefined";
 			this.groupBox_Predefined.Padding = new System.Windows.Forms.Padding(3, 9, 3, 3);
-			this.groupBox_Predefined.Size = new System.Drawing.Size(168, 364);
+			this.groupBox_Predefined.Size = new System.Drawing.Size(168, 387);
 			this.groupBox_Predefined.TabIndex = 0;
 			this.groupBox_Predefined.TabStop = false;
 			this.groupBox_Predefined.Text = "&Predefined Commands";
@@ -2228,7 +2278,7 @@
 			this.predefined.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.predefined.Location = new System.Drawing.Point(3, 22);
 			this.predefined.Name = "predefined";
-			this.predefined.Size = new System.Drawing.Size(162, 339);
+			this.predefined.Size = new System.Drawing.Size(162, 362);
 			this.predefined.TabIndex = 0;
 			this.predefined.SelectedPageChanged += new System.EventHandler(this.predefined_SelectedPageChanged);
 			this.predefined.DefineCommandRequest += new System.EventHandler<YAT.Model.Types.PredefinedCommandEventArgs>(this.predefined_DefineCommandRequest);
@@ -2528,6 +2578,9 @@
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_Separator2;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_Separator1;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MonitorContextMenu_Panels_Separator1;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_OutputXOnXOff;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_Separator3;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TerminalStatus_InputXOnXOff;
 	}
 
 	#region Copied Designer Code For Backup

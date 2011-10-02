@@ -125,7 +125,7 @@ namespace MKY.IO.Serial
 	/// ============================================================================================
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Different root namespace.")]
-	public class SerialPort : IIOProvider, IDisposable
+	public class SerialPort : IIOProvider, IXOnXOffHandler, IDisposable
 	{
 		#region Types
 		//==========================================================================================
@@ -178,7 +178,13 @@ namespace MKY.IO.Serial
 		/// Async receiving.
 		/// </summary>
 		private Queue<byte> receiveQueue = new Queue<byte>();
-		
+
+		private bool inputIsXOn;
+		private object inputIsXOnSyncObj = new object();
+
+		private bool outputIsXOn;
+		private object outputIsXOnSyncObj = new object();
+
 		/// <summary>
 		/// Alive timer detects port break states, i.e. when a USB to serial converter is disconnected.
 		/// </summary>
@@ -411,6 +417,49 @@ namespace MKY.IO.Serial
 			}
 		}
 
+		/// <summary>
+		/// Returens <c>true</c> is XOn/XOff is in use, i.e. if one or the other kind of XOn/XOff
+		/// flow control is active.
+		/// </summary>
+		public virtual bool XOnXOffIsInUse
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				return ((this.settings.Communication.FlowControl == SerialFlowControl.XOnXOff) ||
+						(this.settings.Communication.FlowControl == SerialFlowControl.RequestToSendXOnXOff));
+			}
+		}
+
+		/// <summary>
+		/// Gets the input XOn/XOff state.
+		/// </summary>
+		public virtual bool InputIsXOn
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				lock (this.inputIsXOnSyncObj)
+					return (this.inputIsXOn);
+			}
+		}
+
+		/// <summary>
+		/// Gets the output XOn/XOff state.
+		/// </summary>
+		public virtual bool OutputIsXOn
+		{
+			get
+			{
+				AssertNotDisposed();
+
+				lock (this.outputIsXOnSyncObj)
+					return (this.outputIsXOn);
+			}
+		}
+
 		/// <summary></summary>
 		public virtual object UnderlyingIOInstance
 		{
@@ -480,7 +529,39 @@ namespace MKY.IO.Serial
 				for (int i = 0; i < bytesReceived; i++)
 					data[i] = this.receiveQueue.Dequeue();
 			}
+
+			// Handle input XOn/XOff.
+			bool signalXOnXOff = false;
+			foreach (byte b in data)
+			{
+				if (b == SerialPortSettings.XOnByte)
+				{
+					lock (this.inputIsXOnSyncObj)
+					{
+						if (BoolEx.SetIfCleared(ref this.inputIsXOn))
+							signalXOnXOff = true;
+					}
+				}
+				else if (b == SerialPortSettings.XOffByte)
+				{
+					lock (this.inputIsXOnSyncObj)
+					{
+						if (BoolEx.ClearIfSet(ref this.inputIsXOn))
+							signalXOnXOff = true;
+					}
+				}
+			}
+
+			if (signalXOnXOff)
+				OnIOControlChanged(new EventArgs());
+
 			return (bytesReceived);
+		}
+
+		/// <summary></summary>
+		protected virtual void Send(byte data)
+		{
+			Send(new byte[] { data });
 		}
 
 		/// <summary></summary>
@@ -490,6 +571,32 @@ namespace MKY.IO.Serial
 
 			if (IsOpen)
 			{
+				// Handle output XOn/XOff.
+				bool signalXOnXOff = false;
+				foreach (byte b in data)
+				{
+					if (b == SerialPortSettings.XOnByte)
+					{
+						lock (this.outputIsXOnSyncObj)
+						{
+							if (BoolEx.SetIfCleared(ref this.outputIsXOn))
+								signalXOnXOff = true;
+						}
+					}
+					else if (b == SerialPortSettings.XOffByte)
+					{
+						lock (this.outputIsXOnSyncObj)
+						{
+							if (BoolEx.ClearIfSet(ref this.outputIsXOn))
+								signalXOnXOff = true;
+						}
+					}
+				}
+
+				if (signalXOnXOff)
+					OnIOControlChanged(new EventArgs());
+
+				// Handle output break state.
 				if (!this.port.OutputBreak)
 				{
 					lock (this.portSyncObj)
@@ -510,6 +617,48 @@ namespace MKY.IO.Serial
 					OnIOError(new IOErrorEventArgs(IOErrorSeverity.Acceptable, IODirection.Output, "No data can be sent while port is in output break state"));
 				}
 			}
+		}
+
+		/// <summary></summary>
+		protected virtual void AssumeInputXOn()
+		{
+			lock (this.inputIsXOnSyncObj)
+				this.inputIsXOn = true;
+
+			OnIOControlChanged(new EventArgs());
+		}
+
+		/// <summary>
+		/// Sets the output into XOn state.
+		/// </summary>
+		public virtual void SetOutputXOn()
+		{
+			AssertNotDisposed();
+
+			Send(SerialPortSettings.XOnByte);
+		}
+
+		/// <summary>
+		/// Sets the output into XOff state.
+		/// </summary>
+		public virtual void SetOutputXOff()
+		{
+			AssertNotDisposed();
+
+			Send(SerialPortSettings.XOffByte);
+		}
+
+		/// <summary>
+		/// Toggles the output XOn/XOff state.
+		/// </summary>
+		public virtual void ToggleOutputXOnXOff()
+		{
+			// AssertNotDisposed() and HandshakeIsNotUsingXOnXOff { get; } is called in functions below.
+
+			if (OutputIsXOn)
+				SetOutputXOff();
+			else
+				SetOutputXOn();
 		}
 
 		#endregion
@@ -696,6 +845,17 @@ namespace MKY.IO.Serial
 			OpenPort();
 			StartAliveTimer();
 			SetStateSynchronizedAndNotify(State.Opened);
+
+			// Handle XOn/XOff
+			if (XOnXOffIsInUse)
+			{
+				// Assume XOn on input.
+				AssumeInputXOn();
+
+				// Immediately send XOn if software flow control is enabled to ensure that
+				//   device gets put into XOn if it was XOff before.
+				SetOutputXOn();
+			}
 		}
 
 	#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN

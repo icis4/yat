@@ -19,7 +19,6 @@
 //==================================================================================================
 
 using System;
-using System.ComponentModel;
 
 namespace MKY.IO.Ports
 {
@@ -85,6 +84,11 @@ namespace MKY.IO.Ports
 		SerialPortControlPins ControlPins { get; }
 
 		/// <summary>
+		/// Gets the input break state.
+		/// </summary>
+		bool InputBreak { get; }
+
+		/// <summary>
 		/// Gets or sets the output break state.
 		/// </summary>
 		bool OutputBreak { get; set; }
@@ -95,9 +99,28 @@ namespace MKY.IO.Ports
 		void ToggleOutputBreak();
 
 		/// <summary>
-		/// Gets the input break state.
+		/// Writes the specified byte to an output buffer at the specified offset.
 		/// </summary>
-		bool InputBreak { get; }
+		/// <param name="data">The byte to write the output to.</param>
+		/// <exception cref="System.TimeoutException">
+		/// The operation did not complete before the time-out period ended.
+		/// </exception>
+		/// <exception cref="System.InvalidOperationException">
+		/// The specified port is not open.
+		/// </exception>
+		void WriteByte(byte data);
+
+		/// <summary>
+		/// Writes the specified character to an output buffer at the specified offset.
+		/// </summary>
+		/// <param name="data">The byte to write the output to.</param>
+		/// <exception cref="System.TimeoutException">
+		/// The operation did not complete before the time-out period ended.
+		/// </exception>
+		/// <exception cref="System.InvalidOperationException">
+		/// The specified port is not open.
+		/// </exception>
+		void WriteChar(char data);
 
 		/// <summary>
 		/// Waits for unwritten data to be sent.

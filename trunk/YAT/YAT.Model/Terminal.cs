@@ -18,6 +18,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -39,6 +44,8 @@ using YAT.Settings.Terminal;
 using YAT.Model.Types;
 using YAT.Model.Settings;
 using YAT.Model.Utilities;
+
+#endregion
 
 namespace YAT.Model
 {
@@ -1560,12 +1567,30 @@ namespace YAT.Model
 		}
 
 		/// <summary>
+		/// Toggles the output XOn/XOff state.
+		/// </summary>
+		public virtual void RequestToggleOutputXOnXOff()
+		{
+			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual)
+			{
+				MKY.IO.Serial.IXOnXOffHandler io = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler;
+				if (io != null)
+					io.ToggleOutputXOnXOff();
+				else
+					throw (new InvalidOperationException("The underlying I/O provider is no XOn/XOff handler"));
+			}
+		}
+
+		/// <summary>
 		/// Toggles the output break state.
 		/// </summary>
 		public virtual void RequestToggleOutputBreak()
 		{
-			MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)this.terminal.UnderlyingIOInstance;
-			port.ToggleOutputBreak();
+			MKY.IO.Ports.ISerialPort port = this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
+			if (port != null)
+				port.ToggleOutputBreak();
+			else
+				throw (new InvalidOperationException("The underlying I/O instance is no serial port"));
 		}
 
 		#endregion
