@@ -53,6 +53,9 @@ New:
 - Text terminals: Comments can be chosen to be ignored while sending (feature request #2848298)
    > Comment indicators can be configured in Terminal Settings > Text Settings
    > The C/C++/C#/Java style "//" and the Basic/BAT/DOS style "REM" comment markers are predefined
+- Serial ports: XOn/XOff state is indicated (feature request #3066635)
+   > Applies to 'Software', 'Combined' and 'Manual' flow control
+   > XOn/XOff can be toggled in case of 'Manual' flow control
 - Handling of terminal indecies finalized (feature request #3091859)
    > Fixed indecies are persistently saved and restored upon loading the workspace
    > Dynamic indecies are automatically restored correctly

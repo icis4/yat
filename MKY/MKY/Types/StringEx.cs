@@ -128,7 +128,7 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Reports the index of the first occurrence of the specified string in <see cref="str"/>.
+		/// Reports the index of the first occurrence of the specified string in "str".
 		/// Parameters specify the starting search position in the string, the number of characters
 		/// in the current string to search, and the type of search to use for the specified string.
 		/// </summary>
@@ -138,7 +138,7 @@ namespace MKY
 		}
 
 		/// <summary>
-		/// Reports the index of the first occurrence of the specified string in <see cref="str"/>.
+		/// Reports the index of the first occurrence of the specified string in "str".
 		/// Parameters specify the starting search position in the string, the number of characters
 		/// in the current string to search, and the type of search to use for the specified string.
 		/// </summary>

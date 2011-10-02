@@ -1619,6 +1619,9 @@ namespace YAT.Gui.Forms
 			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_DSR);
 			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_DCD);
 			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_Separator2);
+			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_OutputXOnXOff);
+			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_InputXOnXOff);
+			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_Separator3);
 			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_OutputBreak);
 			this.statusLabels_ioControlSerialPort.Add(toolStripStatusLabel_TerminalStatus_InputBreak);
 		}
@@ -1636,6 +1639,11 @@ namespace YAT.Gui.Forms
 		private void toolStripStatusLabel_TerminalStatus_DTR_Click(object sender, EventArgs e)
 		{
 			this.terminal.RequestToggleDtr();
+		}
+
+		private void toolStripStatusLabel_TerminalStatus_OutputXOnXOff_Click(object sender, EventArgs e)
+		{
+			this.terminal.RequestToggleOutputXOnXOff();
 		}
 
 		private void toolStripStatusLabel_TerminalStatus_OutputBreak_Click(object sender, EventArgs e)
@@ -2852,17 +2860,22 @@ namespace YAT.Gui.Forms
 
 				if (isOpen)
 				{
+					MKY.IO.Ports.ISerialPort port = this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
 					MKY.IO.Ports.SerialPortControlPins pins = new MKY.IO.Ports.SerialPortControlPins();
 					bool outputBreak = false;
 					bool inputBreak = false;
-
-					MKY.IO.Ports.ISerialPort port = this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
 					if (port != null)
 					{
 						pins = port.ControlPins;
 						outputBreak = port.OutputBreak;
 						inputBreak  = port.InputBreak;
 					}
+					else
+					{
+						throw (new InvalidOperationException("The underlying I/O instance is no serial port"));
+					}
+
+					bool manualFlowControl = (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual);
 
 					bool rs485FlowControl = (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.RS485);
 					if (rs485FlowControl)
@@ -2875,15 +2888,31 @@ namespace YAT.Gui.Forms
 						toolStripStatusLabel_TerminalStatus_RTS.Image = (pins.Rts ? on : off);
 					}
 
+					MKY.IO.Serial.IXOnXOffHandler io = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler;
+					bool showXOnXOff = manualFlowControl;
+					bool outputIsXOn = false;
+					bool inputIsXOn = false;
+					if (io != null)
+					{
+						showXOnXOff = (io.XOnXOffIsInUse || manualFlowControl);
+						outputIsXOn = io.OutputIsXOn;
+						inputIsXOn = io.InputIsXOn;
+					}
+					else
+					{
+						throw (new InvalidOperationException("The underlying I/O provider is no XOn/XOff handler"));
+					}
+
 					toolStripStatusLabel_TerminalStatus_CTS.Image = (pins.Cts ? on : off);
 					toolStripStatusLabel_TerminalStatus_DTR.Image = (pins.Dtr ? on : off);
 					toolStripStatusLabel_TerminalStatus_DSR.Image = (pins.Dsr ? on : off);
 					toolStripStatusLabel_TerminalStatus_DCD.Image = (pins.Cd  ? on : off);
 
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = (outputIsXOn ? on : off);
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image  = (inputIsXOn  ? on : off);
+
 					toolStripStatusLabel_TerminalStatus_OutputBreak.Image = (!outputBreak ? on : off);
 					toolStripStatusLabel_TerminalStatus_InputBreak.Image  = (!inputBreak  ? on : off);
-
-					bool manualFlowControl = (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual);
 
 					toolStripStatusLabel_TerminalStatus_RTS.ForeColor = (manualFlowControl ? SystemColors.ControlText : SystemColors.GrayText);
 					toolStripStatusLabel_TerminalStatus_CTS.ForeColor = SystemColors.GrayText;
@@ -2891,8 +2920,15 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_DSR.ForeColor = SystemColors.GrayText;
 					toolStripStatusLabel_TerminalStatus_DCD.ForeColor = SystemColors.GrayText;
 
+					toolStripStatusLabel_TerminalStatus_Separator2.Visible = showXOnXOff;
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = showXOnXOff;
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible = showXOnXOff;
+
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = (manualFlowControl ? SystemColors.ControlText : SystemColors.GrayText);
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor = SystemColors.GrayText;
+
 					toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor = SystemColors.ControlText;
-					toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor  = SystemColors.GrayText;
+					toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor = SystemColors.GrayText;
 				}
 				else
 				{
@@ -2916,8 +2952,6 @@ namespace YAT.Gui.Forms
 		private void ResetRts()
 		{
 			bool isOpen = this.terminal.IsOpen;
-
-			toolStripStatusLabel_TerminalStatus_RTS.Enabled = isOpen;
 
 			Image on = Properties.Resources.Image_On_12x12;
 			Image off = Properties.Resources.Image_Off_12x12;

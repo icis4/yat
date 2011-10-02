@@ -47,6 +47,18 @@ namespace MKY.IO.Serial
 		public const byte ParityErrorReplacementDefault = 0x00;
 
 		/// <summary></summary>
+		public const byte XOnByte = MKY.IO.Ports.SerialPortSettings.XOnByte;
+
+		/// <summary></summary>
+		public const byte XOffByte = MKY.IO.Ports.SerialPortSettings.XOffByte;
+
+		/// <summary></summary>
+		public const string XOnDescription = MKY.IO.Ports.SerialPortSettings.XOnDescription;
+
+		/// <summary></summary>
+		public const string XOffDescription = MKY.IO.Ports.SerialPortSettings.XOffDescription;
+
+		/// <summary></summary>
 		public const bool NoSendOnOutputBreakDefault = true;
 
 		/// <summary></summary>

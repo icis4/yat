@@ -18,10 +18,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
 using System.Text;
 
 namespace MKY.IO.Ports
