@@ -510,7 +510,6 @@ namespace MKY.IO.Serial
 			}
 		}
 
-		/// <summary></summary>
 		/// <remarks>
 		/// Typically, 'OnDataReceived' has been fired before this method is called. However, this
 		/// method can also be called after the port got closed to retrieve the remaining data.
@@ -529,31 +528,6 @@ namespace MKY.IO.Serial
 				for (int i = 0; i < bytesReceived; i++)
 					data[i] = this.receiveQueue.Dequeue();
 			}
-
-			// Handle input XOn/XOff.
-			bool signalXOnXOff = false;
-			foreach (byte b in data)
-			{
-				if (b == SerialPortSettings.XOnByte)
-				{
-					lock (this.inputIsXOnSyncObj)
-					{
-						if (BoolEx.SetIfCleared(ref this.inputIsXOn))
-							signalXOnXOff = true;
-					}
-				}
-				else if (b == SerialPortSettings.XOffByte)
-				{
-					lock (this.inputIsXOnSyncObj)
-					{
-						if (BoolEx.ClearIfSet(ref this.inputIsXOn))
-							signalXOnXOff = true;
-					}
-				}
-			}
-
-			if (signalXOnXOff)
-				OnIOControlChanged(new EventArgs());
 
 			return (bytesReceived);
 		}
@@ -929,8 +903,35 @@ namespace MKY.IO.Serial
 
 				lock (this.receiveQueue)
 				{
+					bool signalXOnXOff = false;
+
 					foreach (byte b in buffer)
+					{
+						// Receive data into queue.
 						this.receiveQueue.Enqueue(b);
+
+						// Handle input XOn/XOff.
+						if (b == SerialPortSettings.XOnByte)
+						{
+							lock (this.inputIsXOnSyncObj)
+							{
+								if (BoolEx.SetIfCleared(ref this.inputIsXOn))
+									signalXOnXOff = true;
+							}
+						}
+						else if (b == SerialPortSettings.XOffByte)
+						{
+							lock (this.inputIsXOnSyncObj)
+							{
+								if (BoolEx.ClearIfSet(ref this.inputIsXOn))
+									signalXOnXOff = true;
+							}
+						}
+					}
+
+					// Immediately invoke the event, but invoke it asyncronously!
+					if (signalXOnXOff)
+						OnIOControlChangedAsync(new EventArgs());
 				}
 
 				// Ensure that only one data received event thread is active at a time.
@@ -1233,6 +1234,12 @@ namespace MKY.IO.Serial
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			EventHelper.FireSync(IOControlChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnIOControlChangedAsync(EventArgs e)
+		{
+			EventHelper.FireAsync(IOControlChanged, this, e);
 		}
 
 		/// <summary></summary>

@@ -2929,6 +2929,12 @@ namespace YAT.Gui.Forms
 
 					toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor = SystemColors.ControlText;
 					toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor = SystemColors.GrayText;
+
+					// \attention
+					// Do not modify the 'Enabled' property. Labels must always be enabled,
+					// otherwise picture get's greyed out, but it must either be green or red.
+					// Instead of modifying 'Enabled', YAT.Model.Terminal.RequestToggle...()
+					// checks whether an operation is allowed.
 				}
 				else
 				{
