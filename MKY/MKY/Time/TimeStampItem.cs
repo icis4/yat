@@ -21,48 +21,58 @@ using System;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace MKY.Collections.Generic
+namespace MKY.Time
 {
 	/// <summary>
 	/// Value pair.
 	/// </summary>
 	[Serializable]
-	public struct Pair<T1, T2>
+	public struct TimeStampItem<T>
 	{
-		private T1 value1;
-		private T2 value2;
+		private DateTime timeStamp;
+		private T item;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="T:ValuePair`1"/> struct.
+		/// Initializes a new instance of the <see cref="T:TimeStampItem`1"/> struct.
 		/// </summary>
-		/// <param name="value1">The first value.</param>
-		/// <param name="value2">The second value.</param>
-		public Pair(T1 value1, T2 value2)
+		/// <param name="item">The second value.</param>
+		public TimeStampItem(T item)
 		{
-			this.value1 = value1;
-			this.value2 = value2;
+			this.timeStamp = DateTime.Now;
+			this.item = item;
 		}
 
 		/// <summary>
-		/// Gets or sets the first value.
+		/// Initializes a new instance of the <see cref="T:TimeStampItem`1"/> struct.
 		/// </summary>
-		/// <value>The first value.</value>
-		[XmlElement("Value1")]
-		public T1 Value1
+		/// <param name="timeStamp">The time stamp.</param>
+		/// <param name="item">The second value.</param>
+		public TimeStampItem(DateTime timeStamp, T item)
 		{
-			get { return (this.value1); }
-			set { this.value1 = value; }
+			this.timeStamp = timeStamp;
+			this.item = item;
 		}
 
 		/// <summary>
-		/// Gets or sets the second value.
+		/// Gets or sets the time stamp.
 		/// </summary>
-		/// <value>The second value.</value>
-		[XmlElement("Value2")]
-		public T2 Value2
+		/// <value>The time stamp.</value>
+		[XmlElement("TimeStamp")]
+		public DateTime TimeStamp
 		{
-			get { return (this.value2); }
-			set { this.value2 = value; }
+			get { return (this.timeStamp); }
+			set { this.timeStamp = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the item.
+		/// </summary>
+		/// <value>The item.</value>
+		[XmlElement("Item")]
+		public T Item
+		{
+			get { return (this.item); }
+			set { this.item = value; }
 		}
 
 		#region Object Members
@@ -74,9 +84,9 @@ namespace MKY.Collections.Generic
 		{
 			StringBuilder sb = new StringBuilder();
 
-			sb.Append(this.value1);
+			sb.Append(this.timeStamp.ToString());
 			sb.Append(" / ");
-			sb.Append(this.value2);
+			sb.Append(this.item.ToString());
 
 			return (sb.ToString());
 		}
@@ -92,11 +102,11 @@ namespace MKY.Collections.Generic
 			if (GetType() != obj.GetType())
 				return (false);
 
-			Pair<T1, T2> other = (Pair<T1, T2>)obj;
+			TimeStampItem<T> other = (TimeStampItem<T>)obj;
 			return
 			(
-				(this.value1.Equals(other.value1)) &&
-				(this.value2.Equals(other.value2))
+				(this.timeStamp.Equals(other.timeStamp)) &&
+				(this.item.Equals(other.item))
 			);
 		}
 
@@ -105,8 +115,8 @@ namespace MKY.Collections.Generic
 		{
 			return
 			(
-				this.value1.GetHashCode() ^
-				this.value2.GetHashCode()
+				this.timeStamp.GetHashCode() ^
+				this.item.GetHashCode()
 			);
 		}
 
@@ -117,7 +127,7 @@ namespace MKY.Collections.Generic
 		/// <summary>
 		/// Determines whether the two specified objects have reference or value equality.
 		/// </summary>
-		public static bool operator ==(Pair<T1, T2> lhs, Pair<T1, T2> rhs)
+		public static bool operator ==(TimeStampItem<T> lhs, TimeStampItem<T> rhs)
 		{
 			// Value type implementation of operator ==.
 			// See MKY.Test.EqualityTest for details.
@@ -132,7 +142,7 @@ namespace MKY.Collections.Generic
 		/// <summary>
 		/// Determines whether the two specified objects have reference and value inequality.
 		/// </summary>
-		public static bool operator !=(Pair<T1, T2> lhs, Pair<T1, T2> rhs)
+		public static bool operator !=(TimeStampItem<T> lhs, TimeStampItem<T> rhs)
 		{
 			return (!(lhs == rhs));
 		}

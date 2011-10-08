@@ -30,66 +30,50 @@ namespace MKY
 	/// <summary>
 	/// DateTime utility methods.
 	/// </summary>
-	public static class TimeSpanEx
+	public static class DateTimeEx
 	{
 		/// <summary>
-		/// Returns time span formatted with "d:hh:mm:ss".
+		/// Returns time formatted with "hh:mm:ss".
 		/// </summary>
-		public static string FormatTimeSpan(TimeSpan timeSpan)
+		public static string FormatTime(DateTime dateTime)
 		{
-			return (FormatTimeSpan(timeSpan, false));
+			return (FormatTime(dateTime, false));
 		}
 
 		/// <summary>
-		/// Returns time span formatted with "d:hh:mm:ss[.hh]".
+		/// Returns time span formatted with "hh:mm:ss[.hh]".
 		/// </summary>
-		public static string FormatTimeSpan(TimeSpan timeSpan, bool hundredths)
+		public static string FormatTime(DateTime dateTime, bool hundredths)
 		{
 			StringBuilder sb = new StringBuilder();
 
 			if (hundredths)
 			{
-				sb.Insert(0, (timeSpan.Milliseconds / 10).ToString("D2"));
+				sb.Insert(0, (dateTime.Millisecond / 10).ToString("D2"));
 				sb.Insert(0, ".");
 			}
 
-			sb.Insert(0, timeSpan.Seconds.ToString("D2"));
+			sb.Insert(0, dateTime.Second.ToString("D2"));
 			sb.Insert(0, ":");
-			if (timeSpan.TotalHours < 1)
-			{
-				sb.Insert(0, timeSpan.Minutes);
-			}
-			else
-			{
-				sb.Insert(0, timeSpan.Minutes.ToString("D2"));
-				sb.Insert(0, ":");
-				if (timeSpan.TotalDays < 1)
-				{
-					sb.Insert(0, timeSpan.Hours);
-				}
-				else
-				{
-					sb.Insert(0, timeSpan.Hours.ToString("D2"));
-					sb.Insert(0, "days ");
-					sb.Insert(0, timeSpan.Days);
-				}
-			}
+			sb.Insert(0, dateTime.Minute.ToString("D2"));
+			sb.Insert(0, ":");
+			sb.Insert(0, dateTime.Hour.ToString("D2"));
 
 			return (sb.ToString());
 		}
 	}
 
 	/// <summary></summary>
-	public class TimeSpanEventArgs : EventArgs
+	public class DateTimeEventArgs : EventArgs
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly TimeSpan TimeSpan;
+		public readonly DateTime DateTime;
 
 		/// <summary></summary>
-		public TimeSpanEventArgs(TimeSpan timeSpan)
+		public DateTimeEventArgs(DateTime dateTime)
 		{
-			TimeSpan = timeSpan;
+			DateTime = dateTime;
 		}
 	}
 }

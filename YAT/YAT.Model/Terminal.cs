@@ -97,25 +97,31 @@ namespace YAT.Model
 		private int sequencialIndex;
 		private string autoName;
 
-		// Settings.
+		// Settings:
 		private DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler;
 		private TerminalSettingsRoot settingsRoot;
 
-		// Terminal.
+		// Terminal:
 		private Domain.Terminal terminal;
 
-		// Logs.
+		// Logs:
 		private Log.Logs log;
 
-		// Time status.
+		// Time status:
 		private Chronometer connectChrono;
 		private Chronometer totalConnectChrono;
 
-		// Count status.
+		// Count status:
 		private int txByteCount;
 		private int rxByteCount;
 		private int txLineCount;
 		private int rxLineCount;
+
+		// Rate status:
+		private Rate txByteRate;
+		private Rate rxByteRate;
+		private Rate txLineRate;
+		private Rate rxLineRate;
 
 		#endregion
 
@@ -135,6 +141,9 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		public event EventHandler IOCountChanged;
+
+		/// <summary></summary>
+		public event EventHandler IORateChanged;
 
 		/// <summary></summary>
 		public event EventHandler<Domain.IORequestEventArgs> IORequest;
@@ -232,7 +241,10 @@ namespace YAT.Model
 			this.log = new Log.Logs(this.settingsRoot.Log);
 
 			// Create chronos.
-			InitializeChronos();
+			CreateChronos();
+
+			// Create rates.
+			CreateRates();
 		}
 
 		#region Disposal
@@ -259,6 +271,7 @@ namespace YAT.Model
 					DetachSettingsEventHandlers();
 
 					// Then, dispose of objects
+					DisposeRates();
 					DisposeChronos();
 					if (this.log != null)
 					{
@@ -1317,6 +1330,10 @@ namespace YAT.Model
 			this.txByteCount += e.Element.Data.Length;
 			OnIOCountChanged(new EventArgs());
 
+			// Rate.
+			if (this.txByteRate.Update(e.Element.Data.Length))
+				OnIORateChanged(new EventArgs());
+
 			// Log.
 			if (this.log.IsStarted)
 			{
@@ -1330,6 +1347,10 @@ namespace YAT.Model
 			// Count.
 			this.rxByteCount += e.Element.Data.Length;
 			OnIOCountChanged(new EventArgs());
+
+			// Rate.
+			if (this.rxByteRate.Update(e.Element.Data.Length))
+				OnIORateChanged(new EventArgs());
 
 			// Log.
 			if (this.log.IsStarted)
@@ -1393,6 +1414,10 @@ namespace YAT.Model
 			this.txLineCount += e.Lines.Count;
 			OnIOCountChanged(new EventArgs());
 
+			// Rate.
+			if (this.txLineRate.Update(e.Lines.Count))
+				OnIORateChanged(new EventArgs());
+
 			// Display.
 			OnDisplayLinesSent(e);
 		}
@@ -1402,6 +1427,10 @@ namespace YAT.Model
 			// Count.
 			this.rxLineCount += e.Lines.Count;
 			OnIOCountChanged(new EventArgs());
+
+			// Rate.
+			if (this.rxLineRate.Update(e.Lines.Count))
+				OnIORateChanged(new EventArgs());
 
 			// Display.
 			OnDisplayLinesReceived(e);
@@ -2020,7 +2049,7 @@ namespace YAT.Model
 		// Terminal > Time Status
 		//------------------------------------------------------------------------------------------
 
-		private void InitializeChronos()
+		private void CreateChronos()
 		{
 			this.connectChrono = new Chronometer();
 			this.connectChrono.Interval = 1000;
@@ -2094,9 +2123,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Terminal > Count Status
+		#region Terminal > Count and Rate Status
 		//------------------------------------------------------------------------------------------
-		// Terminal > Count Status
+		// Terminal > Count and Rate Status
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
@@ -2124,7 +2153,31 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual void ResetIOCount()
+		public virtual int TxByteRate
+		{
+			get { return (this.txByteRate); }
+		}
+
+		/// <summary></summary>
+		public virtual int TxLineRate
+		{
+			get { return (this.txLineRate); }
+		}
+
+		/// <summary></summary>
+		public virtual int RxByteRate
+		{
+			get { return (this.rxByteRate); }
+		}
+
+		/// <summary></summary>
+		public virtual int RxLineRate
+		{
+			get { return (this.rxLineRate); }
+		}
+
+		/// <summary></summary>
+		public virtual void ResetIOCountAndRate()
 		{
 			this.txByteCount = 0;
 			this.txLineCount = 0;
@@ -2132,7 +2185,69 @@ namespace YAT.Model
 			this.rxLineCount = 0;
 
 			OnIOCountChanged(new EventArgs());
+
+			this.txByteRate.Reset();
+			this.txLineRate.Reset();
+			this.rxByteRate.Reset();
+			this.rxLineRate.Reset();
+
+			OnIORateChanged(new EventArgs());
 		}
+
+		private void CreateRates()
+		{
+			int tick = 250;
+			int interval = 1000;
+			int window = 5000;
+
+			this.txByteRate = new Rate(tick, interval, window);
+			this.txLineRate = new Rate(tick, interval, window);
+			this.rxByteRate = new Rate(tick, interval, window);
+			this.rxLineRate = new Rate(tick, interval, window);
+
+			this.txByteRate.Changed += new EventHandler<RateEventArgs>(rate_Changed);
+			this.txLineRate.Changed += new EventHandler<RateEventArgs>(rate_Changed);
+			this.rxByteRate.Changed += new EventHandler<RateEventArgs>(rate_Changed);
+			this.rxLineRate.Changed += new EventHandler<RateEventArgs>(rate_Changed);
+		}
+
+		private void DisposeRates()
+		{
+			if (this.txByteRate != null)
+			{
+				this.txByteRate.Changed -= new EventHandler<RateEventArgs>(rate_Changed);
+				this.txByteRate.Dispose();
+				this.txByteRate = null;
+			}
+
+			if (this.txLineRate != null)
+			{
+				this.txLineRate.Changed -= new EventHandler<RateEventArgs>(rate_Changed);
+				this.txLineRate.Dispose();
+				this.txLineRate = null;
+			}
+
+			if (this.rxByteRate != null)
+			{
+				this.rxByteRate.Changed -= new EventHandler<RateEventArgs>(rate_Changed);
+				this.rxByteRate.Dispose();
+				this.rxByteRate = null;
+			}
+
+			if (this.rxLineRate != null)
+			{
+				this.rxLineRate.Changed -= new EventHandler<RateEventArgs>(rate_Changed);
+				this.rxLineRate.Dispose();
+				this.rxLineRate = null;
+			}
+		}
+
+		private void rate_Changed(object sender, RateEventArgs e)
+		{
+			if (!this.isDisposed)
+				OnIORateChanged(e);
+		}
+
 
 		#endregion
 
@@ -2251,6 +2366,12 @@ namespace YAT.Model
 		protected virtual void OnIOCountChanged(EventArgs e)
 		{
 			EventHelper.FireSync(IOCountChanged, this, e);
+		}
+
+		/// <summary></summary>
+		protected virtual void OnIORateChanged(EventArgs e)
+		{
+			EventHelper.FireSync(IORateChanged, this, e);
 		}
 
 		/// <summary></summary>

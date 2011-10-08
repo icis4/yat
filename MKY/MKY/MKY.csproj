@@ -66,6 +66,9 @@
     <Compile Include="Net\IPResolver.cs" />
     <Compile Include="Text\Ascii.cs" />
     <Compile Include="Text\Escape.cs" />
+    <Compile Include="Time\DateTimeEx.cs" />
+    <Compile Include="Time\TimeStampItem.cs" />
+    <Compile Include="Time\Rate.cs" />
     <Compile Include="Types\BoolEx.cs" />
     <Compile Include="Types\SingleEx.cs" />
     <Compile Include="Windows.Forms\MenuEx.cs" />

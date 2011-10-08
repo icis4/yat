@@ -18,6 +18,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,6 +32,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
+using MKY;
 using MKY.Event;
 using MKY.Diagnostics;
 using MKY.Settings;
@@ -36,6 +42,8 @@ using MKY.Windows.Forms;
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
+
+#endregion
 
 namespace YAT.Gui.Forms
 {
@@ -725,7 +733,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters_Click(object sender, EventArgs e)
 		{
-			this.terminal.ResetIOCount();
+			this.terminal.ResetIOCountAndRate();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ShowRadix_Click(object sender, EventArgs e)
@@ -957,7 +965,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_MonitorContextMenu_ResetCounters_Click(object sender, EventArgs e)
 		{
-			this.terminal.ResetIOCount();
+			this.terminal.ResetIOCountAndRate();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Clear_Click(object sender, EventArgs e)
@@ -2501,6 +2509,7 @@ namespace YAT.Gui.Forms
 				this.terminal.IOControlChanged     += new EventHandler(terminal_IOControlChanged);
 				this.terminal.IOConnectTimeChanged += new EventHandler<TimeSpanEventArgs>(terminal_IOConnectTimeChanged);
 				this.terminal.IOCountChanged       += new EventHandler(terminal_IOCountChanged);
+				this.terminal.IORateChanged        += new EventHandler(terminal_IORateChanged);
 				this.terminal.IORequest            += new EventHandler<Domain.IORequestEventArgs>(terminal_IORequest);
 				this.terminal.IOError              += new EventHandler<Domain.IOErrorEventArgs>(terminal_IOError);
 
@@ -2529,6 +2538,7 @@ namespace YAT.Gui.Forms
 				this.terminal.IOControlChanged     -= new EventHandler(terminal_IOControlChanged);
 				this.terminal.IOConnectTimeChanged -= new EventHandler<TimeSpanEventArgs>(terminal_IOConnectTimeChanged);
 				this.terminal.IOCountChanged       -= new EventHandler(terminal_IOCountChanged);
+				this.terminal.IORateChanged        -= new EventHandler(terminal_IORateChanged);
 				this.terminal.IORequest            -= new EventHandler<Domain.IORequestEventArgs>(terminal_IORequest);
 				this.terminal.IOError              -= new EventHandler<Domain.IOErrorEventArgs>(terminal_IOError);
 
@@ -2596,6 +2606,25 @@ namespace YAT.Gui.Forms
 			monitor_Bidir.RxLineCountStatus = rxLineCount;
 			monitor_Rx.RxByteCountStatus    = rxByteCount;
 			monitor_Rx.RxLineCountStatus    = rxLineCount;
+		}
+
+		private void terminal_IORateChanged(object sender, EventArgs e)
+		{
+			int txByteRate = this.terminal.TxByteRate;
+			int rxByteRate = this.terminal.RxByteRate;
+
+			int txLineRate = this.terminal.TxLineRate;
+			int rxLineRate = this.terminal.RxLineRate;
+
+			monitor_Tx.TxByteRateStatus    = txByteRate;
+			monitor_Tx.TxLineRateStatus    = txLineRate;
+			monitor_Bidir.TxByteRateStatus = txByteRate;
+			monitor_Bidir.TxLineRateStatus = txLineRate;
+
+			monitor_Bidir.RxByteRateStatus = rxByteRate;
+			monitor_Bidir.RxLineRateStatus = rxLineRate;
+			monitor_Rx.RxByteRateStatus    = rxByteRate;
+			monitor_Rx.RxLineRateStatus    = rxLineRate;
 		}
 
 		/// <remarks>

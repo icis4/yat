@@ -56,6 +56,7 @@ New:
 - Serial ports: XOn/XOff state is indicated (feature request #3066635)
    > Applies to 'Software', 'Combined' and 'Manual' flow control
    > XOn/XOff can be toggled in case of 'Manual' flow control
+- Byte and line rate per second can optionally be displayed in monitors (feature request #3274066)
 - Handling of terminal indecies finalized (feature request #3091859)
    > Fixed indecies are persistently saved and restored upon loading the workspace
    > Dynamic indecies are automatically restored correctly
