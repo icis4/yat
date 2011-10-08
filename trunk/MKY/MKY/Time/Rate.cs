@@ -19,6 +19,7 @@
 //==================================================================================================
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
@@ -28,7 +29,21 @@ using MKY.Event;
 namespace MKY.Time
 {
 	/// <summary></summary>
-	public class Chronometer : IDisposable
+	public class RateEventArgs : EventArgs
+	{
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
+		public readonly int Rate;
+
+		/// <summary></summary>
+		public RateEventArgs(int rate)
+		{
+			Rate = rate;
+		}
+	}
+
+	/// <summary></summary>
+	public class Rate : IDisposable
 	{
 		#region Fields
 		//==========================================================================================
@@ -40,8 +55,12 @@ namespace MKY.Time
 		private System.Timers.Timer timer;
 		private object timer_Elapsed_SyncObj = new object();
 
-		private TimeSpan accumulatedTimeSpan = TimeSpan.Zero;
-		private DateTime startTimeStamp = DateTime.Now;
+		private int tick;
+		private int interval;
+		private int window;
+
+		private Queue<TimeStampItem<int>> queue = new Queue<TimeStampItem<int>>();
+		private int value;
 
 		#endregion
 
@@ -53,7 +72,7 @@ namespace MKY.Time
 		/// <summary></summary>
 		[Category("Action")]
 		[Description("Event raised when the tick interval elapsed or the time span was reset.")]
-		public event EventHandler<TimeSpanEventArgs> TimeSpanChanged;
+		public event EventHandler<RateEventArgs> Changed;
 
 		#endregion
 
@@ -63,12 +82,23 @@ namespace MKY.Time
 		//==========================================================================================
 
 		/// <summary></summary>
-		public Chronometer()
+		public Rate()
+			: this (100, 1000, 5000)
 		{
+		}
+
+		/// <summary></summary>
+		public Rate(int tick, int interval, int window)
+		{
+			this.tick = tick;
+			this.interval = interval;
+			this.window = window;
+
 			this.timer = new System.Timers.Timer();
 			this.timer.AutoReset = true;
-			this.timer.Interval = 1000;
+			this.timer.Interval = this.tick;
 			this.timer.Elapsed += new System.Timers.ElapsedEventHandler(timer_Elapsed);
+			this.timer.Start();
 		}
 
 		#region Disposal
@@ -98,7 +128,7 @@ namespace MKY.Time
 		}
 
 		/// <summary></summary>
-		~Chronometer()
+		~Rate()
 		{
 			Dispose(false);
 		}
@@ -126,24 +156,31 @@ namespace MKY.Time
 		//==========================================================================================
 
 		/// <summary></summary>
-		public double Interval
+		public int Tick
 		{
-			get { AssertNotDisposed(); return (this.timer.Interval); }
-			set { AssertNotDisposed(); this.timer.Interval = value;  }
+			get { AssertNotDisposed(); return (this.tick); }
+			set { AssertNotDisposed(); this.tick = value;  }
 		}
 
 		/// <summary></summary>
-		public TimeSpan TimeSpan
+		public int Interval
 		{
-			get
-			{
-				AssertNotDisposed();
+			get { AssertNotDisposed(); return (this.interval); }
+			set { AssertNotDisposed(); this.interval = value;  }
+		}
 
-				if (!this.timer.Enabled)
-					return (this.accumulatedTimeSpan);
-				else
-					return (this.accumulatedTimeSpan + (DateTime.Now - this.startTimeStamp));
-			}
+		/// <summary></summary>
+		public int Window
+		{
+			get { AssertNotDisposed(); return (this.window); }
+			set { AssertNotDisposed(); this.window = value;  }
+		}
+
+		/// <summary></summary>
+		public int Value
+		{
+			get { AssertNotDisposed(); return (this.value); }
+			set { AssertNotDisposed(); this.value = value;  }
 		}
 
 		#endregion
@@ -154,39 +191,13 @@ namespace MKY.Time
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual void Start()
+		public virtual bool Update(int value)
 		{
 			AssertNotDisposed();
 
-			if (!this.timer.Enabled)
-			{
-				this.timer.Start();
-				this.startTimeStamp = DateTime.Now;
-				OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
-			}
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Stop", Justification = "Stop is a common term to start/stop something.")]
-		public virtual void Stop()
-		{
-			AssertNotDisposed();
-
-			if (this.timer.Enabled)
-			{
-				this.timer.Stop();
-				this.accumulatedTimeSpan += (DateTime.Now - this.startTimeStamp);
-				OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
-			}
-		}
-
-		/// <summary></summary>
-		public virtual void StartStop()
-		{
-			if (!this.timer.Enabled)
-				Start();
-			else
-				Stop();
+			AddValueToQueue(value);
+			RemoveObsoleteFromQueue();
+			return (CalculateValueFromQueueAndSignalIfChanged(value));
 		}
 
 		/// <summary></summary>
@@ -194,26 +205,93 @@ namespace MKY.Time
 		{
 			AssertNotDisposed();
 
-			this.startTimeStamp = DateTime.Now;
-			this.accumulatedTimeSpan = TimeSpan.Zero;
-			OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan.Zero));
+			this.queue.Clear();
+			CalculateValueFromQueueAndSignalIfChanged();
 		}
 
-		/// <summary></summary>
-		public virtual void Restart()
+		private void AddValueToQueue(int value)
 		{
-			AssertNotDisposed();
-
-			Stop();
-			Reset();
-			Start();
+			this.queue.Enqueue(new TimeStampItem<int>(value));
 		}
 
-		/// <summary></summary>
-		public override string ToString()
+		private void RemoveObsoleteFromQueue()
 		{
-			AssertNotDisposed();
-			return (TimeSpanEx.FormatTimeSpan(TimeSpan, true));
+			bool isWithinWindow = true;
+			DateTime otherEndOfWindow = DateTime.Now - TimeSpan.FromMilliseconds(this.window);
+			while ((this.queue.Count > 0) && isWithinWindow)
+			{
+				TimeStampItem<int> tsi = this.queue.Peek();
+				if (tsi.TimeStamp < otherEndOfWindow)
+					this.queue.Dequeue();
+				else
+					isWithinWindow = false;
+			}
+		}
+
+
+		private bool CalculateValueFromQueueAndSignalIfChanged()
+		{
+			return (CalculateValueFromQueueAndSignalIfChanged(0));
+		}
+
+		private bool CalculateValueFromQueueAndSignalIfChanged(int value)
+		{
+			int oldValue = this.value;
+			int newValue = 0;
+
+			// If value was 0 before, only consider the current value.
+			if (oldValue <= 0)
+			{
+				newValue = value;
+			}
+			else
+			{
+				// Count number of items within each interval.
+				int numberOfIntervals = (int)(this.window / this.interval);
+				int[] valuePerInterval = ArrayEx.CreateAndInitializeInstance<int>(numberOfIntervals, 0);
+				DateTime now = DateTime.Now;
+				foreach (TimeStampItem<int> tsi in this.queue.ToArray())
+				{
+					TimeSpan ts = (now - tsi.TimeStamp);
+					int i = Int32Ex.LimitToBounds((int)(ts.TotalMilliseconds / this.interval), 0, numberOfIntervals - 1);
+					valuePerInterval[i] += tsi.Item;
+				}
+
+				// Weigh and sum up the intervals.
+				int weight = numberOfIntervals;
+				int weighedSum = 0;
+				int sumOfWeights = 0;
+				foreach (int valueOfInterval in valuePerInterval)
+				{
+					weighedSum += (valueOfInterval * weight);
+					sumOfWeights += weight;
+					weight--;
+				}
+
+				// Evaluate the rate.
+				newValue = (int)((double)weighedSum / sumOfWeights);
+			}
+
+			if (newValue != oldValue)
+			{
+				this.value = newValue;
+				OnRateChanged(new RateEventArgs(this.value));
+				return (true);
+			}
+			else
+			{
+				return (false);
+			}
+		}
+
+		#endregion
+
+		#region Conversion Operators
+
+		/// <summary></summary>
+		public static implicit operator int(Rate rate)
+		{
+			return (rate.value);
 		}
 
 		#endregion
@@ -234,7 +312,8 @@ namespace MKY.Time
 				{
 					try
 					{
-						OnTimeSpanChanged(new TimeSpanEventArgs(TimeSpan));
+						RemoveObsoleteFromQueue();
+						CalculateValueFromQueueAndSignalIfChanged();
 					}
 					finally
 					{
@@ -252,11 +331,9 @@ namespace MKY.Time
 		//==========================================================================================
 
 		/// <summary></summary>
-		protected virtual void OnTimeSpanChanged(TimeSpanEventArgs e)
+		protected virtual void OnRateChanged(RateEventArgs e)
 		{
-			EventHelper.SuspendUnhandledException();
-			EventHelper.FireSync<TimeSpanEventArgs>(TimeSpanChanged, this, e);
-			EventHelper.ResumeUnhandledException();
+			EventHelper.FireSync<RateEventArgs>(Changed, this, e);
 		}
 
 		#endregion

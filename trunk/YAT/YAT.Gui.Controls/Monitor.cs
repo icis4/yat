@@ -26,8 +26,8 @@ using System.Text;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
+using MKY;
 using MKY.Event;
-using MKY.Time;
 using MKY.Windows.Forms;
 
 using YAT.Gui.Utilities;
@@ -101,32 +101,38 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		// State
+		// State:
 		private Domain.RepositoryType repositoryType = RepositoryTypeDefault;
 		private MonitorActivityState activityState = ActivityStateDefault;
 		private MonitorActivityState activityStateOld = ActivityStateDefault;
 
-		// Image
+		// Image:
 		private Image imageInactive = null;
 		private Image imageActive = null;
 		private OpacityState imageOpacityState = OpacityState.Inactive;
 		private double imageOpacity = MinImageOpacity;
 
-		// Lines
+		// Lines:
 		private int maxLineCount = MaxLineCountDefault;
 		private Model.Settings.FormatSettings formatSettings = new Model.Settings.FormatSettings();
 
-		// Time status
+		// Time status:
 		private bool showTimeStatus = ShowTimeStatusDefault;
 		private TimeSpan connectTime;
 		private TimeSpan totalConnectTime;
 
-		// Count status
+		// Count status:
 		private bool showCountStatus = ShowCountStatusDefault;
+
 		private int txByteCountStatus;
 		private int rxByteCountStatus;
 		private int txLineCountStatus;
 		private int rxLineCountStatus;
+
+		private int txByteRateStatus;
+		private int rxByteRateStatus;
+		private int txLineRateStatus;
+		private int rxLineRateStatus;
 
 		#endregion
 
@@ -295,7 +301,7 @@ namespace YAT.Gui.Controls
 				if (value != this.showCountStatus)
 				{
 					this.showCountStatus = value;
-					SetCountStatusControls();
+					SetCountAndRateStatusControls();
 				}
 			}
 		}
@@ -312,7 +318,7 @@ namespace YAT.Gui.Controls
 				if (value != this.txByteCountStatus)
 				{
 					this.txByteCountStatus = value;
-					SetCountStatusControls();
+					SetCountAndRateStatusControls();
 				}
 			}
 		}
@@ -329,7 +335,7 @@ namespace YAT.Gui.Controls
 				if (value != this.txLineCountStatus)
 				{
 					this.txLineCountStatus = value;
-					SetCountStatusControls();
+					SetCountAndRateStatusControls();
 				}
 			}
 		}
@@ -346,7 +352,7 @@ namespace YAT.Gui.Controls
 				if (value != this.rxByteCountStatus)
 				{
 					this.rxByteCountStatus = value;
-					SetCountStatusControls();
+					SetCountAndRateStatusControls();
 				}
 			}
 		}
@@ -363,7 +369,75 @@ namespace YAT.Gui.Controls
 				if (value != this.rxLineCountStatus)
 				{
 					this.rxLineCountStatus = value;
-					SetCountStatusControls();
+					SetCountAndRateStatusControls();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[Category("Monitor")]
+		[Description("The Tx byte rate status.")]
+		[DefaultValue(0)]
+		public virtual int TxByteRateStatus
+		{
+			get { return (this.txByteRateStatus); }
+			set
+			{
+				if (value != this.txByteRateStatus)
+				{
+					this.txByteRateStatus = value;
+					SetCountAndRateStatusControls();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[Category("Monitor")]
+		[Description("The Tx line rate status.")]
+		[DefaultValue(0)]
+		public virtual int TxLineRateStatus
+		{
+			get { return (this.txLineRateStatus); }
+			set
+			{
+				if (value != this.txLineRateStatus)
+				{
+					this.txLineRateStatus = value;
+					SetCountAndRateStatusControls();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[Category("Monitor")]
+		[Description("The Rx byte rate status.")]
+		[DefaultValue(0)]
+		public virtual int RxByteRateStatus
+		{
+			get { return (this.rxByteRateStatus); }
+			set
+			{
+				if (value != this.rxByteRateStatus)
+				{
+					this.rxByteRateStatus = value;
+					SetCountAndRateStatusControls();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[Category("Monitor")]
+		[Description("The Rx line rate status.")]
+		[DefaultValue(0)]
+		public virtual int RxLineRateStatus
+		{
+			get { return (this.rxLineRateStatus); }
+			set
+			{
+				if (value != this.rxLineRateStatus)
+				{
+					this.rxLineRateStatus = value;
+					SetCountAndRateStatusControls();
 				}
 			}
 		}
@@ -475,14 +549,19 @@ namespace YAT.Gui.Controls
 		}
 
 		/// <summary></summary>
-		public virtual void ResetCountStatus()
+		public virtual void ResetCountAndRateStatus()
 		{
 			this.txByteCountStatus = 0;
 			this.txLineCountStatus = 0;
 			this.rxByteCountStatus = 0;
 			this.rxLineCountStatus = 0;
 
-			SetCountStatusControls();
+			this.txByteRateStatus = 0;
+			this.txLineRateStatus = 0;
+			this.rxByteRateStatus = 0;
+			this.rxLineRateStatus = 0;
+
+			SetCountAndRateStatusControls();
 		}
 
 		/// <summary></summary>
@@ -785,7 +864,7 @@ namespace YAT.Gui.Controls
 
 			SetFormatDependentControls();
 			SetTimeStatusControls();
-			SetCountStatusControls();
+			SetCountAndRateStatusControls();
 		}
 
 		private void SetFormatDependentControls()
@@ -819,39 +898,58 @@ namespace YAT.Gui.Controls
 			label_TimeStatus.Visible = this.showTimeStatus;
 		}
 
-		private void SetCountStatusControls()
+		private void SetCountAndRateStatusControls()
 		{
 			StringBuilder sb = new StringBuilder();
 			switch (this.repositoryType)
 			{
 				case Domain.RepositoryType.Tx:
 				{
-					sb.Append(this.txByteCountStatus.ToString());
-					sb.Append(" / ");
-					sb.Append(this.txLineCountStatus.ToString());
+					AppendTxStatus(sb);
 					break;
 				}
 				case Domain.RepositoryType.Bidir:
 				{
-					sb.Append(this.txByteCountStatus.ToString());
-					sb.Append(" / ");
-					sb.Append(this.txLineCountStatus.ToString());
+					AppendTxStatus(sb);
 					sb.Append(Environment.NewLine);
-					sb.Append(this.rxByteCountStatus.ToString());
-					sb.Append(" / ");
-					sb.Append(this.rxLineCountStatus.ToString());
+					AppendRxStatus(sb);
 					break;
 				}
 				case Domain.RepositoryType.Rx:
 				{
-					sb.Append(this.rxByteCountStatus.ToString());
-					sb.Append(" / ");
-					sb.Append(this.rxLineCountStatus.ToString());
+					AppendRxStatus(sb);
 					break;
 				}
 			}
-			label_CountStatus.Text = sb.ToString();
+
 			label_CountStatus.Visible = this.showCountStatus;
+			label_CountStatus.Text = sb.ToString();
+		}
+
+		private void AppendTxStatus(StringBuilder sb)
+		{
+			sb.Append(this.txByteCountStatus);
+			sb.Append(" | ");
+			sb.Append(this.txLineCountStatus);
+			sb.Append(" @ ");
+			sb.Append(this.txByteRateStatus);
+			sb.Append("/s");
+			sb.Append(" | ");
+			sb.Append(this.txLineRateStatus);
+			sb.Append("/s");
+		}
+
+		private void AppendRxStatus(StringBuilder sb)
+		{
+			sb.Append(this.rxByteCountStatus);
+			sb.Append(" | ");
+			sb.Append(this.rxLineCountStatus);
+			sb.Append(" @ ");
+			sb.Append(this.rxByteRateStatus);
+			sb.Append("/s");
+			sb.Append(" | ");
+			sb.Append(this.rxLineRateStatus);
+			sb.Append("/s");
 		}
 
 		/// <summary>

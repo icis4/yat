@@ -97,9 +97,9 @@
 			this.label_CountStatus.Name = "label_CountStatus";
 			this.label_CountStatus.Size = new System.Drawing.Size(136, 30);
 			this.label_CountStatus.TabIndex = 1;
-			this.label_CountStatus.Text = "888 / 888 \r\n888 / 888";
+			this.label_CountStatus.Text = "888 | 888 @ 8/s | 8/s\r\n888 | 888 @ 8/s | 8/s";
 			this.label_CountStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolTip.SetToolTip(this.label_CountStatus, "bytes / lines");
+			this.toolTip.SetToolTip(this.label_CountStatus, "Number of bytes | lines @ bytes | lines per second");
 			// 
 			// pictureBox_Monitor
 			// 
