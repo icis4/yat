@@ -55,18 +55,43 @@ New:
    > The C/C++/C#/Java style "//" and the Basic/BAT/DOS style "REM" comment markers are predefined
 - Serial ports: XOn/XOff state is indicated (feature request #3066635)
    > Applies to 'Software', 'Combined' and 'Manual' flow control
-   > XOn/XOff can be toggled in case of 'Manual' flow control
-- Byte and line rate per second can optionally be displayed in monitors (feature request #3274066)
+   > XOn/XOff can be manually toggled in case of 'Manual' flow control
+- Byte and line data rate per second added to monitors (feature requests #2846784 and #3274066)
 - Handling of terminal indecies finalized (feature request #3091859)
    > Fixed indecies are persistently saved and restored upon loading the workspace
    > Dynamic indecies are automatically restored correctly
 
 Important changes:
-- Update to NUnit 2.5.10
+- The monitor update rate is now dependent on the data rate, i.e. when more data is transmitted or
+  received, the update rate is reduced, results in better performance (feature request #3274073)
+- Monitor display status settings relocated from 'Display' to 'Status' to improve speed on showing
+  the status labels, i.e. no monitor update is needed anymore (related to feature request #3274073)
 - MKY.Data added
 - MKY.Settings.Settings renamed to MKY.Settings.SettingsItem
-- MKY.IO and MKY.IO.Net added to prepare refactoring of MKY.Serial
-- _<Data|Doc|Test> renamed to !-<Data|Doc|Test>
+- MKY.IO and MKY.IO.Net added to prepare refactoring of MKY.IO.Serial (feature request #3388950)
+- Update to NUnit 2.5.10
+- "_<Data|Doc|Test>" renamed to "!-<Data|Doc|Test>"
+
+Limitations and known issues:
+- MDI limitations of .NET
+   > Issues with frame (bugs #1808492 and #1808493)
+   > Issues with window list (bugs #1808494 and #2846917)
+   > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684)
+- Long monitor contents are not displayed properly when scrolling using scroll bar (bug #2865562)
+- Response of multi-line commands or files is delayed (bug #3072919)
+- Serial port auto-reopen not yet implementable due to .NET deadlock issue in System.IO.SerialPort
+  (feature request #1960299)
+- Support for serial ports which are named other than COM isn't supported by .NET
+  (feature request #2848228)
+- USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
+  of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
+- Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)
+- Text terminals: Wait for answer line not yet implemented (feature request #1808509)
+- Terminal/direct mode does not yet support special formats and commands (feature request #1808496)
+- Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
+- System errors are output in local language, even since YAT is all-English (bug #1927786)
+- Multiple simultaneous instances of YAT are limited in the use of default workspaces and terminals
+  (feature request #2842713)
 
 
 YAT 2.0 Beta 3 Candidate 4 Version 1.99.26 :: 2011-04-25

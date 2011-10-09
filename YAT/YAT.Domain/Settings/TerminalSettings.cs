@@ -33,6 +33,7 @@ namespace YAT.Domain.Settings
 
 		// Type independent settings.
 		private IOSettings io;
+		private StatusSettings status;
 		private BufferSettings buffer;
 		private DisplaySettings display;
 		private CharReplaceSettings charReplace;
@@ -62,6 +63,7 @@ namespace YAT.Domain.Settings
 		private void InitializeNodes()
 		{
 			IO = new IOSettings(SettingsType);
+			Status = new StatusSettings(SettingsType);
 			Buffer = new BufferSettings(SettingsType);
 			Display = new DisplaySettings(SettingsType);
 			CharReplace = new CharReplaceSettings(SettingsType);
@@ -81,6 +83,7 @@ namespace YAT.Domain.Settings
 			TerminalType   = rhs.TerminalType;
 
 			IO             = new IOSettings(rhs.IO);
+			Status         = new StatusSettings(rhs.Status);
 			Buffer         = new BufferSettings(rhs.Buffer);
 			Display        = new DisplaySettings(rhs.Display);
 			CharReplace    = new CharReplaceSettings(rhs.CharReplace);
@@ -142,6 +145,32 @@ namespace YAT.Domain.Settings
 					IOSettings old = this.io;
 					this.io = value;
 					ReplaceNode(old, this.io);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("Status")]
+		public StatusSettings Status
+		{
+			get { return (this.status); }
+			set
+			{
+				if (value == null)
+				{
+					this.status = value;
+					DetachNode(this.status);
+				}
+				else if (this.status == null)
+				{
+					this.status = value;
+					AttachNode(this.status);
+				}
+				else if (value != this.status)
+				{
+					StatusSettings old = this.status;
+					this.status = value;
+					ReplaceNode(old, this.status);
 				}
 			}
 		}

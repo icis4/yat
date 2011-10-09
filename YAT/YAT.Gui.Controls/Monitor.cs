@@ -18,6 +18,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -31,6 +36,8 @@ using MKY.Event;
 using MKY.Windows.Forms;
 
 using YAT.Gui.Utilities;
+
+#endregion
 
 namespace YAT.Gui.Controls
 {
@@ -92,7 +99,7 @@ namespace YAT.Gui.Controls
 
 		// Time status
 		private const bool ShowTimeStatusDefault = false;
-		private const bool ShowCountStatusDefault = false;
+		private const bool ShowCountAndRateStatusDefault = false;
 
 		#endregion
 
@@ -122,7 +129,7 @@ namespace YAT.Gui.Controls
 		private TimeSpan totalConnectTime;
 
 		// Count status:
-		private bool showCountStatus = ShowCountStatusDefault;
+		private bool showCountAndRateStatus = ShowCountAndRateStatusDefault;
 
 		private int txByteCountStatus;
 		private int rxByteCountStatus;
@@ -133,6 +140,13 @@ namespace YAT.Gui.Controls
 		private int rxByteRateStatus;
 		private int txLineRateStatus;
 		private int rxLineRateStatus;
+
+		// Update:
+		private int lastDataItemIndex = int.MaxValue;
+		private long updateTickStamp;
+		private long updateTickInterval;
+		private bool performImmediateUpdate;
+		private bool performTimedUpdate;
 
 		#endregion
 
@@ -291,16 +305,16 @@ namespace YAT.Gui.Controls
 
 		/// <summary></summary>
 		[Category("Monitor")]
-		[Description("Show the count status.")]
-		[DefaultValue(ShowCountStatusDefault)]
-		public virtual bool ShowCountStatus
+		[Description("Show the count and rate status.")]
+		[DefaultValue(ShowCountAndRateStatusDefault)]
+		public virtual bool ShowCountAndRateStatus
 		{
-			get { return (this.showCountStatus); }
+			get { return (this.showCountAndRateStatus); }
 			set
 			{
-				if (value != this.showCountStatus)
+				if (value != this.showCountAndRateStatus)
 				{
-					this.showCountStatus = value;
+					this.showCountAndRateStatus = value;
 					SetCountAndRateStatusControls();
 				}
 			}
@@ -387,6 +401,7 @@ namespace YAT.Gui.Controls
 				{
 					this.txByteRateStatus = value;
 					SetCountAndRateStatusControls();
+					CalculateUpdateRate();
 				}
 			}
 		}
@@ -404,6 +419,7 @@ namespace YAT.Gui.Controls
 				{
 					this.txLineRateStatus = value;
 					SetCountAndRateStatusControls();
+					CalculateUpdateRate();
 				}
 			}
 		}
@@ -421,6 +437,7 @@ namespace YAT.Gui.Controls
 				{
 					this.rxByteRateStatus = value;
 					SetCountAndRateStatusControls();
+					CalculateUpdateRate();
 				}
 			}
 		}
@@ -438,6 +455,7 @@ namespace YAT.Gui.Controls
 				{
 					this.rxLineRateStatus = value;
 					SetCountAndRateStatusControls();
+					CalculateUpdateRate();
 				}
 			}
 		}
@@ -504,7 +522,7 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		public virtual void Clear()
 		{
-			ClearListBox();
+			ClearFastListBox();
 		}
 
 		/// <summary></summary>
@@ -658,9 +676,13 @@ namespace YAT.Gui.Controls
 
 		private void Monitor_Resize(object sender, EventArgs e)
 		{
-			int middle = Width / 2;
-			label_TimeStatus.Width = middle - 14;
-			label_CountStatus.Left = middle + 14;
+			const int IconDistance = 14; // 14 relates to half the size of the direction icon.
+			int middle = (Width / 2);
+
+			label_TimeStatus.Width = middle - IconDistance;
+
+			label_CountStatus.Left = middle + IconDistance;
+			label_CountStatus.Width = middle - IconDistance;
 		}
 
 		#endregion
@@ -670,51 +692,17 @@ namespace YAT.Gui.Controls
 		// Controls Event Handlers
 		//==========================================================================================
 
-		private void timer_Opacity_Tick(object sender, EventArgs e)
-		{
-			if (this.imageOpacityState != OpacityState.Inactive)
-			{
-				if (this.imageOpacityState == OpacityState.Incrementing)
-				{
-					this.imageOpacity += ImageOpacityIncrement;
-					if (this.imageOpacity > MaxImageOpacity)
-					{
-						this.imageOpacity = MaxImageOpacity;
-						this.imageOpacityState = OpacityState.Decrementing;
-					}
-				}
-				else
-				{
-					this.imageOpacity += ImageOpacityDecrement;
-					if (this.imageOpacity < MinImageOpacity)
-					{
-						this.imageOpacity = MinImageOpacity;
-						this.imageOpacityState = OpacityState.Incrementing;
-					}
-				}
-#if (FALSE)
-				// \fixme:
-				// Don't know how to alter image opacity yet.
-				pictureBox_Monitor.Image.Opacity = this.imageOpacity
-#endif
-				if (this.imageOpacity >= ((MaxImageOpacity - MinImageOpacity) / 2))
-					pictureBox_Monitor.Image = this.imageActive;
-				else
-					pictureBox_Monitor.Image = null;
-			}
-		}
-
 #if (FALSE)
 		/// <remarks>
 		/// Measures item height only, not needed for OwnerDrawnFixed.
 		/// </remarks>
-		private void listBox_Monitor_MeasureItem(object sender, MeasureItemEventArgs e)
+		private void fastListBox_Monitor_MeasureItem(object sender, MeasureItemEventArgs e)
 		{
 			if (e.Index >= 0)
 			{
 				if (e.Index >= 0)
 				{
-					FastListBox flb = listBox_Monitor;
+					FastListBox flb = fastListBox_Monitor;
 
 					SizeF size = Draw.MeasureItem((List<Domain.DisplayElement>)(flb.Items[e.Index]), this.formatSettings, e.Graphics, e.Bounds);
 
@@ -770,38 +758,121 @@ namespace YAT.Gui.Controls
 		/// CPU usage is about the same as above, however, FastListBox has no flickering at all
 		/// whereas the standard ListBox has.
 		///
+		/// \todo !!!
+		/// PROBLEM: NOT FAST ENOUGHT !!!
+		/// Add timed update to AddElementToListBox() !!!
 		/// </remarks>
-		private void listBox_Monitor_DrawItem(object sender, DrawItemEventArgs e)
+		private void fastListBox_Monitor_DrawItem(object sender, DrawItemEventArgs e)
 		{
 			unchecked
 			{
 				if (e.Index >= 0)
 				{
-					FastListBox flb = fastListBox_Monitor;
-					SizeF requestedSize;
-					SizeF drawnSize;
+					// Either perform the update if immediate update is active (e.g. low data traffic)
+					// or if the tick interval has expired. Otherwise, arm the update timeout to
+					// ensure that update will be performed later.
+					//
+					// \attention:
+					// The DrawItem event is called for each item, as the name suggests. Thus, the
+					// code below has to take into account that a timed update must be performed on
+					// all items.
+					//
 
-					e.DrawBackground();
-					Drawing.DrawAndMeasureItem(flb.Items[e.Index] as Domain.DisplayLine, this.formatSettings,
-					                           e.Graphics, e.Bounds, e.State, out requestedSize, out drawnSize);
-					e.DrawFocusRectangle();
+					// Detect the update of the first item in the list to reset the timed update sequence.
+					if (this.performTimedUpdate && (this.lastDataItemIndex > e.Index))
+						this.performTimedUpdate = false;
 
-					int requestedWidth  = (int)Math.Ceiling(requestedSize.Width);
-					int requestedHeight = (int)Math.Ceiling(requestedSize.Height);
+					// Calculate whether the update has expired.
+					bool timedUpdateHasExpired = (DateTime.Now.Ticks >= (this.updateTickStamp + this.updateTickInterval));
 
-					if ((requestedWidth > 0) && (requestedWidth > flb.HorizontalExtent))
-						flb.HorizontalExtent = requestedWidth;
+					// Detect the update of the first item in the list to set the tick stamp.
+					if (timedUpdateHasExpired && (this.lastDataItemIndex > e.Index))
+					{
+						// Keep tick stamp of update.
+						this.updateTickStamp = DateTime.Now.Ticks;
 
-					if ((requestedHeight > 0) && (requestedHeight != flb.ItemHeight))
-						flb.ItemHeight = requestedHeight;
+						// Signal the beginning of a timed update sequence.
+						// The end of the sequence will be detected in DrawBackgroundRequest().
+						this.performTimedUpdate = true;
+					}
+
+					// Keep current data item index.
+					this.lastDataItemIndex = e.Index;
+
+					if (this.performImmediateUpdate || this.performTimedUpdate)
+					{
+						FastListBox flb = fastListBox_Monitor;
+						SizeF requestedSize;
+						SizeF drawnSize;
+
+						e.DrawBackground();
+						Drawing.DrawAndMeasureItem(flb.Items[e.Index] as Domain.DisplayLine, this.formatSettings,
+						                           e.Graphics, e.Bounds, e.State, out requestedSize, out drawnSize);
+						e.DrawFocusRectangle();
+
+						int requestedWidth = (int)Math.Ceiling(requestedSize.Width);
+						int requestedHeight = (int)Math.Ceiling(requestedSize.Height);
+
+						if ((requestedWidth > 0) && (requestedWidth > flb.HorizontalExtent))
+							flb.HorizontalExtent = requestedWidth;
+
+						if ((requestedHeight > 0) && (requestedHeight != flb.ItemHeight))
+							flb.ItemHeight = requestedHeight;
+					}
+					else
+					{
+						RestartUpdateTimeout(TicksToTimeout(this.updateTickInterval));
+					}
 				}
 			}
 		}
 
-		private void listBox_Monitor_Leave(object sender, EventArgs e)
+		private void fastListBox_Monitor_Leave(object sender, EventArgs e)
 		{
-			FastListBox flb = fastListBox_Monitor;
-			flb.ClearSelected();
+			fastListBox_Monitor.ClearSelected();
+		}
+
+		/// <summary>
+		/// Timeout to ensure that list box is updated even if updates were skipped to improve performance before.
+		/// </summary>
+		private void timer_UpdateTimeout_Tick(object sender, EventArgs e)
+		{
+			StopUpdateTimeout();
+			fastListBox_Monitor.Invalidate();
+		}
+
+		private void timer_Opacity_Tick(object sender, EventArgs e)
+		{
+			if (this.imageOpacityState != OpacityState.Inactive)
+			{
+				if (this.imageOpacityState == OpacityState.Incrementing)
+				{
+					this.imageOpacity += ImageOpacityIncrement;
+					if (this.imageOpacity > MaxImageOpacity)
+					{
+						this.imageOpacity = MaxImageOpacity;
+						this.imageOpacityState = OpacityState.Decrementing;
+					}
+				}
+				else
+				{
+					this.imageOpacity += ImageOpacityDecrement;
+					if (this.imageOpacity < MinImageOpacity)
+					{
+						this.imageOpacity = MinImageOpacity;
+						this.imageOpacityState = OpacityState.Incrementing;
+					}
+				}
+#if (FALSE)
+				// \fixme:
+				// Don't know how to alter image opacity yet.
+				pictureBox_Monitor.Image.Opacity = this.imageOpacity
+#endif
+				if (this.imageOpacity >= ((MaxImageOpacity - MinImageOpacity) / 2))
+					pictureBox_Monitor.Image = this.imageActive;
+				else
+					pictureBox_Monitor.Image = null;
+			}
 		}
 
 		#endregion
@@ -817,9 +888,9 @@ namespace YAT.Gui.Controls
 			{
 				switch (this.repositoryType)
 				{
-					case Domain.RepositoryType.Tx:    this.imageInactive = Properties.Resources.Image_Monitor_Tx_28x28;    this.imageActive = Properties.Resources.Image_Monitor_Tx_28x28_Green;    break;
-					case Domain.RepositoryType.Bidir: this.imageInactive = Properties.Resources.Image_Monitor_Bidir_28x28; this.imageActive = Properties.Resources.Image_Monitor_Bidir_28x28_Green; break;
-					case Domain.RepositoryType.Rx:    this.imageInactive = Properties.Resources.Image_Monitor_Rx_28x28;    this.imageActive = Properties.Resources.Image_Monitor_Rx_28x28_Green;    break;
+					case Domain.RepositoryType.Tx:    this.imageInactive = Properties.Resources.Image_Monitor_Tx_28x28_Grey;    this.imageActive = Properties.Resources.Image_Monitor_Tx_28x28_Green;    break;
+					case Domain.RepositoryType.Bidir: this.imageInactive = Properties.Resources.Image_Monitor_Bidir_28x28_Grey; this.imageActive = Properties.Resources.Image_Monitor_Bidir_28x28_Green; break;
+					case Domain.RepositoryType.Rx:    this.imageInactive = Properties.Resources.Image_Monitor_Rx_28x28_Grey;    this.imageActive = Properties.Resources.Image_Monitor_Rx_28x28_Green;    break;
 				}
 				pictureBox_Monitor.BackgroundImage = this.imageInactive;
 
@@ -922,7 +993,7 @@ namespace YAT.Gui.Controls
 				}
 			}
 
-			label_CountStatus.Visible = this.showCountStatus;
+			label_CountStatus.Visible = this.showCountAndRateStatus;
 			label_CountStatus.Text = sb.ToString();
 		}
 
@@ -1001,7 +1072,7 @@ namespace YAT.Gui.Controls
 			}
 		}
 
-		private void ClearListBox()
+		private void ClearFastListBox()
 		{
 			FastListBox flb = fastListBox_Monitor;
 			flb.BeginUpdate();
@@ -1010,6 +1081,67 @@ namespace YAT.Gui.Controls
 			flb.HorizontalExtent = 0;
 
 			flb.EndUpdate();
+		}
+
+		private int TicksToTimeout(long ticks)
+		{
+			return ((int)(ticks / TimeSpan.TicksPerMillisecond));
+		}
+
+		private long TimeoutToTicks(int timeout)
+		{
+			return ((long)timeout * TimeSpan.TicksPerMillisecond);
+		}
+
+		/// <summary>
+		/// The update rate is calculated on a non-linear basis that represents the typical speeds
+		/// of Rx/Tx data and the human eye. The function is defined as follows:
+		/// 
+		///       update interval in ms
+		///                 ^
+		/// max = 1000      | ------------ x
+		///                 |              |
+		///                 |              |
+		///                 |              |
+		/// min = immediate | - x          |
+		///       (means 0) o-----------------> data rate in bytes per second
+		///                    100       1000
+		/// 
+		/// Thus, up to 100 bytes per second the update is done immediately.
+		/// At 1000 bytes per second or more, the update is done once a second.
+		/// Linear inbetween, for ease of implementation the 1:1 value is used.
+		/// </summary>
+		private void CalculateUpdateRate()
+		{
+			int maxRate = Math.Max(this.txByteRateStatus, this.rxByteRateStatus);
+
+			if (maxRate <= 100)
+			{
+				this.updateTickInterval = 0;
+				this.performImmediateUpdate = true;
+			}
+			else if (maxRate >= 1000)
+			{
+				this.updateTickInterval = TimeoutToTicks(1000);
+				this.performImmediateUpdate = false;
+			}
+			else
+			{
+				this.updateTickInterval = TimeoutToTicks(maxRate);
+				this.performImmediateUpdate = false;
+			}
+		}
+
+		private void StopUpdateTimeout()
+		{
+			timer_UpdateTimeout.Stop();
+		}
+
+		private void RestartUpdateTimeout(int timeout)
+		{
+			timer_UpdateTimeout.Stop();
+			timer_UpdateTimeout.Interval = timeout;
+			timer_UpdateTimeout.Start();
 		}
 
 		#endregion

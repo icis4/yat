@@ -79,8 +79,8 @@
 			this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_RestartConnectTime = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Separator_4 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem_MonitorContextMenu_ShowCounters = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_MonitorContextMenu_ResetCounters = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MonitorContextMenu_ShowCountAndRate = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_MonitorContextMenu_ResetCount = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Separator_5 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_Clear = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Separator_6 = new System.Windows.Forms.ToolStripSeparator();
@@ -200,9 +200,9 @@
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_View_Counters = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_View_CountAndRate = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_TerminalMenu_View_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_Separator_3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_TerminalMenu_View_ShowRadix = new System.Windows.Forms.ToolStripMenuItem();
@@ -296,8 +296,8 @@
             this.toolStripMenuItem_MonitorContextMenu_ShowConnectTime,
             this.toolStripMenuItem_MonitorContextMenu_RestartConnectTime,
             this.toolStripMenuItem_MonitorContextMenu_Separator_4,
-            this.toolStripMenuItem_MonitorContextMenu_ShowCounters,
-            this.toolStripMenuItem_MonitorContextMenu_ResetCounters,
+            this.toolStripMenuItem_MonitorContextMenu_ShowCountAndRate,
+            this.toolStripMenuItem_MonitorContextMenu_ResetCount,
             this.toolStripMenuItem_MonitorContextMenu_Separator_5,
             this.toolStripMenuItem_MonitorContextMenu_Clear,
             this.toolStripMenuItem_MonitorContextMenu_Separator_6,
@@ -660,19 +660,19 @@
 			this.toolStripMenuItem_MonitorContextMenu_Separator_4.Name = "toolStripMenuItem_MonitorContextMenu_Separator_4";
 			this.toolStripMenuItem_MonitorContextMenu_Separator_4.Size = new System.Drawing.Size(218, 6);
 			// 
-			// toolStripMenuItem_MonitorContextMenu_ShowCounters
+			// toolStripMenuItem_MonitorContextMenu_ShowCountAndRate
 			// 
-			this.toolStripMenuItem_MonitorContextMenu_ShowCounters.Name = "toolStripMenuItem_MonitorContextMenu_ShowCounters";
-			this.toolStripMenuItem_MonitorContextMenu_ShowCounters.Size = new System.Drawing.Size(221, 22);
-			this.toolStripMenuItem_MonitorContextMenu_ShowCounters.Text = "Show Byte/Line Counters";
-			this.toolStripMenuItem_MonitorContextMenu_ShowCounters.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowCounters_Click);
+			this.toolStripMenuItem_MonitorContextMenu_ShowCountAndRate.Name = "toolStripMenuItem_MonitorContextMenu_ShowCountAndRate";
+			this.toolStripMenuItem_MonitorContextMenu_ShowCountAndRate.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ShowCountAndRate.Text = "Show Byte/Line Count and Rate";
+			this.toolStripMenuItem_MonitorContextMenu_ShowCountAndRate.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ShowCountAndRate_Click);
 			// 
-			// toolStripMenuItem_MonitorContextMenu_ResetCounters
+			// toolStripMenuItem_MonitorContextMenu_ResetCount
 			// 
-			this.toolStripMenuItem_MonitorContextMenu_ResetCounters.Name = "toolStripMenuItem_MonitorContextMenu_ResetCounters";
-			this.toolStripMenuItem_MonitorContextMenu_ResetCounters.Size = new System.Drawing.Size(221, 22);
-			this.toolStripMenuItem_MonitorContextMenu_ResetCounters.Text = "Reset Counters";
-			this.toolStripMenuItem_MonitorContextMenu_ResetCounters.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ResetCounters_Click);
+			this.toolStripMenuItem_MonitorContextMenu_ResetCount.Name = "toolStripMenuItem_MonitorContextMenu_ResetCount";
+			this.toolStripMenuItem_MonitorContextMenu_ResetCount.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_MonitorContextMenu_ResetCount.Text = "Reset Count";
+			this.toolStripMenuItem_MonitorContextMenu_ResetCount.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_ResetCount_Click);
 			// 
 			// toolStripMenuItem_MonitorContextMenu_Separator_5
 			// 
@@ -1607,7 +1607,7 @@
             this.toolStripMenuItem_TerminalMenu_View_Panels,
             this.toolStripMenuItem_TerminalMenu_View_Separator_1,
             this.toolStripMenuItem_TerminalMenu_View_ConnectTime,
-            this.toolStripMenuItem_TerminalMenu_View_Counters,
+            this.toolStripMenuItem_TerminalMenu_View_CountAndRate,
             this.toolStripMenuItem_TerminalMenu_View_Separator_2,
             this.toolStripMenuItem_TerminalMenu_View_Radix,
             this.toolStripMenuItem_TerminalMenu_View_Separator_3,
@@ -1755,28 +1755,28 @@
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime.Text = "&Restart Connect Time";
 			this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime_Click);
 			// 
-			// toolStripMenuItem_TerminalMenu_View_Counters
+			// toolStripMenuItem_TerminalMenu_View_CountAndRate
 			// 
-			this.toolStripMenuItem_TerminalMenu_View_Counters.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters,
-            this.toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters});
-			this.toolStripMenuItem_TerminalMenu_View_Counters.Name = "toolStripMenuItem_TerminalMenu_View_Counters";
-			this.toolStripMenuItem_TerminalMenu_View_Counters.Size = new System.Drawing.Size(221, 22);
-			this.toolStripMenuItem_TerminalMenu_View_Counters.Text = "&Counters";
+			this.toolStripMenuItem_TerminalMenu_View_CountAndRate.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate,
+            this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount});
+			this.toolStripMenuItem_TerminalMenu_View_CountAndRate.Name = "toolStripMenuItem_TerminalMenu_View_CountAndRate";
+			this.toolStripMenuItem_TerminalMenu_View_CountAndRate.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_CountAndRate.Text = "&Count and Rate";
 			// 
-			// toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters
+			// toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate
 			// 
-			this.toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters.Name = "toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters";
-			this.toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters.Size = new System.Drawing.Size(207, 22);
-			this.toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters.Text = "&Show Byte/Line Counters";
-			this.toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters_Click);
+			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate.Name = "toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate";
+			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate.Size = new System.Drawing.Size(207, 22);
+			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate.Text = "&Show Byte/Line Count and Rate";
+			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate_Click);
 			// 
-			// toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters
+			// toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount
 			// 
-			this.toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters.Name = "toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters";
-			this.toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters.Size = new System.Drawing.Size(207, 22);
-			this.toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters.Text = "&Reset Counters";
-			this.toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters_Click);
+			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount.Name = "toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount";
+			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount.Size = new System.Drawing.Size(207, 22);
+			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount.Text = "&Reset Count";
+			this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount.Click += new System.EventHandler(this.toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount_Click);
 			// 
 			// toolStripMenuItem_TerminalMenu_View_Separator_2
 			// 
@@ -2441,8 +2441,8 @@
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_RadixContextMenu_Dec;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_RadixContextMenu_Hex;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_MonitorContextMenu_Separator_6;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ResetCounters;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowCounters;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ResetCount;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_MonitorContextMenu_ShowCountAndRate;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip_Predefined;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Command_1;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_PredefinedContextMenu_Command_2;
@@ -2488,9 +2488,9 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_View_Panels_Separator_3;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_Panels_RearrangeAll;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_Radix;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_Counters;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters;
-		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_CountAndRate;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_Format;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_TerminalMenu_View_Separator_2;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_TerminalMenu_View_ShowTimeStamp;

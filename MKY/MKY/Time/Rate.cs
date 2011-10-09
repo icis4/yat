@@ -18,6 +18,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,8 +31,15 @@ using System.Threading;
 
 using MKY.Event;
 
+#endregion
+
 namespace MKY.Time
 {
+	#region RateEventArgs
+	//==================================================================================================
+	// RateEventArgs
+	//==================================================================================================
+
 	/// <summary></summary>
 	public class RateEventArgs : EventArgs
 	{
@@ -41,6 +53,8 @@ namespace MKY.Time
 			Rate = rate;
 		}
 	}
+
+	#endregion
 
 	/// <summary></summary>
 	public class Rate : IDisposable

@@ -67,7 +67,7 @@
 			this.checkBox_ShowRadix = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowTimeStamp = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowConnectTime = new System.Windows.Forms.CheckBox();
-			this.checkBox_ShowCounters = new System.Windows.Forms.CheckBox();
+			this.checkBox_ShowCountAndRate = new System.Windows.Forms.CheckBox();
 			this.checkBox_ShowLength = new System.Windows.Forms.CheckBox();
 			this.comboBox_TxRadix = new System.Windows.Forms.ComboBox();
 			this.label_TxRadix = new System.Windows.Forms.Label();
@@ -325,7 +325,7 @@
 			this.groupBox_DisplaySettings.Controls.Add(this.checkBox_ShowRadix);
 			this.groupBox_DisplaySettings.Controls.Add(this.checkBox_ShowTimeStamp);
 			this.groupBox_DisplaySettings.Controls.Add(this.checkBox_ShowConnectTime);
-			this.groupBox_DisplaySettings.Controls.Add(this.checkBox_ShowCounters);
+			this.groupBox_DisplaySettings.Controls.Add(this.checkBox_ShowCountAndRate);
 			this.groupBox_DisplaySettings.Controls.Add(this.checkBox_ShowLength);
 			this.groupBox_DisplaySettings.Controls.Add(this.comboBox_TxRadix);
 			this.groupBox_DisplaySettings.Controls.Add(this.label_TxRadix);
@@ -394,7 +394,7 @@
 			this.label_SpaceReplacementChar.Font = new System.Drawing.Font("DejaVu Sans Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label_SpaceReplacementChar.Location = new System.Drawing.Point(220, 21);
 			this.label_SpaceReplacementChar.Name = "label_SpaceReplacementChar";
-			this.label_SpaceReplacementChar.Size = new System.Drawing.Size(16, 15);
+			this.label_SpaceReplacementChar.Size = new System.Drawing.Size(23, 15);
 			this.label_SpaceReplacementChar.TabIndex = 1;
 			this.label_SpaceReplacementChar.Text = "â£";
 			// 
@@ -524,15 +524,15 @@
 			this.checkBox_ShowConnectTime.Text = "Show connect t&ime";
 			this.checkBox_ShowConnectTime.CheckedChanged += new System.EventHandler(this.checkBox_ShowConnectTime_CheckedChanged);
 			// 
-			// checkBox_ShowCounters
+			// checkBox_ShowCountAndRate
 			// 
-			this.checkBox_ShowCounters.AutoSize = true;
-			this.checkBox_ShowCounters.Location = new System.Drawing.Point(131, 141);
-			this.checkBox_ShowCounters.Name = "checkBox_ShowCounters";
-			this.checkBox_ShowCounters.Size = new System.Drawing.Size(97, 17);
-			this.checkBox_ShowCounters.TabIndex = 9;
-			this.checkBox_ShowCounters.Text = "Show &counters";
-			this.checkBox_ShowCounters.CheckedChanged += new System.EventHandler(this.checkBox_ShowCounters_CheckedChanged);
+			this.checkBox_ShowCountAndRate.AutoSize = true;
+			this.checkBox_ShowCountAndRate.Location = new System.Drawing.Point(131, 141);
+			this.checkBox_ShowCountAndRate.Name = "checkBox_ShowCountAndRate";
+			this.checkBox_ShowCountAndRate.Size = new System.Drawing.Size(125, 17);
+			this.checkBox_ShowCountAndRate.TabIndex = 9;
+			this.checkBox_ShowCountAndRate.Text = "Show &count and rate";
+			this.checkBox_ShowCountAndRate.CheckedChanged += new System.EventHandler(this.checkBox_ShowCountAndRate_CheckedChanged);
 			// 
 			// checkBox_ShowLength
 			// 
@@ -650,7 +650,7 @@
 		private System.Windows.Forms.CheckBox checkBox_KeepCommand;
 		private System.Windows.Forms.Label label_ParityReplacementExample;
 		private System.Windows.Forms.CheckBox checkBox_ShowTimeStamp;
-		private System.Windows.Forms.CheckBox checkBox_ShowCounters;
+		private System.Windows.Forms.CheckBox checkBox_ShowCountAndRate;
 		private System.Windows.Forms.CheckBox checkBox_ShowLength;
 		private System.Windows.Forms.ComboBox comboBox_TxRadix;
 		private System.Windows.Forms.Label label_TxRadix;
