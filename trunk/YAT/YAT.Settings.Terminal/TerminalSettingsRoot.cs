@@ -37,8 +37,11 @@ namespace YAT.Settings.Terminal
 		/// \remind (2008-06-07 / mky) (2 hours to the first Euro2008 game :-)
 		/// Instead of this approach, an [AlternateXmlElementAttribute] based approach should be tried
 		/// in a future version. Such approach would be benefitial in terms of modularity because the
-		/// XML path wouldn't need to be considered, i.e. name changes in the path could be handled.
-		/// That is not the case currently.
+		/// XML path wouldn't need to be considered, i.e. changes in the path could be handled. This is
+		/// not the case currently.
+		/// \remind (2011-10-09 / mky) (No Euro2012 games with Switzerland :-(
+		/// Cannot alternate 'Display.ShowConnectTime|ShowCounters' to 'Status.ShowConnectTime|ShowCountAndRate'
+		/// due to limitation described above.
 		/// </remarks>
 		private static readonly MKY.Xml.AlternateXmlElement[] alternateXmlElements =
 			{
@@ -275,6 +278,14 @@ namespace YAT.Settings.Terminal
 		{
 			get { return (this.explicit_.Terminal.IO.Socket.RemotePort); }
 			set { this.explicit_.Terminal.IO.Socket.RemotePort = value;  }
+		}
+
+		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>
+		[XmlIgnore]
+		public virtual Domain.Settings.StatusSettings Status
+		{
+			get { return (this.explicit_.Terminal.Status); }
+			set { this.explicit_.Terminal.Status = value;  }
 		}
 
 		/// <remarks>Attention, this is just a shortcut for convenience, not a true property.</remarks>

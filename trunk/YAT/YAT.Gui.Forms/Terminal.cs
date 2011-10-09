@@ -649,14 +649,14 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_View_Panels_Predefined.Checked = this.settingsRoot.Layout.PredefinedPanelIsVisible;
 
 			// Connect time
-			bool showConnectTime = this.settingsRoot.Display.ShowConnectTime;
+			bool showConnectTime = this.settingsRoot.Status.ShowConnectTime;
 			toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime.Checked    = showConnectTime;
 			toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime.Enabled = showConnectTime;
 
 			// Counters
-			bool showCounters = this.settingsRoot.Display.ShowCounters;
-			toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters.Checked  = showCounters;
-			toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters.Enabled = showCounters;
+			bool showCountAndRate = this.settingsRoot.Status.ShowCountAndRate;
+			toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate.Checked = showCountAndRate;
+			toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount.Enabled = showCountAndRate;
 
 			// Options
 			toolStripMenuItem_TerminalMenu_View_ShowRadix.Checked     = this.settingsRoot.Display.ShowRadix;
@@ -718,7 +718,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_View_ConnectTime_ShowConnectTime_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.Display.ShowConnectTime = !this.settingsRoot.Display.ShowConnectTime;
+			this.settingsRoot.Status.ShowConnectTime = !this.settingsRoot.Status.ShowConnectTime;
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_ConnectTime_RestartConnectTime_Click(object sender, EventArgs e)
@@ -726,12 +726,12 @@ namespace YAT.Gui.Forms
 			this.terminal.RestartConnectTime();
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_Counters_ShowCounters_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_CountAndRate_ShowCountAndRate_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.Display.ShowCounters = !this.settingsRoot.Display.ShowCounters;
+			this.settingsRoot.Status.ShowCountAndRate = !this.settingsRoot.Status.ShowCountAndRate;
 		}
 
-		private void toolStripMenuItem_TerminalMenu_View_Counters_ResetCounters_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_TerminalMenu_View_CountAndRate_ResetCount_Click(object sender, EventArgs e)
 		{
 			this.terminal.ResetIOCountAndRate();
 		}
@@ -872,13 +872,13 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_MonitorContextMenu_ShowEol.Enabled = isText;
 			toolStripMenuItem_MonitorContextMenu_ShowEol.Checked = isText && this.settingsRoot.TextTerminal.ShowEol;
 
-			bool showConnectTime = this.settingsRoot.Display.ShowConnectTime;
+			bool showConnectTime = this.settingsRoot.Status.ShowConnectTime;
 			toolStripMenuItem_MonitorContextMenu_ShowConnectTime.Checked    = showConnectTime;
 			toolStripMenuItem_MonitorContextMenu_RestartConnectTime.Enabled = showConnectTime;
 
-			bool showCounters = this.settingsRoot.Display.ShowCounters;
-			toolStripMenuItem_MonitorContextMenu_ShowCounters.Checked  = showCounters;
-			toolStripMenuItem_MonitorContextMenu_ResetCounters.Enabled = showCounters;
+			bool showCountAndRate = this.settingsRoot.Status.ShowCountAndRate;
+			toolStripMenuItem_MonitorContextMenu_ShowCountAndRate.Checked  = showCountAndRate;
+			toolStripMenuItem_MonitorContextMenu_ResetCount.Enabled = showCountAndRate;
 
 			toolStripMenuItem_MonitorContextMenu_Clear.Enabled = isMonitor;
 
@@ -950,7 +950,7 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_MonitorContextMenu_ShowConnectTime_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.Display.ShowConnectTime = !this.settingsRoot.Display.ShowConnectTime;
+			this.settingsRoot.Status.ShowConnectTime = !this.settingsRoot.Status.ShowConnectTime;
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_RestartConnectTime_Click(object sender, EventArgs e)
@@ -958,12 +958,12 @@ namespace YAT.Gui.Forms
 			this.terminal.RestartConnectTime();
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ShowCounters_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_ShowCountAndRate_Click(object sender, EventArgs e)
 		{
-			this.settingsRoot.Display.ShowCounters = !this.settingsRoot.Display.ShowCounters;
+			this.settingsRoot.Status.ShowCountAndRate = !this.settingsRoot.Status.ShowCountAndRate;
 		}
 
-		private void toolStripMenuItem_MonitorContextMenu_ResetCounters_Click(object sender, EventArgs e)
+		private void toolStripMenuItem_MonitorContextMenu_ResetCount_Click(object sender, EventArgs e)
 		{
 			this.terminal.ResetIOCountAndRate();
 		}
@@ -2051,18 +2051,21 @@ namespace YAT.Gui.Forms
 			monitor_Rx.ActivityState = activityState;
 		}
 
-		private void SetMonitorContents()
+		private void SetMonitorCountAndRateStatus()
 		{
-			bool showConnectTime = this.settingsRoot.Display.ShowConnectTime;
+			bool showConnectTime = this.settingsRoot.Status.ShowConnectTime;
 			monitor_Tx.ShowTimeStatus    = showConnectTime;
 			monitor_Bidir.ShowTimeStatus = showConnectTime;
 			monitor_Rx.ShowTimeStatus    = showConnectTime;
 
-			bool showCounters = this.settingsRoot.Display.ShowCounters;
-			monitor_Tx.ShowCountStatus    = showCounters;
-			monitor_Bidir.ShowCountStatus = showCounters;
-			monitor_Rx.ShowCountStatus    = showCounters;
+			bool showCountAndRate = this.settingsRoot.Status.ShowCountAndRate;
+			monitor_Tx.ShowCountAndRateStatus    = showCountAndRate;
+			monitor_Bidir.ShowCountAndRateStatus = showCountAndRate;
+			monitor_Rx.ShowCountAndRateStatus    = showCountAndRate;
+		}
 
+		private void SetMonitorContents()
+		{
 			monitor_Tx.MaxLineCount    = this.settingsRoot.Display.TxMaxLineCount;
 			monitor_Bidir.MaxLineCount = this.settingsRoot.Display.BidirMaxLineCount;
 			monitor_Rx.MaxLineCount    = this.settingsRoot.Display.RxMaxLineCount;
@@ -2435,6 +2438,11 @@ namespace YAT.Gui.Forms
 				SetIOStatus();
 				SetIOControlControls();
 			}
+			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Status))
+			{
+				// StatusSettings changed.
+				SetMonitorCountAndRateStatus();
+			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Buffer))
 			{
 				// BufferSettings changed.
@@ -2484,6 +2492,7 @@ namespace YAT.Gui.Forms
 			SetIOStatus();
 			SetIOControlControls();
 			SetMonitorIOStatus();
+			SetMonitorCountAndRateStatus();
 			SetMonitorContents();
 		}
 

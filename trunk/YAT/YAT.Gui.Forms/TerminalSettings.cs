@@ -391,37 +391,37 @@ namespace YAT.Gui.Forms
 			{
 				Refresh();
 
-				// Radix.
+				// Radix:
 				this.settings_Form.Terminal.Display.SeparateTxRxRadix = f.SettingsResult.Terminal.Display.SeparateTxRxRadix;
 				this.settings_Form.Terminal.Display.TxRadix           = f.SettingsResult.Terminal.Display.TxRadix;
 				this.settings_Form.Terminal.Display.RxRadix           = f.SettingsResult.Terminal.Display.RxRadix;
 
-				// Display.
+				// Display:
 				this.settings_Form.Terminal.Display.ShowRadix       = f.SettingsResult.Terminal.Display.ShowRadix;
 				this.settings_Form.Terminal.Display.ShowTimeStamp   = f.SettingsResult.Terminal.Display.ShowTimeStamp;
 				this.settings_Form.Terminal.Display.ShowLength      = f.SettingsResult.Terminal.Display.ShowLength;
-				this.settings_Form.Terminal.Display.ShowConnectTime = f.SettingsResult.Terminal.Display.ShowConnectTime;
-				this.settings_Form.Terminal.Display.ShowCounters    = f.SettingsResult.Terminal.Display.ShowCounters;
+				this.settings_Form.Terminal.Status.ShowConnectTime  = f.SettingsResult.Terminal.Status.ShowConnectTime;
+				this.settings_Form.Terminal.Status.ShowCountAndRate = f.SettingsResult.Terminal.Status.ShowCountAndRate;
 
 				this.settings_Form.Terminal.Display.DirectionLineBreakEnabled = f.SettingsResult.Terminal.Display.DirectionLineBreakEnabled;
 				this.settings_Form.Terminal.Display.TxMaxLineCount            = f.SettingsResult.Terminal.Display.TxMaxLineCount;
 				this.settings_Form.Terminal.Display.RxMaxLineCount            = f.SettingsResult.Terminal.Display.RxMaxLineCount;
 
-				// Char replace.
+				// Char replace:
 				this.settings_Form.Terminal.CharReplace.ReplaceControlChars = f.SettingsResult.Terminal.CharReplace.ReplaceControlChars;
 				this.settings_Form.Terminal.CharReplace.ControlCharRadix    = f.SettingsResult.Terminal.CharReplace.ControlCharRadix;
 				this.settings_Form.Terminal.CharReplace.ReplaceSpace        = f.SettingsResult.Terminal.CharReplace.ReplaceSpace;
 
-				// Communication.
+				// Communication:
 				this.settings_Form.Terminal.IO.Endianess = f.SettingsResult.Terminal.IO.Endianess;
 
-				// Send.
+				// Send:
 				this.settings_Form.Terminal.Send.KeepCommand     = f.SettingsResult.Terminal.Send.KeepCommand;
 				this.settings_Form.Terminal.Send.CopyPredefined  = f.SettingsResult.Terminal.Send.CopyPredefined;
 				this.settings_Form.Terminal.Send.SendImmediately = f.SettingsResult.Terminal.Send.SendImmediately;
 				this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 
-				// Receive.
+				// Receive:
 				this.settings_Form.Terminal.IO.SerialPort.ReplaceParityErrors    = f.SettingsResult.Terminal.IO.SerialPort.ReplaceParityErrors;
 				this.settings_Form.Terminal.IO.SerialPort.ParityErrorReplacement = f.SettingsResult.Terminal.IO.SerialPort.ParityErrorReplacement;
 				this.settings_Form.Terminal.IO.SerialParityErrorReplacement      = f.SettingsResult.Terminal.IO.SerialParityErrorReplacement;

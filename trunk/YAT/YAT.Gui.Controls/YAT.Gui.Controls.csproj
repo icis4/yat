@@ -291,11 +291,11 @@
     <Content Include="Resources\Edit\Image_Delete_16x16.png" />
     <Content Include="Resources\Edit\Image_Delete_16x16_Disabled.png" />
     <Content Include="Resources\Edit\Image_Delete_16x16_Hot.png" />
-    <Content Include="Resources\Monitor\Image_Monitor_Bidir_28x28.png" />
+    <Content Include="Resources\Monitor\Image_Monitor_Bidir_28x28_Grey.png" />
     <None Include="Resources\Monitor\Image_Monitor_Bidir_28x28_Green.png" />
-    <Content Include="Resources\Monitor\Image_Monitor_Rx_28x28.png" />
+    <Content Include="Resources\Monitor\Image_Monitor_Rx_28x28_Grey.png" />
     <None Include="Resources\Monitor\Image_Monitor_Rx_28x28_Green.png" />
-    <Content Include="Resources\Monitor\Image_Monitor_Tx_28x28.png" />
+    <Content Include="Resources\Monitor\Image_Monitor_Tx_28x28_Grey.png" />
     <Content Include="Resources\SerialPortSelection\Image_Refresh_16x16.png" />
     <Content Include="Resources\SerialPortSelection\Image_Refresh_16x16_Disabled.png" />
     <Content Include="Resources\SerialPortSelection\Image_Refresh_16x16_Hot.png" />
