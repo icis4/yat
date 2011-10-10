@@ -142,11 +142,10 @@ namespace YAT.Gui.Controls
 		private int rxLineRateStatus;
 
 		// Update:
-		private int lastDataItemIndex = int.MaxValue;
 		private long updateTickStamp;
 		private long updateTickInterval;
 		private bool performImmediateUpdate;
-		private bool performTimedUpdate;
+		private List<object> pendingElementsAndLines = new List<object>();
 
 		#endregion
 
@@ -470,53 +469,25 @@ namespace YAT.Gui.Controls
 		/// <summary></summary>
 		public virtual void AddElement(Domain.DisplayElement element)
 		{
-			FastListBox flb = fastListBox_Monitor;
-			flb.BeginUpdate();
-
-			AddElementToListBox(element);
-
-			flb.ScrollToBottomIfNoItemsSelected();
-			flb.EndUpdate();
+			AddElementsOrLines(element.Clone());
 		}
 
 		/// <summary></summary>
 		public virtual void AddElements(List<Domain.DisplayElement> elements)
 		{
-			FastListBox flb = fastListBox_Monitor;
-			flb.BeginUpdate();
-
-			foreach (Domain.DisplayElement element in elements)
-				AddElementToListBox(element);
-
-			flb.ScrollToBottomIfNoItemsSelected();
-			flb.EndUpdate();
+			AddElementsOrLines(new List<Domain.DisplayElement>(elements));
 		}
 
 		/// <summary></summary>
 		public virtual void AddLine(Domain.DisplayLine line)
 		{
-			FastListBox flb = fastListBox_Monitor;
-			flb.BeginUpdate();
-
-			foreach (Domain.DisplayElement element in line)
-				AddElementToListBox(element);
-
-			flb.ScrollToBottomIfNoItemsSelected();
-			flb.Refresh();
+			AddElementsOrLines(line.Clone());
 		}
 
 		/// <summary></summary>
 		public virtual void AddLines(List<Domain.DisplayLine> lines)
 		{
-			FastListBox flb = fastListBox_Monitor;
-			flb.BeginUpdate();
-
-			foreach (Domain.DisplayLine line in lines)
-				foreach (Domain.DisplayElement element in line)
-					AddElementToListBox(element);
-
-			flb.ScrollToBottomIfNoItemsSelected();
-			flb.EndUpdate();
+			AddElementsOrLines(new List<Domain.DisplayLine>(lines));
 		}
 
 		/// <summary></summary>
@@ -530,7 +501,7 @@ namespace YAT.Gui.Controls
 		{
 			FastListBox flb = fastListBox_Monitor;
 
-			// Retrieve lines from list box
+			// Retrieve lines from list box.
 			List<Domain.DisplayLine> lines = new List<Domain.DisplayLine>();
 			foreach (object item in flb.Items)
 			{
@@ -538,7 +509,7 @@ namespace YAT.Gui.Controls
 				lines.Add(line);
 			}
 
-			// Clear everything and perform reload
+			// Clear everything and perform reload.
 			Clear();
 			AddLines(lines);
 		}
@@ -723,10 +694,10 @@ namespace YAT.Gui.Controls
 #endif
 
 		/// <remarks>
-		///
+		/// 
 		/// ListBox
 		/// -------
-		///
+		/// 
 		/// Whether we like it or not, <see cref="System.Windows.Forms.ListBox.OnDrawItem"/> calls
 		/// this method pretty often. Actually it's called twice each time a new line is added. In
 		/// addition, another call is needed for the next still empty line. Thus:
@@ -748,19 +719,31 @@ namespace YAT.Gui.Controls
 		/// 1.99.22 with normal drawn => 20% CPU usage
 		/// 
 		/// Double-buffered = <c>true</c> (form and control) doesn't make much difference either...
-		///
-		///
+		/// 
+		/// 
 		/// FastListBox
 		/// -----------
-		///
+		/// 
 		/// Fast and smooth :-)
-		///
+		/// 
 		/// CPU usage is about the same as above, however, FastListBox has no flickering at all
 		/// whereas the standard ListBox has.
-		///
-		/// \todo !!!
-		/// PROBLEM: NOT FAST ENOUGHT !!!
-		/// Add timed update to AddElementToListBox() !!!
+		/// 
+		/// 
+		/// Timed updated FastListBox
+		/// -------------------------
+		/// In case of really large data, the FastListBox still proved too slow. Thus, a timed
+		/// update has been implemented to further improve the performance. Three approaches
+		/// have been tried to implement such timed update:
+		/// 1. More sophisticated handling within <see cref="fastListBox_Monitor_DrawItem"/>
+		///    => Doesn't work because list box's back ground has already been drawn before
+		///       this event is invoked, thus it just increases flickering...
+		/// 2. More sophisticated handling within <see cref="FastListBox.OnPaintBackground"/>
+		///    => Doesn't work because list box has already been cleaned to a black background
+		///       before this event is invoked, thus it increases flickering too...
+		/// 3. Temporarily suspending the adding of elements. The elements are then added upon
+		///    the next update. See <see cref="UpdateHasToBePerformed()"/> for details.
+		/// 
 		/// </remarks>
 		private void fastListBox_Monitor_DrawItem(object sender, DrawItemEventArgs e)
 		{
@@ -768,61 +751,23 @@ namespace YAT.Gui.Controls
 			{
 				if (e.Index >= 0)
 				{
-					// Either perform the update if immediate update is active (e.g. low data traffic)
-					// or if the tick interval has expired. Otherwise, arm the update timeout to
-					// ensure that update will be performed later.
-					//
-					// \attention:
-					// The DrawItem event is called for each item, as the name suggests. Thus, the
-					// code below has to take into account that a timed update must be performed on
-					// all items.
-					//
+					FastListBox flb = fastListBox_Monitor;
+					SizeF requestedSize;
+					SizeF drawnSize;
 
-					// Detect the update of the first item in the list to reset the timed update sequence.
-					if (this.performTimedUpdate && (this.lastDataItemIndex > e.Index))
-						this.performTimedUpdate = false;
+					e.DrawBackground();
+					Drawing.DrawAndMeasureItem(flb.Items[e.Index] as Domain.DisplayLine, this.formatSettings,
+					                           e.Graphics, e.Bounds, e.State, out requestedSize, out drawnSize);
+					e.DrawFocusRectangle();
 
-					// Calculate whether the update has expired.
-					bool timedUpdateHasExpired = (DateTime.Now.Ticks >= (this.updateTickStamp + this.updateTickInterval));
+					int requestedWidth = (int)Math.Ceiling(requestedSize.Width);
+					int requestedHeight = (int)Math.Ceiling(requestedSize.Height);
 
-					// Detect the update of the first item in the list to set the tick stamp.
-					if (timedUpdateHasExpired && (this.lastDataItemIndex > e.Index))
-					{
-						// Keep tick stamp of update.
-						this.updateTickStamp = DateTime.Now.Ticks;
+					if ((requestedWidth > 0) && (requestedWidth > flb.HorizontalExtent))
+						flb.HorizontalExtent = requestedWidth;
 
-						// Signal the beginning of a timed update sequence.
-						// The end of the sequence will be detected in DrawBackgroundRequest().
-						this.performTimedUpdate = true;
-					}
-
-					// Keep current data item index.
-					this.lastDataItemIndex = e.Index;
-
-					if (this.performImmediateUpdate || this.performTimedUpdate)
-					{
-						FastListBox flb = fastListBox_Monitor;
-						SizeF requestedSize;
-						SizeF drawnSize;
-
-						e.DrawBackground();
-						Drawing.DrawAndMeasureItem(flb.Items[e.Index] as Domain.DisplayLine, this.formatSettings,
-						                           e.Graphics, e.Bounds, e.State, out requestedSize, out drawnSize);
-						e.DrawFocusRectangle();
-
-						int requestedWidth = (int)Math.Ceiling(requestedSize.Width);
-						int requestedHeight = (int)Math.Ceiling(requestedSize.Height);
-
-						if ((requestedWidth > 0) && (requestedWidth > flb.HorizontalExtent))
-							flb.HorizontalExtent = requestedWidth;
-
-						if ((requestedHeight > 0) && (requestedHeight != flb.ItemHeight))
-							flb.ItemHeight = requestedHeight;
-					}
-					else
-					{
-						RestartUpdateTimeout(TicksToTimeout(this.updateTickInterval));
-					}
+					if ((requestedHeight > 0) && (requestedHeight != flb.ItemHeight))
+						flb.ItemHeight = requestedHeight;
 				}
 			}
 		}
@@ -838,7 +783,7 @@ namespace YAT.Gui.Controls
 		private void timer_UpdateTimeout_Tick(object sender, EventArgs e)
 		{
 			StopUpdateTimeout();
-			fastListBox_Monitor.Invalidate();
+			UpdateFastListBoxWithPendingElementsAndLines();
 		}
 
 		private void timer_Opacity_Tick(object sender, EventArgs e)
@@ -941,7 +886,6 @@ namespace YAT.Gui.Controls
 		private void SetFormatDependentControls()
 		{
 			FastListBox flb = fastListBox_Monitor;
-
 			flb.BeginUpdate();
 
 			flb.Font = this.formatSettings.Font;
@@ -1021,6 +965,76 @@ namespace YAT.Gui.Controls
 			sb.Append(" | ");
 			sb.Append(this.rxLineRateStatus);
 			sb.Append("/s");
+		}
+
+		private void AddElementsOrLines(object elementsOrLines)
+		{
+			this.pendingElementsAndLines.Add(elementsOrLines);
+
+			// Either perform the update or arm the update timeout to ensure that update
+			// will be performed later.
+			if (UpdateHasToBePerformed())
+				UpdateFastListBoxWithPendingElementsAndLines();
+			else
+				RestartUpdateTimeout(TicksToTimeout(this.updateTickInterval));
+		}
+
+		private void UpdateFastListBoxWithPendingElementsAndLines()
+		{
+			FastListBox flb = fastListBox_Monitor;
+			flb.BeginUpdate();
+
+			foreach (object obj in (this.pendingElementsAndLines))
+			{
+				{
+					Domain.DisplayElement element = (obj as Domain.DisplayElement);
+					if (element != null)
+					{
+						AddElementToListBox(element);
+						continue;
+					}
+				}
+				{
+					List<Domain.DisplayElement> elements = (obj as List<Domain.DisplayElement>);
+					if (elements != null)
+					{
+						foreach (Domain.DisplayElement element in elements)
+							AddElementToListBox(element);
+
+						continue;
+					}
+				}
+				{
+					Domain.DisplayLine line = (obj as Domain.DisplayLine);
+					if (line != null)
+					{
+						foreach (Domain.DisplayElement element in line)
+							AddElementToListBox(element);
+
+						continue;
+					}
+				}
+				{
+					List<Domain.DisplayLine> lines = (obj as List<Domain.DisplayLine>);
+					if (lines != null)
+					{
+						foreach (Domain.DisplayLine line in lines)
+							foreach (Domain.DisplayElement element in line)
+								AddElementToListBox(element);
+
+						continue;
+					}
+				}
+				throw (new InvalidOperationException("Invalid pending element(s) or line(s)"));
+			}
+
+			this.pendingElementsAndLines.Clear();
+
+			// Keep tick stamp of update.
+			this.updateTickStamp = DateTime.Now.Ticks;
+
+			flb.ScrollToBottomIfNoItemsSelected();
+			flb.EndUpdate();
 		}
 
 		/// <summary>
@@ -1110,6 +1124,10 @@ namespace YAT.Gui.Controls
 		/// Thus, up to 100 bytes per second the update is done immediately.
 		/// At 1000 bytes per second or more, the update is done once a second.
 		/// Linear inbetween, for ease of implementation the 1:1 value is used.
+		/// 
+		/// An alternativ solution would be to measure the effective duration of
+		/// an update and then adjust the rate on the duration.Could be tried if
+		/// the calculation applied now doesn't work well.
 		/// </summary>
 		private void CalculateUpdateRate()
 		{
@@ -1130,6 +1148,23 @@ namespace YAT.Gui.Controls
 				this.updateTickInterval = TimeoutToTicks(maxRate);
 				this.performImmediateUpdate = false;
 			}
+		}
+
+		/// <summary>
+		/// Either perform the update if immediate update is active (e.g. low data traffic)
+		/// or if the tick interval has expired.
+		/// </summary>
+		private bool UpdateHasToBePerformed()
+		{
+			// Immediate update.
+			if (this.performImmediateUpdate)
+				return (true);
+
+			// Calculate whether the update has expired.
+			if (DateTime.Now.Ticks >= (this.updateTickStamp + this.updateTickInterval))
+				return (true);
+
+			return (false);
 		}
 
 		private void StopUpdateTimeout()

@@ -33,17 +33,33 @@ namespace MKY
 	public static class DateTimeEx
 	{
 		/// <summary>
+		/// Returns time span formatted with "yyyy-mm-dd".
+		/// </summary>
+		public static string FormatInvariantDate(DateTime dateTime)
+		{
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append(dateTime.Year.ToString("D4"));
+			sb.Append("-");
+			sb.Append(dateTime.Month.ToString("D2"));
+			sb.Append("-");
+			sb.Append(dateTime.Day.ToString("D2"));
+
+			return (sb.ToString());
+		}
+
+		/// <summary>
 		/// Returns time formatted with "hh:mm:ss".
 		/// </summary>
-		public static string FormatTime(DateTime dateTime)
+		public static string FormatInvariantTime(DateTime dateTime)
 		{
-			return (FormatTime(dateTime, false));
+			return (FormatInvariantTime(dateTime, false));
 		}
 
 		/// <summary>
 		/// Returns time span formatted with "hh:mm:ss[.hh]".
 		/// </summary>
-		public static string FormatTime(DateTime dateTime, bool hundredths)
+		public static string FormatInvariantTime(DateTime dateTime, bool hundredths)
 		{
 			StringBuilder sb = new StringBuilder();
 
