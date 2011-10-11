@@ -71,6 +71,7 @@ Important changes:
 - MKY.IO and MKY.IO.Net added to prepare refactoring of MKY.IO.Serial (feature request #3388950)
 - Update to NUnit 2.5.10
 - "_<Data|Doc|Test>" renamed to "!-<Data|Doc|Test>"
+- Product version added to each source code header (feature request #3418320)
 
 Limitations and known issues:
 - MDI limitations of .NET

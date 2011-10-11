@@ -2,13 +2,17 @@
 Note:	The whole release process takes about 6 hours
 
 
-1.	Set versions if not already done                                                    0:10 / 0:10
+1.	Set versions                                                                        0:10 / 0:10
 	-----------------------------------------------------------------------------------------------
-	[ ] Set product name post fix in "YAT.Utilities.ApplicationInfo"
 	[ ] Increment product version in ALAZ.Version
 	[ ] Increment product version in MKY.Version
 	[ ] Increment product version in NUnit.Version
 	[ ] Increment product version in YAT.Version
+	[ ] Set product version in MKY file headers
+	[ ] Set product version in NUnit file headers
+	[ ] Set product version in YAT file headers
+		> Remove 'Development', e.g. 'YAT 2.0 Beta 4 Candidate 1 Version 1.99.27'
+	[ ] Set product name post fix in "YAT.Utilities.ApplicationInfo"
 
 
 2.	Set installation version if not already done                                        0:05 / 0:15
@@ -174,6 +178,8 @@ Note:	The whole release process takes about 6 hours
 	[ ] Fold all projects
 	[ ] Set 'YAT' as the active startup project
 	[ ] Increment product name and versions according to 1. and 2.
+		> Use 'Development' to clearly state that files are non-released revisions
+		  e.g. 'YAT 2.0 Beta 4 Candidate 1 Development Version 1.99.27'
 	[ ] Verify that the solution still properly builds and runs
 	[ ] Commit modifications to the subversion repository
 
