@@ -145,7 +145,15 @@ namespace MKY.Settings
 		// Changed Properties and Methods
 		//==========================================================================================
 
-		/// <summary></summary>
+		/// <summary>
+		/// This flag indicates that the data item has changed. Either the data of the item itself
+		/// or any of the sub-items. The flag can be used to e.g. display an asterisk * indicating
+		/// a change of data, settings,...
+		/// </summary>
+		/// <remarks>
+		/// To clear this flag, <see cref="ClearChanged"/> must be called. The flag is never cleared
+		/// automatically.
+		/// </remarks>
 		public virtual bool HaveChanged
 		{
 			get
