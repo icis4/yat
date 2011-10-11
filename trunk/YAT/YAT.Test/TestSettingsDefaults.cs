@@ -8,7 +8,10 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
+// YAT 2.0 Beta 4 Candidate 1 Development Version 1.99.27
+// ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
+// See release notes for product version details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2010-2011 Matthias Kläy.
 // All rights reserved.

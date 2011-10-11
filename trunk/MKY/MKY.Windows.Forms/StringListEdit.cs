@@ -3,12 +3,15 @@
 // Visit YAT at http://sourceforge.net/projects/y-a-terminal.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY/MKY.Windows.Forms/PathLabel.cs $
-// $Author: maettu_this $
-// $Date: 2011-04-23 01:49:13 +0200 (Sa, 23 Apr 2011) $
-// $Revision: 407 $
+// $URL$
+// $Author$
+// $Date$
+// $Revision$
+// ------------------------------------------------------------------------------------------------
+// MKY Development Version 1.0.6
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
+// See release notes for product version details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
 // Copyright © 2003-2011 Matthias Kläy.
@@ -246,5 +249,5 @@ namespace MKY.Windows.Forms
 
 //==================================================================================================
 // End of
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY/MKY.Windows.Forms/PathLabel.cs $
+// $URL$
 //==================================================================================================

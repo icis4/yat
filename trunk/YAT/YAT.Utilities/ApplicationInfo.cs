@@ -8,7 +8,10 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
+// YAT 2.0 Beta 4 Candidate 1 Development Version 1.99.27
+// ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
+// See release notes for product version details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
 // Copyright © 2003-2011 Matthias Kläy.
@@ -31,10 +34,13 @@ namespace YAT.Utilities
 	/////// <summary></summary>
 	////public const string ProductBuildName = " Beta 4";
 
-		/// <summary></summary>
-		public const string ProductBuildName = " Beta 4 Candidate 1";
+		/////// <summary></summary>
+	////public const string ProductBuildName = " Beta 4 Candidate 1";
 
-	/////// <summary></summary>
+		/// <summary></summary>
+		public const string ProductBuildName = " Beta 4 Candidate 1 Development";
+
+		/////// <summary></summary>
 	////public const string ProductBuildName = " Beta 4 Preliminary";
 
 		/// <summary></summary>

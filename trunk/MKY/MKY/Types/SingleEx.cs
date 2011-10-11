@@ -3,12 +3,15 @@
 // Visit YAT at http://sourceforge.net/projects/y-a-terminal.
 // Contact YAT by mailto:y-a-terminal@users.sourceforge.net.
 // ------------------------------------------------------------------------------------------------
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY/MKY/Types/DoubleEx.cs $
-// $Author: klaey-1 $
-// $Date: 2011/08/24 13:38:39MESZ $
-// $Revision: 1.1 $
+// $URL$
+// $Author$
+// $Date$
+// $Revision$
+// ------------------------------------------------------------------------------------------------
+// MKY Development Version 1.0.6
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
+// See release notes for product version details.
 // ------------------------------------------------------------------------------------------------
 // Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
 // Copyright © 2003-2011 Matthias Kläy.
@@ -67,5 +70,5 @@ namespace MKY
 
 //==================================================================================================
 // End of
-// $URL: https://y-a-terminal.svn.sourceforge.net/svnroot/y-a-terminal/trunk/MKY/MKY/Types/DoubleEx.cs $
+// $URL$
 //==================================================================================================
