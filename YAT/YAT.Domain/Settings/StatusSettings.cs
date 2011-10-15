@@ -78,6 +78,8 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			ShowConnectTime  = ShowConnectTimeDefault;
 			ShowCountAndRate = ShowCountAndRateDefault;
 		}

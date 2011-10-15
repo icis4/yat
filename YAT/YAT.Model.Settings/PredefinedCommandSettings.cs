@@ -70,6 +70,8 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			Pages = new PredefinedCommandPageCollection();
 		}
 

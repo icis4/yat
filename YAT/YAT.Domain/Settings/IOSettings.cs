@@ -83,7 +83,7 @@ namespace YAT.Domain.Settings
 			SerialPort                   = new MKY.IO.Serial.SerialPortSettings(rhs.SerialPort);
 			SerialParityErrorReplacement = rhs.SerialParityErrorReplacement;
 			Socket                       = new MKY.IO.Serial.SocketSettings(rhs.Socket);
-			UsbSerialHidDevice                 = new MKY.IO.Serial.UsbSerialHidDeviceSettings(rhs.UsbSerialHidDevice);
+			UsbSerialHidDevice           = new MKY.IO.Serial.UsbSerialHidDeviceSettings(rhs.UsbSerialHidDevice);
 			Endianess                    = rhs.Endianess;
 
 			ClearChanged();
@@ -94,6 +94,8 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			IOType                       = IOTypeDefault;
 			SerialParityErrorReplacement = SerialParityErrorReplacementDefault;
 			Endianess                    = EndianessDefault;

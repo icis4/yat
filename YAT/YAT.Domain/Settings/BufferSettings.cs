@@ -71,6 +71,8 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			TxBufferSize = BufferSizeDefault;
 			RxBufferSize = BufferSizeDefault;
 		}

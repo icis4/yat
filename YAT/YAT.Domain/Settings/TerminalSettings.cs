@@ -103,6 +103,8 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			TerminalType = TerminalType.Text;
 		}
 

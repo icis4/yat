@@ -91,6 +91,8 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			SeparateTxRxEol  = false;
 			TxEol            = DefaultEol;
 			RxEol            = DefaultEol;

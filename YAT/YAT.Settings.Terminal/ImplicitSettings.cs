@@ -79,8 +79,10 @@ namespace YAT.Settings.Terminal
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			TerminalIsStarted = true;
-			LogIsStarted = false;
+			LogIsStarted      = false;
 		}
 
 		#region Properties

@@ -91,8 +91,10 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			FilePath = "";
-			Guid = Guid.Empty;
+			base.SetMyDefaults();
+
+			FilePath   = "";
+			Guid       = Guid.Empty;
 			FixedIndex = UndefinedFixedIndex;
 		}
 

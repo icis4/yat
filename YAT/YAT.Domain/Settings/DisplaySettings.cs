@@ -103,6 +103,8 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			SeparateTxRxRadix = SeparateTxRxRadixDefault;
 			TxRadix           = RadixDefault;
 			RxRadix           = RadixDefault;

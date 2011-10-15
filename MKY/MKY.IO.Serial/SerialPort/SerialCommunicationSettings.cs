@@ -77,6 +77,8 @@ namespace MKY.IO.Serial
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			BaudRate    = (int)MKY.IO.Ports.BaudRate.Baud009600;
 			DataBits    = MKY.IO.Ports.DataBits.Eight;
 			Parity      = System.IO.Ports.Parity.None;

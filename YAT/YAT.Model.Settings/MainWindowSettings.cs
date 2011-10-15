@@ -77,10 +77,12 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			StartPosition = FormStartPosition.WindowsDefaultLocation;
-			WindowState = FormWindowState.Normal;
-			Location = new Point(0, 0);
-			Size = new Size(800, 600);
+			WindowState   = FormWindowState.Normal;
+			Location      = new Point(0, 0);
+			Size          = new Size(800, 600);
 
 			ShowTerminalInfo = false;
 			ShowChrono       = true;

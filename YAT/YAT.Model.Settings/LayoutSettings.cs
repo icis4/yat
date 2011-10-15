@@ -86,6 +86,8 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			TxMonitorPanelIsVisible    = false;
 			BidirMonitorPanelIsVisible = true;
 			RxMonitorPanelIsVisible    = false;

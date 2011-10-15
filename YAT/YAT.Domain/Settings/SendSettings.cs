@@ -79,6 +79,8 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			KeepCommand     = KeepCommandDefault;
 			CopyPredefined  = CopyPredefinedDefault;
 			SendImmediately = SendImmediatelyDefault;

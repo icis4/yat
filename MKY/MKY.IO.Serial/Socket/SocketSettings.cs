@@ -155,6 +155,8 @@ namespace MKY.IO.Serial
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			HostType                = SocketHostType.TcpAutoSocket;
 
 			RemoteHost              = DefaultRemoteHost;

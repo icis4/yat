@@ -75,6 +75,8 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			Command = new Command();
 			RecentCommands = new RecentItemCollection<Command>(MaxRecentCommands);
 		}

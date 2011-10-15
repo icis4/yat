@@ -81,6 +81,8 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			FontFormat        = new FontFormat(Types.FontFormat.NameDefault, Types.FontFormat.SizeDefault, Types.FontFormat.StyleDefault);
 			TxDataFormat      = new TextFormat(Color.Blue, true, false, false, false);
 			TxControlFormat   = new TextFormat(Color.Blue, false, false, false, false);

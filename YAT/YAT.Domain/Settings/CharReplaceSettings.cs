@@ -87,6 +87,8 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			ReplaceControlChars = ReplaceControlCharsDefault;
 			ControlCharRadix    = ControlCharRadixDefault;
 			ReplaceTab          = ReplaceTabDefault;

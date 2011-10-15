@@ -75,6 +75,8 @@ namespace YAT.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			TerminalFilesPath  = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
 			WorkspaceFilesPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
 			SendFilesPath      = Environment.GetFolderPath(Environment.SpecialFolder.Personal);

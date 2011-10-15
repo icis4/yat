@@ -140,28 +140,30 @@ namespace YAT.Log.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			RootPath = ApplicationSettings.LocalUser.Paths.LogFilesPath;
+			base.SetMyDefaults();
+
+			RootPath     = ApplicationSettings.LocalUser.Paths.LogFilesPath;
 			RootFileName = "YAT-Log";
 
-			RawLogTx = false;
-			RawLogBidir = false;
-			RawLogRx = false;
+			RawLogTx     = false;
+			RawLogBidir  = false;
+			RawLogRx     = false;
 			RawExtension = ExtensionSettings.BinaryFilesDefault;
 
-			NeatLogTx = false;
-			NeatLogBidir = true;
-			NeatLogRx = false;
+			NeatLogTx     = false;
+			NeatLogBidir  = true;
+			NeatLogRx     = false;
 			NeatExtension = ExtensionSettings.LogFilesDefault;
 
 			WriteMode = LogFileWriteMode.Create;
 
-			SubdirectoriesFormat = false;
+			SubdirectoriesFormat  = false;
 			SubdirectoriesChannel = false;
 
-			NameFormat = false;
-			NameChannel = false;
-			NameDate = true;
-			NameTime = true;
+			NameFormat    = false;
+			NameChannel   = false;
+			NameDate      = true;
+			NameTime      = true;
 			NameSeparator = FileNameSeparator.DefaultSeparator;
 		}
 
