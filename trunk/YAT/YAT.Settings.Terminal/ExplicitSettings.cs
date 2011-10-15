@@ -79,6 +79,8 @@ namespace YAT.Settings.Terminal
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			UserName = UserNameDefault;
 		}
 

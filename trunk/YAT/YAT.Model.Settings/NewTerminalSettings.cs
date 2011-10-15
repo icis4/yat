@@ -71,21 +71,21 @@ namespace YAT.Model.Settings
 		public NewTerminalSettings(NewTerminalSettings rhs)
 			: base(rhs)
 		{
-			TerminalType         = rhs.TerminalType;
-			IOType               = rhs.IOType;
+			TerminalType           = rhs.TerminalType;
+			IOType                 = rhs.IOType;
 
-			SerialPortId         = rhs.SerialPortId;
+			SerialPortId           = rhs.SerialPortId;
 
-			SocketRemoteHost     = rhs.SocketRemoteHost;
-			SocketRemotePort     = rhs.SocketRemotePort;
+			SocketRemoteHost       = rhs.SocketRemoteHost;
+			SocketRemotePort       = rhs.SocketRemotePort;
 
-			SocketLocalInterface = rhs.SocketLocalInterface;
-			SocketLocalTcpPort   = rhs.SocketLocalTcpPort;
-			SocketLocalUdpPort   = rhs.SocketLocalUdpPort;
+			SocketLocalInterface   = rhs.SocketLocalInterface;
+			SocketLocalTcpPort     = rhs.SocketLocalTcpPort;
+			SocketLocalUdpPort     = rhs.SocketLocalUdpPort;
 
-			UsbSerialHidDeviceInfo     = rhs.UsbSerialHidDeviceInfo;
+			UsbSerialHidDeviceInfo = rhs.UsbSerialHidDeviceInfo;
 
-			StartTerminal        = rhs.StartTerminal;
+			StartTerminal          = rhs.StartTerminal;
 
 			ClearChanged();
 		}
@@ -99,21 +99,23 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
-			TerminalType         = Domain.TerminalType.Text;
-			IOType               = Domain.IOType.SerialPort;
+			base.SetMyDefaults();
 
-			SerialPortId         = MKY.IO.Ports.SerialPortId.FirstStandardPort;
+			TerminalType           = Domain.TerminalType.Text;
+			IOType                 = Domain.IOType.SerialPort;
 
-			SocketRemoteHost     = MKY.IO.Serial.SocketSettings.DefaultRemoteHost;
-			SocketRemotePort     = MKY.IO.Serial.SocketSettings.DefaultRemotePort;
+			SerialPortId           = MKY.IO.Ports.SerialPortId.FirstStandardPort;
 
-			SocketLocalInterface = MKY.IO.Serial.SocketSettings.DefaultLocalInterface;
-			SocketLocalTcpPort   = MKY.IO.Serial.SocketSettings.DefaultLocalTcpPort;
-			SocketLocalUdpPort   = MKY.IO.Serial.SocketSettings.DefaultLocalUdpPort;
+			SocketRemoteHost       = MKY.IO.Serial.SocketSettings.DefaultRemoteHost;
+			SocketRemotePort       = MKY.IO.Serial.SocketSettings.DefaultRemotePort;
 
-			UsbSerialHidDeviceInfo     = null;
+			SocketLocalInterface   = MKY.IO.Serial.SocketSettings.DefaultLocalInterface;
+			SocketLocalTcpPort     = MKY.IO.Serial.SocketSettings.DefaultLocalTcpPort;
+			SocketLocalUdpPort     = MKY.IO.Serial.SocketSettings.DefaultLocalUdpPort;
 
-			StartTerminal        = true;
+			UsbSerialHidDeviceInfo = null;
+
+			StartTerminal          = true;
 		}
 
 		#region Properties

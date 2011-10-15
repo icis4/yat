@@ -69,6 +69,8 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			State    = FormWindowState.Maximized;
 			Location = new Point(0, 0);
 			Size     = new Size(800, 600);

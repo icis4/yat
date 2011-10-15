@@ -69,6 +69,8 @@ namespace YAT.Domain.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			LengthLineBreak   = new BinaryLengthLineBreak(false, 16);
 			SequenceLineBreak = new BinarySequenceLineBreak(false, @"\h(00)");
 			TimedLineBreak    = new BinaryTimedLineBreak(false, 500);

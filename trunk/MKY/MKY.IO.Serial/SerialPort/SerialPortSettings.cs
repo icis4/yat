@@ -163,6 +163,8 @@ namespace MKY.IO.Serial
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			// Attention: See remarks above.
 			PortId                 = SerialPortId.FirstStandardPort;
 
@@ -172,7 +174,7 @@ namespace MKY.IO.Serial
 			RtsEnabled             = true;
 			DtrEnabled             = true;
 			NoSendOnOutputBreak    = NoSendOnOutputBreakDefault;
-			NoSendOnInputBreak       = NoSendOnInputBreakDefault;
+			NoSendOnInputBreak     = NoSendOnInputBreakDefault;
 		}
 
 		#endregion

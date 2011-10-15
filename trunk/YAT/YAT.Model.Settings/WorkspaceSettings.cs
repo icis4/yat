@@ -67,6 +67,8 @@ namespace YAT.Model.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			TerminalSettings = new GuidList<TerminalSettingsItem>();
 		}
 

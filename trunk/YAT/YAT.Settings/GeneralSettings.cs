@@ -79,6 +79,8 @@ namespace YAT.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			AutoOpenWorkspace      = true;
 			AutoSaveWorkspace      = true;
 			UseRelativePaths       = true;

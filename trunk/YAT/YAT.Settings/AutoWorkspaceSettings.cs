@@ -67,6 +67,8 @@ namespace YAT.Settings
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			FilePath     = "";
 			FilePathUser = Guid.Empty;
 		}

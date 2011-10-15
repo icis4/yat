@@ -81,6 +81,8 @@ namespace MKY.IO.Serial
 		/// </remarks>
 		protected override void SetMyDefaults()
 		{
+			base.SetMyDefaults();
+
 			DeviceInfo = null;
 			AutoOpen = AutoOpenDefault;
 		}
