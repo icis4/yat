@@ -77,6 +77,9 @@ Important changes:
 - "_<Data|Doc|Test>" renamed to "!-<Data|Doc|Test>"
 - Product version added to header of each source code file (feature request #3418320)
 
+Fixed bugs:
+- Exception when selecting an undefined predefined commands using 'Shift + Fx' fixed (bug #3367649)
+
 Limitations and known issues:
 - MDI limitations of .NET
    > Issues with frame (bugs #1808492 and #1808493)
