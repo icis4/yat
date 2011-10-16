@@ -1949,7 +1949,7 @@ namespace YAT.Model
 		{
 			// Verify page index.
 			List<Model.Types.PredefinedCommandPage> pages = this.settingsRoot.PredefinedCommand.Pages;
-			if ((page < 1) && (page > pages.Count))
+			if ((page < 1) || (page > pages.Count))
 				return (false);
 
 			// Verify command index.
