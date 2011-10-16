@@ -895,40 +895,40 @@ namespace YAT.Model.Test
 		public virtual void TestRecentInCaseOfAutoSave()
 		{
 			bool success = false;
-			string uc = "";
+			string step = "";
 
 			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = true;
 			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = true;
 			ApplicationSettings.LocalUser.RecentFiles.FilePaths.Clear();
 
-			#region Use case 1
+			#region Step 1
 			// - Initial start
 			// - Create new terminal
 			//   => Auto workspace with 1 auto terminal
 			//   => Recent must still be empty
 			using (Main main = new Main())
 			{
-				uc = "UC1: ";
+				step = "Step 1: ";
 				success = main.Start();
-				Assert.IsTrue(success, uc + "Main could not be started!");
+				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, uc + "Workspace not created!");
-				Assert.AreEqual(0, workspace.TerminalCount, uc + "Workspace doesn't contain 0 terminals!");
+				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
 
 				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
-				Assert.IsTrue(success, uc + "Terminal could not be created!");
-				Assert.AreEqual(1, workspace.TerminalCount, uc + "Workspace doesn't contain 1 terminal!");
+				Assert.IsTrue(success, step + "Terminal could not be created!");
+				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
 
 				Terminal terminal = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal, uc + "Terminal could not be created!");
+				Assert.IsNotNull(terminal, step + "Terminal could not be created!");
 
 				success = main.Exit();
-				Assert.IsTrue(success, uc + "Main could not be exited!");
+				Assert.IsTrue(success, step + "Main could not be exited!");
 
-				VerifyFiles(uc, workspace, true, terminal, true);
+				VerifyFiles(step, workspace, true, terminal, true);
 
-				Assert.AreEqual(0, ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count, uc + "Recent file list is not empty!!");
+				Assert.AreEqual(0, ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count, step + "Recent file list is not empty!!");
 			}
 			#endregion
 		}
@@ -948,80 +948,80 @@ namespace YAT.Model.Test
 		public virtual void TestRecentInCaseOfManualSave()
 		{
 			bool success = false;
-			string uc = "";
+			string step = "";
 
 			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = false;
 			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = false;
 			ApplicationSettings.LocalUser.RecentFiles.FilePaths.Clear();
 
-			#region Use case 1
+			#region Step 1
 			// - Initial start
 			// - Create new terminal
 			// - Save terminal as
 			//   => Recent contains the terminal
 			using (Main main = new Main())
 			{
-				uc = "UC1: ";
+				step = "Step 1: ";
 				success = main.Start();
-				Assert.IsTrue(success, uc + "Main could not be started!");
+				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, uc + "Workspace not created!");
-				Assert.AreEqual(0, workspace.TerminalCount, uc + "Workspace doesn't contain 0 terminals!");
+				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
 
 				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
-				Assert.IsTrue(success, uc + "Terminal 1 could not be created!");
+				Assert.IsTrue(success, step + "Terminal 1 could not be created!");
 				Terminal terminal = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal, uc + "Terminal 1 could not be created!");
+				Assert.IsNotNull(terminal, step + "Terminal 1 could not be created!");
 				success = terminal.SaveAs(this.normalTerminal1FilePath);
-				Assert.IsTrue(success, uc + "Terminal 1 could not be saved as!");
+				Assert.IsTrue(success, step + "Terminal 1 could not be saved as!");
 
-				VerifyFiles(uc, workspace, false, terminal, true, false);
+				VerifyFiles(step, workspace, false, terminal, true, false);
 
 				success = main.Exit();
-				Assert.IsTrue(success, uc + "Main could not be exited!");
+				Assert.IsTrue(success, step + "Main could not be exited!");
 
-				VerifyFiles(uc, workspace, false, terminal, true, false);
+				VerifyFiles(step, workspace, false, terminal, true, false);
 
-				Assert.AreEqual(1, ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count, uc + "Wrong number of recent file entries!");
+				Assert.AreEqual(1, ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count, step + "Wrong number of recent file entries!");
 			}
 			#endregion
 
-			#region Use case 2
+			#region Step 2
 			// - Start and request recent terminal
 			//   => New workspace with recent terminal
 			using (Main main = new Main())
 			{
-				uc = "UC2: ";
+				step = "Step 2: ";
 				success = main.Start();
-				Assert.IsTrue(success, uc + "Main could not be started!");
+				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, uc + "Workspace not created!");
-				Assert.AreEqual(0, workspace.TerminalCount, uc + "Workspace doesn't contain 0 terminals!");
+				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
 
 				success = main.OpenRecent(1);
-				Assert.IsTrue(success, uc + "Recent terminal could not be opened!");
+				Assert.IsTrue(success, step + "Recent terminal could not be opened!");
 				Terminal terminal = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal, uc + "Recent terminal could not be opened!");
+				Assert.IsNotNull(terminal, step + "Recent terminal could not be opened!");
 
-				VerifyFiles(uc, workspace, false, terminal, true, false);
+				VerifyFiles(step, workspace, false, terminal, true, false);
 
 				success = main.Exit();
-				Assert.IsTrue(success, uc + "Main could not be exited!");
+				Assert.IsTrue(success, step + "Main could not be exited!");
 
-				VerifyFiles(uc, workspace, false, terminal, true, false);
+				VerifyFiles(step, workspace, false, terminal, true, false);
 
-				Assert.AreEqual(1, ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count, uc + "Wrong number of recent file entries!");
+				Assert.AreEqual(1, ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count, step + "Wrong number of recent file entries!");
 			}
 			#endregion
 		}
 
 		#endregion
 
-		#region Tests > TestRecentInCaseOfManualSave
+		#region Tests > TestFixedIndexFeatureOfWorkspace
 		//------------------------------------------------------------------------------------------
-		// Tests > TestRecentInCaseOfManualSave
+		// Tests > TestFixedIndexFeatureOfWorkspace
 		//------------------------------------------------------------------------------------------
 
 		/// <summary>
@@ -1031,13 +1031,13 @@ namespace YAT.Model.Test
 		public virtual void TestFixedIndexFeatureOfWorkspace()
 		{
 			bool success = false;
-			string uc = "";
+			string step = "";
 
 			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = true;
 			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = true;
 			ApplicationSettings.LocalUser.AutoWorkspace.FilePath = "";
 
-			#region Use case 1
+			#region Step 1
 			// - Initial start
 			// - Create new terminal
 			// - Save terminal as
@@ -1045,29 +1045,29 @@ namespace YAT.Model.Test
 			//   => Workspace must contain 1 terminal with fixed index 1
 			using (Main main = new Main())
 			{
-				uc = "UC1: ";
+				step = "Step 1: ";
 				success = main.Start();
-				Assert.IsTrue(success, uc + "Main could not be started!");
+				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, uc + "Workspace not created!");
-				Assert.AreEqual(0, workspace.TerminalCount, uc + "Workspace doesn't contain 0 terminals!");
+				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
 
 				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
-				Assert.IsTrue(success, uc + "Terminal 1 could not be created!");
+				Assert.IsTrue(success, step + "Terminal 1 could not be created!");
 				Terminal terminal = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal, uc + "Terminal 1 could not be created!");
+				Assert.IsNotNull(terminal, step + "Terminal 1 could not be created!");
 				success = terminal.SaveAs(this.normalTerminal1FilePath);
-				Assert.IsTrue(success, uc + "Terminal 1 could not be saved as!");
+				Assert.IsTrue(success, step + "Terminal 1 could not be saved as!");
 
 				success = workspace.SaveAs(this.normalWorkspaceFilePath);
-				Assert.IsTrue(success, uc + "Workspace could not be saved as!");
+				Assert.IsTrue(success, step + "Workspace could not be saved as!");
 				success = main.Exit();
-				Assert.IsTrue(success, uc + "Main could not be exited!");
+				Assert.IsTrue(success, step + "Main could not be exited!");
 			}
 			#endregion
 
-			#region Use case 2
+			#region Step 2
 			// - Subsequent start
 			//   => Workspace must contain 1 terminal with fixed index 1
 			//   => Attention: Sequencial index will be 2 since it is incremented application domain statically
@@ -1078,40 +1078,40 @@ namespace YAT.Model.Test
 			//   => Sequencial index will be 2, 3 and 4
 			using (Main main = new Main())
 			{
-				uc = "UC2: ";
+				step = "Step 2: ";
 				success = main.Start();
-				Assert.IsTrue(success, uc + "Main could not be started!");
+				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, uc + "Workspace not created!");
-				Assert.AreEqual(1, workspace.TerminalCount, uc + "Workspace doesn't contain 1 terminal!");
+				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
 
-				Assert.AreEqual(TerminalSettingsItem.FirstFixedIndex, workspace.ActiveTerminalFixedIndex, uc + "Fixed index of terminal 1 isn't " + TerminalSettingsItem.FirstFixedIndex + "!");
-				Assert.AreEqual(TerminalSettingsItem.FirstDynamicIndex, workspace.ActiveTerminalDynamicIndex, uc + "Dynamic index of terminal 1 isn't " + TerminalSettingsItem.FirstDynamicIndex + "!");
-				Assert.AreEqual(2, workspace.ActiveTerminalSequencialIndex, uc + "Sequencial index of terminal 1 isn't 2!");
+				Assert.AreEqual(TerminalSettingsItem.FirstFixedIndex, workspace.ActiveTerminalFixedIndex, step + "Fixed index of terminal 1 isn't " + TerminalSettingsItem.FirstFixedIndex + "!");
+				Assert.AreEqual(TerminalSettingsItem.FirstDynamicIndex, workspace.ActiveTerminalDynamicIndex, step + "Dynamic index of terminal 1 isn't " + TerminalSettingsItem.FirstDynamicIndex + "!");
+				Assert.AreEqual(2, workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal 1 isn't 2!");
 
 				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
-				Assert.IsTrue(success, uc + "Terminal 2 could not be created!");
+				Assert.IsTrue(success, step + "Terminal 2 could not be created!");
 				Terminal terminal2 = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal2, uc + "Terminal 2 could not be created!");
+				Assert.IsNotNull(terminal2, step + "Terminal 2 could not be created!");
 				success = terminal2.SaveAs(this.normalTerminal2FilePath);
-				Assert.IsTrue(success, uc + "Terminal 2 could not be saved as!");
+				Assert.IsTrue(success, step + "Terminal 2 could not be saved as!");
 
 				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
-				Assert.IsTrue(success, uc + "Terminal 3 could not be created!");
+				Assert.IsTrue(success, step + "Terminal 3 could not be created!");
 				Terminal terminal3 = workspace.ActiveTerminal;
-				Assert.IsNotNull(terminal3, uc + "Terminal 3 could not be created!");
+				Assert.IsNotNull(terminal3, step + "Terminal 3 could not be created!");
 				success = terminal3.SaveAs(this.normalTerminal3FilePath);
-				Assert.IsTrue(success, uc + "Terminal 3 could not be saved as!");
+				Assert.IsTrue(success, step + "Terminal 3 could not be saved as!");
 
 				success = workspace.Save();
-				Assert.IsTrue(success, uc + "Workspace could not be saved!");
+				Assert.IsTrue(success, step + "Workspace could not be saved!");
 				success = main.Exit();
-				Assert.IsTrue(success, uc + "Main could not be exited!");
+				Assert.IsTrue(success, step + "Main could not be exited!");
 			}
 			#endregion
 
-			#region Use case 3
+			#region Step 3
 			// - Subsequent start
 			//   => Workspace must contain 3 terminals with fixed indices 1, 2 and 3
 			//   => Attention: Sequencial index will be 5, 6 and 7 since it is incremented application domain statically
@@ -1120,13 +1120,13 @@ namespace YAT.Model.Test
 			//   => Workspace must contain 2 terminals with fixed indices 1 and 3
 			using (Main main = new Main())
 			{
-				uc = "UC3: ";
+				step = "Step 3: ";
 				success = main.Start();
-				Assert.IsTrue(success, uc + "Main could not be started!");
+				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, uc + "Workspace not created!");
-				Assert.AreEqual(3, workspace.TerminalCount, uc + "Workspace doesn't contain 3 terminals!");
+				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.AreEqual(3, workspace.TerminalCount, step + "Workspace doesn't contain 3 terminals!");
 
 				int first = Terminal.FirstSequencialIndex;
 				int last  = Terminal.FirstSequencialIndex + workspace.TerminalCount - 1;
@@ -1134,49 +1134,152 @@ namespace YAT.Model.Test
 				{
 					int k = 5 + i - 1;
 					workspace.ActivateTerminalBySequentialIndex(k);
-					Assert.AreEqual(i, workspace.ActiveTerminalFixedIndex, uc + "Fixed index of terminal " + i + " isn't " + i + "!");
-					Assert.AreEqual(i, workspace.ActiveTerminalDynamicIndex, uc + "Dynamic index of terminal " + i + " isn't " + i + "!");
-					Assert.AreEqual(k, workspace.ActiveTerminalSequencialIndex, uc + "Sequencial index of terminal " + i + " isn't " + k + "!");
+					Assert.AreEqual(i, workspace.ActiveTerminalFixedIndex, step + "Fixed index of terminal " + i + " isn't " + i + "!");
+					Assert.AreEqual(i, workspace.ActiveTerminalDynamicIndex, step + "Dynamic index of terminal " + i + " isn't " + i + "!");
+					Assert.AreEqual(k, workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal " + i + " isn't " + k + "!");
 				}
 
 				workspace.ActivateTerminalBySequentialIndex(6);
 				success = workspace.CloseActiveTerminal();
-				Assert.IsTrue(success, uc + "Terminal 2 could not be closed!");
-				Assert.AreEqual(2, workspace.TerminalCount, uc + "Workspace doesn't contain 2 terminals!");
+				Assert.IsTrue(success, step + "Terminal 2 could not be closed!");
+				Assert.AreEqual(2, workspace.TerminalCount, step + "Workspace doesn't contain 2 terminals!");
 
 				success = workspace.Save();
-				Assert.IsTrue(success, uc + "Workspace could not be saved!");
+				Assert.IsTrue(success, step + "Workspace could not be saved!");
 				success = main.Exit();
-				Assert.IsTrue(success, uc + "Main could not be exited!");
+				Assert.IsTrue(success, step + "Main could not be exited!");
 			}
 			#endregion
 
-			#region Use case 4
+			#region Step 4
 			// - Subsequent start
 			//   => Workspace must contain 2 terminals with fixed indices 1 and 3
 			//   => Attention: Sequencial index will be 8 and 9 since it is incremented application domain statically
 			using (Main main = new Main())
 			{
-				uc = "UC4: ";
+				step = "Step 4: ";
 				success = main.Start();
-				Assert.IsTrue(success, uc + "Main could not be started!");
+				Assert.IsTrue(success, step + "Main could not be started!");
 
 				Workspace workspace = main.Workspace;
-				Assert.IsNotNull(workspace, uc + "Workspace not created!");
-				Assert.AreEqual(2, workspace.TerminalCount, uc + "Workspace doesn't contain 2 terminals!");
+				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.AreEqual(2, workspace.TerminalCount, step + "Workspace doesn't contain 2 terminals!");
 
 				workspace.ActivateTerminalBySequentialIndex(8);
-				Assert.AreEqual(TerminalSettingsItem.FirstFixedIndex, workspace.ActiveTerminalFixedIndex, uc + "Fixed index of terminal 1 isn't " + TerminalSettingsItem.FirstFixedIndex + "!");
-				Assert.AreEqual(TerminalSettingsItem.FirstDynamicIndex, workspace.ActiveTerminalDynamicIndex, uc + "Dynamic index of terminal 1 isn't " + TerminalSettingsItem.FirstDynamicIndex + "!");
-				Assert.AreEqual(8, workspace.ActiveTerminalSequencialIndex, uc + "Sequencial index of terminal 1 isn't 8!");
+				Assert.AreEqual(TerminalSettingsItem.FirstFixedIndex, workspace.ActiveTerminalFixedIndex, step + "Fixed index of terminal 1 isn't " + TerminalSettingsItem.FirstFixedIndex + "!");
+				Assert.AreEqual(TerminalSettingsItem.FirstDynamicIndex, workspace.ActiveTerminalDynamicIndex, step + "Dynamic index of terminal 1 isn't " + TerminalSettingsItem.FirstDynamicIndex + "!");
+				Assert.AreEqual(8, workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal 1 isn't 8!");
 
 				workspace.ActivateTerminalBySequentialIndex(9);
-				Assert.AreEqual(3, workspace.ActiveTerminalFixedIndex, uc + "Fixed index of terminal 3 isn't 3!");
-				Assert.AreEqual(2, workspace.ActiveTerminalDynamicIndex, uc + "Dynamic index of terminal 3 isn't 2!");
-				Assert.AreEqual(9, workspace.ActiveTerminalSequencialIndex, uc + "Sequencial index of terminal 3 isn't 9!");
+				Assert.AreEqual(3, workspace.ActiveTerminalFixedIndex, step + "Fixed index of terminal 3 isn't 3!");
+				Assert.AreEqual(2, workspace.ActiveTerminalDynamicIndex, step + "Dynamic index of terminal 3 isn't 2!");
+				Assert.AreEqual(9, workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal 3 isn't 9!");
 
 				success = main.Exit();
-				Assert.IsTrue(success, uc + "Main could not be exited!");
+				Assert.IsTrue(success, step + "Main could not be exited!");
+			}
+			#endregion
+		}
+
+		#endregion
+
+		#region Tests > TestConcurrentInstancesInCaseOfAutoSave
+		//------------------------------------------------------------------------------------------
+		// Tests > TestConcurrentInstancesInCaseOfAutoSave
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Expected: Concurrent instance don't lead to exceptions.
+		/// </summary>
+		[Test]
+		public virtual void TestConcurrentInstancesInCaseOfAutoSave()
+		{
+			bool success = false;
+			string step = "";
+
+			ApplicationSettings.LocalUser.General.AutoOpenWorkspace = true;
+			ApplicationSettings.LocalUser.General.AutoSaveWorkspace = true;
+			ApplicationSettings.LocalUser.AutoWorkspace.FilePath = "";
+
+			#region Step 1
+			// - Initial start
+			// - Create new terminal
+			//   => Auto workspace with 1 auto terminal
+			using (Main main = new Main())
+			{
+				step = "Step 1: ";
+				success = main.Start();
+				Assert.IsTrue(success, step + "Main could not be started!");
+
+				Workspace workspace = main.Workspace;
+				Assert.IsNotNull(workspace, step + "Workspace not created!");
+				Assert.AreEqual(0, workspace.TerminalCount, step + "Workspace doesn't contain 0 terminals!");
+
+				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+				Assert.IsTrue(success, step + "Terminal could not be created!");
+				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
+
+				Terminal terminal = workspace.ActiveTerminal;
+				Assert.IsNotNull(terminal, step + "Terminal could not be created!");
+
+				success = main.Exit();
+				Assert.IsTrue(success, step + "Main could not be exited!");
+
+				VerifyFiles(step, workspace, true, terminal, true);
+			}
+			#endregion
+
+			#region Step 2
+			// - Subsequent start
+			//   => Workspace A must contain 1 terminal
+			// - Concurrent start
+			//   => Auto workspace with 1 auto terminal
+			using (Main mainA = new Main())
+			{
+				step = "Step 2: ";
+				success = mainA.Start();
+				Assert.IsTrue(success, step + "Main A could not be started!");
+
+				Workspace workspaceA = mainA.Workspace;
+				Assert.IsNotNull(workspaceA, step + "Workspace A not created!");
+				Assert.AreEqual(1, workspaceA.TerminalCount, step + "Workspace A doesn't contain 1 terminal!");
+
+				using (Main mainB = new Main())
+				{
+					success = mainB.Start();
+					Assert.IsTrue(success, step + "Main B could not be started!");
+
+					Workspace workspaceB = mainB.Workspace;
+					Assert.IsNotNull(workspaceB, step + "Workspace B not created!");
+					Assert.AreEqual(0, workspaceB.TerminalCount, step + "Workspace B doesn't contain 0 terminals!");
+
+					success = workspaceB.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
+					Assert.IsTrue(success, step + "Terminal could not be created!");
+					Assert.AreEqual(1, workspaceB.TerminalCount, step + "Workspace B doesn't contain 1 terminal!");
+
+					Terminal terminalB = workspaceB.ActiveTerminal;
+					Assert.IsNotNull(terminalB, step + "Terminal B could not be created!");
+
+					success = mainB.Exit();
+					Assert.IsTrue(success, step + "Main B could not be exited!");
+
+					VerifyFiles(step, workspaceB, true, terminalB, true);
+
+					// Verify application settings.
+					if (ApplicationSettings.Load())
+						StringAssert.AreEqualIgnoringCase(workspaceB.SettingsFilePath, ApplicationSettings.LocalUser.AutoWorkspace.FilePath, step + "Workspace B file path not set!");
+					else
+						Assert.Fail("Failed to reload application settings!");
+				}
+
+				success = mainA.Exit();
+				Assert.IsTrue(success, step + "Main A could not be exited!");
+
+				// Verify application settings.
+				if (ApplicationSettings.Load())
+					StringAssert.AreEqualIgnoringCase(workspaceA.SettingsFilePath, ApplicationSettings.LocalUser.AutoWorkspace.FilePath, step + "Workspace A file path not set!");
+				else
+					Assert.Fail("Failed to reload application settings!");
 			}
 			#endregion
 		}

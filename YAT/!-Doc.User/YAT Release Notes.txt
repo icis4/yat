@@ -45,14 +45,14 @@ and install it manually.
 ====================================================================================================
 
 
-YAT 2.0 Beta 4 Candidate 1 Version 1.99.27 :: 2011-0x-xx
+YAT 2.0 Beta 4 Candidate 1 Version 1.99.28 :: 2011-1x-xx
 ----------------------------------------------------------------------------------------------------
 
 New:
 - Support for C-style escape sequences (feature request #3044830)
 - Text terminals: Comments can be chosen to be ignored while sending (feature request #2848298)
    > Comment indicators can be configured in Terminal Settings > Text Settings
-   > The C/C++/C#/Java style "//" and the Basic/BAT/DOS style "REM" comment markers are predefined
+   > C/C++/C#/Java style "//" and Basic/BAT/DOS style "REM" comment indicators are predefined
 - Serial ports: XOn/XOff state is indicated (feature request #3066635)
    > Applies to 'Software', 'Combined' and 'Manual' flow control
    > XOn/XOff can be manually toggled in case of 'Manual' flow control
@@ -66,12 +66,16 @@ Important changes:
   received, the update rate is reduced, results in better performance (feature request #3274073)
 - Monitor display status settings relocated from 'Display' to 'Status' to improve speed on showing
   the status labels, i.e. no monitor update is needed anymore (related to feature request #3274073)
+- Behavior of concurrent instances of YAT verified (feature request #2842713)
+   > Seems to work fine, test case added and successfully passed, limitation removed
+   > Also seems to fix bugs #2981792 and #3121250, there are no more multiple questions on whether
+     to save nor exceptions when concurrent instances of YAT were active
 - MKY.Data added
 - MKY.Settings.Settings renamed to MKY.Settings.SettingsItem
 - MKY.IO and MKY.IO.Net added to prepare refactoring of MKY.IO.Serial (feature request #3388950)
 - Update to NUnit 2.5.10
 - "_<Data|Doc|Test>" renamed to "!-<Data|Doc|Test>"
-- Product version added to each source code header (feature request #3418320)
+- Product version added to header of each source code file (feature request #3418320)
 
 Limitations and known issues:
 - MDI limitations of .NET
@@ -91,8 +95,6 @@ Limitations and known issues:
 - Terminal/direct mode does not yet support special formats and commands (feature request #1808496)
 - Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
 - System errors are output in local language, even since YAT is all-English (bug #1927786)
-- Multiple simultaneous instances of YAT are limited in the use of default workspaces and terminals
-  (feature request #2842713)
 
 
 YAT 2.0 Beta 3 Candidate 4 Version 1.99.26 :: 2011-04-25
@@ -147,7 +149,7 @@ Limitations and known issues:
 - Text terminals: Wait for answer line not yet implemented (feature request #1808509)
 - Terminal/direct mode does not yet support special formats and commands (feature request #1808496)
 - Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
-- Multiple simultaneous instances of YAT are limited in the use of default workspaces and terminals
+- Concurrent instances of YAT are limited in the use of default workspaces and terminals
   (feature request #2842713)
 
 
@@ -192,7 +194,7 @@ Limitations and known issues:
 - Text terminals: Wait for answer line not yet implemented (feature request #1808509)
 - Terminal/direct mode does not yet support special formats and commands (feature request #1808496)
 - Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
-- Multiple simultaneous instances of YAT are limited in the use of default workspaces and terminals
+- Concurrent instances of YAT are limited in the use of default workspaces and terminals
   (feature request #2842713)
 
 
@@ -288,7 +290,7 @@ Limitations and known issues:
 - Text terminals: Wait for answer line not yet implemented (feature request #1808509)
 - Terminal/direct mode does not yet support special formats and commands (feature request #1808496)
 - Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
-- Multiple simultaneous instances of YAT are limited in the use of default workspaces and terminals
+- Concurrent instances of YAT are limited in the use of default workspaces and terminals
   (feature request #2842713)
 
 
@@ -312,7 +314,7 @@ New:
 Important changes:
 - Flickering eliminated by implementing a speed optimized list box (bug #2813227)
 - Empty command text is now grayed italics (feature request #2838453)
-- Handling of local user settings on multiple instances of YAT improved (feature request #2842692)
+- Handling of local user settings on concurrent instances of YAT improved (feature request #2842692)
 - Update to .NET 3.5 SP1 (feature request #2813235)
 - Update to ALAZ 2.0 (feature request #2813236)
 - Update to DejaVu 2.29 (feature request #2813292)
@@ -352,7 +354,7 @@ Limitations and known issues:
 - More advanced text line send and receive options not yet implemented
   (feature requests #1808508 and #1808509)
 - Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
-- Multiple simultaneous instances of YAT are limited in the use of default workspaces and terminals
+- Concurrent instances of YAT are limited in the use of default workspaces and terminals
   (feature request #2842713)
 
 
