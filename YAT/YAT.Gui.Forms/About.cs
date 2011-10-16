@@ -248,7 +248,7 @@ namespace YAT.Gui.Forms
 				(
 				this,
 				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
-				"Immediately throw an exception to test that unhandled synchronous exceptions are handled properly?",
+				"Would you like to immediately throw an exception to test that unhandled synchronous exceptions are handled properly?",
 				"Execute manual 'Release' test?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,
@@ -266,7 +266,7 @@ namespace YAT.Gui.Forms
 				(
 				this,
 				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
-				"Start Windows.Forms timer throwing an exception to test that unhandled asynchronous synchronized exceptions are handled properly?",
+				"Would you like to start a Windows.Forms timer throwing an exception to test that unhandled asynchronous synchronized exceptions are handled properly?",
 				"Execute manual 'Release' test?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,
@@ -297,7 +297,7 @@ namespace YAT.Gui.Forms
 				(
 				this,
 				"You have clicked on a hidden button that is used for YAT internal testing in 'Release' configuration." + Environment.NewLine + Environment.NewLine +
-				"Start System.Threading timer throwing an exception to test that unhandled asynchronous non-synchronized exceptions are handled properly?",
+				"Would you like to start a System.Threading timer throwing an exception to test that unhandled asynchronous non-synchronized exceptions are handled properly?",
 				"Execute manual 'Release' test?",
 				MessageBoxButtons.YesNoCancel,
 				MessageBoxIcon.Question,

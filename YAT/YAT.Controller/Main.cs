@@ -259,13 +259,13 @@ namespace YAT.Controller
 		//==========================================================================================
 
 		/// <summary></summary>
-		public MainResult Run()
+		public virtual MainResult Run()
 		{
 			return (Run(true));
 		}
 
 		/// <summary></summary>
-		public MainResult Run(bool runWithView)
+		public virtual MainResult Run(bool runWithView)
 		{
 			MainResult mainResult = MainResult.Success;
 
@@ -289,92 +289,108 @@ namespace YAT.Controller
 				return (mainResult);
 			}
 
+			if (runWithView)
+				return (RunWithView());
+			else
+				return (RunWithoutView());
+		}
+
+		/// <summary></summary>
+		private MainResult RunWithView()
+		{
+			MainResult mainResult = MainResult.Success;
+
 			// Create model and view and run application.
 			using (Model.Main model = new Model.Main(this.commandLineOptions))
 			{
-				if (runWithView)
+				Application.EnableVisualStyles();
+				Application.SetCompatibleTextRenderingDefault(false);
+#if (!DEBUG)
+				try
 				{
-					Application.EnableVisualStyles();
-					Application.SetCompatibleTextRenderingDefault(false);
-#if (!DEBUG)
-					try
-					{
 #endif
-						Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
-						if (welcomeScreen.ShowDialog() != DialogResult.OK)
-							return (Controller.MainResult.ApplicationSettingsError);
+					Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
+					if (welcomeScreen.ShowDialog() != DialogResult.OK)
+						return (Controller.MainResult.ApplicationSettingsError);
 #if (!DEBUG)
-					}
-					catch (Exception ex)
-					{
-						string message = "An unhandled synchronous exception occured while loading " + Application.ProductName + ".";
-						if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
-							Application.Restart();
-
-						mainResult = MainResult.UnhandledException;
-					}
-#endif
-#if (!DEBUG)
-					try
-					{
-#endif
-						// If everything is fine so far, start main application including view.
-						if (mainResult == MainResult.Success)
-						{
-							using (Gui.Forms.Main view = new Gui.Forms.Main(model))
-							{
-								// Start the Win32 message loop on the current thread and the main form.
-								//
-								// \attention:
-								// This call does not return until the application exits.
-								Application.Run(view);
-							}
-						}
-#if (!DEBUG)
-					}
-					catch (Exception ex)
-					{
-						string message = "An unhandled synchronous exception occured while running " + Application.ProductName + ".";
-						if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
-							Application.Restart();
-
-						mainResult = MainResult.UnhandledException;
-					}
-#endif
 				}
-				else // Non-view application for automated test usage.
+				catch (Exception ex)
 				{
-					MKY.Win32.Console.Attach();
-#if (!DEBUG)
-					model.UnhandledException += new EventHandler<EventHelper.UnhandledExceptionEventArgs>(model_UnhandledException);
-					try
-					{
-#endif
-						if (model.Start())
-						{
-							if (model.Exit())
-								mainResult = MainResult.Success;
-							else
-								mainResult = MainResult.ApplicationExitError;
-						}
-						else
-						{
-							mainResult = MainResult.ApplicationStartError;
-						}
-#if (!DEBUG)
-					}
-					catch (Exception ex)
-					{
-						MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), ex);
-						mainResult = MainResult.UnhandledException;
-					}
-					model.UnhandledException -= new EventHandler<EventHelper.UnhandledExceptionEventArgs>(model_UnhandledException);
-#endif
-					MKY.Win32.Console.Detach();
+					string message = "An unhandled synchronous exception occured while loading " + Application.ProductName + ".";
+					if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
+						Application.Restart();
+
+					return (MainResult.UnhandledException);
 				}
+#endif
+#if (!DEBUG)
+				try
+				{
+#endif
+					// If everything is fine so far, start main application including view.
+					using (Gui.Forms.Main view = new Gui.Forms.Main(model))
+					{
+						// Start the Win32 message loop on the current thread and the main form.
+						//
+						// \attention:
+						// This call does not return until the application exits.
+						Application.Run(view);
+					}
+#if (!DEBUG)
+				}
+				catch (Exception ex)
+				{
+					string message = "An unhandled synchronous exception occured while running " + Application.ProductName + ".";
+					if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
+						Application.Restart();
+
+					return (MainResult.UnhandledException);
+				}
+#endif
+				return (mainResult);
 			} // Dispose of model to ensure immediate release of resources.
+		}
 
-			return (mainResult);
+		/// <summary>
+		/// Non-view application for automated test usage.
+		/// </summary>
+		private MainResult RunWithoutView()
+		{
+			MainResult mainResult = MainResult.Success;
+
+			// Create model and run application.
+			using (Model.Main model = new Model.Main(this.commandLineOptions))
+			{
+				MKY.Win32.Console.Attach();
+#if (!DEBUG)
+				model.UnhandledException += new EventHandler<EventHelper.UnhandledExceptionEventArgs>(model_UnhandledException);
+				try
+				{
+#endif
+					if (model.Start())
+					{
+						if (model.Exit())
+							mainResult = MainResult.Success;
+						else
+							mainResult = MainResult.ApplicationExitError;
+					}
+					else
+					{
+						mainResult = MainResult.ApplicationStartError;
+					}
+#if (!DEBUG)
+				}
+				catch (Exception ex)
+				{
+					MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), ex);
+					mainResult = MainResult.UnhandledException;
+				}
+				model.UnhandledException -= new EventHandler<EventHelper.UnhandledExceptionEventArgs>(model_UnhandledException);
+#endif
+				MKY.Win32.Console.Detach();
+
+				return (mainResult);
+			} // Dispose of model to ensure immediate release of resources.
 		}
 
 #if (!DEBUG)
