@@ -52,7 +52,9 @@ namespace YAT
 		/// The application's exit code according to <see cref="Controller.MainResult"/>.
 		/// </returns>
 		/// <remarks>
-		/// Application must be a command line application. Otherwise, no console is available.
+		/// The YAT application must manually attach to the Win32 console since it is a windows
+		/// forms application. Without attaching, no console is available and no command line text
+		/// can be output.
 		/// </remarks>
 		[STAThread]
 		private static int Main(string[] commandLineArgs)
