@@ -67,9 +67,7 @@ Important changes:
 - Monitor display status settings relocated from 'Display' to 'Status' to improve speed on showing
   the status labels, i.e. no monitor update is needed anymore (related to feature request #3274073)
 - Behavior of concurrent instances of YAT verified (feature request #2842713)
-   > Seems to work fine, test case added and successfully passed, limitation removed
-   > Also seems to fix bugs #2981792 and #3121250, there are no more multiple questions on whether
-     to save nor exceptions when concurrent instances of YAT were active
+   > Already seems to work fine, test case added and successfully passed, limitation removed
 - MKY.Data added
 - MKY.Settings.Settings renamed to MKY.Settings.SettingsItem
 - MKY.IO and MKY.IO.Net added to prepare refactoring of MKY.IO.Serial (feature request #3388950)
