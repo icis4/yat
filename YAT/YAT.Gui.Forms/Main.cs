@@ -46,6 +46,25 @@ namespace YAT.Gui.Forms
 	/// </summary>
 	public partial class Main : Form
 	{
+		#region Types
+		//==========================================================================================
+		// Types
+		//==========================================================================================
+
+		private enum ClosingState
+		{
+			/// <summary>/// Normal operation of the form.</summary>
+			None,
+
+			/// <summary>/// Closing has been initiated by a form event.</summary>
+			IsClosingFromForm,
+
+			/// <summary>Closing has been initiated by a model event.</summary>
+			IsClosingFromModel,
+		}
+
+		#endregion
+
 		#region Constants
 		//==========================================================================================
 		// Constants
@@ -62,17 +81,16 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		// Startup.
+		// Startup/Update/Closing:
 		private bool isStartingUp = true;
 		private bool isSettingControls = false;
-		private bool isClosingFromForm = false;
-		private bool isClosingFromModel = false;
+		private ClosingState closingState = ClosingState.None;
 
-		// Model.
+		// Model:
 		private Model.Main main;
 		private Model.Workspace workspace;
 
-		// Settings.
+		// Settings:
 		private LocalUserSettingsRoot settingsRoot;
 
 		#endregion
@@ -120,6 +138,18 @@ namespace YAT.Gui.Forms
 			ApplyWindowSettingsAccordingToStartup();
 
 			SetControls();
+		}
+
+		#endregion
+
+		#region Properties
+		//==========================================================================================
+		// Properties
+		//==========================================================================================
+
+		private bool IsClosing
+		{
+			get { return (this.closingState != ClosingState.None); }
 		}
 
 		#endregion
@@ -200,11 +230,16 @@ namespace YAT.Gui.Forms
 
 		private void Main_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			// Prevent multiple calls to Close().
-			if (!this.isClosingFromModel)
+			// Prevent multiple calls to Exit()/Close().
+			if (this.closingState == ClosingState.None)
 			{
-				this.isClosingFromForm = true;
+				this.closingState = ClosingState.IsClosingFromForm;
+
 				e.Cancel = (!this.main.Exit());
+
+				// Revert closing state in case of cancel.
+				if (!e.Cancel)
+					this.closingState = ClosingState.None;
 			}
 		}
 
@@ -1103,9 +1138,9 @@ namespace YAT.Gui.Forms
 		private void main_Exited(object sender, EventArgs e)
 		{
 			// Prevent multiple calls to Close().
-			if (!this.isClosingFromForm)
+			if (this.closingState == ClosingState.None)
 			{
-				this.isClosingFromModel = true;
+				this.closingState = ClosingState.IsClosingFromModel;
 				Close();
 			}
 		}

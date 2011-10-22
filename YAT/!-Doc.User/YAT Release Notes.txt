@@ -66,6 +66,7 @@ Important changes:
   received, the update rate is reduced, results in better performance (feature request #3274073)
 - Monitor display status settings relocated from 'Display' to 'Status' to improve speed on showing
   the status labels, i.e. no monitor update is needed anymore (related to feature request #3274073)
+- Shortcut for window layout added: Alt-C/H/V layouts cascaded/horizontal/vertical
 - Behavior of concurrent instances of YAT verified (feature request #2842713)
    > Already seems to work fine, test case added and successfully passed, limitation removed
 - MKY.Data added
@@ -77,6 +78,8 @@ Important changes:
 
 Fixed bugs:
 - Exception when selecting an undefined predefined commands using 'Shift + Fx' fixed (bug #3367649)
+- YAT no longer asks twice whether to save (bug #3121250)
+   > Only applied in case of 'File > Preferences... > Save current workspace automatically' = 'No'
 
 Limitations and known issues:
 - MDI limitations of .NET
@@ -95,7 +98,7 @@ Limitations and known issues:
 - Text terminals: Wait for answer line not yet implemented (feature request #1808509)
 - Terminal/direct mode does not yet support special formats and commands (feature request #1808496)
 - Logging in XML not yet implemented, definition of schema pending (bugs #1849227 and #1849228)
-- System errors are output in local language, even since YAT is all-English (bug #1927786)
+- System errors are output in local language, even though YAT is all-English (bug #1927786)
 
 
 YAT 2.0 Beta 3 Candidate 4 Version 1.99.26 :: 2011-04-25

@@ -1094,7 +1094,9 @@ namespace YAT.Model
 		// Close
 		//==========================================================================================
 
-		/// <summary>Closes the terminal and prompts if needed if settings have changed.</summary>
+		/// <summary>
+		/// Closes the terminal and prompts if needed if settings have changed.
+		/// </summary>
 		public virtual bool Close()
 		{
 			return (Close(false, false));

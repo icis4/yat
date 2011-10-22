@@ -61,9 +61,14 @@ namespace YAT.Gui.Forms
 
 		private enum ClosingState
 		{
-			None,               // Normal operation of the form
-			IsClosingFromForm,  // Closing has been initiated by a form event
-			IsClosingFromModel, // Closing has been initiated by a model event
+			/// <summary>/// Normal operation of the form.</summary>
+			None,
+
+			/// <summary>/// Closing has been initiated by a form event.</summary>
+			IsClosingFromForm,
+
+			/// <summary>Closing has been initiated by a model event.</summary>
+			IsClosingFromModel,
 		}
 
 		#endregion
@@ -85,21 +90,21 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		// Startup/update/closing
+		// Startup/Update/Closing:
 		private bool isStartingUp = true;
 		private bool isSettingControls = false;
 		private ClosingState closingState = ClosingState.None;
 
-		// MDI
+		// MDI:
 		private Form mdiParent;
 
-		// Terminal
+		// Terminal:
 		private Model.Terminal terminal;
 
-		// Monitors
+		// Monitors:
 		private Domain.RepositoryType monitorSelection = Domain.RepositoryType.None;
 
-		// Settings
+		// Settings:
 		private TerminalSettingsRoot settingsRoot;
 		private bool handlingTerminalSettingsIsSuspended = false;
 
@@ -173,16 +178,6 @@ namespace YAT.Gui.Forms
 		private bool IsClosing
 		{
 			get { return (this.closingState != ClosingState.None); }
-		}
-
-		private bool IsClosingFromForm
-		{
-			get { return (this.closingState == ClosingState.IsClosingFromForm); }
-		}
-
-		private bool IsClosingFromModel
-		{
-			get { return (this.closingState == ClosingState.IsClosingFromModel); }
 		}
 
 		#endregion
@@ -352,31 +347,24 @@ namespace YAT.Gui.Forms
 		/// <remarks>
 		/// Attention:
 		/// In case of MDI parent/application closing, this FormClosing event is called before
-		/// the FormClosing event of the MDI parent. Therefore, this MDI child has to handle
-		/// such events differently, i.e. auto save the terminal but only in case of non-user
-		/// closing.
+		/// the FormClosing event of the MDI parent. Therefore, this MDI child only has to handle
+		/// this event in case of a user triggered form close request.
 		/// </remarks>
 		private void Terminal_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			// Prevent multiple calls to Close().
-			if (!IsClosingFromModel)
+			if (this.closingState == ClosingState.None)
 			{
 				this.closingState = ClosingState.IsClosingFromForm;
 
 				if (e.CloseReason == CloseReason.UserClosing)
 				{
 					e.Cancel = (!this.terminal.Close());
-				}
-				else
-				{
-					bool tryAutoSave = ApplicationSettings.LocalUser.General.AutoSaveWorkspace;
-					Forms.Main m = this.mdiParent as Forms.Main;
-					Model.Workspace w = m.UnderlyingWorkspace;
-					e.Cancel = (!this.terminal.Close(true, w.TryTerminalAutoSaveIsDesired(tryAutoSave, this.terminal)));
-				}
 
-				if (e.Cancel)
-					this.closingState = ClosingState.None;
+					// Revert closing state in case of cancel.
+					if (e.Cancel)
+						this.closingState = ClosingState.None;
+				}
 			}
 		}
 
@@ -2751,7 +2739,7 @@ namespace YAT.Gui.Forms
 		private void terminal_Closed(object sender, Model.ClosedEventArgs e)
 		{
 			// Prevent multiple calls to Close().
-			if (!IsClosingFromForm)
+			if (this.closingState == ClosingState.None)
 			{
 				this.closingState = ClosingState.IsClosingFromModel;
 				Close();
