@@ -77,9 +77,10 @@ Important changes:
 - Product version added to header of each source code file (feature request #3418320)
 
 Fixed bugs:
-- Exception when selecting an undefined predefined commands using 'Shift + Fx' fixed (bug #3367649)
 - YAT no longer asks twice whether to save (bug #3121250)
    > Only applied in case of 'File > Preferences... > Save current workspace automatically' = 'No'
+- Exception when selecting an undefined predefined commands using 'Shift + Fx' fixed (bug #3367649)
+- Exception due to invalid panel layout (splitter distance) is now handled (bug #3426400)
 
 Limitations and known issues:
 - MDI limitations of .NET
