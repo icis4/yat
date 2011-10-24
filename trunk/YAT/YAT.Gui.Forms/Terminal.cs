@@ -1757,7 +1757,7 @@ namespace YAT.Gui.Forms
 					else
 						widthOrHeight = splitContainer_TxMonitor.Height;
 
-					splitContainer_TxMonitor.SplitterDistance = Int32Ex.LimitToBounds((int)(this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight, 0, widthOrHeight));
+					splitContainer_TxMonitor.SplitterDistance = Int32Ex.LimitToBounds((int)(this.settingsRoot.Layout.TxMonitorSplitterRatio * widthOrHeight), 0, widthOrHeight);
 				}
 			}
 			else
@@ -1807,13 +1807,13 @@ namespace YAT.Gui.Forms
 			{
 				int height = 97;
 				splitContainer_Terminal.Panel2MinSize = height;
-				splitContainer_Terminal.SplitterDistance = Int32Ex.LimitToBounds(splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth, 0, height);
+				splitContainer_Terminal.SplitterDistance = Int32Ex.LimitToBounds(splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth, 0, splitContainer_Terminal.Height);
 			}
 			else if (this.settingsRoot.Layout.SendCommandPanelIsVisible || this.settingsRoot.Layout.SendFilePanelIsVisible)
 			{
 				int height = 48;
 				splitContainer_Terminal.Panel2MinSize = height;
-				splitContainer_Terminal.SplitterDistance = Int32Ex.LimitToBounds(splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth, 0, height);
+				splitContainer_Terminal.SplitterDistance = Int32Ex.LimitToBounds(splitContainer_Terminal.Height - height - splitContainer_Terminal.SplitterWidth, 0, splitContainer_Terminal.Height);
 			}
 
 			send.CommandPanelIsVisible = this.settingsRoot.Layout.SendCommandPanelIsVisible;
