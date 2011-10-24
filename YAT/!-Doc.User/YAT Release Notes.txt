@@ -81,6 +81,7 @@ Fixed bugs:
    > Only applied in case of 'File > Preferences... > Save current workspace automatically' = 'No'
 - Exception when selecting an undefined predefined commands using 'Shift + Fx' fixed (bug #3367649)
 - Exception due to invalid panel layout (splitter distance) is now handled (bug #3426400)
+- Error message in case of an error when opening a port or socket improved (bug #2213639)
 
 Limitations and known issues:
 - MDI limitations of .NET

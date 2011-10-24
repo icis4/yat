@@ -1498,9 +1498,9 @@ namespace YAT.Model
 
 				string ioText;
 				if (this.settingsRoot.IOType == Domain.IOType.SerialPort)
-					ioText = "Port";
+					ioText = "port";
 				else
-					ioText = "Socket";
+					ioText = "socket";
 
 				OnMessageInputRequest
 					(
@@ -1508,7 +1508,7 @@ namespace YAT.Model
 					"System error message:" + Environment.NewLine +
 					ex.Message + Environment.NewLine + Environment.NewLine +
 					"YAT hint:" + Environment.NewLine +
-					ioText + " could already be in use.",
+					"Check the settings of the " + ioText + " and make sure it is not already in use.",
 					"Terminal Error",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Error
