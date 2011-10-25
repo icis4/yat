@@ -34,13 +34,6 @@ using System.Text;
 namespace MKY.IO.Serial
 {
 	/// <summary></summary>
-	public enum IORequest
-	{
-		Open,
-		Close,
-	}
-
-	/// <summary></summary>
 	public enum IOErrorSeverity
 	{
 		Acceptable,

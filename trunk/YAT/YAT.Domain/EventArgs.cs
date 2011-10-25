@@ -32,20 +32,6 @@ using System.Text;
 namespace YAT.Domain
 {
 	/// <summary></summary>
-	public class IORequestEventArgs : EventArgs
-	{
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-		public readonly IORequest Request;
-
-		/// <summary></summary>
-		public IORequestEventArgs(IORequest request)
-		{
-			Request = request;
-		}
-	}
-
-	/// <summary></summary>
 	public class IOErrorEventArgs : EventArgs
 	{
 		/// <summary></summary>

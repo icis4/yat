@@ -62,11 +62,6 @@ namespace MKY.IO.Serial
 		event EventHandler DataSent;
 
 		/// <summary>
-		/// Fired to request an operation.
-		/// </summary>
-		event EventHandler<IORequestEventArgs> IORequest;
-
-		/// <summary>
 		/// Fired after an I/O error has occured.
 		/// </summary>
 		event EventHandler<IOErrorEventArgs> IOError;

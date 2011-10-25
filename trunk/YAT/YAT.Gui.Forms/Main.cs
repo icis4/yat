@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -38,6 +43,8 @@ using MKY.Windows.Forms;
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
+
+#endregion
 
 namespace YAT.Gui.Forms
 {
@@ -406,7 +413,7 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void toolStripMenuItem_MainMenu_Window_SetChildMenuItems()
 		{
-			// Not needed yet: isSettingControls = true;
+			this.isSettingControls = true;
 
 			bool childIsReady = (ActiveMdiChild != null);
 			toolStripMenuItem_MainMenu_Window_Cascade.Enabled = childIsReady;
@@ -414,7 +421,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_MainMenu_Window_TileVertical.Enabled = childIsReady;
 			toolStripMenuItem_MainMenu_Window_ArrangeIcons.Enabled = childIsReady;
 
-			// Not needed yet: isSettingControls = false;
+			this.isSettingControls = false;
 
 #if (FALSE)
 			// \fixme:
@@ -663,12 +670,12 @@ namespace YAT.Gui.Forms
 		{
 			ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll();
 
-			// Not needed yet: isSettingControls = true;
+			this.isSettingControls = true;
 
 			bool recentsAreReady = (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count > 0);
 			toolStripMenuItem_MainContextMenu_File_Recent.Enabled = recentsAreReady;
 
-			// Not needed yet: isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		private void contextMenuStrip_Main_Opening(object sender, CancelEventArgs e)
@@ -731,7 +738,7 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void contextMenuStrip_FileRecent_SetRecentMenuItems()
 		{
-			// Not needed yet: isSettingControls = true;
+			this.isSettingControls = true;
 
 			// Hide all.
 			for (int i = 0; i < Model.Settings.RecentFileSettings.MaxFilePaths; i++)
@@ -759,7 +766,7 @@ namespace YAT.Gui.Forms
 				this.menuItems_recents[i].Visible = true;
 			}
 
-			// Not needed yet: isSettingControls = false;
+			this.isSettingControls = false;
 		}
 
 		/// <summary>
@@ -1434,8 +1441,10 @@ namespace YAT.Gui.Forms
 		private void SetMainControls()
 		{
 			this.isSettingControls = true;
+
 			toolStripStatusLabel_MainStatus_TerminalInfo.Visible = ApplicationSettings.LocalUser.MainWindow.ShowTerminalInfo;
 			toolStripStatusLabel_MainStatus_Chrono.Visible       = ApplicationSettings.LocalUser.MainWindow.ShowChrono;
+
 			this.isSettingControls = false;
 		}
 
@@ -1443,20 +1452,16 @@ namespace YAT.Gui.Forms
 		{
 			toolStripButton_MainTool_SetControls();
 
-			this.isSettingControls = true;
 			toolStripMenuItem_MainMenu_File_SetChildMenuItems();
 			toolStripMenuItem_MainMenu_Window_SetChildMenuItems();
-			this.isSettingControls = false;
 		}
 
 		private void SetRecentControls()
 		{
 			toolStripMenuItem_MainMenu_File_SetRecentMenuItems();
 
-			this.isSettingControls = true;
 			contextMenuStrip_Main_SetRecentMenuItems();
 			contextMenuStrip_FileRecent_SetRecentMenuItems();
-			this.isSettingControls = false;
 		}
 
 		private void SetWorkspaceControls()

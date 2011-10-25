@@ -2510,7 +2510,6 @@ namespace YAT.Gui.Forms
 				this.terminal.IOConnectTimeChanged += new EventHandler<TimeSpanEventArgs>(terminal_IOConnectTimeChanged);
 				this.terminal.IOCountChanged       += new EventHandler(terminal_IOCountChanged);
 				this.terminal.IORateChanged        += new EventHandler(terminal_IORateChanged);
-				this.terminal.IORequest            += new EventHandler<Domain.IORequestEventArgs>(terminal_IORequest);
 				this.terminal.IOError              += new EventHandler<Domain.IOErrorEventArgs>(terminal_IOError);
 
 				this.terminal.DisplayElementsSent     += new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsSent);
@@ -2539,7 +2538,6 @@ namespace YAT.Gui.Forms
 				this.terminal.IOConnectTimeChanged -= new EventHandler<TimeSpanEventArgs>(terminal_IOConnectTimeChanged);
 				this.terminal.IOCountChanged       -= new EventHandler(terminal_IOCountChanged);
 				this.terminal.IORateChanged        -= new EventHandler(terminal_IORateChanged);
-				this.terminal.IORequest            -= new EventHandler<Domain.IORequestEventArgs>(terminal_IORequest);
 				this.terminal.IOError              -= new EventHandler<Domain.IOErrorEventArgs>(terminal_IOError);
 
 				this.terminal.DisplayElementsSent     -= new EventHandler<Domain.DisplayElementsEventArgs>(terminal_DisplayElementsSent);
@@ -2625,24 +2623,6 @@ namespace YAT.Gui.Forms
 			monitor_Bidir.RxLineRateStatus = rxLineRate;
 			monitor_Rx.RxByteRateStatus    = rxByteRate;
 			monitor_Rx.RxLineRateStatus    = rxLineRate;
-		}
-
-		/// <remarks>
-		/// Event is used to invoke I/O start/stop operations on the main thread. This procedure
-		/// fixes the deadlock issue as described in <see cref="MKY.IO.Serial.SerialPort"/>.
-		/// </remarks>
-		private void terminal_IORequest(object sender, Domain.IORequestEventArgs e)
-		{
-			switch (e.Request)
-			{
-				case Domain.IORequest.Start:
-					this.terminal.StartIO();
-					break;
-
-				case Domain.IORequest.Stop:
-					this.terminal.StopIO();
-					break;
-			}
 		}
 
 		private void terminal_IOError(object sender, Domain.IOErrorEventArgs e)

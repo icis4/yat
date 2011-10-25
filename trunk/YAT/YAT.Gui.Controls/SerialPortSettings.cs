@@ -409,21 +409,6 @@ namespace YAT.Gui.Controls
 				comboBox_FlowControl.SelectedIndex = -1;
 			}
 
-			// \fixme:
-			// Auto-reopen doesn't work because of deadlock issue mentioned in SerialPort.
-			if (Enabled)
-			{
-				checkBox_AutoReopen.Visible = false;
-				textBox_AutoReopenInterval.Visible = false;
-				label_AutoReopenIntervalUnit.Visible = false;
-			}
-			else
-			{
-				checkBox_AutoReopen.Visible = false;
-				textBox_AutoReopenInterval.Visible = false;
-				label_AutoReopenIntervalUnit.Visible = false;
-			}
-
 			if (Enabled)
 			{
 				bool autoReopenEnabled = this.autoReopen.Enabled;

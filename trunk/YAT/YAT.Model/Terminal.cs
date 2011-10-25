@@ -149,9 +149,6 @@ namespace YAT.Model
 		public event EventHandler IORateChanged;
 
 		/// <summary></summary>
-		public event EventHandler<Domain.IORequestEventArgs> IORequest;
-
-		/// <summary></summary>
 		public event EventHandler<Domain.IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
@@ -465,11 +462,18 @@ namespace YAT.Model
 							sb.Append(" - ");
 							sb.Append(s.PortId.ToString(true, false));
 							sb.Append(" - ");
-							if (IsOpen)
+							if (IsStarted)
 							{
-								sb.Append("Open");
-								sb.Append(" - ");
-								sb.Append(IsConnected ? "Connected" : "Disconnected");
+								if (IsOpen)
+								{
+									sb.Append("Open");
+									sb.Append(" - ");
+									sb.Append(IsConnected ? "Connected" : "Disconnected"); // Break?
+								}
+								else
+								{
+									sb.Append("Closed - Waiting for reconnect");
+								}
 							}
 							else
 							{
@@ -615,10 +619,17 @@ namespace YAT.Model
 							sb.Append("Serial port ");
 							sb.Append(s.PortId.ToString(true, false));
 							sb.Append(" (" + s.Communication + ") is ");
-							if (IsOpen)
+							if (IsStarted)
 							{
-								sb.Append("open and ");
-								sb.Append(IsConnected ? "connected" : "disconnected");
+								if (IsOpen)
+								{
+									sb.Append("open and ");
+									sb.Append(IsConnected ? "connected" : "disconnected");
+								}
+								else
+								{
+									sb.Append("closed and waiting for reconnect");
+								}
 							}
 							else
 							{
@@ -1249,7 +1260,6 @@ namespace YAT.Model
 			{
 				this.terminal.IOChanged        += new EventHandler(terminal_IOChanged);
 				this.terminal.IOControlChanged += new EventHandler(terminal_IOControlChanged);
-				this.terminal.IORequest        += new EventHandler<Domain.IORequestEventArgs>(terminal_IORequest);
 				this.terminal.IOError          += new EventHandler<Domain.IOErrorEventArgs>(terminal_IOError);
 
 				this.terminal.RawElementSent          += new EventHandler<Domain.RawElementEventArgs>(terminal_RawElementSent);
@@ -1269,7 +1279,6 @@ namespace YAT.Model
 			{
 				this.terminal.IOChanged        -= new EventHandler(terminal_IOChanged);
 				this.terminal.IOControlChanged -= new EventHandler(terminal_IOControlChanged);
-				this.terminal.IORequest        -= new EventHandler<Domain.IORequestEventArgs>(terminal_IORequest);
 				this.terminal.IOError          -= new EventHandler<Domain.IOErrorEventArgs>(terminal_IOError);
 
 				this.terminal.RawElementSent          -= new EventHandler<Domain.RawElementEventArgs>(terminal_RawElementSent);
@@ -1317,11 +1326,6 @@ namespace YAT.Model
 		private void terminal_IOControlChanged(object sender, EventArgs e)
 		{
 			OnIOControlChanged(e);
-		}
-
-		private void terminal_IORequest(object sender, Domain.IORequestEventArgs e)
-		{
-			OnIORequest(e);
 		}
 
 		private void terminal_IOError(object sender, Domain.IOErrorEventArgs e)
@@ -2377,12 +2381,6 @@ namespace YAT.Model
 		protected virtual void OnIORateChanged(EventArgs e)
 		{
 			EventHelper.FireSync(IORateChanged, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnIORequest(Domain.IORequestEventArgs e)
-		{
-			EventHelper.FireSync<Domain.IORequestEventArgs>(IORequest, this, e);
 		}
 
 		/// <summary></summary>

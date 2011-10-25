@@ -56,6 +56,9 @@ New:
 - Serial ports: XOn/XOff state is indicated (feature request #3066635)
    > Applies to 'Software', 'Combined' and 'Manual' flow control
    > XOn/XOff can be manually toggled in case of 'Manual' flow control
+- Serial ports: Auto-reopen implemented (feature request #1960299)
+   > Work-around for .NET deadlock issue in System.IO.SerialPort applied, limitation removed
+   > Also fixes exceptions in case of disconnect (bugs #2981793, #3093159 and #3372435)
 - Byte and line data rate per second added to monitors (feature requests #2846784 and #3274066)
 - Handling of terminal indecies finalized (feature request #3091859)
    > Fixed indecies are persistently saved and restored upon loading the workspace
@@ -87,12 +90,10 @@ Fixed bugs:
 Limitations and known issues:
 - MDI limitations of .NET
    > Issues with frame (bugs #1808492 and #1808493)
-   > Issues with window list (bugs #1808494 and #2846917)
+   > Issues with window list (bugs #1808494, #2846917 and #3160095)
    > Issue with re-routing shortcuts when activating a different MDI child (bug #2996684)
 - Long monitor contents are not displayed properly when scrolling using scroll bar (bug #2865562)
 - Response of multi-line commands or files is delayed (bug #3072919)
-- Serial port auto-reopen not yet implementable due to .NET deadlock issue in System.IO.SerialPort
-  (feature request #1960299)
 - Support for serial ports which are named other than COM isn't supported by .NET
   (feature request #2848228)
 - USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability

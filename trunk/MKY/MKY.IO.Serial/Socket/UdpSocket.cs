@@ -115,9 +115,6 @@ namespace MKY.IO.Serial
 		public event EventHandler DataSent;
 
 		/// <summary></summary>
-		public event EventHandler<IORequestEventArgs> IORequest;
-
-		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
 
 		#endregion
@@ -534,13 +531,6 @@ namespace MKY.IO.Serial
 		protected virtual void OnDataSent(EventArgs e)
 		{
 			EventHelper.FireSync(DataSent, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnIORequest(IORequestEventArgs e)
-		{
-			UnusedEvent.PreventCompilerWarning(IORequest);
-			throw (new NotImplementedException("Event 'IORequest' is not in use for UDP sockets"));
 		}
 
 		/// <summary></summary>
