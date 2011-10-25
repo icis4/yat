@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -33,6 +38,8 @@ using MKY.Windows.Forms;
 
 using YAT.Utilities;
 
+#endregion
+
 namespace YAT.Gui.Forms
 {
 	/// <summary></summary>
@@ -40,15 +47,17 @@ namespace YAT.Gui.Forms
 	public partial class UnhandledException : System.Windows.Forms.Form
 	{
 		private Exception exeption;
-		private bool isAsynchronous;
 		private string originMessage;
+		private bool isAsynchronous;
+
+		private string exceptionText;
 
 		/// <summary></summary>
 		public UnhandledException(Exception exeption, string originMessage, bool isAsynchronous)
 		{
 			InitializeComponent();
 
-			// Set form title
+			// Set form title.
 			StringBuilder sb = new StringBuilder(Application.ProductName);
 			sb.Append(" Unhandled");
 
@@ -62,26 +71,10 @@ namespace YAT.Gui.Forms
 
 			// Set exception information.
 			this.exeption = exeption;
-			this.isAsynchronous = isAsynchronous;
 			this.originMessage = originMessage;
-		}
+			this.isAsynchronous = isAsynchronous;
 
-		private void UnhandledException_Load(object sender, EventArgs e)
-		{
-			textBox_Type.Text    = this.exeption.GetType().ToString();
-			textBox_Message.Text = this.exeption.Message;
-			textBox_Source.Text  = this.exeption.Source;
-			textBox_Stack.Text   = this.exeption.StackTrace;
-		}
-
-		#region Controls Event Handlers
-		//------------------------------------------------------------------------------------------
-		// Controls Event Handlers
-		//------------------------------------------------------------------------------------------
-
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation always succeeds.")]
-		private void button_CopyToClipboard_Click(object sender, EventArgs e)
-		{
+			// Compose exception text.
 			StringWriter text = new StringWriter();
 			try
 			{
@@ -92,17 +85,39 @@ namespace YAT.Gui.Forms
 
 				AnyWriter.WriteException(text, null, this.exeption);
 			}
-			catch
+			catch (Exception ex)
 			{
-				text.Write("Error, unhandled exception data could not be retrieved.");
+				string errorText = "Error, unhandled exception data could not be retrieved.";
+				DebugEx.WriteException(this.GetType(), ex, errorText);
+				text.Write(errorText);
 			}
+			this.exceptionText = text.ToString();
+		}
 
+		private void UnhandledException_Load(object sender, EventArgs e)
+		{
+			textBox_Exception.Text = this.exceptionText;
+
+			// Don't know why it is necessary to manually deselect the text.
+			// DeselectAll() isn't sufficient, settings the properties works.
+			textBox_Exception.SelectionLength = 0;
+			textBox_Exception.SelectionStart = 0;
+		}
+
+		#region Controls Event Handlers
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers
+		//------------------------------------------------------------------------------------------
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Ensure that operation always succeeds.")]
+		private void button_CopyToClipboard_Click(object sender, EventArgs e)
+		{
 			bool retry = false;
 			do
 			{
 				try
 				{
-					Clipboard.SetDataObject(text.ToString(), true);
+					Clipboard.SetDataObject(this.exceptionText, true);
 				}
 				catch (ExternalException)
 				{
