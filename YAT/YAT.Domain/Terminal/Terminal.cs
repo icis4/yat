@@ -78,9 +78,6 @@ namespace YAT.Domain
 		public event EventHandler IOControlChanged;
 
 		/// <summary></summary>
-		public event EventHandler<IORequestEventArgs> IORequest;
-
-		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
@@ -961,7 +958,6 @@ namespace YAT.Domain
 
 			this.rawTerminal.IOChanged          += new EventHandler(rawTerminal_IOChanged);
 			this.rawTerminal.IOControlChanged   += new EventHandler(rawTerminal_IOControlChanged);
-			this.rawTerminal.IORequest          += new EventHandler<IORequestEventArgs>(rawTerminal_IORequest);
 			this.rawTerminal.IOError            += new EventHandler<IOErrorEventArgs>(rawTerminal_IOError);
 
 			this.rawTerminal.RawElementSent     += new EventHandler<RawElementEventArgs>(rawTerminal_RawElementSent);
@@ -984,11 +980,6 @@ namespace YAT.Domain
 		private void rawTerminal_IOControlChanged(object sender, EventArgs e)
 		{
 			OnIOControlChanged(e);
-		}
-
-		private void rawTerminal_IORequest(object sender, IORequestEventArgs e)
-		{
-			OnIORequest(e);
 		}
 
 		private void rawTerminal_IOError(object sender, IOErrorEventArgs e)
@@ -1056,12 +1047,6 @@ namespace YAT.Domain
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			EventHelper.FireSync(IOControlChanged, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnIORequest(IORequestEventArgs e)
-		{
-			EventHelper.FireSync<IORequestEventArgs>(IORequest, this, e);
 		}
 
 		/// <summary></summary>

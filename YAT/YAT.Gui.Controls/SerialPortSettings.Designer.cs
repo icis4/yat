@@ -188,9 +188,9 @@
 			this.checkBox_AutoReopen.AutoSize = true;
 			this.checkBox_AutoReopen.Location = new System.Drawing.Point(3, 192);
 			this.checkBox_AutoReopen.Name = "checkBox_AutoReopen";
-			this.checkBox_AutoReopen.Size = new System.Drawing.Size(235, 17);
+			this.checkBox_AutoReopen.Size = new System.Drawing.Size(237, 17);
 			this.checkBox_AutoReopen.TabIndex = 12;
-			this.checkBox_AutoReopen.Text = "When port is closed, try to reopen port every";
+			this.checkBox_AutoReopen.Text = "When disconnected, try to reopen port every";
 			this.checkBox_AutoReopen.UseVisualStyleBackColor = true;
 			this.checkBox_AutoReopen.CheckedChanged += new System.EventHandler(this.checkBox_AutoReopen_CheckedChanged);
 			// 

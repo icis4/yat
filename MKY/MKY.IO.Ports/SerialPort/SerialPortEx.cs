@@ -173,6 +173,19 @@ namespace MKY.IO.Ports
 			base.PinChanged    += new System.IO.Ports.SerialPinChangedEventHandler(base_PinChanged);
 		}
 
+		/// <remarks>
+		/// This dispose method fixes the deadlock issue described in MKY.IO.Serial.SerialPort.
+		/// </remarks>
+		private void DisposeBaseStream_SerialPortBugFix()
+		{
+			if (this.BaseStream != null)
+			{
+				this.BaseStream.Flush();
+				this.BaseStream.Close();
+				this.BaseStream.Dispose();
+			}
+		}
+
 		#endregion
 
 		#region Properties

@@ -72,9 +72,6 @@ namespace YAT.Domain
 		public event EventHandler IOControlChanged;
 
 		/// <summary></summary>
-		public event EventHandler<IORequestEventArgs> IORequest;
-
-		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
@@ -534,7 +531,6 @@ namespace YAT.Domain
 			this.io.IOChanged        += new EventHandler(io_IOChanged);
 			this.io.IOControlChanged += new EventHandler(io_IOControlChanged);
 			this.io.DataReceived     += new EventHandler(io_DataReceived);
-			this.io.IORequest        += new EventHandler<MKY.IO.Serial.IORequestEventArgs>(io_IORequest);
 			this.io.IOError          += new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(io_IOError);
 		}
 
@@ -543,7 +539,6 @@ namespace YAT.Domain
 			this.io.IOChanged        -= new EventHandler(io_IOChanged);
 			this.io.IOControlChanged -= new EventHandler(io_IOControlChanged);
 			this.io.DataReceived     -= new EventHandler(io_DataReceived);
-			this.io.IORequest        -= new EventHandler<MKY.IO.Serial.IORequestEventArgs>(io_IORequest);
 			this.io.IOError          -= new EventHandler<MKY.IO.Serial.IOErrorEventArgs>(io_IOError);
 			this.io = null;
 		}
@@ -577,11 +572,6 @@ namespace YAT.Domain
 			}
 		}
 
-		private void io_IORequest(object sender, MKY.IO.Serial.IORequestEventArgs e)
-		{
-			OnIORequest(new IORequestEventArgs((IORequest)e.Request));
-		}
-
 		private void io_IOError(object sender, MKY.IO.Serial.IOErrorEventArgs e)
 		{
 			SerialPortIOErrorEventArgs serialPortErrorEventArgs = (e as SerialPortIOErrorEventArgs);
@@ -608,12 +598,6 @@ namespace YAT.Domain
 		protected virtual void OnIOControlChanged(EventArgs e)
 		{
 			EventHelper.FireSync(IOControlChanged, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnIORequest(IORequestEventArgs e)
-		{
-			EventHelper.FireSync<IORequestEventArgs>(IORequest, this, e);
 		}
 
 		/// <summary></summary>

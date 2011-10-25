@@ -24,6 +24,7 @@ namespace MKY.IO.Ports
 				{
 					if (disposing && (components != null))
 					{
+						DisposeBaseStream_SerialPortBugFix();
 						components.Dispose();
 					}
 					this.isDisposed = true;

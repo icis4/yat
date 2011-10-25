@@ -31,16 +31,6 @@ using System.Text;
 namespace YAT.Domain
 {
 	/// <summary></summary>
-	public enum IORequest
-	{
-		/// <summary></summary>
-		Start = MKY.IO.Serial.IORequest.Open,
-
-		/// <summary></summary>
-		Stop = MKY.IO.Serial.IORequest.Close,
-	}
-
-	/// <summary></summary>
 	public enum IOErrorSeverity
 	{
 		/// <summary></summary>

@@ -21,18 +21,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-//==================================================================================================
-// Configuration
-//==================================================================================================
-
-// Choose whether SerialPort should automatically detect and handle live disconnects/reconnects:
-// - Uncomment to enable
-// - Comment out to disable
-//
-// \fixme:
-// Auto-reopen doesn't work because of deadlock issue mentioned below.
-//#define DETECT_BREAKS_AND_TRY_AUTO_REOPEN
-
 #region Using
 //==================================================================================================
 // Using
@@ -62,7 +50,7 @@ namespace MKY.IO.Serial
 	/// work-arounds suggestions.
 	/// 
 	/// ============================================================================================
-	/// Source: http://msdn.microsoft.com/en-us/library/system.io.ports.serialport_methods.aspx
+	/// Source: http://msdn.microsoft.com/en-us/library/system.io.ports.serialport_methods.aspx (3.5)
 	/// Author: Dan Randolph
 	/// 
 	/// There is a deadlock problem with the internal close operation of
@@ -119,12 +107,27 @@ namespace MKY.IO.Serial
 	/// 6. Exit YAT
 	/// 
 	/// ============================================================================================
-	/// Work-arounds tried 2008-05
+	/// (from above)
+	/// 
+	/// Use cases 1 through 3 work fine. But use case 4 results in an exception. Work-arounds tried
+	/// in May 2008:
 	/// - Async close
 	/// - Async DataReceived event
 	/// - Immediate async read
 	/// - Dispatch of all open/close operations onto Windows.Forms main thread using OnRequest event
 	/// - try GC.Collect(Forced) => no exceptions on GC, exception gets fired afterwards
+	/// 
+	/// --------------------------------------------------------------------------------------------
+	/// 
+	/// October 2011:
+	/// Issue fixed by adding the DisposeBaseStream_SerialPortBugFix() to MKY.IO.Ports.SerialPortEx()
+	/// 
+	/// (see below)
+	/// ============================================================================================
+	/// Source: http://msdn.microsoft.com/en-us/library/system.io.ports.serialport_methods.aspx (3.5)
+	/// Author: jmatos1
+	/// 
+	/// I suspect that adding a Dispose() call on the internalSerialStream might be a good change.
 	/// ============================================================================================
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Different root namespace.")]
@@ -189,15 +192,11 @@ namespace MKY.IO.Serial
 		private object outputIsXOnSyncObj = new object();
 
 		/// <summary>
-		/// Alive timer detects port break states, i.e. when a USB to serial converter is disconnected.
+		/// Alive timer detects port disconnects, i.e. when a USB to serial converter is disconnected.
 		/// </summary>
 		private System.Timers.Timer aliveTimer;
-		private System.Timers.Timer reopenTimer;
 
-	#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
-		private bool isInternalStopRequest = false;
-	#endif
-		private ReaderWriterLockSlim isInternalStopRequestLock = new ReaderWriterLockSlim();
+		private System.Timers.Timer reopenTimer;
 
 		#endregion
 
@@ -217,9 +216,6 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		public event EventHandler DataSent;
-
-		/// <summary></summary>
-		public event EventHandler<IORequestEventArgs> IORequest;
 
 		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
@@ -497,20 +493,7 @@ namespace MKY.IO.Serial
 			// AssertNotDisposed() is called by IsStarted.
 
 			if (IsStarted)
-			{
-			#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
-				this.isInternalStopRequestLock.EnterReadLock();
-				bool isInternalStopRequest = this.isInternalStopRequest;
-				this.isInternalStopRequestLock.ExitReadLock();
-
-				if (isInternalStopRequest && this.settings.AutoReopen.Enabled)
-					ClosePortAndStartReopenTimer();
-				else
-					ResetPort();
-			#else
-					ResetPort();
-			#endif
-			}
+				ResetPort();
 		}
 
 		/// <remarks>
@@ -835,7 +818,6 @@ namespace MKY.IO.Serial
 			}
 		}
 
-	#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
 		/// <summary></summary>
 		private void StopOrClosePort()
 		{
@@ -843,27 +825,16 @@ namespace MKY.IO.Serial
 			{
 				StopAndDisposeAliveTimer();
 				CloseAndDisposePort();
-				SetStateAndNotify(PortState.Closed);
+				SetStateSynchronizedAndNotify(State.Closed);
 				OnIOControlChanged(new EventArgs());
 
 				StartReopenTimer();
+				SetStateSynchronizedAndNotify(State.WaitingForReopen);
 			}
 			else
 			{
 				Stop();
 			}
-		}
-	#endif // DETECT_BREAKS_AND_TRY_AUTO_REOPEN
-
-		/// <summary></summary>
-		private void ClosePortAndStartReopenTimer()
-		{
-			StopAndDisposeAliveTimer();
-			StopAndDisposeReopenTimer();
-			CloseAndDisposePort();
-			SetStateSynchronizedAndNotify(State.Closed);
-
-			StartReopenTimer();
 		}
 
 		/// <summary></summary>
@@ -1048,11 +1019,7 @@ namespace MKY.IO.Serial
 			}
 			catch
 			{
-				OnIORequest(new IORequestEventArgs(Serial.IORequest.Close));
-
-			#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
 				StopOrClosePort();
-			#endif
 			}
 		}
 
@@ -1114,12 +1081,6 @@ namespace MKY.IO.Serial
 			}
 		}
 
-#if (FALSE)
-		// \fixme:
-		// Break state detection doesn't work.
-		private bool aliveTimer_BreakState = false;
-#endif
-
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
 		private void aliveTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
@@ -1128,35 +1089,13 @@ namespace MKY.IO.Serial
 				try
 				{
 					// If port isn't open anymore, or access to port throws exception,
-					//   port has been shut down, e.g. USB to serial converter disconnected
+					//   port has been shut down, e.g. USB to serial converter disconnected.
 					if (!this.port.IsOpen)
-					{
-						OnIORequest(new IORequestEventArgs(Serial.IORequest.Close));
-
-					#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
 						StopOrClosePort();
-					#endif
-					}
-#if (FALSE)
-					// \fixme
-					// Break state detection doesn't work.
-					else
-					{
-						// detect break state changes
-						if (this.aliveTimer_BreakState != this.port.BreakState)
-							OnIOChanged(new EventArgs());
-
-						this.aliveTimer_BreakState = this.port.BreakState;
-					}
-#endif
 				}
 				catch
 				{
-					OnIORequest(new IORequestEventArgs(Serial.IORequest.Close));
-
-				#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
 					StopOrClosePort();
-				#endif
 				}
 			}
 			else
@@ -1200,17 +1139,13 @@ namespace MKY.IO.Serial
 			{
 				try
 				{
-					// Try to re-open port
-					OnIORequest(new IORequestEventArgs(Serial.IORequest.Open));
-
-				#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
+					// Try to re-open port.
 					CreateAndOpenPort();
-				#endif
 				}
 				catch
 				{
+					// Re-open failed, cleanup and restart.
 					CloseAndDisposePort();
-					SetStateSynchronizedAndNotify(State.Closed); // Re-open failed, cleanup and restart
 					StartReopenTimer();
 				}
 			}
@@ -1255,21 +1190,6 @@ namespace MKY.IO.Serial
 		protected virtual void OnDataSent(EventArgs e)
 		{
 			EventHelper.FireSync(DataSent, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnIORequest(IORequestEventArgs e)
-		{
-		#if DETECT_BREAKS_AND_TRY_AUTO_REOPEN
-			if (e.Request == Serial.IORequest.Close)
-			{
-				this.isInternalStopRequestLock.EnterWriteLock();
-				this.isInternalStopRequest = true;
-				this.isInternalStopRequestLock.ExitWriteLock();
-			}
-		#endif
-
-			EventHelper.FireSync<IORequestEventArgs>(IORequest, this, e);
 		}
 
 		/// <summary></summary>

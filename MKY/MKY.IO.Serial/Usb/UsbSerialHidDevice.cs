@@ -80,9 +80,6 @@ namespace MKY.IO.Serial
 		public event EventHandler IOControlChanged;
 
 		/// <summary></summary>
-		public event EventHandler<IORequestEventArgs> IORequest;
-
-		/// <summary></summary>
 		public event EventHandler<IOErrorEventArgs> IOError;
 
 		/// <summary></summary>
@@ -478,13 +475,6 @@ namespace MKY.IO.Serial
 		protected virtual void OnDataSent(EventArgs e)
 		{
 			EventHelper.FireSync(DataSent, this, e);
-		}
-
-		/// <summary></summary>
-		protected virtual void OnIORequest(IORequestEventArgs e)
-		{
-			UnusedEvent.PreventCompilerWarning<IORequestEventArgs>(IORequest);
-			throw (new NotImplementedException("Event 'IORequest' is not in use for USB Ser/HID devices"));
 		}
 
 		/// <summary></summary>
