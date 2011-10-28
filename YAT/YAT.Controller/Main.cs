@@ -48,7 +48,7 @@ namespace YAT.Controller
 		// Constants
 		//==========================================================================================
 
-		private static readonly string[] Title =
+		private static readonly string[] Logo =
 		{
 			ApplicationInfo.ProductNameLong + ".",
 			"Operate and debug serial communications.",
@@ -68,67 +68,16 @@ namespace YAT.Controller
 			ApplicationInfo.ProductNameAndBuildNameAndVersion,
 		};
 
-		private static readonly string[] FileOptions =
-		{
-			"Usage:         ",
-			"  YAT[.exe] [<WorkspaceSettings>.yaw|<TerminalSettings>.yat]",
-			"               ",
-			"Usage examples:",
-			"  YAT MyWorkspace.yaw",
-			"               Start YAT and open given workspace settings.",
-			"  YAT MyTerminal.yat",
-			"               Start YAT and open given terminal settings.",
-		};
-
-		private static readonly string[] AdvancedOptions =
-		{
-			"Advanced usage:",
-			"  YAT[.exe] [/r] [/t[n] file]",
-			"               ",
-			"  /r           ",
-			"  -r           Open most recent file according to file list.",
-			"               ",
-			"  /t[n] file   ",
-			"  -t[n] file   Automatically transmit the given file on terminal n.",
-			"               ",
-			"  /?           ",
-			"  -?           ",
-			"  -h           ",
-			"  --help       Display this help text",
-			"               ",
-			"Advanced usage examples:",
-			"  YAT /r       Start YAT and open most recent file.",
-		};
-
-		private static readonly string[] RecentArg =
-		{
-			"/r",
-			"-r",
-		};
-
-		private static readonly string[] TransmitArg =
-		{
-			"/t",
-			"-t",
-		};
-
-		private static readonly string[] HelpArg =
-		{
-			"/?",
-			"-?",
-			"-h",
-			"--help",
-		};
-
 		private static readonly string[] Return =
 		{
 			"Return codes:",
-			"   0           Successful exit",
-			"  -1           Command line argument error",
-			"  -2           Application settings error",
-			"  -3           Application start error",
-			"  -4           Application exit error",
-			"  -5           Unhandled exception",
+			"",
+			"   0      Successful exit",
+			"  -1      Command line argument error",
+			"  -2      Application settings error",
+			"  -3      Application start error",
+			"  -4      Application exit error",
+			"  -5      Unhandled exception",
 		};
 
 		#endregion
@@ -140,12 +89,9 @@ namespace YAT.Controller
 
 		private bool isDisposed;
 
-		// Command line.
-		private bool commandLineError;
-		private bool commandLineHelpIsRequested;
-
 		// Command line options.
-		private Model.CommandLineOptions commandLineOptions = new Model.CommandLineOptions();
+		private string[] commandLineArgs;
+		private CommandLineArgs commandLineOptions;
 
 		#endregion
 
@@ -162,9 +108,7 @@ namespace YAT.Controller
 		/// <summary></summary>
 		public Main(string[] commandLineArgs)
 		{
-			// Parse command line args if there are any.
-			if (commandLineArgs.Length > 0)
-				this.commandLineError = (!ParseCommandLineArgs(commandLineArgs));
+			this.commandLineArgs = commandLineArgs;
 		}
 
 		#region Disposal
@@ -222,15 +166,15 @@ namespace YAT.Controller
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual bool CommandLineError
+		public virtual bool CommandLineIsInvalid
 		{
-			get { return (this.commandLineError); }
+			get { return (this.commandLineOptions.IsInvalid); }
 		}
 
 		/// <summary></summary>
 		public virtual bool CommandLineHelpIsRequested
 		{
-			get { return (this.commandLineHelpIsRequested); }
+			get { return (this.commandLineOptions.HelpIsRequested); }
 		}
 
 		/// <summary></summary>
@@ -240,9 +184,9 @@ namespace YAT.Controller
 		}
 
 		/// <summary></summary>
-		public virtual int RequestedTerminalId
+		public virtual int RequestedSequentialTerminalIndex
 		{
-			get { return (this.commandLineOptions.RequestedTerminalId); }
+			get { return (this.commandLineOptions.RequestedSequentialTerminalIndex); }
 		}
 
 		/// <summary></summary>
@@ -267,23 +211,33 @@ namespace YAT.Controller
 		/// <summary></summary>
 		public virtual MainResult Run(bool runWithView)
 		{
+			bool showLogo = true;
+			bool showHelp = false;
 			MainResult mainResult = MainResult.Success;
 
+			// Process command line argumens
+			this.commandLineOptions = new CommandLineArgs(this.commandLineArgs);
+			if (this.commandLineOptions.IsInvalid)
+			{
+				showHelp = true;
+				mainResult = MainResult.CommandLineArgsError;
+			}
+			else
+			{
+				showLogo = this.commandLineOptions.ShowLogo;
+				showHelp = this.commandLineOptions.HelpIsRequested;
+			}
+
 			// Handle command line arguments that result in a command line output.
-			if (this.commandLineHelpIsRequested || this.commandLineError)
+			if (showHelp)
 			{
 				MKY.Win32.Console.Attach();
 
-				if (this.commandLineHelpIsRequested) // Show command line help if requested.
-				{
-					WriteHelp();
-					mainResult = MainResult.Success;
-				}
-				else // includes this.commandLineError // Show command line help in case of error.
-				{
-					WriteHelp();
-					mainResult = MainResult.CommandLineArgsError;
-				}
+				if (showLogo)
+					WriteLogoToConsole();
+
+				WriteHelpToConsole();
+				WriteReturnToConsole();
 
 				MKY.Win32.Console.Detach();
 				return (mainResult);
@@ -294,6 +248,13 @@ namespace YAT.Controller
 			else
 				return (RunWithoutView());
 		}
+
+		#endregion
+
+		#region Private Methods
+		//==========================================================================================
+		// Private Methods
+		//==========================================================================================
 
 		/// <summary></summary>
 		private MainResult RunWithView()
@@ -400,159 +361,34 @@ namespace YAT.Controller
 		}
 #endif
 
-		#endregion
-
-		#region Command Line Args
-		//==========================================================================================
-		// Command Line Args
-		//==========================================================================================
-
-		private bool ParseCommandLineArgs(string[] commandLineArgs)
+		private void WriteLogoToConsole()
 		{
-			int argsParsed = 0;
-			int argsParsedTotal = 0;
+			Console.WriteLine();
+			Console.WriteLine();
+			Console.WriteLine("===============================================================================");
+			Console.WriteLine();
 
-			if ((argsParsed = ParseArgsForHelp(commandLineArgs)) < 0)     return (false); else argsParsedTotal += argsParsed;
-			if ((argsParsed = ParseArgsForFile(commandLineArgs)) < 0)     return (false); else argsParsedTotal += argsParsed;
-			if ((argsParsed = ParseArgsForRecent(commandLineArgs)) < 0)   return (false); else argsParsedTotal += argsParsed;
-			if ((argsParsed = ParseArgsForTransmit(commandLineArgs)) < 0) return (false); else argsParsedTotal += argsParsed;
+			foreach (string line in Logo)
+				Console.WriteLine(line);
 
-			if (argsParsedTotal != commandLineArgs.Length)
-				return (false);
-
-			return (CheckParsedArgsForConsistency());
+			Console.WriteLine();
+			Console.WriteLine("-------------------------------------------------------------------------------");
+			Console.WriteLine();
 		}
 
-		// Write help text onto console.
-		private static void WriteHelp()
+		private void WriteHelpToConsole()
+		{
+			Console.Write(this.commandLineOptions.GetHelpText());
+		}
+
+		private void WriteReturnToConsole()
 		{
 			Console.WriteLine();
-			Console.WriteLine();
-
-			foreach (string line in Title)
-				Console.WriteLine(line);
-			Console.WriteLine();
-
-			foreach (string line in FileOptions)
-				Console.WriteLine(line);
-			Console.WriteLine();
-
-			foreach (string line in AdvancedOptions)
-				Console.WriteLine(line);
-			Console.WriteLine();
-
 			foreach (string line in Return)
 				Console.WriteLine(line);
+
 			Console.WriteLine();
-		}
-
-		// Parse args for help.
-		private int ParseArgsForHelp(string[] commandLineArgs)
-		{
-			int argsParsed = 0;
-			foreach (string arg in commandLineArgs)
-			{
-				// Check for help args.
-				foreach (string helpArg in HelpArg)
-				{
-					if (StringEx.EqualsOrdinalIgnoreCase(arg, helpArg))
-					{
-						this.commandLineHelpIsRequested = true;
-						argsParsed++;
-					}
-				}
-			}
-			return (argsParsed);
-		}
-
-		// Parse args for file.
-		private int ParseArgsForFile(string[] commandLineArgs)
-		{
-			int argsParsed = 0;
-			foreach (string arg in commandLineArgs)
-			{
-				// Check for file args.
-				string filePath = arg.Trim('"');
-				if (File.Exists(filePath))
-				{
-					// Check for workspace file args.
-					if (ExtensionSettings.IsWorkspaceFile(Path.GetExtension(filePath)))
-					{
-						// Trim optional quotes around file path.
-						this.commandLineOptions.RequestedFilePath = filePath;
-						argsParsed++;
-					}
-
-					// Check for terminal file args.
-					if (ExtensionSettings.IsTerminalFile(Path.GetExtension(filePath)))
-					{
-						// Trim optional quotes around file path.
-						this.commandLineOptions.RequestedFilePath = filePath;
-						argsParsed++;
-					}
-				}
-			}
-			return (argsParsed);
-		}
-
-		// Parse args for recent.
-		private int ParseArgsForRecent(string[] commandLineArgs)
-		{
-			int argsParsed = 0;
-			foreach (string arg in commandLineArgs)
-			{
-				foreach (string recentArg in RecentArg)
-				{
-					if (StringEx.EqualsOrdinalIgnoreCase(arg, recentArg))
-					{
-						ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll();
-						bool recentsReady = (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count > 0);
-						if (recentsReady)
-						{
-							this.commandLineOptions.RequestedFilePath = ApplicationSettings.LocalUser.RecentFiles.FilePaths[0].Item;
-							argsParsed++;
-						}
-					}
-				}
-			}
-			return (argsParsed);
-		}
-
-		// Parse args for transmit.
-		private int ParseArgsForTransmit(string[] commandLineArgs)
-		{
-			int argsParsed = 0;
-			foreach (string arg in commandLineArgs)
-			{
-				foreach (string transmitArg in TransmitArg)
-				{
-					if ((arg.Length >= 2) && (StringEx.EqualsOrdinalIgnoreCase(arg.Substring(0, 2), transmitArg)))
-					{
-						int terminalId;
-						if ((arg.Length) >= 3 && (int.TryParse(arg.Substring(2, 1), out terminalId)))
-							this.commandLineOptions.RequestedTerminalId = terminalId;
-
-						string[] subargs = arg.Split(' ');
-						if (subargs.Length >= 2)
-						{
-							// Trim optional quotes around file path.
-							string filePath = subargs[1].Trim('"');
-							if (File.Exists(filePath))
-								this.commandLineOptions.RequestedTransmitFilePath = filePath;
-						}
-
-						argsParsed++;
-					}
-				}
-			}
-			return (argsParsed);
-		}
-
-		// Check whether parsed command line args are consistent.
-		private static bool CheckParsedArgsForConsistency()
-		{
-			// Nothing to check yet, always return <c>true</c>.
-			return (true);
+			Console.WriteLine("===============================================================================");
 		}
 
 		#endregion

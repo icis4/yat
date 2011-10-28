@@ -49,6 +49,7 @@
     <Compile Include="..\YAT.Version.cs">
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
+    <Compile Include="CommandLineArgs.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="MainResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

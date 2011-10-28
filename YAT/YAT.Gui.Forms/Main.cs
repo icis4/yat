@@ -905,7 +905,7 @@ namespace YAT.Gui.Forms
 			if ((this.main.CommandLineOptions != null) && !string.IsNullOrEmpty(this.main.CommandLineOptions.RequestedTransmitFilePath))
 			{
 				string filePath = this.main.CommandLineOptions.RequestedTransmitFilePath;
-				int id = this.main.CommandLineOptions.RequestedTerminalId;
+				int id = this.main.CommandLineOptions.RequestedSequentialTerminalIndex;
 
 				if (this.workspace.Terminals.Length > id)
 				{
