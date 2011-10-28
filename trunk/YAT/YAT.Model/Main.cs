@@ -69,7 +69,7 @@ namespace YAT.Model
 
 		private Guid guid;
 
-		private CommandLineOptions commandLineOptions;
+		private CommandLineArgs commandLineOptions;
 
 		private Workspace workspace;
 
@@ -117,13 +117,12 @@ namespace YAT.Model
 		/// <summary></summary>
 		public Main(string requestedFilePath)
 		{
-			this.commandLineOptions = new CommandLineOptions();
-			this.commandLineOptions.RequestedFilePath = requestedFilePath;
+			this.commandLineOptions = new CommandLineArgs(new string[] { requestedFilePath });
 			Initialize();
 		}
 
 		/// <summary></summary>
-		public Main(CommandLineOptions commandLineOptions)
+		public Main(CommandLineArgs commandLineOptions)
 		{
 			this.commandLineOptions = commandLineOptions;
 			Initialize();
@@ -210,7 +209,7 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual CommandLineOptions CommandLineOptions
+		public virtual CommandLineArgs CommandLineOptions
 		{
 			get
 			{

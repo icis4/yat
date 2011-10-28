@@ -196,6 +196,56 @@ namespace MKY
 			}
 			return (l.ToArray());
 		}
+
+		/// <summary>
+		/// Splits "str" into chunks of "desiredChunkSize" taking word boundaries into account.
+		/// </summary>
+		public static string[] SplitLexically(string str, int desiredChunkSize)
+		{
+			List<int> spaces = new List<int>();
+
+			// Retrieve all spaces within the string:
+			int i = 0;
+			while ((i = str.IndexOf(' ', i)) >= 0)
+			{
+				spaces.Add(i);
+				i++;
+			}
+
+			// Add an extra space at the end of the string to ensure that the last chunk is splitted properly:
+			spaces.Add(str.Length);
+
+			// Split the string into the desired chunk size taking word boundaries into account:
+			int startIndex = 0;
+			List<string> chunks = new List<string>();
+			while (startIndex < str.Length)
+			{
+				// Find the furthermost split position:
+				Predicate<int> p = new Predicate<int>(value => (value <= (startIndex + desiredChunkSize)));
+				int spaceIndex = spaces.FindLastIndex(p);
+				
+				int splitIndex;
+				if (spaceIndex >= 0)
+					splitIndex = spaces[spaceIndex];
+				else
+					splitIndex = (startIndex + desiredChunkSize);
+
+				// Limit to split within the string and execute the split:
+				splitIndex = Int32Ex.LimitToBounds(splitIndex, startIndex, str.Length);
+				int length = (splitIndex - startIndex);
+				chunks.Add(str.Substring(startIndex, length));
+				startIndex += length;
+
+				// Remove the already used spaces from the collection to ensure those spaces are not used again:
+				if (spaceIndex >= 0)
+				{
+					spaces.RemoveRange(0, (spaceIndex + 1));
+					startIndex++; // Advance an extra character to compensate the space.
+				}
+			}
+
+			return (chunks.ToArray());
+		}
 	}
 }
 

@@ -762,7 +762,7 @@ namespace YAT.Model.Test
 			// - Close first main, then second
 			//   => 2 auto workspaces with 1 normal terminal each
 			using (Main main1 = new Main(this.normalTerminal1FilePath),
-				        main2 = new Main(this.normalTerminal2FilePath))
+			            main2 = new Main(this.normalTerminal2FilePath))
 			{
 				uc = "UC8: ";
 

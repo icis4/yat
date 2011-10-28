@@ -31,7 +31,7 @@ using NUnit.Framework;
 namespace MKY.Test.Types
 {
 	/// <summary></summary>
-	public static class StringExTestData
+	public static class IndexOfOutsideDoubleQuotesTestData
 	{
 		#region Test Cases
 		//==========================================================================================
@@ -65,6 +65,29 @@ namespace MKY.Test.Types
 	}
 
 	/// <summary></summary>
+	public static class SplitLexicallyTestData
+	{
+		#region Test Cases
+		//==========================================================================================
+		// Test Cases
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static IEnumerable TestCases
+		{
+			get
+			{
+				yield return (new TestCaseData("a bb ccc dddd eeeee", 10, new string[] { "a bb ccc", "dddd eeeee" }));
+				yield return (new TestCaseData("a bb ccc dddd eeeee",  5, new string[] { "a bb", "ccc", "dddd", "eeeee" }));
+				yield return (new TestCaseData("a bb ccc dddd eeeee",  4, new string[] { "a bb", "ccc", "dddd", "eeee", "e" }));
+				yield return (new TestCaseData("a bb ccc dddd eeeee",  3, new string[] { "a", "bb", "ccc", "ddd", "d", "eee", "ee" }));
+			}
+		}
+
+		#endregion
+	}
+
+	/// <summary></summary>
 	[TestFixture]
 	public class StringExTest
 	{
@@ -79,11 +102,33 @@ namespace MKY.Test.Types
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
-		[Test, TestCaseSource(typeof(StringExTestData), "TestCases")]
+		[Test, TestCaseSource(typeof(IndexOfOutsideDoubleQuotesTestData), "TestCases")]
 		public virtual void TestIndexOfOutsideDoubleQuotes(string testString, string outString, int outIndex, string inString, int inIndex)
 		{
 			int index = StringEx.IndexOfOutsideDoubleQuotes(testString, outString, StringComparison.InvariantCultureIgnoreCase);
 			Assert.AreEqual(outIndex, index);
+		}
+
+		#endregion
+
+		#region Tests > SplitLexically()
+		//------------------------------------------------------------------------------------------
+		// Tests > SplitLexically()
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(SplitLexicallyTestData), "TestCases")]
+		public virtual void TestSplitLexically(string testString, int desiredChunkSize, string[] expectedChunks)
+		{
+			string[] actualChunks = StringEx.SplitLexically(testString, desiredChunkSize);
+			
+			Assert.AreEqual(expectedChunks.Length, actualChunks.Length, "Number of chunks mismatch");
+
+			for (int i = 0; i < expectedChunks.Length; i++)
+			{
+				Assert.AreEqual(expectedChunks[i].Length, actualChunks[i].Length, "Length of chunks mismatch");
+				Assert.AreEqual(expectedChunks[i], actualChunks[i], "Contents of chunks mismatch");
+			}
 		}
 
 		#endregion

@@ -59,6 +59,7 @@ New:
 - Serial ports: Auto-reopen implemented (feature request #1960299)
    > Work-around for .NET deadlock issue in System.IO.SerialPort applied, limitation removed
    > Also fixes exceptions in case of disconnect (bugs #2981793, #3093159 and #3372435)
+   > Useful for USB Ser/CDC connections such as USB to serial converters or other Ser/CDC devices
 - Byte and line data rate per second added to monitors (feature requests #2846784 and #3274066)
 - Handling of terminal indecies finalized (feature request #3091859)
    > Fixed indecies are persistently saved and restored upon loading the workspace
@@ -72,11 +73,13 @@ Important changes:
 - Shortcut for window layout added: Alt-C/H/V layouts cascaded/horizontal/vertical
 - Behavior of concurrent instances of YAT verified (feature request #2842713)
    > Already seems to work fine, test case added and successfully passed, limitation removed
+- Command line handling refactored, use of NUnit command line infrastructure
+  (feature request #2991946, also fixes feature request #2745211)
 - MKY.Data added
 - MKY.Settings.Settings renamed to MKY.Settings.SettingsItem
 - MKY.IO and MKY.IO.Net added to prepare refactoring of MKY.IO.Serial (feature request #3388950)
 - Update to NUnit 2.5.10
-- "_<Data|Doc|Test>" renamed to "!-<Data|Doc|Test>"
+- "_<Base|Data|Doc|Test>" renamed to "!-<Base|Data|Doc|Test>"
 - Product version added to header of each source code file (feature request #3418320)
 
 Fixed bugs:

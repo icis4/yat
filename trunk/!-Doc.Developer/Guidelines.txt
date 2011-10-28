@@ -81,6 +81,10 @@ Inheritance
 - Implement TryParse() and Parse()
 - Use and TryParse() instead of Parse()
 
+Do not use extension methods <Method> (this…) as they could lead to future incompatibilities
+if the additional methods are supported by a future version of .NET with same parameters but
+differing functionality.
+
 
 Dispose
 -------

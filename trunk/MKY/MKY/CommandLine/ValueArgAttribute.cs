@@ -8,42 +8,41 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 1 Development Version 1.99.27
+// MKY Development Version 1.0.6
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
 // ------------------------------------------------------------------------------------------------
-// Copyright © 2003-2004 HSR Hochschule für Technik Rapperswil.
-// Copyright © 2003-2011 Matthias Kläy.
+// Copyright © 2010-2011 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
-// YAT is licensed under the GNU LGPL.
+// This source code is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using System;
 
-namespace YAT.Model
+namespace MKY.CommandLine
 {
-	/// <summary></summary>
-	public class CommandLineOptions
+	/// <summary>
+	/// Attribute to mark a value argument.
+	/// </summary>
+	/// <remarks>
+	/// This class is based on the NUnit command line infrastructure.
+	/// See <see cref="ArgsHandler"/> for details.
+	/// </remarks>
+	[AttributeUsage(AttributeTargets.Field)]
+	public class ValueArgAttribute : Attribute
 	{
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Temporary solution until more sophisticated command line options are implemented.")]
-		public string RequestedFilePath;
+		private string description;
 
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Temporary solution until more sophisticated command line options are implemented.")]
-		public int RequestedTerminalId;
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Temporary solution until more sophisticated command line options are implemented.")]
-		public string RequestedTransmitFilePath;
-
-		/// <summary></summary>
-		public CommandLineOptions()
+		/// <summary>
+		/// Gets or sets the description.
+		/// </summary>
+		public string Description
 		{
+			get { return (this.description); }
+			set { this.description = value;  }
 		}
 	}
 }

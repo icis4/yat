@@ -21,12 +21,19 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System.Diagnostics.CodeAnalysis;
 
 using NUnit;
 using NUnit.Framework;
 
 using YAT.Settings.Application;
+
+#endregion
 
 namespace YAT.Controller.Test
 {
@@ -168,7 +175,7 @@ namespace YAT.Controller.Test
 		{
 			using (Controller.Main main = new Main(EmptyArgs))
 			{
-				Assert.IsFalse(main.CommandLineError);
+				Assert.IsFalse(main.CommandLineIsInvalid);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
 			}
 		}
@@ -186,7 +193,7 @@ namespace YAT.Controller.Test
 		{
 			using (Controller.Main main = new Main(TerminalArgs))
 			{
-				Assert.IsFalse(main.CommandLineError);
+				Assert.IsFalse(main.CommandLineIsInvalid);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
 				StringAssert.AreEqualIgnoringCase(TerminalArgs[0], main.RequestedFilePath, "Invalid requested terminal settings file path!");
 			}
@@ -205,7 +212,7 @@ namespace YAT.Controller.Test
 		{
 			using (Controller.Main main = new Main(WorkspaceArgs))
 			{
-				Assert.IsFalse(main.CommandLineError);
+				Assert.IsFalse(main.CommandLineIsInvalid);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
 				StringAssert.AreEqualIgnoringCase(WorkspaceArgs[0], main.RequestedFilePath, "Invalid requested workspace settings file path!");
 			}

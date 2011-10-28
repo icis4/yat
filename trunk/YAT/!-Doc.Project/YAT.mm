@@ -191,6 +191,10 @@
 <node CREATED="1293644146228" ID="Freemind_Link_975390689" MODIFIED="1293644149873" TEXT="MKY">
 <node CREATED="1293644150749" ID="Freemind_Link_289823187" MODIFIED="1293644177761" TEXT="EventHelper: Refactor UnhandledEvent"/>
 </node>
+<node CREATED="1319663092263" ID="Freemind_Link_1078433878" MODIFIED="1319663100051" TEXT="CommandLine">
+<node CREATED="1319663141564" ID="Freemind_Link_238224752" MODIFIED="1319663146393" TEXT="Improve CommandLine"/>
+<node CREATED="1319663101764" ID="Freemind_Link_134438230" MODIFIED="1319663129625" TEXT="Consider &lt;RCR&gt;\Logger\sw\win32\RoboScope\RoboScope\Utilities\CmdLine.cs"/>
+</node>
 </node>
 <node CREATED="1293642556772" ID="Freemind_Link_978153231" MODIFIED="1293642559097" POSITION="left" TEXT="Hosting">
 <node CREATED="1293642603781" ID="Freemind_Link_403076306" MODIFIED="1293642632345" TEXT="Delete old releases only if SF requests to do so">
