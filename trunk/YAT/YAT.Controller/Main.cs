@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -31,6 +36,8 @@ using MKY.Event;
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Utilities;
+
+#endregion
 
 namespace YAT.Controller
 {
@@ -90,8 +97,8 @@ namespace YAT.Controller
 		private bool isDisposed;
 
 		// Command line options.
-		private string[] commandLineArgs;
-		private CommandLineArgs commandLineOptions;
+		private string[] commandLineArgsStrings;
+		private CommandLineArgs commandLineArgs;
 
 		#endregion
 
@@ -103,12 +110,19 @@ namespace YAT.Controller
 		/// <summary></summary>
 		public Main()
 		{
+			Initialize(null);
 		}
 
 		/// <summary></summary>
-		public Main(string[] commandLineArgs)
+		public Main(string[] commandLineArgsStrings)
 		{
-			this.commandLineArgs = commandLineArgs;
+			Initialize(commandLineArgsStrings);
+		}
+
+		private void Initialize(string[] commandLineArgsStrings)
+		{
+			this.commandLineArgsStrings = commandLineArgsStrings;
+			this.commandLineArgs = new CommandLineArgs(this.commandLineArgsStrings);
 		}
 
 		#region Disposal
@@ -165,34 +179,49 @@ namespace YAT.Controller
 		// Properties
 		//==========================================================================================
 
+		// Intentionally don't directly return the args strings or object. The requested operation
+		// could also be requested by some other means than the command line, e.g. by a config file.
+
 		/// <summary></summary>
-		public virtual bool CommandLineIsInvalid
+		public virtual bool CommandLineIsValid
 		{
-			get { return (this.commandLineOptions.IsInvalid); }
+			get { return (this.commandLineArgs.IsValid); }
 		}
 
 		/// <summary></summary>
 		public virtual bool CommandLineHelpIsRequested
 		{
-			get { return (this.commandLineOptions.HelpIsRequested); }
+			get { return (this.commandLineArgs.HelpIsRequested); }
+		}
+
+		/// <summary></summary>
+		public virtual bool CommandLineLogoIsRequested
+		{
+			get { return (!this.commandLineArgs.NoLogo); }
 		}
 
 		/// <summary></summary>
 		public virtual string RequestedFilePath
 		{
-			get { return (this.commandLineOptions.RequestedFilePath); }
+			get { return (this.commandLineArgs.RequestedFilePath); }
+		}
+
+		/// <summary></summary>
+		public virtual bool MostRecentIsRequested
+		{
+			get { return (this.commandLineArgs.MostRecentIsRequested); }
 		}
 
 		/// <summary></summary>
 		public virtual int RequestedSequentialTerminalIndex
 		{
-			get { return (this.commandLineOptions.RequestedSequentialTerminalIndex); }
+			get { return (this.commandLineArgs.RequestedSequentialTerminalIndex); }
 		}
 
 		/// <summary></summary>
 		public virtual string RequestedTransmitFilePath
 		{
-			get { return (this.commandLineOptions.RequestedTransmitFilePath); }
+			get { return (this.commandLineArgs.RequestedTransmitFilePath); }
 		}
 
 		#endregion
@@ -215,17 +244,16 @@ namespace YAT.Controller
 			bool showHelp = false;
 			MainResult mainResult = MainResult.Success;
 
-			// Process command line argumens
-			this.commandLineOptions = new CommandLineArgs(this.commandLineArgs);
-			if (this.commandLineOptions.IsInvalid)
+			// Check command line arguments.
+			if (!this.commandLineArgs.IsValid)
 			{
 				showHelp = true;
 				mainResult = MainResult.CommandLineArgsError;
 			}
 			else
 			{
-				showLogo = this.commandLineOptions.ShowLogo;
-				showHelp = this.commandLineOptions.HelpIsRequested;
+				showLogo = this.commandLineArgs.ShowLogo;
+				showHelp = this.commandLineArgs.HelpIsRequested;
 			}
 
 			// Handle command line arguments that result in a command line output.
@@ -262,7 +290,7 @@ namespace YAT.Controller
 			MainResult mainResult = MainResult.Success;
 
 			// Create model and view and run application.
-			using (Model.Main model = new Model.Main(this.commandLineOptions))
+			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
 				Application.EnableVisualStyles();
 				Application.SetCompatibleTextRenderingDefault(false);
@@ -320,7 +348,7 @@ namespace YAT.Controller
 			MainResult mainResult = MainResult.Success;
 
 			// Create model and run application.
-			using (Model.Main model = new Model.Main(this.commandLineOptions))
+			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
 				MKY.Win32.Console.Attach();
 #if (!DEBUG)
@@ -378,7 +406,7 @@ namespace YAT.Controller
 
 		private void WriteHelpToConsole()
 		{
-			Console.Write(this.commandLineOptions.GetHelpText());
+			Console.Write(this.commandLineArgs.GetHelpText());
 		}
 
 		private void WriteReturnToConsole()

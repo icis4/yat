@@ -100,7 +100,7 @@ namespace MKY.Time
 
 		/// <summary></summary>
 		public Rate()
-			: this (100, 1000, 5000)
+			: this(100, 1000, 5000)
 		{
 		}
 

@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System.Collections;
 using System.Collections.Generic;
 
@@ -28,8 +33,15 @@ using NUnit.Framework;
 
 using YAT.Settings.Terminal;
 
+#endregion
+
 namespace YAT.Model.Test
 {
+	#region TransmissionType
+	//==========================================================================================
+	// TransmissionType
+	//==========================================================================================
+
 	/// <summary></summary>
 	public enum TransmissionType
 	{
@@ -46,6 +58,8 @@ namespace YAT.Model.Test
 
 		// USB Ser/HID not possible since YAT only implements the host side.
 	}
+
+	#endregion
 
 	/// <summary></summary>
 	public static class TransmissionTestData
