@@ -212,7 +212,7 @@ namespace MKY
 				i++;
 			}
 
-			// Add an extra space at the end of the string to ensure that the last chunk is splitted properly:
+			// Add an extra space at the end of the string to ensure that the last chunk is split properly:
 			spaces.Add(str.Length);
 
 			// Split the string into the desired chunk size taking word boundaries into account:

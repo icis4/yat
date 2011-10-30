@@ -133,7 +133,7 @@ namespace MKY.Xml
 
 		/// <summary></summary>
 		public AlternateTolerantXmlSerializer(Type type, AlternateXmlElement[] alternates)
-			: base (type)
+			: base(type)
 		{
 			this.alternates = alternates;
 		}

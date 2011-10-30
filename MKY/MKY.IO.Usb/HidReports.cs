@@ -157,7 +157,7 @@ namespace MKY.IO.Usb
 		}
 
 		/// <summary>
-		/// Create the report(s) from given data. The data is splitted into chunks that match the
+		/// Create the report(s) from given data. The data is split into chunks that match the
 		/// size of the device's reported output report capabilities.
 		/// </summary>
 		public void CreateReportsFromData(byte reportId, byte[] data)

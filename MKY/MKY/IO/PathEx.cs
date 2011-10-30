@@ -653,7 +653,7 @@ namespace MKY.IO
 
 		/// <summary>Creates a directory info compare result structure.</summary>
 		public PathCompareResult(bool haveCommon)
-			: this (haveCommon, "")
+			: this(haveCommon, "")
 		{
 		}
 
@@ -672,7 +672,7 @@ namespace MKY.IO
 
 		/// <summary>Creates a directory info compare result structure.</summary>
 		public PathCompareResult(string commonPath, int commonDirectoryCount, int relativeDirectoryCount, string relativePath)
-			: this (commonPath, commonDirectoryCount, relativeDirectoryCount, false, 0, relativePath)
+			: this(commonPath, commonDirectoryCount, relativeDirectoryCount, false, 0, relativePath)
 		{
 		}
 

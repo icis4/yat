@@ -83,11 +83,13 @@ namespace MKY.CommandLine
 
 		/// <summary></summary>
 		public const int MinorIndent =  2;
+
 		/// <summary></summary>
 		public const int MajorIndent = 10;
 
 		/// <summary></summary>
 		public readonly string MinorIndentSpace = new string(' ', MinorIndent);
+
 		/// <summary></summary>
 		public readonly string MajorIndentSpace = new string(' ', MajorIndent);
 
@@ -131,40 +133,42 @@ namespace MKY.CommandLine
 		private void Initialize(string[] args)
 		{
 			this.args = args;
-
-			for (int i = 0; i < args.Length; i++)
+			if (this.args != null)
 			{
-				int pos;
-				if (IsOption(args[i], out pos))
+				for (int i = 0; i < this.args.Length; i++)
 				{
-					// Prepare next argument:
-					string nextArg = null;
-					if ((i + 1) < args.Length)
-						nextArg = args[i + 1];
-
-					// Store option argument:
-					bool nextArgHasBeenConsumedToo = false;
-					if (InitializeOption(args[i].Substring(pos), nextArg, ref nextArgHasBeenConsumedToo))
+					int pos;
+					if (IsOption(this.args[i], out pos))
 					{
-						if (!nextArgHasBeenConsumedToo)
-							this.optionArgs.Add(args[i]);
+						// Prepare next argument:
+						string nextArg = null;
+						if ((i + 1) < this.args.Length)
+							nextArg = this.args[i + 1];
+
+						// Store option argument:
+						bool nextArgHasBeenConsumedToo = false;
+						if (InitializeOption(this.args[i].Substring(pos), nextArg, ref nextArgHasBeenConsumedToo))
+						{
+							if (!nextArgHasBeenConsumedToo)
+								this.optionArgs.Add(this.args[i]);
+							else
+								this.optionArgs.Add(this.args[i] + " " + nextArg);
+						}
 						else
-							this.optionArgs.Add(args[i] + " " + nextArg);
+						{
+							this.invalidArgs.Add(this.args[i]);
+						}
+
+						if (nextArgHasBeenConsumedToo)
+							i++; // Advance index.
 					}
 					else
 					{
-						this.invalidArgs.Add(args[i]);
+						if (InitializeValue(this.args[i], this.valueArgs.Count))
+							this.valueArgs.Add(this.args[i]);
+						else
+							this.invalidArgs.Add(this.args[i]);
 					}
-
-					if (nextArgHasBeenConsumedToo)
-						i++; // Advance index.
-				}
-				else
-				{
-					if (InitializeValue(args[i], this.valueArgs.Count))
-						this.valueArgs.Add(args[i]);
-					else
-						this.invalidArgs.Add(args[i]);
 				}
 			}
 		}
@@ -175,6 +179,14 @@ namespace MKY.CommandLine
 		//==========================================================================================
 		// Properties
 		//==========================================================================================
+
+		/// <summary>
+		/// Gets a value indicating whether this instance is invalid.
+		/// </summary>
+		public bool IsValid
+		{
+			get { return (this.invalidArgs.Count <= 0); }
+		}
 
 		/// <summary>
 		/// Gets the total argument count.
@@ -214,14 +226,6 @@ namespace MKY.CommandLine
 		public int OptionArgsCount
 		{
 			get { return (this.optionArgs.Count); }
-		}
-
-		/// <summary>
-		/// Gets a value indicating whether this instance is invalid.
-		/// </summary>
-		public bool IsInvalid
-		{
-			get { return (this.invalidArgs.Count > 0); }
 		}
 
 		/// <summary>
@@ -329,39 +333,30 @@ namespace MKY.CommandLine
 		/// </summary>
 		protected virtual bool IsOption(string arg, out int pos)
 		{
-			if (arg.Length < 2)
+			int checkPos = 0;
+
+			if      (arg.StartsWith("--"))
+				checkPos = 2;
+			else if (arg.StartsWith("-"))
+				checkPos = 1;
+			else if (arg.StartsWith("/") && AllowForwardSlash)
+				checkPos = 1;
+
+			if (checkPos > 0)
 			{
-				pos = 0;
-				return (false);
-			}
-			else if (arg.Length == 2)
-			{
-				char[] c = arg.ToCharArray();
-				if (((c[0] == '-') || ((c[0] == '/') && AllowForwardSlash)) && IsOptionNameChar(c[1]))
+				char[] chars = arg.ToCharArray();
+				if (checkPos <= (chars.Length - 1))
 				{
-					pos = 1;
-					return (true);
-				}
-				else
-				{
-					pos = 0;
-					return (false);
-				}
-			}
-			else // arg.Length > 2
-			{
-				char[] c = arg.ToCharArray(0, 3);
-				if ((c[0] == '-') && (c[1] == '-') && IsOptionNameChar(c[2]))
-				{
-					pos = 2;
-					return (true);
-				}
-				else
-				{
-					pos = 0;
-					return (false);
+					if (IsOptionNameChar(chars[checkPos]))
+					{
+						pos = checkPos;
+						return (true);
+					}
 				}
 			}
+
+			pos = 0;
+			return (false);
 		}
 
 		/// <summary>
@@ -377,23 +372,20 @@ namespace MKY.CommandLine
 
 				string optionStr;
 				string valueStr;
-				bool isSingleArgOption = SplitOptionAndValue(optionArgWithoutIndicator, out optionStr, out valueStr);
+				bool hasSuccessfullyBeenSplit = SplitOptionAndValue(optionArgWithoutIndicator, out optionStr, out valueStr);
 
-				if (!isSingleArgOption)
+				// Successful split means
+				//   "-o=value" or
+				//   "-o:value".
+				// Not successful split means
+				//   "-o value" or
+				//   "-o" without value, i.e. boolean option.
+				if (!hasSuccessfullyBeenSplit)
 					optionStr = optionArgWithoutIndicator;
 
 				FieldInfo field = GetMemberField(optionStr);
 				if (field != null)
 				{
-					if (!isSingleArgOption)
-					{
-						if (string.IsNullOrEmpty(nextArg))
-							return (false);
-
-						valueStr = nextArg;
-						nextArgHasBeenConsumedToo = true;
-					}
-
 					object value;
 					if (field.FieldType == typeof(bool))
 					{
@@ -402,6 +394,17 @@ namespace MKY.CommandLine
 					}
 					else
 					{
+						// Get value from next argument if needed.
+						if (!hasSuccessfullyBeenSplit)
+						{
+							if (string.IsNullOrEmpty(nextArg))
+								return (false);
+
+							valueStr = nextArg;
+							nextArgHasBeenConsumedToo = true;
+						}
+
+						// Process value.
 						if (string.IsNullOrEmpty(valueStr))
 							return (false);
 

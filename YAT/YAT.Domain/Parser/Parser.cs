@@ -673,7 +673,7 @@ namespace YAT.Domain.Parser
 
 			/// <summary></summary>
 			public NumericState(int parseChar)
-				: this ()
+				: this()
 			{
 				this.numericWriter.Write((char)parseChar);
 			}
