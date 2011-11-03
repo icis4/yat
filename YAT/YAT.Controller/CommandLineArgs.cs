@@ -71,7 +71,7 @@ namespace YAT.Controller
 		/// <summary>
 		/// Gets the help text.
 		/// </summary>
-		public override string GetHelpText()
+		public override string GetHelpText(int maxWidth)
 		{
 			StringBuilder helpText = new StringBuilder();
 
@@ -92,7 +92,7 @@ namespace YAT.Controller
 			helpText.AppendLine(MajorIndentSpace +           "Start YAT and open most recent file.");
 			helpText.AppendLine();
 
-			helpText.Append(base.GetHelpText());
+			helpText.Append(base.GetHelpText(maxWidth));
 
 			return (helpText.ToString());
 		}
