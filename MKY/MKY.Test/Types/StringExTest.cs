@@ -81,6 +81,15 @@ namespace MKY.Test.Types
 				yield return (new TestCaseData("a bb ccc dddd eeeee",  5, new string[] { "a bb", "ccc", "dddd", "eeeee" }));
 				yield return (new TestCaseData("a bb ccc dddd eeeee",  4, new string[] { "a bb", "ccc", "dddd", "eeee", "e" }));
 				yield return (new TestCaseData("a bb ccc dddd eeeee",  3, new string[] { "a", "bb", "ccc", "ddd", "d", "eee", "ee" }));
+
+				yield return (new TestCaseData("1", 4, new string[] { "1" }));
+				yield return (new TestCaseData("1" + Environment.NewLine + "123456", 4, new string[] { "1", "1234", "56" }));
+				yield return (new TestCaseData("1" + Environment.NewLine + "123456" + Environment.NewLine + "78", 4, new string[] { "1", "1234", "56", "78" }));
+
+				yield return (new TestCaseData("1234\n1234",   4, new string[] { "1234", "1234" }));
+				yield return (new TestCaseData("1234\r1234",   4, new string[] { "1234", "1234" }));
+				yield return (new TestCaseData("1234\n\r1234", 4, new string[] { "1234", "1234" }));
+				yield return (new TestCaseData("1234" + Environment.NewLine + "1234", 4, new string[] { "1234", "1234" }));
 			}
 		}
 

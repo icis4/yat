@@ -533,7 +533,8 @@ namespace MKY.CommandLine
 		public virtual string GetHelpText()
 		{
 			// 80 is the default console width. Cannot retrieve the effective console width here
-			// because Console.WindowWidth throws an exception.
+			// because Console.WindowWidth throws an exception. Therefore implemented as a 'magic
+			// number'.
 			return (GetHelpText(80));
 		}
 
@@ -542,11 +543,17 @@ namespace MKY.CommandLine
 		/// </summary>
 		public virtual string GetHelpText(int maxWidth)
 		{
+			// Must be reduced to ensure that lines that exactly match the number of characters
+			// do not lead to an empty line (due to the NewLine which is added).
+			maxWidth--;
+			int width = 0;
+
 			StringBuilder helpText = new StringBuilder();
 
 			Type t = this.GetType();
 			FieldInfo[] fields = t.GetFields(BindingFlags.Instance | BindingFlags.Public);
 
+			helpText.AppendLine();
 			helpText.AppendLine("Arguments:");
 			helpText.AppendLine();
 			foreach (FieldInfo field in fields)
@@ -555,8 +562,8 @@ namespace MKY.CommandLine
 				{
 					if (!string.IsNullOrEmpty(att.Description))
 					{
-						int max = (maxWidth - MajorIndent);
-						foreach (string line in StringEx.SplitLexically(att.Description, max))
+						width = (maxWidth - MajorIndent);
+						foreach (string line in StringEx.SplitLexically(att.Description, width))
 							helpText.AppendLine(MinorIndentSpace + line);
 
 						helpText.AppendLine();
@@ -564,14 +571,15 @@ namespace MKY.CommandLine
 				}
 			}
 
+			helpText.AppendLine();
 			helpText.AppendLine("Options:");
 			helpText.AppendLine();
 			foreach (FieldInfo field in fields)
 			{
 				string valueTypeString;
-				if      (field.FieldType == typeof(string)) valueTypeString = "=STR";
-				else if (field.FieldType != typeof(bool))   valueTypeString = "=VAL";
-				else                                        valueTypeString = "";
+				if      (field.FieldType == typeof(bool)) valueTypeString = "";
+				else if (field.FieldType.IsPrimitive)     valueTypeString = "=VAL";
+				else                                      valueTypeString = "=STR";
 
 				foreach (OptionArgAttribute att in field.GetCustomAttributes(typeof(OptionArgAttribute), true))
 				{
@@ -634,8 +642,8 @@ namespace MKY.CommandLine
 					// Next line(s) = Description:
 					if (!string.IsNullOrEmpty(att.Description))
 					{
-						int max = (maxWidth - MajorIndent);
-						foreach (string line in StringEx.SplitLexically(att.Description, max))
+						width = (maxWidth - MajorIndent);
+						foreach (string line in StringEx.SplitLexically(att.Description, width))
 							helpText.AppendLine(MajorIndentSpace + line);
 					}
 
@@ -643,8 +651,9 @@ namespace MKY.CommandLine
 				}
 			}
 
-			string note = "Options that take values may use an equal sign, a colon or a space to separate the option from its value.";
-			foreach (string line in StringEx.SplitLexically(note, maxWidth))
+			width = (maxWidth - MinorIndent);
+			string note = "Options that take values may use an equal sign '=', a colon ':' or a space ' ' to separate the option from its value.";
+			foreach (string line in StringEx.SplitLexically(note, width))
 				helpText.AppendLine(MinorIndentSpace + line);
 			
 			return (helpText.ToString());

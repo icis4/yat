@@ -90,6 +90,19 @@ namespace MKY
 		}
 
 		/// <summary>
+		/// Compares wether the first <see cref="System.String"/> object matches any <see cref="System.String"/> object of the given array.
+		/// </summary>
+		public static bool EqualsAnyOrdinalIgnoreCase(string strA, string[] strB)
+		{
+			foreach (string str in strB)
+			{
+				if (EqualsOrdinalIgnoreCase(strA, str))
+					return (true);
+			}
+			return (false);
+		}
+
+		/// <summary>
 		/// Truncates "truncateString" to the "length" leftmost characters.
 		/// </summary>
 		public static string Left(string truncateString, int length)
@@ -201,6 +214,17 @@ namespace MKY
 		/// Splits "str" into chunks of "desiredChunkSize" taking word boundaries into account.
 		/// </summary>
 		public static string[] SplitLexically(string str, int desiredChunkSize)
+		{
+			List<string> chunks = new List<string>();
+			string[] newLineSeparators = new string[] { Environment.NewLine, "\n", "\r" };
+
+			foreach (string paragraph in str.Split(newLineSeparators, StringSplitOptions.None))
+				chunks.AddRange(SplitLexicallyWithoutTakingNewLineIntoAccount(paragraph, desiredChunkSize));
+
+			return (chunks.ToArray());
+		}
+
+		private static string[] SplitLexicallyWithoutTakingNewLineIntoAccount(string str, int desiredChunkSize)
 		{
 			List<int> spaces = new List<int>();
 
