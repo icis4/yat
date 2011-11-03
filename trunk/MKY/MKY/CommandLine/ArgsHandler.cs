@@ -530,17 +530,6 @@ namespace MKY.CommandLine
 		/// <summary>
 		/// Gets the help text.
 		/// </summary>
-		public virtual string GetHelpText()
-		{
-			// 80 is the default console width. Cannot retrieve the effective console width here
-			// because Console.WindowWidth throws an exception. Therefore implemented as a 'magic
-			// number'.
-			return (GetHelpText(80));
-		}
-
-		/// <summary>
-		/// Gets the help text.
-		/// </summary>
 		public virtual string GetHelpText(int maxWidth)
 		{
 			// Must be reduced to ensure that lines that exactly match the number of characters

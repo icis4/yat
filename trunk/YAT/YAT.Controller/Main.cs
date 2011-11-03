@@ -80,11 +80,12 @@ namespace YAT.Controller
 			"Return values:",
 			"",
 			"   0      Successful exit",
-			"  -1      Command line argument error",
+			"  -1      Command line error",
 			"  -2      Application settings error",
 			"  -3      Application start error",
-			"  -4      Application exit error",
-			"  -5      Unhandled exception",
+			"  -4      Application run error",
+			"  -5      Application exit error",
+			"  -6      Unhandled exception",
 		};
 
 		#endregion
@@ -389,26 +390,41 @@ namespace YAT.Controller
 		}
 #endif
 
+		/// <remarks>
+		/// Output must be limited to <see cref="Console.WindowWidth"/> - 1 to ensure that lines
+		/// that exactly match the number of characters do not lead to an empty line (due to the
+		/// NewLine which is added).
+		/// </remarks>
 		private void WriteLogoToConsole()
 		{
 			Console.WriteLine();
 			Console.WriteLine();
-			Console.WriteLine("===============================================================================");
+			Console.WriteLine(new String('=', (Console.WindowWidth - 1))); // ==========...
 			Console.WriteLine();
 
 			foreach (string line in Logo)
 				Console.WriteLine(line);
 
 			Console.WriteLine();
-			Console.WriteLine("-------------------------------------------------------------------------------");
+			Console.WriteLine(new String('-', (Console.WindowWidth - 1))); // ----------...
 			Console.WriteLine();
 		}
 
+		/// <remarks>
+		/// Output must be limited to <see cref="Console.WindowWidth"/> - 1 to ensure that lines
+		/// that exactly match the number of characters do not lead to an empty line (due to the
+		/// NewLine which is added).
+		/// </remarks>
 		private void WriteHelpToConsole()
 		{
-			Console.Write(this.commandLineArgs.GetHelpText());
+			Console.Write(this.commandLineArgs.GetHelpText(Console.WindowWidth - 1));
 		}
 
+		/// <remarks>
+		/// Output must be limited to <see cref="Console.WindowWidth"/> - 1 to ensure that lines
+		/// that exactly match the number of characters do not lead to an empty line (due to the
+		/// NewLine which is added).
+		/// </remarks>
 		private void WriteReturnToConsole()
 		{
 			Console.WriteLine();
@@ -417,7 +433,7 @@ namespace YAT.Controller
 				Console.WriteLine(line);
 
 			Console.WriteLine();
-			Console.WriteLine("===============================================================================");
+			Console.WriteLine(new String('=', (Console.WindowWidth - 1))); // ==========...
 		}
 
 		#endregion
