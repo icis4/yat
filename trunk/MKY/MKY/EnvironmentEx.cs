@@ -30,6 +30,12 @@ namespace MKY
 	public static class EnvironmentEx
 	{
 		/// <summary>
+		/// Constant string to use 'NewLine' in places where <see cref="Environment.NewLine"/>
+		/// cannot be used, e.g. in case of attribute arguments.
+		/// </summary>
+		public const string NewLineConstWorkaround = "\n";
+
+		/// <summary>
 		/// Returns <c>true</c> if operating system is Win32 or Win64 or compatible.
 		/// </summary>
 		/// <returns></returns>

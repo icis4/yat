@@ -63,13 +63,25 @@ namespace YAT.Domain
 	{
 		#region String Definitions
 
-		private const string Unknown_string       = "Unknown";
-		private const string SerialPort_string    = "Serial Port (COM)";
-		private const string TcpClient_string     = "TCP/IP Client";
-		private const string TcpServer_string     = "TCP/IP Server";
-		private const string TcpAutoSocket_string = "TCP/IP AutoSocket";
-		private const string Udp_string           = "UDP/IP Socket";
-		private const string UsbSerialHid_string  = "USB Ser/HID";
+		private const string Unknown_string            = "Unknown";
+
+		private const string SerialPort_string         = "Serial Port (COM)";
+		private const string SerialPort_stringShort    = "COM";
+
+		private const string TcpClient_string          = "TCP/IP Client";
+		private const string TcpClient_stringShort     = "TCPClient";
+
+		private const string TcpServer_string          = "TCP/IP Server";
+		private const string TcpServer_stringShort     = "TCPServer";
+
+		private const string TcpAutoSocket_string      = "TCP/IP AutoSocket";
+		private const string TcpAutoSocket_stringShort = "TCPAutoSocket";
+
+		private const string Udp_string                = "UDP/IP Socket";
+		private const string Udp_stringShort           = "UDP";
+
+		private const string UsbSerialHid_string       = "USB Ser/HID";
+		private const string UsbSerialHid_stringShort  = "USBSerHID";
 
 		#endregion
 
@@ -137,32 +149,38 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public static bool TryParse(string type, out IOTypeEx result)
 		{
-			if      (StringEx.EqualsOrdinalIgnoreCase(type, SerialPort_string))
+			if      (StringEx.EqualsOrdinalIgnoreCase(type, SerialPort_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(type, SerialPort_stringShort))
 			{
 				result = new IOTypeEx(IOType.SerialPort);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(type, TcpClient_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(type, TcpClient_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(type, TcpClient_stringShort))
 			{
 				result = new IOTypeEx(IOType.TcpClient);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(type, TcpServer_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(type, TcpServer_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(type, TcpServer_stringShort))
 			{
 				result = new IOTypeEx(IOType.TcpServer);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(type, TcpAutoSocket_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(type, TcpAutoSocket_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(type, TcpAutoSocket_stringShort))
 			{
 				result = new IOTypeEx(IOType.TcpAutoSocket);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(type, Udp_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(type, Udp_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(type, Udp_stringShort))
 			{
 				result = new IOTypeEx(IOType.Udp);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(type, UsbSerialHid_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(type, UsbSerialHid_string) ||
+					 StringEx.EqualsOrdinalIgnoreCase(type, UsbSerialHid_stringShort))
 			{
 				result = new IOTypeEx(IOType.UsbSerialHid);
 				return (true);

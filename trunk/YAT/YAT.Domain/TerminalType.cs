@@ -53,8 +53,11 @@ namespace YAT.Domain
 	{
 		#region String Definitions
 
-		private const string Text_string = "Text";
-		private const string Binary_string = "Binary";
+		private const string Text_string      = "Text";
+		private const string Text_stringShort = "T";
+
+		private const string Binary_string      = "Binary";
+		private const string Binary_stringShort = "B";
 
 		#endregion
 
@@ -114,12 +117,14 @@ namespace YAT.Domain
 		/// <summary></summary>
 		public static bool TryParse(string type, out TerminalTypeEx result)
 		{
-			if      (StringEx.EqualsOrdinalIgnoreCase(type, Text_string))
+			if      (StringEx.EqualsOrdinalIgnoreCase(type, Text_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(type, Text_stringShort))
 			{
 				result = new TerminalTypeEx(TerminalType.Text);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(type, Binary_string))
+			else if (StringEx.EqualsOrdinalIgnoreCase(type, Binary_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase(type, Binary_stringShort))
 			{
 				result = new TerminalTypeEx(TerminalType.Binary);
 				return (true);

@@ -77,7 +77,7 @@ namespace YAT.Controller
 
 		private static readonly string[] Return =
 		{
-			"Return codes:",
+			"Return values:",
 			"",
 			"   0      Successful exit",
 			"  -1      Command line argument error",
@@ -411,6 +411,7 @@ namespace YAT.Controller
 
 		private void WriteReturnToConsole()
 		{
+			Console.WriteLine();
 			Console.WriteLine();
 			foreach (string line in Return)
 				Console.WriteLine(line);

@@ -44,13 +44,13 @@ namespace YAT.Controller
 	{
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
-		[OptionArg(Name = "NoLogo", ShortName = "nl", Description = "Do not display title and copyright")]
+		[OptionArg(Name = "NoLogo", ShortName = "nl", Description = "Do not display title and copyright.")]
 		[CLSCompliant(false)]
 		public bool NoLogo;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
-		[OptionArg(Name = "Help", ShortNames = new string[] { "h", "?" }, Description = "Display this help text")]
+		[OptionArg(Name = "Help", ShortNames = new string[] { "h", "?" }, Description = "Display this help text.")]
 		[CLSCompliant(false)]
 		public bool HelpIsRequested;
 
@@ -78,6 +78,7 @@ namespace YAT.Controller
 			helpText.AppendLine(                   "Usage:");
 			helpText.AppendLine();
 			helpText.AppendLine(MinorIndentSpace +   "YAT[.exe] [<Workspace>.yaw|<Terminal>.yat] [<Options>]");
+			helpText.AppendLine();
 			helpText.AppendLine();
 			helpText.AppendLine(                   "Usage examples:");
 			helpText.AppendLine();

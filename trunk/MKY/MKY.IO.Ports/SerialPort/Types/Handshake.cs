@@ -37,14 +37,20 @@ namespace MKY.IO.Ports
 	{
 		#region String Definitions
 
-		private const string None_string = "None";
-		private const string None_stringShort = "None";
-		private const string RtsCts_string = "Hardware (RTS/CTS)";
-		private const string RtsCts_stringShort = "RTS/CTS";
-		private const string XOnXOff_string = "Software (XOn/XOff)";
-		private const string XOnXOff_stringShort = "XOn/XOff";
-		private const string RtsCtsXOnXOff_string = "Combined (RTS/CTS and XOn/XOff)";
-		private const string RtsCtsXOnXOff_stringShort = "RTS/CTS + XOn/XOff";
+		private const string             None_string = "None";
+		private static readonly string[] None_stringAlternatives = new string[] { "N" };
+
+		private const string             RtsCts_string = "Hardware (RTS/CTS)";
+		private const string             RtsCts_stringShort = "RTS/CTS";
+		private static readonly string[] RtsCts_stringAlternatives = new string[] { "Hardware", "Hard", "HW", "H" };
+
+		private const string             XOnXOff_string = "Software (XOn/XOff)";
+		private const string             XOnXOff_stringShort = "XOn/XOff";
+		private static readonly string[] XOnXOff_stringAlternatives = new string[] { "Software", "Soft", "SW", "S" };
+
+		private const string             RtsCtsXOnXOff_string = "Combined (RTS/CTS and XOn/XOff)";
+		private const string             RtsCtsXOnXOff_stringShort = "RTS/CTS + XOn/XOff";
+		private static readonly string[] RtsCtsXOnXOff_stringAlternatives = new string[] { "Combined", "Combi", "C" };
 
 		#endregion
 
@@ -80,7 +86,7 @@ namespace MKY.IO.Ports
 		{
 			switch ((Handshake)UnderlyingEnum)
 			{
-				case Handshake.None:                 return (None_stringShort);
+				case Handshake.None:                 return (None_string);
 				case Handshake.RequestToSend:        return (RtsCts_stringShort);
 				case Handshake.XOnXOff:              return (XOnXOff_stringShort);
 				case Handshake.RequestToSendXOnXOff: return (RtsCtsXOnXOff_stringShort);
@@ -121,26 +127,29 @@ namespace MKY.IO.Ports
 		/// <summary></summary>
 		public static bool TryParse(string handshake, out HandshakeEx result)
 		{
-			if      (StringEx.EqualsOrdinalIgnoreCase(handshake, None_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(handshake, None_stringShort))
+			if      (StringEx.EqualsOrdinalIgnoreCase   (handshake, None_string) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(handshake, None_stringAlternatives))
 			{
 				result = new HandshakeEx(Handshake.None);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(handshake, RtsCts_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(handshake, RtsCts_stringShort))
+			else if (StringEx.EqualsOrdinalIgnoreCase   (handshake, RtsCts_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase   (handshake, RtsCts_stringShort) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(handshake, RtsCts_stringAlternatives))
 			{
 				result = new HandshakeEx(Handshake.RequestToSend);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(handshake, XOnXOff_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(handshake, XOnXOff_stringShort))
+			else if (StringEx.EqualsOrdinalIgnoreCase   (handshake, XOnXOff_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase   (handshake, XOnXOff_stringShort) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(handshake, XOnXOff_stringAlternatives))
 			{
 				result = new HandshakeEx(Handshake.XOnXOff);
 				return (true);
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(handshake, RtsCtsXOnXOff_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(handshake, RtsCtsXOnXOff_stringShort))
+			else if (StringEx.EqualsOrdinalIgnoreCase   (handshake, RtsCtsXOnXOff_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase   (handshake, RtsCtsXOnXOff_stringShort) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(handshake, RtsCtsXOnXOff_stringAlternatives))
 			{
 				result = new HandshakeEx(Handshake.RequestToSendXOnXOff);
 				return (true);

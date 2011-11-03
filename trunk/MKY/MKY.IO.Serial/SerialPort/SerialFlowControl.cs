@@ -61,10 +61,13 @@ namespace MKY.IO.Serial
 	{
 		#region String Definitions
 
-		private const string Manual_string = "Manual";
-		private const string Manual_stringShort = "Manual";
-		private const string RS485_string = "RS-485 Transceiver Control";
-		private const string RS485_stringShort = "RS-485";
+		private const string             Manual_string = "Manual";
+		private const string             Manual_stringShort = "Manual";
+		private static readonly string[] Manual_stringAlternatives = new string[] { "M" };
+
+		private const string             RS485_string = "RS-485 Transceiver Control";
+		private const string             RS485_stringShort = "RS-485";
+		private static readonly string[] RS485_stringAlternatives = new string[] { "RS485", "485" };
 
 		#endregion
 
@@ -128,13 +131,15 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public static new SerialFlowControlEx Parse(string flowControl)
 		{
-			if      (StringEx.EqualsOrdinalIgnoreCase(flowControl, Manual_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(flowControl, Manual_stringShort))
+			if      (StringEx.EqualsOrdinalIgnoreCase   (flowControl, Manual_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase   (flowControl, Manual_stringShort) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(flowControl, Manual_stringAlternatives))
 			{
 				return (new SerialFlowControlEx(SerialFlowControl.Manual));
 			}
-			else if (StringEx.EqualsOrdinalIgnoreCase(flowControl, RS485_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase(flowControl, RS485_stringShort))
+			else if (StringEx.EqualsOrdinalIgnoreCase   (flowControl, RS485_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase   (flowControl, RS485_stringShort) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(flowControl, RS485_stringAlternatives))
 			{
 				return (new SerialFlowControlEx(SerialFlowControl.RS485));
 			}
