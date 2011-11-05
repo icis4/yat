@@ -39,11 +39,12 @@ namespace YAT.Controller
 	public enum MainResult
 	{
 		Success = 0,
-		CommandLineArgsError = -1,
+		CommandLineError         = -1,
 		ApplicationSettingsError = -2,
-		ApplicationStartError = -3,
-		ApplicationExitError = -4,
-		UnhandledException = -5,
+		ApplicationStartError    = -3,
+		ApplicationRunError      = -4,
+		ApplicationExitError     = -5,
+		UnhandledException       = -6,
 	}
 
 	#pragma warning restore 1591

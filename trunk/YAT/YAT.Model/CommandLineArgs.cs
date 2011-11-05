@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Text;
 
 using MKY;
 using MKY.CommandLine;
@@ -44,43 +45,46 @@ namespace YAT.Model
 	/// <summary></summary>
 	public class CommandLineArgs : ArgsHandler
 	{
+		private const string SuppressionJustification = "This is a simple container for command line args.";
+
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
-		[ValueArg(Description = "The YAT workspace (.yaw) or terminal (.yat) file to open.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[ValueArg(Description = "Open the given YAT workspace (.yaw) or terminal (.yat).")]
+		[OptionArg(Name = "Open", ShortName = "o", Description = "Open the given YAT workspace (.yaw) or terminal (.yat).")]
 		public string RequestedFilePath;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "Recent", ShortName = "r", Description = "Open the most recent file.")]
 		public bool MostRecentIsRequested;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "TerminalType", ShortName = "ty", Description =
-			"The desired terminal type. Valid values are 'Text' or 'Binary'. The default value is 'Text'." + EnvironmentEx.NewLineConstWorkaround +
-			"Example: 'TerminalType=Text' or 'ty=t'")]
+			"The desired terminal type. Valid values are 'Text'/'T' or 'Binary'/'B'. The default value is 'Text'." + EnvironmentEx.NewLineConstWorkaround +
+			"Example: 'TerminalType=Text' or 'TerminalType=T' or 'ty=t'")]
 		public Domain.TerminalTypeEx TerminalType;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "PortType", ShortName = "pt", Description =
 			"The desired port type. Valid values are:" + EnvironmentEx.NewLineConstWorkaround +
-			"> 'COM' (Serial Port)" + EnvironmentEx.NewLineConstWorkaround +
-			"> 'TCPClient', 'TCPServer', 'TCPAutoSocket' (TCP/IP Socket)" + EnvironmentEx.NewLineConstWorkaround +
-			"> 'UDP' (UDP/IP Socket)" + EnvironmentEx.NewLineConstWorkaround +
-			"> 'USBSerHID' (USB Ser/HID)" + EnvironmentEx.NewLineConstWorkaround +
+			"- 'COM' (Serial Port)" + EnvironmentEx.NewLineConstWorkaround +
+			"- 'TCPClient', 'TCPServer', 'TCPAutoSocket' (TCP/IP Socket)" + EnvironmentEx.NewLineConstWorkaround +
+			"- 'UDP' (UDP/IP Socket)" + EnvironmentEx.NewLineConstWorkaround +
+			"- 'USBSerHID' (USB Ser/HID)" + EnvironmentEx.NewLineConstWorkaround +
 			"The default value is 'COM'.")]
 		public Domain.IOTypeEx IOType;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "SerialPort", ShortName = "p", Description =
 			"The desired serial COM port. Valid values are 1 through 65536, given the port exists on the current machine. The default value is 1." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to serial COM ports.")]
 		public int SerialPort;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "Baud", ShortName = "b", Description =
 			"The desired baud rate. Must be a positive integral value that is supported by the selected serial COM port on the current machine. " +
 			"Typical values are 2400, 4800, 9600, 19200, 38400, 57600 and 115200. The default value is 9600." + EnvironmentEx.NewLineConstWorkaround +
@@ -88,28 +92,28 @@ namespace YAT.Model
 		public int Baud;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "DataBits", ShortName = "db", Description =
 			"The desired number of data bits. Valid values are 4, 5, 6, 7 or 8. The default value is 8." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to serial COM ports.")]
 		public int DataBits;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "Parity", ShortName = "pa", Description =
 			"The desired parity setting. Valid values are 'None', 'Odd', 'Even', 'Mark' and 'Space'. The default value is 'None'." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to serial COM ports.")]
 		public string Parity;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "StopBits", ShortName = "sb", Description =
 			"The desired number of stop bits. Valid values are 0, 1, 1.5 or 2. The default value is 1." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to serial COM ports.")]
 		public double StopBits;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "FlowControl", ShortName = "fc", Description =
 			"The desired method of flow control. Valid values are 'None', 'Hardware' (RTS/CTS), 'Software' (XOn/XOff), 'Combined' (RTS/CTS and XOn/XOff), " +
 			"'Manual' and 'RS485' (RS-485 Transceiver Control). The default value is 'None'." + EnvironmentEx.NewLineConstWorkaround +
@@ -117,88 +121,106 @@ namespace YAT.Model
 		public MKY.IO.Serial.SerialFlowControl FlowControl;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
-		[OptionArg(Name = "RemotePort", ShortName = "rp", Description =
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[OptionArg(Name = "RemoteHost", ShortName = "rh", Description =
 			"The desired remote IP host. Must be a valid IPv4 or IPv6 address or an alias like 'localhost'. The default value is 'localhost'." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to TCP or UDP terminals.")]
 		public string RemoteHost;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "RemotePort", ShortName = "rp", Description =
 			"The desired remote TCP or UDP port. Valid values are 0 through 65535. The default value is 10000." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to TCP clients, TCP AutoSockets and UDP.")]
 		public int RemotePort;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "LocalInterface", ShortName = "li", Description =
 			"The desired local IP interface. Must be a valid IPv4 or IPv6 address or an alias or reserved address like:" + EnvironmentEx.NewLineConstWorkaround +
-			"> '<Any>' (any IPv4 or IPv6 interface)" + EnvironmentEx.NewLineConstWorkaround +
-			"> '0.0.0.0' (any IPv4 interface) or '::' (any IPv6 interface)" + EnvironmentEx.NewLineConstWorkaround +
-			"> '127.0.0.1' (IPv4 loopback) or '::1' (IPv6 loopback)" + EnvironmentEx.NewLineConstWorkaround +
+			"- '<Any>' (any IPv4 or IPv6 interface)" + EnvironmentEx.NewLineConstWorkaround +
+			"- '0.0.0.0' (any IPv4 interface) or '::' (any IPv6 interface)" + EnvironmentEx.NewLineConstWorkaround +
+			"- '127.0.0.1' (IPv4 loopback) or '::1' (IPv6 loopback)" + EnvironmentEx.NewLineConstWorkaround +
 			"The default value is '<Any>'. Only applies to TCP or UDP terminals.")]
 		public string LocalInterface;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "LocalPort", ShortName = "lp", Description =
 			"The desired local TCP or UDP port. Valid values are 0 through 65535. The default value is 10000." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to TCP servers, TCP AutoSockets and UDP.")]
 		public int LocalPort;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
-		[OptionArg(Name = "VendorId", ShortName = "VID", Description =
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[OptionArg(Name = "VendorID", ShortName = "VID", Description =
 			"The desired USB device vendor ID (VID). Must be a hexadecimal value from 0 to FFFF. The default value is the VID of the first device currently found." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to USB Ser/HID.")]
 		public string VendorId;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
-		[OptionArg(Name = "ProductId", ShortName = "PID", Description =
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[OptionArg(Name = "ProductID", ShortName = "PID", Description =
 			"The desired USB device product ID (PID). Must be a hexadecimal value from 0 to FFFF. The default value is the PID of the first device currently found." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to USB Ser/HID.")]
 		public string ProductId;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "AutoReconnect", ShortName = "ar", Description =
 			"When connection is lost, try to reconnect every given milliseconds. Must be positive integral value equal or greater than 100. A common value is 500." + EnvironmentEx.NewLineConstWorkaround +
 			"By default, this feature is disabled. Only applies to serial COM ports and TCP clients.")]
 		public int AutoReconnect;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
-		[OptionArg(Name = "AutoOpen", ShortName = "ao", Description =
-			"When device is connected, automatically open it." + EnvironmentEx.NewLineConstWorkaround +
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[OptionArg(Name = "NoAutoOpen", ShortName = "nao", Description =
+			"When device is connected, don't automatically open it." + EnvironmentEx.NewLineConstWorkaround +
 			"By default, this feature is enabled. Only applies to USB Ser/HID.")]
-		public bool AutoOpen;
+		public bool NoAutoOpen;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "Terminal", ShortName = "t", Description =
 			"Perform any requested operation on the terminal with the given sequential index within the opening workspace." + EnvironmentEx.NewLineConstWorkaround +
 			"Valid values are 1 based indices 1, 2, 3,... up to the number of open terminals. " +
 			"0 indicates that the currently active terminal is used, which typically is the last terminal opened. " +
-			"-1 indicates 'none', i.e. no operation is performed at all. This option is useful to temporarily switch off any option without having to edit the command line." + EnvironmentEx.NewLineConstWorkaround +
-			"The default value is 0.")]
+			"-1 indicates 'none', i.e. no operation is performed at all. The default value is 0." + EnvironmentEx.NewLineConstWorkaround +
+			"This option is useful to temporarily switch off any option without having to edit the command line. " +
+			"This option only has an effect when opening a workspace that contains more than one terminal.")]
 		public int RequestedSequentialTerminalIndex;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "TransmitFile", ShortName = "tf", Description = "Automatically transmit the given file using the terminal specified.")]
 		public string RequestedTransmitFilePath;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[OptionArg(Name = "Empty", ShortName = "e", Description = "Start YAT but neither show any dialog nor perform any action.")]
+		public bool Empty;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "KeepOpen", ShortName = "kp", Description = "Keep YAT open after performing the requested operation.")]
 		public bool KeepOpen;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "KeepOpenOnError", ShortName = "ke", Description = "Keep YAT open in case there is an error while performing the requested operation.")]
 		public bool KeepOpenOnError;
+
+		/// <summary></summary>
+		[CLSCompliant(false)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[OptionArg(Names = new string[] { "Horizontal", "TileHorizontal" }, ShortName = "th", Description = "Tile the terminals horizontal after having openend a workspace.")]
+		public bool TileHorizontal;
+
+		/// <summary></summary>
+		[CLSCompliant(false)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[OptionArg(Names = new string[] { "Vertical", "TileVertical" }, ShortName = "tv", Description = "Tile the terminals vertical after having openend a workspace.")]
+		public bool TileVertical;
 
 		/// <summary></summary>
 		public CommandLineArgs(string[] args)
@@ -239,6 +261,51 @@ namespace YAT.Model
 			}
 
 			return (isValid);
+		}
+
+
+		/// <summary>
+		/// Gets the help text.
+		/// </summary>
+		public override string GetHelpText(int maxWidth)
+		{
+			StringBuilder helpText = new StringBuilder();
+
+			helpText.AppendLine(                                "Usage:");
+			helpText.AppendLine();
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, "YAT[.exe] [<Workspace>.yaw|<Terminal>.yat] [<Options>]"));
+			helpText.AppendLine();
+			helpText.AppendLine();
+			helpText.AppendLine(                                "Usage examples:");
+			helpText.AppendLine();
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, "YAT MyWorkspace.yaw"));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT and open the given workspace."));
+			helpText.AppendLine();
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, "YAT MyTerminal.yat"));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT and open the given terminal."));
+			helpText.AppendLine();
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, "YAT MyTerminal.yat /b=19200"));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT with the given terminal, but change the baud rate to 19200 baud."));
+			helpText.AppendLine();
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, "YAT /r"));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT and open the most recent file."));
+			helpText.AppendLine();
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, "YAT /n /p=1 /b=19200"));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT and create a new terminal on COM1 using 19200 baud."));
+			helpText.AppendLine();
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, "YAT"));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT and show the 'New Terminal' dialog."));
+			helpText.AppendLine();
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, "YAT /e"));
+			helpText.Append(SplitIntoLines(maxWidth, MajorIndent,         "Start YAT but neither show any dialog nor perform any action."));
+			helpText.AppendLine();
+
+			helpText.Append(base.GetHelpText(maxWidth));
+
+			helpText.AppendLine();
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent, "Files can be provided with an absolute or relative path. Relative paths are relative to the current working directory. Paths containing spaces must be surrounded with quotes."));
+			helpText.AppendLine();
+			return (helpText.ToString());
 		}
 	}
 }

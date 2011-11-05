@@ -249,7 +249,7 @@ namespace YAT.Controller
 			if (!this.commandLineArgs.IsValid)
 			{
 				showHelp = true;
-				mainResult = MainResult.CommandLineArgsError;
+				mainResult = MainResult.CommandLineError;
 			}
 			else
 			{
@@ -427,7 +427,6 @@ namespace YAT.Controller
 		/// </remarks>
 		private void WriteReturnToConsole()
 		{
-			Console.WriteLine();
 			Console.WriteLine();
 			foreach (string line in Return)
 				Console.WriteLine(line);

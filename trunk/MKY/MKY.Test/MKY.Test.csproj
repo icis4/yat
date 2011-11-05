@@ -49,6 +49,8 @@
     <Compile Include="..\MKY.Version.cs">
       <Link>Properties\MKY.Version.cs</Link>
     </Compile>
+    <Compile Include="CommandLine\ArgsHandler.cs" />
+    <Compile Include="CommandLine\CommandLineArgs.cs" />
     <Compile Include="IO\PathExTest.cs" />
     <Compile Include="Net\IPHostTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -68,6 +70,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\MKY.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CommandLine\ExpectedHelpText.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
