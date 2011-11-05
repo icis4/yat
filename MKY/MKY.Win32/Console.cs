@@ -297,11 +297,8 @@ namespace MKY.Win32
 		/// </summary>
 		public static bool Detach()
 		{
-			bool success = true;
-
-			success = NativeMethods.FreeConsoleFromParentProcess();
+			bool success = NativeMethods.FreeConsoleFromParentProcess();
 			SendKeys.SendWait("{ENTER}");
-
 			return (success);
 		}
 

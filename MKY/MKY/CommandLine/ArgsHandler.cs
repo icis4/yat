@@ -87,12 +87,6 @@ namespace MKY.CommandLine
 		/// <summary></summary>
 		public const int MajorIndent = 10;
 
-		/// <summary></summary>
-		public readonly string MinorIndentSpace = new string(' ', MinorIndent);
-
-		/// <summary></summary>
-		public readonly string MajorIndentSpace = new string(' ', MajorIndent);
-
 		/// <summary>
 		/// Gets a value indicating whether forward slashes are allowed as option indicator.
 		/// This applies to Windows systems.
@@ -296,8 +290,11 @@ namespace MKY.CommandLine
 			object[] atts = field.GetCustomAttributes(typeof(OptionArgAttribute), true);
 			foreach (OptionArgAttribute att in atts)
 			{
-				if (StringEx.EqualsOrdinalIgnoreCase(att.Name, name))
-					return (true);
+				foreach (string s in att.Names)
+				{
+					if (StringEx.EqualsOrdinalIgnoreCase(s, name))
+						return (true);
+				}
 			}
 			return (false);
 		}
@@ -310,9 +307,9 @@ namespace MKY.CommandLine
 			object[] atts = field.GetCustomAttributes(typeof(OptionArgAttribute), true);
 			foreach (OptionArgAttribute att in atts)
 			{
-				foreach (string shortName in att.ShortNames)
+				foreach (string s in att.ShortNames)
 				{
-					if (StringEx.EqualsOrdinalIgnoreCase(shortName, name))
+					if (StringEx.EqualsOrdinalIgnoreCase(s, name))
 						return (true);
 				}
 			}
@@ -333,14 +330,18 @@ namespace MKY.CommandLine
 		/// </summary>
 		protected virtual bool IsOption(string arg, out int pos)
 		{
-			int checkPos = 0;
+			int totalLength = arg.Length;
+			arg = arg.TrimStart();
+			int offset = totalLength - arg.Length;
+
+			int checkPos = offset;
 
 			if      (arg.StartsWith("--"))
-				checkPos = 2;
+				checkPos += 2;
 			else if (arg.StartsWith("-"))
-				checkPos = 1;
+				checkPos += 1;
 			else if (arg.StartsWith("/") && AllowForwardSlash)
-				checkPos = 1;
+				checkPos += 1;
 
 			if (checkPos > 0)
 			{
@@ -381,7 +382,7 @@ namespace MKY.CommandLine
 				//   "-o value" or
 				//   "-o" without value, i.e. boolean option.
 				if (!hasSuccessfullyBeenSplit)
-					optionStr = optionArgWithoutIndicator;
+					optionStr = optionArgWithoutIndicator.Trim();
 
 				FieldInfo field = GetMemberField(optionStr);
 				if (field != null)
@@ -389,12 +390,15 @@ namespace MKY.CommandLine
 					object value;
 					if (field.FieldType == typeof(bool))
 					{
-						// Boolean options are set to true when given as argument.
+						if (hasSuccessfullyBeenSplit && (!string.IsNullOrEmpty(valueStr)))
+							return (false);
+
+						// Boolean options are set to true when given as argument:
 						value = true;
 					}
 					else
 					{
-						// Get value from next argument if needed.
+						// Get value from next argument if needed:
 						if (!hasSuccessfullyBeenSplit)
 						{
 							if (string.IsNullOrEmpty(nextArg))
@@ -404,8 +408,11 @@ namespace MKY.CommandLine
 							nextArgHasBeenConsumedToo = true;
 						}
 
-						// Process value.
-						if (string.IsNullOrEmpty(valueStr))
+						// Trim and process value:
+						valueStr = valueStr.Trim();
+						valueStr = valueStr.Trim('"');
+
+						if (valueStr.Length <= 0)
 							return (false);
 
 						if (field.FieldType.IsEnum)
@@ -439,11 +446,11 @@ namespace MKY.CommandLine
 			if (pos >= 1)
 			{
 				option = optionArgWithoutIndicator.Substring(0, pos);
-				option.Trim();
+				option = option.Trim();
 
 				value = optionArgWithoutIndicator.Substring(pos + 1);
-				value.Trim();
-				value.Trim('"');
+				value = value.Trim();
+				value = value.Trim('"');
 
 				return (true);
 			}
@@ -463,8 +470,8 @@ namespace MKY.CommandLine
 			try
 			{
 				// Trim value argument:
-				value.Trim();
-				value.Trim('"');
+				value = value.Trim();
+				value = value.Trim('"');
 
 				// Optionally validate the value argument:
 				if (IsValidValueArg(value))
@@ -527,6 +534,24 @@ namespace MKY.CommandLine
 		// Methods
 		//==========================================================================================
 
+		/// <summary></summary>
+		public virtual string IndentSpace(int indent)
+		{
+			return (new string(' ', indent));
+		}
+
+		/// <summary></summary>
+		public virtual string SplitIntoLines(int maxWidth, int indent, string text)
+		{
+			StringBuilder lines = new StringBuilder();
+
+			int width = (maxWidth - indent);
+			foreach (string line in StringEx.SplitLexically(text, width))
+				lines.AppendLine(IndentSpace(indent) + line);
+
+			return (lines.ToString());
+		}
+
 		/// <summary>
 		/// Gets the help text.
 		/// </summary>
@@ -535,7 +560,6 @@ namespace MKY.CommandLine
 			// Must be reduced to ensure that lines that exactly match the number of characters
 			// do not lead to an empty line (due to the NewLine which is added).
 			maxWidth--;
-			int width = 0;
 
 			StringBuilder helpText = new StringBuilder();
 
@@ -551,10 +575,7 @@ namespace MKY.CommandLine
 				{
 					if (!string.IsNullOrEmpty(att.Description))
 					{
-						width = (maxWidth - MajorIndent);
-						foreach (string line in StringEx.SplitLexically(att.Description, width))
-							helpText.AppendLine(MinorIndentSpace + line);
-
+						helpText.Append(SplitIntoLines(maxWidth, MinorIndent, att.Description));
 						helpText.AppendLine();
 					}
 				}
@@ -608,14 +629,19 @@ namespace MKY.CommandLine
 						}
 					}
 
-					// Name:
-					if (!string.IsNullOrEmpty(att.Name))
+					// Name(s):
+					if (att.Names != null)
 					{
-						if (names.Length > 0)
-							names.Append(", ");
+						foreach (string name in att.Names)
+						{
+							string option = name;
 
-						names.Append("--" + att.Name.ToLowerInvariant());
-						names.Append(valueTypeString);
+							if (names.Length > 0)
+								names.Append(", ");
+
+							names.Append("--" + option);
+							names.Append(valueTypeString);
+						}
 					}
 
 					// Long name, only if there is no short nor standard name:
@@ -626,25 +652,25 @@ namespace MKY.CommandLine
 					}
 
 					// 1st line = Names:
-					helpText.AppendLine(MinorIndentSpace + names.ToString());
+					helpText.Append(SplitIntoLines(maxWidth, MinorIndent, names.ToString()));
 
 					// Next line(s) = Description:
 					if (!string.IsNullOrEmpty(att.Description))
-					{
-						width = (maxWidth - MajorIndent);
-						foreach (string line in StringEx.SplitLexically(att.Description, width))
-							helpText.AppendLine(MajorIndentSpace + line);
-					}
+						helpText.Append(SplitIntoLines(maxWidth, MajorIndent, att.Description));
 
 					helpText.AppendLine();
 				}
 			}
 
-			width = (maxWidth - MinorIndent);
-			string note = "Options that take values may use an equal sign '=', a colon ':' or a space ' ' to separate the option from its value.";
-			foreach (string line in StringEx.SplitLexically(note, width))
-				helpText.AppendLine(MinorIndentSpace + line);
-			
+			helpText.AppendLine();
+			helpText.AppendLine("Notes:");
+			helpText.AppendLine();
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent,
+				"Options that take values may use an equal sign '=', a colon ':' or a space to separate the option from its value."));
+			helpText.AppendLine();
+			helpText.Append(SplitIntoLines(maxWidth, MinorIndent,
+				"Option names are case-insensitive. Values are also case-insensitive unless stated otherwise."));
+
 			return (helpText.ToString());
 		}
 

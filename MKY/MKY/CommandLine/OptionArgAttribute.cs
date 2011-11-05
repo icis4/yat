@@ -35,17 +35,49 @@ namespace MKY.CommandLine
 	[AttributeUsage(AttributeTargets.Field)]
 	public class OptionArgAttribute : Attribute
 	{
-		private string name;
+		private string[] names;
 		private string[] shortNames;
 		private string description;
 
 		/// <summary>
-		/// Gets or sets the name.
+		/// Gets or sets one or more names.
+		/// </summary>
+		public string[] Names
+		{
+			get { return (this.names); }
+			set { this.names = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets a single name.
 		/// </summary>
 		public string Name
 		{
-			get { return (this.name); }
-			set { this.name = value; }
+			get
+			{
+				if      (this.names == null)
+					return ("");
+				else if (this.names.Length <= 0)
+					return ("");
+				else if (this.names.Length == 1)
+					return (this.names[0]);
+
+				// else
+				StringBuilder singleLine = new StringBuilder();
+				for (int i = 0; i < this.names.Length; i++)
+				{
+					singleLine.Append(this.names[i]);
+
+					if (i < (this.names.Length - 1))
+						singleLine.Append(' ');
+				}
+				return (singleLine.ToString());
+			}
+
+			set
+			{
+				this.names = new string[] { value };
+			}
 		}
 
 		/// <summary>
@@ -58,7 +90,7 @@ namespace MKY.CommandLine
 		}
 
 		/// <summary>
-		/// Sets a short name.
+		/// Gets or sets a single short name.
 		/// </summary>
 		public string ShortName
 		{

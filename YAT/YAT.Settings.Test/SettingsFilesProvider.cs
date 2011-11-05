@@ -89,7 +89,7 @@ namespace YAT.Settings.Test
 			for (int i = 0; i < 3; i++)
 				di = di.Parent;
 
-			// Set path to "<Root>\this.Settings\<directory>\".
+			// Set path to "<Root>\!-Settings\<Directory>\".
 			FilePath = di.FullName + Path.DirectorySeparatorChar + "!-Settings" + Path.DirectorySeparatorChar + directory + Path.DirectorySeparatorChar;
 
 			TerminalFilePaths  = new Dictionary<TerminalSettingsTestCases,  string>();

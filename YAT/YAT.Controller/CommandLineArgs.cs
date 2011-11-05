@@ -27,13 +27,9 @@
 //==================================================================================================
 
 using System;
-using System.Text;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using MKY.CommandLine;
-
-using YAT.Utilities;
 
 #endregion
 
@@ -42,16 +38,17 @@ namespace YAT.Controller
 	/// <summary></summary>
 	public class CommandLineArgs : Model.CommandLineArgs
 	{
+		private const string SuppressionJustification = "This is a simple container for command line args.";
+
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "NoLogo", ShortName = "nl", Description = "Do not display title and copyright.")]
-		[CLSCompliant(false)]
 		public bool NoLogo;
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "This is a simple container for command line args.")]
-		[OptionArg(Name = "Help", ShortNames = new string[] { "h", "?" }, Description = "Display this help text.")]
 		[CLSCompliant(false)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[OptionArg(Names = new string[] { "Help", "HelpText" }, ShortNames = new string[] { "h", "?" }, Description = "Display this help text.")]
 		public bool HelpIsRequested;
 
 		/// <summary></summary>
@@ -66,35 +63,6 @@ namespace YAT.Controller
 		public bool ShowLogo
 		{
 			get { return (!(NoLogo)); }
-		}
-
-		/// <summary>
-		/// Gets the help text.
-		/// </summary>
-		public override string GetHelpText(int maxWidth)
-		{
-			StringBuilder helpText = new StringBuilder();
-
-			helpText.AppendLine(                   "Usage:");
-			helpText.AppendLine();
-			helpText.AppendLine(MinorIndentSpace +   "YAT[.exe] [<Workspace>.yaw|<Terminal>.yat] [<Options>]");
-			helpText.AppendLine();
-			helpText.AppendLine();
-			helpText.AppendLine(                   "Usage examples:");
-			helpText.AppendLine();
-			helpText.AppendLine(MinorIndentSpace +   "YAT MyWorkspace.yaw");
-			helpText.AppendLine(MajorIndentSpace +           "Start YAT and open given workspace.");
-			helpText.AppendLine();
-			helpText.AppendLine(MinorIndentSpace +   "YAT MyTerminal.yat");
-			helpText.AppendLine(MajorIndentSpace +           "Start YAT and open given terminal.");
-			helpText.AppendLine();
-			helpText.AppendLine(MinorIndentSpace +   "YAT /r");
-			helpText.AppendLine(MajorIndentSpace +           "Start YAT and open most recent file.");
-			helpText.AppendLine();
-
-			helpText.Append(base.GetHelpText(maxWidth));
-
-			return (helpText.ToString());
 		}
 	}
 }
