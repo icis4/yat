@@ -93,7 +93,7 @@ namespace MKY.IO.Ports
 
 		#endregion
 
-		#region Parse
+		#region Parse/Form
 
 		/// <summary></summary>
 		public static DataBitsEx Parse(string bits)
@@ -105,17 +105,32 @@ namespace MKY.IO.Ports
 		public static bool TryParse(string bits, out DataBitsEx result)
 		{
 			int intResult;
-
 			if (int.TryParse(bits, out intResult))
+				return (TryFrom(intResult, out result));
+
+			result = null;
+			return (false);
+		}
+
+		/// <summary>
+		/// Tries to create a <see cref="DataBitsEx"/> object from the given port number.
+		/// </summary>
+		public static bool TryFrom(int dataBits, out DataBitsEx result)
+		{
+			if (IsValidDataBits(dataBits))
 			{
-				result = (DataBitsEx)intResult;
+				result = (DataBitsEx)dataBits;
 				return (true);
 			}
-			else
-			{
-				result = null;
-				return (false);
-			}
+
+			result = null;
+			return (false);
+		}
+
+		/// <summary></summary>
+		public static bool IsValidDataBits(int dataBits)
+		{
+			return ((dataBits >= 4) && (dataBits <= 8));
 		}
 
 		#endregion

@@ -326,6 +326,9 @@ namespace YAT.Controller
 						// This call does not return until the application exits.
 						Application.Run(view);
 					}
+
+					Model.MainResult modelResult = model.MainResult;
+					mainResult = ConvertMainResult(modelResult);
 #if (!DEBUG)
 				}
 				catch (Exception ex)
@@ -357,16 +360,15 @@ namespace YAT.Controller
 				try
 				{
 #endif
-					if (model.Start())
+					Model.MainResult modelResult = model.Start();
+					if (modelResult == Model.MainResult.Success)
 					{
-						if (model.Exit())
-							mainResult = MainResult.Success;
-						else
-							mainResult = MainResult.ApplicationExitError;
+						modelResult = model.Exit();
+						mainResult = ConvertMainResult(modelResult);
 					}
 					else
 					{
-						mainResult = MainResult.ApplicationStartError;
+						mainResult = ConvertMainResult(modelResult);
 					}
 #if (!DEBUG)
 				}
@@ -433,6 +435,35 @@ namespace YAT.Controller
 
 			Console.WriteLine();
 			Console.WriteLine(new String('=', (Console.WindowWidth - 1))); // ==========...
+		}
+
+
+		/// <summary></summary>
+		private MainResult ConvertMainResult(Model.MainResult result)
+		{
+			switch (result)
+			{
+				case Model.MainResult.Success:               return (MainResult.Success);
+				case Model.MainResult.CommandLineError:      return (MainResult.CommandLineError);
+				case Model.MainResult.ApplicationStartError: return (MainResult.ApplicationStartError);
+				case Model.MainResult.ApplicationRunError:   return (MainResult.ApplicationRunError);
+				case Model.MainResult.ApplicationExitError:  return (MainResult.ApplicationExitError);
+				default:                                     return (MainResult.UnhandledException); // Covers 'Model.MainResult.UnhandledException'.
+			}
+		}
+
+		/// <summary></summary>
+		private Model.MainResult ConvertMainResult(MainResult result)
+		{
+			switch (result)
+			{
+				case MainResult.Success:               return (Model.MainResult.Success);
+				case MainResult.CommandLineError:      return (Model.MainResult.CommandLineError);
+				case MainResult.ApplicationStartError: return (Model.MainResult.ApplicationStartError);
+				case MainResult.ApplicationRunError:   return (Model.MainResult.ApplicationRunError);
+				case MainResult.ApplicationExitError:  return (Model.MainResult.ApplicationExitError);
+				default:                               return (Model.MainResult.UnhandledException); // Covers 'MainResult.UnhandledException'.
+			}
 		}
 
 		#endregion

@@ -59,13 +59,24 @@ namespace YAT.Model
 		public bool MostRecentIsRequested;
 
 		/// <summary></summary>
+		public string MostRecentFilePath;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[OptionArg(Name = "New", ShortName = "n", Description = "Create a new terminal according to the options given or the default values.")]
+		public bool NewIsRequested;
+
+		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "TerminalType", ShortName = "ty", Description =
 			"The desired terminal type. Valid values are 'Text'/'T' or 'Binary'/'B'. The default value is 'Text'." + EnvironmentEx.NewLineConstWorkaround +
 			"Example: 'TerminalType=Text' or 'TerminalType=T' or 'ty=t'")]
-		public Domain.TerminalTypeEx TerminalType;
+		public string TerminalType;
 
 		/// <summary></summary>
+		/// <remarks>
+		/// This option is intentionally called 'PortType' because it shall match the name on the 'New Terminal' and 'Terminal Settings' dialog.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "PortType", ShortName = "pt", Description =
 			"The desired port type. Valid values are:" + EnvironmentEx.NewLineConstWorkaround +
@@ -74,7 +85,7 @@ namespace YAT.Model
 			"- 'UDP' (UDP/IP Socket)" + EnvironmentEx.NewLineConstWorkaround +
 			"- 'USBSerHID' (USB Ser/HID)" + EnvironmentEx.NewLineConstWorkaround +
 			"The default value is 'COM'.")]
-		public Domain.IOTypeEx IOType;
+		public string IOType;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
@@ -84,12 +95,13 @@ namespace YAT.Model
 		public int SerialPort;
 
 		/// <summary></summary>
+		[CLSCompliant(false)]
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
-		[OptionArg(Name = "Baud", ShortName = "b", Description =
+		[OptionArg(Names = new string[] { "Baud", "BaudRate" }, ShortName = "br", Description =
 			"The desired baud rate. Must be a positive integral value that is supported by the selected serial COM port on the current machine. " +
 			"Typical values are 2400, 4800, 9600, 19200, 38400, 57600 and 115200. The default value is 9600." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to serial COM ports.")]
-		public int Baud;
+		public int BaudRate;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
@@ -118,7 +130,7 @@ namespace YAT.Model
 			"The desired method of flow control. Valid values are 'None', 'Hardware' (RTS/CTS), 'Software' (XOn/XOff), 'Combined' (RTS/CTS and XOn/XOff), " +
 			"'Manual' and 'RS485' (RS-485 Transceiver Control). The default value is 'None'." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to serial COM ports.")]
-		public MKY.IO.Serial.SerialFlowControl FlowControl;
+		public string FlowControl;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
@@ -235,29 +247,66 @@ namespace YAT.Model
 		{
 			bool isValid = true;
 
-			// RequestedFilePath:
-			if (File.Exists(RequestedFilePath))
+			// RequestedFilePath as value argument:
+			if (string.IsNullOrEmpty(RequestedFilePath))
 			{
-				if (!ExtensionSettings.IsWorkspaceFile(Path.GetExtension(RequestedFilePath)) &&
-					!ExtensionSettings.IsTerminalFile (Path.GetExtension(RequestedFilePath)))
+				if (ValueArgsCount > 0)
+					RequestedFilePath = ValueArgs[0];
+			}
+
+			// RequestedFilePath:
+			if (!string.IsNullOrEmpty(RequestedFilePath))
+			{
+				if (File.Exists(RequestedFilePath))
+				{
+					if (!ExtensionSettings.IsWorkspaceFile(Path.GetExtension(RequestedFilePath)) &&
+						!ExtensionSettings.IsTerminalFile (Path.GetExtension(RequestedFilePath)))
+					{
+						RequestedFilePath = null;
+						BoolEx.ClearIfSet(ref isValid);
+					}
+				}
+				else
 				{
 					RequestedFilePath = null;
 					BoolEx.ClearIfSet(ref isValid);
 				}
-			}
-			else
-			{
-				RequestedFilePath = null;
-				BoolEx.ClearIfSet(ref isValid);
 			}
 
 			// Recent:
 			if (MostRecentIsRequested)
 			{
 				ApplicationSettings.LocalUser.RecentFiles.FilePaths.ValidateAll();
-				bool thereAreRecents = (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count > 0);
-				if (thereAreRecents)
-					RequestedFilePath = ApplicationSettings.LocalUser.RecentFiles.FilePaths[0].Item;
+				if (ApplicationSettings.LocalUser.RecentFiles.FilePaths.Count > 0)
+				{
+					string mostRecent = ApplicationSettings.LocalUser.RecentFiles.FilePaths[0];
+					if (File.Exists(mostRecent))
+					{
+						if (ExtensionSettings.IsWorkspaceFile(Path.GetExtension(mostRecent)) ||
+							ExtensionSettings.IsTerminalFile (Path.GetExtension(mostRecent)))
+						{
+							MostRecentFilePath = mostRecent;
+						}
+						else
+						{
+							BoolEx.ClearIfSet(ref isValid);
+						}
+					}
+					else
+					{
+						BoolEx.ClearIfSet(ref isValid);
+					}
+				}
+			}
+
+			// TransmitFile:
+			if (!string.IsNullOrEmpty(RequestedTransmitFilePath))
+			{
+				if (!File.Exists(RequestedTransmitFilePath))
+				{
+					RequestedTransmitFilePath = null;
+					BoolEx.ClearIfSet(ref isValid);
+				}
 			}
 
 			return (isValid);

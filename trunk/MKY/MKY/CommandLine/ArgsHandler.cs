@@ -101,9 +101,12 @@ namespace MKY.CommandLine
 		//==========================================================================================
 
 		private string[] args;
+
 		private List<string> valueArgs = new List<string>();
 		private List<string> optionArgs = new List<string>();
 		private List<string> invalidArgs = new List<string>();
+
+		private List<FieldInfo> optionFields = new List<FieldInfo>();
 
 		#endregion
 
@@ -422,6 +425,7 @@ namespace MKY.CommandLine
 					}
 
 					field.SetValue(this, Convert.ChangeType(value, field.FieldType));
+					this.optionFields.Add(field);
 					return (true);
 				}
 				else
@@ -533,6 +537,14 @@ namespace MKY.CommandLine
 		//==========================================================================================
 		// Methods
 		//==========================================================================================
+
+
+		/// <summary></summary>
+		public virtual bool OptionIsGiven(string name)
+		{
+			FieldInfo fi = GetMemberField(name);
+			return (this.optionFields.Contains(fi));
+		}
 
 		/// <summary></summary>
 		public virtual string IndentSpace(int indent)

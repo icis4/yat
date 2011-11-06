@@ -85,7 +85,7 @@ namespace MKY.IO.Ports
 
 		#endregion
 
-		#region Parse
+		#region Parse/From
 
 		/// <summary></summary>
 		public static StopBitsEx Parse(string bits)
@@ -97,17 +97,37 @@ namespace MKY.IO.Ports
 		public static bool TryParse(string bits, out StopBitsEx result)
 		{
 			double doubleResult;
-
 			if (double.TryParse(bits, out doubleResult))
+				return (TryFrom(doubleResult, out result));
+
+			result = null;
+			return (false);
+		}
+
+		/// <summary>
+		/// Tries to create a <see cref="StopBitsEx"/> object from the given port number.
+		/// </summary>
+		public static bool TryFrom(double stopBits, out StopBitsEx result)
+		{
+			if (IsValidStopBits(stopBits))
 			{
-				result = (StopBitsEx)doubleResult;
+				result = (StopBitsEx)stopBits;
 				return (true);
 			}
-			else
-			{
-				result = null;
-				return (false);
-			}
+
+			result = null;
+			return (false);
+		}
+
+		/// <summary></summary>
+		public static bool IsValidStopBits(double stopBits)
+		{
+			if (stopBits == None_double)         return (true);
+			if (stopBits == One_double)          return (true);
+			if (stopBits == OnePointFive_double) return (true);
+			if (stopBits == Two_double)          return (true);
+
+			return (false);
 		}
 
 		#endregion

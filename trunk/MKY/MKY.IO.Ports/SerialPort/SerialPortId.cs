@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -31,6 +36,8 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
+
+#endregion
 
 namespace MKY.IO.Ports
 {
@@ -540,6 +547,21 @@ namespace MKY.IO.Ports
 						return (true);
 					}
 				}
+			}
+
+			result = null;
+			return (false);
+		}
+
+		/// <summary>
+		/// Tries to create a <see cref="SerialPortId"/> object from the given port number.
+		/// </summary>
+		public static bool TryFrom(int portNumber, out SerialPortId result)
+		{
+			if (IsStandardPortNumber(portNumber))
+			{
+				result = new SerialPortId(portNumber);
+				return (true);
 			}
 
 			result = null;

@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -33,11 +38,14 @@ using MKY.Event;
 using MKY.IO;
 using MKY.Settings;
 
+using YAT.Model.Settings;
 using YAT.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
 using YAT.Utilities;
+
+#endregion
 
 namespace YAT.Model
 {
@@ -69,7 +77,8 @@ namespace YAT.Model
 
 		private Guid guid;
 
-		private CommandLineArgs commandLineOptions;
+		private CommandLineArgs commandLineArgs;
+		private StartRequests startRequests;
 
 		private Workspace workspace;
 
@@ -117,14 +126,14 @@ namespace YAT.Model
 		/// <summary></summary>
 		public Main(string requestedFilePath)
 		{
-			this.commandLineOptions = new CommandLineArgs(new string[] { requestedFilePath });
+			this.commandLineArgs = new CommandLineArgs(new string[] { requestedFilePath });
 			Initialize();
 		}
 
 		/// <summary></summary>
-		public Main(CommandLineArgs commandLineOptions)
+		public Main(CommandLineArgs commandLineArgs)
 		{
-			this.commandLineOptions = commandLineOptions;
+			this.commandLineArgs = commandLineArgs;
 			Initialize();
 		}
 
@@ -209,12 +218,12 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual CommandLineArgs CommandLineOptions
+		public virtual StartRequests StartRequests
 		{
 			get
 			{
 				AssertNotDisposed();
-				return (this.commandLineOptions);
+				return (this.startRequests);
 			}
 		}
 
@@ -260,24 +269,29 @@ namespace YAT.Model
 		/// <returns>
 		/// Returns <c>true</c> if either operation succeeded, <c>false</c> otherwise.
 		/// </returns>
-		public virtual bool Start()
+		public virtual MainResult Start()
 		{
 			AssertNotDisposed();
+
+			// Process command line args into start requests:
+			if (!ProcessCommandLineArgsIntoStartRequests()
+
+
 
 			bool otherInstanceIsAlreadyRunning = OtherInstanceIsAlreadyRunning();
 			bool success = false;
 
-			if ((this.commandLineOptions != null) && !string.IsNullOrEmpty(this.commandLineOptions.RequestedFilePath))
+			if ((this.commandLineArgs != null) && !string.IsNullOrEmpty(this.commandLineArgs.RequestedFilePath))
 			{
-				success = OpenFromFile(this.commandLineOptions.RequestedFilePath);
+				success = OpenFromFile(this.commandLineArgs.RequestedFilePath);
 
 				if (success)
 				{
-					// Reset workspace file path.
+					// Reset workspace file path:
 					ApplicationSettings.LocalUser.AutoWorkspace.ResetFilePathAndUser();
 					ApplicationSettings.Save();
 
-					// Clean up all default workspaces/terminals since they're not needed anymore.
+					// Clean up all default workspaces/terminals since they're not needed anymore:
 					if (!otherInstanceIsAlreadyRunning)
 						CleanupLocalUserDirectory();
 				}
@@ -285,7 +299,7 @@ namespace YAT.Model
 
 			if (!success && ApplicationSettings.LocalUser.General.AutoOpenWorkspace)
 			{
-				// Make sure that auto workspace is not already in use by another instance of YAT.
+				// Make sure that auto workspace is not already in use by another instance of YAT:
 				if (ApplicationSettings.LocalUser.AutoWorkspace.FilePathUser == Guid.Empty)
 				{
 					string filePath = ApplicationSettings.LocalUser.AutoWorkspace.FilePath;
@@ -294,25 +308,218 @@ namespace YAT.Model
 				}
 			}
 
-			// Clean up the default directory.
+			// Clean up the default directory:
 			if (!otherInstanceIsAlreadyRunning)
 				CleanupLocalUserDirectory();
 
-			// If no success so far, create a new empty workspace.
+			// If no success so far, create a new empty workspace:
 			if (!success)
 			{
-				// Reset workspace file path.
+				// Reset workspace file path:
 				ApplicationSettings.LocalUser.AutoWorkspace.ResetFilePathAndUser();
 				ApplicationSettings.Save();
 
 				success = CreateNewWorkspace();
 			}
 
-			// Update number of running instances.
+			// Update number of running instances:
 			if (success)
 				staticInstancesRunning++;
 
 			return (success);
+		}
+
+		/// <summary>
+		/// Process the command line arguments according to their priority and translate them into
+		/// start requests.
+		/// </summary>
+		private bool ProcessCommandLineArgsIntoStartRequests()
+		{
+			this.startRequests = new StartRequests();
+
+			// Defaults:
+			this.startRequests.KeepOpen = this.commandLineArgs.KeepOpen;
+			this.startRequests.KeepOpenOnError = this.commandLineArgs.KeepOpenOnError;
+			this.startRequests.TileHorizontal = this.commandLineArgs.TileHorizontal;
+			this.startRequests.TileVertical = this.commandLineArgs.TileVertical;
+
+			// Prio 1 = Empty:
+			if (this.commandLineArgs.Empty)
+			{
+				this.startRequests.ShowNewTerminalDialog = false;
+				this.startRequests.KeepOpen = true;
+				this.startRequests.KeepOpenOnError = true;
+
+				return (true);
+			}
+
+			// Prio 2 = Recent:
+			string requestedFilePath = null;
+			if (this.commandLineArgs.MostRecentIsRequested)
+			{
+				if (!string.IsNullOrEmpty(this.commandLineArgs.MostRecentFilePath))
+					requestedFilePath = this.commandLineArgs.MostRecentFilePath;
+				else
+					return (false);
+			}
+			// Prio 3 = New:
+			else if (this.commandLineArgs.NewIsRequested)
+			{
+				// No file path to open.
+			}
+			// Prio 4 = Requested file path as option:
+			// Prio 5 = Value argument:
+			else if (!string.IsNullOrEmpty(this.commandLineArgs.RequestedFilePath))
+			{
+				requestedFilePath = this.commandLineArgs.MostRecentFilePath;
+			}
+
+			// Open the requested settings file:
+			if (!string.IsNullOrEmpty(requestedFilePath))
+			{
+				if (ExtensionSettings.IsWorkspaceFile(Path.GetExtension(requestedFilePath)))
+				{
+					try
+					{
+						DocumentSettingsHandler<WorkspaceSettingsRoot> sh = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
+						sh.SettingsFilePath = requestedFilePath;
+						sh.Load();
+						this.startRequests.WorkspaceSettings = sh.Settings;
+					}
+					catch
+					{
+						return (false);
+					}
+				}
+				else if (ExtensionSettings.IsTerminalFile(Path.GetExtension(requestedFilePath)))
+				{
+					try
+					{
+						DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
+						sh.SettingsFilePath = requestedFilePath;
+						sh.Load();
+						this.startRequests.TerminalSettings = sh.Settings;
+					}
+					catch
+					{
+						return (false);
+					}
+				}
+				else
+				{
+					return (false);
+				}
+			}
+
+			// Prio 6 = Retrieve the requested terminal and validate it:
+			if (this.startRequests.WorkspaceSettings != null) // Applies to a terminal within a workspace.
+			{
+				int terminalIndex = -1;
+				if (this.startRequests.RequestedSequentialTerminalIndex > this.startRequests.WorkspaceSettings.TerminalSettings.Count)
+					return (false);
+				else if (this.commandLineArgs.RequestedSequentialTerminalIndex == 0)
+					terminalIndex = (this.startRequests.WorkspaceSettings.TerminalSettings.Count);
+
+				if (terminalIndex >= 1)
+				{
+					try
+					{
+						DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
+						sh.SettingsFilePath = this.startRequests.WorkspaceSettings.TerminalSettings[terminalIndex - 1].FilePath;
+						sh.Load();
+						this.startRequests.TerminalSettings = sh.Settings;
+					}
+					catch
+					{
+						return (false);
+					}
+				}
+			}
+			else if (this.startRequests.TerminalSettings != null) // Applies to a dedicated terminal.
+			{
+				switch (this.commandLineArgs.RequestedSequentialTerminalIndex)
+				{
+					case -1: this.startRequests.RequestedSequentialTerminalIndex = -1; break;
+					case  0:                                                           break;
+					case  1:                                                           break;
+					default: return (false);
+				}
+			}
+			else if (this.commandLineArgs.NewIsRequested) // Applies to new settings.
+			{
+				this.startRequests.TerminalSettings = new TerminalSettingsRoot();
+			}
+
+			// Prio 6 = Override settings as desired:
+			if (this.commandLineArgs.OptionIsGiven("TerminalType"))
+			{
+				Domain.TerminalTypeEx terminalType;
+				if (Domain.TerminalTypeEx.TryParse(this.commandLineArgs.TerminalType, out terminalType))
+					this.startRequests.TerminalSettings.TerminalType = terminalType;
+				else
+					return (false);
+			}
+			if (this.commandLineArgs.OptionIsGiven("PortType"))
+			{
+				Domain.IOTypeEx ioType;
+				if (Domain.IOTypeEx.TryParse(this.commandLineArgs.IOType, out ioType))
+					this.startRequests.TerminalSettings.IOType = ioType;
+				else
+					return (false);
+			}
+
+			Domain.IOType finalIOType = this.startRequests.TerminalSettings.IOType;
+			if (finalIOType == Domain.IOType.SerialPort)
+			{
+				if (this.commandLineArgs.OptionIsGiven("SerialPort"))
+				{
+					MKY.IO.Ports.SerialPortId portId;
+					if (MKY.IO.Ports.SerialPortId.TryFrom(this.commandLineArgs.SerialPort, out portId))
+						this.startRequests.TerminalSettings.IO.SerialPort.PortId = portId;
+					else
+						return (false);
+				}
+				if (this.commandLineArgs.OptionIsGiven("BaudRate"))
+				{
+					MKY.IO.Ports.BaudRateEx baudRate;
+					if (MKY.IO.Ports.BaudRateEx.TryFrom(this.commandLineArgs.BaudRate, out baudRate))
+						this.startRequests.TerminalSettings.IO.SerialPort.Communication.BaudRate = baudRate;
+					else
+						return (false);
+				}
+				if (this.commandLineArgs.OptionIsGiven("DataBits"))
+				{
+					MKY.IO.Ports.DataBitsEx dataBits;
+					if (MKY.IO.Ports.DataBitsEx.TryFrom(this.commandLineArgs.DataBits, out dataBits))
+						this.startRequests.TerminalSettings.IO.SerialPort.Communication.DataBits = dataBits;
+					else
+						return (false);
+				}
+				if (this.commandLineArgs.OptionIsGiven("Parity"))
+				{
+					MKY.IO.Ports.ParityEx parity;
+					if (MKY.IO.Ports.ParityEx.TryParse(this.commandLineArgs.Parity, out parity))
+						this.startRequests.TerminalSettings.IO.SerialPort.Communication.Parity = parity;
+					else
+						return (false);
+				}
+				if (this.commandLineArgs.OptionIsGiven("StopBits"))
+				{
+					MKY.IO.Ports.StopBitsEx stopBits;
+					if (MKY.IO.Ports.StopBitsEx.TryFrom(this.commandLineArgs.StopBits, out stopBits))
+						this.startRequests.TerminalSettings.IO.SerialPort.Communication.StopBits = stopBits;
+					else
+						return (false);
+				}
+				if (this.commandLineArgs.OptionIsGiven("FlowControl"))
+				{
+					MKY.IO.Serial.SerialFlowControlEx flowControl;
+					if (MKY.IO.Serial.SerialFlowControlEx.TryParse(this.commandLineArgs.FlowControl, out flowControl))
+						this.startRequests.TerminalSettings.IO.SerialPort.Communication.FlowControl = flowControl;
+					else
+						return (false);
+				}
+			}
 		}
 
 		private bool OtherInstanceIsAlreadyRunning()
@@ -423,7 +630,7 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary></summary>
-		public virtual bool Exit()
+		public virtual MainResult Exit()
 		{
 			bool success;
 
@@ -443,7 +650,10 @@ namespace YAT.Model
 			if (success)
 				OnExited(new EventArgs());
 
-			return (success);
+			if (success)
+				return (Result);
+			else
+				return (MainResult.ApplicationExitError);
 		}
 
 		#endregion
