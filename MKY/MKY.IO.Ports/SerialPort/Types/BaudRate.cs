@@ -88,7 +88,19 @@ namespace MKY.IO.Ports
 		protected BaudRateEx(int baudRate)
 			: base(BaudRate.UserDefined)
 		{
-			this.userDefinedBaudRate = baudRate;
+			if (IsPotentiallyValidBaudRate(baudRate))
+			{
+				this.userDefinedBaudRate = baudRate;
+			}
+			else
+			{
+				throw (new ArgumentOutOfRangeException
+				(
+					"baudRate",
+					baudRate,
+					"Baud rate must be a positive integral value"
+				));
+			}
 		}
 
 		#region ToString
@@ -133,7 +145,7 @@ namespace MKY.IO.Ports
 
 		#endregion
 
-		#region Parse
+		#region Parse/Form
 
 		/// <summary></summary>
 		public static BaudRateEx Parse(string baudRate)
@@ -145,17 +157,32 @@ namespace MKY.IO.Ports
 		public static bool TryParse(string baudRate, out BaudRateEx result)
 		{
 			int intResult;
-
 			if (int.TryParse(baudRate, out intResult))
+				return (TryFrom(intResult, out result));
+			
+			result = null;
+			return (false);
+		}
+
+		/// <summary>
+		/// Tries to create a <see cref="BaudRateEx"/> object from the given port number.
+		/// </summary>
+		public static bool TryFrom(int baudRate, out BaudRateEx result)
+		{
+			if (IsPotentiallyValidBaudRate(baudRate))
 			{
-				result = (BaudRateEx)intResult;
+				result = new BaudRateEx(baudRate);
 				return (true);
 			}
-			else
-			{
-				result = null;
-				return (false);
-			}
+
+			result = null;
+			return (false);
+		}
+
+		/// <summary></summary>
+		public static bool IsPotentiallyValidBaudRate(int baudRate)
+		{
+			return (baudRate > 0);
 		}
 
 		#endregion

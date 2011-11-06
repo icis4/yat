@@ -21,7 +21,7 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-namespace YAT.Controller
+namespace YAT.Model
 {
 	// Disable warning 1591 "Missing XML comment for publicly visible type or member" to avoid
 	// warnings for each undocumented member below. Documenting each member makes little sense
@@ -34,13 +34,12 @@ namespace YAT.Controller
 	/// </summary>
 	public enum MainResult
 	{
-		Success = 0,
-		CommandLineError         = -1,
-		ApplicationSettingsError = -2,
-		ApplicationStartError    = -3,
-		ApplicationRunError      = -4,
-		ApplicationExitError     = -5,
-		UnhandledException       = -6,
+		Success,
+		CommandLineError,
+		ApplicationStartError,
+		ApplicationRunError,
+		ApplicationExitError,
+		UnhandledException,
 	}
 
 	#pragma warning restore 1591

@@ -176,6 +176,31 @@ namespace YAT.Gui.Forms
 				this.isStartingUp = false;
 
 				// Start YAT according to main settings.
+				switch (this.main.Start())
+				{
+					case Model.StartResult.Success:
+					{
+						if (this.main.Exit())
+							mainResult = MainResult.Success;
+						else
+							mainResult = MainResult.ApplicationExitError;
+
+						break;
+					}
+
+					case Model.StartResult.CommandLineError:
+					{
+						mainResult = MainResult.CommandLineError;
+						break;
+					}
+
+					default: // Covers 'Model.StartResult.ApplicationStartError'.
+					{
+						mainResult = MainResult.ApplicationStartError;
+						break;
+					}
+				}
+
 				if (!this.main.Start())
 				{
 					MessageBox.Show
@@ -194,10 +219,9 @@ namespace YAT.Gui.Forms
 					ShowNewTerminalDialog();
 
 				// Automatically trigger transmit data if desired.
-				// Used for GUI testing.
-				if ((this.main.CommandLineOptions != null) && !string.IsNullOrEmpty(this.main.CommandLineOptions.RequestedTransmitFilePath))
+				if (!string.IsNullOrEmpty(this.main.StartOptions.RequestedTransmitFilePath))
 				{
-					Trace.WriteLine("Triggering automatic transmission for testing purposes");
+					SetFixedStatusText("Triggering automatic transmission");
 					timer_TestTransmit.Start();
 				}
 			}
@@ -880,44 +904,31 @@ namespace YAT.Gui.Forms
 
 		private void timer_TestTransmit_Tick(object sender, EventArgs e)
 		{
-			if (this.workspace.Terminals.Length < 2)
+			int id = this.main.CommandLineOptions.RequestedSequentialTerminalIndex;
+			if (this.workspace.GetTerminalBySequencialIndex(id) != null)
 			{
-				Trace.WriteLine("Trigger received, pending until 2 terminals have been created...");
+				SetTimedStatusText("Trigger received, pending until terminal has been created...");
 				return;
 			}
-			else if (!this.workspace.Terminals[0].IsConnected)
+			if (!this.workspace.GetTerminalBySequencialIndex(id).IsConnected)
 			{
-				Trace.WriteLine("Trigger received, pending until terminal 0 has connected...");
-				return;
-			}
-			else if (!this.workspace.Terminals[1].IsConnected)
-			{
-				Trace.WriteLine("Trigger received, pending until terminal 1 has connected...");
+				SetTimedStatusText("Trigger received, pending until terminal has connected...");
 				return;
 			}
 
 			// Preconditions fullfilled.
-			Trace.WriteLine("Trigger received, preparing transmit");
 			timer_TestTransmit.Stop();
+			SetTimedStatusText("Trigger received, preparing transmit");
 
 			// Automatically transmit data if desired.
-			// Used for GUI testing.
 			if ((this.main.CommandLineOptions != null) && !string.IsNullOrEmpty(this.main.CommandLineOptions.RequestedTransmitFilePath))
 			{
+				SetFixedStatusText("Automatically transmitting data on terminal " + id);
 				string filePath = this.main.CommandLineOptions.RequestedTransmitFilePath;
-				int id = this.main.CommandLineOptions.RequestedSequentialTerminalIndex;
+				this.workspace.Terminals[id].SendFile(new Model.Types.Command("", true, filePath));
 
-				if (this.workspace.Terminals.Length > id)
-				{
-					Trace.WriteLine("Automatically transmitting the following file on terminal " + id + ":");
-					Trace.Indent();
-					Trace.WriteLine(filePath);
-					Trace.Unindent();
-					this.workspace.Terminals[id].SendFile(new Model.Types.Command("", true, filePath));
-
-					Trace.WriteLine("Automatically closing YAT");
-					Close();
-				}
+				SetFixedStatusText("Automatically closing YAT");
+				Close();
 			}
 		}
 

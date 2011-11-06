@@ -460,7 +460,10 @@ namespace MKY.Test.CommandLine
 			Assert.IsFalse(cla.HelpIsRequested);
 
 			if (isValid)
+			{
+				Assert.IsTrue(cla.OptionIsGiven("svo"));
 				Assert.AreEqual(expectedValue, cla.StringValueOption);
+			}
 		}
 
 		#endregion
@@ -480,7 +483,10 @@ namespace MKY.Test.CommandLine
 			Assert.IsFalse(cla.HelpIsRequested);
 
 			if (isValid)
+			{
+				Assert.IsTrue(cla.OptionIsGiven("sbo"));
 				Assert.AreEqual(expectedValue, cla.SimpleBooleanOption);
+			}
 		}
 
 		#endregion
@@ -500,7 +506,10 @@ namespace MKY.Test.CommandLine
 			Assert.IsFalse(cla.HelpIsRequested);
 
 			if (isValid)
+			{
+				Assert.IsTrue(cla.OptionIsGiven("ivo"));
 				Assert.AreEqual(expectedValue, cla.IntValueOption);
+			}
 		}
 
 		#endregion
@@ -520,7 +529,10 @@ namespace MKY.Test.CommandLine
 			Assert.IsFalse(cla.HelpIsRequested);
 
 			if (isValid)
+			{
+				Assert.IsTrue(cla.OptionIsGiven("dvo"));
 				Assert.AreEqual(expectedValue, cla.DoubleValueOption);
+			}
 		}
 
 		#endregion
@@ -540,7 +552,10 @@ namespace MKY.Test.CommandLine
 			Assert.IsFalse(cla.HelpIsRequested);
 
 			if (isValid)
+			{
+				Assert.IsTrue(cla.OptionIsGiven("evo"));
 				Assert.AreEqual(expectedValue, cla.EnumValueOption);
+			}
 		}
 
 		#endregion

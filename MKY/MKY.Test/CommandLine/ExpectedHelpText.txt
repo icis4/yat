@@ -1,0 +1,64 @@
+Usage:
+
+  Application[.exe] [<Values>] [<Options>]
+
+
+Usage examples:
+
+  Application /svo=ABC
+          Run an eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeendless sequence
+          of actions.
+
+
+Arguments:
+
+  A pure value argument.
+
+  A combined value/option argument, this is the value argument description.
+
+
+Options:
+
+  /cvoa=STR, -cvoa=STR, --CombinedValueOptionArg=STR
+          A combined value/option argument, this is the option argument
+          description.
+
+  /svo=STR, -svo=STR, --StringValueOption=STR
+          A string value option.
+
+  /sbo, -sbo, --SimpleBooleanOption
+          A simple boolean option.
+
+  /ivo=VAL, -ivo=VAL, --IntValueOption=VAL
+          A int value option.
+
+  /dvo=VAL, -dvo=VAL, --DoubleValueOption=VAL
+          A double value option.
+
+  /evo=STR, -evo=STR, --EnumValueOption=STR
+          An enum value option.
+
+  /ld=STR, -ld=STR, --LongDescription=STR
+          A long description string value option that comes with a description
+          that blablabla blablabla blablabla blablabla blablabla blablabla
+          blablabla blablabla blablabla blablabla blablabla blablabla blablabla
+          blablabla.
+          blablabla blablabla blablabla blablabla blablabla blablabla blablabla
+          blablabla blablabla blablabla blablabla blablabla blablabla blablabla
+          blablabla blablabla blablabla blablabla blablabla blablabla blablabla
+          blablabla blablabla blablabla.
+
+  /h, -h, /?, -?, --Help, --HelpText
+          Display this help text.
+
+
+Notes:
+
+  Options that take values may use an equal sign '=', a colon ':' or a space to
+  separate the option from its value.
+
+  Option names are case-insensitive. Values are also case-insensitive unless
+  stated otherwise.
+
+  Some additional notes.
+

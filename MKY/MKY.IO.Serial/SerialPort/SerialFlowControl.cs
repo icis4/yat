@@ -131,21 +131,37 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public static new SerialFlowControlEx Parse(string flowControl)
 		{
+			SerialFlowControlEx result;
+
+			if (TryParse(flowControl, out result))
+				return (result);
+			else
+				throw (new ArgumentOutOfRangeException("flowControl", flowControl, "Invalid flow control."));
+		}
+
+		/// <summary></summary>
+		public static bool TryParse(string flowControl, out SerialFlowControlEx result)
+		{
 			if      (StringEx.EqualsOrdinalIgnoreCase   (flowControl, Manual_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase   (flowControl, Manual_stringShort) ||
 			         StringEx.EqualsAnyOrdinalIgnoreCase(flowControl, Manual_stringAlternatives))
 			{
-				return (new SerialFlowControlEx(SerialFlowControl.Manual));
+				result = new SerialFlowControlEx(SerialFlowControl.Manual);
+				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase   (flowControl, RS485_string) ||
 			         StringEx.EqualsOrdinalIgnoreCase   (flowControl, RS485_stringShort) ||
 			         StringEx.EqualsAnyOrdinalIgnoreCase(flowControl, RS485_stringAlternatives))
 			{
-				return (new SerialFlowControlEx(SerialFlowControl.RS485));
+				result = new SerialFlowControlEx(SerialFlowControl.RS485);
+				return (true);
 			}
 			else
 			{
-				return ((SerialFlowControlEx)MKY.IO.Ports.HandshakeEx.Parse(flowControl));
+				Ports.HandshakeEx handshake;
+				bool success = Ports.HandshakeEx.TryParse(flowControl, out handshake);
+				result = (SerialFlowControlEx)handshake;
+				return (success);
 			}
 		}
 
