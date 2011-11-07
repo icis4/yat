@@ -142,7 +142,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "RemotePort", ShortName = "rp", Description =
-			"The desired remote TCP or UDP port. Valid values are 0 through 65535. The default value is 10000." + EnvironmentEx.NewLineConstWorkaround +
+			"The desired remote TCP or UDP port. Valid values are " + System.Net.IPEndPoint.MinPort + " through " + System.Net.IPEndPoint.MinPort + ". The default value is " + MKY.IO.Serial.SocketSettings.DefaultPort + "." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to TCP clients, TCP AutoSockets and UDP.")]
 		public int RemotePort;
 
@@ -159,7 +159,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "LocalPort", ShortName = "lp", Description =
-			"The desired local TCP or UDP port. Valid values are 0 through 65535. The default value is 10000." + EnvironmentEx.NewLineConstWorkaround +
+			"The desired local TCP or UDP port. Valid values are " + System.Net.IPEndPoint.MinPort + " through " + System.Net.IPEndPoint.MinPort + ". The default value is " + MKY.IO.Serial.SocketSettings.DefaultPort + "." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to TCP servers, TCP AutoSockets and UDP.")]
 		public int LocalPort;
 
@@ -179,17 +179,28 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
-		[OptionArg(Name = "AutoReconnect", ShortName = "ar", Description =
-			"When connection is lost, try to reconnect every given milliseconds. Must be positive integral value equal or greater than 100. A common value is 500." + EnvironmentEx.NewLineConstWorkaround +
-			"By default, this feature is disabled. Only applies to serial COM ports and TCP clients.")]
-		public int AutoReconnect;
+		[OptionArg(Name = "SerialPortAutoReopen", ShortName = "npar", Description =
+			"When device is lost, e.g. a USB/Serial converter, try to reopen the port every given milliseconds. Must be positive integral value equal or greater than 100. A common value is 2000. Special value 0 means disabled." + EnvironmentEx.NewLineConstWorkaround +
+			"By default, this feature is enabled and set to 2000 milliseconds. Only applies to serial COM ports.")]
+		public int SerialPortAutoReopen;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// Name is intentionally written 'TCP' instead of 'Tcp' for better readability.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
-		[OptionArg(Name = "NoAutoOpen", ShortName = "nao", Description =
-			"When device is connected, don't automatically open it." + EnvironmentEx.NewLineConstWorkaround +
+		[OptionArg(Name = "TCPAutoReconnect", ShortName = "tar", Description =
+			"When connection is lost, try to reconnect every given milliseconds. Must be positive integral value equal or greater than 100. A common value is 500. Special value 0 means disabled." + EnvironmentEx.NewLineConstWorkaround +
+			"By default, this feature is disabled. Only applies to TCP clients.")]
+		public int TcpAutoReconnect;
+
+		/// <remarks>
+		/// Name is intentionally written 'USB' instead of 'Usb' for better readability.
+		/// </remarks>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[OptionArg(Name = "NoUSBAutoOpen", ShortName = "nuao", Description =
+			"When USB device is connected, don't automatically open it." + EnvironmentEx.NewLineConstWorkaround +
 			"By default, this feature is enabled. Only applies to USB Ser/HID.")]
-		public bool NoAutoOpen;
+		public bool NoUsbAutoOpen;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]

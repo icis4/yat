@@ -69,21 +69,17 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public const int DefaultLocalUdpPort = DefaultPort + 1;
 
-		#endregion
-
-		#region Static Properties
-		//==========================================================================================
-		// Static Properties
-		//==========================================================================================
-
-		/// <summary></summary>
+		/// <remarks>
+		/// Must be implemented as property that creates a new id object on each call to ensure that
+		/// there aren't multiple clients referencing (and modifying) the same id object.
+		/// </remarks>
 		public static AutoRetry TcpClientAutoReconnectDefault
 		{
-			// Must be implemented as property that creates a new id object on each call to
-			// ensure that there aren't multiple clients referencing (and modifying) the same
-			// id object.
 			get { return (new AutoRetry(false, 500)); }
 		}
+
+		/// <summary></summary>
+		public const int TcpClientAutoReconnectMinimumInterval = 100;
 
 		#endregion
 
