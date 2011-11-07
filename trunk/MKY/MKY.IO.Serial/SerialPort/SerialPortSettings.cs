@@ -49,6 +49,18 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public const byte ParityErrorReplacementDefault = 0x00;
 
+		/// <remarks>
+		/// Must be implemented as property that creates a new id object on each call to ensure that
+		/// there aren't multiple clients referencing (and modifying) the same id object.
+		/// </remarks>
+		public static AutoRetry AutoReopenDefault
+		{
+			get { return (new AutoRetry(true, 2000)); }
+		}
+
+		/// <summary></summary>
+		public const int AutoReopenMinimumInterval = 100;
+
 		/// <summary></summary>
 		public const byte XOnByte = MKY.IO.Ports.SerialPortSettings.XOnByte;
 
@@ -66,22 +78,6 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		public const bool NoSendOnInputBreakDefault = false;
-
-		#endregion
-
-		#region Static Properties
-		//==========================================================================================
-		// Static Properties
-		//==========================================================================================
-
-		/// <summary></summary>
-		public static AutoRetry AutoReopenDefault
-		{
-			// Must be implemented as property that creates a new id object on each call to
-			// ensure that there aren't multiple clients referencing (and modifying) the same
-			// id object.
-			get { return (new AutoRetry(true, 2000)); }
-		}
 
 		#endregion
 

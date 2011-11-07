@@ -47,6 +47,14 @@ namespace MKY
 
 			return (value);
 		}
+
+		/// <summary>
+		/// Returns whether "value" is within the boundaries specified.
+		/// </summary>
+		public static bool IsWithin(int value, int lower, int upper)
+		{
+			return ((value >= lower) && (value <= upper));
+		}
 	}
 }
 

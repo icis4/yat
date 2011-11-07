@@ -519,6 +519,75 @@ namespace YAT.Model
 					else
 						return (false);
 				}
+				if (this.commandLineArgs.OptionIsGiven("SerialPortAutoReopen"))
+				{
+					if      (this.commandLineArgs.SerialPortAutoReopen == 0)
+						this.startRequests.TerminalSettings.IO.SerialPort.AutoReopen = new MKY.IO.Serial.AutoRetry(false, 0);
+					else if (this.commandLineArgs.SerialPortAutoReopen >= MKY.IO.Serial.SerialPortSettings.AutoReopenMinimumInterval)
+						this.startRequests.TerminalSettings.IO.SerialPort.AutoReopen = new MKY.IO.Serial.AutoRetry(true, this.commandLineArgs.SerialPortAutoReopen);
+					else
+						return (false);
+				}
+			}
+			else if ((finalIOType == Domain.IOType.TcpClient) ||
+			         (finalIOType == Domain.IOType.TcpServer) ||
+			         (finalIOType == Domain.IOType.TcpAutoSocket) ||
+			         (finalIOType == Domain.IOType.Udp))
+			{
+				if (this.commandLineArgs.OptionIsGiven("RemoteHost"))
+				{
+					MKY.Net.IPHost remoteHost;
+					if (MKY.Net.IPHost.TryParse(this.commandLineArgs.RemoteHost, out remoteHost))
+						this.startRequests.TerminalSettings.IO.Socket.RemoteHost = remoteHost;
+					else
+						return (false);
+				}
+				if (((finalIOType == Domain.IOType.TcpClient) ||
+				     (finalIOType == Domain.IOType.TcpAutoSocket) ||
+				     (finalIOType == Domain.IOType.Udp)) &&
+				    this.commandLineArgs.OptionIsGiven("RemotePort"))
+				{
+					if (Int32Ex.IsWithin(this.commandLineArgs.RemotePort, System.Net.IPEndPoint.MinPort, System.Net.IPEndPoint.MaxPort))
+						this.startRequests.TerminalSettings.IO.Socket.RemotePort = this.commandLineArgs.RemotePort;
+					else
+						return (false);
+				}
+				if (this.commandLineArgs.OptionIsGiven("LocalInterface"))
+				{
+					MKY.Net.IPNetworkInterface localInterface;
+					if (MKY.Net.IPNetworkInterface.TryParse(this.commandLineArgs.LocalInterface, out localInterface))
+						this.startRequests.TerminalSettings.IO.Socket.LocalInterface = localInterface;
+					else
+						return (false);
+				}
+				if (((finalIOType == Domain.IOType.TcpServer) ||
+				     (finalIOType == Domain.IOType.TcpAutoSocket) ||
+				     (finalIOType == Domain.IOType.Udp)) &&
+				    this.commandLineArgs.OptionIsGiven("LocalPort"))
+				{
+					if (Int32Ex.IsWithin(this.commandLineArgs.LocalPort, System.Net.IPEndPoint.MinPort, System.Net.IPEndPoint.MaxPort))
+						this.startRequests.TerminalSettings.IO.Socket.LocalPort = this.commandLineArgs.LocalPort;
+					else
+						return (false);
+				}
+				if ((finalIOType == Domain.IOType.TcpClient) &&
+					this.commandLineArgs.OptionIsGiven("TCPAutoReconnect"))
+				{
+					if      (this.commandLineArgs.TcpAutoReconnect == 0)
+						this.startRequests.TerminalSettings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.AutoRetry(false, 0);
+					else if (this.commandLineArgs.TcpAutoReconnect >= MKY.IO.Serial.SocketSettings.TcpClientAutoReconnectMinimumInterval)
+						this.startRequests.TerminalSettings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.AutoRetry(true, this.commandLineArgs.TcpAutoReconnect);
+					else
+						return (false);
+				}
+			}
+			else if (finalIOType == Domain.IOType.UsbSerialHid)
+			{
+				äöüöäöüöäö
+			}
+			else
+			{
+				return (false);
 			}
 		}
 
