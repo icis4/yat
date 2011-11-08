@@ -139,10 +139,14 @@ namespace YAT.Model
 			"Only applies to TCP or UDP terminals.")]
 		public string RemoteHost;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The values in the description must be provided directly instead of referencing their respective code items
+		/// <see cref="System.Net.IPEndPoint.MinPort"/>, <see cref="System.Net.IPEndPoint.MaxPort"/> and <see cref="MKY.IO.Serial.SocketSettings.DefaultPort"/>
+		/// because attribute arguments must be constant.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "RemotePort", ShortName = "rp", Description =
-			"The desired remote TCP or UDP port. Valid values are " + System.Net.IPEndPoint.MinPort + " through " + System.Net.IPEndPoint.MinPort + ". The default value is " + MKY.IO.Serial.SocketSettings.DefaultPort + "." + EnvironmentEx.NewLineConstWorkaround +
+			"The desired remote TCP or UDP port. Valid values are 0 through 65535. The default value is 0." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to TCP clients, TCP AutoSockets and UDP.")]
 		public int RemotePort;
 
@@ -156,24 +160,36 @@ namespace YAT.Model
 			"The default value is '<Any>'. Only applies to TCP or UDP terminals.")]
 		public string LocalInterface;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The values in the description must be provided directly instead of referencing their respective code items
+		/// <see cref="System.Net.IPEndPoint.MinPort"/>, <see cref="System.Net.IPEndPoint.MaxPort"/> and <see cref="MKY.IO.Serial.SocketSettings.DefaultPort"/>
+		/// because attribute arguments must be constant.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "LocalPort", ShortName = "lp", Description =
-			"The desired local TCP or UDP port. Valid values are " + System.Net.IPEndPoint.MinPort + " through " + System.Net.IPEndPoint.MinPort + ". The default value is " + MKY.IO.Serial.SocketSettings.DefaultPort + "." + EnvironmentEx.NewLineConstWorkaround +
+			"The desired local TCP or UDP port. Valid values are 0 through 65535. The default value is 0." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to TCP servers, TCP AutoSockets and UDP.")]
 		public int LocalPort;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The values in the description must be provided directly instead of referencing their respective code items
+		/// <see cref="MKY.IO.Usb.DeviceInfo.FirstVendorIdString"/> and <see cref="MKY.IO.Usb.DeviceInfo.LastVendorIdString"/>
+		/// because attribute arguments must be constant.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "VendorID", ShortName = "VID", Description =
-			"The desired USB device vendor ID (VID). Must be a hexadecimal value from 0 to FFFF. The default value is the VID of the first device currently found." + EnvironmentEx.NewLineConstWorkaround +
+			"The desired USB device vendor ID (VID). Must be a hexadecimal value from 0000 to FFFF. The default value is the VID of the first device currently found." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to USB Ser/HID.")]
 		public string VendorId;
 
-		/// <summary></summary>
+		/// <remarks>
+		/// The values in the description must be provided directly instead of referencing their respective code items
+		/// <see cref="MKY.IO.Usb.DeviceInfo.FirstProductIdString"/> and <see cref="MKY.IO.Usb.DeviceInfo.LastProductIdString"/>
+		/// because attribute arguments must be constant.
+		/// </remarks>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "ProductID", ShortName = "PID", Description =
-			"The desired USB device product ID (PID). Must be a hexadecimal value from 0 to FFFF. The default value is the PID of the first device currently found." + EnvironmentEx.NewLineConstWorkaround +
+			"The desired USB device product ID (PID). Must be a hexadecimal value from 0000 to FFFF. The default value is the PID of the first device currently found." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to USB Ser/HID.")]
 		public string ProductId;
 
@@ -201,6 +217,17 @@ namespace YAT.Model
 			"When USB device is connected, don't automatically open it." + EnvironmentEx.NewLineConstWorkaround +
 			"By default, this feature is enabled. Only applies to USB Ser/HID.")]
 		public bool NoUsbAutoOpen;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[OptionArg(Name = "OpenTerminal", ShortName = "ot", Description = "Open the terminal.")]
+		public bool OpenTerminal;
+
+		/// <summary></summary>
+		[CLSCompliant(false)]
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		[OptionArg(Names = new string[] { "Log", "BeginLog" }, ShortName = "bl", Description = "Begin logging.")]
+		public bool BeginLog;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
