@@ -274,16 +274,17 @@ namespace YAT.Model
 			AssertNotDisposed();
 
 			// Process command line args into start requests:
-			if (!ProcessCommandLineArgsIntoStartRequests()
+			if (!ProcessCommandLineArgsIntoStartRequests())
+				return (MainResult.CommandLineError);
 
 
 
 			bool otherInstanceIsAlreadyRunning = OtherInstanceIsAlreadyRunning();
 			bool success = false;
 
-			if ((this.commandLineArgs != null) && !string.IsNullOrEmpty(this.commandLineArgs.RequestedFilePath))
+			if ((this.startRequests.WorkspaceSettings != null) || (this.startRequests.TerminalSettings != null))
 			{
-				success = OpenFromFile(this.commandLineArgs.RequestedFilePath);
+				success = OpenFromFile(this.startRequests.WorkspaceSettings, this.startRequests.TerminalSettings);
 
 				if (success)
 				{
@@ -326,7 +327,10 @@ namespace YAT.Model
 			if (success)
 				staticInstancesRunning++;
 
-			return (success);
+			if (success)
+				return (MainResult.Success);
+			else
+				return (MainResult.ApplicationStartError);
 		}
 
 		/// <summary>
@@ -583,12 +587,53 @@ namespace YAT.Model
 			}
 			else if (finalIOType == Domain.IOType.UsbSerialHid)
 			{
-				äöüöäöüöäö
+				if (this.commandLineArgs.OptionIsGiven("VendorID"))
+				{
+					int vendorId;
+					if (int.TryParse(this.commandLineArgs.VendorId, out vendorId))
+					{
+						if (Int32Ex.IsWithin(vendorId, MKY.IO.Usb.DeviceInfo.FirstVendorId, MKY.IO.Usb.DeviceInfo.LastVendorId))
+							this.startRequests.TerminalSettings.IO.UsbSerialHidDevice.DeviceInfo.VendorId = vendorId;
+						else
+							return (false);
+					}
+					else
+					{
+						return (false);
+					}
+				}
+				if (this.commandLineArgs.OptionIsGiven("ProductId"))
+				{
+					int productId;
+					if (int.TryParse(this.commandLineArgs.ProductId, out productId))
+					{
+						if (Int32Ex.IsWithin(productId, MKY.IO.Usb.DeviceInfo.FirstProductId, MKY.IO.Usb.DeviceInfo.LastProductId))
+							this.startRequests.TerminalSettings.IO.UsbSerialHidDevice.DeviceInfo.ProductId = productId;
+						else
+							return (false);
+					}
+					else
+					{
+						return (false);
+					}
+				}
+				if (this.commandLineArgs.OptionIsGiven("NoUSBAutoOpen"))
+				{
+					this.startRequests.TerminalSettings.IO.UsbSerialHidDevice.AutoOpen = !this.commandLineArgs.NoUsbAutoOpen;
+				}
 			}
 			else
 			{
 				return (false);
 			}
+
+			if (this.commandLineArgs.OptionIsGiven("OpenTerminal"))
+				this.startRequests.TerminalSettings.TerminalIsStarted = this.commandLineArgs.OpenTerminal;
+
+			if (this.commandLineArgs.OptionIsGiven("BeginLog"))
+				this.startRequests.TerminalSettings.LogIsStarted = this.commandLineArgs.BeginLog;
+
+			return (true);
 		}
 
 		private bool OtherInstanceIsAlreadyRunning()
@@ -720,7 +765,7 @@ namespace YAT.Model
 				OnExited(new EventArgs());
 
 			if (success)
-				return (Result);
+				return (MainResult.Success);
 			else
 				return (MainResult.ApplicationExitError);
 		}

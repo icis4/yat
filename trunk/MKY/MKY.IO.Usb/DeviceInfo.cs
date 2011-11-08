@@ -53,6 +53,18 @@ namespace MKY.IO.Usb
 		public const int LastProductId  = 0xFFFF;
 
 		/// <summary></summary>
+		public static readonly string FirstVendorIdString  = FirstVendorId .ToString("X4");
+
+		/// <summary></summary>
+		public static readonly string LastVendorIdString   = LastVendorId  .ToString("X4");
+
+		/// <summary></summary>
+		public static readonly string FirstProductIdString = FirstProductId.ToString("X4");
+
+		/// <summary></summary>
+		public static readonly string LastProductIdString  = LastProductId .ToString("X4");
+
+		/// <summary></summary>
 		public const int DefaultVendorId = 0;
 
 		/// <summary></summary>
