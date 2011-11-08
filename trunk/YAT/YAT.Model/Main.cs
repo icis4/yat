@@ -34,6 +34,7 @@ using System.IO;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Diagnostics;
 using MKY.Event;
 using MKY.IO;
 using MKY.Settings;
@@ -277,13 +278,13 @@ namespace YAT.Model
 			if (!ProcessCommandLineArgsIntoStartRequests())
 				return (MainResult.CommandLineError);
 
-
-
-			bool otherInstanceIsAlreadyRunning = OtherInstanceIsAlreadyRunning();
+			// Start YAT according to the start requests:
 			bool success = false;
+			bool otherInstanceIsAlreadyRunning = OtherInstanceIsAlreadyRunning();
 
 			if ((this.startRequests.WorkspaceSettings != null) || (this.startRequests.TerminalSettings != null))
 			{
+				success = OpenFromFile("");
 				success = OpenFromFile(this.startRequests.WorkspaceSettings, this.startRequests.TerminalSettings);
 
 				if (success)
@@ -383,17 +384,11 @@ namespace YAT.Model
 			{
 				if (ExtensionSettings.IsWorkspaceFile(Path.GetExtension(requestedFilePath)))
 				{
-					try
-					{
-						DocumentSettingsHandler<WorkspaceSettingsRoot> sh = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
-						sh.SettingsFilePath = requestedFilePath;
-						sh.Load();
-						this.startRequests.WorkspaceSettings = sh.Settings;
-					}
-					catch
-					{
+					DocumentSettingsHandler<WorkspaceSettingsRoot> settings;
+					if (OpenWorkspaceFile(requestedFilePath, out settings))
+						this.startRequests.WorkspaceSettings = settings.Settings;
+					else
 						return (false);
-					}
 				}
 				else if (ExtensionSettings.IsTerminalFile(Path.GetExtension(requestedFilePath)))
 				{
@@ -842,7 +837,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool CreateNewWorkspace()
 		{
-			// close workspace, only one workspace can exist within application
+			// Close workspace, only one workspace can exist within application.
 			if (this.workspace != null)
 			{
 				if (!this.workspace.Close())
@@ -851,7 +846,7 @@ namespace YAT.Model
 
 			OnFixedStatusTextRequest("Creating new workspace...");
 
-			// Create workspace
+			// Create workspace.
 			this.workspace = new Workspace(new DocumentSettingsHandler<WorkspaceSettingsRoot>());
 			AttachWorkspaceEventHandlers();
 			OnWorkspaceOpened(new WorkspaceEventArgs(this.workspace));
@@ -877,6 +872,14 @@ namespace YAT.Model
 		/// <returns><c>true</c> if successfully opened the workspace or terminal.</returns>
 		public virtual bool OpenFromFile(string filePath)
 		{
+
+			// Check whether workspace is ready, otherwise empty workspace needs to be created first.
+			if (this.workspace != null)
+				this.workspace.OpenTerminalFromFile(ofd.FileName);
+			else
+				this.main.OpenFromFile(ofd.FileName);
+
+
 			AssertNotDisposed();
 
 			string fileName = Path.GetFileName(filePath);
@@ -910,6 +913,41 @@ namespace YAT.Model
 					MessageBoxIcon.Stop
 					);
 				OnTimedStatusTextRequest("No file opened!");
+				return (false);
+			}
+		}
+
+		private bool OpenWorkspaceFile(string filePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settings)
+		{
+			Guid guid;
+			System.Xml.XmlException exception;
+			return (OpenWorkspaceFile(filePath, out settings, out guid, out exception));
+		}
+
+		private bool OpenWorkspaceFile(string filePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settings, out Guid guid, out System.Xml.XmlException exception)
+		{
+			try
+			{
+				settings = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
+				settings.SettingsFilePath = filePath;
+				settings.Load();
+
+				ApplicationSettings.LocalUser.AutoWorkspace.SetFilePathAndUser(filePath, Guid);
+				ApplicationSettings.Save();
+
+				// Try to retrieve GUID from file path (in case of auto saved workspace files).
+				if (!GuidEx.TryCreateGuidFromFilePath(filePath, GeneralSettings.AutoSaveWorkspaceFileNamePrefix, out guid))
+					guid = Guid.NewGuid();
+
+				exception = null;
+				return (true);
+			}
+			catch (System.Xml.XmlException ex)
+			{
+				DebugEx.WriteException(this.GetType(), ex);
+				settings = null;
+				guid = Guid.Empty;
+				exception = ex;
 				return (false);
 			}
 		}
@@ -951,32 +989,26 @@ namespace YAT.Model
 			// Open the workspace itself.
 			// -------------------------------------------------------------------------------------
 
-			OnFixedStatusTextRequest("Opening workspace...");
-			try
+			OnFixedStatusTextRequest("Creating workspace...");
+
+			DocumentSettingsHandler<WorkspaceSettingsRoot> settings;
+			Guid guid;
+			System.Xml.XmlException ex;
+			if (OpenWorkspaceFile(filePath, out settings, out guid, out ex))
 			{
-				DocumentSettingsHandler<WorkspaceSettingsRoot> sh = new DocumentSettingsHandler<WorkspaceSettingsRoot>();
-				sh.SettingsFilePath = filePath;
-				sh.Load();
-
-				ApplicationSettings.LocalUser.AutoWorkspace.SetFilePathAndUser(filePath, Guid);
-				ApplicationSettings.Save();
-
-				// Try to retrieve GUID from file path (in case of auto saved workspace files).
-				Guid guid = GuidEx.CreateGuidFromFilePath(filePath, GeneralSettings.AutoSaveWorkspaceFileNamePrefix);
-
 				// Create workspace.
-				this.workspace = new Workspace(sh, guid);
+				this.workspace = new Workspace(settings, guid);
 				AttachWorkspaceEventHandlers();
 
-				if (!sh.Settings.AutoSaved)
+				if (!settings.Settings.AutoSaved)
 					SetRecent(filePath);
 
 				OnWorkspaceOpened(new WorkspaceEventArgs(this.workspace));
-				OnTimedStatusTextRequest("Workspace opened.");
+				OnTimedStatusTextRequest("Workspace created.");
 			}
-			catch (System.Xml.XmlException ex)
+			else
 			{
-				OnFixedStatusTextRequest("Error opening workspace!");
+				OnFixedStatusTextRequest("Error creating workspace!");
 				OnMessageInputRequest
 					(
 					"Unable to open file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
@@ -1018,6 +1050,22 @@ namespace YAT.Model
 		}
 
 		#endregion
+
+		#endregion
+
+		#region Terminal
+		//==========================================================================================
+		// Terminal
+		//==========================================================================================
+
+		public virtual bool CreateNewTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> sh)
+		{
+			// Check whether workspace is ready, otherwise empty workspace needs to be creaeted first.
+			if (this.workspace != null)
+				this.workspace.CreateNewTerminal(sh);
+			else
+				this.main.CreateNewWorkspaceAndTerminal(sh);
+		}
 
 		#endregion
 

@@ -248,13 +248,25 @@ namespace YAT.Controller
 			// Check command line arguments.
 			if (!this.commandLineArgs.IsValid)
 			{
-				showHelp = true;
 				mainResult = MainResult.CommandLineError;
+				showHelp = true;
 			}
 			else
 			{
 				showLogo = this.commandLineArgs.ShowLogo;
 				showHelp = this.commandLineArgs.HelpIsRequested;
+			}
+
+			// Run application.
+			if (!showHelp)
+			{
+				if (runWithView)
+					mainResult = RunWithView();
+				else
+					mainResult = RunWithoutView();
+
+				if (mainResult == MainResult.CommandLineError)
+					showHelp = true;
 			}
 
 			// Handle command line arguments that result in a command line output.
@@ -269,13 +281,9 @@ namespace YAT.Controller
 				WriteReturnToConsole();
 
 				MKY.Win32.Console.Detach();
-				return (mainResult);
 			}
 
-			if (runWithView)
-				return (RunWithView());
-			else
-				return (RunWithoutView());
+			return (mainResult);
 		}
 
 		#endregion
@@ -325,10 +333,10 @@ namespace YAT.Controller
 						// \attention:
 						// This call does not return until the application exits.
 						Application.Run(view);
-					}
 
-					Model.MainResult modelResult = model.MainResult;
-					mainResult = ConvertMainResult(modelResult);
+						Model.MainResult result = view.MainResult;
+						mainResult = ConvertToMainResult(result);
+					}
 #if (!DEBUG)
 				}
 				catch (Exception ex)
@@ -364,11 +372,11 @@ namespace YAT.Controller
 					if (modelResult == Model.MainResult.Success)
 					{
 						modelResult = model.Exit();
-						mainResult = ConvertMainResult(modelResult);
+						mainResult = ConvertToMainResult(modelResult);
 					}
 					else
 					{
-						mainResult = ConvertMainResult(modelResult);
+						mainResult = ConvertToMainResult(modelResult);
 					}
 #if (!DEBUG)
 				}
@@ -439,7 +447,7 @@ namespace YAT.Controller
 
 
 		/// <summary></summary>
-		private MainResult ConvertMainResult(Model.MainResult result)
+		private MainResult ConvertToMainResult(Model.MainResult result)
 		{
 			switch (result)
 			{
@@ -453,7 +461,7 @@ namespace YAT.Controller
 		}
 
 		/// <summary></summary>
-		private Model.MainResult ConvertMainResult(MainResult result)
+		private Model.MainResult ConvertToMainResult(MainResult result)
 		{
 			switch (result)
 			{

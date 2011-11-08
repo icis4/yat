@@ -30,10 +30,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 using NUnit.Framework;
 
 using MKY.Collections.Generic;
+using MKY.CommandLine;
 
 #endregion
 
@@ -368,6 +370,36 @@ namespace MKY.Test.CommandLine
 	}
 
 	/// <summary></summary>
+	public static class RuntimeValidationTestData
+	{
+		#region Test Cases
+		//==========================================================================================
+		// Test Cases
+		//==========================================================================================
+
+		/// <summary></summary>
+		public static IEnumerable TestCases
+		{
+			get
+			{
+				yield return (new TestCaseData(true, typeof(CommandLineArgs)));
+
+				yield return (new TestCaseData(false, typeof(CommandLineArgsInvalid1)));
+				yield return (new TestCaseData(false, typeof(CommandLineArgsInvalid2)));
+				yield return (new TestCaseData(false, typeof(CommandLineArgsInvalid3)));
+				yield return (new TestCaseData(false, typeof(CommandLineArgsInvalid4)));
+				yield return (new TestCaseData(false, typeof(CommandLineArgsInvalid5)));
+				yield return (new TestCaseData(false, typeof(CommandLineArgsInvalid6)));
+				yield return (new TestCaseData(false, typeof(CommandLineArgsInvalid7)));
+				yield return (new TestCaseData(false, typeof(CommandLineArgsInvalid8)));
+				yield return (new TestCaseData(false, typeof(CommandLineArgsInvalid9)));
+			}
+		}
+
+		#endregion
+	}
+
+	/// <summary></summary>
 	[TestFixture]
 	public class ArgsHandlerTest
 	{
@@ -576,6 +608,47 @@ namespace MKY.Test.CommandLine
 
 			if (isValid)
 				Assert.AreEqual(expectedNumberOfOptions, cla.OptionArgsCount);
+		}
+
+		#endregion
+
+		#region Tests > RuntimeValidation
+		//------------------------------------------------------------------------------------------
+		// Tests > RuntimeValidation
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(RuntimeValidationTestData), "TestCases")]
+		public virtual void TestRuntimeValidation(bool isValid, Type type)
+		{
+			TestRuntimeValidation_type = type;
+			if (isValid)
+			{
+				// Must not throw an exception.
+				Assert.DoesNotThrow(new TestDelegate(TestRuntimeValidation_GetConstructorAndCreateObject));
+			}
+		#if (DEBUG)
+			else
+			{
+				Assert.Throws<ArgsHandler.RuntimeValidationException>(new TestDelegate(TestRuntimeValidation_GetConstructorAndCreateObject));
+			}
+		#endif
+		}
+
+		private Type TestRuntimeValidation_type;
+
+		private void TestRuntimeValidation_GetConstructorAndCreateObject()
+		{
+			try
+			{
+				ConstructorInfo ci = TestRuntimeValidation_type.GetConstructor(new Type[] { typeof(string[]) });
+				object obj = ci.Invoke(new object[] { new string[] { "" } });
+			}
+			catch (TargetInvocationException ex)
+			{
+				// Re-throw the inner exception which will be the 'ArgsHandler.RuntimeValidationException'.
+				throw (ex.InnerException);
+			}
 		}
 
 		#endregion
