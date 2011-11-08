@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 1 Development Version 1.99.27
+// MKY Development Version 1.0.6
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -17,7 +17,7 @@
 // Copyright © 2003-2011 Matthias Kläy.
 // All rights reserved.
 // ------------------------------------------------------------------------------------------------
-// YAT is licensed under the GNU LGPL.
+// This source code is licensed under the GNU LGPL.
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
@@ -27,70 +27,67 @@
 //==================================================================================================
 
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections;
 
-using MKY.CommandLine;
+using NUnit.Framework;
 
 #endregion
 
-namespace YAT.Controller
+namespace MKY.Test.Guid
 {
 	/// <summary></summary>
-	public class CommandLineArgs : Model.CommandLineArgs
+	public static class GuidExTestData
 	{
-		#region Constants
-
+		#region Test Cases
 		//==========================================================================================
-		// Constants
-		//==========================================================================================
-
-		private const string SuppressionJustification = "This is a simple container for command line args.";
-
-		#endregion
-
-		#region Public Fields = Command Line Arguments
-		//==========================================================================================
-		// Public Fields = Command Line Arguments
+		// Test Cases
 		//==========================================================================================
 
 		/// <summary></summary>
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
-		[OptionArg(Name = "NoLogo", ShortName = "nl", Description = "Do not display title and copyright.")]
-		public bool NoLogo;
-
-		/// <summary></summary>
-		[CLSCompliant(false)]
-		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
-		[OptionArg(Names = new string[] { "Help", "HelpText" }, ShortNames = new string[] { "h", "?" }, Description = "Display this help text.")]
-		public bool HelpIsRequested;
-
-		#endregion
-
-		#region Object Lifetime
-		//==========================================================================================
-		// Object Lifetime
-		//==========================================================================================
-
-		/// <summary></summary>
-		public CommandLineArgs(string[] args)
-			: base(args)
+		public static IEnumerable TestCases
 		{
+			get
+			{
+				yield return (new TestCaseData(true, @".\Prefix-dcf25dde-947a-4470-8567-b0dde2459933-Postfix.ext", "Prefix-", "-Postfix", new System.Guid("dcf25dde-947a-4470-8567-b0dde2459933")));
+				yield return (new TestCaseData(true, @".\Prefix-dcf25dde-947a-4470-8567-b0dde2459933.ext",         "Prefix-", "",         new System.Guid("dcf25dde-947a-4470-8567-b0dde2459933")));
+				yield return (new TestCaseData(true,        @".\dcf25dde-947a-4470-8567-b0dde2459933-Postfix.ext", "",        "-Postfix", new System.Guid("dcf25dde-947a-4470-8567-b0dde2459933")));
+			}
 		}
 
 		#endregion
+	}
 
-		#region Properties
+	/// <summary></summary>
+	[TestFixture]
+	public class GuidExTest
+	{
+		#region Tests
 		//==========================================================================================
-		// Properties
+		// Tests
 		//==========================================================================================
 
-		/// <summary>
-		/// Gets a value indicating whether [show logo].
-		/// </summary>
-		public bool ShowLogo
+		#region Tests > TryCreateGuidFromFilePath
+		//------------------------------------------------------------------------------------------
+		// Tests > TryCreateGuidFromFilePath
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test, TestCaseSource(typeof(GuidExTestData), "TestCases")]
+		public virtual void TestTryCreateGuidFromFilePath(bool isValid, string filePath, string prefix, string postfix, System.Guid expectedGuid)
 		{
-			get { return (!(NoLogo)); }
+			System.Guid actualGuid;
+			if (GuidEx.TryCreateGuidFromFilePath(filePath, prefix, postfix, out actualGuid))
+			{
+				Assert.IsTrue(isValid);
+				Assert.AreEqual(expectedGuid, actualGuid);
+			}
+			else
+			{
+				Assert.IsFalse(isValid);
+			}
 		}
+
+		#endregion
 
 		#endregion
 	}

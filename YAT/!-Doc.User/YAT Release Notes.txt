@@ -67,6 +67,10 @@ New:
 - All major terminal settings are now also available when creating a new terminal as well as when
   calling YAT from the command line (feature requests #3162725 and #3391925, related to feature
   request #2991946 listed below)
+- Powerful command line argument handling implemented related to the feature requests stated above
+  (feature request #2991946, also fixes feature request #2745211)
+   > Attribute based argument implementation including test environment and runtime validation
+   > Based on the NUnit command line argument infrastructure
 
 Important changes:
 - The monitor update rate is now dependent on the data rate, i.e. when more data is transmitted or
@@ -76,8 +80,6 @@ Important changes:
 - Shortcut for window layout added: Alt-C/H/V layouts cascaded/horizontal/vertical
 - Behavior of concurrent instances of YAT verified (feature request #2842713)
    > Already seems to work fine, test case added and successfully passed, limitation removed
-- Command line handling refactored, use of NUnit command line infrastructure
-  (feature request #2991946, also fixes feature request #2745211)
 - MKY.Data added
 - MKY.Settings.Settings renamed to MKY.Settings.SettingsItem
 - MKY.IO and MKY.IO.Net added to prepare refactoring of MKY.IO.Serial (feature request #3388950)

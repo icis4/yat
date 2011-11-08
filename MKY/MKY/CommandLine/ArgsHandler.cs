@@ -27,6 +27,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 
@@ -76,6 +77,25 @@ namespace MKY.CommandLine
 	/// </remarks>
 	public abstract class ArgsHandler
 	{
+		#region Types
+		//==========================================================================================
+		// Types
+		//==========================================================================================
+
+	#if (DEBUG)
+		/// <summary></summary>
+		public class RuntimeValidationException : ApplicationException
+		{
+			/// <summary></summary>
+			public RuntimeValidationException(string message)
+				: base(message)
+			{
+			}
+		}
+	#endif
+
+		#endregion
+
 		#region Constants
 		//==========================================================================================
 		// Constants
@@ -263,14 +283,34 @@ namespace MKY.CommandLine
 		// Protected Methods
 		//==========================================================================================
 
+		/// <summary></summary>
+		protected virtual FieldInfo[] GetMemberFields()
+		{
+			Type t = this.GetType();
+			FieldInfo[] fields = t.GetFields(BindingFlags.Instance | BindingFlags.Public);
+			return (fields);
+		}
+
+		/// <summary></summary>
+		protected virtual ValueArgAttribute[] GetValueArgAttributes(FieldInfo field)
+		{
+			ValueArgAttribute[] atts = (ValueArgAttribute[])field.GetCustomAttributes(typeof(ValueArgAttribute), true);
+			return (atts);
+		}
+
+		/// <summary></summary>
+		protected virtual OptionArgAttribute[] GetOptionArgAttributes(FieldInfo field)
+		{
+			OptionArgAttribute[] atts = (OptionArgAttribute[])field.GetCustomAttributes(typeof(OptionArgAttribute), true);
+			return (atts);
+		}
+
 		/// <summary>
 		/// Gets the member field.
 		/// </summary>
 		protected virtual FieldInfo GetMemberField(string name)
 		{
-			Type t = this.GetType();
-			FieldInfo[] fields = t.GetFields(BindingFlags.Instance | BindingFlags.Public);
-			foreach (FieldInfo field in fields)
+			foreach (FieldInfo field in GetMemberFields())
 			{
 				if (MatchesName(field, name))
 					return (field);
@@ -290,8 +330,7 @@ namespace MKY.CommandLine
 		/// </summary>
 		protected virtual bool MatchesName(FieldInfo field, string name)
 		{
-			object[] atts = field.GetCustomAttributes(typeof(OptionArgAttribute), true);
-			foreach (OptionArgAttribute att in atts)
+			foreach (OptionArgAttribute att in GetOptionArgAttributes(field))
 			{
 				foreach (string s in att.Names)
 				{
@@ -307,8 +346,7 @@ namespace MKY.CommandLine
 		/// </summary>
 		protected virtual bool MatchesShortName(FieldInfo field, string name)
 		{
-			object[] atts = field.GetCustomAttributes(typeof(OptionArgAttribute), true);
-			foreach (OptionArgAttribute att in atts)
+			foreach (OptionArgAttribute att in GetOptionArgAttributes(field))
 			{
 				foreach (string s in att.ShortNames)
 				{
@@ -481,8 +519,7 @@ namespace MKY.CommandLine
 				if (IsValidValueArg(value))
 				{
 					int valueArgIndex = 0;
-					Type t = this.GetType();
-					FieldInfo[] fields = t.GetFields(BindingFlags.Instance | BindingFlags.Public);
+					FieldInfo[] fields = GetMemberFields();
 					for (int fieldIndex = 0; fieldIndex < fields.Length; fieldIndex++)
 					{
 						FieldInfo field = fields[fieldIndex];
@@ -528,6 +565,41 @@ namespace MKY.CommandLine
 		/// </summary>
 		protected virtual bool Validate()
 		{
+		#if (DEBUG)
+			List<string> optionStrings = new List<string>();
+			foreach (FieldInfo field in GetMemberFields())
+			{
+				foreach (OptionArgAttribute att in GetOptionArgAttributes(field))
+				{
+					foreach (string s in att.ShortNames)
+					{
+						if (optionStrings.Contains(s))
+						{
+							string message = "Duplicate command line argument " + s;
+							Debug.WriteLine("Runtime validation failed for " + this.GetType() + ": " + message);
+							throw (new RuntimeValidationException(message));
+						}
+						else
+						{
+							optionStrings.Add(s);
+						}
+					}
+					foreach (string s in att.Names)
+					{
+						if (optionStrings.Contains(s))
+						{
+							string message = "Duplicate command line argument " + s;
+							Debug.WriteLine("Runtime validation failed for " + this.GetType() + ": " + message);
+							throw (new RuntimeValidationException(message));
+						}
+						else
+						{
+							optionStrings.Add(s);
+						}
+					}
+				}
+			}
+		#endif
 			return (true);
 		}
 
@@ -574,16 +646,14 @@ namespace MKY.CommandLine
 			maxWidth--;
 
 			StringBuilder helpText = new StringBuilder();
-
-			Type t = this.GetType();
-			FieldInfo[] fields = t.GetFields(BindingFlags.Instance | BindingFlags.Public);
+			FieldInfo[] fields = GetMemberFields();
 
 			helpText.AppendLine();
 			helpText.AppendLine("Arguments:");
 			helpText.AppendLine();
 			foreach (FieldInfo field in fields)
 			{
-				foreach (ValueArgAttribute att in field.GetCustomAttributes(typeof(ValueArgAttribute), true))
+				foreach (ValueArgAttribute att in GetValueArgAttributes(field))
 				{
 					if (!string.IsNullOrEmpty(att.Description))
 					{
@@ -603,7 +673,7 @@ namespace MKY.CommandLine
 				else if (field.FieldType.IsPrimitive)     valueTypeString = "=VAL";
 				else                                      valueTypeString = "=STR";
 
-				foreach (OptionArgAttribute att in field.GetCustomAttributes(typeof(OptionArgAttribute), true))
+				foreach (OptionArgAttribute att in GetOptionArgAttributes(field))
 				{
 					//
 					// Example:

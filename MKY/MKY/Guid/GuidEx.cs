@@ -35,51 +35,64 @@ namespace MKY
 	public static class GuidEx
 	{
 		/// <summary>
-		/// Creates and returns GUID from terminal file path if possible, new GUID otherwise.
-		/// </summary>
-		public static Guid CreateGuidFromFilePath(string filePath)
-		{
-			return (CreateGuidFromFilePath(filePath, "", ""));
-		}
-
-		/// <summary>
-		/// Creates and returns GUID from terminal file path if possible, new GUID otherwise.
-		/// </summary>
-		public static Guid CreateGuidFromFilePath(string filePath, string prefix)
-		{
-			return (CreateGuidFromFilePath(filePath, prefix, ""));
-		}
-
-		/// <summary>
-		/// Creates and returns GUID from terminal file path if possible, new GUID otherwise.
+		/// Tries to create and return a GUID from the file path if possible.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Intends to really catch all exceptions.")]
-		public static Guid CreateGuidFromFilePath(string filePath, string prefix, string postfix)
+		public static bool TryParse(string s, out Guid guid)
 		{
-			// File path may look like ".\Terminal-dcf25dde-947a-4470-8567-b0dde2459933.yat".
-			//                             Length: ^1     ^8   ^13  ^18  ^23          ^36
-			string fileName = Path.GetFileNameWithoutExtension(filePath);
-
-			// Do some basic checks to minimize probablity of exception below.
-			bool tryCreate = true;
-			if (tryCreate && (fileName.Length < (prefix.Length + 32))) // GUID string contains at least 32 chars.
-				tryCreate = false;
-			if (tryCreate && (StringEx.EqualsOrdinalIgnoreCase(fileName.Substring(0, prefix.Length), prefix)))
-				tryCreate = false;
-
-			if (tryCreate)
+			try
 			{
-				// Retrieve GUID string and try to create GUID from it.
-				string guidString = fileName.Substring(prefix.Length);
-				try
-				{
-					return (new Guid(guidString));
-				}
-				catch { }
+				guid = new Guid(s);
+				return (true);
 			}
+			catch
+			{
+				guid = Guid.Empty;
+				return (false);
+			}
+		}
 
-			// Create new GUID.
-			return (Guid.NewGuid());
+		/// <summary>
+		/// Tries to create and return a GUID from the file path if possible.
+		/// </summary>
+		public static bool TryCreateGuidFromFilePath(string filePath, out Guid guid)
+		{
+			return (TryCreateGuidFromFilePath(filePath, "", "", out guid));
+		}
+
+		/// <summary>
+		/// Tries to create and return a GUID from the file path if possible.
+		/// </summary>
+		public static bool TryCreateGuidFromFilePath(string filePath, string prefix, out Guid guid)
+		{
+			return (TryCreateGuidFromFilePath(filePath, prefix, "", out guid));
+		}
+
+		/// <summary>
+		/// Tries to create and return a GUID from the file path if possible.
+		/// </summary>
+		public static bool TryCreateGuidFromFilePath(string filePath, string prefix, string postfix, out Guid guid)
+		{
+			guid = Guid.Empty;
+
+			// File path may look like ".\Prefix-dcf25dde-947a-4470-8567-b0dde2459933-Postfix.ext".
+			//                           Length: ^1     ^8   ^13  ^18  ^23          ^36
+			string fileName = Path.GetFileNameWithoutExtension(filePath);
+			string actualPrefix    = StringEx.Left (fileName, prefix.Length);
+			string actualInbetween = StringEx.Mid  (fileName, prefix.Length, (fileName.Length - postfix.Length - 1));
+			string actualPostfix   = StringEx.Right(fileName, postfix.Length);
+
+			// Do some basic checks to minimize probablity of exception below:
+			if (actualInbetween.Length < 32) // GUID string contains at least 32 chars.
+				return (false);
+
+			if (!StringEx.EqualsOrdinalIgnoreCase(actualPrefix, prefix))
+				return (false);
+
+			if (!StringEx.EqualsOrdinalIgnoreCase(actualPostfix, postfix))
+				return (false);
+
+			return (TryParse(actualInbetween, out guid));
 		}
 	}
 }

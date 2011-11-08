@@ -45,7 +45,20 @@ namespace YAT.Model
 	/// <summary></summary>
 	public class CommandLineArgs : ArgsHandler
 	{
+		#region Constants
+
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
 		private const string SuppressionJustification = "This is a simple container for command line args.";
+
+		#endregion
+
+		#region Public Fields = Command Line Arguments
+		//==========================================================================================
+		// Public Fields = Command Line Arguments
+		//==========================================================================================
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
@@ -272,11 +285,25 @@ namespace YAT.Model
 		[OptionArg(Names = new string[] { "Vertical", "TileVertical" }, ShortName = "tv", Description = "Tile the terminals vertical after having openend a workspace.")]
 		public bool TileVertical;
 
+		#endregion
+
+		#region Object Lifetime
+		//==========================================================================================
+		// Object Lifetime
+		//==========================================================================================
+
 		/// <summary></summary>
 		public CommandLineArgs(string[] args)
 			: base(args)
 		{
 		}
+
+		#endregion
+
+		#region Methods
+		//==========================================================================================
+		// Methods
+		//==========================================================================================
 
 		/// <summary>
 		/// Processes the command line options and validates them.
@@ -350,7 +377,6 @@ namespace YAT.Model
 			return (isValid);
 		}
 
-
 		/// <summary>
 		/// Gets the help text.
 		/// </summary>
@@ -394,6 +420,8 @@ namespace YAT.Model
 			helpText.AppendLine();
 			return (helpText.ToString());
 		}
+
+		#endregion
 	}
 }
 

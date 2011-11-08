@@ -49,8 +49,10 @@
     <Compile Include="..\MKY.Version.cs">
       <Link>Properties\MKY.Version.cs</Link>
     </Compile>
-    <Compile Include="CommandLine\ArgsHandler.cs" />
+    <Compile Include="CommandLine\ArgsHandlerTest.cs" />
     <Compile Include="CommandLine\CommandLineArgs.cs" />
+    <Compile Include="CommandLine\CommandLineArgsInvalid.cs" />
+    <Compile Include="Guid\GuidExTest.cs" />
     <Compile Include="IO\PathExTest.cs" />
     <Compile Include="Net\IPHostTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

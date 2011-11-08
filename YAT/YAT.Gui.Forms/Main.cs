@@ -35,6 +35,7 @@ using System.Windows.Forms;
 
 using MKY;
 using MKY.IO;
+using MKY.Diagnostics;
 using MKY.Event;
 using MKY.Settings;
 using MKY.Time;
@@ -92,6 +93,7 @@ namespace YAT.Gui.Forms
 		private bool isStartingUp = true;
 		private bool isSettingControls = false;
 		private ClosingState closingState = ClosingState.None;
+		private Model.MainResult mainResult = Model.MainResult.Success;
 
 		// Model:
 		private Model.Main main;
@@ -159,6 +161,12 @@ namespace YAT.Gui.Forms
 			get { return (this.closingState != ClosingState.None); }
 		}
 
+		/// <summary></summary>
+		public Model.MainResult MainResult
+		{
+			get { return (this.mainResult); }
+		}
+
 		#endregion
 
 		#region Form Event Handlers
@@ -169,60 +177,59 @@ namespace YAT.Gui.Forms
 		/// <summary>
 		/// Rest is done here as soon as form is visible.
 		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The <see cref="System.Windows.Forms.PaintEventArgs"/> instance containing the event data.</param>
 		private void Main_Paint(object sender, PaintEventArgs e)
 		{
 			if (this.isStartingUp)
 			{
 				this.isStartingUp = false;
 
-				// Start YAT according to main settings.
-				switch (this.main.Start())
+				// Start YAT according to the main settings.
+				this.mainResult = this.main.Start();
+
+				if (this.mainResult != Model.MainResult.Success)
 				{
-					case Model.StartResult.Success:
+					if (this.mainResult == Model.MainResult.CommandLineError)
 					{
-						if (this.main.Exit())
-							mainResult = MainResult.Success;
-						else
-							mainResult = MainResult.ApplicationExitError;
-
-						break;
+						MessageBox.Show
+							(
+							this,
+							"YAT could not be started because the given command line is invalid." + Environment.NewLine +
+							"Use 'YAT.exe /?' for command line help.",
+							"Invalid Command Line",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Warning
+							);
 					}
-
-					case Model.StartResult.CommandLineError:
+					else
 					{
-						mainResult = MainResult.CommandLineError;
-						break;
+						MessageBox.Show
+							(
+							this,
+							"YAT could not be started!",
+							"Application Start Error",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Error
+							);
 					}
-
-					default: // Covers 'Model.StartResult.ApplicationStartError'.
-					{
-						mainResult = MainResult.ApplicationStartError;
-						break;
-					}
-				}
-
-				if (!this.main.Start())
-				{
-					MessageBox.Show
-						(
-						this,
-						"YAT could not be started!",
-						"Serious Application Error",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Stop
-						);
 					Close();
 				}
-
-				// If workspace is empty, display new terminal dialog.
-				if (this.workspace.TerminalCount == 0)
-					ShowNewTerminalDialog();
-
-				// Automatically trigger transmit data if desired.
-				if (!string.IsNullOrEmpty(this.main.StartOptions.RequestedTransmitFilePath))
+				else
 				{
-					SetFixedStatusText("Triggering automatic transmission");
-					timer_TestTransmit.Start();
+					// If workspace is empty, display new terminal dialog.
+					if (this.main.StartRequests.ShowNewTerminalDialog)
+					{
+						if (this.workspace.TerminalCount == 0)
+							ShowNewTerminalDialog();
+					}
+
+					// Automatically trigger transmit data if desired.
+					if (!string.IsNullOrEmpty(this.main.StartRequests.RequestedTransmitFilePath))
+					{
+						SetFixedStatusText("Triggering automatic transmission");
+						timer_TestTransmit.Start();
+					}
 				}
 			}
 		}
@@ -266,7 +273,7 @@ namespace YAT.Gui.Forms
 			{
 				this.closingState = ClosingState.IsClosingFromForm;
 
-				e.Cancel = (!this.main.Exit());
+				e.Cancel = (this.main.Exit() != Model.MainResult.Success);
 
 				// Revert closing state in case of cancel.
 				if (!e.Cancel)
@@ -904,7 +911,7 @@ namespace YAT.Gui.Forms
 
 		private void timer_TestTransmit_Tick(object sender, EventArgs e)
 		{
-			int id = this.main.CommandLineOptions.RequestedSequentialTerminalIndex;
+			int id = this.main.StartRequests.RequestedSequentialTerminalIndex;
 			if (this.workspace.GetTerminalBySequencialIndex(id) != null)
 			{
 				SetTimedStatusText("Trigger received, pending until terminal has been created...");
@@ -921,14 +928,27 @@ namespace YAT.Gui.Forms
 			SetTimedStatusText("Trigger received, preparing transmit");
 
 			// Automatically transmit data if desired.
-			if ((this.main.CommandLineOptions != null) && !string.IsNullOrEmpty(this.main.CommandLineOptions.RequestedTransmitFilePath))
+			if ((this.main.StartRequests != null) && !string.IsNullOrEmpty(this.main.StartRequests.RequestedTransmitFilePath))
 			{
-				SetFixedStatusText("Automatically transmitting data on terminal " + id);
-				string filePath = this.main.CommandLineOptions.RequestedTransmitFilePath;
-				this.workspace.Terminals[id].SendFile(new Model.Types.Command("", true, filePath));
+				try
+				{
+					SetFixedStatusText("Automatically transmitting data on terminal " + id);
 
-				SetFixedStatusText("Automatically closing YAT");
-				Close();
+					string filePath = this.main.StartRequests.RequestedTransmitFilePath;
+					this.workspace.Terminals[id].SendFile(new Model.Types.Command("", true, filePath));
+
+					SetFixedStatusText("Automatically closing YAT");
+					Close();
+				}
+				catch (Exception ex)
+				{
+					DebugEx.WriteException(this.GetType(), ex);
+					this.mainResult = Model.MainResult.ApplicationRunError;
+				}
+			}
+			else
+			{
+				this.mainResult = Model.MainResult.ApplicationRunError;
 			}
 		}
 
@@ -1189,6 +1209,7 @@ namespace YAT.Gui.Forms
 		private void ShowOpenWorkspaceFromFileDialog()
 		{
 			SetFixedStatusText("Opening workspace...");
+
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Title = "Open";
 			ofd.Filter = ExtensionSettings.WorkspaceFilesFilter;
@@ -1201,7 +1222,7 @@ namespace YAT.Gui.Forms
 				ApplicationSettings.LocalUser.Paths.WorkspaceFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
-				this.main.OpenWorkspaceFromFile(ofd.FileName);
+				this.main.OpenFromFile(ofd.FileName);
 			}
 			else
 			{
@@ -1351,6 +1372,7 @@ namespace YAT.Gui.Forms
 		private void ShowNewTerminalDialog()
 		{
 			SetFixedStatusText("New terminal...");
+
 			Gui.Forms.NewTerminal f = new Gui.Forms.NewTerminal(ApplicationSettings.LocalUser.NewTerminal);
 			if (f.ShowDialog(this) == DialogResult.OK)
 			{
@@ -1360,12 +1382,7 @@ namespace YAT.Gui.Forms
 				ApplicationSettings.Save();
 
 				DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>(f.TerminalSettingsResult);
-
-				// Check whether workspace is ready, otherwise empty workspace needs to be creaeted first.
-				if (this.workspace != null)
-					this.workspace.CreateNewTerminal(sh);
-				else
-					this.main.CreateNewWorkspaceAndTerminal(sh);
+				this.main.CreateNewTerminalFromSettings(sh);
 			}
 			else
 			{
@@ -1376,6 +1393,7 @@ namespace YAT.Gui.Forms
 		private void ShowOpenTerminalFromFileDialog()
 		{
 			SetFixedStatusText("Opening terminal...");
+
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Title = "Open";
 			ofd.Filter = ExtensionSettings.TerminalFilesFilter;
@@ -1388,11 +1406,7 @@ namespace YAT.Gui.Forms
 				ApplicationSettings.LocalUser.Paths.TerminalFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
-				// Check whether workspace is ready, otherwise empty workspace needs to be creaeted first.
-				if (this.workspace != null)
-					this.workspace.OpenTerminalFromFile(ofd.FileName);
-				else
-					this.main.OpenFromFile(ofd.FileName);
+				this.main.OpenFromFile(ofd.FileName);
 			}
 			else
 			{
