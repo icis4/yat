@@ -28,10 +28,15 @@ using System.Windows.Forms;
 namespace MKY.Windows.Forms
 {
 	/// <summary>
-	/// System.Windows.Forms utility methods.
+	/// <see cref="System.Windows.Forms"/> utility methods.
 	/// </summary>
 	public static class ControlEx
 	{
+		/// <summary>
+		/// An invalid index is represented by -1 in <see cref="System.Windows.Forms"/> controls.
+		/// </summary>
+		public const int InvalidIndex = -1;
+
 		/// <summary>
 		/// Manual <see cref="FormStartPosition.CenterParent"/> because automatic doesn't work
 		/// if not shown as dialog.

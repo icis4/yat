@@ -245,13 +245,13 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "Terminal", ShortName = "t", Description =
-			"Perform any requested operation on the terminal with the given sequential index within the opening workspace." + EnvironmentEx.NewLineConstWorkaround +
+			"Perform any requested operation on the terminal with the given dynamic index within the opening workspace." + EnvironmentEx.NewLineConstWorkaround +
 			"Valid values are 1 based indices 1, 2, 3,... up to the number of open terminals. " +
 			"0 indicates that the currently active terminal is used, which typically is the last terminal opened. " +
 			"-1 indicates 'none', i.e. no operation is performed at all. The default value is 0." + EnvironmentEx.NewLineConstWorkaround +
 			"This option is useful to temporarily switch off any option without having to edit the command line. " +
 			"This option only has an effect when opening a workspace that contains more than one terminal.")]
-		public int RequestedSequentialTerminalIndex;
+		public int RequestedDynamicTerminalIndex;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
@@ -372,6 +372,14 @@ namespace YAT.Model
 					RequestedTransmitFilePath = null;
 					BoolEx.ClearIfSet(ref isValid);
 				}
+			}
+
+			// Tile:
+			if ((TileHorizontal == true) && (TileVertical == true)) // Must be mutual exclusive.
+			{
+				TileHorizontal = false;
+				TileVertical = false;
+				BoolEx.ClearIfSet(ref isValid);
 			}
 
 			return (isValid);

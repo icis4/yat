@@ -282,14 +282,28 @@ namespace YAT.Model
 			bool success = false;
 			bool otherInstanceIsAlreadyRunning = OtherInstanceIsAlreadyRunning();
 
-			if ((this.startRequests.WorkspaceSettings != null) || (this.startRequests.TerminalSettings != null))
+			bool workspaceIsRequested = (this.startRequests.WorkspaceSettings != null);
+			bool terminalIsRequested  = (this.startRequests.TerminalSettings != null);
+
+			if (workspaceIsRequested || terminalIsRequested)
 			{
-				success = OpenFromFile("");
-				success = OpenFromFile(this.startRequests.WorkspaceSettings, this.startRequests.TerminalSettings);
+				if (workspaceIsRequested && terminalIsRequested)
+				{
+					success = OpenWorkspaceFromSettings(this.startRequests.WorkspaceSettings, this.startRequests.RequestedDynamicTerminalIndex, this.startRequests.TerminalSettings);
+				}
+				else if (workspaceIsRequested) // Workspace only.
+				{
+					success = OpenWorkspaceFromSettings(this.startRequests.WorkspaceSettings);
+				}
+				else // Terminal only.
+				{
+					success = OpenTerminalFromSettings(this.startRequests.TerminalSettings);
+				}
 
 				if (success)
 				{
-					// Reset workspace file path:
+					// Reset workspace file path to ensure that command line files are not used on
+					// next 'normal' start:
 					ApplicationSettings.LocalUser.AutoWorkspace.ResetFilePathAndUser();
 					ApplicationSettings.Save();
 
@@ -333,6 +347,11 @@ namespace YAT.Model
 			else
 				return (MainResult.ApplicationStartError);
 		}
+
+		#region Start > Private Methods
+		//------------------------------------------------------------------------------------------
+		// Start > Private Methods
+		//------------------------------------------------------------------------------------------
 
 		/// <summary>
 		/// Process the command line arguments according to their priority and translate them into
@@ -384,25 +403,19 @@ namespace YAT.Model
 			{
 				if (ExtensionSettings.IsWorkspaceFile(Path.GetExtension(requestedFilePath)))
 				{
-					DocumentSettingsHandler<WorkspaceSettingsRoot> settings;
-					if (OpenWorkspaceFile(requestedFilePath, out settings))
-						this.startRequests.WorkspaceSettings = settings.Settings;
+					DocumentSettingsHandler<WorkspaceSettingsRoot> sh;
+					if (OpenWorkspaceFile(requestedFilePath, out sh))
+						this.startRequests.WorkspaceSettings = sh;
 					else
 						return (false);
 				}
 				else if (ExtensionSettings.IsTerminalFile(Path.GetExtension(requestedFilePath)))
 				{
-					try
-					{
-						DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
-						sh.SettingsFilePath = requestedFilePath;
-						sh.Load();
-						this.startRequests.TerminalSettings = sh.Settings;
-					}
-					catch
-					{
+					DocumentSettingsHandler<TerminalSettingsRoot> sh;
+					if (OpenTerminalFile(requestedFilePath, out sh))
+						this.startRequests.TerminalSettings = sh;
+					else
 						return (false);
-					}
 				}
 				else
 				{
@@ -413,40 +426,34 @@ namespace YAT.Model
 			// Prio 6 = Retrieve the requested terminal and validate it:
 			if (this.startRequests.WorkspaceSettings != null) // Applies to a terminal within a workspace.
 			{
-				int terminalIndex = -1;
-				if (this.startRequests.RequestedSequentialTerminalIndex > this.startRequests.WorkspaceSettings.TerminalSettings.Count)
+				int terminalIndex = InvalidTerminalIndex;
+				if (this.startRequests.RequestedDynamicTerminalIndex > this.startRequests.WorkspaceSettings.Settings.TerminalSettings.Count)
 					return (false);
-				else if (this.commandLineArgs.RequestedSequentialTerminalIndex == 0)
-					terminalIndex = (this.startRequests.WorkspaceSettings.TerminalSettings.Count);
+				else if (this.commandLineArgs.RequestedDynamicTerminalIndex == 0)
+					terminalIndex = (this.startRequests.WorkspaceSettings.Settings.TerminalSettings.Count);
 
 				if (terminalIndex >= 1)
 				{
-					try
-					{
-						DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
-						sh.SettingsFilePath = this.startRequests.WorkspaceSettings.TerminalSettings[terminalIndex - 1].FilePath;
-						sh.Load();
-						this.startRequests.TerminalSettings = sh.Settings;
-					}
-					catch
-					{
+					DocumentSettingsHandler<TerminalSettingsRoot> sh;
+					if (!OpenTerminalFile(this.startRequests.WorkspaceSettings.Settings.TerminalSettings[terminalIndex - 1].FilePath, out sh))
+						this.startRequests.TerminalSettings = sh;
+					else
 						return (false);
-					}
 				}
 			}
 			else if (this.startRequests.TerminalSettings != null) // Applies to a dedicated terminal.
 			{
-				switch (this.commandLineArgs.RequestedSequentialTerminalIndex)
+				switch (this.commandLineArgs.RequestedDynamicTerminalIndex)
 				{
-					case -1: this.startRequests.RequestedSequentialTerminalIndex = -1; break;
-					case  0:                                                           break;
-					case  1:                                                           break;
+					case InvalidTerminalIndex: this.startRequests.RequestedDynamicTerminalIndex = InvalidTerminalIndex; break;
+					case 0: break;
+					case 1: break;
 					default: return (false);
 				}
 			}
 			else if (this.commandLineArgs.NewIsRequested) // Applies to new settings.
 			{
-				this.startRequests.TerminalSettings = new TerminalSettingsRoot();
+				this.startRequests.TerminalSettings = new DocumentSettingsHandler<TerminalSettingsRoot>();
 			}
 
 			// Prio 6 = Override settings as desired:
@@ -454,7 +461,7 @@ namespace YAT.Model
 			{
 				Domain.TerminalTypeEx terminalType;
 				if (Domain.TerminalTypeEx.TryParse(this.commandLineArgs.TerminalType, out terminalType))
-					this.startRequests.TerminalSettings.TerminalType = terminalType;
+					this.startRequests.TerminalSettings.Settings.TerminalType = terminalType;
 				else
 					return (false);
 			}
@@ -462,19 +469,19 @@ namespace YAT.Model
 			{
 				Domain.IOTypeEx ioType;
 				if (Domain.IOTypeEx.TryParse(this.commandLineArgs.IOType, out ioType))
-					this.startRequests.TerminalSettings.IOType = ioType;
+					this.startRequests.TerminalSettings.Settings.IOType = ioType;
 				else
 					return (false);
 			}
 
-			Domain.IOType finalIOType = this.startRequests.TerminalSettings.IOType;
+			Domain.IOType finalIOType = this.startRequests.TerminalSettings.Settings.IOType;
 			if (finalIOType == Domain.IOType.SerialPort)
 			{
 				if (this.commandLineArgs.OptionIsGiven("SerialPort"))
 				{
 					MKY.IO.Ports.SerialPortId portId;
 					if (MKY.IO.Ports.SerialPortId.TryFrom(this.commandLineArgs.SerialPort, out portId))
-						this.startRequests.TerminalSettings.IO.SerialPort.PortId = portId;
+						this.startRequests.TerminalSettings.Settings.IO.SerialPort.PortId = portId;
 					else
 						return (false);
 				}
@@ -482,7 +489,7 @@ namespace YAT.Model
 				{
 					MKY.IO.Ports.BaudRateEx baudRate;
 					if (MKY.IO.Ports.BaudRateEx.TryFrom(this.commandLineArgs.BaudRate, out baudRate))
-						this.startRequests.TerminalSettings.IO.SerialPort.Communication.BaudRate = baudRate;
+						this.startRequests.TerminalSettings.Settings.IO.SerialPort.Communication.BaudRate = baudRate;
 					else
 						return (false);
 				}
@@ -490,7 +497,7 @@ namespace YAT.Model
 				{
 					MKY.IO.Ports.DataBitsEx dataBits;
 					if (MKY.IO.Ports.DataBitsEx.TryFrom(this.commandLineArgs.DataBits, out dataBits))
-						this.startRequests.TerminalSettings.IO.SerialPort.Communication.DataBits = dataBits;
+						this.startRequests.TerminalSettings.Settings.IO.SerialPort.Communication.DataBits = dataBits;
 					else
 						return (false);
 				}
@@ -498,7 +505,7 @@ namespace YAT.Model
 				{
 					MKY.IO.Ports.ParityEx parity;
 					if (MKY.IO.Ports.ParityEx.TryParse(this.commandLineArgs.Parity, out parity))
-						this.startRequests.TerminalSettings.IO.SerialPort.Communication.Parity = parity;
+						this.startRequests.TerminalSettings.Settings.IO.SerialPort.Communication.Parity = parity;
 					else
 						return (false);
 				}
@@ -506,7 +513,7 @@ namespace YAT.Model
 				{
 					MKY.IO.Ports.StopBitsEx stopBits;
 					if (MKY.IO.Ports.StopBitsEx.TryFrom(this.commandLineArgs.StopBits, out stopBits))
-						this.startRequests.TerminalSettings.IO.SerialPort.Communication.StopBits = stopBits;
+						this.startRequests.TerminalSettings.Settings.IO.SerialPort.Communication.StopBits = stopBits;
 					else
 						return (false);
 				}
@@ -514,16 +521,16 @@ namespace YAT.Model
 				{
 					MKY.IO.Serial.SerialFlowControlEx flowControl;
 					if (MKY.IO.Serial.SerialFlowControlEx.TryParse(this.commandLineArgs.FlowControl, out flowControl))
-						this.startRequests.TerminalSettings.IO.SerialPort.Communication.FlowControl = flowControl;
+						this.startRequests.TerminalSettings.Settings.IO.SerialPort.Communication.FlowControl = flowControl;
 					else
 						return (false);
 				}
 				if (this.commandLineArgs.OptionIsGiven("SerialPortAutoReopen"))
 				{
 					if      (this.commandLineArgs.SerialPortAutoReopen == 0)
-						this.startRequests.TerminalSettings.IO.SerialPort.AutoReopen = new MKY.IO.Serial.AutoRetry(false, 0);
+						this.startRequests.TerminalSettings.Settings.IO.SerialPort.AutoReopen = new MKY.IO.Serial.AutoRetry(false, 0);
 					else if (this.commandLineArgs.SerialPortAutoReopen >= MKY.IO.Serial.SerialPortSettings.AutoReopenMinimumInterval)
-						this.startRequests.TerminalSettings.IO.SerialPort.AutoReopen = new MKY.IO.Serial.AutoRetry(true, this.commandLineArgs.SerialPortAutoReopen);
+						this.startRequests.TerminalSettings.Settings.IO.SerialPort.AutoReopen = new MKY.IO.Serial.AutoRetry(true, this.commandLineArgs.SerialPortAutoReopen);
 					else
 						return (false);
 				}
@@ -537,7 +544,7 @@ namespace YAT.Model
 				{
 					MKY.Net.IPHost remoteHost;
 					if (MKY.Net.IPHost.TryParse(this.commandLineArgs.RemoteHost, out remoteHost))
-						this.startRequests.TerminalSettings.IO.Socket.RemoteHost = remoteHost;
+						this.startRequests.TerminalSettings.Settings.IO.Socket.RemoteHost = remoteHost;
 					else
 						return (false);
 				}
@@ -547,7 +554,7 @@ namespace YAT.Model
 				    this.commandLineArgs.OptionIsGiven("RemotePort"))
 				{
 					if (Int32Ex.IsWithin(this.commandLineArgs.RemotePort, System.Net.IPEndPoint.MinPort, System.Net.IPEndPoint.MaxPort))
-						this.startRequests.TerminalSettings.IO.Socket.RemotePort = this.commandLineArgs.RemotePort;
+						this.startRequests.TerminalSettings.Settings.IO.Socket.RemotePort = this.commandLineArgs.RemotePort;
 					else
 						return (false);
 				}
@@ -555,7 +562,7 @@ namespace YAT.Model
 				{
 					MKY.Net.IPNetworkInterface localInterface;
 					if (MKY.Net.IPNetworkInterface.TryParse(this.commandLineArgs.LocalInterface, out localInterface))
-						this.startRequests.TerminalSettings.IO.Socket.LocalInterface = localInterface;
+						this.startRequests.TerminalSettings.Settings.IO.Socket.LocalInterface = localInterface;
 					else
 						return (false);
 				}
@@ -565,7 +572,7 @@ namespace YAT.Model
 				    this.commandLineArgs.OptionIsGiven("LocalPort"))
 				{
 					if (Int32Ex.IsWithin(this.commandLineArgs.LocalPort, System.Net.IPEndPoint.MinPort, System.Net.IPEndPoint.MaxPort))
-						this.startRequests.TerminalSettings.IO.Socket.LocalPort = this.commandLineArgs.LocalPort;
+						this.startRequests.TerminalSettings.Settings.IO.Socket.LocalPort = this.commandLineArgs.LocalPort;
 					else
 						return (false);
 				}
@@ -573,9 +580,9 @@ namespace YAT.Model
 					this.commandLineArgs.OptionIsGiven("TCPAutoReconnect"))
 				{
 					if      (this.commandLineArgs.TcpAutoReconnect == 0)
-						this.startRequests.TerminalSettings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.AutoRetry(false, 0);
+						this.startRequests.TerminalSettings.Settings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.AutoRetry(false, 0);
 					else if (this.commandLineArgs.TcpAutoReconnect >= MKY.IO.Serial.SocketSettings.TcpClientAutoReconnectMinimumInterval)
-						this.startRequests.TerminalSettings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.AutoRetry(true, this.commandLineArgs.TcpAutoReconnect);
+						this.startRequests.TerminalSettings.Settings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.AutoRetry(true, this.commandLineArgs.TcpAutoReconnect);
 					else
 						return (false);
 				}
@@ -588,7 +595,7 @@ namespace YAT.Model
 					if (int.TryParse(this.commandLineArgs.VendorId, out vendorId))
 					{
 						if (Int32Ex.IsWithin(vendorId, MKY.IO.Usb.DeviceInfo.FirstVendorId, MKY.IO.Usb.DeviceInfo.LastVendorId))
-							this.startRequests.TerminalSettings.IO.UsbSerialHidDevice.DeviceInfo.VendorId = vendorId;
+							this.startRequests.TerminalSettings.Settings.IO.UsbSerialHidDevice.DeviceInfo.VendorId = vendorId;
 						else
 							return (false);
 					}
@@ -603,7 +610,7 @@ namespace YAT.Model
 					if (int.TryParse(this.commandLineArgs.ProductId, out productId))
 					{
 						if (Int32Ex.IsWithin(productId, MKY.IO.Usb.DeviceInfo.FirstProductId, MKY.IO.Usb.DeviceInfo.LastProductId))
-							this.startRequests.TerminalSettings.IO.UsbSerialHidDevice.DeviceInfo.ProductId = productId;
+							this.startRequests.TerminalSettings.Settings.IO.UsbSerialHidDevice.DeviceInfo.ProductId = productId;
 						else
 							return (false);
 					}
@@ -614,7 +621,7 @@ namespace YAT.Model
 				}
 				if (this.commandLineArgs.OptionIsGiven("NoUSBAutoOpen"))
 				{
-					this.startRequests.TerminalSettings.IO.UsbSerialHidDevice.AutoOpen = !this.commandLineArgs.NoUsbAutoOpen;
+					this.startRequests.TerminalSettings.Settings.IO.UsbSerialHidDevice.AutoOpen = !this.commandLineArgs.NoUsbAutoOpen;
 				}
 			}
 			else
@@ -623,10 +630,10 @@ namespace YAT.Model
 			}
 
 			if (this.commandLineArgs.OptionIsGiven("OpenTerminal"))
-				this.startRequests.TerminalSettings.TerminalIsStarted = this.commandLineArgs.OpenTerminal;
+				this.startRequests.TerminalSettings.Settings.TerminalIsStarted = this.commandLineArgs.OpenTerminal;
 
 			if (this.commandLineArgs.OptionIsGiven("BeginLog"))
-				this.startRequests.TerminalSettings.LogIsStarted = this.commandLineArgs.BeginLog;
+				this.startRequests.TerminalSettings.Settings.LogIsStarted = this.commandLineArgs.BeginLog;
 
 			return (true);
 		}
@@ -704,6 +711,60 @@ namespace YAT.Model
 				{
 					// Don't care about exceptions.
 				}
+			}
+		}
+
+		#endregion
+
+		#endregion
+
+		#region Open
+		//==========================================================================================
+		// Open
+		//==========================================================================================
+
+		/// <summary>
+		/// Opens the workspace or terminal file given.
+		/// </summary>
+		/// <param name="filePath">Workspace or terminal file.</param>
+		/// <returns><c>true</c> if successfully opened the workspace or terminal.</returns>
+		public virtual bool OpenFromFile(string filePath)
+		{
+			AssertNotDisposed();
+
+			string fileName = Path.GetFileName(filePath);
+			string extension = Path.GetExtension(filePath);
+
+			if      (ExtensionSettings.IsWorkspaceFile(extension))
+			{
+				OnFixedStatusTextRequest("Opening workspace " + fileName + "...");
+				return (OpenWorkspaceFromFile(filePath));
+			}
+			else if (ExtensionSettings.IsTerminalFile(extension))
+			{
+				// Create workspace if it doesn't exist yet.
+				if (this.workspace == null)
+				{
+					if (!CreateNewWorkspace())
+						return (false);
+				}
+
+				OnFixedStatusTextRequest("Opening terminal " + fileName + "...");
+				return (this.workspace.OpenTerminalFromFile(filePath));
+			}
+			else
+			{
+				OnFixedStatusTextRequest("Unknown file type!");
+				OnMessageInputRequest
+					(
+					"File" + Environment.NewLine + filePath + Environment.NewLine +
+					"has unknown type!",
+					"File Error",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Stop
+					);
+				OnTimedStatusTextRequest("No file opened!");
+				return (false);
 			}
 		}
 
@@ -829,9 +890,9 @@ namespace YAT.Model
 
 		#endregion
 
-		#region Workspace > Methods
+		#region Workspace > Public Methods
 		//------------------------------------------------------------------------------------------
-		// Workspace > Methods
+		// Workspace > Public Methods
 		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
@@ -856,65 +917,124 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual bool CreateNewWorkspaceAndTerminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
+		public virtual bool OpenWorkspaceFromFile(string filePath)
 		{
-			if (!CreateNewWorkspace())
-				return (false);
-
-			return (this.workspace.CreateNewTerminal(settingsHandler));
-		}
-
-		/// <summary>
-		/// Opens YAT and opens the workspace or terminal file given. This method can directly
-		/// be called from the main providing the command line arguments.
-		/// </summary>
-		/// <param name="filePath">Workspace or terminal file.</param>
-		/// <returns><c>true</c> if successfully opened the workspace or terminal.</returns>
-		public virtual bool OpenFromFile(string filePath)
-		{
-
-			// Check whether workspace is ready, otherwise empty workspace needs to be created first.
-			if (this.workspace != null)
-				this.workspace.OpenTerminalFromFile(ofd.FileName);
-			else
-				this.main.OpenFromFile(ofd.FileName);
-
-
 			AssertNotDisposed();
 
-			string fileName = Path.GetFileName(filePath);
-			string extension = Path.GetExtension(filePath);
-			if (ExtensionSettings.IsWorkspaceFile(extension))
-			{
-				OnFixedStatusTextRequest("Opening workspace " + fileName + "...");
-				return (OpenWorkspaceFromFile(filePath));
-			}
-			else if (ExtensionSettings.IsTerminalFile(extension))
-			{
-				// Create workspace if it doesn't exist yet.
-				if (this.workspace == null)
-				{
-					if (!CreateNewWorkspace())
-						return (false);
-				}
+			// Ensure that the workspace file is not already open.
+			if (!CheckWorkspaceFile(filePath))
+				return (false);
 
-				OnFixedStatusTextRequest("Opening terminal " + fileName + "...");
-				return (this.workspace.OpenTerminalFromFile(filePath));
+			// Close workspace, only one workspace can exist within the application.
+			if (!CloseWorkspace())
+				return (false);
+
+			// Open the workspace.
+			DocumentSettingsHandler<WorkspaceSettingsRoot> settings;
+			Guid guid;
+			System.Xml.XmlException ex;
+
+			OnFixedStatusTextRequest("Opening workspace...");
+			if (!OpenWorkspaceFile(filePath, out settings, out guid, out ex))
+			{
+				return (OpenWorkspaceFromSettings(settings));
 			}
 			else
 			{
-				OnFixedStatusTextRequest("Unknown file type!");
+				OnFixedStatusTextRequest("Error opening workspace!");
 				OnMessageInputRequest
 					(
-					"File" + Environment.NewLine + filePath + Environment.NewLine +
-					"has unknown type!",
-					"File Error",
+					"Unable to open file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
+					"XML error message: " + ex.Message + Environment.NewLine +
+					"File error message: " + ex.InnerException.Message,
+					"Invalid Workspace File",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Stop
 					);
-				OnTimedStatusTextRequest("No file opened!");
+				OnTimedStatusTextRequest("No workspace opened!");
 				return (false);
 			}
+		}
+
+		/// <summary></summary>
+		public virtual bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settings)
+		{
+			return (OpenWorkspaceFromSettings(settings, InvalidTerminalIndex, null));
+		}
+
+		/// <summary></summary>
+		private bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settings, int dynamicTerminalIndexToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace)
+		{
+			AssertNotDisposed();
+
+			// Ensure that the workspace file is not already open.
+			if (!CheckWorkspaceFile(settings.SettingsFilePath))
+				return (false);
+
+			// Close workspace, only one workspace can exist within the application.
+			if (!CloseWorkspace())
+				return (false);
+
+			// Create new workspace.
+			OnFixedStatusTextRequest("Opening workspace...");
+			this.workspace = new Workspace(settings, guid);
+			AttachWorkspaceEventHandlers();
+
+			if (!settings.Settings.AutoSaved)
+				SetRecent(settings.SettingsFilePath);
+
+			OnWorkspaceOpened(new WorkspaceEventArgs(this.workspace));
+			OnTimedStatusTextRequest("Workspace opened.");
+
+			// Open workspace terminals.
+			int terminalCount = this.workspace.OpenTerminals(dynamicTerminalIndexToReplace, terminalSettingsToReplace);
+			if (terminalCount == 1)
+				OnTimedStatusTextRequest("Workspace terminal opened.");
+			else if (terminalCount > 1)
+				OnTimedStatusTextRequest("Workspace terminals opened.");
+			else
+				OnTimedStatusTextRequest("Workspace contains no terminal to open.");
+
+			return (true);
+		}
+
+		/// <summary>
+		/// Closes the active workspace.
+		/// </summary>
+		public virtual bool CloseWorkspace()
+		{
+			if (this.workspace != null)
+				return (this.workspace.Close());
+			else
+				return (true);
+		}
+
+		#endregion
+
+		#region Workspace > Private Methods
+		//------------------------------------------------------------------------------------------
+		// Workspace > Private Methods
+		//------------------------------------------------------------------------------------------
+
+		private bool CheckWorkspaceFile(string workspaceFilePath)
+		{
+			if (this.workspace != null)
+			{
+				if (PathEx.Equals(workspaceFilePath, this.workspace.SettingsFilePath))
+				{
+					OnFixedStatusTextRequest("Workspace is already open.");
+					OnMessageInputRequest
+						(
+						"Workspace is already open and will not be re-openend.",
+						"Workspace Warning",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+						);
+					OnTimedStatusTextRequest("Workspace not re-opened.");
+					return (false);
+				}
+			}
+			return (true);
 		}
 
 		private bool OpenWorkspaceFile(string filePath, out DocumentSettingsHandler<WorkspaceSettingsRoot> settings)
@@ -952,101 +1072,30 @@ namespace YAT.Model
 			}
 		}
 
-		/// <summary></summary>
-		public virtual bool OpenWorkspaceFromFile(string filePath)
+		private bool OpenTerminalFile(string filePath, out DocumentSettingsHandler<TerminalSettingsRoot> settings)
 		{
-			AssertNotDisposed();
-
-			// -------------------------------------------------------------------------------------
-			// Check whether workspace is already opened.
-			// -------------------------------------------------------------------------------------
-
-			if (this.workspace != null)
-			{
-				if (PathEx.Equals(filePath, this.workspace.SettingsFilePath))
-				{
-					OnFixedStatusTextRequest("Workspace is already open.");
-					OnMessageInputRequest
-						(
-						"Workspace is already open and will not be re-openend.",
-						"Workspace File Warning",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning
-						);
-					OnTimedStatusTextRequest("Workspace not re-opened.");
-					return (false);
-				}
-			}
-
-			// Close workspace, only one workspace can exist within application.
-			if (this.workspace != null)
-			{
-				if (!this.workspace.Close())
-					return (false);
-			}
-
-			// -------------------------------------------------------------------------------------
-			// Open the workspace itself.
-			// -------------------------------------------------------------------------------------
-
-			OnFixedStatusTextRequest("Creating workspace...");
-
-			DocumentSettingsHandler<WorkspaceSettingsRoot> settings;
-			Guid guid;
-			System.Xml.XmlException ex;
-			if (OpenWorkspaceFile(filePath, out settings, out guid, out ex))
-			{
-				// Create workspace.
-				this.workspace = new Workspace(settings, guid);
-				AttachWorkspaceEventHandlers();
-
-				if (!settings.Settings.AutoSaved)
-					SetRecent(filePath);
-
-				OnWorkspaceOpened(new WorkspaceEventArgs(this.workspace));
-				OnTimedStatusTextRequest("Workspace created.");
-			}
-			else
-			{
-				OnFixedStatusTextRequest("Error creating workspace!");
-				OnMessageInputRequest
-					(
-					"Unable to open file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
-					"XML error message: " + ex.Message + Environment.NewLine +
-					"File error message: " + ex.InnerException.Message,
-					"Invalid Workspace File",
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Stop
-					);
-				OnTimedStatusTextRequest("No workspace opened!");
-				return (false);
-			}
-
-			// -------------------------------------------------------------------------------------
-			// Open workspace terminals.
-			// -------------------------------------------------------------------------------------
-
-			int terminalCount = this.workspace.OpenTerminals();
-
-			if (terminalCount == 1)
-				OnTimedStatusTextRequest("Workspace terminal opened.");
-			else if (terminalCount > 1)
-				OnTimedStatusTextRequest("Workspace terminals opened.");
-			else
-				OnTimedStatusTextRequest("Workspace contains no terminal to open.");
-
-			return (true);
+			System.Xml.XmlException exception;
+			return (OpenTerminalFile(filePath, out settings, out exception));
 		}
 
-		/// <summary>
-		/// Closes the active workspace.
-		/// </summary>
-		public virtual bool CloseWorkspace()
+		private bool OpenTerminalFile(string filePath, out DocumentSettingsHandler<TerminalSettingsRoot> settings, out System.Xml.XmlException exception)
 		{
-			if (this.workspace != null)
-				return (this.workspace.Close());
-			else
+			try
+			{
+				settings = new DocumentSettingsHandler<TerminalSettingsRoot>();
+				settings.SettingsFilePath = filePath;
+				settings.Load();
+
+				exception = null;
+				return (true);
+			}
+			catch (System.Xml.XmlException ex)
+			{
+				DebugEx.WriteException(this.GetType(), ex);
+				settings = null;
+				exception = ex;
 				return (false);
+			}
 		}
 
 		#endregion
@@ -1058,13 +1107,31 @@ namespace YAT.Model
 		// Terminal
 		//==========================================================================================
 
+		/// <summary></summary>
 		public virtual bool CreateNewTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> sh)
 		{
-			// Check whether workspace is ready, otherwise empty workspace needs to be creaeted first.
-			if (this.workspace != null)
-				this.workspace.CreateNewTerminal(sh);
-			else
-				this.main.CreateNewWorkspaceAndTerminal(sh);
+			if (this.workspace == null)
+				CreateNewWorkspace();
+
+			return (this.workspace.CreateNewTerminal(sh));
+		}
+
+		/// <summary></summary>
+		public virtual bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> sh)
+		{
+			if (this.workspace == null)
+				CreateNewWorkspace();
+
+			return (this.workspace.OpenTerminalFromSettings(sh));
+		}
+
+		/// <summary></summary>
+		public virtual bool OpenTerminalFromFile(string filePath)
+		{
+			if (this.workspace == null)
+				CreateNewWorkspace();
+
+			return (this.workspace.OpenTerminalFromFile(filePath));
 		}
 
 		#endregion

@@ -34,6 +34,7 @@ using System.IO;
 using System.Text;
 
 using MKY;
+using MKY.IO;
 using MKY.Text;
 
 #endregion
@@ -527,7 +528,7 @@ namespace YAT.Domain.Parser
 						return (true);
 					}
 
-					case -1:                               // End-of-stream.
+					case StreamEx.EndOfStream:
 					{
 						parser.EndByteArray();
 						parser.HasFinished = true;

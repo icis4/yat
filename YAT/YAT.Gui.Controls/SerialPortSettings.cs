@@ -21,11 +21,19 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
 using MKY.Event;
+using MKY.Windows.Forms;
+
+#endregion
 
 namespace YAT.Gui.Controls
 {
@@ -392,7 +400,7 @@ namespace YAT.Gui.Controls
 			else if (Enabled)
 				comboBox_BaudRate.Text = this.baudRate.ToString();
 			else
-				comboBox_BaudRate.SelectedIndex = -1;
+				comboBox_BaudRate.SelectedIndex = ControlEx.InvalidIndex;
 
 			if (Enabled)
 			{
@@ -403,10 +411,10 @@ namespace YAT.Gui.Controls
 			}
 			else
 			{
-				comboBox_DataBits.SelectedIndex    = -1;
-				comboBox_Parity.SelectedIndex      = -1;
-				comboBox_StopBits.SelectedIndex    = -1;
-				comboBox_FlowControl.SelectedIndex = -1;
+				comboBox_DataBits.SelectedIndex    = ControlEx.InvalidIndex;
+				comboBox_Parity.SelectedIndex      = ControlEx.InvalidIndex;
+				comboBox_StopBits.SelectedIndex    = ControlEx.InvalidIndex;
+				comboBox_FlowControl.SelectedIndex = ControlEx.InvalidIndex;
 			}
 
 			if (Enabled)

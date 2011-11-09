@@ -34,6 +34,11 @@ namespace MKY
 	public static class StringEx
 	{
 		/// <summary>
+		/// An invalid index is represented by -1.
+		/// </summary>
+		public const int InvalidIndex = -1;
+	
+		/// <summary>
 		/// Compares two specified <see cref="System.String"/> objects ignoring culture.
 		/// </summary>
 		public static bool EqualsOrdinal(string strA, string strB)
@@ -165,8 +170,8 @@ namespace MKY
 		/// <param name="comparisonType">One of the <see cref="StringComparison"/> values.</param>
 		/// <returns>
 		/// The zero-based index position of the value parameter if that string is found,
-		/// or -1 if it is not. If value is <see cref="String.Empty"/>, the return value is
-		/// startIndex.
+		/// or <see cref="InvalidIndex"/> if it is not. If value is <see cref="String.Empty"/>,
+		/// the return value is startIndex.
 		/// </returns>
 		/// <exception cref="ArgumentNullException">searchString is null.</exception>
 		/// <exception cref="ArgumentOutOfRangeException">count or startIndex is negative.  -or- count plus startIndex specify a position that is not within this instance.</exception>
@@ -193,7 +198,7 @@ namespace MKY
 					return (startIndex + l[i].Key + index);
 			}
 
-			return (-1);
+			return (InvalidIndex);
 		}
 
 		/// <summary>

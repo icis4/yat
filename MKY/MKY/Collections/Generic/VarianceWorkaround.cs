@@ -36,6 +36,11 @@ namespace MKY.Collections.Generic
 	public static class VarianceWorkaround
 	{
 		/// <summary>
+		/// An invalid index is represented by -1.
+		/// </summary>
+		public const int InvalidIndex = -1;
+
+		/// <summary>
 		/// Simple variance for single method, variance in one direction only.
 		/// </summary>
 		/// <typeparam name="S">IList source.</typeparam>
@@ -263,7 +268,7 @@ namespace MKY.Collections.Generic
 				}
 				else
 				{
-					return (-1);
+					return (InvalidIndex);
 				}
 			}
 

@@ -48,6 +48,20 @@ namespace YAT.Model
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
 	public class Workspace : IDisposable, IGuidProvider
 	{
+		#region Constants
+		//==========================================================================================
+		// Constants
+		//==========================================================================================
+
+		/// <summary>
+		/// An invalid index is represented by -1.
+		/// </summary>
+		private const int InvalidIndex = -1;
+
+		private const int FirstValidIndex = 0;
+
+		#endregion
+
 		#region Fields
 		//==========================================================================================
 		// Fields
@@ -868,6 +882,14 @@ namespace YAT.Model
 		/// </summary>
 		public virtual int OpenTerminals()
 		{
+			return (OpenTerminals(Main.InvalidTerminalIndex, null));
+		}
+
+		/// <summary>
+		/// Opens terminals according to workspace settings and returns number of successfully opened terminals.
+		/// </summary>
+		public virtual int OpenTerminals(int dynamicTerminalIndexToReplace, DocumentSettingsHandler<WorkspaceSettingsRoot> terminalSettingsToReplace)
+		{
 			int requestedTerminalCount = this.settingsRoot.TerminalSettings.Count;
 			if (requestedTerminalCount == 1)
 				OnFixedStatusTextRequest("Opening workspace terminal...");
@@ -876,8 +898,10 @@ namespace YAT.Model
 
 			int openedTerminalCount = 0;
 			GuidList<TerminalSettingsItem> clone = new GuidList<TerminalSettingsItem>(this.settingsRoot.TerminalSettings);
-			foreach (TerminalSettingsItem item in clone)
+			for (int i = 0; i < clone.Count; i++)
 			{
+				if (Sequ dynamicTerminalIndexToReplace)
+				TerminalSettingsItem item = clone[i];
 				try
 				{
 					if (OpenTerminalFromFile(item.FilePath, item.Guid, item.FixedIndex, item.Window, true))
@@ -913,7 +937,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool OpenTerminalFromFile(string filePath)
 		{
-			return (OpenTerminalFromFile(filePath, Guid.Empty, TerminalSettingsItem.UndefinedFixedIndex, null, false));
+			return (OpenTerminalFromFile(filePath, Guid.Empty, Indices.DefaultFixedIndex, null, false));
 		}
 
 		private bool OpenTerminalFromFile(string filePath, Guid guid, int fixedIndex, Settings.WindowSettings windowSettings, bool suppressErrorHandling)
@@ -987,6 +1011,9 @@ namespace YAT.Model
 			}
 		}
 
+		/// <summary></summary>
+		public virtual bool OpenTerminalFromSettings
+
 		private TerminalSettingsItem CreateTerminalSettingsItem(Terminal terminal, int fixedIndex)
 		{
 			TerminalSettingsItem tsi = new TerminalSettingsItem();
@@ -1002,7 +1029,7 @@ namespace YAT.Model
 			tsi.Guid = terminal.Guid;
 			tsi.FilePath = filePath;
 
-			if (fixedIndex >= TerminalSettingsItem.UndefinedFixedIndex)
+			if (fixedIndex >= Indices.FirstFixedIndex)
 				tsi.FixedIndex = fixedIndex;
 
 			tsi.Window = new WindowSettings(terminal.WindowSettings); // Clone window settings.
@@ -1012,7 +1039,7 @@ namespace YAT.Model
 
 		private void AddToWorkspace(Terminal terminal)
 		{
-			AddToWorkspace(terminal, TerminalSettingsItem.UndefinedFixedIndex);
+			AddToWorkspace(terminal, Indices.DefaultFixedIndex);
 		}
 
 		private void AddToWorkspace(Terminal terminal, int requestedFixedIndex)
@@ -1070,7 +1097,7 @@ namespace YAT.Model
 		private int AddToFixedIndices(Terminal terminal, int requestedFixedIndex)
 		{
 			// First, try to lookup the requested fixed index if suitable.
-			if (requestedFixedIndex >= TerminalSettingsItem.FirstFixedIndex)
+			if (requestedFixedIndex >= Indices.FirstFixedIndex)
 			{
 				if (!this.fixedIndices.ContainsKey(requestedFixedIndex))
 				{
@@ -1080,7 +1107,7 @@ namespace YAT.Model
 			}
 
 			// As fallback, use the next available fixed index.
-			for (int i = TerminalSettingsItem.FirstFixedIndex; i <= int.MaxValue; i++)
+			for (int i = Indices.FirstFixedIndex; i <= int.MaxValue; i++)
 			{
 				if (!this.fixedIndices.ContainsKey(i))
 				{
@@ -1117,10 +1144,7 @@ namespace YAT.Model
 		public virtual int GetDynamicIndexByTerminal(Terminal terminal)
 		{
 			int index = this.terminals.IndexOf(this.activeTerminal);
-			if (index >= 0)
-				return (index + TerminalSettingsItem.FirstDynamicIndex);
-			else
-				return (TerminalSettingsItem.UndefinedDynamicIndex);
+			return (IndexToDynamicIndex(index));
 		}
 
 		/// <summary>
@@ -1143,11 +1167,11 @@ namespace YAT.Model
 		/// index starts at 1 and is unique throughout the execution of the program. If no terminal
 		/// with this index exists, <c>null</c> is returned.
 		/// </summary>
-		public virtual Terminal GetTerminalBySequencialIndex(int index)
+		public virtual Terminal GetTerminalBySequencialIndex(int sequencialIndex)
 		{
 			foreach (Terminal t in this.terminals)
 			{
-				if (t.SequencialIndex == index)
+				if (t.SequencialIndex == sequencialIndex)
 					return (t);
 			}
 			return (null);
@@ -1162,10 +1186,11 @@ namespace YAT.Model
 		/// <remarks>
 		/// The index must be in the range of 1...NumberOfTerminals.
 		/// </remarks>
-		public virtual Terminal GetTerminalByDynamicIndex(int index)
+		public virtual Terminal GetTerminalByDynamicIndex(int dynamicIndex)
 		{
-			if (index <= (this.terminals.Count))
-				return (this.terminals[index - 1]);
+			int index = DynamicIndexToIndex(dynamicIndex);
+			if (index >= FirstValidIndex)
+				return (this.terminals[index]);
 			else
 				return (null);
 		}

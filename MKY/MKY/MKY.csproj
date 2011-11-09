@@ -124,7 +124,7 @@
     <Compile Include="Types\UInt64Ex.cs" />
     <Compile Include="Usb\Descriptors.cs" />
     <Compile Include="Windows.Forms\NativeMessageHandler.cs" />
-    <Compile Include="Windows.Forms\FormEx.cs" />
+    <Compile Include="Windows.Forms\ControlEx.cs" />
     <Compile Include="Windows.Forms\OrientationEx.cs" />
     <Compile Include="Xml\AlternateTolerantXmlSerializer.cs" />
     <Compile Include="Xml\IAlternateXmlElementProvider.cs" />

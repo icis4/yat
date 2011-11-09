@@ -440,7 +440,7 @@ namespace YAT.Gui.Controls
 				}
 				else
 				{
-					comboBox_Port.SelectedIndex = -1;
+					comboBox_Port.SelectedIndex = ControlEx.InvalidIndex;
 					if (this.portId != null)
 						comboBox_Port.Text = this.portId;
 					else
@@ -449,7 +449,7 @@ namespace YAT.Gui.Controls
 			}
 			else
 			{
-				comboBox_Port.SelectedIndex = -1;
+				comboBox_Port.SelectedIndex = ControlEx.InvalidIndex;
 				comboBox_Port.Text = "";
 			}
 

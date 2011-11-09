@@ -21,11 +21,19 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
 using MKY.Event;
+using MKY.Windows.Forms;
+
+#endregion
 
 namespace YAT.Gui.Controls
 {
@@ -241,8 +249,8 @@ namespace YAT.Gui.Controls
 			}
 			else
 			{
-				comboBox_TerminalType.SelectedIndex = -1;
-				comboBox_IOType.SelectedIndex       = -1;
+				comboBox_TerminalType.SelectedIndex = ControlEx.InvalidIndex;
+				comboBox_IOType.SelectedIndex       = ControlEx.InvalidIndex;
 			}
 
 			this.isSettingControls = false;

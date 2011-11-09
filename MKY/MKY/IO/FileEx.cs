@@ -55,7 +55,7 @@ namespace MKY.IO
 
 			if (File.Exists(dir + name + ext))
 			{
-				int index = -1;
+				int index = -1; // Initialize to -1 and increment before first use.
 				string unique = "";
 				do
 				{

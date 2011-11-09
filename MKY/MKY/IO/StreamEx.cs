@@ -34,7 +34,7 @@ namespace MKY.IO
 		/// <summary>
 		/// Result when reading the stream's end.
 		/// </summary>
-		public const long EndOfStream = -1;
+		public const int EndOfStream = -1;
 
 		/// <summary>
 		/// Result when stream length cannot be retrieved from a stream, e.g. if the stream is not seekable.

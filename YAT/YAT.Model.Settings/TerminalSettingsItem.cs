@@ -21,11 +21,18 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Xml.Serialization;
 
 using MKY;
 using MKY.IO;
+
+#endregion
 
 namespace YAT.Model.Settings
 {
@@ -35,25 +42,20 @@ namespace YAT.Model.Settings
 	{
 		/// <remarks>
 		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
-		/// Therefore, index 0 means undefined.
-		/// </remarks>
-		public const int UndefinedFixedIndex = 0;
-
-		/// <remarks>
-		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
 		/// </remarks>
 		public const int FirstFixedIndex = 1;
 
 		/// <remarks>
 		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
-		/// Therefore, index 0 means undefined.
+		/// Index 0 means 'default'.
 		/// </remarks>
-		public const int UndefinedDynamicIndex = 0;
+		public const int DefaultFixedIndex = 0;
 
 		/// <remarks>
 		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
+		/// Index -1 means 'invalid'.
 		/// </remarks>
-		public const int FirstDynamicIndex = 1;
+		public const int InvalidFixedIndex = -1;
 
 		private string filePath;
 		private Guid guid;
@@ -95,7 +97,7 @@ namespace YAT.Model.Settings
 
 			FilePath   = "";
 			Guid       = Guid.Empty;
-			FixedIndex = UndefinedFixedIndex;
+			FixedIndex = DefaultFixedIndex;
 		}
 
 		#region Properties
