@@ -174,7 +174,7 @@ namespace MKY.Windows.Forms
 			int oldIndex = listBox_StringList.SelectedIndex;
 			int newIndex = oldIndex - 1;
 			string item = (listBox_StringList.SelectedItem as string);
-			if ((oldIndex != -1) && (item != null))
+			if ((oldIndex != ControlEx.InvalidIndex) && (item != null))
 			{
 				this.isSettingControls = true;
 				listBox_StringList.Items.RemoveAt(oldIndex);
@@ -195,7 +195,7 @@ namespace MKY.Windows.Forms
 			int oldIndex = listBox_StringList.SelectedIndex;
 			int newIndex = oldIndex + 1;
 			string item = (listBox_StringList.SelectedItem as string);
-			if ((oldIndex != -1) && (item != null))
+			if ((oldIndex != ControlEx.InvalidIndex) && (item != null))
 			{
 				this.isSettingControls = true;
 				listBox_StringList.Items.RemoveAt(oldIndex);

@@ -214,9 +214,9 @@ namespace YAT.Controller
 		}
 
 		/// <summary></summary>
-		public virtual int RequestedSequentialTerminalIndex
+		public virtual int RequestedDynamicTerminalIndex
 		{
-			get { return (this.commandLineArgs.RequestedSequentialTerminalIndex); }
+			get { return (this.commandLineArgs.RequestedDynamicTerminalIndex); }
 		}
 
 		/// <summary></summary>

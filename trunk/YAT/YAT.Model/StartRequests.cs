@@ -34,6 +34,7 @@ using System.Text;
 
 using MKY;
 using MKY.CommandLine;
+using MKY.Settings;
 
 using YAT.Settings;
 using YAT.Settings.Application;
@@ -51,15 +52,15 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
-		public WorkspaceSettingsRoot WorkspaceSettings;
+		public DocumentSettingsHandler<WorkspaceSettingsRoot> WorkspaceSettings;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
-		public TerminalSettingsRoot TerminalSettings;
+		public DocumentSettingsHandler<TerminalSettingsRoot> TerminalSettings;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
-		public int RequestedSequentialTerminalIndex = -1;
+		public int RequestedDynamicTerminalIndex = Main.InvalidTerminalIndex;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
@@ -88,7 +89,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public bool PerformActionOnRequestedTerminal
 		{
-			get { return (RequestedSequentialTerminalIndex >= 0); }
+			get { return (RequestedDynamicTerminalIndex >= 0); }
 		}
 	}
 }

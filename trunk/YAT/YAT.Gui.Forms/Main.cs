@@ -217,11 +217,19 @@ namespace YAT.Gui.Forms
 				}
 				else
 				{
-					// If workspace is empty, display new terminal dialog.
-					if (this.main.StartRequests.ShowNewTerminalDialog)
+					if (this.workspace.TerminalCount == 0)
 					{
-						if (this.workspace.TerminalCount == 0)
+						// If workspace is empty, and requested, display new terminal dialog.
+						if (this.main.StartRequests.ShowNewTerminalDialog)
 							ShowNewTerminalDialog();
+					}
+					else
+					{
+						// If workspace contains terminals, and requested, tile the terminal forms accordingly.
+						if      (this.main.StartRequests.TileHorizontal)
+							LayoutMdi(MdiLayout.TileHorizontal);
+						else if (this.main.StartRequests.TileVertical)
+							LayoutMdi(MdiLayout.TileVertical);
 					}
 
 					// Automatically trigger transmit data if desired.
@@ -911,13 +919,13 @@ namespace YAT.Gui.Forms
 
 		private void timer_TestTransmit_Tick(object sender, EventArgs e)
 		{
-			int id = this.main.StartRequests.RequestedSequentialTerminalIndex;
-			if (this.workspace.GetTerminalBySequencialIndex(id) != null)
+			int id = this.main.StartRequests.RequestedDynamicTerminalIndex;
+			if (this.workspace.GetTerminalByDynamicIndex(id) != null)
 			{
 				SetTimedStatusText("Trigger received, pending until terminal has been created...");
 				return;
 			}
-			if (!this.workspace.GetTerminalBySequencialIndex(id).IsConnected)
+			if (!this.workspace.GetTerminalByDynamicIndex(id).IsConnected)
 			{
 				SetTimedStatusText("Trigger received, pending until terminal has connected...");
 				return;
@@ -1406,7 +1414,7 @@ namespace YAT.Gui.Forms
 				ApplicationSettings.LocalUser.Paths.TerminalFilesPath = System.IO.Path.GetDirectoryName(ofd.FileName);
 				ApplicationSettings.Save();
 
-				this.main.OpenFromFile(ofd.FileName);
+				this.main.OpenTerminalFromFile(ofd.FileName);
 			}
 			else
 			{

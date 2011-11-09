@@ -21,12 +21,20 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
 using MKY.Event;
 using MKY.IO.Usb;
+using MKY.Windows.Forms;
+
+#endregion
 
 namespace YAT.Gui.Controls
 {
@@ -251,7 +259,7 @@ namespace YAT.Gui.Controls
 				}
 				else
 				{
-					comboBox_Device.SelectedIndex = -1;
+					comboBox_Device.SelectedIndex = ControlEx.InvalidIndex;
 					if (this.deviceInfo != null)
 						comboBox_Device.Text = this.deviceInfo;
 					else
@@ -260,7 +268,7 @@ namespace YAT.Gui.Controls
 			}
 			else
 			{
-				comboBox_Device.SelectedIndex = -1;
+				comboBox_Device.SelectedIndex = ControlEx.InvalidIndex;
 				comboBox_Device.Text = "";
 			}
 

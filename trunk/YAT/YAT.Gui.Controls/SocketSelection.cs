@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -31,6 +36,9 @@ using MKY;
 using MKY.Event;
 using MKY.IO.Serial;
 using MKY.Net;
+using MKY.Windows.Forms;
+
+#endregion
 
 namespace YAT.Gui.Controls
 {
@@ -507,7 +515,7 @@ namespace YAT.Gui.Controls
 				}
 				else
 				{
-					comboBox_RemoteHost.SelectedIndex = -1;
+					comboBox_RemoteHost.SelectedIndex = ControlEx.InvalidIndex;
 					if (this.remoteHost != null)
 						comboBox_RemoteHost.Text = this.remoteHost;
 					else
@@ -516,7 +524,7 @@ namespace YAT.Gui.Controls
 			}
 			else
 			{
-				comboBox_RemoteHost.SelectedIndex = -1;
+				comboBox_RemoteHost.SelectedIndex = ControlEx.InvalidIndex;
 				comboBox_RemoteHost.Text = "";
 			}
 
@@ -548,7 +556,7 @@ namespace YAT.Gui.Controls
 			}
 			else
 			{
-				comboBox_LocalInterface.SelectedIndex = -1;
+				comboBox_LocalInterface.SelectedIndex = ControlEx.InvalidIndex;
 			}
 
 			// Local port label.

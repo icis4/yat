@@ -61,17 +61,6 @@ namespace YAT.Model
 		// Constants
 		//==========================================================================================
 
-		/// <remarks>
-		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
-		/// Therefore, index 0 means undefined.
-		/// </remarks>
-		public const int UndefinedSequencialIndex = 0;
-
-		/// <remarks>
-		/// Indices are 1 (not 0) based for consistency with "Terminal1"...
-		/// </remarks>
-		public const int FirstSequencialIndex = 1;
-
 		private const string TerminalText = "Terminal";
 
 		#endregion

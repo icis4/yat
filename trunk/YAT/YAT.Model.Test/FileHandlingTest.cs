@@ -1093,8 +1093,8 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(workspace, step + "Workspace not created!");
 				Assert.AreEqual(1, workspace.TerminalCount, step + "Workspace doesn't contain 1 terminal!");
 
-				Assert.AreEqual(TerminalSettingsItem.FirstFixedIndex, workspace.ActiveTerminalFixedIndex, step + "Fixed index of terminal 1 isn't " + TerminalSettingsItem.FirstFixedIndex + "!");
-				Assert.AreEqual(TerminalSettingsItem.FirstDynamicIndex, workspace.ActiveTerminalDynamicIndex, step + "Dynamic index of terminal 1 isn't " + TerminalSettingsItem.FirstDynamicIndex + "!");
+				Assert.AreEqual(Indices.FirstFixedIndex, workspace.ActiveTerminalFixedIndex, step + "Fixed index of terminal 1 isn't " + Indices.FirstFixedIndex + "!");
+				Assert.AreEqual(Indices.FirstDynamicIndex, workspace.ActiveTerminalDynamicIndex, step + "Dynamic index of terminal 1 isn't " + Indices.FirstDynamicIndex + "!");
 				Assert.AreEqual(2, workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal 1 isn't 2!");
 
 				success = workspace.CreateNewTerminal(Utilities.GetStartedTextTcpAutoSocketOnIPv4LoopbackSettingsHandler());
@@ -1173,8 +1173,8 @@ namespace YAT.Model.Test
 				Assert.AreEqual(2, workspace.TerminalCount, step + "Workspace doesn't contain 2 terminals!");
 
 				workspace.ActivateTerminalBySequentialIndex(8);
-				Assert.AreEqual(TerminalSettingsItem.FirstFixedIndex, workspace.ActiveTerminalFixedIndex, step + "Fixed index of terminal 1 isn't " + TerminalSettingsItem.FirstFixedIndex + "!");
-				Assert.AreEqual(TerminalSettingsItem.FirstDynamicIndex, workspace.ActiveTerminalDynamicIndex, step + "Dynamic index of terminal 1 isn't " + TerminalSettingsItem.FirstDynamicIndex + "!");
+				Assert.AreEqual(Indices.FirstFixedIndex, workspace.ActiveTerminalFixedIndex, step + "Fixed index of terminal 1 isn't " + Indices.FirstFixedIndex + "!");
+				Assert.AreEqual(Indices.FirstDynamicIndex, workspace.ActiveTerminalDynamicIndex, step + "Dynamic index of terminal 1 isn't " + Indices.FirstDynamicIndex + "!");
 				Assert.AreEqual(8, workspace.ActiveTerminalSequencialIndex, step + "Sequencial index of terminal 1 isn't 8!");
 
 				workspace.ActivateTerminalBySequentialIndex(9);

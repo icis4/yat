@@ -354,19 +354,19 @@ namespace YAT.Controller.Test
 			using (Controller.Main main = new Main(new string[] { "--Terminal=1" }))
 			{
 				Assert.IsTrue(main.CommandLineIsValid);
-				Assert.AreEqual(1, main.RequestedSequentialTerminalIndex);
+				Assert.AreEqual(1, main.RequestedDynamicTerminalIndex);
 			}
 
 			using (Controller.Main main = new Main(new string[] { "--Terminal:1" }))
 			{
 				Assert.IsTrue(main.CommandLineIsValid);
-				Assert.AreEqual(1, main.RequestedSequentialTerminalIndex);
+				Assert.AreEqual(1, main.RequestedDynamicTerminalIndex);
 			}
 
 			using (Controller.Main main = new Main(new string[] { "--Terminal", "1" }))
 			{
 				Assert.IsTrue(main.CommandLineIsValid);
-				Assert.AreEqual(1, main.RequestedSequentialTerminalIndex);
+				Assert.AreEqual(1, main.RequestedDynamicTerminalIndex);
 			}
 		}
 
@@ -389,7 +389,7 @@ namespace YAT.Controller.Test
 
 				Assert.IsTrue(string.IsNullOrEmpty(main.RequestedFilePath));
 				Assert.IsFalse(main.MostRecentIsRequested);
-				Assert.AreEqual(0, main.RequestedSequentialTerminalIndex);
+				Assert.AreEqual(0, main.RequestedDynamicTerminalIndex);
 				Assert.IsTrue(string.IsNullOrEmpty(main.RequestedTransmitFilePath));
 			}
 		}
@@ -420,7 +420,7 @@ namespace YAT.Controller.Test
 			using (Controller.Main main = new Main(new string[] { "--Terminal=1" }))
 			{
 				Assert.IsTrue(main.CommandLineIsValid);
-				Assert.AreEqual(1, main.RequestedSequentialTerminalIndex);
+				Assert.AreEqual(1, main.RequestedDynamicTerminalIndex);
 			}
 
 			using (Controller.Main main = new Main(new string[] { "--TransmitFile=MyFile.txt" }))
