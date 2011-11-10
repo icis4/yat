@@ -74,6 +74,7 @@
     <Compile Include="Time\Rate.cs" />
     <Compile Include="Types\BoolEx.cs" />
     <Compile Include="Types\SingleEx.cs" />
+    <Compile Include="Windows.Forms\SettingControlsHelper.cs" />
     <Compile Include="Windows.Forms\MenuEx.cs" />
     <Compile Include="EnvironmentEx.cs" />
     <Compile Include="Diagnostics\AnyWriter.cs" />
