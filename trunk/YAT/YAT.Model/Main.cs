@@ -262,6 +262,21 @@ namespace YAT.Model
 		//==========================================================================================
 
 		/// <summary>
+		/// This method is used to test the command line argument processing.
+		/// </summary>
+		/// <returns></returns>
+		public virtual MainResult PrepareStart()
+		{
+			AssertNotDisposed();
+
+			// Process command line args into start requests:
+			if (ProcessCommandLineArgsIntoStartRequests())
+				return (MainResult.Success);
+			else
+				return (MainResult.CommandLineError);
+		}
+
+		/// <summary>
 		/// If a file was requested by command line argument, this method tries to open the
 		/// requested file.
 		/// Else, this method tries to open the most recent workspace of the current user.
@@ -426,29 +441,38 @@ namespace YAT.Model
 			// Prio 6 = Retrieve the requested terminal and validate it:
 			if (this.startRequests.WorkspaceSettings != null) // Applies to a terminal within a workspace.
 			{
-				int terminalIndex = InvalidTerminalIndex;
-				if (this.startRequests.RequestedDynamicTerminalIndex > this.startRequests.WorkspaceSettings.Settings.TerminalSettings.Count)
+				int requestedDynamicTerminalIndex = this.commandLineArgs.RequestedDynamicTerminalIndex;
+				int lastDynamicIndex = Indices.IndexToDynamicIndex(this.startRequests.WorkspaceSettings.Settings.TerminalSettings.Count - 1);
+				
+				int dynamicIndex = Indices.InvalidDynamicIndex;
+				if     ((requestedDynamicTerminalIndex >= Indices.FirstDynamicIndex) && (requestedDynamicTerminalIndex <= lastDynamicIndex))
+					dynamicIndex = requestedDynamicTerminalIndex;
+				else if (requestedDynamicTerminalIndex == Indices.DefaultDynamicIndex)
+					dynamicIndex = lastDynamicIndex;
+				else
 					return (false);
-				else if (this.commandLineArgs.RequestedDynamicTerminalIndex == 0)
-					terminalIndex = (this.startRequests.WorkspaceSettings.Settings.TerminalSettings.Count);
 
-				if (terminalIndex >= 1)
-				{
-					DocumentSettingsHandler<TerminalSettingsRoot> sh;
-					if (!OpenTerminalFile(this.startRequests.WorkspaceSettings.Settings.TerminalSettings[terminalIndex - 1].FilePath, out sh))
-						this.startRequests.TerminalSettings = sh;
-					else
-						return (false);
-				}
+				DocumentSettingsHandler<TerminalSettingsRoot> sh;
+				if (!OpenTerminalFile(this.startRequests.WorkspaceSettings.Settings.TerminalSettings[Indices.DynamicIndexToIndex(dynamicIndex)].FilePath, out sh))
+					this.startRequests.TerminalSettings = sh;
+				else
+					return (false);
 			}
 			else if (this.startRequests.TerminalSettings != null) // Applies to a dedicated terminal.
 			{
 				switch (this.commandLineArgs.RequestedDynamicTerminalIndex)
 				{
-					case InvalidTerminalIndex: this.startRequests.RequestedDynamicTerminalIndex = InvalidTerminalIndex; break;
-					case 0: break;
-					case 1: break;
-					default: return (false);
+					case Indices.InvalidDynamicIndex:
+						this.startRequests.RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex;
+						break;
+
+					case Indices.DefaultDynamicIndex:
+					case Indices.FirstDynamicIndex:
+						this.startRequests.RequestedDynamicTerminalIndex = Indices.FirstDynamicIndex;
+						break;
+
+					default:
+						return (false);
 				}
 			}
 			else if (this.commandLineArgs.NewIsRequested) // Applies to new settings.
@@ -921,21 +945,14 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			// Ensure that the workspace file is not already open.
-			if (!CheckWorkspaceFile(filePath))
-				return (false);
-
-			// Close workspace, only one workspace can exist within the application.
-			if (!CloseWorkspace())
-				return (false);
-
-			// Open the workspace.
+			// Open the workspace file, then the workspace itself.
+			// The workspace file and the workspace itself is checked within OpenWorkspaceFromSettings().
 			DocumentSettingsHandler<WorkspaceSettingsRoot> settings;
 			Guid guid;
 			System.Xml.XmlException ex;
 
-			OnFixedStatusTextRequest("Opening workspace...");
-			if (!OpenWorkspaceFile(filePath, out settings, out guid, out ex))
+			OnFixedStatusTextRequest("Opening workspace file...");
+			if (OpenWorkspaceFile(filePath, out settings, out guid, out ex))
 			{
 				return (OpenWorkspaceFromSettings(settings));
 			}
@@ -959,7 +976,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool OpenWorkspaceFromSettings(DocumentSettingsHandler<WorkspaceSettingsRoot> settings)
 		{
-			return (OpenWorkspaceFromSettings(settings, InvalidTerminalIndex, null));
+			return (OpenWorkspaceFromSettings(settings, Indices.InvalidIndex, null));
 		}
 
 		/// <summary></summary>
@@ -1016,6 +1033,9 @@ namespace YAT.Model
 		// Workspace > Private Methods
 		//------------------------------------------------------------------------------------------
 
+		/// <summary>
+		/// Check whether workspace is already open.
+		/// </summary>
 		private bool CheckWorkspaceFile(string workspaceFilePath)
 		{
 			if (this.workspace != null)

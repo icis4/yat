@@ -35,6 +35,21 @@ namespace MKY.IO.Serial
 	[Serializable]
 	public class SerialCommunicationSettings : MKY.Settings.SettingsItem
 	{
+		/// <summary></summary>
+		public const int BaudRateDefault = (int)MKY.IO.Ports.BaudRate.Baud009600;
+
+		/// <summary></summary>
+		public const MKY.IO.Ports.DataBits DataBitsDefault = MKY.IO.Ports.DataBits.Eight;
+
+		/// <summary></summary>
+		public const System.IO.Ports.Parity ParityDefault = System.IO.Ports.Parity.None;
+
+		/// <summary></summary>
+		public const System.IO.Ports.StopBits StopBitsDefault = System.IO.Ports.StopBits.One;
+
+		/// <summary></summary>
+		public const SerialFlowControl FlowControlDefault = SerialFlowControl.None;
+
 		private int baudRate;
 		private MKY.IO.Ports.DataBits dataBits;
 		private System.IO.Ports.Parity parity;
@@ -79,11 +94,11 @@ namespace MKY.IO.Serial
 		{
 			base.SetMyDefaults();
 
-			BaudRate    = (int)MKY.IO.Ports.BaudRate.Baud009600;
-			DataBits    = MKY.IO.Ports.DataBits.Eight;
-			Parity      = System.IO.Ports.Parity.None;
-			StopBits    = System.IO.Ports.StopBits.One;
-			FlowControl = SerialFlowControl.None;
+			BaudRate    = BaudRateDefault;
+			DataBits    = DataBitsDefault;
+			Parity      = ParityDefault;
+			StopBits    = StopBitsDefault;
+			FlowControl = FlowControlDefault;
 		}
 
 		#region Properties

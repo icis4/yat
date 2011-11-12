@@ -50,6 +50,7 @@
     <Compile Include="..\YAT.Version.cs">
       <Link>Properties\YAT.Version.cs</Link>
     </Compile>
+    <Compile Include="StartTest.cs" />
     <Compile Include="FileHandlingTest.cs" />
     <Compile Include="StressTest.cs" />
     <Compile Include="TransmissionTest.cs" />
@@ -73,6 +74,10 @@
     <ProjectReference Include="..\..\MKY\MKY.IO.Serial\MKY.IO.Serial.csproj">
       <Project>{E3A19532-D12A-4A90-B7F3-637A0A8FA6BD}</Project>
       <Name>MKY.IO.Serial</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\MKY\MKY.IO.Usb\MKY.IO.Usb.csproj">
+      <Project>{1B657329-940D-4AA1-9768-431288B555E2}</Project>
+      <Name>MKY.IO.Usb</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\MKY\MKY.Net.Test\MKY.Net.Test.csproj">
       <Project>{EA8A738E-BA58-4AC2-9FE5-61EA851098A4}</Project>
@@ -109,6 +114,10 @@
     <ProjectReference Include="..\YAT.Settings.Terminal\YAT.Settings.Terminal.csproj">
       <Project>{FE2D334F-B2D8-4A07-B63D-93BA775DBBCF}</Project>
       <Name>YAT.Settings.Terminal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAT.Settings.Test\YAT.Settings.Test.csproj">
+      <Project>{306722B1-7554-46FD-A8BE-99185753CD51}</Project>
+      <Name>YAT.Settings.Test</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAT.Settings.Workspace\YAT.Settings.Workspace.csproj">
       <Project>{942BA759-57F9-4213-BDC8-E9A8325631B0}</Project>

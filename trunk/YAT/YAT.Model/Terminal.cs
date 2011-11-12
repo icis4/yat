@@ -74,7 +74,7 @@ namespace YAT.Model
 		/// Static counter to number terminals. Counter is incremented before first use, first
 		/// terminal therefore is "Terminal1".
 		/// </summary>
-		private static int staticSequenciallIndexCounter = FirstSequencialIndex - 1;
+		private static int staticSequenciallIndexCounter = Indices.FirstSequencialIndex - 1;
 
 		#endregion
 
