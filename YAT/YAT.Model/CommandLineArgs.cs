@@ -248,10 +248,10 @@ namespace YAT.Model
 			"Perform any requested operation on the terminal with the given dynamic index within the opening workspace." + EnvironmentEx.NewLineConstWorkaround +
 			"Valid values are 1 based indices 1, 2, 3,... up to the number of open terminals. " +
 			"0 indicates that the currently active terminal is used, which typically is the last terminal opened. " +
-			"-1 indicates 'none', i.e. no operation is performed at all. The default value is 0." + EnvironmentEx.NewLineConstWorkaround +
+			"-1 indicates 'none', i.e. no operation is performed at all. The default value is -1." + EnvironmentEx.NewLineConstWorkaround +
 			"This option is useful to temporarily switch off any option without having to edit the command line. " +
 			"This option only has an effect when opening a workspace that contains more than one terminal.")]
-		public int RequestedDynamicTerminalIndex;
+		public int RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
@@ -310,7 +310,7 @@ namespace YAT.Model
 		/// </summary>
 		protected override bool Validate()
 		{
-			bool isValid = true;
+			bool isValid = base.Validate();
 
 			// RequestedFilePath as value argument:
 			if (string.IsNullOrEmpty(RequestedFilePath))
@@ -328,12 +328,14 @@ namespace YAT.Model
 						!ExtensionSettings.IsTerminalFile (Path.GetExtension(RequestedFilePath)))
 					{
 						RequestedFilePath = null;
+						base.Invalidate("Requested file is no workspace nor terminal file");
 						BoolEx.ClearIfSet(ref isValid);
 					}
 				}
 				else
 				{
 					RequestedFilePath = null;
+					base.Invalidate("Requested file does not exist");
 					BoolEx.ClearIfSet(ref isValid);
 				}
 			}
@@ -354,11 +356,13 @@ namespace YAT.Model
 						}
 						else
 						{
+							base.Invalidate("Requested file is no workspace nor terminal file");
 							BoolEx.ClearIfSet(ref isValid);
 						}
 					}
 					else
 					{
+						base.Invalidate("Requested file does not exist");
 						BoolEx.ClearIfSet(ref isValid);
 					}
 				}
@@ -370,6 +374,7 @@ namespace YAT.Model
 				if (!File.Exists(RequestedTransmitFilePath))
 				{
 					RequestedTransmitFilePath = null;
+					base.Invalidate("Requested file does not exist");
 					BoolEx.ClearIfSet(ref isValid);
 				}
 			}
@@ -378,7 +383,8 @@ namespace YAT.Model
 			if ((TileHorizontal == true) && (TileVertical == true)) // Must be mutual exclusive.
 			{
 				TileHorizontal = false;
-				TileVertical = false;
+				TileVertical   = false;
+				base.Invalidate("Tile horizontal and vertical simultaneously is not possible");
 				BoolEx.ClearIfSet(ref isValid);
 			}
 

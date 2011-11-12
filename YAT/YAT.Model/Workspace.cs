@@ -966,9 +966,6 @@ namespace YAT.Model
 		{
 			AssertNotDisposed();
 
-			// Combine absolute workspace path with terminal path if that one is relative.
-			filePath = PathEx.CombineFilePaths(this.settingsHandler.SettingsFilePath, filePath);
-
 			// Open the terminal.
 			// The terminal file is checked within OpenTerminalFromSettings().
 			DocumentSettingsHandler<TerminalSettingsRoot> settings;
@@ -1068,6 +1065,9 @@ namespace YAT.Model
 
 		private bool OpenTerminalFile(string filePath, out DocumentSettingsHandler<TerminalSettingsRoot> settings, out System.Xml.XmlException exception)
 		{
+			// Combine absolute workspace path with terminal path if that one is relative.
+			filePath = PathEx.CombineFilePaths(this.settingsHandler.SettingsFilePath, filePath);
+
 			try
 			{
 				settings = new DocumentSettingsHandler<TerminalSettingsRoot>();

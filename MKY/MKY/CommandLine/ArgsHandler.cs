@@ -155,7 +155,11 @@ namespace MKY.CommandLine
 				for (int i = 0; i < this.args.Length; i++)
 				{
 					int pos;
-					if (IsOption(this.args[i], out pos))
+					if (string.IsNullOrEmpty(this.args[i]))
+					{
+						// Ignore empty strings within the array.
+					}
+					else if (IsOption(this.args[i], out pos))
 					{
 						// Prepare next argument:
 						string nextArg = null;
@@ -179,12 +183,16 @@ namespace MKY.CommandLine
 						if (nextArgHasBeenConsumedToo)
 							i++; // Advance index.
 					}
-					else
+					else if (IsValue(this.args[i]))
 					{
 						if (InitializeValue(this.args[i], this.valueArgs.Count))
 							this.valueArgs.Add(this.args[i]);
 						else
 							this.invalidArgs.Add(this.args[i]);
+					}
+					else
+					{
+						this.invalidArgs.Add(this.args[i]);
 					}
 				}
 			}
@@ -375,17 +383,11 @@ namespace MKY.CommandLine
 			arg = arg.TrimStart();
 			int offset = totalLength - arg.Length;
 
-			int checkPos = offset;
-
-			if      (arg.StartsWith("--"))
-				checkPos += 2;
-			else if (arg.StartsWith("-"))
-				checkPos += 1;
-			else if (arg.StartsWith("/") && AllowForwardSlash)
-				checkPos += 1;
-
-			if (checkPos > 0)
+			int startPos;
+			if (IsOptionStart(arg, out startPos))
 			{
+				int checkPos = offset + startPos;
+
 				char[] chars = arg.ToCharArray();
 				if (checkPos <= (chars.Length - 1))
 				{
@@ -399,6 +401,35 @@ namespace MKY.CommandLine
 
 			pos = 0;
 			return (false);
+		}
+
+		/// <summary>
+		/// Determines whether the specified argument string starts with an option start sequence.
+		/// An option starts with "/", "-" or "--".
+		/// </summary>
+		protected virtual bool IsOptionStart(string arg)
+		{
+			int pos;
+			return (IsOptionStart(arg, out pos));
+		}
+
+		/// <summary>
+		/// Determines whether the specified argument starts with an option start sequence and
+		/// returns the position of the first character of the option name. An option starts
+		/// with "/", "-" or "--".
+		/// </summary>
+		protected virtual bool IsOptionStart(string arg, out int pos)
+		{
+			if      (arg.StartsWith("--")) // Attention: "--" must be tested before "-" because
+				pos = 2;                   //            "--" also is "-"!
+			else if (arg.StartsWith("-"))
+				pos = 1;
+			else if (arg.StartsWith("/") && AllowForwardSlash)
+				pos = 1;
+			else
+				pos = 0;
+
+			return (pos >= 0);
 		}
 
 		/// <summary>
@@ -505,6 +536,16 @@ namespace MKY.CommandLine
 		}
 
 		/// <summary>
+		/// Determines whether the specified argument is a value argument. A value argument must
+		/// not start with "/", "-" or "--". Additional rules can be defined by overriding this
+		/// method.
+		/// </summary>
+		protected virtual bool IsValue(string arg)
+		{
+			return (!IsOptionStart(arg));
+		}
+
+		/// <summary>
 		/// Initializes a value argument.
 		/// </summary>
 		protected virtual bool InitializeValue(string value, int index)
@@ -601,6 +642,23 @@ namespace MKY.CommandLine
 			}
 		#endif
 			return (true);
+		}
+
+		/// <summary>
+		/// Invalidates the command line argument object by adding a dedicated string to the invalid
+		/// args list.
+		/// </summary>
+		protected virtual void Invalidate(string invalidationMessage)
+		{
+			this.invalidArgs.Add(@"!""" + invalidationMessage + @"""");
+		}
+
+		/// <summary>
+		/// Determines whether the specified argument starts with "!".
+		/// </summary>
+		protected virtual bool IsInvalidationStart(string arg)
+		{
+			return (arg.StartsWith("!"));
 		}
 
 		#endregion

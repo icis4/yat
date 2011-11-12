@@ -68,6 +68,10 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
+		public bool PerformActionOnRequestedTerminal;
+
+		/// <summary></summary>
+		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		public bool ShowNewTerminalDialog;
 
 		/// <summary></summary>
@@ -85,12 +89,6 @@ namespace YAT.Model
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		public bool TileVertical;
-
-		/// <summary></summary>
-		public bool PerformActionOnRequestedTerminal
-		{
-			get { return (RequestedDynamicTerminalIndex >= 0); }
-		}
 	}
 }
 

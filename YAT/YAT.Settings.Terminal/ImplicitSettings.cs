@@ -33,7 +33,7 @@ namespace YAT.Settings.Terminal
 	public class ImplicitSettings : MKY.Settings.SettingsItem
 	{
 		/// <summary></summary>
-		public const bool TerminalIsStartedDefault = true;
+		public const bool TerminalIsStartedDefault = false;
 
 		/// <summary></summary>
 		public const bool LogIsStartedDefault = false;
