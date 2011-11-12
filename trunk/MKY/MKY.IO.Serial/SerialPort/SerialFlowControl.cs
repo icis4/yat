@@ -159,9 +159,16 @@ namespace MKY.IO.Serial
 			else
 			{
 				Ports.HandshakeEx handshake;
-				bool success = Ports.HandshakeEx.TryParse(flowControl, out handshake);
-				result = (SerialFlowControlEx)handshake;
-				return (success);
+				if (Ports.HandshakeEx.TryParse(flowControl, out handshake))
+				{
+					result = new SerialFlowControlEx((SerialFlowControl)(System.IO.Ports.Handshake)handshake);
+					return (true);
+				}
+				else
+				{
+					result = null;
+					return (false);
+				}
 			}
 		}
 
@@ -219,7 +226,11 @@ namespace MKY.IO.Serial
 				case SerialFlowControl.RS485:
 				case SerialFlowControl.Manual:
 				default:
-					return (System.IO.Ports.Handshake.None);
+					throw 
+						(new NotSupportedException(
+						"An object of type 'MKY.IO.Serial.SerialFlowControlEx' cannot be converted to " +
+						"'MKY.IO.Ports.HandshakeEx' in case of 'RS-485' or 'Manual' flow control"
+						));
 			}
 		}
 
