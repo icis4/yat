@@ -60,7 +60,7 @@ namespace YAT.Model
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
-		public int RequestedDynamicTerminalIndex = Main.InvalidTerminalIndex;
+		public int RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex;
 
 		/// <summary></summary>
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]

@@ -32,6 +32,12 @@ namespace YAT.Settings.Terminal
 	[Serializable]
 	public class ImplicitSettings : MKY.Settings.SettingsItem
 	{
+		/// <summary></summary>
+		public const bool TerminalIsStartedDefault = true;
+
+		/// <summary></summary>
+		public const bool LogIsStartedDefault = false;
+
 		private bool terminalIsStarted;
 		private bool logIsStarted;
 
@@ -81,8 +87,8 @@ namespace YAT.Settings.Terminal
 		{
 			base.SetMyDefaults();
 
-			TerminalIsStarted = true;
-			LogIsStarted      = false;
+			TerminalIsStarted = TerminalIsStartedDefault;
+			LogIsStarted      = LogIsStartedDefault;
 		}
 
 		#region Properties

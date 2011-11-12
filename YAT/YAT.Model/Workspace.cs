@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -29,6 +34,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Diagnostics;
 using MKY.Event;
 using MKY.IO;
 using MKY.Settings;
@@ -41,6 +47,8 @@ using YAT.Settings.Workspace;
 using YAT.Model.Settings;
 
 using YAT.Utilities;
+
+#endregion
 
 namespace YAT.Model
 {
@@ -867,6 +875,8 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool CreateNewTerminal(DocumentSettingsHandler<TerminalSettingsRoot> settingsHandler)
 		{
+			AssertNotDisposed();
+
 			OnFixedStatusTextRequest("Creating new terminal...");
 
 			// Create terminal
@@ -882,14 +892,16 @@ namespace YAT.Model
 		/// </summary>
 		public virtual int OpenTerminals()
 		{
-			return (OpenTerminals(Main.InvalidTerminalIndex, null));
+			return (OpenTerminals(Indices.InvalidIndex, null));
 		}
 
 		/// <summary>
 		/// Opens terminals according to workspace settings and returns number of successfully opened terminals.
 		/// </summary>
-		public virtual int OpenTerminals(int dynamicTerminalIndexToReplace, DocumentSettingsHandler<WorkspaceSettingsRoot> terminalSettingsToReplace)
+		public virtual int OpenTerminals(int dynamicTerminalIndexToReplace, DocumentSettingsHandler<TerminalSettingsRoot> terminalSettingsToReplace)
 		{
+			AssertNotDisposed();
+
 			int requestedTerminalCount = this.settingsRoot.TerminalSettings.Count;
 			if (requestedTerminalCount == 1)
 				OnFixedStatusTextRequest("Opening workspace terminal...");
@@ -900,30 +912,40 @@ namespace YAT.Model
 			GuidList<TerminalSettingsItem> clone = new GuidList<TerminalSettingsItem>(this.settingsRoot.TerminalSettings);
 			for (int i = 0; i < clone.Count; i++)
 			{
-				if (Sequ dynamicTerminalIndexToReplace)
 				TerminalSettingsItem item = clone[i];
-				try
+
+				// Replace the desired terminal settings if requested.
+				if ((dynamicTerminalIndexToReplace != Indices.InvalidDynamicIndex) &&
+					(i == Indices.DynamicIndexToIndex(dynamicTerminalIndexToReplace)))
 				{
-					if (OpenTerminalFromFile(item.FilePath, item.Guid, item.FixedIndex, item.Window, true))
+					if (OpenTerminalFromSettings(terminalSettingsToReplace, item.Guid, item.FixedIndex, item.Window, true))
 						openedTerminalCount++;
 				}
-				catch (System.Xml.XmlException ex)
+				else // In all other cases, 'normally' open the terminal from the given file.
 				{
-					OnFixedStatusTextRequest("Error opening terminal!");
-					DialogResult result = OnMessageInputRequest
-						(
-						"Unable to open terminal" + Environment.NewLine + item.FilePath + Environment.NewLine + Environment.NewLine +
-						"XML error message: " + ex.Message + Environment.NewLine +
-						"File error message: " + ex.InnerException.Message + Environment.NewLine + Environment.NewLine +
-						"Continue loading workspace?",
-						"Terminal File Error",
-						MessageBoxButtons.YesNo,
-						MessageBoxIcon.Exclamation
-						);
-					OnTimedStatusTextRequest("Terminal not opened!");
+					try
+					{
+						if (OpenTerminalFromFile(item.FilePath, item.Guid, item.FixedIndex, item.Window, true))
+							openedTerminalCount++;
+					}
+					catch (System.Xml.XmlException ex)
+					{
+						OnFixedStatusTextRequest("Error opening terminal!");
+						DialogResult result = OnMessageInputRequest
+							(
+							"Unable to open terminal" + Environment.NewLine + item.FilePath + Environment.NewLine + Environment.NewLine +
+							"XML error message: " + ex.Message + Environment.NewLine +
+							"File error message: " + ex.InnerException.Message + Environment.NewLine + Environment.NewLine +
+							"Continue loading workspace?",
+							"Terminal File Error",
+							MessageBoxButtons.YesNo,
+							MessageBoxIcon.Exclamation
+							);
+						OnTimedStatusTextRequest("Terminal not opened!");
 
-					if (result == DialogResult.No)
-						break;
+						if (result == DialogResult.No)
+							break;
+					}
 				}
 			}
 
@@ -942,59 +964,33 @@ namespace YAT.Model
 
 		private bool OpenTerminalFromFile(string filePath, Guid guid, int fixedIndex, Settings.WindowSettings windowSettings, bool suppressErrorHandling)
 		{
-			string absoluteFilePath = filePath;
+			AssertNotDisposed();
 
-			OnFixedStatusTextRequest("Opening terminal...");
-			try
+			// Combine absolute workspace path with terminal path if that one is relative.
+			filePath = PathEx.CombineFilePaths(this.settingsHandler.SettingsFilePath, filePath);
+
+			// Open the terminal.
+			// The terminal file is checked within OpenTerminalFromSettings().
+			DocumentSettingsHandler<TerminalSettingsRoot> settings;
+			System.Xml.XmlException ex;
+
+			OnFixedStatusTextRequest("Opening terminal file...");
+			if (OpenTerminalFile(filePath, out settings, out ex))
 			{
-				// Combine absolute workspace path with terminal path if that one is relative.
-				absoluteFilePath = PathEx.CombineFilePaths(this.settingsHandler.SettingsFilePath, filePath);
-
-				// Check whether terminal is already contained in workspace.
-				foreach (Terminal t in this.terminals)
-				{
-					if (PathEx.Equals(absoluteFilePath, t.SettingsFilePath))
-					{
-						OnFixedStatusTextRequest("Terminal is already open.");
-						OnMessageInputRequest
-							(
-							"Terminal is already open and will not be re-openend.",
-							"Terminal File Warning",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Warning
-							);
-						OnTimedStatusTextRequest("Terminal not re-opened.");
-						return (false);
-					}
-				}
-
-				// Load settings.
-				DocumentSettingsHandler<TerminalSettingsRoot> sh = new DocumentSettingsHandler<TerminalSettingsRoot>();
-				sh.SettingsFilePath = absoluteFilePath;
-				sh.Load();
-
 				// Replace window settings with those saved in workspace.
 				if (windowSettings != null)
-					sh.Settings.Window = windowSettings;
+					settings.Settings.Window = windowSettings;
 
-				// Create terminal.
-				Terminal terminal = new Terminal(sh, guid);
-				AddToWorkspace(terminal, fixedIndex);
-
-				if (!sh.Settings.AutoSaved)
-					SetRecent(absoluteFilePath);
-
-				OnTimedStatusTextRequest("Terminal opened.");
-				return (true);
+				return (OpenTerminalFromSettings(settings));
 			}
-			catch (System.Xml.XmlException ex)
+			else
 			{
 				if (!suppressErrorHandling)
 				{
 					OnFixedStatusTextRequest("Error opening terminal!");
 					OnMessageInputRequest
 						(
-						"Unable to open file" + Environment.NewLine + absoluteFilePath + Environment.NewLine + Environment.NewLine +
+						"Unable to open file" + Environment.NewLine + filePath + Environment.NewLine + Environment.NewLine +
 						"XML error message: " + ex.Message + Environment.NewLine +
 						"File error message: " + ex.InnerException.Message,
 						"Invalid Terminal File",
@@ -1012,7 +1008,83 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual bool OpenTerminalFromSettings
+		public virtual bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settings)
+		{
+			return (OpenTerminalFromSettings(settings, Guid.Empty, Indices.DefaultFixedIndex, null, false));
+		}
+
+		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settings, Guid guid, int fixedIndex, Settings.WindowSettings windowSettings, bool suppressErrorHandling)
+		{
+			AssertNotDisposed();
+
+			// Ensure that the terminal file is not already open.
+			if (!CheckTerminalFiles(settings.SettingsFilePath))
+				return (false);
+
+			OnFixedStatusTextRequest("Opening terminal...");
+
+			// Create terminal.
+			Terminal terminal = new Terminal(settings, guid);
+			AddToWorkspace(terminal, fixedIndex);
+
+			if (!settings.Settings.AutoSaved)
+				SetRecent(settings.SettingsFilePath);
+
+			OnTimedStatusTextRequest("Terminal opened.");
+
+			return (true);
+		}
+
+		#endregion
+
+		#region Terminal > Private Methods
+		//------------------------------------------------------------------------------------------
+		// Terminal > Private Methods
+		//------------------------------------------------------------------------------------------
+
+		/// <summary>
+		/// Check whether terminal is already contained in workspace.
+		/// </summary>
+		private bool CheckTerminalFiles(string terminalFilePath)
+		{
+			foreach (Terminal t in this.terminals)
+			{
+				if (PathEx.Equals(terminalFilePath, t.SettingsFilePath))
+				{
+					OnFixedStatusTextRequest("Terminal is already open.");
+					OnMessageInputRequest
+						(
+						"Terminal is already open and will not be re-openend.",
+						"Terminal Warning",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Warning
+						);
+					OnTimedStatusTextRequest("Terminal not re-opened.");
+					return (false);
+				}
+			}
+			return (true);
+		}
+
+		private bool OpenTerminalFile(string filePath, out DocumentSettingsHandler<TerminalSettingsRoot> settings, out System.Xml.XmlException exception)
+		{
+			try
+			{
+				settings = new DocumentSettingsHandler<TerminalSettingsRoot>();
+				settings.SettingsFilePath = filePath;
+				settings.Load();
+
+				exception = null;
+				return (true);
+			}
+			catch (System.Xml.XmlException ex)
+			{
+				DebugEx.WriteException(this.GetType(), ex);
+				settings = null;
+				exception = ex;
+				return (false);
+			}
+		}
 
 		private TerminalSettingsItem CreateTerminalSettingsItem(Terminal terminal, int fixedIndex)
 		{
@@ -1125,6 +1197,13 @@ namespace YAT.Model
 			this.fixedIndices.Remove(GetFixedIndexByTerminal(terminal));
 		}
 
+		#endregion
+
+		#region Terminals > Get Methods
+		//------------------------------------------------------------------------------------------
+		// Terminals > Get Methods
+		//------------------------------------------------------------------------------------------
+
 		/// <summary>
 		/// Returns the fixed index of the given terminal.
 		/// </summary>
@@ -1143,8 +1222,10 @@ namespace YAT.Model
 		/// </summary>
 		public virtual int GetDynamicIndexByTerminal(Terminal terminal)
 		{
+			AssertNotDisposed();
+
 			int index = this.terminals.IndexOf(this.activeTerminal);
-			return (IndexToDynamicIndex(index));
+			return (Indices.IndexToDynamicIndex(index));
 		}
 
 		/// <summary>
@@ -1153,6 +1234,8 @@ namespace YAT.Model
 		/// </summary>
 		public virtual Terminal GetTerminalByGUID(Guid guid)
 		{
+			AssertNotDisposed();
+
 			foreach (Terminal t in this.terminals)
 			{
 				if (t.Guid == guid)
@@ -1169,6 +1252,8 @@ namespace YAT.Model
 		/// </summary>
 		public virtual Terminal GetTerminalBySequencialIndex(int sequencialIndex)
 		{
+			AssertNotDisposed();
+
 			foreach (Terminal t in this.terminals)
 			{
 				if (t.SequencialIndex == sequencialIndex)
@@ -1188,7 +1273,9 @@ namespace YAT.Model
 		/// </remarks>
 		public virtual Terminal GetTerminalByDynamicIndex(int dynamicIndex)
 		{
-			int index = DynamicIndexToIndex(dynamicIndex);
+			AssertNotDisposed();
+
+			int index = Indices.DynamicIndexToIndex(dynamicIndex);
 			if (index >= FirstValidIndex)
 				return (this.terminals[index]);
 			else
@@ -1205,6 +1292,8 @@ namespace YAT.Model
 		/// </summary>
 		public virtual Terminal GetTerminalByFixedIndex(int index)
 		{
+			AssertNotDisposed();
+
 			Terminal t;
 			if (this.fixedIndices.TryGetValue(index, out t))
 				return (t);
@@ -1219,6 +1308,8 @@ namespace YAT.Model
 		/// </summary>
 		public virtual Terminal GetTerminalByUserName(string userName)
 		{
+			AssertNotDisposed();
+
 			foreach (Terminal t in this.terminals)
 			{
 				if (t.SettingsRoot.UserName == userName)
@@ -1229,6 +1320,7 @@ namespace YAT.Model
 				if (StringEx.EqualsOrdinalIgnoreCase(t.SettingsRoot.UserName, userName))
 					return (t);
 			}
+
 			return (null);
 		}
 
@@ -1248,6 +1340,8 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool SaveAllTerminals(bool autoSaveIsAllowed)
 		{
+			AssertNotDisposed();
+
 			bool success = true;
 
 			// Calling Close() on a terminal will modify the list, therefore clone it first
@@ -1271,6 +1365,8 @@ namespace YAT.Model
 		/// </remarks>
 		private bool CloseAllTerminals(bool isWorkspaceClose, bool tryAutoSave)
 		{
+			AssertNotDisposed();
+
 			bool success = true;
 
 			// Calling Close() on a terminal will modify the list, therefore clone it first
@@ -1293,6 +1389,7 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual void ActivateTerminal(Terminal terminal)
 		{
+			AssertNotDisposed();
 			this.activeTerminal = terminal;
 		}
 
@@ -1305,24 +1402,28 @@ namespace YAT.Model
 		/// <summary></summary>
 		public virtual bool SaveActiveTerminal()
 		{
+			AssertNotDisposed();
 			return (this.activeTerminal.Save());
 		}
 
 		/// <summary></summary>
 		public virtual bool CloseActiveTerminal()
 		{
+			AssertNotDisposed();
 			return (this.activeTerminal.Close());
 		}
 
 		/// <summary></summary>
 		public virtual bool OpenActiveTerminalIO()
 		{
+			AssertNotDisposed();
 			return (this.activeTerminal.StartIO());
 		}
 
 		/// <summary></summary>
 		public virtual bool CloseActiveTerminalIO()
 		{
+			AssertNotDisposed();
 			return (this.activeTerminal.StopIO());
 		}
 

@@ -1135,8 +1135,8 @@ namespace YAT.Model.Test
 				Assert.IsNotNull(workspace, step + "Workspace not created!");
 				Assert.AreEqual(3, workspace.TerminalCount, step + "Workspace doesn't contain 3 terminals!");
 
-				int first = Terminal.FirstSequencialIndex;
-				int last  = Terminal.FirstSequencialIndex + workspace.TerminalCount - 1;
+				int first = Indices.FirstSequencialIndex;
+				int last  = Indices.FirstSequencialIndex + workspace.TerminalCount - 1;
 				for (int i = first; i <= last; i++)
 				{
 					int k = 5 + i - 1;

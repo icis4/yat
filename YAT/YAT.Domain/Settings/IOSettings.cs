@@ -67,8 +67,8 @@ namespace YAT.Domain.Settings
 
 		private void InitializeNodes()
 		{
-			SerialPort   = new MKY.IO.Serial.SerialPortSettings(SettingsType);
-			Socket       = new MKY.IO.Serial.SocketSettings(SettingsType);
+			SerialPort         = new MKY.IO.Serial.SerialPortSettings(SettingsType);
+			Socket             = new MKY.IO.Serial.SocketSettings(SettingsType);
 			UsbSerialHidDevice = new MKY.IO.Serial.UsbSerialHidDeviceSettings(SettingsType);
 		}
 

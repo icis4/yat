@@ -201,30 +201,6 @@ namespace YAT.Controller
 			get { return (!this.commandLineArgs.NoLogo); }
 		}
 
-		/// <summary></summary>
-		public virtual string RequestedFilePath
-		{
-			get { return (this.commandLineArgs.RequestedFilePath); }
-		}
-
-		/// <summary></summary>
-		public virtual bool MostRecentIsRequested
-		{
-			get { return (this.commandLineArgs.MostRecentIsRequested); }
-		}
-
-		/// <summary></summary>
-		public virtual int RequestedDynamicTerminalIndex
-		{
-			get { return (this.commandLineArgs.RequestedDynamicTerminalIndex); }
-		}
-
-		/// <summary></summary>
-		public virtual string RequestedTransmitFilePath
-		{
-			get { return (this.commandLineArgs.RequestedTransmitFilePath); }
-		}
-
 		#endregion
 
 		#region Methods
