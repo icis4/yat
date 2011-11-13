@@ -49,7 +49,7 @@
     </Compile>
     <Compile Include="CommandLineArgs.cs" />
     <Compile Include="MainResult.cs" />
-    <Compile Include="StartRequests.cs" />
+    <Compile Include="StartArgs.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

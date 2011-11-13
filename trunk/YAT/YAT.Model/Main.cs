@@ -79,7 +79,7 @@ namespace YAT.Model
 		private Guid guid;
 
 		private CommandLineArgs commandLineArgs;
-		private StartRequests startRequests;
+		private StartArgs startArgs;
 
 		private Workspace workspace;
 
@@ -219,12 +219,12 @@ namespace YAT.Model
 		}
 
 		/// <summary></summary>
-		public virtual StartRequests StartRequests
+		public virtual StartArgs StartArgs
 		{
 			get
 			{
 				AssertNotDisposed();
-				return (this.startRequests);
+				return (this.startArgs);
 			}
 		}
 
@@ -297,22 +297,22 @@ namespace YAT.Model
 			bool success = false;
 			bool otherInstanceIsAlreadyRunning = OtherInstanceIsAlreadyRunning();
 
-			bool workspaceIsRequested = (this.startRequests.WorkspaceSettings != null);
-			bool terminalIsRequested  = (this.startRequests.TerminalSettings != null);
+			bool workspaceIsRequested = (this.startArgs.WorkspaceSettings != null);
+			bool terminalIsRequested  = (this.startArgs.TerminalSettings != null);
 
 			if (workspaceIsRequested || terminalIsRequested)
 			{
 				if (workspaceIsRequested && terminalIsRequested)
 				{
-					success = OpenWorkspaceFromSettings(this.startRequests.WorkspaceSettings, this.startRequests.RequestedDynamicTerminalIndex, this.startRequests.TerminalSettings);
+					success = OpenWorkspaceFromSettings(this.startArgs.WorkspaceSettings, this.startArgs.RequestedDynamicTerminalIndex, this.startArgs.TerminalSettings);
 				}
 				else if (workspaceIsRequested) // Workspace only.
 				{
-					success = OpenWorkspaceFromSettings(this.startRequests.WorkspaceSettings);
+					success = OpenWorkspaceFromSettings(this.startArgs.WorkspaceSettings);
 				}
 				else // Terminal only.
 				{
-					success = OpenTerminalFromSettings(this.startRequests.TerminalSettings);
+					success = OpenTerminalFromSettings(this.startArgs.TerminalSettings);
 				}
 
 				if (success)
@@ -375,14 +375,14 @@ namespace YAT.Model
 		private bool ProcessCommandLineArgsIntoStartRequests()
 		{
 			// Always create start requests to ensure that object exists.
-			this.startRequests = new StartRequests();
+			this.startArgs = new StartArgs();
 
 			// Prio 0 = None:
 			if (this.commandLineArgs == null)
 			{
-				this.startRequests.ShowNewTerminalDialog = true;
-				this.startRequests.KeepOpen              = true;
-				this.startRequests.KeepOpenOnError       = true;
+				this.startArgs.ShowNewTerminalDialog = true;
+				this.startArgs.KeepOpen              = true;
+				this.startArgs.KeepOpenOnError       = true;
 
 				return (true);
 			}
@@ -394,9 +394,9 @@ namespace YAT.Model
 			// Prio 1 = Empty:
 			if (this.commandLineArgs.Empty)
 			{
-				this.startRequests.ShowNewTerminalDialog = false;
-				this.startRequests.KeepOpen              = true;
-				this.startRequests.KeepOpenOnError       = true;
+				this.startArgs.ShowNewTerminalDialog = false;
+				this.startArgs.KeepOpen              = true;
+				this.startArgs.KeepOpenOnError       = true;
 
 				return (true);
 			}
@@ -433,7 +433,7 @@ namespace YAT.Model
 				{
 					DocumentSettingsHandler<WorkspaceSettingsRoot> sh;
 					if (OpenWorkspaceFile(requestedFilePath, out sh))
-						this.startRequests.WorkspaceSettings = sh;
+						this.startArgs.WorkspaceSettings = sh;
 					else
 						return (false);
 				}
@@ -441,7 +441,7 @@ namespace YAT.Model
 				{
 					DocumentSettingsHandler<TerminalSettingsRoot> sh;
 					if (OpenTerminalFile(requestedFilePath, out sh))
-						this.startRequests.TerminalSettings = sh;
+						this.startArgs.TerminalSettings = sh;
 					else
 						return (false);
 				}
@@ -452,10 +452,10 @@ namespace YAT.Model
 			}
 
 			// Prio 6 = Retrieve the requested terminal and validate it:
-			if (this.startRequests.WorkspaceSettings != null) // Applies to a terminal within a workspace.
+			if (this.startArgs.WorkspaceSettings != null) // Applies to a terminal within a workspace.
 			{
 				int requestedDynamicTerminalIndex = this.commandLineArgs.RequestedDynamicTerminalIndex;
-				int lastDynamicIndex = Indices.IndexToDynamicIndex(this.startRequests.WorkspaceSettings.Settings.TerminalSettings.Count - 1);
+				int lastDynamicIndex = Indices.IndexToDynamicIndex(this.startArgs.WorkspaceSettings.Settings.TerminalSettings.Count - 1);
 				
 				int dynamicIndex;
 				if     ((requestedDynamicTerminalIndex >= Indices.FirstDynamicIndex) && (requestedDynamicTerminalIndex <= lastDynamicIndex))
@@ -470,25 +470,25 @@ namespace YAT.Model
 				if (dynamicIndex != Indices.InvalidDynamicIndex)
 				{
 					DocumentSettingsHandler<TerminalSettingsRoot> sh;
-					string workspaceFilePath = this.startRequests.WorkspaceSettings.SettingsFilePath;
-					string terminalFilePath  = this.startRequests.WorkspaceSettings.Settings.TerminalSettings[Indices.DynamicIndexToIndex(dynamicIndex)].FilePath;
+					string workspaceFilePath = this.startArgs.WorkspaceSettings.SettingsFilePath;
+					string terminalFilePath  = this.startArgs.WorkspaceSettings.Settings.TerminalSettings[Indices.DynamicIndexToIndex(dynamicIndex)].FilePath;
 					if (!OpenTerminalFile(workspaceFilePath, terminalFilePath, out sh))
-						this.startRequests.TerminalSettings = sh;
+						this.startArgs.TerminalSettings = sh;
 					else
 						return (false);
 				}
 			}
-			else if (this.startRequests.TerminalSettings != null) // Applies to a dedicated terminal.
+			else if (this.startArgs.TerminalSettings != null) // Applies to a dedicated terminal.
 			{
 				switch (this.commandLineArgs.RequestedDynamicTerminalIndex)
 				{
 					case Indices.InvalidDynamicIndex:
-						this.startRequests.RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex;
+						this.startArgs.RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex;
 						break;
 
 					case Indices.DefaultDynamicIndex:
 					case Indices.FirstDynamicIndex:
-						this.startRequests.RequestedDynamicTerminalIndex = Indices.FirstDynamicIndex;
+						this.startArgs.RequestedDynamicTerminalIndex = Indices.FirstDynamicIndex;
 						break;
 
 					default:
@@ -497,19 +497,19 @@ namespace YAT.Model
 			}
 			else if (this.commandLineArgs.NewIsRequested) // Applies to new settings.
 			{
-				this.startRequests.TerminalSettings = new DocumentSettingsHandler<TerminalSettingsRoot>();
+				this.startArgs.TerminalSettings = new DocumentSettingsHandler<TerminalSettingsRoot>();
 			}
 
 			// Prio 7 = If no settings loaded so far, create a new terminal anyway:
-			if ((this.startRequests.WorkspaceSettings == null) && (this.startRequests.TerminalSettings == null))
-				 this.startRequests.TerminalSettings = new DocumentSettingsHandler<TerminalSettingsRoot>();
+			if ((this.startArgs.WorkspaceSettings == null) && (this.startArgs.TerminalSettings == null))
+				 this.startArgs.TerminalSettings = new DocumentSettingsHandler<TerminalSettingsRoot>();
 
 			// Prio 8 = Override settings as desired:
 			if (this.commandLineArgs.OptionIsGiven("TerminalType"))
 			{
 				Domain.TerminalTypeEx terminalType;
 				if (Domain.TerminalTypeEx.TryParse(this.commandLineArgs.TerminalType, out terminalType))
-					this.startRequests.TerminalSettings.Settings.TerminalType = terminalType;
+					this.startArgs.TerminalSettings.Settings.TerminalType = terminalType;
 				else
 					return (false);
 			}
@@ -517,21 +517,21 @@ namespace YAT.Model
 			{
 				Domain.IOTypeEx ioType;
 				if (Domain.IOTypeEx.TryParse(this.commandLineArgs.IOType, out ioType))
-					this.startRequests.TerminalSettings.Settings.IOType = ioType;
+					this.startArgs.TerminalSettings.Settings.IOType = ioType;
 				else
 					return (false);
 			}
 
-			if (this.startRequests.TerminalSettings != null)
+			if (this.startArgs.TerminalSettings != null)
 			{
-				Domain.IOType finalIOType = this.startRequests.TerminalSettings.Settings.IOType;
+				Domain.IOType finalIOType = this.startArgs.TerminalSettings.Settings.IOType;
 				if (finalIOType == Domain.IOType.SerialPort)
 				{
 					if (this.commandLineArgs.OptionIsGiven("SerialPort"))
 					{
 						MKY.IO.Ports.SerialPortId portId;
 						if (MKY.IO.Ports.SerialPortId.TryFrom(this.commandLineArgs.SerialPort, out portId))
-							this.startRequests.TerminalSettings.Settings.IO.SerialPort.PortId = portId;
+							this.startArgs.TerminalSettings.Settings.IO.SerialPort.PortId = portId;
 						else
 							return (false);
 					}
@@ -539,7 +539,7 @@ namespace YAT.Model
 					{
 						MKY.IO.Ports.BaudRateEx baudRate;
 						if (MKY.IO.Ports.BaudRateEx.TryFrom(this.commandLineArgs.BaudRate, out baudRate))
-							this.startRequests.TerminalSettings.Settings.IO.SerialPort.Communication.BaudRate = baudRate;
+							this.startArgs.TerminalSettings.Settings.IO.SerialPort.Communication.BaudRate = baudRate;
 						else
 							return (false);
 					}
@@ -547,7 +547,7 @@ namespace YAT.Model
 					{
 						MKY.IO.Ports.DataBitsEx dataBits;
 						if (MKY.IO.Ports.DataBitsEx.TryFrom(this.commandLineArgs.DataBits, out dataBits))
-							this.startRequests.TerminalSettings.Settings.IO.SerialPort.Communication.DataBits = dataBits;
+							this.startArgs.TerminalSettings.Settings.IO.SerialPort.Communication.DataBits = dataBits;
 						else
 							return (false);
 					}
@@ -555,7 +555,7 @@ namespace YAT.Model
 					{
 						MKY.IO.Ports.ParityEx parity;
 						if (MKY.IO.Ports.ParityEx.TryParse(this.commandLineArgs.Parity, out parity))
-							this.startRequests.TerminalSettings.Settings.IO.SerialPort.Communication.Parity = parity;
+							this.startArgs.TerminalSettings.Settings.IO.SerialPort.Communication.Parity = parity;
 						else
 							return (false);
 					}
@@ -563,7 +563,7 @@ namespace YAT.Model
 					{
 						MKY.IO.Ports.StopBitsEx stopBits;
 						if (MKY.IO.Ports.StopBitsEx.TryFrom(this.commandLineArgs.StopBits, out stopBits))
-							this.startRequests.TerminalSettings.Settings.IO.SerialPort.Communication.StopBits = stopBits;
+							this.startArgs.TerminalSettings.Settings.IO.SerialPort.Communication.StopBits = stopBits;
 						else
 							return (false);
 					}
@@ -571,16 +571,16 @@ namespace YAT.Model
 					{
 						MKY.IO.Serial.SerialFlowControlEx flowControl;
 						if (MKY.IO.Serial.SerialFlowControlEx.TryParse(this.commandLineArgs.FlowControl, out flowControl))
-							this.startRequests.TerminalSettings.Settings.IO.SerialPort.Communication.FlowControl = flowControl;
+							this.startArgs.TerminalSettings.Settings.IO.SerialPort.Communication.FlowControl = flowControl;
 						else
 							return (false);
 					}
 					if (this.commandLineArgs.OptionIsGiven("SerialPortAutoReopen"))
 					{
 						if (this.commandLineArgs.SerialPortAutoReopen == 0)
-							this.startRequests.TerminalSettings.Settings.IO.SerialPort.AutoReopen = new MKY.IO.Serial.AutoRetry(false, 0);
+							this.startArgs.TerminalSettings.Settings.IO.SerialPort.AutoReopen = new MKY.IO.Serial.AutoRetry(false, 0);
 						else if (this.commandLineArgs.SerialPortAutoReopen >= MKY.IO.Serial.SerialPortSettings.AutoReopenMinimumInterval)
-							this.startRequests.TerminalSettings.Settings.IO.SerialPort.AutoReopen = new MKY.IO.Serial.AutoRetry(true, this.commandLineArgs.SerialPortAutoReopen);
+							this.startArgs.TerminalSettings.Settings.IO.SerialPort.AutoReopen = new MKY.IO.Serial.AutoRetry(true, this.commandLineArgs.SerialPortAutoReopen);
 						else
 							return (false);
 					}
@@ -594,7 +594,7 @@ namespace YAT.Model
 					{
 						MKY.Net.IPHost remoteHost;
 						if (MKY.Net.IPHost.TryParse(this.commandLineArgs.RemoteHost, out remoteHost))
-							this.startRequests.TerminalSettings.Settings.IO.Socket.RemoteHost = remoteHost;
+							this.startArgs.TerminalSettings.Settings.IO.Socket.RemoteHost = remoteHost;
 						else
 							return (false);
 					}
@@ -604,7 +604,7 @@ namespace YAT.Model
 						this.commandLineArgs.OptionIsGiven("RemotePort"))
 					{
 						if (Int32Ex.IsWithin(this.commandLineArgs.RemotePort, System.Net.IPEndPoint.MinPort, System.Net.IPEndPoint.MaxPort))
-							this.startRequests.TerminalSettings.Settings.IO.Socket.RemotePort = this.commandLineArgs.RemotePort;
+							this.startArgs.TerminalSettings.Settings.IO.Socket.RemotePort = this.commandLineArgs.RemotePort;
 						else
 							return (false);
 					}
@@ -612,7 +612,7 @@ namespace YAT.Model
 					{
 						MKY.Net.IPNetworkInterface localInterface;
 						if (MKY.Net.IPNetworkInterface.TryParse(this.commandLineArgs.LocalInterface, out localInterface))
-							this.startRequests.TerminalSettings.Settings.IO.Socket.LocalInterface = localInterface;
+							this.startArgs.TerminalSettings.Settings.IO.Socket.LocalInterface = localInterface;
 						else
 							return (false);
 					}
@@ -622,7 +622,7 @@ namespace YAT.Model
 						this.commandLineArgs.OptionIsGiven("LocalPort"))
 					{
 						if (Int32Ex.IsWithin(this.commandLineArgs.LocalPort, System.Net.IPEndPoint.MinPort, System.Net.IPEndPoint.MaxPort))
-							this.startRequests.TerminalSettings.Settings.IO.Socket.LocalPort = this.commandLineArgs.LocalPort;
+							this.startArgs.TerminalSettings.Settings.IO.Socket.LocalPort = this.commandLineArgs.LocalPort;
 						else
 							return (false);
 					}
@@ -630,39 +630,38 @@ namespace YAT.Model
 						this.commandLineArgs.OptionIsGiven("TCPAutoReconnect"))
 					{
 						if (this.commandLineArgs.TcpAutoReconnect == 0)
-							this.startRequests.TerminalSettings.Settings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.AutoRetry(false, 0);
+							this.startArgs.TerminalSettings.Settings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.AutoRetry(false, 0);
 						else if (this.commandLineArgs.TcpAutoReconnect >= MKY.IO.Serial.SocketSettings.TcpClientAutoReconnectMinimumInterval)
-							this.startRequests.TerminalSettings.Settings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.AutoRetry(true, this.commandLineArgs.TcpAutoReconnect);
+							this.startArgs.TerminalSettings.Settings.IO.Socket.TcpClientAutoReconnect = new MKY.IO.Serial.AutoRetry(true, this.commandLineArgs.TcpAutoReconnect);
 						else
 							return (false);
 					}
 				}
 				else if (finalIOType == Domain.IOType.UsbSerialHid)
 				{
-					if (this.commandLineArgs.OptionIsGiven("VendorID"))
+					bool vendorIdIsGiven  = this.commandLineArgs.OptionIsGiven("VendorID");
+					bool productIdIsGiven = this.commandLineArgs.OptionIsGiven("ProductId");
+					if (vendorIdIsGiven || productIdIsGiven)
 					{
-						int vendorId;
-						if (int.TryParse(this.commandLineArgs.VendorId, out vendorId))
+						// Both vendor and product ID must be given!
+						if (vendorIdIsGiven && productIdIsGiven)
 						{
-							if (Int32Ex.IsWithin(vendorId, MKY.IO.Usb.DeviceInfo.FirstVendorId, MKY.IO.Usb.DeviceInfo.LastVendorId))
-								this.startRequests.TerminalSettings.Settings.IO.UsbSerialHidDevice.DeviceInfo.VendorId = vendorId;
-							else
+							int vendorId;
+							int productId;
+
+							if (!int.TryParse(this.commandLineArgs.VendorId, out vendorId))
 								return (false);
-						}
-						else
-						{
-							return (false);
-						}
-					}
-					if (this.commandLineArgs.OptionIsGiven("ProductId"))
-					{
-						int productId;
-						if (int.TryParse(this.commandLineArgs.ProductId, out productId))
-						{
-							if (Int32Ex.IsWithin(productId, MKY.IO.Usb.DeviceInfo.FirstProductId, MKY.IO.Usb.DeviceInfo.LastProductId))
-								this.startRequests.TerminalSettings.Settings.IO.UsbSerialHidDevice.DeviceInfo.ProductId = productId;
-							else
+
+							if (!Int32Ex.IsWithin(vendorId, MKY.IO.Usb.DeviceInfo.FirstVendorId, MKY.IO.Usb.DeviceInfo.LastVendorId))
 								return (false);
+
+							if (!int.TryParse(this.commandLineArgs.ProductId, out productId))
+								return (false);
+							
+							if (!Int32Ex.IsWithin(productId, MKY.IO.Usb.DeviceInfo.FirstProductId, MKY.IO.Usb.DeviceInfo.LastProductId))
+								return (false);
+
+							this.startArgs.TerminalSettings.Settings.IO.UsbSerialHidDevice.DeviceInfo = new MKY.IO.Usb.DeviceInfo(vendorId, productId);
 						}
 						else
 						{
@@ -671,7 +670,7 @@ namespace YAT.Model
 					}
 					if (this.commandLineArgs.OptionIsGiven("NoUSBAutoOpen"))
 					{
-						this.startRequests.TerminalSettings.Settings.IO.UsbSerialHidDevice.AutoOpen = !this.commandLineArgs.NoUsbAutoOpen;
+						this.startArgs.TerminalSettings.Settings.IO.UsbSerialHidDevice.AutoOpen = !this.commandLineArgs.NoUsbAutoOpen;
 					}
 				}
 				else
@@ -681,33 +680,33 @@ namespace YAT.Model
 			}
 
 			if (this.commandLineArgs.OptionIsGiven("OpenTerminal"))
-				this.startRequests.TerminalSettings.Settings.TerminalIsStarted = this.commandLineArgs.OpenTerminal;
+				this.startArgs.TerminalSettings.Settings.TerminalIsStarted = this.commandLineArgs.OpenTerminal;
 
 			if (this.commandLineArgs.OptionIsGiven("BeginLog"))
-				this.startRequests.TerminalSettings.Settings.LogIsStarted = this.commandLineArgs.BeginLog;
+				this.startArgs.TerminalSettings.Settings.LogIsStarted = this.commandLineArgs.BeginLog;
 
 			// Prio 9 = Perform actions:
 			if (this.commandLineArgs.OptionIsGiven("TransmitFile"))
 			{
-				this.startRequests.RequestedTransmitFilePath = this.commandLineArgs.RequestedTransmitFilePath;
-				this.startRequests.PerformActionOnRequestedTerminal = true;
+				this.startArgs.RequestedTransmitFilePath = this.commandLineArgs.RequestedTransmitFilePath;
+				this.startArgs.PerformActionOnRequestedTerminal = true;
 			}
 
 			// Prio 10 = Set behavior:
-			if (this.startRequests.PerformActionOnRequestedTerminal)
+			if (this.startArgs.PerformActionOnRequestedTerminal)
 			{
-				this.startRequests.KeepOpen        = this.commandLineArgs.KeepOpen;
-				this.startRequests.KeepOpenOnError = this.commandLineArgs.KeepOpenOnError;
+				this.startArgs.KeepOpen        = this.commandLineArgs.KeepOpen;
+				this.startArgs.KeepOpenOnError = this.commandLineArgs.KeepOpenOnError;
 			}
 			else
 			{
-				this.startRequests.KeepOpen        = true;
-				this.startRequests.KeepOpenOnError = true;
+				this.startArgs.KeepOpen        = true;
+				this.startArgs.KeepOpenOnError = true;
 			}
 
 			// Prio 11 = Tile:
-			this.startRequests.TileHorizontal  = this.commandLineArgs.TileHorizontal;
-			this.startRequests.TileVertical    = this.commandLineArgs.TileVertical;
+			this.startArgs.TileHorizontal = this.commandLineArgs.TileHorizontal;
+			this.startArgs.TileVertical   = this.commandLineArgs.TileVertical;
 
 			return (true);
 		}
