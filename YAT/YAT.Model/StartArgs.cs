@@ -46,7 +46,7 @@ using YAT.Settings.Workspace;
 namespace YAT.Model
 {
 	/// <summary></summary>
-	public class StartRequests
+	public class StartArgs
 	{
 		private const string SuppressionJustification = "This is a simple container for start args.";
 

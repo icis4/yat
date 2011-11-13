@@ -220,23 +220,23 @@ namespace YAT.Gui.Forms
 					if (this.workspace.TerminalCount == 0)
 					{
 						// If workspace is empty, and requested, display new terminal dialog.
-						if (this.main.StartRequests.ShowNewTerminalDialog)
+						if (this.main.StartArgs.ShowNewTerminalDialog)
 							ShowNewTerminalDialog();
 					}
 					else
 					{
 						// If workspace contains terminals, and requested, tile the terminal forms accordingly.
-						if      (this.main.StartRequests.TileHorizontal)
+						if      (this.main.StartArgs.TileHorizontal)
 							LayoutMdi(MdiLayout.TileHorizontal);
-						else if (this.main.StartRequests.TileVertical)
+						else if (this.main.StartArgs.TileVertical)
 							LayoutMdi(MdiLayout.TileVertical);
 					}
 
 					// Automatically trigger transmit data if desired.
-					if (!string.IsNullOrEmpty(this.main.StartRequests.RequestedTransmitFilePath))
+					if (this.main.StartArgs.PerformActionOnRequestedTerminal)
 					{
-						SetFixedStatusText("Triggering automatic transmission");
-						timer_TestTransmit.Start();
+						SetFixedStatusText("Triggering start action(s)...");
+						timer_PerformStartAction.Start();
 					}
 				}
 			}
@@ -912,14 +912,14 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region Controls Event Handlers > TestTransmit
+		#region Controls Event Handlers > PerformStartAction
 		//------------------------------------------------------------------------------------------
-		// Controls Event Handlers > TestTransmit
+		// Controls Event Handlers > PerformStartAction
 		//------------------------------------------------------------------------------------------
 
-		private void timer_TestTransmit_Tick(object sender, EventArgs e)
+		private void timer_PerformStartAction_Tick(object sender, EventArgs e)
 		{
-			int id = this.main.StartRequests.RequestedDynamicTerminalIndex;
+			int id = this.main.StartArgs.RequestedDynamicTerminalIndex;
 			if (this.workspace.GetTerminalByDynamicIndex(id) != null)
 			{
 				SetTimedStatusText("Trigger received, pending until terminal has been created...");
@@ -932,17 +932,17 @@ namespace YAT.Gui.Forms
 			}
 
 			// Preconditions fullfilled.
-			timer_TestTransmit.Stop();
+			timer_PerformStartAction.Stop();
 			SetTimedStatusText("Trigger received, preparing transmit");
 
 			// Automatically transmit data if desired.
-			if ((this.main.StartRequests != null) && !string.IsNullOrEmpty(this.main.StartRequests.RequestedTransmitFilePath))
+			if (!string.IsNullOrEmpty(this.main.StartArgs.RequestedTransmitFilePath))
 			{
 				try
 				{
 					SetFixedStatusText("Automatically transmitting data on terminal " + id);
 
-					string filePath = this.main.StartRequests.RequestedTransmitFilePath;
+					string filePath = this.main.StartArgs.RequestedTransmitFilePath;
 					this.workspace.Terminals[id].SendFile(new Model.Types.Command("", true, filePath));
 
 					SetFixedStatusText("Automatically closing YAT");
