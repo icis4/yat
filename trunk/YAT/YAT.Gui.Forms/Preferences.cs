@@ -24,6 +24,8 @@
 using System;
 using System.Windows.Forms;
 
+using MKY.Windows.Forms;
+
 namespace YAT.Gui.Forms
 {
 	/// <summary></summary>
@@ -34,7 +36,7 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 
 		private Settings.Application.LocalUserSettingsRoot settings;
 		private Settings.Application.LocalUserSettingsRoot settings_Form;
@@ -191,16 +193,16 @@ namespace YAT.Gui.Forms
 
 		private void InitializeControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			// Nothing to do yet.
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			checkBox_ShowTerminalInfo.Checked = this.settings_Form.MainWindow.ShowTerminalInfo;
 			checkBox_ShowChrono.Checked       = this.settings_Form.MainWindow.ShowChrono;
@@ -211,7 +213,7 @@ namespace YAT.Gui.Forms
 
 			checkBox_DetectSerialPortsInUse.Checked = this.settings_Form.General.DetectSerialPortsInUse;
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		#endregion

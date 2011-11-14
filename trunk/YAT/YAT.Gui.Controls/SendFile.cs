@@ -35,6 +35,7 @@ using System.Windows.Forms;
 using MKY;
 using MKY.Event;
 using MKY.Recent;
+using MKY.Windows.Forms;
 
 using YAT.Model.Types;
 using YAT.Settings;
@@ -65,7 +66,7 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls;
+		private SettingControlsHelper isSettingControls;
 
 		private Command fileCommand = new Command();
 		private RecentItemCollection<Command> recents;
@@ -220,7 +221,7 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			splitContainer.SplitterDistance = Int32Ex.LimitToBounds((int)(this.splitterRatio * splitContainer.Width), 0, splitContainer.Width);
 
@@ -260,7 +261,7 @@ namespace YAT.Gui.Controls
 			else
 				button_SendFile.Enabled = false;
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void SetFileCommand(Command fileCommand)

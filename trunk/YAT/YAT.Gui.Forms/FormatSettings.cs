@@ -26,6 +26,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
+using MKY.Windows.Forms;
+
 namespace YAT.Gui.Forms
 {
 	/// <summary></summary>
@@ -36,7 +38,7 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 
 		private Model.Settings.FormatSettings formatSettings;
 		private Model.Settings.FormatSettings formatSettings_Form;
@@ -264,7 +266,7 @@ namespace YAT.Gui.Forms
 
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			for (int i = 0; i < this.monitors.Length; i++)
 			{                          // Clone settings before assigning them to control
@@ -283,7 +285,7 @@ namespace YAT.Gui.Forms
 			                           // Clone settings before assigning them to control
 			monitor_Example.FormatSettings = new Model.Settings.FormatSettings(this.formatSettings_Form);
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void ShowFontDialog()

@@ -49,7 +49,7 @@ namespace MKY.Windows.Forms
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 
 		#endregion
 
@@ -176,11 +176,11 @@ namespace MKY.Windows.Forms
 			string item = (listBox_StringList.SelectedItem as string);
 			if ((oldIndex != ControlEx.InvalidIndex) && (item != null))
 			{
-				this.isSettingControls = true;
+				this.isSettingControls.Enter();
 				listBox_StringList.Items.RemoveAt(oldIndex);
 				listBox_StringList.Items.Insert(newIndex, item);
 				listBox_StringList.SelectedIndex = newIndex;
-				this.isSettingControls = false;
+				this.isSettingControls.Leave();
 
 				SetControls();
 				OnStringListChanged(new EventArgs());
@@ -197,11 +197,11 @@ namespace MKY.Windows.Forms
 			string item = (listBox_StringList.SelectedItem as string);
 			if ((oldIndex != ControlEx.InvalidIndex) && (item != null))
 			{
-				this.isSettingControls = true;
+				this.isSettingControls.Enter();
 				listBox_StringList.Items.RemoveAt(oldIndex);
 				listBox_StringList.Items.Insert(newIndex, item);
 				listBox_StringList.SelectedIndex = newIndex;
-				this.isSettingControls = false;
+				this.isSettingControls.Leave();
 
 				SetControls();
 				OnStringListChanged(new EventArgs());
@@ -217,7 +217,7 @@ namespace MKY.Windows.Forms
 
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			int itemCount = listBox_StringList.Items.Count;
 			int selectedItemsCount = listBox_StringList.SelectedIndices.Count;
@@ -227,7 +227,7 @@ namespace MKY.Windows.Forms
 			button_MoveUp.Enabled   = (selectedItemsCount == 1) && (selectedItemIndex > 0);
 			button_MoveDown.Enabled = (selectedItemsCount == 1) && (selectedItemIndex < (itemCount - 1));
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		#endregion

@@ -810,7 +810,7 @@ namespace YAT.Domain.Parser
 						foreach (string s in StringEx.Split(parseString, 2))
 						{
 							byte b;
-							if (byte.TryParse(s, NumberStyles.HexNumber, null, out b))
+							if (byte.TryParse(s, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out b))
 								bytes.WriteByte(b);
 							else
 								errorString = s;
@@ -1314,8 +1314,8 @@ namespace YAT.Domain.Parser
 			{
 				case Radix.Bin: success = UInt64Ex.TryParseBinary(tokenValue, out value); break;
 				case Radix.Oct: success = UInt64Ex.TryParseOctal (tokenValue, out value); break;
-				case Radix.Dec: success = ulong.TryParse        (tokenValue, out value); break;
-				case Radix.Hex: success = ulong.TryParse        (tokenValue, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out value); break;
+				case Radix.Dec: success = ulong.TryParse         (tokenValue, out value); break;
+				case Radix.Hex: success = ulong.TryParse         (tokenValue, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out value); break;
 				default: throw (new ArgumentOutOfRangeException("parseRadix", parseRadix, @"Unknown radix """ + parseRadix + @""""));
 			}
 			if (success)

@@ -28,6 +28,7 @@ using System.IO;
 using System.Windows.Forms;
 
 using MKY;
+using MKY.Windows.Forms;
 
 using YAT.Settings;
 using YAT.Settings.Application;
@@ -42,7 +43,7 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 
 		private Log.Settings.LogSettings settings;
 		private Log.Settings.LogSettings settings_Form;
@@ -389,7 +390,7 @@ namespace YAT.Gui.Forms
 
 		private void InitializeControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			comboBox_Neat_Extension.Items.Clear();
 			foreach (string s in ExtensionSettings.TextFilesWithDot)
@@ -403,12 +404,12 @@ namespace YAT.Gui.Forms
 			foreach (string s in Log.FileNameSeparator.Items)
 				comboBox_Options_NameSeparator.Items.Add(s);
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			if (this.settings_Form.RootPath.Length > 0)
 				pathLabel_Root.Text = this.settings_Form.RootPath + Path.DirectorySeparatorChar + this.settings_Form.RootFileName;
@@ -451,7 +452,7 @@ namespace YAT.Gui.Forms
 			checkBox_Options_NameDate.Enabled = dateTimeEnabled;
 			checkBox_Options_NameTime.Enabled = dateTimeEnabled;
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void ShowSetRootDirectoryDialog()

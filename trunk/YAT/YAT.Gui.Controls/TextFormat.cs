@@ -27,6 +27,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using MKY.Event;
+using MKY.Windows.Forms;
 
 namespace YAT.Gui.Controls
 {
@@ -52,7 +53,7 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 
 		private Font font = new Font(Model.Types.FontFormat.NameDefault, Model.Types.FontFormat.SizeDefault, Model.Types.FontFormat.StyleDefault);
 		private Color color = Color.Black;
@@ -270,14 +271,14 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			checkBox_Bold.Checked = Bold;
 			checkBox_Italic.Checked = Italic;
 			checkBox_Underline.Checked = Underline;
 			checkBox_Strikeout.Checked = Strikeout;
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		#endregion

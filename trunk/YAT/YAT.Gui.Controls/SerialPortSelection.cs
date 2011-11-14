@@ -129,7 +129,7 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 
 		/// <remarks>
 		/// Attention: Do not use <see cref="MKY.IO.Ports.SerialPortId.FirstAvailablePort"/>
@@ -332,7 +332,7 @@ namespace YAT.Gui.Controls
 			// Only scan for ports if control is enabled. This saves some time.
 			if (Enabled && !DesignMode)
 			{
-				this.isSettingControls = true;
+				this.isSettingControls.Enter();
 
 				SerialPortId old = comboBox_Port.SelectedItem as SerialPortId;
 				SerialPortCollection ports = new SerialPortCollection();
@@ -421,13 +421,13 @@ namespace YAT.Gui.Controls
 						);
 				}
 
-				this.isSettingControls = false;
+				this.isSettingControls.Leave();
 			}
 		}
 
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			if (!DesignMode && Enabled)
 			{
@@ -453,7 +453,7 @@ namespace YAT.Gui.Controls
 				comboBox_Port.Text = "";
 			}
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		#endregion

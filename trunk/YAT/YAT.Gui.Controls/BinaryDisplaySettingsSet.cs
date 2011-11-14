@@ -26,6 +26,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 
 using MKY.Event;
+using MKY.Windows.Forms;
 
 using YAT.Domain.Settings;
 using YAT.Gui.Utilities;
@@ -41,7 +42,7 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 		private BinaryDisplaySettings settings = new BinaryDisplaySettings();
 
 		#endregion
@@ -230,7 +231,7 @@ namespace YAT.Gui.Controls
 		{
 			bool enabled;
 
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			enabled = this.settings.LengthLineBreak.Enabled;
 			checkBox_LengthLineBreak.Checked = enabled;
@@ -247,7 +248,7 @@ namespace YAT.Gui.Controls
 			textBox_TimedLineBreakTimeout.Enabled = enabled;
 			textBox_TimedLineBreakTimeout.Text = this.settings.TimedLineBreak.Timeout.ToString();
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		#endregion

@@ -69,7 +69,7 @@ namespace YAT.Gui.Forms
 		//==========================================================================================
 
 		private StartupControl startupControl = new StartupControl(true, 1, 1);
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 
 		private Model.Settings.PredefinedCommandSettings settings;
 		private Model.Settings.PredefinedCommandSettings settings_Form;
@@ -318,7 +318,7 @@ namespace YAT.Gui.Forms
 
 		private void SetPagesControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			int pageCount = this.settings_Form.Pages.Count;
 			bool pageIsSelected = (this.selectedPage != 0);
@@ -357,12 +357,12 @@ namespace YAT.Gui.Forms
 			else
 				groupBox_Page.Text = "<No Page Selected>";
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void SetPageControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			if (this.selectedPage != 0)
 			{
@@ -386,7 +386,7 @@ namespace YAT.Gui.Forms
 				groupBox_Page.Enabled = true;
 			}
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		#endregion

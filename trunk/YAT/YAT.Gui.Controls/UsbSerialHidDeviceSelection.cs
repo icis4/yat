@@ -48,7 +48,7 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 
 		private DeviceInfo deviceInfo = null;
 
@@ -206,7 +206,7 @@ namespace YAT.Gui.Controls
 			// Only scan for ports if control is enabled. This saves some time.
 			if (Enabled && !DesignMode)
 			{
-				this.isSettingControls = true;
+				this.isSettingControls.Enter();
 
 				DeviceInfo old = comboBox_Device.SelectedItem as DeviceInfo;
 
@@ -240,13 +240,13 @@ namespace YAT.Gui.Controls
 						);
 				}
 
-				this.isSettingControls = false;
+				this.isSettingControls.Leave();
 			}
 		}
 
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			if (!DesignMode && Enabled)
 			{
@@ -272,7 +272,7 @@ namespace YAT.Gui.Controls
 				comboBox_Device.Text = "";
 			}
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		#endregion

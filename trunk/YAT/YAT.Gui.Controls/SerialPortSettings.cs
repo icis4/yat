@@ -60,7 +60,7 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 
 		private int                             baudRate    = BaudRateDefault;
 		private MKY.IO.Ports.DataBits           dataBits    = DataBitsDefault;
@@ -379,7 +379,7 @@ namespace YAT.Gui.Controls
 
 		private void InitializeControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			comboBox_BaudRate.Items.AddRange(MKY.IO.Ports.BaudRateEx.GetItems());
 			comboBox_DataBits.Items.AddRange(MKY.IO.Ports.DataBitsEx.GetItems());
@@ -387,12 +387,12 @@ namespace YAT.Gui.Controls
 			comboBox_StopBits.Items.AddRange(MKY.IO.Ports.StopBitsEx.GetItems());
 			comboBox_FlowControl.Items.AddRange(MKY.IO.Serial.SerialFlowControlEx.GetItems());
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			MKY.IO.Ports.BaudRateEx baudRate = (MKY.IO.Ports.BaudRateEx)this.baudRate;
 			if (Enabled && (baudRate != MKY.IO.Ports.BaudRate.UserDefined))
@@ -431,7 +431,7 @@ namespace YAT.Gui.Controls
 				textBox_AutoReopenInterval.Text = "";
 			}
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		#endregion

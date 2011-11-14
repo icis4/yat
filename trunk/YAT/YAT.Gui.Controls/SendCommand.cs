@@ -36,6 +36,7 @@ using System.Windows.Forms;
 using MKY;
 using MKY.Event;
 using MKY.Recent;
+using MKY.Windows.Forms;
 
 using YAT.Gui.Utilities;
 using YAT.Model.Settings;
@@ -87,7 +88,7 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls;
+		private SettingControlsHelper isSettingControls;
 
 		private Command command = new Command();
 		private RecentItemCollection<Command> recents;
@@ -318,11 +319,11 @@ namespace YAT.Gui.Controls
 			// Clear "<Enter a command...>" if needed.
 			if ((this.focusState == FocusState.Inactive) && !this.command.IsSingleLineText)
 			{
-				this.isSettingControls = true;
+				this.isSettingControls.Enter();
 				comboBox_Command.Text      = "";
 				comboBox_Command.ForeColor = SystemColors.ControlText;
 				comboBox_Command.Font      = SystemFonts.DefaultFont; 
-				this.isSettingControls = false;
+				this.isSettingControls.Leave();
 			}
 
 			this.focusState = FocusState.HasFocus;
@@ -445,7 +446,7 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			splitContainer.SplitterDistance = Int32Ex.LimitToBounds((int)(this.splitterRatio * splitContainer.Width), 0, splitContainer.Width);
 
@@ -482,18 +483,18 @@ namespace YAT.Gui.Controls
 
 			button_SendCommand.Enabled = this.terminalIsReadyToSend;
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void SetRecents()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			comboBox_Command.Items.Clear();
 			if (this.recents != null)
 				comboBox_Command.Items.AddRange(this.recents.ToArray());
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void SetCommand(Command command)
@@ -547,11 +548,11 @@ namespace YAT.Gui.Controls
 		private void ShowMultiLineCommandBox(Control requestingControl)
 		{
 			// Indicate multi line command.
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 			comboBox_Command.Text      = Command.MultiLineCommandText;
 			comboBox_Command.ForeColor = SystemColors.ControlText;
 			comboBox_Command.Font      = SystemFonts.DefaultFont;
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 
 			// Calculate startup location.
 			Rectangle area = requestingControl.RectangleToScreen(requestingControl.DisplayRectangle);
