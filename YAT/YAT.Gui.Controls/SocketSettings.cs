@@ -27,6 +27,7 @@ using System.Windows.Forms;
 
 using MKY.Event;
 using MKY.IO.Serial;
+using MKY.Windows.Forms;
 
 namespace YAT.Gui.Controls
 {
@@ -49,7 +50,7 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 
 		private SocketHostType hostType = HostTypeDefault;
 		private AutoRetry tcpClientAutoReconnect = MKY.IO.Serial.SocketSettings.TcpClientAutoReconnectDefault;
@@ -204,7 +205,7 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			bool enabledTcpClient = (Enabled && (this.hostType == SocketHostType.TcpClient));
 
@@ -229,7 +230,7 @@ namespace YAT.Gui.Controls
 			label_TcpClientAutoReconnectInterval.Enabled = enabledTcpClient;
 			label_TcpClientAutoReconnectIntervalUnit.Enabled = enabledTcpClient;
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		#endregion

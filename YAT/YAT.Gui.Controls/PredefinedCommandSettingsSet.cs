@@ -28,6 +28,7 @@ using System.IO;
 using System.Windows.Forms;
 
 using MKY.Event;
+using MKY.Windows.Forms;
 
 using YAT.Gui.Utilities;
 using YAT.Model.Types;
@@ -77,7 +78,7 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 
 		private Model.Types.Command command = new Model.Types.Command();
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
@@ -322,7 +323,7 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			// description
 			textBox_Description.Text = this.command.Description;
@@ -410,7 +411,7 @@ namespace YAT.Gui.Controls
 				button_Delete.Enabled = false;
 			}
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void SetDescription(string description)
@@ -435,11 +436,11 @@ namespace YAT.Gui.Controls
 
 		private void ClearCommand()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 			textBox_Command.Text      = "";
 			textBox_Command.ForeColor = SystemColors.ControlText;
 			textBox_Command.Font      = SystemFonts.DefaultFont;
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		/// <remarks>
@@ -448,11 +449,11 @@ namespace YAT.Gui.Controls
 		private void ShowMultiLineCommandBox(Control requestingControl)
 		{
 			// Indicate multi line command.
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 			textBox_Command.Text      = Command.MultiLineCommandText;
 			textBox_Command.ForeColor = SystemColors.ControlText;
 			textBox_Command.Font      = SystemFonts.DefaultFont;
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 
 			// Calculate startup location.
 			Rectangle area = requestingControl.RectangleToScreen(requestingControl.DisplayRectangle);

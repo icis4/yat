@@ -441,13 +441,13 @@ namespace MKY.IO.Usb
 			if (m.Success)
 			{
 				int vendorId;
-				if (int.TryParse(m.Groups[1].Value, NumberStyles.HexNumber, null, out vendorId))
+				if (int.TryParse(m.Groups[1].Value, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out vendorId))
 				{
 					m = ProductIdRegex.Match(s);
 					if (m.Success)
 					{
 						int productId;
-						if (int.TryParse(m.Groups[1].Value, NumberStyles.HexNumber, null, out productId))
+						if (int.TryParse(m.Groups[1].Value, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out productId))
 						{
 							result = new DeviceInfo(vendorId, productId);
 							return (true);

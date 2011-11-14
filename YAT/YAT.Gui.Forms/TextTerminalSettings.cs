@@ -40,7 +40,7 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 
 		private Domain.Settings.TextTerminalSettings settings;
 		private Domain.Settings.TextTerminalSettings settings_Form;
@@ -416,7 +416,7 @@ namespace YAT.Gui.Forms
 
 		private void InitializeControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			comboBox_TxEol.Items.Clear();
 			comboBox_TxEol.Items.AddRange(Domain.EolEx.GetItems());
@@ -427,12 +427,12 @@ namespace YAT.Gui.Forms
 			comboBox_Encoding.Items.Clear();
 			comboBox_Encoding.Items.AddRange(EncodingEx.GetItems());
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			// Encoding.
 			comboBox_Encoding.SelectedItem = (EncodingEx)this.settings_Form.Encoding;
@@ -483,7 +483,7 @@ namespace YAT.Gui.Forms
 			stringListEdit_EolCommentIndicators.Enabled = this.settings_Form.SkipEolComments;
 			stringListEdit_EolCommentIndicators.StringList = (string[])this.settings_Form.EolCommentIndicators.Clone();
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		#endregion

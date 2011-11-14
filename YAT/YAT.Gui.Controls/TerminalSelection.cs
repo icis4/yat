@@ -96,7 +96,7 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 
 		private Domain.TerminalType terminalType = TerminalTypeDefault;
 		private Domain.IOType       ioType       = IOTypeDefault;
@@ -240,7 +240,7 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			if (Enabled)
 			{
@@ -253,7 +253,7 @@ namespace YAT.Gui.Controls
 				comboBox_IOType.SelectedIndex       = ControlEx.InvalidIndex;
 			}
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		#endregion

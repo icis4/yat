@@ -50,6 +50,8 @@ namespace YAT.Controller.Test
 		private readonly string[] TerminalArgs  = new string[] { Settings.Test.SettingsFilesProvider.FilePaths_Current.TerminalFilePaths[Settings.Test.TerminalSettingsTestCases.T_03_COM1_Closed_Predefined] };
 		private readonly string[] WorkspaceArgs = new string[] { Settings.Test.SettingsFilesProvider.FilePaths_Current.WorkspaceFilePaths[Settings.Test.WorkspaceSettingsTestCases.W_04_Matthias] };
 
+		private readonly string[] SerialPortArgs = new string[] { "--TerminalType=Binary", "--SerialPort=5", "--DataBits=7", "--Parity=E", "--FlowControl=Software" };
+
 		#endregion
 
 		#region Fields
@@ -109,7 +111,7 @@ namespace YAT.Controller.Test
 		{
 			using (Controller.Main main = new Main(EmptyArgs))
 			{
-				Assert.IsTrue(main.CommandLineIsValid);
+				Assert.IsTrue (main.CommandLineIsValid);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
 			}
 		}
@@ -127,7 +129,7 @@ namespace YAT.Controller.Test
 		{
 			using (Controller.Main main = new Main(TerminalArgs))
 			{
-				Assert.IsTrue(main.CommandLineIsValid);
+				Assert.IsTrue (main.CommandLineIsValid);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
 			}
 		}
@@ -145,7 +147,7 @@ namespace YAT.Controller.Test
 		{
 			using (Controller.Main main = new Main(WorkspaceArgs))
 			{
-				Assert.IsTrue(main.CommandLineIsValid);
+				Assert.IsTrue (main.CommandLineIsValid);
 				Assert.IsFalse(main.CommandLineHelpIsRequested);
 			}
 		}
@@ -203,6 +205,23 @@ namespace YAT.Controller.Test
 
 		#endregion
 
+		#region Tests > SerialPortCommandLineArgRun
+		//------------------------------------------------------------------------------------------
+		// Tests > SerialPortCommandLineArgRun
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestSerialPortCommandLineArgRun()
+		{
+			using (Controller.Main main = new Main(SerialPortArgs))
+			{
+				RunAndVerifyApplication(main);
+			}
+		}
+
+		#endregion
+
 		#region Tests > EmptyCommandLineRunInteractive
 		//------------------------------------------------------------------------------------------
 		// Tests > EmptyCommandLineRunInteractive
@@ -250,6 +269,23 @@ namespace YAT.Controller.Test
 		public virtual void TestWorkspaceCommandLineArgRunInteractive()
 		{
 			using (Controller.Main main = new Main(WorkspaceArgs))
+			{
+				RunAndVerifyApplication(main);
+			}
+		}
+
+		#endregion
+
+		#region Tests > SerialPortCommandLineArgRunInteractive
+		//------------------------------------------------------------------------------------------
+		// Tests > SerialPortCommandLineArgRunInteractive
+		//------------------------------------------------------------------------------------------
+
+		/// <summary></summary>
+		[Test]
+		public virtual void TestSerialPortCommandLineArgRunInteractive()
+		{
+			using (Controller.Main main = new Main(SerialPortArgs))
 			{
 				RunAndVerifyApplication(main);
 			}

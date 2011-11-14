@@ -30,6 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 
@@ -457,22 +458,21 @@ namespace YAT.Model
 				int requestedDynamicTerminalIndex = this.commandLineArgs.RequestedDynamicTerminalIndex;
 				int lastDynamicIndex = Indices.IndexToDynamicIndex(this.startArgs.WorkspaceSettings.Settings.TerminalSettings.Count - 1);
 				
-				int dynamicIndex;
 				if     ((requestedDynamicTerminalIndex >= Indices.FirstDynamicIndex) && (requestedDynamicTerminalIndex <= lastDynamicIndex))
-					dynamicIndex = requestedDynamicTerminalIndex;
+					this.startArgs.RequestedDynamicTerminalIndex = requestedDynamicTerminalIndex;
 				else if (requestedDynamicTerminalIndex == Indices.DefaultDynamicIndex)
-					dynamicIndex = lastDynamicIndex;
+					this.startArgs.RequestedDynamicTerminalIndex = lastDynamicIndex;
 				else if (requestedDynamicTerminalIndex == Indices.InvalidDynamicIndex)
-					dynamicIndex = Indices.InvalidDynamicIndex;
+					this.startArgs.RequestedDynamicTerminalIndex = Indices.InvalidDynamicIndex;
 				else
 					return (false);
 
-				if (dynamicIndex != Indices.InvalidDynamicIndex)
+				if (this.startArgs.RequestedDynamicTerminalIndex != Indices.InvalidDynamicIndex)
 				{
 					DocumentSettingsHandler<TerminalSettingsRoot> sh;
 					string workspaceFilePath = this.startArgs.WorkspaceSettings.SettingsFilePath;
-					string terminalFilePath  = this.startArgs.WorkspaceSettings.Settings.TerminalSettings[Indices.DynamicIndexToIndex(dynamicIndex)].FilePath;
-					if (!OpenTerminalFile(workspaceFilePath, terminalFilePath, out sh))
+					string terminalFilePath = this.startArgs.WorkspaceSettings.Settings.TerminalSettings[Indices.DynamicIndexToIndex(this.startArgs.RequestedDynamicTerminalIndex)].FilePath;
+					if (OpenTerminalFile(workspaceFilePath, terminalFilePath, out sh))
 						this.startArgs.TerminalSettings = sh;
 					else
 						return (false);
@@ -649,13 +649,13 @@ namespace YAT.Model
 							int vendorId;
 							int productId;
 
-							if (!int.TryParse(this.commandLineArgs.VendorId, out vendorId))
+							if (!int.TryParse(this.commandLineArgs.VendorId, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out vendorId))
 								return (false);
 
 							if (!Int32Ex.IsWithin(vendorId, MKY.IO.Usb.DeviceInfo.FirstVendorId, MKY.IO.Usb.DeviceInfo.LastVendorId))
 								return (false);
 
-							if (!int.TryParse(this.commandLineArgs.ProductId, out productId))
+							if (!int.TryParse(this.commandLineArgs.ProductId, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo, out productId))
 								return (false);
 							
 							if (!Int32Ex.IsWithin(productId, MKY.IO.Usb.DeviceInfo.FirstProductId, MKY.IO.Usb.DeviceInfo.LastProductId))

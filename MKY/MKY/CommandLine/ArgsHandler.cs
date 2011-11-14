@@ -429,7 +429,7 @@ namespace MKY.CommandLine
 			else
 				pos = 0;
 
-			return (pos >= 0);
+			return (pos > 0);
 		}
 
 		/// <summary>

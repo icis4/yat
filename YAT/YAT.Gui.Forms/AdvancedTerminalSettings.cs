@@ -25,6 +25,8 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
+using MKY.Windows.Forms;
+
 using YAT.Gui.Utilities;
 
 namespace YAT.Gui.Forms
@@ -37,7 +39,7 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 
 		private Settings.Terminal.ExplicitSettings settings;
 		private Settings.Terminal.ExplicitSettings settings_Form;
@@ -377,7 +379,7 @@ namespace YAT.Gui.Forms
 
 		private void InitializeControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			comboBox_TxRadix.Items.AddRange(Domain.RadixEx.GetItems());
 			comboBox_RxRadix.Items.AddRange(Domain.RadixEx.GetItems());
@@ -386,12 +388,12 @@ namespace YAT.Gui.Forms
 			comboBox_ControlCharacterRadix.Items.Clear();
 			comboBox_ControlCharacterRadix.Items.AddRange(Domain.ControlCharRadixEx.GetItems());
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			// Radix:
 			bool separateRadix = this.settings_Form.Terminal.Display.SeparateTxRxRadix;
@@ -445,7 +447,7 @@ namespace YAT.Gui.Forms
 			// User:
 			textBox_UserName.Text = this.settings_Form.UserName;
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		/// <remarks>

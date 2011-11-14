@@ -27,6 +27,7 @@ using System.Windows.Forms;
 
 using MKY.Event;
 using MKY.IO.Serial;
+using MKY.Windows.Forms;
 
 namespace YAT.Gui.Controls
 {
@@ -49,7 +50,7 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 
 		private bool autoOpen = AutoOpenDefault;
 
@@ -159,14 +160,14 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			if (Enabled)
 				checkBox_AutoOpen.Checked = this.autoOpen;
 			else
 				checkBox_AutoOpen.Checked = false;
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		#endregion

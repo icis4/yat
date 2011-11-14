@@ -24,6 +24,8 @@
 using System;
 using System.Windows.Forms;
 
+using MKY.Windows.Forms;
+
 namespace YAT.Gui.Forms
 {
 	/// <summary></summary>
@@ -34,7 +36,7 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 
 		private Domain.Settings.BinaryTerminalSettings settings;
 		private Domain.Settings.BinaryTerminalSettings settings_Form;
@@ -177,7 +179,7 @@ namespace YAT.Gui.Forms
 
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			if (this.settings_Form.SeparateTxRxDisplay)
 				groupBox_TxDisplay.Text = "&Tx and Rx";
@@ -189,7 +191,7 @@ namespace YAT.Gui.Forms
 			groupBox_RxDisplay.Enabled = this.settings_Form.SeparateTxRxDisplay;
 			binaryTerminalSettingsSet_Rx.Settings = this.settings_Form.RxDisplay;
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		#endregion

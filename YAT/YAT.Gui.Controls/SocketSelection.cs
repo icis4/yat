@@ -70,7 +70,7 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 
 		private SocketHostType hostType = DefaultHostType;
 
@@ -448,20 +448,20 @@ namespace YAT.Gui.Controls
 
 		private void InitializeControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			// Remote host.
 			comboBox_RemoteHost.Items.Clear();
 			comboBox_RemoteHost.Items.AddRange(IPHost.GetItems());
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void SetLocalInterfaceList()
 		{
 			if (Enabled)
 			{
-				this.isSettingControls = true;
+				this.isSettingControls.Enter();
 
 				IPNetworkInterface old = comboBox_LocalInterface.SelectedItem as IPNetworkInterface;
 
@@ -495,13 +495,13 @@ namespace YAT.Gui.Controls
 						);
 				}
 
-				this.isSettingControls = false;
+				this.isSettingControls.Leave();
 			}
 		}
 
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			// Remote host address.
 			if (!DesignMode && Enabled && ((this.hostType == SocketHostType.TcpClient) || (this.hostType == SocketHostType.TcpAutoSocket) || (this.hostType == SocketHostType.Udp)))
@@ -582,7 +582,7 @@ namespace YAT.Gui.Controls
 				textBox_LocalPort.Text = "";
 			}
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		#endregion

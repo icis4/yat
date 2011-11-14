@@ -28,6 +28,7 @@ using System.Windows.Forms;
 
 using MKY;
 using MKY.Event;
+using MKY.Windows.Forms;
 
 using YAT.Model.Types;
 
@@ -53,7 +54,7 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 		private PredefinedCommandPageCollection pages;
 		private int selectedPage = SelectedPageDefault;
 		private bool terminalIsReadyToSend = TerminalIsReadyToSendDefault;
@@ -249,7 +250,7 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			pageButtons.TerminalIsReady = this.terminalIsReadyToSend;
 
@@ -281,7 +282,7 @@ namespace YAT.Gui.Controls
 				comboBox_Pages.Items.Clear();
 			}
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void RequestSendCommand(int command)

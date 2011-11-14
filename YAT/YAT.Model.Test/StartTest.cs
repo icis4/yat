@@ -497,11 +497,11 @@ namespace YAT.Model.Test
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsNotNull(main.StartArgs.WorkspaceSettings);
-				Assert.AreEqual (WorkspaceFilePath, main.StartArgs.WorkspaceSettings.SettingsFilePath);
-				Assert.AreEqual (2, main.StartArgs.RequestedDynamicTerminalIndex);
-				Assert.IsNotNull(main.StartArgs.TerminalSettings);
-				Assert.AreEqual (7, main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.DataBits);
+				Assert.IsNotNull(                             main.StartArgs.WorkspaceSettings);
+				Assert.AreEqual (WorkspaceFilePath,           main.StartArgs.WorkspaceSettings.SettingsFilePath);
+				Assert.AreEqual (2,                           main.StartArgs.RequestedDynamicTerminalIndex);
+				Assert.IsNotNull(                             main.StartArgs.TerminalSettings);
+				Assert.AreEqual (MKY.IO.Ports.DataBits.Seven, main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.DataBits);
 
 				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
 				Assert.IsFalse(main.StartArgs.PerformActionOnRequestedTerminal);
@@ -560,12 +560,12 @@ namespace YAT.Model.Test
 
 				Assert.IsNotNull(main.StartArgs.WorkspaceSettings);
 				Assert.AreEqual (WorkspaceFilePath, main.StartArgs.WorkspaceSettings.SettingsFilePath);
-				Assert.IsNull   (main.StartArgs.TerminalSettings);
+				Assert.IsNotNull(main.StartArgs.TerminalSettings);
 				Assert.AreEqual (TerminalFilePath, main.StartArgs.RequestedTransmitFilePath);
 				Assert.AreEqual (2, main.StartArgs.RequestedDynamicTerminalIndex);
 
 				Assert.IsFalse(main.StartArgs.ShowNewTerminalDialog);
-				Assert.IsTrue(main.StartArgs.PerformActionOnRequestedTerminal);
+				Assert.IsTrue (main.StartArgs.PerformActionOnRequestedTerminal);
 
 				Assert.IsFalse(main.StartArgs.KeepOpen);
 				Assert.IsTrue (main.StartArgs.KeepOpenOnError);
@@ -612,12 +612,28 @@ namespace YAT.Model.Test
 		[Test]
 		public virtual void TestTileOptionsPrepare()
 		{
-			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--TileHorizontal", "--TileVertical" })))
+			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--TileHorizontal" })))
 			{
 				PrepareMainAndVerifyResult(main);
 
-				Assert.IsTrue(main.StartArgs.TileHorizontal);
-				Assert.IsTrue(main.StartArgs.TileVertical);
+				Assert.IsTrue (main.StartArgs.TileHorizontal);
+				Assert.IsFalse(main.StartArgs.TileVertical);
+			}
+
+			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--TileVertical" })))
+			{
+				PrepareMainAndVerifyResult(main);
+
+				Assert.IsFalse(main.StartArgs.TileHorizontal);
+				Assert.IsTrue (main.StartArgs.TileVertical);
+			}
+
+			using (Model.Main main = new Main(new CommandLineArgs(new string[] { "--TileHorizontal", "--TileVertical" })))
+			{
+				PrepareMainAndVerifyResult(main, MainResult.CommandLineError);
+
+				Assert.IsFalse(main.StartArgs.TileHorizontal);
+				Assert.IsFalse(main.StartArgs.TileVertical);
 			}
 		}
 

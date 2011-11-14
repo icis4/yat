@@ -29,6 +29,8 @@ using System.IO;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
+using MKY.Windows.Forms;
+
 using YAT.Gui.Utilities;
 using YAT.Model.Types;
 
@@ -42,7 +44,7 @@ namespace YAT.Gui.Controls
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 
 		private Command command;
 		private Command command_Form;
@@ -209,7 +211,7 @@ namespace YAT.Gui.Controls
 
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			if (this.command_Form.IsSingleLineText)
 			{
@@ -227,7 +229,7 @@ namespace YAT.Gui.Controls
 				textBox_Command.Text = text;
 			}
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void AcceptAndClose()

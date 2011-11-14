@@ -25,6 +25,7 @@ using System;
 using System.Windows.Forms;
 
 using MKY.Net;
+using MKY.Windows.Forms;
 
 namespace YAT.Gui.Forms
 {
@@ -36,7 +37,7 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 
 		private Model.Settings.NewTerminalSettings newTerminalSettings;
 		private Model.Settings.NewTerminalSettings newTerminalSettings_Form;
@@ -243,7 +244,7 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			terminalSelection.TerminalType = this.newTerminalSettings_Form.TerminalType;
 
@@ -288,7 +289,7 @@ namespace YAT.Gui.Forms
 			}
 			button_OK.Enabled = isValid;
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		#endregion

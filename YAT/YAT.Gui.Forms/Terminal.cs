@@ -92,7 +92,7 @@ namespace YAT.Gui.Forms
 
 		// Startup/Update/Closing:
 		private bool isStartingUp = true;
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 		private ClosingState closingState = ClosingState.None;
 
 		// MDI:
@@ -422,7 +422,7 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void toolStripMenuItem_TerminalMenu_Terminal_SetMenuItems()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			// Start/stop
 			bool terminalIsStarted = this.terminal.IsStarted;
@@ -437,7 +437,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_Terminal_CopyToClipboard.Enabled = monitorIsSelected;
 			toolStripMenuItem_TerminalMenu_Terminal_Print.Enabled           = monitorIsSelected;
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Terminal_DropDownOpening(object sender, EventArgs e)
@@ -505,7 +505,7 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void toolStripMenuItem_TerminalMenu_Send_SetMenuItems()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			toolStripMenuItem_TerminalMenu_Send_Command.Enabled = this.settingsRoot.SendCommand.Command.IsValidText;
 			toolStripMenuItem_TerminalMenu_Send_File.Enabled    = this.settingsRoot.SendFile.Command.IsValidFilePath;
@@ -514,7 +514,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_Send_CopyPredefined.Checked = this.settingsRoot.Send.CopyPredefined;
 			toolStripMenuItem_TerminalMenu_Send_SendImmediately.Checked = this.settingsRoot.Send.SendImmediately;
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Send_DropDownOpening(object sender, EventArgs e)
@@ -560,7 +560,7 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void toolStripMenuItem_TerminalMenu_Log_SetMenuItems()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			bool logIsSelected = this.settingsRoot.Log.AnyRawOrNeat;
 			bool logIsStarted  = this.settingsRoot.LogIsStarted;
@@ -569,7 +569,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_Log_End.Enabled = logIsSelected && logIsStarted;
 			toolStripMenuItem_TerminalMenu_Log_Clear.Enabled = logIsSelected && logIsStarted;
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_Log_DropDownOpening(object sender, EventArgs e)
@@ -606,11 +606,11 @@ namespace YAT.Gui.Forms
 
 		private void toolStripMenuItem_TerminalMenu_View_Initialize()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			toolStripComboBox_TerminalMenu_View_Panels_Orientation.Items.AddRange(OrientationEx.GetItems());
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		/// <remarks>
@@ -619,7 +619,7 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void toolStripMenuItem_TerminalMenu_View_SetMenuItems()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 			Domain.TerminalType terminalType = this.settingsRoot.TerminalType;
 
 			// Panels
@@ -658,7 +658,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_View_ShowEol.Enabled = isText;
 			toolStripMenuItem_TerminalMenu_View_ShowEol.Checked = isText && this.settingsRoot.TextTerminal.ShowEol;
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void toolStripMenuItem_TerminalMenu_View_DropDownOpening(object sender, EventArgs e)
@@ -780,14 +780,14 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void contextMenuStrip_Preset_SetMenuItems()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			bool isSerialPort = (this.settingsRoot.IOType == Domain.IOType.SerialPort);
 
 			foreach (ToolStripMenuItem item in this.menuItems_preset)
 				item.Enabled = isSerialPort;
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void contextMenuStrip_Preset_Opening(object sender, CancelEventArgs e)
@@ -809,11 +809,11 @@ namespace YAT.Gui.Forms
 
 		private void contextMenuStrip_Monitor_Initialize()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			toolStripComboBox_MonitorContextMenu_Panels_Orientation.Items.AddRange(OrientationEx.GetItems());
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void contextMenuStrip_Monitor_Opening(object sender, CancelEventArgs e)
@@ -827,7 +827,7 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void contextMenuStrip_Monitor_SetMenuItems()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			Domain.TerminalType terminalType = this.settingsRoot.TerminalType;
 			Domain.RepositoryType monitorType = GetMonitorType(contextMenuStrip_Monitor.SourceControl);
@@ -880,7 +880,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_MonitorContextMenu_CopyToClipboard.Enabled = isMonitor;
 			toolStripMenuItem_MonitorContextMenu_Print.Enabled           = isMonitor;
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void toolStripMenuItem_MonitorContextMenu_Panels_Tx_Click(object sender, EventArgs e)
@@ -1006,7 +1006,7 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void contextMenuStrip_Radix_SetMenuItems()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			bool separateTxRx = this.settingsRoot.Display.SeparateTxRxRadix;
 
@@ -1052,7 +1052,7 @@ namespace YAT.Gui.Forms
 				toolStripMenuItem_RadixContextMenu_Rx_Hex.Checked    = (this.settingsRoot.Display.RxRadix == Domain.Radix.Hex);
 			}
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void contextMenuStrip_Radix_Opening(object sender, CancelEventArgs e)
@@ -1203,7 +1203,7 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void contextMenuStrip_Predefined_SetMenuItems()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			// Pages.
 			List<Model.Types.PredefinedCommandPage> pages = this.settingsRoot.PredefinedCommand.Pages;
@@ -1273,7 +1273,7 @@ namespace YAT.Gui.Forms
 				this.menuItems_Predefined_Commands[i].Enabled   = true;
 			}
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		/// <summary>
@@ -1397,7 +1397,7 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void contextMenuStrip_Send_SetMenuItems()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			toolStripMenuItem_SendContextMenu_SendCommand.Enabled = this.settingsRoot.SendCommand.Command.IsValidText;
 			toolStripMenuItem_SendContextMenu_SendFile.Enabled = this.settingsRoot.SendCommand.Command.IsValidFilePath;
@@ -1409,7 +1409,7 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_SendContextMenu_CopyPredefined.Checked = this.settingsRoot.Send.CopyPredefined;
 			toolStripMenuItem_SendContextMenu_SendImmediately.Checked = this.settingsRoot.Send.SendImmediately;
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void contextMenuStrip_Send_Opening(object sender, CancelEventArgs e)
@@ -1719,7 +1719,7 @@ namespace YAT.Gui.Forms
 
 		private void LayoutTerminal()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 			SuspendLayout();
 
 			// splitContainer_Predefined.
@@ -1821,7 +1821,7 @@ namespace YAT.Gui.Forms
 			send.SplitterRatio = this.settingsRoot.Layout.PredefinedSplitterRatio;
 
 			ResumeLayout();
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void SetDisplayControls()
@@ -1840,9 +1840,9 @@ namespace YAT.Gui.Forms
 		{
 			contextMenuStrip_Predefined_SetMenuItems(); // Ensure that shortcuts are activated.
 
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 			predefined.TerminalIsReadyToSend = this.terminal.IsReadyToSend;
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void SetPresetControls()
@@ -1855,14 +1855,14 @@ namespace YAT.Gui.Forms
 			toolStripMenuItem_TerminalMenu_Send_SetMenuItems();
 			contextMenuStrip_Send_SetMenuItems();
 
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 			send.SendCommandImmediately = this.settingsRoot.Send.SendImmediately;
 			send.Command                = this.settingsRoot.SendCommand.Command;
 			send.RecentCommands         = this.settingsRoot.SendCommand.RecentCommands;
 			send.FileCommand            = this.settingsRoot.SendFile.Command;
 			send.RecentFileCommands     = this.settingsRoot.SendFile.RecentCommands;
 			send.TerminalIsReadyToSend  = this.terminal.IsReadyToSend;
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		#endregion
@@ -2355,9 +2355,9 @@ namespace YAT.Gui.Forms
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.PredefinedCommand))
 			{
 				// PredefinedCommandSettings changed.
-				this.isSettingControls = true;
+				this.isSettingControls.Enter();
 				predefined.Pages = this.settingsRoot.PredefinedCommand.Pages;
-				this.isSettingControls = false;
+				this.isSettingControls.Leave();
 
 				SetPredefinedControls();
 			}
@@ -2394,9 +2394,9 @@ namespace YAT.Gui.Forms
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Predefined))
 			{
 				// PredefinedSettings changed.
-				this.isSettingControls = true;
+				this.isSettingControls.Enter();
 				predefined.SelectedPage = this.settingsRoot.Predefined.SelectedPage;
-				this.isSettingControls = false;
+				this.isSettingControls.Leave();
 			}
 			else if (ReferenceEquals(e.Inner.Source, this.settingsRoot.Window))
 			{

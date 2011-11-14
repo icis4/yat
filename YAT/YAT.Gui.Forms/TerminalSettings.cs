@@ -25,6 +25,8 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
+using MKY.Windows.Forms;
+
 namespace YAT.Gui.Forms
 {
 	/// <summary></summary>
@@ -35,7 +37,7 @@ namespace YAT.Gui.Forms
 		// Fields
 		//==========================================================================================
 
-		private bool isSettingControls = false;
+		private SettingControlsHelper isSettingControls;
 
 		private Settings.Terminal.ExplicitSettings settings;
 		private Settings.Terminal.ExplicitSettings settings_Form;
@@ -289,7 +291,7 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void SetControls()
 		{
-			this.isSettingControls = true;
+			this.isSettingControls.Enter();
 
 			Domain.TerminalType terminalType = this.settings_Form.Terminal.TerminalType;
 			terminalSelection.TerminalType = terminalType;
@@ -349,7 +351,7 @@ namespace YAT.Gui.Forms
 
 			this.SetControls_ioTypeOld = ioType;
 
-			this.isSettingControls = false;
+			this.isSettingControls.Leave();
 		}
 
 		private void ShowTextOrBinarySettings()
