@@ -185,11 +185,34 @@ namespace MKY.IO.Serial
 		/// </summary>
 		private Queue<byte> receiveQueue = new Queue<byte>();
 
+		/// <summary>
+		/// Async sending.
+		/// </summary>
+		private Queue<byte> sendQueue = new Queue<byte>();
+
+		private bool manualRtsWasEnabled;
+		private bool manualDtrWasEnabled;
+
+		/// <summary>
+		/// Input XOn/XOff reflects the XOn/XOff state of this serial port itself, i.e. this computer.
+		/// </summary>
+		/// <remarks>
+		/// Only applies in case of <see cref="SerialFlowControl.Manual"/>.
+		/// </remarks>
 		private bool inputIsXOn;
 		private object inputIsXOnSyncObj = new object();
 
+		/// <summary>
+		/// Output XOn/XOff reflects the XOn/XOff state of the communication counterpart, i.e. a device.
+		/// </summary>
+		/// <remarks>
+		/// Only applies in case of <see cref="SerialFlowControl.Manual"/>.
+		/// </remarks>
 		private bool outputIsXOn;
 		private object outputIsXOnSyncObj = new object();
+
+		private bool manualInputWasXOn;
+		private object manualInputWasXOnSyncObj = new object();
 
 		/// <summary>
 		/// Alive timer detects port disconnects, i.e. when a USB to serial converter is disconnected.
@@ -417,7 +440,7 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary>
-		/// Returens <c>true</c> is XOn/XOff is in use, i.e. if one or the other kind of XOn/XOff
+		/// Returns <c>true</c> if XOn/XOff is in use, i.e. if one or the other kind of XOn/XOff
 		/// flow control is active.
 		/// </summary>
 		public virtual bool XOnXOffIsInUse
@@ -425,9 +448,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
-
-				return ((this.settings.Communication.FlowControl == SerialFlowControl.XOnXOff) ||
-						(this.settings.Communication.FlowControl == SerialFlowControl.RequestToSendXOnXOff));
+				return (this.settings.Communication.FlowControlUsesXOnXOff);
 			}
 		}
 
@@ -440,8 +461,15 @@ namespace MKY.IO.Serial
 			{
 				AssertNotDisposed();
 
-				lock (this.inputIsXOnSyncObj)
-					return (this.inputIsXOn);
+				if (this.settings.Communication.FlowControl == SerialFlowControl.Manual)
+				{
+					lock (this.inputIsXOnSyncObj)
+						return (this.inputIsXOn);
+				}
+				else
+				{
+					return (true);
+				}
 			}
 		}
 
@@ -454,8 +482,15 @@ namespace MKY.IO.Serial
 			{
 				AssertNotDisposed();
 
-				lock (this.outputIsXOnSyncObj)
-					return (this.outputIsXOn);
+				if (this.settings.Communication.FlowControl == SerialFlowControl.Manual)
+				{
+					lock (this.outputIsXOnSyncObj)
+						return (this.outputIsXOn);
+				}
+				else
+				{
+					return (true);
+				}
 			}
 		}
 
@@ -518,6 +553,19 @@ namespace MKY.IO.Serial
 			return (bytesReceived);
 		}
 
+		/// <summary>
+		/// Asynchronously invoke outgoing send requests to ensure that software and/or hardware
+		/// flow control is properley buffered and suspended if the communication counterpart
+		/// requests so.
+		/// Also, the mechanism implemented below reduces the amount of events that are propagated
+		/// to the main application. Small chunks of sent data will would generate many events in
+		/// <see cref="Send(byte[])"/>. However, since <see cref="OnDataSent"/> synchronously
+		/// invokes the event, it will take some time until the monitor is released again. During
+		/// this time, no more new events are invoked, instead, outgoing data is buffered.
+		/// </summary>
+		private delegate void SendDelegate();
+		private object SendSyncObj = new object();
+
 		/// <summary></summary>
 		protected virtual void Send(byte data)
 		{
@@ -527,28 +575,44 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public virtual void Send(byte[] data)
 		{
-			// AssertNotDisposed() is called by IsOpen.
+			AssertNotDisposed();
 
 			if (IsOpen)
 			{
-				// Handle output XOn/XOff.
 				bool signalXOnXOff = false;
-				foreach (byte b in data)
+
+				lock (this.sendQueue)
 				{
-					if (b == SerialPortSettings.XOnByte)
+					foreach (byte b in data)
 					{
-						lock (this.outputIsXOnSyncObj)
+						// Receive data into queue.
+						this.sendQueue.Enqueue(b);
+
+						// Handle input XOn/XOff.
+						if (this.settings.Communication.FlowControl == SerialFlowControl.Manual)
 						{
-							if (BoolEx.SetIfCleared(ref this.outputIsXOn))
-								signalXOnXOff = true;
-						}
-					}
-					else if (b == SerialPortSettings.XOffByte)
-					{
-						lock (this.outputIsXOnSyncObj)
-						{
-							if (BoolEx.ClearIfSet(ref this.outputIsXOn))
-								signalXOnXOff = true;
+							if (b == SerialPortSettings.XOnByte)
+							{
+								lock (this.inputIsXOnSyncObj)
+								{
+									if (BoolEx.SetIfCleared(ref this.inputIsXOn))
+										signalXOnXOff = true;
+
+									lock (this.manualInputWasXOnSyncObj)
+										this.manualInputWasXOn = true;
+								}
+							}
+							else if (b == SerialPortSettings.XOffByte)
+							{
+								lock (this.inputIsXOnSyncObj)
+								{
+									if (BoolEx.ClearIfSet(ref this.inputIsXOn))
+										signalXOnXOff = true;
+
+									lock (this.manualInputWasXOnSyncObj)
+										this.manualInputWasXOn = false;
+								}
+							}
 						}
 					}
 				}
@@ -556,42 +620,111 @@ namespace MKY.IO.Serial
 				if (signalXOnXOff)
 					OnIOControlChanged(new EventArgs());
 
-				// Handle output break state.
-				if (!this.port.OutputBreak)
+				// Ensure that only one data send thread is active at a time.
+				// Without this exclusivity, two receive threads could create a race condition.
+				if (Monitor.TryEnter(this.SendSyncObj))
 				{
-					lock (this.portSyncObj)
+					try
 					{
-						if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
-							this.port.RtsEnable = true;
-
-						this.port.Write(data, 0, data.Length);
-
-						if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
-							this.port.RtsEnable = false;
+						SendDelegate asyncInvoker = new SendDelegate(SendAsynch);
+						asyncInvoker.BeginInvoke(null, null);
 					}
-
-					OnDataSent(new EventArgs());
-				}
-				else
-				{
-					OnIOError(new IOErrorEventArgs(IOErrorSeverity.Acceptable, IODirection.Output, "No data can be sent while port is in output break state"));
+					finally
+					{
+						Monitor.Exit(this.SendSyncObj);
+					}
 				}
 			}
 		}
 
-		/// <summary></summary>
-		protected virtual void AssumeInputXOn()
+		private void SendAsynch()
 		{
-			lock (this.inputIsXOnSyncObj)
-				this.inputIsXOn = true;
+			// Ensure that only one data send thread is active at a time.
+			// Without this exclusivity, two receive threads could create a race condition.
+			Monitor.Enter(this.SendSyncObj);
+			try
+			{
+				// Fire events until there is no more data. Must be done to ensure that events
+				// are fired even for data that was enqueued above while the sync obj was busy.
+				// In addition, wait for the minimal time possible to allow other threads to
+				// execute and to prevent that 'OnDataSent' events are fired consecutively.
+				while (true)
+				{
+					if (IsOpen) // Ensure not to forward any events during closing anymore.
+					{
+						// Handle output break state.
+						if (!this.port.OutputBreak)
+						{
+							// In case of XOff, let other threads do their job and then try again.
+							if (XOnXOffIsInUse && !OutputIsXOn)
+							{
+								Thread.Sleep(0);
+								continue;
+							}
+
+							// In case of disabled CTS line, let other threads do their job and then try again.
+							if (this.settings.Communication.FlowControlUsesRtsCts && !this.port.CtsHolding)
+							{
+								Thread.Sleep(0);
+								continue;
+							}
+
+							// No break, no XOFff, no CTS disable, ready to send.
+							byte[] buffer;
+							lock (this.sendQueue)
+							{
+								if (this.sendQueue.Count <= 0)
+									break;
+
+								buffer = this.sendQueue.ToArray();
+								this.sendQueue.Clear();
+							}
+							lock (this.portSyncObj)
+							{
+								if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
+									this.port.RtsEnable = true;
+
+								this.port.Write(buffer, 0, buffer.Length);
+
+								if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
+									this.port.RtsEnable = false;
+							}
+
+							OnDataSent(new EventArgs());
+							Thread.Sleep(0);
+						}
+						else
+						{
+							OnIOError(new IOErrorEventArgs(IOErrorSeverity.Acceptable, IODirection.Output, "No data can be sent while port is in output break state"));
+							break;
+						}
+					}
+					else
+					{
+						// Ensure not to forward any events during closing anymore.
+						break;
+					}
+				}
+			}
+			finally
+			{
+				Monitor.Exit(this.SendSyncObj);
+			}
+		}
+
+		/// <summary></summary>
+		protected virtual void AssumeOutputXOn()
+		{
+			lock (this.outputIsXOnSyncObj)
+				this.outputIsXOn = true;
 
 			OnIOControlChanged(new EventArgs());
 		}
 
 		/// <summary>
-		/// Sets the output into XOn state.
+		/// Signals the other communication endpoint that this device is in XOn state.
 		/// </summary>
-		public virtual void SetOutputXOn()
+		public virtual void SetInputXOn()
 		{
 			AssertNotDisposed();
 
@@ -599,9 +732,9 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary>
-		/// Sets the output into XOff state.
+		/// Signals the other communication endpoint that this device is in XOff state.
 		/// </summary>
-		public virtual void SetOutputXOff()
+		public virtual void SetInputXOff()
 		{
 			AssertNotDisposed();
 
@@ -609,16 +742,16 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary>
-		/// Toggles the output XOn/XOff state.
+		/// Toggles the input XOn/XOff state.
 		/// </summary>
-		public virtual void ToggleOutputXOnXOff()
+		public virtual void ToggleInputXOnXOff()
 		{
 			// AssertNotDisposed() and HandshakeIsNotUsingXOnXOff { get; } is called in functions below.
 
-			if (OutputIsXOn)
-				SetOutputXOff();
+			if (InputIsXOn)
+				SetInputXOff();
 			else
-				SetOutputXOn();
+				SetInputXOn();
 		}
 
 		#endregion
@@ -635,35 +768,16 @@ namespace MKY.IO.Serial
 
 			lock (this.portSyncObj)
 			{
-				// No need to set encoding, only bytes are handled, encoding is done by text terminal
-				//this.port.Encoding = this.ioSettings.Encoding;
-
-				// Keep port name for diagnostics/debug purposes
-				this.portName = this.settings.PortId;
+				// Keep port name for diagnostics/debug purposes:
+				this.portName    = this.settings.PortId;
 				this.port.PortId = this.settings.PortId;
 
 				SerialCommunicationSettings s = this.settings.Communication;
-				this.port.BaudRate = (MKY.IO.Ports.BaudRateEx)s.BaudRate;
-				this.port.DataBits = (MKY.IO.Ports.DataBitsEx)s.DataBits;
-				this.port.Parity = s.Parity;
-				this.port.StopBits = s.StopBits;
+				this.port.BaudRate  = (MKY.IO.Ports.BaudRateEx)s.BaudRate;
+				this.port.DataBits  = (MKY.IO.Ports.DataBitsEx)s.DataBits;
+				this.port.Parity    = s.Parity;
+				this.port.StopBits  = s.StopBits;
 				this.port.Handshake = (SerialFlowControlEx)s.FlowControl;
-
-				// Parity replace
-				this.port.ParityReplace = this.settings.ParityErrorReplacement;
-
-				// RTS and DTR
-				switch (this.settings.Communication.FlowControl)
-				{
-					case SerialFlowControl.Manual:
-						this.port.RtsEnable = this.settings.RtsEnabled;
-						this.port.DtrEnable = this.settings.DtrEnabled;
-						break;
-
-					case SerialFlowControl.RS485:
-						this.port.RtsEnable = false;
-						break;
-				}
 			}
 		}
 
@@ -766,39 +880,36 @@ namespace MKY.IO.Serial
 				// RTS
 				switch (this.settings.Communication.FlowControl)
 				{
-					case SerialFlowControl.None:
-					case SerialFlowControl.XOnXOff:
-						this.port.RtsEnable = false;
-						break;
-
-					case SerialFlowControl.Manual:
-						this.port.RtsEnable = this.settings.RtsEnabled;
+					case SerialFlowControl.RequestToSend:
+					case SerialFlowControl.RequestToSendXOnXOff:
+						// Do nothing, RTS is handled by the underlying serial port object.
 						break;
 
 					case SerialFlowControl.RS485:
 						this.port.RtsEnable = false;
 						break;
 
-					case SerialFlowControl.RequestToSend:
-					case SerialFlowControl.RequestToSendXOnXOff:
-						// Do nothing, RTS is used for hand shake
+					case SerialFlowControl.Manual:
+						this.port.RtsEnable = this.manualRtsWasEnabled;
 						break;
+
+					default:
+						this.port.RtsEnable = false;
+						break;
+
 				}
 
 				// DTR
 				switch (this.settings.Communication.FlowControl)
 				{
-					case SerialFlowControl.None:
-					case SerialFlowControl.RequestToSend:
-					case SerialFlowControl.XOnXOff:
-					case SerialFlowControl.RequestToSendXOnXOff:
-					case SerialFlowControl.RS485:
+					case SerialFlowControl.Manual:
+						this.port.DtrEnable = this.manualDtrWasEnabled;
+						break;
+
+					default:
 						this.port.DtrEnable = false;
 						break;
 
-					case SerialFlowControl.Manual:
-						this.port.DtrEnable = this.settings.DtrEnabled;
-						break;
 				}
 			} // lock (this.portSyncObj)
 
@@ -810,11 +921,26 @@ namespace MKY.IO.Serial
 			if (XOnXOffIsInUse)
 			{
 				// Assume XOn on input.
-				AssumeInputXOn();
+				AssumeOutputXOn();
 
 				// Immediately send XOn if software flow control is enabled to ensure that
 				//   device gets put into XOn if it was XOff before.
-				SetOutputXOn();
+				switch (this.settings.Communication.FlowControl)
+				{
+					case SerialFlowControl.Manual:
+						bool wasXOn = false;
+						lock (this.manualInputWasXOnSyncObj)
+						{
+							wasXOn = this.manualInputWasXOn;
+						}
+						if (wasXOn)
+							SetInputXOn();
+						break;
+
+					default:
+						SetInputXOn();
+						break;
+				}
 			}
 		}
 
@@ -875,38 +1001,41 @@ namespace MKY.IO.Serial
 				byte[] buffer = new byte[bytesToRead];
 				this.port.Read(buffer, 0, bytesToRead);
 
+				bool signalXOnXOff = false;
+
 				lock (this.receiveQueue)
 				{
-					bool signalXOnXOff = false;
-
 					foreach (byte b in buffer)
 					{
 						// Receive data into queue.
 						this.receiveQueue.Enqueue(b);
 
-						// Handle input XOn/XOff.
-						if (b == SerialPortSettings.XOnByte)
+						// Handle output XOn/XOff.
+						if (this.settings.Communication.FlowControl == SerialFlowControl.Manual)
 						{
-							lock (this.inputIsXOnSyncObj)
+							if (b == SerialPortSettings.XOnByte)
 							{
-								if (BoolEx.SetIfCleared(ref this.inputIsXOn))
-									signalXOnXOff = true;
+								lock (this.outputIsXOnSyncObj)
+								{
+									if (BoolEx.SetIfCleared(ref this.outputIsXOn))
+										signalXOnXOff = true;
+								}
 							}
-						}
-						else if (b == SerialPortSettings.XOffByte)
-						{
-							lock (this.inputIsXOnSyncObj)
+							else if (b == SerialPortSettings.XOffByte)
 							{
-								if (BoolEx.ClearIfSet(ref this.inputIsXOn))
-									signalXOnXOff = true;
+								lock (this.outputIsXOnSyncObj)
+								{
+									if (BoolEx.ClearIfSet(ref this.outputIsXOn))
+										signalXOnXOff = true;
+								}
 							}
 						}
 					}
-
-					// Immediately invoke the event, but invoke it asyncronously!
-					if (signalXOnXOff)
-						OnIOControlChangedAsync(new EventArgs());
 				}
+
+				// Immediately invoke the event, but invoke it asynchronously!
+				if (signalXOnXOff)
+					OnIOControlChangedAsync(new EventArgs());
 
 				// Ensure that only one data received event thread is active at a time.
 				// Without this exclusivity, two receive threads could create a race condition.
@@ -942,7 +1071,7 @@ namespace MKY.IO.Serial
 				// > Up to an short-term-average of 20% CPU load while sending a large chuck of text (\YAT\!-SendFiles\Stress-2-Large.txt, 106 kB)
 				// This is an acceptable CPU load.
 				//
-				while (BytesAvailable > 0)
+				while ((this.state == State.Opened) && (BytesAvailable > 0)) // Ensure not to forward any events during closing anymore.
 				{
 					OnDataReceived(new EventArgs());
 					Thread.Sleep(0);
@@ -999,6 +1128,12 @@ namespace MKY.IO.Serial
 
 				if (this.state == State.Opened) // Ensure not to forward any events during closing anymore.
 				{
+					if (this.settings.Communication.FlowControl == SerialFlowControl.Manual)
+					{
+						this.manualRtsWasEnabled = this.port.RtsEnable;
+						this.manualDtrWasEnabled = this.port.DtrEnable;
+					}
+
 					switch (e.EventType)
 					{
 						case MKY.IO.Ports.SerialPinChange.InputBreak:

@@ -269,64 +269,6 @@ namespace YAT.Gui.Forms
 			}
 		}
 
-		private void checkBox_ReplaceParityError_CheckedChanged(object sender, EventArgs e)
-		{
-			if (!this.isSettingControls)
-			{
-				this.settings_Form.Terminal.IO.SerialPort.ReplaceParityErrors = checkBox_ReplaceParityError.Checked;
-				SetControls();
-			}
-		}
-
-		private void textBox_ParityReplacement_Validating(object sender, CancelEventArgs e)
-		{
-			string replacement = textBox_ParityReplacement.Text;
-			int invalidTextStart;
-			int invalidTextLength;
-			if (Validation.ValidateSequence(this, "Replacement", replacement, out invalidTextStart, out invalidTextLength))
-			{
-				Domain.Parser.Parser p = new Domain.Parser.Parser();
-				byte[] bytes = p.Parse(replacement);
-				int length = bytes.Length;
-				if (length == 1)
-				{
-					if (!this.isSettingControls)
-					{
-						this.settings_Form.Terminal.IO.SerialPort.ParityErrorReplacement = bytes[0];
-						this.settings_Form.Terminal.IO.SerialParityErrorReplacement = replacement;
-						SetControls();
-					}
-				}
-				else
-				{
-					string message = "Replacement is too ";
-					if (length == 0)
-						message += "short, it resolves to no byte.";
-					else
-						message += "long, it resolves to " + length + " bytes.";
-
-					message += Environment.NewLine;
-					message += "Enter a replacement that resolves to 1 byte, e.g. " +
-						Domain.Settings.IOSettings.SerialParityErrorReplacementDefault;
-
-					MessageBox.Show
-						(
-						this,
-						message,
-						"Invalid Replacement",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Error
-						);
-					e.Cancel = true;
-				}
-			}
-			else
-			{
-				textBox_ParityReplacement.Select(invalidTextStart, invalidTextLength);
-				e.Cancel = true;
-			}
-		}
-
 		private void checkBox_NoSendOnInputBreak_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -438,10 +380,6 @@ namespace YAT.Gui.Forms
 
 			// Receive:
 			groupBox_ReceiveSettings.Enabled    = (this.settings_Form.Terminal.IO.IOType == Domain.IOType.SerialPort);
-			bool replaceParityErrors            = this.settings_Form.Terminal.IO.SerialPort.ReplaceParityErrors;
-			checkBox_ReplaceParityError.Checked = replaceParityErrors;
-			textBox_ParityReplacement.Enabled   = replaceParityErrors;
-			textBox_ParityReplacement.Text      = this.settings_Form.Terminal.IO.SerialParityErrorReplacement;
 			checkBox_NoSendOnInputBreak.Checked = this.settings_Form.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
 			// User:
@@ -488,10 +426,8 @@ namespace YAT.Gui.Forms
 			this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak = MKY.IO.Serial.SerialPortSettings.NoSendOnOutputBreakDefault;
 
 			// Receive:
-			this.settings_Form.Terminal.IO.SerialPort.ReplaceParityErrors    = MKY.IO.Serial.SerialPortSettings.ReplaceParityErrorsDefault;
-			this.settings_Form.Terminal.IO.SerialPort.ParityErrorReplacement = MKY.IO.Serial.SerialPortSettings.ParityErrorReplacementDefault;
-			this.settings_Form.Terminal.IO.SerialParityErrorReplacement      = Domain.Settings.IOSettings.SerialParityErrorReplacementDefault;
-			this.settings_Form.Terminal.IO.SerialPort.NoSendOnInputBreak     = MKY.IO.Serial.SerialPortSettings.NoSendOnInputBreakDefault;
+			this.settings_Form.Terminal.IO.SerialParityErrorReplacement  = Domain.Settings.IOSettings.SerialParityErrorReplacementDefault;
+			this.settings_Form.Terminal.IO.SerialPort.NoSendOnInputBreak = MKY.IO.Serial.SerialPortSettings.NoSendOnInputBreakDefault;
 
 			// User:
 			this.settings_Form.UserName = Settings.Terminal.ExplicitSettings.UserNameDefault;

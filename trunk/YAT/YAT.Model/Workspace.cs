@@ -978,7 +978,7 @@ namespace YAT.Model
 				if (windowSettings != null)
 					settings.Settings.Window = windowSettings;
 
-				return (OpenTerminalFromSettings(settings));
+				return (OpenTerminalFromSettings(settings, guid));
 			}
 			else
 			{
@@ -1008,6 +1008,11 @@ namespace YAT.Model
 		public virtual bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settings)
 		{
 			return (OpenTerminalFromSettings(settings, Guid.Empty, Indices.DefaultFixedIndex, null, false));
+		}
+
+		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settings, Guid guid)
+		{
+			return (OpenTerminalFromSettings(settings, guid, Indices.DefaultFixedIndex, null, false));
 		}
 
 		private bool OpenTerminalFromSettings(DocumentSettingsHandler<TerminalSettingsRoot> settings, Guid guid, int fixedIndex, Settings.WindowSettings windowSettings, bool suppressErrorHandling)

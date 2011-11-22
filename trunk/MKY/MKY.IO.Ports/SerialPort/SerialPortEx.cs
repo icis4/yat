@@ -168,9 +168,9 @@ namespace MKY.IO.Ports
 
 		private void Initialize()
 		{
-			base.DataReceived  += new System.IO.Ports.SerialDataReceivedEventHandler(base_DataReceived);
+			base.DataReceived  += new System.IO.Ports.SerialDataReceivedEventHandler (base_DataReceived);
 			base.ErrorReceived += new System.IO.Ports.SerialErrorReceivedEventHandler(base_ErrorReceived);
-			base.PinChanged    += new System.IO.Ports.SerialPinChangedEventHandler(base_PinChanged);
+			base.PinChanged    += new System.IO.Ports.SerialPinChangedEventHandler   (base_PinChanged);
 		}
 
 		/// <remarks>
@@ -508,14 +508,16 @@ namespace MKY.IO.Ports
 				SerialPortControlPins pins = new SerialPortControlPins();
 
 				if (HandshakeIsNotUsingRequestToSend)
-					pins.Rts = RtsEnable;
+					pins.Rts = RtsEnable; // 'RtsEnable' must not be accessed if it is used by the base class!
 				else
 					pins.Rts = true;
 
 				pins.Cts = CtsHolding;
 				pins.Dtr = DtrEnable;
 				pins.Dsr = DsrHolding;
-				pins.Cd  = CDHolding;
+				pins.Dcd = CDHolding;
+
+				System.Diagnostics.Debug.WriteLine(pins.ToString());
 
 				return (pins);
 			}
@@ -629,7 +631,7 @@ namespace MKY.IO.Ports
 
 				// Immediately check whether there is already data pending
 				if (BytesToRead > 0)
-					OnDataReceived(new SerialDataReceivedEventArgs());
+					OnDataReceived(new SerialDataReceivedEventArgs(System.IO.Ports.SerialData.Chars));
 			}
 		}
 

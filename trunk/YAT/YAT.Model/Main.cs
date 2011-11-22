@@ -299,7 +299,7 @@ namespace YAT.Model
 			bool otherInstanceIsAlreadyRunning = OtherInstanceIsAlreadyRunning();
 
 			bool workspaceIsRequested = (this.startArgs.WorkspaceSettings != null);
-			bool terminalIsRequested  = (this.startArgs.TerminalSettings != null);
+			bool terminalIsRequested  = (this.startArgs.TerminalSettings  != null);
 
 			if (workspaceIsRequested || terminalIsRequested)
 			{
@@ -379,7 +379,7 @@ namespace YAT.Model
 			this.startArgs = new StartArgs();
 
 			// Prio 0 = None:
-			if (this.commandLineArgs == null)
+			if (this.commandLineArgs == null || this.commandLineArgs.NoArgs)
 			{
 				this.startArgs.ShowNewTerminalDialog = true;
 				this.startArgs.KeepOpen              = true;
@@ -393,7 +393,7 @@ namespace YAT.Model
 			}
 
 			// Prio 1 = Empty:
-			if (this.commandLineArgs.Empty)
+			if (this.commandLineArgs.NoArgs || this.commandLineArgs.Empty)
 			{
 				this.startArgs.ShowNewTerminalDialog = false;
 				this.startArgs.KeepOpen              = true;

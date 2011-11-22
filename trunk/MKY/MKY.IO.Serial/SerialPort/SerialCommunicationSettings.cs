@@ -181,6 +181,34 @@ namespace MKY.IO.Serial
 			}
 		}
 
+		/// <summary>
+		/// Returns <c>true</c> if the RTS/CTS lines are use, i.e. if one or the other kind of RTS/CTS
+		/// flow control is active.
+		/// </summary>
+		public virtual bool FlowControlUsesRtsCts
+		{
+			get
+			{
+				return ((this.flowControl == SerialFlowControl.RequestToSend) ||
+						(this.flowControl == SerialFlowControl.RequestToSendXOnXOff) ||
+						(this.flowControl == SerialFlowControl.Manual));
+			}
+		}
+
+		/// <summary>
+		/// Returns <c>true</c> if XOn/XOff is in use, i.e. if one or the other kind of XOn/XOff
+		/// flow control is active.
+		/// </summary>
+		public virtual bool FlowControlUsesXOnXOff
+		{
+			get
+			{
+				return ((this.flowControl == SerialFlowControl.XOnXOff) ||
+						(this.flowControl == SerialFlowControl.RequestToSendXOnXOff) ||
+						(this.flowControl == SerialFlowControl.Manual));
+			}
+		}
+
 		#endregion
 
 		#region Object Members

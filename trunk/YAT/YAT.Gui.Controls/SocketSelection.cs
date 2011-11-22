@@ -204,6 +204,12 @@ namespace YAT.Gui.Controls
 				if (value != this.localInterface)
 				{
 					this.localInterface = value;
+
+					if (value != null) // In case there is no interface at all (e.g. offline laptop).
+						this.resolvedLocalIPAddress = value.IPAddress;
+					else
+						this.resolvedLocalIPAddress = IPAddress.None;
+
 					SetControls();
 					OnLocalInterfaceChanged(new EventArgs());
 				}
@@ -393,10 +399,7 @@ namespace YAT.Gui.Controls
 		private void comboBox_LocalInterface_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-			{
 				LocalInterface = comboBox_LocalInterface.SelectedItem as IPNetworkInterface;
-				this.resolvedLocalIPAddress = LocalInterface.IPAddress;
-			}
 		}
 
 		private void button_RefreshLocalInterfaces_Click(object sender, EventArgs e)

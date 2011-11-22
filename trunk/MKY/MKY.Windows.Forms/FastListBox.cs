@@ -167,7 +167,7 @@ namespace MKY.Windows.Forms
 		public virtual void ScrollToBottomIfNoItemsSelected()
 		{
 			if ((SelectedItems.Count == 0) && (Items.Count > 0))
-				TopIndex = Items.Count - 1;
+				TopIndex = (Items.Count - 1);
 		}
 
 		#endregion

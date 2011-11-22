@@ -35,7 +35,7 @@ namespace MKY.Windows.Forms
 		/// <summary></summary>
 		public bool IsSettingsControls
 		{
-			get { return (this.count <= 0); }
+			get { return (this.count > 0); }
 		}
 
 		/// <summary></summary>
