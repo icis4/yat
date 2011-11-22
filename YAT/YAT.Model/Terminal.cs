@@ -1576,7 +1576,6 @@ namespace YAT.Model
 			{
 				MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)this.terminal.UnderlyingIOInstance;
 				port.ToggleRts();
-				this.settingsRoot.Terminal.IO.SerialPort.RtsEnabled = port.RtsEnable;
 			}
 		}
 
@@ -1589,20 +1588,19 @@ namespace YAT.Model
 			{
 				MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)this.terminal.UnderlyingIOInstance;
 				port.ToggleDtr();
-				this.settingsRoot.Terminal.IO.SerialPort.DtrEnabled = port.DtrEnable;
 			}
 		}
 
 		/// <summary>
-		/// Toggles the output XOn/XOff state.
+		/// Toggles the input XOn/XOff state.
 		/// </summary>
-		public virtual void RequestToggleOutputXOnXOff()
+		public virtual void RequestToggleInputXOnXOff()
 		{
 			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual)
 			{
 				MKY.IO.Serial.IXOnXOffHandler io = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler;
 				if (io != null)
-					io.ToggleOutputXOnXOff();
+					io.ToggleInputXOnXOff();
 				else
 					throw (new InvalidOperationException("The underlying I/O provider is no XOn/XOff handler"));
 			}

@@ -35,32 +35,32 @@ namespace MKY.IO.Ports
 		/// <summary>
 		/// Request To Send.
 		/// </summary>
-		[XmlElement("Rts")]
+		[XmlElement("RTS")]
 		public bool Rts;
 
 		/// <summary>
 		/// Clear To Send.
 		/// </summary>
-		[XmlElement("Cts")]
+		[XmlElement("CTS")]
 		public bool Cts;
 
 		/// <summary>
 		/// Data Terminal Ready.
 		/// </summary>
-		[XmlElement("Dtr")]
+		[XmlElement("DTR")]
 		public bool Dtr;
 
 		/// <summary>
 		/// Data Set Ready.
 		/// </summary>
-		[XmlElement("Dsr")]
+		[XmlElement("DSR")]
 		public bool Dsr;
 
 		/// <summary>
-		/// Carrier Detect.
+		/// Data Carrier Detect.
 		/// </summary>
-		[XmlElement("Cd")]
-		public bool Cd;
+		[XmlElement("DCD")]
+		public bool Dcd;
 
 		#region Object Members
 
@@ -82,7 +82,7 @@ namespace MKY.IO.Ports
 				(Cts == other.Cts) &&
 				(Dtr == other.Dtr) &&
 				(Dsr == other.Dsr) &&
-				(Cd  == other.Cd)
+				(Dcd == other.Dcd)
 			);
 		}
 
@@ -95,7 +95,20 @@ namespace MKY.IO.Ports
 				Cts.GetHashCode() ^
 				Dtr.GetHashCode() ^
 				Dsr.GetHashCode() ^
-				Cd .GetHashCode()
+				Dcd.GetHashCode()
+			);
+		}
+
+		/// <summary></summary>
+		public override string ToString()
+		{
+			return
+			(
+				"RTS=" + Rts.ToString() + ", " +
+				"CTS=" + Cts.ToString() + ", " +
+				"DTR=" + Dtr.ToString() + ", " +
+				"DSR=" + Dsr.ToString() + ", " +
+				"DCD=" + Dcd.ToString()
 			);
 		}
 

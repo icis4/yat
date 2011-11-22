@@ -1640,9 +1640,9 @@ namespace YAT.Gui.Forms
 			this.terminal.RequestToggleDtr();
 		}
 
-		private void toolStripStatusLabel_TerminalStatus_OutputXOnXOff_Click(object sender, EventArgs e)
+		private void toolStripStatusLabel_TerminalStatus_InputXOnXOff_Click(object sender, EventArgs e)
 		{
-			this.terminal.RequestToggleOutputXOnXOff();
+			this.terminal.RequestToggleInputXOnXOff();
 		}
 
 		private void toolStripStatusLabel_TerminalStatus_OutputBreak_Click(object sender, EventArgs e)
@@ -2884,8 +2884,6 @@ namespace YAT.Gui.Forms
 						throw (new InvalidOperationException("The underlying I/O instance is no serial port"));
 					}
 
-					bool manualFlowControl = (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual);
-
 					bool rs485FlowControl = (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.RS485);
 					if (rs485FlowControl)
 					{
@@ -2898,6 +2896,7 @@ namespace YAT.Gui.Forms
 					}
 
 					MKY.IO.Serial.IXOnXOffHandler io = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler;
+					bool manualFlowControl = (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual);
 					bool showXOnXOff = manualFlowControl;
 					bool outputIsXOn = false;
 					bool inputIsXOn = false;
@@ -2915,13 +2914,7 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_CTS.Image = (pins.Cts ? on : off);
 					toolStripStatusLabel_TerminalStatus_DTR.Image = (pins.Dtr ? on : off);
 					toolStripStatusLabel_TerminalStatus_DSR.Image = (pins.Dsr ? on : off);
-					toolStripStatusLabel_TerminalStatus_DCD.Image = (pins.Cd  ? on : off);
-
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = (outputIsXOn ? on : off);
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image  = (inputIsXOn  ? on : off);
-
-					toolStripStatusLabel_TerminalStatus_OutputBreak.Image = (!outputBreak ? on : off);
-					toolStripStatusLabel_TerminalStatus_InputBreak.Image  = (!inputBreak  ? on : off);
+					toolStripStatusLabel_TerminalStatus_DCD.Image = (pins.Dcd ? on : off);
 
 					toolStripStatusLabel_TerminalStatus_RTS.ForeColor = (manualFlowControl ? SystemColors.ControlText : SystemColors.GrayText);
 					toolStripStatusLabel_TerminalStatus_CTS.ForeColor = SystemColors.GrayText;
@@ -2929,15 +2922,21 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_DSR.ForeColor = SystemColors.GrayText;
 					toolStripStatusLabel_TerminalStatus_DCD.ForeColor = SystemColors.GrayText;
 
-					toolStripStatusLabel_TerminalStatus_Separator2.Visible = showXOnXOff;
+					toolStripStatusLabel_TerminalStatus_Separator2.Visible    = showXOnXOff;
 					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Visible = showXOnXOff;
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible = showXOnXOff;
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Visible  = showXOnXOff;
 
-					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = (manualFlowControl ? SystemColors.ControlText : SystemColors.GrayText);
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor = SystemColors.GrayText;
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = (outputIsXOn ? on : off);
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image  = (inputIsXOn  ? on : off);
+
+					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor  = (manualFlowControl ? SystemColors.ControlText : SystemColors.GrayText);
+
+					toolStripStatusLabel_TerminalStatus_OutputBreak.Image = (!outputBreak ? on : off);
+					toolStripStatusLabel_TerminalStatus_InputBreak.Image  = (!inputBreak  ? on : off);
 
 					toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor = SystemColors.ControlText;
-					toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor = SystemColors.GrayText;
+					toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor  = SystemColors.GrayText;
 
 					// \attention
 					// Do not modify the 'Enabled' property. Labels must always be enabled,

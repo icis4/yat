@@ -68,17 +68,37 @@ Note:	The whole release process takes about 6 hours
 	Note: Run without 1'/10'/60'/infinite takes around 10 minutes, and expect some re-runs
 
 
-5.	Run manual tests                                                                    0:30 / 2:30
+4d)	Disconnect all devices, restart laptop, re-run automated tests                      0:30 / 2:30
+	-----------------------------------------------------------------------------------------------
+	[ ] Use NUnit on 'Debug Test'
+		> "Visual Studio > Tools > NUnit"
+	[ ] Use NUnit on 'Release Test'
+		> "Visual Studio > Tools > NUnit"
+
+	Note: Run without 1'/10'/60'/infinite takes around 10 minutes, and expect some re-runs
+
+
+4d)	Run interactive tests                                                               0:30 / 3:00
+	-----------------------------------------------------------------------------------------------
+	[ ] Use NUnit on 'Debug Test'
+		> "Visual Studio > Tools > NUnit"
+	[ ] Use NUnit on 'Release Test'
+		> "Visual Studio > Tools > NUnit"
+
+	Note: Run without 1'/10'/60'/infinite takes around 10 minutes, and expect some re-runs
+
+
+5.	Run manual tests                                                                    0:30 / 3:30
 	-----------------------------------------------------------------------------------------------
 	[ ] According to manual test cases in "\YAT\_Doc.Project\5 - Test\YAT - Test.ods"
 
 
-6.	Write release notes                                                                 0:00 / 2:30
+6.	Write release notes                                                                 0:00 / 3:30
 	-----------------------------------------------------------------------------------------------
 	[ ] Add them cumulatively to "\_Doc.User\YAT Release Notes.txt"
 
 
-7.	Prepare package directory                                                           0:10 / 2:40
+7.	Prepare package directory                                                           0:10 / 3:40
 	-----------------------------------------------------------------------------------------------
 	[ ] Add a new directory to the offline archive "\YAT\Releases and Checkpoints"
 	[ ] Check and update year of "!-ReadMe.txt" in the release package directories
@@ -87,7 +107,7 @@ Note:	The whole release process takes about 6 hours
 	Note: The distribution packages will be packed further below
 
 
-8.	Build YAT                                                                           0:20 / 3:00
+8.	Build YAT                                                                           0:20 / 4:00
 	-----------------------------------------------------------------------------------------------
 	[ ] Check "YAT.Setup" prerequisites for "Release"
 		> Optimize for speed
@@ -97,26 +117,26 @@ Note:	The whole release process takes about 6 hours
 	[ ] Build "Release with Prerequisites" configuration
 
 
-9.	Close Visual Studio                                                                 0:00 / 3:00
+9.	Close Visual Studio                                                                 0:00 / 4:00
 	-----------------------------------------------------------------------------------------------
 	[ ] Needed to ensure that YAT doesn't detect already running "YAT.vshost.exe" on startup
 
 
-10.	Install YAT                                                                         0:10 / 3:10
+10.	Install YAT                                                                         0:10 / 4:10
 	-----------------------------------------------------------------------------------------------
 
 
-11.	Run manual after-installation tests                                                 0:20 / 3:30
+11.	Run manual after-installation tests                                                 0:20 / 4:30
 	-----------------------------------------------------------------------------------------------
 	[ ] According to manual after-installation test cases
 
 
-12.	Feature request and bug trackers                                                    0:00 / 3:30
+12.	Feature request and bug trackers                                                    0:00 / 4:30
 	-----------------------------------------------------------------------------------------------
 	[ ] Ensure that items that are covered by this release have been closed
 
 
-13.	Commit and tag YAT                                                                  0:15 / 3:45
+13.	Commit and tag YAT                                                                  0:15 / 4:45
 	-----------------------------------------------------------------------------------------------
 	[ ] Commit any modifications to the subversion repository
 		> Message e.g. "YAT 2.0 Beta 3 Candidate 3 Version 1.99.25"
@@ -130,18 +150,18 @@ Note:	The whole release process takes about 6 hours
 				> Check tag
 
 
-14.	Pack YAT                                                                            0:15 / 4:00
+14.	Pack YAT                                                                            0:15 / 5:00
 	-----------------------------------------------------------------------------------------------
 	[ ] Update "\Distribution\Release" and "\Distribution\Release With Prerequisites"
 	[ ] Update the two according .zip files
 
 
-15.	Upload YAT                                                                          0:45 / 4:45
+15.	Upload YAT                                                                          0:45 / 5:45
 	-----------------------------------------------------------------------------------------------
 	[ ] According to "HowToUploadDistributionToSourcForge.txt"
 
 
-16.	Send e-mail to the YAT mailing list                                                 0:15 / 5:00
+16.	Send e-mail to the YAT mailing list                                                 0:15 / 6:00
 	-----------------------------------------------------------------------------------------------
 	[ ] Write e-mail based on earlier mailings
 		> Make sure that links are updated completely, i.e. link text and link below
@@ -152,12 +172,12 @@ Note:	The whole release process takes about 6 hours
 	[ ] Accept e-mail as moderator in mailman if needed
 
 
-17.	Commit YAT                                                                          0:00 / 5:00
+17.	Commit YAT                                                                          0:00 / 6:00
 	-----------------------------------------------------------------------------------------------
 	[ ] Commit any modifications during the release process to the subversion repository
 
 
-18.	Recreate YAT working copy                                                           0:30 / 5:30
+18.	Recreate YAT working copy                                                           0:30 / 6:30
 	-----------------------------------------------------------------------------------------------
 	[ ] Remove existing backups "_Trunk_<Old Date>"
 	[ ] Rename the existing working copy to "_Trunk_<New Date>"
@@ -165,14 +185,14 @@ Note:	The whole release process takes about 6 hours
 	[ ] Check the head revision out into "_Trunk"
 
 
-19.	Archive YAT                                                                         0:15 / 5:45
+19.	Archive YAT                                                                         0:15 / 6:45
 	-----------------------------------------------------------------------------------------------
 	[ ] Export the new working copy to offline archive "<Version>\Working Copy"
 		> SVN > Export...
 	[ ] Pack the copy into a properly named zip file
 
 
-20.	Update and verify YAT working copy                                                  0:15 / 6:00
+20.	Update and verify YAT working copy                                                  0:15 / 7:00
 	-----------------------------------------------------------------------------------------------
 	[ ] Open the YAT solution
 	[ ] Fold all projects
@@ -184,7 +204,7 @@ Note:	The whole release process takes about 6 hours
 	[ ] Commit modifications to the subversion repository
 
 
-21.	Backup PC                                                                           0:30 / 6:30
+21.	Backup PC                                                                           0:30 / 7:30
 	-----------------------------------------------------------------------------------------------
 	[ ] Offline archive
 	[ ] Sandboxes

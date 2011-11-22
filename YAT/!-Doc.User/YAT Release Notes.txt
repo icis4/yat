@@ -77,9 +77,17 @@ Important changes:
   received, the update rate is reduced, results in better performance (feature request #3274073)
 - Monitor display status settings relocated from 'Display' to 'Status' to improve speed on showing
   the status labels, i.e. no monitor update is needed anymore (related to feature request #3274073)
+- Data sending in MKY.IO.Serial.SerialPort switched from synchronous to asynchronous in order to
+  allow proper implementation of XOn/XOff and RTS/CTS flow control below
+- XOn/XOff and RTS/CTS flow control implemented also in case of sending (bug #3432512)
+   > Apparently System.IO.Ports.SerialPort implements flow control only in case of receiving
+- Serial COM ports RTS and DTR states are no longer stored persistently in case of manual flow
+  control (related to feature requests #2932691 and #3066635 and bug #3432512)
+- Parity error replacement removed since parity errors are displayed as error text inside terminal
 - Shortcut for window layout added: Alt-C/H/V layouts cascaded/horizontal/vertical
 - Behavior of concurrent instances of YAT verified (feature request #2842713)
    > Already seems to work fine, test case added and successfully passed, limitation removed
+- "Unhandled Exception" now shows all information including inner exceptions (bug #3290314)
 - MKY.Data added
 - MKY.Settings.Settings renamed to MKY.Settings.SettingsItem
 - MKY.IO and MKY.IO.Net added to prepare refactoring of MKY.IO.Serial (feature request #3388950)
@@ -93,7 +101,7 @@ Fixed bugs:
 - Exception when selecting an undefined predefined commands using 'Shift + Fx' fixed (bug #3367649)
 - Exception due to invalid panel layout (splitter distance) is now handled (bug #3426400)
 - Error message in case of an error when opening a port or socket improved (bug #2213639)
-- "Unhandled Exception" now shows all information including inner exceptions (bug #3290314)
+- Exception in case of a computer without any devices (e.g. off-line notebook) fixed (bug #3060623)
 
 Limitations and known issues:
 - MDI limitations of .NET
@@ -104,6 +112,8 @@ Limitations and known issues:
 - Response of multi-line commands or files is delayed (bug #3072919)
 - Support for serial ports which are named other than COM isn't supported by .NET
   (feature request #2848228)
+- Handling of serial COM port break states (feature #2932691) may not be supported on certain
+  hardware, e.g. USB/RS-232 converters
 - USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
   of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)
@@ -159,6 +169,8 @@ Limitations and known issues:
   (feature request #1960299)
 - Support for serial ports which are named other than COM isn't supported by .NET
   (feature request #2848228)
+- Handling of serial COM port break states (feature #2932691) may not be supported on certain
+  hardware, e.g. USB/RS-232 converters
 - USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
   of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)
@@ -203,6 +215,8 @@ Limitations and known issues:
   (feature request #1960299)
 - Support for serial ports which are named other than COM isn't supported by .NET
   (feature request #2848228)
+- Handling of serial COM port break states (feature #2932691) may not be supported on certain
+  hardware, e.g. USB/RS-232 converters
 - USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
   of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
 - UTF-16/32 testing pending (bug #1931537)
@@ -220,7 +234,6 @@ YAT 2.0 Beta 3 Candidate 2 Version 1.99.24 :: 2010-11-11
 New:
 - Support for USB Ser/HID implemented (feature request #2825931)
 - Handling of input and output break states added to serial COM ports (feature request #2932691)
-  Handling of break states may not be supported on certain hardware, e.g. USB/RS-232 converters
 - Separate connect and total connect time, connect time is restarted on open (bug #2869585)
 - Optional simple terminal/direct mode added to "Send Command" (feature request #1808496)
 - Keyword \!(Clear) added (feature request #2998594)
@@ -299,6 +312,8 @@ Limitations and known issues:
   (feature request #1960299)
 - Support for serial ports which are named other than COM isn't supported by .NET
   (feature request #2848228)
+- Handling of serial COM port break states (feature #2932691) may not be supported on certain
+  hardware, e.g. USB/RS-232 converters
 - USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
   of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
 - UTF-16/32 testing pending (bug #1931537)

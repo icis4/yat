@@ -40,9 +40,6 @@
 			this.label_Endianess = new System.Windows.Forms.Label();
 			this.groupBox_ReceiveSettings = new System.Windows.Forms.GroupBox();
 			this.checkBox_NoSendOnInputBreak = new System.Windows.Forms.CheckBox();
-			this.checkBox_ReplaceParityError = new System.Windows.Forms.CheckBox();
-			this.label_ParityReplacementExample = new System.Windows.Forms.Label();
-			this.textBox_ParityReplacement = new System.Windows.Forms.TextBox();
 			this.groupBox_SendSettings = new System.Windows.Forms.GroupBox();
 			this.checkBox_NoSendOnOutputBreak = new System.Windows.Forms.CheckBox();
 			this.label_SendImmediately = new System.Windows.Forms.Label();
@@ -137,9 +134,9 @@
 			// 
 			this.groupBox_User.Controls.Add(this.textBox_UserName);
 			this.groupBox_User.Controls.Add(this.label2);
-			this.groupBox_User.Location = new System.Drawing.Point(275, 292);
+			this.groupBox_User.Location = new System.Drawing.Point(275, 303);
 			this.groupBox_User.Name = "groupBox_User";
-			this.groupBox_User.Size = new System.Drawing.Size(263, 51);
+			this.groupBox_User.Size = new System.Drawing.Size(263, 104);
 			this.groupBox_User.TabIndex = 4;
 			this.groupBox_User.TabStop = false;
 			this.groupBox_User.Text = "User";
@@ -195,12 +192,9 @@
 			// groupBox_ReceiveSettings
 			// 
 			this.groupBox_ReceiveSettings.Controls.Add(this.checkBox_NoSendOnInputBreak);
-			this.groupBox_ReceiveSettings.Controls.Add(this.checkBox_ReplaceParityError);
-			this.groupBox_ReceiveSettings.Controls.Add(this.label_ParityReplacementExample);
-			this.groupBox_ReceiveSettings.Controls.Add(this.textBox_ParityReplacement);
-			this.groupBox_ReceiveSettings.Location = new System.Drawing.Point(275, 200);
+			this.groupBox_ReceiveSettings.Location = new System.Drawing.Point(275, 228);
 			this.groupBox_ReceiveSettings.Name = "groupBox_ReceiveSettings";
-			this.groupBox_ReceiveSettings.Size = new System.Drawing.Size(263, 86);
+			this.groupBox_ReceiveSettings.Size = new System.Drawing.Size(263, 69);
 			this.groupBox_ReceiveSettings.TabIndex = 3;
 			this.groupBox_ReceiveSettings.TabStop = false;
 			this.groupBox_ReceiveSettings.Text = "Receive Settings";
@@ -208,41 +202,13 @@
 			// checkBox_NoSendOnInputBreak
 			// 
 			this.checkBox_NoSendOnInputBreak.AutoSize = true;
-			this.checkBox_NoSendOnInputBreak.Location = new System.Drawing.Point(12, 59);
+			this.checkBox_NoSendOnInputBreak.Location = new System.Drawing.Point(12, 19);
 			this.checkBox_NoSendOnInputBreak.Name = "checkBox_NoSendOnInputBreak";
 			this.checkBox_NoSendOnInputBreak.Size = new System.Drawing.Size(212, 17);
 			this.checkBox_NoSendOnInputBreak.TabIndex = 3;
 			this.checkBox_NoSendOnInputBreak.Text = "No send w&hile in input break state (IBS)";
 			this.checkBox_NoSendOnInputBreak.UseVisualStyleBackColor = true;
 			this.checkBox_NoSendOnInputBreak.CheckedChanged += new System.EventHandler(this.checkBox_NoSendOnInputBreak_CheckedChanged);
-			// 
-			// checkBox_ReplaceParityError
-			// 
-			this.checkBox_ReplaceParityError.AutoSize = true;
-			this.checkBox_ReplaceParityError.Location = new System.Drawing.Point(12, 19);
-			this.checkBox_ReplaceParityError.Name = "checkBox_ReplaceParityError";
-			this.checkBox_ReplaceParityError.Size = new System.Drawing.Size(137, 17);
-			this.checkBox_ReplaceParityError.TabIndex = 0;
-			this.checkBox_ReplaceParityError.Text = "Replace parit&y errors by";
-			this.checkBox_ReplaceParityError.UseVisualStyleBackColor = true;
-			this.checkBox_ReplaceParityError.CheckedChanged += new System.EventHandler(this.checkBox_ReplaceParityError_CheckedChanged);
-			// 
-			// label_ParityReplacementExample
-			// 
-			this.label_ParityReplacementExample.AutoSize = true;
-			this.label_ParityReplacementExample.Location = new System.Drawing.Point(89, 40);
-			this.label_ParityReplacementExample.Name = "label_ParityReplacementExample";
-			this.label_ParityReplacementExample.Size = new System.Drawing.Size(129, 13);
-			this.label_ParityReplacementExample.TabIndex = 2;
-			this.label_ParityReplacementExample.Text = "Example: \\h(07) or <BEL>";
-			// 
-			// textBox_ParityReplacement
-			// 
-			this.textBox_ParityReplacement.Location = new System.Drawing.Point(150, 17);
-			this.textBox_ParityReplacement.Name = "textBox_ParityReplacement";
-			this.textBox_ParityReplacement.Size = new System.Drawing.Size(50, 20);
-			this.textBox_ParityReplacement.TabIndex = 1;
-			this.textBox_ParityReplacement.Validating += new System.ComponentModel.CancelEventHandler(this.textBox_ParityReplacement_Validating);
 			// 
 			// groupBox_SendSettings
 			// 
@@ -643,12 +609,10 @@
 		private System.Windows.Forms.GroupBox groupBox_SendSettings;
 		private System.Windows.Forms.GroupBox groupBox_DisplaySettings;
 		private System.Windows.Forms.GroupBox groupBox_ReceiveSettings;
-		private System.Windows.Forms.TextBox textBox_ParityReplacement;
 		private System.Windows.Forms.Label label_MaxLineCountUnit;
 		private System.Windows.Forms.TextBox textBox_MaxLineCount;
 		private System.Windows.Forms.Label label_MaxLineCount;
 		private System.Windows.Forms.CheckBox checkBox_KeepCommand;
-		private System.Windows.Forms.Label label_ParityReplacementExample;
 		private System.Windows.Forms.CheckBox checkBox_ShowTimeStamp;
 		private System.Windows.Forms.CheckBox checkBox_ShowCountAndRate;
 		private System.Windows.Forms.CheckBox checkBox_ShowLength;
@@ -660,7 +624,6 @@
 		private System.Windows.Forms.CheckBox checkBox_SeparateTxRxRadix;
 		private System.Windows.Forms.ComboBox comboBox_RxRadix;
 		private System.Windows.Forms.Label label_RxRadix;
-		private System.Windows.Forms.CheckBox checkBox_ReplaceParityError;
 		private System.Windows.Forms.CheckBox checkBox_DirectionLineBreak;
 		private System.Windows.Forms.GroupBox groupBox_Display_ControlChars;
 		private System.Windows.Forms.ComboBox comboBox_ControlCharacterRadix;

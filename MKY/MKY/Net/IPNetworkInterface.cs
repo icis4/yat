@@ -139,7 +139,7 @@ namespace MKY.Net
 				(
 					base.Equals(other) &&
 
-					(this.otherAddress     == other.otherAddress) &&
+					(this.otherAddress == other.otherAddress) &&
 					StringEx.EqualsOrdinalIgnoreCase(this.otherDescription, other.otherDescription)
 				);
 			}

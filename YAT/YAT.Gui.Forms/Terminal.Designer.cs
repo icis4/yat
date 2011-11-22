@@ -68,7 +68,6 @@
 			this.toolStripMenuItem_RadixContextMenu_Rx_Oct = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_RadixContextMenu_Rx_Dec = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem_TerminalMenu_View_Radix = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Format = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Separator_2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem_MonitorContextMenu_ShowRadix = new System.Windows.Forms.ToolStripMenuItem();
@@ -90,6 +89,7 @@
 			this.toolStripMenuItem_MonitorContextMenu_SaveToFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_CopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_MonitorContextMenu_Print = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem_TerminalMenu_View_Radix = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStrip_Predefined = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem_PredefinedContextMenu_Command_1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem_PredefinedContextMenu_Command_2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -393,7 +393,7 @@
             this.toolStripMenuItem_RadixContextMenu_TxRadix,
             this.toolStripMenuItem_RadixContextMenu_RxRadix});
 			this.contextMenuStrip_Radix.Name = "contextMenuStrip_Radix";
-			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_MonitorContextMenu_Radix;
+			this.contextMenuStrip_Radix.OwnerItem = this.toolStripMenuItem_TerminalMenu_View_Radix;
 			this.contextMenuStrip_Radix.Size = new System.Drawing.Size(173, 220);
 			this.contextMenuStrip_Radix.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Radix_Opening);
 			// 
@@ -589,13 +589,6 @@
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex.Text = "&Hexadecimal";
 			this.toolStripMenuItem_RadixContextMenu_Rx_Hex.Click += new System.EventHandler(this.toolStripMenuItem_RadixContextMenu_Rx_Hex_Click);
 			// 
-			// toolStripMenuItem_TerminalMenu_View_Radix
-			// 
-			this.toolStripMenuItem_TerminalMenu_View_Radix.DropDown = this.contextMenuStrip_Radix;
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Name = "toolStripMenuItem_TerminalMenu_View_Radix";
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(221, 22);
-			this.toolStripMenuItem_TerminalMenu_View_Radix.Text = "R&adix";
-			// 
 			// toolStripMenuItem_MonitorContextMenu_Format
 			// 
 			this.toolStripMenuItem_MonitorContextMenu_Format.Name = "toolStripMenuItem_MonitorContextMenu_Format";
@@ -734,6 +727,13 @@
 			this.toolStripMenuItem_MonitorContextMenu_Print.Size = new System.Drawing.Size(241, 22);
 			this.toolStripMenuItem_MonitorContextMenu_Print.Text = "Print...";
 			this.toolStripMenuItem_MonitorContextMenu_Print.Click += new System.EventHandler(this.toolStripMenuItem_MonitorContextMenu_Print_Click);
+			// 
+			// toolStripMenuItem_TerminalMenu_View_Radix
+			// 
+			this.toolStripMenuItem_TerminalMenu_View_Radix.DropDown = this.contextMenuStrip_Radix;
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Name = "toolStripMenuItem_TerminalMenu_View_Radix";
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Size = new System.Drawing.Size(221, 22);
+			this.toolStripMenuItem_TerminalMenu_View_Radix.Text = "R&adix";
 			// 
 			// contextMenuStrip_Predefined
 			// 
@@ -1995,6 +1995,7 @@
 						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
 						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
+			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Image = global::YAT.Gui.Forms.Properties.Resources.Image_On_12x12;
 			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
@@ -2004,7 +2005,6 @@
 			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
 			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ToolTipText = "Output XOn/XOff State (Out)";
-			this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff.Click += new System.EventHandler(this.toolStripStatusLabel_TerminalStatus_OutputXOnXOff_Click);
 			// 
 			// toolStripStatusLabel_TerminalStatus_InputXOnXOff
 			// 
@@ -2012,7 +2012,6 @@
 						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)
 						| System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
 			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter;
-			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image = global::YAT.Gui.Forms.Properties.Resources.Image_On_12x12;
 			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
@@ -2022,6 +2021,7 @@
 			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
 			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.ToolTipText = "Input XOn/XOff State (In)";
+			this.toolStripStatusLabel_TerminalStatus_InputXOnXOff.Click += new System.EventHandler(this.toolStripStatusLabel_TerminalStatus_InputXOnXOff_Click);
 			// 
 			// toolStripStatusLabel_TerminalStatus_Separator3
 			// 

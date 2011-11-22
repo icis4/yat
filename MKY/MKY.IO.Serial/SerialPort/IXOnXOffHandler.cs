@@ -45,19 +45,19 @@ namespace MKY.IO.Serial
 		bool OutputIsXOn { get; }
 
 		/// <summary>
-		/// Sets the output into XOn state.
+		/// Signals the other communication endpoint that this device is in XOn state.
 		/// </summary>
-		void SetOutputXOn();
+		void SetInputXOn();
 
 		/// <summary>
-		/// Sets the output into XOff state.
+		/// Signals the other communication endpoint that this device is in XOff state.
 		/// </summary>
-		void SetOutputXOff();
+		void SetInputXOff();
 
 		/// <summary>
-		/// Toggles the output XOn/XOff state.
+		/// Toggles the input XOn/XOff state.
 		/// </summary>
-		void ToggleOutputXOnXOff();
+		void ToggleInputXOnXOff();
 	}
 }
 

@@ -43,12 +43,6 @@ namespace MKY.IO.Serial
 		// Constants
 		//==========================================================================================
 
-		/// <summary></summary>
-		public const bool ReplaceParityErrorsDefault = false;
-
-		/// <summary></summary>
-		public const byte ParityErrorReplacementDefault = 0x00;
-
 		/// <remarks>
 		/// Must be implemented as property that creates a new id object on each call to ensure that
 		/// there aren't multiple clients referencing (and modifying) the same id object.
@@ -89,10 +83,6 @@ namespace MKY.IO.Serial
 		private SerialPortId portId;
 		private SerialCommunicationSettings communication;
 		private AutoRetry autoReopen;
-		private bool replaceParityErrors;
-		private byte parityErrorReplacement;
-		private bool rtsEnabled;
-		private bool dtrEnabled;
 		private bool noSendOnOutputBreak;
 		private bool noSendOnInputBreak;
 
@@ -138,14 +128,10 @@ namespace MKY.IO.Serial
 			else
 				PortId = null;
 
-			Communication          = new SerialCommunicationSettings(rhs.Communication);
-			AutoReopen             = rhs.autoReopen;
-			ReplaceParityErrors    = rhs.replaceParityErrors;
-			ParityErrorReplacement = rhs.parityErrorReplacement;
-			RtsEnabled             = rhs.RtsEnabled;
-			DtrEnabled             = rhs.DtrEnabled;
-			NoSendOnOutputBreak    = rhs.NoSendOnOutputBreak;
-			NoSendOnInputBreak       = rhs.NoSendOnInputBreak;
+			Communication       = new SerialCommunicationSettings(rhs.Communication);
+			AutoReopen          = rhs.autoReopen;
+			NoSendOnOutputBreak = rhs.NoSendOnOutputBreak;
+			NoSendOnInputBreak  = rhs.NoSendOnInputBreak;
 
 			ClearChanged();
 		}
@@ -164,13 +150,9 @@ namespace MKY.IO.Serial
 			// Attention: See remarks above.
 			PortId                 = SerialPortId.FirstStandardPort;
 
-			AutoReopen             = AutoReopenDefault;
-			ReplaceParityErrors    = ReplaceParityErrorsDefault;
-			ParityErrorReplacement = ParityErrorReplacementDefault;
-			RtsEnabled             = true;
-			DtrEnabled             = true;
-			NoSendOnOutputBreak    = NoSendOnOutputBreakDefault;
-			NoSendOnInputBreak     = NoSendOnInputBreakDefault;
+			AutoReopen          = AutoReopenDefault;
+			NoSendOnOutputBreak = NoSendOnOutputBreakDefault;
+			NoSendOnInputBreak  = NoSendOnInputBreakDefault;
 		}
 
 		#endregion
@@ -237,68 +219,6 @@ namespace MKY.IO.Serial
 		}
 
 		/// <summary></summary>
-		[XmlElement("ReplaceParityErrors")]
-		public virtual bool ReplaceParityErrors
-		{
-			get { return (this.replaceParityErrors); }
-			set
-			{
-				if (value != this.replaceParityErrors)
-				{
-					this.replaceParityErrors = value;
-					SetChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("ParityErrorReplacement")]
-		public virtual byte ParityErrorReplacement
-		{
-			get { return (this.parityErrorReplacement); }
-			set
-			{
-				if (value != this.parityErrorReplacement)
-				{
-					this.parityErrorReplacement = value;
-					SetChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Rts", Justification = "Abbreviation RTS is given by RS-232.")]
-		[XmlElement("RtsEnabled")]
-		public virtual bool RtsEnabled
-		{
-			get { return (this.rtsEnabled); }
-			set
-			{
-				if (value != this.rtsEnabled)
-				{
-					this.rtsEnabled = value;
-					SetChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtr", Justification = "Abbreviation DTR is given by RS-232.")]
-		[XmlElement("DtrEnabled")]
-		public virtual bool DtrEnabled
-		{
-			get { return (this.dtrEnabled); }
-			set
-			{
-				if (value != this.dtrEnabled)
-				{
-					this.dtrEnabled = value;
-					SetChanged();
-				}
-			}
-		}
-
-		/// <summary></summary>
 		[XmlElement("NoSendOnOutputBreak")]
 		public virtual bool NoSendOnOutputBreak
 		{
@@ -348,15 +268,11 @@ namespace MKY.IO.Serial
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.portId                 == other.portId) &&
-				(this.communication          == other.communication) &&
-				(this.autoReopen             == other.autoReopen) &&
-				(this.replaceParityErrors    == other.replaceParityErrors) &&
-				(this.parityErrorReplacement == other.parityErrorReplacement) &&
-				(this.rtsEnabled             == other.rtsEnabled) &&
-				(this.dtrEnabled             == other.dtrEnabled) &&
-				(this.noSendOnOutputBreak    == other.noSendOnOutputBreak) &&
-				(this.noSendOnInputBreak       == other.noSendOnInputBreak)
+				(this.portId              == other.portId) &&
+				(this.communication       == other.communication) &&
+				(this.autoReopen          == other.autoReopen) &&
+				(this.noSendOnOutputBreak == other.noSendOnOutputBreak) &&
+				(this.noSendOnInputBreak  == other.noSendOnInputBreak)
 			);
 		}
 
@@ -371,15 +287,11 @@ namespace MKY.IO.Serial
 			(
 				base.GetHashCode() ^
 
-				portIdHashCode             .GetHashCode() ^
-				this.communication         .GetHashCode() ^
-				this.autoReopen            .GetHashCode() ^
-				this.replaceParityErrors   .GetHashCode() ^
-				this.parityErrorReplacement.GetHashCode() ^
-				this.rtsEnabled            .GetHashCode() ^
-				this.dtrEnabled            .GetHashCode() ^
-				this.noSendOnOutputBreak   .GetHashCode() ^
-				this.noSendOnInputBreak      .GetHashCode()
+				portIdHashCode           .GetHashCode() ^
+				this.communication       .GetHashCode() ^
+				this.autoReopen          .GetHashCode() ^
+				this.noSendOnOutputBreak .GetHashCode() ^
+				this.noSendOnInputBreak  .GetHashCode()
 			);
 		}
 
