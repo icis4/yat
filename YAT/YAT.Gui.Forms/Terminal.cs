@@ -1909,7 +1909,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits    = MKY.IO.Ports.DataBits.Seven;
 					settings.Parity      = System.IO.Ports.Parity.Even;
 					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.SerialFlowControl.XOnXOff;
+					settings.FlowControl = MKY.IO.Serial.SerialFlowControl.Software;
 					break;
 				}
 				case 3: // "9600, 8, None, 1, None"
@@ -1927,7 +1927,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
 					settings.Parity      = System.IO.Ports.Parity.None;
 					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.SerialFlowControl.XOnXOff;
+					settings.FlowControl = MKY.IO.Serial.SerialFlowControl.Software;
 					break;
 				}
 				case 5: // "19200, 8, None, 1, None"
@@ -1945,7 +1945,7 @@ namespace YAT.Gui.Forms
 					settings.DataBits    = MKY.IO.Ports.DataBits.Eight;
 					settings.Parity      = System.IO.Ports.Parity.None;
 					settings.StopBits    = System.IO.Ports.StopBits.One;
-					settings.FlowControl = MKY.IO.Serial.SerialFlowControl.XOnXOff;
+					settings.FlowControl = MKY.IO.Serial.SerialFlowControl.Software;
 					break;
 				}
 			}
@@ -2895,20 +2895,18 @@ namespace YAT.Gui.Forms
 						toolStripStatusLabel_TerminalStatus_RTS.Image = (pins.Rts ? on : off);
 					}
 
-					MKY.IO.Serial.IXOnXOffHandler io = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler;
-					bool manualFlowControl = (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual);
-					bool showXOnXOff = manualFlowControl;
+					bool manualRtsDtr  = this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRtsCtsDtrDsrManually;
+					bool manualXOnXOff = this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually;
+					bool showXOnXOff = false;
 					bool outputIsXOn = false;
 					bool inputIsXOn = false;
-					if (io != null)
+
+					MKY.IO.Serial.IXOnXOffHandler x = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler;
+					if (x != null)
 					{
-						showXOnXOff = (io.XOnXOffIsInUse || manualFlowControl);
-						outputIsXOn = io.OutputIsXOn;
-						inputIsXOn = io.InputIsXOn;
-					}
-					else
-					{
-						throw (new InvalidOperationException("The underlying I/O provider is no XOn/XOff handler"));
+						showXOnXOff = x.XOnXOffIsInUse;
+						outputIsXOn = x.OutputIsXOn;
+						inputIsXOn  = x.InputIsXOn;
 					}
 
 					toolStripStatusLabel_TerminalStatus_CTS.Image = (pins.Cts ? on : off);
@@ -2916,9 +2914,9 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_DSR.Image = (pins.Dsr ? on : off);
 					toolStripStatusLabel_TerminalStatus_DCD.Image = (pins.Dcd ? on : off);
 
-					toolStripStatusLabel_TerminalStatus_RTS.ForeColor = (manualFlowControl ? SystemColors.ControlText : SystemColors.GrayText);
+					toolStripStatusLabel_TerminalStatus_RTS.ForeColor = (manualRtsDtr ? SystemColors.ControlText : SystemColors.GrayText);
 					toolStripStatusLabel_TerminalStatus_CTS.ForeColor = SystemColors.GrayText;
-					toolStripStatusLabel_TerminalStatus_DTR.ForeColor = (manualFlowControl ? SystemColors.ControlText : SystemColors.GrayText);
+					toolStripStatusLabel_TerminalStatus_DTR.ForeColor = (manualRtsDtr ? SystemColors.ControlText : SystemColors.GrayText);
 					toolStripStatusLabel_TerminalStatus_DSR.ForeColor = SystemColors.GrayText;
 					toolStripStatusLabel_TerminalStatus_DCD.ForeColor = SystemColors.GrayText;
 
@@ -2930,7 +2928,7 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_InputXOnXOff.Image  = (inputIsXOn  ? on : off);
 
 					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
-					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor  = (manualFlowControl ? SystemColors.ControlText : SystemColors.GrayText);
+					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor  = (manualXOnXOff ? SystemColors.ControlText : SystemColors.GrayText);
 
 					toolStripStatusLabel_TerminalStatus_OutputBreak.Image = (!outputBreak ? on : off);
 					toolStripStatusLabel_TerminalStatus_InputBreak.Image  = (!inputBreak  ? on : off);

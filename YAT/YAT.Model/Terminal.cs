@@ -1572,10 +1572,10 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void RequestToggleRts()
 		{
-			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual)
+			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRtsCtsDtrDsrManually)
 			{
-				MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)this.terminal.UnderlyingIOInstance;
-				port.ToggleRts();
+				MKY.IO.Ports.ISerialPort p = (MKY.IO.Ports.ISerialPort)this.terminal.UnderlyingIOInstance;
+				p.ToggleRts();
 			}
 		}
 
@@ -1584,10 +1584,10 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void RequestToggleDtr()
 		{
-			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual)
+			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRtsCtsDtrDsrManually)
 			{
-				MKY.IO.Ports.ISerialPort port = (MKY.IO.Ports.ISerialPort)this.terminal.UnderlyingIOInstance;
-				port.ToggleDtr();
+				MKY.IO.Ports.ISerialPort p = (MKY.IO.Ports.ISerialPort)this.terminal.UnderlyingIOInstance;
+				p.ToggleDtr();
 			}
 		}
 
@@ -1596,11 +1596,11 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void RequestToggleInputXOnXOff()
 		{
-			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControl == MKY.IO.Serial.SerialFlowControl.Manual)
+			if (this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually)
 			{
-				MKY.IO.Serial.IXOnXOffHandler io = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler;
-				if (io != null)
-					io.ToggleInputXOnXOff();
+				MKY.IO.Serial.IXOnXOffHandler x = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler;
+				if (x != null)
+					x.ToggleInputXOnXOff();
 				else
 					throw (new InvalidOperationException("The underlying I/O provider is no XOn/XOff handler"));
 			}
@@ -1611,9 +1611,9 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void RequestToggleOutputBreak()
 		{
-			MKY.IO.Ports.ISerialPort port = this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
-			if (port != null)
-				port.ToggleOutputBreak();
+			MKY.IO.Ports.ISerialPort p = this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
+			if (p != null)
+				p.ToggleOutputBreak();
 			else
 				throw (new InvalidOperationException("The underlying I/O instance is no serial port"));
 		}

@@ -348,7 +348,7 @@ namespace YAT.Model.Test
 				Assert.AreEqual(MKY.IO.Ports.DataBits.Seven,                                 main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.DataBits);
 				Assert.AreEqual(System.IO.Ports.Parity.Even,                                 main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.Parity);
 				Assert.AreEqual(MKY.IO.Serial.SerialCommunicationSettings.StopBitsDefault,   main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.StopBits);
-				Assert.AreEqual(MKY.IO.Serial.SerialFlowControl.XOnXOff,                     main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.FlowControl);
+				Assert.AreEqual(MKY.IO.Serial.SerialFlowControl.Software,                     main.StartArgs.TerminalSettings.Settings.IO.SerialPort.Communication.FlowControl);
 
 				Assert.AreEqual(MKY.IO.Serial.SerialPortSettings.AutoReopenDefault.Enabled,  main.StartArgs.TerminalSettings.Settings.IO.SerialPort.AutoReopen.Enabled);
 				Assert.AreEqual(MKY.IO.Serial.SerialPortSettings.AutoReopenDefault.Interval, main.StartArgs.TerminalSettings.Settings.IO.SerialPort.AutoReopen.Interval);

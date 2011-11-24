@@ -48,7 +48,7 @@ namespace MKY.IO.Ports
 		private const string             XOnXOff_stringShort = "XOn/XOff";
 		private static readonly string[] XOnXOff_stringAlternatives = new string[] { "Software", "Soft", "SW", "S" };
 
-		private const string             RtsCtsXOnXOff_string = "Combined (RTS/CTS and XOn/XOff)";
+		private const string             RtsCtsXOnXOff_string = "Combined (RTS/CTS + XOn/XOff)";
 		private const string             RtsCtsXOnXOff_stringShort = "RTS/CTS + XOn/XOff";
 		private static readonly string[] RtsCtsXOnXOff_stringAlternatives = new string[] { "Combined", "Combi", "C" };
 
