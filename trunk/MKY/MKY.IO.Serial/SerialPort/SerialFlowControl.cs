@@ -43,11 +43,16 @@ namespace MKY.IO.Serial
 	/// </remarks>
 	public enum SerialFlowControl
 	{
-		None                 = System.IO.Ports.Handshake.None,
-		RequestToSend        = System.IO.Ports.Handshake.RequestToSend,
-		XOnXOff              = System.IO.Ports.Handshake.XOnXOff,
-		RequestToSendXOnXOff = System.IO.Ports.Handshake.RequestToSendXOnXOff,
-		Manual,
+		None     = System.IO.Ports.Handshake.None,
+
+		Hardware = System.IO.Ports.Handshake.RequestToSend,
+		Software = System.IO.Ports.Handshake.XOnXOff,
+		Combined = System.IO.Ports.Handshake.RequestToSendXOnXOff,
+
+		ManualHardware,
+		ManualSoftware,
+		ManualCombined,
+
 		RS485,
 	}
 
@@ -61,9 +66,17 @@ namespace MKY.IO.Serial
 	{
 		#region String Definitions
 
-		private const string             Manual_string = "Manual";
-		private const string             Manual_stringShort = "Manual";
-		private static readonly string[] Manual_stringAlternatives = new string[] { "M" };
+		private const string             ManualHardware_string = "Manual Hardware (RTS/CTS)";
+		private const string             ManualHardware_stringShort = "Manual RTS/CTS";
+		private static readonly string[] ManualHardware_stringAlternatives = new string[] { "Manual Hardware", "ManualHardware", "Manual Hard", "ManualHard", "Manual HW", "ManualHW", "MHW", "MH" };
+
+		private const string             ManualSoftware_string = "Manual Software (XOn/XOff)";
+		private const string             ManualSoftware_stringShort = "Manual XOn/XOff";
+		private static readonly string[] ManualSoftware_stringAlternatives = new string[] { "Manual Software", "ManualSoftware", "Manual Soft", "ManualSoft", "Manual SW", "ManualSW", "MSW", "MS" };
+
+		private const string             ManualCombined_string = "Manual Combined (RTS/CTS + XOn/XOff)";
+		private const string             ManualCombined_stringShort = "Manual RTS/CTS + XOn/XOff";
+		private static readonly string[] ManualCombined_stringAlternatives = new string[] { "Manual Combined", "ManualCombined", "Manual Combi", "ManualCombi", "Manual C", "ManualC", "MHW", "MH" };
 
 		private const string             RS485_string = "RS-485 Transceiver Control";
 		private const string             RS485_stringShort = "RS-485";
@@ -90,9 +103,11 @@ namespace MKY.IO.Serial
 		{
 			switch ((SerialFlowControl)UnderlyingEnum)
 			{
-				case SerialFlowControl.Manual: return (Manual_string);
-				case SerialFlowControl.RS485:  return (RS485_string);
-				default:                       return (base.ToString());
+				case SerialFlowControl.ManualHardware: return (ManualHardware_string);
+				case SerialFlowControl.ManualSoftware: return (ManualSoftware_string);
+				case SerialFlowControl.ManualCombined: return (ManualCombined_string);
+				case SerialFlowControl.RS485:          return (RS485_string);
+				default:                               return (base.ToString());
 			}
 		}
 
@@ -101,9 +116,11 @@ namespace MKY.IO.Serial
 		{
 			switch ((SerialFlowControl)UnderlyingEnum)
 			{
-				case SerialFlowControl.Manual: return (Manual_stringShort);
-				case SerialFlowControl.RS485:  return (RS485_stringShort);
-				default:                 return (base.ToShortString());
+				case SerialFlowControl.ManualHardware: return (ManualHardware_stringShort);
+				case SerialFlowControl.ManualSoftware: return (ManualSoftware_stringShort);
+				case SerialFlowControl.ManualCombined: return (ManualCombined_stringShort);
+				case SerialFlowControl.RS485:          return (RS485_stringShort);
+				default:                               return (base.ToShortString());
 			}
 		}
 
@@ -116,10 +133,12 @@ namespace MKY.IO.Serial
 		{
 			List<SerialFlowControlEx> a = new List<SerialFlowControlEx>();
 			a.Add(new SerialFlowControlEx(SerialFlowControl.None));
-			a.Add(new SerialFlowControlEx(SerialFlowControl.RequestToSend));
-			a.Add(new SerialFlowControlEx(SerialFlowControl.XOnXOff));
-			a.Add(new SerialFlowControlEx(SerialFlowControl.RequestToSendXOnXOff));
-			a.Add(new SerialFlowControlEx(SerialFlowControl.Manual));
+			a.Add(new SerialFlowControlEx(SerialFlowControl.Hardware));
+			a.Add(new SerialFlowControlEx(SerialFlowControl.Software));
+			a.Add(new SerialFlowControlEx(SerialFlowControl.Combined));
+			a.Add(new SerialFlowControlEx(SerialFlowControl.ManualHardware));
+			a.Add(new SerialFlowControlEx(SerialFlowControl.ManualSoftware));
+			a.Add(new SerialFlowControlEx(SerialFlowControl.ManualCombined));
 			a.Add(new SerialFlowControlEx(SerialFlowControl.RS485));
 			return (a.ToArray());
 		}
@@ -142,11 +161,25 @@ namespace MKY.IO.Serial
 		/// <summary></summary>
 		public static bool TryParse(string flowControl, out SerialFlowControlEx result)
 		{
-			if      (StringEx.EqualsOrdinalIgnoreCase   (flowControl, Manual_string) ||
-			         StringEx.EqualsOrdinalIgnoreCase   (flowControl, Manual_stringShort) ||
-			         StringEx.EqualsAnyOrdinalIgnoreCase(flowControl, Manual_stringAlternatives))
+			if      (StringEx.EqualsOrdinalIgnoreCase   (flowControl, ManualHardware_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase   (flowControl, ManualHardware_stringShort) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(flowControl, ManualHardware_stringAlternatives))
 			{
-				result = new SerialFlowControlEx(SerialFlowControl.Manual);
+				result = new SerialFlowControlEx(SerialFlowControl.ManualHardware);
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (flowControl, ManualSoftware_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase   (flowControl, ManualSoftware_stringShort) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(flowControl, ManualSoftware_stringAlternatives))
+			{
+				result = new SerialFlowControlEx(SerialFlowControl.ManualSoftware);
+				return (true);
+			}
+			else if (StringEx.EqualsOrdinalIgnoreCase   (flowControl, ManualCombined_string) ||
+			         StringEx.EqualsOrdinalIgnoreCase   (flowControl, ManualCombined_stringShort) ||
+			         StringEx.EqualsAnyOrdinalIgnoreCase(flowControl, ManualCombined_stringAlternatives))
+			{
+				result = new SerialFlowControlEx(SerialFlowControl.ManualCombined);
 				return (true);
 			}
 			else if (StringEx.EqualsOrdinalIgnoreCase   (flowControl, RS485_string) ||
@@ -218,13 +251,15 @@ namespace MKY.IO.Serial
 			switch ((SerialFlowControl)flowControl.UnderlyingEnum)
 			{
 				case SerialFlowControl.None:
-				case SerialFlowControl.RequestToSend:
-				case SerialFlowControl.XOnXOff:
-				case SerialFlowControl.RequestToSendXOnXOff:
+				case SerialFlowControl.Hardware:
+				case SerialFlowControl.Software:
+				case SerialFlowControl.Combined:
 					return ((System.IO.Ports.Handshake)(SerialFlowControl)flowControl);
 
+				case SerialFlowControl.ManualHardware:
+				case SerialFlowControl.ManualSoftware:
+				case SerialFlowControl.ManualCombined:
 				case SerialFlowControl.RS485:
-				case SerialFlowControl.Manual:
 				default:
 					return (System.IO.Ports.Handshake.None);
 			}

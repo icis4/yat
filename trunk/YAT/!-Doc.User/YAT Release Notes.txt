@@ -53,9 +53,10 @@ New:
 - Text terminals: Comments can be chosen to be ignored while sending (feature request #2848298)
    > Comment indicators can be configured in Terminal Settings > Text Settings
    > C/C++/C#/Java style "//" and Basic/BAT/DOS style "REM" comment indicators are predefined
+- 'Manual' flow control split into 'Manual Hardware', 'Manual Software' and 'Manual Combined'
 - Serial ports: XOn/XOff state is indicated (feature request #3066635)
-   > Applies to 'Software', 'Combined' and 'Manual' flow control
-   > XOn/XOff can be manually toggled in case of 'Manual' flow control
+   > Applies to 'Software', 'Combined', 'Manual Software' and 'Manual Combined' flow control
+   > XOn/XOff can be manually toggled in case of 'Manual Software' and 'Manual Combined'
 - Serial ports: Auto-reopen implemented (feature request #1960299)
    > Work-around for .NET deadlock issue in System.IO.SerialPort applied, limitation removed
    > Also fixes exceptions in case of disconnect (bugs #2981793, #3093159 and #3372435)
@@ -78,9 +79,7 @@ Important changes:
 - Monitor display status settings relocated from 'Display' to 'Status' to improve speed on showing
   the status labels, i.e. no monitor update is needed anymore (related to feature request #3274073)
 - Data sending in MKY.IO.Serial.SerialPort switched from synchronous to asynchronous in order to
-  allow proper implementation of XOn/XOff and RTS/CTS flow control below
-- XOn/XOff and RTS/CTS flow control implemented also in case of sending (bug #3432512)
-   > Apparently System.IO.Ports.SerialPort implements flow control only in case of receiving
+  allow proper handling of XOn/XOff and RTS/CTS flow control
 - Serial COM ports RTS and DTR states are no longer stored persistently in case of manual flow
   control (related to feature requests #2932691 and #3066635 and bug #3432512)
 - Parity error replacement removed since parity errors are displayed as error text inside terminal
@@ -98,6 +97,7 @@ Important changes:
 Fixed bugs:
 - YAT no longer asks twice whether to save (bug #3121250)
    > Only applied in case of 'File > Preferences... > Save current workspace automatically' = 'No'
+- Serial COM ports now properly support XOn/XOff and RTS/CTS flow control (bug #3432512)
 - Exception when selecting an undefined predefined commands using 'Shift + Fx' fixed (bug #3367649)
 - Exception due to invalid panel layout (splitter distance) is now handled (bug #3426400)
 - Error message in case of an error when opening a port or socket improved (bug #2213639)
@@ -114,6 +114,8 @@ Limitations and known issues:
   (feature request #2848228)
 - Handling of serial COM port break states (feature #2932691) may not be supported on certain
   hardware, e.g. USB/RS-232 converters
+- RTS/CTS flow control 'Hardware' and 'Hardware Combined' may not be supported on certain hardware,
+  e.g. certain USB/RS-232 converters (bug #3417097)
 - USB Ser/HID only runs on Windows, use of 'LibUsbDotNet' and significant work and the availability
   of a test environment would be required to run USB Ser/HID on unixoids (feature request #2982052)
 - Keyword \!(Delay(<TimeSpan>)) not yet implemented (feature request #3105478)

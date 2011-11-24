@@ -141,7 +141,7 @@ namespace YAT.Model
 		[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = SuppressionJustification)]
 		[OptionArg(Name = "FlowControl", ShortName = "fc", Description =
 			"The desired method of flow control. Valid values are 'None', 'Hardware' (RTS/CTS), 'Software' (XOn/XOff), 'Combined' (RTS/CTS and XOn/XOff), " +
-			"'Manual' and 'RS485' (RS-485 Transceiver Control). The default value is 'None'." + EnvironmentEx.NewLineConstWorkaround +
+			"'ManualHardware', 'ManualSoftware', 'ManualCombined' and 'RS485' (RS-485 Transceiver Control). The default value is 'None'." + EnvironmentEx.NewLineConstWorkaround +
 			"Only applies to serial COM ports.")]
 		public string FlowControl;
 

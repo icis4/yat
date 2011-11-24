@@ -189,9 +189,22 @@ namespace MKY.IO.Serial
 		{
 			get
 			{
-				return ((this.flowControl == SerialFlowControl.RequestToSend) ||
-						(this.flowControl == SerialFlowControl.RequestToSendXOnXOff) ||
-						(this.flowControl == SerialFlowControl.Manual));
+				return ((this.flowControl == SerialFlowControl.Hardware) ||
+						(this.flowControl == SerialFlowControl.Combined) ||
+						(this.flowControl == SerialFlowControl.ManualHardware) ||
+						(this.flowControl == SerialFlowControl.ManualCombined));
+			}
+		}
+
+		/// <summary>
+		/// Returns <c>true</c> if the RTS/CTS and/or DTR/DSR lines are managed manually.
+		/// </summary>
+		public virtual bool FlowControlManagesRtsCtsDtrDsrManually
+		{
+			get
+			{
+				return ((this.flowControl == SerialFlowControl.ManualHardware) ||
+						(this.flowControl == SerialFlowControl.ManualCombined));
 			}
 		}
 
@@ -203,9 +216,22 @@ namespace MKY.IO.Serial
 		{
 			get
 			{
-				return ((this.flowControl == SerialFlowControl.XOnXOff) ||
-						(this.flowControl == SerialFlowControl.RequestToSendXOnXOff) ||
-						(this.flowControl == SerialFlowControl.Manual));
+				return ((this.flowControl == SerialFlowControl.Software) ||
+						(this.flowControl == SerialFlowControl.Combined) ||
+						(this.flowControl == SerialFlowControl.ManualSoftware) ||
+						(this.flowControl == SerialFlowControl.ManualCombined));
+			}
+		}
+
+		/// <summary>
+		/// Returns <c>true</c> if XOn/XOff is managed manually.
+		/// </summary>
+		public virtual bool FlowControlManagesXOnXOffManually
+		{
+			get
+			{
+				return ((this.flowControl == SerialFlowControl.ManualSoftware) ||
+						(this.flowControl == SerialFlowControl.ManualCombined));
 			}
 		}
 
@@ -272,9 +298,9 @@ namespace MKY.IO.Serial
 		{
 			return
 			(
-				this.baudRate                           + ", " +
+				this.baudRate                            + ", " +
 				((MKY.IO.Ports.DataBitsEx)this.dataBits) + ", " +
-				((MKY.IO.Ports.ParityEx)this.parity).ToShortString()
+				((MKY.IO.Ports.ParityEx)  this.parity).ToShortString()
 			);
 		}
 
@@ -283,11 +309,11 @@ namespace MKY.IO.Serial
 		{
 			return
 			(
-				this.baudRate                           + ", " +
+				this.baudRate                            + ", " +
 				((MKY.IO.Ports.DataBitsEx)this.dataBits) + ", " +
-				((MKY.IO.Ports.ParityEx)this.parity)     + ", " +
+				((MKY.IO.Ports.ParityEx)  this.parity)   + ", " +
 				((MKY.IO.Ports.StopBitsEx)this.stopBits) + ", " +
-				((SerialFlowControlEx)this.flowControl)
+				((SerialFlowControlEx)    this.flowControl)
 			);
 		}
 

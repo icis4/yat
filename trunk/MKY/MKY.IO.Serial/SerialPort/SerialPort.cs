@@ -190,14 +190,21 @@ namespace MKY.IO.Serial
 		/// </summary>
 		private Queue<byte> sendQueue = new Queue<byte>();
 
-		private bool manualRtsWasEnabled;
-		private bool manualDtrWasEnabled;
+		/// <remarks>
+		/// In case of manual RTS/CTS + DTR/DSR, RTS is enabled after initialization.
+		/// </remarks>
+		private bool manualRtsWasEnabled = true;
+
+		/// <remarks>
+		/// In case of manual RTS/CTS + DTR/DSR, DTR is disabled after initialization.
+		/// </remarks>
+		private bool manualDtrWasEnabled = false;
 
 		/// <summary>
 		/// Input XOn/XOff reflects the XOn/XOff state of this serial port itself, i.e. this computer.
 		/// </summary>
 		/// <remarks>
-		/// Only applies in case of <see cref="SerialFlowControl.Manual"/>.
+		/// Only applies in case of <see cref="SerialFlowControl.ManualSoftware"/> or <see cref="SerialFlowControl.ManualCombined"/>.
 		/// </remarks>
 		private bool inputIsXOn;
 		private object inputIsXOnSyncObj = new object();
@@ -206,12 +213,15 @@ namespace MKY.IO.Serial
 		/// Output XOn/XOff reflects the XOn/XOff state of the communication counterpart, i.e. a device.
 		/// </summary>
 		/// <remarks>
-		/// Only applies in case of <see cref="SerialFlowControl.Manual"/>.
+		/// Only applies in case of <see cref="SerialFlowControl.ManualSoftware"/> or <see cref="SerialFlowControl.ManualCombined"/>.
 		/// </remarks>
 		private bool outputIsXOn;
 		private object outputIsXOnSyncObj = new object();
 
-		private bool manualInputWasXOn;
+		/// <remarks>
+		/// In case of manual XOn/XOff, input is initialized to XOn.
+		/// </remarks>
+		private bool manualInputWasXOn = true;
 		private object manualInputWasXOnSyncObj = new object();
 
 		/// <summary>
@@ -461,7 +471,7 @@ namespace MKY.IO.Serial
 			{
 				AssertNotDisposed();
 
-				if (this.settings.Communication.FlowControl == SerialFlowControl.Manual)
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually)
 				{
 					lock (this.inputIsXOnSyncObj)
 						return (this.inputIsXOn);
@@ -482,7 +492,7 @@ namespace MKY.IO.Serial
 			{
 				AssertNotDisposed();
 
-				if (this.settings.Communication.FlowControl == SerialFlowControl.Manual)
+				if (this.settings.Communication.FlowControlManagesXOnXOffManually)
 				{
 					lock (this.outputIsXOnSyncObj)
 						return (this.outputIsXOn);
@@ -589,7 +599,7 @@ namespace MKY.IO.Serial
 						this.sendQueue.Enqueue(b);
 
 						// Handle input XOn/XOff.
-						if (this.settings.Communication.FlowControl == SerialFlowControl.Manual)
+						if (this.settings.Communication.FlowControlManagesXOnXOffManually)
 						{
 							if (b == SerialPortSettings.XOnByte)
 							{
@@ -880,8 +890,8 @@ namespace MKY.IO.Serial
 				// RTS
 				switch (this.settings.Communication.FlowControl)
 				{
-					case SerialFlowControl.RequestToSend:
-					case SerialFlowControl.RequestToSendXOnXOff:
+					case SerialFlowControl.Hardware:
+					case SerialFlowControl.Combined:
 						// Do nothing, RTS is handled by the underlying serial port object.
 						break;
 
@@ -889,7 +899,8 @@ namespace MKY.IO.Serial
 						this.port.RtsEnable = false;
 						break;
 
-					case SerialFlowControl.Manual:
+					case SerialFlowControl.ManualHardware:
+					case SerialFlowControl.ManualCombined:
 						this.port.RtsEnable = this.manualRtsWasEnabled;
 						break;
 
@@ -902,7 +913,8 @@ namespace MKY.IO.Serial
 				// DTR
 				switch (this.settings.Communication.FlowControl)
 				{
-					case SerialFlowControl.Manual:
+					case SerialFlowControl.ManualHardware:
+					case SerialFlowControl.ManualCombined:
 						this.port.DtrEnable = this.manualDtrWasEnabled;
 						break;
 
@@ -927,7 +939,8 @@ namespace MKY.IO.Serial
 				//   device gets put into XOn if it was XOff before.
 				switch (this.settings.Communication.FlowControl)
 				{
-					case SerialFlowControl.Manual:
+					case SerialFlowControl.ManualSoftware:
+					case SerialFlowControl.ManualCombined:
 						bool wasXOn = false;
 						lock (this.manualInputWasXOnSyncObj)
 						{
@@ -1011,7 +1024,7 @@ namespace MKY.IO.Serial
 						this.receiveQueue.Enqueue(b);
 
 						// Handle output XOn/XOff.
-						if (this.settings.Communication.FlowControl == SerialFlowControl.Manual)
+						if (this.settings.Communication.FlowControlManagesXOnXOffManually)
 						{
 							if (b == SerialPortSettings.XOnByte)
 							{
@@ -1128,7 +1141,7 @@ namespace MKY.IO.Serial
 
 				if (this.state == State.Opened) // Ensure not to forward any events during closing anymore.
 				{
-					if (this.settings.Communication.FlowControl == SerialFlowControl.Manual)
+					if (this.settings.Communication.FlowControlManagesRtsCtsDtrDsrManually)
 					{
 						this.manualRtsWasEnabled = this.port.RtsEnable;
 						this.manualDtrWasEnabled = this.port.DtrEnable;
