@@ -154,6 +154,9 @@ namespace MKY.IO.Serial
 		// Constants
 		//==========================================================================================
 
+		private const int ReceiveQueueInitialCapacity = 4096;
+		private const int SendQueueInitialCapacity    = 4096;
+
 		private const int AliveInterval = 500;
 
 		private const string Undefined = "<Undefined>";
@@ -181,14 +184,16 @@ namespace MKY.IO.Serial
 		private object portSyncObj = new object();
 
 		/// <summary>
-		/// Async receiving.
+		/// Async receiving. The capacity is set large enough to reduce the number of resizing
+		/// operations while adding elements.
 		/// </summary>
-		private Queue<byte> receiveQueue = new Queue<byte>();
+		private Queue<byte> receiveQueue = new Queue<byte>(ReceiveQueueInitialCapacity);
 
 		/// <summary>
-		/// Async sending.
+		/// Async sending. The capacity is set large enough to reduce the number of resizing
+		/// operations while adding elements.
 		/// </summary>
-		private Queue<byte> sendQueue = new Queue<byte>();
+		private Queue<byte> sendQueue = new Queue<byte>(SendQueueInitialCapacity);
 
 		/// <remarks>
 		/// In case of manual RTS/CTS + DTR/DSR, RTS is enabled after initialization.

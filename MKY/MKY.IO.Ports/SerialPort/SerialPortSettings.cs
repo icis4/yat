@@ -233,10 +233,10 @@ namespace MKY.IO.Ports
 		}
 
 		/// <summary>
-		/// Returns length of an interface packet according to the current
+		/// Returns duration of an interface packet according to the current
 		/// interface settings (PacketSize * (1 / BaudRate)) in milliseconds.
 		/// </summary>
-		public long PacketLength
+		public long PacketDuration
 		{
 			get { return ((long)(1000 * PacketSize * (1 / (int)this.baudRate))); }
 		}
