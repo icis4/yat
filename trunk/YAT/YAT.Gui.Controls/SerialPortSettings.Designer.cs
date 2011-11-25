@@ -159,9 +159,9 @@
 			this.label_FlowControlRemarks_2.AutoSize = true;
 			this.label_FlowControlRemarks_2.Location = new System.Drawing.Point(55, 154);
 			this.label_FlowControlRemarks_2.Name = "label_FlowControlRemarks_2";
-			this.label_FlowControlRemarks_2.Size = new System.Drawing.Size(160, 26);
+			this.label_FlowControlRemarks_2.Size = new System.Drawing.Size(203, 26);
 			this.label_FlowControlRemarks_2.TabIndex = 11;
-			this.label_FlowControlRemarks_2.Text = "RTS / DTR can be set manually\r\nRTS is set high while sending\r\n";
+			this.label_FlowControlRemarks_2.Text = "RTS/DTR and/or XOn/XOff set manually\r\nRTS is set high while sending\r\n";
 			// 
 			// label_AutoReopenIntervalUnit
 			// 
