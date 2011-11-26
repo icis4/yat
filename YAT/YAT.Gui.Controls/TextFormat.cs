@@ -81,6 +81,7 @@ namespace YAT.Gui.Controls
 		public TextFormat()
 		{
 			InitializeComponent();
+			SetControls();
 		}
 
 		#endregion

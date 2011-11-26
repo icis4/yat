@@ -56,6 +56,8 @@ namespace YAT.Gui.Forms
 
 			this.settings = settings;
 			this.settings_Form = new Settings.Terminal.ExplicitSettings(settings);
+
+			// SetControls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion

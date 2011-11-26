@@ -130,7 +130,8 @@ namespace YAT.Gui.Controls
 		public SendCommand()
 		{
 			InitializeComponent();
-			SetControls();
+
+			// SetControls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion

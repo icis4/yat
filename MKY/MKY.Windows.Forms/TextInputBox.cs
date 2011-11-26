@@ -57,6 +57,8 @@ namespace MKY.Windows.Forms
 			Text = caption;
 			label_Text.Text = text;
 			this.inputText_Form = initialInputText;
+
+			// SetControls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion

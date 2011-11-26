@@ -56,9 +56,10 @@ namespace YAT.Gui.Forms
 		{
 			InitializeComponent();
 
-			this.settings = settings;
-			this.settings_Form = new Settings.Terminal.ExplicitSettings(settings);
+			KeepAndCloneAndAttachSettings(settings);
 			InitializeControls();
+
+			// SetControls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion
@@ -72,6 +73,31 @@ namespace YAT.Gui.Forms
 		public Settings.Terminal.ExplicitSettings SettingsResult
 		{
 			get { return (this.settings); }
+		}
+
+		#endregion
+
+		#region Settings
+		//==========================================================================================
+		// Settings
+		//==========================================================================================
+
+		private void KeepAndCloneAndAttachSettings(Settings.Terminal.ExplicitSettings settings)
+		{
+			this.settings = settings;
+			this.settings_Form = new Settings.Terminal.ExplicitSettings(settings);
+			this.settings_Form.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
+		}
+
+		private void DetachAndAcceptSettings()
+		{
+			this.settings_Form.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
+			this.settings = this.settings_Form;
+		}
+
+		private void settings_Form_Changed(object sender, MKY.Settings.SettingsEventArgs e)
+		{
+			SetControls();
 		}
 
 		#endregion
@@ -108,10 +134,7 @@ namespace YAT.Gui.Forms
 		private void checkBox_SeparateTxRxRadix_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-			{
 				this.settings_Form.Terminal.Display.SeparateTxRxRadix = checkBox_SeparateTxRxRadix.Checked;
-				SetControls();
-			}
 		}
 
 		private void comboBox_TxRadix_SelectedIndexChanged(object sender, EventArgs e)
@@ -159,10 +182,7 @@ namespace YAT.Gui.Forms
 		private void checkBox_DirectionLineBreak_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-			{
 				this.settings_Form.Terminal.Display.DirectionLineBreakEnabled = checkBox_DirectionLineBreak.Checked;
-				SetControls();
-			}
 		}
 
 		private void textBox_MaxLineCount_TextChanged(object sender, EventArgs e)
@@ -183,7 +203,6 @@ namespace YAT.Gui.Forms
 				{
 					this.settings_Form.Terminal.Display.TxMaxLineCount = lineCount;
 					this.settings_Form.Terminal.Display.RxMaxLineCount = lineCount;
-					SetControls();
 				}
 				else
 				{
@@ -203,10 +222,7 @@ namespace YAT.Gui.Forms
 		private void checkBox_ReplaceControlCharacters_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-			{
 				this.settings_Form.Terminal.CharReplace.ReplaceControlChars = checkBox_ReplaceControlCharacters.Checked;
-				SetControls();
-			}
 		}
 
 		private void comboBox_ControlCharacterRadix_SelectedIndexChanged(object sender, EventArgs e)
@@ -236,46 +252,31 @@ namespace YAT.Gui.Forms
 		private void checkBox_KeepCommand_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-			{
 				this.settings_Form.Terminal.Send.KeepCommand = checkBox_KeepCommand.Checked;
-				SetControls();
-			}
 		}
 
 		private void checkBox_CopyPredefined_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-			{
 				this.settings_Form.Terminal.Send.CopyPredefined = checkBox_CopyPredefined.Checked;
-				SetControls();
-			}
 		}
 
 		private void checkBox_SendImmediately_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-			{
 				this.settings_Form.Terminal.Send.SendImmediately = checkBox_SendImmediately.Checked;
-				SetControls();
-			}
 		}
 
 		private void checkBox_NoSendOnOutputBreak_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-			{
 				this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak = checkBox_NoSendOnOutputBreak.Checked;
-				SetControls();
-			}
 		}
 
 		private void checkBox_NoSendOnInputBreak_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-			{
 				this.settings_Form.Terminal.IO.SerialPort.NoSendOnInputBreak = checkBox_NoSendOnInputBreak.Checked;
-				SetControls();
-			}
 		}
 
 		private void textBox_UserName_TextChanged(object sender, EventArgs e)
@@ -286,7 +287,7 @@ namespace YAT.Gui.Forms
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{
-			this.settings = this.settings_Form;
+			DetachAndAcceptSettings();
 		}
 
 		private void button_Cancel_Click(object sender, EventArgs e)
@@ -308,7 +309,6 @@ namespace YAT.Gui.Forms
 				== DialogResult.Yes)
 			{
 				SetDefaults();
-				SetControls();
 			}
 		}
 
@@ -394,6 +394,8 @@ namespace YAT.Gui.Forms
 		/// </remarks>
 		private void SetDefaults()
 		{
+			this.settings_Form.SuspendChangeEvent();
+
 			// Radix:
 			this.settings_Form.Terminal.Display.SeparateTxRxRadix = Domain.Settings.DisplaySettings.SeparateTxRxRadixDefault;
 			this.settings_Form.Terminal.Display.TxRadix           = Domain.Settings.DisplaySettings.RadixDefault;
@@ -431,6 +433,8 @@ namespace YAT.Gui.Forms
 
 			// User:
 			this.settings_Form.UserName = Settings.Terminal.ExplicitSettings.UserNameDefault;
+
+			this.settings_Form.ResumeChangeEvent();
 		}
 
 		#endregion

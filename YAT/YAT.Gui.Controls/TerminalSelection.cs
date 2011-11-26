@@ -133,7 +133,7 @@ namespace YAT.Gui.Controls
 			comboBox_TerminalType.Items.AddRange(Domain.TerminalTypeEx.GetItems());
 			comboBox_IOType.Items.AddRange(Domain.IOTypeEx.GetItems());
 
-			SetControls();
+			// SetControls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion

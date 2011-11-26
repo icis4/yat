@@ -57,9 +57,10 @@ namespace YAT.Gui.Forms
 		{
 			InitializeComponent();
 
-			this.settings = settings;
-			this.settings_Form = new Domain.Settings.TextTerminalSettings(settings);
+			KeepAndCloneAndAttachSettings(settings);
 			InitializeControls();
+
+			// SetControls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion
@@ -73,6 +74,31 @@ namespace YAT.Gui.Forms
 		public Domain.Settings.TextTerminalSettings SettingsResult
 		{
 			get { return (this.settings); }
+		}
+
+		#endregion
+
+		#region Settings
+		//==========================================================================================
+		// Settings
+		//==========================================================================================
+
+		private void KeepAndCloneAndAttachSettings(Domain.Settings.TextTerminalSettings settings)
+		{
+			this.settings = settings;
+			this.settings_Form = new Domain.Settings.TextTerminalSettings(settings);
+			this.settings_Form.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
+		}
+
+		private void DetachAndAcceptSettings()
+		{
+			this.settings_Form.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
+			this.settings = this.settings_Form;
+		}
+
+		private void settings_Form_Changed(object sender, MKY.Settings.SettingsEventArgs e)
+		{
+			SetControls();
 		}
 
 		#endregion
@@ -115,10 +141,7 @@ namespace YAT.Gui.Forms
 		private void checkBox_SeparateTxRxEol_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-			{
 				this.settings_Form.SeparateTxRxEol = checkBox_SeparateTxRxEol.Checked;
-				SetControls();
-			}
 		}
 
 		private void comboBox_TxEol_SelectedIndexChanged(object sender, EventArgs e)
@@ -134,8 +157,6 @@ namespace YAT.Gui.Forms
 
 				if (!this.settings_Form.SeparateTxRxEol)
 					this.settings_Form.RxEol = this.settings_Form.TxEol;
-
-				SetControls();
 			}
 		}
 
@@ -169,8 +190,6 @@ namespace YAT.Gui.Forms
 
 						if (!this.settings_Form.SeparateTxRxEol)
 							this.settings_Form.RxEol = this.settings_Form.TxEol;
-
-						SetControls();
 					}
 				}
 				else
@@ -191,8 +210,6 @@ namespace YAT.Gui.Forms
 					this.settings_Form.RxEol = eol.ToSequenceString();
 				else
 					this.settings_Form.RxEol = comboBox_RxEol.Text;
-
-				SetControls();
 			}
 		}
 
@@ -212,10 +229,7 @@ namespace YAT.Gui.Forms
 				if (Validation.ValidateSequence(this, "Rx EOL", eolString, out invalidTextStart, out invalidTextLength))
 				{
 					if (!this.isSettingControls)
-					{
 						this.settings_Form.RxEol = eolString;
-						SetControls();
-					}
 				}
 				else
 				{
@@ -228,10 +242,7 @@ namespace YAT.Gui.Forms
 		private void checkBox_ShowEol_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-			{
 				this.settings_Form.ShowEol = checkBox_ShowEol.Checked;
-				SetControls();
-			}
 		}
 
 		private void checkBox_Delay_CheckedChanged(object sender, EventArgs e)
@@ -241,7 +252,6 @@ namespace YAT.Gui.Forms
 				Domain.TextLineSendDelay lsd = this.settings_Form.LineSendDelay;
 				lsd.Enabled = checkBox_Delay.Checked;
 				this.settings_Form.LineSendDelay = lsd;
-				SetControls();
 			}
 		}
 
@@ -255,7 +265,6 @@ namespace YAT.Gui.Forms
 					Domain.TextLineSendDelay lsd = this.settings_Form.LineSendDelay;
 					lsd.Delay = delay;
 					this.settings_Form.LineSendDelay = lsd;
-					SetControls();
 				}
 				else
 				{
@@ -291,7 +300,6 @@ namespace YAT.Gui.Forms
 					Domain.TextLineSendDelay lsd = this.settings_Form.LineSendDelay;
 					lsd.LineInterval = interval;
 					this.settings_Form.LineSendDelay = lsd;
-					SetControls();
 				}
 				else
 				{
@@ -315,7 +323,6 @@ namespace YAT.Gui.Forms
 				Domain.WaitForResponse wfr = this.settings_Form.WaitForResponse;
 				wfr.Enabled = checkBox_WaitForResponse.Checked;
 				this.settings_Form.WaitForResponse = wfr;
-				SetControls();
 			}
 		}
 
@@ -329,7 +336,6 @@ namespace YAT.Gui.Forms
 					Domain.WaitForResponse wfr = this.settings_Form.WaitForResponse;
 					wfr.Timeout = timeout;
 					this.settings_Form.WaitForResponse = wfr;
-					SetControls();
 				}
 				else
 				{
@@ -367,10 +373,7 @@ namespace YAT.Gui.Forms
 		private void checkBox_SkipEolComments_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-			{
 				this.settings_Form.SkipEolComments = checkBox_SkipEolComments.Checked;
-				SetControls();
-			}
 		}
 
 		private void stringListEdit_EolCommentIndicators_StringListChanged(object sender, EventArgs e)
@@ -381,7 +384,7 @@ namespace YAT.Gui.Forms
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{
-			this.settings = this.settings_Form;
+			DetachAndAcceptSettings();
 		}
 
 		private void button_Cancel_Click(object sender, EventArgs e)
@@ -403,7 +406,6 @@ namespace YAT.Gui.Forms
 				== DialogResult.Yes)
 			{
 				this.settings_Form.SetDefaults();
-				SetControls();
 			}
 		}
 
