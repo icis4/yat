@@ -98,6 +98,7 @@ Fixed bugs:
 - YAT no longer asks twice whether to save (bug #3121250)
    > Only applied in case of 'File > Preferences... > Save current workspace automatically' = 'No'
 - Serial COM ports now properly support XOn/XOff and RTS/CTS flow control (bug #3432512)
+- Multi-line commands are again kept in 'Send Command' (bug #3121249)
 - Exception when selecting an undefined predefined commands using 'Shift + Fx' fixed (bug #3367649)
 - Exception due to invalid panel layout (splitter distance) is now handled (bug #3426400)
 - Error message in case of an error when opening a port or socket improved (bug #2213639)

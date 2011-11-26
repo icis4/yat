@@ -517,8 +517,6 @@ namespace MKY.IO.Ports
 				pins.Dsr = DsrHolding;
 				pins.Dcd = CDHolding;
 
-				System.Diagnostics.Debug.WriteLine(pins.ToString());
-
 				return (pins);
 			}
 		}

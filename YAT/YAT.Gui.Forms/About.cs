@@ -89,7 +89,7 @@ namespace YAT.Gui.Forms
 			linkLabel_Description.Text += textAfter;
 
 			// Platform.
-			linkLabel_Platform.Text = "For .NET 3.5 on Windows 2000 and later. Currently running on .NET runtime " + System.Runtime.InteropServices.RuntimeEnvironment.GetSystemVersion() + ".";
+			linkLabel_Platform.Text = "For .NET framework 3.5 on Windows 2000 and later. Currently running on .NET runtime " + Environment.Version + " (CLR version).";
 
 			// HHD.
 			linkLabel_HHD.Text = "";
