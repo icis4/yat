@@ -36,17 +36,21 @@ namespace YAT.Domain.Settings
 		public const Domain.IOType IOTypeDefault = Domain.IOType.SerialPort;
 
 		/// <summary></summary>
-		public const string SerialParityErrorReplacementDefault = @"\h(00)";
+		public const Endianess EndianessDefault = Endianess.BigEndian;
 
 		/// <summary></summary>
-		public const Endianess EndianessDefault = Endianess.BigEndian;
+		public const bool IndicateSerialPortBreakStatesDefault = false;
+
+		/// <summary></summary>
+		public const bool SerialPortOutputBreakIsModifiableDefault = false;
 
 		private Domain.IOType ioType;
 		private MKY.IO.Serial.SerialPortSettings serialPort;
-		private string serialParityErrorReplacement;
 		private MKY.IO.Serial.SocketSettings socket;
 		private MKY.IO.Serial.UsbSerialHidDeviceSettings usbSerialHidDevice;
 		private Endianess endianess;
+		private bool indicateSerialPortBreakStates;
+		private bool serialPortOutputBreakIsModifiable;
 
 		/// <summary></summary>
 		public IOSettings()
@@ -79,12 +83,14 @@ namespace YAT.Domain.Settings
 		public IOSettings(IOSettings rhs)
 			: base(rhs)
 		{
-			IOType                       = rhs.IOType;
-			SerialPort                   = new MKY.IO.Serial.SerialPortSettings(rhs.SerialPort);
-			SerialParityErrorReplacement = rhs.SerialParityErrorReplacement;
-			Socket                       = new MKY.IO.Serial.SocketSettings(rhs.Socket);
-			UsbSerialHidDevice           = new MKY.IO.Serial.UsbSerialHidDeviceSettings(rhs.UsbSerialHidDevice);
-			Endianess                    = rhs.Endianess;
+			IOType             = rhs.IOType;
+			SerialPort         = new MKY.IO.Serial.SerialPortSettings(rhs.SerialPort);
+			Socket             = new MKY.IO.Serial.SocketSettings(rhs.Socket);
+			UsbSerialHidDevice = new MKY.IO.Serial.UsbSerialHidDeviceSettings(rhs.UsbSerialHidDevice);
+			Endianess          = rhs.Endianess;
+
+			IndicateSerialPortBreakStates = rhs.IndicateSerialPortBreakStates;
+			SerialPortOutputBreakIsModifiable = rhs.SerialPortOutputBreakIsModifiable;
 
 			ClearChanged();
 		}
@@ -96,9 +102,11 @@ namespace YAT.Domain.Settings
 		{
 			base.SetMyDefaults();
 
-			IOType                       = IOTypeDefault;
-			SerialParityErrorReplacement = SerialParityErrorReplacementDefault;
-			Endianess                    = EndianessDefault;
+			IOType    = IOTypeDefault;
+			Endianess = EndianessDefault;
+
+			IndicateSerialPortBreakStates = IndicateSerialPortBreakStatesDefault;
+			SerialPortOutputBreakIsModifiable = SerialPortOutputBreakIsModifiableDefault;
 		}
 
 		#region Properties
@@ -147,21 +155,6 @@ namespace YAT.Domain.Settings
 					MKY.IO.Serial.SerialPortSettings old = this.serialPort;
 					this.serialPort = value;
 					ReplaceNode(old, this.serialPort);
-				}
-			}
-		}
-
-		/// <summary></summary>
-		[XmlElement("SerialParityErrorReplacement")]
-		public virtual string SerialParityErrorReplacement
-		{
-			get { return (this.serialParityErrorReplacement); }
-			set
-			{
-				if (value != this.serialParityErrorReplacement)
-				{
-					this.serialParityErrorReplacement = value;
-					SetChanged();
 				}
 			}
 		}
@@ -233,6 +226,36 @@ namespace YAT.Domain.Settings
 			}
 		}
 
+		/// <summary></summary>
+		[XmlElement("IndicateSerialPortBreakStates")]
+		public virtual bool IndicateSerialPortBreakStates
+		{
+			get { return (this.indicateSerialPortBreakStates); }
+			set
+			{
+				if (value != this.indicateSerialPortBreakStates)
+				{
+					this.indicateSerialPortBreakStates = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("SerialPortOutputBreakIsModifiable")]
+		public virtual bool SerialPortOutputBreakIsModifiable
+		{
+			get { return (this.serialPortOutputBreakIsModifiable); }
+			set
+			{
+				if (value != this.serialPortOutputBreakIsModifiable)
+				{
+					this.serialPortOutputBreakIsModifiable = value;
+					SetChanged();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Object Members
@@ -253,9 +276,11 @@ namespace YAT.Domain.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.ioType                       == other.ioType) &&
-				(this.serialParityErrorReplacement == other.serialParityErrorReplacement) &&
-				(this.endianess                    == other.endianess)
+				(this.ioType    == other.ioType) &&
+				(this.endianess == other.endianess) &&
+
+				(this.indicateSerialPortBreakStates == other.indicateSerialPortBreakStates) &&
+				(this.serialPortOutputBreakIsModifiable == other.serialPortOutputBreakIsModifiable)
 			);
 		}
 
@@ -266,9 +291,11 @@ namespace YAT.Domain.Settings
 			(
 				base.GetHashCode() ^
 
-				this.ioType                      .GetHashCode() ^
-				this.serialParityErrorReplacement.GetHashCode() ^
-				this.endianess                   .GetHashCode()
+				this.ioType   .GetHashCode() ^
+				this.endianess.GetHashCode() ^
+
+				this.indicateSerialPortBreakStates.GetHashCode() ^
+				this.serialPortOutputBreakIsModifiable.GetHashCode()
 			);
 		}
 

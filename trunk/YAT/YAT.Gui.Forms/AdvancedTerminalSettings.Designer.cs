@@ -36,6 +36,9 @@
 			this.textBox_UserName = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.groupBox_CommunicationSettings = new System.Windows.Forms.GroupBox();
+			this.groupBox_Communication_Break = new System.Windows.Forms.GroupBox();
+			this.checkBox_OutputBreakModifiable = new System.Windows.Forms.CheckBox();
+			this.checkBox_IndicateBreakStates = new System.Windows.Forms.CheckBox();
 			this.comboBox_Endianess = new System.Windows.Forms.ComboBox();
 			this.label_Endianess = new System.Windows.Forms.Label();
 			this.groupBox_ReceiveSettings = new System.Windows.Forms.GroupBox();
@@ -74,6 +77,7 @@
 			this.groupBox_Settings.SuspendLayout();
 			this.groupBox_User.SuspendLayout();
 			this.groupBox_CommunicationSettings.SuspendLayout();
+			this.groupBox_Communication_Break.SuspendLayout();
 			this.groupBox_ReceiveSettings.SuspendLayout();
 			this.groupBox_SendSettings.SuspendLayout();
 			this.groupBox_DisplaySettings.SuspendLayout();
@@ -134,9 +138,9 @@
 			// 
 			this.groupBox_User.Controls.Add(this.textBox_UserName);
 			this.groupBox_User.Controls.Add(this.label2);
-			this.groupBox_User.Location = new System.Drawing.Point(275, 303);
+			this.groupBox_User.Location = new System.Drawing.Point(275, 355);
 			this.groupBox_User.Name = "groupBox_User";
-			this.groupBox_User.Size = new System.Drawing.Size(263, 104);
+			this.groupBox_User.Size = new System.Drawing.Size(263, 52);
 			this.groupBox_User.TabIndex = 4;
 			this.groupBox_User.TabStop = false;
 			this.groupBox_User.Text = "User";
@@ -160,14 +164,48 @@
 			// 
 			// groupBox_CommunicationSettings
 			// 
+			this.groupBox_CommunicationSettings.Controls.Add(this.groupBox_Communication_Break);
 			this.groupBox_CommunicationSettings.Controls.Add(this.comboBox_Endianess);
 			this.groupBox_CommunicationSettings.Controls.Add(this.label_Endianess);
 			this.groupBox_CommunicationSettings.Location = new System.Drawing.Point(275, 13);
 			this.groupBox_CommunicationSettings.Name = "groupBox_CommunicationSettings";
-			this.groupBox_CommunicationSettings.Size = new System.Drawing.Size(263, 48);
+			this.groupBox_CommunicationSettings.Size = new System.Drawing.Size(263, 118);
 			this.groupBox_CommunicationSettings.TabIndex = 1;
 			this.groupBox_CommunicationSettings.TabStop = false;
 			this.groupBox_CommunicationSettings.Text = "Communication Settings";
+			// 
+			// groupBox_Communication_Break
+			// 
+			this.groupBox_Communication_Break.Controls.Add(this.checkBox_OutputBreakModifiable);
+			this.groupBox_Communication_Break.Controls.Add(this.checkBox_IndicateBreakStates);
+			this.groupBox_Communication_Break.Location = new System.Drawing.Point(6, 45);
+			this.groupBox_Communication_Break.Name = "groupBox_Communication_Break";
+			this.groupBox_Communication_Break.Size = new System.Drawing.Size(251, 67);
+			this.groupBox_Communication_Break.TabIndex = 2;
+			this.groupBox_Communication_Break.TabStop = false;
+			this.groupBox_Communication_Break.Text = "Brea&k (Applies to serial COM ports only)";
+			// 
+			// checkBox_OutputBreakModifiable
+			// 
+			this.checkBox_OutputBreakModifiable.AutoSize = true;
+			this.checkBox_OutputBreakModifiable.Location = new System.Drawing.Point(6, 42);
+			this.checkBox_OutputBreakModifiable.Name = "checkBox_OutputBreakModifiable";
+			this.checkBox_OutputBreakModifiable.Size = new System.Drawing.Size(192, 17);
+			this.checkBox_OutputBreakModifiable.TabIndex = 1;
+			this.checkBox_OutputBreakModifiable.Text = "Output break state can be modified";
+			this.checkBox_OutputBreakModifiable.UseVisualStyleBackColor = true;
+			this.checkBox_OutputBreakModifiable.CheckedChanged += new System.EventHandler(this.checkBox_OutputBreakModifiable_CheckedChanged);
+			// 
+			// checkBox_IndicateBreakStates
+			// 
+			this.checkBox_IndicateBreakStates.AutoSize = true;
+			this.checkBox_IndicateBreakStates.Location = new System.Drawing.Point(6, 19);
+			this.checkBox_IndicateBreakStates.Name = "checkBox_IndicateBreakStates";
+			this.checkBox_IndicateBreakStates.Size = new System.Drawing.Size(125, 17);
+			this.checkBox_IndicateBreakStates.TabIndex = 0;
+			this.checkBox_IndicateBreakStates.Text = "Indicate break states";
+			this.checkBox_IndicateBreakStates.UseVisualStyleBackColor = true;
+			this.checkBox_IndicateBreakStates.CheckedChanged += new System.EventHandler(this.checkBox_IndicateBreakStates_CheckedChanged);
 			// 
 			// comboBox_Endianess
 			// 
@@ -192,9 +230,9 @@
 			// groupBox_ReceiveSettings
 			// 
 			this.groupBox_ReceiveSettings.Controls.Add(this.checkBox_NoSendOnInputBreak);
-			this.groupBox_ReceiveSettings.Location = new System.Drawing.Point(275, 228);
+			this.groupBox_ReceiveSettings.Location = new System.Drawing.Point(275, 303);
 			this.groupBox_ReceiveSettings.Name = "groupBox_ReceiveSettings";
-			this.groupBox_ReceiveSettings.Size = new System.Drawing.Size(263, 69);
+			this.groupBox_ReceiveSettings.Size = new System.Drawing.Size(263, 46);
 			this.groupBox_ReceiveSettings.TabIndex = 3;
 			this.groupBox_ReceiveSettings.TabStop = false;
 			this.groupBox_ReceiveSettings.Text = "Receive Settings";
@@ -217,7 +255,7 @@
 			this.groupBox_SendSettings.Controls.Add(this.checkBox_SendImmediately);
 			this.groupBox_SendSettings.Controls.Add(this.checkBox_CopyPredefined);
 			this.groupBox_SendSettings.Controls.Add(this.checkBox_KeepCommand);
-			this.groupBox_SendSettings.Location = new System.Drawing.Point(275, 67);
+			this.groupBox_SendSettings.Location = new System.Drawing.Point(275, 170);
 			this.groupBox_SendSettings.Name = "groupBox_SendSettings";
 			this.groupBox_SendSettings.Size = new System.Drawing.Size(263, 127);
 			this.groupBox_SendSettings.TabIndex = 2;
@@ -584,6 +622,8 @@
 			this.groupBox_User.PerformLayout();
 			this.groupBox_CommunicationSettings.ResumeLayout(false);
 			this.groupBox_CommunicationSettings.PerformLayout();
+			this.groupBox_Communication_Break.ResumeLayout(false);
+			this.groupBox_Communication_Break.PerformLayout();
 			this.groupBox_ReceiveSettings.ResumeLayout(false);
 			this.groupBox_ReceiveSettings.PerformLayout();
 			this.groupBox_SendSettings.ResumeLayout(false);
@@ -645,5 +685,8 @@
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.CheckBox checkBox_NoSendOnInputBreak;
 		private System.Windows.Forms.CheckBox checkBox_NoSendOnOutputBreak;
+		private System.Windows.Forms.GroupBox groupBox_Communication_Break;
+		private System.Windows.Forms.CheckBox checkBox_OutputBreakModifiable;
+		private System.Windows.Forms.CheckBox checkBox_IndicateBreakStates;
 	}
 }

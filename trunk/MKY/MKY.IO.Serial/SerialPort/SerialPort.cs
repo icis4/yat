@@ -181,7 +181,6 @@ namespace MKY.IO.Serial
 		private string portName;
 
 		private Ports.ISerialPort port;
-		private object portSyncObj = new object();
 
 		/// <summary>
 		/// Async receiving. The capacity is set large enough to reduce the number of resizing
@@ -341,6 +340,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
+
 				switch (this.state)
 				{
 					case State.Reset:
@@ -362,6 +362,7 @@ namespace MKY.IO.Serial
 			get
 			{
 				AssertNotDisposed();
+
 				switch (this.state)
 				{
 					case State.Closed:
@@ -592,62 +593,59 @@ namespace MKY.IO.Serial
 		{
 			AssertNotDisposed();
 
-			if (IsOpen)
+			bool signalXOnXOff = false;
+
+			lock (this.sendQueue)
 			{
-				bool signalXOnXOff = false;
-
-				lock (this.sendQueue)
+				foreach (byte b in data)
 				{
-					foreach (byte b in data)
+					// Receive data into queue.
+					this.sendQueue.Enqueue(b);
+
+					// Handle input XOn/XOff.
+					if (this.settings.Communication.FlowControlManagesXOnXOffManually)
 					{
-						// Receive data into queue.
-						this.sendQueue.Enqueue(b);
-
-						// Handle input XOn/XOff.
-						if (this.settings.Communication.FlowControlManagesXOnXOffManually)
+						if (b == SerialPortSettings.XOnByte)
 						{
-							if (b == SerialPortSettings.XOnByte)
+							lock (this.inputIsXOnSyncObj)
 							{
-								lock (this.inputIsXOnSyncObj)
-								{
-									if (BoolEx.SetIfCleared(ref this.inputIsXOn))
-										signalXOnXOff = true;
+								if (BoolEx.SetIfCleared(ref this.inputIsXOn))
+									signalXOnXOff = true;
 
-									lock (this.manualInputWasXOnSyncObj)
-										this.manualInputWasXOn = true;
-								}
+								lock (this.manualInputWasXOnSyncObj)
+									this.manualInputWasXOn = true;
 							}
-							else if (b == SerialPortSettings.XOffByte)
+						}
+						else if (b == SerialPortSettings.XOffByte)
+						{
+							lock (this.inputIsXOnSyncObj)
 							{
-								lock (this.inputIsXOnSyncObj)
-								{
-									if (BoolEx.ClearIfSet(ref this.inputIsXOn))
-										signalXOnXOff = true;
+								if (BoolEx.ClearIfSet(ref this.inputIsXOn))
+									signalXOnXOff = true;
 
-									lock (this.manualInputWasXOnSyncObj)
-										this.manualInputWasXOn = false;
-								}
+								lock (this.manualInputWasXOnSyncObj)
+									this.manualInputWasXOn = false;
 							}
 						}
 					}
 				}
+			}
 
-				if (signalXOnXOff)
-					OnIOControlChanged(new EventArgs());
+			if (signalXOnXOff)
+				OnIOControlChanged(new EventArgs());
 
-				// Ensure that only one data send thread is active at a time.
-				// Without this exclusivity, two receive threads could create a race condition.
-				if (Monitor.TryEnter(this.SendSyncObj))
+			// Ensure that only one data send thread is active at a time.
+			// Without this exclusivity, two receive threads could create a race condition.
+			if (Monitor.TryEnter(this.SendSyncObj))
+			{
+				try
 				{
-					try
-					{
-						SendDelegate asyncInvoker = new SendDelegate(SendAsynch);
-						asyncInvoker.BeginInvoke(null, null);
-					}
-					finally
-					{
-						Monitor.Exit(this.SendSyncObj);
-					}
+					SendDelegate asyncInvoker = new SendDelegate(SendAsynch);
+					asyncInvoker.BeginInvoke(null, null);
+				}
+				finally
+				{
+					Monitor.Exit(this.SendSyncObj);
 				}
 			}
 		}
@@ -665,58 +663,61 @@ namespace MKY.IO.Serial
 				// execute and to prevent that 'OnDataSent' events are fired consecutively.
 				while (true)
 				{
-					if (IsOpen) // Ensure not to forward any events during closing anymore.
+					// Handle output break state.
+					bool isOutputBreak;
+					lock (this.port)
+						isOutputBreak = this.port.OutputBreak;
+
+					if (!isOutputBreak)
 					{
-						// Handle output break state.
-						if (!this.port.OutputBreak)
+						// In case of XOff, let other threads do their job and then try again.
+						if (XOnXOffIsInUse && !OutputIsXOn)
 						{
-							// In case of XOff, let other threads do their job and then try again.
-							if (XOnXOffIsInUse && !OutputIsXOn)
-							{
-								Thread.Sleep(0);
-								continue;
-							}
-
-							// In case of disabled CTS line, let other threads do their job and then try again.
-							if (this.settings.Communication.FlowControlUsesRtsCts && !this.port.CtsHolding)
-							{
-								Thread.Sleep(0);
-								continue;
-							}
-
-							// No break, no XOFff, no CTS disable, ready to send.
-							byte[] buffer;
-							lock (this.sendQueue)
-							{
-								if (this.sendQueue.Count <= 0)
-									break;
-
-								buffer = this.sendQueue.ToArray();
-								this.sendQueue.Clear();
-							}
-							lock (this.portSyncObj)
-							{
-								if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
-									this.port.RtsEnable = true;
-
-								this.port.Write(buffer, 0, buffer.Length);
-
-								if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
-									this.port.RtsEnable = false;
-							}
-
-							OnDataSent(new EventArgs());
 							Thread.Sleep(0);
+							continue;
 						}
-						else
+
+						// In case of disabled CTS line, let other threads do their job and then try again.
+						if (this.settings.Communication.FlowControlUsesRtsCts)
 						{
-							OnIOError(new IOErrorEventArgs(IOErrorSeverity.Acceptable, IODirection.Output, "No data can be sent while port is in output break state"));
-							break;
+							bool isClearToSend;
+							lock (this.port)
+								isClearToSend = this.port.CtsHolding;
+
+							if (!isClearToSend)
+							{
+								Thread.Sleep(0);
+								continue;
+							}
 						}
+
+						// No break, no XOFff, no CTS disable, ready to send.
+						byte[] buffer;
+						lock (this.sendQueue)
+						{
+							if (this.sendQueue.Count <= 0)
+								break;
+
+							buffer = this.sendQueue.ToArray();
+							this.sendQueue.Clear();
+						}
+						lock (this.port)
+						{
+							if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
+								this.port.RtsEnable = true;
+
+							this.port.Write(buffer, 0, buffer.Length);
+
+							if (this.settings.Communication.FlowControl == SerialFlowControl.RS485)
+								this.port.RtsEnable = false;
+						}
+
+						OnDataSent(new EventArgs());
+						Thread.Sleep(0);
 					}
 					else
 					{
-						// Ensure not to forward any events during closing anymore.
+						OnIOError(new IOErrorEventArgs(IOErrorSeverity.Acceptable, IODirection.Output, "No data can be sent while port is in output break state"));
 						break;
 					}
 				}
@@ -781,7 +782,7 @@ namespace MKY.IO.Serial
 			if (this.port == null)
 				return;
 
-			lock (this.portSyncObj)
+			lock (this.port)
 			{
 				// Keep port name for diagnostics/debug purposes:
 				this.portName    = this.settings.PortId;
@@ -839,21 +840,21 @@ namespace MKY.IO.Serial
 			if (this.port != null)
 				CloseAndDisposePort();
 
-			lock (this.portSyncObj)
-			{
-				this.port = new Ports.SerialPortEx();
-				this.port.DataReceived  += new Ports.SerialDataReceivedEventHandler (port_DataReceived);
-				this.port.PinChanged    += new Ports.SerialPinChangedEventHandler   (port_PinChanged);
-				this.port.ErrorReceived += new Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
-			}
+			this.port = new Ports.SerialPortEx();
+			this.port.DataReceived  += new Ports.SerialDataReceivedEventHandler (port_DataReceived);
+			this.port.PinChanged    += new Ports.SerialPinChangedEventHandler   (port_PinChanged);
+			this.port.ErrorReceived += new Ports.SerialErrorReceivedEventHandler(port_ErrorReceived);
 		}
 
 		private void OpenPort()
 		{
-			if (!this.port.IsOpen)
+			if (this.port != null)
 			{
-				lock (this.portSyncObj)
-					this.port.Open();
+				lock (this.port)
+				{
+					if (!this.port.IsOpen)
+						this.port.Open();
+				}
 			}
 		}
 
@@ -864,16 +865,14 @@ namespace MKY.IO.Serial
 			{
 				try
 				{
-					lock (this.portSyncObj)
-					{
-						if (this.port.IsOpen)
-							this.port.Close();
-
-						this.port.Dispose();
-						this.port = null;
-					}
+					if (this.port.IsOpen)
+						this.port.Close();
 				}
-				catch { }
+				finally
+				{
+					this.port.Dispose();
+					this.port = null;
+				}
 			}
 		}
 
@@ -890,7 +889,7 @@ namespace MKY.IO.Serial
 			CreatePort();          // Port must be created each time because this.port.Close()
 			ApplySettings();       //   disposes the underlying IO instance
 
-			lock (this.portSyncObj)
+			lock (this.port)
 			{
 				// RTS
 				switch (this.settings.Communication.FlowControl)
@@ -1015,9 +1014,14 @@ namespace MKY.IO.Serial
 			if (this.state == State.Opened) // Ensure not to forward any events during closing anymore.
 			{
 				// Immediately read data on this thread.
-				int bytesToRead = this.port.BytesToRead;
-				byte[] buffer = new byte[bytesToRead];
-				this.port.Read(buffer, 0, bytesToRead);
+				int bytesToRead;
+				byte[] buffer;
+				lock (this.port)
+				{
+					bytesToRead = this.port.BytesToRead;
+					buffer = new byte[bytesToRead];
+					this.port.Read(buffer, 0, bytesToRead);
+				}
 
 				bool signalXOnXOff = false;
 

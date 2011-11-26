@@ -420,16 +420,17 @@ namespace YAT.Gui.Forms
 				this.settings_Form.Terminal.CharReplace.ReplaceSpace        = f.SettingsResult.Terminal.CharReplace.ReplaceSpace;
 
 				// Communication:
-				this.settings_Form.Terminal.IO.Endianess = f.SettingsResult.Terminal.IO.Endianess;
+				this.settings_Form.Terminal.IO.Endianess                         = f.SettingsResult.Terminal.IO.Endianess;
+				this.settings_Form.Terminal.IO.IndicateSerialPortBreakStates     = f.SettingsResult.Terminal.IO.IndicateSerialPortBreakStates;
+				this.settings_Form.Terminal.IO.SerialPortOutputBreakIsModifiable = f.SettingsResult.Terminal.IO.SerialPortOutputBreakIsModifiable;
 
 				// Send:
-				this.settings_Form.Terminal.Send.KeepCommand     = f.SettingsResult.Terminal.Send.KeepCommand;
-				this.settings_Form.Terminal.Send.CopyPredefined  = f.SettingsResult.Terminal.Send.CopyPredefined;
-				this.settings_Form.Terminal.Send.SendImmediately = f.SettingsResult.Terminal.Send.SendImmediately;
+				this.settings_Form.Terminal.Send.KeepCommand                  = f.SettingsResult.Terminal.Send.KeepCommand;
+				this.settings_Form.Terminal.Send.CopyPredefined               = f.SettingsResult.Terminal.Send.CopyPredefined;
+				this.settings_Form.Terminal.Send.SendImmediately              = f.SettingsResult.Terminal.Send.SendImmediately;
 				this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnOutputBreak;
 
 				// Receive:
-				this.settings_Form.Terminal.IO.SerialParityErrorReplacement  = f.SettingsResult.Terminal.IO.SerialParityErrorReplacement;
 				this.settings_Form.Terminal.IO.SerialPort.NoSendOnInputBreak = f.SettingsResult.Terminal.IO.SerialPort.NoSendOnInputBreak;
 
 				this.settings_Form.UserName = f.SettingsResult.UserName;
