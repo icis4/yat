@@ -164,6 +164,7 @@ namespace YAT.Gui.Controls
 		public SerialPortSelection()
 		{
 			InitializeComponent();
+			SetControls();
 		}
 
 		#endregion

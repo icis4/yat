@@ -126,6 +126,7 @@ namespace YAT.Gui.Controls
 		public SocketSelection()
 		{
 			InitializeComponent();
+			SetControls();
 		}
 
 		#endregion

@@ -58,6 +58,8 @@ namespace YAT.Gui.Forms
 
 			this.newTerminalSettings = newTerminalSettings;
 			this.newTerminalSettings_Form = new Model.Settings.NewTerminalSettings(newTerminalSettings);
+
+			// SetControls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion
@@ -192,7 +194,7 @@ namespace YAT.Gui.Forms
 			this.terminalSettings.Terminal.IO.Socket.LocalTcpPort            = this.newTerminalSettings.SocketLocalTcpPort;
 			this.terminalSettings.Terminal.IO.Socket.LocalUdpPort            = this.newTerminalSettings.SocketLocalUdpPort;
 
-			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.DeviceInfo        = this.newTerminalSettings.UsbSerialHidDeviceInfo;
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.DeviceInfo  = this.newTerminalSettings.UsbSerialHidDeviceInfo;
 
 			this.terminalSettings.TerminalIsStarted                          = this.newTerminalSettings.StartTerminal;
 

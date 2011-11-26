@@ -66,6 +66,8 @@ namespace YAT.Gui.Forms
 
 			InitializeExamples();
 			InitializeControls();
+		
+			// SetControls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion

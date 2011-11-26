@@ -21,10 +21,17 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Windows.Forms;
 
 using MKY.Windows.Forms;
+
+#endregion
 
 namespace YAT.Gui.Forms
 {
@@ -53,9 +60,9 @@ namespace YAT.Gui.Forms
 		{
 			InitializeComponent();
 
-			this.settings = settings;
-			this.settings_Form = new Domain.Settings.BinaryTerminalSettings(settings);
-			this.settings_Form.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
+			KeepAndCloneAndAttachSettings(settings);
+
+			// SetControls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion
@@ -73,10 +80,23 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
-		#region Settings Event Handlers
+		#region Settings
 		//==========================================================================================
-		// Settings Event Handlers
+		// Settings
 		//==========================================================================================
+
+		private void KeepAndCloneAndAttachSettings(Domain.Settings.BinaryTerminalSettings settings)
+		{
+			this.settings = settings;
+			this.settings_Form = new Domain.Settings.BinaryTerminalSettings(settings);
+			this.settings_Form.Changed += new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
+		}
+
+		private void DetachAndAcceptSettings()
+		{
+			this.settings_Form.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
+			this.settings = this.settings_Form;
+		}
 
 		private void settings_Form_Changed(object sender, MKY.Settings.SettingsEventArgs e)
 		{
@@ -117,34 +137,24 @@ namespace YAT.Gui.Forms
 		private void binaryTerminalSettingsSet_Tx_SettingsChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-			{
 				this.settings_Form.TxDisplay = binaryTerminalSettingsSet_Tx.Settings;
-				SetControls();
-			}
 		}
 
 		private void checkBox_SeparateTxRxDisplay_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-			{
 				this.settings_Form.SeparateTxRxDisplay = checkBox_SeparateTxRxDisplay.Checked;
-				SetControls();
-			}
 		}
 
 		private void binaryTerminalSettingsSet_Rx_SettingsChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
-			{
 				this.settings_Form.RxDisplay = binaryTerminalSettingsSet_Rx.Settings;
-				SetControls();
-			}
 		}
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{
-			this.settings_Form.Changed -= new EventHandler<MKY.Settings.SettingsEventArgs>(settings_Form_Changed);
-			this.settings = this.settings_Form;
+			DetachAndAcceptSettings();
 		}
 
 		private void button_Cancel_Click(object sender, EventArgs e)
@@ -166,7 +176,6 @@ namespace YAT.Gui.Forms
 				== DialogResult.Yes)
 			{
 				this.settings_Form.SetDefaults();
-				SetControls();
 			}
 		}
 

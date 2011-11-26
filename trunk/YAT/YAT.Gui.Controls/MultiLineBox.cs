@@ -67,6 +67,8 @@ namespace YAT.Gui.Controls
 
 			this.command = command;
 			this.command_Form = new Command(command);
+
+			// SetControls() is initially called in the 'Paint' event handler.
 		}
 
 		#endregion

@@ -75,6 +75,7 @@ namespace YAT.Gui.Controls
 		public UsbSerialHidDeviceSelection()
 		{
 			InitializeComponent();
+			SetControls();
 		}
 
 		#endregion
