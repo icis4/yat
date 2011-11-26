@@ -178,12 +178,18 @@ namespace MKY.IO.Ports
 		/// </remarks>
 		private void DisposeBaseStream_SerialPortBugFix()
 		{
-			if (this.BaseStream != null)
+			try
 			{
-				this.BaseStream.Flush();
-				this.BaseStream.Close();
-				this.BaseStream.Dispose();
+				// Attention, the base stream is only available if the port is open!
+				if ((this.IsOpen) && (this.BaseStream != null))
+				{
+					this.BaseStream.Flush();
+					this.BaseStream.Close();
+					
+					// Attention, do not call Dispose() as it can throw after a call to Close().
+				}
 			}
+			catch { }
 		}
 
 		#endregion

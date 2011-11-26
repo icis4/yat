@@ -249,6 +249,18 @@ namespace YAT.Gui.Forms
 				this.settings_Form.Terminal.IO.Endianess = (Domain.EndianessEx)comboBox_Endianess.SelectedItem;
 		}
 
+		private void checkBox_IndicateBreakStates_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settings_Form.Terminal.IO.IndicateSerialPortBreakStates = checkBox_IndicateBreakStates.Checked;
+		}
+
+		private void checkBox_OutputBreakModifiable_CheckedChanged(object sender, EventArgs e)
+		{
+			if (!this.isSettingControls)
+				this.settings_Form.Terminal.IO.SerialPortOutputBreakIsModifiable = checkBox_OutputBreakModifiable.Checked;
+		}
+
 		private void checkBox_KeepCommand_CheckedChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -369,7 +381,9 @@ namespace YAT.Gui.Forms
 			checkBox_ReplaceSpace.Checked               = this.settings_Form.Terminal.CharReplace.ReplaceSpace;
 
 			// Communication:
-			comboBox_Endianess.SelectedItem = (Domain.EndianessEx)this.settings_Form.Terminal.IO.Endianess;
+			comboBox_Endianess.SelectedItem        = (Domain.EndianessEx)this.settings_Form.Terminal.IO.Endianess;
+			checkBox_IndicateBreakStates.Checked   = this.settings_Form.Terminal.IO.IndicateSerialPortBreakStates;
+			checkBox_OutputBreakModifiable.Checked = this.settings_Form.Terminal.IO.SerialPortOutputBreakIsModifiable;
 
 			// Send:
 			checkBox_KeepCommand.Checked         = this.settings_Form.Terminal.Send.KeepCommand;
@@ -419,16 +433,17 @@ namespace YAT.Gui.Forms
 			this.settings_Form.Terminal.CharReplace.ReplaceSpace        = Domain.Settings.CharReplaceSettings.ReplaceSpaceDefault;
 
 			// Communication:
-			this.settings_Form.Terminal.IO.Endianess = Domain.Settings.IOSettings.EndianessDefault;
+			this.settings_Form.Terminal.IO.Endianess                         = Domain.Settings.IOSettings.EndianessDefault;
+			this.settings_Form.Terminal.IO.IndicateSerialPortBreakStates     = Domain.Settings.IOSettings.IndicateSerialPortBreakStatesDefault;
+			this.settings_Form.Terminal.IO.SerialPortOutputBreakIsModifiable = Domain.Settings.IOSettings.SerialPortOutputBreakIsModifiableDefault;
 
 			// Send:
-			this.settings_Form.Terminal.Send.KeepCommand     = Domain.Settings.SendSettings.KeepCommandDefault;
-			this.settings_Form.Terminal.Send.CopyPredefined  = Domain.Settings.SendSettings.CopyPredefinedDefault;
-			this.settings_Form.Terminal.Send.SendImmediately = Domain.Settings.SendSettings.SendImmediatelyDefault;
+			this.settings_Form.Terminal.Send.KeepCommand                  = Domain.Settings.SendSettings.KeepCommandDefault;
+			this.settings_Form.Terminal.Send.CopyPredefined               = Domain.Settings.SendSettings.CopyPredefinedDefault;
+			this.settings_Form.Terminal.Send.SendImmediately              = Domain.Settings.SendSettings.SendImmediatelyDefault;
 			this.settings_Form.Terminal.IO.SerialPort.NoSendOnOutputBreak = MKY.IO.Serial.SerialPortSettings.NoSendOnOutputBreakDefault;
 
 			// Receive:
-			this.settings_Form.Terminal.IO.SerialParityErrorReplacement  = Domain.Settings.IOSettings.SerialParityErrorReplacementDefault;
 			this.settings_Form.Terminal.IO.SerialPort.NoSendOnInputBreak = MKY.IO.Serial.SerialPortSettings.NoSendOnInputBreakDefault;
 
 			// User:

@@ -1611,11 +1611,14 @@ namespace YAT.Model
 		/// </summary>
 		public virtual void RequestToggleOutputBreak()
 		{
-			MKY.IO.Ports.ISerialPort p = this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
-			if (p != null)
-				p.ToggleOutputBreak();
-			else
-				throw (new InvalidOperationException("The underlying I/O instance is no serial port"));
+			if (this.settingsRoot.Terminal.IO.SerialPortOutputBreakIsModifiable)
+			{
+				MKY.IO.Ports.ISerialPort p = this.terminal.UnderlyingIOInstance as MKY.IO.Ports.ISerialPort;
+				if (p != null)
+					p.ToggleOutputBreak();
+				else
+					throw (new InvalidOperationException("The underlying I/O instance is no serial port"));
+			}
 		}
 
 		#endregion

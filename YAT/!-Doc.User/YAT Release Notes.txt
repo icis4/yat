@@ -83,6 +83,7 @@ Important changes:
 - Serial COM ports RTS and DTR states are no longer stored persistently in case of manual flow
   control (related to feature requests #2932691 and #3066635 and bug #3432512)
 - Parity error replacement removed since parity errors are displayed as error text inside terminal
+- Break states are only indicated and modifiable if selected in 'AdvancedSettings'
 - Shortcut for window layout added: Alt-C/H/V layouts cascaded/horizontal/vertical
 - Behavior of concurrent instances of YAT verified (feature request #2842713)
    > Already seems to work fine, test case added and successfully passed, limitation removed

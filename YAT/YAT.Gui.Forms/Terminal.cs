@@ -2897,10 +2897,10 @@ namespace YAT.Gui.Forms
 
 					bool manualRtsDtr  = this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesRtsCtsDtrDsrManually;
 					bool manualXOnXOff = this.settingsRoot.Terminal.IO.SerialPort.Communication.FlowControlManagesXOnXOffManually;
+
 					bool showXOnXOff = false;
 					bool outputIsXOn = false;
 					bool inputIsXOn = false;
-
 					MKY.IO.Serial.IXOnXOffHandler x = this.terminal.UnderlyingIOProvider as MKY.IO.Serial.IXOnXOffHandler;
 					if (x != null)
 					{
@@ -2908,6 +2908,9 @@ namespace YAT.Gui.Forms
 						outputIsXOn = x.OutputIsXOn;
 						inputIsXOn  = x.InputIsXOn;
 					}
+
+					bool indicateBreakStates = this.settingsRoot.Terminal.IO.IndicateSerialPortBreakStates;
+					bool manualOutputBreak   = this.settingsRoot.Terminal.IO.SerialPortOutputBreakIsModifiable;
 
 					toolStripStatusLabel_TerminalStatus_CTS.Image = (pins.Cts ? on : off);
 					toolStripStatusLabel_TerminalStatus_DTR.Image = (pins.Dtr ? on : off);
@@ -2930,10 +2933,14 @@ namespace YAT.Gui.Forms
 					toolStripStatusLabel_TerminalStatus_OutputXOnXOff.ForeColor = SystemColors.GrayText;
 					toolStripStatusLabel_TerminalStatus_InputXOnXOff.ForeColor  = (manualXOnXOff ? SystemColors.ControlText : SystemColors.GrayText);
 
+					toolStripStatusLabel_TerminalStatus_Separator3.Visible  = indicateBreakStates;
+					toolStripStatusLabel_TerminalStatus_OutputBreak.Visible = indicateBreakStates;
+					toolStripStatusLabel_TerminalStatus_InputBreak.Visible  = indicateBreakStates;
+
 					toolStripStatusLabel_TerminalStatus_OutputBreak.Image = (!outputBreak ? on : off);
 					toolStripStatusLabel_TerminalStatus_InputBreak.Image  = (!inputBreak  ? on : off);
 
-					toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor = SystemColors.ControlText;
+					toolStripStatusLabel_TerminalStatus_OutputBreak.ForeColor = (manualOutputBreak ? SystemColors.ControlText : SystemColors.GrayText);
 					toolStripStatusLabel_TerminalStatus_InputBreak.ForeColor  = SystemColors.GrayText;
 
 					// \attention
