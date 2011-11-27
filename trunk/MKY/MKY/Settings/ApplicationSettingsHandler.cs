@@ -568,7 +568,7 @@ namespace MKY.Settings
 					result = ex;
 			}
 
-			// Throw exeption if either operation failed.
+			// Throw exception if either operation failed.
 			if (result != null)
 				throw (result);
 		}

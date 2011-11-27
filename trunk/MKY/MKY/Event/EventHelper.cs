@@ -21,23 +21,6 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
-//==================================================================================================
-// Configuration
-//==================================================================================================
-
-#if (DEBUG)
-
-	// Choose whether exceptions should be handled or execution immediately stopped:
-	// - Uncomment to handle exceptions
-	// - Comment out to break exceptions
-	#define DEBUG_HANDLE_EXCEPTIONS
-
-	#if (!DEBUG_HANDLE_EXCEPTIONS) // Break exceptions is mutual exclusive against handle exceptions.
-		#define DEBUG_BREAK_EXCEPTIONS
-	#endif
-
-#endif
-
 #region Using
 //==================================================================================================
 // Using
@@ -60,84 +43,6 @@ namespace MKY.Event
 	/// </summary>
 	public static class EventHelper
 	{
-		#region Types
-		//==========================================================================================
-		// Types
-		//==========================================================================================
-
-		/// <summary></summary>
-		public class UnhandledExceptionEventArgs : EventArgs
-		{
-			/// <summary></summary>
-			[SuppressMessage("Microsoft.Design", "CA1051:DoNotDeclareVisibleInstanceFields", Justification = "Public fields are straight-forward for event args.")]
-			public readonly Exception UnhandledException;
-
-			/// <summary></summary>
-			public UnhandledExceptionEventArgs(Exception unhandledException)
-			{
-				UnhandledException = unhandledException;
-			}
-		}
-
-		#endregion
-
-		#region Static Events
-		//==========================================================================================
-		// Static Events
-		//==========================================================================================
-
-#if (!DEBUG)
-
-		/// <summary>
-		/// Event on unhandled exceptions. An application can install an event handler that handles
-		/// the unhandled exceptions.
-		/// </summary>
-		public static event EventHandler<UnhandledExceptionEventArgs> UnhandledException;
-
-#endif
-
-		#endregion
-
-		#region Static Properties
-		//==========================================================================================
-		// Static Properties
-		//==========================================================================================
-
-#if (!DEBUG)
-
-		/// <summary>
-		/// Semaphore to temporarily suspend the unhandled exceptions event.
-		/// </summary>
-		private static int SuspendUnhandledExceptionEventSemaphore;
-
-#endif
-
-		/// <remarks>
-		/// \fixme:
-		/// Not an optimal solution. Added to fix an issue with asynchronous timers in
-		/// <see cref="MKY.Time.Chronometer"/>. Should be replaced by a real solution.
-		/// </remarks>
-		public static void SuspendUnhandledException()
-		{
-#if (!DEBUG)
-			Interlocked.Increment(ref SuspendUnhandledExceptionEventSemaphore);
-#endif
-		}
-
-		/// <remarks>
-		/// \fixme:
-		/// Not an optimal solution. Added to fix an issue with asynchronous timers in
-		/// <see cref="MKY.Time.Chronometer"/>. Should be replaced by a real solution.
-		/// </remarks>
-		public static void ResumeUnhandledException()
-		{
-#if (!DEBUG)
-			Interlocked.Decrement(ref SuspendUnhandledExceptionEventSemaphore);
-#endif
-		}
-
-		#endregion
-
 		#region Sync Event Invoking
 		//==========================================================================================
 		// Sync Event Invoking
@@ -162,32 +67,9 @@ namespace MKY.Event
 			{
 				ISynchronizeInvoke sinkTarget = sink.Target as ISynchronizeInvoke;
 				if ((sinkTarget != null) && (sinkTarget.InvokeRequired))
-				{
 					InvokeSynchronized(sinkTarget, sink, args);
-				}
 				else
-				{
-				#if (DEBUG_HANDLE_EXCEPTIONS) // Invoke event savely to ensure that program execution continues.
-					EventHandler castedSink = (EventHandler)sink;
-					object sender = args[0];
-					EventArgs eventArgs = (EventArgs)args[1];
-					try
-					{
-						castedSink(sender, eventArgs);
-					}
-					catch (Exception ex)
-					{
-						WriteExceptionToDebugOutput(ex, sink);
-					}
-				#elif (DEBUG_BREAK_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen.
-					EventHandler castedSink = (EventHandler)sink;
-					object sender = args[0];
-					EventArgs eventArgs = (EventArgs)args[1];
-					castedSink(sender, eventArgs);
-				#else // NON-DEBUG: Invoke event the safe way
 					InvokeOnCurrentThread(sink, args);
-				#endif
-				}
 			}
 		}
 
@@ -210,32 +92,9 @@ namespace MKY.Event
 			{
 				ISynchronizeInvoke sinkTarget = sink.Target as ISynchronizeInvoke;
 				if ((sinkTarget != null) && (sinkTarget.InvokeRequired))
-				{
 					InvokeSynchronized(sinkTarget, sink, args);
-				}
 				else
-				{
-				#if (DEBUG_HANDLE_EXCEPTIONS) // Invoke event savely to ensure that program execution continues.
-					EventHandler<TEventArgs> castedSink = (EventHandler<TEventArgs>)sink;
-					object sender = args[0];
-					TEventArgs eventArgs = (TEventArgs)args[1];
-					try
-					{
-						castedSink(sender, eventArgs);
-					}
-					catch (Exception ex)
-					{
-						WriteExceptionToDebugOutput(ex, sink);
-					}
-				#elif (DEBUG_BREAK_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen.
-					EventHandler<TEventArgs> castedSink = (EventHandler<TEventArgs>)sink;
-					object sender = args[0];
-					TEventArgs eventArgs = (TEventArgs)args[1];
-					castedSink(sender, eventArgs);
-				#else // NON-DEBUG: Invoke event the safe way.
 					InvokeOnCurrentThread(sink, args);
-				#endif
-				}
 			}
 		}
 
@@ -316,31 +175,19 @@ namespace MKY.Event
 		[OneWay]
 		private static void InvokeSynchronized(ISynchronizeInvoke sinkTarget, Delegate sink, object[] args)
 		{
-		#if (DEBUG_HANDLE_EXCEPTIONS) // Invoke event savely to ensure that program execution continues.
+#if (DEBUG)
 			try
 			{
+#endif // DEBUG
 				sinkTarget.Invoke(sink, args);
+#if (DEBUG)
 			}
 			catch (Exception ex)
 			{
 				WriteExceptionToDebugOutput(ex, sink);
+				throw (ex);
 			}
-		#elif (DEBUG_BREAK_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen.
-			sinkTarget.Invoke(sink, args);
-		#else // NON-DEBUG: Forward or discard exception.
-			try
-			{
-				sinkTarget.Invoke(sink, args);
-			}
-			catch (Exception ex)
-			{
-				if (SuspendUnhandledExceptionEventSemaphore <= 0)
-				{
-					UnhandledExceptionEventArgs e = new UnhandledExceptionEventArgs(ex);
-					FireSync<UnhandledExceptionEventArgs>(UnhandledException, typeof(EventHelper), e);
-				}
-			}
-		#endif
+#endif // DEBUG
 		}
 
 		#endregion
@@ -354,31 +201,19 @@ namespace MKY.Event
 		[OneWay]
 		private static void InvokeOnCurrentThread(Delegate sink, object[] args)
 		{
-		#if (DEBUG_HANDLE_EXCEPTIONS) // Invoke event savely to ensure that program execution continues.
+#if (DEBUG)
 			try
 			{
+#endif // DEBUG
 				sink.DynamicInvoke(args);
+#if (DEBUG)
 			}
 			catch (Exception ex)
 			{
 				WriteExceptionToDebugOutput(ex, sink);
+				throw (ex);
 			}
-		#elif (DEBUG_BREAK_EXCEPTIONS) // Invoke event directly so exceptions can be debugged where they happen.
-			sink.DynamicInvoke(args);
-		#else // NON-DEBUG: Forward or discard exception.
-			try
-			{
-				sink.DynamicInvoke(args);
-			}
-			catch (Exception ex)
-			{
-				if (SuspendUnhandledExceptionEventSemaphore <= 0)
-				{
-					UnhandledExceptionEventArgs e = new UnhandledExceptionEventArgs(ex);
-					FireSync<UnhandledExceptionEventArgs>(UnhandledException, typeof(EventHelper), e);
-				}
-			}
-		#endif
+#endif // DEBUG
 		}
 
 		#endregion

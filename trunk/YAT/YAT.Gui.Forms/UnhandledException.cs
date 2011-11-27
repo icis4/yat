@@ -46,33 +46,24 @@ namespace YAT.Gui.Forms
 	[SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix", Justification = "Form indeed deals with exceptions.")]
 	public partial class UnhandledException : System.Windows.Forms.Form
 	{
-		private Exception exeption;
+		private Exception exception;
+		private string title;
 		private string originMessage;
-		private bool isAsynchronous;
 
 		private string exceptionText;
 
 		/// <summary></summary>
-		public UnhandledException(Exception exeption, string originMessage, bool isAsynchronous)
+		public UnhandledException(Exception exception, string title, string originMessage)
 		{
 			InitializeComponent();
 
-			// Set form title.
-			StringBuilder sb = new StringBuilder(Application.ProductName);
-			sb.Append(" Unhandled");
-
-			if (isAsynchronous)
-				sb.Append(" Asynchronous");
-			else
-				sb.Append(" Synchronous");
-
-			sb.Append(" Exception");
-			Text = sb.ToString();
-
-			// Set exception information.
-			this.exeption = exeption;
+			// Keep information.
+			this.exception = exception;
+			this.title = title;
 			this.originMessage = originMessage;
-			this.isAsynchronous = isAsynchronous;
+
+			// Set form title.
+			Text = this.title;
 
 			// Compose exception text.
 			StringWriter text = new StringWriter();
@@ -83,7 +74,7 @@ namespace YAT.Gui.Forms
 				text.WriteLine(ApplicationInfo.ProductNameAndBuildNameAndVersion);
 				text.WriteLine();
 
-				AnyWriter.WriteException(text, null, this.exeption);
+				AnyWriter.WriteException(text, null, this.exception);
 			}
 			catch (Exception ex)
 			{

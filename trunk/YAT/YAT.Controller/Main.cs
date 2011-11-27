@@ -28,6 +28,7 @@
 
 using System;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 
 using MKY;
@@ -269,64 +270,110 @@ namespace YAT.Controller
 		// Private Methods
 		//==========================================================================================
 
+		#region Private Methods > Run With View
+		//------------------------------------------------------------------------------------------
+		// Private Methods > Run With View
+		//------------------------------------------------------------------------------------------
+
 		/// <summary></summary>
 		private MainResult RunWithView()
 		{
 			MainResult mainResult = MainResult.Success;
+
+			AppDomain curentDomainWithView = AppDomain.CurrentDomain;
+			curentDomainWithView.UnhandledException += new UnhandledExceptionEventHandler(curentDomainWithView_UnhandledException);
 
 			// Create model and view and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
 				Application.EnableVisualStyles();
 				Application.SetCompatibleTextRenderingDefault(false);
-#if (!DEBUG)
+
 				try
 				{
-#endif
 					Gui.Forms.WelcomeScreen welcomeScreen = new Gui.Forms.WelcomeScreen();
 					if (welcomeScreen.ShowDialog() != DialogResult.OK)
 						return (Controller.MainResult.ApplicationSettingsError);
-#if (!DEBUG)
 				}
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occured while loading " + Application.ProductName + ".";
-					if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
+					string message = "An unhandled synchronous exception occured while preparing " + Application.ProductName + ".";
+					if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, false, true) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
 						Application.Restart();
 
 					return (MainResult.UnhandledException);
 				}
-#endif
-#if (!DEBUG)
+
 				try
 				{
-#endif
 					// If everything is fine so far, start main application including view.
 					using (Gui.Forms.Main view = new Gui.Forms.Main(model))
 					{
+						// Assume unhandled exceptions and attach the application to the respective handler.
+						mainResult = MainResult.UnhandledException;
+						Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
+
 						// Start the Win32 message loop on the current thread and the main form.
 						//
 						// \attention:
 						// This call does not return until the application exits.
 						Application.Run(view);
 
+						Application.ThreadException -= new ThreadExceptionEventHandler(Application_ThreadException);
+
 						Model.MainResult result = view.MainResult;
 						mainResult = ConvertToMainResult(result);
 					}
-#if (!DEBUG)
 				}
 				catch (Exception ex)
 				{
-					string message = "An unhandled synchronous exception occured while running " + Application.ProductName + ".";
-					if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
+					string message = "An unhandled synchronous exception occured while loading " + Application.ProductName + ".";
+					if (Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, false, true) == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
 						Application.Restart();
 
 					return (MainResult.UnhandledException);
 				}
-#endif
+
 				return (mainResult);
 			} // Dispose of model to ensure immediate release of resources.
 		}
+
+		/// <remarks>
+		/// In case of an <see cref="Application.ThreadException"/>, it is possible to continue operation.
+		/// </remarks>
+		private void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
+		{
+			string message = "An unhandled synchronous exception occured while running" + Application.ProductName + ".";
+			Gui.Forms.UnhandledExceptionResult result = Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(e.Exception, message, false, true);
+			
+			if      (result == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
+				Application.Restart();
+			else if (result == Gui.Forms.UnhandledExceptionResult.Exit)
+				Application.Exit();
+			// else do nothing.
+		}
+
+		/// <remarks>
+		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit.
+		/// </remarks>
+		private void curentDomainWithView_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		{
+			Exception ex = e.ExceptionObject as Exception;
+			string message = "An unhandled asynchronous exception occured in " + Application.ProductName + ".";
+			Gui.Forms.UnhandledExceptionResult result = Gui.Forms.UnhandledExceptionHandler.ProvideExceptionToUser(ex, message, true, false);
+
+			if (result == Gui.Forms.UnhandledExceptionResult.ExitAndRestart)
+				Application.Restart();
+			else
+				Application.Exit();
+		}
+
+		#endregion
+
+		#region Private Methods > Run Without View
+		//------------------------------------------------------------------------------------------
+		// Private Methods > Run Without View
+		//------------------------------------------------------------------------------------------
 
 		/// <summary>
 		/// Non-view application for automated test usage.
@@ -335,15 +382,16 @@ namespace YAT.Controller
 		{
 			MainResult mainResult = MainResult.Success;
 
+			MKY.Win32.Console.Attach();
+
+			AppDomain curentDomainWithoutView = AppDomain.CurrentDomain;
+			curentDomainWithoutView.UnhandledException += new UnhandledExceptionEventHandler(curentDomainWithoutView_UnhandledException);
+
 			// Create model and run application.
 			using (Model.Main model = new Model.Main(this.commandLineArgs))
 			{
-				MKY.Win32.Console.Attach();
-#if (!DEBUG)
-				model.UnhandledException += new EventHandler<EventHelper.UnhandledExceptionEventArgs>(model_UnhandledException);
 				try
 				{
-#endif
 					Model.MainResult modelResult = model.Start();
 					if (modelResult == Model.MainResult.Success)
 					{
@@ -354,27 +402,42 @@ namespace YAT.Controller
 					{
 						mainResult = ConvertToMainResult(modelResult);
 					}
-#if (!DEBUG)
 				}
 				catch (Exception ex)
 				{
+					string message = "An unhandled synchronous exception occured while running " + Application.ProductName + ".";
+					Console.WriteLine(message);
+
 					MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), ex);
+
 					mainResult = MainResult.UnhandledException;
 				}
-				model.UnhandledException -= new EventHandler<EventHelper.UnhandledExceptionEventArgs>(model_UnhandledException);
-#endif
-				MKY.Win32.Console.Detach();
-
-				return (mainResult);
 			} // Dispose of model to ensure immediate release of resources.
+
+			MKY.Win32.Console.Detach();
+
+			return (mainResult);
 		}
 
-#if (!DEBUG)
-		private void model_UnhandledException(object sender, EventHelper.UnhandledExceptionEventArgs e)
+		/// <remarks>
+		/// In case of an <see cref="AppDomain.UnhandledException"/>, the application must exit.
+		/// </remarks>
+		private void curentDomainWithoutView_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
-			MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), e.UnhandledException);
+			string message = "An unhandled asynchronous exception occured in " + Application.ProductName + ".";
+			Console.WriteLine(message);
+
+			Exception ex = e.ExceptionObject as Exception;
+			if (ex != null)
+				MKY.Diagnostics.ConsoleEx.WriteException(this.GetType(), ex);
 		}
-#endif
+
+		#endregion
+
+		#region Private Methods > Console
+		//------------------------------------------------------------------------------------------
+		// Private Methods > Console
+		//------------------------------------------------------------------------------------------
 
 		/// <remarks>
 		/// Output must be limited to <see cref="Console.WindowWidth"/> - 1 to ensure that lines
@@ -421,6 +484,12 @@ namespace YAT.Controller
 			Console.WriteLine(new String('=', (Console.WindowWidth - 1))); // ==========...
 		}
 
+		#endregion
+
+		#region Private Methods > Result
+		//------------------------------------------------------------------------------------------
+		// Private Methods > Result
+		//------------------------------------------------------------------------------------------
 
 		/// <summary></summary>
 		private MainResult ConvertToMainResult(Model.MainResult result)
@@ -449,6 +518,8 @@ namespace YAT.Controller
 				default:                               return (Model.MainResult.UnhandledException); // Covers 'MainResult.UnhandledException'.
 			}
 		}
+
+		#endregion
 
 		#endregion
 	}

@@ -1120,8 +1120,7 @@ namespace YAT.Gui.Forms
 				this.main.TimedStatusTextRequest += new EventHandler<Model.StatusTextEventArgs>(main_TimedStatusTextRequest);
 				this.main.MessageInputRequest    += new EventHandler<Model.MessageInputEventArgs>(main_MessageInputRequest);
 
-				this.main.Exited             += new EventHandler(main_Exited);
-				this.main.UnhandledException += new EventHandler<EventHelper.UnhandledExceptionEventArgs>(main_UnhandledException);
+				this.main.Exited += new EventHandler(main_Exited);
 			}
 		}
 
@@ -1136,8 +1135,7 @@ namespace YAT.Gui.Forms
 				this.main.TimedStatusTextRequest -= new EventHandler<Model.StatusTextEventArgs>(main_TimedStatusTextRequest);
 				this.main.MessageInputRequest    -= new EventHandler<Model.MessageInputEventArgs>(main_MessageInputRequest);
 
-				this.main.Exited             -= new EventHandler(main_Exited);
-				this.main.UnhandledException -= new EventHandler<EventHelper.UnhandledExceptionEventArgs>(main_UnhandledException);
+				this.main.Exited -= new EventHandler(main_Exited);
 			}
 		}
 
@@ -1189,15 +1187,6 @@ namespace YAT.Gui.Forms
 				this.closingState = ClosingState.IsClosingFromModel;
 				Close();
 			}
-		}
-
-		private void main_UnhandledException(object sender, MKY.Event.EventHelper.UnhandledExceptionEventArgs e)
-		{
-			string message = "An unhandled asynchronous exception occured in " + Application.ProductName + ".";
-			if (UnhandledExceptionHandler.ProvideExceptionToUser(this, e.UnhandledException, message, true) == UnhandledExceptionResult.ExitAndRestart)
-				Application.Restart();
-			else
-				Application.Exit();
 		}
 
 		#endregion

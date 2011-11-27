@@ -87,6 +87,8 @@ Important changes:
 - Shortcut for window layout added: Ctrl+Alt+C/H/V layouts cascaded/horizontal/vertical
 - Behavior of concurrent instances of YAT verified (feature request #2842713)
    > Already seems to work fine, test case added and successfully passed, limitation removed
+- Exception handling refactored, now using 'Application.ThreadException' for 'Windows.Forms'
+  and 'AppDomain.UnhandledException' for all other threads (bug #3292682)
 - "Unhandled Exception" now shows all information including inner exceptions (bug #3290314)
 - MKY.Data added
 - MKY.Settings.Settings renamed to MKY.Settings.SettingsItem
@@ -100,7 +102,7 @@ Fixed bugs:
    > Only applied in case of 'File > Preferences... > Save current workspace automatically' = 'No'
 - Serial COM ports now properly support XOn/XOff and RTS/CTS flow control (bug #3432512)
 - Multi-line commands are again kept in 'Send Command' (bug #3121249)
-- Exception when selecting an undefined predefined commands using 'Shift + Fx' fixed (bug #3367649)
+- Exception when selecting an undefined predefined command using 'Shift+Fx' fixed (bug #3367649)
 - Exception due to invalid panel layout (splitter distance) is now handled (bug #3426400)
 - Error message in case of an error when opening a port or socket improved (bug #2213639)
 - Exception in case of a computer without any devices (e.g. off-line notebook) fixed (bug #3060623)
