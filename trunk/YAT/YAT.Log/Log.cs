@@ -313,8 +313,11 @@ namespace YAT.Log
 			/// <summary></summary>
 			protected virtual void StopFlushTimer()
 			{
-				this.flushTimer.Dispose();
-				this.flushTimer = null;
+				if (this.flushTimer != null)
+				{
+					this.flushTimer.Dispose();
+					this.flushTimer = null;
+				}
 			}
 
 			/// <summary></summary>
