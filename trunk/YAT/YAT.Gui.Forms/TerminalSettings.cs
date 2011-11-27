@@ -104,6 +104,11 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers
 		//==========================================================================================
 
+		#region Controls Event Handlers > General
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > General
+		//------------------------------------------------------------------------------------------
+
 		private void terminalSelection_TerminalTypeChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -144,6 +149,13 @@ namespace YAT.Gui.Forms
 			ShowTextOrBinarySettings();
 		}
 
+		#endregion
+
+		#region Controls Event Handlers > Serial Port
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Serial Port
+		//------------------------------------------------------------------------------------------
+
 		private void serialPortSelection_PortIdChanged(object sender, EventArgs e)
 		{
 			this.settings_Form.Terminal.IO.SerialPort.PortId = serialPortSelection.PortId;
@@ -179,6 +191,13 @@ namespace YAT.Gui.Forms
 			this.settings_Form.Terminal.IO.SerialPort.AutoReopen = serialPortSettings.AutoReopen;
 		}
 
+		#endregion
+
+		#region Controls Event Handlers > Socket
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Socket
+		//------------------------------------------------------------------------------------------
+
 		private void socketSelection_RemoteHostChanged(object sender, EventArgs e)
 		{
 			this.settings_Form.Terminal.IO.Socket.RemoteHost = socketSelection.RemoteHost;
@@ -211,6 +230,13 @@ namespace YAT.Gui.Forms
 			this.settings_Form.Terminal.IO.Socket.TcpClientAutoReconnect = socketSettings.TcpClientAutoReconnect;
 		}
 
+		#endregion
+
+		#region Controls Event Handlers > USB Ser/HID
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > USB Ser/HID
+		//------------------------------------------------------------------------------------------
+
 		private void usbSerialHidDeviceSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
 			this.settings_Form.Terminal.IO.UsbSerialHidDevice.DeviceInfo = usbSerialHidDeviceSelection.DeviceInfo;
@@ -221,10 +247,24 @@ namespace YAT.Gui.Forms
 			this.settings_Form.Terminal.IO.UsbSerialHidDevice.AutoOpen = usbSerialHidDeviceSettings.AutoOpen;
 		}
 
+		#endregion
+
+		#region Controls Event Handlers > Advanced
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Advanced
+		//------------------------------------------------------------------------------------------
+
 		private void button_AdvancedSettings_Click(object sender, EventArgs e)
 		{
 			ShowAdvancedSettings();
 		}
+
+		#endregion
+
+		#region Controls Event Handlers > Buttons
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Buttons
+		//------------------------------------------------------------------------------------------
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{
@@ -280,6 +320,8 @@ namespace YAT.Gui.Forms
 
 		#endregion
 
+		#endregion
+
 		#region Private Methods
 		//==========================================================================================
 		// Private Methods
@@ -313,10 +355,11 @@ namespace YAT.Gui.Forms
 
 			bool isSerialPort   = (ioType == Domain.IOType.SerialPort);
 			bool isUsbSerialHid = (ioType == Domain.IOType.UsbSerialHid);
+			bool isSocket       = (!isSerialPort && !isUsbSerialHid);
 
-			// Set socket control before serial port control since that might need to refresh the
-			//   serial port list first (which takes time, which looks ulgy)
-			socketSelection.Visible        = !isSerialPort && !isUsbSerialHid;
+			// Set socket and USB control before serial port control since that might need to refresh
+			// the serial port list first (which takes time, which looks ulgy).
+			socketSelection.Visible        = isSocket;
 			socketSelection.HostType       = (Domain.IOTypeEx)ioType;
 			socketSelection.RemoteHost     = this.settings_Form.Terminal.IO.Socket.RemoteHost;
 			socketSelection.RemotePort     = this.settings_Form.Terminal.IO.Socket.RemotePort;
@@ -324,9 +367,15 @@ namespace YAT.Gui.Forms
 			socketSelection.LocalTcpPort   = this.settings_Form.Terminal.IO.Socket.LocalTcpPort;
 			socketSelection.LocalUdpPort   = this.settings_Form.Terminal.IO.Socket.LocalUdpPort;
 
-			socketSettings.Visible         = !isSerialPort && !isUsbSerialHid;
+			socketSettings.Visible         = isSocket;
 			socketSettings.HostType        = (Domain.IOTypeEx)ioType;
 			socketSettings.TcpClientAutoReconnect = this.settings_Form.Terminal.IO.Socket.TcpClientAutoReconnect;
+
+			usbSerialHidDeviceSelection.Visible    = isUsbSerialHid;
+			usbSerialHidDeviceSelection.DeviceInfo = this.settings_Form.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
+
+			usbSerialHidDeviceSettings.Visible  = isUsbSerialHid;
+			usbSerialHidDeviceSettings.AutoOpen = this.settings_Form.Terminal.IO.UsbSerialHidDevice.AutoOpen;
 
 			serialPortSelection.Visible    = isSerialPort;
 			serialPortSelection.PortId     = this.settings_Form.Terminal.IO.SerialPort.PortId;
@@ -338,12 +387,6 @@ namespace YAT.Gui.Forms
 			serialPortSettings.StopBits    = this.settings_Form.Terminal.IO.SerialPort.Communication.StopBits;
 			serialPortSettings.FlowControl = this.settings_Form.Terminal.IO.SerialPort.Communication.FlowControl;
 			serialPortSettings.AutoReopen  = this.settings_Form.Terminal.IO.SerialPort.AutoReopen;
-
-			usbSerialHidDeviceSelection.Visible    = isUsbSerialHid;
-			usbSerialHidDeviceSelection.DeviceInfo = this.settings_Form.Terminal.IO.UsbSerialHidDevice.DeviceInfo;
-
-			usbSerialHidDeviceSettings.Visible     = isUsbSerialHid;
-			usbSerialHidDeviceSettings.AutoOpen  = this.settings_Form.Terminal.IO.UsbSerialHidDevice.AutoOpen;
 
 			// Trigger refresh of ports/devices if selection of I/O type has changed.
 			if      ((ioType == Domain.IOType.SerialPort)   && (this.SetControls_ioTypeOld != Domain.IOType.SerialPort))

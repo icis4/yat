@@ -112,6 +112,11 @@ namespace YAT.Gui.Forms
 		// Controls Event Handlers
 		//==========================================================================================
 
+		#region Controls Event Handlers > General
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > General
+		//------------------------------------------------------------------------------------------
+
 		private void terminalSelection_TerminalTypeChanged(object sender, EventArgs e)
 		{
 			if (!this.isSettingControls)
@@ -132,10 +137,59 @@ namespace YAT.Gui.Forms
 			}
 		}
 
+		private void checkBox_StartTerminal_CheckedChanged(object sender, EventArgs e)
+		{
+			this.newTerminalSettings_Form.StartTerminal = checkBox_StartTerminal.Checked;
+		}
+
+		#endregion
+
+		#region Controls Event Handlers > Serial Port
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Serial Port
+		//------------------------------------------------------------------------------------------
+
 		private void serialPortSelection_PortIdChanged(object sender, EventArgs e)
 		{
 			this.newTerminalSettings_Form.SerialPortId = serialPortSelection.PortId;
 		}
+
+		private void serialPortSettings_BaudRateChanged(object sender, EventArgs e)
+		{
+			this.newTerminalSettings_Form.SerialPortCommunication.BaudRate = serialPortSettings.BaudRate;
+		}
+
+		private void serialPortSettings_DataBitsChanged(object sender, EventArgs e)
+		{
+			this.newTerminalSettings_Form.SerialPortCommunication.DataBits = serialPortSettings.DataBits;
+		}
+
+		private void serialPortSettings_ParityChanged(object sender, EventArgs e)
+		{
+			this.newTerminalSettings_Form.SerialPortCommunication.Parity = serialPortSettings.Parity;
+		}
+
+		private void serialPortSettings_StopBitsChanged(object sender, EventArgs e)
+		{
+			this.newTerminalSettings_Form.SerialPortCommunication.StopBits = serialPortSettings.StopBits;
+		}
+
+		private void serialPortSettings_FlowControlChanged(object sender, EventArgs e)
+		{
+			this.newTerminalSettings_Form.SerialPortCommunication.FlowControl = serialPortSettings.FlowControl;
+		}
+
+		private void serialPortSettings_AutoReopenChanged(object sender, EventArgs e)
+		{
+			this.newTerminalSettings_Form.SerialPortAutoReopen = serialPortSettings.AutoReopen;
+		}
+
+		#endregion
+
+		#region Controls Event Handlers > Socket
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Socket
+		//------------------------------------------------------------------------------------------
 
 		private void socketSelection_RemoteHostChanged(object sender, EventArgs e)
 		{
@@ -162,15 +216,34 @@ namespace YAT.Gui.Forms
 			this.newTerminalSettings_Form.SocketLocalUdpPort = socketSelection.LocalUdpPort;
 		}
 
+		private void socketSettings_TcpClientAutoReconnectChanged(object sender, EventArgs e)
+		{
+			this.newTerminalSettings_Form.TcpClientAutoReconnect = socketSettings.TcpClientAutoReconnect;
+		}
+
+		#endregion
+
+		#region Controls Event Handlers > USB Ser/HID
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > USB Ser/HID
+		//------------------------------------------------------------------------------------------
+
 		private void usbSerialHidDeviceSelection_DeviceInfoChanged(object sender, EventArgs e)
 		{
 			this.newTerminalSettings_Form.UsbSerialHidDeviceInfo = usbSerialHidDeviceSelection.DeviceInfo;
 		}
 
-		private void checkBox_StartTerminal_CheckedChanged(object sender, EventArgs e)
+		private void usbSerialHidDeviceSettings_AutoOpenChanged(object sender, EventArgs e)
 		{
-			this.newTerminalSettings_Form.StartTerminal = checkBox_StartTerminal.Checked;
+			this.newTerminalSettings_Form.UsbSerialHidAutoOpen = usbSerialHidDeviceSettings.AutoOpen;
 		}
+
+		#endregion
+
+		#region Controls Event Handlers > Buttons
+		//------------------------------------------------------------------------------------------
+		// Controls Event Handlers > Buttons
+		//------------------------------------------------------------------------------------------
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{
@@ -180,23 +253,26 @@ namespace YAT.Gui.Forms
 			// Create document settings and fill it with new terminal settings.
 			this.terminalSettings = new Settings.Terminal.TerminalSettingsRoot();
 
-			this.terminalSettings.Terminal.TerminalType                      = this.newTerminalSettings.TerminalType;
-			this.terminalSettings.Terminal.IO.IOType                         = this.newTerminalSettings.IOType;
+			this.terminalSettings.Terminal.TerminalType = this.newTerminalSettings.TerminalType;
+			this.terminalSettings.Terminal.IO.IOType    = this.newTerminalSettings.IOType;
 
-			this.terminalSettings.Terminal.IO.SerialPort.PortId              = this.newTerminalSettings.SerialPortId;
+			this.terminalSettings.Terminal.IO.SerialPort.PortId        = this.newTerminalSettings.SerialPortId;
+			this.terminalSettings.Terminal.IO.SerialPort.Communication = this.newTerminalSettings.SerialPortCommunication;
+			this.terminalSettings.Terminal.IO.SerialPort.AutoReopen    = this.newTerminalSettings.SerialPortAutoReopen;
 
 			this.terminalSettings.Terminal.IO.Socket.RemoteHost              = this.newTerminalSettings.SocketRemoteHost;
 			this.terminalSettings.Terminal.IO.Socket.ResolvedRemoteIPAddress = socketSelection.ResolvedRemoteIPAddress;
 			this.terminalSettings.Terminal.IO.Socket.RemotePort              = this.newTerminalSettings.SocketRemotePort;
-
 			this.terminalSettings.Terminal.IO.Socket.LocalInterface          = this.newTerminalSettings.SocketLocalInterface;
 			this.terminalSettings.Terminal.IO.Socket.ResolvedLocalIPAddress  = socketSelection.ResolvedLocalIPAddress;
 			this.terminalSettings.Terminal.IO.Socket.LocalTcpPort            = this.newTerminalSettings.SocketLocalTcpPort;
 			this.terminalSettings.Terminal.IO.Socket.LocalUdpPort            = this.newTerminalSettings.SocketLocalUdpPort;
+			this.terminalSettings.Terminal.IO.Socket.TcpClientAutoReconnect  = this.newTerminalSettings.TcpClientAutoReconnect;
 
-			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.DeviceInfo  = this.newTerminalSettings.UsbSerialHidDeviceInfo;
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.DeviceInfo = this.newTerminalSettings.UsbSerialHidDeviceInfo;
+			this.terminalSettings.Terminal.IO.UsbSerialHidDevice.AutoOpen   = this.newTerminalSettings.UsbSerialHidAutoOpen;
 
-			this.terminalSettings.TerminalIsStarted                          = this.newTerminalSettings.StartTerminal;
+			this.terminalSettings.TerminalIsStarted = this.newTerminalSettings.StartTerminal;
 
 			switch (this.terminalSettings.TerminalType)
 			{
@@ -218,6 +294,24 @@ namespace YAT.Gui.Forms
 			// Do nothing.
 		}
 
+		private void button_Defaults_Click(object sender, EventArgs e)
+		{
+			if (MessageBox.Show
+				(
+				this,
+				"Reset all settings to default values?",
+				"Defaults?",
+				MessageBoxButtons.YesNoCancel,
+				MessageBoxIcon.Question,
+				MessageBoxDefaultButton.Button3
+				)
+				== DialogResult.Yes)
+			{
+				this.newTerminalSettings_Form.SetDefaults();
+				SetControls();
+			}
+		}
+
 		private void button_Help_Click(object sender, EventArgs e)
 		{
 			// \fixme: Replace MessageBox with a real help.
@@ -230,6 +324,8 @@ namespace YAT.Gui.Forms
 				MessageBoxIcon.Information
 				);
 		}
+
+		#endregion
 
 		#endregion
 
@@ -255,10 +351,11 @@ namespace YAT.Gui.Forms
 
 			bool isSerialPort   = (ioType == Domain.IOType.SerialPort);
 			bool isUsbSerialHid = (ioType == Domain.IOType.UsbSerialHid);
+			bool isSocket       = (!isSerialPort && !isUsbSerialHid);
 
-			// Set socket control before serial port control since that might need to refresh the
-			//   serial port list first (which takes time, which looks ulgy).
-			socketSelection.Enabled        = !isSerialPort && !isUsbSerialHid;
+			// Set socket and USB control before serial port control since that might need to refresh
+			// the serial port list first (which takes time, which looks ulgy).
+			socketSelection.Visible        = isSocket;
 			socketSelection.HostType       = (Domain.IOTypeEx)ioType;
 			socketSelection.RemoteHost     = this.newTerminalSettings_Form.SocketRemoteHost;
 			socketSelection.RemotePort     = this.newTerminalSettings_Form.SocketRemotePort;
@@ -266,11 +363,26 @@ namespace YAT.Gui.Forms
 			socketSelection.LocalTcpPort   = this.newTerminalSettings_Form.SocketLocalTcpPort;
 			socketSelection.LocalUdpPort   = this.newTerminalSettings_Form.SocketLocalUdpPort;
 
-			serialPortSelection.Enabled    = isSerialPort;
+			socketSettings.Visible         = isSocket;
+			socketSettings.HostType        = (Domain.IOTypeEx)ioType;
+			socketSettings.TcpClientAutoReconnect = this.newTerminalSettings_Form.TcpClientAutoReconnect;
+
+			usbSerialHidDeviceSelection.Visible    = isUsbSerialHid;
+			usbSerialHidDeviceSelection.DeviceInfo = this.newTerminalSettings_Form.UsbSerialHidDeviceInfo;
+
+			usbSerialHidDeviceSettings.Visible  = isUsbSerialHid;
+			usbSerialHidDeviceSettings.AutoOpen = this.newTerminalSettings_Form.UsbSerialHidAutoOpen;
+
+			serialPortSelection.Visible    = isSerialPort;
 			serialPortSelection.PortId     = this.newTerminalSettings_Form.SerialPortId;
 
-			usbSerialHidDeviceSelection.Enabled    = isUsbSerialHid;
-			usbSerialHidDeviceSelection.DeviceInfo = this.newTerminalSettings_Form.UsbSerialHidDeviceInfo;
+			serialPortSettings.Visible     = isSerialPort;
+			serialPortSettings.BaudRate    = this.newTerminalSettings_Form.SerialPortCommunication.BaudRate;
+			serialPortSettings.DataBits    = this.newTerminalSettings_Form.SerialPortCommunication.DataBits;
+			serialPortSettings.Parity      = this.newTerminalSettings_Form.SerialPortCommunication.Parity;
+			serialPortSettings.StopBits    = this.newTerminalSettings_Form.SerialPortCommunication.StopBits;
+			serialPortSettings.FlowControl = this.newTerminalSettings_Form.SerialPortCommunication.FlowControl;
+			serialPortSettings.AutoReopen  = this.newTerminalSettings_Form.SerialPortAutoReopen;
 
 			checkBox_StartTerminal.Checked = this.newTerminalSettings_Form.StartTerminal;
 

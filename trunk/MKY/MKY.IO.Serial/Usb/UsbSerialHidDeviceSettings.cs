@@ -94,7 +94,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("DeviceInfo")]
-		public DeviceInfo DeviceInfo
+		public virtual DeviceInfo DeviceInfo
 		{
 			get { return (this.deviceInfo); }
 			set
@@ -109,7 +109,7 @@ namespace MKY.IO.Serial
 
 		/// <summary></summary>
 		[XmlElement("AutoOpen")]
-		public bool AutoOpen
+		public virtual bool AutoOpen
 		{
 			get { return (this.autoOpen); }
 			set
