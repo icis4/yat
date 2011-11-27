@@ -65,13 +65,13 @@ New:
 - Handling of terminal indecies finalized (feature request #3091859)
    > Fixed indecies are persistently saved and restored upon loading the workspace
    > Dynamic indecies are automatically restored correctly
-- All major terminal settings are now also available when creating a new terminal as well as when
-  calling YAT from the command line (feature requests #3162725 and #3391925, related to feature
-  request #2991946 listed below)
 - Powerful command line argument handling implemented related to the feature requests stated above
   (feature request #2991946, also fixes feature request #2745211)
    > Attribute based argument implementation including test environment and runtime validation
    > Based on the NUnit command line argument infrastructure
+- All major terminal settings are now also available when creating a new terminal as well as when
+  calling YAT from the command line (feature requests #3162725 and #3391925, related to feature
+  request #2991946 listed above)
 
 Important changes:
 - The monitor update rate is now dependent on the data rate, i.e. when more data is transmitted or

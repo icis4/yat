@@ -21,12 +21,19 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 
 using MKY.Net;
+
+#endregion
 
 namespace YAT.Model.Settings
 {
@@ -38,15 +45,18 @@ namespace YAT.Model.Settings
 		private Domain.IOType ioType;
 
 		private MKY.IO.Ports.SerialPortId serialPortId;
+		private MKY.IO.Serial.SerialCommunicationSettings serialPortCommunication;
+		private MKY.IO.Serial.AutoRetry serialPortAutoReopen;
 
 		private IPHost socketRemoteHost;
 		private int socketRemotePort;
-
 		private IPNetworkInterface socketLocalInterface;
 		private int socketLocalTcpPort;
 		private int socketLocalUdpPort;
+		private MKY.IO.Serial.AutoRetry tcpClientAutoReconnect;
 
 		private MKY.IO.Usb.DeviceInfo usbSerialHidDeviceInfo;
+		private bool usbSerialHidAutoOpen;
 
 		private bool startTerminal;
 
@@ -54,6 +64,7 @@ namespace YAT.Model.Settings
 		public NewTerminalSettings()
 		{
 			SetMyDefaults();
+			InitializeNodes();
 			ClearChanged();
 		}
 
@@ -62,7 +73,13 @@ namespace YAT.Model.Settings
 			: base(settingsType)
 		{
 			SetMyDefaults();
+			InitializeNodes();
 			ClearChanged();
+		}
+
+		private void InitializeNodes()
+		{
+			SerialPortCommunication = new MKY.IO.Serial.SerialCommunicationSettings(SettingsType);
 		}
 
 		/// <remarks>
@@ -71,21 +88,24 @@ namespace YAT.Model.Settings
 		public NewTerminalSettings(NewTerminalSettings rhs)
 			: base(rhs)
 		{
-			TerminalType           = rhs.TerminalType;
-			IOType                 = rhs.IOType;
+			TerminalType            = rhs.TerminalType;
+			IOType                  = rhs.IOType;
 
-			SerialPortId           = rhs.SerialPortId;
+			SerialPortId            = rhs.SerialPortId;
+			SerialPortCommunication = rhs.SerialPortCommunication;
+			SerialPortAutoReopen    = rhs.SerialPortAutoReopen;
 
-			SocketRemoteHost       = rhs.SocketRemoteHost;
-			SocketRemotePort       = rhs.SocketRemotePort;
+			SocketRemoteHost        = rhs.SocketRemoteHost;
+			SocketRemotePort        = rhs.SocketRemotePort;
+			SocketLocalInterface    = rhs.SocketLocalInterface;
+			SocketLocalTcpPort      = rhs.SocketLocalTcpPort;
+			SocketLocalUdpPort      = rhs.SocketLocalUdpPort;
+			TcpClientAutoReconnect  = rhs.TcpClientAutoReconnect;
 
-			SocketLocalInterface   = rhs.SocketLocalInterface;
-			SocketLocalTcpPort     = rhs.SocketLocalTcpPort;
-			SocketLocalUdpPort     = rhs.SocketLocalUdpPort;
+			UsbSerialHidDeviceInfo  = rhs.UsbSerialHidDeviceInfo;
+			UsbSerialHidAutoOpen    = rhs.UsbSerialHidAutoOpen;
 
-			UsbSerialHidDeviceInfo = rhs.UsbSerialHidDeviceInfo;
-
-			StartTerminal          = rhs.StartTerminal;
+			StartTerminal           = rhs.StartTerminal;
 
 			ClearChanged();
 		}
@@ -101,21 +121,24 @@ namespace YAT.Model.Settings
 		{
 			base.SetMyDefaults();
 
-			TerminalType           = Domain.TerminalType.Text;
-			IOType                 = Domain.IOType.SerialPort;
+			TerminalType            = Domain.TerminalType.Text;
+			IOType                  = Domain.IOType.SerialPort;
 
-			SerialPortId           = MKY.IO.Ports.SerialPortId.FirstStandardPort;
+			SerialPortId            = MKY.IO.Ports.SerialPortId.FirstStandardPort;
+			// SerialPortCommunication is attached as settings object.
+			SerialPortAutoReopen    = MKY.IO.Serial.SerialPortSettings.AutoReopenDefault;
 
-			SocketRemoteHost       = MKY.IO.Serial.SocketSettings.DefaultRemoteHost;
-			SocketRemotePort       = MKY.IO.Serial.SocketSettings.DefaultRemotePort;
+			SocketRemoteHost        = MKY.IO.Serial.SocketSettings.DefaultRemoteHost;
+			SocketRemotePort        = MKY.IO.Serial.SocketSettings.DefaultRemotePort;
+			SocketLocalInterface    = MKY.IO.Serial.SocketSettings.DefaultLocalInterface;
+			SocketLocalTcpPort      = MKY.IO.Serial.SocketSettings.DefaultLocalTcpPort;
+			SocketLocalUdpPort      = MKY.IO.Serial.SocketSettings.DefaultLocalUdpPort;
+			TcpClientAutoReconnect  = MKY.IO.Serial.SocketSettings.TcpClientAutoReconnectDefault;
 
-			SocketLocalInterface   = MKY.IO.Serial.SocketSettings.DefaultLocalInterface;
-			SocketLocalTcpPort     = MKY.IO.Serial.SocketSettings.DefaultLocalTcpPort;
-			SocketLocalUdpPort     = MKY.IO.Serial.SocketSettings.DefaultLocalUdpPort;
+			UsbSerialHidDeviceInfo  = null;
+			UsbSerialHidAutoOpen    = MKY.IO.Serial.UsbSerialHidDeviceSettings.AutoOpenDefault;
 
-			UsbSerialHidDeviceInfo = null;
-
-			StartTerminal          = true;
+			StartTerminal           = true;
 		}
 
 		#region Properties
@@ -163,6 +186,47 @@ namespace YAT.Model.Settings
 				if (value != this.serialPortId)
 				{
 					this.serialPortId = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("SerialPortCommunication")]
+		public virtual MKY.IO.Serial.SerialCommunicationSettings SerialPortCommunication
+		{
+			get { return (this.serialPortCommunication); }
+			set
+			{
+				if (value == null)
+				{
+					this.serialPortCommunication = value;
+					DetachNode(this.serialPortCommunication);
+				}
+				else if (this.serialPortCommunication == null)
+				{
+					this.serialPortCommunication = value;
+					AttachNode(this.serialPortCommunication);
+				}
+				else if (value != this.serialPortCommunication)
+				{
+					MKY.IO.Serial.SerialCommunicationSettings old = this.serialPortCommunication;
+					this.serialPortCommunication = value;
+					ReplaceNode(old, this.serialPortCommunication);
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("SerialPortAutoReopen")]
+		public virtual MKY.IO.Serial.AutoRetry SerialPortAutoReopen
+		{
+			get { return (this.serialPortAutoReopen); }
+			set
+			{
+				if (value != this.serialPortAutoReopen)
+				{
+					this.serialPortAutoReopen = value;
 					SetChanged();
 				}
 			}
@@ -281,6 +345,21 @@ namespace YAT.Model.Settings
 		}
 
 		/// <summary></summary>
+		[XmlElement("TcpClientAutoReconnect")]
+		public virtual MKY.IO.Serial.AutoRetry TcpClientAutoReconnect
+		{
+			get { return (this.tcpClientAutoReconnect); }
+			set
+			{
+				if (value != this.tcpClientAutoReconnect)
+				{
+					this.tcpClientAutoReconnect = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
 		[XmlElement("UsbSerialHidDeviceInfo")]
 		public virtual MKY.IO.Usb.DeviceInfo UsbSerialHidDeviceInfo
 		{
@@ -290,6 +369,21 @@ namespace YAT.Model.Settings
 				if (value != this.usbSerialHidDeviceInfo)
 				{
 					this.usbSerialHidDeviceInfo = value;
+					SetChanged();
+				}
+			}
+		}
+
+		/// <summary></summary>
+		[XmlElement("UsbSerialHidAutoOpen")]
+		public virtual bool UsbSerialHidAutoOpen
+		{
+			get { return (this.usbSerialHidAutoOpen); }
+			set
+			{
+				if (value != this.usbSerialHidAutoOpen)
+				{
+					this.usbSerialHidAutoOpen = value;
 					SetChanged();
 				}
 			}
@@ -330,16 +424,24 @@ namespace YAT.Model.Settings
 			(
 				base.Equals(other) && // Compare all settings nodes.
 
-				(this.terminalType         == other.terminalType) &&
-				(this.ioType               == other.ioType) &&
-				(this.serialPortId         == other.serialPortId) &&
-				(this.socketRemoteHost     == other.socketRemoteHost) &&
-				(this.socketRemotePort     == other.socketRemotePort) &&
-				(this.socketLocalInterface == other.socketLocalInterface) &&
-				(this.socketLocalTcpPort   == other.socketLocalTcpPort) &&
-				(this.socketLocalUdpPort   == other.socketLocalUdpPort) &&
-				(this.usbSerialHidDeviceInfo     == other.usbSerialHidDeviceInfo) &&
-				(this.startTerminal        == other.startTerminal)
+				(this.terminalType == other.terminalType) &&
+				(this.ioType       == other.ioType) &&
+
+				(this.serialPortId            == other.serialPortId) &&
+				(this.serialPortCommunication == other.serialPortCommunication) &&
+				(this.serialPortAutoReopen    == other.serialPortAutoReopen) &&
+
+				(this.socketRemoteHost       == other.socketRemoteHost) &&
+				(this.socketRemotePort       == other.socketRemotePort) &&
+				(this.socketLocalInterface   == other.socketLocalInterface) &&
+				(this.socketLocalTcpPort     == other.socketLocalTcpPort) &&
+				(this.socketLocalUdpPort     == other.socketLocalUdpPort) &&
+				(this.tcpClientAutoReconnect == other.tcpClientAutoReconnect) &&
+
+				(this.usbSerialHidDeviceInfo == other.usbSerialHidDeviceInfo) &&
+				(this.usbSerialHidAutoOpen   == other.usbSerialHidAutoOpen) &&
+
+				(this.startTerminal == other.startTerminal)
 			);
 		}
 
@@ -358,15 +460,23 @@ namespace YAT.Model.Settings
 			(
 				base.GetHashCode() ^
 
-				this.terminalType        .GetHashCode() ^
-				this.ioType              .GetHashCode() ^
-				serialPortIdHashCode     .GetHashCode() ^
-				this.socketRemoteHost    .GetHashCode() ^
-				this.socketRemotePort    .GetHashCode() ^
-				this.socketLocalInterface.GetHashCode() ^
-				this.socketLocalTcpPort  .GetHashCode() ^
-				this.socketLocalUdpPort  .GetHashCode() ^
-				usbSerialHidDeviceInfoHashCode .GetHashCode() ^
+				this.terminalType.GetHashCode() ^
+				this.ioType      .GetHashCode() ^
+
+				serialPortIdHashCode ^
+				this.serialPortCommunication.GetHashCode() ^
+				this.serialPortAutoReopen   .GetHashCode() ^
+
+				this.socketRemoteHost      .GetHashCode() ^
+				this.socketRemotePort      .GetHashCode() ^
+				this.socketLocalInterface  .GetHashCode() ^
+				this.socketLocalTcpPort    .GetHashCode() ^
+				this.socketLocalUdpPort    .GetHashCode() ^
+				this.tcpClientAutoReconnect.GetHashCode() ^
+
+				usbSerialHidDeviceInfoHashCode ^
+				this.usbSerialHidAutoOpen.GetHashCode() ^
+
 				this.startTerminal       .GetHashCode()
 			);
 		}

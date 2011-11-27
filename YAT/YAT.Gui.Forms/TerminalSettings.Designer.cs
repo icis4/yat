@@ -129,10 +129,10 @@ namespace YAT.Gui.Forms
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox_PortSettings.Controls.Add(this.usbSerialHidDeviceSettings);
 			this.groupBox_PortSettings.Controls.Add(this.usbSerialHidDeviceSelection);
+			this.groupBox_PortSettings.Controls.Add(this.socketSelection);
 			this.groupBox_PortSettings.Controls.Add(this.socketSettings);
 			this.groupBox_PortSettings.Controls.Add(this.serialPortSelection);
 			this.groupBox_PortSettings.Controls.Add(this.serialPortSettings);
-			this.groupBox_PortSettings.Controls.Add(this.socketSelection);
 			this.groupBox_PortSettings.Location = new System.Drawing.Point(6, 79);
 			this.groupBox_PortSettings.Name = "groupBox_PortSettings";
 			this.groupBox_PortSettings.Size = new System.Drawing.Size(300, 303);
@@ -144,7 +144,7 @@ namespace YAT.Gui.Forms
 			// 
 			this.usbSerialHidDeviceSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.usbSerialHidDeviceSettings.Location = new System.Drawing.Point(9, 71);
+			this.usbSerialHidDeviceSettings.Location = new System.Drawing.Point(9, 70);
 			this.usbSerialHidDeviceSettings.Name = "usbSerialHidDeviceSettings";
 			this.usbSerialHidDeviceSettings.Size = new System.Drawing.Size(257, 22);
 			this.usbSerialHidDeviceSettings.TabIndex = 3;
@@ -155,7 +155,7 @@ namespace YAT.Gui.Forms
 			this.usbSerialHidDeviceSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.usbSerialHidDeviceSelection.DeviceInfo = null;
-			this.usbSerialHidDeviceSelection.Location = new System.Drawing.Point(6, 20);
+			this.usbSerialHidDeviceSelection.Location = new System.Drawing.Point(6, 19);
 			this.usbSerialHidDeviceSelection.Name = "usbSerialHidDeviceSelection";
 			this.usbSerialHidDeviceSelection.Size = new System.Drawing.Size(285, 45);
 			this.usbSerialHidDeviceSelection.TabIndex = 4;
