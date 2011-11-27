@@ -21,22 +21,24 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Text;
 using System.Windows.Forms;
 
 using YAT.Utilities;
 
+#endregion
+
 namespace YAT.Gui.Forms
 {
 	/// <summary></summary>
 	public partial class About : System.Windows.Forms.Form
 	{
-		private System.Threading.Timer timer_ExecuteManualTest3;
-		private object timer_ExecuteManualTest3SyncObj = new object();
-
-		private event EventHandler ExecuteManualTest3Event;
-
 		/// <summary></summary>
 		public About()
 		{
@@ -283,6 +285,11 @@ namespace YAT.Gui.Forms
 			timer_ExecuteManualTest2.Stop();
 			throw (new Exception("Unhandled asynchronous synchronized exception test :: Outer exception", new Exception("Inner exception")));
 		}
+
+		private System.Threading.Timer timer_ExecuteManualTest3;
+		private object timer_ExecuteManualTest3SyncObj = new object();
+
+		private event EventHandler ExecuteManualTest3Event;
 
 		/// <summary>
 		/// Test case 3: Unhandled asynchronous non-synchronized exceptions.

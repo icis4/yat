@@ -21,10 +21,16 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+
+#endregion
 
 namespace YAT.Gui.Forms
 {
@@ -49,38 +55,68 @@ namespace YAT.Gui.Forms
 	/// <summary></summary>
 	public static class UnhandledExceptionHandler
 	{
+		/// <summary>
+		/// Used to prevent that multiple unhandled exceptions also generate multiple unhandled exception dialogs.
+		/// </summary>
 		private static bool staticHandleExceptions = true;
 
 		/// <summary></summary>
-		public static UnhandledExceptionResult ProvideExceptionToUser(Exception exeption, string originMessage)
+		public static UnhandledExceptionResult ProvideExceptionToUser(string originMessage, bool isAsynchronous, bool mayBeContinued)
 		{
-			return (ProvideExceptionToUser(null, exeption, originMessage, false));
+			return (ProvideExceptionToUser(null, null, originMessage, isAsynchronous, mayBeContinued));
 		}
 
 		/// <summary></summary>
-		public static UnhandledExceptionResult ProvideExceptionToUser(IWin32Window owner, Exception exeption, string originMessage, bool isAsynchronousAndMayBeContinued)
+		public static UnhandledExceptionResult ProvideExceptionToUser(Exception exception, string originMessage, bool isAsynchronous, bool mayBeContinued)
+		{
+			return (ProvideExceptionToUser(null, exception, originMessage, isAsynchronous, mayBeContinued));
+		}
+
+		/// <summary></summary>
+		public static UnhandledExceptionResult ProvideExceptionToUser(IWin32Window owner, Exception exception, string originMessage, bool isAsynchronous, bool mayBeContinued)
 		{
 			if (!staticHandleExceptions)
-				return UnhandledExceptionResult.Continue;
+				return (UnhandledExceptionResult.Continue);
 
 			string productName = Application.ProductName;
+			StringBuilder titleBuilder = new StringBuilder(productName);
+			titleBuilder.Append(" Unhandled");
 
-			if (MessageBox.Show(owner,
-								originMessage + Environment.NewLine +
-								"Show detailed information?",
-								productName,
-								MessageBoxButtons.YesNo,
-								MessageBoxIcon.Error) == DialogResult.Yes)
+			if (isAsynchronous)
+				titleBuilder.Append(" Asynchronous");
+			else
+				titleBuilder.Append(" Synchronous");
+
+			titleBuilder.Append(" Exception");
+
+			if (exception != null)
 			{
-				UnhandledException f = new UnhandledException(exeption, originMessage, isAsynchronousAndMayBeContinued);
-				f.ShowDialog(owner);
+				if (MessageBox.Show(owner,
+									originMessage + Environment.NewLine +
+									"Show detailed information?",
+									productName,
+									MessageBoxButtons.YesNo,
+									MessageBoxIcon.Error) == DialogResult.Yes)
+				{
+					UnhandledException f = new UnhandledException(exception, titleBuilder.ToString(), originMessage);
+					f.ShowDialog(owner);
+				}
+			}
+			else
+			{
+				MessageBox.Show(owner,
+								titleBuilder.ToString() + Environment.NewLine +
+								originMessage,
+								productName,
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Error);
 			}
 
-			if (isAsynchronousAndMayBeContinued)
+			if (mayBeContinued)
 			{
 				UnhandledExceptionResult result;
 				switch (MessageBox.Show(owner,
-										"After an unhandled asynchronous exception you are advised to exit and restart " + productName + "." + Environment.NewLine + Environment.NewLine +
+										"After an unhandled exception you are advised to exit and restart " + productName + "." + Environment.NewLine + Environment.NewLine +
 										"Select cancel/abort to exit " + productName + " now." + Environment.NewLine +
 										"Or would you like to continue/retry anyway?" + Environment.NewLine +
 										"Or would you like to continue but ignore any additional unhandled exceptions?",
@@ -110,7 +146,7 @@ namespace YAT.Gui.Forms
 			{
 				UnhandledExceptionResult result;
 				switch (MessageBox.Show(owner,
-										"After this unhandled synchronous exception " + productName + " will have to exit." + Environment.NewLine +
+										"After this unhandled exception " + productName + " will have to exit." + Environment.NewLine +
 										"Would you like to restart " + productName + " after exit?",
 										productName,
 										MessageBoxButtons.YesNo,

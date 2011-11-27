@@ -257,9 +257,7 @@ namespace MKY.Time
 		/// <summary></summary>
 		protected virtual void OnTimeSpanChanged(TimeSpanEventArgs e)
 		{
-			EventHelper.SuspendUnhandledException();
 			EventHelper.FireSync<TimeSpanEventArgs>(TimeSpanChanged, this, e);
-			EventHelper.ResumeUnhandledException();
 		}
 
 		#endregion

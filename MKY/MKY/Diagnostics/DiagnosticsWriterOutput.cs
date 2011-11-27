@@ -21,10 +21,17 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
+
+#endregion
 
 namespace MKY.Diagnostics
 {
