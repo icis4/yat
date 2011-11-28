@@ -57,12 +57,16 @@ namespace YAT.Model.Test
 		{
 			/// <summary></summary>
 			public readonly Model.Types.Command Command;
+
 			/// <summary></summary>
 			public readonly int ExpectedLineCount;
+
 			/// <summary></summary>
 			public readonly int[] ExpectedElementCounts;
+
 			/// <summary></summary>
 			public readonly int[] ExpectedDataCounts;
+
 			/// <summary></summary>
 			public readonly bool ExpectedAlsoApplyToA;
 

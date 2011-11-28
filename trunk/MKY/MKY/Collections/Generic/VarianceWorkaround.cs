@@ -28,7 +28,7 @@ using System.Text;
 namespace MKY.Collections.Generic
 {
 	/// <summary>
-	/// Variance workaround, allows casts of generics (e.g. List of device to List of object)
+	/// Variance workaround, allows casts of generics (e.g. List of device to List of object).
 	/// </summary>
 	/// <remarks>
 	/// Taken from "C# Programming Guide" topic "Variance in Generic Types".

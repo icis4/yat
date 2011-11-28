@@ -72,7 +72,6 @@ namespace MKY.Collections
 			set { this.value = value;  }
 		}
 
-
 		#region Object Members
 
 		/// <summary>

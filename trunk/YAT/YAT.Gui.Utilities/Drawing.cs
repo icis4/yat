@@ -21,11 +21,18 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
-using System.Text;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
+
+#endregion
 
 namespace YAT.Gui.Utilities
 {

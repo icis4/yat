@@ -32,8 +32,8 @@ using NUnit.Framework;
 
 using MKY.Collections;
 using MKY.Diagnostics;
-using MKY.Recent;
 using MKY.IO;
+using MKY.Recent;
 
 using YAT.Model.Settings;
 using YAT.Model.Types;
@@ -50,7 +50,7 @@ namespace YAT.Settings.Test
 		// Constants
 		//==========================================================================================
 
-		const string FileExtension = ".xml";
+		private const string FileExtension = ".xml";
 
 		#endregion
 

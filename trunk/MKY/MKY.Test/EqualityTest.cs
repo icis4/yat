@@ -193,7 +193,6 @@ namespace MKY.Test
 
 				return (lhs.Equals(rhs));
 
-
 			#endif
 			}
 

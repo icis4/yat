@@ -47,12 +47,16 @@ namespace YAT.Model.Test
 	{
 		/// <summary></summary>
 		SerialPort,
+
 		/// <summary></summary>
 		TcpAutoSocketOnIPv4Loopback,
+
 		/// <summary></summary>
 		TcpAutoSocketOnIPv6Loopback,
+
 		/// <summary></summary>
 		TcpAutoSocketOnSpecificIPv4Interface,
+
 		/// <summary></summary>
 		TcpAutoSocketOnSpecificIPv6Interface,
 

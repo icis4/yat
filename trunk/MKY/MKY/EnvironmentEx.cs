@@ -38,7 +38,6 @@ namespace MKY
 		/// <summary>
 		/// Returns <c>true</c> if operating system is Win32 or Win64 or compatible.
 		/// </summary>
-		/// <returns></returns>
 		public static bool IsWindows()
 		{
 			switch (Environment.OSVersion.Platform)
@@ -54,7 +53,6 @@ namespace MKY
 				case PlatformID.MacOSX:
 				default:
 					return (false);
-
 			}
 		}
 

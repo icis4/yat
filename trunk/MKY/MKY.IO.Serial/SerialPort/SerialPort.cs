@@ -911,7 +911,6 @@ namespace MKY.IO.Serial
 					default:
 						this.port.RtsEnable = false;
 						break;
-
 				}
 
 				// DTR
@@ -925,7 +924,6 @@ namespace MKY.IO.Serial
 					default:
 						this.port.DtrEnable = false;
 						break;
-
 				}
 			} // lock (this.portSyncObj)
 
@@ -1092,7 +1090,6 @@ namespace MKY.IO.Serial
 				// > 0.0% CPU load in idle
 				// > Up to an short-term-average of 20% CPU load while sending a large chuck of text (\YAT\!-SendFiles\Stress-2-Large.txt, 106 kB)
 				// This is an acceptable CPU load.
-				//
 				while ((this.state == State.Opened) && (BytesAvailable > 0)) // Ensure not to forward any events during closing anymore.
 				{
 					OnDataReceived(new EventArgs());

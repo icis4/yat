@@ -423,7 +423,6 @@ namespace YAT.Model
 			}
 		}
 
-
 		/// <summary></summary>
 		public virtual string Caption
 		{
@@ -1662,7 +1661,6 @@ namespace YAT.Model
 			Send(s, true);
 		}
 
-
 		private void Send(string s)
 		{
 			Send(s, false);
@@ -2246,7 +2244,6 @@ namespace YAT.Model
 			if (!this.isDisposed)
 				OnIORateChanged(e);
 		}
-
 
 		#endregion
 

@@ -67,12 +67,12 @@ namespace MKY.Test.Types
 				yield return (new TestCaseData(int.MinValue, int.MaxValue, int.MinValue + 1, false, false));
 				yield return (new TestCaseData(int.MinValue, int.MaxValue, int.MaxValue - 1, false, false));
 
-				yield return (new TestCaseData(int.MinValue + 1, int.MaxValue - 1, int.MinValue    ,  true, false));
+				yield return (new TestCaseData(int.MinValue + 1, int.MaxValue - 1, int.MinValue,      true, false));
 				yield return (new TestCaseData(int.MinValue + 1, int.MaxValue - 1, int.MinValue + 1,  true, false));
 				yield return (new TestCaseData(int.MinValue + 1, int.MaxValue - 1, int.MinValue + 2, false, false));
 				yield return (new TestCaseData(int.MinValue + 1, int.MaxValue - 1, int.MaxValue - 2, false, false));
 				yield return (new TestCaseData(int.MinValue + 1, int.MaxValue - 1, int.MaxValue - 1, false,  true));
-				yield return (new TestCaseData(int.MinValue + 1, int.MaxValue - 1, int.MaxValue    , false,  true));
+				yield return (new TestCaseData(int.MinValue + 1, int.MaxValue - 1, int.MaxValue,     false,  true));
 			}
 		}
 

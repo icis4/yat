@@ -36,8 +36,8 @@ using System.Text;
 using System.Windows.Forms;
 
 using MKY;
-using MKY.Event;
 using MKY.Diagnostics;
+using MKY.Event;
 using MKY.Settings;
 using MKY.Time;
 using MKY.Windows.Forms;

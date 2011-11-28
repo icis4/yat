@@ -35,7 +35,7 @@ namespace YAT
 	/// Sealed to prevent FxCop "CA1052:StaticHolderTypesShouldBeSealeds".
 	/// </remarks>
 	[SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "Why not?")]
-	sealed public class YAT
+	public sealed class YAT
 	{
 		/// <remarks>
 		/// Prevent FxCop "CA1053:StaticHolderTypesShouldNotHaveConstructors".

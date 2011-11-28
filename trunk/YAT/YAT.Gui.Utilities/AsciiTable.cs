@@ -39,7 +39,7 @@ namespace YAT.Gui.Utilities
 		/// <summary></summary>
 		public AsciiTable()
 		{
-			DataTable t = new DataTable("ASCII");;
+			DataTable t = new DataTable("ASCII");
 
 			DataColumn c;
 			DataRow r;

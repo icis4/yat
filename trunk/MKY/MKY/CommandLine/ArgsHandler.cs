@@ -280,7 +280,6 @@ namespace MKY.CommandLine
 					return (this.args[index]);
 
 				return (null);
-
 			}
 		}
 
@@ -328,7 +327,6 @@ namespace MKY.CommandLine
 
 				if (StringEx.EqualsOrdinalIgnoreCase(field.Name, name))
 					return (field);
-
 			}
 			return (null);
 		}
@@ -668,7 +666,6 @@ namespace MKY.CommandLine
 		// Methods
 		//==========================================================================================
 
-
 		/// <summary></summary>
 		public virtual bool OptionIsGiven(string name)
 		{
@@ -733,7 +730,7 @@ namespace MKY.CommandLine
 
 				foreach (OptionArgAttribute att in GetOptionArgAttributes(field))
 				{
-					//
+					//-----------------------------------------------------------------------------------
 					// Example:
 					//
 					//   /r, -r, --recursive, --processrecursive
@@ -744,7 +741,7 @@ namespace MKY.CommandLine
 					//           Multiple lines if description is longer than 70 (80-10) characters
 					//
 					// 0 3       10                                                                    80
-					//
+					//-----------------------------------------------------------------------------------
 
 					StringBuilder names = new StringBuilder();
 

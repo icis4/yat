@@ -112,7 +112,7 @@ namespace MKY
 		/// Converts value into a byte array. Negative numbers can optionally be converted,
 		/// they are aligned to the specified boundary.
 		/// </summary>
-		/// <param name="value">Value to convert</param>
+		/// <param name="value">Value to convert.</param>
 		/// <param name="boundary">
 		/// byte boundary (e.g. 1/2/4/8 bytes). Set to 0 for
 		/// automatic expansion to next 1/2/4/8 byte boundary.
@@ -129,7 +129,7 @@ namespace MKY
 		/// Converts value into a byte array. Negative numbers can optionally be converted,
 		/// they are aligned to the specified boundary.
 		/// </summary>
-		/// <param name="value">Value to convert</param>
+		/// <param name="value">Value to convert.</param>
 		/// <param name="expandNegative">True to expand negative values.</param>
 		/// <param name="useBigEndian">Use big endian instead of little endian.</param>
 		/// <returns>Converted byte array.</returns>
@@ -143,7 +143,7 @@ namespace MKY
 		/// Converts value into a byte array. Negative numbers can optionally be converted,
 		/// they are aligned to the specified boundary.
 		/// </summary>
-		/// <param name="value">Value to convert</param>
+		/// <param name="value">Value to convert.</param>
 		/// <param name="boundary">
 		/// byte boundary (e.g. 1/2/4/8 bytes). Set to 0 for
 		/// automatic expansion to next 1/2/4/8 byte boundary.

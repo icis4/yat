@@ -362,7 +362,7 @@ namespace YAT.Domain
 							break;
 
 						default:
-							base.ProcessKeywords(keywordResult);
+							ProcessKeywords(keywordResult);
 							break;
 					}
 				}

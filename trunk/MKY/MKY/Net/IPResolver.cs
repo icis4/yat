@@ -36,10 +36,10 @@ using MKY.Diagnostics;
 namespace MKY.Net
 {
 	/// <summary></summary>
-	static public class IPResolver
+	public static class IPResolver
 	{
 		/// <summary></summary>
-		static public IPAddress ResolveRemoteHost(string remoteHost)
+		public static IPAddress ResolveRemoteHost(string remoteHost)
 		{
 			IPHost ipHost;
 			if (IPHost.TryParse(remoteHost, out ipHost))
@@ -80,7 +80,7 @@ namespace MKY.Net
 		}
 
 		/// <summary></summary>
-		static public IPAddress ResolveLocalInterface(string localInterface)
+		public static IPAddress ResolveLocalInterface(string localInterface)
 		{
 			IPNetworkInterface networkInterface;
 			if (IPNetworkInterface.TryParse(localInterface, out networkInterface))
