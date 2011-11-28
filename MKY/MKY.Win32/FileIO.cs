@@ -28,8 +28,8 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 using Microsoft.Win32.SafeHandles;
 
@@ -210,7 +210,7 @@ namespace MKY.Win32
 			/// <param name="SecurityAttributes">A security attributes structure or IntPtr.Zero.</param>
 			/// <param name="bManualReset">Manual Reset = False (The system automatically resets the
 			/// state to nonsignaled after a waiting thread has been released.).</param>
-			/// <param name="bInitialState">Initial state = False (Not signaled.)</param>
+			/// <param name="bInitialState">Initial state = False (Not signaled.).</param>
 			/// <param name="lpName">An event object name (optional).</param>
 			/// <returns>A handle to the event object.</returns>
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]

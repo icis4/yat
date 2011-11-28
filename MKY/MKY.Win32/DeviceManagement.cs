@@ -29,8 +29,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 
 using MKY.Diagnostics;
@@ -185,7 +185,6 @@ namespace MKY.Win32
 			}
 
 			#pragma warning restore 1591
-
 		}
 	
 		#endregion
@@ -306,7 +305,6 @@ namespace MKY.Win32
 			[SuppressMessage("Microsoft.Interoperability", "CA1401:PInvokesShouldNotBeVisible", Justification = "Method is encapsulated in Win32 specific assembly.")]
 			[DllImport(USER_DLL, CharSet = CharSet.Auto, SetLastError = true)]
 			public static extern bool UnregisterDeviceNotification([In] IntPtr Handle);
-
 		}
 
 		#endregion

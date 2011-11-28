@@ -46,7 +46,7 @@ namespace YAT.Controller.Test
 		// Constants
 		//==========================================================================================
 
-		private readonly string[] EmptyArgs = new string[] {};
+		private readonly string[] EmptyArgs = new string[] { };
 		private readonly string[] TerminalArgs  = new string[] { Settings.Test.SettingsFilesProvider.FilePaths_Current.TerminalFilePaths[Settings.Test.TerminalSettingsTestCases.T_03_COM1_Closed_Predefined] };
 		private readonly string[] WorkspaceArgs = new string[] { Settings.Test.SettingsFilesProvider.FilePaths_Current.WorkspaceFilePaths[Settings.Test.WorkspaceSettingsTestCases.W_04_Matthias] };
 

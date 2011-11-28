@@ -245,7 +245,6 @@ namespace MKY.Time
 			}
 		}
 
-
 		private bool CalculateValueFromQueueAndSignalIfChanged()
 		{
 			return (CalculateValueFromQueueAndSignalIfChanged(0));

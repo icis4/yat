@@ -34,9 +34,9 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using MKY;
-using MKY.IO;
 using MKY.Diagnostics;
 using MKY.Event;
+using MKY.IO;
 using MKY.Settings;
 using MKY.Time;
 using MKY.Windows.Forms;

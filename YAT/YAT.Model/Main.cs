@@ -258,7 +258,6 @@ namespace YAT.Model
 		/// <summary>
 		/// This method is used to test the command line argument processing.
 		/// </summary>
-		/// <returns></returns>
 		public virtual MainResult PrepareStart()
 		{
 			AssertNotDisposed();

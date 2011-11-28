@@ -60,8 +60,7 @@ namespace MKY.Settings
 		//==========================================================================================
 
 		/// <summary>
-		/// Handles document settings. Settings are stored in filePath.
-		/// <see cref="SettingsFilePath"/>
+		/// Handles document settings. Settings are stored in <see cref="SettingsFilePath"/>.
 		/// </summary>
 		public DocumentSettingsHandler()
 		{
@@ -69,8 +68,7 @@ namespace MKY.Settings
 		}
 
 		/// <summary>
-		/// Handles document settings. Settings are stored in filePath.
-		/// <see cref="SettingsFilePath"/>
+		/// Handles document settings. Settings are stored in <see cref="SettingsFilePath"/>.
 		/// </summary>
 		public DocumentSettingsHandler(TDocumentSettings settings)
 		{

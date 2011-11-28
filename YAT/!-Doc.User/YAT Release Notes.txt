@@ -88,7 +88,7 @@ Important changes:
 - Behavior of concurrent instances of YAT verified (feature request #2842713)
    > Already seems to work fine, test case added and successfully passed, limitation removed
 - Exception handling refactored, now using 'Application.ThreadException' for 'Windows.Forms'
-  and 'AppDomain.UnhandledException' for all other threads (bug #3292682)
+  and 'AppDomain.UnhandledException' for all other threads (also fixes bug #3292682)
 - "Unhandled Exception" now shows all information including inner exceptions (bug #3290314)
 - MKY.Data added
 - MKY.Settings.Settings renamed to MKY.Settings.SettingsItem

@@ -163,8 +163,8 @@ namespace MKY
 		/// Parameters specify the starting search position in the string, the number of characters
 		/// in the current string to search, and the type of search to use for the specified string.
 		/// </summary>
-		/// <param name="str"></param>
-		/// <param name="searchString">The System.String object to seek.</param>
+		/// <param name="str">The <see cref="System.String"/> object to process.</param>
+		/// <param name="searchString">The <see cref="System.String"/> object to seek.</param>
 		/// <param name="startIndex">The search starting position.</param>
 		/// <param name="count">The number of character positions to examine.</param>
 		/// <param name="comparisonType">One of the <see cref="StringComparison"/> values.</param>

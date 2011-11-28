@@ -60,7 +60,6 @@ namespace MKY.Windows.Forms
 
 			return (sb.ToString());
 		}
-
 	}
 }
 

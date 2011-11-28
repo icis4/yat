@@ -456,6 +456,7 @@ namespace MKY.Test.Settings
 		{
 			/// <summary></summary>
 			public int Data1 = TestCaseId._11;
+
 			/// <summary></summary>
 			public int Data2 = TestCaseId._12;
 		}
@@ -469,8 +470,10 @@ namespace MKY.Test.Settings
 		{
 			/// <summary></summary>
 			public int Data1 = TestCaseId._21;
+
 			/// <summary></summary>
 			public int Data2 = TestCaseId._22;
+
 			/// <summary></summary>
 			public int Data3 = TestCaseId._23;
 		}
@@ -484,6 +487,7 @@ namespace MKY.Test.Settings
 		{
 			/// <summary></summary>
 			public int Data1 = TestCaseId._31;
+
 			/// <summary></summary>
 			public int Data3 = TestCaseId._33;
 		}

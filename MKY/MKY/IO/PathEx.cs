@@ -689,7 +689,6 @@ namespace MKY.IO
 			RelativePath = relativePath;
 		}
 
-
 		#region Object Members
 
 		/// <summary>

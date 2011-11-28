@@ -21,6 +21,11 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System.Diagnostics.CodeAnalysis;
 
 using NUnit.Framework;
@@ -30,6 +35,8 @@ using MKY.Settings;
 using YAT.Settings.Application;
 using YAT.Settings.Terminal;
 using YAT.Settings.Workspace;
+
+#endregion
 
 namespace YAT.Settings.Test
 {

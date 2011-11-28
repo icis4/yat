@@ -21,9 +21,14 @@
 // See http://www.gnu.org/licenses/lgpl.html for license details.
 //==================================================================================================
 
+#region Using
+//==================================================================================================
+// Using
+//==================================================================================================
+
 using System;
-using System.IO;
 using System.Globalization;
+using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -31,6 +36,8 @@ using MKY.IO;
 
 using YAT.Settings;
 using YAT.Settings.Application;
+
+#endregion
 
 namespace YAT.Log.Settings
 {

@@ -328,14 +328,14 @@ namespace YAT.Model
 						!ExtensionSettings.IsTerminalFile (Path.GetExtension(RequestedFilePath)))
 					{
 						RequestedFilePath = null;
-						base.Invalidate("Requested file is no workspace nor terminal file");
+						Invalidate("Requested file is no workspace nor terminal file");
 						BoolEx.ClearIfSet(ref isValid);
 					}
 				}
 				else
 				{
 					RequestedFilePath = null;
-					base.Invalidate("Requested file does not exist");
+					Invalidate("Requested file does not exist");
 					BoolEx.ClearIfSet(ref isValid);
 				}
 			}
@@ -356,13 +356,13 @@ namespace YAT.Model
 						}
 						else
 						{
-							base.Invalidate("Requested file is no workspace nor terminal file");
+							Invalidate("Requested file is no workspace nor terminal file");
 							BoolEx.ClearIfSet(ref isValid);
 						}
 					}
 					else
 					{
-						base.Invalidate("Requested file does not exist");
+						Invalidate("Requested file does not exist");
 						BoolEx.ClearIfSet(ref isValid);
 					}
 				}
@@ -374,7 +374,7 @@ namespace YAT.Model
 				if (!File.Exists(RequestedTransmitFilePath))
 				{
 					RequestedTransmitFilePath = null;
-					base.Invalidate("Requested file does not exist");
+					Invalidate("Requested file does not exist");
 					BoolEx.ClearIfSet(ref isValid);
 				}
 			}
@@ -384,7 +384,7 @@ namespace YAT.Model
 			{
 				TileHorizontal = false;
 				TileVertical   = false;
-				base.Invalidate("Tile horizontal and vertical simultaneously is not possible");
+				Invalidate("Tile horizontal and vertical simultaneously is not possible");
 				BoolEx.ClearIfSet(ref isValid);
 			}
 

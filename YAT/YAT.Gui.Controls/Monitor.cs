@@ -54,8 +54,10 @@ namespace YAT.Gui.Controls
 	{
 		/// <summary></summary>
 		Inactive,
+
 		/// <summary></summary>
 		Active,
+
 		/// <summary></summary>
 		Pending,
 	}
