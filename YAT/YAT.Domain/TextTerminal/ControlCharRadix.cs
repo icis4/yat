@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 1 Development Version 1.99.27
+// YAT 2.0 Beta 4 Candidate 1 Version 1.99.28
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
