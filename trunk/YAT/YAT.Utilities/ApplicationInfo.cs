@@ -8,7 +8,7 @@
 // $Date$
 // $Revision$
 // ------------------------------------------------------------------------------------------------
-// YAT 2.0 Beta 4 Candidate 1 Development Version 1.99.27
+// YAT 2.0 Beta 4 Candidate 1 Version 1.99.28
 // ------------------------------------------------------------------------------------------------
 // See SVN change log for revision details.
 // See release notes for product version details.
@@ -28,28 +28,28 @@ namespace YAT.Utilities
 	/// <summary></summary>
 	public static class ApplicationInfo
 	{
-	/////// <summary></summary>
-	////public const string ProductBuildName = " Final";
+		/////// <summary>The product name postfix that describes the build.</summary>
+		////public const string ProductBuildName = " Final";
 
-	/////// <summary></summary>
-	////public const string ProductBuildName = " Beta 4";
+		/////// <summary>The product name postfix that describes the build.</summary>
+		////public const string ProductBuildName = " Beta 4";
 
-		/////// <summary></summary>
-	////public const string ProductBuildName = " Beta 4 Candidate 1";
+		/// <summary>The product name postfix that describes the build.</summary>
+		public const string ProductBuildName = " Beta 4 Candidate 1";
 
-		/// <summary></summary>
-		public const string ProductBuildName = " Beta 4 Candidate 1 Development";
+		/////// <summary>The product name postfix that describes the build.</summary>
+		////public const string ProductBuildName = " Beta 4 Candidate 1 Development";
 
-		/////// <summary></summary>
-	////public const string ProductBuildName = " Beta 4 Preliminary";
+		/////// <summary>The product name postfix that describes the build.</summary>
+		////public const string ProductBuildName = " Beta 4 Preliminary";
 
-		/// <summary></summary>
+		/// <summary>The product name including the build description.</summary>
 		public static readonly string ProductNameAndBuildName = Application.ProductName + ProductBuildName;
-	
-		/// <summary></summary>
+
+		/// <summary>The complete product name including build description and version.</summary>
 		public static readonly string ProductNameAndBuildNameAndVersion = ProductNameAndBuildName + " Version " + Application.ProductVersion;
 
-		/// <summary></summary>
+		/// <summary>The long variant of the complete product name including build description and version.</summary>
 		public static readonly string ProductNameLong = Application.ProductName + " - Yet Another Terminal";
 	}
 }
